@@ -1,0 +1,79 @@
+===== [fkit-pravilnik-2023 | str. 3] =====
+- < EKSPERIMENTALNI DIO/PREGLEDNI DIO s opisom
+(tehnološko, organizacijsko ili laboratorijsko rješenje postavljenog zadatka);
+
+- < REZULTATI: tablice, dijagrami, slike i ostali eksperimentalni i/ili teorijski rezultati;
+
+- < RASPRAVA: rasprava rezultata;
+Napomena: Poglavlja Rezultati i Rasprava mogu se spojiti u jedno poglavlje Rezultati i rasprava;
+
+- < ZAKLJUČAK: pregled najvažnijih rezultata i zaključaka ostvarenih u završnom radu;
+- < POPIS SIMBOLA korištenih u radu;
+
+- — LITERATURA: popis literature korištene tijekom rada. Potrebno je navesti i izvore svih podataka
+(literaturnih i numeričkih) navedenih u radu. Literaturne citate treba numerirati redoslijedom
+kojim se pojavljuju u tekstu i
+
+- — PRILOZI (po potrebi): dodatna dokumentacija (računalni programi i sl.).
+
+Članak 11.
+Diplomski rad treba sadržavati sljedeća poglavlja:
+
+- < SAŽETAK RADA (na hrvatskom i engleskom jeziku): svrha zadatka, temeljna ideja, bitni zaključci
+i ključne riječi;
+
+===== [fkit-pravilnik-2023 | str. 4] =====
+- < REZULTATI: tablice, dijagrami, slike i ostali eksperimentalni i teorijski rezultati;
+
+- RASPRAVA: rasprava eksperimentalnih rezultata. Rezultati se analiziraju i uspoređuju s
+rezultatima drugih autora. Ukazuje se na prednosti i nedostatke primijenjenih metoda. Posebno se
+razmatra doprinos rada;
+
+Napomena: Poglavlja Rezultati i Rasprava mogu se spojiti u jedno poglavlje Rezultati i rasprava;
+
+- < ZAKLJUČAK: pregled najvažnijih rezultata i zaključaka ostvarenih u završnom radu;
+
+- < POPIS SIMBOLA korištenih u radu;
+
+- < LITERATURA: popis literature korištene tijekom rada. Potrebno je navesti i izvore svih podataka
+(literaturnih i numeričkih) navedenih u radu. Literaturne citate treba numerirati onim
+redoslijedom kojim se pojavljuju u tekstu i
+
+- — PRILOZI (po potrebi): dodatna dokumentacija (računalni programi i sl.).
+
+Članak 12.
+
+Za pristupanje završnom/diplomskom ispitu student podnosi prijavu na propisanom obrascu potpisanom
+od mentora i predaje ju u Studentsku referadu, najkasnije osam (8) dana prije početka utvrđenog termina
+za polaganje završnog/diplomskog ispita. Studentska referada šalje prijavni obrazac na potpis predsjedniku
+Povjerenstva za završne /diplomske radove.
+
+Student može podnijeti prijavu samo ako je položio sve ispite predviđene programom studija.
+
+===== [fkit-pravilnik-2023 | str. 7] =====
+ZAVRŠNI / DIPLOMSKI RAD (160 mm)
+
+Mentor: radno mjesto mentora, Ime i prezime, ustanova zaposlenja (180 mm)
+
+Članovi ispitnog povjerenstva: (180 mm)
+
+radno mjesto članova povjerenstva, Ime i prezime, ustanova zaposlenja (200 mm)
+
+(265 mm)
+
+Zagreb, mjesec i godina
+
+Primjeri navođenja mentora, komentora i članova povjerenstva:
+
+znanstveno-nastavno radno mjesto: prof. dr. sc. Ivan Ivić, Fakultet kemijskog inženjerstva i tehnologije
+suradničko radno mjesto: dr. sc. Ivan Ivić, Fakultet kemijskog inženjerstva i tehnologije
+
+2. PRIMJER CITIRANJA IZVORA PODATAKA
+
+2.1. Časopis:
+
+Van Oss, C. J., Chaundhury, M. K., Good, R. J. Č., Monopolar Surfaces, Adv. Colloid. Interface. Sci.,
+28 (1987) 35-64.
+
+2.2. Knjiga:
+Utracki, L., Polymer Alloys and Blends, Hanser Publ., Munich, 1989., str.116.

@@ -1,0 +1,361 @@
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 2] =====
+SVRHA I CILJ RADA
+
+                                                      Članak 1.
+
+   Ovim Uputama se pojašnjava procedura izrade pisanog dijela Završnog projekta, Završnog rada i
+Diplomskog rada (u daljnjem tekstu pisani dio rada) sukladno Pravilniku o Završnom projektu, Za-
+vršnom radu i Diplomskom radu na Sveučilištu u Slavonskom Brodu (u daljnjem tekstu: Pravilnik).
+
+   Cilj izrade pisanog dijela rada je utvrđivanje kompetencije studenta kroz sposobnost povezivanja
+stečenog znanja s konkretnim zadatkom, kao i samostalnost u rješavanju problema iz struke. Izra-
+dom pisanog dijela rada do izražaja dolazi teorijsko i praktično znanje studenta kao i sposobnost
+služenja aktualnom domaćom i stranom literaturom u pisanoj obradi te pretraživanje različitih baza
+podataka na Internetu. Pri tome mentor rada ocjenjuje razinu samostalnosti studenta, kako u dijelu
+teorijske obrade, tako i u eksperimentalnom dijelu.
+
+                                                  OPSEG RADA
+
+                                                      Članak 2.
+
+   Opseg pisanog dijela rada u pravilu ne bi trebao biti veći od 75 stranica, uključujući tekst, crte-
+že, tablice, dijagrame, fotografije bez priloga.
+
+                                          OBLIK I SADRŽAJ RADA
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 3] =====
+Članak 5.
+
+   Prvi pisani tekst nakon otvaranja naslovnice je stranica s istim tekstom (veličinom i raspore-
+dom) kao na naslovnici, uz navođenje podataka o mentoru rada. Nastavno zvanje, titula, ime i pre-
+zime mentora treba ispisati u sredini stranice ispod imena i prezimena studenta (primjer prilog 2).
+
+                                                      Članak 6.
+
+   Drugi list nakon otvaranja naslovnice treba biti Obrazac s podacima o autoru, mentoru, ko-
+mentoru i radu (primjer prilog 3).
+
+                                                      Članak 7.
+
+   Treći list treba biti tekst primljenog zadatka rada (Ispisan iz ISVU sustava), ovjeren i potpisan
+od strane mentora i predsjednika Povjerenstva za završne i/ili diplomske ispite/radove sastavnica
+Sveučilišta.
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 3] =====
+cijama, osobama i mentoru. Bez obzira na veličinu ovoga teksta, izjava se piše na posebni
+       list na sredini stranice s vlastoručnim potpisom (primjer prilog 4).
+   - Sažetak rada napisan do jedne stranice na hrvatskom i engleskom jeziku (prema prilogu 5).
+   - Sadržaj naslova poglavlja, predviđene redne brojeve poglavlja i brojeve stranica na kojima
+       poglavlja započinju (primjer prilog 6).
+   - Pregled veličina, oznaka, jedinica, kratica, indeksa i termina (primjer prilog 7).
+   - Prvo poglavlje rada (obično: 1 UVOD) (prema prilogu 8).
+   - Ostala poglavlja rada trebaju biti numerirana do najviše tri arapska broja, odvojena
+       točkama. Iza posljednje brojke u nizu ne stavlja se točka niti iza brojke kada je sama pred
+       poglavljem koje označava (prema prilogu 9).
+   - Zaključak rada (prema prilogu 10).
+   - Literaturu - popis korištene literature (prema prilogu 11).
+   - Priloge - po nahođenju studenta i u dogovoru s mentorom, prilozi mogu biti: računalni pro-
+       grami, tablice rezultata eksperimenata, ispisi vrijednosti parametara po računalnim programi-
+       ma, crteži i sl.
+
+   Napomena:
+
+   Svako novo poglavlje započeti na novoj stranici kao i zaključak rada koji dolazi nakon svih
+poglavlja, a prije literature i priloga.
+
+                                                      Članak 9.
+
+   Uvod daje pregled objavljenih i javno publiciranih radova iz šireg područja naslova rada.
+   Sve napisano mora biti odgovarajuća studentova obrada zadane teme, a iznesena stajališta posta-
+ju njegova osobna i dio su njegova znanja. Student mora biti u stanju obrazložiti ova stajališta kao
+svoja.
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 4] =====
+Članak 10.
+
+   U poglavljima koja razrađuju osnovnu temu zadatka student će izložiti vlastiti rad i doprinos
+temi zadatka. Neophodno je obrazložiti plan u pristupu rješavanja zadatka. U zadacima gdje se
+primjenjuju računalni programi potrebno je obrazložiti eventualno dobivanje rezultata simulacijom
+procesa, iterativnim postupkom ili nekim posebnim algoritmom.
+
+   Kod korištenja programskog sustava, programskih paketa i programa treba navesti kratki pregled
+postojećih rješenja te pojašnjenje izbora za primjenu u radu.
+
+   Rješavanje se može osnivati na teorijskom i/ili eksperimentalnom pristupu.
+   Teorijski dio treba sadržavati prikaz problema kojima se student bavi, teorijska polazišta i preg-
+led relevantne literature iz prikazanog područja.
+   Eksperimentalni način podrazumijeva odgovarajuća mjerenja na odabranom uzorku utjecajnih
+parametara (od značenja za rješenje zadatka). Rezultati mjerenja se nakon toga analiziraju i predla-
+žu se konkretni zaključci.
+
+                                                     Članak 11.
+
+   Zaključak rada mora dati jednoznačni navod svih bitnih dokaza, rezultata i rješenja iz procesa
+rješavanja zadatka, a u zadacima gdje se koristio računalni program i komentar izlaznih rezultata
+programskog sustava, programskog paketa ili programa te ocjenu rezultata primjene neke od meto-
+da racionalizacije procesa ili testiranja hipoteze.
+
+   Prema tome, to je kratak prikaz samo čvrstih, numerički podržanih i temeljito obrazloženih sta-
+jališta, dokaza i rezultata što su proizašli iz naslova teme diplomskog rada, s prijedlogom za dalj-
+nji rad u tom području.
+
+                                                     Članak 12.
+
+   Skice, crteže tablice i fotografije treba uvijek obrazložiti u tekstu kada se na njih poziva. Ako
+su crteži, dijagrami ili fotografije preuzete iz rada u popisu literature, u nazivu (opisu) obvezatno
+dati broj izvornika u popisu literature.
+
+   Skice, crteže, tablice, dijagrame i fotografije treba smjestiti uvijek iza onog dijela teksta gdje se
+prvi puta spominju.
+
+                                                     Članak 13.
+
+   Ako se neki originalni tekst, dijagram ili skica na stranom jeziku uključuje u rad, treba dati i pri-
+jevod na hrvatski jezik, osim ukoliko se rad ne piše na engleskom jeziku.
+
+   Latinski nazivi živih bića pišu se kosim slovima (kurzivom) i to roda velikim, a vrste malim po-
+četnim slovom dok se inicijal prezimena autora piše uspravno (npr. Fragaria vesca L. - šumska ja-
+goda ili Coccinella septempunctata L. - sedmočkasta božja ovčica).
+
+   Ako se u tekstu spominje više vrsta istog roda ili se znanstveni naziv ponavlja onda se rod može
+pisati skraćeno (npr. Bellis perennis / B. perennis).
+
+   Ukoliko vrsta ima podvrstu piše se: Olea europaea L. subsp. europaea (maslina).
+
+                                                     Članak 14.
+
+   Korištena literatura u tekstu se navodi u uglatim zagradama [ ] s naznakom broja navoda lite-
+rature u popisu ili u skladu s APA 7th edition stilom (https://apastyle.apa.org/style-grammar-
+guidelines/references/examples).
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 7] =====
+30
+
+   Oznake veličina se usvajaju prema uobičajenim oznakama u području diplomskog rada i moraju
+se provesti dosljedno u cijelom radu.
+
+   Matematičke izraze sa izračunima nije potrebno numerirati.
+Napomena:
+
+   Prema normi HRN ISO 80000-4:2007 Veličine i jedinice sve se varijable pišu koso (italic).
+Konstante i brojevi se pišu uspravno. Indeksi i eksponenti se obvezatno pišu uspravno (izuzetak
+je samo ako se radi o varijablama u indeksu ili eksponentu – tada se piše koso).
+
+   Preporuča se, ako to postupak zahtijeva, uvrstiti brojčane vrijednosti u formulu bez navođenja
+jedinica uz brojčane vrijednosti. Jedinica se obvezatno mora navesti uz rezultat izračuna, ako ta
+veličina ima jedinicu mjere, a piše se obvezatno uspravno (normal). Npr.:
+
+Pe    peVh ni    20 10 5  0,001  800  2   106 667 N m/s = 106,667 kW.
+         30                      30
+
+Pri čemu su:
+                         Nm
+
+snaga Pe  106 667 s  106 ,667 kW
+tlak pe  20 105 Pa
+volumen Vh  0,001 m3
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 8] =====
+ISBN 978-953-6783-04-5
+https://dzm.gov.hr/UserDocsImages/Zakonsko%20mjeriteljstvo/Publikacije/medjunarodni-sustav-
+jedinica.pdf
+
+                                                     Članak 22.
+
+   Područja preporučenih veličina iz literature moraju se dati u cijelosti (npr. A = 60 do 80). Usvo-
+jenu vrijednost prema preporukama mora se obvezatno prokomentirati (npr. zašto A = 63).
+
+                                                     Članak 23.
+
+   Sastavni dio ovih Uputa čine prilozi 1 do 12 u kojima je prikazan izgled diplomskog rada.
+
+                                                     Članak 24.
+
+   Svi pojmovi koji se koriste u ovim Uputama, a koji imaju rodni značaj, bez obzira jesu li korište-
+ni u muškom ili ženskom rodu, obuhvaćaju na jednak način muški i ženski rod.
+
+                                                     Članak 25.
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 12] =====
+Ime i prezime: (12 pt)
+                                 Mjesto i datum rođenja: (12 pt)
+
+                                                    Adresa: (12 pt)
+                                   UPISATI NAZIV SASTAVNICE (12 pt)
+
+                          II. DIPLOMSKI RAD (16 pt)
+
+       Naslov: (12 pt)
+       Naslov na engleskom jeziku: (12 pt)
+       Ključne riječi: (12 pt)
+       Ključne riječi na engleskom jeziku: (12 pt)
+   Broj stranica : ____ slika: ____ tablica: ____ priloga: ____ bibliografskih izvora: ____(12 pt)
+
+   Ustanova i mjesto gdje je rad izrađen: UPISATI NAZIV SASTAVNICE
+
+   Stečen akademski naziv: Upisati akademski naziv (12 pt)
+
+                                       Mentor/ica rada: prof. dr. sc. Ivo Ivanović
+                                       Komentor/ica rada: (unosi se ukoliko je imenovan)
+
+                                     Obranjeno na (Upisati naziv sastavnice)
+                                              dana ________________
+
+                                     Oznaka i redni broj rada: ___________
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 13] =====
+Prilog 4. (Posebni list – pisati po visini na sredini stranice) (svi fontovi 12 pt)
+
+IZJAVA
+   Izjavljujem da sam završni / diplomski rad izradio (izradila) samostalno, koristeći se vlastitim
+
+znanjem, literaturom i provedenim eksperimentima.
+   U radu mi je pomagao savjetima i uputama mentor rada (npr. prof. dr. sc. Ivo Ivanović) te mu
+
+iskreno zahvaljujem.
+   Isto tako zahvaljujem i asistentima mr.sc. Peri Janjiću i mr.sc. Mariji ...
+   Tvrtka „Eurometal“ d.o.o. omogućila mi je eksperimentalni dio rada, te zahvaljujem direktoru
+
+... i suradnicima ...
+                                                                                  (Vlastoručni potpis studenta)
+
+Prilog 5. (Posebni list) (svi fontovi 12 pt)
+
+SAŽETAK
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 14] =====
+3.1.2 Spreg sila . . . . . . . . . . . . . . . . . . .
+
+     3.1.3 Momentno pravilo ili Varignonov teorem . . . . . . . . .
+
+3.2. REDUKCIJA PROSTORNOG SKUPA SILA . . . . . . . .
+
+     3.2.1 Redukcija općeg skupa sila u prostoru  ........
+
+...
+
+7 ZAKLJUČAK                                   ................
+
+8 LITERATURA                                  ................
+
+PRILOZI
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 15] =====
+Prilog 8. (Početak na novom listu) (svi fontovi 12 pt)
+              (Početak poglavlja 2 na novom listu i tako redom za sva poglavlja)
+
+       UVOD
+
+       Uvod je početni ili pristupni dio radu u kojem autor daje početne informacije o problemu koji
+je predmetom rješavanja. Preporuča se uvod napisati u tri stavka.
+
+       Prvi stavak daje prikaz temeljne karakteristike problema, ciljeve koji se žele postići te zadaće
+koje vode do ostvarenja planiranih ciljeva. U tom stavku dobro je navesti što je o problemu poznato,
+a što nije. Ako je student koristio neki stručni ili znanstveni rad, monografiju ili udžbenik, u kojima
+se obrađuje sličan problem ili ako se iz tih izvora uzimaju neki dijelovi teksta, citati, hipoteze i slič-
+no, tada je neophodno spomenuti autora i naziv djela. Time se značajno podiže ukupnu kvalitetu ra-
+da.
+
+       Drugi stavak sadrži kraći prikaz mogućih metoda, načina i putova rješavanja problema kao i
+ograničenja koja su se u radu morala uzeti u obzir i uvažavati.
+
+       U trećem stavku autor kratko priopćava temeljnu strukturu rada, kratki sadržaj pojedinih pog-
+lavlja, ali ne navodi rezultate istraživanja.
+
+       Uvod ne bi trebao biti suviše opsežan. Preporuča se da sadrži od jedne do tri stranice. Uvod
+treba pisati tijekom čitavog razdoblja pisanja rada, a konačno oblikovanje sadržaja uvoda načiniti
+tek kada je rada pri kraju. Tada je moguće dovoljno dobro sagledati i prosuditi cjelinu rada te dati
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 16] =====
+daljnjeg rada na predmetnom problemu i području.
+
+Prilog 10. ( Početak na novom listu) (svi fontovi 12 pt)
+
+ZAKLJUČAK
+
+   U zaključku treba na sustavan, sažet i jasan način dati prikaz relevantnih spoznaja, informaci-
+ja, činjenica i stavova koji su opširnije razrađeni u samoj razradi teme.
+
+   Dijelovi zaključka se navode kronološki prema strukturi rada. Zaključak ne bi trebao biti dulji
+od dvije stranice.
+
+   U zaključku ne smiju biti tablice, slike, grafikoni, sheme, citati i bilješke (fusnote).
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 17] =====
+Prilog 11. (Početak na novom listu) (svi fontovi 12 pt)
+
+       U literaturi se navode sve bibliografske jedinice koje se kao literaturni izvori koriste u radu. Za izradu
+rada preporuča se minimalno pet literaturnih navoda. Literatura se navodi redoslijedom kako se javlja u teks-
+tu, a ispred literaturnog navoda je glavni broj u uglatim zagradama ili u skladu s APA 7th edition stilom
+(https://apastyle.apa.org/style-grammar-guidelines/references/examples).
+
+   LITERATURA
+
+       [1] Matejiček, F.: Kinetika sa zbirkom zadataka. Slavonski Brod; Strojarski fakultet,
+          2014., 224 str.
+
+       [2] Villagra, J., et all., Smooth path and speed planning for an automated public
+              transport vehicle, Robotics and Autonomous Systems, Elsevier, 60(2), 2012,
+              pp. 252–265.
+
+       [3] Blažević, B.; Mlinarević, M. Turistička regionalizacija u globalnim procesima, Ekonomska
+               politika Hrvatske u 2009., Hrvatsko društvo ekonomista, Opatija, 2008., 135-139
+
+       [4] Automatic Dynamic Incremental Nonlinear Analysis, ADINA 6.1,
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 17] =====
+[11] Matejiček, Franjo; Vnučec, Zdravko. Statika : [mrežni udžbenik]. 2003.
+              URL: http://www.sfsb.unios.hr/ksk/statika (31.1.2016.)
+
+       [12] Stojanovski, Jadranka: Croatian libraries : the war is behind us what brings the
+              future? Ariadne. The Web version (1996), 5.
+              URL: http://www.ukoln.ac.uk/ariadne/issue 6. (28.11.2008).
+
+       [13] Burka, Lauren P.: A hypertext history of multi-user dimensions. The MUDdex. 1993.
+              URL: http://www.aka.org.cn/Magazine/Aka4/interhisE4.html. (28.11.2008.).
+
+Monografija (knjiga, disertacija, magistarski rad) [1]:
+   Navodi se redni broj bibliografske jedinice u kutnoj zagradi, autor - prezime, inicijal(i) ima, na-
+
+slov knjige, mjesto izdanja, izdavač, godina izdanja, ukupan broj stranica.
+
+Članak u časopisu (zborniku radova) [2]:
+   Navodi se redni broj bibliografske jedinice u kutnoj zagradi, autori - prezime, inicijal(i) ima, na-
+
+slov članka (može kosim pismom - italic), naslov časopisa, volumen/godište časopisa, godina izda-
+nja, redni broj sveska, stranice od - do gdje se članak ili citirani navod nalazi.
+
+Članci u zbornicima radova [3]:
+   Navodi se redni broj bibliografske jedinice u kutnoj zagradi, autori - prezime, inicijal(i) ima, na-
+
+slov članka (može kosim pismom - italic), naslov zbornika, izdavač, godina izdavanja, mjesto izda-
+vanja, stranice od - do gdje se članak ili citirani navod nalazi.
+
+Programski sustav, programski paket ili program [4]:
+
+===== [unisb-upute-zavrsni-diplomski-2024 | str. 18] =====
+U primjeru korištenja programskih sustava, programskih paketa ili programa treba navesti nje-
+gov puni i skraćeni naziv, verziju, ime proizvođača i godinu proizvodnje.
+Elektronički izvori
+
+Ime(na) autora (ako je/su poznata), naslov dokumenta, datum nastanka (ako se razlikuje od datuma
+pristupa izvoru), naslov potpunog djela (italic), potpuna http adresa, i datum pristupa dokumentu.
+
+elektronički udžbenik [11]
+članak u elektroničkom časopisu [12]
+tekst na web stranici [13]
+
+Profesorove bilješke s predavanja i vježbi, navodi iz Wikipedije, Scribda, dnevnih i tjednih novina
+te slično, nisu literatura za diplomski ili završni rad.
+
+Prilog 12. Temeljni koraci pri izradi završnog rada
+
+Rb   Aktivnost             Nositelj                  Dokument              Komu se dostav-
+r.                        aktivnosti                                                  lja
+
+1.   Odabir teme i        Student/ica i              On-line prijava       Povjerenstvu za za-
+        mentora            mentor/ica                                          vršne ispite
+
+      Upis Teme rada u    Mentor/ica                 Ispisan zadatak iz       Studentu/ici i
+2. ISVU sustav i u-                                    ISVU sustava        Predsjedniku/ici za
+                                                                           završne/diplomske

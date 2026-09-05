@@ -1,0 +1,321 @@
+===== [oss-upute-drustveni | str. 2] =====
+Sadržaj
+
+1. UVOD ................................................................................................................................. 1
+2. IZGLED ZAVRŠNOG RADA ........................................................................................... 2
+3. NAČIN CITIRANJA U ZAVRŠNOM RADU................................................................... 9
+
+  3.1. Citiranje knjiga .......................................................................................................... 10
+  3.2. Citiranje znanstvenih i stručnih radova ..................................................................... 11
+  3.3. Citiranje znanstvenih i stručnih radova u zbornicima i zbirkama radova ................. 11
+  3.4. Citiranje znanstvenih i stručnih članaka u časopisima .............................................. 11
+  3.5. Citiranje publikacija međunarodnih organizacija i dr. .............................................. 12
+  3.6. Citiranje zakonskih propisa ....................................................................................... 12
+  3.7. Dodatne napomene kod citiranja literature................................................................ 12
+
+                                                                                                                           i
+
+===== [oss-upute-drustveni | str. 3] =====
+1. UVOD
+
+Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora obrađuje
+određenu temu. Izradom završnog rada student dokazuje sposobnost primjene teorijskog i
+praktičnog znanja stečenog tijekom studija kao i samostalnost u obradi praktičnih problema iz
+struke uz korištenje: literature, Internetskih resursa, empirijskih istraživanja, računarske i
+analitičke obrade, znanja i iskustva stručnjaka iz prakse te svih ostalih izvora neophodnih za
+izradu rada.
+Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između
+25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na
+specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata
+(bez naslovnice, sadržaja, popisa literature, popisa slika, popisa tablica i priloga), proreda 1,5 i
+margina od 2,5 cm sa svih strana. Standardna veličina slova za tekst završnog rada je 12 pt.,
+font Times New Roman, dok se oblikovanje naslova, formula, izvora tablica i sl. definira
+kasnije u ovim Uputama.
+Tekst u završnom radu treba biti obostrano poravnan. Između odlomaka mora biti jedan prazni
+redak, bez uvlačenja teksta kao i između svakog poglavlja, odnosno podpoglavlja i teksta.
+Tekst rada uvijek se piše u neutralnom obliku (npr. "objasnit će se"/definirat će se“, a ne
+"objasnit ću"/“definirat ću“) vodeći računa o pravopisnim standardima.
+
+                                                                                                                           1
+
+===== [oss-upute-drustveni | str. 4] =====
+2. IZGLED ZAVRŠNOG RADA
+
+Završni rad sadrži sljedeće dijelove:
+     naslovna stranica,
+     prva stranica,
+     sadržaj,
+     naslov i sažetak (na hrvatskom, odnosno engleskom jeziku),
+     uvod,
+     izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova),
+     zaključak,
+     literatura,
+     popis tablica,
+     popis slika,
+     popis grafikona i
+     prilozi.
+
+Izgled naslovne stranice kao i prve stranice završnog rada na preddiplomskim stručnim
+studijima propisan je Prilozima 1a i 1b. ovih Uputa, a izgled naslovne stranice kao i prve
+stranice završnog rada na specijalističkim diplomskim stručnim studijima propisan je
+Prilozima 2a. i 2b. ovih Uputa. Naslovna i prva stranica se ne numeriraju. Prva stranica
+završnog rada istovjetna je naslovnoj stranici, format papira je A4.
+
+Sadržaj završnog rada sadrži nazive poglavlja, podpoglavlja itd. s rednim brojem stranice na
+kojoj se nalaze. Izrađuje se korištenjem funkcije „Insert Table of Contents“. Stranica/stranice
+sa sadržajem se numeriraju slovnim oznakama npr. i, ii, iii itd.
+
+Sažetak završnog rada sadrži naziv završnog rada na hrvatskom jeziku, kratke navode o
+glavnim činjenicama, sadržaju i zadatku rada te postignutim rezultatima i/ili zaključcima.
+Opseg sažetka je do pola stranice. Sažetak se piše i na engleskom jeziku (Summary) te sadrži i
+naziv rada na engleskom jeziku.
+
+Uvodom završnog rada student izlaže predmet, odnosno problematiku kojom se završni rad
+bavi kao i strukturu samog rada. U uvodu se ne navode citati drugih autora niti se pišu fusnote.
+
+                                                                                                                           2
+
+===== [oss-upute-drustveni | str. 5] =====
+Kod izlaganja tematike završnog rada razmatraju se postojeće spoznaje o problemu koji se
+istražuje kroz obradu relevantne literature. Tekst mora biti smisleno i logički podijeljen na više
+poglavlja, koja mogu imati podpoglavlja.
+
+Naslovi poglavlja pišu se fontom Times New Roman, veličinom slova 14 pt. i podebljano.
+Za naslove poglavlja druge razine koristi se font Times New Roman, veličina 12 pt. i
+podebljano, dok se za naslove poglavlja treće razine koristi font Times New
+Roman, veličina 12 pt.
+
+2. POJMOVNO DEFINIRANJE OBVEZNICA                           TNR, vel. 14
+                                                               pt, bold,
+
+                                                            UPPERCASE
+
+===== [oss-upute-drustveni | str. 5] =====
+text text text text text text text text text text text text text text text text text text
+
+                                                 TNR, vel.
+                                                   12 pt
+
+2.1.1. Obveznice prema izdavatelju
+
+Text text text text text text text text text text text text text text text text text text
+text text text text text text text text text text text text text text text text text text
+
+Zaključak je završni dio završnog rada u kojemu se sustavno i sažeto navode najvažnije
+informacije i zaključci do kojih se došlo izradom rada. U zaključku se ne navode citati drugih
+autora niti se pišu fusnote.
+
+Poglavlje literatura sadrži abecedni popis korištene literature numeriran arapskim brojevima.
+Redom se navode svi u radu korišteni izvori, a ne navode se izvori koji se u radu ne citiraju niti
+oni na koje se u radu ne upućuje. Popis literature piše se kako slijedi:
+
+                                                                                                                           3
+
+===== [oss-upute-drustveni | str. 6] =====
+- Prezime autora, inicijal imena. (godina izdanja) Naslov knjige: podnaslov. Podatak
+             o izdanju. Mjesto izdavanja: Nakladnik.
+
+         - Prezime autora, inicijal imena. (godina izdanja) Naslov rada, naziv skupa, časopisa
+             ili zbornika radova, Oznaka sveska/godišta/volumena (broj), str. početna-završna.
+
+         - Prezime autora, inicijal imena. (godina izdanja) Naslov rada, naziv skupa, časopisa
+             ili zbornika radova, Oznaka sveska/godišta/volumena (broj), str. početna-završna,
+             web stranica [datum pristupa]
+
+Kod završnog rada na specijalističkom diplomskom stručnom studiju literatura mora sadržavati
+minimalno 5 izvora na stranom jeziku.
+Kod izvora korištenih u radu, a koji se navode u popisu korištene literature, ne stavlja se broj
+stranice s koje je preuzeta određena spoznaja, kao ni broj članka za propise. Međutim, kod
+navođenja članaka sa skupova ili iz časopisa, navodi se broj stranica cijelog rada. Ukoliko se
+navodi više autora/urednika, međusobno se odvajaju zarezom, osim predzadnjeg i zadnjeg koji
+se odvajaju slovom „i“. Prezime i inicijali imena autora (ako ih je više, do tri autora, pišu se svi
+autori, a ako ih je više od tri, piše se samo prvi autor i dr. ili et al. (lat. et altri, i drugi),
+
+                                                                                                                           4
+
+===== [oss-upute-drustveni | str. 7] =====
+Primjer pisanja korištene literature:
+
+            1. Mamić Sačer, I. i Dečman, N. (2010) Računovodstveni tretman
+                nematerijalne imovine sukladno HSFI 5 i MRS 38. Računovodstvo i
+                financije, 56 (11), str. 22.-28.
+
+            2. Omazić, M. A. et al. (2012) Zbirka studija slučaja društveno odgovornog
+                poslovanja. Zagreb: Hrvatski poslovni savjet za održivi razvoj.
+
+            3. Perčević, H. i Dražić Lutilsky, I. (2004) Računovodstveni modeli ocjene
+                profitabilnosti proizvoda. Zbornik Ekonomskog fakulteta u Zagrebu, 4,
+                str. 309-329.
+
+            4. Zelenika, R. (2010) Metodologija i tehnologija izrade znanstvenog i
+                stručnog djela. 4. izdanje. Rijeka: Ekonomski fakultet Sveučilišta u
+                Rijeci, str. 100.
+
+            5. Žager, K., Vašiček, V. i Žager, L. (2004) Računovodstvo za
+                neračunovođe. 3. izdanje. Zagreb: Hrvatska zajednica računovođa i
+                djelatnika, str. 2.
+
+            6. Žunić Kovačević, N. (2017) Porezna amnestija kao instrument porezne
+                politike. Društvena istraživanja: časopis za opća društvena pitanja, 26
+                (1), str. 101-122. https://doi.org/10.5559/di.26.1.06 [24. 11. 2017.]
+
+Nakon popisa literature, u završnom radu se izrađuju zasebno Popis tablica, Popis slika i Popis
+grafikona. Navedeni popisi izrađuju se na način da se u programu za obradu teksta Word na
+alatnoj traci izabere naredba "References", nakon toga "Insert Table of Figures" tako da sadrže
+broj i naziv slike i redni broj stranice na kojoj se nalaze.
+
+Tablice, grafikoni i slike u završnom radu se numeriraju i opisuju i to iznad tablice, grafikona
+ili slike. Svaka tablica, grafikon i slika moraju imati svoj izvor iz kojeg su preuzeti, a navode
+se ispod same tablice, grafikona ili slike. Ukoliko nisu preuzeti iz nekog tuđeg izvora, kao izvor
+
+                                                                                                                           5
+
+===== [oss-upute-drustveni | str. 11] =====
+3. NAČIN CITIRANJA U ZAVRŠNOM RADU
+
+U završnom radu se od drugog autora mogu preuzeti definicije pojmova, znanstvene činjenice,
+ideje, podaci, stavovi, informacije, ilustracije i sl., ali se uvijek treba na vrlo jasan način navesti
+čiji su i iz kojeg bibliografskog izvora preuzeti. To se postiže citiranjem.
+
+Doslovno i dosljedno preuzimanje tuđih spoznaja označuje se stavljanjem preuzetog teksta
+među znakove navođenja („...“) i citiranjem tuđeg djela u pozivnoj bilješki, odnosno fusnoti.
+Kada se duži tekst „prepriča“ vlastitim riječima i kada se tuđe ideje i podaci interpretiraju na
+vlastiti način, tj. parafraziraju, potrebno je navesti izvor iz kojeg su preuzeti. Ako se u citatu
+unutar nekog navoda, ispusti koja riječ, odnosno koji dio teksta, to se mora označiti s tri točke
+(...).
+
+Svi citati (doslovno prepisani dijelovi drugog autora ili izjave) označavaju se navodnicima i
+određuju brojčano uz objašnjenje u pozivnoj bilješki, odnosno fusnoti. Pozivne bilješke se
+navode kronološki i označavaju arapskim brojevima ispod teksta u podnožju stranice.
+Citiranjem tuđih djela ili spoznaja na kraju rečenice koja sadrži tuđe podatke, spoznaje,
+odredbe, ideje i sl., napiše se arapski broj (korištenjem funkcije „Insert Footnote“), koji se zatim
+ponovi na podnožju iste stranice ispod crte koja se pojavi ispod teksta., a iza njega navode se
+svi bitni elementi bibliografske jedinice. Pozivne bilješke pišu se fontom Times New Roman
+veličina 10.
+
+Kod citiranja dijelova knjiga, bitni elementi fusnota su:
+    1. prezime i inicijali imena autora (ako ih je više, do tri autora, pišu se svi autori, a ako ih
+         je više od tri, piše se samo prvi autor i dr. ili et al. (lat. et altri, i drugi), a može se u
+         zagradi napisati prezime i ime redaktora; imena autora se odvajaju zarezom osim
+         pretposljednjeg i posljednjeg koji se odvajaju s „i“),
+    2. godina izdanja u zagradama,
+    3. naslov djela,
+    4. izdanje djela,
+    5. mjesto izdanja,
+    6. izdavač djela - nakladnik,
+    7. stranica s koje se citira tuđa spoznaja (ako se parafrazira tuđa spoznaja koja je u
+         izvornom djelu napisana na više stranica, pišu se sve te stranice, npr. 155.-165.).
+
+                                                                                                                           9
+
+===== [oss-upute-drustveni | str. 12] =====
+3.1. Citiranje knjiga
+
+     djelo jednog, dva ili tri autora
+Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju. Mjesto
+izdavanja: Nakladnik.
+Primjeri:
+
+          1) Kovačević, Z. (2001) Restrukturiranje hrvatskih poduzeća. Zagreb:
+               Kastmueller, str. 50.
+
+          2) Dedi, L. i Orsag, S. (2014) Tržište kapitala: radna bilježnica za 4. razred
+               srednje strukovne škole. 1. izd. Zagreb: Alka script, str. 18.
+
+===== [oss-upute-drustveni | str. 13] =====
+3.2. Citiranje znanstvenih i stručnih radova
+
+     diplomski rad, magistarski rad i disertacija
+Prezime, inicijal(i) autora. (godina izdavanja) Naslov. Magistarski rad. Mjesto izdavanja:
+Nakladnik.
+Primjer:
+
+        1) Pivčević, P. (2012) Arbitražno rješavanje pomorskih sporova. Magistarski rad.
+             Split: Pravni fakultet, str. 40.
+
+3.3. Citiranje znanstvenih i stručnih radova u zbornicima i zbirkama radova
+
+     znanstveni i stručni rad u zborniku i zbirci radova
+Prezime, inicijal(i) autora. (godina izdavanja) Naslov rada: podnaslov. U: Prezime, inicijal(i)
+urednika, ur. Naslov zbornika: podnaslov. Mjesto izdavanja: Nakladnik, str. od-do.
+Primjer:
+
+      1) Bubić, J. i Roška, V. (2012) Porezna opterećenja u stečajnom postupku. U:
+          Belak, V., ur., Zbornik radova s 13. međunarodne znanstvene i stručne
+          konferencije Računovodstvo i Menadžment – RiM (Svezak I. – znanstveni
+          radovi). Zagreb: Hrvatski računovođa, str. 1-10.
+
+3.4. Citiranje znanstvenih i stručnih članaka u časopisima
+
+     članak u časopisu
+Prezime, inicijal(i) autora. (godina izdavanja). Naslov članka: podnaslov. Naslov časopisa,.
+Oznaka sveska/godišta/volumena (broj), str. početna-završna.
+Primjer:
+
+       1) Vidović, J., Poklepović, T. i Aljinović, Z. (2014) How to Measure Illiquidity on
+            European Emerging Stock Markets?, Business Systems Research Journal, 5(3),
+            str. 67 - 81.
+
+                                                                                                                         11
+
+===== [oss-upute-drustveni | str. 14] =====
+3.5. Citiranje publikacija međunarodnih organizacija i dr.
+Prezime, inicijal(i) autora, urednika ili tijela odgovornog za dokument (godina izdavanja).
+Naslov dokumenta: podnaslov. Mjesto izdavanja: Nakladnik.
+Primjer:
+
+     1) United Nations (1990) Global outlook 2000: an economic, social, and
+         environmental perspective. New York, Geneva: UN.
+
+3.6. Citiranje zakonskih propisa
+Bitni elementi fusnota kod citiranja zakonskih propisa su:
+
+    1. naziv propisa,
+    2. ime ili naziv službenog glasila,
+    3. broj službenog glasila (uključujući izmjene i dopune) i godina izdanja,
+    4. članak (umjesto uobičajenih stranica).
+
+Primjer:
+
+       1) Zakon o računovodstvu, Narodne novine br. 78/15, 134/15 i 120/16, čl. 55.
+
+Kod citiranja izvora preuzetih s interneta, način citiranja je isti kao u prethodnim danim
+primjerima, s tim što je potrebno navesti punu http adresu kao i nadnevak pristupa navedenoj
+stranici u uglatim zagradama.
+
+3.7. Dodatne napomene kod citiranja literature
+Ako se u završnom radu koristi samo jedno djelo jednog autora i ako se to djelo citira više puta
+kroz završni rad, u tom slučaju se svaki sljedeći put navodi kao: Prezime, Inicijal imena., op.
+cit., str. xy. Za literaturu navedenu dolje:
+
+    1) Orsag, S. (2006) Izvedenice. Zagreb: Hrvatska udruga financijskih analitičara, str. 100.
+                                                                                                                         12
+
+===== [oss-upute-drustveni | str. 15] =====
+2) Orsag, S. (1997) Financiranje emisijom vrijednosnih papira. 3. izmijenjeno i dopunjeno
+         izdanje, Zagreb: RIFIN, str. 220.
+
+    3) Žager, K. et al. (red. Lajoš Žager) (2008) Analiza financijskih izvještaja. 2. prošireno
+         izdanje, Zagreb: Masmedia, str. 55.
+
+primjer za ponovno korištenje fusnote pod brojem 1) glasi:
+    1) Orsag, S., op. cit, str. 110.
+
+Ako se u završnom radu koristi više djela jednog autora i ako se ta djela citiraju više puta kroz
+završni rad, u tom slučaju se svaki sljedeći put navodi kao: Prezime, Inicijali imena., naziv
+djela, op. cit., str. xy.
+Primjer za ponovno korištenje fusnote pod brojem 1) ukoliko se u radu koristi i izvor iz fusnote
+pod brojem 2):
+
+    1) Orsag, S., Izvedenice, op. cit., str. 150.
+Ukoliko se isto djelo koristi kao izvor više puta na istoj stranici rada, u tom se slučaju kod
+drugog i svakog sljedećeg puta korištenja tog izvora na istoj stranici završnog rada citira na
+sljedeći način: Ibidem, str. xy.
+Primjer:
+
+    1) Ibidem, str. 30. – znači da je korišten citat iz prethodne fusnote, ali s druge stranice.
+    2) Ibidem (može i skraćeno ibd. ili ib.) – znači da je korišten citat iz prethodne
+
+         bibliografske jedinice i s iste stranice.
+
+                                                                                                                         13

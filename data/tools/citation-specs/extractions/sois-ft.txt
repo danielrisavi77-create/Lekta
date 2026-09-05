@@ -1,0 +1,370 @@
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 1] =====
+1. Uvodno
+
+Završni/diplomski rad je rad koji student izrađuje na kraju studija te ga u tom procesu vodi
+odabrani ili dodijeljeni mentor, a u nekim slučajevima i komentor. Temu rada student odabire s
+popisa predloženih tema od strane nastavnika ili predlaže i dogovara s nastavnikom, odnosno
+mentorom, a ista se potom prijavljuje. Svi postupci u vezi s prijavom i odabirom teme propisani
+su Pravilnikom o završnom i diplomskom radu za studijske programe koji se izvode na
+Sveučilištu obrane i sigurnosti "Dr. Franjo Tuđman".
+
+Studenti prilikom izrade svog završnog/diplomskog rada koriste znanja koja su stekli tijekom
+studija i koja podrazumijevaju ne samo teorijska, već i praktična znanja kao i primjenu
+istraživačkog pristupa. Cilj je da student primijeni sva tijekom studija stečena znanja te da se
+prilikom izrade rada služi domaćom i stranom literaturom vodeći pri tome brigu o ispravnom
+navođenju/citiranju izvora koje koristi. Uz navedeno, student treba svoj rad usmeno
+prezentirati, točnije javno obraniti pred članovima Povjerenstva te ostalim prisutnima, s
+obzirom na to da je obrana završnog/diplomskog rada javna.
+
+Student može obrađivati odabranu temu na temelju podataka koje prikuplja uz pomoć
+istraživačkih metoda, kao npr. provođenjem intervjua, anketnih upitnika, laboratorijskom
+analizom određenih elemenata, testiranjem i sl. Također, student može obrađivati odabranu
+temu tako da napravi pregled određenog područja, odnosno sustavni pregled određene teme ili
+nekog problema pri čemu se koristi recentnim istraživanjima, teorijama, modelima i sl., te
+objašnjava određene pojave i predlaže rješenja. Student u svakom slučaju treba biti svjestan
+ozbiljnosti svog zadatka, odnosno rada na završnom/diplomskom radu kao i važnosti
+transparentnog dogovora s mentorom vezano za pristup koji će se koristiti prilikom izrade rada
+(npr. istraživački, pregledni), a sukladno tome i metode koje će se primjenjivati. Uz sve, važno
+je da je student svjestan važnosti vlastitog doprinosa vezano uz temu kojom se bavi u
+završnom/diplomskom radu.
+
+Student treba voditi računa o tome da u slučaju izrade rada koji se temelji na istraživačkom
+pristupu treba opisati predmetno područje. Uz to, treba opisati problem koji se istražuje i
+postaviti hipoteze. Hipoteze su tvrdnje koje će se potvrditi ili opovrgnuti. Student treba opisati
+metodologiju koju je koristio i način na koji je obrađivao podatke. Također, student treba opisno
+raspraviti dobivene rezultate, usporediti te rezultate s rezultatima ranijih istraživanja i napisati
+što je zaključio iz svega. I na kraju treba predložiti što bi u budućnosti bilo dobro istraživati, a
+što je povezano s temom s kojom se bavio tijekom izrade svog rada.
+
+U slučaju izrade preglednog rada, student treba voditi račina o tome da opiše predmetno
+područje, navede ciljeve rada kao i korištenu literaturu, definira pregledna poglavlja kojima se
+obrađuje zadana/odabrana tema. Student zapravo opisuje i razrađuje dostupne ranije obrađene
+podatke iz literature iz čega navodi zaključke i sažeto iznosi nove spoznaje do kojih je došao.
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 2] =====
+Ove Upute sadrže, osim toga, i upute za pripremu i izvedbu prezentacije za (javnu) obranu
+završnog/diplomskog rada.
+
+    2. Struktura završnog/diplomskog rada
+
+U nastavku je naveden popis elemenata/dijelova koje završni/diplomski rad treba sadržavati.
+Nakon popisa dijelova objašnjena je svrha i sažete su preporuke za pisanje svakog pojedinog
+dijela. Cilj ovih pojašnjenja je da student razumije što radi te da se proces izrade
+završnog/diplomskog rada odvija s razumijevanjem kako u kontekstu segmenta koji student
+obrađuje, tako i u kontekstu tehničkih elemenata te razumijevanja zašto je potrebno slijediti sve
+upute te se pridržavati zadanih okvira vezanih za tehnički dio (npr. tehničko oblikovanje rada,
+slijed rada, pravila koja se odnose na citiranje, odnosno korištenje tuđih izvora i sl.).
+
+Završni/diplomski rad se sastoji od sljedećih elemenata:
+
+    - Naslovna stranica
+    - Sažetak
+    - Sadržaj
+    - Uvod
+    - Razrada teme (poglavlja)
+    - Metodologija
+    - Rezultati rada
+    - Rasprava
+    - Ograničenja istraživanja
+    - Zaključak
+    - Literatura
+    - Popis tablica (ako je primjenjivo)
+    - Popis ilustracija (ako je primjenjivo)
+    - Popis priloga (ako je primjenjivo, npr. popis korištenih anketa ili korištena anketa)
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 4] =====
+nastaviti baviti temom koju je obrađivao i u budućnosti.
+
+- Zaključak – U ovom dijelu student na kraju navodi u kratkim crtama, a s obzirom na
+    cijeli rad, do kojih zaključaka je došao, odnosno što je zaključio. Zaključak treba biti
+    napisan sažeto i jasno, ali pri tome treba obuhvatiti sve ključne elemente iz napravljenog
+    rada. Svrha je sažimanje glavnih činjenica i rezultata, kritički osvrt i komentiranje svega
+    što je u radu obrađeno s naglaskom na ključne elemente u kontekstu rezultata, opisivanje
+    značajnosti, odnosno svrhovitosti elemenata rada pri čemu je važno obuhvatiti, odnosno
+    navesti i prijedloge za buduća istraživanja i djelovanja vezana uz obrađivanje teme koju
+    je student u svom radu obrađivao. Također, u zaključku je moguće navesti i predviđanja
+    koja se, a povezano s obrađenom temom u budućnosti očekuju.
+
+- Literatura – U ovom dijelu student navodi svu literaturu koju je tijekom izrade rada
+    koristio pri čemu vodi računa da to radi na konzistentan i sistematičan način. Važno je
+    da student s mentorom definira stil citiranja i kroz cijeli rad koristi upravo taj stil.
+    Za društveno i interdisciplinarno područje koristi se APA stil za citiranje.
+    Za tehničko područje koristi se stil citiranja IEEE (Institute of Electrical and Electronics
+    Engineers).
+
+- Važno je istaknuti da mentor upućuje studenta na važnost konzistentnosti u odabiru stila
+    citiranja te na propisani stil citiranja. Svrha navođenja literature je zadovoljiti kriterije
+    koji se odnose na ispravno citiranje.
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 5] =====
+dijelova/elemenata:
+
+    1. Izgled/forma naslovne stranice korice rada
+    2. Izgled/forma naslovne stranice (prva unutarnja stranica)
+    3. Dokument: Izjava o autorstvu i suglasnost za korištenje rada
+    4. Dio: Zahvala (ako je primjenjivo student piše zahvalu na za to predviđenom mjestu
+
+         slijedno sukladno predlošku, ako ju student ne piše, ovaj dio se onda ne navodi, odnosno
+         u slučaju da se koristi predložak, ovaj dio se briše)
+    5. Dokument: Završni/diplomski zadatak br. X (navesti broj zadatka)
+    6. Sadržaj
+    7. Sažetak i ključne riječi na hrvatskom jeziku/Sažetak i ključne riječi na engleskom jeziku
+    8. Dio koji se navodi na kraj: Literatura i u slučaju da je primjenjivo popis slika, popis
+         tablica, popis oznaka, prilozi.
+
+Ako student odluči koristiti predložak, treba voditi računa o tome da isti prilagodi sukladno
+tome piše li završni ili diplomski rad te da se pridržava uputa za pisanje koje su navedene u
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 6] =====
+ovom dokumentu kao i dogovora s mentorom. Cilj je da student osvijesti kako je važno voditi
+računa o tome da svaki rad koji oblikuje treba biti konzistentan u svim segmentima (npr.
+terminologija, način citiranja, oblikovanje teksta, font koji se koristi i sl.). Također, važno je da
+student osvijesti kako uvijek prilikom izrade radova postoje upute za pisanje koje treba pronaći
+te sukladno kojima treba postupati vezano za oblikovanje rada.
+
+    3. Upute za izradu prezentacije i pripremu za obranu završnog/diplomskog rada
+
+Za pripremu obrane završnog/diplomskog rada student je dužan pripremiti prezentaciju svog
+rada u elektroničkom obliku pri čemu je dužan koristiti zadani predložak Sveučilišta obrane i
+sigurnosti „Dr. Franjo Tuđman“. Predložak je dostupan na web stranici SOIS FT.
+
+Važno je da student razumije koja je svrha prezentacije koju kreira, a pri tome i koja je svrha
+javne obrane rada.
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 6] =====
+završnom/diplomskom radu i vezano za temu koju je obrađivao);
+    4. Dio vezan za temu koju je student obrađivao – srž prezentacije;
+    5. Metodologija (dovoljno je na jednom slajdu navesti kojom metodologijom se student
+
+         služio tijekom izrade svog završnog/diplomskog rada);
+    6. Zaključak;
+    7. Pitanja - dio koji podrazumijeva vrijeme za pitanja. Bilo bi dobro da na slajdu stoji tekst
+
+         kao npr. „Hvala na pažnji. Pitanja?“ (nakon što student završi prezentiranje svog rada,
+         slijedi vrijeme za pitanja od strane članova Povjerenstva. Nakon članova Povjerenstva
+         za obranu i ocjenu završnih/diplomskih radova, pitanja mogu postaviti i dionici iz
+         publike);
+    8. Na kraju prezentacije student može navesti Literaturu koju je koristio – u slučaju da je
+         npr. koristio neke dodatne izvore, fotografije, grafičke prikaze, konkretne definicije i sl.
+
+    3.1. Kako se pripremiti za prezentiranje/obranu rada:
+    - Student treba voditi računa o tome da je tekst na slajdovima kratak i jasan, naveden u
+
+         obliku natuknica, odnosno da na slajdove ne navodi tekst u obliku dugačkih rečenica,
+         opsežne definicije i sl., koje potom planira čitati. Tekst na slajdovima treba promatrati
+         više kao element koji služi za podsjetnik vezano za elemente/temu o kojoj student
+         govori.
+    - Prilikom pripreme prezentacije, bilo bi dobro da student sam sebi postavi pitanja zašto
+         će nešto govoriti; što želi objasniti i koji efekt želi postići. Također, prilikom pripreme
+         prezentacije, bilo bi dobro da se student vodi time da prezentira temu koju je obrađivao
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 8] =====
+3.2.Dodatni savjeti/preporuke za obranu rada:
+- Držati se uspravno i ne držati ruke u džepovima ili prekrižene;
+- Pozdraviti sve prisutne;
+- Student se može kratko predstaviti (reći svoje ime i prezime, koji studij završava, koju
+
+    temu je obrađivao i onda slijedno nastaviti s prezentacijom);
+- Odabrati jednu točku prema publici u koju će tijekom prezentacije gledati ili
+
+    ravnomjerno usmjeravati pogled prema svim članovima Povjerenstva (ne gledati u samo
+    jednog člana tijekom cijele prezentacije) ili u jednu osobu iz publike; također nikako
+    nije dobro gledati samo i isključivo u prezentaciju/ekran na kojem se ista prikazuje;
+- Ne čitati sa slajdova/kao što je već navedeno – slajdovi služe samo za podsjetnik
+    studentu koji prezentira, odnosno brani svoj rad; Dodatno, jedino u slučaju navođenja
+    konkretne definicije ili citata, tekst se može pročitati;
+- Nakon što završi s prezentiranjem, student se treba zahvaliti na pažnji prisutnima;
+- Nakon svakog postavljenog pitanja od strane člana Povjerenstva ili nekoga od prisutnih
+    (ako do toga dođe), bilo bi dobro da se student zahvali na pitanju prije nego krene
+    odgovarati na postavljeno pitanje;
+- Na samom kraju, odnosno nakon što Povjerenstvo donese odluku o ocjeni rada, student
+    se vraća u prostoriju te je uobičajeno da mu članovi Povjerenstva čestitaju na uspješnoj
+    obrani. Stisak ruke je važan. Vodite računa o tome da bude dovoljno jak/snažan, ali ne
+    pregrub te da je kratkog trajanja (ne zadržavati nečiju ruku).
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 9] =====
+4. Upute za citiranje
+
+4.1. IEEE stil
+
+Stil citiranja IEEE (Institute of Electrical and Electronics Engineers Style) jedan je od
+najzastupljenijih u tehničkim su znanostima.
+
+I) Citiranje unutar teksta
+
+Prvi korak pri citiranju navođenje je izvora u tekstu. Prema IEEE-ovu stilu citiranja, svaki citat
+bilježi se u tekstu jednostavnim korištenjem rednih brojeva u uglatim zagradama [1], bez
+navođenja autora i datuma. Svaki broj naveden u tekstu označava jedan izvor, a izvori se
+numeriraju prema redu kojim se pojavljuju. Jednom kad je nekom izvoru dodijeljen broj, isti
+broj koristi se i u svim sljedećim citiranjima tog izvora poslije u tekstu. Isti način primjenjuje
+se i za tiskane i za elektroničke izvore. Svaki broj referencije treba navesti u uglatim zagradama
+u istom redu u kojem je tekst na koji se odnosi, ispred interpunkcijskih znakova te s razmakom
+ispred zagrade.
+
+Navođenje više izvora odjednom može se pisati i unutar jedne zagrade [3, 4, 15, 22], ali
+uobičajeniji je oblik jedan par zagrada za svaki pojedini izvor. Ako se navodi nekoliko
+referencija koje idu po redu, mogu se navesti prva i zadnja s povlakom između, na primjer [2]
+– [5].
+
+Primjeri:
+
+- Teorija je prvi put predstavljena 2004. godine [1].
+- Za više informacija, vidi [6].
+- Rezultati nekoliko novih istraživanja [2], [8], [9] ukazuju na mogućnosti...
+
+Kad se navodi autor u tekstu, navodi se samo prezime. Ako publikacija ima više od tri autora,
+navodi se samo prvi autor nakon čega se piše kratica et al. ("i ostali").
+- Belamarić [2] tvrdi da…
+- Hogan, Liu i Ming [7] dokazali su da…
+- Hogan et al. [3] dobili su slične rezultate…
+
+II) Popis referenci u popisu literature
+
+Na kraju teksta potrebno je navesti popis korištene literature. Popis se sastoji od redom
+navedenih citata sa svim podacima. Redoslijed izvora nije abecedan, nego se radovi popisuju
+prema pojavljivanju u tekstu.
+
+Broj citata navodi se u uglatoj zagradi uz lijevu marginu;
+koristi se jednostruki prored unutar navoda, dvostruki između navoda.
+Imena autora u popisu literature navode se u obliku "Inicijal imena, Prezime". Ako publikacija
+ima do šest autora, navode se imena svih autora odvojena zarezom (osim posljednjih dvaju
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 10] =====
+autora koji su odvojeni veznikom "i"). Ako publikacija ima više od šest autora, navodi se prvi
+nakon čega se piše kratica et al.
+
+Knjiga - autorska
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, Naslov knjige, izdanje (ako nije
+prvo). Mjesto izdanja: Izdavač, godina.
+
+Poglavlje u knjizi
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naslov poglavlja u knjizi," u
+Naslov knjige, izdanje (ako nije prvo). Inicijal urednikova imena. Urednikovo prezime, Ur.
+Mjesto izdanja: Izdavač, godina, broj stranice.
+
+Urednička knjiga
+
+[broj referencije] Inicijal urednikova imena. Urednikovo prezime, Ur., Naslov knjige, izdanje
+(ako nije prvo). Mjesto izdanja: Izdavač, godina.
+
+Knjiga kojoj je autor institucija ili korporativno tijelo
+
+[broj referencije] Naziv korporativnog tijela, Naslov knjige, izdanje (ako nije prvo), Mjesto
+izdanja: Izdavač, godina.
+
+Elektronička knjiga
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, Naslov knjige, izdanje (ako nije
+prvo). Mjesto izdanja: Izdavač, godina. [Vrsta medija]. Dostupno: URL. [Datum pristupa:
+dan. mjesec riječima godina.].
+
+Članak u časopisu
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naslov članka," Naslov
+časopisa, godište, broj, broj stranice, godina.
+
+Članak u elektroničkom časopisu
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime,"Naslov članka," Naslov
+časopisa, godište, broj, broj stranice ako postoji, godina. [Vrsta medija]. Dostupno: URL.
+[Datum pristupa].
+
+Radovi s konferencija
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naslov rada," u Naslov
+konferencije, Mjesto, godina, broj stranice.
+
+Članak u enciklopediji
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naslov teksta," u Naslov
+enciklopedije. Izdavač, godina, broj stranice ako postoji.
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 11] =====
+Članak u mrežnoj enciklopediji
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naslov teksta," Naslov
+enciklopedije. Izdavač, [vrsta medija], godina, broj stranice ako postoji. Dostupno: URL.
+[Datum pristupa].
+
+Mrežna stranica
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime ili naziv autora, "Naslov teksta,"
+Naziv mrežne stranice, godina. [Vrsta medija]. Dostupno: URL. [Datum pristupa].
+
+Napomena: na mrežnim stranicama često nije moguće pronaći detaljne informacije, ali bi
+uvijek trebalo navesti što je više moguće podataka.
+
+Standardi
+
+[broj referencije] Naslov standarda, Broj standarda, datum.
+
+Izvještaji
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naslov izvještaja," Skraćeni
+naziv tvrtke, Mjesto, Broj izvještaja, godina.
+
+Patenti
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naziv patenta," Država gdje je
+patent registriran i broj patenta, dan. mjesec i godina.
+
+Disertacije, diplomski i završni radovi
+
+[broj referencije] Inicijal autorova imena. Autorovo prezime, "Naslov disertacije," vrsta
+publikacije, Odsjek, Fakultet, Grad, godina.
+
+Izvori:
+
+[1] IEEE DataPort, "How to Cite References: IEEE Documentation Style". [Online].
+Dostupno: https://ieee-
+dataport.org/sites/default/files/analysis/27/IEEE%20Citation%20Guidelines.pdf [Datum
+pristupa 8. travnja 2025.]
+
+[2] IEEE, "Reference Guide," 2023. [Online]. Dostupno:
+https://journals.ieeeauthorcenter.ieee.org/wp-
+content/uploads/sites/7/IEEE_Reference_Guide.pdf [Datum pristupa 8. travnja 2025.]
+
+[3] B. Marijanović, A. Stipčić i M. Tucaković, "Kratke upute za akademsko pisanje," 2022.
+[Online]. Dostupno:
+https://www.fer.unizg.hr/_download/repository/Kratke_upute_za_akademsko_pisanje.pdf
+[Datum pristupa: 8. travnja 2025.]
+
+===== [sois-ft-upute-zavrsni-diplomski-2025 | str. 12] =====
+4.2. APA stil
+I) Citiranje unutar teksta
+Jedan rad jednog autora
+Prezime autora (godina izdavanja publikacije) navodi…
+U novijim proučavanjima Prezime autora (godina izdavanja publikacije)
+Godine 1994 Autor je usporedio….
+
+Unutar jednog paragrafa nije potrebno navoditi godine rada sve dok ne postoji mogućnost
+da se radi o različitim radovima.
+
+Jedan rad skupine autora (do 6)
+Ako se radi o dvojici autora uvijek treba navoditi imena oba autora svaki put kada se
+referenca navodi u tekstu.
+Kada rad ima tri, četiri ili više autora prvi put treba navesti imena svih autora a u kasnijim
+navodima navesti samo ime prvog autora i iza toga navesti „i sur.“
+
+Rad sa šest ili više autora
+Ako rad ima šest ili više autora navodi se ime samo prvog autora i „i sur.“ svaki put. Iznimka
+je ako ima više radova sa šest ili više autora, tada treba navesti ime prvog autora i imena
+drugih autora (onoliko koliko je potrebno da se razlikuju dvije reference).
+
+Autori s istim prezimenima
+Ako lista uključuje reference jednog ili dva primarna autora s istim prezimenom treba
+uključiti inicijale prvog autora u svim citiranjima, čak i ako se razlikuje godina izdanja.
+
+Dva ili više radova u zagradama
+U tekstu je moguće citirati autora na način da se i autor i godina stave u zagradu.
+
+Redoslijed citiranja dva ili više radova unutar zagrada treba odgovarati redoslijedu radova
+u popisu literature, a prema slijedećim pravilima:
+Dva ili više radova istih autora treba posložiti prema godini izdanja, od starijih prema
+novijima.
+Dva ili više radova istih autora s istom godinom izdanja dodatno se označavaju malim
+tiskanim slovima - a,b,c,d...
+
+Dva ili više radova različitih autora

@@ -1,0 +1,205 @@
+===== [apuri-pravilnik-diplomski-2025 | str. 6] =====
+Upute za pisanje diplomskog rada
+
+Diplomski rad sastoji se od praktičnog dijela koji predstavlja rezultat rada na
+umjetničkom projektu vezanom za odabranu i prijavljenu temu (likovnog rada, izvedbenog
+rada, audiovizualnog, praktičnog istraživanja u nastavi) i pisanog dijela koji predstavlja
+teorijsku podlogu i opis umjetničke intervencije.
+
+Pismeni dio rada piše se u skladu sa standardima znanstvenog diskursa te prema
+strategijama i tehnikama pisanja akademske proze. Uputama za pisanje diplomskog rada
+
+definirano je oblikovanje, struktura i nužni dijelovi teksta kao i načini pisanja citatnica.
+
+Oblikovanje teksta:
+
+- Obim rada je između 30 i 70 kartica teksta (jedna kartica sadrži 1 800 znakova s prazninama).
+
+- Rad se piše na računalu.
+
+- Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka.
+
+- Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova
+10 tipografskih točaka.
+
+===== [apuri-pravilnik-diplomski-2025 | str. 7] =====
+3.1.1. NASLOV PRVOG PODODJELJKA
+
+Obavezni dijelovi rada:
+
+- NASLOVNICA je izvanjska stranica koja pri tvrdome uvezu čini korice.
+
+- NASLOVNA STRANICA je prva unutarnja stranica s desne strane.
+
+- SAŽETAK je jezgrovit prikaz glavnih teza rada u dužini od najviše pola kartice teksta.
+
+- SADRŽAJ je popis svih dijelova rada točno onim redoslijedom kojim se pojavljuju u tekstu
+s naznakom brojeva stranica na kojima započinju. Sastavljen je od naslova i podnaslova
+pojedinih dijelova, a generira se automatski u programu Word (References — Insert Table;
+Reference — Tablica sadržaja).
+
+- UVOD je prvo poglavlje u radu i numerira se brojem 1., sadrži kratku informaciju o pitanju
+
+(problemu, temi) koje se obrađuje u radu, razlozima izbora teme i načinima na koji se ista
+
+namjerava obraditi.
+
+===== [apuri-pravilnik-diplomski-2025 | str. 8] =====
+- OSNOVNO TIJELO TEKSTA ILI RASPRAVA obuhvaća razradu teme kroz poglavlja i
+odjeljke od kojih je svako numerirano ovisno o razini.
+
+- ZAKLJUČAK je posljednje poglavlje rada u kojemu se vrlo kratko donose spoznaje o temi,
+odnosno rezultati istraživanja odnosno umjetničke intervencije kao i odgovori na postavljena
+pitanja i probleme. Donosi se i kratak osvrt na korištene metode te projekcija aktivnosti u
+budućnosti kao i naznaka nekih novih istraživačkih/umjetničkih pitanja i intervencija koja
+su se ovim radom otvorila.
+
+- LITERATURA je popis korištenih izvora te se numerira kao poglavlje. Izvori se u popisu
+numeriraju abecednim redom prema prezimenima autora.
+
+- POPIS ILUSTRACIJA; POPIS KRATICA; POPIS TABLICA ILI NEKI DRUGI
+PRILOZI umeću se ovisno o naravi rada odnosno samo onda kada u tekstu postoje neki
+
+prilozi, tablice, grafikoni, slike i slično.
+
+Izgled korica i naslovne strane:
+
+===== [apuri-pravilnik-diplomski-2025 | str. 11] =====
+Upute za citiranje, parafraziranje i oblikovanje citatnica i bilješki:
+
+Navođenje referenci u tekstu je nužno jer se na taj način dokazuje valjanost teza i
+ukazuje se na korištene izvore. Iz teksta mora biti jasno što su autorove ideje i teze, a što je
+sadržaj preuzet iz drugih autorskih izvora. Ne navođenje korištenih izvora smatra se krađom i
+plagiranjem. Za navođenje i upućivanje na korištene izvore odnosno preuzete podatke ili
+cjelovite rečenice nekog drugog autora koristimo citatnice (neologizam od lat. cito — navodim,
+citiranje, citatnost). Citatnice su bibliografske bilješke u kojima se donose podatci potrebni za
+identifikaciju citiranih ili konzultiranih izvora. Svaki izvor (knjiga, članak, zbornik radova,
+internetski izvor ili drugo) koji je poslužio za pisanje teksta odnosno iz kojega su preuzete
+informacije mora točno na tom mjestu u tekstu biti označen citatnicom odnosno fusnotom (eng.
+footnote) koje se generiraju automatski u programu Word (Reference — Umetni fusnotu;
+References — Insert Footnote). Citatnice se označavaju arapskim brojem u obliku eksponenta i
+pozicioniraju na kraju rečenice, nakon točke.!
+
+Tri su osnovna načina uporabe izvora citiranje, parafraziranje i sažimanje. Citati (od lat.
+cito — navodim) su doslovno preuzeti dijelovi tuđega teksta u sklopu vlastitoga. Obilježavaju se
+navodnim znakovima (,, ... “) nakon čega slijedi citatnica kojom se upućuje na izvor iz kojega
+su preuzeti. Parafraziranje (od grč. paraphrazein — prepričati) je oblik korištenja izvora pri
+kojemu se tuđe ideje i argumenti ne prenose od riječi do riječi poput citata već su prepričani
+vlastitim riječima. Sažimanje se ne obilježuje navodnicima, jer u njemu nema tuđih riječi. Na
+sažimanje se međutim obvezno upućuje u citatnicama, jer je riječ o osvrtu na tuđe ideje i
+metode. Upućivanje je najopćenitiji poziv na tuđi tekst u kojemu se kratko naznačuje izvor
+
+važan za temu. Citatnica dolazi neposredno nakon spominjanja izvora ili na kraju rečenice.
+Upute za oblikovanje citatnica prema vrsti izvora:
+
+Članci u časopisima
+
+Primjer: VLADIMIR MARKOVIĆ, Kuća i prostor grada u Dubrovniku nakon potresa 1667.
+godine, u: Radovi Instituta za povijest umjetnosti, 14 (1990.), 137-149.
+
+1. IMEI PREZIME autora
+
+2. Naslov: Podnaslov
+
+3. u:
+
+! Primjer fusnote.
+
+===== [apuri-pravilnik-diplomski-2025 | str. 13] =====
+Katalozi izložbi
+
+Primjer: Pisana riječ u Hrvatskoj, katalog izložbe, (ur.) Josip Bratulić, Zagreb, 1985., 22.
+
+Kataloška jedinica u katalogu
+Primjer: NINA KUDIŠ, "Alessandro Maganza, Bogorodica od sv. Ružarija sa svecima", u:
+
+Višnja Bralić, Nina Kudiš, Slikarska baština Istre, Zagreb 2006., 236-238, kat. 146.
+
+Navođenje tekstova ili natuknica u izdanjima u više tomova:
+Primjer: Hrvatska likovna enciklopedija, "Zasche Ivan", ur. Žarko Domjan, Zagreb 2005, 107.
+ili
+
+EJ. OLSZEWSKI, “Micheli, Parrasio”, u The Dictionary of Art, XXI, London 1996, 462.
+
+Web izvori
+Ime odnosno imena autora (ako je/su poznata), naslov dokumenta, naslov potpunog djela
+(kurziv), datum nastanka (ako se razlikuje od datuma pristupa izvoru), potpuna http adresa i
+
+datum pristupa dokumentu.
+
+Članak u elektroničkom časopisu:
+
+Primjer: Jadranka Stojanovski, Croatian Libraries: The War Is Behind Us, What Brings the
+Future?, Ariadne. The Web version (1996), 5. URL: http://www.ukoln.ac.uk/ariadne/issue6
+(pristupljeno 13.06.1997.).
+
+Tekst na web stranici:
+Primjer: Lauren P. Burka, A hypertext history of multi-user dimensions. The MUDdex. (1993.)
+URL: http://www.apocalypse.org/pub/u/Ipb/muddex/essay/ (pristupljeno 5.12.1994.).
+
+Primjer uputa za kraćenje citatnica:
+
+Kako bi se izbjeglo opetovano cjelovito pisanje izvora moguće je nakon prvog
+cjelovitog navođenja izvora u svakoj sljedećoj bilješki koristiti skraćenu verziju. Kratiti valja
+funkcionalno, tako da se cjeloviti podatci mogu pronaći u bibliografiji ili u prethodnoj punoj
+bilješci. Bilješke se mogu kratiti na dva osnovna načina: kraćenjem bibliografskih podataka te
+
+primjenom latinskih ili domaćih kratica.
+
+Primjer kraćenja bibliografskih podataka:
+
+===== [apuri-pravilnik-diplomski-2025 | str. 14] =====
+Thi:
+
+* Frangeš, Povijest hrvatske književnosti, 372.
+
+Ili:
+
+* Frangeš, Povijest, 372.
+
+Primjer kraćenja uporabom latinskih ili domaćih kratica:
+
+Klasične su latinske kratice Ibid. (ibidem — na istome mjestu, isto). Ibid. se odnosi na
+isti izvor citiran u bilješci neposredno prije i istu stranicu. Kada se u istome nizu citira isti izvor,
+ali različita stranica, uz ibid. se piše broj stranice. Op. cit. (opus citatum — navedeno djelo, hrv.
+kratice n. dj. i nav. dj.). Op. cit. odnosi se na različitu stranicu istoga izvora koji nije citiran
+neposredno prije. Loc. cit. (loco citato — na navedenome mjestu, hrv. kratice n. m. i nav. mj.).
+
+Loc. cit. odnosi se na istu stranicu istoga izvora koji nije citiran neposredno prije.
+
+*! Flaker, Stilske formacije, 107.
+
+52 Ibid.
+
+53 Ibid., 183.
+
+“4 Žmegač, Književnost i povijest društva, 91.
+°° Flaker, op. cit., 295.
+
+%6 Žmegač, loc. cit.
+
+===== [apuri-pravilnik-zavrsni-2025 | str. 2] =====
+Ill. Oblikovanje završnog rada
+
+Članak 7.
+
+Završni rad otisnut je na papiru A4 formata.
+Oblikovanje teksta mora biti kako slijedi:
+
+— Margine: 2,5 cm
+
+— Font: Times New Roman
+
+— Veličina: 12pt, za fusnote 10pt
+
+—  Prored: 1,5
+
+— Poravnanje: obostrano
+
+—  Obrojčavanje stranica: u podnožju, desno
+Očekivani opseg teksta završnoga rada iznosi u pravilu od 2 do 10 stranica, ne uključujući
+
+korice i fotografije u privitku.
+
+Clanak 8.
+Završni rad treba sadržavati sljedeće formalne elemente i sadržajne cjeline:

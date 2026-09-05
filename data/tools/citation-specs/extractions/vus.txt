@@ -1,0 +1,386 @@
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 1] =====
+Članak 2.
+
+Stručni prijediplomski studiji i stručni diplomski studiji na Veleučilištu u Šibeniku završavaju
+polaganjem svih ispita, ispunjavanjem svih studentskih i ostalih obaveza propisanih
+programom studija, te izradom i obranom završnog odnosno diplomskog rada u skladu s ovim
+Pravilnikom. Student stručnog prijediplomskog studija izrađuje završni rad, a student stručnog
+diplomskog studija izrađuje diplomski rad.
+
+                                                   Članak 3.
+
+Završni odnosno diplomski rad je samostalni pisani rad studenta kojim student pod vodstvom
+mentora dokazuje sposobnost i samostalnost u obradi odabrane problematike, uz korištenje
+literature, računalne i analitičke obrade, znanja i iskustva iz prakse te svih ostalih izvora
+neophodnih za izradu rada.
+
+                                                   Članak 4.
+
+(1) Vijeće Veleučilišta na prijedlog dekana imenuje Povjerenstvo za završni i diplomski rad (u
+daljnjem tekstu: Povjerenstvo). Povjerenstvo ima po jednog člana, iz redova nastavnika, sa
+svakog studija koji se imenuje na mandat od dvije godine. Iznimno, kad se radi o istim studijima
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 8] =====
+Prilog I.
+
+         UPUTE ZA IZRADU ZAVRŠNOG I DIPLOMSKOG RADA
+
+Prema Pravilniku o završnom i diplomskom radu Veleučilišta u Šibeniku završni odnosno
+diplomski rad je samostalni pisani rad studenta kojim student pod vodstvom mentora dokazuje
+sposobnost i samostalnost u obradi odabrane problematika, uz korištenje literature, računalne i
+analitičke obrade, znanja i iskustva iz prakse te svih ostalih izvora neophodnih za izradu rada.
+
+Predložak za izradu završnog odnosno diplomskog rada u Word formatu, kao i predlošci drugih
+obrazaca potrebnih za izradu i predaju završnog odnosno diplomskog rada su dostupni na
+sustavu e-učenja pod kolegijem Završni i diplomski rad.
+
+Više o izradi završnog odnosno diplomskog rada pogledajte u: Lugović, G. (2019.) Upute za
+pisanje seminarskog i završnog rada, Veleučilište u Šibeniku, dostupno na sustavu e-učenja
+pod kolegijem Završni i diplomski rad.
+
+Upute koje slijede predstavljaju pomoć pri izradi završnog odnosno diplomskog rada i primjer
+kako treba izgledati završni odnosno diplomski rad, počevši od naslovnice, a završavaju
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 13] =====
+Veleučilište u Šibeniku
+Završni rad ili diplomski rad
+Odjel studija
+Stručni prijediplomski studij ili Stručni diplomski studij
+
+                NASLOV ZAVRŠNOG ili DIPLOMSKOG RADA
+
+                                   IME I PREZIME STUDENTA/ICE
+                                                Adresa, e-mail
+
+Sažetak rada (opseg do 300 riječi)
+
+(xx stranica / xx slika / xx tablica / xx literaturnih navoda / jezik izvornika: hrvatski)
+Rad je pohranjen u: digitalnom repozitoriju Knjižnice Veleučilišta u Šibeniku
+Ključne riječi: (tri do pet riječi)
+Mentor(ica):
+Rad je prihvaćen za obranu dana:
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 14] =====
+Šibenik University od Applied Sciences
+Final Thesis or Master Thesis
+Department of
+Professional Undergraduate Studies / Professional Graduate Studies
+
+          TITLE OF FINAL THESIS/ TITLE OF MASTER THESIS
+
+                                STUDENT’S NAME AND SURNAME
+                                               Address; e-mail
+
+Abstract (up to 300 words)
+
+(xx pages / xx figures / xx tables / xx references / original in Croatian language)
+Thesis deposited in Šibenik University of Applied Sciences Library digital repository
+Keywords: (three to five words)
+Supervisor:
+Paper accepted:
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 15] =====
+Sadržaj
+
+Sadržaj se kreira na kraju pisanja završnog rada ili diplomskog rada.
+Preporuča se korištenje automatskog sadržaja u Wordu zbog jednostavnosti i brzine:
+References → Table of Contents → Automatic table 1
+
+Kako bi ovaj način kreiranja automatskog sadržaja bio moguć, potrebno je naslove cjelina i
+podcjelina definirati u stilu „Heading“ (Naslov cjeline = Heading 1; naslov podcjeline =
+Heading 2 itd.). U nastavku je primjer sadržaja.
+
+SADRŽAJ                              Times New Roman,
+                                     vel. 14, podebljano
+1. UVOD
+                                     Times New Roman,
+         1.1. Cilj rada              vel. 14, podebljano
+         1.2. Metode rada
+         1.3. Struktura rada                   1
+
+2. TEORIJSKI DIO RADA                Times New1 Roman,
+                                     vel. 12, po1debljano
+         2.1. Cjelina 1
+                  2.1.1. Podcjelina              1
+                  2.1.2.
+                  2.1.3.                       2
+
+         2.2. Cjelina 2              Times New2 Roman,
+         2.3. Cjelina 3                      vel.312
+                                                 3
+3. ZAKLJUČAK                                     4
+LITERATURA                                       5
+PRILOZI                                          5
+
+                                               6
+                                               7
+                                               8
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 18] =====
+2. RAZRADA TEME/SADRŽAJA
+
+Završni rad stručnog prijediplomskog studija treba imati minimalno 30 stranica, a diplomski
+rad stručnog diplomskog studija treba imati minimalno 40 stranica. Broj stranica se računa
+od Uvoda do uključivo Zaključka, ne računajući stranice s literaturom i prilozima iako se one
+numeriraju u istom slijedu.
+
+                                                                                                                4
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 19] =====
+3. OBLIKOVANJE TEKSTA U STRUKTURI RADA
+
+Slijedi nekoliko potpoglavlja u kojima se opisuje kako bi trebali definirati izgled i unos bilješki
+na dnu stranice (fusnote), tablica i slika.
+
+    3.1. Bilješke na dnu stranice (fusnote1)
+
+Bilješke na dnu stranice (engl. footnote) upućuju na važnije činjenice u tekstu, definiraju se
+pojmovi, raspravlja se o sporednim činjenicama, upućuje na suprotna mišljenja.
+
+3.2. Tablice
+
+Tablice je potrebno što bliže smjestiti mjestu njihovog refrenciranja u tekstu. Izbjegavajte
+prelamanje tablice preko dvije (ili više) stranica. Naslov tablice dolazi iznad nje na sljedeći
+način:
+
+References → Insert Caption (pri tome za Caption treba koristiti Tablica, a ne Table) → New
+Label → unos: „Tablica“
+
+Za sadržaj u tablici preporuča se font Times New Roman, slova 11 pt (osnovno pravilo je
+preglednost i čitljivost podataka u tablici).
+
+Tablica 1. Dolasci i noćenja domaćih i stranih turista, Hrvatska, za mjesec kolovoz
+
+  Godina             2017              2018              2019
+
+Dolasci i   Dolasci  Noćenja  Dolasci  Noćenja  Dolasci  Noćenja
+noćenja
+Kolovoz     4.205.544 26.826.651 4.369.121 27.050.659 4.712.039 27.771.360
+
+                                             Izvor: www.dzs.hr
+
+3.3. Slike
+
+1 Fusnote su objašnjenja pojmova potrebnih za razumijevanje teksta i upućuju na neki podatak važan za rad.
+
+                                                                                                                5
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 20] =====
+Slike su: grafikoni, karte, histogrami, sheme i fotografije, a upotrebljavaju se radi
+upotpunjavanja teksta ili jednostavnijeg prikaza teksta.
+
+References → Insert Caption (pri tome za Caption treba koristiti Slika, a ne → New Label →
+unos: „Slika“
+
+            Slika 1. Studentski dom Palacin,
+
+                        Izvor: www.vus.hr
+
+28.000.000                                    27.771.360
+27.750.000
+
+27.500.000
+
+27.250.000              27.050.659
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 22] =====
+isto toliko vremena je ostavljeno i za diskusiju koja će uslijediti nakon vašeg izlaganja.
+Sve što se želi prikazati tijekom izlaganja, slike, programi, tablice, filmovi, itd. mora biti unutar
+predviđenih 15 minuta. Često se događa da pristupnici probiju vremensko ograničenje, a u tom
+slučaju komisija zaustavlja izlaganje i tada pristupnik nema priliku izreći najvažnije –
+zaključak.
+
+    5.1. Pravila za pisanje Powerpoint prezentacije
+Naslovni slajd u zaglavlju treba imati naziv visokog učilišta, odjel i studijski program. U
+središtu treba imati naslov prezentacije (36pt). Ispod naslova se piše naziv kolegija, ime i
+prezime mentora/ice, ime i prezime studenta/ice te matični broj studenta/ice. Poželjno je dodati
+i datum izlaganja rada. U nastavku je primjer naslovnog slajda.
+
+Na slajdovima treba izbjegavati pisanje rečenica (izuzetak su citati). Poželjno je na jednom
+slajdu imati do 7 natuknica te svaka natuknica ne bi smjela imati više od 7 riječi. Preporuča se
+svijetla pozadina s tamnim slovima. Treba izbjegavati intenzivne boje. Veličina fonta bi trebala
+biti minimalno 28 pt. Preporuča se na zadnjem slajdu navesti izvore korištene u prezentaciji.
+
+                                                                                                                8
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 23] =====
+6. ZAKLJUČAK
+
+Zaključkom se vlastitim riječima rezimira sadržaj, navodi razrada, daje odgovor na postavljen
+problem i je li cilj rada ostvaren. U prvom dijelu može se ukazati na sličnosti/razlike s
+postojećim podacima i donijeti zaključak, ukazati na moguće smjernice za daljnji rad,
+usporediti početak rada/cilj rada sa stavom na kraju rada, zaključiti je li ostvarena svrha rada,
+a u drugom dijelu dati svoje mišljenje o obrađenoj temi rada (Lugović, 2019).
+
+LITERATURA
+
+Ukoliko je referenca duža od jednog reda tekst u ostalim redovima se uvlači 1 cm, razmak
+redova je 1, a između referenci treba ostaviti red razmaka (Lugović, 2019, str. 26).
+Reference se mogu navoditi ručno, pri čemu se kod uvođenja novih referenci mora paziti na
+redoslijed. Zbog toga je bolje to raditi pomoću računala koje u tom slučaju automatski ažurira
+redoslijed referenci.
+Više citiranju pogledajte u: Lugović, G. (2019). Upute za pisanje seminarskog i završnog rada.
+Šibenik: Veleučilište u Šibeniku.
+
+Za automatsko citiranje, potrebno je pratiti sljedeće korake:
+References → Insert Citation (stil citiranja je APA) →Add New Source
+
+Za automatski popis literature, pratite sljedeće korake:
+References → Bibliography → Insert Bibliography
+
+Primjer automatskog popisa literarure:
+
+Popis literature sadrži sve izvore koji se citiraju u tekstu i navode se abecednim redom prema
+prezimenu autora ukoliko je autor poznat.
+
+Blašković, N. (2018). Rodne razlike u komunikacijskim vještinama menadžera. Završni rad.
+         Šibenik: Veleučilište u Šibeniku.
+
+Ekonomski institut, Zagreb. (2019). CEIZ indeks. Dohvaćeno iz https://www.eizg.hr/indeksi-
+         168/ceiz-indeks/169: www.eizg.hr
+
+Livaja, I., Acalin, J. (2018). Extensible messaging and presence protocol. Zbornik radova
+         Veleučilišta u Šibeniku, 1-2/2018, 169-181. Dohvaćeno iz https://hrcak.srce.hr/198594
+                                                                                                                9
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 24] =====
+Mazalin, K., & Parmač Kovačić, M. (2015). Odrednice percipirane zapošljivosti studenata.
+         Društvena istraživanja, 24(4), 509-529.
+
+Mečev, D., Goleš, D., & Vudrag, N. (2013). Analiza kvalitete web stranica hotela s 3 i 4
+         zvjezdice na području Šibensko-kninske županije. U: Radić Lakoš, T., Bratić, I.,
+         Grubišić, A., Marguš, D., Mečev, D., Pavlović, M., I, Poljičak., Radačić, M., Šišara, J.,
+         Urem, F. (Ur.), Izazovi današnjice: turizam danas - za sutra (str. 472-480). Šibenik:
+         Veleučilište u Šibeniku.
+
+PRILOZI
+
+Po završetku rada treba generirati popis svih tablica i slika u prilogu, na način:
+References → Insert Table of Figures
+
+Popis tablica
+
+Tablica 1. Dolasci i noćenja domaćih i stranih turista ............................................................. 5
+
+Popis slika
+
+Slika 1. Studentski dom Palacin ................................................................................................ 6
+Slika 2. Noćenja domaćih i stranih turista ................................................................................6
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 26] =====
+KRITERIJI OCJENJIVANJA PISANOG RADA
+
+1 Analiza problema                                                                             2345
+
+2 Pregled literature                                                                           2345
+
+3 Kontekst istraživanja                                                                        2345
+
+4 Korištena metodologija                                                                       2345
+
+5 Nalazi, zaključak i preporuke su primjereni.                                                 2345
+
+6   Student je u izradi rada pokazao samostalnost     koristeći  se  stečenim    znanjem,      2  3  4  5
+    navedenom literaturom uz savjete mentora.
+
+7 Rad je izrađen u skladu sa zadatkom; tema rada je kvalitetno obrađena.                       2345
+
+8   Sažetak je relevantan i sažet,  sadrži  najvažnije informacije iz rada i  daje jasan uvid  2  3  4  5
+    u tematiku rada.
+
+9   Student se pridržavao uputa i rokova te je po potrebi, ispravio rad sukladno uputama       2  3  4  5
+    i primjedbama mentora.
+
+    Rad je usklađen s uputama za izradu; tekstualna i tehnička obrada rada su
+
+    zadovoljavajući; rad je ispravno strukturiran; stil pisanja je primjeren; rad je čitljiv,
+
+    pisan standardnim jezikom bez pravopisnih i gramatičkih grešaka, opseg završnog i
+
+10  diplomskog rada je    odgovarajući (minimalno 30 stranica A4 formata od uvoda  do          ispunjen
+    popisa literature za  završni rad na stručnom prijediplomskom studiju odnosno  40
+
+    stranica na stručnom diplomskom studiju); reference i literatura su ispravno
+
+    navedeni u tijelu rada i u popisu literature; ključne riječi (tri do pet) odražavaju
+
+    suštinu rada.
+
+11  Izvornost rada je provjerena u odgovarajućem      informatičkom  alatu    i  zadovoljava
+    uvjete izvornosti (unijeti postotak poklapanja).
+
+Komentar mentora (po potrebi):_______________________________________________
+___________________________________________________________________________
+
+                  Student(ica) može pristupiti obrani završnog/diplomskog rada.
+
+                                                                                               Mentor(ica):
+
+                                                                                 __________________
+
+Prilog:
+    1. Završni/diplomski rad (spiralni uvez, 1 primjerak)
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 27] =====
+Veleučilište u Šibeniku
+Završni rad ili diplomski rad
+Odjel studija
+Stručni prijediplomski studij ili Stručni diplomski studij
+
+                  NASLOV ZAVRŠNOG ili DIPLOMSKOG RADA
+
+                                     IME I PREZIME STUDENTA/ICE
+                                                  Adresa, e-mail
+
+Sažetak rada (opseg do 300 riječi)
+
+(xx stranica / xx slika / xx tablica / xx literaturnih navoda / jezik izvornika: hrvatski)
+Rad je pohranjen u digitalnom repozitoriju Knjižnice Veleučilišta u Šibeniku
+Ključne riječi: (tri do pet riječi)
+Mentor(ica):
+Rad je prihvaćen za obranu dana:
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 28] =====
+Šibenik University od Applied Sciences
+Final Thesis or Master Thesis
+Department of
+Professional Undergraduate Studies / Professional Graduate Studies
+
+            TITLE OF FINAL THESIS/ TITLE OF MASTER THESIS
+
+                                  STUDENT’S NAME AND SURNAME
+                                                 Address; e-mail
+
+Abstract (up to 300 words)
+
+(xx pages / xx figures / xx tables / xx references / original in Croatian language)
+Thesis deposited in Šibenik University of Applied Sciences Library digital repository
+Keywords: (three to five words)
+Supervisor:
+Paper accepted:
+
+===== [vus-pravilnik-zavrsni-diplomski-2023 | str. 29] =====
+Ja,                                          , student/ica Veleučilišta u Šibeniku, JMBAG
+
+            izjavljujem pod materijalnom i kaznenom odgovornošću i svojim potpisom
+
+potvrđujem da je moj završni/diplomski rad na stručnom prijediplomskom / stručnom diplomskom
+
+studiju _____________________ pod naslovom:  ________________________
+
+     ________________________________________________________________________
+
+isključivo rezultat mog vlastitog rada koji se temelji na mojim istraživanjima i oslanja se na
+
+objavljenu literaturu, a što pokazuju korištene bilješke i bibliografija.
+
+Izjavljujem da nijedan dio rada nije napisan na nedozvoljen način, odnosno da je prepisan iz
+necitiranog rada, te da nijedan dio rada ne krši bilo čija autorska prava.
+
+Izjavljujem, također, da nijedan dio rada nije iskorišten za bilo koji drugi rad u bilo kojoj drugoj
+visokoškolskoj, znanstvenoj ili obrazovnoj ustanovi.
+
+U Šibeniku, ____________________
+
+                                             Student/ica:
+                                             _____________________

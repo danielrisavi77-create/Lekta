@@ -1,0 +1,118 @@
+===== [logri-smjernice-radovi | str. 2] =====
+dokument (.docx ili .doc) i kao PDF dokument (.pdf)
+     • IMENOVANJE DOKUMENTA: Prezime_Ime_Naziv rada_skraćeni naziv kolegija (npr.
+
+          Ivic_Iva_Filtriranje zvuka_GA)
+     • obratiti pozornost na pravopisnu i gramatičku točnost
+     • za naglašavanja u tekstu poželjno se koristiti podebljanim (bold) slovima
+     • uvriježene strane nazive, uključujući i nazive dokumenata i institucija na stranome jeziku
+
+          pisati kurzivom (npr. American Speech-Language-Hearing Association)
+     • studentski seminarski radovi u pravilu se sastoje od: Uvoda, Razrade teme (nekoliko
+
+          potpoglavlja), Zaključka i Literature
+
+                 2. NASLOVI, PODNASLOVI, TABLICE, SLIKE, GRAFIKONI
+
+                          1. Naslovi: Centrirano, bold, font 14
+
+1.1. Podnaslovi: Lijevo poravnanje, bold, font 14
+
+1.1.1. Podnaslovi: Lijevo poravnanje, bold, italic, font 12
+
+Naslovi tablica, grafikona i slika navode se iznad te se numeriraju:
+Tablica 1. (bold) Naziv tablice (italic)
+Dodatna pojašnjenja (opcionalno) - navode se ispod tablice
+
+===== [logri-smjernice-radovi | str. 3] =====
+3. NAVOĐENJE LITERATURE PREMA APA STANDARDU
+
+Svrha navođenja literature je da se čitatelja upozna s izvorima kojima se služilo pri pisanju rada te da
+se omogući pronalaženje citiranog mjesta.
+Svaki izvor literature u tekstu treba biti naveden u popisu literature. Svaka referenca s popisa literature
+treba biti vidljiva u tekstu rada.
+Prilikom navođenja literature preporuča se koristiti APA standard/stil za citiranje, parafraziranje i
+popisivanje literature i izvora.
+Više o njemu možete pronaći na: https://apastyle.apa.org/index
+
+KNJIGE:                        OSNOVNE SMJERNICE ZA CITIRANJE:
+ 1 autor
+           Prezime autora, Inicijal(i) imena autora (godina izdavanja). Naslov knjige: Podnaslov.
+           Nakladnik.
+
+           Primjer:
+
+           Clark, E.V. (2003). First Language Acquisition. Cambridge University Press.
+
+2 autora Autor A. A,. i Autor, B. B. (godina izdavanja). Naslov knjige: Podnaslov. Nakladnik.
+
+           Primjer:
+
+===== [logri-smjernice-radovi | str. 5] =====
+ako je autor nepoznat  Primjer:
+
+                        Bjelica, J. Simptomi disleksije u školske djece. Hrvatska udruga za
+                        disleksiju. http://hud.hr/simptomi-disleksije-u-skolske-djece/
+
+                        Naslov: Podnaslov. Izvor web stranice. https://URL
+
+                        Primjer:
+
+                        The Timeline of Dyslexia. The History od Dyslexia. University of Oxford.
+                        https:/dyslexiahistory.web.ox.ac.uk/timeline-dyslexia
+
+           4. CITIRANJE I PARAFRAZIRANJE IZVORA LITERATURE U TEKSTU
+
+Citiranje je izravno, odnosno doslovno navođenje riječi ili rečenica iz nekog rada, odnosno umetanje
+drugog teksta u vlastiti tekst. Prilikom citiranja nekog izvora literature (knjiga, članak i sl.) uvijek treba
+navesti autora, godinu i broj stranica knjige iz koje je originalni citat preuzet.
+
+ Citat koji sadrži manje od 40 riječi (koristiti navodne znakove za početka i kraj citata):
+
+ Pismenost je „set opipljivih vještina - posebice kognitivnih vještina čitanja i pisanja koje su
+ neovisne o kontekstu unutar kojeg se usvajaju te o obilježjima osobe koja ih usvaja“ (UNESCO,
+ 2006, str. 149).
+
+ Citat s više od 40 riječi (početna margina citiranog teksta treba biti uvučena):
+
+           Jezični razvoj je proces, jednako kao i spoznajni, emocionalni ili socijalni razvoj. To znači da
+           je određen prepoznatljivim miljokazima ili razvojnim obrascima koji se pojavljuju u
+           očekivanim razdobljima. Taj je proces također značajno određen i individualnim obilježjima,
+           što znači da ne teče kod sve djece jednakom brzinom i na isti način, odnosno stil kojim djeca
+           dostižu neke miljokaze nije uniforman (Kuvač Kraljević i Kologranić Belić, 2015, str. 25).
+
+===== [logri-smjernice-radovi | str. 6] =====
+Parafraziranje je neizvorno navođenje, odnosno prepričavanje formulirane misli drugim riječima.
+Koristi se kako bi se se sumirale, prepričale ili protumačile ideje drugih autora. Prilikom parafraziranja
+potrebno je navesti autora / autore i godinu objave rada / radova.
+
+PRAVILA CITIRANJA I PARAFRAZIRANJA U ODNOSU NA BROJ AUTORA:
+
+Broj     U zagradi:                U tekstu:
+autora:
+1        (Riddick, 2010)           Riddick (2010)
+2        (Mohorić i Hržica, 2019)  Mohorić i Hržica (2019)
+3-20     (Ramus i sur., 2003)      Ramus i sur. (2003)
+
+Jedan ili dva autora: Ako se citira ili parafrazira navod jednog ili dvaju autora, u tekstu se uvijek
+navode imena svih autora. Ako je riječ o doslovnom citatu, potrebno je dopisati i broj stranica (vrijedi
+neovisno o broju autora).
+
+Tri i li više autora: Ako se citira izvor literature koji ima tri ili više autora, uvijek se navodi samo ime
+prvog autora te oznaka i suradnici (i sur.).
+
+Sekundarni izvori literature: Sekundarne izvore literature treba koristiti samo u iznimnim
+slučajevima, odnosno kada je primarni izvor nedostupan.
+
+ Sekundarni izvor (godina, prema Primarni izvor, godina)
+
+ Primjer:
+
+ Suzby (1985, prema McKenna i Stahl, 2003) izdvaja 9 razvojnih faza u pristupu čitanja slikovnica u
+ razdoblju od izranjajuće do formalne pismenosti.
+
+ (Autori McKenna i Stahl (2003) – primarni izvor literature koji čitatelju dostupan, navode
+ informacije iz izvora čiji je autor Suzby (1985)– sekundarni izvor literature citiran u primarnome
+ izvoru)
+
+Napomena: U popisu literature navodi se samo primarni izvor literature.

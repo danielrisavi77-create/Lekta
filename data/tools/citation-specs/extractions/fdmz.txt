@@ -1,0 +1,283 @@
+===== [fdmz-upute-2025 | str. 3] =====
+2. STRUKTURA STRUČNOGA/ZNANSTVENOGA ISTRAŽIVAČKOG RADA .............. 3
+2.1. Uvod .................................................................................................................................... 3
+2.2. Cilj .......................................................................................................................................3
+2.3. Ispitanici i metode (Materijal i metode) .............................................................................. 3
+2.3.1. Ustroj studije .................................................................................................................... 3
+2.3.2. Ispitanici (ili materijal istraživanja) ................................................................................. 3
+2.3.3. Metode.............................................................................................................................. 4
+2.3.4. Statističke metode............................................................................................................. 5
+2.4. Rezultati............................................................................................................................... 6
+2.5. Rasprava .............................................................................................................................. 6
+2.6. Zaključak ............................................................................................................................. 7
+2.7. Sažetak (Summary) ............................................................................................................. 7
+2.8. Literatura (reference)........................................................................................................... 8
+2.9. Životopis.............................................................................................................................. 9
+2.10. Prilozi ................................................................................................................................ 9
+2.11. Tablice, grafikoni, slike..................................................................................................... 9
+3. TEHNIČKO OBLIKOVANJE RADA................................................................................ 11
+4. SUSTAV ZA PROVJERU IZVORNOSTI RADOVA – TURNITIN ................................ 15
+5. ODGOVORNO I ETIČNO KORIŠTENJE ALATA UMJETNE INTELIGENCIJE......... 16
+6. TISAK I PREDAJA RADA ................................................................................................ 17
+7. PRIPREMA PREZENTACIJE DIPLOMSKOG RADA .................................................... 19
+8. PRILOZI .............................................................................................................................. 21
+8.1. Prilog 1. Izgled ovitka i naslovne stranice rada................................................................. 21
+8.2. Prilog 2. Izgled trećeg lista rada ........................................................................................ 22
+8.3. Prilog 3. Numeriranje poglavlja i potpoglavlja ................................................................. 23
+8.4. Prilog 4. Preuzimanje izvješća iz Turnitina u Text-Only Report obliku........................... 24
+8.5. Prilog 5. Citiranje i pisanje literature ................................................................................ 25
+
+MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek                                                                                          I
+
+Telefon: +385 31 399-600  Fax: +385 31 399-601  www.fdmz.hr  e-mail: info@fdmz.hr
+
+===== [fdmz-upute-2025 | str. 4] =====
+istraživačka.
+Vrsta rada – navodi se vrsta rada prema Uputama, a može biti istraživački rad.
+Znanstveni ili stručni istraživački rad ima sljedeće obvezne dijelove (redoslijedom kako je
+navedeno):
+1. Uvod
+2. Cilj (ili: Ciljevi)
+3. Materijal i metode (ili „Ispitanici i metode“ ili „Bolesnici i metode“)
+4. Rezultati
+5. Rasprava
+6. Zaključak (ili: Zaključci)
+7. Sažetak (sažetak rada i ključne riječi)
+8. Summary (naslov rada, sažetak i ključne riječi na engleskome jeziku)
+9. Literatura (reference)
+10. Životopis
+11. Prilozi
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+                          Telefon: +385 31 399-600  Fax: +385 31 399-601  www.fdmz.hr  e-mail: info@fdmz.hr 2
+
+===== [fdmz-upute-2025 | str. 5] =====
+logično slijediti metodologija istraživanja, rezultati i zaključci.
+
+Treba pripaziti prilikom pisanja ciljeva: cilj je istraživanja ispitati nešto, a ne utvrditi ili
+procijeniti.
+
+2.3. Ispitanici i metode (Materijal i metode)
+
+U ovome je dijelu potrebno detaljno opisati sve elemente metodologije istraživanja.
+
+2.3.1. Ustroj studije
+
+Opisati vrstu studije. Dobro poznate vrste studija (npr. presječnu studiju) nije potrebno
+podrobno opisivati, već samo citirati odgovarajuću literaturu. Nove oblike studija treba
+iscrpno opisati navodeći koje su skupine uključene u istraživanje, kako su oblikovane, na koji
+su način odabrani članovi pojedinih skupina i sl.
+
+2.3.2. Ispitanici (ili materijal istraživanja)
+
+Opisati tko su ispitanici, iz kojih se populacija i kako uzorkuju, kako je i kada uzorak oblikovan
+i zašto, postoji li kontrolna skupina i tko je sačinjava ,odnosno što čini materijal istraživanja,
+kako i kada je prikupljen i sl. Posebno pojasniti sve dodatne čimbenike studije, primjerice
+kriterije za uključivanje i isključivanje ispitanika u studiju, postupak nasumičnoga
+razvrstavanja (randomizacija), maskiranje itd.
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+
+===== [fdmz-upute-2025 | str. 6] =====
+Opisati pokazatelje (varijable) koje se analiziraju. Opisati na koji način su prikupljeni podatci
+(mjerenje, korištenje upitnika, anketa i sl.) i kojim su metodama obavljena mjerenja i druga
+opažanja.
+
+Osobitu pozornost potrebno je posvetiti etičkom aspektu istraživanja. Odobrenje za provođenje
+istraživanja potrebno je zatražiti prije njegova početka, u skladu s hodogramom koji propisuje
+Etičko povjerenstvo Fakulteta za dentalnu medicinu i zdravstvo Osijek te s hodogramom
+nadležnih institucija u kojima se istraživanje provodi. U ovom odjeljku navode se podaci o
+pribavljenim etičkim odobrenjima, uključujući naziv institucije koja ih je izdala te pripadajući
+urudžbeni broj i klasa pod kojima su odobrenja evidentirana. Student je obvezan pridržavati se
+navedenih etičkih načela tijekom cijelog trajanja istraživanja, uključujući prikupljanje i obradu
+podataka, te po završetku istraživanja pri čuvanju prikupljenih podataka. Navođenjem
+primijenjenih etičkih načela i pribavljenih odobrenja potvrđuje se usklađenost istraživanja s
+temeljnim etičkim standardima, uključujući zaštitu sudionika, povjerljivost podataka i
+odgovorno postupanje s rezultatima, čime se osigurava znanstvena vjerodostojnost i integritet
+istraživanja.
+
+Ako se pri izradi rada koristi originalni anketni upitnik, potrebno je navesti njegov izvor
+(literaturni navod, referencu) i u poslati dopuštenje za njegovo korištenje ako je potrebno ili
+navesti da je javno dostupan te da je njegovo korištenje besplatno i pokriveno CC BY licencom.
+U istraživanju se ne mogu koristiti anketni upitnici koje su sastavili studenti prethodnih
+generacija i s drugih fakulteta.
+
+Svi temeljni postupci rada moraju u ovoj cjelini biti navedeni te dostatno tumačeni i
+obrazloženi. Standardni postupci (mjerenja, upitnici, ankete) navode se samo imenom i
+odgovarajućim citatom; manje poznati postupci trebaju biti popraćeni kraćim opisom i
+literaturnim navodom objavljenoga rada u kojemu su detaljno objašnjeni. Instrumenti
+istraživanja (upitnici, ankete) objavljeni u medijima slobodnoga pristupa (časopisi, mrežne
+stranice) trebaju imati eksplicitnu izjavu autora/časopisa o slobodnoj upotrebi ili uvjetima
+korištenja za druge istraživače.
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+                          Telefon: +385 31 399-600  Fax: +385 31 399-601  www.fdmz.hr  e-mail: info@fdmz.hr 4
+
+===== [fdmz-upute-2025 | str. 7] =====
+2.3.4. Statističke metode
+
+Opisati osnovne osobine i mjerne ljestvice prikupljenih podataka. Navesti koji su se odnosi
+među podatcima istraživali zajedno sa statističkim postupcima koji su se u tu svrhu upotrijebili.
+Općepoznati i jednostavni statistički postupci (kao npr. postupci deskriptivne statistike,
+studentov t-test i sl.) navode se samo imenom i citatom opće statističke literature. Diplomski
+rad treba imati više od deskriptivne statistike (obično se ispituju razlike i povezanosti).
+
+Deskriptivne statističke metode koriste se za sažimanje, sistematizaciju i prikaz osnovnih
+svojstava uzorka, dok inferencijalne statističke metode omogućuju ispitivanje razlika među
+grupama, procjenu povezanosti i prediktorskog doprinosa varijabli te utjecaja na ishod. Sama
+uporaba deskriptivne statistike pruža ograničenu interpretaciju podataka, stoga se u
+istraživačkim i stručnim radovima preporučuje kombinacija deskriptivnih i inferencijalnih
+metoda radi postizanja statistički utemeljenih i metodološki valjanih zaključaka.
+
+Manje uvriježene i složene statističke postupke treba opisati uz pozivanje na literaturu gdje su
+detaljno opisani. Navesti kojim je postupcima izvršena provjera ispunjavaju li prikupljeni
+podatci pretpostavke za korištenje primijenjenih statističkih postupaka te koji su se postupci
+rabili u slučaju da prikupljeni podatci nisu ispunjavali tražene pretpostavke. Također je
+potrebno navesti razinu značajnosti koja se koristila za ocjenu značajnosti dobivenih rezultata
+te postupke za očuvanje odabrane razine značajnosti u slučajevima višestrukog testiranja.
+
+U tekstu rada i tablicama, razinu značajnosti (vrijednost P), potrebno je pisati velikim tiskanim
+slovom P, ali ne nakošenim pismom, kosim slovima (kurziv, italic). Sve vrijednosti P
+zaokružuju se na dvije decimale, osim u slučaju kada je P manji od 0,001, tada se piše samo P
+< 0,001.
+
+Potrebno je navesti koji se računalni program koristio za obradu podataka. Ako se za obradu
+podataka koristio neki od računalnih programa za obradu podataka dostupnih na tržištu, treba
+navesti naziv programa iza kojega se u zagradi navodi inačica, proizvođač te mjesto i država
+proizvodnje. Izvorne i vlastite računalne programe koji su korišteni u obradi podataka treba
+navesti nazivom, inačicom, imenom autora, gradom i državom autora, a detaljan opis programa
+(za vlastite programe i ispis programskog koda) dati u privitku (za vlastite programe i u
+digitalnom obliku na nekom od medija za pohranu, kao što su disketa, CD ili DVD).
+
+Primjer navođenja računalnoga programa korištenoga za statističku analizu podataka:
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+                          Telefon: +385 31 399-600  Fax: +385 31 399-601  www.fdmz.hr  e-mail: info@fdmz.hr 5
+
+===== [fdmz-upute-2025 | str. 8] =====
+podataka ne preporučuje se uporaba tortnih (pie) dijagrama zbog ograničene preglednosti
+i mogućnosti ispravnog tumačenja relativnih vrijednosti. Umjesto toga preporučuje se
+korištenje tabličnog prikaza rezultata, a kada je potrebno, i stupčastih, linijskih ili drugih
+prikladnijih grafičkih prikaza podataka. Podatke prikazane u npr. tablici ne treba prepričavati u
+tekstu, nego samo navesti najvažniji (najzanimljiviji) nalaz, a za detalje uputiti čitatelja na
+tablicu u kojoj su oni prikazani. Svaka tablica i slika moraju biti razumljive i bez čitanja
+dodatnoga teksta (vidi odjeljak 2.11. Tablice, grafikoni, slike).
+
+2.5. Rasprava
+
+Bit je rasprave kritički osvrt na dobivene rezultate. U Raspravi se vlastiti rezultati uspoređuju s
+drugim nalazima te raspravljaju teorijske i praktične posljedice provedenoga istraživanja, tj.
+kako se dobiveni rezultati uklapaju u šire područje opisano na početku Uvoda. Raspravom se
+raspravljaju svi podaci izneseni u poglavlju Rezultati, pojedinačno i/ili u korelaciji s drugim
+rezultatima provedenog istraživanja, a u odnosu na nalaze drugih relevantnih istraživanja i
+teorijskih rasprava. Duljina rasprave treba biti sukladna broju iznesenih prikazanih rezultata. U
+koncu rasprave raspravljaju se ograničenja provedenog istraživanja i iznose preporuke za
+buduća istraživanja.
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+                          Telefon: +385 31 399-600  Fax: +385 31 399-601  www.fdmz.hr  e-mail: info@fdmz.hr 6
+
+===== [fdmz-upute-2025 | str. 10] =====
+Ključne riječi: perfekcionizam; samoprocjena; samoučinkovitost; studenti sestrinstva;
+zadovoljstvo.
+-----------------------------------------------------------------------------------------------------------------
+
+Na stranici sažetka na engleskome jeziku, a prije samoga sažetka, navodi se naslov rada na
+engleskome jeziku. Naslov rada na engleskom jeziku treba biti podebljan i na sredini stranice
+(centriran), ali NE treba biti napisan velikim tiskanim slovima. Sažetak na engleskome jeziku
+može biti nešto dulji, ali ne više od 350 riječi. Nakon sažetka na engleskome jeziku navode se
+ključne riječi na engleskome jeziku. U sažetku se o rezultatima raspravlja istodobno s
+njihovim navođenjem.
+
+-----------------------------------------------------------------------------------------------------------------
+Primjer dobro napisanih ključnih riječi na engleskom jeziku:
+Key words: nursing students; perfectionism; satisfaction; self-assessment; self-efficacy.
+-----------------------------------------------------------------------------------------------------------------
+
+2.8. Literatura (reference)
+
+Reference čine popis literature u kojemu se navode samo oni radovi koji su citirani u tekstu.
+Navodi moraju biti što je moguće novijeg datuma objave, pri čemu je najmanje 1/3 citiranih
+radova objavljena u 5 godina koje prethode istraživanju prikazanom u diplomskom radu. Nije
+dopušteno korištenje završnih i diplomskih radova kao izvora literature, budući da isti nisu
+prošli recenzentski postupak i ne smatraju se znanstveno relevantnim izvorima.
+
+Literatura se obvezno navodi vankuverskim stilom pa se reference nižu redoslijedom
+pojavljivanja u tekstu. Prilikom navođenja dviju ili više referenci u tekstu rada, one se
+odvajaju zarezom u istoj zagradi, npr. (18, 19), a ne svaka referenca posebno u svojoj zagradi.
+
+Primjeri pisanja referenci nalaze se u Prilogu 5. (str. 26.).
+
+Preporuka je da se koristi jedan od besplatnih alata za upravljanje referencama (Mendeley,
+Word, Zotero), a upute za korištenje navedenih možete pronaći na poveznici
+https://repozitorij.srce.unizg.hr/islandora/object/srce:429.
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+                          Telefon: +385 31 399-600  Fax: +385 31 399-601  www.fdmz.hr  e-mail: info@fdmz.hr 8
+
+===== [fdmz-upute-2025 | str. 11] =====
+Na isti se način dodaju i ostali prilozi (posebna stranica s rednim brojem i naslovom priloga, a
+iza toga prilog). Najmanji format lista priloga je A4, a veći listovi se slažu na format A4. Prilozi
+mogu biti obostrano ispisani. Sadržaj priloga mora biti u potpunosti vidljiv, stoga treba obratiti
+pažnju da desni slobodni rubnik priloga bude najmanje 2,5 cm. Stranice s rednim brojem i
+naslovom (opisom) pojedinih priloga i sami prilozi se ne numeriraju.
+
+Prilozi nemaju smisao ako se na njih nigdje u tekstu rada ne upućuje. U Priloge se ne stavljaju
+primjeri anketnih listića, dozvole za korištenje upitnika, suglasnost etičkog povjerenstva.
+
+2.11. Tablice, grafikoni, slike
+
+Tablice, grafikoni i slike ne stavljaju se na posebne stranice, nego se uklapaju u tekst rada.
+Opisuju se natpisom, brojem i naslovom.
+
+Uz tablice se stavlja natpis „Tablica“, a uz grafikone i slike (fotografije, crteži i sl.) natpis
+„Slika“. Tablice i slike numeriraju se arapskim brojevima odvojeno (posebno se numeriraju
+tablice, a posebno slike) i jedinstveno u cijelome radu.
+
+Opisi tablica nalaze se uvijek iznad tijela tablice, a opisi slika ispod tijela slika.
+
+I slike i tablice moraju biti objašnjene i jasne same za sebe, pa se u njima ne smiju rabiti kratice
+i oznake koje na istom mjestu, tj. u njima samima ili odmah ispod (za tablice), nisu i tumačene.
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+
+===== [fdmz-upute-2025 | str. 12] =====
+Za označavanje podbilješki u tablicama rabe se sljedeći znakovi (u navedenome redoslijedu):
+*,†,‡,§,||,¶,**,††,‡‡, itd.
+
+Tablice i slike koje nisu vlastite i preuzete su iz drugih izvora (knjige, članci i sl.) ne smiju
+se koristiti u radu bez prethodno pribavljenog dopuštenja autora ili izdavača. U opisu tablica i
+slika iz drugih izvora koje se koriste u radu, a uz pribavljeno dopuštenje, obvezno se navodi
+izvor.
+
+U radu se smiju nalaziti samo one tablice i slike na koje se u tekstu rada čitatelj upućuje.
+Tablice i slike za koje ne postoji poveznica u tekstu su suvišne.
+
+Manji broj jednostavnih matematičkih izraza uklapa se u tekst rada. Ako se u radu prikazuje
+veći broj složenijih matematičkih izraza, oni se unutar teksta izdvajaju u zasebne retke i
+numeriraju brojem bez posebnog daljnjeg označavanja. Tablice i slike se ne bi trebale prelamati
+preko dvije ili više stranica. Ako tablica ne stane na jednu stranicu u njoj je moguće promijeniti
+veličinu slova i/ili prored. Ako tablica i dalje ne stane na jednu stranicu, na sljedećoj stranici
+potrebno je ponoviti zaglavni redak tablice radi lakše preglednosti. Ako je tablica preširoka za
+jednu stranicu, potrebno je promijeniti orijentaciju stranice iz okomite u vodoravnu (pejzažnu,
+engl. landscape).
+
+Slike koje je autor rada sam izradio moraju u opisu imati „fotografirao autor“ ili „izvorna slika
+autora“.
+
+Tablice i slike koje nisu vlastite i preuzete su iz drugih izvora (knjige, članci i sl.) moraju imati
+
+===== [fdmz-upute-2025 | str. 17] =====
+4. SUSTAV ZA PROVJERU IZVORNOSTI RADOVA – TURNITIN
+Sveučilište Josipa Jurja Strossmayera u Osijeku pretplatilo se na sustav za provjeru izvornosti
+radova Turnitin (antiplagijatski program). Ovaj je sustav namijenjen nastavnicima i mentorima
+kao alat za olakšavanje provjere izvornosti studentskih radova te studentima kao alat za
+samoprovjeru vlastitih radova.
+Napomena: kod provjere rada nemojte ga spremati u repozitorij.
+U sustavu je potrebno provjeriti rad s imenom i prezimenom te svim cjelinama osim naslovne
+stranice, sadržaja, životopisa, literature i statističkih metoda, te ga pohraniti u obliku Text Only
+Report Turnitin. Ukoliko Odbor za diplomske radove primijeti korištenje AI generiranog teksta
+u diplomskome radu, isti će biti vraćen na korekcije.
+
+                                                          MB: 4748875  OIB: 83830458507  Crkvena 21  31000 Osijek
+                          Telefon: +385 31 399-600  Fax: +385 31 399-601  www.fdmz.hr  e-mail: info@fdmz.hr 15

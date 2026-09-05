@@ -1,0 +1,192 @@
+===== [mathos-pravilnik-zavrsni-2026 | str. 4] =====
+Članak 6.
+(1) Ako je student tijekom studija izradio jedan ili više radova (seminarski radovi, radovi u
+časopisima ili zbornicima radova) koji po svom sadržaju i opsegu odgovaraju završnom radu,
+Odbor može, na prijedlog mentora, taj rad priznati kao završni rad.
+(2) Odbor može, na prijedlog mentora, priznati kao završni rad i izum, tehničko unapređenje i
+slično, ako po svom sadržaju odgovara završnom radu.
+
+Članak 7.
+(1) Završni rad treba biti napisan u formi kao što je navedeno u Prilogu 1 ovog Pravilnika.
+(2) Pri pisanju završnog rada najstrože je zabranjeno prepisivanje ili direkno prevođenje
+dijelova tuđeg teksta bez navođenja izvora.
+(3) Tijekom izrade završnog rada, mentor redovito provjerava autentičnost završnog rada
+primjenom odgovarajućeg softera.
+
+Clanak 8.
+(1) Završni rad piše se i brani na hrvatskom jeziku.
+(2) Iznimno, uz pristanak mentora, završni rad može se pisati i braniti na stranom jeziku.
+
+II. Obrana završnog rada
+
+Clanak 9.
+(1) Student stječe pravo pristupa obrani završnog rada nakon što položi sve ispite propisane
+studijskim programom.
+
+===== [mathos-pravilnik-zavrsni-2026 | str. 10] =====
+Završni rad sadrži sljedeće cjeline i to navedenim redoslijedom:
+
+Sadržaj: sastoji se od naslova poglavlja i točaka s rednim brojevima odgovarajućih početnih
+stranica.
+
+Uvod: treba sažeto opisati završni zadatak te navesti sadržaj pojedinih poglavlja završnog
+rada.
+
+Glavni dio rada: treba ga podijeliti u poglavlja i točke koje čine određenu logičku cjelinu.
+Moguće je dodati i odgovarajuće potpoglavlje.
+
+Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog
+autora. Korištene reference potrebno je citirati na odgovarajućim mjestima u radu.
+
+Sažetak: ukratko treba opisati sadržaj završnog rada.
+
+Ključne riječi: navesti listu ključnih riječi vezanih uz sadržaj rada.
+
+Engleski prijevod: title, summary i keywords odnose se na englesku verziju naslova rada,
+sažetak i ključne riječi.
+
+Životopis: piše se u prvom licu jednine i treba sadržavati biografske podatke, podatke o
+sudjelovanju na natjecanjima te podatke o osvoj enim nagradama.
+
+II. Izgled završnog rada
+
+- Završni rad treba biti pisan u LaTEX-u koristeći predložak dostupan na web stranicama
+
+Fakulteta.
+
+- Svako novo poglavlje (\chapter) počinje na novom listu. Ako je potreban neki dodatni
+
+paket, jednostavno ga treba dodati na početku koda.
+
+- Formule, slike, tablice, definicije, leme, teoreme i slične strukture treba numerirati. Opis
+slike i tablice stavlja se neposredno ispod slike odnosno ispod tablice. Ako je slika ili neka
+od prethodno navedenih struktura preuzeta iz neke literature, obvezno ju treba citirati.
+
+- Korištenu literaturu treba popisati abecednim redom i to na sljedeći način, pri čemu se web
+
+izvori navode na kraju liste referenci:
+
+¢ članak iz časopisa: inicijali imena i prezime autora, naslov rada, naziv časopisa i
+volumen
+(godina izdanja), stranice od-do. Primjerice,
+[1] S. JUNG, J. BAE, Some functional equations originating from number theory, Proc.
+Indian Acad. Sci. (Math. Sci.) 113(2003), 91—98.
+
+» knjiga: inicijali imena i prezime autora, naslov knjige, izdavač, mjesto, godina izdanja
+Primjerice,
+[2] J. AcLEz, Lectures of Functional Equations and Their Applications, Academic
+Press, New York, 1966.
+
+===== [mathos-pravilnik-zavrsni-2026 | str. 11] =====
+[4] The On-Line Encyclopedia of Integer Sequences, dostupno na \https://oeis.org.
+
+- Na literaturu se poziva stavljanjem rednog broja reference unutar uglatih zagrada,
+primjerice:
+... prema [I] ..., ... Mardešić i Segal 1971 su pokazali ..., ... (vidi [1]). Pri pozivanju na knjigu
+korisno je uz redni broj knjige navesti i broj stranice knjige, primjerice: vidi [2, str. 138].
+- Na rezultate, slike, tablice i ostale strukture u tekstu poziva se na sljedeći način, ovisno o
+kontekstu rečenice: ‘Prema dokazu Teorema | slijedi . . .,%'; “na Slici 2.1 prikazano je...”’
+; ‘iz Tablice 2.1 može se zaključiti .. .2"; "Više o... može se vidjeti u [2]''.
+- Nije potrebno numerirati svaki izraz već samo one na koje ćete se u tekstu pozivati.
+Pozivamo se na način: “Prema formuli (3.1)...
+- Kod pisanja rada treba paziti da tekst, formule, tablice, slike, itd., ne izlaze iz margina rada,
+
+- Izgled korica završnog rada:
+
+===== [mathos-pravilnik-diplomski-2023 | str. 3] =====
+Clanak 6.
+(1) Ako je student tijekom studija izradio jedan ili više radova (seminarski radovi, radovi u
+časopisima ili zbornicima radova) koji po svom sadržaju i opsegu odgovaraju diplomskom
+radu, Odbor može, na prijedlog mentora, taj rad priznati kao diplomski rad.
+(2) Odbor može, na prijedlog mentora, priznati kao diplomski rad i izum, tehničko unapređenje
+i slično, ako po svom sadržaju odgovara diplomskom radu.
+
+Clanak 7.
+(1) Diplomski rad treba biti napisan u formi kao što je navedeno u Prilogu 1 ovog Pravilnika.
+(2) Pri pisanju diplomskog rada najstrože je zabranjeno prepisivanje ili direkno prevođenje
+dijelova tuđeg teksta bez navođenja izvora.
+(3) Tijekom izrade diplomskog rada, mentor redovito provjerava autentičnost diplomskog rada
+primjenom odgovarajućeg softera.
+
+Članak 8.
+(1) Diplomski rad piše se i brani na hrvatskom jeziku.
+(2) Iznimno, uz pristanak mentora, diplomski rad može se pisati i braniti na stranom jeziku.
+
+III. Obrana diplomskog rada
+
+Članak 9.
+(1) Mentor diplomskog rada dužan je u Ured za studente i studije poslati elektroničku verziju
+diplomskog rada u PDF formatu, zajedno s izjavama o autentičnosti rada (Obrasci 2 i 3) i
+
+===== [mathos-pravilnik-diplomski-2023 | str. 10] =====
+Diplomski rad sadrži sljedeće cjeline i to navedenim redoslijedom:
+
+Sadržaj: sastoji se od naslova poglavlja i točaka s rednim brojevima odgovara jućih početnih
+stranica.
+
+Uvod: treba sažeto opisati diplomski zadatak te navesti sadržaj pojedinih po glavlja diplomskog
+rada,
+
+Glavni dio rada: treba ga podijeliti u poglavlja i točke koje čine određenu logičku cjelinu.
+Moguće je dodati i odgovarajuće potpoglavlje.
+
+Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora.
+Korištene reference potrebno je citirati na odgovarajućim mjestima u radu.
+
+Sažetak: ukratko treba opisati sadržaj diplomskog rada.
+
+Ključne riječi: navesti listu ključnih riječi vezanih uz sadržaj rada.
+
+Engleski prijevod: title, summary i keywords odnose se na englesku verziju naslova rada, sažetak
+i ključne riječi.
+
+Životopis: piše se u prvom licu jednine i treba sadržavati biografske podatke, podatke o
+sudjelovanju na natjecanjima te podatke o osvojenim nagradama.
+
+If. Izgled diplomskog rada
+
+- Diplomski rad treba biti pisan u LaTEX-u koristeći predložak dostupan na web stranicama
+
+Fakulteta.
+
+- Svako novo poglavlje (\chapter) počinje na novom listu. Ako je potreban neki dodatni paket,
+
+jednostavno ga treba dodati na početku koda.
+
+- Formule, slike, tablice, definicije, leme, teoreme i slične strukture treba numerirati. Opis slike
+i tablice stavlja se neposredno ispod slike odnosno ispod tablice. Ako je slika ili neka od
+prethodno navedenih struktura preuzeta iz neke literature, obvezno ju treba citirati.
+
+- Korištenu literaturu treba popisati abecednim redom i to na sljedeći način, pri čemu se web
+
+izvori navode na kraju liste referenci:
+
+* članak iz časopisa: inicijali imena i prezime autora, naslov rada, naziv časopisa i volumen
+(godina izdanja), stranice od-do. Primjerice,
+[1] S. JuNG, J. BAE, Some functional equations originating from number theory, Proc.
+Indian Acad. Sci. (Math. Sci.) 113(2003), 91-98.
+
+* knjiga: inicijali imena i prezime autora, naslov knjige, izdavač, mjesto, godina izdanja
+Primjerice,
+[2] J. AcLEz, Lectures of Functional Equations and Their Applications, Academic
+Press, New York, 1966.
+
+* članak iz zbornika radova: inicijali imena i prezime autora, naslov rada, naziv zbornika
+
+===== [mathos-pravilnik-diplomski-2023 | str. 11] =====
+* Web izvor: Primjerice,
+[4] The On-Line Encyclopedia of Integer Sequences, dostupno na \https://oeis.org.
+
+- Na literaturu se poziva stavljanjem rednog broja reference unutar uglatih zagrada, primjerice:
+... prema [I] ..., ... Mardešić i Segal 1971 su pokazali ..., ... (vidi [1]). Pri pozivanju na knjigu
+korisno je uz redni broj knjige navesti i broj stranice knjige, primjerice: vidi [2, str. 138].
+
+- Na rezultate, slike, tablice i ostale strukture u tekstu poziva se na sljedeći način, ovisno o
+
+kontekstu rečenice: “Prema dokazu Teorema | slijedi . . .,2; “na Slici 2.1 prikazano je...” ;
+
+“iz Tablice 2.1 može se zaključiti . . .2? ; “Više o... može se vidjeti u [2]"'.
+
+- Nije potrebno numerirati svaki izraz već samo one na koje ćete se u tekstu pozivati. Pozivamo
+
+se na način: ‘Prema formuli (3.1)... .7

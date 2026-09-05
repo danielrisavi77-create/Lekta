@@ -1,0 +1,50 @@
+===== [math-uniri-pravilnik-zavrsni-2023 | str. 3] =====
+Članak 8.
+(1) Završni rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje
+15, a najviše 30 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova,
+a sastoji se od:
+1. korica (meki ili tvrdi uvez)
+2. naslovnice sljedećeg sadržaja: Sveučilište u Rijeci, Fakultet za matematiku, naziv
+studija, ime i prezime kandidata, naslov rada, Završni rad, datum i mjesto
+3. prva stranica završnog rada treba imati isti izgled kao i korice, s time što treba dodati
+titulu, ime i prezime mentora i komentora (ako je određen)
+sažetaka i ključnih riječi
+uvoda, razrade teme i zaključka
+popisa literature
+popisa izvora
+popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.)
+9. sadržaja (na početku ili na kraju rada).
+(2) Izgled naslovnice utvrđen je u Prilogu 1. koji čini sastavni dio ovog Pravilnika.
+
+941mm
+
+Članak 9.
+(1) Završni rad na Fakultetu u pravilu se zadaje, piše i brani na hrvatskom standardnom jeziku.
+(2) Student koji rad želi pisati na stranom jeziku dužan je podnijeti pisani zahtjev dekanu
+Fakulteta.
+
+===== [math-uniri-pravilnik-diplomski-2023 | str. 3] =====
+Članak 8.
+(1) Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje
+30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova,
+a sastoji se od:
+1. korica (meki ili tvrdi uvez)
+2. naslovnice sljedećeg sadržaja: Sveučilište u Rijeci, Fakultet za matematiku, naziv
+studija, ime i prezime kandidata, naslov rada, Diplomski rad, datum i mjesto
+3. prva stranica diplomskog rada treba imati isti izgled kao i korice, s time što treba
+dodati titulu, ime i prezime mentora i komentora (ako je određen)
+sažetaka i ključnih riječi
+uvoda, razrade teme i zaključka
+popisa literature
+popisa izvora
+popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.)
+9. sadržaja (na početku ili na kraju rada).
+(2) Izgled naslovnice utvrđen je u Prilogu 1. koji čini sastavni dio ovog Pravilnika.
+
+oN AMS
+
+Clanak 9.
+(1) Diplomski rad na Fakultetu u pravilu se zadaje, piše i brani na hrvatskom standardnom
+jeziku.
+(2) Student koji rad želi pisati na stranom jeziku dužan je podnijeti pisani zahtjev dekanu
+Fakulteta.

@@ -1,0 +1,200 @@
+===== [foi-pravilnik-zavrsni-diplomski-2021 | str. 4] =====
+(3) Kako bi student mogao prijaviti temu završnog/diplomskog rada mora proći
+       pripremu/edukaciju studenata za izradu završnog/diplomskog rada koju organizira
+       Fakultet.
+
+(4) Mentor rada prihvaća prijavu teme studenta putem sustava FOI-radovi u roku od 20
+       radnih dana. U suprotnom, tema dobiva status slobodne.
+
+                                                  Članak 10.
+
+(1) Završni/diplomski rad sastoji se od naslovne stranice, izjave o izvornosti rada, sažetka,
+       ključnih riječi, sadržaja, uvoda, obrade teme, zaključka, popisa literature i drugih izvora
+       podataka koji su korišteni u izradi završnog/diplomskog rada te priloga (ako postoje).
+
+(2) Prilikom izrade završnog/diplomskog rada student je obavezan koristiti Predložak za
+       izradu završnog/diplomskog rada koji je objavljen na mrežnim stranicama Fakulteta.
+
+(3) Završni/diplomski rad na Fakultetu zadaje se, piše i brani na hrvatskom jeziku.
+(4) Iznimno, završni/diplomski rad može se pisati i braniti na stranom jeziku.
+(5) Student koji rad želi pisati i braniti na stranom jeziku, dužan je podnijeti pisanu
+
+       zamolbu, uz suglasnost mentora, prodekanu zaduženom za nastavu nakon prihvaćanja
+       teme završnog/diplomskog rada od strane mentora.
+
+===== [foi-predlozak-zavrsni-diplomski | str. 1] =====
+Ključne riječi: riječ; riječ; …riječ; Obuhvaća 7+/-2 ključna pojma koji su glavni predmet rasprave u radu.
+
+Sadržaj
+ TOC \h \z \t "FOI Naslov 1;1;FOI Naslov 2;2;FOI Naslov 3;3;FOI Naslov 4;4" 1.Uvod PAGEREF _Toc496683312 \h 1
+2.Metode i tehnike rada PAGEREF _Toc496683313 \h 2
+3.Razrada teme PAGEREF _Toc496683314 \h 3
+3.1.Poglavlje druge razine PAGEREF _Toc496683315 \h 3
+3.1.1.Poglavlje treće razine PAGEREF _Toc496683316 \h 3
+3.1.1.1.Poglavlje četvrte razine PAGEREF _Toc496683317 \h 3
+4.Tehničke upute PAGEREF _Toc496683318 \h 5
+4.1.Upute za oblikovanje izgleda rada PAGEREF _Toc496683319 \h 5
+4.2.Navođenje literature PAGEREF _Toc496683320 \h 8
+5.Zaključak PAGEREF _Toc496683321 \h 9
+Popis literature PAGEREF _Toc496683322 \h 10
+Popis slika PAGEREF _Toc496683323 \h 11
+Popis tablica PAGEREF _Toc496683324 \h 12
+Prilozi (1, 2, …) PAGEREF _Toc496683325 \h 13
+
+
+Uvod
+Završni ili diplomski rad studenta/studentice je konačni rezultat uloženog napora u završetak studija. Obranom završnog ili diplomskog rada student/studentica stječe prava i obveze koje proizlaze iz završetka akademskog obrazovanja. S ciljem osiguranja potpore studentima pri pisanju završnog/diplomskog rada, izrađen je ovaj predložak oblikovanja samog rada.
+Načelna napomena o strukturi rada jest da se nazivi i struktura poglavlja obavezno definiraju u dogovoru s mentorom/mentoricom. Sadržajna preporuka je da u uvodu treba opisati što je tema završnog/diplomskog rada, zašto je tema značajna te koja je motivacija studenta/studentice za odabir teme. 
+
+Metode i tehnike rada
+U ovom poglavlju treba opisati koje će metode i tehnike biti korištene pri razradi teme, kako su provedene istraživačke aktivnosti, koji su programski alati ili aplikacije korišteni.
+ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam cursus. Morbi ut mi. Nullam enim leo, egestas id, condimentum at, laoreet mattis, massa. Sed eleifend nonummy diam. Praesent mauris ante, elementum et, bibendum at, posuere sit amet, nibh. Duis tincidunt lectus quis dui viverra vestibulum. Suspendisse vulputate aliquam dui. Nulla elementum dui ut augue. Aliquam vehicula mi at mauris. Maecenas placerat, nisl at consequat rhoncus, sem nunc gravida justo, quis eleifend arcu velit quis lacus. Morbi magna magna, tincidunt a, mattis non, imperdiet vitae, tellus. Sed odio est, auctor ac, sollicitudin in, consequat vitae, orci. Fusce id felis. Vivamus sollicitudin metus eget eros.
+
+===== [foi-predlozak-zavrsni-diplomski | str. 1] =====
+Poglavlje treće razine
+Nunc tempus felis vitae urna. Vivamus porttitor, neque at volutpat rutrum, purus nisi eleifend libero, a tempus libero lectus feugiat felis. Morbi diam mauris, viverra in, gravida eu, mattis in, ante. Morbi eget arcu. Morbi porta, libero id ullamcorper nonummy, nibh ligula pulvinar metus, eget consectetuer augue nisi quis lacus. Ut ac mi quis lacus mollis aliquam. Curabitur iaculis tempus eros. Curabitur vel mi sit amet magna malesuada ultrices. Ut nisi erat, fermentum vel, congue id, euismod in, elit. Fusce ultricies, orci ac feugiat suscipit, leo massa sodales velit, et scelerisque mi tortor at ipsum. Proin orci odio, commodo ac, gravida non, tristique vel, tellus. Pellentesque nibh libero, ultricies eu, sagittis non, mollis sed, justo. Praesent metus ipsum, pulvinar pulvinar, porta id, fringilla at, est.
+Poglavlje četvrte razine 
+Phasellus felis dolor, scelerisque a, tempus eget, lobortis id, libero. Donec scelerisque leo ac risus. Praesent sit amet est. In dictum, dolor eu dictum porttitor, enim felis viverra mi, eget luctus massa purus quis odio. Etiam nulla massa, pharetra facilisis, volutpat in, imperdiet sit amet, sem. Aliquam nec erat at purus cursus interdum. Vestibulum ligula augue, bibendum accumsan, vestibulum ut, commodo a, mi. Morbi ornare gravida elit. Integer congue, augue et malesuada iaculis, ipsum dui aliquet felis, at cursus magna nisl nec elit. Donec iaculis diam a nisi accumsan viverra. Duis sed tellus et tortor vestibulum gravida. Praesent elementum elit at tellus. Curabitur metus ipsum, luctus eu, malesuada ut, tincidunt sed, diam. Donec quis mi sed magna hendrerit accumsan:
+Suspendisse risus nibh
+ultricies eu
+volutpat non
+condimentum hendrerit
+augue. 
+Etiam eleifend, metus vitae adipiscing semper, mauris ipsum iaculis elit, congue gravida elit mi egestas orci. Curabitur pede. Maecenas aliquet velit vel turpis. Mauris neque metus, malesuada nec, ultricies sit amet, porttitor mattis, enim. In massa libero, interdum nec, interdum vel, blandit sed, nulla. In ullamcorper, est eget tempor cursus, neque mi consectetuer mi, a ultricies massa est sed nisl. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Proin nulla arcu, nonummy luctus, dictum eget, fermentum et, lorem. Nunc porta convallis pede.
+
+Tehničke upute
+Tehničke upute u nastavku opisuju način tehničkog oblikovanja rada i navođenja literature. 
+Upute za oblikovanje izgleda rada 
+Stranice se oblikuju korištenjem sljedećih parametara: 
+veličina i oblik papira je A4, okomito usmjerenje, margine 2,5 cm na svakoj strani;
+naslovna stranica rada se ne numerira;
+nakon naslovne stranice, sve sljedeće stranice do 1. Poglavlja se numeriraju rimskim brojevima, počevši od i;
+od 1. poglavlja nadalje, stranice se numeriraju arapskim brojevima;
+broj stranice treba pozicionirati desno 1,25 cm od dna stranice, font Arial 9.
+Tekst rada je potrebno oblikovati sukladno ovom predlošku, odnosno na sljedeći način:
+u pisanju teksta koristite font Arial 11 pt, s proredom 1,5 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka, pri čemu je prvi redak uvučen za 1,25 cm;
+u naslovima prve razine „3. Razrada teme“ koristite font Arial 18 pt, podebljano, prijelom stranice (svaki naslov prve razine treba biti na novoj stranici), s proredom 1,5 te razmakom 0 pt prije i razmakom 18 pt poslije odlomka;
+u naslovima druge razine „2.1. Naslov“ koristite font Arial 16 pt, podebljano, s proredom 1,5 te razmakom 18 pt prije i razmakom 12 pt poslije odlomka;
+u naslovima treće razine „2.1.1. Naslov“ koristite font Arial 14 pt, podebljano, s proredom 1,5 te razmakom 12 pt prije i razmakom 6 pt poslije odlomka;
+u naslovima četvrte razine „2.1.1.1. Naslov“ koristite font Arial 12 pt, podebljano, s proredom 1,5 te razmakom 6 pt prije i razmakom 6 pt poslije odlomka;
+ostalo značajno isticanje cjelina rada može biti istaknuto podebljanim i kurziv slovima, korištenjem fonta Arial 11 pt.
+Slike u radu je potrebno oblikovati odnosno na sljedeći način:
+naziv slike navedite ispod slike uz numeraciju;
+za nazive slika koristite iste postavke fonta kao i za tekst, ali stavite naziv slike u centrirani položaj;
+za oblikovanje same slike koristite font Arial 9 pt za tekst na slici;
+ispred same slike umetnite jedan prazan redak (osim ako je slika pozicionirana na početku stranice);
+nakon naziva slike ostavite jedan redak prazan (osim ako je naziv slike zadnji redak na stranici);
+kod prijeloma stranice treba obratiti posebnu pozornost da naziv slike, izvor i sama slika moraju biti na istoj stranici; 
+slike je potrebno numerirati redom pojavljivanja u tekstu;
+ako je slika preuzeta iz drugog izvora, nakon navođenja naziva slike u zagradi navedite izvor, npr. (autor/autorica, godina);
+dozvoljeno je napraviti vlastitu preradu slika, grafikona ili tablica na način da se zadrži isti smisao sadržaja, ali promijeni izgled. I u takvim se slučajevima obavezno u nazivu navodi referenca izvornog djela ovako: “(Prema: Klačmer Čalopa i Cingula, 2012)“;
+dozvoljeno je preuzeti samo jednu sliku, grafikon ili tablicu u izvornom obliku iz istog izvora. Za doslovno preuzimanje većeg dijela sadržaja potrebno je ishoditi dozvolu nositelja autorskih prava;
+primjer označavanja slike možete vidjeti u nastavku.
+
+
+Slika 1: Podjela investicijskih fondova (Izvor: Klačmer Čalopa i Cingula, 2012)
+
+Tablice rada je potrebno oblikovati sukladno ovim uputama:
+naziv tablice navedite iznad slike;
+za nazive tablica koristite iste postavke fonta kao i za tekst, ali stavite naziv tablice u centrirani položaj;
+za oblikovanje same tablice koristite font Arial 9 pt za tekst u tablici;
+tablice numerirajte redom pojavljivanja u tekstu;
+prije naziva tablice umetnite jedan redak prazan (osim ako je naziv tablice prvi redak na stranici);
+nakon same tablice umetnite jedan prazan redak (osim ako je tablica pozicionirana na kraju stranice);
+kod prijeloma stranice treba obratiti posebnu pozornost da naziv tablice, izvor i sama tablica moraju biti na istoj stranici; 
+ako je tablica preuzeta iz drugog izvora, nakon navođenja naziva tablice potrebno je navesti izvor, na isti način kako je opisano kod slika;
+primjer označavanja tablice možete vidjeti u nastavku.
+
+Tablica 1: Prikaz podataka o učestalosti pojavljivanja objekta
+
+===== [foi-predlozak-zavrsni-diplomski | str. 1] =====
+<link rel="shortlink" href="https://www.foi.unizg.hr/hr" />
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dobro došli na FOI | FOI</title>...
+</head>
+
+Formule
+za unos formula koristite editor za formule u svom tekst procesoru.
+Kratice   
+ako želite koristiti kratice pojmova u tekstu, kad prvi put spominjete pojam potrebno je navesti puni naziv, a kraticu navesti u zagradi (npr. Informacijske i komunikacijske tehnologije, kraće IKT). Nakon toga možete koristiti kratice u tekstu. Poželjno je u naslovima koristiti pune nazive.
+Strano nazivlje   
+strano nazivlje se u tekstu navodi u zagradi, napisano kurzivom, nakon hrvatskog izraza, npr. Analiza društvene mreže (eng. Social Network Analysis - SNA).
+Navođenje literature
+Za navođenje literature u radu možete odabrati i koristiti jedan od sljedeća dva ponuđena stila: APA ili IEEE stil. Važno je dosljedno primjenjivati odabrani stil u cijelom radu.
+U popisu literature potrebno je navesti svu literaturu i samo literaturu koju ste koristili u tekstu.
+Uz svaku preuzetu tvrdnju potrebno je navesti njezin izvor, tj. referencu. Reference se u tekstu navode tako da se uz citirani tekst navede izvor, sukladno načinu propisanom odabranim stilom i FOI preporukama za citiranje i referenciranje.
+
+
+Zaključak 
+Ovdje treba sažeto rezimirati najvažnije rezultate razrade teme rada. Potrebno je sažeto opisati što je predmet rada, koje su metode, tehnike, programski alati ili aplikacije korištene u razradi rada te koje su pretpostavke dokazane, a koje opovrgnute. Sadržajno, ono što se u uvodu rada najavljuje i kasnije je obuhvaćeno u samom radu, moralo bi biti opisano u zaključnom dijelu kroz rezultate rada. 
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam cursus. Morbi ut mi. Nullam enim leo, egestas id, condimentum at, laoreet mattis, massa. Sed eleifend nonummy diam. Praesent mauris ante, elementum et, bibendum at, posuere sit amet, nibh. Duis tincidunt lectus quis dui viverra vestibulum. Suspendisse vulputate aliquam dui. Nulla elementum dui ut augue. Aliquam vehicula mi at mauris. Maecenas placerat, nisl at consequat rhoncus, sem nunc gravida justo, quis eleifend arcu velit quis lacus. Morbi magna magna, tincidunt a, mattis non, imperdiet vitae, tellus. Sed odio est, auctor ac, sollicitudin in, consequat vitae, orci. Fusce id felis. Vivamus sollicitudin metus eget eros.
+Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In posuere felis nec tortor. Pellentesque faucibus. Ut accumsan ultricies elit. Maecenas at justo id velit placerat molestie. Donec dictum lectus non odio. Cras a ante vitae enim iaculis aliquam. Mauris nunc quam, venenatis nec, euismod sit amet, egestas placerat, est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras id elit. Integer quis urna. Ut ante enim, dapibus malesuada, fringilla eu, condimentum quis, tellus. Aenean porttitor eros vel dolor. Donec convallis pede venenatis nibh. Duis quam. Nam eget lacus. Aliquam erat volutpat. Quisque dignissim congue leo.
+
+
+Popis literature
+Popis literature treba biti izrađen u skladu s odabranim stilom navođenja literature (APA ili IEEE stilom), a poželjno je korištenje prikladnog programskog alata (npr. Zotero). Primjeri navođenja literature opisani su u dokumentima „FOI: preporuke citiranja i referenciranja primjenom stila referenciranja APA“ i „FOI: preporuke citiranja i referenciranja primjenom stila referenciranja IEEE“.
+
+
+Popis slika
+Popis slika treba biti izrađen po uzoru na indeksirani sadržaj, te upućivati na broj stranice na kojoj se slika može pronaći. 
+ TOC \h \z \t "Naslov slike;1"  \* MERGEFORMAT Slika 1: Podjela investicijskih fondova PAGEREF _Toc496692358 \h 6
+
+
+Popis tablica
+Popis tablica treba biti izrađen po uzoru na indeksirani sadržaj, te upućivati na broj stranice na kojoj se tablica može pronaći. 
+ TOC \h \z \t "Naslov tablice;1" Tablica 1: Prikaz podataka o učestalosti pojavljivanja objekta PAGEREF _Toc496692416 \h 7
+
+Prilozi (1, 2, …)
+
+===== [foi-preporuke-citiranja-apa | str. 1] =====
+POVJERENSTVO ZA IZRADU PREPORUKA ZA IZRADU I
+MENTORIRANJE ZAVRŠNIH I DIPLOMSKIH RADOVA FAKULTETA
+
+                   ORGANIZACIJE I INFORMATIKE
+
+             FOI: PREPORUKE CITIRANJA I
+   REFERENCIRANJA PRIMJENOM STILA
+
+                     REFERENCIRANJA APA
+
+                                                                        STUDENI 2017.
+
+  Referencirati kao:
+  FOI: Preporuke citiranja i referenciranja primjenom stila referenciranja APA (2017, studeni). Sveučilište
+  u Zagrebu, Fakultet organizacije i informatike, Varaždin.
+
+===== [foi-preporuke-citiranja-apa | str. 2] =====
+Sadržaj
+
+UVOD ....................................................................................................................................................... 1
+CITIRANJE I PARAFRAZIRANJE ................................................................................................................. 1
+
+   Citiranje (direktno navođenje) ............................................................................................................ 1
+   Parafraziranje ...................................................................................................................................... 2
+   Grupacija kao autor ............................................................................................................................. 3
+   Referenciranje na više izvora .............................................................................................................. 3
+   Citiranje sekundarnog izvora............................................................................................................... 4
+CITIRANJE I REFERENCIRANJE KNJIGA ..................................................................................................... 4
+   Knjiga s jednim autorom ..................................................................................................................... 5
+   Knjiga s dva autora .............................................................................................................................. 5
+   Knjiga s tri, četiri ili pet autora ............................................................................................................ 5
+   Knjiga sa šest ili više autora ................................................................................................................. 6
+   Poglavlje u uredničkoj knjizi ................................................................................................................ 6
+CITIRANJE ČLANAKA IZ STRUČNIH I ZNANSTVENIH ČASOPISA................................................................ 6
+   Članak u časopisu s jednim autorom................................................................................................... 7
+   Članak u časopisu s tri ili više autora ................................................................................................... 7
+   Članak s više autora i istom godinom izdanja ..................................................................................... 7
+IZVORI S INTERNETA ................................................................................................................................ 8
+SOFTVER I APLIKACIJE............................................................................................................................ 12
+STANDARDI I SMJERNICE....................................................................................................................... 12
+RJEČNIK I ENCIKLOPEDIJA ...................................................................................................................... 13
+SLIKE (ILUSTRACIJE, FOTOGRAFIJE, MAPE, GRAFIKONI)........................................................................ 15
+ZAKON (STATUT / PRAVILNICI) .............................................................................................................. 17
+NOVINE .................................................................................................................................................. 17
+BROŠURA ( S AUTOROM / BEZ AUTORA) .............................................................................................. 18
+KONFERENCIJSKI RAD (TISKANI / ON LINE) ........................................................................................... 18
+DOKTORSKA DISERTACIJA, MAGISTARSKI, SPECIJALISTIČKI, DIPLOMSKI ILI ZAVRŠNI RADOVI (TISKANI /
+ON LINE) ................................................................................................................................................ 19
+Napomena u vezi korištenja softvera za referenciranje ....................................................................... 19
+Popis literature ...................................................................................................................................... 20

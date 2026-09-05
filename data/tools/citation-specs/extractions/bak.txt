@@ -1,0 +1,333 @@
+===== [bak-uputa-2025 | str. 3] =====
+3. NASLOV ....................................................................................... 21
+
+4. ZAKLJUČAK .............................................................................. 23
+
+LITERATURA ................................................................................. 24
+
+Tekstni izvori .................................................................................................... 24
+
+Ilustrativni izvori .............................................................................................. 24
+
+   Tablice ................................................................................................................................. 24
+   Slike .....................................................................................................................................24
+   Grafikoni ............................................................................................................................. 24
+
+PRILOZI........................................................................................... 26
+
+Prilog 1. Citiranje literature............................................................................26
+
+Citiranje i zašto citiramo ................................................................................. 26
+
+Citiranje u tekstu..............................................................................................28
+
+   Izravno citiranje u tekstu ..................................................................................................29
+   Neizravno citiranje u tekstu..............................................................................................30
+   Pravila citiranja/parafraziranja ovisno o broju autora .................................................31
+   Autor nepoznat...................................................................................................................32
+   Autor pravna osoba ...........................................................................................................33
+   Dva ili više djela istog autora ............................................................................................33
+   Djela različitih autora u istoj bilješci ...............................................................................33
+   Autori istoga prezimena ....................................................................................................34
+   Posredni izvori....................................................................................................................34
+
+Citiranje ilustracija .......................................................................................... 34
+
+   Tablice ................................................................................................................................. 35
+   Slike .....................................................................................................................................35
+
+                                                                                                                3
+
+===== [bak-uputa-2025 | str. 4] =====
+Popis literature ................................................................................................. 36
+
+   Načini navođenja literature u popisu literature..............................................................37
+   Primjeri navođenja literature...........................................................................................39
+   Knjiga jednoga autora.......................................................................................................39
+   Knjiga dva autora ..............................................................................................................39
+   Knjiga tri do pet autora.....................................................................................................39
+   Knjiga s više od šest autora ...............................................................................................40
+   Mrežna stranica (internetski izvor)..................................................................................44
+
+Prilog 2. Naslovne stranice završnog ili diplomskog rada ............................ 46
+
+IZJAVA............................................................................................. 47
+BIOGRAFIJA AUTORA/ICE ........................................................ 48
+
+                                                                                                                4
+
+===== [bak-uputa-2025 | str. 5] =====
+UVODNA RIJEČ
+
+Konzultirajući i slijedeći upute svojeg nastavnika – mentora/ice, student/ica u svojem
+završnom ili diplomskom radu obrađuje određenu stručnu ili znanstvenu temu manjega opsega,
+primjenjujući odgovarajuće metodološke postupke kojima dokazuje da je na temelju znanja i
+vještina stečenih na studiju, uz korištenje relevantne stručne i znanstvene literature,
+osposobljen/a samostalno u pisanoj formi i usmeno obraditi, analizirati, argumentirati i
+rješavati određenu problematiku.
+Svojim sadržajem završni1 ili diplomski2 rad treba predočiti praktična, teorijska, odnosno
+praktično-teorijska rješenja vezana za probleme koje treba razjasniti u određenom području.
+Zasniva se na znanjima, sposobnostima i vještinama koje je student/ica stekao/la u procesu
+obrazovanja i prilagođen je procesima rada za koje se student/ica obrazuje.
+Područja izrade završnog ili diplomskog rada propisuje Veleučilište Baltazar Zaprešić kroz
+nadležno Povjerenstvo i njihovo odobrenje prijave teme, a izrađuje se na završetku studija uz
+vođenje mentora/ice.
+
+1 Na stručnom prijediplomskom studiju: završni rad.
+2 Na stručnom diplomskom studiju: diplomski rad.
+
+===== [bak-uputa-2025 | str. 8] =====
+vidljivo u tekstu gore (tekst pisan kroz odlomak, s ciljem navođenja konkretnog
+         primjera oblikovanja teksta).
+    • Svaki novi naslov (razina 1.) stavlja se na novu stranicu.
+    • Tablica sadržaja radi se automatski i njeno uređenje treba odgovarati uređenju
+         naslova i podnaslova u radu.
+    • Duljina rada: minimalno 45 000 znakova3 ili 72 000 znakova4 (promatrano Uvod -
+         Zaključak; ne uključuje poglavlje Literatura)
+    • Koristiti APA stil navođenja literature (6. izdanje)
+    • Citirane izvore navesti na odgovarajući način, npr. (Buble i sur., 2005, str. 282)
+    • OBAVEZNO je dodati stranice ili raspon stranica kod svih navedenih izvora u
+         tekstu (i citati i parafraze), na primjer (Deželić, 2020, str. 15-17)
+    • Detaljno objašnjenje navođenja citata slijedi u Prilog 1. Citiranje literature.
+
+Akademski stil pisanja
+
+    • Upotrijebiti akademski stil pisanja - pisati u neosobnom obliku, ne u 1. licu množine ili
+         jednine (ne iznositi osobne dojmove i doživljaje)
+
+    • Obavezno je komentirati svaki navedeni tekst, a poglavlje u radu ne može završiti bez
+         zaključne misli autora
+
+    • Literatura: u popisu se navode sve u tekstu upotrijebljeni izvori koje je potrebno navesti
+         prema APA standardu navođenja literature (objašnjeno u Prilogu 1.)
+
+Sadržaj – obvezna struktura rada
+
+Sadržaj dolazi poslije naslovnih stranica rada, a prije početka rada jer čitatelja prije
+prelistavanja rada obično zanima od čega se rad sastoji. Sadržaj čine naslovi i podnaslovi rada
+te tako služi i kao mogućnost provjere logičnosti izlaganja.
+
+3 Za stručni prijediplomski studij.
+4 Za stručni diplomski studij.
+
+                                                                                                                8
+
+===== [bak-uputa-2025 | str. 11] =====
+LITERATURA
+
+       Tekstni izvori
+       Ilustrativni izvori
+
+                  Tablice
+                  Slike
+                  Grafikoni
+
+PRILOZI
+
+       Prilog 1. Anketni upitnik
+
+===== [bak-uputa-2025 | str. 14] =====
+Sadržajno – u uvodu je potrebno dati uvodnu riječ o temi rada, upoznati čitatelja s temom, zašto
+je relevantna te prema obveznim potpoglavljima odrediti predmet, cilj, metodologiju rada i
+njegovu strukturu.
+
+Uvod treba ukazati na ono što se u radu obrađuje, stoga se njegovo pisanje može organizirati
+na početku izrade, a konačno ga se može dovršiti tek kada se napiše rad u cjelini, odnosno kada
+se razradi sadržaj rada.
+
+1.1. Predmet i cilj rada
+
+Precizirati predmet i ciljeve rada. To može značiti da će se dati sažet povijesni pregled teme,
+pregled relevantne literature, definirati pojmove sadržane u naslovu ili navesti druge podatke:
+opseg i granice obrade teme, naznačiti je li rad teorijske, praktične ili eksperimentalne prirode
+te ograničava li se na promatranje neke pojave u određenom prostoru i vremenu ili su njegova
+zapažanja općenitije prirode, odnosno namjerava li problemu pristupiti komparativno,
+eksperimentalno ili analitički. U uvodu se navodi o čemu se piše i zbog čega je autor odabrao
+temu te se time motivira čitatelja na daljnje čitanje.
+
+Naznačiti svrhu (cilj) rada, to jest, što se izradom rada želi postići i zašto je to važno. Izraziti
+polazišnu hipotezu koju će dokazivati istraživanje te pretpostavke koje je podupiru.
+Naznačiti opseg i ograničenja istraživanja te u kojim se uvjetima i okolnostima ono odvijalo.
+
+Dati (povijesni) pregled istraživanja koja su prethodila radu, teorijsku podlogu rada, odnosno
+kritički osvrt na postojeću literaturu. Izraziti svoj stav prema temi, istaknuti poteškoće na koje
+se naišlo i razloge za izbor određene teme.
+
+1.2. Metodologija rada
+
+Navesti korištenu metodologiju te u radu korištene izvore podataka.
+
+                                                                                                              14
+
+===== [bak-uputa-2025 | str. 18] =====
+Tekst počinje bez uvlaka na početku svakog poglavlja. Sadržajno je važno dati kvalitetan
+teorijski pregled teme rada. Pri pisanju rada, obavezno je navoditi sve korištene i citirane
+izvore. Detaljne upute o citiranju pročitati u Prilog 1. Citiranje literature.
+
+2.1. Podnaslov
+
+Svaki naslov i/ili podnaslov rada mora imati pripadajući tekst, smisleno podijeljen u odlomke.
+Jedna rečenica ne može biti odlomak. Konzultirati se s mentorom/icom u vezi strukture
+sadržaja i količine korištenih podnaslova, sukladno temi.
+
+2.2. Podnaslov
+
+Primjerak teksta u odlomku. Primjerak teksta u odlomku. Primjerak teksta u odlomku.
+Primjerak teksta u odlomku. Primjerak teksta u odlomku. Primjerak teksta u odlomku.
+Primjerak teksta u odlomku. Primjerak teksta u odlomku. Primjerak teksta u odlomku.
+
+===== [bak-uputa-2025 | str. 21] =====
+3. NASLOV
+
+Razrada teme je najopsežniji dio rada. Mora sadržavati prikaz predmeta, analizu građe ili izvora
+te dokaze postavki ili hipoteza s obzirom na to da je njezin glavni cilj pružanje potrebnih
+informacija o temi. Važno je građu svesti na odgovarajući opseg, međusobno sistematizirati i
+uravnotežiti cjelinu i dijelove rada te sve prezentirati u struci prihvatljivu obliku.
+Tehnički gledano, slike, tablice i grafikoni moraju imati naslov, a detalji su objašnjeni u
+Prilogu 1. Citiranje literature.
+Koristite automatsko označavanje slika i tablica u programu Word. To ćete postići tako da
+označite (kliknete na) sliku, tablicu ili grafikon te u izborniku References kliknete na Insert
+Caption. Pod Label odaberete ono što označujete – sliku, tablicu ili grafikon, a program zatim
+sam smješta naslov ispod slike ili grafikona odnosno iznad tablice.
+
+                    Slika 3 Prikaz numeriranja slika i pripadajućih naslova
+
+                                                  Izvor: autorska slika zaslona
+
+                                                                                                              21
+
+===== [bak-uputa-2025 | str. 22] =====
+Na kraju rada potrebno je izraditi popis tablica, slika i grafikona korištenih u tekstu. Odaberite
+izbornik References, zatim Insert Table of Figures. Izraditi poseban popis za svaku od stavki,
+(tablice, slike i grafikone), kao što je primjer dan u ovoj uputu u poglavlju Literatura pod
+Ilustrativni izvori.
+
+                                 Slika 4 Umetanje popisa slika i tablica
+
+                                                  Izvor: autorska slika zaslona
+
+Svi glavni naslovi moraju počinjati na novoj stranici (oni za koje se koriste stilovi Heading 1).
+Za to je potrebno koristiti opciju Page break u izborniku Insert (ne koristiti tipku Enter za
+prijelaz na drugu stranicu).
+Za potrebe kasnijeg navođenja literature, slijedi primjer tablice.
+
+                           Tablica 1 Primjer tablice za potrebe ovih uputa
+
+                                              Izvor: samostalna izrada autora/ice.
+
+Za potrebe ovih uputa, više se neće granati struktura sadržaja jer je njen primjer naveden u
+poglavlju SADRŽAJ – OBVEZNA STRUKTURA RADA.
+
+                                                                                                              22
+
+===== [bak-uputa-2025 | str. 23] =====
+4. ZAKLJUČAK
+
+Zaključak u radu može sadržavati (kritičku) ocjenu ili procjenu neke teme, stanja ili situacije,
+istaknuti uočene jake ili slabe strane, odnosno može sadržavati i neke savjete i preporuke ili
+može rezimirati činjenice i podatke do kojih se došlo u radu. Treba paziti da se doslovno ne
+ponavlja ono što je izneseno u radu jer to nije potrebno i ne ostavlja dobar dojam. Zaključak
+treba biti koncizan i zanimljiv kako bi ostavio povoljan konačni dojam.
+U njega se ne unosi novi materijal, već se izdvajaju ključni elementi koje valja zapamtiti. On
+sažeto prikazuje stanje i spoznaje, odnosno naznačuje što bi se još moglo poduzeti. Zaključak
+može sadržavati:
+
+    • sažimanje (sintezu) osnovnih činjenica, postavki i rezultata,
+    • rezultate koje treba još jednom naglasiti te komentirati jesu li u skladu s ciljem koji je
+
+         istaknut u uvodu (ako cilj nije postignut, treba objasniti zašto i navesti uzroke), te tako
+         od teme prijeći na raspravu o temi,
+    • moguće značenje rada,
+    • preporuke i prijedloge koji logički proizlaze iz rada i podataka kojima smo raspolagali
+         u radu, a potrebni su osobito ako postoji mogućnost praktične primjene rezultata do
+         kojih smo došli u radu,
+
+===== [bak-uputa-2025 | str. 24] =====
+LITERATURA
+
+Tekstni izvori
+
+Navesti svu korištenu literaturu prema APA standardu.
+
+Ilustrativni izvori
+
+Tablice
+Ovdje umetnuti popis tablica (References -> Insert Table od Figures i zatim odaberite pod
+Caption Label opciju Tablica)
+Tablica 1 Primjer tablice za potrebe ovih uputa .....................................................................22
+Slike
+Ovdje umetnuti popis tablica (References -> Insert Table od Figures i zatim odaberite pod
+Caption Label opciju Slika)
+Slika 1 Uređenje teksta zaglavlja - Normal...............................................................................6
+Slika 2 Uređenje teksta - odlomci (veličina slova 12, naziv slike je Bold, a naziv slike Italic).7
+Slika 3 Prikaz numeriranja slika i pripadajućih naslova..........................................................21
+Slika 4 Umetanje popisa slika i tablica ...................................................................................22
+Grafikoni
+
+Ovdje umetnuti popis tablica (References -> Insert Table od Figures i zatim odaberite pod
+Caption Label opciju Grafikon)
+
+                                                                                                              24
+
+===== [bak-uputa-2025 | str. 26] =====
+PRILOZI
+
+Prilog 1. Citiranje literature
+
+Literatura (od lat. litteratura: pismo, slova, pisanje) neizostavna je sastavnica i jedinstveno
+obilježje svakog autorskog rada koji po svojemu sadržaju, stručnoj terminologiji i jezičnome
+stilu pripada znanstvenome diskursu. Pojam literatura u ovim Smjernicama podrazumijeva sve
+informacijske izvore odnosno sve vrste autorskih djela korištenih za pisanje vlastita rada (u
+daljnjem tekstu: izvori). Pri odabiru literature važno je da izvori na koje ćemo se pozivati budu:
+relevantni (sadržajno odgovaraju istraživačkom predmetu – temi); aktualni (informacije su
+najnovije i točne, nisu zastarjele); provjereni (izvor na koji se pozivamo ima dokazanu
+vrijednost). Informiranje o izvorima može se započeti pretraživanjem tzv. sekundarnih
+informacijskih izvora5 (knjižničnih kataloga, bibliografija, baza podataka) koji opisuju i
+upućuju na raznoliku knjižničnu građu6 akademskog rada.7
+
+Citiranje i zašto citiramo
+
+Bez obzira na mnoge prednosti koje obilje informacijskih izvora donosi, kvalitetna selekcija i
+vrednovanje radova u tako širokom spektru informacijske ponude katkada može predstavljati
+pravi problem i ozbiljnu prepreku autoru akademskog rada. Zato se preporučuje za pomoć i
+savjet pri odabiru i vrednovanju literature obratiti informacijskim stručnjacima, knjižničarima
+koji će na temelju naslova teme, ključnih riječi i knjižničnog intervjua, preporučiti relevantne
+i provjerene informacijske izvore: knjige, časopise, baze s cjelovitim tekstovima, repozitorije,
+internetske portale, itd. Svi se izvori koji su u radu korišteni moraju ispravno, dosljedno i u
+cijelosti dokumentirati prema dogovorenom citatnom stilu.
+
+5 Prema vrsti, informacijske izvore dijelimo još i na primarne (izvorna autorska djela, knjige, članci u časopisima, audiovizualni sadržaji, itd.),
+sekundarne koji su pisani s određenim vremenskim odmakom u odnosu na primarne i uključuju interpretacije, evaluacije, procjene i sažimanje
+primarnih izvora te tercijarne, izvedene informacijske izvore koji su nastali kombinacijom primarnih i sekundarnih (enciklopedije, leksikoni i
+slično).
+6 Svaki jezični, slikovni i zvučni dokument na lako prenosivom materijalu ili u elektronički čitljivu obliku informacijskoga, umjetničkog,
+znanstvenog ili stručnog sadržaja, proizveden u više primjeraka i namijenjen javnosti, kao i rukopisi koje knjižnica drži u svojem fondu i
+stavlja na raspolaganje korisnicima. (v. https://proleksis.lzmk.hr/53707/)
+7 Pod akademskim radom podrazumijevat će se znanstvene, stručne i kvalifikacijske radove (doktorske i magistarske radove te studentske
+radove - završne i diplomske radove).
+
+                                                                                                              26
+
+===== [bak-uputa-2025 | str. 33] =====
+sudjelovali u izradi međunarodnih IFLA-inih standarda i drugih dokumenata (Barbarić,
+Hebrang Grgić i Horvat, 2012., str. 73 – 97).
+
+Dva ili više djela istog autora
+
+Ako se u bilješci u tekstu pojavljuju dva ili više djela jednog autora, prezime se upisuje samo
+jednom, a godine objave djela navodi od starije prema novijoj, na primjer: (Pranjić, 1968,
+1991). Ako su dva ili više djela istoga autora objavljena iste godine, pored godine uvode se
+mala slova po abecednom redu. (Pranjić 1992a, 1992b)
+
+Djela različitih autora u istoj bilješci
+
+Kada se u istome citatu pozivamo na dva ili više djela različitih autora, u bilješci se razdvajaju
+točkom sa zarezom „;“. Prezimena se u tome slučaju navode abecednim redom.
+(Kukoč, 2009; Labus, 2013 i Skledar, 2009)
+(Labus, 2013, 2014; Skledar, 2001a, 2001b)
+
+13 Pravna osoba, udruženje fizičkih osoba ili imovina namijenjena određenoj svrsi kojoj zakon priznaje pravnu samostalnost. Izvor: Pravna
+osoba. (2021). Hrvatska enciklopedija: mrežno izdanje (2021). Leksikografski zavod Miroslav Krleža 2021. Preuzeto s
+https://www.enciklopedija.hr/Natuknica.aspx?ID=49995 (8.7.2022.)
+
+                                                                                                              33

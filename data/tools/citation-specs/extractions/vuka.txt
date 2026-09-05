@@ -1,0 +1,353 @@
+===== [vuka-poslovni-upute | str. 4] =====
+ Načelo izrazitosti (emfaza). Ovo načelo nalaže da se najvažnije misli i ideje u
+         rečenici i pojedinim dijelovima rada moraju naglasiti kako bi se urezale u
+         sjećanje čitatelja. Smatra se da uvodi ne smiju biti dugi, a završeci bi trebali
+         biti izraziti i snažni kako bi odali dojam potpunosti i zaokruženosti izlaganja.
+
+     Načelo raznovrsnosti. Autor bi trebao korištenjem raznovrsnih jezičnih i
+         stilskih mogućnosti, povezivanjem kratkih i dugih rečenica, oštroumnim
+         korištenjem fraza i citata, interesantnim primjerima, grafičkim prikazima i slično
+         zadržavati pozornost čitatelja i izbjeći monotoniju.
+
+    Stručni sadržaj znanstvenih, znanstveno-stručnih i stručnih djela zahtijeva od
+autora primjeren stil koji se mora kretati unutar znanstveno prihvatljivih normi i
+standarda.3 Pri tome autori ne bi smjeli koristiti umjetnički stil - subjektivnost,
+emocionalni naboj i literarno izražavanje.
+
+    Prilikom pisanja radova priznanja potrebno je:4
+     Izbjegavati pisanje u prvom licu jednine i množine. Autori radove često
+
+         pišu u prvom licu jednine što ne priliči znanstvenom stilu i izaziva određenu
+         odbojnost čitatelja ili slušatelja. Zbog toga treba izbjegavati formulacije kao što
+
+===== [vuka-poslovni-upute | str. 7] =====
+3. DOKUMENTACIJSKA PODLOGA RADA
+
+        Svako znanstveno, znanstvenostručno i stručno djelo temelji se na prikupljenoj
+i proučenoj literaturi kojima autor podupire svoje tvrdnje, a koje čine dokumentacijsku
+osnovu rukopisa. Ona obuhvaća citate, pozivne bilješke (fusnote ili napomene) i
+ilustracije.7
+
+3.1. Citati
+
+        Autori pisanih djela često koriste i trebaju koristiti tuđe definicije, ilustracije,
+ideje, stavove što je samo po sebi razumljivo jer svoje tvrdnje žele argumentirati
+pozivom na autoritet određenog znanstvenika ili stručnjaka. Pri tome je bitno navesti
+čiji su podaci, mišljenja, ideje i sl. preuzeti i iz kojeg bibliografskog izvora što se
+postiže citiranjem. Ono predstavlja od riječi do riječi usmeno ili pisano navođenje
+nečijih riječi ili dijelova teksta.
+
+        Citati se moraju uklopiti u cjelinu izlaganja odnosno moraju biti povezani s
+glavnom idejom rada. Citirati se može i iz „druge ruke“ ali je to potrebno navesti na
+način da se u pozivnoj bilješci uz autora i djelo iz koje se citira navede i autor i djelo
+iz kojeg je citirani autor preuzeo tekst uz naznaku „citirano prema xy“.
+
+        Doslovno preuzimanje tuđih misli označuje se stavljanjem toga teksta u
+znakove navođenja („...“) i citiranjem tuđeg dijela u pozivnoj bilješci (fusnoti) na dnu
+stranice ili u uglatoj zagradi u tekstu rada odnosno na druge uobičajene načine. U
+slučaju kada se tuđi tekst prepriča vlastitim riječima odnosno parafrazira potrebno je
+navesti izvor iz kojeg je tekst preuzet. Nedopustivo je preuzimanje tuđeg teksta bez
+navođenja autora i njegovog djela jer bi takav rad predstavljao plagijat.8 Uvijek treba
+voditi računa da se ne preuzima suviše tuđeg teksta jer se time preuzima i tuđi stil
+pisanja te se umanjuje originalnost i vrijednost vlastitog djela.
+
+7 Zelenika, R.: Metodologija i tehnologija izrade znanstvenog i stručnog djela, Ekonomski fakultet
+u Rijeci, Rijeka, 2000. str. 481
+8 Plagijat, lat. plagium = literarna krađa, prisvajanje tuđeg autorstva, izdanje tuđeg djela pod svojim
+imenom
+
+===== [vuka-poslovni-upute | str. 8] =====
+3.2. Pozivna bilješka
+
+        Pozivna bilješka označava popratna objašnjenja koja objašnjavaju neki dio
+naveden u tekstu ili korišten bibliografski izvor. Znanstveno ili stručno djelo ne treba
+opterećivati napomenama jer one mogu odvratiti pozornost čitatelja od osnovnih misli
+i rezultata istraživanja. Također, tvrdnje koje su očite i koje su takve prirode da ih
+čitatelj ne treba provjeravati nije potrebno potkrepljivati bibliografskim izvorima. Treba
+napomenuti da se u uvodnim i zaključnim razmatranjima ne koriste bibliografski izvori
+niti napomene.
+
+        Postoje slijedeće tri osnovne vrste podnožaka:9
+     Dokumentarne (izvorne) ili bibliografske napomene. Dokumentarne
+
+         napomene trebaju čitatelja precizno uputiti na korištenu bibliografsku jedinicu
+         (izvor), čime će se ostvariti veća pouzdanost, a čitatelj će dobiti uvid u
+         odgovarajuće izvore.
+     Eksplikativne napomene. Ova vrsta napomena služi za dodatno
+         pojašnjavanje pojedinih dijelova teksta, određenih podataka, stavova ili
+         činjenica, a iako nisu nužne mogu biti zanimljive čitateljima.
+     Komparativne napomene. Služe za upućivanje čitatelja na neki drugi izvor
+         koji obrađuje istu ili sličnu problematiku ili na dijelove istog izvora.
+
+           Prilikom izrade završnih radova u okviru studija Poslovnog odjela
+Veleučilišta u Karlovcu obavezno se moraju koristiti bibliografske pozivne
+bilješke, a koristi se europski sustav pozivnih bilježaka ispod teksta (fusnote).
+
+3.2.1. Europski sustav pozivnih bilježaka ispod teksta
+
+           Sustav pozivnih bilježaka ispod teksta ili fusnote pišu se ispod teksta na dnu
+stranice, a od glavnog teksta se odvajaju crtom koja je obično duga 1/5 duljine
+teksta. Označavaju se arapskim brojem i povezuju s istim brojem koji je u tekstu
+vezan za ključnu riječ ili se nalazi na kraju rečenice neposredno iza točke, odnosno
+
+9 Zelenika, R.: op. cit., str. 483, citirano prema Ormuš, M. – Matijević, Ž.: Intelektualni rad, metode i
+tehnike, Radničko sveučilište Moša Pijade, Zagreb, 1979., str. 180
+
+===== [vuka-poslovni-upute | str. 9] =====
+ukoliko se radi o nabrajanju oznaka fusnote se stavlja iza dvotočke. Oznake pozivnih
+bilježaka pišu se kronološki u neprekinutom nizu od početka do kraja rada.
+
+         Ispod teksta, u fusnoti, navode se osnovni bibliografski podaci. Potrebno je
+napomenuti da fusnota mora biti barem onoliko koliko se na popisu literature nalazi
+bibliografskih jedinica i da se fusnote pišu manjom veličinom slova od osnovnog
+teksta (za seminarske i završne radove uobičajena veličina slova teksta je 12, a
+fusnota 10)
+
+         Često se u pozivnim bilješkama koriste latinske riječi ili njihove skraćenice pa
+se u nastavku navode neke od njih:
+
+       Opus citatum, skr. op. cit. ili o.c. = navedeno djelo odnosno djelo koje je
+          ranije bilo spomenuto. Kada se ponovno citira iz djela koje je već citirano u
+          radu koristi se ovaj izraz na način da se navodi autor djela, zatim oznaka op.
+          cit. ili o.c. i stranica djela s koje se citira. Sljedeći primjer pokazuje kako se
+          upotrebljava ovaj izraz:
+
+ Primjer 1. Opus citatum
+
+              10 Wasserbauer, B.: op. cit., str. 53.
+
+       Ibidem, skr. Ibid, ibd. ili ib. = na istom mjestu, u istom djelu, na istoj stranici
+          neke knjige. Ukoliko je citat preuzet iz istog djela kao i prethodni koristi se
+          oznaka ibidem, ibid, ibd., ib. Potrebno je napomenuti da se uz prethodno
+          navedenu oznaku ne koristi oznaka stranice ako se navodi s iste stranice kao
+          i prethodni citat, a ukoliko je citat iz istog djela kao i prethodni ali s druge
+          stranice stavlja se oznaka ibidem (ibid, ib., ibd.) i stranica s koje se navodi.
+          Može se koristiti i hrvatska riječ „isto“. Primjer 2. prikazuje kako se koristi
+          navedena oznaka:
+
+===== [vuka-poslovni-upute | str. 10] =====
+nekom od idućih poglavlja se pobliže objašnjava pojam kojeg se trenutno
+         samo spominje. Primjerice ako se u poglavlju 2 samo spominje doktorska
+         disertacija, a u poglavlju 4.3 se pobliže objašnjava onda se navedena
+         napomena koristi na slijedeći način:
+
+Primjer 3. Infra
+
+       89O tome dataljnije cf. infra točku 4.3. O doktorskim studijima
+
+     Supra = gore, ispred, u prethodnom izlaganju. Ova oznaka se koristi kada se
+         u nekom od prethodnih poglavlja pobliže objašnjavao pojam kojeg se
+         trenutno samo spominje. Primjerice ako se u poglavlju 5 samo spominju
+         pozivne bilješke, a u poglavlju 4.8. se one pobliže objašnjavaju tada se
+         navedena napomena koristi na slijedeći način:
+
+    Primjer 4. Supra
+
+       10O tome opširnije cf. supra 4.8. Pozivne bilješke
+
+     Confer, skr. cfr. Ili cf. = usporedi, sravni, vidi. Oznaka confer koristi se
+         ukoliko autor želi čitatelja uputiti na dodatna pojašnjenja ili želi da čitatelj
+         njegove navode usporedi s navodima nekog drugog autora. Primjer 5.
+         prikazuje na koji način se koristi navedena oznaka
+
+===== [vuka-poslovni-upute | str. 11] =====
+Primjer 5. Confer
+
+        8O tome detaljnije cf.: Simonić, A.: Znanost – najveća avantura i izazov ljudskog roda,
+        Medicinska naklada, Zagreb, 2005., str. 155
+
+       Pagina, skr. pag. ili p. = označava stranicu u knjizi, no prilikom označavanja
+          stranica najčešće se koristiti skraćenica hrvatskog naziva „str.“
+
+3.2.2. Razlike navođenja bibliografskih izvora
+
+      Postoje određene razlike u citiranju odnosno navođenju bibliografskih izvora u
+fusnotama ovisno o vrsti djela iz kojeg se citira. U nastavku su pojašnjene neke od
+njih.
+
+       Knjige. Prezimena i inicijali imena (ili imena) autora bitni su elementi fusnota.
+          Ukoliko postoji više autora vrijedi pravilo da ako knjiga ima do tri autora
+          navode se svi, a ako ih ima više piše se prvi autor i naznaka „i dr.“ ili „et.al.“ ili
+          se u zagradi piše glavni urednik (redaktor). Nadalje u fusnoti je bitno navesti
+          naslov djela (koji se najčešće piše podebljanim slovima - bold) i izdanje ako
+          se ne radi o prvom izdanju, zatim izdavača, mjesto i godinu izdanja i stranicu
+          s koje se citira. Primjeri 6 i 7 prikazuju način navođenja citata iz određenih
+          knjiga.
+
+      Primjer 6. Citiranje iz knjiga
+
+        34Simonić, A.: Znanost – najveća avantura i izazov ljudskog roda, Medicinska naklada,
+        Zagreb, 2005., str. 155
+
+===== [vuka-poslovni-upute | str. 12] =====
+Primjer 7. Citiranje iz knjiga
+
+ 4Baban, Lj. i dr.: Primjena metodologije stručnog i znanstvenog istraživanja, Ekonomski
+ fakultet u Osijeku, Osijek, 2000., str. 78
+
+                                                                  ili
+ 4Baban, Lj. et. al.: Primjena metodologije stručnog i znanstvenog istraživanja, Ekonomski
+ fakultet u Osijeku, Osijek, 2000., p. 78
+
+ Časopisi. Znanstvenici i stručnjaci često svoje članke objavljuju u
+    specijaliziranim časopisima koji izlaze mjesečno, dvomjesečno, kvartalno,
+    polugodišnje ili čak godišnje i to kroz dugi niz godina. Kada se citiraju članci
+    iz časopisa potrebno je navesti prezime i inicijal imena ili puno ime autora
+    (ako je više autora vrijedi isto pravilo kao kod citiranja knjiga), zatim se u
+    znakovima navođenja piše naslov članka, podebljanim slovima ili kurzivom
+    piše se naziv časopisa u kojem je članak objavljen, zatim izdavač i mjesto
+    izdanja (ukoliko je časopis međunarodno poznat izdavač i mjesto izdanja se
+    ne navode), slijede volumen ili godište i broj časopisa ili sveska, godina
+    izdanja te na kraju stranice na kojima se članak nalazi. Idući primjer prikazuje
+    način citiranja članaka iz časopisa.
+
+Primjer 8. Citiranje iz časopisa
+
+ 34 Boxall, P., Purcell, J.: „Strategic human resource management: where have we come from and
+ where should we be going?“, International Journal of Management Reviews, Vol. 2., No.2.,
+ 2000., str. 183-203.
+
+ Enciklopedije i leksikoni. Kada se definiraju određeni pojmovi često se
+    koriste enciklopedije, leksikoni ili rječnici. Kod korištenja tih izvora potrebno je
+    u fusnoti navesti slijedeće: prezime i inicijal imena ukoliko je to moguće, izraz
+    „natuknica“ ili „odrednica“, zatim naziv natuknice odnosno odrednice, ime
+    enciklopedije, leksikona ili rječnika, izdavača, mjesto, broj i godinu izdanja,
+    broj sveska i stranicu s koje se navodi natuknica (odrednica). Slijedi primjer
+    citiranja rječnika, leksikona i enciklopedija .
+
+===== [vuka-poslovni-upute | str. 13] =====
+Primjer 9. Citiranje iz enciklopedija, leksikona, rječnika
+
+     89 Klaić, B.: Natuknica plagijat, Rječnik stranih riječi, Nakladni zavod Matice hrvatske, Zagreb,
+    1990., str. 678
+    13Odrednica leksikografija, Priručni leksikon, Znanje, Zagreb, 1959., str. 56
+    34 Natuknica monografija, Hrvatska enciklopedija, Leksikografski zavod Miroslava Krleže, Zagreb,
+    2000., sv. 5, p. 145
+
+       Propisi. Uobičajeno je da se u znanstvenoistraživačkom radu koriste
+          nacionalni i međunarodni propisi, pri tome se ti propisi moraju adekvatno
+          citirati. Kod navođenja propisa fusnota mora sadržavati slijedeće elemente:
+          naziv propisa, naziv službenog glasila, godinu izdanja i broj službenog glasila
+          (uključujući i izmjene i dopune) te članak. U nastavku je dat primjer citiranja
+          propisa.
+
+      Primjer 10. Zakoni
+
+        12Zakon o znanstvenoj djelatnosti i visokom obrazovanju, „Narodne novine“, 123/03, 198/03,
+        105/04, 174/04, 02/07, 46/07, 45/09, 63/11, 94/13, 139/13, 101/14, 60/15, 131/17, čl. 35
+
+                                                               ili
+
+       12 Zakon o znanstvenoj djelatnosti i visokom obrazovanju, NN, 123/03, 198/03, 105/04, 174/04,
+       02/07, 46/07, 45/09, 63/11, 94/13, 139/13, 101/14, 60/15, 131/17, čl. 35
+
+       Internet stranice. Zbog sve većeg broja informacija do kojih je moguće doći
+          putem Interneta, ali i zbog sve većeg broja svjetskih časopisa koji se
+          objavljuju u elektroničkom obliku potrebno je unificirati načine citiranja tuđih
+          spoznaja, rezultata istraživanja i zaključaka koje su dostune online pristupom.
+          Prilikom citiranja radova s Interneta potrebno je navesti slijedeće informacije:
+          Prezime i ime autora, naslov dokumenta u navodnicima, naslov rada u
+          kurzivu, datum publiciranja i posljednje prepravke, potpuna URL adresa,
+          nadnevak pristupa navedenoj URL adresi.10 Ukoliko se navode podaci koji se
+
+10 Zelenika, R.: op. cit., str. 495
+
+===== [vuka-poslovni-upute | str. 14] =====
+nalaze na službenoj stranici neke ustanove, trgovačkog društva i sl. potrebno
+          je navesti naziv stranice, URL adresu stranice i datum pristupa. Idući primjer
+          prikazuje način navođenja korištenih podataka dostupnih na Internetu.
+
+        Primjer 11. Citiranje s Interneta
+
+ 23 Collins, C., Smith, K. G., Stevens, C. K.: “Human Resource Practices, Knowledge-Creation Capability
+ and Performance in High Technology Firms”, www.ilr.cornell.edu/cahrs, (23.03.2021.)
+
+ 43Državni zavod za statistiku, www.dzs.hr (23.06.2021.)
+
+3.3. Ilustracije
+
+         Ilustracije su dodaci ili objašnjenja u obliku komentara, slika, grafikona, tablica
+koji pridonose jasnoći i živosti znanstvenog, znanstvenostručnog ili stručnog rada.11
+Temeljni im je zadatak omogućiti jasno, sažeto i jednostavno predstavljanje
+materijala u radu. Stoga je njihovoj pripremi i izradi potrebno posvetiti primjerenu
+pozornost. Ilustracije se mogu inkorporirati na odgovarajuće mjesto u tekstu ili se
+mogu staviti kao prilozi na kraju djela.
+
+===== [vuka-poslovni-upute | str. 19] =====
+3.3.5. Fotografije
+        Fotografije su ilustracije izrađene pomoću fotoaparata, a mogu se izrađivati u
+
+crno-bijeloj tehnici ili u boji. Često se koriste u radovima iz područja ekonomije,
+šumarstva, agronomije itd.
+
+        Ova vrsta ilustracija označava se na isti način kao i prethodne vrste, dakle,
+treba sadržavati redni broj koji se piše ispred naslova i iznad fotografije, a označava
+se na jedan od prethodno navedenih načina. Iza rednog broja piše se naslov koji
+mora točno odražavati bit fotografije te mora biti kratak i jasan. Ispod fotografije
+naznačava se izvor iz kojeg je fotografija preuzeta.
+
+        Način označavanja fotografija prikazan je primjerom 18.
+Primjer 18. Označavanje fotografija
+
+===== [vuka-poslovni-upute | str. 21] =====
+jezik, uvod, razrada teme, slučajevi iz prakse, zaključak, literatura, popisi ilustracija,
+prilozi, itd. Svako djelo ima svoju strukturu koja ovisi o vrsti i namjeni djela. Osnovna
+struktura dijeli djelo na uvod, razradu teme i zaključak, ali što je djelo kompleksnije to
+će kompleksnija biti i njegova struktura.
+
+3.4.1. Naslov
+
+        Naslov odražava temu pisanog djela i stoga mu je potrebno posvetiti posebnu
+pozornost. On mora biti jasan odnosno nedvosmislen tako da čitatelj odmah zna što
+je autor htio reći, zatim kratak tako da se sa što manje riječi točno opisuje sadržaj
+djela, točan tako da se dosljedno i korektno prezentira tekst djela te po mogućnosti
+intrigantan kako bi privukao pažnju čitatelja.
+
+===== [vuka-poslovni-upute | str. 24] =====
+3.4.7. Sažetak
+
+        Sažetak17 je kratki prikaz cjelokupnog djela, a treba biti pisan problemski
+odnosno mora isticati problematiku rada, ali ne smije biti pisan u obliku strukture
+rada. Uobičajeno je da se sažetak piše na nacionalnom i na nekom od svjetskih
+jezika i to jednostavnim jezikom u trećem licu i u pasivu i u pravilu u jednom odlomku.
+Sažetak u završnim radovima potrebno je napisati na hrvatskom jeziku te je potrebno
+istaknuti ključne riječi (do 5 ključnih riječi). Također je sažetak i ključne riječi potrebno
+prevesti na engleski jezik.
+
+3.4.8. Popis literature
+
+        Literatura ili bibliografija predstavlja popis svih korištenih izvora podataka
+uključujući knjige, časopise, internet stranice, enciklopedije, studije, leksikone itd.
+Popis korištene literature treba biti potpun, točan i sistematičan te usklađen s
+sustavom pozivnih bilježaka.
+
+        Popis korištene literature navodi se na kraju djela iza zaključka i ne označava
+se brojčano. Kada popis sadrži više radova istog autora oni se u literaturi navode
+prema kronološkom redu njihova objavljivanja. Titule autora se u popisu literature ne
+stavljaju. Ukoliko se koristi europski sustav pozivnih bilježaka ispod teksta onda se
+konačni popis literature sastavlja abecednim redom po prezimenu autora. Kada je
+popis literature vrlo opsežan onda se on može grupirati prema vrstama djela.
+
+3.4.9. Popis ilustracija
+
+        Kada rad sadrži ilustracije potrebno je iza popisa korištene literature navesti
+popis ilustracija, s time da je uobičajeno da prvo dolazi popis tablica, zatim popis
+grafikona, fotografija i ostalih ilustracija iako redoslijed može biti i drugačiji.
+
+17 Sažetak = engl. summary, abstract, njem. zusammenfassung
+
+===== [vuka-poslovni-upute | str. 26] =====
+Prilikom izrade radova priznanja također je potrebno voditi računa kako o
+sadržajnim karakteristikama tako i o tehničkoj obradi koja uvelike utječe na kvalitetu
+rada. Uredno i pregledno pripremljen rad olakšava čitanje, te daje uvid u sustavnost
+izlaganja i obrade određene teme.
+
+        Na preddiplomskim, stručnim i diplomskim studijima studenti izrađuju veliki
+broj seminarskih radova, a kruna studija svakog studenta je izrada i obrana
+završnog/diplomskog rada.
+
+           Završni radovi moraju pokazati dobro poznavanje struke te sposobnost
+pisanog i usmenog iznošenja tog znanja. Student obavezno mora sam odabrati temu
+završnog/diplomskog rada te je obrazložiti predmetnom nastavniku zajedno s
+načinom obrade teme i literaturom. Teorijski ili praktični istraživački problem kojeg
+student obrađuje u završnom/diplomskom radu ne mora imati karakter originalnosti.

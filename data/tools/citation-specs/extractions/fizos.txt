@@ -1,0 +1,60 @@
+===== [fizos-opce-upute-diplomski | str. 4] =====
+12. ZAKLJU£AK
+
+U zaklju ku se iznose najvažnija saznanja i najvažniji doprinosi postavljenom problemu
+istraživanja odnosno istraživa kom pitanju (pretpostavljenoj hipotezi).
+
+13. LITERATURA
+Poglavlje LITERATURA sadrži popis svih izvornika tj. znanstvenih radova, monografija,
+zbornika ili drugih izvora koji se spominju u radu. Svaki citat u tekstu mora biti zastupljen u
+popisu literature i obrnuto: obrnuto, svaka referenca iz popisa literature mora biti barem
+jednom navedena u tekstu. Bibliografske reference se navode abecednim redom uzevši u obzir
+po etno slovo prezimena prvoga autora. Interpunkcija, odnosno na in citiranja literature, u
+popisu literature mora biti ujedna en (vidi navedene primjere).
+
+PRIMJERI CITIRANJA LITERATURE U TEKSTU
+U tekstu rada navodi se prezime autora te godina u kojoj je rad objavljen, na primjer:
+(Holland, 2000). Kada su dva autora, treba navesti oba, npr.: (Hughes i Kaufman, 2002), a
+ako je više autora, navodi se prvi autor te dopisuje i suradnici (Graham i sur., 1993). Ako su
+imena autora dio re enice, u zagradu se piše samo godina npr. „Hughes i Kaufman (2002) su
+utvrdili da ...“.
+
+PRIMJERI CITIRANJA U POPISU LITERATURE
+Rad u ¡asopisu:
+Radoli¤, Vanja; Miklav i¤, Igor; Poje Sovilj, Marina; Stani¤, Denis; Petrinec, Branko;
+Vukovi¤, Branko, (2019). The natural radioactivity of Istria, Croatia // Radiation physics and
+chemistry, 155: 332-340.
+
+Knjiga:
+Attix, F. H. (2008). Introduction to radiological physics and radiation dosimetry. John Wiley
+& Sons.
+
+Poglavlje u knjizi:
+United Nations Scientific Committee on the Effects of Atomic Radiation. (1993). Sources and
+effects of ionizing radiation, united nations scientific committee on the effects of atomic
+
+===== [fizos-opce-upute-diplomski | str. 5] =====
+Mrežna (internetska) stranica se citira tako da se navedu slijede¤i podatci (ako su poznati):
+Prezime i inicijali imena autora stranice/institucije, naslov teksta, naslov cijele stranice, adresa
+stranice i datum pristupa. Internetska stranica se automatski podvu e crtom i ozna i plavom
+bojom.
+
+Primjerice:
+Usoskin, Ilya, Professor, Head of Oulu Cosmic Ray station (2022) https://cosmicrays.oulu.fi/;
+Sodankyla Geophysical Observatory (Oulu unit) and Department of Physics, University of
+Oulu FINLAND, P.O.Box 3000, FIN-90014; Pristupljeno 12. 12. 2022.
+
+14. PRILOZI
+Mogu se (po potrebi) dodati na kraju završnog rada, u slu ajevima kada je previše razli itih
+vrsta slika i tablica u prethodnim poglavljima rada u obliku popisa slika i tablica.
+
+===== [fizos-opce-upute-diplomski | str. 11] =====
+Prilog 2. Korisne mrežne stranice
+
+1) Hrvatski jezi¡ni portal, https://hjp.znanje.hr/
+2) Hrvatsko strukovno nazivlje, http://struna.ihjj.hr/
+3) Hrvatski pravopis, http://pravopis.hr/
+4) Hrvatska enciklopedija, https://www.enciklopedija.hr/
+5) Digitalni akademski arhivi i repozitoriji, https://dabar.srce.hr/repozitoriji
+4) Aplikacija Hašek, https://ispravi.me/
+5) https://web2020.ffzg.unizg.hr/znanost/akademska-cestitost/pisem-citiram-dakle-ne-plagiram/

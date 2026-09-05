@@ -1,0 +1,136 @@
+===== [kifos-upute-2024 | str. 2] =====
+• Završni/diplomski sastoji se od sljedećih cjelina: sažetka i ključnih riječi, sadržaja, uvoda,
+    glavnog dijela i zaključka te popisa literature (prilozi po potrebi).
+
+• Ako rad uključuje istraživanje mora sadržavati sljedeća poglavlja i potpoglavlja: cilj,
+    problem(i), hipoteza(e), metode (sudionici, instrumenti, postupak), rezultati, rasprava i
+    zaključak.
+
+• Opseg završnog rada ograničen je na 15 do 30 stranica, a diplomski na 30 do 50 stranica
+    (broje se i označavaju redni brojevi stranica od početka Uvoda sve do kraja rada). U opseg
+    rada se ne uključuje sažetak, sadržaj, popis literature ni prilozi.
+
+• Završni i diplomski rad moraju biti pisani u računalnom programu za obradu teksta (npr.
+    Microsoft Word).
+
+• Veličina je stranice A4 (210x297 mm). Sve rubnice trebaju biti veličine 25,4 mm.
+• Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.
+• Tekst treba pisati s poravnanjem lijeve i desne rubnice.
+• Stranice trebaju biti numerirane s pomoću automatske funkcije umetanja brojeva u
+
+    donjem desnom uglu u zaglavlju. Numeracija stranica počinje na stranici uvoda.
+
+    Formalno uređenje teksta treba biti sukladno APA standardima (engl. Publication Manual
+    of the American Psychological Association, Seventh Edition, 2019).
+
+===== [kifos-upute-2024 | str. 9] =====
+IZJAVA
+                            O AKADEMSKOJ ČESTITOSTI,
+  SUGLASNOSTI ZA OBJAVU U INSTITUCIJSKIM REPOZITORIJIMA
+        I ISTOVJETNOSTI DIGITALNE I TISKANE VERZIJE RADA
+
+    1. Kojom izjavljujem i svojim potpisom potvrđujem da je ________________________
+         (navesti vrstu rada: završni/diplomski) rad isključivo rezultat osobnoga rada koji se temelji
+         na vlastitim istraživanjima i oslanja se na objavljenu literaturu. Potvrđujem poštivanje
+         nepovredivosti autorstva te točno citiranje radova drugih autora i referiranje na njih.
+
+    2. Kojom izjavljujem da sam suglasan/suglasna da se trajno pohrani i objavi moj rad u
+         Institucijskom digitalnom repozitoriju Kineziološkog fakulteta Osijek, Repozitoriju
+         Sveučilišta Josipa Jurja Strossmayera u Osijeku te javno dostupnom Repozitoriju
+         Nacionalne i sveučilišne knjižnice u Zagrebu (u skladu s odredbama Zakona o visokom
+         obrazovanju i znanstvenoj djelatnosti „Narodne novine“ br. 119/22.).
+
+    3. Izjavljujem da sam autor/autorica predanog rada i da je sadržaj predane elektroničke
+         datoteke u potpunosti istovjetan sa dovršenom tiskanom verzijom rada predanom u svrhu
+         obrane istog.
+
+Ime i prezime studenta/studentice:
+
+===== [kifos-upute-2024 | str. 11] =====
+1. Uvod (svrha uvoda je „uvesti“ u problematiku sadržaja rada; ukratko opisati
+         područje/temu rada/istraživanja i važnost; teorijska podloga rada ili istraživanja,
+         dosadašnja istraživana; treba biti jasno povezan s dijelovima koji slijede)
+
+    2. Teme prema poglavljima i potpoglavljima (podijeljena na logičan i jasan način, da se
+         međusobno nadovezuju)
+
+    3. Cilj(evi) rada
+    4. Hipoteza(e) (ukoliko postoji/ kod istraživačkog rada)
+    5. Metode rada (uzorak, sudionici, mjerni instrumenti, metode prikupljanja podataka,
+
+         postupak, metode obrade podataka…….)
+    6. Rezultati (prikaz rezultata vlastitih ili istraživanja dobivenih u korištenoj literaturi)
+    7. Rasprava (pojašnjavanje dobivenih rezultata i njihova važnost, kritički osvrt na dobivene
+
+         rezultate, usporedba s drugim nalazima, teorijske i praktične implikacije)
+    8. Zaključak (iznose se temeljne spoznaje do kojih se došlo u radu, odgovor na postavljene
+
+         ciljeve)
+    9. Literatura
+    10. Životopis
+    11. Prilozi
+(Times News Roman, Lijevo poravnanje, prored 1,5, 12pt., bold, tiskana slova)
+
+===== [kifos-upute-2024 | str. 12] =====
+Citiranje i popis referenci
+
+Navođenje izvora u tekstu:
+Rad jednog autora:
+
+         Seligman (2000) navodi ...
+         U novijoj literaturi Waterman (2019) ističe ...
+
+Kada se citira pojedina stranica ili poglavlje dokumenta, potrebno je navesti stranicu u zagradi.
+         APA stil predstavlja jednostavan oblik citiranja za one koji se susreću sa znanstvenim
+         pisanjem (Smith, 2006, str. 203).
+
+             Autor(i)        Navođenje izvora u zagradi Navođenje izvora u tekstu
+Jedan autor
+Dva autora                   (Myers, 2019)             Myers (2019)
+Tri ili više autora
+Kratice                      (Myers i Smith, 2019)     Myers i Smith (2019)
+- Prvo navođenje
+- Naknadno navođenje         (Myers i sur., 2019)      Myers i suradnici (2019)
+
+                             (American Psychological   American Psychological
+                             Association [APA], 2020)  Association (APA, 2020)
+
+                             (APA, 2020)               APA (2020)
+
+Popis referenci – Literatura
+    • Navode se reference za sve izvore koji su navedeni u tekstu u radu, odnosno, izvor svake
+         referenca mora biti naveden u tekstu
+    • Ako je referenca duža od jednog reda, tekst se uvlači za 1,27 cm u Wordu (engl. hanging)
+    • Unutar i između pojedinih referenci je dupli prored
+    • Reference treba navoditi abecednim redoslijedom prema prezimenu prvog autora. Ako
+         postoje reference istog autora, prvo se navode one koje su novijeg datuma.
+    • Naslovi knjiga, radova, časopisa se navode na onom jeziku na kojem su napisani (ne
+         prevode se).
+
+===== [kifos-upute-2024 | str. 15] =====
+• Isti podaci prikazuju se ili tablično ili grafički
+    • Svaka tablica i slika sadrži redni broj i naslov i navode se iznad
+    • Sve tablice u tekstu trebaju biti oblikovane na jednak način
+    • Pri prikazivanju tablica izbjegavati okomite crte u tablicama, a vodoravnim odvajati tek
+
+         zaglavlje tablice od ostalog dijela ili neke cjeline tablice međusobno
+    • Vrijednosti u redovima i stupcima treba logički poredati (npr. prvo prikazati aritmetičku
+
+         sredinu, pa zatim standardnu devijaciju)
+    • Podatke koje želimo istaknuti mogu se označiti zvjezdicom (npr. statistička značajnost)
+
+    • Detaljnije pogledati na:
+         https://apastyle.apa.org/style-grammar-guidelines/tables-figures/tables
+         https://apastyle.apa.org/style-grammar-guidelines/tables-figures/figures
+
+    • Temeljna načela tabličnog i grafičkog prikazivanja predočena su na Slikama 1 i 2.
+
+===== [kifos-upute-2024 | str. 20] =====
+Korisni izvori
+
+American Psychological Association (2019). Publication Manual of the American Psychological
+Association, Seventh Edition. American Psychological Association.
+https://apastyle.apa.org/
+https://apastyle.apa.org/products/publication-manual-7th-edition
+https://apastyle.apa.org/style-grammar-guidelines
+https://www.scribbr.com/apa-style/apa-seventh-edition-changes/

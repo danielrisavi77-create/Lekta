@@ -1,0 +1,307 @@
+===== [gradri-upute-2022 | str. 2] =====
+2.1.1. Ovitak i prve stranice.......................................................................................................... 3
+        2.1.2. Sažetak i ključne riječi / Abstract and Keywords............................................................... 3
+        2.1.3. Sadržaj ................................................................................................................................. 3
+        2.1.4. Popis oznaka i kratica ......................................................................................................... 3
+        2.1.5. Popis tablica ........................................................................................................................ 4
+        2.1.6. Popis slika............................................................................................................................ 4
+        2.1.7. Digitalna verzija .................................................................................................................. 4
+
+   2.2. Glavni dio završnog i diplomskog rada...................................................................................... 4
+        2.2.1. Uvod .................................................................................................................................... 4
+        2.2.2. Tekst rada – izlaganje tematike (nazivi poglavlja prilagođeni su temi rada) ................... 5
+        2.2.3. Zaključak.............................................................................................................................. 5
+        2.2.4. Literatura i izvori................................................................................................................. 5
+
+3. TEHNIČKE UPUTE ZA IZRADU PISANOG DIJELA RADA ........................................................................ 7
+
+   3.1. Tekst općenito .......................................................................................................................... 7
+   3.2. Dodatne upute za pisanje rada ................................................................................................. 8
+   3.3. Bilješke...................................................................................................................................... 8
+
+        3.3.1. Metoda tekućih bilježaka ................................................................................................... 8
+        3.3.2. Metoda brojčanih bibliografskih bilježaka (Vancouverski način)..................................... 9
+        3.3.3. Metoda prvog elementa i datuma (Harvardski način).................................................... 10
+   3.4. Tablice..................................................................................................................................... 10
+   3.5. Slike......................................................................................................................................... 11
+   3.6. Formule .................................................................................................................................. 11
+   3.7. Grafički prilozi rada: projekti, nacrti, planovi .......................................................................... 12
+
+4. PROVJERA IZVORNOSTI RADA ............................................................................................................ 13
+
+5. PREZENTACIJA I OBRANA RADA ......................................................................................................... 14
+
+6. PRILOZI ................................................................................................................................................ 15
+
+===== [gradri-upute-2022 | str. 3] =====
+Upute za izradu završnog i diplomskog rada
+
+1. ZAVRŠNI I DIPLOMSKI RAD
+
+1.1. Općenito o završnom i diplomskom radu
+
+Završni rad izrađuje se na preddiplomskom sveučilišnom studiju i preddiplomskom stručnom studiju.
+Diplomski rad izrađuje se na diplomskom sveučilišnom studiju i specijalističkom diplomskom
+stručnom studiju.
+Završni odnosno diplomski rad je samostalni stručni rad u kojem student pod vodstvom mentora
+obrađuje izabranu temu. U završnom i diplomskom radu student samostalno istražuje, analizira i
+obrađuje neki složeniji, konkretni problem iz područja određenog kolegija, i to temeljem spoznaja
+stečenih tijekom nastave i iz literature koju nalazi samostalno i u suradnji s mentorom u znanstvenim
+i stručnim izdanjima (udžbenici, knjige, znanstveni i stručni časopisi, zbornici radova, propisi) i drugim
+izvorima.
+Izradom završnog i diplomskog rada student pokazuje teorijsko i praktično znanje stečeno na studiju,
+sposobnost planiranja i obrade zadanog stručnog problema kao i sposobnost proširivanja znanja iz
+sadržaja nastavnog programa kolegija iz kojeg izrađuje rad, sposobnost služenja domaćom i stranom
+literaturom i izvorima u pisanoj obradi.
+Završnim i diplomskim radom student treba dokazati da je stekao kompetencije i usvojio predviđene
+ishode učenja koje primjenjuje pri rješavanju problema iz stručnih i znanstvenih područja studija
+kojeg završava te da vlada građevinskom terminologijom.
+Temu završnog rada zadaje mentor iz područja njegove djelatnosti, u skladu sa sadržajem i ciljevima
+studijskog programa. Temu diplomskog rada student dogovara s mentorom i ona treba biti povezana
+s područjem izučavanja na smjeru diplomskog studija i kolegija iz kojeg se tema dodjeljuje.
+Nakon definiranja i prihvaćanja teme, mentor je dužan upoznati studenta s načinom obrade teme,
+uputiti ga na literaturu i izvore i odrediti aproksimativni sadržaj i opseg rada.
+
+1.2. Naslov završnog i diplomskog rada
+
+Naslov treba obuhvatiti glavnu ideju rada te biti jasan i jednoznačan. Naslov ne bi trebao sadržavati
+kratice, strane riječi i izraze (osim za pojmove za koje ne postoji odgovarajući izraz u hrvatskom jeziku)
+te neprecizne formulacije.
+
+1.3. Zadatak
+
+Zadatak Završnog i Diplomskog rada sastavlja mentor. U zadatku je potrebno obrazložiti aktivnosti
+potrebne za izradu rada i navesti sadržaj rada. Zadatak sadrži podatke o Studiju, kolegiju, studentu i
+radu. U zadatku se definira naslov rada na hrvatskom i engleskom jeziku. U sklopu zadatka potrebno
+
+===== [gradri-upute-2022 | str. 4] =====
+Upute za izradu završnog i diplomskog rada
+
+1.4. Metodologija izrade završnog i diplomskog rada
+1. Prikupljanje literature koja obrađuje zadanu tematiku (popis)
+2. Proučavanje stručne literature i izvora
+3. Terenski rad, laboratorijski rad (stvaranje vlastite baze podataka)
+4. Prijedlog strukture rada
+5. Konzultiranje s mentorom, odobrenje strukture
+6. Oblikovanje i podjela sadržaja prema glavama i poglavljima
+7. Određivanje opsega pojedinih dijelova rada
+8. Izrada pisanog rada, izrada grafičkih priloga
+9. Izrada prezentacije
+10. Obrana rada
+
+                                                                 2
+
+===== [gradri-upute-2022 | str. 7] =====
+mjerenja, grafički prikazi, ispisi i sl.
+        - Prilozi: nacrti, planovi, dijagrami
+Poglavlja je potrebno numerirati, odnosno označiti (podnaslovi).
+Opseg ovog dijela rada ovisi o vrsti i složenosti teme koja se obrađuje. Preporučen obim je 30-50
+stranica teksta za završni rad, 50-80 stranica teksta za diplomski rad.
+
+2.2.3. Zaključak
+U Zaključku se sintetiziraju rezultati završnog/diplomskog rada. Potrebno je odgovoriti na pitanje što
+je doprinos ovog rada, odnosno da li je ostvaren cilj postavljen u uvodnom dijelu. Poželjno je iznijeti
+stav o istraženom problemu, prikazati (ne)podudarnost teorije i prakse te istaći vlastita mišljenja i
+prijedloge. Preporučen obim je 1-2 stranice teksta za završni rad, 2-3 stranice teksta za diplomski rad.
+
+2.2.4. Literatura i izvori
+U ovom poglavlju potrebno je navesti sve izvore i literaturu korištene pri izradi rada. U tekstu rada
+mora svugdje biti navedena literatura gdje je navođenje ili grafički prikaz preuzet ili se temelji na
+nekom pisanom predlošku tj. prilikom svakog kopiranja teksta ili grafičkog prikaza, kako bi čitatelj
+lakše došao do izvornih informacija. Ne navode se radovi koji se u radu ne citiraju niti oni na koje se
+u radu ne upućuje. Redoslijed navođenja ovisi o tome koji je način pisanja bibliografskih bilješki
+korišten u radu (v. poglavlje 3.3.).
+
+a) Knjige se navode na sljedeći način:
+- Ukoliko je poznat autor: Prezime, Ime (ili inicijal imena), Naziv djela, Izdavač, Mjesto izdanja,
+
+     godina izdanja.
+        Primjer:
+        Margeta, J., Osnove gospodarenja vodama, Građevinsko-arhitektonski fakultet
+        Sveučilišta u Splitu, Split, 1992.
+
+- Ukoliko ima više autora ili autor nije poznat: Naziv djela, Izdavač, Mjesto izdanja, godina izdanja.
+        Primjer:
+
+===== [gradri-upute-2022 | str. 9] =====
+Ne smije se pretjerivati s razinama potpoglavlja (podnaslova). Broj razina ovisi o ukupnoj količini
+teksta u radu. Uobičajeno je koristiti do tri razine naslova (poglavlje i dva potpoglavlja). Treba
+izbjegavati skraćenice u naslovima poglavlja i potpoglavlja.
+Kako bi rad bio pregledan i sustavno oblikovan, preporučuje se sljedeće:
+
+        - rad oblikovati kao dokument formata A4, a veće formate (nacrti, prilozi) formatirati na A4;
+        - u tekstu rada koristiti veličinu slova 12 pt. i prored 1,5. Preporuča se font Times New
+
+            Roman, Cambria, Arial ili sl.
+        - za naslove tablica i dijagrama koristiti kosa slova (kurziv, italic), veličine 11 pt.;
+        - za opise slika koristiti uspravna slova (normal), veličine 11 pt.;
+        - za bilješke (fusnote, endnote) koristiti uspravna slova (normal), veličine 10 pt.;
+        - koristiti standardne margine – margine dolje, gore i desno po 2,5 cm, margina lijevo 3 cm
+
+            zbog uveza;
+        - odabrati poravnavanje na obje strane;
+        - pisati u odlomcima (paragrafima) – pri čemu postoje dva načina:
+
+            (1) uvučeni početak odlomka (razmak između odlomaka je polovica reda ili 6 pt.),
+            (2) jedan red razmaka između odlomaka (početak odlomka nije uvučen).
+
+                                                                 7
+
+===== [gradri-upute-2022 | str. 10] =====
+Potrebno je definirati skraćenice i akronime nakon prvoga pojavljivanja u tekstu.
+Iza svake se riječi nalazi samo jedan razmak. Pravopisni znakovi kao što su točka, upitnik, uskličnik,
+zarez, dvotočka (:), točka zarez (;), zatvorena zagrada, navodnici na kraju navoda, znak za postotak,
+pišu se zajedno s riječju iza koje slijede (između tih znakova i riječi ne stavlja se razmak), a nakon tih
+znakova obvezan je razmak.
+Znakovi kao što su navodnici na početku navoda i otvorena zagrada, pišu se zajedno s riječju ispred
+koje se nalaze (između tih znakova i riječi također se ne ostavlja razmak). Ako iza neke riječi dolazi
+tekst u zagradi, između te riječi i početka zagrade ostavlja se razmak. Crtica se piše zajedno s riječima
+između kojih stoji ako se radi o složenici (npr. znanstveno-istraživački), a odvojeno ako se koristi u
+neku drugu svrhu. Ispred i iza matematičkih znakova ostavlja se po jedan razmak.
+
+3.3. Bilješke
+
+Razlikujemo tri vrste bilješki: bibliografsko-dokumentarne, eksplikativne (objasnidbene) i
+komparativne (uputne).
+Bibliografsko-dokumentarne bilješke upućuju na upotrijebljenu bibliografsku jedinicu ili izvor.
+Eksplikativne služe za dopunska objašnjenja ili tumačenja iznesenih tvrdnji kao što su komentari i
+kritičke primjedbe. Komparativne upućuju na neku drugu bibliografsku jedinicu, odnosno tekst koji
+obrađuje istu ili sličnu problematiku.
+Bibliografske bilješke mogu se pisati na tri načina, vodeći računa o dosljednoj primjeni u cijelom radu.
+
+3.3.1. Metoda tekućih bilježaka
+Na kraju rečenice ili odlomka – iza interpunkcije, imena ili ključne riječi o određenom problemu,
+stavlja se u obliku eksponenta arapski broj koji se zatim ponovi na dnu iste stranice ispod crte kojom
+se odvaja glavni dio teksta od dijela koji sadrži bilješke (naredba Insert Footnote). Na dnu stranice
+navode se, uz bibliografske, i ostale dvije vrste bilješki – eksplikativne i komparativne.
+Svaka tekuća bilješka, bez obzira na to sadržava li već spomenuto citirano djelo, dobiva poseban broj
+(na primjer: 1, 2, 3,…46,…88).
+Bibliografske bilješke mogu biti skraćene (navodi se: Prezime, inicijal imena, Naziv djela, stranice),
+dok se potpuni podaci navode u poglavlju Literatura i izvori, u kojem su djela navedena abecedno. (v.
+poglavlje 2.2.4.)
+
+                                                                 8
+
+===== [gradri-upute-2022 | str. 11] =====
+Upute za izradu završnog i diplomskog rada
+
+       Primjer:
+       Tekst:
+       Dva su slobodna pročelja. Manje, sjeverno, gleda na Ulicu hrama (Via del Tempio), a veće, istočno,
+       na Millerov trg (Piazza Miller). Veći dio zapadnog pročelja orijentiran je na dvorište na čijem je
+       zapadnom dijelu kuća br. 238. Kuća ima 70 kvadratnih hvati (klaftera), što znači oko 252 m2.¹
+       Bilješka na dnu stranice:
+
+        1 Računamo li bečki hvat (Klafter Wiener), koji se sastoji od 6 stopa i iznosi 189,66 cm, a u upotrebi je
+           do 1875.g.; HERKOV, Z.: Mjere Hrvatskog primorja, str. 108.
+
+       Bibliografska jedinica u poglavlju Literatura i izvori:
+       HERKOV, Zlatko: Mjere Hrvatskog primorja, HARiP, Posebna izdanja, sv. 4, Rijeka, 1971.
+
+Varijanta ove metode je da bilješke ne prate tekst na svakoj stranici, već da se u neprekinutom nizu
+navedu na kraju teksta (naredba Insert Endnote).
+
+3.3.2. Metoda brojčanih bibliografskih bilježaka (Vancouverski način)
+U ovoj metodi brojke unutar teksta [u uglatoj zagradi] odnose se na određenu bibliografsku jedinicu.
+Bibliografske jedinice u poglavlju Literatura i izvori ne navode se abecedno, već redom prvog
+pojavljivanja tj. prvog citiranja u tekstu. Sve kasnije bibliografske bilješke koje se odnose na određenu
+bibliografsku jedinicu označavaju se istim brojem, bez obzira na mjesto unutar teksta.
+
+        Primjer:
+        Tekst:
+        Nadalje se, nakon inicijalnog razrjeđenja (koje nastaje u tzv. bliskom polju), u
+        takozvanom tranzitnom i dalekom polju miješanja [1,2,3,5], odvijaju procesi koji su
+        uvjetovani lokalnim atmosferskim i hidrološkim prilikama te stoga u tim područjima nije
+        moguće direktno kontrolirati razrjeđenje.
+         Bibliografska jedinica u poglavlju Literatura i izvori:
+
+          [1] Lončar, G., Modeliranje u hidrotehnici, skripta, Građevinski fakultet Sveučilišta u Zagrebu, Zagreb,
+          2011.
+          [2] Travaš, V., Rukopis predavanja iz predmeta Hidraulika, skripta, Građevinski fakultet Sveučilišta u
+          Rijeci, Rijeka, 2010.
+          [3] Gjetvaj, G., Rukopis predavanja iz predmeta Hidraulika, skripta, Građevinski fakultet Sveučilišta u
+          Zagrebu, Zagreb, 2003.
+          [4] Wygnanski, I., Fiedler, H., Some measurements in the self-preserving jet, J. Fluid Mech., 38: pp 577-
+          612, 1969.
+          [5] Fischer, H.B., List, E.J., Koh, R.C.Y., Imberger, J., Brooks, N.H., Mixing in Inland and Coastal Waters,
+          Academic Press, New York, 1979.
+
+Eksplikativne i komparativne bilješke se najčešće nastoje uklopiti u osnovni tekst ili se navode na način
+Metode tekućih bilježaka, kao Footnote na dnu stranice ili Endnote na kraju teksta.
+
+* ISO standard format koji služi za dugoročno arhiviranje dokumenata. Pri izrade pdf verzije rada potrebno je odabrati
+PDF/A format
+
+                                                                 9
+
+===== [gradri-upute-2022 | str. 12] =====
+Upute za izradu završnog i diplomskog rada
+
+3.3.3. Metoda prvog elementa i datuma (Harvardski način)
+
+Kod ove metode bilješke su integrirane u tekst, na način da se njihov skraćeni oblik stavlja u zagrade.
+Najčešće se sastoje samo od prezimena autora, godine objavljivanja i stranice. U slučaju anonimne
+publikacije navodi se njezin naslov i godina objavljivanja. Potpuni bibliografski podaci navode se u
+poglavlju Literatura i izvori, u kojem su djela navedena abecedno. (v. poglavlje 2.2.4.)
+
+       Primjer:
+       Tekst:
+       Izvor Lokanj zasut je prilikom izgradnje vojnog hotela 70-ih godina, a položaj mu je obilježen u
+       pločniku hotelskog restorana; izvor Stubal nalazio se na mjestu negdašnje tvornice sardina,
+       danas pod sportskim igralištem; treći je izvor presušio, a nalazio se u uglu istočne prostorije
+       arheološki prezentirane starokršćanske bazilike u luci (Fisković, 1966: 7; Belamarić, 1985: 70).
+       Bibliografska jedinica u poglavlju Literatura i izvori:
+       Belamarić, J., Lastovo (turistički vodič), Logos, Split, 1985.
+       Fisković, C., Lastovski spomenici, Prilozi PUD, 16:5-152, Split, 1966.
+
+3.4. Tablice
+
+Tablice je potrebno smjestiti što bliže mjestu njihovog referenciranja u tekstu i uvijek se smještaju iza
+onog dijela u tekstu gdje se prvi puta spominju. Treba izbjegavati prelamanje tablice preko dvije (ili
+više) stranica. Svaka tablica mora imati naslov i mora biti numerirana. Naslov tablice dolazi iznad nje.
+Koristiti jedan niz za numeraciju u cijelom radu (Tablica 1:, Tablica 2: itd.), a ne poseban niz u svakom
+poglavlju (npr. Tablica 2.1., Tablica 3.1.). Naslov tablice piše se kosim (kurziv, italic) slovima. Tablicu i
+naslov tablice treba centrirati horizontalno na stranici.
+
+Naziv tablice treba odabrati tako da odražava smisao podataka koje prikazuje i piše se velikim
+početnim slovom. Ako se tablica preuzima iz literature, na kraju naziva poželjno je navesti referencu
+na način kako je to opisano u poglavlju gdje se opisuju reference. Između teksta i tablice treba biti
+jedan red razmaka.
+
+        Primjer:
+
+         Tablica 1: Prikaz proračuna pronosa nanosa prema pojedinim metodama iz SEDTRANS
+                                           modela i prema metodi Bijker
+
+                                    SEDTRANS               Bijker
+
+ukupni pronos nanosa izražen u  Engelund - Hansen  0.0019
+   masenom obliku (kg/s/m)       Einstein - Brown  0.0016
+
+===== [gradri-upute-2022 | str. 13] =====
+Upute za izradu završnog i diplomskog rada
+
+3.5. Slike
+Slike je također potrebno smjestiti što bliže mjestu njihovog referenciranja u tekstu i
+uvijek se smještaju iza onog dijela u tekstu gdje se prvi puta spominju. Naziv slike piše se velikim
+početnim slovom i treba ga odabrati tako da odražava njen smisao. Treba izbjegavati preduge
+naslove. Naslov slike dolazi ispod nje i svaka slika mora biti numerirana. Koristiti jedan niz za
+numeraciju u cijelom radu (Slika 1:, Slika 2: itd.), a ne poseban niz u svakom poglavlju (npr. Slika 2.1.,
+Slika 3.1.). Sliku i naslov slike treba centrirati horizontalno na stranici, osim ako se radi o vrlo malim
+slikama (do najviše 7 cm širine), koje mogu biti smještene jedna do druge.
+Ukoliko se slika preuzima iz literature na kojoj se nalaze pojmovi na nekom od stranih jezika, značenje
+tih pojmova mora biti navedeno i na hrvatskom jeziku. Ako se slika preuzima iz literature, na kraju
+naziva potrebno je navesti referencu odakle je slika preuzeta, na način kako je to opisano u poglavlju
+gdje se opisuju reference.
+
+        Primjer:
+
+                               Slika 11: Detalj A – zglobna veza polulukova u tjemenu [1]
+
+Pri dodavanju slika u rad, potrebno je voditi računa o njihovoj kvaliteti (razlučivosti, rezoluciji).
+Kvalitetu je moguće ocijeniti preko otiska, dok je prikaz na zaslonu ovisan o nizu čimbenika
+(razlučivosti zaslona, veličini radne površine na zaslonu, povećanju, itd.). Izbjegavati korištenje slika s
+crnom ili vrlo tamnom pozadinom. Između teksta i slike treba biti jedan red razmaka.
+
+3.6. Formule
+Formule se obilježavaju brojem u običnoj zagradi, u jedinstvenom nizu. Potrebno je uvijek dati kratke

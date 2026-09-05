@@ -1,0 +1,334 @@
+===== [vss-pravilnik-2023 | str. 2] =====
+prijediplomskom studiju sigurnosti i diplomskog rada na Stručnom diplomskom studiju sigurnosti na
+Veleučilištu studija sigurnosti (dalje kratko: Veleučilište).
+
+(2) Izrazi koji se koriste u ovome Pravilniku, a imaju rodno značenje odnose se jednako na muški i ženski
+rod.
+
+                  Članak 2.
+
+(1) Završni rad, odnosno diplomski rad predstavlja pisano stručno i samostalno djelo studenta u kojem
+student obrađuje određenu temu, pod vodstvom mentora.
+
+(2) Prilikom izrade završnog rada, odnosno diplomskog rada student mora dokazati sposobnost primjene
+znanja stečenog tijekom studija, kao i samostalnost u služenju literaturom prilikom obrade teme.
+
+(3) Prilikom izrade završnog rada, odnosno diplomskog rada student mora dokazati sposobnost da nakon
+položenih ispita tijekom studija posjeduje sposobnost, samostalnost i snalaženje u rješavanju teorijskih i
+praktičnih problema.
+
+(4) Završni i diplomski radovi su javni, te se javno objavljuju na službenim digitalnim repozitorijima.
+
+    II. ODABIR MENTORA I PRIJAVA TEME ZAVRŠNOG ILI DIPLOMSKOG RADA
+
+                                                         Članak 3.
+
+(1) Student izabire temu rada i mentora tijekom zadnjeg semestra posljednje godine studija.
+
+===== [vss-pravilnik-2023 | str. 3] =====
+Student može mentoru podnijeti obrazloženi zahtjev za promjenu teme završnog rada, odnosno diplomskog
+rada do trenutka definiranja datuma održavanja usmene obrane sukladno članku 10. stavku 4. ovog
+Pravilnika kao i u slučaju da je na obrani završnog rada, odnosno diplomskog rada ocijenjen ocjenom
+nedovoljan.
+
+    III. IZRADA I OCJENJIVANJE PISMENOG DIJELA ZAVRŠNOG ILI DIPLOMSKOG
+              RADA
+
+                                                         Članak 7.
+
+(1) Student izrađuje rad sukladno Uputi za izradu završnog rada odnosno Uputi za izradu diplomskog
+rada, te Uputi za citiranje i navođenje literature.
+
+(2) Student izrađuje rad uz kontinuirane konzultacije s mentorom, te je dužan ispraviti rad prema naputcima
+mentora.
+
+===== [vss-pravilnik-2023 | str. 6] =====
+(2) Ukoliko je student uspješno obranio rad, Studentska služba izdaje Uvjerenje o završetku studija, koju
+potpisuje dekan Veleučilišta.
+
+(3) Uvjerenje o završetku studija javna je isprava i služi u svrhu dokazivanja statusa do izdavanja diplome.
+
+(4) Diploma se uručuje na svečanoj promociji koja se u pravilu održava jednom godišnje ili kada se skupi
+grupa od najmanje 30 pristupnika.
+
+                                                         Članak 15.
+
+Obrazac za prijavu teme završnog rada i Obrazac za prijavu teme završnog rada iz članka 4. stavka 5. ovog
+Pravilnika; Uputa za izradu završnog rada, Uputa za izradu diplomskog rada i Uputa za citiranje i
+navođenje literature iz članka 7. stavka 1. ovog Pravilnika odnosno iz članka 11. stavka 2. ovog Pravilnika;
+Predložak za usmenu prezentaciju rada iz članka 9. stavka 3. ovog Pravilnika; Izjava o akademskoj
+čestitosti i Izjava o pohrani i objavi rada u repozitoriju iz članka 11. stavka 2. ovog Pravilnika, te Zapisnik
+o ocjeni i obrani završnog rada i Zapisnik o ocjeni i obrani diplomskog rada iz članka 13. stavka 3. ovog
+Pravilnika, koji su dostupni preko poveznica u ovom Pravilniku i na mrežnim stranicama Veleučilišta čine
+sastavni dio ovog Pravilnika.
+
+                                                         Članak 16.
+
+Ovaj Pravilnik stupa na snagu danom donošenja.
+
+                                                         Članak 17.
+
+===== [vss-upute-zavrsni-2023 | str. 2] =====
+1. UPUTE ZA IZRADU ZAVRŠNOG RADA .......................................................................2
+  1.1. IZGLED ZAVRŠNOG RADA .....................................................................................5
+  1.2. TEHNIČKI DIJELOVI RADA.....................................................................................6
+     1.2.1. Naslovnica .............................................................................................................7
+     1.2.2. Izjava o akademskoj čestitosti .............................................................................11
+     1.2.3. Sažetak (i ključne riječi) ......................................................................................11
+     1.2.4. Sadržaj .................................................................................................................12
+     1.2.5. Uvod ....................................................................................................................14
+     1.2.6. Osnovni tekst .......................................................................................................15
+     1.2.7. Zaključak .............................................................................................................18
+
+LITERATURA ..........................................................................................................................18
+POPIS TABLICA I SLIKA .......................................................................................................19
+PRILOZI .................................................................................................................................... 20
+2. RAD S MS OFFICE PAKETOM ......................................................................................21
+
+Prilog 1. Prikaz slika, grafikona, dijagrama i tablica
+
+===== [vss-upute-zavrsni-2023 | str. 4] =====
+1. UPUTE ZA IZRADU ZAVRŠNOG RADA
+
+       Završni se rad izrađuje na kraju stručnog prijediplomskog studija. U njemu studenti, pod
+vodstvom mentora, samostalno obrađuje temu koju je odobrio mentor.
+
+       Studenti izrađuju rad temeljen na teorijskom i praktičnom znanju, služeći se domaćom i
+stranom pisanom literaturom, pretraživanjem različitih baza podataka i internetskih izvora te
+samostalnim znanstvenim istraživanjem.
+
+       Uobičajeno je da student izabire i predlaže temu završnog rada prema svojem interesu u
+području iz kojeg želi pisati rad. Izabrana tema najčešće je rezultat prethodnih interesa prema
+pojedinom području ili programskom sadržaju tijekom studija iz koje izabrana tema proizlazi.
+Tema rada mora biti sažeta, ni preusko ni preširoko definirana. Naslov rada odražava sadržaj i
+predmet pisanog rada te ga je potrebno jasno, kratko i potpuno iskazati. U naslovu treba
+izbjegavati skraćenice.
+
+       Pod vodstvom mentora, samostalno obrađuje stručnu temu temeljenu na teorijskome i
+praktičnom znanju.
+
+===== [vss-upute-zavrsni-2023 | str. 7] =====
+slova).
+       ✓ Naslovnice rada nemaju paginaciju (rednim brojem označene stranice), odnosno
+
+           nemaju numerirane stranice na kojima se nalaze.
+       ✓ Lijeva margina se podešava na 3,0 cm, a ostale margine na 2,5 cm.
+       ✓ Tablice i slike (grafikoni, dijagrami, ...) numeriraju se rednim brojem od 1 do n
+
+           (Tablica 1. prva je tablica u cijelom radu, Slika 1. prva je slika u radu). Naslovi
+           tablica i slika (grafikona, dijagrama, ...) pišu se masnim fontom, veličine 12 pt,
+           nakon čega slijedi 1 red razmaka.
+       ✓ Naslov tablice piše se iznad tablice, a naslov slike ispod slike (vidjeti Prilog 1).
+           Naslov tablice se navodi na način: Tablica iza čega slijedi broj, pripadni naziv
+           (objašnjenje koje podatke prikazuje) i izvor (ako se preuzima iz literature). Tablica i
+           pripadna referenca poravnavaju se lijevo.
+       ✓ Slike, dijagrami, grafovi, sheme i sl. – dakle sve osim tablica referenciraju se ispod
+           same slike (grafikona, dijagrama) na način: Slika iza čega slijedi broj, zatim naziv i
+           na kraju izvor. Slika i pripadna referenca se centriraju.
+       ✓ Ako je autor samostalno izradio tablicu, sliku, grafikon ili dijagram, izvor se ne
+           navodi. Sve u radu korištene tablice, slike, grafikoni i dijagrami trebaju se u tekstu
+
+                                                                                                                            5
+
+===== [vss-upute-zavrsni-2023 | str. 8] =====
+spomenuti (referencirati). Nužno je da svi preuzeti materijali budu zadovoljavajuće
+           kvalitete s obzirom na njihovu čitljivost i jasnoću.
+       ✓ Dozvoljeno je napraviti vlastitu preradu slika, grafikona ili tablica tako da se zadrži
+           isti smisao sadržaja, ali promijeni izgled. U takvim se slučajevima također obvezno u
+           nazivu navodi referenca izvornog djela npr: (Prema: Klačmer Čalopa i Cingula,
+           2012).
+       ✓ Optimalan opseg rada je između 25 i 40 stranica teksta ( ne računajući vanjsku
+           stranicu završnog rada, naslovnu stranicu završnog rada, izjavu o akademskoj
+           čestitosti, sažetak i sadržaj). Numeracija stranica započinje s uvodom počevši od
+           broja 1 do kraja rada.
+       ✓ U radu mora biti umetnuta Izjava o akademskoj čestitosti.
+       ✓ Rad se predaje u jednom (1) primjerku u tvrdom uvezu (koji se pohranjuje u
+           repozitoriju završnih radova) te rad poslati u pdf obliku na e-adresu: info@vss.hr.
+       ✓ Izradom i obranom završnog rada student stječe 6 ECTS bodova
+       ✓ Rad se piše hrvatskim književnim jezikom. Tekst treba biti gramatički i
+           pravopisno ispravan. Rad se piše u 3. licu jednine – impersonalno (ne 1. licu
+           množine ili u futuru budući da je rad gotov). Npr. umjesto izraza „zaključujem …“
+           ili „zaključit će se …“ koristiti izraz „može se zaključiti …“.
+
+1.2. TEHNIČKI DIJELOVI RADA
+
+       Osnovni dijelovi rada (koji se u nastavku Uputa pojedinačno navode i opisuju) su:
+       1. naslovnica (vanjska omotna stranica i unutarnja),
+       2. izjava o akademskoj čestitosti,
+       3. sažetak (i ključne riječi),
+       4. sadržaj,
+       5. uvod,
+       6. osnovni tekst (razrada teme po poglavljima),
+       7. zaključak,
+       8. literatura,
+       9. popis tablica i slika (ako postoje),
+       10. prilozi (ako postoje).
+
+                                                                                                                            6
+
+===== [vss-upute-zavrsni-2023 | str. 14] =====
+tekstu. Postoje različiti načini označavanja pojedinih dijelova rada, kojima je svrha postići
+dobru preglednost i lakše i brže pronalaženje pojedinih dijelova u radu.
+Sadržaj (kao naslov) se ne označava (numerira) brojem. Sadržaj nema paginaciju (rednim
+brojem označenu stranicu), odnosno nema numeriranu stranicu na kojoj se nalazi4. Sadržaj
+se smješta nakon Sažetka, a prije Uvoda na zasebnoj stranici.
+
+       Početne stranice poglavlja trebaju biti upisane uz desni rub stranice. Naslov
+„SADRŽAJ“ piše se velikim slovima, veličine 14 pt, podebljano („bold“) i poravnato uz lijevi
+rub teksta. Primjer izgleda stranice sadržaja i označavanja poglavlja prikazano je u Primjeru 3.
+
+____________________________
+
+2 Strukturni dijelovi rada – Izjava, Sažetak, Literatura, Popis tablica i slika, kao naslovi nisu numerirani, ali imaju (osim Sažetka
+i Izjave) u Sadržaju naznačen broj stranice na kojoj se nalaze.
+3Izuzetak su strukturni dijelovi izvan osnovnog teksta kao što su Uvod, Zaključak, Literatura.
+4 Isključivo zbog jednostavnije tehničke izrade rada studenta.
+
+                                                                                                                          12
+
+===== [vss-upute-zavrsni-2023 | str. 15] =====
+3.1. PODNASLOV POGLAVLJA……………………16
+                             3.1.1.Podnaslov poglavlja………………..………18
+                             3.1.2.Podnaslov poglavlja…………………..……21
+                             3.1.3.Podnaslov poglavlja………………..………24
+
+                         3.2. PODNASLOV POGLAVLJA ……..……………27
+                              3.2.1.Podnaslov poglavlja…………………..……28
+                              3.2.2.Podnaslov poglavlja..………………………32
+                              3.2.3. Podnaslov poglavlja………….…..………..34
+
+                    4. ZAKLJUČAK ………………….……...………...…...35
+                    LITERATURA ……………………...………….……….38
+                    POPIS TABLICA I SLIKA……………….....................40
+                    PRILOZI………………...………………………..……...41
+
+                                                                                                                          13
+
+===== [vss-upute-zavrsni-2023 | str. 20] =====
+Glavna poglavlja (naslovi u osnovnom tekstu numerirani brojevima 2., 3., 4., ...)
+započinju na zasebnoj stranici. Stranice Osnovnog teksta su numerirane (arapskim brojevima).
+Naslovi potpoglavlja trebaju biti poravnati uz lijevi rub teksta.
+
+1.2.7. Zaključak
+
+       Zaključak je završni dio rada koji predstavlja zasebnu zaključnu misaonu i strukturnu
+cjelinu, u kojoj se sažeto (na sustavan, logičan i koncizan način) iznose sve bitne informacije,
+stavovi, činjenice, rezultati i zaključci rada. Zaključak predstavlja sintezu rezultata istraživanja
+i cjelokupnog rada. Prije pisanja Zaključka potrebno je pažljivo pročitati rad i ciljano izdvojiti
+sintetizirane bitne spoznaje do kojih se došlo u radu.
+
+       U zaključku nema citiranja (ne navode se reference), ne ponavljaju se rečenice, ulomci
+iz prethodnih dijelova, već se iznose vlastita razmišljanja i zaključci na temelju napisanog
+rada.
+
+       Zaključak se smješta nakon Osnovnog teksta na zasebnoj stranici. Preporučuje se pisati
+Zaključak na jednoj do dvije stranice, mada opseg (duljina) zaključka ovisi o dubini,
+složenosti, prirodi istraživanja i obrade teme, te stoga može biti pisan i na više stranica.
+
+       Zaključak (kao naslov) se označava (numerira) pripadajućim rednim brojem, a stranice
+se označavaju (numeriraju arapskim brojevima).
+
+       Naslov „ZAKLJUČAK“ piše se velikim slovima, podebljano („bold“), veličine 14 pt i
+poravnato uz lijevi rub teksta.
+
+LITERATURA
+
+       Na kraju završnog rada potrebno je navesti popis korištene literature. Bibliografske
+jedinice u Literaturi (Bibliografiji) upisuju se manjim fontom slova, veličine 11 tipografskih
+točaka, vrstom slova – Times New Roman.
+
+       Pri pisanju završnih radova na Veleučilištu studija sigurnosti u Zagrebu potrebno je
+koristiti tzv. vancouverski stil citiranja.
+
+       Ako bibliografska jedinica iz prvog retka prelazi u drugi redak, tada se taj novi redak
+uvlači za 0,5.
+
+                                                                                                                          18
+
+===== [vss-upute-zavrsni-2023 | str. 21] =====
+Ako se u radu uključuje obavljeni razgovor s nekim ekspertom, potrebno je navesti ime i
+prezime eksperta, kvalifikaciju što ga čini ekspertom za navedeno područje, te datum i mjesto
+obavljanja razgovora.
+
+       Stil citiranja i navođenja bibliografskih jedinica je zadan i definiran (vidi: Upute za
+citiranje i navođenje literature).
+
+       Literaturu, sve izvore koji su korišteni u radu bilo da su interpretirani, citirani ili
+parafrazirani potrebno je iskazati u Literaturi potpuno i točno.
+
+       Literatura se smješta nakon Zaključka na zasebnoj stranici Literaturi kao naslov se ne
+označava (numerira) brojem, a stranice se označavaju (numeriraju arapskim brojevima). Broj
+relevantnih bibliografskih jedinica iskazanih u Literaturi ukazuje na kvalitetu obrade teme i
+provedenog istraživanja.
+
+       Naslov „LITERATURA“ piše se velikim slovima, podebljano („bold“), veličine 14 pt i
+poravnato uz lijevi rub teksta.
+
+POPIS TABLICA I SLIKA
+
+       Popis tablica i slika (grafikona, shema i sl.) treba biti jasan i pregledan, te smješten u
+osnovnom tekstu rada.
+
+       Osobita je potreba za prikazom popisa, kada u tekstu ima više tablica i slika. Popis
+sadrži podatke o rednom broju, nazivu tablica i slika, te broju stranice na kojoj se tablica i
+slika nalaze u radu.
+
+       Osim tablica i slika to mogu biti i crteži, zemljovidi i fotografije.
+       Za bolje i preglednije tumačenje i uočavanje te interpretaciju različitih odnosa, oblika i
+tendencija koriste se grafički prikazi, kao i za numeričke podatke tablični prikazi. Ilustrativno
+prikazivanje, osobito brojčanih podataka, ima velikih prednosti u odnosu na deskriptivno s
+obzirom na to da se opširni i složeni podaci mogu sustavno, logično i koncizno predočiti na
+relativno manjem prostoru u radu.
+       Popis tablica i slika (kao naslov) se ne označava (numerira) brojem, a stranice se
+označavaju (numeriraju arapskim brojem). Popis tablica i slika se smješta iza Literature
+(Bibliografije) na zasebnoj stranici.
+       Naslov „POPIS TABLICA I SLIKA“ piše se velikim slovima, podebljano („bold“),
+veličine 14 pt i poravnato uz lijevi rub teksta.
+
+                                                                                                                          19
+
+===== [vss-upute-zavrsni-2023 | str. 26] =====
+Izrada sadržaja
+       Sadržaj se izrađuje na sljedeći način:
+
+Kliknite na karticu „References“, pa na ikonu „Table of Contents“. Ponuđen će vam biti
+izgled sadržaja, pa slobodno odaberite prvi na listi.
+
+                                                                                                                          24
+
+===== [vss-upute-zavrsni-2023 | str. 27] =====
+Dobit ćete sadržaj koji izgleda ovako:
+
+Contents
+Koristite stilove za naslove i tekst ......................................................................................... 4
+Dozvolite Wordu da automatski numerira naslove ............... Error! Bookmark not defined.
+Izrada sadržaja ....................................................................................................................... 7
+Numeriranje slika i tablica ..................................................................................................... 9
+Numeriranje stranica ............................................................................................................ 10
+Unos popisa slika i tablica .................................................................................................... 13
+Unos literature (izvora podataka) ......................................................................................... 14
+Razlog zbog kojeg ste se mučili s unosom podataka u bazu Worda .................................... 16
+Bibliography ......................................................................................................................... 16
+
+       „Contents“ preimenujte u SADRŽAJ.
+       Ako napravite promjene u tekstu, sadržaj možete jednostavno ažurirati desnim klikom
+na njega i odabirom opcije „Update field“ gdje je preporučljivo odabrati opciju „Update entire
+table“ kako Wordu ne bi možda promaknuo neki od naslova koji ste možda dodali.
+Možete koristiti i posebnu ikonu za to:
+
+Numeriranje slika i tablica
+
+       Isto kao i s naslovima, Word može automatski dodjeljivati odgovarajuće redne brojeve
+
+===== [vss-upute-zavrsni-2023 | str. 31] =====
+Ovdje treba kliknuti na „Format Page Numbers“.
+
+     Odaberite pod „Page numbering“: „Start at: 1“, kako bi brojanje ponovno započelo od 1.
+  Zapamtite: Bilo gdje u dokumentu moguće je iskoristiti opciju za odjeljivanje
+  posebnih poglavlja rada, tj. „Sectiona“ kako promjene na jednom ili nekoliko
+  listova ne bi bile preslikane na naredni dio dokumenta.
+  Na primjer, prilikom promjene orijentacije stranica ili većih promjena u
+  formatiranju, jednostavno možete te stranice odijeliti kao posebno poglavlje i na
+Unnjoihs pporipmisijaensliitki adriutgaabplircaavila.
+
+                                                                                                                          29

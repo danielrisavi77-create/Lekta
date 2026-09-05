@@ -1,0 +1,280 @@
+===== [fdmri-naputak-zavrsni-2024 | str. 9] =====
+Komentor rada: (Ime i prezime komentora uz titule)
+
+Završni rad ocjenjen je dana     u/na
+
+                                 , pred Povjerenstvom u sastavu:
+
+1.
+
+2.
+
+3.
+
+Rad sadrži  stranica,            slika, tablica, literaturnih navoda.
+
+                                                                       8
+
+===== [fdmri-naputak-zavrsni-2024 | str. 10] =====
+skraćenice. U naslovu rada se ne smiju koristiti skraćenice, osim ako njihovo
+značenje nije opće poznato.
+
+TIJELO ZAVRŠNOG RADA
+Tijelo završnog rada sastoji se od didaktički razrađenih poglavlja.
+
+Prikaz sastavnica završnog rada:
+
+Pregledni rad:                             4. Rasprava
+                                           5. Zaključci
+               Preliminarne stranice       6. Sažetak
+           1. Uvod                         7. Summary
+           2. Svrha rada                   8. Literatura
+          3. Pregled literature na zadanu  9. Životopis
+            temu
+
+                                                                            9
+
+===== [fdmri-naputak-zavrsni-2024 | str. 11] =====
+Znanstveni rad / Stručni rad:
+            Preliminarne stranice
+            1. Uvod
+            2. Svrha rada
+            3. Ispitanici/materijali i postupci
+            4. Rezultati
+            5. Rasprava
+            6. Zaključci
+            7. Sažetak
+            8. Summary
+            9. Literatura
+
+            Svaki dio (uvod, svrha rada, itd.) započinje na novoj stranici.
+
+                                                                                                                    10
+
+===== [fdmri-naputak-zavrsni-2024 | str. 12] =====
+Sažetak se piše poslije zaključka. U sažetku je potrebno ukratko, na jednoj stranici,
+ s najviše 250 riječi, prikazati najvažnije dijelove završnog rada. Ispod sažetka
+ potrebno je navesti 3 - 5 ključne riječi abecednim redom.
+
+ Summary se nalazi iza hrvatskog sažetka. To je prijevod sažetka na engleskom
+ jeziku. Ispod sažetka potrebno je navesti ključne riječi abecednim redom na
+ engleskom jeziku.
+
+ Literatura se navodi nakon engleskog sažetka, a sadrži sve literaturne izvore
+ koje je autor koristio tijekom izrade završnog rada. To mogu biti članci, knjige,
+ mrežne stranice, pravni propisi, itd. Sva literatura pripada autorskom djelu,
+ stoga je student dužan navesti svaku korištenu literaturu.
+
+ Korištene reference u radu navodimo:
+     - prilikom doslovnog navođenja ili parafraziranja tuđeg teksta;
+     - pri preuzimanju slika, tablica i ostalog vizualnog materijala;
+     - u popisu korištene literature na kraju rada.
+
+Za citiranje se koristi Vancouverski stil (International Committee of Medical Journal
+Editors) koji podrazumijeva navođenje referenci redoslijedom pojavljivanja u radu.
+Broj korištene reference se navodi u okrugloj zagradi u rečenici ispred točke (1),
+može se navesti i prezime autora Ingle (4), istovremeno s može pozvati i na više
+djela višestruki izvori (7-11, 14, 22).
+
+ Referenca na kraju rada donosi niz podataka koji precizno opisuju korišteno
+ autorsko djelo:
+
+     - podaci o autorstvu: autori djela, urednici, prevoditelji, ilustratori
+     - podaci o naslovu i podnaslovu članka, knjige, časopisa, mrežne stranice,
+
+         istraživanja
+     - podaci o izdanju, mjestu izdanja, mediju
+     - brojčani podaci: godina izdanja knjige ili časopisa, volumen, broj i stranica
+
+         članka u časopisu, datum zadnjeg ažuriranja i citiranja mrežne stranice
+     - lokacijski podaci: mrežna stranica i DOI
+
+                                                                                                                      11
+
+===== [fdmri-naputak-zavrsni-2024 | str. 13] =====
+Pravila i primjeri navođenja najčešće korištenih djela:
+ KNJIGA
+ - tiskana:
+ Glažar I i suautori. Priručnik oralne higijene. Rijeka: Medicinski fakultet Sveučilišta
+ u Rijeci; 2017.
+
+ - elektronička, dostupna na Internetu:
+ Jain P, ur. Current therapy in endodontics [Internet]. Hobuken: Wiley
+ Online Books; 2016 - [pristupljeno 21.11.2022.]. Dostupno na:
+ https://onlinelibrary.wiley.com/doi/book/10.1002/9781119067757
+
+ - poglavlje / rad u zborniku
+ Ćuković Bagić I. Prevalencija i etiologija dentalne erozije kod djece i mladeži. U: Brkić
+ H i autori. Oralne manifestacije sistemskih bolesti. Zagreb: Stomatološki fakultet
+ Sveučilišta u Zagrebu; 2015. Str. 15-22.
+
+ ČLANAK:
+ - u tiskanom časopisu
+ Hague AL. Eating disorders: screening in the dental office. J Am Dent Assoc.
+ 2010;141(6):675-8.
+ - ukoliko je više od šest autora navodi se samo prvih šest i dodaje i sur.
+ Kuis D, Sciran I, Lajnert V, Snjaric D, Prpic J, Pezelj-Ribaric S i sur. Coronally advanced
+ flap alone or with connective tissue graft in the treatment of single gingival
+ recession defects: a long-term randomized clinical trial. J Periodontol.
+ 2013;84(11):1576-85.
+
+ - u elektroničkom časopisu, dostupnom na Internetu
+ Podnar O, Torre R. Anoreksija i bulimija - dvije krajnosti s istim ciljem. Vaše
+ zdravlje [Internet]. 2006 - [pristupljeno 21.11.2022.]. Dostupno na: URL:
+ http://www.vasezdravlje.com/izdanje/clanak/882/
+
+ OSTALI LITERATURNI NAVODI:
+https://www.nlm.nih.gov/bsd/uniform_requirements.html
+
+                                                                                                                      12
+
+===== [fdmri-naputak-diplomski-2025 | str. 5] =====
+Diplomski rad mora biti napisan u rasponu od 15-50 stranica. Tekst mora biti pisan hrvatskim
+standardnim jezikom, prema svim gramatičkim i pravopisnim pravilima.
+
+Ako je korišten alat UI treba ulaziti u okvir korištenja alata umjetne inteligencije u nastavi, studentskim
+radovima i istraživanju
+
+   • dopuštena je primjena alata UI u nastavi i učenju (transparentno, u skladu s etičkim normama,
+       zakonodavnim okvirima i uz poštivanje privatnosti i intelektualnog vlasništva)
+
+   • pri upotrebi alata UI treba opisati način njihovog korištenja (u poglavlju o metodologiji rada ili na
+       drugom prikladnom mjestu)
+
+   • student ne smije predati sadržaj koji je generiran pomoću alata UI bez navođenja načina korištenja
+       alata
+
+   • jasno naglasiti koji dio rada je generiran alatom UI
+   • student treba kritički vrednovati i provjeriti rezultate i izvore generirane pomoću alata UI
+   • student ne smije koristiti osjetljive i privatne podatke prilikom postavljanja upita alatima UI
+   • student je odgovoran za sadržaj generiran pomoću UI
+   • u slučaju nedoumice u vezi korištenja alata UI prilikom izrade radova, student se treba konzultirati
+
+       s nastavnikom po potrebi prikazati upite i rezultate korištenja UI alata (prikazati razgovor s UI
+       alatom)
+
+Student mora ispuniti i potpisati izjavu o korištenju alata UI u pisanju rada – Obrazac 4
+
+===== [fdmri-naputak-diplomski-2025 | str. 8] =====
+Komentor rada: (Ime i prezime komentora uz titule)
+
+Diplomski rad ocjenjen je dana          u/na
+
+                                , pred povjerenstvom u sastavu:
+
+1.
+
+2.
+
+3.
+
+Rad sadrži  stranica,           slika,  tablica,                        literaturnih navoda.
+
+Napomena: kod pisanja diplomskog rada, sve što je u uputama iznad označeno kurzivom (Italic)
+
+mora biti otisnuto i to na način da se ne razlikuje od ostalog teksta!                        8
+
+===== [fdmri-naputak-diplomski-2025 | str. 10] =====
+Tijelo diplomskog rada sastoji se od didaktički razrađenih poglavlja. Prikaz
+sastavnica diplomskog rada:
+
+Pregledni rad:                Znanstveni rad / Stručni rad:
+       Preliminarne stranice         Preliminarne stranice
+
+      1. Uvod                       1. Uvod
+      2. Prikaz slučaja             2. Svrha rada
+      3. Rasprava                   3. Ispitanici/materijali i postupci
+      4. Zaključci                  4. Rezultati
+      5. Sažetak                    5. Rasprava
+      6. Summary                    6. Zaključci
+      7. Literatura                 7. Sažetak
+      8. Životopis                  8. Summary
+                                    9. Literatura
+                                    9. Životopis
+
+Svaki dio (uvod, svrha rada, itd.) započinje na novoj stranici.
+
+Sažetak se piše poslije zaključka. U sažetku je potrebno ukratko, na jednoj stranici, s najviše 250
+riječi, prikazati najvažnije dijelove diplomskog rada. Ispod sažetka potrebno je navesti 3 - 5
+ključne riječi abecednim redom.
+
+Summary se nalazi iza hrvatskog sažetka. To je prijevod sažetka na engleskom jeziku. Ispod
+sažetka potrebno je navesti ključne riječi abecednim redom na engleskom jeziku.
+
+===== [fdmri-naputak-diplomski-2025 | str. 11] =====
+Literatura se navodi nakon engleskog sažetka, a sadrži sve literaturne izvore koje je autor
+ koristio tijekom izrade diplomskog rada. To mogu biti članci, knjige, mrežne stranice,
+ pravni propisi, itd. Sva literatura pripada autorskom djelu, stoga je student dužan navesti
+ svaku korištenu literaturu.
+
+ Korištene reference u radu navodimo:
+
+     - prilikom doslovnog navođenja ili parafraziranja tuđeg teksta;
+     - pri preuzimanju slika, tablica i ostalog vizualnog materijala;
+     - u popisu korištene literature na kraju rada.
+
+Za citiranje se koristi Vancouverski stil (International Committee of Medical Journal Editors) koji
+podrazumijeva navođenje referenci redoslijedom pojavljivanja u radu. Broj korištene reference se
+navodi u okrugloj zagradi u rečenici ispred točke (1), može se navesti i prezime autora Ingle (4),
+istovremeno s može pozvati i na više djela višestruki izvori (7-11, 14, 22).
+
+ Referenca na kraju rada donosi niz podataka koji precizno opisuju korišteno autorsko djelo:
+
+     - podaci o autorstvu: autori djela, urednici, prevoditelji, ilustratori
+     - podaci o naslovu i podnaslovu članka, knjige, časopisa, mrežne stranice, istraživanja
+     - podaci o izdanju, mjestu izdanja, mediju
+     - brojčani podaci: godina izdanja knjige ili časopisa, volumen, broj i stranica članka u
+
+          časopisu, datum zadnjeg ažuriranja i citiranja mrežne stranice
+
+     - lokacijski podaci: mrežna stranica i DOI
+
+===== [fdmri-naputak-diplomski-2025 | str. 12] =====
+Pravila i primjeri navođenja najčešće korištenih djela:
+KNJIGA
+
+- tiskana:
+
+Glažar I i suautori. Priručnik oralne higijene. Rijeka: Medicinski fakultet Sveučilišta u Rijeci;
+2017.
+
+- elektronička, dostupna na Internetu:
+
+Jain P, ur. Current therapy in endodontics [Internet]. Hobuken: Wiley Online Books;
+
+2016  -  [pristupljeno                  21.11.2022.].  Dostupno  na:
+
+https://onlinelibrary.wiley.com/doi/book/10.1002/9781119067757
+
+- poglavlje / rad u zborniku
+
+Ćuković Bagić I. Prevalencija i etiologija dentalne erozije kod djece i mladeži. U: Brkić H i autori.
+Oralne manifestacije sistemskih bolesti. Zagreb: Stomatološki fakultet Sveučilišta u Zagrebu;
+2015. Str. 15-22.
+
+ČLANAK:
+
+- u tiskanom časopisu
+
+Hague AL. Eating disorders: screening in the dental office. J Am Dent Assoc.
+2010;141(6):675-8.
+
+- ukoliko je više od šest autora navodi se samo prvih šest i dodaje i sur.
+
+===== [fdmri-naputak-diplomski-2025 | str. 13] =====
+http://www.vasezdravlje.com/izdanje/clanak/882/
+
+ OSTALI LITERATURNI NAVODI:
+ Upute za pisanje ostalih literaturnih navoda se mogu naći na ovoj poveznici:
+https://www.nlm.nih.gov/bsd/uniform_requirements.html
+
+ Životopis treba biti napisan u trećem licu jednine, s najviše 200 riječi.
+
+ Privici
+
+ Dopušteni prilozi uz tekst rada su tablice i slike. Svi ostali prilozi (sheme, grafikoni, dijagrami,
+ prikazi i sl.) moraju se uvrstiti u skupinu slike.
+
+ Naslovi slika nalaze se uvijek ispod tijela slika, a naslovi tablica nalaze se uvijek iznad tijela tablica.
+ Moraju bit numerirane. Slike i tablice moraju biti objašnjene i jasne same za sebe, pa seu njima
+ ne smiju rabiti kratice i oznake koje na istom mjestu, tj. u njima samima ili odmah ispod (za

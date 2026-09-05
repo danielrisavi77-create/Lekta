@@ -1,0 +1,125 @@
+===== [aspira-pravilnik-izgled-2023 | str. 1] =====
+1. Naslovna stranica,
+    2. Početna stranica (uključuje predstavnika gospodarstva i naslov teme rada na
+         engleskom jeziku),
+    3. Izjava o akademskoj čestitosti,
+    4. Izjava o korištenju autorskog djela,
+    5. Zahvale (opcionalno),
+    6. Sažetak na hrvatskom i engleskom jeziku,
+    7. Sadržaj,
+    8. Uvod,
+    9. Razrada rada-teorijski dio,
+    10.Primjer iz prakse,
+    11. Zaključak,
+    12.Popis literature,
+    13.Popis ilustracija i/ili tablica,
+    14. Prilozi.
+
+                                                      Članak 4.
+(1) Naslovna stranica rada mora imati na vrhu centriran puni naziv Škole:
+''VELEUČILIŠTE ASPIRA''.
+(2) Red ispod, također centrirano i velikim slovima treba pisati: Puni naziv
+studijskog programa (ne usmjerenja)“.
+
+                                                                                                Stranica 1 od 5
+
+===== [aspira-pravilnik-izgled-2023 | str. 2] =====
+(8) Početna stranica se razlike od naslove stranice po tome što je na početnoj
+stranici naveden i predstavnik gospodarstva (ispod imena i titule mentora).
+(9) Na početnoj stranici, a ispod navedenog mentora (opisano stavkom 4. ovog
+članka), piše se ime predstavnika gospodarstva na sljedeći način (pri dnu stranice s
+lijeve strane):
+''Predstavnik/ca gospodarstva:
+titula, ime i prezime''.
+(10) Početna stranica sadrži logo Veleučilišta i naziv teme na hrvatskom i engleskom
+jeziku.
+
+                                                      Članak 5.
+(1) Izled i struktura završnog i diplomskog rada definirani su pravilnikom Template
+i Tehničke napomene za pisanje rada i upute za citiranje (ASP-P/070), a kojeg su se
+studenti obvezni pridržavati pri pisanju i izradi završnog ili diplomskog rada.
+(2) Aktivnosti vezane za proces pisanja, izrade i obrane radove su determinirani
+Hodogramom aktivnosti za završni/diplomski rad.
+(3) Citiranje i referiranje su definirani Uputom za pisanje i citiranje završnih,
+diplomskih i ostalih stručnih i znanstvenih radova, a koje su se studenti obvezni
+pridržavati pri citiranju i referiranju unutar teksta završnog ili diplomskog rada.
+(4) Završni i diplomski rad mora obvezno sadržavati potpisanu Izjavu o akademskoj
+čestitosti i Izjavu o korištenju autorskog djela
+(5) Sažetak završnog rada iznosi 300 – 500 riječi, a nakon sažetka potrebno je
+navesti ključne riječi (5-7 riječi/pojmova). Ključne riječi pišu se u Italic formi.
+(6) Uvod je početni i pristupni dio završnog rada koji uvodi u tematiku i
+problematiku rada. Treba sadržavati problem rada, cilj rada i metode izrade rada.
+Njime se također određuju načini prikupljanja podataka, njihove izvore i obrada.
+Mora biti napisan do jedne strane te je on prva strana s kojim započinje
+numeriranje. Ne smiju se iznositi zaključci u uvodu.
+(7) Završni ili diplomski rad treba sadržavati detaljno razrađeni sadržaj s određenim
+brojevima sadržaja.
+(8) Zaključak je završni dio rada u kojem treba na sustavan i koncizan način dati
+
+===== [aspira-pravilnik-izgled-2023 | str. 3] =====
+Članak 6.
+(1) Rad treba biti pisan znanstvenim stilom, na standardnom hrvatskom jeziku, u
+pasivu i biti gramatički ispravan.
+(2) Treba izbjegavati kratice.
+(3) Treba koristiti hrvatske pojmove riječi, a ukoliko za neki pojam ne postoji riječ u
+hrvatskom jeziku tada se može upotrijebiti znanstveno prepoznatljiv strani naziv
+(treba biti obavezno napisan kurzivom/italic)
+(4) Treba biti pisan u Time New Roman fontu u A4 formatu.
+(5) Prored treba biti 1,5.
+(6) Font teksta je 12, 14 za naslove te 10 za fusnote.
+(7) Margine su standardne, a tekst poravnat s obje strane.
+(8) Svaki novi naslov mora ići na novu stranicu. Rečenica koja je započeta na jednoj
+stranici ne smije biti završena na drugoj stranici.
+(9) Stranice je potrebno numerirati u donjem desnom uglu stranice.
+(10) Rad treba sadržavati minimalno 30, a maksimalno 50 stranica.
+(11) Svi ostali propisi koji reguliraju oblik i strukturu rada definirani su pravilnikom
+ASP-P/070, a kojih se studenti moraju pridržavati pri pisanju i izradi rada.
+
+                                                      Članak 7.
+Načini citiranja i referenciranja korištenih izvora uzavršnom ili diplomskom radu
+definirani su pravilnikom ASP-P/070, a kojih se studenti moraju pridržavati pri
+pisanju i izradi rada.
+
+                                                      Članak 8.
+(1) Naslov, sažetak, sadržaj, popis literature, popis ilustracija i privitak ne smiju biti
+numerirani.
+(2) Naslov rada, sažetak, sadržaj, popis literature moraju biti centrirani.
+(3) Nazivi poglavlja, potpoglavlja i stavka nisu centrirani nego su poravnati ulijevo
+(Align Left).
+
+                                                      Članak 9.
+(1) Svaka tablica, grafikon, slika ili crtež trebaju biti numerirani arapskim rednim
+brojem i trebaju sadržavati naslov i tumač kratica i znakova ukoliko ih imaju.
+(2) Kod tablica numeracija se piše iznad, a izvor preuzimanja ispod tablice.
+(3) Kod grafikona, slika i crteža numeracija se piše ispod sadržaja označavanja.
+(4) Tablica, grafikon, slika ili crtež izrađen od studenta kao izvor se piše autor,
+izrada autora i sl.
+(5) Preuzeta tablica, grafikon, slika ili crtež se označava na način da se ispod
+sadržaja navodi izvor.
+
+===== [aspira-pravilnik-izgled-2023 | str. 4] =====
+2. Početna stranica (uključuje predstavnika gospodarstva i naslov teme rada na
+
+         engleskom jeziku),
+    3. Izjava o akademskoj čestitosti,
+    4. Izjava o korištenju autorskog djela,
+    5. Zahvale (opcionalno),
+    6. Sažetak na hrvatskom i engleskom jeziku,
+    7. Sadržaj,
+    8. Uvod,
+    9. Razrada rada-teorijski dio,
+    10.Primjer iz prakse,
+    11. Zaključak,
+    12.Popis literature,
+    13.Popis ilustracija i/ili tablica,
+    14. Prilozi.
+
+                                                      Članak 13.
+(1) Naslovna stranica rada mora imati na vrhu centriran puni naziv Škole:
+''VELEUČILIŠTE ASPIRA''.
+(2) Red ispod, također centrirano i velikim slovima treba pisati: Puni naziv
+studijskog programa (ne usmjerenja)''.
+(3) Na sredini naslovnice treba pisati centrirano i velikim slovima naslov završnog
+rada, a ispod njega ''Diplomski rad''.
+(4) Pri dnu stranice s lijeve strane piše se ime mentora na sljedeći način:
+''Mentor:

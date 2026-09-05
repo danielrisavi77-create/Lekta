@@ -1,0 +1,221 @@
+===== [algebra-pravilnik-radovi-2026 | str. 1] =====
+sveučilišnom diplomskom studiju na Sveučilištu Algebra Bernays potrebno je da student, osim
+     položenih ispita i izvršenih drugih obveza, upiše kolegij u sklopu kojeg se izrađuje završni, diplomski
+     odnosno specijalistički rad te da obrani završni, diplomski odnosno specijalistički rad na završnom
+     ispitu, u skladu s odredbama Statuta Sveučilišta Algebra Bernays i odredbama ovog Pravilnika.
+
+2. ZAVRŠNI, DIPLOMSKI ILI SPECIJALISTIČKI RAD
+
+(1) Završni, diplomski odnosno specijalistički rad samostalna je stručna obrada utvrđene teme definirana
+     ovim Pravilnikom i Obrascem za prijavu teme završnog, diplomskog odnosno specijalističkog rada.
+
+(2) Izradom završnog, diplomskog odnosno specijalističkog rada student treba pokazati sposobnost
+     primjene teorijskog i praktičnog znanja i vještina te sposobnost samostalnog služenja stručnom i
+     znanstvenom literaturom, sve u svrhu rješavanja problema struke, koji su primjereni stupnju stručnosti
+     koji daje studij.
+
+(3) Završni, diplomski odnosno specijalistički rad ne mora imati svojstvo izvornog rada, ali mora biti
+     samostalno izrađen od strane studenta.
+
+(4) Završni rad mora biti napisan na temu iz područja studentove stručnosti.
+(5) Završni, diplomski odnosno specijalistički rad može se pripremati unutar Sveučilišta Algebra Bernays
+
+     kroz rad s mentorom ili s pročelnikom sveučilišnog odjela ili u nekom od radilišta Sveučilišta Algebra
+     Bernays odnosno unutar tvrtke koju student odabere, a Sveučilište Algebra Bernays prihvati kao mjesto
+     izrade završnog, diplomskog odnosno specijalističkog rada.
+
+===== [algebra-pravilnik-radovi-2026 | str. 6] =====
+(5) Završni rad za stručni prijediplomski studij Oblikovanja tržišnih komunikacija sastoji se od pisanog dijela
+     rada koji se oblikuje u skladu sa uputama za oblikovanje završnih radova na stručnom studiju
+     Oblikovanja tržišnih komunikacija koje su dane u Prilogu 2 i vizualnih predložaka odnosno digitalnih
+     radova koje je student samostalno izradio.
+(6) Iznimno, na interdisciplinarnom diplomskom studiju Kreativno upravljanje dizajnom i komunikacijama
+     tema može biti vizualno-komunikacijska pri čemu se rad oblikuje kao što je propisano za studij
+     Oblikovanja tržišnih komunikacija u prethodnom stavku.
+
+(1) Kao sastavni dio završnog, diplomskog odnosno specijalističkog rada, student treba potpisati sljedeću
+     izjavu:
+     „Pod punom odgovornošću pismeno potvrđujem da je ovo moj autorski rad čiji niti jedan dio nije nastao
+     kopiranjem ili plagiranjem tuđeg sadržaja, niti generiranjem od strane AI alata. Prilikom izrade rada
+     koristio sam tuđe materijale navedene u popisu literature, ali nisam kopirao niti jedan njihov dio, osim
+     citata za koje sam naveo autora i izvor te ih jasno označio znakovima navodnika. U slučaju da se u bilo
+     kojem trenutku dokaže suprotno, spreman sam snositi sve posljedice uključujući i poništenje javne
+     isprave stečene dijelom i na temelju ovoga rada.”
+
+(2) Izjavu iz stavka 1. ovog članka, s navedenim meta-podacima o radu, student vlastoručno potpisuje
+     pred Ispitnim povjerenstvom prilikom obrane rada.
+
+(1) Student je obvezan tijekom izrade rada prihvaćati primjedbe mentora, ko-mentora ili stručnog
+     koordinatora rada te izvoditi zahtijevane preinake i dorade poštujući pri tome odredbe ovog Pravilnika.
+
+(2) Ako rad, koji je pripremljen za predaju, po mišljenju mentora ne zadovoljava svojom kvalitetom i
+     opsegom ili se ne slaže s odobrenom temom od strane Povjerenstva, studentu će se rad vratiti na
+     dopunu.
+
+===== [algebra-pravilnik-radovi-2026-en | str. 1] =====
+accordance with the provisions of the Statute of Algebra Bernays University and the provisions of this
+     Book of Regulations.
+
+2. FINAL, GRADUATION OR SPECIALIST THESIS
+
+                                                                 Article 3
+(1) The final, graduation or specialist thesis represents an independent professional processing of the
+
+     established subject as defined by this Book of Regulations and the Registration Form for the Subject
+     of the Final, Graduation or Specialist Thesis.
+(2) In the preparation of the final, graduation or specialist thesis, the student should demonstrate the
+     ability to apply theoretical and practical knowledge and skills as well as the ability to utilize
+     professional and scientific literature in an independent manner for the purpose of solving problems
+     related to their profession, in accordance with the degree of expertise acquired at the study
+     programme.
+(3) The final, graduation or specialist thesis does not have to possess the quality of an original work, but
+     it must be prepared independently by the student.
+
+                                                                                                                                            1
+
+===== [algebra-diplomski-predlozak-2017-wayback | str. 1] =====
+2.2.Stilovi za nabrajanje PAGEREF _Toc294079656 \h 3
+2.2.1.Stilovi za nabrajanje s grafičkim i numeričkim oznakam PAGEREF _Toc294079657 \h 3
+2.3.Slike PAGEREF _Toc294079658 \h 3
+2.4.Tablice PAGEREF _Toc294079659 \h 6
+2.5.Izrazi ili formule PAGEREF _Toc294079660 \h 6
+2.6.Kod u radu PAGEREF _Toc294079661 \h 7
+3.Pisanje stranih riječi PAGEREF _Toc294079662 \h 8
+Zaključak PAGEREF _Toc294079663 \h 9
+Popis kratica PAGEREF _Toc294079664 \h 10
+Popis slika PAGEREF _Toc294079665 \h 11
+Popis tablica PAGEREF _Toc294079666 \h 12
+Popis kôdova PAGEREF _Toc294079667 \h 13
+Literatura PAGEREF _Toc294079668 \h 14
+Prilog PAGEREF _Toc294079669 \h 17
+
+Sadržaj se kreira automatski pomoću opcija References – Insert Table of Figures. 
+
+
+Uvod
+Uvod diplomskog rada je obavezan. Uvod je početni i pristupni dio diplomskog rada koji treba čitatelja uvesti u područje tematike diplomskog rada, upoznati ga s problemom i predmetom diplomskog rada, svrhom i ciljem te strukturom diplomskog rada. U uvodu treba naznačiti izvore podataka i načine njihovog prikupljanja i obrade. 
+Ne pretjerujte s uvodom. Dovoljna je jedna stranica (to je maksimum). Prva stranica Uvoda je ujedno i prva stranica rada s kojim započinje numeriranje. U uvodu se ne iznose zaključci. 
+Naslov prvog poglavlja
+U obradi zadatka primjereno je da se cjelokupna problematika diplomskog rada sustavno rasporedi, razradi i prezentira u više međusobno povezanih cjelina (poglavlja i podpoglavlja). To mogu biti;
+Poglavlje u kojem se analizira problem i daju osnovne, poznate zakonitosti vezane uz njegovo rješavanje. 
+Poglavlja u kojima se rješavaju pojedine točke rada prema definiranom zadatku uključujući potrebne specifikacije, proračune i crteže. 
+Opis rezultata provedenih mjerenja i testiranja s pripadajućim grafičkim prikazima i ispisima. 
+Poglavlje u kojem se razmatraju dobiveni rezultati, vrši vrednovanje vlastitog rješenja problema, razmatra ostale probleme koji su se javili prilikom rješavanja zadatka te na osnovu vlastitog iskustva razmatraju moguća poboljšanja.
+U ovom poglavlju počnite opisivati Vaš rad.
+
+===== [algebra-diplomski-predlozak-2017-wayback | str. 1] =====
+Stavka 1
+Stavka 2
+bullet1slova
+Stavka 1
+Stavka 2
+Ako postoji potreba za korištenjem nabrajanja po brojevima ili slovima u drugoj dubini, autor može koristiti sljedeće stilove: bullet2brojevi i bullet2slova.
+Slike
+Student u Završnom radu može koristiti slike, formule i tablice. Nakon što ubacite sliku u tekst, selektirajte ju i odaberite stil slika. Nakon što ste ubacili sliku, odaberite je jednostrukim klikom lijevog gumba na mišu i zatim pritisnite desni gumb na mišu i odaberite opciju Oblikovanje objekta - Format Object. U opciji Izgled - Layout odaberite U redku s tekstom - In line with text.
+
+Slika 2.1 Povezivanje LAN komutatora i javne mreže
+Ako ispisujete rad na pisaču koji ne ispisuje u boji predlažemo da u slikama ne koristite boje, već tonove sivog ako smatrate da je to potrebno. Čak i u grafovima umjesto boja radije koristite različite stilove linija.
+Sve komponente koje se pojavljuju na slikama moraju imati svoju oznaku i vrijednost. Osi i parametri na slikama i grafičkim prikazima moraju biti obilježene fizikalnim veličinama i mjernim jedinicama. 
+Za pisanje teksta ispod slike potrebno je selektirati sliku i odabrati opciju Reference - References u glavnom izborniku i zatim opciju Umetni opis slike - Insert Caption.
+
+Slika 2.2 Načelo odabiranja Captiona za sliku 
+Naravno, opcija Insert Caption će ubaciti  REF _Ref294076950 \h Slika 2.1 Povezivanje LAN komutatora i javne mreže REF _Ref294076986 \h Slika 2.1, a Vi morate samostalno upisati tekst u nastavku (npr. «Povezivanje LAN komutatora i javne mreže»).
+Napomena: Opciju Numeriranje - Numbering u izborniku prozoru Opis - Caption treba podesiti kao na slici ( REF _Ref294077132 \h Slika 2.3).
+
+Slika 2.3 Postavljanje opcije Numbering u prozoru Captioon
+Odaberite labelu Sl. i pritisnite OK. Nakon toga napišite tekst koji treba ići ispod slike.
+Slike ne predstavljaju samo dodatak tekstu, nego su važan dio rada i obavezno se u tekstu treba pozivati na njih, navodeći njihov broj. Pozivanje na sliku se provodi na slijedeći način. Ako se želimo pozvati na sliku moramo napisati željeni tekst, npr. «Primjer povezivanja čvora lokalne mreže s čvorom javne mreže prikazan je slikom 
+zatim odaberemo opciju Reference - References i Unakrsna referenca - Cross-reference, nakon čega se otvori prozor kao na slici ( REF _Ref294077257 \h Slika 2.4). Odaberite opcije koje su prikazane na slici i kliknite na gumb Umetni - Insert.
+
+Slika 2.4 Ubacivanje cross-referencea u tekstu
+Sada će željeni tekst izgledati kao «Primjer povezivanja čvora lokalne mreže s čvorom javne mreže prikazan je slikom ( REF _Ref11811052 \h Pogreška! Izvor reference nije pronađen.)».
+Tablice
+Sličan način rada je i s tablicama. Na početku novog paragrafa uzmite ponovo stil slika. Umetnite tablicu i popunite stupce u njoj. Označite tablicu i odaberite opciju Insert Caption. Kao label odaberite Tablica.
+
+Slika 2.5 Načelo kreiranja captiona za tablicu
+Nakon toga se na željenom mjestu pojavljuje tablica.
+Tablica 2.1 Parametri prijenosnog linka
+prijenosna brzina
+širina prijenosnog pojasa
+
+
+
+
+
+
+
+
+Tablicu svakako centrirajte, tj. postavite na sredinu stranice. Načelo referenciranja na tablicu je isto kao i kod slika.
+Izrazi ili formule
+Izrazi se obilježavaju brojevima u zagradi, uz desni rub stranice, a u tekstu se poziva na broj izraza.
+
+(1)
+Osnovni stil pisanja je Times New Roman 12 pt.
+Kôd u radu
+Programski kod može biti označen brojem kao tablica ili slika (ako ga ima više), ili može biti i bez broja ako se radi o par redaka koda. 
+Više redaka koda (stil Kôd):
+char *trazizad(char *text, char znak) { 
+ char *t; 
+ if(*text == '\0') 
+return NULL;
+
+===== [algebra-diplomski-predlozak-2017-wayback | str. 1] =====
+Zaključak
+Zaključak je diplomski dio rada. U zaključku treba na sustavan, koncizan i jezgrovit način dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u samoj razradi diplomskog rada. Dijelovi odnosno pasusi zaključka se formiraju kronološki prema strukturi diplomskog rada. 
+Popis kratica
+ATMAsynchronous Transfer Modeasinkroni način prijenosa
+ISDNIntegrated Services Digital Networkdigitalna mreža integriranih usluga
+
+Napomena: na naslov Popis kratica primijenite stil Heading 1, a zatim ručno maknite brojčanu oznaku (to je važno kako bi i skraćenice ušle u sadržaj na početku rada, prije uvoda). Pri kreiranju popisa skraćenica koristite stil nabrajanje.
+
+Popis slika 
+ TOC \h \z \c "Slika" Slika 2.1 Povezivanje LAN komutatora i javne mreže PAGEREF _Toc294078697 \h 4
+Slika 2.2 Načelo odabiranja Captiona za sliku PAGEREF _Toc294078698 \h 4
+Slika 2.3 Postavljanje opcije Numbering u prozoru Captioon PAGEREF _Toc294078699 \h 5
+Slika 2.4 Ubacivanje cross-referencea u tekstu PAGEREF _Toc294078700 \h 5
+Slika 2.5 Načelo kreiranja captiona za tablicu PAGEREF _Toc294078701 \h 6
+
+Napomena: na naslov Popis slika primijenite stil Heading 1, a zatim ručno maknite brojčanu oznaku. Tablicu slika umećete na način da odaberete Reference - References u glavnom izborniku i zatim opciju Umetni tablicu slika – Insert Table Caption. Prihvatite sve zadane opcije.
+Popis tablica
+ TOC \h \z \c "Tablica" Tablica 2.1 Parametri prijenosnog linka PAGEREF _Toc294078982 \h 6
+
+Napomena: na naslov Popis tablica primijenite stil Heading 1, a zatim ručno maknite brojčanu oznaku. Tablicu slika umećete na način da odaberete Reference - References u glavnom izborniku i zatim opciju Umetni tablicu slika – Insert Table Caption. Odaberite opciju da umećete Tablicu. Prihvatite sve zadane opcije.
+
+Popis kôdova
+ TOC \h \z \c "Kôd" Kôd 2.1 Program za pronalazak pozicije zadnjeg pojavljivanja znaka u nizu PAGEREF _Toc294079025 \h 7
+
+Napomena: na naslov Popis kôdova primijenite stil Heading 1, a zatim ručno maknite brojčanu oznaku. Tablicu slika umećete na način da odaberete Reference - References u glavnom izborniku i zatim opciju Umetni tablicu slika – Insert Table Caption. Odaberite opciju da umećete kôd. Prihvatite sve zadane opcije.
+
+
+
+Literatura
+Svaki autor piše popis literature na kraju rada. Popis literature se piše stilom literatura.
+Stallings, W. Data and Computer Networks. London: John Wiley, 2006.
+Stallings, W. Local Computer Networks. London: John Wiley, 2006a.
+ATM Forum, User-Network Interface (UNI) Specification, http://www.atmforum.com, travanj. 2010.
+Brady, P.T. A statistical Analysis of On-off Patterns in 16 Conversation, Bell System Technical Journal, 47,1 (1998), 55-62.
+Brady, N. A statistical Analysis of Use Case. Proceedings of the 7th International Conference on Telecommunications ConTEL, Zagreb, (2003), 45-52.
+Lilys, M. Final data structures. Doktorski rad. Sveučilište u Zagrebu, 2010.
+
+Na naslov Literatura primijenite stil Heading 1, a zatim ručno maknite brojčanu oznaku (to je važno kako bi i skraćenice ušle u sadržaj na početku rada, prije uvoda). Pri kreiranju popisa literature koristite stil literatura.
+Ako u popis literature upisujete Internet izvor važno je navesti puni link do korištenog dokumenta i datum kada je dokument preuzet. 
+Imenima autora i standardizacijskih organizacija potrebno je promijeniti ručno font u opciji Home – Velika mala slova - Change Case
+
+i zatim odabrati opciju Veliko početno slovo svake riječi - Capitalize Each World.
+Pozivanje na literaturu u tekstu se provodi na način:
+Povezivanje lokalnih mreža s javnom mrežom provodi se uporabom usmjerivača (Martinis, 1998).
+Ako za istu referencu postoji više autora, onda je referenciranje potrebno provesti kako slijedi:
+Povezivanje lokalnih mreža s javnom mrežom provodi se uporabom usmjerivača (Martinis et al., 1990),
+Konačno, ako se na istu tvrdnju odnosi više od jedne reference, onda je zapis sljedeći:
+Povezivanje lokalnih mreža s javnom mrežom provodi se uporabom usmjerivača (Martinis, 1998; Alba, 1997).
+
+Svaku stavku u literaturi treba u tekstu barem jednom referencirati.
+
+Student vlastoručno potpisuje diplomski rad iza zaključka s datumom i oznakom mjesta završetka rada te naznakom:
+„Pod punom odgovornošću pismeno potvrđujem da je ovo moj autorski rad čiji niti jedan dio nije nastao kopiranjem ili plagiranjem tuđeg sadržaja. Prilikom izrade rada koristio sam tuđe materijale navedene u popisu literature ali nisam kopirao niti jedan njihov dio, osim citata za koje sam naveo autora i izvor te ih jasno označio znakovima navodnika. U slučaju da se u bilo kojem trenutku dokaže suprotno, spreman sam snositi sve posljedice uključivo i poništenje javne isprave stečene dijelom i na temelju ovoga rada“.
+U Zagrebu, datum.
+Ime Prezime
+
+Prilog 
+Diplomski rad može imati priloge, ali se oni ne prilažu uz pisanu verziju diplomskog rada već se mogu priložiti na diplomskom ispitu ukoliko povjerenstvo na diplomskom ispitu tako odluči. Važno je čuvati svu poratnu dokumentaciju koja je nastala pri izradi diplomskog rada. 
+S unutarnje strane na zadnjim koricama originala, kao i svake kopije diplomskog rada, pričvršćuje se CD s kompletnim diplomskim radom u izvornom formatu (npr. .docx) i .pdf formatu sa svom popratnom dokumentacijom i programima. Pri čemu je obvezno da na tom CD- u postoji i dokument koji opisuje kako se rezultat njegova diplomskog rada (softver ili hardver) koristi (ili kako se npr. izvode mjerenja koja je opisao u radu). Ako se radi o softveru nužno je opisati i kako se programska podrška instalira.

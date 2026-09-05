@@ -1,0 +1,130 @@
+===== [iv-pravilnik-2025 | str. 2] =====
+Na temelju članka 45. Statuta Istarskog veleučilišta – Università Istriana di scienze applicate Vijeće Veleučilišta
+Istarskog Veleučilišta – Università Istriana di scienze applicate (u daljnjem tekstu: Veleučilište), na sjednici
+održanoj 22. prosinca 2025. godine donosi:
+
+                         PRAVILNIK O IZRADI ZAVRŠNIH I DIPLOMSKIH RADOVA
+Ovim Pravilnikom uređuju se uvjeti, način izrade, struktura, tehnički zahtjevi, citiranje izvora te postupak
+predaje i provjere izvornosti završnih i diplomskih radova na Veleučilištu.
+Ovim Pravilnikom u cijelosti se zamjenjuju raniji pravilnici i upute koje su se odnosile na izradu završnih,
+diplomskih i specijalističkih završnih radova na Veleučilištu.
+
+                                                           1. OPĆE ODREDBE
+Završni i diplomski rad predstavlja samostalni stručni ili znanstveno-stručni rad studenta kojim se dokazuje
+sposobnost razumijevanja odabrane teme, primjene odgovarajućih metoda, kritičke analize literature te
+jasnoće i sustavnosti u pisanom izlaganju.
+Rad mora biti izrađen u skladu s pravilima akademske čestitosti, uz obvezno ispravno citiranje i navođenje
+svih korištenih izvora.
+
+                                                             2. OPSEG RADA
+• Završni rad: optimalno između 30 i 40 stranica teksta.
+• Diplomski rad: optimalno između 40 i 60 stranica teksta.
+U opseg se ne uračunavaju: naslovnica, sadržaj, sažeci, popis literature, popis tablica/slika i prilozi.
+Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda
+te kvalitetom analize i zaključaka.
+
+                                                        3. TEHNIČKI ZAHTJEVI
+• Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)
+• Prored: 1,5
+• Margine: 2,5 cm sa svih strana.
+• Poravnanje teksta: obostrano (justify).
+• Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.
+Naslovi:
+• Glavni naslovi poglavlja: 14 pt, bold, velikim slovima, poravnati uz lijevi rub.
+• Podnaslovi: 12 pt.
+
+===== [iv-pravilnik-2025 | str. 3] =====
+5. STRUKTURA ZAVRŠNOG I DIPLOMSKOG RADA
+Rad mora sadržavati sljedeće cjeline:
+NASLOVNA STRANICA PRVA
+NASLOVNA STRANICA DRUGA
+IZJAVA O AKADEMSKOJ ČESTITOSTI
+IZJAVA O KORIŠTENJU AUTRORSKOG DJELA
+SADRŽAJ
+UVOD
+TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO)
+METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova)
+REZULTATI I RASPRAVA (mogu biti objedinjeni)
+ZAKLJUČAK
+POPIS LITERATURE
+POPIS TABLICA I SLIKA (ako je primjenjivo)
+PRILOZI (ako postoje)
+SAŽETAK (hrvatski jezik)
+SUMMARY (engleski jezik)
+Sažeci, popisi i prilozi ne numeriraju se, ali se uvrštavaju u sadržaj.
+
+                                                  6. SADRŽAJ PO POGLAVLJIMA
+Uvod
+U uvodu se definira tema rada, njezina važnost, ciljevi rada, istraživačka pitanja i/ili hipoteze te struktura rada.
+Glavni dio
+Student mora pokazati razumijevanje literature i problematike. Mehaničko prepisivanje, prevođenje ili
+prepričavanje tuđih radova bez kritičkog osvrta nije dopušteno.
+Poglavlja i potpoglavlja označavaju se decimalno (npr. 2., 2.1., 2.1.1., 3., 3.1.).
+
+                                                                                                                                               3
+
+===== [iv-pravilnik-2025 | str. 4] =====
+Primjer označavanja poglavlja:
+2. NASLOV PRVOG POGLAVLJA
+2.1. Naslov prvog potpoglavlja
+2.2. Naslov drugog potpoglavlja
+2.2.1. Naslov potpoglavlja u potpoglavlju
+3. NASLOV DRUGOG POGLAVLJA
+3.1. Naslov prvog potpoglavlja
+Zaključak
+Zaključak sažima ključne spoznaje rada, odgovara na istraživačka pitanja i naznačuje mogućnosti daljnjih
+istraživanja. U zaključku se ne citira literatura.
+SAŽETAK I SUMMARY
+• Opseg: 200–250 riječi.
+• Jedan odlomak, bez uvlake.
+• Treće lice, pasiv.
+• Ne sadrži citate.
+Nakon sažetka navodi se 3 do 5 ključnih riječi (Ključne riječi: pojam1; pojam2; pojam3). Jednako i na
+engleskom jeziku.
+
+                                                 7. CITIRANJE I REFERENCIRANJE
+Društvene znanosti – APA stil citiranja (autor–godina)
+Navođenje u tekstu (primjeri):
+• Jedan autor: (Horvat, 2020)
+• S navodom stranice: (Horvat, 2020, str. 45)
+• Dva autora: (Kovač & Novak, 2019)
+• Tri i više autora: (Marković et al., 2021)
+Popis literature (primjeri):
+Horvat, I. (2020). Uvod u sociologiju. Zagreb: Primjer nakladnik.
+Kovač, M., & Novak, L. (2019). Naslov članka. Naziv časopisa, 12(3), 45–60.
+
+Tehničke znanosti – numerički stil
+Navođenje u tekstu (primjeri):
+• Jedan izvor: [1]
+• Više izvora: [2], [3]
+
+                                                                                                                                               4
+
+===== [iv-pravilnik-2025 | str. 5] =====
+• Navođenje raspona: [4–6] (ako se koristi)
+Popis literature (primjeri – prema redoslijedu pojavljivanja u tekstu):
+[1] I. Horvat, Osnove elektrotehnike, Zagreb, Školska knjiga, 2018.
+[2] M. Kovač, "Naslov članka", Naziv časopisa, vol. 10, no. 2, pp. 33–40, 2020.
+
+                                                         8. POPIS LITERATURE
+Navodi se jedinstveno na kraju rada.
+• Društvene znanosti (APA): abecedno prema prezimenu autora; bez numeriranja; viseća uvlaka.
+• Tehničke znanosti (numerički): prema redoslijedu pojavljivanja u tekstu; s numeriranjem.
+Naslove knjiga i nazive časopisa potrebno je pisati kurzivom (italic).
+
+                                                 9. PROVJERA IZVORNOSTI RADA
+
+Svi završni i diplomski radovi podliježu provjeri izvornosti putem sustava za detekciju podudarnosti (npr.
+TurnitIn). Postotak podudarnosti tumači se kvalitativno, uzimajući u obzir pravilno citirane dijelove, popis
+literature i metodološke opise.
+
+                                                        10. ZAVRŠNE ODREDBE
+
+Ovaj Pravilnik stupa na snagu danom donošenja i primjenjuje se na sve studente koji započinju izradu
+završnog ili diplomskog rada nakon njegova stupanja na snagu.
+
+Prilozi:
+
+•         IZGLED PRVE NASLOVNICE
+
+•         IZGLED DRUGE NASLOVNICE
