@@ -10,10 +10,10 @@
   },
   "counts": {
     "E": 41,
-    "B": 300,
+    "B": 297,
     "D": 37,
     "C": 8,
-    "A": 24
+    "A": 27
   },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
@@ -73,7 +73,7 @@
     "efzg-seminarski": "E",
     "efzg-specijalisticki": "B",
     "efzg-strucni-racunovodstvo": "B",
-    "efzg-zavrsni": "B",
+    "efzg-zavrsni": "A",
     "erf-diplomski": "B",
     "erf-doktorski": "B",
     "evtos-diplomski": "B",
@@ -260,12 +260,12 @@
     "pravo-integrirani-diplomski": "B",
     "pravo-javna-uprava-diplomski": "B",
     "pravo-javna-uprava-prijediplomski": "B",
-    "pravo-opci-pravni-akademski-rad": "B",
+    "pravo-opci-pravni-akademski-rad": "A",
     "pravo-porezni-prijediplomski": "B",
     "pravo-socijalna-politika-diplomski": "B",
     "pravo-socijalne-djelatnosti-doktorski": "B",
     "pravo-socijalne-djelatnosti-specijalisticki": "B",
-    "pravo-socijalni-opci-akademski-rad": "B",
+    "pravo-socijalni-opci-akademski-rad": "A",
     "pravo-socijalni-rad-diplomski": "B",
     "pravo-socijalni-rad-zavrsni": "B",
     "pravo-specijalisticki-pravni-opci": "B",

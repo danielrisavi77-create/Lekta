@@ -56,6 +56,40 @@ describe('detectHeadingStructure', () => {
     expect(result.candidates.map((candidate) => candidate.paragraphIndex)).toEqual([5]);
   });
 
+  /**
+   * DVA LAZNA KANDIDATA KOJE JE DOTAD SKRIVALO NEISPRAVNO SIDRO (2026-09-05, `local-01-diplomski`).
+   *
+   * Cim je sidro naslova popravljeno (`<w:br/>` kao razmak), popravak je poceo upisivati sve
+   * predodabrane kandidate, a medju njima: "4 vCPU," i "16 GB RAM," (stavke specifikacije s
+   * numerirani prefiksom, score 7 i 8) te "3.6.1.3 Tipovi testova\nZa potrebe kvantitativne ..."
+   * (naslov zalijepljen s tijelom preko rucnog prijeloma). Ishod: "4 moguca preskakanja razine" -> 5,
+   * i tijelo rada u stilu Heading3.
+   */
+  it('fragment popisa koji zavrsava zarezom nije predodabran, a pravi numerirani naslov jest', () => {
+    const result = detectHeadingStructure([
+      { index: 1, ...run('4 vCPU,', { bold: false, size: 12 }) },
+      { index: 2, ...run('16 GB RAM,', { bold: false, size: 12 }) },
+      { index: 3, ...run('4. Rezultati', { bold: true, size: 14 }) }, // kontrola
+    ], { maxLevel: 3 });
+    const by = new Map(result.candidates.map((c) => [c.paragraphIndex, c]));
+    expect(by.get(1)?.selectedByDefault ?? false, '"4 vCPU," je predodabran kao naslov').toBe(false);
+    expect(by.get(2)?.selectedByDefault ?? false, '"16 GB RAM," je predodabran kao naslov').toBe(false);
+    expect(by.get(3)?.selectedByDefault, 'kontrola: pravi naslov mora ostati predodabran').toBe(true);
+  });
+
+  it('naslov zalijepljen s tijelom preko prijeloma retka nije kandidat, dvoredni naslov jest', () => {
+    const tijelo = 'Za potrebe kvantitativne analize definirani su sljedeci tipovi testova i mjerenja.';
+    const result = detectHeadingStructure([
+      { index: 1, ...run(`3.6.1.3 Tipovi testova\n${tijelo}`, { bold: true, size: 14 }) },
+      { index: 2, ...run('3.6.1.3 Tipovi testova', { bold: true, size: 14 }) }, // kontrola: isti naslov bez tijela
+      { index: 3, ...run('Analiza\nsustava', { bold: true, size: 14 }) }, // kontrola: kratak dvoredni naslov
+    ], { maxLevel: 3 });
+    const indeksi = result.candidates.map((c) => c.paragraphIndex);
+    expect(indeksi, 'odlomak s tijelom iza prijeloma ne smije biti kandidat').not.toContain(1);
+    expect(indeksi).toContain(2);
+    expect(indeksi).toContain(3);
+  });
+
   it('prijavljuje preskok razine', () => {
     const result = detectHeadingStructure([
       { index: 1, text: '1. Glavno poglavlje', runs: [{ text: '1. Glavno poglavlje', bold: true, size: 14 }] },

@@ -73,6 +73,22 @@ describe('pseudonymizeDocx', () => {
     expect(a.parts['docProps/core.xml']).not.toBe(c.parts['docProps/core.xml']);
   });
 
+  it('rucno potvrdjeni pojam (ingest --terms) ulazi u rjecnik SAMO ako doista stoji u dokumentu', () => {
+    const p = {
+      'docProps/core.xml': '<cp:coreProperties></cp:coreProperties>',
+      'word/document.xml': '<w:document><w:body><w:p><w:r><w:t>SVEUČILIŠTE U ZAGREBU</w:t></w:r></w:p><w:p><w:r><w:t>IVAN IVIĆ</w:t></w:r></w:p><w:p><w:r><w:t>ZAVRŠNI RAD</w:t></w:r></w:p></w:body></w:document>',
+    };
+    // Bez rucnog pojma: ime velikim slovima kao samostalan odlomak se namjerno ne pogadja.
+    expect(pseudonymizeDocx(p, { salt: 's' }).dictionarySize).toBe(0);
+    const r = pseudonymizeDocx(p, { salt: 's', extraTerms: ['IVAN IVIĆ', 'Nema Ga'] });
+    expect(r.carriersCleaned).toContain('manual.terms');
+    expect(Object.values(r.parts).join('\n')).not.toMatch(/IVAN IVIĆ/);
+    expect(r.leaks).toEqual([]);
+    // Pojam kojeg u dokumentu nema NE ulazi u rjecnik, nego se broji kao zanemaren.
+    expect(r.manualTermsIgnored).toBe(1);
+    expect(Object.keys(r.mapping)).not.toContain('Nema Ga');
+  });
+
   it('imenuje nositelje koje je ocistio', () => {
     const r = pseudonymizeDocx(parts(), { salt: 's1' });
     expect(r.carriersCleaned).toContain('core.creator');
@@ -163,6 +179,25 @@ describe('frontMatterNames', () => {
   it('NEGATIVNA KONTROLA: naslov rada od dvije velike rijeci se ne brka s imenom', () => {
     // Naslov je recenica s malim slovima, pa ne zadovoljava obrazac "samo velike rijeci".
     expect(frontMatterNames(paras('Formalni kriteriji oblikovanja akademskih radova'))).toEqual([]);
+  });
+
+  it('hvata ime iza uloge nositelj/nositeljica i voditelj/voditeljica (2026-09-05: jedan od 6 praznih rjecnika)', () => {
+    expect(frontMatterNames(paras('Nositeljica kolegija: doc. dr. sc. Ana Anić'))).toContain('Ana Anić');
+    expect(frontMatterNames(paras('Voditelj: prof. dr. sc. Ivan Ivić'))).toContain('Ivan Ivić');
+  });
+
+  it('hvata ime VELIKIM slovima iza uloge, ali NE samostalan odlomak velikim slovima', () => {
+    expect(frontMatterNames(paras('MENTOR: IVAN IVIĆ'))).toContain('IVAN IVIĆ');
+    expect(frontMatterNames(paras('Mentor: prof. dr. sc. ANA ANIĆ'))).toContain('ANA ANIĆ');
+    // Izmjereno 2026-09-05: od 42 samostalna kandidata velikim slovima na 195 radova, 26 nisu imena.
+    expect(frontMatterNames(paras('MEĐUNARODNI ODNOSI'))).toEqual([]);
+    // Placeholder s predloska nije osoba.
+    expect(frontMatterNames(paras('Mentor: IME PREZIME'))).toEqual([]);
+  });
+
+  it('titula se skida samo kao cijela rijec: "dr" u Andrea i "ing" u Ingrid ne raskomadaju ime', () => {
+    expect(frontMatterNames(paras('Mentor: dr. sc. Andrea Anić'))).toContain('Andrea Anić');
+    expect(frontMatterNames(paras('Studentica: Ingrid Ivić'))).toContain('Ingrid Ivić');
   });
 
   it('ime s naslovnice ulazi u rjecnik i nestaje iz izlaza', () => {

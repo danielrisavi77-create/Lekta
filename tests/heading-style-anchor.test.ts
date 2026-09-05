@@ -40,6 +40,47 @@ const request = (anchorText?: string) => [{
 const documentOf = async (bytes: Uint8Array) =>
   new TextDecoder().decode((await readZip(bytes)).find((entry) => entry.name === 'word/document.xml')!.data);
 
+/**
+ * RUCNI PRIJELOM RETKA U NASLOVU (2026-09-05): zadnji `stale-anchor` na cijelom stvarnom korpusu.
+ *
+ * Parser analize prijelom (`<w:br/>`) emitira kao razmak, pa sidro glasi "Tipovi testova Za potrebe".
+ * `paragraphTextsForAnchors` je citao SAMO `<w:t>` i davao "Tipovi testovaZa potrebe": sidro se tada
+ * ne nalazi NIGDJE u dokumentu, meta je `zastarjelo`, i jedna takva meta obara CIJELI zahtjev.
+ *
+ * IZMJERENO na `local-01-diplomski`: 1 od 18 meta (p634, naslov + tijelo u istom odlomku odvojeni
+ * prijelomom) gasila je popravak svih 18 naslova, i to i kad je fixer radio SAM. Zajednicki izvlakac
+ * `anchorTextOfXml` (tab/br/cr -> razmak) vec je sluzio sidrima `required-section` i `link-doi`; ovo
+ * je mjesto bilo zaboravljena kopija koja cita samo `<w:t>`.
+ */
+describe('heading-style-fixer: sidro prezivljava rucni prijelom retka', () => {
+  const XML_S_PRIJELOMOM =
+    '<w:document><w:body>' + para('Uvodni odlomak.') +
+    '<w:p><w:r><w:t>3.6.1.3 </w:t></w:r><w:r><w:t>Tipovi testova</w:t></w:r><w:r><w:br/><w:t>Za potrebe analize definirani su testovi.</w:t></w:r></w:p>' +
+    para('Tijelo poglavlja.') + '</w:body></w:document>';
+  const docxS = async () => writeZip([
+    { name: '[Content_Types].xml', data: enc.encode('<Types></Types>') },
+    { name: 'word/_rels/document.xml.rels', data: enc.encode('<Relationships></Relationships>') },
+    { name: 'word/document.xml', data: enc.encode(XML_S_PRIJELOMOM) },
+    { name: 'word/styles.xml', data: enc.encode('<w:styles><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>') },
+  ]);
+  // Sidro kako ga ANALIZA daje: prijelom je razmak.
+  const zahtjev = [{ ruleId: 'heading-structure-universal', fixerId: 'heading-style-fixer' as const, params: { targets: [{ paragraphIndex: 2, level: 3, anchorText: '3.6.1.3 Tipovi testova Za potrebe analize definirani su testovi.' }] } }];
+
+  it('sidro s razmakom na mjestu <w:br/> se prihvaca i naslov se stilizira', async () => {
+    const out = await applyFixers(await docxS(), zahtjev as never);
+    expect(out.skippedReasons['heading-structure-universal'], 'prijelom retka je procitan kao nista, pa sidro nije nadjeno').toBeUndefined();
+    expect(out.changelog.length).toBeGreaterThan(0);
+    expect(await documentOf(out.docxBytes)).toContain('<w:pStyle w:val="Heading3"/>');
+  });
+
+  it('KONTROLA: sidro koje stvarno ne odgovara i dalje daje stale-anchor', async () => {
+    const krivo = [{ ...zahtjev[0], params: { targets: [{ paragraphIndex: 2, level: 3, anchorText: '3.6.1.3 Tipovi testova Za potrebe NECEG DRUGOG' }] } }];
+    const out = await applyFixers(await docxS(), krivo as never);
+    expect(out.skippedReasons['heading-structure-universal']).toBe('stale-anchor');
+    expect(out.changelog).toEqual([]);
+  });
+});
+
 describe('heading-style-fixer: sidro protiv zastarjele mete', () => {
   it('sidro koje ODGOVARA tekstu odlomka ne mijenja ponasanje', async () => {
     const bytes = await docx();

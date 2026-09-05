@@ -106,3 +106,76 @@ strop za E redke se **imenuje** u ljestvici.
 
 **Posteno ocekivanje ostaje isto:** 26 je gornja granica iz postojecih radova. Dalje pomicu samo
 skupina "podaci" (oko 95 redaka izlazi iz blokatora, ali ostaje na B) i kanal A.
+
+## 8. Prosirenje korpusa 2026-09-05
+
+Vlasnik: radovi su u Downloads, napravljena je posebna mapa `Desktop/Lekta-korpus` (izvan repozitorija, jer ingest
+odbija odrediste unutar njega). Izvedeno istog dana:
+
+| korak | broj |
+|---|---|
+| docx u Downloads / odabrano za korpus | 368 / 195 |
+| ingest (pseudonimizacija, zapis o dopustenju `local-testing`): prihvaceno / bez profila / vacuous | 195 / 80 / 6 |
+| dedupe po klasterima verzija (Jaccard >= 0,8 nad tijelom): predstavnika / odbacenih verzija | 58 / 57 |
+| lokalni korpus prije / poslije (plus 7 commitanih) | 38 / 88 |
+| mjerenje nad `ea15e9ce`: pass / review / fail / regresija | 7 / 86 / 0 / 0 |
+| ovjerenih parova jedinica x vrsta rada | 10 -> 16 |
+| redaka na A | 26 -> **34** |
+| profila na A u mapi tvrdnji | 24 -> 28 |
+
+- "Posteno ocekivanje" iz sekcije 7 (26 kao gornja granica iz postojecih radova) time je pomaknuto: granica su
+  bili radovi koje sesije nisu imale, ne dokaz.
+- Harness je na 15 novih radova javljao `fail` bez integriteta i regresije: prazan `word/comments.xml` iz
+  ne-Wordovih alata koji `final-document-inspector-fixer` ukloni i prijavi kroz `removedPackageParts`, a mjera je
+  deklarirano uklanjanje brojala kao izgubljen zapis. Popravljeno u `ea15e9ce` (`removedByFixers` imenovano,
+  `droppedEntryCount` broji samo neprijavljeno, test s negativnom kontrolom). Prije popravka: fail 15.
+- Pseudonimizacija: `vacuous` na 6 od 195, ne 76 od 246 kao u sekciji 3; stara brojka je iz doba prije heuristike
+  naslovnice. Preostalih 6 je rucni pogled po sidecaru, ne novi mehanizam.
+- 80 radova bez profila su vecinom seminari i eseji cija naslovnica imenuje program ("diplomski studij"), a ne
+  vrstu rada; sirenje detektora na golu rijec "diplomski" oznacilo bi ih kao diplomske radove. Treba odluka o
+  mapiranju eseja i seminara na vrste rada, pa tek onda detektor.
+
+### Drugi val, isti dan
+
+Otvorena pitanja iz sekcije 8 rijesena su na vlasnikovu rijec ("idemo to rijesiti sada"), commit `fc66791f`:
+
+| sto | brojka |
+|---|---|
+| detektor vrste rada (padezi, umetak, esej = seminar, rad kolegija): s profilom od 195 | 115 -> 163 |
+| promjena vrste na vec prepoznatih 115 | 0 |
+| pseudonimizacija (uloge nositelj/voditelj, ime velikim slovima iza uloge): praznih rjecnika | 6 -> 5 |
+| lokalni korpus (dopusteno u mjerenje) | 88 -> 112, ukupno 119 |
+| mjerenje nad `fc66791f`: pass / review / fail / regresija | 7 / 110 / 0 / 0 |
+| ovjerenih parova jedinica x vrsta rada | 16 -> 15 |
+| redaka na A / profila na A | 34 -> 33 / 28 -> 27 |
+
+- A je PAO za jedan, i to je ispravak, ne gubitak: rucni pregled praznih rjecnika pokazao je da su tri FKIT
+  dokumenta popis literature i plan i program diplomskog rada, dakle nisu radovi. Nose `track: not-a-thesis` i
+  ne ulaze u mjerenje, pa par `fkit x graduate` vise nema dokaz. Dokaz koji je stajao na dokumentima koji nisu
+  radovi nije bio dokaz.
+- Preostalih 5 praznih rjecnika: 3 su ti FKIT dokumenti, 1 ima placeholder "IME PREZIME" (prazan s pravom), 1
+  ima ime velikim slovima kao samostalan odlomak, sto se namjerno ne hvata (26 od 42 takva kandidata na 195
+  radova nisu imena nego imena studija).
+- 32 rada i dalje bez profila: bez ikakva traga vrste rada na naslovnici (2 bez ustanove s popisa). Ostaju u
+  `03-ingest` i ne ulaze u mjerenje.
+
+### Treci val, isti dan
+
+Preostala dva pitanja rijesena na vlasnikovu rijec ("idemo to rijesiti"), commit `cf5fe841`:
+
+| sto | brojka |
+|---|---|
+| vrsta rada: rezerve iza naslovnice (izjava/sazetak u prvim stranicama, pa ime datoteke): s profilom od 195 | 163 -> 175 |
+| izvor odluke o vrsti | naslovnica 163, prve stranice 10, ime datoteke 2 |
+| neslaganje rezervi s naslovnicom na 163 rada s vrstom (izmjereno prije ugradnje) | prve stranice 0, ime datoteke 1 (zato NIKAD nemaju prednost) |
+| pseudonimizacija: rucno potvrdjeni pojmovi (`--terms`), praznih rjecnika | 5 -> 4 (tri FKIT ne-rada i jedan placeholder) |
+| lokalni korpus dopusten u mjerenje (ukupno s 7 commitanih) | 112 -> 120 (127) |
+| mjerenje nad `cf5fe841`: pass / review / fail / regresija | 7 / 118 / 0 / 0 |
+| ovjerenih parova / redaka na A / profila na A | 15 / 33 / 27 (nepromijenjeno: novih 8 radova pada u vec dokazane parove) |
+
+- Rucno potvrdjen pojam ulazi u rjecnik SAMO ako doista stoji u dokumentu (`manualTermsIgnored` broji ostale):
+  ime iz naziva datoteke primijenjeno je na jednoj od dvije verzije istog rada, druga ga ne sadrzi, pa ondje
+  nije ni "zamijenjeno".
+- Preostalih 20 radova bez profila (od 195): nema traga vrste rada ni na naslovnici, ni u prvim stranicama, ni u
+  imenu datoteke (2 bez ustanove s popisa). Ostaju u `03-ingest` i ne ulaze u mjerenje; dalje samo rucno.
+- Preostala 4 prazna rjecnika nisu greska: tri dokumenta nisu radovi (iskljuceni), jedan ima placeholder.

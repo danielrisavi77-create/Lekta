@@ -1,15 +1,35 @@
 {
   "schemaVersion": 1,
-  "corpusFingerprint": "476c8339587b6082db25bd3f762c3ba9",
-  "measuredAt": "2026-09-05T11:32:02.830Z",
-  "measuredFromCommit": "6b50b437152dcbdd198c44ecfe8501d0176d3073",
+  "corpusFingerprint": "4a113e922475d3e6279bfa25bfb33a28",
+  "measuredAt": "2026-09-05T15:59:05.685Z",
+  "measuredFromCommit": "cf5fe841789d454af4087dd9ec51bf8510bc52d0",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
   "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-05T11:32:56.930Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: push odobren). Mjerenje ponovljeno nad vrhom grane nakon tudjeg popravka literature (4f9ba2ea), jer dokaz mora biti o kodu koji se isporucuje; isti korpus od 45 radova, unosi po paru jedinica x vrsta rada. Vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
+  "signedAt": "2026-09-05T15:59:50.083Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to, idemo to rijesiti). Treci val korpusa: vrsta rada s naslovnice, uz REZERVE iza nje (izjava o izvornosti i sazetak u prvim stranicama, pa ime datoteke), esej kao seminar, rad kolegija; pseudonimizacija prosirena (uloge nositelj/voditelj, ime velikim slovima iza uloge) i rucno potvrdjeni pojmovi iz zapisa uz dopustenje; tri FKIT dokumenta koji nisu radovi iskljuceni oznakom track not-a-thesis. Radovi iz Desktop/Lekta-korpus ingesta uz zapis o dopustenju (local-testing), verzije istog rada svedene na jednog predstavnika. Broj radova i parova je u ovoj ovjeri; vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
   "entries": [
+    {
+      "unitId": "efzg",
+      "workType": "final",
+      "profileIds": [
+        "efzg-zavrsni"
+      ],
+      "documentCount": 13,
+      "cleanCount": 13,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "efzg",
+      "workType": "seminar",
+      "profileIds": [
+        "efzg-seminarski"
+      ],
+      "documentCount": 7,
+      "cleanCount": 7,
+      "regressedChecks": []
+    },
     {
       "unitId": "fer",
       "workType": "graduate",
@@ -36,8 +56,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 16,
-      "cleanCount": 16,
+      "documentCount": 47,
+      "cleanCount": 47,
       "regressedChecks": []
     },
     {
@@ -46,8 +66,8 @@
       "profileIds": [
         "fpzg-politologija-zavrsni"
       ],
-      "documentCount": 10,
-      "cleanCount": 10,
+      "documentCount": 19,
+      "cleanCount": 19,
       "regressedChecks": []
     },
     {
@@ -56,8 +76,8 @@
       "profileIds": [
         "fpzg-politologija-diplomski"
       ],
-      "documentCount": 12,
-      "cleanCount": 12,
+      "documentCount": 32,
+      "cleanCount": 32,
       "regressedChecks": []
     },
     {
@@ -66,8 +86,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 16,
-      "cleanCount": 16,
+      "documentCount": 47,
+      "cleanCount": 47,
       "regressedChecks": []
     },
     {
@@ -76,8 +96,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 16,
-      "cleanCount": 16,
+      "documentCount": 47,
+      "cleanCount": 47,
       "regressedChecks": []
     },
     {
@@ -95,6 +115,36 @@
       "workType": "graduate",
       "profileIds": [
         "pmf-matematika-graduate"
+      ],
+      "documentCount": 2,
+      "cleanCount": 2,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "pravo",
+      "workType": "article",
+      "profileIds": [
+        "pravo-opci-pravni-akademski-rad"
+      ],
+      "documentCount": 2,
+      "cleanCount": 2,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "pravo",
+      "workType": "project",
+      "profileIds": [
+        "pravo-opci-pravni-akademski-rad"
+      ],
+      "documentCount": 2,
+      "cleanCount": 2,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "pravo",
+      "workType": "seminar",
+      "profileIds": [
+        "pravo-opci-pravni-akademski-rad"
       ],
       "documentCount": 2,
       "cleanCount": 2,

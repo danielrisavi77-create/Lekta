@@ -28,12 +28,25 @@ const XML_HEAD = 200_000;
 /** Koliko teksta vraca; uzorci ustanove i vrste rada zive na prve dvije-tri stranice. */
 const TEXT_LIMIT = 3000;
 
-export function frontText(documentXml: string): string {
-  const head = documentXml.slice(0, XML_HEAD);
+function paragraphsText(documentXml: string, xmlHead: number): string {
+  const head = documentXml.slice(0, xmlHead);
   const paragraphs: string[] = [];
   for (const para of head.split(/<\/w:p>/)) {
     const texts = [...para.matchAll(/<w:t\b[^>]*>([^<]*)<\/w:t>/g)].map((m) => m[1]);
     if (texts.length) paragraphs.push(texts.join(''));
   }
-  return paragraphs.join(' ').replace(/\s+/g, ' ').trim().slice(0, TEXT_LIMIT);
+  return paragraphs.join(' ').replace(/\s+/g, ' ').trim();
+}
+
+export function frontText(documentXml: string): string {
+  return paragraphsText(documentXml, XML_HEAD).slice(0, TEXT_LIMIT);
+}
+
+/**
+ * Tekst prvih stranica u SIREM prozoru (naslovnica, izjava o izvornosti, sadrzaj, sazetak). Dodano 2026-09-05
+ * kao REZERVA za vrstu rada: na 10 od 32 rada bez profila naslovnica ne imenuje vrstu, ali izjava ili sazetak
+ * odmah iza nje kaze "ovaj diplomski rad". Isti izvod kao `frontText`, samo dulji; naslovnica ima prednost.
+ */
+export function leadText(documentXml: string, limit = 15_000): string {
+  return paragraphsText(documentXml, 600_000).slice(0, limit);
 }

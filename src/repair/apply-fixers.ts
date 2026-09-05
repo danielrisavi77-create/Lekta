@@ -5,7 +5,7 @@
 // vrati novi docx gdje su svi ostali zip entryji (slike, headeri, footeri, theme) neizmijenjeni.
 
 import { readZip, writeZip, type ZipEntry } from './zip-codec.ts';
-import { normalizeAnchorText } from './anchor-text.ts';
+import { anchorTextOfXml, normalizeAnchorText } from './anchor-text.ts';
 import {
   marginsFixer,
   paperSizeFixer,
@@ -137,6 +137,11 @@ export interface ApplyFixersResult {
    *  bit-identican, changelog je prazan i nista nije primijenjeno. Pozivatelj (UI, Edge funkcija)
    *  mora ovo razlikovati od "nema se sto popraviti", inace tvrdi neistinu. */
   integrityFailure?: IntegrityFailure;
+  /** Dijelovi paketa koje je neki fixer NAMJERNO uklonio (danas samo final-document-inspector, npr. prazan
+   *  `word/comments.xml` ili nereferenciran `customXml/`). Cisto ADITIVNO polje. Postoji da mjerenje razlikuje
+   *  deklarirano uklanjanje od tiho izgubljenog zapisa: harness stvarnog korpusa je do 2026-09-05 oba brojao kao
+   *  `droppedEntryCount` i 15 od 95 radova proglasio padom, a svih 15 je bilo isto deklarirano uklanjanje. */
+  removedPackageParts?: string[];
 }
 
 /**
@@ -1043,7 +1048,20 @@ function paragraphTextsForAnchors(documentXml: string): string[] {
   return opens.map((open, index) => {
     const start = (open.index ?? 0) + open[0].length;
     const end = index + 1 < opens.length ? (opens[index + 1].index ?? documentXml.length) : documentXml.length;
-    return [...documentXml.slice(start, end).matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((match) => match[1]).join('');
+    /**
+     * ISTI izvlakac kao sidro analize, ne vlastito citanje `<w:t>`.
+     *
+     * Do 2026-09-05 se ovdje spajao samo `<w:t>`, pa je odlomak s rucnim prijelomom retka
+     * (`<w:br/>` izmedju "Tipovi testova" i "Za potrebe...") davao "testovaZa", dok analiza (parser
+     * emitira prijelom kao razmak) daje "testova za". Sidro se tada ne nalazi NIGDJE (`count === 0`),
+     * meta je `zastarjelo`, i to obara CIJELI zahtjev za stiliziranjem naslova.
+     *
+     * IZMJERENO na `local-01-diplomski`: 1 od 18 meta (p634) s `<w:br/>` gasila je popravak svih 18
+     * naslova. Bio je to zadnji `stale-anchor` na cijelom stvarnom korpusu (38 radova). Zajednicki
+     * izvlakac `anchorTextOfXml` postoji upravo za ovaj razred (tab/br/cr -> razmak) i vec ga
+     * koriste sidra `required-section` i `link-doi`; ovo je mjesto bilo zaboravljena kopija.
+     */
+    return anchorTextOfXml(documentXml.slice(start, end));
   });
 }
 
@@ -1343,5 +1361,5 @@ export async function applyFixers(
 
   const newDocxBytes = await writeZip(newEntries);
 
-  return { docxBytes: newDocxBytes, changelog, skipped, skippedReasons };
+  return { docxBytes: newDocxBytes, changelog, skipped, skippedReasons, removedPackageParts: [...(parts.removedPackageParts ?? [])] };
 }
