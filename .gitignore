@@ -89,3 +89,13 @@ docs/generated/coverage-cells.local.json
 # koji hodaju stablom: oxlint je na njima nalazio errore i rusio `npm run check`, a vitest
 # je kolektirao njihove test datoteke (mjereno: 810 umjesto 410).
 visual-system-v2/
+
+# Lokalni otpad u korijenu, zatecen u dijeljenom radnom stablu 2026-09-06. Nije izvor ovog
+# projekta nego trag alata i uredjivaca; dok nije ignoriran, stoji u `git status` svake sesije i
+# lako zavrsi u tudjem commitu (`git add -A` je zbog toga vec jednom odnio 21 tudju datoteku).
+# Ako se ispostavi da nesto od ovoga ipak pripada repozitoriju, makni redak, ne dodaj iznimku.
+.vscode/
+.playwright-cli/
+.tmp-seo.mjs
+output/
+srcids.json
