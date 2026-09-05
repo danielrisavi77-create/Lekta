@@ -29,7 +29,7 @@ describe('fetchActiveCorpusContributions', () => {
     let seenAuth = '';
     const f = fakeFetch((url, init) => {
       seenUrl = url;
-      seenAuth = String((init?.headers as Record<string, string>).Authorization);
+      seenAuth = String(((init?.headers ?? {}) as Record<string, string>).Authorization);
       return { status: 200, body: [{ id: 'c1', repair_job_id: 'j1', created_at: '2026-09-05T10:00:00Z' }, { id: 'c2', repair_job_id: null, created_at: 'x' }, { nema: 'id' }] };
     });
     const out = await fetchActiveCorpusContributions(cfg, 'jwt', f);
