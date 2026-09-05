@@ -165,6 +165,25 @@ describe('frontMatterNames', () => {
     expect(frontMatterNames(paras('Formalni kriteriji oblikovanja akademskih radova'))).toEqual([]);
   });
 
+  it('hvata ime iza uloge nositelj/nositeljica i voditelj/voditeljica (2026-09-05: jedan od 6 praznih rjecnika)', () => {
+    expect(frontMatterNames(paras('Nositeljica kolegija: doc. dr. sc. Ana Anić'))).toContain('Ana Anić');
+    expect(frontMatterNames(paras('Voditelj: prof. dr. sc. Ivan Ivić'))).toContain('Ivan Ivić');
+  });
+
+  it('hvata ime VELIKIM slovima iza uloge, ali NE samostalan odlomak velikim slovima', () => {
+    expect(frontMatterNames(paras('MENTOR: IVAN IVIĆ'))).toContain('IVAN IVIĆ');
+    expect(frontMatterNames(paras('Mentor: prof. dr. sc. ANA ANIĆ'))).toContain('ANA ANIĆ');
+    // Izmjereno 2026-09-05: od 42 samostalna kandidata velikim slovima na 195 radova, 26 nisu imena.
+    expect(frontMatterNames(paras('MEĐUNARODNI ODNOSI'))).toEqual([]);
+    // Placeholder s predloska nije osoba.
+    expect(frontMatterNames(paras('Mentor: IME PREZIME'))).toEqual([]);
+  });
+
+  it('titula se skida samo kao cijela rijec: "dr" u Andrea i "ing" u Ingrid ne raskomadaju ime', () => {
+    expect(frontMatterNames(paras('Mentor: dr. sc. Andrea Anić'))).toContain('Andrea Anić');
+    expect(frontMatterNames(paras('Studentica: Ingrid Ivić'))).toContain('Ingrid Ivić');
+  });
+
   it('ime s naslovnice ulazi u rjecnik i nestaje iz izlaza', () => {
     const p = {
       'docProps/core.xml': '<cp:coreProperties></cp:coreProperties>',

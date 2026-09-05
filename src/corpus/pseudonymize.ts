@@ -70,13 +70,17 @@ const NOT_A_NAME = new Set(
     'MENTOR', 'MENTORICA', 'KOMENTOR', 'STUDENT', 'STUDENTICA', 'AUTOR', 'KANDIDAT',
     'POLITICKIH', 'POLITIČKIH', 'ZNANOSTI', 'EKONOMSKI', 'PRAVNI', 'FILOZOFSKI', 'GRAFICKI', 'GRAFIČKI',
     'PRIJEDIPLOMSKI', 'PREDDIPLOMSKI', 'INTEGRIRANI', 'STRUCNI', 'STRUČNI', 'GODINA', 'AKADEMSKA',
+    // Placeholder s predloska naslovnice ('IME PREZIME'), nije osoba.
+    'IME', 'PREZIME',
   ],
 );
 
 /** Titule koje stoje uz ime, pa ih se ne smije pobrkati sa samim imenom. */
-const TITLE_TOKENS = /(?:prof|doc|dr|sc|mr|mag|univ|spec|izv|red|ing|bacc|dipl)\.?/gi;
+const TITLE_TOKENS = /\b(?:prof|doc|dr|sc|mr|mag|univ|spec|izv|red|ing|bacc|dipl)\.?(?=\s|$)/gi;
 
 const NAME_WORD = '[A-ZČĆŽŠĐ][a-zčćžšđ]{2,}';
+/** Ime VELIKIM slovima, kako ga naslovnice cesto pisu; koristi se SAMO iza oznake uloge (vidi frontMatterNames). */
+const UPPER_WORD = '[A-ZČĆŽŠĐ]{2,}';
 
 /**
  * Imena koja postoje SAMO u vidljivom tekstu (naslovnica), ne u metapodacima.
@@ -97,7 +101,7 @@ export function frontMatterNames(documentXml: string): string[] {
     .filter(Boolean);
 
   const out = new Set<string>();
-  const roleRe = new RegExp(`(?:mentor|mentorica|komentor|student|studentica|autor|kandidat|kandidatkinja)\\s*:?\\s*(.{0,60})`, 'i');
+  const roleRe = new RegExp(`(?:mentor|mentorica|komentor|student|studentica|autor|kandidat|kandidatkinja|nositelj|nositeljica|voditelj|voditeljica)\\s*:?\\s*(.{0,60})`, 'i');
 
   for (const text of paragraphs) {
     const role = roleRe.exec(text);
@@ -105,6 +109,13 @@ export function frontMatterNames(documentXml: string): string[] {
       const cleaned = role[1].replace(TITLE_TOKENS, ' ');
       const m = new RegExp(`${NAME_WORD}(?:\\s+${NAME_WORD}){1,2}`).exec(cleaned);
       if (m && !m[0].split(/\s+/).some((w) => NOT_A_NAME.has(w.toUpperCase()))) out.add(m[0].trim());
+      // Ime VELIKIM slovima iza uloge ("MENTOR: IVAN IVIĆ"): izmjereno 2026-09-05 na jednom od 6 praznih
+      // rjecnika. Samostalan odlomak velikim slovima se NE uzima: od 42 takva kandidata na 195 radova 26 nije
+      // bilo ime (imena studija i smjera), pa bi zamjena kvarila naslovnicu, a ne stitila osobu.
+      if (!m) {
+        const up = new RegExp(`${UPPER_WORD}(?:\\s+${UPPER_WORD}){1,2}`).exec(cleaned);
+        if (up && !up[0].split(/\s+/).some((w) => NOT_A_NAME.has(w))) out.add(up[0].trim());
+      }
     }
     // Odlomak koji je SAMO ime.
     const solo = new RegExp(`^${NAME_WORD}(?:\\s+${NAME_WORD}){1,2}$`).exec(text.replace(TITLE_TOKENS, '').trim());
