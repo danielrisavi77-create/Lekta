@@ -63,6 +63,22 @@ export const PROJECTIONS = [
     regenerate: 'npm run closed-loop',
   },
   {
+    // Popis redaka sintetickog korpusa. Izvor su KATALOG i RUTIRANJE, pa se manifest mijenja i kad
+    // se ne dirne nijedan generator: dovoljno je da jedinica dobije profil ili da se program preimenuje.
+    id: 'synthetic-corpus-manifest',
+    artifacts: ['data/verification/synthetic-corpus-manifest.json'],
+    sources: [
+      'data/catalog/zagreb-catalog.json',
+      'data/profiles/verified-profiles-index.json',
+      'data/profiles/verified-profiles-heavy.json',
+      'src/ui/work-selection.ts',
+      'src/profiles/compose-profile.ts',
+      'scripts/corpus-gen/rows.mts',
+      'scripts/corpus-gen/plan-rows.mts',
+    ],
+    regenerate: 'npm run corpus-gen:rows -- --write',
+  },
+  {
     id: 'real-corpus',
     artifacts: ['docs/generated/repair-real-corpus.json'],
     sources: ['src/repair', 'src/analysis', 'tests/real-corpus/harness.ts'],
