@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.",
   "summary": {
-    "documentCount": 2,
+    "documentCount": 3,
     "fixerCount": 12,
     "deadCount": 4,
     "dead": [
@@ -15,33 +15,35 @@
   "fixers": [
     {
       "fixerId": "bibliography-repair-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": []
     },
     {
       "fixerId": "citation-bibliography-sync-fixer",
-      "requested": 2,
+      "requested": 3,
       "changed": 0,
       "reasons": {
-        "no-target": 2
+        "no-target": 3
       },
       "deadOn": [
         "fpzg--final--prijediplomski--neuredan.docx",
-        "fpzg--final--prijediplomski--uskladjen.docx"
+        "fpzg--final--prijediplomski--uskladjen.docx",
+        "fpzg--final--prijediplomski--word.docx"
       ]
     },
     {
       "fixerId": "consistency-fixer",
-      "requested": 2,
+      "requested": 3,
       "changed": 0,
       "reasons": {
-        "no-target": 2
+        "no-target": 3
       },
       "deadOn": [
         "fpzg--final--prijediplomski--neuredan.docx",
-        "fpzg--final--prijediplomski--uskladjen.docx"
+        "fpzg--final--prijediplomski--uskladjen.docx",
+        "fpzg--final--prijediplomski--word.docx"
       ]
     },
     {
@@ -60,15 +62,15 @@
     },
     {
       "fixerId": "field-integrity-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": []
     },
     {
       "fixerId": "final-document-inspector-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": []
     },
@@ -85,27 +87,32 @@
     },
     {
       "fixerId": "link-doi-fixer",
-      "requested": 2,
+      "requested": 3,
       "changed": 0,
       "reasons": {
-        "no-target": 2
+        "no-target": 3
       },
       "deadOn": [
         "fpzg--final--prijediplomski--neuredan.docx",
-        "fpzg--final--prijediplomski--uskladjen.docx"
+        "fpzg--final--prijediplomski--uskladjen.docx",
+        "fpzg--final--prijediplomski--word.docx"
       ]
     },
     {
       "fixerId": "required-section-fixer",
-      "requested": 2,
+      "requested": 3,
       "changed": 2,
-      "reasons": {},
-      "deadOn": []
+      "reasons": {
+        "unsupported-structure": 1
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--word.docx"
+      ]
     },
     {
       "fixerId": "section-surgery-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": []
     },
@@ -229,9 +236,60 @@
       ],
       "regresije": [],
       "integrityFailure": null
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--word.docx",
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "paloPrije": [
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "section-surgery-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "required-section-fixer",
+          "reason": "unsupported-structure"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-06T21:47:21.143Z",
-  "generatedFromCommit": "25dad2e28f1b114df2d6dd7b4302fed9a8596bd8",
+  "generatedAt": "2026-09-06T22:42:47.282Z",
+  "generatedFromCommit": "4c50a22674ce378e216ef25f1925dc29b7be2ed4",
   "generator": "npm run repair-net -- --write"
 }

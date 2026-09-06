@@ -22,11 +22,9 @@ import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { enumerateRows, composedRulesFor, type CorpusRow } from './rows.mts';
 import { buildFodt, type ProfileRules } from './prose-scenario.mts';
-import { applyMutations, shapeForMutation, MUTATIONS } from './mutations.mts';
-import { validateProseBody, wordCount, type ProseBody } from '../../src/corpus/prose-schema';
-import { detectShapes, presentShapes, verifyShapeClaims } from '../../src/corpus/docx-shapes';
-import { readZip } from '../../src/repair/zip-codec';
-import { TITLE_PAGE_TEMPLATES, resolveTemplate, ensureTemplatesHeavy } from '../../src/title-pages/template-loader';
+import { applyMutations, MUTATIONS } from './mutations.mts';
+import { validateProseBody, type ProseBody } from '../../src/corpus/prose-schema';
+import { titleLinesFor, emitSidecar } from './emit.mts';
 
 const ROOT = resolve(join(dirname(fileURLToPath(import.meta.url)), '..', '..'));
 const KORPUS = process.env.LEKTA_SYNTHETIC_CORPUS || join('C:', 'Users', 'PC', 'Desktop', 'Lekta-korpus', '04-sintetski');
@@ -66,57 +64,6 @@ function convert(soffice: string, fodtPath: string, outDir: string): string {
   return produced;
 }
 
-/**
- * Redci naslovnice iz LEKTINA predloska.
- *
- * Naslovnica je jedina fakultetska dimenzija koju proza ne nosi, i jedina po kojoj se vecina redaka
- * uopce razlikuje: izmjereno 2026-09-06, 720 redaka daje samo 163 razlicita skupa pravila tijela.
- * Zato se uzima iz predloska, po ULOGAMA koje predlozak propisuje, a ne po nasem redoslijedu.
- */
-async function titleLines(row: CorpusRow, body: ProseBody): Promise<{ lines: string[]; templateId: string | null }> {
-  await ensureTemplatesHeavy();
-  const t = resolveTemplate(TITLE_PAGE_TEMPLATES, row.unitId, row.workType as never) as
-    | { id: string; elements?: Array<{ role: string; fixedText?: string; uppercase?: boolean }> }
-    | null;
-  const natpis: Record<string, string> = {
-    seminar: 'SEMINARSKI RAD',
-    final: 'ZAVRŠNI RAD',
-    graduate: 'DIPLOMSKI RAD',
-    specialist: 'SPECIJALISTIČKI RAD',
-    doctoral: 'DOKTORSKI RAD',
-    article: 'ZNANSTVENI ČLANAK',
-    project: 'PROJEKTNI RAD',
-  };
-  const vrijednost: Record<string, string> = {
-    university: 'Sveučilište u Zagrebu',
-    faculty: row.unitName,
-    study: row.program,
-    author: body.titlePage.author,
-    title: body.titlePage.title,
-    subtitle: '',
-    worktype: body.titlePage.label || natpis[row.workType] || 'RAD',
-    mentor: `Mentor: ${body.titlePage.mentor}`,
-    comentor: '',
-    placeyear: 'Zagreb, 2026.',
-  };
-  if (!t?.elements?.length) {
-    // Bez predloska se NE izmislja fakultetski raspored; uzima se neutralan minimum i to se biljezi.
-    return {
-      lines: [row.unitName, row.program, '', body.titlePage.author, '', body.titlePage.title, '',
-        vrijednost.worktype, '', vrijednost.mentor, '', vrijednost.placeyear],
-      templateId: null,
-    };
-  }
-  const lines: string[] = [];
-  for (const e of t.elements) {
-    const v = e.fixedText ?? vrijednost[e.role] ?? '';
-    if (!v) continue;
-    lines.push(e.uppercase ? v.toUpperCase() : v);
-    lines.push('');
-  }
-  return { lines, templateId: t.id };
-}
-
 /** Mutacije koje se primjenjuju na "neuredan" primjerak; sve iz kataloga. */
 const NEUREDNE = MUTATIONS.map((m) => m.id);
 
@@ -137,7 +84,7 @@ async function generirajRedak(row: CorpusRow, messy: boolean, outDir: string, so
   }
 
   const rules = composedRulesFor(row) as ProfileRules;
-  const { lines, templateId } = await titleLines(row, body);
+  const { lines, templateId } = await titleLinesFor(row, body);
   const osnovni = buildFodt(body, { titleLines: lines, rules });
   const { fodt, counters } = messy ? applyMutations(osnovni, NEUREDNE) : { fodt: osnovni, counters: {} };
 
@@ -148,68 +95,28 @@ async function generirajRedak(row: CorpusRow, messy: boolean, outDir: string, so
   const docxPath = convert(soffice, fodtPath, outDir);
   rmSync(fodtPath, { force: true });
 
-  const bytes = new Uint8Array(readFileSync(docxPath));
-  const shapes = detectShapes(await readZip(bytes));
-  const claimed = presentShapes(shapes);
-  const presuda = verifyShapeClaims(claimed, shapes, counters, shapeForMutation());
+  // Mjerenje oblika, provjera tvrdnji i sidecar idu kroz ZAJEDNICKI izlazni sloj (`emit.mts`), isti
+  // koji koristi Word trak. Bez toga bi svaki alat imao vlastiti sidecar, pa bi se razlika medju
+  // trakama citala kao razlika medju ALATIMA, a bila bi razlika medju nasim dvjema izvedbama.
+  const res = await emitSidecar({
+    docxPath,
+    row,
+    body,
+    templateId,
+    tool: 'libreoffice',
+    toolPath: soffice,
+    command: `npx vite-node scripts/corpus-gen/generate.mts -- --row ${row.id}${messy ? ' --messy' : ''}`,
+    counters,
+    requireToc: rules.requireToc !== false,
+  });
 
-  /**
-   * Sto alat NE MOZE proizvesti, imenovano po osi.
-   *
-   * Izmjereno 2026-09-06: `soffice --convert-to docx` ne pise TOC polje UOPCE. Izlaz ima nula
-   * `w:instrText`, `w:fldChar` i `w:fldSimple`, a `text:table-of-content` postane staticni popis.
-   * Isto vrijedi za vec commitanu fixturu `lo-fpzg-zavrsni-uskladjen.docx`, kojoj ime obecava vise
-   * nego sto nosi.
-   *
-   * Posljedica se ne smije presutjeti: primjerak koji se zove "uskladjen" ne moze proci os sadrzaja
-   * ako je profil trazi. Celija koju alat ne pokriva je NEPOKRIVENA, nikad "prolazi" (F2.2). Za zivo
-   * polje treba Word COM (`TablesOfContents.Add`), sto je zaseban trak.
-   */
-  const ogranicenja: string[] = [];
-  if (rules.requireToc !== false && shapes['toc/polje'] === 0) {
-    ogranicenja.push(
-      'toc: LibreOffice ne pise TOC polje pri pretvorbi (0 instrText/fldChar/fldSimple); ' +
-        'os sadrzaja je NEPOKRIVENA ovim alatom, za zivo polje treba Word COM',
-    );
-  }
-
-  const sidecar = {
-    profileId: row.routedProfileId,
-    // DVA POJASA. `synthetic` je prvi filtar u `sidecarAdmitted`, `track` je bijeli popis; dokument s
-    // nasom prozom ne smije potkrijepiti tvrdnju "dokazano na stvarnom studentskom radu".
-    synthetic: true,
-    track: 'authored',
-    row: {
-      id: row.id,
-      unitId: row.unitId,
-      workType: row.workType,
-      level: row.level,
-      program: row.program,
-      variant: row.variant,
-      fallbackFamily: row.fallbackFamily,
-      titlePageTemplateId: templateId,
-    },
-    prose: { id: body.id, words: wordCount(body), authoring: body.authoring },
-    provenance: {
-      tool: 'libreoffice',
-      toolPath: soffice,
-      os: `${process.platform} ${process.arch}`,
-      command: `npx vite-node scripts/corpus-gen/generate.mts -- --row ${row.id}${messy ? ' --messy' : ''}`,
-      generatedAt: new Date().toISOString(),
-    },
-    mutations: counters,
-    shapes: { claimed },
-    toolLimitations: ogranicenja,
-  };
-  writeFileSync(docxPath.replace(/\.docx$/i, '.json'), JSON.stringify(sidecar, null, 2) + '\n', 'utf8');
-
-  const problemi = [...presuda.missing, ...presuda.unknown, ...presuda.underDetected];
-  const oznaka = problemi.length ? 'NALAZ' : 'ok   ';
-  console.log(`  ${oznaka} ${naziv.padEnd(48)} ${String(bytes.length).padStart(7)} B  oblika: ${claimed.length}`);
+  const bytes = readFileSync(docxPath).length;
+  const oznaka = res.problems.length ? 'NALAZ' : 'ok   ';
+  console.log(`  ${oznaka} ${naziv.padEnd(48)} ${String(bytes).padStart(7)} B  oblika: ${res.claimed.length}`);
   // Ogranicenje alata NIJE nalaz (ne obara prolaz), ali se ispisuje svaki put: presucena granica se
   // brzo procita kao pokrivenost.
-  for (const o of ogranicenja) console.log(`        NEPOKRIVENO ${o}`);
-  for (const p of problemi) {
+  for (const o of res.limitations) console.log(`        NEPOKRIVENO ${o}`);
+  for (const p of res.problems) {
     console.error(`        ${p}`);
     process.exitCode = 1;
   }

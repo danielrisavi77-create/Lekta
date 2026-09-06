@@ -22,27 +22,26 @@
     }
   },
   "provenance": {
-    "tool": "libreoffice",
-    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "tool": "word",
+    "toolPath": "C:\\Program Files (x86)\\Microsoft Office\\Office14\\WINWORD.EXE",
     "os": "win32 x64",
-    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row fpzg--final--prijediplomski",
-    "generatedAt": "2026-09-06T22:42:02.379Z"
+    "command": "npm run corpus-gen:word -- --row fpzg--final--prijediplomski",
+    "generatedAt": "2026-09-06T22:38:00.814Z"
   },
   "mutations": {},
   "shapes": {
     "claimed": [
-      "zip/bit3",
       "zip/deflate",
-      "stil/tijelo-nije-normal",
+      "tab/tocke-vodic",
+      "rsid/svaki-odlomak",
+      "velicina/sz-mjesovito",
       "xml/space-preserve",
       "tekst/kosi-padez",
       "tekst/biblio-kandidat",
       "tekst/naslovnica-natpis",
-      "toc/rucno-tipkan",
-      "proizvodjac/libreoffice"
+      "toc/polje",
+      "proizvodjac/word"
     ]
   },
-  "toolLimitations": [
-    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
-  ]
+  "toolLimitations": []
 }

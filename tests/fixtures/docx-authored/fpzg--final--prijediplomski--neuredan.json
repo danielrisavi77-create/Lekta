@@ -26,7 +26,7 @@
     "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
     "os": "win32 x64",
     "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row fpzg--final--prijediplomski --messy",
-    "generatedAt": "2026-09-06T21:21:38.394Z"
+    "generatedAt": "2026-09-06T22:42:05.553Z"
   },
   "mutations": {
     "tabInHeading": 17,
@@ -58,6 +58,6 @@
     ]
   },
   "toolLimitations": [
-    "toc: LibreOffice ne pise TOC polje pri pretvorbi (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom, za zivo polje treba Word COM"
+    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
   ]
 }
