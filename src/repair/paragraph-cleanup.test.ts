@@ -544,3 +544,61 @@ describe('stripOrphanedEmptyParagraphs: front-matter granica trazi znamenku razi
     expect(emptyCount(out.xml)).toBe(6 + 1);
   });
 });
+
+// --- Stil tijela se RAZRJESAVA, ne pretpostavlja (izmjereno 2026-09-06) ----------------------
+//
+// `empty-paragraph-fixer` je bio trajni no-op na svemu sto je pisano LibreOfficeom: ondje tijelo rada
+// ima stil `BodyText`, a cuvar je usporedjivao doslovno s "Normal", pa je SVAKI prazan odlomak nosio
+// "ne-Normal" stil i nijedan se nije smio dirati. Izmjereno na generiranom radu: 39 praznih odlomaka,
+// od toga 30 sa `BodyText`. Korisnik je vidio nalaz, dobio ponudjen popravak i nije dobio nista.
+describe('stil tijela se razrjesava iz dokumenta, ne pretpostavlja kao "Normal"', () => {
+  // Dovoljno teksta u `BodyText` da razrjesitelj to prepozna kao dominantni stil tijela.
+  const BODY = (t: string) => `<w:p><w:pPr><w:pStyle w:val="BodyText"/></w:pPr><w:r><w:t>${t}</w:t></w:r></w:p>`;
+  const BODY_EMPTY = '<w:p><w:pPr><w:pStyle w:val="BodyText"/></w:pPr></w:p>';
+  const HEADING_EMPTY = '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr></w:p>';
+  const STYLES =
+    '<w:styles><w:docDefaults/>' +
+    '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>' +
+    '<w:style w:type="paragraph" w:styleId="BodyText"><w:name w:val="Body Text"/></w:style>' +
+    '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/>' +
+    '<w:pPr><w:outlineLvl w:val="0"/></w:pPr></w:style></w:styles>';
+  const tijelo = (t: string) => BODY(`${t} ${'rijec '.repeat(30)}`);
+
+  it('prazni odlomci u stilu tijela se kolabiraju kad su stilovi predani', () => {
+    const xml = `<w:body>${tijelo('Prvi')}${BODY_EMPTY}${BODY_EMPTY}${BODY_EMPTY}${tijelo('Drugi')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml, STYLES);
+    expect(out.applied).toBe(true);
+    expect(out.paragraphsRemoved).toBe(2);
+    expect((out.xml.match(/<w:pStyle w:val="BodyText"\/><\/w:pPr><\/w:p>/g) ?? []).length).toBe(1);
+  });
+
+  /**
+   * NEGATIVNA KONTROLA nad samim zahvatom: bez stilova se ponasa TOCNO kao prije. Bez ove tvrdnje
+   * ne bi se vidjelo je li novo ponasanje doslo od razrjesbe ili od nekog drugog opustanja cuvara.
+   */
+  it('bez predanih stilova ostaje staro ponasanje: `BodyText` se ne dira', () => {
+    const xml = `<w:body>${tijelo('Prvi')}${BODY_EMPTY}${BODY_EMPTY}${BODY_EMPTY}${tijelo('Drugi')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.applied).toBe(false);
+    expect(out.xml).toBe(xml);
+  });
+
+  /**
+   * DRUGA NEGATIVNA KONTROLA: razrjesba NE smije otvoriti vrata naslovima. `Heading1` nosi
+   * `outlineLvl`, pa ga razrjesitelj po konstrukciji nikad ne proglasi stilom tijela.
+   */
+  it('prazni odlomci u stilu NASLOVA ostaju netaknuti i uz predane stilove', () => {
+    const xml = `<w:body>${tijelo('Prvi')}${HEADING_EMPTY}${HEADING_EMPTY}${tijelo('Drugi')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml, STYLES);
+    expect(out.applied).toBe(false);
+    expect((out.xml.match(/w:val="Heading1"/g) ?? []).length).toBe(2);
+  });
+
+  it('"Normal" i dalje kvalificira, neovisno o razrijesenom stilu tijela', () => {
+    const NORMAL_EMPTY = '<w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr></w:p>';
+    const xml = `<w:body>${tijelo('Prvi')}${NORMAL_EMPTY}${NORMAL_EMPTY}${NORMAL_EMPTY}${tijelo('Drugi')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml, STYLES);
+    expect(out.applied).toBe(true);
+    expect(out.paragraphsRemoved).toBe(2);
+  });
+});

@@ -14,9 +14,13 @@
 //   i strukturiranih kontrola (w:sdt), balansirano prema ugnjezdenju (ista logika
 //   kao run-level.ts, ovdje namjerno reimplementirana lokalno da ovaj modul ostane
 //   potpuno neovisan o run-level.ts, koji je dio zasticenog parser/audit sloja).
-// - Odlomak sa stilom (w:pStyle) razlicitim od "Normal" se ne dira: naslovi, citati,
+// - Odlomak sa stilom (w:pStyle) koji NIJE stil tijela rada se ne dira: naslovi, citati,
 //   natpisi, popisi cesto imaju namjerno prazan sadrzaj (npr. naslov bez teksta kao
 //   privremeni placeholder) i njihov polozaj u strukturi dokumenta nosi znacenje.
+//   Stil tijela se RAZRJESAVA iz dokumenta (`resolveBodyParagraphStyleId`), ne pretpostavlja kao
+//   "Normal": u LibreOffice izlazu tijelo ima `BodyText`, pa je doslovna usporedba s "Normal"
+//   cinila cijelu tu obitelj dokumenata nedodirljivom i fixer je ondje bio trajni no-op
+//   (izmjereno 2026-09-06: 30 od 39 praznih odlomaka nosilo je `BodyText`).
 // - Odlomak ciji w:pPr sadrzi ugnjezdeni w:sectPr se NIKAD ne dira: Word sprema prijelom
 //   odjeljka upravo tako (u pPr POSLJEDNJEG odlomka svakog ne-zavrsnog odjeljka), pa
 //   brisanje takvog odlomka tiho spaja dva odjeljka (gubi velicinu stranice, marginale,
@@ -39,6 +43,11 @@
 // Kad niz kvalificira (duljina >= 2), PRVI odlomak u nizu prezivljava netaknut, a
 // preostali se brisu; usamljen kvalificirajuci odlomak (duljina niza 1) se NIKAD ne
 // dira. Sve izvan obrisanih raspona ostaje bajt-identicno.
+
+// Nastavak `.ts` je OBAVEZAN: ovaj modul kroz `apply-fixers` ulazi u Edge funkciju `repair-docx`,
+// a Deno uvoz bez nastavka odbija. `tsc` to ne vidi (`include: ["src"]` ne pokriva `supabase/`), pa
+// bi bez `npm run check:edge` greska izasla tek na deployu.
+import { resolveBodyParagraphStyleId } from './xml-patch.ts';
 
 export interface ParagraphCleanupResult {
   xml: string;
@@ -85,10 +94,25 @@ function insideRanges(offset: number, ranges: Array<[number, number]>): boolean 
   return ranges.some(([start, end]) => offset >= start && offset < end);
 }
 
-/** Ima li odlomak w:pStyle razlicit od "Normal" (takve nikad ne kvalificiraju kao visak). */
-function hasNonNormalStyle(paragraph: string): boolean {
+/**
+ * Nosi li odlomak stil koji NIJE stil tijela rada (takvi nikad ne kvalificiraju kao visak).
+ *
+ * `bodyStyleId` je STVARNI stil tijela ovog dokumenta, razrijesen iz teksta, a ne pretpostavljeni
+ * "Normal". Bez njega je provjera bila doslovna usporedba s "Normal", sto je cijelu obitelj
+ * dokumenata pisanih LibreOfficeom cinilo nedodirljivom: ondje tijelo ima `BodyText`, pa je SVAKI
+ * prazan odlomak nosio "ne-Normal" stil i fixer je bio trajni no-op.
+ *
+ * Izmjereno 2026-09-06 na generiranom radu (`fpzg--final--prijediplomski--neuredan.docx`): 39 praznih
+ * odlomaka, od toga 30 sa `w:pStyle w:val="BodyText"`. Korisnik je vidio nalaz "Prazni odlomci",
+ * dobio ponudjen popravak i nije dobio nista.
+ *
+ * Isti korijen je repozitorij vec platio kroz laznu tvrdnju popravka o fontu, i rijesio ga upravo
+ * `resolveBodyParagraphStyleId`; ovdje se ta razrjesba samo ponovno koristi umjesto da se pogadja.
+ */
+function hasNonBodyStyle(paragraph: string, bodyStyleId: string | null): boolean {
   const m = paragraph.match(/<w:pStyle\b[^>]*w:val="([^"]*)"/);
-  return !!m && m[1] !== 'Normal';
+  if (!m) return false;
+  return m[1] !== 'Normal' && m[1] !== bodyStyleId;
 }
 
 /** Elementi cija prisutnost sama po sebi diskvalificira odlomak kao "prazan". */
@@ -173,8 +197,8 @@ function startsAppendixSection(paragraph: string): boolean {
  * odjeljka, bez ugradjenog/nevidljivog sadrzaja i bez vidljivog teksta. Poziva
  * se SAMO nad odlomcima koji vec nisu u zasticenoj zoni (tablica/okvir/sdt).
  */
-function qualifiesAsOrphanedEmpty(paragraph: string): boolean {
-  if (hasNonNormalStyle(paragraph)) return false;
+function qualifiesAsOrphanedEmpty(paragraph: string, bodyStyleId: string | null): boolean {
+  if (hasNonBodyStyle(paragraph, bodyStyleId)) return false;
   if (hasNestedSectPr(paragraph)) return false;
   if (hasVisibleParagraphProps(paragraph)) return false;
   if (FORBIDDEN_CONTENT.test(paragraph)) return false;
@@ -255,7 +279,13 @@ function frontMatterRange(documentXml: string): Array<[number, number]> {
  * netaknuto. applied=false znaci da nije bilo sto kolabirati (fail-safe, dokument
  * bajt-identican ulazu).
  */
-export function stripOrphanedEmptyParagraphs(documentXml: string): ParagraphCleanupResult {
+export function stripOrphanedEmptyParagraphs(
+  documentXml: string,
+  stylesXml?: string,
+): ParagraphCleanupResult {
+  // Bez `stylesXml` se ponasa tocno kao prije (samo "Normal" kvalificira): stari pozivi i testovi
+  // ostaju netaknuti, a novo ponasanje se dobiva tek kad pozivatelj preda stilove.
+  const bodyStyleId = stylesXml ? resolveBodyParagraphStyleId(documentXml, stylesXml) : null;
   const protectedRanges = [
     ...balancedRanges(documentXml, 'w:txbxContent'),
     ...balancedRanges(documentXml, 'w:tbl'),
@@ -292,7 +322,7 @@ export function stripOrphanedEmptyParagraphs(documentXml: string): ParagraphClea
         // sam ugnjezduje): unutarnji zatvaraci sijeku non-greedy match pa bi se dio
         // pogresno obradio kao obicno tijelo. Isti guard kao run-level.ts.
         const nestedProtected = paragraph.includes('<w:txbxContent') || paragraph.includes('<w:sdt');
-        if (!nestedProtected) qualifies = qualifiesAsOrphanedEmpty(paragraph);
+        if (!nestedProtected) qualifies = qualifiesAsOrphanedEmpty(paragraph, bodyStyleId);
       }
     }
 
