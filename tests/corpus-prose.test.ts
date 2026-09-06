@@ -35,12 +35,12 @@ function validBody(): ProseBody {
     keywords: { hr: ['oblikovanje', 'norme', 'akademski rad'], en: ['formatting', 'norms', 'thesis'] },
     chapters: [{ level: 1, title: '1. Uvod', paragraphs: odlomci }],
     tables: [
-      { n: 1, caption: 'Tablica 1. Raspodjela po godinama', rows: [['Godina', 'Broj'], ['2024', '12']] },
-      { n: 2, caption: 'Tablica 2. Usporedba kriterija', rows: [['Kriterij', 'Vrijednost'], ['Prored', '1,5']] },
+      { n: 1, caption: 'Tablica 1. Raspodjela po godinama', rows: [['Godina', 'Broj'], ['2024', '12']], source: 'Izrada autora.' },
+      { n: 2, caption: 'Tablica 2. Usporedba kriterija', rows: [['Kriterij', 'Vrijednost'], ['Prored', '1,5']], source: 'Izrada autora.' },
     ],
     figures: [
-      { n: 1, caption: 'Slika 1. Shema postupka' },
-      { n: 2, caption: 'Slika 2. Odstupanja po jedinicama' },
+      { n: 1, caption: 'Slika 1. Shema postupka', source: 'Izrada autora.' },
+      { n: 2, caption: 'Slika 2. Odstupanja po jedinicama', source: 'Izrada autora.' },
     ],
     footnotes: [],
     bibliography: Array.from({ length: 16 }, (_, i) => ({
@@ -133,5 +133,28 @@ describe('shema proze: svaki uvjet stvarno grize', () => {
     const body = validBody();
     body.authoring = { method: '', tool: '', date: '' };
     expect(validateProseBody(body).join(' ')).toMatch(/authoring/);
+  });
+});
+
+// --- Izvor ispod prikaza (nalog pilota 2026-09-06) --------------------------------------------
+//
+// Provjera `element.source` trazi odlomak koji pocinje s "Izvor:" po svakom prikazu; pilot je vratio
+// "0 oznaka Izvor/Source za 6 elemenata". Da polje ostane neobavezno, svih 60 tijela nosilo bi isti
+// nedostatak, pa bi mjerenje mjerilo nas propust, ne motor.
+describe('shema proze: izvor je obavezan po prikazu', () => {
+  it('tablica bez izvora je nalaz', () => {
+    const body = validBody();
+    body.tables[0].source = '';
+    expect(validateProseBody(body).join(' ')).toMatch(/tablica 1 nema izvor/);
+  });
+
+  it('slika bez izvora je nalaz', () => {
+    const body = validBody();
+    body.figures[1].source = '   ';
+    expect(validateProseBody(body).join(' ')).toMatch(/slika 2 nema izvor/);
+  });
+
+  it('prikazi s izvorom ne proizvode nalaz (baseline)', () => {
+    expect(validateProseBody(validBody())).toEqual([]);
   });
 });

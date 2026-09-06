@@ -31,15 +31,28 @@ export interface ProseChapter {
   paragraphs: string[];
 }
 
+/**
+ * Prikaz nosi i IZVOR, jer ga fakultetsko pravilo trazi kao zaseban redak.
+ *
+ * Izmjereno 2026-09-06 na pilotu: provjera `element.source` trazi odlomak oblika `Izvor: ...` po
+ * svakom prikazu i vratila je "0 oznaka Izvor/Source za 6 elemenata". Da polje ostane neobavezno,
+ * svih 60 tijela nosilo bi isti nedostatak, pa bi mjerenje mjerilo nasu propust, ne motor.
+ *
+ * Izvor je SADRZAJ, ne struktura: zna ga samo autor rada, i Katedrin `fix_rules.py` ga izricito
+ * vodi kao nepopravljiv iz istog razloga. Zato ide u prozu, a ne u graditelja.
+ */
 export interface ProseTable {
   n: number;
   caption: string;
   rows: string[][];
+  /** Redak ispod prikaza; za vlastiti prikaz uobicajeno "Izrada autora." */
+  source: string;
 }
 
 export interface ProseFigure {
   n: number;
   caption: string;
+  source: string;
 }
 
 export interface ProseBody {
@@ -155,9 +168,11 @@ export function validateProseBody(body: ProseBody): string[] {
   if ((body.figures?.length ?? 0) < 2) push('manje od dvije slike');
   for (const t of body.tables ?? []) {
     if (!/^Tablica\s+\d+/.test(t.caption)) push(`natpis tablice ne pocinje "Tablica N": ${t.caption}`);
+    if (!t.source?.trim()) push(`tablica ${t.n} nema izvor; provjera element.source trazi redak "Izvor: ..."`);
   }
   for (const f of body.figures ?? []) {
     if (!/^Slika\s+\d+/.test(f.caption)) push(`natpis slike ne pocinje "Slika N": ${f.caption}`);
+    if (!f.source?.trim()) push(`slika ${f.n} nema izvor; provjera element.source trazi redak "Izvor: ..."`);
   }
 
   if (body.family === 'legal' && (body.footnotes?.length ?? 0) < 3) {

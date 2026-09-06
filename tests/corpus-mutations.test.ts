@@ -36,8 +36,8 @@ function proba(): ProseBody {
       { level: 2, title: '2.1. Pojmovi', paragraphs: ['Odlomak o pojmovima.'] },
       { level: 1, title: '3. Zakljucak', paragraphs: ['Zakljucni odlomak.'] },
     ],
-    tables: [{ n: 1, caption: 'Tablica 1. Proba', rows: [['a', 'b']] }],
-    figures: [{ n: 1, caption: 'Slika 1. Proba' }],
+    tables: [{ n: 1, caption: 'Tablica 1. Proba', rows: [['a', 'b']], source: 'Izrada autora.' }],
+    figures: [{ n: 1, caption: 'Slika 1. Proba', source: 'Izrada autora.' }],
     footnotes: ['Biljeska.'],
     bibliography: [{ text: 'Anic, A. (2019). Naslov.', doiKind: 'none' }],
   };
@@ -174,5 +174,45 @@ describe('katalog mutacija: svaka stvarno mijenja izvor', () => {
   it('preslikavanje na oblike pokriva svaku mutaciju', () => {
     const map = shapeForMutation();
     for (const m of MUTATIONS) expect(map[m.id]).toBe(m.shape);
+  });
+});
+
+describe('graditelj: prikazi nose izvor i popise, jer to provjere traze', () => {
+  /**
+   * `element.source` broji odlomke koji POCINJU s "Izvor:" i trazi ih barem koliko ima prikaza
+   * (tablice + slike). Pilot je vratio "0 oznaka Izvor/Source za 6 elemenata".
+   */
+  it('svaki prikaz dobiva redak koji pocinje s "Izvor:"', () => {
+    const x = fodt();
+    const izvori = (x.match(/>Izvor: /g) ?? []).length;
+    const body = proba();
+    expect(izvori).toBe(body.tables.length + body.figures.length);
+  });
+
+  it('prefiks se ne udvostrucuje kad ga proza vec nosi', () => {
+    const body = proba();
+    body.tables[0].source = 'Izvor: Drzavni zavod za statistiku.';
+    const x = buildFodt(body, { titleLines: [], rules: PRAVILA });
+    expect(x).toContain('>Izvor: Drzavni zavod za statistiku.<');
+    expect(x).not.toContain('Izvor: Izvor:');
+  });
+
+  /**
+   * `element.lists` trazi SEKCIJU "Popis tablica" odnosno "Popis slika" kad dokument ima prikaze.
+   * To je struktura koju u stvarnom radu radi uredjivac, pa je gradi graditelj, ne proza.
+   */
+  it('dokument s prikazima dobiva popis tablica i popis slika', () => {
+    const x = fodt();
+    expect(x).toContain('>Popis tablica<');
+    expect(x).toContain('>Popis slika<');
+  });
+
+  it('bez prikaza nema ni popisa, da se ne izmislja prazna sekcija', () => {
+    const body = proba();
+    body.tables = [];
+    body.figures = [];
+    const x = buildFodt(body, { titleLines: [], rules: PRAVILA });
+    expect(x).not.toContain('Popis tablica');
+    expect(x).not.toContain('Popis slika');
   });
 });

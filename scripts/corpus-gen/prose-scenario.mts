@@ -113,7 +113,19 @@ function tocBlock(): string {
    </text:table-of-content>`;
 }
 
-function tableBlock(t: { n: number; caption: string; rows: string[][] }): string {
+/**
+ * Redak izvora ispod prikaza.
+ *
+ * Provjera `element.source` trazi odlomak koji POCINJE s "Izvor:" ili "Source:", jedan po prikazu
+ * (`sourceLines >= tables + images`). Prefiks se zato pise ovdje, a ne prepusta prozi: tekst iza
+ * dvotocke je autorov, oblik retka je struktura.
+ */
+function sourceLine(text: string): string {
+  const clean = String(text).replace(/^\s*(izvor|source)\s*:\s*/i, '');
+  return `   <text:p text:style-name="Natpis">Izvor: ${esc(clean)}</text:p>`;
+}
+
+function tableBlock(t: { n: number; caption: string; rows: string[][]; source: string }): string {
   const cols = Math.max(1, ...t.rows.map((r) => r.length));
   const redci = t.rows
     .map(
@@ -128,16 +140,45 @@ function tableBlock(t: { n: number; caption: string; rows: string[][] }): string
    <table:table table:name="Tablica${t.n}">
     <table:table-column table:number-columns-repeated="${cols}"/>
 ${redci}
-   </table:table>`;
+   </table:table>
+${sourceLine(t.source)}`;
 }
 
-function figureBlock(f: { n: number; caption: string }): string {
+function figureBlock(f: { n: number; caption: string; source: string }): string {
   return `   <text:p text:style-name="Text_20_body">
     <draw:frame draw:name="Slika${f.n}" text:anchor-type="as-char" svg:width="4cm" svg:height="3cm">
      <draw:image><office:binary-data>${PIXEL_PNG_BASE64}</office:binary-data></draw:image>
     </draw:frame>
    </text:p>
-   <text:p text:style-name="Natpis">${esc(f.caption)}</text:p>`;
+   <text:p text:style-name="Natpis">${esc(f.caption)}</text:p>
+${sourceLine(f.source)}`;
+}
+
+/**
+ * Popisi prikaza ("Popis tablica", "Popis slika").
+ *
+ * Provjera `element.lists` trazi SEKCIJU s tim imenom kad dokument ima prikaze, a profil to propisuje.
+ * Ovo je struktura koju u stvarnom radu generira uredjivac, ne autor, pa ide u graditelja, ne u prozu.
+ * Stavke se izvode iz natpisa koje proza vec nosi; nista se ne izmislja.
+ */
+function elementListsBlock(
+  tables: Array<{ n: number; caption: string }>,
+  figures: Array<{ n: number; caption: string }>,
+): string {
+  const blokovi: string[] = [];
+  if (tables.length) {
+    blokovi.push(
+      '   <text:h text:style-name="Heading_20_1" text:outline-level="1">Popis tablica</text:h>',
+      ...tables.map((t) => `   <text:p text:style-name="Text_20_body">${esc(t.caption)}</text:p>`),
+    );
+  }
+  if (figures.length) {
+    blokovi.push(
+      '   <text:h text:style-name="Heading_20_1" text:outline-level="1">Popis slika</text:h>',
+      ...figures.map((f) => `   <text:p text:style-name="Text_20_body">${esc(f.caption)}</text:p>`),
+    );
+  }
+  return blokovi.join('\n');
 }
 
 /** Fusnota kao inline biljeska; pravna obitelj bez njih ne moze mjeriti citatni motor. */
@@ -200,6 +241,7 @@ export function buildFodt(body: ProseBody, opts: BuildOptions): string {
     .join('\n');
 
   const prikazi = [...body.tables.map(tableBlock), ...body.figures.map(figureBlock)].join('\n');
+  const popisi = elementListsBlock(body.tables, body.figures);
 
   const literatura = [
     '   <text:h text:style-name="Heading_20_1" text:outline-level="1">Literatura</text:h>',
@@ -247,6 +289,7 @@ ${rules.requireToc === false ? '' : tocBlock()}
 ${sazetak}
 ${poglavlja}
 ${prikazi}
+${popisi}
 ${literatura}
   </office:text>
  </office:body>
