@@ -63,6 +63,21 @@ export const PROJECTIONS = [
     regenerate: 'npm run closed-loop',
   },
   {
+    // Mreza nad fixerima. Izvor je i sam MOTOR POPRAVKA: promjena u `src/repair` moze ugasiti fixer,
+    // a to je tocno ono sto mreza postoji da uhvati, pa artefakt mora zaostati kad se motor pomakne.
+    id: 'repair-net',
+    artifacts: ['docs/generated/repair-net.json'],
+    sources: [
+      'src/repair',
+      'src/analysis',
+      'src/ui/repair-item-assembly.ts',
+      'tests/fixtures/docx-authored',
+      'scripts/corpus-gen/net-core.mts',
+      'scripts/corpus-gen/repair-net.mts',
+    ],
+    regenerate: 'npm run repair-net -- --write',
+  },
+  {
     // Popis redaka sintetickog korpusa. Izvor su KATALOG i RUTIRANJE, pa se manifest mijenja i kad
     // se ne dirne nijedan generator: dovoljno je da jedinica dobije profil ili da se program preimenuje.
     id: 'synthetic-corpus-manifest',

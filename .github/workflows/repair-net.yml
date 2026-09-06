@@ -1,0 +1,42 @@
+# Mreza nad fixerima: svaki push provjerava je li koji fixer prestao raditi.
+#
+# Zasto ZASEBAN posao, a ne dio `npm run check`: mreza STVARNO vrti popravak (analiza -> applyFixers
+# -> ponovna analiza) nad svakim commitanim `authored` dokumentom, sto je desetak sekundi po
+# dokumentu. `check` mora ostati brz jer se vrti pri svakoj izmjeni; ovo je mjerenje motora, isti
+# razred kao `conformance.yml` i `repair-slow.yml`.
+#
+# Zasto uopce moze u CI: dokumenti su VEC napravljeni pravim alatima i commitani. LibreOffice i Word
+# na ubuntu runneru ne postoje, ali ovdje ni ne trebaju; generiranje je rucni korak na Windowsu.
+#
+# Ne dira ljestvicu dokaza: ulazne fixture nose `synthetic: true` i traku izvan dopustenih, pa ih
+# `sidecarAdmitted` odbija. Mreza mjeri MOTOR, ne pokrivenost fakulteta.
+name: repair-net
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  repair-net:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Izlazni kod 1 znaci NOV mrtav fixer izvan imenovanog popisa, ili fixer koji je ozivio a jos
+      # je na popisu. Oba su nalaz i oba moraju oboriti posao; izlazni kod 2 znaci da mjerenja nije
+      # ni bilo (nema direktorija ili nema dokumenata), sto je takodjer pad, ne tihi prolaz.
+      - name: mreza nad fixerima
+        run: npm run repair-net

@@ -27,6 +27,7 @@ import {
 } from '../src/ui/wizard-machine';
 import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
 import { DOCX_SHAPE_IDS, verifyShapeClaims, type DocxShapeCounts } from '../src/corpus/docx-shapes';
+import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -600,6 +601,55 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'real' }) &&
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'generated' }),
+  },
+  {
+    id: 'mreza/fixer-se-ugasi-a-nitko-ne-primijeti',
+    imitates:
+      'fixer prestane raditi (zatrazen je, ali vise nista ne mijenja) i to nitko ne vidi, jer nijedan ' +
+      'postojeci artefakt to ne mjeri: `closed-loop.json` sprema `requested` kao GOLI BROJ i odbacuje ' +
+      '`skippedReasons`, `repair-real-corpus.json` ima `offeredFixerIds` bez ijednog citatelja, a ' +
+      '`coverage-cells` klasificira staticki i nikad ne premjerava. Tocno taj razred je vec izmjeren: ' +
+      '`empty-paragraph-fixer` je bio trajni no-op na svemu pisanom LibreOfficeom, i nasao ga je tek ' +
+      'sinteticki korpus',
+    caught: () => {
+      const m = (dokument: string, zatrazeno: string[], promijenili: string[]): DocumentMeasurement => ({
+        dokument,
+        profileId: 'p',
+        paloPrije: [],
+        zatrazeno,
+        promijenili,
+        bezUcinka: zatrazeno.filter((f) => !promijenili.includes(f)).map((fixerId) => ({ fixerId, reason: 'no-target' })),
+        rijeseno: [],
+        nerijeseno: [],
+        regresije: [],
+        integrityFailure: null,
+      });
+      const ratchet = new Set(['poznato-mrtav']);
+      const rows = aggregateByFixer([
+        m('a.docx', ['poznato-mrtav', 'radi', 'ugasio-se'], ['radi']),
+        m('b.docx', ['poznato-mrtav', 'radi', 'ugasio-se'], ['radi']),
+      ]);
+      const novi = deadFixers(rows).filter((f) => !ratchet.has(f));
+      return novi.length === 1 && novi[0] === 'ugasio-se';
+    },
+    // Netrivijalnost: fixer koji radi BAREM na jednom dokumentu ne smije se prijaviti, inace bi mreza
+    // "hvatala" tako sto vristi na svaki prolaz i prestala znaciti isto.
+    cleanBefore: () => {
+      const m = (dokument: string, promijenili: string[]): DocumentMeasurement => ({
+        dokument,
+        profileId: 'p',
+        paloPrije: [],
+        zatrazeno: ['radi-ponekad'],
+        promijenili,
+        bezUcinka: promijenili.length ? [] : [{ fixerId: 'radi-ponekad', reason: 'already-ok' }],
+        rijeseno: [],
+        nerijeseno: [],
+        regresije: [],
+        integrityFailure: null,
+      });
+      const rows = aggregateByFixer([m('a.docx', []), m('b.docx', ['radi-ponekad'])]);
+      return deadFixers(rows).length === 0;
+    },
   },
   {
     id: 'oblik/generator-tvrdi-oblik-koji-ne-proizvodi',

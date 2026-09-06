@@ -1,102 +1,29 @@
 /**
- * MJERENJE SINTETICKOG KORPUSA: sto motor vidi, sto popravak rijesi, a sto ostane.
+ * MJERENJE SINTETICKOG KORPUSA: citljiv ispis nad PUNIM generiranim skupom.
  *
  *   npx vite-node scripts/corpus-gen/measure.mts -- [--dir <docx dir>]
  *
- * Odgovara na pitanje zbog kojeg korpus postoji: KOJE provjere padaju i KOJI ih fixer doista rijesi.
- * Rezultat je imenovan, ne prebrojan, jer se broj zna zadrzati dok se sastav promijeni.
+ * Odnos prema mrezi: `repair-net.mts` radi nad COMMITANIM podskupom, pece artefakt i cuva ratchet;
+ * ovaj alat radi nad punim skupom izvan repozitorija i sluzi citanju, ne gardu. Oba dijele JEDNU
+ * jezgru (`net-core.mts`), jer bi inace mjerila "isto" na dva nacina, sto je razred kvara koji je
+ * repozitorij vec platio: real-corpus harness je popravke sastavljao na svoj nacin i zato mjerio uzu
+ * povrsinu od one koju korisnik dobije.
  *
- * NE dira ljestvicu dokaza. Dokumenti su `track: 'authored'` i `synthetic: true`, pa ih
- * `sidecarAdmitted` odbija; ovaj artefakt je zaseban i nijedan potrosac tvrdnji ga ne cita.
+ * NE dira ljestvicu dokaza: dokumenti su `synthetic: true` i traka `authored`, pa ih `sidecarAdmitted`
+ * odbija; ovaj artefakt je zaseban i nijedan potrosac tvrdnji ga ne cita.
  */
 import { readFileSync, readdirSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { installXmlDomParser } from '../../src/docx/xml-dom-install';
-import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
-import { ensureRepairMapHeavy, repairEntriesFor } from '../../src/profiles/profile-runtime-maps';
-import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
-import { buildDefaultRepairRequests } from '../../src/repair/default-selection';
-import { applyFixers } from '../../src/repair/apply-fixers';
-import { detectPassRegressions } from '../../src/analysis/repair-regression';
-import { enumerateRows, composedRulesFor } from './rows.mts';
+import { ensureRepairMapHeavy } from '../../src/profiles/profile-runtime-maps';
+import { enumerateRows } from './rows.mts';
+import { measureDocument, aggregateByFixer, type DocumentMeasurement } from './net-core.mts';
 
 installXmlDomParser();
 
 const ROOT = resolve(join(dirname(fileURLToPath(import.meta.url)), '..', '..'));
 const KORPUS = process.env.LEKTA_SYNTHETIC_CORPUS || join('C:', 'Users', 'PC', 'Desktop', 'Lekta-korpus', '04-sintetski');
-const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-
-interface Nalaz {
-  dokument: string;
-  rowId: string;
-  varijanta: string;
-  profileId: string | null;
-  /** Provjere koje su pale PRIJE popravka, imenovane po stabilnom id-u. */
-  paloPrije: string[];
-  /** Zatrazeni fixeri. */
-  zatrazeno: string[];
-  /** Fixeri koji su nesto stvarno promijenili (changelog). */
-  promijenili: string[];
-  /** Provjere koje su iz pada presle u prolaz. */
-  rijeseno: string[];
-  /** Provjere koje su i dalje pale nakon popravka: OVO je jaz motora. */
-  nerijeseno: string[];
-  regresije: string[];
-  integrityFailure: string | null;
-}
-
-function paleProvjere(checks: Array<{ id?: string; status?: string; max?: number }>): string[] {
-  return checks
-    .filter((c) => c.id && (c.max ?? 0) > 0 && c.status !== 'pass')
-    .map((c) => c.id as string)
-    .sort();
-}
-
-async function mjeriDokument(path: string, rowId: string, varijanta: string, profileId: string | null): Promise<Nalaz | null> {
-  const bytes = new Uint8Array(readFileSync(path));
-  const naziv = path.split(/[\\/]/).pop() as string;
-  const file = new File([bytes], naziv, { type: DOCX_MIME });
-  const before = await analyzeFixture(file, { profileId: profileId ?? undefined });
-
-  // ISTI sastavljac i isti ulazi koje koristi sucelje; harness je isti posao jednom radio na svoj
-  // nacin i zato mjerio uzu povrsinu od one koju korisnik dobije. `entries` su nuzni, jer sedam
-  // asistiranih graditelja cita `profile.ruleEntries`, kojega `resolveProfile` nema.
-  const profile = profileId ? resolveProfile(profileId) : null;
-  const items = buildAllRepairableItems({
-    result: before,
-    profile,
-    entries: profileId ? repairEntriesFor(profileId) : [],
-    titleTemplate: null, // naslovnica trazi UI odabir predloska, pa je izvan mjerenja
-  });
-  const requests = buildDefaultRepairRequests(items);
-  const applied = await applyFixers(bytes, requests);
-
-  const afterFile = new File([applied.docxBytes], `${naziv}-popravljen.docx`, { type: DOCX_MIME });
-  const after = await analyzeFixture(afterFile, { profileId: profileId ?? undefined });
-
-  const prije = paleProvjere(before.checks ?? []);
-  const poslije = paleProvjere(after.checks ?? []);
-  const promijenili = (applied.changelog ?? [])
-    .map((c: { fixerId?: string }) => c.fixerId)
-    .filter((x): x is string => Boolean(x));
-
-  return {
-    dokument: naziv,
-    rowId,
-    varijanta,
-    profileId,
-    paloPrije: prije,
-    zatrazeno: [...new Set(requests.map((r) => r.fixerId))].sort(),
-    promijenili: [...new Set(promijenili)].sort(),
-    rijeseno: prije.filter((id) => !poslije.includes(id)),
-    nerijeseno: poslije.filter((id) => prije.includes(id)),
-    regresije: detectPassRegressions(before.checks ?? [], after.checks ?? []).map((r: unknown) =>
-      typeof r === 'string' ? r : JSON.stringify(r),
-    ),
-    integrityFailure: (applied as { integrityFailure?: string | null }).integrityFailure ?? null,
-  };
-}
 
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
@@ -113,30 +40,19 @@ async function main(): Promise<void> {
     console.error(`Nema direktorija: ${dir}`);
     process.exit(2);
   }
+  // Prazan skup NIJE tihi prolaz: mjerenje bez ijednog dokumenta ne znaci nista.
   if (!files.length) {
-    // Prazan skup NIJE tihi prolaz: mjerenje bez ijednog dokumenta ne znaci nista.
     console.error(`Nijedan .docx u ${dir}; mjerenje bi bilo vakuumsko.`);
     process.exit(2);
   }
 
-  const nalazi: Nalaz[] = [];
+  const nalazi: Array<DocumentMeasurement & { rowId: string; varijanta: string }> = [];
   for (const f of files) {
     const m = /^(.*)--(uskladjen|neuredan)\.docx$/i.exec(f);
     if (!m) continue;
     const row = rows.get(m[1]);
-    const n = await mjeriDokument(join(dir, f), m[1], m[2], row?.routedProfileId ?? null);
-    if (n) nalazi.push(n);
-  }
-
-  // Agregat po fixeru: koliko puta je zatrazen, koliko puta je NESTO promijenio.
-  const poFixeru = new Map<string, { zatrazen: number; promijenio: number }>();
-  for (const n of nalazi) {
-    for (const f of n.zatrazeno) {
-      const e = poFixeru.get(f) ?? { zatrazen: 0, promijenio: 0 };
-      e.zatrazen += 1;
-      if (n.promijenili.includes(f)) e.promijenio += 1;
-      poFixeru.set(f, e);
-    }
+    const mjerenje = await measureDocument(join(dir, f), row?.routedProfileId ?? null);
+    nalazi.push({ ...mjerenje, rowId: m[1], varijanta: m[2] });
   }
 
   console.log(`dokumenata: ${nalazi.length}\n`);
@@ -149,15 +65,21 @@ async function main(): Promise<void> {
     console.log(`  regresije: ${n.regresije.length} | integritet: ${n.integrityFailure ?? 'ok'}`);
   }
 
-  console.log('\n=== fixeri: zatrazen / promijenio ===');
-  for (const [f, e] of [...poFixeru.entries()].sort()) {
-    const oznaka = e.promijenio === 0 ? '  MRTAV' : '       ';
-    console.log(`${oznaka} ${f.padEnd(38)} ${e.zatrazen} / ${e.promijenio}`);
+  console.log('\n=== fixeri: zatrazen / promijenio / razlog ===');
+  for (const r of aggregateByFixer(nalazi)) {
+    const oznaka = r.changed === 0 ? '  MRTAV' : '       ';
+    const razlozi = Object.entries(r.reasons)
+      .map(([k, v]) => `${k}x${v}`)
+      .join(' ');
+    console.log(`${oznaka} ${r.fixerId.padEnd(38)} ${r.requested} / ${r.changed}  ${razlozi}`);
   }
 
   const out = join(KORPUS, 'mjerenje.json');
   mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, JSON.stringify({ schemaVersion: 1, nalazi, poFixeru: Object.fromEntries(poFixeru) }, null, 2) + '\n');
+  writeFileSync(
+    out,
+    JSON.stringify({ schemaVersion: 1, nalazi, poFixeru: aggregateByFixer(nalazi) }, null, 2) + '\n',
+  );
   console.log(`\nzapisano: ${out}`);
 }
 

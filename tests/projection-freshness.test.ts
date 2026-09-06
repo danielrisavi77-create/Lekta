@@ -73,6 +73,7 @@ describe('svjezina pecenih projekcija', () => {
       'real-corpus-backlog',
       'reconcile-programs',
       'repair-gap',
+      'repair-net',
       'repair-recipe',
       'scored-value-drift',
       'site-stats',

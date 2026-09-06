@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.",
+  "summary": {
+    "documentCount": 2,
+    "fixerCount": 12,
+    "deadCount": 4,
+    "dead": [
+      "citation-bibliography-sync-fixer",
+      "consistency-fixer",
+      "heading-style-fixer",
+      "link-doi-fixer"
+    ]
+  },
+  "fixers": [
+    {
+      "fixerId": "bibliography-repair-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "citation-bibliography-sync-fixer",
+      "requested": 2,
+      "changed": 0,
+      "reasons": {
+        "no-target": 2
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--neuredan.docx",
+        "fpzg--final--prijediplomski--uskladjen.docx"
+      ]
+    },
+    {
+      "fixerId": "consistency-fixer",
+      "requested": 2,
+      "changed": 0,
+      "reasons": {
+        "no-target": 2
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--neuredan.docx",
+        "fpzg--final--prijediplomski--uskladjen.docx"
+      ]
+    },
+    {
+      "fixerId": "croatian-typography-fixer",
+      "requested": 1,
+      "changed": 1,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "empty-paragraph-fixer",
+      "requested": 1,
+      "changed": 1,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "field-integrity-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "final-document-inspector-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "heading-style-fixer",
+      "requested": 1,
+      "changed": 0,
+      "reasons": {
+        "invalid-params": 1
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--uskladjen.docx"
+      ]
+    },
+    {
+      "fixerId": "link-doi-fixer",
+      "requested": 2,
+      "changed": 0,
+      "reasons": {
+        "no-target": 2
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--neuredan.docx",
+        "fpzg--final--prijediplomski--uskladjen.docx"
+      ]
+    },
+    {
+      "fixerId": "required-section-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "section-surgery-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "toc-field-fixer",
+      "requested": 1,
+      "changed": 1,
+      "reasons": {},
+      "deadOn": []
+    }
+  ],
+  "documents": [
+    {
+      "dokument": "fpzg--final--prijediplomski--neuredan.docx",
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "paloPrije": [
+        "citation.author-year.missing-reference",
+        "reference.alphabetical",
+        "reference.uncited",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer",
+        "toc-field-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer",
+        "toc-field-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "reference.alphabetical"
+      ],
+      "nerijeseno": [
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--uskladjen.docx",
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "paloPrije": [
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "heading-style-fixer",
+          "reason": "invalid-params"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    }
+  ],
+  "generatedAt": "2026-09-06T21:47:21.143Z",
+  "generatedFromCommit": "25dad2e28f1b114df2d6dd7b4302fed9a8596bd8",
+  "generator": "npm run repair-net -- --write"
+}

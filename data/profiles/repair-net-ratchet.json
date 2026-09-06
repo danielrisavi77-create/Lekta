@@ -1,0 +1,26 @@
+{
+  "measuredAt": "2026-09-06",
+  "note": "IMENOVAN popis fixera koji su na `authored` fixturama zatrazeni a nisu promijenili nista. Popis smije SAMO PADATI: nov mrtav fixer izvan popisa obara `npm run repair-net`, a fixer koji ozivi mora se skinuti, jer ratchet koji nosi rijesen slucaj propusta sljedeci s istim imenom. `reason` NIJE procjena nego vrijednost koju motor sam vrati kroz `skippedReasons`; test tvrdi da se poklapa s izmjerenim, pa se ne moze zapisati zelja umjesto mjerenja.",
+  "dead": [
+    {
+      "fixerId": "citation-bibliography-sync-fixer",
+      "reason": "no-target",
+      "why": "Asistiran fixer koji na ovom dokumentu nema metu. Prvi upis je pogadjao `invalid-params`, a motor je vratio `no-target`; razlika je bitna, jer `invalid-params` znaci prazan odabir koji ceka covjeka, a `no-target` znaci da meta ne postoji. Dokumentirano je da ga opci pravilnik `hasActionableParams` pogresno klasificira kao djelatnog (`default-selection.ts`)."
+    },
+    {
+      "fixerId": "consistency-fixer",
+      "reason": "no-target",
+      "why": "Isti razred. Ranije izmjereno na stvarnim radovima: 110 ponuda, 0 promjena; ondje je uzrok bio prazan zadani parametar, jer Lekta ne smije pogadjati koji je oblik tocan. Ovdje motor javlja `no-target`, dakle na ovom dokumentu nema ni sto ponuditi."
+    },
+    {
+      "fixerId": "heading-style-fixer",
+      "reason": "invalid-params",
+      "why": "JEDINI s tim razlogom, i zato najzanimljiviji. Na neurednom primjerku su svi naslovi spusteni na razinu 3, pa bi fixer imao sto raditi, ali su mu parametri odbijeni kao nevaljani. Trazi vlastito mjerenje: ili predodabir salje prazan parametar, ili je zahtjev sastavljen iz pravila koje ovaj profil ne propisuje."
+    },
+    {
+      "fixerId": "link-doi-fixer",
+      "reason": "no-target",
+      "why": "VJEROJATNO ISPRAVNO PONASANJE, i mjerenje ga potvrdjuje: proza pise pune poveznice (`https://doi.org/10....`), a fixer kanonizira gole oblike (`doi:10....`), pa mete doista nema. Ostaje na popisu dok se ne izmjeri na dokumentu koji goli oblik sadrzi; tek bi tada `no-target` bio kvar."
+    }
+  ]
+}

@@ -28,7 +28,14 @@ import {
 import { buildDocx, TOC_FIELD_PARA, type DocSpec, type ParaSpec } from './helpers/docx-builder';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const FIXTURE_ROOTS = [join(HERE, 'fixtures', 'docx'), join(HERE, 'fixtures', 'docx-word')];
+const FIXTURE_ROOTS = [
+  join(HERE, 'fixtures', 'docx'),
+  join(HERE, 'fixtures', 'docx-word'),
+  // Traka `authored`: izlazi pravih alata nad prozom pisanom izvan pipelinea. Ulaze u OVO mjerenje
+  // jer je pitanje "koje oblike nas commitani skup nosi", a ne "sto je dokaz"; u dokaz ne ulaze
+  // nikad, jer im sidecar nosi `synthetic: true` i traku izvan dopustenih.
+  join(HERE, 'fixtures', 'docx-authored'),
+];
 
 async function shapesOfBytes(bytes: Uint8Array): Promise<DocxShapeCounts> {
   return detectShapes(await readZip(bytes));
@@ -246,15 +253,26 @@ describe('verifyShapeClaims: tvrdnja sidecara protiv stvarnog paketa', () => {
 const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = [
   'zip/direktoriji',
   'paket/bez-png-default',
-  'paket/komentari',
   'paket/comments-prazan',
-  'naslov/samo-razina-3',
-  'tekst/kosi-padez',
-  'tekst/biblio-kandidat',
   'proizvodjac/google-docs',
   'gdocs/potpis',
-  'opseg/prazni-preko-20',
 ];
+
+/**
+ * SKRACEN 2026-09-06, s deset na pet, i to je cijela svrha trake `authored`.
+ *
+ * Zatvorio ih je JEDAN par dokumenata (usklađen + neuredan, FPZG zavrsni, izlaz pravog LibreOfficea):
+ *
+ *     paket/komentari          komentari mentora ostavljeni u dokumentu
+ *     naslov/samo-razina-3     svi naslovi na razini 3, hijerarhija prolazi vakuumski
+ *     tekst/kosi-padez         "u Tablici 1" (RE-58); nominativ je motor vec znao
+ *     tekst/biblio-kandidat    numerirana stavka literature koju motor moze uzeti za naslov
+ *     opseg/prazni-preko-20    prazni odlomci umjesto razmaka; 34 od 38 stvarnih radova ih ima
+ *
+ * Preostalih pet trazi ono sto ovaj stroj ne moze proizvesti: Google Docs roundtrip (dva oblika),
+ * direktorijske zapise u zipu, prazan `comments.xml` iz ne-Word alata, i paket bez png Defaulta.
+ * Ostaju imenovani, ne presuceni.
+ */
 
 describe('izmjereno: koje oblike commitane fixture nose', () => {
   it('popis oblika bez ijedne fixture odgovara mjerenju', async () => {
