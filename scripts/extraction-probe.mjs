@@ -86,6 +86,18 @@ async function main() {
   if (evidenceLeak) {
     fail(`odgovor za ${evidenceLeak.id} nosi evidence kljuceve (${evidenceLeak.markers.join(', ')}); provenijencija je procurila`);
   }
+  // SENTINEL: nula uspjesnih odgovora nije dokaz otpornosti nego dokaz da probe nije ni stigao do
+  // mete. Izmjereno 2026-09-06: `lekta-staging` je SSO-zakljucan i vraca 401 na svaki od 40
+  // zahtjeva, pa je probe izvukao 0 distinct profila, sto je ispod praga, i zavrsio s "OK". Takav
+  // prolaz bi u RELEASE_PROOF usao kao dokazana zastita od bulk enumeracije, a nije izmjereno
+  // nista. Prag koji se zadovoljava NEDOSTUPNOSCU mete ne mjeri metu.
+  if (distinctSeen.size === 0) {
+    fail(
+      `nijedan od ${requests} zahtjeva nije vratio 200 (distinct profila: 0). Meta je nedostupna, `
+      + 'najcesce SSO ili pauzirana instalacija, pa ovaj probe NIJE dokaz. Otkljucaj staging ili '
+      + 'usmjeri LEKTA_STAGING_ORIGIN na instalaciju koja odgovara.',
+    );
+  }
   if (rateLimitedAt === null && distinctSeen.size >= DISTINCT_THRESHOLD) {
     fail(`izvuceno ${distinctSeen.size} distinct profila bez rate limita (prag ${DISTINCT_THRESHOLD}); enumeracija je prejeftina`);
   }

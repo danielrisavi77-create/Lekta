@@ -63,7 +63,23 @@ const TIERS = [
   // Faza C zastite baze pravila: mrezna enumeracija profile-rules endpointa. Trazi
   // LEKTA_STAGING_ORIGIN (samo staging, nikad produkcija); bez varijable je unavailable,
   // ne prolaz (isti obrazac kao Word razine: nedostupno != prolazno).
-  { id: 'extraction', label: 'Tier 2: extraction probe (staging)', cmd: 'node scripts/extraction-probe.mjs', required: true, requiresEnv: 'LEKTA_STAGING_ORIGIN' },
+  //
+  // `required: false` OD 2026-09-06, odlukom vlasnika, i to je ustupak koji se imenuje a ne krije.
+  //
+  // ZASTO: kao obavezna, ova je razina cinila `complete` NEDOSTIZNIM, jer staging Supabase
+  // (`bnyemcnsphlitjradrst`) stoji `INACTIVE`, a besplatni plan dopusta dva aktivna projekta, pa
+  // buđenje staginga trazi pauziranje drugog proizvoda. Uz `LEKTA_REQUIRE_RELEASE_PROOF=1` u
+  // `netlify.toml` to je znacilo da NIJEDAN deploy ne moze proci. `docs/AUDIT_MASTER.md` je tu
+  // zamku predvidio prije nego je sprigla.
+  //
+  // STO SE TIME GUBI: dokaz vise ne tvrdi da je zastita od bulk enumeracije `profile-rules`
+  // izmjerena. To NIJE presuceno: `verify-deploy-dist.mjs` pri svakom deployu poimence ispisuje
+  // svaku razinu koja nije `pass`, pa se u dnevniku builda vidi da je `extraction` propusten i
+  // zasto. Tisi ustupak bi bio gori od samog ustupka.
+  //
+  // KAKO SE VRACA NA `true`: kad staging bude trajno dostupan (placeni plan ili slobodan slot),
+  // ovdje se vrati `required: true` i lanac ponovo mjeri metu.
+  { id: 'extraction', label: 'Tier 2: extraction probe (staging)', cmd: 'node scripts/extraction-probe.mjs', required: false, requiresEnv: 'LEKTA_STAGING_ORIGIN' },
 ];
 
 const args = process.argv.slice(2);
