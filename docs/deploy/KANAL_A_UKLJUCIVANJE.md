@@ -36,13 +36,27 @@ izmjerenim stanjem; brojke su iz `npm run migration-identity` i `npm run deploy-
 |---|---|
 | 2. funkcije na produkciji | IZVEDENO: `repair-docx` v27 -> v29 (nosi i tudje popravke motora s grane od 2026-08-23), `withdraw-corpus-contribution` v2; obje bootaju i dolaze do vlastite auth provjere (`{"error":"unauthorized"}` s anon kljucem), `deploy-drift` vise ne navodi `withdraw-corpus-contribution` |
 | 3. tajna na produkciji | IZVEDENO: `CORPUS_CONTRIBUTION_ENABLED=1` (`secrets set`, count 1). Bez ucinka dok klijent ne salje `corpusConsent`, a bez tablice bi pohrana tiho padala (fail-open), pa klijentska zastavica ceka korak 1 |
-| 1. migracija 0102 (i 0096 do 0101) | CEKA VLASNIKA: `db push` trazi lozinku baze. Predaja bez lijepljenja u razgovor: upisati `SUPABASE_DB_PASSWORD=...` u `.env` (gitignoriran, isti kao za token), pa sesija vrti `npx supabase db push --db-url` ili `link -p` + `db push`, s `--dry-run` prvo |
-| 4. klijentska zastavica | CEKA korak 1 |
-| 5. smoke | CEKA korake 1 i 4 |
+| 1. migracija 0102 (i 0096 do 0101) | IZVEDENO 2026-09-06 (vlasnik dao lozinku kroz `.env` i rekao "napravi ti to sve"): `link -p` na produkciju, pa `db push --include-all`; primijenjeno tocno `0096` do `0102`. `migration-identity` poslije: repo 102, u bazi 106, poklopljeno 102, **nedostaje 0**, samo u bazi 4 (nepromijenjeno), dvaput 0. Kako je CLI prosao pored cetiri tudje verzije: vidi "Cetiri verzije samo u bazi" nize |
+| 4. klijentska zastavica | IZVEDENO 2026-09-06: `corpusContribution:true` u `DEFAULT_PRODUCTION_CONFIG`; kucica se pokazuje samo prijavljenom korisniku s e-mailom, pa Playwright spec bez racuna ne vidi promjenu |
+| 5. smoke | CEKA objavu na Netlifyju (vlasnik) i racun s e-mailom |
 | 6. dohvat | CEKA prve priloge |
 
 Usput izmjereno: `health` na produkciji javlja `degraded`, `dependencies.database.ok: false, http_401`, i PRIJE ovog
 deploya (`health` je v8, nije diran). Nije istrazivano; zaseban nalaz.
+
+## Cetiri verzije samo u bazi: kako je `db push` prosao bez brisanja dnevnika
+
+`supabase db push` odbija raditi dok u bazi postoje verzije kojih nema u `supabase/migrations/`
+("Remote migration versions not found in local migrations directory") i predlaze
+`migration repair --status reverted`, sto BRISE te retke iz `schema_migrations`. To su tudje zive izmjene
+(Katedra/CRM), pa bi brisanje dnevnika sakrilo da postoje, a `migration-identity` bi lazno pao na "samo u bazi: 0".
+
+Izvedeno umjesto toga (2026-09-06): cetiri PRIVREMENE, NETRACKANE datoteke
+`supabase/migrations/<verzija>_privremeno_samo_u_bazi.sql` (samo komentar, bez SQL-a), tocno s tim verzijama.
+CLI ih tada vidi kao vec primijenjene i ne dira ih, a `--include-all` treba jer su `0096` do `0102` po verziji
+"starije" od tih timestamp verzija. Nakon pusha datoteke su izbrisane; u repozitorij ne smiju uci, jer
+`tests/migration-numbering.test.ts` trazi cetveroznamenkasti oblik, a u dijeljenom stablu bi tudji vitest pao na
+njima. Dnevnik u bazi je ostao netaknut (samo u bazi i dalje 4).
 
 ## Redoslijed (tko sto radi)
 
