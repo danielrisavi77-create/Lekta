@@ -134,3 +134,11 @@ prodje, globalna brana se ukljucuje sama, bez ijedne izmjene koda.
 **Migracije se primjenjuju iskljucivo kroz `supabase db push`.** MCP `apply_migration` se ne
 koristi nad Lektinim bazama: on stvara drugi identitet za isti zahvat i upravo je on
 proizveo oba kvara opisana gore. Iznimka je istrazivanje nad bazom koja se smije baciti.
+
+## `db push` uz verzije koje postoje samo u bazi (2026-09-06)
+
+CLI odbija push dok baza ima verzije bez lokalne datoteke i nudi `migration repair --status reverted`, sto brise
+retke iz dnevnika. Umjesto toga se podmetnu privremene NETRACKANE prazne datoteke s tim verzijama
+(`<verzija>_privremeno_samo_u_bazi.sql`), push ide s `--include-all`, pa se datoteke izbrisu. Dnevnik ostaje
+cijel, `migration-identity` i dalje broji te verzije pod "samo u bazi". Detalji i izmjereno stanje:
+`docs/deploy/KANAL_A_UKLJUCIVANJE.md`.
