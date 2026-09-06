@@ -130,7 +130,8 @@ function runStats(paragraph: HeadingStructureParagraph): { boldShare: number; ma
  * Zato se ovaj uzorak testira nad SIROVIM tekstom, prije normalizacije.
  * paragraphText pretvara <w:tab/> u \t, pa isto vrijedi i za prave Wordove sadrzaje.
  */
-const TOC_ENTRY_TAIL = /\t[.\s…]*\d+\s*$/;
+/** Rep stavke sadrzaja: tabulator, tocke, pa broj stranice. Izvezen radi `src/corpus/docx-shapes.ts`. */
+export const TOC_ENTRY_TAIL = /\t[.\s…]*\d+\s*$/;
 
 /**
  * Numeriran ZAPIS LITERATURE nije naslov.

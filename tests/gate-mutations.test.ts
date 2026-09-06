@@ -26,6 +26,7 @@ import {
   type WizardEvent, type WizardState,
 } from '../src/ui/wizard-machine';
 import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
+import { DOCX_SHAPE_IDS, verifyShapeClaims, type DocxShapeCounts } from '../src/corpus/docx-shapes';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -581,6 +582,52 @@ const MUTATIONS: Mutation[] = [
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'real' }) &&
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'generated' }) &&
       !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', synthetic: true }),
+  },
+  {
+    id: 'korpus/authored-traka-ulazi-u-mjerenje',
+    imitates:
+      'dokument s NASOM prozom (traka `authored`) udje u `discoverRealCorpus` i pocne potkrepljivati ' +
+      'tvrdnju "dokazano na stvarnom studentskom radu". Tekst je nas, ne studentov, pa tvrdnja postaje ' +
+      'neistinita bez ijedne promjene ljestvice; uz to su sinteticke fixture izmjereno LAKSE (84,6 posto ' +
+      'ciljanih provjera rijeseno naspram 39,8 posto na stvarnim radovima), pa bi ulazak proizvod ' +
+      'prikazao dvostruko boljim nego jest. Drugi oblik istog kvara je kriva zastavica: sidecar koji ' +
+      'kaze `synthetic: false` mora pasti na traci, inace jedan pojas nosi cijeli zid',
+    caught: () =>
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'authored' }) &&
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'authored', synthetic: false }) &&
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'authored', synthetic: true }),
+    // Netrivijalnost: dopustene trake i dalje prolaze, inace bi zid "hvatao" tako sto odbija sve.
+    cleanBefore: () =>
+      sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'real' }) &&
+      sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'generated' }),
+  },
+  {
+    id: 'oblik/generator-tvrdi-oblik-koji-ne-proizvodi',
+    imitates:
+      'sidecar generiranog dokumenta tvrdi oblik (`shapes.claimed`) kojeg u paketu nema, ili mutaciju ' +
+      'cijim je brojacem nula. Bez ove provjere je sinteticki korpus vakuumski: mjeri se ono sto smo ' +
+      'namjeravali proizvesti, ne ono sto je alat doista spremio. Izmjereno pri izradi detektora: ' +
+      'graditelj je tvrdio `naslov/tab-u-naslovu` a odlomak nije imao ni stil ni razmak iza broja, pa ' +
+      'oblika nije bilo; obrnuto, rucna stavka sadrzaja je lazno nosila isti oblik na pet mjesta',
+    caught: () => {
+      const nula = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      const tvrdiNepostojeci = verifyShapeClaims(['naslov/tab-u-naslovu'], nula).missing.length > 0;
+      const tipfeler = verifyShapeClaims(['naslov/tab-u-naslov'], nula).unknown.length > 0;
+      const mrtavBrojac = verifyShapeClaims([], nula, { tabInHeading: 0 }, {
+        tabInHeading: 'naslov/tab-u-naslovu',
+      }).underDetected.length > 0;
+      return tvrdiNepostojeci && tipfeler && mrtavBrojac;
+    },
+    // Netrivijalnost: ispunjena tvrdnja uz brojac koji paket potvrdjuje NE smije proizvesti nalaz,
+    // inace bi gard "hvatao" tako sto prijavljuje svaki generirani dokument.
+    cleanBefore: () => {
+      const counts = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      counts['naslov/tab-u-naslovu'] = 4;
+      const v = verifyShapeClaims(['naslov/tab-u-naslovu'], counts, { tabInHeading: 4 }, {
+        tabInHeading: 'naslov/tab-u-naslovu',
+      });
+      return v.missing.length === 0 && v.unknown.length === 0 && v.underDetected.length === 0;
+    },
   },
   {
     id: 'korpus/prazan-izvjestaj-tvrdi-da-mjeri',
