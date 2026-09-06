@@ -48,12 +48,15 @@ const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8')) as Manifest;
 /**
  * Izmjereno 2026-09-06, i svaka je brojka razlog za odluku, ne ukras.
  *
- * `BEZ_PROFILA` je najvazniji: 444 od 720 redaka nema fakultetski profil, pa se pisu po obiteljskom
- * baselineu. Medju njima postoje samo TRI razlicita skupa pravila, dakle ta 444 dokumenta razlikuju
+ * `BEZ_PROFILA` je najvazniji: 443 od 720 redaka nema fakultetski profil, pa se pisu po obiteljskom
+ * baselineu. Medju njima postoje samo TRI razlicita skupa pravila, dakle ta 443 dokumenta razlikuju
  * se naslovnicom i prozom, ne oblikovanjem. Ratchet smije samo PADATI: svaki novi fakultetski profil
  * ga spusta, a porast znaci da je profil nestao ili da je rutiranje puklo.
+ *
+ * Bilo je 444 dok se varijanta nije birala: `fpzg--final--prijediplomski` ima dva kandidata i oba
+ * nose varijantu, pa je `resolveDefinition` vracao nista i redak je ispadao kao "bez pravila".
  */
-const BEZ_PROFILA_RATCHET = 444;
+const BEZ_PROFILA_RATCHET = 443;
 const OCEKIVANO_REDAKA = 720;
 
 describe('manifest sintetickog korpusa', () => {

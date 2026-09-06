@@ -87,6 +87,16 @@ export interface CorpusRow {
   /** Je li program stvarno te razine, ili je uzet kao zamjena jer jedinica takav ne nudi. */
   programSource: 'level-match' | 'fallback';
   routedProfileId: string | null;
+  /**
+   * Odabrana varijanta profila, kad je jedinica nudi vise.
+   *
+   * Zasto uopce postoji: `resolveDefinition` vraca profil bez varijante, a kad ga nema, nista. To je
+   * tocno ponasanje SUCELJA (student mora odabrati), ali za korpus znaci da bi redak s dva valjana
+   * kandidata ispao kao "nema fakultetskog pravila". Izmjereno 2026-09-06: takav je jedan redak od
+   * 444 (`fpzg--final--prijediplomski`, kandidati `text` i `av`). Bira se PRVI po abecedi, jer izbor
+   * mora biti ponovljiv, i biljezi se, jer nije nas nego fakultetov.
+   */
+  variant: string | null;
   /** Obitelj po kojoj se slaze baseline kad rutiranje ne nadje profil. */
   fallbackFamily: string | null;
   wordTarget: number;
@@ -119,6 +129,27 @@ function programForLevel(
         : programs.find((p) => DIPLOMSKI.test(p) && !PRIJEDIPLOMSKI.test(p));
   if (match) return { program: match, source: 'level-match' };
   return { program: programs[0], source: 'fallback' };
+}
+
+type Kandidat = { id: string; variant?: string };
+
+/**
+ * Odabir varijante kad profil bez varijante ne postoji.
+ *
+ * Sucelje ovdje trazi od studenta da odabere; korpus mora odabrati sam, i to ponovljivo. Redoslijed
+ * nije proizvoljan nego izveden iz onoga sto gradimo: dokument je TEKST, pa se uzima varijanta koja
+ * propisuje tekstualni rad.
+ *
+ * Izmjereno na jedinom takvom retku (`fpzg--final--prijediplomski`, 1 od 444): `tekst` varijanta nosi
+ * opseg 5000 do 6000 rijeci i sest obveznih dijelova, a `av` varijanta nijedno od toga, jer opisuje
+ * audiovizualni rad. Izbor po abecedi bi uzeo `av` i mjerio tekstualni dokument prema pravilima koja
+ * za njega ne vrijede.
+ */
+function pickVariant(kandidati: Kandidat[]): Kandidat | null {
+  if (!kandidati.length) return null;
+  const tekstualna = kandidati.find((d) => /tekst|text|pis/i.test(`${d.variant ?? ''} ${d.id}`));
+  if (tekstualna) return tekstualna;
+  return [...kandidati].sort((a, b) => a.id.localeCompare(b.id, 'en'))[0];
 }
 
 /** Ciljani opseg iz pravila profila, po istom receptu kao `derivePlanFor` u conformance matrici. */
@@ -193,7 +224,8 @@ export function enumerateRows(): CorpusRow[] {
     ];
     for (const { workType, level } of kombinacije) {
       const { program, source } = programForLevel(programs, level);
-      const routed = resolveDefinition(eligibleDefinitionsFor(registry, unit.id, program, workType), '');
+      const kandidati = eligibleDefinitionsFor(registry, unit.id, program, workType);
+      const routed = resolveDefinition(kandidati, '') ?? pickVariant(kandidati);
       const rulesForTarget = routed ? ((heavyRules()[routed.id]?.rules ?? {}) as Record<string, unknown>) : {};
       const { words, source: wordSource } = wordTargetFrom(rulesForTarget, workType);
       const family = String((unit as { family?: string }).family ?? 'mixed');
@@ -207,6 +239,7 @@ export function enumerateRows(): CorpusRow[] {
         program,
         programSource: source,
         routedProfileId: routed ? routed.id : null,
+        variant: routed ? ((routed as { variant?: string }).variant ?? null) : null,
         fallbackFamily: routed ? null : family,
         wordTarget: words,
         wordTargetSource: wordSource,
