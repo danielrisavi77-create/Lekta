@@ -53,17 +53,6 @@ export const MUTATIONS: Mutation[] = [
       replaceCounted(fodt, /(<text:h\b[^>]*>)((?:\d+\.)+)\s+/g, (m) => `${m[1]}${m[2]}<text:tab/>`),
   },
   {
-    id: 'allLevelThree',
-    shape: 'naslov/samo-razina-3',
-    why:
-      'svi naslovi na razini 3 bez ijednog roditelja; hijerarhija tada prolazi VAKUUMSKI (6/6) sve dok ' +
-      'popravak ne doda pravu razinu 1. Izmjereno na stvarnom radu corpus-0221',
-    apply: (fodt) =>
-      replaceCounted(fodt, /<text:h text:style-name="Heading_20_(\d)" text:outline-level="\d"/g, () =>
-        '<text:h text:style-name="Heading_20_3" text:outline-level="3"',
-      ),
-  },
-  {
     id: 'emptyParagraphBurst',
     shape: 'opseg/prazni-preko-20',
     why:
@@ -119,7 +108,17 @@ export const MUTATIONS: Mutation[] = [
       const sStilom = fodt.replace('</office:styles>', `${stil} </office:styles>`);
       // Zamjena je FUNKCIJA, pa se `$1` ne bi interpolirao nego upisao doslovno; grupa se zato
       // ugradjuje iz `m[1]`. Isti razred kao escape izgubljen u regexu gradjenom kroz alat.
-      return replaceCounted(sStilom, /text:style-name="Text_20_body"(>)/g, (m) => `text:style-name="SVodilicom"${m[1]}`, 3);
+      const res = replaceCounted(
+        sStilom,
+        /text:style-name="Text_20_body"(>)/g,
+        (m) => `text:style-name="SVodilicom"${m[1]}`,
+        3,
+      );
+      // BROJAC JE 1, ne broj odlomaka. Izmjereno 2026-09-06: LibreOffice vodilicu zapise JEDNOM, u
+      // definiciji stila, a odlomci se na nju samo pozivaju; brojac 3 je zato javljao vise nego sto
+      // izlaz moze nositi i gard ga je oborio. Odlomci svejedno moraju postojati, jer neiskoristen
+      // stil alat izbaci, pa bi oblika nestalo.
+      return { fodt: res.fodt, count: res.count > 0 ? 1 : 0 };
     },
   },
   {
@@ -129,11 +128,33 @@ export const MUTATIONS: Mutation[] = [
       'runovi kojima je zadan samo slozeni (complex) font, bez zapadnog. Analiza ih je pripisivala latinici ' +
       'i obarala uskladjen rad; na jednom stvarnom radu to je bilo 57 posto teksta',
     apply(fodt) {
+      // Font za slozeno pismo mora biti DEKLARIRAN, inace ga LibreOffice tiho odbaci. Izmjereno
+      // 2026-09-06 na prvom prolazu: bez deklaracije je izlaz imao NULA `w:rFonts`, a stil je prezivio
+      // samo kao `<w:szCs>`. Brojac je tada javio 4, a mjerenje nad izlazom 0, i gard je to uhvatio.
+      const deklaracija =
+        ' <office:font-face-decls>\n' +
+        '  <style:font-face style:name="ArialCS" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>\n' +
+        ' </office:font-face-decls>\n';
+      // Stil ide u AUTOMATSKE stilove, ne u imenovane. Izmjereno 2026-09-06: imenovani stil
+      // LibreOffice zapise u `word/styles.xml`, pa run u `document.xml` ostaje bez `w:rFonts` i
+      // oblika nema ondje gdje ga motor trazi. Automatski stil je u ODF-u izravno oblikovanje i
+      // zavrsi kao `w:rPr` u samom runu, sto je i oblik koji su stvarni radovi pokazali.
       const stil =
         '  <style:style style:name="SamoCS" style:family="text">\n' +
-        '   <style:text-properties style:font-name-complex="Arial" style:font-size-complex="12pt"/>\n  </style:style>\n';
-      if (!fodt.includes('</office:styles>')) return { fodt, count: 0 };
-      const sStilom = fodt.replace('</office:styles>', `${stil} </office:styles>`);
+        '   <style:text-properties style:font-name-complex="ArialCS" style:font-size-complex="12pt"/>\n  </style:style>\n';
+      if (!fodt.includes('</office:automatic-styles>')) return { fodt, count: 0 };
+      // Deklarira se NAS font, ne provjerava se postoji li BILO KAKAV blok. Izmjereno 2026-09-06:
+      // cim je graditelj dobio vlastiti `font-face-decls` (za profilni font), uvjet "blok postoji"
+      // preskocio je deklaraciju ArialCS-a i mutacija je opet umrla. Postojanje bloka nije isto sto
+      // i postojanje FONTA u njemu.
+      const licePisma =
+        '  <style:font-face style:name="ArialCS" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>\n';
+      const sDeklaracijom = fodt.includes('style:name="ArialCS"')
+        ? fodt
+        : fodt.includes('<office:font-face-decls>')
+          ? fodt.replace('</office:font-face-decls>', `${licePisma} </office:font-face-decls>`)
+          : fodt.replace(' <office:styles>', `${deklaracija} <office:styles>`);
+      const sStilom = sDeklaracijom.replace('</office:automatic-styles>', `${stil} </office:automatic-styles>`);
       // Prag je 10 znakova, ne 30: s pragom 30 mutacija je bila MRTVA na kratkim odlomcima i vracala
       // brojac 0, sto je gard uhvatio. Duljina odlomka nije svojstvo oblika koji se oponasa.
       return replaceCounted(
@@ -174,6 +195,20 @@ export const MUTATIONS: Mutation[] = [
         '<text:p>Provjeri ovaj odlomak prije predaje.</text:p></office:annotation>';
       return replaceCounted(fodt, /(<text:p text:style-name="Text_20_body">)/g, (m) => `${m[1]}${biljeska}`, 2);
     },
+  },
+  {
+    // IDE ZADNJI, i to je izmjereno, ne stilski. `manualToc` umece naslov "Sadrzaj" na razini 1; kad
+    // je ova mutacija stajala prije njega, izlaz je imao 20 naslova razine 3 i JEDAN razine 1, pa
+    // oblik (koji trazi nula roditelja) nije nastao. Brojac je javljao 20, mjerenje nad izlazom 0.
+    id: 'allLevelThree',
+    shape: 'naslov/samo-razina-3',
+    why:
+      'svi naslovi na razini 3 bez ijednog roditelja; hijerarhija tada prolazi VAKUUMSKI (6/6) sve dok ' +
+      'popravak ne doda pravu razinu 1. Izmjereno na stvarnom radu corpus-0221',
+    apply: (fodt) =>
+      replaceCounted(fodt, /<text:h text:style-name="Heading_20_(\d)" text:outline-level="\d"/g, () =>
+        '<text:h text:style-name="Heading_20_3" text:outline-level="3"',
+      ),
   },
 ];
 

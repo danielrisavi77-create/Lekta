@@ -219,6 +219,9 @@ export function buildFodt(body: ProseBody, opts: BuildOptions): string {
  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
  office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="${esc(rules.font?.[0] ?? 'Times New Roman')}" svg:font-family="&apos;${esc(rules.font?.[0] ?? 'Times New Roman')}&apos;" style:font-pitch="variable"/>
+ </office:font-face-decls>
  <office:styles>
 ${styleBlock(rules)}
  </office:styles>

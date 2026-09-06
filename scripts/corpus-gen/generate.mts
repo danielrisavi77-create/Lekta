@@ -153,6 +153,26 @@ async function generirajRedak(row: CorpusRow, messy: boolean, outDir: string, so
   const claimed = presentShapes(shapes);
   const presuda = verifyShapeClaims(claimed, shapes, counters, shapeForMutation());
 
+  /**
+   * Sto alat NE MOZE proizvesti, imenovano po osi.
+   *
+   * Izmjereno 2026-09-06: `soffice --convert-to docx` ne pise TOC polje UOPCE. Izlaz ima nula
+   * `w:instrText`, `w:fldChar` i `w:fldSimple`, a `text:table-of-content` postane staticni popis.
+   * Isto vrijedi za vec commitanu fixturu `lo-fpzg-zavrsni-uskladjen.docx`, kojoj ime obecava vise
+   * nego sto nosi.
+   *
+   * Posljedica se ne smije presutjeti: primjerak koji se zove "uskladjen" ne moze proci os sadrzaja
+   * ako je profil trazi. Celija koju alat ne pokriva je NEPOKRIVENA, nikad "prolazi" (F2.2). Za zivo
+   * polje treba Word COM (`TablesOfContents.Add`), sto je zaseban trak.
+   */
+  const ogranicenja: string[] = [];
+  if (rules.requireToc !== false && shapes['toc/polje'] === 0) {
+    ogranicenja.push(
+      'toc: LibreOffice ne pise TOC polje pri pretvorbi (0 instrText/fldChar/fldSimple); ' +
+        'os sadrzaja je NEPOKRIVENA ovim alatom, za zivo polje treba Word COM',
+    );
+  }
+
   const sidecar = {
     profileId: row.routedProfileId,
     // DVA POJASA. `synthetic` je prvi filtar u `sidecarAdmitted`, `track` je bijeli popis; dokument s
@@ -179,12 +199,16 @@ async function generirajRedak(row: CorpusRow, messy: boolean, outDir: string, so
     },
     mutations: counters,
     shapes: { claimed },
+    toolLimitations: ogranicenja,
   };
   writeFileSync(docxPath.replace(/\.docx$/i, '.json'), JSON.stringify(sidecar, null, 2) + '\n', 'utf8');
 
   const problemi = [...presuda.missing, ...presuda.unknown, ...presuda.underDetected];
   const oznaka = problemi.length ? 'NALAZ' : 'ok   ';
   console.log(`  ${oznaka} ${naziv.padEnd(48)} ${String(bytes.length).padStart(7)} B  oblika: ${claimed.length}`);
+  // Ogranicenje alata NIJE nalaz (ne obara prolaz), ali se ispisuje svaki put: presucena granica se
+  // brzo procita kao pokrivenost.
+  for (const o of ogranicenja) console.log(`        NEPOKRIVENO ${o}`);
   for (const p of problemi) {
     console.error(`        ${p}`);
     process.exitCode = 1;
