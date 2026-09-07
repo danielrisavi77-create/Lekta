@@ -506,6 +506,20 @@ if (fs.existsSync(naslovnicaDir)) {
       } else {
         console.log(`[verify-deploy-dist] dokaz o provjerama OK (commit ${String(proof.commit).slice(0, 12)}).`);
       }
+      // POTPUN DOKAZ NIJE ISTO STO I PUN DOKAZ, i to se ispisuje UVIJEK, i uz OK.
+      //
+      // `complete` znaci samo da je svaka OBAVEZNA razina prosla. Neobavezna razina (od 2026-09-06
+      // `extraction`, jer staging Supabase stoji INACTIVE) ostaje `unavailable`, a dokaz je i dalje
+      // "potpun". Bez ovog ispisa bi u dnevniku builda stajalo samo "OK", pa bi ustupak postao
+      // nevidljiv tocno ondje gdje se objavljuje.
+      const rupe = Array.isArray(proof?.results) ? proof.results.filter((r) => r && r.status !== 'pass') : [];
+      if (rupe.length) {
+        console.log(`[verify-deploy-dist] NIJE IZMJERENO (${rupe.length}), a dokaz se svejedno smatra potpunim:`);
+        for (const r of rupe) {
+          console.log(`  ${String(r.id)}: ${String(r.status)}${r.reason ? ` (${r.reason})` : ''} -- ${String(r.label ?? '')}`);
+        }
+        console.log('  To su svjesni ustupci, ne prolazi. Razlog i put natrag stoje uz razinu u scripts/release-check.mjs.');
+      }
     }
   }
 }
