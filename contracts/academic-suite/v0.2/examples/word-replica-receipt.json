@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.2",
+  "verificationId": "wr-verify-001",
+  "engine": "word-replica",
+  "engineVersion": "0.1.0",
+  "projectId": "project-001",
+  "artifactVersionId": "artifact-docx-001",
+  "outcome": "PASS",
+  "checkedAt": "2026-09-07T18:00:00Z",
+  "findingIds": [],
+  "capabilitiesUsed": [
+    "docx.content.verify",
+    "docx.structure.verify",
+    "docx.formatting.verify",
+    "docx.layout.verify"
+  ],
+  "unavailableCapabilities": ["docx.render.verify"]
+}
