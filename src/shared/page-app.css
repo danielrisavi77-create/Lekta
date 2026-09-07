@@ -1429,7 +1429,26 @@ body.is-scrolling .section *{box-shadow:none!important}
   .lek-head-copy h1 br{display:none}
   .lek-head-copy .lek-top-lead{font-family:var(--sans);font-size:16px;line-height:1.38;margin-top:9px;max-width:none}
   .analyzer-wrap{box-shadow:none}
-  .wizard-rail{display:none}
+  /* TRAKA KORAKA OSTAJE I NA MOBITELU, samo zbijena.
+ *
+ * Do 2026-09-07 je ovdje stajalo `display:none`, i to s razlogom koji je bio stvaran: cetiri
+ * natpisa se na 390 px lome u TRI retka i uzimaju 108 px pregiba (izmjereno). Ali posljedica je
+ * bila da na mobitelu nema NIKAKVOG pokazatelja polozaja u toku, dok ga desktop ima.
+ *
+ * Rjesenje nije sakriti traku nego natpise: brojevi nose redoslijed, a natpis se cuva samo na
+ * AKTIVNOM koraku, pa se ista informacija stane u JEDAN redak (~32 px umjesto 108).
+ * Naslov obrasca odlazi jer je identitet stranice, a ne polozaj u toku, i na 390 px ne stane. */
+/* `flex-wrap` se NAMJERNO ne dira, iako bi `nowrap` izgledao opravdano. Mutacija pokazuje da
+ * ne nosi nista (uz jedan natpis sadrzaj stane u redak), a razlika je u NACINU kvara ako ikad
+ * ne stane: uz `nowrap` + `overflow:hidden` zadnji korak se tiho odsijece, uz naslijedjen `wrap`
+ * traka preraste u dva retka i to se vidi. Vidljiv kvar je bolji od tihog, a visinu cuva test. */
+.wizard-rail{display:flex;gap:9px;padding:9px 16px;overflow:hidden}
+.wizard-rail .rail-form-title{display:none}
+.rail-step .rail-lbl{display:none}
+.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="1"]) .rail-step[data-rail="1"] .rail-lbl,
+.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="2"] .rail-lbl,
+.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="3"] .rail-lbl,
+.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="4"] .rail-lbl{display:inline}
   .analyzer-body{padding:12px}
   #wizardView[data-step="1"] .dropzone{min-height:168px;padding:14px 12px}
   #dropzone::after{font-size:17px;top:6px}

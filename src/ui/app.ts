@@ -34,7 +34,7 @@ import { attachSelectSearch } from './select-search';
 import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked, languageForDefinition, isLanguageLocked, visibleProgramsForUnit, eligibleDefinitionsFor, resolveDefinition } from './work-selection';
 import { oziciSjenu } from './wizard-shadow';
 import { renderProfileCard } from './profile-card';
-import { renderView } from './wizard-view';
+import { renderView, showWizardStep } from './wizard-view';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
@@ -390,7 +390,12 @@ function bind(){
 }
 // Wizard paneli (jedan ekran po koraku): 1 Dokument, 2 Profil, 3 Provjera. data-step na #wizardView
 // gejta CSS panele (index.html LEK blok); spekulativna analiza radi neovisno o panelima.
-function setWizardStep(n: any,animate?: any){const w=$('#wizardView');if(!w)return;const apply=()=>{w.dataset.step=String(n);if(n===2&&selectedDocx){const f=$('#stepFileName');if(f){f.textContent=selectedDocx.name;f.title=selectedDocx.name}}};if(animate)withViewTransition(apply);else apply()}
+// Prijevod koraka u stanje i sam upis zive u `wizard-view.ts`, koji se i predstavlja kao jedini
+// pisac prikaza; ovdje ostaje samo animacija i poznavanje odabranog dokumenta.
+function setWizardStep(n: any,animate?: any){
+ const apply=()=>{showWizardStep(Number(n),selectedDocx?.name??null)};
+ if(animate)withViewTransition(apply);else apply()
+}
 function usesCompactUploadFlow(){return !!(window.matchMedia&&window.matchMedia('(max-width:720px)').matches)}
 // Papir-naslovnica: obrazac je skriven dok korisnik ne krene. Jednosmjerno (klasa se ne skida),
 // pa "Nova provjera" i povratci NE vracaju cover usred toka. pick=true otvara i OS dijalog za
@@ -403,7 +408,10 @@ let _engagedTracked=false;
 function revealAnalyzerForm(_pick?: any){if(!_engagedTracked){_engagedTracked=true;void trackEvent('analyzer_engaged',{})}try{$('#dropzone')?.focus({preventScroll:true})}catch(e: any){}}
 // Meki povratak iz rezultata: dokument OSTAJE u memoriji (selectedDocx), samo se vracamo na korak.
 // Spekulativna analiza odmah krece u pozadini pa je ponovni Analiziraj bez promjena prakticki instantan.
-function backToWizardFromResult(step: any){withViewTransition(()=>{$('#resultView')?.classList.add('hidden');$('#wizardView')?.classList.remove('hidden');setWizardStep(step)});document.querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});void startSpeculativeAnalysis()}
+// Rucno prebacivanje prikaza je uklonjeno: `setWizardStep` sada ide kroz `renderView`, koji
+// sam gasi `#resultView` i pali `#wizardView`. Dva `classList` poziva ovdje bila su tocno ona
+// disciplina pozivatelja koju `wizard-view.ts` u svom uvodu navodi kao razlog svog postojanja.
+function backToWizardFromResult(step: any){setWizardStep(step,true);document.querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});void startSpeculativeAnalysis()}
 function setFile(file: any){
   if(file!==selectedDocx)findingStates.clear();
   const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
@@ -849,10 +857,12 @@ function renderAnalyzeSummary(p: any){
 function renderDocGateConfirm(v: any){const el=$('#analyzeProfile');if(!el)return;el.innerHTML=`<div class="ap-warn"><p>Ovo ne izgleda kao završni ili diplomski rad${v&&v.suspicionReason?` (${escapeHtml(v.suspicionReason)})`:''}. Svejedno analiziraj?</p><div class="ap-actions"><button class="btn btn-primary btn-sm" type="button" data-confirm-docgate>Svejedno analiziraj</button><button class="btn btn-secondary btn-sm" type="button" data-change-docfile>Učitaj drugu datoteku</button></div></div>`;window.__lektaIcons?.()}
 const LEGAL_SOURCE_LABELS: any={book:'Knjige',article:'Članci u časopisima',chapter:'Poglavlja / zbornici',commentary:'Komentari zakona',web:'Mrežni izvori',law:'Hrvatski propisi',euAct:'Pravni akti EU',international:'Međunarodni dokumenti',domesticCase:'Hrvatska sudska praksa',echrCase:'ESLJP',cjeuCase:'Sud EU',secondary:'Posredno citiranje',opcit:'op. cit.',ibid:'Ibid.',other:'Ostalo'};
 /* analyzeDocx i auditni helperi zive u src/analysis/analyze-docx.ts (split monolita) */
-function progress(p: any,msg: any){$('#progressBar').style.width=p+'%';$('#progressPercent').textContent=p+'%';$('#progressMessage').textContent=msg;
-  // Rendgen (progress-scan.ts) se hrani ISTIM stvarnim postotkom; nema vlastiti tajmer,
-  // pa ne moze prikazati napredak koji se nije dogodio. Poruka za aria-live ostaje iznad.
-  renderProgressScan(Number(p));
+// POSTOTAK SE VISE NE ISPISUJE. `p` i dalje stize iz motora i dalje vodi faze, ali kao PRAG
+// a ne kao mjera preostalog vremena; ispisan broj bi tvrdio preciznost koju motor nema.
+// `#progressMessage` ostaje jedini tekst za citac zaslona (popis faza je aria-hidden).
+function progress(p: any,msg: any){
+ const m=$('#progressMessage');if(m)m.textContent=msg;
+ renderProgressScan(Number(p));
 }
 
 // PDF preflight je izvucen u tipiziran modul src/pdf/pdf-preflight.ts (cist, testiran, uz
@@ -1003,7 +1013,7 @@ async function startSpeculativeAnalysis(){
  _spec={key,promise,file,pct:0,msg:'',adopted:false};
  promise.catch(()=>{if(_spec.promise===promise&&!_spec.adopted)clearSpec()}); // cancel/greska: stvarni run ce gresku ponoviti korisniku
 }
-async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnalysis(selectedDocx)){const err=$('#dropError'),msg='Ovaj preglednik ne podržava čitanje datoteka potrebno za analizu. Ažuriraj preglednik ili otvori aplikaciju u novijem Chromeu, Safariju ili Firefoxu.';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone')?.classList.add('has-error');toast(msg);return}if(_intake.file===selectedDocx&&_intake.promise){const _iv=_intake.verdict||await _intake.promise;if(!selectedDocx||_intake.file!==selectedDocx)return;if(_iv.kind==='reject'){toast(_iv.message);return}}await ensureRulesForCurrentSelection(currentDefinitionId,ensureProfileRules);const {id,p}=currentProfile(),settings=buildAnalysisSettings(id,p);if(p.rulesUnavailable)toast('Pravila fakulteta nisu učitana; analiza ide po općoj provjeri, ne po pravilima fakulteta.');if(needsProfileConfirmation(p.statusKey,_profileConfirmed)){renderAnalyzeSummary(p);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Potvrdi profil prije analize: provjeri fakultet i studij.');return}const _dgv=_intake.file===selectedDocx?_intake.verdict:null;if(_dgv&&_dgv.kind==='ok'&&_dgv.suspicious&&!_intake.confirmedSuspicious){renderDocGateConfirm(_dgv);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Provjeri je li učitan pravi rad prije analize.');return}const _specHit=!!(_spec.promise&&_spec.file===selectedDocx&&_spec.key===specKey(selectedDocx,settings));if(_specHit)_spec.adopted=true;else invalidateSpeculative();const token=++_analyzeToken,analyzeBtn=$('#analyzeBtn'),docxFile=selectedDocx;if(analyzeBtn)analyzeBtn.disabled=true;withViewTransition(()=>{renderView('analiza')});progress(0,'Pripremam paketnu analizu');_netProbe=startNetworkProbe();if(_specHit)progress(Math.max(_spec.pct||0,4),_spec.msg||'Analiza već radi u pozadini');$('#progressView')?.scrollIntoView({behavior:'smooth',block:'start'});void trackEvent('analysis_started',{profileStatus:p.statusKey||'generic',workType:settings.workType||''});try{
+async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnalysis(selectedDocx)){const err=$('#dropError'),msg='Ovaj preglednik ne podržava čitanje datoteka potrebno za analizu. Ažuriraj preglednik ili otvori aplikaciju u novijem Chromeu, Safariju ili Firefoxu.';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone')?.classList.add('has-error');toast(msg);return}if(_intake.file===selectedDocx&&_intake.promise){const _iv=_intake.verdict||await _intake.promise;if(!selectedDocx||_intake.file!==selectedDocx)return;if(_iv.kind==='reject'){toast(_iv.message);return}}await ensureRulesForCurrentSelection(currentDefinitionId,ensureProfileRules);const {id,p}=currentProfile(),settings=buildAnalysisSettings(id,p);if(p.rulesUnavailable)toast('Pravila fakulteta nisu učitana; analiza ide po općoj provjeri, ne po pravilima fakulteta.');if(needsProfileConfirmation(p.statusKey,_profileConfirmed)){renderAnalyzeSummary(p);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Potvrdi profil prije analize: provjeri fakultet i studij.');return}const _dgv=_intake.file===selectedDocx?_intake.verdict:null;if(_dgv&&_dgv.kind==='ok'&&_dgv.suspicious&&!_intake.confirmedSuspicious){renderDocGateConfirm(_dgv);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Provjeri je li učitan pravi rad prije analize.');return}const _specHit=!!(_spec.promise&&_spec.file===selectedDocx&&_spec.key===specKey(selectedDocx,settings));if(_specHit)_spec.adopted=true;else invalidateSpeculative();const token=++_analyzeToken,analyzeBtn=$('#analyzeBtn'),docxFile=selectedDocx;if(analyzeBtn)analyzeBtn.disabled=true;withViewTransition(()=>{renderView('analiza')});{const fn=$('#progressFileName');if(fn){fn.textContent=docxFile?.name||'';fn.title=docxFile?.name||''}}progress(0,'Pripremam paketnu analizu');_netProbe=startNetworkProbe();if(_specHit)progress(Math.max(_spec.pct||0,4),_spec.msg||'Analiza već radi u pozadini');$('#progressView')?.scrollIntoView({behavior:'smooth',block:'start'});void trackEvent('analysis_started',{profileStatus:p.statusKey||'generic',workType:settings.workType||''});try{
  // Pomocne datoteke (PDF, metapodaci) NE smiju obarati glavnu analizu: neuspjeh se biljezi
  // kao stavka, a glavni .docx se svejedno analizira (F1).
  currentPdfAudit=selectedPdf?await safeAux(()=>analyzePdfFile(selectedPdf),'PDF preflight'):null;

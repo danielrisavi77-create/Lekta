@@ -24,3 +24,29 @@ export function renderView(stanje: WizardState, doc: Document = document): void 
   }
   if (korak !== null) doc.getElementById('wizardView')?.setAttribute('data-step', korak);
 }
+
+/**
+ * KORAK CAROBNJAKA KAO STANJE. Do 2026-09-07 je `setWizardStep` u `app.ts` pisao `dataset.step`
+ * IZRAVNO, mimo `renderView`, pa su postojala dva pisca istog stanja: korak se mogao postaviti
+ * a da nista ne jamci da je carobnjak uopce vidljiv. Prijevod broja u stanje pripada ovdje, jer
+ * je ovaj modul taj koji tvrdi iskljucivost prikaza.
+ *
+ * `fileName` se PRIMA, ne cita: modul ostaje bez znanja o odabranom dokumentu, pa je testabilan
+ * bez `app.ts` i bez preglednika.
+ */
+export const KORAK_U_STANJE: Readonly<Record<number, WizardState>> = { 1: 'dokument', 2: 'profil', 3: 'provjera' };
+
+export function showWizardStep(
+  korak: number,
+  fileName: string | null = null,
+  doc: Document = document,
+): boolean {
+  const stanje = KORAK_U_STANJE[korak];
+  if (!stanje) return false;
+  renderView(stanje, doc);
+  if (stanje === 'profil' && fileName) {
+    const f = doc.getElementById('stepFileName');
+    if (f) { f.textContent = fileName; f.title = fileName; }
+  }
+  return true;
+}

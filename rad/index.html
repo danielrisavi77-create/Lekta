@@ -53,7 +53,7 @@
          `repair-panel`) kliknu cover prije nego bilo sto provjere. Gard je zato nov:
          `tests/ux/intake-entry.spec.ts` trazi da je carobnjak vidljiv BEZ ijednog klika. -->
     <div class="analyzer-wrap">
-      <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> Dokument</span><span class="rail-step" data-rail="2"><b>2</b> Pravila</span><span class="rail-step" data-rail="3"><b>3</b> Provjera</span><span class="rail-step" data-rail="4"><b>4</b> Popravci</span></div>
+      <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> <span class="rail-lbl">Dokument</span></span><span class="rail-step" data-rail="2"><b>2</b> <span class="rail-lbl">Pravila</span></span><span class="rail-step" data-rail="3"><b>3</b> <span class="rail-lbl">Provjera</span></span><span class="rail-step" data-rail="4"><b>4</b> <span class="rail-lbl">Popravci</span></span></div>
       <div class="analyzer-body wizard-view" id="wizardView" data-step="1">
         <div class="wizard-grid">
           <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">I.</span>Dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · ostaje na tvom uređaju</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
@@ -88,7 +88,23 @@
         </details>
         <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite"></div><div class="analyze-actions"><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
       </div>
-      <div class="progress-view hidden" id="progressView" role="status" aria-live="polite"><div class="spinner"></div><h3>Analiziram dokument…</h3><p id="progressMessage">Otvaram Word strukturu</p><div class="progress-track"><i id="progressBar"></i></div><div class="progress-step" id="progressPercent" aria-hidden="true">0%</div><div class="progress-actions" style="margin-top:24px"><button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini analizu</button></div></div>
+      <div class="progress-view hidden" id="progressView" role="status" aria-live="polite">
+  <!-- PROVJERA, NE UCITAVANJE. Do 2026-09-07 su ovdje bili spinner, "Analiziram dokument...",
+       traka napretka, "0%" i snop od 12 listova s ravninom skena. Brif vlasnika: manje osjecaja
+       loading screena, vise osjecaja stvarnog pregleda rada.
+       POSTOTAK JE UKLONJEN NAMJERNO: motor ga daje kao pragove faza, ne kao mjeru preostalog
+       vremena, pa bi ispisan broj tvrdio preciznost koju nema. Faze govore isto, i istinito. -->
+  <p class="pv-file" id="progressFileName"></p>
+  <h3>Provjeravam rad</h3>
+  <!-- Recenicu za citac nosi OVO, ne popis faza: popis je aria-hidden, inace bi svaka promjena
+       stanja bila izgovorena sedam puta. Vidljivo je suvisno uz popis, pa je samo za citac. -->
+  <p class="sr-only" id="progressMessage">Otvaram Word strukturu</p>
+  <!-- popis faza montira progress-scan.ts, izmedu naslova i napomene -->
+  <p class="pv-local"><i data-lucide="lock" aria-hidden="true"></i> Dokument ne napušta uređaj</p>
+  <div class="progress-actions">
+    <button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini provjeru</button>
+  </div>
+</div>
       <div class="result-view hidden" id="resultView">
         <div class="lek-stepnav lek-stepnav-result"><div class="lek-stepnav-back"><button class="btn btn-ghost btn-sm" id="resultBackDoc" type="button">← Dokument</button><span class="lek-stepfile" id="resultFileName"></span><button class="btn btn-ghost btn-sm" id="resultBackProfile" type="button">← Profil fakulteta</button></div></div>
         <div class="demo-bar hidden" id="demoBar" role="note" aria-label="Primjer izvještaja"></div>

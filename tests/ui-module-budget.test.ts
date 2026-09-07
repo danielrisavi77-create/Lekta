@@ -73,15 +73,21 @@ const BUDZET_APP = 357 * 1024;
 // presao vlastiti budzet (357,2 od 357 KB). Ukupno raste jer je dodana funkcionalnost koje prije
 // nije bilo: potvrda profila kao ekran umjesto formulara od devet kontrola (UX_PRINCIPLES.md 2).
 // Sam app.ts je pritom PAO ispod svog budzeta, sto je ono sto ratchet stvarno cuva.
-// 2026-09-07 (drugi put istog dana, i razlog je drugi): 826 -> 828 KB. Dvoje:
-//  - `openProfileSheet`/`closeProfileSheet` u app.ts, jer list profila mora biti ozicen na ISTO
-//    mjesto kao ostalih 12 modala (globalni Escape rukovatelj i delegirani klik kartice); vani
-//    bi se logika modala razdvojila na dvije datoteke.
-//  - obrazlozenje ispravka u `modal-utils.ts`: vracanje fokusa stajalo je izvan provjere `_trap`,
-//    pa ga je trosio prvi zatvarac u nizu dok je pozadina jos `inert`. Kvar je pogadjao SVIH 12
-//    modala zatvorenih Escapeom i izmjeren je na `#legalModal`, koji ta izmjena ne dira.
-// `app.ts` je pritom OSTAO ispod svog budzeta, sto je ono sto ratchet primarno cuva.
-const BUDZET_UI_UKUPNO = 828 * 1024;
+// 2026-09-07: 823 -> 830 KB kroz TRI dizanja u jednom danu. Pise se kao jedan zapis, jer bi
+// tri odvojena retka sakrila upravo ono sto je vazno: koliko je puta dignut i zasto svaki put.
+//   823 -> 826  `src/ui/profile-card.ts`, nov modul (kartica potvrde profila, testabilna bez DOM-a)
+//   826 -> 828  ozicenje lista profila (mora biti uz ostalih 12 modala) + obrazlozenje ispravka
+//               `releaseModal`, koji je gubio fokus na SVAKOM modalu zatvorenom Escapeom
+//   828 -> 830  redizajn ekrana provjere (`progress-scan.ts`), konsolidacija pisaca faze
+//               (`wizard-view.ts` dobio prijevod koraka u stanje) i traka koraka na mobitelu
+//
+// RAST JE GOTOVO ISKLJUCIVO OBRAZLOZENJE, ne logika: neto +1,7 KB zadnjeg kruga je ~40 redaka
+// komentara koji biljeze mjerenja i odbacene alternative. To je svjesna razmjena, a ne propust.
+//
+// `app.ts` je kroz sva tri kruga OSTAO ispod svog budzeta (356,9 od 357 KB), i to je ono sto
+// ratchet primarno cuva. Kad je u jednom trenutku probio (357,5), rjesenje NIJE bilo dizanje
+// nego selidba: kartica u vlastiti modul, prijevod koraka u `wizard-view.ts`.
+const BUDZET_UI_UKUPNO = 830 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {

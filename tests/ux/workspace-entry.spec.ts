@@ -204,3 +204,141 @@ test('/rad/ list profila: zamka fokusa, izlaz tipkovnicom i povratak fokusa', as
     !!document.activeElement?.closest('[data-change-profile]'));
   expect(vracen, 'fokus se nije vratio na "Promijeni"').toBe(true);
 });
+
+test('/rad/ traka koraka: na mobitelu postoji, u jednom retku, s natpisom samo na aktivnom', async ({ page }) => {
+  /**
+   * Do 2026-09-07 je traka ispod 720 px bila `display:none`, i razlog je bio stvaran: cetiri
+   * natpisa se na 390 px lome u TRI retka i uzimaju 108 px pregiba (izmjereno). Posljedica je
+   * ipak bila da mobilni korisnik nema NIKAKAV pokazatelj polozaja u toku, dok ga desktop ima.
+   *
+   * Rjesenje nije bilo sakriti traku nego natpise. Brojevi nose redoslijed, natpis se cuva samo
+   * na aktivnom koraku, i cijela informacija stane u jedan redak (40 px umjesto 108).
+   *
+   * MJERI SE ISCRTANO, NE `textContent`: prvo mjerenje je citalo tekst cvora i javilo sva cetiri
+   * natpisa kao vidljiva, iako su tri bila `display:none`. Isti razred kao citanje popisa testova
+   * umjesto rezultata: pogled tocan za ono sto mjeri, krivo procitan.
+   */
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/rad/');
+  const traka = page.locator('.wizard-rail');
+  await expect(traka).toBeVisible();
+
+  const m = await traka.evaluate((r) => {
+    const koraci = [...r.querySelectorAll('.rail-step')].map((s) => {
+      const lbl = s.querySelector('.rail-lbl');
+      return {
+        y: s.getBoundingClientRect().y,
+        natpisVidljiv: !!lbl && getComputedStyle(lbl).display !== 'none',
+      };
+    });
+    return {
+      visina: r.getBoundingClientRect().height,
+      raspony: Math.max(...koraci.map((k) => k.y)) - Math.min(...koraci.map((k) => k.y)),
+      snatpisom: koraci.filter((k) => k.natpisVidljiv).length,
+      ukupno: koraci.length,
+      prelijeva: r.scrollWidth > r.clientWidth + 1,
+    };
+  });
+
+  expect(m.ukupno, 'traka mora imati sva cetiri koraka').toBe(4);
+  // Jedan redak: razlika u `y` je poravnanje osnovice, ne prelom. Prag od 8 px je iznad te
+  // razlike (izmjereno 0,9 px) a daleko ispod visine retka (~22 px), pa razlikuje to dvoje.
+  expect(m.raspony, 'koraci su se prelomili u vise redaka').toBeLessThan(8);
+  expect(m.visina, 'traka je narasla preko jednog retka').toBeLessThan(56);
+  expect(m.prelijeva, 'traka se vodoravno prelijeva').toBe(false);
+  // Tocno JEDAN natpis: nula bi znacila da se ne zna gdje si, vise od jednog da se opet lome.
+  expect(m.snatpisom, 'natpis mora nositi tocno aktivni korak').toBe(1);
+});
+
+test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', async ({ page }) => {
+  /**
+   * `wizard-view.ts` se predstavlja kao JEDINI PISAC PRIKAZA, ali do 2026-09-07 su ga dva mjesta
+   * zaobilazila: `setWizardStep` je upisivao `dataset.step` izravno (bez jamstva da je carobnjak
+   * uopce vidljiv), a `backToWizardFromResult` je rucno gasio `#resultView` i palio `#wizardView`.
+   * Ta dva `classList` poziva bila su tocno ona "disciplina pozivatelja" koju uvod tog modula
+   * navodi kao razlog svog postojanja.
+   *
+   * Invarijanta se mjeri NA SVAKOM KORAKU toka, ne jednom na kraju: kvar dva istovremeno vidljiva
+   * prikaza je prolazan i tek ga hod kroz stanja moze uhvatiti.
+   */
+  const jedan = async (gdje: string) => {
+    const vidljivi = await page.evaluate(() =>
+      ['wizardView', 'progressView', 'resultView']
+        .filter((id) => { const el = document.getElementById(id); return el && !el.classList.contains('hidden'); }));
+    expect(vidljivi, `${gdje}: vidljivo ${vidljivi.length} prikaza umjesto jednog (${vidljivi.join(',')})`)
+      .toHaveLength(1);
+    return vidljivi[0];
+  };
+
+  await page.goto('/rad/');
+  expect(await jedan('na dolasku')).toBe('wizardView');
+
+  await page.locator('#fileInput').setInputFiles(FIXTURE);
+  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  expect(await jedan('poslije uploada')).toBe('wizardView');
+
+  // Pokretanje: analiza pa nalaz. Potvrda je primarna akcija od spajanja koraka 2 i 3.
+  await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
+  await jedan('s karticom potvrde');
+  await page.locator('[data-confirm-profile]').click();
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
+  expect(await jedan('na nalazu')).toBe('resultView');
+
+  // POVRATAK JE ONO STO JE PUKLO: stari put je rucno gasio jedan prikaz i palio drugi, pa je
+  // propust jednog poziva ostavljao dva vidljiva. Sada ide kroz `renderView`.
+  const natrag = page.locator('#resultBackProfile');
+  if (await natrag.count()) {
+    await natrag.click();
+    await expect(page.locator('#wizardView')).toBeVisible();
+    expect(await jedan('poslije povratka s nalaza')).toBe('wizardView');
+  }
+});
+
+test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', async ({ page }) => {
+  /**
+   * Brif vlasnika: manje osjecaja loading screena, vise osjecaja stvarnog pregleda rada. Do
+   * 2026-09-07 su ovdje bili spinner, "Analiziram dokument...", traka napretka, "0%" i snop od
+   * 12 listova s ravninom skena.
+   *
+   * POSTOTAK JE ONO STO SE NE SMIJE VRATITI. Motor ga daje kao PRAG faze, ne kao mjeru preostalog
+   * vremena; ispisan broj bi tvrdio preciznost koju nema. Tvrdnja gleda cijeli vidljivi tekst
+   * prikaza, ne pojedini element, jer bi provjera po ID-u prosla cim se broj preseli drugamo.
+   */
+  await page.goto('/rad/');
+  await page.locator('#fileInput').setInputFiles(FIXTURE);
+  await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
+  await page.locator('[data-confirm-profile]').click();
+
+  const pv = page.locator('#progressView');
+  await expect(pv).toBeVisible({ timeout: 15_000 });
+
+  await expect(pv.locator('.pv-file')).toHaveText(path.basename(FIXTURE));
+  await expect(pv.locator('h3')).toHaveText('Provjeravam rad');
+  await expect(pv.locator('.pv-local')).toContainText('ne napušta uređaj');
+  await expect(pv.locator('#cancelAnalysisBtn')).toHaveText('Prekini provjeru');
+
+  const stanje = await pv.evaluate((v) => {
+    const faze = [...v.querySelectorAll('.pscan__phase')];
+    return {
+      ukupno: faze.length,
+      aktivnih: faze.filter((li) => (li as HTMLElement).dataset.state === 'active').length,
+      // Gotova faza mora pokazivati PROSLO vrijeme, dakle drugi tekst od onoga koji motor salje.
+      gotoviProslo: faze
+        .filter((li) => (li as HTMLElement).dataset.state === 'done')
+        .every((li) => {
+          const sad = li.querySelector('.pscan__sad') as HTMLElement | null;
+          const bilo = li.querySelector('.pscan__bilo') as HTMLElement | null;
+          return !!sad && !!bilo && getComputedStyle(sad).display === 'none'
+            && getComputedStyle(bilo).display !== 'none';
+        }),
+      tekst: (v as HTMLElement).innerText,
+      spinnera: v.querySelectorAll('.spinner, .progress-track, #progressBar, #progressPercent').length,
+    };
+  });
+
+  expect(stanje.ukupno, 'popis mora nositi sve faze motora').toBe(7);
+  expect(stanje.aktivnih, 'najvise jedna faza smije biti aktivna').toBeLessThanOrEqual(1);
+  expect(stanje.gotoviProslo, 'gotova faza mora biti u proslom vremenu').toBe(true);
+  expect(stanje.spinnera, 'spinner, traka ili postotak su se vratili').toBe(0);
+  expect(stanje.tekst, `postotak je ponovno na ekranu: ${stanje.tekst}`).not.toMatch(/\d+\s*%/);
+});
