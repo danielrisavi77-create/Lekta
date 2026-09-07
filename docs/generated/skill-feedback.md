@@ -1,4 +1,4 @@
-<!-- npm run skill-feedback -- --write | 2026-09-07T07:53:31.184Z | c5978e127e2f94b714b56d422a5e942669f81ff5 -->
+<!-- npm run skill-feedback -- --write | 2026-09-07T10:40:40.488Z | 45725922550b573521bf3abceebc03d5b168ec79 -->
 <!-- Fragment za <katedra-lite>/references/zamke.md. Provjera na drugoj strani: -->
 <!-- python3 <katedra>/scripts/kvar.py <ovaj-fragment>.md --provjeri --nastavak-od 140 -->
 
@@ -26,82 +26,106 @@ Izmjereno na 6 dokumenata (effectus--seminar--diplomski--neuredan.docx, effectus
 
 ```
 $ python3 scripts/verify_sources.py fzsri--final--prijediplomski--uskladjen.docx --pokrivenost --offline
-   citata_razlicitih: 0 | necitiranih: 20 | bez_izvora: 0
-   (rad ima 20 jedinica literature i citira ih numericki, Vancouver)
 
-$ python3 scripts/verify_sources.py effectus--seminar--diplomski--uskladjen.docx --pokrivenost --offline
-   citata_razlicitih: 0 | necitiranih: 18 | bez_izvora: 0
-   (rad ima 18 jedinica i 12 fusnota; pokrivenost cita samo tijelo_rada(put))
+POKRIVENOST (heuristika: sklonidba prezimena, viseclana prezimena i "i sur." mogu dati lazne
+             nalaze - svaki redak provjeri okom)
+  ⚠️  na popisu, a nigdje citirano (20):        <- SVE jedinice popisa, rad ih ima 20
+      ...
+
+   Ono sto se u ispisu NE vidi, a stoji u `--json` i odmah imenuje uzrok:
+     fzsri     citata_razlicitih: 0 | necitiranih: 20 | bez_izvora: 0   (numericki, Vancouver)
+     effectus  citata_razlicitih: 0 | necitiranih: 18 | bez_izvora: 0   (Chicago, 12 fusnota)
+
+   Zaglavlje upozorava na sklonidbu, sto ovdje nije uzrok; ni jedna rijec ne kaze da stil
+   citiranja uopce nije prepoznat, a `pokrivenost` cita samo `tijelo_rada(put)`.
 ```
 
-## 142. Prezime u kosom padezu ne nadje svoju jedinicu, pa jedan ispravan citat da dva lazna nalaza
+## 142. Sklonidba je deklarirana kao moguc lazan nalaz, a isti redak svejedno nosi crveni krizic
 
-Kljuc citata se svodi na prezime prvog autora i godinu, ali se svodjenje radi nad DOSLOVNIM nizom iz
-teksta. Hrvatski taj niz sklanja. Recenica "Prema Galtungu i Rugeu (1965)" daje kljuc
-`galtungu 1965`, dok jedinica "Galtung, J. i Ruge, M. H. (1965)" daje `galtung 1965`. Kljucevi se
-ne poklope.
+Zaglavlje odjeljka POKRIVENOST samo kaze da sklonidba prezimena moze dati lazne nalaze i trazi da
+se svaki redak provjeri okom. To je posteno i tocno. Problem je sto isti alat taj redak zatim
+oznaci s `❌`, dakle najjacom ozbiljnoscu koju ima, dok susjedni odjeljak nosi `⚠️`.
 
-Jedan te isti ispravno napisan citat zato proizvede DVA nalaza koji se citaju kao razliciti problemi:
-citat bez izvora (jer se kljuc iz teksta ne nalazi u literaturi) i necitirana jedinica (jer se
-jedinica ne nalazi u tekstu). Tko gleda samo jedan od ta dva popisa nema nacina vidjeti da su to dvije
-strane iste stvari, pa ce popravljati tekst koji je bio tocan.
+Upozorenje i oznaka si proturjece. `❌` znaci "ovo je krivo", a zaglavlje istovremeno kaze "ovo
+mozda nije krivo, provjeri okom". Citatelj koji vjeruje oznaci mijenja ispravan tekst; citatelj
+koji vjeruje zaglavlju prelazi preko svih `❌` redaka, pa ce jednom prijeci i preko istinitog.
+Deklarirana nesigurnost pripada oznaci, ne samo zaglavlju.
 
-Lekta je isti kvar imala i popravila ga svodjenjem na korijen prije usporedbe. Recept je prenosiv i
-kratak: skini padezni nastavak s popisa `ovima, evima, ima, ova, eva, om, em, ju, a, e, i, u`,
-odbaci korijen kraci od cetiri znaka i uz svaki korijen ponudi i oblik s dodanim `a` zbog zenske
-sklonidbe, jer "Bandure" treba dati "bandura". Granica od cetiri znaka nije ukras: bez nje "Mara"
-postane "mar" i pocne se lazno vezati uz svaku jedinicu koja pocinje tim slovima, a lazan pozitiv je
-gori od laznog negativa jer tiho tvrdi podudaranje kojega nema. Popravak zivi u `kljuc_prvog_autora`
-i `kljuc_izvora`, dakle na obje strane usporedbe, inace se raskorak samo preseli.
+Mehanizam: kljuc citata svodi se na prezime prvog autora i godinu, ali nad DOSLOVNIM nizom iz teksta.
+Hrvatski taj niz sklanja, pa "Prema Galtungu i Rugeu (1965)" daje `galtungu 1965`, a jedinica
+"Galtung, J. i Ruge, M. H. (1965)" daje `galtung 1965`. Jedan ispravan citat zato izlazi na OBA
+popisa odjednom, kao citat bez izvora i kao necitirana jedinica, sto se cita kao dva razlicita
+problema.
+
+Lekta je isti kvar imala i popravila ga svodjenjem na korijen prije usporedbe; palih citatnih i
+literaturnih provjera preko istih 11 dokumenata bilo je 7, poslije 2, a preostala dva su istiniti
+nalazi iz namjerno pokvarenog primjerka. Recept je prenosiv i kratak: skini padezni nastavak s popisa
+`ovima, evima, ima, ova, eva, om, em, ju, a, e, i, u`, odbaci korijen kraci od cetiri znaka i uz
+svaki korijen ponudi i oblik s dodanim `a` zbog zenske sklonidbe, jer "Bandure" treba dati
+"bandura". Granica od cetiri znaka nije ukras: bez nje "Mara" postane "mar" i pocne se lazno vezati
+uz svaku jedinicu koja pocinje tim slovima, a lazan pozitiv je gori od laznog negativa jer tiho
+tvrdi podudaranje kojega nema. Popravak ide u `kljuc_prvog_autora` i `kljuc_izvora`, na obje strane
+usporedbe, inace se raskorak samo preseli. Kad svodjenje radi, upozorenje u zaglavlju vise nije
+potrebno na ovoj osi, pa se i ono smije suziti.
 
 Izmjereno na 3 dokumenta (fpzg--final--prijediplomski--neuredan.docx, fpzg--final--prijediplomski--uskladjen.docx, fpzg--final--prijediplomski--word.docx); najveci broj nalaza na jednom dokumentu je 2.
 
 ```
 $ python3 scripts/verify_sources.py fpzg--final--prijediplomski--uskladjen.docx --pokrivenost --offline
-   citata_razlicitih: 19 | necitiranih: 1 | bez_izvora: 2
-   bez_izvora:  [galtungu 1965, wallacea 2018]      <- kljucevi iz TIJELA rada
-   necitirani:  [galtung 1965]                      <- kljuc iste jedinice iz LITERATURE
 
-   Ista jedinica je istovremeno na oba popisa, pa jedan kvar izgleda kao dva razlicita.
-   Tijelo rada pise prezime u dativu i genitivu, sto je ispravan hrvatski; literatura ga pise u
-   nominativu, sto je ispravan APA. Nijedna strana nije pogrijesila.
+POKRIVENOST (heuristika: sklonidba prezimena, viseclana prezimena i "i sur." mogu dati lazne
+             nalaze - svaki redak provjeri okom)
+  ⚠️  na popisu, a nigdje citirano (1):
+      Galtung i Ruge 1965
+  ❌ citirano u tekstu, a nema ga na popisu (2):
+      (Galtungu, 1965.)
+      (Wallacea, 2018.)
 
-   (Popis necitiranih je ovdje sveden na KLJUC. Doslovna jedinica je tekst iz dokumenta i ne
-    prelazi granicu izmedju dvaju proizvoda; kljuc je izvedenica i dovoljan je za mehanizam.)
+   Zaglavlje kaze "mozda lazno", redak kaze ❌. Ista jedinica stoji na oba popisa, jednom u
+   nominativu i jednom u dativu odnosno genitivu. Tijelo rada pise ispravan hrvatski, literatura
+   ispravan APA; nijedna strana nije pogrijesila.
 ```
 
-## 143. Popis literature je nadjen, a poruka kaze da nije: brojcani prefiks jedinice odnese sva prezimena
+## 143. Provjera koja nije izvedena ispisuje se kao "0 krsenja", uz razlog koji nije tocan
 
-`literatura_prezimena` u `provjeri_fusnote.py` nadje naslov popisa preko `H.NASLOV_LIT`, prodje kroz
-jedinice i iz svake izvuce prezime uzorkom koji je usidren na POCETAK odlomka i trazi barem tri znaka
-prije zareza ili tocke. Jedinica u numeriranom popisu pocinje brojem i tockom, pa uzorak vidi samo
-znamenku, odbije ju i ne uhvati nista.
+Na radu s 12 fusnota i urednim popisom literature alat ispise "0 krsenja". Iznad toga stoji redak
+"popis literature nije nadjen, razrjesavanje fusnota nije provjereno", oznacen neutralno. Dvije
+tvrdnje zajedno kazu suprotno od onoga sto se dogodilo: provjera NIJE izvedena, a ispis je cist.
 
-Skup prezimena time ostane prazan iako je popis uredno pronadjen i imao 18 jedinica. Poruka koju
-korisnik dobije glasi da popis literature nije nadjen, jer prazan skup i nepostojeci popis prolaze
-kroz istu granu. Dvije razlicite dijagnoze pod jednom porukom gore su od nijedne: poruka salje
-korisnika da trazi naslov koji vec postoji i uredno je stiliziran kao `Heading1`.
+Razlog naveden u poruci k tome nije tocan. Popis JEST nadjen: naslov "Literatura" prolazi
+`H.NASLOV_LIT`, stiliziran je kao `Heading1`, i iza njega slijedi 18 jedinica. Prazan je ispao skup
+PREZIMENA, jer ih `literatura_prezimena` vadi uzorkom usidrenim na pocetak odlomka koji trazi barem
+tri znaka prije zareza ili tocke. Jedinica u numeriranom popisu pocinje brojem i tockom, pa uzorak
+vidi samo znamenku i ne uhvati nista. Prazan skup i nepostojeci popis prolaze kroz istu granu, pa se
+dvije razlicite dijagnoze ispisuju istom recenicom.
 
-Prava steta je ono sto se pritom PRESKOCI. Provjera razrjesava li se fusnotni citat u popisu
-literature jedina je koja tim skupom barata, pa nad numeriranim popisom nikad ne trci. Rad prodje kao
-provjeren, a cijela jedna provjera nije bila izvedena, i to uz stanje koje izgleda neutralno.
-Popravak ima dva dijela i drugi je vazniji: dopusti neobavezan brojcani prefiks u uzorku za prezime,
-i razdvoji dvije poruke, tako da "popis nije nadjen" i "popis nadjen, nijedna jedinica nije
-procitana" budu razliciti nalazi. Drugi je ozbiljniji i mora biti vidljiv i kad prvi ne vrijedi.
+Steta je dvostruka. Poruka salje korisnika da trazi naslov koji vec postoji, a "0 krsenja" ga uvjeri
+da je na tom mjestu cisto. Provjera razrjesava li se fusnotni citat u popisu literature jedina je
+koja tim skupom barata, pa nad numeriranim popisom nikad ne trci; rad prodje kao provjeren, a nije.
+
+Popravak ima tri dijela i treci je najvazniji: dopusti neobavezan brojcani prefiks u uzorku za
+prezime; razdvoji poruke, tako da "popis ne postoji" i "popis postoji, nijedna jedinica nije
+procitana" budu razliciti nalazi; i NE ispisuj "0 krsenja" kad je ijedna provjera preskocena, nego
+reci koliko ih je izvedeno od koliko. Ograda koja bi kvar bila uhvatila je upravo ta zadnja: brojac
+krsenja koji ne razlikuje "nista nije naslo" od "nista nije trazilo".
 
 Izmjereno izravno na 3 dokumenta (effectus--seminar--diplomski--uskladjen.docx, effectus--seminar--diplomski--word.docx, effectus--seminar--diplomski--neuredan.docx).
 
 ```
-$ python3 scripts/provjeri_fusnote.py effectus--seminar--diplomski--uskladjen.docx --json out.json
-   {"fusnota": 12, "prazno": false, "raspon": "2-13",
-    "nalazi": [{"pravilo": "popis", "stanje": "neutralno",
-                "poruka": "popis literature nije nadjen - razrjesavanje fusnota nije provjereno"}]}
+$ python3 scripts/provjeri_fusnote.py effectus--seminar--diplomski--uskladjen.docx
+
+FUSNOTE - disciplina navodjenja
+  12 fusnota (2-13)
+
+➖ popis literature nije nadjen - razrjesavanje fusnota nije provjereno
+
+0 krsenja                                  <- cist ispis, a provjera nije izvedena
 
    Trag kroz literatura_prezimena() na tom istom dokumentu:
-     NASLOV_LIT.match("Literatura")          -> True   (naslov JE nadjen, stil Heading1)
-     jedinica poslije naslova                -> 18
+     NASLOV_LIT.match("Literatura")           -> True   (popis JE nadjen, stil Heading1)
+     jedinica poslije naslova                 -> 18
      PREZIME.match("1. <Prezime>, <Ime> ...") -> False  (uzorak vidi "1", trazi 3+ znaka)
-     literatura_prezimena(...)               -> 0 prezimena
+     literatura_prezimena(...)                -> 0 prezimena
 
    (Jedinica je prikazana kao OBLIK, ne doslovno: doslovan redak je tekst iz dokumenta i ne
     prelazi granicu izmedju dvaju proizvoda. Za mehanizam je vazan samo brojcani prefiks.)

@@ -30,6 +30,7 @@ import { DOCX_SHAPE_IDS, verifyShapeClaims, type DocxShapeCounts } from '../src/
 import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
 import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
+import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -664,6 +665,75 @@ const MUTATIONS: Mutation[] = [
         r.numbers.length === 2 &&
         r.numbers[0] === 141 &&
         r.unsupported.length === 0
+      );
+    },
+  },
+  {
+    id: 'eval/slucaj-nadzivi-kvar-koji-cuva',
+    imitates:
+      'eval slucaj ostane u skupu nakon sto je kvar koji cuva popravljen ili izbrisan iz kataloga. Takav ' +
+      'slucaj i dalje PROLAZI, pa izgleda kao pokrice a ne cuva vise nista, i sljedeca regresija prodje ' +
+      'ispod njega neopazeno. Isti razred kao gard s prepisanom vrijednoscu koji ostaje zelen dokazujuci ' +
+      'nesto o mrtvom nizu; razlika je samo u tome sto ovaj zivi u TUDJEM repozitoriju, pa ga nas gate ' +
+      'nikad vise ne bi vidio',
+    caught: () => {
+      const kvar: DefectClass = {
+        id: 'k',
+        owner: 'katedra-lite',
+        title: 't',
+        body: 'b',
+        output: 'o',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      const slucaj: EvalClass = {
+        defectId: 'k',
+        prompt: 'p',
+        expected_output: 'e',
+        expectations: ['x'],
+        fixtures: ['a.docx'],
+      };
+      // Kvar popravljen na drugoj strani: mjerenje vise ne pokazuje razilazenje.
+      const mirno: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 0, ishod: 'nitko' },
+      ];
+      const popravljen = renderEvalCases([slucaj], [kvar], mirno, 10);
+      // Kvar izbrisan iz kataloga: slucaj vise nema sto cuvati.
+      const bezKvara = renderEvalCases([slucaj], [], mirno, 10);
+      return (
+        popravljen.cases.length === 0 &&
+        popravljen.skipped.length === 1 &&
+        bezKvara.cases.length === 0 &&
+        bezKvara.skipped.length === 1 &&
+        popravljen.skipped[0].why !== bezKvara.skipped[0].why
+      );
+    },
+    // Netrivijalnost: dok kvar postoji I mjerenje ga podupire, slucaj MORA izaci, s dokumentom.
+    cleanBefore: () => {
+      const kvar: DefectClass = {
+        id: 'k',
+        owner: 'katedra-lite',
+        title: 't',
+        body: 'b',
+        output: 'o',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      const slucaj: EvalClass = {
+        defectId: 'k',
+        prompt: 'p',
+        expected_output: 'e',
+        expectations: ['x'],
+        fixtures: ['a.docx'],
+      };
+      const razilazenje: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 20, ishod: 'samo-katedra' },
+      ];
+      const r = renderEvalCases([slucaj], [kvar], razilazenje, 10);
+      return (
+        r.cases.length === 1 &&
+        r.cases[0].id === 11 &&
+        r.skipped.length === 0 &&
+        r.fixtures.length === 1 &&
+        (r.cases[0].files ?? []).length === 1
       );
     },
   },

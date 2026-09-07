@@ -97,6 +97,9 @@
     { "pattern": "src/corpus/prose-schema.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Ugovor prozne datoteke sintetickog korpusa (validator ulaza za graditelja). Test i build sloj; app nikad ne cita prozu." },
     { "pattern": "src/corpus/tool-comparison.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Klasifikacija ishoda usporedbe Lekte i Katedre nad istim dokumentom. Cita ju skripta skill-compare i njezini gardovi; nema je u pregledniku." },
     { "pattern": "src/corpus/tool-feedback.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Renderer kvar zapisa za izvoz prema katedra skillu. Cita ga skripta skill-feedback i njezini gardovi; nema je u pregledniku." },
+    { "pattern": "src/corpus/tool-evals.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Slaganje eval slucajeva za katedra-lite iz kataloga i mjerenja. Test i build sloj; nema je u pregledniku." },
+    { "pattern": "src/corpus/defect-catalog.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Autorski katalog kvarova u tudjem alatu, s doslovnim ispisima. Podatak za izvoz prema katedri, nikad za bundle." },
+    { "pattern": "src/corpus/eval-catalog.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Autorski katalog eval slucajeva. Isti razred kao defect-catalog.ts." },
     { "pattern": "src/routes/shared/public-route-directory.json", "class": "PUBLIC", "bundle": "allowed", "note": "Javni direktorij ruta (natpisi, opisi i root-relative putanje javnih stranica). Jedini PODATAK u src/ koji route shell isporucuje pregledniku, pa dobiva izricitu presudu umjesto oslanjanja na src/** catch-all. Postojanje odredista NIJE stvar manifesta: cuva ga tests/public-route-directory.test.ts." }
   ],
   "canaries": [

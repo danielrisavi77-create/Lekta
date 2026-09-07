@@ -76,6 +76,7 @@
     "corpus-gen:word": "vite-node scripts/corpus-gen/generate-word.mts",
     "repair-net": "vite-node scripts/corpus-gen/repair-net.mts",
     "skill-compare": "vite-node scripts/corpus-gen/skill-compare.mts",
+    "skill-evals": "vite-node scripts/corpus-gen/skill-evals.mts",
     "skill-feedback": "vite-node scripts/corpus-gen/skill-feedback.mts",
     "repair-real-corpus": "vite-node scripts/repair-real-corpus.mts",
     "repair-real-corpus-backlog": "vite-node scripts/generate-real-corpus-backlog.mts",

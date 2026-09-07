@@ -18,7 +18,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readZip } from '../src/repair/zip-codec';
-import { KVAROVI } from '../scripts/corpus-gen/skill-feedback.mts';
+import { KVAROVI } from '../src/corpus/defect-catalog';
 import { dokumenata, isSupported, renderDefectFragment, supportingRows } from '../src/corpus/tool-feedback';
 import type { ComparisonRow } from '../src/corpus/tool-comparison';
 
