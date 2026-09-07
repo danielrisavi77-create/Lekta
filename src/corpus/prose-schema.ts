@@ -111,9 +111,17 @@ const NATPIS_PO_VRSTI: Record<string, RegExp> = {
   project: /PROJEKTNI RAD|RAD/,
 };
 
-/** Sve recenice tijela rada, bez naslova; jedini ulaz koji ide u dokument kao tekst. */
+/**
+ * Sve recenice tijela rada, bez naslova; jedini ulaz koji ide u dokument kao tekst.
+ *
+ * Poglavlje BEZ `paragraphs` je stvarna autorska pogreska, ne teorijska: nastaje cim se u planu
+ * poglavlje vodi kao natpis nad potpoglavljima. Prije 2026-09-07 je zbog toga `validateProseBody`
+ * PUCAO uz `Cannot read properties of undefined`, umjesto da vrati imenovan nalaz. Provjera koja
+ * pukne nije provjera koja je pala: pad se cita kao kvar alata, pa se trazi na krivom mjestu.
+ * Zato se ovdje odsutnost tolerira, a validator je taj koji ju IMENUJE.
+ */
 export function bodyParagraphs(body: ProseBody): string[] {
-  return body.chapters.flatMap((c) => c.paragraphs);
+  return body.chapters.flatMap((c) => c.paragraphs ?? []);
 }
 
 export function wordCount(body: ProseBody): number {
@@ -149,6 +157,12 @@ export function validateProseBody(body: ProseBody): string[] {
 
   const paragraphs = bodyParagraphs(body);
   if (!paragraphs.length) push('nema nijedan odlomak tijela');
+  // Poglavlje bez ijednog odlomka imenuje se POSEBNO. Zbroj odlomaka moze biti uredan dok jedno
+  // poglavlje ostane prazno, pa bi ga provjera nad zbrojem propustila; u dokumentu bi tada stajao
+  // naslov bez teksta, sto je oblik koji analiza vidi a autor ne primijeti.
+  for (const c of body.chapters ?? []) {
+    if (!(c.paragraphs?.length ?? 0)) push(`poglavlje "${c.title}" nema nijedan odlomak`);
+  }
   const vidjeni = new Set<string>();
   let ponovljeni = 0;
   for (const p of paragraphs) {
