@@ -63,6 +63,37 @@ export const PROJECTIONS = [
     regenerate: 'npm run closed-loop',
   },
   {
+    // Mreza nad fixerima. Izvor je i sam MOTOR POPRAVKA: promjena u `src/repair` moze ugasiti fixer,
+    // a to je tocno ono sto mreza postoji da uhvati, pa artefakt mora zaostati kad se motor pomakne.
+    id: 'repair-net',
+    artifacts: ['docs/generated/repair-net.json'],
+    sources: [
+      'src/repair',
+      'src/analysis',
+      'src/ui/repair-item-assembly.ts',
+      'tests/fixtures/docx-authored',
+      'scripts/corpus-gen/net-core.mts',
+      'scripts/corpus-gen/repair-net.mts',
+    ],
+    regenerate: 'npm run repair-net -- --write',
+  },
+  {
+    // Popis redaka sintetickog korpusa. Izvor su KATALOG i RUTIRANJE, pa se manifest mijenja i kad
+    // se ne dirne nijedan generator: dovoljno je da jedinica dobije profil ili da se program preimenuje.
+    id: 'synthetic-corpus-manifest',
+    artifacts: ['data/verification/synthetic-corpus-manifest.json'],
+    sources: [
+      'data/catalog/zagreb-catalog.json',
+      'data/profiles/verified-profiles-index.json',
+      'data/profiles/verified-profiles-heavy.json',
+      'src/ui/work-selection.ts',
+      'src/profiles/compose-profile.ts',
+      'scripts/corpus-gen/rows.mts',
+      'scripts/corpus-gen/plan-rows.mts',
+    ],
+    regenerate: 'npm run corpus-gen:rows -- --write',
+  },
+  {
     id: 'real-corpus',
     artifacts: ['docs/generated/repair-real-corpus.json'],
     sources: ['src/repair', 'src/analysis', 'tests/real-corpus/harness.ts'],

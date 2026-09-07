@@ -1,0 +1,46 @@
+{
+  "profileId": "effectus-seminarski",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "effectus--seminar--diplomski",
+    "unitId": "effectus",
+    "workType": "seminar",
+    "level": "diplomski",
+    "program": "Financije i poslovno pravo",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "effectus-seminar"
+  },
+  "prose": {
+    "id": "effectus--seminar--diplomski",
+    "words": 3091,
+    "authoring": {
+      "method": "SINTETSKI TESTNI ULAZ za Lektu, ne studentski rad i ne za predaju. Autor i mentor su izmišljena imena, tema i tekst su izmišljeni, nema nijednog vlastitog empirijskog podatka, nijedne brojke pripisane stvarnoj ustanovi i nijednog pravnog savjeta; rad je izrijekom pojmovan i pregledan. Pripisivanja poznatim autorima (Jensen i Meckling, Spence, Leland i Pyle, Freeman, Dechow, Ge i Schrand, Akerlof, Healy i Palepu, Verrecchia, Watts i Zimmerman, Beyer i suradnici) drže se općepoznatih pojmovnih doprinosa tih djela, bez pripisivanja pojedinačnih nalaza. Bariše, Kovačević, Marić, Perković, Rajić, Vukelić i Šarić, Zubak te Grgić su IZMIŠLJENE jedinice s izmišljenim izdavačima i časopisima; Marić i Perković nose namjerno izmišljene DOI-je (doiKind fake), da provjera postojanja može vratiti i not-found. BROJEVI STRANICA U FUSNOTAMA SU SINTETSKI i nisu potvrđeni iz izvora (katedra-lite pravilo 28): svrha im je oblik fusnote koji parser mora prepoznati, ne bibliografska točnost; nijedna se doslovna tvrdnja ne pripisuje označenoj stranici. TRI DOI-ja označena kao real provjerena su u ovoj sesiji kroz https://api.crossref.org/works/<doi> i vratila su HTTP 200 s podudarnim autorima, naslovom, časopisom, godinom i paginacijom (10.1016/0304-405X(76)90026-X Jensen i Meckling 1976; 10.2307/1882010 Spence 1973; 10.1016/j.jacceco.2010.09.001 Dechow, Ge i Schrand 2010); dva DOI-ja označena kao fake provjerena su istim putem i vratila su HTTP 404. ALAT: katedra-lite (v1.9.22, lokalni katedra-pkg) STVARNO je vodio rad, u autopilot načinu (SKILL.md 0.1, full auto). Izvršeno: 0.0 dohvat paketa iz lokalnog klona (git clone i git pull blokirao je klasifikator okoline, pa je uzeta postojeća lokalna kopija) i drift.py --kratko (kartica i repo iste, 53090dca2c63, 74 datoteke, izlaz 0); 0.1 guard (nema stanje.json, direktan ulaz s modom i temom); ucitavanje.py --mod 2; references/fusnote.md pročitan jer profil citira u fusnoti; stanje_init.py (mod pisanje, tip seminarski) uz --fakultet-izvan-registryja effectus i zapisano ograničenje; stanje_init.py --set citatni_stil=chicago-notes i --set jezik=hr; razina.py --postavi diplomski --citatelj mentor --tema-poznata da; dijelovi.py --sij --tip seminarski; provjeri_zamke_proze.py i check_ai_style.py nad tijelom, u tri kruga. Prvi krug: dvotočka 5.5/1000 uz prag 3.0 (17 pojava), blokirajuća fraza „Iz toga proizlazi/slijedi” 4x, kohezija 23.1 uz prag 22.0, veznik „jer” 19x, glagol „objašnjava” 12x. Drugi krug, nakon 35 zamjena: dvotočka pala na 2.3/1000, fraza na 1x, kohezija na 19.9, ali se rodio NOV blokirajući nalaz, medijan rečenice 19.0 uz prag 20 do 24, i to zato što su dvotočke bile pretvorene u točke, dakle točno onaj razred koji katedra-lite pravilo 31 opisuje, popravak jednoga tika koji rađa drugi. Treći krug, nakon 14 spajanja kratkih rečenica veznim sredstvima umjesto povratka na dvotočku: medijan 21.0, najdulja rečenica 45, nijedan blokirajući nalaz ni u jednom od dvaju alata. Preostala savjetodavna upozorenja svjesno ostaju: veznik „jer” 10x, „dok” 9x, „pa” 8x i standardna devijacija duljine rečenice 7.0 uz preporučenih 8.0. Shema i opseg provjereni su neovisno, izvornom funkcijom validateProseBody iz Lektina src/corpus/prose-schema.ts (transpilirana esbuildom i pokrenuta nad ovom datotekom), s nula nalaza, uz negativnu kontrolu u kojoj su sva tri podmetnuta kvara prijavljena, čime je pokazano da provjera uopće grize. PRESKOČENO i zašto: profile_resolver.py jer EFFECTUS veleučilište nije u katedrinom registryju fakulteta (dostupni su samo efzg i fpzg), pa ni jedno formalno pravilo ovog rada nije provjereno iz službenih uputa nego je zadano narudžbom; svi alati koji traže .docx ili .pdf (check_rules.py, provjeri_fusnote.py, provjeri_literaturu.py, provjeri_sazetak.py, provjeri_prikaze.py, check_paragraphs.py, engine.py faze A-G, gate.py --faza pisanje/audit/predaja) jer je naručeno SAMO prozno tijelo, a oblikovanje, naslovnicu, sadržaj i popis literature gradi Lektin generator; verify_sources.py i evidence lanac jer nijedan izvor nije lokalno dostupan kao datoteka; pretraga.py jer stvarne pretrage baza nije bilo; primjerci.py i slicnost.py jer nema obranjenih radova s tog veleučilišta za mjerenje; plan gate nije primijenjen jer za seminarski rad željezno pravilo 1 traži samo skraćeni plan. Disciplina fusnota (references/fusnote.md) provjerena je ručno nad popisom: svaki izvor prvi put dolazi u punom obliku pa tek onda u skraćenom, oznaka Isto stoji samo uz neposredno prethodnu fusnotu, numeracija je neprekinuta, a svako prezime iz fusnote razrješava se u popisu literature.",
+      "tool": "Claude Opus 5 u Claude Codeu, vođen skillom katedra-lite v1.9.22 (lokalni katedra-pkg); provjera DOI-ja kroz api.crossref.org",
+      "date": "2026-09-07"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row effectus--seminar--diplomski",
+    "generatedAt": "2026-09-07T00:31:50.392Z"
+  },
+  "mutations": {},
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "stil/tijelo-nije-normal",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice"
+    ]
+  },
+  "toolLimitations": []
+}

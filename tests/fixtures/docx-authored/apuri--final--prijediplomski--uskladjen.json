@@ -1,0 +1,45 @@
+{
+  "profileId": "apuri-zavrsni",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "apuri--final--prijediplomski",
+    "unitId": "apuri",
+    "workType": "final",
+    "level": "prijediplomski",
+    "program": "Prijediplomski sveučilišni studij Gluma i mediji",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "apuri"
+  },
+  "prose": {
+    "id": "apuri--final--prijediplomski",
+    "words": 5645,
+    "authoring": {
+      "method": "SINTETSKI TESTNI ULAZ ZA LEKTU, ne studentski rad i ne za predaju. Autor (Lucija Bregović) i mentor (izv. prof. art. Vedran Kolar) su izmišljena imena, tema i argumentacija su izmišljeni, rad nema nijedan vlastiti empirijski podatak i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje ni podatke ijedne stvarne ustanove. Pripisivanja poznatim autorima (Phelan, Auslander, Fischer-Lichte, States, Benjamin, Goffman, Zarrilli, Barba i Savarese, Grotowski, Bazin, Balázs, Naremore, Baron i Carnicke, Kirby, Lehmann, Krasner, Chekhov, Stanislavski, Pavis) drže se općepoznatih POJMOVNIH pozicija tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite, željezno pravilo 28). VOĐENJE: rad je stvarno vođen skillom katedra-lite v1.9.16 (paket iz ~/.katedra-pkg; drift.py --kratko: kartica i repo iste, 73 datoteke), u autopilot putu iz SKILL.md 0.1. IZVRŠENI KORACI: stanje_init.py (mod novi-rad, tip zavrsni, jezik hr), razina.py (preddiplomski-3, čitatelj komisija), dijelovi.py --sij/--status, perspective_map.py (3 perspektive, validate ready=true), plan_state.py init/import/set/odobri, gate.py --faza plan (6 prošlo, 0 nalaza, 0 preskočeno, izlazni kod 0), plan odobren s --actor full-auto kako SKILL.md 0.1 traži za završni rad, pa mod 2 i tri stilska prolaza uz check_ai_style.py i provjeri_zamke_proze.py --usporedi. PRESKOČENO I ZAŠTO: (1) profile_resolver.py NIJE razriješio profil, jer katedra registry ima rute samo za efzg i fpzg; rad je upisan kao --fakultet-izvan-registryja apuri (admisija nije-admitiran), pa su svi formalni nalazi savjetodavni, a pragovi stila dolaze iz references/glas_fpzg.md, dakle iz tuđega kućnog stila. (2) dijelovi.py je sijao bez profila, pa su sažetak, ključne riječi i popisi prikaza ondje označeni kao ne-primjenjuje-se; ugovor izlazne sheme ih traži i oni postoje, razlika je zabilježena a ne izglađena. (3) gate.py --faza pisanje/audit/predaja NIJE pokretan, jer traži .docx, a ovaj zadatak izrijekom proizvodi samo prozu; .docx gradi Lektin generator iz vlastitih profila. (4) rad-audit, rad-docx i replikacija-pspp nisu zvani, iz istoga razloga. (5) verify_sources.py nije pokretan nad popisom literature; umjesto njega su dva DOI-ja provjerena izravno kroz CrossRef API. PROVJERA DOI-jeva: 10.1162/pajj_a_00106 (HTTP 200, naslov 'Digital Liveness: A Historico-Philosophical Perspective', Auslander, 2012, PAJ 34(3), 3-11) i 10.1353/tj.2008.0002 (HTTP 200, naslov 'An Enactive Approach to Understanding Acting', Zarrilli, 2007, Theatre Journal 59(4), 635-647) označeni su kao real. Treći kandidat, 10.1353/tj.2008.0024, iz sjećanja pripisan Zarrilliju, razriješio se u posve drugi članak i zato NIJE upotrijebljen. 10.99999/cis.2026.9988776 uz izmišljenu jedinicu Horvat (2026) namjerno je neistinit, kao negativna kontrola za provjeru postojanja. OPSEG: 44 odlomka planirana su prije pisanja (plan, sekcija 5) i nijedan nije naknadno dodan ni uklonjen; broj je pogođen iz prve, duljina nije, pa je jedan kalibracijski prolaz produljio postojeće odlomke sa 111,7 na 128,3 riječi prosječno. STANJE ALATA NA KRAJU: check_ai_style.py 'sve dimenzije unutar pragova'; provjeri_zamke_proze.py bez ijedne pogoršane dimenzije naspram prvoga kruga (dvotočka 6,8 -> 2,3/1000, ponovljen kostur odlomka 1 -> 0, doseg uz citat 5 -> 4). Preostala četiri nalaza 'kvantifikator dosega uz citat' presuđena su kao lint-wrong: kvantifikator je u sva četiri slučaja dio univerzalne tvrdnje koju iznosi sam citirani izvor, a ne proširenje dosega koje bi rad dodao. Čitanje tijela rada (željezno pravilo 31) našlo je tri rečenice koje je stilski prolaz pokvario a nijedan alat nije prijavio (dva izgubljena 'se' i jedan viseći 'ali jest dokaz'); sve tri su ispravljene.",
+      "tool": "Claude (Opus 5) kroz Claude Code, vođeno skillom katedra-lite v1.9.16",
+      "date": "2026-09-07"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row apuri--final--prijediplomski",
+    "generatedAt": "2026-09-07T00:29:33.199Z"
+  },
+  "mutations": {},
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "stil/tijelo-nije-normal",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/libreoffice"
+    ]
+  },
+  "toolLimitations": []
+}

@@ -1,7 +1,7 @@
 {
-  "commit": "7999e6a410eeb4e2b98920f235659ee8592a0b37",
+  "commit": "5fa32e5dbd21e4bbffe7eb0fab6f4a1ee24d7e1d",
   "dirtyWorkingTree": false,
-  "createdAt": "2026-09-06T20:07:05.683Z",
+  "createdAt": "2026-09-07T14:00:57.839Z",
   "platform": "win32",
   "partial": false,
   "complete": true,
@@ -11,55 +11,55 @@
       "id": "check",
       "label": "Tier 0: oxlint + tsc + edge (deno) + vitest + build",
       "status": "pass",
-      "durationMs": 1898681
+      "durationMs": 1472095
     },
     {
       "id": "projections",
       "label": "Tier 0: svjezina pecenih projekcija (screening)",
       "status": "fail",
-      "durationMs": 11393
+      "durationMs": 14470
     },
     {
       "id": "conformance",
       "label": "Tier 0: conformance matrica",
       "status": "pass",
-      "durationMs": 199242
+      "durationMs": 211161
     },
     {
       "id": "slow",
       "label": "Tier 0: spori repair testovi",
       "status": "pass",
-      "durationMs": 254061
+      "durationMs": 226410
     },
     {
       "id": "ux",
       "label": "Tier 0: Playwright UX",
       "status": "pass",
-      "durationMs": 1300817
+      "durationMs": 823245
     },
     {
       "id": "strict-open",
       "label": "Tier 1: lxml nad POPRAVLJENIM paketima",
       "status": "pass",
-      "durationMs": 89653
+      "durationMs": 57599
     },
     {
       "id": "word",
       "label": "Tier 2: pravi Microsoft Word",
       "status": "pass",
-      "durationMs": 405324
+      "durationMs": 115779
     },
     {
       "id": "word-worst",
       "label": "Tier 2: Word, najgori slucaj",
       "status": "pass",
-      "durationMs": 465653
+      "durationMs": 34302
     },
     {
       "id": "extraction",
       "label": "Tier 2: extraction probe (staging)",
-      "status": "pass",
-      "durationMs": 27170
+      "status": "unavailable",
+      "reason": "missing-env:LEKTA_STAGING_ORIGIN"
     }
   ]
 }

@@ -200,4 +200,53 @@ export function extractCitationOccurrences(paragraphs: Array<{ index?: number; t
   }).sort((a, b) => a.paragraphIndex - b.paragraphIndex || a.start - b.start || a.end - b.end);
 }
 
+/**
+ * Hrvatski padezni nastavci prezimena, od duljih prema kracima (dulji se skida prvi).
+ *
+ * Popis je namjerno kratak i pokriva jedninu, jer se u citatnici prezime javlja u jednini:
+ * genitiv (Galtunga, Wallacea), dativ i lokativ (Galtungu, Wallaceu), instrumental (Galtungom,
+ * Wallaceem). Mnozina i pridjevski oblici se NE dodaju: donose vise sudara nego pogodaka.
+ */
+const HR_PADEZNI_NASTAVCI = ['ovima', 'evima', 'ima', 'ova', 'eva', 'om', 'em', 'ju', 'a', 'e', 'i', 'u'];
+
+/**
+ * KANDIDATI ZA NOMINATIV sklonjenog prezimena.
+ *
+ * Zasto postoji, izmjereno 2026-09-07 usporedbom dvaju alata nad istim dokumentom: proza je pisala
+ * ISPRAVAN hrvatski ("Prema Galtungu i Rugeu (1965)", "U analizi Wallacea (2018)"), literatura je
+ * imala tocne jedinice ("Galtung, J. i Ruge, M. H."), a usporedba je radila nad doslovnim nizom, pa
+ * "galtungu" nikad nije bilo jednako "galtung". Posljedica nije kozmeticka: `citation.author-year.
+ * missing-reference` je bodovana provjera od 10 bodova sa statusom `fail`, a isti uzrok istovremeno
+ * proizvodi i lazan `reference.uncited` (7 bodova), jer jedinica ostaje "necitirana". Rad koji
+ * citira po pravilima hrvatskog jezika time gubi bodove.
+ *
+ * Isti razred repozitorij je vec platio na unakrsnim uputama (RE-58, "u Tablici 1"), gdje je izraz
+ * trazio samo nominativ. Ondje je rjesenje bio korijen plus nastavci nad POZNATIM rjecnikom; ovdje
+ * je rjecnik otvoren, pa se skida nastavak i trazi tocno podudaranje s prezimenom iz literature.
+ *
+ * GRANICA PROTIV PRETJERANOG SKRACIVANJA: nastavak se skida samo ako korijen ostane duljine >= 4.
+ * Bez toga bi "Mara" postala "Mar", a kratka prezimena bi pocela sudarati. Uz to se svodi SAMO
+ * citatnica, nikad jedinica literature, i podudaranje i dalje trazi i godinu, pa je sudar dvaju
+ * razlicitih prezimena s istim korijenom I istom godinom vrlo malo vjerojatan.
+ */
+export function croatianSurnameStems(word: string): string[] {
+  const w = String(word || '')
+    .trim()
+    .toLowerCase();
+  if (!w) return [];
+  const out: string[] = [];
+  for (const n of HR_PADEZNI_NASTAVCI) {
+    if (!w.endsWith(n)) continue;
+    const korijen = w.slice(0, w.length - n.length);
+    if (korijen.length < 4) continue;
+    out.push(korijen);
+    // ZENSKA SKLONIDBA: kod prezimena na -a korijen se ne vraca u nominativ sam od sebe
+    // ("Bandure" -> "bandur", a jedinica glasi "Bandura"). Zato uz korijen ide i korijen + "a".
+    // Kandidat je prijedlog, ne tvrdnja: presudu i dalje donosi TOCNO podudaranje s prezimenom iz
+    // literature, uz slaganje godine.
+    if (korijen !== w) out.push(korijen + 'a');
+  }
+  return [...new Set(out)].filter((k) => k !== w);
+}
+
 export { extractCitations, extractReferences };

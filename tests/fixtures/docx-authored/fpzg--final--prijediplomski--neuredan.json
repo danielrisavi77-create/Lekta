@@ -1,0 +1,63 @@
+{
+  "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "fpzg--final--prijediplomski",
+    "unitId": "fpzg",
+    "workType": "final",
+    "level": "prijediplomski",
+    "program": "Prijediplomski studij Novinarstvo",
+    "variant": "text",
+    "fallbackFamily": null,
+    "titlePageTemplateId": "fpzg-final"
+  },
+  "prose": {
+    "id": "fpzg--final--prijediplomski",
+    "words": 5350,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, ne studentski rad i ne za predaju. Autor i mentor su izmišljena imena, sadržaj je izmišljen, nema nijednog vlastitog empirijskog podatka i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje. Pripisivanja poznatim autorima (Lewin, White, Shoemaker i Vos, Bruns, Galtung i Ruge, Tuchman, Gans, Gillespie, Napoli, Bell i Owen, Carlson, Singer, Thorson i Wells, Wallace, Deuze i Witschge, Malović, Kunczik i Zipfel) drže se općepoznatih pojmovnih doprinosa tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite pravilo 28), pa se citira djelo u cjelini. Marković (2026) je izmišljena jedinica s izmišljenim DOI-jem, namjerno, da provjera postojanja može vratiti i not-found. ALAT: katedra-lite je STVARNO vodio rad, u autopilot načinu (SKILL.md 0.1, full auto). Izvršeno: 0.0 dohvat paketa (lokalni katedra-pkg 1.9.16, beef5ee) i drift.py --kratko (kartica i repo iste); 0.1 guard; ucitavanje.py --mod 1 i --mod 2; profile_resolver.py (fpzg/zavrsni, status profila nepotvrdeno); stanje_init.py; razina.py --postavi preddiplomski-3 --citatelj mentor; dijelovi.py --sij (25 dijelova, 10 strojno / 8 ručno / 7 nepokriveno); perspective_map.py init/add x3/validate (ready); plan.md sa sekcijama 0-11 i ogradom STRUKTURA; plan_state.py init/import/set; gate.py --faza plan (6 ok, 0 nalaza, izlaz 0); plan_state.py odobri --actor full-auto; stanje_init.py --set plan_odobren=true i mod=pisanje; rukopis.py init pa pisanje po potpoglavljima u .katedra/poglavlja/; provjeri_zamke_proze.py (prvi prolaz 36 dvotočaka, 2 ponovljena kostura, 3 kvantifikatora dosega, nakon stilskog prolaza sve na 0 uz --usporedi); check_ai_style.py --po-poglavljima (prvi prolaz 3 blokirajuća nalaza: fraza 'Iz toga slijedi' 9x, medijan 18.5 u 5. i 25.5 u 6. poglavlju, najdulja rečenica 48 riječi; nakon drugog stilskog prolaza 0 blokirajućih, ostaju savjetodavna upozorenja o dominantnim veznicima); provjeri_jezik.py (0 nalaza); plan_state.py mark za svih 13 potpoglavlja. PRESKOČENO i zašto: izrada .docx-a i svi alati koji traže .docx ili .pdf (check_rules.py, provjeri_literaturu.py, provjeri_sazetak.py, provjeri_prikaze.py, check_argument.py, check_paragraphs.py, engine.py faze A-G, gate.py --faza pisanje/audit/predaja) jer je naručitelj izrijekom tražio SAMO prozu, a oblikovanje radi Lektin generator; verify_sources.py i evidence lanac (claims/evidence/evidence_gate) jer nijedan izvor nije lokalno dostupan kao datoteka pa bi ingest bio prazan; pretraga.py jer stvarne pretrage baza nije ni bilo (rad je sintetski, literatura je odabrana iz poznatoga kanona); primjerci.py jer nema obranjenih radova za mjerenje; replikacija-pspp i fpzg-diplomski jer rad nema brojki ni dokumenta. ODSTUPANJE od kućnoga stila FPZG-a, svjesno: popis literature nosi INICIJAL autora (Prezime, A. (2019).) umjesto punoga imena koje traže Upute FPZG-a, jer je tako tražio ugovor korpusa. Za stvarni studentski rad vrijedilo bi obrnuto. Opseg 5250 riječi zadao je naručitelj i po željeznom pravilu 18 ima prednost pred rasponom iz profila (25-30 stranica, status nepotvrdeno).",
+      "tool": "katedra-lite v1.9.16 (katedra-pkg beef5ee)",
+      "date": "2026-09-06"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row fpzg--final--prijediplomski --messy",
+    "generatedAt": "2026-09-06T22:42:05.553Z"
+  },
+  "mutations": {
+    "tabInHeading": 17,
+    "emptyParagraphBurst": 30,
+    "manualToc": 1,
+    "dotLeaderTabs": 1,
+    "csOnlyFonts": 4,
+    "biblioAsHeading": 2,
+    "commentsPart": 2,
+    "allLevelThree": 23
+  },
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "paket/komentari",
+      "stil/tijelo-nije-normal",
+      "naslov/tab-u-naslovu",
+      "naslov/samo-razina-3",
+      "tab/tocke-vodic",
+      "font/samo-cs-eastAsia",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice",
+      "opseg/prazni-preko-20"
+    ]
+  },
+  "toolLimitations": [
+    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
+  ]
+}

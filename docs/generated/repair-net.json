@@ -1,0 +1,626 @@
+{
+  "schemaVersion": 1,
+  "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.",
+  "summary": {
+    "documentCount": 11,
+    "fixerCount": 14,
+    "deadCount": 2,
+    "dead": [
+      "citation-bibliography-sync-fixer",
+      "consistency-fixer"
+    ]
+  },
+  "fixers": [
+    {
+      "fixerId": "bibliography-repair-fixer",
+      "requested": 3,
+      "changed": 3,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "citation-bibliography-sync-fixer",
+      "requested": 3,
+      "changed": 0,
+      "reasons": {
+        "no-target": 3
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--neuredan.docx",
+        "fpzg--final--prijediplomski--uskladjen.docx",
+        "fpzg--final--prijediplomski--word.docx"
+      ]
+    },
+    {
+      "fixerId": "consistency-fixer",
+      "requested": 11,
+      "changed": 0,
+      "reasons": {
+        "no-target": 11
+      },
+      "deadOn": [
+        "apuri--final--prijediplomski--neuredan.docx",
+        "apuri--final--prijediplomski--uskladjen.docx",
+        "effectus--seminar--diplomski--neuredan.docx",
+        "effectus--seminar--diplomski--uskladjen.docx",
+        "effectus--seminar--diplomski--word.docx",
+        "fpzg--final--prijediplomski--neuredan.docx",
+        "fpzg--final--prijediplomski--uskladjen.docx",
+        "fpzg--final--prijediplomski--word.docx",
+        "fzsri--final--prijediplomski--neuredan.docx",
+        "fzsri--final--prijediplomski--uskladjen.docx",
+        "fzsri--final--prijediplomski--word.docx"
+      ]
+    },
+    {
+      "fixerId": "croatian-typography-fixer",
+      "requested": 6,
+      "changed": 6,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "empty-paragraph-fixer",
+      "requested": 4,
+      "changed": 4,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "field-integrity-fixer",
+      "requested": 10,
+      "changed": 9,
+      "reasons": {
+        "stale-anchor": 1
+      },
+      "deadOn": [
+        "effectus--seminar--diplomski--uskladjen.docx"
+      ]
+    },
+    {
+      "fixerId": "final-document-inspector-fixer",
+      "requested": 11,
+      "changed": 11,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "heading-style-fixer",
+      "requested": 4,
+      "changed": 3,
+      "reasons": {
+        "invalid-params": 1
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--uskladjen.docx"
+      ]
+    },
+    {
+      "fixerId": "line-spacing-fixer",
+      "requested": 1,
+      "changed": 1,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "link-doi-fixer",
+      "requested": 11,
+      "changed": 7,
+      "reasons": {
+        "unsupported-structure": 1,
+        "no-target": 3
+      },
+      "deadOn": [
+        "effectus--seminar--diplomski--word.docx",
+        "fpzg--final--prijediplomski--neuredan.docx",
+        "fpzg--final--prijediplomski--uskladjen.docx",
+        "fpzg--final--prijediplomski--word.docx"
+      ]
+    },
+    {
+      "fixerId": "margins-fixer",
+      "requested": 6,
+      "changed": 6,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "required-section-fixer",
+      "requested": 3,
+      "changed": 2,
+      "reasons": {
+        "unsupported-structure": 1
+      },
+      "deadOn": [
+        "fpzg--final--prijediplomski--word.docx"
+      ]
+    },
+    {
+      "fixerId": "section-surgery-fixer",
+      "requested": 3,
+      "changed": 3,
+      "reasons": {},
+      "deadOn": []
+    },
+    {
+      "fixerId": "toc-field-fixer",
+      "requested": 1,
+      "changed": 1,
+      "reasons": {},
+      "deadOn": []
+    }
+  ],
+  "documents": [
+    {
+      "dokument": "apuri--final--prijediplomski--neuredan.docx",
+      "profileId": "apuri-zavrsni",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "apuri--final--prijediplomski--uskladjen.docx",
+      "profileId": "apuri-zavrsni",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--neuredan.docx",
+      "profileId": "effectus-seminarski",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [
+        "{\"id\":\"reference.min-count\",\"title\":\"Minimalan broj izvora profila\",\"category\":\"citations\",\"after\":\"warn\",\"lostPoints\":0.7999999999999998}"
+      ],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--uskladjen.docx",
+      "profileId": "effectus-seminarski",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "field-integrity-fixer",
+          "reason": "stale-anchor"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [
+        "{\"id\":\"reference.min-count\",\"title\":\"Minimalan broj izvora profila\",\"category\":\"citations\",\"after\":\"warn\",\"lostPoints\":0.7999999999999998}"
+      ],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--word.docx",
+      "profileId": "effectus-seminarski",
+      "paloPrije": [
+        "format.spacing.body",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "line-spacing-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "line-spacing-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "unsupported-structure"
+        }
+      ],
+      "rijeseno": [
+        "format.spacing.body"
+      ],
+      "nerijeseno": [
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "regresije": [
+        "{\"id\":\"reference.min-count\",\"title\":\"Minimalan broj izvora profila\",\"category\":\"citations\",\"after\":\"warn\",\"lostPoints\":0.7999999999999998}"
+      ],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--neuredan.docx",
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "paloPrije": [
+        "reference.alphabetical",
+        "reference.uncited",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer",
+        "toc-field-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer",
+        "toc-field-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "reference.alphabetical"
+      ],
+      "nerijeseno": [
+        "reference.uncited",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--uskladjen.docx",
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "paloPrije": [
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "heading-style-fixer",
+          "reason": "invalid-params"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--word.docx",
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "paloPrije": [
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "required-section-fixer",
+        "section-surgery-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "section-surgery-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "required-section-fixer",
+          "reason": "unsupported-structure"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--neuredan.docx",
+      "profileId": "fzsri-zavrsni",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "empty-paragraph-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--uskladjen.docx",
+      "profileId": "fzsri-zavrsni",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--word.docx",
+      "profileId": "fzsri-zavrsni",
+      "paloPrije": [
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    }
+  ],
+  "generatedAt": "2026-09-07T02:02:18.344Z",
+  "generatedFromCommit": "211b4edaea4a9276515541b62eff0139b4652376",
+  "generator": "npm run repair-net -- --write"
+}

@@ -1061,7 +1061,10 @@ function odlomakLabel(n: number): string {
 }
 
 export function emptyParagraphFixer(parts: DocxXmlParts): FixerOutput {
-  const result = stripOrphanedEmptyParagraphs(parts.documentXml);
+  // Stilovi se PREDAJU, jer se stil tijela razrjesava iz dokumenta, a ne pretpostavlja kao "Normal".
+  // Bez njih je fixer bio trajni no-op na svemu sto je pisano LibreOfficeom (tijelo ondje ima
+  // `BodyText`), pa je korisnik dobivao ponudjen popravak koji nista ne mijenja.
+  const result = stripOrphanedEmptyParagraphs(parts.documentXml, parts.stylesXml);
   if (!result.applied) return NO_OP(parts);
 
   const totalBefore = result.paragraphsRemoved + result.runsCollapsed;

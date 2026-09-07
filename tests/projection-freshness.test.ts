@@ -73,9 +73,11 @@ describe('svjezina pecenih projekcija', () => {
       'real-corpus-backlog',
       'reconcile-programs',
       'repair-gap',
+      'repair-net',
       'repair-recipe',
       'scored-value-drift',
       'site-stats',
+      'synthetic-corpus-manifest',
       'worklist',
     ]);
     for (const p of PROJECTIONS as Array<{ artifacts: string[]; sources: string[]; regenerate: string }>) {

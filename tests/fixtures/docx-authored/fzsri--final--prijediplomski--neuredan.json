@@ -1,0 +1,61 @@
+{
+  "profileId": "fzsri-zavrsni",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "fzsri--final--prijediplomski",
+    "unitId": "fzsri",
+    "workType": "final",
+    "level": "prijediplomski",
+    "program": "Prijediplomski stručni studij Radiološka tehnologija",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "fzsri-final"
+  },
+  "prose": {
+    "id": "fzsri--final--prijediplomski",
+    "words": 5607,
+    "authoring": {
+      "method": "Prozu je u jednom prolazu napisao jezični model (Claude Opus 5, agent Claude Code), vođen skillom katedra-lite v1.9.22 u autopilot putu: profil fakulteta NIJE razriješen jer fzsri nije u Katedrinu registryju (dostupni: efzg, fpzg), pa su svi formalni nalazi savjetodavni; plan je uveden kroz plan_state.py, prošao PLAN GATE i odobren s actor=full-auto, a tekst je pisan po odobrenoj strukturi od 44 odlomka. Sadržaj je IZMIŠLJEN i služi isključivo kao testni ulaz za Lektu: nijedan podatak, ustanova, osoba ni istraživanje nisu stvarni, autor i mentor na naslovnici su izmišljene osobe, a rad nije predan nigdje niti je namijenjen predaji. Od 20 bibliografskih jedinica dvije su stvarne i provjerene kroz CrossRef API (HTTP 200 uz podudaran naslov), jedna nosi očito izmišljen DOI, a preostalih 17 su izmišljene zamjenske jedinice s izmišljenim časopisima. Oblikovanje (font, prored, margine, naslovnica, numeracija) NIJE dio ovog izlaza; dodaje ga Lektin generator iz vlastitih pravila profila.",
+      "tool": "Claude Code (Claude Opus 5) + katedra-lite v1.9.22 (katedra-pkg 22fba58)",
+      "date": "2026-09-07"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row fzsri--final--prijediplomski --messy",
+    "generatedAt": "2026-09-07T00:30:59.868Z"
+  },
+  "mutations": {
+    "tabInHeading": 16,
+    "emptyParagraphBurst": 30,
+    "manualToc": 1,
+    "dotLeaderTabs": 1,
+    "csOnlyFonts": 4,
+    "biblioAsHeading": 2,
+    "commentsPart": 2,
+    "allLevelThree": 22
+  },
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "paket/komentari",
+      "stil/tijelo-nije-normal",
+      "naslov/tab-u-naslovu",
+      "naslov/samo-razina-3",
+      "tab/tocke-vodic",
+      "font/samo-cs-eastAsia",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice",
+      "opseg/prazni-preko-20"
+    ]
+  },
+  "toolLimitations": []
+}

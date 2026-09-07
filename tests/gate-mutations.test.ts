@@ -26,6 +26,11 @@ import {
   type WizardEvent, type WizardState,
 } from '../src/ui/wizard-machine';
 import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
+import { DOCX_SHAPE_IDS, verifyShapeClaims, type DocxShapeCounts } from '../src/corpus/docx-shapes';
+import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
+import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
+import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
+import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -581,6 +586,288 @@ const MUTATIONS: Mutation[] = [
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'real' }) &&
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'generated' }) &&
       !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', synthetic: true }),
+  },
+  {
+    id: 'korpus/authored-traka-ulazi-u-mjerenje',
+    imitates:
+      'dokument s NASOM prozom (traka `authored`) udje u `discoverRealCorpus` i pocne potkrepljivati ' +
+      'tvrdnju "dokazano na stvarnom studentskom radu". Tekst je nas, ne studentov, pa tvrdnja postaje ' +
+      'neistinita bez ijedne promjene ljestvice; uz to su sinteticke fixture izmjereno LAKSE (84,6 posto ' +
+      'ciljanih provjera rijeseno naspram 39,8 posto na stvarnim radovima), pa bi ulazak proizvod ' +
+      'prikazao dvostruko boljim nego jest. Drugi oblik istog kvara je kriva zastavica: sidecar koji ' +
+      'kaze `synthetic: false` mora pasti na traci, inace jedan pojas nosi cijeli zid',
+    caught: () =>
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'authored' }) &&
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'authored', synthetic: false }) &&
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'authored', synthetic: true }),
+    // Netrivijalnost: dopustene trake i dalje prolaze, inace bi zid "hvatao" tako sto odbija sve.
+    cleanBefore: () =>
+      sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'real' }) &&
+      sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'generated' }),
+  },
+  {
+    id: 'izvoz/kvar-bez-dokumenta-koji-ga-je-proizveo',
+    imitates:
+      'zapis o kvaru druge strane ostane u izvozu nakon sto ga mjerenje vise ne potkrepljuje, ili udje ' +
+      'u njega bez ijednog dokumenta. Zeljezno pravilo ciljanog skilla glasi "nijedan kvar bez ' +
+      'dokumenta koji ga je proizveo", a katalog koji nosi popravljene ili nikad izmjerene kvarove ' +
+      'skuplji je od praznog: druga strana trosi vrijeme na kvar kojega nema, i pocinje sumnjati u ' +
+      'ostale zapise. Zato se potkrepa RACUNA pri svakom izvozu, ne pamti uz zapis',
+    caught: () => {
+      const prazan: DefectClass = {
+        id: 'bez-potkrepe',
+        owner: 'katedra-lite',
+        title: 'naslov',
+        body: 'tijelo',
+        output: 'izlaz',
+        // Tvrdnja bez dokumenta: naredba postoji, ali nema nijednog dokumenta na kojem je izvedena.
+        support: [{ kind: 'izravno', command: 'python3 nesto.py', documents: [] }],
+      };
+      const popravljen: DefectClass = {
+        ...prazan,
+        id: 'vise-nije-mjerljiv',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      // Mjerenje postoji, ali vise nema razilazenja: kvar je popravljen na drugoj strani.
+      const bezRazilazenja: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 0, ishod: 'nitko' },
+      ];
+      const r = renderDefectFragment([prazan, popravljen], bezRazilazenja, 140);
+      return (
+        !isSupported(prazan, bezRazilazenja) &&
+        !isSupported(popravljen, bezRazilazenja) &&
+        r.numbers.length === 0 &&
+        r.unsupported.length === 2
+      );
+    },
+    // Netrivijalnost: zapis koji mjerenje POTKREPLJUJE mora izaci, inace bi gard praznio katalog.
+    cleanBefore: () => {
+      const potkrijepljen: DefectClass = {
+        id: 'ima-potkrepu',
+        owner: 'katedra-lite',
+        title: 'naslov',
+        body: 'tijelo',
+        output: 'izlaz',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      const izravni: DefectClass = {
+        ...potkrijepljen,
+        id: 'izmjeren-izravno',
+        support: [{ kind: 'izravno', command: 'python3 nesto.py', documents: ['a.docx'] }],
+      };
+      const sRazilazenjem: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 20, ishod: 'samo-katedra' },
+      ];
+      const r = renderDefectFragment([potkrijepljen, izravni], sRazilazenjem, 140);
+      return (
+        isSupported(potkrijepljen, sRazilazenjem) &&
+        isSupported(izravni, sRazilazenjem) &&
+        r.numbers.length === 2 &&
+        r.numbers[0] === 141 &&
+        r.unsupported.length === 0
+      );
+    },
+  },
+  {
+    id: 'eval/slucaj-nadzivi-kvar-koji-cuva',
+    imitates:
+      'eval slucaj ostane u skupu nakon sto je kvar koji cuva popravljen ili izbrisan iz kataloga. Takav ' +
+      'slucaj i dalje PROLAZI, pa izgleda kao pokrice a ne cuva vise nista, i sljedeca regresija prodje ' +
+      'ispod njega neopazeno. Isti razred kao gard s prepisanom vrijednoscu koji ostaje zelen dokazujuci ' +
+      'nesto o mrtvom nizu; razlika je samo u tome sto ovaj zivi u TUDJEM repozitoriju, pa ga nas gate ' +
+      'nikad vise ne bi vidio',
+    caught: () => {
+      const kvar: DefectClass = {
+        id: 'k',
+        owner: 'katedra-lite',
+        title: 't',
+        body: 'b',
+        output: 'o',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      const slucaj: EvalClass = {
+        defectId: 'k',
+        prompt: 'p',
+        expected_output: 'e',
+        expectations: ['x'],
+        fixtures: ['a.docx'],
+      };
+      // Kvar popravljen na drugoj strani: mjerenje vise ne pokazuje razilazenje.
+      const mirno: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 0, ishod: 'nitko' },
+      ];
+      const popravljen = renderEvalCases([slucaj], [kvar], mirno, 10);
+      // Kvar izbrisan iz kataloga: slucaj vise nema sto cuvati.
+      const bezKvara = renderEvalCases([slucaj], [], mirno, 10);
+      return (
+        popravljen.cases.length === 0 &&
+        popravljen.skipped.length === 1 &&
+        bezKvara.cases.length === 0 &&
+        bezKvara.skipped.length === 1 &&
+        popravljen.skipped[0].why !== bezKvara.skipped[0].why
+      );
+    },
+    // Netrivijalnost: dok kvar postoji I mjerenje ga podupire, slucaj MORA izaci, s dokumentom.
+    cleanBefore: () => {
+      const kvar: DefectClass = {
+        id: 'k',
+        owner: 'katedra-lite',
+        title: 't',
+        body: 'b',
+        output: 'o',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      const slucaj: EvalClass = {
+        defectId: 'k',
+        prompt: 'p',
+        expected_output: 'e',
+        expectations: ['x'],
+        fixtures: ['a.docx'],
+      };
+      const razilazenje: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 20, ishod: 'samo-katedra' },
+      ];
+      const r = renderEvalCases([slucaj], [kvar], razilazenje, 10);
+      return (
+        r.cases.length === 1 &&
+        r.cases[0].id === 11 &&
+        r.skipped.length === 0 &&
+        r.fixtures.length === 1 &&
+        (r.cases[0].files ?? []).length === 1
+      );
+    },
+  },
+  {
+    id: 'usporedba/druga-strana-tiho-prestane-mjeriti',
+    imitates:
+      'usporedba dvaju alata prestane mjeriti a izgleda kao slaganje. Katedrini nalazi se izvlace iz ' +
+      'polja njezina JSON izlaza (`pokrivenost.bez_izvora`, `pokrivenost.necitirani`); preimenovano ili ' +
+      'premjesteno polje vraca 0, nikad gresku. Svi redci tada padnu na `nitko`, sto se cita kao "oba ' +
+      'alata se slazu da je sve u redu", a znaci "jedna strana vise ne mjeri nista". Tocno taj razred ' +
+      'je razlog zbog kojeg usporedba uopce postoji: vise prolaza istim alatom je slaganje, ne tocnost, ' +
+      'pa usporedba koja tiho izgubi drugu stranu gubi jedino sto donosi',
+    caught: () => {
+      const r = (dokument: string, os: string, lekta: number, katedra: number | null): ComparisonRow => ({
+        dokument,
+        os,
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      // Katedrino izvlacenje promasi polje pa svugdje vrati 0; Lekta je na tim osima cista.
+      const oslijepljena = [
+        r('a.docx', 'citirano-bez-jedinice', 0, 0),
+        r('a.docx', 'jedinica-necitirana', 0, 0),
+        r('b.docx', 'citirano-bez-jedinice', 0, 0),
+      ];
+      // Razlikovanje od stvarnog izostanka odgovora: `null` daje vlastiti ishod, ne `nitko`.
+      const bezOdgovora = [r('a.docx', 'fusnote', 0, null)];
+      return (
+        comparisonIsVacuous(oslijepljena) &&
+        comparisonIsVacuous(bezOdgovora) &&
+        oslijepljena.every((x) => x.ishod === 'nitko') &&
+        bezOdgovora[0].ishod === 'katedra-nije-mjerila'
+      );
+    },
+    // Netrivijalnost: usporedba u kojoj BILO KOJA strana nesto nadje nije vakuumska, inace bi gard
+    // vristao na svaki prolaz i prestao razlikovati slijepo mjerenje od cistog dokumenta.
+    cleanBefore: () => {
+      const r = (lekta: number, katedra: number | null): ComparisonRow => ({
+        dokument: 'a.docx',
+        os: 'jedinica-necitirana',
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      const samoKatedra = [r(0, 18), r(0, 0)];
+      const samoLekta = [r(1, 0), r(0, 0)];
+      const oba = [r(1, 3)];
+      return (
+        !comparisonIsVacuous(samoKatedra) &&
+        !comparisonIsVacuous(samoLekta) &&
+        !comparisonIsVacuous(oba) &&
+        divergentRows(samoKatedra).length === 1 &&
+        divergentRows(samoLekta).length === 1 &&
+        divergentRows(oba).length === 0
+      );
+    },
+  },
+  {
+    id: 'mreza/fixer-se-ugasi-a-nitko-ne-primijeti',
+    imitates:
+      'fixer prestane raditi (zatrazen je, ali vise nista ne mijenja) i to nitko ne vidi, jer nijedan ' +
+      'postojeci artefakt to ne mjeri: `closed-loop.json` sprema `requested` kao GOLI BROJ i odbacuje ' +
+      '`skippedReasons`, `repair-real-corpus.json` ima `offeredFixerIds` bez ijednog citatelja, a ' +
+      '`coverage-cells` klasificira staticki i nikad ne premjerava. Tocno taj razred je vec izmjeren: ' +
+      '`empty-paragraph-fixer` je bio trajni no-op na svemu pisanom LibreOfficeom, i nasao ga je tek ' +
+      'sinteticki korpus',
+    caught: () => {
+      const m = (dokument: string, zatrazeno: string[], promijenili: string[]): DocumentMeasurement => ({
+        dokument,
+        profileId: 'p',
+        paloPrije: [],
+        zatrazeno,
+        promijenili,
+        bezUcinka: zatrazeno.filter((f) => !promijenili.includes(f)).map((fixerId) => ({ fixerId, reason: 'no-target' })),
+        rijeseno: [],
+        nerijeseno: [],
+        regresije: [],
+        integrityFailure: null,
+      });
+      const ratchet = new Set(['poznato-mrtav']);
+      const rows = aggregateByFixer([
+        m('a.docx', ['poznato-mrtav', 'radi', 'ugasio-se'], ['radi']),
+        m('b.docx', ['poznato-mrtav', 'radi', 'ugasio-se'], ['radi']),
+      ]);
+      const novi = deadFixers(rows).filter((f) => !ratchet.has(f));
+      return novi.length === 1 && novi[0] === 'ugasio-se';
+    },
+    // Netrivijalnost: fixer koji radi BAREM na jednom dokumentu ne smije se prijaviti, inace bi mreza
+    // "hvatala" tako sto vristi na svaki prolaz i prestala znaciti isto.
+    cleanBefore: () => {
+      const m = (dokument: string, promijenili: string[]): DocumentMeasurement => ({
+        dokument,
+        profileId: 'p',
+        paloPrije: [],
+        zatrazeno: ['radi-ponekad'],
+        promijenili,
+        bezUcinka: promijenili.length ? [] : [{ fixerId: 'radi-ponekad', reason: 'already-ok' }],
+        rijeseno: [],
+        nerijeseno: [],
+        regresije: [],
+        integrityFailure: null,
+      });
+      const rows = aggregateByFixer([m('a.docx', []), m('b.docx', ['radi-ponekad'])]);
+      return deadFixers(rows).length === 0;
+    },
+  },
+  {
+    id: 'oblik/generator-tvrdi-oblik-koji-ne-proizvodi',
+    imitates:
+      'sidecar generiranog dokumenta tvrdi oblik (`shapes.claimed`) kojeg u paketu nema, ili mutaciju ' +
+      'cijim je brojacem nula. Bez ove provjere je sinteticki korpus vakuumski: mjeri se ono sto smo ' +
+      'namjeravali proizvesti, ne ono sto je alat doista spremio. Izmjereno pri izradi detektora: ' +
+      'graditelj je tvrdio `naslov/tab-u-naslovu` a odlomak nije imao ni stil ni razmak iza broja, pa ' +
+      'oblika nije bilo; obrnuto, rucna stavka sadrzaja je lazno nosila isti oblik na pet mjesta',
+    caught: () => {
+      const nula = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      const tvrdiNepostojeci = verifyShapeClaims(['naslov/tab-u-naslovu'], nula).missing.length > 0;
+      const tipfeler = verifyShapeClaims(['naslov/tab-u-naslov'], nula).unknown.length > 0;
+      const mrtavBrojac = verifyShapeClaims([], nula, { tabInHeading: 0 }, {
+        tabInHeading: 'naslov/tab-u-naslovu',
+      }).underDetected.length > 0;
+      return tvrdiNepostojeci && tipfeler && mrtavBrojac;
+    },
+    // Netrivijalnost: ispunjena tvrdnja uz brojac koji paket potvrdjuje NE smije proizvesti nalaz,
+    // inace bi gard "hvatao" tako sto prijavljuje svaki generirani dokument.
+    cleanBefore: () => {
+      const counts = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      counts['naslov/tab-u-naslovu'] = 4;
+      const v = verifyShapeClaims(['naslov/tab-u-naslovu'], counts, { tabInHeading: 4 }, {
+        tabInHeading: 'naslov/tab-u-naslovu',
+      });
+      return v.missing.length === 0 && v.unknown.length === 0 && v.underDetected.length === 0;
+    },
   },
   {
     id: 'korpus/prazan-izvjestaj-tvrdi-da-mjeri',
