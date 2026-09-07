@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lektahr.app/contracts/academic-suite/v0.2/capability-manifest.schema.json",
+  "title": "Academic Suite v0.2 EngineCapabilityManifest",
+  "$defs": {
+    "engineId": {
+      "enum": ["lekta", "katedra", "rad-audit", "rad-docx", "word-replica", "pspp"]
+    },
+    "capability": {
+      "type": "object",
+      "required": ["id", "status"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["supported", "conditional", "unsupported"] },
+        "verificationLevel": { "type": "string", "minLength": 1 },
+        "requires": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "required": ["schemaVersion", "engine", "engineVersion", "capabilities"],
+  "properties": {
+    "schemaVersion": { "const": "0.2" },
+    "engine": { "$ref": "#/$defs/engineId" },
+    "engineVersion": { "type": "string", "minLength": 1 },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/capability" }
+    }
+  },
+  "additionalProperties": false
+}
