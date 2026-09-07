@@ -67,3 +67,96 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
   expect(vidljivi, 'nakon Promijeni moraju se otvoriti SVI obrasci profila').toBeGreaterThan(1);
   await expect(page.locator('#institutionSelect')).toBeFocused();
 });
+
+test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marketinga', async ({ page }) => {
+  /**
+   * Brif vlasnika: "Marketing je zavrsio onog trenutka kada je student ubacio svoj diplomski."
+   * Do 2026-09-07 je zaglavlje radne povrsine nosilo 12 marketinskih poveznica i CTA "Provjeri
+   * rad" koji vodi na stranicu na kojoj korisnik vec jest.
+   *
+   * ZASTO SE MJERI VIDLJIVOST, A NE POSTOJANJE U HTML-u: stara navigacija se na uskom zaslonu
+   * krila CSS-om (`.nav-links{display:none}`) i selila u `#mobileNav`. Tvrdnja "nema ih u
+   * izvoru" bi zato bila zelena i da su samo premjestene, sto je upravo ono sto se ne zeli.
+   */
+  await page.goto('/rad/');
+  const zaglavlje = page.locator('header.topbar');
+  await expect(zaglavlje.getByRole('link', { name: 'Lekta' })).toBeVisible();
+  await expect(zaglavlje.locator('a[href*="landing_benchmark"], a[href*="landing_usporedba"], a[href*="#pricing"], a[href*="#faq"]')).toHaveCount(0);
+  await expect(zaglavlje.getByRole('link', { name: 'Provjeri rad' })).toHaveCount(0);
+
+  // Bez dokumenta traka NE tvrdi nista: prazno ime uz znacku "Lokalno" bi izgledalo kao da je
+  // nesto ucitano. Ovo je stanje korisnika koji dodje izravno na `/rad/`.
+  await expect(page.locator('#radDocBar')).toBeHidden();
+
+  await page.locator('#fileInput').setInputFiles(FIXTURE);
+  await expect(page.locator('#radDocBar')).toBeVisible();
+  await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
+  await expect(page.locator('.rad-doc-local')).toBeVisible();
+
+  // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
+  // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav
+  // pisac, razisla bi se s njima cim se koji pogled preskoci.
+  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
+});
+
+test('/rad/ zaglavlje: dugo ime datoteke se skracuje, a ne gura kontrole s ekrana', async ({ page }) => {
+  /**
+   * STVARAN RIZIK, IZMJEREN: `.rad-doc` je flex stavka, a flex stavka se po zadanome NE SMIJE
+   * stisnuti ispod sirine svog sadrzaja (`min-width:auto`). Bez `min-width:0` dugo ime gurne
+   * lampu i prijavu izvan zaslona umjesto da se skrati.
+   *
+   * SIRINA SE POSTAVLJA OVDJE, i to je popravak vlastite greske od danas. Prva verzija je mjerila
+   * na zadanih 1280 px i imala `test.skip` za sve osim chromiuma. Ondje traka ima 890 px a ime
+   * treba 516, dakle pritiska nema i `min-width:0` se nikad ne aktivira: obje mutacije (bez
+   * roditeljskog, bez djetetovog, bez oba) PROSLE su zeleno. Isti razred kao gard nad
+   * `scroll-margin` ranije danas: tvrdnja postavljena ondje gdje ne moze pasti.
+   *
+   * Izmjereno na 390 px, s istim dugim imenom:
+   *     s `min-width:0`   ime 93 px (skraceno), desni rub lampe 378   <= 390  ispravno
+   *     bez               ime 516 px,           desni rub lampe 801   >  390  kvar
+   */
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/rad/');
+  await page.locator('#fileInput').setInputFiles({
+    name: 'Diplomski rad - konacna verzija - nakon mentora - ispravljeno - za predaju.docx',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    buffer: (await import('node:fs')).readFileSync(FIXTURE),
+  });
+  await expect(page.locator('#radDocBar')).toBeVisible();
+
+  const lampa = await page.locator('#themeBtn').boundingBox();
+  expect(lampa, 'lampa mora imati mjerljiv polozaj').toBeTruthy();
+  expect(lampa!.x + lampa!.width, 'lampa je izgurana izvan zaslona dugim imenom').toBeLessThanOrEqual(390);
+
+  // Ime se mora STVARNO skratiti, a ne samo stati slucajno: bez ove tvrdnje bi prosla i izvedba
+  // koja ime prelomi u vise redaka ili ga sakrije, sto nije isto sto i skracivanje.
+  const skraceno = await page.locator('#radDocName').evaluate((e) => e.scrollWidth > e.clientWidth + 1);
+  expect(skraceno, 'ime mora biti skraceno s trotockom, a ne stati u cijelosti').toBe(true);
+});
+
+test('/rad/ zaglavlje: preziviljava obnovu sesije, jer se pretplacuje prije nje', async ({ page }) => {
+  /**
+   * OVO JE TVRDNJA KOJU KOMENTAR U `workspace/main.ts` DAJE, pa mora biti mjerena, ne vjerovana.
+   *
+   * `wireDocumentBar()` mora stajati prije nego `restoreDocument` pozove `loadAnalyzerDocument`.
+   * `emitAnalyzerDocumentSettled` obavjescuje nad KOPIJOM skupa pretplatnika, izricito zato da
+   * pretplatnik dodan TIJEKOM obavijesti ne dobije taj isti dogadjaj; posljedica u drugom smjeru
+   * je da pretplatnik dodan POSLIJE propusta prijem obnovljenog dokumenta, pa zaglavlje ostaje
+   * prazno iznad uredno ucitanog rada, sto je gore od nepostojece trake.
+   *
+   * Mutacijom izmjereno gdje je granica STVARNO, jer ju je prvi opis promasio: pomak tik prije
+   * `openWorkspace` test NE obara (taj je poziv await-an, pa je ucitavanje i dalje iza njega),
+   * a pomak iza `restoreDocument` ga obara. Tvrdnja bez te druge mutacije bila bi vakuumska.
+   */
+  await page.goto('/rad/');
+  await page.locator('#fileInput').setInputFiles(FIXTURE);
+  await expect(page.locator('#radDocBar')).toBeVisible();
+  // Sesija je zapisana tek kad se fragment pojavi u URL-u; bez tog cekanja bi ponovno ucitavanje
+  // otislo na golu `/rad/` i test bi mjerio prvi dolazak, ne obnovu.
+  await expect(page).toHaveURL(/#session=/, { timeout: 20_000 });
+
+  await page.reload();
+  await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
+  await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
+});

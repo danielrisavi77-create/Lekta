@@ -11,30 +11,28 @@
 </head>
 <body>
 <header class="topbar">
-  <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <div class="nav-links"><a href="/saznaj-vise/#how">Kako radi</a><a href="/saznaj-vise/#video">Video</a><a href="/saznaj-vise/#podcrta">Što provjerava</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="/fakulteti/">Po fakultetu</a><a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a><a href="/saznaj-vise/#pricing">Paketi</a><a href="/saznaj-vise/#faq">Pitanja</a></div>
-    <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
-    <a class="btn btn-primary btn-sm" href="#analyzer">Provjeri rad</a>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
-    <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <!-- ZAGLAVLJE RADNE POVRSINE, NE MARKETINGA. Brif vlasnika: "Marketing je zavrsio onog
+       trenutka kada je student ubacio svoj diplomski." Do 2026-09-07 je ovdje stajalo 12
+       marketinskih poveznica (Kako radi, Video, Usporedba, Benchmark, Paketi, Pitanja, sest
+       alata) plus CTA "Provjeri rad" koji vodi na stranicu na kojoj korisnik vec jest.
+       Ostaje ono sto radnoj povrsini treba: tko si, sto je ucitano, i gdje se to obraduje. -->
+  <nav class="shell nav nav-rad" aria-label="Radna povrsina">
+    <a class="logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+    <div class="rad-doc hidden" id="radDocBar">
+      <span class="rad-doc-name" id="radDocName"></span>
+      <!-- ZNACKA GOVORI O ANALIZI, i to je vazna razlika. Analiza radi u pregledniku i dokument
+           ne odlazi nikamo. Automatski popravak je jedini tok koji dokument SALJE na posluzitelj,
+           i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora
+           mijenjati stanje, inace postaje tvrdnja koja vise nije istinita. -->
+      <span class="rad-doc-local" title="Analiza radi u tvom pregledniku i dokument ne odlazi s uredaja. Salje se samo ako narucis automatski popravak.">Lokalno<span aria-hidden="true"> ✓</span></span>
+    </div>
+    <!-- Desna skupina ima vlastiti omotac: `margin-left:auto` je prije visio o `.nav-links`,
+         a i `#authEntry` se zna sakriti, pa bi poravnanje ovisilo o tome sto je trenutno vidljivo. -->
+    <div class="nav-rad-end">
+      <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
+      <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
+    </div>
   </nav>
-  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
-    <a href="/saznaj-vise/#how">Kako radi</a>
-    <a href="/saznaj-vise/#video">Video</a>
-    <a href="/saznaj-vise/#podcrta">Što provjerava</a>
-    <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
-    <a href="/saznaj-vise/#pricing">Paketi</a>
-    <a href="/saznaj-vise/#faq">Pitanja</a>
-    <a href="alati.html">Svi alati</a>
-    <a href="citat.html">Citat generator</a>
-    <a href="kartice.html">Brojač kartica</a>
-    <a href="naslovnica.html">Naslovnica</a>
-    <a href="literatura.html">Sređivanje literature</a>
-    <a href="izjava.html">Izjava o izvornosti</a>
-    <a href="/fakulteti/">Po fakultetu</a>
-    <div class="mobile-nav-cta"><a class="btn btn-primary" href="#analyzer">Provjeri rad</a></div>
-  </div>
 </header>
 <main id="workspace" data-premium-surface="analyzer">
 <p id="workspace-status" role="status" aria-live="polite" hidden></p>
