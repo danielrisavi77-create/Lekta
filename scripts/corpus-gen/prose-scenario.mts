@@ -222,10 +222,72 @@ export interface BuildOptions {
  * Fusnote se raspodjeljuju po prvim odlomcima tijela, jer fusnota koja visi na kraju dokumenta nije
  * ono sto motor mjeri: on gleda gdje je oznaka u tekstu.
  */
+/**
+ * Dijeli li rad na VISE SEKCIJA (u Wordu vise `<w:sectPr>`).
+ *
+ * Zasto samo doktorski i specijalisticki: oblik `opseg/sekcije-preko-3` postoji jer ga nosi 7 od 38
+ * STVARNIH radova, i to su redom dugi radovi kojima predtekst ide rimskom numeracijom, tijelo
+ * arapskom, a prilozi opet svojom. Kratak zavrsni rad u stvarnosti ima jednu sekciju, pa bi
+ * bezuvjetno dijeljenje proizvelo dokument koji ne slici nicemu, i usput promijenilo svih jedanaest
+ * vec commitanih primjeraka.
+ *
+ * Duljina teksta ovo NE moze postici: izmjereno na commitanim primjercima, svih jedanaest ima tocno
+ * jednu sekciju bez obzira na opseg, jer sekcija nastaje iz stila stranice, ne iz broja odlomaka.
+ */
+function wantsSections(body: ProseBody): boolean {
+  return body.workType === 'doctoral' || body.workType === 'specialist';
+}
+
+/**
+ * Stilovi naslova koji uz sebe nose PROMJENU STILA STRANICE, cime u ODF-u pocinje nova sekcija.
+ *
+ * Nasljeduju `Heading_20_1`, pa naslov ostaje naslov: da smo umjesto toga umetnuli prazan odlomak
+ * sa stilom stranice, dobili bismo sekciju ali izgubili outline razinu, a usput hranili oblik
+ * `opseg/prazni-preko-20` koji mjeri nesto drugo.
+ */
+const SEKCIJE = [
+  { stil: 'Naslov1Predtekst', stranica: 'Predtekst' },
+  { stil: 'Naslov1Tijelo', stranica: 'Tijelo' },
+  { stil: 'Naslov1Prilozi', stranica: 'Prilozi' },
+] as const;
+
+function sectionStyleBlock(): string {
+  return SEKCIJE.map(
+    (s) =>
+      `  <style:style style:name="${s.stil}" style:family="paragraph" style:parent-style-name="Heading_20_1"` +
+      ` style:master-page-name="${s.stranica}"/>`,
+  ).join('\n');
+}
+
+function sectionMasterPages(footer: string): string {
+  return SEKCIJE.map(
+    (s) => `  <style:master-page style:name="${s.stranica}" style:page-layout-name="pm1">\n${footer}\n  </style:master-page>`,
+  ).join('\n');
+}
+
 export function buildFodt(body: ProseBody, opts: BuildOptions): string {
   const { rules } = opts;
   const page = pageSize(rules);
   const m = rules.margins ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
+  const sekcije = wantsSections(body);
+  // Naslov koji zapocinje sekciju; bez sekcija ostaje obican `Heading_20_1`, pa se zatecen izlaz
+  // ne mijenja ni za jedan bajt.
+  const h1 = (i: 0 | 1 | 2): string => (sekcije ? SEKCIJE[i].stil : 'Heading_20_1');
+  // Podnozje je izdvojeno jer ga dijele SVE stranice: da ga svaka nosila svoje, sekcije bi mogle
+  // dobiti razlicitu numeraciju, sto bi bila izmisljena razlika a ne oblik koji mjerimo.
+  const podnozje =
+    rules.requirePageNumbers === false
+      ? '   <style:footer><text:p text:style-name="Footer"/></style:footer>'
+      : [
+          '   <style:footer>',
+          '    <text:p text:style-name="Footer"><text:page-number text:select-page="current">1</text:page-number></text:p>',
+          '   </style:footer>',
+        ].join('\n');
+
+  // Prazan niz kad sekcija nema, pa je izlaz za zatecene radove BAJT-IDENTICAN starome. Vodeci
+  // prijelom retka nosi sama vrijednost, jer bi ga predlozak inace ostavio kao prazan redak.
+  const sekcijskiStilovi = sekcije ? `\n${sectionStyleBlock()}` : '';
+  const sekcijskeStranice = sekcije ? `\n${sectionMasterPages(podnozje)}` : '';
 
   const naslovnica = opts.titleLines.length
     ? `${opts.titleLines
@@ -234,7 +296,7 @@ export function buildFodt(body: ProseBody, opts: BuildOptions): string {
     : '';
 
   const sazetak = [
-    '   <text:h text:style-name="Heading_20_1" text:outline-level="1">Sažetak</text:h>',
+    `   <text:h text:style-name="${h1(0)}" text:outline-level="1">Sažetak</text:h>`,
     `   <text:p text:style-name="Text_20_body">${esc(body.abstract.hr)}</text:p>`,
     `   <text:p text:style-name="Text_20_body">Ključne riječi: ${esc(body.keywords.hr.join(', '))}</text:p>`,
     '   <text:h text:style-name="Heading_20_1" text:outline-level="1">Abstract</text:h>',
@@ -245,9 +307,11 @@ export function buildFodt(body: ProseBody, opts: BuildOptions): string {
   // Fusnote idu u prve odlomke; brojac je izvan petlje da numeracija tece kroz cijeli rad.
   let fusnotaIdx = 0;
   const poglavlja = body.chapters
-    .map((ch) => {
+    .map((ch, idx) => {
       const razina = Math.min(3, Math.max(1, ch.level));
-      const naslov = `   <text:h text:style-name="Heading_20_${razina}" text:outline-level="${razina}">${esc(ch.title)}</text:h>`;
+      // Prvi naslov prve razine otvara sekciju TIJELA; ostali su obicni naslovi.
+      const stilNaslova = idx === 0 && razina === 1 ? h1(1) : `Heading_20_${razina}`;
+      const naslov = `   <text:h text:style-name="${stilNaslova}" text:outline-level="${razina}">${esc(ch.title)}</text:h>`;
       const odlomci = ch.paragraphs
         .map((p) => {
           const fus = fusnotaIdx < body.footnotes.length ? footnoteInline(fusnotaIdx + 1, body.footnotes[fusnotaIdx]) : '';
@@ -263,7 +327,7 @@ export function buildFodt(body: ProseBody, opts: BuildOptions): string {
   const popisi = elementListsBlock(body.tables, body.figures);
 
   const literatura = [
-    '   <text:h text:style-name="Heading_20_1" text:outline-level="1">Literatura</text:h>',
+    `   <text:h text:style-name="${h1(2)}" text:outline-level="1">Literatura</text:h>`,
     ...body.bibliography.map(
       (r, i) =>
         `   <text:p text:style-name="Text_20_body">${i + 1}. ${esc(r.text)}${r.doi ? ` https://doi.org/${esc(r.doi)}` : ''}</text:p>`,
@@ -284,7 +348,7 @@ export function buildFodt(body: ProseBody, opts: BuildOptions): string {
   <style:font-face style:name="${esc(rules.font?.[0] ?? 'Times New Roman')}" svg:font-family="&apos;${esc(rules.font?.[0] ?? 'Times New Roman')}&apos;" style:font-pitch="variable"/>
  </office:font-face-decls>
  <office:styles>
-${styleBlock(rules)}
+${styleBlock(rules)}${sekcijskiStilovi}
  </office:styles>
  <office:automatic-styles>
   <style:page-layout style:name="pm1">
@@ -294,12 +358,8 @@ ${styleBlock(rules)}
  </office:automatic-styles>
  <office:master-styles>
   <style:master-page style:name="Standard" style:page-layout-name="pm1">
-${
-  rules.requirePageNumbers === false
-    ? '   <style:footer><text:p text:style-name="Footer"/></style:footer>'
-    : '   <style:footer>\n    <text:p text:style-name="Footer"><text:page-number text:select-page="current">1</text:page-number></text:p>\n   </style:footer>'
-}
-  </style:master-page>
+${podnozje}
+  </style:master-page>${sekcijskeStranice}
  </office:master-styles>
  <office:body>
   <office:text>

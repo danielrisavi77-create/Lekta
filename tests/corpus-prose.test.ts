@@ -7,6 +7,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { validateProseBody, bodyParagraphs, wordCount, type ProseBody } from '../src/corpus/prose-schema';
+import { buildFodt } from '../scripts/corpus-gen/prose-scenario.mts';
 
 /** Ispravno tijelo; svaki test mu kvari TOCNO jednu stvar. */
 function validBody(): ProseBody {
@@ -156,5 +157,48 @@ describe('shema proze: izvor je obavezan po prikazu', () => {
 
   it('prikazi s izvorom ne proizvode nalaz (baseline)', () => {
     expect(validateProseBody(validBody())).toEqual([]);
+  });
+});
+
+/**
+ * SEKCIJE: dug rad se dijeli na vise stilova stranice, sto u Wordu postaje vise `<w:sectPr>`.
+ *
+ * Zasto je ovo vlastiti gard, a ne posljedica duljine: oblik `opseg/sekcije-preko-3` je do sada bio
+ * nepokriven, i prvo objasnjenje u planu je glasilo da ga zatvara "jedan dulji rad". To je bilo
+ * KRIVO, i mjerenje je to pokazalo: svih jedanaest commitanih primjeraka ima tocno JEDNU sekciju
+ * bez obzira na opseg, jer sekcija nastaje iz stila stranice a ne iz broja odlomaka. Gard zato
+ * mjeri strukturu, a ne velicinu.
+ */
+describe('graditelj: sekcije nastaju iz stila stranice, ne iz duljine', () => {
+  const rules = { font: ['Times New Roman'], size: [12], spacing: 1.5, justify: true };
+  const opts = { rules, titleLines: ['SVEUCILISTE', 'Ime Prezime', 'NASLOV', 'Zagreb, 2026.'] };
+  const gradi = (workType: string): string =>
+    buildFodt({ ...validBody(), workType } as ProseBody, opts as Parameters<typeof buildFodt>[1]);
+
+  it('doktorski i specijalisticki dobivaju cetiri stila stranice', () => {
+    for (const wt of ['doctoral', 'specialist']) {
+      const f = gradi(wt);
+      expect((f.match(/<style:master-page /g) ?? []).length, wt).toBe(4);
+      expect((f.match(/style:master-page-name=/g) ?? []).length, wt).toBe(3);
+    }
+  });
+
+  /**
+   * NEGATIVNA KONTROLA, i nije kozmeticka: bez nje bi izmjena tiho promijenila svih jedanaest vec
+   * commitanih primjeraka, kojima bi tada trebalo mijenjati i tvrdnje o oblicima u sidecarima.
+   */
+  it('kratke vrste rada ostaju na jednoj sekciji, bajt-identicno starome', () => {
+    for (const wt of ['final', 'seminar', 'graduate', 'article']) {
+      const f = gradi(wt);
+      expect((f.match(/<style:master-page /g) ?? []).length, wt).toBe(1);
+      expect(f.includes('style:master-page-name='), wt).toBe(false);
+    }
+  });
+
+  it('podnozje je isto na svim stranicama, pa numeracija ne odluta po sekcijama', () => {
+    const f = gradi('doctoral');
+    const podnozja = f.match(/<style:footer>[\s\S]*?<\/style:footer>/g) ?? [];
+    expect(podnozja.length).toBe(4);
+    expect(new Set(podnozja).size).toBe(1);
   });
 });
