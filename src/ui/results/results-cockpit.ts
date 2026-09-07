@@ -2,7 +2,7 @@ import './result-visuals.css';
 import type { VisualFindingModel, VisualResultModel } from './visual-result-model';
 import { categorySummaryHtml } from './category-summary';
 import { priorityFindingsHtml } from './priority-findings';
-import { readinessHaloHtml } from './technical-compliance-halo';
+import { findingSummary, findingSummaryHtml } from './finding-summary';
 import { bindDocumentDna, documentDnaHtml } from './document-dna';
 import type { DocumentDnaModel } from '../../results/document-dna-model';
 import { repairOutlookHtml } from './repair-outlook-view';
@@ -84,19 +84,27 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   const status = statusCopy(model);
   const action = primaryAction(model.findings.top, options.repairAvailable);
   const advancedOpen = options.advancedOpen === true;
-  const haloStatus = haloStatusLabel(model);
   mount.className = 'result-cockpit result-cockpit--' + status.tone;
   mount.dataset.cockpitExperience = 'correction-desk';
   mount.innerHTML = [
     headerHtml(model),
     // Presuda i poziv dijele JEDNU celiju resetke. Dok su bili dvije celije, visina mjeraca
     // (visi od teksta) razvlacila je redak, pa je izmedju recenice i gumba zjapila praznina.
-    '<div class="cockpit-hero" data-cockpit-hero data-cockpit-status="', status.tone, '">',
+    // SAZETAK JE NASLOV, PRESUDA JE OZNAKA. Do 2026-09-07 su ovdje bila DVA naslova koja se
+    // natjecu: presuda u velikom serifu ("Nije spremno za predaju") i njezin opis, koji je
+    // rijecima ponavljao ono sto sazetak kaze brojkama. Presuda ostaje, jer odgovara na pitanje
+    // "smijem li predati", ali kao sitna oznaka; sazetak odgovara na "sto da radim", i to je
+    // ono zbog cega korisnik dolazi.
+    '<div class="cockpit-hero cockpit-hero--sazetak" data-cockpit-hero data-cockpit-status="', status.tone, '">',
     '<div class="cockpit-hero__lead">',
-    '<div class="cockpit-hero__copy"><span class="cockpit-kicker">Rezultat provjere</span><h2>', escapeHtml(status.label), '</h2><p>', escapeHtml(status.description), '</p></div>',
+    '<span class="cockpit-verdict" data-verdict="', status.tone, '">', escapeHtml(status.label), '</span>',
+    findingSummaryHtml(
+      findingSummary(model.signals, model.score, model.readiness.authoritative, options.repairAvailable),
+      escapeHtml,
+    ),
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
-    action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '', '>', primaryButtonLabel(action), '</button></div>',
-    readinessHaloHtml(model.score, model.signals, haloStatus, status.tone), '</div>',
+    action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '', '>', primaryButtonLabel(action), '</button>',
+    '</div></div>',
     '<section class="cockpit-priority" aria-labelledby="cockpitPriorityTitle"><div class="cockpit-section-heading"><span class="cockpit-kicker">Prvo pogledajte</span><h2 id="cockpitPriorityTitle">Najva\u017Eniji nalazi</h2></div>',
     priorityFindingsHtml(model.findings.top, options.repairAvailable), '</section>',
     options.documentDna ? documentDnaHtml(options.documentDna) : '',
@@ -163,8 +171,3 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   }));
 }
 
-function haloStatusLabel(model: VisualResultModel): string {
-  if (model.readiness.kind === 'blocked') return 'Nije spremno';
-  if (model.readiness.kind === 'needs-work' || model.readiness.kind === 'manual-review') return 'Uvjetno spremno';
-  return 'Spremno';
-}

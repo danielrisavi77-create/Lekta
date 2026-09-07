@@ -342,3 +342,48 @@ test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', 
   expect(stanje.spinnera, 'spinner, traka ili postotak su se vratili').toBe(0);
   expect(stanje.tekst, `postotak je ponovno na ekranu: ${stanje.tekst}`).not.toMatch(/\d+\s*%/);
 });
+
+test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom', async ({ page }) => {
+  /**
+   * Brif vlasnika: "Lekta nije Grammarly score dashboard. Najveca vrijednost nije 'Tvoj rad ima
+   * 71/100' nego 'Nasao sam sest stvari. Tri mogu popraviti automatski.'" Do 2026-09-07 je ocjena
+   * bila tamni uredaj 321x353 px s halo prstenom, a nalazi su pocinjali na y=690, ispod pregiba.
+   *
+   * MJERI SE OMJER VELICINE FONTA, i to je nauceno na ovoj izmjeni. Prva izvedba je IZGLEDALA
+   * ispravno: sazetak lijevo velik, ocjena desno mala. Mjerenje je pokazalo obrnuto, 30,4 naspram
+   * 38,4 px, jer je naslov dug redak a ocjena jedna brojka. Oko je vidjelo hijerarhiju koje nije
+   * bilo. Tvrdnja o "izgleda sporedno" bez brojke ne vrijedi nista.
+   */
+  await page.goto('/rad/');
+  await page.locator('#fileInput').setInputFiles(FIXTURE);
+  await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
+  await page.locator('[data-confirm-profile]').click();
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
+
+  const sazetak = page.locator('[data-finding-summary]');
+  await expect(sazetak).toBeVisible();
+
+  const m = await page.evaluate(() => {
+    const px = (s: string) => {
+      const e = document.querySelector(s);
+      return e ? parseFloat(getComputedStyle(e).fontSize) : 0;
+    };
+    const razine = [...document.querySelectorAll('.fsum-razina b')].map((b) => Number(b.textContent));
+    const naslov = document.querySelector('.fsum-naslov')?.textContent ?? '';
+    return {
+      naslovPx: px('.fsum-naslov'),
+      ocjenaPx: px('.fsum-ocjena b'),
+      zbrojRazina: razine.reduce((a, b) => a + b, 0),
+      naslovBroj: Number(naslov.match(/^\d+/)?.[0] ?? NaN),
+      // Tamni uredaj s halom je ono sto je zamijenjeno; njegov povratak je regresija.
+      halo: document.querySelectorAll('#resultView [class*="halo"]').length,
+    };
+  });
+
+  expect(m.naslovPx, 'sazetak mora biti VECI od ocjene').toBeGreaterThan(m.ocjenaPx);
+  expect(m.naslovPx / m.ocjenaPx, 'ocjena je opet preuzela autoritet').toBeGreaterThanOrEqual(1.25);
+  expect(m.halo, 'tamni mjerac s halom se vratio').toBe(0);
+  // Razine su particija po ozbiljnosti: moraju se zbrojiti u broj iz naslova. Ako se ikad u taj
+  // stupac uvuce redak s druge osi (npr. automatski popravci), ova tvrdnja pada.
+  expect(m.zbrojRazina, 'razine se ne zbrajaju u naslov, pa je u stupac usla druga os').toBe(m.naslovBroj);
+});
