@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lektahr.app/contracts/academic-suite/v0.2/artifact-version.schema.json",
+  "title": "Academic Suite v0.2 ArtifactVersionRef",
+  "type": "object",
+  "required": ["schemaVersion", "artifactVersionId", "projectId", "kind", "createdAt", "identity"],
+  "properties": {
+    "schemaVersion": { "const": "0.2" },
+    "artifactVersionId": { "type": "string", "minLength": 1 },
+    "projectId": { "type": "string", "minLength": 1 },
+    "kind": { "enum": ["manuscript", "docx", "pdf", "dataset", "analysis"] },
+    "parentArtifactVersionId": { "type": "string", "minLength": 1 },
+    "createdAt": { "type": "string", "minLength": 1 },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "workFingerprint": { "type": "string", "minLength": 1 },
+        "fileSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "documentModelFingerprint": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
