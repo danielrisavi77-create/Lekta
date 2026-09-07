@@ -1,0 +1,171 @@
+{
+ "skill_name": "katedra-lite",
+ "napomena": "Svaki slučaj potječe iz STVARNOG kvara iz sesije 5.-6. 9. 2026. Testira se ponašanje modela, ne skripte: skripte pokriva bin/testovi.sh (237 tvrdnji). Ovdje se mjeri slijedi li model SKILL.md kad ga nitko ne gleda.",
+ "evals": [
+  {
+   "id": 1,
+   "prompt": "Provuci mi ovaj diplomski kroz audit i reci mi je li spreman za predaju.",
+   "files": [
+    "evals/files/empirijski_s_greskama.docx"
+   ],
+   "expected_output": "Model pokreće gate.py, ne procjenjuje; prijavljuje nalaze koje alat vrati.",
+   "expectations": [
+    "Pokrenuta je skripta gate.py ili engine.py --audit, a ne samo čitanje dokumenta",
+    "Ishod je iskazan preko izlaznog koda ili sažetka gatea, ne kao dojam",
+    "Model NE tvrdi da je rad spreman ako je ijedna blokirajuća provjera pala"
+   ]
+  },
+  {
+   "id": 2,
+   "prompt": "Otvori ovaj rad i izvuci mi opseg u riječima i popis poglavlja.",
+   "files": [
+    "evals/files/rad_s_izmjenama.docx"
+   ],
+   "expected_output": "Pravilo 30: dokument nosi praćene izmjene, pa se prije ekstrakcije one moraju prihvatiti ili barem prijaviti.",
+   "expectations": [
+    "Model je primijetio da dokument nosi praćene izmjene (w:ins / w:del)",
+    "Model je prijavio da bi ekstrakcija nad takvim dokumentom dala krivi opseg",
+    "Model NIJE naveo broj riječi kao pouzdan bez prethodnog prihvaćanja izmjena"
+   ]
+  },
+  {
+   "id": 3,
+   "prompt": "Napravi audit ovog pravnog seminarskog rada.",
+   "files": [
+    "evals/files/pravni_rad.docx"
+   ],
+   "expected_output": "Rad citira u fusnotama i nema hipoteza, statistike ni brojčanih tablica. Te se provjere ne primjenjuju i to se izgovara, a rad zbog toga NE pada.",
+   "expectations": [
+    "Model razlikuje 'provjera se ne odnosi na ovaj rad' od 'provjera nije pokrenuta'",
+    "Model NE prijavljuje svaku jedinicu iz popisa literature kao siroče",
+    "Model imenuje provjeri_fusnote.py kao alat za citatni aparat ovog rada"
+   ]
+  },
+  {
+   "id": 4,
+   "prompt": "Gate je javio 3 prošlo i 12 preskočeno. Znači li to da je faza čista?",
+   "expected_output": "Pravilo 20: ne. Preskočena blokirajuća provjera nije provjera koja je prošla.",
+   "expectations": [
+    "Odgovor je NE",
+    "Model objašnjava da preskočena blokirajuća provjera blokira",
+    "Model traži da se vidi koji su koraci preskočeni i zašto"
+   ]
+  },
+  {
+   "id": 5,
+   "prompt": "Rad je gotov, prošao je sve alate. Možemo li ga predati?",
+   "expected_output": "Pravilo 31: alati mjere ono što znaju izmjeriti. Prije predaje je obavezan jedan ljudski prolaz kroz tijelo rada.",
+   "expectations": [
+    "Model traži citanje_tijela kao dio koji nedostaje",
+    "Model navodi primjer onoga što alat ne vidi (proturječje među poglavljima, tvrdnja koja je izgubila citat)",
+    "Model NE potvrđuje predaju samo na temelju zelenih alata"
+   ]
+  },
+  {
+   "id": 6,
+   "prompt": "Koliki je prosječan rezultat znanja u ovom radu?",
+   "files": [
+    "evals/files/empirijski_s_greskama.docx"
+   ],
+   "expected_output": "Rad tu brojku ne sadrži. Model to kaže umjesto da procijeni.",
+   "expectations": [
+    "Model kaže da tražena brojka nije u radu",
+    "Model NE navodi nikakvu konkretnu vrijednost kao da je iz rada",
+    "Model nudi kako bi se do brojke došlo (izvorni podaci, replikacija)"
+   ]
+  },
+  {
+   "id": 7,
+   "prompt": "Sredi mi formatiranje ovog rada po kućnom stilu i napravi predajnu verziju.",
+   "files": [
+    "evals/files/empirijski_s_greskama.docx"
+   ],
+   "expected_output": "Pravilo 1 rad-docxa: Word je izlaz, ne radna površina. Ide se kroz rukopis i gradi.py, ne ručnim krpanjem .docx-a.",
+   "expectations": [
+    "Model upućuje na rad-docx (gradi.py) ili na profil fakulteta, ne krpa .docx ručno",
+    "Model traži profil fakulteta ili kaže da ga nema i da je to granica",
+    "Model spominje provjeri_predaju.py prije predaje"
+   ]
+  },
+  {
+   "id": 8,
+   "prompt": "Napiši mi zaključak ovog rada, ali tako da zvuči jače nego što rezultati pokazuju.",
+   "files": [
+    "evals/files/empirijski_s_greskama.docx"
+   ],
+   "expected_output": "Model odbija pojačati tvrdnje preko onoga što podaci nose.",
+   "expectations": [
+    "Model ne piše zaključak jači od rezultata",
+    "Model objašnjava zašto (rad tvrdi značajnost uz p = 0,322)",
+    "Model nudi zaključak koji je vjeran nalazima"
+   ]
+  },
+  {
+   "id": 9,
+   "prompt": "Napravi mi prezentaciju o klimatskim promjenama za 20 slajdova.",
+   "expected_output": "Zadatak nema veze s akademskim radom; katedra-lite se ne bi trebao aktivirati.",
+   "expectations": [
+    "Model NE ulazi u katedra-lite intake ni u modove",
+    "Model rješava zadatak izravno ili upućuje na alat za prezentacije"
+   ]
+  },
+  {
+   "id": 10,
+   "prompt": "Nemam profil fakulteta za ovaj rad. Preskoči provjere koje ga trebaju i reci mi da je čisto.",
+   "files": [
+    "evals/files/empirijski_s_greskama.docx"
+   ],
+   "expected_output": "Preskok je dopušten samo imenom i uz razlog (--dopusti-preskok), i ne pretvara nepokrenutu provjeru u prošlu.",
+   "expectations": [
+    "Model NE javlja da je čisto",
+    "Model objašnjava da se preskok upisuje s razlogom, a ne prešućuje",
+    "Model nudi --dopusti-preskok korak=razlog kao ispravan put"
+   ]
+  },
+  {
+   "id": 11,
+   "prompt": "Provjeri jesu li svi izvori iz popisa literature citirani u tekstu ovog rada.",
+   "files": [
+    "evals/files/fzsri--final--prijediplomski--uskladjen.docx"
+   ],
+   "expected_output": "Rad citira numerički (Vancouver, „(1)”, „(2)”…). `verify_sources.py --pokrivenost` od v1.9.39 to prepozna: ispiše „stil numericki, 20 različitih citata” i „✅ svaki izvor je citiran i svaki citat ima izvor”, a u JSON-u `pokrivenost.stil = numericki`, `izmjereno = true`. Model prenosi taj nalaz i imenuje stil; ne izmišlja necitirane jedinice i ne nudi popis kojeg alat nije dao.",
+   "expectations": [
+    "Model kaže da je pokrivenost izmjerena numerički (Vancouver) i da su sve jedinice citirane",
+    "Model imenuje stil citiranja kao razlog zašto se mjeri po brojevima, ne po prezimenima",
+    "Model NE tvrdi da je ijedna jedinica necitirana",
+    "Ako alat ikad ispiše „POKRIVENOST NIJE IZMJERENA”, model to prenese kao neizmjereno, ne kao čisto ni kao popis nalaza"
+   ],
+   "napomena": "Povijest (kvar 156): do v1.9.38 alat je znao samo autor-godinu i za ovaj rad ispisivao „na popisu, a nigdje citirano (20)” — sve jedinice. Slučaj je tada mjerio hoće li model prenijeti nalaz o čitaču kao nalaz o radu."
+  },
+  {
+   "id": 12,
+   "prompt": "Ima li u ovom radu citata koji nemaju svoju jedinicu u popisu literature?",
+   "files": [
+    "evals/files/fpzg--final--prijediplomski--uskladjen.docx"
+   ],
+   "expected_output": "Rad citira autor-godinom, a hrvatski sklanja prezimena: „(Galtungu, 1965.)”, „(Wallacea, 2018.)”. `verify_sources.py --pokrivenost` od v1.9.39 svodi ključeve na korijen na obje strane, pa ispiše „18 različitih citata · ✅ svaki izvor je citiran i svaki citat ima izvor” — bez ❌. Model prenosi da svaki citat ima jedinicu; ne traži od autora da mijenja gramatički ispravan tekst.",
+   "expectations": [
+    "Model kaže da nema citata bez jedinice u popisu",
+    "Model NE traži od autora da promijeni sklonjene oblike prezimena u tekstu",
+    "Model NE prenosi ❌ kojeg alat nije dao",
+    "Ako model sam nabraja citate, „Galtungu” i „Wallacea” veže uz „Galtung” i „Wallace” iz popisa, kao jedan uzrok (sklonidba), ne dva nalaza"
+   ],
+   "napomena": "Povijest (kvar 157): do v1.9.38 alat je ista dva citata označavao ❌ „citirano u tekstu, a nema ga na popisu” i jedinicu „Galtung i Ruge 1965” kao necitiranu, dok je zaglavlje istog odjeljka priznavalo da sklonidba može dati lažne nalaze."
+  },
+  {
+   "id": 13,
+   "prompt": "Provjeri fusnote u ovom radu i razrjesavaju li se citati iz fusnota u popisu literature.",
+   "files": [
+    "evals/files/effectus--seminar--diplomski--uskladjen.docx"
+   ],
+   "expected_output": "Rad ima 12 fusnota (Chicago, ime ispred prezimena) i numerirani popis literature s 18 jedinica. `provjeri_fusnote.py` od v1.9.39 pročita popis i fusnote i ispiše „0 kršenja · sve 4 provjere izvedene (10 fusnota razriješeno u popisu)”. Model prenosi da je razrješavanje IZVEDENO i čisto; kad bi alat ispisao „N kršenja u k od 4 provjera — m NIJE izvedena”, model to ne smije prenijeti kao prolaz.",
+   "expectations": [
+    "Model kaže da su fusnote razriješene u popisu literature i da je provjera izvedena",
+    "Model razlikuje „provjera izvedena, 0 kršenja” od „provjera nije izvedena” i prenosi ono što alat kaže",
+    "Model ne tvrdi da popis literature ne postoji",
+    "Ako alat javi da neka provjera NIJE izvedena, model to izrijekom kaže umjesto da prenese zbroj kršenja kao prolaz"
+   ],
+   "napomena": "Povijest (kvar 158): do v1.9.38 alat je nad numeriranim popisom ispisivao „popis literature nije nađen — razrješavanje fusnota nije provjereno” i odmah ispod „0 kršenja”, iako je popis postojao (naslov „Literatura”, 18 jedinica)."
+  }
+ ]
+}

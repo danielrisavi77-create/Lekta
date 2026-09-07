@@ -1,0 +1,737 @@
+{
+  "naslov": "Financijska pismenost mladih u Hrvatskoj kao oblik ekonomskog građanstva",
+  "baza": "podaci/baza.csv",
+  "izlaz": "replikacija",
+  "oznake": {
+    "dob": "Dob",
+    "obrazovanje": "Obrazovanje",
+    "prihod": "Prihod",
+    "mat_status": "Mat. status",
+    "FL": "Fin. pism. (0-8)",
+    "edu_dovoljno": "Dostatnost obrazov.",
+    "ima_instrument": "Ima instr.",
+    "planira": "Namjera",
+    "znanje_kamata": "Složena kamata",
+    "znanje_inflacija": "Inflacija",
+    "znanje_eks": "EKS",
+    "znanje_depoziti": "Osiguranje depozita",
+    "znanje_diverz": "Diverzifikacija",
+    "znanje_etf": "Indeksni fondovi",
+    "znanje_kripto": "Kriptovalute",
+    "znanje_stup3": "III. stup",
+    "individualna_odgovornost": "Ind. odgov.",
+    "etatisticka_orijentacija": "Etatiz. orij.",
+    "trzisna_participacija": "Tržiš. partic.",
+    "gradanska_dimenzija": "Građan. dim.",
+    "strukturna_atribucija": "Strukt. atrib.",
+    "EG_kompozit": "EG komp.",
+    "P28": "Sami odgovorni",
+    "P29": "Država jamči standard",
+    "P30": "Tržišta prevelik utj.",
+    "P31": "Ulaganje = kontrola",
+    "P32": "Tko ne štedi, snosi",
+    "P33": "Stroža regulacija",
+    "P34": "Okolnosti prije odluka",
+    "P35": "Bez ulaganja nema st.",
+    "P36": "Pismenost u školama",
+    "P37": "Briga = građanska duž.",
+    "P38": "Uspjeh = trud",
+    "P39": "Regulacija šteti"
+  },
+  "priprema": "REGRESSION /VARIABLES=dob /DEPENDENT=FL /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=planira /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=mat_status /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=prihod /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=EG_kompozit /METHOD=ENTER /SAVE RESID.\nVARIABLE LABELS RES1 'FL bez dobi' RES2 'Namjera bez dobi' RES3 'Mat. status bez dobi'\n  RES4 'Prihod bez dobi' RES5 'EG komp. bez dobi'.\nSAVE OUTFILE='reziduali_bez_dobi.sav'.",
+  "analize": [
+    {
+      "ime": "01_deskriptiva",
+      "sirina": 1180,
+      "natpis": "Deskriptivna statistika dobi i indeksa financijske pismenosti",
+      "sintaksa": "DESCRIPTIVES /VARIABLES=dob FL /STATISTICS=MEAN STDDEV MIN MAX.\nFREQUENCIES /VARIABLES=FL /STATISTICS=MEDIAN."
+    },
+    {
+      "ime": "02_frekvencije",
+      "sirina": 1180,
+      "natpis": "Frekvencije ocjene obrazovanja, posjedovanja instrumenta i namjere ulaganja",
+      "sintaksa": "FREQUENCIES /VARIABLES=edu_dovoljno ima_instrument planira."
+    },
+    {
+      "ime": "03_pouzdanost_znanje",
+      "sirina": 1000,
+      "natpis": "Analiza pouzdanosti osam čestica znanja",
+      "sintaksa": "RELIABILITY /VARIABLES=znanje_kamata znanje_inflacija znanje_eks znanje_depoziti\n  znanje_diverz znanje_etf znanje_kripto znanje_stup3 /MODEL=ALPHA."
+    },
+    {
+      "ime": "04_pouzdanost_ljestvice",
+      "sirina": 1000,
+      "natpis": "Analiza pouzdanosti ljestvica stavova",
+      "sintaksa": "RELIABILITY /VARIABLES=P28 P32 P38 /MODEL=ALPHA.\nRELIABILITY /VARIABLES=P29 P33 /MODEL=ALPHA.\nRELIABILITY /VARIABLES=P31 P35 /MODEL=ALPHA.\nRELIABILITY /VARIABLES=P30 P34 /MODEL=ALPHA.\nRELIABILITY /VARIABLES=P36 P37 /MODEL=ALPHA."
+    },
+    {
+      "ime": "05_korelacije",
+      "sirina": 1460,
+      "natpis": "Korelacije indeksa financijske pismenosti s ostalim varijablama",
+      "sintaksa": "CORRELATIONS /VARIABLES=FL WITH planira ima_instrument individualna_odgovornost\n  etatisticka_orijentacija /PRINT=TWOTAIL SIG.\nCORRELATIONS /VARIABLES=FL WITH mat_status prihod EG_kompozit gradanska_dimenzija dob\n  /PRINT=TWOTAIL SIG."
+    },
+    {
+      "ime": "06_t_test",
+      "sirina": 1460,
+      "natpis": "T-test za nezavisne uzorke prema namjeri ulaganja",
+      "sintaksa": "T-TEST /GROUPS=planira(0 1) /VARIABLES=FL."
+    },
+    {
+      "ime": "07_upareni_t_test",
+      "sirina": 1460,
+      "natpis": "T-test za zavisne uzorke, suvremeni i tradicionalni sadržaji",
+      "sintaksa": "COMPUTE suvremeni = (znanje_etf + znanje_kripto) / 2.\nCOMPUTE tradicionalni = (znanje_kamata + znanje_depoziti) / 2.\nEXECUTE.\nT-TEST /PAIRS=suvremeni WITH tradicionalni (PAIRED)."
+    },
+    {
+      "ime": "08_anova",
+      "sirina": 1380,
+      "natpis": "Analiza varijance po razini obrazovanja",
+      "sintaksa": "TEMPORARY.\nSELECT IF (obrazovanje NE 1).\nONEWAY FL BY obrazovanje /STATISTICS=DESCRIPTIVES."
+    },
+    {
+      "ime": "09_parcijalne",
+      "sirina": 1300,
+      "natpis": "Parcijalne korelacije uz kontrolu dobi",
+      "sintaksa": "REGRESSION /VARIABLES=dob /DEPENDENT=FL /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=planira /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=mat_status /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=prihod /METHOD=ENTER /SAVE RESID.\nREGRESSION /VARIABLES=dob /DEPENDENT=EG_kompozit /METHOD=ENTER /SAVE RESID.\nVARIABLE LABELS RES1 'FL bez dobi' RES2 'Namjera bez dobi' RES3 'Mat. status bez dobi'\n  RES4 'Prihod bez dobi' RES5 'EG komp. bez dobi'.\nCORRELATIONS /VARIABLES=RES1 WITH RES2 RES3 RES4 RES5 /PRINT=TWOTAIL SIG.",
+      "sintaksa_snimka": "GET FILE='reziduali_bez_dobi.sav'.\nCORRELATIONS /VARIABLES=RES1 WITH RES2 RES3 RES4 RES5 /PRINT=TWOTAIL SIG."
+    },
+    {
+      "ime": "10_glavne_komponente",
+      "sirina": 1200,
+      "natpis": "Analiza glavnih komponenti",
+      "sintaksa": "FACTOR /VARIABLES=P28 P29 P30 P31 P32 P33 P34 P35 P36 P37 P38 P39\n  /EXTRACTION=PC /CRITERIA=MINEIGEN(1) /ROTATION=NOROTATE\n  /PRINT=INITIAL EXTRACTION."
+    }
+  ],
+  "ocekivano": [
+    {
+      "oznaka": "A1",
+      "gdje": "4.1",
+      "statistika": "N",
+      "u_radu": "131",
+      "naredba": "DESCRIPTIVES",
+      "decimala": 0,
+      "izvor": {
+        "tip": "deskriptiva",
+        "varijabla": "dob",
+        "stupac": "N"
+      }
+    },
+    {
+      "oznaka": "A2",
+      "gdje": "4.1",
+      "statistika": "dob M",
+      "u_radu": "24,5",
+      "naredba": "DESCRIPTIVES",
+      "decimala": 2,
+      "izvor": {
+        "tip": "deskriptiva",
+        "varijabla": "dob",
+        "stupac": "Mean"
+      }
+    },
+    {
+      "oznaka": "A3",
+      "gdje": "4.1",
+      "statistika": "dob SD",
+      "u_radu": "2,9",
+      "naredba": "DESCRIPTIVES",
+      "decimala": 2,
+      "izvor": {
+        "tip": "deskriptiva",
+        "varijabla": "dob",
+        "stupac": "Std Dev"
+      }
+    },
+    {
+      "oznaka": "A4",
+      "gdje": "4.2",
+      "statistika": "FL M",
+      "u_radu": "3,63",
+      "naredba": "DESCRIPTIVES",
+      "decimala": 2,
+      "izvor": {
+        "tip": "deskriptiva",
+        "varijabla": "FL",
+        "stupac": "Mean"
+      }
+    },
+    {
+      "oznaka": "A5",
+      "gdje": "4.2",
+      "statistika": "FL SD",
+      "u_radu": "2,27",
+      "naredba": "DESCRIPTIVES",
+      "decimala": 2,
+      "izvor": {
+        "tip": "deskriptiva",
+        "varijabla": "FL",
+        "stupac": "Std Dev"
+      }
+    },
+    {
+      "oznaka": "A6",
+      "gdje": "4.2",
+      "statistika": "FL medijan",
+      "u_radu": "3",
+      "naredba": "FREQUENCIES",
+      "decimala": 0,
+      "izvor": {
+        "tip": "statistike",
+        "mjera": "Median"
+      }
+    },
+    {
+      "oznaka": "A7",
+      "gdje": "4.2",
+      "statistika": "udio s manje od 4 boda",
+      "u_radu": "51,9 %",
+      "naredba": "FREQUENCIES",
+      "decimala": 1,
+      "izvor": {
+        "tip": "frekvencije",
+        "varijabla": "FL",
+        "vrijednost": "3",
+        "stupac": "kumulativno"
+      }
+    },
+    {
+      "oznaka": "A8",
+      "gdje": "4.2",
+      "statistika": "udio: obrazovanje nedovoljno",
+      "u_radu": "77,9 %",
+      "naredba": "FREQUENCIES",
+      "decimala": 1,
+      "izvor": {
+        "tip": "frekvencije",
+        "varijabla": "edu_dovoljno",
+        "vrijednost": "2",
+        "stupac": "kumulativno"
+      }
+    },
+    {
+      "oznaka": "A9",
+      "gdje": "4.4",
+      "statistika": "udio bez ijednog instrumenta",
+      "u_radu": "36,6 %",
+      "naredba": "FREQUENCIES",
+      "decimala": 1,
+      "izvor": {
+        "tip": "frekvencije",
+        "varijabla": "ima_instrument",
+        "vrijednost": ".",
+        "stupac": "vazeci"
+      }
+    },
+    {
+      "oznaka": "A10",
+      "gdje": "4.4",
+      "statistika": "udio koji planira ulagati",
+      "u_radu": "37,4 %",
+      "naredba": "FREQUENCIES",
+      "decimala": 1,
+      "izvor": {
+        "tip": "frekvencije",
+        "varijabla": "planira",
+        "vrijednost": "1",
+        "stupac": "vazeci"
+      }
+    },
+    {
+      "oznaka": "A11",
+      "gdje": "3.2",
+      "statistika": "KR-20 za 8 stavki znanja",
+      "u_radu": "0,740",
+      "naredba": "RELIABILITY",
+      "decimala": 2,
+      "izvor": {
+        "tip": "pouzdanost",
+        "redom": 0
+      }
+    },
+    {
+      "oznaka": "A12",
+      "gdje": "4.3",
+      "statistika": "α individualna odgovornost (P28 P32 P38)",
+      "u_radu": "0,343",
+      "naredba": "RELIABILITY",
+      "decimala": 2,
+      "izvor": {
+        "tip": "pouzdanost",
+        "redom": 1
+      }
+    },
+    {
+      "oznaka": "A13",
+      "gdje": "4.3",
+      "statistika": "α etatistička orijentacija (P29 P33)",
+      "u_radu": "0,464",
+      "naredba": "RELIABILITY",
+      "decimala": 2,
+      "izvor": {
+        "tip": "pouzdanost",
+        "redom": 2
+      }
+    },
+    {
+      "oznaka": "A14",
+      "gdje": "4.3",
+      "statistika": "α tržišna participacija (P31 P35)",
+      "u_radu": "0,482",
+      "naredba": "RELIABILITY",
+      "decimala": 2,
+      "izvor": {
+        "tip": "pouzdanost",
+        "redom": 3
+      }
+    },
+    {
+      "oznaka": "A15",
+      "gdje": "4.3",
+      "statistika": "α strukturna atribucija (P30 P34)",
+      "u_radu": "0,571",
+      "naredba": "RELIABILITY",
+      "decimala": 2,
+      "izvor": {
+        "tip": "pouzdanost",
+        "redom": 4
+      }
+    },
+    {
+      "oznaka": "A16",
+      "gdje": "4.3",
+      "statistika": "α građanska dimenzija (P36 P37)",
+      "u_radu": "0,571",
+      "naredba": "RELIABILITY",
+      "decimala": 2,
+      "izvor": {
+        "tip": "pouzdanost",
+        "redom": 5
+      }
+    },
+    {
+      "oznaka": "H1a",
+      "gdje": "4.5",
+      "statistika": "r(FL, planira)",
+      "u_radu": "0,300",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "planira",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H1b",
+      "gdje": "4.5",
+      "statistika": "p uz r(FL, planira)",
+      "u_radu": "< 0,001",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "planira",
+        "sto": "p"
+      }
+    },
+    {
+      "oznaka": "H1c",
+      "gdje": "4.5",
+      "statistika": "r(FL, ima_instrument)",
+      "u_radu": "0,227",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "ima_instrument",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H1d",
+      "gdje": "4.5",
+      "statistika": "p uz r(FL, ima_instrument)",
+      "u_radu": "0,009",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "ima_instrument",
+        "sto": "p"
+      }
+    },
+    {
+      "oznaka": "H1e",
+      "gdje": "4.5",
+      "statistika": "t (Welch, planira vs ne)",
+      "u_radu": "3,53",
+      "naredba": "T-TEST, Welchov redak",
+      "decimala": 2,
+      "izvor": {
+        "tip": "t_nezavisni",
+        "sto": "t",
+        "welch": true
+      }
+    },
+    {
+      "oznaka": "H1f",
+      "gdje": "4.5",
+      "statistika": "Cohenov d",
+      "u_radu": "0,64",
+      "naredba": "iz skupnih statistika",
+      "decimala": 2,
+      "izvor": {
+        "tip": "cohen_d"
+      },
+      "tolerancija": 0.01
+    },
+    {
+      "oznaka": "H2a",
+      "gdje": "4.5",
+      "statistika": "r(FL, individualna odgovornost)",
+      "u_radu": "0,096",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "individualna_odgovornost",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H2b",
+      "gdje": "4.5",
+      "statistika": "p",
+      "u_radu": "0,278",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "individualna_odgovornost",
+        "sto": "p"
+      }
+    },
+    {
+      "oznaka": "H3a",
+      "gdje": "4.5",
+      "statistika": "udio točnih: suvremeni instrumenti",
+      "u_radu": "40,8 %",
+      "naredba": "T-TEST PAIRS",
+      "decimala": 1,
+      "izvor": {
+        "tip": "upareni_prosjek",
+        "varijabla": "suvremeni",
+        "u_postotak": true
+      },
+      "tolerancija": 0.5
+    },
+    {
+      "oznaka": "H3b",
+      "gdje": "4.5",
+      "statistika": "udio točnih: tradicionalni",
+      "u_radu": "34,0 %",
+      "naredba": "T-TEST PAIRS",
+      "decimala": 1,
+      "izvor": {
+        "tip": "upareni_prosjek",
+        "varijabla": "tradicionalni",
+        "u_postotak": true
+      },
+      "tolerancija": 0.5
+    },
+    {
+      "oznaka": "H3c",
+      "gdje": "4.5",
+      "statistika": "t (upareni)",
+      "u_radu": "2,063",
+      "naredba": "T-TEST PAIRS",
+      "decimala": 2,
+      "izvor": {
+        "tip": "t_upareni",
+        "sto": "t",
+        "par": "suvremeni"
+      }
+    },
+    {
+      "oznaka": "H3d",
+      "gdje": "4.5",
+      "statistika": "p (upareni)",
+      "u_radu": "0,041",
+      "naredba": "T-TEST PAIRS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "t_upareni",
+        "sto": "p",
+        "par": "suvremeni"
+      }
+    },
+    {
+      "oznaka": "H4a",
+      "gdje": "4.5",
+      "statistika": "r(FL, etatistička orijentacija)",
+      "u_radu": "0,038",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "etatisticka_orijentacija",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H4b",
+      "gdje": "4.5",
+      "statistika": "p",
+      "u_radu": "0,670",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "etatisticka_orijentacija",
+        "sto": "p"
+      }
+    },
+    {
+      "oznaka": "H5a",
+      "gdje": "4.5",
+      "statistika": "F (ANOVA po obrazovanju)",
+      "u_radu": "4,84",
+      "naredba": "ONEWAY, uz filtar",
+      "decimala": 2,
+      "izvor": {
+        "tip": "anova",
+        "sto": "F"
+      }
+    },
+    {
+      "oznaka": "H5b",
+      "gdje": "4.5",
+      "statistika": "p (ANOVA)",
+      "u_radu": "0,009",
+      "naredba": "ONEWAY, uz filtar",
+      "decimala": 3,
+      "izvor": {
+        "tip": "anova",
+        "sto": "p"
+      }
+    },
+    {
+      "oznaka": "H5c",
+      "gdje": "4.5",
+      "statistika": "r(FL, mat_status)",
+      "u_radu": "0,292",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "mat_status",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H5d",
+      "gdje": "4.5",
+      "statistika": "r(FL, prihod), n = 126",
+      "u_radu": "0,299",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "prihod",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H6a",
+      "gdje": "4.5",
+      "statistika": "r(FL, EG kompozit)",
+      "u_radu": "0,166",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "EG_kompozit",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H6b",
+      "gdje": "4.5",
+      "statistika": "p",
+      "u_radu": "0,058",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "EG_kompozit",
+        "sto": "p"
+      }
+    },
+    {
+      "oznaka": "H6c",
+      "gdje": "4.5",
+      "statistika": "r(FL, građanska dimenzija)",
+      "u_radu": "0,220",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "gradanska_dimenzija",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "H6d",
+      "gdje": "4.5",
+      "statistika": "p",
+      "u_radu": "0,011",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "gradanska_dimenzija",
+        "sto": "p"
+      }
+    },
+    {
+      "oznaka": "K1",
+      "gdje": "4.5",
+      "statistika": "r(FL, dob)",
+      "u_radu": "0,397",
+      "naredba": "CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "FL",
+        "b": "dob",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "K_planira",
+      "gdje": "4.5",
+      "statistika": "parcijalni r(FL, namjera ulaganja | dob)",
+      "u_radu": "0,233",
+      "naredba": "REGRESSION, pa CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "RES1",
+        "b": "RES2",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "K_mat_status",
+      "gdje": "4.5",
+      "statistika": "parcijalni r(FL, materijalni status | dob)",
+      "u_radu": "0,214",
+      "naredba": "REGRESSION, pa CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "RES1",
+        "b": "RES3",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "K_prihod",
+      "gdje": "4.5",
+      "statistika": "parcijalni r(FL, prihod | dob)",
+      "u_radu": "0,113",
+      "naredba": "REGRESSION, pa CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "RES1",
+        "b": "RES4",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "K_EG_kompozit",
+      "gdje": "4.5",
+      "statistika": "parcijalni r(FL, EG kompozit | dob)",
+      "u_radu": "0,129",
+      "naredba": "REGRESSION, pa CORRELATIONS",
+      "decimala": 3,
+      "izvor": {
+        "tip": "korelacija",
+        "a": "RES1",
+        "b": "RES5",
+        "sto": "r"
+      }
+    },
+    {
+      "oznaka": "F1",
+      "gdje": "4.3",
+      "statistika": "broj komponenti po Kaiseru",
+      "u_radu": "3",
+      "naredba": "FACTOR, PC",
+      "decimala": 0,
+      "izvor": {
+        "tip": "komponente",
+        "sto": "broj"
+      }
+    },
+    {
+      "oznaka": "F2",
+      "gdje": "4.3",
+      "statistika": "objašnjena varijanca",
+      "u_radu": "51,3 %",
+      "naredba": "FACTOR, PC",
+      "decimala": 1,
+      "izvor": {
+        "tip": "komponente",
+        "sto": "kumulativno"
+      }
+    },
+    {
+      "oznaka": "F3",
+      "gdje": "4.3",
+      "statistika": "prva svojstvena vrijednost",
+      "u_radu": "3,22",
+      "naredba": "FACTOR, PC",
+      "decimala": 2,
+      "izvor": {
+        "tip": "komponente",
+        "sto": "svojstvena",
+        "redni": 1
+      }
+    }
+  ],
+  "oznake_izvedene": {
+    "RES1": "FL bez dobi",
+    "RES2": "Namjera bez dobi",
+    "RES3": "Mat. status bez dobi",
+    "RES4": "Prihod bez dobi",
+    "RES5": "EG komp. bez dobi"
+  },
+  "prilog": {
+    "dokument": "rad.docx",
+    "sidro": "Sažetak",
+    "uvod_prilog2": [
+      "Svi izračuni izneseni u poglavlju 4 ponovno su provedeni u programu PSPP, neovisno o skriptama kojima su izvorno dobiveni. PSPP je slobodan program koji preuzima naredbe i oblik ispisa iz SPSS-a. Svrha je pokazati da nalazi ne ovise o sredstvu kojim su izračunati te omogućiti da ih se u cijelosti ponovi.",
+      "Uz rad se prilažu četiri datoteke: baza podataka u obliku koji se čita bez posebnog programa (baza.csv, 131 ispitanik i 54 varijable), šifrarnik s opisom svake varijable i njezinih kodova (sifrarnik.csv), datoteka sa sintaksom svih analiza (provjera.sps) i cjelovit ispis programa (izlaz.pdf). Sintaksa se pokreće jednom naredbom i svaki put daje isti ispis.",
+      "Tri mjesta zaslužuju napomenu. Prvo, pri usporedbi pismenosti po razini obrazovanja izostavljena je skupina sa završenom osnovnom školom jer je čine tri ispitanika, a procjena varijance na tako malom broju nije pouzdana. Drugo, kod usporedbe dviju skupina nejednake veličine mjerodavan je redak ispisa koji ne pretpostavlja jednakost varijanci, dakle Welchova inačica testa. Treće, broj komponenti u analizi glavnih komponenti određen je Kaiserovim kriterijem i rotacija se ne primjenjuje, dok PSPP zadano rotira komponente Varimax metodom.",
+      "Za osam čestica znanja, koje su dihotomne, Cronbachova alfa i Kuder-Richardsonova formula 20 matematički su ista veličina, pa se vrijednost koju PSPP ispisuje kao Cronbachovu alfu čita kao KR-20. PSPP je ispisuje na dvije decimale, dakle 0,74; treću decimalu, 0,740, daju izračuni u R-u i Pythonu."
+    ],
+    "zakljucak_prilog2": "Razlike koje se javljaju posljedica su različitog broja ispisanih decimala i ne smatraju se odstupanjem; dob je u radu zaokružena na jednu decimalu, a PSPP je ispisuje na dvije. Od {ukupno} provjerenih vrijednosti poklapa se {slaze}. Cjelovit ispis programa priložen je kao zasebna datoteka, a najvažniji dijelovi prikazani su u Prilogu 3.",
+    "uvod_prilog3": "Prikazi u ovom prilogu snimke su prozora programa PSPP, načinjene dok su analize bile otvorene. Uz svaku se vidi i naredba kojom je dobivena, jer PSPP sintaksu ispisuje iznad rezultata. Poredani su onim redom kojim se analize provode i ni na koji način nisu dorađivani."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "katedra-originality-check-v1",
+  "title": "Katedra originality_check.py --json output (v1.1-advisory)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "alat",
+    "napomena",
+    "rad",
+    "evidence_ledger",
+    "prag",
+    "odlomaka",
+    "evidence_passagea",
+    "nalazi"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "alat": { "const": "originality_check" },
+    "napomena": { "type": "string", "minLength": 1 },
+    "rad": { "type": "string", "minLength": 1 },
+    "evidence_ledger": { "type": "string", "minLength": 1 },
+    "prag": { "type": "number", "minimum": 0, "maximum": 1 },
+    "odlomaka": { "type": "integer", "minimum": 0 },
+    "evidence_passagea": { "type": "integer", "minimum": 0 },
+    "nalazi": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "paragraph_index",
+          "excerpt",
+          "overlap_ratio",
+          "evidence_id",
+          "source_id",
+          "matched_excerpt"
+        ],
+        "properties": {
+          "paragraph_index": { "type": "integer", "minimum": 0 },
+          "excerpt": { "type": "string", "minLength": 1 },
+          "overlap_ratio": { "type": "number", "minimum": 0, "maximum": 1 },
+          "total_coverage": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "$comment": "Udio shingleova odlomka pronađenih u BILO KOJEM ingestiranom izvoru (unija preko svih passagea). `overlap_ratio` je i dalje najbolji POJEDINAČNI izvor i služi za imenovanje primarnog izvora; odluku o prijavi donosi `total_coverage`. Dodano nakon audita: bez unije, doslovno prepisan odlomak razlomljen preko dva passagea matematički nikad ne može doseći prag (maksimum je 0.5 - 3.5/(n-7) za n riječi), pa je mozaično prepisivanje preko tri izvora prolazilo kao čisto."
+          },
+          "evidence_id": { "type": ["string", "null"] },
+          "source_id": { "type": ["string", "null"] },
+          "matched_excerpt": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

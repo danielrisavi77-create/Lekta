@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://katedra.local/schemas/benchmark-report-v1.json",
+  "title": "Katedra benchmark report",
+  "type": "object",
+  "required": ["schema_version", "benchmark_kind", "scope", "dataset", "baseline", "candidate", "comparison", "limitations"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "benchmark_kind": {"type": "string", "minLength": 1},
+    "scope": {"type": "string", "minLength": 1},
+    "dataset": {
+      "type": "object",
+      "required": ["sha256", "total_cases", "lanes"],
+      "properties": {
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "total_cases": {"type": "integer", "minimum": 1},
+        "lanes": {"type": "object", "minProperties": 1}
+      },
+      "additionalProperties": true
+    },
+    "critical_case_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "baseline": {"$ref": "#/$defs/subjectScore"},
+    "candidate": {"$ref": "#/$defs/subjectScore"},
+    "comparison": {
+      "type": "object",
+      "required": ["accuracy_delta", "recovered_cases", "regressions", "critical_regressions"],
+      "properties": {
+        "accuracy_delta": {"type": "number", "minimum": -1, "maximum": 1},
+        "recovered_cases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "regressions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "critical_regressions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  },
+  "$defs": {
+    "subjectScore": {
+      "type": "object",
+      "required": ["subject", "score"],
+      "properties": {
+        "subject": {
+          "type": "object",
+          "required": ["id", "architecture", "agent_count", "source"],
+          "properties": {
+            "id": {"type": "string", "minLength": 1},
+            "architecture": {"type": "string", "minLength": 1},
+            "agent_count": {"type": "integer", "minimum": 1},
+            "source": {"type": "string", "minLength": 1},
+            "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          },
+          "additionalProperties": true
+        },
+        "score": {
+          "type": "object",
+          "required": ["total", "passed", "failed", "accuracy", "passed_case_ids", "failed_case_ids"],
+          "properties": {
+            "total": {"type": "integer", "minimum": 1},
+            "passed": {"type": "integer", "minimum": 0},
+            "failed": {"type": "integer", "minimum": 0},
+            "accuracy": {"type": "number", "minimum": 0, "maximum": 1},
+            "passed_case_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "failed_case_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

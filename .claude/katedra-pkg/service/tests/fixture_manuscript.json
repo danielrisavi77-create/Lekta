@@ -1,0 +1,17 @@
+{
+  "version": 1, "id": "m1", "title": "Obvezno glasanje i legitimnost izbora", "workType": "d",
+  "meta": {"institution": "FPZG", "mentor": "izv. prof. dr. sc. Test", "citationStyle": "fpzg", "deadline": "2026-12-01", "unitId": "unizg-fpzg", "profileId": "fpzg-diplomski"},
+  "sections": [
+    {"id": "s0", "title": "Sažetak", "kind": "frontmatter", "order": 0, "status": "draft", "content": {"type": "doc", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Rad ispituje odnos obveznog glasanja i legitimnosti u tri poglavlja."}]}]}},
+    {"id": "s1", "title": "Uvod", "kind": "chapter", "order": 1, "status": "draft", "content": {"type": "doc", "content": [
+      {"type": "paragraph", "content": [{"type": "text", "text": "Obvezno glasanje je "}, {"type": "text", "marks": [{"type": "bold"}], "text": "institucionalna mjera"}, {"type": "text", "text": " koja mijenja strukturu biračkog tijela (Lijphart, 1997: 2). Teza rada je da obvezno glasanje povećava formalnu, ali ne i percipiranu legitimnost."}]},
+      {"type": "heading", "attrs": {"level": 2}, "content": [{"type": "text", "text": "Istraživačko pitanje"}]},
+      {"type": "paragraph", "content": [{"type": "text", "text": "Kako obvezno glasanje utječe na percipiranu legitimnost izbora? [TREBA IZVOR]"}]},
+      {"type": "bulletList", "content": [{"type": "listItem", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "prva stavka"}]}]}, {"type": "listItem", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "druga stavka"}]}]}]}
+    ]}},
+    {"id": "s2", "title": "Teorijski okvir", "kind": "chapter", "order": 2, "status": "empty", "content": {"type": "doc", "content": []}},
+    {"id": "s9", "title": "Zaključak", "kind": "conclusion", "order": 9, "status": "draft", "content": {"type": "doc", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Nalazi pokazuju da obvezno glasanje povećava formalnu legitimnost."}]}, {"type": "table", "content": [{"type": "tableRow", "content": [{"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Država"}]}]}, {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Odaziv"}]}]}]}, {"type": "tableRow", "content": [{"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Belgija"}]}]}, {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "88 %"}]}]}]}]}]}},
+    {"id": "sr", "title": "Literatura", "kind": "references", "order": 99, "status": "draft", "content": {"type": "doc", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Lijphart, Arend (1997) Unequal Participation. American Political Science Review 91(1): 1-14."}]}]}}
+  ],
+  "sources": [{"id": "src-1", "title": "Unequal Participation: Democracy's Unresolved Dilemma", "authors": "Lijphart, A.", "year": 1997, "urlOrDoi": "https://doi.org/10.2307/2952255", "verified": true}]
+}

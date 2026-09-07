@@ -1,0 +1,252 @@
+{
+  "ukupno": 24,
+  "ponavljanja": 3,
+  "tocno": 18,
+  "tocnost": 0.75,
+  "napomena": "Mjeri opis KARTICE koja je instalirana u sesiji, ne onaj u repou. Ako se verzije razlikuju, broj vrijedi za karticu.",
+  "redci": [
+    {
+      "upit": "Provuci mi diplomski kroz audit prije predaje.",
+      "ocekivano": true,
+      "okinuo": true,
+      "stopa": 0.67,
+      "skill": "katedra-lite",
+      "pozicija": 5,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Napiši mi plan i program za seminarski rad iz obiteljskog prava.",
+      "ocekivano": true,
+      "okinuo": true,
+      "stopa": 1.0,
+      "skill": "katedra-lite",
+      "pozicija": 1,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Provjeri jesu li svi citati u radu pokriveni popisom literature.",
+      "ocekivano": true,
+      "okinuo": false,
+      "stopa": 0.33,
+      "skill": "katedra-lite",
+      "pozicija": 4,
+      "greska": null,
+      "prolaz": false
+    },
+    {
+      "upit": "Rad mi je vratio mentor s komentarima, usporedi s onim što sam mu poslao.",
+      "ocekivano": true,
+      "okinuo": false,
+      "stopa": 0.33,
+      "skill": "docx",
+      "pozicija": 10,
+      "greska": null,
+      "prolaz": false
+    },
+    {
+      "upit": "Trebam predajnu verziju diplomskog po pravilima fakulteta.",
+      "ocekivano": true,
+      "okinuo": true,
+      "stopa": 1.0,
+      "skill": "katedra-lite",
+      "pozicija": 4,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Pripremi me za obranu diplomskog rada.",
+      "ocekivano": true,
+      "okinuo": true,
+      "stopa": 1.0,
+      "skill": "katedra-lite",
+      "pozicija": 1,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Provjeri brojke u radu naspram izvora iz kojih sam ih uzeo.",
+      "ocekivano": true,
+      "okinuo": true,
+      "stopa": 1.0,
+      "skill": "katedra-lite",
+      "pozicija": 7,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Ovaj završni rad ima 79 stranica, a smije 50. Što da kratim?",
+      "ocekivano": true,
+      "okinuo": false,
+      "stopa": 0.33,
+      "skill": "katedra-lite",
+      "pozicija": 3,
+      "greska": null,
+      "prolaz": false
+    },
+    {
+      "upit": "Jesu li hipoteze u ovom radu uopće presuđene?",
+      "ocekivano": true,
+      "okinuo": false,
+      "stopa": 0.33,
+      "skill": "katedra-lite",
+      "pozicija": 8,
+      "greska": "timeout",
+      "prolaz": false
+    },
+    {
+      "upit": "Provjeri metapodatke ovog .docx-a prije nego ga pošaljem mentorici.",
+      "ocekivano": true,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": false
+    },
+    {
+      "upit": "Trebam pomoć oko strukture diplomskog na FPZG-u.",
+      "ocekivano": true,
+      "okinuo": true,
+      "stopa": 1.0,
+      "skill": "katedra-lite",
+      "pozicija": 1,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Nađi mi proturječja između Rezultata i Rasprave u ovom radu.",
+      "ocekivano": true,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": "timeout",
+      "prolaz": false
+    },
+    {
+      "upit": "Napravi mi prezentaciju o klimatskim promjenama za 20 slajdova.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": "pptx",
+      "pozicija": 1,
+      "greska": "timeout",
+      "prolaz": true
+    },
+    {
+      "upit": "Napiši mi Python skriptu koja preimenuje datoteke u mapi.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Koliko je 17 posto od 4300 eura?",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Sastavi mi jelovnik za tjedan dana.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Popravi mi CSS na landing stranici, gumb se ne vidi na mobitelu.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Napiši mi motivacijsko pismo za posao u marketingu.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Kakvo je vrijeme sutra u Zagrebu?",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Sredi mi ovu Excel tablicu s troškovima po mjesecima.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Napiši objavu za Instagram o novoj usluzi.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Prevedi mi ovaj ugovor s engleskog na hrvatski.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Objasni mi kako radi Dixon-Coles model za nogomet.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    },
+    {
+      "upit": "Napravi mi bazu u Supabaseu za korisnike aplikacije.",
+      "ocekivano": false,
+      "okinuo": false,
+      "stopa": 0.0,
+      "skill": null,
+      "pozicija": null,
+      "greska": null,
+      "prolaz": true
+    }
+  ],
+  "ograničenje": "Upiti se pokreću u praznoj radnoj mapi, bez priloženog .docx-a. Model bez dokumenta često prvo traži dokument umjesto da učita skill, pa je odziv donja granica. Redak s 33 % okida nepouzdano; sud o opisu nose samo retci s 0 %.",
+  "kartica_verzija": "v1.9.5 (instalirana), repo v1.9.12 — broj vrijedi za karticu",
+  "ogranicenje": "Upiti se pokrecu u praznoj radnoj mapi, bez prilozenog .docx-a. Model bez dokumenta cesto prvo trazi dokument umjesto da ucita skill, pa je odziv donja granica. Redak s 33 % okida nepouzdano; sud o opisu nose samo retci s 0 %."
+}

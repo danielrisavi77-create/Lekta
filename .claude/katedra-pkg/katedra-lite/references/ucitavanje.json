@@ -1,0 +1,338 @@
+{
+ "$comment": "UGOVOR O UČITAVANJU. Dva zahtjeva koja vuku na suprotne strane: učitaj samo ono što treba, i nikad ne preskoči ono što se mora znati. Rješenje nije fiksan popis po modu nego popis IZVEDEN IZ STANJA PROJEKTA: rad bez vlastitog istraživanja ne treba metodologija.md, rad kojemu je razina već zadana ne treba razina.md, a rad koji ide na obranu treba obrana.md i ništa drugo. `scripts/ucitavanje.py` uvjete evaluira i ispisuje točan popis s razlogom za svaku stavku.",
+ "schema_version": 1,
+ "$comment_granica": "Alat NE MOŽE provjeriti je li nešto stvarno pročitano — nijedan alat to ne može. Ono što može, i što je cijela vrijednost: ukloniti nagađanje. Popis je izračunat, imenovan i obrazložen, pa se ne pamti nego čita. Isti odnos kao gate.py prema provjerama.",
+ "uvjeti": {
+  "uvijek": "bezuvjetno",
+  "nema:<dat>": "datoteke nema u .katedra/",
+  "ima:<dat>": "datoteka postoji u .katedra/",
+  "dio:<id>": "dio je u .katedra/dijelovi.json označen kao tražen (trazi_profil = da ili provjeri)",
+  "tip:<t>": "stanje.json tip je <t>",
+  "prazno:<dat>:<kljuc>": "datoteka postoji, ali joj je ključ prazan ili ga nema",
+  "jezik:<j>": "jezik rada je <j> (stanje.json ili profil)",
+  "fakultet:<slug>": "slug profila rada je <slug> (stanje.json fakultet.slug, rezerva resolved_profile.json slug)"
+ },
+ "uvijek": [
+  {
+   "ref": "SKILL.md",
+   "zasto": "router; učitava se u svakoj poruci"
+  }
+ ],
+ "modovi": {
+  "1": {
+   "naziv": "Novi rad",
+   "obavezno": [
+    {
+     "ref": "references/plan.md",
+     "zasto": "protokol moda 1, sekcije 0–11"
+    }
+   ],
+   "uvjetno": [
+    {
+     "ref": "references/intake.md",
+     "uvjet": "nema:stanje.json",
+     "zasto": "mehanika intakea; na projektu koji već ima stanje ne treba"
+    },
+    {
+     "ref": "references/razina.md",
+     "uvjet": "nema:razina.json",
+     "zasto": "razina se zadaje u modu 1; bez nje se dubina objašnjavanja pogađa"
+    },
+    {
+     "ref": "references/istrazivanje.md",
+     "uvjet": "nema:pretraga.json",
+     "zasto": "kriteriji se pišu PRIJE pretrage; poslije su opravdanje"
+    },
+    {
+     "ref": "references/primjerci.md",
+     "uvjet": "nema:primjerci.json",
+     "zasto": "obranjeni rad kao mjerilo oblika (pravilo 17/24)"
+    },
+    {
+     "ref": "references/dijelovi.md",
+     "uvjet": "nema:dijelovi.json",
+     "zasto": "os dijelova se sije u modu 1"
+    },
+    {
+     "ref": "references/metodologija.md",
+     "uvjet": "dio:metodologija",
+     "zasto": "metodologija se planira u modu 1; uzorak se poslije ne popravlja"
+    },
+    {
+     "ref": "references/grill_me.md",
+     "uvjet": "tip:diplomski",
+     "zasto": "sokratski stress-test plana; advisory"
+    }
+   ],
+   "na_zahtjev": []
+  },
+  "2": {
+   "naziv": "Pisanje",
+   "obavezno": [
+    {
+     "ref": "references/pisanje.md",
+     "zasto": "protokol pisanja i self-check"
+    }
+   ],
+   "uvjetno": [
+    {
+     "ref": "references/razina.md",
+     "uvjet": "nema:razina.json",
+     "zasto": "čita se prije prve rečenice; ako je razina zadana, dovoljan je ispis razina.py"
+    },
+    {
+     "ref": "references/stil_autora.md",
+     "uvjet": "ima:stil_autora.json",
+     "zasto": "glas autora obvezuje jednako kao kućni stil"
+    },
+    {
+     "ref": "references/metodologija.md",
+     "uvjet": "dio:metodologija",
+     "zasto": "osam odjeljaka poglavlja koje komisija prvo napadne"
+    },
+    {
+     "ref": "references/rasprava.md",
+     "uvjet": "dio:rasprava",
+     "zasto": "četiri poteza po nalazu; poglavlje koje dijeli 4 od 5"
+    },
+    {
+     "ref": "references/engleski.md",
+     "uvjet": "dio:summary_en",
+     "zasto": "prevodi se iz GOTOVOG hrvatskog sažetka"
+    },
+    {
+     "ref": "references/izracuni.md",
+     "uvjet": "ima:model.json",
+     "zasto": "rad ima vlastite izračune — izbor formule, ne aritmetika"
+    },
+    {
+     "ref": "references/glas_fpzg.md",
+     "uvjet": "fakultet:fpzg",
+     "zasto": "kućni glas FPZG-a: citatni dijalekt (Prezime, godina: str), propisi s NN, šablone koje se ne pišu, pragovi dvotočke/crtice"
+    }
+   ],
+   "na_zahtjev": [
+    {
+     "ref": "references/vjestine.md",
+     "okidac": "treba izraditi .docx ili pozvati satelit",
+     "zasto": "granica prema rad-docx / replikacija-pspp; razrješava se `vjestine.py --provjeri`"
+    },
+    {
+     "ref": "references/stil_pipeline.md",
+     "okidac": "korisnik traži popravak stila, ne novo pisanje",
+     "zasto": "to je mod 3; redoslijed zahvata je ondje obavezan"
+    },
+    {
+     "ref": "references/fusnote.md",
+     "okidac": "profil traži fusnote (legal-footnote) ili rad ih već ima",
+     "zasto": "disciplina navođenja; bez fusnota alat kaže da nema što provjeriti"
+    }
+   ]
+  },
+  "3": {
+   "naziv": "Poboljšanje teksta",
+   "obavezno": [
+    {
+     "ref": "references/pisanje.md",
+     "zasto": "struktura odlomka i self-check"
+    },
+    {
+     "ref": "references/stil_pipeline.md",
+     "zasto": "redoslijed zahvata je obavezan — popravci se međusobno kvare"
+    }
+   ],
+   "uvjetno": [
+    {
+     "ref": "references/stil_autora.md",
+     "uvjet": "ima:stil_autora.json",
+     "zasto": "nema smisla popravljati prema pravilu koje je autor već odbio"
+    },
+    {
+     "ref": "references/razina.md",
+     "uvjet": "nema:razina.json",
+     "zasto": "bez razine se ne zna smije li se pojam pretpostaviti"
+    },
+    {
+     "ref": "references/glas_fpzg.md",
+     "uvjet": "fakultet:fpzg",
+     "zasto": "popravak stila na FPZG radu mjeri se i kućnim pragovima; bez njih se dvotočke i šablone ne vide"
+    }
+   ],
+   "na_zahtjev": []
+  },
+  "4": {
+   "naziv": "Audit",
+   "obavezno": [
+    {
+     "ref": "references/audit.md",
+     "zasto": "adapter na rad-audit; granica prema motoru"
+    }
+   ],
+   "uvjetno": [
+    {
+     "ref": "references/vjestine.md",
+     "uvjet": "uvijek",
+     "zasto": "koji satelit se zove i što kad ga nema"
+    },
+    {
+     "ref": "references/rasprava.md",
+     "uvjet": "dio:rasprava",
+     "zasto": "je li rasprava rasprava — nalaz koji nijedan alat ne daje"
+    },
+    {
+     "ref": "references/izracuni.md",
+     "uvjet": "ima:model.json",
+     "zasto": "brojka može biti točna, a formula kriva"
+    }
+   ],
+   "na_zahtjev": [
+    {
+     "ref": "references/rad_audit_contract.md",
+     "okidac": "engine.py vrati izlazni kod 4 ili DocumentAuditResult koji ne prolazi provjeru",
+     "zasto": "specifikacija ugovora; pri urednom auditu se ne otvara"
+    },
+    {
+     "ref": "references/fusnote.md",
+     "okidac": "profil traži fusnote (legal-footnote) ili rad ih već ima",
+     "zasto": "disciplina navođenja; bez fusnota alat kaže da nema što provjeriti"
+    }
+   ]
+  },
+  "5": {
+   "naziv": "Obrana",
+   "obavezno": [
+    {
+     "ref": "references/obrana.md",
+     "zasto": "12 slajdova, scenarij, 15 pitanja"
+    }
+   ],
+   "uvjetno": [],
+   "na_zahtjev": [
+    {
+     "ref": "references/metodologija.md",
+     "okidac": "pišeš slabe točke, a rad ima vlastito istraživanje",
+     "zasto": "§8 (ograničenja) je gotov materijal za slabe_tocke.md — otvori TU sekciju"
+    },
+    {
+     "ref": "references/istrazivanje.md",
+     "okidac": "komisija pita „kako ste došli do literature”",
+     "zasto": "odgovor je ispis `pretraga.py status`, ne referenca"
+    }
+   ]
+  },
+  "6": {
+   "naziv": "Predaja",
+   "obavezno": [
+    {
+     "ref": "references/predaja.md",
+     "zasto": "preflight i hodogram unatrag od roka"
+    }
+   ],
+   "uvjetno": [
+    {
+     "ref": "references/dijelovi.md",
+     "uvjet": "uvijek",
+     "zasto": "sedam dijelova nitko ne provjerava — idu u RUČNO PROVJERI"
+    },
+    {
+     "ref": "references/rubrika.md",
+     "uvjet": "uvijek",
+     "zasto": "studentu se kaže POJAS i što ga drži, ne „rad je spreman”"
+    },
+    {
+     "ref": "references/engleski.md",
+     "uvjet": "dio:summary_en",
+     "zasto": "jedini dio rada koji nakon predaje ostaje javan"
+    },
+    {
+     "ref": "references/izracuni.md",
+     "uvjet": "ima:model.json",
+     "zasto": "postotni bod, osnovica, indeks, zbroj udjela"
+    },
+    {
+     "ref": "references/vjestine.md",
+     "uvjet": "ima:model.json",
+     "zasto": "statistički prilog i predajni .docx dolaze od satelita"
+    }
+   ],
+   "na_zahtjev": [
+    {
+     "ref": "references/istrazivanje.md",
+     "okidac": "metodologija opisuje strategiju pretrage",
+     "zasto": "zapis pretrage ide u metodologiju, ali se ne piše u modu 6"
+    },
+    {
+     "ref": "references/fusnote.md",
+     "okidac": "profil traži fusnote (legal-footnote) ili rad ih već ima",
+     "zasto": "disciplina navođenja; bez fusnota alat kaže da nema što provjeriti"
+    }
+   ]
+  },
+  "7": {
+   "naziv": "Povratak iz Worda",
+   "obavezno": [
+    {
+     "ref": "references/povratak.md",
+     "zasto": "tri hrpe: vraćamo / pamtimo / pitamo"
+    },
+    {
+     "ref": "references/stil_autora.md",
+     "zasto": "ovdje se glas autora dopunjuje"
+    }
+   ],
+   "uvjetno": [],
+   "na_zahtjev": []
+  }
+ },
+ "nikad_tijekom_rada": [
+  {
+   "ref": "references/mapa.md",
+   "zasto": "indeks datoteka; otvara se SAMO kad treba znati koja skripta radi što"
+  },
+  {
+   "ref": "references/zasto.md",
+   "zasto": "obrazloženja pravila; čitaju se jednom, ne pri radu na radu"
+  },
+  {
+   "ref": "references/razvoj.md",
+   "zasto": "referenca za onoga tko MIJENJA Katedru"
+  },
+  {
+   "ref": "references/stanje_schema.md",
+   "zasto": "oblik .katedra/ datoteka; alati ih pišu i validiraju sami"
+  },
+  {
+   "ref": "references/dijelovi.json",
+   "zasto": "registar koji čita dijelovi.py, ne agent"
+  },
+  {
+   "ref": "references/rubrika.json",
+   "zasto": "registar koji čita rubrika.py, ne agent"
+  },
+  {
+   "ref": "references/razina.json",
+   "zasto": "registar koji čita razina.py, ne agent"
+  },
+  {
+   "ref": "references/ucitavanje.json",
+   "zasto": "ovaj ugovor; čita ga ucitavanje.py, ne agent"
+  },
+  {
+   "ref": "references/release_v1_audit.json",
+   "zasto": "zamrznuti zapis certifikacije v1.0.1"
+  },
+  {
+   "ref": "references/fakulteti/",
+   "zasto": "profili se razrješavaju alatom (profile_resolver.py), ne čitanjem"
+  },
+  {
+   "ref": "docs/",
+   "zasto": "povijest izmjena i audit; nikad pri radu na radu"
+  },
+  {
+   "ref": "references/jezik.md",
+   "zasto": "protokol jezika; alati ga čitaju kroz jezik.py"
+  }
+ ],
+ "$comment_na_zahtjev": "Treća kategorija, uvedena kad se mjerenjem pokazalo da modovi 4 i 5 NARASTU: referenca koja se otvara samo na imenovan okidač. Nije isto što i „nikad tijekom rada” — ovo se čita, ali tek kad se okidač dogodi. Učitati 8 KB reference da bi se iz nje izvukao jedan popis je isti gubitak kao i preskočiti ju: u prvom slučaju plaća se kontekst, u drugom točnost."
+}
