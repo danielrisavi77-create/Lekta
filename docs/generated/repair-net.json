@@ -362,7 +362,6 @@
       "dokument": "fpzg--final--prijediplomski--neuredan.docx",
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "paloPrije": [
-        "citation.author-year.missing-reference",
         "reference.alphabetical",
         "reference.uncited",
         "structure.heading.hierarchy",
@@ -409,7 +408,6 @@
         "reference.alphabetical"
       ],
       "nerijeseno": [
-        "citation.author-year.missing-reference",
         "reference.uncited",
         "structure.heading.hierarchy",
         "structure.heading.word-styles"
@@ -421,8 +419,6 @@
       "dokument": "fpzg--final--prijediplomski--uskladjen.docx",
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "paloPrije": [
-        "citation.author-year.missing-reference",
-        "reference.uncited",
         "structure.heading.word-styles"
       ],
       "zatrazeno": [
@@ -463,8 +459,6 @@
       ],
       "rijeseno": [],
       "nerijeseno": [
-        "citation.author-year.missing-reference",
-        "reference.uncited",
         "structure.heading.word-styles"
       ],
       "regresije": [],
@@ -474,8 +468,6 @@
       "dokument": "fpzg--final--prijediplomski--word.docx",
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "paloPrije": [
-        "citation.author-year.missing-reference",
-        "reference.uncited",
         "structure.heading.word-styles"
       ],
       "zatrazeno": [
@@ -514,8 +506,6 @@
       ],
       "rijeseno": [],
       "nerijeseno": [
-        "citation.author-year.missing-reference",
-        "reference.uncited",
         "structure.heading.word-styles"
       ],
       "regresije": [],
@@ -630,7 +620,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-07T00:39:59.995Z",
-  "generatedFromCommit": "b3f700c5c3af2d74595dce5b4afc4f3e4c460120",
+  "generatedAt": "2026-09-07T02:02:18.344Z",
+  "generatedFromCommit": "211b4edaea4a9276515541b62eff0139b4652376",
   "generator": "npm run repair-net -- --write"
 }
