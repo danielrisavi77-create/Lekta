@@ -241,14 +241,19 @@ function wantsSections(body: ProseBody): boolean {
 /**
  * Stilovi naslova koji uz sebe nose PROMJENU STILA STRANICE, cime u ODF-u pocinje nova sekcija.
  *
+ * IME NE SMIJE POCETI S `Naslov<broj>`: detektor oblika razinu naslova cita iz IMENA stila
+ * (`/^(?:Heading|Naslov)[\s_-]?(\d)/`), pa bi `Naslov1Predtekst` zauvijek bio razina 1 i mutacija
+ * `allLevelThree` ga ne bi mogla spustiti. Izmjereno 2026-09-07: brojac 32, detektirano 0. S imenom
+ * bez broja detektor pada na `<w:outlineLvl>`, koji LibreOffice za ove stilove uredno zapise.
+ *
  * Nasljeduju `Heading_20_1`, pa naslov ostaje naslov: da smo umjesto toga umetnuli prazan odlomak
  * sa stilom stranice, dobili bismo sekciju ali izgubili outline razinu, a usput hranili oblik
  * `opseg/prazni-preko-20` koji mjeri nesto drugo.
  */
 const SEKCIJE = [
-  { stil: 'Naslov1Predtekst', stranica: 'Predtekst' },
-  { stil: 'Naslov1Tijelo', stranica: 'Tijelo' },
-  { stil: 'Naslov1Prilozi', stranica: 'Prilozi' },
+  { stil: 'SekcijaPredtekst', stranica: 'Predtekst' },
+  { stil: 'SekcijaTijelo', stranica: 'Tijelo' },
+  { stil: 'SekcijaPrilozi', stranica: 'Prilozi' },
 ] as const;
 
 function sectionStyleBlock(): string {

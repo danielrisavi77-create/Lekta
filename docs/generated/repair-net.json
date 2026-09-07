@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.",
   "summary": {
-    "documentCount": 13,
+    "documentCount": 15,
     "fixerCount": 14,
     "deadCount": 2,
     "dead": [
@@ -33,14 +33,16 @@
     },
     {
       "fixerId": "consistency-fixer",
-      "requested": 13,
+      "requested": 15,
       "changed": 0,
       "reasons": {
-        "no-target": 13
+        "no-target": 15
       },
       "deadOn": [
         "apuri--final--prijediplomski--neuredan.docx",
         "apuri--final--prijediplomski--uskladjen.docx",
+        "arh--doctoral--poslijediplomski--neuredan.docx",
+        "arh--doctoral--poslijediplomski--uskladjen.docx",
         "effectus--seminar--diplomski--neuredan.docx",
         "effectus--seminar--diplomski--uskladjen.docx",
         "effectus--seminar--diplomski--word.docx",
@@ -56,8 +58,8 @@
     },
     {
       "fixerId": "croatian-typography-fixer",
-      "requested": 7,
-      "changed": 7,
+      "requested": 8,
+      "changed": 8,
       "reasons": {},
       "deadOn": []
     },
@@ -70,8 +72,8 @@
     },
     {
       "fixerId": "field-integrity-fixer",
-      "requested": 11,
-      "changed": 10,
+      "requested": 13,
+      "changed": 12,
       "reasons": {
         "stale-anchor": 1
       },
@@ -81,8 +83,8 @@
     },
     {
       "fixerId": "final-document-inspector-fixer",
-      "requested": 13,
-      "changed": 13,
+      "requested": 15,
+      "changed": 15,
       "reasons": {},
       "deadOn": []
     },
@@ -108,8 +110,8 @@
     },
     {
       "fixerId": "link-doi-fixer",
-      "requested": 13,
-      "changed": 9,
+      "requested": 15,
+      "changed": 11,
       "reasons": {
         "unsupported-structure": 1,
         "no-target": 3
@@ -123,8 +125,8 @@
     },
     {
       "fixerId": "margins-fixer",
-      "requested": 6,
-      "changed": 6,
+      "requested": 8,
+      "changed": 8,
       "reasons": {},
       "deadOn": []
     },
@@ -199,6 +201,80 @@
     {
       "dokument": "apuri--final--prijediplomski--uskladjen.docx",
       "profileId": "apuri-zavrsni",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "arh--doctoral--poslijediplomski--neuredan.docx",
+      "profileId": "arh-doktorski",
+      "paloPrije": [
+        "page.margins",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "margins-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "page.margins"
+      ],
+      "nerijeseno": [
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "arh--doctoral--poslijediplomski--uskladjen.docx",
+      "profileId": "arh-doktorski",
       "paloPrije": [
         "page.margins",
         "structure.heading.word-styles"
@@ -696,7 +772,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-07T19:01:44.448Z",
-  "generatedFromCommit": "afb478bfdcafcd84747e1695654fd2bd6b8f60d1",
+  "generatedAt": "2026-09-07T19:57:49.922Z",
+  "generatedFromCommit": "86eff5367011f6653769b641284dd1ea14ff62c3",
   "generator": "npm run repair-net -- --write"
 }
