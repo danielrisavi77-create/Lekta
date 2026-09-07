@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.2",
+  "findingId": "issue-001",
+  "findingKey": "margin-left",
+  "engine": "lekta",
+  "engineVersion": "2.2.2",
+  "projectId": "project-001",
+  "artifactVersionId": "artifact-docx-001",
+  "authority": "normative",
+  "category": "page-geometry",
+  "severity": "error",
+  "summary": "Lijeva margina nije prema odabranom profilu.",
+  "location": { "section": "document" },
+  "ruleId": "fpzg.margin.left",
+  "fixCapability": "automatic",
+  "fixerId": "margin-fixer",
+  "verificationOwner": "lekta",
+  "status": "OPEN",
+  "sourceAnalysisId": "analysis-001"
+}
