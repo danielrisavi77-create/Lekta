@@ -54,11 +54,6 @@ footer{padding:44px 0 35px}.footer-grid{display:flex;align-items:flex-start;just
 @keyframes hd-mark-x{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.4)}}
 @keyframes hd-mark-check{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
 @keyframes hd-stamp{from{opacity:0;transform:rotate(6deg) scale(1.55)}to{opacity:1;transform:rotate(-6deg) scale(1)}}
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"],
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"]{color:var(--brand)}
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b{border-color:var(--brand);color:var(--brand)}
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step b{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
 @keyframes diff-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .cta .btn{background:var(--bg);color:var(--text)}
 
@@ -222,9 +217,6 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 /* ===== KS W3: analizator kao papirnati obrazac LK-01 (wizard, progres, rezultati, modali) ===== */
 @keyframes ksScan{0%{top:6%}55%{top:88%}100%{top:6%}}
 @keyframes ksCircle{from{stroke-dashoffset:560}to{stroke-dashoffset:0}}
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"] b,.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b{border-color:var(--red-deep);color:var(--red-deep);background:none}
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step:is([data-rail="1"],[data-rail="2"],[data-rail="3"]) b{border-color:var(--pass);color:var(--pass);background:none}
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step{color:var(--paper-ink)}
 .analyze-actions .btn-ghost{font-family:var(--display-serif);font-style:italic;font-size:15.5px;font-weight:400;color:var(--red-deep);border-bottom:1px dashed var(--red-deep);border-radius:0;padding:0 0 2px;text-transform:none;letter-spacing:0}
 .analyze-actions .btn-ghost:hover{color:var(--paper-ink);border-bottom-color:var(--paper-ink)}
 .result-actions .btn-ghost{font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted)}
