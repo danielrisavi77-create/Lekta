@@ -32,6 +32,7 @@ import { resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
+import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -734,6 +735,21 @@ const MUTATIONS: Mutation[] = [
       for (const st of SVA_STANJA) for (const dg of SVI_DOGADAJI) if (transition(st, dg) !== null) dopusteni += 1;
       return dopusteni === 9 && transition('dokument', 'pokreni-analizu') === null;
     },
+  },
+  /**
+   * Provjera koja se tiho preskoci jednaka je provjeri koje nema. `post-deploy-smoke` je ulaz cuvao
+   * slijepljenom stazom, pa na Windowsu nije izveo nista i vratio 0, dok je na CI-ju bio crven 40
+   * puta zaredom. Gard mora prijaviti oblik, a ne osloniti se na to da netko primijeti tisinu.
+   */
+  {
+    id: 'cli/straza-ulaza-slijepljenom-stazom',
+    imitates:
+      'ESM straza `import.meta.url === `file://` + process.argv[1]`, koja se na Windowsu nikad ne ' +
+      'poklopi, pa se skripta ucita, ne izvede nista i izade s kodom 0 (lazno zeleno)',
+    caught: () => hasNaiveEntryGuard('if (import.meta.url === `file://${process.argv[1]}`) main();'),
+    // Baseline: stvaran izvor u repozitoriju mora biti cist, inace tvrdnja gore ne govori o mutaciji.
+    cleanBefore: () =>
+      !hasNaiveEntryGuard(readFileSync(resolve(process.cwd(), 'scripts/post-deploy-smoke.mjs'), 'utf8')),
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

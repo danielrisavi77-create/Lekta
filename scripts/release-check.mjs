@@ -63,7 +63,29 @@ const TIERS = [
   // Faza C zastite baze pravila: mrezna enumeracija profile-rules endpointa. Trazi
   // LEKTA_STAGING_ORIGIN (samo staging, nikad produkcija); bez varijable je unavailable,
   // ne prolaz (isti obrazac kao Word razine: nedostupno != prolazno).
-  { id: 'extraction', label: 'Tier 2: extraction probe (staging)', cmd: 'node scripts/extraction-probe.mjs', required: true, requiresEnv: 'LEKTA_STAGING_ORIGIN' },
+  //
+  // `required: false` OD 2026-09-06, odlukom vlasnika, i to je ustupak koji se imenuje a ne krije.
+  //
+  // ZASTO JE UVEDEN: kao obavezna, ova je razina cinila `complete` NEDOSTIZNIM kad god staging
+  // Supabase (`bnyemcnsphlitjradrst`) nije budan. Uz `LEKTA_REQUIRE_RELEASE_PROOF=1` u
+  // `netlify.toml` to znaci da NIJEDAN deploy ne moze proci. `docs/AUDIT_MASTER.md` je tu zamku
+  // opisao prije nego je sprigla.
+  //
+  // ZASTO OSTAJE, iako je staging istoga dana vracen u trajno aktivno stanje (vlasnik je odlucio
+  // ostaviti `fpzg-raspored` pauziranim i osloboditi slot za staging): Supabase besplatni plan
+  // PAUZIRA projekt sam, nakon dovoljno dugog mirovanja. Obavezna razina cija dostupnost ovisi o
+  // tome je li netko nedavno dirao staging vratila bi istu zamku, samo rjedje i nepredvidivije, a
+  // to je gore od poznatog ustupka. Danas razina STVARNO mjeri (`LEKTA_STAGING_ORIGIN` je zapisan
+  // u lokalnom `.env`, obrazac je u `.env.example`), pa je `unavailable` iznimka, ne pravilo.
+  //
+  // STO SE GUBI KAD JE PRESKOCENA: dokaz tada ne tvrdi da je zastita od bulk enumeracije
+  // `profile-rules` izmjerena. To NIJE presuceno: `verify-deploy-dist.mjs` pri svakom deployu
+  // poimence ispisuje svaku razinu koja nije `pass`, pa se u dnevniku builda vidi sto je
+  // propusteno i zasto. Tisi ustupak bio bi gori od samog ustupka.
+  //
+  // KAKO SE VRACA NA `true`: kad staging bude na placenom planu, dakle kad njegova dostupnost vise
+  // ne ovisi o tome kad je zadnji put koristen.
+  { id: 'extraction', label: 'Tier 2: extraction probe (staging)', cmd: 'node scripts/extraction-probe.mjs', required: false, requiresEnv: 'LEKTA_STAGING_ORIGIN' },
 ];
 
 const args = process.argv.slice(2);

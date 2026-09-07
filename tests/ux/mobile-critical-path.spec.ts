@@ -25,12 +25,18 @@ test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page })
   await page.locator('#stepToProfile').click();
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
 
-  await page.locator('#stepToAnalyze').click();
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');
+  // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
+  // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
+  // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
 
-  await page.locator('#analyzeBtn').click();
+  // POTVRDA JE PRIMARNA AKCIJA, pa se na nju ceka umjesto da se pogadja. Prijasnji oblik
+  // (`#analyzeBtn` pa `if (await confirm.isVisible())`) je bio utrka: `isVisible()` NE ceka,
+  // a kartica se crta u `updateProfile`, koji ceka pravila profila preko mreze. Na mobitelu je
+  // ocitanje stizalo prije kartice, potvrda se tiho preskakala, `runAnalysis` je izlazio na
+  // vratima potvrde, i test je padao na `#resultView` koji nikad ne postane vidljiv.
   const confirm = page.locator('[data-confirm-profile]');
-  if (await confirm.isVisible()) await confirm.click();
+  await expect(confirm).toBeVisible({ timeout: 30_000 });
+  await confirm.click();
 
   await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });

@@ -91,8 +91,9 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
 
   // Landing drzi obrazac skrivenim do prve interakcije, pa se bez ovog klika `#stepToAnalyze`
   // nikad ne prikaze (`data-step` postane 2, ali je traka nevidljiva).
-  const uploadCta = page.locator('#uploadCtaBtn');
-  if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
+  // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
+  // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
+  // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   const wizard = page.locator('#wizardView');
   if ((await wizard.getAttribute('data-step')) === '1') {
@@ -102,9 +103,11 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   await expect(wizard).toHaveAttribute('data-step', '2');
   nalazi.push(...(await skeniraj(page, 'carobnjak 2 (profil)')));
 
-  await page.locator('#stepToAnalyze').click();
-  await expect(wizard).toHaveAttribute('data-step', '3');
-  nalazi.push(...(await skeniraj(page, 'carobnjak 3 (spremno za analizu)')));
+  // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
+  // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
+  // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
+  // Zasebno skeniranje koraka 3 otpada jer taj ekran vise ne postoji; ono sto je nosio
+  // (gumb za pokretanje) skenira se gore, u sklopu koraka 2.
 
   await page.locator('#analyzeBtn').click();
   const potvrda = page.locator('[data-confirm-profile]');

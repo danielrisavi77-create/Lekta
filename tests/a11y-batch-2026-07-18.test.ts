@@ -17,6 +17,18 @@ const PAGES = [
   'literatura.html', 'izjava.html', 'landing_usporedba.html', 'landing_benchmark.html',
 ];
 
+/**
+ * ULAZ `/` NEMA VISENAMJENSKU NAVIGACIJU (rez 2026-09-06, odluka vlasnika).
+ *
+ * Ekran ima jednu svrhu: ubaciti dokument. Otisli su izbornik od devet stavki, padajuci
+ * "Alati", drugi CTA i mobilni hamburger; ostala su dva odredista i lampa. Zato `#mobileNav`
+ * ondje vise ne postoji, a lampa je bez natpisa.
+ *
+ * Iznimka je UZA od stranice: `index.html` ispada SAMO iz ta dva pravila, a iz svih ostalih
+ * (kontrast, aria-live, ARIA semantika) i dalje se mjeri kao i prije.
+ */
+const PAGES_S_IZBORNIKOM = PAGES.filter((p) => p !== 'index.html');
+
 // --- WCAG 2.x kontrast: relativna luminancija + alpha blend nad poznatom pozadinom -----------
 
 function hexToRgb(h: string): [number, number, number] {
@@ -152,7 +164,7 @@ describe('WCAG kontrast: tp-badge (AUD a11y #2)', () => {
 });
 
 describe('mobileNav landmark + aria-current (AUD a11y #4)', () => {
-  it.each(PAGES)('%s: #mobileNav ima role=navigation i aria-label', (page) => {
+  it.each(PAGES_S_IZBORNIKOM)('%s: #mobileNav ima role=navigation i aria-label', (page) => {
     const html = read(page);
     const tag = html.match(/<div class="mobile-nav" id="mobileNav"([^>]*)>/)?.[1] ?? '';
     expect(tag).toMatch(/role="navigation"/);
@@ -161,7 +173,20 @@ describe('mobileNav landmark + aria-current (AUD a11y #4)', () => {
 });
 
 describe('themeBtn label-in-name (AUD a11y #Izjava-2, WCAG 2.5.3)', () => {
-  it.each(PAGES)('%s: #themeBtn staticki (pre-boot) aria-label sadrzi vidljivu rijec "Lampa"', (page) => {
+  it('ulaz `/`: lampa je bez natpisa, pa 2.5.3 ne vrijedi, ali aria-label MORA postojati', () => {
+    // Label-in-Name stiti glasovnu kontrolu kad gumb IMA vidljiv tekst: izgovoreno ime mora
+    // pogoditi element. Na ulazu je lampa ikona bez natpisa, pa to pravilo po definiciji ne
+    // vrijedi. Ono sto vrijedi UVIJEK jest da gumb bez teksta mora imati pristupacno ime,
+    // inace je citacu ekrana bezimen. Tvrdnja se time NE gubi nego mijenja u onu koja ovdje
+    // stvarno stiti korisnika.
+    const html = read('index.html');
+    const tag = html.match(/<button class="lampa-btn[^"]*" id="themeBtn"[^>]*>/)?.[0] ?? '';
+    expect(tag, 'nema #themeBtn na ulazu').not.toBe('');
+    expect(tag).toMatch(/aria-label="[^"]+"/);
+    expect(html, 'lampa na ulazu nema natpis, pa ga ne smije ni glumiti').not.toContain('lampa-txt');
+  });
+
+  it.each(PAGES_S_IZBORNIKOM)('%s: #themeBtn staticki (pre-boot) aria-label sadrzi vidljivu rijec "Lampa"', (page) => {
     const html = read(page);
     const tag = html.match(/<button class="lampa-btn" id="themeBtn"[^>]*>/)?.[0] ?? '';
     const label = tag.match(/aria-label="([^"]*)"/)?.[1] ?? '';

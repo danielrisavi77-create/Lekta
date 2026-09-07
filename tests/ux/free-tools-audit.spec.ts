@@ -10,7 +10,8 @@ for (const pageSpec of FREE_TOOL_PAGES) {
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator(pageSpec.primarySelector)).toBeVisible();
-    await expect(page.locator('#mobileMenuBtn')).toBeVisible();
+    // Hamburger samo ondje gdje ljuska ima izbornik; lampa je kontrola i mora biti svugdje.
+    if (pageSpec.hasChromeMenu !== false) await expect(page.locator('#mobileMenuBtn')).toBeVisible();
     await expect(page.locator('#themeBtn')).toBeVisible();
 
     if (pageSpec.workspaceSelector) {
@@ -328,10 +329,19 @@ test('potvrda ishoda se gasi pod reduced-motion', async ({ page, context }) => {
   await page.locator('#kt-input').fill('Proba.');
   await page.locator('#kt-copy').click();
 
-  const anim = await page.evaluate(() => {
-    const cs = getComputedStyle(document.querySelector('#kt-copy')!);
+  // `data-lekta-ok` je PROLAZNO stanje: `tool-ui.ts` ga postavi pa ukloni nakon 1600 ms. Citanje
+  // odmah nakon klika je zato utrka izmedju dva procesa: dok Playwright posalje `evaluate` i dobije
+  // odgovor, prozor moze isteci i `animationName` vrati `none`. Izmjereno 2026-09-06: test je pao u
+  // punom `release:check` prolazu na opterecenom stroju, a u izolaciji prolazi 6/6, dakle mjerio je
+  // opterecenje a ne ponasanje.
+  //
+  // `waitForFunction` ceka atribut i cita stil U ISTOM TIKU unutar stranice, pa obilaska nema.
+  const anim = await page.waitForFunction(() => {
+    const el = document.querySelector('#kt-copy');
+    if (!el || !el.hasAttribute('data-lekta-ok')) return null;
+    const cs = getComputedStyle(el);
     return { name: cs.animationName, durationMs: parseFloat(cs.animationDuration) * 1000 };
-  });
+  }).then((handle) => handle.jsonValue() as Promise<{ name: string; durationMs: number }>);
 
   // Pravilo je i dalje pridruzeno (potvrda ostaje kao stanje), ali TRAJANJE mora biti nemjerljivo:
   // globalni prekidac u `motion.css` gasi svaku animaciju, pa ovdje nema vlastite iznimke.

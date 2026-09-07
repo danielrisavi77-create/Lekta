@@ -111,7 +111,8 @@
     "check:edge-lock": "node scripts/check-edge-lock.mjs",
     "status": "node scripts/generate-status.mjs",
     "deploy-manifest": "node scripts/generate-deploy-manifest.mjs",
-    "attest-corpus": "node scripts/attest-real-corpus.mjs"
+    "attest-corpus": "node scripts/attest-real-corpus.mjs",
+    "branch-ci": "node scripts/master-ci-status.mjs --current"
   },
   "overrides": {
     "nanoid": "^3.3.18"

@@ -26,11 +26,27 @@
 //
 // Pokretanje:  npm run master-ci        (ili: node scripts/master-ci-status.mjs)
 
+import { execFileSync } from 'node:child_process';
+import { formatOcjenu, ocijeniRunove } from './master-ci-core.mjs';
+
 const REPO = 'danielrisavi77-create/Lekta';
-const WORKFLOW = 'check.yml';
+// SVI workflowi, ne samo `check.yml`. Do 2026-09-06 se pitalo samo za `check`, pa je
+// `browser-matrix` bio nevidljiv: bio je crven dva commita zaredom dok je `check` bio zelen, a
+// alat bi nad takvom granom javio ZELENO. Prosudba je u `master-ci-core.mjs`, s testovima.
 // Grana je argument SAMO da bi se crvena i "ne znam" grana mogle stvarno izvrsiti (negativne
 // kontrole); bez argumenta je uvijek master, sto je jedina upotreba u proizvodu.
-const BRANCH = process.argv[2] || 'master';
+// `--current` razrjesava granu SAM, jer `$(git ...)` kroz npm skriptu na Windowsu ne izvrsava
+// nista nego se prosljedjuje doslovno (izmjereno: grana je ispala '$(git').
+const ARG = process.argv[2] || 'master';
+const BRANCH = ARG === '--current'
+  ? (() => {
+      try {
+        return execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8' }).trim();
+      } catch {
+        return 'master';
+      }
+    })()
+  : ARG;
 const TIMEOUT_MS = 20000;
 
 function neZnam(razlog) {
@@ -40,8 +56,8 @@ function neZnam(razlog) {
 }
 
 async function provjeri() {
-  const url = `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/runs`
-    + `?branch=${encodeURIComponent(BRANCH)}&per_page=20`;
+  const url = `https://api.github.com/repos/${REPO}/actions/runs`
+    + `?branch=${encodeURIComponent(BRANCH)}&per_page=100`;
 
   let res;
   try {
@@ -68,31 +84,10 @@ async function provjeri() {
   }
 
   const runovi = Array.isArray(podaci.workflow_runs) ? podaci.workflow_runs : [];
-  const dovrseni = runovi.filter((r) => r.status === 'completed' && r.conclusion);
-  if (!dovrseni.length) {
-    return neZnam(`nema dovrsenih runova na ${BRANCH} (u tijeku: ${runovi.length - dovrseni.length}).`);
-  }
-
-  const zadnji = dovrseni[0];
-  const sha = String(zadnji.head_sha).slice(0, 8);
-  const kada = String(zadnji.created_at).replace('T', ' ').replace('Z', ' UTC');
-
-  if (zadnji.conclusion === 'success') {
-    console.log(`ZELENO: ${BRANCH} ${sha} je prosao CI (${kada}).`);
-    return 0;
-  }
-
-  // Niz uzastopnih padova je vazniji od jednog: 2026-09-02 ih je bilo cetiri, a nitko nije gledao.
-  let niz = 0;
-  for (const r of dovrseni) {
-    if (r.conclusion === 'success') break;
-    niz += 1;
-  }
-
-  console.log(`CRVENO: ${BRANCH} ${sha} je pao na CI-u (${zadnji.conclusion}, ${kada}).`);
-  if (niz > 1) console.log(`Uzastopnih padova na vrhu: ${niz}. Grana je crvena duze, ne tek od zadnjeg commita.`);
-  console.log(`Detalji: ${zadnji.html_url || '(bez url-a)'}`);
-  return 1;
+  const ocjena = ocijeniRunove(runovi);
+  for (const redak of formatOcjenu(ocjena, BRANCH)) console.log(redak);
+  if (ocjena.ishod === 'zeleno') return 0;
+  return ocjena.ishod === 'crveno' ? 1 : 2;
 }
 
 process.exitCode = await provjeri();

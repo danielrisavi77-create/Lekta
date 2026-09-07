@@ -56,14 +56,16 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
     expect(await page.evaluate(() => typeof Worker), 'Worker mora doista biti ugasen').toBe('undefined');
   }
 
-  const uploadCta = page.locator('#uploadCtaBtn');
-  if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
+  // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
+  // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
+  // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   const wizard = page.locator('#wizardView');
   if ((await wizard.getAttribute('data-step')) === '1') await page.locator('#stepToProfile').click();
   await expect(wizard).toHaveAttribute('data-step', '2');
-  await page.locator('#stepToAnalyze').click();
-  await expect(wizard).toHaveAttribute('data-step', '3');
+  // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
+  // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
+  // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
   await page.locator('#analyzeBtn').click();
   const confirm = page.locator('[data-confirm-profile]');

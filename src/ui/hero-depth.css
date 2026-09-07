@@ -27,6 +27,15 @@
 }
 .hero-atmos[data-ready] { opacity: 1; }
 
+/* NA USKOM ZASLONU NEMA BOCNOG PRELIJEVANJA. Snop namjerno izlazi izvan roditelja (`inset`),
+   ali roditelj nema `overflow:hidden` (i ne smije ga imati, jer bi odrezao sjenu papira i
+   listove ispod njega), pa bocnih -6% zavrsi izvan viewporta i stvori VODORAVNI SCROLL.
+   Izmjereno 2026-09-07 na 375x667: sloj je bio sirok 393 px, dokument 384, viewport 375.
+   Okomito prelijevanje ostaje: ono ne pomice sirinu, a snop bez njega izgleda odrezano. */
+@media (max-width: 600px) {
+  .hero-atmos { inset: -8% 0 -12%; }
+}
+
 /* Boja snopa je ovdje DOSLOVNA, ne preko `--lamp`: taj token je vec pecen na alpha .15
    za tanke obrube, pa bi snop kroz color-mix ispao na ~4% i bio nevidljiv (izmjereno).
    Dva sloja: siroka topla aura + uzi vrely jezgra, da svjetlo ima pad, ne ravnu mrlju. */
