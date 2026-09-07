@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lektahr.app/contracts/academic-suite/v0.2/project-ref.schema.json",
+  "title": "Academic Suite v0.2 ProjectRef",
+  "type": "object",
+  "required": ["schemaVersion", "projectId", "unitId", "workType"],
+  "properties": {
+    "schemaVersion": { "const": "0.2" },
+    "projectId": { "type": "string", "minLength": 1 },
+    "ownerUserId": { "type": "string", "minLength": 1 },
+    "unitId": { "type": "string", "minLength": 1 },
+    "profileId": { "type": "string", "minLength": 1 },
+    "workType": {
+      "enum": ["seminar", "zavrsni", "diplomski", "doctoral", "specialist", "article", "other"]
+    },
+    "rulesetId": { "type": "string", "minLength": 1 },
+    "stage": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}
