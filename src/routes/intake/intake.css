@@ -50,7 +50,9 @@
    `--mono`. Fallback je zato hvatao sustavni `ui-monospace` (na Windowsu Consolas), dakle
    obitelj koju nitko nije izabrao i koja se ne ucitava. Ista klasa kvara kao `--font-hand`. */
 .intake-kicker{
-  color:var(--brand);
+  /* --brand (--red) mjeri 3,3:1 na --paper u tamnoj temi: tekst na papiru trazi tamniji
+     par (--red-on-soft, vec izmjeren za "tekst na soft podlogama" u design-system.css). */
+  color:var(--red-on-soft, #A62B23);
   font:italic 500 clamp(.84rem,1.7vw,.98rem)/1.3 var(--display-serif);
   letter-spacing:.005em;
 }

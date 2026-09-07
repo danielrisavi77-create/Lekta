@@ -23,12 +23,10 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
     await expectInsideFold(page, '#browseBtn', viewport.height);
 
     await page.locator('#fileInput').setInputFiles(fixture);
-    await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '1');
-    const sticky = page.locator('.lek-stepnav-1');
-    await expect(sticky).toBeVisible();
-    await expect(sticky.locator('#stepToProfile')).toContainText('Nastavi na profil');
-    await expectInsideFold(page, '#stepToProfile', viewport.height);
-    await sticky.locator('#stepToProfile').click();
+    // Korak 2 dolazi SAM, bez sticky CTA-a "Nastavi na profil": popravljeno 2026-09-08
+    // (`usesCompactUploadFlow` je bio vestigalni ostatak stare mobilne staze koji je ovdje jos
+    // trazio rucni klik). Provjera fold-vidljivosti tog gumba time otpada: gumb vise ne postoji
+    // na ovom putu (nula do jedan tap, isto kao desktop).
     await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
   });
 

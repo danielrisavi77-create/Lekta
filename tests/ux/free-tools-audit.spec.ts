@@ -673,16 +673,26 @@ for (const [ime, dataTheme, scheme] of [
  */
 const KONTRAST_STRANICE = [
   { ruta: '/rad/', prag: 90 },        // izmjereno 118 neutralizirano; tekstura u svijetloj temi ~65
-  { ruta: '/index.html', prag: 25 },  // izmjereno 35 i s teksturom i bez nje: ulaz nema teksta preko teksture,
-                                      // pa je prag ovdje samo provjera da stranica nije ostala prazna
+  { ruta: '/index.html', prag: 15 },  // PREKALIBRIRANO 2026-09-08 (v. dolje): 35 -> 20 moguca cvora
+                                      // nakon reza navigacije/podnozja; prag ovdje samo provjerava
+                                      // da stranica nije ostala prazna, ne mjeri stvarni kontrast
 ] as const;
 for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'dark'] as const) {
   test(`${ruta}: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(ruta);
     await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);
-    // Neutralizacija teksture je JEDINI nacin da axe uopce izmjeri ove cvorove.
-    await page.addStyleTag({ content: 'body{background-image:none!important}' });
+    // Neutralizacija je JEDINI nacin da axe uopce izmjeri ove cvorove, i vise ne pokriva samo
+    // teksturu na `body`. `.ks-decor`/`.hero-atmos` su dvije dekorativne pozadinske podloge
+    // (sjaj lampe, atmosfera hero demoa) koje sjede IZA sadrzaja (z-index 0 < 2, pointer-events
+    // none) i stvarni kontrast ne diraju, a axe ih svejedno ne zna razrijesiti; iste su naravi kao
+    // tekstura gore, samo NOVIJE i izvan `body`. `.intake-paper::before/::after` su dva CSS-generirana
+    // lista ispod papira (bez dodatnog cvora, RAZ NASLOVNICE); axe pseudo-elemente broji kao
+    // neodredive bez obzira na boju (`messageKey: pseudoContent`).
+    //
+    // Izmjereno 2026-09-08 na `/index.html`: bez ovoga 3 od 20 mogucih cvorova (obje teme), s ovim
+    // 20 od 20. Isti zahvat na `/rad/` ne obara rezultat ispod praga (98 od >90).
+    await page.addStyleTag({ content: 'body{background-image:none!important}.ks-decor,.hero-atmos{display:none!important}.intake-paper::before,.intake-paper::after{content:none!important}' });
     await page.waitForTimeout(300);
 
     const r = await new AxeBuilder({ page }).analyze();

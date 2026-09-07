@@ -396,7 +396,6 @@ function setWizardStep(n: any,animate?: any){
  const apply=()=>{showWizardStep(Number(n),selectedDocx?.name??null)};
  if(animate)withViewTransition(apply);else apply()
 }
-function usesCompactUploadFlow(){return !!(window.matchMedia&&window.matchMedia('(max-width:720px)').matches)}
 // Papir-naslovnica: obrazac je skriven dok korisnik ne krene. Jednosmjerno (klasa se ne skida),
 // pa "Nova provjera" i povratci NE vracaju cover usred toka. pick=true otvara i OS dijalog za
 // odabir datoteke (dozvoljeno jer se poziva iz korisnickog klika).
@@ -417,7 +416,7 @@ function setFile(file: any){
   const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
  const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);emitAnalyzerDocumentSettled({kind:'rejected',file,message:String(msg||'')});return}
  clearErr();$('#detectBadge')?.classList.add('hidden');
- selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;setWizardStep(file&&!usesCompactUploadFlow()?2:1,!!file);
+ selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;setWizardStep(file?2:1,!!file);
  if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;void trackEvent('file_selected',{sizeBucket:file.size<1024*1024?'under_1mb':file.size<5*1024*1024?'1_5mb':'over_5mb'});updateQuickStats(file);updateProfile();void admitFile(file)}else{$('#fileInput').value='';invalidateSpeculative()}
 }
 // Intake gate sloj 1: trijaza datoteke PRIJE detekcije konteksta i spekulativne analize.

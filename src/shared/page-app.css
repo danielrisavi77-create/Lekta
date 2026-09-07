@@ -1470,7 +1470,6 @@ body.is-scrolling .section *{box-shadow:none!important}
   .finding-card h4{font-size:20px}
   .finding-card>p,.finding-evidence p,.finding-scope,.finding-source{font-size:16px}
   .finding-ignore-form{align-items:stretch;flex-direction:column}
-  .lek-stepnav-result{display:none}
   .result-summary{grid-template-columns:104px minmax(0,1fr);gap:12px;padding:0 0 14px}
   .score-card{gap:3px;align-self:start}
   .score-ring{width:104px;height:88px}
