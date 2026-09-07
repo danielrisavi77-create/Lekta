@@ -31,6 +31,13 @@ describe('Academic Suite v0.2 contract pack', () => {
 
   it('validates every canonical example with JSON Schema 2020-12', () => {
     const ajv = new Ajv2020({ allErrors: true, strict: true });
+    const validators = new Map<string, ReturnType<typeof ajv.compile>>();
+
+    for (const schemaName of SCHEMAS) {
+      const schema = readJson(join(CONTRACT_ROOT, `${schemaName}.schema.json`));
+      validators.set(schemaName, ajv.compile(schema));
+    }
+
     const pairs = [
       ['project-ref', 'project-ref'],
       ['artifact-version', 'artifact-docx'],
@@ -41,11 +48,11 @@ describe('Academic Suite v0.2 contract pack', () => {
     ] as const;
 
     for (const [schemaName, exampleName] of pairs) {
-      const schema = readJson(join(CONTRACT_ROOT, `${schemaName}.schema.json`));
       const example = readJson(join(CONTRACT_ROOT, 'examples', `${exampleName}.json`));
-      const validate = ajv.compile(schema);
+      const validate = validators.get(schemaName);
 
-      expect(validate(example), JSON.stringify(validate.errors)).toBe(true);
+      expect(validate).toBeDefined();
+      expect(validate!(example), JSON.stringify(validate!.errors)).toBe(true);
     }
   });
 });
