@@ -91,8 +91,9 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
 
   // Landing drzi obrazac skrivenim do prve interakcije, pa se bez ovog klika `#stepToAnalyze`
   // nikad ne prikaze (`data-step` postane 2, ali je traka nevidljiva).
-  const uploadCta = page.locator('#uploadCtaBtn');
-  if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
+  // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
+  // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
+  // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   const wizard = page.locator('#wizardView');
   if ((await wizard.getAttribute('data-step')) === '1') {

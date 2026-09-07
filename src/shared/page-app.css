@@ -1323,10 +1323,16 @@ body.is-scrolling .section *{box-shadow:none!important}
 @media(prefers-reduced-motion:reduce){#wizardView[data-step="2"] :is(.wizard-col-profile,.lek-stepnav-2),#wizardView[data-step="3"] :is(.lek-stepnav-3,.advanced-options,.analyze-row){animation:none}}
 .analyzer-wrap:has(#wizardView[data-step="3"]) .rail-step[data-rail="3"]{color:var(--paper-ink)}
 .analyzer-wrap:has(#wizardView[data-step="3"]) .rail-step[data-rail="3"] b{border-color:var(--red-deep);color:var(--red-deep);background:none}
-/* Papir je klikabilna NASLOVNICA obrasca: dok korisnik ne krene (klik/CTA/drag), analyzer-wrap je
-   skriven a cover stoji na njegovom mjestu. .lek-engaged je jednosmjeran (postavlja ga JS). */
-.lek-col-form:not(.lek-engaged) .analyzer-wrap{display:none}
-.lek-col-form.lek-engaged .lek-paper-cover{display:none}
+/* UVJET VIDLJIVOSTI JE UKLONJEN 2026-09-07, zajedno s marketinskim herojem na `/rad/`.
+
+   Do tada je vrijedilo `.lek-col-form:not(.lek-engaged) .analyzer-wrap{display:none}`: papir je
+   bio klikabilna naslovnica obrasca, a carobnjak skriven dok ga JS ne otkljuca. To je imalo
+   smisla dok je `/rad/` bio i landing. Nakon reza korisnik ondje dolazi S DOKUMENTOM koji je vec
+   ubacio na `/`, pa nema sto otkljucavati, a uvjet bi ostavio PRAZAN ekran.
+
+   Kvar bi pritom bio nevidljiv testovima: cetiri UX speca kliknu cover prije nego bilo sto
+   provjere, dakle mjere put starog korisnika a ne stanje ekrana. Gard je zato nov i izricit
+   (`tests/ux/intake-entry.spec.ts`: carobnjak vidljiv BEZ ijednog klika). */
 .lek-paper-cover{display:flex;flex-direction:column;align-items:center}
 .lek-cover-stage{position:relative;width:100%;max-width:480px;transition:transform .25s ease}
 .lek-cover-stage:hover{transform:translateY(-4px)}
@@ -1408,8 +1414,6 @@ body.is-scrolling .section *{box-shadow:none!important}
   .lek-col-proof .hero-coverage,.lek-col-proof .lek-cover-stage,.lek-demo-actions,.lek-bridge{display:none!important}
   .lek-col-proof .trust-row{margin-top:6px;justify-content:flex-start;gap:6px 12px;flex-wrap:wrap}
   .lek-col-proof .trust-row span{font-family:var(--sans);font-size:12px;line-height:1.2}
-  .lek-col-form:not(.lek-engaged) .analyzer-wrap{display:block}
-  .lek-col-form .lek-paper-cover{display:none}
   .analyzer-wrap{box-shadow:none}
   .wizard-rail{display:none}
   .analyzer-body{padding:12px}

@@ -40,44 +40,20 @@
 <p id="workspace-status" role="status" aria-live="polite" hidden></p>
 <section class="section section-soft" id="analyzer">
   <div class="shell">
-    <div class="lek-top-grid">
-    <div class="lek-col-proof">
-      <div class="lek-head-copy hero-copy"><div class="hero-kicker">23:47 · predaja je sutra · sve pod kontrolom</div><h1>Je li tvoj rad tehnički <span class="h1-crta">spreman<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M2 6 Q 20 1, 40 6 T 78 6 T 116 6 T 154 6 T 196 6"/></svg></span> za predaju?<br>Lekta ti kaže <em>prije</em> mentora.</h1><p class="lek-top-lead">Oblikovanje, struktura, opseg i citiranje, izmjereno lokalno po službenim pravilima tvog fakulteta, ili po općim akademskim ondje gdje ih fakultet nije objavio. Dokument pri automatskoj provjeri ne napušta uređaj.</p></div>
-      <div class="hero-coverage" id="heroCoverage" hidden></div>
-      <div class="lek-head-cta"><button class="btn btn-primary" id="uploadCtaBtn" type="button">Učitaj rad (.docx)</button></div>
-      <div class="trust-row"><span>Lokalno</span><span>Bez registracije</span><span>Rezultat u sekundama</span><span>Nije provjera plagijata</span></div>
-    </div>
-    <div class="lek-col-form">
-    <div class="lek-paper-cover" id="paperCover">
-      <div class="lek-cover-stage">
-      <div class="hero-demo" aria-hidden="true">
-        <div class="hd-stage">
-          <div class="hd-back" data-hero="back"></div>
-          <div class="hd-sheet" data-hero="sheet">
-            <div class="hd-doc-title">3. MEDIJSKO UOKVIRIVANJE KLIMATSKIH PROMJENA</div>
-            <p>Analiza okvira pokazala je da dnevne novine klimatske promjene najčešće uokviruju kroz ekonomsku prizmu (Peruško 2021.), dok se znanstveni okvir pojavljuje u <span class="hd-strike" data-hero="strike">značajno manjem broju</span> slučajeva. Slično tvrdi i <span class="hd-circle" data-hero="circle">Jandrić (2019)</span>, koji upozorava da izostanak znanstvenih izvora osiromašuje raspravu…</p>
-            <p>U promatranom razdoblju objavljeno je 214 članaka, od čega su 122 sadržavala barem jedan izravni citat. Kako navodi Grbeša (2020), medijska pozornost raste s blizinom klimatskih konferencija…</p>
-            <div class="hd-a hd-a1" data-hero="a1">izvor nije u literaturi!!</div>
-            <div class="hd-a hd-a2" data-hero="a2">preciznije!</div>
-            <div class="hd-a hd-a3" data-hero="a3">margina 2,3 → 3 cm!</div>
-            <i class="hd-a3line" data-hero="a3line"></i>
-            <div class="hd-f hd-f2" data-hero="f2">✓ jasnije, ok</div>
-            <div class="hd-f hd-f3" data-hero="f3">✓ margina 3 cm</div>
-            <i class="hd-scan" data-hero="scan"></i>
-          </div>
-          <div class="hd-postit" data-hero="postit">rok:<br><b>15. 9.</b><br>NE paničari →<br>provjeri</div>
-          <div class="hd-score" data-hero="score">
-            <div class="hd-score-k">LEKTA · NALAZ</div>
-            <div class="hd-score-n"><span data-hero="scoreval">71</span><span class="hd-score-max">/100</span></div>
-            <div class="hd-score-chip" data-hero="scorechip">17 nalaza · potrebne dorade<i class="hd-caret" aria-hidden="true">▮</i></div>
-          </div>
-        </div>
-      </div>
-      <button class="lek-cover-hit" id="paperCoverBtn" type="button" aria-label="Učitaj svoj rad (.docx) i pokreni provjeru"></button>
-      <div class="lek-bridge" aria-hidden="true">ovaj je prošao. klikni pa provjeri svoj →</div>
-      </div>
-      <div class="lek-demo-actions"><button class="hero-replay" id="heroReplay" type="button" aria-label="Ponovno pokreni animaciju primjera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ponovi pregled</button><button class="linklike-serif" id="heroDemoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Pogledaj cijeli primjer izvještaja →</button></div>
-    </div>
+    <!-- MARKETINSKI HERO JE UKLONJEN 2026-09-07, odlukom vlasnika.
+
+         Na `/rad/` korisnik dolazi S DOKUMENTOM, koji je vec ubacio na `/`. Do reza ga je ovdje
+         docekivao veliki naslov, demo papir s post-itom i ocjenom, gumb "Ucitaj rad" i poziv
+         "Pogledaj cijeli primjer izvjestaja", dakle uvjeravanje nekoga tko je vec odlucio.
+         Marketing je zavrsio u trenutku kad je student ubacio svoj diplomski; poslije mu ne treba
+         izmisljen dokument nego njegov.
+
+         UZ HERO JE OTISAO I UVJET VIDLJIVOSTI. `.lek-col-form:not(.lek-engaged) .analyzer-wrap`
+         je carobnjaka drzao skrivenim dok ga JS ne otkljuca klikom na taj isti demo papir. Bez
+         uklanjanja tog uvjeta brisanje heroja ostavilo bi PRAZAN ekran, a nijedan postojeci UX
+         spec to ne bi uhvatio: cetiri njih (`desktop-flow`, `a11y-states`, `parser-parity`,
+         `repair-panel`) kliknu cover prije nego bilo sto provjere. Gard je zato nov:
+         `tests/ux/intake-entry.spec.ts` trazi da je carobnjak vidljiv BEZ ijednog klika. -->
     <div class="analyzer-wrap">
       <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> Dokument</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Nalaz</span></div>
       <div class="analyzer-body wizard-view" id="wizardView" data-step="1">
@@ -131,7 +107,7 @@
             </div>
           </div>
         </details>
-        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite"></div><div class="analyze-actions"><button class="btn btn-ghost" id="demoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Primjer bez učitavanja</button><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
+        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite"></div><div class="analyze-actions"><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
       </div>
       <div class="progress-view hidden" id="progressView" role="status" aria-live="polite"><div class="spinner"></div><h3>Analiziram dokument…</h3><p id="progressMessage">Otvaram Word strukturu</p><div class="progress-track"><i id="progressBar"></i></div><div class="progress-step" id="progressPercent" aria-hidden="true">0%</div><div class="progress-actions" style="margin-top:24px"><button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini analizu</button></div></div>
       <div class="result-view hidden" id="resultView">
@@ -184,8 +160,6 @@
       </div>
     </div>
     <div class="analyzer-header"><div class="launch-actions"><button class="btn btn-secondary btn-sm" id="historyBtn" type="button">Povijest <span id="historyCount"></span></button><button class="btn btn-secondary btn-sm hidden" id="repairHistoryBtn" type="button">Moji popravci</button><!-- dev-only:start --><button class="btn btn-secondary btn-sm hidden" id="qaBtn" type="button">QA konzola</button><!-- dev-only:end --><span class="privacy-pill"><i data-lucide="lock"></i> Lokalna obrada</span></div></div>
-    </div>
-    </div>
   </div>
 </section>
 </main>

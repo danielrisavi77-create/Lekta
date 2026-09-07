@@ -53,8 +53,9 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     await odbij.click();
     await expect(page.locator('#consentBanner')).toBeHidden();
   }
-  const uploadCta = page.locator('#uploadCtaBtn');
-  if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
+  // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
+  // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
+  // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   // Tok se razlikuje po sirini i to NIJE detalj testa: na uskom zaslonu carobnjak staje na koraku
   // 1 uz sticky CTA "Nastavi na profil", dok desktop odmah skoci na korak 2. Zato se ovdje ne

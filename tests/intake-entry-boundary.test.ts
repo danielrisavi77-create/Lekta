@@ -175,9 +175,17 @@ describe('cisti ulaz /', () => {
     expect(specs.length, 'prazan skup specova nije prolaz').toBeGreaterThan(3);
 
     const ANALIZATOR = /#fileInput|#analyzeBtn|#wizardView|#resultView|id="analyzer"|#resultCockpit/;
+    // KOMENTARI NISU KOD. Bez ovoga gard prijavljuje FANTOM: dovoljno je da neka biljeska spomene
+    // `goto('/')` opisujuci samo pravilo, i tvrdnja pada nad datotekom koja nigdje ne navigira na
+    // korijen. Izmjereno 2026-09-07 na `workspace-entry.spec.ts`, ciji doc-komentar objasnjava bas
+    // ovaj gard. Isti razred je u ovom repozitoriju vec zapisan za graf modula (uvozi u komentarima
+    // i `import type` bridovi davali su 17 ciklusa kojih je stvarnih bilo nula).
+    const bezKomentara = (src: string): string => src
+      .replace(/\/\*[\s\S]*?\*\//g, ' ')
+      .replace(/^[ \t]*\/\/.*$/gm, ' ');
     const krivi: string[] = [];
     for (const spec of specs) {
-      const src = source(resolve(dir, spec));
+      const src = bezKomentara(source(resolve(dir, spec)));
       if (!ANALIZATOR.test(src)) continue;
       // Svaka navigacija na korijen, s opcijama ili bez njih, u tom specu je kriva meta.
       for (const m of src.matchAll(/goto\(\s*['"`](\/(?:index\.html)?)['"`]/g)) {

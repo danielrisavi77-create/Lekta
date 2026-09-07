@@ -19,7 +19,9 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
 test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/rad/');
-  await page.locator('#uploadCtaBtn').click();
+  // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
+  // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
+  // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
   await page.locator('#stepToAnalyze').click();
