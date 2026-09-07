@@ -26,5 +26,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      # Od 2026-09-01 je `check:edge` DIO `npm run check`, a taj korak trazi Deno i NAMJERNO pada
+      # umjesto da se tiho preskoci. `check.yml` je Deno dobio odmah; ovaj posao nije, i to se nije
+      # vidjelo jer se okida SAMO na pull requestu prema masteru, nikad na pushu na master. Master
+      # je zato ostao zelen, a svaki PR od tada pada na "deno nije dostupan u PATH-u", sto izgleda
+      # kao kvar u PR-u a kvar je u ovom workflowu.
+      - name: Deno setup (Edge typecheck je dio gatea)
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: v2.x
+
       - run: npm ci
       - run: npm run check
