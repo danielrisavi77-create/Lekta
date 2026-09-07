@@ -37,6 +37,25 @@ export interface ProfileRules {
   justify?: boolean;
   requireToc?: boolean;
   requirePageNumbers?: boolean;
+  requiredSections?: Array<{ key?: string; label?: string; terms?: string[] }>;
+}
+
+/**
+ * Treba li dokument sadrzaj.
+ *
+ * NIJE dovoljno gledati `requireToc`. Izmjereno 2026-09-07 na `effectus-seminarski`: profil ima
+ * `requireToc: false`, ali u `requiredSections` trazi dio "sadrzaj". Da se gledala samo prva
+ * zastavica, dokument bi ispao bez sadrzaja i pao na obveznim dijelovima, a uzrok bi izgledao kao
+ * kvar motora umjesto kao propust graditelja. Dvije zastavice govore o dvije stvari: prva o ZIVOM
+ * POLJU, druga o postojanju DIJELA.
+ */
+function needsToc(rules: ProfileRules): boolean {
+  if (rules.requireToc !== false) return true;
+  return (rules.requiredSections ?? []).some((s) =>
+    [s.key, s.label, ...(s.terms ?? [])]
+      .filter(Boolean)
+      .some((t) => /sadr[zž]aj|contents/i.test(String(t))),
+  );
 }
 
 /** Format stranice u centimetrima; A4 je zadan jer ga trazi vecina profila. */
@@ -285,7 +304,7 @@ ${
  <office:body>
   <office:text>
 ${naslovnica}
-${rules.requireToc === false ? '' : tocBlock()}
+${needsToc(rules) ? tocBlock() : ''}
 ${sazetak}
 ${poglavlja}
 ${prikazi}

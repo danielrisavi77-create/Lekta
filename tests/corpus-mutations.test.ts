@@ -216,3 +216,36 @@ describe('graditelj: prikazi nose izvor i popise, jer to provjere traze', () => 
     expect(x).not.toContain('Popis slika');
   });
 });
+
+/**
+ * Sadrzaj se trazi iz DVIJE zastavice, ne jedne.
+ *
+ * Izmjereno 2026-09-07 na `effectus-seminarski`: profil ima `requireToc: false`, ali u
+ * `requiredSections` trazi dio "sadrzaj". Da graditelj gleda samo prvu zastavicu, dokument bi ispao
+ * bez sadrzaja i pao na obveznim dijelovima, a uzrok bi izgledao kao kvar motora umjesto kao propust
+ * graditelja. Zastavice govore o dvjema stvarima: prva o ZIVOM POLJU, druga o postojanju DIJELA.
+ */
+describe('graditelj: sadrzaj kad ga trazi obvezni dio, a ne zastavica', () => {
+  const bezPolja = { ...PRAVILA, requireToc: false };
+
+  it('bez oboje nema sadrzaja', () => {
+    const x = buildFodt(proba(), { titleLines: [], rules: bezPolja });
+    expect(x).not.toContain('<text:table-of-content');
+  });
+
+  it('obvezni dio "sadrzaj" ga vraca i kad je zastavica polja false', () => {
+    const x = buildFodt(proba(), {
+      titleLines: [],
+      rules: { ...bezPolja, requiredSections: [{ key: 'sadrzaj', label: 'sadržaj', terms: ['sadržaj', 'sadrzaj'] }] },
+    });
+    expect(x).toContain('<text:table-of-content');
+  });
+
+  it('obvezni dio koji NIJE sadrzaj ga ne vraca', () => {
+    const x = buildFodt(proba(), {
+      titleLines: [],
+      rules: { ...bezPolja, requiredSections: [{ key: 'uvod', label: 'uvodni dio', terms: ['uvod'] }] },
+    });
+    expect(x).not.toContain('<text:table-of-content');
+  });
+});
