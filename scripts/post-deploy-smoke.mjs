@@ -36,6 +36,7 @@ const DEFAULT_FUNCTIONS = process.env.LEKTA_FUNCTIONS_ORIGIN
 /** Koliko se ceka na jedan zahtjev. Produkcija koja odgovara sporije od ovoga je i sama nalaz. */
 const TIMEOUT_MS = Number(process.env.LEKTA_SMOKE_TIMEOUT_MS || '15000');
 
+import { pathToFileURL } from 'node:url';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 
 // ---------------------------------------------------------------------------
@@ -422,7 +423,13 @@ function arg(name, fallback) {
   return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// STRAZA IDE PREKO `pathToFileURL`, NIKAD PREKO `file://` + staze. Na Windowsu je `process.argv[1]`
+// oblika `C:\...\post-deploy-smoke.mjs`, a `import.meta.url` `file:///C:/.../post-deploy-smoke.mjs`,
+// pa se rucno slijepljen `file://` NIKAD ne poklopi: skripta bi se ucitala, nista ne izvela i izasla
+// s kodom 0. Tako je izgledala kao da prolazi, dok je CI (Linux, gdje se straza poklapa) bio crven
+// 40 puta zaredom, i nitko to nije mogao reproducirati lokalno (izmjereno 2026-09-07).
+// Gard: tests/post-deploy-smoke-cli.test.ts.
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   if (process.argv.includes('--self-test')) {
     selfTest();
   } else {

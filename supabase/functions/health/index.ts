@@ -34,16 +34,30 @@ type DepResult = { ok: boolean; detail?: string };
  * Najjeftiniji dokaz da je PostgREST ziv i da baza odgovara.
  *
  * Namjerno se ne cita nijedna aplikacijska tablica: health je javan (verify_jwt=false), pa ne
- * smije postati besplatan upit nad podacima. Dovoljno je da REST korijen odgovori.
+ * smije postati besplatan upit nad podacima. Zove se `public.health_ping()` (migracija 0103),
+ * funkcija bez argumenata koja ne dira nijednu tablicu i vraca `true`.
+ *
+ * NE KORISTITI korijen PostgREST-a (`GET /rest/v1/`): od 2026 prima iskljucivo `service_role`
+ * kljuc i na anon vraca 401, pa je health mjesecima javljao `degraded` uz posve zdravu bazu
+ * (izmjereno 2026-09-07, `post-deploy-smoke` crven 40 puta zaredom). Odgovor se i PROVJERAVA,
+ * ne samo status: 200 s necim drugim u tijelu znaci da je odgovorio posrednik, ne Postgres.
  */
 async function checkDatabase(): Promise<DepResult> {
   if (!SUPABASE_URL || !ANON_KEY) return { ok: false, detail: 'not_configured' };
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/`, {
-      headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}` },
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/health_ping`, {
+      method: 'POST',
+      headers: {
+        apikey: ANON_KEY,
+        Authorization: `Bearer ${ANON_KEY}`,
+        'content-type': 'application/json',
+      },
+      body: '{}',
       signal: AbortSignal.timeout(DEP_TIMEOUT_MS),
     });
-    return res.ok ? { ok: true } : { ok: false, detail: `http_${res.status}` };
+    if (!res.ok) return { ok: false, detail: `http_${res.status}` };
+    const text = (await res.text()).trim();
+    return text === 'true' ? { ok: true } : { ok: false, detail: 'neocekivan_odgovor' };
   } catch (e) {
     return { ok: false, detail: e instanceof Error && e.name === 'TimeoutError' ? 'timeout' : 'unreachable' };
   }
