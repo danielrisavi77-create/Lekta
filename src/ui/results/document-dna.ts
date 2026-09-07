@@ -1,5 +1,5 @@
 import { escapeHtml } from '../../utils/helpers';
-import { pluralHr } from './technical-compliance-halo';
+import { pluralHr } from './plural-hr';
 import type { DnaBucket, DocumentDnaModel } from '../../results/document-dna-model';
 
 /**

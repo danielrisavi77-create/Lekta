@@ -817,3 +817,86 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 }
 
 .outlook__note { margin: 0; color: var(--ck-muted); font-size: .78rem; line-height: 1.5; }
+
+/* SAZETAK NALAZA -----------------------------------------------------------------------------
+ *
+ * Zamjenjuje tamni uredaj s halo prstenom (321x353 px), koji je drzao pogled prije nego je covjek
+ * stigao do nalaza. Hijerarhija je sada obrnuta: brojke nalaza su glavne, ocjena je sporedna.
+ *
+ * Ocjena NIJE uklonjena. I dalje je istinita i korisna, samo vise ne odreduje sto se cita prvo.
+ */
+.fsum {
+  display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 28px;
+  padding: 22px 24px; border: 1px solid var(--paper-line, #E0D8C8); border-radius: 3px;
+  background: color-mix(in srgb, var(--paper, #F7F3E8) 60%, transparent);
+}
+.fsum-naslov {
+  margin: 0 0 12px; font-family: var(--display-serif, Georgia, serif);
+  font-weight: 500; font-size: clamp(1.45rem, 2.8vw, 2.15rem); line-height: 1.15;
+  letter-spacing: -.01em; color: var(--paper-ink, #23201B);
+}
+.fsum-razine { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px }
+.fsum-razina {
+  display: grid; grid-template-columns: 1.6rem 1fr; align-items: baseline; gap: .5rem;
+  font: 400 15px/1.45 var(--ui, system-ui); color: var(--paper-ink, #23201B);
+}
+.fsum-razina b { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right }
+.fsum-razina[data-ton='blok'] b { color: var(--red-deep, #8E2A22) }
+.fsum-razina[data-ton='dorada'] b { color: var(--warn, #A9741B) }
+.fsum-razina[data-ton='provjera'] b { color: var(--paper-muted, #6E6558) }
+
+/* CRTA I "OD TOGA" RAZDVAJAJU OSI. Redci iznad su particija po ozbiljnosti i zbrajaju se u
+ * naslov; ovaj je popravljivost i PRESIJECA ih. Bez tog razdvajanja cita se kao pribrojnik, pa
+ * kad se ne zbroji, izgleda kao kvar. */
+.fsum-auto {
+  margin: 12px 0 0; padding-top: 11px; border-top: 1px solid var(--paper-line, #E0D8C8);
+  font: 400 15px/1.45 var(--ui, system-ui); color: var(--paper-ink, #23201B);
+}
+.fsum-auto span { color: var(--paper-muted, #6E6558); font-size: 13px }
+.fsum-auto b { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F) }
+
+/* Ocjena: broj, kosa crta, natpis. Bez prstena, bez tamne plohe, bez halo sjaja. */
+.fsum-ocjena {
+  display: grid; justify-items: end; align-content: start; gap: 0;
+  padding-left: 24px; border-left: 1px solid var(--paper-line, #E0D8C8);
+}
+/* OCJENA MORA BITI MANJA OD NASLOVA, i to se mjeri a ne procjenjuje. Prva izvedba je imala
+ * naslov 30,4 px i ocjenu 38,4 px: izgledala je sporedno jer je naslov dug redak a ocjena jedna
+ * brojka, ali po velicini fonta je i dalje pobjedivala. Gard cuva OMJER, ne izgled. */
+.fsum-ocjena b {
+  font-family: var(--display-serif, Georgia, serif); font-weight: 500; font-size: 1.5rem;
+  line-height: 1; font-variant-numeric: tabular-nums; color: var(--paper-ink, #23201B);
+}
+.fsum-ocjena span { font: 400 13px/1 var(--ui, system-ui); color: var(--paper-muted, #6E6558); margin-top: 2px }
+.fsum-ocjena small {
+  margin-top: 7px; font: 600 10px/1.2 var(--sans, system-ui); letter-spacing: .09em;
+  text-transform: uppercase; color: var(--paper-muted, #6E6558);
+}
+.fsum-ocjena--nema span { font: 400 12px/1.35 var(--ui, system-ui); text-align: right }
+
+@media (max-width: 700px) {
+  /* Ocjena ide POD sazetak, ne uz njega: uz 320 px sirine broj bi stisnuo naslov u tri retka. */
+  .fsum { grid-template-columns: 1fr; gap: 16px }
+  .fsum-ocjena {
+    justify-items: start; padding: 12px 0 0; border-left: 0;
+    border-top: 1px solid var(--paper-line, #E0D8C8);
+    grid-template-columns: auto auto 1fr; align-items: baseline; gap: 7px;
+  }
+  .fsum-ocjena b { font-size: 1.7rem }
+  .fsum-ocjena small { margin-top: 0 }
+}
+
+/* Presuda kao OZNAKA, ne kao naslov. Odgovara na "smijem li predati"; sazetak ispod odgovara na
+ * "sto da radim", i taj je odgovor razlog dolaska. */
+.cockpit-hero--sazetak { display: block }
+.cockpit-hero--sazetak .cockpit-hero__lead { display: grid; gap: 14px; justify-items: start }
+.cockpit-verdict {
+  display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px;
+  border: 1px solid currentColor; border-radius: 999px;
+  font: 600 10.5px/1 var(--sans, system-ui); letter-spacing: .1em; text-transform: uppercase;
+}
+.cockpit-verdict::before { content: '●'; font-size: 8px }
+.cockpit-verdict[data-verdict='blocked'] { color: var(--red-deep, #8E2A22) }
+.cockpit-verdict[data-verdict='warn'] { color: var(--warn, #A9741B) }
+.cockpit-verdict[data-verdict='ok'] { color: var(--pass, #2E8B5F) }
+.cockpit-hero--sazetak .fsum { width: 100% }
