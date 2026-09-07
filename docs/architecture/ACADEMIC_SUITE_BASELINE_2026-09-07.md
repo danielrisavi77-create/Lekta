@@ -8,10 +8,16 @@ This document freezes the integration assumptions used before Academic Suite con
 |---|---|---|---|
 | `danielrisavi77-create/Lekta` | `master` | `6dc63ccccaa62cc2c3f0273acca76d1220a85ec1` | `2.2.2` |
 | `danielrisavi77-create/katedra` | `master` | `c2365b4d2d04e6462121c34812bf8e516e839e95` | `0.1.0` |
-| `danielrisavi77-create/katedra-pkg` | `main` | `72adc57b4bcf1bcc6125c392c5f364aa682c41bd` | `1.9.34` |
+| `danielrisavi77-create/katedra-pkg` | `main` | `31d5487e08e5916df8f9133c89c1dd7938712e08` | `1.9.35` |
 | `danielrisavi77-create/WordReplica-Automation` | `main` | `a070dadc58c335447461bf4ec5bd8909fdf53458` | `0.1.0` |
 
 These SHAs are the baseline for PR1. Later PRs must not silently assume them if a repository head advances: the changed head and its compatibility implications must be recorded before implementation continues.
+
+### Baseline refresh during PR1
+
+`katedra-pkg` advanced while the first PR1 CI run was executing: `72adc57b4bcf1bcc6125c392c5f364aa682c41bd` / `1.9.34` → `31d5487e08e5916df8f9133c89c1dd7938712e08` / `1.9.35` via merged PR #42. That change is directly relevant to later integration because it strengthens `rad-docx` defect documentation and its RD11 regression guard around rounding basis; it is therefore included in the baseline instead of leaving PR2 pinned to the older package snapshot.
+
+Lekta, Katedra and WordReplica heads were re-read after the first PR1 CI run and remained at the SHAs recorded above.
 
 ## Contract truth
 
@@ -47,13 +53,30 @@ The current `master` SHA is the merge commit for PR #54. The PR head (`715523e56
 - `security-audit` — success
 - `Academic Suite DB` — skipped for that PR context, not failed
 
-A fresh branch was then created directly from current `master` for this baseline work: `chore/academic-suite-v02-baseline-2026-09-07`. Branch creation triggered the normal push workflows on the exact `6dc63ccccaa62cc2c3f0273acca76d1220a85ec1` source tree. At the first observation, 19 runs had already completed, **0 failure runs** existed for that SHA/branch, and 5 runs were still in progress. This document will be updated once the documentation commit has its own PR checks.
+A fresh branch was then created directly from current `master` for this baseline work: `chore/academic-suite-v02-baseline-2026-09-07`.
+
+The first documentation commit (`763a7f2a1d587c06bd7f809e46dbac6885cc20eb`) completed all executed PR workflows successfully:
+
+- `check` — success
+- `browser-matrix` — success
+- `conformance` — success
+- `Foundation check` — success
+- `db-smoke` — success
+- `docx-smoke` — success
+- `docx-strict-open` — success
+- `repair-net` — success
+- `repair-slow` — success
+- `rule-claims` — success
+- `security-audit` — success
+- `Academic Suite DB` — skipped for this PR context, not failed
+
+This second documentation-only commit refreshes only the external `katedra-pkg` baseline SHA/version and must pass the PR checks again before merge.
 
 ### Code-state interpretation
 
-**Current classification: GREEN BASELINE, PR1 RE-CHECK PENDING.**
+**Current classification: GREEN BASELINE, REFRESH RE-CHECK PENDING.**
 
-Reason: the source that entered `master` passed the required PR code gates, and no failure had appeared on the fresh baseline branch before the documentation commit. PR1 still needs its own checks after this file is committed.
+Reason: the first documentation commit passed the full executed PR gate set. The only follow-up change is the recorded external `katedra-pkg` baseline, but the refreshed PR head must still earn its own CI result rather than inheriting the previous commit's green status.
 
 ## Production/deploy-state evidence
 
