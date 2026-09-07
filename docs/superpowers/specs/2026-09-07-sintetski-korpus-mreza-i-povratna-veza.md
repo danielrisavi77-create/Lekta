@@ -15,6 +15,7 @@ izmjereno i sto je jos otvoreno. Namjera je u planu; ovdje je stanje.
     npm run repair-net                   analiza -> popravak -> ponovna analiza, po fixeru
     npm run skill-compare -- --write     Lektini nalazi protiv Katedrinih, nad ISTIM dokumentom
     npm run skill-feedback -- --write    kvar zapis u obliku koji `katedra` skill cita
+    npm run skill-evals -- --write --stage <dir>   eval slucajevi + mapa za predaju
 
 Prva, cetvrta i posljednja rade svugdje, ukljucujuci CI. Druga trosi najvise pa ide u valovima. Treca
 trazi Windows s LibreOfficeom i Wordom. Peta trazi Python i Katedrin paket, pa se u CI-ju ne vrti.
@@ -75,12 +76,12 @@ slaganje. Iz njih su izvedena tri kvara, svaki izmjeren prije nego zapisan:
 | broj | mehanizam | izmjereno |
 |---|---|---|
 | 141 | pokrivenost gradi citate samo iz oblika autor-godina | fzsri 0 citata, 20 od 20 necitiranih; effectus 0 i 18 od 18 |
-| 142 | prezime u kosom padezu ne nadje svoju jedinicu | fpzg: 2 citata bez izvora i 1 necitirana jedinica, iz istog para |
-| 143 | popis literature nadjen, a poruka kaze da nije | effectus: naslov Heading1, 18 jedinica, 0 procitanih prezimena |
+| 142 | sklonidba je deklarirana kao moguc lazan nalaz, a redak svejedno nosi `❌` | fpzg: 2 citata bez izvora i 1 necitirana jedinica, iz istog para |
+| 143 | neizvedena provjera ispisuje se kao "0 krsenja", uz netocan razlog | effectus: naslov Heading1, 18 jedinica, 0 procitanih prezimena |
 
 Zapis prolazi Katedrin VLASTITI validator (`kvar.py --provjeri --nastavak-od 140`, izlazni kod 0).
 
-Kvar 142 je isti koji je Lekta imala i popravila (`ddf9ee8e`), pa je recept prenesen doslovno: popis
+Mehanizam kvara 142 je isti koji je Lekta imala i popravila (`ddf9ee8e`), pa je recept prenesen: popis
 padeznih nastavaka, granica korijena od cetiri znaka i dodatni kandidat na `a` zbog zenske sklonidbe.
 Zbog tog popravka je fpzg os `citirano-bez-jedinice` sada `samo-katedra`: Lekta 0, Katedra 2.
 
@@ -158,6 +159,43 @@ Tri stvari koje su izmjerene i koje bi inace svih 60 tijela ponovilo:
 - **Alat ne pise sadrzaj**, nego se proza uzima kao PODATAK. U repozitoriju nema ni modela ni prompta,
   i ova biljeska je mjerenje o kalibraciji, ne uputa koju pipeline izvodi.
 
+## Eval slucajevi i isporuka (dopunjeno 2026-09-07)
+
+Vlasnik je odobrio slanje dokumenata drugom proizvodu, pa je napravljen i drugi izlaz: tri eval
+slucaja (`docs/generated/skill-evals.json`, id 11 do 13) uz tri dokumenta. Zapis kvara kaze STO je
+pokvareno; eval cuva da se u medjuvremenu ne laze, dakle da model krivi izlaz alata ne prenese kao
+istinu o radu.
+
+**Potkrepa se racuna, ne pamti, i to na oba izlaza.** Eval koji nadzivi svoj kvar i dalje PROLAZI, pa
+izgleda kao pokrice a ne cuva nista; k tome bi zivio u tudjem repozitoriju, gdje ga nas gate nikad
+vise ne vidi. Zato slucaj ispada iz izvoza cim kvara nema u katalogu ILI ga mjerenje vise ne podupire,
+a to su dva razlicita razloga i imenuju se odvojeno.
+
+**Sto je provjera isporuke nasla u nasem VLASTITOM zapisu.** Oba nalaza su iz istog poteza: pokrenuti
+njihov alat i procitati ISPIS, umjesto samo JSON polja koje nam treba.
+
+- Sklonidbu alat VEC deklarira: zaglavlje odjeljka POKRIVENOST pise da moze dati lazne nalaze i trazi
+  provjeru okom. Nas zapis je tvrdio da alat to ne zna, sto nije istina. Nalaz je preformuliran u ono
+  sto stvarno stoji, i time je postao jaci: zaglavlje deklarira nesigurnost, a isti redak svejedno
+  nosi `❌` dok susjedni nosi `⚠️`.
+- Ispis ne pokazuje `citata_razlicitih`, pa je jedno ocekivanje trazilo od modela da primijeti
+  vrijednost koju bez `--json` ne moze vidjeti. Zamijenjeno onim sto se doista vidi.
+- Isti prolaz dao je i bolji dokaz za kvar 143: alat ispisuje "0 krsenja" dok je cijela provjera
+  preskocena, sto je jace od "poruka je zbunjujuca".
+
+**Isporuka je uvjezbana na klonu prije nego je dirnut njihov repozitorij.** Cetiri stvari su svojstvo
+NJIHOVE datoteke, ne nase isporuke, i svaka bi tiho pokvarila diff: CRLF, separator `---` medju
+novijim unosima, zaglavlje fragmenta koje ne ide u katalog, i uvlaka od JEDNOG razmaka u `evals.json`
+(pisanje s dva dalo bi lazan diff od 127 redaka). Vjernost pisca dokazana je round-tripom nad
+neizmijenjenom datotekom.
+
+Uz to se u istom zahvatu osvjezava `zamke_indeks.md`, jer je izvedena projekcija kataloga; bez toga
+bi u njihov repozitorij usla ustajala projekcija, tocno razred protiv kojeg ovaj vodic ima alat.
+
+**Novi unosi namjerno nemaju `Ograda:` redak.** Po njihovu kvaru 139 to znaci prvo stanje, dakle
+ograda NEDOSTAJE i to je pravi dug; tako i jest, jer kvarovi nisu popravljeni. `Ograda: nema` bi
+tvrdilo da ograda ne pripada, sto bi bilo netocno i sakrilo bi dug. Dug im time raste s 25 na 28.
+
 ## Sto ostaje
 
 1. Val 2 proze, prema 60 tijela, uz mjerenje nakon svakog vala.
@@ -165,6 +203,4 @@ Tri stvari koje su izmjerene i koje bi inace svih 60 tijela ponovilo:
    odabirom, jer je to jedino stanje u kojem ta dva uopce mogu raditi.
 3. `apuri` nema Wordovu inacicu, a ostala tri je imaju. Nije zapisano je li izostala namjerno ili je
    pokusaj pao; utvrditi prije nego se broj dokumenata negdje navede kao ujednacen.
-4. Eval slucaj za `katedra-lite/evals/evals.json`. NIJE napravljen jer trazi odluku vlasnika: eval
-   treba dokument, a slanje `.docx`-a drugom proizvodu je pitanje granice koje nitko nije presudio.
-   Zapis kvara je samostalno upotrebljiv i bez toga.
+4. Popravci na njihovoj strani, i skidanje eval slucaja tek kad kvar doista nestane iz mjerenja.
