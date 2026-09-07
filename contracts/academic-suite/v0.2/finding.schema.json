@@ -81,7 +81,12 @@
         "properties": { "fixCapability": { "const": "automatic" } },
         "required": ["fixCapability"]
       },
-      "then": { "required": ["fixerId"] }
+      "then": {
+        "properties": {
+          "fixerId": { "type": "string", "minLength": 1 }
+        },
+        "required": ["fixerId"]
+      }
     }
   ],
   "additionalProperties": false
