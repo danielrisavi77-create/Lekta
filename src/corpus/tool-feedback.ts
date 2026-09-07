@@ -74,18 +74,32 @@ export function isSupported(cls: DefectClass, rows: readonly ComparisonRow[]): b
   return cls.support.some((s) => s.kind === 'izravno' && s.command.length > 0 && s.documents.length > 0);
 }
 
+/**
+ * Hrvatski broj uz imenicu ima TRI oblika, ne dva, i zapis ide drugom proizvodu pa se cita kao nas
+ * rad: 1 dokument, 2 do 4 dokumenta, 5 i vise dokumenata. Iznimke su tinejdzerske: 11 do 14 uvijek
+ * uzimaju zadnji oblik, pa `11 dokumenata` a `21 dokument`.
+ */
+export function dokumenata(n: number): string {
+  const zadnja = n % 10;
+  const dvije = n % 100;
+  if (zadnja === 1 && dvije !== 11) return `${n} dokumentu`;
+  if (zadnja >= 2 && zadnja <= 4 && (dvije < 12 || dvije > 14)) return `${n} dokumenta`;
+  return `${n} dokumenata`;
+}
+
 function measuredLine(cls: DefectClass, rows: readonly ComparisonRow[]): string {
   const podupiruci = supportingRows(cls.support, rows);
   if (podupiruci.length) {
     const dokumenti = [...new Set(podupiruci.map((r) => r.dokument))].sort();
     const najveci = podupiruci.reduce((a, r) => Math.max(a, r.katedra ?? 0), 0);
     return (
-      `Izmjereno na ${dokumenti.length} dokumenta (${dokumenti.join(', ')}); ` +
+      `Izmjereno na ${dokumenata(dokumenti.length)} (${dokumenti.join(', ')}); ` +
       `najveci broj nalaza na jednom dokumentu je ${najveci}.`
     );
   }
   const izravna = cls.support.find((s): s is Extract<DefectSupport, { kind: 'izravno' }> => s.kind === 'izravno');
-  return `Izmjereno izravno na ${izravna?.documents.length ?? 0} dokumenta (${(izravna?.documents ?? []).join(', ')}).`;
+  const imena = izravna?.documents ?? [];
+  return `Izmjereno izravno na ${dokumenata(imena.length)} (${imena.join(', ')}).`;
 }
 
 /**

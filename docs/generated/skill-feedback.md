@@ -1,4 +1,4 @@
-<!-- npm run skill-feedback -- --write | 2026-09-07T07:28:46.318Z | ddf9ee8eb573b76fa5d05624b40d00a8b1332c00 -->
+<!-- npm run skill-feedback -- --write | 2026-09-07T07:53:31.184Z | c5978e127e2f94b714b56d422a5e942669f81ff5 -->
 <!-- Fragment za <katedra-lite>/references/zamke.md. Provjera na drugoj strani: -->
 <!-- python3 <katedra>/scripts/kvar.py <ovaj-fragment>.md --provjeri --nastavak-od 140 -->
 
@@ -22,7 +22,7 @@ pokrivenost uz tu vrijednost ne smije izdati popis necitiranih, nego reci da sti
 prepoznat. Popravak zato ima dva dijela: prepoznavanje numerickog i fusnotnog citiranja u
 `pokrivenost`, i tvrdu ogradu koja kod nula prepoznatih citata odbija izdati popis.
 
-Izmjereno na 6 dokumenta (effectus--seminar--diplomski--neuredan.docx, effectus--seminar--diplomski--uskladjen.docx, effectus--seminar--diplomski--word.docx, fzsri--final--prijediplomski--neuredan.docx, fzsri--final--prijediplomski--uskladjen.docx, fzsri--final--prijediplomski--word.docx); najveci broj nalaza na jednom dokumentu je 22.
+Izmjereno na 6 dokumenata (effectus--seminar--diplomski--neuredan.docx, effectus--seminar--diplomski--uskladjen.docx, effectus--seminar--diplomski--word.docx, fzsri--final--prijediplomski--neuredan.docx, fzsri--final--prijediplomski--uskladjen.docx, fzsri--final--prijediplomski--word.docx); najveci broj nalaza na jednom dokumentu je 22.
 
 ```
 $ python3 scripts/verify_sources.py fzsri--final--prijediplomski--uskladjen.docx --pokrivenost --offline

@@ -19,7 +19,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readZip } from '../src/repair/zip-codec';
 import { KVAROVI } from '../scripts/corpus-gen/skill-feedback.mts';
-import { isSupported, renderDefectFragment, supportingRows } from '../src/corpus/tool-feedback';
+import { dokumenata, isSupported, renderDefectFragment, supportingRows } from '../src/corpus/tool-feedback';
 import type { ComparisonRow } from '../src/corpus/tool-comparison';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -162,5 +162,28 @@ describe('izvoz prema katedri: potkrepa se racuna, ne pamti', () => {
     );
     expect(r.numbers).toEqual([]);
     expect(r.unsupported.length).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * Hrvatski broj uz imenicu ima TRI oblika. Testira se ODVOJENO od izvoza, jer trenutni skup dokumenata
+ * proizvodi samo 3 i 6, pa bi provjera kroz izvoz tvrdila da pokriva pravilo koje nikad ne izvede.
+ * Isti razred kao sweep cija generatorska strana ne stvara oblik koji navodno pokriva.
+ */
+describe('izvoz prema katedri: broj uz imenicu', () => {
+  it('jednina, mnozina do cetiri i mnozina od pet', () => {
+    expect(dokumenata(1)).toBe('1 dokumentu');
+    expect(dokumenata(2)).toBe('2 dokumenta');
+    expect(dokumenata(4)).toBe('4 dokumenta');
+    expect(dokumenata(5)).toBe('5 dokumenata');
+    expect(dokumenata(0)).toBe('0 dokumenata');
+  });
+
+  it('iznimka od 11 do 14 uzima zadnji oblik, a 21 opet prvi', () => {
+    for (const n of [11, 12, 13, 14]) expect(dokumenata(n), String(n)).toBe(`${n} dokumenata`);
+    expect(dokumenata(21)).toBe('21 dokumentu');
+    expect(dokumenata(22)).toBe('22 dokumenta');
+    expect(dokumenata(111)).toBe('111 dokumenata');
+    expect(dokumenata(101)).toBe('101 dokumentu');
   });
 });
