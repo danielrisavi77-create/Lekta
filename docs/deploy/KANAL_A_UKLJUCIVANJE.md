@@ -51,6 +51,11 @@ posve zdravom bazom. Zamjena: `public.health_ping()` (migracija `0103`), funkcij
 ne cita nijednu tablicu. Zbog istog kvara je zakazani `post-deploy-smoke` bio crven 40 uzastopnih
 pokretanja, od 2026-08-28.
 
+Izvedeno istoga dana: migracija `0103` primijenjena na produkciju (`db push`), `health` deployan (v8 -> v9).
+Izmjereno poslije: `rpc/health_ping` s anon kljucem vraca `200 true` (bez kljuca 401), `/health` vraca
+`200 {"status":"ok","dependencies":{"database":{"ok":true}}}`, POST na health i dalje 405 (endpoint jos
+moze pasti), a `node scripts/post-deploy-smoke.mjs` prolazi 27 od 27 provjera.
+
 ## Cetiri verzije samo u bazi: kako je `db push` prosao bez brisanja dnevnika
 
 `supabase db push` odbija raditi dok u bazi postoje verzije kojih nema u `supabase/migrations/`
