@@ -1332,7 +1332,7 @@ body.is-scrolling .section *{box-shadow:none!important}
 .lek-col-form .wizard-grid{grid-template-columns:1fr}
 /* Wizard paneli: jedan ekran po koraku (data-step na #wizardView) s povratkom; nista se ne gomila. */
 #wizardView[data-step="1"] :is(.wizard-col-profile,.advanced-options,.analyze-row,.lek-stepnav-2,.lek-stepnav-3,#fpzgPhaseHint){display:none}
-#wizardView[data-step="2"] :is(.wizard-col-upload,.advanced-options,.analyze-row,.lek-stepnav-1,.lek-stepnav-3,#fpzgPhaseHint){display:none}
+#wizardView[data-step="2"] :is(.wizard-col-upload,.advanced-options,.lek-stepnav-1,.lek-stepnav-3,#fpzgPhaseHint){display:none}
 #wizardView[data-step="3"] :is(.wizard-col-upload,.wizard-col-profile,.lek-stepnav-1,.lek-stepnav-2){display:none}
 /* Naprijed s koraka 1 postoji samo kad je datoteka vec ucitana (povratak s koraka 2). */
 #wizardView[data-step="1"]:not(:has(#dropzone.has-file)) .lek-stepnav-1{display:none}
@@ -1531,3 +1531,36 @@ a.mw-item-name:hover{text-decoration:underline}
   font-size:1.1rem;letter-spacing:-.012em;font-variant-numeric:tabular-nums;
 }
 .site-stats-note{flex-basis:100%;text-align:center;font-size:.8rem;opacity:.85}
+
+/* KARTICA POTVRDE PROFILA (`#analyzeProfile`).
+ *
+ * Klase `ap-*` postojale su u HTML-u koji ispisuje `renderAnalyzeSummary`, ali NIJEDNA nije
+ * imala stil, pa je potvrda izgledala kao redak teksta ispod formulara od devet selectova.
+ * `UX_PRINCIPLES.md` trazi obrnuto: kontekst je potvrda, promjena je sekundarna.
+ *
+ * `ap-nesigurno` NIJE ukras: pali se kad studij nije prepoznat iz dokumenta, gdje izbornik stoji
+ * na alfabetski prvom fallbacku. Tada karticu treba citati kao pitanje, ne kao cinjenicu. */
+.ap-kartica{display:grid;gap:14px}
+.ap-head{display:flex;align-items:center;gap:10px}
+.ap-tijelo{display:grid;gap:3px}
+.ap-ustanova{font:600 clamp(1.05rem,2vw,1.3rem)/1.2 var(--display-serif);color:var(--paper-ink);letter-spacing:-.01em}
+.ap-studij{font:500 .98rem/1.35 var(--display-serif);color:var(--paper-ink)}
+.ap-vrsta{font:500 .86rem/1.4 var(--sans);color:var(--paper-muted)}
+.ap-red{display:flex;gap:8px;align-items:baseline;margin-top:9px;font:500 .8rem/1.4 var(--sans);color:var(--paper-muted)}
+.ap-red b{font-weight:650;color:var(--paper-ink);font-variant-numeric:tabular-nums}
+.ap-upozorenje{margin:0;padding:10px 12px;border-radius:8px;font:500 .86rem/1.5 var(--sans);
+  color:var(--paper-ink);background:color-mix(in srgb,var(--brand) 10%,transparent);
+  border:1px solid color-mix(in srgb,var(--brand) 30%,transparent)}
+.ap-akcije{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ap-nesigurno{border-left:3px solid var(--brand);padding-left:14px}
+
+/* KONTEKST JE POTVRDA, NE FORMULAR (UX_PRINCIPLES.md 2; brif vlasnika 2026-09-07).
+ *
+ * Korak "Pravila" je do sada bio devet selectova, a kartica profila stajala je ISPOD njih. Sada
+ * je obrnuto: vidi se potvrda, a kontrole cekaju iza "Promijeni". Koraci 2 i 3 su time spojeni,
+ * jer je potvrda ujedno pokretanje provjere; `lek-stepnav-2` ("Nastavi na provjeru") bi bio
+ * treci gumb za istu radnju.
+ *
+ * Skriva se FORMA, ne cijeli stupac: naslov koraka i kartica ostaju vidljivi. */
+#wizardView[data-step="2"]:not(.lek-izmjena) .wizard-col-profile .form-grid,
+#wizardView[data-step="2"] .lek-stepnav-2{display:none}

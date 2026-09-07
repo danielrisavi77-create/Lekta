@@ -68,7 +68,12 @@ const BUDZET_APP = 357 * 1024;
 // 2026-09-05: 821 -> 823 KB za Kanal A: novi modul src/ui/corpus-consent-row.ts (2,4 KB, testiran) i tri retka u app.ts
 // (kucica + gumb povlacenja). Nova znacajka izvan app.ts, ne rast monolita; app.ts ostaje unutar BUDZET_APP.
 // Izmjereno 842067 B; budzet 842752 B ostavlja 685 B, pa gard i dalje grize na sljedeci rast.
-const BUDZET_UI_UKUPNO = 823 * 1024;
+// 2026-09-07: 823 -> 826 KB za karticu potvrde profila: novi modul src/ui/profile-card.ts
+// (cist HTML iz podataka, bez DOM-a) i SMANJENJE app.ts, koji je karticu prvo dobio inline pa
+// presao vlastiti budzet (357,2 od 357 KB). Ukupno raste jer je dodana funkcionalnost koje prije
+// nije bilo: potvrda profila kao ekran umjesto formulara od devet kontrola (UX_PRINCIPLES.md 2).
+// Sam app.ts je pritom PAO ispod svog budzeta, sto je ono sto ratchet stvarno cuva.
+const BUDZET_UI_UKUPNO = 826 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
