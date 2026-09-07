@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "0.2",
+  "fixPlanId": "fix-plan-margin-001",
+  "projectId": "project-001",
+  "targetArtifactVersionId": "artifact-docx-001",
+  "findingIds": ["issue-001"],
+  "executor": "lekta",
+  "fixerId": "margin-fixer",
+  "changeTypes": ["pageGeometry"],
+  "invalidates": [
+    "pagination",
+    "toc-pages",
+    "figure-layout",
+    "submission-freeze"
+  ],
+  "requiresUserApproval": true
+}
