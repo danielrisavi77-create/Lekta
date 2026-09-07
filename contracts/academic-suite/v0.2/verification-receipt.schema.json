@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lektahr.app/contracts/academic-suite/v0.2/verification-receipt.schema.json",
+  "title": "Academic Suite v0.2 VerificationReceipt",
+  "$defs": {
+    "engineId": {
+      "enum": ["lekta", "katedra", "rad-audit", "rad-docx", "word-replica", "pspp"]
+    }
+  },
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "verificationId",
+    "engine",
+    "engineVersion",
+    "projectId",
+    "artifactVersionId",
+    "outcome",
+    "checkedAt",
+    "findingIds",
+    "capabilitiesUsed"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.2" },
+    "verificationId": { "type": "string", "minLength": 1 },
+    "engine": { "$ref": "#/$defs/engineId" },
+    "engineVersion": { "type": "string", "minLength": 1 },
+    "projectId": { "type": "string", "minLength": 1 },
+    "artifactVersionId": { "type": "string", "minLength": 1 },
+    "outcome": {
+      "enum": ["PASS", "FINDING", "NOT_APPLICABLE", "SKIPPED", "UNSUPPORTED", "ENGINE_FAILED"]
+    },
+    "checkedAt": { "type": "string", "minLength": 1 },
+    "findingIds": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "capabilitiesUsed": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "unavailableCapabilities": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "unsupportedCapabilities": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "sourceAnalysisId": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}
