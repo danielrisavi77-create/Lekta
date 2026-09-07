@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.2",
+  "findingId": "rad-audit-run-001:finding-001",
+  "findingKey": "claim-source:chapter-2:unsupported-claim",
+  "engine": "rad-audit",
+  "engineVersion": "1.9.35",
+  "projectId": "project-001",
+  "artifactVersionId": "artifact-docx-001",
+  "authority": "evidence",
+  "category": "claim-source",
+  "severity": "warning",
+  "summary": "Tvrdnja nema potvrđen izvor u dostupnoj građi.",
+  "location": {
+    "section": "2. Teorijski okvir",
+    "paragraphIndex": 12
+  },
+  "evidenceRefs": ["source-gap-001"],
+  "fixCapability": "author",
+  "verificationOwner": "rad-audit",
+  "status": "NEEDS_AUTHOR",
+  "sourceAnalysisId": "rad-audit-run-001"
+}
