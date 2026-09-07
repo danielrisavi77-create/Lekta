@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "0.2",
+  "artifactVersionId": "artifact-docx-001",
+  "projectId": "project-001",
+  "kind": "docx",
+  "createdAt": "2026-09-07T18:00:00Z",
+  "identity": {
+    "workFingerprint": "work-fpzg-001",
+    "fileSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "documentModelFingerprint": "word-replica-model-001"
+  }
+}
