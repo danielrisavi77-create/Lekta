@@ -1,26 +1,17 @@
 {
-  "measuredAt": "2026-09-06",
-  "note": "IMENOVAN popis fixera koji su na `authored` fixturama zatrazeni a nisu promijenili nista. Popis smije SAMO PADATI: nov mrtav fixer izvan popisa obara `npm run repair-net`, a fixer koji ozivi mora se skinuti, jer ratchet koji nosi rijesen slucaj propusta sljedeci s istim imenom. `reason` NIJE procjena nego vrijednost koju motor sam vrati kroz `skippedReasons`; test tvrdi da se poklapa s izmjerenim, pa se ne moze zapisati zelja umjesto mjerenja.",
+  "measuredAt": "2026-09-07",
+  "note": "IMENOVAN popis fixera koji su na `authored` fixturama zatrazeni a nisu promijenili NISTA ni na jednom dokumentu. Popis smije SAMO PADATI: nov mrtav fixer izvan popisa obara `npm run repair-net`, a fixer koji ozivi mora se skinuti, jer ratchet koji nosi rijesen slucaj propusta sljedeci s istim imenom. `reason` NIJE procjena nego vrijednost koju motor sam vrati kroz `skippedReasons`; test tvrdi da se poklapa s izmjerenim, pa se ne moze zapisati zelja umjesto mjerenja.",
+  "history": "2026-09-06 na TRI dokumenta popis je imao cetiri unosa. Sirenje na JEDANAEST dokumenata (tri nova rada, dva alata) ozivjelo je dva: `heading-style-fixer` (1/0 -> 4/3) i `link-doi-fixer` (2/0 -> 11/7). Oba su bila `no-target` odnosno `invalid-params` samo zato sto ih prva proza nije imala cime nahraniti: pilot je pisao pune DOI poveznice, pa fixer koji kanonizira gole oblike doista nije imao metu. To je izmjereni razlog zbog kojeg popis mora padati, a ne zato sto se nesto popravilo u motoru.",
   "dead": [
-    {
-      "fixerId": "citation-bibliography-sync-fixer",
-      "reason": "no-target",
-      "why": "Asistiran fixer koji na ovom dokumentu nema metu. Prvi upis je pogadjao `invalid-params`, a motor je vratio `no-target`; razlika je bitna, jer `invalid-params` znaci prazan odabir koji ceka covjeka, a `no-target` znaci da meta ne postoji. Dokumentirano je da ga opci pravilnik `hasActionableParams` pogresno klasificira kao djelatnog (`default-selection.ts`)."
-    },
     {
       "fixerId": "consistency-fixer",
       "reason": "no-target",
-      "why": "Isti razred. Ranije izmjereno na stvarnim radovima: 110 ponuda, 0 promjena; ondje je uzrok bio prazan zadani parametar, jer Lekta ne smije pogadjati koji je oblik tocan. Ovdje motor javlja `no-target`, dakle na ovom dokumentu nema ni sto ponuditi."
+      "why": "Zatrazen na SVIH 11 dokumenata i nijednom nista nije promijenio; motor svaki put javlja `no-target`. Ranije izmjereno na stvarnim radovima: 110 ponuda, 0 promjena, uz uzrok prazan zadani parametar, jer Lekta ne smije pogadjati koji je oblik tocan. Da je rijec o cekanju na covjeka, ocekivao bi se `invalid-params`; `no-target` govori da na ovim dokumentima nema ni sto ponuditi, sto je druga tvrdnja i trazi vlastito mjerenje."
     },
     {
-      "fixerId": "heading-style-fixer",
-      "reason": "invalid-params",
-      "why": "JEDINI s tim razlogom, i zato najzanimljiviji. Na neurednom primjerku su svi naslovi spusteni na razinu 3, pa bi fixer imao sto raditi, ali su mu parametri odbijeni kao nevaljani. Trazi vlastito mjerenje: ili predodabir salje prazan parametar, ili je zahtjev sastavljen iz pravila koje ovaj profil ne propisuje."
-    },
-    {
-      "fixerId": "link-doi-fixer",
+      "fixerId": "citation-bibliography-sync-fixer",
       "reason": "no-target",
-      "why": "VJEROJATNO ISPRAVNO PONASANJE, i mjerenje ga potvrdjuje: proza pise pune poveznice (`https://doi.org/10....`), a fixer kanonizira gole oblike (`doi:10....`), pa mete doista nema. Ostaje na popisu dok se ne izmjeri na dokumentu koji goli oblik sadrzi; tek bi tada `no-target` bio kvar."
+      "why": "Zatrazen na 3 od 11 dokumenata (samo ondje gdje profil ima `citation-sync-rules`) i nijednom nista nije promijenio. Dokumentirano je da ga opci pravilnik `hasActionableParams` pogresno klasificira kao djelatnog (`src/repair/default-selection.ts`), pa se nudi i kad nema sto raditi. Ostaje imenovan dok se ne izmjeri na dokumentu koji nesuglasje citata i literature doista sadrzi."
     }
   ]
 }
