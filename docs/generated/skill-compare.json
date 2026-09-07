@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "note": "Usporedba Lektinih i Katedrinih nalaza nad ISTIM dokumentima. Cita samo NALAZE, nikad pravila: fakultetska pravila i dalje teku iskljucivo Lekta -> Katedra.",
+  "summary": {
+    "documentCount": 11,
+    "comparisonCount": 22,
+    "byOutcome": {
+      "nitko": 9,
+      "samo-katedra": 12,
+      "oba": 1
+    }
+  },
+  "rows": [
+    {
+      "dokument": "apuri--final--prijediplomski--neuredan.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "apuri--final--prijediplomski--neuredan.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 2,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "apuri--final--prijediplomski--uskladjen.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "apuri--final--prijediplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--neuredan.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--neuredan.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 20,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--uskladjen.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 18,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "effectus--seminar--diplomski--word.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 18,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--neuredan.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 2,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--neuredan.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 1,
+      "katedra": 3,
+      "ishod": "oba"
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--uskladjen.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 2,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 1,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 2,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fpzg--final--prijediplomski--word.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 1,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--neuredan.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--neuredan.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 22,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--uskladjen.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 20,
+      "ishod": "samo-katedra"
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "fzsri--final--prijediplomski--word.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 20,
+      "ishod": "samo-katedra"
+    }
+  ],
+  "generatedAt": "2026-09-07T07:26:10.625Z",
+  "generatedFromCommit": "ddf9ee8eb573b76fa5d05624b40d00a8b1332c00",
+  "generator": "npm run skill-compare -- --write"
+}

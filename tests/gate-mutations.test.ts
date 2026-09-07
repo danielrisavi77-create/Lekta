@@ -28,6 +28,8 @@ import {
 import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
 import { DOCX_SHAPE_IDS, verifyShapeClaims, type DocxShapeCounts } from '../src/corpus/docx-shapes';
 import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
+import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
+import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -601,6 +603,124 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'real' }) &&
       sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'generated' }),
+  },
+  {
+    id: 'izvoz/kvar-bez-dokumenta-koji-ga-je-proizveo',
+    imitates:
+      'zapis o kvaru druge strane ostane u izvozu nakon sto ga mjerenje vise ne potkrepljuje, ili udje ' +
+      'u njega bez ijednog dokumenta. Zeljezno pravilo ciljanog skilla glasi "nijedan kvar bez ' +
+      'dokumenta koji ga je proizveo", a katalog koji nosi popravljene ili nikad izmjerene kvarove ' +
+      'skuplji je od praznog: druga strana trosi vrijeme na kvar kojega nema, i pocinje sumnjati u ' +
+      'ostale zapise. Zato se potkrepa RACUNA pri svakom izvozu, ne pamti uz zapis',
+    caught: () => {
+      const prazan: DefectClass = {
+        id: 'bez-potkrepe',
+        owner: 'katedra-lite',
+        title: 'naslov',
+        body: 'tijelo',
+        output: 'izlaz',
+        // Tvrdnja bez dokumenta: naredba postoji, ali nema nijednog dokumenta na kojem je izvedena.
+        support: [{ kind: 'izravno', command: 'python3 nesto.py', documents: [] }],
+      };
+      const popravljen: DefectClass = {
+        ...prazan,
+        id: 'vise-nije-mjerljiv',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      // Mjerenje postoji, ali vise nema razilazenja: kvar je popravljen na drugoj strani.
+      const bezRazilazenja: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 0, ishod: 'nitko' },
+      ];
+      const r = renderDefectFragment([prazan, popravljen], bezRazilazenja, 140);
+      return (
+        !isSupported(prazan, bezRazilazenja) &&
+        !isSupported(popravljen, bezRazilazenja) &&
+        r.numbers.length === 0 &&
+        r.unsupported.length === 2
+      );
+    },
+    // Netrivijalnost: zapis koji mjerenje POTKREPLJUJE mora izaci, inace bi gard praznio katalog.
+    cleanBefore: () => {
+      const potkrijepljen: DefectClass = {
+        id: 'ima-potkrepu',
+        owner: 'katedra-lite',
+        title: 'naslov',
+        body: 'tijelo',
+        output: 'izlaz',
+        support: [{ kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' }],
+      };
+      const izravni: DefectClass = {
+        ...potkrijepljen,
+        id: 'izmjeren-izravno',
+        support: [{ kind: 'izravno', command: 'python3 nesto.py', documents: ['a.docx'] }],
+      };
+      const sRazilazenjem: ComparisonRow[] = [
+        { dokument: 'fzsri--a.docx', os: 'jedinica-necitirana', lekta: 0, katedra: 20, ishod: 'samo-katedra' },
+      ];
+      const r = renderDefectFragment([potkrijepljen, izravni], sRazilazenjem, 140);
+      return (
+        isSupported(potkrijepljen, sRazilazenjem) &&
+        isSupported(izravni, sRazilazenjem) &&
+        r.numbers.length === 2 &&
+        r.numbers[0] === 141 &&
+        r.unsupported.length === 0
+      );
+    },
+  },
+  {
+    id: 'usporedba/druga-strana-tiho-prestane-mjeriti',
+    imitates:
+      'usporedba dvaju alata prestane mjeriti a izgleda kao slaganje. Katedrini nalazi se izvlace iz ' +
+      'polja njezina JSON izlaza (`pokrivenost.bez_izvora`, `pokrivenost.necitirani`); preimenovano ili ' +
+      'premjesteno polje vraca 0, nikad gresku. Svi redci tada padnu na `nitko`, sto se cita kao "oba ' +
+      'alata se slazu da je sve u redu", a znaci "jedna strana vise ne mjeri nista". Tocno taj razred ' +
+      'je razlog zbog kojeg usporedba uopce postoji: vise prolaza istim alatom je slaganje, ne tocnost, ' +
+      'pa usporedba koja tiho izgubi drugu stranu gubi jedino sto donosi',
+    caught: () => {
+      const r = (dokument: string, os: string, lekta: number, katedra: number | null): ComparisonRow => ({
+        dokument,
+        os,
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      // Katedrino izvlacenje promasi polje pa svugdje vrati 0; Lekta je na tim osima cista.
+      const oslijepljena = [
+        r('a.docx', 'citirano-bez-jedinice', 0, 0),
+        r('a.docx', 'jedinica-necitirana', 0, 0),
+        r('b.docx', 'citirano-bez-jedinice', 0, 0),
+      ];
+      // Razlikovanje od stvarnog izostanka odgovora: `null` daje vlastiti ishod, ne `nitko`.
+      const bezOdgovora = [r('a.docx', 'fusnote', 0, null)];
+      return (
+        comparisonIsVacuous(oslijepljena) &&
+        comparisonIsVacuous(bezOdgovora) &&
+        oslijepljena.every((x) => x.ishod === 'nitko') &&
+        bezOdgovora[0].ishod === 'katedra-nije-mjerila'
+      );
+    },
+    // Netrivijalnost: usporedba u kojoj BILO KOJA strana nesto nadje nije vakuumska, inace bi gard
+    // vristao na svaki prolaz i prestao razlikovati slijepo mjerenje od cistog dokumenta.
+    cleanBefore: () => {
+      const r = (lekta: number, katedra: number | null): ComparisonRow => ({
+        dokument: 'a.docx',
+        os: 'jedinica-necitirana',
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      const samoKatedra = [r(0, 18), r(0, 0)];
+      const samoLekta = [r(1, 0), r(0, 0)];
+      const oba = [r(1, 3)];
+      return (
+        !comparisonIsVacuous(samoKatedra) &&
+        !comparisonIsVacuous(samoLekta) &&
+        !comparisonIsVacuous(oba) &&
+        divergentRows(samoKatedra).length === 1 &&
+        divergentRows(samoLekta).length === 1 &&
+        divergentRows(oba).length === 0
+      );
+    },
   },
   {
     id: 'mreza/fixer-se-ugasi-a-nitko-ne-primijeti',
