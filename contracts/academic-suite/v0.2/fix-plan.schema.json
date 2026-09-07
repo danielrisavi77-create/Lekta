@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lektahr.app/contracts/academic-suite/v0.2/fix-plan.schema.json",
+  "title": "Academic Suite v0.2 FixPlan",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "fixPlanId",
+    "projectId",
+    "targetArtifactVersionId",
+    "findingIds",
+    "executor",
+    "changeTypes",
+    "invalidates",
+    "requiresUserApproval"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.2" },
+    "fixPlanId": { "type": "string", "minLength": 1 },
+    "projectId": { "type": "string", "minLength": 1 },
+    "targetArtifactVersionId": { "type": "string", "minLength": 1 },
+    "findingIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "executor": {
+      "enum": ["lekta", "katedra", "rad-docx", "word-replica", "author", "mentor"]
+    },
+    "fixerId": { "type": "string", "minLength": 1 },
+    "changeTypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "invalidates": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "requiresUserApproval": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}
