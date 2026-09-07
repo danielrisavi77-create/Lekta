@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lektahr.app/contracts/academic-suite/v0.2/finding.schema.json",
+  "title": "Academic Suite v0.2 FindingEnvelope",
+  "$defs": {
+    "engineId": {
+      "enum": ["lekta", "katedra", "rad-audit", "rad-docx", "word-replica", "pspp"]
+    },
+    "documentLocator": {
+      "type": "object",
+      "properties": {
+        "section": { "type": "string", "minLength": 1 },
+        "paragraphIndex": { "type": "integer", "minimum": 0 },
+        "tableId": { "type": "string", "minLength": 1 },
+        "pageHint": { "type": "string", "minLength": 1 },
+        "artifactElementId": { "type": "string", "minLength": 1 },
+        "logicalElementId": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "findingId",
+    "findingKey",
+    "engine",
+    "engineVersion",
+    "projectId",
+    "artifactVersionId",
+    "authority",
+    "category",
+    "severity",
+    "summary",
+    "fixCapability",
+    "verificationOwner",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.2" },
+    "findingId": { "type": "string", "minLength": 1 },
+    "findingKey": { "type": "string", "minLength": 1 },
+    "engine": { "$ref": "#/$defs/engineId" },
+    "engineVersion": { "type": "string", "minLength": 1 },
+    "projectId": { "type": "string", "minLength": 1 },
+    "artifactVersionId": { "type": "string", "minLength": 1 },
+    "authority": {
+      "enum": ["normative", "evidence", "document-fidelity", "academic-build", "advisory"]
+    },
+    "category": { "type": "string", "minLength": 1 },
+    "severity": { "enum": ["error", "warning", "info"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "detail": { "type": "string" },
+    "location": { "$ref": "#/$defs/documentLocator" },
+    "ruleId": { "type": "string", "minLength": 1 },
+    "evidenceRefs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "fixCapability": { "enum": ["automatic", "suggestion", "author", "mentor", "none"] },
+    "fixerId": { "type": "string", "minLength": 1 },
+    "verificationOwner": { "$ref": "#/$defs/engineId" },
+    "status": {
+      "enum": [
+        "OPEN",
+        "FIX_PROPOSED",
+        "USER_CHANGED",
+        "RECHECK_REQUIRED",
+        "VERIFIED_FIXED",
+        "NEEDS_AUTHOR",
+        "NEEDS_MENTOR"
+      ]
+    },
+    "sourceAnalysisId": { "type": "string", "minLength": 1 },
+    "sourceFindingId": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "fixCapability": { "const": "automatic" } },
+        "required": ["fixCapability"]
+      },
+      "then": { "required": ["fixerId"] }
+    }
+  ],
+  "additionalProperties": false
+}
