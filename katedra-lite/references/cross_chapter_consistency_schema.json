@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "katedra-cross-chapter-consistency-v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "check_kind",
+    "read_only",
+    "coverage_status",
+    "graph",
+    "findings",
+    "summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "check_kind": {
+      "const": "deterministic_claim_consistency"
+    },
+    "read_only": {
+      "const": true
+    },
+    "graph": {
+      "type": "object",
+      "required": [
+        "nodes",
+        "edges"
+      ],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "chapter",
+              "claims"
+            ],
+            "properties": {
+              "chapter": {
+                "type": "string",
+                "minLength": 1
+              },
+              "claims": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "anchor",
+              "chapters",
+              "claim_ids"
+            ],
+            "properties": {
+              "kind": {
+                "const": "shared_claim_anchor"
+              },
+              "anchor": {
+                "type": "string"
+              },
+              "chapters": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 2
+              },
+              "claim_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 2
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "severity",
+          "anchor",
+          "chapters",
+          "claim_ids",
+          "details"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "numeric_conflict",
+              "polarity_conflict"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "blocking",
+              "warning"
+            ]
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "chapters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "chapters",
+        "edges",
+        "findings",
+        "blocking"
+      ],
+      "properties": {
+        "chapters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "edges": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "findings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocking": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "coverage_status": {
+      "enum": [
+        "sufficient",
+        "insufficient"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

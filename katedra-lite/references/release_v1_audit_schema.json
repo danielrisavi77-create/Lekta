@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Katedra v1 release audit manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "release_version",
+    "release_from",
+    "release_status",
+    "audit_findings",
+    "new_findings",
+    "known_limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "release_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "release_from": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "release_status": {
+      "enum": [
+        "candidate",
+        "verified"
+      ]
+    },
+    "audit_findings": {
+      "type": "array",
+      "minItems": 44,
+      "maxItems": 44,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "audit_id",
+          "batch",
+          "title",
+          "status",
+          "pytest_node"
+        ],
+        "properties": {
+          "audit_id": {
+            "type": "string",
+            "pattern": "^AUD-\\d{3}$"
+          },
+          "batch": {
+            "type": "string",
+            "pattern": "^B\\d{2}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "const": "verified"
+          },
+          "pytest_node": {
+            "type": "string",
+            "pattern": "^tests/.+::test_.+"
+          }
+        }
+      }
+    },
+    "new_findings": {
+      "type": "array",
+      "minItems": 17,
+      "maxItems": 17,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "finding_id",
+          "status",
+          "summary",
+          "release_blocking"
+        ],
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "pattern": "^NEW-\\d{3}$"
+          },
+          "status": {
+            "enum": [
+              "accepted_environment",
+              "accepted_compatibility_debt",
+              "accepted_external_dependency",
+              "closed_before_v1",
+              "closed_in_v1",
+              "closed_in_v1_0_1"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "release_blocking": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "known_limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

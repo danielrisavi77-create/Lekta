@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "gate_version": 1,
+  "tiers": {
+    "production": {
+      "require_confirmed_status": true,
+      "min_qualification_cases": 3,
+      "min_distinct_asserted_pointers": 5,
+      "min_asserted_rule_families": 3,
+      "require_fresh_provenance": true,
+      "max_untracked": 0,
+      "core_benchmark_min_accuracy": 1.0,
+      "max_regressions": 0,
+      "max_critical_regressions": 0
+    },
+    "pilot": {
+      "require_confirmed_status": false,
+      "min_qualification_cases": 2,
+      "min_distinct_asserted_pointers": 3,
+      "min_asserted_rule_families": 2,
+      "require_fresh_provenance": false,
+      "max_untracked": 0,
+      "core_benchmark_min_accuracy": 1.0,
+      "max_regressions": 0,
+      "max_critical_regressions": 0
+    }
+  }
+}

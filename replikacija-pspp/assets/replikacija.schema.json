@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "replikacija.json",
+  "type": "object",
+  "required": [
+    "baza",
+    "analize",
+    "ocekivano"
+  ],
+  "properties": {
+    "naslov": {
+      "type": "string"
+    },
+    "baza": {
+      "type": "string",
+      "description": "CSV s podacima, prvi redak su nazivi varijabli"
+    },
+    "izlaz": {
+      "type": "string",
+      "default": "replikacija"
+    },
+    "varijable": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "ako se izostavi, čita se prvi redak baze"
+    },
+    "oznake": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "varijable koje u bazi postoje; svaka riječ najviše 7 znakova"
+    },
+    "oznake_izvedene": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "varijable koje nastaju tijekom analize; ne ulaze u početni blok"
+    },
+    "priprema": {
+      "type": "string"
+    },
+    "dopusti_neslaganje": {
+      "type": "boolean",
+      "default": false
+    },
+    "analize": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "ime",
+          "sintaksa"
+        ],
+        "properties": {
+          "ime": {
+            "type": "string",
+            "pattern": "^[0-9]{2}_"
+          },
+          "natpis": {
+            "type": "string"
+          },
+          "sirina": {
+            "type": "integer",
+            "minimum": 600,
+            "maximum": 1560
+          },
+          "sintaksa": {
+            "type": "string"
+          },
+          "sintaksa_snimka": {
+            "type": "string"
+          },
+          "bez_snimke": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "ocekivano": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "oznaka",
+          "statistika",
+          "u_radu",
+          "izvor"
+        ],
+        "properties": {
+          "oznaka": {
+            "type": "string"
+          },
+          "gdje": {
+            "type": "string"
+          },
+          "statistika": {
+            "type": "string"
+          },
+          "u_radu": {
+            "type": "string"
+          },
+          "naredba": {
+            "type": "string"
+          },
+          "decimala": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6
+          },
+          "tolerancija": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "izvor": {
+            "type": "object",
+            "required": [
+              "tip"
+            ],
+            "properties": {
+              "tip": {
+                "enum": [
+                  "deskriptiva",
+                  "statistike",
+                  "frekvencije",
+                  "pouzdanost",
+                  "korelacija",
+                  "t_nezavisni",
+                  "t_upareni",
+                  "upareni_prosjek",
+                  "skupna",
+                  "cohen_d",
+                  "anova",
+                  "komponente"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "prilog": {
+      "type": "object",
+      "properties": {
+        "dokument": {
+          "type": "string"
+        },
+        "sidro": {
+          "type": "string",
+          "default": "Sažetak"
+        },
+        "uvod_prilog2": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "zakljucak_prilog2": {
+          "type": "string"
+        },
+        "uvod_prilog3": {
+          "type": "string"
+        },
+        "sirina_teksta_cm": {
+          "type": "number"
+        },
+        "dpi_min": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "efzg-rfir",
+  "level": "programme",
+  "match": {
+    "faculty": "efzg",
+    "programme": "rfir"
+  },
+  "aliases": [
+    "RFIR",
+    "Računovodstvo, financijsko izvještavanje i revizija",
+    "stručni diplomski studij EFZG"
+  ],
+  "rules": {
+    "studij": "stručni diplomski studij Računovodstvo, financijsko izvještavanje i revizija"
+  },
+  "provenance": {
+    "default": {
+      "source": "RFIR studentski predložak seminara (2026.) prenesen iz provjerenog EFZG profila",
+      "type": "inferred",
+      "confidence": 0.75,
+      "verified_at": "2026-08-04"
+    }
+  }
+}

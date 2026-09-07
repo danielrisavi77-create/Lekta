@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "release_version": "1.0.1",
+  "release_from": "1.0.0",
+  "release_status": "verified",
+  "audit_findings": [
+    {
+      "audit_id": "AUD-001",
+      "batch": "B02",
+      "title": "Progressive disclosure invariant",
+      "status": "verified",
+      "pytest_node": "tests/unit/test_architecture_invariants.py::test_aud_001_progressive_disclosure_remains_modular"
+    },
+    {
+      "audit_id": "AUD-002",
+      "batch": "B02",
+      "title": "rad-audit/Katedra boundary invariant",
+      "status": "verified",
+      "pytest_node": "tests/unit/test_architecture_invariants.py::test_aud_002_rad_audit_pipeline_is_not_duplicated_in_katedra"
+    },
+    {
+      "audit_id": "AUD-003",
+      "batch": "B03",
+      "title": "Persistent state invariant",
+      "status": "verified",
+      "pytest_node": "tests/integration/test_project_state_isolation.py::test_existing_project_state_resumes_from_cwd"
+    },
+    {
+      "audit_id": "AUD-004",
+      "batch": "B14",
+      "title": "Plan approval gate invariant",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_perspective_map_plan_gate.py::test_aud_004_approval_does_not_flip_true_when_plan_gate_incomplete"
+    },
+    {
+      "audit_id": "AUD-005",
+      "batch": "B13",
+      "title": "Rewrite invariants",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_evidence_gates_rewrite_safety.py::test_aud_005_verify_rewrite_blocks_when_evidence_gate_fails"
+    },
+    {
+      "audit_id": "AUD-006",
+      "batch": "B15",
+      "title": "Mentor feedback state/versioning",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_state_artifact_mentor_versioning.py::test_aud_006_mentor_feedback_tracks_source_versions_revision_and_resolution_history"
+    },
+    {
+      "audit_id": "AUD-007",
+      "batch": "B02",
+      "title": "Changelog feedback loop",
+      "status": "verified",
+      "pytest_node": "tests/unit/test_architecture_invariants.py::test_aud_007_documented_regressions_link_to_live_tests"
+    },
+    {
+      "audit_id": "AUD-008",
+      "batch": "B03",
+      "title": "Project state isolation",
+      "status": "verified",
+      "pytest_node": "tests/integration/test_project_state_isolation.py::test_default_state_is_isolated_per_project"
+    },
+    {
+      "audit_id": "AUD-009",
+      "batch": "B04",
+      "title": "Nested profile access correctness",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_profile_correctness.py::test_aud_009_engine_reads_nested_format_rules"
+    },
+    {
+      "audit_id": "AUD-010",
+      "batch": "B05",
+      "title": "rad-audit interface contract",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_rad_audit_contract.py::test_aud_010_valid_document_audit_result_is_interpreted"
+    },
+    {
+      "audit_id": "AUD-011",
+      "batch": "B04",
+      "title": "Explicit work type resolution",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_profile_correctness.py::test_aud_011_multiple_work_types_require_explicit_tip"
+    },
+    {
+      "audit_id": "AUD-012",
+      "batch": "B07",
+      "title": "Compositional profile resolver",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_compositional_profile_resolver.py::test_aud_012_composition_uses_declared_layer_precedence"
+    },
+    {
+      "audit_id": "AUD-013",
+      "batch": "B08",
+      "title": "Per-rule provenance",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_rule_provenance_freshness.py::test_aud_013_production_resolved_profiles_have_full_rule_provenance_coverage"
+    },
+    {
+      "audit_id": "AUD-014",
+      "batch": "B06",
+      "title": "EFZG false-positive regressions",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_efzg_known_false_positives.py::test_aud_014_content_chapter_count_excludes_back_matter_lists"
+    },
+    {
+      "audit_id": "AUD-015",
+      "batch": "B01",
+      "title": "Test/eval lanes",
+      "status": "verified",
+      "pytest_node": "tests/unit/test_bootstrap_contract.py::test_aud_015_test_and_eval_lanes_exist"
+    },
+    {
+      "audit_id": "AUD-016",
+      "batch": "B17",
+      "title": "Wizard/description consistency",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_trigger_workflow_evals.py::test_aud_016_frontmatter_and_policy_agree_wizard_is_conditional"
+    },
+    {
+      "audit_id": "AUD-017",
+      "batch": "B09",
+      "title": "Methodology-aware argument validation",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_methodology_aware_argument_validation.py::test_aud_017_theoretical_work_without_displays_is_not_penalized_as_missing_contribution"
+    },
+    {
+      "audit_id": "AUD-018",
+      "batch": "B09",
+      "title": "Descriptiveness as soft signal",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_methodology_aware_argument_validation.py::test_aud_018_high_absence_of_analytical_signals_is_soft_warning_not_hard_failure"
+    },
+    {
+      "audit_id": "AUD-019",
+      "batch": "B10",
+      "title": "Citation dialect architecture",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_citation_architecture.py::test_aud_019_ieee_document_is_counted_in_argument_density"
+    },
+    {
+      "audit_id": "AUD-020",
+      "batch": "B10",
+      "title": "Legal citations",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_citation_architecture.py::test_aud_020_legal_footnote_is_counted_and_typed"
+    },
+    {
+      "audit_id": "AUD-021",
+      "batch": "B11",
+      "title": "Source verification semantics",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_source_verification_semantics.py::test_aud_021_offline_croatian_book_is_unverified_not_invalid"
+    },
+    {
+      "audit_id": "AUD-022",
+      "batch": "B12",
+      "title": "Claim/evidence ledger",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_page_evidence_claim_ledger.py::test_aud_022_claim_ledger_can_link_claim_to_existing_evidence"
+    },
+    {
+      "audit_id": "AUD-023",
+      "batch": "B13",
+      "title": "Evidence gates / Source Analysis Matrix",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_evidence_gates_rewrite_safety.py::test_aud_023_strict_gate_blocks_unsupported_claim"
+    },
+    {
+      "audit_id": "AUD-024",
+      "batch": "B14",
+      "title": "Perspective mapping before plan",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_perspective_map_plan_gate.py::test_aud_024_big_work_outline_import_blocked_before_ready_perspective_map"
+    },
+    {
+      "audit_id": "AUD-025",
+      "batch": "B11",
+      "title": "Source quality and discovery identity",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_source_verification_semantics.py::test_aud_025_google_scholar_is_discovery_channel_not_source_entity"
+    },
+    {
+      "audit_id": "AUD-026",
+      "batch": "B18",
+      "title": "Agent/swarm complexity gate",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_benchmark_agent_policy.py::test_aud_026_agent_policy_rejects_swarm_without_benchmark"
+    },
+    {
+      "audit_id": "AUD-027",
+      "batch": "B07",
+      "title": "RFIR route",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_compositional_profile_resolver.py::test_aud_027_generated_registry_routes_rfir_to_programme_context"
+    },
+    {
+      "audit_id": "AUD-028",
+      "batch": "B07",
+      "title": "Generated registry drift prevention",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_compositional_profile_resolver.py::test_aud_028_registry_is_exactly_generated_from_canonical_sources"
+    },
+    {
+      "audit_id": "AUD-029",
+      "batch": "B04",
+      "title": "Profile-derived paragraph thresholds",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_profile_correctness.py::test_aud_029_paragraph_thresholds_come_from_profile"
+    },
+    {
+      "audit_id": "AUD-030",
+      "batch": "B16",
+      "title": "CLI consistency",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_cli_consistency.py::test_aud_030_every_user_cli_supports_help_without_traceback"
+    },
+    {
+      "audit_id": "AUD-031",
+      "batch": "B01",
+      "title": "Dependency manifest",
+      "status": "verified",
+      "pytest_node": "tests/unit/test_bootstrap_contract.py::test_aud_031_pyproject_declares_runtime_and_dev_dependencies"
+    },
+    {
+      "audit_id": "AUD-032",
+      "batch": "B01",
+      "title": "Version/schema/compat metadata",
+      "status": "verified",
+      "pytest_node": "tests/unit/test_bootstrap_contract.py::test_aud_032_skill_frontmatter_has_version_schema_and_compatibility_contract"
+    },
+    {
+      "audit_id": "AUD-033",
+      "batch": "B05",
+      "title": "Capability handshake instead of source scan",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_rad_audit_contract.py::test_aud_033_manifest_capabilities_replace_source_marker_scanning"
+    },
+    {
+      "audit_id": "AUD-034",
+      "batch": "B15",
+      "title": "State migrations",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_state_artifact_mentor_versioning.py::test_aud_034_v1_state_auto_migrates_with_backup"
+    },
+    {
+      "audit_id": "AUD-035",
+      "batch": "B15",
+      "title": "Artifact hash/version tracking",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_state_artifact_mentor_versioning.py::test_aud_035_snapshots_create_versioned_artifact_manifest_and_detect_drift"
+    },
+    {
+      "audit_id": "AUD-036",
+      "batch": "B17",
+      "title": "Trigger evals",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_trigger_workflow_evals.py::test_aud_036_trigger_eval_lane_is_nonempty_and_machine_runnable"
+    },
+    {
+      "audit_id": "AUD-037",
+      "batch": "B17",
+      "title": "Workflow evals",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_trigger_workflow_evals.py::test_aud_037_workflow_eval_lane_covers_wizard_skip_and_all_six_modes"
+    },
+    {
+      "audit_id": "AUD-038",
+      "batch": "B18",
+      "title": "v1/v2 contract benchmark",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_benchmark_agent_policy.py::test_aud_038_cross_version_contract_benchmark_is_machine_runnable"
+    },
+    {
+      "audit_id": "AUD-039",
+      "batch": "B19",
+      "title": "Reviewer simulation",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_review_safety_reviewer_consistency.py::test_aud_039_reviewer_simulation_combines_four_review_lenses_deterministically"
+    },
+    {
+      "audit_id": "AUD-040",
+      "batch": "B19",
+      "title": "Cross-chapter consistency",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_review_safety_reviewer_consistency.py::test_aud_040_cross_chapter_checker_detects_numeric_and_polarity_conflicts"
+    },
+    {
+      "audit_id": "AUD-041",
+      "batch": "B08",
+      "title": "Rule freshness revalidation",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_rule_provenance_freshness.py::test_aud_041_freshness_cli_marks_old_rules_stale_without_mutating_profile"
+    },
+    {
+      "audit_id": "AUD-042",
+      "batch": "B19",
+      "title": "Review/mutation boundary",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_review_safety_reviewer_consistency.py::test_aud_042_phase_g_runs_only_after_snapshot_and_explicit_authorization"
+    },
+    {
+      "audit_id": "AUD-043",
+      "batch": "B12",
+      "title": "Page-level evidence locators",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_page_evidence_claim_ledger.py::test_aud_043_pdf_ingest_emits_stable_page_level_locators"
+    },
+    {
+      "audit_id": "AUD-044",
+      "batch": "B20",
+      "title": "Faculty scale-out gate",
+      "status": "verified",
+      "pytest_node": "tests/regression/test_faculty_scale_out_gate.py::test_aud_044_production_profiles_are_admission_gated"
+    }
+  ],
+  "new_findings": [
+    {
+      "finding_id": "NEW-001",
+      "status": "accepted_environment",
+      "summary": "Package-index/DNS limitation in verification environment",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-002",
+      "status": "accepted_compatibility_debt",
+      "summary": "Potential host-validator compatibility divergence for frontmatter compatibility field",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-003",
+      "status": "closed_before_v1",
+      "summary": "Generated build directories in skill archive; final archive hygiene removes them",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-004",
+      "status": "accepted_environment",
+      "summary": "Unrelated global Python dependency conflict; isolated env is clean",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-005",
+      "status": "accepted_environment",
+      "summary": "Optional build module missing in runtime verifier; disposable build env used",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-006",
+      "status": "closed_before_v1",
+      "summary": "Packaging verification order contamination fixed by clean staging",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-007",
+      "status": "accepted_external_dependency",
+      "summary": "External rad-audit must implement engine contract v1 for full live motor use",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-008",
+      "status": "closed_before_v1",
+      "summary": "Legacy public aliases preserved in canonical profiles",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-009",
+      "status": "closed_in_v1",
+      "summary": "profile_resolver help now states project override is a JSON file path",
+      "release_blocking": true
+    },
+    {
+      "finding_id": "NEW-010",
+      "status": "closed_in_v1",
+      "summary": "Dedicated resolved-profile schema formalizes functional profile + provenance sidecar boundary",
+      "release_blocking": true
+    },
+    {
+      "finding_id": "NEW-011",
+      "status": "closed_before_v1",
+      "summary": "Source verification workflows keep project cwd",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-012",
+      "status": "closed_before_v1",
+      "summary": "Crossref journal type no longer implies peer review quality",
+      "release_blocking": false
+    },
+    {
+      "finding_id": "NEW-013",
+      "status": "closed_in_v1",
+      "summary": "Release matrix restores machine-readable 44/44 audit traceability",
+      "release_blocking": true
+    },
+    {
+      "finding_id": "NEW-014",
+      "status": "closed_in_v1_0_1",
+      "summary": "Fresh Novi rad workflow now initializes plan machine state before importing the human-readable plan",
+      "release_blocking": true
+    },
+    {
+      "finding_id": "NEW-015",
+      "status": "closed_in_v1_0_1",
+      "summary": "Runtime documentation preserves project cwd and addresses installed skill scripts explicitly through <KATEDRA_SKILL>",
+      "release_blocking": true
+    },
+    {
+      "finding_id": "NEW-016",
+      "status": "closed_in_v1_0_1",
+      "summary": "Full SKILL body now matches the conditional wizard policy used by frontmatter and routing evals",
+      "release_blocking": true
+    },
+    {
+      "finding_id": "NEW-017",
+      "status": "closed_in_v1_0_1",
+      "summary": "Production CLI guidance emitted by scripts now preserves project cwd and addresses installed scripts through <KATEDRA_SKILL>",
+      "release_blocking": true
+    }
+  ],
+  "known_limitations": [
+    "Full live rad-audit motor execution requires a separate compatible rad-audit skill publishing engine_contract.json v1.",
+    "Network-backed source verification depends on network/provider availability; unavailable providers yield unverified, not invalid.",
+    "FPZG remains pilot because its faculty profile status is nepotvrdeno; EFZG is the admitted production faculty profile."
+  ]
+}

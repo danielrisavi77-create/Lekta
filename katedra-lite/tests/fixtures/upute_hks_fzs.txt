@@ -1,0 +1,235 @@
+POSEBNE UPUTE ZA PISANJE DIPLOMSKOG RADA
+Fakultet zdravstvenih studija, Hrvatsko katoličko sveučilište
+Zagreb, veljača 2026.
+
+[REKONSTRUKCIJA — TESTNI FIXTURE, NIJE IZVORNI DOKUMENT. Tekst je sastavljen iz napomena i lokatora u
+references/fakulteti/hks-fzs.json i provjera u scripts/provjeri_hks_fzs.py da bi scripts/upute_u_profil.py
+imao ulaz s poznatim očekivanim izlazom. Brojevi stranica i odjeljaka odgovaraju lokatorima u profilu; formulacije
+rečenica su rekonstruirane, ne prepisane. Izvornik: https://www.unicath.hr/sites/default/files/2026-02/Upute%20za%20pisanje%20diplomskog%20rada%20FZS%20HKS.pdf]
+
+Ove upute odnose se na diplomski rad na sveučilišnim diplomskim studijima Fakulteta zdravstvenih studija. Diplomski rad
+je samostalan rad studenta kojim se dokazuje sposobnost provođenja istraživanja i pisanja znanstvenog teksta.
+
+1. OPĆE ODREDBE
+
+1.1. Tema diplomskog rada
+
+Temu diplomskog rada student dogovara s mentorom. Tema mora biti iz područja studija i mora omogućiti provedbu
+istraživanja u roku predviđenom studijskim programom.
+
+Diplomski rad piše se na hrvatskom jeziku, uz sažetak na hrvatskom i engleskom jeziku.
+
+1.2. Istraživanje
+
+Diplomski rad temelji se na vlastitom istraživanju studenta. Kvantitativno istraživanje mora obuhvatiti najmanje 100
+ispitanika. Kvalitativno istraživanje provodi se prema načelima kvalitativne metodologije uz obrazloženje veličine
+uzorka.
+
+Istraživanje se smije započeti tek nakon odobrenja etičkog povjerenstva ustanove u kojoj se provodi.
+
+2. OBLIKOVANJE RADA
+
+2.1. Opseg rada
+
+Opseg diplomskog rada nije propisan ukupnim brojem stranica nego opsegom pojedinih dijelova. Uvod mora sadržavati
+najmanje 3000 riječi, a Rasprava najmanje 1000 riječi. Ostali dijelovi rada pišu se u opsegu koliko je potrebno da se
+sadržaj jasno prikaže.
+
+2.2. Ispis
+
+Rad se ispisuje jednostrano na papiru formata A4.
+
+2.3. Font, prored i razmaci
+
+U cijelom radu koristi se font Book Antiqua, veličina fonta 11. Razmak između slova je 1,5. Razmak između odlomaka je
+6 pt. Naslovi poglavlja pišu se velikim slovima.
+
+2.4. Odlomci
+
+Odlomak sadrži 5-10 redaka teksta i obrađuje jednu misao. Odlomci se ne uvlače.
+
+2.5. Naslovi
+
+Naslovi poglavlja i podnaslovi numeriraju se arapskim brojevima (1., 1.1., 1.1.1.). Naslovi se ne završavaju točkom.
+
+2.6. Numeracija stranica
+
+Stranice se numeriraju arapskim brojevima u donjem desnom uglu stranice. Naslovnica i prednji dio rada ne nose broj
+stranice; numeracija se podešava tako da prva stranica uvoda bude označena kao stranica br. 1.
+
+2.7. Prijelom
+
+Svako poglavlje počinje na novoj stranici; prelazak na novu stranicu izvodi se prijelomom stranice, ne praznim
+redcima.
+
+2.8. Pravopis
+
+Prije predaje rada mora biti uključena provjera pravopisa (spell-check) za hrvatski jezik.
+
+3. DIJELOVI RADA
+
+Diplomski rad sadrži sljedeće dijelove, ovim redoslijedom:
+
+1. Naslovnica
+2. Zahvala (nije obavezna)
+3. Izjava o akademskoj čestitosti
+4. Temeljna dokumentacijska kartica
+5. Basic documentation card
+6. Sažetak
+7. Summary
+8. Sadržaj
+9. Popis kratica (po potrebi)
+10. Uvod
+11. Cilj
+12. Hipoteze
+13. Metode
+14. Rezultati
+15. Rasprava
+16. Zaključak
+17. Popis citirane literature
+18. Prilozi
+19. Životopis
+
+3.1. Naslovnica
+
+Naslovnica sadrži naziv sveučilišta i fakulteta, ime i prezime studenta, naslov rada, oznaku „Diplomski rad", ime i
+prezime mentora te mjesto i godinu.
+
+3.2. Zahvala
+
+Zahvala nije obavezna. Ako se piše, stoji na zasebnoj stranici iza naslovnice.
+
+3.3. Izjava o akademskoj čestitosti
+
+Izjavu potpisuje student. Obrazac izjave dostupan je na mrežnim stranicama Fakulteta.
+
+3.4. Temeljna dokumentacijska kartica
+
+Temeljna dokumentacijska kartica ispunjava se prema obrascu Fakulteta i sadrži podatke o radu na hrvatskom jeziku.
+
+3.5. Basic documentation card
+
+Basic documentation card istovjetna je Temeljnoj dokumentacijskoj kartici, na engleskom jeziku.
+
+3.6. Sažetak
+
+Sažetak je strukturiran i sadrži podnaslove: Uvod, Cilj, Metode, Rezultati, Zaključak. Sažetak može imati najviše 1800
+znakova. Prva rečenica Rezultata navodi broj ispitanika. Ispod sažetka navode se najmanje 3 ključne riječi iz
+MeSH-a (Medical Subject Headings).
+
+3.7. Summary
+
+Summary je prijevod sažetka na engleski jezik i sadrži: Title, Background, Aim, Methods, Results, Conclusion. Ispod
+se navode ključne riječi (Keywords).
+
+3.8. Sadržaj
+
+Sadržaj se izrađuje automatski i navodi sva poglavlja i podpoglavlja s brojevima stranica.
+
+3.9. Popis kratica
+
+Popis kratica navodi se po potrebi, abecednim redom, iza sadržaja.
+
+3.10. Uvod
+
+Uvod daje pregled dosadašnjih spoznaja o temi i obrazlaže potrebu istraživanja. Uvod ne smije prelaziti trećinu
+ukupnog teksta rada.
+
+3.11. Cilj
+
+Cilj rada navodi se jasno i sažeto, po potrebi s istraživačkim pitanjima.
+
+3.12. Hipoteze
+
+Hipoteze se navode kao provjerljive tvrdnje koje proizlaze iz cilja rada.
+
+3.13. Metode
+
+Poglavlje Metode sadrži podnaslove ovim redoslijedom: Etika, Ustroj istraživanja, Mjesto i vrijeme provedbe, Jedinica
+analize, Postupci, Statistički postupci. Pod naslovom Etika navodi se odobrenje etičkog povjerenstva i način
+dobivanja informiranog pristanka.
+
+Pod naslovom Postupci opisuje se mjerni instrument i način prikupljanja podataka, a pod naslovom Statistički
+postupci statističke metode i program u kojem je analiza provedena.
+
+3.14. Rezultati
+
+Rezultati se prikazuju tekstom, tablicama i slikama bez tumačenja. Isti podatak ne prikazuje se i u tablici i na
+slici.
+
+3.15. Rasprava
+
+Rasprava počinje odlomkom koji sažima najvažnije rezultate. U Raspravi se ne ponavljaju brojke iz Rezultata niti se
+upućuje na tablice. Rezultati se uspoređuju s rezultatima drugih istraživanja. Predzadnji odjeljak Rasprave nosi
+naslov „Prednosti i nedostatci istraživanja", a zadnji „Smjernice za buduća istraživanja".
+
+3.16. Zaključak
+
+Zaključak daje odgovor na probleme i hipoteze istraživanja. Sažeti rezultati označuju se rednim brojevima.
+
+3.17. Popis citirane literature
+
+Popis citirane literature navodi se prema vancouverskom stilu (vidi odjeljak 5.7).
+
+3.18. Prilozi
+
+Prilozi sadrže anketni upitnik, odobrenje etičkog povjerenstva i druge dokumente na koje se rad poziva.
+
+3.19. Životopis
+
+Životopis studenta piše se u natuknicama, ne u rečenicama.
+
+4. PROVJERA IZVORNOSTI
+
+Svi diplomski radovi prije obrane provjeravaju se pomoću računalnog programa koji otkriva plagiranje. Rad s
+utvrđenim plagiranjem vraća se studentu i ne upućuje na obranu.
+
+5. TEHNIČKE UPUTE
+
+5.1. Jezik i stil
+
+Rad se piše jasnim znanstvenim stilom, bez žargona i suvišnih stranih riječi.
+
+5.2. Kratice
+
+Kratica se pri prvom spominjanju piše u zagradi iza punog naziva, a dalje se koristi samo kratica.
+
+5.3. Brojevi i mjerne jedinice
+
+Decimalni brojevi pišu se s decimalnim zarezom. Mjerne jedinice pišu se prema SI sustavu.
+
+5.4. Poglavlja i podpoglavlja
+
+Podpoglavlje postoji samo ako u istom poglavlju postoje najmanje dva podpoglavlja.
+
+5.5. Tablice
+
+Natpis tablice stoji iznad tablice. Natpis počinje riječju „Tablica" i rednim brojem s točkom, npr. „Tablica 1.",
+bez kurziva. Prored natpisa je 1, veličina 11. Svaka tablica mora biti spomenuta u tekstu prije nego što se pojavi,
+npr. „(Tablica 1)" ili „u Tablici 1", bez točke iza broja.
+
+Sadržaj tablica piše se veličinom 11 kao i tekst rada. Tablica se ne smije lomiti na dvije stranice ako stane na
+jednu.
+
+Izvor podataka za tablicu ne navodi se ispod tablice nego brojem reference u natpisu tablice ako tablica nije
+rezultat vlastitog istraživanja.
+
+5.6. Slike
+
+Natpis slike stoji ispod slike i počinje riječju „Slika" i rednim brojem s točkom, npr. „Slika 1.". Grafikoni su
+crno-bijeli i dvodimenzionalni. Svaka slika mora biti spomenuta u tekstu.
+
+5.7. Citiranje
+
+U radu se koristi vancouverski stil citiranja. Reference se numeriraju redoslijedom prvog pojavljivanja u tekstu i ista
+referenca uvijek nosi isti broj. Broj reference piše se u ovalnim zagradama u razini teksta, npr. (1) ili (1, 2) ili
+(3–5), i stoji prije zareza ili točke. Više referenci navodi se u jednoj zagradi.
+
+U popisu literature navodi se prvih šest autora, a zatim „i sur.". Naslov rada piše se samo s velikim početnim slovom
+prve riječi; ime časopisa navodi se u skraćenom obliku.
+
+Primjer: Kellehear A. Compassionate Cities: global significance and meaning for palliative care. Prog Palliat Care.
+2020;28(2):115-9.
+
+Doslovni citat stavlja se u navodnike i kurziv te se izrijekom označuje kao citat. Izravno citiranje treba
+izbjegavati.

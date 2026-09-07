@@ -1,0 +1,286 @@
+{
+ "slug": "fpzg",
+ "naziv": "Fakultet političkih znanosti Sveučilišta u Zagrebu",
+ "sveuciliste": "Sveučilište u Zagrebu",
+ "studij": "politologija / novinarstvo / javne politike",
+ "aliasi": [
+  "FPZG",
+  "Fakultet političkih znanosti",
+  "fpzg.unizg.hr",
+  "politologija",
+  "novinarstvo"
+ ],
+ "tipovi_radova": [
+  "esej",
+  "seminarski",
+  "zavrsni",
+  "diplomski"
+ ],
+ "status": "nepotvrdeno",
+ "izvor": {
+  "dokument": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.) — samo za dio pravila; MARGINE, opseg seminarskog rada i opseg završnog rada NISU u tom dokumentu nego su naslijeđene nepotvrđene procjene",
+  "url": "https://www.fpzg.unizg.hr/images/50442907/Upute_za_pisanje_akademskih_radova_na_Fakultetu_politickih_znanosti.pdf",
+  "datum_dokumenta": "2015-11",
+  "provjereno": "2026-08-08",
+  "napomena_o_dohvatu": "Dio pravila (citiranje, font/prored/poravnanje, duljina odlomka, struktura rada, opseg i izvori diplomskog) provjeren je u službenom PDF-u. Margine, opseg seminarskog i završnog rada te obrana/predaja NISU u Uputama — te vrijednosti ostaju prenesene iz ranijeg skilla fpzg-skill-pisanje i zato profil ostaje „nepotvrdeno“. Margine su UKLONJENE iz profila (a ne postavljene na null): ključa kojeg nema znači „fakultet to ne propisuje\", dok null znači „propisuje, ali je vrijednost neupotrebljiva\" i daje ⚠️. Vrijednost lijevo 3 cm bila je naslijeđena procjena i obranjeni FPZG rad ima 2,54 cm sa sve četiri strane, pa je svaki takav rad dobivao lažno kršenje."
+ },
+ "citiranje": {
+  "stil": "autor-godina",
+  "u_tekstu": "(Becker, 2007: 9)",
+  "popis_primjer": "Šiber, Ivan (2003) Politički marketing. Zagreb: Politička kultura.",
+  "tocka_iza_godine": false,
+  "uvlaka_u_popisu": true,
+  "napomena": "Tekstnota je autor-godina s DVOTOČKOM pred stranicom: „(Becker, 2007: 9)“, „(Swanson i Mancini, 1996: 9)“ — bez „str.“. Godina se piše bez točke. U popisu literature ide „Prezime, Ime (Godina) Naslov. Mjesto: Nakladnik.“ — puno ime autora, godina u zagradi bez točke, bez APA inicijala. Uvijek točna stranica uz specifičnu tvrdnju — godina bez stranice je nalaz."
+ },
+ "format": {
+  "font": [
+   "Times New Roman"
+  ],
+  "velicina_pt": 12,
+  "prored": 1.5,
+  "poravnanje": "obostrano",
+  "lice": "trece-jednina",
+  "odlomak": {
+   "min_redaka": 5,
+   "max_redaka": 15
+  }
+ },
+ "struktura": {
+  "opseg": {
+   "seminarski": {
+    "rijeci": [
+     1500,
+     3000
+    ],
+    "izvori_min": 6
+   },
+   "zavrsni": {
+    "stranice": [
+     25,
+     30
+    ],
+    "izvori_min": 15
+   },
+   "diplomski": {
+    "rijeci": [
+     10000,
+     15000
+    ],
+    "izvori_min": 15
+   },
+   "esej": {
+    "napomena": "Upute ne poznaju esej kao vrstu rada, a opseg zadaje silabus kolegija. Ako je korisnik zadao vlastiti raspon, mjeri se protiv njega; ako nije, opseg se NE mjeri i ne prijavljuje kao kršenje."
+   },
+   "_razina_nalaza": {
+    "esej": "obavijest",
+    "seminarski": "za_potvrdu",
+    "zavrsni": "za_potvrdu",
+    "diplomski": "krsenje",
+    "_pravilo": "Raspon iz izvora sa statusom „nepotvrdeno\" NE smije dati ❌. Crveno je rezervirano za pravila koja stoje u službenim Uputama. Korisnikov izrijekom zadan opseg uvijek ima prednost pred profilom."
+   }
+  },
+  "obavezni_dijelovi": [
+   "naslovnica (vanjska)",
+   "naslovnica (unutarnja)",
+   "izjava o autorstvu",
+   "sadržaj",
+   "popis ilustracija (ako postoje)",
+   "uvod",
+   "tijelo teksta",
+   "zaključak",
+   "popis literature",
+   "prilozi (ako postoje)",
+   "sažetak i ključne riječi"
+  ],
+  "prikazi": {
+   "natpis": "iznad",
+   "izvor_ispod": true,
+   "mora_biti_spomenut_u_tekstu": true
+  }
+ },
+ "predaja": {
+  "turnitin": true,
+  "administrativni_rep_dana": 14
+ },
+ "obrana": {
+  "trajanje_min": 15,
+  "slajdova": 12,
+  "komisija": 3
+ },
+ "napomene": [
+  "STATUS JE NEPOTVRĐEN, ali više nije sve nepotvrđeno: citiranje, font/prored/poravnanje, duljina odlomka (5–15 redaka), struktura rada te opseg i izvori diplomskog rada provjereni su u službenim Uputama (2013./2015.). Ta pravila nose vlastiti provenance zapis i NE nose oznaku „za potvrdu“.",
+  "MARGINE nisu propisane u Uputama. Vrijednosti 2,5/2,5/3,0/2,5 cm prenesene su iz ranijeg skilla i ostaju „za potvrdu“ — ne navodi ih studentu kao fakultetski propis.",
+  "OPSEG DIPLOMSKOG je programski različit: politologija 10.000–12.000 riječi, novinarstvo 12.000–15.000 riječi, završni specijalistički 8.000–12.000 riječi. Profil nosi zajedničku ovojnicu 10.000–15.000; za točan raspon pitaj studenta koji je studij i primijeni njegov.",
+  "Opseg i broj izvora SEMINARSKOG rada nisu u Uputama („opseg ovisi o silabusu pojedinoga kolegija“) — vrijednosti u profilu su naslijeđene procjene i ostaju „za potvrdu“.",
+  "ZAVRŠNI rad na preddiplomskom studiju nije obrađen u Uputama; dokument poznaje samo „završni specijalistički rad“ (8.000–12.000 riječi). Raspon stranica u profilu je naslijeđen.",
+  "PRIMJERCI, a ne procjene. Dvije stvarne opservacije o marginama proturječe si (2,54 sa sve četiri strane naspram 2,5 uz 3,0 lijevo) i obje su zapisane u /primjerci. Gate ne smije tvrditi kršenje pravila kojeg u Uputama nema — javlja „odstupa od primjerka X\" i pokazuje raspon zabilježenih vrijednosti.",
+  "UZORAK MENTORA JE JAČI OD PROFILA. Ako student donese rad koji mu je mentor dao kao mjerilo oblika, izmjeri ga, upiši kao primjerak i po njemu radi. Uzorak seminarskog rada iz 2026. donio je numerirane pododjeljke (1.1, 1.2), sadržaj na dvije razine, naslove 14/13 pt i sve ostalo u 12 pt — ništa od toga nije bilo u profilu, a sve je studentica očekivala."
+ ],
+ "provenance": {
+  "default": {
+   "source": "nije dohvaćeno iz službenog PDF-a — profil je prenesen iz ranijeg skilla fpzg-skill-pisanje",
+   "type": "inferred",
+   "confidence": 0.5,
+   "verified_at": "2026-08-02"
+  },
+  "rules": {
+   "/citiranje/stil": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Tekstnote (bilješke u tekstu)",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/citiranje/u_tekstu": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Tekstnote — primjeri „(Becker, 2007: 9)“, „(Swanson i Mancini, 1996: 9)“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/citiranje/popis_primjer": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Popis literature — primjer „Šiber, Ivan (2003) Politički marketing. Zagreb: Politička kultura.“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/citiranje/tocka_iza_godine": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Tekstnote i Popis literature — godina se piše bez točke",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/citiranje/napomena": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Tekstnote + Popis literature",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/format/font": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Oblikovanje teksta — „Times New Roman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/format/velicina_pt": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Oblikovanje teksta — „veličinom slova 12“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/format/prored": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Oblikovanje teksta — „s proredom 1,5“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/format/poravnanje": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Oblikovanje teksta — „obostrano poravnati (Justify)“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/format/odlomak/min_redaka": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Odlomak — „Prosječna je duljina odlomka pet do 15 redaka“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/format/odlomak/max_redaka": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Odlomak — „Prosječna je duljina odlomka pet do 15 redaka“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/struktura/obavezni_dijelovi": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Struktura rada — naslovnica (vanjska, unutarnja), Izjava o autorstvu, Sadržaj, Popis ilustracija (ako postoje), Uvod, Tijelo teksta, Zaključak, Popis literature, Prilozi (ako postoje), Sažetak i ključne riječi",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/struktura/opseg/diplomski/rijeci": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Opseg rada — politologija „ni manje od 10.000 ni više od 12.000 riječi“, novinarstvo „ni manje od 12.000 ni više od 15.000 riječi“",
+    "type": "derived",
+    "confidence": 0.8,
+    "verified_at": "2026-08-08",
+    "derivation": "Profil pokriva oba diplomska studija pa nosi zajedničku ovojnicu 10.000–15.000 riječi; po studiju je raspon uži."
+   },
+   "/struktura/opseg/diplomski/izvori_min": {
+    "source": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti (Zagreb, ožujak 2013.; izmijenjeno i dopunjeno studeni 2015.)",
+    "locator": "Literatura — „Temeljna literatura za izradu diplomskog, odnosno završnog specijalističkog rada sadrži najmanje 15 klasičnih znanstvenih izvora (…), od čega najmanje tri knjige.“",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-08"
+   },
+   "/struktura/opseg/seminarski": {
+    "source": "NIJE u Uputama FPZG-a (2013./2015.) — Upute o opsegu seminarskog rada kažu samo „ovisi o silabusu pojedinoga kolegija“, pa su brojke naslijeđene i nepotvrđene",
+    "type": "inferred",
+    "confidence": 0.3,
+    "verified_at": "2026-08-08",
+    "derivation": "Upute ne daju brojku; raspon riječi i izvori_min preneseni su iz ranijeg skilla i nisu potvrđeni."
+   },
+   "/struktura/opseg/zavrsni": {
+    "source": "NIJE u Uputama FPZG-a (2013./2015.) — dokument poznaje samo „završni specijalistički rad“, pa je raspon stranica za preddiplomski završni rad naslijeđen i nepotvrđen",
+    "type": "inferred",
+    "confidence": 0.3,
+    "verified_at": "2026-08-08",
+    "derivation": "Upute ne poznaju završni rad na preddiplomskom studiju, samo „završni specijalistički rad“ (8.000–12.000 riječi). Raspon stranica je naslijeđen i nije potvrđen."
+   }
+  }
+ },
+ "primjerci": [
+  {
+   "id": "obranjeni-diplomski-2026",
+   "vrsta": "diplomski",
+   "izvor": "obranjeni rad na FPZG-u",
+   "zabiljezeno": "2026-08-08",
+   "mjereno": {
+    "margine_cm": {
+     "gore": 2.54,
+     "desno": 2.54,
+     "dolje": 2.54,
+     "lijevo": 2.54
+    }
+   }
+  },
+  {
+   "id": "uzorak-mentora-seminarski-2026",
+   "vrsta": "seminarski",
+   "izvor": "rad koji je mentor dao studentu kao mjerilo oblika (prikaz knjige, prijediplomski studij politologije)",
+   "zabiljezeno": "2026-08-25",
+   "mjereno": {
+    "margine_cm": {
+     "gore": 2.5,
+     "desno": 2.5,
+     "dolje": 2.5,
+     "lijevo": 3.0
+    },
+    "naslov_1_pt": 14,
+    "naslov_2_pt": 13,
+    "naslov_1_bold": true,
+    "naslov_2_bold": true,
+    "numerirani_pododjeljci": "X.Y",
+    "sadrzaj_razina": 2,
+    "natpis_pt": 12,
+    "izvor_ispod_pt": 12,
+    "sazetak_pt": 12,
+    "naslov_na_naslovnici_pt": 12,
+    "naslov_na_naslovnici_verzal": true,
+    "naslovnica_broj": 1,
+    "izjava_naziv": "IZJAVA O AUTORSTVU",
+    "sazetak_polozaj": "prije sadržaja"
+   }
+  }
+ ]
+}

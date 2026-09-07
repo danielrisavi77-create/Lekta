@@ -1,0 +1,697 @@
+{
+ "$comment": "Registar DIJELOVA RADA — druga os Katedre. Modovi su os vremena (kad se što radi); ovo je os dokumenta (od čega se rad sastoji). Prije v1.3 pokrivenost je bila emergentna: postojala je samo kao nuspojava toga koji je mod odabran, pa nijedna datoteka nije mogla odgovoriti na pitanje „koji dio rada nitko ne provjerava\". Registar to pretvara u podatak. Isti obrazac kao references/vjestine.json: deklaracija u JSON-u, strojno razrješavanje u scripts/dijelovi.py, nijedan novi dio ne traži izmjenu koda. `provjera.razina: nepokriveno` NIJE propust nego deklarirana granica — pravilo 8 traži da se granica kaže, a ne da se prešuti.",
+ "schema_version": 1,
+ "skupine": {
+  "prednji": "prednji aparat rada — sve prije Uvoda",
+  "tijelo": "sadržajna poglavlja — od Uvoda do Zaključka",
+  "zadnji": "završni aparat rada — sve iza Zaključka",
+  "proces": "dio posla oko rada koji nije dio dokumenta, ali bez kojega rad ne prolazi"
+ },
+ "razine_provjere": {
+  "strojno": "postoji naredba koja dio provjerava i vraća izlazni kod",
+  "rucno": "alat ne može zaključiti iz teksta; provjera je propisana, ali ju radi čovjek",
+  "nepokriveno": "nitko ovaj dio ne provjerava — deklarirana granica, ide u RUČNO PROVJERI"
+ },
+ "dijelovi": {
+  "naslovnica": {
+   "naziv": "Naslovnica",
+   "skupina": "prednji",
+   "redoslijed": 10,
+   "obavezan": "uvijek",
+   "profil_nazivi": [
+    "naslovnica",
+    "naslovnica (hrvatska)",
+    "naslovnica (vanjska)"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "izrada.docx (rad-docx) ili scripts/build_docx.py"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": null,
+    "kako": "check_rules.py naslovnicu drži NEPROVJERLJIVOM jer nema vlastiti naslov: prisutnost polja se ne vidi iz teksta. Oko provjerava: točno ime i JMBAG, ZVANJE mentora doslovno kako ga fakultet piše, ustanova, mjesto, godina. Zvanje mentora je najčešća pogreška na prvoj stranici."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "naslovnica_druga": {
+   "naziv": "Druga naslovnica (engleska ili unutarnja)",
+   "skupina": "prednji",
+   "redoslijed": 20,
+   "obavezan": "profil",
+   "profil_nazivi": [
+    "naslovnica (engleska)",
+    "naslovnica (unutarnja)"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "izrada.docx (rad-docx) ili scripts/build_docx.py"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/provjeri_engleski.py ./rad.docx --dio naslov",
+    "kako": "Uloga se razlikuje po fakultetu: EFZG traži ENGLESKU naslovnicu, FPZG UNUTARNJU (hrvatsku). Ne pretpostavljaj — pročitaj profil. Ako je engleska, naslov mora biti prijevod, ne parafraza; provjeri_engleski.py uspoređuje termine s hrvatskim naslovom."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "izjava_cestitost": {
+   "naziv": "Izjava o akademskoj čestitosti / autorstvu",
+   "skupina": "prednji",
+   "redoslijed": 30,
+   "obavezan": "profil",
+   "profil_nazivi": [
+    "izjava o akademskoj čestitosti",
+    "izjava o autorstvu",
+    "izjava o izvornosti"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "izrada.docx (rad-docx) ili scripts/build_docx.py"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/check_rules.py ./rad.docx --profil ./.katedra/resolved_profile.json --tip <tip>",
+    "kako": "rule_id struktura.obavezni_dijelovi. Potpis alat ne vidi — potpisanost ide u RUČNO PROVJERI."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "izjava_ai": {
+   "naziv": "Izjava o korištenju alata umjetne inteligencije",
+   "skupina": "prednji",
+   "redoslijed": 35,
+   "obavezan": "uvjetno",
+   "uvjet": "fakultet ju traži — od 2025./2026. sve češće, a stariji profili je ne poznaju",
+   "profil_nazivi": [
+    "izjava o korištenju ai alata",
+    "izjava o umjetnoj inteligenciji",
+    "izjava o korištenju generativne umjetne inteligencije"
+   ],
+   "proizvodi": {
+    "mod": "6",
+    "cime": "student je piše sam — sadržaj je njegova odgovornost, ne Katedrina"
+   },
+   "provjera": {
+    "razina": "nepokriveno",
+    "naredba": null,
+    "kako": "Nijedan profil u registryju je još nema, pa ju check_rules ne traži. U modu 1, dok su Upute pred očima, provjeri traži li ju fakultet i upiši u .katedra/zadatak.json. Rad koji ju izostavi a fakultet ju traži vraća se s referade — formalno, prije nego ga itko pročita."
+   },
+   "modovi": [
+    "1",
+    "6"
+   ],
+   "$comment": "Prvi dio unesen u registar upravo zato što ga nijedan profil ne poznaje. Registar mora moći nositi dio koji postoji u svijetu prije nego postoji u profilu, inače se pokrivenost mjeri prema vlastitim datotekama umjesto prema stvarnom radu."
+  },
+  "zahvala": {
+   "naziv": "Zahvala",
+   "skupina": "prednji",
+   "redoslijed": 40,
+   "obavezan": "uvjetno",
+   "uvjet": "profil ju predviđa ili je student želi",
+   "profil_nazivi": [
+    "zahvala"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "student"
+   },
+   "provjera": {
+    "razina": "nepokriveno",
+    "naredba": null,
+    "kako": "Neobavezan dio bez formalnih pravila. Jedino pravilo koje vrijedi: ako postoji, stoji na vlastitoj stranici i ne ulazi u numeraciju poglavlja."
+   },
+   "modovi": [
+    "2"
+   ]
+  },
+  "sazetak_hr": {
+   "naziv": "Sažetak i ključne riječi (hrvatski)",
+   "skupina": "prednji",
+   "redoslijed": 50,
+   "obavezan": "profil",
+   "profil_nazivi": [
+    "sažetak",
+    "sazetak",
+    "kljucne-rijeci",
+    "ključne riječi",
+    "sažetak i ključne riječi",
+    "sažetak i ključne riječi (hrvatski)"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "piše se ZADNJI, nakon zaključka"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/provjeri_sazetak.py ./rad.docx --tablica",
+    "kako": "Broj poglavlja, pojmovi, brojke, ključne riječi, parnjak u zaključku. Proturječje alat NE vidi — paritetnu tablicu mora pročitati čovjek."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "summary_en": {
+   "naziv": "Summary and keywords (engleski)",
+   "skupina": "prednji",
+   "redoslijed": 60,
+   "obavezan": "profil",
+   "profil_nazivi": [
+    "summary and keywords (engleski)",
+    "summary",
+    "abstract",
+    "keywords",
+    "sažetak na engleskom"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "prevodi se iz gotovog hrvatskog sažetka, nikad se ne piše paralelno"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/provjeri_engleski.py ./rad.docx --profil ./.katedra/resolved_profile.json",
+    "kako": "Do v1.3 nitko ovaj dio nije provjeravao: provjeri_sazetak.py radi nad hrvatskim, a check_rules gleda samo postoji li naslov. Provjerava se suglasje s hrvatskim sažetkom (brojke, broj ključnih riječi, termini), a ne kvaliteta prijevoda."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ],
+   "$comment": "Najveća pojedinačna rupa v1.2: dio koji mentor i repozitorij čitaju, a nijedan alat nije dodirivao. Vidi references/engleski.md."
+  },
+  "sadrzaj": {
+   "naziv": "Sadržaj",
+   "skupina": "prednji",
+   "redoslijed": 70,
+   "obavezan": "uvijek",
+   "profil_nazivi": [
+    "sadržaj",
+    "sadrzaj",
+    "kazalo"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "Wordovo POLJE, ne natipkan popis"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <RAD_DOCX_SKILL>/scripts/provjeri_reference.py ./rad.pdf",
+    "kako": "Brojevi stranica se mjere protiv stvarnog otiska, ne protiv dokumenta. Bez PDF-a: revizije.py toc daje procjenu (±1 str.), koja NE zamjenjuje Update Field u Wordu."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "popis_tablica": {
+   "naziv": "Popis tablica",
+   "skupina": "prednji",
+   "redoslijed": 80,
+   "obavezan": "profil",
+   "profil_nazivi": [
+    "popis tablica",
+    "popis-tablica-slika-grafikona"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "izrada.docx (rad-docx) — živo polje s unakrsnim referencama"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <RAD_DOCX_SKILL>/scripts/provjeri_reference.py ./rad.pdf",
+    "kako": "Natpis u tekstu mora se slagati sa stavkom u popisu, znak po znak. Spojnica umjesto en crtice u rasponu razbija slaganje — tipična regresija iz moda 7."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "popis_slika": {
+   "naziv": "Popis slika, grafikona i ilustracija",
+   "skupina": "prednji",
+   "redoslijed": 90,
+   "obavezan": "profil",
+   "profil_nazivi": [
+    "popis slika i grafikona",
+    "popis ilustracija",
+    "popis ilustracija (ako postoje)",
+    "popis slika",
+    "popis grafikona",
+    "popis-tablica-slika-grafikona"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "izrada.docx (rad-docx)"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <RAD_DOCX_SKILL>/scripts/provjeri_reference.py ./rad.pdf",
+    "kako": "Isto kao popis tablica."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "popis_kratica": {
+   "naziv": "Popis kratica",
+   "skupina": "prednji",
+   "redoslijed": 100,
+   "obavezan": "uvjetno",
+   "uvjet": "rad koristi više od nekoliko kratica ili ih profil traži",
+   "profil_nazivi": [
+    "popis kratica",
+    "popis skraćenica",
+    "kratice"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "student"
+   },
+   "provjera": {
+    "razina": "nepokriveno",
+    "naredba": null,
+    "kako": "Nijedan alat ne uspoređuje kratice korištene u tekstu s popisom. Ručno pravilo: svaka kratica razriješena pri PRVOM pojavljivanju u tekstu, bez obzira na to postoji li popis; popis nije zamjena za razrješenje."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "uvod": {
+   "naziv": "Uvod",
+   "skupina": "tijelo",
+   "redoslijed": 110,
+   "obavezan": "uvijek",
+   "profil_nazivi": [
+    "uvod"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "piše se PRVI po planu, prepisuje ZADNJI kad je zaključak gotov"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/check_argument.py ./rad.docx --profil ./.katedra/resolved_profile.json",
+    "kako": "check_argument nalazi tezu i zatvara li zaključak krug, ali NE provjerava je li uvod potpun. Šest obveznih elemenata (references/pisanje.md §1.4): predmet, relevantnost, istraživačko pitanje, cilj, teza, pregled strukture. Prođi ih redom, jedan po jedan."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "razrada": {
+   "naziv": "Razrada — sadržajna poglavlja",
+   "skupina": "tijelo",
+   "redoslijed": 115,
+   "obavezan": "uvijek",
+   "profil_nazivi": [
+    "razrada po poglavljima",
+    "tijelo teksta",
+    "obrada-teme",
+    "razrada",
+    "glavni dio"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "plan §5 → .katedra/poglavlja/NN-naziv.md → rukopis"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/plan_state.py status",
+    "kako": "Razrada nije jedno poglavlje nego SVA poglavlja između uvoda i zaključka; njezin status je zbroj statusa potpoglavlja u plan.json. check_rules ju prepoznaje po tome što između uvoda i zaključka postoje poglavlja, ne po naslovu — nijedan rad nema naslov „Razrada\"."
+   },
+   "modovi": [
+    "2",
+    "4"
+   ],
+   "$comment": "Profili je zovu „razrada po poglavljima\" (EFZG), „tijelo teksta\" (FPZG) i „obrada-teme\" (Libertas). Do v1.3 su sva tri završavala na teorijski_okvir, pa je rad bez ijednog teorijskog poglavlja izgledao pokriveno. Razrada je vlastiti dio; teorijski okvir je jedno od poglavlja u njoj."
+  },
+  "teorijski_okvir": {
+   "naziv": "Teorijski okvir",
+   "skupina": "tijelo",
+   "redoslijed": 120,
+   "obavezan": "uvjetno",
+   "uvjet": "završni i diplomski; seminarski po dogovoru",
+   "profil_nazivi": [
+    "teorijski okvir",
+    "teorijsko-konceptualni okvir",
+    "pojmovni okvir"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "plan §5 → rukopis"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/evidence_gate.py --claims ./.katedra/claims.jsonl --evidence ./.katedra/evidence.jsonl --sources ./.katedra/izvori.json --policy strict",
+    "kako": "Teorijski okvir je najgušći dio dokazima. Strict gate blokira unsupported/conflicted/contradicted."
+   },
+   "modovi": [
+    "2",
+    "4"
+   ]
+  },
+  "metodologija": {
+   "naziv": "Metodologija",
+   "skupina": "tijelo",
+   "redoslijed": 130,
+   "obavezan": "uvjetno",
+   "uvjet": "svaki rad s vlastitim istraživanjem; teorijski rad umjesto nje ima odjeljak o pristupu i građi",
+   "profil_nazivi": [
+    "metodologija",
+    "metoda istraživanja",
+    "metodološki okvir"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "references/metodologija.md — osam obveznih odjeljaka"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/check_argument.py ./rad.docx --profil ./.katedra/resolved_profile.json --metodologija <tip>",
+    "kako": "argument_methodology.py bira POLICY za validator argumenta prema tipu metodologije — to nije provjera samog poglavlja. Potpunost poglavlja provjerava se protiv popisa u references/metodologija.md. Ovo je poglavlje koje se na obrani prvo napada."
+   },
+   "modovi": [
+    "1",
+    "2",
+    "5"
+   ],
+   "$comment": "Do v1.3 skill je imao policy za metodologiju u validatoru, a nijednu uputu kako se poglavlje piše. Vidi references/metodologija.md."
+  },
+  "analiza": {
+   "naziv": "Analiza / rezultati / studija slučaja",
+   "skupina": "tijelo",
+   "redoslijed": 140,
+   "obavezan": "uvjetno",
+   "uvjet": "empirijski i primijenjeni radovi",
+   "profil_nazivi": [
+    "analiza",
+    "rezultati",
+    "empirijski dio",
+    "studija slučaja"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "model.py → .katedra/model.json → zamjena {{model.kljuc}} u tekstu (željezno pravilo 13)"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/vjestine.py --sposobnost audit.brojke",
+    "kako": "Svaka brojka replicira se u trećem programu (replikacija-pspp). Redak usporedba.csv koji se ne poklapa je nalaz razine A. „PSPP to ne ispisuje\" je ograničenje, ne neslaganje."
+   },
+   "modovi": [
+    "2",
+    "4",
+    "6"
+   ]
+  },
+  "prikazi": {
+   "naziv": "Tablice, slike i grafikoni",
+   "skupina": "tijelo",
+   "redoslijed": 145,
+   "obavezan": "uvjetno",
+   "uvjet": "profil ili metodologija očekuju prikaz; rad bez ijedne vlastite tablice čita se kao seminar",
+   "profil_nazivi": [
+    "prikazi",
+    "tablice",
+    "slike i grafikoni"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "grafikon se crta IZVAN lanca (nijedan skill ga ne crta); umeće ga i mjeri izrada.docx"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/provjeri_prikaze.py ./rad.docx",
+    "kako": "Struktura prikaza (natpis, izvor, spomen u tekstu, lomljenje) ide kroz check_rules i rad-docx. `provjeri_prikaze.py` mjeri SAMU SLIKU: efektivni dpi, širinu naspram teksta, razvučen omjer, kolabiranu visinu i skaliranje koje mijenja veličinu pisma u grafikonu. NE ocjenjuje je li grafikon dobro odabran ni odgovara li podacima — to traži kontekst."
+   },
+   "modovi": [
+    "2",
+    "4",
+    "6"
+   ],
+   "$comment": "Do v1.4 se prikaz provjeravao samo kao struktura u dokumentu. Grafikon izvezen na 6,1 in i umetnut na 12 cm ima svako pismo manje za 23 %, a nijedan alat to nije vidio."
+  },
+  "rasprava": {
+   "naziv": "Rasprava",
+   "skupina": "tijelo",
+   "redoslijed": 150,
+   "obavezan": "uvjetno",
+   "uvjet": "svaki rad s vlastitim nalazima; bez nje nalazi ostaju neprotumačeni",
+   "profil_nazivi": [
+    "rasprava",
+    "diskusija",
+    "interpretacija nalaza"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "references/rasprava.md — četiri poteza po nalazu"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/consistency_check.py --claims ./.katedra/claims.jsonl --out ./.katedra/consistency.json",
+    "kako": "consistency_check gradi claim graph UNUTAR rada i nalazi proturječja među poglavljima. Ono što ne radi — i što je bit rasprave — jest odnos MOJEG nalaza prema tuđem nalazu iz literature. To se provjerava protokolom u references/rasprava.md."
+   },
+   "modovi": [
+    "2",
+    "4",
+    "5"
+   ],
+   "$comment": "Poglavlje koje dijeli rad s ocjenom 4 od rada s ocjenom 5, a v1.2 ga nije spominjala nijednom riječi."
+  },
+  "zakljucak": {
+   "naziv": "Zaključak",
+   "skupina": "tijelo",
+   "redoslijed": 160,
+   "obavezan": "uvijek",
+   "profil_nazivi": [
+    "zaključak",
+    "zakljucak",
+    "zaključna razmatranja"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "piše se prije sažetka, poslije svih poglavlja"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/check_argument.py ./rad.docx --profil ./.katedra/resolved_profile.json --json ./.katedra/arg.json",
+    "kako": "Zatvara li zaključak krug s istraživačkim pitanjem iz uvoda. Zaključak koji ne odgovara na pitanje iz uvoda je najčešći razlog zašto formalno uredan rad dobije četvorku."
+   },
+   "modovi": [
+    "2",
+    "4",
+    "6"
+   ]
+  },
+  "literatura": {
+   "naziv": "Popis literature / izvora",
+   "skupina": "zadnji",
+   "redoslijed": 170,
+   "obavezan": "uvijek",
+   "profil_nazivi": [
+    "popis izvora",
+    "popis literature",
+    "literatura",
+    "bibliografija",
+    "izvori"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": ".katedra/izvori.json → export_bibliography.py ako fakultet traži BibTeX/RIS"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/provjeri_literaturu.py ./rad.docx --profil ./.katedra/resolved_profile.json",
+    "kako": "Dvije provjere, ne jedna: `verify_sources.py --pokrivenost` gleda je li svaki izvor citiran i svaki citat pokriven, a `provjeri_literaturu.py` gleda je li JEDINICA napisana po kućnom stilu — oblik imena, godina, završna točka, uvlaka, razmak, abecedni red. Do v1.4 drugo nije provjeravao nitko."
+   },
+   "modovi": [
+    "1",
+    "2",
+    "4",
+    "6"
+   ]
+  },
+  "prilozi": {
+   "naziv": "Prilozi",
+   "skupina": "zadnji",
+   "redoslijed": 180,
+   "obavezan": "uvjetno",
+   "uvjet": "rad s vlastitim instrumentom (anketa, protokol intervjua), opsežnim tablicama ili ispisom programa",
+   "profil_nazivi": [
+    "prilozi",
+    "prilozi (ako postoje)",
+    "prilog"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "instrument iz metodologije + statistički prilog (replikacija-pspp)"
+   },
+   "provjera": {
+    "razina": "nepokriveno",
+    "naredba": null,
+    "kako": "Nitko ne provjerava jesu li prilozi numerirani, spomenuti u tekstu, ni je li instrument uopće priložen. Ručno: svaki prilog ima broj i naslov, svaki je spomenut u tijelu barem jednom („v. Prilog 2\"), i nijedan prilog ne nosi tvrdnju koja se nigdje u tijelu ne pojavljuje. Empirijski rad bez priloženog instrumenta nije replikabilan — to je nalaz, ne kozmetika."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "zivotopis": {
+   "naziv": "Životopis",
+   "skupina": "zadnji",
+   "redoslijed": 190,
+   "obavezan": "profil",
+   "profil_nazivi": [
+    "životopis",
+    "zivotopis",
+    "curriculum vitae"
+   ],
+   "proizvodi": {
+    "mod": "2",
+    "cime": "student"
+   },
+   "provjera": {
+    "razina": "strojno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/check_rules.py ./rad.docx --profil ./.katedra/resolved_profile.json --tip <tip>",
+    "kako": "Provjerava se samo prisutnost naslova (rule_id struktura.obavezni_dijelovi). Sadržaj nitko ne ocjenjuje."
+   },
+   "modovi": [
+    "2",
+    "6"
+   ]
+  },
+  "prijava_teme": {
+   "naziv": "Prijava teme / sinopsis",
+   "skupina": "proces",
+   "redoslijed": 5,
+   "obavezan": "uvjetno",
+   "uvjet": "završni i diplomski na većini fakulteta; prethodi svemu ostalom",
+   "profil_nazivi": [],
+   "proizvodi": {
+    "mod": "1",
+    "cime": "izvod iz plana: teza (§3), struktura (§4), literatura (§7), hodogram (§9)"
+   },
+   "provjera": {
+    "razina": "nepokriveno",
+    "naredba": null,
+    "kako": "Plan (§11) ga navodi kao isporuku, ali nijedan protokol ne kaže što u njemu stoji ni tko ga provjerava. Praktično: sinopsis je plan skraćen na 1–2 stranice, s obrascem fakulteta kao predloškom. Ako je tema već prijavljena, provjeri slaže li se PRIJAVLJENI naslov s naslovom rada — razilaženje se otkriva u referadi, na kraju."
+   },
+   "modovi": [
+    "1"
+   ],
+   "$comment": "Prvi formalni dokument u životu rada, a skill je počinjao od plana. Neslaganje prijavljenog i stvarnog naslova je administrativni blok koji troši tjedan."
+  },
+  "turnitin": {
+   "naziv": "Izvještaj o podudarnosti (Turnitin / iThenticate)",
+   "skupina": "proces",
+   "redoslijed": 200,
+   "obavezan": "uvjetno",
+   "profil_nazivi": [],
+   "proizvodi": {
+    "mod": "6",
+    "cime": "institucija; student samo predaje rad"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": "python3 <KATEDRA_SKILL>/scripts/originality_check.py ./rad.docx --json ./.katedra/originality.json",
+    "kako": "originality_check je jeftiniji PRVI prolaz protiv već ingestiranih izvora — nije zamjena za institucionalnu provjeru i ne gleda internet. Sam izvještaj čita čovjek: gleda se STRUKTURA, ne broj. Visok postotak na jednom izvoru je teži nalaz od istog postotka raspršenog po dvadeset njih. Podudarnost s vlastitim ranijim radom je samoplagijat i traži citiranje."
+   },
+   "modovi": [
+    "6"
+   ],
+   "uvjet": "fakultet propisuje provjeru podudarnosti",
+   "profil_pokazatelj": "/predaja/prag_podudarnosti"
+  },
+  "repozitorij": {
+   "naziv": "Unos u repozitorij (Dabar) — metapodaci",
+   "skupina": "proces",
+   "redoslijed": 230,
+   "obavezan": "uvjetno",
+   "uvjet": "svi javni završni i diplomski radovi u Hrvatskoj",
+   "profil_nazivi": [],
+   "proizvodi": {
+    "mod": "6",
+    "cime": "student popunjava obrazac"
+   },
+   "provjera": {
+    "razina": "nepokriveno",
+    "naredba": null,
+    "kako": "Hodogram ga broji kao 1 dan, a nijedan alat ne priprema ono što obrazac traži: naslov na engleskom, abstract na engleskom, ključne riječi na engleskom, znanstveno područje/polje, licencija i eventualni embargo. Sve osim licencije već postoji u radu — pripremi ih iz summary_en dijela i predaj studentu kao gotov blok teksta, da ih ne prevodi treći put i treći način."
+   },
+   "modovi": [
+    "6"
+   ],
+   "$comment": "Jedini korak u kojem rad izlazi iz Worda i ulazi u tuđi obrazac. Neusklađen engleski naslov između naslovnice, sažetka i repozitorija je trajan i javan."
+  },
+  "citanje_tijela": {
+   "naziv": "Autorovo čitanje tijela rada",
+   "skupina": "proces",
+   "redoslijed": 205,
+   "obavezan": "uvijek",
+   "uvjet": "svaki rad prije predaje",
+   "profil_nazivi": [],
+   "proizvodi": {
+    "mod": "6",
+    "cime": "jedan prolaz kroz tijelo, od Uvoda do Zaključka"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": null,
+    "kako": "Željezno pravilo 31. Alati mjere ono što znaju izmjeriti; proturječje između poglavlja, tvrdnja koja je pri cijepanju rečenice izgubila citat i tablica koja ne prikazuje proces opisan u tekstu ne padaju ni na jednoj provjeri. Mjereno 4. 9. 2026.: dva kruga alata prošla su bez blokirajućeg nalaza, čitanje je našlo sedam grešaka. Zabilježi tko je čitao i kada; ovo je jedini blokirajući dio koji alat ne može sam zadovoljiti, i to namjerno."
+   },
+   "modovi": [
+    "6"
+   ]
+  },
+  "obrana_paket": {
+   "naziv": "Paket za obranu",
+   "skupina": "proces",
+   "redoslijed": 210,
+   "obavezan": "uvjetno",
+   "uvjet": "završni i diplomski",
+   "profil_nazivi": [],
+   "proizvodi": {
+    "mod": "5",
+    "cime": "references/obrana.md — 12 slajdova, scenarij, 15 pitanja, slabe točke, 5 brojki"
+   },
+   "provjera": {
+    "razina": "rucno",
+    "naredba": null,
+    "kako": "Nijedna brojka na slajdovima ne smije odstupati od one u radu. To je najlakše pitanje koje komisija može postaviti."
+   },
+   "modovi": [
+    "5"
+   ]
+  },
+  "ispravci_nakon_obrane": {
+   "naziv": "Ispravci nakon obrane",
+   "skupina": "proces",
+   "redoslijed": 220,
+   "obavezan": "uvjetno",
+   "uvjet": "komisija traži izmjene prije konačnog pohranjivanja",
+   "profil_nazivi": [],
+   "proizvodi": {
+    "mod": "7",
+    "cime": "popravci u rukopisu → dokument se gradi iznova"
+   },
+   "provjera": {
+    "razina": "nepokriveno",
+    "naredba": null,
+    "kako": "Skill je rad ispuštao na predaji. Traženje komisije zapiši u .katedra/zamjerke.json kao i mentorovo (extract_comments.py ili ručni unos), pa ga zatvori kroz zamjerke.py resolve. Verzija koja ide u repozitorij mora biti verzija koja je prošla ispravke, ne ona koja je branjena — to se razilazi tiho."
+   },
+   "modovi": [
+    "7"
+   ]
+  }
+ },
+ "$comment_pokazatelj": "Dio čija obaveznost ne dolazi iz struktura.obavezni_dijelovi nego iz drugog mjesta u profilu nosi `profil_pokazatelj` — JSON Pointer koji sij() provjerava. Bez toga bi Turnitin ispao „ne primjenjuje se\" na svakom fakultetu, jer ga nijedan profil ne navodi među dijelovima dokumenta — a nije ni dio dokumenta."
+}

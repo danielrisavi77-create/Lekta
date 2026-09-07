@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "katedra-claim-record-v1",
+  "title": "Katedra claim ledger JSONL record",
+  "type": "object",
+  "required": ["schema_version", "claim_id", "text", "location", "evidence"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "claim_id": {"type": "string", "minLength": 1},
+    "text": {"type": "string", "minLength": 1},
+    "location": {
+      "type": "object",
+      "properties": {
+        "chapter": {"type": "string"},
+        "paragraph": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "relation"],
+        "properties": {
+          "evidence_id": {"type": "string", "minLength": 1},
+          "relation": {"enum": ["supports", "contradicts", "contextualizes"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

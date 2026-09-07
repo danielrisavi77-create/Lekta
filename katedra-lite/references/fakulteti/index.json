@@ -1,0 +1,153 @@
+{
+  "verzija": 2,
+  "generated": true,
+  "generator": "scripts/profile_rules.py::generate_registry",
+  "generated_from": [
+    "_support_catalog.json",
+    "efzg.json",
+    "fpzg.json",
+    "overlays/efzg-rfir-seminarski.json",
+    "overlays/efzg-rfir.json"
+  ],
+  "fakulteti": [
+    {
+      "slug": "efzg",
+      "naziv": "Ekonomski fakultet Sveučilišta u Zagrebu",
+      "aliasi": [
+        "EFZG",
+        "Ekonomski fakultet Zagreb",
+        "Ekonomski fakultet",
+        "efzg.hr",
+        "Poslovna ekonomija"
+      ],
+      "status": "potvrdeno",
+      "support_tier": "advisory",
+      "provjereno": "2026-08-04"
+    },
+    {
+      "slug": "fpzg",
+      "naziv": "Fakultet političkih znanosti Sveučilišta u Zagrebu",
+      "aliasi": [
+        "FPZG",
+        "Fakultet političkih znanosti",
+        "fpzg.unizg.hr",
+        "politologija",
+        "novinarstvo"
+      ],
+      "status": "nepotvrdeno",
+      "support_tier": "advisory",
+      "provjereno": "2026-08-08"
+    }
+  ],
+  "rute": [
+    {
+      "alias": "efzg",
+      "context": {
+        "faculty": "efzg"
+      },
+      "source": "efzg.json"
+    },
+    {
+      "alias": "efzg.hr",
+      "context": {
+        "faculty": "efzg"
+      },
+      "source": "efzg.json"
+    },
+    {
+      "alias": "Ekonomski fakultet",
+      "context": {
+        "faculty": "efzg"
+      },
+      "source": "efzg.json"
+    },
+    {
+      "alias": "Ekonomski fakultet Sveučilišta u Zagrebu",
+      "context": {
+        "faculty": "efzg"
+      },
+      "source": "efzg.json"
+    },
+    {
+      "alias": "Ekonomski fakultet Zagreb",
+      "context": {
+        "faculty": "efzg"
+      },
+      "source": "efzg.json"
+    },
+    {
+      "alias": "Fakultet političkih znanosti",
+      "context": {
+        "faculty": "fpzg"
+      },
+      "source": "fpzg.json"
+    },
+    {
+      "alias": "Fakultet političkih znanosti Sveučilišta u Zagrebu",
+      "context": {
+        "faculty": "fpzg"
+      },
+      "source": "fpzg.json"
+    },
+    {
+      "alias": "fpzg",
+      "context": {
+        "faculty": "fpzg"
+      },
+      "source": "fpzg.json"
+    },
+    {
+      "alias": "fpzg.unizg.hr",
+      "context": {
+        "faculty": "fpzg"
+      },
+      "source": "fpzg.json"
+    },
+    {
+      "alias": "novinarstvo",
+      "context": {
+        "faculty": "fpzg"
+      },
+      "source": "fpzg.json"
+    },
+    {
+      "alias": "politologija",
+      "context": {
+        "faculty": "fpzg"
+      },
+      "source": "fpzg.json"
+    },
+    {
+      "alias": "Poslovna ekonomija",
+      "context": {
+        "faculty": "efzg"
+      },
+      "source": "efzg.json"
+    },
+    {
+      "alias": "Računovodstvo, financijsko izvještavanje i revizija",
+      "context": {
+        "faculty": "efzg",
+        "programme": "rfir"
+      },
+      "source": "overlays/efzg-rfir.json"
+    },
+    {
+      "alias": "RFIR",
+      "context": {
+        "faculty": "efzg",
+        "programme": "rfir"
+      },
+      "source": "overlays/efzg-rfir.json"
+    },
+    {
+      "alias": "stručni diplomski studij EFZG",
+      "context": {
+        "faculty": "efzg",
+        "programme": "rfir"
+      },
+      "source": "overlays/efzg-rfir.json"
+    }
+  ],
+  "napomena": "GENERIRANO — ne uređuj ručno. Canonical podaci su <slug>.json i overlays/*.json; regeneriraj scripts/profile_registry.py."
+}
