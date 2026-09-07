@@ -57,15 +57,13 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
   // Provjera se pokrece s OVOG koraka: spajanje 2 i 3.
   await expect(page.locator('#analyzeBtn')).toBeVisible();
 
-  // Kontrole cekaju iza "Promijeni".
-  // Stupac profila ima DVA obrasca (ustanova/fakultet/studij, pa vrsta rada), pa se broji
-  // koliko ih je vidljivo umjesto da se bira jedan: tvrdnja nad `.first()` bi prosla i da je
-  // drugi ostao na ekranu.
+  // Kontrole nisu na ekranu: od 2026-09-07 uopce nisu u `#wizardView`, nego u listu izvan
+  // `<main>`. Tvrdnja gleda VIDLJIVOST, ne postojanje, pa vrijedi i za jedno i za drugo.
   await expect(page.locator('.wizard-col-profile .form-grid:visible')).toHaveCount(0);
   await page.locator('[data-change-profile]').click();
-  const vidljivi = await page.locator('.wizard-col-profile .form-grid:visible').count();
-  expect(vidljivi, 'nakon Promijeni moraju se otvoriti SVI obrasci profila').toBeGreaterThan(1);
-  await expect(page.locator('#institutionSelect')).toBeFocused();
+  await expect(page.locator('#profileSheet')).toBeVisible();
+  const vidljivi = await page.locator('#profileSheet .form-grid:visible').count();
+  expect(vidljivi, 'list mora otvoriti SVE obrasce profila').toBeGreaterThan(1);
 });
 
 test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marketinga', async ({ page }) => {
@@ -91,7 +89,7 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#radDocBar')).toBeVisible();
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
-  await expect(page.locator('.rad-doc-local')).toBeVisible();
+  await expect(page.locator('.nav-rad .local-badge')).toBeVisible();
 
   // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
   // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav
@@ -159,4 +157,50 @@ test('/rad/ zaglavlje: preziviljava obnovu sesije, jer se pretplacuje prije nje'
   await page.reload();
   await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
+});
+
+test('/rad/ list profila: zamka fokusa, izlaz tipkovnicom i povratak fokusa', async ({ page }) => {
+  /**
+   * OVO JE UGOVOR KOJI PRIJE NIJE POSTOJAO. Do 2026-09-07 su se kontrole otkrivale na mjestu
+   * (klasa `lek-izmjena`), pa nije bilo ni zamke fokusa ni izlaza tipkovnicom: Tab je iz zadnjeg
+   * izbornika nastavljao u sadrzaj IZA panela, koji je vizualno izgledao kao pozadina.
+   *
+   * List je zato obican modal (`.modal-backdrop` + `trapModal`), a ne nov sustav. Zamka fokusa,
+   * `inert` pozadina, Escape i povratak fokusa dolaze iz `modal-utils.ts`, isto kao za ostalih 12
+   * dijaloga na ovoj stranici.
+   *
+   * ZASTO JE POLOZAJ U DOM-u DIO UGOVORA: `setBackgroundInert` postavlja `inert` na `header.topbar`,
+   * `main` i `footer`. List ostavljen unutar `#wizardView` (koji je u `<main>`) postao bi inertan
+   * ZAJEDNO s pozadinom, dakle nedostupan tipkovnicom. Svih 12 postojecih modala zato stoji izvan
+   * `<main>`, i tvrdnja to mjeri izravno.
+   */
+  await page.goto('/rad/');
+  await page.locator('#fileInput').setInputFiles(FIXTURE);
+  await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
+
+  const izvanMaina = await page.locator('#profileSheet').evaluate((el) => !el.closest('main'));
+  expect(izvanMaina, 'list unutar <main> bio bi inertan zajedno s pozadinom').toBe(true);
+
+  await page.locator('[data-change-profile]').click();
+  await expect(page.locator('#profileSheet')).toBeVisible();
+
+  // Fokus je USAO u list. Ne tvrdi se KOJI je element, jer `trapModal` bira gumb zatvaranja, a to
+  // je odluka dijeljenog helpera; ugovor je da fokus nije ostao iza panela.
+  await expect(page.locator('#profileSheet')).toContainText('Profil fakulteta');
+  const fokusUnutra = await page.evaluate(() =>
+    !!document.activeElement?.closest('#profileSheet'));
+  expect(fokusUnutra, 'fokus je ostao izvan lista, pa zamka ne drzi').toBe(true);
+
+  // Pozadina je stvarno inertna, ne samo vizualno prekrivena.
+  await expect(page.locator('main')).toHaveAttribute('inert', '');
+
+  // Izlaz tipkovnicom. Ovo je ono cega prije nije bilo.
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#profileSheet')).toBeHidden();
+  await expect(page.locator('main')).not.toHaveAttribute('inert', '');
+
+  // Fokus se vraca na okidac, inace korisnik nakon zatvaranja pada na vrh dokumenta.
+  const vracen = await page.evaluate(() =>
+    !!document.activeElement?.closest('[data-change-profile]'));
+  expect(vracen, 'fokus se nije vratio na "Promijeni"').toBe(true);
 });

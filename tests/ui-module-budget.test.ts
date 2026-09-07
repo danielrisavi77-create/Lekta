@@ -73,7 +73,15 @@ const BUDZET_APP = 357 * 1024;
 // presao vlastiti budzet (357,2 od 357 KB). Ukupno raste jer je dodana funkcionalnost koje prije
 // nije bilo: potvrda profila kao ekran umjesto formulara od devet kontrola (UX_PRINCIPLES.md 2).
 // Sam app.ts je pritom PAO ispod svog budzeta, sto je ono sto ratchet stvarno cuva.
-const BUDZET_UI_UKUPNO = 826 * 1024;
+// 2026-09-07 (drugi put istog dana, i razlog je drugi): 826 -> 828 KB. Dvoje:
+//  - `openProfileSheet`/`closeProfileSheet` u app.ts, jer list profila mora biti ozicen na ISTO
+//    mjesto kao ostalih 12 modala (globalni Escape rukovatelj i delegirani klik kartice); vani
+//    bi se logika modala razdvojila na dvije datoteke.
+//  - obrazlozenje ispravka u `modal-utils.ts`: vracanje fokusa stajalo je izvan provjere `_trap`,
+//    pa ga je trosio prvi zatvarac u nizu dok je pozadina jos `inert`. Kvar je pogadjao SVIH 12
+//    modala zatvorenih Escapeom i izmjeren je na `#legalModal`, koji ta izmjena ne dira.
+// `app.ts` je pritom OSTAO ispod svog budzeta, sto je ono sto ratchet primarno cuva.
+const BUDZET_UI_UKUPNO = 828 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {

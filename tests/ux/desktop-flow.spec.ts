@@ -24,8 +24,9 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
-  await page.locator('#stepToAnalyze').click();
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');
+  // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
+  // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
+  // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await page.locator('#analyzeBtn').click();
   const confirm = page.locator('[data-confirm-profile]');
   if (await confirm.isVisible()) await confirm.click();
