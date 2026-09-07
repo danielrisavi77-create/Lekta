@@ -1471,3 +1471,17 @@ body.is-scrolling .section *{box-shadow:none!important}
 .mw-item-name{font-weight:600;color:var(--text);text-decoration:none}
 a.mw-item-name:hover{text-decoration:underline}
 .mw-item-meta{color:var(--muted);font-size:.86rem}
+
+/* TRAKA S BROJKAMA na `/saznaj-vise/`. Preseljena s ulaza `/` 2026-09-06: ondje je konkurirala
+   jedinoj radnji ekrana, a ovdje je na mjestu, jer stranica i postoji da objasni opseg.
+   Broj je serif (display glas), oznaka je sucelje: isti par kao na ulazu. */
+.site-stats{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:6px 22px;
+  margin:0 0 clamp(20px,3vh,30px);color:var(--muted);font-family:var(--ui);font-size:.84rem;
+}
+.site-stats > span:not(.site-stats-note){display:inline-flex;align-items:baseline;gap:.34em}
+.site-stats b{
+  color:var(--text);font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600;
+  font-size:1.1rem;letter-spacing:-.012em;font-variant-numeric:tabular-nums;
+}
+.site-stats-note{flex-basis:100%;text-align:center;font-size:.8rem;opacity:.85}

@@ -108,30 +108,112 @@
 .intake-continue:not([hidden]){display:block;margin-top:14px;color:var(--muted);font-family:var(--ui);font-size:.9rem}
 .intake-continue a{color:var(--brand);font-weight:650}
 
-.intake-stats{
-  display:flex;justify-content:center;flex-wrap:wrap;gap:4px 20px;
-  margin-top:clamp(22px,4vh,34px);color:var(--muted);
-  font-family:var(--ui);font-size:.84rem;
-}
-/* Samo CELIJE s brojkom, ne i napomena ispod: `display:inline-flex` gasi naslijedjeni
-   `text-align:center`, pa je napomena s `flex-basis:100%` bila odlijepljena ulijevo. */
-.intake-stats > span:not(.intake-stats-note){display:inline-flex;align-items:baseline;gap:.34em}
-.intake-stats b{
-  color:var(--text);font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600;
-  font-size:1.1rem;letter-spacing:-.012em;font-variant-numeric:tabular-nums;
-}
-.intake-stats-note{flex-basis:100%;font-size:.8rem;opacity:.85}
-
-.intake-links{display:flex;justify-content:center;gap:8px 20px;flex-wrap:wrap;margin-top:16px;font-family:var(--ui);font-size:.9rem;font-weight:600}
+.intake-links{display:flex;justify-content:center;margin-top:18px;font-family:var(--ui);font-size:.9rem;font-weight:600}
 .intake-links a{color:var(--muted);text-underline-offset:4px}
 .intake-links a:hover,.intake-links a:focus-visible{color:var(--brand)}
+
+/* --- kratka navigacija ulaza ----------------------------------------------------------------- */
+/* Dva odredista i jedna kontrola. Vise od toga natjece se s jedinom radnjom ekrana. */
+.intake-nav{display:flex;align-items:center;gap:14px;margin-left:auto}
+.intake-nav>a{
+  color:var(--muted);font-family:var(--ui);font-size:.88rem;font-weight:600;
+  text-decoration:none;text-underline-offset:4px;
+}
+.intake-nav>a:hover,.intake-nav>a:focus-visible{color:var(--brand);text-decoration:underline}
+/* Pomoc je diskretna, ali mora ostati META od 24 px (WCAG 2.5.8), pa je krug a ne goli znak. */
+.intake-nav-help{
+  display:inline-grid;place-items:center;min-width:26px;min-height:26px;
+  border:1px solid var(--line);border-radius:999px;line-height:1;
+}
+.intake-nav-help:hover,.intake-nav-help:focus-visible{border-color:var(--brand);text-decoration:none}
+
+/* --- papir: drugo lice ------------------------------------------------------------------------ */
+/* Isti list, dva sadrzaja. Poziv nestaje cim dokument lezi na papiru, pa se stanje vidi NA
+   predmetu umjesto kao poruka negdje ispod njega. `display` se prebacuje, ne `opacity`: skriveni
+   poziv ne smije ostati u redoslijedu citaca ekrana ni hvatati fokus. */
+.intake-poziv{display:grid;justify-items:center}
+.intake-karta{display:none;justify-items:center;gap:0;text-align:center}
+.intake-stage[data-intake-state="checking"] .intake-poziv,
+.intake-stage[data-intake-state="saving"] .intake-poziv,
+.intake-stage[data-intake-state="ready"] .intake-poziv{display:none}
+.intake-stage[data-intake-state="checking"] .intake-karta,
+.intake-stage[data-intake-state="saving"] .intake-karta,
+.intake-stage[data-intake-state="ready"] .intake-karta{display:grid}
+
+.intake-karta-znak{
+  display:inline-grid;place-items:center;width:44px;height:52px;margin-bottom:14px;
+  border:1px solid var(--paper-line);border-radius:3px;
+  background:color-mix(in srgb,var(--brand) 10%,transparent);
+  color:var(--brand);font:700 19px/1 var(--ui);letter-spacing:.02em;
+}
+.intake-karta .intake-file-name{
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--paper-ink);font-family:var(--display-serif);font-optical-sizing:auto;
+  font-weight:600;font-size:clamp(1.05rem,2.4vw,1.35rem);letter-spacing:-.01em;
+}
+.intake-karta-velicina{margin-top:4px;color:var(--paper-muted);font-family:var(--ui);font-size:.84rem}
+
+.intake-karta-potvrde{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:7px;justify-items:start}
+.intake-karta-potvrde li{
+  display:grid;grid-template-columns:18px auto;align-items:center;gap:9px;
+  color:var(--paper-muted);font-family:var(--ui);font-size:.9rem;
+}
+/* Kvacica se pali TEK kad je taj korak stvarno gotov. Prazan krug znaci "jos traje", pa napredak
+   nosi sam popis umjesto zasebnog vrtuljka. */
+.intake-karta-potvrde li::before{
+  content:"";display:inline-grid;place-items:center;
+  width:16px;height:16px;border:1.5px solid var(--paper-line);border-radius:999px;
+  color:var(--on-brand,#fff);font:700 10px/1 var(--ui);
+}
+.intake-stage[data-intake-state="saving"] li[data-korak="format"]::before,
+.intake-stage[data-intake-state="ready"] li[data-korak="format"]::before,
+.intake-stage[data-intake-state="ready"] li[data-korak="lokalno"]::before{
+  content:"\2713";border-color:var(--pass);background:var(--pass);
+}
+.intake-stage[data-intake-state="saving"] li[data-korak="format"],
+.intake-stage[data-intake-state="ready"] li[data-korak="format"],
+.intake-stage[data-intake-state="ready"] li[data-korak="lokalno"]{color:var(--paper-ink)}
+
+.intake-karta-odlazak{
+  margin-top:20px;color:var(--brand);font-family:var(--ui);font-weight:650;font-size:.92rem;
+  opacity:0;transition:opacity .18s ease;
+}
+.intake-stage[data-intake-state="ready"] .intake-karta-odlazak{opacity:1}
+
+/* --- brava: obecanje koje se vidi bez citanja ------------------------------------------------- */
+.intake-brava{
+  display:inline-flex;align-items:center;gap:7px;margin-top:18px;
+  color:var(--paper-muted);font-family:var(--ui);font-size:.82rem;
+}
+.intake-brava svg{width:14px;height:14px}
+
+/* --- podnozje ulaza --------------------------------------------------------------------------- */
+.intake-footer{margin-top:clamp(28px,6vh,56px);padding-bottom:26px}
+.intake-footer-pravno{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 18px}
+.intake-footer-pravno a{
+  color:var(--muted);font-family:var(--ui);font-size:.82rem;text-decoration:none;text-underline-offset:4px;
+}
+.intake-footer-pravno a:hover,.intake-footer-pravno a:focus-visible{color:var(--brand);text-decoration:underline}
+.intake-footer-nota{
+  margin:10px 0 0;text-align:center;color:var(--muted-2,var(--muted));
+  font-family:var(--ui);font-size:.76rem;line-height:1.5;
+}
 
 /* --- stanja ------------------------------------------------------------------------------- */
 .intake-stage[data-intake-state="checking"] .intake-paper,
 .intake-stage[data-intake-state="saving"] .intake-paper{cursor:progress}
 .intake-stage[data-intake-state="ready"] .intake-paper{border-color:var(--brand)}
-/* Papir se uvlaci sa stola pri prijelazu na /rad/. */
-.intake-stage.intake-leaving .intake-paper{transform:translateY(-14px) scale(.985) rotate(0);opacity:.6;transition-duration:.18s}
+/* PAPIR ODLAZI PREMA RADNOM PROSTORU. Nije ukras nego jedini trenutak u kojem korisnik vidi da
+   je isti predmet presao dalje, umjesto da je stigao na nepovezan ekran. Zato je pomak vidljiv
+   (-64 px) i prati ga blago suzenje, kao da list klizne u mapu.
+   Animiraju se ISKLJUCIVO `transform` i `opacity`; sve ostalo bi izazvalo preracun rasporeda. */
+.intake-stage.intake-leaving .intake-paper{
+  transform:translateY(-64px) scale(.955) rotate(0);opacity:0;
+  transition:transform .34s cubic-bezier(.4,0,.2,1),opacity .34s ease,box-shadow .34s ease;
+  box-shadow:0 40px 60px rgba(0,0,0,.18);
+}
+.intake-stage.intake-leaving .intake-paper::before,
+.intake-stage.intake-leaving .intake-paper::after{opacity:0;transition:opacity .2s ease}
 
 @media (max-width:600px){
   .intake-shell{width:calc(100% - 24px)}

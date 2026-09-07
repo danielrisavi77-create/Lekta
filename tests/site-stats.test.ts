@@ -26,13 +26,26 @@ describe('site-stats: pecene brojke naslovnice', () => {
     expect(fresh.works).toBeGreaterThan(100_000);
   });
 
-  it('ulaz `/` cita SAMO pecen JSON, ne registar', () => {
-    // Uvoz registra u ulaz bio bi veci od cijele stranice; formula zivi u modulu koji ulaz ne uvozi.
-    const entry = readFileSync(resolve(__dirname, '..', 'src', 'routes', 'intake', 'main.ts'), 'utf8');
-    expect(entry).toContain('data/coverage/site-stats.json');
-    expect(entry).not.toContain('profile-registry');
-    expect(entry).not.toContain('catalog-loader');
+  it('traka cita SAMO pecen JSON, ne registar', () => {
+    // Uvoz registra bio bi veci od cijele stranice; formula zivi u modulu koji traka ne uvozi.
+    //
+    // META SE 2026-09-06 PROMIJENILA, NAMJERA NIJE. Traka je preseljena s ulaza `/` (ondje je
+    // konkurirala jedinoj radnji ekrana) na `/saznaj-vise/`, koji i postoji da objasni opseg.
+    // Potrosac je sada `routes/shared/site-stats-strip.ts`; pravilo "pecen JSON, nikad ziv
+    // registar" vrijedi za njega jednako kao prije za ulaz.
+    const strip = readFileSync(resolve(__dirname, '..', 'src', 'routes', 'shared', 'site-stats-strip.ts'), 'utf8');
+    expect(strip).toContain('data/coverage/site-stats.json');
+    expect(strip).not.toContain('profile-registry');
+    expect(strip).not.toContain('catalog-loader');
     // Modul s formulom zavrsava na `site-stats'`, pecen JSON na `site-stats.json'`; zabranjen je samo modul.
-    expect(entry).not.toContain("coverage/site-stats'");
+    expect(strip).not.toContain("coverage/site-stats'");
+  });
+
+  it('ULAZ `/` vise ne vuce brojke uopce: njegov graf ih ne dodiruje', () => {
+    // Drugi smjer iste selidbe. Bez ove tvrdnje bi se traka mogla tiho vratiti na ulaz, a s njom i
+    // razlog zbog kojeg je maknuta.
+    const entry = readFileSync(resolve(__dirname, '..', 'src', 'routes', 'intake', 'main.ts'), 'utf8');
+    expect(entry).not.toContain('site-stats');
+    expect(entry).not.toContain('intakeStats');
   });
 });

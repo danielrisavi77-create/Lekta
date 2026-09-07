@@ -22,4 +22,5 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
     await sticky.locator('#stepToProfile').click();
     await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
   });
+
 }

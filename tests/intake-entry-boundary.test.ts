@@ -34,7 +34,7 @@ describe('cisti ulaz /', () => {
     expect(statSync(ROOT_HTML).size).toBeLessThan(30_000);
     expect(html).toMatch(/src=["']\/src\/routes\/intake\/main\.ts["']/);
     expect(html).not.toContain('/src/main.ts');
-    for (const id of ['intakeStage', 'intakeDropzone', 'intakeFile', 'intakeFileName', 'intakeStatus', 'intakeError', 'intakeMemoryAction', 'intakeContinue', 'intakeStats', 'paperCover']) {
+    for (const id of ['intakeStage', 'intakeDropzone', 'intakeFile', 'intakeFileName', 'intakeFileSize', 'intakeStatus', 'intakeError', 'intakeMemoryAction', 'intakeContinue', 'paperCover']) {
       expect(html, `ulaz treba #${id}`).toContain(`id="${id}"`);
     }
     expect(html).toContain('href="/moji-radovi/"');
@@ -45,6 +45,50 @@ describe('cisti ulaz /', () => {
       expect(html, `#${id} ne pripada ulazu`).not.toContain(`id="${id}"`);
     }
     expect(html).not.toMatch(/Često postavljena pitanja|PREPORUČENO|price-card/);
+  });
+
+  it('ekran ima JEDNU radnju: nista ne konkurira papiru', () => {
+    // Rez 2026-09-06, odlukom vlasnika. Ulaz je do tada nosio devet stavki izbornika, padajuci
+    // "Alati", drugi CTA ("Provjeri rad"), mobilni hamburger, traku s brojkama, red poveznica,
+    // marquee i cetverostupacno podnozje. Sve to vodi na sadrzaj koji zivi na `/saznaj-vise/`, a na
+    // ekranu cija je jedina svrha ubaciti dokument bilo je konkurencija toj radnji.
+    //
+    // Guard je nad ODSUTNOSCU, jer se takve stvari vracaju jedna po jedna, svaka s dobrim
+    // pojedinacnim razlogom, i nitko ne vidi zbroj.
+    const html = source(ROOT_HTML);
+    for (const oznaka of ['nav-links', 'nav-tools', 'mobileNav', 'mobileMenuBtn', 'ks-marquee', 'ks-tape', 'footer-grid', 'intakeStats']) {
+      expect(html, `${oznaka} je vraceno na ulaz; sadrzaj pripada /saznaj-vise/`).not.toContain(oznaka);
+    }
+    // Navigacija smije imati najvise dva odredista (Moji radovi, pomoc) plus logo.
+    const nav = html.match(/<div class="intake-nav">[\s\S]*?<\/div>/)?.[0] ?? '';
+    expect(nav, 'nedostaje kratka navigacija ulaza').not.toBe('');
+    expect([...nav.matchAll(/<a\b/g)]).toHaveLength(2);
+  });
+
+  it('PRAVNE poveznice ostaju, i nisu predmet pojednostavljenja', () => {
+    // Podnozje je svedeno, ali ne i ovo: privatnost, uvjeti i obrada dokumenata moraju biti
+    // dohvatljivi s ekrana na kojem korisnik predaje dokument. Popravak dokument UPLOADA i
+    // POHRANJUJE, pa je to predugovorna informacija, ne ukras.
+    const html = source(ROOT_HTML);
+    for (const put of ['/privatnost.html', '/uvjeti-koristenja.html', '/obrada-dokumenata.html']) {
+      expect(html, `nedostaje pravna poveznica ${put}`).toContain(`href="${put}"`);
+    }
+  });
+
+  it('papir mijenja stanje NA sebi: kartica dokumenta postoji uz poziv', () => {
+    // Do reza je status stajao kao poruka ISPOD papira, pa je dokument izgledao kao da je
+    // "negdje drugdje". Kartica je isti list s drugim sadrzajem, pa se vidi da predmet putuje.
+    const html = source(ROOT_HTML);
+    expect(html).toContain('class="intake-poziv"');
+    expect(html).toContain('class="intake-karta"');
+    for (const korak of ['format', 'lokalno']) {
+      expect(html, `kartici nedostaje potvrda koraka ${korak}`).toContain(`data-korak="${korak}"`);
+    }
+    const css = source(INTAKE_CSS);
+    // Prebacivanje ide preko `display`, ne `opacity`: skriveni poziv ne smije ostati u redoslijedu
+    // citaca ekrana ni hvatati fokus.
+    expect(css).toMatch(/data-intake-state="ready"\][^{]*\.intake-poziv\{display:none\}/);
+    expect(css).toMatch(/data-intake-state="ready"\][^{]*\.intake-karta\{display:grid\}/);
   });
 
   it('nav i podnozje NE vode u mrtva sidra: odrediste svakog `#` sidra postoji na stranici', () => {

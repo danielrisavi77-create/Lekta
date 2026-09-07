@@ -3,12 +3,19 @@ export type FreeToolPage = {
   name: string;
   primarySelector: string;
   workspaceSelector?: string;
+  /**
+   * Ima li stranica STANDARDNU ljusku (mobilni hamburger). Ulaz `/` je nema od reza 2026-09-06:
+   * navigacija je svedena na dva odredista i lampu, pa hamburger nema sto otvoriti. Stranica
+   * OSTAJE na popisu, jer axe pokrivenost i primarna akcija i dalje vrijede; iznimka je uska i
+   * imenovana, umjesto da se cijela stranica izbaci iz mjerenja.
+   */
+  hasChromeMenu?: boolean;
 };
 
 export const FREE_TOOL_PAGES: FreeToolPage[] = [
   // Rez naslovnice 2026-09-05: `/` je cisti ulaz, pa je primarna akcija papir za ucitavanje
   // (`#intakeDropzone`), a ne analizatorov `#dropzone`, koji je preselio na `/rad/`.
-  { route: '/index.html', name: 'naslovnica proizvoda', primarySelector: '#intakeDropzone' },
+  { route: '/index.html', name: 'naslovnica proizvoda', primarySelector: '#intakeDropzone', hasChromeMenu: false },
   { route: '/alati.html', name: 'alati', primarySelector: '.tool-card[href="citat.html"]' },
   { route: '/citat.html', name: 'citat', primarySelector: '#copyBtn', workspaceSelector: '.tool-workspace' },
   { route: '/kartice.html', name: 'kartice', primarySelector: '#kt-copy', workspaceSelector: '.tool-workspace' },

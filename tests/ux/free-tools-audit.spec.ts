@@ -10,7 +10,8 @@ for (const pageSpec of FREE_TOOL_PAGES) {
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator(pageSpec.primarySelector)).toBeVisible();
-    await expect(page.locator('#mobileMenuBtn')).toBeVisible();
+    // Hamburger samo ondje gdje ljuska ima izbornik; lampa je kontrola i mora biti svugdje.
+    if (pageSpec.hasChromeMenu !== false) await expect(page.locator('#mobileMenuBtn')).toBeVisible();
     await expect(page.locator('#themeBtn')).toBeVisible();
 
     if (pageSpec.workspaceSelector) {

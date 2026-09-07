@@ -129,6 +129,10 @@ export function mountIntakeController(
     clearError();
     elements.stage.classList.remove('intake-leaving');
     elements.fileName.textContent = file.name;
+    // Velicina je NEOBAVEZNA meta: kontroler mora raditi i nad minimalnim DOM-om iz testova, gdje
+    // je kartica dokumenta ne postoji. Ime ide kroz `textContent` kao i dosad, nikad kroz HTML.
+    const fileSize = doc.getElementById('intakeFileSize');
+    if (fileSize) fileSize.textContent = formatBytes(file.size);
 
     if (!/\.docx$/i.test(file.name)) {
       showError('Odaberi Word dokument s nastavkom .docx.');
@@ -191,7 +195,10 @@ export function mountIntakeController(
     clearError();
     setState('ready', 'Dokument je spreman. Otvaram korektorski stol.');
     elements.stage.classList.add('intake-leaving');
-    await delay(dependencies.transitionDelayMs ?? 180);
+    // 420 ms, ne 180: odlazak papira traje 340 ms (`intake.css`), a to je jedini trenutak u kojem
+    // korisnik vidi da je ISTI dokument presao u radni prostor. Kraca stanka rezala je animaciju
+    // na pola, pa je prijelaz izgledao kao obicna navigacija. Testovi predaju 0 i ne cekaju nista.
+    await delay(dependencies.transitionDelayMs ?? 420);
     if (token !== selectionToken) {
       try {
         await dependencies.persistentStore.delete(session.id);
