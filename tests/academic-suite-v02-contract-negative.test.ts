@@ -27,23 +27,23 @@ describe('Academic Suite v0.2 contract rejection tripwires', () => {
     expect(validate.errors?.some((error) => error.keyword === 'required' && error.params.missingProperty === 'projectId')).toBe(true);
   });
 
-  it('rejects an artifact version with an underspecified document fingerprint', () => {
+  it('rejects an artifact version with an invalid DOCX SHA-256 identity', () => {
     const validate = compile('artifact-version');
     const example = clone(readJson<Record<string, unknown>>(join(CONTRACT_ROOT, 'examples', 'artifact-docx.json')));
+    const identity = example.identity as Record<string, unknown>;
 
-    example.documentFingerprint = 'short';
+    identity.fileSha256 = 'short';
 
     expect(validate(example)).toBe(false);
-    expect(validate.errors?.some((error) => error.instancePath === '/documentFingerprint' && error.keyword === 'minLength')).toBe(true);
+    expect(validate.errors?.some((error) => error.instancePath === '/identity/fileSha256' && error.keyword === 'pattern')).toBe(true);
   });
 
   it('rejects an automatic finding that has no real fixerId', () => {
     const validate = compile('finding');
     const example = clone(readJson<Record<string, unknown>>(join(CONTRACT_ROOT, 'examples', 'lekta-margin-finding.json')));
-    const autoFix = example.autoFix as Record<string, unknown>;
 
-    autoFix.mode = 'automatic';
-    delete autoFix.fixerId;
+    example.fixCapability = 'automatic';
+    delete example.fixerId;
 
     expect(validate(example)).toBe(false);
     expect(validate.errors?.some((error) => error.keyword === 'required' && error.params.missingProperty === 'fixerId')).toBe(true);
@@ -69,25 +69,23 @@ describe('Academic Suite v0.2 contract rejection tripwires', () => {
     expect(validate.errors?.some((error) => error.instancePath === '/findingIds' && error.keyword === 'minItems')).toBe(true);
   });
 
-  it('rejects a verification receipt with a non-canonical status', () => {
+  it('rejects a verification receipt with a non-canonical outcome', () => {
     const validate = compile('verification-receipt');
     const example = clone(readJson<Record<string, unknown>>(join(CONTRACT_ROOT, 'examples', 'word-replica-receipt.json')));
 
-    example.status = 'GREEN';
+    example.outcome = 'GREEN';
 
     expect(validate(example)).toBe(false);
-    expect(validate.errors?.some((error) => error.instancePath === '/status' && error.keyword === 'enum')).toBe(true);
+    expect(validate.errors?.some((error) => error.instancePath === '/outcome' && error.keyword === 'enum')).toBe(true);
   });
 
   it('rejects a capability manifest that advertises no capabilities', () => {
     const validate = compile('capability-manifest');
     const example = {
-      contractVersion: '0.2',
+      schemaVersion: '0.2',
       engine: 'lekta',
       engineVersion: '2.2.2',
       capabilities: [],
-      dataBoundary: 'browser-local',
-      verifiedAt: '2026-09-07T00:00:00.000Z',
     };
 
     expect(validate(example)).toBe(false);
