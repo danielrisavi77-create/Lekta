@@ -11,6 +11,20 @@ revision-bound plan approval and billing/refund reconciliation. 0111 adds atomic
 run consent withdrawal and restrictive live-payload reads. 0112 adds immutable
 result allocation and per-object upload intents for run contexts and results.
 
+0113 applies the same custody to material files: service allocation with explicit
+`material-storage-v1` consent precedes any upload, both objects must complete
+before publication, and replay preserves the original 72-hour deadline. Owner
+privacy metadata and withdrawal remain available without a Pass or feature flag.
+Authenticated direct uploads to this private bucket are denied.
+
+Material withdrawal atomically revokes every recorded dependent run, including
+previous attachments and detached materials. Identifier-only lineage is recorded
+in the attachment transaction; withdrawal locks those runs in order, then the
+manifest, and rejects a concurrent binding/history change for retry. The UI
+confirmation explains that dependent runs stop and their temporary copies are
+removed. Local manuscript content is preserved. Existing context selection
+metadata backfills known history; missing legacy history is not invented.
+
 Only the service can authorize upload start, record completion or confirm
 recovery evidence. A second start never authorizes another HTTP upload under the
 same identity. Late completion after withdrawal remains discoverable for cleanup.
@@ -48,15 +62,21 @@ worker received upload authorization. It is retained at
 Staging readback on 2026-09-08 found zero temporary payload manifests and zero
 temporary Storage objects, and confirmed `storage.allow_any_operation` exists.
 That is a clean cutover prerequisite, not proof of completed authenticated
-Storage journeys. 0111/0112 must pass full gates and be deployed before those
-journeys. Production is unchanged.
+Storage journeys. 0111/0112 were applied to staging after their full gates;
+0113 requires its own reviewed deployment. Production is unchanged.
 
 Legacy protocol-0 objects have no trustworthy stored hash and remain uncertain
 pending explicit reconciliation. Missing metadata, an expired lease, or a timed
 out HTTP request does not prove physical absence. The system must not claim its
-72-hour physical deletion requirement is verified for such cases. Unbound
-material uploads and raw provider-response recovery remain separate release
-requirements. None of these SQL/unit checks replaces final staging verification.
+72-hour physical deletion requirement is verified for such cases. Raw
+provider-response recovery remains a separate release requirement. None of these
+SQL/unit checks replaces final staging verification.
+
+`D:/output/katedra-release-tools/material-concurrency.mjs` additionally exercises
+real lock waits for duplicate allocation, incomplete attachment, both attachment
+and withdrawal orders, and terminal-run reuse. Output is retained at
+`D:/output/lekta-material-concurrency.log`. It uses a disposable local database;
+Storage metadata in these checks is synthetic.
 
 Storage behavior references:
 - [Upload ordering](https://github.com/supabase/storage/blob/master/src/storage/uploader.ts)

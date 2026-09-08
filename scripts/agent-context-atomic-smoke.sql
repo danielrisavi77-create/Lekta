@@ -292,4 +292,105 @@ delete from public.agent_payload_manifests where manifest_id='40000000-0000-0000
 do $$ begin
   if exists(select 1 from public.agent_payload_upload_intents where manifest_id='40000000-0000-0000-0000-000000000001') then raise exception 'CLEANED_UPLOAD_EVIDENCE_DID_NOT_CASCADE'; end if;
 end $$;
+\i supabase/migrations/0077_agent_payload_tombstone.sql
+\i supabase/migrations/0113_material_payload_custody.sql
+\i supabase/migrations/0113_material_payload_custody.sql
+select set_config('request.jwt.claim.role','service_role',true);
+do $$ declare x record; y record; token uuid:=gen_random_uuid(); begin
+  begin
+    perform public.reserve_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',null,'60000000-0000-4000-8000-000000000001','old');
+    raise exception 'MATERIAL_WITHOUT_CONSENT_RESERVED';
+  exception when invalid_parameter_value then null; end;
+  select * into x from public.reserve_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',null,'60000000-0000-4000-8000-000000000001','material-storage-v1');
+  select * into y from public.reserve_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',null,'60000000-0000-4000-8000-000000000001','material-storage-v1');
+  if x.manifest_id<>y.manifest_id or x.expires_at<>y.expires_at or x.expires_at>x.created_at+interval '72 hours' then raise exception 'MATERIAL_REPLAY_EXTENDED_CUSTODY'; end if;
+  if public.can_read_agent_payload('katedra-temporary-materials',x.storage_path) then raise exception 'INCOMPLETE_MATERIAL_READABLE'; end if;
+  begin
+    perform public.complete_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',x.manifest_id);
+    raise exception 'MISSING_MATERIAL_UPLOAD_PUBLISHED';
+  exception when sqlstate '40901' then null; end;
+  if public.begin_agent_payload_upload(x.manifest_id,'body',token,repeat('c',64),1)<>'upload' then raise exception 'UNBOUND_UPLOAD_NOT_AUTHORIZED'; end if;
+  if public.begin_agent_payload_upload(x.manifest_id,'body',gen_random_uuid(),repeat('c',64),1)<>'uncertain' then raise exception 'UNBOUND_UPLOAD_REISSUED'; end if;
+  insert into storage.objects(bucket_id,name) values('katedra-temporary-materials',x.storage_path);
+  perform public.finish_agent_payload_upload(x.manifest_id,'body',token,true);
+  token:=gen_random_uuid();
+  perform public.begin_agent_payload_upload(x.manifest_id,'manifest',token,repeat('d',64),1);
+  insert into storage.objects(bucket_id,name) values('katedra-temporary-materials',x.manifest_path);
+  perform public.finish_agent_payload_upload(x.manifest_id,'manifest',token,true);
+  perform public.complete_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',x.manifest_id);
+  perform public.complete_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',x.manifest_id);
+  if not public.can_read_agent_payload('katedra-temporary-materials',x.storage_path) then raise exception 'COMPLETE_MATERIAL_NOT_READABLE'; end if;
+  perform public.tombstone_agent_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','60000000-0000-4000-8000-000000000001');
+  if public.can_read_agent_payload('katedra-temporary-materials',x.storage_path) then raise exception 'WITHDRAWN_MATERIAL_READABLE'; end if;
+  begin
+    perform public.reserve_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',null,'60000000-0000-4000-8000-000000000001','material-storage-v1');
+    raise exception 'WITHDRAWN_MATERIAL_REVIVED';
+  exception when sqlstate '40901' then null; end;
+  select * into x from public.reserve_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',null,'60000000-0000-4000-8000-000000000002','material-storage-v1');
+  token:=gen_random_uuid();
+  perform public.begin_agent_payload_upload(x.manifest_id,'body',token,repeat('e',64),1);
+  perform public.tombstone_agent_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','60000000-0000-4000-8000-000000000002');
+  if exists(select 1 from public.agent_payload_deletion_ready(array[x.manifest_id])) then raise exception 'PENDING_MATERIAL_UPLOAD_FALSELY_READY'; end if;
+  insert into storage.objects(bucket_id,name) values('katedra-temporary-materials',x.storage_path);
+  perform public.finish_agent_payload_upload(x.manifest_id,'body',token,true);
+  if not exists(select 1 from public.agent_payload_deletion_ready(array[x.manifest_id])) then raise exception 'LATE_MATERIAL_NOT_CLEANABLE'; end if;
+  begin
+    perform public.begin_agent_payload_upload(x.manifest_id,'manifest',gen_random_uuid(),repeat('e',64),1);
+    raise exception 'WITHDRAWN_MATERIAL_UPLOAD_STARTED';
+  exception when sqlstate '40901' then null; end;
+  if has_function_privilege('authenticated','public.reserve_material_payload(uuid,uuid,uuid,uuid,text)','EXECUTE')
+    or has_function_privilege('authenticated','public.complete_material_payload(uuid,uuid,uuid)','EXECUTE') then raise exception 'MATERIAL_UPLOAD_AUTHORITY_EXPOSED'; end if;
+  raise notice 'MATERIAL_PAYLOAD_CUSTODY_SQL_PASS';
+end $$;
+set local role authenticated;
+do $$ begin
+  begin
+    insert into storage.objects(bucket_id,name) values('katedra-temporary-materials','20000000-0000-0000-0000-000000000001/30000000-0000-0000-0000-000000000001/60000000-0000-4000-8000-000000000099-body');
+    raise exception 'DIRECT_MATERIAL_UPLOAD_BYPASSED_CUSTODY';
+  exception when insufficient_privilege then null; end;
+end $$;
+reset role;
+update public.entitlements set purchase_expires_at=now()-interval '1 day';
+select set_config('request.jwt.claim.role','authenticated',true);
+set local role authenticated;
+do $$ begin
+  if (select count(*) from public.list_material_payload_privacy('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',null))<>2 then
+    raise exception 'EXPIRED_PASS_CANNOT_DISCOVER_MATERIAL_CLEANUP';
+  end if;
+  begin
+    perform public.list_material_payload_privacy('20000000-0000-0000-0000-000000000002','30000000-0000-0000-0000-000000000001',null);
+    raise exception 'FOREIGN_MATERIAL_PRIVACY_EXPOSED';
+  exception when insufficient_privilege then null; end;
+end $$;
+reset role;
+-- Withdrawal must stop a dependent run, not reject the owner's request.
+select set_config('request.jwt.claim.role','service_role',true);
+update public.entitlements set purchase_expires_at=now()+interval '1 day';
+update public.agent_runs set status='running',snapshot_consent_version='agentic-snapshot-v1',snapshot_consent_at=now()
+  where run_id='10000000-0000-0000-0000-000000000001';
+do $$ declare x record; begin
+  select * into x from public.reserve_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','60000000-0000-4000-8000-000000000003','material-storage-v1');
+  perform public.withdraw_material_payload_consent('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','60000000-0000-4000-8000-000000000003');
+  if exists(select 1 from public.agent_runs where run_id='10000000-0000-0000-0000-000000000001' and (status<>'cancelled' or snapshot_consent_at is not null)) then raise exception 'MATERIAL_WITHDRAWAL_DID_NOT_STOP_RUN'; end if;
+  if exists(select 1 from public.agent_payload_manifests where run_id='10000000-0000-0000-0000-000000000001' and (deleted_at is null or deletion_requested_at is null)) then raise exception 'DEPENDENT_COPIES_SURVIVED_WITHDRAWAL'; end if;
+  if public.can_read_agent_payload('katedra-temporary-materials',x.storage_path) then raise exception 'WITHDRAWN_ATTACHED_MATERIAL_READABLE'; end if;
+  perform public.withdraw_material_payload_consent('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','60000000-0000-4000-8000-000000000003');
+  perform public.finalize_agent_payload_deletions(array[x.manifest_id]);
+  if not exists(select 1 from public.agent_payload_manifests where manifest_id=x.manifest_id and content_deleted_at is not null) then raise exception 'MATERIAL_CLEANUP_FIXTURE_NOT_FINALIZED'; end if;
+  if not exists(select 1 from public.list_material_payload_privacy('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',null) where manifest_id=x.manifest_id and cleanup='pending') then raise exception 'DERIVED_PENDING_CLEANUP_HIDDEN'; end if;
+  begin
+    delete from public.agent_payload_manifests where manifest_id=x.manifest_id;
+    raise exception 'DERIVED_CLEANUP_LINEAGE_ERASED';
+  exception when sqlstate '40901' then null; end;
+  raise notice 'ACTIVE_MATERIAL_WITHDRAWAL_SQL_PASS';
+end $$;
+-- Detach/reuse must not erase the history needed to remove derived copies.
+update public.agent_runs set status='running',snapshot_consent_version='agentic-snapshot-v1',snapshot_consent_at=now();
+do $$ declare x record; begin
+  select * into x from public.reserve_material_payload('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','60000000-0000-4000-8000-000000000004','material-storage-v1');
+  update public.agent_payload_manifests set run_id=null where manifest_id=x.manifest_id;
+  perform public.withdraw_material_payload_consent('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','60000000-0000-4000-8000-000000000004');
+  if exists(select 1 from public.agent_runs where run_id='10000000-0000-0000-0000-000000000001' and snapshot_consent_at is not null) then raise exception 'DETACHED_MATERIAL_RUN_SURVIVED_WITHDRAWAL'; end if;
+  raise notice 'MATERIAL_LINEAGE_WITHDRAWAL_SQL_PASS';
+end $$;
 rollback;

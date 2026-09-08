@@ -17,7 +17,11 @@ function candidate(value: unknown): Candidate | null {
     || row.storage_bucket !== 'katedra-temporary-materials' || typeof row.storage_version !== 'string' || !row.storage_version
     || typeof row.storage_path !== 'string') return null;
   const parts = row.storage_path.split('/');
-  if (parts.length < 4 || !parts.slice(0, 3).every(part => UUID.test(part))
+  const suffix = row.object_kind === 'body' ? '-body' : '.manifest.json';
+  const materialPath = parts.length === 3 && parts.slice(0, 2).every(part => UUID.test(part))
+    && parts[2].endsWith(suffix) && UUID.test(parts[2].slice(0, -suffix.length));
+  const runPath = parts.length >= 4 && parts.slice(0, 3).every(part => UUID.test(part));
+  if ((!materialPath && !runPath)
     || parts.some(part => !part || part === '.' || part === '..' || /[\\%\x00-\x1f]/.test(part))) return null;
   return row;
 }

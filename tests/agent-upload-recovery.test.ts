@@ -10,6 +10,19 @@ async function fixture() {
   return { rpc, download, item, client: { rpc, storage: { from: () => ({ download }) } } };
 }
 describe('unknown upload reconciliation', () => {
+  it.each(['body', 'manifest'])('recovers a canonical unbound material %s object', async kind => {
+    const f = await fixture();
+    f.item.object_kind = kind;
+    f.item.storage_path = '33333333-3333-4333-8333-333333333333/44444444-4444-4444-8444-444444444444/55555555-5555-4555-8555-555555555555' + (kind === 'body' ? '-body' : '.manifest.json');
+    expect(await recoverAgentPayloadUploads(f.client)).toMatchObject({ recovered: 1, deferred: 0 });
+    expect(f.download).toHaveBeenCalledWith(f.item.storage_path);
+  });
+  it('does not download an unbound path outside the canonical material identity', async () => {
+    const f = await fixture();
+    f.item.storage_path = '33333333-3333-4333-8333-333333333333/44444444-4444-4444-8444-444444444444/arbitrary-body';
+    expect(await recoverAgentPayloadUploads(f.client)).toMatchObject({ recovered: 0, deferred: 1 });
+    expect(f.download).not.toHaveBeenCalled();
+  });
   it('confirms only matching bytes and the captured Storage version', async () => {
     const f = await fixture();
     expect(await recoverAgentPayloadUploads(f.client)).toMatchObject({ recovered: 1, deferred: 0, error: null });
