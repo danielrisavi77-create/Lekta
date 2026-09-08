@@ -38,6 +38,8 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -1087,6 +1089,33 @@ const MUTATIONS: Mutation[] = [
     // Baseline: stvaran izvor u repozitoriju mora biti cist, inace tvrdnja gore ne govori o mutaciji.
     cleanBefore: () =>
       !hasNaiveEntryGuard(readFileSync(resolve(process.cwd(), 'scripts/post-deploy-smoke.mjs'), 'utf8')),
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 5. `repair-docx` je citao multipart s `req.formData()` iza
+   * provjere `clen && clen > MAX`: bez `Content-Length` je `clen` 0, uvjet otpadne, i cijelo tijelo
+   * se parsira u memoriju prije ijedne granice. Straza je staticka (cita izvor) jer grize i na
+   * NOVOJ funkciji koju nijedan dinamicki test jos ne poznaje.
+   */
+  {
+    id: 'edge/multipart-bez-granice',
+    imitates:
+      'Edge funkcija koja multipart cita s `req.formData()` pa velicinu provjerava POSLIJE, kad je ' +
+      'tijelo vec u memoriji; bez Content-Length zaglavlja rana provjera `clen && clen > MAX` otpadne',
+    caught: () => hasUnboundedFormData('const clen = Number(h ?? "0"); if (clen && clen > MAX) return r413(); const form = await req.formData();'),
+    cleanBefore: () =>
+      !hasUnboundedFormData(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')),
+  },
+  /**
+   * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,
+   * inace bi dijakritici propustili osjetno vece tijelo od deklariranog.
+   */
+  {
+    id: 'edge/meta-dio-bez-granice',
+    imitates:
+      'tekstualni `meta` dio multiparta koji ulazi u JSON.parse bez ikakve granice velicine, pa ' +
+      'napadac bira koliko memorije potrosi neovisno o granici datoteke',
+    caught: () => !metaWithinBudget('x'.repeat(256 * 1024 + 1), 256 * 1024),
+    cleanBefore: () => metaWithinBudget(JSON.stringify({ workType: 'graduate', requests: [], references: [] }), 256 * 1024),
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

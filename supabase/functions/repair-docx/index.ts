@@ -30,6 +30,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { readFormDataBounded, metaWithinBudget } from '../_shared/read-body.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
 import { readZip } from '../../../src/repair/zip-codec.ts';
@@ -81,6 +82,8 @@ const REPAIR_STORAGE_DAILY_CAP = Number(Deno.env.get('REPAIR_STORAGE_DAILY_CAP')
 // vlastiti `20 * 1024 * 1024` uz komentar "Uskladi s klijentskim uploadMaxBytes", dakle uskladjenost
 // je ovisila o tome da se netko sjeti promijeniti dva mjesta. Env override ostaje za hitne zahvate.
 const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(DOCX_MAX_UPLOAD_BYTES));
+/** Granica `meta` dijela multiparta (JSON bez teksta rada). 256 KB je red velicine iznad stvarnog. */
+const META_MAX_BYTES = 256 * 1024;
 
 // Provjera postojanja domacih izvora u M4 korpusu (plan docs/PLAN_KORPUS_PROVJERA_IZVORA.md, K3).
 // Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan. Konfiguracija i
@@ -316,13 +319,21 @@ Deno.serve(async (req: Request) => {
     //    Iz meta je izostavljen tekst RADA (ostaju brojevi i enumi); jedina iznimka su `references`,
     //    tj. naslovi i godine iz popisa literature, koji su nuzni za provjeru postojanja izvora
     //    (korak 8). To nije novo otkrivanje jer cijeli .docx putuje u istom zahtjevu.
-    const clen = Number(req.headers.get('content-length') ?? '0');
-    if (clen && clen > MAX_DOCX_BYTES * 1.4) return json({ error: 'payload_too_large' }, 413);
-    let form: FormData;
-    try { form = await req.formData(); } catch { return json({ error: 'bad_request' }, 400); }
+    //    GRANICA JE BROJANJE, NE ZAGLAVLJE (vanjski audit 2026-09-08, nalaz 5). Do tada je ovdje
+    //    stajalo `if (clen && clen > MAX)` pa izravan poziv `formData()` nad zahtjevom: bez
+    //    `Content-Length` je `clen` 0, uvjet otpadne, i multipart se parsirao do kraja PRIJE ijedne
+    //    provjere velicine; `meta` se nije mjerio nikad. Sada se cijelo tijelo omedjuje streamom (`readFormDataBounded`), a
+    //    `meta` ima vlastitu granicu prije `JSON.parse`. Isti obrazac vec koriste client-error,
+    //    file-guarantee-claim, source-check i webhook-mor; ova je bila jedina s binarnim tijelom.
+    //    Faktor 1.4 je rezerva za multipart okvir; `META_MAX_BYTES` je red velicine iznad
+    //    stvarnog `meta` (brojevi, enumi, naslovi i godine iz literature).
+    const bounded = await readFormDataBounded(req, Math.floor(MAX_DOCX_BYTES * 1.4) + META_MAX_BYTES);
+    if (!bounded.ok) return json({ error: bounded.reason === 'too_large' ? 'payload_too_large' : 'bad_request' }, bounded.reason === 'too_large' ? 413 : 400);
+    const form = bounded.form;
     const filePart = form.get('file');
     const metaRaw = form.get('meta');
     if (!(filePart instanceof File) || typeof metaRaw !== 'string') return json({ error: 'bad_request' }, 400);
+    if (!metaWithinBudget(metaRaw, META_MAX_BYTES)) return json({ error: 'payload_too_large' }, 413);
 
     const docxBytes = new Uint8Array(await filePart.arrayBuffer());
     if (docxBytes.length === 0 || docxBytes.length > MAX_DOCX_BYTES) return json({ error: 'payload_too_large' }, 413);

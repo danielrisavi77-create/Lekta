@@ -4,6 +4,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
+import { readFormDataBounded } from '../_shared/read-body.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
@@ -39,10 +40,17 @@ Deno.serve(async (req: Request) => {
   const { data } = await admin.auth.getUser(auth.replace(/^Bearer\s+/i, ''));
   if (!data.user) return json({ error: 'unauthorized' }, 401, origin);
 
-  const contentLength = Number(req.headers.get('content-length') ?? '0');
-  if (contentLength && contentLength > MAX_BYTES * 1.05) return json({ error: 'payload_too_large' }, 413, origin);
-  let form: FormData;
-  try { form = await req.formData(); } catch { return json({ error: 'bad_request' }, 400, origin); }
+  // Granica je BROJANJE, ne zaglavlje (vanjski audit 2026-09-08, nalaz 5, isti oblik kao u
+  // repair-docx): bez Content-Length je stara provjera `contentLength && ...` otpadala, pa se
+  // multipart parsirao do kraja prije ijedne granice. `readFormDataBounded` prekida stream cim
+  // zbroj bajtova prijedje granicu; 1.05 je rezerva za multipart okvir.
+  const bounded = await readFormDataBounded(req, Math.floor(MAX_BYTES * 1.05));
+  if (!bounded.ok) {
+    return bounded.reason === 'too_large'
+      ? json({ error: 'payload_too_large' }, 413, origin)
+      : json({ error: 'bad_request' }, 400, origin);
+  }
+  const form = bounded.form;
   const file = form.get('file');
   if (!(file instanceof File)) return json({ error: 'bad_request' }, 400, origin);
   const bytes = new Uint8Array(await file.arrayBuffer());
