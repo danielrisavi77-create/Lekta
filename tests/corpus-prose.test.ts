@@ -6,7 +6,14 @@
  * i validator koji vristi na sve.
  */
 import { describe, expect, it } from 'vitest';
-import { validateProseBody, bodyParagraphs, wordCount, type ProseBody } from '../src/corpus/prose-schema';
+import {
+  validateProseBody,
+  validateProseAgainstRow,
+  bodyParagraphs,
+  wordCount,
+  type ProseBody,
+  type ProseRowClaim,
+} from '../src/corpus/prose-schema';
 import { buildFodt } from '../scripts/corpus-gen/prose-scenario.mts';
 
 /** Ispravno tijelo; svaki test mu kvari TOCNO jednu stvar. */
@@ -200,5 +207,50 @@ describe('graditelj: sekcije nastaju iz stila stranice, ne iz duljine', () => {
     const podnozja = f.match(/<style:footer>[\s\S]*?<\/style:footer>/g) ?? [];
     expect(podnozja.length).toBe(4);
     expect(new Set(podnozja).size).toBe(1);
+  });
+});
+
+/**
+ * GARD NAD SAMOOPISOM PROZE.
+ *
+ * `validateProseBody` mjeri tijelo SAMO PREMA SEBI, pa je prozno tijelo moglo tvrditi bilo koji
+ * `unitId`, `workType`, `level` ili `family` a da to nista ne prijavi. Generator prozu dohvaca po
+ * imenu datoteke, dakle po `row.id`, pa se `id` implicitno poklapa; sve ostalo je bilo slobodan
+ * tekst i jedno se od devet napisanih tijela stvarno razislo.
+ */
+describe('proza prema retku matrice', () => {
+  const redak = (): ProseRowClaim => ({
+    id: 'fpzg--final--prijediplomski',
+    unitId: 'fpzg',
+    workType: 'final',
+    level: 'prijediplomski',
+    family: 'social',
+  });
+
+  it('tijelo koje se slaze s retkom ne daje nijedan nalaz', () => {
+    expect(validateProseAgainstRow(validBody(), redak())).toEqual([]);
+  });
+
+  it('svako od pet polja se mjeri zasebno i imenuje se u nalazu', () => {
+    const polja: Array<[keyof ProseRowClaim, string]> = [
+      ['id', 'fpzg--graduate--diplomski'],
+      ['unitId', 'efzg'],
+      ['workType', 'graduate'],
+      ['level', 'diplomski'],
+      ['family', 'mixed'],
+    ];
+    for (const [polje, druga] of polja) {
+      const r = redak();
+      (r as unknown as Record<string, string>)[polje] = druga;
+      const nalazi = validateProseAgainstRow(validBody(), r);
+      expect(nalazi.length, polje).toBe(1);
+      expect(nalazi[0], polje).toContain(`${polje}: proza tvrdi`);
+      expect(nalazi[0], polje).toContain(druga);
+    }
+  });
+
+  it('vise razilazenja daje vise nalaza, ne jedan zbirni', () => {
+    const r = { ...redak(), unitId: 'efzg', family: 'stem' };
+    expect(validateProseAgainstRow(validBody(), r)).toHaveLength(2);
   });
 });

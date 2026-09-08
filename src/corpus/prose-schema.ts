@@ -212,3 +212,47 @@ export function validateProseBody(body: ProseBody): string[] {
 
   return nalazi;
 }
+
+/**
+ * Redak matrice onako kako ga proza SMIJE opisati; namjerno uzak, da ovaj modul ne ovisi o
+ * `scripts/corpus-gen/rows.mts` (koji vuce cijeli registar profila i ne smije u ovaj sloj).
+ */
+export interface ProseRowClaim {
+  id: string;
+  unitId: string;
+  workType: string;
+  level: string;
+  family: string;
+}
+
+/**
+ * USPOREDBA PROZE S RETKOM MATRICE: opisuje li tijelo samo sebe onako kako ga matrica vodi.
+ *
+ * `validateProseBody` provjerava tijelo SAMO PREMA SEBI, pa je do 2026-09-08 prozno tijelo moglo
+ * tvrditi bilo koji `unitId`, `workType`, `level` ili `family` i nista to ne bi prijavilo. Generator
+ * prozu dohvaca po IMENU DATOTEKE, dakle po `row.id`, pa se `id` implicitno poklapa; sve ostalo je
+ * bilo slobodan tekst.
+ *
+ * IZMJERENO pri uvodjenju: od devet napisanih tijela jedno se razilazilo
+ * (`algebra--specialist--poslijediplomski`: proza `social`, redak `mixed`) i to je stajalo
+ * neprimijeceno dva dana. Ucinak je danas nikakav, jer graditelj `body.family` uopce ne cita (cita
+ * ga samo pravilo o fusnotama pravne obitelji), i upravo je to razlog zbog kojeg gard treba: polje
+ * koje nitko ne cita ne ispravlja se samo, a prvi potrosac koji ga procita naslijedit ce krivu
+ * vrijednost bez ijedne poruke.
+ *
+ * Vraca IMENOVANE nalaze, ne brojku, jer se zbroj zna zadrzati dok se sastav promijeni.
+ */
+export function validateProseAgainstRow(body: ProseBody, row: ProseRowClaim): string[] {
+  const nalazi: string[] = [];
+  const usporedi = (polje: string, uProzi: unknown, uRetku: unknown) => {
+    if (String(uProzi ?? '') !== String(uRetku ?? '')) {
+      nalazi.push(`${polje}: proza tvrdi "${String(uProzi ?? '')}", matrica vodi "${String(uRetku ?? '')}"`);
+    }
+  };
+  usporedi('id', body.id, row.id);
+  usporedi('unitId', body.unitId, row.unitId);
+  usporedi('workType', body.workType, row.workType);
+  usporedi('level', body.level, row.level);
+  usporedi('family', body.family, row.family);
+  return nalazi;
+}
