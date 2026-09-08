@@ -169,6 +169,7 @@ export function loadAnalyzerDocument(file: File): Promise<AnalyzerDocumentAdmiss
 import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
 import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, motionReduced, withViewTransition } from './environment-signals';
 import { deskItems } from './results/desk-model';
+import { privacyPrijelazHtml } from './privacy-state';
 import { mountFacsimileInto } from './results/desk-document';
 
 
@@ -2086,8 +2087,11 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   wrap.appendChild(deepRow);
   deepToggle=deepRow.querySelector('input');
  }
+ // OSMA TOCKA: promjena stanja privatnosti stoji UZ gumb, a kucica ispod nje je zapis privole.
+ // Ugovor i obrazlozenje: `privacy-state.ts`.
+ wrap.insertAdjacentHTML('beforeend',privacyPrijelazHtml(escapeHtml));
  const consentRow=document.createElement('label');consentRow.className='lekta-repair-panel__deep';
- consentRow.innerHTML='<input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span>';
+ consentRow.innerHTML='<input type="checkbox" data-repair-consent><span>Razumijem i šaljem dokument na ovaj popravak.</span>';
  wrap.appendChild(consentRow);
  // Namjerno bez native disabled dok privola nije oznacena: disabled gumb ne ispaljuje click uopce,
  // pa je klik izgledao kao da gumb "ne radi" (nijedna povratna informacija zasto). Umjesto toga

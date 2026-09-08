@@ -172,6 +172,27 @@ test('repair panel: Tier A "Uredi..." zamijeni ledger jednim fokusiranim modalom
   await expect(ledger).toBeVisible();
 });
 
+test('repair panel: promjena stanja privatnosti stoji PRIJE gumba za slanje', async () => {
+  /**
+   * Osma tocka: "Za ovaj korak dokument ce se sigurno poslati Lekti. Original se ne mijenja.
+   * Ne strasno. Ne legalisticki. Ali potpuno jasno."
+   *
+   * REDOSLIJED JE CIJELI SADRZAJ TVRDNJE. Ista recenica ispod gumba je objasnjenje onoga sto se vec
+   * dogodilo, a iznad njega je odluka. Zato se mjeri POLOZAJ u DOM-u, ne samo postojanje.
+   */
+  const blok = page.locator('#repairPanelMount [data-privacy-prijelaz]');
+  await expect(blok).toBeVisible();
+  await expect(blok).toContainText('Original na tvom uređaju se ne mijenja');
+
+  const prijeGumba = await page.evaluate(() => {
+    const b = document.querySelector('#repairPanelMount [data-privacy-prijelaz]');
+    const g = document.querySelector('#repairPanelMount .lekta-repair-panel__download');
+    if (!b || !g) return false;
+    return (b.compareDocumentPosition(g) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+  });
+  expect(prijeGumba, 'obavijest o slanju mora stajati iznad gumba koji salje').toBe(true);
+});
+
 test('repair panel: konsenzus checkbox daje jasnu povratnu informaciju umjesto tihog no-opa', async () => {
   const btn = page.locator('#repairPanelMount .lekta-repair-panel__download');
   await expect(btn).toBeEnabled();

@@ -191,7 +191,10 @@ const BUDZET_APP = 357 * 1024;
 // 860 -> 862 KB: cuvanje polozaja stola kroz ponovnu montazu (`startIndex`), regres koji je
 // uhvatio CI. Naplaceno prije dizanja: 1.427 B proze iz `repair-plan.ts`, `desk-mount.ts` i
 // `desk-view.ts`, dakle recenice koje test vec doslovno tvrdi. Ostatak je kod.
-const BUDZET_UI_UKUPNO = 862 * 1024;
+// 862 -> 865 KB: `privacy-state.ts`, osma tocka. Modul postoji jer je zatecena tvrdnja o
+// privatnosti stajala na CETIRI mjesta u TRI formulacije; jedan izvor je manje bajtova nego
+// cetiri koja se razilaze, ali tek sljedeci put. Skracen s 3.130 na 2.331 B prije ulaska.
+const BUDZET_UI_UKUPNO = 865 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {

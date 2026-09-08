@@ -149,6 +149,33 @@
   font-weight: 600;
 }
 
+/* PROMJENA STANJA PRIVATNOSTI (osma tocka). Do sada je jedini znak da dokument odlazi s uredaja
+   bila kucica privole u pravnom registru, koja se citala kao "netko se osigurava", a ne kao "sad se
+   nesto mijenja". Blok zato ima vlastitu podlogu i rub: mora se vidjeti da je ekran drukciji, i to
+   bez straha (bez crvene, bez usklicnika). Obrazlozenje i tekst: `privacy-state.ts`. */
+.pv-prijelaz {
+  margin: 0 0 0.875rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--line, rgba(0, 0, 0, 0.12));
+  border-left: 3px solid var(--brand, #1d3fbf);
+  border-radius: 0.5rem;
+  background: var(--panel-2, rgba(0, 0, 0, 0.02));
+}
+
+.pv-prijelaz__naslov {
+  margin: 0 0 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.pv-prijelaz__tijelo {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
 .lekta-repair-panel__consent-hint {
   margin: -0.5rem 0 0.875rem;
   color: #b3261e;
