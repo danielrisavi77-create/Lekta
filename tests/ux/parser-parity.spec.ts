@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
+import { potvrdiProfil } from './confirm-profile';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -68,8 +69,7 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
   await page.locator('#analyzeBtn').click();
-  const confirm = page.locator('[data-confirm-profile]');
-  if (await confirm.isVisible().catch(() => false)) await confirm.click();
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
 
   // Nalazi zive iza sklopljenog bloka "Napredna provjera"; otvara se onako kako to radi korisnik.

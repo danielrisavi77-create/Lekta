@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
+import { potvrdiProfil } from './confirm-profile';
 
 // FER diplomski, prazni odlomci: profil ima wired repair-map fixere (font/margine/prored/format
 // papira) + universal fixeri (toc-field/bibliography-repair/section-surgery/consistency-engine)
@@ -70,8 +71,7 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
   await page.locator('#analyzeBtn').click();
-  const confirm = page.locator('[data-confirm-profile]');
-  if (await confirm.isVisible().catch(() => false)) await confirm.click();
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   // Redizajn "Results Cockpit" seli SVE iza `#resultCockpit` u sklopljeni blok "Napredna
   // provjera" (`ensureResultsCockpitAdvancedShell`), pa su ondje i kartice i stari tabovi.

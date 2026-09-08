@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
+import { potvrdiProfil } from './confirm-profile';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -33,14 +34,7 @@ test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page })
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
 
-  // POTVRDA JE PRIMARNA AKCIJA, pa se na nju ceka umjesto da se pogadja. Prijasnji oblik
-  // (`#analyzeBtn` pa `if (await confirm.isVisible())`) je bio utrka: `isVisible()` NE ceka,
-  // a kartica se crta u `updateProfile`, koji ceka pravila profila preko mreze. Na mobitelu je
-  // ocitanje stizalo prije kartice, potvrda se tiho preskakala, `runAnalysis` je izlazio na
-  // vratima potvrde, i test je padao na `#resultView` koji nikad ne postane vidljiv.
-  const confirm = page.locator('[data-confirm-profile]');
-  await expect(confirm).toBeVisible({ timeout: 30_000 });
-  await confirm.click();
+  await potvrdiProfil(page);
 
   await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });

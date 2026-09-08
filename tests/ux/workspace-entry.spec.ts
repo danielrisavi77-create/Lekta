@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
+import { potvrdiProfil } from './confirm-profile';
 
 const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -280,7 +281,7 @@ test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', asy
   // Pokretanje: analiza pa nalaz. Potvrda je primarna akcija od spajanja koraka 2 i 3.
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
   await jedan('s karticom potvrde');
-  await page.locator('[data-confirm-profile]').click();
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   expect(await jedan('na nalazu')).toBe('resultView');
 
@@ -307,7 +308,7 @@ test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', 
   await page.goto('/rad/');
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
-  await page.locator('[data-confirm-profile]').click();
+  await potvrdiProfil(page);
 
   const pv = page.locator('#progressView');
   await expect(pv).toBeVisible({ timeout: 15_000 });
@@ -357,7 +358,7 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
   await page.goto('/rad/');
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
-  await page.locator('[data-confirm-profile]').click();
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
 
   const sazetak = page.locator('[data-finding-summary]');

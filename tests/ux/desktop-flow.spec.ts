@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 import { expectInsideFold } from './fold';
+import { potvrdiProfil } from './confirm-profile';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -28,8 +29,7 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await page.locator('#analyzeBtn').click();
-  const confirm = page.locator('[data-confirm-profile]');
-  if (await confirm.isVisible()) await confirm.click();
+  await potvrdiProfil(page);
   await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   // NALAZI ZIVE U COCKPITU, NE VISE U `#triagePanel`. Redizajn "Results Cockpit" seli SVE
