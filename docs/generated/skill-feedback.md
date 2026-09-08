@@ -1,10 +1,10 @@
-<!-- npm run skill-feedback -- --write | 2026-09-08T19:14:41.140Z | 31e8499a5b1ad1a0873ff749976cffdadb3645ad -->
+<!-- npm run skill-feedback -- --write | 2026-09-08T19:41:22.501Z | d7375acb9611017efdc3e0cd3dc4339fb4b6b6bf -->
 <!-- Fragment za <katedra-lite>/references/zamke.md. Provjera na drugoj strani: -->
-<!-- python3 <katedra>/scripts/kvar.py <ovaj-fragment>.md --provjeri --nastavak-od 140 -->
+<!-- python3 <katedra>/scripts/kvar.py <ovaj-fragment>.md --provjeri --nastavak-od 159 -->
 
-nadovezuje se na unos 140
+nadovezuje se na unos 159
 
-## 141. Pokrivenost izvora mjeri se samo autor-godinom, pa rad koji citira drukcije nema nijedan citat
+## 160. Pokrivenost izvora mjeri se samo autor-godinom, pa rad koji citira drukcije nema nijedan citat
 
 `verify_sources.py --pokrivenost` gradi skup citata iz tijela rada preko `H.kljucevi_citata`, koji
 prepoznaje oblik autor-godina. Rad koji citira numericki (Vancouver) ili u fusnotama (Chicago) ne
@@ -40,7 +40,7 @@ POKRIVENOST (heuristika: sklonidba prezimena, viseclana prezimena i "i sur." mog
    citiranja uopce nije prepoznat, a `pokrivenost` cita samo `tijelo_rada(put)`.
 ```
 
-## 142. Sklonidba je deklarirana kao moguc lazan nalaz, a isti redak svejedno nosi crveni krizic
+## 161. Sklonidba je deklarirana kao moguc lazan nalaz, a isti redak svejedno nosi crveni krizic
 
 Zaglavlje odjeljka POKRIVENOST samo kaze da sklonidba prezimena moze dati lazne nalaze i trazi da
 se svaki redak provjeri okom. To je posteno i tocno. Problem je sto isti alat taj redak zatim
@@ -86,7 +86,7 @@ POKRIVENOST (heuristika: sklonidba prezimena, viseclana prezimena i "i sur." mog
    ispravan APA; nijedna strana nije pogrijesila.
 ```
 
-## 143. Provjera koja nije izvedena ispisuje se kao "0 krsenja", uz razlog koji nije tocan
+## 162. Provjera koja nije izvedena ispisuje se kao "0 krsenja", uz razlog koji nije tocan
 
 Na radu s 12 fusnota i urednim popisom literature alat ispise "0 krsenja". Iznad toga stoji redak
 "popis literature nije nadjen, razrjesavanje fusnota nije provjereno", oznacen neutralno. Dvije
@@ -129,42 +129,4 @@ FUSNOTE - disciplina navodjenja
 
    (Jedinica je prikazana kao OBLIK, ne doslovno: doslovan redak je tekst iz dokumenta i ne
     prelazi granicu izmedju dvaju proizvoda. Za mehanizam je vazan samo brojcani prefiks.)
-```
-
-## 144. Cijeli validacijski sloj pada bez `jsonschema`, a kvar se vidi tek na fakultetu koji je u registryju
-
-`profile_resolver.py` odbija razrijesiti profil porukom da nedostaje paket `jsonschema` i upucuje na
-`pyproject.toml`. Isto se ranije vidjelo na `check_rules.py`. Nije rijec o dvije skripte nego o
-jednom sloju: sve sto validira shemu staje, a razrjesavanje profila je prvi korak svakog rada, pa
-bez njega ne radi nista nizvodno.
-
-Kvar je pritom ZAKLONJEN drugim kvarom, i to ga cini teskim za primijetiti. Registar rutira samo
-`efzg` i `fpzg`; za svaki drugi fakultet `profile_resolver.py` padne ranije, na "nema profila/rute",
-pa se do validacije nikad ne dodje. Na cetiri uzastopna rada (adu, arh, algebra, ffzg) vidjela se
-samo poruka o registryju, a tek je peti rad, na `fpzg`, dosao dovoljno daleko da otkrije da paketa
-nema. Tko testira na nerutiranom fakultetu, ovaj kvar ne moze naci.
-
-Poruka je uz to tocna a nedovoljna: kaze sto instalirati, ali ne kaze da je rijec o ovisnosti koju
-paket sam deklarira. Instalacija (`pip install jsonschema`) rjesava problem odmah i razrjesavanje
-profila prodje iz prvog pokusaja, sto znaci da je jedini nedostatak u tome sto se ovisnost ne
-isporucuje s paketom. Kandidat za popravak je zato instalacijski, ne kodni: ili se `jsonschema`
-povuce pri postavljanju, ili `bin/env.sh` provjeri prisutnost i javi to JEDNOM, na pocetku sesije,
-umjesto da svaka skripta pada zasebno u trenutku upotrebe.
-
-Izmjereno izravno na 1 dokumentu (fpzg--project--diplomski--uskladjen.docx).
-
-```
-$ python3 scripts/profile_resolver.py --fakultet fpzg --tip diplomski \
-      --profile-out .katedra/resolved_profile.json
-❌ razriješeni profil se ne može validirati: nedostaje paket jsonschema.
-   Što napraviti: instaliraj jsonschema (pyproject.toml) pa ponovi.
-
-   Za nerutiran fakultet kvar se NE vidi, jer skripta padne ranije:
-$ python3 scripts/profile_resolver.py --fakultet adu --tip seminarski
-❌ nema profila/rute za „adu“. Dostupni fakulteti: efzg, fpzg
-
-   Nakon `pip install jsonschema`, ista prva naredba prolazi iz prvog pokusaja:
-context: {"faculty": "fpzg", "work_type": "diplomski"}
-layers: faculty:fpzg
-profile: .katedra/resolved_profile.json
 ```
