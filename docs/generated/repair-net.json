@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.",
   "summary": {
-    "documentCount": 15,
+    "documentCount": 17,
     "fixerCount": 14,
     "deadCount": 2,
     "dead": [
@@ -33,12 +33,14 @@
     },
     {
       "fixerId": "consistency-fixer",
-      "requested": 15,
+      "requested": 17,
       "changed": 0,
       "reasons": {
-        "no-target": 15
+        "no-target": 17
       },
       "deadOn": [
+        "algebra--specialist--poslijediplomski--neuredan.docx",
+        "algebra--specialist--poslijediplomski--uskladjen.docx",
         "apuri--final--prijediplomski--neuredan.docx",
         "apuri--final--prijediplomski--uskladjen.docx",
         "arh--doctoral--poslijediplomski--neuredan.docx",
@@ -58,8 +60,8 @@
     },
     {
       "fixerId": "croatian-typography-fixer",
-      "requested": 8,
-      "changed": 8,
+      "requested": 9,
+      "changed": 9,
       "reasons": {},
       "deadOn": []
     },
@@ -72,8 +74,8 @@
     },
     {
       "fixerId": "field-integrity-fixer",
-      "requested": 13,
-      "changed": 12,
+      "requested": 14,
+      "changed": 13,
       "reasons": {
         "stale-anchor": 1
       },
@@ -83,8 +85,8 @@
     },
     {
       "fixerId": "final-document-inspector-fixer",
-      "requested": 15,
-      "changed": 15,
+      "requested": 17,
+      "changed": 17,
       "reasons": {},
       "deadOn": []
     },
@@ -110,8 +112,8 @@
     },
     {
       "fixerId": "link-doi-fixer",
-      "requested": 15,
-      "changed": 11,
+      "requested": 17,
+      "changed": 13,
       "reasons": {
         "unsupported-structure": 1,
         "no-target": 3
@@ -157,6 +159,68 @@
     }
   ],
   "documents": [
+    {
+      "dokument": "algebra--specialist--poslijediplomski--neuredan.docx",
+      "profileId": "algebra-specijalisticki",
+      "paloPrije": [
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "algebra--specialist--poslijediplomski--uskladjen.docx",
+      "profileId": "algebra-specijalisticki",
+      "paloPrije": [
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
     {
       "dokument": "apuri--final--prijediplomski--neuredan.docx",
       "profileId": "apuri-zavrsni",
@@ -772,7 +836,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-07T19:57:49.922Z",
-  "generatedFromCommit": "86eff5367011f6653769b641284dd1ea14ff62c3",
+  "generatedAt": "2026-09-08T06:59:14.866Z",
+  "generatedFromCommit": "e62dfb4a66f66254cf20ed6edac5a848c8f774f6",
   "generator": "npm run repair-net -- --write"
 }
