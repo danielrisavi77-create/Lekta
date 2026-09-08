@@ -143,6 +143,9 @@ proze ili nesto drugo:
 Prva dva zatvara JEDAN dulji rad (preko 400 odlomaka, vise od tri sekcije), pa val 2 neka ih namjerno
 gadja. Preostalih osam trazi Google Docs roundtrip ili rucno slozen paket i ne rjesava se pisanjem.
 
+> Dopuna 2026-09-08: "Google Docs roundtrip" je za jedan od tih oblika bio KRIV put, i to se vidjelo
+> tek kad se izmjerilo. Vidi odjeljak "Oblici bez fixture: s pet na jedan".
+
 ## Sto val 2 mora znati unaprijed
 
 Val 1 stoji na CETIRI prozna tijela (apuri, effectus, fpzg, fzsri). Iz njih je nastalo 11 commitanih
@@ -314,6 +317,50 @@ Vrijedi zapisati i suprotan smjer, jer je cesci nego sto se prijavljuje:
 - `ui-module-budget` je odbio moj komentar od 17 redaka u `src/ui`; ratchet smije samo padati, pa je
   obrazlozenje preseljeno u test i u poruku commita, a u kodu je ostao jedan redak.
 
+## Oblici bez fixture: s pet na jedan, i to mjerenjem (2026-09-08)
+
+Popis oblika koje nijedna commitana fixtura ne nosi bio je: `zip/direktoriji`, `paket/bez-png-default`,
+`paket/comments-prazan`, `proizvodjac/google-docs`, `gdocs/potpis`. Svih pet je opisano kao "trazi
+Google Docs roundtrip ili rucno slozen paket". Prvo je izmjereno sto stvarni radovi doista nose, nad
+457 dokumenata u `Lekta-korpus` (200 izvor, 187 ingest, 24 sintetski, 46 izbaceno):
+
+    zip/direktoriji         130 od 457      21 od njih NIJE Google Docs
+    paket/comments-prazan   135 od 457
+    gdocs/potpis            129 od 457      `<Properties/>` doslovno prazan
+    paket/bez-png-default     0 od 457      205 dokumenata ima png, svih 205 nosi Default
+    proizvodjac/google-docs   0 od 457      nijedan `<Application>` ne sadrzi "Google"
+
+**Mjerenje je oborilo dvije stavke popisa, i to je glavni nalaz.**
+
+`proizvodjac/google-docs` se ne moze zatvoriti ni najboljim roundtripom, jer se s `gdocs/potpis`
+MEDJUSOBNO ISKLJUCUJE: prvi trazi `<Application>` koji sadrzi "Google", drugi trazi da tog elementa
+NEMA. Google Docs ga ne pise, nego ostavlja prazan `<Properties/>`, pa bi izvoz iz Google Docsa
+zatvorio `gdocs/potpis`, `zip/direktoriji` i `proizvodjac/nepoznat`, a taj oblik nikad. Grana
+`/Google/i` u `producerFamilyOf` bila je pogodjena, bez ijednog testa i bez ijednog dokumenta, dakle
+mrtav kod, i to u funkciji koja u susjednom komentaru izricito odbija pogadjati za Apple Pages. Grana
+i oblik su uklonjeni, a identitet Google Docsa ostaje ondje gdje je izmjeren, kao `gdocs/potpis`.
+
+`paket/bez-png-default` je zapisan kao "naslo se na 1 od 246 stvarnih radova" i to se vise ne
+reproducira. Ostaje imenovan i nepokriven: razred kvara je stvaran (Word takav paket odbija), ali
+nositelja u korpusu nema, pa se fixtura ne izmislja da bi popis izgledao zatvoren.
+
+Preostala tri zatvara JEDAN rucno slozen paket, `tests/fixtures/docx-packaging/gdocs-otisak.docx`,
+uz novu traku `handbuilt` (izvan `ADMITTED_TRACKS`, uz `synthetic: true`, dakle oba pojasa zida).
+Otisak je REPRODUCIRAN iz mjerenja, ne dobiven iz Google Docsa, i tako je i imenovan u sidecaru:
+imena i redoslijed zapisa, prazan `<Properties/>` i prisutan `docProps/custom.xml` prepisani su s dva
+stvarna rada koja oba imaju 22 zapisa i 4 direktorija.
+
+**Fixtura mora zaraditi svoje mjesto**, inace samo skracuje popis. Gard je zato
+`tests/corpus-packaging.test.ts`, koji paket tjera kroz motor: analiza ga cita, a popravak ga PONOVNO
+NAPISE i sva tri oblika prezive (`integrityFailure` null, 4 direktorijska zapisa i poslije). Kljucna
+je druga polovica tvrdnje: zadani odabir bez profila na tom dokumentu daje NULA zahtjeva, `applyFixers`
+tada vrati ULAZNE bajtove, i tvrdnja o prezivljavanju bi prosla nad netaknutim originalom. Zato paket
+nosi cetiri prazna odlomka, zahtjev se salje izravno, a `verifyRepairRoundTrip` uz `lost` vraca i
+`vacuous`. Mutacija `oblik/popravak-izgubi-oblik-pakiranja-pri-ponovnom-pisanju` pokriva oba smjera.
+
+Usput izmjereno: nas pisac paketa izlaz KOMPRIMIRA, pa popravljeni paket dobije `zip/deflate` kojega
+ulaz nema. Nije kvar, ali je razlika ulaza i izlaza koju nijedan zapis dosad nije imenovao.
+
 ## Sto ostaje
 
 1. Daljnja proza. Napisano je DESET tijela (cetiri val 1, tri val 2, tri val 3), sto pokriva 488
@@ -324,3 +371,7 @@ Vrijedi zapisati i suprotan smjer, jer je cesci nego sto se prijavljuje:
 3. `apuri` nema Wordovu inacicu, a ostala tri je imaju. Nije zapisano je li izostala namjerno ili je
    pokusaj pao; utvrditi prije nego se broj dokumenata negdje navede kao ujednacen.
 4. Popravci na njihovoj strani, i skidanje eval slucaja tek kad kvar doista nestane iz mjerenja.
+5. Odluka vlasnika o `paket/bez-png-default`: jedini preostali oblik bez fixture, s provenijencijom
+   koja se vise ne reproducira (0 od 457). Ili ostaje imenovan kao danas, ili ispada iz kataloga.
+   Fixtura se za njega moze sloziti u minuti, ali bi bila jedini oblik koji nijedan stvarni rad ne
+   nosi, dakle mjera nad oblikom koji smo sami izmislili.

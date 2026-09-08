@@ -35,6 +35,10 @@ const FIXTURE_ROOTS = [
   // jer je pitanje "koje oblike nas commitani skup nosi", a ne "sto je dokaz"; u dokaz ne ulaze
   // nikad, jer im sidecar nosi `synthetic: true` i traku izvan dopustenih.
   join(HERE, 'fixtures', 'docx-authored'),
+  // Traka `handbuilt`: paketi slozeni rucno, radi oblika PAKIRANJA koje ni Word ni LibreOffice na
+  // ovom stroju ne pisu. Vrijedi im isto sto i traci `authored`: broje se u ovo mjerenje, u dokaz
+  // nikad (`synthetic: true` plus traka izvan `ADMITTED_TRACKS`).
+  join(HERE, 'fixtures', 'docx-packaging'),
 ];
 
 async function shapesOfBytes(bytes: Uint8Array): Promise<DocxShapeCounts> {
@@ -250,13 +254,7 @@ describe('verifyShapeClaims: tvrdnja sidecara protiv stvarnog paketa', () => {
  * ne moze pasti na njemu. Popis se skracuje kako trake `authored` i `generated` dodaju dokumente,
  * i svaka izmjena mora biti svjesna: test trazi TOCNU jednakost, u oba smjera.
  */
-const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = [
-  'zip/direktoriji',
-  'paket/bez-png-default',
-  'paket/comments-prazan',
-  'proizvodjac/google-docs',
-  'gdocs/potpis',
-];
+const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = ['paket/bez-png-default'];
 
 /**
  * SKRACEN 2026-09-06, s deset na pet, i to je cijela svrha trake `authored`.
@@ -269,9 +267,23 @@ const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = [
  *     tekst/biblio-kandidat    numerirana stavka literature koju motor moze uzeti za naslov
  *     opseg/prazni-preko-20    prazni odlomci umjesto razmaka; 34 od 38 stvarnih radova ih ima
  *
- * Preostalih pet trazi ono sto ovaj stroj ne moze proizvesti: Google Docs roundtrip (dva oblika),
- * direktorijske zapise u zipu, prazan `comments.xml` iz ne-Word alata, i paket bez png Defaulta.
- * Ostaju imenovani, ne presuceni.
+ * SKRACEN 2026-09-08, s pet na JEDAN, i to mjerenjem, ne dodavanjem proze.
+ *
+ * Tri oblika zatvorio je jedan RUCNO slozen paket (`tests/fixtures/docx-packaging/gdocs-otisak.docx`,
+ * traka `handbuilt`): `zip/direktoriji`, `paket/comments-prazan`, `gdocs/potpis`. Google Docs izvoz
+ * na ovom stroju nije izvediv, pa je njegov otisak REPRODUCIRAN iz mjerenja nad 457 stvarnih radova,
+ * i tako je i imenovan; gard koji ga tjera kroz motor je `tests/corpus-packaging.test.ts`.
+ *
+ * Cetvrti, `proizvodjac/google-docs`, nije zatvoren nego UKLONJEN, jer se ne moze zatvoriti. Trazio
+ * je `<Application>` koji sadrzi "Google", a takvog nema nijedan od 457 radova; Google Docs taj
+ * element uopce ne pise, nego ostavlja prazan `<Properties/>`, sto je bas `gdocs/potpis`. Dva oblika
+ * su se time medjusobno iskljucivala: dokument koji nosi jedan ne moze nositi drugi, pa je "Google
+ * Docs roundtrip" kao put zatvaranja bio kriv za oba razloga.
+ *
+ * Peti ostaje, i ostaje imenovan: `paket/bez-png-default`. Njegova provenijencija ("1 od 246
+ * stvarnih radova") se vise ne reproducira; ponovljeno mjerenje daje 205 dokumenata s `png` i svih
+ * 205 nosi `Default Extension="png"`. Razred kvara je stvaran (Word takav paket odbija), ali nositelja
+ * u korpusu nema, pa se fixtura ne izmislja da bi popis izgledao zatvoren.
  */
 
 describe('izmjereno: koje oblike commitane fixture nose', () => {

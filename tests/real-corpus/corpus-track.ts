@@ -11,6 +11,8 @@
  * - `real`      stvaran studentski rad (pseudonimiziran kroz `scripts/corpus-ingest.mts`).
  * - `generated` izlaz PRAVOG alata nad izmisljenim sadrzajem (`scripts/corpus-gen/*`).
  * - `authored`  izlaz pravog alata nad PROZOM koju je napisao covjek uz pomoc modela.
+ * - `handbuilt` paket slozen RUCNO, bez ijednog alata, radi oblika PAKIRANJA koje ni Word ni
+ *               LibreOffice na ovom stroju ne proizvode.
  * - `converted` docx nastao pretvorbom PDF-a. NIKAD ne ulazi u mjerenje koje puni matricu.
  *
  * Zasto je `converted` iskljucen: motor boduje OOXML (stilovi, `sectPr`, `rPr`, polja, fusnote),
@@ -28,8 +30,14 @@
  * 2026-09-05 na postojecem skupu: sinteticke fixture rjesavaju 84,6 posto ciljanih provjera, a
  * stvarni radovi 39,8 posto, pa bi ulazak u `results` proizvod prikazao dvostruko boljim nego jest.
  * Mjeri se odvojeno (`docs/generated/synthetic-corpus.json`), nikad kroz `results`.
+ *
+ * Zasto je `handbuilt` iskljucen: takav paket nema ni autora ni proze, nego samo zeljeni oblik zipa
+ * i dijelova. Sve u njemu je nase, ukljucujuci i ono sto bi na stvarnom radu bilo nalaz, pa ne moze
+ * potkrijepiti nijednu tvrdnju o tome kako radovi izgledaju. Postoji zato da oblik PAKIRANJA koji
+ * stvarni radovi nose (direktorijski zapisi, prazan `comments.xml`, Google Docs `app.xml`) uopce
+ * ima commitanog nositelja nad kojim motor moze pasti.
  */
-export type CorpusTrack = 'real' | 'generated' | 'authored' | 'converted';
+export type CorpusTrack = 'real' | 'generated' | 'authored' | 'converted' | 'handbuilt';
 
 /** Trake koje smiju u mjerenje. Popis je BIJEL: nepoznata traka je odbijena, ne propustena. */
 export const ADMITTED_TRACKS: readonly string[] = ['real', 'generated'];

@@ -34,11 +34,19 @@ export const DOCX_SHAPE_IDS = [
   'zip/bit3',
   /** DEFLATE zapisi; nas graditelj fixtura pise iskljucivo nekomprimirano (metoda 0). */
   'zip/deflate',
-  /** Direktorijski zapisi u zipu; dio izmjerenog Google Docs otiska (89 od 100 datoteka). */
+  /** Direktorijski zapisi u zipu; 130 od 457 stvarnih radova, od cega 21 NIJE Google Docs. */
   'zip/direktoriji',
   /** Nedostaje `word/settings.xml`; bez njega je `field-integrity-fixer` vracao `no-target`. */
   'paket/bez-settings',
-  /** `.png` u paketu bez `Default` unosa za png; naslo se na 1 od 246 stvarnih radova. */
+  /**
+   * `.png` u paketu bez `Default` unosa za png; takav paket Word odbija otvoriti.
+   *
+   * PROVENIJENCIJA SE VISE NE REPRODUCIRA i to ovdje stoji umjesto ranije tvrdnje "1 od 246
+   * stvarnih radova". Ponovljeno mjerenje 2026-09-08 nad 457 radova (ukljucujuci 99-izbaceno):
+   * 205 dokumenata ima `word/media/*.png` i SVIH 205 nosi `Default Extension="png"`; nijedan ga ne
+   * deklarira ni preko `Override`. Oblik zato ostaje imenovan i NEPOKRIVEN: razred kvara je stvaran
+   * (Word odbija paket), ali dokumenta koji ga nosi u ovom korpusu nema, pa se fixtura ne izmislja.
+   */
   'paket/bez-png-default',
   /** Zivi komentari (`w:comment`). */
   'paket/komentari',
@@ -78,9 +86,16 @@ export const DOCX_SHAPE_IDS = [
   // --- provenijencija --------------------------------------------------------------------------
   'proizvodjac/word',
   'proizvodjac/libreoffice',
-  'proizvodjac/google-docs',
   'proizvodjac/nepoznat',
-  /** Izmjeren Google Docs potpis: `docProps/app.xml` postoji bez `<Application>`. */
+  /**
+   * Izmjeren Google Docs potpis: `docProps/app.xml` postoji, a `<Properties/>` je PRAZAN.
+   *
+   * Oblik `proizvodjac/google-docs` je 2026-09-08 UKLONJEN, jer se s ovim iskljucivao: trazio je
+   * `<Application>` koji sadrzi "Google", a Google Docs taj element uopce ne pise. Mjerenje nad 457
+   * stvarnih radova: 129 s praznim `<Properties/>` (= ovaj oblik), 0 s "Google" u `<Application>`.
+   * Iz toga slijedi i da Google Docs roundtrip NIKAD ne bi zatvorio uklonjeni oblik, nego ovaj plus
+   * `zip/direktoriji` plus `proizvodjac/nepoznat`.
+   */
   'gdocs/potpis',
   // --- opseg (pragovi) -------------------------------------------------------------------------
   /** Vise od 400 odlomaka: 24 od 38 stvarnih radova, 0 od 12 commitanih. */
@@ -277,13 +292,13 @@ export function detectShapes(entries: ReadonlyArray<ShapeZipEntry>): DocxShapeCo
   const familyKey = {
     word: 'proizvodjac/word',
     libreoffice: 'proizvodjac/libreoffice',
-    'google-docs': 'proizvodjac/google-docs',
     unknown: 'proizvodjac/nepoznat',
   } as const;
   counts[familyKey[features.producerFamily]] = 1;
 
-  // Google Docs otisak: `docProps/app.xml` postoji a NEMA `<Application>`. Izmjereno nad 100
-  // datoteka; `custom.xml` i direktorijski zapisi su prateci znakovi, ne uvjet, pa se broje odvojeno.
+  // Google Docs otisak: `docProps/app.xml` postoji a NEMA `<Application>`; izmjereno na 129 od 457
+  // stvarnih radova, gdje je `<Properties/>` doslovno prazan. `custom.xml` i direktorijski zapisi su
+  // prateci znakovi, ne uvjet, pa se broje odvojeno.
   const app = parts['docProps/app.xml'];
   if (app !== undefined && !/<Application>/.test(app)) counts['gdocs/potpis'] = 1;
 
@@ -298,6 +313,38 @@ export function detectShapes(entries: ReadonlyArray<ShapeZipEntry>): DocxShapeCo
 /** Oblici koje paket NOSI (brojka > 0), sortirano; oblik zapisa `shapes.claimed` u sidecaru. */
 export function presentShapes(counts: DocxShapeCounts): DocxShapeId[] {
   return DOCX_SHAPE_IDS.filter((id) => counts[id] > 0);
+}
+
+/** Nalaz o paketu koji je popravak ponovno napisao. */
+export interface RoundTripVerdict {
+  /** Tvrdjeni oblici koji su nakon popravka NESTALI iz paketa. */
+  lost: string[];
+  /** Popravak nije promijenio nista, pa tvrdnja o prezivljavanju ne znaci nista. */
+  vacuous: boolean;
+}
+
+/**
+ * Jesu li oblici PAKIRANJA prezivjeli ponovno pisanje paketa.
+ *
+ * Dvije tvrdnje, i druga je razlog zbog kojeg ovo nije puki `verifyShapeClaims`. Kad popravak nema
+ * sto raditi, `applyFixers` vrati ULAZNE bajtove; tvrdnja "oblici su prezivjeli" tada je istinita
+ * nad netaknutim originalom i ne govori nista o pisacu paketa. Isti razred kvara repozitorij vec
+ * ima zapisan za vrata integriteta (`tests/repair-package-integrity.test.ts`), gdje odbijena
+ * isporuka takodjer vraca ulaz, pa harness bez izricite tvrdnje vidi uredan `no-op`.
+ *
+ * Zato `changed` ne dolazi iz ove funkcije nego od pozivatelja (neprazan changelog ili razlicit
+ * broj bajtova): mjera koja bi sama sebi potvrdila da je bilo promjene ne bi bila neovisna.
+ */
+export function verifyRepairRoundTrip(
+  claimed: readonly string[],
+  after: DocxShapeCounts,
+  opts: { changed: boolean },
+): RoundTripVerdict {
+  const known = new Set<string>(DOCX_SHAPE_IDS);
+  return {
+    lost: claimed.filter((id) => known.has(id) && (after[id as DocxShapeId] ?? 0) <= 0),
+    vacuous: !opts.changed,
+  };
 }
 
 /** Nalaz usporedbe TVRDNJE iz sidecara sa stvarnim paketom. */

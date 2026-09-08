@@ -1,0 +1,23 @@
+{
+  "profileId": null,
+  "synthetic": true,
+  "track": "handbuilt",
+  "razlog": "Rucno slozen paket, nije izvoz iz Google Docsa. Reproducira IZMJEREN otisak takvog izvoza (prazan Properties, custom.xml, direktorijski zapisi) da commitani skup uopce ima nositelja tih oblika. Sadrzaj nije rad i ne cita se kao proza.",
+  "provenance": {
+    "measuredOver": "457 stvarnih radova u Lekta-korpus, 2026-09-08",
+    "generatedAt": "2026-09-08T21:26:52.842Z",
+    "generatedFromCommit": "1d4c67fa3b8fa31ceb815f0e591c60f4b081c5c6",
+    "generator": "npm run corpus-gen:pakiranje -- --write"
+  },
+  "shapes": {
+    "claimed": [
+      "zip/direktoriji",
+      "paket/comments-prazan",
+      "gdocs/potpis"
+    ]
+  },
+  "toolLimitations": [
+    "Google Docs roundtrip nije izvediv na ovom stroju (nema racuna), pa je otisak reproduciran, ne dobiven.",
+    "paket/bez-png-default nije ukljucen: nijedan od 457 stvarnih radova ga ne nosi, pa se ne izmislja."
+  ]
+}

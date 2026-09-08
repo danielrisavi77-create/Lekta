@@ -26,7 +26,12 @@ import {
   type WizardEvent, type WizardState,
 } from '../src/ui/wizard-machine';
 import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
-import { DOCX_SHAPE_IDS, verifyShapeClaims, type DocxShapeCounts } from '../src/corpus/docx-shapes';
+import {
+  DOCX_SHAPE_IDS,
+  verifyRepairRoundTrip,
+  verifyShapeClaims,
+  type DocxShapeCounts,
+} from '../src/corpus/docx-shapes';
 import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
 import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
@@ -922,6 +927,47 @@ const MUTATIONS: Mutation[] = [
         tabInHeading: 'naslov/tab-u-naslovu',
       });
       return v.missing.length === 0 && v.unknown.length === 0 && v.underDetected.length === 0;
+    },
+  },
+  {
+    id: 'oblik/popravak-izgubi-oblik-pakiranja-pri-ponovnom-pisanju',
+    imitates:
+      'popravak ponovno napise paket i usput ispusti oblik PAKIRANJA koji je ulaz nosio, na primjer ' +
+      'direktorijske zapise u zipu (130 od 457 stvarnih radova) ili prazan `word/comments.xml` (135 ' +
+      'od 457). U dokumentu se to ne vidi: tekst je isti, analiza prolazi, a paket vise nije onaj ' +
+      'oblik na kojem je motor trebao biti dokazan. Druga polovica mutacije je vakuum: popravak koji ' +
+      'nema sto raditi vrati ULAZNE bajtove, pa tvrdnja "oblici su prezivjeli" postane istinita nad ' +
+      'netaknutim originalom i ne govori nista o pisacu paketa (isti razred kao odbijena isporuka ' +
+      'kroz vrata integriteta, koja takodjer vraca ulaz)',
+    caught: () => {
+      const counts = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      counts['paket/comments-prazan'] = 1;
+      counts['gdocs/potpis'] = 1;
+      // Popravak je ispustio direktorijske zapise; ostala dva oblika su prezivjela, pa nalaz mora
+      // biti IMENOVAN, a ne izveden iz toga da se broj oblika smanjio.
+      const izgubljen = verifyRepairRoundTrip(
+        ['zip/direktoriji', 'paket/comments-prazan', 'gdocs/potpis'],
+        counts,
+        { changed: true },
+      );
+      const vakuum = verifyRepairRoundTrip(['zip/direktoriji'], { ...counts, 'zip/direktoriji': 4 }, {
+        changed: false,
+      });
+      return izgubljen.lost.join(',') === 'zip/direktoriji' && vakuum.vacuous;
+    },
+    // Netrivijalnost: paket koji je popravak stvarno promijenio a oblike zadrzao ne smije dati nalaz,
+    // inace bi gard prijavljivao svaki popravak nad svakim paketom.
+    cleanBefore: () => {
+      const counts = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      counts['zip/direktoriji'] = 4;
+      counts['paket/comments-prazan'] = 1;
+      counts['gdocs/potpis'] = 1;
+      const v = verifyRepairRoundTrip(
+        ['zip/direktoriji', 'paket/comments-prazan', 'gdocs/potpis'],
+        counts,
+        { changed: true },
+      );
+      return v.lost.length === 0 && !v.vacuous;
     },
   },
   {
