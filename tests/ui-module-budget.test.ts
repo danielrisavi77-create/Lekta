@@ -87,7 +87,17 @@ const BUDZET_APP = 357 * 1024;
 // `app.ts` je kroz sva tri kruga OSTAO ispod svog budzeta (356,9 od 357 KB), i to je ono sto
 // ratchet primarno cuva. Kad je u jednom trenutku probio (357,5), rjesenje NIJE bilo dizanje
 // nego selidba: kartica u vlastiti modul, prijevod koraka u `wizard-view.ts`.
-const BUDZET_UI_UKUPNO = 830 * 1024;
+//   830 -> 831  `region` opseg nalaza: 94% nalaza je pisalo "lokacija se ne moze odrediti", sto
+//               za marginu nije istina nego izostanak odgovora. Poslije: nepoznato 33%.
+//               Sama mapa NIJE ovdje (zivi u `src/scoring`, uz registar koji tumaci); ostatak
+//               je `region` grana u `finding-view-model.ts` i `priority-findings.ts`.
+//
+// DUG KOJI OVO DIZANJE CINI PRIVREMENIM: `src/ui/hero-demo.ts` (8,6 KB) je MRTAV u produkciji.
+// `.hero-demo` postoji samo u `prototype/`, koji nije ulaz u buildu i nema ga u `dist/`; ni
+// `index.html` ni `rad/index.html` nemaju nijedan njegov element, pa `setup()` odmah izlazi.
+// Oba produkcijska ulaza ga svejedno uvoze. Brisanje vraca 8,6 KB, dakle vise nego sva cetiri
+// dizanja zajedno, ali trazi vlastitu provjeru (prototip i njegov spec), pa ide zasebno.
+const BUDZET_UI_UKUPNO = 831 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
