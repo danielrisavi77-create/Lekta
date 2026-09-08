@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
-  "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.",
+  "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza. TRI stanja, ne dva: `dead` je kvar, `awaiting` je fixer koji ceka ljudsku potvrdu, ostalo radi.",
   "summary": {
     "documentCount": 24,
     "fixerCount": 14,
-    "deadCount": 2,
-    "dead": [
+    "deadCount": 0,
+    "dead": [],
+    "awaitingCount": 2,
+    "awaiting": [
       "citation-bibliography-sync-fixer",
       "consistency-fixer"
     ]
@@ -16,7 +18,8 @@
       "requested": 5,
       "changed": 5,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "citation-bibliography-sync-fixer",
@@ -31,7 +34,8 @@
         "fpzg--final--prijediplomski--word.docx",
         "fpzg--project--diplomski--neuredan.docx",
         "fpzg--project--diplomski--uskladjen.docx"
-      ]
+      ],
+      "awaitingConfirmation": 5
     },
     {
       "fixerId": "consistency-fixer",
@@ -65,21 +69,24 @@
         "fzsri--final--prijediplomski--neuredan.docx",
         "fzsri--final--prijediplomski--uskladjen.docx",
         "fzsri--final--prijediplomski--word.docx"
-      ]
+      ],
+      "awaitingConfirmation": 24
     },
     {
       "fixerId": "croatian-typography-fixer",
       "requested": 13,
       "changed": 13,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "empty-paragraph-fixer",
       "requested": 6,
       "changed": 6,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "field-integrity-fixer",
@@ -90,28 +97,32 @@
       },
       "deadOn": [
         "effectus--seminar--diplomski--uskladjen.docx"
-      ]
+      ],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "final-document-inspector-fixer",
       "requested": 24,
       "changed": 24,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "heading-style-fixer",
       "requested": 3,
       "changed": 3,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "line-spacing-fixer",
       "requested": 1,
       "changed": 1,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "link-doi-fixer",
@@ -128,14 +139,16 @@
         "fpzg--final--prijediplomski--word.docx",
         "fpzg--project--diplomski--neuredan.docx",
         "fpzg--project--diplomski--uskladjen.docx"
-      ]
+      ],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "margins-fixer",
       "requested": 8,
       "changed": 8,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "required-section-fixer",
@@ -146,21 +159,24 @@
       },
       "deadOn": [
         "fpzg--final--prijediplomski--word.docx"
-      ]
+      ],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "section-surgery-fixer",
       "requested": 5,
       "changed": 5,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     },
     {
       "fixerId": "toc-field-fixer",
       "requested": 1,
       "changed": 1,
       "reasons": {},
-      "deadOn": []
+      "deadOn": [],
+      "awaitingConfirmation": 0
     }
   ],
   "documents": [
@@ -195,6 +211,9 @@
           "fixerId": "consistency-fixer",
           "reason": "no-target"
         }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
       ],
       "rijeseno": [],
       "nerijeseno": [
@@ -238,6 +257,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -276,6 +298,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.hierarchy",
@@ -304,6 +329,9 @@
           "fixerId": "consistency-fixer",
           "reason": "no-target"
         }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
       ],
       "rijeseno": [],
       "nerijeseno": [
@@ -343,6 +371,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "page.margins"
       ],
@@ -378,6 +409,9 @@
           "fixerId": "consistency-fixer",
           "reason": "no-target"
         }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
       ],
       "rijeseno": [
         "page.margins"
@@ -417,6 +451,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "page.margins"
       ],
@@ -452,6 +489,9 @@
           "fixerId": "consistency-fixer",
           "reason": "no-target"
         }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
       ],
       "rijeseno": [
         "page.margins"
@@ -494,6 +534,9 @@
           "fixerId": "consistency-fixer",
           "reason": "no-target"
         }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
       ],
       "rijeseno": [
         "page.margins"
@@ -538,6 +581,9 @@
           "reason": "stale-anchor"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "page.margins"
       ],
@@ -581,6 +627,9 @@
           "reason": "unsupported-structure"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "format.spacing.body"
       ],
@@ -623,6 +672,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "reference.alphabetical",
@@ -663,6 +715,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -698,6 +753,9 @@
           "fixerId": "consistency-fixer",
           "reason": "no-target"
         }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
       ],
       "rijeseno": [],
       "nerijeseno": [
@@ -755,6 +813,10 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "reference.alphabetical"
       ],
@@ -803,6 +865,10 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -850,6 +916,10 @@
           "reason": "unsupported-structure"
         }
       ],
+      "cekaPotvrdu": [
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -895,6 +965,10 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "reference.alphabetical"
       ],
@@ -939,6 +1013,10 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [],
       "regresije": [],
@@ -971,6 +1049,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "page.numbers.present"
@@ -998,6 +1079,9 @@
           "fixerId": "consistency-fixer",
           "reason": "no-target"
         }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
       ],
       "rijeseno": [],
       "nerijeseno": [
@@ -1037,6 +1121,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "page.margins"
       ],
@@ -1073,6 +1160,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [
         "page.margins"
       ],
@@ -1107,6 +1197,9 @@
           "reason": "no-target"
         }
       ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -1115,7 +1208,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-08T17:39:51.365Z",
-  "generatedFromCommit": "7a540f9fec4dab78661426f17393dbd141dd29d5",
+  "generatedAt": "2026-09-08T20:24:03.429Z",
+  "generatedFromCommit": "da242d9109c09ffdbc068cd336e5b83ea6d56a1e",
   "generator": "npm run repair-net -- --write"
 }
