@@ -26,6 +26,8 @@ create policy fixture_storage_access on storage.objects for all to authenticated
 \i supabase/migrations/0105_agent_payload_deletion_authority.sql
 \i supabase/migrations/0106_atomic_agent_context.sql
 \i supabase/migrations/0106_atomic_agent_context.sql
+\i supabase/migrations/0107_agent_context_plan_approval.sql
+\i supabase/migrations/0107_agent_context_plan_approval.sql
 insert into public.academic_projects values('30000000-0000-0000-0000-000000000001','20000000-0000-0000-0000-000000000001',null);
 insert into public.katedra_project_locks values('30000000-0000-0000-0000-000000000001','20000000-0000-0000-0000-000000000001','locked','diplomski');
 insert into public.entitlements values('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','katedra_pass_diplomski','active','stripe',now()+interval '1 day');
@@ -45,6 +47,11 @@ do $$ declare x record; y record; z record; active_count integer; begin
   exception when sqlstate '40901' then null; end;
   insert into storage.objects(bucket_id,name) values('katedra-temporary-materials',x.storage_path),('katedra-temporary-materials',x.manifest_path);
   perform public.commit_agent_run_context('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001',x.manifest_id,'{}');
+  begin
+    perform public.approve_agent_run_context_plan('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001',x.context_revision,repeat('a',64),false);
+    raise exception 'IMPLICIT_APPROVAL_ACCEPTED';
+  exception when invalid_parameter_value then null; end;
+  perform public.approve_agent_run_context_plan('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001',x.context_revision,repeat('a',64),true);
   update storage.objects set name=name where name=x.storage_path;
   if found then raise exception 'IMMUTABLE_CONTEXT_OVERWRITTEN'; end if;
   select * into y from public.reserve_agent_run_context('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001');
@@ -56,6 +63,11 @@ do $$ declare x record; y record; z record; active_count integer; begin
   exception when sqlstate '40901' then null; end;
   if not exists(select 1 from public.agent_payload_manifests where manifest_id=x.manifest_id and deleted_at is null and context_state='active') then raise exception 'OLD_CONTEXT_DAMAGED'; end if;
   perform public.commit_agent_run_context('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001',y.manifest_id,'{}');
+  if exists(select 1 from public.agent_payload_manifests where manifest_id=y.manifest_id and context_plan_approval is not null) then raise exception 'NEW_CONTEXT_INHERITED_APPROVAL'; end if;
+  begin
+    perform public.approve_agent_run_context_plan('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001',x.context_revision,repeat('a',64),true);
+    raise exception 'STALE_APPROVAL_ACCEPTED';
+  exception when sqlstate '40901' then null; end;
   -- Ponovljen isti commit je siguran; drugi izbor nije isti zahtjev.
   perform public.commit_agent_run_context('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001',y.manifest_id,'{}');
   begin
