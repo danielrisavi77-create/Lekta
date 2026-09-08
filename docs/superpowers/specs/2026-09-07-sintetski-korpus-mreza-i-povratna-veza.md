@@ -244,11 +244,81 @@ preusmjerava roditelje na `Heading_20_3` umjesto da ih preimenuje: preimenovanje
 
 Popis mrtvih se nije promijenio i oba i dalje nose IZMJEREN razlog `no-target`.
 
+## Val 3: tri rada birana mjerenjem, i dva kvara proizvoda koje su nasli (2026-09-08)
+
+Redci vise nisu birani po dojmu nego po pokrivenosti. Prije pisanja izmjereno: sedam tijela iz
+valova 1 i 2 pokriva 41 od 720 redaka matrice, a razlicitih skupova pravila ima 131.
+
+    adu--seminar--diplomski           3.012 rijeci    54 odlomka   pokriva 381 redak
+    ffzg--graduate--diplomski        10.767 rijeci   203 odlomka   pokriva  61 redak
+    fpzg--project--diplomski          5.020 rijeci   105 odlomaka  pokriva   5 redaka
+
+Ishod: tijela 7 -> 10, dokumenti 17 -> 24, pokriveni redci 41 -> 488 od 720, skupovi pravila 7 -> 10.
+NIJEDNA vrsta rada vise nije bez proze (`graduate` i `project` dobili su prve dokumente).
+
+**Nesrazmjer je poanta, i vrijedi ga zapamtiti za sljedeci izbor.** Rad od 3.000 rijeci kupio je 381
+redak, jer je to skup pravila na koji pada vecina redaka bez fakultetskog profila (`arts` fallback,
+13 osi). Po dojmu bih izabrao bogatiji profil i dobio deset puta manje. Nakon ovog vala vise nema
+velikog dobitka po radu: preostala su 232 retka na 121 razredu, najveci od 8 redaka, pa daljnje
+pisanje kupuje dubinu na pojedinom profilu, ne pokrivenost.
+
+**Ispravak usred posla.** Za drugi rad bio je odredjen `adu--final--prijediplomski` (5.500 rijeci).
+Mjerenje je pokazalo da isti razred sadrzi i 14 `graduate` redaka, a `graduate` je vrsta rada sa 134
+retka i nijednim tijelom. Predstavnik `graduate` pokriva istih 61 redak i uz to otvara vrstu rada.
+Cijena je dvostruka (11.000 rijeci) i placena je svjesno.
+
+### Dva kvara proizvoda koje je korpus nasao sam
+
+**1. Citatni motor ne vidi `Kumar (2022, str. 1470)`.** Pripovjedna citatnica s lokatorom nije se
+prepoznavala. Dvije grane promase istovremeno: pripovjedna je trazila zatvorenu zagradu ODMAH iza
+godine, a parentetska nadje godinu ali unutar zagrade nema autora. Posljedica je bodovana:
+`reference.uncited` (7 bodova) javlja ispravno citiran izvor kao NECITIRAN, `citation.recognized`
+(3 boda) podbrojava. Izolirano kontrolama koje iskljucuju sufiks, autora i oblik zagrade; ostaje
+tocno jedna varijabla. Popravljeno u `5c849d98`, uz deset testova od kojih je pet palo PRIJE izmjene.
+Isti kvar na drugom regexu (`citation.direct-quote-locator`, max 0) popravljen zasebno u `7a540f9f`.
+
+Golden nije dirnut ni u jednom od dva popravka, i to je ujedno objasnjenje zasto je kvar prezivio:
+nijedna fixtura nije nosila taj oblik.
+
+**2. `heading-style-fixer` nije bio pokvaren nego smo mu slali prazan zahtjev.** Mreza ga je
+prijavljivala kao 7 zatrazeno / 3 promijenjeno uz `invalid-params` x4. Mjerenje na sva cetiri
+pogodjena dokumenta: tocno jedan kandidat, nula odabranih, `targets` prazan, a stavka svejedno
+`violated: true`. Cuvar u graditelju gleda SIROVE popise, ne odabrane. Popravljeno u `2dd22f3a`
+(`violated: targets.length > 0`), uz gard siri od slucaja: nijedan fixer u mrezi ne smije vracati
+`invalid-params`, jer taj razlog jedini opisuje NAS zahtjev a ne dokument.
+
+### Sto je jos zatvoreno
+
+- **Proza se mora slagati s retkom matrice** (`b8169693`). Do tada je tijelo moglo tvrditi bilo koji
+  `unitId`, `workType`, `level` ili `family`; jedno od devet se razislo (`algebra`: proza `social`,
+  matrica `mixed`) i stajalo dva dana. Ucinak je bio nikakav (graditelj `body.family` ne cita), i
+  upravo je zato gard trebao: polje koje nitko ne cita ne ispravlja se samo.
+- **Word trak zatvorio je os sadrzaja.** LibreOffice je za `ffzg` sam prijavio imenovano NEPOKRIVENO
+  (`0 instrText/fldChar/fldSimple`), a profil trazi `requireToc: true`. Wordov primjerak nosi stvarno
+  polje: provjeren je SADRZAJ uputa, ne broj (`TOC \o "1-3" \h \z`, 30 `PAGEREF _Toc...`, 360 `w:rsid`).
+- **Kvar 144 izvezen Katedri**: validacijski sloj pada bez `jsonschema`, a kvar je ZAKLONJEN time sto
+  registar rutira samo `efzg` i `fpzg`, pa na nerutiranom fakultetu skripta padne ranije i do
+  validacije nikad ne dodje.
+
+### Sto su alati uhvatili meni
+
+Vrijedi zapisati i suprotan smjer, jer je cesci nego sto se prijavljuje:
+
+- katedra-lite **plan gate pao je dvaput iz prvog pokusaja**, oba puta na potpoglavlju bez planiranih
+  izvora. Treci rad je prosao iz prve, jer sam nakon dva pada izvore dao svima.
+- validator proze uhvatio je dvije kose unakrsne upute umjesto tri (dvije sam napisao u nominativu) i
+  opseg 2.259 umjesto 3.000.
+- `reference.uncited` javio je 11 od 16 izvora bez citatnice, jer sam autore spominjao bez godine.
+- skener je nasao **nevidljiv meki prijelom (U+00AD)** usred rijeci u sazetku i cirilicu u mom
+  vlastitom komentaru u testu.
+- `ui-module-budget` je odbio moj komentar od 17 redaka u `src/ui`; ratchet smije samo padati, pa je
+  obrazlozenje preseljeno u test i u poruku commita, a u kodu je ostao jedan redak.
+
 ## Sto ostaje
 
-1. Daljnja proza, prema 60 tijela. Napisano je SEDAM (cetiri iz vala 1, tri iz vala 2), pa
-   preostaje 53. Odluka vlasnika iz vala 2 je da se ide ciljano, redak po redak s razlogom, a ne
-   sirinom: broj tijela nije sam po sebi mjera, jer 720 redaka daje samo 163 razlicita skupa pravila.
+1. Daljnja proza. Napisano je DESET tijela (cetiri val 1, tri val 2, tri val 3), sto pokriva 488
+   od 720 redaka. Preostala 232 retka leze na 121 razredu, najveci od 8 redaka, pa daljnje pisanje
+   kupuje dubinu na pojedinom profilu, a ne pokrivenost; izbor retka od sada mora nositi razlog.
 2. Vlastito mjerenje za `consistency-fixer` i `citation-bibliography-sync-fixer`, s POTVRDJENIM
    odabirom, jer je to jedino stanje u kojem ta dva uopce mogu raditi.
 3. `apuri` nema Wordovu inacicu, a ostala tri je imaju. Nije zapisano je li izostala namjerno ili je
