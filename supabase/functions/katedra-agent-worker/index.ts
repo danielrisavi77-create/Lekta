@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { isCronAuthorized } from '../_shared/cron-auth.ts';
 import { dispatchAgentRuns } from './dispatcher.ts';
+import { handlePayloadCleanup } from './payload-cleaner.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -15,6 +16,14 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
 Deno.serve(async (req) => {
   if (!isCronAuthorized(req, CRON_SECRET)) return json({ error: 'unauthorized' }, 401);
+  if (new URL(req.url).searchParams.get('mode') === 'cleanup') {
+    // Odvojeni poziv ne dispatcha runove i ne zahtijeva aktivaciju generiranja.
+    // Rok svakog zahtjeva ostavlja prostor za potvrdu i ponovni pokusaj.
+    const cleanupClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+      global: { fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(10_000) }) },
+    });
+    return handlePayloadCleanup(req, cleanupClient, CRON_SECRET);
+  }
   if (!APP_URL || !WORKER_TOKEN) return json({ error: 'worker_dispatcher_not_configured' }, 503);
 
   /**
