@@ -680,9 +680,13 @@ for (const [ime, dataTheme, scheme] of [
  */
 const KONTRAST_STRANICE = [
   { ruta: '/rad/', prag: 90 },        // izmjereno 118 neutralizirano; tekstura u svijetloj temi ~65
-  { ruta: '/index.html', prag: 15 },  // PREKALIBRIRANO 2026-09-08 (v. dolje): 35 -> 20 moguca cvora
+  { ruta: '/index.html', prag: 8 },   // PREKALIBRIRANO 2026-09-08 (v. dolje): 35 -> 20 moguca cvora
                                       // nakon reza navigacije/podnozja; prag ovdje samo provjerava
-                                      // da stranica nije ostala prazna, ne mjeri stvarni kontrast
+                                      // da stranica nije ostala prazna, ne mjeri stvarni kontrast.
+                                      // 15 se pokazalo prekriveno: 20 pod lakim opterecenjem, 13 na
+                                      // CI-ju, 9 pod teskim lokalnim opterecenjem (isto neutralizirano
+                                      // stanje, samo sporije slaganje stranice). Razmak prema stvarno
+                                      // slijepom stanju (3) ostaje velik i na 8.
 ] as const;
 for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'dark'] as const) {
   test(`${ruta}: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
