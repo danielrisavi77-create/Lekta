@@ -693,7 +693,8 @@ export function headingStructureRepairableItem(result: any, profile: any): Repai
     fixerId: 'heading-style-fixer',
     label: 'Ručno oblikovani naslovi: primijeni Heading stilove',
     params: { targets, options: { pageBreakLevels, ...(numbering ? { numbering } : {}) } },
-    violated: true,
+    // Prazan `targets` je slao zahtjev bez mete (`invalid-params`); tests/repair-net.test.ts.
+    violated: targets.length > 0,
     matchKeys: ['Uporaba Word stilova naslova', 'Hijerarhija naslova'],
     headingCandidates: candidates,
     headingNumberingPlan: numberingPlan,

@@ -37,7 +37,15 @@ function extractCitations(paragraphs: any){
   // Vodeca granica je Unicode-svjesna (lookbehind), NE ASCII \b: prezime koje pocinje
   // dijakritikom (C/C/S/Z/Dj) nema ASCII granicu ispred sebe pa ga \b nikad ne uhvati.
   // Uz "Prezime1 i Prezime2 (godina)" prihvati i skupne oblike "Prezime i sur./et al. (godina)".
-  const narr=/(?<![\p{L}\p{N}])([\p{Lu}][\p{L}'’\-]{2,})(?:\s+(?:i|and|&)\s+[\p{Lu}][\p{L}'’\-]{2,}|\s+i\s+sur\.?|\s+et\s+al\.?)?\s*\(((?:18|19|20)\d{2}[a-z]?)\)/gu;
+  // LOKATOR IZA GODINE (2026-09-08): "Kumar (2022, str. 1470)" je standardan APA oblik, a broj
+  // stranice je OBVEZAN uz doslovan navod. Prije ovoga se nije prepoznavao kao citatnica, jer je
+  // ova grana trazila zatvorenu zagradu ODMAH iza godine, a parentetska grana unutar zagrade ne
+  // nalazi autora (prefiks je prazan). Posljedica je bila BODOVANA: reference.uncited (7 bodova)
+  // javljao je ispravno citiran izvor kao NECITIRAN, a citation.recognized (3 boda) podbrojavao.
+  // Nasla ga je sinteticka fixtura fpzg--project--diplomski, ne stvarni rad.
+  // GRANICA JE UZA NEGO STO BI MOGLA BITI, i to namjerno: prihvaca se str./s./p./pp. s brojem te
+  // dvotocje s brojem, a GOLI zarez s brojem NE, jer bi "(2023, 45 posto)" tada postao citatnica.
+  const narr=/(?<![\p{L}\p{N}])([\p{Lu}][\p{L}'’\-]{2,})(?:\s+(?:i|and|&)\s+[\p{Lu}][\p{L}'’\-]{2,}|\s+i\s+sur\.?|\s+et\s+al\.?)?\s*\(((?:18|19|20)\d{2}[a-z]?)(?:\s*[,:]\s*(?:str|pp|p|s)\.?\s*\d{1,4}(?:\s*[‐-―-]\s*\d{1,4})?|\s*:\s*\d{1,4}(?:\s*[‐-―-]\s*\d{1,4})?)?\)/gu;
   while((m=narr.exec(t))){const before=t.slice(Math.max(0,m.index-40),m.index);const nameGuard=/([\p{Lu}][\p{L}'’\-]{2,})\s+$/u.exec(before);
    // Guard sprjecava da se drugi dio punog imena ("Ivan Horvat") uhvati kao samostalna citatnica,
    // ali SAMO kad ta prethodna velika rijec nije sama pocetak recenice (inace "Prema Horvat (2020)"
