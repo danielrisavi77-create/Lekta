@@ -96,3 +96,6 @@ jobs:
 
       - name: Jednokratno razrjesenje poznate AI potrosnje
         run: psql -v ON_ERROR_STOP=1 -f scripts/katedra-billing-reconciliation-smoke.sql
+
+      - name: Jednokratni provider start i oporavak izvornog odgovora
+        run: psql -v ON_ERROR_STOP=1 -f scripts/agent-execution-recovery-smoke.sql
