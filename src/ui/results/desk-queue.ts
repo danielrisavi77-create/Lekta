@@ -1,26 +1,16 @@
 /**
  * RED CEKANJA NALAZA: kompaktan popis umjesto zoološkog vrta kartica.
  *
- * Brif vlasnika (2026-09-08): "Nalazi ne smiju izgledati kao 25 jednakih kartica. Najbolji prikaz
- * nije 'card zoo'. Desno bi bila kompaktna queue lista. Kliknes 03 i samo se njegov detalj otvori.
- * Odmah je vidljivo: sto prvo, sto Lekta moze rijesiti, sto mora student."
- *
  *     01  KRITICNO   Lijeva margina              AUTO
  *     02  VAZNO      Nedostaje izvor             RUCNO
- *     03  VAZNO      Preskocena razina naslova   AUTO
  *
- * DVIJE OSI U ISTOM RETKU, i to je cijela poanta prikaza. Lijevo stoji OZBILJNOST (sto prvo),
- * desno POPRAVLJIVOST (tko to radi). To su dvije NEZAVISNE particije istog skupa, sto
- * `finding-summary.ts` vec objasnjava: blokator moze biti automatski popravljiv, a sitnica ne mora.
- * Popis ih zato drzi u odvojenim stupcima; da su pomijesani u jednu oznaku, korisnik bi ih citao
- * kao jednu ljestvicu i pitao se zasto "kriticno" ponekad znaci "gotovo samo".
+ * DVIJE OSI U ISTOM RETKU: lijevo OZBILJNOST (sto prvo), desno POPRAVLJIVOST (tko radi posao).
+ * Nezavisne su particije istog skupa (vidi `finding-summary.ts`) - blokator zna biti automatski
+ * popravljiv, sitnica ne mora - pa stoje u ODVOJENIM stupcima. Spojene u jednu oznaku citale bi se
+ * kao jedna ljestvica.
  *
- * RIJECI SU IZ SAZETKA, ne nove. Sazetak vec kaze "blokira predaju / treba doraditi / trebas
- * provjeriti sam"; popis nosi njihove kratke oblike (KRITICNO / VAZNO / PROVJERI), pa je vidljivo
- * da je rijec o ISTOJ podjeli, samo zbijenoj u redak.
- *
- * REDNI BROJ JE POLOZAJ NA STOLU, isti onaj iz "3 / 9". Kad se dvije brojke na istom ekranu ne
- * slazu, korisnik to cita kao kvar.
+ * RIJECI SU IZ SAZETKA, ne nove: KRITICNO / VAZNO / PROVJERI su kratki oblici onoga sto sazetak
+ * vec kaze. REDNI BROJ je polozaj iz "3 / 9"; dvije brojke koje se ne slazu citaju se kao kvar.
  */
 import type { DeskItem } from './desk-model';
 import type { VisualFindingModel } from './visual-result-model';

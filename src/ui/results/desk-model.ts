@@ -1,22 +1,12 @@
 /**
- * KOREKTORSKI STOL: spoj nalaza i mjesta u dokumentu.
+ * KOREKTORSKI STOL: spoj nalaza i mjesta u dokumentu. Bez DOM-a, pa se mjeri bez preglednika.
  *
- * Brif vlasnika (2026-09-08): "Klik na nalaz pomakne dokument. Klik na oznaceno mjesto aktivira
- * nalaz. To daje 'aha' trenutak koji screenshot score dashboarda nikada nece dati."
+ * SPOJ NIJE TRIVIJALAN: zastavice gradi `collectAllPreviewFlags` iz cijelog rezultata (ukljucujuci
+ * registre bez vlastitog nalaza), a nalaze `buildFindingViewModels` iz `issues`. Presjek je manji
+ * od oba skupa; vazno je da se veza ne izmislja.
  *
- * Oba smjera trebaju ISTU vezu: nalaz <-> zastavica koju renderer iscrtava u dokumentu.
- * `renderFacsimile` vraca `flagTargets: Map<indeksZastavice, element>`, a nalaz nosi
- * `scope: { kind: 'anchor', paragraphIndex, footnoteId? }`. Ovaj modul spaja to dvoje i radi
- * ISKLJUCIVO nad podacima, bez DOM-a, pa se moze mjeriti bez preglednika.
- *
- * ZASTO SPOJ NIJE TRIVIJALAN: zastavica i nalaz dolaze razlicitim putevima. Zastavice gradi
- * `collectAllPreviewFlags` iz cijelog rezultata (ukljucujuci registre koji nemaju svoj nalaz, npr.
- * duge recenice), a nalaze `buildFindingViewModels` iz `issues`. Presjek je manji od oba skupa i
- * to je normalno; vazno je da se ne izmislja.
- *
- * IZMJERENO PRIJE GRADNJE (19 golden fixtura, 233 nalaza): samo 6% nalaza ima sidro. Zato stol ne
- * smije biti gradjen kao da svaki nalaz ima mjesto: 45% vrijedi za cijeli rad, 16% za podrucje,
- * 33% se ne zna. `veza` je zato `null` za vecinu, i to je ISHOD, ne kvar.
+ * IZMJERENO PRIJE GRADNJE (19 golden fixtura, 233 nalaza): sidro 6%, podrucje 16%, cijeli dokument
+ * 45%, nepoznato 33%. Dakle `flagIndex` je `null` za VECINU, i to je ishod, ne kvar.
  */
 import type { FindingScope } from '../finding-view-model';
 

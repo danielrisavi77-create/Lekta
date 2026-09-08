@@ -165,7 +165,22 @@ const BUDZET_APP = 357 * 1024;
 // `triage-view.ts` prikazuje os POPRAVLJIVOSTI, koju sada prikazuje `desk-queue.ts`, ozicen i
 // vidljiv. Nije ista izvedba (queue ne grupira po popravljivosti i nema doslovne isjecke iza
 // `recipeUnlocked`), pa brisanje i dalje nije moj poziv.
-const BUDZET_UI_UKUPNO = 854 * 1024;
+// 854 -> 851 KB, i ovo je jedino SPUSTANJE u nizu od danas. Razlog je tudja ispravka, ne moja
+// zamisao: druga sesija je istog dana pogodila isti strop i KRATILA vlastiti komentar umjesto da
+// digne granicu (`31e8499a`), pozivajuci se na pravilo da ratchet smije samo padati. Bila je u
+// pravu, a ja sam dizao cetiri puta.
+//
+// Izmjereno na vlastitim modulima stola: 51% njihovih bajtova bio je KOMENTAR (15.344 od 30.081 B).
+// Skraceno je 3.184 B, i to iskljucivo PRIPOVIJEST (kako sam do nalaza dosao, sto sam prvo mislio)
+// te obrazlozenja ponovljena u vise datoteka. Odluke, mjerenja i zamke su ostale, jer njih citatelj
+// treba PRIJE izmjene. Ono sto je skraceno nije izgubljeno: zivi u porukama commita, gdje nema
+// budzeta.
+//
+// Sto je preostalo od dnevnika: ukupno je danas islo 831 -> 851 KB za sest novih testiranih modula
+// (desk-model, desk-view, desk-mount, desk-document, desk-queue, environment-signals) plus red
+// cekanja. `BUDZET_APP` je pritom OSTAO netaknut i `app.ts` je neto SMANJEN, a to je ono sto
+// ratchet po vlastitom obrazlozenju primarno cuva.
+const BUDZET_UI_UKUPNO = 851 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {

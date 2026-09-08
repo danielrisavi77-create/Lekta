@@ -1,22 +1,11 @@
 /**
- * KOREKTORSKI STOL: prikaz. Model veze nalaz <-> mjesto zivi u `desk-model.ts`; ovdje je samo ono
- * sto korisnik vidi.
+ * KOREKTORSKI STOL: prikaz. Raspored je 58% dokument, 42% nalazi.
  *
- * Brif vlasnika (2026-09-08): "Digitalni korektor koji sjedi uz tvoj Word. Ne dashboard, ne
- * tablica provjera, ne score app. Klik na nalaz pomakne dokument, klik na oznaceno mjesto aktivira
- * nalaz." Raspored je 58% dokument, 42% nalazi.
+ * NAVIGACIJA NE OMATA: na zadnjem nalazu "Sljedeci problem" je ugasen. Stol na kojem se vrtis u
+ * krug ne moze odgovoriti na "jesam li gotov", a to je pitanje zbog kojeg korisnik broji.
  *
- * JEDAN NALAZ ODJEDNOM, i to je cijela razlika prema popisu kartica. Popis trazi da korisnik sam
- * bira gdje gledati; stol mu daje jedno mjesto i jedno pitanje, pa navigacija ("1 / 6") nosi
- * osjecaj napretka koji tablica nema.
- *
- * NAVIGACIJA NE OMATA. Na zadnjem nalazu "Sljedeci problem" je ugasen, a ne vraca na prvi.
- * Korektorski stol na kojem se vrtis u krug ne moze reci jesi li gotov, a upravo to je pitanje
- * zbog kojeg korisnik broji.
- *
- * KARTICU NALAZA CRTA `priority-findings.ts`, ne ovaj modul. Druga izvedba iste kartice bi se
- * razisla s prvom (mjereno na ovom repozitoriju vise puta: dvije izvedbe istog pravila se prije ili
- * kasnije raziđu), pa stol dodaje SAMO ono sto je njegovo: traku o opsegu i navigaciju.
+ * KARTICU CRTA `priority-findings.ts`, ne ovaj modul: druga izvedba iste kartice bi se s prvom
+ * prije ili kasnije razisla. Stol dodaje samo svoje - traku o opsegu, popis i navigaciju.
  */
 import type { DeskItem } from './desk-model';
 import { trakaZaOpseg } from './desk-model';
@@ -49,17 +38,12 @@ export function deskNav(ukupno: number, index: number): DeskNav {
 }
 
 /**
- * Sto stoji iznad dokumenta kad nalaz nema svoje mjesto.
+ * Sto stoji iznad dokumenta kad nalaz nema svoje mjesto. 61% nalaza ne moze pokazati odlomak
+ * (mjereno), pa je to vecinski slucaj: dokument ostaje NEOZNACEN uz recenicu koja kaze zasto,
+ * umjesto izmisljenog okvira.
  *
- * IZMJERENO PRIJE GRADNJE (19 golden fixtura, 233 nalaza): sidro ima 6%, podrucje 16%, cijeli
- * dokument 45%, nepoznato 33%. Dakle 61% nalaza NE MOZE pokazati odlomak, i to je vecina. Stol
- * zato ne smije biti gradjen oko okvira: kad mjesta nema, dokument ostaje NEOZNACEN, a iznad njega
- * stoji recenica koja kaze zasto. Vlasnik je taj izbor potvrdio ("ne izmisljati okvir na prvoj
- * stranici").
- *
- * Cetvrti slucaj nastaje tek pri spajanju i zato ga model ne zna: nalaz IMA sidro, ali zastavica
- * za to mjesto nije iscrtana (prikaz je skracen, ili registar nema svoj nalaz). Sutjeti bi ovdje
- * bilo najgore: korisnik bi trazio oznaku koje nema.
+ * Cetvrti slucaj model ne zna, jer nastaje tek pri spajanju: nalaz IMA sidro, ali zastavica nije
+ * iscrtana. Sutnja bi ondje bila najgora, jer korisnik trazi oznaku koje nema.
  */
 export function deskTraka(item: DeskItem): string | null {
   // NEPOZNAT OPSEG NE DOBIVA TRAKU, jer bi ponovio ono sto kartica vec pise. `trakaZaOpseg` za
@@ -88,16 +72,9 @@ export function deskNavHtml(nav: DeskNav, esc: (v: string) => string): string {
 /**
  * Desna strana stola: RED CEKANJA s otvorenim detaljem odabranog, pa navigacija.
  *
- * Brif vlasnika (2026-09-08): "Nalazi ne smiju izgledati kao 25 jednakih kartica... Odmah je
- * vidljivo sto prvo, sto Lekta moze rijesiti, sto mora student."
- *
- * DO TE IZMJENE je ovdje stajala TOCNO JEDNA kartica, a ostali nalazi su se vidjeli samo kroz
- * "Sljedeci problem". To je rjesavalo card zoo, ali je stvaralo drugi problem: korisnik nije mogao
- * vidjeti STO GA JOS CEKA, pa "1 / 9" nije govorilo nista o tome je li ostatak tezak ili sitan.
- * Popis vraca pregled bez vracanja kartica.
- *
- * NAVIGACIJA OSTAJE uz popis. Popis odgovara na "sto sve", navigacija na "vodi me redom"; to su
- * dva razlicita nacina rada i jeftino je imati oba, tim vise sto dijele isti `data-desk-go`.
+ * Popis odgovara na "sto sve me ceka", navigacija na "vodi me redom". Oba su jeftina jer dijele
+ * isti `data-desk-go`, a samo jedan od njih ne bi bio dovoljan: jedna kartica ne kaze je li
+ * ostatak tezak ni sitan, a sam popis ne vodi kroz posao.
  */
 export function deskPaneHtml(
   item: DeskItem<VisualFindingModel> | null,

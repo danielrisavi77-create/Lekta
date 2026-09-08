@@ -3,19 +3,14 @@
  *
  * Izdvojeno iz `app.ts` 2026-09-08, iz DVA razloga odjednom.
  *
- * 1. UKLAPANJE PO SIRINI NIJE UKRAS NEGO CITLJIVOST. Faksimil je pravi A4, dakle 21 cm, a pano
- *    stola je uzi. Bez skaliranja stranica se REZE po desnom rubu i rijeci se lome nasred retka
- *    ("...akademskog tel"), pa dokument prestaje biti citljiv upravo u alatu koji sluzi citanju.
- *    Modal pregleda to vec radi (`renderPreviewMode` zove `fitWidth`); stol je u prvoj izvedbi
- *    ozicenja to ispustio.
+ * 1. UKLAPANJE PO SIRINI NIJE UKRAS NEGO CITLJIVOST. Faksimil je pravi A4 (21 cm), pano je uzi, pa
+ *    se bez skaliranja stranica REZE po desnom rubu i rijeci se lome nasred retka. Uklapanje je
+ *    zato DIO MONTAZE, a ne nesto sto pozivatelj mora zapamtiti.
  *
- *    KAKO JE OTKRIVENO, jer je to poanta: nijedan test nije pao. Faksimil JEST bio vidljiv, omjer
- *    stupaca JEST bio tocan, i oba su se mjerila. Rez se vidio tek na SNIMCI ekrana. Tvrdnja o
- *    postojanju elementa ne mjeri je li sadrzaj upotrebljiv, i to je granica koju ovaj modul
- *    zatvara tako da uklapanje bude dio montaze, a ne nesto sto pozivatelj mora zapamtiti.
+ *    Kvar je prosao sve testove (faksimil vidljiv, omjer stupaca tocan) i vidio se tek na snimci;
+ *    sada ga cuva tvrdnja o prelijevanju u `tests/ux/korektorski-stol.spec.ts`.
  *
- * 2. `app.ts` je na svom budzetu. Ovo je selidba, ne dizanje: zatvorenje koje je zivjelo unutar
- *    poziva kokpita seli ovamo, pa `app.ts` predaje jedan izraz.
+ * 2. `app.ts` je na svom budzetu, pa je zatvorenje iz poziva kokpita preselilo ovamo.
  *
  * OBA TESKA MODULA SE UCITAVAJU LIJENO. Renderer faksimila i zoom nisu u grafu ekrana rezultata;
  * dovlace se tek kad je pano stvarno vidljiv, sto ljuska provjerava prije poziva.
