@@ -34,8 +34,14 @@ export interface DeskFlag {
   readonly footnoteId?: number;
 }
 
-export interface DeskItem {
-  readonly finding: DeskFinding;
+export interface DeskItem<F extends DeskFinding = DeskFinding> {
+  /**
+   * Nalaz U ONOM TIPU U KOJEM JE USAO. Bez parametra tipa bi spoj "zaboravio" sva polja mimo
+   * cetiri koja stol treba, pa bi ga svaki prikaz morao vracati kastom. Kast bi ovdje bio
+   * tvrdnja bez pokrica: kartica nalaza cita i `explanation`, `capabilities` i
+   * `status`, kojih u `DeskFinding` nema.
+   */
+  readonly finding: F;
   /**
    * Indeks u polju zastavica koje renderer iscrtava, ili `null` kad nalaz nema mjesto u
    * dokumentu. `null` je najcesci slucaj i prikaz ga mora podnijeti bez izmisljanja okvira.
@@ -52,10 +58,10 @@ function kljuc(paragraphIndex: number, footnoteId?: number): string {
  * Spoji nalaze sa zastavicama. Kad vise zastavica gadja isto mjesto, uzima se PRVA: renderer ih
  * iscrtava redom, pa je prva ona koju korisnik vidi na vrhu tog odlomka.
  */
-export function deskItems(
-  findings: readonly DeskFinding[],
+export function deskItems<F extends DeskFinding>(
+  findings: readonly F[],
   flags: readonly DeskFlag[],
-): DeskItem[] {
+): DeskItem<F>[] {
   const poMjestu = new Map<string, number>();
   flags.forEach((f, i) => {
     const k = kljuc(f.paragraphIndex, f.footnoteId);
@@ -70,7 +76,10 @@ export function deskItems(
 }
 
 /** Obrnut smjer: koji je nalaz na toj zastavici. `null` kad zastavica nema svoj nalaz. */
-export function findingForFlag(items: readonly DeskItem[], flagIndex: number): DeskFinding | null {
+export function findingForFlag<F extends DeskFinding>(
+  items: readonly DeskItem<F>[],
+  flagIndex: number,
+): F | null {
   const hit = items.find((it) => it.flagIndex === flagIndex);
   return hit ? hit.finding : null;
 }

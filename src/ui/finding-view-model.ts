@@ -213,7 +213,10 @@ export function buildFindingViewModels(
   });
 }
 
-export function topFindings(findings: FindingViewModel[], limit = 3): FindingViewModel[] {
+// Genericki, jer funkcija nikad ne GRADI nalaz nego samo filtrira, sortira i reze. Bez parametra
+// tipa bi svaki pozivatelj koji radi s bogatijim modelom (npr. `VisualFindingModel`) izgubio
+// polja i morao ih vracati kastom, dakle tvrdnjom bez pokrica.
+export function topFindings<F extends FindingViewModel>(findings: readonly F[], limit = 3): F[] {
   return [...findings]
     // Rucna potvrda znaci samo da je korisnik pogledao nalaz. Ne smije sakriti
     // blokator niti se smije predstavljati kao dokaz da je dokument popravljen.

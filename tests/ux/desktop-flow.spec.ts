@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 import { expectInsideFold } from './fold';
+import { potvrdiProfil } from './confirm-profile';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -17,19 +19,30 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
  * audit P1-17 prijavio kao nacin da suite bude zelena a da nista ne vrti.
  */
 test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', async ({ page }) => {
+  /**
+   * ROK JE VECI OD ZADANIH 120 s, jer ovaj spec radi PUNI put: analiza stvarnog .docx-a, rezultat,
+   * kartice, modal pregleda, faksimil i zoom. To je najduzi scenarij u matrici, a WebKit najsporiji
+   * motor u njoj.
+   *
+   * IZMJERENO 2026-09-08, lokalno, nakon popravka utrke oko koraka: spec vise ne pada na koraku 2
+   * nego stigne do RETKA 131 od 134 i ondje potrosi globalnih 120 s. Rok zato nije skrivanje
+   * jednog sporog mjesta nego priznanje duljine scenarija; da je rijec o zaglavljenom elementu,
+   * veci rok ne bi promijenio nista, i to je provjereno ponovnim mjerenjem.
+   */
+  test.setTimeout(Number(process.env.LEKTA_DESKTOP_TIMEOUT_MS ?? 300_000));
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/rad/');
+  await cekajApp(page);
   // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
   // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
   // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await page.locator('#analyzeBtn').click();
-  const confirm = page.locator('[data-confirm-profile]');
-  if (await confirm.isVisible()) await confirm.click();
+  await potvrdiProfil(page);
   await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   // NALAZI ZIVE U COCKPITU, NE VISE U `#triagePanel`. Redizajn "Results Cockpit" seli SVE
@@ -63,11 +76,7 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await expect(page.locator('.dl-menu-btn')).toContainText('Preuzmi izvještaj');
   await expect(page.locator('#newAnalysis')).toContainText('Ponovno analiziraj');
 
-  // Ovaj dokument nema PAGE polje, pa nalaz o brojevima stranica MORA biti u panelu. Koji je od
-  // vise nalaza iste tezine prvi NIJE tvrdnja proizvoda: priorityRank izjednacuje sve 'error'
-  // nalaze, a remi lomi puki redoslijed emitiranja iz analize. Vezanje na .first() zato je lomilo
-  // gate cim bi analiza legitimno dodala jos jedan kriticni nalaz (ovdje: dokument nema ni sadrzaj).
-  await expect(page.locator('#resultCockpit')).toContainText('Nisu pronađeni automatski brojevi stranica');
+  // Tvrdnja o nalazu za brojeve stranica SELJENA je nize, na puni popis nalaza (vidi ondje).
   const firstFinding = page.locator('#resultCockpit article.cockpit-finding').first();
   const findingId = await firstFinding.getAttribute('data-finding-id');
   expect(findingId, 'kartica nalaza mora nositi stabilan data-finding-id').toBeTruthy();
@@ -102,6 +111,13 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await expect(page.locator('#issueFilters')).toContainText('Problemi dokumenta');
   await expect(page.locator('#issueFilters')).toContainText('Ograničenja analize');
   await expect(page.locator('#issueCountLabel')).toContainText('problema dokumenta');
+  // OVAJ DOKUMENT NEMA PAGE POLJE, pa nalaz o brojevima stranica MORA biti prijavljen. Tvrdnja
+  // je 2026-09-08 preseljena s `#resultCockpit` na puni popis, jer je korektorski stol zamijenio
+  // popis tri kartice i pokazuje JEDAN nalaz odjednom. Time je stara tvrdnja pocela mjeriti
+  // koji je nalaz slucajno prvi, a to nikad nije bila tvrdnja proizvoda: `priorityRank`
+  // izjednacuje sve `error` nalaze, pa remi lomi puki redoslijed emitiranja iz analize.
+  // Ovdje namjera vrijedi neovisno o tome sto stol trenutacno prikazuje.
+  await expect(page.locator('#issuesList')).toContainText('Nisu pronađeni automatski brojevi stranica');
   await page.locator('#issueFilters').getByRole('button', { name: 'Ograničenja analize' }).click();
   await expect(page.locator('#issuesList')).toContainText('Profil ograničeno terenski testiran');
 

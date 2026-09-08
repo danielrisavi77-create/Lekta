@@ -83,7 +83,7 @@ function checkoutConfigured(){return purePr.checkoutConfigured(productionConfig)
 function paidOffersLive(){return purePr.paidOffersLive(productionConfig)}
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocxOffThread, cancelActiveAnalysis, isAnalysisCancelled } from '../analysis/analyze-docx-client';
-import { uploadCapBytes, decompressionBudgetBytes } from '../analysis/memory-budget';
+import { decompressionBudgetBytes } from '../analysis/memory-budget';
 import { detectContextFromText, needsProfileConfirmation, isConfidentDetection } from './profile-detect';
 import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
@@ -167,6 +167,9 @@ export function loadAnalyzerDocument(file: File): Promise<AnalyzerDocumentAdmiss
 }
 
 import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
+import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, motionReduced, withViewTransition } from './environment-signals';
+import { deskItems } from './results/desk-model';
+import { mountFacsimileInto } from './results/desk-document';
 
 
 const $=(s: string,r: any=runtimeDocument()): any=>r.querySelector(s), $$=(s: string,r: any=runtimeDocument()): any[]=>[...r.querySelectorAll(s)];
@@ -1253,7 +1256,18 @@ function renderResultsCockpitForResult(r: any){
     repairItems:[...repairPanelItems,...repairPanelTextItems],
     ruleEntries:analyzedProfile?.ruleEntries,
   });
+  // KOREKTORSKI STOL. Nalazi idu u PRIORITETNOM redoslijedu (isti `topFindings` koji je birao
+  // tri kartice, samo bez rezanja), jer "1 / 6" mora poceti od onoga sto je najvaznije.
+  // Zastavice se skupljaju samo kad pregled uopce postoji; bez odlomaka nema sto oznaciti.
+  const _deskFlags=r?.preview?.paragraphs?.length?collectAllPreviewFlags(r,(_existenceVerdicts&&_existenceVerdicts.result===r)?_existenceVerdicts.verdicts:null):[];
+  // `renderFacsimile` se ucitava LIJENO i tek kad je pano stvarno vidljiv (ljuska to provjerava),
+  // pa uzak ekran ne placa crtanje A4 listova koje nitko nece vidjeti.
+  // `topFindings` VEC izbacuje zanemarene i sortira po prioritetu; drugo filtriranje ovdje bilo bi
+  // drugo mjesto koje odrzava isto pravilo.
+  const _deskItems=deskItems(topFindings(model.findings.document,model.findings.document.length),_deskFlags);
+  const _desk=_deskItems.length?{items:_deskItems,mountDocument:(host: HTMLElement)=>mountFacsimileInto(host,r.preview,_deskFlags)}:undefined;
   renderResultsCockpit(mount,model,{
+    desk:_desk,
     repairAvailable:!r?.demo,
     documentDna:_dna,
     repairOutlook:_outlook,
@@ -1488,22 +1502,10 @@ function celebrateReady(r: any){
     }).catch(()=>{});
   }catch(e: any){}
 }
-// Animacije ekrana rezultata (count-up, ring sweep, punjenje traka). Sve ima instant-fallback
-// na prefers-reduced-motion ili ako Motion nije dostupan; vrijednosti su uvijek tocne.
-function motionReduced(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)}
-// Lokalni View Transition: glatki morph pri swapu analyzer viewova i koraka wizarda. Fallback na
-// obicnu mutaciju bez podrske ili uz reduced-motion. .vt-local (na <html>) gasi root fade i imenuje
-// analyzer viewove (motion.css). mutate MORA biti sinkron (renderResult jest) da novi snapshot
-// uhvati dovrsen DOM. Sekvencijalni pozivi su ok; VT se ne preklapaju (novi preskoci stari).
-function withViewTransition(mutate: any){const d: any=document;if(motionReduced()||typeof d.startViewTransition!=='function'){mutate();return}const root=document.documentElement;root.classList.add('vt-local');try{const t=d.startViewTransition(()=>mutate());t.ready&&t.ready.catch(()=>{});t.finished.catch(()=>{}).finally(()=>root.classList.remove('vt-local'))}catch(e: any){root.classList.remove('vt-local');mutate()}}
 // Mobilno-svjestan limit velicine (P1 6, BL-P0-05-7): docx do 50 MB dekomprimira do ~200 MB po
 // zapisu, sto na slabijem mobitelu moze premasiti memoriju taba prije nego capovi parsera reagiraju.
 // Granice su izvucene u cistu, testabilnu jezgru (src/analysis/memory-budget.ts); ovdje samo citamo
 // signale uredaja iz preglednika i delegiramo.
-function deviceMemoryGb(){try{return (navigator as any).deviceMemory ?? null}catch(e: any){return null}}
-function coarsePointer(){try{return !!(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)}catch(e: any){return false}}
-function isLikelyMobile(){return coarsePointer()||((deviceMemoryGb() as number)>0&&(deviceMemoryGb() as number)<=4)}
-function effectiveUploadCap(){return uploadCapBytes({deviceMemory:deviceMemoryGb(),coarsePointer:coarsePointer()})}
 function _animate(){return window.__lektaAnimate} // lijeno ucitan Motion (ui-boot); null dok se ne ucita
 const resultAnimations=createAnimationRegistry();
 function stopResultAnimations(){resultAnimations.stopAll()}
@@ -2404,6 +2406,8 @@ export function initAnalyzerApp(doc: Document=document): void{
   initLegacy(doc,controller.signal);
   _analyzerMounted=true;
   _mountedDocuments.add(doc);
+  // Spremnost je OPAZIVA; ugovor: `tests/ux/app-ready.ts`. Tek poslije uspjesne montaze.
+  doc.documentElement.dataset.lektaReady='1';
  }catch(error){
   // Neuspjela montaza ne smije ostaviti pola stanja: sljedeci poziv mora moci pokusati ponovno.
   controller.abort();
@@ -2427,6 +2431,7 @@ export function disposeAnalyzerApp(doc: Document=document): void{
  controller.abort();
  _mountAbortControllers.delete(doc);
  _mountedDocuments.delete(doc);
+ delete doc.documentElement.dataset.lektaReady; // odmontiran ne tvrdi da je spreman
  if(_runtimeDocument===doc){_runtimeDocument=null;_analyzerMounted=false}
 }
 

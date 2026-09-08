@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 import { expectInsideFold } from './fold';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -22,12 +23,13 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
     await expectInsideFold(page, '#dropzone', viewport.height);
     await expectInsideFold(page, '#browseBtn', viewport.height);
 
+    await cekajApp(page);
     await page.locator('#fileInput').setInputFiles(fixture);
     // Korak 2 dolazi SAM, bez sticky CTA-a "Nastavi na profil": popravljeno 2026-09-08
     // (`usesCompactUploadFlow` je bio vestigalni ostatak stare mobilne staze koji je ovdje jos
     // trazio rucni klik). Provjera fold-vidljivosti tog gumba time otpada: gumb vise ne postoji
     // na ovom putu (nula do jedan tap, isto kao desktop).
-    await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+    await cekajKorak(page, '2');
   });
 
 }
