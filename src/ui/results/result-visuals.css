@@ -602,7 +602,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .cockpit-authority__mark { color: var(--ck-green); }
 .cockpit-authority p { margin: .1rem 0 0; }
 
-/* ---- Napredna provjera (zatecen ekran, sklopljen) --------------------------- */
+/* ---- Detalji provjere (zatecen ekran, sklopljen) ---------------------------- */
 
 .result-cockpit-advanced-shell { display: grid; gap: .75rem; margin-top: 1.75rem; }
 /* Stavka grida ima zadani `min-width: auto`, pa ne moze ispod svoje min-content sirine.
@@ -970,4 +970,58 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
   .lekta-facsimile [data-desk-active] { scroll-margin: 0; }
+}
+
+/* ==========================================================================
+   RED CEKANJA NALAZA (desna strana stola)
+   Brif vlasnika (2026-09-08): "Nalazi ne smiju izgledati kao 25 jednakih kartica... Odmah je
+   vidljivo: sto prvo, sto Lekta moze rijesiti, sto mora student."
+
+   REDAK JE TABLICA OD CETIRI STUPCA, ne slobodan tekst: broj, ozbiljnost, naslov, popravljivost.
+   Fiksne sirine rubnih stupaca drze OKOMITO PORAVNANJE, jer se popis cita po stupcu ("koje su
+   kriticne", "sto ide automatski"), a ne redak po redak. `minmax(0, 1fr)` na naslovu je nuzan:
+   bez njega dug naslov razvuce redak i izgura oznaku AUTO izvan panoa.
+   ========================================================================== */
+.dq { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.dq-btn {
+  width: 100%; display: grid;
+  grid-template-columns: 2.2rem 5.5rem minmax(0, 1fr) auto;
+  align-items: center; gap: .6rem;
+  padding: .5rem .6rem; border: 1px solid transparent; border-radius: 8px;
+  background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.dq-btn:hover { background: var(--ck-soft, rgba(0, 0, 0, .04)); }
+.dq-btn:focus-visible { outline: 2px solid var(--ck-accent, #c8102e); outline-offset: -2px; }
+
+.dq-num { font-variant-numeric: tabular-nums; color: var(--ck-muted); font-size: .8rem; }
+.dq-sev { font-size: .7rem; letter-spacing: .06em; font-weight: 600; }
+.dq-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* OZBILJNOST NOSI BOJU, POPRAVLJIVOST NE. Dvije obojene osi u istom retku natjecale bi se i
+   citale kao jedna ljestvica; boja zato ostaje rezervirana za "sto prvo". */
+.dq-item[data-ton="blok"] .dq-sev { color: var(--ck-accent, #c8102e); }
+.dq-item[data-ton="dorada"] .dq-sev { color: var(--ck-ink); }
+.dq-item[data-ton="provjera"] .dq-sev { color: var(--ck-muted); }
+
+/* AUTO i RUCNO su ZNACKE, ne gumbi: ne pokrecu nista, nego kazu tko radi posao. */
+.dq-fix {
+  font-size: .65rem; letter-spacing: .06em; font-weight: 600;
+  padding: .12rem .4rem; border-radius: 999px; border: 1px solid var(--ck-line);
+  color: var(--ck-muted); white-space: nowrap;
+}
+.dq-fix[data-fix="auto"] { border-color: var(--ck-green, #1a7f5a); color: var(--ck-green-text, #1a7f5a); }
+
+/* Otvoren redak je JEDINI koji nosi detalj, pa smije uzeti i vizualnu tezinu. */
+.dq-item--open { border-radius: 10px; background: var(--ck-soft, rgba(0, 0, 0, .04)); }
+.dq-item--open > .dq-btn { border-color: var(--ck-line); }
+.dq-detalj { padding: .2rem .4rem .5rem; }
+/* Kartica unutar reda gubi vlastitu podlogu: ona je vec unutar otvorenog retka, pa bi dvostruki
+   okvir izgledao kao kartica u kartici. */
+.dq-detalj .cockpit-finding { border: 0; background: transparent; padding-left: 0; padding-right: 0; }
+
+@media (max-width: 900px) {
+  .dq-btn { grid-template-columns: 2rem minmax(0, 1fr) auto; }
+  /* Na uskom zaslonu oznaka ozbiljnosti pada ispod naslova umjesto da guta njegovu sirinu. */
+  .dq-sev { grid-column: 2; font-size: .65rem; }
+  .dq-title { grid-column: 2; }
 }

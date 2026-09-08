@@ -136,7 +136,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     options.repairOutlook ? repairOutlookHtml(options.repairOutlook) : '',
     categorySummaryHtml(model.categories),
     actionRowHtml(model, options.repairAvailable),
-    '<button type="button" class="cockpit-advanced-toggle" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="', advancedOpen ? 'true' : 'false', '"><span>Napredna provjera</span><span aria-hidden="true">&#65291;</span></button>',
+    '<button type="button" class="cockpit-advanced-toggle" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="', advancedOpen ? 'true' : 'false', '"><span>Detalji provjere</span><span aria-hidden="true">&#65291;</span></button>',
   ].join('');
   mount.dataset.advancedOpen = String(advancedOpen);
   // Ulaz je JEDAN orkestriran trenutak, ne rasuti efekti: razred se pali u sljedecem kadru pa

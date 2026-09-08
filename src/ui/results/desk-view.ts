@@ -21,6 +21,7 @@
 import type { DeskItem } from './desk-model';
 import { trakaZaOpseg } from './desk-model';
 import { priorityFindingHtml } from './priority-findings';
+import { queueHtml, queueRedci } from './desk-queue';
 import type { VisualFindingModel } from './visual-result-model';
 
 export interface DeskNav {
@@ -61,6 +62,12 @@ export function deskNav(ukupno: number, index: number): DeskNav {
  * bilo najgore: korisnik bi trazio oznaku koje nema.
  */
 export function deskTraka(item: DeskItem): string | null {
+  // NEPOZNAT OPSEG NE DOBIVA TRAKU, jer bi ponovio ono sto kartica vec pise. `trakaZaOpseg` za
+  // `unavailable` vraca `scope.reason`, a isti taj razlog kartica ispisuje u retku "Gdje:", pa su
+  // se na ekranu pojavile DVIJE identicne recenice jedna iznad druge (vidjeno na snimci
+  // 2026-09-08, nalaz 03). Za `document` i `region` traka govori nesto sto kartica ne kaze: zasto
+  // u dokumentu lijevo nema nijedne oznake.
+  if (item.finding.scope.kind === 'unavailable') return null;
   const opseg = trakaZaOpseg(item.finding.scope);
   if (opseg) return opseg;
   if (item.flagIndex === null) return 'Mjesto je poznato, ali nije označeno u ovom prikazu.';
@@ -78,20 +85,37 @@ export function deskNavHtml(nav: DeskNav, esc: (v: string) => string): string {
     + '</nav>';
 }
 
-/** Desna strana stola: traka o opsegu, kartica nalaza, navigacija. */
+/**
+ * Desna strana stola: RED CEKANJA s otvorenim detaljem odabranog, pa navigacija.
+ *
+ * Brif vlasnika (2026-09-08): "Nalazi ne smiju izgledati kao 25 jednakih kartica... Odmah je
+ * vidljivo sto prvo, sto Lekta moze rijesiti, sto mora student."
+ *
+ * DO TE IZMJENE je ovdje stajala TOCNO JEDNA kartica, a ostali nalazi su se vidjeli samo kroz
+ * "Sljedeci problem". To je rjesavalo card zoo, ali je stvaralo drugi problem: korisnik nije mogao
+ * vidjeti STO GA JOS CEKA, pa "1 / 9" nije govorilo nista o tome je li ostatak tezak ili sitan.
+ * Popis vraca pregled bez vracanja kartica.
+ *
+ * NAVIGACIJA OSTAJE uz popis. Popis odgovara na "sto sve", navigacija na "vodi me redom"; to su
+ * dva razlicita nacina rada i jeftino je imati oba, tim vise sto dijele isti `data-desk-go`.
+ */
 export function deskPaneHtml(
   item: DeskItem<VisualFindingModel> | null,
   nav: DeskNav,
   repairAvailable: boolean,
   esc: (v: string) => string,
+  // OBAVEZAN, bez zadane vrijednosti. Zadano `[item]` je izmisljalo jednoclani popis, pa kad se ne
+  // bi poklopio s polozajem, NIJEDAN redak ne bi bio odabran i detalj bi tiho nestao s ekrana.
+  svi: readonly DeskItem<VisualFindingModel>[],
 ): string {
   if (!item) return '<div class="desk-pane" data-desk-pane><p class="desk-prazno">Nema otvorenih nalaza.</p></div>';
   const traka = deskTraka(item);
+  const detalj = (traka ? `<p class="desk-traka" data-desk-traka>${esc(traka)}</p>` : '')
+    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u "3 / 9" i u retku popisa.
+    // Kad se dvije brojke na istom ekranu ne slazu, korisnik to cita kao kvar.
+    + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1);
   return '<div class="desk-pane" data-desk-pane>'
-    + (traka ? `<p class="desk-traka" data-desk-traka>${esc(traka)}</p>` : '')
-    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u "1 / 6". Kartica ga ispisuje
-    // kao svoj redni broj, pa se dvije brojke na ekranu slazu umjesto da se natjecu.
-    + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1)
+    + queueHtml(queueRedci(svi, repairAvailable), nav.index, esc, detalj)
     + deskNavHtml(nav, esc)
     + '</div>';
 }
@@ -106,6 +130,7 @@ export function deskHtml(
   nav: DeskNav,
   repairAvailable: boolean,
   esc: (v: string) => string,
+  svi: readonly DeskItem<VisualFindingModel>[],
 ): string {
   return '<section class="desk" data-desk aria-label="Korektorski stol">'
     // `tabindex` i `role` NISU ukras: pano ima vlastiti skrol, pa bez njih korisnik tipkovnice
@@ -114,6 +139,6 @@ export function deskHtml(
     // `role="region"`, inace citac ekrana najavi podrucje koje nema ime.
     + '<div class="desk-doc" data-desk-doc tabindex="0" role="region" aria-label="Dokument">'
     + '<p class="desk-doc__cekanje">Pripremam prikaz dokumenta…</p></div>'
-    + deskPaneHtml(item, nav, repairAvailable, esc)
+    + deskPaneHtml(item, nav, repairAvailable, esc, svi)
     + '</section>';
 }

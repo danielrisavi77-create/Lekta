@@ -81,13 +81,13 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
   let mete: ReadonlyMap<number, HTMLElement> | null = null;
   let odbacen = false;
 
-  section.innerHTML = deskHtml(o.items[0] ?? null, deskNav(o.items.length, 0), o.repairAvailable, o.esc);
+  section.innerHTML = deskHtml(o.items[0] ?? null, deskNav(o.items.length, 0), o.repairAvailable, o.esc, o.items);
 
   const nacrtajPlocu = (): void => {
     const stara = section.querySelector<HTMLElement>('[data-desk-pane]');
     if (!stara) return;
     const nova = section.ownerDocument.createElement('div');
-    nova.innerHTML = deskPaneHtml(o.items[index] ?? null, deskNav(o.items.length, index), o.repairAvailable, o.esc);
+    nova.innerHTML = deskPaneHtml(o.items[index] ?? null, deskNav(o.items.length, index), o.repairAvailable, o.esc, o.items);
     const zamjena = nova.firstElementChild;
     if (zamjena) stara.replaceWith(zamjena);
   };

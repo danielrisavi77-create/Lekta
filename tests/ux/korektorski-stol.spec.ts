@@ -66,8 +66,45 @@ test('stol dijeli ekran 58/42: dokument lijevo, jedan nalaz desno', async ({ pag
   });
   expect(prelijev, `dokument prelijeva pano za ${((prelijev - 1) * 100).toFixed(0)}%`).toBeLessThan(1.05);
 
-  // JEDAN nalaz odjednom: stol ne smije biti popis kartica pod drugim imenom.
+  // JEDAN OTVOREN DETALJ, ali SVI nalazi vidljivi kao redci. To je sesta tocka brifa:
+  // "Nalazi ne smiju izgledati kao 25 jednakih kartica... Odmah je vidljivo sto prvo, sto Lekta
+  // moze rijesiti, sto mora student."
+  const redci = page.locator('[data-desk-queue] .dq-item');
+  expect(await redci.count(), 'popis mora pokazati SVE nalaze, ne samo otvoreni').toBeGreaterThan(3);
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
+  await expect(page.locator('.dq-detalj')).toHaveCount(1);
+
+  // OBJE OSI U RETKU: ozbiljnost lijevo, popravljivost desno. Bez druge osi popis ne odgovara na
+  // "sto Lekta moze rijesiti", sto je pola onoga zbog cega je trazen.
+  await expect(page.locator('[data-desk-queue] .dq-sev').first()).toBeVisible();
+  expect(await page.locator('[data-desk-queue] .dq-fix').count()).toBeGreaterThan(0);
+
+  // REDAK SE NE SMIJE PRELIJEVATI. Dug naslov nalaza bi bez `minmax(0,1fr)` izgurao oznaku AUTO
+  // izvan panoa; isti razred kvara vec je uhvacen na `.rad-doc` i na samom dokumentu stola.
+  const prelijevRetka = await page.evaluate(() => {
+    const b = document.querySelector('[data-desk-queue] .dq-btn') as HTMLElement | null;
+    return b ? b.scrollWidth / b.clientWidth : 0;
+  });
+  expect(prelijevRetka, `redak popisa prelijeva za ${((prelijevRetka - 1) * 100).toFixed(0)}%`).toBeLessThan(1.02);
+});
+
+test('klik na redak otvara SAMO njegov detalj', async ({ page }) => {
+  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await doRezultata(page);
+
+  // Doslovno po brifu: "Kliknes 03 i samo se njegov detalj otvori."
+  await page.locator('[data-desk-queue] [data-desk-go="2"]').click();
+  await expect(page.locator('[data-desk-count]')).toHaveText(/^3 \/ \d+$/);
+  await expect(page.locator('.dq-detalj')).toHaveCount(1);
+  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="2"]')).toHaveAttribute('aria-expanded', 'true');
+
+  // Popis i navigacija su DVA nacina rada nad istim stanjem, ne dva stanja: nakon klika na redak
+  // navigacija nastavlja odande, a ne od pocetka.
+  await page.locator('.desk-nav__btn--next').click();
+  await expect(page.locator('[data-desk-count]')).toHaveText(/^4 \/ \d+$/);
+  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="3"]')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('.dq-detalj')).toHaveCount(1);
 });
 
 test('navigacija stolom mijenja nalaz i ne omata na kraju', async ({ page }) => {

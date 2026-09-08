@@ -145,7 +145,27 @@ const BUDZET_APP = 357 * 1024;
 // u alatu koji sluzi citanju. Kvar je prosao SVE testove (faksimil vidljiv, omjer stupaca tocan,
 // oba mjerena) i vidio se tek na snimci ekrana; sada ga cuva tvrdnja o prelijevanju, cija je
 // mutacija izmjerena na 22%. `app.ts` je pritom SMANJEN za 114 B, jer je zatvorenje preselilo.
-const BUDZET_UI_UKUPNO = 848 * 1024;
+// 848 -> 854 KB, CETVRTI put u jednom danu: `desk-queue.ts` (4,3 KB) i sire potpisi prikaza, za
+// sestu tocku vlasnikova pregleda ("nalazi ne smiju izgledati kao 25 jednakih kartica").
+//
+// CETIRI DIZANJA U DANU ZNACE DA OVAJ BROJ VISE NIJE RATCHET NEGO DNEVNIK, i to se pise ovdje da
+// se ne bi tumacilo kao da je gard drzao. Ono sto JEST drzalo je `BUDZET_APP`: `app.ts` je danas
+// neto SMANJEN (selidba signala okoline -1438 B, montaza dokumenta -114 B, ozicenje stola +987 B),
+// i to je ono sto ratchet po vlastitom obrazlozenju primarno cuva ("ne trazi da se `app.ts` odmah
+// razbije; trazi samo da ne raste dalje").
+//
+// UKUPNO je naraslo 831 -> 854 KB zbog sest novih modula za znacajku koju je vlasnik trazio, i svi
+// su testirani (desk-model, desk-view, desk-mount, desk-document, desk-queue, environment-signals;
+// 63 testa). To nije drift nego isporuka, ali granica koja se u jednom danu pomakne cetiri puta
+// vise ne odgovara na pitanje zbog kojeg postoji.
+//
+// ODLUKA KOJA NEDOSTAJE JE VLASNIKOVA, i namjerno je nisam donio sam: ili se ukupna granica
+// prekalibrira na novu stvarnost, ili se naplati onih ~20 KB u tri modula koje uvozi iskljucivo
+// njihov vlastiti test (popis nize). Sesta tocka je pritom priblizila jedan od njih odluci:
+// `triage-view.ts` prikazuje os POPRAVLJIVOSTI, koju sada prikazuje `desk-queue.ts`, ozicen i
+// vidljiv. Nije ista izvedba (queue ne grupira po popravljivosti i nema doslovne isjecke iza
+// `recipeUnlocked`), pa brisanje i dalje nije moj poziv.
+const BUDZET_UI_UKUPNO = 854 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {

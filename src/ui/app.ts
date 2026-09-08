@@ -1148,8 +1148,8 @@ function ensureResultsCockpitAdvancedShell(): HTMLElement|null{
   const shell=document.createElement('section');
   shell.id='resultCockpitAdvanced';
   shell.className='result-cockpit-advanced-shell';
-  shell.setAttribute('aria-label','Napredna provjera');
-  shell.innerHTML='<div class="result-cockpit-advanced-head"><strong>Napredna provjera</strong><p>Puni popis nalaza, bodovanje, plan ispravaka i dodatne provjere ostaju ovdje, nepromijenjeni.</p></div><div class="result-cockpit-advanced-content" id="resultCockpitAdvancedContent" data-cockpit-advanced-content></div>';
+  shell.setAttribute('aria-label','Detalji provjere');
+  shell.innerHTML='<div class="result-cockpit-advanced-head"><strong>Detalji provjere</strong><p>Puni popis nalaza, bodovanje, plan ispravaka i dodatne provjere ostaju ovdje, nepromijenjeni.</p></div><div class="result-cockpit-advanced-content" id="resultCockpitAdvancedContent" data-cockpit-advanced-content></div>';
   const moved: Element[]=[];
   for(let node=mount.nextElementSibling;node;node=node.nextElementSibling)moved.push(node);
   mount.insertAdjacentElement('afterend',shell);
