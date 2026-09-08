@@ -382,6 +382,23 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
 
   expect(m.naslovPx, 'sazetak mora biti VECI od ocjene').toBeGreaterThan(m.ocjenaPx);
   expect(m.naslovPx / m.ocjenaPx, 'ocjena je opet preuzela autoritet').toBeGreaterThanOrEqual(1.25);
+
+  // OMJER SE MJERI NA VISE SIRINA, i to je nauceno kad je CI (mobile-chromium) oborio prvu
+  // izvedbu ovog testa: naslov je bio `clamp`, ocjena FIKSNA, pa je ispod 828 px ocjena opet
+  // bila veca (izmjereno 390 px: 23,2 naspram 27,2). Test koji mjeri samo zatecenu sirinu
+  // projekta ne vidi raspon u kojem se odnos obrce, a bas ondje je zivio kvar.
+  for (const w of [390, 700, 1024]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    const omjer = await page.evaluate(() => {
+      const px = (s: string) => {
+        const e = document.querySelector(s);
+        return e ? parseFloat(getComputedStyle(e).fontSize) : 0;
+      };
+      return px('.fsum-naslov') / px('.fsum-ocjena b');
+    });
+    expect(omjer, `na ${w} px ocjena nadjacava sazetak (omjer ${omjer.toFixed(2)})`)
+      .toBeGreaterThanOrEqual(1.25);
+  }
   expect(m.halo, 'tamni mjerac s halom se vratio').toBe(0);
   // Razine su particija po ozbiljnosti: moraju se zbrojiti u broj iz naslova. Ako se ikad u taj
   // stupac uvuce redak s druge osi (npr. automatski popravci), ova tvrdnja pada.

@@ -76,7 +76,11 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   // POSTENJE RUCNE POTVRDE. Stara kartica je taj tekst nosila TRAJNO; cockpit ga isporucuje kao
   // prolazan toast (`handleResultsCockpitAction`). Tvrdnja se zato seli na toast, ne ispusta:
   // korisnik koji nalaz oznaci provjerenim mora vidjeti da mu se automatska ocjena NIJE promijenila.
-  await expect(page.locator('.toast')).toContainText('Automatska ocjena se nije promijenila');
+  // GADJA SE TOAST S TIM TEKSTOM, ne ".toast": `toast()` namjerno SLAZE obavijesti (svaka je
+  // nov element koji se sam uklanja nakon 3,5 s), pa dvije mogu supostojati. Na firefoxu je to
+  // 2026-09-08 dalo "strict mode violation: locator('.toast') resolved to 2 elements" i oborilo
+  // browser-matrix. Tvrdnja o POSTOJANJU te poruke ne ovisi o tome koliko ih je na ekranu.
+  await expect(page.locator('.toast', { hasText: 'Automatska ocjena se nije promijenila' })).toBeVisible();
   // Stanje se u cockpitu cita iz same radnje, a ne iz natpisa "Otvoreno": nakon potvrde nudi se
   // ponistavanje, nakon ponistavanja opet potvrda.
   await expect(card.getByRole('button', { name: 'Poništi ručnu potvrdu' })).toBeVisible();
