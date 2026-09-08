@@ -16,7 +16,19 @@ insert into public.academic_projects values('30000000-0000-0000-0000-00000000000
 \i supabase/migrations/0083_billing_pending_marker.sql
 \i supabase/migrations/0109_katedra_billing_reconciliation.sql
 \i supabase/migrations/0109_katedra_billing_reconciliation.sql
+\i supabase/migrations/0110_katedra_billing_usage_evidence.sql
+\i supabase/migrations/0110_katedra_billing_usage_evidence.sql
 select set_config('request.jwt.claim.role','service_role',true);
+do $$ declare outcome jsonb; begin
+  outcome:=public.record_katedra_billing_usage('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','captured-usage',110,'fixture-model',10,20);
+  if outcome->>'status'<>'pending_reconciliation' then raise exception 'USAGE_NOT_CAPTURED'; end if;
+  if (select input_tokens from public.katedra_billing_attempts where request_id='captured-usage')<>10 then raise exception 'USAGE_DISCARDED'; end if;
+  begin
+    perform public.record_katedra_billing_usage('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','captured-usage',110,'fixture-model',11,20);
+    raise exception 'OBSERVED_USAGE_OVERWRITTEN';
+  exception when unique_violation then null; end;
+  delete from public.katedra_billing_attempts where request_id='captured-usage';
+end $$;
 do $$ declare outcome jsonb; begin
   outcome:=public.katedra_consume('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','known-usage',110,'fixture-model',10,20);
   if outcome->>'status'<>'pending_reconciliation' then raise exception 'EXPECTED_PENDING'; end if;
@@ -29,6 +41,8 @@ do $$ declare outcome jsonb; begin
   if outcome->>'status'<>'settled' then raise exception 'KNOWN_USAGE_NEVER_RECONCILES'; end if;
   outcome:=public.reconcile_katedra_billing('known-usage');
   if outcome->>'status'<>'already_settled' then raise exception 'REPLAY_NOT_TERMINAL'; end if;
+  outcome:=public.record_katedra_billing_usage('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','known-usage',110,'fixture-model',10,20);
+  if outcome->>'status'<>'already_settled' then raise exception 'LOST_RESPONSE_NOT_RECOVERED'; end if;
   if (select balance from public.katedra_wallets)<>890 or (select count(*) from public.katedra_usage)<>1 then raise exception 'DOUBLE_DEBIT'; end if;
   perform public.katedra_mark_pending('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','unknown-usage',500,'fixture-model');
   outcome:=public.reconcile_katedra_billing('unknown-usage');
@@ -49,6 +63,10 @@ do $$ begin
     perform public.list_reconcilable_katedra_billing();
     raise exception 'CLIENT_QUEUE_ALLOWED';
   exception when insufficient_privilege then null; end;
+  begin
+    perform public.record_katedra_billing_usage('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','known-usage',110,'fixture-model',10,20);
+    raise exception 'CLIENT_EVIDENCE_ALLOWED';
+  exception when insufficient_privilege then null; end;
 end $$;
 reset role;
 select set_config('request.jwt.claim.role','service_role',true);
@@ -66,7 +84,12 @@ do $$ declare outcome jsonb; begin
 end $$;
 alter table public.katedra_usage drop constraint fixture_usage_rejection;
 do $$ declare outcome jsonb; begin
-  update public.katedra_billing_attempts set input_tokens=1,charged=5 where request_id='unknown-usage';
+  begin
+    perform public.record_katedra_billing_usage('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','unknown-usage',500,'fixture-model',0,0);
+    raise exception 'ZERO_USAGE_ACCEPTED_AS_EVIDENCE';
+  exception when invalid_parameter_value then null; end;
+  outcome:=public.record_katedra_billing_usage('20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001','unknown-usage',5,'fixture-model',1,0);
+  if outcome->>'status'<>'pending_reconciliation' or (select charged from public.katedra_billing_attempts where request_id='unknown-usage')<>5 then raise exception 'ESTIMATE_NOT_REPLACED_WITH_ACTUAL_USAGE'; end if;
   update public.academic_projects set user_id='20000000-0000-0000-0000-000000000002';
   outcome:=public.reconcile_katedra_billing('unknown-usage');
   if outcome->>'reason'<>'project_unavailable' then raise exception 'FOREIGN_PROJECT_SETTLED'; end if;
