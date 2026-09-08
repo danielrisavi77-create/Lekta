@@ -93,3 +93,6 @@ jobs:
 
       - name: Trajni identitet i lease povrata
         run: psql -v ON_ERROR_STOP=1 -f scripts/katedra-refund-ledger-smoke.sql
+
+      - name: Jednokratno razrjesenje poznate AI potrosnje
+        run: psql -v ON_ERROR_STOP=1 -f scripts/katedra-billing-reconciliation-smoke.sql
