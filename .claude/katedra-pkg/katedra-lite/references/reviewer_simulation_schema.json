@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "katedra-reviewer-simulation-v1",
+  "type": "object",
+  "required": ["schema_version", "simulation_kind", "read_only", "lenses", "questions", "summary"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "simulation_kind": {"const": "deterministic_reviewer_lenses"},
+    "read_only": {"const": true},
+    "lenses": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "object", "required": ["lens", "status", "issues"], "properties": {"lens": {"enum": ["argument", "evidence", "consistency", "mentor"]}, "status": {"enum": ["not_run", "clear", "watch", "risk", "nedovoljno_pokriveno"], "description": "v1.1 fix Q12 (namjerno proširenje ugovora): 'nedovoljno_pokriveno' je peto, izričito stanje leće — mjerenje JE pokrenuto, ali producent (consistency_check.py, coverage_status=insufficient) odbija certificirati pokrivenost. Ne smije se svesti ni na 'clear' (lažno zeleno) ni na 'not_run' (lećom se ipak mjerilo, pa bi 'not_run' sakrio da postoji visokoprioritetno pitanje u issues). Potrošač koji poznaje samo v1 enum mora nepoznato stanje tretirati kao NE-zeleno."}, "issues": {"type": "array"}}, "additionalProperties": false}},
+    "questions": {"type": "array", "items": {"type": "object", "required": ["lens", "priority", "code", "question"], "properties": {"lens": {"enum": ["argument", "evidence", "consistency", "mentor"]}, "priority": {"enum": ["high", "medium"]}, "code": {"type": "string"}, "question": {"type": "string"}}, "additionalProperties": false}},
+    "summary": {"type": "object", "required": ["high_priority", "medium_priority", "total_questions", "blocking_review_risks"], "properties": {"high_priority": {"type": "integer", "minimum": 0}, "medium_priority": {"type": "integer", "minimum": 0}, "total_questions": {"type": "integer", "minimum": 0}, "blocking_review_risks": {"type": "integer", "minimum": 0}}, "additionalProperties": false}
+  },
+  "additionalProperties": false
+}

@@ -1,4 +1,5 @@
 import type { Check, Issue } from '../scoring/checks';
+import { scopeForCheckId } from '../scoring/finding-scope-map';
 import type { Fixability, TriageFinding, TriageModel } from '../analysis/triage';
 import { collectFootnoteAnchors, collectIssueAnchors } from '../preview/preview-anchors';
 import { safeHref } from '../utils/helpers';
@@ -10,6 +11,8 @@ export type FindingKind = 'document' | 'limitation';
 
 export type FindingScope =
   | { kind: 'anchor'; paragraphIndex: number; footnoteId?: number }
+  /** Znamo PODRUCJE (naslovnica, sadrzaj, literatura) ali ne odlomak: izmedju sidra i neznanja. */
+  | { kind: 'region'; label: string }
   | { kind: 'document' }
   | { kind: 'unavailable'; reason: string };
 
@@ -111,7 +114,7 @@ function matchingTriage(issue: Issue, check: Check | undefined, triage: TriageMo
   );
 }
 
-function scopeFor(issue: Issue, triage: TriageFinding | undefined): FindingScope {
+function scopeFor(issue: Issue, triage: TriageFinding | undefined, checkId?: string | null): FindingScope {
   const location = triage?.locations?.[0];
   if (location) {
     return location.footnoteId != null
@@ -126,6 +129,10 @@ function scopeFor(issue: Issue, triage: TriageFinding | undefined): FindingScope
       ? { kind: 'anchor', paragraphIndex: 0, footnoteId: flag.footnoteId }
       : { kind: 'anchor', paragraphIndex: flag.paragraphIndex };
   }
+
+  // Sidra nema; pita se identitet provjere prije nego se prizna neznanje (finding-scope-map.ts).
+  const izMape = scopeForCheckId(checkId);
+  if (izMape) return izMape;
 
   const where = String(issue.where || '').trim();
   if (/cijeli dokument|postavke stranice|zaglavlje|podnožje|dokument u cjelini/i.test(where)) {
@@ -194,7 +201,7 @@ export function buildFindingViewModels(
       explanation: issue.detail,
       ...(check?.detail ? { measured: check.detail } : {}),
       ...(source ? { source } : {}),
-      scope: scopeFor(issue, triage),
+      scope: scopeFor(issue, triage, check?.id),
       fixability,
       autoRepairable: !!triage?.fixId,
       matchKeys: [...new Set([issue.title, check?.title].filter((v): v is string => !!v))],
@@ -223,6 +230,9 @@ function scopeHtml(scope: FindingScope): string {
   if (scope.kind === 'anchor') {
     const label = scope.footnoteId != null ? `bilješka ${scope.footnoteId}` : `odlomak ${scope.paragraphIndex}`;
     return `<button class="finding-scope finding-scope--jump" type="button" data-finding-jump>${esc(label)} <span aria-hidden="true">→</span></button>`;
+  }
+  if (scope.kind === 'region') {
+    return `<span class="finding-scope">Odnosi se na ${esc(scope.label)}.</span>`;
   }
   if (scope.kind === 'document') return '<span class="finding-scope">Odnosi se na cijeli dokument.</span>';
   return `<span class="finding-scope finding-scope--muted">${esc(scope.reason)}</span>`;

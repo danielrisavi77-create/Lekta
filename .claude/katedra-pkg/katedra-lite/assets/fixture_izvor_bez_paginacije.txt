@@ -1,0 +1,9 @@
+Izvor bez tiskane paginacije — testna građa za evidence_ingest.py. Datoteka nema form feed znakova, pa cijeli tekst čini jednu stranicu bez tiskane oznake: svaki zapis dobiva page_label: null i lokator po odlomku. Pet odlomaka niže daju pet passagea, numeriranih 1 do 5.
+
+Mrežni izvještaj, HTML članak i institucijska objava rijetko imaju brojeve stranica. Kad se takav tekst pretvori u .txt, redni broj stranice koji bi alat sam dodijelio bio bi izmišljotina — student bi ga prepisao u citat, a čitatelj ga ne bi mogao naći ni u jednom otisku. Zato je oznaka null, a ne jedinica.
+
+Razlika prema privremenom stanju je bitna i trajna. Kad stranica postoji, ali nije potvrđena iz same datoteke, lokator je nedovršen i u tekstu stoji placeholder dok se ne provjeri. Kad stranica ne postoji, ničega nema za potvrditi: lokator je gotov onog trenutka kad je odlomak određen.
+
+Odlomak je ovdje stabilna jedinica jer se izvodi iz praznih redaka u normaliziranom tekstu, ne iz prijeloma retka. Dva ingesta iste datoteke daju iste granice i isti evidence_id, pa se citat po odlomku može provjeriti jednako kao citat po stranici.
+
+Peti odlomak zatvara fixture i drži broj zapisa na pet. Ako se datoteci doda ili oduzme odlomak, provjera iz zakrpe (očekivanih pet redaka s page_label: null) prestaje vrijediti i treba je uskladiti s novim brojem.

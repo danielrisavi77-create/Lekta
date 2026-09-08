@@ -42,7 +42,19 @@ izmjerenim stanjem; brojke su iz `npm run migration-identity` i `npm run deploy-
 | 6. dohvat | CEKA prve priloge |
 
 Usput izmjereno: `health` na produkciji javlja `degraded`, `dependencies.database.ok: false, http_401`, i PRIJE ovog
-deploya (`health` je v8, nije diran). Nije istrazivano; zaseban nalaz.
+deploya (`health` je v8, nije diran).
+
+RIJESENO 2026-09-07, i nije bilo vezano uz Kanal A. `health` je zivost baze mjerio pozivom na korijen
+PostgREST-a (`GET /rest/v1/`), a taj endpoint prima iskljucivo `service_role` kljuc i na anon vraca
+401 ("Only the `service_role` API key can be used for this endpoint"), pa je health javljao 503 nad
+posve zdravom bazom. Zamjena: `public.health_ping()` (migracija `0103`), funkcija bez argumenata koja
+ne cita nijednu tablicu. Zbog istog kvara je zakazani `post-deploy-smoke` bio crven 40 uzastopnih
+pokretanja, od 2026-08-28.
+
+Izvedeno istoga dana: migracija `0103` primijenjena na produkciju (`db push`), `health` deployan (v8 -> v9).
+Izmjereno poslije: `rpc/health_ping` s anon kljucem vraca `200 true` (bez kljuca 401), `/health` vraca
+`200 {"status":"ok","dependencies":{"database":{"ok":true}}}`, POST na health i dalje 405 (endpoint jos
+moze pasti), a `node scripts/post-deploy-smoke.mjs` prolazi 27 od 27 provjera.
 
 ## Cetiri verzije samo u bazi: kako je `db push` prosao bez brisanja dnevnika
 

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "gate_version", "profiles"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "gate_version": {"type": "integer", "minimum": 1},
+    "profiles": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["tier", "admitted_at", "bundle_sha256", "qualification_sha256", "benchmark_sha256", "gate_version"],
+        "properties": {
+          "tier": {"enum": ["production", "pilot", "advisory"]},
+          "admitted_at": {"type": "string", "format": "date"},
+          "bundle_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "qualification_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "benchmark_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+          "gate_version": {"type": "integer", "minimum": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

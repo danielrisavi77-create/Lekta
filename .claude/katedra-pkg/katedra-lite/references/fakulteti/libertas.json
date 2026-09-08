@@ -1,0 +1,218 @@
+{
+ "slug": "libertas",
+ "naziv": "Libertas međunarodno sveučilište",
+ "sveuciliste": "Libertas međunarodno sveučilište, Zagreb",
+ "aliasi": [
+  "libertas",
+  "libertas medunarodno sveuciliste",
+  "libertas zagreb",
+  "lms"
+ ],
+ "tipovi_radova": [
+  "seminarski",
+  "zavrsni",
+  "diplomski"
+ ],
+ "status": "nepotvrdeno",
+ "izvor": {
+  "dokument": "Pravilnik o završnom radu (Senat 19. 7. 2024., na snazi 1. 10. 2024.) i Pravilnik o diplomskom radu (Senat 19. 7. 2024., na snazi 1. 10. 2024.)",
+  "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf",
+  "datum_dokumenta": "2024-07-19",
+  "provjereno": "2026-08-09"
+ },
+ "citiranje": {
+  "stil": "harvard",
+  "u_tekstu": "(Andrijanić, Gregurek i Merkaš, 2016, str. 45)",
+  "popis_primjer": "Andrijanić, I., Gregurek, M., Merkaš, Z. (2016.) Upravljanje poslovnim rizicima. Zagreb: Plejada.",
+  "tocka_iza_godine": true,
+  "uvlaka_u_popisu": false,
+  "napomena": "Pravilnik o završnom radu (čl. 7) preporučuje harvardski stil, a istodobno traži FUSNOTE kod izravnog citata, netrivijalnog činjeničnog iskaza i parafraze. Pravilnik je u tome interno nedosljedan. Odluka Katedre: harvard u tekstu + fusnote za pojmovna objašnjenja i pravne izvore s člankom, uz izričitu deklaraciju u uvodu rada. Dodatak Pravilniku s detaljnim pravilima harvardskog citiranja NIJE javno objavljen.",
+  "dozvoljeni_tipovi_izvora": [
+   "book",
+   "chapter",
+   "journal_article",
+   "law",
+   "regulation",
+   "eu_act",
+   "official_report",
+   "dataset",
+   "web_page"
+  ]
+ },
+ "format": {
+  "font": [
+   "Times New Roman"
+  ],
+  "velicina_pt": 12,
+  "prored": 1.5,
+  "margine_cm": {
+   "gore": 2.5,
+   "dolje": 2.5,
+   "lijevo": 2.5,
+   "desno": 2.5
+  },
+  "lice": "trece-jednina",
+  "numeracija": {
+   "opis": "arapski brojevi u podnožju; naslovnica se ne numerira — NIJE propisano nijednim dostupnim pravilnikom, pretpostavka",
+   "prednji_dio": "bez",
+   "tijelo": "arapski",
+   "tijelo_pocinje_od": 1,
+   "prijelom_kod": "uvod"
+  }
+ },
+ "struktura": {
+  "opseg": {
+   "seminarski": {
+    "stranice": [
+     10,
+     20
+    ],
+    "izvori_min": 8
+   },
+   "zavrsni": {
+    "stranice": [
+     30,
+     60
+    ],
+    "izvori_min": 15
+   },
+   "diplomski": {
+    "stranice": [
+     60,
+     80
+    ],
+    "izvori_min": 25
+   }
+  },
+  "obavezni_dijelovi": [
+   "naslovnica",
+   "sadrzaj",
+   "sazetak",
+   "kljucne-rijeci",
+   "uvod",
+   "obrada-teme",
+   "zakljucak",
+   "literatura",
+   "popis-tablica-slika-grafikona"
+  ],
+  "prikazi": {
+   "natpis": "iznad",
+   "izvor_ispod": true,
+   "mora_biti_spomenut_u_tekstu": true
+  }
+ },
+ "predaja": {
+  "napomena": "Završni i diplomski: prijavnica + PDF u Studentsku referadu, obvezan Turnitin, tvrdi uvez nakon obrane u 8 dana, diplomski uz potvrdu o lekturi. Pristupni rad iz predmeta Upravljanje poslovnim rizicima: e-mailom nositelju predmeta, ne uvezuje se, najmanje 15 dana prije pisanog ispita."
+ },
+ "obrana": {
+  "napomena": "Završni: dvočlano povjerenstvo, usmeno izlaganje 10 min, bez prava žalbe na ocjenu. Diplomski: tročlano povjerenstvo, izlaganje 10-15 min, moguća prezentacija."
+ },
+ "napomene": [
+  "KRITIČNO OGRANIČENJE: Pravilnik o seminarskom radu (svibanj 2016.) objavljen je kao skenirani PDF bez tekstualnog sloja — službena pravila za seminarski i pristupni rad NISU javno strojno dostupna. Sva pravila u ovom profilu za tip 'seminarski' izvedena su iz Pravilnika o završnom i diplomskom radu.",
+  "Prilozi 1. (korice) i 2. (naslovna stranica) na koje se oba pravilnika izrijekom pozivaju NISU javno objavljeni. Točan izgled naslovnice nije rekonstruiran i ne smije se izmišljati — treba ga zatražiti od Studentske referade ili mentora.",
+  "Margine 2,5 cm propisane su samo Pravilnikom o DIPLOMSKOM radu (čl. 2); Pravilnik o završnom radu margine ne propisuje. Vrijednost je dodatno potvrđena mjerenjem prihvaćenog pristupnog rada iz predmeta Upravljanje poslovnim rizicima (2,50 cm sa sve četiri strane).",
+  "Nije propisano: poravnanje teksta, numeracija stranica (položaj i početak), uvlake, veličina i rez fonta podnaslova, oblik popisa tablica i grafikona.",
+  "Naslovi: glavna poglavlja velikim slovima i jednoznamenkasto (1., 2.), potpoglavlja malim slovima i dvoznamenkasto (1.1.), najviše tri razine.",
+  "Uvod i zaključak pišu se BEZ citata i BEZ bilježaka (Pravilnik o završnom radu, čl. 7).",
+  "Stil pisanja je impersonalan — pravilnik izrijekom navodi konstrukcije tipa 'ovim radom se dokazuje', 'rad obrađuje', 'rad naglašava'.",
+  "Vlastiti prikaz u Libertasovoj terminologiji nosi oznaku 'Izvor: sistematizacija autora'."
+ ],
+ "provenance": {
+  "default": {
+   "source": "Izvedeno iz Pravilnika o završnom radu i Pravilnika o diplomskom radu Libertas međunarodnog sveučilišta (oba na snazi 1. 10. 2024.); pravila za seminarski/pristupni rad nisu javno dostupna i prenesena su analogijom",
+   "type": "derived",
+   "confidence": 0.6,
+   "verified_at": "2026-08-09"
+  },
+  "rules": {
+   "/format/font": {
+    "source": "Pravilnik o završnom radu, Libertas međunarodno sveučilište",
+    "locator": "čl. 7 — „font 12, s proredom 1,5, a stil u kojem se piše je Times New Roman\"",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-09"
+   },
+   "/format/velicina_pt": {
+    "source": "Pravilnik o završnom radu, Libertas međunarodno sveučilište",
+    "locator": "čl. 7",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-09"
+   },
+   "/format/prored": {
+    "source": "Pravilnik o završnom radu, Libertas međunarodno sveučilište",
+    "locator": "čl. 7",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-09"
+   },
+   "/format/margine_cm": {
+    "source": "Pravilnik o diplomskom radu, Libertas međunarodno sveučilište; potvrđeno mjerenjem prihvaćenog pristupnog rada iz predmeta",
+    "locator": "čl. 2 — „margine stranica su 2,5 cm sa svih strana\"",
+    "type": "explicit",
+    "confidence": 0.9,
+    "verified_at": "2026-08-09"
+   },
+   "/format/numeracija": {
+    "source": "nije propisano nijednim dostupnim pravilnikom Libertasa",
+    "type": "inferred",
+    "confidence": 0.3,
+    "verified_at": "2026-08-09"
+   },
+   "/citiranje/stil": {
+    "source": "Pravilnik o završnom radu i Pravilnik o diplomskom radu, Libertas međunarodno sveučilište",
+    "locator": "čl. 7 — „Prijedlog citiranja literature je Harvardski stil\"; diplomski — „preporuča se koristiti američki (harvardski) stil\"",
+    "type": "explicit",
+    "confidence": 0.9,
+    "verified_at": "2026-08-09"
+   },
+   "/citiranje/u_tekstu": {
+    "source": "Dodatak Pravilniku s detaljnim pravilima harvardskog citiranja nije javno objavljen",
+    "type": "inferred",
+    "confidence": 0.4,
+    "verified_at": "2026-08-09"
+   },
+   "/struktura/prikazi": {
+    "source": "Pravilnik o završnom radu, Libertas međunarodno sveučilište",
+    "locator": "čl. 7 — „iznad prikaza imati odgovarajući naslov i biti numerirane, a ispod prikaza navedeni izvori\"",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-09"
+   },
+   "/struktura/opseg/zavrsni": {
+    "source": "Pravilnik o završnom radu, Libertas međunarodno sveučilište",
+    "locator": "čl. 7 — „opseg od 30 do 60 stranica\"",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-09"
+   },
+   "/struktura/opseg/diplomski": {
+    "source": "Pravilnik o diplomskom radu, Libertas međunarodno sveučilište",
+    "locator": "čl. 2 — „Preporučljivo je da ima od 60 do 80 stanica\" (sic)",
+    "type": "explicit",
+    "confidence": 1.0,
+    "verified_at": "2026-08-09"
+   },
+   "/struktura/opseg/seminarski": {
+    "source": "Pravilnik o seminarskom radu (2016.) je skenirani PDF bez tekstualnog sloja — opseg nije potvrđen; vrijednost je pretpostavka za pristupni rad koji se prezentira i brani",
+    "type": "inferred",
+    "confidence": 0.3,
+    "verified_at": "2026-08-09"
+   },
+   "/struktura/obavezni_dijelovi": {
+    "source": "Pravilnik o diplomskom radu (čl. 3) + uputa predmeta Upravljanje poslovnim rizicima (listopad 2022.), koja izrijekom navodi da se ime i prezime autora, naslov, sažetak i/ili ključne riječi, sadržaj, uvod, glavni dio, zaključak i popis literature „ne mogu izostaviti\"",
+    "type": "explicit",
+    "confidence": 0.85,
+    "verified_at": "2026-08-09"
+   }
+  }
+ },
+ "ogranicenja": [
+  "Pravilnik o seminarskom radu (2016.) je skenirani PDF bez tekstualnog sloja — službena pravila za seminarski i pristupni rad nisu strojno dostupna, nego izvedena iz pravilnika o završnom i diplomskom radu.",
+  "Prilozi 1. i 2. (korice, naslovnica) nisu javno objavljeni — naslovnica se ne rekonstruira nego traži od referade.",
+  "Pravilnik o završnom radu je interno nedosljedan: čl. 7 preporučuje harvardski stil i istodobno propisuje fusnote. Rješenje je hibrid koji se DEKLARIRA u uvodu rada, pa nedosljednost pravilnika prestaje biti nedosljednost rada.",
+  "Dodatak Pravilniku s detaljnim pravilima harvardskog citiranja nije javno objavljen."
+ ],
+ "admisija": "nije-admitiran",
+ "$comment_admisija": "Profil je PILOT KANDIDAT, ne admitiran fakultet. faculty_scale_gate.py ga odbija na qualification_cases i to je ispravno — nema dovoljno provjerenih radova. Do admisije se koristi samostojnim putem: profile_resolver.py --profil-datoteka, uz savjetodavne nalaze."
+}

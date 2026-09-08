@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "katedra-evidence-record-v1",
+  "title": "Katedra page evidence JSONL record",
+  "type": "object",
+  "required": [
+    "schema_version", "evidence_id", "source_id", "source_path", "source_sha256",
+    "locator", "text", "text_sha256", "extraction"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "evidence_id": {"type": "string", "pattern": "^ev_[0-9a-f]{20}$"},
+    "source_id": {"type": "string", "minLength": 1},
+    "source_path": {"type": "string", "minLength": 1},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "locator": {
+      "type": "object",
+      "required": ["kind", "page", "page_label", "passage", "char_start", "char_end"],
+      "properties": {
+        "kind": {"const": "page"},
+        "page": {"type": "integer", "minimum": 1},
+        "page_label": {"type": ["string", "null"]},
+        "passage": {"type": "integer", "minimum": 1},
+        "char_start": {"type": "integer", "minimum": 0},
+        "char_end": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "text": {"type": "string", "minLength": 1},
+    "text_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "extraction": {
+      "type": "object",
+      "required": ["format", "engine"],
+      "properties": {
+        "format": {"enum": ["pdf", "text", "markdown"]},
+        "engine": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

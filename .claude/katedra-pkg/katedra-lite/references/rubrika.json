@@ -1,0 +1,184 @@
+{
+ "$comment": "Registar KRITERIJA OCJENJIVANJA. Cijeli je paket optimiran prema petici, a nigdje nije stajalo prema čemu se ta petica mjeri — pa je „rad je spreman\" značilo „prošao je formalne provjere\", što nije isto. Ovaj registar imenuje kriterije, a `scripts/rubrika.py` im status IZVODI iz artefakata koje su drugi alati već napisali. Ne uvodi nijednu novu prosudbu: rubrika je agregator, ne sudac (željezno pravilo 13 — nijedna izvedena vrijednost na dva mjesta). Ono što nijedan artefakt ne pokriva ostaje `nepoznato` i NIKAD se ne broji kao ispunjeno.",
+ "schema_version": 1,
+ "$comment_ocjena": "Alat ne predviđa ocjenu mentora i to izrijekom govori u svakom ispisu. Daje POJAS: gornju granicu koju rad u ovom stanju može doseći, i imenuje što ju drži. Ocjenjuje mentor; ovo je popis onoga što bi mu smetalo.",
+ "pojasevi": {
+  "5": "svi ključni kriteriji ispunjeni i vlastiti doprinos vidljiv",
+  "4": "svi ključni kriteriji barem djelomično; nešto ključno je na pola",
+  "3": "ključni kriterij nije ispunjen — rad je deskriptivan ili bez teze",
+  "nepoznato": "nedostaje artefakt za ključni kriterij; pojas se NE procjenjuje"
+ },
+ "statusi": {
+  "ispunjeno": "artefakt pokazuje da kriterij stoji",
+  "djelomicno": "artefakt pokazuje signal, ali sa zadrškom",
+  "neispunjeno": "artefakt pokazuje da kriterij ne stoji",
+  "nepoznato": "artefakt ne postoji ili ne pokriva ovaj kriterij — nije isto što i neispunjeno",
+  "ne-primjenjuje-se": "kriterij ne vrijedi za ovu vrstu rada; traži obrazloženje"
+ },
+ "kriteriji": {
+  "teza": {
+   "naziv": "Teza i zatvaranje kruga",
+   "tezina": 5,
+   "kljucni": true,
+   "sto_se_gleda": "postoji li obranjiva tvrdnja u uvodu i odgovara li zaključak na istraživačko pitanje istim riječima kojima je postavljeno",
+   "izvor": {
+    "artefakt": "arg.json",
+    "citac": "arg_teza"
+   },
+   "kako_rucno": "Test: može li se s tezom ne složiti? „Pandemija je utjecala na turoperatore\" nije teza. Zaključak koji ne odgovara na pitanje iz uvoda je najčešći razlog zašto formalno uredan rad dobije četvorku.",
+   "$comment": "Prvi kriterij i jedini s težinom 5. Forma nije argument (željezno pravilo 11)."
+  },
+  "doprinos": {
+   "naziv": "Vlastiti doprinos i analitičnost",
+   "tezina": 5,
+   "kljucni": true,
+   "sto_se_gleda": "ima li rad vlastiti izračun, vlastitu tablicu ili vlastitu interpretaciju, ili samo prepričava izvore",
+   "izvor": {
+    "artefakt": "arg.json",
+    "citac": "arg_doprinos"
+   },
+   "kako_rucno": "Rad bez ijedne vlastite tablice čita se kao seminar. Deskriptivnost je od B09 soft signal, ne presuda — teorijski i pravni radovi nemaju uzročne markere po naravi, pa se visok udio opisnih odlomaka ondje čita drukčije.",
+   "$comment": "Kriterij koji najčešće razlikuje 4 od 5, i jedini koji alat ne može potvrditi, samo opovrgnuti."
+  },
+  "zadatak": {
+   "naziv": "Odgovor na zadatak predmeta",
+   "tezina": 5,
+   "kljucni": true,
+   "sto_se_gleda": "je li u radu ono što uputa nositelja predmeta izrijekom traži",
+   "izvor": {
+    "artefakt": "zadatak.json",
+    "citac": "zadatak_komponente"
+   },
+   "kako_rucno": "Zapiši komponente u modu 1, dok je uputa pred očima. Rad koji prođe sve formalne provjere a izostavi traženu komponentu pada na sadržaju (željezno pravilo 14).",
+   "$comment": "Bez `.katedra/zadatak.json` ostaje `nepoznato`, što pojas obara na „nepoznato\" — namjerno: rad se ne proglašava dobrim dok se ne zna na što je trebao odgovoriti."
+  },
+  "izvori": {
+   "naziv": "Izvori i dokazna potpora",
+   "tezina": 4,
+   "kljucni": true,
+   "sto_se_gleda": "ima li svaka tvrdnja potporu, jesu li izvori provjerljivi i je li ijedan `conflict`/`invalid`",
+   "izvor": {
+    "artefakt": "evidence_gate.json",
+    "citac": "evidence"
+   },
+   "kako_rucno": "Bez claim ledgera: svaki izvor citiran barem jednom i svaki citat ima izvor (`verify_sources.py --pokrivenost`). `unverified` nije dokaz nepostojanja i ide u RUČNO PROVJERI.",
+   "$comment": "Bez ledgera pada na `verify_sources` pokrivenost — slabiji dokaz, i tako se prijavljuje."
+  },
+  "struktura": {
+   "naziv": "Struktura i obavezni dijelovi",
+   "tezina": 3,
+   "kljucni": false,
+   "sto_se_gleda": "postoje li svi dijelovi koje profil traži i jesu li napravljeni",
+   "izvor": {
+    "artefakt": "dijelovi.json",
+    "citac": "dijelovi"
+   },
+   "kako_rucno": "`dijelovi.py --status --opsirno`. Dio razine `nepokriveno` nitko ne provjerava — v. references/dijelovi.md."
+  },
+  "metodologija": {
+   "naziv": "Metodologija",
+   "tezina": 4,
+   "kljucni": false,
+   "uvjetno_kljucni": "rad ima vlastito istraživanje",
+   "sto_se_gleda": "je li poglavlje potpuno: dizajn, uzorak, instrument, operacionalizacija, etika, ograničenja",
+   "izvor": {
+    "artefakt": "dijelovi.json",
+    "citac": "dio_metodologija"
+   },
+   "kako_rucno": "Osam odjeljaka iz references/metodologija.md §1. Poglavlje koje preskoči operacionalizaciju ili ograničenja izgleda potpuno dok ga ne pročita netko tko poznaje temu.",
+   "$comment": "Za empirijski rad postaje ključan: dizajn koji je krivo odabran ne popravlja se prepisivanjem."
+  },
+  "forma": {
+   "naziv": "Usklađenost s kućnim stilom",
+   "tezina": 2,
+   "kljucni": false,
+   "sto_se_gleda": "font, prored, margine, numeracija, prikazi, popis izvora — sve što profil propisuje",
+   "izvor": {
+    "artefakt": "pravila.json",
+    "citac": "pravila"
+   },
+   "kako_rucno": "`check_rules.py --json`. Mehanička kršenja ispravlja `fix_rules.py`, ne student klik po klik.",
+   "$comment": "Težina 2 namjerno: forma je uvjet, ne vrlina. Rad koji prođe svih dvanaest formalnih provjera i nema tezu i dalje ne nosi peticu."
+  },
+  "jezik_stil": {
+   "naziv": "Jezik i povezanost teksta",
+   "tezina": 2,
+   "kljucni": false,
+   "sto_se_gleda": "kohezija, prazne fraze, tragovi generiranog teksta, geometrija odlomaka",
+   "izvor": {
+    "artefakt": "stil.json",
+    "citac": "stil"
+   },
+   "kako_rucno": "`check_ai_style.py`. „Zvuči robotski\" nije jedna mana nego četiri neovisne — pipeline je u references/stil_pipeline.md."
+  },
+  "sazetak": {
+   "naziv": "Sažetak i engleski sloj",
+   "tezina": 2,
+   "kljucni": false,
+   "sto_se_gleda": "slaže li se sažetak s radom, i engleski sa sažetkom",
+   "izvor": {
+    "artefakt": "sazetak.json",
+    "citac": "sazetak"
+   },
+   "kako_rucno": "Mentor sažetak čita prvi, a engleski nakon predaje ostaje javan u repozitoriju. Aritmetička netočnost na prvoj stranici skuplja je od bilo koje u tijelu."
+  },
+  "zamjerke": {
+   "naziv": "Zamjerke mentora",
+   "tezina": 4,
+   "kljucni": true,
+   "sto_se_gleda": "je li ijedna zamjerka iz prethodnog kruga ostala otvorena",
+   "izvor": {
+    "artefakt": "zamjerke.json",
+    "citac": "zamjerke"
+   },
+   "kako_rucno": "`zamjerke.py provjeri`. Zamjerka spomenuta u intakeu pa zaboravljena je najskuplja greška u procesu.",
+   "$comment": "Ključan jer je jedini kriterij na kojem mentor već ima zapisano mišljenje. Rad koji ignorira prošli krug ne dobiva ocjenu nego novi krug. Kad zamjerki još nema (prvi krug), status je `ne-primjenjuje-se`, ne `nepoznato`."
+  },
+  "razina": {
+   "naziv": "Razina i publika",
+   "tezina": 3,
+   "kljucni": false,
+   "sto_se_gleda": "je li zadana razina rada i tko ga čita — bez toga se dubina objašnjavanja pogađa",
+   "izvor": {
+    "artefakt": "razina.json",
+    "citac": "razina"
+   },
+   "kako_rucno": "references/razina.md. Niža razina nije lošiji rad nego rad koji više objašnjava i manje tvrdi; nedefiniran pojam na prvoj godini i definicija poznatog pojma na diplomskom su ista pogreška u dva smjera."
+  },
+  "jezik": {
+   "naziv": "Pravopis i gramatika",
+   "tezina": 3,
+   "kljucni": false,
+   "sto_se_gleda": "pravopisne i gramatičke pogreške u hrvatskom akademskom tekstu",
+   "izvor": {
+    "artefakt": "jezik.json",
+    "citac": "jezik"
+   },
+   "kako_rucno": "provjeri_jezik.py. Pravilna jezgra je namjerno uska (visoka preciznost); rječnički prolaz je neobavezan i savjetodavan jer nad akademskim tekstom prijavi svaki stručni termin."
+  },
+  "izracuni": {
+   "naziv": "Izbor formule i brojke",
+   "tezina": 4,
+   "kljucni": false,
+   "uvjetno_kljucni": "rad ima vlastite izračune",
+   "sto_se_gleda": "postotni bod naspram postotka, deklarirana osnovica, vrsta indeksa, nominalno/realno, zbroj udjela",
+   "izvor": {
+    "artefakt": "izracuni.json",
+    "citac": "izracuni"
+   },
+   "kako_rucno": "references/izracuni.md — šest pogrešaka i test za svaku. Aritmetiku pokrivaju model.json i replikacija-pspp; ovdje je izbor formule."
+  },
+  "fusnote": {
+   "naziv": "Disciplina fusnota",
+   "tezina": 3,
+   "kljucni": false,
+   "uvjetno_kljucni": "profil traži citiranje u fusnoti",
+   "sto_se_gleda": "prvo puni pa skraćeni oblik, ibid. uz neposredno prethodnu fusnotu, kontinuitet numeracije, razrješenje u popisu literature",
+   "izvor": {
+    "artefakt": "fusnote.json",
+    "citac": "fusnote"
+   },
+   "kako_rucno": "references/fusnote.md. Rad bez fusnota nije nalaz — je li fusnota TREBALA postojati zna profil, ne alat."
+  }
+ }
+}

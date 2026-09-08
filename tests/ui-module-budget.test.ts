@@ -68,7 +68,36 @@ const BUDZET_APP = 357 * 1024;
 // 2026-09-05: 821 -> 823 KB za Kanal A: novi modul src/ui/corpus-consent-row.ts (2,4 KB, testiran) i tri retka u app.ts
 // (kucica + gumb povlacenja). Nova znacajka izvan app.ts, ne rast monolita; app.ts ostaje unutar BUDZET_APP.
 // Izmjereno 842067 B; budzet 842752 B ostavlja 685 B, pa gard i dalje grize na sljedeci rast.
-const BUDZET_UI_UKUPNO = 823 * 1024;
+// 2026-09-07: 823 -> 826 KB za karticu potvrde profila: novi modul src/ui/profile-card.ts
+// (cist HTML iz podataka, bez DOM-a) i SMANJENJE app.ts, koji je karticu prvo dobio inline pa
+// presao vlastiti budzet (357,2 od 357 KB). Ukupno raste jer je dodana funkcionalnost koje prije
+// nije bilo: potvrda profila kao ekran umjesto formulara od devet kontrola (UX_PRINCIPLES.md 2).
+// Sam app.ts je pritom PAO ispod svog budzeta, sto je ono sto ratchet stvarno cuva.
+// 2026-09-07: 823 -> 830 KB kroz TRI dizanja u jednom danu. Pise se kao jedan zapis, jer bi
+// tri odvojena retka sakrila upravo ono sto je vazno: koliko je puta dignut i zasto svaki put.
+//   823 -> 826  `src/ui/profile-card.ts`, nov modul (kartica potvrde profila, testabilna bez DOM-a)
+//   826 -> 828  ozicenje lista profila (mora biti uz ostalih 12 modala) + obrazlozenje ispravka
+//               `releaseModal`, koji je gubio fokus na SVAKOM modalu zatvorenom Escapeom
+//   828 -> 830  redizajn ekrana provjere (`progress-scan.ts`), konsolidacija pisaca faze
+//               (`wizard-view.ts` dobio prijevod koraka u stanje) i traka koraka na mobitelu
+//
+// RAST JE GOTOVO ISKLJUCIVO OBRAZLOZENJE, ne logika: neto +1,7 KB zadnjeg kruga je ~40 redaka
+// komentara koji biljeze mjerenja i odbacene alternative. To je svjesna razmjena, a ne propust.
+//
+// `app.ts` je kroz sva tri kruga OSTAO ispod svog budzeta (356,9 od 357 KB), i to je ono sto
+// ratchet primarno cuva. Kad je u jednom trenutku probio (357,5), rjesenje NIJE bilo dizanje
+// nego selidba: kartica u vlastiti modul, prijevod koraka u `wizard-view.ts`.
+//   830 -> 831  `region` opseg nalaza: 94% nalaza je pisalo "lokacija se ne moze odrediti", sto
+//               za marginu nije istina nego izostanak odgovora. Poslije: nepoznato 33%.
+//               Sama mapa NIJE ovdje (zivi u `src/scoring`, uz registar koji tumaci); ostatak
+//               je `region` grana u `finding-view-model.ts` i `priority-findings.ts`.
+//
+// DUG NAPLACEN ISTOG DANA:  (8,6 KB) je obrisan. Bio je MRTAV: trazio je
+//  i , kojih nema ni u  ni u , pa je
+//  odmah izlazio, a oba produkcijska ulaza su ga svejedno uvozila. Prototip ima
+// vlastiti  i  i nikad ga nije koristio. Zato ovo dizanje NIJE potrosen prostor:
+// brisanje je vratilo vise nego sto je cetvrto dizanje uzelo.
+const BUDZET_UI_UKUPNO = 831 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {

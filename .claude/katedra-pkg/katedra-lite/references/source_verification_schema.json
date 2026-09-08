@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "katedra-source-verification-v1",
+  "title": "Katedra Source Verification Result",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "alat",
+    "datoteka",
+    "offline",
+    "izvori",
+    "semantic_summary",
+    "quality_taxonomy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "alat": {
+      "const": "verify_sources"
+    },
+    "datoteka": {
+      "type": "string"
+    },
+    "offline": {
+      "type": "boolean"
+    },
+    "izvori": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "unos",
+          "status",
+          "verification",
+          "source_entity",
+          "quality",
+          "blocking",
+          "discovered_via"
+        ],
+        "properties": {
+          "unos": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "discovered_via": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "verification": {
+            "type": "object",
+            "required": [
+              "status",
+              "provider",
+              "availability",
+              "scope",
+              "reason"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "verified",
+                  "unverified",
+                  "conflict",
+                  "invalid"
+                ]
+              },
+              "provider": {
+                "type": "string"
+              },
+              "availability": {
+                "enum": [
+                  "available",
+                  "unavailable"
+                ]
+              },
+              "scope": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "source_entity": {
+            "type": "object",
+            "required": [
+              "kind",
+              "type"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "bibliographic_source",
+                  "discovery_service"
+                ]
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "quality": {
+            "type": "object",
+            "required": [
+              "class",
+              "status",
+              "basis"
+            ],
+            "properties": {
+              "class": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "E",
+                  "X",
+                  null
+                ]
+              },
+              "status": {
+                "enum": [
+                  "classified",
+                  "needs_classification"
+                ]
+              },
+              "basis": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "source_id": {
+            "type": "string",
+            "pattern": "^src_[0-9a-f]{16}$"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "semantic_summary": {
+      "type": "object",
+      "required": [
+        "verified",
+        "unverified",
+        "conflict",
+        "invalid"
+      ],
+      "properties": {
+        "verified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unverified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conflict": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "invalid": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "quality_taxonomy": {
+      "type": "object",
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "X"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

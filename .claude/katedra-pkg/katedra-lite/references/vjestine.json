@@ -1,0 +1,130 @@
+{
+ "$comment": "Registar SPOSOBNOSTI koje Katedra treba, a ne posjeduje. Ovo je jedino mjesto na kojem se satelitski skill spominje po imenu: Katedra deklarira što joj treba, satelit deklarira što nudi, a `scripts/vjestine.py` ih spaja. Načelo 10 kaže da se tuđi kod ne kopira; registar je oblik u kojem se to načelo može strojno provjeriti umjesto da ostane obećanje u prozi. Četvrti satelit je jedan zapis ovdje, bez ijedne izmjene Katedrina koda.",
+ "schema_version": 1,
+ "sposobnosti": {
+  "audit.dokument": {
+   "opis": "faze A–G nad dokumentom (citati, brojke u tekstu, tipografija, Word polja)",
+   "vjestina": "rad-audit",
+   "razina_povjerenja": "strojno",
+   "modovi": [
+    "4"
+   ],
+   "razrjesitelj": "scripts/engine.py",
+   "provjera": "python3 <KATEDRA_SKILL>/scripts/engine.py --provjeri",
+   "$comment": "Jedina sposobnost razine `strojno`: Katedra rezultat INTERPRETIRA (DocumentAuditResult), pa kandidat bez valjanog engine_contract.json nije kompatibilan bez obzira na to koje funkcije sadrži. Razrješavanje i provjeru radi engine.py, ne ovaj registar — ovdje stoji samo zato da popis sposobnosti bude potpun."
+  },
+  "audit.brojke": {
+   "opis": "neovisna replikacija svake brojke iz empirijskog dijela u trećem programu",
+   "vjestina": "replikacija-pspp",
+   "razina_povjerenja": "radno",
+   "modovi": [
+    "4",
+    "6"
+   ],
+   "entrypoints": {
+    "replikacija": "scripts/pspp_replikacija.py",
+    "prilog": "scripts/prilog_replikacija.py"
+   },
+   "artefakti": [
+    "usporedba.csv",
+    "izlaz.pdf",
+    "izlaz.csv"
+   ],
+   "tezina_neslaganja": "A",
+   "$comment": "Redak `usporedba.csv` koji se ne poklapa je nalaz razine A — jednako težak kao izmišljen izvor, jer je riječ o istoj vrsti pogreške: rad tvrdi nešto što se ne može pokazati. „PSPP to ne ispisuje\" NIJE neslaganje nego ograničenje i bilježi se kao takvo."
+  },
+  "izrada.docx": {
+   "opis": "izrada predajnog .docx-a iz rukopisa: živa Wordova polja, numeracija po sekcijama, nedjeljivi prikazi, unakrsne reference",
+   "vjestina": "rad-docx",
+   "razina_povjerenja": "radno",
+   "modovi": [
+    "2",
+    "6"
+   ],
+   "entrypoints": {
+    "gradi": "scripts/gradi.py",
+    "izmjeri": "scripts/izmjeri.py",
+    "prikazi": "scripts/prikazi.py",
+    "provjeri_predaju": "scripts/provjeri_predaju.py",
+    "sadrzaj": "scripts/sadrzaj.py",
+    "arhiva": "scripts/arhiva.py"
+   },
+   "provjera": "python3 <RAD_DOCX_SKILL>/scripts/gradi.py --provjeri --graditelj true",
+   "artefakti": [
+    "toc.json",
+    "prelomi.json",
+    "natpisi.json",
+    "blokovi.json",
+    "naslovi.json",
+    "_pregled.pdf"
+   ],
+   "rezerva": {
+    "vjestina": "katedra-lite",
+    "entrypoint": "scripts/build_docx.py",
+    "opis": "generički kostur po profilu kad motora nema; bez mjerenja prijeloma i bez unakrsnih referenci"
+   },
+   "$comment": "BEZ `uvjet.fakultet` — motor je neutralan. Kućni stil dolazi iz profila (resolved_profile.json) i iz sposobnosti `stil.kucni`. Graditelj .docx-a (pandoc + injektor polja) motor prima kao naredbu `--graditelj`, pa se satelit stila može uključiti bez izmjene motora.",
+   "ugovor_s_graditeljem": {
+    "$comment": "Motor graditelja poziva kao naredbu i preko okoline mu predaje STANJE PETLJE. Graditelj mora o njemu ovisiti; ako ne ovisi, petlja konvergira na brojevima koje dokument ne nosi. Sto satelit ne poznaje, nadopunjuje prilagodnik motorovim alatima — satelit se NE mijenja.",
+    "okolina": {
+     "RAD_MD": "ulazni sastavljeni markdown",
+     "RAD_DOCX": "izlazni .docx",
+     "RAD_PROFIL": "resolved_profile.json",
+     "RAD_SADRZAJ": "staticni (mjerenje) | zivi (predaja)",
+     "RAD_TOC": "toc.json iz prethodnog kruga",
+     "RAD_PRELOMI": "prelomi.json iz prethodnog kruga"
+    },
+    "duznosti_prilagodnika": [
+     "prevesti stanje petlje u imenski prostor satelita PRIJE izgradnje, ne poslije",
+     "reproducirati cijeli cjevovod satelita, ne samo njegov Pythonov skript",
+     "nadopuniti RAD_SADRZAJ preko scripts/sadrzaj.py ako ga satelit ne poznaje",
+     "primijeniti scripts/arhiva.py (prijelom rijeci, font teme, docDefaults)"
+    ]
+   },
+   "$prethodni_zapis": {
+    "vjestina": "fpzg-diplomski",
+    "uvjet": {
+     "fakultet": [
+      "fpzg"
+     ]
+    },
+    "zamijenjeno": "kolovoz 2026., nakon prihvatnog testa (v. references/vjestine.md)"
+   }
+  },
+  "stil.kucni": {
+   "opis": "kućni stil fakulteta: referentni .docx, redoslijed dijelova, osobitosti koje profil ne pokriva",
+   "vjestina": "fpzg-diplomski",
+   "razina_povjerenja": "radno",
+   "modovi": [
+    "2",
+    "6"
+   ],
+   "uvjet": {
+    "fakultet": [
+     "fpzg"
+    ],
+    "tipovi": [
+     "zavrsni",
+     "diplomski"
+    ],
+    "izvan_uvjeta": "za seminarski/esej kućni stil fpzg-diplomski se NE poziva: .docx ide kroz izrada.docx (rad-docx gradi.py), a bez motora kroz rezervu scripts/build_docx.py + rad-docx/scripts/arhiva.py",
+    "$comment": "v1.9 (nalaz 5): satelit fpzg-diplomski je kućni stil ZAVRŠNOG/DIPLOMSKOG rada; `tipovi` je novo, unatrag kompatibilno polje (bez njega ili bez konteksta tipa vrijedi kao prije). vjestine.py tip čita iz --tip ili .katedra/stanje.json."
+   },
+   "entrypoints": {
+    "graditelj": "scripts/build_docx.py",
+    "provjeri_stil": "scripts/provjeri_stil.py"
+   },
+   "artefakti": [
+    "assets/ref_fpzg.docx",
+    "references/kucni-stil.md",
+    "references/struktura.md"
+   ],
+   "rezerva": {
+    "vjestina": "katedra-lite",
+    "entrypoint": "references/fakulteti/<slug>.json",
+    "opis": "sam profil, bez satelita stila; sve što profil ne propisuje ide na zadane vrijednosti i deklarira se"
+   },
+   "$comment": "Drugi fakultet dodaje se OVDJE, novim zapisom s vlastitim `uvjet.fakultet`. Ako satelita stila nema, motor radi po profilu — smanjeni opseg, deklariran."
+  }
+ }
+}

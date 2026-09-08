@@ -1,0 +1,201 @@
+{
+  "slug": "efzg",
+  "naziv": "Ekonomski fakultet Sveučilišta u Zagrebu",
+  "sveuciliste": "Sveučilište u Zagrebu",
+  "studij": "prijediplomski stručni studij Poslovna ekonomija",
+  "aliasi": [
+    "EFZG",
+    "Ekonomski fakultet Zagreb",
+    "Ekonomski fakultet",
+    "efzg.hr",
+    "Poslovna ekonomija"
+  ],
+  "tipovi_radova": [
+    "zavrsni",
+    "seminarski"
+  ],
+  "status": "potvrdeno",
+  "izvor": {
+    "dokument": "Upute za pisanje radova na preddiplomskom stručnom studiju „Poslovna ekonomija\"",
+    "datum_dokumenta": "2021-01",
+    "provjereno": "2026-08-04",
+    "napomena_o_dohvatu": "Stranica fakulteta radi 302 na Google Drive; HTML vraća samo navigaciju. Slijedi redirect i dohvati kroz Drive konektor."
+  },
+  "citiranje": {
+    "stil": "apa-hr",
+    "u_tekstu": "(Čavlek, 1998., str. 41)",
+    "popis_primjer": "Čavlek, N. (1998.), Turoperatori i svjetski turizam, Zagreb: Golden marketing",
+    "tocka_iza_godine": true,
+    "uvlaka_u_popisu": false,
+    "razmak_izmedu_jedinica": true,
+    "napomena": "Hrvatska varijanta APA-e: iza zagrade s godinom ide ZAREZ, ne točka; jedinica NE završava točkom. Popis izvora bez ikakvog uvlačenja. Abecedni red po hrvatskoj kolaciji: C < Č < Ć, D < Đ, S < Š, Z < Ž."
+  },
+  "format": {
+    "font": [
+      "Times New Roman",
+      "Calibri"
+    ],
+    "velicina_pt": 12,
+    "prored": 1.5,
+    "poravnanje": "obostrano",
+    "margine_cm": {
+      "gore": 2.54,
+      "dolje": 2.54,
+      "lijevo": 2.54,
+      "desno": 2.54
+    },
+    "lice": "trece-jednina",
+    "numeracija": {
+      "opis": "rimski brojevi do Uvoda, zatim arapski počevši od 1",
+      "prednji_dio": "rimski",
+      "tijelo": "arapski",
+      "tijelo_pocinje_od": 1,
+      "prijelom_kod": "uvod"
+    },
+    "naslov_poglavlja_pt": 14,
+    "prijelom_pred_poglavljem": true,
+    "odlomak": {
+      "min_redaka": 5,
+      "max_redaka": 12,
+      "min_recenica": 2,
+      "po_stranici": "2–3 odlomka"
+    }
+  },
+  "struktura": {
+    "opseg": {
+      "zavrsni": {
+        "stranice": [
+          30,
+          40
+        ],
+        "izvori_min": 15,
+        "poglavlja": [
+          5,
+          7
+        ]
+      },
+      "seminarski": {
+        "rijeci": [
+          3000,
+          4000
+        ],
+        "izvori_min": 10,
+        "poglavlja": [
+          5,
+          8
+        ]
+      }
+    },
+    "obavezni_dijelovi": [
+      "naslovnica (hrvatska)",
+      "naslovnica (engleska)",
+      "izjava o akademskoj čestitosti",
+      "sažetak i ključne riječi (hrvatski)",
+      "summary and keywords (engleski)",
+      "sadržaj",
+      "uvod",
+      "razrada po poglavljima",
+      "zaključak",
+      "popis izvora",
+      "popis tablica",
+      "popis slika i grafikona",
+      "životopis"
+    ],
+    "prikazi": {
+      "natpis": "iznad",
+      "izvor_ispod": true,
+      "mora_biti_spomenut_u_tekstu": true,
+      "ne_smije_se_lomiti": true
+    }
+  },
+  "predaja": {
+    "turnitin": true,
+    "administrativni_rep_dana": 14,
+    "koraci": [
+      "mentor odobrava finalnu verziju",
+      "provjera podudarnosti (Turnitin)",
+      "uvez i predaja primjeraka",
+      "unos u repozitorij",
+      "prijava obrane u referadi"
+    ]
+  },
+  "napomene": [
+    "Svaki prikaz mora biti spomenut U TEKSTU i objašnjen — prikaz koji stoji sam je nalaz.",
+    "Natpis, prikaz i redak „Izvor:\" ne smiju se lomiti preko dvije stranice (cantSplit + keepNext).",
+    "min_redaka: 5 nije doslovno u Uputama — izvedeno je iz pravila „2–3 odlomka po stranici\" uz TNR 12 / prored 1,5 / margine 2,54 cm. Uputa doslovno traži najmanje 2 rečenice po odlomku.",
+    "Dokument je interno nedosljedan: §1.2 upućuje na „PRILOG 2\" za prijavu teme, a stvarni prilog je PRILOG 1. Mjerodavni su prilozi.",
+    "STUDIJ RFIR (stručni diplomski, Računovodstvo, financijsko izvještavanje i revizija) — potvrđeno iz stvarnog predloška studenta (seminar, 2026.): citat BEZ točke iza godine '(Dragija i sur., 2015)', literatura u obliku 'Prezime, I. (godina). Naslov. Grad: Izdavač.', BEZ prijeloma pred poglavljima, BEZ sažetka/summaryja/životopisa za seminarski. Polja tocka_iza_godine i prijelom_pred_poglavljem u ovom profilu vrijede za ZAVRŠNI na prijediplomskom stručnom studiju — za RFIR seminarski predložak studenta ima prednost (precedencija 1).",
+    "Seminarski na RFIR: obavezni dijelovi su naslovnica (HR), izjava o akademskoj čestitosti (HR+EN), sadržaj, 5 poglavlja (uvod s 1.1 predmet i cilj / 1.2 metode / 1.3 struktura), popis literature, popis tablica, popis slika. Prijelom stranice ide pred POPIS LITERATURE.",
+    "B06 REGRESSION ZAŠTITA check_rules.py: završni popisi (POPIS LITERATURE/TABLICA/SLIKA/GRAFIKONA) ne ulaze u broj sadržajnih poglavlja; retci unutar popisa tablica/slika/grafikona ne računaju se kao stvarni natpisi prikaza; provjera veličine fonta ocjenjuje efektivnu glavnu prozu, dok naslovnica, naslovi, ćelije tablica i retci „Izvor:\" nisu lažna kršenja pravila proze. True-positive kontrole ostaju obavezne.",
+    "Provjereni citatni oblik pravnih izvora na RFIR: prvi citat '(Zakon o porezu na dobit, NN 177/04–151/25, čl. 5.; u nastavku: ZPD)', dalje '(ZPD, čl. 7.)'; NN brojeve svih izmjena verificirati na zakon.hr prije uvrštavanja.",
+    "opseg.seminarski ostaje široki profilni raspon; check_rules.py od B06 za broj poglavlja računa samo sadržajne Heading 1 naslove, bez završnih popisa. Broj riječi i dalje je tehnička mjera cijelog dokumenta dok se u kasnijem profilu ne uvede precizniji scope."
+  ],
+  "provenance": {
+    "default": {
+      "source": "Upute za pisanje radova na preddiplomskom stručnom studiju „Poslovna ekonomija\"",
+      "type": "explicit",
+      "confidence": 1.0,
+      "verified_at": "2026-08-04"
+    },
+    "rules": {
+      "/format/odlomak/min_redaka": {
+        "source": "Upute za pisanje radova na preddiplomskom stručnom studiju „Poslovna ekonomija\"",
+        "type": "derived",
+        "confidence": 0.65,
+        "verified_at": "2026-08-04",
+        "derivation": "Izvedeno iz pravila „2–3 odlomka po stranici” uz TNR 12, prored 1,5 i profilne margine; vrijednost 5 nije doslovno propisana."
+      }
+    }
+  },
+  "primjerci": [
+    {
+      "id": "efzg-rfir-seminarski-ocjena5-2026",
+      "vrsta": "seminarski",
+      "izvor": "obranjeni seminarski rad s istog kolegija (RFIR), ocjena 5, ustupio student 4. 9. 2026.",
+      "zabiljezeno": "2026-09-05",
+      "mjereno": {
+        "margine_cm": {
+          "gore": 2.5,
+          "dolje": 2.5,
+          "lijevo": 2.5,
+          "desno": 2.5
+        },
+        "velicina_pt": 12,
+        "naslov_1_pt": 14,
+        "naslov_2_pt": 12,
+        "naslov_1_bold": false,
+        "naslov_2_bold": false,
+        "prijelom_pred_poglavljem": true,
+        "numerirani_pododjeljci": "X.Y. (s točkom na kraju)",
+        "rijeci_tijela": 3990,
+        "broj_poglavlja_1": 5,
+        "prikazi": {
+          "tablica": 6,
+          "slika": 1
+        },
+        "polja": {
+          "TOC": 3,
+          "SEQ": 6,
+          "REF": 9,
+          "PAGEREF": 27
+        },
+        "literatura_jedinica": 15,
+        "literatura_skupine": [
+          "Knjige i znanstveni radovi",
+          "Propisi i standardi",
+          "Mrežni izvori"
+        ],
+        "zavrsna_tocka_u_popisu": false,
+        "uvod_potpoglavlja": [
+          "Predmet i cilj rada",
+          "Izvori podataka i metode prikupljanja",
+          "Struktura rada"
+        ],
+        "sazetak_hr": false,
+        "summary_en": false,
+        "zivotopis": false
+      },
+      "napomena": "Dvije vrijednosti proturječe overlayu efzg-rfir-seminarski (inferred, confidence 0.75): prijelom pred poglavljem (overlay false, uzorak 8/8 ima prijelom) i opseg (overlay 3000–4000 riječi, uzorak 3990 riječi tijela na 13 stranica, a Upute Katedre prema izjavi studenta traže 15–20 stranica). Obje ostaju zapisane; primjerak je opservacija, Upute su norma."
+    }
+  ]
+}

@@ -18,19 +18,29 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
 test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page }) => {
   await page.goto('/rad/');
   await page.locator('#fileInput').setInputFiles(fixture);
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '1');
+  // Korak 2 dolazi SAM, bez klika na #stepToProfile (isto kao desktop). Popravljeno 2026-09-08:
+  // `usesCompactUploadFlow` je bio vestigalni ostatak stare mobilne staze (Jul 25) koji je gasio
+  // bas ovaj prijelaz na mobitelu, iako je uoci ovog popravka (2026-09-07) traka koraka na
+  // mobitelu vec dobila raditi isti cilj "nula do jedan tap" kao desktop; #stepToProfile je uz
+  // taj popravak i skriven na koraku 2 (`.lek-stepnav-1{display:none}`), pa bi klik na njega ovdje
+  // sada samo timeoutao na nevidljivom gumbu.
+  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
 
   // Banner mora biti gore: bez njega ovaj test ne bi cuvao nista.
   await expect(page.locator('#consentBanner')).toBeVisible();
-  await page.locator('#stepToProfile').click();
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
 
-  await page.locator('#stepToAnalyze').click();
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');
+  // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
+  // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
+  // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
 
-  await page.locator('#analyzeBtn').click();
+  // POTVRDA JE PRIMARNA AKCIJA, pa se na nju ceka umjesto da se pogadja. Prijasnji oblik
+  // (`#analyzeBtn` pa `if (await confirm.isVisible())`) je bio utrka: `isVisible()` NE ceka,
+  // a kartica se crta u `updateProfile`, koji ceka pravila profila preko mreze. Na mobitelu je
+  // ocitanje stizalo prije kartice, potvrda se tiho preskakala, `runAnalysis` je izlazio na
+  // vratima potvrde, i test je padao na `#resultView` koji nikad ne postane vidljiv.
   const confirm = page.locator('[data-confirm-profile]');
-  if (await confirm.isVisible()) await confirm.click();
+  await expect(confirm).toBeVisible({ timeout: 30_000 });
+  await confirm.click();
 
   await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });

@@ -10,7 +10,8 @@ for (const pageSpec of FREE_TOOL_PAGES) {
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator(pageSpec.primarySelector)).toBeVisible();
-    await expect(page.locator('#mobileMenuBtn')).toBeVisible();
+    // Hamburger samo ondje gdje ljuska ima izbornik; lampa je kontrola i mora biti svugdje.
+    if (pageSpec.hasChromeMenu !== false) await expect(page.locator('#mobileMenuBtn')).toBeVisible();
     await expect(page.locator('#themeBtn')).toBeVisible();
 
     if (pageSpec.workspaceSelector) {
@@ -570,6 +571,13 @@ for (const [sirina, visina] of [[360, 667], [393, 727], [393, 900], [430, 844]] 
     // STVARNA datoteka, ne podmetnuta klasa: `has-file` ne prikazuje `#selectedFile` ni ne skriva
     // `#dropEmpty`, pa daje raspored koji nijedan korisnik ne vidi (izmjereno: preklop 0 umjesto 70 px).
     await page.setInputFiles('#fileInput', 'tests/fixtures/docx/fer-diplomski-puna-struktura.docx');
+    // Popravljeno 2026-09-08: upload sada ide RAVNO na korak 2 (isto kao desktop; mobilna iznimka
+    // koja je ovdje silila korak 1 je uklonjena). Stanje koje ovaj test provjerava (korak 1 S VEC
+    // ODABRANOM datotekom) postize se izravnim postavljanjem atributa: vidljivost je posve CSS-om
+    // vodjena preko `#wizardView[data-step="N"]`, pa nema potrebe za klikom kroz UI (koji bi ovdje
+    // ionako ciljao #stepBackDoc dok ga traka o privoli moze prekrivati, sto je posve druga tvrdnja
+    // od one koju ovaj test zeli postaviti).
+    await page.evaluate(() => document.getElementById('wizardView')?.setAttribute('data-step', '1'));
     await page.waitForSelector('.lek-stepnav-1 .btn', { state: 'visible' });
     await page.waitForTimeout(300);
 
@@ -672,16 +680,34 @@ for (const [ime, dataTheme, scheme] of [
  */
 const KONTRAST_STRANICE = [
   { ruta: '/rad/', prag: 90 },        // izmjereno 118 neutralizirano; tekstura u svijetloj temi ~65
-  { ruta: '/index.html', prag: 25 },  // izmjereno 35 i s teksturom i bez nje: ulaz nema teksta preko teksture,
-                                      // pa je prag ovdje samo provjera da stranica nije ostala prazna
+  { ruta: '/index.html', prag: 8 },   // PREKALIBRIRANO 2026-09-08 (v. dolje): 35 -> 20 moguca cvora
+                                      // nakon reza navigacije/podnozja; prag ovdje samo provjerava
+                                      // da stranica nije ostala prazna, ne mjeri stvarni kontrast.
+                                      // 15 se pokazalo prekriveno: 20 pod lakim opterecenjem, 13 na
+                                      // CI-ju, 9 pod teskim lokalnim opterecenjem (isto neutralizirano
+                                      // stanje, samo sporije slaganje stranice). Razmak prema stvarno
+                                      // slijepom stanju (3) ostaje velik i na 8.
 ] as const;
 for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'dark'] as const) {
   test(`${ruta}: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(ruta);
     await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);
-    // Neutralizacija teksture je JEDINI nacin da axe uopce izmjeri ove cvorove.
-    await page.addStyleTag({ content: 'body{background-image:none!important}' });
+    // Neutralizacija je JEDINI nacin da axe uopce izmjeri ove cvorove, i vise ne pokriva samo
+    // teksturu na `body`. `.ks-decor`/`.hero-atmos` su dvije dekorativne pozadinske podloge
+    // (sjaj lampe, atmosfera hero demoa) koje sjede IZA sadrzaja (z-index 0 < 2, pointer-events
+    // none) i stvarni kontrast ne diraju, a axe ih svejedno ne zna razrijesiti; iste su naravi kao
+    // tekstura gore, samo NOVIJE i izvan `body`. `.intake-paper::before/::after` su dva CSS-generirana
+    // lista ispod papira (bez dodatnog cvora, RAZ NASLOVNICE); axe pseudo-elemente broji kao
+    // neodredive bez obzira na boju (`messageKey: pseudoContent`).
+    //
+    // Izmjereno 2026-09-08 na `/index.html`: bez ovoga 3 od 20 mogucih cvorova (obje teme), s ovim
+    // 20 od 20. Isti zahvat na `/rad/` ne obara rezultat ispod praga (98 od >90).
+    await page.addStyleTag({ content: 'body{background-image:none!important}.ks-decor,.hero-atmos{display:none!important}.intake-paper::before,.intake-paper::after{content:none!important}' });
+    // Fontovi, ne fiksni rok: pod pravim opterecenjem (cijela test:ux suita usporedno) 300ms je
+    // jednom dao 9 od 20 (izmjereno 2026-09-08) jer stranica jos nije bila slozena, ne zbog
+    // neutralizacije (ona je CSS pravilo, vrijedi cim se element pojavi, neovisno o vremenu).
+    await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
 
     const r = await new AxeBuilder({ page }).analyze();

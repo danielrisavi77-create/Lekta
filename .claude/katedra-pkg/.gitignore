@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# dnevnik zadnjeg prolaza suitea (kvar 142) — trag, ne artefakt
+.testovi/

@@ -1,0 +1,83 @@
+{
+ "format": {
+  "font": [
+   "Times New Roman"
+  ],
+  "velicina_pt": 12,
+  "prored": 1.5,
+  "margine_cm": {
+   "gore": 2.5,
+   "dolje": 2.5,
+   "lijevo": 2.5,
+   "desno": 2.5
+  },
+  "lice": "trece-jednina",
+  "numeracija": {
+   "opis": "arapski brojevi u podnožju; naslovnica se ne numerira — NIJE propisano nijednim dostupnim pravilnikom, pretpostavka",
+   "prednji_dio": "bez",
+   "tijelo": "arapski",
+   "tijelo_pocinje_od": 1,
+   "prijelom_kod": "uvod"
+  }
+ },
+ "struktura": {
+  "opseg": {
+   "seminarski": {
+    "stranice": [
+     10,
+     20
+    ],
+    "izvori_min": 8
+   },
+   "zavrsni": {
+    "stranice": [
+     30,
+     60
+    ],
+    "izvori_min": 15
+   },
+   "diplomski": {
+    "stranice": [
+     60,
+     80
+    ],
+    "izvori_min": 25
+   }
+  },
+  "obavezni_dijelovi": [
+   "naslovnica",
+   "sadrzaj",
+   "sazetak",
+   "kljucne-rijeci",
+   "uvod",
+   "obrada-teme",
+   "zakljucak",
+   "literatura",
+   "popis-tablica-slika-grafikona"
+  ],
+  "prikazi": {
+   "natpis": "iznad",
+   "izvor_ispod": true,
+   "mora_biti_spomenut_u_tekstu": true
+  }
+ },
+ "citiranje": {
+  "stil": "harvard",
+  "u_tekstu": "(Andrijanić, Gregurek i Merkaš, 2016, str. 45)",
+  "popis_primjer": "Andrijanić, I., Gregurek, M., Merkaš, Z. (2016.) Upravljanje poslovnim rizicima. Zagreb: Plejada.",
+  "tocka_iza_godine": true,
+  "uvlaka_u_popisu": false,
+  "napomena": "Pravilnik o završnom radu (čl. 7) preporučuje harvardski stil, a istodobno traži FUSNOTE kod izravnog citata, netrivijalnog činjeničnog iskaza i parafraze. Pravilnik je u tome interno nedosljedan. Odluka Katedre: harvard u tekstu + fusnote za pojmovna objašnjenja i pravne izvore s člankom, uz izričitu deklaraciju u uvodu rada. Dodatak Pravilniku s detaljnim pravilima harvardskog citiranja NIJE javno objavljen.",
+  "dozvoljeni_tipovi_izvora": [
+   "book",
+   "chapter",
+   "journal_article",
+   "law",
+   "regulation",
+   "eu_act",
+   "official_report",
+   "dataset",
+   "web_page"
+  ]
+ }
+}

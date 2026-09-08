@@ -34,9 +34,21 @@ function emptyDoc(): Document {
 function workspaceHtml(): string {
   const parsed = document.implementation.createHTMLDocument('izvor');
   parsed.documentElement.innerHTML = INDEX;
+  /**
+   * DVA KORIJENA, NE JEDAN. Od 2026-09-07 kontrole profila zive u `#profileSheet`, koji stoji IZVAN
+   * `<main>` jer `setBackgroundInert` (modal-utils.ts) postavlja `inert` na `header.topbar`, `main`
+   * i `footer`; list ostavljen unutar `#analyzer` bio bi inertan zajedno s pozadinom, dakle
+   * nedostupan tipkovnicom. Isto vrijedi za svih 12 ostalih dijaloga na stranici.
+   *
+   * Fixture zato uzima OBA korijena. To NIJE popustanje tvrdnje o tankoj ruti nego njezino
+   * precizno izricanje: tanka ruta mora nositi radnu povrsinu, a radna povrsina je od tada dva
+   * odvojena podstabla. Bez lista `initCatalog` pada na `#institutionSelect` koji je `null`, i to
+   * je ISPRAVNO ponasanje: montaza bez kontrola profila znacila bi analizu pod zatecenim zadanim
+   * profilom, dakle tvrdnju korisniku cija se pravila primjenjuju, a da to nitko nije birao.
+   */
   const analyzer = parsed.getElementById('analyzer');
   if (!analyzer) throw new Error('index.html nema #analyzer, fixture se ne moze izvesti');
-  return analyzer.outerHTML;
+  return analyzer.outerHTML + (parsed.getElementById('profileSheet')?.outerHTML ?? '');
 }
 
 function workspaceDoc(): Document {

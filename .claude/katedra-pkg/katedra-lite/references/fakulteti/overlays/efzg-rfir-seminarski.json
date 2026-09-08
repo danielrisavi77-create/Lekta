@@ -1,0 +1,64 @@
+{
+  "id": "efzg-rfir-seminarski",
+  "level": "work_type",
+  "match": {
+    "faculty": "efzg",
+    "programme": "rfir",
+    "work_type": "seminarski"
+  },
+  "aliases": [],
+  "rules": {
+    "citiranje": {
+      "u_tekstu": "(Dragija i sur., 2015)",
+      "popis_primjer": "Prezime, I. (godina). Naslov. Grad: Izdavač.",
+      "tocka_iza_godine": false,
+      "napomena": "RFIR seminarski: citat u tekstu je bez točke iza godine, npr. '(Dragija i sur., 2015)'. Literatura slijedi RFIR predložak: 'Prezime, I. (godina). Naslov. Grad: Izdavač.'."
+    },
+    "format": {
+      "prijelom_pred_poglavljem": false
+    },
+    "struktura": {
+      "opseg": {
+        "seminarski": {
+          "poglavlja": [
+            5,
+            5
+          ]
+        }
+      },
+      "obavezni_dijelovi": [
+        "naslovnica (hrvatska)",
+        "izjava o akademskoj čestitosti (hrvatski i engleski)",
+        "sadržaj",
+        "uvod",
+        "razrada po poglavljima",
+        "zaključak",
+        "popis literature",
+        "popis tablica",
+        "popis slika"
+      ]
+    },
+    "predaja": {
+      "turnitin": false,
+      "administrativni_rep_dana": 0,
+      "koraci": [
+        "mentor odobrava finalnu verziju",
+        "slanje cijelog rada e-mailom nositelju"
+      ]
+    }
+  },
+  "provenance": {
+    "default": {
+      "source": "RFIR studentski predložak seminara (2026.) prenesen iz provjerenog EFZG profila",
+      "type": "inferred",
+      "confidence": 0.75,
+      "verified_at": "2026-08-04"
+    },
+    "/rules/predaja": {
+      "source": "koraci iz efzg.json (Turnitin, uvez primjeraka, unos u repozitorij, prijava obrane) su koraci završnog rada; seminarski se predaje e-mailom nositelju, pa rep od 14 dana za njega ne postoji",
+      "type": "inferred",
+      "confidence": 0.8,
+      "verified_at": "2026-09-05"
+    }
+  }
+}
