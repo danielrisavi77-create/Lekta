@@ -101,17 +101,10 @@
     },
     {
       "fixerId": "heading-style-fixer",
-      "requested": 7,
+      "requested": 3,
       "changed": 3,
-      "reasons": {
-        "invalid-params": 4
-      },
-      "deadOn": [
-        "ffzg--graduate--diplomski--uskladjen.docx",
-        "fpzg--final--prijediplomski--uskladjen.docx",
-        "fsb--article--diplomski--neuredan.docx",
-        "fsb--article--diplomski--uskladjen.docx"
-      ]
+      "reasons": {},
+      "deadOn": []
     },
     {
       "fixerId": "line-spacing-fixer",
@@ -657,7 +650,6 @@
         "consistency-fixer",
         "field-integrity-fixer",
         "final-document-inspector-fixer",
-        "heading-style-fixer",
         "link-doi-fixer"
       ],
       "promijenili": [
@@ -669,10 +661,6 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
-        },
-        {
-          "fixerId": "heading-style-fixer",
-          "reason": "invalid-params"
         }
       ],
       "rijeseno": [],
@@ -790,7 +778,6 @@
         "consistency-fixer",
         "field-integrity-fixer",
         "final-document-inspector-fixer",
-        "heading-style-fixer",
         "link-doi-fixer",
         "required-section-fixer",
         "section-surgery-fixer"
@@ -810,10 +797,6 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
-        },
-        {
-          "fixerId": "heading-style-fixer",
-          "reason": "invalid-params"
         },
         {
           "fixerId": "link-doi-fixer",
@@ -924,9 +907,7 @@
     {
       "dokument": "fpzg--project--diplomski--uskladjen.docx",
       "profileId": "fpzg-opci-akademski-rad",
-      "paloPrije": [
-        "reference.uncited"
-      ],
+      "paloPrije": [],
       "zatrazeno": [
         "bibliography-repair-fixer",
         "citation-bibliography-sync-fixer",
@@ -959,9 +940,7 @@
         }
       ],
       "rijeseno": [],
-      "nerijeseno": [
-        "reference.uncited"
-      ],
+      "nerijeseno": [],
       "regresije": [],
       "integrityFailure": null
     },
@@ -977,7 +956,6 @@
         "empty-paragraph-fixer",
         "field-integrity-fixer",
         "final-document-inspector-fixer",
-        "heading-style-fixer",
         "link-doi-fixer"
       ],
       "promijenili": [
@@ -991,10 +969,6 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
-        },
-        {
-          "fixerId": "heading-style-fixer",
-          "reason": "invalid-params"
         }
       ],
       "rijeseno": [],
@@ -1013,7 +987,6 @@
       "zatrazeno": [
         "consistency-fixer",
         "final-document-inspector-fixer",
-        "heading-style-fixer",
         "link-doi-fixer"
       ],
       "promijenili": [
@@ -1024,10 +997,6 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
-        },
-        {
-          "fixerId": "heading-style-fixer",
-          "reason": "invalid-params"
         }
       ],
       "rijeseno": [],
@@ -1146,7 +1115,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-08T13:29:58.779Z",
-  "generatedFromCommit": "b8169693a537c1c3d7a320a1ab1ed777475f6b41",
+  "generatedAt": "2026-09-08T17:39:51.365Z",
+  "generatedFromCommit": "7a540f9fec4dab78661426f17393dbd141dd29d5",
   "generator": "npm run repair-net -- --write"
 }

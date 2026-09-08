@@ -843,6 +843,56 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'mreza/zahtjev-bez-ijedne-mete-prolazi-kao-mrtav-fixer',
+    imitates:
+      'graditelj stavki posalje zahtjev BEZ IJEDNE METE, motor ga odbije s `invalid-params`, a to se ' +
+      'procita kao "fixer je mrtav" pa se kvar trazi u fixeru umjesto u pozivu. Izmjereno 2026-09-08: ' +
+      '`heading-style-fixer` je isao kao `violated: true` s praznim popisom meta na cetiri dokumenta ' +
+      '(kandidat postoji, nijedan nije predodabran), pa je zadani odabir slao prazan zahtjev. Ostali ' +
+      'razlozi opisuju ULAZ (`no-target`, `already-ok`, `unsupported-structure`, `stale-anchor`); ' +
+      '`invalid-params` jedini opisuje POZIV, i zato je uvijek nas kvar',
+    caught: () => {
+      const m = (dokument: string, reason: string): DocumentMeasurement => ({
+        dokument,
+        profileId: 'p',
+        paloPrije: [],
+        zatrazeno: ['gradi-prazan-zahtjev'],
+        promijenili: [],
+        bezUcinka: [{ fixerId: 'gradi-prazan-zahtjev', reason }],
+        rijeseno: [],
+        nerijeseno: [],
+        regresije: [],
+        integrityFailure: null,
+      });
+      const rows = aggregateByFixer([m('a.docx', 'invalid-params'), m('b.docx', 'invalid-params')]);
+      const losZahtjev = rows.filter((f) => Number(f.reasons?.['invalid-params'] ?? 0) > 0);
+      return losZahtjev.length === 1 && losZahtjev[0].fixerId === 'gradi-prazan-zahtjev';
+    },
+    // Netrivijalnost: razlozi koji opisuju DOKUMENT ne smiju okinuti ovaj gard, inace bi svaki
+    // uredan `no-target` prolaz izgledao kao kvar poziva i tvrdnja bi prestala znaciti isto.
+    cleanBefore: () => {
+      const m = (dokument: string, reason: string): DocumentMeasurement => ({
+        dokument,
+        profileId: 'p',
+        paloPrije: [],
+        zatrazeno: ['uredan-preskok'],
+        promijenili: [],
+        bezUcinka: [{ fixerId: 'uredan-preskok', reason }],
+        rijeseno: [],
+        nerijeseno: [],
+        regresije: [],
+        integrityFailure: null,
+      });
+      const rows = aggregateByFixer([
+        m('a.docx', 'no-target'),
+        m('b.docx', 'already-ok'),
+        m('c.docx', 'unsupported-structure'),
+        m('d.docx', 'stale-anchor'),
+      ]);
+      return rows.every((f) => Number(f.reasons?.['invalid-params'] ?? 0) === 0);
+    },
+  },
+  {
     id: 'oblik/generator-tvrdi-oblik-koji-ne-proizvodi',
     imitates:
       'sidecar generiranog dokumenta tvrdi oblik (`shapes.claimed`) kojeg u paketu nema, ili mutaciju ' +

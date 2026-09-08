@@ -777,7 +777,6 @@
       "droppedEntryCount": 0,
       "removedByFixers": [],
       "offeredFixerIds": [
-        "heading-style-fixer",
         "bibliography-repair-fixer",
         "final-document-inspector-fixer",
         "field-integrity-fixer",
