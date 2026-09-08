@@ -10,6 +10,8 @@ import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
 import type { DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
+import { buildRepairPlan, type PlanItemInput } from './repair-plan';
+import { repairPlanHtml } from './repair-plan-view';
 
 export type ResultsRenderer = 'legacy' | 'cockpit';
 export type ResultsCockpitAction =
@@ -31,6 +33,11 @@ export type ResultsCockpitAction =
 export interface ResultsCockpitDesk {
   readonly items: readonly DeskItem<VisualFindingModel>[];
   readonly mountDocument: (host: HTMLElement) => Promise<DeskDocument | null>;
+  /**
+   * Stavke popravka, u sirovom obliku. Plan se gradi OVDJE, a ne u `app.ts`, iz dva razloga:
+   * `app.ts` je na svom budzetu, i klasifikacija pripada sloju rezultata koji vec drzi nalaze.
+   */
+  readonly planItems?: readonly PlanItemInput[];
 }
 
 export interface ResultsCockpitOptions {
@@ -98,6 +105,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // Stari stol se odbacuje PRIJE nego `innerHTML` odnese njegov DOM: inace bi mu kasni
   // `mountDocument` mogao razapeti slusace po elementima kojih vise nema.
   const drzac = mount as HTMLElement & { _desk?: DeskHandle | null };
+  // POLOZAJ PREZIVLJAVA ponovnu montazu; vidi `startIndex` u `desk-mount.ts`.
+  const prethodniIndex = drzac._desk?.index ?? 0;
   drzac._desk?.dispose();
   drzac._desk = null;
   const stol = options.desk && options.desk.items.length ? options.desk : null;
@@ -149,10 +158,14 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   if (stol) {
     const domacin = mount.querySelector<HTMLElement>('[data-desk-host]');
     if (domacin) {
+      const plan = buildRepairPlan(stol.planItems ?? [], model.findings.document, options.repairAvailable);
       drzac._desk = mountDesk(domacin, {
         items: stol.items,
+        startIndex: prethodniIndex,
         repairAvailable: options.repairAvailable,
         esc: escapeHtml,
+        // Prazan plan se ne nudi: gumb koji vodi na "nema zahvata" je losiji od izostanka gumba.
+        planHtml: plan.prazan ? null : repairPlanHtml(plan, escapeHtml),
         // NA USKOM EKRANU SE DOKUMENT NE CRTA. Raspored 58/42 ondje nema smisla, pa ga CSS
         // sakrije, a tada je `clientWidth` nula. Bez ove provjere bi se faksimil svejedno
         // renderirao: desetci odlomaka u A4 listovima za posao koji nitko nece vidjeti, i to

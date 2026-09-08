@@ -1025,3 +1025,55 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   .dq-sev { grid-column: 2; font-size: .65rem; }
   .dq-title { grid-column: 2; }
 }
+
+/* ==========================================================================
+   PLAN ISPRAVAKA
+   Brif: "Vizualno samo treba napraviti da izgleda kao PLAN RADA, ne kao tehnicki
+   configuration panel."
+
+   Razlika je u tome sto redak vodi. Panel vodi KONTROLOM (kvacica lijevo, sve isto siroko);
+   plan vodi VRIJEDNOSCU: naziv pa prijelaz "2,3 cm -> 3,0 cm", a kvacica je sitna oznaka stanja,
+   ne glavni element retka.
+   ========================================================================== */
+.desk-plan-open {
+  justify-self: start; border: 1px solid var(--ck-line); background: transparent; color: inherit;
+  border-radius: 8px; padding: .45rem .8rem; font: inherit; cursor: pointer;
+}
+.desk-plan-open:hover { border-color: var(--ck-ink); }
+.desk-natrag {
+  border: 0; background: transparent; color: var(--ck-muted); font: inherit; cursor: pointer;
+  padding: .2rem 0; text-align: left; justify-self: start;
+}
+.desk-natrag:hover { color: var(--ck-ink); }
+
+.rp { display: grid; gap: .8rem; }
+.rp-kicker { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ck-muted); }
+.rp-uvod { margin: 0; font-size: 1.02rem; }
+.rp-skupina { display: grid; gap: .35rem; }
+/* Naslov skupine je RAZDJELNIK, ne naslov sekcije: tri skupine su jedan popis s tri registra,
+   pa im crta iznad govori "od ovdje vrijedi drugo pravilo" jasnije od razmaka. */
+.rp-naslov {
+  margin: .4rem 0 0; padding-top: .5rem; border-top: 1px solid var(--ck-line);
+  font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ck-muted); font-weight: 600;
+}
+.rp-popis { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.rp-stavka { display: grid; grid-template-columns: 1.3rem minmax(0, 1fr); gap: .5rem; align-items: start; }
+.rp-kvacica, .rp-tocka { line-height: 1.4; color: var(--ck-muted); }
+.rp-kvacica[data-odabrano="da"] { color: var(--ck-green-text, #1a7f5a); }
+.rp-tijelo { display: grid; gap: .1rem; min-width: 0; }
+.rp-naziv { font-weight: 500; }
+/* Prijelaz je PODATAK, pa ide u mono: isti registar koji ostatak sucelja koristi za mjerene
+   vrijednosti, cime se odmah razlikuje od proze oko sebe. */
+.rp-prijelaz { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; color: var(--ck-ink); }
+.rp-napomena { color: var(--ck-muted); font-size: .8rem; line-height: 1.35; }
+.rp-prazno { margin: 0; color: var(--ck-muted); }
+
+.rp-podnozje {
+  display: flex; align-items: center; justify-content: space-between; gap: .6rem; flex-wrap: wrap;
+  margin-top: .4rem; padding-top: .7rem; border-top: 1px solid var(--ck-line);
+}
+.rp-brojac { color: var(--ck-muted); font-size: .85rem; }
+
+@media (max-width: 900px) {
+  .rp-podnozje { flex-direction: column; align-items: stretch; }
+}

@@ -1,11 +1,10 @@
 /**
  * KOREKTORSKI STOL: prikaz. Raspored je 58% dokument, 42% nalazi.
  *
- * NAVIGACIJA NE OMATA: na zadnjem nalazu "Sljedeci problem" je ugasen. Stol na kojem se vrtis u
- * krug ne moze odgovoriti na "jesam li gotov", a to je pitanje zbog kojeg korisnik broji.
+ * NAVIGACIJA NE OMATA: stol na kojem se vrtis u krug ne moze odgovoriti na "jesam li gotov".
  *
- * KARTICU CRTA `priority-findings.ts`, ne ovaj modul: druga izvedba iste kartice bi se s prvom
- * prije ili kasnije razisla. Stol dodaje samo svoje - traku o opsegu, popis i navigaciju.
+ * KARTICU CRTA `priority-findings.ts`: druga izvedba iste kartice bi se s prvom razisla. Stol
+ * dodaje samo svoje - traku o opsegu, popis i navigaciju.
  */
 import type { DeskItem } from './desk-model';
 import { trakaZaOpseg } from './desk-model';
@@ -39,18 +38,15 @@ export function deskNav(ukupno: number, index: number): DeskNav {
 
 /**
  * Sto stoji iznad dokumenta kad nalaz nema svoje mjesto. 61% nalaza ne moze pokazati odlomak
- * (mjereno), pa je to vecinski slucaj: dokument ostaje NEOZNACEN uz recenicu koja kaze zasto,
- * umjesto izmisljenog okvira.
+ * (mjereno), pa je to vecinski slucaj: dokument ostaje NEOZNACEN uz recenicu koja kaze zasto.
  *
- * Cetvrti slucaj model ne zna, jer nastaje tek pri spajanju: nalaz IMA sidro, ali zastavica nije
- * iscrtana. Sutnja bi ondje bila najgora, jer korisnik trazi oznaku koje nema.
+ * Cetvrti slucaj nastaje tek pri spajanju: nalaz IMA sidro, ali zastavica nije iscrtana. Sutnja
+ * bi ondje bila najgora, jer korisnik trazi oznaku koje nema.
  */
 export function deskTraka(item: DeskItem): string | null {
-  // NEPOZNAT OPSEG NE DOBIVA TRAKU, jer bi ponovio ono sto kartica vec pise. `trakaZaOpseg` za
-  // `unavailable` vraca `scope.reason`, a isti taj razlog kartica ispisuje u retku "Gdje:", pa su
-  // se na ekranu pojavile DVIJE identicne recenice jedna iznad druge (vidjeno na snimci
-  // 2026-09-08, nalaz 03). Za `document` i `region` traka govori nesto sto kartica ne kaze: zasto
-  // u dokumentu lijevo nema nijedne oznake.
+  // NEPOZNAT OPSEG NE DOBIVA TRAKU: `trakaZaOpseg` za `unavailable` vraca `scope.reason`, a isti
+  // razlog kartica vec ispisuje u retku "Gdje:", pa su se na snimci (2026-09-08, nalaz 03)
+  // vidjele DVIJE identicne recenice jedna iznad druge.
   if (item.finding.scope.kind === 'unavailable') return null;
   const opseg = trakaZaOpseg(item.finding.scope);
   if (opseg) return opseg;
@@ -84,6 +80,7 @@ export function deskPaneHtml(
   // OBAVEZAN, bez zadane vrijednosti. Zadano `[item]` je izmisljalo jednoclani popis, pa kad se ne
   // bi poklopio s polozajem, NIJEDAN redak ne bi bio odabran i detalj bi tiho nestao s ekrana.
   svi: readonly DeskItem<VisualFindingModel>[],
+  planDostupan = false,
 ): string {
   if (!item) return '<div class="desk-pane" data-desk-pane><p class="desk-prazno">Nema otvorenih nalaza.</p></div>';
   const traka = deskTraka(item);
@@ -91,9 +88,32 @@ export function deskPaneHtml(
     // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u "3 / 9" i u retku popisa.
     // Kad se dvije brojke na istom ekranu ne slazu, korisnik to cita kao kvar.
     + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1);
+  // ULAZ U PLAN STOJI UZ NALAZE, jer se ondje i donosi odluka da se nesto popravi. Do 2026-09-08
+  // je jedini ulaz bio CTA uz ocjenu, koji vodi na panel skriven u kartici "Spremnost za predaju";
+  // kod je uz taj CTA sam pisao da ga "ni autor aplikacije nije nasao".
+  const uPlan = planDostupan
+    ? '<button type="button" class="desk-plan-open" data-desk-plan-open>Otvori plan ispravaka'
+      + ' <span aria-hidden="true">&#8594;</span></button>'
+    : '';
   return '<div class="desk-pane" data-desk-pane>'
     + queueHtml(queueRedci(svi, repairAvailable), nav.index, esc, detalj)
+    + uPlan
     + deskNavHtml(nav, esc)
+    + '</div>';
+}
+
+/**
+ * Desna strana u nacinu PLAN. Plan ZAMJENJUJE popis nalaza, ne stoji uz njega: to su dva pogleda
+ * na isti posao ("sto nije u redu" i "sto cu s tim"), pa jedan ispod drugoga trazi da korisnik
+ * dvaput procita iste stavke.
+ *
+ * Povratak je uvijek ponudjen, jer plan je ODLUKA, a odluka bez izlaza nije odluka.
+ */
+export function deskPlanPaneHtml(planHtml: string): string {
+  return '<div class="desk-pane desk-pane--plan" data-desk-pane>'
+    + '<button type="button" class="desk-natrag" data-desk-plan-close>'
+    + '<span aria-hidden="true">&#8592;</span> Natrag na nalaze</button>'
+    + planHtml
     + '</div>';
 }
 
@@ -108,6 +128,7 @@ export function deskHtml(
   repairAvailable: boolean,
   esc: (v: string) => string,
   svi: readonly DeskItem<VisualFindingModel>[],
+  planDostupan = false,
 ): string {
   return '<section class="desk" data-desk aria-label="Korektorski stol">'
     // `tabindex` i `role` NISU ukras: pano ima vlastiti skrol, pa bez njih korisnik tipkovnice
@@ -116,6 +137,6 @@ export function deskHtml(
     // `role="region"`, inace citac ekrana najavi podrucje koje nema ime.
     + '<div class="desk-doc" data-desk-doc tabindex="0" role="region" aria-label="Dokument">'
     + '<p class="desk-doc__cekanje">Pripremam prikaz dokumenta…</p></div>'
-    + deskPaneHtml(item, nav, repairAvailable, esc, svi)
+    + deskPaneHtml(item, nav, repairAvailable, esc, svi, planDostupan)
     + '</section>';
 }

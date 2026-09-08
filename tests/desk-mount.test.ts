@@ -223,3 +223,72 @@ describe('MUTACIJA: indeks nalaza NIJE indeks zastavice', () => {
     expect(pomaknuto).not.toContain(mete.get(1));
   });
 });
+
+describe('plan ispravaka kao drugi nacin rada', () => {
+  const PLAN = '<div class="rp" data-repair-plan><button type="button" data-repair-plan-go>Izradi</button></div>';
+
+  it('bez plana stol NE nudi ulaz u njega', () => {
+    // Gumb koji vodi na "nema zahvata" losiji je od izostanka gumba.
+    montiraj();
+    expect(sekcija.querySelector('[data-desk-plan-open]')).toBeNull();
+  });
+
+  it('klik na "Otvori plan" ZAMJENJUJE popis nalaza planom', () => {
+    // Plan i popis su dva pogleda na isti posao; jedan ispod drugoga trazio bi dvostruko citanje.
+    montiraj({ planHtml: PLAN });
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    expect(sekcija.querySelector('[data-repair-plan]')).toBeTruthy();
+    expect(sekcija.querySelector('[data-desk-queue]')).toBeNull();
+  });
+
+  it('povratak vraca nalaze i cuva polozaj, jer plan je odluka a ne izlazak', () => {
+    const { handle } = montiraj({ planHtml: PLAN });
+    handle.goTo(2);
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    klik(sekcija.querySelector('[data-desk-plan-close]'));
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 / 3');
+  });
+
+  it('CTA plana salje radnju ljusci, jer plan ne izvodi popravak sam', () => {
+    const { akcije } = montiraj({ planHtml: PLAN });
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    klik(sekcija.querySelector('[data-repair-plan-go]'));
+    expect(akcije).toEqual([{ kind: 'repair-safe' }]);
+  });
+
+  it('delegacija radi i u nacinu plan, dakle poslije ponovnog crtanja', () => {
+    const { akcije } = montiraj({ planHtml: PLAN });
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    klik(sekcija.querySelector('[data-desk-plan-close]'));
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    klik(sekcija.querySelector('[data-repair-plan-go]'));
+    expect(akcije).toEqual([{ kind: 'repair-safe' }]);
+  });
+});
+
+describe('polozaj prezivljava ponovnu montazu', () => {
+  it('stol pocinje ondje gdje je stao, a ne od prvog nalaza', () => {
+    /**
+     * Ljuska iznova crta cijeli kokpit na SVAKU radnju nad nalazom (potvrda, zanemarivanje,
+     * povratak), pa se stol ponovno montira. Bez `startIndex` bi korisnik koji potvrdi peti nalaz
+     * zavrsio natrag na prvom, sto se cita kao da je radnja ponistila napredak.
+     *
+     * Uhvatio CI (`browser-matrix`, 2026-09-08): kartica na kojoj je test radio nestala je iz
+     * DOM-a jer stol vise nije bio na njoj. Nije bio WebKit hir nego regres.
+     */
+    const { handle } = montiraj({ startIndex: 2 });
+    expect(handle.index).toBe(2);
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 / 3');
+  });
+
+  it('polozaj se STISCE kad se popis u medjuvremenu skratio', () => {
+    // Zanemarivanje nalaza skracuje popis; zapamcen polozaj tada moze pokazivati izvan njega.
+    const { handle } = montiraj({ items: stavke().slice(0, 2), startIndex: 5 });
+    expect(handle.index).toBe(1);
+  });
+
+  it('bez zapamcenog polozaja stol pocinje od prvog', () => {
+    const { handle } = montiraj();
+    expect(handle.index).toBe(0);
+  });
+});

@@ -145,3 +145,36 @@ test('na uskom zaslonu stol NE crta dokument, umjesto da ga stisne', async ({ pa
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
   await expect(page.locator('[data-desk-count]')).toBeVisible();
 });
+
+test('plan ispravaka je jedan klik od nalaza, i cita se kao plan rada', async ({ page }) => {
+  /**
+   * Sedma tocka: "Popravak ne smije biti feature koji se pronadje. Nalaz prirodno zavrsava u
+   * popravku." Do 2026-09-08 je jedini ulaz bio CTA uz ocjenu koji vodi na panel skriven u kartici
+   * "Spremnost za predaju"; kod je uz taj CTA sam pisao da ga "ni autor aplikacije nije nasao".
+   */
+  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await doRezultata(page);
+
+  await page.locator('[data-desk-plan-open]').click();
+  await expect(page.locator('[data-repair-plan]')).toBeVisible({ timeout: 15_000 });
+
+  // PLAN ZAMJENJUJE POPIS, ne stoji uz njega: dva pogleda na isti posao jedan ispod drugoga
+  // trazila bi da korisnik dvaput procita iste stavke.
+  await expect(page.locator('[data-desk-queue]')).toHaveCount(0);
+
+  // Tri skupine, tri razlicita registra. Bez njih plan je opet popis kvacica.
+  const naslovi = await page.locator('.rp-naslov').allTextContents();
+  expect(naslovi).toContain('Sigurni zahvati');
+  expect(naslovi).toContain('Ručno');
+
+  // RUCNE STAVKE NEMAJU KVACICU. Prazna kvacica bi izgledala kao nesto sto se moze ukljuciti, a
+  // Lekta to ne moze napraviti ni kad bi htjela.
+  const rucniOkvir = page.locator('.rp-popis--rucno');
+  await expect(rucniOkvir.locator('.rp-kvacica')).toHaveCount(0);
+  expect(await rucniOkvir.locator('.rp-tocka').count()).toBeGreaterThan(0);
+
+  // Povratak je uvijek ponudjen: plan je odluka, a odluka bez izlaza nije odluka.
+  await page.locator('[data-desk-plan-close]').click();
+  await expect(page.locator('[data-desk-queue]')).toHaveCount(1);
+});
