@@ -50,6 +50,22 @@ test('stol dijeli ekran 58/42: dokument lijevo, jedan nalaz desno', async ({ pag
   await expect(page.locator('[data-desk-doc] .lekta-facsimile')).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('[data-desk-doc] .desk-doc__cekanje')).toHaveCount(0);
 
+  // DOKUMENT NE SMIJE BITI ODREZAN. Faksimil je pravi A4 (21 cm), a pano stola je uzi, pa se bez
+  // uklapanja po sirini stranica rezala po desnom rubu i rijeci su se lomile nasred retka
+  // ("...akademskog tel"). Dokument tada prestaje biti citljiv upravo u alatu koji sluzi citanju.
+  //
+  // ZASTO OVA TVRDNJA POSTOJI: kvar je prosao SVE ostale provjere. Faksimil je bio vidljiv, omjer
+  // stupaca tocan, oba mjerena. Rez se vidio tek na snimci ekrana. Tvrdnja o postojanju elementa
+  // ne mjeri je li sadrzaj upotrebljiv; ova mjeri.
+  //
+  // Izmjereno nakon popravka: pano 677 px, `scrollWidth` 684 px, dakle 1,01. Bez uklapanja je
+  // stranica ~794 px u istom panu. Prag 1,05 propusta rub za scrollbar, a ne propusta rez.
+  const prelijev = await page.evaluate(() => {
+    const pano = document.querySelector('[data-desk-doc]') as HTMLElement | null;
+    return pano ? pano.scrollWidth / pano.clientWidth : 0;
+  });
+  expect(prelijev, `dokument prelijeva pano za ${((prelijev - 1) * 100).toFixed(0)}%`).toBeLessThan(1.05);
+
   // JEDAN nalaz odjednom: stol ne smije biti popis kartica pod drugim imenom.
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
 });

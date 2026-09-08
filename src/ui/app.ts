@@ -169,6 +169,7 @@ export function loadAnalyzerDocument(file: File): Promise<AnalyzerDocumentAdmiss
 import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
 import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, motionReduced, withViewTransition } from './environment-signals';
 import { deskItems } from './results/desk-model';
+import { mountFacsimileInto } from './results/desk-document';
 
 
 const $=(s: string,r: any=runtimeDocument()): any=>r.querySelector(s), $$=(s: string,r: any=runtimeDocument()): any[]=>[...r.querySelectorAll(s)];
@@ -1264,7 +1265,7 @@ function renderResultsCockpitForResult(r: any){
   // `topFindings` VEC izbacuje zanemarene i sortira po prioritetu; drugo filtriranje ovdje bilo bi
   // drugo mjesto koje odrzava isto pravilo.
   const _deskItems=deskItems(topFindings(model.findings.document,model.findings.document.length),_deskFlags);
-  const _desk=_deskItems.length?{items:_deskItems,mountDocument:async(host: HTMLElement)=>{const {renderFacsimile}=await import('../preview/render-facsimile');const iscrtano=renderFacsimile(r.preview,_deskFlags);host.textContent='';host.appendChild(iscrtano.root);return {flagTargets:iscrtano.flagTargets}}}:undefined;
+  const _desk=_deskItems.length?{items:_deskItems,mountDocument:(host: HTMLElement)=>mountFacsimileInto(host,r.preview,_deskFlags)}:undefined;
   renderResultsCockpit(mount,model,{
     desk:_desk,
     repairAvailable:!r?.demo,

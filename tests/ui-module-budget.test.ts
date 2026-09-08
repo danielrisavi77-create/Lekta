@@ -139,7 +139,13 @@ const BUDZET_APP = 357 * 1024;
 // brisanje moglo ukloniti namjeru, a ne mrtav kod. Ostala dva su jos jasnije tudja odluka.
 // Razlika prema `hero-demo`, koji JEST obrisan: ondje je bilo dokazano da mu selektori ne postoje
 // nigdje, dakle da ne moze raditi nista. Ovdje takav dokaz ne postoji, pa odluka ide vlasniku.
-const BUDZET_UI_UKUPNO = 846 * 1024;
+// 846 -> 848 KB, isti dan, treci put: `desk-document.ts` (2,5 KB), koji montira faksimil u pano
+// stola i UKLAPA GA PO SIRINI. To nije nova znacajka nego popravak kvara: bez uklapanja se A4
+// stranica rezala po desnom rubu i rijeci su se lomile nasred retka, pa je dokument bio necitljiv
+// u alatu koji sluzi citanju. Kvar je prosao SVE testove (faksimil vidljiv, omjer stupaca tocan,
+// oba mjerena) i vidio se tek na snimci ekrana; sada ga cuva tvrdnja o prelijevanju, cija je
+// mutacija izmjerena na 22%. `app.ts` je pritom SMANJEN za 114 B, jer je zatvorenje preselilo.
+const BUDZET_UI_UKUPNO = 848 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
