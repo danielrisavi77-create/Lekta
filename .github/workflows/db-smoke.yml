@@ -90,3 +90,6 @@ jobs:
 
       - name: Atomska zamjena i rezervacija konteksta
         run: psql -v ON_ERROR_STOP=1 -f scripts/agent-context-atomic-smoke.sql
+
+      - name: Trajni identitet i lease povrata
+        run: psql -v ON_ERROR_STOP=1 -f scripts/katedra-refund-ledger-smoke.sql
