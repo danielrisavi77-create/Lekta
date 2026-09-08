@@ -1,11 +1,39 @@
 # Staging migration journal: reviewable repair proposal
 
-Target: `bnyemcnsphlitjradrst`. No staging mutation has been performed.
+Target: `bnyemcnsphlitjradrst`. The owner approved this repair on 2026-09-08,
+explicitly superseding staging rebuild. The guarded repair and six canonical
+contracts have now been applied to staging. Production was not changed.
+
+## Approved execution evidence
+
+- Fresh complete backup: `D:/output/lekta-staging-journal-backup-approved-2026-09-08.json`.
+- Before repair: 121 rows, fingerprint `a2bb8567494e1cf132fa9d03de0617db`.
+- The exact rollback form succeeded; readback proved the original fingerprint unchanged.
+- The same SQL with only its final ROLLBACK changed to COMMIT succeeded: 83 unique
+  versions and names, fingerprint `5d02c61aec0ed06e1b3d312f810e3243`.
+- Full-repository CLI dry-run exposed unrelated historical migrations, including
+  a cron directed at production. That full list was not applied.
+- A staging CLI bundle contains byte-identical canonical SQL for the 83 recorded
+  identities and six pending contracts 0105–0110. It does not mark omitted
+  migrations applied or rewrite SQL. Source hashes and manifest are under
+  `D:/output/lekta-staging-contracts-approved-20260908`.
+- CLI dry-run listed exactly 0105–0110. CLI push with `--linked --skip-vault`
+  applied those six contracts. The journal now has 89 rows, latest version 0110;
+  repeating that bundle's dry-run returns no pending migrations.
+- RPC privilege readback confirms service-only deletion finalization, refund
+  reconciliation and billing evidence/settlement. Context reserve/commit and
+  explicit plan approval permit authenticated users with canonical ownership
+  checks; none permits anon execution.
+
+The bundle being up to date is not full-repository migration parity. Other
+pending migrations remain unapplied and must be evaluated if required by the
+authenticated journey. Physical Storage deletion, provider-result recovery,
+paid staging tests and activation remain separate work.
 
 The existing [migration identity decision](MIGRATION_IDENTITY.md), section 3
 step 5, prescribes rebuilding staging because the 38 duplicate identities could
-not then be reliably untangled. This proposal needs an explicit owner decision
-to supersede that staging-specific choice. It does not authorize production
+not then be reliably untangled. The owner's explicit decision supersedes that
+staging-specific choice. It does not authorize production
 changes, migration deployment, service activation or changes to privacy policy.
 
 ## Evidence
@@ -59,12 +87,12 @@ database. No provider request, payment or production connection is involved.
 
 ## Owner decision and follow-up
 
-Approve repairing the existing staging journal using this exact proposal,
-superseding the earlier rebuild recommendation. After approval, revalidate the
-live fingerprint, run the rollback form, and only then apply the identical SQL
-with its final `ROLLBACK` changed to `COMMIT`. A fingerprint mismatch stops work.
+The owner approved this exact repair, superseding the rebuild recommendation.
+The execution evidence above records the fresh fingerprint, rollback verification,
+committed repair and scoped application of 0105–0110. The original review SQL
+continues to end in `ROLLBACK` and rejects a changed or already repaired journal.
 
-After journal repair, rerun the linked staging CLI migration dry-run with
-`--skip-vault`. Review its pending migration list before applying canonical
-migrations with `supabase db push`. This journal operation alone does not prove
-Storage behavior, paid journeys, institutional policy or release readiness.
+Subsequent deployments must still review the scoped CLI dry-run with
+`--skip-vault`. This operation does not prove Storage behavior, paid journeys,
+institutional policy or release readiness. The new consent/upload contract is
+documented in [AGENT_PAYLOAD_CUSTODY.md](AGENT_PAYLOAD_CUSTODY.md).

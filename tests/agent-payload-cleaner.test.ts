@@ -9,18 +9,24 @@ function fixture(rows = [row(a), row(b)]) {
   const events: string[] = [];
   const rpc = vi.fn(async (name: string, params?: Record<string, unknown>) => {
     events.push(name);
-    return { data: name === 'list_pending_agent_payload_deletions' ? rows : [{ deleted: (params?.p_manifest_ids as string[] || []).length }], error: null };
+    return { data: name === 'claim_agent_payload_upload_reconciliation' ? [] : name === 'list_pending_agent_payload_deletions' || name === 'agent_payload_deletion_ready' ? rows : [{ deleted: (params?.p_manifest_ids as string[] || []).length }], error: null };
   });
   const remove = vi.fn(async (_paths: string[]): Promise<{ error: unknown }> => { events.push('remove'); return { error: null }; });
   return { events, rpc, remove, client: { rpc, storage: { from: vi.fn(() => ({ remove })) } } };
 }
 
 describe('canonical Storage-first payload cleanup', () => {
+  it('defers in-flight or uncertain uploads before attempting Storage removal', async () => {
+    const f = fixture();
+    f.rpc.mockImplementation(async name => ({ data: name === 'list_pending_agent_payload_deletions' ? [row(a)] : [], error: null }));
+    expect(await cleanupAgentPayloads(f.client)).toMatchObject({ deleted: 0, deferred: 1, error: null });
+    expect(f.remove).not.toHaveBeenCalled();
+  });
   it('removes both objects before finalizing only their manifest IDs', async () => {
     const f = fixture();
     expect(await cleanupAgentPayloads(f.client)).toMatchObject({ deleted: 2, failed: 0 });
     expect(f.remove).toHaveBeenCalledWith([row(a).storage_path, row(a).manifest_path]);
-    expect(f.events).toEqual(['list_pending_agent_payload_deletions', 'remove', 'remove', 'finalize_agent_payload_deletions']);
+    expect(f.events).toEqual(['claim_agent_payload_upload_reconciliation', 'list_pending_agent_payload_deletions', 'agent_payload_deletion_ready', 'remove', 'remove', 'finalize_agent_payload_deletions']);
     expect(f.rpc).toHaveBeenLastCalledWith('finalize_agent_payload_deletions', expect.objectContaining({ p_manifest_ids: [a, b] }));
   });
   it('retains failed items for retry and never persists raw Storage errors', async () => {
@@ -32,13 +38,13 @@ describe('canonical Storage-first payload cleanup', () => {
   });
   it('fails closed when the pending query fails', async () => {
     const f = fixture();
-    f.rpc.mockRejectedValueOnce(new Error('private query'));
+    f.rpc.mockImplementation(async name => { if (name === 'list_pending_agent_payload_deletions') throw new Error('private query'); return { data: [], error: null }; });
     expect(await cleanupAgentPayloads(f.client)).toMatchObject({ error: 'payload_queue_unavailable', deleted: 0 });
     expect(f.remove).not.toHaveBeenCalled();
   });
   it('does not report physical completion when finalization fails', async () => {
     const f = fixture([row(a)]);
-    f.rpc.mockImplementation(async name => ({ data: name === 'list_pending_agent_payload_deletions' ? [row(a)] : null, error: name === 'finalize_agent_payload_deletions' ? { message: 'private error' } : null }));
+    f.rpc.mockImplementation(async name => ({ data: name === 'claim_agent_payload_upload_reconciliation' ? [] : name === 'list_pending_agent_payload_deletions' || name === 'agent_payload_deletion_ready' ? [row(a)] : null, error: name === 'finalize_agent_payload_deletions' ? { message: 'private error' } : null }));
     expect(await cleanupAgentPayloads(f.client)).toMatchObject({ deleted: 0, error: 'payload_finalize_failed' });
   });
   it('rejects foreign buckets and malformed or mismatched paths before deletion', async () => {

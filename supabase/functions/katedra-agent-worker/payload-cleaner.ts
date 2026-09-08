@@ -1,9 +1,10 @@
 import { isCronAuthorized } from '../_shared/cron-auth.ts';
+import { recoverAgentPayloadUploads } from './upload-recovery.ts';
 
 interface Result { data?: unknown; error?: unknown }
 export interface CleanupClient {
   rpc(name: string, params?: Record<string, unknown>): PromiseLike<Result>;
-  storage: { from(bucket: string): { remove(paths: string[]): PromiseLike<Result> } };
+  storage: { from(bucket: string): { remove(paths: string[]): PromiseLike<Result>; download?(path: string): PromiseLike<Result> } };
 }
 interface Payload { manifest_id: string; storage_bucket: string; storage_path: string; manifest_path: string }
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -27,16 +28,27 @@ function payload(value: unknown): Payload | null {
 export async function cleanupAgentPayloads(client: CleanupClient, options: { now?: () => number; deadlineAt?: number } = {}) {
   const now = options.now ?? Date.now;
   const deadline = options.deadlineAt ?? now() + 45_000;
-  const summary = { deleted: 0, failed: 0, deferred: 0, error: null as string | null };
+  const recovery = await recoverAgentPayloadUploads(client, { now, deadlineAt: Math.min(deadline, now() + 15_000) });
+  const summary = { deleted: 0, failed: 0, deferred: 0, recoveredUploads: recovery.recovered, unresolvedUploads: recovery.deferred, error: recovery.error };
+  if (recovery.error) return summary;
   let pending: Result;
   try { pending = await client.rpc('list_pending_agent_payload_deletions', { p_now: new Date(now()).toISOString() }); }
   catch { return { ...summary, error: 'payload_queue_unavailable' }; }
   if (pending.error || !Array.isArray(pending.data) || pending.data.length > 500) return { ...summary, error: 'payload_queue_unavailable' };
+  if (now() >= deadline) return { ...summary, deferred: pending.data.length };
+  const candidates = pending.data.map(payload).filter((item): item is Payload => item !== null);
+  if (!candidates.length) return { ...summary, failed: pending.data.length };
+  let ready: Result;
+  try { ready = await client.rpc('agent_payload_deletion_ready', { p_manifest_ids: candidates.map(item => item.manifest_id) }); }
+  catch { return { ...summary, error: 'payload_upload_state_unavailable' }; }
+  if (ready.error || !Array.isArray(ready.data)) return { ...summary, error: 'payload_upload_state_unavailable' };
+  const readyIds = new Set(ready.data.map(item => item?.manifest_id));
   const removed: string[] = [];
   for (let i = 0; i < pending.data.length; i++) {
-    if (now() >= deadline) { summary.deferred = pending.data.length - i; break; }
+    if (now() >= deadline) { summary.deferred += pending.data.length - i; break; }
     const item = payload(pending.data[i]);
     if (!item) { summary.failed++; continue; }
+    if (!readyIds.has(item.manifest_id)) { summary.deferred++; continue; }
     try {
       const result = await client.storage.from(item.storage_bucket).remove([...new Set([item.storage_path, item.manifest_path])]);
       if (result.error) throw new Error('storage_delete_failed');
@@ -56,6 +68,7 @@ export async function cleanupAgentPayloads(client: CleanupClient, options: { now
       const count = Array.isArray(result.data) ? result.data[0]?.deleted : undefined;
       if (result.error || !Number.isInteger(count) || count < 0 || count > removed.length) throw new Error('payload_finalize_failed');
       summary.deleted = count;
+      summary.deferred += removed.length - count;
     } catch { summary.error = 'payload_finalize_failed'; }
   }
   return summary;
