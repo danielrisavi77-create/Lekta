@@ -87,3 +87,6 @@ jobs:
 
       - name: Autoritet i oporavak brisanja agent payloadova
         run: psql -v ON_ERROR_STOP=1 -f scripts/agent-payload-cleanup-smoke.sql
+
+      - name: Atomska zamjena i rezervacija konteksta
+        run: psql -v ON_ERROR_STOP=1 -f scripts/agent-context-atomic-smoke.sql
