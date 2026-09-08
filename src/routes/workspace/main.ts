@@ -18,7 +18,6 @@ import '../../shared/page-app.css';  // stil stranice; bez njega je ruta goli HT
 // staticnu, neanimiranu demo scenu i nije razumio `?workType=`/`#handoff=` s Katedre.
 import '../../integration/katedra-entry';
 import '../../integration/katedra-result-cta';
-import '../../ui/hero-demo';
 import '../../ui/hero-depth';
 
 /**

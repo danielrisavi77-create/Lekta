@@ -132,7 +132,12 @@ describe('ruta /rad/', () => {
 
   it('radna povrsina razumije Katedrin dolazak i demo scenu, koje su do reza zivjele samo na /', () => {
     const workspace = readFileSync(resolve(ROOT, 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
-    for (const modul of ['integration/katedra-entry', 'integration/katedra-result-cta', 'ui/hero-demo', 'ui/hero-depth']) {
+    // `ui/hero-demo` je uklonjen 2026-09-08: modul je bio MRTAV. Trazio je `.hero-demo` i
+    // `#heroReplay`, kojih nema ni u `index.html` ni u `rad/index.html`, pa je `setup()` odmah
+    // izlazio; prototip `prototype/analyzer-hero-demo.html` ima vlastiti `.ts` i `.css` i nikad
+    // nije koristio ovaj. Oba produkcijska ulaza su ga svejedno uvozila, dakle 8,6 KB isporuceno
+    // svakom korisniku za element koji ne postoji. Ostatak popisa je i dalje ugovor.
+    for (const modul of ['integration/katedra-entry', 'integration/katedra-result-cta', 'ui/hero-depth']) {
       expect(workspace, `${modul} je do reza uvozio samo src/main.ts`).toContain(modul);
     }
   });

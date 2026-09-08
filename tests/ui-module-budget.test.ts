@@ -92,11 +92,11 @@ const BUDZET_APP = 357 * 1024;
 //               Sama mapa NIJE ovdje (zivi u `src/scoring`, uz registar koji tumaci); ostatak
 //               je `region` grana u `finding-view-model.ts` i `priority-findings.ts`.
 //
-// DUG KOJI OVO DIZANJE CINI PRIVREMENIM: `src/ui/hero-demo.ts` (8,6 KB) je MRTAV u produkciji.
-// `.hero-demo` postoji samo u `prototype/`, koji nije ulaz u buildu i nema ga u `dist/`; ni
-// `index.html` ni `rad/index.html` nemaju nijedan njegov element, pa `setup()` odmah izlazi.
-// Oba produkcijska ulaza ga svejedno uvoze. Brisanje vraca 8,6 KB, dakle vise nego sva cetiri
-// dizanja zajedno, ali trazi vlastitu provjeru (prototip i njegov spec), pa ide zasebno.
+// DUG NAPLACEN ISTOG DANA:  (8,6 KB) je obrisan. Bio je MRTAV: trazio je
+//  i , kojih nema ni u  ni u , pa je
+//  odmah izlazio, a oba produkcijska ulaza su ga svejedno uvozila. Prototip ima
+// vlastiti  i  i nikad ga nije koristio. Zato ovo dizanje NIJE potrosen prostor:
+// brisanje je vratilo vise nego sto je cetvrto dizanje uzelo.
 const BUDZET_UI_UKUPNO = 831 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
