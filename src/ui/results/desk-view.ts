@@ -108,7 +108,12 @@ export function deskHtml(
   esc: (v: string) => string,
 ): string {
   return '<section class="desk" data-desk aria-label="Korektorski stol">'
-    + '<div class="desk-doc" data-desk-doc><p class="desk-doc__cekanje">Pripremam prikaz dokumenta…</p></div>'
+    // `tabindex` i `role` NISU ukras: pano ima vlastiti skrol, pa bez njih korisnik tipkovnice
+    // ne moze pomaknuti dokument. axe to prijavljuje kao `scrollable-region-focusable`, i
+    // prijavio je 2026-09-08 na TRI ekrana odjednom cim je stol ozicen. Naziv je obavezan uz
+    // `role="region"`, inace citac ekrana najavi podrucje koje nema ime.
+    + '<div class="desk-doc" data-desk-doc tabindex="0" role="region" aria-label="Dokument">'
+    + '<p class="desk-doc__cekanje">Pripremam prikaz dokumenta…</p></div>'
     + deskPaneHtml(item, nav, repairAvailable, esc)
     + '</section>';
 }

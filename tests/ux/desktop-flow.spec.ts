@@ -76,11 +76,7 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await expect(page.locator('.dl-menu-btn')).toContainText('Preuzmi izvještaj');
   await expect(page.locator('#newAnalysis')).toContainText('Ponovno analiziraj');
 
-  // Ovaj dokument nema PAGE polje, pa nalaz o brojevima stranica MORA biti u panelu. Koji je od
-  // vise nalaza iste tezine prvi NIJE tvrdnja proizvoda: priorityRank izjednacuje sve 'error'
-  // nalaze, a remi lomi puki redoslijed emitiranja iz analize. Vezanje na .first() zato je lomilo
-  // gate cim bi analiza legitimno dodala jos jedan kriticni nalaz (ovdje: dokument nema ni sadrzaj).
-  await expect(page.locator('#resultCockpit')).toContainText('Nisu pronađeni automatski brojevi stranica');
+  // Tvrdnja o nalazu za brojeve stranica SELJENA je nize, na puni popis nalaza (vidi ondje).
   const firstFinding = page.locator('#resultCockpit article.cockpit-finding').first();
   const findingId = await firstFinding.getAttribute('data-finding-id');
   expect(findingId, 'kartica nalaza mora nositi stabilan data-finding-id').toBeTruthy();
@@ -115,6 +111,13 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await expect(page.locator('#issueFilters')).toContainText('Problemi dokumenta');
   await expect(page.locator('#issueFilters')).toContainText('Ograničenja analize');
   await expect(page.locator('#issueCountLabel')).toContainText('problema dokumenta');
+  // OVAJ DOKUMENT NEMA PAGE POLJE, pa nalaz o brojevima stranica MORA biti prijavljen. Tvrdnja
+  // je 2026-09-08 preseljena s `#resultCockpit` na puni popis, jer je korektorski stol zamijenio
+  // popis tri kartice i pokazuje JEDAN nalaz odjednom. Time je stara tvrdnja pocela mjeriti
+  // koji je nalaz slucajno prvi, a to nikad nije bila tvrdnja proizvoda: `priorityRank`
+  // izjednacuje sve `error` nalaze, pa remi lomi puki redoslijed emitiranja iz analize.
+  // Ovdje namjera vrijedi neovisno o tome sto stol trenutacno prikazuje.
+  await expect(page.locator('#issuesList')).toContainText('Nisu pronađeni automatski brojevi stranica');
   await page.locator('#issueFilters').getByRole('button', { name: 'Ograničenja analize' }).click();
   await expect(page.locator('#issuesList')).toContainText('Profil ograničeno terenski testiran');
 

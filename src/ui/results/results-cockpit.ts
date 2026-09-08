@@ -8,6 +8,8 @@ import type { DocumentDnaModel } from '../../results/document-dna-model';
 import { repairOutlookHtml } from './repair-outlook-view';
 import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
+import type { DeskItem } from './desk-model';
+import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
 
 export type ResultsRenderer = 'legacy' | 'cockpit';
 export type ResultsCockpitAction =
@@ -21,6 +23,16 @@ export type ResultsCockpitAction =
   | { kind: 'simulate-repair' }
   | { kind: 'repair-safe' };
 
+/**
+ * KOREKTORSKI STOL kao izvor. Ljuska NE zna kako se crta dokument: `mountDocument` joj se
+ * predaje, jer je faksimil tezak modul koji se ucitava lijeno, a ovaj bi ga uvoz povukao u
+ * graf ekrana rezultata.
+ */
+export interface ResultsCockpitDesk {
+  readonly items: readonly DeskItem<VisualFindingModel>[];
+  readonly mountDocument: (host: HTMLElement) => Promise<DeskDocument | null>;
+}
+
 export interface ResultsCockpitOptions {
   repairAvailable: boolean;
   /** DNA rada. Izostavljen kad rezultat nema mjerene odlomke; sekcija se tada ne crta. */
@@ -30,6 +42,8 @@ export interface ResultsCockpitOptions {
   advancedOpen?: boolean;
   onAction?: (action: ResultsCockpitAction) => void;
   onAdvancedToggle?: (open: boolean) => void;
+  /** Kad je prisutan i ima nalaza, stol zamjenjuje popis tri kartice. */
+  desk?: ResultsCockpitDesk;
 }
 
 type ResultsCockpitFindingAction = Extract<ResultsCockpitAction, { findingId: string }>;
@@ -81,6 +95,12 @@ export function resultRendererFor(doc: Document): ResultsRenderer {
 }
 
 export function renderResultsCockpit(mount: HTMLElement, model: VisualResultModel, options: ResultsCockpitOptions): void {
+  // Stari stol se odbacuje PRIJE nego `innerHTML` odnese njegov DOM: inace bi mu kasni
+  // `mountDocument` mogao razapeti slusace po elementima kojih vise nema.
+  const drzac = mount as HTMLElement & { _desk?: DeskHandle | null };
+  drzac._desk?.dispose();
+  drzac._desk = null;
+  const stol = options.desk && options.desk.items.length ? options.desk : null;
   const status = statusCopy(model);
   const action = primaryAction(model.findings.top, options.repairAvailable);
   const advancedOpen = options.advancedOpen === true;
@@ -105,8 +125,13 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
     action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '', '>', primaryButtonLabel(action), '</button>',
     '</div></div>',
-    '<section class="cockpit-priority" aria-labelledby="cockpitPriorityTitle"><div class="cockpit-section-heading"><span class="cockpit-kicker">Prvo pogledajte</span><h2 id="cockpitPriorityTitle">Najva\u017Eniji nalazi</h2></div>',
-    priorityFindingsHtml(model.findings.top, options.repairAvailable), '</section>',
+    // STOL ZAMJENJUJE POPIS, ne stoji uz njega. Tri kartice i stol odgovaraju na isto pitanje
+    // ("sto prvo"), pa bi jedno ispod drugoga bilo dvostruko citanje istih nalaza.
+    '<section class="cockpit-priority', stol ? ' cockpit-priority--stol' : '', '" aria-labelledby="cockpitPriorityTitle">',
+    '<div class="cockpit-section-heading"><span class="cockpit-kicker">', stol ? 'Korektorski stol' : 'Prvo pogledajte', '</span>',
+    '<h2 id="cockpitPriorityTitle">', stol ? 'Nalaz uz dokument' : 'Najva\u017Eniji nalazi', '</h2></div>',
+    stol ? '<div data-desk-host></div>' : priorityFindingsHtml(model.findings.top, options.repairAvailable),
+    '</section>',
     options.documentDna ? documentDnaHtml(options.documentDna) : '',
     options.repairOutlook ? repairOutlookHtml(options.repairOutlook) : '',
     categorySummaryHtml(model.categories),
@@ -120,6 +145,24 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   const raf = mount.ownerDocument.defaultView?.requestAnimationFrame;
   if (typeof raf === 'function') raf(() => { mount.dataset.entered = 'true'; });
   else mount.dataset.entered = 'true';
+
+  if (stol) {
+    const domacin = mount.querySelector<HTMLElement>('[data-desk-host]');
+    if (domacin) {
+      drzac._desk = mountDesk(domacin, {
+        items: stol.items,
+        repairAvailable: options.repairAvailable,
+        esc: escapeHtml,
+        // NA USKOM EKRANU SE DOKUMENT NE CRTA. Raspored 58/42 ondje nema smisla, pa ga CSS
+        // sakrije, a tada je `clientWidth` nula. Bez ove provjere bi se faksimil svejedno
+        // renderirao: desetci odlomaka u A4 listovima za posao koji nitko nece vidjeti, i to
+        // bas na uredaju s najmanje memorije. Odluka stoji OVDJE, a ne u `mountDesk`, jer je
+        // ovo mjesto koje zna za raspored; `mountDesk` ostaje cist i mjerljiv bez preglednika.
+        mountDocument: (host) => (host.clientWidth > 0 ? stol.mountDocument(host) : Promise.resolve(null)),
+        onAction: (action) => options.onAction?.(action),
+      });
+    }
+  }
 
   // DNA salje iste akcije kao kartice nalaza, pa ljuska ne mora znati odakle je klik dosao.
   bindDocumentDna(mount, (action) => options.onAction?.(action));

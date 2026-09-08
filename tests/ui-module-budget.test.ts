@@ -115,7 +115,31 @@ const BUDZET_APP = 357 * 1024;
 // ono sto ratchet primarno cuva.
 //
 // Izmjereno 858629 B; budzet 859136 B ostavlja 507 B, pa gard grize na sljedeci rast.
-const BUDZET_UI_UKUPNO = 839 * 1024;
+// 2026-09-08: 839 -> 846 KB za OZICENJE korektorskog stola, cime peta tocka vlasnikova pregleda
+// prvi put nesto pokazuje korisniku. Rast po dijelovima:
+//   +2,0 KB  `environment-signals.ts`: SELIDBA iz `app.ts` (motionReduced, withViewTransition,
+//            deviceMemoryGb, coarsePointer, isLikelyMobile, effectiveUploadCap). `app.ts` je time
+//            smrsavio 1438 B, sto je i bio uvjet: ratchet za probijen `app.ts` propisuje selidbu,
+//            ne dizanje. Klaster do tada nije imao NIJEDAN test, iako o njemu ovisi kada se mijenja
+//            ekran i koliki se dokument prima; sada ima 11.
+//   +1,5 KB  `results-cockpit.ts`: stol zamjenjuje popis tri kartice kad ima nalaza
+//   +1,2 KB  `app.ts`: predaja izvora stola (nalazi + zastavice + lijeni renderer dokumenta)
+//   +0,3 KB  `topFindings` postaje genericki, da pozivatelj ne gubi tip i ne vraca ga kastom
+//
+// I OVO DIZANJE NIJE NAPLACENO, drugo zaredom, i to se pise otvoreno umjesto da se zagladi.
+// Trazio sam cime platiti i nasao TRI modula u `src/ui` koje uvozi ISKLJUCIVO njihov vlastiti
+// test, ukupno oko 20 KB:
+//
+//     verification-console.ts   11,1 KB   pripada zasebnoj stranici (verification.html)
+//     triage-view.ts             5,2 KB   `#triagePanel` puni `findingCardHtml`, ne on
+//     source-cross-check-view.ts 3,7 KB   placena opt-in dopuna, nikad ozicena
+//
+// NIJEDAN NIJE OBRISAN. Za `triage-view` se ne da utvrditi je li NADIDJEN ili nikad spojen: on
+// prikazuje os POPRAVLJIVOSTI (auto/asistirano/rucno), koju kartica nalaza ne pokazuje, pa bi
+// brisanje moglo ukloniti namjeru, a ne mrtav kod. Ostala dva su jos jasnije tudja odluka.
+// Razlika prema `hero-demo`, koji JEST obrisan: ondje je bilo dokazano da mu selektori ne postoje
+// nigdje, dakle da ne moze raditi nista. Ovdje takav dokaz ne postoji, pa odluka ide vlasniku.
+const BUDZET_UI_UKUPNO = 846 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
