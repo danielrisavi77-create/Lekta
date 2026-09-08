@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
+import { cekajApp } from './app-ready';
 
 // FER diplomski, prazni odlomci: profil ima wired repair-map fixere (font/margine/prored/format
 // papira) + universal fixeri (toc-field/bibliography-repair/section-surgery/consistency-engine)
@@ -54,6 +55,7 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     await odbij.click();
     await expect(page.locator('#consentBanner')).toBeHidden();
   }
+  await cekajApp(page);
   // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
   // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.

@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
+import { cekajApp } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -57,6 +58,7 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
     expect(await page.evaluate(() => typeof Worker), 'Worker mora doista biti ugasen').toBe('undefined');
   }
 
+  await cekajApp(page);
   // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
   // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.

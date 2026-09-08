@@ -2404,6 +2404,8 @@ export function initAnalyzerApp(doc: Document=document): void{
   initLegacy(doc,controller.signal);
   _analyzerMounted=true;
   _mountedDocuments.add(doc);
+  // Spremnost je OPAZIVA; ugovor: `tests/ux/app-ready.ts`. Tek poslije uspjesne montaze.
+  doc.documentElement.dataset.lektaReady='1';
  }catch(error){
   // Neuspjela montaza ne smije ostaviti pola stanja: sljedeci poziv mora moci pokusati ponovno.
   controller.abort();
@@ -2427,6 +2429,7 @@ export function disposeAnalyzerApp(doc: Document=document): void{
  controller.abort();
  _mountAbortControllers.delete(doc);
  _mountedDocuments.delete(doc);
+ delete doc.documentElement.dataset.lektaReady; // odmontiran ne tvrdi da je spreman
  if(_runtimeDocument===doc){_runtimeDocument=null;_analyzerMounted=false}
 }
 

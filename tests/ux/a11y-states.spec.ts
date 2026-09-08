@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type BrowserContext, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
+import { cekajApp } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -90,6 +91,7 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   test.skip(!!isMobile, 'mobilni prolaz jos nije izmjeren zelenim');
   test.setTimeout(600_000);
 
+  await cekajApp(page);
   // Landing drzi obrazac skrivenim do prve interakcije, pa se bez ovog klika `#stepToAnalyze`
   // nikad ne prikaze (`data-step` postane 2, ali je traka nevidljiva).
   // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je

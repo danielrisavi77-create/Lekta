@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { FREE_TOOL_PAGES } from './free-tools-pages';
+import { cekajApp } from './app-ready';
 
 for (const pageSpec of FREE_TOOL_PAGES) {
   test(`${pageSpec.name}: ima jasnu glavnu zonu i primarnu akciju`, async ({ page }) => {
@@ -568,6 +569,7 @@ for (const [sirina, visina] of [[360, 667], [393, 727], [393, 900], [430, 844]] 
     await page.setViewportSize({ width: sirina, height: visina });
     await page.goto('/rad/');
     await page.waitForSelector('#consentBanner:not(.hidden)');
+    await cekajApp(page);
     // STVARNA datoteka, ne podmetnuta klasa: `has-file` ne prikazuje `#selectedFile` ni ne skriva
     // `#dropEmpty`, pa daje raspored koji nijedan korisnik ne vidi (izmjereno: preklop 0 umjesto 70 px).
     await page.setInputFiles('#fileInput', 'tests/fixtures/docx/fer-diplomski-puna-struktura.docx');

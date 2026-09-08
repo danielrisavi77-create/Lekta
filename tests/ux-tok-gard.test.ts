@@ -3,7 +3,15 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /**
- * GARD NAD OBLIKOM POTVRDE PROFILA U UX SPECOVIMA.
+ * GARD NAD REDOSLIJEDOM U UX SPECOVIMA: cekaj, ne pogadjaj.
+ *
+ * Dva ugovora, isti razred kvara. Oba su UTRKE koje ne padaju nego se TIHO PRESKOCE, pa kvar
+ * uvijek stigne nekoliko redaka kasnije i izgleda kao neka treca stvar:
+ *
+ *   POTVRDA PROFILA   ocitanje umjesto cekanja  ->  analiza ne krene, pada `#resultView`
+ *   SPREMNOST APLIKACIJE  upload prije `bind()` ->  `change` se izgubi, pada `data-step`
+ *
+ * PRVI UGOVOR: POTVRDA PROFILA.
  *
  * Zasto postoji: ista utrka je srusila gate DVAPUT, na dva razlicita spec-a, s istim potpisom.
  *
@@ -33,6 +41,7 @@ import { describe, expect, it } from 'vitest';
  */
 const UX = path.resolve(__dirname, 'ux');
 const POMOCNIK = 'potvrdiProfil';
+const SPREMNOST = 'cekajApp';
 
 function citaj(ime: string): string {
   return readFileSync(path.join(UX, ime), 'utf8').split('\r\n').join('\n');
@@ -72,6 +81,11 @@ export function prigovori(ime: string, src: string): string[] {
   if (pokrece && cekaIshod && !kod.includes(POMOCNIK)) {
     nalazi.push(`${ime}: klika #analyzeBtn i ceka ishod, ali ne zove ${POMOCNIK}()`);
   }
+  // DRUGI UGOVOR: `#fileInput` postoji u statickom HTML-u, pa ga Playwright popuni i prije nego
+  // aplikacija veze slusace. Taj `change` nema tko primiti i gubi se ZAUVIJEK.
+  if (kod.includes('setInputFiles') && !kod.includes(SPREMNOST)) {
+    nalazi.push(`${ime}: postavlja datoteku bez ${SPREMNOST}(); upload prije bind() gubi dogadjaj`);
+  }
   return nalazi;
 }
 
@@ -92,6 +106,32 @@ describe('potvrda profila u UX specovima', () => {
     expect(kod).toContain('toBeVisible');
     expect(kod).not.toContain('isVisible');
     expect(kod).toContain(`export async function ${POMOCNIK}`);
+  });
+
+  it('pomocnik spremnosti CEKA marker koji postavlja montaza', () => {
+    const kod = bezKomentara(citaj('app-ready.ts'));
+    expect(kod).toContain('data-lekta-ready');
+    expect(kod).toContain('toHaveAttribute');
+    expect(kod).toContain(`export async function ${SPREMNOST}`);
+  });
+
+  it('MUTACIJA: upload bez cekanja na spremnost se prijavi', () => {
+    const bezCekanja = [
+      "  await page.goto('/rad/');",
+      "  await page.locator('#fileInput').setInputFiles(fixture);",
+    ].join('\n');
+    const nalazi = prigovori('podmetnut4.spec.ts', bezCekanja);
+    expect(nalazi).toHaveLength(1);
+    expect(nalazi[0]).toContain('bez cekajApp');
+  });
+
+  it('KONTROLA: upload uz cekanje ne proizvodi prigovor', () => {
+    const dobar = [
+      "  await page.goto('/rad/');",
+      '  await cekajApp(page);',
+      "  await page.locator('#fileInput').setInputFiles(fixture);",
+    ].join('\n');
+    expect(prigovori('dobar2.spec.ts', dobar)).toEqual([]);
   });
 
   it('MUTACIJA: vraceni stari oblik se prijavi', () => {
