@@ -693,24 +693,7 @@ export function headingStructureRepairableItem(result: any, profile: any): Repai
     fixerId: 'heading-style-fixer',
     label: 'Ručno oblikovani naslovi: primijeni Heading stilove',
     params: { targets, options: { pageBreakLevels, ...(numbering ? { numbering } : {}) } },
-    /**
-     * PREDODABRAN SAMO AKO IMA STO ODABRATI (2026-09-08).
-     *
-     * Cuvar na vrhu funkcije odustaje kad su SIROVI popisi prazni, ali ne gleda je li isto STO
-     * odabrano: kad kandidat postoji a nijedan nije `selectedByDefault`, `targets` je prazan niz,
-     * a stavka je svejedno isla kao `violated: true`. `buildDefaultRepairRequests` je onda
-     * (po pravilu `violated !== false`) slao zahtjev BEZ IJEDNE METE, a `applyFixers` ga je
-     * ispravno odbijao s `invalid-params`.
-     *
-     * IZMJERENO nad commitanim korpusom: cetiri dokumenta (ffzg--graduate--uskladjen,
-     * fpzg--final--uskladjen, fsb--article--neuredan, fsb--article--uskladjen), svaki s tocno
-     * jednim kandidatom i nula odabranih. `invalid-params` znaci "poziv je sastavio los zahtjev",
-     * pa je to bio NAS kvar, ne kvar fixera.
-     *
-     * Stavka se NE uklanja, jer je `heading-style-fixer` asistiran: sucelje i dalje prikazuje
-     * kandidate i korisnik ih moze odabrati rucno. `violated: false` je tocno oblik koji ovaj
-     * modul vec koristi za opt-in stavke, pa se semantika ne siri.
-     */
+    // Prazan `targets` je slao zahtjev bez mete (`invalid-params`); tests/repair-net.test.ts.
     violated: targets.length > 0,
     matchKeys: ['Uporaba Word stilova naslova', 'Hijerarhija naslova'],
     headingCandidates: candidates,
