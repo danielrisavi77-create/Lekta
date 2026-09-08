@@ -8,9 +8,14 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
 
 test('desktop upload progresses when the native transition snapshot stalls', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.addInitScript(() => {
+    const timings: { started: number; completed?: number; skipped: boolean }[] = [];
+    (window as unknown as { __stalledTransitions: typeof timings }).__stalledTransitions = timings;
     // Reproduce the CI trace: snapshot acquisition holds the callback for five seconds.
     document.startViewTransition = ((update: () => void) => {
+      const timing = { started: performance.now(), completed: undefined as number | undefined, skipped: false };
+      timings.push(timing);
       let finish!: () => void;
       let rejectReady!: (reason: Error) => void;
       const finished = new Promise<void>((resolve) => { finish = resolve; });
@@ -20,18 +25,30 @@ test('desktop upload progresses when the native transition snapshot stalls', asy
         if (done) return;
         done = true;
         update();
+        timing.completed = performance.now();
         rejectReady(new Error('snapshot skipped'));
         finish();
       };
       const timer = setTimeout(run, 5000);
       return { ready, finished, updateCallbackDone: finished,
-        skipTransition: () => { clearTimeout(timer); setTimeout(run, 0); } };
+        skipTransition: () => { timing.skipped = true; clearTimeout(timer); setTimeout(run, 0); } };
     }) as typeof document.startViewTransition;
   });
   await page.goto('/rad/');
   await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(fixture);
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2', { timeout: 2000 });
+  await cekajKorak(page, '2');
+  // Mjeri sam prijelaz u pregledniku, ne parsiranje dokumenta i Playwright transport.
+  // CI trag 34260994901: korak 2 je vec nastao, a vanjsko cekanje od 2 s ipak je isteklo.
+  const timings = await page.evaluate(() => (window as unknown as {
+    __stalledTransitions: { started: number; completed?: number; skipped: boolean }[];
+  }).__stalledTransitions);
+  expect(timings.length, 'test mora stvarno pokrenuti namjerno zaglavljen prijelaz').toBeGreaterThan(0);
+  for (const timing of timings) {
+    expect(timing.skipped, 'zastita mora preskociti zaglavljeni snapshot').toBe(true);
+    expect(timing.completed).toBeDefined();
+    expect(timing.completed! - timing.started).toBeLessThan(2000);
+  }
   await expect(page.locator('#analyzeBtn')).toBeVisible();
   await expect(page.locator('html')).not.toHaveClass(/vt-local/);
 });
