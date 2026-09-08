@@ -5,6 +5,35 @@ import { confirmAnalysisWhenReady } from './analysis-confirmation';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
+test('desktop upload progresses when the native transition snapshot stalls', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.addInitScript(() => {
+    // Reproduce the CI trace: snapshot acquisition holds the callback for five seconds.
+    document.startViewTransition = ((update: () => void) => {
+      let finish!: () => void;
+      let rejectReady!: (reason: Error) => void;
+      const finished = new Promise<void>((resolve) => { finish = resolve; });
+      const ready = new Promise<void>((_, reject) => { rejectReady = reject; });
+      let done = false;
+      const run = () => {
+        if (done) return;
+        done = true;
+        update();
+        rejectReady(new Error('snapshot skipped'));
+        finish();
+      };
+      const timer = setTimeout(run, 5000);
+      return { ready, finished, updateCallbackDone: finished,
+        skipTransition: () => { clearTimeout(timer); setTimeout(run, 0); } };
+    }) as typeof document.startViewTransition;
+  });
+  await page.goto('/rad/');
+  await page.locator('#fileInput').setInputFiles(fixture);
+  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2', { timeout: 2000 });
+  await expect(page.locator('#analyzeBtn')).toBeVisible();
+  await expect(page.locator('html')).not.toHaveClass(/vt-local/);
+});
+
 // CI WebKit ponekad ostane na koraku 1; biljezi samo stanje prikaza, bez sadrzaja dokumenta.
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {

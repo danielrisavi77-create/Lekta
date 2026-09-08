@@ -4,6 +4,7 @@ import { guaranteeAppliesToStatus, guaranteeStatusNote } from '../report/guarant
 import { escapeHtml, safeHref, clamp, fmt, normalize, els, first, textOf, reframeStatusNote } from '../utils/helpers';
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 import { createAnimationRegistry } from '../shared/animation-registry';
+import { withViewTransition } from '../shared/view-transition';
 // BL-P0-05-4: DOCX parser se koristi tek nakon odabira datoteke (metapodaci, detekcija konteksta),
 // pa se uvozi LIJENO (dinamicki import) u tim funkcijama; njegov kod ispada iz glavnog landing chunka.
 import { makeCheck, issue, scoreMeta } from '../scoring/checks';
@@ -1491,11 +1492,6 @@ function celebrateReady(r: any){
 // Animacije ekrana rezultata (count-up, ring sweep, punjenje traka). Sve ima instant-fallback
 // na prefers-reduced-motion ili ako Motion nije dostupan; vrijednosti su uvijek tocne.
 function motionReduced(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)}
-// Lokalni View Transition: glatki morph pri swapu analyzer viewova i koraka wizarda. Fallback na
-// obicnu mutaciju bez podrske ili uz reduced-motion. .vt-local (na <html>) gasi root fade i imenuje
-// analyzer viewove (motion.css). mutate MORA biti sinkron (renderResult jest) da novi snapshot
-// uhvati dovrsen DOM. Sekvencijalni pozivi su ok; VT se ne preklapaju (novi preskoci stari).
-function withViewTransition(mutate: any){const d: any=document;if(motionReduced()||typeof d.startViewTransition!=='function'){mutate();return}const root=document.documentElement;root.classList.add('vt-local');try{const t=d.startViewTransition(()=>mutate());t.ready&&t.ready.catch(()=>{});t.finished.catch(()=>{}).finally(()=>root.classList.remove('vt-local'))}catch(e: any){root.classList.remove('vt-local');mutate()}}
 // Mobilno-svjestan limit velicine (P1 6, BL-P0-05-7): docx do 50 MB dekomprimira do ~200 MB po
 // zapisu, sto na slabijem mobitelu moze premasiti memoriju taba prije nego capovi parsera reagiraju.
 // Granice su izvucene u cistu, testabilnu jezgru (src/analysis/memory-budget.ts); ovdje samo citamo
