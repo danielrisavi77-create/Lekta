@@ -81,3 +81,9 @@ jobs:
 
       - name: Sabirnica klijentskih gresaka (P1-28)
         run: psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql
+
+      - name: Mutacija autoriteta brisanja agent payloadova
+        run: bash scripts/agent-payload-cleanup-mutation-check.sh
+
+      - name: Autoritet i oporavak brisanja agent payloadova
+        run: psql -v ON_ERROR_STOP=1 -f scripts/agent-payload-cleanup-smoke.sql
