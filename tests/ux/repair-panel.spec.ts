@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
-import { confirmAnalysisWhenReady } from './analysis-confirmation';
+import { potvrdiProfil } from './confirm-profile';
+import { cekajApp, cekajKorak } from './app-ready';
 
 // FER diplomski, prazni odlomci: profil ima wired repair-map fixere (font/margine/prored/format
 // papira) + universal fixeri (toc-field/bibliography-repair/section-surgery/consistency-engine)
@@ -54,6 +55,7 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     await odbij.click();
     await expect(page.locator('#consentBanner')).toBeHidden();
   }
+  await cekajApp(page);
   // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
   // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
@@ -61,17 +63,15 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   // Tok se razlikuje po sirini i to NIJE detalj testa: na uskom zaslonu carobnjak staje na koraku
   // 1 uz sticky CTA "Nastavi na profil", dok desktop odmah skoci na korak 2. Zato se ovdje ne
   // pretpostavlja korak nego se procita.
-  const wizard = page.locator('#wizardView');
-  if ((await wizard.getAttribute('data-step')) === '1') {
-    await page.locator('#stepToProfile').click();
-  }
-  await expect(wizard).toHaveAttribute('data-step', '2');
+  // Vidi `app-ready.ts`: korak 2 dolazi sam, a uvjetni klik je bio utrka nad trenutacnim
+  // ocitanjem, koja je znala pogoditi gumb sakriven u medjuvremenu.
+  await cekajKorak(page, '2');
   // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
   await page.locator('#analyzeBtn').click();
-  await confirmAnalysisWhenReady(page);
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   // Redizajn "Results Cockpit" seli SVE iza `#resultCockpit` u sklopljeni blok "Napredna
   // provjera" (`ensureResultsCockpitAdvancedShell`), pa su ondje i kartice i stari tabovi.

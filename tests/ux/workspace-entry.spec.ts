@@ -1,5 +1,7 @@
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
+import { potvrdiProfil } from './confirm-profile';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -41,11 +43,12 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
    * stigao zavrsiti boot. `expect(locator)` ponavlja dok ne istekne, pa mjeri stanje a ne trenutak.
    */
   await page.goto('/rad/');
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   // Korak 2 dolazi SAM kad je detekcija pouzdana (`isConfidentDetection`), bez klika na
   // "Nastavi na profil". To je i smisao "nula do jedan tap": kad je studij prepoznat iz
   // dokumenta, korisniku preostaje samo potvrda.
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
 
   // Kartica je ekran: vidi se profil i obje akcije.
   // Duzi rok NIJE skrivanje sporosti: kartica se crta u `updateProfile`, koji CEKA pravila
@@ -86,6 +89,7 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   // nesto ucitano. Ovo je stanje korisnika koji dodje izravno na `/rad/`.
   await expect(page.locator('#radDocBar')).toBeHidden();
 
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#radDocBar')).toBeVisible();
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
@@ -94,7 +98,7 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
   // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav
   // pisac, razisla bi se s njima cim se koji pogled preskoci.
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
 });
 
@@ -116,6 +120,7 @@ test('/rad/ zaglavlje: dugo ime datoteke se skracuje, a ne gura kontrole s ekran
    */
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/rad/');
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles({
     name: 'Diplomski rad - konacna verzija - nakon mentora - ispravljeno - za predaju.docx',
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -148,6 +153,7 @@ test('/rad/ zaglavlje: preziviljava obnovu sesije, jer se pretplacuje prije nje'
    * a pomak iza `restoreDocument` ga obara. Tvrdnja bez te druge mutacije bila bi vakuumska.
    */
   await page.goto('/rad/');
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#radDocBar')).toBeVisible();
   // Sesija je zapisana tek kad se fragment pojavi u URL-u; bez tog cekanja bi ponovno ucitavanje
@@ -175,6 +181,7 @@ test('/rad/ list profila: zamka fokusa, izlaz tipkovnicom i povratak fokusa', as
    * `<main>`, i tvrdnja to mjeri izravno.
    */
   await page.goto('/rad/');
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
 
@@ -273,14 +280,15 @@ test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', asy
   await page.goto('/rad/');
   expect(await jedan('na dolasku')).toBe('wizardView');
 
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
   expect(await jedan('poslije uploada')).toBe('wizardView');
 
   // Pokretanje: analiza pa nalaz. Potvrda je primarna akcija od spajanja koraka 2 i 3.
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
   await jedan('s karticom potvrde');
-  await page.locator('[data-confirm-profile]').click();
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
   expect(await jedan('na nalazu')).toBe('resultView');
 
@@ -305,9 +313,10 @@ test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', 
    * prikaza, ne pojedini element, jer bi provjera po ID-u prosla cim se broj preseli drugamo.
    */
   await page.goto('/rad/');
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
-  await page.locator('[data-confirm-profile]').click();
+  await potvrdiProfil(page);
 
   const pv = page.locator('#progressView');
   await expect(pv).toBeVisible({ timeout: 15_000 });
@@ -355,9 +364,10 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
    * bilo. Tvrdnja o "izgleda sporedno" bez brojke ne vrijedi nista.
    */
   await page.goto('/rad/');
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
-  await page.locator('[data-confirm-profile]').click();
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
 
   const sazetak = page.locator('[data-finding-summary]');
@@ -382,6 +392,23 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
 
   expect(m.naslovPx, 'sazetak mora biti VECI od ocjene').toBeGreaterThan(m.ocjenaPx);
   expect(m.naslovPx / m.ocjenaPx, 'ocjena je opet preuzela autoritet').toBeGreaterThanOrEqual(1.25);
+
+  // OMJER SE MJERI NA VISE SIRINA, i to je nauceno kad je CI (mobile-chromium) oborio prvu
+  // izvedbu ovog testa: naslov je bio `clamp`, ocjena FIKSNA, pa je ispod 828 px ocjena opet
+  // bila veca (izmjereno 390 px: 23,2 naspram 27,2). Test koji mjeri samo zatecenu sirinu
+  // projekta ne vidi raspon u kojem se odnos obrce, a bas ondje je zivio kvar.
+  for (const w of [390, 700, 1024]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    const omjer = await page.evaluate(() => {
+      const px = (s: string) => {
+        const e = document.querySelector(s);
+        return e ? parseFloat(getComputedStyle(e).fontSize) : 0;
+      };
+      return px('.fsum-naslov') / px('.fsum-ocjena b');
+    });
+    expect(omjer, `na ${w} px ocjena nadjacava sazetak (omjer ${omjer.toFixed(2)})`)
+      .toBeGreaterThanOrEqual(1.25);
+  }
   expect(m.halo, 'tamni mjerac s halom se vratio').toBe(0);
   // Razine su particija po ozbiljnosti: moraju se zbrojiti u broj iz naslova. Ako se ikad u taj
   // stupac uvuce redak s druge osi (npr. automatski popravci), ova tvrdnja pada.

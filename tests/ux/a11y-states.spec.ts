@@ -1,7 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type BrowserContext, type Page } from '@playwright/test';
 import path from 'node:path';
-import { confirmAnalysisWhenReady } from './analysis-confirmation';
+import { potvrdiProfil } from './confirm-profile';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -90,6 +91,7 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   test.skip(!!isMobile, 'mobilni prolaz jos nije izmjeren zelenim');
   test.setTimeout(600_000);
 
+  await cekajApp(page);
   // Landing drzi obrazac skrivenim do prve interakcije, pa se bez ovog klika `#stepToAnalyze`
   // nikad ne prikaze (`data-step` postane 2, ali je traka nevidljiva).
   // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
@@ -97,11 +99,13 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   const wizard = page.locator('#wizardView');
+  // Skeniranje koraka 1 ostaje OPORTUNISTICKO (to je prolazno stanje, jer korak 2 dolazi sam),
+  // ali klik odlazi: bio je utrka nad trenutacnim ocitanjem i znao je pogoditi gumb koji je
+  // carobnjak vec sakrio. Propusteno skeniranje nista ne kvari; promasen klik kvari.
   if ((await wizard.getAttribute('data-step')) === '1') {
     nalazi.push(...(await skeniraj(page, 'carobnjak 1 (dokument odabran)')));
-    await page.locator('#stepToProfile').click();
   }
-  await expect(wizard).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
   nalazi.push(...(await skeniraj(page, 'carobnjak 2 (profil)')));
 
   // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
@@ -111,7 +115,7 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   // (gumb za pokretanje) skenira se gore, u sklopu koraka 2.
 
   await page.locator('#analyzeBtn').click();
-  await confirmAnalysisWhenReady(page);
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
   nalazi.push(...(await skeniraj(page, 'rezultat')));
 

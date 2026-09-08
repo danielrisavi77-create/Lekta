@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 import { confirmAnalysisWhenReady } from './analysis-confirmation';
+import { cekajApp } from './app-ready';
 
 test('potvrda profila ceka zavrsetak odgodenog dohvata pravila', async ({ page }) => {
   let releaseRules!: () => void;
@@ -14,11 +15,12 @@ test('potvrda profila ceka zavrsetak odgodenog dohvata pravila', async ({ page }
   try {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/rad/', { waitUntil: 'domcontentloaded' });
+    await cekajApp(page);
     await page.locator('#fileInput').setInputFiles(path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx'));
     await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
     await page.locator('#analyzeBtn').click();
     await expect.poll(() => heldRequests).toBeGreaterThan(0);
-    expect(await page.locator('[data-confirm-profile]').isVisible()).toBe(false);
+    await expect(page.locator('[data-confirm-profile]')).toBeHidden();
     // Pokreni cekanje dok potvrda jos ne postoji, zatim dovrsi stvarni lokalni dohvat.
     const confirmation = confirmAnalysisWhenReady(page);
     releaseRules();

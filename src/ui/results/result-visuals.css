@@ -862,9 +862,18 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 }
 /* OCJENA MORA BITI MANJA OD NASLOVA, i to se mjeri a ne procjenjuje. Prva izvedba je imala
  * naslov 30,4 px i ocjenu 38,4 px: izgledala je sporedno jer je naslov dug redak a ocjena jedna
- * brojka, ali po velicini fonta je i dalje pobjedivala. Gard cuva OMJER, ne izgled. */
+ * brojka, ali po velicini fonta je i dalje pobjedivala. Gard cuva OMJER, ne izgled.
+ *
+ * ZATIM JE CI (mobile-chromium) UHVATIO da isti kvar zivi ispod 828 px: naslov ondje pada na
+ * minimum svog `clamp`, a ocjena je bila FIKSNA. Izmjereno 390 px 23,2/27,2 i 700 px 23,2/27,2,
+ * dakle cijeli raspon, ne samo mobitel.
+ *
+ * KORIJEN NIJE BILA BROJKA NEGO ODNOS: dvije velicine bile su dva neovisna `font-size`, pa je
+ * svaka promjena jedne trazila da netko provjeri drugu. Sada dijele OBLIK `clamp`-a s istim
+ * omjerom (2,15/1,5 = 2,8/1,95 = 1,45/1,0 ~ 1,43), pa odnos vrijedi po konstrukciji. */
 .fsum-ocjena b {
-  font-family: var(--display-serif, Georgia, serif); font-weight: 500; font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-family: var(--display-serif, Georgia, serif); font-weight: 500;
+  font-size: clamp(1rem, 1.95vw, 1.5rem);
   line-height: 1; font-variant-numeric: tabular-nums; color: var(--paper-ink, #23201B);
 }
 .fsum-ocjena span { font: 400 13px/1 var(--ui, system-ui); color: var(--paper-muted, #6E6558); margin-top: 2px }
@@ -882,6 +891,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
     border-top: 1px solid var(--paper-line, #E0D8C8);
     grid-template-columns: auto auto 1fr; align-items: baseline; gap: 7px;
   }
+  /* Bez fiksne velicine: `clamp` iznad drzi omjer i ovdje. Fiksna vrijednost JE bila kvar. */
   .fsum-ocjena small { margin-top: 0 }
 }
 
@@ -899,3 +909,65 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .cockpit-verdict[data-verdict='warn'] { color: var(--warn, #A9741B) }
 .cockpit-verdict[data-verdict='ok'] { color: var(--pass, #2E8B5F) }
 .cockpit-hero--sazetak .fsum { width: 100% }
+
+/* ==========================================================================
+   KOREKTORSKI STOL
+   Brif vlasnika (2026-09-08): "Digitalni korektor koji sjedi uz tvoj Word."
+   Dokument lijevo, jedan nalaz desno, klik u oba smjera.
+
+   OMJER 58/42 DOLAZI IZ SPECIFIKACIJE, ne iz oka. Dokument dobiva vise, jer je on ono sto
+   korisnik prepoznaje kao svoj rad; nalaz treba tocno onoliko sirine koliko trazi citljiv redak.
+   `minmax(0, ...)` je nuzan na OBA stupca: bez njega grid stavka ne smije ispod svoje
+   min-content sirine, pa dugi naslov nalaza ili siroka tablica u faksimilu razvuku cijeli
+   raspored i izguraju desni stupac s ekrana. Isti razred kvara vec je uhvacen na `.rad-doc`.
+   ========================================================================== */
+.desk { display: grid; grid-template-columns: minmax(0, 58fr) minmax(0, 42fr); gap: 1.1rem; align-items: start; }
+
+/* Dokument je PLOHA, ne kartica: bijeli list na tamnijoj podlozi, s vlastitim skrolom, pa
+   navigacija po nalazima ne pomice cijelu stranicu. Visina je vezana uz viewport jer stol mora
+   stati na ekran; inace bi "sljedeci problem" trazio skrolanje prije nego se vidi rezultat. */
+.desk-doc {
+  position: sticky; top: 1rem;
+  max-height: min(78vh, 900px); overflow: auto;
+  border: 1px solid var(--ck-line); border-radius: 10px;
+  background: var(--ck-paper, #fff); padding: .8rem;
+}
+.desk-doc__cekanje { margin: 0; padding: 2rem 1rem; text-align: center; color: var(--ck-muted); font-size: .9rem; }
+
+/* AKTIVNO MJESTO. Oznaka je na dokumentu, ne na kartici, jer dokument odgovara na "gdje".
+   Obris umjesto ispune: ispuna bi pojela sam tekst rada, a upravo njega korisnik cita. */
+.lekta-facsimile [data-desk-active] {
+  outline: 2px solid var(--ck-accent, #c8102e); outline-offset: 2px;
+  border-radius: 3px; scroll-margin: 2rem;
+}
+
+.desk-pane { display: grid; gap: .7rem; min-width: 0; }
+.desk-traka {
+  margin: 0; padding: .5rem .7rem; border-radius: 8px;
+  background: var(--ck-soft, rgba(0, 0, 0, .04)); color: var(--ck-muted);
+  font-size: .85rem; line-height: 1.4;
+}
+.desk-prazno { margin: 0; padding: 1.5rem; text-align: center; color: var(--ck-muted); }
+
+.desk-nav { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.desk-nav__count { font-variant-numeric: tabular-nums; color: var(--ck-muted); font-size: .9rem; }
+.desk-nav__btn {
+  border: 1px solid var(--ck-line); background: transparent; color: inherit;
+  border-radius: 8px; padding: .45rem .8rem; font: inherit; cursor: pointer;
+}
+.desk-nav__btn:hover:not(:disabled) { border-color: var(--ck-ink); }
+/* Ugasen gumb je KRAJ POPISA, ne kvar: navigacija namjerno ne omata, pa se vidi da si gotov.
+   Ostaje citljiv (ne prigusuje se u sivilo), jer prigusen `<button>` je uvijek kvar. */
+.desk-nav__btn:disabled { cursor: default; opacity: .45; }
+
+/* USKO: dokument se NE crta. Raspored 58/42 na 390 px nema smisla, a `mountDesk` cita
+   `clientWidth`, pa `display:none` ovdje ujedno znaci da se faksimil nikad ni ne renderira.
+   Prag je 900 px: ispod njega dokument dobiva manje od 520 px, sto je uze od A4 stranice. */
+@media (max-width: 900px) {
+  .desk { grid-template-columns: minmax(0, 1fr); }
+  .desk-doc { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lekta-facsimile [data-desk-active] { scroll-margin: 0; }
+}

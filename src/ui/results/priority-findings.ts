@@ -13,6 +13,9 @@ function severityLabel(severity: VisualFindingModel['severity']): string {
 function scopeLabel(scope: FindingScope): string {
   if (scope.kind === 'anchor') return scope.footnoteId != null ? 'Bilje\u0161ka ' + scope.footnoteId : 'Odlomak ' + scope.paragraphIndex;
   if (scope.kind === 'document') return 'Cijeli dokument';
+  // `region` je izmedju sidra i neznanja: znamo PODRUCJE, ne odlomak. Veliko pocetno slovo jer je
+  // ovo oznaka u kartici, a ne recenica.
+  if (scope.kind === 'region') return scope.label.charAt(0).toUpperCase() + scope.label.slice(1);
   return scope.reason;
 }
 function recommendation(finding: VisualFindingModel, repairAvailable: boolean): string {
