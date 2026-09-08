@@ -92,12 +92,30 @@ const BUDZET_APP = 357 * 1024;
 //               Sama mapa NIJE ovdje (zivi u `src/scoring`, uz registar koji tumaci); ostatak
 //               je `region` grana u `finding-view-model.ts` i `priority-findings.ts`.
 //
-// DUG NAPLACEN ISTOG DANA:  (8,6 KB) je obrisan. Bio je MRTAV: trazio je
-//  i , kojih nema ni u  ni u , pa je
-//  odmah izlazio, a oba produkcijska ulaza su ga svejedno uvozila. Prototip ima
-// vlastiti  i  i nikad ga nije koristio. Zato ovo dizanje NIJE potrosen prostor:
-// brisanje je vratilo vise nego sto je cetvrto dizanje uzelo.
-const BUDZET_UI_UKUPNO = 831 * 1024;
+// DUG NAPLACEN ISTOG DANA: `src/ui/hero-demo.ts` (8,6 KB) je obrisan. Bio je MRTAV: trazio je
+// `.hero-demo` i `#heroReplay`, kojih nema ni u `index.html` ni u `rad/index.html`, pa je
+// odmah izlazio, a oba produkcijska ulaza su ga svejedno uvozila. Prototip ima vlastiti
+// `analyzer-hero-demo.ts` i `.css` i nikad ga nije koristio. Zato ono dizanje NIJE potrosen
+// prostor: brisanje je vratilo vise nego sto je cetvrto dizanje uzelo.
+//
+// (Taj je zapis 2026-09-07 bio OSTECEN: svi nazivi u kosim navodnicima su nestali, pa je recenica
+// glasila "DUG NAPLACEN ISTOG DANA:  (8,6 KB) je obrisan". Uzrok je poznat razred iz ovog
+// repozitorija: backtick unutar template literala u alatu kojim je komentar pisan. Vraceno
+// 2026-09-08, iz istog izvora iz kojeg je i napisan.)
+//
+// 2026-09-08: 831 -> 839 KB za KOREKTORSKI STOL, drugu polovicu pete tocke vlasnikova pregleda
+// ("Digitalni korektor koji sjedi uz tvoj Word"). Dva nova modula u `src/ui/results/`:
+//   `desk-view.ts`   5,2 KB  jedan nalaz odjednom, traka o opsegu, navigacija koja NE omata
+//   `desk-mount.ts`  7,2 KB  ozicenje oba smjera klika, delegacija koja prezivi ponovno crtanje
+//
+// OVO DIZANJE NIJE NAPLACENO, i to se pise doslovno da se ne bi citalo kao da jest. Prethodna
+// cetiri kruga su svaki put nasla mrtav kod ili selidbu koja vrati vise nego sto uzme; ovdje
+// takvog duga nije bilo. Rast je nova funkcionalnost koju je vlasnik trazio, mjerena bez
+// preglednika (28 testova), a ne rast monolita: `app.ts` je i dalje ispod svog budzeta, sto je
+// ono sto ratchet primarno cuva.
+//
+// Izmjereno 858629 B; budzet 859136 B ostavlja 507 B, pa gard grize na sljedeci rast.
+const BUDZET_UI_UKUPNO = 839 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
