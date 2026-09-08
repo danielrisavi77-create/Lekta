@@ -1,0 +1,19 @@
+{
+  "naziv": "fpzg-seminarski",
+  "opis": "FPZG seminarski od plana do predaje, full_auto, testna tema. Profil iz registryja (fpzg), autor-godina. Očekuje se cijeli lanac plan → pisanje → audit → predaja; audit se smije vratiti na plan najviše 3x.",
+  "args": {
+    "tip": "seminarski",
+    "tema": "[TEST] Digitalna transformacija visokog obrazovanja u Hrvatskoj",
+    "fakultet": "fpzg",
+    "faza": "plan",
+    "empirijski": false,
+    "full_auto": true,
+    "rok": "2026-10-05"
+  },
+  "ocekivano": {
+    "status": ["zavrseno", "ceka_autora"],
+    "artefakti_moraju_postojati": [".katedra/stanje.json", ".katedra/plan.json", ".katedra/gate.json", ".katedra/napredak.json"],
+    "min_faza_dovrseno": ["plan", "pisanje", "audit"],
+    "max_iteracija": 12
+  }
+}

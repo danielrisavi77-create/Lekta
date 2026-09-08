@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://katedra.local/schemas/agent-decision-v1.json",
+  "title": "Katedra agent architecture decision",
+  "type": "object",
+  "required": ["schema_version", "approved", "decision", "reasons", "agent_count"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "policy_id": {"type": "string"},
+    "approved": {"type": "boolean"},
+    "decision": {"enum": ["single_orchestrator", "approve_agentic", "reject_agentic"]},
+    "reasons": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "agent_count": {"type": "integer", "minimum": 1},
+    "checks": {"type": "object"},
+    "thresholds": {"type": "object"}
+  },
+  "additionalProperties": true
+}

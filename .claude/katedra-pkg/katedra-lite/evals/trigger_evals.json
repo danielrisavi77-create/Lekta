@@ -1,0 +1,98 @@
+[
+ {
+  "query": "Provuci mi diplomski kroz audit prije predaje.",
+  "should_trigger": true
+ },
+ {
+  "query": "Napiši mi plan i program za seminarski rad iz obiteljskog prava.",
+  "should_trigger": true
+ },
+ {
+  "query": "Provjeri jesu li svi citati u radu pokriveni popisom literature.",
+  "should_trigger": true
+ },
+ {
+  "query": "Rad mi je vratio mentor s komentarima, usporedi s onim što sam mu poslao.",
+  "should_trigger": true
+ },
+ {
+  "query": "Trebam predajnu verziju diplomskog po pravilima fakulteta.",
+  "should_trigger": true
+ },
+ {
+  "query": "Pripremi me za obranu diplomskog rada.",
+  "should_trigger": true
+ },
+ {
+  "query": "Provjeri brojke u radu naspram izvora iz kojih sam ih uzeo.",
+  "should_trigger": true
+ },
+ {
+  "query": "Ovaj završni rad ima 79 stranica, a smije 50. Što da kratim?",
+  "should_trigger": true
+ },
+ {
+  "query": "Jesu li hipoteze u ovom radu uopće presuđene?",
+  "should_trigger": true
+ },
+ {
+  "query": "Provjeri metapodatke ovog .docx-a prije nego ga pošaljem mentorici.",
+  "should_trigger": true
+ },
+ {
+  "query": "Trebam pomoć oko strukture diplomskog na FPZG-u.",
+  "should_trigger": true
+ },
+ {
+  "query": "Nađi mi proturječja između Rezultata i Rasprave u ovom radu.",
+  "should_trigger": true
+ },
+ {
+  "query": "Napravi mi prezentaciju o klimatskim promjenama za 20 slajdova.",
+  "should_trigger": false
+ },
+ {
+  "query": "Napiši mi Python skriptu koja preimenuje datoteke u mapi.",
+  "should_trigger": false
+ },
+ {
+  "query": "Koliko je 17 posto od 4300 eura?",
+  "should_trigger": false
+ },
+ {
+  "query": "Sastavi mi jelovnik za tjedan dana.",
+  "should_trigger": false
+ },
+ {
+  "query": "Popravi mi CSS na landing stranici, gumb se ne vidi na mobitelu.",
+  "should_trigger": false
+ },
+ {
+  "query": "Napiši mi motivacijsko pismo za posao u marketingu.",
+  "should_trigger": false
+ },
+ {
+  "query": "Kakvo je vrijeme sutra u Zagrebu?",
+  "should_trigger": false
+ },
+ {
+  "query": "Sredi mi ovu Excel tablicu s troškovima po mjesecima.",
+  "should_trigger": false
+ },
+ {
+  "query": "Napiši objavu za Instagram o novoj usluzi.",
+  "should_trigger": false
+ },
+ {
+  "query": "Prevedi mi ovaj ugovor s engleskog na hrvatski.",
+  "should_trigger": false
+ },
+ {
+  "query": "Objasni mi kako radi Dixon-Coles model za nogomet.",
+  "should_trigger": false
+ },
+ {
+  "query": "Napravi mi bazu u Supabaseu za korisnike aplikacije.",
+  "should_trigger": false
+ }
+]

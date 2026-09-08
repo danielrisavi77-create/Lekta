@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "gate_version",
+    "tiers"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "gate_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "tiers": {
+      "type": "object",
+      "required": [
+        "production",
+        "pilot"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^(production|pilot)$": {
+          "type": "object",
+          "required": [
+            "require_confirmed_status",
+            "min_qualification_cases",
+            "require_fresh_provenance",
+            "max_untracked",
+            "core_benchmark_min_accuracy",
+            "max_regressions",
+            "max_critical_regressions",
+            "min_distinct_asserted_pointers",
+            "min_asserted_rule_families"
+          ],
+          "properties": {
+            "require_confirmed_status": {
+              "type": "boolean"
+            },
+            "min_qualification_cases": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "min_distinct_asserted_pointers": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "min_asserted_rule_families": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "require_fresh_provenance": {
+              "type": "boolean"
+            },
+            "max_untracked": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "core_benchmark_min_accuracy": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "max_regressions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_critical_regressions": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

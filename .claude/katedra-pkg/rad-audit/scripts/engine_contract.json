@@ -1,0 +1,19 @@
+{
+ "contract_version": "1",
+ "engine": "rad-audit",
+ "engine_version": "0.0.0-undeclared+b133a824",
+ "capabilities": [
+  "audit.report-json.v1",
+  "hr.citations.author-year.v1",
+  "hr.citations.vancouver.v1",
+  "hr.typography.numbers.v1",
+  "safe-fixes.preserve-page-breaks.v1",
+  "phase.G"
+ ],
+ "entrypoints": {
+  "audit": "katedra_adapter.py",
+  "phases": {
+   "G": "apply_safe_fixes.py"
+  }
+ }
+}

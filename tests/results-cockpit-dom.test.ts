@@ -194,20 +194,31 @@ describe('Results Cockpit V1', () => {
     });
   });
 
-  it('prikazuje jedan Readiness Halo sa stvarnim slojevima i brojkama', () => {
+  it('sazetak nalaza je glavni pokazatelj, a ocjena sporedna', () => {
+    /**
+     * Do 2026-09-07 je ovdje stajao Readiness Halo: tamni uredaj s tri sloja prstena oko ocjene.
+     * Brif vlasnika ga uklanja jer je ocjeni davao autoritet koji pripada nalazima. Namjera testa
+     * je ista kao prije (JEDAN glavni pokazatelj, brojke iz stvarnih signala), promijenio se prikaz.
+     */
     const mount = document.createElement('section');
     const model = buildVisualResultModel(result({ file: { name: 'DIPLOMSKI_RAD.docx' } }));
 
     renderResultsCockpit(mount, model, { repairAvailable: true });
 
     expect(mount.querySelectorAll('[data-cockpit-score]')).toHaveLength(1);
-    expect(mount.querySelector('[data-readiness-halo]')).toBeTruthy();
-    expect(mount.querySelector('[data-halo-layer="scored"]')).toBeTruthy();
-    expect(mount.querySelector('[data-halo-layer="blockers"]')).toBeTruthy();
-    expect(mount.querySelector('[data-halo-layer="informational"]')).toBeTruthy();
-    expect(mount.textContent).toContain('1 blokator');
-    expect(mount.textContent).toContain('2 upozorenja');
-    expect(mount.textContent).toContain('1 sigurna popravka');
+    expect(mount.querySelector('[data-finding-summary]')).toBeTruthy();
+    // Halo i njegovi slojevi vise ne postoje; povratak bi znacio povratak stare hijerarhije.
+    expect(mount.querySelector('[data-readiness-halo]')).toBeNull();
+    expect(mount.querySelectorAll('[data-halo-layer]')).toHaveLength(0);
+
+    // Razine su particija po ozbiljnosti: moraju se zbrojiti u broj iz naslova. Tvrdnja pada ako
+    // se u taj stupac ikad uvuce redak s druge osi (automatski popravci).
+    const razine = [...mount.querySelectorAll('.fsum-razina b')].map((b) => Number(b.textContent));
+    const naslov = mount.querySelector('.fsum-naslov')?.textContent ?? '';
+    expect(razine.length).toBeGreaterThan(0);
+    expect(razine.reduce((a, b) => a + b, 0)).toBe(Number(naslov.match(/^\d+/)?.[0]));
+    // Automatski popravci stoje IZVAN tog zbroja, uz "od toga".
+    expect(mount.querySelector('.fsum-auto')?.textContent).toContain('od toga');
   });
 
   it('kod nebodovanog rezultata prikazuje provjerena pravila bez izmišljene ocjene', () => {

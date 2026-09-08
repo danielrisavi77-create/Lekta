@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "gate_version": 1,
+  "profiles": {
+    "efzg": {
+      "tier": "advisory",
+      "admitted_at": "2026-08-09",
+      "bundle_sha256": "665dd4987410e79319ed6bdd5cc771fbfbd143e2c663317ac6bc338d1d5b0de1",
+      "qualification_sha256": "577f88070b7b7288b9f33772fa5b861b1c6324254439de991c2db6aad38b5186",
+      "benchmark_sha256": "3d59bbad7e4156ff8e5f645677c049eb013ced39c7e402d50351a6edfab6dbda",
+      "gate_version": 1
+    },
+    "fpzg": {
+      "tier": "advisory",
+      "admitted_at": "2026-08-09",
+      "bundle_sha256": "0b73cc72351df6a12196182d57c9c0da026a6d024149d2bfd73af3b12894ad24",
+      "qualification_sha256": "577f88070b7b7288b9f33772fa5b861b1c6324254439de991c2db6aad38b5186",
+      "benchmark_sha256": "3d59bbad7e4156ff8e5f645677c049eb013ced39c7e402d50351a6edfab6dbda",
+      "gate_version": 1
+    }
+  }
+}

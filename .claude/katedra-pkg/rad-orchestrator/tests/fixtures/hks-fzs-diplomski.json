@@ -1,0 +1,22 @@
+{
+  "naziv": "hks-fzs-diplomski",
+  "opis": "Gotov tuđi diplomski (HKS-FZS, Vancouver, N=203) u modu rad_docx: nema plana ni pisanja, izvornik se ne dira, popravci samo na kopiji. Rad NIJE u repou — putanja se zadaje pri pripremi (--rad-docx). Profil izvan registryja preko profil_datoteka.",
+  "args": {
+    "tip": "diplomski",
+    "tema": "Znanje studenata HKS o palijativnoj skrbi: presječno istraživanje",
+    "fakultet": "hks-fzs",
+    "faza": "audit",
+    "empirijski": true,
+    "full_auto": false,
+    "rad_docx": "<ZADAJ --rad-docx>",
+    "profil_datoteka": "<KATEDRA_SKILL>/references/fakulteti/hks-fzs.json"
+  },
+  "ocekivano": {
+    "status": ["zavrseno", "ceka_autora"],
+    "artefakti_moraju_postojati": [".katedra/stanje.json", ".katedra/gate.json", ".katedra/napredak.json", ".katedra/verzije.json"],
+    "izvornik_nepromijenjen": "rad.docx",
+    "kopija_postoji": ["rad_v2.docx", "rad_v2a.docx", "rad-final.docx"],
+    "bez_plana": true,
+    "max_iteracija": 12
+  }
+}

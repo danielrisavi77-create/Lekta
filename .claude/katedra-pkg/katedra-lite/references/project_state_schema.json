@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Katedra project state v2",
+  "type": "object",
+  "required": ["verzija", "state_meta", "mod", "tip", "tema", "fakultet", "citatni_stil", "ciljana_ocjena", "datoteke", "ogranicenja", "plan_odobren", "azurirano"],
+  "properties": {
+    "verzija": {"const": 2},
+    "state_meta": {
+      "type": "object",
+      "required": ["schema_version", "artifact_manifest", "mentor_feedback"],
+      "properties": {
+        "schema_version": {"const": 2},
+        "migrated_from": {"type": "integer", "minimum": 1},
+        "artifact_manifest": {"const": "artifacts.json"},
+        "mentor_feedback": {"const": "zamjerke.json"}
+      },
+      "additionalProperties": true
+    },
+    "mod": {"type": "string"},
+    "tip": {"type": "string"},
+    "tema": {"type": "string"},
+    "fakultet": {"type": "object"},
+    "rok": {"type": ["string", "null"]},
+    "citatni_stil": {"type": "string"},
+    "ciljana_ocjena": {"type": "integer"},
+    "datoteke": {"type": "object"},
+    "ogranicenja": {"type": "array"},
+    "plan_odobren": {"type": "boolean"},
+    "azurirano": {"type": "string"}
+  },
+  "additionalProperties": true
+}

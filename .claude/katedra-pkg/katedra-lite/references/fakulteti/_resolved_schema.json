@@ -1,0 +1,494 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Katedra resolved functional faculty profile schema",
+  "description": "Schema za functional resolved_profile.json. Provenance je namjerno izdvojen u zaseban sidecar i zato nije dio ovog dokumenta; canonical faculty input i dalje koristi _schema.json.",
+  "type": "object",
+  "required": [
+    "slug",
+    "naziv",
+    "status",
+    "citiranje",
+    "format",
+    "struktura"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "naziv": {
+      "type": "string"
+    },
+    "sveuciliste": {
+      "type": "string"
+    },
+    "studij": {
+      "type": "string"
+    },
+    "aliasi": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tipovi_radova": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "esej", "seminarski",
+          "zavrsni",
+          "diplomski"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Vrste rada koje profil izrijekom pokriva. Resolver odbija --tip izvan ovog popisa (v1.1-fix Q9b)."
+    },
+    "status": {
+      "enum": [
+        "potvrdeno",
+        "nepotvrdeno"
+      ],
+      "description": "potvrdeno = pročitane službene upute; nepotvrdeno = izvedeno ili preneseno"
+    },
+    "izvor": {
+      "type": "object",
+      "description": "Odakle su pravila. Bez ovoga status ne smije biti 'potvrdeno'.",
+      "required": [
+        "dokument"
+      ],
+      "properties": {
+        "dokument": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "datum_dokumenta": {
+          "type": "string"
+        },
+        "provjereno": {
+          "type": "string",
+          "description": "ISO datum zadnje provjere legacy izvora; freshness se od B08 procjenjuje preko provenance i ne mijenja profile status."
+        }
+      }
+    },
+    "citiranje": {
+      "type": "object",
+      "required": [
+        "stil"
+      ],
+      "properties": {
+        "stil": {
+          "enum": [
+            "autor-godina",
+            "ieee",
+            "harvard",
+            "apa",
+            "apa-hr",
+            "legal-footnote",
+            "vancouver"
+          ]
+        },
+        "u_tekstu": {
+          "type": "string",
+          "description": "Primjer točnog oblika, npr. '(Prezime, 2011., str. 81)'"
+        },
+        "popis_primjer": {
+          "type": "string"
+        },
+        "tocka_iza_godine": {
+          "type": "boolean",
+          "description": "Hrvatska varijanta APA-e piše '2011.' s točkom"
+        },
+        "uvlaka_u_popisu": {
+          "type": "boolean"
+        },
+        "razmak_izmedu_jedinica": {
+          "type": "boolean"
+        },
+        "napomena": {
+          "type": "string"
+        },
+        "dozvoljeni_tipovi_izvora": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "journal_article",
+              "book",
+              "chapter",
+              "law",
+              "regulation",
+              "court_decision",
+              "eu_act",
+              "official_report",
+              "dataset",
+              "web_page",
+              "unknown"
+            ]
+          },
+          "uniqueItems": true,
+          "description": "Tipovi bibliografskih/pravnih izvora koje profil dopušta; B10 tipizira reference, B11 provjerava postojanje izvora."
+        }
+      }
+    },
+    "format": {
+      "type": "object",
+      "properties": {
+        "font": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "velicina_pt": {
+          "type": "number"
+        },
+        "prored": {
+          "type": "number"
+        },
+        "poravnanje": {
+          "enum": [
+            "obostrano",
+            "lijevo"
+          ]
+        },
+        "margine_cm": {
+          "type": "object",
+          "properties": {
+            "gore": {
+              "type": "number"
+            },
+            "dolje": {
+              "type": "number"
+            },
+            "lijevo": {
+              "type": "number"
+            },
+            "desno": {
+              "type": "number"
+            }
+          }
+        },
+        "lice": {
+          "enum": [
+            "trece-jednina",
+            "trece-mnozina",
+            "prvo-mnozina"
+          ]
+        },
+        "numeracija": {
+          "$comment": "Slobodan tekst je NASLIJEĐENI oblik: generator ga je morao pogađati regexom („rimski“ mora doslovno stajati u opisu), pa je drukčije formuliran propis tiho davao None i rad je ostajao bez propisane numeracije. Strukturirani oblik je izvor istine; `opis` ostaje za ljudski ispis i za izvor pravila. Objekt se k tome ispravno spaja s overlayima (deep merge po ključu), a niska se može samo zamijeniti u cijelosti.",
+          "oneOf": [
+            {"type": "string", "description": "naslijeđeno: npr. 'rimski do Uvoda, zatim arapski od 1'"},
+            {
+              "type": "object",
+              "required": ["prednji_dio", "tijelo"],
+              "properties": {
+                "opis": {"type": "string"},
+                "prednji_dio": {
+                  "enum": ["rimski", "rimski_mala", "arapski", "bez"],
+                  "description": "numeracija prednjeg aparata (do prijeloma)"
+                },
+                "tijelo": {
+                  "enum": ["rimski", "rimski_mala", "arapski", "bez"],
+                  "description": "numeracija tijela rada (od prijeloma nadalje)"
+                },
+                "tijelo_pocinje_od": {"type": "integer", "minimum": 1, "default": 1},
+                "prijelom_kod": {
+                  "type": "string",
+                  "default": "uvod",
+                  "description": "dio rada na kojem numeracija prelazi u tijelo"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "naslov_poglavlja_pt": {
+          "type": "number"
+        },
+        "prijelom_pred_poglavljem": {
+          "type": "boolean",
+          "description": "true → pageBreakBefore na Heading 1 NIJE nalaz nego propis"
+        },
+        "odlomak": {
+          "type": "object",
+          "properties": {
+            "min_redaka": {
+              "type": "integer"
+            },
+            "max_redaka": {
+              "type": "integer"
+            },
+            "min_recenica": {
+              "type": "integer"
+            },
+            "po_stranici": {
+              "type": "string"
+            },
+            "razmak_pt": {
+              "type": "number",
+              "minimum": 0,
+              "description": "v1.9 (nalaz 9): razmak IZA odlomka u točkama (space after), npr. 6. Provjerava provjeri_dijelove.py nad stilom Normal."
+            }
+          }
+        }
+      }
+    },
+    "struktura": {
+      "type": "object",
+      "properties": {
+        "opseg": {
+          "type": "object",
+          "description": "Ključ je tip rada: seminarski | zavrsni | diplomski",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "stranice": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "rijeci": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "izvori_min": {
+                "type": "integer"
+              },
+              "poglavlja": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "dijelovi": {
+                "type": "object",
+                "description": "v1.9 (nalaz 9): opseg po DIJELOVIMA rada. Ključ je slug dijela (uvod, metode, rezultati, rasprava, zakljucak, sazetak, summary, literatura, zivotopis…), vrijednost su pravila za taj dio. Zamjenjuje ručne napomene tipa „Uvod ≥ 3000 riječi\". Provjerava scripts/provjeri_dijelove.py.",
+                "propertyNames": {
+                  "pattern": "^[a-z0-9_-]+$"
+                },
+                "additionalProperties": {
+                  "$ref": "#/definitions/dioOpsega"
+                }
+              }
+            }
+          }
+        },
+        "obavezni_dijelovi": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Redoslijedom kojim moraju stajati u radu"
+        },
+        "prikazi": {
+          "type": "object",
+          "properties": {
+            "natpis": {
+              "enum": [
+                "iznad",
+                "ispod"
+              ]
+            },
+            "izvor_ispod": {
+              "type": "boolean"
+            },
+            "mora_biti_spomenut_u_tekstu": {
+              "type": "boolean"
+            },
+            "ne_smije_se_lomiti": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "predaja": {
+      "type": "object",
+      "properties": {
+        "turnitin": {
+          "type": "boolean"
+        },
+        "prag_podudarnosti": {
+          "type": "number"
+        },
+        "broj_uvezanih": {
+          "type": "integer"
+        },
+        "uvez": {
+          "type": "string"
+        },
+        "repozitorij": {
+          "type": "string"
+        },
+        "administrativni_rep_dana": {
+          "type": "integer",
+          "description": "Turnitin + uvez + referada"
+        },
+        "koraci": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "obrana": {
+      "type": "object",
+      "properties": {
+        "trajanje_min": {
+          "type": "integer"
+        },
+        "slajdova": {
+          "type": "integer"
+        },
+        "komisija": {
+          "type": "integer"
+        }
+      }
+    },
+    "napomene": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "primjerci": {
+     "description": "Izmjereni obranjeni radovi (pravila 17/24, scripts/primjerci.py). Opservacija, ne norma.",
+     "type": ["object", "array"]
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "default"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "$ref": "#/definitions/provenanceEntry"
+        },
+        "rules": {
+          "type": "object",
+          "patternProperties": {
+            "^/": {
+              "$ref": "#/definitions/provenanceEntry"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "description": "B08 sidecar provenance: default applies to rule leaves unless a nearest JSON Pointer override exists."
+    },
+    "metodologija": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "generic",
+            "quantitative",
+            "qualitative",
+            "mixed_methods",
+            "case_study",
+            "doctrinal_legal",
+            "theoretical",
+            "historical",
+            "review",
+            "systematic_review"
+          ],
+          "description": "B09 project/work methodology used by argument heuristics; not a faculty-wide default unless explicitly resolved."
+        }
+      }
+    },
+    "_nepoznata_pravila": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^/"
+      },
+      "uniqueItems": true,
+      "description": "JSON Pointeri pravila koja je neki sloj eksplicitno učinio nepoznatima (null ili vrijednost izvan enuma). Potrošači ih moraju prikazati kao upozorenje, ne kao „profil ne propisuje“ (v1.1-fix Q15a)."
+    }
+  },
+  "definitions": {
+    "dioOpsega": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "v1.9 (nalaz 9): pravila za JEDAN dio rada. Sve je opcionalno; izostanak ključa znači „profil to ne propisuje\".",
+      "properties": {
+        "rijeci_min": {"type": "integer", "minimum": 0, "description": "najmanji broj riječi dijela"},
+        "rijeci_max": {"type": "integer", "minimum": 0, "description": "najveći broj riječi dijela"},
+        "udio_min": {"type": "number", "minimum": 0, "maximum": 1, "description": "najmanji udio dijela u tijelu teksta (0–1; tijelo = od Uvoda do popisa literature)"},
+        "udio_max": {"type": "number", "minimum": 0, "maximum": 1, "description": "najveći udio dijela u tijelu teksta (0–1); „ne smije prelaziti trećinu\" = 0.3333"},
+        "znakovi_max": {"type": "integer", "minimum": 0, "description": "najveći broj znakova s razmacima, npr. sažetak ≤ 1800"},
+        "obavezan": {"type": "boolean", "description": "true = dio mora postojati; izostanak je nalaz"},
+        "redoslijed": {"type": "integer", "minimum": 0, "description": "relativni redni broj dijela u radu; provjerava se samo poredak među dijelovima, ne apsolutna vrijednost"},
+        "podsekcije": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "description": "slugovi propisanih podnaslova, redoslijedom kojim moraju stajati (npr. metode: etika, ustroj-istrazivanja, …)"
+        },
+        "napomena": {"type": "string"}
+      }
+    },
+    "provenanceEntry": {
+      "type": "object",
+      "required": [
+        "source",
+        "type",
+        "confidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "explicit",
+            "derived",
+            "default",
+            "inferred",
+            "project_override"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "verified_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "derivation": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "not": {
+    "required": [
+      "provenance"
+    ]
+  }
+}

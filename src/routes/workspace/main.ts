@@ -1,4 +1,7 @@
-import { initAnalyzerApp, loadAnalyzerDocument, subscribeAnalyzerDocumentAccepted } from '../../ui/app';
+import {
+  initAnalyzerApp, loadAnalyzerDocument,
+  subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
+} from '../../ui/app';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
   type StorageAvailability,
@@ -36,6 +39,36 @@ function detectStorage(): StorageAvailability {
   }
 }
 
+/**
+ * TRAKA DOKUMENTA U ZAGLAVLJU: `Lekta | <ime> | Lokalno`.
+ *
+ * ZIVI U RUTI, NE U `app.ts`, i to je odluka o sloju. Zaglavlje je oprema `/rad/`, a analizator
+ * vec objavljuje prihvat dokumenta kao ugovor (`analyzer-document-events`), pa oprema rute ne
+ * mora posezati u njegovu unutrasnjost. Prva izvedba je pisala izravno u `setFile`; radila je,
+ * ali je rasla u `app.ts`, koji ratchet `tests/ui-module-budget.test.ts` gura prema DOLJE.
+ *
+ * SVA TRI ISHODA, jer bi dva ostavila traku da tvrdi neistinu:
+ *   accepted    dokument je prosao intake gate; ime na ekran
+ *   rejected    `admitFile` je vec pozvao `setFile(null)`, dakle nema dokumenta; traka odlazi
+ *   superseded  u letu je NOVIJI dokument; ovaj se ignorira, inace bi stariji pregazio noviji
+ *
+ * Ime se namjerno pojavljuje tek NA PRIHVAT, ne na odabir: traka govori na cemu Lekta radi, a
+ * ne koju je datoteku korisnik dotaknuo. Odbijen dokument tako nikad ne provede trenutak u
+ * zaglavlju kao da je prihvacen.
+ */
+function wireDocumentBar(): void {
+  const bar = document.getElementById('radDocBar');
+  const name = document.getElementById('radDocName');
+  if (!bar || !name) return;
+  subscribeAnalyzerDocumentSettled((event) => {
+    if (event.kind === 'superseded') return;
+    const file = event.kind === 'accepted' ? event.file : null;
+    name.textContent = file ? file.name : '';
+    name.title = file ? file.name : '';
+    bar.classList.toggle('hidden', !file);
+  });
+}
+
 function showStatus(text: string | null): void {
   const el = document.getElementById('workspace-status');
   if (!el) return;
@@ -69,6 +102,17 @@ async function start(): Promise<void> {
   // ZAPIS: tek kad je dokument STVARNO prihvacen. Pretplata se postavlja PRIJE obnove, jer i
   // obnovljen dokument prolazi kroz prijem (odbijanje se postuje), ali se on ovdje prepozna i
   // preskoci.
+  // Pretplata mora postojati prije nego `restoreDocument` pozove `loadAnalyzerDocument`:
+  // `emitAnalyzerDocumentSettled` obavjescuje nad KOPIJOM skupa pretplatnika, pa pretplatnik
+  // dodan poslije prijem obnovljenog dokumenta ne vidi, i zaglavlje na `/rad/#session=...`
+  // ostaje prazno iznad uredno ucitanog rada.
+  //
+  // GRANICA JE IZMJERENA, ne procijenjena, jer je prva verzija ovog komentara promasila:
+  //   tik prije `openWorkspace`   i dalje radi  (taj poziv je await-an, ucitavanje je iza njega)
+  //   iza `restoreDocument`       pada
+  // Vrh `start()` je zato jedini polozaj koji ne trazi da citatelj drzi taj redoslijed u glavi.
+  wireDocumentBar();
+
   subscribeAnalyzerDocumentAccepted((event) => {
     showState(afterDocumentAccepted(context));
     if (restoredFile !== null && event.file === restoredFile) {

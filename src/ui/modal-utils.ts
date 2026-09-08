@@ -52,14 +52,30 @@ export function trapModal(el: HTMLElement | null): void {
   }, 30);
 }
 
+/**
+ * FOKUS VRACA SAMO MODAL KOJI GA JE I UZEO, i to TEK nakon sto pozadina prestane biti inertna.
+ *
+ * Do 2026-09-07 je vracanje fokusa stajalo IZVAN provjere `_trap`, pa ga je trosio prvi poziv
+ * bez obzira je li taj modal uopce bio otvoren. Globalni Escape rukovatelj zove SVE zatvarace
+ * redom (`closeOrder(); closeHistory(); closeLegal(); ...`), pa je `_modalReturnFocus` potrosio
+ * `closeOrder`, i to dok je `main` jos `inert`: `.focus()` na element u inertnom podstablu tiho
+ * ne uspije, a zastavica se ipak obrise, pa pravi modal poslije nema sto vratiti.
+ *
+ * Posljedica je bila da se fokus gubi na SVAKOM modalu zatvorenom Escapeom, a ne samo na jednom.
+ * Izmjereno na zatecenom `#legalModal`, bez ijedne izmjene u njegovu putu:
+ *     X gumb   fokus se vraca na [data-legal] poveznicu
+ *     Escape   fokus zavrsi na <body>
+ * Gard: `tests/ux/workspace-entry.spec.ts` (list profila) mjeri oba puta.
+ *
+ * Svi pozivatelji prosljedjuju element koji su prethodno i zarobili, pa rani izlaz nista ne gubi.
+ */
 export function releaseModal(el: HTMLElement | null): void {
-  if (el && (el as any)._trap) {
-    el.removeEventListener('keydown', (el as any)._trap);
-    (el as any)._trap = null;
-    if (--_modalDepth <= 0) {
-      _modalDepth = 0;
-      setBackgroundInert(false);
-    }
+  if (!el || !(el as any)._trap) return;
+  el.removeEventListener('keydown', (el as any)._trap);
+  (el as any)._trap = null;
+  if (--_modalDepth <= 0) {
+    _modalDepth = 0;
+    setBackgroundInert(false);
   }
   if (_modalReturnFocus) {
     try {

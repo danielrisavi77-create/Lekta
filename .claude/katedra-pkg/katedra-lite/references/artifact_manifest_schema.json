@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Katedra artifact manifest",
+  "type": "object",
+  "required": ["schema_version", "artifacts"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["artifact_id", "path", "kind", "current_version", "versions"],
+        "properties": {
+          "artifact_id": {"type": "string", "pattern": "^art_[0-9a-f]{16}$"},
+          "path": {"type": "string"},
+          "kind": {"type": "string"},
+          "current_version": {"type": ["string", "null"]},
+          "versions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["version_id", "sha256", "size_bytes", "recorded_at"],
+              "properties": {
+                "version_id": {"type": "string"},
+                "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                "size_bytes": {"type": "integer", "minimum": 0},
+                "recorded_at": {"type": "string"},
+                "snapshot_id": {"type": ["string", "null"]},
+                "snapshot_path": {"type": ["string", "null"]},
+                "note": {"type": "string"}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

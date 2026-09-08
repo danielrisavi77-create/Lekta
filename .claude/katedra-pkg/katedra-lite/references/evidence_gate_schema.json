@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "katedra-evidence-gate-v1",
+  "title": "Katedra Evidence Gate Result",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "policy",
+    "passed",
+    "summary",
+    "preconditions",
+    "matrix"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "policy": {
+      "enum": [
+        "advisory",
+        "strict"
+      ]
+    },
+    "passed": {
+      "type": "boolean"
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "claims",
+        "passed",
+        "blocked",
+        "would_block"
+      ],
+      "properties": {
+        "claims": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "passed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocked": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "would_block": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "matrix": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "claim_id",
+          "text",
+          "location",
+          "support_status",
+          "gate_status",
+          "reasons",
+          "source_ids",
+          "evidence"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "location": {
+            "type": "object"
+          },
+          "support_status": {
+            "enum": [
+              "supported",
+              "unsupported",
+              "conflicted",
+              "contradicted"
+            ]
+          },
+          "gate_status": {
+            "enum": [
+              "pass",
+              "block"
+            ]
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "evidence_id",
+                "relation",
+                "source_id",
+                "locator",
+                "source_verification",
+                "source_quality",
+                "source_blocking"
+              ],
+              "properties": {
+                "evidence_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "relation": {
+                  "enum": [
+                    "supports",
+                    "contradicts",
+                    "contextualizes"
+                  ]
+                },
+                "source_id": {
+                  "type": "string"
+                },
+                "locator": {
+                  "type": "object"
+                },
+                "source_verification": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "source_quality": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "source_blocking": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

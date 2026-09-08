@@ -1,0 +1,89 @@
+{
+ "$comment": "Registar RAZINE RADA. Do v1.4 skill je skalirao samo po TIPU rada (opseg, broj poglavlja, izvori_min) i imao tri radna moda. Nije postojalo nijedno polje za ono što odlučuje kako rečenica izgleda: koliko čitatelj već zna. Isti pojam za studenta prve godine traži definiciju i primjer, a za komisiju koja tim pojmom radi dvadeset godina definicija je gubitak prostora i signal da autor ne zna kome piše.",
+ "schema_version": 1,
+ "$comment_nacelo": "NAČELO KOJE SE NE SMIJE IZOKRENUTI: niža razina NE znači lošiji rad. Znači rad koji VIŠE OBJAŠNJAVA i MANJE TVRDI. Rad prve godine koji uredno izloži i poveže literaturu je odličan rad prve godine; isti tekst na diplomskom je prepričavanje. Ovaj registar zato nigdje ne spušta zahtjeve na točnost, izvore ni argument — mijenja samo dubinu objašnjavanja, očekivani doprinos i omjer teorije i analize. Tko ga upotrijebi da napiše slabiji tekst, upotrijebio ga je krivo.",
+ "razine": {
+  "preddiplomski-1-2": {
+   "naziv": "Preddiplomski, 1.–2. godina",
+   "tipicno": ["seminarski", "esej"],
+   "smije_se_pretpostaviti": "opća pismenost struke i pojmovi s uvodnih kolegija",
+   "pojmovi": {
+    "definiraj": "svaki stručni pojam pri prvom pojavljivanju, uz izvor i jedan konkretan primjer",
+    "pretpostavi": "ništa izvan uvodnih kolegija"
+   },
+   "omjer_teorija_analiza": [0.65, 0.35],
+   "doprinos": "točna sinteza literature + vlastiti primjer ili usporedba; vlastiti izračun nije očekivan",
+   "izvori": {"tipicno": ["udžbenik", "pregledni članak", "službeni dokument"],
+              "minimalna_kvaliteta": "C"},
+   "rečenica": "kraća i izravnija; medijan pri donjoj granici raspona",
+   "$comment": "Najčešća pogreška na ovoj razini nije plitkost nego pretvaranje: rad koji piše kao da je autor pročitao dvadeset članaka, a citira tri."
+  },
+  "preddiplomski-3": {
+   "naziv": "Preddiplomski, završna godina",
+   "tipicno": ["zavrsni", "seminarski"],
+   "smije_se_pretpostaviti": "pojmovi svih obveznih kolegija studija",
+   "pojmovi": {
+    "definiraj": "pojmove koji nose argument i pojmove izvan matičnog kolegija",
+    "pretpostavi": "standardni aparat struke"
+   },
+   "omjer_teorija_analiza": [0.5, 0.5],
+   "doprinos": "vlastita analiza slučaja ili podataka; barem jedan vlastiti prikaz s izvorom „autorov izračun prema…”",
+   "izvori": {"tipicno": ["recenzirani članak", "službeni izvještaj", "dataset"],
+              "minimalna_kvaliteta": "C"},
+   "rečenica": "srednja duljina; podređene rečenice dopuštene ako nose uvjet ili ogradu",
+   "$comment": "Prijelomna razina: ovdje rad prvi put mora nešto TVRDITI, a ne samo izložiti."
+  },
+  "diplomski": {
+   "naziv": "Diplomski studij",
+   "tipicno": ["diplomski", "zavrsni"],
+   "smije_se_pretpostaviti": "cjelokupan pojmovni aparat struke; čitatelj poznaje glavne autore područja",
+   "pojmovi": {
+    "definiraj": "samo sporne pojmove, pojmove koje rad koristi u užem značenju, i one koji se u literaturi različito shvaćaju",
+    "pretpostavi": "sve standardno; definicija poznatog pojma je signal da autor ne zna kome piše"
+   },
+   "omjer_teorija_analiza": [0.35, 0.65],
+   "doprinos": "obranjiva teza + vlastita analiza + rasprava koja nalaz sudara s literaturom (references/rasprava.md)",
+   "izvori": {"tipicno": ["recenzirani članak", "primarni izvor", "dataset", "propis"],
+              "minimalna_kvaliteta": "B"},
+   "rečenica": "argumentacijski bogata, ali ne nerazumljiva; ograda se piše, ne podrazumijeva",
+   "$comment": "Ovdje se rad ocjenjuje po tome što tvrdi, ne po tome što zna."
+  },
+  "poslijediplomski": {
+   "naziv": "Poslijediplomski / doktorski",
+   "tipicno": ["diplomski"],
+   "smije_se_pretpostaviti": "čitatelj je stručnjak područja i poznaje aktualne rasprave",
+   "pojmovi": {
+    "definiraj": "samo pojmove koje rad uvodi ili redefinira",
+    "pretpostavi": "sve ostalo"
+   },
+   "omjer_teorija_analiza": [0.3, 0.7],
+   "doprinos": "izvoran doprinos: novi podatak, novi odnos ili nova interpretacija koja se dade osporiti",
+   "izvori": {"tipicno": ["recenzirani članak", "primarni izvor", "dataset"],
+              "minimalna_kvaliteta": "A"},
+   "rečenica": "gusta; ekonomičnost je vrlina jer čitatelj ne treba uvod u poznato"
+  }
+ },
+ "citatelji": {
+  "nositelj": {
+   "naziv": "Nositelj kolegija",
+   "zna": "temu bolje od autora i zna koja je literatura obvezna",
+   "posljedica": "obvezna literatura kolegija mora biti citirana i vidljivo upotrijebljena, ne samo navedena u popisu; metodološka upozorenja (plan §8) prvo se provjeravaju"
+  },
+  "mentor": {
+   "naziv": "Mentor",
+   "zna": "područje i prati rad kroz krugove",
+   "posljedica": "ono što je već rečeno u prethodnom krugu ne ponavlja se; otvorene zamjerke su prvi kriterij"
+  },
+  "komisija": {
+   "naziv": "Povjerenstvo za obranu",
+   "zna": "područje, ali ovaj rad vidi prvi put",
+   "posljedica": "svaka kratica i svaki vlastiti pojam razriješen pri prvom pojavljivanju; teza mora biti nalaziva u uvodu bez traženja"
+  },
+  "sira-publika": {
+   "naziv": "Šira stručna publika",
+   "zna": "struku općenito, ne i ovo uže područje",
+   "posljedica": "uže pojmove definirati, ali bez udžbeničkog tona; kontekst prije tvrdnje"
+  }
+ },
+ "$comment_upotreba": "Razina se ZADAJE, ne zaključuje iz teksta — isto načelo kao citatni stil (SKILL.md § 0.8). Zapisuje se u .katedra/razina.json u modu 1 i čita prije prve rečenice u modu 2. Kad se razina sudari s Uputama fakulteta ili s glasom autora, Upute pobjeđuju, a sudar se javi izrijekom (željezna pravila 16 i 17)."
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "faculty", "tier", "as_of", "decision", "reasons", "checks", "evidence"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "faculty": {"type": "string"},
+    "tier": {"enum": ["production", "pilot"]},
+    "as_of": {"type": "string", "format": "date"},
+    "decision": {"enum": ["pass", "fail"]},
+    "reasons": {"type": "array", "items": {"type": "string"}},
+    "checks": {
+      "type": "object",
+      "required": ["profile_schema", "status", "provenance", "routing", "qualification_cases", "core_benchmark"],
+      "additionalProperties": {"type": "object"}
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["bundle_sha256", "qualification_sha256", "benchmark_sha256"],
+      "properties": {
+        "bundle_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "qualification_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "benchmark_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  },
+  "additionalProperties": false
+}

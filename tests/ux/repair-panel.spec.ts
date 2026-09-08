@@ -53,8 +53,9 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     await odbij.click();
     await expect(page.locator('#consentBanner')).toBeHidden();
   }
-  const uploadCta = page.locator('#uploadCtaBtn');
-  if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
+  // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
+  // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
+  // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   // Tok se razlikuje po sirini i to NIJE detalj testa: na uskom zaslonu carobnjak staje na koraku
   // 1 uz sticky CTA "Nastavi na profil", dok desktop odmah skoci na korak 2. Zato se ovdje ne
@@ -64,9 +65,9 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     await page.locator('#stepToProfile').click();
   }
   await expect(wizard).toHaveAttribute('data-step', '2');
-  await page.locator('#stepToAnalyze').click();
-  // Korak 3 mora biti u DOM-u prije klika (isti barijerni obrazac kao roadmap-v2.spec.ts).
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');
+  // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
+  // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
+  // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
   await page.locator('#analyzeBtn').click();
   const confirm = page.locator('[data-confirm-profile]');

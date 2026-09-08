@@ -11,97 +11,52 @@
 </head>
 <body>
 <header class="topbar">
-  <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <div class="nav-links"><a href="/saznaj-vise/#how">Kako radi</a><a href="/saznaj-vise/#video">Video</a><a href="/saznaj-vise/#podcrta">Što provjerava</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="/fakulteti/">Po fakultetu</a><a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a><a href="/saznaj-vise/#pricing">Paketi</a><a href="/saznaj-vise/#faq">Pitanja</a></div>
-    <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
-    <a class="btn btn-primary btn-sm" href="#analyzer">Provjeri rad</a>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
-    <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <!-- ZAGLAVLJE RADNE POVRSINE, NE MARKETINGA. Brif vlasnika: "Marketing je zavrsio onog
+       trenutka kada je student ubacio svoj diplomski." Do 2026-09-07 je ovdje stajalo 12
+       marketinskih poveznica (Kako radi, Video, Usporedba, Benchmark, Paketi, Pitanja, sest
+       alata) plus CTA "Provjeri rad" koji vodi na stranicu na kojoj korisnik vec jest.
+       Ostaje ono sto radnoj povrsini treba: tko si, sto je ucitano, i gdje se to obraduje. -->
+  <nav class="shell nav nav-rad" aria-label="Radna povrsina">
+    <a class="logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+    <div class="rad-doc hidden" id="radDocBar">
+      <span class="rad-doc-name" id="radDocName"></span>
+      <!-- ZNACKA GOVORI O ANALIZI, i to je vazna razlika. Analiza radi u pregledniku i dokument
+           ne odlazi nikamo. Automatski popravak je jedini tok koji dokument SALJE na posluzitelj,
+           i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora
+           mijenjati stanje, inace postaje tvrdnja koja vise nije istinita. -->
+      <span class="local-badge" title="Analiza radi u tvom pregledniku i dokument ne odlazi s uredaja. Salje se samo ako narucis automatski popravak."><i data-lucide="lock"></i> Lokalno</span>
+    </div>
+    <!-- Desna skupina ima vlastiti omotac: `margin-left:auto` je prije visio o `.nav-links`,
+         a i `#authEntry` se zna sakriti, pa bi poravnanje ovisilo o tome sto je trenutno vidljivo. -->
+    <div class="nav-rad-end">
+      <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
+      <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
+    </div>
   </nav>
-  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
-    <a href="/saznaj-vise/#how">Kako radi</a>
-    <a href="/saznaj-vise/#video">Video</a>
-    <a href="/saznaj-vise/#podcrta">Što provjerava</a>
-    <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
-    <a href="/saznaj-vise/#pricing">Paketi</a>
-    <a href="/saznaj-vise/#faq">Pitanja</a>
-    <a href="alati.html">Svi alati</a>
-    <a href="citat.html">Citat generator</a>
-    <a href="kartice.html">Brojač kartica</a>
-    <a href="naslovnica.html">Naslovnica</a>
-    <a href="literatura.html">Sređivanje literature</a>
-    <a href="izjava.html">Izjava o izvornosti</a>
-    <a href="/fakulteti/">Po fakultetu</a>
-    <div class="mobile-nav-cta"><a class="btn btn-primary" href="#analyzer">Provjeri rad</a></div>
-  </div>
 </header>
 <main id="workspace" data-premium-surface="analyzer">
 <p id="workspace-status" role="status" aria-live="polite" hidden></p>
 <section class="section section-soft" id="analyzer">
   <div class="shell">
-    <div class="lek-top-grid">
-    <div class="lek-col-proof">
-      <div class="lek-head-copy hero-copy"><div class="hero-kicker">23:47 · predaja je sutra · sve pod kontrolom</div><h1>Je li tvoj rad tehnički <span class="h1-crta">spreman<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M2 6 Q 20 1, 40 6 T 78 6 T 116 6 T 154 6 T 196 6"/></svg></span> za predaju?<br>Lekta ti kaže <em>prije</em> mentora.</h1><p class="lek-top-lead">Oblikovanje, struktura, opseg i citiranje, izmjereno lokalno po službenim pravilima tvog fakulteta, ili po općim akademskim ondje gdje ih fakultet nije objavio. Dokument pri automatskoj provjeri ne napušta uređaj.</p></div>
-      <div class="hero-coverage" id="heroCoverage" hidden></div>
-      <div class="lek-head-cta"><button class="btn btn-primary" id="uploadCtaBtn" type="button">Učitaj rad (.docx)</button></div>
-      <div class="trust-row"><span>Lokalno</span><span>Bez registracije</span><span>Rezultat u sekundama</span><span>Nije provjera plagijata</span></div>
-    </div>
-    <div class="lek-col-form">
-    <div class="lek-paper-cover" id="paperCover">
-      <div class="lek-cover-stage">
-      <div class="hero-demo" aria-hidden="true">
-        <div class="hd-stage">
-          <div class="hd-back" data-hero="back"></div>
-          <div class="hd-sheet" data-hero="sheet">
-            <div class="hd-doc-title">3. MEDIJSKO UOKVIRIVANJE KLIMATSKIH PROMJENA</div>
-            <p>Analiza okvira pokazala je da dnevne novine klimatske promjene najčešće uokviruju kroz ekonomsku prizmu (Peruško 2021.), dok se znanstveni okvir pojavljuje u <span class="hd-strike" data-hero="strike">značajno manjem broju</span> slučajeva. Slično tvrdi i <span class="hd-circle" data-hero="circle">Jandrić (2019)</span>, koji upozorava da izostanak znanstvenih izvora osiromašuje raspravu…</p>
-            <p>U promatranom razdoblju objavljeno je 214 članaka, od čega su 122 sadržavala barem jedan izravni citat. Kako navodi Grbeša (2020), medijska pozornost raste s blizinom klimatskih konferencija…</p>
-            <div class="hd-a hd-a1" data-hero="a1">izvor nije u literaturi!!</div>
-            <div class="hd-a hd-a2" data-hero="a2">preciznije!</div>
-            <div class="hd-a hd-a3" data-hero="a3">margina 2,3 → 3 cm!</div>
-            <i class="hd-a3line" data-hero="a3line"></i>
-            <div class="hd-f hd-f2" data-hero="f2">✓ jasnije, ok</div>
-            <div class="hd-f hd-f3" data-hero="f3">✓ margina 3 cm</div>
-            <i class="hd-scan" data-hero="scan"></i>
-          </div>
-          <div class="hd-postit" data-hero="postit">rok:<br><b>15. 9.</b><br>NE paničari →<br>provjeri</div>
-          <div class="hd-score" data-hero="score">
-            <div class="hd-score-k">LEKTA · NALAZ</div>
-            <div class="hd-score-n"><span data-hero="scoreval">71</span><span class="hd-score-max">/100</span></div>
-            <div class="hd-score-chip" data-hero="scorechip">17 nalaza · potrebne dorade<i class="hd-caret" aria-hidden="true">▮</i></div>
-          </div>
-        </div>
-      </div>
-      <button class="lek-cover-hit" id="paperCoverBtn" type="button" aria-label="Učitaj svoj rad (.docx) i pokreni provjeru"></button>
-      <div class="lek-bridge" aria-hidden="true">ovaj je prošao. klikni pa provjeri svoj →</div>
-      </div>
-      <div class="lek-demo-actions"><button class="hero-replay" id="heroReplay" type="button" aria-label="Ponovno pokreni animaciju primjera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ponovi pregled</button><button class="linklike-serif" id="heroDemoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Pogledaj cijeli primjer izvještaja →</button></div>
-    </div>
+    <!-- MARKETINSKI HERO JE UKLONJEN 2026-09-07, odlukom vlasnika.
+
+         Na `/rad/` korisnik dolazi S DOKUMENTOM, koji je vec ubacio na `/`. Do reza ga je ovdje
+         docekivao veliki naslov, demo papir s post-itom i ocjenom, gumb "Ucitaj rad" i poziv
+         "Pogledaj cijeli primjer izvjestaja", dakle uvjeravanje nekoga tko je vec odlucio.
+         Marketing je zavrsio u trenutku kad je student ubacio svoj diplomski; poslije mu ne treba
+         izmisljen dokument nego njegov.
+
+         UZ HERO JE OTISAO I UVJET VIDLJIVOSTI. `.lek-col-form:not(.lek-engaged) .analyzer-wrap`
+         je carobnjaka drzao skrivenim dok ga JS ne otkljuca klikom na taj isti demo papir. Bez
+         uklanjanja tog uvjeta brisanje heroja ostavilo bi PRAZAN ekran, a nijedan postojeci UX
+         spec to ne bi uhvatio: cetiri njih (`desktop-flow`, `a11y-states`, `parser-parity`,
+         `repair-panel`) kliknu cover prije nego bilo sto provjere. Gard je zato nov:
+         `tests/ux/intake-entry.spec.ts` trazi da je carobnjak vidljiv BEZ ijednog klika. -->
     <div class="analyzer-wrap">
-      <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> Dokument</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Nalaz</span></div>
+      <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> <span class="rail-lbl">Dokument</span></span><span class="rail-step" data-rail="2"><b>2</b> <span class="rail-lbl">Pravila</span></span><span class="rail-step" data-rail="3"><b>3</b> <span class="rail-lbl">Provjera</span></span><span class="rail-step" data-rail="4"><b>4</b> <span class="rail-lbl">Popravci</span></span></div>
       <div class="analyzer-body wizard-view" id="wizardView" data-step="1">
         <div class="wizard-grid">
           <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">I.</span>Dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · ostaje na tvom uređaju</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
-          <section class="wizard-col wizard-col-profile">
-            <div class="wstep"><span class="wstep-no">II.</span>Profil fakulteta</div><div class="detect-badge hidden" id="detectBadge" role="status"></div>
-            <fieldset class="profile-group"><legend class="fg-label">Ustanova</legend>
-            <div class="form-grid">
-              <div class="field full"><label for="institutionSelect">Sveučilište</label><select id="institutionSelect"></select></div>
-              <div class="field full"><label for="unitSelect">Fakultet ili akademija</label><select id="unitSelect"></select><button type="button" class="no-faculty-link hidden" id="noFacultyBtn">Nema mog fakulteta?</button><div class="no-faculty-panel" id="noFacultyPanel" hidden><label for="noFacultyName">Naziv fakulteta</label><input id="noFacultyName" type="text" maxlength="200" placeholder="npr. Filozofski fakultet u Osijeku"><label for="noFacultyEmail">E-mail (nije obavezno)</label><input id="noFacultyEmail" type="email" inputmode="email" autocomplete="email" placeholder="tvoj@email.hr"><button type="button" class="btn btn-primary btn-sm" id="noFacultySubmit">Pošalji</button><div class="wl-msg" id="noFacultyMsg" aria-live="polite"></div></div></div>
-              <div class="field full"><label for="programSelect">Studij</label><select id="programSelect"></select></div><div class="field full hidden" id="departmentField"><label for="departmentSelect">Katedra ili područje rada (opcionalno)</label><select id="departmentSelect"><option value="general">Bez posebnog profila katedre</option></select><div class="subtle-help">Profil katedre nadopunjuje studijski profil i vrijedi samo za ono što izričito uređuje.</div></div>
-            </div>
-            </fieldset>
-            <fieldset class="profile-group"><legend class="fg-label">Rad</legend>
-            <div class="form-grid">
-              <div class="field"><label for="workType">Vrsta rada</label><select id="workType"><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate" selected>Diplomski rad</option><option value="specialist">Specijalistički rad</option><option value="doctoral">Doktorski rad</option><option value="article">Znanstveni članak</option><option value="project">Projektni / istraživački rad</option></select><div class="work-support" id="workTypeSupport"></div></div>
-              <div class="field hidden" id="variantField"><label for="workVariant">Varijanta rada</label><select id="workVariant"><option value="default">Opći profil</option></select></div>
-              <div class="field full hidden" id="methodologyField"><label for="methodologySelect">Metodološka varijanta diplomskog rada</label><select id="methodologySelect"><option value="auto">Automatski prepoznaj iz strukture</option><option value="theoretical">Teorijski rad</option><option value="qualitative">Empirijski rad, kvalitativno istraživanje</option><option value="quantitative">Empirijski rad, kvantitativno istraživanje</option></select><div class="methodology-help">Aktivira provjeru cilja, pitanja ili hipoteza, metode, rezultata i rasprave. Automatski način zaključuje iz strukture dokumenta.</div></div>
-              <div class="field full hidden" id="fpzgCohortField"><label for="fpzgCohort">Status završnog rada u 2025./2026.</label><select id="fpzgCohort"><option value="current">Završni rad upisan u 2025./2026.</option><option value="carried">Završni rad prenesen iz 2024./2025.</option></select><div class="subtle-help">Preneseni završni rad ima i prvi dio integriranog ispitnog roka; novoupisani završni rad nema taj rok.</div></div><div class="field full hidden" id="fpzgDeadlineField"><label for="fpzgDeadline">Ciljani godišnji rok obrane</label><select id="fpzgDeadline"></select><div class="subtle-help" id="fpzgDeadlineHelp">Rokovi se preuzimaju iz odluke FPZG-a i akademskog kalendara za 2025./2026.</div></div>
-            </div>
-            </fieldset>
-            <div class="profile-note" id="profileNote"></div>
-          </section>
         </div>
         <div class="lek-stepnav lek-stepnav-1"><button class="btn btn-primary btn-sm" id="stepToProfile" type="button">Nastavi na profil →</button></div>
         <div class="lek-stepnav lek-stepnav-2"><div class="lek-stepnav-back"><button class="btn btn-ghost btn-sm" id="stepBackDoc" type="button">← Dokument</button><span class="lek-stepfile" id="stepFileName"></span></div><button class="btn btn-primary btn-sm" id="stepToAnalyze" type="button">Nastavi na provjeru →</button></div>
@@ -131,9 +86,25 @@
             </div>
           </div>
         </details>
-        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite"></div><div class="analyze-actions"><button class="btn btn-ghost" id="demoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Primjer bez učitavanja</button><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
+        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite"></div><div class="analyze-actions"><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
       </div>
-      <div class="progress-view hidden" id="progressView" role="status" aria-live="polite"><div class="spinner"></div><h3>Analiziram dokument…</h3><p id="progressMessage">Otvaram Word strukturu</p><div class="progress-track"><i id="progressBar"></i></div><div class="progress-step" id="progressPercent" aria-hidden="true">0%</div><div class="progress-actions" style="margin-top:24px"><button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini analizu</button></div></div>
+      <div class="progress-view hidden" id="progressView" role="status" aria-live="polite">
+  <!-- PROVJERA, NE UCITAVANJE. Do 2026-09-07 su ovdje bili spinner, "Analiziram dokument...",
+       traka napretka, "0%" i snop od 12 listova s ravninom skena. Brif vlasnika: manje osjecaja
+       loading screena, vise osjecaja stvarnog pregleda rada.
+       POSTOTAK JE UKLONJEN NAMJERNO: motor ga daje kao pragove faza, ne kao mjeru preostalog
+       vremena, pa bi ispisan broj tvrdio preciznost koju nema. Faze govore isto, i istinito. -->
+  <p class="pv-file" id="progressFileName"></p>
+  <h3>Provjeravam rad</h3>
+  <!-- Recenicu za citac nosi OVO, ne popis faza: popis je aria-hidden, inace bi svaka promjena
+       stanja bila izgovorena sedam puta. Vidljivo je suvisno uz popis, pa je samo za citac. -->
+  <p class="sr-only" id="progressMessage">Otvaram Word strukturu</p>
+  <!-- popis faza montira progress-scan.ts, izmedu naslova i napomene -->
+  <p class="pv-local"><i data-lucide="lock" aria-hidden="true"></i> Dokument ne napušta uređaj</p>
+  <div class="progress-actions">
+    <button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini provjeru</button>
+  </div>
+</div>
       <div class="result-view hidden" id="resultView">
         <div class="lek-stepnav lek-stepnav-result"><div class="lek-stepnav-back"><button class="btn btn-ghost btn-sm" id="resultBackDoc" type="button">← Dokument</button><span class="lek-stepfile" id="resultFileName"></span><button class="btn btn-ghost btn-sm" id="resultBackProfile" type="button">← Profil fakulteta</button></div></div>
         <div class="demo-bar hidden" id="demoBar" role="note" aria-label="Primjer izvještaja"></div>
@@ -184,8 +155,6 @@
       </div>
     </div>
     <div class="analyzer-header"><div class="launch-actions"><button class="btn btn-secondary btn-sm" id="historyBtn" type="button">Povijest <span id="historyCount"></span></button><button class="btn btn-secondary btn-sm hidden" id="repairHistoryBtn" type="button">Moji popravci</button><!-- dev-only:start --><button class="btn btn-secondary btn-sm hidden" id="qaBtn" type="button">QA konzola</button><!-- dev-only:end --><span class="privacy-pill"><i data-lucide="lock"></i> Lokalna obrada</span></div></div>
-    </div>
-    </div>
   </div>
 </section>
 </main>
@@ -203,6 +172,40 @@
 <!-- dev-only:start --><div class="modal-backdrop hidden" id="setupModal" role="dialog" aria-modal="true" aria-labelledby="setupTitle"><div class="modal"><div class="modal-head"><h3 id="setupTitle">Produkcijska konfiguracija</h3><button class="modal-close" id="closeSetup" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><div class="setup-note"><strong>Testna konfiguracija preglednika.</strong> Ovdje spremljene vrijednosti vrijede samo u ovom pregledniku. Za javnu objavu iste vrijednosti upiši u <code>DEFAULT_PRODUCTION_CONFIG</code> u HTML-u.</div><div class="setup-grid"><div class="field"><label for="setupEnabled">Aktivacija narudžbi</label><select id="setupEnabled"><option value="false">Testni fallback</option><option value="true">Aktivno slanje</option></select></div><div class="field"><label for="setupProvider">Payment provider</label><select id="setupProvider"><option value="stripe">Stripe Payment Links</option><option value="lemonsqueezy">Lemon Squeezy</option><option value="custom">Drugi provider</option></select></div><div class="field full"><label for="setupOrderEndpoint">Endpoint obrasca</label><input class="input" id="setupOrderEndpoint" placeholder="/ ili https://…"></div><div class="field"><label for="setupBusinessName">Naziv pružatelja</label><input class="input" id="setupBusinessName"></div><div class="field"><label for="setupContactEmail">Kontakt e-mail</label><input class="input" id="setupContactEmail" type="email"></div><div class="field"><label for="setupRetentionDays">Čuvanje narudžbe (dana)</label><input class="input" id="setupRetentionDays" type="number" min="1" max="3650"></div><div class="field"><label for="setupUploadMb">Najveća datoteka (MB)</label><input class="input" id="setupUploadMb" type="number" min="1" max="50"></div><div class="field full"><label for="setupAnalyticsEndpoint">Opcionalni event analytics endpoint</label><input class="input" id="setupAnalyticsEndpoint" placeholder="Prazno = bez klijentske analitike"></div><div class="field full"><label for="setupErrorEndpoint">Opcionalni error-tracking endpoint</label><input class="input" id="setupErrorEndpoint" placeholder="Prazno = samo hosting/console logovi (npr. Sentry tunnel ili /functions/v1/log-error)"></div></div><div class="panel-title" style="margin-top:18px">Puni izvještaj i naplata (napredno)</div><div class="setup-grid"><div class="field full"><label for="setupReportEndpoint">Endpoint punog izvještaja (generate-report)</label><input class="input" id="setupReportEndpoint" placeholder="https://…/functions/v1/generate-report"></div><div class="field full"><label for="setupCheckoutEndpoint">Endpoint checkouta (create-checkout)</label><input class="input" id="setupCheckoutEndpoint" placeholder="https://…/functions/v1/create-checkout"></div><div class="field full"><label for="setupGuaranteeEndpoint">Endpoint garancije (file-guarantee-claim)</label><input class="input" id="setupGuaranteeEndpoint" placeholder="https://…/functions/v1/file-guarantee-claim"></div><div class="field full"><label for="setupSupabaseUrl">Supabase URL</label><input class="input" id="setupSupabaseUrl" placeholder="https://xxxx.supabase.co"></div><div class="field full"><label for="setupSupabaseAnon">Supabase anon ključ (public)</label><input class="input" id="setupSupabaseAnon" placeholder="eyJhbGci… (anon key, smije u klijent)"></div></div><div class="panel-title" style="margin-top:18px">Payment linkovi</div><div class="setup-grid" id="setupPaymentLinks"></div><div class="setup-actions"><button class="btn btn-secondary" id="resetProductionConfig">Vrati zadano</button><button class="btn btn-secondary" id="exportProductionConfig">Izvezi JSON</button><button class="btn btn-primary" id="saveProductionConfig">Spremi testnu konfiguraciju</button></div></div></div></div>
 <!-- dev-only:end -->
 <div class="modal-backdrop hidden" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle"><div class="modal"><div class="modal-head"><h3 id="authTitle">Prijava e-mailom</h3><button class="modal-close" id="closeAuth" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><p class="history-privacy">Za kupnju paketa i puni izvještaj potrebna je kratka prijava e-mailom. Šaljemo jednokratni kod, bez lozinke.</p><div class="field"><label for="authEmail">E-mail</label><input class="input" id="authEmail" type="email" autocomplete="email" inputmode="email" maxlength="180" placeholder="ime@primjer.hr"></div><div class="field hidden" id="authCodeField"><label for="authCode">Kod iz e-maila</label><input class="input" id="authCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Šesteroznamenkasti kod"></div><div class="order-status hidden" id="authStatus" role="status" aria-live="polite"></div><div class="modal-actions"><button class="btn btn-secondary hidden" id="authChangeEmail" type="button">Promijeni e-mail</button><button class="btn btn-primary" id="authSubmit" type="button">Pošalji kod</button></div></div></div></div>
+<!-- LIST ZA PROMJENU PROFILA. Stoji IZVAN <main> kao i svih 12 postojecih modala, i to nije
+     razmjestaj nego uvjet: `setBackgroundInert` (modal-utils.ts) postavlja `inert` na
+     `header.topbar`, `main` i `footer`. List ostavljen unutar `#wizardView` bio bi inertan
+     zajedno s pozadinom, dakle nedostupan tipkovnicom, sto je tocno ono sto ovaj korak rjesava. -->
+<div class="modal-backdrop hidden" id="profileSheet" role="dialog" aria-modal="true" aria-labelledby="profileSheetTitle">
+  <div class="modal modal--sheet">
+    <div class="modal-head">
+      <h3 id="profileSheetTitle">Profil fakulteta</h3>
+      <button class="modal-close" id="closeProfileSheet" aria-label="Zatvori"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+          <section class="wizard-col wizard-col-profile">
+            <div class="detect-badge hidden" id="detectBadge" role="status"></div>
+            <fieldset class="profile-group"><legend class="fg-label">Ustanova</legend>
+            <div class="form-grid">
+              <div class="field full"><label for="institutionSelect">Sveučilište</label><select id="institutionSelect"></select></div>
+              <div class="field full"><label for="unitSelect">Fakultet ili akademija</label><select id="unitSelect"></select><button type="button" class="no-faculty-link hidden" id="noFacultyBtn">Nema mog fakulteta?</button><div class="no-faculty-panel" id="noFacultyPanel" hidden><label for="noFacultyName">Naziv fakulteta</label><input id="noFacultyName" type="text" maxlength="200" placeholder="npr. Filozofski fakultet u Osijeku"><label for="noFacultyEmail">E-mail (nije obavezno)</label><input id="noFacultyEmail" type="email" inputmode="email" autocomplete="email" placeholder="tvoj@email.hr"><button type="button" class="btn btn-primary btn-sm" id="noFacultySubmit">Pošalji</button><div class="wl-msg" id="noFacultyMsg" aria-live="polite"></div></div></div>
+              <div class="field full"><label for="programSelect">Studij</label><select id="programSelect"></select></div><div class="field full hidden" id="departmentField"><label for="departmentSelect">Katedra ili područje rada (opcionalno)</label><select id="departmentSelect"><option value="general">Bez posebnog profila katedre</option></select><div class="subtle-help">Profil katedre nadopunjuje studijski profil i vrijedi samo za ono što izričito uređuje.</div></div>
+            </div>
+            </fieldset>
+            <fieldset class="profile-group"><legend class="fg-label">Rad</legend>
+            <div class="form-grid">
+              <div class="field"><label for="workType">Vrsta rada</label><select id="workType"><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate" selected>Diplomski rad</option><option value="specialist">Specijalistički rad</option><option value="doctoral">Doktorski rad</option><option value="article">Znanstveni članak</option><option value="project">Projektni / istraživački rad</option></select><div class="work-support" id="workTypeSupport"></div></div>
+              <div class="field hidden" id="variantField"><label for="workVariant">Varijanta rada</label><select id="workVariant"><option value="default">Opći profil</option></select></div>
+              <div class="field full hidden" id="methodologyField"><label for="methodologySelect">Metodološka varijanta diplomskog rada</label><select id="methodologySelect"><option value="auto">Automatski prepoznaj iz strukture</option><option value="theoretical">Teorijski rad</option><option value="qualitative">Empirijski rad, kvalitativno istraživanje</option><option value="quantitative">Empirijski rad, kvantitativno istraživanje</option></select><div class="methodology-help">Aktivira provjeru cilja, pitanja ili hipoteza, metode, rezultata i rasprave. Automatski način zaključuje iz strukture dokumenta.</div></div>
+              <div class="field full hidden" id="fpzgCohortField"><label for="fpzgCohort">Status završnog rada u 2025./2026.</label><select id="fpzgCohort"><option value="current">Završni rad upisan u 2025./2026.</option><option value="carried">Završni rad prenesen iz 2024./2025.</option></select><div class="subtle-help">Preneseni završni rad ima i prvi dio integriranog ispitnog roka; novoupisani završni rad nema taj rok.</div></div><div class="field full hidden" id="fpzgDeadlineField"><label for="fpzgDeadline">Ciljani godišnji rok obrane</label><select id="fpzgDeadline"></select><div class="subtle-help" id="fpzgDeadlineHelp">Rokovi se preuzimaju iz odluke FPZG-a i akademskog kalendara za 2025./2026.</div></div>
+            </div>
+            </fieldset>
+            <div class="profile-note" id="profileNote"></div>
+          </section>
+      <div class="sheet-akcije"><button class="btn btn-primary btn-sm" id="profileSheetDone" type="button">Gotovo</button></div>
+    </div>
+  </div>
+</div>
 <div class="modal-backdrop hidden" id="guaranteeModal" role="dialog" aria-modal="true" aria-labelledby="guaranteeTitle"><div class="modal"><div class="modal-head"><h3 id="guaranteeTitle">Garancijski zahtjev (T2/T3)</h3><button class="modal-close" id="closeGuarantee" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><p class="history-privacy"><strong>Što garancija pokriva:</strong> točnost verificiranih, bodovanih pravila. Ako je referada vratila rad zbog pravila koje je puni izvještaj označio prolaznim, vrijedi povrat i besplatan ručni popravak. Garancija se ne odnosi na prihvaćanje rada, ocjenu ni sadržaj; Lekta nije službena potvrda fakulteta. Zahtjev se podnosi unutar 30 dana od vezivanja izvještaja, a odluku donosi čovjek nakon pregleda, s odgovorom u roku od 5 radnih dana. Detalji su u <a class="legal-open" data-legal="guarantee" href="/garancija.html">garancijskim uvjetima</a>.</p><div class="field"><label for="guaranteeRule">Sporno pravilo (označeno prolaznim)</label><select class="input" id="guaranteeRule"></select></div><div class="field"><label for="guaranteeEvidence">Dokaz (opis povrata i poveznica na dopis ili e-mail referade)</label><textarea class="input" id="guaranteeEvidence" rows="4" maxlength="1500" placeholder="Npr. referada je 12. 7. vratila rad uz obrazloženje da margine nisu 2,5 cm; poveznica na sken dopisa."></textarea></div><div class="order-status hidden" id="guaranteeStatus" role="status" aria-live="polite"></div><div class="modal-actions"><button class="btn btn-primary" id="guaranteeSubmit" type="button">Pošalji zahtjev</button></div></div></div></div>
 <form name="lekta-orders" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" class="hidden" aria-hidden="true"><input type="hidden" name="form-name" value="lekta-orders"><p class="honeypot"><label>Ne ispunjavaj: <input name="bot-field"></label></p><input name="order_id"><input name="name"><input name="email"><input name="package"><input name="deadline"><input name="notes"><input name="profile"><input name="fingerprint"><input name="marketing_consent"><input name="terms_version"><input name="document" type="file"></form>
 <div class="consent-banner hidden" id="consentBanner" role="region" aria-label="Postavke privole za analitiku"><p><strong>Dobrovoljna anonimna analitika.</strong> Osnovne funkcije i lokalna analiza rade bez marketinških kolačića. Možeš dopustiti slanje anonimnih događaja korištenja kada je takav endpoint konfiguriran.</p><div class="consent-actions"><button class="btn btn-secondary btn-sm" id="analyticsDecline">Samo nužno</button><button class="btn btn-primary btn-sm" id="analyticsAccept">Dopusti analitiku</button></div></div>

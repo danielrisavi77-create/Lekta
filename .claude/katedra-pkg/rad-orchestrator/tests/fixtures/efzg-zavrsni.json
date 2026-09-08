@@ -1,0 +1,19 @@
+{
+  "naziv": "efzg-zavrsni",
+  "opis": "EFZG završni od plana, full_auto, neempirijski. Profil iz registryja (efzg, potvrđen) — jedini fixture na kojem gate 'pravila' smije dati ❌. Za završni plan gate je obavezan (pravilo 1): očekuje se da plan prođe plan_state odobri --actor full-auto ili da se stane s pitanjima.",
+  "args": {
+    "tip": "zavrsni",
+    "tema": "[TEST] Utjecaj digitalnog bankarstva na zadovoljstvo klijenata malih banaka u Hrvatskoj",
+    "fakultet": "efzg",
+    "faza": "plan",
+    "empirijski": false,
+    "full_auto": true,
+    "rok": "2026-11-15"
+  },
+  "ocekivano": {
+    "status": ["zavrseno", "ceka_autora", "ceka_stvaran_input"],
+    "artefakti_moraju_postojati": [".katedra/stanje.json", ".katedra/plan.json", ".katedra/gate.json"],
+    "min_faza_dovrseno": ["plan"],
+    "max_iteracija": 12
+  }
+}

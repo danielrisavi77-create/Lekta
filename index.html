@@ -35,61 +35,74 @@
 <header class="topbar">
   <nav class="shell nav" aria-label="Glavna navigacija">
     <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <div class="nav-links"><a href="/saznaj-vise/#how">Kako radi</a><a href="/saznaj-vise/#video">Video</a><a href="/saznaj-vise/#podcrta">Što provjerava</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="/fakulteti/">Po fakultetu</a><a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a><a href="/saznaj-vise/#pricing">Paketi</a><a href="/saznaj-vise/#faq">Pitanja</a></div>
-    <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
-    <a class="btn btn-primary btn-sm" href="#intakeDropzone">Provjeri rad</a>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
-    <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
+    <!-- NAVIGACIJA ULAZA JE NAMJERNO KRATKA (2026-09-06).
+         Ekran ima jednu svrhu: ubaciti dokument. Devet stavki izbornika, padajuci "Alati", drugi
+         CTA ("Provjeri rad") i mobilni hamburger natjecali su se s njom, a vodili su na sadrzaj
+         koji zivi na `/saznaj-vise/`. Ostaju samo dva odredista koja korisnik na OVOM ekranu moze
+         trebati: povratak svom radu i objasnjenje sto se dogadja.
+         Lampa ostaje kao KONTROLA, ne kao navigacija, ali bez natpisa: tamna tema je zadana, pa bi
+         ulaz bez preklopnika bio gubitak, a ne pojednostavljenje. -->
+    <div class="intake-nav">
+      <a href="/moji-radovi/">Moji radovi</a>
+      <a class="intake-nav-help" href="/saznaj-vise/#how" aria-label="Kako Lekta radi">?</a>
+      <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
+    </div>
   </nav>
-  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
-    <a href="/saznaj-vise/#how">Kako radi</a>
-    <a href="/saznaj-vise/#video">Video</a>
-    <a href="/saznaj-vise/#podcrta">Što provjerava</a>
-    <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
-    <a href="/saznaj-vise/#pricing">Paketi</a>
-    <a href="/saznaj-vise/#faq">Pitanja</a>
-    <a href="alati.html">Svi alati</a>
-    <a href="citat.html">Citat generator</a>
-    <a href="kartice.html">Brojač kartica</a>
-    <a href="naslovnica.html">Naslovnica</a>
-    <a href="literatura.html">Sređivanje literature</a>
-    <a href="izjava.html">Izjava o izvornosti</a>
-    <a href="/fakulteti/">Po fakultetu</a>
-    <div class="mobile-nav-cta"><a class="btn btn-primary" href="#intakeDropzone">Provjeri rad</a></div>
-  </div>
 </header>
 <main id="top" class="intake-main">
 <section class="intake-stage" id="intakeStage" data-intake-state="idle" aria-labelledby="intakeTitle">
   <div class="intake-shell">
     <div class="intake-desk" id="paperCover">
       <div class="intake-paper" id="intakeDropzone" role="button" tabindex="0" aria-controls="intakeFile" aria-describedby="intakeMeta" aria-busy="false">
-        <span class="intake-kicker">lokalni korektorski stol</span>
-        <h1 class="intake-title" id="intakeTitle">Ubaci rad.<br>Ostaje na tvom <em class="intake-em">uređaju<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em>.</h1>
-        <p class="intake-lead">Provjeravamo oblikovanje, strukturu, opseg i citiranje prema pravilima tvog fakulteta. Bez slanja dokumenta i bez registracije.</p>
-        <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
-        <span class="intake-hint">ili ispusti dokument na papir</span>
-        <span class="intake-file-name" id="intakeFileName"></span>
+        <!-- PAPIR IMA DVA LICA. `intake-poziv` je poziv na radnju, `intake-karta` je isti taj list
+             nakon sto na njemu lezi dokument. Prebacuje ih CSS preko `data-intake-state` na
+             `#intakeStage`, pa se stanje vidi NA papiru umjesto kao poruka ispod njega: isti
+             predmet putuje kroz proizvod, a ne niz nepovezanih ekrana. -->
+        <div class="intake-poziv">
+          <span class="intake-kicker">Besplatna provjera · lokalno na uređaju</span>
+          <h1 class="intake-title" id="intakeTitle">Ubaci rad.</h1>
+          <p class="intake-lead">Provjerit ćemo <em class="intake-em">formu<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em> prije nego ga predaš.</p>
+          <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
+          <span class="intake-hint">ili ispusti dokument ovdje</span>
+          <span class="intake-brava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Dokument ostaje ovdje</span>
+        </div>
+        <div class="intake-karta" aria-hidden="true">
+          <span class="intake-karta-znak">W</span>
+          <span class="intake-file-name" id="intakeFileName"></span>
+          <span class="intake-karta-velicina" id="intakeFileSize"></span>
+          <ul class="intake-karta-potvrde">
+            <li data-korak="format">Word dokument je spreman</li>
+            <li data-korak="lokalno">Možemo ga analizirati lokalno</li>
+          </ul>
+          <span class="intake-karta-odlazak">Otvaram korektorski stol…</span>
+        </div>
       </div>
       <input class="intake-file-input" id="intakeFile" type="file" tabindex="-1" aria-hidden="true" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
     </div>
 
-    <p class="intake-meta" id="intakeMeta">Word .docx do <strong data-upload-limit>dopuštene veličine</strong> · jedan dokument · analiza radi u pregledniku</p>
+    <p class="intake-meta" id="intakeMeta">.docx · do <strong data-upload-limit>dopuštene veličine</strong> · bez prijave</p>
     <p class="intake-status" id="intakeStatus" aria-live="polite" aria-atomic="true"></p>
     <p class="intake-error" id="intakeError" role="alert" hidden></p>
     <button class="intake-memory-action" id="intakeMemoryAction" type="button" hidden>Otvori korektorski stol bez spremanja</button>
     <p class="intake-continue" id="intakeContinue" hidden></p>
 
-    <div class="intake-stats" id="intakeStats" aria-label="Pokrivenost"></div>
-    <p class="intake-links"><a href="/saznaj-vise/#how">Kako radi i što provjerava</a><a href="/moji-radovi/">Moji radovi</a></p>
+    <p class="intake-links"><a href="/saznaj-vise/#how">Kako radi?</a></p>
   </div>
 </section>
-<section class="ks-marquee" aria-hidden="true">
-  <div class="ks-tape"><div class="ks-tape-track">
-    <span><b>●</b>&nbsp;&nbsp;CITATNICE</span><span><b>●</b>&nbsp;&nbsp;LITERATURA</span><span><b>●</b>&nbsp;&nbsp;STRUKTURA</span><span><b>●</b>&nbsp;&nbsp;OBLIKOVANJE</span><span><b>●</b>&nbsp;&nbsp;TABLICE I SLIKE</span><span><b>●</b>&nbsp;&nbsp;PREDAJNI PAKET</span><span><b>●</b>&nbsp;&nbsp;PRIVATNOST</span><span><b>●</b>&nbsp;&nbsp;FPZG · VERIFICIRANA PRAVILA</span><span><b>●</b>&nbsp;&nbsp;CITATNICE</span><span><b>●</b>&nbsp;&nbsp;LITERATURA</span><span><b>●</b>&nbsp;&nbsp;STRUKTURA</span><span><b>●</b>&nbsp;&nbsp;OBLIKOVANJE</span><span><b>●</b>&nbsp;&nbsp;TABLICE I SLIKE</span><span><b>●</b>&nbsp;&nbsp;PREDAJNI PAKET</span><span><b>●</b>&nbsp;&nbsp;PRIVATNOST</span><span><b>●</b>&nbsp;&nbsp;FPZG · VERIFICIRANA PRAVILA</span>
-  </div></div>
-</section>
 </main>
-<footer><div class="shell"><div class="footer-grid"><div class="footer-brand"><a class="logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a><p class="footer-copy">Tehnička provjera i priprema akademskih radova. Aplikacija ne piše sadržaj rada i ne zamjenjuje mentora, knjižničara, lektora, službene fakultetske upute ni provjeru plagijata ili sličnosti (nije Turnitin).</p><span class="local-badge"><i data-lucide="lock"></i> Automatska provjera je lokalna</span></div><nav class="footer-col" aria-label="Proizvod"><span class="footer-col-h">Proizvod</span><a href="#intakeDropzone">Provjera</a><a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a><a href="/saznaj-vise/#pricing">Paketi</a><a href="/pokrivenost.html">Pokrivenost profila</a><a href="/fakulteti/">Pravila po fakultetu</a></nav><nav class="footer-col" aria-label="Alati"><span class="footer-col-h">Alati</span><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></nav><nav class="footer-col" aria-label="Pravno"><span class="footer-col-h">Pravno</span><a class="footer-link-btn legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a><a class="footer-link-btn legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a><a class="footer-link-btn legal-open" data-legal="disclaimer" href="/odricanje-od-odgovornosti.html">Odricanje</a><a class="footer-link-btn legal-open" data-legal="purchase" href="/pravila-povrata.html">Pravila kupnje i povrata</a><a class="footer-link-btn legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a><a class="footer-link-btn legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a><a class="footer-link-btn legal-open" data-legal="guarantee" href="/garancija.html">Garancija</a></nav><nav class="footer-col" aria-label="Ostalo"><span class="footer-col-h">Ostalo</span><a class="footer-link-btn" href="privatnost.html">Postavke privatnosti</a></nav></div><div class="footer-bottom"><span>© 2026 Lekta · Zagreb</span><span>Nije provjera plagijata · Nije službena potvrda fakulteta</span></div></div></footer>
+<!-- PODNOZJE ULAZA JE SVEDENO NA PRAVNO (2026-09-06). Cetiri stupca poveznica (proizvod,
+     alati, pravno, ostalo) pripadaju `/saznaj-vise/`; ovdje su konkurirala jedinoj radnji.
+     Pravne poveznice OSTAJU i nisu predmet pojednostavljenja: privatnost, uvjeti i obrada
+     dokumenata moraju biti dohvatljivi s ekrana na kojem korisnik predaje dokument. -->
+<footer class="intake-footer"><div class="shell">
+  <nav class="intake-footer-pravno" aria-label="Pravno">
+    <a class="legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a>
+    <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
+    <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
+    <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
+  </nav>
+  <p class="intake-footer-nota">© 2026 Lekta · Automatska provjera je lokalna · Nije provjera plagijata ni službena potvrda fakulteta</p>
+</div></footer>
 <div class="toast-wrap" id="toastWrap" role="status" aria-live="polite" aria-atomic="false"></div>
 <script type="module" src="/src/routes/intake/main.ts"></script>
 </body>

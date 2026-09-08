@@ -1,0 +1,74 @@
+{
+  "status": "nepotvrdeno",
+  "napomene": [
+    "Overlay izveden iz OBRANJENOG diplomskog rada s diplomskog studija politologije FPZG-a (2026.), a ne iz čitanja Uputa. Gdje se Upute i obranjeni rad razilaze, zabilježeno je oboje.",
+    "Overlay ne smije podići status profila — promocija ide kroz faculty readiness gate."
+  ],
+  "format": {
+    "font": ["Times New Roman"],
+    "velicina_pt": 12,
+    "prored": 1.5,
+    "poravnanje": "obostrano",
+    "margine_cm": {"gore": 2.54, "dolje": 2.54, "lijevo": 2.54, "desno": 2.54},
+    "odlomak": {"min_redaka": 5, "max_redaka": 15, "min_recenica": 3},
+    "uvlaka_prvog_retka_cm": null,
+    "razmak_izmedu_odlomaka_pt": 6
+  },
+  "struktura": {
+    "prikazi": {
+      "natpis": "iznad",
+      "natpis_oblik": "Tablica 1. Naslov",
+      "natpis_razdjelnik": [".", ":"],
+      "natpis_pt": 11,
+      "izvor_ispod": true,
+      "izvor_pt": 10,
+      "tekst_u_tablici_pt": 11,
+      "mora_biti_spomenut_u_tekstu": true,
+      "poziv_u_tekstu": "malo pocetno slovo",
+      "ne_smije_se_lomiti": true
+    },
+    "fusnote": {
+      "vrsta": "wordove",
+      "pt": 10,
+      "prored": 1.0,
+      "samo_objasnidbene": true
+    },
+    "numeracija_stranica": {
+      "polozaj": "podnozje sredina",
+      "predtekst_bez_broja": true,
+      "tijelo_pocinje_od": 1
+    },
+    "redoslijed": [
+      "naslovnica (vanjska)",
+      "naslovnica (unutarnja)",
+      "izjava o akademskoj cestitosti",
+      "sadrzaj",
+      "uvod",
+      "tijelo teksta",
+      "zakljucak",
+      "literatura",
+      "popis tablica",
+      "popis grafikona",
+      "prilozi",
+      "sazetak i kljucne rijeci",
+      "summary and keywords"
+    ]
+  },
+  "provenance": [
+    {
+      "polje": "format.margine_cm",
+      "izvor": "obranjeni diplomski rad, FPZG, politologija, 2026.",
+      "napomena": "Upute margine NE propisuju; raniji profil je nosio lijevo 3 cm iz nepotvrdenog izvora."
+    },
+    {
+      "polje": "struktura.prikazi.natpis_oblik",
+      "izvor": "obranjeni diplomski rad",
+      "napomena": "Upute na jednom mjestu daju dvotocku; obranjeni rad koristi tocku. Alat mora prihvacati oba."
+    },
+    {
+      "polje": "format.uvlaka_prvog_retka_cm",
+      "izvor": "obranjeni diplomski rad",
+      "napomena": "null = odlomci se odvajaju razmakom. Upute dopustaju i uvlaku; obranjeni rad je nema."
+    }
+  ]
+}

@@ -1,0 +1,377 @@
+{
+ "slug": "mefri-sanitarno",
+ "naziv": "Medicinski fakultet Sveučilišta u Rijeci, sanitarno inženjerstvo",
+ "sveuciliste": "Sveučilište u Rijeci",
+ "studij": "sveučilišni diplomski studij sanitarnog inženjerstva",
+ "aliasi": [
+  "MEFRI",
+  "MEDRI",
+  "Medicinski fakultet Rijeka",
+  "Medicinski fakultet Sveučilišta u Rijeci",
+  "medri.uniri.hr",
+  "sanitarno inženjerstvo",
+  "sanitarno inzenjerstvo"
+ ],
+ "tipovi_radova": [
+  "diplomski"
+ ],
+ "status": "nepotvrdeno",
+ "izvor": {
+  "dokument": "Naputak za izradu diplomskog rada, Medicinski fakultet Sveučilišta u Rijeci, ak. god. 2025./2026.; pravila izvučena preko sažimača jer izravno preuzimanje s medri.uniri.hr nije prošlo kroz proxy (403). Egress NIJE zaobiđen. Vrijednosti neovisno potvrđene u verziji Naputka 2020./2021.",
+  "url": "https://medri.uniri.hr/",
+  "datum_dokumenta": "2025/2026",
+  "provjereno": "2026-09-05"
+ },
+ "citiranje": {
+  "stil": "vancouver",
+  "u_tekstu": "(1) ili (1, 2) ili (3–5) — u ovalnim zagradama, u razini teksta, PRIJE zareza ili točke",
+  "popis_primjer": "Bezak B, Kovačić S, Bralić M. Mehanička trombektomija. Med Flum. 2021;57(4):328-40.",
+  "napomena": "VANCOUVER, ne IEEE: numerički stil po redoslijedu prvog pojavljivanja; brojevi u OVALNIM zagradama (n), ne uglatim [n] i ne u eksponentu; više referenci u JEDNOJ zagradi; ista referenca uvijek isti broj; prvih 6 autora pa „i sur.\"; naslov rada samo prvo slovo veliko; časopis skraćenim imenom. Od v1.9 paket ima dijalekt 'vancouver' (citation_dialects.py): ovalne zagrade, rasponi, siročad, redoslijed prvog pojavljivanja; scripts/provjeri_vancouver.py ostaje kao samostalna provjera."
+ },
+ "format": {
+  "font": [
+   "Times New Roman",
+   "Arial"
+  ],
+  "velicina_pt": 12,
+  "prored": 2.0,
+  "lice": "trece-jednina",
+  "numeracija": {
+   "opis": "broj stranice u donjem desnom kutu; prednji dio bez broja; Uvod je stranica 1",
+   "prednji_dio": "bez",
+   "tijelo": "arapski",
+   "tijelo_pocinje_od": 1
+  },
+  "prijelom_pred_poglavljem": true,
+  "odlomak": {
+   "min_redaka": 5,
+   "max_redaka": 10,
+   "razmak_pt": 6
+  },
+  "margine_cm": {
+   "gore": 2.5,
+   "dolje": 2.5,
+   "lijevo": 2.5,
+   "desno": 2.5
+  },
+  "prikazi": {
+   "natpis_tablice": "iznad",
+   "natpis_slike": "ispod",
+   "napomena": "naslov tablice iznad tablice, naslov slike ispod slike"
+  }
+ },
+ "struktura": {
+  "opseg": {
+   "diplomski": {
+    "dijelovi": {
+     "zahvala": {
+      "obavezan": false,
+      "redoslijed": 2,
+      "napomena": "neobavezna (Upute, točka 2) — ovdje samo radi redoslijeda"
+     },
+     "izjava": {
+      "obavezan": true,
+      "redoslijed": 3
+     },
+     "tdk": {
+      "obavezan": true,
+      "redoslijed": 4
+     },
+     "bdc": {
+      "obavezan": true,
+      "redoslijed": 5
+     },
+     "sazetak": {
+      "obavezan": true,
+      "redoslijed": 6,
+      "znakovi_max": 1800,
+      "podsekcije": [
+       "uvod",
+       "cilj",
+       "metode",
+       "rezultati",
+       "zakljucak"
+      ],
+      "napomena": "strukturiran; prva rečenica Rezultata navodi broj ispitanika; ≥ 3 ključne riječi iz MeSH-a (provjera MeSH-a ostaje ručna)"
+     },
+     "summary": {
+      "obavezan": true,
+      "redoslijed": 7,
+      "podsekcije": [
+       "title",
+       "background",
+       "aim",
+       "methods",
+       "results",
+       "conclusion"
+      ]
+     },
+     "sadrzaj": {
+      "obavezan": true,
+      "redoslijed": 8
+     },
+     "kratice": {
+      "obavezan": false,
+      "redoslijed": 9,
+      "napomena": "popis kratica po potrebi (Upute, točka 9) — ovdje samo radi redoslijeda; stoji IZA sadržaja"
+     },
+     "uvod": {
+      "obavezan": true,
+      "redoslijed": 10,
+      "rijeci_min": 3000,
+      "udio_max": 0.3333,
+      "napomena": "„ne smije prelaziti trećinu ukupnog teksta\" — tijelo = od Uvoda do popisa literature"
+     },
+     "cilj": {
+      "obavezan": true,
+      "redoslijed": 11
+     },
+     "hipoteze": {
+      "obavezan": true,
+      "redoslijed": 12
+     },
+     "metode": {
+      "obavezan": true,
+      "redoslijed": 13,
+      "podsekcije": [
+       "etika",
+       "ustroj-istrazivanja",
+       "mjesto-i-vrijeme-provedbe",
+       "jedinica-analize",
+       "postupci",
+       "statisticki-postupci"
+      ]
+     },
+     "rezultati": {
+      "obavezan": true,
+      "redoslijed": 14
+     },
+     "rasprava": {
+      "obavezan": true,
+      "redoslijed": 15,
+      "rijeci_min": 1000,
+      "podsekcije": [
+       "prednosti-i-nedostatci-istrazivanja",
+       "smjernice-za-buduca-istrazivanja"
+      ],
+      "napomena": "podsekcije su PREDZADNJI i ZADNJI odjeljak Rasprave; počinje odlomkom koji sažima rezultate, ne upućuje na tablice (to ostaje u provjeri_hks_fzs.py)"
+     },
+     "zakljucak": {
+      "obavezan": true,
+      "redoslijed": 16
+     },
+     "literatura": {
+      "obavezan": true,
+      "redoslijed": 17
+     },
+     "prilozi": {
+      "obavezan": true,
+      "redoslijed": 18
+     },
+     "zivotopis": {
+      "obavezan": true,
+      "redoslijed": 19
+     }
+    },
+    "stranica_min": 15,
+    "stranica_max": 50,
+    "napomena_opseg": "15–50 stranica računajući sve od Uvoda nadalje (Naputak). Prednji dio se ne broji. Izmjereno na stvarnom radu: dvostruki prored je dominantan trošak, prikazi su nosili samo 5 stranica."
+   }
+  },
+  "obavezni_dijelovi": [
+   "naslovnica",
+   "izjava o akademskoj čestitosti",
+   "temeljna dokumentacijska kartica",
+   "basic documentation card",
+   "sažetak",
+   "summary",
+   "sadržaj",
+   "uvod",
+   "cilj",
+   "hipoteze",
+   "metode",
+   "rezultati",
+   "rasprava",
+   "zaključak",
+   "popis citirane literature",
+   "prilozi",
+   "životopis"
+  ],
+  "prikazi": {
+   "natpis": "iznad",
+   "izvor_ispod": false,
+   "mora_biti_spomenut_u_tekstu": true
+  }
+ },
+ "predaja": {
+  "turnitin": true
+ },
+ "napomene": [
+  "STATUS NEPOTVRĐENO iz jednog razloga: pravila su iz službenog PDF-a uputa (veljača 2026.), ali pročitana preko sažimača, ne pdftotext-om. Lokatori (str./odjeljak) su iz sažimača — potvrditi otvaranjem PDF-a prije nego se bilo koji nalaz studentu prikaže kao ❌.",
+  "OPSEG nije po ukupnim stranicama nego po dijelovima — od v1.9 nosi ga struktura.opseg.diplomski.dijelovi (nalaz 9): UVOD najmanje 3000 riječi i ne više od trećine ukupnog teksta (str. 4, odj. 2.1 i 3.10); RASPRAVA najmanje 1000 riječi (str. 4, odj. 2.1); SAŽETAK najviše 1800 znakova (str. 5, odj. 3.6); ostali dijelovi „koliko je potrebno\". Kvantitativno istraživanje: najmanje 100 ispitanika (str. 3, odj. 1.2) — to shema i dalje ne nosi. Provjerava scripts/provjeri_dijelove.py; check_rules.py to ne vidi.",
+  "RAZMAK IZMEĐU ODLOMAKA 6 pt (str. 4, odj. 2.3) — od v1.9 format.odlomak.razmak_pt; provjerava provjeri_dijelove.py nad stilom Normal.",
+  "SAŽETAK strukturiran s podnaslovima Uvod, Cilj, Metode, Rezultati, Zaključak; prva rečenica Rezultata navodi broj ispitanika; najmanje 3 ključne riječi iz MeSH-a (str. 5, odj. 3.6). SUMMARY: Title + Background, Aim, Methods, Results, Conclusion (str. 5, odj. 3.7).",
+  "METODE — propisan redoslijed podsekcija: Etika, Ustroj istraživanja, Mjesto i vrijeme provedbe, Jedinica analize, Postupci, Statistički postupci (str. 5–6, odj. 3.13) — od v1.9 dijelovi.metode.podsekcije.",
+  "RASPRAVA počinje odlomkom koji sažima najvažnije rezultate; ne ponavlja brojke iz Rezultata i ne upućuje na tablice; predzadnji odjeljak „Prednosti i nedostatci istraživanja\", zadnji „Smjernice za buduća istraživanja\" (str. 6, odj. 3.15).",
+  "ZAKLJUČAK: odgovor na probleme i hipoteze; sažeti rezultati označeni rednim brojevima (str. 7, odj. 3.16). ŽIVOTOPIS u natuknicama (str. 7, odj. 3.19).",
+  "TABLICE: natpis IZNAD, „Tablica 1.\" s točkom iza broja i bez kurziva u natpisu; prored natpisa 1, veličina 11; u tekstu se referira „(Tablica 1)\" ili „u Tablici 1\" — BEZ točke iza broja (str. 11–12, odj. 5.5). SLIKE: natpis ISPOD, „Slika 1.\", crno-bijeli 2D grafikoni (str. 13, odj. 5.6).",
+  "Doslovni citat: navodnici + kurziv + izrijekom označeno; izravno citiranje izbjegavati (str. 15, odj. 5.7). Jednostrani ispis (odj. 2.2), spell-check uključen (odj. 2.8), svako poglavlje na novoj stranici prijelomom (odj. 2.7). Margine, poravnanje i veličine naslova NISU propisani.",
+  "NEOBAVEZNI dijelovi po Uputama: zahvala (točka 2) i popis kratica (točka 9) — namjerno NISU u obavezni_dijelovi da ne daju lažni „fali\"."
+ ],
+ "provenance": {
+  "default": {
+   "source": "Posebne upute za pisanje diplomskog rada FZS HKS (veljača 2026.), pročitano sažimačem",
+   "type": "explicit",
+   "confidence": 0.8,
+   "verified_at": "2026-09-01"
+  },
+  "rules": {
+   "/format/font": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.3 — „koristi se font Book Antiqua, veličina fonta 11\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/format/velicina_pt": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.3",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/format/prored": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.3 — „Razmak između slova je 1,5\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/format/numeracija": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.6 — „u donjem desnom uglu … prva stranica uvoda bude označena kao stranica br. 1\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/format/prijelom_pred_poglavljem": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.7",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/format/odlomak": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.4 — „5-10 redaka teksta\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/format/lice": {
+    "source": "nije propisano u Uputama — zadano paketa",
+    "type": "default",
+    "confidence": 0.3,
+    "verified_at": "2026-09-01"
+   },
+   "/citiranje/stil": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 14, odj. 5.7 — „vancouverski stil citiranja\"; od v1.9 shema ima 'vancouver'",
+    "type": "derived",
+    "confidence": 0.6,
+    "verified_at": "2026-09-01",
+    "derivation": "Vancouver: numerički, ovalne zagrade, 'i sur.' nakon 6 autora — dijalekt 'vancouver'"
+   },
+   "/struktura/obavezni_dijelovi": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4–8, odj. 3, točke 1–19",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/prikazi": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 11–13, odj. 5.5–5.6",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/predaja/turnitin": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 7, odj. 4 — „provjeravaju se pomoću računalnog programa koji otkriva plagiranje\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/format/odlomak/razmak_pt": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.3 — „razmak između odlomaka 6 pt\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/opseg/diplomski/dijelovi": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4–8, odj. 3, točke 1–19 — redoslijed i obaveznost dijelova",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/opseg/diplomski/dijelovi/uvod/rijeci_min": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.1 — „Uvod najmanje 3000 riječi\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/opseg/diplomski/dijelovi/uvod/udio_max": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 3.10 — „ne smije prelaziti trećinu ukupnog teksta\"",
+    "type": "derived",
+    "confidence": 0.7,
+    "verified_at": "2026-09-01",
+    "derivation": "„trećina\" → udio_max 0.3333"
+   },
+   "/struktura/opseg/diplomski/dijelovi/rasprava/rijeci_min": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 4, odj. 2.1 — „Rasprava najmanje 1000 riječi\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/opseg/diplomski/dijelovi/rasprava/podsekcije": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 6, odj. 3.15 — „Prednosti i nedostatci istraživanja\", „Smjernice za buduća istraživanja\"",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/opseg/diplomski/dijelovi/sazetak": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 5, odj. 3.6 — „najviše 1800 znakova\"; podnaslovi Uvod, Cilj, Metode, Rezultati, Zaključak",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/opseg/diplomski/dijelovi/summary": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 5, odj. 3.7 — Title, Background, Aim, Methods, Results, Conclusion",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   },
+   "/struktura/opseg/diplomski/dijelovi/metode/podsekcije": {
+    "source": "Upute FZS HKS 2026",
+    "locator": "str. 5–6, odj. 3.13 — Etika, Ustroj istraživanja, Mjesto i vrijeme provedbe, Jedinica analize, Postupci, Statistički postupci",
+    "type": "explicit",
+    "confidence": 0.8,
+    "verified_at": "2026-09-01"
+   }
+  }
+ },
+ "sazetak": {
+  "max_rijeci": 250,
+  "vrsta": "deskriptivni",
+  "napomena": "sažetak diplomskog opisuje O ČEMU je rad, s rezultatima u jednoj rečenici na kraju; nije niz brojki (v. C4 audita)"
+ }
+}

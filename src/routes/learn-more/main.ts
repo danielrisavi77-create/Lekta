@@ -1,4 +1,5 @@
 import { CHECK_ITEMS } from '../../config/config-loader';
+import { renderSiteStats } from '../shared/site-stats-strip';
 import { PRICING_TIERS } from '../../config/pricing-tiers';
 import { loadProductionConfig, paidOffersLive } from '../../config/production-config';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
@@ -49,6 +50,11 @@ function renderPricing(root: HTMLElement, live: boolean): void {
 }
 
 function start(): void {
+  // Traka s brojkama: preseljena s ulaza `/` (2026-09-06). Podatak je pecen, pa stranica ne
+  // vuce registar profila od 194 KB samo da ispise tri broja.
+  const stats = document.getElementById('siteStats');
+  if (stats) renderSiteStats(document, stats);
+
   const checks = document.getElementById('checkGrid');
   if (checks) renderChecks(checks);
 

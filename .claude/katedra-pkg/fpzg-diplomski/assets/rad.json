@@ -1,0 +1,17 @@
+{
+  "docx": "Diplomski_PREZIME.docx",
+  "naslov": "Puni naslov rada onako kako stoji na naslovnici",
+  "dijelovi": [
+    "predtekst.md",
+    "[[SEC]]",
+    "pog1_uvod.md",
+    "pog2_teorija.md",
+    "pog3_metodologija.md",
+    "pog4_rezultati.md",
+    "pog5_rasprava.md",
+    "pog6_zakljucak.md",
+    "literatura.md",
+    "prilog.md",
+    "zatekst.md"
+  ]
+}

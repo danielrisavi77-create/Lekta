@@ -49,7 +49,11 @@ const RADNA_POVRSINA_TREBA = [
   'analyzer', 'dropzone', 'fileInput', 'analyzeBtn', 'resultCockpit',
   'orderModal', 'historyModal', 'repairHistoryModal', 'reportModal', 'legalModal', 'previewModal',
   'checkoutConsentModal', 'authModal', 'guaranteeModal', 'consentBanner', 'authEntry', 'themeBtn',
-  'mobileNav', 'toastWrap', 'workspace-status',
+  // 'mobileNav' je uklonjen 2026-09-07 zajedno s marketinskom navigacijom na `/rad/`: nema
+  // vise sto sklapati u mobilni izbornik. Obrazlozenje popisa ("inace ozicenje iz app.ts nema
+  // metu") za taj ID ionako nije vrijedilo: app.ts ga spominje NULA puta, a jedini pisac je
+  // `setupMobileNav` u ui-boot.ts, koji izlazi na `if (!btn || !nav) return`.
+  'toastWrap', 'workspace-status',
 ];
 
 describe('ruta /rad/', () => {

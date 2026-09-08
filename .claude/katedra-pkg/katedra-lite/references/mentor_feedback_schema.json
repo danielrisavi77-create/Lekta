@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Katedra mentor feedback state v2",
+  "type": "object",
+  "required": ["verzija", "revision", "izvor", "source_artifact", "history", "zamjerke"],
+  "properties": {
+    "verzija": {"const": 2},
+    "revision": {"type": "integer", "minimum": 1},
+    "izvor": {"type": "string"},
+    "source_artifact": {
+      "type": "object",
+      "required": ["path", "artifact_id", "version_id", "sha256"],
+      "properties": {
+        "path": {"type": "string"},
+        "artifact_id": {"type": ["string", "null"]},
+        "version_id": {"type": ["string", "null"]},
+        "sha256": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "history": {"type": "array", "items": {"type": "object"}},
+    "zamjerke": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "JSON Schema ne može izraziti jedinstvenost PO SVOJSTVU, pa `uniqueItems` hvata samo doslovne duplikate. Jedinstvenost `id` polja mora se provjeriti u kodu na SVAKOM putu zapisa: `mentor_feedback_state.merge_feedback` (spajanje s novim izvozom iz .docx-a) i `mentor_feedback_state.resolve_feedback` (--zatvori). Oba dižu ValueError; zatvaranje po dvostrukom id-u pogodilo bi samo prvi zapis, pa bi drugi ostao neriješen. Audit je pokazao zašto: spajanje po normaliziranom tekstu komentara značilo je da dva mentorova komentara istog teksta („Izvor?\", „Nejasno\") kolabiraju u jedan zapis, pa je neriješena zamjerka nasljeđivala status riješene — a shema je to validirala kao ispravno.",
+      "items": {
+        "type": "object",
+        "required": ["id", "autor", "mjesto", "tekst", "tip", "status", "introduced_revision", "history"],
+        "properties": {
+          "id": {"type": "string"},
+          "autor": {"type": "string"},
+          "mjesto": {"type": "string"},
+          "tekst": {"type": "string"},
+          "tip": {"enum": ["sadrzaj", "struktura", "citiranje", "stil", "forma"]},
+          "status": {"enum": ["otvoreno", "rijeseno"]},
+          "rijeseno_gdje": {"type": ["string", "null"]},
+          "introduced_revision": {"type": "integer", "minimum": 1},
+          "history": {"type": "array", "items": {"type": "object"}}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
