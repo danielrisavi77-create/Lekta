@@ -170,6 +170,7 @@ import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled } from '.
 import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, motionReduced, withViewTransition } from './environment-signals';
 import { deskItems } from './results/desk-model';
 import { privacyPrijelazHtml } from './privacy-state';
+import { repairDoneHtml, repairDoneModel } from './results/repair-done';
 import { mountFacsimileInto } from './results/desk-document';
 
 
@@ -2087,8 +2088,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   wrap.appendChild(deepRow);
   deepToggle=deepRow.querySelector('input');
  }
- // OSMA TOCKA: promjena stanja privatnosti stoji UZ gumb, a kucica ispod nje je zapis privole.
- // Ugovor i obrazlozenje: `privacy-state.ts`.
+ // Promjena stanja privatnosti uz gumb; kucica ispod je zapis privole. Vidi `privacy-state.ts`.
  wrap.insertAdjacentHTML('beforeend',privacyPrijelazHtml(escapeHtml));
  const consentRow=document.createElement('label');consentRow.className='lekta-repair-panel__deep';
  consentRow.innerHTML='<input type="checkbox" data-repair-consent><span>Razumijem i šaljem dokument na ovaj popravak.</span>';
@@ -2253,7 +2253,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       // objasnjenje "zasto 97 nije nedovrsen posao" postojalo SAMO na besplatnom putu.
       const ceiling=res.checks?repairCeiling(res.checks):null;
       const ceilingHtml=(res.score<100&&ceiling&&ceiling.hasManualGap&&res.score===ceiling.maxScore)?`<div class="lekta-repair-panel__ceiling"><p><strong>${res.score}/100 je maksimalna ocjena koju automatski popravak može jamčiti</strong> za ovaj profil. Preostale stavke traže tvoju sadržajnu provjeru - alat ih namjerno ne smije mijenjati bez tebe:</p><ul>${ceiling.items.map((x: any)=>`<li>${escapeHtml(x.title)} (−${x.lostPoints})</li>`).join('')}</ul></div>`:'';
-      recheck.innerHTML=scoreLine+outcomeHtml+regressionHtml+ceilingHtml+flatNote;
+      recheck.innerHTML=repairDoneHtml(repairDoneModel({outcome,regresije:regressions,changelog:out.changelog}),escapeHtml)+scoreLine+outcomeHtml+regressionHtml+ceilingHtml+flatNote;
       // Zicanje TEK nakon zadnjeg innerHTML pisanja u ovaj element (inace se handler izgubi).
       const origBtn=recheck.querySelector<HTMLButtonElement>('[data-repair-original]');
       if(origBtn)origBtn.onclick=()=>downloadBlob(bytes,DOCX_MIME,r.file?.name||file.name||'rad.docx');
@@ -2271,12 +2271,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       const b=document.createElement('button');b.type='button';b.className='btn btn-secondary btn-sm';b.textContent='Pokaži što je popravljeno';
       b.onclick=async()=>{const {openRepairDiff}=await import('./repair-diff');openRepairDiff({before:r.preview,after:res.preview,changelog:out.changelog,fileName:out.fileName});void trackEvent('repair_diff_opened',{changes:out.changelog.length})};
       summary.appendChild(b);
-     }}catch(e: any){console.error('Provjera popravljenog dokumenta:',e);recheck.innerHTML='<p class="muted">Popravljeni dokument je preuzet, ali ga nije bilo moguće ponovno provjeriti na ovom uređaju, pa usporedba prije/poslije nije dostupna.</p>'}
-    // RE-37: uvijek ponudi nacin da se GLAVNI izvjestaj (ne samo redak ispod) osvjezi na popravljeni
-    // dokument, umjesto da korisnik zakljuci "nista se nije dogodilo" jer ocjena gore ostaje stara.
+     }}catch(e: any){console.error('Provjera popravljenog dokumenta:',e);
+     // `regresije:null` je NE ZNAM, ne nula.
+     recheck.innerHTML=repairDoneHtml(repairDoneModel({outcome:null,regresije:null,changelog:out.changelog}),escapeHtml)
+      +'<p class="muted">Popravljeni dokument je preuzet.</p>'}
+    // RE-37: glavni izvjestaj se mora moci osvjeziti na popravljeni dokument, ne samo redak ispod.
     const reloadBtn=document.createElement('button');
-    reloadBtn.type='button';reloadBtn.className='btn btn-secondary btn-sm';
-    reloadBtn.textContent='Učitaj popravljeni dokument za novu analizu';
+    reloadBtn.type='button';reloadBtn.className='btn btn-secondary';
+    reloadBtn.textContent='Ponovno provjeri novu verziju';
     reloadBtn.onclick=()=>{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:DOCX_MIME});resetAnalyzer();setFile(f)};
     summary.appendChild(reloadBtn);
     btn.textContent='Popravak preuzet ✓';

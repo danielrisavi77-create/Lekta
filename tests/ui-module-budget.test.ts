@@ -194,7 +194,9 @@ const BUDZET_APP = 357 * 1024;
 // 862 -> 865 KB: `privacy-state.ts`, osma tocka. Modul postoji jer je zatecena tvrdnja o
 // privatnosti stajala na CETIRI mjesta u TRI formulacije; jedan izvor je manje bajtova nego
 // cetiri koja se razilaze, ali tek sljedeci put. Skracen s 3.130 na 2.331 B prije ulaska.
-const BUDZET_UI_UKUPNO = 865 * 1024;
+// 865 -> 869 KB: `repair-done.ts`, deveta tocka. `BUDZET_APP` je pritom OSTAO netaknut iako je
+// prvo pao: obrazlozenja su preseljena iz `app.ts` u modul, po pravilu koje ovaj ratchet i cuva.
+const BUDZET_UI_UKUPNO = 869 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {

@@ -149,6 +149,51 @@
   font-weight: 600;
 }
 
+/* ISHOD POPRAVKA (deveta tocka). Vodi DJELO, ne ocjena, pa brojka "2 / 3" nosi najvecu tezinu na
+   ekranu, a redak sa spremnoscu dolazi ispod nje. Model i obrazlozenje: `results/repair-done.ts`. */
+.rd { margin: 0 0 0.875rem; }
+
+.rd__oznaka {
+  margin: 0 0 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rd__brojka {
+  margin: 0 0 0.25rem;
+  font-size: 1.0625rem;
+  color: var(--text);
+}
+
+.rd__novi { margin: 0 0 0.625rem; font-size: 0.8125rem; }
+.rd__novi--cisto { color: var(--ok, #1a7a54); font-weight: 600; }
+.rd__novi--pozor { color: #b3261e; font-weight: 600; }
+/* NEPOZNATO nije ni zeleno ni crveno: boja bi presudila umjesto teksta, a presude nema. */
+.rd__novi--nepoznato { color: var(--muted); }
+
+.rd__tablica {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.rd__tablica th {
+  text-align: left;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 0.5rem 0.25rem 0;
+  border-bottom: 1px solid var(--line, rgba(0, 0, 0, 0.12));
+}
+
+.rd__tablica td { padding: 0.3125rem 0.5rem 0.3125rem 0; vertical-align: top; }
+.rd__prije { color: var(--muted); text-decoration: line-through; }
+.rd__poslije { color: var(--text); font-weight: 600; }
+
 /* PROMJENA STANJA PRIVATNOSTI (osma tocka). Do sada je jedini znak da dokument odlazi s uredaja
    bila kucica privole u pravnom registru, koja se citala kao "netko se osigurava", a ne kao "sad se
    nesto mijenja". Blok zato ima vlastitu podlogu i rub: mora se vidjeti da je ekran drukciji, i to
