@@ -1138,3 +1138,20 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
     expect(checkSourceHashes({ sources: [REAL_SOURCE], only: [REAL_SOURCE_ID] }).problems).toEqual([]);
   });
 });
+
+// Agent result success cannot bypass dependency or independent-review gates.
+describe('agent workflow guards', () => {
+  it('accepts ready work, catches a reopened dependency and same-provider review', async () => {
+    const { prepareJob } = await import('../scripts/agents/core.mjs');
+    const queue = { tasks: [
+      { id: 'T00', title: 'Baseline', status: 'done', dependsOn: [] },
+      { id: 'T01', title: 'Fix', status: 'ready', dependsOn: ['T00'], implementationAgent: 'opus' },
+    ] };
+    expect(() => prepareJob(queue, 'T01', 'implement', 'sol')).not.toThrow();
+    queue.tasks[0].status = 'ready';
+    expect(() => prepareJob(queue, 'T01', 'implement', 'sol')).toThrow(/T00/);
+    queue.tasks[1].status = 'in_review';
+    expect(() => prepareJob(queue, 'T01', 'review', 'astra')).not.toThrow();
+    expect(() => prepareJob(queue, 'T01', 'review', 'fable', 2)).toThrow(/different provider/);
+  });
+});
