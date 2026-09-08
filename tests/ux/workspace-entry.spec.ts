@@ -386,4 +386,14 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
   // Razine su particija po ozbiljnosti: moraju se zbrojiti u broj iz naslova. Ako se ikad u taj
   // stupac uvuce redak s druge osi (npr. automatski popravci), ova tvrdnja pada.
   expect(m.zbrojRazina, 'razine se ne zbrajaju u naslov, pa je u stupac usla druga os').toBe(m.naslovBroj);
+  // Cuva i prijelaz iz mobilnog u desktop raspored, ne samo zadani viewport projekta.
+  for (const width of [320, 390, 700, 701, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const ratio = await page.evaluate(() => {
+      const headline = document.querySelector('.fsum-naslov')!;
+      const score = document.querySelector('.fsum-ocjena b')!;
+      return parseFloat(getComputedStyle(headline).fontSize) / parseFloat(getComputedStyle(score).fontSize);
+    });
+    expect(ratio, `sazetak mora nadjacati ocjenu na sirini ${width}px`).toBeGreaterThanOrEqual(1.25);
+  }
 });
