@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.",
   "summary": {
-    "documentCount": 22,
+    "documentCount": 24,
     "fixerCount": 14,
     "deadCount": 2,
     "dead": [
@@ -13,30 +13,32 @@
   "fixers": [
     {
       "fixerId": "bibliography-repair-fixer",
-      "requested": 3,
-      "changed": 3,
+      "requested": 5,
+      "changed": 5,
       "reasons": {},
       "deadOn": []
     },
     {
       "fixerId": "citation-bibliography-sync-fixer",
-      "requested": 3,
+      "requested": 5,
       "changed": 0,
       "reasons": {
-        "no-target": 3
+        "no-target": 5
       },
       "deadOn": [
         "fpzg--final--prijediplomski--neuredan.docx",
         "fpzg--final--prijediplomski--uskladjen.docx",
-        "fpzg--final--prijediplomski--word.docx"
+        "fpzg--final--prijediplomski--word.docx",
+        "fpzg--project--diplomski--neuredan.docx",
+        "fpzg--project--diplomski--uskladjen.docx"
       ]
     },
     {
       "fixerId": "consistency-fixer",
-      "requested": 22,
+      "requested": 24,
       "changed": 0,
       "reasons": {
-        "no-target": 22
+        "no-target": 24
       },
       "deadOn": [
         "adu--seminar--diplomski--neuredan.docx",
@@ -56,6 +58,8 @@
         "fpzg--final--prijediplomski--neuredan.docx",
         "fpzg--final--prijediplomski--uskladjen.docx",
         "fpzg--final--prijediplomski--word.docx",
+        "fpzg--project--diplomski--neuredan.docx",
+        "fpzg--project--diplomski--uskladjen.docx",
         "fsb--article--diplomski--neuredan.docx",
         "fsb--article--diplomski--uskladjen.docx",
         "fzsri--final--prijediplomski--neuredan.docx",
@@ -65,8 +69,8 @@
     },
     {
       "fixerId": "croatian-typography-fixer",
-      "requested": 11,
-      "changed": 11,
+      "requested": 13,
+      "changed": 13,
       "reasons": {},
       "deadOn": []
     },
@@ -79,8 +83,8 @@
     },
     {
       "fixerId": "field-integrity-fixer",
-      "requested": 19,
-      "changed": 18,
+      "requested": 21,
+      "changed": 20,
       "reasons": {
         "stale-anchor": 1
       },
@@ -90,8 +94,8 @@
     },
     {
       "fixerId": "final-document-inspector-fixer",
-      "requested": 22,
-      "changed": 22,
+      "requested": 24,
+      "changed": 24,
       "reasons": {},
       "deadOn": []
     },
@@ -118,17 +122,19 @@
     },
     {
       "fixerId": "link-doi-fixer",
-      "requested": 22,
+      "requested": 24,
       "changed": 18,
       "reasons": {
         "unsupported-structure": 1,
-        "no-target": 3
+        "no-target": 5
       },
       "deadOn": [
         "effectus--seminar--diplomski--word.docx",
         "fpzg--final--prijediplomski--neuredan.docx",
         "fpzg--final--prijediplomski--uskladjen.docx",
-        "fpzg--final--prijediplomski--word.docx"
+        "fpzg--final--prijediplomski--word.docx",
+        "fpzg--project--diplomski--neuredan.docx",
+        "fpzg--project--diplomski--uskladjen.docx"
       ]
     },
     {
@@ -151,8 +157,8 @@
     },
     {
       "fixerId": "section-surgery-fixer",
-      "requested": 3,
-      "changed": 3,
+      "requested": 5,
+      "changed": 5,
       "reasons": {},
       "deadOn": []
     },
@@ -869,6 +875,97 @@
       "integrityFailure": null
     },
     {
+      "dokument": "fpzg--project--diplomski--neuredan.docx",
+      "profileId": "fpzg-opci-akademski-rad",
+      "paloPrije": [
+        "reference.alphabetical",
+        "reference.uncited"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "section-surgery-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "section-surgery-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [
+        "reference.alphabetical"
+      ],
+      "nerijeseno": [
+        "reference.uncited"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fpzg--project--diplomski--uskladjen.docx",
+      "profileId": "fpzg-opci-akademski-rad",
+      "paloPrije": [
+        "reference.uncited"
+      ],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "section-surgery-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "section-surgery-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "reference.uncited"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
       "dokument": "fsb--article--diplomski--neuredan.docx",
       "profileId": "fsb-opci-akademski-rad",
       "paloPrije": [
@@ -1049,7 +1146,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-08T11:31:45.103Z",
-  "generatedFromCommit": "3b08620c0cc9ba0fb32170f1e35f2d4991ce73ee",
+  "generatedAt": "2026-09-08T13:29:58.779Z",
+  "generatedFromCommit": "b8169693a537c1c3d7a320a1ab1ed777475f6b41",
   "generator": "npm run repair-net -- --write"
 }
