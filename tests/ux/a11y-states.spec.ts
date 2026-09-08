@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type BrowserContext, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
-import { cekajApp } from './app-ready';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -99,11 +99,13 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
   const wizard = page.locator('#wizardView');
+  // Skeniranje koraka 1 ostaje OPORTUNISTICKO (to je prolazno stanje, jer korak 2 dolazi sam),
+  // ali klik odlazi: bio je utrka nad trenutacnim ocitanjem i znao je pogoditi gumb koji je
+  // carobnjak vec sakrio. Propusteno skeniranje nista ne kvari; promasen klik kvari.
   if ((await wizard.getAttribute('data-step')) === '1') {
     nalazi.push(...(await skeniraj(page, 'carobnjak 1 (dokument odabran)')));
-    await page.locator('#stepToProfile').click();
   }
-  await expect(wizard).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
   nalazi.push(...(await skeniraj(page, 'carobnjak 2 (profil)')));
 
   // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa

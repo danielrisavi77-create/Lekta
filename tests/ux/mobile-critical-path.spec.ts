@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
-import { cekajApp } from './app-ready';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -34,7 +34,7 @@ test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page })
   // mobitelu vec dobila raditi isti cilj "nula do jedan tap" kao desktop; #stepToProfile je uz
   // taj popravak i skriven na koraku 2 (`.lek-stepnav-1{display:none}`), pa bi klik na njega ovdje
   // sada samo timeoutao na nevidljivom gumbu.
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
 
   // Banner mora biti gore: bez njega ovaj test ne bi cuvao nista.
   await expect(page.locator('#consentBanner')).toBeVisible();

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
 import { potvrdiProfil } from './confirm-profile';
-import { cekajApp } from './app-ready';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -48,7 +48,7 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
   // Korak 2 dolazi SAM kad je detekcija pouzdana (`isConfidentDetection`), bez klika na
   // "Nastavi na profil". To je i smisao "nula do jedan tap": kad je studij prepoznat iz
   // dokumenta, korisniku preostaje samo potvrda.
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
 
   // Kartica je ekran: vidi se profil i obje akcije.
   // Duzi rok NIJE skrivanje sporosti: kartica se crta u `updateProfile`, koji CEKA pravila
@@ -98,7 +98,7 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
   // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav
   // pisac, razisla bi se s njima cim se koji pogled preskoci.
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
 });
 
@@ -282,7 +282,7 @@ test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', asy
 
   await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(FIXTURE);
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
   expect(await jedan('poslije uploada')).toBe('wizardView');
 
   // Pokretanje: analiza pa nalaz. Potvrda je primarna akcija od spajanja koraka 2 i 3.

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 import { potvrdiProfil } from './confirm-profile';
-import { cekajApp } from './app-ready';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -63,9 +63,11 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
   // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
   await page.locator('#fileInput').setInputFiles(fixture);
-  const wizard = page.locator('#wizardView');
-  if ((await wizard.getAttribute('data-step')) === '1') await page.locator('#stepToProfile').click();
-  await expect(wizard).toHaveAttribute('data-step', '2');
+  // Korak 2 dolazi SAM, i na desktopu i na mobitelu (`mobile-critical-path` to dokazuje na
+  // mobile-webkitu bez ijednog klika). Uvjetni klik na `#stepToProfile` bio je ISTA utrka kao
+  // `isVisible()`: `getAttribute` je trenutacno ocitanje, pa je znao procitati "1" i tek onda
+  // kliknuti gumb koji je carobnjak u medjuvremenu sakrio na koraku 2.
+  await cekajKorak(page, '2');
   // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
