@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type BrowserContext, type Page } from '@playwright/test';
 import path from 'node:path';
+import { confirmAnalysisWhenReady } from './analysis-confirmation';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -110,8 +111,7 @@ test('axe: cijeli tok od uploada do nalaza nema kriticnih ni ozbiljnih krsenja',
   // (gumb za pokretanje) skenira se gore, u sklopu koraka 2.
 
   await page.locator('#analyzeBtn').click();
-  const potvrda = page.locator('[data-confirm-profile]');
-  if (await potvrda.isVisible().catch(() => false)) await potvrda.click();
+  await confirmAnalysisWhenReady(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
   nalazi.push(...(await skeniraj(page, 'rezultat')));
 

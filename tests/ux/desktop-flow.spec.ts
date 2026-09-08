@@ -5,6 +5,50 @@ import { confirmAnalysisWhenReady } from './analysis-confirmation';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
+// CI WebKit ponekad ostane na koraku 1; biljezi samo stanje prikaza, bez sadrzaja dokumenta.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    const events: Record<string, unknown>[] = [];
+    (window as unknown as { __wizardTrace: typeof events }).__wizardTrace = events;
+    const record = (phase: string, id?: number) => {
+      if (events.length >= 100) return;
+      events.push({ phase, id, time: performance.now(), visibility: document.visibilityState,
+        width: innerWidth, step: document.getElementById('wizardView')?.getAttribute('data-step') });
+    };
+    document.addEventListener('visibilitychange', () => record('visibility'));
+    document.addEventListener('change', (event) => {
+      if ((event.target as Element | null)?.id === 'fileInput') record('file-change');
+    }, true);
+    new MutationObserver((records) => {
+      if (records.some((entry) => (entry.target as Element).id === 'wizardView')) record('wizard-mutation');
+    }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-step', 'class'] });
+    if (typeof document.startViewTransition !== 'function') return;
+    const start = document.startViewTransition.bind(document);
+    let nextId = 0;
+    document.startViewTransition = (update) => {
+      const id = nextId++;
+      record('transition-start', id);
+      if (typeof update !== 'function') return start(update);
+      const transition = start(() => {
+        record('callback-start', id);
+        const result = update();
+        record('callback-returned', id);
+        return result;
+      });
+      for (const phase of ['ready', 'updateCallbackDone', 'finished'] as const) {
+        void transition[phase].then(() => record(phase, id), () => record(`${phase}-rejected`, id));
+      }
+      return transition;
+    };
+  });
+});
+
+test.afterEach(async ({ page }, testInfo) => {
+  if (testInfo.status === testInfo.expectedStatus || page.isClosed()) return;
+  const evidence = await page.evaluate(() => (window as unknown as { __wizardTrace?: unknown }).__wizardTrace ?? []);
+  await testInfo.attach('wizard-transition-events', { body: JSON.stringify(evidence), contentType: 'application/json' });
+});
+
 /**
  * DESKTOP TOK, ODVOJEN OD MOBILNOG (audit P0-05, P1-18).
  *
