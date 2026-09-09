@@ -171,6 +171,7 @@ import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, moti
 import { deskItems } from './results/desk-model';
 import { privacyPrijelazHtml } from './privacy-state';
 import { repairDoneHtml, repairDoneModel } from './results/repair-done';
+import { repairLanding } from './results/repair-entry';
 import { mountFacsimileInto } from './results/desk-document';
 
 
@@ -1174,7 +1175,8 @@ function handleResultsCockpitAction(r: any,action: ResultsCockpitAction){
     return;
   }
   if(action.kind==='open-findings'){setResultsCockpitAdvanced(true);openTab('issues');$('#issuesList')?.scrollIntoView({behavior:'smooth',block:'start'});return}
-  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){scrollToRepairPanel(r);return}
+  // Disclosure se MORA otvoriti prije skrolanja: panel zivi u njemu.
+  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){setResultsCockpitAdvanced(true);scrollToRepairPanel(r);return}
   const finding=findingsFor(r).find(x=>x.id===action.findingId);
   if(!finding)return;
   if(action.kind==='preview'){
@@ -1416,24 +1418,22 @@ function renderPhaseThreeRepairEntry(r: any){
 // stavka trenutno nije ponudjena (npr. dokument nema upotrebljiv split sekcija za numeriranje),
 // korisnik dobiva postenu poruku umjesto tihog slijetanja na nepovezanu stavku.
 function scrollToRepairPanel(r: any,finding?: any){
-  // renderResult zatvori #resultDetails I #tabDetails, a openTab samo prebacuje klase. Bez ova dva
-  // otkrivanja CTA je prebacivao karticu koja je i dalje skrivena, pa se naizgled nista ne dogodi
-  // (isti obrazac koji vec koriste kartice u #categoryGrid).
+  // Bez oba otkrivanja CTA prebacuje karticu koja ostaje skrivena, pa se nista ne dogodi.
   revealResultDetails();
   revealDetails();
   openTab('submission');
   const m=$('#repairPanelMount');
   let act: any=null;
   if(m){
-    m.scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
+    // CTA plana slijece na ODLUKU; vidi `results/repair-entry.ts`.
+    const slijetanje=finding?null:repairLanding(m);
+    (slijetanje?.scroll??m).scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
     m.classList.remove('repair-flash');void (m as any).offsetWidth;m.classList.add('repair-flash');
     if(finding){
       const target=pickTargetItem(finding.matchKeys,repairPanelItems)||pickTargetItem(finding.matchKeys,repairPanelTextItems);
       if(target){
-        // Glavne stavke (data-idx) sad zive SAMO kao ledger redak (list je trajno skriven, vidi
-        // renderRepairSection): otvori ledger PRIJE trazenja retka, inace redak jos ne postoji u
-        // DOM-u. Tekstualne stavke (renderTextItemsSection, data-text-apply) ostaju izvan ledgera,
-        // uvijek vidljive - za njih vrijedi stari put preko #repairPanelMount.
+        // Glavne stavke zive SAMO kao ledger redak (list je skriven), pa se ledger mora otvoriti
+        // PRIJE trazenja retka. Tekstualne stavke su izvan ledgera i idu starim putem.
         const triggerBtn: any=m.querySelector('.lekta-repair-trigger__btn');
         triggerBtn?.click();
         const ledgerRow: any=document.querySelector(`.lekta-repair-ledger-row[data-rule-id="${target.ruleId}"]`);
@@ -1462,7 +1462,7 @@ function scrollToRepairPanel(r: any,finding?: any){
         toast('Ovaj popravak trenutno nije ponuđen kao automatska stavka za ovaj dokument. Pogledaj cijeli popis ispod.');
       }
     }
-    if(!act)act=m.querySelector('[data-repair-go]:not(:disabled),button:not(:disabled),a[href]');
+    if(!act)act=slijetanje?.focus??m.querySelector('[data-repair-go]:not(:disabled),button:not(:disabled),a[href]');
     if(act)act.focus?.({preventScroll:true});else{m.setAttribute('tabindex','-1');m.focus?.({preventScroll:true})}
   }
   try{void trackEvent('triage_repair_cta',{count:r?.details?.triage?.counts?.auto||0})}catch(e: any){}
