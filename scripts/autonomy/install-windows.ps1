@@ -11,7 +11,7 @@
 
 .PARAMETER RepoPath
   Apsolutna staza pouzdane instalacije (git checkout pregledane verzije).
-.PARAMETER Home
+.PARAMETER StateDir
   LEKTA_AUTONOMY_HOME (stanje, baza, konfiguracija). Zadano %LOCALAPPDATA%\Lekta\autonomy.
 .PARAMETER Minutes
   Period ponavljanja. Zadano 60.
