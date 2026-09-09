@@ -13,6 +13,7 @@
  * generator koji tu stazu pise i koji je ozicen u deploy lanac (netlify.toml).
  */
 import { describe, it, expect } from 'vitest';
+import { buildCommandLine } from '../scripts/build-production.mjs';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import publicRouteDirectory from '../src/routes/shared/public-route-directory.json';
@@ -208,7 +209,14 @@ function parseDeployCommands(toml: string): readonly string[] {
   return [...toml.matchAll(assignment)].map((match) => match[1]);
 }
 
-const netlifyBuildCommands = parseDeployCommands(netlifyToml);
+/**
+ * Od 2026-09-09 (plan T03) `command` je `node scripts/build-production.mjs`, a popis koraka zivi u toj
+ * skripti. Neizravnost se RAZRJESAVA, ne pretpostavlja: naredba koja zove skriptu prosiruje se u doslovan
+ * lanac iz `buildCommandLine()`, pa tvrdnja "generator je u deploy lancu" i dalje mjeri stvarno izvrsavanje.
+ */
+const netlifyBuildCommands = parseDeployCommands(netlifyToml).map((command) =>
+  command.includes('node scripts/build-production.mjs') ? buildCommandLine() : command,
+);
 
 function runsInDeployChain(npmScript: string): boolean {
   return netlifyBuildCommands.some((command) => command.includes(`npm run ${npmScript}`));

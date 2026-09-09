@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { buildCommandLine } from '../scripts/build-production.mjs';
 
 /**
  * NETLIFY I `dist-gate` MORAJU GRADITI ISTIM RUNTIMEOM I ISTIM LANCEM.
@@ -48,16 +49,22 @@ describe('produkcijski build: Netlify i CI se ne smiju razici', () => {
   });
 
   it('grade istim lancem naredbi', () => {
+    // Od 2026-09-09 (plan T03) oba potrosaca zovu JEDNU skriptu, `scripts/build-production.mjs`, pa se
+    // "isti lanac" dokazuje tako: Netlify `command` je poziv skripte (s verify), CI korak je poziv iste
+    // skripte s `--skip-verify` pa zaseban `verify-deploy-dist.mjs`. Doslovan popis koraka mjeri
+    // tests/build-production.test.ts nad samom skriptom; ovdje se tvrdi da nitko ne gradi mimo nje.
     const netlifyChain = /command\s*=\s*"([^"]+)"/.exec(TOML)?.[1] ?? '';
-    const ciChain = /run:\s*(npm run build [^\n]+)/.exec(distGate())?.[1] ?? '';
-    expect(netlifyChain, 'build command nije nadjen u netlify.toml').toBeTruthy();
-    expect(ciChain, 'produkcijski build korak nije nadjen u dist-gate jobu').toBeTruthy();
+    // `.trim()`: radna kopija na Windowsu ima CRLF, pa bi `[^\n]*` pokupio i `\r` (CLAUDE.md: gard koji cita s diska normalizira CR).
+    const ciChain = (/run:\s*(node scripts\/build-production\.mjs[^\n]*)/.exec(distGate())?.[1] ?? '').trim();
+    expect(netlifyChain, 'build command nije nadjen u netlify.toml').toBe('node scripts/build-production.mjs');
+    expect(ciChain, 'produkcijski build korak nije nadjen u dist-gate jobu').toBe('node scripts/build-production.mjs --skip-verify');
 
-    // `verify-deploy-dist` je u CI-u ZASEBAN korak (`node scripts/verify-deploy-dist.mjs`), pa se
-    // iz Netlifyjeva lanca izuzima; sve ostalo mora biti isto i istim redom.
-    const netlifyKoraci = koraci(netlifyChain).filter((k) => !k.includes('verify-deploy-dist'));
+    // `verify-deploy-dist` je u CI-u ZASEBAN korak, pa ga skripta ondje preskace; u Netlifyju je dio skripte.
     expect(distGate(), 'CI ne provjerava dist artefakt').toContain('verify-deploy-dist.mjs');
-    expect(koraci(ciChain)).toEqual(netlifyKoraci);
+    expect(koraci(buildCommandLine({ verify: false }))).toEqual(koraci(buildCommandLine()).filter((k) => !k.includes('verify-deploy-dist')));
+    // Nitko ne smije graditi prepisanim nizom mimo skripte, ni u CI-u ni na hostingu.
+    expect(distGate()).not.toMatch(/npm run build &&/);
+    expect(TOML).not.toMatch(/^\s*command\s*=\s*"npm run build/m);
   });
 
   /**
