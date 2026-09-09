@@ -39,3 +39,14 @@ plan popravka s pravim kontrolama su zapisani kao D7 u planu audita. T11 do T15 
 | `scripts/agents/core.mjs`: pretplatnicki nacin | `--subscription`: bez budzeta, bez Fablea, odbija API kljuc u okolini; rucni `--budget-usd` nacin nepromijenjen |
 | post-deploy-smoke: `build-info` 404 | `unknown` ishod: `--expect-commit` (cron, usporedba s masterom) upozorava, novi `--require-build-info` (konkretna objava) pada; klasifikacija ne moze biti `ok` bez ijednog prolaza; izlaz preko `process.exitCode` (`process.exit()` uz zivu fetch uticnicu na Windowsu vraca 0xC0000409); test `tests/post-deploy-smoke-build-info-cli.test.ts` s pravim lokalnim posluziteljem; izmjereno nad zivom stranicom: 27 ok + 1 unknown, exit 0 odnosno 1 |
 | `npm run check` nad granom | ZELEN 2026-09-09 (izolirani worktree, `VITEST_MAX_THREADS=2`): oxlint, tsc, Deno 25 funkcija, vitest 516 datoteka / 5975 testova (1 datoteka i 4 testa preskoceni po dizajnu), vite build; `orphan-scan` cist. Smoke paket (3 datoteke, 23 testa) i 91 Python test pokrenuti odvojeno nakon zadnje izmjene smoke skripte, zeleni |
+
+## Dokaz izdanja 2026-09-10 (grana `release/2026-09-10`, commit `f9e0f310`)
+
+| stavka | izmjereno |
+| --- | --- |
+| Osnova | master `e9dcc52a` (PR #68: `scripts/build-production.mjs`, E2E s `/`, popravak zamrzavanja nakon primopredaje) |
+| Zasto nov dokaz | prvi dokaz `de18daa8` (grana `release/2026-09-09`, na `27f0ae1f`) nosi kvar: cross-document View Transition (`@view-transition { navigation: auto }` u `src/shared/motion.css`) zamrzavao je `/rad/` nakon navigacije s `/` (rAF 0 okvira), maskirano duplikatom `view-transition-name` do `76ed4492`. Nijedan od 219 UX testova to nije vidio jer nijedan nije polazio s `/`. Popravak: `navigation: none`; gard: `tests/ux-dist/production-journey.spec.ts` |
+| Razine | check 6026 testova, conformance 536, slow 399, UX 219, ux-dist 6, strict-open, word, word-worst: sve `pass`; projections `fail` (screening redoslijeda commita, nije obvezan); extraction `unavailable` (bez `LEKTA_STAGING_ORIGIN`). `complete: true` |
+| Produkcijski build | `DEPLOY=1 LEKTA_REQUIRE_RELEASE_PROOF=1 node scripts/build-production.mjs` nad `f9e0f310`: gate "otisak stabla jednak", `dist/build-info.json` nosi `f9e0f310` |
+| Proba nakon builda | `/` pa `location.assign('/rad/')` nad `dist/` kroz `vite preview`, 3 mjerenja: rAF 1, 0, 0 ms (prije popravka 0 okvira u 3 s) |
+| Objava | rucno, na rijec vlasnika: `netlify deploy --prod --no-build --dir dist`, pa `node scripts/post-deploy-smoke.mjs --require-build-info --expect-commit f9e0f310` |
