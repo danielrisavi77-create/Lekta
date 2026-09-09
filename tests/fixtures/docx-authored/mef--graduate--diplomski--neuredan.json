@@ -1,0 +1,68 @@
+{
+  "profileId": "mef-diplomski",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "mef--graduate--diplomski",
+    "unitId": "mef",
+    "workType": "graduate",
+    "level": "diplomski",
+    "program": "Diplomski studiji Medicinskog fakulteta",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "mef-graduate"
+  },
+  "prose": {
+    "id": "mef--graduate--diplomski",
+    "words": 10042,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmisljena imena. Rad je pojmovno-raspravni pregled bez vlastitog empirijskog istrazivanja, pa nijedna brojka ne opisuje izmjereni podatak; sve kvantitativne tvrdnje pripisane su objavljenim izvorima ili su pisane s ogradom. Cetiri jedinice literature POTVRDJENE su kroz CrossRef API uz HTTP 200 i prepisane iz odgovora (Barlam i sur. 2016; Baur i sur. 2017; Davey i sur. 2017; Magiorakos i sur. 2012). Maric i Novosel (2024) te Peric i Simunovic (2023) su izmisljene jedinice s izmisljenim DOI-jem, namjerno, da provjera postojanja moze vratiti i not-found. ALAT: katedra-lite 1.9.40 (vendorirani subtree) je STVARNO vodio rad. Izvrseno: profile_resolver.py (PAO, registry rutira samo efzg i fpzg); stanje_init.py uz --fakultet-izvan-registryja mef i tri imenovana ogranicenja; razina.py --postavi diplomski; dijelovi.py --sij; perspective_map.py init + tri perspektive + validate (ready: true); plan_state.py init/import/odobri. PLAN GATE je iz prvog pokusaja PAO (potpoglavlja bez opisa i bez planiranih izvora); nakon prepisivanja plana u tablicni oblik prosao je (sha256:0e003e3e906f). OBLIK dokumenta dolazi iz Lektine matrice retka mef--graduate--diplomski, ne iz Katedre. NAMJERNO OSTAVLJENE DVIJE OBVEZNE SEKCIJE KOJE NEDOSTAJU: profil trazi Summary i Zivotopis, a graditelj emitira Abstract i nema zivotopis, pa dokument daje stvarnu metu za required-section-fixer. NE POPRAVLJAJ TO U PROZI.",
+      "tool": "katedra-lite 1.9.40 (autopilot)",
+      "date": "2026-09-09"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row mef--graduate--diplomski --messy",
+    "generatedAt": "2026-09-09T05:45:04.098Z"
+  },
+  "mutations": {
+    "tabInHeading": 32,
+    "emptyParagraphBurst": 30,
+    "manualToc": 1,
+    "dotLeaderTabs": 1,
+    "csOnlyFonts": 4,
+    "biblioAsHeading": 2,
+    "commentsPart": 2,
+    "allLevelThree": 38,
+    "wrongBodyFont": 1,
+    "singleLineSpacing": 1,
+    "letterPaper": 1,
+    "paragraphSpacingNoise": 1
+  },
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "paket/komentari",
+      "stil/tijelo-nije-normal",
+      "naslov/tab-u-naslovu",
+      "naslov/samo-razina-3",
+      "tab/tocke-vodic",
+      "font/samo-cs-eastAsia",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice",
+      "opseg/prazni-preko-20"
+    ]
+  },
+  "toolLimitations": [
+    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
+  ]
+}

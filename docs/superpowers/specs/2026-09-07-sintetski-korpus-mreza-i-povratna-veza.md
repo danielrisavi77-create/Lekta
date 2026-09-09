@@ -418,6 +418,35 @@ deset profila ne boduje tu os, pa `paragraph-spacing-fixer` i dalje nije zatraze
 kao i preostalih 15 nedoseznih fixera; dio njih (`title-page-fixer`, `submission-metadata-fixer`)
 trazi ulaz izvan dokumenta i mutacijom se ne doseze uopce.
 
+## Val 4: jedanaesto tijelo, i bodovana provjera koja pada bez ijednog popravka (2026-09-09)
+
+Redak je biran mjerenjem, kako "Sto ostaje" trazi. Od 269 kandidata s profilom i bez proze,
+`mef--graduate--diplomski` je medju najbogatijima pravilima: nosi obvezne sekcije, vlastiti popis
+formata i harvard, a `biomed` je uz `mixed` najtanja obitelj (jedno tijelo na 75 redaka matrice).
+
+Napisano je 10.042 rijeci tijela u 157 odlomaka, uz 17 jedinica literature; validator proze daje
+nula nalaza. Cetiri jedinice potvrdjene su kroz CrossRef uz HTTP 200 i prepisane iz odgovora, dvije
+su namjerno izmisljene. Protokol katedra-lite izvrsen je u cijelosti, ukljucujuci ono sto je palo:
+`profile_resolver.py` odbija `mef` (registar rutira samo efzg i fpzg), pa je stanje otvoreno s tri
+imenovana ogranicenja, a PLAN GATE je iz prvog pokusaja pao (potpoglavlja bez opisa i bez planiranih
+izvora) i prosao tek nakon prepisivanja plana u tablicni oblik.
+
+    uskladjen   palo 3   zatrazeno 4   promijenili 3   regresije 0
+    neuredan    palo 6   zatrazeno 8   promijenili 7   regresije 0
+    mreza       26 dokumenata, 16 fixera, popis mrtvih i dalje prazan
+
+**Nalaz koji nije bio namjera.** Dvije obvezne sekcije ostavljene su nezadovoljene namjerno
+(`Summary`, jer graditelj pise `Abstract`, i `Zivotopis`, kojega nema), s ocekivanjem da ce dati metu
+`required-section-fixer`-u. `structure.sections.profile` doista pada na OBA primjerka, ali fixer nije
+ni zatrazen. Razlog je ispravan i dokumentiran u CLAUDE.md: taj popravak umece iskljucivo natpis koji
+propisuje VERIFICIRANO pravilo (`required-section-rules` sa `sourceId`, `sourcePage` i doslovnim
+citatom), a profil `mef-diplomski` obvezne sekcije nosi samo u `rules`.
+
+Time je imenovana nova vrsta rupe, razlicita od one koja se trazila: bodovana provjera koja pada, a
+za koju popravka nema jer pravilu nedostaje provenijencija. To NIJE kvar fixera i ne ide u ratchet
+mrtvih; ide u popis profila kojima obvezne sekcije treba potkrijepiti izvorom prije nego se od
+popravka ista ocekuje.
+
 ## Sto ostaje
 
 1. Daljnja proza. Napisano je DESET tijela (cetiri val 1, tri val 2, tri val 3), sto pokriva 488

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza. TRI stanja, ne dva: `dead` je kvar, `awaiting` je fixer koji ceka ljudsku potvrdu, ostalo radi.",
   "summary": {
-    "documentCount": 24,
+    "documentCount": 26,
     "fixerCount": 16,
     "deadCount": 0,
     "dead": [],
@@ -39,10 +39,10 @@
     },
     {
       "fixerId": "consistency-fixer",
-      "requested": 24,
+      "requested": 26,
       "changed": 0,
       "reasons": {
-        "no-target": 24
+        "no-target": 26
       },
       "deadOn": [
         "adu--seminar--diplomski--neuredan.docx",
@@ -68,14 +68,16 @@
         "fsb--article--diplomski--uskladjen.docx",
         "fzsri--final--prijediplomski--neuredan.docx",
         "fzsri--final--prijediplomski--uskladjen.docx",
-        "fzsri--final--prijediplomski--word.docx"
+        "fzsri--final--prijediplomski--word.docx",
+        "mef--graduate--diplomski--neuredan.docx",
+        "mef--graduate--diplomski--uskladjen.docx"
       ],
-      "awaitingConfirmation": 24
+      "awaitingConfirmation": 26
     },
     {
       "fixerId": "croatian-typography-fixer",
-      "requested": 13,
-      "changed": 13,
+      "requested": 14,
+      "changed": 14,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -90,8 +92,8 @@
     },
     {
       "fixerId": "field-integrity-fixer",
-      "requested": 21,
-      "changed": 20,
+      "requested": 23,
+      "changed": 22,
       "reasons": {
         "stale-anchor": 1
       },
@@ -102,16 +104,16 @@
     },
     {
       "fixerId": "final-document-inspector-fixer",
-      "requested": 24,
-      "changed": 24,
+      "requested": 26,
+      "changed": 26,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
     },
     {
       "fixerId": "font-fixer",
-      "requested": 6,
-      "changed": 6,
+      "requested": 7,
+      "changed": 7,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -134,8 +136,8 @@
     },
     {
       "fixerId": "link-doi-fixer",
-      "requested": 24,
-      "changed": 18,
+      "requested": 26,
+      "changed": 20,
       "reasons": {
         "unsupported-structure": 1,
         "no-target": 5
@@ -160,8 +162,8 @@
     },
     {
       "fixerId": "paper-size-fixer",
-      "requested": 5,
-      "changed": 5,
+      "requested": 6,
+      "changed": 6,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -188,8 +190,8 @@
     },
     {
       "fixerId": "toc-field-fixer",
-      "requested": 1,
-      "changed": 1,
+      "requested": 2,
+      "changed": 2,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -1306,9 +1308,98 @@
       ],
       "regresije": [],
       "integrityFailure": null
+    },
+    {
+      "dokument": "mef--graduate--diplomski--neuredan.docx",
+      "profileId": "mef-diplomski",
+      "paloPrije": [
+        "format.font.dominant",
+        "page.size.a4-list",
+        "reference.uncited",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "font-fixer",
+        "link-doi-fixer",
+        "paper-size-fixer",
+        "toc-field-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "font-fixer",
+        "link-doi-fixer",
+        "paper-size-fixer",
+        "toc-field-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [
+        "format.font.dominant",
+        "page.size.a4-list"
+      ],
+      "nerijeseno": [
+        "reference.uncited",
+        "structure.heading.hierarchy",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "mef--graduate--diplomski--uskladjen.docx",
+      "profileId": "mef-diplomski",
+      "paloPrije": [
+        "reference.uncited",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "reference.uncited",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "regresije": [],
+      "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-08T22:55:03.353Z",
-  "generatedFromCommit": "c0648d2d176360117f3b78d657417729cb0211e0",
+  "generatedAt": "2026-09-09T05:47:33.763Z",
+  "generatedFromCommit": "f1652c1126cc18a1c9c04ff12ce1fa52b38b8679",
   "generator": "npm run repair-net -- --write"
 }
