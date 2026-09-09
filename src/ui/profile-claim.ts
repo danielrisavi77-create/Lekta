@@ -35,13 +35,24 @@ export interface ProfileClaim {
   proof: 'direct' | 'inherited' | null;
   /** Napomena uz naslijedjen dokaz, doslovno iz ledgera (PROOF_SOURCE_NOTE); prazna inace. */
   note: string;
+  /**
+   * Osnova dokaza kao JEDNA os za sve razine (plan T05): `direct` (A, izmjereno na ovom profilu),
+   * `inherited` (A, izmjereno na drugom profilu iste ustanove i vrste rada), `synthetic` (B, popravak dokazan
+   * samo na generiranom dokumentu), `not-demonstrated` (C, D, E). Razina A do E ostaje zasebna dimenzija.
+   */
+  evidenceBasis: EvidenceBasis;
+  /** Profili na kojima je dokaz STVARNO izmjeren; za `inherited` nikad ne sadrzi ovaj profil. Prazno inace. */
+  testedProfileIds: string[];
 }
+
+export type EvidenceBasis = 'direct' | 'inherited' | 'synthetic' | 'not-demonstrated';
 
 const ARTIFACT = claims as unknown as {
   ladder: Record<string, string>;
   byProfile: Record<string, ClaimLetter>;
   proofNotes?: Record<string, string>;
   inheritedA?: string[];
+  inheritedFrom?: Record<string, string[]>;
 };
 
 const INHERITED_A = new Set(ARTIFACT.inheritedA ?? []);
@@ -57,13 +68,18 @@ export function profileClaimFor(profileId: string | null | undefined): ProfileCl
   if (!claim) return null;
   const label = ARTIFACT.ladder[claim];
   if (!label) return null;
-  if (claim !== 'A') return { claim, label, proof: null, note: '' };
+  if (claim !== 'A') {
+    return { claim, label, proof: null, note: '', evidenceBasis: claim === 'B' ? 'synthetic' : 'not-demonstrated', testedProfileIds: [] };
+  }
   const inherited = INHERITED_A.has(profileId);
+  const tested = inherited ? (ARTIFACT.inheritedFrom?.[profileId] ?? []).filter((id) => id !== profileId) : [profileId];
   return {
     claim,
     label,
     proof: inherited ? 'inherited' : 'direct',
     note: inherited ? (ARTIFACT.proofNotes?.['unit-work-type'] ?? '') : '',
+    evidenceBasis: inherited ? 'inherited' : 'direct',
+    testedProfileIds: tested,
   };
 }
 

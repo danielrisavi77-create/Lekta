@@ -28,6 +28,7 @@ from typing import Callable
 from .gate import verify_candidate
 from .policy import PolicyError, billing_allowed, explain_change, load_config
 from .publisher import publish_verified
+from .remote import load_remotes, token_fingerprint
 from .report import write_report
 from .signals import collect
 from .store import Store
@@ -175,6 +176,18 @@ def _repo_visibility(repository: str | None) -> dict:
         return {"visibility": None, "detail": type(exc).__name__}
 
 
+def _publisher_state(home: str, config: dict | None) -> dict:
+    """Postoji li odvojen identitet izdavaca. Samo otisak tokena, nikad vrijednost."""
+    from .remote import read_secret_file
+    gh = read_secret_file(home, "publisher-token")
+    nl = read_secret_file(home, "netlify-token")
+    site = read_secret_file(home, "netlify-site")
+    return {"githubTokenPresent": bool(gh), "githubTokenFingerprint": token_fingerprint(gh),
+            "netlifyTokenPresent": bool(nl), "netlifySiteConfigured": bool(site),
+            "enabled": bool((config or {}).get("publisherEnabled")),
+            "note": "token mora pripadati ODVOJENOM GitHub identitetu s pravima samo na ovaj repo; radnik ga nikad ne dobiva u okolinu"}
+
+
 def _config_fingerprint(config: dict | None, tools: dict) -> str:
     payload = {"config": config, "tools": {k: v.get("version") for k, v in tools.items()}}
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
@@ -230,6 +243,7 @@ def doctor(*, config: dict | None, config_problems: list[str], write_profile: bo
         "resources": _resources(),
         "repository": _repo_visibility((config or {}).get("repository")),
         "osIsolation": {"proven": False, "detail": "radnik i izdavac dijele OS korisnika dok se ne postavi zaseban identitet; produkcijska objava ostaje blokirana (plan 4)"},
+        "publisher": _publisher_state(home, config),
     }
     report["configFingerprint"] = _config_fingerprint(config, tools)
     previous = load_billing_profile(home)
@@ -351,7 +365,25 @@ class DefaultAdapters:
         return explain_change(changed_paths(self.repo), changed_line_count(self.repo), self.config, root=self.repo)
 
     def publish(self, task: dict, evidence: dict, store: Store, now: int, change_class: str) -> dict:
-        return {"status": "blocked", "reason": "publisher_not_configured: udaljeni adapter s odvojenim identitetom nije postavljen"}
+        # Izdavac postoji samo uz token ODVOJENOG GitHub identiteta u LEKTA_AUTONOMY_HOME/publisher-token; radnikova
+        # okolina ga nikad ne vidi (worker.scrubbed_env). Bez njega je odgovor blokada s razlogom, ne tiho nista.
+        remotes = load_remotes(self.home, self.config)
+        if remotes["remote"] is None:
+            return {"status": "blocked", "reason": "publisher_not_configured: " + "; ".join(remotes["reasons"])}
+        branch = subprocess.run(["git", "branch", "--show-current"], cwd=self.repo, capture_output=True, text=True, check=False).stdout.strip()
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.repo, capture_output=True, text=True, check=False).stdout.strip()
+        if not branch or branch in ("master", "main"):
+            return {"status": "blocked", "reason": "kandidat nije na zasebnoj grani"}
+        push = subprocess.run(["git", "push", "-u", "origin", branch], cwd=self.repo, capture_output=True, text=True, check=False, env=scrubbed_env())
+        if push.returncode != 0:
+            return {"status": "unknown", "reason": "git push nije uspio ili je ishod nepoznat"}
+        signal = task.get("signal") or {}
+        candidate = {"candidateSha": head, "branch": branch, "task_id": task["id"],
+                     "title": f"autonomy: {signal.get('kind', 'zadatak')} {signal.get('location', '')[:60]}".strip(),
+                     "body": f"Automatski pripremljena promjena za signal `{task.get('signal_key')}`.\n\nDokaz: complete={evidence.get('complete')}, "
+                             f"staleness={(evidence.get('staleness') or {}).get('verdict')}, klasa={change_class}.\n\nRunner nije proglasio nista `done`: pregled i merge su odvojeni koraci.",
+                     "openAutonomyPrs": 0}
+        return publish_verified(candidate, evidence, self.config, remote=remotes["remote"], store=store, now=now, change_class=change_class)
 
 
 # --------------------------------------------------------------------------------------------
