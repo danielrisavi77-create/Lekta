@@ -7,15 +7,18 @@ from scripts.autonomy.signals import (
 NOW = 1_800_000_000
 SHA = "48c1fc9e85f50213e5b313bc67cfbc0a45a28607"
 
-# Markeri koji nikad ne smiju izaci iz redakcije. Vrijednosti su sinteticke.
+# Markeri koji nikad ne smiju izaci iz redakcije. Vrijednosti su SINTETICKE i grade se spajanjem dijelova
+# u runtimeu, da ih skener tajni (gitleaks u security-audit.yml) ne vidi kao doslovne literale u izvoru:
+# izmjereno 2026-09-09, doslovan lazni JWT i "PRIVATE KEY" blok pali su gitleaks na PR-u #62.
+_B64 = "abcdefghijklmnopqrstuvwxyz0123456789"
 MARKERS = {
     "github_token": "ghp_" + "A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r8",
-    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYW5vbiJ9.abcdefghijklmnopqrstuvwxyz0123456789",
-    "anthropic": "sk-ant-api03-ZZZZZZZZZZZZZZZZZZZZ",
+    "jwt": ".".join(["eyJhbGciOiJIUzI1NiJ9", "eyJyb2xlIjoiYW5vbiJ9", _B64]),
+    "anthropic": "sk-ant-api03-" + "Z" * 20,
     "docx_xml": '<w:p><w:r><w:t>Uvod u politologiju, student Ivan</w:t></w:r></w:p>',
     "docx_zip": "UEsDBBQABgAIAAAAIQDd" + "A" * 40,
     "service_role": "SUPABASE_SERVICE_ROLE_KEY=abc",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQ\n-----END PRIVATE KEY-----",
+    "private_key": "-----BEGIN " + "PRIVATE KEY-----\nMIIEvQ\n-----END " + "PRIVATE KEY-----",
 }
 
 

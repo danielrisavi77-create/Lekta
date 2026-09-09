@@ -8,3 +8,11 @@
 # ovaj skraceni oblik regex ne pokriva. Nalaz je u povijesnom blobu (commit
 # cf38fb0) pa se ne moze ukloniti uredivanjem datoteke bez prepisivanja povijesti.
 cf38fb02655adb69238287206b4220d63fa93666:docs/audit/AUDIT_2026-07-16/10_CODE_TS.md:generic-api-key:136
+
+# scripts/autonomy/tests/test_signals.py: SINTETICKI markeri (lazan JWT s payloadom {"role":"anon"} i
+# nepotpun "PRIVATE KEY" blok od jednog retka) koji dokazuju da redakcija signala nikad ne propusta takve
+# oblike u bazu ili prompt. Nisu vjerodajnice ni kljucevi: nista se njima ne moze potpisati ni prijaviti.
+# Od commita poslije a229f008 test ih gradi spajanjem dijelova u runtimeu pa ih gitleaks vise ne vidi u
+# radnom stablu; ova dva otiska pokrivaju povijesni blob koji se bez prepisivanja povijesti ne moze ukloniti.
+a229f00896f07bad2d27f0c028627437740ed7a3:scripts/autonomy/tests/test_signals.py:jwt:13
+a229f00896f07bad2d27f0c028627437740ed7a3:scripts/autonomy/tests/test_signals.py:private-key:18
