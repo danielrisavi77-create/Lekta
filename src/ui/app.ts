@@ -1421,6 +1421,11 @@ function scrollToRepairPanel(r: any,finding?: any){
   // (isti obrazac koji vec koriste kartice u #categoryGrid).
   revealResultDetails();
   revealDetails();
+  // Nadredjeni blok "Napredna provjera" je zadano SKLOPLJEN (ensureResultsCockpitAdvancedShell seli u
+  // njega sve iza cockpita, ukljucujuci #repairPanelMount), pa bez ovoga CTA prebaci karticu visine 0
+  // i skrol nema metu: korisnik gleda isti ekran (vanjski audit 2026-09-08, nalaz 2). `open-findings`
+  // ovo vec radi; no-op kad bloka nema (legacy renderer). Gard: tests/ux/repair-cta-opens-panel.spec.ts.
+  setResultsCockpitAdvanced(true);
   openTab('submission');
   const m=$('#repairPanelMount');
   let act: any=null;
