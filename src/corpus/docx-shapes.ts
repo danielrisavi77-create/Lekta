@@ -44,8 +44,13 @@ export const DOCX_SHAPE_IDS = [
    * PROVENIJENCIJA SE VISE NE REPRODUCIRA i to ovdje stoji umjesto ranije tvrdnje "1 od 246
    * stvarnih radova". Ponovljeno mjerenje 2026-09-08 nad 457 radova (ukljucujuci 99-izbaceno):
    * 205 dokumenata ima `word/media/*.png` i SVIH 205 nosi `Default Extension="png"`; nijedan ga ne
-   * deklarira ni preko `Override`. Oblik zato ostaje imenovan i NEPOKRIVEN: razred kvara je stvaran
-   * (Word odbija paket), ali dokumenta koji ga nosi u ovom korpusu nema, pa se fixtura ne izmislja.
+   * deklarira ni preko `Override`.
+   *
+   * NOSITELJ JE IZMISLJEN, NE NADJEN (odluka vlasnika 2026-09-09). Oblik je zatvoren rucno slozenom
+   * fixturom `tests/fixtures/docx-packaging/png-bez-defaulta.docx`, cijem sidecaru stoji da potkrepe
+   * u stvarnom korpusu NEMA. Razred kvara je stvaran (Word odbija paket u kojem vrsta dijela nije
+   * deklarirana), ali brojka uz ovaj redak i dalje glasi 0 od 457 i tako je treba citati: popis
+   * oblika bez NOSITELJA je od danas prazan, popis oblika bez POTKREPE nije.
    */
   'paket/bez-png-default',
   /** Zivi komentari (`w:comment`). */

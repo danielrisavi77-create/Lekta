@@ -110,3 +110,50 @@ describe('rucno slozen paket: oblici pakiranja', () => {
     expect(counts['gdocs/potpis']).toBe(0);
   });
 });
+
+/**
+ * DRUGA FIXTURA: `paket/bez-png-default`, jedini oblik cijeg nositelja NIJE dala mjera nego odluka.
+ *
+ * Zbog toga je ovdje jedna tvrdnja koje kod ostalih fixtura nema: sidecar MORA reci da potkrepe u
+ * stvarnom korpusu nema. Bez nje bi za godinu dana ovaj oblik izgledao jednako potkrijepljen kao
+ * `zip/direktoriji`, koji stoji na 130 stvarnih radova.
+ */
+describe('rucno slozen paket: png bez deklarirane vrste', () => {
+  const PNG_DOCX = join(DIR, 'png-bez-defaulta.docx');
+  const PNG_SIDECAR = join(DIR, 'png-bez-defaulta.json');
+
+  it('fixtura postoji i nosi tocno tvrdjeni oblik', async () => {
+    expect(existsSync(PNG_DOCX), PNG_DOCX).toBe(true);
+    const sidecar = JSON.parse(readFileSync(PNG_SIDECAR, 'utf8')) as Sidecar;
+    expect(sidecar.shapes?.claimed).toEqual(['paket/bez-png-default']);
+
+    const counts = detectShapes(await readZip(new Uint8Array(readFileSync(PNG_DOCX))));
+    expect(verifyShapeClaims(sidecar.shapes?.claimed ?? [], counts)).toEqual({
+      missing: [],
+      unknown: [],
+      underDetected: [],
+    });
+  });
+
+  it('sidecar izricito kaze da oblik nema potkrepu u stvarnom korpusu', () => {
+    const sidecar = JSON.parse(readFileSync(PNG_SIDECAR, 'utf8')) as Sidecar & {
+      razlog?: string;
+      toolLimitations?: string[];
+    };
+    expect(sidecar.razlog ?? '').toMatch(/IZMISLJEN OBLIK/);
+    expect((sidecar.toolLimitations ?? []).join(' ')).toMatch(/nema potkrepu u stvarnom korpusu/);
+    expect(sidecarAdmitted(sidecar)).toBe(false);
+  });
+
+  it('negativna kontrola: isti paket bez png dijela oblik NE nosi', async () => {
+    const spec: DocSpec = { paragraphs: [{ text: 'Tijelo rada.' }], settings: true };
+    const counts = detectShapes(await readZip(buildDocx(spec)));
+    expect(counts['paket/bez-png-default']).toBe(0);
+  });
+
+  it('analiza cita paket s nedeklariranim dijelom, ne puca na njemu', async () => {
+    const bytes = new Uint8Array(readFileSync(PNG_DOCX));
+    const result = await analyzeFixture(new File([bytes], 'png-bez-defaulta.docx', { type: MIME }));
+    expect((result.checks ?? []).length).toBeGreaterThan(20);
+  });
+});

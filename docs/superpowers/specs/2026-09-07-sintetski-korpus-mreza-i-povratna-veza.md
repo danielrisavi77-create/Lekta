@@ -341,8 +341,9 @@ mrtav kod, i to u funkciji koja u susjednom komentaru izricito odbija pogadjati 
 i oblik su uklonjeni, a identitet Google Docsa ostaje ondje gdje je izmjeren, kao `gdocs/potpis`.
 
 `paket/bez-png-default` je zapisan kao "naslo se na 1 od 246 stvarnih radova" i to se vise ne
-reproducira. Ostaje imenovan i nepokriven: razred kvara je stvaran (Word takav paket odbija), ali
-nositelja u korpusu nema, pa se fixtura ne izmislja da bi popis izgledao zatvoren.
+reproducira; ponovljeno mjerenje daje 0 od 457. Isprva je ostao imenovan i nepokriven, a 2026-09-09
+je odlukom vlasnika zatvoren rucno slozenom fixturom (`png-bez-defaulta.docx`). Vidi "Sto ostaje",
+tocka 5: nositelj postoji, potkrepa ne, i ta se razlika vodi izrijekom.
 
 Preostala tri zatvara JEDAN rucno slozen paket, `tests/fixtures/docx-packaging/gdocs-otisak.docx`,
 uz novu traku `handbuilt` (izvan `ADMITTED_TRACKS`, uz `synthetic: true`, dakle oba pojasa zida).
@@ -457,7 +458,11 @@ popravka ista ocekuje.
 3. `apuri` nema Wordovu inacicu, a ostala tri je imaju. Nije zapisano je li izostala namjerno ili je
    pokusaj pao; utvrditi prije nego se broj dokumenata negdje navede kao ujednacen.
 4. Popravci na njihovoj strani, i skidanje eval slucaja tek kad kvar doista nestane iz mjerenja.
-5. ~~Odluka vlasnika o `paket/bez-png-default`.~~ ODLUCENO 2026-09-09: **ostaje imenovan**. Oblik
-   se ne brise iz kataloga i ne dobiva izmisljenu fixturu, nego stoji kao jedini nepokriven, s
-   provenijencijom koja se vise ne reproducira (0 od 457; 205 dokumenata s png-om, svih 205 nosi
-   `Default`). Ako ga ijedan buduci ingest donese, zatvara se tim dokumentom, ne rucnim paketom.
+5. ~~Odluka vlasnika o `paket/bez-png-default`.~~ ZATVORENO 2026-09-09, uz izmjenu prve odluke istog
+   dana. Vlasnik je prvo odlucio da oblik ostane imenovan i nepokriven, pa je odluku promijenio:
+   oblik je zatvoren RUCNO SLOZENOM fixturom `png-bez-defaulta.docx`. Popis oblika bez nositelja je
+   time prazan, ali popis oblika bez POTKREPE nije: mjerenje nad 457 stvarnih radova taj oblik i
+   dalje nalazi na NULA njih. Ta razlika je zapisana na tri mjesta (sidecar fixture, komentar uz
+   oblik, ovaj redak) jer je jedina obrana od toga da za godinu dana izgleda jednako potkrijepljeno
+   kao `zip/direktoriji`, koji stoji na 130 radova. Ako ga ijedan buduci ingest donese, fixturu treba
+   zamijeniti tim dokumentom.
