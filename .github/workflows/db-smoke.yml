@@ -81,3 +81,21 @@ jobs:
 
       - name: Sabirnica klijentskih gresaka (P1-28)
         run: psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql
+
+      - name: Mutacija autoriteta brisanja agent payloadova
+        run: bash scripts/agent-payload-cleanup-mutation-check.sh
+
+      - name: Autoritet i oporavak brisanja agent payloadova
+        run: psql -v ON_ERROR_STOP=1 -f scripts/agent-payload-cleanup-smoke.sql
+
+      - name: Atomska zamjena i rezervacija konteksta
+        run: psql -v ON_ERROR_STOP=1 -f scripts/agent-context-atomic-smoke.sql
+
+      - name: Trajni identitet i lease povrata
+        run: psql -v ON_ERROR_STOP=1 -f scripts/katedra-refund-ledger-smoke.sql
+
+      - name: Jednokratno razrjesenje poznate AI potrosnje
+        run: psql -v ON_ERROR_STOP=1 -f scripts/katedra-billing-reconciliation-smoke.sql
+
+      - name: Jednokratni provider start i oporavak izvornog odgovora
+        run: psql -v ON_ERROR_STOP=1 -f scripts/agent-execution-recovery-smoke.sql
