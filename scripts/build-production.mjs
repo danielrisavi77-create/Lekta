@@ -36,14 +36,15 @@ export function buildCommandLine({ verify = true } = {}) {
 }
 
 export function runBuild({ verify = true, cwd = process.cwd(), log = console.log } = {}) {
-  const steps = BUILD_STEPS.map((step) => ({ label: `npm run ${step}`, cmd: 'npm', args: ['run', step] }));
-  if (verify) steps.push({ label: VERIFY_STEP, cmd: process.execPath, args: ['scripts/verify-deploy-dist.mjs'] });
+  // `npm` na Windowsu je npm.cmd, pa ide kroz shell kao JEDAN niz (argv + shell:true daje DEP0190 i ista
+  // upozorenja koja je ratchet skripta vec jednom pocistila). Imena koraka su konstante iz ove datoteke, ne
+  // korisnicki ulaz. Node korak ide bez shella.
+  const steps = BUILD_STEPS.map((step) => ({ label: `npm run ${step}`, run: () => spawnSync(`npm run ${step}`, { cwd, stdio: 'inherit', shell: true }) }));
+  if (verify) steps.push({ label: VERIFY_STEP, run: () => spawnSync(process.execPath, ['scripts/verify-deploy-dist.mjs'], { cwd, stdio: 'inherit' }) });
   for (const step of steps) {
     log(`[build-production] ${step.label}`);
     const started = Date.now();
-    // `shell: true` je nuzan za `npm` na Windowsu (npm.cmd); argumenti su konstante iz ove datoteke,
-    // ne korisnicki ulaz, pa interpolacija ne otvara nista.
-    const r = spawnSync(step.cmd, step.args, { cwd, stdio: 'inherit', shell: step.cmd === 'npm' });
+    const r = step.run();
     if (r.status !== 0) {
       log(`[build-production] PAD u koraku "${step.label}" (kod ${r.status ?? r.signal}) nakon ${Math.round((Date.now() - started) / 1000)} s`);
       return r.status ?? 1;

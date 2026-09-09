@@ -78,10 +78,17 @@ test.describe('dist: putovanje od pocetne stranice', () => {
 
     // Dokument je VEC ucitan: korak 2 bez ponovnog ubacivanja, i bez marketinskog uvoda.
     await cekajKorak(page, '2');
-    await expect(page.locator('#analyzeBtn')).toBeEnabled({ timeout: 60_000 });
     await expect(page.locator('#analyzer')).toBeVisible();
 
-    await page.locator('#analyzeBtn').click();
+    // Obnovljena sesija ide korak dalje od rucnog ubacivanja: radni prostor ODMAH nudi karticu potvrde
+    // profila ("Potvrdi i provjeri"), a #analyzeBtn stoji iza nje i nije klikabilan (izmjereno lokalno
+    // i na CI-u 2026-09-09: "resolved", ali nikad "visible, enabled and stable"). Klik na analizu ide
+    // samo kad kartice jos nema; u oba slucaja potvrda profila je tvrda tvrdnja (vidi confirm-profile.ts).
+    const potvrda = page.locator('[data-confirm-profile]');
+    if (!(await potvrda.isVisible().catch(() => false))) {
+      await expect(page.locator('#analyzeBtn')).toBeEnabled({ timeout: 60_000 });
+      await page.locator('#analyzeBtn').click();
+    }
     await potvrdiProfil(page);
     await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
     await expect(page.locator('#resultCockpit')).toBeVisible();
