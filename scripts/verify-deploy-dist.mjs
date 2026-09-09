@@ -48,6 +48,17 @@ for (const f of assets) {
 // 3. pravne stranice postoje i sadrze ocekivane markere
 // Popis je izdvojen u scripts/lib/legal-pages.mjs jer ga dijeli i post-deploy smoke; dok je bio
 // prepisan na dva mjesta, nova stranica se lako dodala samo u jedan alat.
+// Identitet builda (vanjski audit 2026-09-08, nalaz 3): `dist/build-info.json` pise `npm run build-info`
+// odmah nakon `vite build`; `post-deploy-smoke` ga cita sa zive stranice i usporedjuje s masterom.
+// Bez njega objavljeni commit nije citljiv nigdje osim po ponasanju u pregledniku.
+{
+  const p = path.join(DIST, 'build-info.json');
+  if (!fs.existsSync(p)) fail('dist/build-info.json ne postoji (npm run build-info nije prosao?)');
+  let info = null;
+  try { info = JSON.parse(fs.readFileSync(p, 'utf8')); } catch { fail('dist/build-info.json nije valjan JSON'); }
+  if (info && !/^[0-9a-f]{40}$/.test(String(info.commit ?? ''))) fail('dist/build-info.json nema 40-znamenkasti commit');
+}
+
 for (const [file, marker] of LEGAL_PAGES) {
   const p = path.join(DIST, file);
   if (!fs.existsSync(p)) fail(`dist/${file} ne postoji (generate-legal-pages nije prosao?)`);

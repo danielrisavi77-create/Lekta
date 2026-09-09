@@ -44,6 +44,8 @@
     "test": "vitest",
     "test:ux": "playwright test --project=chromium --project=mobile-chromium",
     "test:ux:browsers": "playwright test --project=firefox --project=webkit --project=mobile-webkit",
+    "test:ux:dist": "playwright test -c playwright.dist.config.ts",
+    "build-info": "node scripts/write-build-info.mjs",
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "oxlint && tsc --noEmit && npm run check:edge && vitest run && vite build",

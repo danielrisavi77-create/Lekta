@@ -190,6 +190,31 @@ async function observe(url, init = {}) {
  * `observeImpl` je injektabilan iskljucivo zato da se lanac moze provrtjeti bez mreze u testu;
  * u radu je uvijek pravi `observe`.
  */
+/**
+ * `build-info.json` mora postojati i nositi 40-znamenkasti commit (pise ga `scripts/write-build-info.mjs`
+ * u Netlify lancu). Bez njega se identitet OBJAVLJENOG builda ne da procitati sa zive stranice, pa se
+ * raskorak "javno naspram master" vidi tek usporedbom ponasanja u pregledniku (vanjski audit 2026-09-08,
+ * nalaz 3: stranica je danima stajala na commitu od 2026-09-06 a nista to nije reklo).
+ *
+ * Tvrdnja provjerava OBLIK, ne jednakost s masterom: zakljucana objava je namjerno stanje, pa se
+ * neslaganje commita javlja kao upozorenje u CLI-ju (`--expect-commit`), ne kao pad ovdje. Pad bi bio
+ * stalna crvena koju svi nauce ignorirati (isti argument kao u security-audit.yml).
+ */
+export function assertBuildInfo(obs) {
+  if (obs.status !== 200) return bad(`build-info.json: HTTP ${obs.status}`);
+  let body;
+  try { body = JSON.parse(obs.text || ''); } catch { return bad('build-info.json nije JSON'); }
+  if (!/^[0-9a-f]{40}$/.test(String(body?.commit ?? ''))) return bad('build-info.json nema 40-znamenkasti commit');
+  if (!Number.isFinite(Date.parse(String(body?.builtAt ?? '')))) return bad('build-info.json nema valjan builtAt');
+  return ok();
+}
+
+/** Commit iz `build-info.json`, ili `null` kad ga tvrdnja iznad ne bi priznala. */
+export function buildInfoCommit(obs) {
+  if (!assertBuildInfo(obs).ok) return null;
+  return JSON.parse(obs.text).commit;
+}
+
 export async function runSmoke({ site, functions, observeImpl = observe }) {
   const nalazi = [];
   /**
@@ -239,6 +264,11 @@ export async function runSmoke({ site, functions, observeImpl = observe }) {
       return html.ok ? assertContains(obs, marker, file) : html;
     });
   }
+
+  // 3b. Identitet objavljenog builda. Sam oblik je nalaz; usporedbu s masterom radi CLI kao upozorenje.
+  const buildInfo = await observeImpl(`${site}/build-info.json`);
+  const buildOk = zapisi('build-info', 'site', buildInfo, () => assertBuildInfo(buildInfo));
+  if (buildOk) nalazi[nalazi.length - 1].commit = buildInfoCommit(buildInfo);
 
   // 4. Edge funkcije.
   const health = await observeImpl(`${functions}/health`);
@@ -336,6 +366,11 @@ const MUTACIJE = [
   ['health uvijek 200 (OPS-01 regresija)', () => assertHealthRejectsPost({ status: 200 })],
   ['popravak radi bez tokena', () => assertRequiresAuth({ status: 200 }, 'repair-docx')],
   ['popravak puca prije autha', () => assertRequiresAuth({ status: 500 }, 'repair-docx')],
+  // Identitet builda (vanjski audit 2026-09-08, nalaz 3).
+  ['build-info nedostaje (lanac bez write-build-info)', () => assertBuildInfo({ status: 404, text: '' })],
+  ['build-info nije JSON (SPA fallback vratio HTML)', () => assertBuildInfo({ status: 200, text: '<html>x</html>' })],
+  ['build-info bez commita', () => assertBuildInfo({ status: 200, text: JSON.stringify({ builtAt: '2026-09-09T00:00:00Z' }) })],
+  ['build-info sa skracenim commitom', () => assertBuildInfo({ status: 200, text: JSON.stringify({ commit: 'abc123', builtAt: '2026-09-09T00:00:00Z' }) })],
 ];
 
 /**
@@ -383,6 +418,7 @@ const BASELINE = [
   ['health', () => assertHealth({ status: 200, text: ZDRAV_HEALTH })],
   ['health POST', () => assertHealthRejectsPost({ status: 405 })],
   ['auth', () => assertRequiresAuth({ status: 401 }, 'repair-docx')],
+  ['build-info', () => assertBuildInfo({ status: 200, text: JSON.stringify({ commit: 'a'.repeat(40), builtAt: '2026-09-09T00:00:00.000Z' }) })],
 ];
 
 function selfTest() {
@@ -442,6 +478,15 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     });
     for (const n of nalazi) {
       console.log(n.ok ? `  ok    ${n.id}` : `  ${n.unreachable ? '????' : 'FAIL'}  ${n.id}: ${n.detail}`);
+    }
+    // Objavljeni commit naspram ocekivanog (`--expect-commit`, u cronu `github.sha` mastera). UPOZORENJE, ne
+    // pad: zakljucana objava je namjerno stanje (vlasnik, 2026-09-09), a stalna crvena bi se naucila
+    // ignorirati. Da nema `build-info.json` uopce, to je vec nalaz `build-info` gore.
+    const expectCommit = String(arg('expect-commit', '')).trim();
+    const objavljeno = nalazi.find((n) => n.id === 'build-info')?.commit ?? null;
+    if (objavljeno) console.log(`[post-deploy-smoke] objavljeni build: ${objavljeno.slice(0, 12)}`);
+    if (expectCommit && objavljeno && expectCommit !== objavljeno) {
+      console.log(`::warning::objavljena stranica je ${objavljeno.slice(0, 12)}, a master je ${expectCommit.slice(0, 12)}; objava zaostaje ili je zakljucana.`);
     }
     const pali = nalazi.filter((n) => !n.ok);
     const ishod = classifyRun(nalazi);

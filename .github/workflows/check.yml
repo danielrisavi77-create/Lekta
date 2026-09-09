@@ -98,3 +98,40 @@ jobs:
 
       - name: UX viewport gate
         run: npm run test:ux
+
+  # KRITICNI PUT NAD PRODUKCIJSKIM ARTEFAKTOM (vanjski audit 2026-09-08, nalaz 3).
+  #
+  # `ux-gate` iznad vrti Playwright protiv `npm run dev`; `post-deploy-smoke` nad zivom stranicom nikad
+  # ne ucitava dokument. Nista dakle nije vrtjelo dokument -> profil -> nalaz -> popravak nad onim sto
+  # se stvarno objavljuje (minificiran bundle, `__DEV_TOOLS__=false`, generirane stranice). Ovaj job
+  # gradi ISTIM lancem kao netlify.toml, provjeri dist (bez obaveznog dokaza izdanja: dokaz se pece
+  # lokalno jer trazi Word, i to je vec tako), pa vrti `tests/ux-dist/**` kroz `vite preview`.
+  dist-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Node 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instaliraj ovisnosti
+        run: npm ci
+
+      - name: Instaliraj Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Produkcijski build (isti lanac kao netlify.toml)
+        env:
+          LEKTA_SITE_ORIGIN: https://lektahr.netlify.app
+        run: npm run build && npm run build-info && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-title-page-tools && npm run generate-competitor-pages
+
+      - name: Provjera dist artefakta
+        run: node scripts/verify-deploy-dist.mjs
+
+      - name: Kriticni put nad dist/ (vite preview)
+        run: npm run test:ux:dist
