@@ -170,6 +170,7 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'croatian-typography-fixer': 'croatian-typography',
   'link-doi-fixer': 'link-doi',
   'required-section-fixer': 'required-section',
+  'bibliography-repair-fixer': 'bibliography',
 };
 
 /**
@@ -331,6 +332,8 @@ export const APPLIED_AXIS_FIXER: Record<string, string> = {
    * uvijek bio `false` i os NIKAD nije mogla zaraditi dokaz `applied`.
    */
   'element-caption': 'element-caption-fixer',
+  /** Vidi obrazlozenje uz `bibliography` u `closed-loop-wiring.ts`: bodovana samo na dijelu profila. */
+  bibliography: 'bibliography-repair-fixer',
 };
 
 /**

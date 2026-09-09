@@ -9,15 +9,15 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4807,
-    "uncoveredCount": 7810,
+    "coveredCount": 4827,
+    "uncoveredCount": 7790,
     "resolvedCount": 1919,
-    "authoredCount": 7,
+    "authoredCount": 5,
     "byReason": {
       "profil-ne-propisuje-os": 6133,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 49,
+      "nema-dokaza": 29,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -189,8 +189,13 @@
     {
       "profileId": "fpzg-politologija-zavrsni",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-politologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
@@ -454,6 +459,51 @@
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "fixerId": "bibliography-repair-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-zavrsni-tekst",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-zavrsni-tekst",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-zavrsni-tekst",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "fixerId": "section-surgery-fixer",
       "status": "pokriveno",
       "evidence": {
         "kind": "authored",
@@ -464,51 +514,6 @@
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "fixerId": "citation-bibliography-sync-fixer",
-      "status": "nepokriveno",
-      "reason": "ceka-ljudski-odabir"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "fixerId": "legal-footnote-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "fixerId": "final-document-inspector-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-zavrsni-tekst",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "fixerId": "table-figure-rescue-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:fpzg-novinarstvo-zavrsni-tekst",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "fixerId": "section-surgery-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "authored",
-        "strength": "applied",
-        "track": "authored",
-        "artifactId": "fpzg--final--prijediplomski--neuredan.docx"
-      }
-    },
-    {
-      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "fixerId": "field-integrity-fixer",
       "status": "pokriveno",
       "evidence": {
@@ -955,8 +960,13 @@
     {
       "profileId": "fpzg-politologija-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-politologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-politologija-diplomski",
@@ -1220,8 +1230,13 @@
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-nacionalna-sigurnost-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -1485,8 +1500,13 @@
     {
       "profileId": "fpzg-novinarstvo-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -1750,8 +1770,13 @@
     {
       "profileId": "fpzg-mes-master-thesis",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -2015,8 +2040,13 @@
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-odnosi-s-javnoscu",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -2280,8 +2310,13 @@
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-prilagodba-eu",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
@@ -2545,8 +2580,13 @@
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-sigurnosna-politika-rh",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -2810,8 +2850,13 @@
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-vanjska-politika-diplomacija",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
@@ -3320,10 +3365,10 @@
       "fixerId": "bibliography-repair-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "authored",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "authored",
-        "artifactId": "fpzg--project--diplomski--neuredan.docx"
+        "artifactId": "closed-loop:fpzg-opci-akademski-rad",
+        "checkIds": []
       }
     },
     {
@@ -20411,8 +20456,13 @@
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -42029,8 +42079,13 @@
     {
       "profileId": "unizd-turizam-zavrsni",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-turizam-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-turizam-zavrsni",
@@ -42300,8 +42355,13 @@
     {
       "profileId": "unizd-turizam-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-turizam-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-turizam-diplomski",
@@ -42559,8 +42619,13 @@
     {
       "profileId": "unizd-psihologija-zavrsni",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-psihologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
@@ -42818,8 +42883,13 @@
     {
       "profileId": "unizd-pedagogija-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-pedagogija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
@@ -43089,8 +43159,13 @@
     {
       "profileId": "unizd-povijest-umj-zavrsni",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-povijest-umj-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
@@ -55561,8 +55636,13 @@
     {
       "profileId": "ffri-kulturalni-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-kulturalni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -63024,8 +63104,13 @@
     {
       "profileId": "unizd-ekologija-zavrsni",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-ekologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-ekologija-zavrsni",
@@ -63785,8 +63870,13 @@
     {
       "profileId": "unizd-zdravstvo-zavrsni",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-zdravstvo-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-zdravstvo-zavrsni",
@@ -70705,8 +70795,13 @@
     {
       "profileId": "unizd-povijest-umj-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-povijest-umj-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-umj-diplomski",
@@ -93698,8 +93793,13 @@
     {
       "profileId": "unizd-tko-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-tko-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-tko-diplomski",

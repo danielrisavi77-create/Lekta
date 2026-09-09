@@ -77,6 +77,7 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'element-caption',
   'field-integrity',
   'heading-format',
+  'bibliography',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -489,6 +490,42 @@ export async function buildViolatingDocx(
      * velicina i poravnanje. Numeracija se drzi ISPRAVNOM (broj s tockom), jer je ona zasebna
      * provjera (`structure.heading.numbering`) i njezino bi krsenje pomijesalo dva nalaza.
      */
+    /**
+     * `bibliography`: popis literature s higijenskim nedostacima -> `bibliography-repair-fixer`.
+     *
+     * ZASTO OS POSTOJI. Izmjereno 2026-09-09: 20 celija tog fixera nema dokaza, i to na profilima
+     * koji `bibliography-rules` DOISTA imaju. Uzrok nije kvar nego to sto generator nikad nije
+     * proizveo popis literature: graditelj stavke trazi `bibliographyStructure.entries` neprazan, a
+     * bez naslova "Literatura" i zapisa ispod njega analiza taj popis ne prepoznaje.
+     *
+     * Zapisi su namjerno u autor-godina obliku, jedan s golim DOI-jem koji treba kanonizirati i dva
+     * koja se razlikuju samo sufiksom godine, jer su to higijenske promjene koje se predodabiru.
+     * Tekst je izmisljen i nije ni iz jednog stvarnog rada.
+     */
+    if (wants(structural, 'bibliography')) {
+      paragraphs.push({ text: 'Literatura', styleId: 'Heading1' });
+      /**
+       * REDOSLIJED JE NAMJERNO POKVAREN, i to je izmjereno, ne ukras.
+       *
+       * Prva izvedba je zapise nizala abecedno. Na `fpzg-politologija-zavrsni` je popravak svejedno
+       * radio, jer tamosnje pravilo trazi i sufikse godina (`authorYearSuffixes`), pa je imao sto
+       * ispraviti; na `unizd-turizam-zavrsni`, cije pravilo ima samo `sort`, nije bilo NIJEDNOG
+       * zahtjeva, jer uredan popis nema sto popraviti. Os koja radi samo na dijelu profila je
+       * poluprazna os.
+       *
+       * Sada popis krsi oboje: nije abecedan i ima dva zapisa istog autora i godine bez sufiksa.
+       */
+      for (const zapis of [
+        'Cvitanic, P. (2019). Uvod u analizu dokumenata. Split: Naklada Treca.',
+        'Babic, L. (2021). Oblikovanje akademskog teksta. Zagreb: Naklada Druga. doi:10.1234/lekta.2021.002',
+        'Anic, M. (2020). Metodologija drustvenih istrazivanja. Zagreb: Naklada Prva.',
+        'Babic, L. (2021). Norme i praksa citiranja. Zagreb: Naklada Druga.',
+      ]) {
+        paragraphs.push({ ...para, text: zapis });
+      }
+      violated.push('bibliography');
+    }
+
     if (wants(structural, 'heading-format')) {
       const hr = (profile as { headingRules?: HeadingRulesShape } | null)?.headingRules;
       if (hr) {

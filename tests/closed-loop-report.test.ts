@@ -52,6 +52,21 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
   });
 
+  /**
+   * Os `bibliography` mora ostati PRIMIJENJENA na netrivijalnom broju profila.
+   *
+   * Ne trazi se `resolved`, i to je izmjereno: `reference.alphabetical` postoji samo na dijelu
+   * profila, pa je os prvo ozicena kao bodovana i closed-loop je pao s 372 `pass` na 11, uz 361
+   * `partial`. Dokaz je zato `applied`, kroz changelog, i tvrdnja mjeri upravo njega.
+   *
+   * Bez ove tvrdnje bi nestanak popisa literature iz generatora prosao tiho: `pass` bi ostao 372,
+   * a matrica bi izgubila 20 celija `bibliography-repair-fixera`.
+   */
+  it('popravak literature ostaje primijenjen na netrivijalnom broju profila', () => {
+    const primijenjen = report.rows.filter((r) => ((r as { axesApplied?: string[] }).axesApplied ?? []).includes('bibliography'));
+    expect(primijenjen.length, 'nijedan profil; generator je prestao proizvoditi popis literature').toBeGreaterThan(5);
+  });
+
   it('zatecene kategorije odgovaraju zabiljezenima', () => {
     expect(count('pass'), 'pass').toBe(ratchet.pass);
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);
