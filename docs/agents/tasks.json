@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "baselineCommit": "7bdd70853392b092dfa271aef077118df4b18325",
+  "tasks": [
+    {
+      "id": "T00",
+      "title": "Potvrdi polazište i napravi kartu već riješenih nalaza",
+      "status": "done",
+      "dependsOn": [],
+      "note": "docs/quality/lekta-plan-status.md, docs/agents/autonomy-baseline.md (2026-09-09, master 48c1fc9e)"
+    },
+    {
+      "id": "T01",
+      "title": "Zatvori prihvaćanje nepoznate Git usporedbe",
+      "status": "done",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "PR #61 D3 c2ee6e1f: treeDigest, fresh/stale/unknown, tests/release-proof-staleness.test.ts"
+    },
+    {
+      "id": "T02",
+      "title": "Otvori sve slojeve prikaza pri pozivu popravka",
+      "status": "ready",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "djelomicno u PR #61 D5 (CTA otvara blok); ostatak ceka sesiju redizajna /rad/"
+    },
+    {
+      "id": "T03",
+      "title": "Testiraj stvarni produkcijski artefakt od početne stranice",
+      "status": "blocked",
+      "dependsOn": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "id": "T04",
+      "title": "Saniraj visokorizične ovisnosti alata",
+      "status": "ready",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "djelomicno u PR #61 D2 (ratchet 23); sanacija i dependency-decisions.md nisu napravljeni"
+    },
+    {
+      "id": "T05",
+      "title": "Učini podrijetlo dokaza profila eksplicitnim",
+      "status": "ready",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "djelomicno u PR #61 D4 (proofSource direct/inherited); evidenceBasis i testedProfileIds nisu uvedeni"
+    },
+    {
+      "id": "T06",
+      "title": "Izmjeri stvarni učinak popravka na realnom korpusu",
+      "status": "ready",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "harness postoji; protokol i ciljana metrika nisu napravljeni"
+    },
+    {
+      "id": "T07",
+      "title": "Ograniči cijelo tijelo zahtjeva prije multipart parsiranja",
+      "status": "done",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "PR #61 D1 38c41656: readBytesBounded/readFormDataBounded, tests/edge-formdata-bounded.test.ts"
+    },
+    {
+      "id": "T08",
+      "title": "Izdvoji upravljanje tokom uz očuvanje postojećih ugovora",
+      "status": "blocked",
+      "dependsOn": [
+        "T01",
+        "T02",
+        "T03",
+        "T05",
+        "T06",
+        "T07"
+      ]
+    },
+    {
+      "id": "T09",
+      "title": "Pretvori plan u stvarno upravljiv prikaz",
+      "status": "blocked",
+      "dependsOn": [
+        "T08"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Poveži završni prikaz s provjerenim ishodom i oporavkom",
+      "status": "blocked",
+      "dependsOn": [
+        "T09"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Dodaj usporedbu nalaza dviju revizija",
+      "status": "blocked",
+      "dependsOn": [
+        "T05",
+        "T08",
+        "T09",
+        "T10"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Omogući učitavanje nove verzije i prikaz napretka",
+      "status": "blocked",
+      "dependsOn": [
+        "T11"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Pretvori postojeće Word komentare u lokalne zadatke",
+      "status": "blocked",
+      "dependsOn": [
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "Izmjeri tok uz postojeću privolu i ograničene podatke",
+      "status": "blocked",
+      "dependsOn": [
+        "T10",
+        "T12",
+        "T13"
+      ]
+    },
+    {
+      "id": "T15",
+      "title": "Provedi korisnički pilot i završnu procjenu spremnosti",
+      "status": "blocked",
+      "dependsOn": [
+        "T14"
+      ]
+    }
+  ],
+  "statusNote": "Statusi azurirani 2026-09-09 prema docs/quality/lekta-plan-status.md (T00). \"done\" = nalaz zatvoren dokazom ponasanja u PR-u #61; ostatak posla po zadatku je u toj karti."
+}
