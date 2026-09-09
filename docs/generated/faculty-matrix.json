@@ -465,10 +465,10 @@
         "uncoveredCount": 57,
         "resolvedCount": 15,
         "byReason": {
-          "profil-ne-propisuje-os": 42,
+          "profil-ne-propisuje-os": 45,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 3,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6
         }
@@ -516,10 +516,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -568,10 +568,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -620,10 +620,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -704,10 +704,10 @@
         "uncoveredCount": 76,
         "resolvedCount": 20,
         "byReason": {
-          "profil-ne-propisuje-os": 56,
+          "profil-ne-propisuje-os": 60,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 4,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 8,
           "trazi-ulaz-izvan-dokumenta": 8
         }
@@ -766,10 +766,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -827,10 +827,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -882,10 +882,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -938,10 +938,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -1017,10 +1017,10 @@
         "uncoveredCount": 175,
         "resolvedCount": 17,
         "byReason": {
-          "profil-ne-propisuje-os": 142,
+          "profil-ne-propisuje-os": 143,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 16,
           "trazi-ulaz-izvan-dokumenta": 16
         }
@@ -1064,10 +1064,10 @@
             "uncoveredCount": 22,
             "resolvedCount": 2,
             "byReason": {
-              "profil-ne-propisuje-os": 17,
+              "profil-ne-propisuje-os": 18,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -1711,10 +1711,10 @@
         "uncoveredCount": 64,
         "resolvedCount": 8,
         "byReason": {
-          "profil-ne-propisuje-os": 51,
+          "profil-ne-propisuje-os": 52,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6
         }
@@ -1757,10 +1757,10 @@
             "uncoveredCount": 22,
             "resolvedCount": 2,
             "byReason": {
-              "profil-ne-propisuje-os": 17,
+              "profil-ne-propisuje-os": 18,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -3933,10 +3933,10 @@
         "uncoveredCount": 112,
         "resolvedCount": 32,
         "byReason": {
-          "profil-ne-propisuje-os": 85,
+          "profil-ne-propisuje-os": 88,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 3,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 12,
           "trazi-ulaz-izvan-dokumenta": 12
         }
@@ -3989,10 +3989,10 @@
             "uncoveredCount": 18,
             "resolvedCount": 6,
             "byReason": {
-              "profil-ne-propisuje-os": 13,
+              "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -4099,10 +4099,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -4156,10 +4156,10 @@
             "uncoveredCount": 18,
             "resolvedCount": 6,
             "byReason": {
-              "profil-ne-propisuje-os": 13,
+              "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -5300,10 +5300,10 @@
         "uncoveredCount": 58,
         "resolvedCount": 14,
         "byReason": {
-          "profil-ne-propisuje-os": 44,
+          "profil-ne-propisuje-os": 46,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6
         }
@@ -5353,10 +5353,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -5408,10 +5408,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -9219,10 +9219,10 @@
         "uncoveredCount": 42,
         "resolvedCount": 6,
         "byReason": {
-          "profil-ne-propisuje-os": 32,
+          "profil-ne-propisuje-os": 34,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4
         }
@@ -9268,10 +9268,10 @@
             "uncoveredCount": 21,
             "resolvedCount": 3,
             "byReason": {
-              "profil-ne-propisuje-os": 16,
+              "profil-ne-propisuje-os": 17,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -9322,10 +9322,10 @@
             "uncoveredCount": 21,
             "resolvedCount": 3,
             "byReason": {
-              "profil-ne-propisuje-os": 16,
+              "profil-ne-propisuje-os": 17,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -9390,10 +9390,10 @@
         "uncoveredCount": 61,
         "resolvedCount": 11,
         "byReason": {
-          "profil-ne-propisuje-os": 47,
+          "profil-ne-propisuje-os": 49,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6
         }
@@ -9442,10 +9442,10 @@
             "uncoveredCount": 21,
             "resolvedCount": 3,
             "byReason": {
-              "profil-ne-propisuje-os": 16,
+              "profil-ne-propisuje-os": 17,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -9495,10 +9495,10 @@
             "uncoveredCount": 21,
             "resolvedCount": 3,
             "byReason": {
-              "profil-ne-propisuje-os": 16,
+              "profil-ne-propisuje-os": 17,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -12337,10 +12337,10 @@
         "uncoveredCount": 57,
         "resolvedCount": 15,
         "byReason": {
-          "profil-ne-propisuje-os": 43,
+          "profil-ne-propisuje-os": 45,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6
         }
@@ -12390,10 +12390,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -12444,10 +12444,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -13380,10 +13380,10 @@
         "uncoveredCount": 40,
         "resolvedCount": 8,
         "byReason": {
-          "profil-ne-propisuje-os": 30,
+          "profil-ne-propisuje-os": 32,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4
         }
@@ -13432,10 +13432,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -13485,10 +13485,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -15786,10 +15786,10 @@
         "uncoveredCount": 40,
         "resolvedCount": 8,
         "byReason": {
-          "profil-ne-propisuje-os": 30,
+          "profil-ne-propisuje-os": 32,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4
         }
@@ -15837,10 +15837,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -15889,10 +15889,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -16418,10 +16418,10 @@
         "uncoveredCount": 55,
         "resolvedCount": 17,
         "byReason": {
-          "profil-ne-propisuje-os": 42,
+          "profil-ne-propisuje-os": 43,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6
         }
@@ -16471,10 +16471,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -16922,10 +16922,10 @@
         "uncoveredCount": 42,
         "resolvedCount": 6,
         "byReason": {
-          "profil-ne-propisuje-os": 33,
+          "profil-ne-propisuje-os": 34,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4
         }
@@ -16973,10 +16973,10 @@
             "uncoveredCount": 23,
             "resolvedCount": 1,
             "byReason": {
-              "profil-ne-propisuje-os": 18,
+              "profil-ne-propisuje-os": 19,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -18251,10 +18251,10 @@
         "uncoveredCount": 115,
         "resolvedCount": 29,
         "byReason": {
-          "profil-ne-propisuje-os": 89,
+          "profil-ne-propisuje-os": 91,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 12,
           "trazi-ulaz-izvan-dokumenta": 12
         }
@@ -18461,10 +18461,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -18567,10 +18567,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -18880,10 +18880,10 @@
         "uncoveredCount": 228,
         "resolvedCount": 84,
         "byReason": {
-          "profil-ne-propisuje-os": 152,
+          "profil-ne-propisuje-os": 156,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 24,
+          "nema-dokaza": 20,
           "ceka-ljudski-odabir": 26,
           "trazi-ulaz-izvan-dokumenta": 26
         }
@@ -19144,10 +19144,10 @@
             "uncoveredCount": 17,
             "resolvedCount": 7,
             "byReason": {
-              "profil-ne-propisuje-os": 8,
+              "profil-ne-propisuje-os": 9,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 5,
+              "nema-dokaza": 4,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -19199,10 +19199,10 @@
             "uncoveredCount": 16,
             "resolvedCount": 8,
             "byReason": {
-              "profil-ne-propisuje-os": 7,
+              "profil-ne-propisuje-os": 8,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 5,
+              "nema-dokaza": 4,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -19254,10 +19254,10 @@
             "uncoveredCount": 16,
             "resolvedCount": 8,
             "byReason": {
-              "profil-ne-propisuje-os": 7,
+              "profil-ne-propisuje-os": 8,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 5,
+              "nema-dokaza": 4,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -19370,10 +19370,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -21931,10 +21931,10 @@
         "uncoveredCount": 36,
         "resolvedCount": 12,
         "byReason": {
-          "profil-ne-propisuje-os": 27,
+          "profil-ne-propisuje-os": 28,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4
         }
@@ -21987,10 +21987,10 @@
             "uncoveredCount": 18,
             "resolvedCount": 6,
             "byReason": {
-              "profil-ne-propisuje-os": 13,
+              "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -27831,10 +27831,10 @@
         "uncoveredCount": 20,
         "resolvedCount": 4,
         "byReason": {
-          "profil-ne-propisuje-os": 15,
+          "profil-ne-propisuje-os": 16,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 2,
           "trazi-ulaz-izvan-dokumenta": 2
         }
@@ -27882,10 +27882,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -30233,10 +30233,10 @@
         "uncoveredCount": 40,
         "resolvedCount": 8,
         "byReason": {
-          "profil-ne-propisuje-os": 30,
+          "profil-ne-propisuje-os": 32,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4
         }
@@ -30290,10 +30290,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -30348,10 +30348,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 15,
+              "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -30392,10 +30392,10 @@
     "resolvedCount": 1919,
     "authoredCount": 0,
     "byReason": {
-      "profil-ne-propisuje-os": 6098,
+      "profil-ne-propisuje-os": 6134,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 91,
+      "nema-dokaza": 55,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }

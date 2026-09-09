@@ -33,6 +33,7 @@ import {
   type DocxShapeCounts,
 } from '../src/corpus/docx-shapes';
 import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
+import { uncoveredReason } from './helpers/coverage-cells';
 import { verifyOutputProofs } from '../scripts/corpus-gen/mutations.mts';
 import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
@@ -957,6 +958,33 @@ const MUTATIONS: Mutation[] = [
       verifyOutputProofs({ wrongBodyFont: 1 }, {
         'word/styles.xml': '<w:styles><w:style w:styleId="BodyText"><w:rPr><w:rFonts w:ascii="Comic Sans MS"/></w:rPr></w:style></w:styles>',
       }).length === 0,
+  },
+  {
+    id: 'matrica/demotirana-os-prijavljena-kao-rupa-u-dokazu',
+    imitates:
+      'celija dobije oznaku `nema-dokaza` iako proizvod tu os UOPCE NE BODUJE. Redci matrice pravila ' +
+      'izvode se iz SIROVIH pravila profila, a engine boduje pravila nakon scored/advisory demotije, ' +
+      'koja gasi barem jednu bodovanu dimenziju na 383 od 407 profila. Izmjereno 2026-09-09: 36 celija ' +
+      '(`paper-size-fixer` 24, `font-fixer` 12) tvrdilo je da fakultet os propisuje a mjerenja nema, ' +
+      'dok je istina bila da ju proizvod ne boduje, pa ju generator i ne krsi. Isti razred kao ' +
+      'preimenovanje 78 celija 2026-08-31: broj nepokrivenih se ne mijenja, mijenja se sto o njima tvrdimo',
+    caught: () => {
+      // Profil kojemu je os demotirana: `paramsForCheck` za svaki njegov checkId vraca `null`.
+      const demotiran = uncoveredReason(3, true, undefined, 'paper-size-fixer', { requireA4: false }, 'x', [
+        'paper-size',
+      ]);
+      return demotiran === 'profil-ne-propisuje-os';
+    },
+    /**
+     * Netrivijalnost: profil koji os DOISTA boduje mora zadrzati `nema-dokaza`, inace bi grana
+     * pojela svaku stvarnu rupu i matrica bi se ispraznila u nesto lijepo a neistinito.
+     */
+    cleanBefore: () => {
+      const stvarnaRupa = uncoveredReason(3, true, undefined, 'paper-size-fixer', { requireA4: true }, 'x', [
+        'paper-size',
+      ]);
+      return stvarnaRupa === 'nema-dokaza';
+    },
   },
   {
     id: 'petlja/os-prestane-krsiti-pa-pokrivenost-tiho-nestane',

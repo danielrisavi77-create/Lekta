@@ -14,10 +14,10 @@
     "resolvedCount": 1919,
     "authoredCount": 7,
     "byReason": {
-      "profil-ne-propisuje-os": 6097,
+      "profil-ne-propisuje-os": 6133,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 85,
+      "nema-dokaza": 49,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -4534,7 +4534,7 @@
       "profileId": "pravo-socijalni-rad-zavrsni",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -4797,7 +4797,7 @@
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -5067,7 +5067,7 @@
       "profileId": "pravo-socijalna-politika-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -5592,7 +5592,7 @@
       "profileId": "pravo-socijalni-opci-akademski-rad",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -6856,7 +6856,7 @@
       "profileId": "agr-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "agr-diplomski",
@@ -7108,7 +7108,7 @@
       "profileId": "agr-zavrsni",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "agr-zavrsni",
@@ -7373,7 +7373,7 @@
       "profileId": "agr-doktorski",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "agr-doktorski",
@@ -7612,7 +7612,7 @@
       "profileId": "efzg-zavrsni",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-zavrsni",
@@ -8137,7 +8137,7 @@
       "profileId": "efzg-strucni-racunovodstvo",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
@@ -8391,7 +8391,7 @@
       "profileId": "efzg-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-diplomski",
@@ -9146,7 +9146,7 @@
       "profileId": "fer-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fer-diplomski",
@@ -9394,7 +9394,7 @@
       "profileId": "fer-zavrsni",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fer-zavrsni",
@@ -10420,7 +10420,7 @@
       "profileId": "sumfak-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sumfak-diplomski",
@@ -11458,7 +11458,7 @@
       "profileId": "grad-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grad-diplomski",
@@ -11710,7 +11710,7 @@
       "profileId": "grad-zavrsni",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grad-zavrsni",
@@ -15228,7 +15228,7 @@
       "profileId": "arh-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "arh-diplomski",
@@ -15472,7 +15472,7 @@
       "profileId": "fkit-diplomski",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fkit-diplomski",
@@ -15712,7 +15712,7 @@
       "profileId": "fkit-zavrsni",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fkit-zavrsni",
@@ -17745,7 +17745,7 @@
       "profileId": "alu-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-diplomski",
@@ -17978,7 +17978,7 @@
       "profileId": "muza-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "muza-diplomski",
@@ -19509,7 +19509,7 @@
       "profileId": "pmf-matematika-graduate",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -29703,7 +29703,7 @@
       "profileId": "zvu-zavrsni",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zvu-zavrsni",
@@ -29950,7 +29950,7 @@
       "profileId": "zvu-specijalisticki",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zvu-specijalisticki",
@@ -33502,7 +33502,7 @@
       "profileId": "medri-farmacija-diplomski",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -46026,7 +46026,7 @@
       "profileId": "medri-medicina-diplomski",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "medri-medicina-diplomski",
@@ -47268,7 +47268,7 @@
       "profileId": "fizri-zavrsni",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fizri-zavrsni",
@@ -47508,7 +47508,7 @@
       "profileId": "fizri-diplomski",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fizri-diplomski",
@@ -51401,7 +51401,7 @@
       "profileId": "mev-zavrsni",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mev-zavrsni",
@@ -53172,7 +53172,7 @@
       "profileId": "vhzk-zavrsni",
       "fixerId": "font-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vhzk-zavrsni",
@@ -85061,7 +85061,7 @@
       "profileId": "pmf-geofizika-graduate",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -91564,7 +91564,7 @@
       "profileId": "iv-zavrsni",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "iv-zavrsni",
@@ -91812,7 +91812,7 @@
       "profileId": "iv-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "iv-diplomski",
@@ -96874,7 +96874,7 @@
       "profileId": "algebra-zavrsni",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-zavrsni",
@@ -97129,7 +97129,7 @@
       "profileId": "algebra-diplomski",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-diplomski",
@@ -97384,7 +97384,7 @@
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
@@ -97639,7 +97639,7 @@
       "profileId": "algebra-specijalisticki",
       "fixerId": "paper-size-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-specijalisticki",

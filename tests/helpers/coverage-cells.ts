@@ -15,7 +15,8 @@
  * `nepokriveno`: treci status bi postao izlaz za nuzdu kojim se matrica isprazni a broj ostane
  * lijep, sto je obrazac na kojem je ovaj projekt vec izgorio.
  */
-import { resolveProfile } from '../../src/analysis/golden-entry';
+import { liveProfile } from './live-profile';
+import { paramsForCheck } from '../../src/ui/repair-items';
 import { draftRuleEntriesFor } from '../../src/profiles/drafts-runtime';
 import { FIXER_IDS, type FixerId } from '../../src/repair/apply-fixers';
 import type { RepairCoverageMatrix } from './repair-coverage';
@@ -375,8 +376,16 @@ export function buildCoverageCells(
     const rows = matrix.rows.filter((row) => row.profileId === profileId);
     const loop = loopByProfile.get(profileId);
     const resolvedAxes = new Set(loop?.axesResolved ?? []);
-    // Pravila profila trebaju samo za dijagnozu NEPOKRIVENE celije, pa se citaju jednom po profilu.
-    const resolved = resolveProfile(profileId) as Record<string, unknown> | null;
+    /**
+     * Pravila profila trebaju samo za dijagnozu NEPOKRIVENE celije, pa se citaju jednom po profilu.
+     *
+     * ZIVI profil, ne goli `resolveProfile`, i to je ispravak iz 2026-09-09. Dijagnoza je dotad
+     * citala sirova pravila, a proizvod boduje pravila NAKON demotije, koja gasi barem jednu
+     * bodovanu dimenziju na 383 od 407 profila. Izmjereno: od 36 celija `paper-size-fixera` i
+     * `font-fixera` s oznakom `nema-dokaza`, njih 34 uopce nisu rupa nego osi koje proizvod ne
+     * boduje. Oznaka je tvrdila da fakultet os propisuje a mjerenja nema; istina je suprotna.
+     */
+    const resolved = liveProfile(profileId);
     const resolvedUniversalFixers = new Set(
       [...resolvedAxes].flatMap((axis) => {
         const upis = RESOLVED_AXIS_FIXER[axis];
@@ -523,7 +532,7 @@ export function buildCoverageCells(
         profileId,
         fixerId,
         status: 'nepokriveno',
-        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId, resolved, profileId),
+        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId, resolved, profileId, checkIds),
       });
     }
   }
@@ -531,14 +540,30 @@ export function buildCoverageCells(
   return { cells, summary: summarize(cells) };
 }
 
-function uncoveredReason(
+export function uncoveredReason(
   ruleCount: number,
   isGated: boolean,
   loop: ClosedLoopRow | undefined,
   fixerId: string,
   profile: Record<string, unknown> | null,
   profileId: string,
+  checkIds: string[] = [],
 ): UncoveredReason {
+  /**
+   * OS KOJU ZIVI PROFIL NE BODUJE nije rupa nego neprimjenjivost, i to je ispravak iz 2026-09-09.
+   *
+   * Redci matrice pravila (`repair-coverage`) izvode se iz SIROVIH pravila, a proizvod boduje
+   * pravila nakon demotije. Za takav profil `paramsForCheck` vraca `null`, generator os ne krsi,
+   * fixer se ne nudi, i nema se sto dokazati.
+   *
+   * IZMJERENO: od 36 celija `paper-size-fixera` i `font-fixera` s oznakom `nema-dokaza`, njih 34 su
+   * bile upravo to. Oznaka je tvrdila da fakultet os propisuje a mjerenja nema; istina je da ju
+   * proizvod ne boduje. Isti razred kao preimenovanje 78 celija 2026-08-31: broj nepokrivenih se ne
+   * mijenja, mijenja se sto o njima tvrdimo.
+   */
+  if (checkIds.length && profile && checkIds.every((id) => paramsForCheck(id, profile) === null)) {
+    return 'profil-ne-propisuje-os';
+  }
   // Alat kojem je zadani odabir prazan po konstrukciji: nijedna os ga ne moze dokazati.
   if (UNDECIDABLE_FIXERS.has(fixerId)) return 'ceka-ljudski-odabir';
   if (OUT_OF_DOCUMENT_FIXERS.has(fixerId)) return 'trazi-ulaz-izvan-dokumenta';

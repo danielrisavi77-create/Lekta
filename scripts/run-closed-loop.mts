@@ -32,6 +32,7 @@ const { normalizeCheckFlags } = await import('../src/profiles/profile-baseline')
 const { applyScoredAdvisory } = await import('../src/profiles/advisory-demotion');
 const { SOURCE_REGISTRY } = await import('../src/verification/verification-registry');
 const { buildViolatingDocx, VIOLATABLE_CHECK_IDS } = await import('../tests/helpers/violating-docx');
+const { liveProfile: sharedLiveProfile } = await import('../tests/helpers/live-profile');
 const { APPLIED_AXIS_FIXER } = await import('../tests/helpers/coverage-cells');
 const { AXIS_SIGNAL, STRUCTURAL_WITHOUT_SCORED_CHECK, assertAxisEvidenceWiring } = await import('../tests/helpers/closed-loop-wiring');
 
@@ -62,31 +63,13 @@ const limit = limitFlag > -1 ? Number(process.argv[limitFlag + 1]) : Infinity;
  * `vuka-strojarski-diplomski`: mirror kaze margine 2/2/2/2,5, zapis i `effectiveRules` kazu
  * 3/3/3/3 - petlja je bez ovog overlaya prijavljivala lazno proturjecje izmedju popravka i ocjene.
  */
-function liveProfile(profileId: string): Record<string, unknown> {
-  const withDrafts = (VERIFIED_PROFILES_WITH_DRAFTS as Array<{ id: string }>).find((p) => p.id === profileId);
-  const base = resolveProfile(profileId) as Record<string, unknown>;
-  if (!withDrafts) return base;
-  // Normalizacija MORA ici nakon overlaya: `applyEntry` upisuje sirovu vrijednost zapisa
-  // (npr. `size: 12`), a analizator ocekuje oblik iz `rules` (`size: [12]`). Zivi app radi isto -
-  // `currentProfile` normalizira nakon sto procita effectiveRules. Bez toga 144 profila puca na
-  // `profile.size.some is not a function` (izmjereno).
-  const merged = { ...base, ...compileEffectiveRules(withDrafts as never) } as Record<string, unknown>;
-  normalizeCheckFlags(merged);
-  /**
-   * Scored/advisory demotion je PRODUKTNA politika: zivi engine boduje samo verificirani scored
-   * skup, a ostale dimenzije prikazuje informativno (max 0). Golden je namjerno ne primjenjuje jer
-   * mjeri sirovi engine, ali closed-loop mora mjeriti PROIZVOD - inace prijavi kao neuspjeh
-   * popravka ono sto fakultet uopce ne propisuje nego savjetuje (izmjereno: 29 profila je na osi
-   * `paper-size` ispadalo `partial`, a rijec je o `advisory` zapisu bez fixera).
-   */
-  applyScoredAdvisory(
-    merged as never,
-    withDrafts as never,
-    draftRuleEntriesFor(profileId),
-    SOURCE_REGISTRY as never,
-  );
-  return merged;
-}
+/**
+ * Zivi profil dolazi iz JEDNOG izvora (`tests/helpers/live-profile.ts`), koji dijeli i matrica
+ * pokrivenosti. Do 2026-09-09 je ista konstrukcija stajala ovdje, a `coverage-cells` je za dijagnozu
+ * citao goli `resolveProfile`; razlika je bila demotija, koja gasi bodovanu dimenziju na 383 od 407
+ * profila, pa je 34 celije nosilo neistinitu oznaku.
+ */
+const liveProfile = (profileId: string): Record<string, unknown> => sharedLiveProfile(profileId) ?? {};
 
 
 /**
