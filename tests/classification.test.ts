@@ -20,7 +20,7 @@ import { loadManifest, classifyPath, compilePattern } from '../scripts/security/
 
 // __dirname preko vitest CJS shima; happy-dom okolina kvari new URL(import.meta.url)
 const ROOT = resolve(__dirname, '..');
-const COVERED_TOP_DIRS = ['data', 'src', 'scripts', 'supabase', 'docs', 'tests', 'public', 'prototype', 'reference'];
+const COVERED_TOP_DIRS = ['data', 'src', 'scripts', 'supabase', 'docs', 'tests', 'public', 'prototype', 'reference', 'config'];
 // korijenski *.html su Rollup entryji pa i oni moraju imati razred
 const EXTRA_SCOPES = ['*.html'];
 

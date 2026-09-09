@@ -173,6 +173,26 @@ describe('runSmoke nad laznim opazanjima', () => {
     expect(bi?.commit).toBe('c'.repeat(40));
   });
 
+  it('build-info 404 je NEPOZNAT identitet, ne ispad: operativni status ostaje ok, nalaz nosi unknown', async () => {
+    // Izmjereno 2026-09-09 nad zivom stranicom: 27 od 28 prolazi, jedini "pad" je 404 na build-info.json jer
+    // zakljucana objava (2026-09-06) prethodi write-build-info. To ne smije biti stalna crvena.
+    const bezBuildInfo = async (url: string, init: { method?: string } = {}) =>
+      (new URL(url).pathname.endsWith('/build-info.json') ? { status: 404, headers: {}, text: 'Not found' } : zdravObserve(url, init));
+    const nalazi = await runSmoke({ site: 'https://s.test', functions: 'https://f.test/functions/v1', observeImpl: bezBuildInfo });
+    const bi = nalazi.find((n: { id: string }) => n.id === 'build-info') as { ok: boolean; unknown?: boolean; commit?: string; status?: number };
+    expect(bi.ok).toBe(false);
+    expect(bi.unknown).toBe(true);
+    expect(bi.status).toBe(404);
+    expect(bi.commit).toBeUndefined();
+    expect(classifyRun(nalazi)).toBe('ok');
+    // Baseline drugog smjera: SPA fallback (200 s HTML-om) i dalje JEST pad, jer lanac tvrdi da pise build-info.
+    const spaFallback = async (url: string, init: { method?: string } = {}) =>
+      (new URL(url).pathname.endsWith('/build-info.json') ? { status: 200, headers: {}, text: '<html>x</html>' } : zdravObserve(url, init));
+    const nalazi2 = await runSmoke({ site: 'https://s.test', functions: 'https://f.test/functions/v1', observeImpl: spaFallback });
+    expect(classifyRun(nalazi2)).toBe('fail');
+    expect(classifyRun([{ id: 'build-info', host: 'site', ok: false, unknown: true }])).not.toBe('ok');
+  });
+
   it('kad naslovnica padne, resursi se NE prijavljuju kao zaseban kvar', async () => {
     // Ovisna provjera nad stranicom koje nema tvrdila bi "prazan build" i slala u krivu dijagnozu;
     // k tome je nalaz bez HTTP statusa razbijao prepoznavanje presretaca.

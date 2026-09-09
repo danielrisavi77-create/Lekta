@@ -9,10 +9,20 @@
 # cf38fb0) pa se ne moze ukloniti uredivanjem datoteke bez prepisivanja povijesti.
 cf38fb02655adb69238287206b4220d63fa93666:docs/audit/AUDIT_2026-07-16/10_CODE_TS.md:generic-api-key:136
 
-# scripts/autonomy/tests/test_signals.py: SINTETICKI markeri (lazan JWT s payloadom {"role":"anon"} i
-# nepotpun "PRIVATE KEY" blok od jednog retka) koji dokazuju da redakcija signala nikad ne propusta takve
-# oblike u bazu ili prompt. Nisu vjerodajnice ni kljucevi: nista se njima ne moze potpisati ni prijaviti.
-# Od commita poslije a229f008 test ih gradi spajanjem dijelova u runtimeu pa ih gitleaks vise ne vidi u
-# radnom stablu; ova dva otiska pokrivaju povijesni blob koji se bez prepisivanja povijesti ne moze ukloniti.
+# Sinteticki markeri za test REDAKCIJE (`scripts/autonomy/tests/test_signals.py`), nadjeni
+# 2026-09-09. Datoteka gradi skup vrijednosti koje `redact_payload` i `contains_forbidden` NIKAD
+# ne smiju propustiti, i sama to kaze u komentaru ("Vrijednosti su sinteticke"). Da su izostavljene,
+# test redakcije ne bi imao sto redigirati.
+#
+# Da nisu tajne vidi se iz njih samih: "privatni kljuc" je sest znakova (`MIIEvQ`), anthropic kljuc
+# je niz slova Z, a `github_token` je sastavljen konkatenacijom pa ga isti skener uopce ne vidi.
+# Tocno ta konkatenacija je razlog zasto padaju samo dva od sedam markera.
+#
+# Commit je na grani `autonomy-2026-09-09` i NIJE na masteru; gitleaks svejedno pada na svakom
+# commitu jer skenira punu povijest repozitorija (`fetch-depth: 0`), pa je master bio crven zbog
+# koda kojeg u njemu nema.
+#
+# Iskljucuje se po FINGERPRINTU, ne po datoteci ni po pravilu: nova tajna u toj istoj datoteci i
+# dalje obara gard.
 a229f00896f07bad2d27f0c028627437740ed7a3:scripts/autonomy/tests/test_signals.py:jwt:13
 a229f00896f07bad2d27f0c028627437740ed7a3:scripts/autonomy/tests/test_signals.py:private-key:18
