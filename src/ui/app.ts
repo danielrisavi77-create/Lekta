@@ -171,6 +171,7 @@ import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, moti
 import { deskItems } from './results/desk-model';
 import { privacyPrijelazHtml } from './privacy-state';
 import { repairDoneHtml, repairDoneModel } from './results/repair-done';
+import { repairLanding } from './results/repair-entry';
 import { mountFacsimileInto } from './results/desk-document';
 
 
@@ -1410,10 +1411,8 @@ function renderPhaseThreeRepairEntry(r: any){
 }
 // Most iz besplatne dijagnoze u placeni popravak: prebaci na karticu "Spremnost za predaju" gdje
 // zivi #repairPanelMount, doskrolaj i kratko istakni panel te fokusiraj njegovu glavnu akciju.
-// RESULT-03: kad je poziv dosao s KONKRETNE kartice nalaza (finding), ne otvara se samo opceniti
-// panel bez veze s kliknutim nalazom - trazi se bas ona stavka koja popravlja taj nalaz
-// (repair-items.pickTargetItem preko matchKeys), istice se i njoj se pomice fokus. Kad takva
-// stavka trenutno nije ponudjena (npr. dokument nema upotrebljiv split sekcija za numeriranje),
+// RESULT-03: poziv s KONKRETNE kartice nalaza trazi bas stavku koja taj nalaz popravlja
+// (pickTargetItem preko matchKeys), istice je i fokusira. Kad takva stavka nije ponudjena,
 // korisnik dobiva postenu poruku umjesto tihog slijetanja na nepovezanu stavku.
 function scrollToRepairPanel(r: any,finding?: any){
   // renderResult zatvori #resultDetails i #tabDetails, a napredni blok je zadano sklopljen: bez sva TRI
@@ -1426,15 +1425,15 @@ function scrollToRepairPanel(r: any,finding?: any){
   const m=$('#repairPanelMount');
   let act: any=null;
   if(m){
-    m.scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
+    // Slijetanje na ODLUKU: `results/repair-entry.ts`.
+    const slijetanje=finding?null:repairLanding(m);
+    (slijetanje?.scroll??m).scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
     m.classList.remove('repair-flash');void (m as any).offsetWidth;m.classList.add('repair-flash');
     if(finding){
       const target=pickTargetItem(finding.matchKeys,repairPanelItems)||pickTargetItem(finding.matchKeys,repairPanelTextItems);
       if(target){
-        // Glavne stavke (data-idx) sad zive SAMO kao ledger redak (list je trajno skriven, vidi
-        // renderRepairSection): otvori ledger PRIJE trazenja retka, inace redak jos ne postoji u
-        // DOM-u. Tekstualne stavke (renderTextItemsSection, data-text-apply) ostaju izvan ledgera,
-        // uvijek vidljive - za njih vrijedi stari put preko #repairPanelMount.
+        // Glavne stavke zive SAMO kao ledger redak (list je skriven), pa se ledger mora otvoriti
+        // PRIJE trazenja retka. Tekstualne stavke su izvan ledgera i idu starim putem.
         const triggerBtn: any=m.querySelector('.lekta-repair-trigger__btn');
         triggerBtn?.click();
         const ledgerRow: any=document.querySelector(`.lekta-repair-ledger-row[data-rule-id="${target.ruleId}"]`);
@@ -1463,7 +1462,7 @@ function scrollToRepairPanel(r: any,finding?: any){
         toast('Ovaj popravak trenutno nije ponuđen kao automatska stavka za ovaj dokument. Pogledaj cijeli popis ispod.');
       }
     }
-    if(!act)act=m.querySelector('[data-repair-go]:not(:disabled),button:not(:disabled),a[href]');
+    if(!act)act=slijetanje?.focus??m.querySelector('[data-repair-go]:not(:disabled),button:not(:disabled),a[href]');
     if(act)act.focus?.({preventScroll:true});else{m.setAttribute('tabindex','-1');m.focus?.({preventScroll:true})}
   }
   try{void trackEvent('triage_repair_cta',{count:r?.details?.triage?.counts?.auto||0})}catch(e: any){}

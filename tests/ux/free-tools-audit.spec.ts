@@ -692,6 +692,24 @@ const KONTRAST_STRANICE = [
 ] as const;
 for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'dark'] as const) {
   test(`${ruta}: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
+    /**
+     * REDUCED-MOTION NIJE OVDJE UKRAS NEGO UVJET MJERENJA (CI crven 2026-09-09, `48c1fc9e`).
+     *
+     * `/index.html` pusta ulaznu sekvencu kroz Web Animations API (`intake-motion.ts`): zavrsna
+     * skupina (`#intakeMeta`, `.intake-stats`, `.intake-links`) ide 0 -> 1 s kasnjenjem do 380 ms i
+     * trajanjem 420, dakle zavrsava na ~800 ms. Test je mjerio na `fonts.ready` + 300 ms, pa je axe
+     * na CI-u uhvatio tekst USRED pojavljivanja i racunao kompozit, ne konacnu boju.
+     *
+     * Brojke se poklapaju i to je ono sto dijagnozu zatvara: pale su `#69604f` (4,36) i `#6d6453`
+     * (4,11) na `#dfd8c6`, a to je tocno `--desk-faint` (#5F5645, sam po sebi 5,09 i prolazi) uz
+     * prozirnost ~0,90 do 0,93. Dvije razlicite boje u dva pokusaja su potpis pomicne mete.
+     *
+     * Zasto reduced-motion, a ne duze cekanje: `playIntakeEntry` pod njim izlazi ODMAH
+     * (`if (reducedMotion()) return`), pa sekvence nema uopce. Cekanje bi bilo pogadjanje roka na
+     * tudjem stroju. WAAPI se inace ne gasi CSS prekidacem, pa bi `motion.css` ovdje bio bez ucinka.
+     * Isti lijek vec koriste `repair-panel.spec.ts` i `analyzer-hero-demo.spec.ts`.
+     */
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(ruta);
     await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);

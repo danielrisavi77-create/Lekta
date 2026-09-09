@@ -146,6 +146,45 @@ test('na uskom zaslonu stol NE crta dokument, umjesto da ga stisne', async ({ pa
   await expect(page.locator('[data-desk-count]')).toBeVisible();
 });
 
+test('CTA plana slijece na ODLUKU, i namjerno ne pokrece popravak', async ({ page }) => {
+  /**
+   * Sedma tocka, drugi dio. Do 2026-09-09 je CTA otvarao panel i doskrolao na njegov VRH, a fokus
+   * je isao na prvi omoguceni gumb, sto je znalo biti "Uredi..." iz popisa: ulaz je postojao, ali
+   * je korisnik i dalje morao pronaci radnju.
+   *
+   * NE POKRECE POPRAVAK, i to je odluka a ne izostanak. Izmedju "prihvacam plan" i "dokument je
+   * poslan" stoji trenutak privole iz osme tocke; gumb koji ga preskoci ponistava taj dogovor, a
+   * gumb koji ga ne preskoci bi odmah pao na upozorenje. Zato se mjeri i da privola NIJE oznacena.
+   */
+  test.setTimeout(Number(process.env.LEKTA_DESK_TIMEOUT_MS ?? 300_000));
+  // Glatko klizanje je JS i `reducedMotion` ga ne gasi; bez ovoga Playwright ceka element koji
+  // putuje. Isti razlog i isti lijek kao u `repair-panel.spec.ts`.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => {
+    const st = document.createElement('style');
+    st.textContent = 'html,body,*{scroll-behavior:auto!important}';
+    document.documentElement.appendChild(st);
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await doRezultata(page);
+
+  await page.locator('[data-desk-plan-open]').click();
+  await expect(page.locator('[data-repair-plan]')).toBeVisible({ timeout: 15_000 });
+  await page.locator('[data-repair-plan-go]').click();
+
+  // Panel je otvoren I fokus je na glavnoj radnji, ne na prvom gumbu koji se zatekne.
+  const glavna = page.locator('#repairPanelMount .lekta-repair-panel__download');
+  await expect(glavna).toBeVisible({ timeout: 15_000 });
+  await expect(glavna).toBeFocused();
+
+  // Trenutak slanja je u vidnom polju, jer je to ono na sto se slijece.
+  await expect(page.locator('#repairPanelMount [data-privacy-prijelaz]')).toBeInViewport();
+
+  // NISTA NIJE POSLANO: privola je i dalje neoznacena, a gumb nosi svoj izvorni natpis.
+  await expect(page.locator('#repairPanelMount [data-repair-consent]')).not.toBeChecked();
+  await expect(glavna).toHaveText('Popravi sve jednim klikom');
+});
+
 test('plan ispravaka je jedan klik od nalaza, i cita se kao plan rada', async ({ page }) => {
   /**
    * Sedma tocka: "Popravak ne smije biti feature koji se pronadje. Nalaz prirodno zavrsava u
