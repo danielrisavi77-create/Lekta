@@ -1,0 +1,49 @@
+{
+  "profileId": "pravo-porezni-prijediplomski",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "pravo--final--prijediplomski",
+    "unitId": "pravo",
+    "workType": "final",
+    "level": "prijediplomski",
+    "program": "Stručni prijediplomski Porezni studij",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "pravo-final"
+  },
+  "prose": {
+    "id": "pravo--final--prijediplomski",
+    "words": 5261,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmisljena imena. Rad je pojmovno-raspravni pregled bez vlastitog empirijskog istrazivanja i BEZ analize konkretne sudske prakse; nijedna presuda se ne navodi ni ne izmislja, a tvrdnje se pripisuju propisima i literaturi ili se pisu s ogradom. Dvije jedinice literature POTVRDJENE su kroz CrossRef uz HTTP 200 i prepisane iz odgovora (Cogan 2011, IBFD; Quackelbeen 2026, Hart). Maric (2023) i Novosel (2022) su izmisljene jedinice s izmisljenim DOI-jem, namjerno, da provjera postojanja moze vratiti i not-found; domace knjige bez DOI-ja su stvarna djela navedena bez stranica jer ih ova sesija nije mogla potvrditi. ZASTO OVAJ REDAK: izmjereno je da je pravo-fusnote citatni stil koji nijedan od 11 dosad napisanih radova ne koristi (12 redaka matrice), a fusnotno pravno citiranje je jedini oblik koji dotice Lektin pravni citatni motor. ALAT: katedra-lite 1.9.40 (vendorirani subtree) je STVARNO vodio rad. Izvrseno: stanje_init.py uz --fakultet-izvan-registryja pravo i tri imenovana ogranicenja; razina.py (prvi pokusaj PAO, zavrsni nije poznata razina, ispravljeno na preddiplomski-3); dijelovi.py --sij; perspective_map.py init + tri perspektive + validate (ready: true); plan_state.py init/import/odobri, PLAN GATE prosao iz prvog pokusaja (sha256:d36b36abaa65). NALAZ ZA KATEDRU: stanje_init.py ne poznaje citatni stil pravo-fusnote (njegov popis staje na autor-godina, ieee, vancouver, harvard, apa, apa-hr), pa fusnotni pravni stil nema oznaku. OBLIK dokumenta dolazi iz Lektine matrice retka pravo--final--prijediplomski, ne iz Katedre.",
+      "tool": "katedra-lite 1.9.40 (autopilot)",
+      "date": "2026-09-09"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row pravo--final--prijediplomski",
+    "generatedAt": "2026-09-09T14:26:53.749Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "stil/tijelo-nije-normal",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice"
+    ]
+  },
+  "toolLimitations": [
+    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
+  ]
+}

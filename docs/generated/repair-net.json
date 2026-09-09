@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza. TRI stanja, ne dva: `dead` je kvar, `awaiting` je fixer koji ceka ljudsku potvrdu, ostalo radi.",
   "summary": {
-    "documentCount": 26,
-    "fixerCount": 16,
+    "documentCount": 28,
+    "fixerCount": 21,
     "deadCount": 0,
     "dead": [],
     "awaitingCount": 2,
@@ -39,10 +39,10 @@
     },
     {
       "fixerId": "consistency-fixer",
-      "requested": 26,
+      "requested": 28,
       "changed": 0,
       "reasons": {
-        "no-target": 26
+        "no-target": 28
       },
       "deadOn": [
         "adu--seminar--diplomski--neuredan.docx",
@@ -70,14 +70,16 @@
         "fzsri--final--prijediplomski--uskladjen.docx",
         "fzsri--final--prijediplomski--word.docx",
         "mef--graduate--diplomski--neuredan.docx",
-        "mef--graduate--diplomski--uskladjen.docx"
+        "mef--graduate--diplomski--uskladjen.docx",
+        "pravo--final--prijediplomski--neuredan.docx",
+        "pravo--final--prijediplomski--uskladjen.docx"
       ],
-      "awaitingConfirmation": 26
+      "awaitingConfirmation": 28
     },
     {
       "fixerId": "croatian-typography-fixer",
-      "requested": 14,
-      "changed": 14,
+      "requested": 15,
+      "changed": 15,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -92,8 +94,8 @@
     },
     {
       "fixerId": "field-integrity-fixer",
-      "requested": 23,
-      "changed": 22,
+      "requested": 25,
+      "changed": 24,
       "reasons": {
         "stale-anchor": 1
       },
@@ -104,14 +106,62 @@
     },
     {
       "fixerId": "final-document-inspector-fixer",
-      "requested": 26,
-      "changed": 26,
+      "requested": 28,
+      "changed": 28,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
     },
     {
       "fixerId": "font-fixer",
+      "requested": 8,
+      "changed": 8,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
+      "fixerId": "footnote-spacing-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
+      "fixerId": "footnote-typography-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
+      "fixerId": "heading-case-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
+      "fixerId": "heading-format-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
+      "fixerId": "heading-style-fixer",
+      "requested": 5,
+      "changed": 5,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
+      "fixerId": "line-spacing-fixer",
       "requested": 7,
       "changed": 7,
       "reasons": {},
@@ -119,25 +169,9 @@
       "awaitingConfirmation": 0
     },
     {
-      "fixerId": "heading-style-fixer",
-      "requested": 3,
-      "changed": 3,
-      "reasons": {},
-      "deadOn": [],
-      "awaitingConfirmation": 0
-    },
-    {
-      "fixerId": "line-spacing-fixer",
-      "requested": 6,
-      "changed": 6,
-      "reasons": {},
-      "deadOn": [],
-      "awaitingConfirmation": 0
-    },
-    {
       "fixerId": "link-doi-fixer",
-      "requested": 26,
-      "changed": 20,
+      "requested": 28,
+      "changed": 22,
       "reasons": {
         "unsupported-structure": 1,
         "no-target": 5
@@ -169,6 +203,14 @@
       "awaitingConfirmation": 0
     },
     {
+      "fixerId": "paragraph-spacing-fixer",
+      "requested": 2,
+      "changed": 2,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
       "fixerId": "required-section-fixer",
       "requested": 3,
       "changed": 2,
@@ -190,8 +232,8 @@
     },
     {
       "fixerId": "toc-field-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -1397,9 +1439,171 @@
       ],
       "regresije": [],
       "integrityFailure": null
+    },
+    {
+      "dokument": "pravo--final--prijediplomski--neuredan.docx",
+      "profileId": "pravo-porezni-prijediplomski",
+      "paloPrije": [
+        "footnote.format",
+        "footnote.spacing",
+        "format.font.dominant",
+        "format.spacing.body",
+        "format.spacing.paragraph",
+        "legal.act-abbrev",
+        "legal.case-law",
+        "legal.first-citation-completeness",
+        "legal.footnote-bibliography",
+        "legal.source-classification",
+        "reference.alphabetical",
+        "structure.heading.align",
+        "structure.heading.format",
+        "structure.heading.hierarchy",
+        "structure.heading.numbering",
+        "structure.heading.word-styles",
+        "structure.sections.profile",
+        "title.layout",
+        "toc.coverage",
+        "toc.format"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "font-fixer",
+        "footnote-spacing-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "heading-format-fixer",
+        "heading-style-fixer",
+        "line-spacing-fixer",
+        "link-doi-fixer",
+        "paragraph-spacing-fixer",
+        "toc-field-fixer"
+      ],
+      "promijenili": [
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "font-fixer",
+        "footnote-spacing-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "heading-format-fixer",
+        "heading-style-fixer",
+        "line-spacing-fixer",
+        "link-doi-fixer",
+        "paragraph-spacing-fixer",
+        "toc-field-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [
+        "format.font.dominant",
+        "format.spacing.body",
+        "structure.heading.align",
+        "structure.heading.format",
+        "toc.format"
+      ],
+      "nerijeseno": [
+        "footnote.format",
+        "footnote.spacing",
+        "format.spacing.paragraph",
+        "legal.act-abbrev",
+        "legal.case-law",
+        "legal.first-citation-completeness",
+        "legal.footnote-bibliography",
+        "legal.source-classification",
+        "reference.alphabetical",
+        "structure.heading.hierarchy",
+        "structure.heading.numbering",
+        "structure.heading.word-styles",
+        "structure.sections.profile",
+        "title.layout",
+        "toc.coverage"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "pravo--final--prijediplomski--uskladjen.docx",
+      "profileId": "pravo-porezni-prijediplomski",
+      "paloPrije": [
+        "footnote.format",
+        "footnote.spacing",
+        "format.spacing.paragraph",
+        "legal.act-abbrev",
+        "legal.case-law",
+        "legal.first-citation-completeness",
+        "legal.footnote-bibliography",
+        "legal.source-classification",
+        "reference.alphabetical",
+        "structure.heading.align",
+        "structure.heading.format",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "footnote-spacing-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "heading-format-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "paragraph-spacing-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "footnote-spacing-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "heading-format-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "paragraph-spacing-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [
+        "structure.heading.align",
+        "structure.heading.format"
+      ],
+      "nerijeseno": [
+        "footnote.format",
+        "footnote.spacing",
+        "format.spacing.paragraph",
+        "legal.act-abbrev",
+        "legal.case-law",
+        "legal.first-citation-completeness",
+        "legal.footnote-bibliography",
+        "legal.source-classification",
+        "reference.alphabetical",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "regresije": [],
+      "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-09T05:47:33.763Z",
-  "generatedFromCommit": "f1652c1126cc18a1c9c04ff12ce1fa52b38b8679",
+  "generatedAt": "2026-09-09T14:30:51.571Z",
+  "generatedFromCommit": "dd7b08b2c639016dbb33f4f32ff2c8c3f5898c0c",
   "generator": "npm run repair-net -- --write"
 }

@@ -448,6 +448,43 @@ za koju popravka nema jer pravilu nedostaje provenijencija. To NIJE kvar fixera 
 mrtvih; ide u popis profila kojima obvezne sekcije treba potkrijepiti izvorom prije nego se od
 popravka ista ocekuje.
 
+## Val 5: jedan redak koji je otvorio pet fixera (2026-09-09)
+
+Izbor je opet bio mjerenje, i ovaj put je platio vise nego ijedan dosad. Mjereno je koji CITATNI
+STIL nijedan od 11 napisanih radova ne koristi:
+
+    napisano po stilu   (nema) 5, fpzg 2, chicago-notes 1, custom 1, vancouver 1, harvard 1
+    nedostaje           apa7 (23 retka), pravo-fusnote (12), chicago-author (2)
+
+`pravo-fusnote` je izabran jer je fusnotno pravno citiranje jedini oblik koji dira Lektin PRAVNI
+citatni motor, a nijedan sinteticki dokument ga dosad nije ni dotaknuo. Napisan je
+`pravo--final--prijediplomski` (Pravni fakultet, porezni studij, 5.261 rijec tijela, 99 odlomaka,
+14 fusnota, 16 jedinica literature); validator daje nula nalaza.
+
+    uskladjen   palo 13   zatrazeno 10   promijenili  9   regresije 0
+    neuredan    palo 20   zatrazeno 14   promijenili 13   regresije 0
+    mreza       28 dokumenata, 21 od 31 fixera (bilo 16)
+
+**PET NOVIH FIXERA**, svaki 2/2, dakle mijenja na svakom zahtjevu: `footnote-spacing-fixer`,
+`footnote-typography-fixer`, `heading-case-fixer`, `heading-format-fixer`, `paragraph-spacing-fixer`.
+Uz njih prvi put pada cijela `legal.*` obitelj provjera (`act-abbrev`, `case-law`,
+`first-citation-completeness`, `footnote-bibliography`, `source-classification`), pa pravni citatni
+motor napokon ima ulaz.
+
+**`paragraph-spacing-fixer` je zatvorio otvorenu stavku iz vala 4.** Ondje je zapisano da mutacija
+`paragraphSpacingNoise` radi i dokazuje se u paketu, ali da je nijedan od deset profila ne boduje, pa
+fixer ostaje nedosezan. Ovaj profil tu os boduje. Mutacija napisana dva commita ranije dobila je metu
+tek izborom retka, sto je i najbolji dokaz da izbor po mjerenju nije formalnost.
+
+**Sto ovo NIJE zatvorilo.** Nijedna `legal.*` provjera nije RIJESENA popravkom, samo su pale. To je
+ocekivano (pravni motor cita citate, a ne oblik), ali znaci da je za te osi otvoreno zasebno pitanje:
+je li nasa fusnotna proza neispravna ili je motor strog. Odgovor trazi usporedbu s pravim radom, ne
+jos jednu sintetsku fusnotu.
+
+**Nalaz za Katedru:** `stanje_init.py` ne poznaje citatni stil `pravo-fusnote`; njegov popis staje na
+`autor-godina, ieee, vancouver, harvard, apa, apa-hr`, pa fusnotni pravni stil ondje nema oznaku.
+Zapisano u `authoring.method` rada, kandidat za `skill-feedback`.
+
 ## Sto ostaje
 
 1. Daljnja proza. Napisano je DESET tijela (cetiri val 1, tri val 2, tri val 3), sto pokriva 488
