@@ -30,3 +30,8 @@ Zabranjeno: `npm audit fix --force` (lomi `hunspell-asm`, vidi memoriju `npm-aud
 
 Ratchet (23) u `security-audit.yml` bez `continue-on-error`, `scripts/npm-audit-ratchet.mjs --selftest`,
 mutacija `supply-chain/porast-nalaza-nevidljiv`. Bez toga bi grupa C mogla narasti neopazeno.
+
+## Azuriranje 2026-09-09 (kasnije istog dana)
+
+- PR #63: `npm audit fix --package-lock-only`, pun graf 23 -> 14 (grupa C zatvorena).
+- Grana `deps/netlify-cli-27`: `netlify-cli` 26.2 -> 27.5.2, pun graf 14 -> 7. Preostalih 7: `@netlify/dev`, `@netlify/images`, `ipx`, `sharp`, `netlify-cli` (bez objavljenog popravka i u 27.x; iznimka grupe A ostaje do 2026-10-09) te `vite`/`vitest` (grupa B, zaseban PR s vitest 5).
