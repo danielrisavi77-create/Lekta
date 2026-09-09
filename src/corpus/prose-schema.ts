@@ -160,8 +160,20 @@ export function validateProseBody(body: ProseBody): string[] {
   // Poglavlje bez ijednog odlomka imenuje se POSEBNO. Zbroj odlomaka moze biti uredan dok jedno
   // poglavlje ostane prazno, pa bi ga provjera nad zbrojem propustila; u dokumentu bi tada stajao
   // naslov bez teksta, sto je oblik koji analiza vidi a autor ne primijeti.
-  for (const c of body.chapters ?? []) {
-    if (!(c.paragraphs?.length ?? 0)) push(`poglavlje "${c.title}" nema nijedan odlomak`);
+  //
+  // IZUZETAK ZA NADREDJENO POGLAVLJE, izmjereno 2026-09-09. Prazan smije biti naslov cijim sadrzajem
+  // upravljaju podpoglavlja: "2. Pojmovni okvir" bez vlastitog teksta, a odmah za njim 2.1, 2.2, 2.3.
+  // To je obican akademski raspored, a pravilo ga je odbijalo, pa se `fzsri--final--prijediplomski`
+  // vise NIJE MOGAO reproducirati iz vlastite commitane proze: dokument je u repozitoriju, a njegov
+  // ulaz je padao na cetiri nalaza. Provjera i dalje grize ondje gdje je i nastala, na LISTU: naslov
+  // iza kojega ne slijedi dublja razina mora imati tekst.
+  const chapters = body.chapters ?? [];
+  for (let i = 0; i < chapters.length; i++) {
+    const c = chapters[i];
+    if (c.paragraphs?.length) continue;
+    const sljedeci = chapters[i + 1];
+    const imaPodpoglavlja = sljedeci !== undefined && Number(sljedeci.level ?? 1) > Number(c.level ?? 1);
+    if (!imaPodpoglavlja) push(`poglavlje "${c.title}" nema nijedan odlomak`);
   }
   const vidjeni = new Set<string>();
   let ponovljeni = 0;

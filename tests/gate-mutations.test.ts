@@ -33,6 +33,7 @@ import {
   type DocxShapeCounts,
 } from '../src/corpus/docx-shapes';
 import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
+import { verifyOutputProofs } from '../scripts/corpus-gen/mutations.mts';
 import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
@@ -928,6 +929,34 @@ const MUTATIONS: Mutation[] = [
       });
       return v.missing.length === 0 && v.unknown.length === 0 && v.underDetected.length === 0;
     },
+  },
+  {
+    id: 'mutacija/forma-upisana-a-alat-ju-je-tiho-odbacio',
+    imitates:
+      'mutacija bodovane FORME (font, prored, format stranice) upise se u izvor, brojac javi da je ' +
+      'radila, a LibreOffice ju pri spremanju tiho odbaci. Dokument tada izgleda kao da nosi kvar, a ' +
+      'nosi ga samo nas izvor; mreza bi mjerila oblik koji u paketu ne postoji. Nije teorijski: ovaj ' +
+      'katalog je isti kvar platio DVAPUT na `csOnlyFonts` (nedeklariran font, pa imenovan stil umjesto ' +
+      'automatskog), i oba puta ga je uhvatio jedino dokaz nad IZLAZOM. Druga polovica je brojac 0, ' +
+      'dakle mehanizam koji nije ni pokusao',
+    caught: () => {
+      // Brojac tvrdi da je font upisan, a `word/styles.xml` ga nema.
+      const odbaceno = verifyOutputProofs({ wrongBodyFont: 1 }, {
+        'word/styles.xml': '<w:styles><w:style w:styleId="BodyText"><w:rPr><w:rFonts w:ascii="Times New Roman"/></w:rPr></w:style></w:styles>',
+      });
+      const mrtav = verifyOutputProofs({ wrongBodyFont: 0 }, {
+        'word/styles.xml': '<w:styles><w:rFonts w:ascii="Comic Sans MS"/></w:styles>',
+      });
+      return (
+        odbaceno.some((p) => p.startsWith('wrongBodyFont:') && p.includes('nema dokaza')) &&
+        mrtav.some((p) => p.includes('mrtav mehanizam'))
+      );
+    },
+    // Netrivijalnost: kad paket dokaz NOSI, gard suti. Bez ovoga bi "hvatao" i gard koji vristi uvijek.
+    cleanBefore: () =>
+      verifyOutputProofs({ wrongBodyFont: 1 }, {
+        'word/styles.xml': '<w:styles><w:style w:styleId="BodyText"><w:rPr><w:rFonts w:ascii="Comic Sans MS"/></w:rPr></w:style></w:styles>',
+      }).length === 0,
   },
   {
     id: 'oblik/popravak-izgubi-oblik-pakiranja-pri-ponovnom-pisanju',

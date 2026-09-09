@@ -26,7 +26,7 @@
     "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
     "os": "win32 x64",
     "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row effectus--seminar--diplomski --messy",
-    "generatedAt": "2026-09-07T00:31:57.222Z"
+    "generatedAt": "2026-09-08T22:42:53.581Z"
   },
   "mutations": {
     "tabInHeading": 11,
@@ -36,7 +36,13 @@
     "csOnlyFonts": 4,
     "biblioAsHeading": 2,
     "commentsPart": 2,
-    "allLevelThree": 17
+    "allLevelThree": 17,
+    "wrongBodyFont": 1,
+    "letterPaper": 1,
+    "paragraphSpacingNoise": 1
+  },
+  "mutationsNotApplicable": {
+    "singleLineSpacing": "profil ne trazi prored 1,5, pa ga nema sto pokvariti"
   },
   "shapes": {
     "claimed": [

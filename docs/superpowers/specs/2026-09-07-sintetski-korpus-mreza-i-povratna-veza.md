@@ -361,6 +361,63 @@ nosi cetiri prazna odlomka, zahtjev se salje izravno, a `verifyRepairRoundTrip` 
 Usput izmjereno: nas pisac paketa izlaz KOMPRIMIRA, pa popravljeni paket dobije `zip/deflate` kojega
 ulaz nema. Nije kvar, ali je razlika ulaza i izlaza koju nijedan zapis dosad nije imenovao.
 
+## Sedamnaest fixera nije bilo mrtvo nego NEDOSEZNO (2026-09-09)
+
+Pitanje je bilo koje retke pisati u valu 4. Odgovor je stigao iz mjerenja, i bio je da val 4 uopce
+ne pocinje prozom:
+
+    fixera ukupno            31
+    dodirnutih mrezom        14
+    razlicitih palih provjera 11   na svih 24 dokumenta
+
+Uzrok nije proza nego KATALOG MUTACIJA. Svih osam mutacija dira OBLIKE (tab u naslovu, prazni
+odlomci, rucni sadrzaj, tockaste vodilice, cs-fontovi, biblio kao naslov, komentari, sve razine 3), a
+nijedna ne krsi formu koju motor BODUJE. Usklađen primjerak se gradi po pravilima retka, neuredan ih
+ne dira, pa `font-fixer`, `paper-size-fixer` i ostali nemaju metu ni na jednom dokumentu. Jos tri
+rada s istim mutacijama dala bi istih 11 palih provjera i istih 14 fixera.
+
+Dodane su cetiri mutacije bodovane forme: `wrongBodyFont` (Comic Sans u stilu tijela),
+`singleLineSpacing` (prored 1 umjesto 1,5), `letterPaper` (Letter umjesto A4), `paragraphSpacingNoise`
+(razmak iza odlomka 17 pt). Vrijednosti su birane tako da ih nijedan profil ne dopusta, pa mutacija ne
+ovisi o retku.
+
+Mjereno nad svih deset neurednih primjeraka, prije i poslije:
+
+    pale provjere            8 -> 12
+    fixeri zatrazeni        13 -> 16
+    fixeri koji MIJENJAJU   11 -> 14
+    novi                    font-fixer, line-spacing-fixer, paper-size-fixer
+    izgubljenih             nijedan
+    regresije                3 -> 3  (sve tri zatecene)
+
+Mreza nad punim skupom sada doseze 16 fixera, a sva tri nova mijenjaju na svakom zahtjevu (6/6, 6/6,
+5/5) i doista poprave svoju os, ne samo da se zatraze.
+
+**Dvije stvari koje katalog nije imao, a mutacija forme ih trazi.**
+
+DOKAZ U IZLAZU. Mutacije forme nemaju katalogiziran oblik: krsenje bodovane forme je vrijednost, ne
+oblik, a `docx-shapes` nabraja nalaze iz stvarnog korpusa i ondje se ne dopisuje ono sto nam treba za
+mjerenje. Svaka nosi predikat nad GOTOVIM paketom (`verifyOutputProofs`), jer LibreOffice zna tiho
+odbaciti ono sto mu upises; taj je kvar ovaj katalog vec platio dvaput na `csOnlyFonts`. Brojac bez
+dokaza obara prolaz. Mutacija: `mutacija/forma-upisana-a-alat-ju-je-tiho-odbacio`.
+
+NEPRIMJENJIVOST ODVOJENA OD NULE. Brojac 0 znaci mrtav mehanizam i mora oboriti prolaz, ali profil
+koji ne trazi prored 1,5 nema sto izgubiti. Neprimjenjiva mutacija ide u `mutationsNotApplicable` s
+razlogom, ne medju brojace. Isti razred razlike koji je mreza upravo prosla s "mrtav fixer" naspram
+"ceka covjeka".
+
+**Usput nadjeno: fixtura koja se ne moze reproducirati iz vlastitog ulaza.** Regeneracija je pala na
+`fzsri--final--prijediplomski`, jer validator proze trazi da SVAKO poglavlje ima odlomak, a taj rad
+ima obican akademski raspored: "2. Pojmovni okvir" bez vlastitog teksta, pa 2.1, 2.2, 2.3. Dokument je
+bio commitan, a njegov commitani ulaz je padao na cetiri nalaza. Pravilo sada izuzima naslov iza
+kojega slijedi dublja razina, a i dalje grize na LISTU (poglavlje bez odlomaka i bez podpoglavlja, te
+prazan odjeljak).
+
+**Sto ovo NIJE zatvorilo.** `paragraphSpacingNoise` se primjenjuje i dokazuje u paketu, ali nijedan od
+deset profila ne boduje tu os, pa `paragraph-spacing-fixer` i dalje nije zatrazen. Ostaje imenovan,
+kao i preostalih 15 nedoseznih fixera; dio njih (`title-page-fixer`, `submission-metadata-fixer`)
+trazi ulaz izvan dokumenta i mutacijom se ne doseze uopce.
+
 ## Sto ostaje
 
 1. Daljnja proza. Napisano je DESET tijela (cetiri val 1, tri val 2, tri val 3), sto pokriva 488
@@ -371,7 +428,7 @@ ulaz nema. Nije kvar, ali je razlika ulaza i izlaza koju nijedan zapis dosad nij
 3. `apuri` nema Wordovu inacicu, a ostala tri je imaju. Nije zapisano je li izostala namjerno ili je
    pokusaj pao; utvrditi prije nego se broj dokumenata negdje navede kao ujednacen.
 4. Popravci na njihovoj strani, i skidanje eval slucaja tek kad kvar doista nestane iz mjerenja.
-5. Odluka vlasnika o `paket/bez-png-default`: jedini preostali oblik bez fixture, s provenijencijom
-   koja se vise ne reproducira (0 od 457). Ili ostaje imenovan kao danas, ili ispada iz kataloga.
-   Fixtura se za njega moze sloziti u minuti, ali bi bila jedini oblik koji nijedan stvarni rad ne
-   nosi, dakle mjera nad oblikom koji smo sami izmislili.
+5. ~~Odluka vlasnika o `paket/bez-png-default`.~~ ODLUCENO 2026-09-09: **ostaje imenovan**. Oblik
+   se ne brise iz kataloga i ne dobiva izmisljenu fixturu, nego stoji kao jedini nepokriven, s
+   provenijencijom koja se vise ne reproducira (0 od 457; 205 dokumenata s png-om, svih 205 nosi
+   `Default`). Ako ga ijedan buduci ingest donese, zatvara se tim dokumentom, ne rucnim paketom.
