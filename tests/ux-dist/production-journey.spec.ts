@@ -76,6 +76,17 @@ test.describe('dist: putovanje od pocetne stranice', () => {
     }
     await cekajApp(page);
 
+    // CRTANJE MORA ZIVJETI. Izmjereno 2026-09-09 nad dist/ (headless, headed i pravi Chrome 152): nakon
+    // primopredaje s `/` requestAnimationFrame na `/rad/` vise ne okida (0 okvira u 3 s), dok izravan ulaz radi.
+    // Bez ove tvrdnje svaki kasniji klik visi 300 s na "stable" i pad izgleda kao spor stroj. Zivi build od
+    // 2026-09-06 (4d7c6f6e) to nema; regresija je u masteru poslije njega.
+    const okvir = await page.evaluate(() => new Promise<number | null>((ok) => {
+      const t0 = performance.now();
+      requestAnimationFrame(() => ok(Math.round(performance.now() - t0)));
+      setTimeout(() => ok(null), 5000);
+    }));
+    expect(okvir, 'requestAnimationFrame nije okinuo 5 s nakon dolaska s /: crtanje je zamrznuto').not.toBeNull();
+
     // Dokument je VEC ucitan: korak 2 bez ponovnog ubacivanja, i bez marketinskog uvoda.
     await cekajKorak(page, '2');
     await expect(page.locator('#analyzer')).toBeVisible();
