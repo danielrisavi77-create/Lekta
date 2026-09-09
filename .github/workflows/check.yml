@@ -128,7 +128,7 @@ jobs:
       - name: Produkcijski build (isti lanac kao netlify.toml)
         env:
           LEKTA_SITE_ORIGIN: https://lektahr.netlify.app
-        run: npm run build && npm run build-info && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-title-page-tools && npm run generate-competitor-pages
+        run: node scripts/build-production.mjs --skip-verify
 
       - name: Provjera dist artefakta
         run: node scripts/verify-deploy-dist.mjs
