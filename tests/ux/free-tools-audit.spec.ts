@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { FREE_TOOL_PAGES } from './free-tools-pages';
-import { cekajApp } from './app-ready';
+import { cekajApp, cekajKorak } from './app-ready';
 
 for (const pageSpec of FREE_TOOL_PAGES) {
   test(`${pageSpec.name}: ima jasnu glavnu zonu i primarnu akciju`, async ({ page }) => {
@@ -573,6 +573,11 @@ for (const [sirina, visina] of [[360, 667], [393, 727], [393, 900], [430, 844]] 
     // STVARNA datoteka, ne podmetnuta klasa: `has-file` ne prikazuje `#selectedFile` ni ne skriva
     // `#dropEmpty`, pa daje raspored koji nijedan korisnik ne vidi (izmjereno: preklop 0 umjesto 70 px).
     await page.setInputFiles('#fileInput', 'tests/fixtures/docx/fer-diplomski-puna-struktura.docx');
+    // UTRKA, izmjerena na CI-u 2026-09-09 (tri ponovna pokretanja, 2 do 3 od 4 viewporta, lokalno 16/16):
+    // prijem datoteke je asinkron i tek na kraju postavi korak 2. Ako se korak 1 dolje upise PRIJE toga,
+    // prijem ga poslije prepise na 2, `#stepToProfile` ostane skriven i cekanje ispod istekne. Zato se prvo
+    // ceka da prijem zavrsi (korak 2), pa se tek onda vraca na korak 1.
+    await cekajKorak(page, '2');
     // Popravljeno 2026-09-08: upload sada ide RAVNO na korak 2 (isto kao desktop; mobilna iznimka
     // koja je ovdje silila korak 1 je uklonjena). Stanje koje ovaj test provjerava (korak 1 S VEC
     // ODABRANOM datotekom) postize se izravnim postavljanjem atributa: vidljivost je posve CSS-om
