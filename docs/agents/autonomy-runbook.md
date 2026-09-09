@@ -85,6 +85,24 @@ neprovedena provjera, ne kao prolaz.
   `propose`; produkcijska objava ostaje blokirana dok izdavac ne dobije zaseban identitet i token izvan
   radnikova dosega.
 
+## Odvojen identitet izdavaca (preduvjet za `publisherEnabled: true`)
+
+Izdavac (`scripts/autonomy/remote.py`) cita token iz DATOTEKE `LEKTA_AUTONOMY_HOME\publisher-token`, nikad iz
+okoline procesa: radnikova okolina je ociscena od `GITHUB_*` i `GH_*` varijabli pa kandidatov kod token ne vidi.
+Token mora pripadati ODVOJENOM GitHub identitetu (machine user ili fine-grained PAT ogranicen na ovaj repo, prava:
+Pull requests read/write, Contents read/write, Metadata). Vlasnikov osobni `gh` login se NE koristi.
+
+```powershell
+Set-Content -NoNewline "$env:LOCALAPPDATA\Lekta\autonomy\publisher-token" "<token odvojenog identiteta>"
+Set-Content -NoNewline "$env:LOCALAPPDATA\Lekta\autonomy\netlify-token" "<Netlify PAT>"
+Set-Content -NoNewline "$env:LOCALAPPDATA\Lekta\autonomy\netlify-site"  "<site id>"
+python -m scripts.autonomy.cli doctor   # publisher.githubTokenPresent; samo otisak, nikad vrijednost
+```
+
+Bez tih datoteka `publish` vraca `publisher_not_configured` i zadatak zavrsava kao `needs_human` s pripremljenom
+granom. I s tokenom, merge se dogadja SAMO u `auto_low_risk` nacinu uz potpun dokaz, zelene obvezne provjere na
+aktualnom headu i nepomaknut master; `propose` otvara PR i staje. Uklanjanje datoteke odmah gasi izdavaca.
+
 ## Dokaz i objava
 
 - `gate.verify_candidate` pokrece `npm run release:check` (kroz ubrizgani runner), cita
