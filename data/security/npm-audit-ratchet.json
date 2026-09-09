@@ -1,11 +1,11 @@
 {
   "note": "Ratchet nad PUNIM grafom `npm audit` (runtime + build alati). Produkcijski graf (`--omit=dev`) je zaseban, blokirajuci korak u security-audit.yml; ovaj broj smije samo PADATI. Osvjezi: `npm run audit:ratchet` ispisuje izmjereno, pa upisi ovdje uz razlog u changeNote.",
   "measuredAt": "2026-09-09",
-  "fullGraphHighCritical": 23,
-  "changeNote": "Prvo mjerenje s ratchetom (vanjski audit 2026-09-08, nalaz 6). Do sada je broj bio samo ISPISAN u koraku s continue-on-error, pa je rast bio nevidljiv: komentar u workflowu tvrdio je 21 (mjereno 2026-08-24), a stvarno je 23 (22 high + 1 critical). Svih 23 su tranzitivni pod netlify-cli i njegovim @netlify/* paketima (fastify/static, find-my-way, ipx, sharp, svgo, tar, toml, extract-zip, image-size, fast-uri, brace-expansion, postcss) te pod vitest/vite. Nijedan nije u browser bundleu (produkcijski audit daje 0). Spustanje trazi odluku o nadogradnji tih alata; do tada strop drzi da se ne pogorsa neopazeno.",
+  "fullGraphHighCritical": 14,
+  "changeNote": "`npm audit fix --package-lock-only` (BEZ --force, bez promjene korijenskih ovisnosti): 39 tranzitivnih paketa podignuto unutar semver raspona (brace-expansion, fast-uri, find-my-way, postcss, svgo, tar, @netlify/blobs i srodni @netlify/* patchevi), 83 dodana zapisa u lock, 0 uklonjenih. Puni graf pada 23 -> 14 (13 high + 1 critical); preostalih 14 traze semver-major netlify-cli odnosno vitest 5 (vidi docs/quality/dependency-decisions.md). Produkcijski graf ostaje 0.",
   "priorMeasurement": {
-    "measuredAt": "2026-08-24",
-    "fullGraphHighCritical": 21,
-    "note": "Brojka iz komentara u .github/workflows/security-audit.yml, bez ratcheta; nije bila tvrdnja nego opis."
+    "measuredAt": "2026-09-09",
+    "fullGraphHighCritical": 23,
+    "note": "Prvo mjerenje s ratchetom (PR #61). 22 high + 1 critical, svi tranzitivni pod netlify-cli i vitest/vite."
   }
 }
