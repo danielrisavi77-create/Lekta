@@ -41,18 +41,24 @@ body {
 @media print { body { background-image: none } }
 
 /*
- * View Transitions: glatki cross-fade pri navigaciji medu stranicama (index <-> alati).
- * Cross-document radi jer se ovaj CSS ucita na svakoj stranici. Nepodrzani preglednici
- * jednostavno naviguju bez prijelaza (progresivno pobojlsanje).
+ * CROSS-DOCUMENT VIEW TRANSITIONS SU UGASENE (2026-09-09), i to je popravak kvara, ne stil.
+ *
+ * Izmjereno nad produkcijskim dist buildom (headless, headed i pravi Chrome 152): nakon navigacije koju
+ * pokrene stranica s `/` ili `/alati/` prema `/rad/` (i `/` prema `/alati/`), novi dokument NIKAD ne dobije
+ * okvir: requestAnimationFrame ne okida (0 okvira u 3 s), pa sve kasnije radnje cekaju "stabilan element".
+ * Korisnik koji ubaci rad na naslovnici tako dobije zamrznut radni prostor. Bisekcija (3 mjerenja po
+ * commitu) pokazuje `76ed4492`: on je s naslovnice uklonio DRUGI `.logo` (footer). Do tada su dva
+ * elementa dijelila `view-transition-name: lekta-logo`, pa je Chrome cross-document prijelaz PRESKAKAO;
+ * s jednim logom prijelaz se stvarno pokrene i ne zavrsi. Kvar je dakle stariji od tog commita, a bio je
+ * maskiran duplikatom imena; ziva stranica 4d7c6f6e ga nema samo zbog te maske.
+ *
+ * Kontrola: kad se na `/` prije navigacije doda `@view-transition { navigation: none }`, okviri odmah rade.
+ * Gard: tests/ux-dist/production-journey.spec.ts (tvrdi rAF nakon primopredaje s `/`).
+ *
+ * Same-document prijelazi (withViewTransition, `.vt-local`) ostaju: nisu bili u lancu kvara. Ako se
+ * cross-document ikad vrati, mora proci kroz taj spec i kroz probu s JEDNIM `.logo` na stranici.
  */
-@view-transition { navigation: auto }
-::view-transition-old(root) { animation: lekta-vt-out var(--dur-1) var(--ease-spring) both }
-::view-transition-new(root) { animation: lekta-vt-in var(--dur-2) var(--ease-spring) both }
-@keyframes lekta-vt-out { to { opacity: 0 } }
-@keyframes lekta-vt-in { from { opacity: 0 } }
-
-/* Kontinuitet loga medu stranicama (blagi morph umjesto cross-fade). */
-.logo { view-transition-name: lekta-logo }
+@view-transition { navigation: none }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
