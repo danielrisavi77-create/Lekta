@@ -4,6 +4,7 @@ import { guaranteeAppliesToStatus, guaranteeStatusNote } from '../report/guarant
 import { escapeHtml, safeHref, clamp, fmt, normalize, els, first, textOf, reframeStatusNote } from '../utils/helpers';
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 import { createAnimationRegistry } from '../shared/animation-registry';
+import { withViewTransition } from '../shared/view-transition';
 // BL-P0-05-4: DOCX parser se koristi tek nakon odabira datoteke (metapodaci, detekcija konteksta),
 // pa se uvozi LIJENO (dinamicki import) u tim funkcijama; njegov kod ispada iz glavnog landing chunka.
 import { makeCheck, issue, scoreMeta } from '../scoring/checks';
@@ -167,7 +168,7 @@ export function loadAnalyzerDocument(file: File): Promise<AnalyzerDocumentAdmiss
 }
 
 import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
-import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, motionReduced, withViewTransition } from './environment-signals';
+import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, motionReduced } from './environment-signals';
 import { deskItems } from './results/desk-model';
 import { privacyPrijelazHtml } from './privacy-state';
 import { repairDoneHtml, repairDoneModel } from './results/repair-done';

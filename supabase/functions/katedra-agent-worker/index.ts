@@ -1,6 +1,9 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { isCronAuthorized } from '../_shared/cron-auth.ts';
 import { dispatchAgentRuns } from './dispatcher.ts';
+import { handlePayloadCleanup } from './payload-cleaner.ts';
+import { dispatchRefundReconciliation } from './refund-dispatcher.ts';
+import { reconcileBillingQueue } from './billing-reconciler.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -15,7 +18,25 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
 Deno.serve(async (req) => {
   if (!isCronAuthorized(req, CRON_SECRET)) return json({ error: 'unauthorized' }, 401);
+  if (new URL(req.url).searchParams.get('mode') === 'cleanup') {
+    // Odvojeni poziv ne dispatcha runove i ne zahtijeva aktivaciju generiranja.
+    // Rok svakog zahtjeva ostavlja prostor za potvrdu i ponovni pokusaj.
+    const cleanupClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+      global: { fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(10_000) }) },
+    });
+    return handlePayloadCleanup(req, cleanupClient, CRON_SECRET);
+  }
+  if (new URL(req.url).searchParams.get('mode') === 'billing') {
+    try {
+      const boundedClient = { rpc: (name: string, params: Record<string, unknown>) => supabase.rpc(name, params).abortSignal(AbortSignal.timeout(10_000)) };
+      return json(await reconcileBillingQueue(boundedClient), 200);
+    } catch { return json({ error: 'billing_queue_unavailable' }, 503); }
+  }
   if (!APP_URL || !WORKER_TOKEN) return json({ error: 'worker_dispatcher_not_configured' }, 503);
+  if (new URL(req.url).searchParams.get('mode') === 'refunds') {
+    const result = await dispatchRefundReconciliation(APP_URL, WORKER_TOKEN);
+    return json(result, result.ok ? 200 : 503);
+  }
 
   /**
    * ATOMSKO PREUZIMANJE RUNOVA (audit OPS-18, OPS-20).

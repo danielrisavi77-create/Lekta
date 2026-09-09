@@ -728,7 +728,12 @@ for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'da
     // jednom dao 9 od 20 (izmjereno 2026-09-08) jer stranica jos nije bila slozena, ne zbog
     // neutralizacije (ona je CSS pravilo, vrijedi cim se element pojavi, neovisno o vremenu).
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(300);
+    // Ulazna sekvenca jos moze mijenjati opacity nakon ucitavanja fontova. Fiksnih 300ms
+    // mjerilo je "Kako radi?" usred pojavljivanja (3.86–4.49:1); bazno stanje prolazi.
+    // Pricekaj stvarni zavrsetak konacnih animacija; trajne dekorativne petlje se ne cekaju.
+    await page.evaluate(() => Promise.all(document.getAnimations()
+      .filter((animation) => Number.isFinite(animation.effect?.getComputedTiming().endTime))
+      .map((animation) => animation.finished.catch(() => {}))));
 
     const r = await new AxeBuilder({ page }).analyze();
     const mjereno = r.passes.filter((x) => x.id === 'color-contrast')

@@ -41,6 +41,7 @@ import { describe, expect, it } from 'vitest';
  */
 const UX = path.resolve(__dirname, 'ux');
 const POMOCNIK = 'potvrdiProfil';
+const POTVRDA_ILI_REZULTAT = 'confirmAnalysisWhenReady';
 const SPREMNOST = 'cekajApp';
 
 function citaj(ime: string): string {
@@ -78,7 +79,9 @@ export function prigovori(ime: string, src: string): string[] {
   // `runAnalysis` izadje na vratima potvrde i cekanje traje do timeouta.
   const pokrece = kod.includes("#analyzeBtn').click()");
   const cekaIshod = kod.includes('#resultView') || kod.includes('#progressView');
-  if (pokrece && cekaIshod && !kod.includes(POMOCNIK)) {
+  const cekaPotvrdu = [POMOCNIK, POTVRDA_ILI_REZULTAT]
+    .some((imePomocnika) => new RegExp(`\\b${imePomocnika}\\s*\\(`).test(kod));
+  if (pokrece && cekaIshod && !cekaPotvrdu) {
     nalazi.push(`${ime}: klika #analyzeBtn i ceka ishod, ali ne zove ${POMOCNIK}()`);
   }
   // DRUGI UGOVOR: `#fileInput` postoji u statickom HTML-u, pa ga Playwright popuni i prije nego
@@ -113,6 +116,27 @@ describe('potvrda profila u UX specovima', () => {
     expect(kod).toContain('data-lekta-ready');
     expect(kod).toContain('toHaveAttribute');
     expect(kod).toContain(`export async function ${SPREMNOST}`);
+  });
+
+  it('pomocnik za ponovnu analizu ceka potvrdu ili gotov rezultat prije klika', () => {
+    const kod = bezKomentara(citaj('analysis-confirmation.ts'));
+    expect(kod).toContain('await expect.poll(');
+    expect(kod).toContain('await confirmation.isVisible() || await result.isVisible()');
+    expect(kod.indexOf('await expect.poll(')).toBeLessThan(kod.indexOf('await confirmation.click()'));
+  });
+
+  it('KONTROLA: potvrda ili rezultat smije koristiti provjereni pomocnik', () => {
+    const dobar = [
+      "await page.locator('#analyzeBtn').click();",
+      'await confirmAnalysisWhenReady(page);',
+      "await expect(page.locator('#resultView')).toBeVisible();",
+    ].join('\n');
+    expect(prigovori('ponovna.spec.ts', dobar)).toEqual([]);
+    // Sam import bez poziva ne dokazuje da je tok cekao potvrdu.
+    expect(prigovori('preskok.spec.ts', dobar.replace(
+      'await confirmAnalysisWhenReady(page);',
+      "import { confirmAnalysisWhenReady } from './analysis-confirmation';",
+    ))).toHaveLength(1);
   });
 
   it('MUTACIJA: upload bez cekanja na spremnost se prijavi', () => {

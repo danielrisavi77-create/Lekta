@@ -6,6 +6,97 @@ import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
+test('desktop upload progresses when the native transition snapshot stalls', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.addInitScript(() => {
+    const timings: { started: number; completed?: number; skipped: boolean }[] = [];
+    (window as unknown as { __stalledTransitions: typeof timings }).__stalledTransitions = timings;
+    // Reproduce the CI trace: snapshot acquisition holds the callback for five seconds.
+    document.startViewTransition = ((update: () => void) => {
+      const timing = { started: performance.now(), completed: undefined as number | undefined, skipped: false };
+      timings.push(timing);
+      let finish!: () => void;
+      let rejectReady!: (reason: Error) => void;
+      const finished = new Promise<void>((resolve) => { finish = resolve; });
+      const ready = new Promise<void>((_, reject) => { rejectReady = reject; });
+      let done = false;
+      const run = () => {
+        if (done) return;
+        done = true;
+        update();
+        timing.completed = performance.now();
+        rejectReady(new Error('snapshot skipped'));
+        finish();
+      };
+      const timer = setTimeout(run, 5000);
+      return { ready, finished, updateCallbackDone: finished,
+        skipTransition: () => { timing.skipped = true; clearTimeout(timer); setTimeout(run, 0); } };
+    }) as typeof document.startViewTransition;
+  });
+  await page.goto('/rad/');
+  await cekajApp(page);
+  await page.locator('#fileInput').setInputFiles(fixture);
+  await cekajKorak(page, '2');
+  // Mjeri sam prijelaz u pregledniku, ne parsiranje dokumenta i Playwright transport.
+  // CI trag 34260994901: korak 2 je vec nastao, a vanjsko cekanje od 2 s ipak je isteklo.
+  const timings = await page.evaluate(() => (window as unknown as {
+    __stalledTransitions: { started: number; completed?: number; skipped: boolean }[];
+  }).__stalledTransitions);
+  expect(timings.length, 'test mora stvarno pokrenuti namjerno zaglavljen prijelaz').toBeGreaterThan(0);
+  for (const timing of timings) {
+    expect(timing.skipped, 'zastita mora preskociti zaglavljeni snapshot').toBe(true);
+    expect(timing.completed).toBeDefined();
+    expect(timing.completed! - timing.started).toBeLessThan(2000);
+  }
+  await expect(page.locator('#analyzeBtn')).toBeVisible();
+  await expect(page.locator('html')).not.toHaveClass(/vt-local/);
+});
+
+// CI WebKit ponekad ostane na koraku 1; biljezi samo stanje prikaza, bez sadrzaja dokumenta.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    const events: Record<string, unknown>[] = [];
+    (window as unknown as { __wizardTrace: typeof events }).__wizardTrace = events;
+    const record = (phase: string, id?: number) => {
+      if (events.length >= 100) return;
+      events.push({ phase, id, time: performance.now(), visibility: document.visibilityState,
+        width: innerWidth, step: document.getElementById('wizardView')?.getAttribute('data-step') });
+    };
+    document.addEventListener('visibilitychange', () => record('visibility'));
+    document.addEventListener('change', (event) => {
+      if ((event.target as Element | null)?.id === 'fileInput') record('file-change');
+    }, true);
+    new MutationObserver((records) => {
+      if (records.some((entry) => (entry.target as Element).id === 'wizardView')) record('wizard-mutation');
+    }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-step', 'class'] });
+    if (typeof document.startViewTransition !== 'function') return;
+    const start = document.startViewTransition.bind(document);
+    let nextId = 0;
+    document.startViewTransition = (update) => {
+      const id = nextId++;
+      record('transition-start', id);
+      if (typeof update !== 'function') return start(update);
+      const transition = start(() => {
+        record('callback-start', id);
+        const result = update();
+        record('callback-returned', id);
+        return result;
+      });
+      for (const phase of ['ready', 'updateCallbackDone', 'finished'] as const) {
+        void transition[phase].then(() => record(phase, id), () => record(`${phase}-rejected`, id));
+      }
+      return transition;
+    };
+  });
+});
+
+test.afterEach(async ({ page }, testInfo) => {
+  if (testInfo.status === testInfo.expectedStatus || page.isClosed()) return;
+  const evidence = await page.evaluate(() => (window as unknown as { __wizardTrace?: unknown }).__wizardTrace ?? []);
+  await testInfo.attach('wizard-transition-events', { body: JSON.stringify(evidence), contentType: 'application/json' });
+});
+
 /**
  * DESKTOP TOK, ODVOJEN OD MOBILNOG (audit P0-05, P1-18).
  *
