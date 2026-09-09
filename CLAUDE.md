@@ -891,11 +891,15 @@ dopustenih na SVE tri tocke, dakle populacija se nije mijenjala i usporedba vrij
   dakle nepoklapanjem DVIJU brojki, a ne sumnjom u metodu. Obje strane su pritom bile vlastite
   provjere iste sesije.
 
-## Codex (drugo misljenje)
+## Modeli za koordinaciju i drugo misljenje
 
-Instaliran je Codex plugin (codex@openai-codex). Podjela uloga: Claude Code je
-primarni driver (implementacija, orkestracija, memorija, domensko znanje), Codex
-je neovisno drugo misljenje drugog modela.
+Astra ili Fable vodi zadatak i audit; Opus, Sonnet ili Sol implementira kod. Jedan aktivni
+koordinator i jedan pisac po zadatku. Ugovor i lokalne naredbe su u `docs/agents/README.md`,
+a zajednicki red zadataka u `docs/agents/tasks.json`. Pregled dolazi od drugog providera:
+Astra pregledava Claude implementacije, Fable pregledava Sol. Modelski rezultat nije dokaz
+prolaza. Sva postojeca pravila provjera, izolacije i commitanja ostaju obavezna.
+
+Ako je lokalno instaliran Codex plugin (codex@openai-codex), dostupan je i ovaj put pregleda:
 
 - `/codex:review` prije commita netrivijalnih promjena; `/codex:adversarial-review`
   za parser/citation/security kod i arhitektonske odluke (npr. backlog 6 backend).
