@@ -1,7 +1,8 @@
 {
-  "commit": "5fa32e5dbd21e4bbffe7eb0fab6f4a1ee24d7e1d",
+  "commit": "e9dcc52a0ec0203ac2c71ff9ea5b7e2a2d998abf",
+  "treeDigest": "5cc429d8f4741be5db97a450437a26d222fc69e4490dafab7d6fa6f64c9ead40",
   "dirtyWorkingTree": false,
-  "createdAt": "2026-09-07T14:00:57.839Z",
+  "createdAt": "2026-09-09T23:05:13.949Z",
   "platform": "win32",
   "partial": false,
   "complete": true,
@@ -11,49 +12,55 @@
       "id": "check",
       "label": "Tier 0: oxlint + tsc + edge (deno) + vitest + build",
       "status": "pass",
-      "durationMs": 1472095
+      "durationMs": 1125408
     },
     {
       "id": "projections",
       "label": "Tier 0: svjezina pecenih projekcija (screening)",
       "status": "fail",
-      "durationMs": 14470
+      "durationMs": 7305
     },
     {
       "id": "conformance",
       "label": "Tier 0: conformance matrica",
       "status": "pass",
-      "durationMs": 211161
+      "durationMs": 161426
     },
     {
       "id": "slow",
       "label": "Tier 0: spori repair testovi",
       "status": "pass",
-      "durationMs": 226410
+      "durationMs": 222965
     },
     {
       "id": "ux",
       "label": "Tier 0: Playwright UX",
       "status": "pass",
-      "durationMs": 823245
+      "durationMs": 1511055
+    },
+    {
+      "id": "ux-dist",
+      "label": "Tier 0: Playwright nad dist/ (vite preview)",
+      "status": "pass",
+      "durationMs": 120298
     },
     {
       "id": "strict-open",
       "label": "Tier 1: lxml nad POPRAVLJENIM paketima",
       "status": "pass",
-      "durationMs": 57599
+      "durationMs": 61591
     },
     {
       "id": "word",
       "label": "Tier 2: pravi Microsoft Word",
       "status": "pass",
-      "durationMs": 115779
+      "durationMs": 124094
     },
     {
       "id": "word-worst",
       "label": "Tier 2: Word, najgori slucaj",
       "status": "pass",
-      "durationMs": 34302
+      "durationMs": 34104
     },
     {
       "id": "extraction",
