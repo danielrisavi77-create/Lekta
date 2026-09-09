@@ -140,3 +140,17 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 
 Lokalni testovi provjeravaju protokol i rukovanje rezultatima. Oni ne dokazuju da su
 racuni prijavljeni ili da je stvarni model isporucio kvalitetnu LEKTA promjenu.
+
+## Pretplatnicki nacin i autonomni kontroler (2026-09-09)
+
+`--subscription` je drugi, odvojen nacin naplate runnera: Claude poziv ide bez `--max-budget-usd` (jer
+se do naplate ne smije ni doci), Fable je iskljucen (nije u paketu), a postavljen `ANTHROPIC_API_KEY` u
+okolini je greska prije pripreme. Rucni `--budget-usd` nacin je nepromijenjen.
+
+```bash
+npm run agents -- prepare T02 --phase plan --agent astra --subscription
+```
+
+Trajni raspored, red zadataka, politika opsega, dokaz i izdavac zive u `scripts/autonomy/` (Python,
+stdlib) i pozivaju ovaj runner samo za pripremu i izvrsenje jednog poziva. Upute: `docs/agents/autonomy-runbook.md`;
+polazna tocka: `docs/agents/autonomy-baseline.md`; status zadataka T00 do T15: `docs/quality/lekta-plan-status.md`.

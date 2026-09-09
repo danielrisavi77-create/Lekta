@@ -5,24 +5,27 @@
     {
       "id": "T00",
       "title": "Potvrdi polazište i napravi kartu već riješenih nalaza",
-      "status": "ready",
-      "dependsOn": []
+      "status": "done",
+      "dependsOn": [],
+      "note": "docs/quality/lekta-plan-status.md, docs/agents/autonomy-baseline.md (2026-09-09, master 48c1fc9e)"
     },
     {
       "id": "T01",
       "title": "Zatvori prihvaćanje nepoznate Git usporedbe",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T00"
-      ]
+      ],
+      "note": "PR #61 D3 c2ee6e1f: treeDigest, fresh/stale/unknown, tests/release-proof-staleness.test.ts"
     },
     {
       "id": "T02",
       "title": "Otvori sve slojeve prikaza pri pozivu popravka",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T00"
-      ]
+      ],
+      "note": "djelomicno u PR #61 D5 (CTA otvara blok); ostatak ceka sesiju redizajna /rad/"
     },
     {
       "id": "T03",
@@ -36,34 +39,38 @@
     {
       "id": "T04",
       "title": "Saniraj visokorizične ovisnosti alata",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T00"
-      ]
+      ],
+      "note": "djelomicno u PR #61 D2 (ratchet 23); sanacija i dependency-decisions.md nisu napravljeni"
     },
     {
       "id": "T05",
       "title": "Učini podrijetlo dokaza profila eksplicitnim",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T00"
-      ]
+      ],
+      "note": "djelomicno u PR #61 D4 (proofSource direct/inherited); evidenceBasis i testedProfileIds nisu uvedeni"
     },
     {
       "id": "T06",
       "title": "Izmjeri stvarni učinak popravka na realnom korpusu",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T00"
-      ]
+      ],
+      "note": "harness postoji; protokol i ciljana metrika nisu napravljeni"
     },
     {
       "id": "T07",
       "title": "Ograniči cijelo tijelo zahtjeva prije multipart parsiranja",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T00"
-      ]
+      ],
+      "note": "PR #61 D1 38c41656: readBytesBounded/readFormDataBounded, tests/edge-formdata-bounded.test.ts"
     },
     {
       "id": "T08",
@@ -142,5 +149,6 @@
         "T14"
       ]
     }
-  ]
+  ],
+  "statusNote": "Statusi azurirani 2026-09-09 prema docs/quality/lekta-plan-status.md (T00). \"done\" = nalaz zatvoren dokazom ponasanja u PR-u #61; ostatak posla po zadatku je u toj karti."
 }
