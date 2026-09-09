@@ -131,9 +131,21 @@ function sectPrXml(spec: DocSpec): string {
   const page = spec.pageCm ?? { w: 21.0, h: 29.7 };
   const m = spec.marginsCm ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
   const tw = (cm: number) => Math.round(cm * TWIPS_PER_CM);
-  // Redoslijed po OOXML shemi: footerReference, pgSz, pgMar, pgNumType. xmlns:r deklariran LOKALNO
-  // na footerReference (root document.xml nema xmlns:r) pa je izlaz bez footera BAJT-IDENTICAN.
-  const footerRef = spec.footer ? `<w:footerReference w:type="default" r:id="${FOOTER_RID}" xmlns:r="${REL_NS}"/>` : '';
+  /**
+   * Redoslijed po OOXML shemi: footerReference, pgSz, pgMar, pgNumType.
+   *
+   * xmlns:r ide na KORIJEN w:document (vidi documentXml), ne lokalno na ovaj element. Lokalna
+   * deklaracija je valjan XML, ali NIJE oblik koji Word pise, a razlika je izmjerena 2026-09-10:
+   * link-doi-fixer trazi xmlns:r obrascem koji gleda BILO GDJE u dokumentu, pa je lokalnu
+   * deklaraciju citao kao dokaz da je prostor imena vec vezan i preskakao upis na korijen.
+   * Hiperveza se umece u tijelo, izvan dosega te deklaracije, pa izlazni word/document.xml
+   * prestane biti valjan XML, i to uz integrityFailure === null. xml-patch.ts istu stvar radi
+   * tocno, jer svoj obrazac sidri na korijenski tag.
+   *
+   * Graditelj zato pise realan oblik; kvar u link-doi-fixeru je PRIJAVLJEN i popravlja se odvojeno,
+   * jer je popravak zasticen sloj i trazi vlastiti golden dokaz.
+   */
+  const footerRef = spec.footer ? `<w:footerReference w:type="default" r:id="${FOOTER_RID}"/>` : '';
   const pgNum = spec.pageNumberStart != null ? `<w:pgNumType w:start="${spec.pageNumberStart}"/>` : '';
   return (
     `<w:sectPr>` +
@@ -170,7 +182,8 @@ export function documentXml(spec: DocSpec): string {
   const body = spec.paragraphs.map(paraXml).join('');
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+    // xmlns:r se deklarira SAMO kad ga dokument treba (podnozje), pa je izlaz bez njega bajt-identican.
+    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"${spec.footer ? ` xmlns:r="${REL_NS}"` : ''}>` +
     `<w:body>${body}${sectPrXml(spec)}</w:body></w:document>`
   );
 }

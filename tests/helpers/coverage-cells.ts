@@ -167,7 +167,7 @@ export function profileGatedFixers(matrix: RepairCoverageMatrix): Set<string> {
  * krsi os SAMO kad ju profil propisuje: `toc-field` se dodaje iskljucivo uz `requireToc === true`
  * (83 profila od 407). Bez ovoga je preostalih 325 celija `toc-field-fixera` nosilo dijagnozu
  * "univerzalna higijena bez dokaza", a tocna je "profil ne propisuje os": ti profili sadrzaj uopce
- * ne trazе, pa se nema sto ni dokazivati.
+ * ne traze, pa se nema sto ni dokazivati.
  */
 const AXIS_BY_FIXER: Record<string, string> = {
   'final-document-inspector-fixer': 'revision-metadata',
