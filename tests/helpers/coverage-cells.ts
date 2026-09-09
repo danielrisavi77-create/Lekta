@@ -66,8 +66,23 @@ export interface ClosedLoopReport {
  */
 export type EvidenceStrength = 'resolved' | 'applied';
 
+/**
+ * Mjerenje mreze popravka nad trakom `authored` (`docs/generated/repair-net.json`).
+ *
+ * Odvojen tip, a ne `RealCorpusReport`, jer se te dvije populacije NE SMIJU stopiti: prva su
+ * stvarni studentski radovi, druga su dokumenti cija je proza nasa.
+ */
+export interface AuthoredNetReport {
+  documents: Array<{
+    dokument: string;
+    profileId: string | null;
+    promijenili: string[];
+    regresije: unknown[];
+  }>;
+}
+
 export interface CellEvidence {
-  kind: 'closed-loop' | 'real' | 'generated';
+  kind: 'closed-loop' | 'real' | 'generated' | 'authored';
   strength: EvidenceStrength;
   /** Traka korpusa za dokaz iz dokumenta; `converted` ovdje ne moze doci (vidi corpus-track.ts). */
   track?: CorpusTrack;
@@ -112,6 +127,15 @@ export interface CoverageCellReport {
     uncoveredCount: number;
     /** Dokaz jacine `resolved`; jedina brojka koja tvrdi da se provjera doista prevrnula. */
     resolvedCount: number;
+    /**
+     * Celije ciji dokaz pociva na dokumentu s NASOM prozom (traka `authored`).
+     *
+     * Broji se odvojeno i uvijek, jer je to jedina brojka koja odgovara na pitanje koliko
+     * pokrivenosti stoji na tekstu koji smo sami napisali. Bez nje bi se ta ovisnost s vremenom
+     * izgubila u zbroju, a upravo je razlikovanje nasih i tudjih dokumenata ono sto ovaj
+     * repozitorij drzi kroz cijeli zid dokaza.
+     */
+    authoredCount: number;
     byReason: Record<UncoveredReason, number>;
   };
 }
@@ -340,6 +364,7 @@ export function buildCoverageCells(
   matrix: RepairCoverageMatrix,
   closedLoop: ClosedLoopReport,
   corpus: RealCorpusReport,
+  authored?: AuthoredNetReport,
 ): CoverageCellReport {
   const gated = profileGatedFixers(matrix);
   const loopByProfile = new Map(closedLoop.rows.map((row) => [row.profileId, row]));
@@ -456,6 +481,44 @@ export function buildCoverageCells(
         continue;
       }
 
+      /**
+       * 3) NAJSLABIJI dokaz: fixer je promijenio dokument s NASOM prozom, bez regresije.
+       *
+       * Odluka vlasnika 2026-09-09. Do tada traka `authored` nije bila izvor dokaza, pa je 12
+       * napisanih radova zatvaralo NULA celija iako se na njima 21 fixer dokazano izvodi.
+       *
+       * Cetiri ograde, sve namjerne:
+       *
+       *   - ide ZADNJI, pa nikad ne potiskuje jaci dokaz iz closed-loopa ni sa stvarnog rada;
+       *   - nosi vlastitu vrstu (`kind: 'authored'`) i vlastitu traku, pa se u artefaktu ne moze
+       *     procitati kao stvaran rad;
+       *   - jacina je `applied`, nikad `resolved`: mreza biljezi da je fixer promijenio dokument,
+       *     ne i da se bodovana provjera prevrnula;
+       *   - broji se odvojeno (`authoredCount`), da se ovisnost o vlastitom tekstu vidi kao brojka,
+       *     a ne da se izgubi u zbroju pokrivenih.
+       *
+       * Zid dokaza time ostaje netaknut: `sidecarAdmitted` i dalje odbija te dokumente iz mjerenja
+       * koje puni matricu tvrdnji o profilima, a ovo je druga tvrdnja, o tome radi li POPRAVAK.
+       */
+      const nas = (authored?.documents ?? []).find(
+        (d) => d.profileId === profileId && d.promijenili.includes(fixerId) && d.regresije.length === 0,
+      );
+      if (nas) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'authored',
+            strength: 'applied',
+            track: 'authored',
+            artifactId: nas.dokument,
+            checkIds: checkIds.length ? checkIds : undefined,
+          },
+        });
+        continue;
+      }
+
       cells.push({
         profileId,
         fixerId,
@@ -526,10 +589,12 @@ function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
   };
   let covered = 0;
   let resolved = 0;
+  let authoredEvidence = 0;
   for (const cell of cells) {
     if (cell.status === 'pokriveno') {
       covered += 1;
       if (cell.evidence.strength === 'resolved') resolved += 1;
+      if (cell.evidence.kind === 'authored') authoredEvidence += 1;
     } else {
       byReason[cell.reason] += 1;
     }
@@ -539,6 +604,7 @@ function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
     coveredCount: covered,
     uncoveredCount: cells.length - covered,
     resolvedCount: resolved,
+    authoredCount: authoredEvidence,
     byReason,
   };
 }

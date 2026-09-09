@@ -4,18 +4,20 @@
     "note": "Celija = (profil x fixer). Tocno jedan od dva statusa, nikad prazno, nikad treci.",
     "repairSource": "tests/helpers/repair-coverage.ts",
     "closedLoopSource": "docs/generated/closed-loop.json",
-    "realCorpusSource": "docs/generated/repair-real-corpus.json"
+    "realCorpusSource": "docs/generated/repair-real-corpus.json",
+    "authoredSource": "docs/generated/repair-net.json (traka `authored`, nasa proza)"
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4800,
-    "uncoveredCount": 7817,
+    "coveredCount": 4807,
+    "uncoveredCount": 7810,
     "resolvedCount": 1919,
+    "authoredCount": 7,
     "byReason": {
-      "profil-ne-propisuje-os": 6098,
+      "profil-ne-propisuje-os": 6097,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 91,
+      "nema-dokaza": 85,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -452,8 +454,13 @@
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "authored",
+        "strength": "applied",
+        "track": "authored",
+        "artifactId": "fpzg--final--prijediplomski--neuredan.docx"
+      }
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -492,8 +499,13 @@
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "fixerId": "section-surgery-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "authored",
+        "strength": "applied",
+        "track": "authored",
+        "artifactId": "fpzg--final--prijediplomski--neuredan.docx"
+      }
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -3306,8 +3318,13 @@
     {
       "profileId": "fpzg-opci-akademski-rad",
       "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "authored",
+        "strength": "applied",
+        "track": "authored",
+        "artifactId": "fpzg--project--diplomski--neuredan.docx"
+      }
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -3346,8 +3363,13 @@
     {
       "profileId": "fpzg-opci-akademski-rad",
       "fixerId": "section-surgery-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "authored",
+        "strength": "applied",
+        "track": "authored",
+        "artifactId": "fpzg--project--diplomski--neuredan.docx"
+      }
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4272,8 +4294,13 @@
     {
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "authored",
+        "strength": "applied",
+        "track": "authored",
+        "artifactId": "pravo--final--prijediplomski--neuredan.docx"
+      }
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -4307,8 +4334,13 @@
     {
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "footnote-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "authored",
+        "strength": "applied",
+        "track": "authored",
+        "artifactId": "pravo--final--prijediplomski--neuredan.docx"
+      }
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -4358,8 +4390,13 @@
     {
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "authored",
+        "strength": "applied",
+        "track": "authored",
+        "artifactId": "pravo--final--prijediplomski--neuredan.docx"
+      }
     },
     {
       "profileId": "pravo-porezni-prijediplomski",

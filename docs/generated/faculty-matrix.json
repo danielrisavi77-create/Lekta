@@ -30390,6 +30390,7 @@
     "coveredCount": 4800,
     "uncoveredCount": 7817,
     "resolvedCount": 1919,
+    "authoredCount": 0,
     "byReason": {
       "profil-ne-propisuje-os": 6098,
       "univerzalna-higijena-bez-dokaza": 0,
