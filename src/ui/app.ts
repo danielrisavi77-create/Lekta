@@ -2275,10 +2275,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      // `regresije:null` je NE ZNAM, ne nula.
      recheck.innerHTML=repairDoneHtml(repairDoneModel({outcome:null,regresije:null,changelog:out.changelog}),escapeHtml)
       +'<p class="muted">Popravljeni dokument je preuzet.</p>'}
-    // RE-37: glavni izvjestaj se mora moci osvjeziti na popravljeni dokument, ne samo redak ispod.
+    // RE-37 razlog ostaje, ali ovo je IZLAZ (rusi ekran s tablicom prije/poslije), ne druga radnja.
     const reloadBtn=document.createElement('button');
-    reloadBtn.type='button';reloadBtn.className='btn btn-secondary';
-    reloadBtn.textContent='Ponovno provjeri novu verziju';
+    reloadBtn.type='button';reloadBtn.className='lekta-repair-panel__izlaz';
+    reloadBtn.textContent='Prikaži novi izvještaj kao glavni';
     reloadBtn.onclick=()=>{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:DOCX_MIME});resetAnalyzer();setFile(f)};
     summary.appendChild(reloadBtn);
     btn.textContent='Popravak preuzet ✓';

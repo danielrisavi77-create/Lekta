@@ -205,15 +205,6 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 @keyframes ksBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 @keyframes ksMarquee{to{transform:translateX(-50%)}}
 .hero-actions .btn-primary{font-size:14px;padding:18px 28px;text-transform:uppercase;letter-spacing:.03em}
-/* marquee vrpca: zalijepljena papirnata traka preko stola */
-.ks-marquee{position:relative;padding:6px 0 10px;overflow:hidden}
-.ks-tape{background:var(--paper);color:var(--paper-ink);transform:rotate(-.6deg);width:104%;margin-left:-2%;box-shadow:var(--paper-sh-sm)}
-.ks-tape,.ks-marquee{overflow:hidden}
-.ks-tape-track{display:flex;width:max-content;padding:13px 0}
-.ks-tape-track span{white-space:nowrap;font-family:var(--display-serif);font-size:15.5px;font-weight:500;letter-spacing:.06em;margin-right:44px}
-.ks-tape-track b{color:var(--red-deep);font-weight:400}
-@media print{.ks-marquee{display:none}}
-@media(prefers-reduced-motion:reduce){.hd-caret,.ks-tape-track{animation:none}}
 /* ===== KS W3: analizator kao papirnati obrazac LK-01 (wizard, progres, rezultati, modali) ===== */
 @keyframes ksScan{0%{top:6%}55%{top:88%}100%{top:6%}}
 @keyframes ksCircle{from{stroke-dashoffset:560}to{stroke-dashoffset:0}}

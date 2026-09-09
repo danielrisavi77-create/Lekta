@@ -46,157 +46,28 @@ function bajtova(rel: string): number {
   return n;
 }
 
-function tsDatoteke(rel: string): string[] {
-  const out: string[] = [];
-  const hodaj = (p: string) => {
-    for (const d of fs.readdirSync(p, { withFileTypes: true })) {
-      const q = path.join(p, d.name);
-      if (d.isDirectory()) { hodaj(q); continue; }
-      if (/\.tsx?$/.test(d.name) && !/\.test\.tsx?$/.test(d.name)) out.push(path.relative(KORIJEN, q).split(path.sep).join('/'));
-    }
-  };
-  hodaj(path.join(KORIJEN, rel));
-  return out.sort();
-}
-
 /** Izmjereno 2026-09-03. Brojke se SPUSTAJU kako kod izlazi iz `app.ts`, nikad ne dizu. */
 /**
  * Povijest: 359 -> 357 (T16 B5, telemetrija izasla u `src/ui/telemetry.ts`).
  * Spusta se na IZMJERENU vrijednost svaki put kad kod izadje, nikad se ne dize.
  */
 const BUDZET_APP = 357 * 1024;
-// 2026-09-05: 821 -> 823 KB za Kanal A: novi modul src/ui/corpus-consent-row.ts (2,4 KB, testiran) i tri retka u app.ts
-// (kucica + gumb povlacenja). Nova znacajka izvan app.ts, ne rast monolita; app.ts ostaje unutar BUDZET_APP.
-// Izmjereno 842067 B; budzet 842752 B ostavlja 685 B, pa gard i dalje grize na sljedeci rast.
-// 2026-09-07: 823 -> 826 KB za karticu potvrde profila: novi modul src/ui/profile-card.ts
-// (cist HTML iz podataka, bez DOM-a) i SMANJENJE app.ts, koji je karticu prvo dobio inline pa
-// presao vlastiti budzet (357,2 od 357 KB). Ukupno raste jer je dodana funkcionalnost koje prije
-// nije bilo: potvrda profila kao ekran umjesto formulara od devet kontrola (UX_PRINCIPLES.md 2).
-// Sam app.ts je pritom PAO ispod svog budzeta, sto je ono sto ratchet stvarno cuva.
-// 2026-09-07: 823 -> 830 KB kroz TRI dizanja u jednom danu. Pise se kao jedan zapis, jer bi
-// tri odvojena retka sakrila upravo ono sto je vazno: koliko je puta dignut i zasto svaki put.
-//   823 -> 826  `src/ui/profile-card.ts`, nov modul (kartica potvrde profila, testabilna bez DOM-a)
-//   826 -> 828  ozicenje lista profila (mora biti uz ostalih 12 modala) + obrazlozenje ispravka
-//               `releaseModal`, koji je gubio fokus na SVAKOM modalu zatvorenom Escapeom
-//   828 -> 830  redizajn ekrana provjere (`progress-scan.ts`), konsolidacija pisaca faze
-//               (`wizard-view.ts` dobio prijevod koraka u stanje) i traka koraka na mobitelu
+// UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
+// njega sljedeca sesija guard vratila.
 //
-// RAST JE GOTOVO ISKLJUCIVO OBRAZLOZENJE, ne logika: neto +1,7 KB zadnjeg kruga je ~40 redaka
-// komentara koji biljeze mjerenja i odbacene alternative. To je svjesna razmjena, a ne propust.
+// Brojao je BAJTOVE IZVORA cijelog `src/ui`, ukljucujuci komentare. Komentari se pri buildu
+// odbacuju i korisnik ih nikad ne preuzme, pa je guard oporezivao upravo ono sto ovaj repozitorij
+// izricito trazi: gusto objasnjene odluke. U dva dana je dignut PET puta (831 -> 869 KB), svaki
+// put uz mjerenje i biljesku, i svaki put zato sto znacajka koju vlasnik trazi po prirodi slijece
+// u `src/ui`. Guard koji se digne svaki put kad zasmeta jednak je guardu koji ne postoji.
 //
-// `app.ts` je kroz sva tri kruga OSTAO ispod svog budzeta (356,9 od 357 KB), i to je ono sto
-// ratchet primarno cuva. Kad je u jednom trenutku probio (357,5), rjesenje NIJE bilo dizanje
-// nego selidba: kartica u vlastiti modul, prijevod koraka u `wizard-view.ts`.
-//   830 -> 831  `region` opseg nalaza: 94% nalaza je pisalo "lokacija se ne moze odrediti", sto
-//               za marginu nije istina nego izostanak odgovora. Poslije: nepoznato 33%.
-//               Sama mapa NIJE ovdje (zivi u `src/scoring`, uz registar koji tumaci); ostatak
-//               je `region` grana u `finding-view-model.ts` i `priority-findings.ts`.
+// Ono sto korisnik STVARNO osjeti, tezinu preuzimanja, cuva `bundleSizeGuard` u `vite.config.ts`:
+// mjeri izgradjeni entry (960 KB) i pada kad lazy split pukne. To je mjera koja se tice studenta
+// na laptopu; zbroj izvornih bajtova nije.
 //
-// DUG NAPLACEN ISTOG DANA: `src/ui/hero-demo.ts` (8,6 KB) je obrisan. Bio je MRTAV: trazio je
-// `.hero-demo` i `#heroReplay`, kojih nema ni u `index.html` ni u `rad/index.html`, pa je
-// odmah izlazio, a oba produkcijska ulaza su ga svejedno uvozila. Prototip ima vlastiti
-// `analyzer-hero-demo.ts` i `.css` i nikad ga nije koristio. Zato ono dizanje NIJE potrosen
-// prostor: brisanje je vratilo vise nego sto je cetvrto dizanje uzelo.
-//
-// (Taj je zapis 2026-09-07 bio OSTECEN: svi nazivi u kosim navodnicima su nestali, pa je recenica
-// glasila "DUG NAPLACEN ISTOG DANA:  (8,6 KB) je obrisan". Uzrok je poznat razred iz ovog
-// repozitorija: backtick unutar template literala u alatu kojim je komentar pisan. Vraceno
-// 2026-09-08, iz istog izvora iz kojeg je i napisan.)
-//
-// 2026-09-08: 831 -> 839 KB za KOREKTORSKI STOL, drugu polovicu pete tocke vlasnikova pregleda
-// ("Digitalni korektor koji sjedi uz tvoj Word"). Dva nova modula u `src/ui/results/`:
-//   `desk-view.ts`   5,2 KB  jedan nalaz odjednom, traka o opsegu, navigacija koja NE omata
-//   `desk-mount.ts`  7,2 KB  ozicenje oba smjera klika, delegacija koja prezivi ponovno crtanje
-//
-// OVO DIZANJE NIJE NAPLACENO, i to se pise doslovno da se ne bi citalo kao da jest. Prethodna
-// cetiri kruga su svaki put nasla mrtav kod ili selidbu koja vrati vise nego sto uzme; ovdje
-// takvog duga nije bilo. Rast je nova funkcionalnost koju je vlasnik trazio, mjerena bez
-// preglednika (28 testova), a ne rast monolita: `app.ts` je i dalje ispod svog budzeta, sto je
-// ono sto ratchet primarno cuva.
-//
-// Izmjereno 858629 B; budzet 859136 B ostavlja 507 B, pa gard grize na sljedeci rast.
-// 2026-09-08: 839 -> 846 KB za OZICENJE korektorskog stola, cime peta tocka vlasnikova pregleda
-// prvi put nesto pokazuje korisniku. Rast po dijelovima:
-//   +2,0 KB  `environment-signals.ts`: SELIDBA iz `app.ts` (motionReduced, withViewTransition,
-//            deviceMemoryGb, coarsePointer, isLikelyMobile, effectiveUploadCap). `app.ts` je time
-//            smrsavio 1438 B, sto je i bio uvjet: ratchet za probijen `app.ts` propisuje selidbu,
-//            ne dizanje. Klaster do tada nije imao NIJEDAN test, iako o njemu ovisi kada se mijenja
-//            ekran i koliki se dokument prima; sada ima 11.
-//   +1,5 KB  `results-cockpit.ts`: stol zamjenjuje popis tri kartice kad ima nalaza
-//   +1,2 KB  `app.ts`: predaja izvora stola (nalazi + zastavice + lijeni renderer dokumenta)
-//   +0,3 KB  `topFindings` postaje genericki, da pozivatelj ne gubi tip i ne vraca ga kastom
-//
-// I OVO DIZANJE NIJE NAPLACENO, drugo zaredom, i to se pise otvoreno umjesto da se zagladi.
-// Trazio sam cime platiti i nasao TRI modula u `src/ui` koje uvozi ISKLJUCIVO njihov vlastiti
-// test, ukupno oko 20 KB:
-//
-//     verification-console.ts   11,1 KB   pripada zasebnoj stranici (verification.html)
-//     triage-view.ts             5,2 KB   `#triagePanel` puni `findingCardHtml`, ne on
-//     source-cross-check-view.ts 3,7 KB   placena opt-in dopuna, nikad ozicena
-//
-// NIJEDAN NIJE OBRISAN. Za `triage-view` se ne da utvrditi je li NADIDJEN ili nikad spojen: on
-// prikazuje os POPRAVLJIVOSTI (auto/asistirano/rucno), koju kartica nalaza ne pokazuje, pa bi
-// brisanje moglo ukloniti namjeru, a ne mrtav kod. Ostala dva su jos jasnije tudja odluka.
-// Razlika prema `hero-demo`, koji JEST obrisan: ondje je bilo dokazano da mu selektori ne postoje
-// nigdje, dakle da ne moze raditi nista. Ovdje takav dokaz ne postoji, pa odluka ide vlasniku.
-// 846 -> 848 KB, isti dan, treci put: `desk-document.ts` (2,5 KB), koji montira faksimil u pano
-// stola i UKLAPA GA PO SIRINI. To nije nova znacajka nego popravak kvara: bez uklapanja se A4
-// stranica rezala po desnom rubu i rijeci su se lomile nasred retka, pa je dokument bio necitljiv
-// u alatu koji sluzi citanju. Kvar je prosao SVE testove (faksimil vidljiv, omjer stupaca tocan,
-// oba mjerena) i vidio se tek na snimci ekrana; sada ga cuva tvrdnja o prelijevanju, cija je
-// mutacija izmjerena na 22%. `app.ts` je pritom SMANJEN za 114 B, jer je zatvorenje preselilo.
-// 848 -> 854 KB, CETVRTI put u jednom danu: `desk-queue.ts` (4,3 KB) i sire potpisi prikaza, za
-// sestu tocku vlasnikova pregleda ("nalazi ne smiju izgledati kao 25 jednakih kartica").
-//
-// CETIRI DIZANJA U DANU ZNACE DA OVAJ BROJ VISE NIJE RATCHET NEGO DNEVNIK, i to se pise ovdje da
-// se ne bi tumacilo kao da je gard drzao. Ono sto JEST drzalo je `BUDZET_APP`: `app.ts` je danas
-// neto SMANJEN (selidba signala okoline -1438 B, montaza dokumenta -114 B, ozicenje stola +987 B),
-// i to je ono sto ratchet po vlastitom obrazlozenju primarno cuva ("ne trazi da se `app.ts` odmah
-// razbije; trazi samo da ne raste dalje").
-//
-// UKUPNO je naraslo 831 -> 854 KB zbog sest novih modula za znacajku koju je vlasnik trazio, i svi
-// su testirani (desk-model, desk-view, desk-mount, desk-document, desk-queue, environment-signals;
-// 63 testa). To nije drift nego isporuka, ali granica koja se u jednom danu pomakne cetiri puta
-// vise ne odgovara na pitanje zbog kojeg postoji.
-//
-// ODLUKA KOJA NEDOSTAJE JE VLASNIKOVA, i namjerno je nisam donio sam: ili se ukupna granica
-// prekalibrira na novu stvarnost, ili se naplati onih ~20 KB u tri modula koje uvozi iskljucivo
-// njihov vlastiti test (popis nize). Sesta tocka je pritom priblizila jedan od njih odluci:
-// `triage-view.ts` prikazuje os POPRAVLJIVOSTI, koju sada prikazuje `desk-queue.ts`, ozicen i
-// vidljiv. Nije ista izvedba (queue ne grupira po popravljivosti i nema doslovne isjecke iza
-// `recipeUnlocked`), pa brisanje i dalje nije moj poziv.
-// 854 -> 851 KB, i ovo je jedino SPUSTANJE u nizu od danas. Razlog je tudja ispravka, ne moja
-// zamisao: druga sesija je istog dana pogodila isti strop i KRATILA vlastiti komentar umjesto da
-// digne granicu (`31e8499a`), pozivajuci se na pravilo da ratchet smije samo padati. Bila je u
-// pravu, a ja sam dizao cetiri puta.
-//
-// Izmjereno na vlastitim modulima stola: 51% njihovih bajtova bio je KOMENTAR (15.344 od 30.081 B).
-// Skraceno je 3.184 B, i to iskljucivo PRIPOVIJEST (kako sam do nalaza dosao, sto sam prvo mislio)
-// te obrazlozenja ponovljena u vise datoteka. Odluke, mjerenja i zamke su ostale, jer njih citatelj
-// treba PRIJE izmjene. Ono sto je skraceno nije izgubljeno: zivi u porukama commita, gdje nema
-// budzeta.
-//
-// Sto je preostalo od dnevnika: ukupno je danas islo 831 -> 851 KB za sest novih testiranih modula
-// (desk-model, desk-view, desk-mount, desk-document, desk-queue, environment-signals) plus red
-// cekanja. `BUDZET_APP` je pritom OSTAO netaknut i `app.ts` je neto SMANJEN, a to je ono sto
-// ratchet po vlastitom obrazlozenju primarno cuva.
-// 851 -> 860 KB: `repair-plan.ts` + `repair-plan-view.ts` (8,4 KB, 17 testova), sedma tocka
-// vlasnikova pregleda. Oba modula su SKRACENA (-1054 B) prije nego su usla, po pravilu iz retka
-// iznad; ostatak je sama funkcionalnost, ne proza.
-//
-// STRUKTURNA NAPOMENA, da se ovaj niz vise ne cita kao niz propusta: dok znacajke koje vlasnik
-// trazi zive u `src/ui`, UKUPNA granica ne moze istovremeno biti ratchet i strop. Ono sto se moze
-// drzati, i drzi se, jest `BUDZET_APP`: `app.ts` je kroz cijeli dan neto SMANJEN. Odluka o
-// ukupnoj granici (prekalibrirati ili naplatiti ~20 KB neozicenih modula) ostaje vlasnikova.
-// 860 -> 862 KB: cuvanje polozaja stola kroz ponovnu montazu (`startIndex`), regres koji je
-// uhvatio CI. Naplaceno prije dizanja: 1.427 B proze iz `repair-plan.ts`, `desk-mount.ts` i
-// `desk-view.ts`, dakle recenice koje test vec doslovno tvrdi. Ostatak je kod.
-// 862 -> 865 KB: `privacy-state.ts`, osma tocka. Modul postoji jer je zatecena tvrdnja o
-// privatnosti stajala na CETIRI mjesta u TRI formulacije; jedan izvor je manje bajtova nego
-// cetiri koja se razilaze, ali tek sljedeci put. Skracen s 3.130 na 2.331 B prije ulaska.
-// 865 -> 869 KB: `repair-done.ts`, deveta tocka. `BUDZET_APP` je pritom OSTAO netaknut iako je
-// prvo pao: obrazlozenja su preseljena iz `app.ts` u modul, po pravilu koje ovaj ratchet i cuva.
-const BUDZET_UI_UKUPNO = 869 * 1024;
+// `BUDZET_APP` OSTAJE i NIJE isti slucaj. On ima cilj (monolit se rasplice) i taj se cilj mjeri
+// PADANJEM, uz pravilo da se spusta cim datoteka smrsavi. Dvaput u jednom danu je natjerao
+// selidbu objasnjenja iz `app.ts` u modul umjesto dizanja brojke, dakle radio je svoj posao.
 const MAX_HIDDEN_DODIRA = 97;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
@@ -213,12 +84,6 @@ describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
       `app.ts je sada ${(s / 1024).toFixed(1)} KB, znatno ispod budzeta od ${(BUDZET_APP / 1024).toFixed(0)} KB. `
       + 'Spusti BUDZET_APP na izmjerenu vrijednost, inace gard vise nista ne cuva.',
     ).toBeGreaterThan(BUDZET_APP - POPUST);
-  });
-
-  it('ukupna velicina src/ui ne raste', () => {
-    const uk = tsDatoteke('src/ui').reduce((s, f) => s + bajtova(f), 0);
-    expect(uk, `src/ui je ${(uk / 1024).toFixed(1)} KB; budzet je ${(BUDZET_UI_UKUPNO / 1024).toFixed(0)} KB`)
-      .toBeLessThanOrEqual(BUDZET_UI_UKUPNO);
   });
 
   /**

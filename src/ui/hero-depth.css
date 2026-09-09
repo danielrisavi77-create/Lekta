@@ -70,41 +70,13 @@
    Bez ovoga svijetla tema dobije prljavu zutu mrlju preko papira. */
 [data-theme='light'] .hero-atmos { opacity: .3; }
 [data-theme='light'] .hero-atmos__dust { display: none; }
-
-/* ---- 3D dubina pozornice -------------------------------------------------- */
-
-/* Paralaksu radi POMICANJE OCISTA (perspective-origin), ne rotacija scene. Razlog je
-   izmjeren: .hd-stage ima transform-origin: top center (traži ga fit-scale iz hero-demo.ts),
-   pa i mali rotateY ondje zavrti dno pozornice za desetke piksela i izbaci karticu nalaza
-   iz stupca. Pomak ocista daje pravu dubinsku paralaksu (slojevi se razmicu razmjerno svom
-   Z-u) uz nula pomaka layouta. Rotacija ostaje, ali samo kao natruha. */
-.hero-demo {
-  perspective: 1150px;
-  perspective-origin: var(--po-x, 50%) var(--po-y, 42%);
-}
 .hd-stage { transform-style: preserve-3d; }
 
-/* Slojevi u dubini. `translate` je NEOVISNO svojstvo: WAAPI iz hero-demo.ts i dalje
-   slobodno animira `transform` istih elemenata.
-   Z je namjerno plitak: pri perspektivi 1150px svaki piksel Z-a uvecava sloj za ~0,09%,
-   pa je 34px vec vidljiva dubina, a 62px je karticu nalaza guralo preko ruba stupca. */
-.hd-back { translate: 0 0 -28px; }
-.hd-sheet { translate: 0 0 0; }
-.hd-a, .hd-f, .hd-a3line { translate: 0 0 9px; }
-.hd-scan { translate: 0 0 6px; }
-.hd-postit { translate: 0 0 22px; }
-.hd-score { translate: 0 0 34px; }
-
-/* Sjena papira prati lampu: kad se snop pomakne, sjena pada na suprotnu stranu.
-   --sh-x/--sh-y racuna hero-depth.ts iz polozaja svjetla. */
-.hd-sheet {
-  box-shadow:
-    calc(var(--sh-x, -8px) * 1) calc(var(--sh-y, 14px) * 1) 42px rgba(0, 0, 0, .5),
-    calc(var(--sh-x, -8px) * .35) calc(var(--sh-y, 14px) * .35) 10px rgba(0, 0, 0, .35);
-}
-.hd-back {
-  box-shadow: calc(var(--sh-x, -8px) * .7) calc(var(--sh-y, 14px) * .7) 26px rgba(0, 0, 0, .42);
-}
+/* SLOJEVI PAPIRA SU UKLONJENI 2026-09-08 (deseta tocka). `.hd-back` i `.hd-sheet` nisu
+   postojali ni u jednoj od 37 pracenih ruta otkad je demo scena otisla, pa su `translate`
+   dubina i sjena vezana uz lampu bile mrtve. `hero-depth.ts` jos racuna `--sh-x/--sh-y` i
+   `--po-x/--po-y`: ti upisi sada nemaju citatelja. Ozivljavanje (perspektiva na `#paperCover`)
+   je vizualna odluka vlasnika, ne ciscenje, pa kod nije diran. */
 
 /* ---- Crvena olovka ISPISUJE podcrtu --------------------------------------- */
 

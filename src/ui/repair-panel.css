@@ -149,6 +149,27 @@
   font-weight: 600;
 }
 
+/* IZLAZ S EKRANA, ne druga radnja (odluka vlasnika 2026-09-09: "zasto moraju biti dva?").
+   Osvjezavanje glavnog izvjestaja rusi ovaj ekran i s njim tablicu prije/poslije, pa ne smije
+   izgledati kao ravnopravan gumb uz preuzimanje. Poveznica, s punom metom za dodir. */
+.lekta-repair-panel__izlaz {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.375rem 0;
+  min-height: 2.75rem;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.lekta-repair-panel__izlaz:hover { color: var(--text); }
+.lekta-repair-panel__izlaz:focus-visible { outline: 2px solid var(--brand, #1d3fbf); outline-offset: 2px; }
+
 /* ISHOD POPRAVKA (deveta tocka). Vodi DJELO, ne ocjena, pa brojka "2 / 3" nosi najvecu tezinu na
    ekranu, a redak sa spremnoscu dolazi ispod nje. Model i obrazlozenje: `results/repair-done.ts`. */
 .rd { margin: 0 0 0.875rem; }
