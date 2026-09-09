@@ -24,7 +24,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { CLAIM_LADDER, type ClaimLevel } from '../src/verification/completion-ledger';
+import { CLAIM_LADDER, PROOF_SOURCE_NOTE, type ClaimLevel, type ProofAxis, type ProofSource } from '../src/verification/completion-ledger';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -32,6 +32,8 @@ interface LedgerRow {
   profileId: string | null;
   claim: ClaimLevel;
   claimLabel: string;
+  proof: ProofAxis;
+  proofSource: ProofSource | null;
 }
 
 const ledger = JSON.parse(
@@ -40,6 +42,8 @@ const ledger = JSON.parse(
 
 const byProfile: Record<string, ClaimLevel> = {};
 const conflicts: string[] = [];
+/** Izvori dokaza po profilu, preko svih njegovih redaka (vrsta rada x program). */
+const sourcesByProfile: Record<string, Set<ProofSource | 'none'>> = {};
 
 for (const row of ledger.rows) {
   if (!row.profileId) continue;
@@ -51,6 +55,36 @@ for (const row of ledger.rows) {
   const seen = byProfile[row.profileId];
   if (seen && seen !== row.claim) conflicts.push(row.profileId);
   byProfile[row.profileId] = row.claim;
+  (sourcesByProfile[row.profileId] ??= new Set()).add(row.proofSource ?? 'none');
+}
+
+/**
+ * Profili razine A ciji je dokaz na stvarnom radu ISKLJUCIVO naslijedjen (svi redci `unit-work-type`,
+ * nijedan izmjeren na samom profilu). Vanjski audit 2026-09-08 (nalaz 4): sucelje je istom recenicom
+ * pokrivalo izmjereno i izvedeno; ovdje se popis pece da ga sucelje moze PREPISATI, a ne izvoditi.
+ */
+const inheritedA = Object.keys(byProfile)
+  .filter((id) => byProfile[id] === 'A')
+  .filter((id) => {
+    const s = sourcesByProfile[id] ?? new Set();
+    return s.has('unit-work-type') && !s.has('profile');
+  })
+  .sort();
+
+// Nazivnici imenovani: 407 iz registra + 3 pravne katedre = 410. Brojaci po slovu se daju ZASEBNO,
+// jer se inace "D 34" (spoj nad registrom) i "D 37" (cijeli artefakt) razilaze bez objasnjenja.
+const registryIds = new Set(
+  (JSON.parse(readFileSync(join(root, 'data/profiles/verified-profiles.json'), 'utf8')) as Array<{ id: string }>).map((p) => p.id),
+);
+const departmentIds = new Set(
+  (JSON.parse(readFileSync(join(root, 'data/profiles/legal-departments.json'), 'utf8')) as Array<{ id: string }>).map((d) => d.id),
+);
+const countsByRegistry: Record<string, number> = {};
+const countsByLegalDepartment: Record<string, number> = {};
+for (const [id, claim] of Object.entries(byProfile)) {
+  if (registryIds.has(id)) countsByRegistry[claim] = (countsByRegistry[claim] ?? 0) + 1;
+  else if (departmentIds.has(id)) countsByLegalDepartment[claim] = (countsByLegalDepartment[claim] ?? 0) + 1;
+  else throw new Error(`profil ${id} nije ni u registru ni medju pravnim katedrama`);
 }
 
 // Profil s vise programa ima vise redaka. Danas nijedan nema proturjecne razine; ako se to
@@ -71,6 +105,12 @@ const out = {
     'naspram 10 KB), a ugovor "label se prepisuje, nikad ne srokuje" ostaje na snazi.',
   ladder: CLAIM_LADDER,
   counts,
+  countsByRegistry,
+  countsByLegalDepartment,
+  /** Napomene uz razinu, doslovno iz ledgera (PROOF_SOURCE_NOTE); sucelje ih prepisuje. */
+  proofNotes: PROOF_SOURCE_NOTE,
+  /** Profili razine A s iskljucivo naslijedjenim dokazom (par jedinica x vrsta rada), sortirano. */
+  inheritedA,
   byProfile,
 };
 

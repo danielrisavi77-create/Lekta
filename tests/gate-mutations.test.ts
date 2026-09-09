@@ -43,6 +43,7 @@ import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
+import { proofSourceProblems } from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -1153,6 +1154,25 @@ const MUTATIONS: Mutation[] = [
       const digest = treeDigestFromLsTree('100644 blob 1111111111111111111111111111111111111111\tsrc/a.ts');
       return proofStaleness({ commit: 'abc', treeDigest: digest }, digest).verdict === 'fresh';
     },
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 4. Razina A je za 19 od 31 profila bila IZVEDENA (par jedinica x
+   * vrsta rada), ne izmjerena, a nista to nije razlikovalo. Ledger sada nosi `proofSource`; gard je
+   * cista funkcija nad redcima, a baseline cita COMMITANI ledger.
+   */
+  {
+    id: 'ledger/naslijedjeni-dokaz-bez-izvora',
+    imitates:
+      'redak s dokazom na stvarnom radu bez zapisanog izvora, pa sucelje ne moze razlikovati profil na ' +
+      'kojem je mjereno od profila koji dokaz nasljedjuje po paru jedinica x vrsta rada',
+    caught: () =>
+      proofSourceProblems([{ profileId: 'x', proof: 'real-docx-pass', proofSource: null }]).length === 1,
+    cleanBefore: () =>
+      proofSourceProblems(
+        (JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/completion-ledger.json'), 'utf8')) as {
+          rows: Parameters<typeof proofSourceProblems>[0];
+        }).rows,
+      ).length === 0,
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

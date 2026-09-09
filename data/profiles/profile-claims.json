@@ -15,6 +15,41 @@
     "C": 8,
     "A": 31
   },
+  "countsByRegistry": {
+    "E": 41,
+    "B": 293,
+    "D": 34,
+    "C": 8,
+    "A": 31
+  },
+  "countsByLegalDepartment": {
+    "D": 3
+  },
+  "proofNotes": {
+    "profile": "",
+    "unit-work-type": "Dokaz na stvarnom radu izmjeren je na drugom profilu iste ustanove i iste vrste rada, ne na ovom profilu."
+  },
+  "inheritedA": [
+    "ffzg-arheologija-graduate",
+    "ffzg-etnologija-graduate",
+    "ffzg-kroatistika-graduate",
+    "ffzg-lingvistika-diplomski",
+    "ffzg-pedagogija-graduate",
+    "ffzg-povijest-umjetnosti-diplomski",
+    "ffzg-psihologija-diplomski",
+    "ffzg-sociologija-diplomski",
+    "fpzg-mes-master-thesis",
+    "fpzg-nacionalna-sigurnost-diplomski",
+    "fpzg-novinarstvo-diplomski",
+    "fpzg-novinarstvo-zavrsni-tekst",
+    "libertas-diplomski-en",
+    "pmf-biologija-graduate",
+    "pmf-fizika-graduate",
+    "pmf-geografija-diplomski",
+    "pmf-geologija-graduate",
+    "pravo-socijalni-opci-akademski-rad",
+    "ttf-dizajn-diplomski"
+  ],
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
     "adu-ftv-rezija-diplomski": "E",

@@ -15,8 +15,57 @@ import artifact from '../data/profiles/profile-claims.json';
 import status from '../data/profiles/profile-status.json';
 import registry from '../data/profiles/verified-profiles.json';
 
-const art = artifact as unknown as { ladder: Record<string, string>; byProfile: Record<string, string> };
+const art = artifact as unknown as {
+  ladder: Record<string, string>;
+  byProfile: Record<string, string>;
+  proofNotes: Record<string, string>;
+  inheritedA: string[];
+};
 const statusEntries = Object.entries(status as Record<string, { label: string; note?: string }>);
+
+/**
+ * Vanjski audit 2026-09-08, nalaz 4: od 31 profila razine A samo je 12 izravno u ovjeri, 19
+ * nasljedjuje dokaz po paru jedinica x vrsta rada, a sucelje ih je pokrivalo istom recenicom.
+ * Skupovi se IZVODE iz artefakta, ne hardkodiraju, uz tvrdnju da nijedan nije prazan; inace bi
+ * test prolazio vakuumski nad praznim popisom.
+ */
+describe('razina A: izmjeren i naslijedjen dokaz se razlikuju', () => {
+  const aIds = Object.keys(art.byProfile).filter((id) => art.byProfile[id] === 'A');
+  const inherited = new Set(art.inheritedA);
+  const direct = aIds.filter((id) => !inherited.has(id));
+
+  it('oba skupa postoje (inace tvrdnje nize ne mjere nista)', () => {
+    expect(direct.length).toBeGreaterThan(0);
+    expect(art.inheritedA.length).toBeGreaterThan(0);
+    expect(art.inheritedA.every((id) => art.byProfile[id] === 'A')).toBe(true);
+  });
+
+  it('naslijedjen dokaz nosi napomenu iz ledgera, doslovno', () => {
+    const note = art.proofNotes['unit-work-type'];
+    expect(note.length).toBeGreaterThan(20);
+    for (const id of art.inheritedA) {
+      const claim = profileClaimFor(id)!;
+      expect(claim.proof, id).toBe('inherited');
+      expect(claim.note, id).toBe(note);
+      expect(claimSentence(claim), id).toContain(note);
+    }
+  });
+
+  it('izmjeren dokaz NEMA napomenu o nasljedjivanju', () => {
+    const note = art.proofNotes['unit-work-type'];
+    for (const id of direct) {
+      const claim = profileClaimFor(id)!;
+      expect(claim.proof, id).toBe('direct');
+      expect(claimSentence(claim), id).not.toContain(note);
+    }
+  });
+
+  it('razine ispod A nemaju izvor dokaza', () => {
+    const b = Object.keys(art.byProfile).find((id) => art.byProfile[id] === 'B')!;
+    expect(profileClaimFor(b)!.proof).toBeNull();
+    expect(profileClaimFor(b)!.note).toBe('');
+  });
+});
 
 describe('profileClaimFor', () => {
   it('vraca doslovan tekst ljestvice za svaki profil iz registra', () => {
