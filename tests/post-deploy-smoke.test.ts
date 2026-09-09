@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   assertHtmlOk, assertContains, assertSecurityHeaders, assertAssetOk,
   assertHealth, assertHealthRejectsPost, assertRequiresAuth,
-  extractLocalAssets, classifyRun, runSmoke,
+  extractLocalAssets, classifyRun, runSmoke, assertBuildInfo, buildInfoCommit,
 // @ts-expect-error - .mjs skripta bez tipova; ovdje se namjerno vrti IZVORNI alat, ne njegov prijepis.
 } from '../scripts/post-deploy-smoke.mjs';
 import { LEGAL_PAGES } from '../scripts/lib/legal-pages.mjs';
@@ -15,6 +15,29 @@ import { LEGAL_PAGES } from '../scripts/lib/legal-pages.mjs';
  * mreze. `--self-test` u samoj skripti vrti isti skup mutacija; ovaj test ga uvlaci u `npm run
  * check`, jer provjera koju nitko ne pokrece ne stiti nista.
  */
+
+/**
+ * Identitet objavljenog builda (vanjski audit 2026-09-08, nalaz 3): `dist/build-info.json` pise
+ * `write-build-info.mjs`, smoke ga cita sa zive stranice. Tvrdnja mjeri OBLIK; neslaganje s masterom
+ * je upozorenje u CLI-ju, jer je zakljucana objava namjerno stanje.
+ */
+describe('build-info: identitet objavljenog builda', () => {
+  const zdrav = { status: 200, text: JSON.stringify({ commit: 'b'.repeat(40), builtAt: '2026-09-09T10:00:00.000Z' }) };
+
+  it('baseline: valjan zapis prolazi i vraca commit', () => {
+    expect(assertBuildInfo(zdrav).ok).toBe(true);
+    expect(buildInfoCommit(zdrav)).toBe('b'.repeat(40));
+  });
+
+  it('mutacije: nema datoteke, HTML umjesto JSON-a, bez commita, skracen commit, bez vremena', () => {
+    expect(assertBuildInfo({ status: 404, text: '' }).ok).toBe(false);
+    expect(assertBuildInfo({ status: 200, text: '<html>x</html>' }).ok).toBe(false);
+    expect(assertBuildInfo({ status: 200, text: JSON.stringify({ builtAt: '2026-09-09T00:00:00Z' }) }).ok).toBe(false);
+    expect(assertBuildInfo({ status: 200, text: JSON.stringify({ commit: 'abc123', builtAt: '2026-09-09T00:00:00Z' }) }).ok).toBe(false);
+    expect(assertBuildInfo({ status: 200, text: JSON.stringify({ commit: 'b'.repeat(40) }) }).ok).toBe(false);
+    expect(buildInfoCommit({ status: 200, text: '<html>x</html>' })).toBeNull();
+  });
+});
 
 const ZAGLAVLJA = {
   'content-type': 'text/html; charset=utf-8',
@@ -124,6 +147,9 @@ describe('runSmoke nad laznim opazanjima', () => {
         : { status: 200, headers: {}, text: JSON.stringify({ status: 'ok', dependencies: { database: { ok: true } } }) };
     }
     if (u.pathname.endsWith('/repair-docx')) return { status: 401, headers: {}, text: '' };
+    if (u.pathname.endsWith('/build-info.json')) {
+      return { status: 200, headers: { 'content-type': 'application/json' }, text: JSON.stringify({ commit: 'c'.repeat(40), builtAt: '2026-09-09T10:00:00.000Z' }) };
+    }
     if (u.pathname.endsWith('.js')) return { status: 200, headers: { 'content-type': 'text/javascript' }, text: '' };
     const pravna = LEGAL_PAGES.find(([f]: [string, string]) => u.pathname.endsWith(`/${f}`));
     const tijelo = pravna
@@ -141,6 +167,10 @@ describe('runSmoke nad laznim opazanjima', () => {
       expect(nalazi.some((n: { id: string }) => n.id === `legal:${file}`), `nedostaje provjera za ${file}`).toBe(true);
     }
     expect(classifyRun(nalazi)).toBe('ok');
+    // Identitet builda je dio smokea i nosi commit koji CLI usporedjuje s masterom (nalaz 3).
+    const bi = nalazi.find((n: { id: string }) => n.id === 'build-info') as { ok: boolean; commit?: string } | undefined;
+    expect(bi?.ok).toBe(true);
+    expect(bi?.commit).toBe('c'.repeat(40));
   });
 
   it('kad naslovnica padne, resursi se NE prijavljuju kao zaseban kvar', async () => {

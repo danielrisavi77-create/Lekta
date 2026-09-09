@@ -16,18 +16,24 @@ import baked from '../data/profiles/profile-claims.json';
 import ledger from '../docs/generated/completion-ledger.json';
 import registry from '../data/profiles/verified-profiles.json';
 import legalDepartments from '../data/profiles/legal-departments.json';
-import { CLAIM_LADDER, type ClaimLevel } from '../src/verification/completion-ledger';
+import { CLAIM_LADDER, PROOF_SOURCE_NOTE, type ClaimLevel } from '../src/verification/completion-ledger';
 
 interface Row {
   profileId: string | null;
   claim: ClaimLevel;
   claimLabel: string;
+  proof: string;
+  proofSource: 'profile' | 'unit-work-type' | null;
 }
 
 const rows = (ledger as { rows: Row[] }).rows;
 const art = baked as unknown as {
   ladder: Record<string, string>;
   counts: Record<string, number>;
+  countsByRegistry: Record<string, number>;
+  countsByLegalDepartment: Record<string, number>;
+  proofNotes: Record<string, string>;
+  inheritedA: string[];
   byProfile: Record<string, ClaimLevel>;
 };
 
@@ -81,8 +87,42 @@ describe('profile-claims.json: nazivnici su imenovani', () => {
   const registryIds = (registry as Array<{ id: string }>).map((p) => p.id);
   const departmentIds = (legalDepartments as Array<{ id: string }>).map((d) => d.id);
 
-  it('410 profila u ledgeru = 407 iz registra + 3 pravne katedre', () => {
+  /**
+   * SKUPOVNA tvrdnja, ne usporedba velicina. Stara verzija je usporedjivala samo brojeve
+   * (407 + 3 = 410), pa bi prosla i kad bi tri profila viska bila bilo koja tri, a ne bas pravne
+   * katedre. Vanjski audit 2026-09-08 (nalaz 4) je uz to izbrojio D 34 nad registrom dok artefakt
+   * kaze D 37: razlika su upravo te tri katedre, i mora biti IMENOVANA, ne izracunata iz razlike.
+   */
+  it('profili izvan registra su TOCNO pravne katedre iz legal-departments.json', () => {
+    const izvanRegistra = Object.keys(art.byProfile).filter((id) => !registryIds.includes(id)).sort();
+    expect(izvanRegistra).toEqual([...departmentIds].sort());
     expect(registryIds.length + departmentIds.length).toBe(Object.keys(art.byProfile).length);
+  });
+
+  it('brojaci po slovu su rastavljeni po nazivniku i zbroj daje ukupne brojace', () => {
+    const zbroj: Record<string, number> = {};
+    for (const src of [art.countsByRegistry, art.countsByLegalDepartment]) {
+      for (const [k, v] of Object.entries(src)) zbroj[k] = (zbroj[k] ?? 0) + v;
+    }
+    expect(zbroj).toEqual(art.counts);
+    // Tri katedre su sve razine D, sto je razlika "D 34 naspram D 37" iz audita.
+    expect(Object.values(art.countsByLegalDepartment).reduce((a, b) => a + b, 0)).toBe(departmentIds.length);
+  });
+
+  it('naslijedjeni dokaz razine A je prepisan iz ledgera, ne izveden u artefaktu', () => {
+    const izvedeno = new Set<string>();
+    const izvoriPoProfilu: Record<string, Set<string>> = {};
+    for (const row of rows) {
+      if (!row.profileId) continue;
+      (izvoriPoProfilu[row.profileId] ??= new Set()).add(row.proofSource ?? 'none');
+    }
+    for (const [id, claim] of Object.entries(art.byProfile)) {
+      const s = izvoriPoProfilu[id] ?? new Set();
+      if (claim === 'A' && s.has('unit-work-type') && !s.has('profile')) izvedeno.add(id);
+    }
+    expect([...izvedeno].sort()).toEqual(art.inheritedA);
+    expect(art.inheritedA.length).toBeGreaterThan(0);
+    expect(art.proofNotes).toEqual(PROOF_SOURCE_NOTE);
   });
 
   it('svaki profil iz registra ima razinu dokaza', () => {

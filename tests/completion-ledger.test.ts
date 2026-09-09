@@ -23,6 +23,7 @@ import {
   buildCompletionLedger,
   CLAIM_LADDER,
   STROP_RAZINE_A,
+  proofSourceProblems,
   type LedgerInputs,
   type CompletionLedger,
 } from '../src/verification/completion-ledger';
@@ -183,5 +184,55 @@ describe('completion ledger: nacionalna tvrdnja', () => {
   it('zatecena tri evidentirana programa bez profila ostaju vidljiva', () => {
     expect(fresh.summary.programsWithoutProfile).toHaveLength(3);
     expect(fresh.summary.programsWithoutProfile.join(' ')).toContain('Vojno vođenje');
+  });
+});
+
+/**
+ * Vanjski audit 2026-09-08, nalaz 4: od 31 profila razine A samo je 12 izravno u ovjeri, 19 nasljedjuje
+ * dokaz po paru jedinica x vrsta rada (odluka vlasnika 2026-09-05), a sucelje ih je pokrivalo istom
+ * recenicom. Ledger sada uz os dokaza nosi i IZVOR (`proofSource`), pa se izmjereno i izvedeno moze
+ * razlikovati bez sroceanja u sucelju.
+ */
+describe('completion ledger: izvor dokaza na stvarnom radu', () => {
+  it('os dokaza i njezin izvor se slazu na svakom retku (svjeze i commitano)', () => {
+    expect(proofSourceProblems(fresh.rows)).toEqual([]);
+    expect(proofSourceProblems((baked as CompletionLedger).rows)).toEqual([]);
+  });
+
+  it('svaki A redak ima izvor, i nijedan redak bez dokaza na stvarnom radu ga nema', () => {
+    for (const row of fresh.rows) {
+      if (row.claim === 'A') expect(row.proofSource, row.profileId ?? '?').not.toBeNull();
+      if (row.proof !== 'real-docx-pass') expect(row.proofSource, row.profileId ?? '?').toBeNull();
+    }
+  });
+
+  it('zbroj po izvoru odgovara redovima', () => {
+    const s = fresh.summary.byProofSource;
+    expect(s.profile + s['unit-work-type'] + s.none).toBe(fresh.rows.length);
+    expect(s.profile + s['unit-work-type']).toBe(fresh.summary.byProof['real-docx-pass']);
+  });
+
+  /**
+   * RATCHET s imenovanim brojkama (izmjereno 2026-09-09 nad ovjerom od 2026-09-05): 18 redaka ima
+   * dokaz izmjeren na vlastitom profilu (12 razlicitih profila, tocno onih 12 iz `profileIds` ovjere),
+   * 23 retka ga nasljedjuju po paru. Izmjereni broj smije samo RASTI (vise ovjerenih profila), a
+   * naslijedjeni se smije mijenjati samo uz svjesnu izmjenu ovdje. Pad izmjerenog znaci da je ovjera
+   * izgubila profil ili da je definicija izvora popustila.
+   */
+  it('izmjereno naspram naslijedjeno: 18 redaka / 12 profila izmjereno, 23 retka naslijedjeno', () => {
+    const s = fresh.summary.byProofSource;
+    expect(s.profile).toBeGreaterThanOrEqual(18);
+    expect(s['unit-work-type']).toBe(23);
+    const izravniProfili = new Set(fresh.rows.filter((r) => r.proofSource === 'profile').map((r) => r.profileId));
+    expect(izravniProfili.size).toBeGreaterThanOrEqual(12);
+  });
+
+  it('gard nad izvorom stvarno grize (podmetnut A redak bez izvora)', () => {
+    const cisto = fresh.rows;
+    expect(proofSourceProblems(cisto)).toEqual([]);
+    const a = cisto.find((r) => r.claim === 'A')!;
+    expect(proofSourceProblems([{ ...a, proofSource: null }])).toHaveLength(1);
+    const b = cisto.find((r) => r.proof !== 'real-docx-pass')!;
+    expect(proofSourceProblems([{ ...b, proofSource: 'unit-work-type' }])).toHaveLength(1);
   });
 });

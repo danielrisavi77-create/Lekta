@@ -47,7 +47,8 @@ jobs:
           set +e
           node scripts/post-deploy-smoke.mjs \
             ${{ inputs.site && format('--site {0}', inputs.site) || '' }} \
-            ${{ inputs.functions && format('--functions {0}', inputs.functions) || '' }}
+            ${{ inputs.functions && format('--functions {0}', inputs.functions) || '' }} \
+            --expect-commit ${{ github.sha }}
           code=$?
           set -e
           # Izlazni kod 2 znaci NEUVJERLJIVO: runner nije uspio do oba pruzatelja, sto je nalaz o

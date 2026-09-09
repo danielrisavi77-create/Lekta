@@ -1175,8 +1175,7 @@ function handleResultsCockpitAction(r: any,action: ResultsCockpitAction){
     return;
   }
   if(action.kind==='open-findings'){setResultsCockpitAdvanced(true);openTab('issues');$('#issuesList')?.scrollIntoView({behavior:'smooth',block:'start'});return}
-  // Disclosure se MORA otvoriti prije skrolanja: panel zivi u njemu.
-  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){setResultsCockpitAdvanced(true);scrollToRepairPanel(r);return}
+  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){scrollToRepairPanel(r);return}
   const finding=findingsFor(r).find(x=>x.id===action.findingId);
   if(!finding)return;
   if(action.kind==='preview'){
@@ -1412,20 +1411,21 @@ function renderPhaseThreeRepairEntry(r: any){
 }
 // Most iz besplatne dijagnoze u placeni popravak: prebaci na karticu "Spremnost za predaju" gdje
 // zivi #repairPanelMount, doskrolaj i kratko istakni panel te fokusiraj njegovu glavnu akciju.
-// RESULT-03: kad je poziv dosao s KONKRETNE kartice nalaza (finding), ne otvara se samo opceniti
-// panel bez veze s kliknutim nalazom - trazi se bas ona stavka koja popravlja taj nalaz
-// (repair-items.pickTargetItem preko matchKeys), istice se i njoj se pomice fokus. Kad takva
-// stavka trenutno nije ponudjena (npr. dokument nema upotrebljiv split sekcija za numeriranje),
+// RESULT-03: poziv s KONKRETNE kartice nalaza trazi bas stavku koja taj nalaz popravlja
+// (pickTargetItem preko matchKeys), istice je i fokusira. Kad takva stavka nije ponudjena,
 // korisnik dobiva postenu poruku umjesto tihog slijetanja na nepovezanu stavku.
 function scrollToRepairPanel(r: any,finding?: any){
-  // Bez oba otkrivanja CTA prebacuje karticu koja ostaje skrivena, pa se nista ne dogodi.
+  // renderResult zatvori #resultDetails i #tabDetails, a napredni blok je zadano sklopljen: bez sva TRI
+  // otkrivanja CTA prebaci karticu visine 0 i skrol nema metu, pa se nista ne dogodi
+  // (audit 2026-09-08 nalaz 2; gard repair-cta-opens-panel.spec.ts).
   revealResultDetails();
   revealDetails();
+  setResultsCockpitAdvanced(true);
   openTab('submission');
   const m=$('#repairPanelMount');
   let act: any=null;
   if(m){
-    // CTA plana slijece na ODLUKU; vidi `results/repair-entry.ts`.
+    // Slijetanje na ODLUKU: `results/repair-entry.ts`.
     const slijetanje=finding?null:repairLanding(m);
     (slijetanje?.scroll??m).scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
     m.classList.remove('repair-flash');void (m as any).offsetWidth;m.classList.add('repair-flash');
