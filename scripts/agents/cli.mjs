@@ -14,7 +14,7 @@ const git = (...args) => {
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol [--budget-usd N] [--execute]');
+    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol [--budget-usd N | --subscription] [--execute]');
     return;
   }
   if (command === 'doctor') {
@@ -38,8 +38,8 @@ function main() {
   const options = new Map();
   while (rest.length) {
     const key = rest.shift();
-    if (!['--agent', '--phase', '--budget-usd', '--execute'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
-    const value = key === '--execute' ? true : rest.shift();
+    if (!['--agent', '--phase', '--budget-usd', '--execute', '--subscription'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
+    const value = (key === '--execute' || key === '--subscription') ? true : rest.shift();
     if (!value || (typeof value === 'string' && value.startsWith('--'))) throw new Error(`Missing value: ${key}`);
     options.set(key, value);
   }
@@ -47,7 +47,14 @@ function main() {
   const phase = options.get('--phase');
   const agent = options.get('--agent');
   const budget = options.has('--budget-usd') ? Number(options.get('--budget-usd')) : undefined;
-  const job = prepareJob(queue, id, phase, agent, budget);
+  const billingMode = options.has('--subscription') ? 'subscription' : 'budget';
+  // Pretplatnicki nacin: postavljen API kljuc bi Claude `-p` poziv prebacio na API naplatu (dokumentirano
+  // ponasanje CLI-ja), pa je to greska prije pripreme, ne upozorenje poslije poziva.
+  if (billingMode === 'subscription') {
+    const leaked = ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_API_KEY'].filter(name => process.env[name]);
+    if (leaked.length) throw new Error(`subscription mode refuses API credentials in the environment: ${leaked.join(', ')}`);
+  }
+  const job = prepareJob(queue, id, phase, agent, budget, { billingMode });
   if (!options.has('--execute')) {
     console.log(JSON.stringify({ dryRun: true, ...job }, null, 2));
     return;

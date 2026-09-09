@@ -31,7 +31,20 @@ export function validateQueue(queue) {
   return tasks;
 }
 
-export function prepareJob(queue, id, phase, agentName, budget) {
+/**
+ * Dva nacina naplate, razdvojena namjerno (plan autonomije, Zadatak 1):
+ *  - `budget`: postojeci rucni nacin; Claude poziv trazi eksplicitan `--max-budget-usd` jer moze trositi
+ *    dodatne usage kredite.
+ *  - `subscription`: autonomni profil; NEMA budzeta jer se ne smije ni doci do naplate: Fable je iskljucen
+ *    (nije u paketu), API kljuc u okolini je odbijen u CLI-ju, a poziv ide iskljucivo kroz prijavljenu
+ *    pretplatu. Lazni pozitivan budzet se ovdje ne unosi da bi "prosla" stara validacija.
+ */
+export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
+export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable']);
+
+export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
+  const billingMode = options.billingMode ?? 'budget';
+  if (!BILLING_MODES.includes(billingMode)) throw new Error(`Unknown billing mode: ${billingMode}`);
   const tasks = validateQueue(queue);
   const task = tasks.get(id);
   const agent = Object.hasOwn(AGENTS, agentName) ? AGENTS[agentName] : null;
@@ -54,7 +67,16 @@ export function prepareJob(queue, id, phase, agentName, budget) {
   const args = agent.command === 'codex'
     ? ['exec', '--model', agent.model, '--sandbox', phase === 'implement' ? 'workspace-write' : 'read-only', '--json', '-']
     : ['-p', '--model', agent.model, '--output-format', 'json', '--max-turns', '20', '--permission-mode', 'dontAsk'];
-  if (agent.command === 'claude') {
+  if (billingMode === 'subscription' && SUBSCRIPTION_EXCLUDED_AGENTS.includes(agentName)) {
+    throw new Error(`${agentName} is not included in the subscription profile`);
+  }
+  if (agent.command === 'claude' && billingMode === 'subscription') {
+    if (budget !== undefined) throw new Error('subscription mode does not take --budget-usd');
+    const allowed = phase === 'implement'
+      ? 'Read,Edit,Write,Glob,Grep,Bash(git diff *),Bash(git status *),Bash(npm run check),Bash(npm run orphan-scan),Bash(npm run build),Bash(npx vitest run *)'
+      : 'Read,Glob,Grep';
+    args.push('--tools', phase === 'implement' ? 'Read,Edit,Write,Glob,Grep,Bash' : 'Read,Glob,Grep', '--allowedTools', allowed);
+  } else if (agent.command === 'claude') {
     if (!Number.isFinite(budget) || budget <= 0) throw new Error('Claude requires a positive --budget-usd');
     const allowed = phase === 'implement'
       ? 'Read,Edit,Write,Glob,Grep,Bash(git diff *),Bash(git status *),Bash(npm run check),Bash(npm run orphan-scan),Bash(npm run build),Bash(npx vitest run *)'
@@ -72,7 +94,7 @@ export function prepareJob(queue, id, phase, agentName, budget) {
     'Return: base HEAD, scope, findings/changes, tests actually run, unresolved risks, recommended next step. Success is not task completion.',
     JSON.stringify(task, null, 2),
   ].join('\n\n');
-  return { command: agent.command, args, prompt, requestedModel: agent.model };
+  return { command: agent.command, args, prompt, requestedModel: agent.model, billingMode };
 }
 
 export function parseResult(command, stdout, exitCode) {

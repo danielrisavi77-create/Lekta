@@ -66,3 +66,22 @@ describe('provider results do not replace verification', () => {
     expect(parseResult('claude', 'not json', 0).ok).toBe(false);
   });
 });
+
+describe('subscription billing mode (autonomy profile)', () => {
+  it('never emits a budget flag, refuses Fable and refuses a fake budget', () => {
+    const job = prepareJob(queue(), 'T01', 'implement', 'sonnet', undefined, { billingMode: 'subscription' });
+    expect(job.args).not.toContain('--max-budget-usd');
+    expect(job.args).toContain('dontAsk');
+    expect(job.billingMode).toBe('subscription');
+    const q = queue();
+    q.tasks[1].status = 'blocked';
+    expect(() => prepareJob(q, 'T01', 'plan', 'fable', undefined, { billingMode: 'subscription' })).toThrow(/subscription/);
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet', 3, { billingMode: 'subscription' })).toThrow(/budget/);
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet', 3, { billingMode: 'prepaid' })).toThrow(/billing/);
+  });
+  it('keeps the manual budget mode unchanged by default', () => {
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet')).toThrow(/budget/);
+    expect(prepareJob(queue(), 'T01', 'implement', 'sonnet', 3).billingMode).toBe('budget');
+    expect(prepareJob(queue(), 'T01', 'implement', 'sol').args).not.toContain('--max-budget-usd');
+  });
+});
