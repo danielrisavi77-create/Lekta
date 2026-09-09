@@ -60,6 +60,32 @@ describe('razina A: izmjeren i naslijedjen dokaz se razlikuju', () => {
     }
   });
 
+  it('T05: osnova dokaza je jedna os za sve razine, a testedProfileIds nikad ne sadrzi naslijedjeni profil', () => {
+    const inheritedFrom = (art as unknown as { inheritedFrom: Record<string, string[]> }).inheritedFrom;
+    expect(Object.keys(inheritedFrom).sort()).toEqual(art.inheritedA);
+    for (const id of art.inheritedA) {
+      const claim = profileClaimFor(id)!;
+      expect(claim.evidenceBasis, id).toBe('inherited');
+      expect(claim.testedProfileIds.length, id).toBeGreaterThan(0);
+      expect(claim.testedProfileIds, id).not.toContain(id);
+      for (const tested of claim.testedProfileIds) expect(profileClaimFor(tested)?.evidenceBasis, tested).toBe('direct');
+    }
+    for (const id of direct) {
+      const claim = profileClaimFor(id)!;
+      expect(claim.evidenceBasis, id).toBe('direct');
+      expect(claim.testedProfileIds, id).toEqual([id]);
+    }
+    const basis = new Map<string, Set<string>>();
+    for (const [id, letter] of Object.entries(art.byProfile)) {
+      const claim = profileClaimFor(id)!;
+      (basis.get(letter) ?? basis.set(letter, new Set()).get(letter)!).add(claim.evidenceBasis);
+      if (letter !== 'A') expect(claim.testedProfileIds, id).toEqual([]);
+    }
+    expect([...(basis.get('B') ?? [])]).toEqual(['synthetic']);
+    for (const letter of ['C', 'D', 'E']) if (basis.has(letter)) expect([...basis.get(letter)!]).toEqual(['not-demonstrated']);
+    expect([...(basis.get('A') ?? [])].sort()).toEqual(['direct', 'inherited']);
+  });
+
   it('razine ispod A nemaju izvor dokaza', () => {
     const b = Object.keys(art.byProfile).find((id) => art.byProfile[id] === 'B')!;
     expect(profileClaimFor(b)!.proof).toBeNull();
