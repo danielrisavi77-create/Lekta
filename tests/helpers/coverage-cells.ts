@@ -47,6 +47,14 @@ export interface ClosedLoopRow {
    * strukturno nedostizno.
    */
   recommendationsApplied?: string[];
+  /**
+   * Fixeri koji su u GLAVNOM prolazu upisali unos u changelog, uz `integrityFailure === null`.
+   *
+   * Zrcalo `recommendationsApplied` za drugi prolaz. Glavni je dosad cuvao samo BROJ zahtjeva, pa je
+   * fixer bez vlastite osi generatora bio strukturno nedokaziv: nije ga mogla pokriti ni grana po
+   * osi (1b) ni grana preporuka (1c), iako se dokazano izvodio.
+   */
+  fixersChanged?: string[];
   axesRemaining: string[];
   regressions: number;
   textPreserved: boolean;
@@ -468,6 +476,38 @@ export function buildCoverageCells(
             strength: 'applied',
             artifactId: `closed-loop:${profileId}`,
             checkIds: [],
+          },
+        });
+        continue;
+      }
+
+      /**
+       * 1d) Fixer je u GLAVNOM prolazu closed-loopa upisao unos u changelog.
+       *
+       * Zasto zaseban razred, a ne prosirenje 1b: 1b pripisuje dokaz preko OSI generatora, pa vrijedi
+       * samo za fixer koji svoju os ima. Fixer koji se nudi iz profilnih pravila bez vlastite osi
+       * dosad nije mogao dokazati nista, ma koliko puta odradio posao, jer je glavni prolaz cuvao
+       * samo BROJ zahtjeva.
+       *
+       * IZMJERENO 2026-09-09: `section-surgery-fixer` na `fpzg-politologija-zavrsni` gradi stavku,
+       * ulazi u zadane zahtjeve i upise se u changelog uz `integrityFailure === null`, dok je celija
+       * citala `nema-dokaza`. Isti fixer na `unizd-turizam-zavrsni` u glavnom prolazu ne gradi
+       * nijednu stavku i dokaz mu dolazi kroz 1c. Dvije mjere iste stvari, a zapisana je bila jedna.
+       *
+       * Jacina je `applied`, nikad `resolved`: changelog kaze da je dokument promijenjen bez pada
+       * integriteta, ne da je bodovana provjera presla u prolaz. Redoslijed je zato IZA 1a i 1b,
+       * koji nose jaci dokaz, i ISPRED stvarnog korpusa samo utoliko sto je isti prolaz.
+       */
+      if ((loop?.fixersChanged ?? []).includes(fixerId)) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'closed-loop',
+            strength: 'applied',
+            artifactId: `closed-loop:${profileId}`,
+            checkIds: checkIds.length ? checkIds : [],
           },
         });
         continue;

@@ -182,6 +182,24 @@ interface Row {
    */
   recommendationsApplied: string[];
   /**
+   * Fixeri koji su u GLAVNOM prolazu doista upisali unos u changelog.
+   *
+   * Postoji jer je isti podatak dosad postojao samo za preporuke. Glavni prolaz je vracao `requested`
+   * kao goli BROJ, pa se identitet fixera gubio, a presuda je isla iskljucivo preko OSI generatora.
+   * Fixer koji se nudi iz profilnih pravila a nema vlastitu os time nije mogao nista dokazati, ma
+   * koliko puta odradio posao.
+   *
+   * IZMJERENO 2026-09-09 na `fpzg-politologija-zavrsni`: `section-surgery-fixer` je izgradjen kao
+   * stavka (`violated: true`), usao u zadane zahtjeve i UPISAO se u changelog uz
+   * `integrityFailure === null`, dok je njegova celija u matrici citala `nema-dokaza`. Suprotan
+   * slucaj, `unizd-turizam-zavrsni`, u glavnom prolazu ne gradi nijednu stavku i dokaz mu dolazi iz
+   * prolaza preporuka, koji se biljezi. Ista mjera, dva puta, samo je jedan bio zapisan.
+   *
+   * Ovo je dokaz snage `applied`, ne `resolved`: kaze da je fixer promijenio dokument bez pada
+   * integriteta, ne da je bodovana provjera presla u prolaz.
+   */
+  fixersChanged: string[];
+  /**
    * Osi koje propisuje PROFIL, a generator ih je prekrsio. Prazno znaci da tom profilu nijedan
    * objavljen izvor ne propisuje nijednu od sest formatnih osi.
    */
@@ -197,7 +215,7 @@ interface Row {
 }
 
 async function runProfile(profileId: string): Promise<Row> {
-  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], recommendationsApplied: [], profileAxesViolated: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
+  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], recommendationsApplied: [], fixersChanged: [], profileAxesViolated: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
   try {
     const profile = liveProfile(profileId);
     const { bytes, violated } = await buildViolatingDocx(profile, useStructural ? { structural: true } : {});
@@ -226,6 +244,15 @@ async function runProfile(profileId: string): Promise<Row> {
     if (!requests.length) return { ...base, outcome: 'no-repair', violated };
 
     const applied = await applyFixers(bytes, requests);
+    /**
+     * Identitet fixera iz GLAVNOG prolaza. Cita se iz changeloga, ne iz zahtjeva: zatrazen fixer
+     * koji nije nista promijenio ne dokazuje nista, a `applyFixers` uz pad integriteta vraca ULAZNE
+     * bajtove i PRAZAN changelog, pa bi brojanje zahtjeva bilo vakuumski zeleno.
+     */
+    const fixersChanged = applied.integrityFailure
+      ? []
+      : [...new Set((applied.changelog as Array<{ fixerId?: string }>).map((entry) => entry.fixerId)
+          .filter((id): id is string => Boolean(id)))].sort();
 
     /**
      * DRUGI PROLAZ: preporuke, svaka zasebno i nad IZVORNIM bajtovima.
@@ -322,6 +349,7 @@ async function runProfile(profileId: string): Promise<Row> {
       axesRemaining,
       axesApplied,
       recommendationsApplied: [...new Set(recommendationsApplied)].sort(),
+      fixersChanged,
       profileAxesViolated,
       resolved: axesResolved.length,
       regressions,

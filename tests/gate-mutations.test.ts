@@ -804,8 +804,9 @@ const MUTATIONS: Mutation[] = [
     id: 'mreza/fixer-se-ugasi-a-nitko-ne-primijeti',
     imitates:
       'fixer prestane raditi (zatrazen je, ali vise nista ne mijenja) i to nitko ne vidi, jer nijedan ' +
-      'postojeci artefakt to ne mjeri: `closed-loop.json` sprema `requested` kao GOLI BROJ i odbacuje ' +
-      '`skippedReasons`, `repair-real-corpus.json` ima `offeredFixerIds` bez ijednog citatelja, a ' +
+      'postojeci artefakt to ne mjeri: `closed-loop.json` je do 2026-09-09 spremao `requested` kao GOLI ' +
+      'BROJ (od tada uz njega stoji i `fixersChanged`, ali `skippedReasons` i dalje odbacuje), ' +
+      '`repair-real-corpus.json` ima `offeredFixerIds` bez ijednog citatelja, a ' +
       '`coverage-cells` klasificira staticki i nikad ne premjerava. Tocno taj razred je vec izmjeren: ' +
       '`empty-paragraph-fixer` je bio trajni no-op na svemu pisanom LibreOfficeom, i nasao ga je tek ' +
       'sinteticki korpus',
@@ -1026,6 +1027,42 @@ const MUTATIONS: Mutation[] = [
       }));
       const sPravilima = rows.filter((r) => r.violated.includes('heading-format'));
       return sPravilima.length > 15 && !sPravilima.some((r) => !r.axesResolved.includes('heading-format'));
+    },
+  },
+  {
+    id: 'petlja/glavni-prolaz-zaboravi-tko-je-mijenjao',
+    imitates:
+      'glavni prolaz closed-loopa prestane biljeziti identitet fixera koji su promijenili dokument, ' +
+      'ili ga zabiljezi i kad je isporuka odbijena. Prvo je zateceno stanje do 2026-09-09: `requested` ' +
+      'je bio goli BROJ, pa fixer bez vlastite osi generatora nije mogao dokazati nista, ma koliko ' +
+      'puta odradio posao (izmjereno: `section-surgery-fixer` je na devet FPZG profila upisivao unos ' +
+      'u changelog dok mu je celija citala `nema-dokaza`). Drugo je vakuumsko zeleno iz vodica: uz ' +
+      '`integrityFailure` `applyFixers` vraca ULAZNE bajtove i PRAZAN changelog, pa bi brojanje ' +
+      'ZAHTJEVA umjesto changeloga pokrilo celije dokumentom koji nikad nije bio popravljen',
+    caught: () => {
+      type Ishod = { changelog: Array<{ fixerId?: string }>; integrityFailure: string | null };
+      // Ista izvedba kao u `run-closed-loop.mts`: identitet iz CHANGELOGA, prazno uz pad integriteta.
+      const izvedi = (out: Ishod): string[] =>
+        out.integrityFailure
+          ? []
+          : [...new Set(out.changelog.map((e) => e.fixerId).filter((id): id is string => Boolean(id)))].sort();
+      const gard = (redak: { outcome: string; fixersChanged: string[] }) =>
+        redak.outcome === 'pass' && redak.fixersChanged.length === 0;
+
+      // 1) Fixer je odradio posao, ali ga glavni prolaz nije zapisao.
+      const zaboravljen = gard({ outcome: 'pass', fixersChanged: [] });
+      // 2) Isporuka je odbijena, pa dokaza NEMA iako je zahtjev bio poslan.
+      const odbijena = izvedi({ changelog: [], integrityFailure: 'zip' }).length === 0;
+      // 3) Podmetnut changelog uz pad integriteta ne smije proizvesti dokaz.
+      const laznidokaz =
+        izvedi({ changelog: [{ fixerId: 'section-surgery-fixer' }], integrityFailure: 'zip' }).length === 0;
+      return zaboravljen && odbijena && laznidokaz;
+    },
+    // Netrivijalnost: uredan prolaz (fixer promijenio dokument, integritet cist) NE smije dati nalaz.
+    cleanBefore: () => {
+      const uredan = { outcome: 'pass', fixersChanged: ['section-surgery-fixer'] };
+      const izveden = [...new Set([{ fixerId: 'font-fixer' }, { fixerId: 'font-fixer' }].map((e) => e.fixerId))];
+      return !(uredan.outcome === 'pass' && uredan.fixersChanged.length === 0) && izveden.length === 1;
     },
   },
   {

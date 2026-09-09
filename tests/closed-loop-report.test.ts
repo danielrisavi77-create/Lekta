@@ -67,6 +67,41 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(primijenjen.length, 'nijedan profil; generator je prestao proizvoditi popis literature').toBeGreaterThan(5);
   });
 
+  /**
+   * GLAVNI prolaz mora zapisati KOJI su fixeri promijenili dokument, ne samo koliko ih je zatrazeno.
+   *
+   * Do 2026-09-09 je `requested` bio goli BROJ, pa je fixer koji se nudi iz profilnih pravila a nema
+   * vlastitu os generatora bio strukturno nedokaziv: nije ga mogla pokriti ni grana po osi ni grana
+   * preporuka. Izmjereno tada: `section-surgery-fixer` je na devet FPZG profila gradio stavku, ulazio
+   * u zadane zahtjeve i upisivao se u changelog uz `integrityFailure === null`, dok je njegova celija
+   * citala `nema-dokaza`. Ista mjera je za `unizd-*` profile postojala kroz prolaz preporuka i bila
+   * zapisana; razlika je bila iskljucivo u tome tko se biljezi.
+   *
+   * Bez ove tvrdnje bi nestanak polja prosao tiho: `pass` bi ostao 372, a matrica bi izgubila
+   * 13 celija.
+   */
+  it('glavni prolaz biljezi koji su fixeri doista promijenili dokument', () => {
+    const pass = report.rows.filter((r) => r.outcome === 'pass');
+    // Anti-vakuum: prazan skup bi tvrdnju nize ucinio istinitom ni nad cim.
+    expect(pass.length, 'nijedan profil ne prolazi petlju').toBeGreaterThan(300);
+    const prazni = pass
+      .filter((r) => (((r as { fixersChanged?: string[] }).fixersChanged ?? []).length === 0))
+      .map((r) => r.profileId);
+    expect(prazni, 'profil prolazi petlju, a nijedan fixer nije upisan u changelog').toEqual([]);
+  });
+
+  /**
+   * `section-surgery-fixer` nema vlastitu bodovanu provjeru ni os generatora, pa mu je changelog
+   * glavnog prolaza JEDINI dokaz. Brojka je namjerno niska (izmjereno 11) jer os ovisi o tome koliko
+   * profila propisuje `section-surgery-rules` u obliku koji daje operaciju nad prvom sekcijom.
+   */
+  it('zahvat nad sekcijama ostaje dokazan kroz changelog glavnog prolaza', () => {
+    const promijenili = report.rows.filter((r) =>
+      ((r as { fixersChanged?: string[] }).fixersChanged ?? []).includes('section-surgery-fixer'),
+    );
+    expect(promijenili.length, 'nijedan profil; zahvat nad sekcijama se prestao izvoditi').toBeGreaterThan(5);
+  });
+
   it('zatecene kategorije odgovaraju zabiljezenima', () => {
     expect(count('pass'), 'pass').toBe(ratchet.pass);
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);
