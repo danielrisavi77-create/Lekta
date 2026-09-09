@@ -8,19 +8,12 @@
 # Standardni runner javnog repozitorija: 0 USD dodatne naplate. Bez artefakata, bez cachea.
 name: autonomy-tests
 
+# BEZ path filtera, namjerno: ovo je OBVEZNA provjera grane master (`unittest (3.12)`), a obvezna provjera
+# koja se na nekom PR-u uopce ne okine ostavlja taj PR trajno blokiranim. Posao traje oko minutu na
+# standardnom runneru javnog repozitorija, pa je cijena svakog PR-a 0 USD i minuta.
 on:
   push:
-    paths:
-      - 'scripts/autonomy/**'
-      - 'scripts/agents/**'
-      - 'config/autonomy.example.json'
-      - '.github/workflows/autonomy-tests.yml'
   pull_request:
-    paths:
-      - 'scripts/autonomy/**'
-      - 'scripts/agents/**'
-      - 'config/autonomy.example.json'
-      - '.github/workflows/autonomy-tests.yml'
   workflow_dispatch:
 
 permissions:
