@@ -42,6 +42,7 @@ import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
+import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -1132,6 +1133,26 @@ const MUTATIONS: Mutation[] = [
       'pa porast s 21 na 23 prodje neopazeno jer nista ne tvrdi strop',
     caught: () => compareToRatchet(auditRatchet.fullGraphHighCritical + 1, auditRatchet).verdict === 'above',
     cleanBefore: () => compareToRatchet(auditRatchet.fullGraphHighCritical, auditRatchet).verdict === 'equal',
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
+   * commitovima i u catch grani vracao "nije zastario": u plitkom klonu (Netlify, CI) stari commit ne
+   * postoji, pa je gate ispisao "OK" nad dokazom od kojeg se promijenilo 425 datoteka. Presuda sada
+   * ima tri ishoda, a nepoznato stablo NIKAD nije svjeze.
+   */
+  {
+    id: 'dokaz/zastarjelost-nepoznata-prolazi-kao-svjeza',
+    imitates:
+      'gate koji "ne moze procitati povijest" (plitak klon, bad object) tretira kao "nije zastarjelo", ' +
+      'pa dokaz pecen 425 datoteka ranije prolazi kao potvrda za kod koji nitko nije provjerio',
+    caught: () => {
+      const digest = treeDigestFromLsTree('100644 blob 1111111111111111111111111111111111111111\tsrc/a.ts');
+      return proofStaleness({ commit: 'abc', treeDigest: digest }, null).verdict !== 'fresh';
+    },
+    cleanBefore: () => {
+      const digest = treeDigestFromLsTree('100644 blob 1111111111111111111111111111111111111111\tsrc/a.ts');
+      return proofStaleness({ commit: 'abc', treeDigest: digest }, digest).verdict === 'fresh';
+    },
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

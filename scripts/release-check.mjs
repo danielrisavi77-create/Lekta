@@ -25,6 +25,7 @@ import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { treeDigestFromLsTree } from './release-proof-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'docs', 'generated', 'RELEASE_PROOF.json');
@@ -168,8 +169,24 @@ const missingRequired = TIERS.filter(
   (t) => t.required && !results.some((r) => r.id === t.id && r.status === 'pass'),
 ).map((t) => t.id);
 
+/**
+ * Otisak stabla HEAD-a bez same datoteke dokaza (vidi `release-proof-core.mjs`). Gate pri deployu
+ * ga ponovno racuna iz `git ls-tree -r <head>`, sto radi i u plitkom klonu; `git diff` medju
+ * commitovima ondje nije radio i tiho je prolazio (vanjski audit 2026-09-08, nalaz 1). Kad
+ * `ls-tree` padne, upisuje se `null`: takav dokaz gate cita kao "ne znam", ne kao svjez.
+ */
+function treeDigestAt(ref) {
+  try {
+    return treeDigestFromLsTree(execSync(`git ls-tree -r ${ref}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
+  } catch {
+    console.warn('[release-check] UPOZORENJE: `git ls-tree` nije uspio, dokaz nece nositi treeDigest i gate ga nece moci proglasiti svjezim.');
+    return null;
+  }
+}
+
 const proof = {
   commit,
+  treeDigest: treeDigestAt('HEAD'),
   dirtyWorkingTree: dirty,
   createdAt: new Date().toISOString(),
   platform: process.platform,
