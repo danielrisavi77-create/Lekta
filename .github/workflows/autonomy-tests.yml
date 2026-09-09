@@ -1,0 +1,60 @@
+# Testovi autonomnog kontrolera (scripts/autonomy/**, Python stdlib, bez mreze i bez modela).
+#
+# Zaseban od check.yml NAMJERNO, iz istog razloga kao docx-strict-open i rule-claims: python ovisnost
+# ne smije uci u tvrdi build gate (`npm run check`). Ovo je ipak OBVEZNA provjera za PR koji dira
+# kontroler ili njegove upute: vlasnik je dodaje u required checkove grane master, pa buduci PR ne moze
+# preskociti njezino izvrsenje (plan autonomije, "Pravilo zatvaranja svakog zadatka").
+#
+# Standardni runner javnog repozitorija: 0 USD dodatne naplate. Bez artefakata, bez cachea.
+name: autonomy-tests
+
+on:
+  push:
+    paths:
+      - 'scripts/autonomy/**'
+      - 'scripts/agents/**'
+      - 'config/autonomy.example.json'
+      - '.github/workflows/autonomy-tests.yml'
+  pull_request:
+    paths:
+      - 'scripts/autonomy/**'
+      - 'scripts/agents/**'
+      - 'config/autonomy.example.json'
+      - '.github/workflows/autonomy-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Python ${{ matrix.python }}
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python }}
+
+      # Node treba samo jednom testu koji stvarno zove scripts/agents/cli.mjs prepare (bez modela).
+      - name: Node 20
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 20
+
+      - name: Autonomy unittest (bez mreze, bez modela, bez tajni)
+        env:
+          ANTHROPIC_API_KEY: ''
+          OPENAI_API_KEY: ''
+        run: python -m unittest discover -s scripts/autonomy/tests -t . -p 'test_*.py' -v
