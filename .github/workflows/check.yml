@@ -126,8 +126,12 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Produkcijski build (isti lanac kao netlify.toml)
+        # OKOLINA MORA BITI ISTA KAO `[build.environment]` u netlify.toml, inace ovaj job vrti
+        # isti lanac pod drugim uvjetima i zeleno ovdje ne znaci zeleno ondje. Gard nad tom
+        # jednakoscu: `tests/deploy-runtime-parity.test.ts`.
         env:
           LEKTA_SITE_ORIGIN: https://lektahr.netlify.app
+          DEPLOY: "1"
         run: node scripts/build-production.mjs --skip-verify
 
       - name: Provjera dist artefakta

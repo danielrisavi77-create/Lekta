@@ -67,6 +67,52 @@ describe('produkcijski build: Netlify i CI se ne smiju razici', () => {
     expect(TOML).not.toMatch(/^\s*command\s*=\s*"npm run build/m);
   });
 
+  /**
+   * TRECA OS, dodana 2026-09-09 nakon sto su prve dvije PROPUSTILE stvarni ispad produkcije.
+   *
+   * Netlify je 14 uzastopnih deploya gradio crveno dok je CI bio zelen nad ISTIM lancem i ISTIM
+   * Nodeom. Razlika
+   * je bila u OKOLINI: `netlify.toml` postavlja `LEKTA_REQUIRE_RELEASE_PROOF`, koji
+   * `verify-deploy-dist.mjs` pretvara u tvrd gate nad `docs/generated/RELEASE_PROOF.json`. CI ga
+   * nije postavljao, pa je isti skript ondje bio MEKAN i uredno prolazio.
+   *
+   * `LEKTA_REQUIRE_RELEASE_PROOF` je JEDINA dopustena razlika i nije previd nego posljedica: dokaz
+   * izdanja se pece neposredno prije objave i vrijedi za jedan otisak stabla. Zahtijevati ga na
+   * svaki push znacilo bi da CI mora biti crven cim itko nesto gurne, dakle gard koji po
+   * konstrukciji nikad nije zelen. Provjerava se pri OBJAVI, a objava je od danas na zahtjev.
+   *
+   * Svaka DRUGA varijabla mora biti u oba, i to je poanta: nova varijabla u `netlify.toml` obara
+   * ovaj gard dok netko svjesno ne odluci u koju od dvije skupine ide.
+   */
+  it('okolina je ista, uz jednu imenovanu iznimku', () => {
+    const SAMO_PRI_OBJAVI = new Set(['LEKTA_REQUIRE_RELEASE_PROOF']);
+
+    const blok = /\[build\.environment\]([\s\S]*?)(?=\n\[|$)/.exec(TOML)?.[1] ?? '';
+    expect(blok, '`[build.environment]` nije nadjen u netlify.toml').toBeTruthy();
+    const netlifyVars = [...blok.matchAll(/^\s*([A-Z_][A-Z0-9_]*)\s*=/gm)].map((m) => m[1]);
+    expect(netlifyVars.length, 'nijedna varijabla nije procitana').toBeGreaterThan(2);
+
+    const gate = distGate();
+    const nedostaju = netlifyVars
+      // NODE_VERSION se usporedjuje zasebno (gore), jer u CI-u nije `env:` nego `node-version:`.
+      .filter((v) => v !== 'NODE_VERSION' && !SAMO_PRI_OBJAVI.has(v))
+      .filter((v) => !new RegExp(`^\\s*${v}:`, 'm').test(gate));
+
+    expect(
+      nedostaju,
+      `netlify.toml postavlja, a dist-gate ne: ${nedostaju.join(', ')}. `
+      + 'Dodaj ih u `env:` produkcijskog build koraka ILI ih svjesno stavi u SAMO_PRI_OBJAVI uz razlog.',
+    ).toEqual([]);
+  });
+
+  it('MUTACIJA: iznimka NIJE prazan popis koji sve propusta', () => {
+    // Da je `SAMO_PRI_OBJAVI` prosiren "da prode", gard bi tiho prestao gristi. Ovo tvrdi da je
+    // dopustena tocno jedna, imenovana varijabla, pa svako sljedece prosirenje mora dirati i test.
+    const izvor = readFileSync(join(KORIJEN, 'tests/deploy-runtime-parity.test.ts'), 'utf8');
+    const popis = /SAMO_PRI_OBJAVI = new Set\(\[([^\]]*)\]\)/.exec(izvor)?.[1] ?? '';
+    expect([...popis.matchAll(/'([^']+)'/g)].map((m) => m[1])).toEqual(['LEKTA_REQUIRE_RELEASE_PROOF']);
+  });
+
   it('SENTINEL: citaci stvarno nalazi sadrzaj, a ne prazan niz', () => {
     // Prazan `dist-gate` blok bi obje tvrdnje iznad ucinio vakuumskima.
     expect(distGate().length).toBeGreaterThan(400);
