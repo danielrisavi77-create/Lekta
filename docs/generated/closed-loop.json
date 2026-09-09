@@ -7832,6 +7832,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 8,
@@ -7840,6 +7841,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -7860,7 +7862,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -7878,6 +7880,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 8,
@@ -7886,6 +7889,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -7906,7 +7910,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -11343,6 +11347,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 13,
@@ -11353,6 +11358,7 @@
         "justify",
         "toc-field",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -11374,7 +11380,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
       "textPreserved": true
     },
@@ -11394,6 +11400,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 13,
@@ -11404,6 +11411,7 @@
         "justify",
         "toc-field",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -11425,7 +11433,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
       "textPreserved": true
     },
@@ -11445,6 +11453,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 13,
@@ -11455,6 +11464,7 @@
         "justify",
         "toc-field",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -11476,7 +11486,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
       "textPreserved": true
     },
@@ -11545,6 +11555,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 13,
@@ -11555,6 +11566,7 @@
         "justify",
         "toc-field",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -11576,7 +11588,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
       "textPreserved": true
     },
@@ -11596,6 +11608,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 14,
@@ -11606,6 +11619,7 @@
         "justify",
         "toc-field",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -11627,7 +11641,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
       "textPreserved": true
     },
@@ -11799,6 +11813,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 14,
@@ -11809,6 +11824,7 @@
         "justify",
         "toc-field",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -11830,7 +11846,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
       "textPreserved": true
     },
@@ -11850,6 +11866,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 13,
@@ -11860,6 +11877,7 @@
         "justify",
         "toc-field",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -11881,7 +11899,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
       "textPreserved": true
     },
@@ -12536,6 +12554,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 7,
@@ -12545,6 +12564,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -12566,7 +12586,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
       "textPreserved": true
     },
@@ -12585,6 +12605,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 7,
@@ -12594,6 +12615,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -12615,7 +12637,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14441,6 +14463,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -14449,6 +14472,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -14469,7 +14493,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14487,6 +14511,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -14495,6 +14520,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -14515,7 +14541,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14533,6 +14559,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -14541,6 +14568,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -14561,7 +14589,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14579,6 +14607,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -14587,6 +14616,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -14607,7 +14637,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14625,6 +14655,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -14633,6 +14664,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -14653,7 +14685,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14671,6 +14703,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -14679,6 +14712,7 @@
         "line-spacing",
         "justify",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -14699,7 +14733,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -18223,6 +18257,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -18231,6 +18266,7 @@
         "font-size",
         "line-spacing",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -18251,7 +18287,7 @@
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -18269,6 +18305,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -18277,6 +18314,7 @@
         "font-size",
         "line-spacing",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -18297,7 +18335,7 @@
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -18315,6 +18353,7 @@
         "element-caption",
         "field-integrity",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "requested": 10,
@@ -18323,6 +18362,7 @@
         "font-size",
         "line-spacing",
         "heading-style",
+        "heading-format",
         "margins"
       ],
       "axesRemaining": [],
@@ -18343,7 +18383,7 @@
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -18857,14 +18897,16 @@
         "revision-metadata",
         "element-caption",
         "field-integrity",
-        "heading-style"
+        "heading-style",
+        "heading-format"
       ],
       "requested": 10,
       "axesResolved": [
         "font",
         "line-spacing",
         "justify",
-        "heading-style"
+        "heading-style",
+        "heading-format"
       ],
       "axesRemaining": [],
       "axesApplied": [
@@ -18883,7 +18925,7 @@
         "line-spacing",
         "justify"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },

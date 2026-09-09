@@ -8,14 +8,14 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4758,
-    "uncoveredCount": 7859,
-    "resolvedCount": 1877,
+    "coveredCount": 4800,
+    "uncoveredCount": 7817,
+    "resolvedCount": 1919,
     "byReason": {
-      "profil-ne-propisuje-os": 6107,
+      "profil-ne-propisuje-os": 6098,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 124,
+      "nema-dokaza": 91,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -3520,8 +3520,13 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-integrirani-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3549,8 +3554,13 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-integrirani-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3780,8 +3790,13 @@
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -3809,8 +3824,13 @@
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -4040,8 +4060,13 @@
     {
       "profileId": "pravo-javna-uprava-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -4069,8 +4094,13 @@
     {
       "profileId": "pravo-javna-uprava-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -4300,8 +4330,13 @@
     {
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-porezni-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -4329,8 +4364,13 @@
     {
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-porezni-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -4553,8 +4593,13 @@
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalni-rad-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -4582,8 +4627,13 @@
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalni-rad-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -4813,8 +4863,13 @@
     {
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalni-rad-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -4842,8 +4897,13 @@
     {
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalni-rad-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -5073,8 +5133,13 @@
     {
       "profileId": "pravo-socijalna-politika-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalna-politika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -5102,8 +5167,13 @@
     {
       "profileId": "pravo-socijalna-politika-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalna-politika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -27610,8 +27680,13 @@
     {
       "profileId": "zsem-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:zsem-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "zsem-diplomski",
@@ -27639,8 +27714,13 @@
     {
       "profileId": "zsem-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:zsem-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "zsem-diplomski",
@@ -47977,8 +48057,13 @@
     {
       "profileId": "riteh-zavrsni",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:riteh-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "riteh-zavrsni",
@@ -48006,8 +48091,13 @@
     {
       "profileId": "riteh-zavrsni",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:riteh-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "riteh-zavrsni",
@@ -48232,8 +48322,13 @@
     {
       "profileId": "riteh-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:riteh-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "riteh-diplomski",
@@ -48261,8 +48356,13 @@
     {
       "profileId": "riteh-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:riteh-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "riteh-diplomski",
@@ -48981,8 +49081,13 @@
     {
       "profileId": "unin-tehnicki-zavrsni",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-tehnicki-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -49010,8 +49115,13 @@
     {
       "profileId": "unin-tehnicki-zavrsni",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-tehnicki-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -49235,8 +49345,13 @@
     {
       "profileId": "unin-tehnicki-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-tehnicki-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -49264,8 +49379,13 @@
     {
       "profileId": "unin-tehnicki-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-tehnicki-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -49489,8 +49609,13 @@
     {
       "profileId": "unin-biomedicina-zavrsni",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-biomedicina-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -49518,8 +49643,13 @@
     {
       "profileId": "unin-biomedicina-zavrsni",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-biomedicina-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -49743,8 +49873,13 @@
     {
       "profileId": "unin-biomedicina-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-biomedicina-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -49772,8 +49907,13 @@
     {
       "profileId": "unin-biomedicina-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-biomedicina-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -49997,8 +50137,13 @@
     {
       "profileId": "unin-drustveni-zavrsni",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-drustveni-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -50026,8 +50171,13 @@
     {
       "profileId": "unin-drustveni-zavrsni",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-drustveni-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -50251,8 +50401,13 @@
     {
       "profileId": "unin-drustveni-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-drustveni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-drustveni-diplomski",
@@ -50280,8 +50435,13 @@
     {
       "profileId": "unin-drustveni-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unin-drustveni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-drustveni-diplomski",
@@ -53511,8 +53671,13 @@
     {
       "profileId": "gradri-zavrsni",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:gradri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "gradri-zavrsni",
@@ -53540,8 +53705,13 @@
     {
       "profileId": "gradri-zavrsni",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:gradri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "gradri-zavrsni",
@@ -53737,8 +53907,13 @@
     {
       "profileId": "gradri-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:gradri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "gradri-diplomski",
@@ -53766,8 +53941,13 @@
     {
       "profileId": "gradri-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:gradri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "gradri-diplomski",
@@ -76747,8 +76927,13 @@
     {
       "profileId": "vuka-poslovni-zavrsni",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -76776,8 +76961,13 @@
     {
       "profileId": "vuka-poslovni-zavrsni",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -76987,8 +77177,13 @@
     {
       "profileId": "vuka-poslovni-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -77016,8 +77211,13 @@
     {
       "profileId": "vuka-poslovni-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -86408,8 +86608,13 @@
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
       "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -86437,8 +86642,13 @@
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
       "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",

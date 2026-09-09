@@ -32,6 +32,26 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(count('pass')).toBeGreaterThanOrEqual(ratchet.pass);
   });
 
+  /**
+   * Os `heading-format` mora biti PREKRSENA I RIJESENA na svakom profilu koji `headingRules`
+   * propisuje. Bez ove tvrdnje bi njezin izostanak prosao tiho: `pass` bi ostao isti (os koja se ne
+   * krsi ne moze ni pasti), a matrica pokrivenosti bi izgubila 42 celije, po 21 za
+   * `heading-format-fixer` i `heading-case-fixer`.
+   *
+   * Uvedeno 2026-09-09 uz samu os. Brojka nije prepisana nego se racuna iz profila, pa raste sama
+   * ako se `headingRules` doda jos kojem profilu; prepisana bi istrunula, kao sto je istrunuo
+   * `continuesFrom` u izvozu kvarova.
+   */
+  it('os oblikovanja naslova je prekrsena i rijesena na svakom profilu koji ga propisuje', () => {
+    const sPravilima = report.rows.filter((r) => (r.violated as string[]).includes('heading-format'));
+    // Anti-vakuum: prazan skup bi ucinio obje tvrdnje nize istinitima ni nad cim.
+    expect(sPravilima.length, 'nijedan profil ne krsi os; generator ju je prestao proizvoditi').toBeGreaterThan(15);
+    const nerijeseni = sPravilima
+      .filter((r) => !(r.axesResolved as string[]).includes('heading-format'))
+      .map((r) => r.profileId);
+    expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
+  });
+
   it('zatecene kategorije odgovaraju zabiljezenima', () => {
     expect(count('pass'), 'pass').toBe(ratchet.pass);
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);

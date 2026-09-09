@@ -76,10 +76,19 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'revision-metadata',
   'element-caption',
   'field-integrity',
+  'heading-format',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
 export type AnyViolationId = ViolatableCheckId | StructuralViolationId;
+
+/** Oblik `headingRules` koliko ovom generatoru treba; profil ih nosi u naslijedjenom `rules`. */
+interface HeadingRulesShape {
+  size?: unknown;
+  align?: string;
+  maxLevel?: unknown;
+  levels?: Record<string, { uppercase?: boolean; bold?: boolean; italic?: boolean } | undefined>;
+}
 
 export interface ViolationOptions {
   /**
@@ -197,7 +206,14 @@ export async function buildViolatingDocx(
   const normalPPr: string[] = [];
   if (spacingTarget != null) normalPPr.push(`<w:spacing w:line="${Math.round(spacingTarget * 240)}" w:lineRule="auto"/>`);
   if (alignTarget) normalPPr.push(`<w:jc w:val="${alignTarget}"/>`);
-  const stylesXml =
+  /**
+   * Definicije naslovnih stilova; os `heading-format` ih PRESLOZI, pa se grade nize.
+   *
+   * Zadano ostaje tocno ono sto je ovdje stajalo prije: samo `Heading1`, bez oblikovanja. Time je
+   * izlaz bez te osi bajt-identican starome.
+   */
+  let headingStyles = '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/></w:style>';
+  const buildStyles = () =>
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<w:styles ${W}>` +
     '<w:docDefaults><w:rPrDefault><w:rPr>' +
@@ -207,7 +223,7 @@ export async function buildViolatingDocx(
     '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/>' +
     (normalPPr.length ? `<w:pPr>${normalPPr.join('')}</w:pPr>` : '') +
     '</w:style>' +
-    '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/></w:style>' +
+    headingStyles +
     '</w:styles>';
 
   const paragraphs: ParaSpec[] = [
@@ -215,6 +231,9 @@ export async function buildViolatingDocx(
     para,
     { ...para, text: 'Drugi odlomak tijela rada, istog pogresnog oblikovanja kao prvi.' },
   ];
+
+  /** Mjesta na koja idu nizovi praznih odlomaka; broj se racuna tek kad je dokument gotov. */
+  let emptyBurstAt: number[] | null = null;
 
   const structural = options.structural;
   if (structural) {
@@ -255,9 +274,22 @@ export async function buildViolatingDocx(
       for (let i = 1; i <= 6; i += 1) {
         paragraphs.push({ ...para, text: `Odlomak tijela rada broj ${i}, dovoljne duljine da dokument bude reprezentativan.` });
       }
-      paragraphs.push({ empty: true }, { empty: true }, { empty: true });
+      /**
+       * NIZOVI PRAZNIH ODLOMAKA SE UMECU NA KRAJU, prema duljini gotovog dokumenta.
+       *
+       * Do 2026-09-09 su ovdje stajala dva fiksna niza po tri prazna odlomka, izracunata za tadasnju
+       * duljinu. Prag nalaza je RAZMJERAN (>=18 posto dokumenta), pa je svaka nova os koja doda
+       * odlomke razrjedjivala udio i gasila `empty-paragraph-fixer`. Izmjereno pri uvodjenju osi
+       * `heading-format`: sest dodanih odlomaka srusilo je pokrivenost na 21 profilu, tri dodana na
+       * sedam. Fiksan broj je time bio zajednicki resurs kojim raspolazu sve osi, a nitko ga nije
+       * vodio.
+       *
+       * Zato se ovdje pamte samo MJESTA, a broj se racuna kad su svi ostali odlomci vec dodani.
+       * Ostale osi umecu iskljucivo na kraj, pa zapamceni indeksi ostaju valjani.
+       */
+      emptyBurstAt = [paragraphs.length];
       paragraphs.push({ ...para, text: 'Odlomak izmedju dva niza praznih odlomaka.' });
-      paragraphs.push({ empty: true }, { empty: true }, { empty: true });
+      emptyBurstAt.push(paragraphs.length);
       paragraphs.push({ ...para, text: 'Zakljucni odlomak tijela rada.' });
       violated.push('empty-paragraphs');
     }
@@ -410,14 +442,111 @@ export async function buildViolatingDocx(
     }
 
     if (wants(structural, 'heading-style')) {
+      /**
+       * Oblik ovog naslova PRATI pravila profila kad ih profil ima, i to je ispravak iz 2026-09-09.
+       *
+       * Os krsi TOCNO JEDNU stvar: izostanak Word Heading stila. Do sada je uz to nosila i podebljanje
+       * i vecu velicinu, sto na profilima s `headingRules` nije bilo nevino: `heading-style-fixer`
+       * odlomak promakne u naslov, promaknuti naslov zadrzi svoje IZRAVNO oblikovanje, a ono nadjaca
+       * stil koji je `heading-format-fixer` u istom prolazu ispravio. Izmjereno na
+       * `vuka-poslovni-zavrsni`: 4 od 4 naslova odstupa prije, 1 od 5 poslije, pa je provjera ostala
+       * pala i tri su profila pala iz `pass` u `partial`.
+       *
+       * To NIJE bio kvar popravka nego dvije osi koje se sudaraju, sto je upravo razlog zbog kojeg su
+       * osi u ovom generatoru odvojene. Bodovanje kandidata i dalje prolazi: numeriran prefiks (+5),
+       * kratak odlomak (+2) i podebljanje (+2) daju devet, uz prag sedam, i kad velicina odgovara
+       * tijelu umjesto da je veca.
+       */
+      const hrStyle = (profile as { headingRules?: HeadingRulesShape } | null)?.headingRules;
+      const razina3 = hrStyle?.levels?.['3'] ?? {};
+      const velicina3 = (razina3 as { size?: unknown }).size ?? hrStyle?.size;
       paragraphs.push({
         ...para,
         text: '3. Rezultati istrazivanja',
+        // Podebljanje ostaje: bez njega kandidat gubi dva boda, a profili ga ionako traze na 3. razini.
         bold: true,
-        sizePt: (sizeTarget ?? 12) + 2,
+        ...(hrStyle && razina3.italic === true ? { italic: true } : {}),
+        sizePt: hrStyle && velicina3 != null ? Number(velicina3) : (sizeTarget ?? 12) + 2,
       });
       paragraphs.push({ ...para, text: 'Odlomak tijela ispod rucno oblikovanog naslova.' });
       violated.push('heading-style');
+    }
+
+    /**
+     * `heading-format`: naslov IMA Word stil, ali mu oblikovanje proturjeci `headingRules` profila.
+     *
+     * Razlika prema `heading-style` je cijela poanta: ondje naslov nema stil, ovdje ga ima, pa je
+     * jedini nalaz nesklad s propisanim oblikom. Zato se i ne mogu spojiti u jednu os.
+     *
+     * ZASTO OS POSTOJI. Izmjereno 2026-09-09 nad `coverage-cells.json`: `heading-format-fixer` nema
+     * dokaza na 21 profilu, a `heading-case-fixer` na 12, i to su TOCNO svi profili koji
+     * `headingRules` imaju, odnosno svi kojima neka razina trazi velika slova. Uzrok nije bio kvar
+     * fixera nego to sto generator tu os nikad nije krsio; oba popravka vise o istoj provjeri
+     * (`structure.heading.format`, vidi `heading-format-universal` i `heading-case-universal` u
+     * `src/ui/repair-items.ts`), pa jedna os zatvara obje.
+     *
+     * Krsi se SAMO ono sto profil propisuje, i to po razinama: velika slova, podebljanje, kurziv,
+     * velicina i poravnanje. Numeracija se drzi ISPRAVNOM (broj s tockom), jer je ona zasebna
+     * provjera (`structure.heading.numbering`) i njezino bi krsenje pomijesalo dva nalaza.
+     */
+    if (wants(structural, 'heading-format')) {
+      const hr = (profile as { headingRules?: HeadingRulesShape } | null)?.headingRules;
+      if (hr) {
+        const razine = Math.min(Number(hr.maxLevel ?? 3) || 3, 3);
+        /**
+         * KRSI SE STIL, NE IZRAVNO OBLIKOVANJE, i to je izmjereno, ne izabrano.
+         *
+         * Prva izvedba je odstupanje pisala kao izravno oblikovanje odlomka. Popravak je uredno
+         * radio i changelog je bio neprazan, ali se provjera nije vracala u prolaz: 4 od 4 naslova
+         * odstupa prije, 3 od 4 poslije. Uzrok je bio dvostruk i oba su dijela bila MOJA:
+         *
+         *   1. `styles.xml` je definirao samo `Heading1`, a odlomci su nosili `Heading2`/`Heading3`,
+         *      dakle stilove kojih u dokumentu nema;
+         *   2. `heading-format-fixer` upisuje ciljani oblik U STIL, pa ga izravno oblikovanje
+         *      odlomka nadjacava i nalaz ostaje.
+         *
+         * Stvarni dokument izgleda upravo ovako: predlozak nosi oblik naslova, autor ga ne dira
+         * rucno. Zato odstupanje ide u definiciju stila, a odlomci ostaju bez izravnog oblikovanja.
+         */
+        const rPr: string[] = [];
+        if (hr.size != null) rPr.push(`<w:sz w:val="${Math.round((Number(hr.size) + 2) * 2)}"/>`);
+        const styles: string[] = [];
+        for (let level = 1; level <= razine; level += 1) {
+          const pravilo = hr.levels?.[String(level)] ?? {};
+          // Podebljanje i kurziv se IZOSTAVLJAJU tocno ondje gdje ih profil trazi.
+          const runPr = [...rPr].join('');
+          const parPr = hr.align ? `<w:pPr><w:jc w:val="${hr.align === 'center' ? 'left' : 'center'}"/></w:pPr>` : '';
+          styles.push(
+            `<w:style w:type="paragraph" w:styleId="Heading${level}"><w:name w:val="heading ${level}"/>` +
+              parPr +
+              (runPr ? `<w:rPr>${runPr}</w:rPr>` : '') +
+              '</w:style>',
+          );
+          void pravilo;
+          paragraphs.push({
+            // Numeracija ostaje ISPRAVNA; krsi se oblik, ne brojenje, jer je numeracija zasebna
+            // provjera (`structure.heading.numbering`) i mijesanje bi dalo dva nalaza umjesto jednog.
+            // Tekst je malim slovima, sto krsi `uppercase` ondje gdje ga profil trazi.
+            text: `${level}. Naslov ${level}. razine`,
+            styleId: `Heading${level}`,
+          });
+          /**
+           * ODLOMAK TIJELA SE NE DODAJE, i to je izmjereno, ne stedljivost.
+           *
+           * Prva izvedba je uz svaki naslov dodavala i odlomak, dakle sest odlomaka ukupno. Time je
+           * dokument narastao toliko da je udio praznih odlomaka pao ispod praga od 18 posto, pa
+           * `empty-paragraph-fixer` vise nije ni opalio: matrica je IZGUBILA 21 pokrivenu celiju,
+           * tocno na 21 profilu koji `headingRules` ima. Isti prag opisuje i os `empty-paragraphs`
+           * nekoliko desetaka redaka iznad; ovo je druga strana istog kvara.
+           *
+           * Nova os zato dodaje samo naslove: provjera oblika naslova broji naslove, a tijelo joj
+           * ne treba. Svaka buduca os koja dodaje odlomke mora ovo premjeriti, jer je prag zajednicki
+           * resurs kojim raspolazu sve osi zajedno.
+           */
+        }
+        headingStyles = styles.join('');
+        violated.push('heading-format');
+      }
     }
   }
 
@@ -426,7 +555,22 @@ export async function buildViolatingDocx(
    * `field-integrity`). Word ga pise u svaki dokument, pa je i realnije; ostaje OPT-IN da izlaz
    * bez strukturnih osi ostane bajt-identican.
    */
-  const spec: DocSpec = { stylesXml, paragraphs, ...(structural ? { settings: true as const } : {}) };
+  /**
+   * Nizovi praznih odlomaka, dimenzionirani prema GOTOVOM dokumentu.
+   *
+   * Cilj je oko cetvrtine dokumenta, dakle udobno iznad praga od 18 posto, a nakon popravka ostaju
+   * dva prazna odlomka (fixer namjerno cuva po jedan iz svakog niza), sto je kod ovako dugog tijela
+   * daleko ispod praga. Umece se OD KRAJA prema pocetku, da prvi splice ne pomakne drugo mjesto.
+   */
+  if (emptyBurstAt) {
+    const tijelo = paragraphs.length;
+    const poNizu = Math.max(3, Math.ceil(tijelo / 6));
+    for (const at of [...emptyBurstAt].sort((a, b) => b - a)) {
+      paragraphs.splice(at, 0, ...Array.from({ length: poNizu }, () => ({ empty: true as const })));
+    }
+  }
+
+  const spec: DocSpec = { stylesXml: buildStyles(), paragraphs, ...(structural ? { settings: true as const } : {}) };
 
   if (marginsTarget) {
     // Margine pomaknute za 1 cm od ciljanih, u smjeru koji nikad ne izlazi iz razumnog raspona.

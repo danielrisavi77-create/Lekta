@@ -959,6 +959,48 @@ const MUTATIONS: Mutation[] = [
       }).length === 0,
   },
   {
+    id: 'petlja/os-prestane-krsiti-pa-pokrivenost-tiho-nestane',
+    imitates:
+      'os generatora prestane krsiti pravilo (netko promijeni uvjet, profil izgubi `headingRules`, ' +
+      'ili se blok tiho preskoci). Ratchet closed-loopa to NE VIDI: os koja se ne krsi ne moze ni ' +
+      'pasti, pa broj `pass` ostaje isti, a matrica pokrivenosti izgubi 42 celije (po 21 za ' +
+      '`heading-format-fixer` i `heading-case-fixer`). Izmjereno 2026-09-09 pri uvodjenju te osi: ' +
+      'prva izvedba je uz naslove dodavala i odlomke tijela, cime je udio praznih odlomaka pao ispod ' +
+      'praga i `empty-paragraph-fixer` je nestao s 21 profila, a nijedan gard to nije prijavio',
+    caught: () => {
+      type Redak = { profileId: string; violated: string[]; axesResolved: string[] };
+      const provjeri = (rows: Redak[]) => {
+        const sPravilima = rows.filter((r) => r.violated.includes('heading-format'));
+        if (sPravilima.length <= 15) return true; // os je nestala iz generatora
+        return sPravilima.some((r) => !r.axesResolved.includes('heading-format'));
+      };
+      // Os je nestala: nijedan redak je vise ne krsi.
+      const nestala = provjeri([
+        { profileId: 'a', violated: ['font'], axesResolved: ['font'] },
+        { profileId: 'b', violated: ['font'], axesResolved: ['font'] },
+      ]);
+      // Os se krsi, ali ju popravak vise ne zatvara.
+      const nerijesena = provjeri(
+        Array.from({ length: 21 }, (_, i) => ({
+          profileId: `p${i}`,
+          violated: ['heading-format'],
+          axesResolved: i === 7 ? [] : ['heading-format'],
+        })),
+      );
+      return nestala && nerijesena;
+    },
+    // Netrivijalnost: uredan izvjestaj (os prekrsena i zatvorena na svima) NE smije dati nalaz.
+    cleanBefore: () => {
+      const rows = Array.from({ length: 21 }, (_, i) => ({
+        profileId: `p${i}`,
+        violated: ['heading-format'],
+        axesResolved: ['heading-format'],
+      }));
+      const sPravilima = rows.filter((r) => r.violated.includes('heading-format'));
+      return sPravilima.length > 15 && !sPravilima.some((r) => !r.axesResolved.includes('heading-format'));
+    },
+  },
+  {
     id: 'oblik/popravak-izgubi-oblik-pakiranja-pri-ponovnom-pisanju',
     imitates:
       'popravak ponovno napise paket i usput ispusti oblik PAKIRANJA koji je ulaz nosio, na primjer ' +

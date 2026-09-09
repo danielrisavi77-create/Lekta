@@ -112,6 +112,14 @@ const AXIS_CHECK_ID: Record<string, string> = {
   // BODOVANA; obrazlozenje je u `STRUCTURAL_WITHOUT_SCORED_CHECK` nize.
   'toc-field': 'toc.present',
   'heading-style': 'structure.heading.word-styles',
+  /**
+   * `structure.heading.format` je BODOVANA (max 6, izmjereno na `pravo-porezni-prijediplomski`),
+   * pa os smije nositi `resolved`. Uvedena 2026-09-09, jer je matrica pokrivenosti imala 21 celiju
+   * `heading-format-fixera` i 12 celija `heading-case-fixera` bez ijednog dokaza, i to TOCNO na
+   * svim profilima koji `headingRules` propisuju. Uzrok nije bio kvar fixera nego to sto generator
+   * tu os nikad nije krsio.
+   */
+  'heading-format': 'structure.heading.format',
 };
 
 /**

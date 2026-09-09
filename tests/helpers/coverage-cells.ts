@@ -321,9 +321,19 @@ export const APPLIED_AXIS_FIXER: Record<string, string> = {
  * Jacina je `resolved`, ne `applied`: iza ovih osi stoji bodovana provjera koja se doista prevrnula
  * (`toc.present` max 5, `structure.heading.word-styles` max 4).
  */
-const RESOLVED_AXIS_FIXER: Record<string, string> = {
+const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
   'toc-field': 'toc-field-fixer',
   'heading-style': 'heading-style-fixer',
+  /**
+   * DVA fixera na jednoj osi, i zato je vrijednost od 2026-09-09 smjela postati polje.
+   *
+   * `heading-format-fixer` i `heading-case-fixer` vise o ISTOJ bodovanoj provjeri
+   * (`structure.heading.format`, max 6): oba se nude uz `isViolated('heading-format')`, prvi
+   * postavlja velicinu i isticanje po razinama, drugi tekst razina koje profil trazi velikim
+   * slovima. Kad se os rijesi, rijesila su je oba zajedno, pa bi upis samo jednoga ostavio drugi
+   * bez dokaza iako je radio.
+   */
+  'heading-format': ['heading-format-fixer', 'heading-case-fixer'],
 };
 
 export function buildCoverageCells(
@@ -343,7 +353,10 @@ export function buildCoverageCells(
     // Pravila profila trebaju samo za dijagnozu NEPOKRIVENE celije, pa se citaju jednom po profilu.
     const resolved = resolveProfile(profileId) as Record<string, unknown> | null;
     const resolvedUniversalFixers = new Set(
-      [...resolvedAxes].map((axis) => RESOLVED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
+      [...resolvedAxes].flatMap((axis) => {
+        const upis = RESOLVED_AXIS_FIXER[axis];
+        return upis === undefined ? [] : Array.isArray(upis) ? [...upis] : [upis];
+      }),
     );
     const appliedFixers = new Set(
       (loop?.axesApplied ?? []).map((axis) => APPLIED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
