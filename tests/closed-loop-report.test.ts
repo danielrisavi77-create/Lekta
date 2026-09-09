@@ -102,6 +102,24 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(promijenili.length, 'nijedan profil; zahvat nad sekcijama se prestao izvoditi').toBeGreaterThan(5);
   });
 
+  /**
+   * Os `paragraph-spacing` je UVJETNA: krsi se samo kad profil ima `checkParagraphSpacingZero`.
+   *
+   * Populacija je zato mala (izmjereno 4), i bas to je cini opasnom. Da uvjet tiho prestane
+   * pogadjati (preimenovana zastavica, promijenjen graditelj), `pass` bi ostao 372 jer os koja se ne
+   * krsi ne moze ni pasti, a matrica bi izgubila tri celije s dokazom `resolved` i jednu bi vratila
+   * s `resolved` na `applied`. Prag je namjerno nizak i izveden iz mjerenja, ne prepisan naslijepo.
+   */
+  it('os razmaka odlomaka je prekrsena i rijesena na svakom profilu koji ju propisuje', () => {
+    const sPravilima = report.rows.filter((r) => (r.violated as string[]).includes('paragraph-spacing'));
+    // Anti-vakuum: prazan skup bi obje tvrdnje nize ucinio istinitima ni nad cim.
+    expect(sPravilima.length, 'nijedan profil ne krsi os; generator ju je prestao proizvoditi').toBeGreaterThan(2);
+    const nerijeseni = sPravilima
+      .filter((r) => !(r.axesResolved as string[]).includes('paragraph-spacing'))
+      .map((r) => r.profileId);
+    expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
+  });
+
   it('zatecene kategorije odgovaraju zabiljezenima', () => {
     expect(count('pass'), 'pass').toBe(ratchet.pass);
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);

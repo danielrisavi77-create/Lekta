@@ -103,6 +103,15 @@ const AXIS_CHECK_ID: Record<string, string> = {
    * tu os nikad nije krsio.
    */
   'heading-format': 'structure.heading.format',
+  /**
+   * `format.spacing.paragraph` je BODOVANA (max 3, izmjereno na `pravo-integrirani-diplomski`:
+   * 2,8/3 `warn` prije popravka, 3/3 `pass` poslije), pa os smije nositi `resolved`.
+   *
+   * Za razliku od `bibliography`, ovdje se skupovi POKLAPAJU: os se krsi samo kad profil ima
+   * `checkParagraphSpacingZero === true`, a bas ta zastavica i emitira provjeru. Kod literature
+   * je bilo obrnuto (os na svima, bodovanje na manjini) i closed-loop je pao s 372 na 11.
+   */
+  'paragraph-spacing': 'format.spacing.paragraph',
 };
 
 /**

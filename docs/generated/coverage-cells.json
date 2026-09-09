@@ -9,15 +9,15 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4840,
-    "uncoveredCount": 7777,
-    "resolvedCount": 1919,
-    "authoredCount": 3,
+    "coveredCount": 4843,
+    "uncoveredCount": 7774,
+    "resolvedCount": 1923,
+    "authoredCount": 2,
     "byReason": {
       "profil-ne-propisuje-os": 6132,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 17,
+      "nema-dokaza": 14,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -3579,8 +3579,13 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-integrirani-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3849,8 +3854,13 @@
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
       "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -4119,8 +4129,13 @@
     {
       "profileId": "pravo-javna-uprava-diplomski",
       "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -4391,10 +4406,10 @@
       "fixerId": "paragraph-spacing-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "authored",
-        "strength": "applied",
-        "track": "authored",
-        "artifactId": "pravo--final--prijediplomski--neuredan.docx"
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-porezni-prijediplomski",
+        "checkIds": []
       }
     },
     {

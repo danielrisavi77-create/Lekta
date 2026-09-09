@@ -178,6 +178,7 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'croatian-typography-fixer': 'croatian-typography',
   'link-doi-fixer': 'link-doi',
   'required-section-fixer': 'required-section',
+  'paragraph-spacing-fixer': 'paragraph-spacing',
   'bibliography-repair-fixer': 'bibliography',
 };
 
@@ -370,6 +371,12 @@ const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
    * bez dokaza iako je radio.
    */
   'heading-format': ['heading-format-fixer', 'heading-case-fixer'],
+  /**
+   * `format.spacing.paragraph` je bodovana (max 3) i emitira se TOCNO za profile s
+   * `checkParagraphSpacingZero === true`, dakle za one koje generator i krsi. Skupovi se
+   * poklapaju, pa os smije nositi `resolved`; kod literature nisu i ondje je namjerno `applied`.
+   */
+  'paragraph-spacing': 'paragraph-spacing-fixer',
 };
 
 export function buildCoverageCells(

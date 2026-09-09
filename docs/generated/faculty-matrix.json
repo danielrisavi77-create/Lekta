@@ -18876,14 +18876,14 @@
       },
       "cellSummary": {
         "cellCount": 403,
-        "coveredCount": 178,
-        "uncoveredCount": 225,
-        "resolvedCount": 84,
+        "coveredCount": 182,
+        "uncoveredCount": 221,
+        "resolvedCount": 88,
         "byReason": {
           "profil-ne-propisuje-os": 156,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 17,
+          "nema-dokaza": 13,
           "ceka-ljudski-odabir": 26,
           "trazi-ulaz-izvan-dokumenta": 26
         }
@@ -18928,14 +18928,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 15,
-            "uncoveredCount": 16,
-            "resolvedCount": 8,
+            "coveredCount": 16,
+            "uncoveredCount": 15,
+            "resolvedCount": 9,
             "byReason": {
               "profil-ne-propisuje-os": 10,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
+              "nema-dokaza": 1,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -18981,14 +18981,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 15,
-            "uncoveredCount": 16,
-            "resolvedCount": 8,
+            "coveredCount": 16,
+            "uncoveredCount": 15,
+            "resolvedCount": 9,
             "byReason": {
               "profil-ne-propisuje-os": 10,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
+              "nema-dokaza": 1,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -19034,14 +19034,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 15,
-            "uncoveredCount": 16,
-            "resolvedCount": 8,
+            "coveredCount": 16,
+            "uncoveredCount": 15,
+            "resolvedCount": 9,
             "byReason": {
               "profil-ne-propisuje-os": 10,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
+              "nema-dokaza": 1,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -19087,14 +19087,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 15,
-            "uncoveredCount": 16,
-            "resolvedCount": 8,
+            "coveredCount": 16,
+            "uncoveredCount": 15,
+            "resolvedCount": 9,
             "byReason": {
               "profil-ne-propisuje-os": 10,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
+              "nema-dokaza": 1,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -30381,21 +30381,21 @@
     "syntheticClosedLoopPassCount": 372,
     "syntheticClosedLoopNotRunCount": 0,
     "cellCount": 12617,
-    "coveredCellCount": 4837,
-    "uncoveredCellCount": 7780,
-    "resolvedCellCount": 1919
+    "coveredCellCount": 4841,
+    "uncoveredCellCount": 7776,
+    "resolvedCellCount": 1923
   },
   "cellSummary": {
     "cellCount": 12617,
-    "coveredCount": 4837,
-    "uncoveredCount": 7780,
-    "resolvedCount": 1919,
+    "coveredCount": 4841,
+    "uncoveredCount": 7776,
+    "resolvedCount": 1923,
     "authoredCount": 0,
     "byReason": {
       "profil-ne-propisuje-os": 6133,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 19,
+      "nema-dokaza": 15,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }

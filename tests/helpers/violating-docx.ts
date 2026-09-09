@@ -78,6 +78,7 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'field-integrity',
   'heading-format',
   'bibliography',
+  'paragraph-spacing',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -314,6 +315,36 @@ export async function buildViolatingDocx(
      * Kanonizacija DOI-ja je jedan od cetiri popravka koji SMIJU mijenjati vidljiv tekst, i to
      * je namjerno: DOI je identifikator, ne autorova recenica.
      */
+    /**
+     * `paragraph-spacing`: odlomci tijela nose razmak PRIJE i POSLIJE, a profil trazi nulu.
+     *
+     * UVJETNA os: krsi se samo kad profil ima `checkParagraphSpacingZero === true`. Bez tog uvjeta
+     * bi se `paragraph-spacing-fixer` nudio profilima koji razmak ne propisuju, sto je izmisljeno
+     * pravilo, a upravo to tvrdo pravilo ovog repozitorija zabranjuje.
+     *
+     * ZASTO OS POSTOJI. Izmjereno 2026-09-09 nad `coverage-cells.json`: `paragraph-spacing-fixer`
+     * je imao tri celije bez ijednog dokaza (`pravo-integrirani-diplomski`,
+     * `pravo-javna-uprava-prijediplomski`, `pravo-javna-uprava-diplomski`). Uzrok nije bio kvar
+     * fixera ni ugasena zastavica: `paragraphSpacingRepairableItem` stavku GRADI (zastavica je
+     * `true` i u sirovom i u zivom profilu), ali joj upise `violated: false`, pa je
+     * `buildAllRepairableItems` odbaci prije nego dodje do zahtjeva. Generator tu os nikad nije
+     * krsio.
+     *
+     * Razmak se pise IZRAVNIM oblikovanjem, kao i ostale formatne osi: Word tako i pise dokumente,
+     * a `deep` preklopnik cilja bas na to.
+     */
+    if (wants(structural, 'paragraph-spacing') && (profile as { checkParagraphSpacingZero?: unknown } | null)?.checkParagraphSpacingZero === true) {
+      paragraphs.push({
+        ...para,
+        before: 6,
+        after: 12,
+        text:
+          'Ovaj odlomak nosi razmak prije i poslije, iako fakultet trazi nulu. ' +
+          'Popravak smije promijeniti razmak, ali ne i ovu recenicu.',
+      });
+      violated.push('paragraph-spacing');
+    }
+
     if (wants(structural, 'link-doi')) {
       paragraphs.push({ ...para, text: 'Izvor je dostupan pod doi:10.1234/lekta.2026.001 u repozitoriju.' });
       violated.push('link-doi');

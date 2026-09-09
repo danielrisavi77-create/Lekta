@@ -14344,6 +14344,7 @@
         "toc-field",
         "empty-paragraphs",
         "croatian-typography",
+        "paragraph-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14353,13 +14354,14 @@
         "heading-format",
         "margins"
       ],
-      "requested": 14,
+      "requested": 15,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
         "justify",
         "toc-field",
+        "paragraph-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14388,6 +14390,7 @@
         "heading-style-fixer",
         "line-spacing-fixer",
         "link-doi-fixer",
+        "paragraph-spacing-fixer",
         "toc-field-fixer"
       ],
       "profileAxesViolated": [
@@ -14397,7 +14400,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 8,
+      "resolved": 9,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14412,6 +14415,7 @@
         "toc-field",
         "empty-paragraphs",
         "croatian-typography",
+        "paragraph-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14421,13 +14425,14 @@
         "heading-format",
         "margins"
       ],
-      "requested": 14,
+      "requested": 15,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
         "justify",
         "toc-field",
+        "paragraph-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14456,6 +14461,7 @@
         "heading-style-fixer",
         "line-spacing-fixer",
         "link-doi-fixer",
+        "paragraph-spacing-fixer",
         "toc-field-fixer"
       ],
       "profileAxesViolated": [
@@ -14465,7 +14471,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 8,
+      "resolved": 9,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14480,6 +14486,7 @@
         "toc-field",
         "empty-paragraphs",
         "croatian-typography",
+        "paragraph-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14489,13 +14496,14 @@
         "heading-format",
         "margins"
       ],
-      "requested": 14,
+      "requested": 15,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
         "justify",
         "toc-field",
+        "paragraph-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14524,6 +14532,7 @@
         "heading-style-fixer",
         "line-spacing-fixer",
         "link-doi-fixer",
+        "paragraph-spacing-fixer",
         "toc-field-fixer"
       ],
       "profileAxesViolated": [
@@ -14533,7 +14542,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 8,
+      "resolved": 9,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14609,6 +14618,7 @@
         "toc-field",
         "empty-paragraphs",
         "croatian-typography",
+        "paragraph-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14618,13 +14628,14 @@
         "heading-format",
         "margins"
       ],
-      "requested": 14,
+      "requested": 15,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
         "justify",
         "toc-field",
+        "paragraph-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14653,6 +14664,7 @@
         "heading-style-fixer",
         "line-spacing-fixer",
         "link-doi-fixer",
+        "paragraph-spacing-fixer",
         "toc-field-fixer"
       ],
       "profileAxesViolated": [
@@ -14662,7 +14674,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 8,
+      "resolved": 9,
       "regressions": 0,
       "textPreserved": true
     },

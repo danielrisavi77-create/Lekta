@@ -1030,6 +1030,54 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'petlja/uvjetna-os-tiho-prestane-pogadjati',
+    imitates:
+      'UVJETNA os generatora (krsi se samo kad profil nosi odredjenu zastavicu) prestane pogadjati, ' +
+      'jer se zastavica preimenuje ili graditelj promijeni uvjet. Razred je opasniji od bezuvjetne ' +
+      'osi upravo zato sto je populacija mala: `paragraph-spacing` se krsi na 4 od 407 profila, pa ' +
+      'gubitak ne pomice nijednu zbirnu brojku. `pass` ostaje 372 (os koja se ne krsi ne moze ni ' +
+      'pasti), a matrica tiho izgubi tri celije s dokazom `resolved` i jednu vrati s `resolved` na ' +
+      '`applied`. Gard koji bi trazio veliku populaciju ovdje ne bi grizao, pa je prag izveden iz ' +
+      'mjerenja',
+    caught: () => {
+      type Redak = { profileId: string; violated: string[]; axesResolved: string[] };
+      const provjeri = (rows: Redak[]) => {
+        const sPravilima = rows.filter((r) => r.violated.includes('paragraph-spacing'));
+        if (sPravilima.length <= 2) return true; // uvjet je prestao pogadjati
+        return sPravilima.some((r) => !r.axesResolved.includes('paragraph-spacing'));
+      };
+      // 1) Zastavica se preimenovala: nijedan redak vise ne krsi os.
+      const nestala = provjeri([
+        { profileId: 'a', violated: ['font'], axesResolved: ['font'] },
+        { profileId: 'b', violated: ['font'], axesResolved: ['font'] },
+      ]);
+      // 2) Uvjet je prezivio samo na dva profila umjesto na cetiri: pad ispod praga se vidi.
+      const osula = provjeri([
+        { profileId: 'a', violated: ['paragraph-spacing'], axesResolved: ['paragraph-spacing'] },
+        { profileId: 'b', violated: ['paragraph-spacing'], axesResolved: ['paragraph-spacing'] },
+      ]);
+      // 3) Os se krsi, ali ju popravak vise ne zatvara.
+      const nerijesena = provjeri(
+        Array.from({ length: 4 }, (_, i) => ({
+          profileId: `p${i}`,
+          violated: ['paragraph-spacing'],
+          axesResolved: i === 2 ? [] : ['paragraph-spacing'],
+        })),
+      );
+      return nestala && osula && nerijesena;
+    },
+    // Netrivijalnost: izmjereno stanje (cetiri profila, sva cetiri zatvorena) NE smije dati nalaz.
+    cleanBefore: () => {
+      const rows = Array.from({ length: 4 }, (_, i) => ({
+        profileId: `p${i}`,
+        violated: ['paragraph-spacing'],
+        axesResolved: ['paragraph-spacing'],
+      }));
+      const sPravilima = rows.filter((r) => r.violated.includes('paragraph-spacing'));
+      return sPravilima.length > 2 && !sPravilima.some((r) => !r.axesResolved.includes('paragraph-spacing'));
+    },
+  },
+  {
     id: 'petlja/glavni-prolaz-zaboravi-tko-je-mijenjao',
     imitates:
       'glavni prolaz closed-loopa prestane biljeziti identitet fixera koji su promijenili dokument, ' +
