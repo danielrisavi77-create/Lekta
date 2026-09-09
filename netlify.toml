@@ -26,7 +26,18 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  # ISTA VERZIJA KAO CI, i to je uvjet a ne uskladjivanje radi urednosti.
+  #
+  # `dist-gate` (`.github/workflows/check.yml`) vrti DOSLOVNO gornji `command`, pa
+  # `verify-deploy-dist` i ux testove nad `dist/`. Time CI odgovara na pitanje "gradi li se
+  # produkcijski artefakt" na svaki push. Ta zamjena vrijedi SAMO ako obje strane grade istim
+  # runtimeom; dok je CI bio na 24 a ovdje 20, "CI zelen" nije znacilo "Netlify zelen".
+  #
+  # Podize se Netlify na 24, a ne CI na 20: Node 20 je izasao iz podrske, pa bi spustanje CI-ja
+  # bilo korak unatrag. Provjereno 2026-09-09 prije izmjene: cijeli lanac (vite build + svih
+  # sedam generatora + verify-deploy-dist) prolazi i na 20 i na 24, pa ovo NIJE popravak
+  # tekuceg pada deploya nego uklanjanje razlike zbog koje se pad ne bi vidio u CI-u.
+  NODE_VERSION = "24"
   DEPLOY = "1"
   # Generator citata pece kanonske URL-ove i sitemap iz ove domene (BEZ zavrsne kose crte,
   # inace bi ${ORIGIN}/alati/... dalo dvostruki //). Ziva domena je Netlify subdomena.
