@@ -30,6 +30,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 interface LedgerRow {
   profileId: string | null;
+  unitId: string;
+  workType: string;
   claim: ClaimLevel;
   claimLabel: string;
   proof: ProofAxis;
@@ -44,6 +46,9 @@ const byProfile: Record<string, ClaimLevel> = {};
 const conflicts: string[] = [];
 /** Izvori dokaza po profilu, preko svih njegovih redaka (vrsta rada x program). */
 const sourcesByProfile: Record<string, Set<ProofSource | 'none'>> = {};
+/** Parovi `unitId::workType` po profilu i profili na kojima je dokaz stvarno IZMJEREN po paru (T05). */
+const pairsByProfile: Record<string, Set<string>> = {};
+const measuredByPair: Record<string, Set<string>> = {};
 
 for (const row of ledger.rows) {
   if (!row.profileId) continue;
@@ -56,6 +61,9 @@ for (const row of ledger.rows) {
   if (seen && seen !== row.claim) conflicts.push(row.profileId);
   byProfile[row.profileId] = row.claim;
   (sourcesByProfile[row.profileId] ??= new Set()).add(row.proofSource ?? 'none');
+  const pairKey = `${row.unitId}::${row.workType}`;
+  (pairsByProfile[row.profileId] ??= new Set()).add(pairKey);
+  if (row.proofSource === 'profile') (measuredByPair[pairKey] ??= new Set()).add(row.profileId);
 }
 
 /**
@@ -70,6 +78,18 @@ const inheritedA = Object.keys(byProfile)
     return s.has('unit-work-type') && !s.has('profile');
   })
   .sort();
+
+/**
+ * Za svaki naslijedjeni A profil: profili iste ustanove i vrste rada na kojima je dokaz IZMJEREN (T05,
+ * `testedProfileIds`). Sucelje to prepisuje; prazan popis bi bio kvar (nasljedjuje se od nekoga), pa se staje.
+ */
+const inheritedFrom: Record<string, string[]> = {};
+for (const id of inheritedA) {
+  const tested = new Set<string>();
+  for (const pair of pairsByProfile[id] ?? []) for (const src of measuredByPair[pair] ?? []) if (src !== id) tested.add(src);
+  if (!tested.size) throw new Error(`naslijedjeni A profil ${id} nema izmjerenog izvora dokaza`);
+  inheritedFrom[id] = [...tested].sort();
+}
 
 // Nazivnici imenovani: 407 iz registra + 3 pravne katedre = 410. Brojaci po slovu se daju ZASEBNO,
 // jer se inace "D 34" (spoj nad registrom) i "D 37" (cijeli artefakt) razilaze bez objasnjenja.
@@ -111,6 +131,8 @@ const out = {
   proofNotes: PROOF_SOURCE_NOTE,
   /** Profili razine A s iskljucivo naslijedjenim dokazom (par jedinica x vrsta rada), sortirano. */
   inheritedA,
+  /** Za svaki naslijedjeni A profil: profili na kojima je dokaz izmjeren (T05, `testedProfileIds`). */
+  inheritedFrom,
   byProfile,
 };
 

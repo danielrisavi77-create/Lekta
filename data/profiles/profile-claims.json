@@ -50,6 +50,65 @@
     "pravo-socijalni-opci-akademski-rad",
     "ttf-dizajn-diplomski"
   ],
+  "inheritedFrom": {
+    "ffzg-arheologija-graduate": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "ffzg-etnologija-graduate": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "ffzg-kroatistika-graduate": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "ffzg-lingvistika-diplomski": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "ffzg-pedagogija-graduate": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "ffzg-povijest-umjetnosti-diplomski": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "ffzg-psihologija-diplomski": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "ffzg-sociologija-diplomski": [
+      "ffzg-filozofija-diplomski"
+    ],
+    "fpzg-mes-master-thesis": [
+      "fpzg-politologija-diplomski"
+    ],
+    "fpzg-nacionalna-sigurnost-diplomski": [
+      "fpzg-politologija-diplomski"
+    ],
+    "fpzg-novinarstvo-diplomski": [
+      "fpzg-politologija-diplomski"
+    ],
+    "fpzg-novinarstvo-zavrsni-tekst": [
+      "fpzg-politologija-zavrsni"
+    ],
+    "libertas-diplomski-en": [
+      "libertas-diplomski"
+    ],
+    "pmf-biologija-graduate": [
+      "pmf-matematika-graduate"
+    ],
+    "pmf-fizika-graduate": [
+      "pmf-matematika-graduate"
+    ],
+    "pmf-geografija-diplomski": [
+      "pmf-matematika-graduate"
+    ],
+    "pmf-geologija-graduate": [
+      "pmf-matematika-graduate"
+    ],
+    "pravo-socijalni-opci-akademski-rad": [
+      "pravo-opci-pravni-akademski-rad"
+    ],
+    "ttf-dizajn-diplomski": [
+      "ttf-diplomski"
+    ]
+  },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
     "adu-ftv-rezija-diplomski": "E",
