@@ -50,6 +50,11 @@ test.describe('dist: putovanje od pocetne stranice', () => {
   test('/ -> ubaci dokument -> /rad/#session -> dokument vec ucitan -> analiza -> plan popravka', async ({ page }) => {
     await posluziPravilaIzArtefakta(page);
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.addInitScript(() => {
+      const st = document.createElement('style');
+      st.textContent = 'html,body,*{scroll-behavior:auto!important;transition:none!important;animation:none!important}';
+      document.documentElement.appendChild(st);
+    });
 
     await page.goto('/');
     // Pocetna stranica nosi SAMO ulaz: nema analizatora ni njegove privolne trake u pocetnom grafu.
@@ -61,10 +66,13 @@ test.describe('dist: putovanje od pocetne stranice', () => {
     await page.waitForURL(/\/rad\/#session=[0-9a-f-]{36}$/i, { timeout: 60_000 });
     expect(page.url()).not.toContain('prazni-odlomci');
 
+    // Privola nije predmet ovog testa. Izmjereno na CI-u 2026-09-09: nakon preusmjeravanja s `/` gumb je
+    // "resolved" ali Playwright ga 300 s nije proglasio stabilnim (traka ulazi animacijom), pa se odbijanje
+    // salje kao dogadjaj, kako to radi i korisnikov klik, bez cekanja na animaciju.
     const odbij = page.locator('#analyticsDecline');
     if (await odbij.isVisible().catch(() => false)) {
-      await odbij.click();
-      await expect(page.locator('#consentBanner')).toBeHidden();
+      await odbij.dispatchEvent('click');
+      await expect(page.locator('#consentBanner')).toBeHidden({ timeout: 30_000 });
     }
     await cekajApp(page);
 
