@@ -40,6 +40,8 @@ import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
+import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -1116,6 +1118,20 @@ const MUTATIONS: Mutation[] = [
       'napadac bira koliko memorije potrosi neovisno o granici datoteke',
     caught: () => !metaWithinBudget('x'.repeat(256 * 1024 + 1), 256 * 1024),
     cleanBefore: () => metaWithinBudget(JSON.stringify({ workType: 'graduate', requests: [], references: [] }), 256 * 1024),
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 6. Broj high/critical u punom grafu `npm audit` samo se ispisivao
+   * u koraku s `continue-on-error`, pa je s 21 (komentar, 2026-08-24) narastao na 23 a da CI to nije
+   * mogao pokazati. Ratchet cita STVARNU commitanu datoteku stropa: podmetnut porast za jedan mora
+   * biti `above`, jednak broj `equal`.
+   */
+  {
+    id: 'supply-chain/porast-nalaza-nevidljiv',
+    imitates:
+      'zeleni security workflow koji broj high/critical nalaza u punom grafu samo ispise (continue-on-error), ' +
+      'pa porast s 21 na 23 prodje neopazeno jer nista ne tvrdi strop',
+    caught: () => compareToRatchet(auditRatchet.fullGraphHighCritical + 1, auditRatchet).verdict === 'above',
+    cleanBefore: () => compareToRatchet(auditRatchet.fullGraphHighCritical, auditRatchet).verdict === 'equal',
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
