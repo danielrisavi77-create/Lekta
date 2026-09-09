@@ -19,7 +19,7 @@
  * fakulteta, pa su posteno `derived`.
  */
 import type { WorkType } from '../profiles/profile-schema';
-import { provenUnitWorkTypes, type CorpusAttestation } from './real-corpus-attestation';
+import { provenUnitWorkTypes, attestedProfileWorkTypes, type CorpusAttestation } from './real-corpus-attestation';
 
 /** Odakle znamo da program postoji: `official` = sluzbeni Upisnik (jos nedostupno, faza P1). */
 export type ProgramAxis = 'official' | 'derived' | 'missing' | 'unsupported';
@@ -29,6 +29,48 @@ export type RulesAxis = 'verified' | 'bulk-pending' | 'advisory-only' | 'none';
 export type RepairAxis = 'faculty-specific' | 'universal-hygiene' | 'manual-only';
 /** Najjaci dokaz da popravak stvarno radi na dokumentu. */
 export type ProofAxis = 'real-docx-pass' | 'synthetic-pass' | 'review' | 'not-run';
+
+/**
+ * ODAKLE dolazi dokaz na stvarnom radu, kad ga redak ima (`proof === 'real-docx-pass'`).
+ *
+ *  - `profile`: mjereno na dokumentima OVOG profila: commitani uzorci (`automaticTests.realCorpus`)
+ *    ili profil imenovan u `profileIds` dokazanog unosa ovjere (`attestedProfileWorkTypes`).
+ *  - `unit-work-type`: izvedeno iz ovjere za par jedinica x vrsta rada (`provenUnitWorkTypes`),
+ *    dakle mjereno na DRUGOM profilu iste ustanove i iste vrste rada.
+ *  - `null`: redak nema dokaz na stvarnom radu.
+ *
+ * Vanjski audit 2026-09-08 (nalaz 4): od 31 profila razine A samo 12 je izravno u ovjeri, 19
+ * nasljedjuje po paru, a sucelje je istom recenicom pokrivalo oboje. Izvedeni dokaz je legitiman
+ * (odluka vlasnika 2026-09-05), ali se mora RAZLIKOVATI od izmjerenog, inace je tvrdnja
+ * "dokazano na stvarnom radu" za 19 profila jaca od onoga sto je mjereno.
+ */
+export type ProofSource = 'profile' | 'unit-work-type';
+
+/**
+ * Napomena koja se PREPISUJE uz razinu kad je dokaz naslijedjen. Zivi ovdje, ne u sucelju, iz istog
+ * razloga kao `claimLabel`: tekst koji generator sroci sam ne prolazi kroz nijednu os.
+ */
+export const PROOF_SOURCE_NOTE: Record<ProofSource, string> = {
+  profile: '',
+  'unit-work-type':
+    'Dokaz na stvarnom radu izmjeren je na drugom profilu iste ustanove i iste vrste rada, ne na ovom profilu.',
+};
+
+/**
+ * Nesklad izmedju osi dokaza i njezinog izvora: redak s dokazom na stvarnom radu bez izvora, ili
+ * redak s izvorom a bez tog dokaza. Cista funkcija, pa je mutacijski test moze zvati sinkrono.
+ */
+export function proofSourceProblems(
+  rows: ReadonlyArray<{ profileId: string | null; proof: ProofAxis; proofSource: ProofSource | null }>,
+): string[] {
+  const out: string[] = [];
+  for (const r of rows) {
+    const hasProof = r.proof === 'real-docx-pass';
+    if (hasProof && r.proofSource == null) out.push(`${r.profileId ?? '?'}: dokaz na stvarnom radu bez izvora`);
+    if (!hasProof && r.proofSource != null) out.push(`${r.profileId ?? '?'}: izvor dokaza bez dokaza`);
+  }
+  return out;
+}
 /** Vjernost pomocnog sadrzaja (naslovnica, citatni spec, izjava). */
 export type AssetAxis = 'exact-official' | 'exact-derived' | 'reused' | 'generic' | 'unknown';
 /** Razina javne tvrdnje; vidi CLAIM_LADDER. */
@@ -61,6 +103,8 @@ export interface LedgerRow {
   rules: RulesAxis;
   repair: RepairAxis;
   proof: ProofAxis;
+  /** Odakle dokaz na stvarnom radu dolazi; `null` kad ga redak nema. Vidi `ProofSource`. */
+  proofSource: ProofSource | null;
   assets: AssetAxis;
   claim: ClaimLevel;
   /**
@@ -92,6 +136,8 @@ export interface LedgerSummary {
   byRules: Record<RulesAxis, number>;
   byRepair: Record<RepairAxis, number>;
   byProof: Record<ProofAxis, number>;
+  /** Koliko redaka s dokazom na stvarnom radu ga ima izmjerenog (`profile`) a koliko izvedenog (`unit-work-type`). */
+  byProofSource: Record<ProofSource | 'none', number>;
   /**
    * `assets` je NAJSLABIJI clan svoje tri podosi, pa dok je `data/declarations/declarations.json`
    * prazan, cijela os pada na `generic` za svaki redak. Bez razlaganja bi to sakrilo da su
@@ -306,6 +352,9 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
    * rada a ne po katedri. Isti ustupak vec postoji za citatne specove.
    */
   const dokazani = provenUnitWorkTypes(inputs.corpusAttestation);
+  // Parovi profil::vrsta na cijim je radovima dokaz STVARNO izmjeren; razlika prema `dokazani` je
+  // razlika izmedju izmjerenog i izvedenog (`proofSource`).
+  const izmjereni = attestedProfileWorkTypes(inputs.corpusAttestation);
   const coverageByProfile = new Map(inputs.coverageCells.map((c) => [c.profileId, c]));
   const bulkByProfile = new Map(inputs.worklistRows.map((r) => [r.profileId, r.bulk]));
 
@@ -403,6 +452,14 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
             : profile.automaticTests.realCorpus === 'review' || loop === 'partial'
               ? 'review'
               : 'not-run';
+      // Izvor dokaza, odvojeno od osi: izmjereno na OVOM profilu ima prednost pred izvedenim iz
+      // ovjere para jedinica x vrsta rada. `null` kad dokaza na stvarnom radu nema.
+      const proofSourceFor = (workType: string | null): ProofSource | null =>
+        profile.automaticTests.realCorpus === 'pass' || izmjereni.has(`${profile.profileId}::${workType}`)
+          ? 'profile'
+          : dokazani.has(`${faculty.unitId}::${workType}`)
+            ? 'unit-work-type'
+            : null;
 
       // `official` smije doci ISKLJUCIVO iz sluzbenog Upisnika; zapis sa stranice fakulteta je
       // vjerodostojan, ali nije nacionalni registar, pa ostaje `derived`.
@@ -453,6 +510,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
           rules,
           repair,
           proof,
+          proofSource: proofSourceFor(workType),
           assets: weakestAsset([titlePage, citation, declaration]),
           claim,
           claimLabel: CLAIM_LADDER[claim],
@@ -493,6 +551,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
         rules: 'none',
         repair: 'manual-only',
         proof: 'not-run',
+        proofSource: null,
         assets: 'unknown',
         claim: 'E',
         claimLabel: CLAIM_LADDER.E,
@@ -527,6 +586,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
     byRules: emptyCount(['verified', 'bulk-pending', 'advisory-only', 'none'] as const),
     byRepair: emptyCount(['faculty-specific', 'universal-hygiene', 'manual-only'] as const),
     byProof: emptyCount(['real-docx-pass', 'synthetic-pass', 'review', 'not-run'] as const),
+    byProofSource: emptyCount(['profile', 'unit-work-type', 'none'] as const),
     byAssets: emptyCount(ASSET_ORDER),
     byTitlePage: emptyCount(ASSET_ORDER),
     byCitation: emptyCount(ASSET_ORDER),
@@ -541,6 +601,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
     summary.byRules[row.rules] += 1;
     summary.byRepair[row.repair] += 1;
     summary.byProof[row.proof] += 1;
+    summary.byProofSource[row.proofSource ?? 'none'] += 1;
     summary.byAssets[row.assets] += 1;
     summary.byTitlePage[row.assetDetail.titlePage] += 1;
     summary.byCitation[row.assetDetail.citation] += 1;

@@ -22,7 +22,7 @@
   # generate-competitor-pages: /usporedba/<slug>/ podstranice (P2b), svaka tvrdnja izvorena
   # preko data/competitors/competitor-facts.json; poredak prema drugim generatorima nebitan,
   # samo mora biti poslije `vite build` i prije zavrsnog verify gatea.
-  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-title-page-tools && npm run generate-competitor-pages && node scripts/verify-deploy-dist.mjs"
+  command = "npm run build && npm run build-info && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-title-page-tools && npm run generate-competitor-pages && node scripts/verify-deploy-dist.mjs"
   publish = "dist"
 
 [build.environment]
@@ -41,6 +41,10 @@
   # POSLJEDICA KOJU TREBA ZNATI: od trenutka kad ovo udje u master, produkcijski build PADA dok
   # dokaz ne bude potpun, vezan uz ono sto se gradi, nastao nad cistim stablom i mladji od
   # LEKTA_PROOF_MAX_AGE_DAYS (zadano 14). Popravak je `npm run release:check` pa commit dokaza.
+  # "Vezan uz ono sto se gradi" se od 2026-09-09 mjeri OTISKOM STABLA (`treeDigest`, bez same
+  # datoteke dokaza), ne `git diff`-om medju commitovima: diff je u plitkom klonu tiho prolazio
+  # (vanjski audit 2026-09-08, nalaz 1). Dokaz bez otiska ili stablo koje se ne da procitati je
+  # "ne znam", i to je pad, ne prolaz.
   # To je namjera gatea, ne nuspojava: zastario dokaz je opasniji od nikakvog jer izgleda kao
   # potvrda za kod koji nitko nije provjerio.
   LEKTA_REQUIRE_RELEASE_PROOF = "1"

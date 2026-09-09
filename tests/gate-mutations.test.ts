@@ -38,6 +38,12 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
+import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import auditRatchet from '../data/security/npm-audit-ratchet.json';
+import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
+import { proofSourceProblems } from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -1087,6 +1093,86 @@ const MUTATIONS: Mutation[] = [
     // Baseline: stvaran izvor u repozitoriju mora biti cist, inace tvrdnja gore ne govori o mutaciji.
     cleanBefore: () =>
       !hasNaiveEntryGuard(readFileSync(resolve(process.cwd(), 'scripts/post-deploy-smoke.mjs'), 'utf8')),
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 5. `repair-docx` je citao multipart s `req.formData()` iza
+   * provjere `clen && clen > MAX`: bez `Content-Length` je `clen` 0, uvjet otpadne, i cijelo tijelo
+   * se parsira u memoriju prije ijedne granice. Straza je staticka (cita izvor) jer grize i na
+   * NOVOJ funkciji koju nijedan dinamicki test jos ne poznaje.
+   */
+  {
+    id: 'edge/multipart-bez-granice',
+    imitates:
+      'Edge funkcija koja multipart cita s `req.formData()` pa velicinu provjerava POSLIJE, kad je ' +
+      'tijelo vec u memoriji; bez Content-Length zaglavlja rana provjera `clen && clen > MAX` otpadne',
+    caught: () => hasUnboundedFormData('const clen = Number(h ?? "0"); if (clen && clen > MAX) return r413(); const form = await req.formData();'),
+    cleanBefore: () =>
+      !hasUnboundedFormData(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')),
+  },
+  /**
+   * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,
+   * inace bi dijakritici propustili osjetno vece tijelo od deklariranog.
+   */
+  {
+    id: 'edge/meta-dio-bez-granice',
+    imitates:
+      'tekstualni `meta` dio multiparta koji ulazi u JSON.parse bez ikakve granice velicine, pa ' +
+      'napadac bira koliko memorije potrosi neovisno o granici datoteke',
+    caught: () => !metaWithinBudget('x'.repeat(256 * 1024 + 1), 256 * 1024),
+    cleanBefore: () => metaWithinBudget(JSON.stringify({ workType: 'graduate', requests: [], references: [] }), 256 * 1024),
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 6. Broj high/critical u punom grafu `npm audit` samo se ispisivao
+   * u koraku s `continue-on-error`, pa je s 21 (komentar, 2026-08-24) narastao na 23 a da CI to nije
+   * mogao pokazati. Ratchet cita STVARNU commitanu datoteku stropa: podmetnut porast za jedan mora
+   * biti `above`, jednak broj `equal`.
+   */
+  {
+    id: 'supply-chain/porast-nalaza-nevidljiv',
+    imitates:
+      'zeleni security workflow koji broj high/critical nalaza u punom grafu samo ispise (continue-on-error), ' +
+      'pa porast s 21 na 23 prodje neopazeno jer nista ne tvrdi strop',
+    caught: () => compareToRatchet(auditRatchet.fullGraphHighCritical + 1, auditRatchet).verdict === 'above',
+    cleanBefore: () => compareToRatchet(auditRatchet.fullGraphHighCritical, auditRatchet).verdict === 'equal',
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
+   * commitovima i u catch grani vracao "nije zastario": u plitkom klonu (Netlify, CI) stari commit ne
+   * postoji, pa je gate ispisao "OK" nad dokazom od kojeg se promijenilo 425 datoteka. Presuda sada
+   * ima tri ishoda, a nepoznato stablo NIKAD nije svjeze.
+   */
+  {
+    id: 'dokaz/zastarjelost-nepoznata-prolazi-kao-svjeza',
+    imitates:
+      'gate koji "ne moze procitati povijest" (plitak klon, bad object) tretira kao "nije zastarjelo", ' +
+      'pa dokaz pecen 425 datoteka ranije prolazi kao potvrda za kod koji nitko nije provjerio',
+    caught: () => {
+      const digest = treeDigestFromLsTree('100644 blob 1111111111111111111111111111111111111111\tsrc/a.ts');
+      return proofStaleness({ commit: 'abc', treeDigest: digest }, null).verdict !== 'fresh';
+    },
+    cleanBefore: () => {
+      const digest = treeDigestFromLsTree('100644 blob 1111111111111111111111111111111111111111\tsrc/a.ts');
+      return proofStaleness({ commit: 'abc', treeDigest: digest }, digest).verdict === 'fresh';
+    },
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 4. Razina A je za 19 od 31 profila bila IZVEDENA (par jedinica x
+   * vrsta rada), ne izmjerena, a nista to nije razlikovalo. Ledger sada nosi `proofSource`; gard je
+   * cista funkcija nad redcima, a baseline cita COMMITANI ledger.
+   */
+  {
+    id: 'ledger/naslijedjeni-dokaz-bez-izvora',
+    imitates:
+      'redak s dokazom na stvarnom radu bez zapisanog izvora, pa sucelje ne moze razlikovati profil na ' +
+      'kojem je mjereno od profila koji dokaz nasljedjuje po paru jedinica x vrsta rada',
+    caught: () =>
+      proofSourceProblems([{ profileId: 'x', proof: 'real-docx-pass', proofSource: null }]).length === 1,
+    cleanBefore: () =>
+      proofSourceProblems(
+        (JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/completion-ledger.json'), 'utf8')) as {
+          rows: Parameters<typeof proofSourceProblems>[0];
+        }).rows,
+      ).length === 0,
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

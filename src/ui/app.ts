@@ -1416,11 +1416,12 @@ function renderPhaseThreeRepairEntry(r: any){
 // stavka trenutno nije ponudjena (npr. dokument nema upotrebljiv split sekcija za numeriranje),
 // korisnik dobiva postenu poruku umjesto tihog slijetanja na nepovezanu stavku.
 function scrollToRepairPanel(r: any,finding?: any){
-  // renderResult zatvori #resultDetails I #tabDetails, a openTab samo prebacuje klase. Bez ova dva
-  // otkrivanja CTA je prebacivao karticu koja je i dalje skrivena, pa se naizgled nista ne dogodi
-  // (isti obrazac koji vec koriste kartice u #categoryGrid).
+  // renderResult zatvori #resultDetails i #tabDetails, a napredni blok je zadano sklopljen: bez sva TRI
+  // otkrivanja CTA prebaci karticu visine 0 i skrol nema metu, pa se nista ne dogodi
+  // (audit 2026-09-08 nalaz 2; gard repair-cta-opens-panel.spec.ts).
   revealResultDetails();
   revealDetails();
+  setResultsCockpitAdvanced(true);
   openTab('submission');
   const m=$('#repairPanelMount');
   let act: any=null;

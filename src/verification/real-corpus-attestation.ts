@@ -111,3 +111,22 @@ export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Se
   }
   return out;
 }
+
+/**
+ * Parovi `profileId::workType` na cijim je dokumentima dokaz STVARNO izmjeren (polje `profileIds`
+ * dokazanog unosa). Razlika prema `provenUnitWorkTypes` je razlika izmedju izmjerenog i izvedenog:
+ * ovjera dokazuje par jedinica x vrsta rada za sve profile te jedinice, ali su radovi dosli iz
+ * profila koje unos imenuje. Ledger tu razliku biljezi kao `proofSource` (vanjski audit
+ * 2026-09-08, nalaz 4: sucelje je 12 izmjerenih i 19 izvedenih profila pokrivalo istom recenicom).
+ * Isti uvjet cistoce kao za par: unos s regresijom nista ne dokazuje.
+ */
+export function attestedProfileWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
+  if (attestationProblems(a).length > 0) return new Set();
+  const out = new Set<string>();
+  for (const e of a!.entries) {
+    if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
+      for (const p of e.profileIds ?? []) out.add(`${p}::${e.workType}`);
+    }
+  }
+  return out;
+}

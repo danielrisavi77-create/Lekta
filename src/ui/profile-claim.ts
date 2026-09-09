@@ -24,12 +24,27 @@ export interface ProfileClaim {
   claim: ClaimLetter;
   /** Doslovan tekst iz ljestvice. Nikad sastavljen u sucelju. */
   label: string;
+  /**
+   * Za razinu A: je li dokaz na stvarnom radu izmjeren na OVOM profilu (`direct`) ili naslijedjen od
+   * drugog profila iste ustanove i iste vrste rada (`inherited`). `null` za ostale razine.
+   *
+   * Vanjski audit 2026-09-08 (nalaz 4): od 31 A profila 19 je nasljedjivalo dokaz, a sucelje ih je
+   * pokrivalo istom recenicom kao i 12 izmjerenih. Popis naslijedjenih se PREPISUJE iz artefakta
+   * (`inheritedA`, pecen iz ledgera), ne izvodi ovdje.
+   */
+  proof: 'direct' | 'inherited' | null;
+  /** Napomena uz naslijedjen dokaz, doslovno iz ledgera (PROOF_SOURCE_NOTE); prazna inace. */
+  note: string;
 }
 
 const ARTIFACT = claims as unknown as {
   ladder: Record<string, string>;
   byProfile: Record<string, ClaimLetter>;
+  proofNotes?: Record<string, string>;
+  inheritedA?: string[];
 };
+
+const INHERITED_A = new Set(ARTIFACT.inheritedA ?? []);
 
 /**
  * Razina dokaza za profil, ili `null` kad profila nema (opca provjera, nepoznat id).
@@ -42,10 +57,22 @@ export function profileClaimFor(profileId: string | null | undefined): ProfileCl
   if (!claim) return null;
   const label = ARTIFACT.ladder[claim];
   if (!label) return null;
-  return { claim, label };
+  if (claim !== 'A') return { claim, label, proof: null, note: '' };
+  const inherited = INHERITED_A.has(profileId);
+  return {
+    claim,
+    label,
+    proof: inherited ? 'inherited' : 'direct',
+    note: inherited ? (ARTIFACT.proofNotes?.['unit-work-type'] ?? '') : '',
+  };
 }
 
-/** Recenica za prikaz uz profil. Prefiks je oznaka polja, ostatak je doslovan tekst ljestvice. */
+/**
+ * Recenica za prikaz uz profil. Prefiks je oznaka polja, ostatak je doslovan tekst ljestvice; za
+ * naslijedjen dokaz slijedi napomena, takodjer doslovna iz ledgera.
+ */
 export function claimSentence(claim: ProfileClaim | null): string {
-  return claim ? `Razina dokaza ${claim.claim}: ${claim.label}.` : '';
+  if (!claim) return '';
+  const base = `Razina dokaza ${claim.claim}: ${claim.label}.`;
+  return claim.proof === 'inherited' && claim.note ? `${base} ${claim.note}` : base;
 }

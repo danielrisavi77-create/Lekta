@@ -52,22 +52,21 @@ jobs:
       # bundler utjece na ono sto se objavi jednako kao i runtime ovisnost. Do sada taj graf nitko
       # nije ni mjerio.
       #
-      # NIJE blokirajuc, i to je posteno stanje a ne izgovor: mjereno 2026-08-24 pun graf ima 21
-      # high/critical nalaz, SVE transitivno pod `netlify-cli`, uz `vitest`/`vite` (critical je sam
-      # vitest, sto zatvara vec otvoreni dependabot PR #8). Nijedan se ne da popraviti u ovom
-      # repozitoriju bez odluke o nadogradnji tih alata, pa bi tvrdi gate samo trajno obojio CI
-      # crveno i naucio sve da ga ignoriraju. Ovako je broj VIDLJIV i mjerljiv po commitu, a gate
-      # postaje tvrd kad vlasnik odluci o nadogradnji.
-      - name: Audit punog grafa (vidljivo, ne blokira)
-        continue-on-error: true
+      # RATCHET, ne tvrdi gate, i ne vise samo ispis (vanjski audit 2026-09-08, nalaz 6). Do
+      # 2026-09-09 ovaj je korak imao `continue-on-error` i broj samo ISPISIVAO, pa je rast bio
+      # nevidljiv: komentar ovdje tvrdio je 21 (mjereno 2026-08-24), a stvarno je bilo 23. Strop
+      # zivi u `data/security/npm-audit-ratchet.json` i smije samo PADATI: iznad stropa korak pada,
+      # ispod stropa javlja `::notice` da se strop spusti, jednako je tiho OK. Tvrdi gate na nuli
+      # bi i dalje bio greska: svih 23 su tranzitivni pod `netlify-cli` i `vitest`/`vite` i ne
+      # daju se popraviti bez odluke o nadogradnji tih alata, pa bi trajno crven CI naucio sve da
+      # ga ignoriraju. Selftest prije mjerenja dokazuje da gard grize (podmetnut porast mora pasti).
+      - name: Audit punog grafa (ratchet, selftest pa mjerenje)
         run: |
           echo "::group::Pun dependency graf (runtime + build)"
           npm audit --audit-level=high || true
           echo "::endgroup::"
-          BROJ=$(npm audit --json 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const v=JSON.parse(s).vulnerabilities||{};console.log(Object.values(v).filter(x=>['high','critical'].includes(x.severity)).length)})")
-          echo "high/critical u punom grafu: $BROJ"
-          echo "### Supply chain: $BROJ high/critical u punom grafu" >> "$GITHUB_STEP_SUMMARY"
-          echo "Produkcijski graf (ono sto ide u bundle) je zaseban korak iznad i JEST blokirajuc." >> "$GITHUB_STEP_SUMMARY"
+          node scripts/npm-audit-ratchet.mjs --selftest
+          node scripts/npm-audit-ratchet.mjs
 
       # SBOM (audit P1-21). Popis svega sto je stvarno instalirano, vezan uz commit, da se poslije
       # moze odgovoriti "je li ta ranjiva verzija bila u ovom buildu" bez pogadjanja.
