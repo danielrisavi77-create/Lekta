@@ -19,6 +19,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderDefectFragment } from '../../src/corpus/tool-feedback';
 import { KVAROVI } from '../../src/corpus/defect-catalog';
+import { openDefects } from '../../src/corpus/tool-feedback';
 import type { ComparisonRow } from '../../src/corpus/tool-comparison';
 import { withProvenance } from '../lib/provenance.mjs';
 
@@ -74,9 +75,16 @@ function main(): void {
   }
 
   const rows = (JSON.parse(readFileSync(USPOREDBA, 'utf8')) as { rows: ComparisonRow[] }).rows;
-  const { markdown, unsupported, numbers } = renderDefectFragment(KVAROVI, rows, continuesFrom);
+  // Izlaze SAMO otvoreni kvarovi. Zatvoreni ostaju u katalogu radi dokaza i eval veze, ali bi u
+  // izvozu bili procitani kao zadatak koji je vec obavljen.
+  const otvoreni = openDefects(KVAROVI);
+  const { markdown, unsupported, numbers } = renderDefectFragment(otvoreni, rows, continuesFrom);
 
-  console.log(`kvarova u katalogu: ${KVAROVI.length}, izlazi: ${numbers.length} (brojevi ${numbers.join(', ')})`);
+  console.log(
+    `kvarova u katalogu: ${KVAROVI.length} (otvorenih ${otvoreni.length}, zatvorenih uzvodno ` +
+      `${KVAROVI.length - otvoreni.length}), izlazi: ${numbers.length}` +
+      (numbers.length ? ` (brojevi ${numbers.join(', ')})` : ''),
+  );
   if (unsupported.length) {
     // Nije greska nego ISHOD: mjerenje vise ne potkrepljuje taj zapis, pa je vjerojatno popravljen.
     console.log(`bez potkrepe, ne izlaze: ${unsupported.join(', ')}`);

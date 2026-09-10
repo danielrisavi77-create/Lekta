@@ -32,6 +32,20 @@ export type DefectSupport =
 export interface DefectClass {
   /** Interni identitet, za gard i za povezivanje s eval slucajem. Nikad ne izlazi u zapis. */
   id: string;
+  /**
+   * Referenca na popravak kad je kvar zatvoren UZVODNO. Zapis time IZLAZI IZ IZVOZA, ali OSTAJE u
+   * katalogu.
+   *
+   * Zasto ne brisanje: brisanjem bi nestao i dokaz da je kvar postojao i eval slucaj koji se na njega
+   * veze preko `defectId`. Uz to bi katalog tiho ostao prazan, a prazan izvoz izgleda isto kao izvoz
+   * koji vise nista ne mjeri. Ovako se prazno stanje ne moze dogoditi neprimjetno: gard trazi da SVAKI
+   * zapis ima ili potkrepu ili ovu referencu, i da otvorenih bude barem jedan.
+   *
+   * IZMJERENO 2026-09-10: sva tri zatecena zapisa bila su zatvorena uzvodno, a mjerili smo ih protiv
+   * kopije paketa koja je bila OSAMNAEST verzija stara (v1.9.22 naspram v1.9.40). Nalaz o tudjem alatu
+   * vrijedi samo uz verziju uz koju je izmjeren.
+   */
+  resolvedUpstream?: string;
   /** Skill cija je skripta kriva; odredjuje u koji katalog zapis ide. */
   owner: 'katedra-lite' | 'rad-audit' | 'rad-docx';
   /** Naslov imenuje MEHANIZAM, ne simptom. Bez broja i bez oblika "Kvar N -". */
@@ -63,6 +77,17 @@ export function supportingRows(support: readonly DefectSupport[], rows: readonly
         (r.ishod === 'samo-katedra' || r.ishod === 'samo-lekta'),
     ),
   );
+}
+
+/**
+ * Zapisi koji jos NISU zatvoreni uzvodno; samo oni idu u izvoz prema drugom proizvodu.
+ *
+ * Izvoz zatvorenog kvara nije bezopasan: druga strana ga procita kao otvoren zadatak i potrosi pregled
+ * na posao koji je vec obavljen. Izmjereno 2026-09-10 na vlastitoj kozi, granom koja je duplicirala
+ * postojeci popravak i morala biti povucena.
+ */
+export function openDefects(klase: readonly DefectClass[]): DefectClass[] {
+  return klase.filter((k) => !k.resolvedUpstream);
 }
 
 /**

@@ -801,6 +801,42 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'izvoz/zatvoren-kvar-se-i-dalje-salje-drugoj-strani',
+    imitates:
+      'kvar koji je druga strana vec popravila ostaje u izvozu i putuje k njoj kao otvoren zadatak. ' +
+      'Steta nije teorijska: 2026-09-10 je ova sesija mjerila katedra-lite protiv kopije stare OSAMNAEST ' +
+      'verzija (v1.9.22 naspram v1.9.40), zakljucila da su tri kvara otvorena, i gurnula granu koja je ' +
+      'duplicirala postojeci uzvodni popravak. Granu je trebalo povuci. Obrnuta steta je jednako tiha: ' +
+      'zapis koji nema ni potkrepu ni referencu na popravak je tvrdnja bez mjerenja, a izgleda isto kao ' +
+      'zapis koji je netko upravo izmjerio',
+    caught: () => {
+      type Zapis = { id: string; resolvedUpstream?: string; potkrijepljen: boolean };
+      const izlazi = (z: Zapis) => !z.resolvedUpstream;
+      const uredan = (z: Zapis) =>
+        (typeof z.resolvedUpstream === 'string' && z.resolvedUpstream.length > 0) || z.potkrijepljen;
+
+      // 1) Zatvoren kvar NE smije izaci u izvoz.
+      const zatvoren: Zapis = { id: 'a', resolvedUpstream: 'katedra-pkg kvar 157, v1.9.39', potkrijepljen: false };
+      // 2) Zapis bez potkrepe i bez reference je tvrdnja bez mjerenja.
+      const gol: Zapis = { id: 'b', potkrijepljen: false };
+      // 3) Prazna referenca nije referenca.
+      const prazna: Zapis = { id: 'c', resolvedUpstream: '', potkrijepljen: false };
+      return !izlazi(zatvoren) && uredan(zatvoren) && !uredan(gol) && !uredan(prazna);
+    },
+    /**
+     * Netrivijalnost: OTVOREN i potkrijepljen zapis mora i izaci i proci gard. Bez ove polovice bi
+     * prosla i izvedba koja sve proglasi zatvorenim, cime bi izvoz utihnuo a gard bio zadovoljan.
+     */
+    cleanBefore: () => {
+      type Zapis = { id: string; resolvedUpstream?: string; potkrijepljen: boolean };
+      const izlazi = (z: Zapis) => !z.resolvedUpstream;
+      const uredan = (z: Zapis) =>
+        (typeof z.resolvedUpstream === 'string' && z.resolvedUpstream.length > 0) || z.potkrijepljen;
+      const otvoren: Zapis = { id: 'd', potkrijepljen: true };
+      return izlazi(otvoren) && uredan(otvoren);
+    },
+  },
+  {
     id: 'usporedba/odsutna-provjera-brojana-kao-cist-nalaz',
     imitates:
       'usporedba dvaju alata brine odsutnost NASE provjere kao da je provjera trcala i bila cista. ' +

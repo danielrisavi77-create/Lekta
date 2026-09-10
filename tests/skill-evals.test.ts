@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { readZip } from '../src/repair/zip-codec';
 import { EVALI } from '../src/corpus/eval-catalog';
 import { KVAROVI } from '../src/corpus/defect-catalog';
+import { openDefects } from '../src/corpus/tool-feedback';
 import { evalFilePath, renderEvalCases, type EvalCase } from '../src/corpus/tool-evals';
 import type { ComparisonRow } from '../src/corpus/tool-comparison';
 
@@ -91,10 +92,19 @@ describe('eval slucajevi: veza uz kvar koji cuvaju', () => {
   });
 
   it('zapisano se poklapa s onim sto se izvede iz kataloga i mjerenja', () => {
-    const svjeze = renderEvalCases(EVALI, KVAROVI, redci, f.continuesFrom);
-    expect(svjeze.skipped).toEqual([]);
+    // Eval slucaj zivi uz OTVOREN kvar; zatvoren kvar vise nema sto mjeriti nad modelom.
+    const otvoreni = openDefects(KVAROVI);
+    const svjeze = renderEvalCases(EVALI, otvoreni, redci, f.continuesFrom);
     expect(svjeze.cases).toEqual(f.evals);
     expect(svjeze.fixtures.map(evalFilePath)).toEqual(f.files);
+    /**
+     * Preskoceni su TOCNO oni slucajevi cijim je kvarom uzvodno zatvoren. Tvrdnja je prije glasila
+     * `toEqual([])`, sto je vrijedilo dok nijedan kvar nije bio zatvoren; od 2026-09-10 su tri od
+     * cetiri zatvorena, pa bi prazan popis znacio da eval nadzivljava kvar koji cuva.
+     */
+    const otvoreniIds = new Set(otvoreni.map((k) => k.id));
+    const ocekivanoPreskoceni = EVALI.filter((e) => !otvoreniIds.has(e.defectId)).map((e) => e.defectId);
+    expect(svjeze.skipped.map((x) => x.defectId).sort()).toEqual([...ocekivanoPreskoceni].sort());
   });
 
   /**
@@ -106,12 +116,42 @@ describe('eval slucajevi: veza uz kvar koji cuvaju', () => {
     expect(bezKvara.cases).toEqual([]);
     expect(bezKvara.skipped).toHaveLength(EVALI.length);
 
+    /**
+     * Druga polovica mjeri MEHANIZAM nad PODMETNUTIM parom, ne nad zatecenim katalogom.
+     *
+     * Prije je uzimala stvarne zapise s potkrepom iz usporedbe, pa je prestala mjeriti isti dan kad je
+     * zadnji takav kvar zatvoren: skup je postao prazan i `toEqual([])` je vrijedio ni nad cim. Gard
+     * koji utihne kad se katalog promijeni nije gard.
+     */
+    const kvar = {
+      id: 'probni-kvar-koji-visi-o-usporedbi',
+      owner: 'katedra-lite' as const,
+      title: 'Probni kvar',
+      body: 'x'.repeat(420),
+      output: '$ probna naredba',
+      support: [{ kind: 'usporedba' as const, os: 'jedinica-necitirana', documentPrefix: 'fpzg' }],
+    };
+    const slucaj = {
+      defectId: kvar.id,
+      prompt: 'Probni upit.',
+      expected_output: 'Probni ocekivani izlaz.',
+      expectations: ['Model nesto primijeti'],
+      fixtures: ['fpzg--final--prijediplomski--uskladjen.docx'],
+    };
+    const sRazilazenjem = redci.map((r) =>
+      r.os === 'jedinica-necitirana' && r.dokument.startsWith('fpzg')
+        ? { ...r, ishod: 'samo-katedra' as const }
+        : r,
+    );
+    // Kontrola: dok razilazenje postoji, slucaj IZLAZI. Bez nje bi "ispao" znacilo samo da nikad
+    // nije ni ulazio, pa bi tvrdnja prolazila i nad slomljenim rendererom.
+    const dok = renderEvalCases([slucaj], [kvar], sRazilazenjem, 10);
+    expect(dok.cases.length, 'slucaj ne izlazi ni kad razilazenje postoji').toBeGreaterThan(0);
+
     const bezRazilazenja = redci.map((r) => ({ ...r, ishod: 'nitko' as const }));
-    const samoIzUsporedbe = KVAROVI.filter((k) => k.support.every((s) => s.kind === 'usporedba'));
-    const cuvani = EVALI.filter((e) => samoIzUsporedbe.some((k) => k.id === e.defectId));
-    expect(cuvani.length).toBeGreaterThan(0);
-    const popravljeno = renderEvalCases(cuvani, samoIzUsporedbe, bezRazilazenja, 10);
+    const popravljeno = renderEvalCases([slucaj], [kvar], bezRazilazenja, 10);
     expect(popravljeno.cases).toEqual([]);
+    expect(popravljeno.skipped.map((x) => x.defectId)).toEqual([kvar.id]);
   });
 });
 

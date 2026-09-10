@@ -89,10 +89,25 @@ describe('usporedba dvaju alata: netrivijalnost', () => {
   });
 
   /**
-   * Razilazenje je jedini razlog zbog kojeg se dva alata usporedjuju: slaganje se moglo dobiti i
-   * jednim. Kad razilazenja nema, usporedba je ili savrsena ili slijepa, i to treba primijetiti.
+   * ZIVA NA OBJE STRANE, umjesto "mora postojati razilazenje".
+   *
+   * Stara tvrdnja je trazila da se dva alata TRAJNO ne slazu. To je uvjet koji se namjerno ukida:
+   * 2026-09-10 su sva razilazenja zatvorena (8 -> 0), dijelom uzvodnim popravcima u katedra-lite
+   * (kvarovi 156 i 157), dijelom nasim nalazom o sufiksu godine. Gard koji trazi neslaganje bi tada
+   * pao na uspjeh, i pritisak bi isao prema tome da se kvar NE popravi.
+   *
+   * Ono sto uistinu treba cuvati jest da usporedba nije oslijepila: obje strane moraju i dalje
+   * PROIZVODITI nalaze. Stara tvrdnja to nije pokrivala, jer bi prosla i uz jedno jedino razilazenje
+   * dok je druga strana mrtva.
    */
-  it('biljezi razilazenje, jer je ono jedini razlog usporedbe', () => {
-    expect(divergentRows(a.rows).length).toBeGreaterThan(0);
+  it('obje strane i dalje proizvode nalaze, pa usporedba nije oslijepila', () => {
+    const lektaNasla = a.rows.filter((r) => typeof r.lekta === 'number' && r.lekta > 0);
+    const katedraNasla = a.rows.filter((r) => typeof r.katedra === 'number' && r.katedra > 0);
+    expect(lektaNasla.length, 'Lekta ne nalazi nista ni na jednoj osi').toBeGreaterThan(0);
+    expect(katedraNasla.length, 'Katedra ne nalazi nista ni na jednoj osi').toBeGreaterThan(0);
+    // Razilazenja SMIJU biti nula (to je cilj), ali popis mora biti izvediv iz redaka, ne prepisan.
+    expect(divergentRows(a.rows).length).toBe(
+      a.rows.filter((r) => r.ishod === 'samo-lekta' || r.ishod === 'samo-katedra').length,
+    );
   });
 });

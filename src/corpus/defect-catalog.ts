@@ -17,6 +17,8 @@ export const KVAROVI: readonly DefectClass[] = [
   {
     id: 'pokrivenost-pretpostavlja-autor-godinu',
     owner: 'katedra-lite',
+    resolvedUpstream:
+      'katedra-pkg kvar 156, v1.9.39: `pokrivenost` prepoznaje numericki i fusnotni stil i vraca `stil` u JSON-u. Izmjereno 2026-09-10 na v1.9.41: fzsri (numericki) 0 necitiranih, prije 20.',
     title: 'Pokrivenost izvora mjeri se samo autor-godinom, pa rad koji citira drukcije nema nijedan citat',
     body: [
       '`verify_sources.py --pokrivenost` gradi skup citata iz tijela rada preko `H.kljucevi_citata`, koji',
@@ -78,6 +80,8 @@ export const KVAROVI: readonly DefectClass[] = [
   {
     id: 'prezime-u-kosom-padezu',
     owner: 'katedra-lite',
+    resolvedUpstream:
+      'katedra-pkg kvar 157, v1.9.39: `_korijen()` svodi prezime na obje strane usporedbe. Izmjereno 2026-09-10 na v1.9.41: fpzg--final 0 necitiranih i 0 bez izvora, a usporedba dvaju alata 0 razilazenja od 56.',
     title: 'Sklonidba je deklarirana kao moguc lazan nalaz, a isti redak svejedno nosi crveni krizic',
     body: [
       'Zaglavlje odjeljka POKRIVENOST samo kaze da sklonidba prezimena moze dati lazne nalaze i trazi da',
@@ -129,6 +133,8 @@ export const KVAROVI: readonly DefectClass[] = [
   {
     id: 'popis-nadjen-a-poruka-kaze-da-nije',
     owner: 'katedra-lite',
+    resolvedUpstream:
+      'katedra-pkg kvar 158, v1.9.39: sazetak imenuje NEIZVEDENU provjeru umjesto golog `0 krsenja`. Izmjereno 2026-09-10 na v1.9.41: effectus ispisuje `0 krsenja - sve 4 provjere izvedene (10 fusnota razrijeseno u popisu)`.',
     title: 'Provjera koja nije izvedena ispisuje se kao "0 krsenja", uz razlog koji nije tocan',
     body: [
       'Na radu s 12 fusnota i urednim popisom literature alat ispise "0 krsenja". Iznad toga stoji redak',
@@ -180,6 +186,53 @@ export const KVAROVI: readonly DefectClass[] = [
           'effectus--seminar--diplomski--word.docx',
           'effectus--seminar--diplomski--neuredan.docx',
         ],
+      },
+    ],
+  },
+  {
+    id: 'sufiks-godine-rusi-citanje-jedinice',
+    owner: 'katedra-lite',
+    title: 'Slovni sufiks godine razbija citanje jedinice, pa isti rad izlazi na oba popisa',
+    body: [
+      '`GODINA_RE` iza cetveroznamenkaste godine trazi granicu rijeci, pa jedinica „Maric, L. (2023a). ..."',
+      'ne dobije NIJEDNU godinu. Kljuc jedinice postane („maric", ""), a kljuc citata („maric", "2023a"),',
+      'i isti rad izadje istovremeno kao citat bez izvora I kao necitirana jedinica, dakle kao dva',
+      'razlicita problema.',
+      '',
+      'Zamka je u tome sto sufiks nije rub nego PROPIS: APA ga trazi kad isti autor ima dva rada iste',
+      'godine. Upravo radovi kojima je potreban jedini su koje alat ne moze spojiti, pa kvar pogadja',
+      'tocno one popise koji su najpazljivije napisani.',
+      '',
+      'Kvar 157 je zatvorio sklonidbu i daje isti simptom, ali ovu granu ne dodiruje: `_korijen()` radi',
+      'nad prezimenom, a ovdje puca godina. Uz citanje treba i usporedba: sufiks se skidao samo s',
+      'citatne strane (`rstrip("abcdefg")`), pa je „2023" mjereno protiv „2023a".',
+      '',
+      'Granica popravka je uska i vrijedi je zadrzati: sufiks se DOPUSTA, ali se NE uzima u godinu, pa',
+      '„20231" i „2023x9" i dalje nisu godina. Bez te ograde bi se pojam godine prosirio na svaki broj',
+      'kojemu slijedi slovo.',
+    ].join('\n'),
+    output: [
+      '$ python3 scripts/verify_sources.py fpzg--project--diplomski--uskladjen.docx --pokrivenost --offline --json out.json',
+      '',
+      '   v1.9.40, prije popravka:',
+      '     bez_izvora:  ["maric 2023a", "maric 2023b"]     <- citirano, a tobože nema jedinice',
+      '     necitirani:  1                                   <- ISTA jedinica, druga rubrika',
+      '',
+      '   Uzrok se vidi tek u strukturi koju `rastavi()` vraca:',
+      '     {"autor": "Maric", "godina": null}               <- godina nije procitana UOPCE',
+      '',
+      '   poslije popravka: bez_izvora 0, necitirani 0',
+    ].join('\n'),
+    /**
+     * Potkrepa je IZRAVNA, ne iz usporedbe: popravak je vec ozicen u lokalnom paketu koji usporedba
+     * vrti, pa bi redak danas bio `nitko` i potkrepa bi pala. Naredba iznad ponavlja mjerenje nad
+     * izdanjem u kojem kvar postoji (v1.9.40).
+     */
+    support: [
+      {
+        kind: 'izravno',
+        command: 'python3 scripts/verify_sources.py <docx> --pokrivenost --offline --json out.json',
+        documents: ['fpzg--project--diplomski--uskladjen.docx', 'fpzg--project--diplomski--neuredan.docx'],
       },
     ],
   },

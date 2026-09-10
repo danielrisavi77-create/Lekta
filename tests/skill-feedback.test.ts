@@ -19,7 +19,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readZip } from '../src/repair/zip-codec';
 import { KVAROVI } from '../src/corpus/defect-catalog';
-import { dokumenata, isSupported, renderDefectFragment, supportingRows } from '../src/corpus/tool-feedback';
+import { dokumenata, isSupported, openDefects, renderDefectFragment, supportingRows } from '../src/corpus/tool-feedback';
 import type { ComparisonRow } from '../src/corpus/tool-comparison';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -102,9 +102,24 @@ describe('izvoz prema katedri: granica prema sadrzaju rada', () => {
 describe('izvoz prema katedri: oblik koji druga strana cita', () => {
   const unosi = izvoz.split(/^## /m).slice(1).map((x) => `## ${x}`);
 
-  it('svaki zapis u katalogu ima potkrepu, inace ne izlazi', () => {
-    for (const k of KVAROVI) expect(isSupported(k, redci), k.id).toBe(true);
-    expect(unosi).toHaveLength(KVAROVI.length);
+  /**
+   * Zapis je ili OTVOREN i potkrijepljen, ili ZATVOREN uzvodno uz referencu na popravak. Trece
+   * stanje ne postoji, jer bi zapis bez oboga bio tvrdnja bez mjerenja.
+   *
+   * Izvoz nosi SAMO otvorene: zatvoren kvar poslan drugoj strani procita se kao zadatak koji je vec
+   * obavljen. Izmjereno 2026-09-10, granom koja je duplicirala postojeci uzvodni popravak i morala
+   * biti povucena.
+   */
+  it('svaki zapis je ili potkrijepljen ili zatvoren uzvodno, i izlaze samo otvoreni', () => {
+    for (const k of KVAROVI) {
+      const zatvoren = typeof k.resolvedUpstream === 'string' && k.resolvedUpstream.length > 0;
+      expect(zatvoren || isSupported(k, redci), k.id).toBe(true);
+    }
+    const otvoreni = openDefects(KVAROVI);
+    expect(unosi).toHaveLength(otvoreni.length);
+    // Anti-vakuum: prazan katalog otvorenih ucinio bi svaku tvrdnju nize istinitom ni nad cim, a
+    // prazan izvoz izgleda isto kao izvoz koji vise nista ne mjeri.
+    expect(otvoreni.length, 'nijedan otvoren kvar; mjeri li usporedba jos ista?').toBeGreaterThan(0);
   });
 
   it('zaglavlje nastavka nosi broj, pa se numeracija ne sudara s tudjim zapisima', () => {
@@ -136,32 +151,64 @@ describe('izvoz prema katedri: oblik koji druga strana cita', () => {
 
   it('zapisano se poklapa s onim sto renderer proizvede iz kataloga i mjerenja', () => {
     const nastavak = Number(izvoz.match(/nadovezuje se na unos\s+(\d+)/)?.[1]);
-    const svjeze = renderDefectFragment(KVAROVI, redci, nastavak);
+    // Renderer vidi SAMO otvorene, isto kao pogon; zatvoreni ostaju u katalogu ali ne izlaze.
+    const svjeze = renderDefectFragment(openDefects(KVAROVI), redci, nastavak);
     expect(svjeze.unsupported).toEqual([]);
     expect(izvoz.endsWith(svjeze.markdown), 'izvoz je rucno diran; regeneriraj ga').toBe(true);
   });
 });
 
 describe('izvoz prema katedri: potkrepa se racuna, ne pamti', () => {
-  it('zapis s potkrepom iz usporedbe imenuje dokumente na kojima je izmjeren', () => {
-    const izUsporedbe = KVAROVI.filter((k) => k.support.some((s) => s.kind === 'usporedba'));
-    expect(izUsporedbe.length).toBeGreaterThan(0);
-    for (const k of izUsporedbe) {
-      const podupiruci = supportingRows(k.support, redci);
-      expect(podupiruci.length, k.id).toBeGreaterThan(0);
-      for (const r of podupiruci) expect(izvoz).toContain(r.dokument);
+  /**
+   * SVAKI otvoren zapis imenuje dokumente na kojima je izmjeren, bez obzira na vrstu potkrepe.
+   *
+   * Tvrdnja je prije vrijedila samo za potkrepu iz usporedbe i trazila da takvih bude barem jedan. Taj
+   * uvjet je 2026-09-10 postao neispunjiv i to zasluzeno: sva razilazenja su zatvorena (8 na 0), pa
+   * otvoren zapis danas nosi IZRAVNU potkrepu. Vezati gard uz jednu vrstu potkrepe znacilo bi da
+   * popravak druge strane obara nas gard.
+   */
+  it('svaki otvoren zapis imenuje dokumente na kojima je izmjeren', () => {
+    const otvoreni = openDefects(KVAROVI);
+    expect(otvoreni.length, 'nijedan otvoren zapis; tvrdnja bi bila istinita ni nad cim').toBeGreaterThan(0);
+    for (const k of otvoreni) {
+      const izUsporedbe = supportingRows(k.support, redci).map((r) => r.dokument);
+      const izravni = k.support.flatMap((sup) => (sup.kind === 'izravno' ? [...sup.documents] : []));
+      const imenovani = [...new Set([...izUsporedbe, ...izravni])];
+      expect(imenovani.length, k.id + ': zapis ne imenuje nijedan dokument').toBeGreaterThan(0);
+      for (const d of imenovani) expect(izvoz, k.id).toContain(d);
     }
   });
 
+  /**
+   * MEHANIZAM, ne zateceni katalog: zapis koji visi o usporedbi mora ispasti iz izvoza cim
+   * razilazenja nestane.
+   *
+   * Klasa je PODMETNUTA, a ne uzeta iz `KVAROVI`. Prije je test uzimao stvarne zapise, pa je prestao
+   * mjeriti isti dan kad je zadnji takav zapis zatvoren: `unsupported` je postao prazan i tvrdnja
+   * "barem jedan je ispao" vise nije imala nad cim vrijediti. Gard koji utihne kad se katalog
+   * promijeni nije gard.
+   */
   it('zapis bez ijednog retka razilazenja ispada iz izvoza', () => {
-    const bezRazilazenja = redci.map((r) => ({ ...r, ishod: 'nitko' as const }));
-    const r = renderDefectFragment(
-      KVAROVI.filter((k) => k.support.every((s) => s.kind === 'usporedba')),
-      bezRazilazenja,
-      140,
+    const podmetnut = {
+      id: 'probni-zapis-koji-visi-o-usporedbi',
+      owner: 'katedra-lite' as const,
+      title: 'Probni zapis',
+      body: 'x'.repeat(420),
+      output: '$ probna naredba',
+      support: [{ kind: 'usporedba' as const, os: 'jedinica-necitirana', documentPrefix: 'fpzg' }],
+    };
+    const sRazilazenjem = redci.map((r) =>
+      r.os === 'jedinica-necitirana' && r.dokument.startsWith('fpzg')
+        ? { ...r, ishod: 'samo-katedra' as const }
+        : r,
     );
-    expect(r.numbers).toEqual([]);
-    expect(r.unsupported.length).toBeGreaterThan(0);
+    const bezRazilazenja = redci.map((r) => ({ ...r, ishod: 'nitko' as const }));
+    // Kontrola: uz razilazenje zapis IZLAZI, inace bi "ispao" znacilo samo da nikad nije ni ulazio.
+    const sa = renderDefectFragment([podmetnut], sRazilazenjem, 140);
+    expect(sa.numbers.length, 'zapis ne izlazi ni kad razilazenje postoji').toBeGreaterThan(0);
+    const bez = renderDefectFragment([podmetnut], bezRazilazenja, 140);
+    expect(bez.numbers).toEqual([]);
+    expect(bez.unsupported).toEqual([podmetnut.id]);
   });
 });
 
