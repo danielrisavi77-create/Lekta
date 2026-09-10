@@ -1,4 +1,5 @@
 import type { LocalRepairLaunchV1 } from './repair-client.ts';
+import { DEPLOYMENT_CONFIG } from '../config/deployment.ts';
 
 const SHA256 = /^[0-9a-f]{64}$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -9,6 +10,13 @@ const EXE_MIME = 'application/vnd.microsoft.portable-executable';
 export interface LocalRepairRunnerArtifactConfig {
   url: string;
   sha256: string;
+}
+
+export function localRepairRunnerConfig(): LocalRepairRunnerArtifactConfig {
+  return {
+    url: DEPLOYMENT_CONFIG.localRepairRunnerUrl,
+    sha256: DEPLOYMENT_CONFIG.localRepairRunnerSha256,
+  };
 }
 
 export interface LocalRepairRunnerOfferDependencies {

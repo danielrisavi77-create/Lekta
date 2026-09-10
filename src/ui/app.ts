@@ -38,10 +38,9 @@ import { renderView, showWizardStep } from './wizard-view';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
-import { DEPLOYMENT_CONFIG } from '../config/deployment';
 import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
-import { renderRepairPanel, renderConfirmation, advancedFormFor } from './repair-panel';
+import { renderRepairPanel, advancedFormFor } from './repair-panel';
 import { renderRepairLedgerModal } from './repair-price-slider';
 import { trapModal, releaseModal } from './modal-utils';
 import { profileClaimFor, claimSentence } from './profile-claim';
@@ -1599,7 +1598,6 @@ function downloadProfileManifest(){downloadBlob(JSON.stringify(profileManifest()
 // placeni popravak ide na server (upload -> repair-docx -> gotov docx).
 function repairServerConfigured(){return!!String(productionConfig?.repairEndpoint||'').trim()}
 function repairConfig(){return{endpoint:String(productionConfig?.repairEndpoint||'').trim()}}
-function localRepairRunnerConfig(){return{url:DEPLOYMENT_CONFIG.localRepairRunnerUrl,sha256:DEPLOYMENT_CONFIG.localRepairRunnerSha256}}
 // Provjera izvora ide zasebnom funkcijom (source-check) USPOREDNO s uploadom, da popravak vise ne
 // ceka korpusni budzet. Endpoint se izvodi iz repairEndpointa (ista Supabase projektna baza, susjedna
 // funkcija), isti obrazac kao repairHistoryConfig; zaseban setup unos ne bi imao sto dodati.
@@ -2127,7 +2125,6 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
   let inFlight=false;
   const localRepairConfirmations=new Map<string,{confirmationText:string;confirmedAt:string}>();
-  const localConfirmationKey=(item: any)=>`${String(item.fixerId)}\u0000${String(item.ruleId)}`;
  async function go(confirmedMismatch: boolean){
   if(inFlight)return;
   inFlight=true;
@@ -2150,13 +2147,9 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const chosen=[...chosenItems,...textItems.filter((it: any)=>okTextIds.has(it.ruleId))];
    const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&_SERVER_DEEP_FIXERS.has(it.fixerId))?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
-   const {buildRepairMeta,uploadRepair,localRepairRequestRequiresConfirmation}=await loadRepairClient();
-   const confirmations=chosen.flatMap((it: any,requestIndex: number)=>{
-    if(!localRepairRequestRequiresConfirmation(String(it.fixerId)))return[];
-    const receipt=localRepairConfirmations.get(localConfirmationKey(it));
-    if(!receipt)throw new Error('Nedostaje izricita potvrda za lokalni Word popravak.');
-    return[{requestIndex,...receipt}];
-   });
+   const {buildRepairMeta,uploadRepair}=await loadRepairClient();
+   const {collectLocalRepairConfirmationReceipts}=await import('./local-repair-confirmation-flow');
+   const confirmations=collectLocalRepairConfirmationReceipts(chosen,localRepairConfirmations);
    // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,
    // koje vec imamo iz lokalne analize. Dok je bila dio odgovora popravka, korisnik je gledao
    // spinner i nakon sto je dokument bio gotov. Namjerno BEZ await: `checkSources` ne baca (svaki
@@ -2209,7 +2202,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     const dlBtn: any=summary.querySelector('[data-repair-download]');
     if(dlBtn)dlBtn.onclick=()=>downloadBlob(out.docxBytes,DOCX_MIME,out.fileName);
     if(out.localRepair){
-     const {renderLocalRepairRunnerOffer}=await import('../report/local-repair-runner-download');
+     const {renderLocalRepairRunnerOffer,localRepairRunnerConfig}=await import('../report/local-repair-runner-download');
      renderLocalRepairRunnerOffer(summary,out.localRepair,localRepairRunnerConfig());
     }
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0,ms:uploadMs});
@@ -2328,36 +2321,11 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    if(!lockButton){btn.disabled=false;btn.textContent=orig}
   }
  }
- // RE-19: prikazi potvrdni korak PRIJE poziva go() kad je odabrana stavka koja trazi potvrdu
- // lokacije (K6 section-insert); go() se poziva tek iz "Potvrdi i popravi" (isti obrazac kao
- // lokalni panel). "Nastavi svejedno" (data-repair-confirm, tier_mismatch) zove go(true) izravno:
- // do te tocke je lokacija vec jednom potvrdjena u prvom pokusaju iste serije odabira.
+ // Potvrdni korak i receipt stanje zive u lijeno ucitanom modulu.
   btn.onclick=async()=>{
-  if(!consent.checked){
-   consentHint.hidden=false;
-   consentRow.classList.add('lekta-repair-panel__deep--alert');
-   consent.focus();
-   consentRow.scrollIntoView({behavior:'smooth',block:'center'});
-   return;
-  }
-   const selectedTextIds=new Set(Array.from(wrap.querySelectorAll('[data-text-apply]')).filter((c: any)=>c.checked).map((c: any)=>c.value));
-   const selectedItems=[...getCheckedItems(),...textItems.filter((it: any)=>selectedTextIds.has(it.ruleId))];
-   const {localRepairRequestRequiresConfirmation}=await loadRepairClient();
-   const needsConfirm=selectedItems.filter((it: any)=>it.requiresConfirmation||localRepairRequestRequiresConfirmation(String(it.fixerId)));
-   if(needsConfirm.length){
-    renderConfirmation(confirmBox,needsConfirm,()=>{
-     const confirmedAt=new Date().toISOString();
-     for(const item of needsConfirm){
-      if(localRepairRequestRequiresConfirmation(String(item.fixerId))){
-       localRepairConfirmations.set(localConfirmationKey(item),{confirmationText:String(item.confirmationText||`Potvrdi popravak: ${item.label}`).trim(),confirmedAt});
-      }
-     }
-     confirmBox.hidden=true;confirmBox.innerHTML='';void go(false);
-    });
-   return;
-  }
-  void go(false);
- };
+   const {confirmRepairSelection}=await import('./local-repair-confirmation-flow');
+   confirmRepairSelection({consent,consentHint,consentRow,wrap,textItems,getCheckedItems,confirmBox,confirmations:localRepairConfirmations,onConfirmed:()=>void go(false)});
+  };
 }
 
 // Provjera prije predaje: cloud forenzika izvornosti. Sekcija (i tab) postoje

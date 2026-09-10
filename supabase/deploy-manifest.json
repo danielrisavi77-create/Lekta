@@ -331,10 +331,14 @@
         "CORPUS_CONTRIBUTION_ENABLED",
         "DAILY_CAP",
         "IP_HASH_SALT",
+        "REPAIR_CONTRACT_KEY_ID",
+        "REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL",
         "REPAIR_DISABLED",
         "REPAIR_FREE_DAILY_CAP",
         "REPAIR_FREE_IP_DAILY_CAP",
         "REPAIR_FREE_MODE",
+        "REPAIR_LOCAL_DISABLED",
+        "REPAIR_LOCAL_ENABLED",
         "REPAIR_MAX_CONCURRENT",
         "REPAIR_MAX_DOCX_BYTES",
         "REPAIR_SLOT_LEASE_SECONDS",
@@ -344,6 +348,34 @@
       ],
       "domain": "popravak",
       "impactIfDown": "PLACENI popravak ne radi; glavni proizvod stoji",
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "repair-local-claim",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "REPAIR_LOCAL_DISABLED",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "domain": "popravak",
+      "impactIfDown": "program na racunalu ne moze jednokratno preuzeti placeni posao; serverska kopija ostaje dostupna",
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "repair-local-status",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "REPAIR_LOCAL_DISABLED",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "domain": "popravak",
+      "impactIfDown": "lokalni Word popravak ne moze potvrditi napredak ni dovrsetak; serverska kopija ostaje dostupna",
       "intentionalExclusion": null,
       "reason": null
     },
@@ -428,7 +460,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-05T18:57:51.778Z",
-  "generatedFromCommit": "602ae440e3b35b2c016dfd4f88521d6f43d8847c",
+  "generatedAt": "2026-09-10T21:51:32.117Z",
+  "generatedFromCommit": "8cf328cf03da8adee658373c24b7d71cab85bce4",
   "generator": "npm run deploy-manifest"
 }
