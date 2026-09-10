@@ -1,4 +1,4 @@
-<!-- npm run skill-feedback -- --write | 2026-09-08T19:41:22.501Z | d7375acb9611017efdc3e0cd3dc4339fb4b6b6bf -->
+<!-- npm run skill-feedback -- --write | 2026-09-10T07:29:39.342Z | 8c9f9fdbed17b7d2dd371eb1e56bf557e90133ab -->
 <!-- Fragment za <katedra-lite>/references/zamke.md. Provjera na drugoj strani: -->
 <!-- python3 <katedra>/scripts/kvar.py <ovaj-fragment>.md --provjeri --nastavak-od 159 -->
 
@@ -22,7 +22,7 @@ pokrivenost uz tu vrijednost ne smije izdati popis necitiranih, nego reci da sti
 prepoznat. Popravak zato ima dva dijela: prepoznavanje numerickog i fusnotnog citiranja u
 `pokrivenost`, i tvrdu ogradu koja kod nula prepoznatih citata odbija izdati popis.
 
-Izmjereno na 6 dokumenata (effectus--seminar--diplomski--neuredan.docx, effectus--seminar--diplomski--uskladjen.docx, effectus--seminar--diplomski--word.docx, fzsri--final--prijediplomski--neuredan.docx, fzsri--final--prijediplomski--uskladjen.docx, fzsri--final--prijediplomski--word.docx); najveci broj nalaza na jednom dokumentu je 22.
+Izmjereno izravno na 3 dokumenta (fzsri--final--prijediplomski--uskladjen.docx, fzsri--final--prijediplomski--word.docx, effectus--seminar--diplomski--uskladjen.docx).
 
 ```
 $ python3 scripts/verify_sources.py fzsri--final--prijediplomski--uskladjen.docx --pokrivenost --offline
@@ -68,7 +68,7 @@ tvrdi podudaranje kojega nema. Popravak ide u `kljuc_prvog_autora` i `kljuc_izvo
 usporedbe, inace se raskorak samo preseli. Kad svodjenje radi, upozorenje u zaglavlju vise nije
 potrebno na ovoj osi, pa se i ono smije suziti.
 
-Izmjereno na 3 dokumenta (fpzg--final--prijediplomski--neuredan.docx, fpzg--final--prijediplomski--uskladjen.docx, fpzg--final--prijediplomski--word.docx); najveci broj nalaza na jednom dokumentu je 2.
+Izmjereno na 5 dokumenata (fpzg--final--prijediplomski--neuredan.docx, fpzg--final--prijediplomski--uskladjen.docx, fpzg--final--prijediplomski--word.docx, fpzg--project--diplomski--neuredan.docx, fpzg--project--diplomski--uskladjen.docx); najveci broj nalaza na jednom dokumentu je 2.
 
 ```
 $ python3 scripts/verify_sources.py fpzg--final--prijediplomski--uskladjen.docx --pokrivenost --offline

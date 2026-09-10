@@ -801,6 +801,60 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'usporedba/odsutna-provjera-brojana-kao-cist-nalaz',
+    imitates:
+      'usporedba dvaju alata brine odsutnost NASE provjere kao da je provjera trcala i bila cista. ' +
+      'Lektine citatne provjere nisu univerzalne: `reference.uncited` se emitira samo za profile koji ' +
+      'citiranje propisuju. Dok je odsutnost padala u `lekta = 0`, artefakt je tvrdio da je Lekta ' +
+      'gledala i nista nasla, pa je 17 od 25 razilazenja bilo LAZNO, i svako od njih se cita kao ' +
+      '"Lektina provjera je slijepa". Izmjereno 2026-09-10: ondje gdje Lekta os DOISTA mjeri, brojke ' +
+      'se poklapaju s Katedrinima (`adu`: 12 naspram 12), pa je zakljucak o sljepoci bio artefakt ' +
+      'usporedbe. Kvar je podmukao jer raste u smjeru koji izgleda kao bogatiji nalaz, ne kao regresija',
+    caught: () => {
+      const r = (lekta: number | null, katedra: number | null): ComparisonRow => ({
+        dokument: 'fzsri--final--prijediplomski--uskladjen.docx',
+        os: 'jedinica-necitirana',
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      // 1) Odsutna provjera NE smije proizvesti razilazenje.
+      const odsutna = r(null, 20);
+      const stopljena = r(0, 20); // stara izvedba: odsutnost stopljena s cistim nalazom
+      // 2) Cista provjera koja je DOISTA trcala i dalje daje razilazenje.
+      const cista = r(0, 20);
+      return (
+        odsutna.ishod === 'lekta-ne-mjeri' &&
+        divergentRows([odsutna]).length === 0 &&
+        stopljena.ishod === 'samo-katedra' &&
+        divergentRows([stopljena]).length === 1 &&
+        cista.ishod === 'samo-katedra'
+      );
+    },
+    /**
+     * Netrivijalnost u OBA smjera: `null` ne smije progutati stvarno razilazenje, a mjerena cista
+     * provjera ne smije ispasti kao "ne mjeri". Bez druge polovice bi prosao i gard koji sve
+     * proglasi nemjerenim, cime bi razilazenja nestala i izvoz kvarova ostao bez potkrepe.
+     */
+    cleanBefore: () => {
+      const r = (lekta: number | null, katedra: number | null): ComparisonRow => ({
+        dokument: 'fpzg--final--prijediplomski--uskladjen.docx',
+        os: 'citirano-bez-jedinice',
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      const stvarno = r(0, 2);
+      const nasli = r(1, 2);
+      return (
+        stvarno.ishod === 'samo-katedra' &&
+        divergentRows([stvarno]).length === 1 &&
+        nasli.ishod === 'oba' &&
+        divergentRows([nasli]).length === 0
+      );
+    },
+  },
+  {
     id: 'mreza/fixer-se-ugasi-a-nitko-ne-primijeti',
     imitates:
       'fixer prestane raditi (zatrazen je, ali vise nista ne mijenja) i to nitko ne vidi, jer nijedan ' +

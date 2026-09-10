@@ -53,7 +53,7 @@
     "evals/files/fpzg--final--prijediplomski--uskladjen.docx",
     "evals/files/fzsri--final--prijediplomski--uskladjen.docx"
   ],
-  "generatedAt": "2026-09-07T10:42:10.767Z",
-  "generatedFromCommit": "45725922550b573521bf3abceebc03d5b168ec79",
+  "generatedAt": "2026-09-10T07:30:08.296Z",
+  "generatedFromCommit": "8c9f9fdbed17b7d2dd371eb1e56bf557e90133ab",
   "generator": "npm run skill-evals -- --write"
 }

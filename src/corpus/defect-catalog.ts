@@ -50,9 +50,29 @@ export const KVAROVI: readonly DefectClass[] = [
       '   Zaglavlje upozorava na sklonidbu, sto ovdje nije uzrok; ni jedna rijec ne kaze da stil',
       '   citiranja uopce nije prepoznat, a `pokrivenost` cita samo `tijelo_rada(put)`.',
     ].join('\n'),
+    /**
+     * Potkrepa je IZRAVNA, ne iz usporedbe, i to je ispravak od 2026-09-10.
+     *
+     * Prije je stajala kao `usporedba` nad `fzsri` i `effectus`, sto je izgledalo tocno jer su ta dva
+     * dokumenta tada padala na `samo-katedra`. Nisu smjela: Lekta na profilima `fzsri-zavrsni` i
+     * `effectus-seminarski` provjeru `reference.uncited` UOPCE NE EMITIRA, pa razilazenja nije ni
+     * moglo biti. Redak je bio `samo-katedra` samo zato sto je usporedba odsutnost provjere brojala
+     * kao `lekta = 0`; s ispravkom je taj redak `lekta-ne-mjeri` i potkrepa je pala.
+     *
+     * Kvar time NIJE opovrgnut, jer nikad nije ni pocivao na Lektinoj strani: dokaz je Katedrin
+     * VLASTITI izlaz, `citata_razlicitih: 0` uz `necitiranih: 20`. To je tocno razred za koji
+     * `izravno` i postoji, jer ga usporedba po konstrukciji ne vidi.
+     */
     support: [
-      { kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'fzsri' },
-      { kind: 'usporedba', os: 'jedinica-necitirana', documentPrefix: 'effectus' },
+      {
+        kind: 'izravno',
+        command: 'python3 scripts/verify_sources.py <docx> --pokrivenost --offline --json out.json',
+        documents: [
+          'fzsri--final--prijediplomski--uskladjen.docx',
+          'fzsri--final--prijediplomski--word.docx',
+          'effectus--seminar--diplomski--uskladjen.docx',
+        ],
+      },
     ],
   },
   {
