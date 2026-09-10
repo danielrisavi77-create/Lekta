@@ -38,6 +38,7 @@ import { renderView, showWizardStep } from './wizard-view';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
+import { DEPLOYMENT_CONFIG } from '../config/deployment';
 import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
 import { renderRepairPanel, renderConfirmation, advancedFormFor } from './repair-panel';
@@ -1598,6 +1599,7 @@ function downloadProfileManifest(){downloadBlob(JSON.stringify(profileManifest()
 // placeni popravak ide na server (upload -> repair-docx -> gotov docx).
 function repairServerConfigured(){return!!String(productionConfig?.repairEndpoint||'').trim()}
 function repairConfig(){return{endpoint:String(productionConfig?.repairEndpoint||'').trim()}}
+function localRepairRunnerConfig(){return{url:DEPLOYMENT_CONFIG.localRepairRunnerUrl,sha256:DEPLOYMENT_CONFIG.localRepairRunnerSha256}}
 // Provjera izvora ide zasebnom funkcijom (source-check) USPOREDNO s uploadom, da popravak vise ne
 // ceka korpusni budzet. Endpoint se izvodi iz repairEndpointa (ista Supabase projektna baza, susjedna
 // funkcija), isti obrazac kao repairHistoryConfig; zaseban setup unos ne bi imao sto dodati.
@@ -2120,10 +2122,12 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  }
  // RE-37: uspjesan popravak TRAJNO zakljucava gumb (umjesto povratka na identican CTA), da drugi
  // klik ne posalje drugi upload/potrosi drugi slot jer korisnik misli da se nista nije dogodilo.
- let lockButton=false;
+  let lockButton=false;
  // RE-20: in-flight cuvar dijeljen izmedju glavnog gumba i "Nastavi svejedno" (koji zove isti go()):
  // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
- let inFlight=false;
+  let inFlight=false;
+  const localRepairConfirmations=new Map<string,{confirmationText:string;confirmedAt:string}>();
+  const localConfirmationKey=(item: any)=>`${String(item.fixerId)}\u0000${String(item.ruleId)}`;
  async function go(confirmedMismatch: boolean){
   if(inFlight)return;
   inFlight=true;
@@ -2146,7 +2150,13 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const chosen=[...chosenItems,...textItems.filter((it: any)=>okTextIds.has(it.ruleId))];
    const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&_SERVER_DEEP_FIXERS.has(it.fixerId))?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
-   const {buildRepairMeta,uploadRepair}=await loadRepairClient();
+   const {buildRepairMeta,uploadRepair,localRepairRequestRequiresConfirmation}=await loadRepairClient();
+   const confirmations=chosen.flatMap((it: any,requestIndex: number)=>{
+    if(!localRepairRequestRequiresConfirmation(String(it.fixerId)))return[];
+    const receipt=localRepairConfirmations.get(localConfirmationKey(it));
+    if(!receipt)throw new Error('Nedostaje izricita potvrda za lokalni Word popravak.');
+    return[{requestIndex,...receipt}];
+   });
    // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,
    // koje vec imamo iz lokalne analize. Dok je bila dio odgovora popravka, korisnik je gledao
    // spinner i nakon sto je dokument bio gotov. Namjerno BEZ await: `checkSources` ne baca (svaki
@@ -2158,7 +2168,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      .catch((e: any)=>({kind:'unavailable',reason:e instanceof Error?e.message:'greska'}))
     :null;
    // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
-   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch,corpusConsent:corpusRow.checked()});
+   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,confirmations,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch,corpusConsent:corpusRow.checked()});
    const bytes=new Uint8Array(await file.arrayBuffer());
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
    // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".
@@ -2198,6 +2208,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}${unknownFixerNote(out)}`);
     const dlBtn: any=summary.querySelector('[data-repair-download]');
     if(dlBtn)dlBtn.onclick=()=>downloadBlob(out.docxBytes,DOCX_MIME,out.fileName);
+    if(out.localRepair){
+     const {renderLocalRepairRunnerOffer}=await import('../report/local-repair-runner-download');
+     renderLocalRepairRunnerOffer(summary,out.localRepair,localRepairRunnerConfig());
+    }
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0,ms:uploadMs});
     // K4: provjera izvora je DODATAK uz popravak. Kad je izostala (stari server, ugasena zastavica,
     // greska), buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema. Nikad ne javlja
@@ -2318,7 +2332,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // lokacije (K6 section-insert); go() se poziva tek iz "Potvrdi i popravi" (isti obrazac kao
  // lokalni panel). "Nastavi svejedno" (data-repair-confirm, tier_mismatch) zove go(true) izravno:
  // do te tocke je lokacija vec jednom potvrdjena u prvom pokusaju iste serije odabira.
- btn.onclick=()=>{
+  btn.onclick=async()=>{
   if(!consent.checked){
    consentHint.hidden=false;
    consentRow.classList.add('lekta-repair-panel__deep--alert');
@@ -2326,9 +2340,20 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    consentRow.scrollIntoView({behavior:'smooth',block:'center'});
    return;
   }
-  const needsConfirm=getCheckedItems().filter((it: any)=>it.requiresConfirmation);
-  if(needsConfirm.length){
-   renderConfirmation(confirmBox,needsConfirm,()=>{confirmBox.hidden=true;confirmBox.innerHTML='';void go(false)});
+   const selectedTextIds=new Set(Array.from(wrap.querySelectorAll('[data-text-apply]')).filter((c: any)=>c.checked).map((c: any)=>c.value));
+   const selectedItems=[...getCheckedItems(),...textItems.filter((it: any)=>selectedTextIds.has(it.ruleId))];
+   const {localRepairRequestRequiresConfirmation}=await loadRepairClient();
+   const needsConfirm=selectedItems.filter((it: any)=>it.requiresConfirmation||localRepairRequestRequiresConfirmation(String(it.fixerId)));
+   if(needsConfirm.length){
+    renderConfirmation(confirmBox,needsConfirm,()=>{
+     const confirmedAt=new Date().toISOString();
+     for(const item of needsConfirm){
+      if(localRepairRequestRequiresConfirmation(String(item.fixerId))){
+       localRepairConfirmations.set(localConfirmationKey(item),{confirmationText:String(item.confirmationText||`Potvrdi popravak: ${item.label}`).trim(),confirmedAt});
+      }
+     }
+     confirmBox.hidden=true;confirmBox.innerHTML='';void go(false);
+    });
    return;
   }
   void go(false);

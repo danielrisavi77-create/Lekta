@@ -465,6 +465,15 @@ verify_jwt = true
 
 [functions.withdraw-corpus-contribution]
 verify_jwt = true
+# Jednokratni WordReplica claim koristi vlastiti 256-bitni bearer token i
+# atomsko vezanje uz kljuc uredjaja, ne korisnicki Supabase JWT.
+[functions.repair-local-claim]
+verify_jwt = false
+
+# Status autentificira potpis uredjaja vezanog pri claimu; JWT korisnika nije
+# dostupan lokalnom jednokratnom runneru.
+[functions.repair-local-status]
+verify_jwt = false
 
 [functions.delete-repair-job]
 verify_jwt = true

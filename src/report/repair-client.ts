@@ -10,6 +10,8 @@
  */
 
 import { isReportWorkType, type ReportWorkType } from './pricing';
+import { FIXER_IDS, type FixerId } from '../repair/apply-fixers.ts';
+import { requestRequiresException } from '../repair/contract/request-policy.ts';
 import { TERMS_VERSION } from '../legal/terms-version';
 import { CORPUS_CONSENT_VERSION } from '../legal/corpus-consent';
 import { parseSourceCheck, type RepairSourceCheck } from './source-check-parse';
@@ -70,6 +72,47 @@ export type { RepairSourceCheck } from './source-check-parse';
  * Put punog izvjestaja (`generate-report`) i dalje ga salje i ondje JEST potreban: ondje se
  * otisak racuna IZ njega (`computeFingerprint(body.parsedStructure)`), ne iz datoteke.
  */
+
+export interface RepairConfirmationReceipt {
+  requestIndex: number;
+  confirmationText: string;
+  confirmedAt: string;
+}
+
+export function localRepairRequestRequiresConfirmation(fixerId: string): boolean {
+  if (!(FIXER_IDS as readonly string[]).includes(fixerId)) return false;
+  return requestRequiresException(fixerId as FixerId);
+}
+
+export interface LocalRepairLaunchV1 {
+  version: 1;
+  jobId: string;
+  claimToken: string;
+  expiresAt: string;
+}
+
+const LOCAL_REPAIR_JOB_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const LOCAL_REPAIR_CLAIM_TOKEN = /^[A-Za-z0-9_-]{43}$/;
+
+function parseLocalRepairLaunch(value: unknown, expectedJobId: unknown): LocalRepairLaunchV1 | null {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return null;
+  const candidate = value as Record<string, unknown>;
+  if (Object.keys(candidate).sort().join(',') !== 'claimToken,expiresAt,jobId,version') return null;
+  if (candidate.version !== 1
+    || typeof candidate.jobId !== 'string'
+    || !LOCAL_REPAIR_JOB_ID.test(candidate.jobId)
+    || candidate.jobId !== expectedJobId
+    || typeof candidate.claimToken !== 'string'
+    || !LOCAL_REPAIR_CLAIM_TOKEN.test(candidate.claimToken)
+    || typeof candidate.expiresAt !== 'string'
+    || !Number.isFinite(Date.parse(candidate.expiresAt))) return null;
+  return {
+    version: 1,
+    jobId: candidate.jobId,
+    claimToken: candidate.claimToken,
+    expiresAt: candidate.expiresAt,
+  };
+}
 export interface RepairMeta {
   workType: ReportWorkType;
   signals: RepairSignals;
@@ -98,6 +141,7 @@ export interface RepairMeta {
    * odbija popravak. Izostaje kad kucica nije ponudjena ili nije oznacena: nema polja, nema pohrane.
    */
   corpusConsent?: { version: string };
+  confirmations?: RepairConfirmationReceipt[];
 }
 
 export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel: string }
@@ -105,7 +149,7 @@ export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel:
 export type RepairOutcome =
   // storagePending: pohrana ("Moji popravci") se dovrsava u pozadini nakon odgovora, pa jobId JEST
   // dodijeljen, ali posao jos ne mora biti vidljiv. Sucelje tada ne smije tvrditi da je spremljeno.
-  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; unknownFixers: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null }
+  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; unknownFixers: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null; localRepair: LocalRepairLaunchV1 | null }
   | { kind: 'tier_mismatch'; suggestedWorkType: string }
   | { kind: 'paywall'; workType: ReportWorkType }
   // RE-33: reason razlikuje placeni dnevni strop od besplatne kvote (po korisniku ili po IP-u),
@@ -155,6 +199,7 @@ export function buildRepairMeta(input: {
   sourceCheckSeparate?: boolean;
   /** Kanal A: korisnik je oznacio zasebnu privolu za prilog korpusu. */
   corpusConsent?: boolean;
+  confirmations?: RepairConfirmationReceipt[];
 }): RepairMeta {
   const workType: ReportWorkType = isReportWorkType(input.workType) ? input.workType : 'zavrsni';
   const meta: RepairMeta = {
@@ -171,6 +216,9 @@ export function buildRepairMeta(input: {
   if (input.confirmedMismatch) meta.confirmedMismatch = true;
   if (input.sourceCheckSeparate) meta.sourceCheckSeparate = true;
   if (input.corpusConsent === true) meta.corpusConsent = { version: CORPUS_CONSENT_VERSION };
+  if (input.confirmations?.length) {
+    meta.confirmations = input.confirmations.map((confirmation) => ({ ...confirmation }));
+  }
   // Reference bez naslova nemaju sto traziti u korpusu (kljuc je naslov), pa ispadaju ovdje umjesto
   // da putuju na server i tamo se tiho odbace. Prazan popis se izostavlja: nema polja, nema provjere.
   // Kad provjeru vodi zaseban poziv, popis literature se uz dokument NE salje uopce: server ga tada
@@ -201,7 +249,7 @@ export function buildRepairMeta(input: {
 function okFromMeta(meta: Record<string, unknown>, docxBytes: Uint8Array): RepairOutcome {
   const m = meta as {
     fileName?: string; changelog?: RepairChange[]; skipped?: string[]; unknownFixers?: unknown[];
-    slotId?: string; jobId?: string | null; storagePending?: boolean; sourceCheck?: unknown;
+    slotId?: string; jobId?: string | null; storagePending?: boolean; sourceCheck?: unknown; localRepair?: unknown;
   };
   return {
     kind: 'ok',
@@ -218,6 +266,7 @@ function okFromMeta(meta: Record<string, unknown>, docxBytes: Uint8Array): Repai
     // "ishod je vec poznat", sto je za taj server tocno.
     storagePending: m.storagePending === true,
     sourceCheck: parseSourceCheck(m.sourceCheck),
+    localRepair: parseLocalRepairLaunch(m.localRepair, m.jobId),
   };
 }
 
@@ -284,7 +333,7 @@ export async function uploadRepair(
 
     const data = (await res.json().catch(() => ({}))) as {
       docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; unknownFixers?: string[]; slotId?: string; jobId?: string | null;
-      storagePending?: boolean; sourceCheck?: unknown;
+      storagePending?: boolean; sourceCheck?: unknown; localRepair?: unknown;
       error?: string; integrityFailure?: { part?: unknown; problem?: unknown; preexisting?: unknown };
     };
     if (data.error === 'integrity_failed') {

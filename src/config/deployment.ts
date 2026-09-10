@@ -52,4 +52,6 @@ export const DEPLOYMENT_CONFIG = {
   supabaseUrl,
   supabaseAnonKey: configuredAnonKey || (devWithoutConfig ? 'lokalni-dev-bez-kljuca' : PRODUCTION_SUPABASE_ANON_KEY),
   functionEndpoint: (name: string) => `${supabaseUrl.replace(/\/+$/, '')}/functions/v1/${name}`,
+  localRepairRunnerUrl: String(import.meta.env.VITE_LEKTA_LOCAL_REPAIR_RUNNER_URL || '').trim(),
+  localRepairRunnerSha256: String(import.meta.env.VITE_LEKTA_LOCAL_REPAIR_RUNNER_SHA256 || '').trim().toLowerCase(),
 } as const;

@@ -173,7 +173,52 @@ describe('uploadRepair', () => {
       expect(out.changelog).toHaveLength(1);
       expect(out.skipped).toEqual(['margine']);
       expect(out.jobId).toBe('j1');
+      expect(out.localRepair).toBe(null);
     }
+  });
+
+  it('prenosi samo strukturirane potvrde za potpisani local repair ugovor', () => {
+    const confirmations = [{
+      requestIndex: 0,
+      confirmationText: 'Potvrđujem promjenu naslova.',
+      confirmedAt: '2026-08-24T19:00:00.000Z',
+    }];
+    const m = buildRepairMeta({
+      workType: 'zavrsni',
+      parsedStructure: { title: 'Naslov', author: 'Autor', headings: [] },
+      requests: [{ fixerId: 'heading-case-fixer', ruleId: 'heading-case', params: { levels: [1] } }],
+      confirmations,
+    });
+    expect(m.confirmations).toEqual(confirmations);
+  });
+
+  it('200 prenosi samo strogo valjan jednokratni WordReplica launch', async () => {
+    const jobId = '33333333-3333-4333-8333-333333333333';
+    const localRepair = {
+      version: 1,
+      jobId,
+      claimToken: 'A'.repeat(43),
+      expiresAt: '2026-08-25T19:00:00.000Z',
+    };
+    const out = await uploadRepair(config, 'jwt', new Uint8Array([0x50, 0x4b]), meta(), async () =>
+      res(200, { docxBase64: b64([0x50, 0x4b, 0x03, 0x04]), jobId, localRepair }),
+    );
+
+    expect(out.kind).toBe('ok');
+    if (out.kind === 'ok') expect(out.localRepair).toEqual(localRepair);
+  });
+
+  it('200 odbacuje nevaljan WordReplica launch bez kvarenja serverskog rezultata', async () => {
+    const out = await uploadRepair(config, 'jwt', new Uint8Array([0x50, 0x4b]), meta(), async () =>
+      res(200, {
+        docxBase64: b64([0x50, 0x4b, 0x03, 0x04]),
+        jobId: '33333333-3333-4333-8333-333333333333',
+        localRepair: { version: 1, jobId: 'drugi-posao', claimToken: 'kratak', expiresAt: 'sutra' },
+      }),
+    );
+
+    expect(out.kind).toBe('ok');
+    if (out.kind === 'ok') expect(out.localRepair).toBe(null);
   });
 
   it('200 bez docxBase64 -> error', async () => {
