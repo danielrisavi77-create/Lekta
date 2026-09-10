@@ -68,7 +68,9 @@ const BUDZET_APP = 357 * 1024;
 // `BUDZET_APP` OSTAJE i NIJE isti slucaj. On ima cilj (monolit se rasplice) i taj se cilj mjeri
 // PADANJEM, uz pravilo da se spusta cim datoteka smrsavi. Dvaput u jednom danu je natjerao
 // selidbu objasnjenja iz `app.ts` u modul umjesto dizanja brojke, dakle radio je svoj posao.
-const MAX_HIDDEN_DODIRA = 97;
+// Spusteno 97 -> 81 (2026-09-10): dva dodira iz `[data-open-phase]` su izasla jer je
+// `setWizardStep(3)` kroz `renderView` vec postavljao isto stanje, pa su bili suvisni.
+const MAX_HIDDEN_DODIRA = 81;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
   it('app.ts ne raste', () => {
