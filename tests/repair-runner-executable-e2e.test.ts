@@ -16,6 +16,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import * as diagnostics from '../scripts/repair-runner-e2e-diagnostics.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');
 const temporaryDirectories: string[] = [];
 
 interface ExecutableHardeningApi {
@@ -208,6 +209,7 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
     const completed = spawnSync(
       process.execPath,
       [
+        tsxEntrypoint,
         join(root, 'scripts', 'run-local-repair-release.mts'),
         '--artifact',
         artifactPath,

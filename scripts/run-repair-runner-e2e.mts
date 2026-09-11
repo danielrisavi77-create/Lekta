@@ -44,6 +44,7 @@ import {
 import { prepareFieldStableTarget } from './repair-runner-e2e-target.mts';
 
 const LEKTA_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const tsxEntrypoint = join(LEKTA_ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs');
 const WORDREPLICA_ROOT = 'C:\\WordReplica-Automation\\repo';
 const WORDREPLICA_PYTHON = 'C:\\WordReplica-Automation\\.venv\\Scripts\\python.exe';
 const DIAGNOSTICS_ROOT = 'C:\\WordReplica-Automation\\diagnostics';
@@ -801,6 +802,7 @@ async function main(): Promise<void> {
     writeJsonAtomic(productionManifestPath, productionPreflight.manifest);
     const preflightLogPath = join(logDirectory, 'production-preflight.log');
     const preflight = runCaptured(process.execPath, [
+      tsxEntrypoint,
       join(LEKTA_ROOT, 'scripts', 'run-local-repair-release.mts'),
       '--artifact',
       builtExecutable,
