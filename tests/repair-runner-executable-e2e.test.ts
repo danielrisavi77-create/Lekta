@@ -52,6 +52,10 @@ interface ExecutableHardeningApi {
   }) => {
     manifest: Record<string, unknown>; environment: NodeJS.ProcessEnv;
   };
+  assertSensitiveValuesAbsentFromDiagnostics: (
+    root: string,
+    sensitiveValues: readonly string[],
+  ) => void;
 }
 
 const hardening = diagnostics as typeof diagnostics & Partial<ExecutableHardeningApi>;
@@ -151,6 +155,26 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
 
     expect(existsSync(transient.path)).toBe(false);
     expect(JSON.stringify({ artifact: sourcePath, executionRoot })).not.toContain(claimToken);
+  });
+
+  it('keeps the contract private key memory-only and scans diagnostics for every sensitive value', () => {
+    const harness = readFileSync(join(root, 'scripts', 'run-repair-runner-e2e.mts'), 'utf8');
+    expect(harness).not.toContain('contract-signer.private.json');
+    expect(harness).toContain('assertSensitiveValuesAbsentFromDiagnostics');
+
+    const directory = createTemporaryDirectory('lekta-runner-sensitive-scan-');
+    const privateKey = 'private-key-regression-secret';
+    const claimToken = 'C'.repeat(43);
+    const assertSensitiveValuesAbsent = requiredHelper(
+      'assertSensitiveValuesAbsentFromDiagnostics',
+    );
+    writeFileSync(join(directory, 'safe.log'), 'no secrets here', 'utf8');
+    expect(() => assertSensitiveValuesAbsent(directory, [privateKey, claimToken])).not.toThrow();
+
+    const leakedPath = join(directory, 'accidental-private-key.json');
+    writeFileSync(leakedPath, JSON.stringify({ privateKey }), 'utf8');
+    expect(() => assertSensitiveValuesAbsent(directory, [privateKey, claimToken]))
+      .toThrow(/leaked a sensitive value/i);
   });
 
   it('configures the unsigned development artifact far enough to reject specifically on Authenticode', () => {

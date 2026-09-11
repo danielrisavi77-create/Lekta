@@ -27,6 +27,7 @@ import {
 } from '../src/repair/local-runner/status-service.ts';
 import { acquireE2ESingleRunLock } from './repair-runner-e2e-lock.mts';
 import {
+  assertSensitiveValuesAbsentFromDiagnostics,
   assertProcessSetUnchanged,
   buildUnsignedProductionPreflightInputs,
   buildE2EChildEnvironment,
@@ -325,27 +326,6 @@ function assertFileIdentity(path: string, expectedSha256: string, expectedSize: 
   equal(sha256(bytes), expectedSha256, `${path} SHA-256 changed`);
 }
 
-function assertClaimTokenAbsentFromDiagnostics(root: string, claimToken: string): void {
-  const tokenBytes = Buffer.from(claimToken, 'utf8');
-  const pending = [root];
-  while (pending.length > 0) {
-    const directory = pending.pop();
-    if (!directory) continue;
-    for (const entry of readdirSync(directory, { withFileTypes: true })) {
-      const path = join(directory, entry.name);
-      ok(!path.includes(claimToken), `Diagnostics path leaked the claim token: ${path}`);
-      if (entry.isDirectory()) {
-        pending.push(path);
-      } else if (entry.isFile()) {
-        ok(
-          !readFileSync(path).includes(tokenBytes),
-          `Diagnostics artifact leaked the claim token: ${path}`,
-        );
-      }
-    }
-  }
-}
-
 async function main(): Promise<void> {
   if (process.platform !== 'win32') throw new Error('repair:runner:e2e is Windows-only.');
   const lektaRepository = readRepositoryEvidence(LEKTA_ROOT, LEKTA_BRANCH);
@@ -460,15 +440,8 @@ async function main(): Promise<void> {
   const privateKeyBase64Url = signerPrivatePkcs8.toString('base64url');
   const keyId = `lekta-e2e-${randomBytes(8).toString('hex')}`;
   const publicKeyPath = join(keyDirectory, 'contract-public-key.spki.b64url');
-  const privateKeyPath = join(keyDirectory, 'contract-signer.private.json');
   const trustStorePath = join(keyDirectory, 'trusted_keys.json');
   writeFileSync(publicKeyPath, `${publicKeyBase64Url}\n`, { encoding: 'utf8', mode: 0o600 });
-  writeJsonAtomic(privateKeyPath, {
-    version: 1,
-    algorithm: 'ES256-P1363',
-    keyId,
-    privateKeyPkcs8Base64Url: privateKeyBase64Url,
-  });
   activeFailureContext.sensitiveValues.push(privateKeyBase64Url);
 
   const createdAt = new Date();
@@ -871,7 +844,7 @@ async function main(): Promise<void> {
       jobId,
       userId,
       slotId,
-      keyMaterial: { publicKeyPath, privateKeyPath, trustStorePath, keyId },
+      keyMaterial: { publicKeyPath, trustStorePath, keyId, privateKeyPersisted: false },
       build: {
         script: join(WORDREPLICA_ROOT, 'BUILD_LEKTA_REPAIR_RUNNER_DEV.ps1'),
         executable: builtExecutable,
@@ -912,7 +885,10 @@ async function main(): Promise<void> {
         },
       },
     });
-    assertClaimTokenAbsentFromDiagnostics(diagnosticsDirectory, issued.launch.claimToken);
+    assertSensitiveValuesAbsentFromDiagnostics(diagnosticsDirectory, [
+      privateKeyBase64Url,
+      issued.launch.claimToken,
+    ]);
     process.stdout.write(`E2E summary: ${summaryPath}\nGolden report: ${qaReportPath}\n`);
   } finally {
     await new Promise<void>((resolvePromise, reject) => {

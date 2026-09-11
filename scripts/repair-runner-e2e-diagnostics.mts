@@ -12,6 +12,7 @@ import {
   mkdirSync,
   mkdtempSync,
   openSync,
+  readdirSync,
   readFileSync,
   rmSync,
   statSync,
@@ -108,6 +109,37 @@ export function assertProcessSetUnchanged(
   const actual = normalize(after);
   if (expected.length !== actual.length || expected.some((pid, index) => pid !== actual[index])) {
     throw new Error(`WINWORD process set changed during ${phase}: before=${expected.join(',')} after=${actual.join(',')}`);
+  }
+}
+
+
+export function assertSensitiveValuesAbsentFromDiagnostics(
+  root: string,
+  sensitiveValues: readonly string[],
+): void {
+  const values = sensitiveValues.filter((value) => value.length > 0);
+  const pending = [root];
+  while (pending.length > 0) {
+    const directory = pending.pop();
+    if (!directory) continue;
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      for (const value of values) {
+        if (path.includes(value)) {
+          throw new Error(`Diagnostics path leaked a sensitive value: ${path}`);
+        }
+      }
+      if (entry.isDirectory()) {
+        pending.push(path);
+      } else if (entry.isFile()) {
+        const bytes = readFileSync(path);
+        for (const value of values) {
+          if (bytes.includes(Buffer.from(value, 'utf8'))) {
+            throw new Error(`Diagnostics artifact leaked a sensitive value: ${path}`);
+          }
+        }
+      }
+    }
   }
 }
 
