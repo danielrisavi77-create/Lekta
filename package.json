@@ -52,8 +52,8 @@
     "master-ci": "node scripts/master-ci-status.mjs",
     "check:repair-integration": "tsc --noEmit && vitest run --config vitest.repair-integration.config.ts && vite build",
     "repair:runner:e2e": "vite-node scripts/run-repair-runner-e2e.mts",
-    "release:repair:preflight": "node scripts/run-local-repair-release.mts",
-    "release:repair:deploy": "node scripts/run-local-repair-release.mts --execute",
+    "release:repair:preflight": "tsx scripts/run-local-repair-release.mts",
+    "release:repair:deploy": "tsx scripts/run-local-repair-release.mts --execute",
     "check:edge": "node scripts/check-edge.mjs",
     "smoke:db": "psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/guarantee-evidence-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/repair-deletion-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/anon-purge-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/bonus-outbox-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql",
     "smoke:db:mutation": "bash scripts/rate-slots-mutation-check.sh",
@@ -143,6 +143,7 @@
     "netlify-cli": "^27.5.2",
     "oxlint": "^1.79.0",
     "supabase": "^2.109.1",
+    "tsx": "4.23.13",
     "typescript": "^7.0.2",
     "vite": "^8.1.4",
     "vitest": "^2.1.4"

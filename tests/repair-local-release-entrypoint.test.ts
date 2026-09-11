@@ -16,7 +16,9 @@ describe('local-repair release stvarni CLI entrypoint', () => {
       .toString('base64url');
     const contractPublicKeySha256 = createHash('sha256')
       .update(publicKey.export({ format: 'der', type: 'spki' })).digest('hex');
+    const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');
     const completed = spawnSync(process.execPath, [
+      tsxEntrypoint,
       join(root, 'scripts', 'run-local-repair-release.mts'),
       '--artifact', missing,
     ], {

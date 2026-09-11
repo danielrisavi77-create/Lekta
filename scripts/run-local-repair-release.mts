@@ -184,6 +184,9 @@ export function parseLocalRepairReleaseArgs(
 }
 
 export function readAuthenticodeEvidence(artifactPath: string): AuthenticodeEvidence {
+  if (!existsSync(artifactPath)) {
+    throw new Error(`Runner artefakt ne postoji: ${artifactPath}`);
+  }
   const script = [
     "$signature = Get-AuthenticodeSignature -LiteralPath $env:LEKTA_RUNNER_ARTIFACT",
     "$thumbprint = if ($null -ne $signature.SignerCertificate) { [string]$signature.SignerCertificate.Thumbprint } else { '' }",
@@ -200,8 +203,12 @@ export function readAuthenticodeEvidence(artifactPath: string): AuthenticodeEvid
     }),
     windowsHide: true,
   });
+  if (completed.error) {
+    throw new Error(`Authenticode provjera nije uspjela: ${completed.error.message}`);
+  }
   if (completed.status !== 0) {
-    throw new Error(`Authenticode provjera nije uspjela: ${completed.stderr.trim()}`);
+    const stderr = typeof completed.stderr === 'string' ? completed.stderr.trim() : '';
+    throw new Error(`Authenticode provjera nije uspjela${stderr ? `: ${stderr}` : '.'}`);
   }
   try {
     return JSON.parse(completed.stdout.trim()) as AuthenticodeEvidence;
@@ -500,8 +507,10 @@ export function mainLocalRepairRelease(args = process.argv.slice(2)): void {
   }
 }
 
-const isDirect = process.argv[1]
-  && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));
+const modulePath = resolve(fileURLToPath(import.meta.url));
+const isDirect = process.argv
+  .slice(1)
+  .some((argument) => resolve(argument) === modulePath);
 if (isDirect) {
   try {
     mainLocalRepairRelease();

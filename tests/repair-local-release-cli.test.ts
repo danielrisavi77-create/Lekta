@@ -841,6 +841,14 @@ describe('automatizirani local-repair release CLI', () => {
     })).toEqual({ accessTokenPresent: true, databasePasswordPresent: true });
   });
 
+  it('odbija nedostajuci artefakt prije platformskog Authenticode poziva', () => {
+    const missing = join(
+      mkdtempSync(join(tmpdir(), 'lekta-release-missing-artifact-')),
+      'missing.exe',
+    );
+    expect(() => releaseCli.readAuthenticodeEvidence(missing)).toThrow(/runner artefakt ne postoji/i);
+  });
+
   it('izlaze kao preflight i explicit execute npm naredbe bez password argumenta', () => {
     const root = join(import.meta.dirname, '..');
     const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')) as {
@@ -848,8 +856,8 @@ describe('automatizirani local-repair release CLI', () => {
     };
     const cli = readFileSync(join(root, 'scripts', 'run-local-repair-release.mts'), 'utf8');
 
-    expect(pkg.scripts?.['release:repair:preflight']).toBe('node scripts/run-local-repair-release.mts');
-    expect(pkg.scripts?.['release:repair:deploy']).toBe('node scripts/run-local-repair-release.mts --execute');
+    expect(pkg.scripts?.['release:repair:preflight']).toBe('tsx scripts/run-local-repair-release.mts');
+    expect(pkg.scripts?.['release:repair:deploy']).toBe('tsx scripts/run-local-repair-release.mts --execute');
     expect(cli).toContain('Get-AuthenticodeSignature');
     expect(cli).toContain("command[0] === 'netlify' && command[1] === 'build'");
     expect(cli).not.toContain("command[0] === 'npm' && command[1] === 'run'");
