@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { createHash, generateKeyPairSync } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import {
   existsSync,
@@ -46,6 +46,8 @@ interface ExecutableHardeningApi {
     artifactSha256: string;
     artifactSizeBytes: number;
     contractKeyId: string;
+    contractPublicKeySha256: string;
+    contractPrivateKeyPkcs8Base64Url: string;
     sourceCommit: string;
   }) => {
     manifest: Record<string, unknown>; environment: NodeJS.ProcessEnv;
@@ -157,12 +159,24 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
     const artifactBytes = Buffer.from('unsigned development runner', 'utf8');
     writeFileSync(artifactPath, artifactBytes);
     const artifactSha256 = createHash('sha256').update(artifactBytes).digest('hex');
+    const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
+    const privateKeyPkcs8Base64Url = privateKey
+      .export({ format: 'der', type: 'pkcs8' })
+      .toString('base64url');
+    const contractPublicKeySha256 = createHash('sha256')
+      .update(publicKey.export({ format: 'der', type: 'spki' })).digest('hex');
     const fixture = requiredHelper('buildUnsignedProductionPreflightInputs')({
       fileName: 'LektaRepairDev.exe',
       artifactSha256,
       artifactSizeBytes: artifactBytes.byteLength,
       contractKeyId: 'lekta-e2e-key',
+      contractPublicKeySha256,
+      contractPrivateKeyPkcs8Base64Url: privateKeyPkcs8Base64Url,
       sourceCommit: '1'.repeat(40),
+    });
+    expect(fixture.manifest).toMatchObject({
+      schemaVersion: 2,
+      contractPublicKeySha256,
     });
     const manifestPath = join(directory, 'lekta-repair-runner-manifest.json');
     writeFileSync(manifestPath, JSON.stringify(fixture.manifest), 'utf8');

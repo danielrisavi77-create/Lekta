@@ -118,24 +118,32 @@ export function buildUnsignedProductionPreflightInputs(
     artifactSha256: string;
     artifactSizeBytes: number;
     contractKeyId: string;
+    contractPublicKeySha256: string;
+    contractPrivateKeyPkcs8Base64Url: string;
     sourceCommit: string;
   },
 ): { manifest: Record<string, unknown>; environment: NodeJS.ProcessEnv } {
+  const privateBytes = Buffer.from(input.contractPrivateKeyPkcs8Base64Url, 'base64url');
+  const canonicalPrivateKey = privateBytes.length > 0
+    && privateBytes.toString('base64url') === input.contractPrivateKeyPkcs8Base64Url;
   if (input.fileName !== basename(input.fileName)
     || !/^[a-f0-9]{64}$/.test(input.artifactSha256)
     || !Number.isSafeInteger(input.artifactSizeBytes) || input.artifactSizeBytes <= 0
     || !/^[A-Za-z0-9._-]{1,80}$/.test(input.contractKeyId)
+    || !/^[a-f0-9]{64}$/.test(input.contractPublicKeySha256)
+    || !canonicalPrivateKey
     || !/^[a-f0-9]{40}$/.test(input.sourceCommit)) {
     throw new Error('Unsigned production preflight inputs are invalid.');
   }
   const signingCertificateThumbprint = '0'.repeat(40);
   return {
     manifest: {
-      schemaVersion: 1,
+      schemaVersion: 2,
       fileName: input.fileName,
       sha256: input.artifactSha256,
       sizeBytes: input.artifactSizeBytes,
       contractKeyId: input.contractKeyId,
+      contractPublicKeySha256: input.contractPublicKeySha256,
       signingCertificateThumbprint,
       timestampServer: 'https://timestamp.example.invalid',
       engineVersion: '0.1.0',
@@ -146,8 +154,11 @@ export function buildUnsignedProductionPreflightInputs(
     environment: {
       LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: signingCertificateThumbprint,
       LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: input.contractKeyId,
+      LEKTA_REPAIR_EXPECTED_CONTRACT_PUBLIC_KEY_SHA256: input.contractPublicKeySha256,
       LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT: input.sourceCommit,
       LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256: input.artifactSha256,
+      LEKTA_REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL:
+        input.contractPrivateKeyPkcs8Base64Url,
     },
   };
 }

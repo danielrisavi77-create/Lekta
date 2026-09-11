@@ -21,7 +21,11 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = join(__dirname, '..');
-const GATE_SCRIPTS = ['scripts/release-check.mjs', 'scripts/verify-deploy-dist.mjs'];
+const GATE_SCRIPTS = [
+  'scripts/release-check.mjs',
+  'scripts/verify-deploy-dist.mjs',
+  'scripts/run-local-repair-release.mts',
+];
 
 function sourceOf(relative: string): string {
   return readFileSync(join(ROOT, relative), 'utf8');
@@ -32,7 +36,10 @@ function gateVariables(): string[] {
   const found = new Set<string>();
   for (const relative of GATE_SCRIPTS) {
     const src = sourceOf(relative);
-    for (const m of src.matchAll(/process\.env\.(LEKTA_[A-Z0-9_]+)/g)) found.add(m[1]);
+    for (const m of src.matchAll(/(?:process\.)?env\.([A-Z][A-Z0-9_]+)/g)) found.add(m[1]);
+    for (const m of src.matchAll(
+      /requiredEnvironmentValue\(\s*env,\s*'([A-Z0-9_]+)'/g,
+    )) found.add(m[1]);
     for (const m of src.matchAll(/requiresEnv:\s*'([A-Z0-9_]+)'/g)) found.add(m[1]);
   }
   return [...found].sort();

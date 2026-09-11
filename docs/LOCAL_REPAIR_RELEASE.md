@@ -8,13 +8,16 @@ Lekta je dodaje samo lokalnom nazivu preuzete datoteke za jedan placeni posao.
 
 - WordReplica `BUILD_LEKTA_REPAIR_RUNNER.ps1` proizveo je `LektaRepair.exe` i
   `lekta-repair-runner-manifest.json`. Manifest mora zapisati
-  `engineVersion: "0.1.0"`, puni `sourceCommit`, `sourceBranch: "automation-dev"` i
-  `sourceTreeClean: true`.
+  `schemaVersion: 2`, `engineVersion: "0.1.0"`, puni `sourceCommit`,
+  `sourceBranch: "automation-dev"`, `sourceTreeClean: true` i lowercase
+  `contractPublicKeySha256`.
 - Authenticode status EXE-a je `Valid`. Stvarni potpisnik mora odgovarati i
   thumbprintu iz manifesta i neovisno konfiguriranom ocekivanom publisher
   thumbprintu. Self-signed development certifikat nije produkcijski identitet.
 - Repair Contract key id iz manifesta mora odgovarati neovisno konfiguriranom
-  ocekivanom key id-u, a `sourceCommit` tocno pregledanom i odobrenom SHA-u.
+  ocekivanom key id-u. Javni fingerprint iz manifesta, neovisno konfigurirani
+  javni fingerprint i javni kljuc izveden iz privatnog PKCS#8 P-256 kljuca moraju
+  biti potpuno jednaki, a `sourceCommit` tocno pregledanom i odobrenom SHA-u.
 - SHA-256 stvarnih bajtova runner artefakta mora odgovarati neovisno pregledanom
   i konfiguriranom artifact hashu; vrijednost se ne prepisuje iz susjednog manifesta.
 - Dostupne su varijable `SUPABASE_ACCESS_TOKEN` i `SUPABASE_DB_PASSWORD`.
@@ -31,9 +34,17 @@ pregledanog release zapisa, nikad ih ne prepisuje iz susjednog manifesta:
 ```powershell
 $env:LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT = '<trusted-publisher-thumbprint>'
 $env:LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID = '<approved-contract-key-id>'
+$env:LEKTA_REPAIR_EXPECTED_CONTRACT_PUBLIC_KEY_SHA256 = '<approved-public-spki-sha256>'
 $env:LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT = '<reviewed-full-source-sha>'
 $env:LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256 = '<reviewed-artifact-sha256>'
+$env:LEKTA_REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL = '<private-p256-pkcs8-base64url>'
 ```
+
+Prvih pet vrijednosti neovisni su javni release inputi. Privatni PKCS#8 input
+ostaje tajna i ne smije se commitati, ispisivati ni prosljedivati child procesima.
+Supabase runtime dobiva samo `REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL`,
+`REPAIR_CONTRACT_KEY_ID`, `REPAIR_LOCAL_ENABLED` i `REPAIR_LOCAL_DISABLED`,
+i to kroz privremeni ograniceni `--env-file` koji se odmah brise.
 
 Opcionalno se moze postaviti `LEKTA_PUBLIC_REPAIR_RUNNER_URL`. Zadana vrijednost
 je `https://lektahr.netlify.app/downloads/LektaRepair.exe`; URL mora biti HTTPS
@@ -46,11 +57,17 @@ npm run release:repair:preflight -- --artifact C:\put\do\LektaRepair.exe
 ```
 
 Manifest se zadano cita iz istog foldera. Preflight fail-closed provjerava
-manifest, velicinu, SHA-256 stvarnih bajtova prema manifestu i neovisno pregledanom
-artifact hashu, trostruko slaganje Authenticode potpisnika (stvarni potpis,
-manifest, ocekivani publisher), ocekivani contract key, engine verziju,
+schema v2, velicinu i SHA-256 stvarnih bajtova prema manifestu i neovisno
+pregledanom artifact hashu; trostruko slaganje Authenticode potpisnika (stvarni
+potpis, manifest, ocekivani publisher); te trostruko slaganje javnog Repair
+Contract fingerprinta (manifest, neovisni release input i javni kljuc izveden iz
+privatnog PKCS#8 P-256 kljuca). Provjerava i key id, engine verziju,
 `automation-dev` branch, pregledani source commit, cisto izvorno stablo, projekt i
 migracije 0104-0106. Ne povezuje projekt i ne radi mrezne promjene.
+
+Testovi i implementacijska provjera u ovom repozitoriju ne izvode produkcijski
+deploy. Produkcijski release zahtijeva izriciti `--execute`, sve gateove i stvarni
+trusted Authenticode certifikat; self-signed ili nepotpisani runner ostaje odbijen.
 
 ## Potpuni automatizirani release
 
@@ -58,22 +75,29 @@ migracije 0104-0106. Ne povezuje projekt i ne radi mrezne promjene.
 npm run release:repair:deploy -- --artifact C:\put\do\LektaRepair.exe
 ```
 
-Redoslijed je namjerno fiksan:
+Redoslijed je namjerno fiksan i disabled-first:
 
 1. povezivanje iskljucivo na odobreni Supabase projekt;
 2. puni Lekta repair integration gate i produkcijski build s prikovanim URL-om
    i SHA-256 hashom;
 3. ponovno provjereno kopiranje EXE-a u `dist/downloads/LektaRepair.exe`;
-4. ponovni zavrsni `verify-deploy-dist` nad konacnim `dist` folderom koji sada
-   ukljucuje runner;
-5. provjera cijele remote migracijske povijesti u privremenom workspaceu,
+4. ponovni zavrsni `verify-deploy-dist` nad konacnim `dist` folderom;
+5. prva remote mutacija zapisuje samo `REPAIR_LOCAL_DISABLED=true`;
+6. druga ogranicena env-file operacija postavlja privatni contract kljuc, key id,
+   `REPAIR_LOCAL_ENABLED=false` i zadrzava `REPAIR_LOCAL_DISABLED=true`;
+7. provjera cijele remote migracijske povijesti u privremenom workspaceu,
    dry-run, pa stvarni `db push`;
-6. deploy `repair-local-claim`, `repair-local-status` i `repair-docx`;
-7. Netlify production deploy vec izgradenog i provjerenog `dist` foldera.
+8. deploy `repair-local-claim`, `repair-local-status` i `repair-docx`;
+9. Netlify production deploy vec izgradenog i provjerenog `dist` foldera;
+10. prijelaz na `REPAIR_LOCAL_ENABLED=true` dok
+    `REPAIR_LOCAL_DISABLED=true` i dalje cuva flow;
+11. zadnja operacija aktivira flow postavljanjem `REPAIR_LOCAL_DISABLED=false`.
 
-Svaki neuspjeh zaustavlja sljedece korake. Netlify se poziva zadnji, pa javni
-klijent nikad ne pokazuje na runner koji nije prosao lokalni gate i hash
-provjeru.
+Svaka secret faza koristi jednu `supabase secrets set --env-file` naredbu.
+Privremeni folder i datoteka dobivaju ograniceni ACL/chmod, privatna vrijednost
+nije u argumentima ni logovima, a cleanup kvar zaustavlja release. Svaki drugi
+neuspjeh takoder odmah zaustavlja sljedece korake, pa zavrsna aktivacija ostaje
+nedostizna nakon bilo kojeg ranijeg kvara.
 
 ## Fail-closed migracijski workspace
 

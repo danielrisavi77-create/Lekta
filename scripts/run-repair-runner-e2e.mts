@@ -820,6 +820,8 @@ async function main(): Promise<void> {
       artifactSha256: sha256(artifactBytes),
       artifactSizeBytes: artifactBytes.byteLength,
       contractKeyId: keyId,
+      contractPublicKeySha256: sha256(signerPublicSpki),
+      contractPrivateKeyPkcs8Base64Url: privateKeyBase64Url,
       sourceCommit: wordReplicaRepository.head,
     });
     const productionManifestPath = join(artifactDirectory, 'lekta-repair-runner-manifest.json');

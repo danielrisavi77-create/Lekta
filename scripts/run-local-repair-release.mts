@@ -21,6 +21,10 @@ import {
 import {
   executeLocalRepairMigrationWorkspace,
 } from './local-repair-migration-workspace.mts';
+import {
+  buildLocalRepairSecretChildEnvironment,
+  stageLocalRepairSecrets,
+} from './local-repair-secret-staging.mts';
 export { assertNetlifyReleaseSecrets, buildRunnerDeploymentEnvironment, stageVerifiedRunnerArtifact };
 export {
   applyLocalRepairMigrationWorkspacePlan,
@@ -46,8 +50,13 @@ interface CliOptions {
 export interface LocalRepairReleaseTrustPolicy {
   expectedPublisherThumbprint: string;
   expectedContractKeyId: string;
+  expectedContractPublicKeySha256: string;
   reviewedSourceCommit: string;
   reviewedArtifactSha256: string;
+}
+
+export interface LocalRepairContractSigningSecret {
+  privateKeyPkcs8Base64Url: string;
 }
 
 function requiredEnvironmentValue(
@@ -71,6 +80,10 @@ export function readLocalRepairReleaseTrustPolicy(
       env,
       'LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID',
     ),
+    expectedContractPublicKeySha256: requiredEnvironmentValue(
+      env,
+      'LEKTA_REPAIR_EXPECTED_CONTRACT_PUBLIC_KEY_SHA256',
+    ).toLowerCase(),
     reviewedSourceCommit: requiredEnvironmentValue(
       env,
       'LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT',
@@ -80,6 +93,23 @@ export function readLocalRepairReleaseTrustPolicy(
       'LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256',
     ).toLowerCase(),
   };
+}
+
+export function readLocalRepairContractSigningSecret(
+  env: Record<string, string | undefined> = process.env,
+): LocalRepairContractSigningSecret {
+  return {
+    privateKeyPkcs8Base64Url: requiredEnvironmentValue(
+      env,
+      'LEKTA_REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL',
+    ),
+  };
+}
+
+export function buildLocalRepairChildEnvironment(
+  source: NodeJS.ProcessEnv,
+): NodeJS.ProcessEnv {
+  return buildLocalRepairSecretChildEnvironment(source);
 }
 
 export function assertLocalRepairReleaseSecrets(
@@ -164,7 +194,10 @@ export function readAuthenticodeEvidence(artifactPath: string): AuthenticodeEvid
     '-NoProfile', '-NonInteractive', '-Command', script,
   ], {
     encoding: 'utf8',
-    env: { ...process.env, LEKTA_RUNNER_ARTIFACT: resolve(artifactPath) },
+    env: buildLocalRepairChildEnvironment({
+      ...process.env,
+      LEKTA_RUNNER_ARTIFACT: resolve(artifactPath),
+    }),
     windowsHide: true,
   });
   if (completed.status !== 0) {
@@ -185,7 +218,7 @@ function executableFor(command: string, root: string): string {
   throw new Error(`Nepodrzana release naredba: ${command}`);
 }
 
-function readAndVerifyRemoteRepairDocxBaseline(root: string): RemoteRepairDocxEvidence {
+function readAndVerifyRemoteRepairDocxBaseline(root: string, childEnv: NodeJS.ProcessEnv): RemoteRepairDocxEvidence {
   const completed = spawnSync(executableFor('supabase', root), [
     'functions', 'list',
     '--project-ref', EXPECTED_SUPABASE_PROJECT_REF,
@@ -193,7 +226,7 @@ function readAndVerifyRemoteRepairDocxBaseline(root: string): RemoteRepairDocxEv
   ], {
     cwd: root,
     encoding: 'utf8',
-    env: process.env,
+    env: buildLocalRepairChildEnvironment(childEnv),
     windowsHide: true,
   });
   if (completed.status !== 0) {
@@ -207,7 +240,7 @@ function runReleaseCommand(parts: string[], root: string, env: NodeJS.ProcessEnv
   const executable = executableFor(command, root);
   const completed = spawnSync(executable, args, {
     cwd: root,
-    env,
+    env: buildLocalRepairChildEnvironment(env),
     stdio: 'inherit',
     windowsHide: true,
   });
@@ -224,7 +257,7 @@ function runReleaseCommandCaptured(
   const [command, ...args] = parts;
   const completed = spawnSync(executableFor(command, root), args, {
     cwd: root,
-    env: { ...env, NO_COLOR: '1' },
+    env: buildLocalRepairChildEnvironment({ ...env, NO_COLOR: '1' }),
     encoding: 'utf8',
     windowsHide: true,
   });
@@ -245,11 +278,11 @@ function assertLinkedProject(root: string): void {
   }
 }
 
-function readNetlifyLinkedStatus(root: string): unknown {
+function readNetlifyLinkedStatus(root: string, childEnv: NodeJS.ProcessEnv): unknown {
   const completed = spawnSync(executableFor('netlify', root), ['status', '--json'], {
     cwd: root,
     encoding: 'utf8',
-    env: process.env,
+    env: buildLocalRepairChildEnvironment(childEnv),
     windowsHide: true,
   });
   if (completed.status !== 0) {
@@ -267,34 +300,138 @@ export interface LocalRepairDeploymentInput {
   artifactPath: string;
   artifactSha256: string;
   publicUrl: string;
+  contractKeyId: string;
+  contractPrivateKeyPkcs8Base64Url: string;
+}
+
+export type LocalRepairSecretPhase =
+  | 'guard-disabled'
+  | 'disabled-config'
+  | 'enabled-guarded'
+  | 'activate';
+
+const LOCAL_REPAIR_SECRET_PHASES = new Set<LocalRepairSecretPhase>([
+  'guard-disabled',
+  'disabled-config',
+  'enabled-guarded',
+  'activate',
+]);
+
+function isLocalRepairSecretPhase(value: string): value is LocalRepairSecretPhase {
+  return LOCAL_REPAIR_SECRET_PHASES.has(value as LocalRepairSecretPhase);
+}
+
+function secretValuesForPhase(
+  phase: LocalRepairSecretPhase,
+  input: LocalRepairDeploymentInput,
+): Readonly<Record<string, string>> {
+  if (phase === 'guard-disabled') return { REPAIR_LOCAL_DISABLED: 'true' };
+  if (phase === 'disabled-config') {
+    return {
+      REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL: input.contractPrivateKeyPkcs8Base64Url,
+      REPAIR_CONTRACT_KEY_ID: input.contractKeyId,
+      REPAIR_LOCAL_ENABLED: 'false',
+      REPAIR_LOCAL_DISABLED: 'true',
+    };
+  }
+  if (phase === 'enabled-guarded') {
+    return {
+      REPAIR_LOCAL_ENABLED: 'true',
+      REPAIR_LOCAL_DISABLED: 'true',
+    };
+  }
+  if (phase === 'activate') return { REPAIR_LOCAL_DISABLED: 'false' };
+  throw new Error(`Nepoznata local-repair secret faza: ${phase}`);
+}
+
+export interface LocalRepairDeploymentExecutor {
+  runCommand(command: readonly string[]): void;
+  assertLinkedProject(): void;
+  stageRunner(): void;
+  deployMigrations(): void;
+  stageSecrets(phase: LocalRepairSecretPhase, secretNames: readonly string[]): void;
+}
+
+export function executeLocalRepairDeploymentPlan(
+  plan: readonly (readonly string[])[],
+  executor: LocalRepairDeploymentExecutor,
+): void {
+  const canonicalPlan = buildLocalRepairDeploymentPlan();
+  if (JSON.stringify(plan) !== JSON.stringify(canonicalPlan)) {
+    throw new Error('Local-repair disabled-first plan nije kanonski; izvrsenje je odbijeno.');
+  }
+
+  let staged = false;
+  let verifiedDist = false;
+  for (const command of plan) {
+    const isDistVerification = command[0] === 'node'
+      && command[1] === 'scripts/verify-deploy-dist.mjs';
+    if (isDistVerification && !staged) {
+      throw new Error('Zavrsna dist provjera odbijena jer runner nije spremljen u dist.');
+    }
+    if (
+      command[0] === 'netlify'
+      && command[1] === 'deploy'
+      && (!staged || !verifiedDist)
+    ) {
+      throw new Error('Netlify deploy odbijen jer runner nije spremljen i provjeren u dist.');
+    }
+    if (command[0] === 'internal' && command[1] === 'stage-local-repair-secrets') {
+      const phase = command[2];
+      if (!isLocalRepairSecretPhase(phase)) {
+        throw new Error(`Nepoznata local-repair secret faza: ${phase || '(prazno)'}`);
+      }
+      executor.stageSecrets(phase, command.slice(3));
+      continue;
+    }
+    if (command[0] === 'internal' && command[1] === 'deploy-local-repair-migrations') {
+      executor.deployMigrations();
+      continue;
+    }
+    executor.runCommand(command);
+    if (command[0] === 'supabase' && command[1] === 'link') {
+      executor.assertLinkedProject();
+    }
+    if (command[0] === 'netlify' && command[1] === 'build') {
+      executor.stageRunner();
+      staged = true;
+    }
+    if (isDistVerification) verifiedDist = true;
+  }
 }
 
 export function executeLocalRepairDeployment(input: LocalRepairDeploymentInput): void {
   const root = input.root || process.cwd();
   assertLocalRepairReleaseSecrets(process.env);
-  readAndVerifyRemoteRepairDocxBaseline(root);
+  const childEnv = buildLocalRepairChildEnvironment(process.env);
+  readAndVerifyRemoteRepairDocxBaseline(root, childEnv);
   selectNetlifyReleaseAuthorization({
     env: process.env,
-    linkedStatus: readNetlifyLinkedStatus(root),
+    linkedStatus: readNetlifyLinkedStatus(root, childEnv),
   });
-  const releaseEnv = {
+  const releaseEnv = buildLocalRepairChildEnvironment({
     ...process.env,
     ...buildRunnerDeploymentEnvironment({
       publicUrl: input.publicUrl,
       sha256: input.artifactSha256,
     }),
-  };
-  let staged = false;
-  let verifiedDist = false;
-  for (const command of buildLocalRepairDeploymentPlan()) {
-    const isDistVerification = command[0] === 'node' && command[1] === 'scripts/verify-deploy-dist.mjs';
-    if (isDistVerification && !staged) {
-      throw new Error('Zavrsna dist provjera odbijena jer runner nije spremljen u dist.');
-    }
-    if (command[0] === 'netlify' && command[1] === 'deploy' && (!staged || !verifiedDist)) {
-      throw new Error('Netlify deploy odbijen jer runner nije spremljen i provjeren u dist.');
-    }
-    if (command[0] === 'internal' && command[1] === 'deploy-local-repair-migrations') {
+  });
+
+  executeLocalRepairDeploymentPlan(buildLocalRepairDeploymentPlan(), {
+    runCommand(command) {
+      runReleaseCommand([...command], root, releaseEnv);
+    },
+    assertLinkedProject() {
+      assertLinkedProject(root);
+    },
+    stageRunner() {
+      stageVerifiedRunnerArtifact({
+        artifactPath: input.artifactPath,
+        distDirectory: join(root, 'dist'),
+        sha256: input.artifactSha256,
+      });
+    },
+    deployMigrations() {
       executeLocalRepairMigrationWorkspace({
         projectRef: EXPECTED_SUPABASE_PROJECT_REF,
         localMigrationsDirectory: join(root, 'supabase', 'migrations'),
@@ -307,32 +444,45 @@ export function executeLocalRepairDeployment(input: LocalRepairDeploymentInput):
           return {};
         },
       });
-      continue;
-    }
-    runReleaseCommand(command, root, releaseEnv);
-    if (command[0] === 'supabase' && command[1] === 'link') assertLinkedProject(root);
-    if (command[0] === 'netlify' && command[1] === 'build') {
-      stageVerifiedRunnerArtifact({
-        artifactPath: input.artifactPath,
-        distDirectory: join(root, 'dist'),
-        sha256: input.artifactSha256,
+    },
+    stageSecrets(phase, secretNames) {
+      const secrets = secretValuesForPhase(phase, input);
+      const expectedNames = [...secretNames].sort();
+      const actualNames = Object.keys(secrets).sort();
+      if (JSON.stringify(actualNames) !== JSON.stringify(expectedNames)) {
+        throw new Error(`Secret plan za fazu ${phase} ne odgovara vrijednostima.`);
+      }
+      stageLocalRepairSecrets({
+        projectRef: EXPECTED_SUPABASE_PROJECT_REF,
+        secrets,
+        runSupabase(args) {
+          const completed = spawnSync(executableFor('supabase', root), [...args], {
+            cwd: root,
+            env: buildLocalRepairChildEnvironment(releaseEnv),
+            encoding: 'utf8',
+            windowsHide: true,
+          });
+          if (completed.status !== 0) {
+            throw new Error(`Supabase secret faza ${phase} nije uspjela.`);
+          }
+        },
       });
-      staged = true;
-    }
-    if (isDistVerification) verifiedDist = true;
-  }
+    },
+  });
 }
 
 export function mainLocalRepairRelease(args = process.argv.slice(2)): void {
   const root = process.cwd();
   const options = parseLocalRepairReleaseArgs(args);
   const trustPolicy = readLocalRepairReleaseTrustPolicy();
+  const signingSecret = readLocalRepairContractSigningSecret();
   const verified = verifyLocalRepairRelease({
     artifactPath: options.artifactPath,
     manifestPath: options.manifestPath,
     migrationsDirectory: options.migrationsDirectory,
     projectRef: EXPECTED_SUPABASE_PROJECT_REF,
     authenticode: readAuthenticodeEvidence(options.artifactPath),
+    contractPrivateKeyPkcs8Base64Url: signingSecret.privateKeyPkcs8Base64Url,
     ...trustPolicy,
   });
 
@@ -342,6 +492,8 @@ export function mainLocalRepairRelease(args = process.argv.slice(2)): void {
       root,
       artifactPath: verified.artifactPath,
       artifactSha256: verified.artifactSha256,
+      contractKeyId: verified.contractKeyId,
+      contractPrivateKeyPkcs8Base64Url: signingSecret.privateKeyPkcs8Base64Url,
       publicUrl: process.env.LEKTA_PUBLIC_REPAIR_RUNNER_URL
         || 'https://lektahr.netlify.app/downloads/LektaRepair.exe',
     });

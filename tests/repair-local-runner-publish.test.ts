@@ -53,11 +53,11 @@ describe('objava potpisanog WordReplica runnera kroz Lekta release', () => {
     })).toThrow(/SHA-256/i);
   });
 
-  it('za produkcijsku objavu zahtijeva Netlify token i site id te deploy radi zadnji', () => {
+  it('za produkcijsku objavu zahtijeva Netlify token i site id te aktivira tek zadnja', () => {
     expect(() => assertNetlifyReleaseSecrets({})).toThrow(/NETLIFY_AUTH_TOKEN/);
     expect(() => assertNetlifyReleaseSecrets({ NETLIFY_AUTH_TOKEN: 'token' })).toThrow(/NETLIFY_SITE_ID/);
     expect(buildLocalRepairDeploymentPlan().at(-1)).toEqual([
-      'netlify', 'deploy', '--prod', '--dir', 'dist', '--no-build',
+      'internal', 'stage-local-repair-secrets', 'activate', 'REPAIR_LOCAL_DISABLED',
     ]);
   });
 });

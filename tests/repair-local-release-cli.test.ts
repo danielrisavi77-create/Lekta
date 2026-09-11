@@ -13,14 +13,64 @@ import { assertLocalRepairReleaseSecrets } from '../scripts/run-local-repair-rel
 import { parseAndVerifyRemoteRepairDocxBaseline } from '../scripts/run-local-repair-release';
 import * as releaseCli from '../scripts/run-local-repair-release';
 
+import type { LocalRepairDeploymentExecutor } from '../scripts/run-local-repair-release';
+
+const SUCCESS_TRACE = [
+  'command:supabase link',
+  'assert-linked-project',
+  'command:npm run',
+  'command:netlify build',
+  'stage-runner',
+  'command:node scripts/verify-deploy-dist.mjs',
+  'secrets:guard-disabled',
+  'secrets:disabled-config',
+  'migrations',
+  'command:supabase functions repair-local-claim',
+  'command:supabase functions repair-local-status',
+  'command:supabase functions repair-docx',
+  'command:netlify deploy',
+  'secrets:enabled-guarded',
+  'secrets:activate',
+];
+
+function commandEvent(command: readonly string[]): string {
+  if (command[0] === 'supabase' && command[1] === 'functions') {
+    return `command:supabase functions ${command[3]}`;
+  }
+  return `command:${command[0]} ${command[1]}`;
+}
+
+function recordingExecutor(
+  trace: string[],
+  failAt?: string,
+): LocalRepairDeploymentExecutor {
+  const record = (event: string) => {
+    trace.push(event);
+    if (event === failAt) throw new Error(`simulated failure at ${event}`);
+  };
+  return {
+    runCommand(command) { record(commandEvent(command)); },
+    assertLinkedProject() { record('assert-linked-project'); },
+    stageRunner() { record('stage-runner'); },
+    deployMigrations() { record('migrations'); },
+    stageSecrets(phase) { record(`secrets:${phase}`); },
+  };
+}
+
 describe('automatizirani local-repair release CLI', () => {
   it('zahtijeva neovisno konfigurirane produkcijske trust, source i artifact vrijednosti', () => {
     expect(releaseCli).toHaveProperty('readLocalRepairReleaseTrustPolicy');
+    expect(releaseCli).toHaveProperty('readLocalRepairContractSigningSecret');
     const readLocalRepairReleaseTrustPolicy = (
       releaseCli as typeof releaseCli & {
         readLocalRepairReleaseTrustPolicy: (env: Record<string, string | undefined>) => unknown;
       }
     ).readLocalRepairReleaseTrustPolicy;
+    const readLocalRepairContractSigningSecret = (
+      releaseCli as typeof releaseCli & {
+        readLocalRepairContractSigningSecret: (env: Record<string, string | undefined>) => unknown;
+      }
+    ).readLocalRepairContractSigningSecret;
 
     expect(() => readLocalRepairReleaseTrustPolicy({})).toThrow(
       /LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT/,
@@ -31,24 +81,48 @@ describe('automatizirani local-repair release CLI', () => {
     expect(() => readLocalRepairReleaseTrustPolicy({
       LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: 'AA'.repeat(20),
       LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: 'lekta-prod-2026-01',
+    })).toThrow(/LEKTA_REPAIR_EXPECTED_CONTRACT_PUBLIC_KEY_SHA256/);
+    expect(() => readLocalRepairReleaseTrustPolicy({
+      LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: 'AA'.repeat(20),
+      LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: 'lekta-prod-2026-01',
+      LEKTA_REPAIR_EXPECTED_CONTRACT_PUBLIC_KEY_SHA256: 'a'.repeat(64),
     })).toThrow(/LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT/);
     expect(() => readLocalRepairReleaseTrustPolicy({
       LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: 'AA'.repeat(20),
       LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: 'lekta-prod-2026-01',
+      LEKTA_REPAIR_EXPECTED_CONTRACT_PUBLIC_KEY_SHA256: 'a'.repeat(64),
       LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT: '1'.repeat(40),
     })).toThrow(/LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256/);
 
     expect(readLocalRepairReleaseTrustPolicy({
       LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: ' aa '.repeat(20),
       LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: ' lekta-prod-2026-01 ',
+      LEKTA_REPAIR_EXPECTED_CONTRACT_PUBLIC_KEY_SHA256: ` ${'A'.repeat(64)} `,
       LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT: ` ${'1'.repeat(40)} `,
       LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256: ` ${'B'.repeat(64)} `,
+      LEKTA_REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL: ' private-key ',
     })).toEqual({
       expectedPublisherThumbprint: 'AA'.repeat(20),
       expectedContractKeyId: 'lekta-prod-2026-01',
+      expectedContractPublicKeySha256: 'a'.repeat(64),
       reviewedSourceCommit: '1'.repeat(40),
       reviewedArtifactSha256: 'b'.repeat(64),
     });
+
+    expect(() => readLocalRepairContractSigningSecret({})).toThrow(
+      /LEKTA_REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL/,
+    );
+    expect(readLocalRepairContractSigningSecret({
+      LEKTA_REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL: ' private-key ',
+    })).toEqual({ privateKeyPkcs8Base64Url: 'private-key' });
+  });
+
+  it('uklanja privatni release kljuc iz svakog child environmenta', () => {
+    expect(releaseCli.buildLocalRepairChildEnvironment({
+      PATH: 'C:\\Windows',
+      LEKTA_REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL: 'secret-private-key',
+      REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL: 'runtime-secret',
+    })).toEqual({ PATH: 'C:\\Windows' });
   });
 
   it('planira samo provjerene remote gapove i tocno tri nove Lekta migracije', () => {
@@ -663,18 +737,99 @@ describe('automatizirani local-repair release CLI', () => {
     }
   });
 
-  it('radi link, regresijski gate, migracijski dry-run, push i funkcije deterministickim redom', () => {
+  it('radi disabled-first release i aktivira kill switch tek kao zadnju operaciju', () => {
     expect(buildLocalRepairDeploymentPlan()).toEqual([
       ['supabase', 'link', '--project-ref', EXPECTED_SUPABASE_PROJECT_REF, '--yes'],
       ['npm', 'run', 'check:repair-integration'],
       ['netlify', 'build'],
       ['node', 'scripts/verify-deploy-dist.mjs'],
+      ['internal', 'stage-local-repair-secrets', 'guard-disabled', 'REPAIR_LOCAL_DISABLED'],
+      ['internal', 'stage-local-repair-secrets', 'disabled-config',
+        'REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL', 'REPAIR_CONTRACT_KEY_ID',
+        'REPAIR_LOCAL_ENABLED', 'REPAIR_LOCAL_DISABLED'],
       ['internal', 'deploy-local-repair-migrations'],
       ['supabase', 'functions', 'deploy', 'repair-local-claim', '--project-ref', EXPECTED_SUPABASE_PROJECT_REF],
       ['supabase', 'functions', 'deploy', 'repair-local-status', '--project-ref', EXPECTED_SUPABASE_PROJECT_REF],
       ['supabase', 'functions', 'deploy', 'repair-docx', '--project-ref', EXPECTED_SUPABASE_PROJECT_REF],
       ['netlify', 'deploy', '--prod', '--dir', 'dist', '--no-build'],
+      ['internal', 'stage-local-repair-secrets', 'enabled-guarded',
+        'REPAIR_LOCAL_ENABLED', 'REPAIR_LOCAL_DISABLED'],
+      ['internal', 'stage-local-repair-secrets', 'activate', 'REPAIR_LOCAL_DISABLED'],
     ]);
+  });
+
+  it.each([
+    {
+      name: 'migracije',
+      plan: [['internal', 'deploy-local-repair-migrations']],
+      forbiddenEvent: 'migrations',
+    },
+    {
+      name: 'deploy funkcije',
+      plan: [[
+        'supabase', 'functions', 'deploy', 'repair-docx',
+        '--project-ref', EXPECTED_SUPABASE_PROJECT_REF,
+      ]],
+      forbiddenEvent: 'command:supabase functions repair-docx',
+    },
+    {
+      name: 'Netlify deploy',
+      plan: [
+        ['netlify', 'build'],
+        ['node', 'scripts/verify-deploy-dist.mjs'],
+        ['netlify', 'deploy', '--prod', '--dir', 'dist', '--no-build'],
+      ],
+      forbiddenEvent: 'command:netlify deploy',
+    },
+    {
+      name: 'enabled-guarded',
+      plan: [[
+        'internal', 'stage-local-repair-secrets', 'enabled-guarded',
+        'REPAIR_LOCAL_ENABLED', 'REPAIR_LOCAL_DISABLED',
+      ]],
+      forbiddenEvent: 'secrets:enabled-guarded',
+    },
+    {
+      name: 'activate',
+      plan: [[
+        'internal', 'stage-local-repair-secrets', 'activate', 'REPAIR_LOCAL_DISABLED',
+      ]],
+      forbiddenEvent: 'secrets:activate',
+    },
+  ])('odbija preuredjeni ili skraceni plan prije faze $name', ({ plan, forbiddenEvent }) => {
+    const trace: string[] = [];
+    expect(() => releaseCli.executeLocalRepairDeploymentPlan(
+      plan,
+      recordingExecutor(trace),
+    )).toThrow(/disabled-first/);
+    expect(trace).not.toContain(forbiddenEvent);
+  });
+
+  it('izvrsava disabled-first plan i aktivira tek kao zadnju operaciju', () => {
+    const trace: string[] = [];
+    releaseCli.executeLocalRepairDeploymentPlan(
+      buildLocalRepairDeploymentPlan(),
+      recordingExecutor(trace),
+    );
+    expect(trace).toEqual(SUCCESS_TRACE);
+  });
+
+  it.each(SUCCESS_TRACE.slice(0, -1))(
+    'ne aktivira nakon kvara na koraku %s',
+    (failAt) => {
+      const trace: string[] = [];
+      expect(() => releaseCli.executeLocalRepairDeploymentPlan(
+        buildLocalRepairDeploymentPlan(),
+        recordingExecutor(trace, failAt),
+      )).toThrow(/simulated failure/);
+      expect(trace).not.toContain('secrets:activate');
+    },
+  );
+
+  it('javni plan sadrzi samo nazive tajni, nikad privatnu vrijednost', () => {
+    const planJson = JSON.stringify(buildLocalRepairDeploymentPlan());
+    expect(planJson).toContain('REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL');
+    expect(planJson).not.toContain('private-key-sentinel');
   });
 
   it('prije execute moda zahtijeva obje tajne bez vracanja njihovih vrijednosti', () => {
@@ -698,7 +853,11 @@ describe('automatizirani local-repair release CLI', () => {
     expect(cli).toContain('Get-AuthenticodeSignature');
     expect(cli).toContain("command[0] === 'netlify' && command[1] === 'build'");
     expect(cli).not.toContain("command[0] === 'npm' && command[1] === 'run'");
-    expect(cli).toContain("command[0] === 'node' && command[1] === 'scripts/verify-deploy-dist.mjs'");
+    expect(cli).toContain("command[0] === 'node'");
+    expect(cli).toContain("command[1] === 'scripts/verify-deploy-dist.mjs'");
+    expect(cli.match(/spawnSync\(/g)?.length).toBe(
+      cli.match(/env: buildLocalRepairChildEnvironment/g)?.length,
+    );
     expect(cli).toContain('verifiedDist');
     expect(cli).toContain('SUPABASE_ACCESS_TOKEN');
     expect(cli).toContain('SUPABASE_DB_PASSWORD');
