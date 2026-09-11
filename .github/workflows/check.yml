@@ -42,6 +42,12 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
 
+      # setup-node uz Node 20 trenutno donosi npm 10, ali package.json zakljucava npm 11.11.0.
+      # Razlicite npm verzije razlicito tumace opcionalne peer zapise u lockfileu, pa matrica
+      # mora prije `npm ci` koristiti isti package manager kojim je lockfile proizveden.
+      - name: npm iz packageManager polja
+        run: npm install --global npm@11.11.0
+
       # supabase/functions/** je Deno kod izvan tsconfig.json include-a. Od 2026-09-01 je
       # `check:edge` DIO `npm run check`, pa Deno treba OBJEMA granama matrice, prije gatea.
       # Ranije je stajao kao zaseban korak samo na Node 20, pa je lokalni gate tu rupu imao
