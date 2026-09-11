@@ -234,7 +234,7 @@ function validateSectionSurgery(params: DataObject): boolean {
 
 function validateFieldIntegrity(params: DataObject): boolean {
   if (!array(params.fields, 2_000, (item) => object(item, ['id', 'part', 'anchorFingerprint', 'action', 'confirmed'])
-    && identifier(item.id) && safePart(item.part) && fingerprint(item.anchorFingerprint) && item.action === 'mark-dirty' && item.confirmed === true)
+    && identifier(item.id) && safePart(item.part) && fingerprint(item.anchorFingerprint) && oneOf(item.action, ['mark-dirty', 'remove-orphan-control']) && item.confirmed === true)
     || !uniqueIds(params.fields)) return false;
   if (params.settings !== undefined && (!object(params.settings, [], ['updateFieldsOnOpen']) || !trueOrMissing(params.settings.updateFieldsOnOpen))) return false;
   if (!optional(params.manualToc, (value) => array(value, 20, (item) => object(item, ['startParagraphIndex', 'endParagraphIndex', 'anchorFingerprint', 'action', 'confirmed'])

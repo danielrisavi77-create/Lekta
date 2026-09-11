@@ -861,8 +861,9 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       const fields = p.fields.flatMap((raw) => {
         if (!raw || typeof raw !== 'object') return [];
         const value = raw as Record<string, unknown>;
-        return value.confirmed === true && value.action === 'mark-dirty' && typeof value.id === 'string' && typeof value.part === 'string' && typeof value.anchorFingerprint === 'string'
-          ? [{ id: value.id.slice(0, 300), part: value.part.slice(0, 200), anchorFingerprint: value.anchorFingerprint.slice(0, 120), action: 'mark-dirty' as const, confirmed: true as const }]
+        const action: FieldIntegrityParams['fields'][number]['action'] | undefined = value.action === 'mark-dirty' || value.action === 'remove-orphan-control' ? value.action : undefined;
+        return value.confirmed === true && action && typeof value.id === 'string' && typeof value.part === 'string' && typeof value.anchorFingerprint === 'string'
+          ? [{ id: value.id.slice(0, 300), part: value.part.slice(0, 200), anchorFingerprint: value.anchorFingerprint.slice(0, 120), action, confirmed: true as const }]
           : [];
       });
       const manualToc = Array.isArray(p.manualToc) ? p.manualToc.flatMap((raw) => {

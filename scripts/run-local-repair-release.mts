@@ -43,6 +43,45 @@ interface CliOptions {
   execute: boolean;
 }
 
+export interface LocalRepairReleaseTrustPolicy {
+  expectedPublisherThumbprint: string;
+  expectedContractKeyId: string;
+  reviewedSourceCommit: string;
+  reviewedArtifactSha256: string;
+}
+
+function requiredEnvironmentValue(
+  env: Record<string, string | undefined>,
+  name: string,
+): string {
+  const value = env[name]?.trim();
+  if (!value) throw new Error(`Preflight zahtijeva ${name}.`);
+  return value;
+}
+
+export function readLocalRepairReleaseTrustPolicy(
+  env: Record<string, string | undefined> = process.env,
+): LocalRepairReleaseTrustPolicy {
+  return {
+    expectedPublisherThumbprint: requiredEnvironmentValue(
+      env,
+      'LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT',
+    ).replace(/\s+/g, '').toUpperCase(),
+    expectedContractKeyId: requiredEnvironmentValue(
+      env,
+      'LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID',
+    ),
+    reviewedSourceCommit: requiredEnvironmentValue(
+      env,
+      'LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT',
+    ).toLowerCase(),
+    reviewedArtifactSha256: requiredEnvironmentValue(
+      env,
+      'LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256',
+    ).toLowerCase(),
+  };
+}
+
 export function assertLocalRepairReleaseSecrets(
   env: Record<string, string | undefined>,
 ): ReleaseSecretsEvidence {
@@ -287,12 +326,14 @@ export function executeLocalRepairDeployment(input: LocalRepairDeploymentInput):
 export function mainLocalRepairRelease(args = process.argv.slice(2)): void {
   const root = process.cwd();
   const options = parseLocalRepairReleaseArgs(args);
+  const trustPolicy = readLocalRepairReleaseTrustPolicy();
   const verified = verifyLocalRepairRelease({
     artifactPath: options.artifactPath,
     manifestPath: options.manifestPath,
     migrationsDirectory: options.migrationsDirectory,
     projectRef: EXPECTED_SUPABASE_PROJECT_REF,
     authenticode: readAuthenticodeEvidence(options.artifactPath),
+    ...trustPolicy,
   });
 
   process.stdout.write(`${JSON.stringify({ status: 'verified', ...verified }, null, 2)}\n`);

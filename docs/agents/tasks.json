@@ -148,6 +148,15 @@
       "dependsOn": [
         "T14"
       ]
+    },
+    {
+      "id": "T16",
+      "title": "Dokazi stvarni Lekta do WordReplica EXE tok na Windowsu",
+      "status": "in_review",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "npm run repair:runner:e2e gradi i pokrece unsigned development EXE kroz stvarni claim/status HTTP tok; T03 ostaje zaseban browser journey"
     }
   ],
   "statusNote": "Statusi azurirani 2026-09-09 prema docs/quality/lekta-plan-status.md (T00). \"done\" = nalaz zatvoren dokazom ponasanja u PR-u #61; ostatak posla po zadatku je u toj karti."

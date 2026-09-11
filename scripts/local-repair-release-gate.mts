@@ -4,6 +4,8 @@ import { basename, resolve } from 'node:path';
 
 export const EXPECTED_SUPABASE_PROJECT_REF = 'zrrjttizjyfcxmcpgzml';
 export const EXPECTED_REPAIR_DOCX_REMOTE_EZBR_SHA256 = '141400a3804ac8f74934fa33af3d168e213b1d3f5a57eaf267ba44f1482412a5';
+export const EXPECTED_WORDREPLICA_ENGINE_VERSION = '0.1.0';
+export const EXPECTED_WORDREPLICA_SOURCE_BRANCH = 'automation-dev';
 
 const REQUIRED_MIGRATIONS = [
   '0104_repair_local_claims.sql',
@@ -35,6 +37,10 @@ interface RunnerManifest {
   contractKeyId: string;
   signingCertificateThumbprint: string;
   timestampServer: string;
+  engineVersion: string;
+  sourceCommit: string;
+  sourceBranch: string;
+  sourceTreeClean: boolean;
 }
 
 export interface LocalRepairReleaseInput {
@@ -43,6 +49,10 @@ export interface LocalRepairReleaseInput {
   migrationsDirectory: string;
   projectRef: string;
   authenticode: AuthenticodeEvidence;
+  expectedPublisherThumbprint: string;
+  expectedContractKeyId: string;
+  reviewedSourceCommit: string;
+  reviewedArtifactSha256: string;
 }
 
 export interface VerifiedLocalRepairRelease {
@@ -53,6 +63,10 @@ export interface VerifiedLocalRepairRelease {
   contractKeyId: string;
   signingCertificateThumbprint: string;
   timestampServer: string;
+  engineVersion: string;
+  sourceCommit: string;
+  sourceBranch: string;
+  sourceTreeClean: true;
   migrations: readonly string[];
   functions: readonly string[];
 }
@@ -79,8 +93,8 @@ export function verifyRemoteRepairDocxBaseline(
   };
 }
 
-function normalizeThumbprint(value: string): string {
-  return value.replace(/\s+/g, '').toUpperCase();
+function normalizeThumbprint(value: unknown): string {
+  return typeof value === 'string' ? value.replace(/\s+/g, '').toUpperCase() : '';
 }
 
 function loadManifest(path: string): RunnerManifest {
@@ -106,11 +120,23 @@ function loadManifest(path: string): RunnerManifest {
     fail('contractKeyId manifesta nije valjan.');
   }
   if (typeof manifest.signingCertificateThumbprint !== 'string'
-      || normalizeThumbprint(manifest.signingCertificateThumbprint).length === 0) {
-    fail('manifest nema signing certificate thumbprint.');
+      || !/^[A-F0-9]{40}$/.test(normalizeThumbprint(manifest.signingCertificateThumbprint))) {
+    fail('manifest nema valjan signing certificate thumbprint.');
   }
   if (typeof manifest.timestampServer !== 'string' || !/^https:\/\//i.test(manifest.timestampServer)) {
     fail('timestamp server manifesta mora biti HTTPS.');
+  }
+  if (manifest.engineVersion !== EXPECTED_WORDREPLICA_ENGINE_VERSION) {
+    fail(`engineVersion manifesta nije ${EXPECTED_WORDREPLICA_ENGINE_VERSION}.`);
+  }
+  if (typeof manifest.sourceCommit !== 'string' || !/^[a-f0-9]{40}$/i.test(manifest.sourceCommit)) {
+    fail('sourceCommit manifesta nije valjan puni Git SHA.');
+  }
+  if (manifest.sourceBranch !== EXPECTED_WORDREPLICA_SOURCE_BRANCH) {
+    fail(`sourceBranch manifesta nije ${EXPECTED_WORDREPLICA_SOURCE_BRANCH}.`);
+  }
+  if (manifest.sourceTreeClean !== true) {
+    fail('WordReplica source tree nije bio cist pri release buildu.');
   }
   return manifest as RunnerManifest;
 }
@@ -118,6 +144,22 @@ function loadManifest(path: string): RunnerManifest {
 export function verifyLocalRepairRelease(input: LocalRepairReleaseInput): VerifiedLocalRepairRelease {
   if (input.projectRef.trim() !== EXPECTED_SUPABASE_PROJECT_REF) {
     fail(`project-ref nije ${EXPECTED_SUPABASE_PROJECT_REF}.`);
+  }
+  const expectedPublisherThumbprint = normalizeThumbprint(input.expectedPublisherThumbprint);
+  if (!/^[A-F0-9]{40}$/.test(expectedPublisherThumbprint)) {
+    fail('nije konfiguriran valjan ocekivani publisher thumbprint.');
+  }
+  const expectedContractKeyId = input.expectedContractKeyId?.trim();
+  if (!expectedContractKeyId || !/^[A-Za-z0-9._-]{1,80}$/.test(expectedContractKeyId)) {
+    fail('nije konfiguriran valjan ocekivani Repair Contract key id.');
+  }
+  const reviewedSourceCommit = input.reviewedSourceCommit?.trim().toLowerCase();
+  if (!reviewedSourceCommit || !/^[a-f0-9]{40}$/.test(reviewedSourceCommit)) {
+    fail('nije konfiguriran valjan pregledani WordReplica source commit.');
+  }
+  const reviewedArtifactSha256 = input.reviewedArtifactSha256?.trim().toLowerCase();
+  if (!reviewedArtifactSha256 || !/^[a-f0-9]{64}$/.test(reviewedArtifactSha256)) {
+    fail('nije konfiguriran valjan pregledani runner artefakt SHA-256.');
   }
   if (!existsSync(input.artifactPath) || !statSync(input.artifactPath).isFile()) {
     fail('runner artefakt ne postoji.');
@@ -133,6 +175,9 @@ export function verifyLocalRepairRelease(input: LocalRepairReleaseInput): Verifi
 
   const artifact = readFileSync(input.artifactPath);
   const artifactSha256 = createHash('sha256').update(artifact).digest('hex');
+  if (artifactSha256 !== reviewedArtifactSha256) {
+    fail('SHA-256 runnera ne odgovara pregledanom artefaktu.');
+  }
   if (artifact.byteLength !== manifest.sizeBytes) fail('velicina runnera ne odgovara manifestu.');
   if (artifactSha256 !== manifest.sha256.toLowerCase()) fail('SHA-256 runnera ne odgovara manifestu.');
 
@@ -141,6 +186,15 @@ export function verifyLocalRepairRelease(input: LocalRepairReleaseInput): Verifi
   const signerThumbprint = normalizeThumbprint(input.authenticode.signerThumbprint);
   if (!signerThumbprint || signerThumbprint !== manifestThumbprint) {
     fail('Authenticode potpisnik ne odgovara manifestu.');
+  }
+  if (signerThumbprint !== expectedPublisherThumbprint) {
+    fail('Authenticode potpisnik ne odgovara ocekivanom publisher thumbprintu.');
+  }
+  if (manifest.contractKeyId !== expectedContractKeyId) {
+    fail('Repair Contract key id manifesta ne odgovara ocekivanoj vrijednosti.');
+  }
+  if (manifest.sourceCommit.toLowerCase() !== reviewedSourceCommit) {
+    fail('WordReplica source commit nije pregledani i odobreni commit.');
   }
 
   if (!existsSync(input.migrationsDirectory) || !statSync(input.migrationsDirectory).isDirectory()) {
@@ -159,6 +213,10 @@ export function verifyLocalRepairRelease(input: LocalRepairReleaseInput): Verifi
     contractKeyId: manifest.contractKeyId,
     signingCertificateThumbprint: manifestThumbprint,
     timestampServer: manifest.timestampServer,
+    engineVersion: manifest.engineVersion,
+    sourceCommit: manifest.sourceCommit.toLowerCase(),
+    sourceBranch: manifest.sourceBranch,
+    sourceTreeClean: true,
     migrations: REQUIRED_MIGRATIONS,
     functions: REQUIRED_FUNCTIONS,
   };

@@ -14,6 +14,43 @@ import { parseAndVerifyRemoteRepairDocxBaseline } from '../scripts/run-local-rep
 import * as releaseCli from '../scripts/run-local-repair-release';
 
 describe('automatizirani local-repair release CLI', () => {
+  it('zahtijeva neovisno konfigurirane produkcijske trust, source i artifact vrijednosti', () => {
+    expect(releaseCli).toHaveProperty('readLocalRepairReleaseTrustPolicy');
+    const readLocalRepairReleaseTrustPolicy = (
+      releaseCli as typeof releaseCli & {
+        readLocalRepairReleaseTrustPolicy: (env: Record<string, string | undefined>) => unknown;
+      }
+    ).readLocalRepairReleaseTrustPolicy;
+
+    expect(() => readLocalRepairReleaseTrustPolicy({})).toThrow(
+      /LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT/,
+    );
+    expect(() => readLocalRepairReleaseTrustPolicy({
+      LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: 'AA'.repeat(20),
+    })).toThrow(/LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID/);
+    expect(() => readLocalRepairReleaseTrustPolicy({
+      LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: 'AA'.repeat(20),
+      LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: 'lekta-prod-2026-01',
+    })).toThrow(/LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT/);
+    expect(() => readLocalRepairReleaseTrustPolicy({
+      LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: 'AA'.repeat(20),
+      LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: 'lekta-prod-2026-01',
+      LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT: '1'.repeat(40),
+    })).toThrow(/LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256/);
+
+    expect(readLocalRepairReleaseTrustPolicy({
+      LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: ' aa '.repeat(20),
+      LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: ' lekta-prod-2026-01 ',
+      LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT: ` ${'1'.repeat(40)} `,
+      LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256: ` ${'B'.repeat(64)} `,
+    })).toEqual({
+      expectedPublisherThumbprint: 'AA'.repeat(20),
+      expectedContractKeyId: 'lekta-prod-2026-01',
+      reviewedSourceCommit: '1'.repeat(40),
+      reviewedArtifactSha256: 'b'.repeat(64),
+    });
+  });
+
   it('planira samo provjerene remote gapove i tocno tri nove Lekta migracije', () => {
     expect(releaseCli).toHaveProperty('planLocalRepairMigrationWorkspace');
 

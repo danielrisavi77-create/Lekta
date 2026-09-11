@@ -14,6 +14,13 @@ describe('local-repair release stvarni CLI entrypoint', () => {
       '--artifact', missing,
     ], {
       cwd: root,
+      env: {
+        ...process.env,
+        LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT: 'AA'.repeat(20),
+        LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID: 'lekta-prod-test',
+        LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT: '1'.repeat(40),
+        LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256: 'a'.repeat(64),
+      },
       encoding: 'utf8',
       windowsHide: true,
       timeout: 30_000,

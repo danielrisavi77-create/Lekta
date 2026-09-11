@@ -12,9 +12,31 @@ import {
   verifyLocalRepairRelease,
 } from '../scripts/local-repair-release-gate';
 
-function fixture(root: string) {
+const EXPECTED_PUBLISHER_THUMBPRINT = 'AA'.repeat(20);
+const EXPECTED_CONTRACT_KEY_ID = 'lekta-prod-2026-01';
+const REVIEWED_WORDREPLICA_COMMIT = '1'.repeat(40);
+const REVIEWED_ARTIFACT_SHA256 = 'd45671f221c3c68442aab595bba79d80dcc175e04821751310ea9ecc4b54cc7d';
+
+interface ManifestFixture {
+  schemaVersion: number;
+  fileName: string;
+  sha256: string;
+  sizeBytes: number;
+  contractKeyId: string;
+  signingCertificateThumbprint: string;
+  timestampServer: string;
+  engineVersion: string;
+  sourceCommit: string;
+  sourceBranch: string;
+  sourceTreeClean: boolean;
+}
+
+function fixture(
+  root: string,
+  manifestOverrides: Partial<ManifestFixture> = {},
+  bytes = Buffer.from('signed-runner-fixture'),
+) {
   const artifactPath = join(root, 'LektaRepair.exe');
-  const bytes = Buffer.from('signed-runner-fixture');
   writeFileSync(artifactPath, bytes);
 
   const manifestPath = join(root, 'lekta-repair-runner-manifest.json');
@@ -23,9 +45,14 @@ function fixture(root: string) {
     fileName: 'LektaRepair.exe',
     sha256: createHash('sha256').update(bytes).digest('hex'),
     sizeBytes: bytes.byteLength,
-    contractKeyId: 'lekta-prod-2026-01',
-    signingCertificateThumbprint: 'AA11BB22',
+    contractKeyId: EXPECTED_CONTRACT_KEY_ID,
+    signingCertificateThumbprint: EXPECTED_PUBLISHER_THUMBPRINT,
     timestampServer: 'https://timestamp.example.test',
+    engineVersion: '0.1.0',
+    sourceCommit: REVIEWED_WORDREPLICA_COMMIT,
+    sourceBranch: 'automation-dev',
+    sourceTreeClean: true,
+    ...manifestOverrides,
   }));
 
   const migrationsDirectory = join(root, 'migrations');
@@ -40,20 +67,72 @@ function fixture(root: string) {
   return { artifactPath, manifestPath, migrationsDirectory };
 }
 
+function validReleaseInput(paths: ReturnType<typeof fixture>) {
+  return {
+    ...paths,
+    projectRef: EXPECTED_SUPABASE_PROJECT_REF,
+    authenticode: {
+      status: 'Valid',
+      signerThumbprint: EXPECTED_PUBLISHER_THUMBPRINT.toLowerCase(),
+    },
+    expectedPublisherThumbprint: EXPECTED_PUBLISHER_THUMBPRINT,
+    expectedContractKeyId: EXPECTED_CONTRACT_KEY_ID,
+    reviewedSourceCommit: REVIEWED_WORDREPLICA_COMMIT,
+    reviewedArtifactSha256: REVIEWED_ARTIFACT_SHA256,
+  };
+}
+
 describe('Lekta local-repair release gate', () => {
   it('prihvaca samo uskladjen potpisani WordReplica artefakt i sve potrebne migracije', () => {
     const root = mkdtempSync(join(tmpdir(), 'lekta-release-gate-valid-'));
     const paths = fixture(root);
 
-    expect(verifyLocalRepairRelease({
-      ...paths,
+    expect(verifyLocalRepairRelease(validReleaseInput(paths))).toMatchObject({
       projectRef: EXPECTED_SUPABASE_PROJECT_REF,
-      authenticode: { status: 'Valid', signerThumbprint: 'aa11bb22' },
-    })).toMatchObject({
-      projectRef: EXPECTED_SUPABASE_PROJECT_REF,
-      artifactSha256: expect.stringMatching(/^[a-f0-9]{64}$/),
-      contractKeyId: 'lekta-prod-2026-01',
+      artifactSha256: REVIEWED_ARTIFACT_SHA256,
+      contractKeyId: EXPECTED_CONTRACT_KEY_ID,
+      engineVersion: '0.1.0',
+      sourceCommit: REVIEWED_WORDREPLICA_COMMIT,
+      sourceBranch: 'automation-dev',
     });
+  });
+
+  it('odbija drugi valjani Authenticode potpisnik i samouskladjeni krivotvoreni manifest', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-release-gate-forged-signer-'));
+    const forgedThumbprint = 'BB'.repeat(20);
+    const paths = fixture(root, { signingCertificateThumbprint: forgedThumbprint });
+
+    expect(() => verifyLocalRepairRelease({
+      ...validReleaseInput(paths),
+      authenticode: { status: 'Valid', signerThumbprint: forgedThumbprint },
+    })).toThrow(/ocekivanom publisher thumbprintu/i);
+  });
+
+  it('odbija stari trusted-signed artefakt sa samouskladjenim manifestom koji tvrdi pregledani source commit', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-release-gate-old-artifact-'));
+    const paths = fixture(root, {}, Buffer.from('old-trusted-signed-runner'));
+
+    expect(() => verifyLocalRepairRelease(validReleaseInput(paths))).toThrow(/pregledanom artefaktu/i);
+  });
+
+  it.each([
+    ['WrongContractKey', { manifest: { contractKeyId: 'other-valid-key' } }],
+    ['WrongEngineVersion', { manifest: { engineVersion: '0.1.1' } }],
+    ['WrongSourceBranch', { manifest: { sourceBranch: 'main' } }],
+    ['UnreviewedSourceCommit', { manifest: { sourceCommit: '2'.repeat(40) } }],
+    ['DirtySourceTree', { manifest: { sourceTreeClean: false } }],
+    ['MissingExpectedPublisher', { input: { expectedPublisherThumbprint: '' } }],
+    ['MissingExpectedContractKey', { input: { expectedContractKeyId: '' } }],
+    ['MissingReviewedCommit', { input: { reviewedSourceCommit: '' } }],
+    ['MissingReviewedArtifactHash', { input: { reviewedArtifactSha256: '' } }],
+  ])('trust/source gate fail-closed odbija %s', (_label, mutation) => {
+    const root = mkdtempSync(join(tmpdir(), `lekta-release-gate-${_label}-`));
+    const paths = fixture(root, 'manifest' in mutation ? mutation.manifest : {});
+
+    expect(() => verifyLocalRepairRelease({
+      ...validReleaseInput(paths),
+      ...('input' in mutation ? mutation.input : {}),
+    })).toThrow();
   });
 
   it.each([
@@ -74,13 +153,13 @@ describe('Lekta local-repair release gate', () => {
     }
 
     expect(() => verifyLocalRepairRelease({
-      ...paths,
+      ...validReleaseInput(paths),
       projectRef: 'projectRef' in mutation
         ? String(mutation.projectRef)
         : EXPECTED_SUPABASE_PROJECT_REF,
       authenticode: 'authenticode' in mutation
         ? mutation.authenticode
-        : { status: 'Valid', signerThumbprint: 'AA11BB22' },
+        : { status: 'Valid', signerThumbprint: EXPECTED_PUBLISHER_THUMBPRINT },
     })).toThrow();
   });
 

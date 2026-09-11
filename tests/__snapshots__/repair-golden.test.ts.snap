@@ -7675,9 +7675,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "noOpBitIdentican": true,
       "params": {
         "fields": [],
-        "settings": {
-          "updateFieldsOnOpen": true,
-        },
         "version": 1,
       },
       "skipped": [
@@ -14704,12 +14701,8 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "typografija-i-literatura.docx": {
     "__kombinirano": {
-      "applied": 11,
+      "applied": 10,
       "changelog": [
-        {
-          "after": "Polja označena za osvježavanje pri otvaranju",
-          "before": "Wordova polja i spremljeni rezultati",
-        },
         {
           "after": "Primijenjene potvrđene hrvatske tehničko-tipografske izmjene",
           "before": "3 tipografskih zahvata",
@@ -14793,6 +14786,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         ],
       },
       "skipped": [
+        "field-integrity-fixer-rule",
         "consistency-fixer-rule",
         "link-doi-fixer-rule",
         "empty-paragraph-fixer-rule",
@@ -15161,60 +15155,17 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "field-integrity-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "Polja označena za osvježavanje pri otvaranju",
-          "before": "Wordova polja i spremljeni rezultati",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 0,
-          "runSz": 0,
-        },
-        "docDefaults": {
-          "ascii": null,
-          "hAnsi": null,
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 0,
-          "parts": [],
-        },
-        "normal": {
-          "jc": null,
-          "line": null,
-          "lineRule": null,
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1440",
-              "left": "1440",
-              "right": "1440",
-              "top": "1440",
-            },
-            "pgNumType": null,
-            "pgSz": {
-              "h": "15840",
-              "w": "12240",
-            },
-            "titlePg": false,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "fields": [],
-        "settings": {
-          "updateFieldsOnOpen": true,
-        },
         "version": 1,
       },
-      "skipped": [],
+      "skipped": [
+        "field-integrity-fixer-rule",
+      ],
     },
     "final-document-inspector-fixer": {
       "applied": true,

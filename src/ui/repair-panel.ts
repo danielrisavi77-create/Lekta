@@ -138,7 +138,7 @@ export interface SectionSurgeryFormDefinition {
 }
 
 export interface FieldIntegrityFormDefinition {
-  fields: Array<{ id: string; part: string; kind: string; instruction: string; status: string; confidence: string; anchorFingerprint: string; selected: boolean; evidence: string[] }>;
+  fields: Array<{ id: string; part: string; kind: string; instruction: string; status: string; confidence: string; anchorFingerprint: string; action: 'mark-dirty' | 'remove-orphan-control'; selected: boolean; evidence: string[] }>;
   manualTocCandidates: Array<{ startParagraphIndex: number; endParagraphIndex: number; rawText: string; anchorFingerprint: string; selected: boolean }>;
   bookmarks: Array<{ name: string; part: string; status: string; targetFingerprint?: string; selected: boolean }>;
   summary: string;

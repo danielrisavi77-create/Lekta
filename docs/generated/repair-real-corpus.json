@@ -1194,7 +1194,6 @@
         "link-doi-fixer"
       ],
       "changedFixerIds": [
-        "field-integrity-fixer",
         "croatian-typography-fixer",
         "font-fixer",
         "line-spacing-fixer",

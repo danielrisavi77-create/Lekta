@@ -7,9 +7,16 @@ Lekta je dodaje samo lokalnom nazivu preuzete datoteke za jedan placeni posao.
 ## Preduvjeti
 
 - WordReplica `BUILD_LEKTA_REPAIR_RUNNER.ps1` proizveo je `LektaRepair.exe` i
-  `lekta-repair-runner-manifest.json`.
-- Authenticode status EXE-a je `Valid`, a potpisnik odgovara thumbprintu iz
-  manifesta.
+  `lekta-repair-runner-manifest.json`. Manifest mora zapisati
+  `engineVersion: "0.1.0"`, puni `sourceCommit`, `sourceBranch: "automation-dev"` i
+  `sourceTreeClean: true`.
+- Authenticode status EXE-a je `Valid`. Stvarni potpisnik mora odgovarati i
+  thumbprintu iz manifesta i neovisno konfiguriranom ocekivanom publisher
+  thumbprintu. Self-signed development certifikat nije produkcijski identitet.
+- Repair Contract key id iz manifesta mora odgovarati neovisno konfiguriranom
+  ocekivanom key id-u, a `sourceCommit` tocno pregledanom i odobrenom SHA-u.
+- SHA-256 stvarnih bajtova runner artefakta mora odgovarati neovisno pregledanom
+  i konfiguriranom artifact hashu; vrijednost se ne prepisuje iz susjednog manifesta.
 - Dostupne su varijable `SUPABASE_ACCESS_TOKEN` i `SUPABASE_DB_PASSWORD`.
 - Za Netlify su dostupne obje varijable `NETLIFY_AUTH_TOKEN` i
   `NETLIFY_SITE_ID`, ili je Netlify CLI vec globalno prijavljen i worktree je
@@ -17,6 +24,16 @@ Lekta je dodaje samo lokalnom nazivu preuzete datoteke za jedan placeni posao.
   `https://lektahr.netlify.app`. Release provjerava i ID i URL fail-closed.
   Vrijednosti tajni ne stavljaju se u argumente naredbe niti u repozitorij.
 - Ciljni Supabase projekt je iskljucivo `zrrjttizjyfcxmcpgzml`.
+
+Preflight nema zadane trust identitete. Operator ih mora unijeti iz neovisno
+pregledanog release zapisa, nikad ih ne prepisuje iz susjednog manifesta:
+
+```powershell
+$env:LEKTA_REPAIR_EXPECTED_PUBLISHER_THUMBPRINT = '<trusted-publisher-thumbprint>'
+$env:LEKTA_REPAIR_EXPECTED_CONTRACT_KEY_ID = '<approved-contract-key-id>'
+$env:LEKTA_REPAIR_REVIEWED_WORDREPLICA_COMMIT = '<reviewed-full-source-sha>'
+$env:LEKTA_REPAIR_REVIEWED_ARTIFACT_SHA256 = '<reviewed-artifact-sha256>'
+```
 
 Opcionalno se moze postaviti `LEKTA_PUBLIC_REPAIR_RUNNER_URL`. Zadana vrijednost
 je `https://lektahr.netlify.app/downloads/LektaRepair.exe`; URL mora biti HTTPS
@@ -29,7 +46,10 @@ npm run release:repair:preflight -- --artifact C:\put\do\LektaRepair.exe
 ```
 
 Manifest se zadano cita iz istog foldera. Preflight fail-closed provjerava
-manifest, velicinu, SHA-256, Authenticode potpisnika, contract key, projekt i
+manifest, velicinu, SHA-256 stvarnih bajtova prema manifestu i neovisno pregledanom
+artifact hashu, trostruko slaganje Authenticode potpisnika (stvarni potpis,
+manifest, ocekivani publisher), ocekivani contract key, engine verziju,
+`automation-dev` branch, pregledani source commit, cisto izvorno stablo, projekt i
 migracije 0104-0106. Ne povezuje projekt i ne radi mrezne promjene.
 
 ## Potpuni automatizirani release
