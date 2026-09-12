@@ -10,17 +10,17 @@
   },
   "counts": {
     "E": 41,
-    "B": 293,
+    "B": 292,
     "D": 37,
     "C": 8,
-    "A": 31
+    "A": 32
   },
   "countsByRegistry": {
     "E": 41,
-    "B": 293,
+    "B": 292,
     "D": 34,
     "C": 8,
-    "A": 31
+    "A": 32
   },
   "countsByLegalDepartment": {
     "D": 3
@@ -268,7 +268,7 @@
     "fsb-zavrsni": "E",
     "ftrr-diplomski": "B",
     "ftrr-zavrsni": "B",
-    "fzsri-diplomski": "B",
+    "fzsri-diplomski": "A",
     "fzsri-zavrsni": "B",
     "geof-diplomski": "D",
     "geof-doktorski": "D",
