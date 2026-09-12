@@ -79,6 +79,8 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'heading-format',
   'bibliography',
   'paragraph-spacing',
+  /** Krsi se SAMO u paginiranoj inacici (`pageNumberFooter`), nikad u zadanoj. */
+  'page-number-alignment',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -103,6 +105,23 @@ export interface ViolationOptions {
    * sam DOI ili susjedstvo.
    */
   structural?: boolean | readonly StructuralViolationId[];
+  /**
+   * DRUGA INACICA dokumenta: paginiran primjerak s podnozjem i brojem stranice.
+   *
+   * Zasto zasebna inacica, a ne jos jedna os. Pravila o broju stranice se po konstrukciji ne mogu
+   * mjeriti na dokumentu koji broj stranice nema: `page.numbers.position` i `page.numbers.start` na
+   * takvom dokumentu dolaze kao `max 0`, dakle nebodovane, pa im `isViolated` vraca `false` i
+   * `page-numbering-fixer` se nikad ni ne ponudi.
+   *
+   * A podnozje se NE SMIJE dodati u zadani primjerak: `sectionInsertFixer` namjerno odbija dokument
+   * koji vec ima podnozje, zaglavlje ili `titlePg` (`fixers.ts`, da umetanje markera ne ostavi
+   * `titlePg` na glavnoj sekciji). Izmjereno 2026-09-09: uvijek-podnozje zamijeni 3 dokazane celije
+   * `section-insert-fixera` za 3 nove, dakle nula.
+   *
+   * Zato dvije inacice istog profila: nepaginirana (zadana) i paginirana (ova). Poravnanje je KRIVO
+   * kad ga profil propisuje, inace sredina.
+   */
+  pageNumberFooter?: boolean;
 }
 
 /** Je li os ukljucena za ovaj poziv? */
@@ -639,6 +658,19 @@ export async function buildViolatingDocx(
   }
 
   const spec: DocSpec = { stylesXml: buildStyles(), paragraphs, ...(structural ? { settings: true as const } : {}) };
+
+  /**
+   * Paginirana inacica: podnozje s PAGE poljem. Poravnanje je krivo kad ga profil propisuje, pa os
+   * polozaja broja stranice ima sto rijesiti; inace sredina, pa provjere postanu mjerljive a da se
+   * nista ne krsi bez pravila.
+   */
+  if (options.pageNumberFooter) {
+    const trazeno = (profile as { pageNumberAlignment?: unknown } | null)?.pageNumberAlignment;
+    const align: 'left' | 'center' | 'right' =
+      typeof trazeno === 'string' && trazeno ? (trazeno === 'right' ? 'left' : 'right') : 'center';
+    spec.footer = { page: true, align };
+    if (typeof trazeno === 'string' && trazeno) violated.push('page-number-alignment');
+  }
 
   if (marginsTarget) {
     // Margine pomaknute za 1 cm od ciljanih, u smjeru koji nikad ne izlazi iz razumnog raspona.

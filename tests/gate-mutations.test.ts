@@ -837,6 +837,82 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'petlja/pravilo-mjereno-na-dokumentu-koji-ga-ne-moze-nositi',
+    imitates:
+      'pravilo se mjeri na dokumentu koji trazenu pojavu UOPCE nema, pa provjera dodje kao `max 0`, ' +
+      '`isViolated` vrati `false`, fixer se nikad ne ponudi, a celija se cita kao "nema dokaza". ' +
+      'Izmjereno 2026-09-12: generator nikad nije emitirao podnozje, pa su se sva pravila o broju ' +
+      'stranice mjerila na dokumentu BEZ broja stranice. Zamka je dvostruka, jer se ne rjesava tako ' +
+      'da se podnozje doda svima: `sectionInsertFixer` dokument s podnozjem NAMJERNO odbija, pa ' +
+      'uvijek-podnozje zamijeni 3 dokazane celije za 3 nove, dakle nula',
+    caught: () => {
+      type Provjera = { id: string; earned: number; max: number };
+      const violated = (c: Provjera | undefined) => Boolean(c) && (c!.max ?? 0) > 0 && (c!.earned ?? 0) < (c!.max ?? 0);
+      // 1) Nepaginiran dokument: provjera postoji, ali je `max 0`, pa se ne moze prekrsiti.
+      const nepaginiran = violated({ id: 'page.numbers.position', earned: 0, max: 0 });
+      // 2) Paginiran dokument s krivim poravnanjem: provjera je bodovana i prekrsena.
+      const paginiran = violated({ id: 'page.numbers.position', earned: 1, max: 3 });
+      // 3) Dvije inacice se NE smiju stopiti u jednu: dokument koji nosi oboje ne postoji, jer
+      //    podnozje iskljucuje zahvat nad sekcijom.
+      const istiDokument = (imaPodnozje: boolean) => ({
+        alignmentMjerljiv: imaPodnozje,
+        sectionInsertMoguc: !imaPodnozje,
+      });
+      const s = istiDokument(true);
+      const bez = istiDokument(false);
+      const nemaDokumentaSOboje = !(s.alignmentMjerljiv && s.sectionInsertMoguc)
+        && !(bez.alignmentMjerljiv && bez.sectionInsertMoguc);
+      return !nepaginiran && paginiran && nemaDokumentaSOboje;
+    },
+    /**
+     * Netrivijalnost: uredna bodovana provjera koja je ZADOVOLJENA ne smije ispasti prekrsena, inace
+     * bi gard vristao na svaki paginiran dokument i prestao razlikovati mjerljivo od prekrsenog.
+     */
+    cleanBefore: () => {
+      type Provjera = { id: string; earned: number; max: number };
+      const violated = (c: Provjera) => (c.max ?? 0) > 0 && (c.earned ?? 0) < (c.max ?? 0);
+      return !violated({ id: 'page.numbers.position', earned: 3, max: 3 });
+    },
+  },
+  {
+    id: 'paket/dio-kojeg-svaki-pravi-dokument-ima-a-nas-nema',
+    imitates:
+      'generator ispusti dio paketa koji SVAKI pravi `.docx` ima, pa fixer koji taj dio trazi tiho ' +
+      'odustane i mjerenje pokaze slabiji popravak od onoga koji korisnik dobije. Izmjereno 2026-09-12: ' +
+      '`word/_rels/document.xml.rels` pisao se SAMO uz podnozje, a `footerPageFixer` prvi redak glasi ' +
+      '`if (!contentTypesXml || !documentRelsXml) return NO_OP(parts)`. `sectionInsertFixer` ga zove ' +
+      'iznutra, pa je popravak upisivao `pgNumType` i NIJE umetao podnozje: dokument je dobio ' +
+      'numeraciju koja se nema gdje ispisati, a zatvorena petlja je to biljezila kao uredan zahvat',
+    caught: () => {
+      type Dijelovi = { contentTypesXml?: string; documentRelsXml?: string };
+      // Ista ograda kao u `footerPageFixer`: bez OBA dijela se ne umece nista.
+      const umece = (d: Dijelovi) => Boolean(d.contentTypesXml) && Boolean(d.documentRelsXml);
+      const bezVeza = umece({ contentTypesXml: '<Types/>' });
+      const bezTipova = umece({ documentRelsXml: '<Relationships/>' });
+      const prazneVeze = umece({ contentTypesXml: '<Types/>', documentRelsXml: '' });
+
+      // Druga polovica: veza koja obecava dio kojeg u paketu nema jednako je kvar, samo u drugom
+      // smjeru (paket tvrdi vise nego sto nosi).
+      const imena = new Set(['word/styles.xml']);
+      const veze = ['styles.xml', 'footer1.xml'];
+      const obecajePremalo = veze.every((t) => imena.has('word/' + t));
+
+      return !bezVeza && !bezTipova && !prazneVeze && !obecajePremalo;
+    },
+    /**
+     * Netrivijalnost: uredan paket (oba dijela prisutna, veze pokrivene stvarnim dijelovima) NE smije
+     * dati nalaz. Bez ove polovice bi prosao i gard koji svaki paket proglasi neispravnim.
+     */
+    cleanBefore: () => {
+      type Dijelovi = { contentTypesXml?: string; documentRelsXml?: string };
+      const umece = (d: Dijelovi) => Boolean(d.contentTypesXml) && Boolean(d.documentRelsXml);
+      const uredan = umece({ contentTypesXml: '<Types/>', documentRelsXml: '<Relationships/>' });
+      const imena = new Set(['word/styles.xml', 'word/footer1.xml']);
+      const veze = ['styles.xml', 'footer1.xml'];
+      return uredan && veze.every((t) => imena.has('word/' + t));
+    },
+  },
+  {
     id: 'usporedba/odsutna-provjera-brojana-kao-cist-nalaz',
     imitates:
       'usporedba dvaju alata brine odsutnost NASE provjere kao da je provjera trcala i bila cista. ' +

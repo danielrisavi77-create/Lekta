@@ -14736,6 +14736,52 @@
         "section-insert-fixer",
         "toc-field-fixer"
       ],
+      "paginated": {
+        "fixersChanged": [
+          "alignment-fixer",
+          "croatian-typography-fixer",
+          "empty-paragraph-fixer",
+          "field-integrity-fixer",
+          "final-document-inspector-fixer",
+          "font-fixer",
+          "heading-format-fixer",
+          "heading-style-fixer",
+          "line-spacing-fixer",
+          "link-doi-fixer",
+          "margins-fixer",
+          "page-number-alignment-fixer",
+          "toc-field-fixer"
+        ],
+        "violated": [
+          "font",
+          "font-size",
+          "line-spacing",
+          "justify",
+          "toc-field",
+          "empty-paragraphs",
+          "croatian-typography",
+          "link-doi",
+          "revision-metadata",
+          "element-caption",
+          "field-integrity",
+          "heading-style",
+          "bibliography",
+          "heading-format",
+          "page-number-alignment",
+          "margins"
+        ],
+        "axesResolved": [
+          "font",
+          "font-size",
+          "line-spacing",
+          "justify",
+          "toc-field",
+          "heading-style",
+          "heading-format",
+          "page-number-alignment",
+          "margins"
+        ]
+      },
       "profileAxesViolated": [
         "font",
         "font-size",
@@ -14995,6 +15041,52 @@
         "section-insert-fixer",
         "toc-field-fixer"
       ],
+      "paginated": {
+        "fixersChanged": [
+          "alignment-fixer",
+          "croatian-typography-fixer",
+          "empty-paragraph-fixer",
+          "field-integrity-fixer",
+          "final-document-inspector-fixer",
+          "font-fixer",
+          "heading-format-fixer",
+          "heading-style-fixer",
+          "line-spacing-fixer",
+          "link-doi-fixer",
+          "margins-fixer",
+          "page-number-alignment-fixer",
+          "toc-field-fixer"
+        ],
+        "violated": [
+          "font",
+          "font-size",
+          "line-spacing",
+          "justify",
+          "toc-field",
+          "empty-paragraphs",
+          "croatian-typography",
+          "link-doi",
+          "revision-metadata",
+          "element-caption",
+          "field-integrity",
+          "heading-style",
+          "bibliography",
+          "heading-format",
+          "page-number-alignment",
+          "margins"
+        ],
+        "axesResolved": [
+          "font",
+          "font-size",
+          "line-spacing",
+          "justify",
+          "toc-field",
+          "heading-style",
+          "heading-format",
+          "page-number-alignment",
+          "margins"
+        ]
+      },
       "profileAxesViolated": [
         "font",
         "font-size",
@@ -15063,6 +15155,51 @@
         "section-insert-fixer",
         "toc-field-fixer"
       ],
+      "paginated": {
+        "fixersChanged": [
+          "croatian-typography-fixer",
+          "empty-paragraph-fixer",
+          "field-integrity-fixer",
+          "final-document-inspector-fixer",
+          "font-fixer",
+          "heading-format-fixer",
+          "heading-style-fixer",
+          "line-spacing-fixer",
+          "link-doi-fixer",
+          "margins-fixer",
+          "page-number-alignment-fixer",
+          "toc-field-fixer"
+        ],
+        "violated": [
+          "font",
+          "font-size",
+          "line-spacing",
+          "justify",
+          "toc-field",
+          "empty-paragraphs",
+          "croatian-typography",
+          "link-doi",
+          "revision-metadata",
+          "element-caption",
+          "field-integrity",
+          "heading-style",
+          "bibliography",
+          "heading-format",
+          "page-number-alignment",
+          "margins"
+        ],
+        "axesResolved": [
+          "font",
+          "font-size",
+          "line-spacing",
+          "justify",
+          "toc-field",
+          "heading-style",
+          "heading-format",
+          "page-number-alignment",
+          "margins"
+        ]
+      },
       "profileAxesViolated": [
         "font",
         "font-size",

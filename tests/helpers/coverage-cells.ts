@@ -55,6 +55,15 @@ export interface ClosedLoopRow {
    * osi (1b) ni grana preporuka (1c), iako se dokazano izvodio.
    */
   fixersChanged?: string[];
+  /**
+   * PAGINIRANA INACICA istog profila: dokument s podnozjem i brojem stranice.
+   *
+   * Pravila o polozaju broja stranice se na nepaginiranom dokumentu ne mogu mjeriti (`max 0`), a
+   * podnozje se ne smije dodati u zadani primjerak jer `sectionInsertFixer` takav dokument namjerno
+   * odbija. Dvije inacice istog profila su zato jedini nacin da se obje osi izmjere, i dokaz iz ove
+   * ima ISTU tezinu, jer prolazi kroz isti lanac.
+   */
+  paginated?: { fixersChanged: string[]; violated: string[]; axesResolved: string[] };
   axesRemaining: string[];
   regressions: number;
   textPreserved: boolean;
@@ -179,6 +188,7 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'link-doi-fixer': 'link-doi',
   'required-section-fixer': 'required-section',
   'paragraph-spacing-fixer': 'paragraph-spacing',
+  'page-number-alignment-fixer': 'page-number-alignment',
   'bibliography-repair-fixer': 'bibliography',
 };
 
@@ -377,6 +387,8 @@ const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
    * poklapaju, pa os smije nositi `resolved`; kod literature nisu i ondje je namjerno `applied`.
    */
   'paragraph-spacing': 'paragraph-spacing-fixer',
+  /** Mjeri se iskljucivo u paginiranoj inacici; `page.numbers.position` (max 3) ondje postoji. */
+  'page-number-alignment': 'page-number-alignment-fixer',
 };
 
 export function buildCoverageCells(
@@ -393,7 +405,8 @@ export function buildCoverageCells(
     const profileId = profile.profileId;
     const rows = matrix.rows.filter((row) => row.profileId === profileId);
     const loop = loopByProfile.get(profileId);
-    const resolvedAxes = new Set(loop?.axesResolved ?? []);
+    // Osi rijesene u BILO KOJOJ inacici; paginirana prolazi isti lanac, pa nosi isti dokaz.
+    const resolvedAxes = new Set([...(loop?.axesResolved ?? []), ...(loop?.paginated?.axesResolved ?? [])]);
     /**
      * Pravila profila trebaju samo za dijagnozu NEPOKRIVENE celije, pa se citaju jednom po profilu.
      *
@@ -505,7 +518,7 @@ export function buildCoverageCells(
        * integriteta, ne da je bodovana provjera presla u prolaz. Redoslijed je zato IZA 1a i 1b,
        * koji nose jaci dokaz, i ISPRED stvarnog korpusa samo utoliko sto je isti prolaz.
        */
-      if ((loop?.fixersChanged ?? []).includes(fixerId)) {
+      if ([...(loop?.fixersChanged ?? []), ...(loop?.paginated?.fixersChanged ?? [])].includes(fixerId)) {
         cells.push({
           profileId,
           fixerId,

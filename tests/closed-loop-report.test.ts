@@ -120,6 +120,33 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
   });
 
+  /**
+   * PAGINIRANA INACICA mora postojati i zatvoriti os polozaja broja stranice.
+   *
+   * Zasto zasebna inacica: `page.numbers.position` na dokumentu BEZ broja stranice dolazi kao
+   * `max 0`, pa `isViolated` vraca `false` i `page-number-alignment-fixer` se nikad ne ponudi. A
+   * podnozje se ne smije dodati u zadani primjerak, jer `sectionInsertFixer` dokument s podnozjem
+   * namjerno odbija (`fixers.ts`); izmjereno 2026-09-09, uvijek-podnozje zamijeni 3 dokazane celije
+   * `section-insert-fixera` za 3 nove.
+   *
+   * Bez ove tvrdnje bi nestanak drugog prolaza prosao tiho: `pass` bi ostao 372, jer se inacica u
+   * presudu glavnog prolaza ne mijesa, a matrica bi izgubila 3 celije s dokazom `resolved`.
+   */
+  it('paginirana inacica postoji i zatvara os polozaja broja stranice', () => {
+    type Pag = { paginated?: { violated?: string[]; axesResolved?: string[] } };
+    const sInacicom = report.rows.filter((r) => (r as Pag).paginated !== undefined);
+    // Anti-vakuum: prazan skup bi tvrdnju nize ucinio istinitom ni nad cim.
+    expect(sInacicom.length, 'nijedan profil nema paginiranu inacicu; je li drugi prolaz nestao?').toBeGreaterThan(2);
+    const nerijeseni = sInacicom
+      .filter((r) => {
+        const pag = (r as Pag).paginated!;
+        return (pag.violated ?? []).includes('page-number-alignment')
+          && !(pag.axesResolved ?? []).includes('page-number-alignment');
+      })
+      .map((r) => r.profileId);
+    expect(nerijeseni, 'os polozaja broja stranice prekrsena, a popravak ju nije zatvorio').toEqual([]);
+  });
+
   it('zatecene kategorije odgovaraju zabiljezenima', () => {
     expect(count('pass'), 'pass').toBe(ratchet.pass);
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);

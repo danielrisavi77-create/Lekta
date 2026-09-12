@@ -171,12 +171,34 @@ function footerXml(f: FooterSpec): string {
   );
 }
 
-/** word/_rels/document.xml.rels s vezom na footer1.xml (parser relMap: Id -> Target). */
-const DOCUMENT_RELS =
-  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-  `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
-  `<Relationship Id="${FOOTER_RID}" Type="${REL_NS}/footer" Target="footer1.xml"/>` +
-  `</Relationships>`;
+/**
+ * `word/_rels/document.xml.rels`: veze glavnog dijela prema ostalim dijelovima paketa.
+ *
+ * EMITIRA SE UVIJEK, i to je ispravak od 2026-09-10. Prije se pisao SAMO uz podnozje, pa dokument
+ * bez podnozja uopce nije imao veze glavnog dijela. Nijedan pravi `.docx` tako ne izgleda: Word uvijek
+ * upise barem vezu na `styles.xml`.
+ *
+ * Razlika nije kozmeticka nego je gasila cijeli fixer. `footerPageFixer` na prvom retku radi
+ * `if (!contentTypesXml || !documentRelsXml) return NO_OP(parts)`, dakle bez `document.xml.rels` ne
+ * umece podnozje UOPCE. Zato je `footer-page-fixer` na sva 4 profila koja numeraciju stranica
+ * propisuju stajao kao `nema-dokaza`, a uzrok nije bio ni u fixeru ni u profilu nego u obliku koji
+ * generator proizvodi. Isti razred kao `xmlns:r` deklariran lokalno umjesto na korijenu.
+ *
+ * Veze se grade iz dijelova koji DOISTA postoje, da paket ne obeca dio kojeg u zipu nema.
+ */
+function documentRelsXml(spec: DocSpec, hasFootnotes: boolean, hasFooter: boolean, hasEndnotes: boolean): string {
+  const veze: string[] = [`<Relationship Id="rId1" Type="${REL_NS}/styles" Target="styles.xml"/>`];
+  if (spec.settings) veze.push(`<Relationship Id="rId2" Type="${REL_NS}/settings" Target="settings.xml"/>`);
+  if (hasFootnotes) veze.push(`<Relationship Id="rId3" Type="${REL_NS}/footnotes" Target="footnotes.xml"/>`);
+  if (hasEndnotes) veze.push(`<Relationship Id="rId4" Type="${REL_NS}/endnotes" Target="endnotes.xml"/>`);
+  if (hasFooter) veze.push(`<Relationship Id="${FOOTER_RID}" Type="${REL_NS}/footer" Target="footer1.xml"/>`);
+  return (
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+    veze.join('') +
+    `</Relationships>`
+  );
+}
 
 export function documentXml(spec: DocSpec): string {
   const body = spec.paragraphs.map(paraXml).join('');
@@ -382,10 +404,12 @@ export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8A
   }
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
   if (hasEndnotes) files.push({ name: 'word/endnotes.xml', data: enc.encode(endnotesXml(spec.endnotes!)) });
-  if (hasFooter) {
-    files.push({ name: 'word/footer1.xml', data: enc.encode(footerXml(spec.footer!)) });
-    files.push({ name: 'word/_rels/document.xml.rels', data: enc.encode(DOCUMENT_RELS) });
-  }
+  if (hasFooter) files.push({ name: 'word/footer1.xml', data: enc.encode(footerXml(spec.footer!)) });
+  // Veze glavnog dijela idu UVIJEK, kao u svakom pravom dokumentu; vidi biljesku uz documentRelsXml.
+  files.push({
+    name: 'word/_rels/document.xml.rels',
+    data: enc.encode(documentRelsXml(spec, hasFootnotes, hasFooter, hasEndnotes)),
+  });
   return zipStore([...files, ...extraFiles]);
 }
 

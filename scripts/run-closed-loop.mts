@@ -112,6 +112,11 @@ const AXIS_CHECK_ID: Record<string, string> = {
    * je bilo obrnuto (os na svima, bodovanje na manjini) i closed-loop je pao s 372 na 11.
    */
   'paragraph-spacing': 'format.spacing.paragraph',
+  /**
+   * `page.numbers.position` je BODOVANA (max 3), ali SAMO na dokumentu koji broj stranice ima.
+   * Zato se os krsi iskljucivo u paginiranoj inacici; u zadanoj je ta provjera `max 0`.
+   */
+  'page-number-alignment': 'page.numbers.position',
 };
 
 /**
@@ -208,6 +213,19 @@ interface Row {
    * integriteta, ne da je bodovana provjera presla u prolaz.
    */
   fixersChanged: string[];
+  /**
+   * PAGINIRANA INACICA: isti profil, dokument s podnozjem i brojem stranice.
+   *
+   * Postoji jer se pravila o broju stranice po konstrukciji ne mogu mjeriti na dokumentu koji broj
+   * stranice nema: `page.numbers.position` ondje dolazi kao `max 0`, pa `isViolated` vraca `false` i
+   * `page-number-alignment-fixer` se nikad ne ponudi. A podnozje se ne smije dodati u zadani
+   * primjerak, jer `sectionInsertFixer` namjerno odbija dokument koji ga vec ima; izmjereno
+   * 2026-09-09, uvijek-podnozje zamijeni 3 dokazane celije za 3 nove.
+   *
+   * Vrti se SAMO za profile koji polozaj broja stranice propisuju (izmjereno: 3 od 407), pa je cijena
+   * zanemariva.
+   */
+  paginated?: { fixersChanged: string[]; violated: string[]; axesResolved: string[] };
   /**
    * Osi koje propisuje PROFIL, a generator ih je prekrsio. Prazno znaci da tom profilu nijedan
    * objavljen izvor ne propisuje nijednu od sest formatnih osi.
@@ -349,6 +367,46 @@ async function runProfile(profileId: string): Promise<Row> {
     const profileAxesViolated = violated.filter((axis) => PROFILE_AXES.has(axis));
     const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
 
+    /**
+     * TRECI PROLAZ: paginirana inacica, samo za profile koji polozaj broja stranice propisuju.
+     *
+     * Mjeri se ISTIM lancem kao glavni prolaz, pa dokaz ima istu tezinu. Pad ovdje ne smije oboriti
+     * presudu glavnog prolaza: inacica postoji da bi se izmjerilo NESTO VISE, ne da bi se izgubilo
+     * ono sto je vec izmjereno.
+     */
+    let paginated: Row['paginated'];
+    if ((profile as { pageNumberAlignment?: unknown }).pageNumberAlignment) {
+      try {
+        const pag = await buildViolatingDocx(profile, { structural: true, pageNumberFooter: true } as never);
+        const pBefore = await analyzeFixture(
+          new File([pag.bytes], `${profileId}-pag.docx`, { type: DOCX_MIME }),
+          { profileId, profile },
+        );
+        const pItems = buildAllRepairableItems({ result: pBefore, profile, entries: draftRuleEntriesFor(profileId) } as never);
+        const pReq = buildDefaultRepairRequests(pItems as never).map((request) =>
+          DEEP_CAPABLE.has(request.fixerId) ? { ...request, params: { ...request.params, deep: true } } : request,
+        );
+        const pApplied = await applyFixers(pag.bytes, pReq);
+        if (!pApplied.integrityFailure) {
+          const pAfter = await analyzeFixture(
+            new File([pApplied.docxBytes], `${profileId}-pag-fixed.docx`, { type: DOCX_MIME }),
+            { profileId, profile },
+          );
+          const pChecks = (pAfter.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
+          paginated = {
+            fixersChanged: [...new Set((pApplied.changelog as Array<{ fixerId?: string }>).map((e) => e.fixerId)
+              .filter((id): id is string => Boolean(id)))].sort(),
+            violated: [...pag.violated],
+            axesResolved: pag.violated.filter(
+              (axis) => !STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis) && axisResolved(checkForAxis(pChecks, axis)),
+            ),
+          };
+        }
+      } catch {
+        // Paginirana inacica je DODATAK. Njezin pad se ne smije preliti na presudu glavnog prolaza.
+      }
+    }
+
     const row: Row = {
       profileId,
       outcome: 'pass',
@@ -359,6 +417,7 @@ async function runProfile(profileId: string): Promise<Row> {
       axesApplied,
       recommendationsApplied: [...new Set(recommendationsApplied)].sort(),
       fixersChanged,
+      ...(paginated ? { paginated } : {}),
       profileAxesViolated,
       resolved: axesResolved.length,
       regressions,
