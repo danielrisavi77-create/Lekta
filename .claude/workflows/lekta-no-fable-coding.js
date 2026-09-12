@@ -223,7 +223,9 @@ while (true) {
     { phase: 'Pregled', label: `pregled:${lens}:${round}`, model: 'opus', effort: 'high', schema: REVIEW_SCHEMA },
   )))).filter(Boolean).flatMap((r) => r.findings)
   review = found
-  const blockers = found.filter((f) => f.severity === 'blocker')
+  // `major` se vraca implementatoru kao i `blocker`: izmjereno 2026-09-12, pregled je regresiju vrata integriteta
+  // (isporuka pokvarenog paketa koju master zaustavlja) ocijenio kao major, a to nije nalaz koji smije proci.
+  const blockers = found.filter((f) => f.severity === 'blocker' || f.severity === 'major')
   log(`Pregled krug ${round}: ${found.length} nalaza, ${blockers.length} blokatora`)
   if (!blockers.length || round >= 3) break
   round += 1
@@ -241,9 +243,13 @@ phase('Gate')
 const gate = await agent(
   `U worktreeu ${impl.worktreePath} (grana ${impl.branch}) pokreni, tim redom, i vrati TOCNE retke izlaza:\n` +
   `1. \`npm run orphan-scan\`\n` +
-  `2. \`VITEST_MAX_THREADS=2 npm run check > gate.log 2>&1; echo EXIT=$?\` pa iz gate.log procitaj retke "Test Files" i "Tests", ` +
-  `popis FAIL datoteka i je li build prosao ("built in"). Ishod citaj iz retka Test Files, NIKAD iz izlaznog koda omotaca. ` +
-  `Ako node_modules nedostaje, prvo napravi junction (vidi pravila). Nista ne mijenjaj u kodu.\n\nPRAVILA:\n${PRAVILA}`,
+  `2. \`(VITEST_MAX_THREADS=2 npm run check > gate.log 2>&1; echo EXIT=$? >> gate.log)\` POKRENUTO U POZADINI (run_in_background), ` +
+  `jer traje 25 do 40 minuta, a jedan poziv alata istekne prije. Zatim CEKAJ kraj: u petlji svakih 60 s provjeri ` +
+  `\`grep -c "^EXIT=" gate.log\` dok ne bude 1 (npr. \`until grep -q "^EXIT=" gate.log; do sleep 60; done\` u pozivu s rokom 10 min, ponovljeno koliko treba). ` +
+  `NE vracaj izvjestaj dok redak EXIT= ne postoji; izvjestaj bez retka "Test Files" je neuspjeh ove faze, ne "nepoznato". ` +
+  `Iz gate.log procitaj retke "Test Files" i "Tests", popis FAIL datoteka i je li build prosao ("built in"). Ishod citaj iz ` +
+  `retka Test Files, NIKAD iz izlaznog koda omotaca. Ako node_modules nedostaje, prvo napravi junction (vidi pravila). ` +
+  `Nista ne mijenjaj u kodu.\n\nPRAVILA:\n${PRAVILA}`,
   { phase: 'Gate', label: 'gate', model: 'sonnet', effort: 'low', schema: GATE_SCHEMA },
 )
 
