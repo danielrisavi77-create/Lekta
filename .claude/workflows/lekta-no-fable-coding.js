@@ -31,9 +31,16 @@ const hintFiles = (args && Array.isArray(args.files) ? args.files : []).join(', 
 const hintAcceptance = (args && Array.isArray(args.acceptance) ? args.acceptance : []).join('\n- ')
 const branchHint = (args && typeof args.branch === 'string' && args.branch) ? args.branch : null
 
+// Worktree radi SAM implementator, ne harness: `isolation: 'worktree'` je 2026-09-12 pao na Windowsu
+// (WorktreeIsolationError, redirect c:/ naspram C:/ u `.claude/worktrees`). Repozitorijska konvencija je ionako
+// worktree IZVAN repozitorija (CLAUDE.md), pa je to i ovdje pravilo.
+const WT_BASE = 'C:/Users/PC/AppData/Local/Temp/claude/lekta-wf'
 const PRAVILA = [
-  'Radis u VLASTITOM git worktreeu (isolation), nikad u dijeljenom stablu. Prije prvog testa napravi junction na node_modules:',
+  `Radis u VLASTITOM git worktreeu IZVAN repozitorija, nikad u dijeljenom stablu (cwd je dijeljeno stablo: u njemu NE mijenjaj nista).`,
+  `Napravi ga prvo: git fetch origin && git worktree add --detach "${WT_BASE}/<ime-grane-bez-kose-crte>" origin/master, pa u njemu git checkout -b <grana>.`,
+  'Prije prvog testa u worktreeu napravi junction na node_modules (i na tests/fixtures/docx-local ako testovi to traze):',
   '  cmd //c mklink //J node_modules "C:\\Users\\PC\\Desktop\\Lekta\\node_modules"',
+  'Svaku naredbu pokreci s `git -C <worktree>` ili nakon `cd` u worktree; provjeri `git rev-parse --show-toplevel` da si u njemu.',
   'Commit ISKLJUCIVO `git commit --only <putanje> -F <datoteka s porukom>`; nikad `git add -A`, nikad `--amend`. Poruka na hrvatskom, bez em i en crtica.',
   'Ne diraj parser, citation ni repair kod bez golden testa koji PRVO dokazuje zateceno ponasanje; svaki novi gard ima mutaciju.',
   'Lekta nikad ne generira ni prepravlja sadrzaj rada; popravak je deterministican i bez modela.',
@@ -192,7 +199,7 @@ const implPrompt = (round, reviewFindings, prev) =>
   `sazetak testova (redak Test Files) i sto NISI mogao dokazati.`
 
 let impl = await agent(implPrompt(1, [], null), {
-  phase: 'Implementacija', label: 'implementator', model: 'opus', effort: 'high', schema: IMPL_SCHEMA, isolation: 'worktree',
+  phase: 'Implementacija', label: 'implementator', model: 'opus', effort: 'high', schema: IMPL_SCHEMA,
 })
 if (!impl) throw new Error('implementator nije vratio izvjestaj')
 log(`Implementacija: ${impl.commits.length} commit(a) na ${impl.branch}; ${impl.testSummary.slice(0, 120)}`)
@@ -216,7 +223,9 @@ while (true) {
     { phase: 'Pregled', label: `pregled:${lens}:${round}`, model: 'opus', effort: 'high', schema: REVIEW_SCHEMA },
   )))).filter(Boolean).flatMap((r) => r.findings)
   review = found
-  const blockers = found.filter((f) => f.severity === 'blocker')
+  // `major` se vraca implementatoru kao i `blocker`: izmjereno 2026-09-12, pregled je regresiju vrata integriteta
+  // (isporuka pokvarenog paketa koju master zaustavlja) ocijenio kao major, a to nije nalaz koji smije proci.
+  const blockers = found.filter((f) => f.severity === 'blocker' || f.severity === 'major')
   log(`Pregled krug ${round}: ${found.length} nalaza, ${blockers.length} blokatora`)
   if (!blockers.length || round >= 3) break
   round += 1
@@ -234,9 +243,13 @@ phase('Gate')
 const gate = await agent(
   `U worktreeu ${impl.worktreePath} (grana ${impl.branch}) pokreni, tim redom, i vrati TOCNE retke izlaza:\n` +
   `1. \`npm run orphan-scan\`\n` +
-  `2. \`VITEST_MAX_THREADS=2 npm run check > gate.log 2>&1; echo EXIT=$?\` pa iz gate.log procitaj retke "Test Files" i "Tests", ` +
-  `popis FAIL datoteka i je li build prosao ("built in"). Ishod citaj iz retka Test Files, NIKAD iz izlaznog koda omotaca. ` +
-  `Ako node_modules nedostaje, prvo napravi junction (vidi pravila). Nista ne mijenjaj u kodu.\n\nPRAVILA:\n${PRAVILA}`,
+  `2. \`(VITEST_MAX_THREADS=2 npm run check > gate.log 2>&1; echo EXIT=$? >> gate.log)\` POKRENUTO U POZADINI (run_in_background), ` +
+  `jer traje 25 do 40 minuta, a jedan poziv alata istekne prije. Zatim CEKAJ kraj: u petlji svakih 60 s provjeri ` +
+  `\`grep -c "^EXIT=" gate.log\` dok ne bude 1 (npr. \`until grep -q "^EXIT=" gate.log; do sleep 60; done\` u pozivu s rokom 10 min, ponovljeno koliko treba). ` +
+  `NE vracaj izvjestaj dok redak EXIT= ne postoji; izvjestaj bez retka "Test Files" je neuspjeh ove faze, ne "nepoznato". ` +
+  `Iz gate.log procitaj retke "Test Files" i "Tests", popis FAIL datoteka i je li build prosao ("built in"). Ishod citaj iz ` +
+  `retka Test Files, NIKAD iz izlaznog koda omotaca. Ako node_modules nedostaje, prvo napravi junction (vidi pravila). ` +
+  `Nista ne mijenjaj u kodu.\n\nPRAVILA:\n${PRAVILA}`,
   { phase: 'Gate', label: 'gate', model: 'sonnet', effort: 'low', schema: GATE_SCHEMA },
 )
 
