@@ -56,13 +56,25 @@ describe('korisnicka faza', () => {
   });
 
   /**
-   * FAZA `popravak` JOS NIJE DOSTIZNA, i to je tvrdnja a ne propust. Stanje `popravak` dolazi u
-   * koraku B3. Dok ga nema, traka ga smije prikazati kao "slijedi", ali nijedno stanje ne smije
-   * tvrditi da je korisnik VEC ondje. Kad B3 dodá stanje, ovaj test PADA i to je namjerno: tjera
-   * sljedecu sesiju da svjesno prepise tvrdnju umjesto da faza tiho postane dostizna.
+   * PREPISANO U KORAKU B3, tocno kako je B1 predvidio.
+   *
+   * Dok stanja popravak nije bilo, ovdje je stajala obrnuta tvrdnja (da faza jos nije dostizna),
+   * postavljena da PADNE cim stanje dode. Time je promjena morala proci kroz svjestan prepis
+   * umjesto da faza tiho postane dostizna. Sada se tvrdi ono sto vrijedi: faza je dostizna, i to
+   * iz TOCNO JEDNOG stanja.
    */
-  it('faza Popravak jos nije dostizna ni iz jednog stanja', () => {
-    expect(SVA_STANJA.map(phaseFor)).not.toContain('popravak');
+  it('faza Popravak je dostizna, i to iz tocno jednog stanja', () => {
+    const izvori = SVA_STANJA.filter((s) => phaseFor(s) === 'popravak');
+    expect(izvori).toEqual(['popravak']);
+  });
+
+  it('u popravak se ulazi samo iz nalaza, i iz njega se vraca na nalaz', () => {
+    // Ulaz iz faze Dokument bio bi ponuda nad praznim: nema nalaza, nema sto popravljati.
+    expect(transition('dokument', 'na-popravak')).toBeNull();
+    expect(transition('profil', 'na-popravak')).toBeNull();
+    expect(transition('rezultat', 'na-popravak')).toBe('popravak');
+    // Povratak vodi na NALAZ, ne na pocetak; inace bi odabir popravaka nestao.
+    expect(transition('popravak', 'natrag-na-provjeru')).toBe('rezultat');
   });
 
   /**
@@ -73,14 +85,15 @@ describe('korisnicka faza', () => {
     const mutirano: Readonly<Record<WizardState, WizardPhase>> = {
       dokument: 'dokument', profil: 'dokument', provjera: 'dokument',
       analiza: 'provjera', rezultat: 'popravak', // <- podmetnuto
+      popravak: 'popravak',
     };
     expect(mutirano.rezultat, 'mutacija mora biti razlicita od stvarnog izvoda').not.toBe(phaseFor('rezultat'));
-    // Uz mutaciju bi tvrdnja "Popravak nije dostizan" pala, sto je bas ono sto gard treba javiti.
-    expect(SVA_STANJA.map((s) => mutirano[s])).toContain('popravak');
+    // Uz mutaciju bi faza Popravak bila dostizna iz DVA stanja, a tvrdnja gore trazi tocno jedno.
+    expect(SVA_STANJA.filter((s) => mutirano[s] === 'popravak').length).toBeGreaterThan(1);
   });
 
   it('SENTINEL: popisi nisu prazni, pa setnje nisu vakuumske', () => {
-    expect(SVA_STANJA.length).toBe(5);
+    expect(SVA_STANJA.length).toBe(6);
     expect(SVE_FAZE.length).toBe(3);
     // `viewFor` i `phaseFor` moraju pokrivati ISTI skup stanja; inace jedan od njih tiho zaostane.
     for (const s of SVA_STANJA) expect(viewFor(s).prikaz).toBeTruthy();

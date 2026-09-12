@@ -173,7 +173,7 @@ import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, moti
 import { deskItems } from './results/desk-model';
 import { privacyPrijelazHtml } from './privacy-state';
 import { repairDoneHtml, repairDoneModel } from './results/repair-done';
-import { repairLanding } from './results/repair-entry';
+import { enterRepairPhase, wireRepairPhase } from './repair-phase';
 import { mountFacsimileInto } from './results/desk-document';
 
 
@@ -355,7 +355,7 @@ function toast(msg: any){const doc=runtimeDocument(),wrap=$('#toastWrap');if(!wr
  * proslijedjeni dokument, a odgodjeni demo provjerava je li montaza u medjuvremenu ugasena.
  */
 function initLegacy(doc: Document,signal: AbortSignal){
- productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode){location.replace('/admin.html');return}
+ productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();wireRepairPhase(doc,signal);if(adminMode){location.replace('/admin.html');return}
  ctl('#packagePicks').innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('');
  bind();updateProfile();updateHistoryBadge();updatePackageUi();if(__DEV_TOOLS__)$('#qaBtn')?.classList.toggle('hidden',!qaMode);renderConsentBanner();renderHeroCoverage();wireNoFaculty();if(!paidOffersLive())$('#orderFromResult')?.classList.add('hidden');renderAuthEntry();
  // T16 B3: stroj stanja vozi se u SJENI, samo u dev buildu. Ne pise u DOM i ne mijenja tok;
@@ -1415,19 +1415,13 @@ function renderPhaseThreeRepairEntry(r: any){
 // (pickTargetItem preko matchKeys), istice je i fokusira. Kad takva stavka nije ponudjena,
 // korisnik dobiva postenu poruku umjesto tihog slijetanja na nepovezanu stavku.
 function scrollToRepairPanel(r: any,finding?: any){
-  // renderResult zatvori #resultDetails i #tabDetails, a napredni blok je zadano sklopljen: bez sva TRI
-  // otkrivanja CTA prebaci karticu visine 0 i skrol nema metu, pa se nista ne dogodi
-  // (audit 2026-09-08 nalaz 2; gard repair-cta-opens-panel.spec.ts).
-  revealResultDetails();
-  revealDetails();
-  setResultsCockpitAdvanced(true);
-  openTab('submission');
+  // Panel ima VLASTITU POVRSINU (korak B3), pa se vise ne mora otkrivati kroz tri sloja kartice.
+  // Kvar iz audita 2026-09-08 nalaz 2 (kartica visine 0, skrol bez mete) time postaje strukturno
+  // nemoguc: nema kartice koju bi trebalo rasklopiti.
+  enterRepairPhase(null,runtimeDocument());
   const m=$('#repairPanelMount');
   let act: any=null;
   if(m){
-    // Slijetanje na ODLUKU: `results/repair-entry.ts`.
-    const slijetanje=finding?null:repairLanding(m);
-    (slijetanje?.scroll??m).scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
     m.classList.remove('repair-flash');void (m as any).offsetWidth;m.classList.add('repair-flash');
     if(finding){
       const target=pickTargetItem(finding.matchKeys,repairPanelItems)||pickTargetItem(finding.matchKeys,repairPanelTextItems);
@@ -1462,8 +1456,9 @@ function scrollToRepairPanel(r: any,finding?: any){
         toast('Ovaj popravak trenutno nije ponuđen kao automatska stavka za ovaj dokument. Pogledaj cijeli popis ispod.');
       }
     }
-    if(!act)act=slijetanje?.focus??m.querySelector('[data-repair-go]:not(:disabled),button:not(:disabled),a[href]');
-    if(act)act.focus?.({preventScroll:true});else{m.setAttribute('tabindex','-1');m.focus?.({preventScroll:true})}
+    // Kad je zatrazen KONKRETAN nalaz, fokus ide na njegovu stavku; inace je slijetanje vec
+    // obavio `enterRepairPhase`, pa se ovdje ne dira.
+    if(act)act.focus?.({preventScroll:true})
   }
   try{void trackEvent('triage_repair_cta',{count:r?.details?.triage?.counts?.auto||0})}catch(e: any){}
 }
@@ -1817,7 +1812,7 @@ function renderSubmissionChecklist(r: any){
  const blockers=[...a.files.blockers.map((x: any)=>`<div class="crossfile-warning"><strong>Blokira predaju:</strong> ${escapeHtml(x)}</div>`),...a.files.warnings.map((x: any)=>`<div class="crossfile-warning"><strong>Treba potvrditi:</strong> ${escapeHtml(x)}</div>`)].join('');
  const groups=[...new Set(bp.items.map((x: any)=>x.section))].map(section=>`<div class="phase-block"><div class="phase-title">${escapeHtml(section)}</div><div class="phase-list">${bp.items.filter((x: any)=>x.section===section).map((x: any)=>`<label class="phase-item"><input type="checkbox" data-submission-check="${escapeHtml(x.id)}" ${manual[x.id]?'checked':''}><div><strong>${escapeHtml(x.label)}</strong><p>${escapeHtml(x.description||'')}</p></div><span class="phase-tag ${x.blocking?'blocking':''}">${x.blocking?'obvezno':'informativno'}</span></label>`).join('')}</div></div>`).join('');
  const meta=currentMetadataAudit?`<div class="${currentMetadataAudit.compliant?'crossfile-ok':'crossfile-warning'}"><strong>Zasebni Word:</strong> ${currentMetadataAudit.valid?(currentMetadataAudit.complete?`Prepoznati su dvojezični elementi. Ključne riječi HR/EN: ${currentMetadataAudit.keywordCounts?.hr??'?'}/${currentMetadataAudit.keywordCounts?.en??'?'}; rečenice sažetka HR/EN: ${currentMetadataAudit.summarySentences?.hr??'?'}/${currentMetadataAudit.summarySentences?.en??'?'}.`:'Nisu prepoznati svi očekivani dvojezični elementi.'):'Datoteku nije moguće pročitati.'}</div>`:'';
- const sources=(bp.sources||[]).map((x: any)=>`<div class="source-line">Službeni izvor: <a href="${escapeHtml(safeHref(x.url))}" target="_blank" rel="noopener">${escapeHtml(x.title)}</a></div>`).join('');$('#submissionChecklist').innerHTML=`<div class="submission-intro"><strong>Provjera spremnosti nije službena potvrda fakulteta.</strong> Automatizirano provjerava dostupne elemente datoteka, a administrativne obveze potvrđuješ ručno prema aktualnom službenom postupku. Pravila su zadnji put provjerena ${escapeHtml(bp.sourceDate)}.</div>${deadlineHtml}${blockers}${meta}${selectedAvFile?`<div class="crossfile-ok"><strong>Audiovizualni prilog:</strong> ${escapeHtml(selectedAvFile.name)} · ${(selectedAvFile.size/1024/1024).toFixed(2)} MB · evidentirano samo lokalno.</div>`:''}${groups||'<div class="empty" style="text-align:left"><p style="margin:0 0 8px">Način „Samo dokument” provjerava samo Word datoteku, pa ovdje još nema checkliste predaje.</p><p style="margin:0 0 12px">Za provjeru spremnosti za predaju odaberi fazu (prije ili nakon obrane, ili cijeli paket) i dodaj konačni PDF, pa ponovno pokreni analizu.</p><button class="btn btn-secondary btn-sm" type="button" data-open-phase>Odaberi fazu predaje i dodaj PDF</button></div>'}${sources?`<div class="source-stack">${sources}</div>`:''}<div id="deadlineReminderMount"></div><div id="repairPanelMount"></div><div class="submission-tools"><button class="btn btn-secondary btn-sm" type="button" data-download-submission>Preuzmi paketni izvještaj</button></div>`;
+ const sources=(bp.sources||[]).map((x: any)=>`<div class="source-line">Službeni izvor: <a href="${escapeHtml(safeHref(x.url))}" target="_blank" rel="noopener">${escapeHtml(x.title)}</a></div>`).join('');$('#submissionChecklist').innerHTML=`<div class="submission-intro"><strong>Provjera spremnosti nije službena potvrda fakulteta.</strong> Automatizirano provjerava dostupne elemente datoteka, a administrativne obveze potvrđuješ ručno prema aktualnom službenom postupku. Pravila su zadnji put provjerena ${escapeHtml(bp.sourceDate)}.</div>${deadlineHtml}${blockers}${meta}${selectedAvFile?`<div class="crossfile-ok"><strong>Audiovizualni prilog:</strong> ${escapeHtml(selectedAvFile.name)} · ${(selectedAvFile.size/1024/1024).toFixed(2)} MB · evidentirano samo lokalno.</div>`:''}${groups||'<div class="empty" style="text-align:left"><p style="margin:0 0 8px">Način „Samo dokument” provjerava samo Word datoteku, pa ovdje još nema checkliste predaje.</p><p style="margin:0 0 12px">Za provjeru spremnosti za predaju odaberi fazu (prije ili nakon obrane, ili cijeli paket) i dodaj konačni PDF, pa ponovno pokreni analizu.</p><button class="btn btn-secondary btn-sm" type="button" data-open-phase>Odaberi fazu predaje i dodaj PDF</button></div>'}${sources?`<div class="source-stack">${sources}</div>`:''}<div id="deadlineReminderMount"></div><div class="submission-tools"><button class="btn btn-secondary btn-sm" type="button" data-download-submission>Preuzmi paketni izvještaj</button></div>`;
  // Opt-in podsjetnik na potvrden rok (ROKOVI_PODSJETNICI.md): prikaze se samo kad postoji
  // potvrden rok u ACADEMIC_DEADLINES i kad je korisnik prijavljen; inace no-op (registar je prazan
  // dok se ne unesu rokovi, a auth je OFF dok supabaseUrl/anon nisu postavljeni).

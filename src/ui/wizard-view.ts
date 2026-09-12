@@ -12,9 +12,12 @@
  * `data-step` se pise SAMO kad je carobnjak vidljiv. Kad nije, `viewFor` vraca `null` i atribut se
  * ne dira: tada ga nitko ne cita, a mijenjati ga znacilo bi izmisljati stanje.
  */
-import { phaseFor, SVE_FAZE, viewFor, type WizardPhase, type WizardState } from './wizard-machine';
+import {
+  phaseFor, SVE_FAZE, transition, viewFor,
+  type WizardEvent, type WizardPhase, type WizardState,
+} from './wizard-machine';
 
-const PRIKAZI = ['wizardView', 'progressView', 'resultView'] as const;
+const PRIKAZI = ['wizardView', 'progressView', 'resultView', 'repairView'] as const;
 
 type StanjeKoraka = 'gotov' | 'aktivan' | 'slijedi';
 
@@ -61,6 +64,41 @@ export function renderView(stanje: WizardState, doc: Document = document): void 
   }
   if (korak !== null) doc.getElementById('wizardView')?.setAttribute('data-step', korak);
   renderRail(phaseFor(stanje), doc);
+  trenutno = stanje;
+}
+
+/**
+ * PRIJELAZ KROZ TABLICU, a ne izravnim crtanjem (korak B3, 2026-09-12).
+ *
+ * `renderView(stanje)` crta sto mu se kaze i ne pita je li se do tog stanja SMJELO doci. To je bilo
+ * dovoljno dok su sve prijelaze vodila mjesta u `app.ts` koja vec znaju kontekst. Za fazu popravka
+ * nije: ulaz i izlaz iz nje su prave korisnicke radnje s gumbima, pa nedopusten prijelaz mora biti
+ * ODBIJEN, a ne nacrtan.
+ *
+ * `trenutno` se azurira i iz `renderView`, pa se izravni pozivi iz `app.ts` i prijelazi kroz
+ * `posalji` ne mogu razici. Da `posalji` vodi vlastito stanje, imali bismo dva stroja koja se
+ * slazu dok se ne raziđu.
+ */
+let trenutno: WizardState = 'dokument';
+
+/** Zadnje NACRTANO stanje. Citanje, ne izvor istine; izvor je DOM koji je `renderView` proizveo. */
+export function stanjeSada(): WizardState {
+  return trenutno;
+}
+
+/** Za testove koji dizu stranicu vise puta u istom procesu. Produkcija ga ne zove. */
+export function resetirajPrikaz(stanje: WizardState = 'dokument'): void {
+  trenutno = stanje;
+}
+
+/**
+ * Prijelaz. Vraca `false` i NE DIRA DOM kad tablica prijelaz ne dopusta; to je odgovor, ne greska.
+ */
+export function posalji(dogadaj: WizardEvent, doc: Document = document): boolean {
+  const sljedece = transition(trenutno, dogadaj);
+  if (sljedece === null) return false;
+  renderView(sljedece, doc);
+  return true;
 }
 
 /**

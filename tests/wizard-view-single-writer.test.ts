@@ -17,7 +17,7 @@ import { describe, expect, it } from 'vitest';
  */
 
 const KORIJEN = path.resolve(__dirname, '..');
-const PRIKAZI = ['wizardView', 'progressView', 'resultView'] as const;
+const PRIKAZI = ['wizardView', 'progressView', 'resultView', 'repairView'] as const;
 
 /**
  * OBA OBLIKA PRISTUPA, i to je popravak a ne uljepsavanje.

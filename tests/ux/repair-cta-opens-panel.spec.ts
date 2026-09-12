@@ -20,6 +20,14 @@ import { cekajApp, cekajKorak } from './app-ready';
  * DOKAZ DA GARD GRIZE: ovaj spec je 2026-09-09 vrcen nad `src/ui/app.ts` BEZ popravka i pao je na
  * `#repairPanelMount` "hidden" u oba projekta; s popravkom (jedan redak u `scrollToRepairPanel`) prolazi.
  *
+ * STO SE PROMIJENILO 2026-09-12 (korak B3): panel je dobio VLASTITU POVRSINU (`#repairView`), a
+ * `#repairPanelMount` je izasao iz `innerHTML` kartice "Spremnost za predaju". Time kvar iz audita
+ * postaje STRUKTURNO NEMOGUC: nema kartice koju bi trebalo rasklopiti, pa ni visine 0. Tvrdnje o
+ * `#resultCockpitAdvancedContent` zato odlaze, jer bi mjerile mehaniku koje vise nema.
+ *
+ * JAMSTVO OSTAJE ISTO i zato se spec ne brise: glavni poziv na popravak mora dovesti do VIDLJIVOG
+ * i fokusiranog panela. Mijenja se samo cime se to mjeri.
+ *
  * Tok do rezultata je namjerno isti kao u `repair-panel.spec.ts` (fixture, odbijanje trake privole,
  * reducedMotion, `scroll-behavior:auto`), ali BEZ klika na `open-findings`: bas to stanje korisnik
  * napusta prvim klikom na popravak, i bas ono do sada nije bilo mjereno. Dupliciran je s referencom
@@ -55,10 +63,11 @@ test.describe('CTA popravka otvara panel', () => {
   test('klik na "Popravi sigurne stavke" (ili "Simuliraj") ostavlja panel VIDLJIV i fokusiran', async ({ page }) => {
     await analyzeToResult(page);
 
-    // BASELINE: napredni blok je zadano SKLOPLJEN. Bez ove tvrdnje test bi mogao prolaziti zato sto
-    // je blok vec otvoren iz drugog razloga, a ne zato sto ga CTA otvara.
-    const advanced = page.locator('#resultCockpitAdvancedContent');
-    await expect(advanced, 'napredni blok mora biti sklopljen prije klika (inace test ne mjeri nista)').toBeHidden();
+    // BASELINE: prije klika je vidljiv NALAZ, a povrsina popravka je skrivena. Bez ove tvrdnje
+    // test bi mogao prolaziti zato sto je panel vec otvoren iz drugog razloga, a ne zbog CTA-a.
+    const povrsina = page.locator('#repairView');
+    await expect(povrsina, 'povrsina popravka mora biti skrivena prije klika').toBeHidden();
+    await expect(page.locator('#resultView')).toBeVisible();
 
     // Jedan od dva CTA-a MORA biti omogucen; tihi `if` bi ovdje pretvorio nedostatak gumba u prolaz.
     const safe = page.locator('#resultCockpit [data-cockpit-action="repair-safe"]');
@@ -68,7 +77,8 @@ test.describe('CTA popravka otvara panel', () => {
     expect(safeEnabled || simulateEnabled, 'ni repair-safe ni simulate-repair nisu omoguceni').toBe(true);
     await (safeEnabled ? safe : simulate).first().click();
 
-    await expect(advanced, 'CTA popravka mora otvoriti napredni blok').toBeVisible();
+    await expect(povrsina, 'CTA popravka mora otvoriti fazu popravka').toBeVisible();
+    await expect(page.locator('#resultView'), 'nalaz i popravak ne smiju biti vidljivi istovremeno').toBeHidden();
     const mount = page.locator('#repairPanelMount');
     await expect(mount, 'panel popravka mora biti vidljiv nakon CTA').toBeVisible();
     const fokusUnutar = await page.evaluate(() => {
@@ -77,6 +87,30 @@ test.describe('CTA popravka otvara panel', () => {
       return !!m && !!a && m.contains(a);
     });
     expect(fokusUnutar, 'fokus mora biti unutar panela popravka').toBe(true);
+
+    // POVRATAK NE GUBI ODABIR, i to se mjeri a ne obecava: procita se stanje konkretne kucice,
+    // ode na nalaz, pa natrag. Mount je staticki element rute, pa ga nista ne prepisuje.
+    const prije = await page.evaluate(() => {
+      const cb = document.querySelector('#repairPanelMount input[type="checkbox"]') as HTMLInputElement | null;
+      return cb ? { ima: true, oznacen: cb.checked } : { ima: false, oznacen: false };
+    });
+    await page.locator('#repairBackToResults').click();
+    await expect(page.locator('#resultView'), 'povratak mora vratiti na nalaz').toBeVisible();
+    await expect(povrsina).toBeHidden();
+    await (safeEnabled ? safe : simulate).first().click();
+    await expect(povrsina).toBeVisible();
+    const poslije = await page.evaluate(() => {
+      const cb = document.querySelector('#repairPanelMount input[type="checkbox"]') as HTMLInputElement | null;
+      return cb ? { ima: true, oznacen: cb.checked } : { ima: false, oznacen: false };
+    });
+    expect(poslije.ima, 'panel je nestao pri povratku, dakle nesto ga prepisuje').toBe(prije.ima);
+    if (prije.ima) {
+      expect(poslije.oznacen, 'odabir nije prezivio povratak na nalaz').toBe(prije.oznacen);
+    } else {
+      // IZRICITO, ne tiho: bez kucice tvrdnja o odabiru nije izmjerena, pa spec to KAZE. Inace bi
+      // se zeleno citalo kao dokaz da odabir prezivljava, a dokaza ne bi bilo.
+      test.info().annotations.push({ type: 'neizmjereno', description: 'panel nema kucicu; ocuvanje odabira nije izmjereno na ovom fixtureu' });
+    }
   });
 
   test('plan popravka (`[data-repair-plan-go]`) vodi na isti vidljiv panel, ako je stol prisutan', async ({ page }) => {
@@ -94,7 +128,7 @@ test.describe('CTA popravka otvara panel', () => {
     if ((await otvori.count()) > 0) await otvori.first().click();
     await expect(go.first()).toBeVisible();
     await go.first().click();
-    await expect(page.locator('#resultCockpitAdvancedContent')).toBeVisible();
+    await expect(page.locator('#repairView')).toBeVisible();
     await expect(page.locator('#repairPanelMount')).toBeVisible();
   });
 });

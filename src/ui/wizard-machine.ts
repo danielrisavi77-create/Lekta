@@ -16,7 +16,7 @@
  * gard nad njim ne tvrdi nista. Ovdje nedopusten par vraca `null`, sto pozivatelj mora obraditi.
  */
 
-export type WizardState = 'dokument' | 'profil' | 'provjera' | 'analiza' | 'rezultat';
+export type WizardState = 'dokument' | 'profil' | 'provjera' | 'analiza' | 'rezultat' | 'popravak';
 
 export type WizardEvent =
   | 'na-profil'
@@ -26,10 +26,12 @@ export type WizardEvent =
   | 'pokreni-analizu'
   | 'analiza-gotova'
   | 'analiza-prekinuta'
-  | 'nova-analiza';
+  | 'nova-analiza'
+  | 'na-popravak'
+  | 'natrag-na-provjeru';
 
 /** Jedini vidljivi prikaz za dano stanje. Nikad dva, i to je invarijanta koju test tvrdi. */
-export type WizardView = 'wizardView' | 'progressView' | 'resultView';
+export type WizardView = 'wizardView' | 'progressView' | 'resultView' | 'repairView';
 
 const TABLICA: Readonly<Record<WizardState, Readonly<Partial<Record<WizardEvent, WizardState>>>>> = {
   dokument: { 'na-profil': 'profil' },
@@ -40,7 +42,10 @@ const TABLICA: Readonly<Record<WizardState, Readonly<Partial<Record<WizardEvent,
     'natrag-na-dokument': 'dokument',
   },
   analiza: { 'analiza-gotova': 'rezultat', 'analiza-prekinuta': 'provjera' },
-  rezultat: { 'nova-analiza': 'dokument' },
+  rezultat: { 'nova-analiza': 'dokument', 'na-popravak': 'popravak' },
+  // Iz popravka se vraca na NALAZ, ne na pocetak. Do 2026-09-12 povratka nije bilo: jedini put
+  // unatrag bio je `nova-analiza`, dakle reset cijelog toka, sto je odabir popravaka bacalo.
+  popravak: { 'natrag-na-provjeru': 'rezultat', 'nova-analiza': 'dokument' },
 };
 
 /** Novo stanje, ili `null` ako prijelaz nije dopusten. `null` je odgovor, ne greska. */
@@ -59,6 +64,7 @@ export function viewFor(stanje: WizardState): { prikaz: WizardView; korak: '1' |
     case 'provjera': return { prikaz: 'wizardView', korak: '3' };
     case 'analiza': return { prikaz: 'progressView', korak: null };
     case 'rezultat': return { prikaz: 'resultView', korak: null };
+    case 'popravak': return { prikaz: 'repairView', korak: null };
   }
 }
 
@@ -86,6 +92,7 @@ const FAZA_ZA_STANJE: Readonly<Record<WizardState, WizardPhase>> = {
   provjera: 'dokument',
   analiza: 'provjera',
   rezultat: 'provjera',
+  popravak: 'popravak',
 };
 
 /** Faza kojoj stanje pripada. Totalna funkcija: svako stanje ima tocno jednu fazu. */
@@ -108,4 +115,5 @@ export const SVA_STANJA: readonly WizardState[] = Object.keys(TABLICA) as Wizard
 export const SVI_DOGADAJI: readonly WizardEvent[] = [
   'na-profil', 'na-provjeru', 'natrag-na-profil', 'natrag-na-dokument',
   'pokreni-analizu', 'analiza-gotova', 'analiza-prekinuta', 'nova-analiza',
+  'na-popravak', 'natrag-na-provjeru',
 ];

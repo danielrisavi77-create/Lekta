@@ -278,7 +278,7 @@ test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', asy
    */
   const jedan = async (gdje: string) => {
     const vidljivi = await page.evaluate(() =>
-      ['wizardView', 'progressView', 'resultView']
+      ['wizardView', 'progressView', 'resultView', 'repairView']
         .filter((id) => { const el = document.getElementById(id); return el && !el.classList.contains('hidden'); }));
     expect(vidljivi, `${gdje}: vidljivo ${vidljivi.length} prikaza umjesto jednog (${vidljivi.join(',')})`)
       .toHaveLength(1);

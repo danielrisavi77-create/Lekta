@@ -787,6 +787,12 @@ body.is-scrolling .section *{box-shadow:none!important}
   border-color:var(--pass);background:var(--pass);color:var(--on-brand,#fff);font-size:0;
 }
 .rail-step[data-state="gotov"] b::after{content:"\2713";font-size:11px;line-height:1}
+/* FAZA POPRAVKA: cetvrta povrsina, sestra ostalih triju (korak B3, 2026-09-12).
+ * Namjerno stedljivo: panel donosi vlastiti izgled, ovdje je samo okvir i zaglavlje s povratkom. */
+.repair-view{padding:30px}
+.repair-view__head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.repair-view__title{font:600 13px var(--sans);letter-spacing:.18em;text-transform:uppercase;margin:0;color:var(--paper-ink)}
+@media (max-width:720px){.repair-view{padding:12px}}
 .rail-line{width:14px;height:0;border-top:1px solid var(--paper-line);background:none;flex:none}
 .analyzer-body{padding:30px}
 .wizard-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:34px;align-items:start}
