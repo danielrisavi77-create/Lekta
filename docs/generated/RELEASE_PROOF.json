@@ -1,8 +1,8 @@
 {
-  "commit": "e9dcc52a0ec0203ac2c71ff9ea5b7e2a2d998abf",
-  "treeDigest": "5cc429d8f4741be5db97a450437a26d222fc69e4490dafab7d6fa6f64c9ead40",
+  "commit": "7e52bc66551d7d920ab83810f87f0c52a10f8c16",
+  "treeDigest": "48ebb0bf8305e243dee6ac3850d6729fcfb606b11a0eccd57c66c66fb066bb8a",
   "dirtyWorkingTree": false,
-  "createdAt": "2026-09-10T00:24:40.519Z",
+  "createdAt": "2026-09-12T16:55:17.107Z",
   "platform": "win32",
   "partial": false,
   "complete": true,
@@ -12,61 +12,61 @@
       "id": "check",
       "label": "Tier 0: oxlint + tsc + edge (deno) + vitest + build",
       "status": "pass",
-      "durationMs": 868524
+      "durationMs": 1071748
     },
     {
       "id": "projections",
       "label": "Tier 0: svjezina pecenih projekcija (screening)",
       "status": "fail",
-      "durationMs": 6007
+      "durationMs": 10044
     },
     {
       "id": "conformance",
       "label": "Tier 0: conformance matrica",
       "status": "pass",
-      "durationMs": 152127
+      "durationMs": 173048
     },
     {
       "id": "slow",
       "label": "Tier 0: spori repair testovi",
       "status": "pass",
-      "durationMs": 216861
+      "durationMs": 246860
     },
     {
       "id": "ux",
       "label": "Tier 0: Playwright UX",
       "status": "pass",
-      "durationMs": 969730
+      "durationMs": 1617175
     },
     {
       "id": "ux-dist",
       "label": "Tier 0: Playwright nad dist/ (vite preview)",
       "status": "pass",
-      "durationMs": 38508
+      "durationMs": 57609
     },
     {
       "id": "strict-open",
       "label": "Tier 1: lxml nad POPRAVLJENIM paketima",
       "status": "pass",
-      "durationMs": 26064
+      "durationMs": 42531
     },
     {
       "id": "word",
       "label": "Tier 2: pravi Microsoft Word",
       "status": "pass",
-      "durationMs": 62276
+      "durationMs": 186617
     },
     {
       "id": "word-worst",
       "label": "Tier 2: Word, najgori slucaj",
       "status": "pass",
-      "durationMs": 26898
+      "durationMs": 94088
     },
     {
       "id": "extraction",
       "label": "Tier 2: extraction probe (staging)",
-      "status": "pass",
-      "durationMs": 22768
+      "status": "unavailable",
+      "reason": "missing-env:LEKTA_STAGING_ORIGIN"
     }
   ]
 }
