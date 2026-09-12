@@ -3,7 +3,14 @@ import { buildRepairCoverageMatrix } from './repair-coverage';
 import type { RealCorpusReport } from '../real-corpus/harness';
 import generatedCorpusReport from '../../docs/generated/repair-real-corpus.json';
 import generatedClosedLoop from '../../docs/generated/closed-loop.json';
-import { buildCoverageCells, type ClosedLoopReport, type CoverageCellReport } from './coverage-cells';
+import {
+  buildCoverageCells,
+  type AuthoredNetReport,
+  type ClosedLoopReport,
+  type CoverageCellReport,
+  emptyByReason,
+} from './coverage-cells';
+import generatedAuthoredNet from '../../docs/generated/repair-net.json';
 import { VERIFIED_PROFILE_REGISTRY } from '../../src/profiles/profile-registry';
 import rawCatalog from '../../data/catalog/zagreb-catalog.json';
 
@@ -152,14 +159,16 @@ function summarizeCells(cells: CoverageCellReport['cells']): CoverageCellReport[
    *
    * S anotacijom tipa umjesto casta, isti propust je greska pri prevodjenju, a ne tiha NaN.
    */
-  const byReason: CoverageCellReport['summary']['byReason'] = {
-    'profil-ne-propisuje-os': 0,
-    'univerzalna-higijena-bez-dokaza': 0,
-    'closed-loop-nije-rijesio': 0,
-    'nema-dokaza': 0,
-    'ceka-ljudski-odabir': 0,
-    'trazi-ulaz-izvan-dokumenta': 0,
-  };
+  /**
+   * JEDAN izvor umjesto prepisanog popisa.
+   *
+   * Anotacija tipa iznad je bila zamisljena kao zastita, ali `tests/**` se ne typechecka
+   * (`tsconfig.json` ima `include: ["src"]`), pa nedostajuci kljuc nema gdje izaci kao greska.
+   * Izmjereno 2026-09-12 pri dodavanju razloga `pomocni-fixer-dokaz-nosi-pozivatelj`: ovaj popis je
+   * ostao bez njega, `undefined + 1` je dalo `NaN`, a `NaN` se u JSON zapisuje kao `null`, pa je
+   * artefakt na 6 mjesta nosio `null` ondje gdje je trebao broj.
+   */
+  const byReason = emptyByReason();
   let covered = 0;
   let resolved = 0;
   for (const cell of cells) {
@@ -223,8 +232,18 @@ export function buildFacultyMatrixReport(
   matrix = buildRepairCoverageMatrix(),
   corpus: RealCorpusReport = generatedCorpusReport as RealCorpusReport,
   closedLoop: ClosedLoopReport = generatedClosedLoop as ClosedLoopReport,
+  /**
+   * Mjerenje mreze nad trakom `authored`, ISTI ulaz koji prosljedjuje i pogon.
+   *
+   * Nedostajalo je do 2026-09-12, pa je gard "matrica je sinkronizirana s generiranim izvjestajem"
+   * usporedjivao DVIJE RAZLICITE OSNOVE: pogon je racunao s dokazom iz nase proze, a gard bez njega.
+   * Razlika je izasla tek kad je `authoredCount` pao s 2 na 1 i time promijenio zbroj; dok su se
+   * brojke slucajno poklapale, gard je prolazio a mjerio je drugo. Isti razred kao gard koji
+   * usporedjuje dvije osnove indeksa.
+   */
+  authoredNet: AuthoredNetReport = generatedAuthoredNet as unknown as AuthoredNetReport,
 ): FacultyMatrixReport {
-  const cellReport = buildCoverageCells(matrix, closedLoop, corpus);
+  const cellReport = buildCoverageCells(matrix, closedLoop, corpus, authoredNet);
   const registryById = new Map(matrix.profiles.map((profile) => [profile.profileId, profile]));
   const profileIdsByUnit = new Map<string, string[]>();
 

@@ -837,6 +837,32 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'dijagnoza/razlog-preuzme-vise-celija-nego-sto-mu-pripada',
+    imitates:
+      'nov razlog u lancu dijagnoze stavi se PRERANO i preuzme celije koje pripadaju blazoj istini. ' +
+      'Izmjereno 2026-09-12 na vlastitoj izmjeni: `pomocni-fixer-dokaz-nosi-pozivatelj` je na vrhu ' +
+      'lanca preuzeo 407 celija umjesto 4, jer je odgovarao na pitanje "kakav je ovo fixer" prije ' +
+      'pitanja "propisuje li profil tu os uopce". Broj nepokrivenih ostaje isti, pa se kvar ne vidi u ' +
+      'zbroju; mijenja se samo STO o njima tvrdimo, i to u smjeru koji zvuci bezazlenije',
+    caught: () => {
+      type Celija = { propisuje: boolean; pomocni: boolean };
+      const prerano = (c: Celija) => (c.pomocni ? 'pomocni' : c.propisuje ? 'nema-dokaza' : 'ne-propisuje');
+      const tocno = (c: Celija) => (!c.propisuje ? 'ne-propisuje' : c.pomocni ? 'pomocni' : 'nema-dokaza');
+      const nePropisujeAliPomocni: Celija = { propisuje: false, pomocni: true };
+      return prerano(nePropisujeAliPomocni) === 'pomocni' && tocno(nePropisujeAliPomocni) === 'ne-propisuje';
+    },
+    /**
+     * Netrivijalnost: ondje gdje profil os PROPISUJE, pomocni fixer doista dobiva svoj razlog. Bez
+     * ove polovice bi prosla i izvedba koja novi razlog nikad ne dodijeli.
+     */
+    cleanBefore: () => {
+      type Celija = { propisuje: boolean; pomocni: boolean };
+      const tocno = (c: Celija) => (!c.propisuje ? 'ne-propisuje' : c.pomocni ? 'pomocni' : 'nema-dokaza');
+      return tocno({ propisuje: true, pomocni: true }) === 'pomocni'
+        && tocno({ propisuje: true, pomocni: false }) === 'nema-dokaza';
+    },
+  },
+  {
     id: 'generator/krsi-izravno-a-fixer-pise-u-stil',
     imitates:
       'generator krsi os IZRAVNIM oblikovanjem, dok fixer pise u DEFINICIJU STILA. Stavka se gradi, ' +

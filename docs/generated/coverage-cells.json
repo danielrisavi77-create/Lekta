@@ -17,9 +17,10 @@
       "profil-ne-propisuje-os": 6132,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 8,
+      "nema-dokaza": 4,
       "ceka-ljudski-odabir": 814,
-      "trazi-ulaz-izvan-dokumenta": 814
+      "trazi-ulaz-izvan-dokumenta": 814,
+      "pomocni-fixer-dokaz-nosi-pozivatelj": 4
     }
   },
   "cells": [
@@ -4710,7 +4711,7 @@
       "profileId": "pravo-socijalni-rad-zavrsni",
       "fixerId": "footer-page-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "pomocni-fixer-dokaz-nosi-pozivatelj"
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -4990,7 +4991,7 @@
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "footer-page-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "pomocni-fixer-dokaz-nosi-pozivatelj"
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -5270,7 +5271,7 @@
       "profileId": "pravo-socijalna-politika-diplomski",
       "fixerId": "footer-page-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "pomocni-fixer-dokaz-nosi-pozivatelj"
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -22002,7 +22003,7 @@
       "profileId": "mef-doktorski",
       "fixerId": "footer-page-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "pomocni-fixer-dokaz-nosi-pozivatelj"
     },
     {
       "profileId": "mef-doktorski",

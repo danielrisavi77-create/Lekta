@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza. TRI stanja, ne dva: `dead` je kvar, `awaiting` je fixer koji ceka ljudsku potvrdu, ostalo radi.",
   "summary": {
-    "documentCount": 28,
+    "documentCount": 36,
     "fixerCount": 21,
     "deadCount": 0,
     "dead": [],
@@ -15,44 +15,49 @@
   "fixers": [
     {
       "fixerId": "bibliography-repair-fixer",
-      "requested": 5,
-      "changed": 5,
+      "requested": 6,
+      "changed": 6,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
     },
     {
       "fixerId": "citation-bibliography-sync-fixer",
-      "requested": 5,
+      "requested": 6,
       "changed": 0,
       "reasons": {
-        "no-target": 5
+        "no-target": 6
       },
       "deadOn": [
         "fpzg--final--prijediplomski--neuredan.docx",
         "fpzg--final--prijediplomski--uskladjen.docx",
         "fpzg--final--prijediplomski--word.docx",
         "fpzg--project--diplomski--neuredan.docx",
-        "fpzg--project--diplomski--uskladjen.docx"
+        "fpzg--project--diplomski--uskladjen.docx",
+        "fpzg--project--diplomski--word.docx"
       ],
-      "awaitingConfirmation": 5
+      "awaitingConfirmation": 6
     },
     {
       "fixerId": "consistency-fixer",
-      "requested": 28,
+      "requested": 36,
       "changed": 0,
       "reasons": {
-        "no-target": 28
+        "no-target": 36
       },
       "deadOn": [
         "adu--seminar--diplomski--neuredan.docx",
         "adu--seminar--diplomski--uskladjen.docx",
+        "adu--seminar--diplomski--word.docx",
         "algebra--specialist--poslijediplomski--neuredan.docx",
         "algebra--specialist--poslijediplomski--uskladjen.docx",
+        "algebra--specialist--poslijediplomski--word.docx",
         "apuri--final--prijediplomski--neuredan.docx",
         "apuri--final--prijediplomski--uskladjen.docx",
+        "apuri--final--prijediplomski--word.docx",
         "arh--doctoral--poslijediplomski--neuredan.docx",
         "arh--doctoral--poslijediplomski--uskladjen.docx",
+        "arh--doctoral--poslijediplomski--word.docx",
         "effectus--seminar--diplomski--neuredan.docx",
         "effectus--seminar--diplomski--uskladjen.docx",
         "effectus--seminar--diplomski--word.docx",
@@ -64,22 +69,26 @@
         "fpzg--final--prijediplomski--word.docx",
         "fpzg--project--diplomski--neuredan.docx",
         "fpzg--project--diplomski--uskladjen.docx",
+        "fpzg--project--diplomski--word.docx",
         "fsb--article--diplomski--neuredan.docx",
         "fsb--article--diplomski--uskladjen.docx",
+        "fsb--article--diplomski--word.docx",
         "fzsri--final--prijediplomski--neuredan.docx",
         "fzsri--final--prijediplomski--uskladjen.docx",
         "fzsri--final--prijediplomski--word.docx",
         "mef--graduate--diplomski--neuredan.docx",
         "mef--graduate--diplomski--uskladjen.docx",
+        "mef--graduate--diplomski--word.docx",
         "pravo--final--prijediplomski--neuredan.docx",
-        "pravo--final--prijediplomski--uskladjen.docx"
+        "pravo--final--prijediplomski--uskladjen.docx",
+        "pravo--final--prijediplomski--word.docx"
       ],
-      "awaitingConfirmation": 28
+      "awaitingConfirmation": 36
     },
     {
       "fixerId": "croatian-typography-fixer",
-      "requested": 15,
-      "changed": 15,
+      "requested": 16,
+      "changed": 16,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -94,8 +103,8 @@
     },
     {
       "fixerId": "field-integrity-fixer",
-      "requested": 25,
-      "changed": 24,
+      "requested": 33,
+      "changed": 32,
       "reasons": {
         "stale-anchor": 1
       },
@@ -106,8 +115,8 @@
     },
     {
       "fixerId": "final-document-inspector-fixer",
-      "requested": 28,
-      "changed": 28,
+      "requested": 36,
+      "changed": 36,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -130,32 +139,32 @@
     },
     {
       "fixerId": "footnote-typography-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
     },
     {
       "fixerId": "heading-case-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
     },
     {
       "fixerId": "heading-format-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
     },
     {
       "fixerId": "heading-style-fixer",
-      "requested": 5,
-      "changed": 5,
+      "requested": 6,
+      "changed": 6,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -170,19 +179,22 @@
     },
     {
       "fixerId": "link-doi-fixer",
-      "requested": 28,
-      "changed": 22,
+      "requested": 36,
+      "changed": 27,
       "reasons": {
-        "unsupported-structure": 1,
-        "no-target": 5
+        "unsupported-structure": 3,
+        "no-target": 6
       },
       "deadOn": [
+        "arh--doctoral--poslijediplomski--word.docx",
         "effectus--seminar--diplomski--word.docx",
         "fpzg--final--prijediplomski--neuredan.docx",
         "fpzg--final--prijediplomski--uskladjen.docx",
         "fpzg--final--prijediplomski--word.docx",
         "fpzg--project--diplomski--neuredan.docx",
-        "fpzg--project--diplomski--uskladjen.docx"
+        "fpzg--project--diplomski--uskladjen.docx",
+        "fpzg--project--diplomski--word.docx",
+        "fsb--article--diplomski--word.docx"
       ],
       "awaitingConfirmation": 0
     },
@@ -204,8 +216,8 @@
     },
     {
       "fixerId": "paragraph-spacing-fixer",
-      "requested": 2,
-      "changed": 2,
+      "requested": 3,
+      "changed": 3,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -224,8 +236,8 @@
     },
     {
       "fixerId": "section-surgery-fixer",
-      "requested": 5,
-      "changed": 5,
+      "requested": 6,
+      "changed": 6,
       "reasons": {},
       "deadOn": [],
       "awaitingConfirmation": 0
@@ -339,6 +351,49 @@
       "integrityFailure": null
     },
     {
+      "dokument": "adu--seminar--diplomski--word.docx",
+      "profileId": null,
+      "paloPrije": [
+        "reference.uncited",
+        "scope.words",
+        "structure.heading.word-styles",
+        "structure.sections.profile",
+        "title.elements",
+        "toc.present"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "reference.uncited",
+        "scope.words",
+        "structure.heading.word-styles",
+        "structure.sections.profile",
+        "title.elements",
+        "toc.present"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
       "dokument": "algebra--specialist--poslijediplomski--neuredan.docx",
       "profileId": "algebra-specijalisticki",
       "paloPrije": [
@@ -387,6 +442,39 @@
         "link-doi-fixer"
       ],
       "promijenili": [
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "algebra--specialist--poslijediplomski--word.docx",
+      "profileId": "algebra-specijalisticki",
+      "paloPrije": [
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
         "final-document-inspector-fixer",
         "link-doi-fixer"
       ],
@@ -501,6 +589,39 @@
       "integrityFailure": null
     },
     {
+      "dokument": "apuri--final--prijediplomski--word.docx",
+      "profileId": "apuri-zavrsni",
+      "paloPrije": [
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
       "dokument": "arh--doctoral--poslijediplomski--neuredan.docx",
       "profileId": "arh-doktorski",
       "paloPrije": [
@@ -586,6 +707,42 @@
       "rijeseno": [
         "page.margins"
       ],
+      "nerijeseno": [
+        "structure.heading.word-styles"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "arh--doctoral--poslijediplomski--word.docx",
+      "profileId": "arh-doktorski",
+      "paloPrije": [
+        "structure.heading.word-styles"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "unsupported-structure"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
       ],
@@ -1149,6 +1306,50 @@
       "integrityFailure": null
     },
     {
+      "dokument": "fpzg--project--diplomski--word.docx",
+      "profileId": "fpzg-opci-akademski-rad",
+      "paloPrije": [],
+      "zatrazeno": [
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer",
+        "section-surgery-fixer"
+      ],
+      "promijenili": [
+        "bibliography-repair-fixer",
+        "croatian-typography-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "section-surgery-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "citation-bibliography-sync-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "citation-bibliography-sync-fixer",
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
+      "nerijeseno": [],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
       "dokument": "fsb--article--diplomski--neuredan.docx",
       "profileId": "fsb-opci-akademski-rad",
       "paloPrije": [
@@ -1210,6 +1411,42 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "page.numbers.present"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
+      "dokument": "fsb--article--diplomski--word.docx",
+      "profileId": "fsb-opci-akademski-rad",
+      "paloPrije": [
+        "page.numbers.present"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        },
+        {
+          "fixerId": "link-doi-fixer",
+          "reason": "unsupported-structure"
         }
       ],
       "cekaPotvrdu": [
@@ -1441,6 +1678,43 @@
       "integrityFailure": null
     },
     {
+      "dokument": "mef--graduate--diplomski--word.docx",
+      "profileId": "mef-diplomski",
+      "paloPrije": [
+        "reference.uncited",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "link-doi-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [],
+      "nerijeseno": [
+        "reference.uncited",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "regresije": [],
+      "integrityFailure": null
+    },
+    {
       "dokument": "pravo--final--prijediplomski--neuredan.docx",
       "profileId": "pravo-porezni-prijediplomski",
       "paloPrije": [
@@ -1601,9 +1875,75 @@
       ],
       "regresije": [],
       "integrityFailure": null
+    },
+    {
+      "dokument": "pravo--final--prijediplomski--word.docx",
+      "profileId": "pravo-porezni-prijediplomski",
+      "paloPrije": [
+        "footnote.format",
+        "format.spacing.paragraph",
+        "legal.act-abbrev",
+        "legal.case-law",
+        "legal.first-citation-completeness",
+        "legal.footnote-bibliography",
+        "legal.source-classification",
+        "reference.alphabetical",
+        "structure.heading.format",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "zatrazeno": [
+        "consistency-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "heading-format-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "paragraph-spacing-fixer"
+      ],
+      "promijenili": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "heading-format-fixer",
+        "heading-style-fixer",
+        "link-doi-fixer",
+        "paragraph-spacing-fixer"
+      ],
+      "bezUcinka": [
+        {
+          "fixerId": "consistency-fixer",
+          "reason": "no-target"
+        }
+      ],
+      "cekaPotvrdu": [
+        "consistency-fixer"
+      ],
+      "rijeseno": [
+        "footnote.format",
+        "format.spacing.paragraph",
+        "structure.heading.format"
+      ],
+      "nerijeseno": [
+        "legal.act-abbrev",
+        "legal.case-law",
+        "legal.first-citation-completeness",
+        "legal.footnote-bibliography",
+        "legal.source-classification",
+        "reference.alphabetical",
+        "structure.heading.word-styles",
+        "structure.sections.profile"
+      ],
+      "regresije": [
+        "{\"id\":\"toc.coverage\",\"title\":\"Naslovi dokumenta ↔ sadržaj\",\"category\":\"structure\",\"after\":\"warn\",\"lostPoints\":2}"
+      ],
+      "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-09T14:30:51.571Z",
-  "generatedFromCommit": "dd7b08b2c639016dbb33f4f32ff2c8c3f5898c0c",
+  "generatedAt": "2026-09-12T14:52:49.221Z",
+  "generatedFromCommit": "207c2daeac3fe5862124c72257071bc4ace35ccf",
   "generator": "npm run repair-net -- --write"
 }

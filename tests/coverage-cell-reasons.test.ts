@@ -16,6 +16,7 @@
  * preimenovanju dijagnoze, a ne o promjeni pokrivenosti.
  */
 import { describe, expect, it } from 'vitest';
+import { REPAIR_SURFACE } from '../src/repair/repair-surface';
 import cells from '../docs/generated/coverage-cells.json';
 import { ASSISTED_RULE_GATE, PROFILE_GATE } from './helpers/coverage-cells';
 
@@ -85,10 +86,41 @@ describe('razlog nepokrivene celije', () => {
     expect(uhvaceno).toHaveLength(1);
   });
 
+  /**
+   * POMOCNI (`dispatch-only`) fixer nosi svoj razlog SAMO ondje gdje profil os propisuje.
+   *
+   * Redoslijed u lancu dijagnoze je ugovor, ne stil: prva izvedba je provjeru stavila na vrh i time
+   * preuzela 407 celija umjesto 4. Za profil koji os ne propisuje istina je i dalje
+   * `profil-ne-propisuje-os`; nova oznaka bi tvrdila da je posrijedi svojstvo alata ondje gdje alat
+   * nema sto raditi, dakle blaza prica o istom broju.
+   */
+  it('razlog pomocnog fixera ne preuzima celije profila koji os ne propisuje', () => {
+    const pomocni = new Set(
+      Object.entries(REPAIR_SURFACE as Record<string, { kind?: string }>)
+        .filter(([, v]) => v.kind === 'dispatch-only')
+        .map(([k]) => k),
+    );
+    // Anti-vakuum: bez ijednog pomocnog fixera tvrdnje nize ne mjere nista.
+    expect(pomocni.size, 'nijedan `dispatch-only` fixer; je li `REPAIR_SURFACE` promijenjen?').toBeGreaterThan(0);
+
+    const sTimRazlogom = nepokrivene.filter((c) => c.reason === 'pomocni-fixer-dokaz-nosi-pozivatelj');
+    for (const c of sTimRazlogom) {
+      expect(pomocni, `${c.profileId}/${c.fixerId}: razlog nosi fixer koji nije pomocni`).toContain(c.fixerId);
+    }
+    // Gornja granica je BROJ PROFILA: vise od toga znaci da je razlog pojeo celije drugih fixera.
+    expect(sTimRazlogom.length, 'razlog je preuzeo vise celija nego sto ima profila po fixeru')
+      .toBeLessThanOrEqual(pomocni.size * 407);
+    // I donja: mora postojati barem jedna, inace razred tiho nestane iz matrice.
+    expect(sTimRazlogom.length, 'nijedna celija s tim razlogom; je li lanac dijagnoze promijenjen?').toBeGreaterThan(0);
+  });
+
   it('svaka nepokrivena celija ima razlog iz zatvorenog popisa', () => {
     const dopusteni = new Set([
       'profil-ne-propisuje-os', 'univerzalna-higijena-bez-dokaza', 'closed-loop-nije-rijesio',
       'nema-dokaza', 'ceka-ljudski-odabir', 'trazi-ulaz-izvan-dokumenta',
+      // Pomocni (`dispatch-only`) fixer: unos u changelog nosi onaj koji ga zove, pa mu je dokaz
+      // kroz `fixersChanged` strukturno nedostizan. Razred se izvodi iz `REPAIR_SURFACE`.
+      'pomocni-fixer-dokaz-nosi-pozivatelj',
     ]);
     const nepoznati = [...new Set(nepokrivene.map((c) => c.reason).filter((r) => !r || !dopusteni.has(r)))];
     expect(nepoznati).toEqual([]);

@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "note": "Usporedba Lektinih i Katedrinih nalaza nad ISTIM dokumentima. Cita samo NALAZE, nikad pravila: fakultetska pravila i dalje teku iskljucivo Lekta -> Katedra.",
   "summary": {
-    "documentCount": 28,
-    "comparisonCount": 56,
+    "documentCount": 36,
+    "comparisonCount": 72,
     "byOutcome": {
-      "nitko": 15,
-      "oba": 9,
-      "lekta-ne-mjeri": 32
+      "nitko": 19,
+      "oba": 11,
+      "lekta-ne-mjeri": 42
     }
   },
   "rows": [
@@ -34,6 +34,20 @@
     },
     {
       "dokument": "adu--seminar--diplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 1,
+      "katedra": 12,
+      "ishod": "oba"
+    },
+    {
+      "dokument": "adu--seminar--diplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "adu--seminar--diplomski--word.docx",
       "os": "jedinica-necitirana",
       "lekta": 1,
       "katedra": 12,
@@ -68,6 +82,20 @@
       "ishod": "lekta-ne-mjeri"
     },
     {
+      "dokument": "algebra--specialist--poslijediplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": null,
+      "katedra": 0,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "algebra--specialist--poslijediplomski--word.docx",
+      "os": "jedinica-necitirana",
+      "lekta": null,
+      "katedra": 3,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
       "dokument": "apuri--final--prijediplomski--neuredan.docx",
       "os": "citirano-bez-jedinice",
       "lekta": null,
@@ -90,6 +118,20 @@
     },
     {
       "dokument": "apuri--final--prijediplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": null,
+      "katedra": 0,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "apuri--final--prijediplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": null,
+      "katedra": 0,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "apuri--final--prijediplomski--word.docx",
       "os": "jedinica-necitirana",
       "lekta": null,
       "katedra": 0,
@@ -118,6 +160,20 @@
     },
     {
       "dokument": "arh--doctoral--poslijediplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": null,
+      "katedra": 5,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "arh--doctoral--poslijediplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": null,
+      "katedra": 2,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "arh--doctoral--poslijediplomski--word.docx",
       "os": "jedinica-necitirana",
       "lekta": null,
       "katedra": 5,
@@ -278,6 +334,20 @@
       "ishod": "nitko"
     },
     {
+      "dokument": "fpzg--project--diplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "fpzg--project--diplomski--word.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
       "dokument": "fsb--article--diplomski--neuredan.docx",
       "os": "citirano-bez-jedinice",
       "lekta": null,
@@ -300,6 +370,20 @@
     },
     {
       "dokument": "fsb--article--diplomski--uskladjen.docx",
+      "os": "jedinica-necitirana",
+      "lekta": null,
+      "katedra": 15,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "fsb--article--diplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": null,
+      "katedra": 0,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "fsb--article--diplomski--word.docx",
       "os": "jedinica-necitirana",
       "lekta": null,
       "katedra": 15,
@@ -376,6 +460,20 @@
       "ishod": "oba"
     },
     {
+      "dokument": "mef--graduate--diplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": 0,
+      "katedra": 0,
+      "ishod": "nitko"
+    },
+    {
+      "dokument": "mef--graduate--diplomski--word.docx",
+      "os": "jedinica-necitirana",
+      "lekta": 1,
+      "katedra": 11,
+      "ishod": "oba"
+    },
+    {
       "dokument": "pravo--final--prijediplomski--neuredan.docx",
       "os": "citirano-bez-jedinice",
       "lekta": null,
@@ -402,9 +500,23 @@
       "lekta": null,
       "katedra": 8,
       "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "pravo--final--prijediplomski--word.docx",
+      "os": "citirano-bez-jedinice",
+      "lekta": null,
+      "katedra": 0,
+      "ishod": "lekta-ne-mjeri"
+    },
+    {
+      "dokument": "pravo--final--prijediplomski--word.docx",
+      "os": "jedinica-necitirana",
+      "lekta": null,
+      "katedra": 8,
+      "ishod": "lekta-ne-mjeri"
     }
   ],
-  "generatedAt": "2026-09-10T08:44:09.329Z",
-  "generatedFromCommit": "6ba55be11f962f01865b53e98c53e15c6d98d8b1",
+  "generatedAt": "2026-09-12T14:22:14.888Z",
+  "generatedFromCommit": "207c2daeac3fe5862124c72257071bc4ace35ccf",
   "generator": "npm run skill-compare -- --write"
 }

@@ -1,0 +1,45 @@
+{
+  "profileId": "fpzg-opci-akademski-rad",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "fpzg--project--diplomski",
+    "unitId": "fpzg",
+    "workType": "project",
+    "level": "diplomski",
+    "program": "Diplomski studij Novinarstvo",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "fpzg-graduate"
+  },
+  "prose": {
+    "id": "fpzg--project--diplomski",
+    "words": 5020,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmišljena imena, tema je stvarna a obrada je autorska za potrebe testiranja, i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje niti donosi vlastiti empirijski podatak. Rad je NACRT postupka, ne izvještaj o provedbi: sve brojke o trajanju i opsegu izrijekom su označene kao procjene, jer nijedna redakcija po ovom nacrtu nije radila. Pripisivanja poznatim djelima (Kovach i Rosenstiel, Silverman, Singer, Nielsen) drže se općepoznatih pojmovnih doprinosa tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite pravilo 28). Četiri jedinice s DOI-jem POTVRĐENE su kroz CrossRef API uz HTTP 200 i prepisane iz odgovora (Graves 2016; Koliska i Roberts 2024; Kumar 2022; Thorson 2024). Marić (2023a), Marić (2023b), Jurić i Pavlić (2024) te Boras (2022) izmišljene su jedinice, namjerno: par Marić 2023a/2023b postoji da provjera `checkDuplicateYears` ima što mjeriti, a doslovan navod uz oznaku stranice u poglavlju 3.4 uzet je BAŠ iz izmišljene jedinice, da se ne bi krivo navodio stvaran rad. ALAT: katedra-lite je STVARNO vodio rad, u autopilot načinu. Izvršeno: profile_resolver.py (PROŠAO, prvi put u ovom valu, jer je fpzg u Katedrinu registryju; prije toga je PAO uz `nedostaje paket jsonschema`, pa je jsonschema instalirana); stanje_init.py uz dva imenovana ograničenja; razina.py --postavi diplomski --citatelj mentor; perspective_map.py init + tri perspektive + validate (ready: true); plan_state.py init + set teza + import + odobri --actor full-auto (PLAN GATE PASS iz prvog pokušaja, sha256:57872cb26435). Imenovano ograničenje: Lektina matrica vodi ovaj redak kao vrstu rada `project`, a katedra-lite CLI poznaje samo seminarski, zavrsni i diplomski, pa je tip ondje postavljen na diplomski i to nije isto. OBLIK dokumenta dolazi iz Lektina profila fpzg-opci-akademski-rad, ne iz Katedre. NAMJERNO OSTAVLJEN OBLIK KOJI PADA: u poglavlju 3.4 stoji pripovjedna citatnica s lokatorom, Marić (2023a, str. 47), koju extractCitations NE prepoznaje, pa reference.uncited (7 bodova) taj izvor prijavljuje kao necitiran iako je citiran. Izmjereno kontrolama 2026-09-08: ista citatnica bez lokatora je prepoznata, isti lokator u zagradnom obliku je prepoznat, a Kumar (2022, str. 1470) bez sufiksa jednako pada; varijabla je pripovjedni oblik s lokatorom. NE POPRAVLJAJ PROZU: fixtura namjerno nosi i taj oblik i zagradni, da kvar ima gdje ostati vidljiv dok se motor ne popravi.",
+      "tool": "katedra-lite 1.9.22 (autopilot)",
+      "date": "2026-09-08"
+    }
+  },
+  "provenance": {
+    "tool": "word",
+    "toolPath": "C:\\Program Files (x86)\\Microsoft Office\\Office14\\WINWORD.EXE",
+    "os": "win32 x64",
+    "command": "npm run corpus-gen:word -- --row fpzg--project--diplomski",
+    "generatedAt": "2026-09-12T14:14:28.642Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/deflate",
+      "rsid/svaki-odlomak",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/word"
+    ]
+  },
+  "toolLimitations": []
+}

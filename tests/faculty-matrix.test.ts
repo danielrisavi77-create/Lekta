@@ -13,6 +13,36 @@ describe('fakultetska matrica Repair Enginea', () => {
     expect(report.faculties.every((faculty) => faculty.profiles.length === faculty.profileCount)).toBe(true);
   });
 
+  /**
+   * SVAKI brojac po razlogu mora biti konacan broj, na SVAKOJ razini sazetka.
+   *
+   * Izmjereno 2026-09-12: `faculty-matrix.ts` je imao vlastiti, prepisan popis razloga i pri dodavanju
+   * novoga ostao bez njega. To nije dalo gresku nego `undefined + 1 = NaN`, a `NaN` se u JSON zapisuje
+   * kao `null`, pa je artefakt na sest mjesta nosio `null` ondje gdje je trebao broj. Uhvatila ga je
+   * tek duboka usporedba cijelog izvjestaja, i to preko `NaN !== NaN`, dakle najzaobilaznije moguce.
+   *
+   * Anotacija tipa tu ne pomaze: `tests/**` se ne typechecka (`include: ["src"]`).
+   */
+  it('svaki brojac po razlogu je konacan broj, na svakoj razini', () => {
+    const kljuceviVrha = Object.keys(generatedReport.cellSummary.byReason);
+    expect(kljuceviVrha.length, 'prazan popis razloga; tvrdnja nize ne bi mjerila nista').toBeGreaterThan(3);
+    const lose: string[] = [];
+    const provjeri = (byReason: Record<string, unknown>, gdje: string) => {
+      for (const k of kljuceviVrha) {
+        const v = byReason[k];
+        if (typeof v !== 'number' || !Number.isFinite(v)) lose.push(`${gdje}.${k} = ${JSON.stringify(v)}`);
+      }
+    };
+    provjeri(generatedReport.cellSummary.byReason as Record<string, unknown>, 'vrh');
+    for (const f of generatedReport.faculties) {
+      provjeri((f.cellSummary as { byReason: Record<string, unknown> }).byReason, f.unitId ?? 'fakultet');
+      for (const p of f.profiles) {
+        provjeri((p.cellSummary as { byReason: Record<string, unknown> }).byReason, p.profileId);
+      }
+    }
+    expect(lose, 'brojac nije konacan broj; nedostaje li kljuc u nekom prepisanom popisu?').toEqual([]);
+  });
+
   it('stvarne DOCX uzorke ne prikazuje kao dokaz 100/100', () => {
     const report = buildFacultyMatrixReport();
     expect(report.summary.realDocxSampleCount).toBeGreaterThan(0);

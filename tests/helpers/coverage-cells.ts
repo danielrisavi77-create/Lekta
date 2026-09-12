@@ -19,6 +19,7 @@ import { liveProfile } from './live-profile';
 import { paramsForCheck } from '../../src/ui/repair-items';
 import { draftRuleEntriesFor } from '../../src/profiles/drafts-runtime';
 import { FIXER_IDS, type FixerId } from '../../src/repair/apply-fixers';
+import { REPAIR_SURFACE } from '../../src/repair/repair-surface';
 import type { RepairCoverageMatrix } from './repair-coverage';
 import type { RealCorpusReport } from '../real-corpus/harness';
 import type { CorpusTrack } from '../real-corpus/corpus-track';
@@ -131,7 +132,19 @@ export type UncoveredReason =
    * Fixer trazi ulaz koji generirani dokument NE MOZE dati: drugu datoteku za usporedbu, ili
    * odabir predloska koji je korak u sucelju. Nije rupa u mjerenju nego granica mjerenja.
    */
-  | 'trazi-ulaz-izvan-dokumenta';
+  | 'trazi-ulaz-izvan-dokumenta'
+  /**
+   * POMOCNI fixer (`dispatch-only`): radi iznutra, a unos u changelog nosi onaj koji ga zove.
+   *
+   * Nije rupa nego svojstvo alata, i to mjerljivo: `footer-page-fixer` poziva `sectionInsertFixer`
+   * iz svoje jezgre, pa `footer-page-fixer` u `fixersChanged` ne moze doci NI U JEDNOM scenariju,
+   * ma koliko puta odradio posao. Izmjereno 2026-09-12 nakon sto je popravljen `document.xml.rels`:
+   * podnozje se DOISTA umece (0 -> 1 footer dio), a ime u changelogu je i dalje pozivateljevo.
+   *
+   * Razred se izvodi iz `REPAIR_SURFACE`, ne iz prepisanog popisa, pa novi pomocni fixer dobije
+   * tocnu oznaku sam od sebe; prepisan popis bi istrunuo.
+   */
+  | 'pomocni-fixer-dokaz-nosi-pozivatelj';
 
 export type CoverageCell =
   | { profileId: string; fixerId: FixerId; status: 'pokriveno'; evidence: CellEvidence }
@@ -393,6 +406,29 @@ const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
   /** `footnote.spacing` (max 3) emitira se tocno za profile s `checkFootnoteParagraphSpacingZero`. */
   'footnote-spacing': 'footnote-spacing-fixer',
 };
+
+/**
+ * Prazan brojac po razlogu, s NULOM za svaki razlog iz zatvorenog popisa.
+ *
+ * JEDAN izvor, jer su dva prepisana popisa vec kostala: `faculty-matrix.ts` je imao vlastitu kopiju
+ * i pri dodavanju razloga `pomocni-fixer-dokaz-nosi-pozivatelj` ostao bez njega. Posljedica nije bila
+ * greska nego `undefined + 1 = NaN`, a `NaN` se u JSON zapisuje kao `null`, pa je artefakt nosio
+ * `null` ondje gdje je trebao broj. Gard je to uhvatio tek preko `toEqual`, jer `NaN !== NaN`.
+ *
+ * `tests/**` se ne typechecka (`tsconfig.json` ima `include: ["src"]`), pa nedostajuci kljuc nema
+ * gdje izaci kao tipska greska. Zato popis smije postojati samo na jednom mjestu.
+ */
+export function emptyByReason(): Record<UncoveredReason, number> {
+  return {
+    'profil-ne-propisuje-os': 0,
+    'univerzalna-higijena-bez-dokaza': 0,
+    'closed-loop-nije-rijesio': 0,
+    'nema-dokaza': 0,
+    'ceka-ljudski-odabir': 0,
+    'trazi-ulaz-izvan-dokumenta': 0,
+    'pomocni-fixer-dokaz-nosi-pozivatelj': 0,
+  };
+}
 
 export function buildCoverageCells(
   matrix: RepairCoverageMatrix,
@@ -659,6 +695,20 @@ export function uncoveredReason(
    * Razlika nije kozmeticka: "univerzalna higijena bez dokaza" zvuci kao rub, a `nema-dokaza` je
    * rupa u pokrivenosti bas ondje gdje fakultet nesto propisuje.
    */
+  /**
+   * POMOCNI (`dispatch-only`) fixer ide TEK OVDJE, nakon svih provjera propisuje li profil os.
+   *
+   * Prva izvedba ga je stavila na vrh i preuzela 407 celija umjesto 4: za profil koji os uopce ne
+   * propisuje istina je i dalje `profil-ne-propisuje-os`, a nova oznaka bi tvrdila da je posrijedi
+   * svojstvo alata ondje gdje alat nema sto raditi. Redoslijed je zato ugovor, ne stil.
+   *
+   * Ovdje je istinita: profil os PROPISUJE, popravak je odradjen, ali `footer-page-fixer` radi
+   * iznutra i unos u changelog nosi `section-insert-fixer` koji ga zove, pa dokaz kroz
+   * `fixersChanged` ne moze doci NI U JEDNOM scenariju.
+   */
+  if ((REPAIR_SURFACE as Record<string, { kind?: string }>)[fixerId]?.kind === 'dispatch-only') {
+    return 'pomocni-fixer-dokaz-nosi-pozivatelj';
+  }
   const kapijaProsla = Boolean((gate && profile) || (ruleCheckId && profileId));
   if (ruleCount === 0) {
     if (isGated) return 'profil-ne-propisuje-os';
@@ -670,14 +720,7 @@ export function uncoveredReason(
 }
 
 function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
-  const byReason: Record<UncoveredReason, number> = {
-    'profil-ne-propisuje-os': 0,
-    'univerzalna-higijena-bez-dokaza': 0,
-    'closed-loop-nije-rijesio': 0,
-    'nema-dokaza': 0,
-    'ceka-ljudski-odabir': 0,
-    'trazi-ulaz-izvan-dokumenta': 0,
-  };
+  const byReason = emptyByReason();
   let covered = 0;
   let resolved = 0;
   let authoredEvidence = 0;
