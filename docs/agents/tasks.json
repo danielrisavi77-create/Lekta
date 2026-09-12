@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "baselineCommit": "7bdd70853392b092dfa271aef077118df4b18325",
+  "baselineCommit": "afccbdd78af4d09f7ff9097adc45e05e3fc41287",
   "tasks": [
     {
       "id": "T00",
@@ -152,12 +152,379 @@
     {
       "id": "T15",
       "title": "Provedi korisnički pilot i završnu procjenu spremnosti",
-      "status": "ready",
+      "status": "blocked",
       "dependsOn": [
-        "T14"
+        "T14",
+        "T46"
       ],
-      "note": "docs/quality/usability-protocol.md i release-readiness.md napisani; sam pilot s 5 do 8 korisnika je vlasnikova radnja i NIJE proveden"
+      "note": "docs/quality/usability-protocol.md i release-readiness.md napisani; sam pilot s 5 do 8 korisnika je vlasnikova radnja i NIJE proveden. P0 za javno lansiranje; spremnost ovjerenog kandidata (T46) je novi preduvjet pilota, pa je status vracen na blocked (plan do live, odjeljak 11)"
+    },
+    {
+      "id": "T16",
+      "title": "Aktualno polazište i jedinstven plan do live",
+      "status": "in_review",
+      "implementationAgent": "opus",
+      "dependsOn": [
+        "T00"
+      ],
+      "note": "P0. Dokaz: validator reda prolazi bez ciklusa i bez dva kanonska statusa, svaki potvrdjeni nalaz ima vlasnicki T zadatak, i nema blanket tvrdnje o postotku dovrsenosti. Program unesen iz docs/agents/plan-do-live-2026-09-12.md."
+    },
+    {
+      "id": "T17",
+      "title": "Dokazati postojeći workflow agenata bez dodatne naplate",
+      "status": "blocked",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "P1. Dokaz: jedan mali zadatak prodje plan, implementaciju, neovisni review i integraciju uz stvarne izlaze doctor/tick/status; ponovno pokretanje ne stvara dupli posao i greska ili limit ne uzrokuju naplatu."
+    },
+    {
+      "id": "T18",
+      "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
+      "status": "blocked",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka."
+    },
+    {
+      "id": "T19",
+      "title": "Pouzdana produkcijska gradnja i dokaz izdanja",
+      "status": "blocked",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "P0. Dokaz: proizvedeni artefakt ima tocan identitet, strogi smoke odbija pogresnu verziju, a negativni slucajevi (nedostajuci build-info, pogresan SHA, stale ili unknown dokaz) zaustavljaju objavu."
+    },
+    {
+      "id": "T20",
+      "title": "Uskladiti Edge kod, pravila i konfiguraciju",
+      "status": "blocked",
+      "dependsOn": [
+        "T18",
+        "T19"
+      ],
+      "note": "P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak."
+    },
+    {
+      "id": "T21",
+      "title": "Zatvoriti sigurnosne i autorizacijske rizike",
+      "status": "blocked",
+      "dependsOn": [
+        "T18",
+        "T20"
+      ],
+      "note": "P0. Dokaz: nema potvrdjenog citanja ili mutacije tudjih podataka, zaobilaska prava ni neogranicene obrade, a negativni testovi padaju kad se zastita namjerno ukloni."
+    },
+    {
+      "id": "T22",
+      "title": "Dovršiti račun, prijavu i e-poštu",
+      "status": "blocked",
+      "dependsOn": [
+        "T18",
+        "T20",
+        "T21"
+      ],
+      "note": "P0. Dokaz: stvarne testne poruke stizu na namjenske adrese, sve sesijske grane daju ocekivani ishod, a anonimni korisnik nakon registracije zadrzava vlastiti rad i prava."
+    },
+    {
+      "id": "T23",
+      "title": "Urediti katalog, cijene i prava proizvoda",
+      "status": "blocked",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "P0. Dokaz: svaki ponudjeni SKU ima jednoznacno objasnjenje i MoR mapiranje, test potvrdjuje stvarnu cijenu i pravo, a stara kupnja ostaje ispravno prepoznata nakon promjene kataloga."
+    },
+    {
+      "id": "T24",
+      "title": "Završiti checkout, webhook i životni ciklus prava",
+      "status": "blocked",
+      "dependsOn": [
+        "T20",
+        "T22",
+        "T23"
+      ],
+      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag."
+    },
+    {
+      "id": "T25",
+      "title": "Pouzdan popravak i oporavak nepoznatog ishoda",
+      "status": "blocked",
+      "dependsOn": [
+        "T20",
+        "T21",
+        "T24"
+      ],
+      "note": "P0. Dokaz: dvostruki klik, refresh, paralelni poziv i izgubljeni odgovor daju jedan definiran posao i jednu ocekivanu potrosnju prava, a isti posao je ponovno dohvatljiv."
+    },
+    {
+      "id": "T26",
+      "title": "Potvrditi točnost lokalne DOCX analize",
+      "status": "blocked",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera."
+    },
+    {
+      "id": "T27",
+      "title": "Dokazati i poboljšati svih 31 fixera",
+      "status": "blocked",
+      "dependsOn": [
+        "T25",
+        "T26"
+      ],
+      "note": "P0. Dokaz: svaki od 31 registriranog fixera ima pozitivan i negativan dokaz, nula ostecenja i laznih uspjeha, a izvjestaj odvojeno prikazuje rijesene, nerijesene, preskocene i rucne stavke s tocnim nazivnicima."
+    },
+    {
+      "id": "T28",
+      "title": "Završiti pravila, programe i dokaze za 407 profila",
+      "status": "blocked",
+      "dependsOn": [
+        "T16",
+        "T26"
+      ],
+      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva."
+    },
+    {
+      "id": "T29",
+      "title": "Dovršiti citate, literaturu i provjeru izvora",
+      "status": "blocked",
+      "dependsOn": [
+        "T26",
+        "T28"
+      ],
+      "note": "P1. Dokaz: poznato ispravni i poznato pogresni primjeri daju tocan rezultat, servis u kvaru daje unknown uz oporavak, a sadrzaj reference se ne mijenja po nepouzdanom podudaranju."
+    },
+    {
+      "id": "T30",
+      "title": "Dovršiti glavni korisnički tok i izvještaj",
+      "status": "blocked",
+      "dependsOn": [
+        "T22",
+        "T25",
+        "T27",
+        "T28"
+      ],
+      "note": "P1. Dokaz: stvarni korisnicki scenariji i snimke relevantnih stanja pokazuju da novi korisnik bez pomoci autora zavrsi tok, a svi prikazani ishodi odgovaraju backend i verifikacijskom stanju."
+    },
+    {
+      "id": "T31",
+      "title": "Završiti Moje radove, revizije i mentorske zadaće",
+      "status": "blocked",
+      "dependsOn": [
+        "T25",
+        "T30"
+      ],
+      "note": "P1. Dokaz: revizije i mentorske zadace ne prelaze na krivi rad, lokalni zivotni ciklus ne gubi podatke bez upozorenja, a korisnik moze pronaci i obrisati sve sto aplikacija tvrdi da je spremila."
+    },
+    {
+      "id": "T32",
+      "title": "Dovršiti sve besplatne alate",
+      "status": "blocked",
+      "dependsOn": [
+        "T28",
+        "T29"
+      ],
+      "note": "P1. Dokaz: svaki javno naveden alat ima funkcionalan izlaz, radi na mobitelu i s tipkovnicom, ne gubi unesene podatke i ne tvrdi da je genericki predlozak sluzbeno odobren."
+    },
+    {
+      "id": "T33",
+      "title": "Dovršiti PDF tok i njegove granice",
+      "status": "blocked",
+      "dependsOn": [
+        "T26",
+        "T30"
+      ],
+      "note": "P1. Dokaz: tekstualni PDF daje reproducibilan ogranicen rezultat, nepodrzan ulaz ne dobiva lazno preciznu ocjenu, a PDF tok ne obecava automatski DOCX popravak ni nepostojeci OCR."
+    },
+    {
+      "id": "T34",
+      "title": "Završiti preflight i integrity sa stvarnim servisom",
+      "status": "blocked",
+      "dependsOn": [
+        "T20",
+        "T21",
+        "T22",
+        "T29",
+        "T36"
+      ],
+      "note": "P1. Dokaz: stvarni testni dokument prodje cijeli put do serverski filtriranog rezultata, pogresne ovlasti i tokeni se odbijaju, a privremeni sadrzaj se brise prema ugovoru; nedostupan host ostaje vidljiv blokator, ne status done."
+    },
+    {
+      "id": "T35",
+      "title": "Dovršiti field-render i završni Word dokument",
+      "status": "blocked",
+      "dependsOn": [
+        "T20",
+        "T27"
+      ],
+      "note": "P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original."
+    },
+    {
+      "id": "T36",
+      "title": "Završiti privatnost, brisanje i životni ciklus podataka",
+      "status": "blocked",
+      "dependsOn": [
+        "T21",
+        "T22",
+        "T25"
+      ],
+      "note": "P0. Dokaz: svaki obecani rok i brisanje imaju dokaz na stvarnom objektu i metapodacima, korisnik ima funkcionalnu kontrolu svojih podataka, a tekst rada i e-posta ne zavrsavaju u nepotrebnim logovima."
+    },
+    {
+      "id": "T37",
+      "title": "Dovršiti garanciju, raskid, povrat i podršku",
+      "status": "blocked",
+      "dependsOn": [
+        "T22",
+        "T24",
+        "T36"
+      ],
+      "note": "P1. Dokaz: testni zahtjev prodje podnosenje, potvrdu, admin obradu, razrjesenje i obavijest korisniku, uz autorizaciju i trag promjena."
+    },
+    {
+      "id": "T38",
+      "title": "Dovršiti preporuke, bonuse, podsjetnike i usluge",
+      "status": "blocked",
+      "dependsOn": [
+        "T22",
+        "T24",
+        "T36"
+      ],
+      "note": "P1. Dokaz: bonus se dodijeli tocno jednom uz kontrolirani retry i vidljiv terminalni kvar, odjava zaustavlja buduce podsjetnike, a svaka ponudjena usluga ima cijeli isporucivi tok."
+    },
+    {
+      "id": "T39",
+      "title": "Dovršiti administraciju i operativni pregled",
+      "status": "blocked",
+      "dependsOn": [
+        "T20",
+        "T24",
+        "T25",
+        "T37",
+        "T38"
+      ],
+      "note": "P1. Dokaz: admin brojke se podudaraju s pripremljenim DB i payment scenarijima, neovlasteni pristup je odbijen na serveru, a kriticni korisnicki problem je razrjesiv bez rucne izmjene baze."
+    },
+    {
+      "id": "T40",
+      "title": "Dovršiti postojeću integraciju s Katedrom",
+      "status": "blocked",
+      "dependsOn": [
+        "T21",
+        "T22",
+        "T24",
+        "T36"
+      ],
+      "note": "P1. Dokaz: postojeci cross-app tok prodje na kompatibilnim stvarnim testnim servisima uz ocuvanu privolu i vlasnistvo, a kvar Katedre ne unistava lokalni rad."
+    },
+    {
+      "id": "T41",
+      "title": "Sanirati ovisnosti i dovršiti održivu provjeru koda",
+      "status": "blocked",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "P1. Dokaz: ratchet i glavne provjere prolaze na ponovljivoj instalaciji s praznim cacheom, a svaki preostali nalaz ima vlasnika, mitigaciju i rok."
+    },
+    {
+      "id": "T42",
+      "title": "Završiti pristupačnost, mobitel i performanse",
+      "status": "blocked",
+      "dependsOn": [
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T34",
+        "T35"
+      ],
+      "note": "P1. Dokaz: nema blokirajuce pristupacne ili mobilne prepreke, nema nekontroliranog zamrzavanja ni rasta memorije, a izmjerene granice odgovaraju stvarnom ponasanju; cilj je WCAG 2.2 AA za javne tokove."
+    },
+    {
+      "id": "T43",
+      "title": "Završiti javne stranice, tvrdnje i SEO",
+      "status": "blocked",
+      "dependsOn": [
+        "T23",
+        "T28",
+        "T30",
+        "T32",
+        "T37"
+      ],
+      "note": "P1. Dokaz: nema slomljenog javnog puta, pogresne ponude ni kontradiktorne tvrdnje, a crawl popis odgovara manifestu ruta i objavljenom artefaktu."
+    },
+    {
+      "id": "T44",
+      "title": "Dokazati cijele tokove sa stvarnim backendom",
+      "status": "blocked",
+      "dependsOn": [
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43"
+      ],
+      "note": "P0. Dokaz: sve obavezne grane matrice scenarija E01 do E36 imaju stvarni prolaz i evidenciju bez presucenog mocka; nedostupan servis je oznacen blocked ili unavailable, nikad pass."
+    },
+    {
+      "id": "T45",
+      "title": "Dovršiti monitoring, oporavak i troškovne granice",
+      "status": "blocked",
+      "dependsOn": [
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T36",
+        "T39",
+        "T41"
+      ],
+      "note": "P0. Dokaz: kontrolirani kvar proizvede vidljiv signal, rollback i restore su stvarno izvedeni na testu, a svaka operativna obveza ima vlasnika i kratku naredbu."
+    },
+    {
+      "id": "T46",
+      "title": "Ovjeriti konačni kandidat i pripremiti pilot",
+      "status": "blocked",
+      "dependsOn": [
+        "T17",
+        "T44",
+        "T45"
+      ],
+      "note": "P0. Dokaz: sve release kontrolne tocke iz odjeljka 8 plana imaju svjez dokaz (Word, produkcijski UX, stvarni E2E, holdout) i postoji konkretan testni kandidat dostupan pilotu."
+    },
+    {
+      "id": "T47",
+      "title": "Objaviti cijelo izdanje i predati operacije",
+      "status": "blocked",
+      "dependsOn": [
+        "T15",
+        "T46"
+      ],
+      "note": "P0. Dokaz: javni artefakt odgovara dokazanoj verziji, svi ukljuceni tokovi rade, prvi tjedan nadzora je obradjen bez nerazrijesenog kriticnog signala i operacije su predane uz runbook."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12 (grana plan/t02-t06-2026-09-10). \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno; sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. Karta: docs/quality/lekta-plan-status.md."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F)."
 }
