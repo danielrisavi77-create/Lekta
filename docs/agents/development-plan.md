@@ -8,7 +8,7 @@
 
 **Tech Stack:** Postojeći Vite, TypeScript, Vitest, Playwright, DOCX/OOXML obrada, lokalna pohrana/IndexedDB, Supabase Edge Functions i PostgreSQL. `package.json` pregledane verzije zahtijeva Node >=20; postojeći CI provjerava Node 20 i 24. Ne mijenjati tehnološki skup radi ovog plana.
 
-**Spec:** Odjeljak „1. Ugovorena specifikacija” u ovom dokumentu; samodostatan opis cilja i ograničenja. Plan uključuje pet podplanova koji se mogu zasebno pregledati i isporučiti.
+**Spec:** Odjeljak „1. Ugovorena specifikacija” u ovom dokumentu; samodostatan opis cilja i ograničenja. Plan uključuje šest podplanova koji se mogu zasebno pregledati i isporučiti: A do E za prvi ciklus (T00-T15) i F za program do javnog lansiranja (T16-T47).
 
 **Polazište:** audit od 8. rujna 2026., repo [danielrisavi77-create/Lekta](https://github.com/danielrisavi77-create/Lekta), commit `3c1af21b0808f8cc1ec68b5f4ec813f4d40d65db`. Putanje označene kao postojeće provjerene su na tom snapshotu. Prije izvedbe usporediti aktualno stanje; već ispravljene nalaze zatvoriti dokazom, bez ponovne implementacije.
 
@@ -87,6 +87,7 @@ Poznato oštećenje dokumenta ili neobjašnjena regresija blokira izdavanje pogo
 | C - jedinstven plan i završetak popravka | T08-T10 | T01-T03, T05-T07 | Dosljedan odabir, izvršenje, provjera i preuzimanje. |
 | D - praćenje nalaza kroz verzije | T11-T12 | T05, T08-T10 | Usporedba stvarno riješenih, postojećih i novih problema. |
 | E - mentorovi zadaci i korisnička provjera | T13-T15 | T09-T12 | Pilot komentara, mjerenje toka i završna procjena spremnosti. |
+| F - program do javnog lansiranja | T16-T47 | T09-T12, T14 (T15 ostaje u Podplanu E, blokiran do T46) | Ovjeren kandidat, pilot i javna objava; redoslijed unutar F je u vlastitoj tablici valova u odjeljku „Podplan F”. |
 
 T04 i T07 mogu imati zasebne PR-ove; nisu razlog za miješanje sigurnosnih nadogradnji s vizualnim promjenama. Podplanovi A-C čine prvi ciklus stabilizacije. D i E su zasebne funkcionalne isporuke. Osnovne korisničke zadatke 1-3 iz T15 provesti već nakon T10; zadatke 4-5 dodati tek kada pripadajuće funkcije postoje.
 
@@ -701,14 +702,20 @@ priprema mogu početi ranije.
 
 ### Valovi i kritični put
 
+Oznake **F-A** do **F-F** označavaju valove UNUTAR Podplana F i odgovaraju redom valovima A do F iz
+`docs/agents/plan-do-live-2026-09-12.md`, odjeljak 5 (F-A je Val A, F-B je Val B i tako redom).
+Vendorani plan se ne mijenja i ostaje izvor; prefiks `F-` dodan je samo ovdje da se oznaka vala ne
+pomiješa s nazivima podplanova A-E iz odjeljka 2 (gdje je, primjerice, Podplan A skup zadataka
+T00-T04, a val F-A obuhvaća T16-T19).
+
 | Val | Fokus i redoslijed | Izlazni dokaz | Okvir napora |
 | --- | --- | --- | --- |
-| A | T16, početak T17, T18, T19 | Jedinstven plan, operativni staging, pouzdana gradnja i identitet kandidata | 3-5 dana |
-| B | T20-T25, T36, početak T41 | Usklađen backend, račun, katalog, testna kupnja, oporavak bez dvostrukog izvršenja | 7-12 dana |
-| C | T26-T29 | Dokazana analiza, učinak popravaka, pokrivenost svih profila i citata | 10-20+ dana |
-| D | T30-T35, T37-T40 | Cijelo sučelje i pomoćne/integracijske funkcije dovršene | 8-15 dana |
-| E | Završetak T41, T42-T46 | Stvarni E2E, performanse, sigurnost, operacije i kandidat za pilot | 4-7 dana |
-| F | T15, T47 | Pilot, sanacije, javna objava i 7 dana početnog nadzora | 3-6 radnih dana, uz protek vremena za promatranje |
+| F-A | T16, početak T17, T18, T19 | Jedinstven plan, operativni staging, pouzdana gradnja i identitet kandidata | 3-5 dana |
+| F-B | T20-T25, T36, početak T41 | Usklađen backend, račun, katalog, testna kupnja, oporavak bez dvostrukog izvršenja | 7-12 dana |
+| F-C | T26-T29 | Dokazana analiza, učinak popravaka, pokrivenost svih profila i citata | 10-20+ dana |
+| F-D | T30-T35, T37-T40 | Cijelo sučelje i pomoćne/integracijske funkcije dovršene | 8-15 dana |
+| F-E | Završetak T41, T42-T46 | Stvarni E2E, performanse, sigurnost, operacije i kandidat za pilot | 4-7 dana |
+| F-F | T15, T47 | Pilot, sanacije, javna objava i 7 dana početnog nadzora | 3-6 radnih dana, uz protek vremena za promatranje |
 
 **Kritični put objave:** T18 -> T20 -> T22/T24 -> T25/T27 -> T30 -> T44 -> T46 -> T15 -> T47.
 

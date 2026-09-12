@@ -2,7 +2,8 @@
 
 Datum konsolidacije: 28. srpnja 2026. Pregledan commit: `1329c43` (grana `audit/remediation-2026-07-16`).
 
-**Zadnje ažuriranje: 17. kolovoza 2026.** (grana `fix/audit-remediation-2026-08`), nakon vanjskog
+**Zadnje ažuriranje: 12. rujna 2026.** (poglavlje 17, program do javnog lansiranja). Ažuriranje od 17.
+kolovoza 2026. (grana `fix/audit-remediation-2026-08`) napravljeno je nakon vanjskog
 audita repozitorija i verifikacije njegovih tvrdnji protiv žive produkcije, staginga i GitHub
 postavki. Do tog ažuriranja dokument je bio zamrznut na 28.7., a repozitorij je u međuvremenu
 primio 221 commit, pa je sam bio primjer drifta na koji upozorava. Vidi poglavlje 4A.

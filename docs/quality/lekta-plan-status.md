@@ -100,7 +100,7 @@ unos: nijedna datoteka izvan `docs/` nije dirana, nijedan artefakt u `docs/gener
 | `npm run agents -- list` | prolazi, ispisuje svih 48 zadataka; validator (`validateQueue`) bez duplikata, ciklusa i nepoznatih statusa |
 | gard-mutacija nad prosirenim redom | baseline prolazi; odbijeno svih sest podmetnutih kvarova: duplikat `T20`, ciklus `T20` -> `T21` -> `T20`, samoovisnost `T47`, nepostojeca ovisnost `T99`, status `needs_verification`, ID `T100` |
 | usporedba s planom | `T16` do `T47`: 0 razlika u `id`, `title` i `dependsOn`; prioriteti u `note` i u Podplanu F poklapaju se s odjeljkom 6 (0 razlika) |
-| vendorani plan | bajt jednak izvoru (sha256 iznad); 991 redak, UTF-8 bez BOM-a, LF |
+| vendorani plan | bajt jednak izvoru NAKON normalizacije CR (sha256 iznad); 991 redak, UTF-8 bez BOM-a. Uz `core.autocrlf=true` ista datoteka na disku moze nositi CRLF ili LF ovisno o tome kako je stablo materijalizirano (CLAUDE.md, "Gard koji cita datoteku s diska mora normalizirati CR"), pa se jednakost mjeri nad blobom, ne nad sirovim bajtovima na disku; `.gitattributes` od ovog kruga prikiva `text eol=lf` za tu putanju |
 | citaci prave datoteke | `scripts/agents/cli.mjs` (validator iznad) i `scripts/autonomy/policy.py` (samo popis kontrolnih putanja, bez ogranicenja broja zapisa). Nijedan test ne tvrdi broj zadataka ni `baselineCommit`, pa nijedan test nije mijenjan |
 
 Sto NIJE dokazano ovim krugom: `tests/agent-workflow-cli.test.ts` je na Windowsu preskocen po dizajnu
