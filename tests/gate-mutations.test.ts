@@ -1076,7 +1076,7 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => {
       let dopusteni = 0;
       for (const st of SVA_STANJA) for (const dg of SVI_DOGADAJI) if (transition(st, dg) !== null) dopusteni += 1;
-      return dopusteni === 9 && transition('dokument', 'pokreni-analizu') === null;
+      return dopusteni === 12 && transition('dokument', 'pokreni-analizu') === null;
     },
   },
   /**

@@ -268,6 +268,44 @@ describe('model lokalne dokumentne sesije', () => {
     });
     expect(sanitizeLocalDocumentSession(valid, CREATED_AT + 500)?.workspace?.analysis?.payload).toEqual(validAnalysisPayload());
   });
+
+  /**
+   * ODABIR POPRAVAKA IMA ISTU ASIMETRIJU KAO ANALIZA, i to je namjerno (korak C1, 2026-09-12).
+   *
+   * Nevaljan `repairSelection` se IZOSTAVLJA, ali sesija prezivi. Suprotno bi znacilo da korisnik
+   * zbog krivo zapisane kucice izgubi i DOKUMENT, sto je nesrazmjerna kazna za podatak koji je
+   * samo udobnost. Nevaljan `profile` ili `stage` i dalje rusi cijelu sesiju, jer oni odredjuju
+   * PO CEMU se rad mjeri.
+   */
+  it('uklanja samo nevaljan odabir popravaka, a čuva dokument i analizu', () => {
+    const dobarOdabir = {
+      schemaVersion: 1,
+      itemsDigest: 'D1',
+      selected: ['heading-case-fixer|fpzg.heading.case'],
+      deep: false,
+      updatedAt: CREATED_AT + 300,
+    };
+
+    const sKrivomVerzijom = makeSession(SESSION_ID, {
+      workspace: { stage: 'results', repairSelection: { ...dobarOdabir, schemaVersion: 2 } },
+    });
+    const out = sanitizeLocalDocumentSession(sKrivomVerzijom, CREATED_AT + 500);
+    expect(out, 'nevaljan odabir NE SMIJE srušiti sesiju').not.toBeNull();
+    expect(out?.workspace?.stage).toBe('results');
+    expect(out?.workspace?.repairSelection, 'nevaljan odabir se izostavlja').toBeUndefined();
+
+    // Duplikat kljuca znaci da je zapis nastao krivim putem; sažimanje bi taj put sakrilo.
+    const sDuplikatom = makeSession(SESSION_ID, {
+      workspace: { stage: 'results', repairSelection: { ...dobarOdabir, selected: ['a|1', 'a|1'] } },
+    });
+    expect(sanitizeLocalDocumentSession(sDuplikatom, CREATED_AT + 500)?.workspace?.repairSelection)
+      .toBeUndefined();
+
+    // Baseline: ispravan odabir PROLAZI, inače bi gore bile tvrdnje o funkciji koja odbija sve.
+    const valjan = makeSession(SESSION_ID, { workspace: { stage: 'results', repairSelection: dobarOdabir } });
+    expect(sanitizeLocalDocumentSession(valjan, CREATED_AT + 500)?.workspace?.repairSelection?.selected)
+      .toEqual(['heading-case-fixer|fpzg.heading.case']);
+  });
 });
 
 describe('MemoryDocumentSessionStore', () => {
@@ -1329,5 +1367,83 @@ describe('IndexedDbDocumentSessionStore', () => {
     await expect(operation).rejects.toMatchObject({ code });
     expect(localStorageSpy).not.toHaveBeenCalled();
     localStorageSpy.mockRestore();
+  });
+
+  /** Svjeza baza po testu: sukobi se inace prelijevaju iz prethodnog slucaja. */
+  const fakeStore = (): IndexedDbDocumentSessionStore => new IndexedDbDocumentSessionStore({
+    indexedDB: new FakeIndexedDbFactory() as unknown as IDBFactory,
+    keyRange: fakeKeyRange(),
+    now: () => CREATED_AT + 1_000,
+  });
+
+  /**
+   * COMPARE-AND-SWAP (korak C2, 2026-09-12).
+   *
+   * Do danas je `update` bio read-modify-write kroz DVIJE transakcije. Izmedju citanja i pisanja
+   * postojao je prozor u kojem je drugi pisac mogao zapisati svoje, a ovaj bi ga zatim pregazio
+   * BEZ IJEDNOG TRAGA: pohrana nije imala nista sto bi to otkrilo, pa se izgubljeni rad vidio tek
+   * kao "nestao mi je odabir".
+   */
+  it('svjez pisac prolazi i dize generaciju', async () => {
+    const store = fakeStore();
+    await store.put(makeSession());
+    const pocetna = (await store.get(SESSION_ID))?.revision ?? 0;
+
+    const out = await store.update(SESSION_ID, { workspace: { stage: 'results' } }, pocetna);
+    expect(out.revision, 'generacija mora rasti, inace CAS nema sto usporedjivati').toBe(pocetna + 1);
+    expect((await store.get(SESSION_ID))?.workspace?.stage).toBe('results');
+  });
+
+  it('USTAJAO PISAC DOBIVA conflict, i ne pregazi tudji rad', async () => {
+    const store = fakeStore();
+    await store.put(makeSession());
+    const zajednickaOsnova = (await store.get(SESSION_ID))?.revision ?? 0;
+
+    // Prvi pisac zapise svoje.
+    await store.update(SESSION_ID, { workspace: { stage: 'results' } }, zajednickaOsnova);
+
+    // Drugi pisac jos uvijek misli da drzi staru generaciju. Ovo je TOCNO izgubljeni zapis.
+    await expect(
+      store.update(SESSION_ID, { workspace: { stage: 'profile' } }, zajednickaOsnova),
+    ).rejects.toMatchObject({ code: 'conflict' });
+
+    // Rad prvog pisca je netaknut; odbijen zapis ne smije ostaviti pola izmjene.
+    const poslije = await store.get(SESSION_ID);
+    expect(poslije?.workspace?.stage, 'tudji rad je pregazen usprkos sukobu').toBe('results');
+    expect(poslije?.revision).toBe(zajednickaOsnova + 1);
+  });
+
+  it('bez ocekivane generacije upis je bezuvjetan, i to je imenovan izlaz', async () => {
+    // Za pozivatelja koji NEMA sto izgubiti (prvi zapis, migracije, testovi).
+    const store = fakeStore();
+    await store.put(makeSession());
+    await store.update(SESSION_ID, { workspace: { stage: 'results' } });
+    await store.update(SESSION_ID, { workspace: { stage: 'comparison' } });
+    expect((await store.get(SESSION_ID))?.workspace?.stage).toBe('comparison');
+  });
+
+  /**
+   * MUTACIJA I SENTINEL U JEDNOM.
+   *
+   * Mutacija: pisac koji IGNORIRA `expectedRevision` (dakle ponasanje od prije ovog koraka) tiho
+   * pregazi tudji rad. Tvrdnja dokazuje da bez uvjeta gubitka doista ima, pa gard iznad nije
+   * vakuumski.
+   *
+   * Sentinel: prije mutacije se tvrdi da su dva pisca DOISTA imali istu osnovu. Bez toga bi test
+   * mogao prolaziti nad scenarijem u kojem se nikad nisu ni sudarili.
+   */
+  it('gard grize: bez uvjeta generacije rad se gubi tiho', async () => {
+    const store = fakeStore();
+    await store.put(makeSession());
+    const osnova = (await store.get(SESSION_ID))?.revision ?? 0;
+
+    await store.update(SESSION_ID, { workspace: { stage: 'results' } }, osnova);
+    const nakonPrvog = await store.get(SESSION_ID);
+    expect(nakonPrvog?.revision, 'sentinel: pisci moraju imati razlicite generacije').toBe(osnova + 1);
+
+    // Podmetnuto staro ponasanje: upis bez ikakvog uvjeta.
+    await store.update(SESSION_ID, { workspace: { stage: 'profile' } });
+    expect((await store.get(SESSION_ID))?.workspace?.stage,
+      'podmetnut bezuvjetan upis MORA pregaziti, inace tvrdnja o CAS-u ne znaci nista').toBe('profile');
   });
 });

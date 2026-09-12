@@ -1,15 +1,17 @@
 import {
-  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent,
+  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
 import { subscribeAnalyzerResultReady } from '../../ui/analyzer-document-events';
+import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
+import { createConfirmedProfile } from './confirmed-profile';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
   type StorageAvailability,
 } from './bootstrap';
-import { initialContext, type WorkspaceContext } from './workspace-state';
+import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
@@ -100,11 +102,11 @@ async function start(): Promise<void> {
   let sessionId: string | null = null;
   // Stanje se DRZI i osvjezava. Zapisano jednom pri ucitavanju, tvrdilo bi `empty` i nakon sto
   // korisnik ucita dokument; ustajala tvrdnja o stanju gora je od nikakve, jer je netko procita.
-  let context: WorkspaceContext = initialContext(false);
-  const showState = (next: WorkspaceContext): void => {
-    context = next;
-    document.documentElement.dataset.workspaceState = context.state;
-  };
+  // Knjiga sesije. Do 2026-09-12 je ovdje zivio i upis `data-workspace-state` na <html>; atribut
+  // je uklonjen jer NIJEDAN citatelj nije postojao (ni CSS, ni test, ni kod), pa je bio trosak bez
+  // korisnika. Stanje koje korisnik vidi pise `wizard-view.ts`.
+  let context: WorkspaceLedger = emptyLedger();
+  const upisi = (next: WorkspaceLedger): void => { context = next; };
 
   // OBNOVLJEN DOKUMENT SE NE ZAPISUJE PONOVNO. Do 2026-09-05 je i on prolazio kroz zapis, pa je
   // svako otvaranje `/rad/#session=X` stvaralo NOVU sesiju Y i brisalo X: poveznica iz
@@ -134,6 +136,16 @@ async function start(): Promise<void> {
     status: showStatus,
     track: trackWorkspaceEvent,
   });
+  // C4: potvrdjeni profil se pamti uz sesiju i vraca pri obnovi. Pretplata ide PRIJE
+  // `openWorkspace` iz istog razloga kao gore: objava ide nad kopijom skupa pretplatnika.
+  const profil = createConfirmedProfile({
+    store: () => (storage.kind === 'available' ? storage.store : null),
+    sessionId: () => sessionId,
+    apply: applyConfirmedProfileSelection,
+    status: showStatus,
+    track: trackWorkspaceEvent,
+  });
+  subscribeProfileConfirmed((event) => profil.onConfirmed(event));
   subscribeAnalyzerResultReady((event) => {
     revisions.onResult(event.result);
     // T13: komentari iz paketa postaju lokalni zadaci; bez komentara sekcija ostaje skrivena. Citanje paketa je lokalno.
@@ -150,27 +162,29 @@ async function start(): Promise<void> {
   });
 
   subscribeAnalyzerDocumentAccepted((event) => {
-    showState(afterDocumentAccepted(context));
+    upisi(afterDocumentAccepted(context));
     if (restoredFile !== null && event.file === restoredFile) {
-      showState(afterPersist(context, true));
+      upisi(afterPersist(context, true));
       showStatus(null);
       return;
     }
     void (async () => {
       const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
-      showState(afterPersist(context, out.kind === 'persisted'));
+      upisi(afterPersist(context, out.kind === 'persisted'));
       if (out.kind !== 'persisted') { showStatus(out.notice); return; }
       sessionId = out.sessionId;
       // `replaceState`, ne `pushState`: zapis sesije nije korisnikova navigacija, pa ne smije
       // dodati korak u povijest kroz koji se "natrag" vraca na praznu radnu povrsinu.
       history.replaceState(history.state, '', location.pathname + location.search + out.fragment);
       showStatus(null);
+      // Potvrda koja je stigla dok sesija jos nije imala adresu sada dobiva kamo ici.
+      void profil.flush();
     })();
   });
 
   const outcome = await openWorkspace(location.hash, storage);
   showStatus(outcome.notice);
-  showState(outcome.context);
+  upisi(outcome.context);
 
   if (outcome.session) {
     sessionId = outcome.session.id;
@@ -181,6 +195,10 @@ async function start(): Promise<void> {
     restoredFile = fileFromLocalDocumentSession(outcome.session);
     // Snimke revizija iz sesije (stariji zapisi ih nemaju): usporedba prezivi ponovno ucitavanje stranice.
     revisions.restore(outcome.session.workspace?.revision, outcome.session.workspace?.previousRevision);
+    // REDOSLIJED JE UGOVOR (gard: tests/thin-route-mount.test.ts). Profil sesije ide POSLIJE
+    // `initAnalyzerApp` (koje kroz `restorePreferences` vraca globalne postavke, koje bi ga inace
+    // pregazile) i PRIJE `restoreDocument` (cija detekcija iz dokumenta bi ga inace pregazila).
+    profil.restore(outcome.session.profile);
     const restored = await restoreDocument(outcome.session, () => loadAnalyzerDocument(restoredFile!));
     if (restored.kind === 'refused') showStatus(restored.notice);
   }

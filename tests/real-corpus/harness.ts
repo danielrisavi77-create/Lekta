@@ -400,6 +400,11 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     // zvao samo dva graditelja, pa je mjerio uzu povrsinu od one koju korisnik stvarno dobije:
     // sirenje korpusa s 12 na 50 stvarnih radova nije pomaklo pokrivenost s 4 fixera jer
     // numeriranje, sadrzaj, naslovnica, natpisi, bibliografija i sekcije nikad nisu ni ponudjeni.
+    // "ISTI" je istina tek od E2 (2026-09-12): do tada je app.ts imao vlastiti inline sastav koji se
+    // od modula razlikovao u redoslijedu i clanstvu (gard: tests/repair-item-assembly-single-source).
+    // Preostala razlika, namjerna: sucelje heading-case drzi u zasebnoj sekciji s vlastitom privolom
+    // (splitSeparateConsentItems), a harness ga ostavlja u popisu pa ga defaultSelectedItems uzme
+    // kad je prekrsen. Harness time mjeri VISE nego korisnikov zadani klik, ne manje.
     const items = buildAllRepairableItems({
       result: before,
       profile,

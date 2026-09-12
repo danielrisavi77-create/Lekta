@@ -25,7 +25,8 @@ export type LocalDocumentSessionStoreErrorCode =
   | 'request'
   | 'transaction'
   | 'not-found'
-  | 'invalid-record';
+  | 'invalid-record'
+  | 'conflict';
 
 export interface LocalDocumentSessionStorageInfo {
   kind: 'indexeddb' | 'memory';
@@ -52,6 +53,7 @@ function messageFor(code: LocalDocumentSessionStoreErrorCode): string {
     case 'transaction': return 'Transakcija lokalne pohrane dokumenta nije uspjela.';
     case 'not-found': return 'Lokalna dokumentna sesija više ne postoji ili je istekla.';
     case 'invalid-record': return 'Lokalna dokumentna sesija nije valjana.';
+    case 'conflict': return 'Rad je u međuvremenu spremljen s drugog mjesta; promjena nije primijenjena.';
   }
 }
 
@@ -148,10 +150,18 @@ export class MemoryDocumentSessionStore implements LocalDocumentSessionStore {
     return sanitizeLocalDocumentSession(sanitized, now);
   }
 
-  async update(id: string, update: LocalDocumentSessionUpdate): Promise<LocalDocumentSessionV1> {
+  async update(
+    id: string,
+    update: LocalDocumentSessionUpdate,
+    expectedRevision?: number,
+  ): Promise<LocalDocumentSessionV1> {
     const now = this.currentTime();
     const current = await this.get(id, now);
     if (!current) throw storeError('not-found');
+    // Ista semantika kao kod trajne pohrane, inace testovi rute mjere drukciji ugovor od produkcije.
+    if (expectedRevision !== undefined && (current.revision ?? 0) !== expectedRevision) {
+      throw storeError('conflict');
+    }
 
     let updated: LocalDocumentSessionV1;
     try {
@@ -159,8 +169,8 @@ export class MemoryDocumentSessionStore implements LocalDocumentSessionStore {
     } catch (error) {
       throw storeError('invalid-record', error);
     }
-    this.records.set(id, updated);
-    return sanitizeLocalDocumentSession(updated, now)!;
+    await this.put(updated);
+    return updated;
   }
 
   async list(now = this.currentTime()): Promise<LocalDocumentSessionSummary[]> {
@@ -255,19 +265,108 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
     return sanitized;
   }
 
-  async update(id: string, update: LocalDocumentSessionUpdate): Promise<LocalDocumentSessionV1> {
+  /**
+   * IZMJENA RADA U JEDNOJ TRANSAKCIJI (compare-and-swap; korak C2, 2026-09-12).
+   *
+   * Do danas je ovo bio read-modify-write kroz DVIJE transakcije: `get` (readonly), pa `put`
+   * (readwrite). Izmedju njih je postojao prozor u kojem je drugi pisac mogao zapisati svoje, a
+   * ovaj bi ga zatim pregazio bez ijednog traga. Pohrana nije imala nista sto bi to otkrilo.
+   *
+   * Sada citanje i pisanje zive u ISTOJ `readwrite` transakciji, a `expectedRevision` je uvjet:
+   * zapis koji se u meduvremenu pomaknuo daje `conflict` umjesto tihog gubitka. Odluku sto dalje
+   * (ponovno citanje, spajanje, pa jos jedan pokusaj) donosi pisac, ne pohrana.
+   */
+  async update(
+    id: string,
+    update: LocalDocumentSessionUpdate,
+    expectedRevision?: number,
+  ): Promise<LocalDocumentSessionV1> {
     const now = this.currentTime();
-    const current = await this.get(id, now);
-    if (!current) throw storeError('not-found');
+    const database = await this.database();
 
-    let updated: LocalDocumentSessionV1;
-    try {
-      updated = applyLocalDocumentSessionUpdate(current, update, now);
-    } catch (error) {
-      throw storeError('invalid-record', error);
-    }
-    await this.put(updated);
-    return updated;
+    return new Promise<LocalDocumentSessionV1>((resolve, reject) => {
+      let transaction: IDBTransaction;
+      try {
+        transaction = database.transaction(
+          [LOCAL_DOCUMENT_STORE_NAME, LOCAL_DOCUMENT_SUMMARY_STORE_NAME],
+          'readwrite',
+        );
+      } catch (error) {
+        reject(storeError('transaction', error));
+        return;
+      }
+
+      let settled = false;
+      let zapisano: LocalDocumentSessionV1 | null = null;
+      const fail = (code: LocalDocumentSessionStoreErrorCode, cause?: unknown) => {
+        if (settled) return;
+        settled = true;
+        reject(storeError(code, cause));
+      };
+      // Prekid se trazi TEK nakon `fail`, jer `onabort` inace javi `transaction` i sakrije pravi
+      // razlog (`conflict` ili `not-found`). Zastavica `settled` cuva prvi, tocan odgovor.
+      const prekini = () => { try { transaction.abort(); } catch { /* vec zatvorena */ } };
+
+      transaction.onerror = () => fail('transaction', transaction.error);
+      transaction.onabort = () => fail('transaction', transaction.error);
+      transaction.oncomplete = () => {
+        if (settled) return;
+        settled = true;
+        if (zapisano) resolve(zapisano);
+        else reject(storeError('not-found'));
+      };
+
+      let sessions: IDBObjectStore;
+      let summaries: IDBObjectStore;
+      try {
+        sessions = transaction.objectStore(LOCAL_DOCUMENT_STORE_NAME);
+        summaries = transaction.objectStore(LOCAL_DOCUMENT_SUMMARY_STORE_NAME);
+      } catch (error) {
+        fail('transaction', error);
+        return;
+      }
+
+      let citanje: IDBRequest;
+      try {
+        citanje = sessions.get(id);
+      } catch (error) {
+        fail('request', error);
+        return;
+      }
+      citanje.onerror = () => { fail('request', citanje.error); };
+      citanje.onsuccess = () => {
+        const current = sanitizeLocalDocumentSession(citanje.result, now);
+        if (!current) { fail('not-found'); prekini(); return; }
+
+
+        if (expectedRevision !== undefined && (current.revision ?? 0) !== expectedRevision) {
+          fail('conflict');
+          prekini();
+          return;
+        }
+
+        let updated: LocalDocumentSessionV1;
+        try {
+          updated = applyLocalDocumentSessionUpdate(current, update, now);
+        } catch (error) {
+          fail('invalid-record', error);
+          prekini();
+          return;
+        }
+
+        try {
+          const upisSesije = sessions.put(updated);
+          upisSesije.onerror = () => { fail('request', upisSesije.error); };
+          const upisSazetka = summaries.put(summarizeLocalDocumentSession(updated));
+          upisSazetka.onerror = () => { fail('request', upisSazetka.error); };
+        } catch (error) {
+          fail('request', error);
+          prekini();
+          return;
+        }
+        zapisano = updated;
+      };
+    });
   }
 
   async list(now = this.currentTime()): Promise<LocalDocumentSessionSummary[]> {

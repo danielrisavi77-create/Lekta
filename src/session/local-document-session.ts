@@ -1,9 +1,14 @@
 import type { IntakeOk } from '../docx/intake-gate';
+// Model uvozi PRAVILO spajanja, a ne obrnuto: `session-merge` iz ovog modula uzima samo tipove
+// (`import type`), pa u izvodjenju ciklusa nema. Pravilo zivi na JEDNOM mjestu, jer bi druga
+// kopija u pohrani i u pisacu bila dvije presude o istom pitanju.
+import { mergeSessionWork } from './session-merge';
 import { sanitizeStoredRevision, type StoredRevision } from './revision-storage';
 
 export const LOCAL_DOCUMENT_SCHEMA_VERSION = 1 as const;
 export const LOCAL_DOCUMENT_TTL_MS = 24 * 60 * 60 * 1_000;
 export const STORED_ANALYSIS_SCHEMA_VERSION = 1 as const;
+export const REPAIR_SELECTION_SCHEMA_VERSION = 1 as const;
 
 const SESSION_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const WORKSPACE_STAGES = new Set<LocalWorkspaceSnapshot['stage']>([
@@ -26,10 +31,37 @@ export interface StoredAnalysisSnapshot {
   payload: unknown;
 }
 
+/**
+ * ODABIR POPRAVAKA, zapisan po IDENTITETU a ne po polozaju.
+ *
+ * `selected` nosi kljuceve oblika `fixerId|ruleId`, nikad indekse. Razlog je izmjeren, ne stilski:
+ * `buildAllRepairableItems` gradi popis iz SVJEZE analize i uvjetno (`only`, `includeNonViolated`,
+ * predlosci naslova), pa dvije analize istog dokumenta legitimno daju isti skup u drugom poretku i
+ * drugoj duljini. Vracanje po indeksu kvacilo bi krive kucice, i to tiho.
+ *
+ * `itemsDigest` je otisak PONUDJENOG skupa. Bez njega bi se odabir vracao na popis stavaka koji s
+ * njim nema veze: kljucevi bi se slucajno preklopili i korisnik bi dobio oznaceno ono sto nije
+ * birao. Kad se otisak ne poklapa, odabir se ODBACUJE, ne krpa.
+ *
+ * STO OVDJE NAMJERNO NIJE: odabir unutar naprednih formi (koja bibliografska jedinica, koji citat).
+ * Te su odluke izracunate iz JEDNE konkretne analize, pa bi ih vracanje na ponovno izvedenu formu
+ * primijenilo na stanje dokumenta koje korisnik nije vidio. Stavke s formom vracaju se neoznacene
+ * i sucelje to kaze.
+ */
+export interface RepairSelectionSnapshot {
+  schemaVersion: typeof REPAIR_SELECTION_SCHEMA_VERSION;
+  itemsDigest: string;
+  selected: string[];
+  /** Preklopnik "uskladi i rucno formatirane dijelove". */
+  deep: boolean;
+  updatedAt: number;
+}
+
 export interface LocalWorkspaceSnapshot {
   stage: 'profile' | 'results' | 'repairPlan' | 'comparison' | 'submission';
   selectedFindingId?: string;
   analysis?: StoredAnalysisSnapshot;
+  repairSelection?: RepairSelectionSnapshot;
   /** T12: snimka nalaza tekuce analize (bez sadrzaja rada), za usporedbu verzija. Neobavezno: stariji zapisi je nemaju. */
   revision?: StoredRevision;
   /** T12: snimka prethodne verzije istog rada, prenesena pri ucitavanju nove verzije. */
@@ -50,6 +82,14 @@ export interface LocalDocumentSessionV1 {
   intake: IntakeOk;
   profile?: ConfirmedProfileSnapshot;
   workspace?: LocalWorkspaceSnapshot;
+  /**
+   * Generacija zapisa. Raste za jedan na svaku izmjenu rada.
+   *
+   * OPCIONALNA JE NAMJERNO. Obavezno polje bi trazilo dizanje `LOCAL_DOCUMENT_SCHEMA_VERSION`, a
+   * to baca SVE postojece sesije, dakle i bajtove dokumenata koje je korisnik vec ucitao. Odsutna
+   * revizija se cita kao 0, pa stari zapisi i dalje rade.
+   */
+  revision?: number;
 }
 
 export interface LocalDocumentSessionUpdate {
@@ -68,7 +108,21 @@ export interface LocalDocumentSessionSummary {
 export interface LocalDocumentSessionStore {
   put(session: LocalDocumentSessionV1): Promise<void>;
   get(id: string, now?: number): Promise<LocalDocumentSessionV1 | null>;
-  update(id: string, update: LocalDocumentSessionUpdate): Promise<LocalDocumentSessionV1>;
+  /**
+   * Izmjena rada. `expectedRevision` je GENERACIJA koju pisac misli da ima.
+   *
+   * Kad je zadana i ne poklapa se s onom u pohrani, izmjena se ODBIJA kodom `conflict` umjesto da
+   * pregazi tudji zapis. Bez tog uvjeta dvije kartice (ili zakasnjeli zapis iste kartice) tiho
+   * gube rad: tko zapise drugi, pobijedi, i nista to ne prijavi.
+   *
+   * Izostavljena vrijednost znaci bezuvjetan upis, i to je za pozivatelja koji NEMA sto izgubiti
+   * (prvi zapis, migracije, testovi).
+   */
+  update(
+    id: string,
+    update: LocalDocumentSessionUpdate,
+    expectedRevision?: number,
+  ): Promise<LocalDocumentSessionV1>;
   list(now?: number): Promise<LocalDocumentSessionSummary[]>;
   delete(id: string): Promise<void>;
   deleteExpired(now?: number): Promise<number>;
@@ -219,7 +273,36 @@ function sanitizeAnalysis(value: unknown): StoredAnalysisSnapshot | null {
   }
 }
 
-function sanitizeWorkspaceMetadata(value: unknown): Omit<LocalWorkspaceSnapshot, 'analysis'> | null {
+/**
+ * Strog kao i ostali: tocan skup kljuceva, prvo odstupanje vraca `null`.
+ *
+ * Duplikati u `selected` se ODBIJAJU umjesto da se tiho saziimaju: dvostruki kljuc znaci da je
+ * zapis nastao krivim putem, a saziimanje bi taj put sakrilo.
+ */
+function sanitizeRepairSelection(value: unknown): RepairSelectionSnapshot | null {
+  if (!isRecord(value)) return null;
+  if (value.schemaVersion !== REPAIR_SELECTION_SCHEMA_VERSION) return null;
+  if (typeof value.itemsDigest !== 'string' || value.itemsDigest.length === 0) return null;
+  if (typeof value.deep !== 'boolean' || !isFiniteTimestamp(value.updatedAt)) return null;
+  if (!Array.isArray(value.selected)) return null;
+
+  const selected: string[] = [];
+  for (const key of value.selected) {
+    if (typeof key !== 'string' || key.length === 0) return null;
+    if (selected.includes(key)) return null;
+    selected.push(key);
+  }
+
+  return {
+    schemaVersion: REPAIR_SELECTION_SCHEMA_VERSION,
+    itemsDigest: value.itemsDigest,
+    selected,
+    deep: value.deep,
+    updatedAt: value.updatedAt,
+  };
+}
+
+function sanitizeWorkspaceMetadata(value: unknown): Omit<LocalWorkspaceSnapshot, 'analysis' | 'repairSelection'> | null {
   if (!isRecord(value) || typeof value.stage !== 'string') return null;
   if (!WORKSPACE_STAGES.has(value.stage as LocalWorkspaceSnapshot['stage'])) return null;
   if (!(value.selectedFindingId === undefined || typeof value.selectedFindingId === 'string')) return null;
@@ -235,6 +318,11 @@ function sanitizeWorkspace(value: unknown): LocalWorkspaceSnapshot | null {
   const workspace: LocalWorkspaceSnapshot = { ...metadata };
   const analysis = sanitizeAnalysis((value as Record<string, unknown>).analysis);
   if (analysis) workspace.analysis = analysis;
+  // Ista asimetrija kao za analizu, i iz istog razloga: nevaljan ODABIR ne smije srusiti sesiju,
+  // jer bi time korisnik zbog krivo zapisane kucice izgubio i dokument. Odabir se izostavi, a rad
+  // ostaje.
+  const repairSelection = sanitizeRepairSelection((value as Record<string, unknown>).repairSelection);
+  if (repairSelection) workspace.repairSelection = repairSelection;
   // Revizije su NEOBAVEZNE i sanitiziraju se zasebno: neispravna snimka se izostavlja, ne rusi sesiju (stara sesija
   // ostaje citljiva, plan T12). Prazan `previousRevision` bez `revision` je dopusten (nova verzija jos nije analizirana).
   const revision = sanitizeStoredRevision((value as Record<string, unknown>).revision);
@@ -390,6 +478,13 @@ export function sanitizeLocalDocumentSession(
     session.workspace = workspace;
   }
 
+  // Nevaljana revizija se IZOSTAVLJA (cita se kao 0), a ne rusi sesiju: generacija je mehanika
+  // pisanja, ne korisnikov rad, pa zbog nje nitko ne smije izgubiti dokument. Posljedica je
+  // najgore jedan odbijen zapis, koji pisac ponovi.
+  if (typeof record.revision === 'number' && Number.isSafeInteger(record.revision) && record.revision >= 0) {
+    session.revision = record.revision;
+  }
+
   return session;
 }
 
@@ -433,8 +528,27 @@ export function applyLocalDocumentSessionUpdate(
   const candidate: LocalDocumentSessionV1 = { ...session };
   if (update.profile === null) delete candidate.profile;
   else if (update.profile !== undefined) candidate.profile = update.profile;
+  // WORKSPACE SE SPAJA, NE ZAMJENJUJE (ispravak 2026-09-12).
+  //
+  // Do danas je parcijalni patch prepisivao CIJELI `workspace`. Posljedica je bila tiha i sigurna:
+  // `revisions.persist` salje `{stage, revision, previousRevision}` i time brise `analysis` i
+  // `repairSelection`; pisac odabira salje `{repairSelection}` i time brise snimke verzija. Svaki
+  // pisac je bio u pravu za svoje polje i krivu za tudje.
+  //
+  // `mergeSessionWork` je vec presudjivao po polju, ali samo u grani SUKOBA u `session-writer.ts`;
+  // na uspjesnom putu se nije izvodio uopce. Time je ponasanje ovisilo o tome je li slucajno doslo
+  // do sukoba, sto je najgori oblik: tocno kad nema utrke, gubi se rad.
   if (update.workspace === null) delete candidate.workspace;
-  else if (update.workspace !== undefined) candidate.workspace = update.workspace;
+  else if (update.workspace !== undefined) {
+    const spojeno = mergeSessionWork(
+      candidate.workspace ? { workspace: candidate.workspace } : {},
+      { workspace: update.workspace },
+    );
+    candidate.workspace = spojeno.workspace;
+  }
+
+  // Generacija raste PRIJE sanitizacije, da je i ona provuce kroz istu provjeru.
+  candidate.revision = (session.revision ?? 0) + 1;
 
   const sanitized = sanitizeLocalDocumentSession(candidate, now);
   if (!sanitized) throw new TypeError('Ažuriranje lokalne dokumentne sesije nije valjano.');

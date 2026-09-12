@@ -54,10 +54,10 @@ describe('wizard-machine: nedopusteno je stvarno nedopusteno', () => {
     let dopusteni = 0;
     for (const s of SVA_STANJA) for (const d of SVI_DOGADAJI) if (transition(s, d) !== null) dopusteni += 1;
     const ukupno = SVA_STANJA.length * SVI_DOGADAJI.length;
-    expect(ukupno).toBe(40);
+    expect(ukupno).toBe(60);
     // 1 (dokument) + 2 (profil) + 3 (provjera) + 2 (analiza) + 1 (rezultat)
-    expect(dopusteni, 'izmjereno: 9 dopustenih od 40 mogucih parova').toBe(9);
-    // Kad bi `transition` bio `switch` koji sve propusta, ovdje bi stajalo 40.
+    expect(dopusteni, 'izmjereno: 12 dopustenih od 60 mogucih parova').toBe(12);
+    // Kad bi `transition` bio `switch` koji sve propusta, ovdje bi stajalo 60.
     expect(dopusteni).toBeLessThan(ukupno);
   });
 
@@ -70,7 +70,7 @@ describe('wizard-machine: viewFor je jedini izvor prikaza', () => {
   it('svako stanje daje TOCNO jedan prikaz', () => {
     for (const s of SVA_STANJA) {
       const v = viewFor(s);
-      expect(['wizardView', 'progressView', 'resultView']).toContain(v.prikaz);
+      expect(['wizardView', 'progressView', 'resultView', 'repairView']).toContain(v.prikaz);
     }
   });
 

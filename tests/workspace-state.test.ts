@@ -1,124 +1,80 @@
 import { describe, expect, it } from 'vitest';
-import {
-  initialContext, transition, canLinkSession, hasDocument, hasConfirmedProfile,
-  WORKSPACE_STATES, type WorkspaceContext, type WorkspaceEvent, type WorkspaceState,
-} from '../src/routes/workspace/workspace-state';
+import { canLinkSession, emptyLedger } from '../src/routes/workspace/workspace-state';
+// Kompozitori zive u `bootstrap.ts`; razlog je zapisan ondje.
+import { afterDocumentAccepted, afterPersist } from '../src/routes/workspace/bootstrap';
 
 /**
- * STROJ STANJA RADNOG PROSTORA. Gardovi ne mjere da se prijelazi vrte, nego tri pravila koja bi
- * bez njih otisla tiho: analiza prije potvrde profila, greska koja baci rad, i poveznica na
- * sesiju koja nije zapisana.
+ * KNJIGA SESIJE RADNOG PROSTORA (prije: stroj stanja; povuceno 2026-09-12, korak B5).
+ *
+ * STO JE OVDJE PRIJE STAJALO, i zasto je otislo: tvrdnje o dvanaest stanja i osamnaest dogadjaja,
+ * ukljucujuci `analyzing`, `results`, `repairPlan`, `comparison` i `submission`. Izmjereno
+ * 2026-09-10: nijedno od tih stanja produkcija nikad nije dosegla, a te dogadjaje nitko nije
+ * emitirao izvan ovog testa. Gard koji ne moze pasti nije pokrivenost, pa je otisao zajedno sa
+ * strojem. Stanja korisnickog toka vozi `src/ui/wizard-machine.ts`, koji stvarno pise prikaz, a
+ * njegove tvrdnje zive u `tests/wizard-machine.test.ts` i `tests/wizard-phase.test.ts`.
+ *
+ * OD TRI PRAVILA koja je stari uvod naveo kao razlog svog postojanja, dva su presla u stroj
+ * prikaza (analiza ne pocinje prije potvrde profila; greska ne baci rad), a trece je ostalo ovdje
+ * i tek se sada stvarno mjeri: poveznica na sesiju koja nije zapisana.
  */
 
-const run = (events: WorkspaceEvent[], fragment = false): WorkspaceContext =>
-  events.reduce<WorkspaceContext>((ctx, e) => transition(ctx, e), initialContext(fragment));
-
-/** Put od praznog do rezultata; koristi ga vecina tvrdnji ispod. */
-const TO_RESULTS: WorkspaceEvent[] = [
-  'documentOffered', 'documentAccepted', 'sessionPersisted', 'profileConfirmed', 'analysisCompleted',
-];
-
-describe('stroj stanja radnog prostora', () => {
-  it('bez sesije u fragmentu krece prazan, sa sesijom krece u obnovu', () => {
-    expect(initialContext(false).state).toBe('empty');
-    expect(initialContext(true).state).toBe('restoring');
+describe('knjiga sesije', () => {
+  it('prazna knjiga nema ni dokument ni zapis', () => {
+    const l = emptyLedger();
+    expect(l.documentPresent).toBe(false);
+    expect(l.sessionPersisted).toBe(false);
+    expect(canLinkSession(l)).toBe(false);
   });
 
-  it('osnovni tok iz specifikacije prolazi do predaje', () => {
-    const ctx = run([...TO_RESULTS, 'repairPlanOpened', 'repairStarted', 'repairCompleted', 'submissionOpened']);
-    expect(ctx.state).toBe('submission');
-    expect(ctx.rejected).toBeNull();
+  /**
+   * OVA TVRDNJA JE NOVA, i to je poanta koraka.
+   *
+   * U starom stroju se `true` nikad nije izmjerio: jedina grana koja je postavljala
+   * `sessionPersisted` zivjela je u `main.ts`, a nijedan test je nije prosao. Gard je time tvrdio
+   * samo negativnu stranu. Sada se mjere OBA ishoda.
+   *
+   * Pronalazak sesije u pohrani i dalje NE daje `true`, i to je zatecen ugovor koji ovaj korak
+   * namjerno cuva: poveznica se nudi samo za zapis koji smo MI napravili.
+   */
+  it('poveznica se smije ponuditi TEK kad zapis stvarno postoji', () => {
+    expect(canLinkSession(afterPersist(emptyLedger(), true))).toBe(true);
+    expect(canLinkSession(afterPersist(emptyLedger(), false)), 'neuspjeh zapisa ne nudi poveznicu').toBe(false);
+    expect(canLinkSession(emptyLedger()), 'pronadjen zapis nije nas zapis').toBe(false);
   });
 
-  it('ANALIZA NE POCINJE PRIJE POTVRDE PROFILA', () => {
-    // Bez ovoga bi se rad mjerio po profilu koji korisnik nije vidio, pa bi se ocjena odnosila
-    // na pravila drugog studija. Jedini ulaz u `analyzing` je iz `profile`.
-    // PAZI: odbijen dogadjaj ostavlja stanje nepromijenjeno, pa bi `state === 'analyzing'` samo
-    // po sebi lazno prijavilo i sam `analyzing` kao vlastiti ulaz. Broje se ISKLJUCIVO prihvaceni
-    // prijelazi. Prva izvedba ovog testa upravo je na tome pala.
-    const SVI: WorkspaceEvent[] = ['restoreFound', 'restoreEmpty', 'restoreFailed', 'documentOffered',
-      'documentAccepted', 'documentRejected', 'sessionPersisted', 'sessionPersistFailed',
-      'profileConfirmed', 'analysisCompleted', 'analysisFailed', 'repairPlanOpened', 'repairStarted',
-      'repairCompleted', 'repairFailed', 'submissionOpened', 'documentReplaced', 'recover'];
-    const ulazi = WORKSPACE_STATES.filter((from) => {
-      const ctx: WorkspaceContext = { state: from, lastSafe: null, sessionPersisted: true, rejected: null };
-      return SVI.some((e) => {
-        const res = transition(ctx, e);
-        return res.rejected === null && res.state === 'analyzing' && from !== 'analyzing';
-      });
-    });
-    expect(ulazi).toEqual(['profile']);
-  });
-
-  it('sesija spremna JOS nije potvrdjen profil', () => {
-    const ctx = run(['documentOffered', 'documentAccepted']);
-    expect(ctx.state).toBe('sessionReady');
-    expect(hasDocument(ctx.state)).toBe(true);
-    expect(hasConfirmedProfile(ctx.state)).toBe(false);
-  });
-
-  it('GRESKA ANALIZE NE BACI RAD: povratak vodi na potvrdjen profil, ne na pocetak', () => {
-    const failed = run(['documentOffered', 'documentAccepted', 'sessionPersisted', 'profileConfirmed', 'analysisFailed']);
-    expect(failed.state).toBe('error');
-    expect(hasDocument(failed.state, failed.lastSafe)).toBe(true);
-    const back = transition(failed, 'recover');
-    expect(back.state).toBe('profile');
-  });
-
-  it('GRESKA POPRAVKA NE BACI ANALIZU: povratak vodi na rezultate', () => {
-    const failed = run([...TO_RESULTS, 'repairPlanOpened', 'repairStarted', 'repairFailed']);
-    expect(failed.state).toBe('error');
-    const back = transition(failed, 'recover');
-    expect(back.state).toBe('results');
-    expect(hasConfirmedProfile(back.state)).toBe(true);
-  });
-
-  it('BEZ ZAPISA NEMA POVEZNICE: neuspjela pohrana vodi dalje, ali bez ponude sesije', () => {
-    // Degradacija: rad ostaje u kartici. Poveznica bi vodila na sesiju koja ne postoji.
-    const ok = run(['documentOffered', 'documentAccepted', 'sessionPersisted']);
-    const degraded = run(['documentOffered', 'documentAccepted', 'sessionPersistFailed']);
-    expect(ok.state).toBe('profile');
-    expect(degraded.state).toBe('profile'); // isto stanje...
-    expect(canLinkSession(ok)).toBe(true);
-    expect(canLinkSession(degraded)).toBe(false); // ...ali NE ista ponuda
+  it('prihvacen dokument JOS nije zapisana sesija', () => {
+    const l = afterDocumentAccepted(emptyLedger());
+    expect(l.documentPresent).toBe(true);
+    expect(l.sessionPersisted, 'u trenutku prihvata zapis jos ne postoji').toBe(false);
+    expect(canLinkSession(l)).toBe(false);
   });
 
   it('zamjena dokumenta ponistava zapis, jer stara sesija opisuje drugi rad', () => {
-    const ctx = run([...TO_RESULTS, 'documentReplaced']);
-    expect(ctx.state).toBe('validating');
-    expect(canLinkSession(ctx)).toBe(false);
+    const zapisana = afterPersist(afterDocumentAccepted(emptyLedger()), true);
+    expect(canLinkSession(zapisana)).toBe(true);
+    const zamijenjen = afterDocumentAccepted(zapisana);
+    expect(zamijenjen.documentPresent).toBe(true);
+    expect(canLinkSession(zamijenjen), 'poveznica bi vodila na krivi dokument').toBe(false);
   });
 
-  it('u gresci se poveznica ne nudi ni kad je sesija bila zapisana', () => {
-    const failed = run(['documentOffered', 'documentAccepted', 'sessionPersisted', 'profileConfirmed', 'analysisFailed']);
-    expect(failed.sessionPersisted).toBe(true);
-    expect(canLinkSession(failed)).toBe(false);
+  it('neuspjeh zapisa NE baca dokument: rad ostaje u kartici', () => {
+    const l = afterPersist(afterDocumentAccepted(emptyLedger()), false);
+    expect(l.documentPresent, 'dokument se ne smije izgubiti zbog pohrane').toBe(true);
+    expect(canLinkSession(l)).toBe(false);
   });
 
-  it('nepoznat dogadjaj se ODBIJA i imenuje, a stanje ostaje', () => {
-    // Tiho ignoriran dogadjaj vidi se tek kao zaglavljeno sucelje, bez ijednog traga.
-    const ctx = run(['documentOffered']);
-    const after = transition(ctx, 'repairStarted');
-    expect(after.state).toBe('validating');
-    expect(after.rejected).toMatch(/validating.*repairStarted/);
+  /**
+   * Gard bez dokaza da grize se ne racuna. Podmece se tocno kvar zbog kojeg knjiga postoji:
+   * poveznica ponudena zato sto dokument POSTOJI, umjesto zato sto je zapis USPIO.
+   */
+  it('gard grize: poveznica bez zapisa mora biti prijavljena', () => {
+    const posteno = afterDocumentAccepted(emptyLedger());
+    expect(canLinkSession(posteno), 'baseline je izmjeren, ne pretpostavljen').toBe(false);
+    const popustljiv = (l: { documentPresent: boolean }): boolean => l.documentPresent;
+    expect(popustljiv(posteno), 'podmetnuta popustljiva provjera mora dati drukciji odgovor').toBe(true);
   });
 
-  it('prihvacen dogadjaj brise raniji razlog odbijanja', () => {
-    const rejected = transition(run(['documentOffered']), 'repairStarted');
-    expect(rejected.rejected).toBeTruthy();
-    expect(transition(rejected, 'documentAccepted').rejected).toBeNull();
-  });
-
-  it('svako stanje ima unos u tablici, pa nijedno nije slijepa ulica bez namjere', () => {
-    const states: WorkspaceState[] = ['restoring', 'empty', 'validating', 'sessionReady', 'profile',
-      'analyzing', 'results', 'repairPlan', 'repairing', 'comparison', 'submission', 'error'];
-    expect([...WORKSPACE_STATES].sort()).toEqual([...states].sort());
-  });
-
-  it('obnova koja nista ne nadje zavrsava prazna, ne u gresci', () => {
-    // Prazna ili istekla sesija je uredan ishod, ne kvar: korisnik jednostavno pocinje iznova.
-    expect(run(['restoreEmpty'], true).state).toBe('empty');
-    expect(run(['restoreFailed'], true).state).toBe('empty');
-    expect(run(['restoreFound'], true).state).toBe('sessionReady');
+  it('SENTINEL: knjiga nosi tocno dvije cinjenice, pa se ne moze tiho pretvoriti natrag u stroj', () => {
+    expect(Object.keys(emptyLedger()).sort()).toEqual(['documentPresent', 'sessionPersisted']);
   });
 });
