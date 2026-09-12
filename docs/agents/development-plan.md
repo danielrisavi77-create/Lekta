@@ -682,3 +682,243 @@ Za svaki novi feature koristiti postojeći mehanizam kontrole dostupnosti ako po
 - [Inspekcija komentara i revizija](https://github.com/danielrisavi77-create/Lekta/blob/3c1af21b0808f8cc1ec68b5f4ec813f4d40d65db/src/analysis/final-document-inspector.ts)
 
 **Završni cilj plana:** pouzdan osnovni tok, mjerena kvaliteta popravka i jasne granice dokaza; zatim korisna usporedba nalaza kroz verzije i zaseban pilot mentorovih zadataka.
+
+## Podplan F - program do javnog lansiranja (T16-T47)
+
+Ovaj podplan je dodan 2026-09-12 iz vlasnikova plana. Pune checkliste, obrazloženja i vanjske izvore
+NE prepisujemo ovamo: kanonski tekst je `docs/agents/plan-do-live-2026-09-12.md` (odjeljci 6 i 11), a
+ovdje je indeks po zadatku. Kanonski status i red ostaju u `docs/agents/tasks.json`; treći sustav statusa
+se ne uvodi.
+
+Plan je pisan nad masterom `7e52bc66551d7d920ab83810f87f0c52a10f8c16`. Polazište unosa je
+`afccbdd78af4d09f7ff9097adc45e05e3fc41287`, koji se od njega razlikuje samo za PR #74 i #75 (workflow
+bez Fablea), bez izmjene aplikacijskog koda.
+
+**P0** znači sigurnost, podatke, naplatu ili pouzdanost izdanja zbog kojih se objava zaustavlja. **P1**
+znači dovršenost i kvalitetu potrebnu za cijeli dogovoreni proizvod; nije sinonim za "ostaviti za
+poslije". Ovisnost znači da završni dokaz paketa mora koristiti dovršene prethodnike; istraživanje i
+priprema mogu početi ranije.
+
+### Valovi i kritični put
+
+| Val | Fokus i redoslijed | Izlazni dokaz | Okvir napora |
+| --- | --- | --- | --- |
+| A | T16, početak T17, T18, T19 | Jedinstven plan, operativni staging, pouzdana gradnja i identitet kandidata | 3-5 dana |
+| B | T20-T25, T36, početak T41 | Usklađen backend, račun, katalog, testna kupnja, oporavak bez dvostrukog izvršenja | 7-12 dana |
+| C | T26-T29 | Dokazana analiza, učinak popravaka, pokrivenost svih profila i citata | 10-20+ dana |
+| D | T30-T35, T37-T40 | Cijelo sučelje i pomoćne/integracijske funkcije dovršene | 8-15 dana |
+| E | Završetak T41, T42-T46 | Stvarni E2E, performanse, sigurnost, operacije i kandidat za pilot | 4-7 dana |
+| F | T15, T47 | Pilot, sanacije, javna objava i 7 dana početnog nadzora | 3-6 radnih dana, uz protek vremena za promatranje |
+
+**Kritični put objave:** T18 -> T20 -> T22/T24 -> T25/T27 -> T30 -> T44 -> T46 -> T15 -> T47.
+
+T28, T34/T35 i T45 mogu postati dodatni kritični put ako se pokažu praznine u izvorima, vanjskoj
+infrastrukturi ili oporavku podataka. Rasponi se dijelom preklapaju i ne zbrajaju se kao ponuda; za
+jednog aktivnog implementatora uz neovisni review plan računa okvirno 35-65 radnih dana. Koordinator
+bira sljedeći spreman zadatak prema kritičnom putu, ne prema najnižem broju.
+
+### T16 - Aktualno polazište i jedinstven plan do live
+
+**Prioritet:** P0. **Ovisi o:** T00. **Mjesta rada:** `docs/agents/development-plan.md`, `docs/agents/tasks.json`, `docs/AUDIT_MASTER.md`, `docs/agents/autonomy-baseline.md`, `docs/quality/lekta-plan-status.md`.
+
+**Gotovo kada:** validator reda prolazi, nema ciklusa ni dva kanonska statusa, svaki potvrđeni nalaz ima vlasnika i povezani T-zadatak, a stari nalazi nose datum i status; nema blanket tvrdnje "aplikacija X% gotova".
+
+### T17 - Dokazati postojeći workflow agenata bez dodatne naplate
+
+**Prioritet:** P1. **Ovisi o:** T16. **Mjesta rada:** `scripts/agents/core.mjs`, `scripts/agents/cli.mjs`, `scripts/autonomy/`, `config/autonomy.example.json`, `docs/agents/README.md`, `docs/agents/autonomy-runbook.md`.
+
+**Gotovo kada:** mali zadatak prolazi plan, implementaciju, neovisni review, dokaz i integraciju; ponovno pokretanje ne stvara dupli posao, greška ili limit ne uzrokuju naplatu, a kontroler ne proglašava sam `done`. Dokaz su stvarni izlazi `doctor`, `tick` i `status`.
+
+### T18 - Obnoviti staging i uskladiti migracijsku disciplinu
+
+**Prioritet:** P0. **Ovisi o:** T16. **Mjesta rada:** `supabase/config.toml`, `supabase/migrations/`, `scripts/migration-identity.mjs`, DB smoke skripte, postojeći deploy runbookovi.
+
+**Gotovo kada:** novi testni korisnik u stagingu prolazi auth, pravila, testni popravak i privatno preuzimanje, DB provjere prolaze, a manifest razlikuje okruženja; nema neplanirane promjene produkcijskih podataka. Ograničenje računa ili plana ostaje zapisan blokator, ne prolaz.
+
+### T19 - Pouzdana produkcijska gradnja i dokaz izdanja
+
+**Prioritet:** P0. **Ovisi o:** T16. **Mjesta rada:** `scripts/build-production.mjs`, `scripts/write-build-info.mjs`, `scripts/release-check.mjs`, `scripts/release-proof-core.mjs`, `scripts/verify-deploy-dist.mjs`, `scripts/post-deploy-smoke.mjs`, `netlify.toml`, `.github/workflows/`, `playwright.dist.config.ts`.
+
+**Gotovo kada:** proizvedeni artefakt ima točan identitet, strogi smoke odbija pogrešnu verziju, a negativni slučajevi (nedostajući build-info, pogrešan SHA, stale ili unknown dokaz, izmijenjen izvor poslije ovjere) zaustavljaju objavu. Svjež završni Word dokaz nastaje u T46.
+
+### T20 - Uskladiti Edge kod, pravila i konfiguraciju
+
+**Prioritet:** P0. **Ovisi o:** T18, T19. **Mjesta rada:** `supabase/deploy-manifest.json`, `supabase/functions/`, `scripts/deploy-drift.mjs`, `scripts/generate-deploy-manifest.mjs`, `src/config/production-config.ts`, `src/config/deployment.ts`, `data/generated/profile-rules-server.json`.
+
+**Gotovo kada:** potvrđena odstupanja osnovnog backenda nestanu na stagingu, server i klijent koriste isti kompatibilni skup pravila, a svaka preostala aktivacija ima konkretan zadatak. Završna produkcijska jednakost provjerava se ponovno u T47.
+
+### T21 - Zatvoriti sigurnosne i autorizacijske rizike
+
+**Prioritet:** P0. **Ovisi o:** T18, T20. **Mjesta rada:** `supabase/migrations/`, `supabase/functions/_shared/`, svi javni Edge ulazi, auth/RLS/RPC testovi i postojeće security provjere.
+
+**Gotovo kada:** nema potvrđenog čitanja ili mutacije tuđih podataka, zaobilaska prava ni neograničene obrade; relevantni negativni testovi padaju pri namjerno uklonjenoj zaštiti, a advisor iznimke imaju objašnjenje i vlasnika.
+
+### T22 - Dovršiti račun, prijavu i e-poštu
+
+**Prioritet:** P0. **Ovisi o:** T18, T20, T21. **Mjesta rada:** `src/auth/session.ts`, račun u `src/routes/my-work/`, pripadajući UI, Supabase Auth postavke i email predlošci.
+
+**Gotovo kada:** stvarne testne poruke stižu na namjenske adrese, sve sesijske grane daju očekivani rezultat, a anonimni korisnik nakon registracije zadržava vlastiti rad i pripadajuća prava.
+
+### T23 - Urediti katalog, cijene i prava proizvoda
+
+**Prioritet:** P0. **Ovisi o:** T16. **Mjesta rada:** `src/catalog/products-catalog.ts`, `src/report/pricing.ts`, `src/report/slot-logic.ts`, tablica `products`, postojeći RPC za promjenu cijene i povijest cijena.
+
+**Gotovo kada:** svaki ponuđeni SKU ima jednoznačno objašnjenje i mapiranje, test potvrđuje stvarnu cijenu i prava, a stara kupnja ostaje ispravno prepoznata nakon promjene kataloga. Nove cijene se ne izmišljaju kao dio tehničke sanacije.
+
+### T24 - Završiti checkout, webhook i životni ciklus prava
+
+**Prioritet:** P0. **Ovisi o:** T20, T22, T23. **Mjesta rada:** `supabase/functions/create-checkout/`, `supabase/functions/webhook-mor/`, `src/report/checkout.ts`, `src/report/webhook.ts`, slot/RPC migracije i testovi.
+
+**Gotovo kada:** svaka namjenska testna kupnja završava točno jednim odgovarajućim pravom, ponovljeni događaj ne daje dodatno pravo, a greške imaju oporavak i operativni trag. Nema stvarnih troškova samo radi automatiziranog testa.
+
+### T25 - Pouzdan popravak i oporavak nepoznatog ishoda
+
+**Prioritet:** P0. **Ovisi o:** T20, T21, T24. **Mjesta rada:** `src/repair/workflow-controller.ts`, `src/repair/recovery-policy.ts`, `src/report/repair-client.ts`, repair history, `supabase/functions/repair-docx/`, `supabase/functions/delete-repair-job/`, pripadajuće DB/RPC promjene.
+
+**Gotovo kada:** dvostruki klik, refresh, paralelni poziv i izgubljeni odgovor daju jedan definiran posao i očekivanu potrošnju prava, a isti posao je ponovno dohvatljiv. Korisnik nikad ne dobiva savjet da slijepo pokrene novu naplativu obradu.
+
+### T26 - Potvrditi točnost lokalne DOCX analize
+
+**Prioritet:** P1. **Ovisi o:** T16. **Mjesta rada:** `src/analysis/`, `src/docx/parser.ts`, `src/scoring/evaluate/`, `src/preview/`, parser/conformance fixture i testovi.
+
+**Gotovo kada:** reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog lažno pozitivnog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su označene kao `unknown` ili ručna provjera. Veličina i vrijeme obrade imaju izmjerene granice.
+
+### T27 - Dokazati i poboljšati svih 31 fixera
+
+**Prioritet:** P0. **Ovisi o:** T25, T26. **Mjesta rada:** `src/repair/`, `scripts/corpus-gen/repair-net.mts`, `scripts/repair-real-corpus.mts`, `docs/quality/real-corpus-protocol.md`, `data/verification/`, pripadajući testovi.
+
+**Gotovo kada:** svaki fixer ima pozitivan i negativan dokaz, sva neočekivana oštećenja i lažno prikazani uspjesi su nula, a izvještaj odvojeno pokazuje razriješene, neriješene, preskočene, neprimjenjive i ručne stavke s točnim nazivnicima. Jedan agregatni postotak nije release kriterij.
+
+### T28 - Završiti pravila, programe i dokaze za 407 profila
+
+**Prioritet:** P1. **Ovisi o:** T16, T26. **Mjesta rada:** `data/profiles/`, registri izvora i programa, `src/profiles/`, `src/programs/`, `src/ui/profile-claim.ts`, generator completion-ledgera i faculty-matrice.
+
+**Gotovo kada:** nema zapisa bez razriješenog statusa, nevažećeg mapiranja ni prikrivenog nasljeđivanja; tvrdnja u izboru profila, rezultatima i na javnoj stranici je ista i dokaziva. Ako ustanova ne objavljuje pravilo, dovršetak je točno dokumentirano ograničenje, ne fabricirana norma.
+
+### T29 - Dovršiti citate, literaturu i provjeru izvora
+
+**Prioritet:** P1. **Ovisi o:** T26, T28. **Mjesta rada:** `src/citations/`, citatni fixeri u `src/repair/`, `supabase/functions/source-check/`, pripadajući alati i citation dossier skripte.
+
+**Gotovo kada:** poznato ispravni i pogrešni primjeri imaju točan rezultat, servisi u kvaru daju `unknown` uz oporavak, a korisniku se ne mijenja sadržaj reference na temelju nepouzdanog podudaranja.
+
+### T30 - Dovršiti glavni korisnički tok i izvještaj
+
+**Prioritet:** P1. **Ovisi o:** T22, T25, T27, T28. **Mjesta rada:** `src/routes/intake/`, `src/routes/workspace/`, `src/ui/repair-panel.ts`, `src/ui/repair-workflow-binding.ts`, `src/ui/results/`, `src/repair/workflow-controller.ts`, `src/report/report.ts`, `supabase/functions/generate-report/`.
+
+**Gotovo kada:** novi korisnik bez objašnjenja autora razumije sljedeću radnju i može završiti tok, a svi prikazani ishodi odgovaraju backend i verifikacijskom stanju. Dokaz su stvarni korisnički scenariji i snimke relevantnih stanja.
+
+### T31 - Završiti Moje radove, revizije i mentorske zadaće
+
+**Prioritet:** P1. **Ovisi o:** T25, T30. **Mjesta rada:** `src/routes/my-work/`, `src/routes/workspace/revisions.ts`, `src/session/`, `src/history/`, `src/mentor/`, `src/ui/results/`.
+
+**Gotovo kada:** revizije i zadaće ne prelaze na krivi rad, lokalni životni ciklus ne gubi podatke bez upozorenja, a korisnik može pronaći i obrisati sve što aplikacija tvrdi da je spremila.
+
+### T32 - Dovršiti sve besplatne alate
+
+**Prioritet:** P1. **Ovisi o:** T28, T29. **Mjesta rada:** `src/tools/`, `src/title-pages/`, `src/declarations/`, `scripts/generate-citation-tools.mjs`, `scripts/generate-title-page-tools.mjs`, HTML ulazi alata.
+
+**Gotovo kada:** svaki javno naveden alat ima funkcionalan izlaz, radi na mobitelu i s tipkovnicom, ne gubi unesene podatke pri očekivanoj radnji i ne tvrdi da je generički izlaz službeno odobren.
+
+### T33 - Dovršiti PDF tok i njegove granice
+
+**Prioritet:** P1. **Ovisi o:** T26, T30. **Mjesta rada:** `src/pdf/pdf-preflight.ts`, intake/workspace integracija i PDF testovi.
+
+**Gotovo kada:** tekstualni PDF daje reproducibilan ograničen rezultat, nepodržani ulazi ne dobivaju lažno preciznu ocjenu, a PDF tok ne obećava automatski DOCX popravak niti nepostojeći OCR.
+
+### T34 - Završiti preflight i integrity sa stvarnim servisom
+
+**Prioritet:** P1. **Ovisi o:** T20, T21, T22, T29, T36. **Mjesta rada:** `src/preflight/`, `src/integrity/`, `supabase/functions/preflight-start/`, `preflight-result/`, `integrity-check/`, `docs/deploy/PREFLIGHT_DEPLOY.md`, vanjski Python servis.
+
+**Gotovo kada:** stvaran testni dokument prolazi cijeli put do ispravno filtriranog rezultata, pogrešne ovlasti i tokeni se odbijaju, a dokument i privremeni sadržaj brišu se prema ugovoru. Nedostupan izvor ili host ostaje vidljiv blokator, ne lažni `done`.
+
+### T35 - Dovršiti field-render i završni Word dokument
+
+**Prioritet:** P1. **Ovisi o:** T20, T27. **Mjesta rada:** `workers/field-renderer/`, `supabase/functions/field-render/`, klijentski poziv rendereru, `scripts/word-verify/`, `scripts/verify-docx/`.
+
+**Gotovo kada:** korisnik dobiva provjeren konačni dokument i razumljiv status polja, worker se oporavlja od lošeg ulaza, a dokaz uključuje stvarno otvaranje popravljenog izlaza u Wordu prije i nakon ažuriranja polja.
+
+### T36 - Završiti privatnost, brisanje i životni ciklus podataka
+
+**Prioritet:** P0. **Ovisi o:** T21, T22, T25. **Mjesta rada:** `src/legal/`, `src/session/`, `src/corpus/`, `supabase/functions/delete-repair-job/`, `cleanup-orphan-repairs/`, `withdraw-corpus-contribution/`, purge migracije i pripadajuća UI dokumentacija.
+
+**Gotovo kada:** svaki obećani rok i brisanje imaju dokaz na objektu i metapodacima, korisnik ima funkcionalnu kontrolu svojih podataka, a e-pošta, nazivi dokumenata i tekst rada ne završavaju u nepotrebnim logovima.
+
+### T37 - Dovršiti garanciju, raskid, povrat i podršku
+
+**Prioritet:** P1. **Ovisi o:** T22, T24, T36. **Mjesta rada:** `src/report/guarantee.ts`, `src/legal/`, `supabase/functions/file-guarantee-claim/`, javne stranice uvjeta i garancije, odgovarajući admin tok; pregledati PR #29.
+
+**Gotovo kada:** testni zahtjev prolazi podnošenje, potvrdu, admin obradu, razrješenje i obavijest korisniku, uz autorizaciju i trag promjena.
+
+### T38 - Dovršiti preporuke, bonuse, podsjetnike i usluge
+
+**Prioritet:** P1. **Ovisi o:** T22, T24, T36. **Mjesta rada:** `src/referral/`, `src/waitlist/`, `src/submission/`, `src/report/referral.ts`, `src/report/partner.ts`, `supabase/functions/redeem-referral-signup/`, `process-bonus-outbox/`, `faculty-request/`, `send-reminders/`, `unsubscribe-reminder/`.
+
+**Gotovo kada:** svaka ponuđena pogodnost ili usluga ima cijeli isporučivi tok, obračun i podršku; bonus se dodijeli jednom, odjava zaustavlja buduće podsjetnike, a korisnik vidi odgovara li paket njegovu slučaju.
+
+### T39 - Dovršiti administraciju i operativni pregled
+
+**Prioritet:** P1. **Ovisi o:** T20, T24, T25, T37, T38. **Mjesta rada:** `src/admin/`, `supabase/functions/admin-stats/`, povezani admin RPC-ovi.
+
+**Gotovo kada:** admin brojke se podudaraju s pripremljenim DB i payment scenarijima, neovlašteni pristup je odbijen, a svaki kritični korisnički problem može se pronaći i razriješiti bez ručnog mijenjanja baze naslijepo.
+
+### T40 - Dovršiti postojeću integraciju s Katedrom
+
+**Prioritet:** P1. **Ovisi o:** T21, T22, T24, T36. **Mjesta rada:** `src/integration/`, `src/integrations/`, `supabase/functions/record-completion-check/`, `katedra-agent-worker/`, povezani ugovori i PR-ovi #57 i #71.
+
+**Gotovo kada:** postojeći cross-app tok prolazi na kompatibilnim stvarnim testnim servisima, vlasništvo i privola su očuvani, a kvar druge aplikacije ne uništava lokalni rad. To ne podrazumijeva dovršavanje svih nepovezanih mogućnosti Katedre.
+
+### T41 - Sanirati ovisnosti i dovršiti održivu provjeru koda
+
+**Prioritet:** P1. **Ovisi o:** T16. **Mjesta rada:** `package.json`, `package-lock.json`, Deno lock i Edge konfiguracija, `scripts/npm-audit-ratchet.mjs`, `docs/quality/dependency-decisions.md`, TypeScript i CI konfiguracija.
+
+**Gotovo kada:** nema novog neobjašnjenog sigurnosnog duga, ratchet i glavne provjere prolaze na ponovljivoj instalaciji, a iznimke nisu bez roka. Stari dokumentirani broj type grešaka ne navodi se kao aktualan bez ponovnog izvođenja.
+
+### T42 - Završiti pristupačnost, mobitel i performanse
+
+**Prioritet:** P1. **Ovisi o:** T30, T31, T32, T33, T34, T35. **Mjesta rada:** sve javne rute i UI stilovi, `tests/ux/`, browser matrica i produkcijski bundle.
+
+**Gotovo kada:** nema blokirajuće pristupačne ili mobilne prepreke, nema nekontroliranog zamrzavanja ni rasta memorije, a mjerene granice i upozorenja odgovaraju stvarnom ponašanju. Cilj je WCAG 2.2 AA za javne tokove, uz popis provjerenih kriterija.
+
+### T43 - Završiti javne stranice, tvrdnje i SEO
+
+**Prioritet:** P1. **Ovisi o:** T23, T28, T30, T32, T37. **Mjesta rada:** `src/routes/shared/public-route-directory.json`, `src/routes/learn-more/`, svi generatori javnih, legal, faculty i competitor stranica, sitemap i robots konfiguracija.
+
+**Gotovo kada:** nema slomljenog javnog puta, pogrešne ponude ni kontradiktornih tvrdnji; crawl popis odgovara manifestu ruta i objavljenom artefaktu, a sadržaj se može ažurirati iz kanonskih podataka bez ručnog razilaženja kopija.
+
+### T44 - Dokazati cijele tokove sa stvarnim backendom
+
+**Prioritet:** P0. **Ovisi o:** T19 do T43 za njihove korisnički dostupne rezultate; eksplicitni popis je u redu zadataka. **Mjesta rada:** `tests/ux-dist/`, `playwright.dist.config.ts`, namjenski staging seed i cleanup, CI i release dokaz.
+
+**Gotovo kada:** sve obavezne grane matrice scenarija E01 do E36 imaju stvarni prolaz i evidenciju; nema prešućenog mocka u dokazu integracije, a nedostupan servis je označen `blocked` ili `unavailable`, nikad `pass`.
+
+### T45 - Dovršiti monitoring, oporavak i troškovne granice
+
+**Prioritet:** P0. **Ovisi o:** T18, T19, T20, T21, T36, T39, T41. **Mjesta rada:** `src/ui/telemetry.ts`, `supabase/functions/client-error/`, `analytics-event/`, `health/`, cleanup i cron funkcije, admin operacije i deploy runbookovi.
+
+**Gotovo kada:** kontrolirani kvar proizvede vidljiv signal, rollback i restore su izvedeni na testu, a svaka operativna obveza ima vlasnika i kratku naredbu. Uspješan cron zapis zamijenjen je dokazom stvarnog učinka gdje je to bitno.
+
+### T46 - Ovjeriti konačni kandidat i pripremiti pilot
+
+**Prioritet:** P0. **Ovisi o:** T17, T44, T45. **Mjesta rada:** postojeći release, Word i quality artefakti, `docs/generated/RELEASE_PROOF.json`, pilot dokumentacija T15.
+
+**Gotovo kada:** sve release kontrolne točke iz odjeljka 8 vendoranog plana imaju svjež dokaz i postoji konkretan testni kandidat dostupan pilotu. Plan pilota ili generirani potpis nisu zamjena za stvarne rezultate.
+
+### T15 - pilot (postojeći zadatak, povezan s ovim programom)
+
+**Prioritet:** P0 za javno lansiranje. **Ovisi o:** T14 i T46 (spremnost ovjerenog kandidata je novi preduvjet, pa je status vraćen na `blocked`). **Mjesta rada:** postojeći T15 iznad, pilot protokol, audit registar i dokazi bez osobnih podataka.
+
+**Gotovo kada:** najmanje pet korisnika završilo je glavni tok, nema neriješenog P0 ni blokirajućeg P1, a ponovljene primjedbe o razumijevanju i rezultatu obrađene su. Opis zadataka pilota ostaje u odjeljku T15 Podplana E.
+
+### T47 - Objaviti cijelo izdanje i predati operacije
+
+**Prioritet:** P0. **Ovisi o:** T15, T46. **Mjesta rada:** Netlify, Supabase i worker deploy postupci, release dokaz, post-deploy smoke, monitoring i runbookovi.
+
+**Gotovo kada:** javni artefakt odgovara dokazanoj verziji, svi uključeni tokovi rade, operativni nadzor nema nerazriješen kritični signal i početni tjedan je obrađen. Nakon toga razvoj prelazi na održavanje uz isti standard dokaza.
+
+### Što ovaj podplan ne mijenja
+
+Podplanovi A-E i njihovi zadaci T00-T15 ostaju iznad nepromijenjeni. Granice iz odjeljka 4 vendoranog
+plana vrijede za svaki paket: jedan implementator u jednom izoliranom worktreeu, klijent nije autoritet
+za cijenu ni prava, migracije idu kroz `supabase db push`, produkcijske tajne ne ulaze u frontend ni u
+dokaze, a regresija ili integritetski kvar nikad se ne prikazuju kao uspješna isporuka. Izlaz runnera
+`needs_verification` nije kanonski status i ne upisuje se u red.
