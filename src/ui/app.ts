@@ -63,13 +63,13 @@ import { detectPassRegressions, dropStaleFieldRegressions, tocFieldWillRefresh }
 import { summarizeRepairOutcome } from '../repair/repair-outcome';
 import { scoringChangeNote } from './scoring-change-note';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
-import { buildRepairableItems, asRecommendation, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, headingStructureRepairableItem, footnoteTypographyRepairableItem, headingCaseRepairableItem, titlePageRepairableItem, elementCaptionRepairableItem, bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem, finalDocumentInspectorRepairableItem, fieldIntegrityRepairableItem, tableFigureRescueRepairableItem, sectionSurgeryRepairableItem, pickTargetItem, requiredSectionsRepairableItem, linkDoiRepairableItem, crossFileSubmissionRepairableItem } from './repair-items';
+import { pickTargetItem } from './repair-items';
+import { buildAllRepairableItems, splitSeparateConsentItems } from './repair-item-assembly';
 import { ensureTemplatesHeavy, selectTemplate } from '../title-pages/template-loader';
 // Direktan import (ne preko template-loader): level-slugs.ts je namjerno odvojen da ovaj
 // (glavni bundle) modul ne povuce ~0,5 MB templates.json samo za slug<->WorkType mapiranje.
 import { workTypeFromSlug } from '../title-pages/level-slugs';
 import { buildLektaResult } from '../integrations/lekta-result';
-import { croatianTypographyRepairableItem, consistencyRepairableItem } from './repair-items';
 import { headingCaseSuggestions } from '../repair/heading-case';
 import './repair-panel.css';
 import '../preflight/preflight-panel.css';
@@ -1845,76 +1845,35 @@ async function renderRepairSection(r: any){
  // profile-runtime-maps); za povijest/stale rezultate ovo dohvaca i profil rezultata.
  await ensureProfileRules(defId);
  if(r!==currentResult||!analyzedProfile) return;
- // BAKANI ruleEntries (repair-map.json preko repairEntriesFor) MORAJU biti na analyzedProfile
- // PRIJE poziva *RepairableItem funkcija ispod: element-caption/bibliography/citation-sync/
- // legal-footnote/table-figure-rescue/section-surgery/required-sections citaju profile.ruleEntries
- // izravno (gen-profile-runtime-maps.mts, ASSISTED_RULE_ENTRY_CHECK_IDS). Bez ovoga je to polje
- // uvijek prazno u zivom appu pa ovih 7 fixera nikad ne bi aktiviralo, ma koliko podataka postojalo.
+ // Od E2 (2026-09-12) ponudu slaze ISKLJUCIVO buildAllRepairableItems: isti sastavljac koji mjeri
+ // real-corpus harness, pa mjerenje opisuje ono sto korisnik vidi. Prije je ovdje stajao inline
+ // sastav koji se od modula razlikovao u redoslijedu (consistency/croatian-typography prije
+ // table-figure-rescue/section-surgery u modulu, obrnuto inline) i u clanstvu (modul vraca i
+ // heading-case, inline ga je zvao zasebno kao textItems). Modul radi na KOPIJI profila s
+ // ruleEntries; ovdje se postavljaju i na analyzedProfile, kao i prije E2, jer isti objekt dalje
+ // putuje u reanalyze nakon popravka.
  const entries=repairEntriesFor(defId);
  analyzedProfile.ruleEntries=entries;
  if(!r.details?.crossFileSubmissionConsistency) r.details.crossFileSubmissionConsistency=buildCrossFileSubmissionConsistency(r,analyzedProfile,r.details?.docxCore,r.details?.pdfPreflight,currentResult?.file,selectedPdf);
  const templateSelection=selectTemplate(r.settings?.selectionIds?.unit||r.selection?.unit, r.settings?.workType||r.selection?.workType||'final');
-  const titleItems=titlePageRepairableItem(r,analyzedProfile,templateSelection.template);
-  const elementItems=asRecommendation(analyzedProfile,'element-caption-rules',elementCaptionRepairableItem(r,analyzedProfile));
-  const bibliographyItems=asRecommendation(analyzedProfile,'bibliography-rules',bibliographyRepairableItem(r,analyzedProfile));
-  const citationBibliographySyncItems=asRecommendation(analyzedProfile,'citation-sync-rules',citationBibliographySyncRepairableItem(r,analyzedProfile));
-  const legalFootnoteItems=asRecommendation(analyzedProfile,'legal-footnote-repair-rules',legalFootnoteRepairableItem(r,analyzedProfile));
-  const finalDocumentInspectorItems=finalDocumentInspectorRepairableItem(r);
-  const fieldIntegrityItems=fieldIntegrityRepairableItem(r);
-  const croatianTypographyItems=croatianTypographyRepairableItem(r);
-  const consistencyItems=consistencyRepairableItem(r);
-  const tableFigureRescueItems=asRecommendation(analyzedProfile,'table-figure-rescue-rules',tableFigureRescueRepairableItem(r,analyzedProfile));
-  const sectionSurgeryItems=asRecommendation(analyzedProfile,'section-surgery-rules',sectionSurgeryRepairableItem(r,analyzedProfile));
-  const requiredSectionsItems=asRecommendation(analyzedProfile,'required-section-rules',requiredSectionsRepairableItem(r,analyzedProfile));
-  const linkDoiItems=linkDoiRepairableItem(r,analyzedProfile);
-  const crossFileSubmissionItems=crossFileSubmissionRepairableItem(r,analyzedProfile);
- if(paywallGateActive()){
+ const teaser=paywallGateActive();
+ // Zahvati u TEKST rada (heading-case) se drze odvojeno od "Popravi sve": zasebna privola i opcija
+ // "samo prijedlog". Teaser ih ne nabraja (kao ni prije E2): nudi samo ono sto ide bez privole.
+ const {items,textItems}=splitSeparateConsentItems(buildAllRepairableItems({result:r,profile:analyzedProfile,entries,titleTemplate:templateSelection.template,includeNonViolated:!teaser}));
+ if(teaser){
   // Teaser: samo prekrseno (Opcija A); "uskladi sve" + dubinsko ciscenje je placeni dio (Feature B).
-  const items=[...buildRepairableItems(r.checks||[],analyzedProfile,entries),...universalRepairableItems(r.issues||[]).filter((i: any)=>i.violated),...paragraphSpacingRepairableItem(r.checks||[],analyzedProfile,r).filter((i: any)=>i.violated),...pageNumberingRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...footnoteSpacingRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...pageNumberAlignmentRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...introSectionRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...tocFieldRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...headingFormatRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...footnoteTypographyRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...titleItems];
-  items.push(...headingStructureRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated));
-  items.push(...elementItems.filter((i: any)=>i.violated));
-  items.push(...bibliographyItems.filter((i: any)=>i.violated));
-  items.push(...citationBibliographySyncItems.filter((i: any)=>i.violated));
-  items.push(...legalFootnoteItems.filter((i: any)=>i.violated));
-  items.push(...finalDocumentInspectorItems.filter((i: any)=>i.violated));
-  items.push(...fieldIntegrityItems.filter((i: any)=>i.violated));
-  items.push(...tableFigureRescueItems.filter((i: any)=>i.violated));
-  items.push(...sectionSurgeryItems.filter((i: any)=>i.violated));
-  items.push(...croatianTypographyItems.filter((i: any)=>i.violated));
-  items.push(...consistencyItems.filter((i: any)=>i.violated));
-  items.push(...requiredSectionsItems.filter((i: any)=>i.violated));
-  items.push(...linkDoiItems.filter((i: any)=>i.violated));
-  items.push(...crossFileSubmissionItems.filter((i: any)=>i.violated));
   if(!items.length) return;
   mount.innerHTML=`<div class="lekta-repair-panel"><p><strong>Ovo možemo popraviti umjesto tebe:</strong> ${items.map((i: any)=>escapeHtml(i.label)).join(', ')}.</p></div>`+paywallLockHtml('Automatski popravak s dubinskim usklađivanjem cijelog dokumenta i preuzimanje ispravljene datoteke');
   wireLockCtas(); return; // teaser je bez stanja: re-render na svakom toggleu je bezopasan
  }
  // Placeno (fullReport) ili soft-launch: Feature B, nudi i neprekrsene dimenzije
  // ("uskladi cijeli dokument") uz v2 dubinsko ciscenje izravnog formatiranja.
- const items=[...buildRepairableItems(r.checks||[],analyzedProfile,entries,{includeNonViolated:true}),...universalRepairableItems(r.issues||[]),...paragraphSpacingRepairableItem(r.checks||[],analyzedProfile,r),...pageNumberingRepairableItem(r,analyzedProfile),...footnoteSpacingRepairableItem(r.checks||[],analyzedProfile),...pageNumberAlignmentRepairableItem(r.checks||[],analyzedProfile),...introSectionRepairableItem(r,analyzedProfile),...tocFieldRepairableItem(r,analyzedProfile),...headingFormatRepairableItem(r.checks||[],analyzedProfile),...footnoteTypographyRepairableItem(r.checks||[],analyzedProfile),...titleItems];
  repairPanelItems=items; // RESULT-03: dostupno wireFindingCards-u i prije eventualnog ranog izlaska
- items.push(...headingStructureRepairableItem(r,analyzedProfile));
- items.push(...elementItems);
- items.push(...bibliographyItems);
- items.push(...citationBibliographySyncItems);
- items.push(...legalFootnoteItems);
- items.push(...finalDocumentInspectorItems);
- items.push(...fieldIntegrityItems);
- items.push(...tableFigureRescueItems);
- items.push(...sectionSurgeryItems);
- items.push(...croatianTypographyItems);
- items.push(...consistencyItems);
- items.push(...requiredSectionsItems);
- items.push(...linkDoiItems);
- items.push(...crossFileSubmissionItems);
  if(!items.length) return;
  if(!selectedDocx){mount.innerHTML=`<div class="lekta-repair-panel"><p>Za automatski popravak ponovno učitaj .docx datoteku (dokument više nije u memoriji).</p></div>`;return}
  const file=selectedDocx;
  // WS-3: kad je repair server konfiguriran, placeni popravak ide na SERVER (upload -> gotov docx),
  // a klijentski src/repair vise nije put isporuke. Bez servera (soft-launch) ostaje lokalni popravak.
- // Zahvati u TEKST rada drze se odvojeno od "Popravi sve": za njih se trazi zasebna privola, a
- // korisniku se uvijek nudi i opcija da samo vidi prijedlog i odluci sam.
- const textItems=headingCaseRepairableItem(r.checks||[],analyzedProfile);
  repairPanelTextItems=textItems;
  // GRANICE POPRAVKA se provjeravaju PRIJE izbora panela, da vrijede za OBA puta.
  //

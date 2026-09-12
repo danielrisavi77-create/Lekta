@@ -77,7 +77,13 @@ function bajtova(rel: string): number {
 //       applyDetectedContext, dva uvoza (obrazlozenje zivi u profile-confirmed-events.ts)      +1207
 //   neto                                                                                        -137
 // Adapter je placen vadjenjem iz iste datoteke, kako gornji komentar trazi; brojka ide DOLJE.
-const BUDZET_APP = 363652;
+// PAKET C, korak E2 (2026-09-12): 363652 -> 358698. Racunica:
+//   inline sastav ponude popravaka u renderRepairSection (dva niza od po 24 poziva graditelja,
+//   14 pomocnih konstanti, uvoz 27 imena iz repair-items) van; ostaje jedan poziv
+//   buildAllRepairableItems + splitSeparateConsentItems iz src/ui/repair-item-assembly.ts   -4954
+// Ovo nije cisto vadjenje nego preusmjeravanje na modul koji vec postoji (harness ga mjeri);
+// razlika u redoslijedu i clanstvu je imenovana u tests/repair-item-assembly-single-source.test.ts.
+const BUDZET_APP = 358698;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //
