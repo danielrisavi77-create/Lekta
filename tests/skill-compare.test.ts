@@ -55,10 +55,27 @@ describe('usporedba dvaju alata: ugovor artefakta', () => {
 
   it('svaki zapisan ishod slijedi iz vlastitih brojki', () => {
     for (const r of a.rows) {
-      expect(typeof r.lekta, r.dokument).toBe('number');
+      expect(r.lekta === null || typeof r.lekta === 'number', r.dokument).toBe(true);
       expect(r.katedra === null || typeof r.katedra === 'number', r.dokument).toBe(true);
       expect(classifyOutcome(r.lekta, r.katedra), `${r.dokument}/${r.os}`).toBe(r.ishod);
     }
+  });
+
+  /**
+   * `lekta-ne-mjeri` mora biti ZASTUPLJEN, i to je anti-vakuumska tvrdnja, ne kozmetika.
+   *
+   * Lektine citatne provjere nisu univerzalne: emitiraju se samo za profile koji citiranje propisuju.
+   * Dok se odsutnost provjere brojala kao `lekta = 0`, artefakt je tvrdio da je Lekta gledala i nista
+   * nasla, pa je 17 redaka lazno ispalo `samo-katedra`, dakle "Lektina provjera je slijepa". Da taj
+   * razred opet utihne (netko vrati staru izvedbu), broj razilazenja bi SKOCIO, a to izgleda kao
+   * bogatiji nalaz umjesto kao regresija mjerenja.
+   */
+  it('razlikuje profil na kojem Lekta os NE MJERI od onoga na kojem nije nasla nalaz', () => {
+    const neMjeri = a.rows.filter((r) => r.lekta === null);
+    expect(neMjeri.length, 'nijedan redak; je li se odsutnost provjere opet stopila s praznim nalazom?').toBeGreaterThan(10);
+    for (const r of neMjeri) expect(r.ishod, `${r.dokument}/${r.os}`).toBe('lekta-ne-mjeri');
+    // Kontrola u drugom smjeru: mora postojati i redak na kojem je Lekta DOISTA mjerila.
+    expect(a.rows.some((r) => typeof r.lekta === 'number'), 'Lekta ne mjeri nijednu os').toBe(true);
   });
 });
 
@@ -72,10 +89,25 @@ describe('usporedba dvaju alata: netrivijalnost', () => {
   });
 
   /**
-   * Razilazenje je jedini razlog zbog kojeg se dva alata usporedjuju: slaganje se moglo dobiti i
-   * jednim. Kad razilazenja nema, usporedba je ili savrsena ili slijepa, i to treba primijetiti.
+   * ZIVA NA OBJE STRANE, umjesto "mora postojati razilazenje".
+   *
+   * Stara tvrdnja je trazila da se dva alata TRAJNO ne slazu. To je uvjet koji se namjerno ukida:
+   * 2026-09-10 su sva razilazenja zatvorena (8 -> 0), dijelom uzvodnim popravcima u katedra-lite
+   * (kvarovi 156 i 157), dijelom nasim nalazom o sufiksu godine. Gard koji trazi neslaganje bi tada
+   * pao na uspjeh, i pritisak bi isao prema tome da se kvar NE popravi.
+   *
+   * Ono sto uistinu treba cuvati jest da usporedba nije oslijepila: obje strane moraju i dalje
+   * PROIZVODITI nalaze. Stara tvrdnja to nije pokrivala, jer bi prosla i uz jedno jedino razilazenje
+   * dok je druga strana mrtva.
    */
-  it('biljezi razilazenje, jer je ono jedini razlog usporedbe', () => {
-    expect(divergentRows(a.rows).length).toBeGreaterThan(0);
+  it('obje strane i dalje proizvode nalaze, pa usporedba nije oslijepila', () => {
+    const lektaNasla = a.rows.filter((r) => typeof r.lekta === 'number' && r.lekta > 0);
+    const katedraNasla = a.rows.filter((r) => typeof r.katedra === 'number' && r.katedra > 0);
+    expect(lektaNasla.length, 'Lekta ne nalazi nista ni na jednoj osi').toBeGreaterThan(0);
+    expect(katedraNasla.length, 'Katedra ne nalazi nista ni na jednoj osi').toBeGreaterThan(0);
+    // Razilazenja SMIJU biti nula (to je cilj), ali popis mora biti izvediv iz redaka, ne prepisan.
+    expect(divergentRows(a.rows).length).toBe(
+      a.rows.filter((r) => r.ishod === 'samo-lekta' || r.ishod === 'samo-katedra').length,
+    );
   });
 });

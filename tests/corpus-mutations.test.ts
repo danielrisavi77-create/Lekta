@@ -95,10 +95,23 @@ describe('graditelj: oblik dolazi iz PRAVILA, ne iz proze', () => {
 });
 
 describe('katalog mutacija: svaka stvarno mijenja izvor', () => {
-  it('svaka mutacija gadja postojeci oblik i ima obrazlozenje', () => {
+  /**
+   * Svaka mutacija mora imati TOCNO JEDNU vezu s izlazom, i to je jedina razlika koju je uvodjenje
+   * mutacija forme donijelo (2026-09-09). Oblik (`shape`) vrijedi za mutacije koje gadjaju
+   * katalogizirane oblike; krsenje bodovane forme nije oblik nego vrijednost, pa nosi `proves`,
+   * predikat nad gotovim paketom. Mutacija bez ijedne veze bi prosla vakuumski: brojac bi tvrdio da
+   * je radila, a nista ne bi provjeravalo je li prezivjela pretvorbu.
+   */
+  it('svaka mutacija ima TOCNO jednu vezu s izlazom i obrazlozenje', () => {
     const poznati = new Set<string>(DOCX_SHAPE_IDS);
     for (const m of MUTATIONS) {
-      expect(poznati.has(m.shape), `${m.id} gadja nepoznat oblik ${m.shape}`).toBe(true);
+      const veza = [m.shape !== undefined, m.proves !== undefined].filter(Boolean).length;
+      expect(veza, `${m.id}: mora imati ili shape ili proves, tocno jedno (ima ${veza})`).toBe(1);
+      if (m.shape !== undefined) {
+        expect(poznati.has(m.shape), `${m.id} gadja nepoznat oblik ${m.shape}`).toBe(true);
+      } else {
+        expect(m.proves?.opis.length ?? 0, `${m.id}: dokaz nema opis`).toBeGreaterThan(20);
+      }
       expect(m.why.length, `${m.id} nema obrazlozenje`).toBeGreaterThan(40);
     }
     expect(new Set(MUTATIONS.map((m) => m.id)).size).toBe(MUTATIONS.length);
@@ -106,9 +119,24 @@ describe('katalog mutacija: svaka stvarno mijenja izvor', () => {
 
   it.each(MUTATIONS.map((m) => m.id))('%s mijenja izvor i vraca brojac vec od nule', (id) => {
     const prije = fodt();
-    const { fodt: poslije, count } = mutationById(id).apply(prije);
+    const { fodt: poslije, count, notApplicable } = mutationById(id).apply(prije);
+    // Neprimjenjivost je ISHOD, ne kvar, ali mora biti IMENOVANA. Brojac nula bez razloga i dalje
+    // znaci mrtav mehanizam; ovaj probni izvor nosi sve osi (prored 1,5, obostrano, A4), pa nijedna
+    // od danasnjih mutacija ovdje ne bi smjela biti neprimjenjiva.
+    expect(notApplicable, `${id}: neocekivano neprimjenjiva na probnom izvoru`).toBeUndefined();
     expect(count, `${id}: brojac je nula, mehanizam je mrtav`).toBeGreaterThan(0);
     expect(poslije, `${id}: izvor je nepromijenjen`).not.toBe(prije);
+  });
+
+  /**
+   * Negativna kontrola za neprimjenjivost: profil koji ne trazi prored 1,5 nema sto izgubiti, pa
+   * `singleLineSpacing` mora reci RAZLOG, a ne vratiti nulu koja se cita kao pokvaren mehanizam.
+   */
+  it('mutacija koja na ovom dokumentu nema metu javlja razlog, ne brojac nula', () => {
+    const bezProreda = buildFodt(proba(), { titleLines: [], rules: { ...PRAVILA, spacing: 1 } });
+    const res = mutationById('singleLineSpacing').apply(bezProreda);
+    expect(res.notApplicable, 'razlog mora biti imenovan').toMatch(/prored/);
+    expect(res.fodt).toBe(bezProreda);
   });
 
   it('tabInHeading umece tabulator IZA broja naslova, ne bilo gdje', () => {

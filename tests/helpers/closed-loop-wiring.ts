@@ -40,6 +40,15 @@ export const AXIS_SIGNAL: Record<string, ((result: AnalysisLike) => number) | un
   'link-doi': (r) => (r?.details?.linkDoiStructure?.occurrences ?? []).filter((o) => (o?.safeOperations ?? []).length > 0).length,
   'required-section': (r) => (r?.details?.requiredSectionsStructure?.candidates ?? []).filter((c) => !c.present).length,
   /**
+   * IZRICITO `undefined`, uz obrazlozenje koje gard trazi.
+   *
+   * Popravak literature ne smanjuje nijedan brojac koji analiza izlaze: zapisi se PREPISUJU (redom,
+   * sufiksom godine, kanonskim DOI-jem), pa ih je prije i poslije jednako. Signal bi zato uvijek bio
+   * nepromijenjen i os bi lazno ispala neprimijenjena. Dokaz dolazi iz changeloga, kroz
+   * `APPLIED_AXIS_FIXER`.
+   */
+  bibliography: undefined,
+  /**
    * Osi BEZ mjerljivog signala. Moraju stajati izricito, s `undefined`, jer ih provjera nize
    * zahtijeva; izostavljena os bi tiho pala na slabije changelog pravilo.
    *
@@ -79,6 +88,19 @@ export type AnalysisLike = {
  */
 export const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set([
   'empty-paragraphs',
+  /**
+   * `bibliography` ima bodovanu provjeru (`reference.alphabetical`, max 4), ali SAMO na dijelu
+   * profila, pa ne smije nositi `resolved`.
+   *
+   * IZMJERENO 2026-09-09, i to skupo: os je prvo ozicena kao bodovana. Buduci da se krsi na svakom
+   * dokumentu, a provjera postoji na manjini profila, closed-loop je pao s 372 `pass` i 0 `partial`
+   * na 11 `pass` i 361 `partial`. Od 20 profila koji `bibliography-rules` imaju, devet ima bodovanu
+   * provjeru, jedanaest ju nema jer im je demotirana.
+   *
+   * Dokaz je zato `applied`: popravak je promijenio popis literature bez regresije. To je ista
+   * jacina koju nose i nasi `authored` dokumenti, i istinita je za sve profile.
+   */
+  'bibliography',
   'croatian-typography',
   'link-doi',
   'revision-metadata',

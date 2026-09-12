@@ -11,21 +11,43 @@
  */
 
 /**
- * Cetiri ishoda mjerenja i peti koji kaze da mjerenja nije ni bilo.
+ * Cetiri ishoda mjerenja i dva koja kazu da mjerenja nije ni bilo.
  *
  * `katedra-nije-mjerila` je namjerno ODVOJEN od `nitko`. Prvi znaci da druga strana nije dala
  * odgovor, drugi da ga je dala i da je bio prazan. Spojeni bi izgledali isto, a znace suprotno:
  * jedno je rupa u mjerenju, drugo je slaganje.
+ *
+ * `lekta-ne-mjeri` je ista razlika na NASOJ strani i uveden je 2026-09-10, nakon sto je izostanak te
+ * razlike proizveo 17 laznih razilazenja. Lektina provjera nije univerzalna: `reference.uncited` i
+ * `citation.author-year.missing-reference` emitiraju se samo za profile koji citiranje propisuju.
+ * Dok je odsutnost provjere brojana kao `lekta = 0`, artefakt je tvrdio da je Lekta gledala i nista
+ * nasla, pa je 17 redaka ispalo `samo-katedra`, dakle "Lektina provjera je slijepa". Izmjereno:
+ * ondje gdje Lekta tu provjeru DOISTA emitira, brojke se poklapaju s Katedrinima (`adu`: 12 naspram
+ * 12), pa je zakljucak o sljepoci bio artefakt usporedbe, a ne nalaz o proizvodu.
  */
-export type ComparisonOutcome = 'oba' | 'samo-lekta' | 'samo-katedra' | 'nitko' | 'katedra-nije-mjerila';
+export type ComparisonOutcome =
+  | 'oba'
+  | 'samo-lekta'
+  | 'samo-katedra'
+  | 'nitko'
+  | 'katedra-nije-mjerila'
+  | 'lekta-ne-mjeri';
 
 export interface ComparisonRow {
   /** Ime dokumenta nad kojim su OBA alata trcala. */
   dokument: string;
   /** Os koju obje strane mjere, imenovana neovisno o tome kako ju koja strana zove. */
   os: string;
-  /** Broj Lektinih nalaza na toj osi (0 znaci "nema nalaza"). */
-  lekta: number;
+  /**
+   * Lektina strana: `1` nalaz postoji, `0` provjera je trcala i bila cista, `null` provjere NEMA na
+   * tom profilu.
+   *
+   * Jedinica je namjerno PRISUTNOST, ne broj stavki, jer Lekta po osi emitira JEDNU provjeru
+   * (`reference.uncited` sazima "12 izvora bez pronadjene citatnice" u jedan nalaz), dok Katedrina
+   * strana broji stavke. Presuda gleda samo `> 0`, pa asimetrija ne kvari ishod; usporedjivati te
+   * dvije brojke po VELICINI bilo bi mjerenje dviju razlicitih jedinica.
+   */
+  lekta: number | null;
   /** Broj Katedrinih nalaza; `null` znaci da ta strana nije dala odgovor. */
   katedra: number | null;
   ishod: ComparisonOutcome;
@@ -35,8 +57,10 @@ export interface ComparisonRow {
  * Presuda se IZVODI iz brojki, nikad ne upisuje uz njih. Time zapisani ishod ostaje provjerljiv:
  * gard nad artefaktom ponovno racuna isto i usporedjuje, pa redak koji tvrdi jedno a nosi drugo pada.
  */
-export function classifyOutcome(lekta: number, katedra: number | null): ComparisonOutcome {
+export function classifyOutcome(lekta: number | null, katedra: number | null): ComparisonOutcome {
   if (katedra === null) return 'katedra-nije-mjerila';
+  // Redoslijed je ugovor: odsutnost NASE provjere se sudi tek kad je druga strana dala odgovor.
+  if (lekta === null) return 'lekta-ne-mjeri';
   if (lekta > 0 && katedra > 0) return 'oba';
   if (lekta > 0) return 'samo-lekta';
   if (katedra > 0) return 'samo-katedra';

@@ -144,11 +144,25 @@ async function main(): Promise<void> {
     const r = await analyzeFixture(new File([new Uint8Array(readFileSync(docx))], f, { type: DOCX_MIME }), {
       profileId: sidecar.profileId,
     });
-    const pali = new Set(
-      (r.checks ?? [])
-        .filter((c: { id?: string; status?: string; max?: number }) => c.id && (c.max ?? 0) > 0 && c.status !== 'pass')
-        .map((c: { id?: string }) => c.id as string),
-    );
+    /**
+     * Lektina strana ima TRI stanja, ne dva: nalaz, cisto, i "provjere nema".
+     *
+     * Do 2026-09-10 je odsutnost provjere padala u isti kos kao cisto (`lekta = 0`), pa je artefakt
+     * tvrdio da je Lekta gledala i nista nasla. Izmjereno tada: `reference.uncited` se NE emitira na
+     * profilima `algebra-specijalisticki`, `apuri-zavrsni`, `arh-doktorski`, `effectus-seminarski`,
+     * `fsb-opci-akademski-rad` i drugima, jer citiranje ne propisuju; ondje gdje se emitira, brojke se
+     * poklapaju s Katedrinima (`adu`: Lekta "12 izvora bez pronadjene citatnice", Katedra 12). Time je
+     * 17 redaka lazno ispalo `samo-katedra`, sto se cita kao "Lektina provjera je slijepa".
+     *
+     * `max === 0` NIJE razlog za `null`: nebodovana provjera i dalje MJERI, samo ne kaznjava, pa
+     * njezin `warn` jest Lektin nalaz.
+     */
+    const provjere = (r.checks ?? []) as Array<{ id?: string; status?: string; max?: number }>;
+    const lektaStrana = (checkId: string): number | null => {
+      const c = provjere.find((x) => x.id === checkId);
+      if (!c) return null;
+      return c.status !== 'pass' ? 1 : 0;
+    };
 
     const katedraIzlaz: Record<string, Record<string, unknown> | null> = {};
     for (const skripta of ['verify_sources'] as const) {
@@ -163,7 +177,7 @@ async function main(): Promise<void> {
 
     for (const os of OSI) {
       const j = katedraIzlaz[os.katedraSkripta];
-      const lekta = pali.has(os.lektaCheck) ? 1 : 0;
+      const lekta = lektaStrana(os.lektaCheck);
       const katedra = j ? os.katedraNalaz(j) : null;
       redci.push({ dokument: f, os: os.id, lekta, katedra, ishod: classifyOutcome(lekta, katedra) });
     }

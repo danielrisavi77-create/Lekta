@@ -11,7 +11,7 @@ import { detectShapes, presentShapes, verifyShapeClaims, type DocxShapeCounts } 
 import { readZip } from '../../src/repair/zip-codec';
 import { wordCount, type ProseBody } from '../../src/corpus/prose-schema';
 import { TITLE_PAGE_TEMPLATES, resolveTemplate, ensureTemplatesHeavy } from '../../src/title-pages/template-loader';
-import { shapeForMutation } from './mutations.mts';
+import { shapeForMutation, verifyOutputProofs } from './mutations.mts';
 import type { CorpusRow } from './rows.mts';
 
 /** Natpis vrste rada; koristi se samo kad ga proza nije zadala. */
@@ -93,6 +93,8 @@ export interface EmitInput {
   command: string;
   /** Brojaci mutacija; prazno za usklađen primjerak. */
   counters: Record<string, number>;
+  /** Mutacije koje na OVAJ dokument nisu primjenjive, uz razlog; nije isto sto i brojac 0. */
+  notApplicable?: Record<string, string>;
   /** Trazi li profil sadrzaj; ulaz za popis ogranicenja alata. */
   requireToc: boolean;
 }
@@ -115,9 +117,18 @@ export interface EmitResult {
  */
 export async function emitSidecar(input: EmitInput): Promise<EmitResult> {
   const bytes = new Uint8Array(readFileSync(input.docxPath));
-  const shapes = detectShapes(await readZip(bytes));
+  const entries = await readZip(bytes);
+  const shapes = detectShapes(entries);
   const claimed = presentShapes(shapes);
   const presuda = verifyShapeClaims(claimed, shapes, input.counters, shapeForMutation());
+
+  // Dokazi forme se citaju iz istih bajtova, ne iz `DocSpec`-a: mutacija koja krsi bodovanu formu
+  // nema katalogiziran oblik, a LibreOffice zna tiho odbaciti ono sto mu upises (ovaj katalog je taj
+  // kvar vec platio dvaput na fontovima).
+  const decoder = new TextDecoder();
+  const parts: Record<string, string> = {};
+  for (const e of entries) if (/\.(xml|rels)$/i.test(e.name)) parts[e.name] = decoder.decode(e.data);
+  const dokaziForme = verifyOutputProofs(input.counters, parts);
 
   /**
    * Izmjereno 2026-09-06: `soffice --convert-to docx` ne pise TOC polje UOPCE (nula `w:instrText`,
@@ -156,6 +167,7 @@ export async function emitSidecar(input: EmitInput): Promise<EmitResult> {
       generatedAt: new Date().toISOString(),
     },
     mutations: input.counters,
+    mutationsNotApplicable: input.notApplicable ?? {},
     shapes: { claimed },
     toolLimitations: limitations,
   };
@@ -164,7 +176,7 @@ export async function emitSidecar(input: EmitInput): Promise<EmitResult> {
   return {
     shapes,
     claimed,
-    problems: [...presuda.missing, ...presuda.unknown, ...presuda.underDetected],
+    problems: [...presuda.missing, ...presuda.unknown, ...presuda.underDetected, ...dokaziForme],
     limitations,
   };
 }

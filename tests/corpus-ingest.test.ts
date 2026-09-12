@@ -146,6 +146,24 @@ describe('deriveDocxFeatures', () => {
     expect(producerFamilyOf('Pages')).toBe('unknown');
   });
 
+  /**
+   * Isto pravilo, primijenjeno na granu koja ga je krsila do 2026-09-08.
+   *
+   * `producerFamilyOf` je imao `/Google/i` granu, dakle pogodjenu isto kao sto bi bila Pages, i
+   * mjerenje nad 457 stvarnih radova (`Lekta-korpus`) ne daje NIJEDAN `<Application>` s tim nizom.
+   * Google Docs izvoz je onih 129 kojima je `<Properties/>` doslovno prazan, pa se iz `<Application>`
+   * ne moze prepoznati i 'unknown' je istinit odgovor. Identitet zivi kao oblik `gdocs/potpis`.
+   */
+  it('Google Docs izvoz nema <Application>, pa obitelj OSTAJE nepoznata', () => {
+    const app =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" ' +
+      'xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"/>';
+    const f = deriveDocxFeatures(parts({ 'docProps/app.xml': app }));
+    expect(f.producer).toBeNull();
+    expect(f.producerFamily).toBe('unknown');
+  });
+
   it('prepoznaje dijelove koje pise samo moderni Word', () => {
     const f = deriveDocxFeatures(parts({ 'word/people.xml': '<w15:people/>' }));
     expect(f.modernWordParts).toContain('word/people.xml');

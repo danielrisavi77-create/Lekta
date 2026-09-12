@@ -1,0 +1,45 @@
+{
+  "profileId": null,
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "adu--seminar--diplomski",
+    "unitId": "adu",
+    "workType": "seminar",
+    "level": "diplomski",
+    "program": "Dramaturgija",
+    "variant": null,
+    "fallbackFamily": "arts",
+    "titlePageTemplateId": "adu-graduate"
+  },
+  "prose": {
+    "id": "adu--seminar--diplomski",
+    "words": 3012,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmišljena imena, tema je stvarna a obrada je autorska za potrebe testiranja, i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje niti donosi vlastiti empirijski podatak. Rad je pojmovno-raspravni, bez poglavlja s rezultatima, jer bi nalazi iz izmišljene građe bili neistiniti i kad je rad označen kao testni. Pripisivanja poznatim djelima (Pfister, Ubersfeld, Elam, Esslin, Fischer-Lichte, Barba i Savarese, States, Aston i Savona, Beckerman) drže se općepoznatih pojmovnih doprinosa tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite pravilo 28). Četiri jedinice s DOI-jem POTVRĐENE su kroz CrossRef API uz HTTP 200 i prepisane su iz odgovora (Biet i Triau 2019; Chambers-Coe 2021; Grobler 1990; Revermann 2006). Marić (2024), Kovač i Šimić (2023) te Novak (2022) su izmišljene jedinice, namjerno, da provjera postojanja može vratiti i not-found. ALAT: katedra-lite je STVARNO vodio rad, u autopilot načinu. Izvršeno: profile_resolver.py (PAO uz poruku da registar rutira samo efzg i fpzg); stanje_init.py uz --fakultet-izvan-registryja adu i dva imenovana ograničenja; razina.py --postavi diplomski --citatelj mentor; perspective_map.py init + tri perspektive + validate (ready: true, tri različite); plan_state.py init + set teza + import tablice + odobri --actor full-auto. PLAN GATE je iz prvog pokušaja PAO, jer Zaključak nije imao planirane izvore; nakon dopune prošao je (sha256:209345d04f67). OBLIK dokumenta dolazi iz Lektina fallbacka za obitelj arts, ne iz Katedre.",
+      "tool": "katedra-lite 1.9.22 (autopilot)",
+      "date": "2026-09-08"
+    }
+  },
+  "provenance": {
+    "tool": "word",
+    "toolPath": "C:\\Program Files (x86)\\Microsoft Office\\Office14\\WINWORD.EXE",
+    "os": "win32 x64",
+    "command": "npm run corpus-gen:word -- --row adu--seminar--diplomski",
+    "generatedAt": "2026-09-12T14:05:14.187Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/deflate",
+      "rsid/svaki-odlomak",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/word"
+    ]
+  },
+  "toolLimitations": []
+}

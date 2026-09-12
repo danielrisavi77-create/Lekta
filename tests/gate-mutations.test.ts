@@ -26,8 +26,15 @@ import {
   type WizardEvent, type WizardState,
 } from '../src/ui/wizard-machine';
 import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
-import { DOCX_SHAPE_IDS, verifyShapeClaims, type DocxShapeCounts } from '../src/corpus/docx-shapes';
+import {
+  DOCX_SHAPE_IDS,
+  verifyRepairRoundTrip,
+  verifyShapeClaims,
+  type DocxShapeCounts,
+} from '../src/corpus/docx-shapes';
 import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
+import { uncoveredReason } from './helpers/coverage-cells';
+import { verifyOutputProofs } from '../scripts/corpus-gen/mutations.mts';
 import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
@@ -800,11 +807,230 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'izvoz/zatvoren-kvar-se-i-dalje-salje-drugoj-strani',
+    imitates:
+      'kvar koji je druga strana vec popravila ostaje u izvozu i putuje k njoj kao otvoren zadatak. ' +
+      'Steta nije teorijska: 2026-09-10 je ova sesija mjerila katedra-lite protiv kopije stare OSAMNAEST ' +
+      'verzija (v1.9.22 naspram v1.9.40), zakljucila da su tri kvara otvorena, i gurnula granu koja je ' +
+      'duplicirala postojeci uzvodni popravak. Granu je trebalo povuci. Obrnuta steta je jednako tiha: ' +
+      'zapis koji nema ni potkrepu ni referencu na popravak je tvrdnja bez mjerenja, a izgleda isto kao ' +
+      'zapis koji je netko upravo izmjerio',
+    caught: () => {
+      type Zapis = { id: string; resolvedUpstream?: string; potkrijepljen: boolean };
+      const izlazi = (z: Zapis) => !z.resolvedUpstream;
+      const uredan = (z: Zapis) =>
+        (typeof z.resolvedUpstream === 'string' && z.resolvedUpstream.length > 0) || z.potkrijepljen;
+
+      // 1) Zatvoren kvar NE smije izaci u izvoz.
+      const zatvoren: Zapis = { id: 'a', resolvedUpstream: 'katedra-pkg kvar 157, v1.9.39', potkrijepljen: false };
+      // 2) Zapis bez potkrepe i bez reference je tvrdnja bez mjerenja.
+      const gol: Zapis = { id: 'b', potkrijepljen: false };
+      // 3) Prazna referenca nije referenca.
+      const prazna: Zapis = { id: 'c', resolvedUpstream: '', potkrijepljen: false };
+      return !izlazi(zatvoren) && uredan(zatvoren) && !uredan(gol) && !uredan(prazna);
+    },
+    /**
+     * Netrivijalnost: OTVOREN i potkrijepljen zapis mora i izaci i proci gard. Bez ove polovice bi
+     * prosla i izvedba koja sve proglasi zatvorenim, cime bi izvoz utihnuo a gard bio zadovoljan.
+     */
+    cleanBefore: () => {
+      type Zapis = { id: string; resolvedUpstream?: string; potkrijepljen: boolean };
+      const izlazi = (z: Zapis) => !z.resolvedUpstream;
+      const uredan = (z: Zapis) =>
+        (typeof z.resolvedUpstream === 'string' && z.resolvedUpstream.length > 0) || z.potkrijepljen;
+      const otvoren: Zapis = { id: 'd', potkrijepljen: true };
+      return izlazi(otvoren) && uredan(otvoren);
+    },
+  },
+  {
+    id: 'dijagnoza/razlog-preuzme-vise-celija-nego-sto-mu-pripada',
+    imitates:
+      'nov razlog u lancu dijagnoze stavi se PRERANO i preuzme celije koje pripadaju blazoj istini. ' +
+      'Izmjereno 2026-09-12 na vlastitoj izmjeni: `pomocni-fixer-dokaz-nosi-pozivatelj` je na vrhu ' +
+      'lanca preuzeo 407 celija umjesto 4, jer je odgovarao na pitanje "kakav je ovo fixer" prije ' +
+      'pitanja "propisuje li profil tu os uopce". Broj nepokrivenih ostaje isti, pa se kvar ne vidi u ' +
+      'zbroju; mijenja se samo STO o njima tvrdimo, i to u smjeru koji zvuci bezazlenije',
+    caught: () => {
+      type Celija = { propisuje: boolean; pomocni: boolean };
+      const prerano = (c: Celija) => (c.pomocni ? 'pomocni' : c.propisuje ? 'nema-dokaza' : 'ne-propisuje');
+      const tocno = (c: Celija) => (!c.propisuje ? 'ne-propisuje' : c.pomocni ? 'pomocni' : 'nema-dokaza');
+      const nePropisujeAliPomocni: Celija = { propisuje: false, pomocni: true };
+      return prerano(nePropisujeAliPomocni) === 'pomocni' && tocno(nePropisujeAliPomocni) === 'ne-propisuje';
+    },
+    /**
+     * Netrivijalnost: ondje gdje profil os PROPISUJE, pomocni fixer doista dobiva svoj razlog. Bez
+     * ove polovice bi prosla i izvedba koja novi razlog nikad ne dodijeli.
+     */
+    cleanBefore: () => {
+      type Celija = { propisuje: boolean; pomocni: boolean };
+      const tocno = (c: Celija) => (!c.propisuje ? 'ne-propisuje' : c.pomocni ? 'pomocni' : 'nema-dokaza');
+      return tocno({ propisuje: true, pomocni: true }) === 'pomocni'
+        && tocno({ propisuje: true, pomocni: false }) === 'nema-dokaza';
+    },
+  },
+  {
+    id: 'generator/krsi-izravno-a-fixer-pise-u-stil',
+    imitates:
+      'generator krsi os IZRAVNIM oblikovanjem, dok fixer pise u DEFINICIJU STILA. Stavka se gradi, ' +
+      'ulazi u zadane zahtjeve, fixer se pozove, i changelog ostane prazan. Izmjereno dvaput: os ' +
+      '`heading-format` (fixer pise u `Heading1`) i os `footnote-spacing` (fixer pise u `FootnoteText`, ' +
+      'i izricito NE izmislja stil kojeg dokument nema). Kvar je tih jer sve izgleda ispravno do ' +
+      'zadnjeg koraka: `pass` ostaje isti, a celija se cita kao "nema dokaza"',
+    caught: () => {
+      type Stilovi = { ima: (id: string) => boolean };
+      // Ista ograda kao `patchNormalParagraphProps`: bez stila nema sto zakrpati.
+      const zakrpa = (stilovi: Stilovi, styleId: string) => stilovi.ima(styleId);
+      const bezStila: Stilovi = { ima: () => false };
+      const saStilom: Stilovi = { ima: (id) => id === 'FootnoteText' };
+      const krivStil: Stilovi = { ima: (id) => id === 'Normal' };
+      return !zakrpa(bezStila, 'FootnoteText') && !zakrpa(krivStil, 'FootnoteText') && zakrpa(saStilom, 'FootnoteText');
+    },
+    /**
+     * Netrivijalnost: dokument koji stil IMA mora se dati zakrpati. Bez ove polovice bi prosla i
+     * izvedba koja nikad nista ne zakrpa.
+     */
+    cleanBefore: () => {
+      const stilovi = { ima: (id: string) => id === 'FootnoteText' || id === 'Heading1' };
+      return stilovi.ima('FootnoteText') && stilovi.ima('Heading1');
+    },
+  },
+  {
+    id: 'petlja/pravilo-mjereno-na-dokumentu-koji-ga-ne-moze-nositi',
+    imitates:
+      'pravilo se mjeri na dokumentu koji trazenu pojavu UOPCE nema, pa provjera dodje kao `max 0`, ' +
+      '`isViolated` vrati `false`, fixer se nikad ne ponudi, a celija se cita kao "nema dokaza". ' +
+      'Izmjereno 2026-09-12: generator nikad nije emitirao podnozje, pa su se sva pravila o broju ' +
+      'stranice mjerila na dokumentu BEZ broja stranice. Zamka je dvostruka, jer se ne rjesava tako ' +
+      'da se podnozje doda svima: `sectionInsertFixer` dokument s podnozjem NAMJERNO odbija, pa ' +
+      'uvijek-podnozje zamijeni 3 dokazane celije za 3 nove, dakle nula',
+    caught: () => {
+      type Provjera = { id: string; earned: number; max: number };
+      const violated = (c: Provjera | undefined) => Boolean(c) && (c!.max ?? 0) > 0 && (c!.earned ?? 0) < (c!.max ?? 0);
+      // 1) Nepaginiran dokument: provjera postoji, ali je `max 0`, pa se ne moze prekrsiti.
+      const nepaginiran = violated({ id: 'page.numbers.position', earned: 0, max: 0 });
+      // 2) Paginiran dokument s krivim poravnanjem: provjera je bodovana i prekrsena.
+      const paginiran = violated({ id: 'page.numbers.position', earned: 1, max: 3 });
+      // 3) Dvije inacice se NE smiju stopiti u jednu: dokument koji nosi oboje ne postoji, jer
+      //    podnozje iskljucuje zahvat nad sekcijom.
+      const istiDokument = (imaPodnozje: boolean) => ({
+        alignmentMjerljiv: imaPodnozje,
+        sectionInsertMoguc: !imaPodnozje,
+      });
+      const s = istiDokument(true);
+      const bez = istiDokument(false);
+      const nemaDokumentaSOboje = !(s.alignmentMjerljiv && s.sectionInsertMoguc)
+        && !(bez.alignmentMjerljiv && bez.sectionInsertMoguc);
+      return !nepaginiran && paginiran && nemaDokumentaSOboje;
+    },
+    /**
+     * Netrivijalnost: uredna bodovana provjera koja je ZADOVOLJENA ne smije ispasti prekrsena, inace
+     * bi gard vristao na svaki paginiran dokument i prestao razlikovati mjerljivo od prekrsenog.
+     */
+    cleanBefore: () => {
+      type Provjera = { id: string; earned: number; max: number };
+      const violated = (c: Provjera) => (c.max ?? 0) > 0 && (c.earned ?? 0) < (c.max ?? 0);
+      return !violated({ id: 'page.numbers.position', earned: 3, max: 3 });
+    },
+  },
+  {
+    id: 'paket/dio-kojeg-svaki-pravi-dokument-ima-a-nas-nema',
+    imitates:
+      'generator ispusti dio paketa koji SVAKI pravi `.docx` ima, pa fixer koji taj dio trazi tiho ' +
+      'odustane i mjerenje pokaze slabiji popravak od onoga koji korisnik dobije. Izmjereno 2026-09-12: ' +
+      '`word/_rels/document.xml.rels` pisao se SAMO uz podnozje, a `footerPageFixer` prvi redak glasi ' +
+      '`if (!contentTypesXml || !documentRelsXml) return NO_OP(parts)`. `sectionInsertFixer` ga zove ' +
+      'iznutra, pa je popravak upisivao `pgNumType` i NIJE umetao podnozje: dokument je dobio ' +
+      'numeraciju koja se nema gdje ispisati, a zatvorena petlja je to biljezila kao uredan zahvat',
+    caught: () => {
+      type Dijelovi = { contentTypesXml?: string; documentRelsXml?: string };
+      // Ista ograda kao u `footerPageFixer`: bez OBA dijela se ne umece nista.
+      const umece = (d: Dijelovi) => Boolean(d.contentTypesXml) && Boolean(d.documentRelsXml);
+      const bezVeza = umece({ contentTypesXml: '<Types/>' });
+      const bezTipova = umece({ documentRelsXml: '<Relationships/>' });
+      const prazneVeze = umece({ contentTypesXml: '<Types/>', documentRelsXml: '' });
+
+      // Druga polovica: veza koja obecava dio kojeg u paketu nema jednako je kvar, samo u drugom
+      // smjeru (paket tvrdi vise nego sto nosi).
+      const imena = new Set(['word/styles.xml']);
+      const veze = ['styles.xml', 'footer1.xml'];
+      const obecajePremalo = veze.every((t) => imena.has('word/' + t));
+
+      return !bezVeza && !bezTipova && !prazneVeze && !obecajePremalo;
+    },
+    /**
+     * Netrivijalnost: uredan paket (oba dijela prisutna, veze pokrivene stvarnim dijelovima) NE smije
+     * dati nalaz. Bez ove polovice bi prosao i gard koji svaki paket proglasi neispravnim.
+     */
+    cleanBefore: () => {
+      type Dijelovi = { contentTypesXml?: string; documentRelsXml?: string };
+      const umece = (d: Dijelovi) => Boolean(d.contentTypesXml) && Boolean(d.documentRelsXml);
+      const uredan = umece({ contentTypesXml: '<Types/>', documentRelsXml: '<Relationships/>' });
+      const imena = new Set(['word/styles.xml', 'word/footer1.xml']);
+      const veze = ['styles.xml', 'footer1.xml'];
+      return uredan && veze.every((t) => imena.has('word/' + t));
+    },
+  },
+  {
+    id: 'usporedba/odsutna-provjera-brojana-kao-cist-nalaz',
+    imitates:
+      'usporedba dvaju alata brine odsutnost NASE provjere kao da je provjera trcala i bila cista. ' +
+      'Lektine citatne provjere nisu univerzalne: `reference.uncited` se emitira samo za profile koji ' +
+      'citiranje propisuju. Dok je odsutnost padala u `lekta = 0`, artefakt je tvrdio da je Lekta ' +
+      'gledala i nista nasla, pa je 17 od 25 razilazenja bilo LAZNO, i svako od njih se cita kao ' +
+      '"Lektina provjera je slijepa". Izmjereno 2026-09-10: ondje gdje Lekta os DOISTA mjeri, brojke ' +
+      'se poklapaju s Katedrinima (`adu`: 12 naspram 12), pa je zakljucak o sljepoci bio artefakt ' +
+      'usporedbe. Kvar je podmukao jer raste u smjeru koji izgleda kao bogatiji nalaz, ne kao regresija',
+    caught: () => {
+      const r = (lekta: number | null, katedra: number | null): ComparisonRow => ({
+        dokument: 'fzsri--final--prijediplomski--uskladjen.docx',
+        os: 'jedinica-necitirana',
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      // 1) Odsutna provjera NE smije proizvesti razilazenje.
+      const odsutna = r(null, 20);
+      const stopljena = r(0, 20); // stara izvedba: odsutnost stopljena s cistim nalazom
+      // 2) Cista provjera koja je DOISTA trcala i dalje daje razilazenje.
+      const cista = r(0, 20);
+      return (
+        odsutna.ishod === 'lekta-ne-mjeri' &&
+        divergentRows([odsutna]).length === 0 &&
+        stopljena.ishod === 'samo-katedra' &&
+        divergentRows([stopljena]).length === 1 &&
+        cista.ishod === 'samo-katedra'
+      );
+    },
+    /**
+     * Netrivijalnost u OBA smjera: `null` ne smije progutati stvarno razilazenje, a mjerena cista
+     * provjera ne smije ispasti kao "ne mjeri". Bez druge polovice bi prosao i gard koji sve
+     * proglasi nemjerenim, cime bi razilazenja nestala i izvoz kvarova ostao bez potkrepe.
+     */
+    cleanBefore: () => {
+      const r = (lekta: number | null, katedra: number | null): ComparisonRow => ({
+        dokument: 'fpzg--final--prijediplomski--uskladjen.docx',
+        os: 'citirano-bez-jedinice',
+        lekta,
+        katedra,
+        ishod: classifyOutcome(lekta, katedra),
+      });
+      const stvarno = r(0, 2);
+      const nasli = r(1, 2);
+      return (
+        stvarno.ishod === 'samo-katedra' &&
+        divergentRows([stvarno]).length === 1 &&
+        nasli.ishod === 'oba' &&
+        divergentRows([nasli]).length === 0
+      );
+    },
+  },
+  {
     id: 'mreza/fixer-se-ugasi-a-nitko-ne-primijeti',
     imitates:
       'fixer prestane raditi (zatrazen je, ali vise nista ne mijenja) i to nitko ne vidi, jer nijedan ' +
-      'postojeci artefakt to ne mjeri: `closed-loop.json` sprema `requested` kao GOLI BROJ i odbacuje ' +
-      '`skippedReasons`, `repair-real-corpus.json` ima `offeredFixerIds` bez ijednog citatelja, a ' +
+      'postojeci artefakt to ne mjeri: `closed-loop.json` je do 2026-09-09 spremao `requested` kao GOLI ' +
+      'BROJ (od tada uz njega stoji i `fixersChanged`, ali `skippedReasons` i dalje odbacuje), ' +
+      '`repair-real-corpus.json` ima `offeredFixerIds` bez ijednog citatelja, a ' +
       '`coverage-cells` klasificira staticki i nikad ne premjerava. Tocno taj razred je vec izmjeren: ' +
       '`empty-paragraph-fixer` je bio trajni no-op na svemu pisanom LibreOfficeom, i nasao ga je tek ' +
       'sinteticki korpus',
@@ -816,6 +1042,7 @@ const MUTATIONS: Mutation[] = [
         zatrazeno,
         promijenili,
         bezUcinka: zatrazeno.filter((f) => !promijenili.includes(f)).map((fixerId) => ({ fixerId, reason: 'no-target' })),
+        cekaPotvrdu: [],
         rijeseno: [],
         nerijeseno: [],
         regresije: [],
@@ -839,6 +1066,7 @@ const MUTATIONS: Mutation[] = [
         zatrazeno: ['radi-ponekad'],
         promijenili,
         bezUcinka: promijenili.length ? [] : [{ fixerId: 'radi-ponekad', reason: 'already-ok' }],
+        cekaPotvrdu: [],
         rijeseno: [],
         nerijeseno: [],
         regresije: [],
@@ -865,6 +1093,7 @@ const MUTATIONS: Mutation[] = [
         zatrazeno: ['gradi-prazan-zahtjev'],
         promijenili: [],
         bezUcinka: [{ fixerId: 'gradi-prazan-zahtjev', reason }],
+        cekaPotvrdu: [],
         rijeseno: [],
         nerijeseno: [],
         regresije: [],
@@ -884,6 +1113,7 @@ const MUTATIONS: Mutation[] = [
         zatrazeno: ['uredan-preskok'],
         promijenili: [],
         bezUcinka: [{ fixerId: 'uredan-preskok', reason }],
+        cekaPotvrdu: [],
         rijeseno: [],
         nerijeseno: [],
         regresije: [],
@@ -924,6 +1154,228 @@ const MUTATIONS: Mutation[] = [
         tabInHeading: 'naslov/tab-u-naslovu',
       });
       return v.missing.length === 0 && v.unknown.length === 0 && v.underDetected.length === 0;
+    },
+  },
+  {
+    id: 'mutacija/forma-upisana-a-alat-ju-je-tiho-odbacio',
+    imitates:
+      'mutacija bodovane FORME (font, prored, format stranice) upise se u izvor, brojac javi da je ' +
+      'radila, a LibreOffice ju pri spremanju tiho odbaci. Dokument tada izgleda kao da nosi kvar, a ' +
+      'nosi ga samo nas izvor; mreza bi mjerila oblik koji u paketu ne postoji. Nije teorijski: ovaj ' +
+      'katalog je isti kvar platio DVAPUT na `csOnlyFonts` (nedeklariran font, pa imenovan stil umjesto ' +
+      'automatskog), i oba puta ga je uhvatio jedino dokaz nad IZLAZOM. Druga polovica je brojac 0, ' +
+      'dakle mehanizam koji nije ni pokusao',
+    caught: () => {
+      // Brojac tvrdi da je font upisan, a `word/styles.xml` ga nema.
+      const odbaceno = verifyOutputProofs({ wrongBodyFont: 1 }, {
+        'word/styles.xml': '<w:styles><w:style w:styleId="BodyText"><w:rPr><w:rFonts w:ascii="Times New Roman"/></w:rPr></w:style></w:styles>',
+      });
+      const mrtav = verifyOutputProofs({ wrongBodyFont: 0 }, {
+        'word/styles.xml': '<w:styles><w:rFonts w:ascii="Comic Sans MS"/></w:styles>',
+      });
+      return (
+        odbaceno.some((p) => p.startsWith('wrongBodyFont:') && p.includes('nema dokaza')) &&
+        mrtav.some((p) => p.includes('mrtav mehanizam'))
+      );
+    },
+    // Netrivijalnost: kad paket dokaz NOSI, gard suti. Bez ovoga bi "hvatao" i gard koji vristi uvijek.
+    cleanBefore: () =>
+      verifyOutputProofs({ wrongBodyFont: 1 }, {
+        'word/styles.xml': '<w:styles><w:style w:styleId="BodyText"><w:rPr><w:rFonts w:ascii="Comic Sans MS"/></w:rPr></w:style></w:styles>',
+      }).length === 0,
+  },
+  {
+    id: 'matrica/demotirana-os-prijavljena-kao-rupa-u-dokazu',
+    imitates:
+      'celija dobije oznaku `nema-dokaza` iako proizvod tu os UOPCE NE BODUJE. Redci matrice pravila ' +
+      'izvode se iz SIROVIH pravila profila, a engine boduje pravila nakon scored/advisory demotije, ' +
+      'koja gasi barem jednu bodovanu dimenziju na 383 od 407 profila. Izmjereno 2026-09-09: 36 celija ' +
+      '(`paper-size-fixer` 24, `font-fixer` 12) tvrdilo je da fakultet os propisuje a mjerenja nema, ' +
+      'dok je istina bila da ju proizvod ne boduje, pa ju generator i ne krsi. Isti razred kao ' +
+      'preimenovanje 78 celija 2026-08-31: broj nepokrivenih se ne mijenja, mijenja se sto o njima tvrdimo',
+    caught: () => {
+      // Profil kojemu je os demotirana: `paramsForCheck` za svaki njegov checkId vraca `null`.
+      const demotiran = uncoveredReason(3, true, undefined, 'paper-size-fixer', { requireA4: false }, 'x', [
+        'paper-size',
+      ]);
+      return demotiran === 'profil-ne-propisuje-os';
+    },
+    /**
+     * Netrivijalnost: profil koji os DOISTA boduje mora zadrzati `nema-dokaza`, inace bi grana
+     * pojela svaku stvarnu rupu i matrica bi se ispraznila u nesto lijepo a neistinito.
+     */
+    cleanBefore: () => {
+      const stvarnaRupa = uncoveredReason(3, true, undefined, 'paper-size-fixer', { requireA4: true }, 'x', [
+        'paper-size',
+      ]);
+      return stvarnaRupa === 'nema-dokaza';
+    },
+  },
+  {
+    id: 'petlja/os-prestane-krsiti-pa-pokrivenost-tiho-nestane',
+    imitates:
+      'os generatora prestane krsiti pravilo (netko promijeni uvjet, profil izgubi `headingRules`, ' +
+      'ili se blok tiho preskoci). Ratchet closed-loopa to NE VIDI: os koja se ne krsi ne moze ni ' +
+      'pasti, pa broj `pass` ostaje isti, a matrica pokrivenosti izgubi 42 celije (po 21 za ' +
+      '`heading-format-fixer` i `heading-case-fixer`). Izmjereno 2026-09-09 pri uvodjenju te osi: ' +
+      'prva izvedba je uz naslove dodavala i odlomke tijela, cime je udio praznih odlomaka pao ispod ' +
+      'praga i `empty-paragraph-fixer` je nestao s 21 profila, a nijedan gard to nije prijavio',
+    caught: () => {
+      type Redak = { profileId: string; violated: string[]; axesResolved: string[] };
+      const provjeri = (rows: Redak[]) => {
+        const sPravilima = rows.filter((r) => r.violated.includes('heading-format'));
+        if (sPravilima.length <= 15) return true; // os je nestala iz generatora
+        return sPravilima.some((r) => !r.axesResolved.includes('heading-format'));
+      };
+      // Os je nestala: nijedan redak je vise ne krsi.
+      const nestala = provjeri([
+        { profileId: 'a', violated: ['font'], axesResolved: ['font'] },
+        { profileId: 'b', violated: ['font'], axesResolved: ['font'] },
+      ]);
+      // Os se krsi, ali ju popravak vise ne zatvara.
+      const nerijesena = provjeri(
+        Array.from({ length: 21 }, (_, i) => ({
+          profileId: `p${i}`,
+          violated: ['heading-format'],
+          axesResolved: i === 7 ? [] : ['heading-format'],
+        })),
+      );
+      return nestala && nerijesena;
+    },
+    // Netrivijalnost: uredan izvjestaj (os prekrsena i zatvorena na svima) NE smije dati nalaz.
+    cleanBefore: () => {
+      const rows = Array.from({ length: 21 }, (_, i) => ({
+        profileId: `p${i}`,
+        violated: ['heading-format'],
+        axesResolved: ['heading-format'],
+      }));
+      const sPravilima = rows.filter((r) => r.violated.includes('heading-format'));
+      return sPravilima.length > 15 && !sPravilima.some((r) => !r.axesResolved.includes('heading-format'));
+    },
+  },
+  {
+    id: 'petlja/uvjetna-os-tiho-prestane-pogadjati',
+    imitates:
+      'UVJETNA os generatora (krsi se samo kad profil nosi odredjenu zastavicu) prestane pogadjati, ' +
+      'jer se zastavica preimenuje ili graditelj promijeni uvjet. Razred je opasniji od bezuvjetne ' +
+      'osi upravo zato sto je populacija mala: `paragraph-spacing` se krsi na 4 od 407 profila, pa ' +
+      'gubitak ne pomice nijednu zbirnu brojku. `pass` ostaje 372 (os koja se ne krsi ne moze ni ' +
+      'pasti), a matrica tiho izgubi tri celije s dokazom `resolved` i jednu vrati s `resolved` na ' +
+      '`applied`. Gard koji bi trazio veliku populaciju ovdje ne bi grizao, pa je prag izveden iz ' +
+      'mjerenja',
+    caught: () => {
+      type Redak = { profileId: string; violated: string[]; axesResolved: string[] };
+      const provjeri = (rows: Redak[]) => {
+        const sPravilima = rows.filter((r) => r.violated.includes('paragraph-spacing'));
+        if (sPravilima.length <= 2) return true; // uvjet je prestao pogadjati
+        return sPravilima.some((r) => !r.axesResolved.includes('paragraph-spacing'));
+      };
+      // 1) Zastavica se preimenovala: nijedan redak vise ne krsi os.
+      const nestala = provjeri([
+        { profileId: 'a', violated: ['font'], axesResolved: ['font'] },
+        { profileId: 'b', violated: ['font'], axesResolved: ['font'] },
+      ]);
+      // 2) Uvjet je prezivio samo na dva profila umjesto na cetiri: pad ispod praga se vidi.
+      const osula = provjeri([
+        { profileId: 'a', violated: ['paragraph-spacing'], axesResolved: ['paragraph-spacing'] },
+        { profileId: 'b', violated: ['paragraph-spacing'], axesResolved: ['paragraph-spacing'] },
+      ]);
+      // 3) Os se krsi, ali ju popravak vise ne zatvara.
+      const nerijesena = provjeri(
+        Array.from({ length: 4 }, (_, i) => ({
+          profileId: `p${i}`,
+          violated: ['paragraph-spacing'],
+          axesResolved: i === 2 ? [] : ['paragraph-spacing'],
+        })),
+      );
+      return nestala && osula && nerijesena;
+    },
+    // Netrivijalnost: izmjereno stanje (cetiri profila, sva cetiri zatvorena) NE smije dati nalaz.
+    cleanBefore: () => {
+      const rows = Array.from({ length: 4 }, (_, i) => ({
+        profileId: `p${i}`,
+        violated: ['paragraph-spacing'],
+        axesResolved: ['paragraph-spacing'],
+      }));
+      const sPravilima = rows.filter((r) => r.violated.includes('paragraph-spacing'));
+      return sPravilima.length > 2 && !sPravilima.some((r) => !r.axesResolved.includes('paragraph-spacing'));
+    },
+  },
+  {
+    id: 'petlja/glavni-prolaz-zaboravi-tko-je-mijenjao',
+    imitates:
+      'glavni prolaz closed-loopa prestane biljeziti identitet fixera koji su promijenili dokument, ' +
+      'ili ga zabiljezi i kad je isporuka odbijena. Prvo je zateceno stanje do 2026-09-09: `requested` ' +
+      'je bio goli BROJ, pa fixer bez vlastite osi generatora nije mogao dokazati nista, ma koliko ' +
+      'puta odradio posao (izmjereno: `section-surgery-fixer` je na devet FPZG profila upisivao unos ' +
+      'u changelog dok mu je celija citala `nema-dokaza`). Drugo je vakuumsko zeleno iz vodica: uz ' +
+      '`integrityFailure` `applyFixers` vraca ULAZNE bajtove i PRAZAN changelog, pa bi brojanje ' +
+      'ZAHTJEVA umjesto changeloga pokrilo celije dokumentom koji nikad nije bio popravljen',
+    caught: () => {
+      type Ishod = { changelog: Array<{ fixerId?: string }>; integrityFailure: string | null };
+      // Ista izvedba kao u `run-closed-loop.mts`: identitet iz CHANGELOGA, prazno uz pad integriteta.
+      const izvedi = (out: Ishod): string[] =>
+        out.integrityFailure
+          ? []
+          : [...new Set(out.changelog.map((e) => e.fixerId).filter((id): id is string => Boolean(id)))].sort();
+      const gard = (redak: { outcome: string; fixersChanged: string[] }) =>
+        redak.outcome === 'pass' && redak.fixersChanged.length === 0;
+
+      // 1) Fixer je odradio posao, ali ga glavni prolaz nije zapisao.
+      const zaboravljen = gard({ outcome: 'pass', fixersChanged: [] });
+      // 2) Isporuka je odbijena, pa dokaza NEMA iako je zahtjev bio poslan.
+      const odbijena = izvedi({ changelog: [], integrityFailure: 'zip' }).length === 0;
+      // 3) Podmetnut changelog uz pad integriteta ne smije proizvesti dokaz.
+      const laznidokaz =
+        izvedi({ changelog: [{ fixerId: 'section-surgery-fixer' }], integrityFailure: 'zip' }).length === 0;
+      return zaboravljen && odbijena && laznidokaz;
+    },
+    // Netrivijalnost: uredan prolaz (fixer promijenio dokument, integritet cist) NE smije dati nalaz.
+    cleanBefore: () => {
+      const uredan = { outcome: 'pass', fixersChanged: ['section-surgery-fixer'] };
+      const izveden = [...new Set([{ fixerId: 'font-fixer' }, { fixerId: 'font-fixer' }].map((e) => e.fixerId))];
+      return !(uredan.outcome === 'pass' && uredan.fixersChanged.length === 0) && izveden.length === 1;
+    },
+  },
+  {
+    id: 'oblik/popravak-izgubi-oblik-pakiranja-pri-ponovnom-pisanju',
+    imitates:
+      'popravak ponovno napise paket i usput ispusti oblik PAKIRANJA koji je ulaz nosio, na primjer ' +
+      'direktorijske zapise u zipu (130 od 457 stvarnih radova) ili prazan `word/comments.xml` (135 ' +
+      'od 457). U dokumentu se to ne vidi: tekst je isti, analiza prolazi, a paket vise nije onaj ' +
+      'oblik na kojem je motor trebao biti dokazan. Druga polovica mutacije je vakuum: popravak koji ' +
+      'nema sto raditi vrati ULAZNE bajtove, pa tvrdnja "oblici su prezivjeli" postane istinita nad ' +
+      'netaknutim originalom i ne govori nista o pisacu paketa (isti razred kao odbijena isporuka ' +
+      'kroz vrata integriteta, koja takodjer vraca ulaz)',
+    caught: () => {
+      const counts = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      counts['paket/comments-prazan'] = 1;
+      counts['gdocs/potpis'] = 1;
+      // Popravak je ispustio direktorijske zapise; ostala dva oblika su prezivjela, pa nalaz mora
+      // biti IMENOVAN, a ne izveden iz toga da se broj oblika smanjio.
+      const izgubljen = verifyRepairRoundTrip(
+        ['zip/direktoriji', 'paket/comments-prazan', 'gdocs/potpis'],
+        counts,
+        { changed: true },
+      );
+      const vakuum = verifyRepairRoundTrip(['zip/direktoriji'], { ...counts, 'zip/direktoriji': 4 }, {
+        changed: false,
+      });
+      return izgubljen.lost.join(',') === 'zip/direktoriji' && vakuum.vacuous;
+    },
+    // Netrivijalnost: paket koji je popravak stvarno promijenio a oblike zadrzao ne smije dati nalaz,
+    // inace bi gard prijavljivao svaki popravak nad svakim paketom.
+    cleanBefore: () => {
+      const counts = Object.fromEntries(DOCX_SHAPE_IDS.map((id) => [id, 0])) as DocxShapeCounts;
+      counts['zip/direktoriji'] = 4;
+      counts['paket/comments-prazan'] = 1;
+      counts['gdocs/potpis'] = 1;
+      const v = verifyRepairRoundTrip(
+        ['zip/direktoriji', 'paket/comments-prazan', 'gdocs/potpis'],
+        counts,
+        { changed: true },
+      );
+      return v.lost.length === 0 && !v.vacuous;
     },
   },
   {

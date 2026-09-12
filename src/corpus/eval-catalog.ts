@@ -59,4 +59,20 @@ export const EVALI: readonly EvalClass[] = [
     ],
     fixtures: ['effectus--seminar--diplomski--uskladjen.docx'],
   },
+  {
+    defectId: 'sufiks-godine-rusi-citanje-jedinice',
+    prompt: 'Jesu li svi citati iz ovog rada pokriveni jedinicama u popisu literature?',
+    expected_output:
+      'Alat prijavi `maric 2023a` i `maric 2023b` kao citate bez izvora, a ISTU jedinicu istovremeno kao ' +
+      'necitiranu. Rad ima „Maric, L. (2023a)." i „Maric, L. (2023b)." u popisu; nijedna strana nije ' +
+      'pogrijesila. Ista stavka u dvije suprotne rubrike je potpis kvara u alatu, ne dva nalaza o radu.',
+    expectations: [
+      'Model primijeti da se ISTO prezime i ista godina pojavljuju u OBJE rubrike odjednom',
+      'Model iz toga zakljuci da je rijec o JEDNOM uzroku u alatu, ne o dva problema u radu',
+      'Model prepozna da je `2023a` propisan APA sufiks za dva rada istog autora iste godine',
+      'Model NE trazi od autora da makne sufiks ili da promijeni ispravan popis literature',
+      'Model kaze da pokrivenost za te jedinice NIJE pouzdano izmjerena, umjesto da prenese oba nalaza',
+    ],
+    fixtures: ['fpzg--project--diplomski--uskladjen.docx'],
+  },
 ];

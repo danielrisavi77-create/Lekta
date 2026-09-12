@@ -33,7 +33,7 @@ export interface DocxFeatures {
   fields: number;
   /** Alat koji je ZADNJI spremio dokument (`docProps/app.xml`). */
   producer: string | null;
-  producerFamily: 'word' | 'libreoffice' | 'google-docs' | 'unknown';
+  producerFamily: 'word' | 'libreoffice' | 'unknown';
   appVersion: string | null;
   /** Moderni Word (2013+) dijelovi; Word 2010 ih ne pise. */
   modernWordParts: string[];
@@ -58,12 +58,26 @@ function countMatches(xml: string | undefined, re: RegExp): number {
  *
  * Za Apple Pages NE postoji izmjerena vrijednost na ovom stroju, pa `family` nikad ne poprima
  * 'pages' na temelju nagadjanja; takav dokument ostaje 'unknown'.
+ *
+ * GRANA ZA GOOGLE DOCS JE UKLONJENA 2026-09-08, i to isto pravilo primijenjeno dosljedno. Bila je
+ * napisana kao `/Google/i.test(application)`, dakle pogodjena, i mjerenje nad 457 stvarnih radova
+ * (`Lekta-korpus`) ne daje NIJEDAN dokument s takvim `<Application>`:
+ *
+ *     241  Microsoft Office Word          20  LibreOffice/26.2.5.2$Windows_X86_64
+ *      49  Microsoft Macintosh Word        8  LibreOffice/25.2.3.2$Linux_X86_64
+ *       8  Microsoft Word 12.0.0           2  <pseudonimizirano> Office Word
+ *     129  app.xml BEZ <Application>       0  bilo sto s "Google"
+ *
+ * Google Docs izvoz je onih 129: `docProps/app.xml` postoji, ali je element `<Properties/>` PRAZAN,
+ * uz `docProps/custom.xml` i direktorijske zapise u zipu. Iz `<Application>` se takav dokument ne
+ * moze prepoznati, jer tog elementa nema, pa je 'unknown' ISTINIT odgovor ove funkcije. Identitet
+ * Google Docsa zato zivi ondje gdje je i izmjeren, kao oblik `gdocs/potpis` u `docx-shapes.ts`,
+ * koji gleda paket a ne niz.
  */
 export function producerFamilyOf(application: string | null): DocxFeatures['producerFamily'] {
   if (!application) return 'unknown';
   if (/^LibreOffice\//i.test(application) || /^OpenOffice/i.test(application)) return 'libreoffice';
   if (/Microsoft/i.test(application)) return 'word';
-  if (/Google/i.test(application)) return 'google-docs';
   return 'unknown';
 }
 

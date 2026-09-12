@@ -7,6 +7,7 @@ import { buildCoverageCells } from '../tests/helpers/coverage-cells';
 import { buildRepairCoverageMatrix } from '../tests/helpers/repair-coverage';
 import corpusReport from '../docs/generated/repair-real-corpus.json';
 import closedLoopReport from '../docs/generated/closed-loop.json';
+import authoredNet from '../docs/generated/repair-net.json';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const report = buildFacultyMatrixReport();
@@ -35,6 +36,7 @@ const cells = buildCoverageCells(
   buildRepairCoverageMatrix(),
   closedLoopReport as Parameters<typeof buildCoverageCells>[1],
   corpusReport as Parameters<typeof buildCoverageCells>[2],
+  authoredNet as Parameters<typeof buildCoverageCells>[3],
 );
 const cellOutput = join(root, 'docs', 'generated', 'coverage-cells.json');
 writeFileSync(
@@ -47,6 +49,7 @@ writeFileSync(
         repairSource: 'tests/helpers/repair-coverage.ts',
         closedLoopSource: 'docs/generated/closed-loop.json',
         realCorpusSource: 'docs/generated/repair-real-corpus.json',
+        authoredSource: 'docs/generated/repair-net.json (traka `authored`, nasa proza)',
       },
       summary: cells.summary,
       cells: cells.cells,

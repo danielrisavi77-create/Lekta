@@ -15,9 +15,11 @@
  * `nepokriveno`: treci status bi postao izlaz za nuzdu kojim se matrica isprazni a broj ostane
  * lijep, sto je obrazac na kojem je ovaj projekt vec izgorio.
  */
-import { resolveProfile } from '../../src/analysis/golden-entry';
+import { liveProfile } from './live-profile';
+import { paramsForCheck } from '../../src/ui/repair-items';
 import { draftRuleEntriesFor } from '../../src/profiles/drafts-runtime';
 import { FIXER_IDS, type FixerId } from '../../src/repair/apply-fixers';
+import { REPAIR_SURFACE } from '../../src/repair/repair-surface';
 import type { RepairCoverageMatrix } from './repair-coverage';
 import type { RealCorpusReport } from '../real-corpus/harness';
 import type { CorpusTrack } from '../real-corpus/corpus-track';
@@ -46,6 +48,23 @@ export interface ClosedLoopRow {
    * strukturno nedostizno.
    */
   recommendationsApplied?: string[];
+  /**
+   * Fixeri koji su u GLAVNOM prolazu upisali unos u changelog, uz `integrityFailure === null`.
+   *
+   * Zrcalo `recommendationsApplied` za drugi prolaz. Glavni je dosad cuvao samo BROJ zahtjeva, pa je
+   * fixer bez vlastite osi generatora bio strukturno nedokaziv: nije ga mogla pokriti ni grana po
+   * osi (1b) ni grana preporuka (1c), iako se dokazano izvodio.
+   */
+  fixersChanged?: string[];
+  /**
+   * PAGINIRANA INACICA istog profila: dokument s podnozjem i brojem stranice.
+   *
+   * Pravila o polozaju broja stranice se na nepaginiranom dokumentu ne mogu mjeriti (`max 0`), a
+   * podnozje se ne smije dodati u zadani primjerak jer `sectionInsertFixer` takav dokument namjerno
+   * odbija. Dvije inacice istog profila su zato jedini nacin da se obje osi izmjere, i dokaz iz ove
+   * ima ISTU tezinu, jer prolazi kroz isti lanac.
+   */
+  paginated?: { fixersChanged: string[]; violated: string[]; axesResolved: string[] };
   axesRemaining: string[];
   regressions: number;
   textPreserved: boolean;
@@ -66,8 +85,23 @@ export interface ClosedLoopReport {
  */
 export type EvidenceStrength = 'resolved' | 'applied';
 
+/**
+ * Mjerenje mreze popravka nad trakom `authored` (`docs/generated/repair-net.json`).
+ *
+ * Odvojen tip, a ne `RealCorpusReport`, jer se te dvije populacije NE SMIJU stopiti: prva su
+ * stvarni studentski radovi, druga su dokumenti cija je proza nasa.
+ */
+export interface AuthoredNetReport {
+  documents: Array<{
+    dokument: string;
+    profileId: string | null;
+    promijenili: string[];
+    regresije: unknown[];
+  }>;
+}
+
 export interface CellEvidence {
-  kind: 'closed-loop' | 'real' | 'generated';
+  kind: 'closed-loop' | 'real' | 'generated' | 'authored';
   strength: EvidenceStrength;
   /** Traka korpusa za dokaz iz dokumenta; `converted` ovdje ne moze doci (vidi corpus-track.ts). */
   track?: CorpusTrack;
@@ -98,7 +132,19 @@ export type UncoveredReason =
    * Fixer trazi ulaz koji generirani dokument NE MOZE dati: drugu datoteku za usporedbu, ili
    * odabir predloska koji je korak u sucelju. Nije rupa u mjerenju nego granica mjerenja.
    */
-  | 'trazi-ulaz-izvan-dokumenta';
+  | 'trazi-ulaz-izvan-dokumenta'
+  /**
+   * POMOCNI fixer (`dispatch-only`): radi iznutra, a unos u changelog nosi onaj koji ga zove.
+   *
+   * Nije rupa nego svojstvo alata, i to mjerljivo: `footer-page-fixer` poziva `sectionInsertFixer`
+   * iz svoje jezgre, pa `footer-page-fixer` u `fixersChanged` ne moze doci NI U JEDNOM scenariju,
+   * ma koliko puta odradio posao. Izmjereno 2026-09-12 nakon sto je popravljen `document.xml.rels`:
+   * podnozje se DOISTA umece (0 -> 1 footer dio), a ime u changelogu je i dalje pozivateljevo.
+   *
+   * Razred se izvodi iz `REPAIR_SURFACE`, ne iz prepisanog popisa, pa novi pomocni fixer dobije
+   * tocnu oznaku sam od sebe; prepisan popis bi istrunuo.
+   */
+  | 'pomocni-fixer-dokaz-nosi-pozivatelj';
 
 export type CoverageCell =
   | { profileId: string; fixerId: FixerId; status: 'pokriveno'; evidence: CellEvidence }
@@ -112,6 +158,15 @@ export interface CoverageCellReport {
     uncoveredCount: number;
     /** Dokaz jacine `resolved`; jedina brojka koja tvrdi da se provjera doista prevrnula. */
     resolvedCount: number;
+    /**
+     * Celije ciji dokaz pociva na dokumentu s NASOM prozom (traka `authored`).
+     *
+     * Broji se odvojeno i uvijek, jer je to jedina brojka koja odgovara na pitanje koliko
+     * pokrivenosti stoji na tekstu koji smo sami napisali. Bez nje bi se ta ovisnost s vremenom
+     * izgubila u zbroju, a upravo je razlikovanje nasih i tudjih dokumenata ono sto ovaj
+     * repozitorij drzi kroz cijeli zid dokaza.
+     */
+    authoredCount: number;
     byReason: Record<UncoveredReason, number>;
   };
 }
@@ -134,7 +189,7 @@ export function profileGatedFixers(matrix: RepairCoverageMatrix): Set<string> {
  * krsi os SAMO kad ju profil propisuje: `toc-field` se dodaje iskljucivo uz `requireToc === true`
  * (83 profila od 407). Bez ovoga je preostalih 325 celija `toc-field-fixera` nosilo dijagnozu
  * "univerzalna higijena bez dokaza", a tocna je "profil ne propisuje os": ti profili sadrzaj uopce
- * ne trazе, pa se nema sto ni dokazivati.
+ * ne traze, pa se nema sto ni dokazivati.
  */
 const AXIS_BY_FIXER: Record<string, string> = {
   'final-document-inspector-fixer': 'revision-metadata',
@@ -145,6 +200,10 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'croatian-typography-fixer': 'croatian-typography',
   'link-doi-fixer': 'link-doi',
   'required-section-fixer': 'required-section',
+  'paragraph-spacing-fixer': 'paragraph-spacing',
+  'page-number-alignment-fixer': 'page-number-alignment',
+  'footnote-spacing-fixer': 'footnote-spacing',
+  'bibliography-repair-fixer': 'bibliography',
 };
 
 /**
@@ -306,6 +365,8 @@ export const APPLIED_AXIS_FIXER: Record<string, string> = {
    * uvijek bio `false` i os NIKAD nije mogla zaraditi dokaz `applied`.
    */
   'element-caption': 'element-caption-fixer',
+  /** Vidi obrazlozenje uz `bibliography` u `closed-loop-wiring.ts`: bodovana samo na dijelu profila. */
+  bibliography: 'bibliography-repair-fixer',
 };
 
 /**
@@ -321,15 +382,59 @@ export const APPLIED_AXIS_FIXER: Record<string, string> = {
  * Jacina je `resolved`, ne `applied`: iza ovih osi stoji bodovana provjera koja se doista prevrnula
  * (`toc.present` max 5, `structure.heading.word-styles` max 4).
  */
-const RESOLVED_AXIS_FIXER: Record<string, string> = {
+const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
   'toc-field': 'toc-field-fixer',
   'heading-style': 'heading-style-fixer',
+  /**
+   * DVA fixera na jednoj osi, i zato je vrijednost od 2026-09-09 smjela postati polje.
+   *
+   * `heading-format-fixer` i `heading-case-fixer` vise o ISTOJ bodovanoj provjeri
+   * (`structure.heading.format`, max 6): oba se nude uz `isViolated('heading-format')`, prvi
+   * postavlja velicinu i isticanje po razinama, drugi tekst razina koje profil trazi velikim
+   * slovima. Kad se os rijesi, rijesila su je oba zajedno, pa bi upis samo jednoga ostavio drugi
+   * bez dokaza iako je radio.
+   */
+  'heading-format': ['heading-format-fixer', 'heading-case-fixer'],
+  /**
+   * `format.spacing.paragraph` je bodovana (max 3) i emitira se TOCNO za profile s
+   * `checkParagraphSpacingZero === true`, dakle za one koje generator i krsi. Skupovi se
+   * poklapaju, pa os smije nositi `resolved`; kod literature nisu i ondje je namjerno `applied`.
+   */
+  'paragraph-spacing': 'paragraph-spacing-fixer',
+  /** Mjeri se iskljucivo u paginiranoj inacici; `page.numbers.position` (max 3) ondje postoji. */
+  'page-number-alignment': 'page-number-alignment-fixer',
+  /** `footnote.spacing` (max 3) emitira se tocno za profile s `checkFootnoteParagraphSpacingZero`. */
+  'footnote-spacing': 'footnote-spacing-fixer',
 };
+
+/**
+ * Prazan brojac po razlogu, s NULOM za svaki razlog iz zatvorenog popisa.
+ *
+ * JEDAN izvor, jer su dva prepisana popisa vec kostala: `faculty-matrix.ts` je imao vlastitu kopiju
+ * i pri dodavanju razloga `pomocni-fixer-dokaz-nosi-pozivatelj` ostao bez njega. Posljedica nije bila
+ * greska nego `undefined + 1 = NaN`, a `NaN` se u JSON zapisuje kao `null`, pa je artefakt nosio
+ * `null` ondje gdje je trebao broj. Gard je to uhvatio tek preko `toEqual`, jer `NaN !== NaN`.
+ *
+ * `tests/**` se ne typechecka (`tsconfig.json` ima `include: ["src"]`), pa nedostajuci kljuc nema
+ * gdje izaci kao tipska greska. Zato popis smije postojati samo na jednom mjestu.
+ */
+export function emptyByReason(): Record<UncoveredReason, number> {
+  return {
+    'profil-ne-propisuje-os': 0,
+    'univerzalna-higijena-bez-dokaza': 0,
+    'closed-loop-nije-rijesio': 0,
+    'nema-dokaza': 0,
+    'ceka-ljudski-odabir': 0,
+    'trazi-ulaz-izvan-dokumenta': 0,
+    'pomocni-fixer-dokaz-nosi-pozivatelj': 0,
+  };
+}
 
 export function buildCoverageCells(
   matrix: RepairCoverageMatrix,
   closedLoop: ClosedLoopReport,
   corpus: RealCorpusReport,
+  authored?: AuthoredNetReport,
 ): CoverageCellReport {
   const gated = profileGatedFixers(matrix);
   const loopByProfile = new Map(closedLoop.rows.map((row) => [row.profileId, row]));
@@ -339,11 +444,23 @@ export function buildCoverageCells(
     const profileId = profile.profileId;
     const rows = matrix.rows.filter((row) => row.profileId === profileId);
     const loop = loopByProfile.get(profileId);
-    const resolvedAxes = new Set(loop?.axesResolved ?? []);
-    // Pravila profila trebaju samo za dijagnozu NEPOKRIVENE celije, pa se citaju jednom po profilu.
-    const resolved = resolveProfile(profileId) as Record<string, unknown> | null;
+    // Osi rijesene u BILO KOJOJ inacici; paginirana prolazi isti lanac, pa nosi isti dokaz.
+    const resolvedAxes = new Set([...(loop?.axesResolved ?? []), ...(loop?.paginated?.axesResolved ?? [])]);
+    /**
+     * Pravila profila trebaju samo za dijagnozu NEPOKRIVENE celije, pa se citaju jednom po profilu.
+     *
+     * ZIVI profil, ne goli `resolveProfile`, i to je ispravak iz 2026-09-09. Dijagnoza je dotad
+     * citala sirova pravila, a proizvod boduje pravila NAKON demotije, koja gasi barem jednu
+     * bodovanu dimenziju na 383 od 407 profila. Izmjereno: od 36 celija `paper-size-fixera` i
+     * `font-fixera` s oznakom `nema-dokaza`, njih 34 uopce nisu rupa nego osi koje proizvod ne
+     * boduje. Oznaka je tvrdila da fakultet os propisuje a mjerenja nema; istina je suprotna.
+     */
+    const resolved = liveProfile(profileId);
     const resolvedUniversalFixers = new Set(
-      [...resolvedAxes].map((axis) => RESOLVED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
+      [...resolvedAxes].flatMap((axis) => {
+        const upis = RESOLVED_AXIS_FIXER[axis];
+        return upis === undefined ? [] : Array.isArray(upis) ? [...upis] : [upis];
+      }),
     );
     const appliedFixers = new Set(
       (loop?.axesApplied ?? []).map((axis) => APPLIED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
@@ -423,6 +540,38 @@ export function buildCoverageCells(
         continue;
       }
 
+      /**
+       * 1d) Fixer je u GLAVNOM prolazu closed-loopa upisao unos u changelog.
+       *
+       * Zasto zaseban razred, a ne prosirenje 1b: 1b pripisuje dokaz preko OSI generatora, pa vrijedi
+       * samo za fixer koji svoju os ima. Fixer koji se nudi iz profilnih pravila bez vlastite osi
+       * dosad nije mogao dokazati nista, ma koliko puta odradio posao, jer je glavni prolaz cuvao
+       * samo BROJ zahtjeva.
+       *
+       * IZMJERENO 2026-09-09: `section-surgery-fixer` na `fpzg-politologija-zavrsni` gradi stavku,
+       * ulazi u zadane zahtjeve i upise se u changelog uz `integrityFailure === null`, dok je celija
+       * citala `nema-dokaza`. Isti fixer na `unizd-turizam-zavrsni` u glavnom prolazu ne gradi
+       * nijednu stavku i dokaz mu dolazi kroz 1c. Dvije mjere iste stvari, a zapisana je bila jedna.
+       *
+       * Jacina je `applied`, nikad `resolved`: changelog kaze da je dokument promijenjen bez pada
+       * integriteta, ne da je bodovana provjera presla u prolaz. Redoslijed je zato IZA 1a i 1b,
+       * koji nose jaci dokaz, i ISPRED stvarnog korpusa samo utoliko sto je isti prolaz.
+       */
+      if ([...(loop?.fixersChanged ?? []), ...(loop?.paginated?.fixersChanged ?? [])].includes(fixerId)) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'closed-loop',
+            strength: 'applied',
+            artifactId: `closed-loop:${profileId}`,
+            checkIds: checkIds.length ? checkIds : [],
+          },
+        });
+        continue;
+      }
+
       // 2) Slabiji dokaz: fixer je na stvarnom radu promijenio dokument bez regresije.
       const sample = samples.find(
         (result) => (result.changedFixerIds ?? []).includes(fixerId) && result.passRegressionCount === 0,
@@ -443,11 +592,49 @@ export function buildCoverageCells(
         continue;
       }
 
+      /**
+       * 3) NAJSLABIJI dokaz: fixer je promijenio dokument s NASOM prozom, bez regresije.
+       *
+       * Odluka vlasnika 2026-09-09. Do tada traka `authored` nije bila izvor dokaza, pa je 12
+       * napisanih radova zatvaralo NULA celija iako se na njima 21 fixer dokazano izvodi.
+       *
+       * Cetiri ograde, sve namjerne:
+       *
+       *   - ide ZADNJI, pa nikad ne potiskuje jaci dokaz iz closed-loopa ni sa stvarnog rada;
+       *   - nosi vlastitu vrstu (`kind: 'authored'`) i vlastitu traku, pa se u artefaktu ne moze
+       *     procitati kao stvaran rad;
+       *   - jacina je `applied`, nikad `resolved`: mreza biljezi da je fixer promijenio dokument,
+       *     ne i da se bodovana provjera prevrnula;
+       *   - broji se odvojeno (`authoredCount`), da se ovisnost o vlastitom tekstu vidi kao brojka,
+       *     a ne da se izgubi u zbroju pokrivenih.
+       *
+       * Zid dokaza time ostaje netaknut: `sidecarAdmitted` i dalje odbija te dokumente iz mjerenja
+       * koje puni matricu tvrdnji o profilima, a ovo je druga tvrdnja, o tome radi li POPRAVAK.
+       */
+      const nas = (authored?.documents ?? []).find(
+        (d) => d.profileId === profileId && d.promijenili.includes(fixerId) && d.regresije.length === 0,
+      );
+      if (nas) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'authored',
+            strength: 'applied',
+            track: 'authored',
+            artifactId: nas.dokument,
+            checkIds: checkIds.length ? checkIds : undefined,
+          },
+        });
+        continue;
+      }
+
       cells.push({
         profileId,
         fixerId,
         status: 'nepokriveno',
-        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId, resolved, profileId),
+        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId, resolved, profileId, checkIds),
       });
     }
   }
@@ -455,14 +642,30 @@ export function buildCoverageCells(
   return { cells, summary: summarize(cells) };
 }
 
-function uncoveredReason(
+export function uncoveredReason(
   ruleCount: number,
   isGated: boolean,
   loop: ClosedLoopRow | undefined,
   fixerId: string,
   profile: Record<string, unknown> | null,
   profileId: string,
+  checkIds: string[] = [],
 ): UncoveredReason {
+  /**
+   * OS KOJU ZIVI PROFIL NE BODUJE nije rupa nego neprimjenjivost, i to je ispravak iz 2026-09-09.
+   *
+   * Redci matrice pravila (`repair-coverage`) izvode se iz SIROVIH pravila, a proizvod boduje
+   * pravila nakon demotije. Za takav profil `paramsForCheck` vraca `null`, generator os ne krsi,
+   * fixer se ne nudi, i nema se sto dokazati.
+   *
+   * IZMJERENO: od 36 celija `paper-size-fixera` i `font-fixera` s oznakom `nema-dokaza`, njih 34 su
+   * bile upravo to. Oznaka je tvrdila da fakultet os propisuje a mjerenja nema; istina je da ju
+   * proizvod ne boduje. Isti razred kao preimenovanje 78 celija 2026-08-31: broj nepokrivenih se ne
+   * mijenja, mijenja se sto o njima tvrdimo.
+   */
+  if (checkIds.length && profile && checkIds.every((id) => paramsForCheck(id, profile) === null)) {
+    return 'profil-ne-propisuje-os';
+  }
   // Alat kojem je zadani odabir prazan po konstrukciji: nijedna os ga ne moze dokazati.
   if (UNDECIDABLE_FIXERS.has(fixerId)) return 'ceka-ljudski-odabir';
   if (OUT_OF_DOCUMENT_FIXERS.has(fixerId)) return 'trazi-ulaz-izvan-dokumenta';
@@ -492,6 +695,20 @@ function uncoveredReason(
    * Razlika nije kozmeticka: "univerzalna higijena bez dokaza" zvuci kao rub, a `nema-dokaza` je
    * rupa u pokrivenosti bas ondje gdje fakultet nesto propisuje.
    */
+  /**
+   * POMOCNI (`dispatch-only`) fixer ide TEK OVDJE, nakon svih provjera propisuje li profil os.
+   *
+   * Prva izvedba ga je stavila na vrh i preuzela 407 celija umjesto 4: za profil koji os uopce ne
+   * propisuje istina je i dalje `profil-ne-propisuje-os`, a nova oznaka bi tvrdila da je posrijedi
+   * svojstvo alata ondje gdje alat nema sto raditi. Redoslijed je zato ugovor, ne stil.
+   *
+   * Ovdje je istinita: profil os PROPISUJE, popravak je odradjen, ali `footer-page-fixer` radi
+   * iznutra i unos u changelog nosi `section-insert-fixer` koji ga zove, pa dokaz kroz
+   * `fixersChanged` ne moze doci NI U JEDNOM scenariju.
+   */
+  if ((REPAIR_SURFACE as Record<string, { kind?: string }>)[fixerId]?.kind === 'dispatch-only') {
+    return 'pomocni-fixer-dokaz-nosi-pozivatelj';
+  }
   const kapijaProsla = Boolean((gate && profile) || (ruleCheckId && profileId));
   if (ruleCount === 0) {
     if (isGated) return 'profil-ne-propisuje-os';
@@ -503,20 +720,15 @@ function uncoveredReason(
 }
 
 function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
-  const byReason: Record<UncoveredReason, number> = {
-    'profil-ne-propisuje-os': 0,
-    'univerzalna-higijena-bez-dokaza': 0,
-    'closed-loop-nije-rijesio': 0,
-    'nema-dokaza': 0,
-    'ceka-ljudski-odabir': 0,
-    'trazi-ulaz-izvan-dokumenta': 0,
-  };
+  const byReason = emptyByReason();
   let covered = 0;
   let resolved = 0;
+  let authoredEvidence = 0;
   for (const cell of cells) {
     if (cell.status === 'pokriveno') {
       covered += 1;
       if (cell.evidence.strength === 'resolved') resolved += 1;
+      if (cell.evidence.kind === 'authored') authoredEvidence += 1;
     } else {
       byReason[cell.reason] += 1;
     }
@@ -526,6 +738,7 @@ function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
     coveredCount: covered,
     uncoveredCount: cells.length - covered,
     resolvedCount: resolved,
+    authoredCount: authoredEvidence,
     byReason,
   };
 }

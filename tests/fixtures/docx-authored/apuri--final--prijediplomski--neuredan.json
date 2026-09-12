@@ -26,7 +26,7 @@
     "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
     "os": "win32 x64",
     "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row apuri--final--prijediplomski --messy",
-    "generatedAt": "2026-09-07T00:29:39.738Z"
+    "generatedAt": "2026-09-08T22:42:08.765Z"
   },
   "mutations": {
     "tabInHeading": 16,
@@ -36,8 +36,13 @@
     "csOnlyFonts": 4,
     "biblioAsHeading": 2,
     "commentsPart": 2,
-    "allLevelThree": 22
+    "allLevelThree": 22,
+    "wrongBodyFont": 1,
+    "singleLineSpacing": 1,
+    "letterPaper": 1,
+    "paragraphSpacingNoise": 1
   },
+  "mutationsNotApplicable": {},
   "shapes": {
     "claimed": [
       "zip/bit3",

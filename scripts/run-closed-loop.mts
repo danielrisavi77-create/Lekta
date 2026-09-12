@@ -32,6 +32,7 @@ const { normalizeCheckFlags } = await import('../src/profiles/profile-baseline')
 const { applyScoredAdvisory } = await import('../src/profiles/advisory-demotion');
 const { SOURCE_REGISTRY } = await import('../src/verification/verification-registry');
 const { buildViolatingDocx, VIOLATABLE_CHECK_IDS } = await import('../tests/helpers/violating-docx');
+const { liveProfile: sharedLiveProfile } = await import('../tests/helpers/live-profile');
 const { APPLIED_AXIS_FIXER } = await import('../tests/helpers/coverage-cells');
 const { AXIS_SIGNAL, STRUCTURAL_WITHOUT_SCORED_CHECK, assertAxisEvidenceWiring } = await import('../tests/helpers/closed-loop-wiring');
 
@@ -62,31 +63,13 @@ const limit = limitFlag > -1 ? Number(process.argv[limitFlag + 1]) : Infinity;
  * `vuka-strojarski-diplomski`: mirror kaze margine 2/2/2/2,5, zapis i `effectiveRules` kazu
  * 3/3/3/3 - petlja je bez ovog overlaya prijavljivala lazno proturjecje izmedju popravka i ocjene.
  */
-function liveProfile(profileId: string): Record<string, unknown> {
-  const withDrafts = (VERIFIED_PROFILES_WITH_DRAFTS as Array<{ id: string }>).find((p) => p.id === profileId);
-  const base = resolveProfile(profileId) as Record<string, unknown>;
-  if (!withDrafts) return base;
-  // Normalizacija MORA ici nakon overlaya: `applyEntry` upisuje sirovu vrijednost zapisa
-  // (npr. `size: 12`), a analizator ocekuje oblik iz `rules` (`size: [12]`). Zivi app radi isto -
-  // `currentProfile` normalizira nakon sto procita effectiveRules. Bez toga 144 profila puca na
-  // `profile.size.some is not a function` (izmjereno).
-  const merged = { ...base, ...compileEffectiveRules(withDrafts as never) } as Record<string, unknown>;
-  normalizeCheckFlags(merged);
-  /**
-   * Scored/advisory demotion je PRODUKTNA politika: zivi engine boduje samo verificirani scored
-   * skup, a ostale dimenzije prikazuje informativno (max 0). Golden je namjerno ne primjenjuje jer
-   * mjeri sirovi engine, ali closed-loop mora mjeriti PROIZVOD - inace prijavi kao neuspjeh
-   * popravka ono sto fakultet uopce ne propisuje nego savjetuje (izmjereno: 29 profila je na osi
-   * `paper-size` ispadalo `partial`, a rijec je o `advisory` zapisu bez fixera).
-   */
-  applyScoredAdvisory(
-    merged as never,
-    withDrafts as never,
-    draftRuleEntriesFor(profileId),
-    SOURCE_REGISTRY as never,
-  );
-  return merged;
-}
+/**
+ * Zivi profil dolazi iz JEDNOG izvora (`tests/helpers/live-profile.ts`), koji dijeli i matrica
+ * pokrivenosti. Do 2026-09-09 je ista konstrukcija stajala ovdje, a `coverage-cells` je za dijagnozu
+ * citao goli `resolveProfile`; razlika je bila demotija, koja gasi bodovanu dimenziju na 383 od 407
+ * profila, pa je 34 celije nosilo neistinitu oznaku.
+ */
+const liveProfile = (profileId: string): Record<string, unknown> => sharedLiveProfile(profileId) ?? {};
 
 
 /**
@@ -112,6 +95,37 @@ const AXIS_CHECK_ID: Record<string, string> = {
   // BODOVANA; obrazlozenje je u `STRUCTURAL_WITHOUT_SCORED_CHECK` nize.
   'toc-field': 'toc.present',
   'heading-style': 'structure.heading.word-styles',
+  /**
+   * `structure.heading.format` je BODOVANA (max 6, izmjereno na `pravo-porezni-prijediplomski`),
+   * pa os smije nositi `resolved`. Uvedena 2026-09-09, jer je matrica pokrivenosti imala 21 celiju
+   * `heading-format-fixera` i 12 celija `heading-case-fixera` bez ijednog dokaza, i to TOCNO na
+   * svim profilima koji `headingRules` propisuju. Uzrok nije bio kvar fixera nego to sto generator
+   * tu os nikad nije krsio.
+   */
+  'heading-format': 'structure.heading.format',
+  /**
+   * `format.spacing.paragraph` je BODOVANA (max 3, izmjereno na `pravo-integrirani-diplomski`:
+   * 2,8/3 `warn` prije popravka, 3/3 `pass` poslije), pa os smije nositi `resolved`.
+   *
+   * Za razliku od `bibliography`, ovdje se skupovi POKLAPAJU: os se krsi samo kad profil ima
+   * `checkParagraphSpacingZero === true`, a bas ta zastavica i emitira provjeru. Kod literature
+   * je bilo obrnuto (os na svima, bodovanje na manjini) i closed-loop je pao s 372 na 11.
+   */
+  'paragraph-spacing': 'format.spacing.paragraph',
+  /**
+   * `page.numbers.position` je BODOVANA (max 3), ali SAMO na dokumentu koji broj stranice ima.
+   * Zato se os krsi iskljucivo u paginiranoj inacici; u zadanoj je ta provjera `max 0`.
+   */
+  'page-number-alignment': 'page.numbers.position',
+  /**
+   * `footnote.spacing` je BODOVANA (max 3, izmjereno na `pravo-integrirani-diplomski`: 2,8/3
+   * prije popravka, 3/3 poslije). Os je uvjetna: krsi se samo uz
+   * `checkFootnoteParagraphSpacingZero === true`, a bas ta zastavica i emitira provjeru.
+   *
+   * Fusnota pritom ODGOVARA profilu u svemu ostalom (`present` 4/4, `format` 6/6, `marker` 4/4),
+   * pa se krsi TOCNO jedna os i uzroci se ne mijesaju.
+   */
+  'footnote-spacing': 'footnote.spacing',
 };
 
 /**
@@ -191,6 +205,37 @@ interface Row {
    */
   recommendationsApplied: string[];
   /**
+   * Fixeri koji su u GLAVNOM prolazu doista upisali unos u changelog.
+   *
+   * Postoji jer je isti podatak dosad postojao samo za preporuke. Glavni prolaz je vracao `requested`
+   * kao goli BROJ, pa se identitet fixera gubio, a presuda je isla iskljucivo preko OSI generatora.
+   * Fixer koji se nudi iz profilnih pravila a nema vlastitu os time nije mogao nista dokazati, ma
+   * koliko puta odradio posao.
+   *
+   * IZMJERENO 2026-09-09 na `fpzg-politologija-zavrsni`: `section-surgery-fixer` je izgradjen kao
+   * stavka (`violated: true`), usao u zadane zahtjeve i UPISAO se u changelog uz
+   * `integrityFailure === null`, dok je njegova celija u matrici citala `nema-dokaza`. Suprotan
+   * slucaj, `unizd-turizam-zavrsni`, u glavnom prolazu ne gradi nijednu stavku i dokaz mu dolazi iz
+   * prolaza preporuka, koji se biljezi. Ista mjera, dva puta, samo je jedan bio zapisan.
+   *
+   * Ovo je dokaz snage `applied`, ne `resolved`: kaze da je fixer promijenio dokument bez pada
+   * integriteta, ne da je bodovana provjera presla u prolaz.
+   */
+  fixersChanged: string[];
+  /**
+   * PAGINIRANA INACICA: isti profil, dokument s podnozjem i brojem stranice.
+   *
+   * Postoji jer se pravila o broju stranice po konstrukciji ne mogu mjeriti na dokumentu koji broj
+   * stranice nema: `page.numbers.position` ondje dolazi kao `max 0`, pa `isViolated` vraca `false` i
+   * `page-number-alignment-fixer` se nikad ne ponudi. A podnozje se ne smije dodati u zadani
+   * primjerak, jer `sectionInsertFixer` namjerno odbija dokument koji ga vec ima; izmjereno
+   * 2026-09-09, uvijek-podnozje zamijeni 3 dokazane celije za 3 nove.
+   *
+   * Vrti se SAMO za profile koji polozaj broja stranice propisuju (izmjereno: 3 od 407), pa je cijena
+   * zanemariva.
+   */
+  paginated?: { fixersChanged: string[]; violated: string[]; axesResolved: string[] };
+  /**
    * Osi koje propisuje PROFIL, a generator ih je prekrsio. Prazno znaci da tom profilu nijedan
    * objavljen izvor ne propisuje nijednu od sest formatnih osi.
    */
@@ -206,7 +251,7 @@ interface Row {
 }
 
 async function runProfile(profileId: string): Promise<Row> {
-  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], recommendationsApplied: [], profileAxesViolated: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
+  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], recommendationsApplied: [], fixersChanged: [], profileAxesViolated: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
   try {
     const profile = liveProfile(profileId);
     const { bytes, violated } = await buildViolatingDocx(profile, useStructural ? { structural: true } : {});
@@ -235,6 +280,15 @@ async function runProfile(profileId: string): Promise<Row> {
     if (!requests.length) return { ...base, outcome: 'no-repair', violated };
 
     const applied = await applyFixers(bytes, requests);
+    /**
+     * Identitet fixera iz GLAVNOG prolaza. Cita se iz changeloga, ne iz zahtjeva: zatrazen fixer
+     * koji nije nista promijenio ne dokazuje nista, a `applyFixers` uz pad integriteta vraca ULAZNE
+     * bajtove i PRAZAN changelog, pa bi brojanje zahtjeva bilo vakuumski zeleno.
+     */
+    const fixersChanged = applied.integrityFailure
+      ? []
+      : [...new Set((applied.changelog as Array<{ fixerId?: string }>).map((entry) => entry.fixerId)
+          .filter((id): id is string => Boolean(id)))].sort();
 
     /**
      * DRUGI PROLAZ: preporuke, svaka zasebno i nad IZVORNIM bajtovima.
@@ -322,6 +376,46 @@ async function runProfile(profileId: string): Promise<Row> {
     const profileAxesViolated = violated.filter((axis) => PROFILE_AXES.has(axis));
     const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
 
+    /**
+     * TRECI PROLAZ: paginirana inacica, samo za profile koji polozaj broja stranice propisuju.
+     *
+     * Mjeri se ISTIM lancem kao glavni prolaz, pa dokaz ima istu tezinu. Pad ovdje ne smije oboriti
+     * presudu glavnog prolaza: inacica postoji da bi se izmjerilo NESTO VISE, ne da bi se izgubilo
+     * ono sto je vec izmjereno.
+     */
+    let paginated: Row['paginated'];
+    if ((profile as { pageNumberAlignment?: unknown }).pageNumberAlignment) {
+      try {
+        const pag = await buildViolatingDocx(profile, { structural: true, pageNumberFooter: true } as never);
+        const pBefore = await analyzeFixture(
+          new File([pag.bytes], `${profileId}-pag.docx`, { type: DOCX_MIME }),
+          { profileId, profile },
+        );
+        const pItems = buildAllRepairableItems({ result: pBefore, profile, entries: draftRuleEntriesFor(profileId) } as never);
+        const pReq = buildDefaultRepairRequests(pItems as never).map((request) =>
+          DEEP_CAPABLE.has(request.fixerId) ? { ...request, params: { ...request.params, deep: true } } : request,
+        );
+        const pApplied = await applyFixers(pag.bytes, pReq);
+        if (!pApplied.integrityFailure) {
+          const pAfter = await analyzeFixture(
+            new File([pApplied.docxBytes], `${profileId}-pag-fixed.docx`, { type: DOCX_MIME }),
+            { profileId, profile },
+          );
+          const pChecks = (pAfter.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
+          paginated = {
+            fixersChanged: [...new Set((pApplied.changelog as Array<{ fixerId?: string }>).map((e) => e.fixerId)
+              .filter((id): id is string => Boolean(id)))].sort(),
+            violated: [...pag.violated],
+            axesResolved: pag.violated.filter(
+              (axis) => !STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis) && axisResolved(checkForAxis(pChecks, axis)),
+            ),
+          };
+        }
+      } catch {
+        // Paginirana inacica je DODATAK. Njezin pad se ne smije preliti na presudu glavnog prolaza.
+      }
+    }
+
     const row: Row = {
       profileId,
       outcome: 'pass',
@@ -331,6 +425,8 @@ async function runProfile(profileId: string): Promise<Row> {
       axesRemaining,
       axesApplied,
       recommendationsApplied: [...new Set(recommendationsApplied)].sort(),
+      fixersChanged,
+      ...(paginated ? { paginated } : {}),
       profileAxesViolated,
       resolved: axesResolved.length,
       regressions,

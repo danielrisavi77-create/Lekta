@@ -98,7 +98,9 @@ async function generirajRedak(row: CorpusRow, messy: boolean, outDir: string, so
   const rules = composedRulesFor(row) as ProfileRules;
   const { lines, templateId } = await titleLinesFor(row, body);
   const osnovni = buildFodt(body, { titleLines: lines, rules });
-  const { fodt, counters } = messy ? applyMutations(osnovni, NEUREDNE) : { fodt: osnovni, counters: {} };
+  const { fodt, counters, notApplicable } = messy
+    ? applyMutations(osnovni, NEUREDNE)
+    : { fodt: osnovni, counters: {}, notApplicable: {} };
 
   const naziv = `${row.id}--${messy ? 'neuredan' : 'uskladjen'}`;
   const fodtPath = join(outDir, `${naziv}.fodt`);
@@ -119,6 +121,7 @@ async function generirajRedak(row: CorpusRow, messy: boolean, outDir: string, so
     toolPath: soffice,
     command: `npx vite-node scripts/corpus-gen/generate.mts -- --row ${row.id}${messy ? ' --messy' : ''}`,
     counters,
+    notApplicable,
     requireToc: rules.requireToc !== false,
   });
 

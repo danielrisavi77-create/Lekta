@@ -14,7 +14,12 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
+import {
+  aggregateByFixer,
+  deadFixers,
+  awaitingConfirmationFixers,
+  type DocumentMeasurement,
+} from '../scripts/corpus-gen/net-core.mts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ARTEFAKT = join(ROOT, 'docs', 'generated', 'repair-net.json');
@@ -27,10 +32,18 @@ interface FixerRowJson {
   changed: number;
   reasons: Record<string, number>;
   deadOn: string[];
+  awaitingConfirmation: number;
 }
 interface Artefakt {
   schemaVersion: number;
-  summary: { documentCount: number; fixerCount: number; deadCount: number; dead: string[] };
+  summary: {
+    documentCount: number;
+    fixerCount: number;
+    deadCount: number;
+    dead: string[];
+    awaitingCount: number;
+    awaiting: string[];
+  };
   fixers: FixerRowJson[];
   documents: DocumentMeasurement[];
   generatedAt?: string;
@@ -140,6 +153,67 @@ describe('ratchet: popis mrtvih je imenovan i smije samo padati', () => {
       expect(row!.deadOn.length, d.fixerId).toBeGreaterThan(0);
     }
   });
+
+  /**
+   * PRAZAN RATCHET PROLAZI VAKUUMSKI kroz sve tvrdnje iznad, jer se svaka vrti po njegovim unosima.
+   * Popis je 2026-09-08 doista ispraznjen, pa je bez ove tvrdnje cijeli ovaj describe od tog dana
+   * prestao ista dokazivati. Trazi se dakle da mjerenje POSTOJI i da nijedan fixer ne bude mrtav
+   * a da to nitko nije upisao.
+   */
+  it('prazan popis mrtvih znaci da MJERENJE nije naslo nijednog, ne da mjerenja nema', () => {
+    expect(artefakt.fixers.length, 'nijedan fixer nije ni zatrazen; mreza nista ne mjeri').toBeGreaterThan(0);
+    expect(artefakt.summary.dead).toEqual([]);
+    expect(ratchet.dead).toEqual([]);
+  });
+});
+
+/**
+ * TRI STANJA, NE DVA. Fixer kojemu `params` ni na jednom dokumentu ne nose posao NIJE mrtav nego
+ * ceka ljudsku potvrdu. Do 2026-09-08 je mreza ta dva stanja mijesala, pa su `consistency-fixer`
+ * (24/0) i `citation-bibliography-sync-fixer` (5/0) godinama stajali na popisu mrtvih. Posljedica
+ * nije bila kozmeticka: da se JEDAN OD NJIH doista pokvari, izgledalo bi tocno kao tada.
+ */
+describe('fixer koji ceka potvrdu nije mrtav', () => {
+  it('artefakt razdvaja `dead` od `awaiting`, i skupovi se ne preklapaju', () => {
+    const presjek = artefakt.summary.dead.filter((f) => artefakt.summary.awaiting.includes(f));
+    expect(presjek, 'isti fixer ne moze biti i mrtav i u cekanju').toEqual([]);
+    expect(artefakt.summary.awaitingCount).toBe(artefakt.summary.awaiting.length);
+    expect(artefakt.summary.deadCount).toBe(artefakt.summary.dead.length);
+  });
+
+  it('svaki fixer u cekanju je zatrazen, nista nije promijenio, i SVAKI mu je zahtjev bio bez posla', () => {
+    // Anti-vakuum: popis ne smije biti prazan, inace tvrdnje ispod ne mjere nista.
+    expect(artefakt.summary.awaiting.length).toBeGreaterThan(0);
+    for (const id of artefakt.summary.awaiting) {
+      const row = artefakt.fixers.find((f) => f.fixerId === id);
+      expect(row, `${id} je u cekanju a nije ni zatrazen`).toBeTruthy();
+      expect(row!.changed, id).toBe(0);
+      expect(row!.awaitingConfirmation, id).toBe(row!.requested);
+    }
+  });
+
+  it('fixer koji je BAREM jednom dobio zahtjev s poslom a nista nije promijenio ostaje MRTAV', () => {
+    const m = (dokument: string, ceka: boolean): DocumentMeasurement => ({
+      dokument,
+      profileId: 'p',
+      paloPrije: [],
+      zatrazeno: ['x'],
+      promijenili: [],
+      bezUcinka: [{ fixerId: 'x', reason: 'no-target' }],
+      cekaPotvrdu: ceka ? ['x'] : [],
+      rijeseno: [],
+      nerijeseno: [],
+      regresije: [],
+      integrityFailure: null,
+    });
+    const svi = aggregateByFixer([m('a.docx', true), m('b.docx', true)]);
+    expect(deadFixers(svi)).toEqual([]);
+    expect(awaitingConfirmationFixers(svi)).toEqual(['x']);
+
+    const jedan = aggregateByFixer([m('a.docx', true), m('b.docx', false)]);
+    expect(deadFixers(jedan), 'jedan zahtjev s poslom vraca fixer medju mrtve').toEqual(['x']);
+    expect(awaitingConfirmationFixers(jedan)).toEqual([]);
+  });
 });
 
 describe('agregacija po fixeru: mehanizam se dokazuje nad podmetnutim ulazom', () => {
@@ -150,6 +224,7 @@ describe('agregacija po fixeru: mehanizam se dokazuje nad podmetnutim ulazom', (
     zatrazeno,
     promijenili,
     bezUcinka: zatrazeno.filter((f) => !promijenili.includes(f)).map((fixerId) => ({ fixerId, reason: razlog })),
+    cekaPotvrdu: [],
     rijeseno: [],
     nerijeseno: [],
     regresije: [],

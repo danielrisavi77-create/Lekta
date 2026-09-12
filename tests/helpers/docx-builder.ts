@@ -35,6 +35,18 @@ export interface FootnoteSpec {
   spacingLine?: number;
   before?: number;
   after?: number;
+  /**
+   * Stil odlomka fusnote, u praksi `FootnoteText`.
+   *
+   * Polje je DEKLARIRANO 2026-09-12, iako ga je `footnotesXml` kroz spread vec propustao do
+   * `paraXml`: generator ga je koristio, a tip o njemu nije znao. `tsconfig.json` ima
+   * `include: ["src"]`, pa se `tests/**` ne typechecka i visak svojstva se nije imao gdje prijaviti.
+   * Oslanjati se na nedeklarirano polje je isti razred kao mjerenje bez garda.
+   *
+   * Postoji jer `patchFootnoteTextSpacing` pise u STIL `FootnoteText` i izricito ne izmislja stil
+   * kojeg dokument nema, pa fusnota mora taj stil doista nositi.
+   */
+  styleId?: string;
 }
 
 /** Podnožje sa (zadanim) brojem stranice: word/footer1.xml + veza u document.xml.rels.
@@ -131,9 +143,21 @@ function sectPrXml(spec: DocSpec): string {
   const page = spec.pageCm ?? { w: 21.0, h: 29.7 };
   const m = spec.marginsCm ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
   const tw = (cm: number) => Math.round(cm * TWIPS_PER_CM);
-  // Redoslijed po OOXML shemi: footerReference, pgSz, pgMar, pgNumType. xmlns:r deklariran LOKALNO
-  // na footerReference (root document.xml nema xmlns:r) pa je izlaz bez footera BAJT-IDENTICAN.
-  const footerRef = spec.footer ? `<w:footerReference w:type="default" r:id="${FOOTER_RID}" xmlns:r="${REL_NS}"/>` : '';
+  /**
+   * Redoslijed po OOXML shemi: footerReference, pgSz, pgMar, pgNumType.
+   *
+   * xmlns:r ide na KORIJEN w:document (vidi documentXml), ne lokalno na ovaj element. Lokalna
+   * deklaracija je valjan XML, ali NIJE oblik koji Word pise, a razlika je izmjerena 2026-09-10:
+   * link-doi-fixer trazi xmlns:r obrascem koji gleda BILO GDJE u dokumentu, pa je lokalnu
+   * deklaraciju citao kao dokaz da je prostor imena vec vezan i preskakao upis na korijen.
+   * Hiperveza se umece u tijelo, izvan dosega te deklaracije, pa izlazni word/document.xml
+   * prestane biti valjan XML, i to uz integrityFailure === null. xml-patch.ts istu stvar radi
+   * tocno, jer svoj obrazac sidri na korijenski tag.
+   *
+   * Graditelj zato pise realan oblik; kvar u link-doi-fixeru je PRIJAVLJEN i popravlja se odvojeno,
+   * jer je popravak zasticen sloj i trazi vlastiti golden dokaz.
+   */
+  const footerRef = spec.footer ? `<w:footerReference w:type="default" r:id="${FOOTER_RID}"/>` : '';
   const pgNum = spec.pageNumberStart != null ? `<w:pgNumType w:start="${spec.pageNumberStart}"/>` : '';
   return (
     `<w:sectPr>` +
@@ -159,18 +183,41 @@ function footerXml(f: FooterSpec): string {
   );
 }
 
-/** word/_rels/document.xml.rels s vezom na footer1.xml (parser relMap: Id -> Target). */
-const DOCUMENT_RELS =
-  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-  `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
-  `<Relationship Id="${FOOTER_RID}" Type="${REL_NS}/footer" Target="footer1.xml"/>` +
-  `</Relationships>`;
+/**
+ * `word/_rels/document.xml.rels`: veze glavnog dijela prema ostalim dijelovima paketa.
+ *
+ * EMITIRA SE UVIJEK, i to je ispravak od 2026-09-10. Prije se pisao SAMO uz podnozje, pa dokument
+ * bez podnozja uopce nije imao veze glavnog dijela. Nijedan pravi `.docx` tako ne izgleda: Word uvijek
+ * upise barem vezu na `styles.xml`.
+ *
+ * Razlika nije kozmeticka nego je gasila cijeli fixer. `footerPageFixer` na prvom retku radi
+ * `if (!contentTypesXml || !documentRelsXml) return NO_OP(parts)`, dakle bez `document.xml.rels` ne
+ * umece podnozje UOPCE. Zato je `footer-page-fixer` na sva 4 profila koja numeraciju stranica
+ * propisuju stajao kao `nema-dokaza`, a uzrok nije bio ni u fixeru ni u profilu nego u obliku koji
+ * generator proizvodi. Isti razred kao `xmlns:r` deklariran lokalno umjesto na korijenu.
+ *
+ * Veze se grade iz dijelova koji DOISTA postoje, da paket ne obeca dio kojeg u zipu nema.
+ */
+function documentRelsXml(spec: DocSpec, hasFootnotes: boolean, hasFooter: boolean, hasEndnotes: boolean): string {
+  const veze: string[] = [`<Relationship Id="rId1" Type="${REL_NS}/styles" Target="styles.xml"/>`];
+  if (spec.settings) veze.push(`<Relationship Id="rId2" Type="${REL_NS}/settings" Target="settings.xml"/>`);
+  if (hasFootnotes) veze.push(`<Relationship Id="rId3" Type="${REL_NS}/footnotes" Target="footnotes.xml"/>`);
+  if (hasEndnotes) veze.push(`<Relationship Id="rId4" Type="${REL_NS}/endnotes" Target="endnotes.xml"/>`);
+  if (hasFooter) veze.push(`<Relationship Id="${FOOTER_RID}" Type="${REL_NS}/footer" Target="footer1.xml"/>`);
+  return (
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+    veze.join('') +
+    `</Relationships>`
+  );
+}
 
 export function documentXml(spec: DocSpec): string {
   const body = spec.paragraphs.map(paraXml).join('');
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+    // xmlns:r se deklarira SAMO kad ga dokument treba (podnozje), pa je izlaz bez njega bajt-identican.
+    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"${spec.footer ? ` xmlns:r="${REL_NS}"` : ''}>` +
     `<w:body>${body}${sectPrXml(spec)}</w:body></w:document>`
   );
 }
@@ -369,10 +416,12 @@ export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8A
   }
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
   if (hasEndnotes) files.push({ name: 'word/endnotes.xml', data: enc.encode(endnotesXml(spec.endnotes!)) });
-  if (hasFooter) {
-    files.push({ name: 'word/footer1.xml', data: enc.encode(footerXml(spec.footer!)) });
-    files.push({ name: 'word/_rels/document.xml.rels', data: enc.encode(DOCUMENT_RELS) });
-  }
+  if (hasFooter) files.push({ name: 'word/footer1.xml', data: enc.encode(footerXml(spec.footer!)) });
+  // Veze glavnog dijela idu UVIJEK, kao u svakom pravom dokumentu; vidi biljesku uz documentRelsXml.
+  files.push({
+    name: 'word/_rels/document.xml.rels',
+    data: enc.encode(documentRelsXml(spec, hasFootnotes, hasFooter, hasEndnotes)),
+  });
   return zipStore([...files, ...extraFiles]);
 }
 

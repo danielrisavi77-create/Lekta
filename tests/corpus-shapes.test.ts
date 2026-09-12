@@ -35,6 +35,10 @@ const FIXTURE_ROOTS = [
   // jer je pitanje "koje oblike nas commitani skup nosi", a ne "sto je dokaz"; u dokaz ne ulaze
   // nikad, jer im sidecar nosi `synthetic: true` i traku izvan dopustenih.
   join(HERE, 'fixtures', 'docx-authored'),
+  // Traka `handbuilt`: paketi slozeni rucno, radi oblika PAKIRANJA koje ni Word ni LibreOffice na
+  // ovom stroju ne pisu. Vrijedi im isto sto i traci `authored`: broje se u ovo mjerenje, u dokaz
+  // nikad (`synthetic: true` plus traka izvan `ADMITTED_TRACKS`).
+  join(HERE, 'fixtures', 'docx-packaging'),
 ];
 
 async function shapesOfBytes(bytes: Uint8Array): Promise<DocxShapeCounts> {
@@ -250,13 +254,7 @@ describe('verifyShapeClaims: tvrdnja sidecara protiv stvarnog paketa', () => {
  * ne moze pasti na njemu. Popis se skracuje kako trake `authored` i `generated` dodaju dokumente,
  * i svaka izmjena mora biti svjesna: test trazi TOCNU jednakost, u oba smjera.
  */
-const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = [
-  'zip/direktoriji',
-  'paket/bez-png-default',
-  'paket/comments-prazan',
-  'proizvodjac/google-docs',
-  'gdocs/potpis',
-];
+const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = [];
 
 /**
  * SKRACEN 2026-09-06, s deset na pet, i to je cijela svrha trake `authored`.
@@ -269,15 +267,36 @@ const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = [
  *     tekst/biblio-kandidat    numerirana stavka literature koju motor moze uzeti za naslov
  *     opseg/prazni-preko-20    prazni odlomci umjesto razmaka; 34 od 38 stvarnih radova ih ima
  *
- * Preostalih pet trazi ono sto ovaj stroj ne moze proizvesti: Google Docs roundtrip (dva oblika),
- * direktorijske zapise u zipu, prazan `comments.xml` iz ne-Word alata, i paket bez png Defaulta.
- * Ostaju imenovani, ne presuceni.
+ * SKRACEN 2026-09-08, s pet na JEDAN, i to mjerenjem, ne dodavanjem proze.
+ *
+ * Tri oblika zatvorio je jedan RUCNO slozen paket (`tests/fixtures/docx-packaging/gdocs-otisak.docx`,
+ * traka `handbuilt`): `zip/direktoriji`, `paket/comments-prazan`, `gdocs/potpis`. Google Docs izvoz
+ * na ovom stroju nije izvediv, pa je njegov otisak REPRODUCIRAN iz mjerenja nad 457 stvarnih radova,
+ * i tako je i imenovan; gard koji ga tjera kroz motor je `tests/corpus-packaging.test.ts`.
+ *
+ * Cetvrti, `proizvodjac/google-docs`, nije zatvoren nego UKLONJEN, jer se ne moze zatvoriti. Trazio
+ * je `<Application>` koji sadrzi "Google", a takvog nema nijedan od 457 radova; Google Docs taj
+ * element uopce ne pise, nego ostavlja prazan `<Properties/>`, sto je bas `gdocs/potpis`. Dva oblika
+ * su se time medjusobno iskljucivala: dokument koji nosi jedan ne moze nositi drugi, pa je "Google
+ * Docs roundtrip" kao put zatvaranja bio kriv za oba razloga.
+ *
+ * ZATVOREN NA NULU 2026-09-09, i to treba citati oprezno. Peti oblik, `paket/bez-png-default`, dobio
+ * je nositelja ODLUKOM VLASNIKA, ne nalazom: `tests/fixtures/docx-packaging/png-bez-defaulta.docx` je
+ * rucno slozen paket s `word/media/slika1.png` bez `Default Extension="png"`. Mjerenje nad 457
+ * stvarnih radova taj oblik nije naslo ni na jednom (205 ih ima png i svih 205 ga deklarira), pa je
+ * popis oblika bez NOSITELJA prazan, a popis oblika bez POTKREPE nije. Razlika je zapisana i u
+ * sidecaru te fixture i uz sam oblik u `docx-shapes.ts`.
+ *
+ * Prazan popis nosi vlastitu opasnost: od danas svaka tvrdnja ovog testa vrti po praznom skupu, pa
+ * bi detektor koji svakom dokumentu vrati SVE oblike proizveo isti prazan popis. Zato uz jednakost
+ * stoji i tvrdnja da nijedna pojedina fixtura ne nosi sve oblike.
  */
 
 describe('izmjereno: koje oblike commitane fixture nose', () => {
   it('popis oblika bez ijedne fixture odgovara mjerenju', async () => {
     const nosi = new Set<DocxShapeId>();
     let documentCount = 0;
+    let najviseUJednom = 0;
     for (const root of FIXTURE_ROOTS) {
       let files: string[] = [];
       try {
@@ -288,11 +307,21 @@ describe('izmjereno: koje oblike commitane fixture nose', () => {
       for (const file of files) {
         documentCount += 1;
         const counts = await shapesOfBytes(new Uint8Array(readFileSync(join(root, file))));
-        for (const id of presentShapes(counts)) nosi.add(id);
+        const uOvom = presentShapes(counts);
+        najviseUJednom = Math.max(najviseUJednom, uOvom.length);
+        for (const id of uOvom) nosi.add(id);
       }
     }
     // Prazan skup dokumenata bi svaki oblik proglasio nepokrivenim i test bi vakuumski "prosao".
     expect(documentCount).toBeGreaterThan(15);
+    /**
+     * ANTI-VAKUUM ZA PRAZAN POPIS. Otkako je popis prazan, jednakost nize prolazi i kad detektor
+     * poludi u drugom smjeru: kad bi svakom dokumentu vratio SVE oblike, `nosi` bi bio pun i
+     * `bezFixture` bi opet bio prazan. Zato se tvrdi i da nijedna pojedina fixtura ne nosi sve, sto
+     * mjeri razlikuje li detektor dokumente medjusobno. Isti razred kao prazan popis mrtvih fixera
+     * u mrezi popravka: prazno mora znaciti "izmjereno i nije nadjeno", ne "nije izmjereno".
+     */
+    expect(najviseUJednom).toBeLessThan(DOCX_SHAPE_IDS.length);
 
     const bezFixture = DOCX_SHAPE_IDS.filter((id) => !nosi.has(id));
     expect(

@@ -1,0 +1,47 @@
+{
+  "profileId": "mef-diplomski",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "mef--graduate--diplomski",
+    "unitId": "mef",
+    "workType": "graduate",
+    "level": "diplomski",
+    "program": "Diplomski studiji Medicinskog fakulteta",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "mef-graduate"
+  },
+  "prose": {
+    "id": "mef--graduate--diplomski",
+    "words": 10042,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmisljena imena. Rad je pojmovno-raspravni pregled bez vlastitog empirijskog istrazivanja, pa nijedna brojka ne opisuje izmjereni podatak; sve kvantitativne tvrdnje pripisane su objavljenim izvorima ili su pisane s ogradom. Cetiri jedinice literature POTVRDJENE su kroz CrossRef API uz HTTP 200 i prepisane iz odgovora (Barlam i sur. 2016; Baur i sur. 2017; Davey i sur. 2017; Magiorakos i sur. 2012). Maric i Novosel (2024) te Peric i Simunovic (2023) su izmisljene jedinice s izmisljenim DOI-jem, namjerno, da provjera postojanja moze vratiti i not-found. ALAT: katedra-lite 1.9.40 (vendorirani subtree) je STVARNO vodio rad. Izvrseno: profile_resolver.py (PAO, registry rutira samo efzg i fpzg); stanje_init.py uz --fakultet-izvan-registryja mef i tri imenovana ogranicenja; razina.py --postavi diplomski; dijelovi.py --sij; perspective_map.py init + tri perspektive + validate (ready: true); plan_state.py init/import/odobri. PLAN GATE je iz prvog pokusaja PAO (potpoglavlja bez opisa i bez planiranih izvora); nakon prepisivanja plana u tablicni oblik prosao je (sha256:0e003e3e906f). OBLIK dokumenta dolazi iz Lektine matrice retka mef--graduate--diplomski, ne iz Katedre. NAMJERNO OSTAVLJENE DVIJE OBVEZNE SEKCIJE KOJE NEDOSTAJU: profil trazi Summary i Zivotopis, a graditelj emitira Abstract i nema zivotopis, pa dokument daje stvarnu metu za required-section-fixer. NE POPRAVLJAJ TO U PROZI.",
+      "tool": "katedra-lite 1.9.40 (autopilot)",
+      "date": "2026-09-09"
+    }
+  },
+  "provenance": {
+    "tool": "word",
+    "toolPath": "C:\\Program Files (x86)\\Microsoft Office\\Office14\\WINWORD.EXE",
+    "os": "win32 x64",
+    "command": "npm run corpus-gen:word -- --row mef--graduate--diplomski",
+    "generatedAt": "2026-09-12T14:17:29.276Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/deflate",
+      "tab/tocke-vodic",
+      "rsid/svaki-odlomak",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/polje",
+      "proizvodjac/word"
+    ]
+  },
+  "toolLimitations": []
+}

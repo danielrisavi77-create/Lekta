@@ -1,0 +1,46 @@
+{
+  "profileId": "algebra-specijalisticki",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "algebra--specialist--poslijediplomski",
+    "unitId": "algebra",
+    "workType": "specialist",
+    "level": "poslijediplomski",
+    "program": "Poslijediplomski specijalistički studij Strateško komuniciranje",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": null
+  },
+  "prose": {
+    "id": "algebra--specialist--poslijediplomski",
+    "words": 19929,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, ne studentski rad i ne za predaju. Autor i mentor su izmišljena imena, tema je stvarna a obrada je autorska za potrebe testiranja, i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje niti donosi vlastiti empirijski podatak. Rad je pojmovno-usporedni pregled, bez poglavlja s rezultatima, jer bi nalazi iz izmišljene građe bili neistiniti i kad je rad označen kao testni. Pripisivanja poznatim djelima (Kotter, Quirke, Men i Bowen, Ruck i Welch, Welch, Lewis, Cameron i Green, Daymon i Holloway) drže se općepoznatih pojmovnih doprinosa tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite pravilo 28). Tomić i Perić (2025), Blažević (2024), Šarić i Kovač (2023) i Dujmović (2022) su izmišljene jedinice, namjerno, da provjera postojanja može vratiti i not-found. ALAT: katedra-lite je STVARNO vodio rad, u autopilot načinu. Izvršeno: dohvat paketa (katedra-pkg 1.9.22, 22fba58); stanje_init.py uz --fakultet-izvan-registryja i imenovano ograničenje (Algebra nije u Katedrinu registru); razina.py --postavi poslijediplomski --citatelj mentor; perspective_map.py init + tri perspektive + validate (ready: true); plan_state.py init + import tablice + odobri --actor full-auto (PLAN GATE PASS iz prvog pokušaja, sha256:05086592d3e9). OBLIK dokumenta dolazi iz Lektina profila algebra-specijalisticki, koji propisuje opseg 20000 do 25000 riječi.",
+      "tool": "katedra-lite 1.9.22 (autopilot)",
+      "date": "2026-09-07"
+    }
+  },
+  "provenance": {
+    "tool": "word",
+    "toolPath": "C:\\Program Files (x86)\\Microsoft Office\\Office14\\WINWORD.EXE",
+    "os": "win32 x64",
+    "command": "npm run corpus-gen:word -- --row algebra--specialist--poslijediplomski",
+    "generatedAt": "2026-09-12T14:09:58.707Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/deflate",
+      "rsid/svaki-odlomak",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/word",
+      "opseg/odlomci-preko-400"
+    ]
+  },
+  "toolLimitations": []
+}

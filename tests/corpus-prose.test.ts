@@ -78,6 +78,41 @@ describe('shema proze: svaki uvjet stvarno grize', () => {
     expect(validateProseBody(body).join(' ')).toMatch(/natpis naslovnice/);
   });
 
+  /**
+   * Izmjereno 2026-09-09: pravilo "svako poglavlje mora imati odlomak" odbijalo je obican akademski
+   * raspored, nadredjeni naslov cijim sadrzajem upravljaju podpoglavlja. Posljedica nije bila
+   * teorijska: `fzsri--final--prijediplomski` je bio COMMITAN kao fixtura, a njegova commitana proza
+   * je padala na cetiri nalaza, pa se dokument vise nije mogao reproducirati iz vlastitog ulaza.
+   */
+  it('nadredjeno poglavlje smije biti bez odlomaka kad ga slijede podpoglavlja', () => {
+    const body = validBody();
+    body.chapters = [
+      { level: 1, title: '1. Uvod', paragraphs: validBody().chapters[0].paragraphs },
+      { level: 1, title: '2. Pojmovni okvir', paragraphs: [] },
+      { level: 2, title: '2.1. Odredjenje pojma', paragraphs: ['Odjeljak nosi tekst nadredjenog poglavlja.'] },
+    ];
+    expect(validateProseBody(body)).toEqual([]);
+  });
+
+  it('poglavlje bez odlomaka i bez podpoglavlja je i dalje nalaz', () => {
+    const body = validBody();
+    body.chapters = [
+      { level: 1, title: '1. Uvod', paragraphs: validBody().chapters[0].paragraphs },
+      { level: 1, title: '2. Prazno poglavlje', paragraphs: [] },
+    ];
+    expect(validateProseBody(body).join(' ')).toMatch(/poglavlje "2\. Prazno poglavlje" nema nijedan odlomak/);
+  });
+
+  it('podpoglavlje bez odlomaka je nalaz, jer iza njega ne slijedi dublja razina', () => {
+    const body = validBody();
+    body.chapters = [
+      { level: 1, title: '1. Uvod', paragraphs: validBody().chapters[0].paragraphs },
+      { level: 1, title: '2. Okvir', paragraphs: [] },
+      { level: 2, title: '2.1. Prazan odjeljak', paragraphs: [] },
+    ];
+    expect(validateProseBody(body).join(' ')).toMatch(/poglavlje "2\.1\. Prazan odjeljak" nema nijedan odlomak/);
+  });
+
   it('ponovljen odlomak je nalaz, jer sidra traze jedinstvene odlomke', () => {
     const body = validBody();
     body.chapters[0].paragraphs[1] = body.chapters[0].paragraphs[0];

@@ -18,12 +18,38 @@ import type { DocxShapeId } from '../../src/corpus/docx-shapes';
 export interface MutationResult {
   fodt: string;
   count: number;
+  /**
+   * Mutacija na OVAJ dokument nije primjenjiva, sto NIJE isto sto i brojac 0.
+   *
+   * Brojac 0 znaci mrtav mehanizam i mora oboriti prolaz. Neprimjenjivost je stanje ulaza: profil
+   * koji tijelo ne poravnava obostrano nema sto izgubiti poravnanjem, pa mutacija nema metu. Bez te
+   * razlike bi svaki takav redak izgledao kao pokvarena mutacija, a to je tocno onaj razred kvara
+   * koji je mreza upravo prosla s "mrtav fixer" naspram "ceka covjeka".
+   */
+  notApplicable?: string;
+}
+
+/**
+ * Dokaz u GOTOVOM paketu za mutacije koje ne odgovaraju nijednom katalogiziranom obliku.
+ *
+ * Oblici (`docx-shapes`) nabrajaju nalaze iz STVARNOG korpusa i ondje se ne dopisuje ono sto nam
+ * treba za mjerenje; krsenje bodovane FORME (font, prored, format stranice, razmak odlomka) nije
+ * oblik nego vrijednost, pa ima vlastiti dokaz. Uloga je ista: LibreOffice zna tiho odbaciti ono sto
+ * mu upises, i to se u ovom katalogu vec dogodilo dvaput na fontovima.
+ */
+export interface OutputProof {
+  /** Sto se u paketu mora vidjeti; ulazi u poruku kad izostane. */
+  opis: string;
+  /** Koliko je puta dokaz nadjen; usporedjuje se s brojacem mutacije. */
+  count(parts: Readonly<Record<string, string>>): number;
 }
 
 export interface Mutation {
   id: string;
   /** Oblik koji se MORA pojaviti u gotovom .docx-u; veza brojaca i mjerenja. */
-  shape: DocxShapeId;
+  shape?: DocxShapeId;
+  /** Dokaz u paketu, za mutacije forme koje nemaju katalogiziran oblik. */
+  proves?: OutputProof;
   /** Sto oponasa i na kojem je stvarnom nalazu izmjereno. */
   why: string;
   apply(fodt: string): MutationResult;
@@ -242,6 +268,120 @@ export const MUTATIONS: Mutation[] = [
   },
 ];
 
+/**
+ * Blok imenovanog stila iz `word/styles.xml`; dokazi forme gledaju TIJELO RADA, ne cijelu datoteku.
+ *
+ * Bez suzavanja bi dokaz bio lazno ispunjen: `w:jc w:val="left"` postoji u svakom dokumentu (naslovi,
+ * podnozje), pa bi "tijelo vise nije obostrano poravnato" prolazilo i na netaknutom primjerku.
+ */
+function styleBlock(parts: Readonly<Record<string, string>>, styleId: string): string {
+  const styles = parts['word/styles.xml'] ?? '';
+  const re = new RegExp(`<w:style [^>]*w:styleId="${styleId}"[\\s\\S]*?</w:style>`);
+  return re.exec(styles)?.[0] ?? '';
+}
+
+/**
+ * MUTACIJE BODOVANE FORME.
+ *
+ * Zasto ih dosad nije bilo, izmjereno 2026-09-09: svih osam mutacija iznad dira OBLIKE, a nijedna ne
+ * krsi formu koju motor BODUJE. "Uskladjen" primjerak se gradi po pravilima retka, "neuredan" ih ne
+ * dira, pa je na svih 24 commitana dokumenta padalo tek 11 razlicitih provjera i mreza je dosezala
+ * 14 od 31 fixera. Preostalih 17 nije bilo mrtvo nego NEDOSEZNO: nijedan dokument nije krsio os na
+ * kojoj rade. Vise proze to ne bi promijenilo, jer bi nosila iste mutacije.
+ *
+ * Vrijednosti su birane tako da ih nijedan profil ne dopusta, pa mutacija ne ovisi o retku.
+ */
+const FORMA: Mutation[] = [
+  {
+    id: 'wrongBodyFont',
+    proves: {
+      opis: 'tijelo rada u fontu koji nijedan profil ne dopusta (`w:ascii="Comic Sans MS"`)',
+      count: (parts) => ((parts['word/styles.xml'] ?? '').match(/w:ascii="Comic Sans MS"/g) ?? []).length,
+    },
+    why:
+      'tijelo rada napisano fontom koji profil ne dopusta. Najcesci format nalaz uopce, a nijedan od 24 ' +
+      'commitana dokumenta ga nije nosio, pa `font-fixer` nikad nije bio ni zatrazen',
+    apply(fodt) {
+      // Font mora biti DEKLARIRAN, inace ga LibreOffice tiho odbaci; isti kvar je ovaj katalog vec
+      // platio dvaput na `csOnlyFonts`, pa se deklaracija provjerava po IMENU, ne po postojanju bloka.
+      const lice =
+        '  <style:font-face style:name="Comic Sans MS" svg:font-family="&apos;Comic Sans MS&apos;" ' +
+        'style:font-family-generic="script" style:font-pitch="variable"/>\n';
+      const sLicem = fodt.includes('style:name="Comic Sans MS"')
+        ? fodt
+        : fodt.includes('<office:font-face-decls>')
+          ? fodt.replace('</office:font-face-decls>', `${lice} </office:font-face-decls>`)
+          : fodt.replace(' <office:styles>', ` <office:font-face-decls>\n${lice} </office:font-face-decls>\n <office:styles>`);
+      // Gadja se SAMO stil tijela rada. Naslovi i naslovnica ostaju u profilnom fontu, jer se oponasa
+      // student koji je tijelo zalijepio iz drugog dokumenta, ne dokument pisan cijeli krivim fontom.
+      const blok = /(<style:style style:name="Text_20_body"[\s\S]*?<\/style:style>)/;
+      const m = blok.exec(sLicem);
+      if (!m) return { fodt: sLicem, count: 0 };
+      const izmijenjen = m[1].replace(/style:font-name="[^"]*"/g, 'style:font-name="Comic Sans MS"');
+      return { fodt: sLicem.replace(m[1], izmijenjen), count: 1 };
+    },
+  },
+  {
+    id: 'singleLineSpacing',
+    proves: {
+      opis: 'prored tijela rada vise nije 1,5 (`w:line="360"` nestao iz stila `BodyText`)',
+      count: (parts) => (styleBlock(parts, 'BodyText').includes('w:line="360"') ? 0 : 1),
+    },
+    why:
+      'prored 1 ondje gdje profil trazi 1,5. `format.spacing.body` pada na dijelu skupa, ali ' +
+      '`line-spacing-fixer` je izmjeren kao 1 od 24 zatrazen, dakle jedva dosegnut',
+    apply(fodt) {
+      const blok = /(<style:style style:name="Text_20_body"[\s\S]*?<\/style:style>)/;
+      const m = blok.exec(fodt);
+      if (!m) return { fodt, count: 0 };
+      if (!/fo:line-height="150%"/.test(m[1])) {
+        return { fodt, count: 0, notApplicable: 'profil ne trazi prored 1,5, pa ga nema sto pokvariti' };
+      }
+      return { fodt: fodt.replace(m[1], m[1].replace(/fo:line-height="150%"/g, 'fo:line-height="100%"')), count: 1 };
+    },
+  },
+  {
+    id: 'letterPaper',
+    proves: {
+      opis: 'format stranice Letter umjesto A4 (`w:pgSz w:w="12240"`)',
+      count: (parts) => ((parts['word/document.xml'] ?? '').match(/<w:pgSz[^>]*w:w="12240"/g) ?? []).length,
+    },
+    why:
+      'dokument u formatu Letter, sto je zadani format americkog predloska i cest nalaz na radovima ' +
+      'pisanim u tudjem predlosku. `paper-size-fixer` nije bio zatrazen ni na jednom dokumentu',
+    apply(fodt) {
+      // 21,59 x 27,94 cm je Letter; A4 je 21 x 29,7. Mijenja se SAMO izgled stranice, ne margine,
+      // da nalaz ostane na jednoj osi i da se ne mijesa s `page.margins`, koji vec pada.
+      const res = replaceCounted(
+        fodt,
+        /fo:page-width="[\d.]+cm" fo:page-height="[\d.]+cm"/g,
+        () => 'fo:page-width="21.59cm" fo:page-height="27.94cm"',
+      );
+      return res;
+    },
+  },
+  {
+    id: 'paragraphSpacingNoise',
+    proves: {
+      opis: 'razmak iza odlomka tijela narastao na 17 pt (`w:after="340"` u stilu `BodyText`)',
+      count: (parts) => (styleBlock(parts, 'BodyText').includes('w:after="340"') ? 1 : 0),
+    },
+    why:
+      'razmak iza odlomka postavljen rucno umjesto proreda; ide uz prazne odlomke kao drugi nacin na ' +
+      'koji student radi razmak. `paragraph-spacing-fixer` nije bio zatrazen ni na jednom dokumentu',
+    apply(fodt) {
+      const blok = /(<style:style style:name="Text_20_body"[\s\S]*?<\/style:style>)/;
+      const m = blok.exec(fodt);
+      if (!m) return { fodt, count: 0 };
+      const izmijenjen = m[1].replace(/fo:margin-bottom="[\d.]+cm"/g, 'fo:margin-bottom="0.6cm"');
+      if (izmijenjen === m[1]) return { fodt, count: 0 };
+      return { fodt: fodt.replace(m[1], izmijenjen), count: 1 };
+    },
+  },
+];
+
+MUTATIONS.push(...FORMA);
+
 /** Mutacija po id-u; nepoznat id je greska, ne tiho preskakanje. */
 export function mutationById(id: string): Mutation {
   const m = MUTATIONS.find((x) => x.id === id);
@@ -254,19 +394,55 @@ export function mutationById(id: string): Mutation {
  *
  * Brojac 0 se NE presucuje: vraca se kakav jest, da ga gard moze prijaviti kao mrtav mehanizam.
  */
-export function applyMutations(fodt: string, ids: readonly string[]): { fodt: string; counters: Record<string, number> } {
+export function applyMutations(
+  fodt: string,
+  ids: readonly string[],
+): { fodt: string; counters: Record<string, number>; notApplicable: Record<string, string> } {
   let out = fodt;
   const counters: Record<string, number> = {};
+  const notApplicable: Record<string, string> = {};
   for (const id of ids) {
     const m = mutationById(id);
     const res = m.apply(out);
     out = res.fodt;
-    counters[id] = res.count;
+    // Neprimjenjiva mutacija NE ulazi medju brojace: ondje bi nula znacila mrtav mehanizam i oborila
+    // prolaz na dokumentu koji nema sto pokvariti. Razlog se svejedno zapisuje, jer presucen izostanak
+    // se cita kao pokrivenost.
+    if (res.notApplicable) notApplicable[id] = res.notApplicable;
+    else counters[id] = res.count;
   }
-  return { fodt: out, counters };
+  return { fodt: out, counters, notApplicable };
 }
 
-/** Preslikavanje mutacija na oblike; ulaz za `verifyShapeClaims`. */
+/** Preslikavanje mutacija na oblike; ulaz za `verifyShapeClaims`. Mutacije forme nemaju oblik. */
 export function shapeForMutation(): Record<string, DocxShapeId> {
-  return Object.fromEntries(MUTATIONS.map((m) => [m.id, m.shape]));
+  return Object.fromEntries(
+    MUTATIONS.filter((m): m is Mutation & { shape: DocxShapeId } => m.shape !== undefined).map((m) => [m.id, m.shape]),
+  );
+}
+
+/**
+ * Provjeri dokaze forme nad GOTOVIM paketom.
+ *
+ * Vraca poruke istog oblika kao `verifyShapeClaims().underDetected`, jer je i pitanje isto: brojac
+ * kaze da je mehanizam radio, a paket to mora potvrditi. Brojac 0 je mrtav mehanizam i ovdje, pa se
+ * prijavljuje i kad dokaza nema i kad ga ima.
+ */
+export function verifyOutputProofs(
+  counters: Readonly<Record<string, number>>,
+  parts: Readonly<Record<string, string>>,
+): string[] {
+  const problems: string[] = [];
+  for (const m of MUTATIONS) {
+    if (!m.proves) continue;
+    const counter = counters[m.id];
+    if (counter === undefined) continue; // neprimjenjiva na ovom dokumentu, imenovana drugdje
+    if (counter <= 0) {
+      problems.push(`${m.id}: brojac 0 (mrtav mehanizam)`);
+      continue;
+    }
+    const nadjeno = m.proves.count(parts);
+    if (nadjeno <= 0) problems.push(`${m.id}: brojac ${counter}, a u paketu nema dokaza (${m.proves.opis})`);
+  }
+  return problems;
 }

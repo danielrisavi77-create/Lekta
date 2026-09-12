@@ -24,7 +24,13 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { installXmlDomParser } from '../../src/docx/xml-dom-install';
 import { ensureRepairMapHeavy } from '../../src/profiles/profile-runtime-maps';
-import { measureDocument, aggregateByFixer, deadFixers, type DocumentMeasurement } from './net-core.mts';
+import {
+  measureDocument,
+  aggregateByFixer,
+  deadFixers,
+  awaitingConfirmationFixers,
+  type DocumentMeasurement,
+} from './net-core.mts';
 import { withProvenance } from '../lib/provenance.mjs';
 
 installXmlDomParser();
@@ -83,6 +89,7 @@ async function run(): Promise<void> {
 
   const rows = aggregateByFixer(mjerenja);
   const mrtvi = deadFixers(rows);
+  const cekaju = awaitingConfirmationFixers(rows);
 
   const ratchet: Ratchet = JSON.parse(readFileSync(RATCHET, 'utf8')) as Ratchet;
   const dopusteni = new Set(ratchet.dead.map((d) => d.fixerId));
@@ -91,7 +98,8 @@ async function run(): Promise<void> {
 
   console.log(`dokumenata: ${mjerenja.length} | fixera zatrazeno: ${rows.length}\n`);
   for (const r of rows) {
-    const oznaka = r.changed === 0 ? 'MRTAV ' : '      ';
+    // Tri stanja, ne dva: MRTAV je kvar, CEKA je stanje forme, prazno je uredan rad.
+    const oznaka = cekaju.includes(r.fixerId) ? 'CEKA  ' : r.changed === 0 ? 'MRTAV ' : '      ';
     const razlozi = Object.entries(r.reasons)
       .map(([k, v]) => `${k}x${v}`)
       .join(' ');
@@ -116,12 +124,20 @@ async function run(): Promise<void> {
       schemaVersion: 1,
       note:
         'Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. ' +
-        'Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza.',
+        'Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza. ' +
+        'TRI stanja, ne dva: `dead` je kvar, `awaiting` je fixer koji ceka ljudsku potvrdu, ostalo radi.',
       summary: {
         documentCount: mjerenja.length,
         fixerCount: rows.length,
         deadCount: mrtvi.length,
         dead: mrtvi,
+        /**
+         * Fixeri koji NISU mrtvi nego cekaju ljudsku potvrdu: zahtjev im je poslan, ali `params` ni
+         * na jednom dokumentu ne nose posao. Bez ovog polja se to stanje ne razlikuje od kvara, pa
+         * bi stvaran kvar bas tih fixera bio nevidljiv.
+         */
+        awaitingCount: cekaju.length,
+        awaiting: cekaju,
       },
       fixers: rows,
       documents: mjerenja,

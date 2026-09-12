@@ -16,7 +16,7 @@ import { readFileSync } from 'node:fs';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { repairEntriesFor } from '../../src/profiles/profile-runtime-maps';
 import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
-import { buildDefaultRepairRequests } from '../../src/repair/default-selection';
+import { buildDefaultRepairRequests, hasActionableParams } from '../../src/repair/default-selection';
 import { applyFixers } from '../../src/repair/apply-fixers';
 import { detectPassRegressions } from '../../src/analysis/repair-regression';
 
@@ -33,6 +33,17 @@ export interface DocumentMeasurement {
   promijenili: string[];
   /** Fixeri zatrazeni bez ijedne promjene, s razlogom kad ga motor zna. */
   bezUcinka: Array<{ fixerId: string; reason: string }>;
+  /**
+   * Fixeri cijem zahtjevu params NE nose posao, dakle ceka se ljudska potvrda.
+   *
+   * Bez ovoga mreza NE MOZE razlikovati dva stanja koja izgledaju jednako: fixer koji se pokvario i
+   * fixer koji po konstrukciji ceka covjeka. `consistency-fixer` gradi svaki odabir s `confirmed`
+   * koji zadani odabir ne moze postaviti, pa je na svih 24 dokumenta slan s `groups: []` i
+   * `replacements: []`; `citation-bibliography-sync-fixer` isto, kroz formu. Repozitorij tu razliku
+   * vec zna (`hasActionableParams`, izmjereno 2026-08-29 na 116 stvarnih radova), samo ju mreza nije
+   * koristila, pa je oba zvala MRTVIMA. Da se jedan od njih doista pokvari, izgledalo bi identicno.
+   */
+  cekaPotvrdu: string[];
   rijeseno: string[];
   nerijeseno: string[];
   regresije: string[];
@@ -90,6 +101,12 @@ export async function measureDocument(path: string, profileId: string | null): P
       return { fixerId, reason: razlozi.length ? razlozi.sort().join('|') : 'nepoznato' };
     });
 
+  // Ceka potvrdu = NIJEDAN od zahtjeva tog fixera ne nosi posao. Ako makar jedan nosi, fixer je
+  // imao priliku i njegov izostanak ucinka je nalaz, ne stanje forme.
+  const cekaPotvrdu = zatrazeno.filter((f) =>
+    requests.filter((r) => r.fixerId === f).every((r) => !hasActionableParams(r.params as Record<string, unknown>, f)),
+  );
+
   return {
     dokument: naziv,
     profileId,
@@ -97,6 +114,7 @@ export async function measureDocument(path: string, profileId: string | null): P
     zatrazeno,
     promijenili,
     bezUcinka,
+    cekaPotvrdu,
     rijeseno: prije.filter((id) => !poslije.includes(id)),
     nerijeseno: poslije.filter((id) => prije.includes(id)),
     regresije: detectPassRegressions(before.checks ?? [], after.checks ?? []).map((r: unknown) =>
@@ -116,6 +134,8 @@ export interface FixerRow {
   reasons: Record<string, number>;
   /** Dokumenti na kojima je zatrazen a nije promijenio nista. */
   deadOn: string[];
+  /** Na koliko je dokumenata zahtjev bio bez posla, dakle cekao ljudsku potvrdu. */
+  awaitingConfirmation: number;
 }
 
 /** Agregat po fixeru; ulaz su mjerenja pojedinih dokumenata. */
@@ -123,8 +143,9 @@ export function aggregateByFixer(mjerenja: readonly DocumentMeasurement[]): Fixe
   const map = new Map<string, FixerRow>();
   for (const m of mjerenja) {
     for (const f of m.zatrazeno) {
-      const row = map.get(f) ?? { fixerId: f, requested: 0, changed: 0, reasons: {}, deadOn: [] };
+      const row = map.get(f) ?? { fixerId: f, requested: 0, changed: 0, reasons: {}, deadOn: [], awaitingConfirmation: 0 };
       row.requested += 1;
+      if (m.cekaPotvrdu.includes(f)) row.awaitingConfirmation += 1;
       if (m.promijenili.includes(f)) row.changed += 1;
       else {
         row.deadOn.push(m.dokument);
@@ -137,7 +158,22 @@ export function aggregateByFixer(mjerenja: readonly DocumentMeasurement[]): Fixe
   return [...map.values()].sort((a, b) => a.fixerId.localeCompare(b.fixerId, 'en'));
 }
 
-/** Fixeri koji su zatrazeni a nisu promijenili NISTA ni na jednom dokumentu. */
+/**
+ * Fixeri koji su zatrazeni a nisu promijenili NISTA ni na jednom dokumentu.
+ *
+ * Fixer cijem je zahtjevu params BEZ POSLA na svakom dokumentu nije mrtav nego ceka ljudsku
+ * potvrdu, i tu se razliku mora povuci ovdje: bez nje mrtav popis mijesa kvar sa stanjem forme, pa
+ * bi stvaran kvar tih fixera bio nevidljiv, jer izgleda tocno kao danasnje stanje.
+ */
 export function deadFixers(rows: readonly FixerRow[]): string[] {
-  return rows.filter((r) => r.requested > 0 && r.changed === 0).map((r) => r.fixerId);
+  return rows
+    .filter((r) => r.requested > 0 && r.changed === 0 && r.awaitingConfirmation < r.requested)
+    .map((r) => r.fixerId);
+}
+
+/** Fixeri koji ni na jednom dokumentu nisu dobili zahtjev s poslom; cekaju covjeka, nisu mrtvi. */
+export function awaitingConfirmationFixers(rows: readonly FixerRow[]): string[] {
+  return rows
+    .filter((r) => r.requested > 0 && r.changed === 0 && r.awaitingConfirmation === r.requested)
+    .map((r) => r.fixerId);
 }

@@ -21,6 +21,7 @@ import { renderEvalCases } from '../../src/corpus/tool-evals';
 import { EVALI } from '../../src/corpus/eval-catalog';
 import type { ComparisonRow } from '../../src/corpus/tool-comparison';
 import { KVAROVI } from '../../src/corpus/defect-catalog';
+import { openDefects } from '../../src/corpus/tool-feedback';
 import { withProvenance } from '../lib/provenance.mjs';
 
 const ROOT = resolve(join(dirname(fileURLToPath(import.meta.url)), '..', '..'));
@@ -71,7 +72,9 @@ function main(): void {
   }
 
   const rows = (JSON.parse(readFileSync(USPOREDBA, 'utf8')) as { rows: ComparisonRow[] }).rows;
-  const { cases, skipped, fixtures } = renderEvalCases(EVALI, KVAROVI, rows, startAfter);
+  // Eval slucaj zivi uz OTVOREN kvar. Zatvoren kvar ostaje u katalogu radi dokaza, ali nad modelom
+  // vise nema sto mjeriti: alat koji ga je proizvodio popravljen je uzvodno.
+  const { cases, skipped, fixtures } = renderEvalCases(EVALI, openDefects(KVAROVI), rows, startAfter);
 
   // Isporuka bez dokumenta nije eval nego tvrdnja; nedostajuca fixtura obara izvoz.
   const nedostaju = fixtures.filter((f) => !existsSync(join(FIXTURES, f)));

@@ -143,6 +143,9 @@ proze ili nesto drugo:
 Prva dva zatvara JEDAN dulji rad (preko 400 odlomaka, vise od tri sekcije), pa val 2 neka ih namjerno
 gadja. Preostalih osam trazi Google Docs roundtrip ili rucno slozen paket i ne rjesava se pisanjem.
 
+> Dopuna 2026-09-08: "Google Docs roundtrip" je za jedan od tih oblika bio KRIV put, i to se vidjelo
+> tek kad se izmjerilo. Vidi odjeljak "Oblici bez fixture: s pet na jedan".
+
 ## Sto val 2 mora znati unaprijed
 
 Val 1 stoji na CETIRI prozna tijela (apuri, effectus, fpzg, fzsri). Iz njih je nastalo 11 commitanih
@@ -244,13 +247,259 @@ preusmjerava roditelje na `Heading_20_3` umjesto da ih preimenuje: preimenovanje
 
 Popis mrtvih se nije promijenio i oba i dalje nose IZMJEREN razlog `no-target`.
 
+## Val 3: tri rada birana mjerenjem, i dva kvara proizvoda koje su nasli (2026-09-08)
+
+Redci vise nisu birani po dojmu nego po pokrivenosti. Prije pisanja izmjereno: sedam tijela iz
+valova 1 i 2 pokriva 41 od 720 redaka matrice, a razlicitih skupova pravila ima 131.
+
+    adu--seminar--diplomski           3.012 rijeci    54 odlomka   pokriva 381 redak
+    ffzg--graduate--diplomski        10.767 rijeci   203 odlomka   pokriva  61 redak
+    fpzg--project--diplomski          5.020 rijeci   105 odlomaka  pokriva   5 redaka
+
+Ishod: tijela 7 -> 10, dokumenti 17 -> 24, pokriveni redci 41 -> 488 od 720, skupovi pravila 7 -> 10.
+NIJEDNA vrsta rada vise nije bez proze (`graduate` i `project` dobili su prve dokumente).
+
+**Nesrazmjer je poanta, i vrijedi ga zapamtiti za sljedeci izbor.** Rad od 3.000 rijeci kupio je 381
+redak, jer je to skup pravila na koji pada vecina redaka bez fakultetskog profila (`arts` fallback,
+13 osi). Po dojmu bih izabrao bogatiji profil i dobio deset puta manje. Nakon ovog vala vise nema
+velikog dobitka po radu: preostala su 232 retka na 121 razredu, najveci od 8 redaka, pa daljnje
+pisanje kupuje dubinu na pojedinom profilu, ne pokrivenost.
+
+**Ispravak usred posla.** Za drugi rad bio je odredjen `adu--final--prijediplomski` (5.500 rijeci).
+Mjerenje je pokazalo da isti razred sadrzi i 14 `graduate` redaka, a `graduate` je vrsta rada sa 134
+retka i nijednim tijelom. Predstavnik `graduate` pokriva istih 61 redak i uz to otvara vrstu rada.
+Cijena je dvostruka (11.000 rijeci) i placena je svjesno.
+
+### Dva kvara proizvoda koje je korpus nasao sam
+
+**1. Citatni motor ne vidi `Kumar (2022, str. 1470)`.** Pripovjedna citatnica s lokatorom nije se
+prepoznavala. Dvije grane promase istovremeno: pripovjedna je trazila zatvorenu zagradu ODMAH iza
+godine, a parentetska nadje godinu ali unutar zagrade nema autora. Posljedica je bodovana:
+`reference.uncited` (7 bodova) javlja ispravno citiran izvor kao NECITIRAN, `citation.recognized`
+(3 boda) podbrojava. Izolirano kontrolama koje iskljucuju sufiks, autora i oblik zagrade; ostaje
+tocno jedna varijabla. Popravljeno u `5c849d98`, uz deset testova od kojih je pet palo PRIJE izmjene.
+Isti kvar na drugom regexu (`citation.direct-quote-locator`, max 0) popravljen zasebno u `7a540f9f`.
+
+Golden nije dirnut ni u jednom od dva popravka, i to je ujedno objasnjenje zasto je kvar prezivio:
+nijedna fixtura nije nosila taj oblik.
+
+**2. `heading-style-fixer` nije bio pokvaren nego smo mu slali prazan zahtjev.** Mreza ga je
+prijavljivala kao 7 zatrazeno / 3 promijenjeno uz `invalid-params` x4. Mjerenje na sva cetiri
+pogodjena dokumenta: tocno jedan kandidat, nula odabranih, `targets` prazan, a stavka svejedno
+`violated: true`. Cuvar u graditelju gleda SIROVE popise, ne odabrane. Popravljeno u `2dd22f3a`
+(`violated: targets.length > 0`), uz gard siri od slucaja: nijedan fixer u mrezi ne smije vracati
+`invalid-params`, jer taj razlog jedini opisuje NAS zahtjev a ne dokument.
+
+### Sto je jos zatvoreno
+
+- **Proza se mora slagati s retkom matrice** (`b8169693`). Do tada je tijelo moglo tvrditi bilo koji
+  `unitId`, `workType`, `level` ili `family`; jedno od devet se razislo (`algebra`: proza `social`,
+  matrica `mixed`) i stajalo dva dana. Ucinak je bio nikakav (graditelj `body.family` ne cita), i
+  upravo je zato gard trebao: polje koje nitko ne cita ne ispravlja se samo.
+- **Word trak zatvorio je os sadrzaja.** LibreOffice je za `ffzg` sam prijavio imenovano NEPOKRIVENO
+  (`0 instrText/fldChar/fldSimple`), a profil trazi `requireToc: true`. Wordov primjerak nosi stvarno
+  polje: provjeren je SADRZAJ uputa, ne broj (`TOC \o "1-3" \h \z`, 30 `PAGEREF _Toc...`, 360 `w:rsid`).
+- **Kvar 144 izvezen Katedri**: validacijski sloj pada bez `jsonschema`, a kvar je ZAKLONJEN time sto
+  registar rutira samo `efzg` i `fpzg`, pa na nerutiranom fakultetu skripta padne ranije i do
+  validacije nikad ne dodje.
+
+### Sto su alati uhvatili meni
+
+Vrijedi zapisati i suprotan smjer, jer je cesci nego sto se prijavljuje:
+
+- katedra-lite **plan gate pao je dvaput iz prvog pokusaja**, oba puta na potpoglavlju bez planiranih
+  izvora. Treci rad je prosao iz prve, jer sam nakon dva pada izvore dao svima.
+- validator proze uhvatio je dvije kose unakrsne upute umjesto tri (dvije sam napisao u nominativu) i
+  opseg 2.259 umjesto 3.000.
+- `reference.uncited` javio je 11 od 16 izvora bez citatnice, jer sam autore spominjao bez godine.
+- skener je nasao **nevidljiv meki prijelom (U+00AD)** usred rijeci u sazetku i cirilicu u mom
+  vlastitom komentaru u testu.
+- `ui-module-budget` je odbio moj komentar od 17 redaka u `src/ui`; ratchet smije samo padati, pa je
+  obrazlozenje preseljeno u test i u poruku commita, a u kodu je ostao jedan redak.
+
+## Oblici bez fixture: s pet na jedan, i to mjerenjem (2026-09-08)
+
+Popis oblika koje nijedna commitana fixtura ne nosi bio je: `zip/direktoriji`, `paket/bez-png-default`,
+`paket/comments-prazan`, `proizvodjac/google-docs`, `gdocs/potpis`. Svih pet je opisano kao "trazi
+Google Docs roundtrip ili rucno slozen paket". Prvo je izmjereno sto stvarni radovi doista nose, nad
+457 dokumenata u `Lekta-korpus` (200 izvor, 187 ingest, 24 sintetski, 46 izbaceno):
+
+    zip/direktoriji         130 od 457      21 od njih NIJE Google Docs
+    paket/comments-prazan   135 od 457
+    gdocs/potpis            129 od 457      `<Properties/>` doslovno prazan
+    paket/bez-png-default     0 od 457      205 dokumenata ima png, svih 205 nosi Default
+    proizvodjac/google-docs   0 od 457      nijedan `<Application>` ne sadrzi "Google"
+
+**Mjerenje je oborilo dvije stavke popisa, i to je glavni nalaz.**
+
+`proizvodjac/google-docs` se ne moze zatvoriti ni najboljim roundtripom, jer se s `gdocs/potpis`
+MEDJUSOBNO ISKLJUCUJE: prvi trazi `<Application>` koji sadrzi "Google", drugi trazi da tog elementa
+NEMA. Google Docs ga ne pise, nego ostavlja prazan `<Properties/>`, pa bi izvoz iz Google Docsa
+zatvorio `gdocs/potpis`, `zip/direktoriji` i `proizvodjac/nepoznat`, a taj oblik nikad. Grana
+`/Google/i` u `producerFamilyOf` bila je pogodjena, bez ijednog testa i bez ijednog dokumenta, dakle
+mrtav kod, i to u funkciji koja u susjednom komentaru izricito odbija pogadjati za Apple Pages. Grana
+i oblik su uklonjeni, a identitet Google Docsa ostaje ondje gdje je izmjeren, kao `gdocs/potpis`.
+
+`paket/bez-png-default` je zapisan kao "naslo se na 1 od 246 stvarnih radova" i to se vise ne
+reproducira; ponovljeno mjerenje daje 0 od 457. Isprva je ostao imenovan i nepokriven, a 2026-09-09
+je odlukom vlasnika zatvoren rucno slozenom fixturom (`png-bez-defaulta.docx`). Vidi "Sto ostaje",
+tocka 5: nositelj postoji, potkrepa ne, i ta se razlika vodi izrijekom.
+
+Preostala tri zatvara JEDAN rucno slozen paket, `tests/fixtures/docx-packaging/gdocs-otisak.docx`,
+uz novu traku `handbuilt` (izvan `ADMITTED_TRACKS`, uz `synthetic: true`, dakle oba pojasa zida).
+Otisak je REPRODUCIRAN iz mjerenja, ne dobiven iz Google Docsa, i tako je i imenovan u sidecaru:
+imena i redoslijed zapisa, prazan `<Properties/>` i prisutan `docProps/custom.xml` prepisani su s dva
+stvarna rada koja oba imaju 22 zapisa i 4 direktorija.
+
+**Fixtura mora zaraditi svoje mjesto**, inace samo skracuje popis. Gard je zato
+`tests/corpus-packaging.test.ts`, koji paket tjera kroz motor: analiza ga cita, a popravak ga PONOVNO
+NAPISE i sva tri oblika prezive (`integrityFailure` null, 4 direktorijska zapisa i poslije). Kljucna
+je druga polovica tvrdnje: zadani odabir bez profila na tom dokumentu daje NULA zahtjeva, `applyFixers`
+tada vrati ULAZNE bajtove, i tvrdnja o prezivljavanju bi prosla nad netaknutim originalom. Zato paket
+nosi cetiri prazna odlomka, zahtjev se salje izravno, a `verifyRepairRoundTrip` uz `lost` vraca i
+`vacuous`. Mutacija `oblik/popravak-izgubi-oblik-pakiranja-pri-ponovnom-pisanju` pokriva oba smjera.
+
+Usput izmjereno: nas pisac paketa izlaz KOMPRIMIRA, pa popravljeni paket dobije `zip/deflate` kojega
+ulaz nema. Nije kvar, ali je razlika ulaza i izlaza koju nijedan zapis dosad nije imenovao.
+
+## Sedamnaest fixera nije bilo mrtvo nego NEDOSEZNO (2026-09-09)
+
+Pitanje je bilo koje retke pisati u valu 4. Odgovor je stigao iz mjerenja, i bio je da val 4 uopce
+ne pocinje prozom:
+
+    fixera ukupno            31
+    dodirnutih mrezom        14
+    razlicitih palih provjera 11   na svih 24 dokumenta
+
+Uzrok nije proza nego KATALOG MUTACIJA. Svih osam mutacija dira OBLIKE (tab u naslovu, prazni
+odlomci, rucni sadrzaj, tockaste vodilice, cs-fontovi, biblio kao naslov, komentari, sve razine 3), a
+nijedna ne krsi formu koju motor BODUJE. Usklađen primjerak se gradi po pravilima retka, neuredan ih
+ne dira, pa `font-fixer`, `paper-size-fixer` i ostali nemaju metu ni na jednom dokumentu. Jos tri
+rada s istim mutacijama dala bi istih 11 palih provjera i istih 14 fixera.
+
+Dodane su cetiri mutacije bodovane forme: `wrongBodyFont` (Comic Sans u stilu tijela),
+`singleLineSpacing` (prored 1 umjesto 1,5), `letterPaper` (Letter umjesto A4), `paragraphSpacingNoise`
+(razmak iza odlomka 17 pt). Vrijednosti su birane tako da ih nijedan profil ne dopusta, pa mutacija ne
+ovisi o retku.
+
+Mjereno nad svih deset neurednih primjeraka, prije i poslije:
+
+    pale provjere            8 -> 12
+    fixeri zatrazeni        13 -> 16
+    fixeri koji MIJENJAJU   11 -> 14
+    novi                    font-fixer, line-spacing-fixer, paper-size-fixer
+    izgubljenih             nijedan
+    regresije                3 -> 3  (sve tri zatecene)
+
+Mreza nad punim skupom sada doseze 16 fixera, a sva tri nova mijenjaju na svakom zahtjevu (6/6, 6/6,
+5/5) i doista poprave svoju os, ne samo da se zatraze.
+
+**Dvije stvari koje katalog nije imao, a mutacija forme ih trazi.**
+
+DOKAZ U IZLAZU. Mutacije forme nemaju katalogiziran oblik: krsenje bodovane forme je vrijednost, ne
+oblik, a `docx-shapes` nabraja nalaze iz stvarnog korpusa i ondje se ne dopisuje ono sto nam treba za
+mjerenje. Svaka nosi predikat nad GOTOVIM paketom (`verifyOutputProofs`), jer LibreOffice zna tiho
+odbaciti ono sto mu upises; taj je kvar ovaj katalog vec platio dvaput na `csOnlyFonts`. Brojac bez
+dokaza obara prolaz. Mutacija: `mutacija/forma-upisana-a-alat-ju-je-tiho-odbacio`.
+
+NEPRIMJENJIVOST ODVOJENA OD NULE. Brojac 0 znaci mrtav mehanizam i mora oboriti prolaz, ali profil
+koji ne trazi prored 1,5 nema sto izgubiti. Neprimjenjiva mutacija ide u `mutationsNotApplicable` s
+razlogom, ne medju brojace. Isti razred razlike koji je mreza upravo prosla s "mrtav fixer" naspram
+"ceka covjeka".
+
+**Usput nadjeno: fixtura koja se ne moze reproducirati iz vlastitog ulaza.** Regeneracija je pala na
+`fzsri--final--prijediplomski`, jer validator proze trazi da SVAKO poglavlje ima odlomak, a taj rad
+ima obican akademski raspored: "2. Pojmovni okvir" bez vlastitog teksta, pa 2.1, 2.2, 2.3. Dokument je
+bio commitan, a njegov commitani ulaz je padao na cetiri nalaza. Pravilo sada izuzima naslov iza
+kojega slijedi dublja razina, a i dalje grize na LISTU (poglavlje bez odlomaka i bez podpoglavlja, te
+prazan odjeljak).
+
+**Sto ovo NIJE zatvorilo.** `paragraphSpacingNoise` se primjenjuje i dokazuje u paketu, ali nijedan od
+deset profila ne boduje tu os, pa `paragraph-spacing-fixer` i dalje nije zatrazen. Ostaje imenovan,
+kao i preostalih 15 nedoseznih fixera; dio njih (`title-page-fixer`, `submission-metadata-fixer`)
+trazi ulaz izvan dokumenta i mutacijom se ne doseze uopce.
+
+## Val 4: jedanaesto tijelo, i bodovana provjera koja pada bez ijednog popravka (2026-09-09)
+
+Redak je biran mjerenjem, kako "Sto ostaje" trazi. Od 269 kandidata s profilom i bez proze,
+`mef--graduate--diplomski` je medju najbogatijima pravilima: nosi obvezne sekcije, vlastiti popis
+formata i harvard, a `biomed` je uz `mixed` najtanja obitelj (jedno tijelo na 75 redaka matrice).
+
+Napisano je 10.042 rijeci tijela u 157 odlomaka, uz 17 jedinica literature; validator proze daje
+nula nalaza. Cetiri jedinice potvrdjene su kroz CrossRef uz HTTP 200 i prepisane iz odgovora, dvije
+su namjerno izmisljene. Protokol katedra-lite izvrsen je u cijelosti, ukljucujuci ono sto je palo:
+`profile_resolver.py` odbija `mef` (registar rutira samo efzg i fpzg), pa je stanje otvoreno s tri
+imenovana ogranicenja, a PLAN GATE je iz prvog pokusaja pao (potpoglavlja bez opisa i bez planiranih
+izvora) i prosao tek nakon prepisivanja plana u tablicni oblik.
+
+    uskladjen   palo 3   zatrazeno 4   promijenili 3   regresije 0
+    neuredan    palo 6   zatrazeno 8   promijenili 7   regresije 0
+    mreza       26 dokumenata, 16 fixera, popis mrtvih i dalje prazan
+
+**Nalaz koji nije bio namjera.** Dvije obvezne sekcije ostavljene su nezadovoljene namjerno
+(`Summary`, jer graditelj pise `Abstract`, i `Zivotopis`, kojega nema), s ocekivanjem da ce dati metu
+`required-section-fixer`-u. `structure.sections.profile` doista pada na OBA primjerka, ali fixer nije
+ni zatrazen. Razlog je ispravan i dokumentiran u CLAUDE.md: taj popravak umece iskljucivo natpis koji
+propisuje VERIFICIRANO pravilo (`required-section-rules` sa `sourceId`, `sourcePage` i doslovnim
+citatom), a profil `mef-diplomski` obvezne sekcije nosi samo u `rules`.
+
+Time je imenovana nova vrsta rupe, razlicita od one koja se trazila: bodovana provjera koja pada, a
+za koju popravka nema jer pravilu nedostaje provenijencija. To NIJE kvar fixera i ne ide u ratchet
+mrtvih; ide u popis profila kojima obvezne sekcije treba potkrijepiti izvorom prije nego se od
+popravka ista ocekuje.
+
+## Val 5: jedan redak koji je otvorio pet fixera (2026-09-09)
+
+Izbor je opet bio mjerenje, i ovaj put je platio vise nego ijedan dosad. Mjereno je koji CITATNI
+STIL nijedan od 11 napisanih radova ne koristi:
+
+    napisano po stilu   (nema) 5, fpzg 2, chicago-notes 1, custom 1, vancouver 1, harvard 1
+    nedostaje           apa7 (23 retka), pravo-fusnote (12), chicago-author (2)
+
+`pravo-fusnote` je izabran jer je fusnotno pravno citiranje jedini oblik koji dira Lektin PRAVNI
+citatni motor, a nijedan sinteticki dokument ga dosad nije ni dotaknuo. Napisan je
+`pravo--final--prijediplomski` (Pravni fakultet, porezni studij, 5.261 rijec tijela, 99 odlomaka,
+14 fusnota, 16 jedinica literature); validator daje nula nalaza.
+
+    uskladjen   palo 13   zatrazeno 10   promijenili  9   regresije 0
+    neuredan    palo 20   zatrazeno 14   promijenili 13   regresije 0
+    mreza       28 dokumenata, 21 od 31 fixera (bilo 16)
+
+**PET NOVIH FIXERA**, svaki 2/2, dakle mijenja na svakom zahtjevu: `footnote-spacing-fixer`,
+`footnote-typography-fixer`, `heading-case-fixer`, `heading-format-fixer`, `paragraph-spacing-fixer`.
+Uz njih prvi put pada cijela `legal.*` obitelj provjera (`act-abbrev`, `case-law`,
+`first-citation-completeness`, `footnote-bibliography`, `source-classification`), pa pravni citatni
+motor napokon ima ulaz.
+
+**`paragraph-spacing-fixer` je zatvorio otvorenu stavku iz vala 4.** Ondje je zapisano da mutacija
+`paragraphSpacingNoise` radi i dokazuje se u paketu, ali da je nijedan od deset profila ne boduje, pa
+fixer ostaje nedosezan. Ovaj profil tu os boduje. Mutacija napisana dva commita ranije dobila je metu
+tek izborom retka, sto je i najbolji dokaz da izbor po mjerenju nije formalnost.
+
+**Sto ovo NIJE zatvorilo.** Nijedna `legal.*` provjera nije RIJESENA popravkom, samo su pale. To je
+ocekivano (pravni motor cita citate, a ne oblik), ali znaci da je za te osi otvoreno zasebno pitanje:
+je li nasa fusnotna proza neispravna ili je motor strog. Odgovor trazi usporedbu s pravim radom, ne
+jos jednu sintetsku fusnotu.
+
+**Nalaz za Katedru:** `stanje_init.py` ne poznaje citatni stil `pravo-fusnote`; njegov popis staje na
+`autor-godina, ieee, vancouver, harvard, apa, apa-hr`, pa fusnotni pravni stil ondje nema oznaku.
+Zapisano u `authoring.method` rada, kandidat za `skill-feedback`.
+
 ## Sto ostaje
 
-1. Daljnja proza, prema 60 tijela. Napisano je SEDAM (cetiri iz vala 1, tri iz vala 2), pa
-   preostaje 53. Odluka vlasnika iz vala 2 je da se ide ciljano, redak po redak s razlogom, a ne
-   sirinom: broj tijela nije sam po sebi mjera, jer 720 redaka daje samo 163 razlicita skupa pravila.
+1. Daljnja proza. Napisano je DESET tijela (cetiri val 1, tri val 2, tri val 3), sto pokriva 488
+   od 720 redaka. Preostala 232 retka leze na 121 razredu, najveci od 8 redaka, pa daljnje pisanje
+   kupuje dubinu na pojedinom profilu, a ne pokrivenost; izbor retka od sada mora nositi razlog.
 2. Vlastito mjerenje za `consistency-fixer` i `citation-bibliography-sync-fixer`, s POTVRDJENIM
    odabirom, jer je to jedino stanje u kojem ta dva uopce mogu raditi.
 3. `apuri` nema Wordovu inacicu, a ostala tri je imaju. Nije zapisano je li izostala namjerno ili je
    pokusaj pao; utvrditi prije nego se broj dokumenata negdje navede kao ujednacen.
 4. Popravci na njihovoj strani, i skidanje eval slucaja tek kad kvar doista nestane iz mjerenja.
+5. ~~Odluka vlasnika o `paket/bez-png-default`.~~ ZATVORENO 2026-09-09, uz izmjenu prve odluke istog
+   dana. Vlasnik je prvo odlucio da oblik ostane imenovan i nepokriven, pa je odluku promijenio:
+   oblik je zatvoren RUCNO SLOZENOM fixturom `png-bez-defaulta.docx`. Popis oblika bez nositelja je
+   time prazan, ali popis oblika bez POTKREPE nije: mjerenje nad 457 stvarnih radova taj oblik i
+   dalje nalazi na NULA njih. Ta razlika je zapisana na tri mjesta (sidecar fixture, komentar uz
+   oblik, ovaj redak) jer je jedina obrana od toga da za godinu dana izgleda jednako potkrijepljeno
+   kao `zip/direktoriji`, koji stoji na 130 radova. Ako ga ijedan buduci ingest donese, fixturu treba
+   zamijeniti tim dokumentom.
