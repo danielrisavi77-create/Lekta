@@ -137,7 +137,9 @@ const brief = await agent(
   `koji su kriteriji prihvacanja IZVAN diffa (plan, dokument, mjerenje; ako pozivatelj nije dao kriterije, izvedi ih iz ` +
   `docs/agents/development-plan.md ili docs/quality/*.md i reci odakle), koje testove treba pokrenuti i koji su rizici. ` +
   `Vrati strukturirano.`,
-  { phase: 'Izvidjaj', model: 'sonnet', effort: 'medium', schema: BRIEF_SCHEMA, agentType: 'Explore' },
+  // Bez `agentType: 'Explore'`: izmjereno 2026-09-12, Explore agent uz schemu 5 puta nije popunio obavezna polja
+  // (StructuredOutput retry cap). Zadani workflow podagent sa Sonnetom postuje schemu; "samo citaj" je u promptu.
+  { phase: 'Izvidjaj', model: 'sonnet', effort: 'medium', schema: BRIEF_SCHEMA },
 )
 if (!brief) throw new Error('izvidjaj nije vratio brief')
 log(`Brief: ${brief.summary.slice(0, 160)}`)
@@ -152,7 +154,7 @@ const angles = [
 const designs = (await parallel(angles.map((angle, i) => () => agent(
   `ZADATAK:\n${task}\n\nBRIEF IZVIDJAJA:\n${briefText}\n\nPredlozi implementaciju iz kuta: "${angle}". SAMO CITAJ. ` +
   `Vrati korake, datoteke, testove koje treba dodati i kompromise. Ne pisi kod.`,
-  { phase: 'Dizajn', label: `dizajn:${i + 1}`, model: 'sonnet', effort: 'medium', schema: DESIGN_SCHEMA, agentType: 'Plan' },
+  { phase: 'Dizajn', label: `dizajn:${i + 1}`, model: 'sonnet', effort: 'medium', schema: DESIGN_SCHEMA },
 )))).filter(Boolean)
 if (!designs.length) throw new Error('nijedan dizajn nije vracen')
 
