@@ -189,6 +189,7 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'required-section-fixer': 'required-section',
   'paragraph-spacing-fixer': 'paragraph-spacing',
   'page-number-alignment-fixer': 'page-number-alignment',
+  'footnote-spacing-fixer': 'footnote-spacing',
   'bibliography-repair-fixer': 'bibliography',
 };
 
@@ -389,6 +390,8 @@ const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
   'paragraph-spacing': 'paragraph-spacing-fixer',
   /** Mjeri se iskljucivo u paginiranoj inacici; `page.numbers.position` (max 3) ondje postoji. */
   'page-number-alignment': 'page-number-alignment-fixer',
+  /** `footnote.spacing` (max 3) emitira se tocno za profile s `checkFootnoteParagraphSpacingZero`. */
+  'footnote-spacing': 'footnote-spacing-fixer',
 };
 
 export function buildCoverageCells(

@@ -14345,6 +14345,7 @@
         "empty-paragraphs",
         "croatian-typography",
         "paragraph-spacing",
+        "footnote-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14354,7 +14355,7 @@
         "heading-format",
         "margins"
       ],
-      "requested": 15,
+      "requested": 16,
       "axesResolved": [
         "font",
         "font-size",
@@ -14362,6 +14363,7 @@
         "justify",
         "toc-field",
         "paragraph-spacing",
+        "footnote-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14385,6 +14387,7 @@
         "field-integrity-fixer",
         "final-document-inspector-fixer",
         "font-fixer",
+        "footnote-spacing-fixer",
         "heading-case-fixer",
         "heading-format-fixer",
         "heading-style-fixer",
@@ -14400,7 +14403,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 9,
+      "resolved": 10,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14416,6 +14419,7 @@
         "empty-paragraphs",
         "croatian-typography",
         "paragraph-spacing",
+        "footnote-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14425,7 +14429,7 @@
         "heading-format",
         "margins"
       ],
-      "requested": 15,
+      "requested": 16,
       "axesResolved": [
         "font",
         "font-size",
@@ -14433,6 +14437,7 @@
         "justify",
         "toc-field",
         "paragraph-spacing",
+        "footnote-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14456,6 +14461,7 @@
         "field-integrity-fixer",
         "final-document-inspector-fixer",
         "font-fixer",
+        "footnote-spacing-fixer",
         "heading-case-fixer",
         "heading-format-fixer",
         "heading-style-fixer",
@@ -14471,7 +14477,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 9,
+      "resolved": 10,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14487,6 +14493,7 @@
         "empty-paragraphs",
         "croatian-typography",
         "paragraph-spacing",
+        "footnote-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14496,7 +14503,7 @@
         "heading-format",
         "margins"
       ],
-      "requested": 15,
+      "requested": 16,
       "axesResolved": [
         "font",
         "font-size",
@@ -14504,6 +14511,7 @@
         "justify",
         "toc-field",
         "paragraph-spacing",
+        "footnote-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14527,6 +14535,7 @@
         "field-integrity-fixer",
         "final-document-inspector-fixer",
         "font-fixer",
+        "footnote-spacing-fixer",
         "heading-case-fixer",
         "heading-format-fixer",
         "heading-style-fixer",
@@ -14542,7 +14551,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 9,
+      "resolved": 10,
       "regressions": 0,
       "textPreserved": true
     },
@@ -14619,6 +14628,7 @@
         "empty-paragraphs",
         "croatian-typography",
         "paragraph-spacing",
+        "footnote-spacing",
         "link-doi",
         "revision-metadata",
         "element-caption",
@@ -14628,7 +14638,7 @@
         "heading-format",
         "margins"
       ],
-      "requested": 15,
+      "requested": 16,
       "axesResolved": [
         "font",
         "font-size",
@@ -14636,6 +14646,7 @@
         "justify",
         "toc-field",
         "paragraph-spacing",
+        "footnote-spacing",
         "heading-style",
         "heading-format",
         "margins"
@@ -14659,6 +14670,7 @@
         "field-integrity-fixer",
         "final-document-inspector-fixer",
         "font-fixer",
+        "footnote-spacing-fixer",
         "heading-case-fixer",
         "heading-format-fixer",
         "heading-style-fixer",
@@ -14674,7 +14686,7 @@
         "justify",
         "margins"
       ],
-      "resolved": 9,
+      "resolved": 10,
       "regressions": 0,
       "textPreserved": true
     },

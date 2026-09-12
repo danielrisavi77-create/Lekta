@@ -147,6 +147,27 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(nerijeseni, 'os polozaja broja stranice prekrsena, a popravak ju nije zatvorio').toEqual([]);
   });
 
+  /**
+   * Os `footnote-spacing` je UVJETNA i mala (izmjereno 4 profila, svi `pravo-*`).
+   *
+   * Krsi se ISKLJUCIVO u definiciji stila `FootnoteText`, jer `patchFootnoteTextSpacing` pise tocno
+   * ondje i izricito ne izmislja stil kojeg dokument nema. Prva izvedba je krsila izravnim
+   * oblikovanjem: stavka se gradila, ulazila u zahtjeve, fixer se pozivao, a changelog je ostajao
+   * prazan. Bez ove tvrdnje bi povratak na taj oblik prosao tiho, jer `pass` ostaje 372.
+   *
+   * Fusnota pritom ODGOVARA profilu u svemu ostalom (`present` 4/4, `format` 6/6, `marker` 4/4), pa
+   * se krsi tocno jedna os; da nije tako, pad se ne bi mogao pripisati njoj.
+   */
+  it('os razmaka fusnota je prekrsena i rijesena na svakom profilu koji ju propisuje', () => {
+    const sPravilima = report.rows.filter((r) => (r.violated as string[]).includes('footnote-spacing'));
+    // Anti-vakuum: prazan skup bi obje tvrdnje nize ucinio istinitima ni nad cim.
+    expect(sPravilima.length, 'nijedan profil ne krsi os; generator je prestao emitirati fusnote').toBeGreaterThan(2);
+    const nerijeseni = sPravilima
+      .filter((r) => !(r.axesResolved as string[]).includes('footnote-spacing'))
+      .map((r) => r.profileId);
+    expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
+  });
+
   it('zatecene kategorije odgovaraju zabiljezenima', () => {
     expect(count('pass'), 'pass').toBe(ratchet.pass);
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);

@@ -837,6 +837,32 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'generator/krsi-izravno-a-fixer-pise-u-stil',
+    imitates:
+      'generator krsi os IZRAVNIM oblikovanjem, dok fixer pise u DEFINICIJU STILA. Stavka se gradi, ' +
+      'ulazi u zadane zahtjeve, fixer se pozove, i changelog ostane prazan. Izmjereno dvaput: os ' +
+      '`heading-format` (fixer pise u `Heading1`) i os `footnote-spacing` (fixer pise u `FootnoteText`, ' +
+      'i izricito NE izmislja stil kojeg dokument nema). Kvar je tih jer sve izgleda ispravno do ' +
+      'zadnjeg koraka: `pass` ostaje isti, a celija se cita kao "nema dokaza"',
+    caught: () => {
+      type Stilovi = { ima: (id: string) => boolean };
+      // Ista ograda kao `patchNormalParagraphProps`: bez stila nema sto zakrpati.
+      const zakrpa = (stilovi: Stilovi, styleId: string) => stilovi.ima(styleId);
+      const bezStila: Stilovi = { ima: () => false };
+      const saStilom: Stilovi = { ima: (id) => id === 'FootnoteText' };
+      const krivStil: Stilovi = { ima: (id) => id === 'Normal' };
+      return !zakrpa(bezStila, 'FootnoteText') && !zakrpa(krivStil, 'FootnoteText') && zakrpa(saStilom, 'FootnoteText');
+    },
+    /**
+     * Netrivijalnost: dokument koji stil IMA mora se dati zakrpati. Bez ove polovice bi prosla i
+     * izvedba koja nikad nista ne zakrpa.
+     */
+    cleanBefore: () => {
+      const stilovi = { ima: (id: string) => id === 'FootnoteText' || id === 'Heading1' };
+      return stilovi.ima('FootnoteText') && stilovi.ima('Heading1');
+    },
+  },
+  {
     id: 'petlja/pravilo-mjereno-na-dokumentu-koji-ga-ne-moze-nositi',
     imitates:
       'pravilo se mjeri na dokumentu koji trazenu pojavu UOPCE nema, pa provjera dodje kao `max 0`, ' +

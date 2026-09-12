@@ -117,6 +117,15 @@ const AXIS_CHECK_ID: Record<string, string> = {
    * Zato se os krsi iskljucivo u paginiranoj inacici; u zadanoj je ta provjera `max 0`.
    */
   'page-number-alignment': 'page.numbers.position',
+  /**
+   * `footnote.spacing` je BODOVANA (max 3, izmjereno na `pravo-integrirani-diplomski`: 2,8/3
+   * prije popravka, 3/3 poslije). Os je uvjetna: krsi se samo uz
+   * `checkFootnoteParagraphSpacingZero === true`, a bas ta zastavica i emitira provjeru.
+   *
+   * Fusnota pritom ODGOVARA profilu u svemu ostalom (`present` 4/4, `format` 6/6, `marker` 4/4),
+   * pa se krsi TOCNO jedna os i uzroci se ne mijesaju.
+   */
+  'footnote-spacing': 'footnote.spacing',
 };
 
 /**

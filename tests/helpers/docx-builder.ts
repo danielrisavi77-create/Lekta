@@ -35,6 +35,18 @@ export interface FootnoteSpec {
   spacingLine?: number;
   before?: number;
   after?: number;
+  /**
+   * Stil odlomka fusnote, u praksi `FootnoteText`.
+   *
+   * Polje je DEKLARIRANO 2026-09-12, iako ga je `footnotesXml` kroz spread vec propustao do
+   * `paraXml`: generator ga je koristio, a tip o njemu nije znao. `tsconfig.json` ima
+   * `include: ["src"]`, pa se `tests/**` ne typechecka i visak svojstva se nije imao gdje prijaviti.
+   * Oslanjati se na nedeklarirano polje je isti razred kao mjerenje bez garda.
+   *
+   * Postoji jer `patchFootnoteTextSpacing` pise u STIL `FootnoteText` i izricito ne izmislja stil
+   * kojeg dokument nema, pa fusnota mora taj stil doista nositi.
+   */
+  styleId?: string;
 }
 
 /** Podnožje sa (zadanim) brojem stranice: word/footer1.xml + veza u document.xml.rels.

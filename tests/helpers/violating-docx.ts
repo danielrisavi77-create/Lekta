@@ -79,6 +79,7 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'heading-format',
   'bibliography',
   'paragraph-spacing',
+  'footnote-spacing',
   /** Krsi se SAMO u paginiranoj inacici (`pageNumberFooter`), nikad u zadanoj. */
   'page-number-alignment',
 ] as const;
@@ -190,6 +191,7 @@ export async function buildViolatingDocx(
   const paperTarget = targets['paper-size'] as { w: number; h: number } | undefined;
 
   const violated: AnyViolationId[] = [];
+  const footnotes: NonNullable<DocSpec['footnotes']> = [];
   const para: ParaSpec = {
     text:
       'Ovaj odlomak postoji da bi analiza imala tijelo rada nad kojim mjeri oblikovanje. ' +
@@ -234,6 +236,17 @@ export async function buildViolatingDocx(
    * izlaz bez te osi bajt-identican starome.
    */
   let headingStyles = '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/></w:style>';
+  /**
+   * Stil `FootnoteText` s KRIVIM razmakom; prazno kad se os ne krsi, pa je izlaz bajt-identican.
+   *
+   * Krsi se u DEFINICIJI STILA, ne izravnim oblikovanjem, jer `patchFootnoteTextSpacing` pise tocno
+   * ondje (`patchNormalParagraphProps(stylesXml, 'FootnoteText', ...)`) i izricito NE izmislja stil
+   * kojeg dokument nema. Izmjereno: uz izravno oblikovanje se stavka gradi, ulazi u zahtjeve i fixer
+   * se pozove, a changelog ostane prazan. Isti razred kao os `heading-format`, gdje je prva izvedba
+   * krsila izravno dok fixer pise u stil.
+   */
+  let footnoteStyle = '';
+
   const buildStyles = () =>
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<w:styles ${W}>` +
@@ -245,6 +258,7 @@ export async function buildViolatingDocx(
     (normalPPr.length ? `<w:pPr>${normalPPr.join('')}</w:pPr>` : '') +
     '</w:style>' +
     headingStyles +
+    footnoteStyle +
     '</w:styles>';
 
   const paragraphs: ParaSpec[] = [
@@ -362,6 +376,52 @@ export async function buildViolatingDocx(
           'Popravak smije promijeniti razmak, ali ne i ovu recenicu.',
       });
       violated.push('paragraph-spacing');
+    }
+
+    /**
+     * `footnote-spacing`: fusnota nosi razmak PRIJE i POSLIJE, a profil trazi nulu.
+     *
+     * UVJETNA os: krsi se samo uz `checkFootnoteParagraphSpacingZero === true` (izmjereno: 4 profila,
+     * svi Pravo). Bez tog uvjeta bi se `footnote-spacing-fixer` nudio profilima koji razmak fusnote ne
+     * propisuju, dakle po izmisljenom pravilu.
+     *
+     * FUSNOTA ODGOVARA PROFILU U SVEMU OSTALOM, i to je nuzno a ne uljudno: ta cetiri profila nose
+     * `legalFootnoteProfile`, `footnoteFont`, `footnoteSize`, `footnoteSpacing`, `footnoteJustify` i
+     * `footnoteEndPeriod`. Fusnota koja krsi vise od jedne osi pomijesala bi uzroke, a taj razred
+     * sudara je u ovom generatoru vec dvaput oborio pokrivenost (prazni odlomci, naslovi).
+     *
+     * Oznaka fusnote ide u TIJELO (`w:footnoteReference`), jer bez nje analiza vidi datoteku fusnota
+     * bez ijedne oznake, sto nije rad nego paket.
+     */
+    const fnSpacing = (profile as { checkFootnoteParagraphSpacingZero?: unknown } | null)?.checkFootnoteParagraphSpacingZero;
+    if (wants(structural, 'footnote-spacing') && fnSpacing === true) {
+      const fnFont = ((profile as { footnoteFont?: unknown[] } | null)?.footnoteFont ?? [])[0];
+      const fnSize = ((profile as { footnoteSize?: unknown[] } | null)?.footnoteSize ?? [])[0];
+      paragraphs.push({
+        raw:
+          // Oznaka ide IZA recenicnog znaka: profil to propisuje, a izmjereno je i obrnuto
+          // ("1 uz pogresnu stranu zareza/tocke" kad je ispred), pa bi dokument krsio i tu os.
+          '<w:p><w:r><w:t xml:space="preserve">Tvrdnja koja se potkrepljuje biljeskom.</w:t></w:r>' +
+          '<w:r><w:rPr><w:rStyle w:val="FootnoteReference"/><w:vertAlign w:val="superscript"/></w:rPr>' +
+          '<w:footnoteReference w:id="1"/></w:r></w:p>',
+      });
+      // Razmak ide u STIL (fixer pise ondje), ostalo u fusnotu, da se krsi TOCNO jedna os.
+      footnoteStyle =
+        '<w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="footnote text"/>' +
+        '<w:pPr><w:spacing w:before="120" w:after="120"/></w:pPr></w:style>' +
+        // Znakovni stil oznake: Word ga upise u svaki dokument s fusnotama, pa bez njega dokument
+        // krsi i os polozaja oznake, a htjeli smo krsiti TOCNO jednu.
+        '<w:style w:type="character" w:styleId="FootnoteReference"><w:name w:val="footnote reference"/>' +
+        '<w:rPr><w:vertAlign w:val="superscript"/></w:rPr></w:style>';
+      footnotes.push({
+        text: 'Izvor uz tvrdnju iz tijela rada.',
+        styleId: 'FootnoteText',
+        ...(typeof fnFont === 'string' ? { font: fnFont } : {}),
+        ...(typeof fnSize === 'number' ? { sizePt: fnSize } : {}),
+        spacingLine: 240,
+        jc: 'both',
+      });
+      violated.push('footnote-spacing');
     }
 
     if (wants(structural, 'link-doi')) {
@@ -657,7 +717,12 @@ export async function buildViolatingDocx(
     }
   }
 
-  const spec: DocSpec = { stylesXml: buildStyles(), paragraphs, ...(structural ? { settings: true as const } : {}) };
+  const spec: DocSpec = {
+    stylesXml: buildStyles(),
+    paragraphs,
+    ...(footnotes.length ? { footnotes } : {}),
+    ...(structural ? { settings: true as const } : {}),
+  };
 
   /**
    * Paginirana inacica: podnozje s PAGE poljem. Poravnanje je krivo kad ga profil propisuje, pa os
