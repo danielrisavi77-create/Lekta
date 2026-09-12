@@ -5,6 +5,10 @@
 // verified, REPAIR_ENGINE.md sekcija 3). Checkboxovi su PREDODABRANI (opt-out).
 
 import type { FixerId } from '../repair/apply-fixers';
+import { bindRepairWorkflow, type RepairWorkflowBinding } from './repair-workflow-binding';
+import { verifiedOutcomeFrom, type VerifiedRepairOutcome } from '../repair/repair-outcome-verified';
+import { repairOutcomeHtml } from './results/repair-outcome-view';
+import type { ApplyFixersResult } from '../repair/apply-fixers';
 import type { HeadingCandidate, HeadingStructureWarning } from '../analysis/heading-structure';
 import type { HeadingNumberingPlan } from '../analysis/heading-numbering';
 import type { BibliographyEnrichmentCandidate, BibliographyEnrichmentInput } from '../citations/bibliography-enrichment';
@@ -351,6 +355,23 @@ export interface RepairPanelContext {
   /** Opcionalni sandboxani LibreOffice worker. XML popravak radi i bez njega. */
   fieldRenderEndpoint?: string;
   getAccessToken?: () => Promise<string>;
+  /** Telemetrija toka (T14): `repair_completed` nakon PROVJERENOG ishoda, `repair_download_started` na preuzimanje. */
+  trackEvent?: (event: string, data?: Record<string, unknown>) => unknown;
+  /**
+   * Identitet sesije dokumenta za kontroler toka (T08). Novi dokument ili profil daje novi panel s novim tokenom,
+   * pa zakasnjeli rezultat starog panela ne moze uci u novi. Bez njega se koristi ime datoteke.
+   */
+  sessionToken?: string;
+}
+
+/** Sto panel vraca pozivatelju (T08/T09): odabir iz plana ide OVUDA, ne kroz DOM. */
+export interface RepairPanelHandle {
+  /** Postavi odabir iz plana popravka; vraca koliko je zahvata stvarno postavljeno. */
+  applySelection(ruleIds: Iterable<string>): number;
+  /** Trenutni odabir kontrolera, po `ruleId`. */
+  selectedRuleIds(): string[];
+  /** Faza toka (`ready`, `running`, `complete`, ...). */
+  phase(): string;
 }
 
 /** Polja koje "obicna" stavka smije nositi (ono sto ledger prezentacija razumije: cist
@@ -369,6 +390,62 @@ const SIMPLE_ITEM_KEYS = new Set<string>([
   'recommended',
   'matchKeys',
 ]);
+
+/**
+ * Skrivena checkbox lista stavki, ISTA za lokalni i serverski panel (do 2026-09-10 dva prijepisa iste petlje).
+ *
+ * Tri skupine: prekrseno (predodabrano) > preporuka fakulteta > neprekrseno-ali-bodovano ("uskladi cijeli dokument").
+ * Redoslijed druge dvije i naslovi skupina su parametri, jer su se paneli tu povijesno razlikovali; ponasanje je
+ * namjerno ocuvano, samo je kod jedan. `data-idx` je indeks u ULAZNOM `items` nizu (to cita ledger i kontroler).
+ */
+export interface RepairListCopy {
+  /** Naslov skupine neprekrsenih; prima `firstExtraIdx === 0` (kad nista nije prekrseno). */
+  extra: (nothingViolated: boolean) => string;
+  /** Naslov skupine preporuka; prima broj preporuka. */
+  recommended: (count: number) => string;
+  /** Koja od dvije opt-in skupina ide prva. */
+  order: 'recommended-first' | 'extra-first';
+}
+
+export function buildRepairItemList(items: readonly RepairableItem[], copy: RepairListCopy): HTMLUListElement {
+  const list = document.createElement('ul');
+  list.className = 'lekta-repair-panel__list';
+  const rank = (i: RepairableItem) => (i.violated !== false ? 0 : i.recommended ? (copy.order === 'recommended-first' ? 1 : 2) : (copy.order === 'recommended-first' ? 2 : 1));
+  const ordered = [...items].sort((a, b) => rank(a) - rank(b));
+  const recRank = copy.order === 'recommended-first' ? 1 : 2;
+  const extraRank = copy.order === 'recommended-first' ? 2 : 1;
+  const firstRecommendedIdx = ordered.findIndex((i) => rank(i) === recRank);
+  const firstExtraIdx = ordered.findIndex((i) => rank(i) === extraRank);
+  ordered.forEach((item, orderIdx) => {
+    const idx = items.indexOf(item);
+    const isViolated = item.violated !== false;
+    if (orderIdx === firstExtraIdx && firstExtraIdx !== -1) {
+      const sub = document.createElement('li');
+      sub.className = 'lekta-repair-panel__subtitle';
+      sub.textContent = copy.extra(firstExtraIdx === 0);
+      list.appendChild(sub);
+    }
+    if (orderIdx === firstRecommendedIdx && firstRecommendedIdx !== -1) {
+      const sub = document.createElement('li');
+      sub.className = 'lekta-repair-panel__subtitle';
+      sub.textContent = copy.recommended(ordered.filter((i) => rank(i) === recRank).length);
+      list.appendChild(sub);
+    }
+    const li = document.createElement('li');
+    li.className = 'lekta-repair-panel__item';
+    li.dataset.ruleId = item.ruleId;
+    const badgeText = item.recommended ? 'Preporučeno' : isViolated ? 'Možemo ovo popraviti umjesto tebe' : 'Uskladi s profilom';
+    li.innerHTML = `<label><input type="checkbox" ${isViolated ? 'checked' : ''} data-idx="${idx}" /><span>${escapeHtml(item.label)}</span></label><span class="lekta-repair-panel__badge">${badgeText}</span>`;
+    list.appendChild(li);
+  });
+  return list;
+}
+
+/**
+ * Preklopnik dubinskog ciscenja, ISTI tekst na lokalnom i serverskom panelu (do 2026-09-10 dupliciran u app.ts; RE-35
+ * je vec jednom nasao da je serverski put deep ukljucivao bez ijedne rijeci u copyju, pa tekst zivi na jednom mjestu).
+ */
+export const DEEP_TOGGLE_HTML = '<input type="checkbox" checked /><span>Uskladi i ručno formatirane dijelove, da popravak stvarno primi.</span><details class="lekta-repair-panel__deep-more"><summary>Što to znači</summary><p>Ako je oblikovanje upisano izravno u tekst, ono nadjačava stilove i popravak se vizualno ne vidi. Ovo uklanja takvo izravno oblikovanje (font, prored, poravnanje). <strong>Netaknuti ostaju:</strong> naslovi i stilizirani dijelovi, podebljano i kurziv, centrirano, veće naslovne veličine, formule, tablice (prored i poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero, Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</p></details><span></span>';
 
 /** Izvezeno da app.ts (isti uzi kriterij za renderServerRepairPanel) ne duplicira allowlistu. */
 export function isSimpleItem(item: RepairableItem): boolean {
@@ -439,86 +516,61 @@ export function advancedFormFor(item: RepairableItem): AdvancedFormDescriptor | 
   return null;
 }
 
-export function renderRepairPanel(ctx: RepairPanelContext): void {
-  if (ctx.items.length === 0) return; // nema autoFixable stavki za ovaj rad
+export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | null {
+  if (ctx.items.length === 0) return null; // nema autoFixable stavki za ovaj rad
 
   const container = document.createElement('div');
   container.className = 'lekta-repair-panel';
+  // Stabilna testna oznaka (plan T02): isti panel na lokalnom i serverskom putu nosi `repair-workflow`.
+  container.dataset.testid = 'repair-workflow';
 
-  const list = document.createElement('ul');
-  list.className = 'lekta-repair-panel__list';
-
-  // Tri skupine, tim redom: prekrseno (predodabrano) > PREPORUKA fakulteta > neprekrseno-ali-
-  // bodovano ("uskladi cijeli dokument", Feature B). Obje zadnje su uvijek opt-in.
+  // Tri skupine, tim redom: prekrseno (predodabrano) > PREPORUKA fakulteta > neprekrseno-ali-bodovano
+  // ("uskladi cijeli dokument", Feature B). Obje zadnje su uvijek opt-in.
   //
-  // Preporuke su podignute IZNAD neprekrsenih bodovanih stavki namjerno. Vecina hrvatskih
-  // fakultetskih uputa su preporuke, ne obveze (izmjereno na snapshotiranom korpusu: svih pet
-  // ustanova iz pilota ima izricitu ogradu tipa "preporucuje se" ili "u dogovoru s mentorom").
-  // Bodovati ih kao obveze znacilo bi lazan nalaz: student bi gubio bodove za rad koji je tocan
-  // po mentorovoj uputi. Zato ostaju izvan ocjene, ali dobivaju mjesto koje odgovara njihovoj
-  // stvarnoj vrijednosti za korisnika, umjesto zadnjeg mjesta na popisu.
-  const rank = (i: RepairableItem) => (i.violated !== false ? 0 : i.recommended ? 1 : 2);
-  const ordered = [...ctx.items].sort((a, b) => rank(a) - rank(b));
-  const firstRecommendedIdx = ordered.findIndex((i) => rank(i) === 1);
-  const firstExtraIdx = ordered.findIndex((i) => rank(i) === 2);
-
-  ordered.forEach((item, orderIdx) => {
-    const idx = ctx.items.indexOf(item);
-    const isViolated = item.violated !== false;
-    if (orderIdx === firstExtraIdx && firstExtraIdx !== -1) {
-      const sub = document.createElement('li');
-      sub.className = 'lekta-repair-panel__subtitle';
-      // Kad NISTA nije prekrseno (uredan rad), "i ostalo" nema smisla: preokreni
-      // u pozitivnu poruku. Inace: dodatne dimenzije ispod prekrsenih.
-      sub.textContent =
-        firstExtraIdx === 0
-          ? 'Sve prepoznato je usklađeno. Po želji dodatno uskladi:'
-          : 'Uskladi i ostalo (trenutno nije prekršeno):';
-      list.appendChild(sub);
-    }
-    if (orderIdx === firstRecommendedIdx && firstRecommendedIdx !== -1) {
-      const sub = document.createElement('li');
-      sub.className = 'lekta-repair-panel__subtitle';
-      // Naslov imenuje IZVOR preporuke: to je ono sto joj daje tezinu kod korisnika, a
-      // istovremeno posteno kaze da ne ulazi u ocjenu.
-      const count = ordered.filter((i) => rank(i) === 1).length;
-      sub.textContent = `Vaš fakultet ovo preporučuje (${count}); ne ulazi u ocjenu:`;
-      list.appendChild(sub);
-    }
-    const li = document.createElement('li');
-    li.className = 'lekta-repair-panel__item';
-    li.dataset.ruleId = item.ruleId;
-    const badgeText = item.recommended
-      ? 'Preporučeno'
-      : isViolated
-        ? 'Možemo ovo popraviti umjesto tebe'
-        : 'Uskladi s profilom';
-    li.innerHTML = `
-      <label>
-        <input type="checkbox" ${isViolated ? 'checked' : ''} data-idx="${idx}" />
-        <span>${escapeHtml(item.label)}</span>
-      </label>
-      <span class="lekta-repair-panel__badge">${badgeText}</span>
-    `;
-    list.appendChild(li);
-    // Napredna forma (literatura, citati, fusnote, naslovnica...) se VISE ne gradi ovdje inline:
-    // list je uvijek skriven (ledger je jedini vidljivi prikaz, vidi nize), pa bi izgradnja ovdje
-    // bila uzaludan posao za svaku stavku sinkrono pri svakom renderu. advancedFormFor (gore) je
-    // sad jedino mjesto koje zna koji render*Controls ide uz koju formu; renderRepairLedgerModal
-    // ga zove LIJENO, tek na klik na "Uredi..."/otvaranje <details> retka.
+  // Preporuke su podignute IZNAD neprekrsenih bodovanih stavki namjerno. Vecina hrvatskih fakultetskih uputa su
+  // preporuke, ne obveze (izmjereno na snapshotiranom korpusu: svih pet ustanova iz pilota ima izricitu ogradu
+  // tipa "preporucuje se" ili "u dogovoru s mentorom"). Bodovati ih kao obveze znacilo bi lazan nalaz; zato ostaju
+  // izvan ocjene, ali dobivaju mjesto koje odgovara njihovoj stvarnoj vrijednosti za korisnika.
+  // Napredna forma se NE gradi ovdje inline: list je uvijek skriven, ledger je zove LIJENO (advancedFormFor).
+  const list = buildRepairItemList(ctx.items, {
+    order: 'recommended-first',
+    extra: (nothingViolated) => (nothingViolated ? 'Sve prepoznato je usklađeno. Po želji dodatno uskladi:' : 'Uskladi i ostalo (trenutno nije prekršeno):'),
+    // Naslov imenuje IZVOR preporuke: to je ono sto joj daje tezinu, a istovremeno posteno kaze da ne ulazi u ocjenu.
+    recommended: (count) => `Vaš fakultet ovo preporučuje (${count}); ne ulazi u ocjenu:`,
   });
 
   // v2 dubinsko ciscenje: uklanja izravno formatiranje u tekstu (font, prored,
   // poravnanje po runovima/odlomcima) da popravljeni stilovi stvarno pobijede.
   const deepAvailable = ctx.items.some((i) => DEEP_CAPABLE.has(i.fixerId));
   let deepToggle: HTMLInputElement | null = null;
+
+  // T08: kontroler je JEDINI vlasnik odabira i zivotnog ciklusa. Adapter `run` je dosadasnji poziv motora,
+  // nepromijenjenog redoslijeda (zahtjevi u redoslijedu stavki, `deep` po preklopniku); `verify` su vrata
+  // integriteta. `getCheckedItems` cita kontroler, ne DOM.
+  const binding: RepairWorkflowBinding<ApplyFixersResult> = bindRepairWorkflow<ApplyFixersResult>({
+    items: ctx.items,
+    listEl: list,
+    sessionToken: ctx.sessionToken ?? ctx.originalFileName,
+    run: async (ruleIds) => {
+      const { applyFixers } = await import('../repair/apply-fixers');
+      const deep = deepToggle?.checked === true;
+      const chosen = new Set(ruleIds);
+      const requests = ctx.items
+        .filter((item) => chosen.has(item.ruleId))
+        .map((item) => ({
+          ruleId: item.ruleId,
+          fixerId: item.fixerId,
+          params: deep && DEEP_CAPABLE.has(item.fixerId) ? { ...item.params, deep: true } : item.params,
+        }));
+      const docxBytes = await ctx.getDocxBytes();
+      return applyFixers(docxBytes, requests);
+    },
+    verify: async (result) => (result.integrityFailure ? { ok: false, error: `${result.integrityFailure.part}: ${result.integrityFailure.problem}` } : { ok: true }),
+  });
   const deepRow = document.createElement('label');
   if (deepAvailable) {
     deepRow.className = 'lekta-repair-panel__deep';
-    deepRow.innerHTML = `
-      <input type="checkbox" checked />
-      <span>Uskladi i ručno formatirane dijelove, da popravak stvarno primi.</span><details class="lekta-repair-panel__deep-more"><summary>Što to znači</summary><p>Ako je oblikovanje upisano izravno u tekst, ono nadjačava stilove i popravak se vizualno ne vidi. Ovo uklanja takvo izravno oblikovanje (font, prored, poravnanje). <strong>Netaknuti ostaju:</strong> naslovi i stilizirani dijelovi, podebljano i kurziv, centrirano, veće naslovne veličine, formule, tablice (prored i poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero, Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</p></details><span></span>
-    `;
+    deepRow.innerHTML = DEEP_TOGGLE_HTML;
     deepToggle = deepRow.querySelector('input');
   }
 
@@ -558,12 +610,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   summary.hidden = true;
 
   function getCheckedItems(): RepairableItem[] {
-    const checkboxes = list.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
-    const checked: RepairableItem[] = [];
-    checkboxes.forEach((input) => {
-      if (input.checked) checked.push(ctx.items[Number(input.dataset.idx)]);
-    });
-    return checked;
+    return binding.selectedItems(ctx.items);
   }
 
   downloadBtn.addEventListener('click', () => {
@@ -606,16 +653,16 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     downloadBtn.textContent = 'Popravljam...';
 
     let repairedBytes: Uint8Array | null = null;
+    let execution: RecheckExecution | null = null;
     try {
-      const { applyFixers } = await import('../repair/apply-fixers');
-      const deep = deepToggle?.checked === true;
-      const requests = checkedItems.map((item) => ({
-        ruleId: item.ruleId,
-        fixerId: item.fixerId,
-        params: deep && DEEP_CAPABLE.has(item.fixerId) ? { ...item.params, deep: true } : item.params,
-      }));
-      const docxBytes = await ctx.getDocxBytes();
-      const result = await applyFixers(docxBytes, requests);
+      // `start()` je dopusten samo iz `ready`; drugi klik dok traje se odbija u kontroleru, ne samo gumbom.
+      const state = await binding.controller.start();
+      const result = state.result as ApplyFixersResult | null;
+      if (!result) {
+        if (state.phase === 'running' || state.phase === 'verifying') return; // vec traje: nista ne prikazuj dvaput
+        throw new Error(state.lastError ?? 'popravak nije pokrenut');
+      }
+      execution = { skippedRuleIds: result.skipped, appliedChangeCount: result.changelog.length, integrity: result.integrityFailure ? 'failed' : 'passed' };
 
       // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
       // identicno kad se ne razdvoje, pa uredan rad u "uskladi sve" toku djeluje kao kvar.
@@ -650,6 +697,9 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     } finally {
       downloadBtn.disabled = false;
       downloadBtn.textContent = originalLabel;
+      // Lokalni popravak nije naplativ, pa se nakon svakog ishoda vraca na plan: odabir se CUVA, a novi klik
+      // ide opet kroz `ready -> running`. Serverski panel to namjerno NE radi nakon uspjeha (vidi app.ts).
+      binding.controller.backToPlan();
     }
 
     // Re-check PRIJE isporuke (obrnuto od ugovora do 2026-08-16, kad se dokument preuzimao odmah
@@ -661,7 +711,12 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     // dokument, ali kad postoji regresija glavna ponuda je original. Kad ponovna analiza padne,
     // popravljeni se isporucuje uz iskrenu napomenu - pad provjere ne smije zarobiti dokument.
     if (repairedBytes) {
-      const verdict = await renderRecheck(summary, repairedBytes, ctx, checkedItems);
+      const verdict = await renderRecheck(summary, repairedBytes, ctx, checkedItems, execution ?? undefined);
+      // T14: "repair_completed" je vezan uz ZAVRSENU PROVJERU (ponovna analiza), ne uz klik; bez provjere se ne salje.
+      if (verdict.verified) {
+        const v = verdict.verified;
+        ctx.trackEvent?.('repair_completed', { count: v.resolvedIds.length, total: v.resolvedIds.length + v.unresolvedIds.length + v.skippedIds.length, changes: execution?.appliedChangeCount ?? 0, kind: v.recommendRepairedCopy ? 'recommended' : 'demoted' });
+      }
       renderDelivery(summary, repairedBytes, verdict, ctx);
     }
   }
@@ -680,6 +735,11 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   container.appendChild(confirmBox);
   container.appendChild(summary);
   ctx.mountEl.appendChild(container);
+  return {
+    applySelection: (ruleIds) => binding.applySelection(ruleIds),
+    selectedRuleIds: () => binding.selectedItems(ctx.items).map((i) => i.ruleId),
+    phase: () => binding.getState().phase,
+  };
 }
 
 export function renderTitlePageControls(li: HTMLElement, item: RepairableItem): void {
@@ -1615,6 +1675,8 @@ export interface RecheckVerdict {
    * ishoda.
    */
   outcome: RepairOutcome | null;
+  /** Provjereni ishod (T10); `null` kad ponovna analiza nije izvedena ili nema podataka o izvrsenju. */
+  verified: VerifiedRepairOutcome | null;
 }
 
 /**
@@ -1624,15 +1686,23 @@ export interface RecheckVerdict {
  * Od 2026-08-16 se izvodi PRIJE isporuke i vraca verdikt, jer o njemu ovisi sto je glavna
  * ponuda za preuzimanje (vidi `renderDelivery`).
  */
+/** Sto je motor STVARNO izvrsio; ulaz za provjereni ishod (T10), odvojen od onoga sto je ponovna analiza izmjerila. */
+export interface RecheckExecution {
+  skippedRuleIds: readonly string[];
+  appliedChangeCount: number;
+  integrity: 'passed' | 'failed';
+}
+
 async function renderRecheck(
   el: HTMLElement,
   bytes: Uint8Array,
   ctx: RepairPanelContext,
   selectedItems: readonly RepairableItem[] = [],
+  execution?: RecheckExecution,
 ): Promise<RecheckVerdict> {
   const before = ctx.beforeScore;
   const reanalyze = ctx.reanalyze;
-  if (!reanalyze || !before) return { unavailable: true, regressions: 0, outcome: null }; // lokalni const: narrowing prezivi await ispod
+  if (!reanalyze || !before) return { unavailable: true, regressions: 0, outcome: null, verified: null }; // lokalni const: narrowing prezivi await ispod
   const pending = document.createElement('p');
   pending.className = 'lekta-repair-panel__recheck-pending';
   pending.textContent = 'Računam spremnost popravljenog dokumenta...';
@@ -1652,13 +1722,13 @@ async function renderRecheck(
     note.textContent =
       'Novi rezultat nije bilo moguće izračunati, pa provjera popravljenog dokumenta ovaj put izostaje.';
     el.appendChild(note);
-    return { unavailable: true, regressions: 0, outcome: null };
+    return { unavailable: true, regressions: 0, outcome: null, verified: null };
   }
   if (after === null) {
     const note = document.createElement('p');
     note.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
     el.appendChild(note);
-    return { unavailable: true, regressions: 0, outcome: null };
+    return { unavailable: true, regressions: 0, outcome: null, verified: null };
   }
   const box = buildBeforeAfter(before, after);
   // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju.
@@ -1676,8 +1746,19 @@ async function renderRecheck(
     : null;
   const outcomeLine = buildOutcomeLine(outcome);
   if (outcomeLine) box.insertBefore(outcomeLine, box.firstChild?.nextSibling ?? null);
+  // T10: provjereni ishod (rijeseno / nerijeseno / preskoceno / regresija / integritet), iz ISTE ponovne analize kao
+  // usporedba prije/poslije iznad, pa se sazetak i usporedba ne mogu raziti.
+  let verified: VerifiedRepairOutcome | null = null;
+  if (before.checks && after.checks && execution) {
+    verified = verifiedOutcomeFrom({ before: before.checks, after: after.checks, selected: selectedItems, skippedRuleIds: execution.skippedRuleIds, integrity: execution.integrity });
+    const titles = new Map<string, string>();
+    for (const c of [...before.checks, ...after.checks]) if (c.id && c.title && !titles.has(c.id)) titles.set(c.id, c.title);
+    const wrap = document.createElement('div');
+    wrap.innerHTML = repairOutcomeHtml({ outcome: verified, titleOf: (id) => titles.get(id) ?? id, manualOnlyIds: outcome?.manualOnly ?? [], appliedChangeCount: execution.appliedChangeCount }, escapeHtml);
+    box.appendChild(wrap.firstElementChild as HTMLElement);
+  }
   el.appendChild(box);
-  return { unavailable: false, regressions: regressions.length, outcome };
+  return { unavailable: false, regressions: regressions.length, outcome, verified };
 }
 
 /**
@@ -1717,7 +1798,8 @@ export function buildOutcomeLine(outcome: RepairOutcome | null): HTMLElement | n
 function renderDelivery(el: HTMLElement, repaired: Uint8Array, verdict: RecheckVerdict, ctx: RepairPanelContext): void {
   const box = document.createElement('div');
   box.className = 'lekta-repair-panel__delivery';
-  const regressed = verdict.regressions > 0;
+  // Politika isporuke: regresija (ili provjereni ishod koji kopiju ne preporucuje) demotira popravljeni dokument.
+  const regressed = verdict.regressions > 0 || (verdict.verified !== null && !verdict.verified.recommendRepairedCopy);
 
   if (regressed) {
     const lead = document.createElement('p');
@@ -1745,7 +1827,11 @@ function renderDelivery(el: HTMLElement, repaired: Uint8Array, verdict: RecheckV
   secondary.type = 'button';
   secondary.className = 'btn btn-secondary btn-sm';
 
-  const downloadRepaired = () => triggerDownload(repaired, buildFixedFileName(ctx.originalFileName));
+  const downloadRepaired = () => {
+    // "Started", ne "downloaded": preglednik ne potvrdjuje ni otvaranje ni spremanje na disk.
+    ctx.trackEvent?.('repair_download_started', { kind: regressed ? 'demoted' : 'recommended' });
+    triggerDownload(repaired, buildFixedFileName(ctx.originalFileName));
+  };
   const downloadOriginal = async () => {
     try {
       triggerDownload(await ctx.getDocxBytes(), ctx.originalFileName);

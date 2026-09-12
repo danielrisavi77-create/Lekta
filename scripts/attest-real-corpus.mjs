@@ -30,6 +30,17 @@ const biljeska = (() => {
   const i = args.indexOf('--note');
   return i >= 0 ? args[i + 1] : null;
 })();
+// T06 (protokol 2.4): verzija Worda u kojem je izlaz vizualno provjeren (COM `Application.Version`,
+// danas 14.0). Nije izmisljena: bez zastavice ostaje `null`, a `null` u ovjeri znaci "nije provjereno u
+// Wordu", ne "provjereno u nepoznatoj verziji".
+const wordVersion = (() => {
+  const i = args.indexOf('--word-version');
+  return i >= 0 ? String(args[i + 1]) : null;
+})();
+// T06 (protokol 2.2): izdvojeni skup (`holdout`) se MJERI, ali u dokaz razine A ulazi tek kad vlasnik potvrdi
+// zavrsnu provjeru, i to izricito. Bez zastavice ti dokumenti ne ulaze ni u `documentCount` ni u `cleanCount`
+// skupine, pa dokaz stoji samo na dokumentima na kojima se ocekivanja nisu dotjerivala.
+const holdoutConfirmed = args.includes('--holdout-confirmed');
 
 if (!fs.existsSync(ULAZ)) {
   console.error(`[ovjera] FAIL: nema ${ULAZ}. Pokreni mjerenje s LEKTA_LOCAL_CORPUS=1.`);
@@ -67,7 +78,11 @@ const registar = new Map(
 // vise vrsta rada (9 od 407) ulazi u svaku od njih, jer je profil tako i definiran.
 const poSkupini = new Map();
 let bezJedinice = 0;
+let izdvojeno = 0;
+let neovisnoPotvrdjeno = 0;
 for (const r of rezultati) {
+  if (r.expectationProvenance === 'independent') neovisnoPotvrdjeno += 1;
+  if (r.holdout === true && !holdoutConfirmed) { izdvojeno += 1; continue; }
   const p = registar.get(r.profileId);
   if (!p || !p.unitId) { bezJedinice += 1; continue; }
   const vrste = p.workTypes.length ? p.workTypes : ['unknown'];
@@ -85,6 +100,7 @@ for (const r of rezultati) {
   }
 }
 if (bezJedinice) console.warn(`[ovjera] ${bezJedinice} dokumenata preskoceno: profil nema jedinicu u registru.`);
+if (izdvojeno) console.warn(`[ovjera] ${izdvojeno} dokumenata u izdvojenom skupu NE ulazi u dokaz (dodaj --holdout-confirmed nakon zavrsne provjere).`);
 
 const commit = (() => {
   try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(); } catch { return null; }
@@ -100,6 +116,14 @@ const ovjera = {
   measuredAt: mjerenje.generatedAt,
   measuredFromCommit: mjerenje.generatedFromCommit,
   oracles: ['scripts/repair-real-corpus.mts (harness + detectPassRegressions)'],
+  // T06: okolina i protokol mjerenja, da se zakljucak moze vezati uz verziju alata i uz nacin nastanka ocekivanja.
+  environment: { wordVersion },
+  protocol: {
+    holdoutExcluded: !holdoutConfirmed,
+    holdoutDocumentCount: rezultati.filter((r) => r.holdout === true).length,
+    independentlyConfirmedCount: neovisnoPotvrdjeno,
+    derivedExpectationCount: rezultati.length - neovisnoPotvrdjeno,
+  },
   // Potpis se NE nasljedjuje kad se korpus promijeni: tada je rijec o drugom mjerenju.
   signedBy: potpis ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedBy : null),
   signedAt: potpis ? new Date().toISOString() : (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedAt : null),

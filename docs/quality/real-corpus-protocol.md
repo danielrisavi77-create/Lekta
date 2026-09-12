@@ -52,20 +52,26 @@ Osam profila, unutar raspona 5 do 10. Odluka o konacnom popisu je vlasnikova (ni
 
 ### 2.2 Izdvojeni skup za zavrsnu provjeru
 
-Sidecar dobiva polje `holdout: true` za oko 20 posto dokumenata po profilu, odabranih PRIJE prvog mjerenja
-(deterministicki: sha256(fileName) modulo 5 == 0). Harness ih ukljucuje u `results`, ali ih `attest-real-corpus`
-NE broji u dokaz razine A dok vlasnik ne potvrdi zavrsnu provjeru. Time se ocekivanja ne "dotjeruju" na istim
-dokumentima na kojima se tvrdi uspjeh. NIJE implementirano.
+IMPLEMENTIRANO 2026-09-10 (`tests/real-corpus/corpus-track.ts`, `isHoldout`). Oko 20 posto dokumenata je izdvojeno
+DETERMINISTICKI iz imena datoteke (FNV-1a 32 modulo 5; modul nema uvoza pa nije sha256), a sidecar smije presuditi
+izricitim `holdout: true|false`. Harness ih mjeri i oznacava u `results[].holdout`; `attest-real-corpus.mjs` ih NE
+broji u dokaz dok se ne pozove s `--holdout-confirmed`, nakon zavrsne provjere. Ovjera nosi
+`protocol.holdoutExcluded` i `protocol.holdoutDocumentCount`. Time se ocekivanja ne "dotjeruju" na istim
+dokumentima na kojima se tvrdi uspjeh. Gard: `tests/real-corpus-holdout.test.ts`.
 
 ### 2.3 Neovisna potvrda ocekivanja
 
-`expected` u sidecaru pise osoba koja NIJE pokrenula popravak, prije pokretanja; harness vec odbija dokument bez
-sidecara. Dodati polje `expectedBy` i `expectedAt`; bez njih dokument je `review`, ne `pass`. NIJE implementirano.
+IMPLEMENTIRANO 2026-09-10 kao PROVENIJENCIJA, ne kao promjena ishoda: sidecar smije nositi `expectedBy` i `expectedAt`
+(ISO datum); harness ih prevodi u `results[].expectationProvenance` (`independent` | `derived`) i broji u
+`summary.independentlyConfirmedCount`, a ovjera u `protocol.independentlyConfirmedCount`. Strojni `pass` se time NE
+mijenja (ocekivanja i dalje izvodi analiza prije popravka); mijenja se koliko je dokaza netko neovisno potvrdio, i
+to je brojka koju ljestvica moze citati kad vlasnik odluci. Danas: 0 od 321, jer nijedan sidecar jos nema ta polja.
 
 ### 2.4 Word okruzenje uz svaki izvjestaj
 
-`RELEASE_PROOF.json` nosi ishod Tier 2 razine, ali ne verziju Worda. Dodati `oracles.word.version` (COM
-`Application.Version`, danas 14.0) u ovjeru; `attest-real-corpus.mjs` vec ima `oracles` objekt. NIJE implementirano.
+IMPLEMENTIRANO 2026-09-10: `attest-real-corpus.mjs --word-version 14.0` upisuje `environment.wordVersion`; bez
+zastavice ostaje `null`, sto znaci "izlaz nije otvoren u Wordu", ne "nepoznata verzija". Vrijednost se ne izmislja iz
+`RELEASE_PROOF.json`, jer Tier 2 ondje otvara commitane fixture, ne ovaj korpus.
 
 ### 2.5 Vrste dokumenata koje treba pokriti po profilu
 
@@ -92,8 +98,45 @@ Uvjet iz plana za izdanje: poznato ostecenje (`integrityFailureCount > 0`) ili n
 univerzalno jamstvo; brojcani pragovi tocnosti se postavljaju tek nakon prvog neovisnog mjerenja po pravilu i
 ozbiljnosti (2.3).
 
-## 4. Stanje 2026-09-09
+## 4. Mjerenje 2026-09-10 (master `59adbc8c`, lokalni korpus + `Lekta-korpus/03-ingest`)
 
-Mjerenje po ovom protokolu NIJE izvedeno u ovoj sesiji: trazi mirni stroj (lokalni korpus, Word), a stroj je
-istodobno pekao dokaz izdanja. Ovaj dokument zatvara dio T06 koji ne ovisi o mjerenju; 2.2 do 2.4 su konkretni,
-mali zahvati u sidecar shemu i ovjeru koji idu u zaseban PR kad vlasnik potvrdi popis profila iz 2.1.
+Prvi puni prolaz po ovom protokolu. Harness je pritom dobio ograniceni paralelizam (`mapLimited`, zadano 4):
+`Promise.all` nad 315 dokumenata rusio je Node s "heap out of memory", a 54 su prolazila.
+
+| mjera | vrijednost |
+| --- | --- |
+| dokumenata (dopustenih) | 321, od toga 314 lokalnih (128 `docx-local` + 187 `03-ingest`) i 7 commitanih |
+| ishod | pass 15, review 304, fail 0, no-op 2 |
+| ostecenja i regresije | integrityFailure 0, passRegression 0 |
+| ciljane provjere | 645, razrijeseno 116 (18 posto) |
+| jaz motora, automatski | 9 (imenovane: `footnote.format`, `format.justify.body`, `format.spacing.body`) |
+| jaz motora, asistirano | 520 (primijenjeno, i dalje pada) |
+| ceka ljudski odabir | 73 |
+| izvan granice popravka | 964 (rucno) |
+| izdvojeni skup | 63 (19,6 posto), NE ulazi u ovjeru bez `--holdout-confirmed` |
+| neovisno potvrdjena ocekivanja | 0 od 321 |
+| profili s najvise radova | fpzg-opci-akademski-rad 98, fpzg-politologija-diplomski 90, fpzg-politologija-zavrsni 34, efzg-zavrsni 32, hks-diplomski 17, efzg-seminarski 16 |
+
+Sto iz toga slijedi, po redu vaznosti:
+
+1. U release skupu NEMA poznatog ostecenja ni neobjasnjene regresije (0 i 0), pa uvjet iz plana za izdavanje
+   zahvata vrijedi za sve zahvate koji su u ovom skupu bili primijenjeni.
+2. Stopa razrjesenja ciljanog (18 posto) NIJE mjera kvalitete motora nego GRANICE: 520 od 645 ciljanih provjera
+   ostaje crveno nakon ASISTIRANOG zahvata (naslovnica, literatura, fusnote, sekcije), gdje harness primjenjuje zadani
+   odabir bez covjeka. To je popis za sljedeci ciklus rada nad motorom, imenovan po provjeri u
+   `summary.assistedUnresolvedChecks` lokalnog artefakta.
+3. Ovjera nad ovim mjerenjem (`data/verification/real-corpus-attestation.json`) NIJE prepisana u repozitoriju:
+   otisak korpusa se promijenio (54 -> 321 dokumenata), pa bi nova ovjera bila nepotpisana i ljestvica bi profile
+   razine A spustila dok vlasnik ne potpise. Nepotpisana ovjera je spremljena izvan repozitorija; vlasnik je
+   ponovno proizvodi i potpisuje s:
+
+   ```bash
+   LEKTA_LOCAL_CORPUS=1 LEKTA_CORPUS_SOURCE="<put do 03-ingest>" NODE_OPTIONS=--max-old-space-size=3072 npx vite-node scripts/repair-real-corpus.mts
+   npm run verify:word:corpus                 # Word, pa verziju iz COM-a upisati dolje
+   node scripts/attest-real-corpus.mjs --sign "Ime" --word-version 14.0   # bez --holdout-confirmed dok zavrsna provjera nije izvedena
+   npm run completion-ledger && npm run gen-profile-claims                # u cistom worktreeu, artefakti u istom commitu
+   ```
+
+Sto ostaje otvoreno: 2.1 (konacni popis profila je vlasnikova odluka; mjerenje pokriva svih 8 predlozenih), 2.5
+(endnote i Google Docs izvoz i dalje nema u korpusu), te sidecar polja `expectedBy`/`expectedAt` koja nitko jos nije
+popunio.

@@ -39,3 +39,27 @@ plan popravka s pravim kontrolama su zapisani kao D7 u planu audita. T11 do T15 
 | `scripts/agents/core.mjs`: pretplatnicki nacin | `--subscription`: bez budzeta, bez Fablea, odbija API kljuc u okolini; rucni `--budget-usd` nacin nepromijenjen |
 | post-deploy-smoke: `build-info` 404 | `unknown` ishod: `--expect-commit` (cron, usporedba s masterom) upozorava, novi `--require-build-info` (konkretna objava) pada; klasifikacija ne moze biti `ok` bez ijednog prolaza; izlaz preko `process.exitCode` (`process.exit()` uz zivu fetch uticnicu na Windowsu vraca 0xC0000409); test `tests/post-deploy-smoke-build-info-cli.test.ts` s pravim lokalnim posluziteljem; izmjereno nad zivom stranicom: 27 ok + 1 unknown, exit 0 odnosno 1 |
 | `npm run check` nad granom | ZELEN 2026-09-09 (izolirani worktree, `VITEST_MAX_THREADS=2`): oxlint, tsc, Deno 25 funkcija, vitest 516 datoteka / 5975 testova (1 datoteka i 4 testa preskoceni po dizajnu), vite build; `orphan-scan` cist. Smoke paket (3 datoteke, 23 testa) i 91 Python test pokrenuti odvojeno nakon zadnje izmjene smoke skripte, zeleni |
+
+## Krug 2026-09-10 do 2026-09-12: T02 do T15 (grana `plan/t02-t06-2026-09-10`)
+
+Vlasnikova rijec "Napravi sve iz plana T00 do T15" (2026-09-10) ukljucila je i datoteke redizajna `/rad/`. Sve
+promjene u `src/ui/app.ts` su unutar ratcheta (`ui-module-budget`): prostor je napravljen seljenjem dupliciranog koda
+(graditelj liste stavki, preklopnik dubinskog ciscenja, recenica ishoda) iz `app.ts` u `repair-panel.ts` i
+`repair-outcome-view.ts`.
+
+| zadatak | sto je izvedeno | dokaz |
+| --- | --- | --- |
+| T02 | `data-testid` na stvarnim elementima (`repair-entry` je UVIJEK omogucen gumb: sigurne stavke ili simulacija), tri ulaza u popravak | `tests/ux/repair-entry-visible.spec.ts`, 4 testa x 2 projekta zeleno |
+| T03 | dovrsetak: oznake `document-profile` (kartica profila na koraku 2) i `analysis-results`, `production-journey` do `repair-workflow` | `tests/ux-dist/production-journey.spec.ts` |
+| T05 | ista projekcija na kartici i u rezultatu, recenica po osnovi dokaza | `tests/profile-claim-ui.test.ts` (+5) |
+| T06 | holdout, provenijencija ocekivanja, verzija Worda u ovjeri, `mapLimited` (OOM nad 315 dokumenata), prvo mjerenje 321 dokumenta | `real-corpus-protocol.md` odjeljak 4, `tests/real-corpus-holdout.test.ts` |
+| T08 | kontroler vezan na lokalni i serverski panel; ledger emitira `change` | `tests/repair-workflow-binding.test.ts` |
+| T09 | pravi checkboxovi u planu, sazetak, odabir u kontroler; NALAZ USPUT: podnozje plana na mobilnom guralo gumb izvan ekrana (scrollWidth 393 -> 877), popravljeno gridom | `tests/ux/repair-plan-selection.spec.ts`, `tests/desk-mount.test.ts` (+4) |
+| T10 | provjereni ishod na oba puta, politika oporavka, `check-existing-job` prije ponavljanja | `tests/repair-recovery.test.ts`, `tests/ux/repair-recovery.spec.ts` (4 zeleno na chromiumu) |
+| T12 | nova verzija rada, snimke u sesiji, pitanje o povezivanju, sazetak razlike | `tests/document-revisions.test.ts` (15), `tests/ux/document-revisions.spec.ts` |
+| T13 | mentorovi komentari kao zadaci u ruti `/rad/`, fixture s komentarima generirana skriptom | `tests/mentor-tasks-ui.test.ts` (7), `tests/ux/mentor-tasks.spec.ts` |
+| T14 | registar dogadjaja toka, gard da se svaki emitira | `tests/product-journey-telemetry.test.ts`, `docs/quality/product-metrics.md` |
+| T15 | protokol pilota i spremnost izdanja | `usability-protocol.md`, `release-readiness.md`; pilot NIJE proveden (vlasnik) |
+
+Sto ostaje vlasniku: potpis ovjere korpusa nad 321 dokumentom (i odluka o `holdout` potvrdi), pilot s korisnicima,
+objava kandidata nakon novog dokaza izdanja nad spojenim masterom.

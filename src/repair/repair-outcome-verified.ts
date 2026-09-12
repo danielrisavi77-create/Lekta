@@ -19,6 +19,9 @@
  * ovdje broje provjere, a adapter u sucelju vezuje zahvate na provjere koje trebaju rijesiti.
  */
 
+import { checksById, isFailingCheck, summarizeRepairOutcome, type OutcomeCheckLike, type OutcomeItemLike } from './repair-outcome';
+import { stableCheckId } from '../scoring/check-id-registry';
+
 export interface VerifiedCheck {
   id: string;
   status: 'pass' | 'fail' | 'unmeasurable';
@@ -80,4 +83,52 @@ export function buildRepairOutcome(input: RepairOutcomeInput): VerifiedRepairOut
     integrity: input.integrity,
     recommendRepairedCopy: input.integrity === 'passed' && regressedIds.length === 0,
   };
+}
+
+/**
+ * ADAPTER NA POSTOJECE OBLIKE (T10). Ulaz su iste provjere `before`/`after` i iste odabrane stavke koje vec koristi
+ * `summarizeRepairOutcome`; ovdje se samo prevode u ugovor `RepairOutcomeInput`:
+ *  - provjera je `pass` kad je razrijesena (earned >= max), `fail` kad je bodovana i pada, `unmeasurable` kad to sama
+ *    kaze (`status === 'unmeasurable'`) ili je nema u novoj analizi;
+ *  - `selectedCheckIds` su CILJANE provjere (padale prije i meta su odabranog zahvata), ne broj zahvata;
+ *  - `skippedCheckIds` su provjere koje gadja zahvat koji je motor PRESKOCIO (`result.skipped` po `ruleId`).
+ * Time se "zahvat izvrsen" (changelog) i "problem rijesen" (ova funkcija) racunaju odvojeno, kako plan trazi.
+ */
+export interface VerifiedOutcomeSource {
+  before: readonly OutcomeCheckLike[];
+  after: readonly OutcomeCheckLike[] | null;
+  selected: readonly (OutcomeItemLike & { ruleId?: string })[];
+  skippedRuleIds: readonly string[];
+  integrity: RepairIntegrity;
+}
+
+export function verifiedCheckOf(check: OutcomeCheckLike | undefined, id: string): VerifiedCheck {
+  if (!check || check.status === 'unmeasurable') return { id, status: 'unmeasurable' };
+  return { id, status: isFailingCheck(check) ? 'fail' : 'pass' };
+}
+
+export function verifiedOutcomeFrom(src: VerifiedOutcomeSource): VerifiedRepairOutcome {
+  const beforeById = checksById(src.before);
+  const afterById = src.after ? checksById(src.after) : new Map<string, OutcomeCheckLike>();
+  const ids = new Set([...beforeById.keys(), ...afterById.keys()]);
+  const before = [...ids].map((id) => verifiedCheckOf(beforeById.get(id), id));
+  // Bez nove analize nista nije IZMJERENO: sve je `unmeasurable`, pa nista ne moze biti "rijeseno".
+  const after = src.after ? [...ids].map((id) => verifiedCheckOf(afterById.get(id), id)) : [...ids].map((id) => ({ id, status: 'unmeasurable' as const }));
+  const targeted = summarizeRepairOutcome({ before: src.before, after: src.after ?? [], selected: src.selected }).targeted;
+  const skipped = new Set(src.skippedRuleIds);
+  const skippedCheckIds: string[] = [];
+  for (const item of src.selected) {
+    if (!item.ruleId || !skipped.has(item.ruleId)) continue;
+    for (const title of item.matchKeys ?? []) {
+      const id = stableCheckId(title);
+      if (id && targeted.includes(id)) skippedCheckIds.push(id);
+    }
+  }
+  return buildRepairOutcome({
+    selectedCheckIds: targeted,
+    before,
+    after,
+    skippedCheckIds,
+    integrity: src.after ? src.integrity : (src.integrity === 'failed' ? 'failed' : 'not-verified'),
+  });
 }

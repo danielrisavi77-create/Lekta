@@ -49,3 +49,22 @@ export function emitAnalyzerDocumentSettled(event: AnalyzerDocumentSettled): voi
     try { listener(event); } catch (error) { console.warn('Pretplatnik na ishod prijema je pukao:', error); }
   }
 }
+
+/**
+ * REZULTAT ANALIZE JE SPREMAN. Ruta radne povrsine (T12) iz njega gradi snimku revizije bez sadrzaja rada. Rezultat se
+ * prosljedjuje kao `unknown`: ruta ne smije ovisiti o obliku rezultata analizatora, nego o `revision-snapshot.ts`.
+ */
+export interface AnalyzerResultReady { file: File | null; result: unknown }
+type ResultListener = (event: AnalyzerResultReady) => void;
+const _resultListeners = new Set<ResultListener>();
+
+export function subscribeAnalyzerResultReady(listener: ResultListener): () => void {
+  _resultListeners.add(listener);
+  return () => { _resultListeners.delete(listener); };
+}
+
+export function emitAnalyzerResultReady(event: AnalyzerResultReady): void {
+  for (const listener of [..._resultListeners]) {
+    try { listener(event); } catch (error) { console.warn('Pretplatnik na rezultat analize je pukao:', error); }
+  }
+}

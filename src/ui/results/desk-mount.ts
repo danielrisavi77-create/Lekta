@@ -12,6 +12,8 @@
  * ozicenje mjerljivo bez preglednika: test ubaci vlastite mete umjesto stvarnog dokumenta.
  */
 import type { DeskItem } from './desk-model';
+import { repairPlanFooterHtml } from './repair-plan-view';
+import type { RepairPlan } from './repair-plan';
 import { deskHtml, deskNav, deskPaneHtml, deskPlanPaneHtml } from './desk-view';
 import type { ResultsCockpitAction } from './results-cockpit';
 import type { VisualFindingModel } from './visual-result-model';
@@ -28,6 +30,8 @@ export interface DeskMountOptions {
   readonly mountDocument: (host: HTMLElement) => Promise<DeskDocument | null>;
   /** HTML plana ispravaka; bez njega stol nema drugi nacin rada i gumb se ne nudi. */
   readonly planHtml?: string | null;
+  /** Model plana (T09); bez njega promjena odabira ne moze ponovno iscrtati podnozje. */
+  plan?: RepairPlan | null;
   readonly onAction?: (action: ResultsCockpitAction) => void;
   /** Testovi ubacuju vlastito pomicanje; produkcija koristi `scrollIntoView`. */
   readonly scrollTo?: (el: HTMLElement) => void;
@@ -134,13 +138,13 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
       if (v) goTo(Number(v));
       return;
     }
-    if (cilj.closest('[data-desk-plan-open]')) { nacin = 'plan'; nacrtajPlocu(); return; }
+    if (cilj.closest('[data-desk-plan-open]')) { nacin = 'plan'; nacrtajPlocu(); o.onAction?.({ kind: 'plan-opened' }); return; }
     if (cilj.closest('[data-desk-plan-close]')) { nacin = 'nalazi'; nacrtajPlocu(); oznaciMjesto(); return; }
     if (cilj.closest('[data-repair-plan-go]')) {
-      // Plan NE izvodi popravak sam: motor zivi u `renderRepairPanel`, koji nema poziv koji bi se
-      // dao pozvati izvana. Radnja se predaje ljusci, koja vodi na postojeci panel. Spajanje do
-      // kraja je zaseban zahvat nad placenim tokom pod golden zastitom.
-      o.onAction?.({ kind: 'repair-safe' });
+      // T09: plan NE izvodi popravak sam (motor, privola i naplata zive u panelu), ali ODABIR putuje s radnjom:
+      // ljuska ga preda kontroleru toka (`RepairPanelHandle.applySelection`), pa je odabir u planu i prije slanja
+      // ISTI. Do sada se odabir iz plana odbacivao i panel je sam birao "prekrseno".
+      o.onAction?.({ kind: 'repair-safe', ruleIds: planOdabir() });
       return;
     }
     if (cilj.closest('[data-finding-ignore]')) {
@@ -156,6 +160,23 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
   };
 
   section.addEventListener('click', naKlik);
+
+  /** Trenutni odabir u planu, iz stvarnih kontrola; prazan niz kad plan nije iscrtan. */
+  const planOdabir = (): string[] =>
+    Array.from(section.querySelectorAll<HTMLInputElement>('[data-repair-plan-item]'))
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.dataset.repairPlanItem ?? '')
+      .filter(Boolean);
+
+  // Promjena odabira u planu: brojac i sazetak se ponovno iscrtaju iz ISTE logike koja crta pocetno stanje.
+  const naPromjenu = (e: Event): void => {
+    const cb = e.target as HTMLInputElement | null;
+    if (!cb || typeof cb.matches !== 'function' || !cb.matches('[data-repair-plan-item]')) return;
+    cb.dataset.odabrano = cb.checked ? 'da' : 'ne';
+    const podnozje = section.querySelector<HTMLElement>('[data-repair-plan-footer]');
+    if (podnozje && o.plan) podnozje.innerHTML = repairPlanFooterHtml(o.plan, planOdabir(), o.esc);
+  };
+  section.addEventListener('change', naPromjenu);
 
   const domacin = section.querySelector<HTMLElement>('[data-desk-doc]');
   if (domacin) {
@@ -184,6 +205,7 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
     dispose() {
       odbacen = true;
       section.removeEventListener('click', naKlik);
+      section.removeEventListener('change', naPromjenu);
     },
   };
 }

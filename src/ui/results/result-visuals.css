@@ -1058,8 +1058,16 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 }
 .rp-popis { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
 .rp-stavka { display: grid; grid-template-columns: 1.3rem minmax(0, 1fr); gap: .5rem; align-items: start; }
+/* T09: kvacica je pravi <input type=checkbox> vezan na jedan ruleId; dovoljno velik za dodir (44 px cilj kroz
+   padding retka) i vidljiv fokus, bez skrivanja native kontrole. */
 .rp-kvacica, .rp-tocka { line-height: 1.4; color: var(--ck-muted); }
+.rp-kvacica { width: 1.1rem; height: 1.1rem; margin: .15rem 0 0; accent-color: var(--ck-green-text, #1a7f5a); cursor: pointer; }
+.rp-kvacica:focus-visible { outline: 2px solid var(--ck-ink); outline-offset: 2px; }
+.rp-naziv[for] { cursor: pointer; }
 .rp-kvacica[data-odabrano="da"] { color: var(--ck-green-text, #1a7f5a); }
+.rp-sazetak { margin: 0; padding-left: 1.1rem; font-size: .85rem; color: var(--ck-ink); flex-basis: 100%; }
+.rp-sazetak--prazno { color: var(--ck-muted); padding-left: 0; }
+[data-repair-plan-go][disabled] { opacity: .55; cursor: not-allowed; }
 .rp-tijelo { display: grid; gap: .1rem; min-width: 0; }
 .rp-naziv { font-weight: 500; }
 /* Prijelaz je PODATAK, pa ide u mono: isti registar koji ostatak sucelja koristi za mjerene
@@ -1075,5 +1083,34 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .rp-brojac { color: var(--ck-muted); font-size: .85rem; }
 
 @media (max-width: 900px) {
-  .rp-podnozje { flex-direction: column; align-items: stretch; }
+  /* GRID, ne `flex-direction: column` uz `flex-wrap: wrap`: kad je sazetak (T09) dodan u podnozje, Chrome je u
+     stupcanom flexu s omatanjem slozio stavke u NOVE STUPCE (gumb na x=526..863 na zaslonu od 393 px), pa je
+     glavna radnja na mobilnom bila izvan ekrana i nedostupna dodiru; `body{overflow-x:clip}` je visak tiho rezao.
+     Izmjereno Playwright probom 2026-09-10 (scrollWidth 393 -> 877 tek nakon otvaranja plana). */
+  .rp-podnozje { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; }
+  .rp-sazetak { flex-basis: auto; }
 }
+
+/* T12: usporedba verzija (revision-summary.ts). Cetiri skupine, bez zbrajanja u "napredak". */
+.revision-summary { margin: .8rem 0 0; }
+.rs { border: 1px solid var(--ck-line); border-radius: 10px; padding: .8rem 1rem; background: var(--ck-paper, #fff); }
+.rs-kicker { margin: 0 0 .4rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ck-muted); font-weight: 600; }
+.rs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .8rem; }
+.rs-skupina h4 { margin: 0 0 .3rem; font-size: .85rem; }
+.rs-skupina ul { margin: 0; padding-left: 1.1rem; font-size: .85rem; }
+.rs-skupina--rijeseno h4 { color: var(--ck-green-text, #1a7f5a); }
+.rs-skupina--novo h4 { color: var(--ck-accent, #c8102e); }
+.rs--pitanje p { margin: .3rem 0; }
+.rad-doc-new-version { margin-left: .5rem; }
+
+/* T13: mentorovi komentari kao zadaci (mentor-tasks.ts). Dva statusa, vizualno odvojena: korisnikov i strojni. */
+.mentor-tasks { margin: .8rem 0 0; }
+.mt { border: 1px solid var(--ck-line); border-radius: 10px; padding: .8rem 1rem; background: var(--ck-paper, #fff); }
+.mt-kicker { margin: 0 0 .3rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ck-muted); font-weight: 600; }
+.mt-popis { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .7rem; }
+.mt-zadatak { border-top: 1px solid var(--ck-line); padding-top: .6rem; }
+.mt-zadatak[data-user-status="addressed"] .mt-tekst { color: var(--ck-muted); }
+.mt-napomena { display: block; color: var(--ck-muted); font-size: .8rem; }
+.mt-status { font-size: .85rem; margin: .3rem 0; }
+.mt-zadatak[data-verification="formal-check-passed"] .mt-strojno { color: var(--ck-green-text, #1a7f5a); }
+.mt-prijedlog { font-size: .85rem; }
