@@ -863,6 +863,46 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'dijagnoza/ponudjeno-a-nemjerljivo-procita-se-kao-neprimjenjivo',
+    imitates:
+      'celija u kojoj se fixer korisniku STVARNO nudi, a proizvod tu os ne boduje, padne na razlog ' +
+      '`profil-ne-propisuje-os`, cije obrazlozenje doslovno glasi "fixer se ne nudi, i nema se sto ' +
+      'dokazivati". Oba dijela su tada neistinita. Izmjereno 2026-09-12 na `efzg-seminarski` / ' +
+      '`footnote-typography-fixer`: kapija fixera trazi `footnoteFont[0]`, `footnoteSize` ili ' +
+      '`footnoteSpacing`, a provjeru "Oblikovanje fusnota" emitira samo profil s ' +
+      '`legalFootnoteProfile`, pa `violated` ostaje `false` zauvijek. Posljedica nije samo oznaka: ' +
+      '`buildDefaultRepairRequests` predodabire `violated !== false`, pa stavka nikad nije ' +
+      'predodabrana, a `matchKeys` gadja naslov provjere koje u rezultatu nema',
+    caught: () => {
+      type Celija = { kapijaProlazi: boolean; bodujeSe: boolean };
+      // Lanac BEZ nove grane: sve sto se ne boduje zavrsi kao "profil ne propisuje os".
+      const bezGrane = (c: Celija) => (c.bodujeSe ? 'nema-dokaza' : 'ne-propisuje');
+      // Lanac S granom: ponudjeno-a-nebodovano dobiva vlastitu, tocniju istinu.
+      const sGranom = (c: Celija) =>
+        c.kapijaProlazi && !c.bodujeSe ? 'nudi-se-bez-provjere' : c.bodujeSe ? 'nema-dokaza' : 'ne-propisuje';
+      const ponudjenoNemjerljivo: Celija = { kapijaProlazi: true, bodujeSe: false };
+      return bezGrane(ponudjenoNemjerljivo) === 'ne-propisuje'
+        && sGranom(ponudjenoNemjerljivo) === 'nudi-se-bez-provjere';
+    },
+    /**
+     * Netrivijalnost ima DVIJE polovice, jer su moguca dva suprotna promasaja.
+     *
+     * Prva: celija kojoj kapija NE prolazi mora i dalje nositi `ne-propisuje`; inace bi nova grana
+     * pojela celije kojima alat doista nema sto raditi, sto je tocno kvar koji je
+     * `pomocni-fixer-dokaz-nosi-pozivatelj` vec jednom napravio (407 umjesto 4).
+     *
+     * Druga: celija koja se BODUJE ne smije zavrsiti na novoj grani, inace bi razlog prikrio
+     * stvarnu rupu u pokrivenosti.
+     */
+    cleanBefore: () => {
+      type Celija = { kapijaProlazi: boolean; bodujeSe: boolean };
+      const sGranom = (c: Celija) =>
+        c.kapijaProlazi && !c.bodujeSe ? 'nudi-se-bez-provjere' : c.bodujeSe ? 'nema-dokaza' : 'ne-propisuje';
+      return sGranom({ kapijaProlazi: false, bodujeSe: false }) === 'ne-propisuje'
+        && sGranom({ kapijaProlazi: true, bodujeSe: true }) === 'nema-dokaza';
+    },
+  },
+  {
     id: 'generator/krsi-izravno-a-fixer-pise-u-stil',
     imitates:
       'generator krsi os IZRAVNIM oblikovanjem, dok fixer pise u DEFINICIJU STILA. Stavka se gradi, ' +

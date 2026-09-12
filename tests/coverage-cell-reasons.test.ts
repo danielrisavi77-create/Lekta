@@ -19,6 +19,7 @@ import { describe, expect, it } from 'vitest';
 import { REPAIR_SURFACE } from '../src/repair/repair-surface';
 import cells from '../docs/generated/coverage-cells.json';
 import { ASSISTED_RULE_GATE, PROFILE_GATE } from './helpers/coverage-cells';
+import { liveProfile } from './helpers/live-profile';
 
 type Dokaz = { kind?: string; strength?: string; track?: string; artifactId?: string };
 type Cell = { profileId: string; fixerId: string; status: string; reason?: string; evidence?: Dokaz };
@@ -114,6 +115,39 @@ describe('razlog nepokrivene celije', () => {
     expect(sTimRazlogom.length, 'nijedna celija s tim razlogom; je li lanac dijagnoze promijenjen?').toBeGreaterThan(0);
   });
 
+  /**
+   * PONUDJENO A NEMJERLJIVO: razlog smije stajati SAMO ondje gdje kapija fixera prolazi.
+   *
+   * Razlika prema `profil-ne-propisuje-os` je cijela poanta ovog razloga. Ondje alat nema sto
+   * raditi; ovdje ima, stavka se gradi i korisniku se nudi, ali `violated` ostaje `false` zauvijek
+   * jer provjere u rezultatu nema. `buildDefaultRepairRequests` predodabire `violated !== false`,
+   * pa takva stavka nikad nije predodabrana, a `matchKeys` pokazuje na naslov kojeg nema, pa
+   * korelacija prije/poslije nema na sto sjesti.
+   *
+   * IZMJERENO 2026-09-12: `efzg-seminarski` / `footnote-typography-fixer`. Provjeru "Oblikovanje
+   * fusnota" emitira samo profil s `legalFootnoteProfile`, a kapija fixera trazi `footnoteFont[0]`,
+   * `footnoteSize` ili `footnoteSpacing`; ta dva uvjeta nisu isti skup.
+   *
+   * ZAMKA KOJA JE OVDJE VEC JEDNOM PROSLA: ista mjera nad SIROVIM `data/profiles/**` daje 23
+   * profila umjesto 1, jer matrica i proizvod rade nad ZIVIM (slozenim, demotiranim) profilom.
+   * Mjeri `liveProfile`, nikad draftove.
+   */
+  it('razlog `fixer-se-nudi-a-provjere-nema` stoji samo gdje se fixer STVARNO nudi', () => {
+    const sTimRazlogom = nepokrivene.filter((c) => c.reason === 'fixer-se-nudi-a-provjere-nema');
+    // Donja granica: bez ijedne celije razred tiho nestane iz matrice i gard mjeri prazno.
+    expect(sTimRazlogom.length, 'nijedna celija s tim razlogom; je li lanac dijagnoze promijenjen?')
+      .toBeGreaterThan(0);
+    for (const c of sTimRazlogom) {
+      const kapija = PROFILE_GATE[c.fixerId];
+      expect(kapija, `${c.profileId}/${c.fixerId}: fixer nema kapiju, pa se ne moze tvrditi da se nudi`)
+        .toBeTypeOf('function');
+      const zivi = liveProfile(c.profileId);
+      expect(zivi, `${c.profileId}: nema zivog profila`).toBeTruthy();
+      expect(kapija(zivi as Record<string, unknown>), `${c.profileId}/${c.fixerId}: kapija NE prolazi, pa razlog laze`)
+        .toBe(true);
+    }
+  });
+
   it('svaka nepokrivena celija ima razlog iz zatvorenog popisa', () => {
     const dopusteni = new Set([
       'profil-ne-propisuje-os', 'univerzalna-higijena-bez-dokaza', 'closed-loop-nije-rijesio',
@@ -121,6 +155,9 @@ describe('razlog nepokrivene celije', () => {
       // Pomocni (`dispatch-only`) fixer: unos u changelog nosi onaj koji ga zove, pa mu je dokaz
       // kroz `fixersChanged` strukturno nedostizan. Razred se izvodi iz `REPAIR_SURFACE`.
       'pomocni-fixer-dokaz-nosi-pozivatelj',
+      // Kapija fixera PROLAZI (stavka se korisniku nudi), a proizvod tu os ne boduje, pa ju
+      // nijedna provjera ne moze oznaciti prekrsenom. Vidi tvrdnju nize.
+      'fixer-se-nudi-a-provjere-nema',
     ]);
     const nepoznati = [...new Set(nepokrivene.map((c) => c.reason).filter((r) => !r || !dopusteni.has(r)))];
     expect(nepoznati).toEqual([]);

@@ -14,7 +14,8 @@
     "resolvedCount": 1934,
     "authoredCount": 1,
     "byReason": {
-      "profil-ne-propisuje-os": 6132,
+      "profil-ne-propisuje-os": 6131,
+      "fixer-se-nudi-a-provjere-nema": 1,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
       "nema-dokaza": 0,
@@ -102075,7 +102076,7 @@
       "profileId": "efzg-seminarski",
       "fixerId": "footnote-typography-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "fixer-se-nudi-a-provjere-nema"
     },
     {
       "profileId": "efzg-seminarski",
