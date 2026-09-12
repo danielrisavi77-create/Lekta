@@ -27,6 +27,7 @@ import { DOMParser } from '@xmldom/xmldom';
 import { parseXml } from '../src/docx/parser';
 import { readZip } from '../src/repair/zip-codec';
 import { scanXmlWellFormed, checkSchemaInvalidContent } from '../src/repair/package-integrity';
+import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FIXTURE_DIR = join(here, 'fixtures', 'docx');
@@ -139,13 +140,13 @@ describe('A0: prefiks bez xmlns deklaracije u dosegu', () => {
     // BASELINE: doista je nevaljan i po DRUGOM alatu, ne samo po nasem skeneru. Ovu klasu xmldom
     // ne prijavljuje kroz `onError` nego BACA, za razliku od RE-47 oblika iznad.
     expect(() => xmldomErrors(xml)).toThrow(/NamespaceError/);
-    const result = scanXmlWellFormed(xml);
+    const result = scanXmlWellFormed(xml, { namespaces: true });
     expect(result.ok).toBe(false);
     expect(result.problem).toMatch(/prefiks r:/);
   });
 
   it('GRIZE i kad je nevezan prefiks u IMENU elementa', () => {
-    expect(scanXmlWellFormed(`<w:document xmlns:w="${W}"><w:body><m:oMath/></w:body></w:document>`).ok).toBe(false);
+    expect(scanXmlWellFormed(`<w:document xmlns:w="${W}"><w:body><m:oMath/></w:body></w:document>`, { namespaces: true }).ok).toBe(false);
   });
 
   it('BASELINE: deklaracija na KORIJENU je uredna', () => {
@@ -154,12 +155,12 @@ describe('A0: prefiks bez xmlns deklaracije u dosegu', () => {
       + '<w:p><w:hyperlink r:id="rId1"><w:r><w:t xml:space="preserve">x</w:t></w:r></w:hyperlink></w:p>'
       + '</w:body></w:document>';
     expect(xmldomErrors(xml)).toEqual([]);
-    expect(scanXmlWellFormed(xml).ok).toBe(true);
+    expect(scanXmlWellFormed(xml, { namespaces: true }).ok).toBe(true);
   });
 
   it('BASELINE: deklaracija na PRETKU vrijedi za cijelo podstablo', () => {
     const xml = `<w:document xmlns:w="${W}"><w:body xmlns:r="${REL}"><w:p><w:hyperlink r:id="rId1"/></w:p></w:body></w:document>`;
-    expect(scanXmlWellFormed(xml).ok).toBe(true);
+    expect(scanXmlWellFormed(xml, { namespaces: true }).ok).toBe(true);
   });
 
   it('DOSEG SE ZATVARA: prefiks nakon zatvaranja elementa koji ga je deklarirao vise ne vrijedi', () => {
@@ -168,17 +169,59 @@ describe('A0: prefiks bez xmlns deklaracije u dosegu', () => {
       + `<w:p xmlns:r="${REL}"><w:hyperlink r:id="rId1"/></w:p>`
       + '<w:p><w:hyperlink r:id="rId2"/></w:p>'
       + '</w:body></w:document>';
-    const result = scanXmlWellFormed(xml);
+    const result = scanXmlWellFormed(xml, { namespaces: true });
     expect(result.ok, 'druga hiperveza je izvan dosega deklaracije s prvog odlomka').toBe(false);
     expect(result.problem).toMatch(/prefiks r:/);
   });
 
   it('NE VRISTI: xml: i xmlns: se po definiciji ne deklariraju', () => {
-    expect(scanXmlWellFormed(`<w:t xmlns:w="${W}" xml:space="preserve">x</w:t>`).ok).toBe(true);
+    expect(scanXmlWellFormed(`<w:t xmlns:w="${W}" xml:space="preserve">x</w:t>`, { namespaces: true }).ok).toBe(true);
   });
 
   it('NE VRISTI: imena bez prefiksa i default namespace', () => {
-    expect(scanXmlWellFormed('<Relationships xmlns="urn:x"><Relationship Id="rId1"/></Relationships>').ok).toBe(true);
+    expect(scanXmlWellFormed('<Relationships xmlns="urn:x"><Relationship Id="rId1"/></Relationships>', { namespaces: true }).ok).toBe(true);
+  });
+
+  /**
+   * PROVJERA JE OPT-IN, i to je odluka, ne propust. Minimalni sinteticki dijelovi kroz ovaj
+   * repozitorij namjerno izostavljaju deklaracije (`<w:styles>` bez `xmlns:w`; izmjereno: 25
+   * testova u `src/repair/apply-fixers.test.ts` gradi takve ulaze). Bezuvjetna provjera bi mjerila
+   * tudji sinteticki ulaz umjesto naseg zahvata.
+   */
+  it('bez opcije se vezanje NE provjerava (zadano ponasanje ostaje netaknuto)', () => {
+    const xml = `<w:document xmlns:w="${W}"><w:body><w:p><w:hyperlink r:id="rId1"/></w:p></w:body></w:document>`;
+    expect(scanXmlWellFormed(xml).ok).toBe(true);
+    expect(scanXmlWellFormed(xml, { namespaces: true }).ok).toBe(false);
+  });
+
+  /**
+   * VRATA PRIJAVLJUJU SAMO ONO STO SMO MI UVELI, isto pravilo koje vec vrijedi za strukturu paketa.
+   * Nevezan prefiks koji je stigao S DOKUMENTOM nije nas kvar i ne smije zaustaviti isporuku;
+   * nevezan prefiks u dijelu ciji je ULAZ bio valjan jest.
+   */
+  describe('vrata integriteta: nevezan prefiks samo kad je NOV', () => {
+    const valjanUlaz =
+      `<w:document xmlns:w="${W}"><w:body><w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p>`
+      + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL}"/></w:sectPr>`
+      + '</w:body></w:document>';
+    const losIzlaz = valjanUlaz.replace('<w:r><w:t>doi:10.1234/abc</w:t></w:r>', '<w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink>');
+    const dobarIzlaz = losIzlaz.replace('<w:document ', `<w:document xmlns:r="${REL}" `);
+    const gate = (ulaz: string, izlaz: string) =>
+      detectIntegrityFailure([{ name: 'word/document.xml', xml: izlaz }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': ulaz });
+
+    it('NOV nevezan prefiks zaustavlja isporuku', () => {
+      expect(gate(valjanUlaz, losIzlaz)?.problem).toMatch(/prefiks r:/);
+    });
+
+    it('BASELINE: ispravan izlaz prolazi', () => {
+      expect(gate(valjanUlaz, dobarIzlaz)).toBeNull();
+    });
+
+    it('nevezan prefiks koji je VEC bio na ulazu ne zaustavlja isporuku', () => {
+      const vecPokvarenUlaz = `<w:document xmlns:w="${W}"><w:body><w:p><w:hyperlink r:id="rId1"/></w:p></w:body></w:document>`;
+      const istiKvarNaIzlazu = vecPokvarenUlaz.replace('<w:p>', '<w:p w:rsidR="00AA">');
+      expect(gate(vecPokvarenUlaz, istiKvarNaIzlazu)).toBeNull();
+    });
   });
 });
 
