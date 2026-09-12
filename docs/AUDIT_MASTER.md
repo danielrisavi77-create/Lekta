@@ -839,3 +839,102 @@ preskok, (3) staging test s dva računa da se ne može čitati/mijenjati/
 brisati tuđe, (4) mrežni canary test da lokalni DOCX ne napušta preglednik
 bez preflight privole, (5) opterećenje unutar sigurnih granica za
 preflight/integrity.
+
+---
+
+## 17. Program do javnog lansiranja (12. rujna 2026.): nalazi i vlasnički zadaci
+
+Unos vlasnikova pregleda od 12. rujna 2026. Puni tekst je vendoran u
+`docs/agents/plan-do-live-2026-09-12.md`; ovdje je registar nalaza i njihovih vlasnika.
+Nijedan postojeći unos (poglavlja 0 do 16) nije promijenjen ni obrisan.
+
+**Polazište pregleda:** master `7e52bc66551d7d920ab83810f87f0c52a10f8c16` (spojen PR #73).
+**Polazište unosa u red zadataka:** `afccbdd78af4d09f7ff9097adc45e05e3fc41287`, koji se od
+pregledanog mastera razlikuje samo za PR #74 i #75 (workflow bez Fablea), bez izmjene
+aplikacijskog koda. Nalazi se time ne mijenjaju.
+
+**Opseg pregleda i njegove granice:** pregledani su kod i upute repozitorija, konfiguracija
+gradnje i objave, glavni korisnički i serverski tokovi, testovi, GitHub CI, metapodaci
+Supabasea, dio stvarno objavljenog Edge izvornog koda i HTTP smoke javne stranice. NIJE
+provedena nova puna lokalna testna sesija, vizualni pregled svih ekrana, stvarna kupnja,
+slanje e-pošte ni nova Word provjera; lokalni skup od 321 dokumenta nije bio dostupan za
+ponovno mjerenje. Ti dokazi su zadaće programa, ne tvrdnje ovog unosa.
+
+### 17.1 Aktualni nalazi i vlasnički zadatak
+
+Stupac "vlasnik" je T-zadatak iz reda `docs/agents/tasks.json`. Gdje ga plan ne imenuje
+izričito, oznaka je **(procjena)** i vlasnik ju smije korigirati.
+
+| Područje | Dokaz na dan pregleda | Posljedica za program | Vlasnik |
+|---|---|---|---|
+| Arhitektura | Vite, TypeScript, Vitest, Playwright, Deno/Supabase Edge, PostgreSQL, Netlify; paket 2.2.2. Frontend nema React/Next.js. | Raditi unutar postojeće arhitekture. | T16 (procjena; trajna odluka o opsegu) |
+| CI na masteru | 11/11 workflowa uspješno na točnom pregledanom SHA-u. | Stare crvene CI nalaze ne prepisivati kao aktualne. | T16 |
+| Dokaz izdanja | `docs/generated/RELEASE_PROOF.json` odnosi se na `e9dcc52…`, 10. 9.; izračun stanja prema aktualnom kodu daje `stale`. | Obnoviti dokaz tek nakon finalizacije kandidata; `complete: true` sam nije dovoljan. | T19, završno T46 |
+| Javni deploy | Smoke: 27 provjera prolazi, ali `/build-info.json` vraća 404. Stroga naredba završava kodom 1. | Ne može se dokazati da javni frontend odgovara pregledanom SHA-u. | T19, završno T47 |
+| Produkcijski backend | Produkcija aktivna, staging neaktivan. U repozitoriju 25 Edge ulaznih funkcija, objavljeno 19. | Obnoviti staging i uskladiti manifest, kod, konfiguraciju i uključivanje mogućnosti. | T18, T20 |
+| Nedostajuće funkcije | `client-error`, `process-bonus-outbox`, `field-render`, `integrity-check`, `preflight-start`, `preflight-result`. | Dio je povijesno namjerno isključen; dovršiti preduvjete, testirati i uključiti. Posebno je važan `client-error`, na koji zadana konfiguracija već upućuje. | `client-error` T20/T45; `process-bonus-outbox` T38; `field-render` T35; `integrity-check`, `preflight-start`, `preflight-result` T34 |
+| Razlika izvornog koda | Objavljeni `repair-docx/index.ts` nema aktualni `readFormDataBounded`; razlikuju se i `delete-repair-job/index.ts` te `profile-rules/index.ts`. | Sigurnosni popravak u GitHubu još nije dovoljan ako ga nema na poslužitelju. | T20 (uz T25, T27, T36, T28 po funkciji) |
+| Granica tog nalaza | `apply-fixers.ts`, `package-integrity.ts` i ulaz `generate-report` podudaraju se nakon normalizacije završetaka redaka. | Nema dokaza da je cijeli repair engine zastario. Uspoređivati sadržaj, ne samo duljinu ili datum. | T20 (metodološko ograničenje nalaza iznad) |
+| Verzija pravila | Objavljeni server dataset `37cc1b5a…`, repozitorij `8ce3bee1…`; oba s 407 profila. | Jednak broj profila nije jednak skup pravila. Potrebna je provjera hasha i kompatibilnosti klijenta i servera. | T20, T28 |
+| Migracije | Produkcija ima numerirane migracije 0001 do 0103 i još četiri vremenski označene migracije drugih cjelina. | Baza je dijeljena. Ne resetirati je niti naslijepo ponavljati povijesne migracije. | T18 |
+| Konfiguracija ponude | Zadano `enabled: false`; prazni endpointi za izvještaj, checkout, garanciju, preporuke, preflight i field-render. | Dovršiti centralnu konfiguraciju i provjeriti je iz potpuno novog preglednika. | T20 |
+| Katalog | 23 aktivna proizvoda; 3 pripadaju Katedra/Stripe toku. Svih 20 preostalih Lekta proizvoda nema `mor_product_id`. | Dovršiti mapiranje proizvoda i potvrdu prava nakon naplate. Tri Katedra proizvoda ne računati kao Lemon Squeezy grešku. | T23, T24 |
+| Nelogičnost ponude | Završni pass: 9,99 EUR / 180 dana naspram slota do obrane 9,99 EUR / 120 dana. Diplomski pass: 14,99 EUR / 180 dana naspram 16,99 EUR / 120 dana. | Razjasniti razlike ili urediti ponudu; ne predlagati nove cijene bez provjere što svaki SKU uključuje. | T23 |
+| Sigurnosni advisor | 22 INFO i 67 WARN; u dohvaćenom nalazu nema ERROR. | Ovo nisu 67 potvrđenih ranjivosti. Provjeriti namjeru i dostupnost RLS/RPC pravila prije izmjena. | T21 |
+| Pozadinski poslovi | 11 aktivnih cron poslova; najnoviji zapisi raspoređivača uspješni. Nema crona za `process-bonus-outbox`. | Uspješan SQL/HTTP raspored nije dokaz dostave poruke ili brisanja objekta. Testirati krajnji učinak. | T38 (cron za outbox), T45 (signali i krajnji učinak) |
+| Produkcijski E2E | Postoji test nad `dist/`, ali mockira `profile-rules` i završava u toku planiranja popravka. | Dodati stvarni staging tok kroz backend, naplatu u test modu, popravak i preuzimanje. | T44 |
+| Ovisnosti | Ratchet bilježi 7 high/critical nalaza punog razvojnog grafa, od toga 1 critical; iznimke istječu 9. 10. 2026. | Ponovno provjeriti identifikatore i izloženost; sanirati ili vremenski ograničiti opravdanu iznimku. | T41 |
+| Plan razvoja | T00 do T14 označeni `done`, T15 `ready`. Postoji autonomni kontroler; konfiguracija je `observe`, publisher isključen. | Ne graditi treći sustav statusa. Pripremiti rad u postojećem sustavu i stvarno provesti pilot. | T16 (unos programa), T17 (kontroler), T15 (pilot) |
+
+Sigurnosni WARN nalazi uključuju `pg_net` u javnoj shemi, dostupnost 13 SECURITY DEFINER
+funkcija autentificiranim korisnicima, pravila vezana uz anonimnu autentifikaciju i postavku
+zaštite od kompromitiranih lozinki. Namjerno zatvorene servisne tablice mogu imati RLS bez
+politika. T21 provjerava konkretan pristup i vlasništvo, a ne boju advisora.
+
+### 17.2 Što mjerenja popravaka trenutačno dokazuju
+
+Ovo je registar tumačenja, ne novih mjerenja. Sprječava da se zabilježeni brojevi čitaju kao
+stopa točnosti automatskog popravka ili kao udio dovršene aplikacije.
+
+| Skup / artefakt | Zabilježeno | Kako ga tumačiti | Vlasnik |
+|---|---|---|---|
+| Povijesno lokalno mjerenje, 10. 9., master `59adbc8c` | 321 dokument; 0 integritetskih kvarova, 0 regresija; 15 `pass`, 304 `review`, 2 `noop`. Od 645 ciljanih nalaza 116 riješeno, 9 automatskih neriješeno, 520 asistiranih neriješeno. | Nije ponovljeno u ovom pregledu. Oko 18% ukupno riješenih ciljeva NIJE stopa točnosti automatskog popravka; `review` često znači preostali ljudski rad. | T27 |
+| Neovisnost tog mjerenja | Holdout ima 63 dokumenta; 0/321 neovisno potvrđenih očekivanja. | Treba označiti ispravne i pogrešne primjere neovisno o implementaciji, pa ponovno mjeriti. | T27 |
+| Trenutačni spremljeni real-corpus artefakt | 7 stvarnih dokumenata; 0 ciljanih provjera; `measuresRepairEffectiveness: false`. | Koristan za integritet i regresije; nije mjera učinkovitosti popravka. | T27 |
+| Synthetic repair-net | 24 autorska sintetička dokumenta, 14 obuhvaćenih fixera od 31 registriranog. | Proširiti pokrivenost i negativne kontrole. Dva fixera bez promjene nisu sama po sebi dokaz da su pokvarena. | T27 |
+| Fakultetski ledger | 436 redaka, 410 različitih oznaka profila; 41 redak s real dokazom, 347 sa sintetičkim, 48 bez izvršenog dokaza. | Ledger ima dodatne retke; ne dijeliti te brojeve sa 407 i ne predstavljati ih kao udio dovršene aplikacije. | T28 |
+| Registar profila | 407 profila kroz 131 jedinicu u generiranoj matrici. | To su profili i varijante rada, ne 407 fakulteta. | T28 |
+
+U ledgeru je 37 redaka klase A, 301 B, 8 C, 42 D i 48 E. Za pravila je 380 redaka označeno
+verified, 8 bulk-pending, 19 advisory i 29 none. Ti stupci mjere različite stvari i javni prikaz
+treba zadržati tu razliku. Potpisana ovjera iz rujna ne prenosi se na novi skup, commit ili Word
+verziju bez novog stvarnog izvođenja.
+
+### 17.3 Trijaža otvorenih PR-ova
+
+Trijaža je prema dohvaćenom stanju i opisu na dan pregleda, NE završen review svakog diffa.
+Prije spajanja ponovno provjeriti head, ovisnosti i CI na aktualnom masteru. PR se ne spaja
+samo zato što se naziv poklapa sa zadatkom.
+
+| PR | Pristup u ovom programu | Vlasnik |
+|---|---|---|
+| #74 workflow bez Fablea | Usporediti s postojećim kontrolerom i pravilom drugog providera; preuzeti kompatibilne dijelove bez novog paralelnog sustava. Napomena od 12. 9.: #74 i #75 su u međuvremenu SPOJENI u master, pa T17 radi nad spojenim stanjem, ne nad otvorenim PR-om. | T17 |
+| #59 synthetic corpus | Provjeriti dodaje li nove korisne slučajeve u odnosu na već spremljene rezultate; ne prihvatiti broj dokumenata kao jedini dokaz. | T27 |
+| #57, #71 Katedra ugovori i oporavak | Pregledati kao lanac s povezanim Katedra/package promjenama; posebno migracije i kompatibilnost. | T40 |
+| #29 zahtjevi za raskid | Procijeniti i dovršiti cijeli tok; tablica `withdrawal_requests` nije zatečena u produkciji. | T37 |
+| #31 Katedra pass proizvodi | Usporediti s tri već postojeća proizvoda; moguća redundancija. | T23, T40 |
+| #38 WordReplica ugovor | Razriješiti granicu i potrebni ugovor. Nema dokaza da je to gotov installer ili desktop servis. | T35 |
+| #34 Academic IR Core | Odvojeni razvojni prijedlog; uključiti samo nužan kompatibilni ugovor ako postojeći tok to zahtijeva. | Izvan programa (bez T-zadatka) |
+| #16 Dabar objekti | Provjeriti dopuštenje i provenijenciju ako treba za korpus; bez nekontroliranog preuzimanja ili objave radova. | T27, T36 |
+| #46 cleanup dry-run | Koristan razvojni alat ako rješava stvaran operativni rizik; bez zamjene za pravi dokaz brisanja. | T45 |
+| Dependabot #8, #40, #41, #42, #53 | Grupirati prema kompatibilnosti i aktualnim advisoryjima. Veći broj verzije nije dokaz sigurnog popravka. | T41 |
+
+PR #60 i #73 su već spojeni; njihove isporučene rezultate ne planirati kao da ih nema.
+
+### 17.4 Što ovaj unos ne tvrdi
+
+Nema tvrdnje "aplikacija je X% gotova". Zeleni CI na pregledanom SHA-u dokazuje kandidata, ne
+spremnost proizvoda: produkcijska verzija nije pouzdano identificirana, dokaz izdanja je
+zastario, dio Edge koda i podataka nije usklađen s repozitorijem, naplata nije potpuno
+konfigurirana. Kontrolne točke G0 do G6 i matrica scenarija E01 do E36 su u odjeljcima 7 i 8
+vendoranog plana; njihovi dokazi nastaju u T44, T46 i T47, a ne ovim unosom.
