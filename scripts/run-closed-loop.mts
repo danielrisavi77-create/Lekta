@@ -126,6 +126,13 @@ const AXIS_CHECK_ID: Record<string, string> = {
    * pa se krsi TOCNO jedna os i uzroci se ne mijesaju.
    */
   'footnote-spacing': 'footnote.spacing',
+  /**
+   * `page.numbers.start` je bodovana (max 4) SAMO na dokumentu s dvije zive sekcije, uz prijelom
+   * neposredno prije Uvoda i prednju sekciju s VLASTITIM podnozjem. Pad je `earned 2`, nikad 0:
+   * `earned = startOk ? 4 : 2`. Bez vlastitog podnozja `!before.hasAnyPageField` spasi presudu i
+   * provjera prolazi 4/4 cak i uz `w:start="7"`.
+   */
+  'page-number-start': 'page.numbers.start',
 };
 
 /**
@@ -384,7 +391,14 @@ async function runProfile(profileId: string): Promise<Row> {
      * ono sto je vec izmjereno.
      */
     let paginated: Row['paginated'];
-    if ((profile as { pageNumberAlignment?: unknown }).pageNumberAlignment) {
+    /**
+     * Paginirana inacica treba i profilima koji propisuju POCETAK numeriranja, ne samo polozaj.
+     * Dokument se pritom razlikuje: prednju sekciju dobiva samo onaj profil koji ju propisuje.
+     */
+    const trebaPaginiranu =
+      Boolean((profile as { pageNumberAlignment?: unknown }).pageNumberAlignment) ||
+      (profile as { checkPageNumberStartAtIntro?: unknown }).checkPageNumberStartAtIntro === true;
+    if (trebaPaginiranu) {
       try {
         const pag = await buildViolatingDocx(profile, { structural: true, pageNumberFooter: true } as never);
         const pBefore = await analyzeFixture(

@@ -889,6 +889,39 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'generator/prednja-sekcija-bez-vlastitog-podnozja',
+    imitates:
+      'prednja sekcija se izgradi, ali BEZ vlastitog zivog podnozja, pa provjera koja ju mjeri PROLAZI ' +
+      'umjesto da padne. Presuda je `startOk = !!after.hasAnyPageField && (after.pageNumbering?.start ' +
+      '=== 1 || !before.hasAnyPageField)`: sekcija bez vlastitog `footerReference` nasljedjuje polja ' +
+      'prethodne, `before.hasAnyPageField` ostane neistinit i zadnji clan spasi presudu. Izmjereno ' +
+      '2026-09-12: dokument je prolazio 4/4 CAK I uz `w:start="7"` na zavrsnoj sekciji, pa je ' +
+      'izgledalo da stanje pada uopce ne postoji. Drugi smjer istog kvara je jednako tih: prijelom ' +
+      'koji nije na odlomku NEPOSREDNO prije Uvoda ne gradi stavku popravka, bez ijedne poruke',
+    caught: () => {
+      const startOk = (before, after) =>
+        Boolean(after.hasAnyPageField) && (after.pageNumberingStart === 1 || !before.hasAnyPageField);
+      // 1) Prednja sekcija bez vlastitog podnozja: provjera PROLAZI, pa os nije prekrsena.
+      const bezPodnozja = startOk({ hasAnyPageField: false }, { hasAnyPageField: true, pageNumberingStart: 7 });
+      // 2) S vlastitim podnozjem i bez restarta na 1: provjera PADA, sto i trazimo.
+      const sPodnozjem = startOk({ hasAnyPageField: true }, { hasAnyPageField: true, pageNumberingStart: null });
+      // 3) Susjedstvo: stavka se gradi samo uz strogu jednakost, bez tolerancije.
+      const detectable = (beforeIdx, introIdx) => beforeIdx === introIdx - 1;
+      const razmaknuto = detectable(3, 6);
+      const susjedno = detectable(3, 4);
+      return bezPodnozja && !sPodnozjem && !razmaknuto && susjedno;
+    },
+    /**
+     * Netrivijalnost: uredan slucaj (prednja sekcija s podnozjem, glavna restarta na 1) NE smije
+     * ispasti prekrsen, inace bi gard vristao na svaki ispravan dokument.
+     */
+    cleanBefore: () => {
+      const startOk = (before, after) =>
+        Boolean(after.hasAnyPageField) && (after.pageNumberingStart === 1 || !before.hasAnyPageField);
+      return startOk({ hasAnyPageField: true }, { hasAnyPageField: true, pageNumberingStart: 1 });
+    },
+  },
+  {
     id: 'petlja/pravilo-mjereno-na-dokumentu-koji-ga-ne-moze-nositi',
     imitates:
       'pravilo se mjeri na dokumentu koji trazenu pojavu UOPCE nema, pa provjera dodje kao `max 0`, ' +

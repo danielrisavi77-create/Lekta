@@ -57,6 +57,45 @@ export interface FooterSpec {
   align?: 'left' | 'center' | 'right'; // poravnanje odlomka podnožja (w:jc), za provjeru položaja broja
 }
 
+/**
+ * PREDNJA sekcija: prijelom sekcije unutar tijela, s VLASTITIM podnozjem.
+ *
+ * Zasto prvorazredna opcija, a ne rucni `raw` odlomak. Prijelom sekcije nije jedan XML fragment
+ * nego CETIRI usuglasena dijela paketa: odlomak s `w:sectPr` u tijelu, dodatna `word/footer2.xml`
+ * particija, njezina veza u `word/_rels/document.xml.rels` i `Override` u `[Content_Types].xml`.
+ * Ispusti li se ijedan, `partPageInfo` (src/analysis/analyze-docx.ts) toj sekciji vrati
+ * `has: false`, pa `hasAnyPageField` ostane `false` i sve sto o njemu ovisi tiho promasi.
+ *
+ * VLASTITO PODNOZJE JE UVJET, NE UKRAS. Sekcija bez vlastitog `footerReference` NASLJEDJUJE polja
+ * prethodne (`if(!ownRefs.length&&sections.length)` u istoj petlji). Prednja sekcija je PRVA, pa
+ * nema od koga naslijediti: bez svog podnozja joj je `hasAnyPageField` `false`, a provjera
+ * "Numeriranje od prve stranice Uvoda" ima granu `|| !before.hasAnyPageField` koja tada presudi
+ * PROLAZ i kad glavna sekcija pocinje od sedme stranice. Dokument bi izgledao pokvareno a mjerio
+ * se kao ispravan.
+ *
+ * `titlePg` zrcali ono sto `sectionInsertFixer` sam upisuje u marker prednje sekcije: "drukcija
+ * prva stranica" bez definiranog `first` podnozja je nacin na koji Word naslovnicu ostavlja bez
+ * broja.
+ */
+export interface FrontSectionSpec {
+  /**
+   * 0-based indeks u `paragraphs`: marker prijeloma emitira se NEPOSREDNO PRIJE tog odlomka, kao
+   * zaseban `<w:p><w:pPr><w:sectPr/></w:pPr></w:p>` (isti oblik koji pise i `sectionInsertFixer`).
+   *
+   * Mjesto je dio ugovora, ne udobnost: `sectionNumberingTargets` (src/ui/repair-items.ts) trazi
+   * STROGU jednakost `before.paragraphIndex === introParagraphIndex - 1`, bez tolerancije. Jedan
+   * odlomak izmedju prijeloma i Uvoda tiho gasi stavku popravka, i to bez ijednog traga u
+   * changelogu.
+   */
+  beforeParagraph: number;
+  /** Podnozje PREDNJE sekcije (`word/footer2.xml`). Bez njega sekcija nema vlastito PAGE polje. */
+  footer?: FooterSpec;
+  /** `<w:titlePg/>`: drukcija prva stranica (naslovnica bez broja). */
+  titlePg?: boolean;
+  /** `w:pgNumType` prednje sekcije; izostavljen znaci da numeriranje nije eksplicitno zapisano. */
+  pageNumber?: { start?: number; fmt?: 'decimal' | 'lowerRoman' | 'upperRoman' };
+}
+
 export interface DocSpec {
   paragraphs: ParaSpec[];
   /** Opcionalni stilovi za testove koji moraju imati Normal backstop. */
@@ -82,6 +121,8 @@ export interface DocSpec {
    */
   settings?: true;
   pageNumberStart?: number; // w:pgNumType w:start na završnoj sekciji (npr. glavni tekst numeriran od 1)
+  /** Prijelom sekcije u tijelu (prednji listovi). OPT-IN: izlaz bez njega je BAJT-IDENTICAN. */
+  frontSection?: FrontSectionSpec;
 }
 
 function esc(s: string): string {
@@ -137,12 +178,45 @@ export const TOC_FIELD_PARA: ParaSpec = {
 };
 
 const FOOTER_RID = 'rId100'; // veza document.xml.rels -> word/footer1.xml
+const FRONT_FOOTER_RID = 'rId101'; // veza document.xml.rels -> word/footer2.xml (prednja sekcija)
 const REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
 
-function sectPrXml(spec: DocSpec): string {
+/** `w:pgSz` + `w:pgMar` zavrsne sekcije. Dijeli ga i marker prednje sekcije, jer prijelom sekcije
+ *  ne smije promijeniti geometriju stranice (isto sto radi `extractFinalSectionGeometry` u
+ *  src/repair/xml-patch.ts kad marker gradi popravak). */
+function pageGeometryXml(spec: DocSpec): string {
   const page = spec.pageCm ?? { w: 21.0, h: 29.7 };
   const m = spec.marginsCm ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
   const tw = (cm: number) => Math.round(cm * TWIPS_PER_CM);
+  return (
+    `<w:pgSz w:w="${tw(page.w)}" w:h="${tw(page.h)}"/>` +
+    `<w:pgMar w:top="${tw(m.top)}" w:right="${tw(m.right)}" w:bottom="${tw(m.bottom)}" w:left="${tw(m.left)}"/>`
+  );
+}
+
+/**
+ * Odlomak-marker prednje sekcije: `<w:p><w:pPr><w:sectPr>...</w:sectPr></w:pPr></w:p>`.
+ *
+ * Redoslijed djece po CT_SectPr (ISO 29500): footerReference, pgSz, pgMar, pgNumType, titlePg.
+ * `page-numbering-fixer` pgNumType umece TOCNO iza `w:pgMar` (`insertIntoSectPr`), pa se ovaj
+ * poredak poklapa s onim koji popravak proizvodi.
+ *
+ * Marker je prazan odlomak, ali ga `empty-paragraph-fixer` NE BRISE: `paragraph-cleanup.ts`
+ * izricito stiti odlomak ciji `w:pPr` nosi ugnjezdeni `w:sectPr`.
+ */
+function frontSectionParaXml(spec: DocSpec): string {
+  const fs = spec.frontSection;
+  if (!fs) return '';
+  const footerRef = fs.footer ? `<w:footerReference w:type="default" r:id="${FRONT_FOOTER_RID}"/>` : '';
+  const pn = fs.pageNumber;
+  const pgNum = pn
+    ? `<w:pgNumType${pn.fmt ? ` w:fmt="${pn.fmt}"` : ''}${pn.start != null ? ` w:start="${pn.start}"` : ''}/>`
+    : '';
+  const titlePg = fs.titlePg ? '<w:titlePg/>' : '';
+  return `<w:p><w:pPr><w:sectPr>${footerRef}${pageGeometryXml(spec)}${pgNum}${titlePg}</w:sectPr></w:pPr></w:p>`;
+}
+
+function sectPrXml(spec: DocSpec): string {
   /**
    * Redoslijed po OOXML shemi: footerReference, pgSz, pgMar, pgNumType.
    *
@@ -159,14 +233,7 @@ function sectPrXml(spec: DocSpec): string {
    */
   const footerRef = spec.footer ? `<w:footerReference w:type="default" r:id="${FOOTER_RID}"/>` : '';
   const pgNum = spec.pageNumberStart != null ? `<w:pgNumType w:start="${spec.pageNumberStart}"/>` : '';
-  return (
-    `<w:sectPr>` +
-    footerRef +
-    `<w:pgSz w:w="${tw(page.w)}" w:h="${tw(page.h)}"/>` +
-    `<w:pgMar w:top="${tw(m.top)}" w:right="${tw(m.right)}" w:bottom="${tw(m.bottom)}" w:left="${tw(m.left)}"/>` +
-    pgNum +
-    `</w:sectPr>`
-  );
+  return `<w:sectPr>` + footerRef + pageGeometryXml(spec) + pgNum + `</w:sectPr>`;
 }
 
 /** word/footer1.xml: jedan odlomak s (opcionalnim) PAGE poljem i poravnanjem; parser cita PAGE + w:jc. */
@@ -204,6 +271,11 @@ function documentRelsXml(spec: DocSpec, hasFootnotes: boolean, hasFooter: boolea
   if (hasFootnotes) veze.push(`<Relationship Id="rId3" Type="${REL_NS}/footnotes" Target="footnotes.xml"/>`);
   if (hasEndnotes) veze.push(`<Relationship Id="rId4" Type="${REL_NS}/endnotes" Target="endnotes.xml"/>`);
   if (hasFooter) veze.push(`<Relationship Id="${FOOTER_RID}" Type="${REL_NS}/footer" Target="footer1.xml"/>`);
+  // Podnozje PREDNJE sekcije. `partPageInfo` r:id razrjesava BAS kroz ovu mapu, pa bez ove veze
+  // marker sekcije nosi footerReference u prazno i sekcija ostaje bez `hasAnyPageField`.
+  if (spec.frontSection?.footer) {
+    veze.push(`<Relationship Id="${FRONT_FOOTER_RID}" Type="${REL_NS}/footer" Target="footer2.xml"/>`);
+  }
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
@@ -213,11 +285,19 @@ function documentRelsXml(spec: DocSpec, hasFootnotes: boolean, hasFooter: boolea
 }
 
 export function documentXml(spec: DocSpec): string {
-  const body = spec.paragraphs.map(paraXml).join('');
+  const odlomci = spec.paragraphs.map(paraXml);
+  if (spec.frontSection) {
+    // Clamp, ne bacanje: pozivatelj indeks racuna iz vlastitog niza, a granicni slucaj (0 ili kraj)
+    // je legitiman dokument, samo bez prednjeg dijela odnosno bez glavnog.
+    const at = Math.max(0, Math.min(odlomci.length, spec.frontSection.beforeParagraph));
+    odlomci.splice(at, 0, frontSectionParaXml(spec));
+  }
+  const body = odlomci.join('');
+  // xmlns:r se deklarira SAMO kad ga dokument treba (podnozje), pa je izlaz bez njega bajt-identican.
+  const trebaR = !!spec.footer || !!spec.frontSection?.footer;
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-    // xmlns:r se deklarira SAMO kad ga dokument treba (podnozje), pa je izlaz bez njega bajt-identican.
-    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"${spec.footer ? ` xmlns:r="${REL_NS}"` : ''}>` +
+    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"${trebaR ? ` xmlns:r="${REL_NS}"` : ''}>` +
     `<w:body>${body}${sectPrXml(spec)}</w:body></w:document>`
   );
 }
@@ -230,7 +310,7 @@ const STYLES_XML =
   `<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style>` +
   `</w:styles>`;
 
-function contentTypesXml(hasFootnotes: boolean, hasFooter = false, hasEndnotes = false, hasSettings = false): string {
+function contentTypesXml(hasFootnotes: boolean, hasFooter = false, hasEndnotes = false, hasSettings = false, hasFrontFooter = false): string {
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
@@ -249,6 +329,9 @@ function contentTypesXml(hasFootnotes: boolean, hasFooter = false, hasEndnotes =
       : '') +
     (hasFooter
       ? `<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>`
+      : '') +
+    (hasFrontFooter
+      ? `<Override PartName="/word/footer2.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>`
       : '') +
     `</Types>`
   );
@@ -395,8 +478,9 @@ export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8A
   const hasEndnotes = !!spec.endnotes?.length;
   const hasFooter = !!spec.footer;
   const hasSettings = spec.settings === true;
+  const hasFrontFooter = !!spec.frontSection?.footer;
   const files = [
-    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter, hasEndnotes, hasSettings)) },
+    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter, hasEndnotes, hasSettings, hasFrontFooter)) },
     { name: '_rels/.rels', data: enc.encode(RELS) },
     { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
     { name: 'word/styles.xml', data: enc.encode(spec.stylesXml ?? STYLES_XML) },
@@ -417,6 +501,7 @@ export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8A
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
   if (hasEndnotes) files.push({ name: 'word/endnotes.xml', data: enc.encode(endnotesXml(spec.endnotes!)) });
   if (hasFooter) files.push({ name: 'word/footer1.xml', data: enc.encode(footerXml(spec.footer!)) });
+  if (hasFrontFooter) files.push({ name: 'word/footer2.xml', data: enc.encode(footerXml(spec.frontSection!.footer!)) });
   // Veze glavnog dijela idu UVIJEK, kao u svakom pravom dokumentu; vidi biljesku uz documentRelsXml.
   files.push({
     name: 'word/_rels/document.xml.rels',

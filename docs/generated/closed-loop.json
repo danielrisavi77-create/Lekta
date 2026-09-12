@@ -12422,6 +12422,39 @@
         "section-insert-fixer",
         "toc-field-fixer"
       ],
+      "paginated": {
+        "fixersChanged": [
+          "croatian-typography-fixer",
+          "empty-paragraph-fixer",
+          "field-integrity-fixer",
+          "final-document-inspector-fixer",
+          "heading-style-fixer",
+          "link-doi-fixer",
+          "page-numbering-fixer",
+          "paper-size-fixer",
+          "toc-field-fixer"
+        ],
+        "violated": [
+          "toc-field",
+          "empty-paragraphs",
+          "croatian-typography",
+          "link-doi",
+          "revision-metadata",
+          "required-section",
+          "element-caption",
+          "field-integrity",
+          "heading-style",
+          "bibliography",
+          "page-number-start",
+          "paper-size"
+        ],
+        "axesResolved": [
+          "toc-field",
+          "heading-style",
+          "page-number-start",
+          "paper-size"
+        ]
+      },
       "profileAxesViolated": [
         "paper-size"
       ],
@@ -14762,6 +14795,7 @@
           "link-doi-fixer",
           "margins-fixer",
           "page-number-alignment-fixer",
+          "page-numbering-fixer",
           "toc-field-fixer"
         ],
         "violated": [
@@ -14780,6 +14814,7 @@
           "bibliography",
           "heading-format",
           "page-number-alignment",
+          "page-number-start",
           "margins"
         ],
         "axesResolved": [
@@ -14791,6 +14826,7 @@
           "heading-style",
           "heading-format",
           "page-number-alignment",
+          "page-number-start",
           "margins"
         ]
       },
@@ -15067,6 +15103,7 @@
           "link-doi-fixer",
           "margins-fixer",
           "page-number-alignment-fixer",
+          "page-numbering-fixer",
           "toc-field-fixer"
         ],
         "violated": [
@@ -15085,6 +15122,7 @@
           "bibliography",
           "heading-format",
           "page-number-alignment",
+          "page-number-start",
           "margins"
         ],
         "axesResolved": [
@@ -15096,6 +15134,7 @@
           "heading-style",
           "heading-format",
           "page-number-alignment",
+          "page-number-start",
           "margins"
         ]
       },
@@ -15180,6 +15219,7 @@
           "link-doi-fixer",
           "margins-fixer",
           "page-number-alignment-fixer",
+          "page-numbering-fixer",
           "toc-field-fixer"
         ],
         "violated": [
@@ -15198,6 +15238,7 @@
           "bibliography",
           "heading-format",
           "page-number-alignment",
+          "page-number-start",
           "margins"
         ],
         "axesResolved": [
@@ -15209,6 +15250,7 @@
           "heading-style",
           "heading-format",
           "page-number-alignment",
+          "page-number-start",
           "margins"
         ]
       },

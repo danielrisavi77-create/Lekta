@@ -80,8 +80,9 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'bibliography',
   'paragraph-spacing',
   'footnote-spacing',
-  /** Krsi se SAMO u paginiranoj inacici (`pageNumberFooter`), nikad u zadanoj. */
+  /** Obje se krse SAMO u paginiranoj inacici (`pageNumberFooter`), nikad u zadanoj. */
   'page-number-alignment',
+  'page-number-start',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -266,6 +267,16 @@ export async function buildViolatingDocx(
     para,
     { ...para, text: 'Drugi odlomak tijela rada, istog pogresnog oblikovanja kao prvi.' },
   ];
+  /**
+   * Odlomak "Uvod" po IDENTITETU, ne po indeksu.
+   *
+   * Osi ga pomicu (`toc-field` ga `unshift`-om gura na trece mjesto, nizovi praznih odlomaka
+   * mijenjaju duljinu), a prednja sekcija mora sjesti TOCNO ispred njega. Zapamcen indeks bi se
+   * razisao pri svakoj novoj osi, a posljedica ne bi bila greska nego tiho ugasena stavka popravka:
+   * `sectionNumberingTargets` trazi `before.paragraphIndex === introParagraphIndex - 1` bez ijedne
+   * tolerancije.
+   */
+  const introPara = paragraphs[0];
 
   /** Mjesta na koja idu nizovi praznih odlomaka; broj se racuna tek kad je dokument gotov. */
   let emptyBurstAt: number[] | null = null;
@@ -735,6 +746,53 @@ export async function buildViolatingDocx(
       typeof trazeno === 'string' && trazeno ? (trazeno === 'right' ? 'left' : 'right') : 'center';
     spec.footer = { page: true, align };
     if (typeof trazeno === 'string' && trazeno) violated.push('page-number-alignment');
+
+    /**
+     * PREDNJA SEKCIJA: bez nje provjera `page.numbers.start` ne moze pasti, ma kakav bio broj.
+     *
+     * Presuda je (src/scoring/evaluate/structure.ts, doslovno):
+     *
+     *   startOk = !!after.hasAnyPageField && (after.pageNumbering?.start === 1 || !before.hasAnyPageField)
+     *
+     * Druga grana je zamka: dok prednja sekcija nema VLASTITO zivo podnozje, `before.hasAnyPageField`
+     * je `false` i provjera prolazi 4/4 i kad glavni tekst pocinje od sedme stranice. Zato prednja
+     * sekcija dobiva svoje podnozje (`word/footer2.xml`), a ne nasljedjuje tudje.
+     *
+     * PAD JE 2 OD 4, NIKAD 0: `earned = startOk ? 4 : 2`. Test koji ocekuje nulu mjeri nesto sto
+     * ovaj motor ne proizvodi; tvrdnja mora glasiti `earned < max`.
+     *
+     * Glavna sekcija namjerno NEMA `w:pgNumType`, kao sto ga nema ni stvaran studentski rad:
+     * `pageNumbering` je tada `null`, `start` nije 1, i to je ono sto `page-numbering-fixer` upisuje.
+     *
+     * UVJETNA OS, kao i ostale: samo uz `checkPageNumberStartAtIntro === true`, jer bas ta zastavica
+     * emitira provjeru (`profile.checkPageNumberStartAtIntro && pageNums`) i gejta stavku popravka
+     * (`pageNumberingRepairableItem`). Bez tog uvjeta bi se dokument dijelio na sekcije po pravilu
+     * koje fakultet nije propisao.
+     *
+     * `titlePg` zrcali ono sto u marker upisuje i sam `sectionInsertFixer`: naslovnica je "drukcija
+     * prva stranica" bez definiranog `first` podnozja, pa Word na njoj broj ne prikazuje. Time
+     * provjera "Naslovnica bez broja stranice" postaje MJERLJIVA i prolazna, umjesto da ostane
+     * nedetektabilna (0/0) ili trajno pala.
+     */
+    const trazenPocetak = (profile as { checkPageNumberStartAtIntro?: unknown } | null)?.checkPageNumberStartAtIntro;
+    const introAt = paragraphs.indexOf(introPara);
+    /**
+     * `introAt >= 1` NIJE kozmetika: prijelom ispred PRVOG odlomka dao bi prednju sekciju bez
+     * ijedne stranice sadrzaja, dakle dokument kakav nijedan student ne predaje, a `page-numbering`
+     * bi na njemu bio dokaz nad izmisljenim oblikom. Profil koji prednjeg dijela nema (bez sadrzaja
+     * i naslovnice) ostaje bez ove osi, i to je istinit ishod, ne propust.
+     */
+    if (trazenPocetak === true && introAt >= 1) {
+      spec.frontSection = { beforeParagraph: introAt, footer: { page: true, align }, titlePg: true };
+      /**
+       * Os se prijavljuje TOCNO ONDJE gdje je dokument i dobio prednju sekciju.
+       *
+       * Bezuvjetan push bi dao lazan prekrsaj na svakom profilu koji ima samo `pageNumberAlignment`:
+       * ondje prednje sekcije nema, provjera je nedetektabilna (`max 0`), a petlja bi tvrdila da je
+       * os prekrsena i nikad rijesena. Uvjet je zato isti izraz koji gradi sekciju, ne slican.
+       */
+      violated.push('page-number-start');
+    }
   }
 
   if (marginsTarget) {

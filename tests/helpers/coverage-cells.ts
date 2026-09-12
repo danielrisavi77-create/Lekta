@@ -203,6 +203,7 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'paragraph-spacing-fixer': 'paragraph-spacing',
   'page-number-alignment-fixer': 'page-number-alignment',
   'footnote-spacing-fixer': 'footnote-spacing',
+  'page-numbering-fixer': 'page-number-start',
   'bibliography-repair-fixer': 'bibliography',
 };
 
@@ -405,6 +406,8 @@ const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
   'page-number-alignment': 'page-number-alignment-fixer',
   /** `footnote.spacing` (max 3) emitira se tocno za profile s `checkFootnoteParagraphSpacingZero`. */
   'footnote-spacing': 'footnote-spacing-fixer',
+  /** Mjeri se samo u paginiranoj inacici, i samo za profil koji pocetak numeriranja propisuje. */
+  'page-number-start': 'page-numbering-fixer',
 };
 
 /**

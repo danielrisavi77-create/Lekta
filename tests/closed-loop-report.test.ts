@@ -168,6 +168,33 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
   });
 
+  /**
+   * Os `page-number-start` je najkrhkija od svih uvjetnih, jer visi o TRI stvari odjednom.
+   *
+   * 1. Prednja sekcija mora imati VLASTITO zivo podnozje. Presuda glasi
+   *    `startOk = !!after.hasAnyPageField && (after.pageNumbering?.start === 1 || !before.hasAnyPageField)`,
+   *    pa bez toga `!before.hasAnyPageField` spasi provjeru i ona prolazi 4/4 cak i uz `w:start="7"`.
+   * 2. Prijelom mora biti na odlomku NEPOSREDNO prije Uvoda: `sectionNumberingTargets` trazi strogu
+   *    jednakost `before.paragraphIndex === introParagraphIndex - 1`, bez tolerancije. Jedan odlomak
+   *    izmedju i stavka popravka se NE GRADI, bez ijedne poruke.
+   * 3. Pad je `earned 2 / max 4`, nikad 0 (`earned = startOk ? 4 : 2`).
+   *
+   * Svaka od te tri promjene proizvodi TIHO zeleno: `pass` ostaje 372, jer os koja se ne krsi ne
+   * moze ni pasti, a matrica izgubi 4 celije s dokazom `resolved`.
+   */
+  it('os pocetka numeriranja je prekrsena i rijesena na svakom profilu koji ju propisuje', () => {
+    type Pag = { paginated?: { violated?: string[]; axesResolved?: string[] } };
+    const sPravilima = report.rows.filter((r) =>
+      ((r as Pag).paginated?.violated ?? []).includes('page-number-start'),
+    );
+    // Anti-vakuum: prazan skup bi tvrdnju nize ucinio istinitom ni nad cim.
+    expect(sPravilima.length, 'nijedan profil ne krsi os; generator je prestao graditi prednju sekciju').toBeGreaterThan(2);
+    const nerijeseni = sPravilima
+      .filter((r) => !((r as Pag).paginated?.axesResolved ?? []).includes('page-number-start'))
+      .map((r) => r.profileId);
+    expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
+  });
+
   it('zatecene kategorije odgovaraju zabiljezenima', () => {
     expect(count('pass'), 'pass').toBe(ratchet.pass);
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);
