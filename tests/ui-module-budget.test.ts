@@ -71,7 +71,13 @@ function bajtova(rel: string): number {
 //
 // Brojka se pomakla samo zato sto je u granu usla tudja legitimna znacajka, a spojena datoteka je
 // i dalje manja od obje strane. Pravilo ostaje: vlastiti rad se placa vadjenjem, ne dizanjem.
-const BUDZET_APP = 363789;
+// PAKET C, korak E1 + C4 (2026-09-12): 363789 -> 363652. Racunica:
+//   E1  applyFacultyContext + applyUnitFromUrl s komentarima -> src/ui/selection-entry.ts   -1344
+//   C4  potvrdiProfil, applyConfirmedProfileSelection, vezanje zastavice uz dokument, gard u
+//       applyDetectedContext, dva uvoza (obrazlozenje zivi u profile-confirmed-events.ts)      +1207
+//   neto                                                                                        -137
+// Adapter je placen vadjenjem iz iste datoteke, kako gornji komentar trazi; brojka ide DOLJE.
+const BUDZET_APP = 363652;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

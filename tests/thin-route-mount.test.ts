@@ -66,6 +66,31 @@ describe('tanka ruta: montaza bez cjenika i narudzbi', () => {
     }
   }, 180000);
 
+  /**
+   * REDOSLIJED OBNOVE U `src/routes/workspace/main.ts` (korak C4). Sesijski profil se primjenjuje
+   * POSLIJE `initAnalyzerApp` (koje kroz `restorePreferences` vraca globalne postavke) i PRIJE
+   * `restoreDocument` (cija detekcija iz dokumenta bi ga pregazila). Runtime test to ne moze vidjeti
+   * kroz `main.ts` (modul se sam pokrece nad `location`), pa je ovo slaba ali jeftina tvrdnja nad
+   * IZVOROM. Usporedjuju se INDEKSI pojavljivanja, nikad susjedstvo: buduci koraci ubacuju u isti
+   * prozor i ne smiju oboriti gard bez stvarne regresije.
+   */
+  it('main.ts: initAnalyzerApp( < profil.restore( < restoreDocument( po polozaju u izvoru', () => {
+    const src = readFileSync(resolve(__dirname, '..', 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
+    const redoslijed = ['initAnalyzerApp(', 'profil.restore(', 'restoreDocument('];
+    const pozicije = redoslijed.map((p) => src.indexOf(p));
+    // SENTINEL: gard koji ne nadje nijedan obrazac (preimenovanje, refaktor) je oslijepio, ne zelen.
+    for (let i = 0; i < redoslijed.length; i++) {
+      expect(pozicije[i], `gard je oslijepio: "${redoslijed[i]}" nije nadjen u main.ts`).toBeGreaterThanOrEqual(0);
+    }
+    expect(pozicije[0], 'profil.restore mora doci POSLIJE initAnalyzerApp').toBeLessThan(pozicije[1]);
+    expect(pozicije[1], 'profil.restore mora doci PRIJE restoreDocument').toBeLessThan(pozicije[2]);
+
+    // Gard bez dokaza da grize se ne racuna: u KOPIJI izvora zamijenjen redoslijed dvaju poziva.
+    const mutiran = src.replace('profil.restore(', '__A__(').replace('restoreDocument(', 'profil.restore(').replace('__A__(', 'restoreDocument(');
+    const m = redoslijed.map((p) => mutiran.indexOf(p));
+    expect(m[1] < m[2], 'podmetnuta zamjena MORA pasti na tvrdnji o redoslijedu').toBe(false);
+  });
+
   it('montaza je ozicila radnu povrsinu, ne samo zabiljezila dokument', async () => {
     // Registracija bez ozicenja bi prosla gornju tvrdnju a ne bi radila nista. Dokaz je da
     // dropzone ima rukovatelja, dakle da je `bind()` doista prosao.

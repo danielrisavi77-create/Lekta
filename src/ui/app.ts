@@ -93,6 +93,8 @@ import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
 import { profileFingerprint } from '../profiles/profile-fingerprint';
 import { readSelectionIds } from './profile-selection-ids';
+import { facultyContextSelection, urlSelection } from './selection-entry';
+import { emitProfileConfirmed } from './profile-confirmed-events';
 import { createTelemetry } from './telemetry';
 import { buildErrorReport, makeIncidentId } from '../report/error-redaction';
 import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/methodology-loader';
@@ -275,16 +277,12 @@ const CHECKOUT_CONSENT_TEXT=canonicalConsentText(TERMS_VERSION)||'';
 // navigator.userAgent (BL-P0-04-4 privola/GDPR data-flow-08): UA je uklonjen iz payloada da se
 // bez privole ne salje pseudonimni otisak preglednika. NE dodavati ga natrag bez pravne osnove.
 let _errSent=0;
-// KLIJENT REDAKTIRA PRIJE SLANJA (audit P1-28). Poruka i stack su slobodan tekst, pa u njih lako
-// upadne ime datoteke ("Ivan_Horvat_diplomski.docx"), e-mail ili token iz URL-a. `buildErrorReport`
-// ih redaktira i odbacuje svako polje izvan dogovorenog oblika. Posluzitelj vrti ISTI modul pri
-// primitku; ovo nije dvostruki posao nego obrana u dubinu, isti obrazac kao kod analitike.
-//
-// `incidentId` se generira OVDJE, ne na posluzitelju, jer se salje preko `sendBeacon` koji odgovor
-// ne cita. Korisnik ga tako moze procitati podrsci, a iz njega se ne da doci do njega.
-// Korisnik mora MOCI dobiti oznaku incidenta, inace je sabirnica korisna samo nama (audit P1-28
-// trazi "korisnicki incident ID"). Javlja se SAMO na prvu gresku po ucitavanju stranice: svaka
-// sljedeca je najcesce posljedica prve, a niz toastova bi uplasio korisnika bez ikakve koristi.
+// KLIJENT REDAKTIRA PRIJE SLANJA (audit P1-28): poruka i stack su slobodan tekst pa lako nose ime
+// datoteke, e-mail ili token iz URL-a. `buildErrorReport` ih redaktira i odbacuje polja izvan
+// dogovorenog oblika; posluzitelj vrti ISTI modul (obrana u dubinu, kao kod analitike).
+// `incidentId` nastaje OVDJE jer `sendBeacon` odgovor ne cita; korisnik ga moze reci podrsci, a iz
+// njega se ne da doci do njega (audit P1-28: "korisnicki incident ID"). Toast ide SAMO na prvu
+// gresku po ucitavanju: sljedece su najcesce posljedica prve, a niz toastova bi uplasio korisnika.
 let _incidentToastShown=false;
 function announceIncident(incidentId: string){if(_incidentToastShown)return;_incidentToastShown=true;
  try{toast(`Došlo je do greške. Ako javiš podršci, navedi oznaku ${incidentId}.`)}catch(e: any){}}
@@ -299,6 +297,15 @@ let productionConfig: any=null;
 // mijenja tri puta u izvodjenju, a privola u bilo kojem trenutku.
 const { trackEvent }=createTelemetry({config:()=>productionConfig,consent:()=>safeStorageGet(STORAGE_KEYS.analyticsConsent)});
 let lastProfileContext='';let _profileConfirmed=false;
+// C4: profil iz sesije gasi detekciju iz dokumenta dok vrijedi; zasto i kada se gasi, vidi
+// zaglavlje `./profile-confirmed-events`. Datoteka: dokument uz koji je zastavica vezana.
+let _sessionProfileApplied=false,_sessionProfileFile: File|null=null,_restoringSessionProfile=false;
+function potvrdiProfil(){_profileConfirmed=true;updateProfile();if(_restoringSessionProfile)return;emitProfileConfirmed({profileDefinitionId:currentDefinitionId(),selectionIds:readSelectionIds(runtimeDocument()),confirmedAt:Date.now()})}
+// Pri `mismatch` (spremljeni profil vise ne postoji) zastavica ostaje podignuta NAMJERNO: korisnik
+// je vec obavijesten (NOTICE_PROFILE_MISMATCH) i trazi se njegova potvrda odabira; detekcija koja
+// bi u tom trenutku sama pomaknula izbornik zamijenila bi jednu neizrecenu odluku drugom.
+export function applyConfirmedProfileSelection(ids: Record<string,string>): string|null{_restoringSessionProfile=true;try{_sessionProfileApplied=true;_sessionProfileFile=null;_profileConfirmed=true;applySelectionIds(ids)}finally{_restoringSessionProfile=false}return currentDefinitionId()}
+subscribeAnalyzerDocumentSettled((e)=>{if(!_sessionProfileApplied)return;if(e.kind!=='accepted'){if(!_sessionProfileFile)_sessionProfileApplied=false;return}if(!_sessionProfileFile)_sessionProfileFile=e.file;else if(e.file!==_sessionProfileFile)_sessionProfileApplied=false});
 /* ZAGREB_CATALOG se sada uvozi iz catalog-loader (data/catalog/zagreb-catalog.json) */
 /* INSTITUTIONAL_COVERAGE_MATRIX i COVERAGE_STATUS_META se uvoze iz coverage-loader (data/coverage) */
 /* SOCIAL_METHOD_REGISTRY i SOCIAL_METHOD_SOURCE se uvoze iz methodology-loader (data/methodology) */
@@ -385,7 +392,7 @@ function bind(){
  $$('.tab').forEach(b=>{b.onclick=()=>openTab(b.dataset.tab);b.onkeydown=(e: any)=>{if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;const tabs=Array.from<any>(document.querySelectorAll('.tab')).filter((t: any)=>t.offsetParent!==null);const i=tabs.indexOf(b);if(i<0)return;e.preventDefault();const n=e.key==='Home'?0:e.key==='End'?tabs.length-1:e.key==='ArrowRight'?(i+1)%tabs.length:(i-1+tabs.length)%tabs.length;const t=tabs[n];openTab(t.dataset.tab);t.focus()}});ctl('#detailsToggle').onclick=()=>{const d=$('#tabDetails'),hidden=d.hasAttribute('hidden');if(hidden){d.removeAttribute('hidden');$('#detailsToggle')?.classList.add('open');$('#detailsToggle')?.setAttribute('aria-expanded','true');openTab('formatting')}else{d.setAttribute('hidden','');$('#detailsToggle')?.classList.remove('open');$('#detailsToggle')?.setAttribute('aria-expanded','false');openTab('overview')}};ctl('#submissionChecklist').onchange=(e: any)=>{const c=e.target.closest('[data-submission-check]');if(c){saveSubmissionCheck(c.dataset.submissionCheck,c.checked);if(currentResult)renderSubmissionChecklist(currentResult)}};ctl('#submissionChecklist').onclick=(e: any)=>{const b=e.target.closest('[data-download-submission]');if(b){downloadSubmissionReport();return}const ph=e.target.closest('[data-open-phase]');if(ph){setWizardStep(3);const d=document.querySelector('.advanced-options');if(d)(d as any).open=true;document.querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});setTimeout(()=>$('#submissionPhase')?.focus(),350)}};ctl('#categoryGrid').onclick=(e: any)=>{const c=e.target.closest('[data-cat-tab]');if(!c)return;const t=c.dataset.catTab;if(t&&t!=='overview'){revealResultDetails();revealDetails();openTab(t)}};ctl('#categoryGrid').onkeydown=(e: any)=>{if(e.key!=='Enter'&&e.key!==' ')return;const c=e.target.closest('[data-cat-tab]');if(!c)return;e.preventDefault();c.click()};$$('.metric-jump').forEach(m=>{m.onclick=()=>{revealResultDetails();openTab(m.dataset.jump)};m.onkeydown=(e: any)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();revealResultDetails();openTab(m.dataset.jump)}}});{const dm=document.querySelector('.dl-menu'),db=dm?.querySelector('.dl-menu-btn');if(dm&&db){const set=(v: any)=>db.setAttribute('aria-expanded',v?'true':'false');dm.addEventListener('mouseenter',()=>set(true));dm.addEventListener('mouseleave',()=>set(false));dm.addEventListener('focusin',()=>set(true));dm.addEventListener('focusout',()=>set(false));dm.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){set(false);document.activeElement&&(document.activeElement as any).blur&&(document.activeElement as any).blur()}})}}{const ph=$('#openPhaseFromHint');if(ph)ph.onclick=()=>{setWizardStep(3);const d=document.querySelector('.advanced-options');if(d)(d as any).open=true;const sp=$('#submissionPhase');if(sp){sp.focus();sp.scrollIntoView({behavior:'smooth',block:'center'})}}}
  $('#closeProfileSheet')&&(ctl('#closeProfileSheet').onclick=closeProfileSheet);$('#profileSheetDone')&&(ctl('#profileSheetDone').onclick=closeProfileSheet);ctl('#newAnalysis').onclick=resetAnalyzer;$('#previewModeCitljivo')&&(ctl('#previewModeCitljivo').onclick=()=>setPreviewMode('citljivo'));$('#previewModeFaksimil')&&(ctl('#previewModeFaksimil').onclick=()=>setPreviewMode('faksimil'));$('#closePreview')&&(ctl('#closePreview').onclick=closePreview);$('#closePreviewBottom')&&(ctl('#closePreviewBottom').onclick=closePreview);$('#previewModal')&&(ctl('#previewModal').onclick=(e: any)=>{if(e.target.id==='previewModal')closePreview()});$('#reportWrongCheck')&&(ctl('#reportWrongCheck').onclick=reportWrongCheck);$('#closeReport')&&(ctl('#closeReport').onclick=closeReport);$('#cancelReport')&&(ctl('#cancelReport').onclick=closeReport);$('#submitReport')&&(ctl('#submitReport').onclick=submitReport);$('#reportModal')&&(ctl('#reportModal').onclick=(e: any)=>{if(e.target.id==='reportModal')closeReport()});ctl('#printReport').onclick=()=>window.print();ctl('#downloadHtml').onclick=downloadHtmlReport;{const ub=$('#unlockReport');if(ub){ub.onclick=handleUnlockReport;ub.classList.toggle('hidden',!reportEndpointConfigured())}}ctl('#downloadJson').onclick=downloadResult;ctl('#orderFromResult').onclick=()=>openOrder('panic');ctl('#historyBtn').onclick=openHistory;ctl('#closeHistory').onclick=closeHistory;ctl('#closeHistoryBottom').onclick=closeHistory;ctl('#clearHistory').onclick=clearAnalysisHistory;ctl('#historyModal').onclick=(e: any)=>{if(e.target.id==='historyModal')closeHistory()};ctl('#historyList').onclick=handleHistoryAction;$('#repairHistoryBtn')&&(ctl('#repairHistoryBtn').onclick=openRepairHistory);$('#closeRepairHistory')&&(ctl('#closeRepairHistory').onclick=closeRepairHistory);$('#closeRepairHistoryBottom')&&(ctl('#closeRepairHistoryBottom').onclick=closeRepairHistory);$('#repairHistoryModal')&&(ctl('#repairHistoryModal').onclick=(e: any)=>{if(e.target.id==='repairHistoryModal')closeRepairHistory()});$('#repairHistoryList')&&(ctl('#repairHistoryList').onclick=handleRepairHistoryAction);if(__DEV_TOOLS__){ctl('#qaBtn').onclick=openQa;ctl('#closeQa').onclick=closeQa;ctl('#closeQaBottom').onclick=closeQa;ctl('#qaModal').onclick=(e: any)=>{if(e.target.id==='qaModal')closeQa()};ctl('#downloadManifest').onclick=downloadProfileManifest;}$('#closeAuth')&&(ctl('#closeAuth').onclick=closeAuth);$('#authSubmit')&&(ctl('#authSubmit').onclick=authSubmit);$('#authChangeEmail')&&(ctl('#authChangeEmail').onclick=authChangeEmail);$('#authModal')&&(ctl('#authModal').onclick=(e: any)=>{if(e.target.id==='authModal')closeAuth()});$('#authCode')&&$('#authCode')?.addEventListener('keydown',(e: any)=>{if(e.key==='Enter')authSubmit()});$('#authEmail')&&$('#authEmail')?.addEventListener('keydown',(e: any)=>{if(e.key==='Enter'&&_authStep==='email')authSubmit()});$('#closeGuarantee')&&(ctl('#closeGuarantee').onclick=closeGuarantee);$('#guaranteeSubmit')&&(ctl('#guaranteeSubmit').onclick=submitGuaranteeClaim);$('#guaranteeModal')&&(ctl('#guaranteeModal').onclick=(e: any)=>{if(e.target.id==='guaranteeModal')closeGuarantee()});$('#closeCheckoutConsent')&&(ctl('#closeCheckoutConsent').onclick=closeCheckoutConsent);$('#cancelCheckoutConsent')&&(ctl('#cancelCheckoutConsent').onclick=closeCheckoutConsent);$('#checkoutConsentModal')&&(ctl('#checkoutConsentModal').onclick=(e: any)=>{if(e.target.id==='checkoutConsentModal')closeCheckoutConsent()});
  $$('.order-btn').forEach(b=>b.onclick=()=>openOrder(b.dataset.package));ctl('#closeModal').onclick=closeOrder;ctl('#cancelOrder').onclick=closeOrder;ctl('#orderModal').onclick=(e: any)=>{if(e.target.id==='orderModal')closeOrder()};ctl('#submitOrder').onclick=submitOrder;ctl('#orderDocument').onchange=updateOrderFileMeta;document.addEventListener('click',(e: any)=>{const b=e.target.closest('.legal-open');if(b){e.preventDefault();openLegal(b.dataset.legal)}});ctl('#closeLegal').onclick=closeLegal;ctl('#closeLegalBottom').onclick=closeLegal;ctl('#legalModal').onclick=(e: any)=>{if(e.target.id==='legalModal')closeLegal()};ctl('#privacySettingsBtn').onclick=openPrivacySettings;ctl('#analyticsAccept').onclick=()=>setAnalyticsConsent('granted');ctl('#analyticsDecline').onclick=()=>setAnalyticsConsent('denied');try{window.addEventListener('resize',()=>syncConsentBannerInset())}catch(e: any){}if(__DEV_TOOLS__){ctl('#closeSetup').onclick=closeSetup;ctl('#setupModal').onclick=(e: any)=>{if(e.target.id==='setupModal')closeSetup()};ctl('#saveProductionConfig').onclick=saveSetupConfig;ctl('#resetProductionConfig').onclick=resetSetupConfig;ctl('#exportProductionConfig').onclick=exportProductionConfig;}
- document.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){const _modalOpen=!!document.querySelector('.modal-backdrop:not(.hidden)');closeOrder();closeHistory();closeLegal();closeAuth();closeGuarantee();closeProfileSheet();closeCheckoutConsent();closeReport();closePreview();closeRepairHistory();if(__DEV_TOOLS__){closeQa();closeSetup()}if(!_modalOpen&&$('#progressView')?.classList.contains('hidden')===false)cancelAnalysis()}if(__DEV_TOOLS__&&e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='q'&&qaMode)openQa()});if(__DEV_TOOLS__&&setupMode)setTimeout(openSetup,250);['#institutionSelect','#unitSelect','#programSelect','#workType','#workVariant','#departmentSelect','#methodologySelect'].forEach(s=>$(s)?.addEventListener('change',()=>{_profileConfirmed=true}));$('#analyzeProfile')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-confirm-profile]')){_profileConfirmed=true;updateProfile();runAnalysis()}else if(e.target.closest('[data-change-profile]')){openProfileSheet()}else if(e.target.closest('[data-confirm-docgate]')){_intake.confirmedSuspicious=true;runAnalysis()}else if(e.target.closest('[data-change-docfile]')){setWizardStep(1);try{$('#dropzone')?.focus()}catch(err: any){}}});$('#wizardView')?.addEventListener('change',()=>{invalidateSpeculative();clearTimeout(_specTimer);_specTimer=setTimeout(()=>{startSpeculativeAnalysis()},450)});$('#stepBackDoc')&&(ctl('#stepBackDoc').onclick=()=>{setWizardStep(1,true);try{$('#dropzone')?.focus()}catch(e: any){}});$('#stepToProfile')&&(ctl('#stepToProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});$('#stepToAnalyze')&&(ctl('#stepToAnalyze').onclick=()=>{_profileConfirmed=true;updateProfile();setWizardStep(3,true);try{$('#analyzeBtn')?.focus()}catch(e: any){}});$('#stepBackProfile')&&(ctl('#stepBackProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});
+ document.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){const _modalOpen=!!document.querySelector('.modal-backdrop:not(.hidden)');closeOrder();closeHistory();closeLegal();closeAuth();closeGuarantee();closeProfileSheet();closeCheckoutConsent();closeReport();closePreview();closeRepairHistory();if(__DEV_TOOLS__){closeQa();closeSetup()}if(!_modalOpen&&$('#progressView')?.classList.contains('hidden')===false)cancelAnalysis()}if(__DEV_TOOLS__&&e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='q'&&qaMode)openQa()});if(__DEV_TOOLS__&&setupMode)setTimeout(openSetup,250);['#institutionSelect','#unitSelect','#programSelect','#workType','#workVariant','#departmentSelect','#methodologySelect'].forEach(s=>$(s)?.addEventListener('change',()=>{_profileConfirmed=true}));$('#analyzeProfile')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-confirm-profile]')){potvrdiProfil();runAnalysis()}else if(e.target.closest('[data-change-profile]')){openProfileSheet()}else if(e.target.closest('[data-confirm-docgate]')){_intake.confirmedSuspicious=true;runAnalysis()}else if(e.target.closest('[data-change-docfile]')){setWizardStep(1);try{$('#dropzone')?.focus()}catch(err: any){}}});$('#wizardView')?.addEventListener('change',()=>{invalidateSpeculative();clearTimeout(_specTimer);_specTimer=setTimeout(()=>{startSpeculativeAnalysis()},450)});$('#stepBackDoc')&&(ctl('#stepBackDoc').onclick=()=>{setWizardStep(1,true);try{$('#dropzone')?.focus()}catch(e: any){}});$('#stepToProfile')&&(ctl('#stepToProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});$('#stepToAnalyze')&&(ctl('#stepToAnalyze').onclick=()=>{potvrdiProfil();setWizardStep(3,true);try{$('#analyzeBtn')?.focus()}catch(e: any){}});$('#stepBackProfile')&&(ctl('#stepBackProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});
  $('#resultBackDoc')&&(ctl('#resultBackDoc').onclick=()=>{backToWizardFromResult(1);try{$('#dropzone')?.focus({preventScroll:true})}catch(e: any){}});$('#resultBackProfile')&&(ctl('#resultBackProfile').onclick=()=>{backToWizardFromResult(2);try{$('#institutionSelect')?.focus({preventScroll:true})}catch(e: any){}});
  document.addEventListener('click',(e: any)=>{if(e.target.closest('a[href="#analyzer"]'))revealAnalyzerForm(false)});
  $('#stepToProfile')?.addEventListener('click',()=>{void trackEvent('profile_step_opened',{})});
@@ -483,6 +490,7 @@ async function detectDocxContext(file: any){
  }catch(e: any){return null}
 }
 async function applyDetectedContext(file: any){
+ if(_sessionProfileApplied)return; // C4: potvrdjeni profil sesije ima prednost pred heuristikom
  const token=++_detectToken,ctx=await detectDocxContext(file);
  if(token!==_detectToken||!ctx)return;
  setOptionIfExists($('#institutionSelect'),ctx.institutionId||'unizg');populateUnits();
@@ -643,41 +651,17 @@ async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[dat
   const win=window.open('','_blank');
   try{let url=await signRepairDownload(repairHistoryConfig(),token||'',path);url+=(url.includes('?')?'&':'?')+'download='+encodeURIComponent(dl.dataset.name||'popravljeno.docx');if(win){win.location.href=url}else{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click()}}catch(err: any){if(win)win.close();toast('Preuzimanje trenutačno nije moguće.')}finally{dl.disabled=false;dl.textContent=orig}return}if(del){const id=del.dataset.repairDel;if(!confirm('Trajno obrisati ovaj popravak? Original i popravljena datoteka bit će uklonjeni sa servera.'))return;del.disabled=true;const out=await deleteRepairJob(repairHistoryConfig(),token||'',id);if(out.ok){toast('Popravak je obrisan.');void renderRepairHistoryList()}else{del.disabled=false;toast('Brisanje trenutačno nije moguće.')}return}}
 function applySelectionIds(p: any={}){setOptionIfExists($('#institutionSelect'),p.institution);populateUnits();setOptionIfExists($('#unitSelect'),p.unit);populatePrograms();setOptionIfExists($('#programSelect'),p.program);setOptionIfExists($('#workType'),p.workType);populateVariants();setOptionIfExists($('#workVariant'),p.variant);populateDepartments();setOptionIfExists($('#departmentSelect'),p.department);populateMethodology();setOptionIfExists($('#methodologySelect'),p.methodology);setOptionIfExists($('#citationStyle'),p.citation);syncProfileContext()}
-/* lekta.faculty-context (src/tools/faculty-context.ts): isti fakultet koji korisnik vec
-   odabere na citat/naslovnica alatima. Primjenjuje se SAMO ako restorePreferences() nije
-   vec postavila bogatiju analizatorsku memoriju (p.unit) - faculty-context je namjerno
-   tanji, medju-alatni "popuni prazno" signal, ne smije prepisati postojecu analizatorsku
-   povijest. ?unit= URL parametar (applyUnitFromUrl, poziva se POSLIJE ove funkcije) i dalje
-   ima krajnji prioritet. */
+// Odluka oba ulaza (medju-alatni signal i `?unit=` link) zivi u `./selection-entry`, zajedno s
+// obrazlozenjem prvenstva. Ovdje ostaje samo dodir DOM-a.
 function applyFacultyContext(){try{
- const p=safeStorageGet(STORAGE_KEYS.preferences);
- if(p&&p.unit)return;
- const ctx=readFacultyContext();
- if(!ctx.unitId)return;
- const u: any=allUnits().find((x: any)=>x.id===ctx.unitId);
- if(!u)return;
- const sel: any={institution:u.institutionId,unit:u.id};
- if(ctx.program)sel.program=ctx.program;
- if(ctx.level)sel.workType=ctx.level;
- applySelectionIds(sel);
+ const sel=facultyContextSelection(safeStorageGet(STORAGE_KEYS.preferences),readFacultyContext(),allUnits());
+ if(sel)applySelectionIds(sel);
 }catch(e: any){}}
-/* ?unit=<unitId>[&work=<slug>][&project=<id>] s alat-stranica (SEO citatne stranice i sl.,
-   ili Katedra handoff): posjetitelj koji dolazi sa stranice SVOG fakulteta ne mora ga
-   ponovno traziti u izborniku. Namjerno POSLIJE restorePreferences (eksplicitni link ima
-   prednost pred zapamcenim odabirom); nepoznat unit ILI nepoznat work slug je tihi no-op
-   (svaki neovisno o drugom). Koristi istu applySelectionIds putanju kao povijest analiza.
-   project je nepromijenjen, netipiziran Katedra Project Manifest ID (Faza C): Lekta ga
-   samo prenosi natrag u rezultat (buildAnalysisSettings), nikad ga ne tumaci ni validira. */
 let currentProjectId: string|null=null;
 function applyUnitFromUrl(){try{
- const uid=(params.get('unit')||'').trim();
- const workType=workTypeFromSlug((params.get('work')||'').trim());
- const project=(params.get('project')||'').trim();
- if(project)currentProjectId=project;
- const sel: any={};
- if(uid){const u: any=allUnits().find((x: any)=>x.id===uid);if(u){sel.institution=u.institutionId;sel.unit=u.id}}
- if(workType)sel.workType=workType;
- if(Object.keys(sel).length)applySelectionIds(sel);
+ const out=urlSelection(params,allUnits(),workTypeFromSlug);
+ if(out.projectId)currentProjectId=out.projectId;
+ if(Object.keys(out.selection).length)applySelectionIds(out.selection);
 }catch(e: any){}}
 /* Katedra (sestrinski proizvod, AI coach za pisanje) integracija, Milestone 1 Task 3
    (MASTER-PLAN.md): prazan URL = znacajka skrivena (jos nema javne Katedra adrese), popuni

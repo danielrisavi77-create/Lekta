@@ -1,9 +1,11 @@
 import {
-  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent,
+  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
 import { subscribeAnalyzerResultReady } from '../../ui/analyzer-document-events';
+import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
+import { createConfirmedProfile } from './confirmed-profile';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
@@ -134,6 +136,16 @@ async function start(): Promise<void> {
     status: showStatus,
     track: trackWorkspaceEvent,
   });
+  // C4: potvrdjeni profil se pamti uz sesiju i vraca pri obnovi. Pretplata ide PRIJE
+  // `openWorkspace` iz istog razloga kao gore: objava ide nad kopijom skupa pretplatnika.
+  const profil = createConfirmedProfile({
+    store: () => (storage.kind === 'available' ? storage.store : null),
+    sessionId: () => sessionId,
+    apply: applyConfirmedProfileSelection,
+    status: showStatus,
+    track: trackWorkspaceEvent,
+  });
+  subscribeProfileConfirmed((event) => profil.onConfirmed(event));
   subscribeAnalyzerResultReady((event) => {
     revisions.onResult(event.result);
     // T13: komentari iz paketa postaju lokalni zadaci; bez komentara sekcija ostaje skrivena. Citanje paketa je lokalno.
@@ -165,6 +177,8 @@ async function start(): Promise<void> {
       // dodati korak u povijest kroz koji se "natrag" vraca na praznu radnu povrsinu.
       history.replaceState(history.state, '', location.pathname + location.search + out.fragment);
       showStatus(null);
+      // Potvrda koja je stigla dok sesija jos nije imala adresu sada dobiva kamo ici.
+      void profil.flush();
     })();
   });
 
@@ -181,6 +195,10 @@ async function start(): Promise<void> {
     restoredFile = fileFromLocalDocumentSession(outcome.session);
     // Snimke revizija iz sesije (stariji zapisi ih nemaju): usporedba prezivi ponovno ucitavanje stranice.
     revisions.restore(outcome.session.workspace?.revision, outcome.session.workspace?.previousRevision);
+    // REDOSLIJED JE UGOVOR (gard: tests/thin-route-mount.test.ts). Profil sesije ide POSLIJE
+    // `initAnalyzerApp` (koje kroz `restorePreferences` vraca globalne postavke, koje bi ga inace
+    // pregazile) i PRIJE `restoreDocument` (cija detekcija iz dokumenta bi ga inace pregazila).
+    profil.restore(outcome.session.profile);
     const restored = await restoreDocument(outcome.session, () => loadAnalyzerDocument(restoredFile!));
     if (restored.kind === 'refused') showStatus(restored.notice);
   }
