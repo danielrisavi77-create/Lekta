@@ -1,6 +1,6 @@
 import {
-  initialContext, transition, canLinkSession,
-  type WorkspaceContext,
+  emptyLedger, canLinkSession,
+  type WorkspaceLedger,
 } from './workspace-state';
 import {
   parseSessionFragment, sessionFragment, createLocalDocumentSession, fileFromLocalDocumentSession,
@@ -38,7 +38,7 @@ export type StorageAvailability =
   | { kind: 'unavailable'; reason: string };
 
 export interface RestoreOutcome {
-  context: WorkspaceContext;
+  context: WorkspaceLedger;
   /** Poruka za korisnika; `null` kad nema sto reci. */
   notice: string | null;
   /** Smije li se sesija ponuditi kao poveznica. Nikad `true` bez stvarnog zapisa. */
@@ -70,10 +70,10 @@ export async function openWorkspace(
   if (storage.kind === 'unavailable') {
     // Rad ostaje u kartici. Fragment se NE cisti: korisnik ga moze imati u povijesti, a brisanje
     // bi izgledalo kao da smo nesto obrisali. Poveznica se ipak ne nudi.
-    return { context: initialContext(false), notice: NOTICE_NO_STORAGE, offerLink: false, session: null };
+    return { context: emptyLedger(), notice: NOTICE_NO_STORAGE, offerLink: false, session: null };
   }
 
-  let context = initialContext(Boolean(sessionId));
+  const context = emptyLedger();
   if (!sessionId) return { context, notice: null, offerLink: false, session: null };
 
   try {
@@ -81,13 +81,12 @@ export async function openWorkspace(
     await storage.store.deleteExpired(now);
     const session = await storage.store.get(sessionId, now);
     if (!session) {
-      return { context: transition(context, 'restoreEmpty'), notice: NOTICE_SESSION_GONE, offerLink: false, session: null };
+      return { context, notice: NOTICE_SESSION_GONE, offerLink: false, session: null };
     }
-    context = transition(context, 'restoreFound');
     return { context, notice: null, offerLink: canLinkSession(context), session };
   } catch {
     // Kvar pohrane nije kvar rada: korisnik nastavlja ispocetka, uz jasnu poruku.
-    return { context: transition(context, 'restoreFailed'), notice: NOTICE_SESSION_GONE, offerLink: false, session: null };
+    return { context, notice: NOTICE_SESSION_GONE, offerLink: false, session: null };
   }
 }
 
@@ -165,19 +164,22 @@ export async function restoreDocument(
 
 
 /**
- * PRIJELAZ NA PRIHVACEN DOKUMENT, kao JEDAN korak prema van.
+ * Dokument je prihvacen, bilo prvi ili zamjena.
  *
- * Stroj stanja trazi dva dogadjaja (ponuda pa prihvacanje), a prijem javlja samo ishod. Ovdje se
- * ta dva spajaju, i to s razlikom koju stroj trazi: prvi dokument je PONUDA, svaki sljedeci je
- * ZAMJENA. Kriva rijec znaci odbijen prijelaz i stanje koje ostane na starom, dakle atribut koji
- * tvrdi `empty` dok dokument postoji.
+ * `sessionPersisted` pada na `false` u OBA slucaja, jer u tom trenutku zapis za ovaj dokument jos
+ * ne postoji. Za zamjenu je to i vise od tehnicke tocnosti: stara sesija opisuje drugi dokument,
+ * pa bi poveznica na nju vodila na krivi rad.
+ *
+ * Funkcija OSTAJE ovdje, a ne seli u `workspace-state.ts` uz knjigu, i to je svjestan ustupak
+ * alatu: `orphan-scan` trazi `export function` po imenu i ne prati `export ... from` lanac, pa bi
+ * selidba uz re-izvoz izgledala kao simbol koji postoji samo u radnom stablu. Gard se ne zaobilazi
+ * zato sto je nepotpun.
  */
-export function afterDocumentAccepted(context: WorkspaceContext): WorkspaceContext {
-  const opened = transition(context, context.state === 'empty' ? 'documentOffered' : 'documentReplaced');
-  return transition(opened, 'documentAccepted');
+export function afterDocumentAccepted(_ledger: WorkspaceLedger): WorkspaceLedger {
+  return { documentPresent: true, sessionPersisted: false };
 }
 
-/** Prijelaz nakon pokusaja zapisa sesije; neuspjeh vodi dalje, samo bez poveznice. */
-export function afterPersist(context: WorkspaceContext, persisted: boolean): WorkspaceContext {
-  return transition(context, persisted ? 'sessionPersisted' : 'sessionPersistFailed');
+/** Ishod pokusaja zapisa. Neuspjeh NE baca dokument: rad ostaje u kartici, samo bez poveznice. */
+export function afterPersist(ledger: WorkspaceLedger, persisted: boolean): WorkspaceLedger {
+  return { documentPresent: ledger.documentPresent, sessionPersisted: persisted };
 }

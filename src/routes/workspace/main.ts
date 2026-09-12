@@ -6,7 +6,7 @@ import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
   type StorageAvailability,
 } from './bootstrap';
-import { initialContext, type WorkspaceContext } from './workspace-state';
+import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
@@ -85,11 +85,11 @@ async function start(): Promise<void> {
   let sessionId: string | null = null;
   // Stanje se DRZI i osvjezava. Zapisano jednom pri ucitavanju, tvrdilo bi `empty` i nakon sto
   // korisnik ucita dokument; ustajala tvrdnja o stanju gora je od nikakve, jer je netko procita.
-  let context: WorkspaceContext = initialContext(false);
-  const showState = (next: WorkspaceContext): void => {
-    context = next;
-    document.documentElement.dataset.workspaceState = context.state;
-  };
+  // Knjiga sesije. Do 2026-09-12 je ovdje zivio i upis `data-workspace-state` na <html>; atribut
+  // je uklonjen jer NIJEDAN citatelj nije postojao (ni CSS, ni test, ni kod), pa je bio trosak bez
+  // korisnika. Stanje koje korisnik vidi pise `wizard-view.ts`.
+  let context: WorkspaceLedger = emptyLedger();
+  const upisi = (next: WorkspaceLedger): void => { context = next; };
 
   // OBNOVLJEN DOKUMENT SE NE ZAPISUJE PONOVNO. Do 2026-09-05 je i on prolazio kroz zapis, pa je
   // svako otvaranje `/rad/#session=X` stvaralo NOVU sesiju Y i brisalo X: poveznica iz
@@ -113,15 +113,15 @@ async function start(): Promise<void> {
   wireDocumentBar();
 
   subscribeAnalyzerDocumentAccepted((event) => {
-    showState(afterDocumentAccepted(context));
+    upisi(afterDocumentAccepted(context));
     if (restoredFile !== null && event.file === restoredFile) {
-      showState(afterPersist(context, true));
+      upisi(afterPersist(context, true));
       showStatus(null);
       return;
     }
     void (async () => {
       const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
-      showState(afterPersist(context, out.kind === 'persisted'));
+      upisi(afterPersist(context, out.kind === 'persisted'));
       if (out.kind !== 'persisted') { showStatus(out.notice); return; }
       sessionId = out.sessionId;
       // `replaceState`, ne `pushState`: zapis sesije nije korisnikova navigacija, pa ne smije
@@ -133,7 +133,7 @@ async function start(): Promise<void> {
 
   const outcome = await openWorkspace(location.hash, storage);
   showStatus(outcome.notice);
-  showState(outcome.context);
+  upisi(outcome.context);
 
   if (outcome.session) {
     sessionId = outcome.session.id;
