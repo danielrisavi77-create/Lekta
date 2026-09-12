@@ -22,6 +22,23 @@ export interface XmlScanResult {
   problem?: string;
   /** Priblizna pozicija u stringu, za lakse trazenje u velikom XML-u. */
   offset?: number;
+  /**
+   * Razred greske. `namespace` je jedini koji se mjeri i na ULAZU pa prijavljuje samo kad je NOV
+   * (vidi `detectIntegrityFailure`); sve ostalo je bezuvjetno fatalno.
+   */
+  kind?: 'structure' | 'namespace';
+}
+
+export interface XmlScanOptions {
+  /**
+   * Uz strukturu provjeri i da svako ime s prefiksom ima `xmlns:` deklaraciju U DOSEGU (RE-60).
+   *
+   * NIJE zadano, i to je odluka: minimalni sinteticki dijelovi kroz ovaj repozitorij namjerno
+   * izostavljaju deklaracije (`<w:styles>` bez `xmlns:w`), sto stvaran Word dokument nikad ne
+   * radi. Bezuvjetna provjera bi ih sve proglasila neispravnima, a mjeri se tudji sinteticki ulaz,
+   * ne nas popravak. Ukljucuje je vratima integriteta, gdje se usporedjuje s ulazom.
+   */
+  namespaces?: boolean;
 }
 
 export interface PartInspection {
@@ -69,21 +86,24 @@ function isNameStart(ch: string): boolean {
  *   - nebalansirane ili krivo ugnijezdjene tagove,
  *   - samostalan `<` u tekstu,
  *   - `&` koji ne zapocinje valjan entitet,
- *   - prefiks (`r:id`, `w:val`) koji u DOSEGU nema svoju `xmlns:` deklaraciju (RE-60).
+ *   - uz `options.namespaces`: prefiks (`r:id`, `w:val`) koji u DOSEGU nema `xmlns:` deklaraciju
+ *     (RE-60).
  *
  * Namjerno NE validira shemu (to je posao Tier 1/2 oraclea: python-docx, Word).
  *
  * ZASTO I VEZANJE PREFIKSA: nevezan prefiks nije stvar sheme nego namespace-well-formedness, i
  * @xmldom/xmldom ga odbija s `NamespaceError: prefix is non-null and namespace is null`, kao i
- * lxml i Word. Do 2026-09-12 je `link-doi-fixer` umetao `<w:hyperlink r:id="...">` bez deklaracije
- * na korijenu kad je dokument `xmlns:r` deklarirao LOKALNO na nekom drugom elementu, a
- * `integrityFailure` je ostajao `null` jer skener doseg nije pratio. Provjera zato ide kroz
- * postojeci `stack` (deklaracija vrijedi od elementa na kojem stoji do njegova zatvaranja), NIKAD
- * kao globalni regex nad cijelim nizom: globalni regex bi ponovio tocno onu gresku koja se
- * popravlja.
+ * lxml (`Namespace prefix r for id on hyperlink is not defined`) i Word. Do 2026-09-12 je
+ * `link-doi-fixer` umetao `<w:hyperlink r:id="...">` bez deklaracije na korijenu kad je dokument
+ * `xmlns:r` deklarirao LOKALNO na nekom drugom elementu, a `integrityFailure` je ostajao `null`
+ * jer skener doseg nije pratio. Provjera zato ide kroz postojeci `stack` (deklaracija vrijedi od
+ * elementa na kojem stoji do njegova zatvaranja), NIKAD kao globalni regex nad cijelim nizom:
+ * globalni regex bi ponovio tocno onu gresku koja se popravlja.
  */
-export function scanXmlWellFormed(xml: string): XmlScanResult {
-  const fail = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset });
+export function scanXmlWellFormed(xml: string, options: XmlScanOptions = {}): XmlScanResult {
+  const checkNamespaces = options.namespaces === true;
+  const fail = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset, kind: 'structure' });
+  const failNamespace = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset, kind: 'namespace' });
   const stack: Array<{ name: string; offset: number; declared: string[] }> = [];
   /**
    * Prefiksi deklarirani u trenutnom dosegu, s brojem razina koje ih deklariraju. Brojac, a ne
@@ -216,13 +236,15 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
      * upisuju tek kad su svi atributi procitani, a provjera ide odmah nakon toga.
      */
     const declaredHere: string[] = [];
-    for (const attr of seenAttrs) if (attr.startsWith('xmlns:') && attr.length > 6) declaredHere.push(attr.slice(6));
-    declare(declaredHere);
-    const unboundName = unboundPrefixOf(name);
-    if (unboundName) return fail(`prefiks ${unboundName}: u <${name}> nema xmlns deklaraciju u dosegu`, lt);
-    for (const attr of seenAttrs) {
-      const unboundAttr = unboundPrefixOf(attr);
-      if (unboundAttr) return fail(`prefiks ${unboundAttr}: u atributu ${attr} (<${name}>) nema xmlns deklaraciju u dosegu`, lt);
+    if (checkNamespaces) {
+      for (const attr of seenAttrs) if (attr.startsWith('xmlns:') && attr.length > 6) declaredHere.push(attr.slice(6));
+      declare(declaredHere);
+      const unboundName = unboundPrefixOf(name);
+      if (unboundName) return failNamespace(`prefiks ${unboundName}: u <${name}> nema xmlns deklaraciju u dosegu`, lt);
+      for (const attr of seenAttrs) {
+        const unboundAttr = unboundPrefixOf(attr);
+        if (unboundAttr) return failNamespace(`prefiks ${unboundAttr}: u atributu ${attr} (<${name}>) nema xmlns deklaraciju u dosegu`, lt);
+      }
     }
 
     if (selfClosing) undeclare(declaredHere);

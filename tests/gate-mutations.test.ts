@@ -57,7 +57,7 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
-import { scanXmlWellFormed } from '../src/repair/package-integrity';
+import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -169,13 +169,32 @@ function evidenceFor(ruleCheckId: string, checkId: string, title: string, catego
   return Object.keys(buildExactEvidence([check], [issue], [entry])).length;
 }
 
-/** RE-60: `word/document.xml` u kojem `r:` nema deklaraciju u dosegu (ona stoji lokalno, nize). */
+/**
+ * RE-60. ULAZ je valjan: `xmlns:r` je deklariran LOKALNO na `w:footerReference`, sto je legalan
+ * XML. IZLAZ nosi hipervezu s `r:id` u tijelu, dakle izvan dosega te deklaracije, i vise nije
+ * namespace-well-formed (@xmldom/xmldom i lxml ga odbijaju). Kontrolni izlaz je isti dokument s
+ * deklaracijom na korijenu.
+ */
 const REL_NS_FOR_MUTATION = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
-const UNBOUND_PREFIX_DOCUMENT =
+const RE60_INPUT =
   '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
-  + '<w:p><w:hyperlink r:id="rId1" w:history="1"><w:r><w:t>https://doi.org/10.1234/abc</w:t></w:r></w:hyperlink></w:p>'
+  + '<w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p>'
   + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL_NS_FOR_MUTATION}"/></w:sectPr>`
   + '</w:body></w:document>';
+const RE60_BAD_OUTPUT = RE60_INPUT.replace(
+  '<w:r><w:t>doi:10.1234/abc</w:t></w:r>',
+  '<w:hyperlink r:id="rId1" w:history="1"><w:r><w:t>https://doi.org/10.1234/abc</w:t></w:r></w:hyperlink>',
+);
+const RE60_GOOD_OUTPUT = RE60_BAD_OUTPUT.replace('<w:document ', `<w:document xmlns:r="${REL_NS_FOR_MUTATION}" `);
+/** Vrata integriteta nad JEDNIM promijenjenim dijelom; ostali argumenti su neutralni. */
+const re60Gate = (output: string) =>
+  detectIntegrityFailure(
+    [{ name: 'word/document.xml', xml: output }],
+    ['word/document.xml'],
+    ['word/document.xml'],
+    [],
+    { 'word/document.xml': RE60_INPUT },
+  );
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1196,8 +1215,8 @@ const MUTATIONS: Mutation[] = [
     imitates:
       'popravljeni word/document.xml koristi prefiks r: izvan dosega njegove xmlns deklaracije, pa ga '
       + 'Word odbija otvoriti dok vrata integriteta javljaju da je paket ispravan',
-    caught: () => !scanXmlWellFormed(UNBOUND_PREFIX_DOCUMENT).ok,
-    cleanBefore: () => scanXmlWellFormed(UNBOUND_PREFIX_DOCUMENT.replace('<w:document ', `<w:document xmlns:r="${REL_NS_FOR_MUTATION}" `)).ok,
+    caught: () => re60Gate(RE60_BAD_OUTPUT) !== null,
+    cleanBefore: () => re60Gate(RE60_GOOD_OUTPUT) === null,
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

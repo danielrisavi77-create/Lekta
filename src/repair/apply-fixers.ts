@@ -1005,12 +1005,23 @@ export function detectIntegrityFailure(
     if (part.xml.length === 0) {
       return { part: part.name, problem: 'dio paketa je nakon popravka prazan' };
     }
-    const scan = scanXmlWellFormed(part.xml);
+    const scan = scanXmlWellFormed(part.xml, { namespaces: true });
     if (!scan.ok) {
       // Ulaz se skenira SAMO ovdje, na vec propalom izlazu: normalan tijek time ne placi nista,
       // a poruka ne optuzuje nas za kvar koji je dosao s dokumentom (ni obrnuto).
       const before = originalXmlParts[part.name];
-      const preexisting = before !== undefined && !scanXmlWellFormed(before).ok;
+      const preexisting = before !== undefined && !scanXmlWellFormed(before, { namespaces: true }).ok;
+      /**
+       * NEVEZAN PREFIKS SE PRIJAVLJUJE SAMO AKO SMO GA MI UVELI (RE-60).
+       *
+       * Isto pravilo koje vec vrijedi za strukturu paketa nize: mjeri se i ULAZ, pa se
+       * zaustavlja samo ono sto je popravak dodao. Razlog je izmjeren: minimalni sinteticki
+       * dijelovi kroz ovaj repozitorij namjerno izostavljaju deklaracije (`<w:styles>` bez
+       * `xmlns:w`), a stvaran Word dokument ih uvijek ima. Bezuvjetno odbijanje bi kaznjavalo
+       * tudji ulaz, a ne nas zahvat. Slucaj zbog kojeg gard postoji je upravo NOV: ulaz je bio
+       * valjan (deklaracija lokalno na `w:footerReference`), izlaz nije.
+       */
+      if (scan.kind === 'namespace' && preexisting) continue;
       return {
         part: part.name,
         problem: scan.problem ?? 'XML nije dobro oblikovan',
