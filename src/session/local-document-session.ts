@@ -3,6 +3,7 @@ import type { IntakeOk } from '../docx/intake-gate';
 export const LOCAL_DOCUMENT_SCHEMA_VERSION = 1 as const;
 export const LOCAL_DOCUMENT_TTL_MS = 24 * 60 * 60 * 1_000;
 export const STORED_ANALYSIS_SCHEMA_VERSION = 1 as const;
+export const REPAIR_SELECTION_SCHEMA_VERSION = 1 as const;
 
 const SESSION_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const WORKSPACE_STAGES = new Set<LocalWorkspaceSnapshot['stage']>([
@@ -25,10 +26,37 @@ export interface StoredAnalysisSnapshot {
   payload: unknown;
 }
 
+/**
+ * ODABIR POPRAVAKA, zapisan po IDENTITETU a ne po polozaju.
+ *
+ * `selected` nosi kljuceve oblika `fixerId|ruleId`, nikad indekse. Razlog je izmjeren, ne stilski:
+ * `buildAllRepairableItems` gradi popis iz SVJEZE analize i uvjetno (`only`, `includeNonViolated`,
+ * predlosci naslova), pa dvije analize istog dokumenta legitimno daju isti skup u drugom poretku i
+ * drugoj duljini. Vracanje po indeksu kvacilo bi krive kucice, i to tiho.
+ *
+ * `itemsDigest` je otisak PONUDJENOG skupa. Bez njega bi se odabir vracao na popis stavaka koji s
+ * njim nema veze: kljucevi bi se slucajno preklopili i korisnik bi dobio oznaceno ono sto nije
+ * birao. Kad se otisak ne poklapa, odabir se ODBACUJE, ne krpa.
+ *
+ * STO OVDJE NAMJERNO NIJE: odabir unutar naprednih formi (koja bibliografska jedinica, koji citat).
+ * Te su odluke izracunate iz JEDNE konkretne analize, pa bi ih vracanje na ponovno izvedenu formu
+ * primijenilo na stanje dokumenta koje korisnik nije vidio. Stavke s formom vracaju se neoznacene
+ * i sucelje to kaze.
+ */
+export interface RepairSelectionSnapshot {
+  schemaVersion: typeof REPAIR_SELECTION_SCHEMA_VERSION;
+  itemsDigest: string;
+  selected: string[];
+  /** Preklopnik "uskladi i rucno formatirane dijelove". */
+  deep: boolean;
+  updatedAt: number;
+}
+
 export interface LocalWorkspaceSnapshot {
   stage: 'profile' | 'results' | 'repairPlan' | 'comparison' | 'submission';
   selectedFindingId?: string;
   analysis?: StoredAnalysisSnapshot;
+  repairSelection?: RepairSelectionSnapshot;
 }
 
 export interface LocalDocumentSessionV1 {
@@ -214,7 +242,36 @@ function sanitizeAnalysis(value: unknown): StoredAnalysisSnapshot | null {
   }
 }
 
-function sanitizeWorkspaceMetadata(value: unknown): Omit<LocalWorkspaceSnapshot, 'analysis'> | null {
+/**
+ * Strog kao i ostali: tocan skup kljuceva, prvo odstupanje vraca `null`.
+ *
+ * Duplikati u `selected` se ODBIJAJU umjesto da se tiho saziimaju: dvostruki kljuc znaci da je
+ * zapis nastao krivim putem, a saziimanje bi taj put sakrilo.
+ */
+function sanitizeRepairSelection(value: unknown): RepairSelectionSnapshot | null {
+  if (!isRecord(value)) return null;
+  if (value.schemaVersion !== REPAIR_SELECTION_SCHEMA_VERSION) return null;
+  if (typeof value.itemsDigest !== 'string' || value.itemsDigest.length === 0) return null;
+  if (typeof value.deep !== 'boolean' || !isFiniteTimestamp(value.updatedAt)) return null;
+  if (!Array.isArray(value.selected)) return null;
+
+  const selected: string[] = [];
+  for (const key of value.selected) {
+    if (typeof key !== 'string' || key.length === 0) return null;
+    if (selected.includes(key)) return null;
+    selected.push(key);
+  }
+
+  return {
+    schemaVersion: REPAIR_SELECTION_SCHEMA_VERSION,
+    itemsDigest: value.itemsDigest,
+    selected,
+    deep: value.deep,
+    updatedAt: value.updatedAt,
+  };
+}
+
+function sanitizeWorkspaceMetadata(value: unknown): Omit<LocalWorkspaceSnapshot, 'analysis' | 'repairSelection'> | null {
   if (!isRecord(value) || typeof value.stage !== 'string') return null;
   if (!WORKSPACE_STAGES.has(value.stage as LocalWorkspaceSnapshot['stage'])) return null;
   if (!(value.selectedFindingId === undefined || typeof value.selectedFindingId === 'string')) return null;
@@ -230,6 +287,11 @@ function sanitizeWorkspace(value: unknown): LocalWorkspaceSnapshot | null {
   const workspace: LocalWorkspaceSnapshot = { ...metadata };
   const analysis = sanitizeAnalysis((value as Record<string, unknown>).analysis);
   if (analysis) workspace.analysis = analysis;
+  // Ista asimetrija kao za analizu, i iz istog razloga: nevaljan ODABIR ne smije srusiti sesiju,
+  // jer bi time korisnik zbog krivo zapisane kucice izgubio i dokument. Odabir se izostavi, a rad
+  // ostaje.
+  const repairSelection = sanitizeRepairSelection((value as Record<string, unknown>).repairSelection);
+  if (repairSelection) workspace.repairSelection = repairSelection;
   return workspace;
 }
 

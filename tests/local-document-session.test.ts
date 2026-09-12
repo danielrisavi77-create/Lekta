@@ -268,6 +268,44 @@ describe('model lokalne dokumentne sesije', () => {
     });
     expect(sanitizeLocalDocumentSession(valid, CREATED_AT + 500)?.workspace?.analysis?.payload).toEqual(validAnalysisPayload());
   });
+
+  /**
+   * ODABIR POPRAVAKA IMA ISTU ASIMETRIJU KAO ANALIZA, i to je namjerno (korak C1, 2026-09-12).
+   *
+   * Nevaljan `repairSelection` se IZOSTAVLJA, ali sesija prezivi. Suprotno bi znacilo da korisnik
+   * zbog krivo zapisane kucice izgubi i DOKUMENT, sto je nesrazmjerna kazna za podatak koji je
+   * samo udobnost. Nevaljan `profile` ili `stage` i dalje rusi cijelu sesiju, jer oni odredjuju
+   * PO CEMU se rad mjeri.
+   */
+  it('uklanja samo nevaljan odabir popravaka, a čuva dokument i analizu', () => {
+    const dobarOdabir = {
+      schemaVersion: 1,
+      itemsDigest: 'D1',
+      selected: ['heading-case-fixer|fpzg.heading.case'],
+      deep: false,
+      updatedAt: CREATED_AT + 300,
+    };
+
+    const sKrivomVerzijom = makeSession(SESSION_ID, {
+      workspace: { stage: 'results', repairSelection: { ...dobarOdabir, schemaVersion: 2 } },
+    });
+    const out = sanitizeLocalDocumentSession(sKrivomVerzijom, CREATED_AT + 500);
+    expect(out, 'nevaljan odabir NE SMIJE srušiti sesiju').not.toBeNull();
+    expect(out?.workspace?.stage).toBe('results');
+    expect(out?.workspace?.repairSelection, 'nevaljan odabir se izostavlja').toBeUndefined();
+
+    // Duplikat kljuca znaci da je zapis nastao krivim putem; sažimanje bi taj put sakrilo.
+    const sDuplikatom = makeSession(SESSION_ID, {
+      workspace: { stage: 'results', repairSelection: { ...dobarOdabir, selected: ['a|1', 'a|1'] } },
+    });
+    expect(sanitizeLocalDocumentSession(sDuplikatom, CREATED_AT + 500)?.workspace?.repairSelection)
+      .toBeUndefined();
+
+    // Baseline: ispravan odabir PROLAZI, inače bi gore bile tvrdnje o funkciji koja odbija sve.
+    const valjan = makeSession(SESSION_ID, { workspace: { stage: 'results', repairSelection: dobarOdabir } });
+    expect(sanitizeLocalDocumentSession(valjan, CREATED_AT + 500)?.workspace?.repairSelection?.selected)
+      .toEqual(['heading-case-fixer|fpzg.heading.case']);
+  });
 });
 
 describe('MemoryDocumentSessionStore', () => {
