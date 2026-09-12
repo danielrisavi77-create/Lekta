@@ -48,10 +48,20 @@ function bajtova(rel: string): number {
 
 /** Izmjereno 2026-09-03. Brojke se SPUSTAJU kako kod izlazi iz `app.ts`, nikad ne dizu. */
 /**
- * Povijest: 359 -> 357 (T16 B5, telemetrija izasla u `src/ui/telemetry.ts`).
- * Spusta se na IZMJERENU vrijednost svaki put kad kod izadje, nikad se ne dize.
+ * Povijest: 359 -> 357 KB (T16 B5, telemetrija izasla u `src/ui/telemetry.ts`), pa 357 KB -> 363608 B
+ * (2026-09-12, paket B: dupli pisac prikaza, otisak profila, odabir profila, otkrivacki ples,
+ * keSiranje panela i sjena stroja stanja).
+ *
+ * ZASTO VISE NIJE OKRUGAO BROJ: svaka okrugla vrijednost iznad izmjerene je SKRIVENI ZRAK. Uz
+ * `357 * 1024` bi ostalo 1960 bajta u koje bi sljedeca izmjena mogla narasti a da gard suti, sto
+ * je upravo ono protiv cega ovaj ratchet postoji. Cijena je da svako sljedece vadjenje mora
+ * dirati i ovu brojku; to je posao, ne smetnja.
+ *
+ * SLJEDECI KORAK (paket C) DODAJE u `app.ts` uske adaptere. Brojka se zbog toga NE DIZE: adapteri
+ * se placaju novim vadjenjem iz iste datoteke. Ako se pojavi pritisak da se digne, to je znak da
+ * kod pripada drugom modulu, ne da je gard prestrog.
  */
-const BUDZET_APP = 357 * 1024;
+const BUDZET_APP = 363608;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //
