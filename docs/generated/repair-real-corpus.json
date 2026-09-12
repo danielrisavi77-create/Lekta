@@ -914,13 +914,13 @@
       "profileId": "pravo-socijalni-rad-diplomski",
       "outcome": "pass",
       "before": {
-        "checkCount": 38,
+        "checkCount": 39,
         "passCount": 18,
-        "score": 68
+        "score": 67
       },
       "after": {
-        "checkCount": 38,
-        "passCount": 24,
+        "checkCount": 39,
+        "passCount": 25,
         "score": 88
       },
       "beforeEntryCount": 9,
@@ -935,6 +935,7 @@
         "page-number-alignment-fixer",
         "section-insert-fixer",
         "heading-format-fixer",
+        "footnote-typography-fixer",
         "final-document-inspector-fixer",
         "field-integrity-fixer",
         "consistency-fixer"
@@ -946,10 +947,11 @@
         "margins-fixer",
         "page-number-alignment-fixer",
         "heading-format-fixer",
+        "footnote-typography-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 6,
+      "targetedCheckCount": 7,
+      "targetedResolvedCount": 7,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
@@ -980,6 +982,7 @@
       ],
       "error": null,
       "statusChanges": [
+        "footnote.format:warn->pass",
         "format.font.dominant:fail->pass",
         "format.size.body:fail->pass",
         "format.spacing.body:fail->pass",
@@ -1345,8 +1348,8 @@
     "manualReviewCount": 11,
     "passRegressionCount": 0,
     "passRegressionChecks": [],
-    "targetedCheckCount": 45,
-    "targetedResolvedCount": 38,
+    "targetedCheckCount": 46,
+    "targetedResolvedCount": 39,
     "autoUnresolvedCount": 0,
     "autoUnresolvedChecks": [],
     "assistedUnresolvedCount": 7,

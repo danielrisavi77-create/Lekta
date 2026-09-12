@@ -2630,9 +2630,9 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Očekuje se Times New Roman 10, prored 1, razmak prije/poslije 0 i obostrano poravnanje.",
+      "detail": "Profil za fusnote propisuje: Times New Roman, 10 pt, prored 1, obostrano poravnanje.",
       "severity": "warning",
-      "title": "Fusnote odstupaju od pravnog profila",
+      "title": "Fusnote odstupaju od pravila profila",
       "where": "Fusnote",
     },
     {
@@ -2756,7 +2756,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Nije moguće utvrditi: Nijedna dimenzija oblikovanja fusnota (font, veličina, prored, poravnanje) nije zapisana u dokumentu.",
+      "detail": "Nije moguće utvrditi: Nijedna dimenzija koju profil propisuje (Times New Roman, 10 pt, prored 1, obostrano poravnanje) nije zapisana u dokumentu.",
       "earned": 0,
       "max": 0,
       "status": "unmeasurable",
