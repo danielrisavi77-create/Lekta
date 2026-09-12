@@ -116,36 +116,30 @@ describe('razlog nepokrivene celije', () => {
   });
 
   /**
-   * PONUDJENO A NEMJERLJIVO: razlog smije stajati SAMO ondje gdje kapija fixera prolazi.
+   * `profil-ne-propisuje-os` NE SMIJE STAJATI ONDJE GDJE KAPIJA FIXERA PROLAZI.
    *
-   * Razlika prema `profil-ne-propisuje-os` je cijela poanta ovog razloga. Ondje alat nema sto
-   * raditi; ovdje ima, stavka se gradi i korisniku se nudi, ali `violated` ostaje `false` zauvijek
-   * jer provjere u rezultatu nema. `buildDefaultRepairRequests` predodabire `violated !== false`,
-   * pa takva stavka nikad nije predodabrana, a `matchKeys` pokazuje na naslov kojeg nema, pa
-   * korelacija prije/poslije nema na sto sjesti.
+   * Kapija zrcali doslovan uvjet iz `src/ui/repair-items.ts` pod kojim se stavka uopce gradi. Ako
+   * prolazi, profil os propisuje i stavka se korisniku nudi, pa je oznaka ciji tekst glasi "fixer
+   * se ne nudi, i nema se sto dokazivati" neistinita u oba dijela.
    *
-   * IZMJERENO 2026-09-12: `efzg-seminarski` / `footnote-typography-fixer`. Provjeru "Oblikovanje
-   * fusnota" emitira samo profil s `legalFootnoteProfile`, a kapija fixera trazi `footnoteFont[0]`,
-   * `footnoteSize` ili `footnoteSpacing`; ta dva uvjeta nisu isti skup.
-   *
-   * ZAMKA KOJA JE OVDJE VEC JEDNOM PROSLA: ista mjera nad SIROVIM `data/profiles/**` daje 23
-   * profila umjesto 1, jer matrica i proizvod rade nad ZIVIM (slozenim, demotiranim) profilom.
-   * Mjeri `liveProfile`, nikad draftove.
+   * IZMJERENO 2026-09-12: uzrok je bila grana koja zakljucuje iz `paramsForCheck(...) === null`.
+   * Za `footnote.format` ta funkcija vraca `null` za SVAKI profil, ukljucujuci
+   * `pravo-porezni-prijediplomski`, koji je POKRIVEN, jer `footnoteTypographyRepairableItem` gradi
+   * parametre sam i kroz `paramsForCheck` nikad ne prolazi.
    */
-  it('razlog `fixer-se-nudi-a-provjere-nema` stoji samo gdje se fixer STVARNO nudi', () => {
-    const sTimRazlogom = nepokrivene.filter((c) => c.reason === 'fixer-se-nudi-a-provjere-nema');
-    // Donja granica: bez ijedne celije razred tiho nestane iz matrice i gard mjeri prazno.
+  it('`profil-ne-propisuje-os` ne stoji ondje gdje kapija fixera prolazi', () => {
+    const sTimRazlogom = nepokrivene.filter((c) => c.reason === 'profil-ne-propisuje-os');
+    // Anti-vakuum: prazan skup bi tvrdnju nize ucinio istinitom ni nad cim.
     expect(sTimRazlogom.length, 'nijedna celija s tim razlogom; je li lanac dijagnoze promijenjen?')
       .toBeGreaterThan(0);
-    for (const c of sTimRazlogom) {
+    const lazne = sTimRazlogom.filter((c) => {
       const kapija = PROFILE_GATE[c.fixerId];
-      expect(kapija, `${c.profileId}/${c.fixerId}: fixer nema kapiju, pa se ne moze tvrditi da se nudi`)
-        .toBeTypeOf('function');
-      const zivi = liveProfile(c.profileId);
-      expect(zivi, `${c.profileId}: nema zivog profila`).toBeTruthy();
-      expect(kapija(zivi as Record<string, unknown>), `${c.profileId}/${c.fixerId}: kapija NE prolazi, pa razlog laze`)
-        .toBe(true);
-    }
+      if (!kapija) return false;
+      const zivi = liveProfile(c.profileId) as Record<string, unknown> | null;
+      return Boolean(zivi && kapija(zivi));
+    });
+    expect(lazne.map((c) => `${c.profileId}/${c.fixerId}`), 'kapija prolazi, a oznaka tvrdi da profil os ne propisuje')
+      .toEqual([]);
   });
 
   it('svaka nepokrivena celija ima razlog iz zatvorenog popisa', () => {
@@ -155,9 +149,6 @@ describe('razlog nepokrivene celije', () => {
       // Pomocni (`dispatch-only`) fixer: unos u changelog nosi onaj koji ga zove, pa mu je dokaz
       // kroz `fixersChanged` strukturno nedostizan. Razred se izvodi iz `REPAIR_SURFACE`.
       'pomocni-fixer-dokaz-nosi-pozivatelj',
-      // Kapija fixera PROLAZI (stavka se korisniku nudi), a proizvod tu os ne boduje, pa ju
-      // nijedna provjera ne moze oznaciti prekrsenom. Vidi tvrdnju nize.
-      'fixer-se-nudi-a-provjere-nema',
     ]);
     const nepoznati = [...new Set(nepokrivene.map((c) => c.reason).filter((r) => !r || !dopusteni.has(r)))];
     expect(nepoznati).toEqual([]);

@@ -116,12 +116,6 @@ export interface CellEvidence {
 export type UncoveredReason =
   /** Nijedno pravilo profila ne gadja taj fixer; nema sto popraviti dok se pravilo ne doda. */
   | 'profil-ne-propisuje-os'
-  /**
-   * Profil os PROPISUJE i fixer mu se STVARNO nudi, ali ga proizvod ne boduje, pa ga nijedna
-   * provjera ne moze oznaciti prekrsenim. Razlikuje se od `profil-ne-propisuje-os` po tome sto
-   * ondje alat nema sto raditi, a ovdje ima i nudi se, samo se ucinak ne moze izmjeriti.
-   */
-  | 'fixer-se-nudi-a-provjere-nema'
   /** Univerzalna higijena: vrijedi za svaki dokument, ali dokaza jos nema. Zatvara se generatorom. */
   | 'univerzalna-higijena-bez-dokaza'
   /** Profil os propisuje, closed-loop ju je pokusao popraviti i nije uspio. Stvaran jaz motora. */
@@ -430,7 +424,6 @@ const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
 export function emptyByReason(): Record<UncoveredReason, number> {
   return {
     'profil-ne-propisuje-os': 0,
-    'fixer-se-nudi-a-provjere-nema': 0,
     'univerzalna-higijena-bez-dokaza': 0,
     'closed-loop-nije-rijesio': 0,
     'nema-dokaza': 0,
@@ -662,36 +655,29 @@ export function uncoveredReason(
   checkIds: string[] = [],
 ): UncoveredReason {
   /**
-   * FIXER SE NUDI, A PROVJERE KOJA BI GA MOGLA OZNACITI PREKRSENIM NEMA.
+   * KAPIJA KOJA PROLAZI IMA PREDNOST PRED `paramsForCheck`, i to je ispravak iz 2026-09-12.
    *
-   * Ova grana stoji PRVA, ali je usko ogradjena, pa uzima samo celije u kojima su ISTOVREMENO
-   * istinite dvije stvari koje se inace medjusobno iskljucuju:
+   * Grana nize zakljucuje "profil os ne propisuje" iz toga sto `paramsForCheck` za sve `checkIds`
+   * vrati `null`. Ta pretpostavka vrijedi samo za osi koje `paramsForCheck` UOPCE POZNAJE.
    *
-   *     kapija fixera PROLAZI        profil propisuje os i `buildAllRepairableItems` stavku GRADI
-   *     `paramsForCheck` je `null`   proizvod tu os ne boduje, pa provjere u rezultatu NEMA
+   * IZMJERENO na `footnote.format`: vraca `null` za SVAKI profil, ukljucujuci
+   * `pravo-porezni-prijediplomski`, koji je u matrici POKRIVEN. Razlog je sto
+   * `footnoteTypographyRepairableItem` gradi parametre sam, iz `footnoteFont`/`footnoteSize`/
+   * `footnoteSpacing`, i nikad ne prolazi kroz `paramsForCheck`. Posljedica je bila da su sve
+   * nepokrivene celije tog fixera nosile `profil-ne-propisuje-os`, i za profile koji os propisuju.
    *
-   * Bez nje takva celija pada na sljedecu granu i dobiva `profil-ne-propisuje-os`, cije
-   * obrazlozenje doslovno glasi "fixer se ne nudi, i nema se sto dokazivati". Za ove profile je to
-   * NEISTINA u oba dijela: stavka se nudi, i ima se sto dokazati, samo se ne moze.
+   * `PROFILE_GATE` je pouzdaniji svjedok, jer ZRCALI doslovan uvjet iz `src/ui/repair-items.ts` pod
+   * kojim se stavka uopce gradi. Kad ta kapija PRODJE, profil os propisuje, pa `paramsForCheck`
+   * vise ne smije presuditi suprotno; dijagnoza ide dalje niz lanac i zavrsi kao `nema-dokaza`
+   * odnosno `closed-loop-nije-rijesio`, sto je prava, imenovana rupa u pokrivenosti.
    *
-   * IZMJERENO 2026-09-12 na `footnote-typography-fixer`: od 28 profila kojima se nudi (pozitivan
-   * `footnoteFont[0]`, `footnoteSize` ili `footnoteSpacing`), samo 5 ima `legalFootnoteProfile`,
-   * dakle jedini izvor provjere "Oblikovanje fusnota". Preostala 23 dobiju ponudjenu stavku uz
-   * `violated: false` zauvijek: `buildDefaultRepairRequests` predodabire `violated !== false`, pa
-   * ju korisnik mora ukljuciti rucno, a `matchKeys` pokazuje na naslov provjere koje u rezultatu
-   * nema, pa korelacija prije/poslije nema na sto sjesti.
-   *
-   * REDOSLIJED JE UGOVOR, kao i kod `pomocni-fixer-dokaz-nosi-pozivatelj`: ondje je prva izvedba
-   * stajala na vrhu bez ograde i uzela 407 celija umjesto 4. Ograda je zato KONJUNKCIJA, ne
-   * disjunkcija, i trazi da kapija postoji I prodje.
+   * POVUCEN RAZLOG: do ovog commita je ovdje stajao `fixer-se-nudi-a-provjere-nema`, uveden jedan
+   * commit ranije za celije u kojima se fixer nudi a provjere nema. Prosirenje provjere
+   * "Oblikovanje fusnota" izvan `legalFootnoteProfile` uklonilo je tocno to stanje, pa razlog vise
+   * nije bio istinit ni nad jednom celijom. Zapis o kvaru ostaje u povijesti; oznaka ne ostaje.
    */
   const kapijaFixera = PROFILE_GATE[fixerId];
-  if (
-    kapijaFixera && profile && kapijaFixera(profile) &&
-    checkIds.length > 0 && checkIds.every((id) => paramsForCheck(id, profile) === null)
-  ) {
-    return 'fixer-se-nudi-a-provjere-nema';
-  }
+  const kapijaPropisuje = Boolean(kapijaFixera && profile && kapijaFixera(profile));
   /**
    * OS KOJU ZIVI PROFIL NE BODUJE nije rupa nego neprimjenjivost, i to je ispravak iz 2026-09-09.
    *
@@ -704,15 +690,14 @@ export function uncoveredReason(
    * proizvod ne boduje. Isti razred kao preimenovanje 78 celija 2026-08-31: broj nepokrivenih se ne
    * mijenja, mijenja se sto o njima tvrdimo.
    */
-  if (checkIds.length && profile && checkIds.every((id) => paramsForCheck(id, profile) === null)) {
+  if (!kapijaPropisuje && checkIds.length && profile && checkIds.every((id) => paramsForCheck(id, profile) === null)) {
     return 'profil-ne-propisuje-os';
   }
   // Alat kojem je zadani odabir prazan po konstrukciji: nijedna os ga ne moze dokazati.
   if (UNDECIDABLE_FIXERS.has(fixerId)) return 'ceka-ljudski-odabir';
   if (OUT_OF_DOCUMENT_FIXERS.has(fixerId)) return 'trazi-ulaz-izvan-dokumenta';
   // Profil koji os ne propisuje: fixer se za njega uopce ne nudi, pa se nema sto dokazivati.
-  const gate = PROFILE_GATE[fixerId];
-  if (gate && profile && !gate(profile)) return 'profil-ne-propisuje-os';
+  if (kapijaFixera && profile && !kapijaPropisuje) return 'profil-ne-propisuje-os';
   // Asistirano pravilo bez kojeg graditelj radi tvrdi `return []`: bez njega se fixer ne nudi
   // ni kao preporuka, pa se za taj profil nema sto dokazivati.
   const ruleCheckId = ASSISTED_RULE_GATE[fixerId];
@@ -750,9 +735,16 @@ export function uncoveredReason(
   if ((REPAIR_SURFACE as Record<string, { kind?: string }>)[fixerId]?.kind === 'dispatch-only') {
     return 'pomocni-fixer-dokaz-nosi-pozivatelj';
   }
-  const kapijaProsla = Boolean((gate && profile) || (ruleCheckId && profileId));
+  const kapijaProsla = Boolean((kapijaFixera && profile) || (ruleCheckId && profileId));
   if (ruleCount === 0) {
-    if (isGated) return 'profil-ne-propisuje-os';
+    /**
+     * I OVDJE KAPIJA IMA PREDNOST. `isGated` ne znaci "profil os propisuje" nego samo "fixer ima
+     * redke u `repair-coverage`". Ti se redci izvode iz SIROVIH pravila, pa profil koji os propisuje
+     * u ZIVOM obliku moze imati nula redaka i svejedno dobiti ponudjenu stavku. Izmjereno
+     * 2026-09-12: 51 celija s prolaznom kapijom nosila je oznaku da profil os ne propisuje, i sve su
+     * dolazile odavde, ne iz grane s `paramsForCheck`.
+     */
+    if (isGated && !kapijaPropisuje) return 'profil-ne-propisuje-os';
     return kapijaProsla ? 'nema-dokaza' : 'univerzalna-higijena-bez-dokaza';
   }
   // Profil os propisuje. Je li ju closed-loop pokusao i nije uspio, ili ju nikad nije dotaknuo?

@@ -863,43 +863,36 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
-    id: 'dijagnoza/ponudjeno-a-nemjerljivo-procita-se-kao-neprimjenjivo',
+    id: 'dijagnoza/sonda-koja-os-ne-poznaje-procita-se-kao-odsutno-pravilo',
     imitates:
-      'celija u kojoj se fixer korisniku STVARNO nudi, a proizvod tu os ne boduje, padne na razlog ' +
-      '`profil-ne-propisuje-os`, cije obrazlozenje doslovno glasi "fixer se ne nudi, i nema se sto ' +
-      'dokazivati". Oba dijela su tada neistinita. Izmjereno 2026-09-12 na `efzg-seminarski` / ' +
-      '`footnote-typography-fixer`: kapija fixera trazi `footnoteFont[0]`, `footnoteSize` ili ' +
-      '`footnoteSpacing`, a provjeru "Oblikovanje fusnota" emitira samo profil s ' +
-      '`legalFootnoteProfile`, pa `violated` ostaje `false` zauvijek. Posljedica nije samo oznaka: ' +
-      '`buildDefaultRepairRequests` predodabire `violated !== false`, pa stavka nikad nije ' +
-      'predodabrana, a `matchKeys` gadja naslov provjere koje u rezultatu nema',
+      'lanac dijagnoze zakljucuje "profil os ne propisuje" iz toga sto `paramsForCheck` vrati `null`. ' +
+      'Ta pretpostavka vrijedi samo za osi koje ta funkcija UOPCE POZNAJE. Izmjereno 2026-09-12 na ' +
+      '`footnote.format`: vraca `null` za svaki profil, ukljucujuci `pravo-porezni-prijediplomski`, ' +
+      'koji je u matrici POKRIVEN, jer `footnoteTypographyRepairableItem` gradi parametre sam i kroz ' +
+      '`paramsForCheck` nikad ne prolazi. Sonda koja os ne poznaje time izgleda kao odsutno pravilo, ' +
+      'i oznaka tvrdi da se fixer ne nudi bas ondje gdje se korisniku nudi',
     caught: () => {
-      type Celija = { kapijaProlazi: boolean; bodujeSe: boolean };
-      // Lanac BEZ nove grane: sve sto se ne boduje zavrsi kao "profil ne propisuje os".
-      const bezGrane = (c: Celija) => (c.bodujeSe ? 'nema-dokaza' : 'ne-propisuje');
-      // Lanac S granom: ponudjeno-a-nebodovano dobiva vlastitu, tocniju istinu.
-      const sGranom = (c: Celija) =>
-        c.kapijaProlazi && !c.bodujeSe ? 'nudi-se-bez-provjere' : c.bodujeSe ? 'nema-dokaza' : 'ne-propisuje';
-      const ponudjenoNemjerljivo: Celija = { kapijaProlazi: true, bodujeSe: false };
-      return bezGrane(ponudjenoNemjerljivo) === 'ne-propisuje'
-        && sGranom(ponudjenoNemjerljivo) === 'nudi-se-bez-provjere';
+      type Celija = { kapijaProlazi: boolean; sondaZnaOs: boolean };
+      // Sonda vraca `null` i kad os ne poznaje, pa se ta dva stanja izvana ne razlikuju.
+      const sonda = (c: Celija) => (c.sondaZnaOs ? 'ima-pravilo' : null);
+      const bezPrednosti = (c: Celija) => (sonda(c) === null ? 'ne-propisuje' : 'dalje');
+      const sPrednoscu = (c: Celija) => (!c.kapijaProlazi && sonda(c) === null ? 'ne-propisuje' : 'dalje');
+      // Profil koji os PROPISUJE (kapija prolazi), a sonda tu os ne poznaje.
+      const propisujeAliSondaSlijepa: Celija = { kapijaProlazi: true, sondaZnaOs: false };
+      return bezPrednosti(propisujeAliSondaSlijepa) === 'ne-propisuje'
+        && sPrednoscu(propisujeAliSondaSlijepa) === 'dalje';
     },
     /**
-     * Netrivijalnost ima DVIJE polovice, jer su moguca dva suprotna promasaja.
-     *
-     * Prva: celija kojoj kapija NE prolazi mora i dalje nositi `ne-propisuje`; inace bi nova grana
-     * pojela celije kojima alat doista nema sto raditi, sto je tocno kvar koji je
-     * `pomocni-fixer-dokaz-nosi-pozivatelj` vec jednom napravio (407 umjesto 4).
-     *
-     * Druga: celija koja se BODUJE ne smije zavrsiti na novoj grani, inace bi razlog prikrio
-     * stvarnu rupu u pokrivenosti.
+     * Netrivijalnost u oba smjera: profil kojemu kapija NE prolazi mora i dalje zavrsiti na
+     * `ne-propisuje` (inace bi prednost pojela celije kojima alat doista nema sto raditi), a celija
+     * kojoj sonda pravilo NADJE mora ici dalje niz lanac i bez kapije.
      */
     cleanBefore: () => {
-      type Celija = { kapijaProlazi: boolean; bodujeSe: boolean };
-      const sGranom = (c: Celija) =>
-        c.kapijaProlazi && !c.bodujeSe ? 'nudi-se-bez-provjere' : c.bodujeSe ? 'nema-dokaza' : 'ne-propisuje';
-      return sGranom({ kapijaProlazi: false, bodujeSe: false }) === 'ne-propisuje'
-        && sGranom({ kapijaProlazi: true, bodujeSe: true }) === 'nema-dokaza';
+      type Celija = { kapijaProlazi: boolean; sondaZnaOs: boolean };
+      const sonda = (c: Celija) => (c.sondaZnaOs ? 'ima-pravilo' : null);
+      const sPrednoscu = (c: Celija) => (!c.kapijaProlazi && sonda(c) === null ? 'ne-propisuje' : 'dalje');
+      return sPrednoscu({ kapijaProlazi: false, sondaZnaOs: false }) === 'ne-propisuje'
+        && sPrednoscu({ kapijaProlazi: false, sondaZnaOs: true }) === 'dalje';
     },
   },
   {
