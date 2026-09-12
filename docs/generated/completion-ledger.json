@@ -5000,11 +5000,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
-      "proofSource": null,
+      "proof": "real-docx-pass",
+      "proofSource": "profile",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -5018,9 +5018,7 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -13144,15 +13142,15 @@
       "manual-only": 53
     },
     "byProof": {
-      "real-docx-pass": 41,
-      "synthetic-pass": 347,
+      "real-docx-pass": 42,
+      "synthetic-pass": 346,
       "review": 0,
       "not-run": 48
     },
     "byProofSource": {
-      "profile": 18,
+      "profile": 19,
       "unit-work-type": 23,
-      "none": 395
+      "none": 394
     },
     "byAssets": {
       "exact-official": 13,
@@ -13183,8 +13181,8 @@
       "unknown": 3
     },
     "byClaim": {
-      "A": 37,
-      "B": 301,
+      "A": 38,
+      "B": 300,
       "C": 8,
       "D": 42,
       "E": 48
