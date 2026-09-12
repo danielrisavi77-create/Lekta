@@ -76,6 +76,7 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
+import { scanXmlWellFormed } from '../src/repair/package-integrity';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -197,6 +198,14 @@ function evidenceFor(ruleCheckId: string, checkId: string, title: string, catego
   } as never;
   return Object.keys(buildExactEvidence([check], [issue], [entry])).length;
 }
+
+/** RE-60: `word/document.xml` u kojem `r:` nema deklaraciju u dosegu (ona stoji lokalno, nize). */
+const REL_NS_FOR_MUTATION = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+const UNBOUND_PREFIX_DOCUMENT =
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+  + '<w:p><w:hyperlink r:id="rId1" w:history="1"><w:r><w:t>https://doi.org/10.1234/abc</w:t></w:r></w:hyperlink></w:p>'
+  + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL_NS_FOR_MUTATION}"/></w:sectPr>`
+  + '</w:body></w:document>';
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
