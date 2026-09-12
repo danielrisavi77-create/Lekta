@@ -761,59 +761,32 @@ body.is-scrolling .section *{box-shadow:none!important}
 .rail-form-title{font:600 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-ink);margin-right:auto}
 .rail-step{display:inline-flex;align-items:center;gap:7px;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);background:none;border:0;padding:0}
 .rail-step b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--paper-line);background:none;color:var(--paper-muted);font-size:9.5px;font-weight:600}
-/* TRAKA KORAKA: JEDAN BLOK, STANJE IZVEDENO IZ DOM-a ------------------------------------------
+/* TRAKA FAZA: STANJE JE PODATAK, PISE GA JEDINI PISAC PRIKAZA --------------------------------
  *
- * Do 2026-09-07 su stanja bila rasuta na tri mjesta i vozena razlicitim stvarima: `has-file`
- * (ima li datoteke), `data-step` (gdje je carobnjak) i zatecena paleta. Korak 4 tada nije ni
- * postojao, pa je faza popravka bila nevidljiva.
+ * Do 2026-09-10 je stanje izvodio `:has()` lanac iz `.hidden` i `data-step`. Tada je to bila
+ * ispravna odluka, i njezin je razlog vrijedan zapisa: pisaca prikaza bilo je vise, pa bi cetvrti,
+ * koji bi odrzavao kopiju za traku, mogao odlutati od njih; citanje ne moze odlutati jer kopije
+ * nema.
  *
- * ZASTO IZVOD IZ DOM-a, A NE VARIJABLA: stanje faze u `app.ts` ima TRI pisca (`renderView`,
- * `setWizardStep`, i dva mjesta koja skrivaju `#resultView` izravno). Cetvrti pisac koji bi
- * odrzavao kopiju za traku mogao bi se razici s njima; citanje `:has()` ne moze, jer nema kopije,
- * nego gleda ono sto ti pisci proizvedu. Konsolidacija tih pisaca je stvaran dug, ali zaseban
- * zadatak: ne mijesa se s izgledom.
+ * ZASTO SE SADA MIJENJA: od koraka A1 pisac je doista JEDAN (`renderView`), pa izvod iz DOM-a vise
+ * nista ne kupuje, a cijena je ostala. Lanac je vezao izgled uz MEHANIKU prikaza (koja je povrsina
+ * skrivena) umjesto uz FAZU, pa je svaka nova povrsina trazila jos jedan krak po stanju, a traka
+ * je usput tvrdila da korisnik popravlja cim je nalaz na ekranu.
  *
- * AKTIVAN je korak na kojem korisnik JEST; GOTOV je svaki prije njega. Cetvrti je aktivan dok je
- * nalaz na ekranu, jer se popravci biraju ondje.
+ * `data-state` je `gotov`, `aktivan` ili `slijedi`. CSS ga samo crta.
  */
 .rail-step[data-rail] b{background:none;border-color:var(--paper-line);color:var(--paper-muted)}
 .rail-step[data-rail]{color:var(--paper-muted)}
 
 /* aktivan */
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="1"]) .rail-step[data-rail="1"],
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="2"],
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="3"],
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"],
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="4"]{color:var(--paper-ink)}
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="1"]) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="3"] b,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="4"] b{
-  border-color:var(--red-deep);color:var(--red-deep);
-}
+.rail-step[data-state="aktivan"]{color:var(--paper-ink)}
+.rail-step[data-state="aktivan"] b{border-color:var(--red-deep);color:var(--red-deep)}
 
 /* gotov: kvacica umjesto broja, da se prijedjeni put vidi bez citanja */
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b{
+.rail-step[data-state="gotov"] b{
   border-color:var(--pass);background:var(--pass);color:var(--on-brand,#fff);font-size:0;
 }
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="2"] b::after,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="2"] b::after,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="2"] b::after,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b::after{
-  content:"\2713";font-size:11px;line-height:1;
-}
+.rail-step[data-state="gotov"] b::after{content:"\2713";font-size:11px;line-height:1}
 .rail-line{width:14px;height:0;border-top:1px solid var(--paper-line);background:none;flex:none}
 .analyzer-body{padding:30px}
 .wizard-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:34px;align-items:start}
@@ -1376,10 +1349,7 @@ body.is-scrolling .section *{box-shadow:none!important}
 .wizard-rail{display:flex;gap:9px;padding:9px 16px;overflow:hidden}
 .wizard-rail .rail-form-title{display:none}
 .rail-step .rail-lbl{display:none}
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="1"]) .rail-step[data-rail="1"] .rail-lbl,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="2"] .rail-lbl,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="3"] .rail-lbl,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="4"] .rail-lbl{display:inline}
+.rail-step[data-state="aktivan"] .rail-lbl{display:inline}
   .analyzer-body{padding:12px}
   #wizardView[data-step="1"] .dropzone{min-height:168px;padding:14px 12px}
   #dropzone::after{font-size:17px;top:6px}

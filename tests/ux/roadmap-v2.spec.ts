@@ -16,8 +16,9 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
     // Preostale tvrdnje SU ono sto naslov testa kaze: upload i njegova primarna akcija bez
     // skrolanja. Dvije uklonjene bile su o marketinskom naslovu, koji vise ne postoji.
     //
-    // TRAKA KORAKA NIJE ZAMJENA, iako bi po smislu bila: `.wizard-rail` je ispod 720 px
-    // `display:none` i to je ZATECENA odluka (pravilo postoji i u HEAD-u prije ovog rada).
+    // TRAKA KORAKA NIJE ZAMJENA, iako bi po smislu bila. NAPOMENA: tvrdnja ispod je ZASTARJELA
+    // od 2026-09-07, kada je traka na mobitelu vracena (natpis samo na aktivnom koraku); cuva se
+    // jer objasnjava zasto su ove dvije tvrdnje uopce napisane ovako.
     // Na mobitelu dakle nema pokazatelja polozaja u toku. Zabiljezeno kao nalaz, ne popravljeno
     // ovdje: promjena bi bila UX odluka vlasnika, a ne popravak slomljenog testa.
     await expectInsideFold(page, '#dropzone', viewport.height);

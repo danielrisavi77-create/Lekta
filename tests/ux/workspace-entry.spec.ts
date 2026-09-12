@@ -218,6 +218,8 @@ test('/rad/ traka koraka: na mobitelu postoji, u jednom retku, s natpisom samo n
    * natpisa se na 390 px lome u TRI retka i uzimaju 108 px pregiba (izmjereno). Posljedica je
    * ipak bila da mobilni korisnik nema NIKAKAV pokazatelj polozaja u toku, dok ga desktop ima.
    *
+   * Od 2026-09-10 koraka su TRI, ne cetiri, i nose korisnicke faze umjesto koraka carobnjaka.
+   *
    * Rjesenje nije bilo sakriti traku nego natpise. Brojevi nose redoslijed, natpis se cuva samo
    * na aktivnom koraku, i cijela informacija stane u jedan redak (40 px umjesto 108).
    *
@@ -244,10 +246,16 @@ test('/rad/ traka koraka: na mobitelu postoji, u jednom retku, s natpisom samo n
       snatpisom: koraci.filter((k) => k.natpisVidljiv).length,
       ukupno: koraci.length,
       prelijeva: r.scrollWidth > r.clientWidth + 1,
+      aktivnih: r.querySelectorAll('[aria-current="step"]').length,
+      skriveniOdCitaca: r.getAttribute('aria-hidden') === 'true',
     };
   });
 
-  expect(m.ukupno, 'traka mora imati sva cetiri koraka').toBe(4);
+  expect(m.ukupno, 'traka mora imati sve tri faze').toBe(3);
+  // Traka je od 2026-09-10 IZLOZENA citacu ekrana (prije je bila `aria-hidden`), pa se to i
+  // mjeri: tocno jedan korak nosi `aria-current`, inace bi dva "trenutacno" zvucala tocno.
+  expect(m.aktivnih, 'tocno jedan korak smije biti oznacen kao trenutacni').toBe(1);
+  expect(m.skriveniOdCitaca, 'traka vise ne smije biti aria-hidden').toBe(false);
   // Jedan redak: razlika u `y` je poravnanje osnovice, ne prelom. Prag od 8 px je iznad te
   // razlike (izmjereno 0,9 px) a daleko ispod visine retka (~22 px), pa razlikuje to dvoje.
   expect(m.raspony, 'koraci su se prelomili u vise redaka').toBeLessThan(8);
