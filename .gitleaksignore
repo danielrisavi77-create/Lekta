@@ -26,3 +26,19 @@ cf38fb02655adb69238287206b4220d63fa93666:docs/audit/AUDIT_2026-07-16/10_CODE_TS.
 # dalje obara gard.
 a229f00896f07bad2d27f0c028627437740ed7a3:scripts/autonomy/tests/test_signals.py:jwt:13
 a229f00896f07bad2d27f0c028627437740ed7a3:scripts/autonomy/tests/test_signals.py:private-key:18
+
+# 2026-09-12: 13 nalaza iz TUDJE grane feature/repair-contract-v1-current-v2 (wordreplica release-key, sinteticki kljucevi u
+# testovima i specovima); skener vidi sve grane pa obara PR koji taj kod ne sadrzi. Isti presedan kao 009ef246.
+1c0761ca18542627350a9c0db535a87558f18ed1:docs/superpowers/specs/2026-09-11-lekta-wordreplica-release-key-binding-design.md:generic-api-key:75
+2a80212c8ef5b529a8ebbfb785c59a8b26623de2:docs/superpowers/plans/2026-09-11-lekta-wordreplica-release-key-binding.md:generic-api-key:921
+4df1cd31d27930edc63c353d98fa465f03a1be52:tests/repair-local-release-cli.test.ts:generic-api-key:87
+8cf328cf03da8adee658373c24b7d71cab85bce4:tests/fixtures/repair-local-status-v1/wordreplica-python.json:generic-api-key:2
+8cf328cf03da8adee658373c24b7d71cab85bce4:tests/fixtures/repair-local-status-v1/wordreplica-python.json:generic-api-key:3
+8cf328cf03da8adee658373c24b7d71cab85bce4:tests/repair-local-issue-service.test.ts:generic-api-key:48
+8cf328cf03da8adee658373c24b7d71cab85bce4:tests/repair-local-release-gate.test.ts:generic-api-key:26
+8cf328cf03da8adee658373c24b7d71cab85bce4:tests/repair-local-release-gate.test.ts:generic-api-key:55
+ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-cli.test.ts:generic-api-key:33
+ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-cli.test.ts:generic-api-key:37
+ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-cli.test.ts:generic-api-key:43
+ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-cli.test.ts:generic-api-key:48
+ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-gate.test.ts:generic-api-key:16

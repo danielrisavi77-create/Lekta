@@ -13,43 +13,57 @@
       "documentId": "fer-diplomski-prazni-odlomci",
       "fileName": "fer-diplomski-prazni-odlomci.docx",
       "profileId": "fer-diplomski",
-      "root": "tests/fixtures/docx"
+      "root": "tests/fixtures/docx",
+      "holdout": false,
+      "expectationProvenance": "derived"
     },
     {
       "documentId": "fer-diplomski-uskladjen",
       "fileName": "fer-diplomski-uskladjen.docx",
       "profileId": "fer-diplomski",
-      "root": "tests/fixtures/docx"
+      "root": "tests/fixtures/docx",
+      "holdout": false,
+      "expectationProvenance": "derived"
     },
     {
       "documentId": "ffzg-filozofija-diplomski",
       "fileName": "ffzg-filozofija-diplomski.docx",
       "profileId": "ffzg-filozofija-diplomski",
-      "root": "tests/fixtures/docx"
+      "root": "tests/fixtures/docx",
+      "holdout": false,
+      "expectationProvenance": "derived"
     },
     {
       "documentId": "mef-doktorski-disertacija",
       "fileName": "mef-doktorski-disertacija.docx",
       "profileId": "mef-doktorski",
-      "root": "tests/fixtures/docx"
+      "root": "tests/fixtures/docx",
+      "holdout": false,
+      "expectationProvenance": "derived"
     },
     {
       "documentId": "pmf-matematika-uskladjen",
       "fileName": "pmf-matematika-uskladjen.docx",
       "profileId": "pmf-matematika-graduate",
-      "root": "tests/fixtures/docx"
+      "root": "tests/fixtures/docx",
+      "holdout": false,
+      "expectationProvenance": "derived"
     },
     {
       "documentId": "pmf-matematika-zasticeni-odlomci",
       "fileName": "pmf-matematika-zasticeni-odlomci.docx",
       "profileId": "pmf-matematika-graduate",
-      "root": "tests/fixtures/docx"
+      "root": "tests/fixtures/docx",
+      "holdout": false,
+      "expectationProvenance": "derived"
     },
     {
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
-      "root": "tests/fixtures/docx"
+      "root": "tests/fixtures/docx",
+      "holdout": false,
+      "expectationProvenance": "derived"
     }
   ],
   "results": [
@@ -57,6 +71,8 @@
       "documentId": "fer-diplomski-prazni-odlomci",
       "fileName": "fer-diplomski-prazni-odlomci.docx",
       "profileId": "fer-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "no-op",
       "before": {
         "checkCount": 19,
@@ -111,6 +127,8 @@
       "documentId": "fer-diplomski-uskladjen",
       "fileName": "fer-diplomski-uskladjen.docx",
       "profileId": "fer-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "no-op",
       "before": {
         "checkCount": 19,
@@ -165,6 +183,8 @@
       "documentId": "ffzg-filozofija-diplomski",
       "fileName": "ffzg-filozofija-diplomski.docx",
       "profileId": "ffzg-filozofija-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 19,
@@ -221,6 +241,8 @@
       "documentId": "mef-doktorski-disertacija",
       "fileName": "mef-doktorski-disertacija.docx",
       "profileId": "mef-doktorski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 19,
@@ -279,6 +301,8 @@
       "documentId": "pmf-matematika-uskladjen",
       "fileName": "pmf-matematika-uskladjen.docx",
       "profileId": "pmf-matematika-graduate",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 19,
@@ -337,6 +361,8 @@
       "documentId": "pmf-matematika-zasticeni-odlomci",
       "fileName": "pmf-matematika-zasticeni-odlomci.docx",
       "profileId": "pmf-matematika-graduate",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 19,
@@ -396,6 +422,8 @@
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 19,
@@ -466,13 +494,17 @@
     "autoUnresolvedChecks": [],
     "assistedUnresolvedCount": 0,
     "awaitingConfirmationCount": 0,
-    "manualOnlyCount": 15
+    "manualOnlyCount": 15,
+    "holdoutCount": 0,
+    "independentlyConfirmedCount": 0
   },
   "syntheticResults": [
     {
       "documentId": "fer-diplomski-puna-struktura",
       "fileName": "fer-diplomski-puna-struktura.docx",
       "profileId": "fer-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 19,
@@ -538,6 +570,8 @@
       "documentId": "fpzg-novinarstvo-bibliografija",
       "fileName": "fpzg-novinarstvo-bibliografija.docx",
       "profileId": "fpzg-novinarstvo-diplomski",
+      "holdout": true,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 35,
@@ -625,6 +659,8 @@
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
       "profileId": "grf-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "pass",
       "before": {
         "checkCount": 19,
@@ -683,6 +719,8 @@
       "documentId": "lo-fpzg-zavrsni-neuskladjen",
       "fileName": "lo-fpzg-zavrsni-neuskladjen.docx",
       "profileId": "fpzg-politologija-zavrsni",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "pass",
       "before": {
         "checkCount": 34,
@@ -761,6 +799,8 @@
       "documentId": "lo-fpzg-zavrsni-uskladjen",
       "fileName": "lo-fpzg-zavrsni-uskladjen.docx",
       "profileId": "fpzg-politologija-zavrsni",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 34,
@@ -825,6 +865,8 @@
       "documentId": "pravo-integrirani-fusnote",
       "fileName": "pravo-integrirani-fusnote.docx",
       "profileId": "pravo-integrirani-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "pass",
       "before": {
         "checkCount": 42,
@@ -912,6 +954,8 @@
       "documentId": "pravo-socijalni-rad-fusnote",
       "fileName": "pravo-socijalni-rad-fusnote.docx",
       "profileId": "pravo-socijalni-rad-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "pass",
       "before": {
         "checkCount": 38,
@@ -992,6 +1036,8 @@
       "documentId": "synthetic-formula-omath",
       "fileName": "synthetic-formula-omath.docx",
       "profileId": "fer-diplomski",
+      "holdout": true,
+      "expectationProvenance": "derived",
       "outcome": "no-op",
       "before": {
         "checkCount": 19,
@@ -1038,9 +1084,75 @@
       "statusChanges": []
     },
     {
+      "documentId": "synthetic-fpzg-zavrsni-verzija-2",
+      "fileName": "synthetic-fpzg-zavrsni-verzija-2.docx",
+      "profileId": "fpzg-politologija-zavrsni",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "review",
+      "before": {
+        "checkCount": 34,
+        "passCount": 22,
+        "score": 90
+      },
+      "after": {
+        "checkCount": 34,
+        "passCount": 22,
+        "score": 90
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "bibliography-repair-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer",
+        "section-surgery-fixer"
+      ],
+      "changedFixerIds": [
+        "section-surgery-fixer"
+      ],
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 4,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": []
+    },
+    {
       "documentId": "synthetic-hrvatski-naslov1-heading",
       "fileName": "synthetic-hrvatski-naslov1-heading.docx",
       "profileId": "pravo-integrirani-diplomski",
+      "holdout": true,
+      "expectationProvenance": "derived",
       "outcome": "pass",
       "before": {
         "checkCount": 41,
@@ -1098,6 +1210,8 @@
       "documentId": "synthetic-libreoffice-standard-default",
       "fileName": "synthetic-libreoffice-standard-default.docx",
       "profileId": "fpzg-politologija-zavrsni",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 33,
@@ -1161,9 +1275,91 @@
       ]
     },
     {
+      "documentId": "synthetic-mentor-komentari",
+      "fileName": "synthetic-mentor-komentari.docx",
+      "profileId": "fpzg-politologija-zavrsni",
+      "holdout": false,
+      "expectationProvenance": "derived",
+      "outcome": "pass",
+      "before": {
+        "checkCount": 34,
+        "passCount": 17,
+        "score": 73
+      },
+      "after": {
+        "checkCount": 34,
+        "passCount": 22,
+        "score": 90
+      },
+      "beforeEntryCount": 14,
+      "afterEntryCount": 14,
+      "droppedEntryCount": 0,
+      "removedByFixers": [],
+      "offeredFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "bibliography-repair-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer",
+        "section-surgery-fixer"
+      ],
+      "changedFixerIds": [
+        "field-integrity-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "section-surgery-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 4,
+      "targetedResolvedCount": 4,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
+      "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 5,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
+      "passRegressionCount": 0,
+      "passRegressionChecks": [],
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null,
+      "statusChanges": [
+        "format.font.dominant:fail->pass",
+        "format.justify.body:warn->pass",
+        "format.size.body:fail->pass",
+        "format.spacing.body:fail->pass",
+        "page.size.a4:warn->pass"
+      ]
+    },
+    {
       "documentId": "typografija-i-literatura",
       "fileName": "typografija-i-literatura.docx",
       "profileId": "fpzg-mes-master-thesis",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 33,
@@ -1253,6 +1449,8 @@
       "documentId": "word-veliki-neuredan",
       "fileName": "word-veliki-neuredan.docx",
       "profileId": "fpzg-politologija-diplomski",
+      "holdout": false,
+      "expectationProvenance": "derived",
       "outcome": "review",
       "before": {
         "checkCount": 35,
@@ -1335,22 +1533,24 @@
     }
   ],
   "syntheticSummary": {
-    "documentCount": 12,
-    "passCount": 5,
-    "reviewCount": 6,
+    "documentCount": 14,
+    "passCount": 6,
+    "reviewCount": 7,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 1,
-    "changedDocumentCount": 11,
-    "manualReviewCount": 11,
+    "changedDocumentCount": 13,
+    "manualReviewCount": 13,
     "passRegressionCount": 0,
     "passRegressionChecks": [],
-    "targetedCheckCount": 45,
-    "targetedResolvedCount": 38,
+    "targetedCheckCount": 49,
+    "targetedResolvedCount": 42,
     "autoUnresolvedCount": 0,
     "autoUnresolvedChecks": [],
     "assistedUnresolvedCount": 7,
     "awaitingConfirmationCount": 0,
-    "manualOnlyCount": 60
+    "manualOnlyCount": 69,
+    "holdoutCount": 3,
+    "independentlyConfirmedCount": 0
   }
 }

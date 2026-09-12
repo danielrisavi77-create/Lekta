@@ -1518,12 +1518,19 @@ a.mw-item-name:hover{text-decoration:underline}
   letter-spacing:.02em;cursor:help}
 .nav-rad .local-badge svg{width:12px;height:12px}
 
+/* T12: "Ucitaj novu verziju ovog rada" u traci. `flex:0 0 auto` + `white-space:nowrap` da ga ime datoteke ne lomi;
+ * na uskom zaslonu ide u NOVI RED (traka smije prelomiti), jer gumb koji se ne moze stisnuti inace gura traku preko
+ * 393 px i cijela se stranica rasiri (izmjereno 2026-09-12: parser-parity na mobile-chromium, gumb "Pregledaj nalaze"
+ * nikad "stabilan" jer je layout viewport narastao). Isti razred kvara kao podnozje plana popravka. */
+.rad-doc-new-version{flex:0 0 auto;white-space:nowrap}
+
 @media(max-width:720px){
   /* Na uskom zaslonu ime datoteke ustupa mjesto kontrolama, ali ne nestaje: ono je jedini
    * podsjetnik KOJI se dokument gleda. Znacka odlazi jer je ista tvrdnja napisana u tijelu. */
   .nav-rad{gap:12px}
-  .rad-doc{padding-left:12px;gap:8px}
+  .rad-doc{padding-left:12px;gap:8px;flex-wrap:wrap;align-items:center}
   .rad-doc-local{display:none}
+  .rad-doc-new-version{flex-basis:100%;margin-left:0;font-size:12px;padding:4px 0}
 }
 
 /* LIST ZA PROMJENU PROFILA -----------------------------------------------------------------

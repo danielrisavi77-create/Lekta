@@ -21,47 +21,48 @@
     {
       "id": "T02",
       "title": "Otvori sve slojeve prikaza pri pozivu popravka",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T00"
       ],
-      "note": "djelomicno u PR #61 D5 (CTA otvara blok); ostatak ceka sesiju redizajna /rad/"
+      "note": "oznake repair-entry / repair-workflow / document-profile / analysis-results; tests/ux/repair-entry-visible.spec.ts (opca akcija, tipkovnica, akcija nalaza, akcija iz plana; chromium + mobile-chromium)"
     },
     {
       "id": "T03",
       "title": "Testiraj stvarni produkcijski artefakt od početne stranice",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T01",
         "T02"
-      ]
+      ],
+      "note": "scripts/build-production.mjs (Netlify i CI isti lanac), tests/ux-dist/production-journey.spec.ts od / do repair-workflow, build-info.json + smoke --require-build-info; LEKTA_UX_MODE nije uveden, dist tok ide kroz playwright.dist.config.ts"
     },
     {
       "id": "T04",
       "title": "Saniraj visokorizične ovisnosti alata",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T00"
       ],
-      "note": "djelomicno u PR #61 D2 (ratchet 23); sanacija i dependency-decisions.md nisu napravljeni"
+      "note": "docs/quality/dependency-decisions.md: 23 -> 7 high/critical, svaka iznimka s identifikatorom, razlogom, vlasnikom i rokom 2026-10-09; ratchet blokira rast"
     },
     {
       "id": "T05",
       "title": "Učini podrijetlo dokaza profila eksplicitnim",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T00"
       ],
-      "note": "djelomicno u PR #61 D4 (proofSource direct/inherited); evidenceBasis i testedProfileIds nisu uvedeni"
+      "note": "evidenceBasis + testedProfileIds u profile-claim.ts; ISTA projekcija na kartici profila i u zaglavlju rezultata (claimBadgeHtml); recenica po osnovi (B generiran, C/D/E granice); tests/profile-claim-ui.test.ts"
     },
     {
       "id": "T06",
       "title": "Izmjeri stvarni učinak popravka na realnom korpusu",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T00"
       ],
-      "note": "harness postoji; protokol i ciljana metrika nisu napravljeni"
+      "note": "docs/quality/real-corpus-protocol.md; holdout (deterministicki), expectedBy/expectedAt provenijencija, --word-version u ovjeri; prvo puno mjerenje 2026-09-10 nad 321 dokumentom (0 ostecenja, 0 regresija, 116/645 ciljanih); potpis ovjere i holdout potvrda su vlasnikove"
     },
     {
       "id": "T07",
@@ -75,7 +76,7 @@
     {
       "id": "T08",
       "title": "Izdvoji upravljanje tokom uz očuvanje postojećih ugovora",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T01",
         "T02",
@@ -83,72 +84,80 @@
         "T05",
         "T06",
         "T07"
-      ]
+      ],
+      "note": "RepairWorkflowController vezan na oba panela (repair-workflow-binding.ts): jedan vlasnik odabira i faza, start samo iz ready, zamrznut odabir tijekom rada, complete blokira drugi naplativi start"
     },
     {
       "id": "T09",
       "title": "Pretvori plan u stvarno upravljiv prikaz",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T08"
-      ]
+      ],
+      "note": "plan ima prave checkboxove po ruleId, brojac i sazetak (repair-selected-summary), odabir putuje u kontroler (applySelection); mobilni raspored podnozja popravljen; tests/ux/repair-plan-selection.spec.ts"
     },
     {
       "id": "T10",
       "title": "Poveži završni prikaz s provjerenim ishodom i oporavkom",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T09"
-      ]
+      ],
+      "note": "verifiedOutcomeFrom + repairOutcomeHtml (rijeseno/nerijeseno/preskoceno/regresija/integritet) na oba puta; recovery-policy.ts + repair-recovery-view.ts (prekid nakon slanja -> provjera posla prije ponavljanja); tests/ux/repair-recovery.spec.ts"
     },
     {
       "id": "T11",
       "title": "Dodaj usporedbu nalaza dviju revizija",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T05",
         "T08",
         "T09",
         "T10"
-      ]
+      ],
+      "note": "src/history/finding-revisions.ts + tests (PR #70); koristi ga T12"
     },
     {
       "id": "T12",
       "title": "Omogući učitavanje nove verzije i prikaz napretka",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T11"
-      ]
+      ],
+      "note": "revision-snapshot.ts, routes/workspace/revisions.ts, revision-summary.ts; \"Ucitaj novu verziju ovog rada\" u traci dokumenta; snimke u postojecoj IndexedDB sesiji (neobavezna polja, stara sesija citljiva); slab identitet trazi potvrdu; tests/ux/document-revisions.spec.ts"
     },
     {
       "id": "T13",
       "title": "Pretvori postojeće Word komentare u lokalne zadatke",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T09",
         "T10",
         "T11",
         "T12"
-      ]
+      ],
+      "note": "comment-tasks.ts + ui/results/mentor-tasks.ts u ruti /rad/: puni tekst komentara, sidro ili null, obradjeno != provjereno, nit oznacena kao nepodrzana; fixture synthetic-mentor-komentari.docx; tests/ux/mentor-tasks.spec.ts"
     },
     {
       "id": "T14",
       "title": "Izmjeri tok uz postojeću privolu i ograničene podatke",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T10",
         "T12",
         "T13"
-      ]
+      ],
+      "note": "PRODUCT_JOURNEY_EVENTS u telemetry.ts (repair_plan_opened, repair_completed nakon provjere, repair_download_started, revision_compared); docs/quality/product-metrics.md; tests/product-journey-telemetry.test.ts"
     },
     {
       "id": "T15",
       "title": "Provedi korisnički pilot i završnu procjenu spremnosti",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T14"
-      ]
+      ],
+      "note": "docs/quality/usability-protocol.md i release-readiness.md napisani; sam pilot s 5 do 8 korisnika je vlasnikova radnja i NIJE proveden"
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-09 prema docs/quality/lekta-plan-status.md (T00). \"done\" = nalaz zatvoren dokazom ponasanja u PR-u #61; ostatak posla po zadatku je u toj karti."
+  "statusNote": "Statusi azurirani 2026-09-12 (grana plan/t02-t06-2026-09-10). \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno; sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. Karta: docs/quality/lekta-plan-status.md."
 }
