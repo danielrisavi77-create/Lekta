@@ -133,9 +133,10 @@ async function buildCases(): Promise<DispatchCase[]> {
    * `cp:` i `dc:` se MORAJU deklarirati, kao u svakom stvarnom `docProps/core.xml`.
    *
    * Do 2026-09-12 su ovdje stajali nedeklarirani, dakle sinteticki ulaz koji nijedan pravi Word
-   * dokument nema i koji nijedan XML parser ne prihvaca. Prolazilo je samo zato sto vrata
-   * integriteta vezanje prefiksa nisu provjeravala (RE-60); cim je provjera dodana, popravak je
-   * uredno odbio isporuciti paket sastavljen od takvog dijela.
+   * dokument nema i koji nijedan XML parser ne prihvaca. Vrata integriteta ga TOLERIRAJU, jer
+   * nevezan prefiks prijavljuju samo kad ga je uveo popravak (RE-60), pa ovaj ulaz nikad nije ni
+   * mogao pasti. Deklaracije su svejedno dopisane: sinteticki ulaz koji se pretvara da je Wordov
+   * dokument treba i izgledati kao Wordov dokument, inace mjeri oblik koji u produkciji ne postoji.
    */
   const inspectorPackage = {
     'word/settings.xml': `<w:settings ${WORD_NS}><w:trackRevisions/></w:settings>`,
