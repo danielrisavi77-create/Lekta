@@ -90,5 +90,30 @@ export function profileClaimFor(profileId: string | null | undefined): ProfileCl
 export function claimSentence(claim: ProfileClaim | null): string {
   if (!claim) return '';
   const base = `Razina dokaza ${claim.claim}: ${claim.label}.`;
-  return claim.proof === 'inherited' && claim.note ? `${base} ${claim.note}` : base;
+  const basis = BASIS_NOTE[claim.evidenceBasis];
+  const inherited = claim.proof === 'inherited' && claim.note ? ` ${claim.note}` : '';
+  return `${base}${inherited}${basis ? ` ${basis}` : ''}`;
+}
+
+/**
+ * Sto osnova dokaza znaci za KORISNIKA (plan T05): za B da je dokument na kojem je popravak dokazan generiran,
+ * za C, D i E gdje je stvarna granica provjere i popravka. Recenica ljestvice ostaje doslovna; ovo je dodatak
+ * o OSNOVI, ne parafraza razine. Za `direct` nema dodatka: ljestvica vec kaze "dokazano na stvarnom radu".
+ * Za `inherited` napomenu nosi ledger (`note`), pa se ovdje ne ponavlja.
+ */
+const BASIS_NOTE: Record<EvidenceBasis, string> = {
+  direct: '',
+  inherited: '',
+  synthetic: 'Dokument na kojem je popravak dokazan je generiran, nije stvaran studentski rad.',
+  'not-demonstrated': 'Provjera vrijedi; automatski popravak za ovaj profil nije dokazan ni na jednom dokumentu, pa ga treba pregledati u Wordu.',
+};
+
+/**
+ * JEDNA oznaka razine dokaza za kartici profila I za zaglavlje rezultata (plan T05: "na kartici profila i u
+ * rezultatu prikazati istu projekciju"). Oba mjesta zovu ovu funkciju, pa ne mogu odlutati. Atributi nose
+ * osnovu i slovo strojno citljivo (testovi, stilovi); vidljivi tekst je kratak, puna recenica je u `title`.
+ */
+export function claimBadgeHtml(claim: ProfileClaim | null, esc: (v: string) => string): string {
+  if (!claim) return '';
+  return `<span class="profile-status evidence" data-evidence-claim="${esc(claim.claim)}" data-evidence-basis="${esc(claim.evidenceBasis)}" title="${esc(claimSentence(claim))}">Razina dokaza ${esc(claim.claim)}</span>`;
 }

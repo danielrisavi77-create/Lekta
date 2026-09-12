@@ -61,7 +61,17 @@ function bajtova(rel: string): number {
  * se placaju novim vadjenjem iz iste datoteke. Ako se pojavi pritisak da se digne, to je znak da
  * kod pripada drugom modulu, ne da je gard prestrog.
  */
-const BUDZET_APP = 363608;
+// SPAJANJE S MASTEROM 2026-09-12: 363608 -> 363789.
+//
+// Ovo NIJE dizanje brojke zato sto smeta, i racunica je zato ovdje:
+//   zajednicka osnova (59adbc8c)   365386 B
+//   master (PR #73, nova znacajka) 365552 B   (+166 prema osnovi)
+//   ova grana (paketi A i B)       363608 B   (-1778 prema osnovi)
+//   spojeno                        363789 B   (-1597 prema osnovi, i ispod OBA roditelja)
+//
+// Brojka se pomakla samo zato sto je u granu usla tudja legitimna znacajka, a spojena datoteka je
+// i dalje manja od obje strane. Pravilo ostaje: vlastiti rad se placa vadjenjem, ne dizanjem.
+const BUDZET_APP = 363789;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

@@ -25,6 +25,9 @@
            i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora
            mijenjati stanje, inace postaje tvrdnja koja vise nije istinita. -->
       <span class="local-badge" data-privacy-badge title="Analiza radi u tvom pregledniku. Dokument ne odlazi s uredaja. Salje se samo ako narucis automatski popravak."><i data-lucide="lock"></i> Lokalno na ovom uređaju</span>
+      <!-- T12: nova verzija ISTOG rada. Datoteka ide kroz isti prijem kao prva; usporedbu nalaza radi ruta (revisions.ts). -->
+      <button type="button" class="btn btn-ghost btn-sm rad-doc-new-version hidden" id="radDocNewVersion" data-testid="load-new-version">Učitaj novu verziju ovog rada</button>
+      <input type="file" id="radDocNewVersionInput" accept=".docx" class="sr-only" tabindex="-1" aria-hidden="true">
     </div>
     <!-- Desna skupina ima vlastiti omotac: `margin-left:auto` je prije visio o `.nav-links`,
          a i `#authEntry` se zna sakriti, pa bi poravnanje ovisilo o tome sto je trenutno vidljivo. -->
@@ -86,7 +89,7 @@
             </div>
           </div>
         </details>
-        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite"></div><div class="analyze-actions"><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
+        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite" data-testid="document-profile"></div><div class="analyze-actions"><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
       </div>
       <div class="progress-view hidden" id="progressView" role="status" aria-live="polite">
   <!-- PROVJERA, NE UCITAVANJE. Do 2026-09-07 su ovdje bili spinner, "Analiziram dokument...",
@@ -108,7 +111,12 @@
       <div class="result-view hidden" id="resultView">
         <div class="lek-stepnav lek-stepnav-result"><div class="lek-stepnav-back"><button class="btn btn-ghost btn-sm" id="resultBackDoc" type="button">← Dokument</button><span class="lek-stepfile" id="resultFileName"></span><button class="btn btn-ghost btn-sm" id="resultBackProfile" type="button">← Profil fakulteta</button></div></div>
         <div class="demo-bar hidden" id="demoBar" role="note" aria-label="Primjer izvještaja"></div>
-        <section class="result-cockpit hidden" id="resultCockpit" aria-live="polite"></section>
+        <!-- T12 i T13 stoje ISPRED cockpita: ensureResultsCockpitAdvancedShell seli sve IZA njega u sklopljeni napredni blok. -->
+        <!-- T12: usporedba s prethodnom verzijom istog rada; puni je ruta /rad/ (revisions.ts), prazno = skriveno. -->
+        <section class="revision-summary hidden" id="revisionSummary" data-testid="revision-summary" aria-live="polite"></section>
+        <!-- T13: mentorovi komentari kao lokalni zadaci; puni ih ruta /rad/ (mentor-tasks.ts), prazno = skriveno. -->
+        <section class="mentor-tasks hidden" id="mentorTasks" data-testid="mentor-tasks"></section>
+        <section class="result-cockpit hidden" id="resultCockpit" aria-live="polite" data-testid="analysis-results"></section>
         <div class="result-summary"><div class="score-card"><div class="score-ring" id="scoreRing"><div class="score-ring-inner"><span><b id="scoreValue">0</b><small>/ 100</small></span></div><svg class="ks-circle" viewBox="0 0 190 150" fill="none" aria-hidden="true" focusable="false"><path d="M95 14 C 158 10, 184 40, 181 75 C 178 116, 138 140, 92 137 C 44 134, 8 112, 11 72 C 14 34, 52 12, 95 16"/></svg></div><div class="score-label" id="scoreLabel">Automatska tehnička ocjena</div><div class="ready-stamp hidden" id="readyStamp" aria-hidden="true">Bez automatskih blokatora</div></div><div class="result-main"><h2 id="resultTitle">Rezultat provjere</h2><p id="resultSubtitle"></p><p class="summary-note scoring-change-note hidden" id="scoringChangeNote" role="note"></p><div class="result-readiness" id="resultReadiness" role="status" aria-live="polite"></div><div class="metrics"><div class="metric metric-jump" data-jump="issues" role="button" tabindex="0" aria-label="Prikaži sve probleme"><span>MOGUĆI PROBLEMI</span><b id="metricIssues">0</b></div><div class="metric"><span>RIJEČI</span><b id="metricWords">0</b></div><div class="metric"><span>IZVORI</span><b id="metricRefs">0</b></div><div class="metric"><span>CITATNICE</span><b id="metricCitations">0</b></div></div><div class="result-actions result-actions--util"><button class="btn btn-primary btn-sm hidden" id="unlockReport">Otključaj puni izvještaj</button><button class="btn btn-ghost btn-sm" id="orderFromResult">Naruči ručno sređivanje</button><div class="dl-menu"><button class="btn btn-ghost btn-sm dl-menu-btn" type="button" aria-haspopup="true" aria-expanded="false">Preuzmi <i data-lucide="chevron-down"></i></button><div class="dl-menu-list" role="menu"><button class="dl-item" id="printReport" type="button" role="menuitem">Spremi kao PDF</button><button class="dl-item" id="downloadHtml" type="button" role="menuitem">HTML izvještaj</button><button class="dl-item" id="downloadJson" type="button" role="menuitem">Podatke (JSON)</button><button class="dl-item" id="reportWrongCheck" type="button" role="menuitem" title="Prijavi ako je neka provjera po tvome kriva">Prijavi pogrešnu provjeru</button></div></div><button class="btn btn-ghost btn-sm" id="newAnalysis">Nova provjera</button></div></div></div>
         <section class="premium-viz-grid" id="premiumResultDashboard" aria-label="Vizualni sažetak rezultata" data-reveal>
           <article class="premium-viz-card premium-paper-stack" data-premium-tilt>

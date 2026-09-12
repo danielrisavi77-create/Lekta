@@ -3,6 +3,8 @@ import type { DeskItem } from '../src/ui/results/desk-model';
 import { mountDesk, type DeskDocument } from '../src/ui/results/desk-mount';
 import type { ResultsCockpitAction } from '../src/ui/results/results-cockpit';
 import type { VisualFindingModel } from '../src/ui/results/visual-result-model';
+import { buildRepairPlan } from '../src/ui/results/repair-plan';
+import { repairPlanHtml } from '../src/ui/results/repair-plan-view';
 
 /**
  * OZICENJE STOLA. Brif trazi DVA smjera: klik na nalaz pomakne dokument, klik na oznaceno mjesto
@@ -233,6 +235,12 @@ describe('plan ispravaka kao drugi nacin rada', () => {
     expect(sekcija.querySelector('[data-desk-plan-open]')).toBeNull();
   });
 
+  it('otvaranje plana emitira `plan-opened` (T14: repair_plan_opened na stvarnoj promjeni stanja)', () => {
+    const { akcije } = montiraj({ planHtml: PLAN });
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    expect(akcije).toEqual([{ kind: 'plan-opened' }]);
+  });
+
   it('klik na "Otvori plan" ZAMJENJUJE popis nalaza planom', () => {
     // Plan i popis su dva pogleda na isti posao; jedan ispod drugoga trazio bi dvostruko citanje.
     montiraj({ planHtml: PLAN });
@@ -253,7 +261,8 @@ describe('plan ispravaka kao drugi nacin rada', () => {
     const { akcije } = montiraj({ planHtml: PLAN });
     klik(sekcija.querySelector('[data-desk-plan-open]'));
     klik(sekcija.querySelector('[data-repair-plan-go]'));
-    expect(akcije).toEqual([{ kind: 'repair-safe' }]);
+    // T09: radnja nosi ODABIR iz plana; s praznim planom (bez kontrola) je to prazan popis, ne izostanak polja.
+    expect(akcije.filter((a) => a.kind !== 'plan-opened')).toEqual([{ kind: 'repair-safe', ruleIds: [] }]);
   });
 
   it('delegacija radi i u nacinu plan, dakle poslije ponovnog crtanja', () => {
@@ -262,7 +271,65 @@ describe('plan ispravaka kao drugi nacin rada', () => {
     klik(sekcija.querySelector('[data-desk-plan-close]'));
     klik(sekcija.querySelector('[data-desk-plan-open]'));
     klik(sekcija.querySelector('[data-repair-plan-go]'));
-    expect(akcije).toEqual([{ kind: 'repair-safe' }]);
+    expect(akcije.filter((a) => a.kind !== 'plan-opened')).toEqual([{ kind: 'repair-safe', ruleIds: [] }]);
+  });
+});
+
+/**
+ * T09: plan sa STVARNIM kontrolama. Odabir u planu putuje s radnjom `repair-safe`, brojac i sazetak se ponovno
+ * iscrtavaju iz istog modela, a iskljucivanje jednog zahvata ne dira drugi.
+ */
+describe('plan ispravaka: stvarne kontrole odabira (T09)', () => {
+  const plan = buildRepairPlan([
+    { ruleId: 'margine', label: 'Uskladi margine', violated: true },
+    { ruleId: 'prored', label: 'Uskladi prored osnovnog teksta', violated: true },
+    { ruleId: 'izjava', label: 'Umetni izjavu o izvornosti', violated: true, requiresConfirmation: true, confirmationText: 'Ti potvrđuješ mjesto.' },
+  ], [], true);
+  const montirajPlan = () => montiraj({ planHtml: repairPlanHtml(plan, esc), plan });
+  const promjena = (el: Element | null) => el?.dispatchEvent(new window.Event('change', { bubbles: true }));
+
+  it('zadani odabir = sigurni zahvati; odluka je iskljucena i ima razlog uz sebe', () => {
+    montirajPlan();
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    const kutije = Array.from(sekcija.querySelectorAll<HTMLInputElement>('[data-repair-plan-item]'));
+    expect(kutije.map((c) => [c.dataset.repairPlanItem, c.checked])).toEqual([['margine', true], ['prored', true], ['izjava', false]]);
+    expect(sekcija.querySelector('[data-repair-plan-count]')?.getAttribute('data-repair-plan-count')).toBe('2');
+    expect(sekcija.querySelector('[data-rule="izjava"]')?.textContent).toContain('Ti potvrđuješ mjesto.');
+  });
+
+  it('iskljucivanje jednog zahvata mijenja brojac i sazetak, a drugi zahvat ostaje odabran', () => {
+    const { akcije } = montirajPlan();
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    const prored = sekcija.querySelector<HTMLInputElement>('[data-repair-plan-item="prored"]')!;
+    prored.checked = false;
+    promjena(prored);
+    expect(sekcija.querySelector('[data-repair-plan-count]')?.getAttribute('data-repair-plan-count')).toBe('1');
+    const sazetak = sekcija.querySelector('[data-repair-selected-summary]')?.textContent ?? '';
+    expect(sazetak).toContain('Uskladi margine');
+    expect(sazetak).not.toContain('Uskladi prored');
+    // Kontrola prezivi ponovno crtanje podnozja: ista kutija, isto stanje.
+    expect(sekcija.querySelector<HTMLInputElement>('[data-repair-plan-item="margine"]')?.checked).toBe(true);
+    klik(sekcija.querySelector('[data-repair-plan-go]'));
+    expect(akcije.filter((a) => a.kind !== 'plan-opened')).toEqual([{ kind: 'repair-safe', ruleIds: ['margine'] }]);
+  });
+
+  it('ukljucivanje odluke najavljuje potvrdu PRIJE slanja i ulazi u odabir', () => {
+    const { akcije } = montirajPlan();
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    const izjava = sekcija.querySelector<HTMLInputElement>('[data-repair-plan-item="izjava"]')!;
+    izjava.checked = true;
+    promjena(izjava);
+    expect(sekcija.querySelector('[data-repair-plan-footer]')?.textContent).toContain('traži se potvrda za: Umetni izjavu o izvornosti');
+    klik(sekcija.querySelector('[data-repair-plan-go]'));
+    expect(akcije.filter((a) => a.kind !== 'plan-opened')[0]).toEqual({ kind: 'repair-safe', ruleIds: ['margine', 'prored', 'izjava'] });
+  });
+
+  it('bez ijednog odabranog zahvata glavna radnja je onemogucena, ne privid', () => {
+    montirajPlan();
+    klik(sekcija.querySelector('[data-desk-plan-open]'));
+    for (const cb of sekcija.querySelectorAll<HTMLInputElement>('[data-repair-plan-item]')) { cb.checked = false; promjena(cb); }
+    expect(sekcija.querySelector<HTMLButtonElement>('[data-repair-plan-go]')?.disabled).toBe(true);
+    expect(sekcija.querySelector('[data-repair-selected-summary]')?.textContent).toContain('Nijedan zahvat nije odabran');
   });
 });
 

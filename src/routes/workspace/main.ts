@@ -1,7 +1,10 @@
 import {
-  initAnalyzerApp, loadAnalyzerDocument,
+  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
+import { subscribeAnalyzerResultReady } from '../../ui/analyzer-document-events';
+import { createRevisions } from './revisions';
+import { mountMentorTasks } from '../../ui/results/mentor-tasks';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
   type StorageAvailability,
@@ -55,17 +58,29 @@ function detectStorage(): StorageAvailability {
  * ne koju je datoteku korisnik dotaknuo. Odbijen dokument tako nikad ne provede trenutak u
  * zaglavlju kao da je prihvacen.
  */
-function wireDocumentBar(): void {
+function wireDocumentBar(onNewVersion: (file: File) => void): void {
   const bar = document.getElementById('radDocBar');
   const name = document.getElementById('radDocName');
   if (!bar || !name) return;
+  const newVersionBtn = document.getElementById('radDocNewVersion') as HTMLButtonElement | null;
+  const newVersionInput = document.getElementById('radDocNewVersionInput') as HTMLInputElement | null;
   subscribeAnalyzerDocumentSettled((event) => {
     if (event.kind === 'superseded') return;
     const file = event.kind === 'accepted' ? event.file : null;
     name.textContent = file ? file.name : '';
     name.title = file ? file.name : '';
     bar.classList.toggle('hidden', !file);
+    // T12: nova verzija ima smisla tek kad postoji dokument s kojim se usporedjuje.
+    newVersionBtn?.classList.toggle('hidden', !file);
   });
+  if (newVersionBtn && newVersionInput) {
+    newVersionBtn.addEventListener('click', () => newVersionInput.click());
+    newVersionInput.addEventListener('change', () => {
+      const file = newVersionInput.files?.[0] ?? null;
+      newVersionInput.value = '';
+      if (file) onNewVersion(file);
+    });
+  }
 }
 
 function showStatus(text: string | null): void {
@@ -110,7 +125,29 @@ async function start(): Promise<void> {
   //   tik prije `openWorkspace`   i dalje radi  (taj poziv je await-an, ucitavanje je iza njega)
   //   iza `restoreDocument`       pada
   // Vrh `start()` je zato jedini polozaj koji ne trazi da citatelj drzi taj redoslijed u glavi.
-  wireDocumentBar();
+  // T12: verzije rada. Snimka tekuce analize ide u sesiju; "Ucitaj novu verziju" prenosi je kao prethodnu.
+  const revisions = createRevisions({
+    store: () => (storage.kind === 'available' ? storage.store : null),
+    sessionId: () => sessionId,
+    mount: () => document.getElementById('revisionSummary'),
+    esc: (v) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'),
+    status: showStatus,
+    track: trackWorkspaceEvent,
+  });
+  subscribeAnalyzerResultReady((event) => {
+    revisions.onResult(event.result);
+    // T13: komentari iz paketa postaju lokalni zadaci; bez komentara sekcija ostaje skrivena. Citanje paketa je lokalno.
+    const mentorMount = document.getElementById('mentorTasks');
+    if (mentorMount && event.file) {
+      void event.file.arrayBuffer()
+        .then((buf) => mountMentorTasks(mentorMount, new Uint8Array(buf), ((event.result as { checks?: unknown[] } | null)?.checks ?? []) as never))
+        .catch((error) => { console.warn('Mentorovi komentari:', error); mentorMount.classList.add('hidden'); });
+    }
+  });
+  wireDocumentBar((file) => {
+    revisions.beginNewVersion();
+    void loadAnalyzerDocument(file);
+  });
 
   subscribeAnalyzerDocumentAccepted((event) => {
     upisi(afterDocumentAccepted(context));
@@ -142,6 +179,8 @@ async function start(): Promise<void> {
     // Isti `File` objekt koji ulazi u prijem pamti se PRIJE poziva, jer pretplata iznad gleda
     // identitet objekta, ne ime ili velicinu (dva razlicita ubacivanja iste datoteke su dva rada).
     restoredFile = fileFromLocalDocumentSession(outcome.session);
+    // Snimke revizija iz sesije (stariji zapisi ih nemaju): usporedba prezivi ponovno ucitavanje stranice.
+    revisions.restore(outcome.session.workspace?.revision, outcome.session.workspace?.previousRevision);
     const restored = await restoreDocument(outcome.session, () => loadAnalyzerDocument(restoredFile!));
     if (restored.kind === 'refused') showStatus(restored.notice);
   }
