@@ -87,7 +87,12 @@ Poznato oštećenje dokumenta ili neobjašnjena regresija blokira izdavanje pogo
 | C - jedinstven plan i završetak popravka | T08-T10 | T01-T03, T05-T07 | Dosljedan odabir, izvršenje, provjera i preuzimanje. |
 | D - praćenje nalaza kroz verzije | T11-T12 | T05, T08-T10 | Usporedba stvarno riješenih, postojećih i novih problema. |
 | E - mentorovi zadaci i korisnička provjera | T13-T15 | T09-T12 | Pilot komentara, mjerenje toka i završna procjena spremnosti. |
-| F - program do javnog lansiranja | T16-T47 | T09-T12, T14 (T15 ostaje u Podplanu E, blokiran do T46) | Ovjeren kandidat, pilot i javna objava; redoslijed unutar F je u vlastitoj tablici valova u odjeljku „Podplan F”. |
+| F - program do javnog lansiranja | T16-T47 | T00 (ulaz: jedini prethodnik, nosi ga T16) i T15 (izlaz: T47 ovisi o njemu; sam T15 ostaje u Podplanu E i blokiran je do T46) | Ovjeren kandidat, pilot i javna objava; redoslijed unutar F je u vlastitoj tablici valova u odjeljku „Podplan F”. |
+
+Stupac ovisnosti za Podplan F navodi samo ovisnosti prema zadacima IZVAN njega. Izmjereno iz `**Ovisi o:**`
+deklaracija svih zadataka T16-T47 u odjeljku „Podplan F” i iz `docs/agents/tasks.json`, takve su točno dvije:
+`T16 -> T00` i `T47 -> T15`. Nijedan zadatak T16-T47 ne ovisi o T09-T14. Unutarnje ovisnosti su po zadatku
+u odjeljku „Podplan F”, a redoslijed u tamošnjoj tablici valova.
 
 T04 i T07 mogu imati zasebne PR-ove; nisu razlog za miješanje sigurnosnih nadogradnji s vizualnim promjenama. Podplanovi A-C čine prvi ciklus stabilizacije. D i E su zasebne funkcionalne isporuke. Osnovne korisničke zadatke 1-3 iz T15 provesti već nakon T10; zadatke 4-5 dodati tek kada pripadajuće funkcije postoje.
 
