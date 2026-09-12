@@ -125,15 +125,17 @@ Sto iz toga slijedi, po redu vaznosti:
    ostaje crveno nakon ASISTIRANOG zahvata (naslovnica, literatura, fusnote, sekcije), gdje harness primjenjuje zadani
    odabir bez covjeka. To je popis za sljedeci ciklus rada nad motorom, imenovan po provjeri u
    `summary.assistedUnresolvedChecks` lokalnog artefakta.
-3. Ovjera nad ovim mjerenjem (`data/verification/real-corpus-attestation.json`) NIJE prepisana u repozitoriju:
-   otisak korpusa se promijenio (54 -> 321 dokumenata), pa bi nova ovjera bila nepotpisana i ljestvica bi profile
-   razine A spustila dok vlasnik ne potpise. Nepotpisana ovjera je spremljena izvan repozitorija; vlasnik je
-   ponovno proizvodi i potpisuje s:
+3. Ovjera nad ovim mjerenjem je PREPISANA I POTPISANA 2026-09-12 (`data/verification/real-corpus-attestation.json`),
+   po izricitoj uputi vlasnika ("dajem ti dopustenje"), kroz Claude Code; `signatureNote` to i kaze, jer potpis po
+   uputi nije isto sto i potpis vlastitom rukom. Otisak korpusa `8e5bd529...`, 19 skupina jedinica x vrsta rada, sve
+   19 s cistim dokazom; izdvojeni skup (63 dokumenta) NIJE u dokazu (bez `--holdout-confirmed`), `wordVersion` je
+   `null` jer izlaz korpusa nije otvoren u Wordu. Ledger i tvrdnje profila regenerirani u cistom worktreeu u istom
+   commitu. Ponavljanje ili prosirenje (holdout, Word):
 
    ```bash
    LEKTA_LOCAL_CORPUS=1 LEKTA_CORPUS_SOURCE="<put do 03-ingest>" NODE_OPTIONS=--max-old-space-size=3072 npx vite-node scripts/repair-real-corpus.mts
    npm run verify:word:corpus                 # Word, pa verziju iz COM-a upisati dolje
-   node scripts/attest-real-corpus.mjs --sign "Ime" --word-version 14.0   # bez --holdout-confirmed dok zavrsna provjera nije izvedena
+   node scripts/attest-real-corpus.mjs --sign "Ime" --word-version 14.0 [--holdout-confirmed]
    npm run completion-ledger && npm run gen-profile-claims                # u cistom worktreeu, artefakti u istom commitu
    ```
 
