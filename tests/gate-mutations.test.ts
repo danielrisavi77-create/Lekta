@@ -57,6 +57,7 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
+import { scanXmlWellFormed } from '../src/repair/package-integrity';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -167,6 +168,14 @@ function evidenceFor(ruleCheckId: string, checkId: string, title: string, catego
   } as never;
   return Object.keys(buildExactEvidence([check], [issue], [entry])).length;
 }
+
+/** RE-60: `word/document.xml` u kojem `r:` nema deklaraciju u dosegu (ona stoji lokalno, nize). */
+const REL_NS_FOR_MUTATION = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+const UNBOUND_PREFIX_DOCUMENT =
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+  + '<w:p><w:hyperlink r:id="rId1" w:history="1"><w:r><w:t>https://doi.org/10.1234/abc</w:t></w:r></w:hyperlink></w:p>'
+  + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL_NS_FOR_MUTATION}"/></w:sectPr>`
+  + '</w:body></w:document>';
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1173,6 +1182,22 @@ const MUTATIONS: Mutation[] = [
           rows: Parameters<typeof proofSourceProblems>[0];
         }).rows,
       ).length === 0,
+  },
+  /**
+   * RE-60 (2026-09-12). `link-doi-fixer` je umetao `<w:hyperlink r:id="...">` u tijelo dokumenta
+   * ciji korijen `xmlns:r` nema, jer je deklaraciju trazio BILO GDJE u nizu, a dokument ju je imao
+   * lokalno na `w:footerReference`. Izlaz vise nije namespace-well-formed (@xmldom/xmldom, lxml i
+   * Word ga odbijaju), a `integrityFailure` je ostajao `null` jer skener paketa doseg deklaracija
+   * nije pratio. Mutacija podmece tocno taj oblik; baseline je ISTI dokument s deklaracijom na
+   * korijenu, pa tvrdnja nije o tome da skener vristi na sve.
+   */
+  {
+    id: 'paket/nevezan-prefiks-u-document-xml',
+    imitates:
+      'popravljeni word/document.xml koristi prefiks r: izvan dosega njegove xmlns deklaracije, pa ga '
+      + 'Word odbija otvoriti dok vrata integriteta javljaju da je paket ispravan',
+    caught: () => !scanXmlWellFormed(UNBOUND_PREFIX_DOCUMENT).ok,
+    cleanBefore: () => scanXmlWellFormed(UNBOUND_PREFIX_DOCUMENT.replace('<w:document ', `<w:document xmlns:r="${REL_NS_FOR_MUTATION}" `)).ok,
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

@@ -114,6 +114,75 @@ describe('A0: duplikat atributa na istom elementu', () => {
 });
 
 /**
+ * RE-60 (2026-09-12): NEVEZAN PREFIKS, razred koji je skener propustao jer nije pratio DOSEG.
+ *
+ * `link-doi-fixer` je `xmlns:r` na korijenu trazio uzorkom `/xmlns:r=["']/` nad cijelim
+ * `document.xml`, dakle bilo gdje. Dokument koji prefiks deklarira LOKALNO na nekom elementu
+ * (legalan XML) time je prolazio kao vec deklariran, fixer je umetnuo `<w:hyperlink r:id="...">` u
+ * tijelo izvan dosega te deklaracije, a `integrityFailure` je ostajao `null` jer skener imena s
+ * prefiksom uopce nije provjeravao. @xmldom/xmldom, lxml i Word takav dio odbijaju
+ * (`NamespaceError: prefix is non-null and namespace is null`).
+ *
+ * Gard mora imati oba dokaza: da GRIZE na nevezanom prefiksu i da NE VRISTI na ispravnim oblicima
+ * (deklaracija na korijenu, deklaracija na pretku, `xml:`/`xmlns:` koji se nikad ne deklariraju).
+ */
+describe('A0: prefiks bez xmlns deklaracije u dosegu', () => {
+  const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+
+  it('GRIZE: r: u tijelu dok je xmlns:r deklariran LOKALNO na drugom elementu', () => {
+    const xml =
+      `<w:document xmlns:w="${W}"><w:body>`
+      + '<w:p><w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink></w:p>'
+      + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL}"/></w:sectPr>`
+      + '</w:body></w:document>';
+    // BASELINE: doista je nevaljan i po DRUGOM alatu, ne samo po nasem skeneru. Ovu klasu xmldom
+    // ne prijavljuje kroz `onError` nego BACA, za razliku od RE-47 oblika iznad.
+    expect(() => xmldomErrors(xml)).toThrow(/NamespaceError/);
+    const result = scanXmlWellFormed(xml);
+    expect(result.ok).toBe(false);
+    expect(result.problem).toMatch(/prefiks r:/);
+  });
+
+  it('GRIZE i kad je nevezan prefiks u IMENU elementa', () => {
+    expect(scanXmlWellFormed(`<w:document xmlns:w="${W}"><w:body><m:oMath/></w:body></w:document>`).ok).toBe(false);
+  });
+
+  it('BASELINE: deklaracija na KORIJENU je uredna', () => {
+    const xml =
+      `<w:document xmlns:w="${W}" xmlns:r="${REL}"><w:body>`
+      + '<w:p><w:hyperlink r:id="rId1"><w:r><w:t xml:space="preserve">x</w:t></w:r></w:hyperlink></w:p>'
+      + '</w:body></w:document>';
+    expect(xmldomErrors(xml)).toEqual([]);
+    expect(scanXmlWellFormed(xml).ok).toBe(true);
+  });
+
+  it('BASELINE: deklaracija na PRETKU vrijedi za cijelo podstablo', () => {
+    const xml = `<w:document xmlns:w="${W}"><w:body xmlns:r="${REL}"><w:p><w:hyperlink r:id="rId1"/></w:p></w:body></w:document>`;
+    expect(scanXmlWellFormed(xml).ok).toBe(true);
+  });
+
+  it('DOSEG SE ZATVARA: prefiks nakon zatvaranja elementa koji ga je deklarirao vise ne vrijedi', () => {
+    const xml =
+      `<w:document xmlns:w="${W}"><w:body>`
+      + `<w:p xmlns:r="${REL}"><w:hyperlink r:id="rId1"/></w:p>`
+      + '<w:p><w:hyperlink r:id="rId2"/></w:p>'
+      + '</w:body></w:document>';
+    const result = scanXmlWellFormed(xml);
+    expect(result.ok, 'druga hiperveza je izvan dosega deklaracije s prvog odlomka').toBe(false);
+    expect(result.problem).toMatch(/prefiks r:/);
+  });
+
+  it('NE VRISTI: xml: i xmlns: se po definiciji ne deklariraju', () => {
+    expect(scanXmlWellFormed(`<w:t xmlns:w="${W}" xml:space="preserve">x</w:t>`).ok).toBe(true);
+  });
+
+  it('NE VRISTI: imena bez prefiksa i default namespace', () => {
+    expect(scanXmlWellFormed('<Relationships xmlns="urn:x"><Relationship Id="rId1"/></Relationships>').ok).toBe(true);
+  });
+});
+
+/**
  * DOBRO OBLIKOVAN, ALI SHEMOM NEVALJAN: razred koji je prosao kroz SVE automatske razine.
  *
  * Izmjereno 2026-09-03: `croatian-typography-fixer` je definicije tab-stopova zamjenjivao tekstom i

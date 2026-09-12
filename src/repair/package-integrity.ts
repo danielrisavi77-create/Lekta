@@ -68,13 +68,49 @@ function isNameStart(ch: string): boolean {
  *   - nezatvoren navodnik u vrijednosti atributa,
  *   - nebalansirane ili krivo ugnijezdjene tagove,
  *   - samostalan `<` u tekstu,
- *   - `&` koji ne zapocinje valjan entitet.
+ *   - `&` koji ne zapocinje valjan entitet,
+ *   - prefiks (`r:id`, `w:val`) koji u DOSEGU nema svoju `xmlns:` deklaraciju (RE-60).
  *
  * Namjerno NE validira shemu (to je posao Tier 1/2 oraclea: python-docx, Word).
+ *
+ * ZASTO I VEZANJE PREFIKSA: nevezan prefiks nije stvar sheme nego namespace-well-formedness, i
+ * @xmldom/xmldom ga odbija s `NamespaceError: prefix is non-null and namespace is null`, kao i
+ * lxml i Word. Do 2026-09-12 je `link-doi-fixer` umetao `<w:hyperlink r:id="...">` bez deklaracije
+ * na korijenu kad je dokument `xmlns:r` deklarirao LOKALNO na nekom drugom elementu, a
+ * `integrityFailure` je ostajao `null` jer skener doseg nije pratio. Provjera zato ide kroz
+ * postojeci `stack` (deklaracija vrijedi od elementa na kojem stoji do njegova zatvaranja), NIKAD
+ * kao globalni regex nad cijelim nizom: globalni regex bi ponovio tocno onu gresku koja se
+ * popravlja.
  */
 export function scanXmlWellFormed(xml: string): XmlScanResult {
   const fail = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset });
-  const stack: Array<{ name: string; offset: number }> = [];
+  const stack: Array<{ name: string; offset: number; declared: string[] }> = [];
+  /**
+   * Prefiksi deklarirani u trenutnom dosegu, s brojem razina koje ih deklariraju. Brojac, a ne
+   * skup, jer isti prefiks smije biti redeklariran dublje u stablu; tek kad i zadnja razina koja
+   * ga deklarira nestane, prefiks izlazi iz dosega.
+   */
+  const declaredPrefixes = new Map<string, number>();
+  const declare = (prefixes: readonly string[]): void => {
+    for (const prefix of prefixes) declaredPrefixes.set(prefix, (declaredPrefixes.get(prefix) ?? 0) + 1);
+  };
+  const undeclare = (prefixes: readonly string[]): void => {
+    for (const prefix of prefixes) {
+      const left = (declaredPrefixes.get(prefix) ?? 0) - 1;
+      if (left > 0) declaredPrefixes.set(prefix, left);
+      else declaredPrefixes.delete(prefix);
+    }
+  };
+  /** Vraca nevezan prefiks imena, ili `null` kad je ime bez prefiksa ili je prefiks vezan. */
+  const unboundPrefixOf = (qname: string): string | null => {
+    const colon = qname.indexOf(':');
+    if (colon <= 0) return null;
+    const prefix = qname.slice(0, colon);
+    // `xml` i `xmlns` su vezani po definiciji (Namespaces in XML 1.0, sec. 3) i nikad se ne
+    // deklariraju; bez ovog izuzeca bi `xml:space` i `xmlns:w` bili lazni nalazi.
+    if (prefix === 'xml' || prefix === 'xmlns') return null;
+    return (declaredPrefixes.get(prefix) ?? 0) > 0 ? null : prefix;
+  };
   let i = 0;
 
   while (i < xml.length) {
@@ -121,6 +157,7 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
       const open = stack.pop();
       if (!open) return fail(`zatvarajuci tag </${name}> bez otvarajuceg`, lt);
       if (open.name !== name) return fail(`ocekivan </${open.name}>, a nadjen </${name}>`, lt);
+      undeclare(open.declared);
       i = j + 1;
       continue;
     }
@@ -174,7 +211,22 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
       j = close + 1;
     }
 
-    if (!selfClosing) stack.push({ name, offset: lt });
+    /**
+     * Deklaracije s OVOG elementa vrijede i za njegovo VLASTITO ime i za njegove atribute, pa se
+     * upisuju tek kad su svi atributi procitani, a provjera ide odmah nakon toga.
+     */
+    const declaredHere: string[] = [];
+    for (const attr of seenAttrs) if (attr.startsWith('xmlns:') && attr.length > 6) declaredHere.push(attr.slice(6));
+    declare(declaredHere);
+    const unboundName = unboundPrefixOf(name);
+    if (unboundName) return fail(`prefiks ${unboundName}: u <${name}> nema xmlns deklaraciju u dosegu`, lt);
+    for (const attr of seenAttrs) {
+      const unboundAttr = unboundPrefixOf(attr);
+      if (unboundAttr) return fail(`prefiks ${unboundAttr}: u atributu ${attr} (<${name}>) nema xmlns deklaraciju u dosegu`, lt);
+    }
+
+    if (selfClosing) undeclare(declaredHere);
+    else stack.push({ name, offset: lt, declared: declaredHere });
     i = j;
   }
 
