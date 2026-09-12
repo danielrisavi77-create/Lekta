@@ -73,6 +73,14 @@ export interface LocalDocumentSessionV1 {
   intake: IntakeOk;
   profile?: ConfirmedProfileSnapshot;
   workspace?: LocalWorkspaceSnapshot;
+  /**
+   * Generacija zapisa. Raste za jedan na svaku izmjenu rada.
+   *
+   * OPCIONALNA JE NAMJERNO. Obavezno polje bi trazilo dizanje `LOCAL_DOCUMENT_SCHEMA_VERSION`, a
+   * to baca SVE postojece sesije, dakle i bajtove dokumenata koje je korisnik vec ucitao. Odsutna
+   * revizija se cita kao 0, pa stari zapisi i dalje rade.
+   */
+  revision?: number;
 }
 
 export interface LocalDocumentSessionUpdate {
@@ -91,7 +99,21 @@ export interface LocalDocumentSessionSummary {
 export interface LocalDocumentSessionStore {
   put(session: LocalDocumentSessionV1): Promise<void>;
   get(id: string, now?: number): Promise<LocalDocumentSessionV1 | null>;
-  update(id: string, update: LocalDocumentSessionUpdate): Promise<LocalDocumentSessionV1>;
+  /**
+   * Izmjena rada. `expectedRevision` je GENERACIJA koju pisac misli da ima.
+   *
+   * Kad je zadana i ne poklapa se s onom u pohrani, izmjena se ODBIJA kodom `conflict` umjesto da
+   * pregazi tudji zapis. Bez tog uvjeta dvije kartice (ili zakasnjeli zapis iste kartice) tiho
+   * gube rad: tko zapise drugi, pobijedi, i nista to ne prijavi.
+   *
+   * Izostavljena vrijednost znaci bezuvjetan upis, i to je za pozivatelja koji NEMA sto izgubiti
+   * (prvi zapis, migracije, testovi).
+   */
+  update(
+    id: string,
+    update: LocalDocumentSessionUpdate,
+    expectedRevision?: number,
+  ): Promise<LocalDocumentSessionV1>;
   list(now?: number): Promise<LocalDocumentSessionSummary[]>;
   delete(id: string): Promise<void>;
   deleteExpired(now?: number): Promise<number>;
@@ -441,6 +463,13 @@ export function sanitizeLocalDocumentSession(
     session.workspace = workspace;
   }
 
+  // Nevaljana revizija se IZOSTAVLJA (cita se kao 0), a ne rusi sesiju: generacija je mehanika
+  // pisanja, ne korisnikov rad, pa zbog nje nitko ne smije izgubiti dokument. Posljedica je
+  // najgore jedan odbijen zapis, koji pisac ponovi.
+  if (typeof record.revision === 'number' && Number.isSafeInteger(record.revision) && record.revision >= 0) {
+    session.revision = record.revision;
+  }
+
   return session;
 }
 
@@ -486,6 +515,9 @@ export function applyLocalDocumentSessionUpdate(
   else if (update.profile !== undefined) candidate.profile = update.profile;
   if (update.workspace === null) delete candidate.workspace;
   else if (update.workspace !== undefined) candidate.workspace = update.workspace;
+
+  // Generacija raste PRIJE sanitizacije, da je i ona provuce kroz istu provjeru.
+  candidate.revision = (session.revision ?? 0) + 1;
 
   const sanitized = sanitizeLocalDocumentSession(candidate, now);
   if (!sanitized) throw new TypeError('Ažuriranje lokalne dokumentne sesije nije valjano.');
