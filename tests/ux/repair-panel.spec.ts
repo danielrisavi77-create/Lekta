@@ -8,7 +8,7 @@ import { cekajApp, cekajKorak } from './app-ready';
 // koji su gotovo univerzalni za stvarne teze - dobar reprezentativan slucaj za "predugacak panel".
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
-async function analyzeAndOpenSubmissionTab(page: Page) {
+async function analyzeAndEnterRepairPhase(page: Page) {
   // NEMA tvrdog viewporta: velicinu daje projekt (Desktop Chrome ili Pixel 5). Dok je ovdje
   // stajalo 1440x1000, mobilni projekt je izvodio ISTI desktop scenarij drugi put, pa popravak,
   // dakle placeni dio proizvoda, nije imao nijednu mobilnu provjeru (UX-02).
@@ -73,15 +73,21 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   await page.locator('#analyzeBtn').click();
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
-  // Redizajn "Results Cockpit" seli SVE iza `#resultCockpit` u sklopljeni blok "Napredna
-  // provjera" (`ensureResultsCockpitAdvancedShell`), pa su ondje i kartice i stari tabovi.
-  // Otvara se onako kako to radi korisnik; bez toga `#tabbtn-submission` ima visinu 0 i klik
-  // ceka do timeouta, sto izgleda kao spor stroj a nije.
-  await page.locator('#resultCockpit [data-cockpit-action="open-findings"]').click();
-  // `#resultDetailsToggle` se NE pritisce: "Pregledaj nalaze" vec poziva `revealResultDetails()`,
-  // pa bi ga ovaj klik ZATVORIO (izmjereno na desktop-flow: tab s 45 px padne na 0 px).
-  await expect(page.locator('#tabbtn-submission')).toBeVisible();
-  await page.locator('#tabbtn-submission').click();
+  // DO PANELA SE OD 2026-09-12 DOLAZI ULASKOM U FAZU POPRAVKA (korak B3).
+  //
+  // Prije toga je panel fizicki zivio u kartici "Spremnost za predaju", pa je put do njega isao
+  // kroz otvaranje naprednog bloka i prebacivanje kartice. Ta mehanika vise ne postoji: mount je
+  // staticki element vlastite povrsine (`#repairView`). Tvrdnje ovog speca se NE mijenjaju, sve
+  // cetiri i dalje gledaju isti panel; mijenja se samo put kojim se do njega dolazi, i sada je to
+  // isti put kojim ide korisnik.
+  const safe = page.locator('#resultCockpit [data-cockpit-action="repair-safe"]');
+  const simulate = page.locator('#resultCockpit [data-cockpit-action="simulate-repair"]');
+  const safeEnabled = (await safe.count()) > 0 && (await safe.first().isEnabled());
+  const simulateEnabled = (await simulate.count()) > 0 && (await simulate.first().isEnabled());
+  // Tihi `if` bi ovdje nedostatak gumba pretvorio u prolaz nad praznim panelom.
+  expect(safeEnabled || simulateEnabled, 'ni repair-safe ni simulate-repair nisu omoguceni').toBe(true);
+  await (safeEnabled ? safe : simulate).first().click();
+  await expect(page.locator('#repairView'), 'CTA nije otvorio fazu popravka').toBeVisible();
 }
 
 /**
@@ -110,7 +116,7 @@ test.beforeAll(async ({ browser }) => {
   // tvrdnja se ne mijenja i nijedan test ne dobiva vise vremena.
   test.setTimeout(300_000);
   page = await browser.newPage();
-  await analyzeAndOpenSubmissionTab(page);
+  await analyzeAndEnterRepairPhase(page);
 });
 
 test.afterAll(async () => {

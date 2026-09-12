@@ -225,11 +225,14 @@ const findingStates=new Map<string,FindingSessionState>();
 // params smiju doci samo odavde: currentProfile() u trenutku rendera moze biti
 // druga selekcija (povijest/odjava) pa bi popravak gadjao krivi fakultet.
 let analyzedProfile: any=null;
-// Ocuvani DOM podstablo repair panela: renderSubmissionChecklist se ponovno
-// izvodi na svaki toggle checkliste i pregazi #repairPanelMount; da korisnikov
-// odabir stavki, deep-preklopnik i prikazani sazetak ne nestanu, cuvamo stvarni
-// cvor i re-attachamo ga dok je isti rezultat aktivan (samo za placeni panel).
-let repairPanelNode: any=null, repairPanelForResult: any=null;
+// Za koji je rezultat panel vec izgradjen. Sluzi SAMO tome da se isti panel ne gradi nanovo na
+// svaki re-render checkliste; cuvanje samog DOM cvora vise ne treba.
+//
+// Do 2026-09-12 se ovdje cuvalo i podstablo panela, pa re-attachalo, jer je mount zivio unutar
+// `innerHTML` kartice "Spremnost za predaju" i svaki njezin toggle ga je brisao zajedno s
+// korisnikovim odabirom. Mount je u koraku B3 presao u vlastitu povrsinu (`#repairView`) i vise
+// ga nista ne prepisuje, pa je re-attach bio lijek za bolest koje nema.
+let repairPanelForResult: any=null;
 // RESULT-03: zadnji izracunati items/textItems iz renderRepairSection, da klik na "Otvori
 // mogucnost popravka" na kartici KONKRETNOG nalaza (wireFindingCards) moze naci bas tu stavku u
 // vec-mountiranom panelu bez ponovnog racunanja repair-items liste (skupo, i moglo bi drift-ati
@@ -1818,9 +1821,8 @@ function renderSubmissionChecklist(r: any){
  // dok se ne unesu rokovi, a auth je OFF dok supabaseUrl/anon nisu postavljeni).
  const _sess=authConfigured()?authStore.load():null;
  renderDeadlineReminderToggleIfAvailable({facultyId:r.settings?.selectionIds?.unit||null,programId:r.selection?.program||null,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),deadlineRegistry:ACADEMIC_DEADLINES,config:authConfig(),accessToken:_sess?.accessToken||'',userId:_sess?.userId||'',mountEl:$('#deadlineReminderMount')});
- // Ocuvaj vec renderiran placeni repair panel (checkboxi, deep-preklopnik,
- // sazetak) umjesto da ga innerHTML iznad pregazi: re-attach isti cvor.
- if(repairPanelNode&&repairPanelForResult===r){const m=$('#repairPanelMount');if(m){m.appendChild(repairPanelNode);return}}
+ // Panel za isti rezultat se ne gradi dvaput: ponovna gradnja bi obrisala korisnikov odabir.
+ if(r&&repairPanelForResult===r)return;
  void renderRepairSection(r).catch((e: any)=>console.error('Repair panel:',e));
 }
 
@@ -1845,7 +1847,7 @@ function unknownFixerNote(out: any): string{
 }
 async function renderRepairSection(r: any){
  const mount=$('#repairPanelMount'); if(!mount) return; mount.innerHTML='';
- repairPanelNode=null; repairPanelForResult=null; // dok se ne renderira stateful panel, nema sto cuvati
+ repairPanelForResult=null; // dok se panel ne izgradi, nema sto pamtiti
  repairPanelItems=[]; repairPanelTextItems=[];
  try{
  const defId=r.details?.profileDefinitionId; if(!defId) return;
@@ -1931,11 +1933,11 @@ async function renderRepairSection(r: any){
  // Prvotno je ova zastita stajala samo u serverskom panelu, pa je lokalni put (bez konfiguriranog
  // repairEndpointa) i dalje nudio popravak dokumenta koji se ne moze popraviti; padao bi tek u
  // readZip, dakle upravo ono lazno obecanje koje je zastita trebala ukloniti.
- if(!renderRepairCapabilityBlock(mount,r)){repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
- if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file,textItems);repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
+ if(!renderRepairCapabilityBlock(mount,r)){repairPanelForResult=r;return}
+ if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file,textItems);repairPanelForResult=r;return}
  renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks,tocFieldWillRefresh:tocFieldWillRefresh(res)}:null}});
  // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
- repairPanelNode=mount.firstElementChild; repairPanelForResult=r;
+ repairPanelForResult=r;
  } finally {
   // RE-34 nastavak: mount se puni ASINKRONO (ensureTemplatesHeavy + fixer builderi), a renderRepairCta
   // se prvi put zove SINKRONO odmah nakon poziva ove funkcije (renderResult), dok je mount jos prazan
