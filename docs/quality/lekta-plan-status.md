@@ -63,3 +63,50 @@ promjene u `src/ui/app.ts` su unutar ratcheta (`ui-module-budget`): prostor je n
 
 Sto ostaje vlasniku: potpis ovjere korpusa nad 321 dokumentom (i odluka o `holdout` potvrdi), pilot s korisnicima,
 objava kandidata nakon novog dokaza izdanja nad spojenim masterom.
+
+## Krug 2026-09-12: unos programa T16 do T47 (grana `wf/t16-plan-do-live`)
+
+Program do javnog lansiranja iz vlasnikova plana unesen je u postojeci sustav. Ovo je DOKUMENTACIJSKI
+unos: nijedna datoteka izvan `docs/` nije dirana, nijedan artefakt u `docs/generated` ili
+`data/generated` nije regeneriran, i nijedan novi statusni sustav nije uveden.
+
+| stavka | vrijednost |
+| --- | --- |
+| novi `baselineCommit` | `afccbdd78af4d09f7ff9097adc45e05e3fc41287` (`origin/master` u trenutku unosa) |
+| prethodni `baselineCommit` | `7bdd70853392b092dfa271aef077118df4b18325` |
+| polaziste plana | master `7e52bc66551d7d920ab83810f87f0c52a10f8c16` |
+| razlika mastera od tog polazista | SAMO PR #74 i #75, oba "workflow bez Fablea" (`.claude/workflows/lekta-no-fable-coding.js`, `docs/agents/no-fable-workflow.md`); bez izmjene aplikacijskog koda, pa nalazi plana vrijede nepromijenjeni |
+| kanonski tekst programa | `docs/agents/plan-do-live-2026-09-12.md` (doslovna kopija, sha256 `1b2af479a68609df1571bc98f040a93ff896a27e1940c6d1b11ef012564ece46`) |
+| red zadataka | `docs/agents/tasks.json`, 48 zapisa (T00 do T47) |
+| opisi zadataka | `docs/agents/development-plan.md`, "Podplan F" |
+| nalazi i vlasnici | `docs/AUDIT_MASTER.md`, odjeljak 17 |
+
+### Sto je promijenjeno u redu zadataka
+
+- **T00 do T14:** nedirnuti. Provjereno usporedbom sa `HEAD:docs/agents/tasks.json`, 0 izmijenjenih zapisa.
+- **T15:** `ready` -> `blocked`, `dependsOn` `["T14"]` -> `["T14","T46"]`. Spremnost ovjerenog kandidata
+  (T46) je novi preduvjet pilota; stara biljeska je sacuvana i samo dopunjena.
+- **T16 do T47:** 32 nova zapisa. `id`, `title` i `dependsOn` su STROJNO preuzeti iz JSON bloka odjeljka
+  11 vendoranog plana i provjereni polje po polje (0 razlika). Svaki nosi `note` s prioritetom P0 ili P1
+  iz odjeljka 6 i jednom recenicom sto je dokaz zatvaranja.
+- **Svi T17 do T47 su NEZAPOCETI** (`blocked`, kako ih plan i postavlja). T16 je `in_review`, ne `done`:
+  ovaj commit ga izvodi, a `done` postavlja koordinator nakon prihvacenog dokaza. `implementationAgent`
+  je postojece polje sheme (`scripts/agents/core.mjs`, review faza), ne novo.
+
+### Dokaz ovog kruga
+
+| provjera | ishod |
+| --- | --- |
+| `npm run agents -- list` | prolazi, ispisuje svih 48 zadataka; validator (`validateQueue`) bez duplikata, ciklusa i nepoznatih statusa |
+| gard-mutacija nad prosirenim redom | baseline prolazi; odbijeno svih sest podmetnutih kvarova: duplikat `T20`, ciklus `T20` -> `T21` -> `T20`, samoovisnost `T47`, nepostojeca ovisnost `T99`, status `needs_verification`, ID `T100` |
+| usporedba s planom | `T16` do `T47`: 0 razlika u `id`, `title` i `dependsOn`; prioriteti u `note` i u Podplanu F poklapaju se s odjeljkom 6 (0 razlika) |
+| vendorani plan | bajt jednak izvoru (sha256 iznad); 991 redak, UTF-8 bez BOM-a, LF |
+| citaci prave datoteke | `scripts/agents/cli.mjs` (validator iznad) i `scripts/autonomy/policy.py` (samo popis kontrolnih putanja, bez ogranicenja broja zapisa). Nijedan test ne tvrdi broj zadataka ni `baselineCommit`, pa nijedan test nije mijenjan |
+
+Sto NIJE dokazano ovim krugom: `tests/agent-workflow-cli.test.ts` je na Windowsu preskocen po dizajnu
+(`describe.skipIf(process.platform === 'win32')`, POSIX shebang u testnom izvrsnom programu), pa 4 od 4
+testa nisu izvedena. Taj test ionako gradi VLASTITI privremeni `tasks.json` s jednim zapisom i ne cita
+pravu datoteku, ali njegov prolaz nad ovom promjenom nije izmjeren lokalno; mjerodavan je CI.
+
+Sljedeci korak nije najnizi broj nego kritican put: `T18` -> `T20` -> `T22`/`T24` -> `T25`/`T27` -> `T30`
+-> `T44` -> `T46` -> `T15` -> `T47`. Koordinator postavlja zadatak u `ready` kad su mu ovisnosti `done`.
