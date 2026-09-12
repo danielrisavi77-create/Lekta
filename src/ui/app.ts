@@ -804,7 +804,9 @@ function workTypeLabel(v: any){return (WORK_TYPE_LABELS as any)[v]||v}
 // providera). updateProfile cita currentProfile()->definition.rules pa mora pricekati dohvat;
 // picker/hero rade odmah. Kvar dohvata currentProfile posteno degradira (vidi branu gore).
 async function updateProfile(){
- await ensureRulesForCurrentSelection(currentDefinitionId,ensureProfileRules);
+ // Odmontiranje pod nogama: vidi ensure-current-rules.ts.
+ const m=_runtimeDocument;
+ if((await ensureRulesForCurrentSelection(currentDefinitionId,ensureProfileRules,3,()=>_runtimeDocument===m)).abandoned)return;
  const {p}=currentProfile(),sel=p.selection,sm=(PROFILE_STATUS as any)[p.statusKey]||PROFILE_STATUS.generic,am=p.authority||PROFILE_AUTHORITY.generic;
  const sourceHtml=p.sources?.length?`<div class="source-stack">${p.sources.map((s: any)=>`<div class="source-line">Službeni izvor: <a href="${escapeHtml(safeHref(s.url))}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a></div>`).join('')}${p.verifiedAt?`<div class="source-line">Ručno provjereno: ${escapeHtml(new Date(p.verifiedAt+'T12:00:00').toLocaleDateString('hr-HR'))}${p.documentDate?' · Dokument: '+escapeHtml(p.documentDate):''}${academicYearFromDate(p.verifiedAt)?' · ak. godina verifikacije: '+escapeHtml(academicYearFromDate(p.verifiedAt)):''}</div>`:''}</div>`:`<div class="source-line">Posebna pravila još nisu povezana s provjerenim službenim izvorom. Primjenjuje se generička provjera.</div>`;
  const facts=p.facts?.length?`<div class="rule-facts">${p.facts.map((f: any)=>`<span class="rule-fact">${escapeHtml(f)}</span>`).join('')}</div>`:'';

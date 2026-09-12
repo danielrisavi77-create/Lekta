@@ -86,6 +86,47 @@ describe('utrka odabira pri dohvatu pravila', () => {
     expect(seen).toEqual([null]);
   });
 
+  /**
+   * IZVOR ISTINE NESTANE POD NOGAMA (`isLive`), drugi oblik iste utrke.
+   *
+   * U aplikaciji `readId` cita DOM. Kad `disposeAnalyzerApp` stigne u prozor dohvata, sljedeci
+   * `readId()` BACA, a pozivatelj (`updateProfile`) se nigdje ne ceka, pa iznimka ispliva kao
+   * nenadzirana rejekcija. Ovdje se to podmece doslovno: `readId` poslije prvog kruga baca.
+   */
+  it('NESTAO IZVOR: `readId` se vise ne zove, posao se napusta bez bacanja', async () => {
+    let citano = 0;
+    let ziv = true;
+    const out = await ensureRulesForCurrentSelection(
+      () => {
+        citano += 1;
+        // Tocno ponasanje srusenog DOM-a: prvo citanje uspije, svako sljedece baca.
+        if (citano > 1) throw new TypeError("Cannot read properties of null (reading 'value')");
+        return 'A';
+      },
+      async () => { ziv = false; },
+      3,
+      () => ziv,
+    );
+    expect(out).toMatchObject({ id: 'A', stable: false, abandoned: true });
+    // ANTI-VAKUUM: da se `readId` zvao drugi put, gornji `await` bi bacio i test bi pao ovdje.
+    expect(citano, 'readId je pozvan i nakon sto je izvor nestao').toBe(1);
+  });
+
+  it('ZIVI izvor uz predan `isLive` ne mijenja nista: ista presuda kao bez njega', async () => {
+    const bez = await ensureRulesForCurrentSelection(() => 'A', async () => {});
+    const sa = await ensureRulesForCurrentSelection(() => 'A', async () => {}, 3, () => true);
+    expect(sa).toEqual(bez);
+    expect(sa).toMatchObject({ id: 'A', stable: true, rounds: 1, abandoned: false });
+  });
+
+  it('bez predanog `isLive` `abandoned` je uvijek `false`, pa zateceni pozivatelji ne vide razliku', async () => {
+    const miran = await ensureRulesForCurrentSelection(() => 'A', async () => {});
+    let i = 0;
+    const nesmiren = await ensureRulesForCurrentSelection(() => `P${i}`, async () => { i += 1; }, 2);
+    expect(miran.abandoned).toBe(false);
+    expect(nesmiren).toMatchObject({ stable: false, abandoned: false });
+  });
+
   it('greska dohvata se ne guta: pozivatelj je mora vidjeti', async () => {
     // Tiho progutana greska mrezu bi pretvorila u "profil bez pravila" i vratila nas na tihi
     // gubitak, samo na drugom mjestu.

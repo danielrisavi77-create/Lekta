@@ -136,6 +136,67 @@ describe('granica analizatora', () => {
     expect(isAnalyzerMounted(doc)).toBe(false);
   }, 180000);
 
+  /**
+   * ODMONTIRANJE DOK DOHVAT PRAVILA JOS TRAJE.
+   *
+   * `bind()` vjesa `updateProfile()` na promjenu stila citiranja, a `updateProfile` je `async` i
+   * nigdje se ne ceka: svih sest poziva su fire-and-forget. Unutra se ceka
+   * `ensureRulesForCurrentSelection`, koja POSLIJE awaita ponovno cita odabir iz DOM-a
+   * (`readId()` -> `currentDefinitionId` -> `selectedInstitution` -> `$('#institutionSelect').value`).
+   *
+   * `disposeAnalyzerApp` u tom prozoru postavi `_runtimeDocument` na `null`, pa `runtimeDocument()`
+   * padne natrag na GLOBALNI `document`, koji kontrole profila nema. Nastavak pukne na `null.value`,
+   * a jer poziv nitko ne ceka, iznimka ne stigne ni do jednog pozivatelja nego ispliva kao
+   * NENADZIRANA REJEKCIJA, izvan testa koji ju je izazvao.
+   *
+   * Izmjereno 2026-09-12: cetiri puna gatea zaredom bila su cista, a peti, koji je trajao 1783 s
+   * umjesto uobicajenih ~1200 s, dao je 16 takvih rejekcija, sve pripisane
+   * `tests/analyzer-document-entry.test.ts`. Nijedan test nije pao, svih 5900 je proslo, a vitest je
+   * svejedno izasao s 1. To je najgori oblik kvara jer izgleda kao opterecenje stroja.
+   *
+   * ZASTO PROVIDER, A NE PUKA MONTAZA PA DISPOSE: bez postavljenog providera `ensureProfileRules`
+   * ceka `PROVIDER_WAIT_MS` (8 s) prije nego odustane, pa prva inacica ovog garda nije ni dotakla
+   * nastavak i PROLAZILA JE I BEZ POPRAVKA. Vrata koja test sam otvara drze taj trenutak, pa je
+   * redoslijed (dohvat krenuo -> odmontirano -> dohvat zavrsio) izmjeren, a ne docekan.
+   */
+  it('odmontiranje tijekom dohvata pravila ne ostavlja nenadziranu rejekciju', async () => {
+    const { initAnalyzerApp, disposeAnalyzerApp } = await import('../src/ui/app');
+    const registry = await import('../src/profiles/profile-registry');
+    const doc = workspaceDoc();
+    const uhvacene: unknown[] = [];
+    const biljezi = (razlog: unknown) => { uhvacene.push(razlog); };
+    process.on('unhandledRejection', biljezi);
+    let otvoriVrata: () => void = () => {};
+    let pozvanProvider = 0;
+    try {
+      initAnalyzerApp(doc);
+      // Provider se postavlja TEK POSLIJE montaze: `initLegacy` prvi zove `wireProfileRulesProvider`,
+      // pa bi ga montaza inace pregazila.
+      registry.resetProfileRulesForTests();
+      const vrata = new Promise<void>((res) => { otvoriVrata = res; });
+      registry.setProfileRulesProvider(async () => {
+        pozvanProvider += 1;
+        await vrata;
+        return { kind: 'failed', reason: 'test' };
+      });
+      const stil = doc.querySelector('#citationStyle');
+      expect(stil, 'fixture nema #citationStyle, pa se updateProfile ne bi ni pokrenuo').not.toBeNull();
+      stil?.dispatchEvent(new Event('change'));
+      await new Promise((r) => setTimeout(r, 30));
+      // ANTI-VAKUUM: bez ovoga bi tvrdnja nize bila istinita ni nad cim.
+      expect(pozvanProvider, 'dohvat pravila nije ni krenuo; scenarij nije reproduciran').toBe(1);
+      disposeAnalyzerApp(doc);
+      otvoriVrata();
+      // Pusti i mikro i makro zadatke, inace bi rejekcija stigla tek poslije tvrdnje.
+      for (let i = 0; i < 8; i += 1) await new Promise((r) => setTimeout(r, 20));
+    } finally {
+      process.off('unhandledRejection', biljezi);
+      otvoriVrata();
+      registry.resetProfileRulesForTests();
+    }
+    expect(uhvacene.map((e) => (e instanceof Error ? e.message : String(e)))).toEqual([]);
+  }, 180000);
+
   it('globalni document bez #analyzer ne montira nista pri ucitavanju modula', async () => {
     // Auto-montaza na dnu modula je ogradjena. Bez te ograde bi svaki uvoz modula u testu
     // pokusao montazu nad praznim happy-dom dokumentom.
