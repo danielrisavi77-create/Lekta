@@ -25,8 +25,28 @@ export interface XmlScanResult {
   /**
    * Razred greske. `namespace` je jedini koji se mjeri i na ULAZU pa prijavljuje samo kad je NOV
    * (vidi `detectIntegrityFailure`); sve ostalo je bezuvjetno fatalno.
+   *
+   * STRUKTURA IMA PRVENSTVO: strukturna greska prekida skeniranje odmah, a nevezani prefiksi se
+   * skupljaju i javljaju tek na kraju. Bez tog redoslijeda bi dio s OBA kvara bio prijavljen kao
+   * `namespace`, pa bi ga izuzece za vec postojeci prefiks propustilo ZAJEDNO sa strukturnim
+   * kvarom. Izmjereno 2026-09-12: RE-47 oblik (`<w:fldChar .../ w:dirty="true">`) je prolazio kroz
+   * vrata integriteta samo zato sto je ulaz imao nevezan prefiks na korijenu.
    */
   kind?: 'structure' | 'namespace';
+  /**
+   * SVI nevezani prefiksi dijela, po prvoj pojavi (samo uz `options.namespaces`, i samo kad je
+   * `kind === 'namespace'`). Popis, a ne jedan nalaz, jer vrata integriteta usporedjuju SKUP
+   * prefiksa ulaza i izlaza: da se javlja samo prvi, jedan vec postojeci nevezan prefiks bi sakrio
+   * svaki NOV koji je popravak uveo.
+   */
+  unboundPrefixes?: readonly UnboundPrefix[];
+}
+
+/** Jedan nevezan prefiks: ime, mjesto prve pojave i citljiv opis. */
+export interface UnboundPrefix {
+  prefix: string;
+  offset: number;
+  detail: string;
 }
 
 export interface XmlScanOptions {
@@ -103,8 +123,16 @@ function isNameStart(ch: string): boolean {
 export function scanXmlWellFormed(xml: string, options: XmlScanOptions = {}): XmlScanResult {
   const checkNamespaces = options.namespaces === true;
   const fail = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset, kind: 'structure' });
-  const failNamespace = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset, kind: 'namespace' });
   const stack: Array<{ name: string; offset: number; declared: string[] }> = [];
+  /**
+   * Nevezani prefiksi se SKUPLJAJU, ne prijavljuju odmah. Dva razloga, oba izmjerena:
+   * struktura mora imati prvenstvo (vidi `XmlScanResult.kind`), a vrata integriteta trebaju CIJELI
+   * skup da bi razlikovala nov prefiks od onog koji je dosao s dokumentom.
+   */
+  const unbound = new Map<string, UnboundPrefix>();
+  const noteUnbound = (prefix: string, offset: number, detail: string): void => {
+    if (!unbound.has(prefix)) unbound.set(prefix, { prefix, offset, detail });
+  };
   /**
    * Prefiksi deklarirani u trenutnom dosegu, s brojem razina koje ih deklariraju. Brojac, a ne
    * skup, jer isti prefiks smije biti redeklariran dublje u stablu; tek kad i zadnja razina koja
@@ -240,10 +268,10 @@ export function scanXmlWellFormed(xml: string, options: XmlScanOptions = {}): Xm
       for (const attr of seenAttrs) if (attr.startsWith('xmlns:') && attr.length > 6) declaredHere.push(attr.slice(6));
       declare(declaredHere);
       const unboundName = unboundPrefixOf(name);
-      if (unboundName) return failNamespace(`prefiks ${unboundName}: u <${name}> nema xmlns deklaraciju u dosegu`, lt);
+      if (unboundName) noteUnbound(unboundName, lt, `prefiks ${unboundName}: u <${name}> nema xmlns deklaraciju u dosegu`);
       for (const attr of seenAttrs) {
         const unboundAttr = unboundPrefixOf(attr);
-        if (unboundAttr) return failNamespace(`prefiks ${unboundAttr}: u atributu ${attr} (<${name}>) nema xmlns deklaraciju u dosegu`, lt);
+        if (unboundAttr) noteUnbound(unboundAttr, lt, `prefiks ${unboundAttr}: u atributu ${attr} (<${name}>) nema xmlns deklaraciju u dosegu`);
       }
     }
 
@@ -258,6 +286,10 @@ export function scanXmlWellFormed(xml: string, options: XmlScanOptions = {}): Xm
     if (open.length) {
       const last = open[open.length - 1];
       return fail(`tag <${last.name}> nije zatvoren`, last.offset);
+    }
+    if (unbound.size) {
+      const list = [...unbound.values()];
+      return { ok: false, problem: list[0].detail, offset: list[0].offset, kind: 'namespace', unboundPrefixes: list };
     }
     return { ok: true };
   }

@@ -196,6 +196,22 @@ const re60Gate = (output: string) =>
     { 'word/document.xml': RE60_INPUT },
   );
 
+/** Ulaz s TUDJIM nevezanim prefiksima (VML crtez), pa izlaz koji uz to nosi NAS `r:id`. */
+const RE60_MIXED_INPUT =
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+  + '<w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p><w:p><v:shape o:spid="x"/></w:p>'
+  + '</w:body></w:document>';
+const RE60_MIXED_BAD = RE60_MIXED_INPUT.replace(
+  '<w:r><w:t>doi:10.1234/abc</w:t></w:r>',
+  '<w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink>',
+);
+const RE60_MIXED_GATE = (output: string) =>
+  detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_MIXED_INPUT });
+/** Sinteticki ulaz bez ijedne deklaracije (oblik koji testovi ovog repozitorija masovno grade). */
+const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t></w:r></w:p></w:body></w:document>';
+const RE60_SYNTHETIC_GATE = (output: string) =>
+  detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
+
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
   {
@@ -1217,6 +1233,37 @@ const MUTATIONS: Mutation[] = [
       + 'Word odbija otvoriti dok vrata integriteta javljaju da je paket ispravan',
     caught: () => re60Gate(RE60_BAD_OUTPUT) !== null,
     cleanBefore: () => re60Gate(RE60_GOOD_OUTPUT) === null,
+  },
+  /**
+   * SUZENJE GARDA NE SMIJE GA OSLIJEPITI (nalaz pregleda, 2026-09-12).
+   *
+   * Nevezan prefiks se prijavljuje samo kad ga je uveo popravak. Da je to izuzece pisano PO DIJELU
+   * ("ulazni dio je i sam padao"), jedan prefiks koji je dosao s dokumentom gasio bi provjeru za
+   * cijeli taj dio, pa bi i NAS nov prefiks prosao. Mutacija podmece tocno taj par: ulaz s VML
+   * crtezom (`v:`/`o:` nedeklarirani) i izlaz koji uz to nosi nasu hipervezu s `r:id`.
+   */
+  {
+    id: 'paket/nov-prefiks-iza-vec-nevezanog-prefiksa',
+    imitates:
+      'popravak uvodi nevezan prefiks r: u dio koji je vec imao tudji nevezan prefiks v:, pa izuzece '
+      + 'za tudji ulaz propusta i nas vlastiti kvar',
+    caught: () => RE60_MIXED_GATE(RE60_MIXED_BAD)?.problem.includes('prefiks r:') === true,
+    cleanBefore: () => RE60_MIXED_GATE(RE60_MIXED_INPUT.replace('<w:body>', '<w:body w:rsidR="00AA">')) === null,
+  },
+  /**
+   * STRUKTURA IMA PRVENSTVO NAD NAMESPACEOM (nalaz pregleda, 2026-09-12).
+   *
+   * Ista rupa u drugom smjeru: kad ulazni dio pada na nevezanom prefiksu, izuzece ne smije progutati
+   * STRUKTURNI (RE-47) kvar koji je popravak uveo. Baseline je isti sinteticki ulaz uz bezopasnu
+   * izmjenu teksta.
+   */
+  {
+    id: 'paket/re47-iza-nevezanog-prefiksa-na-ulazu',
+    imitates:
+      'popravak proizvede atribut iza kose crte u dijelu ciji je ulaz vec imao nevezan prefiks, pa '
+      + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
+    caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
+    cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
