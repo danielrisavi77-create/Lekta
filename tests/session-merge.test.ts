@@ -122,4 +122,74 @@ describe('spajanje rada iz dvije kartice', () => {
     expect(JSON.stringify(base)).toBe(kopijaBase);
     expect(JSON.stringify(patch)).toBe(kopijaPatch);
   });
+
+  /**
+   * SVA POLJA PREZIVE SPAJANJE, i ovo je gard protiv razreda kvara koji se vec dogodio.
+   *
+   * `spojiWorkspace` je prvo gradio NOV objekt i rucno prepisivao cetiri polja koja je tip tada
+   * imao. Kad je spajanje s masterom dodalo `revision` i `previousRevision` (snimke verzija rada,
+   * T12), ta su se dva polja tiho gubila na svakom spajanju. Nijedan postojeci test to nije vidio,
+   * jer su svi tvrdili o poljima koja su POSTOJALA kad su napisani.
+   *
+   * SENTINEL JE U TIPU, ne u tvrdnji: fixtura je `Required<LocalWorkspaceSnapshot>`, pa je
+   * prevodilac duzan traziti SVAKO polje. Doda li netko sedmo, ova se datoteka NE PREVODI dok ga
+   * ne unese, i tek onda tvrdnja ispod provjeri prezivljava li spajanje. Tvrdnja bez tog sentinela
+   * bila bi tocno ono sto je i pukla: popis koji zaostane za tipom.
+   */
+  it('nijedno polje workspacea se ne gubi pri spajanju', () => {
+    const puni: Required<LocalWorkspaceSnapshot> = {
+      stage: 'results',
+      selectedFindingId: 'nalaz-1',
+      analysis: analiza(100)!,
+      repairSelection: odabir(100, 'D1', ['a|1']),
+      revision: { id: 'r1' } as unknown as Required<LocalWorkspaceSnapshot>['revision'],
+      previousRevision: { id: 'r0' } as unknown as Required<LocalWorkspaceSnapshot>['previousRevision'],
+    };
+
+    // Patch koji spominje SAMO fazu. Ovako pise svaki pisac koji zna za jedno polje.
+    const out = mergeSessionWork({ workspace: puni }, { workspace: { stage: 'repairPlan' } });
+    const spojen = out.workspace!;
+
+    for (const kljuc of Object.keys(puni) as Array<keyof typeof puni>) {
+      expect(spojen[kljuc], 'polje ' + kljuc + ' je nestalo pri spajanju').toBeDefined();
+    }
+    expect(spojen.stage, 'faza ipak dolazi iz kartice koja pise').toBe('repairPlan');
+    expect(spojen.revision).toEqual(puni.revision);
+    expect(spojen.previousRevision).toEqual(puni.previousRevision);
+  });
+
+  /**
+   * Gard bez dokaza da grize se ne racuna. Podmece se TOCNO prva izvedba: nov objekt s rucnim
+   * popisom polja.
+   */
+  it('gard grize: rucni popis polja ispusta ono cega nije bilo kad je pisan', () => {
+    const puni = {
+      stage: 'results' as const,
+      selectedFindingId: 'nalaz-1',
+      analysis: analiza(100),
+      repairSelection: odabir(100, 'D1', ['a|1']),
+      revision: { id: 'r1' },
+      previousRevision: { id: 'r0' },
+    };
+
+    // Podmetnuta stara izvedba: gradi nov objekt i zna samo za cetiri polja.
+    const staro = (base: typeof puni, patch: { stage: 'repairPlan' }) => {
+      const spojen: Record<string, unknown> = { stage: patch.stage };
+      if (base.selectedFindingId !== undefined) spojen.selectedFindingId = base.selectedFindingId;
+      if (base.analysis) spojen.analysis = base.analysis;
+      if (base.repairSelection) spojen.repairSelection = base.repairSelection;
+      return spojen;
+    };
+
+    const mutirano = staro(puni, { stage: 'repairPlan' });
+    expect(mutirano.revision, 'podmetnuta izvedba MORA izgubiti novo polje').toBeUndefined();
+    expect(mutirano.previousRevision).toBeUndefined();
+
+    // Baseline: stvarno spajanje ga cuva.
+    const stvarno = mergeSessionWork(
+      { workspace: puni as unknown as LocalWorkspaceSnapshot },
+      { workspace: { stage: 'repairPlan' } },
+    );
+    expect(stvarno.workspace?.revision, 'baseline je izmjeren, ne pretpostavljen').toBeDefined();
+  });
 });

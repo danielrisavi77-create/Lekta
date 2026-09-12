@@ -1,4 +1,8 @@
 import type { IntakeOk } from '../docx/intake-gate';
+// Model uvozi PRAVILO spajanja, a ne obrnuto: `session-merge` iz ovog modula uzima samo tipove
+// (`import type`), pa u izvodjenju ciklusa nema. Pravilo zivi na JEDNOM mjestu, jer bi druga
+// kopija u pohrani i u pisacu bila dvije presude o istom pitanju.
+import { mergeSessionWork } from './session-merge';
 import { sanitizeStoredRevision, type StoredRevision } from './revision-storage';
 
 export const LOCAL_DOCUMENT_SCHEMA_VERSION = 1 as const;
@@ -524,8 +528,24 @@ export function applyLocalDocumentSessionUpdate(
   const candidate: LocalDocumentSessionV1 = { ...session };
   if (update.profile === null) delete candidate.profile;
   else if (update.profile !== undefined) candidate.profile = update.profile;
+  // WORKSPACE SE SPAJA, NE ZAMJENJUJE (ispravak 2026-09-12).
+  //
+  // Do danas je parcijalni patch prepisivao CIJELI `workspace`. Posljedica je bila tiha i sigurna:
+  // `revisions.persist` salje `{stage, revision, previousRevision}` i time brise `analysis` i
+  // `repairSelection`; pisac odabira salje `{repairSelection}` i time brise snimke verzija. Svaki
+  // pisac je bio u pravu za svoje polje i krivu za tudje.
+  //
+  // `mergeSessionWork` je vec presudjivao po polju, ali samo u grani SUKOBA u `session-writer.ts`;
+  // na uspjesnom putu se nije izvodio uopce. Time je ponasanje ovisilo o tome je li slucajno doslo
+  // do sukoba, sto je najgori oblik: tocno kad nema utrke, gubi se rad.
   if (update.workspace === null) delete candidate.workspace;
-  else if (update.workspace !== undefined) candidate.workspace = update.workspace;
+  else if (update.workspace !== undefined) {
+    const spojeno = mergeSessionWork(
+      candidate.workspace ? { workspace: candidate.workspace } : {},
+      { workspace: update.workspace },
+    );
+    candidate.workspace = spojeno.workspace;
+  }
 
   // Generacija raste PRIJE sanitizacije, da je i ona provuce kroz istu provjeru.
   candidate.revision = (session.revision ?? 0) + 1;

@@ -63,15 +63,21 @@ function spojiWorkspace(
   if (!base) return patch;
   if (!patch) return base;
 
-  // Stage i odabrani nalaz dolaze iz kartice koja upravo pise.
-  const spojen: LocalWorkspaceSnapshot = { stage: patch.stage };
-  if (patch.selectedFindingId !== undefined) spojen.selectedFindingId = patch.selectedFindingId;
+  // POLAZI SE OD `base`, ne od praznog objekta, i to je ispravak kvara iz 2026-09-12.
+  //
+  // Prva izvedba je gradila nov objekt i rucno prepisivala cetiri polja koja je tada imala. Kad je
+  // spajanje s masterom tipu dodalo `revision` i `previousRevision` (snimke verzija rada, T12), ta
+  // dva polja su se TIHO GUBILA na svakom spajanju. TypeScript to ne vidi: objekt s podskupom
+  // neobaveznih polja je valjan tip. Polazak od `base` cini propust nemogucim po konstrukciji, a
+  // ne po paznji: novo polje prezivi i kad ga nitko ne spomene.
+  const spojen: LocalWorkspaceSnapshot = { ...base, ...patch };
 
+  // Polja s vlastitim pravilom presudjuju se izricito, jer im plitko prepisivanje nije tocno.
   const analysis = noviji(base.analysis, patch.analysis, (a) => a.createdAt);
-  if (analysis) spojen.analysis = analysis;
+  if (analysis) spojen.analysis = analysis; else delete spojen.analysis;
 
   const odabir = spojiOdabir(base.repairSelection, patch.repairSelection);
-  if (odabir) spojen.repairSelection = odabir;
+  if (odabir) spojen.repairSelection = odabir; else delete spojen.repairSelection;
 
   return spojen;
 }
