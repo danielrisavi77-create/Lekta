@@ -49,6 +49,10 @@ HEAD, pa u dijeljenom stablu mjeri i tudje necommitane izmjene i laze u oba smje
 - Stroj: 8 GB, 4 jezgre, suite 420 datoteka. Ispod ~1 GB slobodnog RAM-a ne pokrecu se testovi.
   Nula FAIL redaka + nema sazetka + npm 1 = iscrpljen resurs, ne regresija. Kad stroj nije miran,
   dokaz se seli na CI.
+- Sazetak POSTOJI + redak `Errors N errors` + npm 1 = NENADZIRANE REJEKCIJE, ne stroj: svi testovi
+  prolaze, a nesto baca izvan testa poslije teardowna. Presudjuje PRISUTNOST sazetka, ne izlazni kod.
+  Javlja se samo na sporom prolazu, pa se lako zamijeni za iscrpljen resurs. Blok `Unhandled Errors`
+  imenuje datoteku u kojoj se DOGODILO, ne onu u kojoj kvar zivi.
 
 ## Paralelizam ide kroz IZOLACIJU, ne kroz vise pisaca
 

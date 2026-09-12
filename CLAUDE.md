@@ -201,6 +201,24 @@ RESURS, ne regresiju; ne pripisuj to commitu. Prije mjerenja pogledaj slobodni R
 (`Get-CimInstance Win32_OperatingSystem`) i broj node procesa; ispod ~1 GB slobodno nema smisla ni
 pokretati. Kad stroj nije miran, dokaz se seli na CI (cist stroj) ili se ceka.
 
+ISTI IZLAZNI KOD, DRUGI KVAR: `Errors N errors` U SAZETKU. Kad sazetak POSTOJI, svi testovi prolaze,
+a `npm` svejedno vrati 1, to nisu padovi nego NENADZIRANE REJEKCIJE: nesto baca izvan testa, poslije
+njegova teardowna. Izmjereno 2026-09-12: `Test Files 508 passed`, `Tests 5900 passed`, `Errors 16
+errors`, na prolazu od 1783 s umjesto uobicajenih ~1200 s, dok su cetiri ranija gatea bila cista.
+
+Presuda se donosi po PRISUTNOSTI sazetka, ne po izlaznom kodu:
+
+    nema sazetka        + npm 1   iscrpljen resurs; NE pripisuj commitu
+    ima sazetak+Errors  + npm 1   neuhvacena rejekcija; JEST kvar, i to zatecen
+
+Zamka je u tome sto se drugi slucaj lako procita kao prvi, jer se javlja samo kad je stroj spor.
+Blok `Unhandled Errors` imenuje datoteku u kojoj se kvar DOGODIO, ne onu u kojoj zivi; ta datoteka
+sama prolazi cisto. Uzrok je bio fire-and-forget `async` (`updateProfile`) ciji se nastavak probudio
+nakon `disposeAnalyzerApp` i citao srusen DOM; rjesenje je `isLive` u
+`src/profiles/ensure-current-rules.ts`, dakle USPOREDBA KONTEKSTA, ne hvatanje iznimke. Reprodukcija
+mora kontrolirati vrijeme: gard koji samo montira pa odmah odmontira PROLAZI I BEZ POPRAVKA, jer
+`ensureProfileRules` bez providera ceka 8 s pa nastavak ni ne krene.
+
 ## Tvrdo pravilo: paralelizam ide kroz IZOLACIJU, ne kroz vise pisaca
 
 Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u istom stablu.
