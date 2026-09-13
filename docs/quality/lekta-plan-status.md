@@ -110,3 +110,10 @@ pravu datoteku, ali njegov prolaz nad ovom promjenom nije izmjeren lokalno; mjer
 
 Sljedeci korak nije najnizi broj nego kritican put: `T18` -> `T20` -> `T22`/`T24` -> `T25`/`T27` -> `T30`
 -> `T44` -> `T46` -> `T15` -> `T47`. Koordinator postavlja zadatak u `ready` kad su mu ovisnosti `done`.
+
+## Krug 2026-09-13: T16 zatvoren, kriticni put otvoren
+
+`T16` je postavljen na `done`: PR #78 spojen u master `528fbae7`, gate zelen (531 datoteka, 6102 testa).
+Koordinator je programski postavio `ready` svakom zadatku ciju su sve ovisnosti `done`: `T17`, `T18`,
+`T19`, `T23`, `T26`, `T41`. `T15` ostaje `blocked` (ovisi jos o `T46`). Sljedeci koraci po kriticnom
+putu ostaju `T18` pa `T19`.
