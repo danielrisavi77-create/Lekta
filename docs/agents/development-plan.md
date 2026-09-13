@@ -86,8 +86,8 @@ Poznato oštećenje dokumenta ili neobjašnjena regresija blokira izdavanje pogo
 | B - kvaliteta pravila i sigurnost obrade | T05-T07 | T00 | Jasna razina dokaza, realni ciljevi popravka, ograničen ulaz. |
 | C - jedinstven plan i završetak popravka | T08-T10 | T01-T03, T05-T07 | Dosljedan odabir, izvršenje, provjera i preuzimanje. |
 | D - praćenje nalaza kroz verzije | T11-T12 | T05, T08-T10 | Usporedba stvarno riješenih, postojećih i novih problema. |
-| E - mentorovi zadaci i korisnička provjera | T13-T15 | T09-T12 | Pilot komentara, mjerenje toka i završna procjena spremnosti. |
-| F - program do javnog lansiranja | T16-T47 | T00 (ulaz: jedini prethodnik, nosi ga T16) i T15 (izlaz: T47 ovisi o njemu; sam T15 ostaje u Podplanu E i blokiran je do T46) | Ovjeren kandidat, pilot i javna objava; redoslijed unutar F je u vlastitoj tablici valova u odjeljku „Podplan F”. |
+| E - mentorovi zadaci i korisnička provjera | T13-T15 | T09-T12; T15 uz to ovisi o T46 iz Podplana F | Pilot komentara, mjerenje toka i završna procjena spremnosti. |
+| F - program do javnog lansiranja | T16-T47 | T00 (ulaz: jedini prethodnik, nosi ga T16) i T15 (izlaz: T47 ovisi o njemu; sam T15 ostaje u Podplanu E i ovisi o T14 i T46) | Ovjeren kandidat, pilot i javna objava; redoslijed unutar F je u vlastitoj tablici valova u odjeljku „Podplan F”. |
 
 Stupac ovisnosti za Podplan F navodi samo ovisnosti prema zadacima IZVAN njega. Izmjereno iz `**Ovisi o:**`
 deklaracija svih zadataka T16-T47 u odjeljku „Podplan F” i iz `docs/agents/tasks.json`, takve su točno dvije:
@@ -711,7 +711,8 @@ Oznake **F-A** do **F-F** označavaju valove UNUTAR Podplana F i odgovaraju redo
 `docs/agents/plan-do-live-2026-09-12.md`, odjeljak 5 (F-A je Val A, F-B je Val B i tako redom).
 Vendorani plan se ne mijenja i ostaje izvor; prefiks `F-` dodan je samo ovdje da se oznaka vala ne
 pomiješa s nazivima podplanova A-E iz odjeljka 2 (gdje je, primjerice, Podplan A skup zadataka
-T00-T04, a val F-A obuhvaća T16-T19).
+T00-T04, a val F-A obuhvaća T16-T19). Iznimka je val F-F: uz T47 uključuje i T15 iz Podplana E,
+jer je na kritičnom putu T46 -> T15 -> T47.
 
 | Val | Fokus i redoslijed | Izlazni dokaz | Okvir napora |
 | --- | --- | --- | --- |
