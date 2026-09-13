@@ -147,7 +147,7 @@ describe('razlog nepokrivene celije', () => {
   it('svaka nepokrivena celija ima razlog iz zatvorenog popisa', () => {
     const dopusteni = new Set([
       'profil-ne-propisuje-os', 'univerzalna-higijena-bez-dokaza', 'closed-loop-nije-rijesio',
-      'nema-dokaza', 'ceka-ljudski-odabir', 'trazi-ulaz-izvan-dokumenta',
+      'nema-dokaza', 'ceka-ljudski-odabir',
       // Pomocni (`dispatch-only`) fixer: unos u changelog nosi onaj koji ga zove, pa mu je dokaz
       // kroz `fixersChanged` strukturno nedostizan. Razred se izvodi iz `REPAIR_SURFACE`.
       'pomocni-fixer-dokaz-nosi-pozivatelj',

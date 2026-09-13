@@ -32,7 +32,11 @@ import {
   verifyShapeClaims,
   type DocxShapeCounts,
 } from '../src/corpus/docx-shapes';
-import { aggregateByFixer, deadFixers, type DocumentMeasurement } from '../scripts/corpus-gen/net-core.mts';
+import {
+  aggregateByFixer,
+  deadFixers,
+  type DocumentMeasurement,
+} from '../scripts/corpus-gen/net-core.mts';
 import { uncoveredReason } from './helpers/coverage-cells';
 import { verifyOutputProofs } from '../scripts/corpus-gen/mutations.mts';
 import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow } from '../src/corpus/tool-comparison';
@@ -221,6 +225,29 @@ const RE60_MIXED_GATE = (output: string) =>
 const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t></w:r></w:p></w:body></w:document>';
 const RE60_SYNTHETIC_GATE = (output: string) =>
   detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
+
+/** Jedno mjerenje mreze popravka; samo polja koja brojac naslovnice cita nose vrijednost. */
+function netMeasurement(
+  dokument: string,
+  titleTemplateId: string | null,
+  zatrazeno: string[],
+  promijenili: string[],
+): DocumentMeasurement {
+  return {
+    dokument,
+    profileId: 'p',
+    paloPrije: [],
+    zatrazeno,
+    promijenili,
+    bezUcinka: [],
+    cekaPotvrdu: [],
+    titleTemplateId,
+    rijeseno: [],
+    nerijeseno: [],
+    regresije: [],
+    integrityFailure: null,
+  };
+}
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1880,6 +1907,49 @@ const MUTATIONS: Mutation[] = [
       + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
     caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
     cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
+  },
+  {
+    id: 'matrica/naslovnica-pausalno-proglasena-nemjerljivom',
+    imitates:
+      'celija `title-page-fixera` nosi pausalnu oznaku da mu ulaz dolazi izvan dokumenta, i to za SVIH '
+      + '407 profila. Obrazlozenje se pozivalo na to da je odabir predloska korak u SUCELJU, a aplikacija '
+      + 'ga izvodi CISTOM funkcijom `selectTemplate(unitId, workType)` (src/ui/app.ts, '
+      + 'src/title-pages/template-loader.ts), koju mjerenje moze pozvati jednako. Posljedica nije '
+      + 'kozmeticka: 388 profila koji naslovnicu UOPCE NE PROPISUJU (`checkTitlePage !== true`) citalo je '
+      + 'granicu mjerenja ondje gdje je istina "fakultet os ne propisuje", a 19 koji ju propisuju krilo je '
+      + 'imenovanu rupu iza iste oznake',
+    caught: () => {
+      // Profil koji naslovnicu ne propisuje: fixer mu se ne nudi, pa je istina `profil-ne-propisuje-os`.
+      const nePropisuje = uncoveredReason(0, false, undefined, 'title-page-fixer', { checkTitlePage: false }, 'x', []);
+      return nePropisuje === 'profil-ne-propisuje-os';
+    },
+    /**
+     * Netrivijalnost: profil koji naslovnicu PROPISUJE ne smije dobiti istu oznaku, inace bi grana
+     * pojela i stvarnu rupu i matrica bi se ispraznila u nesto blago a neistinito.
+     */
+    cleanBefore: () =>
+      uncoveredReason(0, false, undefined, 'title-page-fixer', { checkTitlePage: true }, 'x', []) !==
+      'profil-ne-propisuje-os',
+  },
+  {
+    id: 'matrica/nesuglasje-unutar-jedne-datoteke-proglaseno-vanjskim-ulazom',
+    imitates:
+      '`submission-metadata-fixer` je nosio obrazlozenje da usporedjuje docx s DRUGOM datotekom (PDF), pa '
+      + 'da jedan dokument po definiciji ne moze dati nesuglasje. IZMJERENO suprotno: '
+      + '`analyzeCrossFileSubmission` nema nijedan uvjet o broju datoteka i usporedjuje izvore UNUTAR '
+      + 'iste datoteke; nad 54 `authored` fixture, svaka iz JEDNE datoteke, izlazi 360 nalaza. Ishod '
+      + 'celije je pritom bio tocan iz DRUGOG razloga: graditelj svaki nalaz gradi s tvrdim '
+      + '`selected: false`, pa su zadani parametri prazni, dakle isti razred kao `consistency-fixer`',
+    caught: () =>
+      uncoveredReason(0, false, undefined, 'submission-metadata-fixer', {}, 'x', []) === 'ceka-ljudski-odabir',
+    /**
+     * Netrivijalnost, dvije strane: razred mora vec vrijediti za fixer koji je u njemu odavno, i ne
+     * smije progutati profil koji os doista boduje a dokaza nema.
+     */
+    cleanBefore: () =>
+      uncoveredReason(0, false, undefined, 'consistency-fixer', {}, 'x', []) === 'ceka-ljudski-odabir' &&
+      uncoveredReason(3, true, undefined, 'paper-size-fixer', { requireA4: true }, 'x', ['paper-size']) ===
+        'nema-dokaza',
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {

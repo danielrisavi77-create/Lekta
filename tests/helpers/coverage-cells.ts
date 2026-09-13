@@ -128,11 +128,15 @@ export type UncoveredReason =
    * stoji kao dug koji se nikad ne moze zatvoriti.
    */
   | 'ceka-ljudski-odabir'
-  /**
-   * Fixer trazi ulaz koji generirani dokument NE MOZE dati: drugu datoteku za usporedbu, ili
-   * odabir predloska koji je korak u sucelju. Nije rupa u mjerenju nego granica mjerenja.
+  /*
+   * POVUCEN RAZLOG: ovdje je do 2026-09-13 stajao `trazi-ulaz-izvan-dokumenta`, uz tvrdnju da fixer
+   * trazi ulaz koji jedan dokument ne moze dati (drugu datoteku za usporedbu, ili odabir predloska
+   * koji je korak u sucelju). Obje njegove nositeljice su izmjerene i nijedna tvrdnja nije stajala:
+   * predlozak naslovnice izvodi CISTA funkcija `selectTemplate(unitId, workType)`, a
+   * `analyzeCrossFileSubmission` usporedjuje izvore UNUTAR iste datoteke. Oznaka je time prestala
+   * biti istinita nad ijednom celijom, pa se povlaci, kao i `fixer-se-nudi-a-provjere-nema` prije
+   * nje. Zapis o kvaru ostaje u povijesti; oznaka ne ostaje.
    */
-  | 'trazi-ulaz-izvan-dokumenta'
   /**
    * POMOCNI fixer (`dispatch-only`): radi iznutra, a unos u changelog nosi onaj koji ga zove.
    *
@@ -259,6 +263,39 @@ export const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => 
     if (!levels || typeof levels !== 'object') return false;
     return Object.values(levels).some((level) => level?.uppercase === true);
   },
+  /**
+   * `buildTitlePageRepairPlan` (src/analysis/title-page-repair.ts) radi tvrdi
+   * `if (profile?.checkTitlePage !== true) return null`, pa je kapija doslovna, kao i ostale ovdje.
+   *
+   * Do 2026-09-13 je `title-page-fixer` umjesto kapije nosio PAUSALNU oznaku da mu ulaz dolazi izvan
+   * dokumenta, uz obrazlozenje da je odabir predloska korak u SUCELJU. To je bilo netocno: sucelje ga
+   * izvodi cistom funkcijom `selectTemplate(unitId, workType)` (`src/ui/app.ts`), koju mjerenje moze
+   * pozvati jednako, a i jest (`scripts/corpus-gen/net-core.mts`, `tests/real-corpus/harness.ts`).
+   * Izmjereno: 19 od 407 profila propisuje `checkTitlePage`, pa je preostalih 388 celija nosilo
+   * granicu mjerenja ondje gdje je istina "fakultet os ne propisuje".
+   *
+   * PRAVE PREPREKE OSTAJU I NISU KVAR: uz zastavicu plan trazi i predlozak `verified` +
+   * `provenance.status: official`, pouzdano omedjenu prvu stranicu i nijedan odlomak u tablici. Zato
+   * profil s prolaznom kapijom a bez dokaza cita `nema-dokaza`, dakle imenovanu rupu, a ne blagu
+   * oznaku.
+   */
+  /**
+   * KAPIJA ZRCALI SAMO POLOVICU DOSLOVNOG UVJETA, i to se ovdje kaze naglas.
+   *
+   * `buildTitlePageRepairPlan` (src/analysis/title-page-repair.ts:89) uz `checkTitlePage` trazi i
+   * predlozak sa `status === 'verified'` I `provenance.status === 'official'`. Ovaj predikat drugu
+   * polovicu NE provjerava, jer bi trazio ucitavanje predlozaka, a `buildCoverageCells` je sinkron.
+   *
+   * IZMJERENO 2026-09-13 nad ZIVIM profilima: 19 ih ima `checkTitlePage === true`, svih 19 ima
+   * predlozak, ali samo 15 je verified+official. Preostala 4 imaju `derived` predlozak, pa im se
+   * stavka ne moze ponuditi ni na jednom dokumentu, a ovdje svejedno zavrse pod `nema-dokaza`.
+   *
+   * Ta oznaka za njih nije laz nego OPTIMIZAM: rupa jest stvarna i jest zatvoriva, ali se zatvara
+   * VERIFIKACIJOM PREDLOSKA (izvor, stranica, citat, ljudski potpis), ne mjerenjem. Isti razred kao
+   * `legal-footnote-repair-fixer`, kojemu nijedan profil nema unos pravila. Kad ta cetiri predloska
+   * dobiju ovjeru, brojka pada sama; do tada se ne pretvaramo da je mjerenje dovoljno.
+   */
+  'title-page-fixer': (p) => p?.checkTitlePage === true,
 };
 
 /**
@@ -317,25 +354,37 @@ const UNDECIDABLE_FIXERS: ReadonlySet<string> = new Set([
   // pa su `params` prazni po konstrukciji (`{citations: [], entries: [], mappings: []}`) i na
   // dokumentu koji ima i citate i popis literature i nesklad medju njima.
   'citation-bibliography-sync-fixer',
+  /**
+   * TRECI iz istog razreda, premjesten 2026-09-13 iz razloga `trazi-ulaz-izvan-dokumenta`.
+   *
+   * Staro obrazlozenje je tvrdilo da `submission-metadata-fixer` usporedjuje docx s DRUGOM datotekom
+   * (PDF), pa da jedan dokument po definiciji ne moze dati nesuglasje. IZMJERENO suprotno:
+   * `analyzeCrossFileSubmission` (src/analysis/cross-file-submission-consistency.ts) nema nijedan
+   * uvjet o broju datoteka i usporedjuje izvore UNUTAR iste datoteke (naslov u `docProps/core.xml`
+   * naspram naslova s naslovnice i slicno). Nad 54 `authored` fixture, svaka iz JEDNE datoteke,
+   * izlazi 360 nalaza.
+   *
+   * ODVOJENA, JOS OTVORENA STVAR, izmjerena istim prolazom: u mrezi popravka ovaj fixer nije ni
+   * zatrazen, jer `buildAllRepairableItems` cita `result.details.crossFileSubmissionConsistency`, a
+   * tu strukturu gradi `src/ui/app.ts` posebnim pozivom koji sastavljac nema. To je rupa u SASTAVLJACU,
+   * ne razlog celije, i ne mijenja razred ispod: i kad se struktura dovede, zadani odabir je prazan.
+   *
+   * ISHOD CELIJE JE PRITOM BIO TOCAN, iz drugog razloga: `crossFileSubmissionRepairableItem`
+   * (src/ui/repair-items.ts) gradi svaki nalaz s tvrdim `selected: false`, pa `buildParams` vraca
+   * prazan `fields` i zadani zahtjev ne nosi posao. To je doslovno isti razred kao dva fixera iznad,
+   * i tako se sada i imenuje. Razlika nije kozmeticka: "trazi ulaz izvan dokumenta" salje sljedecu
+   * sesiju da izmisljaju drugu datoteku, a stvarna prepreka je potvrda u obrascu.
+   */
+  'submission-metadata-fixer',
 ]);
 
-/**
- * Fixeri kojima generirani dokument ne moze dati ulaz, pa im dokaz nije stvar generatora.
- *
- * `submission-metadata-fixer` usporedjuje metapodatke DOCX-a s DRUGOM datotekom (PDF); jedan
- * dokument po definiciji ne moze dati nesuglasje, pa `structure.issues` ostaje prazan.
- *
- * `title-page-fixer` se gradi samo uz predlozak naslovnice, a njegov odabir je korak u SUCELJU:
- * `tests/real-corpus/harness.ts` zato predaje `titleTemplate: null` uz izricitu napomenu, a
- * closed-loop ga ne prosljedjuje uopce.
- *
- * Oboje je granica mjerenja, ne dug. Celija koja o njima tvrdi "nedostaje dokaz" trazila bi dokaz
- * koji se u ovom harnessu ne moze proizvesti ni u jednom scenariju.
+/*
+ * OVDJE JE STAJAO `OUT_OF_DOCUMENT_FIXERS`, skup od dva fixera kojima navodno nijedan dokument ne
+ * moze dati ulaz. Oba su obrazlozenja 2026-09-13 izmjerena i oba su bila netocna, pa je skup
+ * uklonjen umjesto da ostane prazan: prazan skup i njegova grana su mrtav kod koji izgleda kao
+ * zastita. `submission-metadata-fixer` je presao u `UNDECIDABLE_FIXERS` (vidi ondje), a
+ * `title-page-fixer` je dobio kapiju u `PROFILE_GATE`, jer mu je uvjet doslovno citljiv iz koda.
  */
-const OUT_OF_DOCUMENT_FIXERS: ReadonlySet<string> = new Set([
-  'submission-metadata-fixer',
-  'title-page-fixer',
-]);
 
 /** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
 /**
@@ -437,7 +486,6 @@ export function emptyByReason(): Record<UncoveredReason, number> {
     'closed-loop-nije-rijesio': 0,
     'nema-dokaza': 0,
     'ceka-ljudski-odabir': 0,
-    'trazi-ulaz-izvan-dokumenta': 0,
     'pomocni-fixer-dokaz-nosi-pozivatelj': 0,
   };
 }
@@ -704,7 +752,6 @@ export function uncoveredReason(
   }
   // Alat kojem je zadani odabir prazan po konstrukciji: nijedna os ga ne moze dokazati.
   if (UNDECIDABLE_FIXERS.has(fixerId)) return 'ceka-ljudski-odabir';
-  if (OUT_OF_DOCUMENT_FIXERS.has(fixerId)) return 'trazi-ulaz-izvan-dokumenta';
   // Profil koji os ne propisuje: fixer se za njega uopce ne nudi, pa se nema sto dokazivati.
   if (kapijaFixera && profile && !kapijaPropisuje) return 'profil-ne-propisuje-os';
   // Asistirano pravilo bez kojeg graditelj radi tvrdi `return []`: bez njega se fixer ne nudi
