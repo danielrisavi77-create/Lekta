@@ -137,6 +137,38 @@ for (const { w, h, ime } of SIRINE) {
     if (w === 390) {
       const znacka = await page.locator('.nav-rad .local-badge').evaluate((el) => getComputedStyle(el).display);
       expect(znacka, 'znacka u zaglavlju mora otici na 390 px').toBe('none');
+
+      // TRAKA DOKUMENTA NE PRELAZI SVOJU NAVIGACIJU. Izmjereno u koraku D: `#radDocBar` je bio
+      // 76 px visok u navigaciji od 66 px (tri retka: ime, indikator, gumb nove verzije), pocinjao
+      // na y=-5 i prelazio na obrazac ispod. Okvir trake mora ostati unutar okvira `.nav-rad`, i
+      // ne smije dosegnuti `.analyzer-wrap`.
+      const okviri = await page.evaluate(() => {
+        const bar = document.getElementById('radDocBar')?.getBoundingClientRect() ?? null;
+        const nav = document.querySelector('.nav-rad')?.getBoundingClientRect() ?? null;
+        const wrap = document.querySelector('.analyzer-wrap')?.getBoundingClientRect() ?? null;
+        return {
+          bar: bar ? { top: bar.top, bottom: bar.bottom, height: bar.height } : null,
+          nav: nav ? { top: nav.top, bottom: nav.bottom, height: nav.height } : null,
+          wrap: wrap ? { top: wrap.top } : null,
+        };
+      });
+      // SENTINELI: bez visine oba okvira bi prazan/neiscrtan element lazno prosao usporedbu rubova.
+      expect(okviri.bar?.height ?? 0, 'sentinel: #radDocBar nema visinu').toBeGreaterThan(0);
+      expect(okviri.nav?.height ?? 0, 'sentinel: .nav-rad nema visinu').toBeGreaterThan(0);
+      expect(
+        okviri.bar!.top,
+        `traka dokumenta pocinje (top=${okviri.bar!.top}) iznad svoje navigacije (top=${okviri.nav!.top})`,
+      ).toBeGreaterThanOrEqual(okviri.nav!.top);
+      expect(
+        okviri.bar!.bottom,
+        `traka dokumenta izlazi (bottom=${okviri.bar!.bottom}) izvan svoje navigacije (bottom=${okviri.nav!.bottom})`,
+      ).toBeLessThanOrEqual(okviri.nav!.bottom + 1);
+      if (okviri.wrap) {
+        expect(
+          okviri.bar!.bottom,
+          `traka dokumenta (bottom=${okviri.bar!.bottom}) preklapa obrazac (top=${okviri.wrap.top})`,
+        ).toBeLessThanOrEqual(okviri.wrap.top + 1);
+      }
     }
 
     // PROVJERA U TIJEKU je prolazna; mjeri se oportunisticki (prikaz zna zavrsiti prije ocitanja),

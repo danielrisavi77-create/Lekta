@@ -6,6 +6,43 @@
 let _modalReturnFocus: HTMLElement | null = null;
 let _modalDepth = 0;
 
+/**
+ * ZADNJI ELEMENT NA KOJI JE KORISNIK KLIKNUO, GLOBALNO PRACEN (korak D, 2026-09-13).
+ *
+ * WebKit gumbe NE fokusira na klik misem (samo tekstualna polja i slicno; poznato, namjerno
+ * ponasanje Safarija bez "Full Keyboard Access"). Okidac modala (npr. gumb "Promijeni") je
+ * skoro uvijek `<button>`, pa `trapModal` u WebKitu zna zateci `document.activeElement` na
+ * `<body>` umjesto na stvarnom okidacu, i `releaseModal` poslije nema kamo vratiti fokus.
+ *
+ * IZMJERENO 2026-09-13 (`tests/ux/workspace-entry.spec.ts`, "list profila", webkit): nakon klika
+ * na `[data-change-profile]` i otvaranja `#profileSheet`, `document.activeElement` je bio
+ * `<body>` (`tagName: "BODY"`), a poslije Escapea fokus se NIJE vratio na "Promijeni". U
+ * Chromiumu isti tok prolazi, jer ondje klik na gumb i fokusira gumb.
+ *
+ * PRVI POKUSAJ POPRAVKA (padao je): koristiti ovaj zapis SAMO kad je `document.activeElement`
+ * bas `<body>`. Nedovoljno, jer aktivni element zna biti neki DRUGI, STAR ostatak (npr.
+ * `#fileInput` s ranijeg koraka), ne bas `<body>` - `active !== document.body` je tad tocno, pa bi
+ * kod zadrzao krivi, zastarjeli element umjesto stvarnog okidaca. Zato `trapModal` uvijek
+ * PRETPOSTAVLJA klik ako je SVJEZ (unutar `_POINTER_SVJEZINA_MS`), bez obzira sto trenutno pise u
+ * `document.activeElement`; iza tog prozora vrijedi obrnuto, jer tada modal gotovo sigurno NIJE
+ * otvoren klikom (npr. tipkovnicki Enter na vec fokusiranom elementu, gdje `pointerdown` uopce ne
+ * nastaje). Slusac je na `document` s capture:true da uhvati klik i kad ga ciljni rukovatelj
+ * poslije zaustavi (`stopPropagation`).
+ */
+const _POINTER_SVJEZINA_MS = 500;
+let _lastPointerTarget: HTMLElement | null = null;
+let _lastPointerAt = 0;
+document.addEventListener(
+  'pointerdown',
+  (e) => {
+    if (e.target instanceof HTMLElement) {
+      _lastPointerTarget = e.target;
+      _lastPointerAt = Date.now();
+    }
+  },
+  true,
+);
+
 export function modalFocusables(el: HTMLElement): HTMLElement[] {
   return [
     ...el.querySelectorAll<HTMLElement>(
@@ -30,7 +67,13 @@ export function setBackgroundInert(on: boolean): void {
 
 export function trapModal(el: HTMLElement | null): void {
   if (!el) return;
-  _modalReturnFocus = document.activeElement as HTMLElement | null;
+  const active = document.activeElement;
+  const svjezKlik = _lastPointerTarget && Date.now() - _lastPointerAt < _POINTER_SVJEZINA_MS;
+  _modalReturnFocus = svjezKlik
+    ? _lastPointerTarget
+    : active instanceof HTMLElement && active !== document.body
+      ? active
+      : null;
   if (++_modalDepth === 1) setBackgroundInert(true);
   (el as any)._trap = (e: KeyboardEvent) => {
     if (e.key !== 'Tab') return;

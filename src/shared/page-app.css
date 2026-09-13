@@ -1529,6 +1529,17 @@ a.mw-item-name:hover{text-decoration:underline}
   .rad-doc-new-version{flex-basis:100%;margin-left:0;font-size:12px;padding:4px 0}
   /* Indikator ne gura ime: ime vec ima min-width:0 i skracuje se, a indikator je kratak i ostaje u istom retku. */
   .rad-doc-save{font-size:11px}
+
+  /* Znacka je maknuta gore, ali traka je i dalje bila 76 px visoka u navigaciji od 66 px (tri
+   * retka: ime, indikator, gumb nove verzije), pocinjala na y=-5 i prelazila na obrazac ispod
+   * (izmjereno 2026-09-13, tvrdnja iz mutacije: top=-5,16). `.nav` ima fiksnu visinu
+   * (page-chrome.css), pa navigacija tu visinu ne prati; treba joj vlastiti red. `.nav-rad`
+   * postaje wrap SAMO na ovoj sirini, a `.rad-doc` dobiva `flex-basis:100%` i ide POSLIJE loga i
+   * desne skupine (`order`), ne izmedju njih: prvi red ostaje logo + lampa/prijava, drugi red je
+   * cijela traka dokumenta. `height:auto` na `.nav-rad` je nuzan jer bi inace fiksnih 66 px
+   * odsjekao drugi red. */
+  .nav-rad{flex-wrap:wrap;height:auto;padding-block:10px}
+  .rad-doc{flex-basis:100%;order:2}
 }
 
 /* LIST ZA PROMJENU PROFILA -----------------------------------------------------------------
