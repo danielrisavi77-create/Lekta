@@ -5,9 +5,11 @@ import tempfile
 import time
 import unittest
 
+from unittest import mock
+
 from scripts.autonomy.worker import (
     ProcessTree, classify_stream, diff_within_scope, model_matches, parse_provider_output, pid_alive,
-    resolve_launcher, run_phase, scrubbed_env,
+    prepare_job_via_node, resolve_launcher, run_phase, sandbox_unusable, scrubbed_env,
 )
 
 FAKE_CLI = r'''
@@ -39,10 +41,27 @@ elif mode == "wrong_model":
     print(json.dumps({"type": "turn.completed", "model": "gpt-4o-mini"}))
 elif mode == "claude_ok":
     print(json.dumps({"subtype": "success", "is_error": False, "modelUsage": {"claude-sonnet-5": {}}}))
+elif mode == "replay":
+    # doslovan ponovni ispis snimljenog izlaza stvarnog providera (stdout i stderr iz artefakta)
+    sys.stdout.buffer.write(open(os.environ["FAKE_STDOUT"], "rb").read())
+    sys.stderr.buffer.write(open(os.environ["FAKE_STDERR"], "rb").read())
+    sys.exit(int(os.environ.get("FAKE_EXIT", "0")))
 elif mode == "echo_prompt":
     assert "LEKTA task" in prompt
     print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
 '''
+
+
+# Doslovno prepisano iz %LOCALAPPDATA%\Lekta\autonomy\artifacts\26ba9cf7-321f-4598-af80-aad6c000ae31\
+# planning-f8994dab\{stdout,stderr}.log (prvi propose tick, 2026-09-13). Ne parafrazirati: test bi inace
+# mjerio oblik koji Codex CLI nikad ne proizvede.
+SANDBOX_STDERR = '2026-09-13T12:13:21.734060Z ERROR codex_core::tools::router: error=timed out negotiating with the code-mode host\n2026-09-13T12:13:41.324028Z ERROR codex_core::tools::router: error=exec_command failed: CreateProcess { message: "Rejected(\\"Failed to create unified exec process: helper_unknown_error: apply deny-read ACLs\\")" }\n2026-09-13T12:13:41.324313Z ERROR codex_core::tools::router: error=exec_command failed: CreateProcess { message: "Rejected(\\"Failed to create unified exec process: helper_unknown_error: apply deny-read ACLs\\")" }\n2026-09-13T12:14:44.070935Z ERROR codex_core::tools::router: error=exec_command failed: CreateProcess { message: "Rejected(\\"Failed to create unified exec process: helper_unknown_error: apply deny-read ACLs\\")" }\n2026-09-13T12:16:22.498606Z ERROR codex_models_manager::manager: failed to refresh available models: timeout waiting for child process to exit\n'
+
+SANDBOX_STDOUT = '{"type":"thread.started","thread_id":"01a09aae-63cd-7ed3-9d2c-4250ee2ff8a2"}\n{"type":"turn.started"}\n{"type":"item.completed","item":{"id":"item_0","type":"error","message":"Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest."}}\n{"type":"item.completed","item":{"id":"item_1","type":"agent_message","text":"Pročitat ću operativne upute i odjeljak T00, zatim usporediti zabilježeno polazište s trenutačnim kodom. Procjena ostaje samo za čitanje, uz jasno odvajanje potvrđenih nalaza od nepokrenutih provjera.\\n"}}\n{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Lokalni alat ne uspijeva pokrenuti čitanje datoteka zbog pogreške sandboxa `apply deny-read ACLs`. Provjeravam još jednostavan poziv; zasad nisam mogao pročitati repo niti utvrditi HEAD, pa status `done` iz zadatka nije potvrđen ovom procjenom.\\n"}}\n{"type":"item.completed","item":{"id":"item_3","type":"agent_message","text":"Procjena T00 blokirana je pristupom repozitoriju. Lokalni alat ponovljeno pada prije izvršavanja naredbe: `Failed to create unified exec process: helper_unknown_error: apply deny-read ACLs`.\\n\\n- **Base HEAD:** nije utvrđen. `48c1fc9e` je povijesno polazište iz dostavljene bilješke, nije potvrđen trenutačni HEAD.\\n- **Opseg:** read-only provjera T00, karte riješenih nalaza i njihove usklađenosti s trenutačnim kodom.\\n- **Nalazi/promjene:** nema izmjena ni potvrđenih nalaza o kodu. Dostavljene upute AGENTS.md jesu dostupne u poruci; lokalni CLAUDE.md, README i razvojni plan nisu pročitani.\\n- **Stvarno pokrenuti testovi:** nijedan. Nema novog dokaza za lokalni gate, master CI, produkciju ili Word provjeru.\\n- **Otvoreni rizik:** status `done` i dokumenti navedeni u bilješci mogu opisivati starije stanje; njihova aktualnost nije provjerena.\\n- **Preporučeni sljedeći korak:** ponoviti read-only procjenu nakon popravka lokalnog izvršnog alata. Utvrditi HEAD i razlike radnog stabla te povezati svaku tvrdnju iz [statusa plana](/C:/Users/PC/Lekta-autonomy/docs/quality/lekta-plan-status.md) i [polazišta](/C:/Users/PC/Lekta-autonomy/docs/agents/autonomy-baseline.md) s trenutačnim kodom i dokazom provjere.\\n\\nOva procjena ne potvrđuje dovršenost T00."}}\n{"type":"turn.completed","usage":{"input_tokens":217654,"cached_input_tokens":190976,"cache_write_input_tokens":0,"output_tokens":1014,"reasoning_output_tokens":30}}\n'
+
+# Isti stdout, ali BEZ potpisa u stderru: model koji radi bas na ovom kvaru doslovno citira frazu u
+# `agent_message`. To ne smije biti `blocked`, inace bi gard sam sebe okinuo na ispravnom radu.
+BENIGN_STDERR = "2026-09-13T12:13:41.324028Z  INFO codex_core::tools::router: ok\n"
 
 
 def profile(**over):
@@ -160,6 +179,80 @@ class WorkerTest(unittest.TestCase):
         self.assertEqual(classify_stream("HTTP 429 Too Many Requests"), "waiting_quota")
         self.assertEqual(classify_stream("session expired, please log in"), "needs_login")
         self.assertIsNone(classify_stream("all good"))
+
+    def replay(self, stdout_text, stderr_text, exit_code=0):
+        out = os.path.join(self.dir, "replay_stdout.log")
+        err = os.path.join(self.dir, "replay_stderr.log")
+        with open(out, "w", encoding="utf-8", newline="") as fh:
+            fh.write(stdout_text)
+        with open(err, "w", encoding="utf-8", newline="") as fh:
+            fh.write(stderr_text)
+        job, env = self.job("replay")
+        env.update(FAKE_STDOUT=out, FAKE_STDERR=err, FAKE_EXIT=str(exit_code))
+        return run_phase(job, "plan", profile(), cwd=self.dir, timeout_seconds=60, env=env,
+                         artifact_dir=os.path.join(self.dir, "art-replay"))
+
+    def test_unusable_sandbox_is_blocked_not_a_vacuous_success(self):
+        """Tocka 3 nalaza: `turn.completed` uz odbijen exec nije uspjeh.
+
+        BASELINE (negativna kontrola): isti stdout uz cist stderr i dalje daje `needs_verification`.
+        MUTACIJA: stvarni stderr iz artefakta 26ba9cf7 daje `blocked` i ne trosi pokusaj.
+        """
+        blocked = self.replay(SANDBOX_STDOUT, SANDBOX_STDERR)
+        self.assertEqual(blocked["verdict"], "blocked", blocked)
+        self.assertIn("provider_unusable", blocked["reason"])
+        self.assertFalse(blocked["attempt_spent"])
+        self.assertEqual(blocked["exit_code"], 0, "provider je zavrsio uredno; upravo to je i bila zamka")
+        self.assertTrue(any(p.endswith("stderr.log") for p in blocked["artifact_paths"]),
+                        "dijagnostika kojom je kvar nadjen mora ostati zapisana")
+
+    def test_the_same_phrase_in_model_prose_alone_is_not_blocked(self):
+        # Potpis se trazi ISKLJUCIVO u stderru. Stdout ovdje sadrzi obje fraze, u modelovu tekstu.
+        self.assertIn("apply deny-read ACLs", SANDBOX_STDOUT)
+        self.assertIn("Failed to create unified exec process", SANDBOX_STDOUT)
+        ok = self.replay(SANDBOX_STDOUT, BENIGN_STDERR)
+        self.assertEqual(ok["verdict"], "needs_verification", ok)
+
+    def test_nested_item_error_stays_benign(self):
+        # Iz istog stvarnog loga: `item.completed` s ugnijezdjenim `item.type == "error"` (skraceni opisi
+        # skillova). To NIJE greska poziva i ne smije promijeniti ni parser ni novi gard.
+        self.assertIn('"type":"error"', SANDBOX_STDOUT)
+        parsed = parse_provider_output("codex", SANDBOX_STDOUT, 0)
+        self.assertTrue(parsed["ok"], "ugnijezdjeni item.type=error nije top-level greska")
+        # Gard bi na OVOM tekstu pogodio, jer ga modelova proza sadrzi; zato ga run_phase zove iskljucivo
+        # nad stderrom (dokazuje test iznad). Ovdje se to samo imenuje, da ogranicenje ne ostane precutno.
+        self.assertTrue(sandbox_unusable(SANDBOX_STDOUT))
+
+    def test_sandbox_signature_matches_both_known_forms_and_nothing_else(self):
+        self.assertTrue(sandbox_unusable('Rejected("Failed to create unified exec process: x")'))
+        self.assertTrue(sandbox_unusable("helper_unknown_error: apply deny-read ACLs"))
+        self.assertTrue(sandbox_unusable("APPLY DENY-READ ACLS"))
+        self.assertFalse(sandbox_unusable(""))
+        self.assertFalse(sandbox_unusable("deny read acls"))
+        self.assertFalse(sandbox_unusable("failed to create process"))
+
+    def test_prepare_job_argv_is_unchanged_without_overrides(self):
+        # Rucni tok mora ostati bajt za bajt isti; override se dodaje samo kad ga pozivatelj zada.
+        seen = {}
+
+        class Out:
+            returncode = 0
+            stdout = json.dumps({"dryRun": True, "command": "codex"})
+            stderr = ""
+
+        def fake_run(argv, **kwargs):
+            seen["argv"] = argv
+            return Out()
+
+        with mock.patch("scripts.autonomy.worker.subprocess.run", fake_run):
+            prepare_job_via_node(self.dir, "T17", "plan", "astra")
+            self.assertEqual(seen["argv"][2:], ["prepare", "T17", "--phase", "plan", "--agent", "astra", "--subscription"])
+            self.assertNotIn("--override-status", seen["argv"])
+            self.assertNotIn("--override-implementer", seen["argv"])
+            prepare_job_via_node(self.dir, "T17", "review", "astra", override_status="in_review", override_implementer="sonnet")
+            argv = seen["argv"]
+            self.assertEqual(argv[-4:], ["--override-status", "in_review", "--override-implementer", "sonnet"])
+            self.assertEqual(argv[argv.index("--phase") + 1], "review")
 
     def test_launcher_resolution_reports_shims(self):
         info = resolve_launcher(os.path.basename(sys.executable))

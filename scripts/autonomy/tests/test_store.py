@@ -120,6 +120,57 @@ class StoreTest(unittest.TestCase):
         self.assertIsNone(self.store.claim("A", NOW + 10))
         self.assertIsNotNone(self.store.claim("A", NOW + 7200))
 
+    def test_refund_attempt_is_explicit_and_does_not_change_old_targets(self):
+        """Uzak refund za ciljeve izvan REFUND_STATUSES (tocka 1 i 3 nalaza 2026-09-13).
+
+        BASELINE: blocked i needs_human bez zastavice i dalje TROSE pokusaj, kao i prije.
+        MUTACIJA: ista prijelaza sa `refund_attempt: True` vracaju pokusaj.
+        REGRESIJA: waiting_quota bez zastavice i dalje refundira PO DEFAULTU, a s `False` ne refundira.
+        """
+        task_id = self.store.enqueue(signal(), NOW)
+
+        # BASELINE: stari put, bez zastavice; pokusaj ostaje potrosen.
+        self.store.claim("A", NOW, max_attempts=9, max_new_per_day=99)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 1)
+        self.store.transition(task_id, "planning", "blocked", {"reason": "x"}, NOW + 1)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 1, "blocked bez zastavice ne smije refundirati")
+        self.store.transition(task_id, "blocked", "queued", {}, NOW + 2)
+
+        self.store.claim("A", NOW + 3, max_attempts=9, max_new_per_day=99)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 2)
+        self.store.transition(task_id, "planning", "needs_human", {"reason": "dokaz nepotpun"}, NOW + 4)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 2, "needs_human bez zastavice ne smije refundirati")
+        self.store.transition(task_id, "needs_human", "queued", {}, NOW + 5)
+
+        # MUTACIJA: eksplicitna tvrdnja da poziv nije ni poceo.
+        self.store.claim("A", NOW + 6, max_attempts=9, max_new_per_day=99)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 3)
+        self.store.transition(task_id, "planning", "needs_human",
+                              {"reason": "no_ready_plan_task: signal nema planTask", "refund_attempt": True}, NOW + 7)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 2, "no_ready_plan_task ne smije trositi pokusaj")
+        self.store.transition(task_id, "needs_human", "queued", {}, NOW + 8)
+
+        self.store.claim("A", NOW + 9, max_attempts=9, max_new_per_day=99)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 3)
+        self.store.transition(task_id, "planning", "blocked",
+                              {"reason": "provider_unusable: codex sandbox", "refund_attempt": True}, NOW + 10)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 2, "provider_unusable ne smije trositi pokusaj")
+        # Zastavica ne smije procuriti u dnevnik dogadjaja.
+        last = self.store.events(task_id)[-1]
+        self.assertNotIn("refund_attempt", json.loads(last["sanitized_payload"]))
+        self.store.transition(task_id, "blocked", "queued", {}, NOW + 11)
+
+        # REGRESIJA: stari REFUND_STATUSES put je netaknut u OBA smjera.
+        self.store.claim("A", NOW + 12, max_attempts=9, max_new_per_day=99)
+        before = self.store.get_task(task_id)["attempts"]
+        self.store.transition(task_id, "planning", "waiting_quota", {}, NOW + 13)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], before - 1, "waiting_quota i dalje refundira po defaultu")
+        self.store.transition(task_id, "waiting_quota", "queued", {}, NOW + 14)
+        self.store.claim("A", NOW + 15, max_attempts=9, max_new_per_day=99)
+        before = self.store.get_task(task_id)["attempts"]
+        self.store.transition(task_id, "planning", "waiting_quota", {"refund_attempt": False}, NOW + 16)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], before, "izricito False i dalje gasi refund")
+
     def test_attempt_ceiling_and_daily_limit_reset_on_utc_day_not_on_restart(self):
         task_id = self.store.enqueue(signal(), NOW)
         for i in range(2):

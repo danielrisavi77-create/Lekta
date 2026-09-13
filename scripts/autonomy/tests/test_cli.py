@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 from scripts.autonomy import cli
 from scripts.autonomy.store import Store
@@ -151,6 +152,233 @@ class TickTest(unittest.TestCase):
             self.assertNotEqual(cli._agent_for(cfg, phase, {}), "fable")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}), "astra")
+
+
+
+QUEUE_FIXTURE = [
+    {"id": "T00", "title": "gotov zadatak", "status": "done", "dependsOn": []},
+    {"id": "T01", "title": "spreman bez ovisnosti", "status": "ready", "dependsOn": []},
+    {"id": "T02", "title": "spreman uz nedovrsenu ovisnost", "status": "ready", "dependsOn": ["T01"]},
+    {"id": "T03", "title": "spreman uz dovrsenu ovisnost", "status": "ready", "dependsOn": ["T00"]},
+    {"id": "T04", "title": "blokiran", "status": "blocked", "dependsOn": []},
+]
+
+
+def make_repo(tasks=None):
+    """Minimalan radnikov repo: samo koordinatorov red. Kontroler ga cita, nikad ne pise."""
+    repo = tempfile.mkdtemp()
+    agents = os.path.join(repo, "docs", "agents")
+    os.makedirs(agents)
+    with open(os.path.join(agents, "tasks.json"), "w", encoding="utf-8") as fh:
+        json.dump({"tasks": tasks if tasks is not None else QUEUE_FIXTURE}, fh)
+    return repo
+
+
+def inbox_source(plan_task="T01", symptom="ux-gate pada"):
+    scope = {"area": "ci"}
+    if plan_task is not None:
+        scope["planTask"] = plan_task
+    return [{"id": "inbox", "kind": "inbox", "items": [dict(kind="ci_failure", location="check/ux-gate@master",
+                                                            symptom=symptom, source_revision=SHA, observed_at=NOW - 60,
+                                                            scope=scope)]}]
+
+
+def fake_job(command="codex"):
+    return {"command": command, "args": ["exec"], "prompt": "LEKTA task", "requestedModel": "m", "dryRun": True}
+
+
+class PlanTaskGateTest(unittest.TestCase):
+    """Tocka 1 nalaza 2026-09-13: ciljni zadatak se razrjesava PRIJE ijednog poziva modela.
+
+    BASELINE dokazuje da ispravan `ready` zadatak i dalje prolazi (gard koji sve gasi nije gard).
+    MUTACIJE su tri oblika promasaja iz zivog ticka 26ba9cf7.
+    """
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.adapters = cli.DefaultAdapters(config(workerRepoPath=self.repo), self.home)
+
+    def task(self, plan_task, task_id="task-1"):
+        scope = {} if plan_task is None else {"planTask": plan_task}
+        return {"id": task_id, "signal": {"scope": scope}}
+
+    def drive(self, task, phase="planning"):
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()) as prep, \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}) as call:
+            result = self.adapters.run_phase(task, phase, profile())
+        return result, prep, call
+
+    def test_baseline_ready_task_still_reaches_the_provider(self):
+        result, prep, call = self.drive(self.task("T01"))
+        self.assertEqual(result["verdict"], "needs_verification", result)
+        self.assertEqual(result["plan_task"], "T01")
+        self.assertEqual(result["agent"], "astra")
+        self.assertEqual(prep.call_count, 1)
+        self.assertEqual(prep.call_args.args[1], "T01", "prepare mora dobiti razrijesen zadatak, ne T00")
+        self.assertEqual(call.call_count, 1)
+
+    def test_baseline_ready_task_with_finished_dependency_passes(self):
+        result, prep, _ = self.drive(self.task("T03"))
+        self.assertEqual(result["verdict"], "needs_verification", result)
+        self.assertEqual(prep.call_args.args[1], "T03")
+
+    def test_signal_without_plan_task_never_calls_a_provider(self):
+        result, prep, call = self.drive(self.task(None))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertTrue(result["reason"].startswith("no_ready_plan_task"), result["reason"])
+        self.assertFalse(result["attempt_spent"])
+        self.assertEqual(prep.call_count, 0)
+        self.assertEqual(call.call_count, 0)
+
+    def test_done_task_never_calls_a_provider(self):
+        # Tocno zivi tick 26ba9cf7: fallback na T00, koji je u redu `done`.
+        result, prep, call = self.drive(self.task("T00"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("T00 je done", result["reason"])
+        self.assertEqual((prep.call_count, call.call_count), (0, 0))
+
+    def test_unfinished_dependency_never_calls_a_provider(self):
+        result, prep, call = self.drive(self.task("T02"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("ovisnost T01 nije done", result["reason"])
+        self.assertEqual((prep.call_count, call.call_count), (0, 0))
+
+    def test_unknown_task_and_unreadable_queue_never_call_a_provider(self):
+        result, prep, _ = self.drive(self.task("T99"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("T99 nije u redu", result["reason"])
+        self.assertEqual(prep.call_count, 0)
+        os.remove(os.path.join(self.repo, "docs", "agents", "tasks.json"))
+        result, prep, _ = self.drive(self.task("T01"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("nije citljiv", result["reason"])
+        self.assertEqual(prep.call_count, 0)
+
+    def test_gate_holds_on_every_phase_and_on_a_repeated_tick(self):
+        # Jednoprolazni gard je slijep: drugi identican prolaz mora dati isti ishod, i dalje bez poziva.
+        for phase in ("planning", "implementing", "reviewing"):
+            for attempt in (1, 2):
+                result, prep, call = self.drive(self.task("T00"), phase=phase)
+                self.assertEqual(result["verdict"], "needs_human", (phase, attempt))
+                self.assertTrue(result["reason"].startswith("no_ready_plan_task"), (phase, attempt, result["reason"]))
+                self.assertEqual((prep.call_count, call.call_count), (0, 0), (phase, attempt))
+
+
+class ReviewWithoutQueueWriteTest(unittest.TestCase):
+    """Tocka 2 nalaza: pregled prolazi bez ijedne izmjene `docs/agents/tasks.json`."""
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.queue_path = os.path.join(self.repo, "docs", "agents", "tasks.json")
+        with open(self.queue_path, "rb") as fh:
+            self.queue_before = fh.read()
+        self.adapters = cli.DefaultAdapters(config(workerRepoPath=self.repo), self.home)
+        self.task = {"id": "task-1", "signal": {"scope": {"planTask": "T01"}}}
+
+    def run_phase(self, phase, prep):
+        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            return self.adapters.run_phase(self.task, phase, profile())
+
+    def test_review_uses_the_implementer_recorded_in_this_tick(self):
+        prep = mock.Mock(return_value=fake_job())
+        self.assertEqual(self.run_phase("implementing", prep)["agent"], "sonnet")
+        result = self.run_phase("reviewing", prep)
+        self.assertEqual(result["verdict"], "needs_verification", result)
+        self.assertEqual(result["agent"], "astra", "recenzent mora biti drugi provider od implementatora")
+        kwargs = prep.call_args.kwargs
+        self.assertEqual(kwargs["override_status"], "in_review")
+        self.assertEqual(kwargs["override_implementer"], "sonnet")
+        with open(self.queue_path, "rb") as fh:
+            self.assertEqual(fh.read(), self.queue_before, "kontroler ne smije dirati koordinatorov red")
+
+    def test_review_without_a_recorded_implementer_is_blocked_not_guessed(self):
+        # MUTACIJA: pregled bez prethodne implementacije u ovom ticku. Pogadjanje bi moglo dati istog
+        # providera kao recenzent, cime bi pravilo o drugom provideru tiho otislo.
+        prep = mock.Mock(return_value=fake_job())
+        result = self.run_phase("reviewing", prep)
+        self.assertEqual(result["verdict"], "blocked")
+        self.assertIn("implementer_unknown", result["reason"])
+        self.assertFalse(result["attempt_spent"])
+        self.assertEqual(prep.call_count, 0)
+
+    def test_implement_phase_never_sends_an_override(self):
+        # Override ne smije postati rupa kroz koju se zaobilazi provjera spremnosti iz tocke 1.
+        prep = mock.Mock(return_value=fake_job())
+        self.run_phase("implementing", prep)
+        self.assertIsNone(prep.call_args.kwargs["override_status"])
+        self.assertIsNone(prep.call_args.kwargs["override_implementer"])
+
+    def test_plan_phase_never_sends_an_override(self):
+        prep = mock.Mock(return_value=fake_job())
+        self.run_phase("planning", prep)
+        self.assertIsNone(prep.call_args.kwargs["override_status"])
+        self.assertIsNone(prep.call_args.kwargs["override_implementer"])
+
+
+class GatedAdapters(cli.DefaultAdapters):
+    """Pravi `run_phase` (ono sto se mjeri), lazna verifikacija i objava (ne diramo git ni mrezu)."""
+
+    def classify(self, task):
+        return "auto_low_risk", []
+
+    def verify(self, task):
+        return {"complete": True, "staleness": {"verdict": "fresh"}, "controlFilesChanged": [], "candidateSha": SHA}
+
+    def publish(self, task, evidence, store, now, change_class):
+        return {"status": "proposed", "reason": "fake", "pr": 7}
+
+
+class TickPlanTaskTest(unittest.TestCase):
+    """Isti kvar na razini cijelog ticka, s pravim redom i pravim `_drive_task`-om."""
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+
+    def tearDown(self):
+        self.store.close()
+
+    def run_tick(self, sources, now=NOW):
+        adapters = GatedAdapters(config(mode="propose", workerRepoPath=self.repo), self.home)
+        prep = mock.Mock(return_value=fake_job())
+        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            out = cli.tick(config(mode="propose", workerRepoPath=self.repo), now, False, store=self.store,
+                           home=self.home, sources=sources, adapters=adapters, profile=profile())
+        return out, prep
+
+    def test_signal_without_plan_task_costs_no_call_and_no_attempt(self):
+        out, prep = self.run_tick(ci_source())
+        self.assertEqual(out["outcome"], "needs_human")
+        self.assertEqual(prep.call_count, 0, "nijedan poziv providera ne smije krenuti")
+        task = self.store.get_task(out["claimed"])
+        self.assertEqual(task["attempts"], 0, "pokusaj se ne trosi kad poziv nije ni poceo")
+        self.assertTrue(task["status"] == "needs_human")
+        payload = json.loads(self.store.events(task["id"])[-1]["sanitized_payload"])
+        self.assertTrue(str(payload.get("reason", "")).startswith("no_ready_plan_task"), payload)
+
+    def test_repeated_tick_repeats_the_verdict_without_spending_attempts(self):
+        first, prep = self.run_tick(ci_source())
+        self.assertEqual(first["outcome"], "needs_human")
+        self.store.transition(first["claimed"], "needs_human", "queued", {}, NOW + 1)
+        second, prep2 = self.run_tick(ci_source(), now=NOW + 2)
+        self.assertEqual(second["outcome"], "needs_human")
+        self.assertEqual(second["claimed"], first["claimed"])
+        self.assertEqual(prep2.call_count, 0)
+        self.assertEqual(self.store.get_task(first["claimed"])["attempts"], 0)
+
+    def test_ready_plan_task_drives_all_three_phases(self):
+        # BASELINE nad cijelim tickom: ispravan signal i dalje prolazi plan -> implement -> review.
+        out, prep = self.run_tick(inbox_source("T01"))
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual([p["phase"] for p in out["phases"]][:3], ["planning", "implementing", "reviewing"])
+        self.assertEqual([p.get("agent") for p in out["phases"]][:3], ["astra", "sonnet", "astra"])
+        self.assertEqual(prep.call_count, 3)
+        self.assertEqual([c.args[1] for c in prep.call_args_list], ["T01", "T01", "T01"])
 
 
 class BillingProfileTest(unittest.TestCase):
