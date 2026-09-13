@@ -44,6 +44,8 @@
     "test": "vitest",
     "test:ux": "playwright test --project=chromium --project=mobile-chromium",
     "test:ux:browsers": "playwright test --project=firefox --project=webkit --project=mobile-webkit",
+    "test:ux:dist": "playwright test -c playwright.dist.config.ts",
+    "build-info": "node scripts/write-build-info.mjs",
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "oxlint && tsc --noEmit && npm run check:edge && vitest run && vite build",
@@ -118,10 +120,12 @@
     "post-deploy-smoke": "node scripts/post-deploy-smoke.mjs",
     "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test",
     "check:edge-lock": "node scripts/check-edge-lock.mjs",
+    "audit:ratchet": "node scripts/npm-audit-ratchet.mjs",
     "status": "node scripts/generate-status.mjs",
     "deploy-manifest": "node scripts/generate-deploy-manifest.mjs",
     "attest-corpus": "node scripts/attest-real-corpus.mjs",
-    "branch-ci": "node scripts/master-ci-status.mjs --current"
+    "branch-ci": "node scripts/master-ci-status.mjs --current",
+    "agents": "node scripts/agents/cli.mjs"
   },
   "overrides": {
     "nanoid": "^3.3.18"
@@ -132,7 +136,7 @@
     "dictionary-hr": "^2.0.0",
     "esbuild": "^0.28.1",
     "happy-dom": "^20.10.6",
-    "netlify-cli": "^26.2.0",
+    "netlify-cli": "^27.5.2",
     "oxlint": "^1.79.0",
     "supabase": "^2.109.1",
     "typescript": "^7.0.2",

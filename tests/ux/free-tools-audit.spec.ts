@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { FREE_TOOL_PAGES } from './free-tools-pages';
-import { cekajApp } from './app-ready';
+import { cekajApp, cekajKorak } from './app-ready';
 
 for (const pageSpec of FREE_TOOL_PAGES) {
   test(`${pageSpec.name}: ima jasnu glavnu zonu i primarnu akciju`, async ({ page }) => {
@@ -573,6 +573,11 @@ for (const [sirina, visina] of [[360, 667], [393, 727], [393, 900], [430, 844]] 
     // STVARNA datoteka, ne podmetnuta klasa: `has-file` ne prikazuje `#selectedFile` ni ne skriva
     // `#dropEmpty`, pa daje raspored koji nijedan korisnik ne vidi (izmjereno: preklop 0 umjesto 70 px).
     await page.setInputFiles('#fileInput', 'tests/fixtures/docx/fer-diplomski-puna-struktura.docx');
+    // UTRKA, izmjerena na CI-u 2026-09-09 (tri ponovna pokretanja, 2 do 3 od 4 viewporta, lokalno 16/16):
+    // prijem datoteke je asinkron i tek na kraju postavi korak 2. Ako se korak 1 dolje upise PRIJE toga,
+    // prijem ga poslije prepise na 2, `#stepToProfile` ostane skriven i cekanje ispod istekne. Zato se prvo
+    // ceka da prijem zavrsi (korak 2), pa se tek onda vraca na korak 1.
+    await cekajKorak(page, '2');
     // Popravljeno 2026-09-08: upload sada ide RAVNO na korak 2 (isto kao desktop; mobilna iznimka
     // koja je ovdje silila korak 1 je uklonjena). Stanje koje ovaj test provjerava (korak 1 S VEC
     // ODABRANOM datotekom) postize se izravnim postavljanjem atributa: vidljivost je posve CSS-om
@@ -692,6 +697,24 @@ const KONTRAST_STRANICE = [
 ] as const;
 for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'dark'] as const) {
   test(`${ruta}: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
+    /**
+     * REDUCED-MOTION NIJE OVDJE UKRAS NEGO UVJET MJERENJA (CI crven 2026-09-09, `48c1fc9e`).
+     *
+     * `/index.html` pusta ulaznu sekvencu kroz Web Animations API (`intake-motion.ts`): zavrsna
+     * skupina (`#intakeMeta`, `.intake-stats`, `.intake-links`) ide 0 -> 1 s kasnjenjem do 380 ms i
+     * trajanjem 420, dakle zavrsava na ~800 ms. Test je mjerio na `fonts.ready` + 300 ms, pa je axe
+     * na CI-u uhvatio tekst USRED pojavljivanja i racunao kompozit, ne konacnu boju.
+     *
+     * Brojke se poklapaju i to je ono sto dijagnozu zatvara: pale su `#69604f` (4,36) i `#6d6453`
+     * (4,11) na `#dfd8c6`, a to je tocno `--desk-faint` (#5F5645, sam po sebi 5,09 i prolazi) uz
+     * prozirnost ~0,90 do 0,93. Dvije razlicite boje u dva pokusaja su potpis pomicne mete.
+     *
+     * Zasto reduced-motion, a ne duze cekanje: `playIntakeEntry` pod njim izlazi ODMAH
+     * (`if (reducedMotion()) return`), pa sekvence nema uopce. Cekanje bi bilo pogadjanje roka na
+     * tudjem stroju. WAAPI se inace ne gasi CSS prekidacem, pa bi `motion.css` ovdje bio bez ucinka.
+     * Isti lijek vec koriste `repair-panel.spec.ts` i `analyzer-hero-demo.spec.ts`.
+     */
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(ruta);
     await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);

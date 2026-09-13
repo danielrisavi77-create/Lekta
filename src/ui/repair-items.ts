@@ -369,7 +369,7 @@ export function consistencyRepairableItem(result: any): RepairableItem[] {
     });
     return { version: 1, groups: groupParams, replacements };
   };
-  return [{ ruleId: 'consistency-engine-assisted', fixerId: 'consistency-fixer', label: 'Consistency Engine', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi odabrane kanonske varijante. Lekta mijenja samo potvrđene jednostavne tekstualne raspone, a original ostaje nepromijenjen.', consistencyForm: form, matchKeys: ['Dosljednost', 'Consistency Engine'] }];
+  return [{ ruleId: 'consistency-engine-assisted', fixerId: 'consistency-fixer', label: 'Ujednačavanje varijanti istog pojma', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi odabrane kanonske varijante. Lekta mijenja samo potvrđene jednostavne tekstualne raspone, a original ostaje nepromijenjen.', consistencyForm: form, matchKeys: ['Dosljednost', 'Consistency Engine'] }];
 }
 
 export function crossFileSubmissionRepairableItem(result: any, _profile: any): RepairableItem[] {
@@ -409,7 +409,7 @@ export function crossFileSubmissionRepairableItem(result: any, _profile: any): R
   return [{
     ruleId: 'cross-file-submission-consistency-assisted',
     fixerId: 'submission-metadata-fixer',
-    label: 'Cross-file Submission Consistency',
+    label: 'Metapodaci predajnog paketa: naslov i autor',
     params: form.buildParams(form),
     violated: issues.some((issue: any) => issue.status === 'mismatch' || issue.status === 'ambiguous'),
     requiresConfirmation: true,
@@ -999,7 +999,7 @@ export function finalDocumentInspectorRepairableItem(result: any): RepairableIte
   return [{
     ruleId: 'final-document-inspector-assisted',
     fixerId: 'final-document-inspector-fixer',
-    label: 'Final Document Inspector',
+    label: 'Tragovi uređivanja: revizije, komentari i skriveni tekst',
     params: form.buildParams(form),
     violated: true,
     requiresConfirmation: true,
@@ -1046,7 +1046,7 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
    * `final-document-inspector-fixer`, koji `matchKeys` uopce nema: ucinak postoji, ali ga nijedna
    * nasa provjera ne mjeri, pa se ta sutnja imenuje umjesto da se pokrije pogodjenim kljucem.
    */
-  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Field Integrity', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form }];
+  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Word polja i sidra: osvježavanje pri otvaranju', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form }];
 }
 
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -1137,7 +1137,7 @@ export function sectionSurgeryRepairableItem(result: any, profile: any): Repaira
   if (!operationCount) return [];
   const form: SectionSurgeryFormDefinition = { sections: sectionForms, summary: `Pronađeno je ${sectionForms.length} Word sekcija i ${operationCount} profilnih operacija. Sigurne geometrijske i numeracijske promjene su predodabrane, a prekid veza zaglavlja/podnožja traži zasebnu potvrdu.`, buildParams: () => ({}) };
   form.buildParams = (current) => ({ version: 1, operations: current.sections.flatMap((section) => section.operations.filter((operation) => operation.selected && !operation.disabled).map((operation) => operation.operation)) });
-  return [{ ruleId: 'section-surgery-assisted', fixerId: 'section-surgery-fixer', label: 'Section Surgery Engine', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi promjene sekcija. Lekta može promijeniti margine, orijentaciju, numeriranje i nasljeđivanje zaglavlja/podnožja, ali ne mijenja tekst rada. Original ostaje nepromijenjen.', sectionSurgeryForm: form, matchKeys: ['Margine dokumenta'] }];
+  return [{ ruleId: 'section-surgery-assisted', fixerId: 'section-surgery-fixer', label: 'Sekcije: margine, orijentacija i numeracija', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi promjene sekcija. Lekta može promijeniti margine, orijentaciju, numeriranje i nasljeđivanje zaglavlja/podnožja, ali ne mijenja tekst rada. Original ostaje nepromijenjen.', sectionSurgeryForm: form, matchKeys: ['Margine dokumenta'] }];
 }
 
 export function legalFootnoteRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -1169,7 +1169,7 @@ export function legalFootnoteRepairableItem(result: any, profile: any): Repairab
   const hasActions = candidates.some((candidate: any) => candidate.operations.length) || markers.length || links.length;
   if (!hasActions) return [];
   return [{
-    ruleId: 'legal-footnote-repair-assisted', fixerId: 'legal-footnote-repair-fixer', label: 'Advanced Legal Footnote Repair', params: form.buildParams(form), violated: true, requiresConfirmation: true,
+    ruleId: 'legal-footnote-repair-assisted', fixerId: 'legal-footnote-repair-fixer', label: 'Fusnote: ručne oznake u prave Word fusnote', params: form.buildParams(form), violated: true, requiresConfirmation: true,
     confirmationText: 'Potvrdi pojedinačne promjene citatnog teksta. Ručni markeri pretvaraju se u stvarne Word fusnote samo uz sigurno postojeće sidro.', legalFootnoteRepairForm: form,
     matchKeys: ['Pravne fusnote', 'op. cit. → prvo navođenje', 'Slijed Ibid.', 'Propisi i uvedene kratice', 'Fusnote ↔ bibliografija'],
   }];
@@ -1269,7 +1269,7 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
   return [{
     ruleId: 'bibliography-repair-assisted',
     fixerId: 'bibliography-repair-fixer',
-    label: 'Bibliography Repair Engine',
+    label: 'Popis literature: sortiranje, ujednačavanje i duplikati',
     params: form.buildParams(form),
     violated: true,
     requiresConfirmation: true,

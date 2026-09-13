@@ -46,8 +46,14 @@ import { findScoredValueFindings, sameRuleValue } from '../src/verification/scor
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import {
-  BUDZET_APP, BUDZET_UI_UKUPNO, POPUST, bajtova, presudaRatcheta, tsDatoteke,
+  BUDZET_APP, POPUST, bajtova, presudaRatcheta,
 } from './helpers/ui-budget';
+import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
+import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import auditRatchet from '../data/security/npm-audit-ratchet.json';
+import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
+import { proofSourceProblems } from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -61,6 +67,7 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
+import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -171,6 +178,49 @@ function evidenceFor(ruleCheckId: string, checkId: string, title: string, catego
   } as never;
   return Object.keys(buildExactEvidence([check], [issue], [entry])).length;
 }
+
+/**
+ * RE-60. ULAZ je valjan: `xmlns:r` je deklariran LOKALNO na `w:footerReference`, sto je legalan
+ * XML. IZLAZ nosi hipervezu s `r:id` u tijelu, dakle izvan dosega te deklaracije, i vise nije
+ * namespace-well-formed (@xmldom/xmldom i lxml ga odbijaju). Kontrolni izlaz je isti dokument s
+ * deklaracijom na korijenu.
+ */
+const REL_NS_FOR_MUTATION = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+const RE60_INPUT =
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+  + '<w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p>'
+  + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL_NS_FOR_MUTATION}"/></w:sectPr>`
+  + '</w:body></w:document>';
+const RE60_BAD_OUTPUT = RE60_INPUT.replace(
+  '<w:r><w:t>doi:10.1234/abc</w:t></w:r>',
+  '<w:hyperlink r:id="rId1" w:history="1"><w:r><w:t>https://doi.org/10.1234/abc</w:t></w:r></w:hyperlink>',
+);
+const RE60_GOOD_OUTPUT = RE60_BAD_OUTPUT.replace('<w:document ', `<w:document xmlns:r="${REL_NS_FOR_MUTATION}" `);
+/** Vrata integriteta nad JEDNIM promijenjenim dijelom; ostali argumenti su neutralni. */
+const re60Gate = (output: string) =>
+  detectIntegrityFailure(
+    [{ name: 'word/document.xml', xml: output }],
+    ['word/document.xml'],
+    ['word/document.xml'],
+    [],
+    { 'word/document.xml': RE60_INPUT },
+  );
+
+/** Ulaz s TUDJIM nevezanim prefiksima (VML crtez), pa izlaz koji uz to nosi NAS `r:id`. */
+const RE60_MIXED_INPUT =
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+  + '<w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p><w:p><v:shape o:spid="x"/></w:p>'
+  + '</w:body></w:document>';
+const RE60_MIXED_BAD = RE60_MIXED_INPUT.replace(
+  '<w:r><w:t>doi:10.1234/abc</w:t></w:r>',
+  '<w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink>',
+);
+const RE60_MIXED_GATE = (output: string) =>
+  detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_MIXED_INPUT });
+/** Sinteticki ulaz bez ijedne deklaracije (oblik koji testovi ovog repozitorija masovno grade). */
+const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t></w:r></w:p></w:body></w:document>';
+const RE60_SYNTHETIC_GATE = (output: string) =>
+  detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1678,38 +1728,158 @@ const MUTATIONS: Mutation[] = [
   },
   // --- ratchet nad `src/ui` (tests/ui-module-budget.test.ts) ----------------------------------
   {
-    id: 'ui-budzet/rast-i-naduvan-budzet',
+    id: 'ui-budzet/naduvan-budzet',
     imitates:
       'budzet ostane NADUVAN nakon sto je kod izdvojen, pa ratchet prestane cuvati ono zbog cega '
       + 'postoji: gornja grana vise ne moze ugristi jer ima kilobajta mrtve zrake. Izmjereno '
-      + '2026-09-13, dvaput istoga dana: ukupni prag je bio goli `toBeLessThanOrEqual` pa je '
-      + 'naduvavanje s 838 natrag na 848 KB prolazilo ZELENO, a prva izvedba OVE mutacije je '
-      + 'vjezbala presudu nad IZMISLJENIM budzetima, pa je ostajala zelena i kad se `BUDZET_APP` '
-      + 'naduva na `999 * 1024`, dakle na tocno onaj kvar koji imenuje',
+      + '2026-09-13: prva izvedba OVE mutacije vjezbala je presudu nad IZMISLJENIM budzetima, pa je '
+      + 'ostajala zelena i kad se `BUDZET_APP` naduva na `999 * 1024`, dakle na tocno onaj kvar koji '
+      + 'imenuje. Mutacija s vlastitom kopijom broja ne mjeri gard nego samu sebe',
     caught: () => {
       const s = bajtova('src/ui/app.ts');
-      const uk = tsDatoteke('src/ui').reduce((a, f) => a + bajtova(f), 0);
-      // Podmetnut kvar nad STVARNIM velicinama: prag naduvan za POPUST mora biti prijavljen, i to
-      // za OBA praga, jer je donja grana do danas postojala samo za `app.ts`.
+      // Podmetnut kvar nad STVARNOM velicinom: prag naduvan za POPUST mora biti prijavljen.
       return presudaRatcheta(s, s + POPUST).includes('budzet-naduvan')
-        && presudaRatcheta(uk, uk + POPUST).includes('budzet-naduvan')
         && presudaRatcheta(s, s - 1).includes('preko-budzeta');
     },
     /**
-     * OVA POLOVICA CITA STVARNE PRAGOVE, i to je cijela razlika prema prvoj izvedbi.
+     * OVA POLOVICA CITA STVARAN PRAG, i to je cijela razlika prema prvoj izvedbi. `caught` gore
+     * dokazuje da presuda ZNA prijaviti naduvan prag, ali to bi dokazala i nad izmisljenim brojem.
+     * Tek ovdje se cita `BUDZET_APP`, pa mutacija pada cim netko naduva sam prag.
      *
-     * `caught` gore dokazuje da presuda ZNA prijaviti naduvan prag, ali to bi dokazala i nad
-     * izmisljenim brojevima. Tek ovdje se cita `BUDZET_APP` i `BUDZET_UI_UKUPNO`, pa mutacija pada
-     * cim netko naduva sam prag: presuda tada nije prazna i baseline propada. Bez toga mutacija
-     * mjeri vlastitu aritmetiku, ne gard.
+     * UKUPNI PRAG NAD `src/ui` SE OVDJE NE MJERI: ukinut je 2026-09-09 odlukom vlasnika, jer je
+     * oporezivao komentare koje korisnik nikad ne preuzme.
      */
     cleanBefore: () => {
       const s = bajtova('src/ui/app.ts');
-      const uk = tsDatoteke('src/ui').reduce((a, f) => a + bajtova(f), 0);
-      return s > 1000 && uk > s
-        && presudaRatcheta(s, BUDZET_APP).length === 0
-        && presudaRatcheta(uk, BUDZET_UI_UKUPNO).length === 0;
+      return s > 1000 && presudaRatcheta(s, BUDZET_APP).length === 0;
     },
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 5. `repair-docx` je citao multipart s `req.formData()` iza
+   * provjere `clen && clen > MAX`: bez `Content-Length` je `clen` 0, uvjet otpadne, i cijelo tijelo
+   * se parsira u memoriju prije ijedne granice. Straza je staticka (cita izvor) jer grize i na
+   * NOVOJ funkciji koju nijedan dinamicki test jos ne poznaje.
+   */
+  {
+    id: 'edge/multipart-bez-granice',
+    imitates:
+      'Edge funkcija koja multipart cita s `req.formData()` pa velicinu provjerava POSLIJE, kad je ' +
+      'tijelo vec u memoriji; bez Content-Length zaglavlja rana provjera `clen && clen > MAX` otpadne',
+    caught: () => hasUnboundedFormData('const clen = Number(h ?? "0"); if (clen && clen > MAX) return r413(); const form = await req.formData();'),
+    cleanBefore: () =>
+      !hasUnboundedFormData(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')),
+  },
+  /**
+   * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,
+   * inace bi dijakritici propustili osjetno vece tijelo od deklariranog.
+   */
+  {
+    id: 'edge/meta-dio-bez-granice',
+    imitates:
+      'tekstualni `meta` dio multiparta koji ulazi u JSON.parse bez ikakve granice velicine, pa ' +
+      'napadac bira koliko memorije potrosi neovisno o granici datoteke',
+    caught: () => !metaWithinBudget('x'.repeat(256 * 1024 + 1), 256 * 1024),
+    cleanBefore: () => metaWithinBudget(JSON.stringify({ workType: 'graduate', requests: [], references: [] }), 256 * 1024),
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 6. Broj high/critical u punom grafu `npm audit` samo se ispisivao
+   * u koraku s `continue-on-error`, pa je s 21 (komentar, 2026-08-24) narastao na 23 a da CI to nije
+   * mogao pokazati. Ratchet cita STVARNU commitanu datoteku stropa: podmetnut porast za jedan mora
+   * biti `above`, jednak broj `equal`.
+   */
+  {
+    id: 'supply-chain/porast-nalaza-nevidljiv',
+    imitates:
+      'zeleni security workflow koji broj high/critical nalaza u punom grafu samo ispise (continue-on-error), ' +
+      'pa porast s 21 na 23 prodje neopazeno jer nista ne tvrdi strop',
+    caught: () => compareToRatchet(auditRatchet.fullGraphHighCritical + 1, auditRatchet).verdict === 'above',
+    cleanBefore: () => compareToRatchet(auditRatchet.fullGraphHighCritical, auditRatchet).verdict === 'equal',
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
+   * commitovima i u catch grani vracao "nije zastario": u plitkom klonu (Netlify, CI) stari commit ne
+   * postoji, pa je gate ispisao "OK" nad dokazom od kojeg se promijenilo 425 datoteka. Presuda sada
+   * ima tri ishoda, a nepoznato stablo NIKAD nije svjeze.
+   */
+  {
+    id: 'dokaz/zastarjelost-nepoznata-prolazi-kao-svjeza',
+    imitates:
+      'gate koji "ne moze procitati povijest" (plitak klon, bad object) tretira kao "nije zastarjelo", ' +
+      'pa dokaz pecen 425 datoteka ranije prolazi kao potvrda za kod koji nitko nije provjerio',
+    caught: () => {
+      const digest = treeDigestFromLsTree('100644 blob 1111111111111111111111111111111111111111\tsrc/a.ts');
+      return proofStaleness({ commit: 'abc', treeDigest: digest }, null).verdict !== 'fresh';
+    },
+    cleanBefore: () => {
+      const digest = treeDigestFromLsTree('100644 blob 1111111111111111111111111111111111111111\tsrc/a.ts');
+      return proofStaleness({ commit: 'abc', treeDigest: digest }, digest).verdict === 'fresh';
+    },
+  },
+  /**
+   * Vanjski audit 2026-09-08, nalaz 4. Razina A je za 19 od 31 profila bila IZVEDENA (par jedinica x
+   * vrsta rada), ne izmjerena, a nista to nije razlikovalo. Ledger sada nosi `proofSource`; gard je
+   * cista funkcija nad redcima, a baseline cita COMMITANI ledger.
+   */
+  {
+    id: 'ledger/naslijedjeni-dokaz-bez-izvora',
+    imitates:
+      'redak s dokazom na stvarnom radu bez zapisanog izvora, pa sucelje ne moze razlikovati profil na ' +
+      'kojem je mjereno od profila koji dokaz nasljedjuje po paru jedinica x vrsta rada',
+    caught: () =>
+      proofSourceProblems([{ profileId: 'x', proof: 'real-docx-pass', proofSource: null }]).length === 1,
+    cleanBefore: () =>
+      proofSourceProblems(
+        (JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/completion-ledger.json'), 'utf8')) as {
+          rows: Parameters<typeof proofSourceProblems>[0];
+        }).rows,
+      ).length === 0,
+  },
+  /**
+   * RE-60 (2026-09-12). `link-doi-fixer` je umetao `<w:hyperlink r:id="...">` u tijelo dokumenta
+   * ciji korijen `xmlns:r` nema, jer je deklaraciju trazio BILO GDJE u nizu, a dokument ju je imao
+   * lokalno na `w:footerReference`. Izlaz vise nije namespace-well-formed (@xmldom/xmldom, lxml i
+   * Word ga odbijaju), a `integrityFailure` je ostajao `null` jer skener paketa doseg deklaracija
+   * nije pratio. Mutacija podmece tocno taj oblik; baseline je ISTI dokument s deklaracijom na
+   * korijenu, pa tvrdnja nije o tome da skener vristi na sve.
+   */
+  {
+    id: 'paket/nevezan-prefiks-u-document-xml',
+    imitates:
+      'popravljeni word/document.xml koristi prefiks r: izvan dosega njegove xmlns deklaracije, pa ga '
+      + 'Word odbija otvoriti dok vrata integriteta javljaju da je paket ispravan',
+    caught: () => re60Gate(RE60_BAD_OUTPUT) !== null,
+    cleanBefore: () => re60Gate(RE60_GOOD_OUTPUT) === null,
+  },
+  /**
+   * SUZENJE GARDA NE SMIJE GA OSLIJEPITI (nalaz pregleda, 2026-09-12).
+   *
+   * Nevezan prefiks se prijavljuje samo kad ga je uveo popravak. Da je to izuzece pisano PO DIJELU
+   * ("ulazni dio je i sam padao"), jedan prefiks koji je dosao s dokumentom gasio bi provjeru za
+   * cijeli taj dio, pa bi i NAS nov prefiks prosao. Mutacija podmece tocno taj par: ulaz s VML
+   * crtezom (`v:`/`o:` nedeklarirani) i izlaz koji uz to nosi nasu hipervezu s `r:id`.
+   */
+  {
+    id: 'paket/nov-prefiks-iza-vec-nevezanog-prefiksa',
+    imitates:
+      'popravak uvodi nevezan prefiks r: u dio koji je vec imao tudji nevezan prefiks v:, pa izuzece '
+      + 'za tudji ulaz propusta i nas vlastiti kvar',
+    caught: () => RE60_MIXED_GATE(RE60_MIXED_BAD)?.problem.includes('prefiks r:') === true,
+    cleanBefore: () => RE60_MIXED_GATE(RE60_MIXED_INPUT.replace('<w:body>', '<w:body w:rsidR="00AA">')) === null,
+  },
+  /**
+   * STRUKTURA IMA PRVENSTVO NAD NAMESPACEOM (nalaz pregleda, 2026-09-12).
+   *
+   * Ista rupa u drugom smjeru: kad ulazni dio pada na nevezanom prefiksu, izuzece ne smije progutati
+   * STRUKTURNI (RE-47) kvar koji je popravak uveo. Baseline je isti sinteticki ulaz uz bezopasnu
+   * izmjenu teksta.
+   */
+  {
+    id: 'paket/re47-iza-nevezanog-prefiksa-na-ulazu',
+    imitates:
+      'popravak proizvede atribut iza kose crte u dijelu ciji je ulaz vec imao nevezan prefiks, pa '
+      + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
+    caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
+    cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
@@ -1759,5 +1929,22 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
     const raw = readFileSync(resolve(process.cwd(), REAL_SOURCE.snapshotPath!));
     expect(raw.byteLength).toBeGreaterThan(1000);
     expect(checkSourceHashes({ sources: [REAL_SOURCE], only: [REAL_SOURCE_ID] }).problems).toEqual([]);
+  });
+});
+
+// Agent result success cannot bypass dependency or independent-review gates.
+describe('agent workflow guards', () => {
+  it('accepts ready work, catches a reopened dependency and same-provider review', async () => {
+    const { prepareJob } = await import('../scripts/agents/core.mjs');
+    const queue = { tasks: [
+      { id: 'T00', title: 'Baseline', status: 'done', dependsOn: [] },
+      { id: 'T01', title: 'Fix', status: 'ready', dependsOn: ['T00'], implementationAgent: 'opus' },
+    ] };
+    expect(() => prepareJob(queue, 'T01', 'implement', 'sol')).not.toThrow();
+    queue.tasks[0].status = 'ready';
+    expect(() => prepareJob(queue, 'T01', 'implement', 'sol')).toThrow(/T00/);
+    queue.tasks[1].status = 'in_review';
+    expect(() => prepareJob(queue, 'T01', 'review', 'astra')).not.toThrow();
+    expect(() => prepareJob(queue, 'T01', 'review', 'fable', 2)).toThrow(/different provider/);
   });
 });

@@ -47,7 +47,21 @@ function updateRelationshipTarget(rels: string, id: string, target: string): str
     return /\bTarget=["'][^"']*["']/i.test(tag) ? tag.replace(/(\bTarget=["'])[^"']*(["'])/i, `$1${encode(target)}$2`) : tag.replace(/\/>$/, ` Target="${encode(target)}"/>`);
   });
 }
-function ensureRNamespace(xml: string): string { return /xmlns:r=["']/i.test(xml) ? xml : xml.replace(/<w:document\b([^>]*)>/i, '<w:document$1 xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'); }
+/**
+ * Deklaracija se trazi na KORIJENU, ne bilo gdje u dokumentu.
+ *
+ * RE-60 (2026-09-12): uvjet je bio `/xmlns:r=["']/i.test(xml)`, dakle "ima li ovaj string igdje
+ * nisku `xmlns:r=`". Dokument koji prefiks deklarira LOKALNO na nekom elementu (posve legalan XML;
+ * nas vlastiti graditelj fixtura to pise na `w:footerReference`) time je prolazio kao vec
+ * deklariran, pa se na korijen nije upisalo nista. Hiperveza se zatim umetne u TIJELO, izvan
+ * dosega te lokalne deklaracije, i izlaz prestane biti namespace-well-formed: @xmldom/xmldom baca
+ * `NamespaceError: prefix is non-null and namespace is null`.
+ *
+ * Uzorak je DOSLOVNO preuzet iz `ensureRelationshipsNamespace` u `xml-patch.ts`, gdje je ispravan
+ * od pocetka. Ne gradi se dinamicki iz niza: repozitorij vec ima povijest escapea izgubljenog kroz
+ * konkatenaciju.
+ */
+function ensureRNamespace(xml: string): string { return /<w:document\b[^>]*\sxmlns:r=/.test(xml) ? xml : xml.replace(/<w:document\b([^>]*)>/i, '<w:document$1 xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'); }
 function paragraphTextNodes(xml: string): Array<{ start: number; end: number; contentStart: number; contentEnd: number; text: string }> {
   return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/gi)].map((match) => ({ start: match.index ?? 0, end: (match.index ?? 0) + match[0].length, contentStart: (match.index ?? 0) + match[0].indexOf('>') + 1, contentEnd: (match.index ?? 0) + match[0].length - match[0].match(/<\/w:t>$/i)![0].length, text: decode(match[1]) }));
 }

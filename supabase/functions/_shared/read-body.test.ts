@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readTextBounded } from './read-body';
+import { readTextBounded, readFormDataBounded, metaWithinBudget } from './read-body';
 
 /**
  * Audit P1-04 / P1-06: granica tijela mora vrijediti i kad klijent LAZE ili sUTI o duljini.
@@ -134,5 +134,96 @@ describe('readTextBounded', () => {
     const req = new Request('https://lekta.test/fn', { method: 'POST' });
     const out = await readTextBounded(req, MAX);
     expect(out).toEqual({ ok: true, text: '' });
+  });
+});
+
+/**
+ * Vanjski audit 2026-09-08, nalaz 5: `repair-docx` je zvao `req.formData()` prije ijedne provjere
+ * velicine, pa je granica datoteke stizala kad je cijeli multipart vec bio u memoriji, a `meta` se
+ * nije mjerio nikad. Ovi testovi dokazuju da omedjeni multipart (1) vraca iste bajtove za uredan
+ * zahtjev, (2) odbija preveliko tijelo i BEZ `content-length` i kad ono laze, i (3) da je citac
+ * otkazan, dakle ostatak se ne alocira.
+ */
+
+/** Pravi multipart kroz undici: `content-type` dobiva boundary, tijelo je stream. */
+async function multipartBytes(file: Uint8Array, meta: string): Promise<{ bytes: Uint8Array; contentType: string }> {
+  const fd = new FormData();
+  fd.append('file', new Blob([file], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }), 'rad.docx');
+  fd.append('meta', meta);
+  const req = new Request('https://lekta.test/fn', { method: 'POST', body: fd });
+  return { bytes: new Uint8Array(await req.arrayBuffer()), contentType: req.headers.get('content-type') ?? '' };
+}
+
+/** Isti multipart, ali posluzen kao stream BEZ `content-length`, uz ocuvan `content-type`. */
+function streamingMultipart(bytes: Uint8Array, contentType: string, chunkSize = 1024): { req: Request; stream: ReadableStream<Uint8Array> } {
+  const stream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      for (let i = 0; i < bytes.byteLength; i += chunkSize) {
+        controller.enqueue(bytes.subarray(i, Math.min(i + chunkSize, bytes.byteLength)));
+      }
+      controller.close();
+    },
+  });
+  const headers = new Headers();
+  headers.set('content-type', contentType);
+  return { req: { headers, body: stream } as unknown as Request, stream };
+}
+
+describe('readFormDataBounded', () => {
+  const docx = new Uint8Array(64 * 1024);
+  docx.set([0x50, 0x4b, 0x03, 0x04]);
+  for (let i = 4; i < docx.byteLength; i++) docx[i] = (i * 7919) & 0xff;
+  const META = JSON.stringify({ workType: 'graduate', requests: [], references: [] });
+
+  it('odbija multipart iznad granice i kad `content-length` UOPCE NE POSTOJI (grize prvo)', async () => {
+    const { bytes, contentType } = await multipartBytes(docx, META);
+    const { req, stream } = streamingMultipart(bytes, contentType);
+    const out = await readFormDataBounded(req, 8 * 1024);
+    expect(out).toEqual({ ok: false, reason: 'too_large' });
+    // Otkazan citac: ostatak tijela nije procitan ni alociran.
+    expect(stream.locked).toBe(false);
+  });
+
+  it('odbija multipart kad `content-length` LAZE da je malo', async () => {
+    const { bytes, contentType } = await multipartBytes(docx, META);
+    const { req } = streamingMultipart(bytes, contentType);
+    req.headers.set('content-length', '10');
+    const out = await readFormDataBounded(req, 8 * 1024);
+    expect(out).toEqual({ ok: false, reason: 'too_large' });
+  });
+
+  it('uredan multipart unutar granice vraca IDENTICNE bajtove datoteke i `meta` niz', async () => {
+    const { bytes, contentType } = await multipartBytes(docx, META);
+    const { req } = streamingMultipart(bytes, contentType);
+    const out = await readFormDataBounded(req, bytes.byteLength + 1024);
+    expect(out.ok).toBe(true);
+    if (!out.ok) return;
+    const file = out.form.get('file');
+    expect(file).toBeInstanceOf(File);
+    const back = new Uint8Array(await (file as File).arrayBuffer());
+    expect(back.byteLength).toBe(docx.byteLength);
+    expect(Buffer.from(back).equals(Buffer.from(docx))).toBe(true);
+    expect(out.form.get('meta')).toBe(META);
+  });
+
+  it('bez `content-type` s boundaryjem multipart se ne da parsirati: bad_request, ne pad', async () => {
+    const { bytes } = await multipartBytes(docx, META);
+    const { req } = streamingMultipart(bytes, 'text/plain');
+    const out = await readFormDataBounded(req, bytes.byteLength + 1024);
+    expect(out).toEqual({ ok: false, reason: 'bad_request' });
+  });
+});
+
+describe('metaWithinBudget', () => {
+  it('mjeri BAJTOVE UTF-8, ne znakove', () => {
+    expect(metaWithinBudget('{}', 2)).toBe(true);
+    expect(metaWithinBudget('{"a":"š"}', 9)).toBe(false); // š je 2 bajta, niz je 10 bajtova
+    expect(metaWithinBudget('{"a":"š"}', 10)).toBe(true);
+  });
+
+  it('meta iznad granice se odbija (mutacija), uredan meta prolazi (baseline)', () => {
+    const MAX_META = 256 * 1024;
+    expect(metaWithinBudget(JSON.stringify({ workType: 'graduate' }), MAX_META)).toBe(true);
+    expect(metaWithinBudget('x'.repeat(MAX_META + 1), MAX_META)).toBe(false);
   });
 });

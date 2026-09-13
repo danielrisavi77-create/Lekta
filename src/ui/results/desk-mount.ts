@@ -1,21 +1,20 @@
 /**
- * KOREKTORSKI STOL: ozicenje. `desk-view.ts` daje HTML, `desk-model.ts` vezu nalaz <-> mjesto,
- * a ovaj modul ih spaja u zivo sucelje.
+ * KOREKTORSKI STOL: ozicenje. `desk-view.ts` daje HTML, `desk-model.ts` vezu nalaz <-> mjesto.
  *
  * Brif vlasnika (2026-09-08): "Klik na nalaz pomakne dokument. Klik na oznaceno mjesto aktivira
- * nalaz. To daje 'aha' trenutak koji screenshot score dashboarda nikada nece dati."
+ * nalaz."
  *
- * DELEGACIJA, NE IZRAVNI SLUSACI, i to nije stil nego nuznost. Stol PONOVNO CRTA desnu plocu na
- * svaku promjenu nalaza, pa bi slusaci zakaceni na pojedinacne gumbe umrli zajedno s karticom koju
- * su drzali. Prvi klik bi radio, drugi ne, i to bi izgledalo kao nasumican kvar. Jedan slusac na
- * sekciji prezivi svako ponovno crtanje.
+ * DELEGACIJA, NE IZRAVNI SLUSACI, i to je nuznost: stol ponovno crta desnu plocu na svaku promjenu
+ * nalaza, pa bi slusac na pojedinacnom gumbu umro s karticom koju drzi. Prvi klik bi radio, drugi
+ * ne, sto izgleda kao nasumican kvar.
  *
- * DOKUMENT SE MONTIRA IZVANA (`mountDocument`), jer je faksimil tezak modul koji se ucitava lijeno.
- * Time je i ovaj modul mjerljiv bez preglednika: test ubaci vlastite mete umjesto stvarnog
- * dokumenta. Bez toga bi se ozicenje moglo dokazati samo Playwrightom, dakle sporo i tek na CI-u.
+ * DOKUMENT SE MONTIRA IZVANA (`mountDocument`), jer je faksimil tezak lijeni modul. Time je i ovo
+ * ozicenje mjerljivo bez preglednika: test ubaci vlastite mete umjesto stvarnog dokumenta.
  */
 import type { DeskItem } from './desk-model';
-import { deskHtml, deskNav, deskPaneHtml } from './desk-view';
+import { repairPlanFooterHtml } from './repair-plan-view';
+import type { RepairPlan } from './repair-plan';
+import { deskHtml, deskNav, deskPaneHtml, deskPlanPaneHtml } from './desk-view';
 import type { ResultsCockpitAction } from './results-cockpit';
 import type { VisualFindingModel } from './visual-result-model';
 
@@ -29,9 +28,19 @@ export interface DeskMountOptions {
   readonly repairAvailable: boolean;
   readonly esc: (v: string) => string;
   readonly mountDocument: (host: HTMLElement) => Promise<DeskDocument | null>;
+  /** HTML plana ispravaka; bez njega stol nema drugi nacin rada i gumb se ne nudi. */
+  readonly planHtml?: string | null;
+  /** Model plana (T09); bez njega promjena odabira ne moze ponovno iscrtati podnozje. */
+  plan?: RepairPlan | null;
   readonly onAction?: (action: ResultsCockpitAction) => void;
   /** Testovi ubacuju vlastito pomicanje; produkcija koristi `scrollIntoView`. */
   readonly scrollTo?: (el: HTMLElement) => void;
+  /**
+   * Odakle poceti. Stol se PONOVNO MONTIRA na svaku radnju nad nalazom, pa bi bez ovoga korisnik
+   * koji potvrdi peti nalaz zavrsio natrag na prvom, kao da je radnja ponistila napredak. Uhvatio
+   * CI (`browser-matrix`, 2026-09-08), jer je kartica na kojoj test radi nestala iz DOM-a.
+   */
+  readonly startIndex?: number;
 }
 
 export interface DeskHandle {
@@ -77,17 +86,21 @@ function radnjaZaKlik(cilj: HTMLElement): ResultsCockpitAction | null {
 
 export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle {
   const pomakni = o.scrollTo ?? zadanoPomicanje;
-  let index = 0;
+  // Stisce se u raspon: popis se izmedju dviju montaza mogao skratiti (zanemaren nalaz).
+  let index = deskNav(o.items.length, o.startIndex ?? 0).index;
+  let nacin: 'nalazi' | 'plan' = 'nalazi';
   let mete: ReadonlyMap<number, HTMLElement> | null = null;
   let odbacen = false;
 
-  section.innerHTML = deskHtml(o.items[0] ?? null, deskNav(o.items.length, 0), o.repairAvailable, o.esc);
+  section.innerHTML = deskHtml(o.items[index] ?? null, deskNav(o.items.length, index), o.repairAvailable, o.esc, o.items, !!o.planHtml);
 
   const nacrtajPlocu = (): void => {
     const stara = section.querySelector<HTMLElement>('[data-desk-pane]');
     if (!stara) return;
     const nova = section.ownerDocument.createElement('div');
-    nova.innerHTML = deskPaneHtml(o.items[index] ?? null, deskNav(o.items.length, index), o.repairAvailable, o.esc);
+    nova.innerHTML = nacin === 'plan' && o.planHtml
+      ? deskPlanPaneHtml(o.planHtml)
+      : deskPaneHtml(o.items[index] ?? null, deskNav(o.items.length, index), o.repairAvailable, o.esc, o.items, !!o.planHtml);
     const zamjena = nova.firstElementChild;
     if (zamjena) stara.replaceWith(zamjena);
   };
@@ -125,6 +138,15 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
       if (v) goTo(Number(v));
       return;
     }
+    if (cilj.closest('[data-desk-plan-open]')) { nacin = 'plan'; nacrtajPlocu(); o.onAction?.({ kind: 'plan-opened' }); return; }
+    if (cilj.closest('[data-desk-plan-close]')) { nacin = 'nalazi'; nacrtajPlocu(); oznaciMjesto(); return; }
+    if (cilj.closest('[data-repair-plan-go]')) {
+      // T09: plan NE izvodi popravak sam (motor, privola i naplata zive u panelu), ali ODABIR putuje s radnjom:
+      // ljuska ga preda kontroleru toka (`RepairPanelHandle.applySelection`), pa je odabir u planu i prije slanja
+      // ISTI. Do sada se odabir iz plana odbacivao i panel je sam birao "prekrseno".
+      o.onAction?.({ kind: 'repair-safe', ruleIds: planOdabir() });
+      return;
+    }
     if (cilj.closest('[data-finding-ignore]')) {
       cilj.closest<HTMLElement>('[data-finding-id]')?.querySelector<HTMLElement>('[data-finding-ignore-form]')?.removeAttribute('hidden');
       return;
@@ -139,6 +161,23 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
 
   section.addEventListener('click', naKlik);
 
+  /** Trenutni odabir u planu, iz stvarnih kontrola; prazan niz kad plan nije iscrtan. */
+  const planOdabir = (): string[] =>
+    Array.from(section.querySelectorAll<HTMLInputElement>('[data-repair-plan-item]'))
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.dataset.repairPlanItem ?? '')
+      .filter(Boolean);
+
+  // Promjena odabira u planu: brojac i sazetak se ponovno iscrtaju iz ISTE logike koja crta pocetno stanje.
+  const naPromjenu = (e: Event): void => {
+    const cb = e.target as HTMLInputElement | null;
+    if (!cb || typeof cb.matches !== 'function' || !cb.matches('[data-repair-plan-item]')) return;
+    cb.dataset.odabrano = cb.checked ? 'da' : 'ne';
+    const podnozje = section.querySelector<HTMLElement>('[data-repair-plan-footer]');
+    if (podnozje && o.plan) podnozje.innerHTML = repairPlanFooterHtml(o.plan, planOdabir(), o.esc);
+  };
+  section.addEventListener('change', naPromjenu);
+
   const domacin = section.querySelector<HTMLElement>('[data-desk-doc]');
   if (domacin) {
     void o.mountDocument(domacin).then((dokument) => {
@@ -147,9 +186,8 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
       mete = dokument.flagTargets;
       mete.forEach((el, flagIndex) => {
         el.addEventListener('click', () => {
-          // OBRNUT SMJER: mjesto aktivira nalaz. Trazi se po `flagIndex`, jer zastavica i nalaz
-          // dolaze razlicitim putevima i presjek je manji od oba skupa; zastavica bez nalaza
-          // (npr. registar duge recenice) ne smije nista pomaknuti.
+          // OBRNUT SMJER: mjesto aktivira nalaz. Po `flagIndex`, jer zastavica bez nalaza (npr.
+          // registar duge recenice) ne smije nista pomaknuti.
           const i = o.items.findIndex((it) => it.flagIndex === flagIndex);
           if (i >= 0) goTo(i);
         });
@@ -167,6 +205,7 @@ export function mountDesk(section: HTMLElement, o: DeskMountOptions): DeskHandle
     dispose() {
       odbacen = true;
       section.removeEventListener('click', naKlik);
+      section.removeEventListener('change', naPromjenu);
     },
   };
 }

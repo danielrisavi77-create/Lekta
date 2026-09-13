@@ -1,26 +1,15 @@
 /**
- * KOREKTORSKI STOL: prikaz. Model veze nalaz <-> mjesto zivi u `desk-model.ts`; ovdje je samo ono
- * sto korisnik vidi.
+ * KOREKTORSKI STOL: prikaz. Raspored je 58% dokument, 42% nalazi.
  *
- * Brif vlasnika (2026-09-08): "Digitalni korektor koji sjedi uz tvoj Word. Ne dashboard, ne
- * tablica provjera, ne score app. Klik na nalaz pomakne dokument, klik na oznaceno mjesto aktivira
- * nalaz." Raspored je 58% dokument, 42% nalazi.
+ * NAVIGACIJA NE OMATA: stol na kojem se vrtis u krug ne moze odgovoriti na "jesam li gotov".
  *
- * JEDAN NALAZ ODJEDNOM, i to je cijela razlika prema popisu kartica. Popis trazi da korisnik sam
- * bira gdje gledati; stol mu daje jedno mjesto i jedno pitanje, pa navigacija ("1 / 6") nosi
- * osjecaj napretka koji tablica nema.
- *
- * NAVIGACIJA NE OMATA. Na zadnjem nalazu "Sljedeci problem" je ugasen, a ne vraca na prvi.
- * Korektorski stol na kojem se vrtis u krug ne moze reci jesi li gotov, a upravo to je pitanje
- * zbog kojeg korisnik broji.
- *
- * KARTICU NALAZA CRTA `priority-findings.ts`, ne ovaj modul. Druga izvedba iste kartice bi se
- * razisla s prvom (mjereno na ovom repozitoriju vise puta: dvije izvedbe istog pravila se prije ili
- * kasnije raziđu), pa stol dodaje SAMO ono sto je njegovo: traku o opsegu i navigaciju.
+ * KARTICU CRTA `priority-findings.ts`: druga izvedba iste kartice bi se s prvom razisla. Stol
+ * dodaje samo svoje - traku o opsegu, popis i navigaciju.
  */
 import type { DeskItem } from './desk-model';
 import { trakaZaOpseg } from './desk-model';
 import { priorityFindingHtml } from './priority-findings';
+import { queueHtml, queueRedci } from './desk-queue';
 import type { VisualFindingModel } from './visual-result-model';
 
 export interface DeskNav {
@@ -48,19 +37,17 @@ export function deskNav(ukupno: number, index: number): DeskNav {
 }
 
 /**
- * Sto stoji iznad dokumenta kad nalaz nema svoje mjesto.
+ * Sto stoji iznad dokumenta kad nalaz nema svoje mjesto. 61% nalaza ne moze pokazati odlomak
+ * (mjereno), pa je to vecinski slucaj: dokument ostaje NEOZNACEN uz recenicu koja kaze zasto.
  *
- * IZMJERENO PRIJE GRADNJE (19 golden fixtura, 233 nalaza): sidro ima 6%, podrucje 16%, cijeli
- * dokument 45%, nepoznato 33%. Dakle 61% nalaza NE MOZE pokazati odlomak, i to je vecina. Stol
- * zato ne smije biti gradjen oko okvira: kad mjesta nema, dokument ostaje NEOZNACEN, a iznad njega
- * stoji recenica koja kaze zasto. Vlasnik je taj izbor potvrdio ("ne izmisljati okvir na prvoj
- * stranici").
- *
- * Cetvrti slucaj nastaje tek pri spajanju i zato ga model ne zna: nalaz IMA sidro, ali zastavica
- * za to mjesto nije iscrtana (prikaz je skracen, ili registar nema svoj nalaz). Sutjeti bi ovdje
- * bilo najgore: korisnik bi trazio oznaku koje nema.
+ * Cetvrti slucaj nastaje tek pri spajanju: nalaz IMA sidro, ali zastavica nije iscrtana. Sutnja
+ * bi ondje bila najgora, jer korisnik trazi oznaku koje nema.
  */
 export function deskTraka(item: DeskItem): string | null {
+  // NEPOZNAT OPSEG NE DOBIVA TRAKU: `trakaZaOpseg` za `unavailable` vraca `scope.reason`, a isti
+  // razlog kartica vec ispisuje u retku "Gdje:", pa su se na snimci (2026-09-08, nalaz 03)
+  // vidjele DVIJE identicne recenice jedna iznad druge.
+  if (item.finding.scope.kind === 'unavailable') return null;
   const opseg = trakaZaOpseg(item.finding.scope);
   if (opseg) return opseg;
   if (item.flagIndex === null) return 'Mjesto je poznato, ali nije označeno u ovom prikazu.';
@@ -78,21 +65,55 @@ export function deskNavHtml(nav: DeskNav, esc: (v: string) => string): string {
     + '</nav>';
 }
 
-/** Desna strana stola: traka o opsegu, kartica nalaza, navigacija. */
+/**
+ * Desna strana stola: RED CEKANJA s otvorenim detaljem odabranog, pa navigacija.
+ *
+ * Popis odgovara na "sto sve me ceka", navigacija na "vodi me redom". Oba su jeftina jer dijele
+ * isti `data-desk-go`, a samo jedan od njih ne bi bio dovoljan: jedna kartica ne kaze je li
+ * ostatak tezak ni sitan, a sam popis ne vodi kroz posao.
+ */
 export function deskPaneHtml(
   item: DeskItem<VisualFindingModel> | null,
   nav: DeskNav,
   repairAvailable: boolean,
   esc: (v: string) => string,
+  // OBAVEZAN, bez zadane vrijednosti. Zadano `[item]` je izmisljalo jednoclani popis, pa kad se ne
+  // bi poklopio s polozajem, NIJEDAN redak ne bi bio odabran i detalj bi tiho nestao s ekrana.
+  svi: readonly DeskItem<VisualFindingModel>[],
+  planDostupan = false,
 ): string {
   if (!item) return '<div class="desk-pane" data-desk-pane><p class="desk-prazno">Nema otvorenih nalaza.</p></div>';
   const traka = deskTraka(item);
+  const detalj = (traka ? `<p class="desk-traka" data-desk-traka>${esc(traka)}</p>` : '')
+    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u "3 / 9" i u retku popisa.
+    // Kad se dvije brojke na istom ekranu ne slazu, korisnik to cita kao kvar.
+    + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1);
+  // ULAZ U PLAN STOJI UZ NALAZE, jer se ondje i donosi odluka da se nesto popravi. Do 2026-09-08
+  // je jedini ulaz bio CTA uz ocjenu, koji vodi na panel skriven u kartici "Spremnost za predaju";
+  // kod je uz taj CTA sam pisao da ga "ni autor aplikacije nije nasao".
+  const uPlan = planDostupan
+    ? '<button type="button" class="desk-plan-open" data-desk-plan-open>Otvori plan ispravaka'
+      + ' <span aria-hidden="true">&#8594;</span></button>'
+    : '';
   return '<div class="desk-pane" data-desk-pane>'
-    + (traka ? `<p class="desk-traka" data-desk-traka>${esc(traka)}</p>` : '')
-    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u "1 / 6". Kartica ga ispisuje
-    // kao svoj redni broj, pa se dvije brojke na ekranu slazu umjesto da se natjecu.
-    + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1)
+    + queueHtml(queueRedci(svi, repairAvailable), nav.index, esc, detalj)
+    + uPlan
     + deskNavHtml(nav, esc)
+    + '</div>';
+}
+
+/**
+ * Desna strana u nacinu PLAN. Plan ZAMJENJUJE popis nalaza, ne stoji uz njega: to su dva pogleda
+ * na isti posao ("sto nije u redu" i "sto cu s tim"), pa jedan ispod drugoga trazi da korisnik
+ * dvaput procita iste stavke.
+ *
+ * Povratak je uvijek ponudjen, jer plan je ODLUKA, a odluka bez izlaza nije odluka.
+ */
+export function deskPlanPaneHtml(planHtml: string): string {
+  return '<div class="desk-pane desk-pane--plan" data-desk-pane>'
+    + '<button type="button" class="desk-natrag" data-desk-plan-close>'
+    + '<span aria-hidden="true">&#8592;</span> Natrag na nalaze</button>'
+    + planHtml
     + '</div>';
 }
 
@@ -106,6 +127,8 @@ export function deskHtml(
   nav: DeskNav,
   repairAvailable: boolean,
   esc: (v: string) => string,
+  svi: readonly DeskItem<VisualFindingModel>[],
+  planDostupan = false,
 ): string {
   return '<section class="desk" data-desk aria-label="Korektorski stol">'
     // `tabindex` i `role` NISU ukras: pano ima vlastiti skrol, pa bez njih korisnik tipkovnice
@@ -114,6 +137,6 @@ export function deskHtml(
     // `role="region"`, inace citac ekrana najavi podrucje koje nema ime.
     + '<div class="desk-doc" data-desk-doc tabindex="0" role="region" aria-label="Dokument">'
     + '<p class="desk-doc__cekanje">Pripremam prikaz dokumenta…</p></div>'
-    + deskPaneHtml(item, nav, repairAvailable, esc)
+    + deskPaneHtml(item, nav, repairAvailable, esc, svi, planDostupan)
     + '</section>';
 }

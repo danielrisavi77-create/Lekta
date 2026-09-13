@@ -25,6 +25,7 @@ import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { treeDigestFromLsTree } from './release-proof-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'docs', 'generated', 'RELEASE_PROOF.json');
@@ -54,6 +55,10 @@ const TIERS = [
   { id: 'conformance', label: 'Tier 0: conformance matrica', cmd: 'npm run conformance', required: true },
   { id: 'slow', label: 'Tier 0: spori repair testovi', cmd: 'npm run test:slow', required: true },
   { id: 'ux', label: 'Tier 0: Playwright UX', cmd: 'npm run test:ux', required: true },
+  // Kriticni put nad `dist/` kroz `vite preview` (vanjski audit 2026-09-08, nalaz 3). `required: false`
+  // dok se ne izmjeri stabilnost; `dist/` postoji jer je `check` iznad vec izvrtio `vite build`. Nije
+  // duplikat `ux` razine: ona vrti dev server, ova produkcijski bundle.
+  { id: 'ux-dist', label: 'Tier 0: Playwright nad dist/ (vite preview)', cmd: 'npm run test:ux:dist', required: false },
   // POPRAVLJENE pakete, ne ulazne fixture: `verify:strict-open` (bez `:repaired`) otvara
   // `tests/fixtures/docx`, dakle ULAZE, i popravak u njoj nikad nije pozvan. Do 2026-08-30 je
   // RELEASE_PROOF biljezio bas tu, slabiju provjeru kao "Tier 1: pass".
@@ -168,8 +173,24 @@ const missingRequired = TIERS.filter(
   (t) => t.required && !results.some((r) => r.id === t.id && r.status === 'pass'),
 ).map((t) => t.id);
 
+/**
+ * Otisak stabla HEAD-a bez same datoteke dokaza (vidi `release-proof-core.mjs`). Gate pri deployu
+ * ga ponovno racuna iz `git ls-tree -r <head>`, sto radi i u plitkom klonu; `git diff` medju
+ * commitovima ondje nije radio i tiho je prolazio (vanjski audit 2026-09-08, nalaz 1). Kad
+ * `ls-tree` padne, upisuje se `null`: takav dokaz gate cita kao "ne znam", ne kao svjez.
+ */
+function treeDigestAt(ref) {
+  try {
+    return treeDigestFromLsTree(execSync(`git ls-tree -r ${ref}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
+  } catch {
+    console.warn('[release-check] UPOZORENJE: `git ls-tree` nije uspio, dokaz nece nositi treeDigest i gate ga nece moci proglasiti svjezim.');
+    return null;
+  }
+}
+
 const proof = {
   commit,
+  treeDigest: treeDigestAt('HEAD'),
   dirtyWorkingTree: dirty,
   createdAt: new Date().toISOString(),
   platform: process.platform,

@@ -1,4 +1,5 @@
 import type { IntakeOk } from '../docx/intake-gate';
+import { sanitizeStoredRevision, type StoredRevision } from './revision-storage';
 
 export const LOCAL_DOCUMENT_SCHEMA_VERSION = 1 as const;
 export const LOCAL_DOCUMENT_TTL_MS = 24 * 60 * 60 * 1_000;
@@ -29,6 +30,10 @@ export interface LocalWorkspaceSnapshot {
   stage: 'profile' | 'results' | 'repairPlan' | 'comparison' | 'submission';
   selectedFindingId?: string;
   analysis?: StoredAnalysisSnapshot;
+  /** T12: snimka nalaza tekuce analize (bez sadrzaja rada), za usporedbu verzija. Neobavezno: stariji zapisi je nemaju. */
+  revision?: StoredRevision;
+  /** T12: snimka prethodne verzije istog rada, prenesena pri ucitavanju nove verzije. */
+  previousRevision?: StoredRevision;
 }
 
 export interface LocalDocumentSessionV1 {
@@ -230,6 +235,12 @@ function sanitizeWorkspace(value: unknown): LocalWorkspaceSnapshot | null {
   const workspace: LocalWorkspaceSnapshot = { ...metadata };
   const analysis = sanitizeAnalysis((value as Record<string, unknown>).analysis);
   if (analysis) workspace.analysis = analysis;
+  // Revizije su NEOBAVEZNE i sanitiziraju se zasebno: neispravna snimka se izostavlja, ne rusi sesiju (stara sesija
+  // ostaje citljiva, plan T12). Prazan `previousRevision` bez `revision` je dopusten (nova verzija jos nije analizirana).
+  const revision = sanitizeStoredRevision((value as Record<string, unknown>).revision);
+  if (revision) workspace.revision = revision;
+  const previous = sanitizeStoredRevision((value as Record<string, unknown>).previousRevision);
+  if (previous) workspace.previousRevision = previous;
   return workspace;
 }
 

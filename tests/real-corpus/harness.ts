@@ -12,7 +12,7 @@ import { summarizeRepairOutcome } from '../../src/repair/repair-outcome';
 import { inspectDocxParts } from '../../src/repair/package-integrity';
 import { readZip } from '../../src/repair/zip-codec';
 import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
-import { sidecarAdmitted, type CorpusSidecar } from './corpus-track';
+import { expectationProvenance, isHoldout, sidecarAdmitted, type CorpusSidecar, type ExpectationProvenance } from './corpus-track';
 
 export { sidecarAdmitted, ADMITTED_TRACKS, type CorpusTrack, type CorpusSidecar } from './corpus-track';
 
@@ -51,12 +51,18 @@ export interface RealCorpusManifestEntry {
   profileId: string;
   /** Direktorij iz kojeg se datoteka cita; omogucuje spajanje commitanog i lokalnog korpusa. */
   root?: string;
+  /** Izdvojen za zavrsnu provjeru (T06, 2.2): mjeri se, ali ovjera ga ne broji bez potvrde vlasnika. */
+  holdout: boolean;
+  /** Tko je zapisao ocekivanja: neovisna osoba prije popravka, ili ih je harness izveo iz analize. */
+  expectationProvenance: ExpectationProvenance;
 }
 
 export interface RealCorpusResult {
   documentId: string;
   fileName: string;
   profileId: string;
+  holdout: boolean;
+  expectationProvenance: ExpectationProvenance;
   outcome: 'pass' | 'review' | 'fail' | 'no-op';
   before: { checkCount: number; passCount: number; score: number | null };
   /**
@@ -208,11 +214,26 @@ export interface RealCorpusReport {
     assistedUnresolvedCount: number;
     awaitingConfirmationCount: number;
     manualOnlyCount: number;
+    /** Koliko je dokumenata u izdvojenom skupu (T06, 2.2); ovjera ih broji tek uz potvrdu. */
+    holdoutCount: number;
+    /** Koliko dokumenata ima ocekivanja koja je zapisala neovisna osoba prije popravka (T06, 2.3). */
+    independentlyConfirmedCount: number;
   };
 }
 
 function sidecarPath(root: string, fileName: string): string {
   return join(root, fileName.replace(/\.docx$/i, '.json'));
+}
+
+function manifestEntry(fileName: string, metadata: CorpusSidecar, root: string): RealCorpusManifestEntry {
+  return {
+    documentId: fileName.replace(/\.docx$/i, ''),
+    fileName,
+    profileId: metadata.profileId as string,
+    root,
+    holdout: isHoldout(fileName, metadata),
+    expectationProvenance: expectationProvenance(metadata),
+  };
 }
 
 /**
@@ -249,9 +270,7 @@ export function discoverExcludedCorpus(root = REAL_CORPUS_ROOT): RealCorpusManif
         return [];
       }
       if (sidecarAdmitted(metadata) || !metadata.profileId) return [];
-      return [
-        { documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId as string, root },
-      ];
+      return [manifestEntry(fileName, metadata, root)];
     });
 }
 
@@ -274,9 +293,7 @@ export function discoverRealCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestE
         return [];
       }
       if (!sidecarAdmitted(metadata)) return [];
-      return [
-        { documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId as string, root },
-      ];
+      return [manifestEntry(fileName, metadata, root)];
     });
 }
 
@@ -341,6 +358,8 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     documentId: entry.documentId,
     fileName: entry.fileName,
     profileId: entry.profileId,
+    holdout: entry.holdout,
+    expectationProvenance: entry.expectationProvenance,
     outcome: 'fail' as const,
     before: { checkCount: 0, passCount: 0, score: null },
     after: null,
@@ -540,6 +559,29 @@ function repoRelative(absolute: string): string {
   return relative(join(HERE, '..', '..'), absolute).split(sep).join('/');
 }
 
+/**
+ * OGRANICEN PARALELIZAM. `Promise.all` nad cijelim manifestom je pokretao analizu i popravak SVIH dokumenata
+ * odjednom; izmjereno 2026-09-10: 128 lokalnih + 187 vanjskih radova srusilo je Node s "heap out of memory"
+ * (mark-compacts near heap limit) na stroju s 8 GB, a 54 dokumenta su prolazila. Redoslijed rezultata ostaje
+ * redoslijed manifesta, pa se artefakt ne mijenja; mijenja se samo koliko dokumenata zivi u memoriji odjednom.
+ * `LEKTA_CORPUS_CONCURRENCY` postoji za mjerenje, ne za zaobilazenje: zadano 4 je ispod broja jezgri.
+ */
+export const CORPUS_CONCURRENCY = Math.max(1, Number(process.env.LEKTA_CORPUS_CONCURRENCY) || 4);
+
+export async function mapLimited<T, R>(items: readonly T[], fn: (item: T) => Promise<R>, limit = CORPUS_CONCURRENCY): Promise<R[]> {
+  const out: R[] = new Array(items.length);
+  let next = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) {
+      const i = next;
+      next += 1;
+      out[i] = await fn(items[i]);
+    }
+  });
+  await Promise.all(workers);
+  return out;
+}
+
 /** Sazetak nad BILO KOJIM skupom rezultata; dijele ga dopusteni i iskljuceni korpus. */
 function summarizeResults(results: RealCorpusResult[]): RealCorpusReport['summary'] {
   return {
@@ -560,6 +602,8 @@ function summarizeResults(results: RealCorpusResult[]): RealCorpusReport['summar
     assistedUnresolvedCount: results.reduce((total, result) => total + result.assistedUnresolvedCount, 0),
     awaitingConfirmationCount: results.reduce((total, result) => total + result.awaitingConfirmationCount, 0),
     manualOnlyCount: results.reduce((total, result) => total + result.manualOnlyCount, 0),
+    holdoutCount: results.filter((result) => result.holdout).length,
+    independentlyConfirmedCount: results.filter((result) => result.expectationProvenance === 'independent').length,
   };
 }
 
@@ -576,13 +620,13 @@ export async function runRealCorpus(
     ...(options.includeLocal && EXTERNAL_CORPUS_ROOT ? discoverRealCorpus(EXTERNAL_CORPUS_ROOT) : []),
   ];
   if (options.outputDir) mkdirSync(options.outputDir, { recursive: true });
-  const results = await Promise.all(manifest.map((entry) => runOne(entry, entry.root ?? root, options.outputDir)));
+  const results = await mapLimited(manifest, (entry) => runOne(entry, entry.root ?? root, options.outputDir));
   // Iskljuceni (sinteticki) idu ZASEBNO i bez `outputDir`: sluze detekciji regresije, ne dokazu.
   const excluded = [
     ...discoverExcludedCorpus(root),
     ...(options.includeLocal ? discoverExcludedCorpus(LOCAL_CORPUS_ROOT) : []),
   ];
-  const syntheticResults = await Promise.all(excluded.map((entry) => runOne(entry, entry.root ?? root)));
+  const syntheticResults = await mapLimited(excluded, (entry) => runOne(entry, entry.root ?? root));
   const localCount = options.includeLocal
     ? discoverRealCorpus(LOCAL_CORPUS_ROOT).length +
       (EXTERNAL_CORPUS_ROOT ? discoverRealCorpus(EXTERNAL_CORPUS_ROOT).length : 0)

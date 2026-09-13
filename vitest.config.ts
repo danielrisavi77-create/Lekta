@@ -25,7 +25,7 @@ export default defineConfig({
     // nedovrsenim sondama: izmjereno 2026-08-31, `.artifacts/probe/rss-mutated.test.ts` je bio
     // jedan od dva pada punog gatea. Isti razred kao `visual-system-v2/` iznad: LAZNO CRVENO iz
     // koda koji nije nicija odgovornost u ovom stablu, i koji git ionako ne prati.
-    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/visual-system-v2/**', '**/.artifacts/**', '**/tests/conformance/**', '**/tests/ux/**'],
+    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/visual-system-v2/**', '**/.artifacts/**', '**/tests/conformance/**', '**/tests/ux/**', '**/tests/ux-dist/**'],
     // Vitestov default je 5000 ms, sto je mjera za obican jedinicni test. Velik dio ovog
     // paketa gradi, raspakirava i parsira STVARNE .docx pakete (zip + OOXML + puna analiza),
     // pa takav test redovno traje 3-5 s i sam po sebi je zdrav. Uz 5000 ms nekoliko ih je

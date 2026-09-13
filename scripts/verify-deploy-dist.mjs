@@ -14,6 +14,7 @@ import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
+import { treeDigestFromLsTree, proofStaleness, formatStaleness } from './release-proof-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -47,6 +48,17 @@ for (const f of assets) {
 // 3. pravne stranice postoje i sadrze ocekivane markere
 // Popis je izdvojen u scripts/lib/legal-pages.mjs jer ga dijeli i post-deploy smoke; dok je bio
 // prepisan na dva mjesta, nova stranica se lako dodala samo u jedan alat.
+// Identitet builda (vanjski audit 2026-09-08, nalaz 3): `dist/build-info.json` pise `npm run build-info`
+// odmah nakon `vite build`; `post-deploy-smoke` ga cita sa zive stranice i usporedjuje s masterom.
+// Bez njega objavljeni commit nije citljiv nigdje osim po ponasanju u pregledniku.
+{
+  const p = path.join(DIST, 'build-info.json');
+  if (!fs.existsSync(p)) fail('dist/build-info.json ne postoji (npm run build-info nije prosao?)');
+  let info = null;
+  try { info = JSON.parse(fs.readFileSync(p, 'utf8')); } catch { fail('dist/build-info.json nije valjan JSON'); }
+  if (info && !/^[0-9a-f]{40}$/.test(String(info.commit ?? ''))) fail('dist/build-info.json nema 40-znamenkasti commit');
+}
+
 for (const [file, marker] of LEGAL_PAGES) {
   const p = path.join(DIST, file);
   if (!fs.existsSync(p)) fail(`dist/${file} ne postoji (generate-legal-pages nije prosao?)`);
@@ -424,28 +436,26 @@ if (fs.existsSync(naslovnicaDir)) {
 // zastavicu i dokaz postaje obavezan.
 {
   /**
-   * Je li dokaz zastario u odnosu na ono sto se gradi.
+   * Je li dokaz zastario u odnosu na ono sto se gradi: OTISAK STABLA, ne git povijest.
    *
    * Ne moze se samo usporediti `proof.commit !== HEAD`, jer je sam dokaz datoteka u repozitoriju:
-   * cim ga commitas, HEAD se pomakne i dokaz bi UVIJEK ispao zastario, pa bi gate bio neupotrebljiv
-   * (klasican problem koke i jajeta). Zato se gleda STO se promijenilo: dokaz vrijedi sve dok se
-   * izmedju njegovog commita i HEAD-a nije promijenilo nista osim samog dokaza.
+   * cim ga commitas, HEAD se pomakne i dokaz bi UVIJEK ispao zastario (koka i jaje). Zato dokaz nosi
+   * otisak stabla BEZ same datoteke dokaza (`treeDigest`, vidi `release-proof-core.mjs`), a ovdje se
+   * isti otisak racuna iz `git ls-tree -r <head>` i usporedjuje.
    *
-   * Kad se povijest ne moze procitati (plitak clone na CI-ju), radije se NE tvrdi da je zastario:
-   * ostale provjere (`complete`, `dirtyWorkingTree`) i dalje vrijede.
+   * DO 2026-09-09 OVDJE JE STAJAO `git diff --name-only <commitDokaza> <head>` S CATCH GRANOM KOJA JE
+   * VRACALA "NIJE ZASTARIO". U plitkom klonu (Netlify, CI bez fetch-depth) stari commit ne postoji
+   * ("fatal: bad object"), pa je gate ispisao "dokaz o provjerama OK" nad dokazom od kojeg se
+   * promijenilo 425 datoteka, dok je isti build u punom klonu padao (vanjski audit 2026-09-08,
+   * nalaz 1). `ls-tree` treba samo stablo HEAD-a, pa radi jednako u oba klona; a kad ni on ne uspije,
+   * presuda je `unknown`, sto je uz obavezan dokaz PAD, ne prolaz. "Ne znam" nikad ne izlazi kao zeleno.
    */
-  const staleAgainst = (proofCommit, headCommit) => {
+  const headDigestFor = (ref) => {
+    if (!ref) return null;
     try {
-      const changed = execSync(`git diff --name-only ${proofCommit} ${headCommit}`, {
-        cwd: ROOT,
-        encoding: 'utf8',
-      })
-        .split(/\r?\n/)
-        .map((l) => l.trim())
-        .filter(Boolean);
-      return changed.some((f) => f !== 'docs/generated/RELEASE_PROOF.json');
+      return treeDigestFromLsTree(execSync(`git ls-tree -r ${ref}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
     } catch {
-      return false;
+      return null;
     }
   };
 
@@ -465,7 +475,19 @@ if (fs.existsSync(naslovnicaDir)) {
     console.warn('  Pokreni `npm run release:check`, pa postavi LEKTA_REQUIRE_RELEASE_PROOF=1 da gate postane tvrd.');
   };
 
+  // `COMMIT_REF` postavlja Netlify; ako se ne da razrijesiti u ovom klonu, pada se na HEAD; ako ni
+  // to ne ide, `head` ostaje prazan i presuda nize je `unknown` (do 2026-09-09 prazan `head` je
+  // TIHO PRESKAKAO provjeru zastarjelosti kroz `head &&`).
+  const resolvable = (ref) => {
+    try {
+      execSync(`git cat-file -e ${ref}^{commit}`, { cwd: ROOT, stdio: 'ignore' });
+      return true;
+    } catch {
+      return false;
+    }
+  };
   let head = process.env.COMMIT_REF || '';
+  if (head && !resolvable(head)) head = '';
   if (!head) {
     try {
       head = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
@@ -487,9 +509,11 @@ if (fs.existsSync(naslovnicaDir)) {
       if (!proof.complete) {
         const missing = Array.isArray(proof.missingRequired) ? proof.missingRequired.join(', ') : '?';
         complain(`nije potpun, bez prolaza ostaju: ${missing}`);
-      } else if (head && proof.commit && proof.commit !== head && staleAgainst(proof.commit, head)) {
+      } else if (proofStaleness(proof, headDigestFor(head)).verdict !== 'fresh') {
         // Zastario dokaz je opasniji od nikakvog: izgleda kao potvrda za kod koji nije provjeren.
-        complain(`vezan je uz commit ${String(proof.commit).slice(0, 12)}, a gradi se ${head.slice(0, 12)}`);
+        // `unknown` (nema otiska, nema `head`, `ls-tree` pao) se namjerno tretira ISTO kao `stale`.
+        const status = proofStaleness(proof, headDigestFor(head));
+        complain(formatStaleness(status, proof.commit, head));
       } else if (proof.dirtyWorkingTree) {
         complain('nastao je nad NECISTIM radnim stablom, pa ne pokriva sve sto se gradi');
       } else if (proofAgeDays(proof) > MAX_PROOF_AGE_DAYS) {
@@ -504,7 +528,7 @@ if (fs.existsSync(naslovnicaDir)) {
           'verzijama Worda/LibreOfficea izvan repozitorija, pa stari prolaz ne dokazuje danasnje ponasanje',
         );
       } else {
-        console.log(`[verify-deploy-dist] dokaz o provjerama OK (commit ${String(proof.commit).slice(0, 12)}).`);
+        console.log(`[verify-deploy-dist] ${formatStaleness(proofStaleness(proof, headDigestFor(head)), proof.commit, head)}.`);
       }
       // POTPUN DOKAZ NIJE ISTO STO I PUN DOKAZ, i to se ispisuje UVIJEK, i uz OK.
       //

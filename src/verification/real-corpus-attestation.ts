@@ -57,6 +57,21 @@ export interface CorpusAttestation {
   /** Tko jamci za mjerenje. `null` dok covjek ne potpise, i tada ovjera NE vrijedi. */
   signedBy: string | null;
   signedAt: string | null;
+  /**
+   * T06 (protokol 2.4): u kojoj je verziji Worda izlaz vizualno provjeren. `null` znaci "nije", ne "nepoznato".
+   * Neobavezno, jer starije ovjere polje nemaju; njihova valjanost se time ne mijenja.
+   */
+  environment?: { wordVersion: string | null };
+  /**
+   * T06 (protokol 2.2 i 2.3): je li izdvojeni skup ostao izvan dokaza i koliko je ocekivanja zapisala neovisna
+   * osoba prije popravka. Brojke opisuju MJERENJE, ne dokumente; ne ulaze u odluku o dokazu.
+   */
+  protocol?: {
+    holdoutExcluded: boolean;
+    holdoutDocumentCount: number;
+    independentlyConfirmedCount: number;
+    derivedExpectationCount: number;
+  };
   entries: CorpusAttestationEntry[];
 }
 
@@ -107,6 +122,25 @@ export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Se
   for (const e of a!.entries) {
     if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
       out.add(`${e.unitId}::${e.workType}`);
+    }
+  }
+  return out;
+}
+
+/**
+ * Parovi `profileId::workType` na cijim je dokumentima dokaz STVARNO izmjeren (polje `profileIds`
+ * dokazanog unosa). Razlika prema `provenUnitWorkTypes` je razlika izmedju izmjerenog i izvedenog:
+ * ovjera dokazuje par jedinica x vrsta rada za sve profile te jedinice, ali su radovi dosli iz
+ * profila koje unos imenuje. Ledger tu razliku biljezi kao `proofSource` (vanjski audit
+ * 2026-09-08, nalaz 4: sucelje je 12 izmjerenih i 19 izvedenih profila pokrivalo istom recenicom).
+ * Isti uvjet cistoce kao za par: unos s regresijom nista ne dokazuje.
+ */
+export function attestedProfileWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
+  if (attestationProblems(a).length > 0) return new Set();
+  const out = new Set<string>();
+  for (const e of a!.entries) {
+    if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
+      for (const p of e.profileIds ?? []) out.add(`${p}::${e.workType}`);
     }
   }
   return out;

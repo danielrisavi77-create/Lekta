@@ -308,7 +308,12 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
     (row.querySelector('.lekta-repair-ledger-fill-label') as HTMLElement).textContent = item.label ?? '';
     row.addEventListener('click', () => {
       const cb = checkboxes().find((c) => Number(c.dataset.idx) === idx);
-      if (cb) cb.checked = !cb.checked;
+      if (cb) {
+        cb.checked = !cb.checked;
+        // T08: promjena ide kroz dogadjaj, da kontroler toka (repair-workflow-binding) vidi odabir i smije ga
+        // odbiti dok popravak traje; renderAll ispod tada crta vraceno stanje, ne zeljeno.
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       renderAll();
     });
     li.appendChild(row);
@@ -421,7 +426,11 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   range.addEventListener('input', () => {
     const picked = new Set(itemsForBudgetFraction(items, Number(range.value) / STEPS));
     checkboxes().forEach((cb) => {
-      cb.checked = picked.has(items[Number(cb.dataset.idx)]);
+      const zeljeno = picked.has(items[Number(cb.dataset.idx)]);
+      if (cb.checked !== zeljeno) {
+        cb.checked = zeljeno;
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     });
     renderAll();
   });
@@ -432,9 +441,13 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   // trapModal/releaseModal (modal-utils.ts) daju pravi focus-trap + inertnu pozadinu, isti obrazac
   // kao svaki drugi modal u appu (prije je ovo bio bespoke openModal/closeModal bez toga).
   function openLedger(): void {
+    renderAll(); // odabir je mogao promijeniti kontroler (plan, T09) dok je modal bio zatvoren
     backdrop.classList.remove('hidden');
     trapModal(backdrop);
   }
+  // T08/T09: kad kontroler toka prepise checkboxove (odabir iz plana), javi se ovim dogadjajem na listi, pa
+  // brojac i redci ledgera odmah pokazuju isto sto ce se poslati.
+  listEl.addEventListener('lekta-repair-selection', () => renderAll());
   function closeLedger(): void {
     releaseModal(backdrop);
     backdrop.classList.add('hidden');

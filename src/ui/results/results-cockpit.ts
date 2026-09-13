@@ -1,4 +1,5 @@
 import './result-visuals.css';
+import { claimBadgeHtml } from '../profile-claim';
 import type { VisualFindingModel, VisualResultModel } from './visual-result-model';
 import { categorySummaryHtml } from './category-summary';
 import { priorityFindingsHtml } from './priority-findings';
@@ -10,6 +11,8 @@ import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
 import type { DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
+import { buildRepairPlan, type PlanItemInput } from './repair-plan';
+import { repairPlanHtml } from './repair-plan-view';
 
 export type ResultsRenderer = 'legacy' | 'cockpit';
 export type ResultsCockpitAction =
@@ -21,7 +24,8 @@ export type ResultsCockpitAction =
   | { kind: 'preview-location'; paragraphIndex: number; footnoteId?: number }
   | { kind: 'open-findings' }
   | { kind: 'simulate-repair' }
-  | { kind: 'repair-safe' };
+  | { kind: 'repair-safe'; ruleIds?: string[] }
+  | { kind: 'plan-opened' };
 
 /**
  * KOREKTORSKI STOL kao izvor. Ljuska NE zna kako se crta dokument: `mountDocument` joj se
@@ -31,6 +35,11 @@ export type ResultsCockpitAction =
 export interface ResultsCockpitDesk {
   readonly items: readonly DeskItem<VisualFindingModel>[];
   readonly mountDocument: (host: HTMLElement) => Promise<DeskDocument | null>;
+  /**
+   * Stavke popravka, u sirovom obliku. Plan se gradi OVDJE, a ne u `app.ts`, iz dva razloga:
+   * `app.ts` je na svom budzetu, i klasifikacija pripada sloju rezultata koji vec drzi nalaze.
+   */
+  readonly planItems?: readonly PlanItemInput[];
 }
 
 export interface ResultsCockpitOptions {
@@ -77,12 +86,17 @@ export function authorityHtml(model: VisualResultModel['authority']): string {
 
 function headerHtml(model: VisualResultModel): string {
   const confirmation = model.header.profileConfirmed ? 'Profil potvrđen' : 'Profil nije potvrđen';
-  return `<header class="cockpit-header" data-cockpit-header><div><span class="cockpit-kicker">Rezultat provjere</span><h2>${escapeHtml(model.header.documentName)}</h2><p>${escapeHtml(model.header.profile)} · ${escapeHtml(model.header.authorityLabel)}</p></div><span class="cockpit-header__status ${model.header.profileConfirmed ? 'cockpit-header__status--confirmed' : ''}"><span aria-hidden="true">${model.header.profileConfirmed ? '✓' : 'ℹ'}</span>${confirmation}</span></header>`;
+  return `<header class="cockpit-header" data-cockpit-header><div><span class="cockpit-kicker">Rezultat provjere</span><h2>${escapeHtml(model.header.documentName)}</h2><p>${escapeHtml(model.header.profile)} · ${escapeHtml(model.header.authorityLabel)}</p>${claimBadgeHtml(model.header.evidenceClaim, escapeHtml)}</div><span class="cockpit-header__status ${model.header.profileConfirmed ? 'cockpit-header__status--confirmed' : ''}"><span aria-hidden="true">${model.header.profileConfirmed ? '✓' : 'ℹ'}</span>${confirmation}</span></header>`;
 }
 
+/**
+ * `repair-entry` (plan T02) je OMOGUCEN opci ulaz u popravak: "Popravi sigurne stavke" kad dokument ima automatskih
+ * stavki, inace "Simuliraj popravak". Oznaka je uvijek na tocno jednom gumbu koji se stvarno moze kliknuti, pa test
+ * ne mora birati izmedju dva gumba, a onemogucen gumb nikad ne nosi oznaku ulaza.
+ */
 function actionRowHtml(model: VisualResultModel, repairAvailable: boolean): string {
   const safeDisabled = !repairAvailable || model.signals.automaticFixes <= 0;
-  return `<section class="cockpit-actions" aria-label="Sljedeći koraci"><button type="button" class="button button-primary" data-cockpit-action="open-findings">Pregledaj nalaze</button><button type="button" class="button button-secondary" data-cockpit-action="simulate-repair"${repairAvailable ? '' : ' disabled'}>Simuliraj popravak</button><button type="button" class="button button-secondary" data-cockpit-action="repair-safe"${safeDisabled ? ' disabled' : ''}>Popravi sigurne stavke <span class="cockpit-actions__count">${escapeHtml(model.signals.automaticFixes)}</span></button></section>`;
+  return `<section class="cockpit-actions" aria-label="Sljedeći koraci"><button type="button" class="button button-primary" data-cockpit-action="open-findings">Pregledaj nalaze</button><button type="button" class="button button-secondary" data-cockpit-action="simulate-repair"${safeDisabled && repairAvailable ? ' data-testid="repair-entry"' : ''}${repairAvailable ? '' : ' disabled'}>Simuliraj popravak</button><button type="button" class="button button-secondary" data-cockpit-action="repair-safe"${safeDisabled ? '' : ' data-testid="repair-entry"'}${safeDisabled ? ' disabled' : ''}>Popravi sigurne stavke <span class="cockpit-actions__count">${escapeHtml(model.signals.automaticFixes)}</span></button></section>`;
 }
 
 export function resultRendererFor(doc: Document): ResultsRenderer {
@@ -98,6 +112,8 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // Stari stol se odbacuje PRIJE nego `innerHTML` odnese njegov DOM: inace bi mu kasni
   // `mountDocument` mogao razapeti slusace po elementima kojih vise nema.
   const drzac = mount as HTMLElement & { _desk?: DeskHandle | null };
+  // POLOZAJ PREZIVLJAVA ponovnu montazu; vidi `startIndex` u `desk-mount.ts`.
+  const prethodniIndex = drzac._desk?.index ?? 0;
   drzac._desk?.dispose();
   drzac._desk = null;
   const stol = options.desk && options.desk.items.length ? options.desk : null;
@@ -136,7 +152,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     options.repairOutlook ? repairOutlookHtml(options.repairOutlook) : '',
     categorySummaryHtml(model.categories),
     actionRowHtml(model, options.repairAvailable),
-    '<button type="button" class="cockpit-advanced-toggle" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="', advancedOpen ? 'true' : 'false', '"><span>Napredna provjera</span><span aria-hidden="true">&#65291;</span></button>',
+    '<button type="button" class="cockpit-advanced-toggle" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="', advancedOpen ? 'true' : 'false', '"><span>Detalji provjere</span><span aria-hidden="true">&#65291;</span></button>',
   ].join('');
   mount.dataset.advancedOpen = String(advancedOpen);
   // Ulaz je JEDAN orkestriran trenutak, ne rasuti efekti: razred se pali u sljedecem kadru pa
@@ -149,10 +165,15 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   if (stol) {
     const domacin = mount.querySelector<HTMLElement>('[data-desk-host]');
     if (domacin) {
+      const plan = buildRepairPlan(stol.planItems ?? [], model.findings.document, options.repairAvailable);
       drzac._desk = mountDesk(domacin, {
         items: stol.items,
+        startIndex: prethodniIndex,
         repairAvailable: options.repairAvailable,
         esc: escapeHtml,
+        // Prazan plan se ne nudi: gumb koji vodi na "nema zahvata" je losiji od izostanka gumba.
+        planHtml: plan.prazan ? null : repairPlanHtml(plan, escapeHtml),
+        plan: plan.prazan ? null : plan,
         // NA USKOM EKRANU SE DOKUMENT NE CRTA. Raspored 58/42 ondje nema smisla, pa ga CSS
         // sakrije, a tada je `clientWidth` nula. Bez ove provjere bi se faksimil svejedno
         // renderirao: desetci odlomaka u A4 listovima za posao koji nitko nece vidjeti, i to
