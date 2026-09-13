@@ -172,11 +172,11 @@
     {
       "id": "T17",
       "title": "Dokazati postojeći workflow agenata bez dodatne naplate",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T16"
       ],
-      "note": "P1. Dokaz: jedan mali zadatak prodje plan, implementaciju, neovisni review i integraciju uz stvarne izlaze doctor/tick/status; ponovno pokretanje ne stvara dupli posao i greska ili limit ne uzrokuju naplatu."
+      "note": "P1. Dokaz: jedan mali zadatak prodje plan, implementaciju, neovisni review i integraciju uz stvarne izlaze doctor/tick/status; ponovno pokretanje ne stvara dupli posao i greska ili limit ne uzrokuju naplatu. Dokaz 2026-09-13: PR #82 (master 2081951c), workflow lekta-no-fable-coding run wf_d264f4da-2bf, gate 532 datoteke / 6133 testa zeleno; kontroler prvi propose tick 12:10 UTC fail-closed (plan Codex vakuumski ok, implement blocked), 0 naplate; otvoreno pravilo drugog providera (Codex sandbox apply deny-read ACLs)."
     },
     {
       "id": "T18",
@@ -526,5 +526,5 @@
       "note": "P0. Dokaz: javni artefakt odgovara dokazanoj verziji, svi ukljuceni tokovi rade, prvi tjedan nadzora je obradjen bez nerazrijesenog kriticnog signala i operacije su predane uz runbook."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82)."
 }
