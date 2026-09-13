@@ -145,4 +145,23 @@ describe('ruta /rad/', () => {
   it('ima podrucje za posten status, i ono je skriveno dok nema sto reci', () => {
     expect(RAD).toMatch(/id="workspace-status"[^>]*role="status"[^>]*aria-live="polite"[^>]*hidden/);
   });
+
+  /**
+   * C7: indikator spremanja je TRAJNO stanje unutar `#radDocBar`, obrnuto od `#workspace-status`:
+   * bez `aria-live` i bez `role=status`, inace bi svaki klik ponavljao "Spremljeno" citacu ekrana.
+   */
+  it('#radDocSave stoji unutar #radDocBar i NEMA aria-live ni role=status', () => {
+    const bar = RAD.indexOf('id="radDocBar"');
+    expect(bar, 'sentinel: nema #radDocBar').toBeGreaterThanOrEqual(0);
+    const kraj = RAD.indexOf('</div>', bar);
+    const unutar = RAD.slice(bar, kraj);
+    const tag = unutar.match(/<span[^>]*id="radDocSave"[^>]*>/)?.[0];
+    expect(tag, '#radDocSave mora biti unutar #radDocBar').toBeTruthy();
+    expect(tag).not.toContain('aria-live');
+    expect(tag).not.toContain('role=');
+    expect(tag).toContain('hidden');
+    // MUTACIJA (kopija HTML-a): ziva regija na indikatoru mora pasti na istoj tvrdnji.
+    const mutiran = tag!.replace('id="radDocSave"', 'id="radDocSave" aria-live="polite"');
+    expect(mutiran.includes('aria-live')).toBe(true);
+  });
 });

@@ -46,3 +46,19 @@ check` i novi dokaz izdanja idu nakon spajanja, jer dokaz vrijedi za JEDAN otisa
 
 Sto nije strojno: pilot s korisnicima, potpis ovjere korpusa nad 321 dokumentom (`real-corpus-protocol.md`, odjeljak
 4), i odluka o `holdout` potvrdi. Sve tri su vlasnikove radnje i ovdje se ne prikazuju kao gotove.
+
+## Velicina bundlea `/rad/` nakon radnog prostora tri faze (korak D, 2026-09-13)
+
+Izmjereno iz `node scripts/build-production.mjs` (isti lanac kao netlify.toml, `DEPLOY=1`), na grani
+`feat/radni-prostor-tri-faze` nakon C7:
+
+| artefakt | sirovo | gzip (vite) | budzet (`bundleSizeGuard`, vite.config.ts) |
+| --- | --- | --- | --- |
+| `dist/assets/rad-*.js` | 761,1 kB (761 106 B) | 204,5 kB | 960 KB (983 040 B), iskoristeno 77 % |
+| `dist/assets/rad-*.css` | 49,6 kB | 9,8 kB | (nema zasebnog budzeta) |
+| `dist/rad/index.html` | 50,4 kB | 14,0 kB | |
+
+Usporedna tocka PRIJE ovog rada nije izmjerena istim postupkom u istoj sesiji: biljeska uz `bundleSizeGuard` u
+`vite.config.ts` navodi "app chunk 687 KB raw" iz vremena reza naslovnice, sto je jedini zapisan broj. Razlika
+(oko 74 kB sirovo) nije razlucena po koraku i ne tvrdi se da je cijela iz radnog prostora tri faze. Gard od 960 KB
+nije diran; hero inicijalizacije nisu uklanjane, jer nije dokazano da nisu potrebne.

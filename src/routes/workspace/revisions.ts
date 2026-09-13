@@ -16,6 +16,17 @@ import {
 } from '../../history/revision-snapshot';
 import type { LocalDocumentSessionStore } from '../../session/local-document-session';
 import { revisionLinkPromptHtml, revisionSummaryHtml } from '../../ui/results/revision-summary';
+import type { SessionWriteOutcome } from '../../session/session-writer';
+import type { SaveEvent } from './save-state';
+
+/** Kod greske pohrane u ishod indikatora; nepoznat kod je `failed`, ne tisina. */
+function outcomeOf(error: unknown): SessionWriteOutcome {
+  const code = (error as { code?: unknown } | null)?.code;
+  if (code === 'quota') return { kind: 'quota' };
+  if (code === 'expired') return { kind: 'expired' };
+  if (code === 'conflict') return { kind: 'conflict' };
+  return { kind: 'failed', reason: typeof code === 'string' ? code : 'unknown' };
+}
 
 export interface RevisionsDeps {
   /** Pohrana sesija; `null` kad nije dostupna (tada usporedba zivi samo u memoriji ove stranice). */
@@ -25,6 +36,12 @@ export interface RevisionsDeps {
   esc: (v: string) => string;
   status: (text: string | null) => void;
   track?: (event: string, data?: Record<string, unknown>) => void;
+  /**
+   * Indikator spremanja (C7). `persist` pise IZRAVNO kroz `store.update` (ne kroz pisaca sesije), pa
+   * ishod za indikator gradi sam, iz koda greske pohrane; `NOTICE_REVISION_NOT_SAVED` ostaje jednokratni
+   * glas o istom dogadjaju i namjerno se ne mijenja (vidi `save-state.ts`, ugovor 4).
+   */
+  onSaveEvent?: (event: SaveEvent) => void;
 }
 
 export interface RevisionsState {
@@ -57,10 +74,13 @@ export function createRevisions(deps: RevisionsDeps) {
     const store = deps.store();
     const id = deps.sessionId();
     if (!store || !id || !state.current) return;
+    deps.onSaveEvent?.({ kind: 'queued' });
     try {
-      await store.update(id, { workspace: { stage: 'results', revision: state.current, previousRevision: state.previous ?? undefined } });
-    } catch {
+      const zapisano = await store.update(id, { workspace: { stage: 'results', revision: state.current, previousRevision: state.previous ?? undefined } });
+      deps.onSaveEvent?.({ kind: 'outcome', outcome: { kind: 'written', revision: zapisano.revision ?? 0, at: Date.now() } });
+    } catch (error) {
       // Kvota ili druga greska pohrane: analiza ostaje, korisnik dobiva jasnu poruku (plan T12).
+      deps.onSaveEvent?.({ kind: 'outcome', outcome: outcomeOf(error) });
       deps.status(NOTICE_REVISION_NOT_SAVED);
     }
   }

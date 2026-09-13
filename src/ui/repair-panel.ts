@@ -364,7 +364,15 @@ export interface RepairPanelContext {
   sessionToken?: string;
 }
 
-/** Sto panel vraca pozivatelju (T08/T09): odabir iz plana ide OVUDA, ne kroz DOM. */
+/**
+ * Sto panel vraca pozivatelju (T08/T09): odabir iz plana ide OVUDA, ne kroz DOM.
+ *
+ * STANJE PRIJE C6 (2026-09-12), da se ne pise ponovo: `applySelection`, `selectedRuleIds` i
+ * `phase` su postojali, a `sessionToken` je vec bio u kontekstu. Nedostajalo je tocno ono sto
+ * pamcenje odabira trazi: pretplata na promjenu, citanje i postavljanje preklopnika dubinskog
+ * ciscenja, i `dispose()` NA HANDLEU (binding ga je imao, handle ga nije izvozio, pa ga app.ts nije
+ * mogao pozvati; `mount.innerHTML=''` je micao DOM a pretplate ostavljao zive).
+ */
 export interface RepairPanelHandle {
   /** Postavi odabir iz plana popravka; vraca koliko je zahvata stvarno postavljeno. */
   applySelection(ruleIds: Iterable<string>): number;
@@ -372,6 +380,65 @@ export interface RepairPanelHandle {
   selectedRuleIds(): string[];
   /** Faza toka (`ready`, `running`, `complete`, ...). */
   phase(): string;
+  /**
+   * Javlja se na svaku STVARNU promjenu odabira ili preklopnika dubinskog ciscenja; vraca odjavu.
+   * Vlasnik odabira ostaje DOM plus kontroler; ovo je izvedena projekcija za pisca sesije.
+   */
+  onSelectionChange(cb: () => void): () => void;
+  /** Stanje preklopnika dubinskog ciscenja; `null` kad panel preklopnik uopce nema. */
+  deep(): boolean | null;
+  /** Postavi preklopnik; `false` kad ga panel nema (tada se `deep` iz snimke ne vraca). */
+  setDeep(value: boolean): boolean;
+  /**
+   * Skida slusace i uklanja panel iz DOM-a. Poslije njega se `onSelectionChange` vise NE zove.
+   * Zove se PRIJE gradnje novog panela za isti mount; bez toga bi stari panel javljao promjene i
+   * prepisivao odabir novog u sesiji.
+   */
+  dispose(): void;
+}
+
+/**
+ * JEDAN graditelj handlea za oba panela (lokalni ovdje, serverski u app.ts), da im ugovor ne
+ * moze razici: pamcenje koje radi samo na lokalnom putu bilo bi zeleno na testu a mrtvo za
+ * korisnika s konfiguriranim `repairEndpointom`, jer taj put lokalni panel nikad ne vidi.
+ */
+export function buildRepairPanelHandle(
+  binding: Pick<RepairWorkflowBinding<unknown>, 'applySelection' | 'selectedItems' | 'getState' | 'onSelectionChanged' | 'dispose'>,
+  items: readonly RepairableItem[],
+  deepToggle: HTMLInputElement | null,
+  container: HTMLElement,
+): RepairPanelHandle {
+  const listeners = new Set<() => void>();
+  let disposed = false;
+  const notify = (): void => { for (const cb of [...listeners]) cb(); };
+  const onDeep = (): void => notify();
+  deepToggle?.addEventListener('change', onDeep);
+  const offBinding = binding.onSelectionChanged(notify);
+  return {
+    applySelection: (ruleIds) => binding.applySelection(ruleIds),
+    selectedRuleIds: () => binding.selectedItems(items).map((i) => i.ruleId),
+    phase: () => binding.getState().phase,
+    onSelectionChange(cb) {
+      if (disposed) return () => {};
+      listeners.add(cb);
+      return () => { listeners.delete(cb); };
+    },
+    deep: () => (deepToggle ? deepToggle.checked : null),
+    setDeep(value) {
+      if (!deepToggle) return false;
+      if (deepToggle.checked !== value) { deepToggle.checked = value; notify(); }
+      return true;
+    },
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      offBinding();
+      binding.dispose();
+      deepToggle?.removeEventListener('change', onDeep);
+      listeners.clear();
+      container.remove();
+    },
+  };
 }
 
 /** Polja koje "obicna" stavka smije nositi (ono sto ledger prezentacija razumije: cist
@@ -735,11 +802,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
   container.appendChild(confirmBox);
   container.appendChild(summary);
   ctx.mountEl.appendChild(container);
-  return {
-    applySelection: (ruleIds) => binding.applySelection(ruleIds),
-    selectedRuleIds: () => binding.selectedItems(ctx.items).map((i) => i.ruleId),
-    phase: () => binding.getState().phase,
-  };
+  return buildRepairPanelHandle(binding, ctx.items, deepToggle, container);
 }
 
 export function renderTitlePageControls(li: HTMLElement, item: RepairableItem): void {
