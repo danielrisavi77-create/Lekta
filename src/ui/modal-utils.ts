@@ -22,26 +22,34 @@ let _modalDepth = 0;
  * PRVI POKUSAJ POPRAVKA (padao je): koristiti ovaj zapis SAMO kad je `document.activeElement`
  * bas `<body>`. Nedovoljno, jer aktivni element zna biti neki DRUGI, STAR ostatak (npr.
  * `#fileInput` s ranijeg koraka), ne bas `<body>` - `active !== document.body` je tad tocno, pa bi
- * kod zadrzao krivi, zastarjeli element umjesto stvarnog okidaca. Zato `trapModal` uvijek
- * PRETPOSTAVLJA klik ako je SVJEZ (unutar `_POINTER_SVJEZINA_MS`), bez obzira sto trenutno pise u
- * `document.activeElement`; iza tog prozora vrijedi obrnuto, jer tada modal gotovo sigurno NIJE
- * otvoren klikom (npr. tipkovnicki Enter na vec fokusiranom elementu, gdje `pointerdown` uopce ne
- * nastaje). Slusac je na `document` s capture:true da uhvati klik i kad ga ciljni rukovatelj
- * poslije zaustavi (`stopPropagation`).
+ * kod zadrzao krivi, zastarjeli element umjesto stvarnog okidaca.
+ *
+ * DRUGI POKUSAJ POPRAVKA (i on je padao, otkriveno na CI-ju 2026-09-13, ne lokalno): "svjez klik"
+ * mjeren PROTEKLIM VREMENOM (`Date.now() - _lastPointerAt < 500`) je utrka, ne popravak. Traka
+ * privole u `beforeEach` (`tests/ux/workspace-a11y.spec.ts`) klikne "#analyticsDecline" NAKON
+ * `page.goto`, sto ostavi zapis. Ako sve sljedece (upload, cekanje koraka 2, fokus na
+ * `[data-change-profile]`, Enter) na BRZOM stroju stane u tih 500 ms, `trapModal` je zapis od
+ * TRAKE PRIVOLE tumacio kao svjez klik na "Promijeni" i njega spremio kao okidac; Escape je poslije
+ * fokus vratio na (vec uklonjeni) gumb trake, ne na "Promijeni". Na sporijem Windows stroju isti
+ * niz koraka traje dulje od 500 ms, prozor istekne, i test prolazi - otud CI crven/lokalno zeleno.
+ * Popravak je isti FER pilot bez sata: zapis vrijedi dok ga ne potrosi TOCNO JEDAN modal ILI dok se
+ * ne dogodi SLJEDECI `focusin` (stvaran pomak fokusa dokazuje da je zapis vec odradio svoje, ili da
+ * dolazi od nepovezane interakcije). Tipkovnicki put je time siguran bez ijednog mjerenja vremena:
+ * da bi se `Enter` uopce pritisnuo na okidacu, okidac je prije toga MORAO primiti fokus, sto je vec
+ * jedan `focusin` koji je obrisao stariji zapis. Slusac je na `document` s capture:true da uhvati
+ * klik i kad ga ciljni rukovatelj poslije zaustavi (`stopPropagation`).
  */
-const _POINTER_SVJEZINA_MS = 500;
 let _lastPointerTarget: HTMLElement | null = null;
-let _lastPointerAt = 0;
 document.addEventListener(
   'pointerdown',
   (e) => {
-    if (e.target instanceof HTMLElement) {
-      _lastPointerTarget = e.target;
-      _lastPointerAt = Date.now();
-    }
+    if (e.target instanceof HTMLElement) _lastPointerTarget = e.target;
   },
   true,
 );
+document.addEventListener('focusin', () => {
+  _lastPointerTarget = null;
+});
 
 export function modalFocusables(el: HTMLElement): HTMLElement[] {
   return [
@@ -68,12 +76,12 @@ export function setBackgroundInert(on: boolean): void {
 export function trapModal(el: HTMLElement | null): void {
   if (!el) return;
   const active = document.activeElement;
-  const svjezKlik = _lastPointerTarget && Date.now() - _lastPointerAt < _POINTER_SVJEZINA_MS;
-  _modalReturnFocus = svjezKlik
+  _modalReturnFocus = _lastPointerTarget
     ? _lastPointerTarget
     : active instanceof HTMLElement && active !== document.body
       ? active
       : null;
+  _lastPointerTarget = null;
   if (++_modalDepth === 1) setBackgroundInert(true);
   (el as any)._trap = (e: KeyboardEvent) => {
     if (e.key !== 'Tab') return;
