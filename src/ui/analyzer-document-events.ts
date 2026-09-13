@@ -5,6 +5,7 @@
  * pretplatnika i objava. `app.ts` je pod ratchetom koji trazi da se smanjuje, a ovo je bio jedini
  * dio prijema koji ondje nije morao stajati.
  */
+import type { RepairPanelHandle, RepairableItem } from './repair-panel';
 
 /**
  * ISHOD PRIJEMA DOKUMENTA. Ruta radne povrsine mora znati KADA je dokument stvarno prihvacen, da
@@ -66,5 +67,27 @@ export function subscribeAnalyzerResultReady(listener: ResultListener): () => vo
 export function emitAnalyzerResultReady(event: AnalyzerResultReady): void {
   for (const listener of [..._resultListeners]) {
     try { listener(event); } catch (error) { console.warn('Pretplatnik na rezultat analize je pukao:', error); }
+  }
+}
+
+/**
+ * PANEL POPRAVKA JE IZGRADJEN (korak C6). Ruta radne povrsine kroz handle vraca zapamceni odabir i
+ * pretplacuje pisca sesije. `items` su stavke GLAVNOG panela (bez zasebne privole za zahvate u
+ * tekst), u redoslijedu koji panel koristi; otisak ponude se racuna iz njih, ne iz handlea.
+ * Emitira se tek kad handle postoji: teaser, blok nemogucnosti popravka i prazna ponuda nemaju
+ * odabir koji bi se pamtio.
+ */
+export interface RepairPanelReady { handle: RepairPanelHandle; items: readonly RepairableItem[] }
+type PanelListener = (event: RepairPanelReady) => void;
+const _panelListeners = new Set<PanelListener>();
+
+export function subscribeRepairPanelReady(listener: PanelListener): () => void {
+  _panelListeners.add(listener);
+  return () => { _panelListeners.delete(listener); };
+}
+
+export function emitRepairPanelReady(event: RepairPanelReady): void {
+  for (const listener of [..._panelListeners]) {
+    try { listener(event); } catch (error) { console.warn('Pretplatnik na panel popravka je pukao:', error); }
   }
 }

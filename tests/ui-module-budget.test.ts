@@ -83,7 +83,15 @@ function bajtova(rel: string): number {
 //   buildAllRepairableItems + splitSeparateConsentItems iz src/ui/repair-item-assembly.ts   -4954
 // Ovo nije cisto vadjenje nego preusmjeravanje na modul koji vec postoji (harness ga mjeri);
 // razlika u redoslijedu i clanstvu je imenovana u tests/repair-item-assembly-single-source.test.ts.
-const BUDZET_APP = 358698;
+// PAKET C, korak C6 (2026-09-12): 358698 -> 359013. Racunica:
+//   dispose() starog handlea prije prerendera, dva emitRepairPanelReady adaptera i dva uvoza    +373
+//   serverski handle: rucni objekt od tri metode zamijenjen s buildRepairPanelHandle(...)       -58
+//   neto                                                                                        +315
+// Odluka orkestratora paketa C: E2 je oslobodio 4954 B (363652 -> 358698) upravo za C6, pa se ovaj
+// adapter placa iz tog viska i brojka ide na IZMJERENO. Prema stanju prije E2 to je -4639. Sva
+// logika (kljuc, otisak, obnova, pisac) zivi u src/ui/repair-selection.ts i
+// src/routes/workspace/repair-selection.ts, ne u app.ts.
+const BUDZET_APP = 359013;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

@@ -88,29 +88,37 @@ test.describe('CTA popravka otvara panel', () => {
     });
     expect(fokusUnutar, 'fokus mora biti unutar panela popravka').toBe(true);
 
-    // POVRATAK NE GUBI ODABIR, i to se mjeri a ne obecava: procita se stanje konkretne kucice,
-    // ode na nalaz, pa natrag. Mount je staticki element rute, pa ga nista ne prepisuje.
-    const prije = await page.evaluate(() => {
-      const cb = document.querySelector('#repairPanelMount input[type="checkbox"]') as HTMLInputElement | null;
-      return cb ? { ima: true, oznacen: cb.checked } : { ima: false, oznacen: false };
+    // POVRATAK NE GUBI ODABIR, i to se MJERI a ne obecava (od C6, 2026-09-12, bez grane
+    // "neizmjereno": fixture MORA imati kucicu, inace je tvrdnja prazna i spec pada). Kucica se
+    // prvo PREKLOPI kroz ledger, kao korisnik, da se ocuvanje ne mjeri nad zadanim stanjem koje bi
+    // i ponovna gradnja panela dala; zatim se ode na nalaz i natrag. Mount je staticki element
+    // rute, pa ga nista ne prepisuje.
+    const ruleId = await page.evaluate(() => {
+      const cb = [...document.querySelectorAll<HTMLInputElement>('#repairPanelMount li.lekta-repair-panel__item input[type="checkbox"]')].find((c) => c.checked);
+      return cb?.closest<HTMLElement>('li')?.dataset.ruleId ?? null;
     });
+    expect(ruleId, 'panel nema predodabranu kucicu; ocuvanje odabira se ne moze izmjeriti na ovom fixtureu').toBeTruthy();
+    const stanje = (id: string) => page.evaluate((rid) => {
+      const cb = document.querySelector<HTMLInputElement>(`#repairPanelMount li.lekta-repair-panel__item[data-rule-id="${rid}"] input[type="checkbox"]`);
+      return cb ? cb.checked : null;
+    }, id);
+    await mount.locator('.lekta-repair-trigger__btn').click();
+    const ledger = page.locator('.modal-backdrop[data-lekta-repair-ledger-modal]');
+    await expect(ledger).toBeVisible();
+    await ledger.locator(`.lekta-repair-ledger-row[data-rule-id="${ruleId}"]`).click();
+    await page.keyboard.press('Escape');
+    await expect(ledger).toBeHidden();
+    const prije = await stanje(ruleId!);
+    expect(prije, 'preklop kroz ledger mora promijeniti kucicu iz zadanog (oznacenog) stanja').toBe(false);
+
     await page.locator('#repairBackToResults').click();
     await expect(page.locator('#resultView'), 'povratak mora vratiti na nalaz').toBeVisible();
     await expect(povrsina).toBeHidden();
     await (safeEnabled ? safe : simulate).first().click();
     await expect(povrsina).toBeVisible();
-    const poslije = await page.evaluate(() => {
-      const cb = document.querySelector('#repairPanelMount input[type="checkbox"]') as HTMLInputElement | null;
-      return cb ? { ima: true, oznacen: cb.checked } : { ima: false, oznacen: false };
-    });
-    expect(poslije.ima, 'panel je nestao pri povratku, dakle nesto ga prepisuje').toBe(prije.ima);
-    if (prije.ima) {
-      expect(poslije.oznacen, 'odabir nije prezivio povratak na nalaz').toBe(prije.oznacen);
-    } else {
-      // IZRICITO, ne tiho: bez kucice tvrdnja o odabiru nije izmjerena, pa spec to KAZE. Inace bi
-      // se zeleno citalo kao dokaz da odabir prezivljava, a dokaza ne bi bilo.
-      test.info().annotations.push({ type: 'neizmjereno', description: 'panel nema kucicu; ocuvanje odabira nije izmjereno na ovom fixtureu' });
-    }
+    const poslije = await stanje(ruleId!);
+    expect(poslije, 'panel je nestao pri povratku, dakle nesto ga prepisuje').not.toBeNull();
+    expect(poslije, 'odabir nije prezivio povratak na nalaz').toBe(prije);
   });
 
   test('plan popravka (`[data-repair-plan-go]`) vodi na isti vidljiv panel, ako je stol prisutan', async ({ page }) => {

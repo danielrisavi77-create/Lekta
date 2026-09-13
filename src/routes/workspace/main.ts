@@ -2,10 +2,11 @@ import {
   initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
-import { subscribeAnalyzerResultReady } from '../../ui/analyzer-document-events';
+import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../ui/analyzer-document-events';
 import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
 import { createConfirmedProfile } from './confirmed-profile';
+import { createRepairSelectionMemory } from './repair-selection';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
@@ -146,6 +147,16 @@ async function start(): Promise<void> {
     track: trackWorkspaceEvent,
   });
   subscribeProfileConfirmed((event) => profil.onConfirmed(event));
+  // C6: odabir popravaka se pamti po identitetu (`fixerId|ruleId`) i vraca na PRVI panel ciji se
+  // otisak ponude poklapa sa zapisanim. Panel se gradi tek nakon analize, pa pretplata prije
+  // `openWorkspace` ne moze zakasniti; stoji ovdje iz istog razloga kao ostale.
+  const odabir = createRepairSelectionMemory({
+    store: () => (storage.kind === 'available' ? storage.store : null),
+    sessionId: () => sessionId,
+    status: showStatus,
+    track: trackWorkspaceEvent,
+  });
+  subscribeRepairPanelReady((event) => odabir.onPanel(event));
   subscribeAnalyzerResultReady((event) => {
     revisions.onResult(event.result);
     // T13: komentari iz paketa postaju lokalni zadaci; bez komentara sekcija ostaje skrivena. Citanje paketa je lokalno.
@@ -168,6 +179,8 @@ async function start(): Promise<void> {
       showStatus(null);
       return;
     }
+    // Drugi dokument: snimka odabira iz sesije opisuje ponudu koja za njega nikad nece nastati.
+    odabir.forget();
     void (async () => {
       const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
       upisi(afterPersist(context, out.kind === 'persisted'));
@@ -199,8 +212,9 @@ async function start(): Promise<void> {
     // `initAnalyzerApp` (koje kroz `restorePreferences` vraca globalne postavke, koje bi ga inace
     // pregazile) i PRIJE `restoreDocument` (cija detekcija iz dokumenta bi ga inace pregazila).
     profil.restore(outcome.session.profile);
+    odabir.restore(outcome.session.workspace?.repairSelection);
     const restored = await restoreDocument(outcome.session, () => loadAnalyzerDocument(restoredFile!));
-    if (restored.kind === 'refused') showStatus(restored.notice);
+    if (restored.kind === 'refused') { odabir.forget(); showStatus(restored.notice); }
   }
 }
 

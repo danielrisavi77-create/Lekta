@@ -57,6 +57,9 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
+import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
+import { buildRepairPanelHandle } from '../src/ui/repair-panel';
+import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -1174,7 +1177,103 @@ const MUTATIONS: Mutation[] = [
         }).rows,
       ).length === 0,
   },
+  /**
+   * Korak C6 (2026-09-12): odabir popravaka se pamti po IDENTITETU `fixerId|ruleId`, nikad po
+   * polozaju. Do C6 je DOM odraz kljucevao `data-idx`, pa bi snimka po polozaju nad preslaganom
+   * ponudom kvacila krive kucice bez ijedne poruke. Mutacija: snimka koja nosi INDEKSE umjesto
+   * kljuceva; gard je mora prijaviti kao nepoznate kljuceve (applied 0), ne tiho preslikati.
+   */
+  {
+    id: 'odabir/mrtav-kljuc-po-polozaju',
+    imitates:
+      'snimka odabira zapisana po polozaju (data-idx) umjesto po fixerId|ruleId, pa se nad ponudom u ' +
+      'drugom poretku tiho vrati kriva kucica',
+    caught: () => {
+      const items = C6_ITEMS();
+      const poIndeksu = { ...buildRepairSelectionSnapshot({ items, keys: [], deep: false, now: 1 })!, selected: ['0', '2'] };
+      const r = applyRepairSelectionSnapshot([items[2], items[0], items[1]], poIndeksu);
+      return r.applied === 0 && r.skippedUnknown === 2 && r.ruleIds.length === 0;
+    },
+    cleanBefore: () => {
+      const items = C6_ITEMS();
+      const s = buildRepairSelectionSnapshot({ items, keys: ['font-fixer|a', 'toc-field-fixer|c'], deep: false, now: 1 })!;
+      const r = applyRepairSelectionSnapshot([items[2], items[0], items[1]], s);
+      // Redoslijed prati SNIMKU (a, c), ne preslaganu ponudu (c, a, b): to i jest smisao kljuca.
+      return r.applied === 2 && r.skippedUnknown === 0 && r.ruleIds.join(',') === 'a,c';
+    },
+  },
+  /**
+   * Otisak ponude mora biti osjetljiv na CLANSTVO, ne samo na broj stavaka: dva skupa iste duljine
+   * s razlicitim kljucevima moraju dati razlicit otisak, inace bi se odabir vratio na popis koji s
+   * njim nema veze. Baseline: isti skup u drugom poretku daje isti otisak.
+   */
+  {
+    id: 'odabir/otisak-ne-grize',
+    imitates:
+      'otisak ponude sveden na broj stavaka (items.length), pa dva razlicita skupa jednake duljine ' +
+      'prolaze kao ista ponuda i odabir se vraca na krive stavke',
+    caught: () => {
+      const a = C6_ITEMS();
+      const b = [a[0], a[1], { fixerId: 'toc-field-fixer', ruleId: 'd', params: {} }];
+      return a.length === b.length && repairItemsDigest(a) !== repairItemsDigest(b);
+    },
+    cleanBefore: () => {
+      const a = C6_ITEMS();
+      return repairItemsDigest(a) === repairItemsDigest([a[2], a[0], a[1]]);
+    },
+  },
+  /**
+   * Stari panel poslije `dispose()` ne smije javljati promjene: inace kroz zivu pretplatu
+   * prepisuje odabir novog panela u sesiji. Mutacija: panel koji se NE disposea i dalje javlja
+   * (to je potpis kvara koji gard tests/repair-panel-dispose.test.ts lovi); baseline: disposean
+   * panel javlja nula puta, a prije dispose tocno jednom (sentinel protiv nepretplacenog panela).
+   */
+  {
+    id: 'panel/bez-dispose',
+    imitates:
+      'renderRepairSection koji panel mice s mount.innerHTML=\'\' bez dispose(), pa stari panel kroz ' +
+      'zivu pretplatu i dalje pise odabir u sesiju preko novog panela',
+    caught: () => {
+      const { handle, applyThroughOldBinding } = c6Panel();
+      let poziva = 0;
+      handle.onSelectionChange(() => { poziva += 1; });
+      applyThroughOldBinding(['b']); // bez dispose
+      return poziva === 1;
+    },
+    cleanBefore: () => {
+      const { handle, applyThroughOldBinding } = c6Panel();
+      let poziva = 0;
+      handle.onSelectionChange(() => { poziva += 1; });
+      applyThroughOldBinding(['b']);
+      const prije = poziva;
+      handle.dispose();
+      applyThroughOldBinding(['a']);
+      return prije === 1 && poziva === 1;
+    },
+  },
 ];
+
+/** Tri stavke za C6 mutacije; `violated` uvijek boolean, kako to graditelji i vracaju. */
+function C6_ITEMS() {
+  return [
+    { fixerId: 'font-fixer', ruleId: 'a', params: {}, violated: true },
+    { fixerId: 'margins-fixer', ruleId: 'b', params: {}, violated: false },
+    { fixerId: 'toc-field-fixer', ruleId: 'c', params: {}, violated: true },
+  ];
+}
+
+/** Panel handle nad stvarnim bindingom i skrivenom listom, kako ga grade oba panela. */
+function c6Panel() {
+  const items = C6_ITEMS().map((i) => ({ ...i, label: i.ruleId, fixerId: i.fixerId as never }));
+  const list = document.createElement('ul');
+  items.forEach((it, idx) => { list.innerHTML += `<li><input type="checkbox" ${it.violated ? 'checked' : ''} data-idx="${idx}"></li>`; });
+  const wrap = document.createElement('div');
+  wrap.appendChild(list);
+  document.body.appendChild(wrap);
+  const binding = bindRepairWorkflow({ items, listEl: list, sessionToken: 'c6', run: async (ids) => ids, verify: async () => ({ ok: true }) });
+  const handle = buildRepairPanelHandle(binding, items, null, wrap);
+  return { handle, applyThroughOldBinding: (ids: string[]) => binding.applySelection(ids) };
+}
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it.each(MUTATIONS.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
     expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);

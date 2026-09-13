@@ -39,7 +39,7 @@ import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../su
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
 import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
-import { renderRepairPanel, renderConfirmation, advancedFormFor, DEEP_TOGGLE_HTML, buildRepairItemList, type RepairPanelHandle } from './repair-panel';
+import { renderRepairPanel, renderConfirmation, advancedFormFor, DEEP_TOGGLE_HTML, buildRepairItemList, buildRepairPanelHandle, type RepairPanelHandle } from './repair-panel';
 import { bindRepairWorkflow } from './repair-workflow-binding';
 import { recoveryFor } from '../repair/recovery-policy';
 import { renderRepairRecovery } from './repair-recovery-view';
@@ -176,7 +176,7 @@ export function loadAnalyzerDocument(file: File): Promise<AnalyzerDocumentAdmiss
   });
 }
 
-import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled, emitAnalyzerResultReady } from './analyzer-document-events';
+import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled, emitAnalyzerResultReady, emitRepairPanelReady } from './analyzer-document-events';
 import { coarsePointer, deviceMemoryGb, effectiveUploadCap, isLikelyMobile, motionReduced, withViewTransition } from './environment-signals';
 import { deskItems } from './results/desk-model';
 import { privacyPrijelazHtml } from './privacy-state';
@@ -1834,7 +1834,7 @@ function unknownFixerNote(out: any): string{
     +`${list.length===1?'Ona nije primijenjena na dokument':'One nisu primijenjene na dokument'}. Ako se ovo ponovi, javi nam.</p>`;
 }
 async function renderRepairSection(r: any){
- const mount=$('#repairPanelMount'); if(!mount) return; mount.innerHTML='';
+ const mount=$('#repairPanelMount'); if(!mount) return; repairPanelHandle?.dispose(); mount.innerHTML=''; // C6: dispose skida pretplate pisca sesije; innerHTML sam ih ostavlja zive
  repairPanelForResult=null; repairPanelHandle=null; // dok se panel ne izgradi, nema sto pamtiti
  repairPanelItems=[]; repairPanelTextItems=[];
  try{
@@ -1881,10 +1881,11 @@ async function renderRepairSection(r: any){
  // repairEndpointa) i dalje nudio popravak dokumenta koji se ne moze popraviti; padao bi tek u
  // readZip, dakle upravo ono lazno obecanje koje je zastita trebala ukloniti.
  if(!renderRepairCapabilityBlock(mount,r)){repairPanelForResult=r;return}
- if(repairServerConfigured()){repairPanelHandle=renderServerRepairPanel(mount,r,items,file,textItems);repairPanelForResult=r;return}
+ if(repairServerConfigured()){repairPanelHandle=renderServerRepairPanel(mount,r,items,file,textItems);repairPanelForResult=r;emitRepairPanelReady({handle:repairPanelHandle,items});return}
  repairPanelHandle=renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,sessionToken:`${file?.name}:${file?.size}:${file?.lastModified}`,trackEvent:(e: string,d?: Record<string,unknown>)=>{void trackEvent(e,d||{})},beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks,tocFieldWillRefresh:tocFieldWillRefresh(res)}:null}});
  // Panel za isti rezultat se ne gradi dvaput: ponovna gradnja bi obrisala korisnikov odabir.
  repairPanelForResult=r;
+ if(repairPanelHandle)emitRepairPanelReady({handle:repairPanelHandle,items}); // C6: ruta vraca zapamceni odabir i pretplacuje pisca
  } finally {
   // RE-34 nastavak: mount se puni ASINKRONO (ensureTemplatesHeavy + fixer builderi), a renderRepairCta
   // se prvi put zove SINKRONO odmah nakon poziva ove funkcije (renderResult), dok je mount jos prazan
@@ -2247,7 +2248,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   }
   void go(false);
  };
- return{applySelection:(ids)=>binding.applySelection(ids),selectedRuleIds:()=>binding.selectedItems(items).map((i: any)=>i.ruleId),phase:()=>binding.getState().phase};
+ return buildRepairPanelHandle(binding,items,deepToggle,wrap); // C6: isti ugovor handlea kao lokalni panel (dispose, onSelectionChange, deep)
 }
 
 // Provjera prije predaje: cloud forenzika izvornosti. Sekcija (i tab) postoje
