@@ -45,6 +45,9 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import {
+  BUDZET_APP, BUDZET_UI_UKUPNO, POPUST, bajtova, presudaRatcheta, tsDatoteke,
+} from './helpers/ui-budget';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -1672,6 +1675,41 @@ const MUTATIONS: Mutation[] = [
     // Baseline: stvaran izvor u repozitoriju mora biti cist, inace tvrdnja gore ne govori o mutaciji.
     cleanBefore: () =>
       !hasNaiveEntryGuard(readFileSync(resolve(process.cwd(), 'scripts/post-deploy-smoke.mjs'), 'utf8')),
+  },
+  // --- ratchet nad `src/ui` (tests/ui-module-budget.test.ts) ----------------------------------
+  {
+    id: 'ui-budzet/rast-i-naduvan-budzet',
+    imitates:
+      'budzet ostane NADUVAN nakon sto je kod izdvojen, pa ratchet prestane cuvati ono zbog cega '
+      + 'postoji: gornja grana vise ne moze ugristi jer ima kilobajta mrtve zrake. Izmjereno '
+      + '2026-09-13, dvaput istoga dana: ukupni prag je bio goli `toBeLessThanOrEqual` pa je '
+      + 'naduvavanje s 838 natrag na 848 KB prolazilo ZELENO, a prva izvedba OVE mutacije je '
+      + 'vjezbala presudu nad IZMISLJENIM budzetima, pa je ostajala zelena i kad se `BUDZET_APP` '
+      + 'naduva na `999 * 1024`, dakle na tocno onaj kvar koji imenuje',
+    caught: () => {
+      const s = bajtova('src/ui/app.ts');
+      const uk = tsDatoteke('src/ui').reduce((a, f) => a + bajtova(f), 0);
+      // Podmetnut kvar nad STVARNIM velicinama: prag naduvan za POPUST mora biti prijavljen, i to
+      // za OBA praga, jer je donja grana do danas postojala samo za `app.ts`.
+      return presudaRatcheta(s, s + POPUST).includes('budzet-naduvan')
+        && presudaRatcheta(uk, uk + POPUST).includes('budzet-naduvan')
+        && presudaRatcheta(s, s - 1).includes('preko-budzeta');
+    },
+    /**
+     * OVA POLOVICA CITA STVARNE PRAGOVE, i to je cijela razlika prema prvoj izvedbi.
+     *
+     * `caught` gore dokazuje da presuda ZNA prijaviti naduvan prag, ali to bi dokazala i nad
+     * izmisljenim brojevima. Tek ovdje se cita `BUDZET_APP` i `BUDZET_UI_UKUPNO`, pa mutacija pada
+     * cim netko naduva sam prag: presuda tada nije prazna i baseline propada. Bez toga mutacija
+     * mjeri vlastitu aritmetiku, ne gard.
+     */
+    cleanBefore: () => {
+      const s = bajtova('src/ui/app.ts');
+      const uk = tsDatoteke('src/ui').reduce((a, f) => a + bajtova(f), 0);
+      return s > 1000 && uk > s
+        && presudaRatcheta(s, BUDZET_APP).length === 0
+        && presudaRatcheta(uk, BUDZET_UI_UKUPNO).length === 0;
+    },
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
