@@ -833,6 +833,14 @@ body.is-scrolling .section *{box-shadow:none!important}
 .override-box{border:0;border-top:1px dashed var(--paper-line);border-radius:0;background:none;padding:16px 0 0}
 .override-toggle span{font-family:var(--display-serif);font-size:13.5px;font-weight:600}
 .analyzer-wrap input[type="checkbox"],.modal input[type="checkbox"]{accent-color:var(--red-deep)}
+/* FOKUSNI PRSTEN NA KUCICI JE OUTLINE, NE BOX-SHADOW (korak D, 2026-09-13, izmjereno u WebKitu).
+ * Globalni `:focus-visible{outline:none;box-shadow:var(--focus)}` na izvornoj kucici u WebKitu daje
+ * `box-shadow: none` (sonda: `matches(':focus-visible')` true, `--focus` razrijesen, computed shadow
+ * `none`; isti gumbi u istom panelu prsten imaju). Korisnik tipkovnice u Safariju tako u panelu popravka
+ * ne vidi gdje mu je fokus na "Uskladi..." i "Razumijem i saljem...". Chromium prsten crta, pa se to
+ * nije vidjelo dok matrica preglednika nije dobila `workspace-a11y.spec.ts`. Outline se na kucici crta
+ * u svim motorima, pa vrijedi za sve, ne samo za WebKit. */
+input[type="checkbox"]:focus-visible{outline:2px solid var(--scan,var(--brand));outline-offset:2px}
 .override-toggle::after{content:"← mentor uvijek ima zadnju riječ";font-family:var(--font-hand);font-size:19px;color:var(--red-deep);transform:rotate(-2deg);margin-left:8px;font-weight:500;white-space:nowrap}
 /* pokretanje */
 .analyze-row{border-top:1.5px solid var(--paper-ink);padding-top:20px;margin-top:8px}
@@ -1512,7 +1520,12 @@ a.mw-item-name:hover{text-decoration:underline}
    * podsjetnik KOJI se dokument gleda. Znacka odlazi jer je ista tvrdnja napisana u tijelu. */
   .nav-rad{gap:12px}
   .rad-doc{padding-left:12px;gap:8px;flex-wrap:wrap;align-items:center}
-  .rad-doc-local{display:none}
+  /* Do koraka D (2026-09-13) je ovdje stajalo `.rad-doc-local{display:none}`: klasa koju je komentar
+   * iznad vec proglasio greskom i koja u HTML-u NE POSTOJI, pa znacka na uskom zaslonu nikad nije
+   * odlazila. Izmjereno na 390 px (Chromium i WebKit jednako): traka je 106 px siroka, sadrzaj se slaze
+   * u CETIRI retka (ime, indikator, znacka, gumb nove verzije) i visok je 111 px u navigaciji od 66 px,
+   * pocinje na y=-22 i prelazi preko obrasca ispod. Znacka je jedan od ta cetiri retka. */
+  .nav-rad .local-badge{display:none}
   .rad-doc-new-version{flex-basis:100%;margin-left:0;font-size:12px;padding:4px 0}
   /* Indikator ne gura ime: ime vec ima min-width:0 i skracuje se, a indikator je kratak i ostaje u istom retku. */
   .rad-doc-save{font-size:11px}

@@ -968,3 +968,9 @@ Ako je lokalno instaliran Codex plugin (codex@openai-codex), dostupan je i ovaj 
    `tests/violating-docx-required-section.test.ts` koristi (tri greške koje danas ništa ne prijavljuje).
 
    DoD: `include` proširen, `npm run check` zelen, `ParaSpec` unija s negativnim testom.
+8. (SVJESNO IZOSTAVLJENO 2026-09-13, odlukom vlasnika) Spremljeni nalaz analize uz lokalnu sesiju
+   (C5 iz plana radnog prostora tri faze). Razlog: najveca povrsina rizika u tom paketu (allowlist nad
+   `details`, tajne, granica od 32 KB, druga ocjena uz svjezu) za dobit od nekoliko sekundi, jer se
+   analiza pri obnovi sesije ionako pokrece iznova. Uvjet povratka: IZMJERENO trajanje ponovne analize
+   na velikom `.docx`-u koje korisnik stvarno osjeti, zapisano uz brojku, fixture i stroj; procjena
+   nije uvjet. Tek tada C5 ulazi u plan, i to iza ugovora o jednom piscu `workspace` zapisa.

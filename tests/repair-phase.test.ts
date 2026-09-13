@@ -66,6 +66,26 @@ describe('faza popravka', () => {
     expect(document.activeElement?.id, 'korisnik tipkovnice inace pada na vrh dokumenta').toBe('probni-okidac');
   });
 
+  it('bez proslijedjenog okidaca fokus se vraca na element koji je BIO aktivan pri ulasku', () => {
+    /**
+     * Ovo je put kojim produkcija STVARNO ide: `scrollToRepairPanel` u `app.ts` zove
+     * `enterRepairPhase(null, ...)`. Gornji test s izricitim gumbom je zato do koraka D (2026-09-13)
+     * bio zelen nad granom koju nitko ne izvodi, a korisnik tipkovnice je poslije povratka padao na
+     * `body`. Mutacija: vrati `okidac = opener` bez `izAktivnog` i ovaj test pada na `BODY`.
+     */
+    renderView('rezultat', document);
+    const cta = document.createElement('button');
+    cta.id = 'probni-cta';
+    document.getElementById('resultView')!.appendChild(cta);
+    cta.focus();
+    // SENTINEL: bez stvarno fokusiranog okidaca tvrdnja o povratku bila bi vakuumska.
+    expect(document.activeElement?.id, 'sentinel: okidac mora biti aktivan prije ulaska').toBe('probni-cta');
+    enterRepairPhase(null, document);
+    expect(stanjeSada()).toBe('popravak');
+    leaveRepairPhase(document);
+    expect(document.activeElement?.id, 'fokus se ne vraca na CTA koji je fazu otvorio').toBe('probni-cta');
+  });
+
   it('gumb za povratak radi, i veze se uz AbortSignal', () => {
     const ac = new AbortController();
     wireRepairPhase(document, ac.signal);
