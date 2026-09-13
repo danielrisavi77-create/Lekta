@@ -32,7 +32,8 @@ from .remote import load_remotes, token_fingerprint
 from .report import write_report
 from .signals import collect
 from .store import Store
-from .worker import API_KEY_ENV, changed_line_count, changed_paths, prepare_job_via_node, resolve_launcher, run_phase, scrubbed_env
+from .worker import (API_KEY_ENV, changed_line_count, changed_paths, implementation_worktree_blocked,
+                     prepare_job_via_node, resolve_launcher, run_phase, scrubbed_env)
 
 PHASE_ORDER = ("planning", "implementing", "reviewing", "verifying", "ready_to_publish", "publishing")
 PHASE_TO_AGENT_PHASE = {"planning": "plan", "implementing": "implement", "reviewing": "review"}
@@ -318,8 +319,14 @@ def _resolve_ready_plan_task(repo: str, task: dict) -> tuple[str | None, str]:
     zadatkom koji je `done` (T00), a `implement` je odmah padao u prepareJob na `T00 must be ready`.
     Zato se ovo razrjesava PRIJE ijednog poziva modela, a promasaj je `needs_human`, ne potrosen pokusaj.
     """
-    plan_task = ((task.get("signal") or {}).get("scope") or {}).get("planTask")
+    scope = (task.get("signal") or {}).get("scope") or {}
+    plan_task = scope.get("planTask")
     if not isinstance(plan_task, str) or not plan_task:
+        # Razlika je vazna operateru: nenapisan kljuc trazi dopunu inbox datoteke, a odbijen oblik ispravak.
+        # Jedna poruka za oba slucaja salje ga da trazi ono sto je vec napisao.
+        rejected = scope.get("planTaskRejected")
+        if rejected:
+            return None, f"no_ready_plan_task: planTask '{rejected}' nije u obliku Tnn"
         return None, "no_ready_plan_task: signal nema planTask"
     try:
         with open(os.path.join(repo, "docs", "agents", "tasks.json"), encoding="utf-8") as fh:
@@ -366,7 +373,16 @@ class DefaultAdapters:
         # PRVO red, pa tek onda model. Bez razrjesivog `ready` zadatka ne krece nijedan poziv i pokusaj ostaje.
         plan_task, reason = _resolve_ready_plan_task(self.repo, task)
         if plan_task is None:
-            return {"verdict": "needs_human", "reason": reason, "provider": None, "attempt_spent": False}
+            return {"verdict": "needs_human", "reason": reason, "provider": None,
+                    "attempt_spent": False, "provider_called": False}
+        if agent_phase == "implement":
+            # Agent s pravom pisanja se ne pokrece u dijeljenom stablu. Kontroler posao priprema kroz `prepare`,
+            # pa ga tri preduvjeta iz `cli.mjs run --execute` nikad ne dotaknu; do 2026-09-13 to nije bilo vidljivo
+            # samo zato sto `implement` nije bio dostizan (prepareJob je uvijek padao na `T00 must be ready`).
+            unsafe = implementation_worktree_blocked(self.repo)
+            if unsafe:
+                return {"verdict": "blocked", "reason": unsafe, "provider": None,
+                        "attempt_spent": False, "provider_called": False}
         override_status = override_implementer = None
         lookup_task = task
         if agent_phase == "review":
@@ -376,7 +392,7 @@ class DefaultAdapters:
             implementer = self._implementer_by_task.get(task["id"])
             if implementer is None:
                 return {"verdict": "blocked", "reason": "implementer_unknown: ovaj tick nema zapis o implementatoru",
-                        "provider": None, "attempt_spent": False}
+                        "provider": None, "attempt_spent": False, "provider_called": False}
             lookup_task = {**task, "implementationAgent": implementer}
             override_status, override_implementer = "in_review", implementer
         agent = _agent_for(self.config, phase, lookup_task)
@@ -384,7 +400,10 @@ class DefaultAdapters:
             job = prepare_job_via_node(self.repo, plan_task, agent_phase, agent,
                                        override_status=override_status, override_implementer=override_implementer)
         except (RuntimeError, ValueError, OSError) as exc:
-            return {"verdict": "blocked", "reason": f"prepare_failed: {type(exc).__name__}", "provider": None}
+            # Priprema je node poziv bez modela; kad padne, ni jedan token nije potrosen, pa ni pokusaj ni
+            # dnevni slot ne smiju biti potroseni. Zadatak ostaje `blocked` i ceka covjeka, dakle ne vrti se u krug.
+            return {"verdict": "blocked", "reason": f"prepare_failed: {type(exc).__name__}", "provider": None,
+                    "attempt_spent": False, "provider_called": False}
         if agent_phase == "implement":
             self._implementer_by_task[task["id"]] = agent
         art = os.path.join(self.home, "artifacts", task["id"], f"{phase}-{uuid.uuid4().hex[:8]}")
@@ -488,9 +507,13 @@ def tick(config: dict, now: int, dry_run: bool, *, store: Store, home: str | Non
 def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict, now: int, summary: dict) -> str:
     task_id = task["id"]
     status = "planning"
+    # Je li OVAJ posao ikad pokrenuo providera. Dnevni slot je po POSLU, ne po fazi: kad je plan vec potrosio
+    # poziv modela, slot je potrosen i kasnija blokada u implementaciji ga ne smije vratiti.
+    provider_ever_called = False
     for phase in ("planning", "implementing", "reviewing"):
         store.record_event(task_id, f"phase_start:{phase}", {}, now)
         result = adapters.run_phase(task, phase, profile)
+        provider_ever_called = provider_ever_called or bool(result.get("provider_called", True))
         store.record_run(task_id, phase, result, now, now)
         summary["phases"].append({"phase": phase, "verdict": result.get("verdict"), "reason": result.get("reason"),
                                   "agent": result.get("agent")})
@@ -504,6 +527,12 @@ def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict,
             payload: dict = {"reason": result.get("reason")}
             if not result.get("attempt_spent", True):
                 payload["refund_attempt"] = True
+                # Dnevni slot se vraca samo kad provider nije NI POKRENUT. Inace bi pokvaren provider (sandbox,
+                # prazan hod) vrtio model u krug bez ijedne granice. Kad poziv nije ni krenuo, slot mora natrag:
+                # tri CI signala bez ciljnog zadatka inace potrose sva tri dnevna slota i izgladne posao koji bi
+                # prosao (izmjereno 2026-09-13 nad pravim `ci` izvorom iz config/autonomy.example.json).
+                if not provider_ever_called:
+                    payload["refund_daily_job"] = True
             store.transition(task_id, status, verdict, payload, now)
             return verdict
         if verdict != "needs_verification":

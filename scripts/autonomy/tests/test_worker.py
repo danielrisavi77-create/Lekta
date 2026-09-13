@@ -8,9 +8,17 @@ import unittest
 from unittest import mock
 
 from scripts.autonomy.worker import (
-    ProcessTree, classify_stream, diff_within_scope, model_matches, parse_provider_output, pid_alive,
-    prepare_job_via_node, resolve_launcher, run_phase, sandbox_unusable, scrubbed_env,
+    ProcessTree, classify_stream, diff_within_scope, implementation_worktree_blocked, machine_stdout,
+    model_matches, parse_provider_output, pid_alive, prepare_job_via_node, resolve_launcher, run_phase,
+    sandbox_unusable, scrubbed_env, successful_tool_calls,
 )
+
+# Uspjesno izvrsavanje u codex NDJSON-u. Oblik je GRADJEN prema shemi stavke (`item.completed` +
+# `command_execution` s `exit_code`), a ne prepisan iz izmjerenog artefakta: taj artefakt je log KVARA i po
+# definiciji nema nijedno uspjesno izvrsavanje. Ta razlika je zapisana i u izvjestaju, ne presucena.
+TOOL_CALL_LINE = ('{"type":"item.completed","item":{"id":"item_t","type":"command_execution",'
+                  '"command":"bash -lc \'sed -n 1,40p AGENTS.md\'","aggregated_output":"# AGENTS",'
+                  '"exit_code":0,"status":"completed"}}')
 
 FAKE_CLI = r'''
 import json, os, subprocess, sys, time
@@ -26,6 +34,21 @@ if mode == "hang":
     time.sleep(300)
 elif mode == "codex_ok":
     print(json.dumps({"type": "turn.started", "model": "gpt-5.6-sol"}))
+    # Uspjesan plan NESTO procita; bez toga bi ovaj mod opisivao prazan hod, a ne uspjeh.
+    print(json.dumps({"type": "item.completed", "item": {"id": "item_t", "type": "command_execution",
+                                                         "command": "bash -lc 'sed -n 1,40p AGENTS.md'",
+                                                         "aggregated_output": "# AGENTS", "exit_code": 0,
+                                                         "status": "completed"}}))
+    print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
+elif mode == "codex_no_tools":
+    # Uredan zavrsetak BEZ ijednog citanja ili izvrsavanja: tocno oblik vakuumskog zelenog.
+    print(json.dumps({"type": "item.completed", "item": {"id": "item_1", "type": "agent_message",
+                                                         "text": "Nisam mogao nista procitati."}}))
+    print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
+elif mode == "codex_failed_tool":
+    print(json.dumps({"type": "item.completed", "item": {"id": "item_t", "type": "command_execution",
+                                                         "command": "bash -lc 'cat AGENTS.md'",
+                                                         "exit_code": 1, "status": "failed"}}))
     print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
 elif mode == "codex_failed":
     print(json.dumps({"type": "turn.failed"}))
@@ -48,6 +71,9 @@ elif mode == "replay":
     sys.exit(int(os.environ.get("FAKE_EXIT", "0")))
 elif mode == "echo_prompt":
     assert "LEKTA task" in prompt
+    print(json.dumps({"type": "item.completed", "item": {"id": "item_t", "type": "command_execution",
+                                                         "command": "bash -lc 'sed -n 1,5p AGENTS.md'",
+                                                         "exit_code": 0, "status": "completed"}}))
     print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
 '''
 
@@ -62,6 +88,20 @@ SANDBOX_STDOUT = '{"type":"thread.started","thread_id":"01a09aae-63cd-7ed3-9d2c-
 # Isti stdout, ali BEZ potpisa u stderru: model koji radi bas na ovom kvaru doslovno citira frazu u
 # `agent_message`. To ne smije biti `blocked`, inace bi gard sam sebe okinuo na ispravnom radu.
 BENIGN_STDERR = "2026-09-13T12:13:41.324028Z  INFO codex_core::tools::router: ok\n"
+
+_SANDBOX_LINES = SANDBOX_STDOUT.strip().splitlines()
+# Stvarni stdout uz JEDNO uspjesno izvrsavanje: tako brojac uspjesnih poziva ne okine, pa test koji slijedi
+# mjeri ISKLJUCIVO potpis sandboxa, a ne prazan hod (dva razlicita mehanizma, dvije razlicite mjere).
+SANDBOX_STDOUT_WITH_TOOL_USE = "\n".join(_SANDBOX_LINES[:2] + [TOOL_CALL_LINE] + _SANDBOX_LINES[2:]) + "\n"
+# Isti oblik, ali je kvar prijavljen STRUKTURIRANO, u `item.type == "error"`, a poruka je doslovno preuzeta iz
+# stvarnog stderr retka (`_ROUTER_MESSAGE` se iz njega i izvodi, da se ne prepisuje rucno). Codex u JSON nacinu
+# dokazano emitira `error` stavke; kad tracing na stderr izostane, ovo je jedino mjesto na kojem se kvar vidi.
+_ROUTER_MESSAGE = next(l for l in SANDBOX_STDERR.splitlines() if "apply deny-read ACLs" in l).split("error=", 1)[1]
+SANDBOX_STDOUT_STRUCTURED = "\n".join(
+    _SANDBOX_LINES[:2]
+    + [TOOL_CALL_LINE,
+       json.dumps({"type": "item.completed", "item": {"id": "item_0", "type": "error", "message": _ROUTER_MESSAGE}})]
+    + _SANDBOX_LINES[3:]) + "\n"
 
 
 def profile(**over):
@@ -206,11 +246,25 @@ class WorkerTest(unittest.TestCase):
         self.assertTrue(any(p.endswith("stderr.log") for p in blocked["artifact_paths"]),
                         "dijagnostika kojom je kvar nadjen mora ostati zapisana")
 
+    def test_structured_sandbox_error_on_stdout_alone_is_blocked(self):
+        """Potpis se prepoznaje i kad ga codex prijavi SAMO strukturirano, u NDJSON-u, uz cist stderr.
+
+        Bez ovoga bi build ili okolina koja tracing na stderr prigusi vratila upravo ono lazno zeleno zbog
+        kojeg gard i postoji: `turn.completed`, prazan popis modela, `needs_verification`.
+        """
+        blocked = self.replay(SANDBOX_STDOUT_STRUCTURED, BENIGN_STDERR)
+        self.assertEqual(blocked["verdict"], "blocked", blocked)
+        self.assertIn("provider_unusable", blocked["reason"])
+        self.assertFalse(blocked["attempt_spent"])
+        # Kontrola da nalaz ne dolazi od drugog mehanizma: uspjesno izvrsavanje je prisutno, brojac nije nula.
+        self.assertGreaterEqual(successful_tool_calls("codex", SANDBOX_STDOUT_STRUCTURED), 1)
+
     def test_the_same_phrase_in_model_prose_alone_is_not_blocked(self):
-        # Potpis se trazi ISKLJUCIVO u stderru. Stdout ovdje sadrzi obje fraze, u modelovu tekstu.
-        self.assertIn("apply deny-read ACLs", SANDBOX_STDOUT)
-        self.assertIn("Failed to create unified exec process", SANDBOX_STDOUT)
-        ok = self.replay(SANDBOX_STDOUT, BENIGN_STDERR)
+        # Negativna kontrola gore navedenog: obje fraze su u modelovu tekstu, nijedna u strojnoj stavci.
+        # Model koji radi bas na ovom kvaru ih doslovno napise, pa ga gard ne smije blokirati.
+        self.assertIn("apply deny-read ACLs", SANDBOX_STDOUT_WITH_TOOL_USE)
+        self.assertIn("Failed to create unified exec process", SANDBOX_STDOUT_WITH_TOOL_USE)
+        ok = self.replay(SANDBOX_STDOUT_WITH_TOOL_USE, BENIGN_STDERR)
         self.assertEqual(ok["verdict"], "needs_verification", ok)
 
     def test_nested_item_error_stays_benign(self):
@@ -219,9 +273,19 @@ class WorkerTest(unittest.TestCase):
         self.assertIn('"type":"error"', SANDBOX_STDOUT)
         parsed = parse_provider_output("codex", SANDBOX_STDOUT, 0)
         self.assertTrue(parsed["ok"], "ugnijezdjeni item.type=error nije top-level greska")
-        # Gard bi na OVOM tekstu pogodio, jer ga modelova proza sadrzi; zato ga run_phase zove iskljucivo
-        # nad stderrom (dokazuje test iznad). Ovdje se to samo imenuje, da ogranicenje ne ostane precutno.
-        self.assertTrue(sandbox_unusable(SANDBOX_STDOUT))
+        self.assertFalse(sandbox_unusable("", SANDBOX_STDOUT, "codex"), "benigna greska ne smije okinuti gard")
+        self.assertTrue(sandbox_unusable("", SANDBOX_STDOUT_STRUCTURED, "codex"))
+
+    def test_prose_is_stripped_before_the_signature_is_looked_for(self):
+        machine = machine_stdout(SANDBOX_STDOUT)
+        self.assertIn("Skill descriptions were shortened", machine, "strojna stavka ostaje")
+        self.assertNotIn("apply deny-read ACLs", machine, "modelova proza se ne skenira")
+        self.assertIn("apply deny-read ACLs", machine_stdout(SANDBOX_STDOUT_STRUCTURED))
+        # Claudeov izlaz je JEDAN objekt s modelovim tekstom, ne NDJSON; njegov stdout se zato ne skenira.
+        claude_out = json.dumps({"subtype": "success", "is_error": False,
+                                 "result": "pao je apply deny-read ACLs, nisam mogao citati"})
+        self.assertTrue(sandbox_unusable("", claude_out, "codex"), "kao NDJSON bi ovo pogodilo")
+        self.assertFalse(sandbox_unusable("", claude_out, "claude"))
 
     def test_sandbox_signature_matches_both_known_forms_and_nothing_else(self):
         self.assertTrue(sandbox_unusable('Rejected("Failed to create unified exec process: x")'))
@@ -230,6 +294,42 @@ class WorkerTest(unittest.TestCase):
         self.assertFalse(sandbox_unusable(""))
         self.assertFalse(sandbox_unusable("deny read acls"))
         self.assertFalse(sandbox_unusable("failed to create process"))
+        # GRANICA, imenovana a ne precutna: drugi oblik iste stete iz ISTOG stvarnog loga nema potpis.
+        self.assertFalse(sandbox_unusable(
+            "2026-09-13T12:13:21.734060Z ERROR codex_core::tools::router: error=timed out negotiating with the code-mode host"),
+            "potpis pokriva samo dvije poznate fraze; ostatak hvata brojac uspjesnih poziva")
+
+    def test_a_phase_that_read_nothing_is_never_needs_verification(self):
+        """Opcenito pravilo, neovisno o potpisu: plan bez ijednog uspjesnog citanja nije uspjeh.
+
+        BASELINE: `codex_ok` cita jednu datoteku i i dalje zavrsava kao `needs_verification`.
+        MUTACIJA: `codex_no_tools` uredno posalje `turn.completed` bez ijednog poziva alata.
+        """
+        ok = self.run_fake("codex_ok")
+        self.assertEqual(ok["verdict"], "needs_verification", ok)
+        self.assertEqual(ok["successful_tool_calls"], 1)
+        vacuous = self.run_fake("codex_no_tools")
+        self.assertEqual(vacuous["verdict"], "blocked", vacuous)
+        self.assertIn("no_tool_use", vacuous["reason"])
+        self.assertFalse(vacuous["attempt_spent"])
+        self.assertEqual(vacuous["successful_tool_calls"], 0)
+        # Poziv alata koji je PAO nije uspjesan poziv; inace bi se gard dao zavarati samim pokusajem.
+        failed_tool = self.run_fake("codex_failed_tool")
+        self.assertEqual(failed_tool["verdict"], "blocked", failed_tool)
+        self.assertIn("no_tool_use", failed_tool["reason"])
+        # Ista mjera ne vrijedi za `implement`: promjena datoteka se dokazuje gateom, ne brojacem alata.
+        job, env = self.job("codex_no_tools")
+        impl = run_phase(job, "implement", profile(), cwd=self.dir, timeout_seconds=60, env=env)
+        self.assertEqual(impl["verdict"], "needs_verification", impl)
+
+    def test_tool_call_counter_is_unknown_for_claude_and_ignores_prose(self):
+        self.assertIsNone(successful_tool_calls("claude", json.dumps({"subtype": "success"})),
+                          "Claude ne prijavljuje popis alata; nepoznato ne smije blokirati")
+        self.assertEqual(successful_tool_calls("codex", SANDBOX_STDOUT), 0, "tri poruke modela nisu citanje")
+        self.assertEqual(successful_tool_calls("codex", ""), 0)
+        self.assertEqual(successful_tool_calls("codex", TOOL_CALL_LINE), 1)
+
+
 
     def test_prepare_job_argv_is_unchanged_without_overrides(self):
         # Rucni tok mora ostati bajt za bajt isti; override se dodaje samo kad ga pozivatelj zada.
@@ -268,6 +368,52 @@ class WorkerTest(unittest.TestCase):
 
     def test_process_tree_without_start_is_trivially_stopped(self):
         self.assertTrue(ProcessTree().terminate_tree())
+
+
+class ImplementWorktreeGuardTest(unittest.TestCase):
+    """Agent s pravom pisanja ne smije se pokrenuti u dijeljenom stablu.
+
+    `git` se ubrizgava, pa test mjeri ODLUKU, ne stanje stroja. BASELINE je uredna okolina; svaka mutacija
+    je jedan od tri preduvjeta koje `scripts/agents/cli.mjs run --execute` namece rucnom toku.
+    """
+
+    HEALTHY = {("rev-parse", "--git-dir"): "/repo/.git/worktrees/wt",
+               ("rev-parse", "--git-common-dir"): "/repo/.git",
+               ("branch", "--show-current"): "wf/nesto",
+               ("status", "--porcelain"): ""}
+
+    def guard(self, **over):
+        table = dict(self.HEALTHY)
+        table.update({tuple(k.split(" ")): v for k, v in over.items()})
+        return implementation_worktree_blocked("/repo", git=lambda args: (0, table[tuple(args)]))
+
+    def test_baseline_clean_feature_worktree_is_allowed(self):
+        self.assertIsNone(self.guard())
+
+    def test_shared_checkout_is_refused(self):
+        reason = self.guard(**{"rev-parse --git-dir": "/repo/.git"})
+        self.assertIn("nije zaseban git worktree", reason)
+
+    def test_master_and_detached_head_are_refused(self):
+        self.assertIn("nije feature grana", self.guard(**{"branch --show-current": "master"}))
+        self.assertIn("nije feature grana", self.guard(**{"branch --show-current": "main"}))
+        self.assertIn("nije feature grana", self.guard(**{"branch --show-current": ""}))
+
+    def test_dirty_worktree_is_refused(self):
+        self.assertIn("nije cisto", self.guard(**{"status --porcelain": " M src/ui/app.ts"}))
+
+    def test_git_failure_is_refused_not_ignored(self):
+        self.assertIn("nije uspio", implementation_worktree_blocked("/repo", git=lambda args: (128, "")))
+
+        def boom(args):
+            raise OSError("git nema")
+
+        self.assertIn("nije dostupan", implementation_worktree_blocked("/repo", git=boom))
+
+    def test_a_real_temporary_directory_is_not_a_worktree(self):
+        # Bez ubrizganog gita, nad stvarnim direktorijem: ovo je stanje u kojem kontroler zivi na ovom stroju
+        # kad `workerRepoPath` pokazuje na instalacijski checkout ili na nesto sto uopce nije repozitorij.
+        self.assertIsNotNone(implementation_worktree_blocked(tempfile.mkdtemp()))
 
 
 if __name__ == "__main__":

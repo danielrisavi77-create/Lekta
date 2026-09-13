@@ -171,6 +171,71 @@ class StoreTest(unittest.TestCase):
         self.store.transition(task_id, "planning", "waiting_quota", {"refund_attempt": False}, NOW + 16)
         self.assertEqual(self.store.get_task(task_id)["attempts"], before, "izricito False i dalje gasi refund")
 
+    def test_daily_job_slot_is_returned_only_when_the_caller_claims_it(self):
+        """Dnevni slot je granica MODELSKE potrosnje (nalaz 2026-09-13).
+
+        BASELINE: nijedan postojeci prijelaz ne dira brojac, ni onaj koji refundira pokusaj.
+        MUTACIJA: `refund_daily_job: True` vraca slot.
+        RUB: brojac ne ide ispod nule, i zastavica ne curi u dnevnik dogadjaja.
+        """
+        task_id = self.store.enqueue(signal(), NOW)
+        self.store.claim("A", NOW, max_attempts=9, max_new_per_day=99)
+        self.assertEqual(self.store.daily_counter("jobs", NOW), 1)
+
+        self.store.transition(task_id, "planning", "needs_human", {"reason": "dokaz nepotpun"}, NOW + 1)
+        self.assertEqual(self.store.daily_counter("jobs", NOW), 1, "bez zastavice slot ostaje potrosen")
+        self.store.transition(task_id, "needs_human", "queued", {}, NOW + 2)
+        self.store.claim("A", NOW + 3, max_attempts=9, max_new_per_day=99)
+        self.store.transition(task_id, "planning", "waiting_quota", {}, NOW + 4)
+        self.assertEqual(self.store.daily_counter("jobs", NOW), 2,
+                         "refund POKUSAJA ne povlaci refund slota; to su dvije razlicite granice")
+        self.store.transition(task_id, "waiting_quota", "queued", {}, NOW + 5)
+
+        self.store.claim("A", NOW + 6, max_attempts=9, max_new_per_day=99)
+        self.assertEqual(self.store.daily_counter("jobs", NOW), 3)
+        self.store.transition(task_id, "planning", "needs_human",
+                              {"reason": "no_ready_plan_task: signal nema planTask",
+                               "refund_attempt": True, "refund_daily_job": True}, NOW + 7)
+        self.assertEqual(self.store.daily_counter("jobs", NOW), 2, "poziv nije ni krenuo, slot se vraca")
+        self.assertNotIn("refund_daily_job", json.loads(self.store.events(task_id)[-1]["sanitized_payload"]))
+
+        # RUB: vise povrata nego sto je uzeto ne smije dati negativan brojac.
+        for step, expected in ((8, 1), (10, 0), (12, 0)):
+            self.store.transition(task_id, "needs_human", "queued", {}, NOW + step)
+            self.store.transition(task_id, "queued", "needs_human", {"refund_daily_job": True}, NOW + step + 1)
+            self.assertEqual(self.store.daily_counter("jobs", NOW), expected)
+
+    def test_an_amended_signal_updates_the_task_and_wakes_it_from_needs_human(self):
+        """Ponovljen signal s IZMIJENJENIM opsegom je operaterov ispravak (nalaz 2026-09-13 nad store.enqueue).
+
+        BASELINE: identican signal samo broji pojave i nista ne mijenja.
+        MUTACIJA: izmijenjen `scope` osvjezava zapis i vraca `needs_human` zadatak u red.
+        KONTROLA: zadatak u `blocked` se NE budi, da ispravak ne postane zaobilazak zaustavljanja.
+        """
+        raw = dict(kind="ci_failure", location="check/ux-gate@master", symptom="ux-gate pada",
+                   source_revision=SHA, observed_at=NOW, scope={"area": "ci"})
+        task_id = self.store.enqueue(normalize_signal(raw), NOW)
+        self.store.enqueue(normalize_signal(raw), NOW + 1)
+        task = self.store.get_task(task_id)
+        self.assertEqual(task["occurrences"], 2)
+        self.assertEqual(task["status"], "queued")
+        self.assertEqual([e["event_type"] for e in self.store.events(task_id)][-1], "signal_repeated")
+
+        self.store.claim("A", NOW + 2)
+        self.store.transition(task_id, "planning", "needs_human", {"reason": "no_ready_plan_task"}, NOW + 3)
+        amended = dict(raw, scope={"area": "ci", "planTask": "T17"})
+        self.assertEqual(self.store.enqueue(normalize_signal(amended), NOW + 4), task_id, "isti fingerprint")
+        task = self.store.get_task(task_id)
+        self.assertEqual(task["status"], "queued", "ispravak budi zadatak koji je cekao covjeka")
+        self.assertEqual(task["signal"]["scope"]["planTask"], "T17", "zapis signala se osvjezava, ne zamrzava")
+        self.assertEqual(task["scope"]["planTask"], "T17")
+        self.assertIn("signal_amended", [e["event_type"] for e in self.store.events(task_id)])
+
+        self.store.claim("A", NOW + 5)
+        self.store.transition(task_id, "planning", "blocked", {"reason": "provider_unusable"}, NOW + 6)
+        self.store.enqueue(normalize_signal(dict(raw, scope={"area": "ci", "planTask": "T18"})), NOW + 7)
+        self.assertEqual(self.store.get_task(task_id)["status"], "blocked", "blokiran zadatak se ne budi sam")
+
     def test_attempt_ceiling_and_daily_limit_reset_on_utc_day_not_on_restart(self):
         task_id = self.store.enqueue(signal(), NOW)
         for i in range(2):

@@ -48,7 +48,8 @@ python -m scripts.autonomy.cli report
 - `tick`: u `observe` upisuje signale i staje. U `propose` i `auto_low_risk` uzima najvise jedan posao
   (dnevni limit 3, 2 pokusaja po zadatku) i vodi ga planning -> implementing -> reviewing -> verifying ->
   ready_to_publish -> publishing, svaku fazu biljezi prije i poslije. `waiting_quota` i `needs_login` ne
-  trose pokusaj, a od 2026-09-13 ni `no_ready_plan_task` ni `provider_unusable` (vidi nize).
+  trose pokusaj, a od 2026-09-13 ni `no_ready_plan_task`, `implement_unsafe`, `provider_unusable` ni
+  `no_tool_use` (vidi nize). Dnevni slot posla vraca samo ishod u kojem provider NIJE ni pokrenut.
 
 ### Sto se trazi prije ijednog poziva modela (od 2026-09-13)
 
@@ -67,17 +68,37 @@ python -m scripts.autonomy.cli report
   `npm run agents prepare/run` nepromijenjen. Kad kontroler nema zapis o implementatoru (npr. tick koji nije
   sam odradio implementaciju), pregled je `blocked` uz `implementer_unknown`; implementator se ne pogadja,
   jer bi pogodak mogao biti isti provider kao recenzent i tiho ugasiti pravilo o drugom provideru.
-- **Codex koji je zavrsio uz odbijen exec je `blocked`, ne uspjeh.** Kad se u STDERRU providera pojavi potpis
-  neupotrebljive izvrsne okoline (`apply deny-read ACLs`, `Failed to create unified exec process`), verdict je
-  `blocked` uz razlog `provider_unusable: codex sandbox`, i pokusaj se ne trosi. Provjera ide prije
-  `classify_stream` i prije parsiranja izlaza, jer model u tom stanju uredno posalje `turn.completed` i u
-  `agent_message` napise da nije mogao procitati repozitorij (izmjereno 2026-09-13, artefakt
+  Ciljni zadatak koji je napisan u obliku koji red ne poznaje (`t17` i `T17 ` se ISPRAVLJAJU, `T7` i `T017`
+  ne, jer bi to bilo pogadjanje) razlikuje se u razlogu: `planTask 'T7' nije u obliku Tnn`, a ne "signal nema
+  planTask". Ispravak inbox datoteke se PRIMJENJUJE: isti otisak signala uz izmijenjen `scope` osvjezava zapis
+  zadatka i vraca ga iz `needs_human` u red, pa sljedeci tick radi po ispravljenom cilju. Zadatak u `blocked`
+  se time NE budi. Dnevni slot posla (`maxNewJobsPerDay`) se pritom VRACA, jer ga nije potrosio nijedan poziv
+  modela; bez toga tri crvena workflowa iz izvora `ci` pojedu dan i posao s ispravnim `planTask` nikad ne
+  dodje na red. Slot se ne vraca cim je provider u tom poslu jednom pokrenut.
+- **Agent s pravom pisanja se ne pokrece u dijeljenom stablu.** Faza `implement` je popravkom iznad prvi put
+  postala DOSTIZNA, a kontroler posao priprema kroz `prepare` (bez `--execute`), pa ga tri preduvjeta iz
+  `scripts/agents/cli.mjs` ne bi dotaknula. Kontroler ih zato provjerava sam: zaseban git worktree, feature
+  grana, cisto stablo. Promasaj je `blocked` uz `implement_unsafe: ...`, prije poziva modela i bez potrosenog
+  pokusaja. `workerRepoPath` mora pokazivati na worktree na feature grani, ne na instalacijski checkout koji
+  Task Scheduler drzi na masteru.
+- **Codex koji je zavrsio uz odbijen exec je `blocked`, ne uspjeh.** Kad se pojavi potpis neupotrebljive
+  izvrsne okoline (`apply deny-read ACLs`, `Failed to create unified exec process`), verdict je `blocked` uz
+  razlog `provider_unusable: codex sandbox`, i pokusaj se ne trosi. Trazi se u STDERRU (ondje su
+  `codex_core::tools::router` redci iz izmjerenog artefakta) i u STDOUT NDJSON-u, ali ondje samo u STROJNIM
+  stavkama: modelova proza (`agent_message`, `reasoning`) se preskace, jer model koji radi bas na tom kvaru
+  istu frazu doslovno napise u svojoj poruci. Provjera ide prije `classify_stream` i prije parsiranja izlaza,
+  jer model u tom stanju uredno posalje `turn.completed` (izmjereno 2026-09-13, artefakt
   `26ba9cf7-.../planning-f8994dab`).
+- **Plan i pregled bez ijednog uspjesnog citanja ili izvrsavanja nikad nisu `needs_verification`.** Mehanizam
+  ima vlastiti brojac (`successful_tool_calls` u rezultatu radnika): broje se dovrsene NDJSON stavke koje nisu
+  proza ni greska i koje nisu pale. Nula je `blocked` uz `no_tool_use: ...` i ne trosi pokusaj. Time je
+  pokriven i oblik iz istog stvarnog loga koji nema poznat potpis (`timed out negotiating with the code-mode
+  host`).
 
-  GRANICA TOG GARDA, da ne ostane precutna: mehanizirano je samo prepoznavanje POZNATOG potpisa, i to samo u
-  stderru (stdout se namjerno ne skenira, jer model koji radi bas na tom kvaru istu frazu doslovno citira u
-  svojoj poruci). Opcenito pravilo "plan ili pregled bez ijednog uspjesnog citanja ili izvrsenja ne smije biti
-  `needs_verification`" NIJE pokriveno: drugi oblik iste stete jos prolazi kao uspjeh.
+  GRANICA, da ne ostane precutna: brojac se moze izmjeriti samo iz codex NDJSON-a. Claude `-p --output-format
+  json` vraca jedan sazetak bez popisa alata, pa je za njega brojac `None`, NEPOZNAT, i ne blokira nista;
+  Claude kao recenzent (agent `opus`) tako i dalje moze proci vakuumski. Faza `implement` se ovim brojacem ne
+  mjeri: promjenu datoteka dokazuju vrata provjere, ne popis poziva alata.
 - `pause`: trajno (prezivi restart i novi proces); novi claim je nemoguc dok `resume` ne prodje.
   `resume` ne ponistava `needs_login`, `billing_unknown` ni zamrzavanje objava nakon povrata.
 - `status` i `report`: `status.json` i `status.md` (zadnji poll, aktivni posao, brojaci, upozorenja

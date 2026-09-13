@@ -117,8 +117,18 @@ def normalize_signal(raw: dict) -> dict | None:
     # Ciljni zadatak iz koordinatorova reda. Do 2026-09-13 se ovaj kljuc TIHO gubio ovdje, pa nijedan signal
     # nije mogao imati `planTask` i kontroler je svakoj fazi slao `T00`. Oblik je uzak (`T` + dvije znamenke,
     # isto sto trazi validateQueue), jer vrijednost putuje u argv `scripts/agents/cli.mjs prepare`.
-    plan_task = scope.get("planTask")
-    plan_task = plan_task if isinstance(plan_task, str) and _PLAN_TASK_RE.fullmatch(plan_task) else None
+    # Sitnice oblika (razmaci, mala slova) se ISPRAVLJAJU, jer nisu pogadjanje; sve ostalo se ODBIJA IMENOM,
+    # da razlog nizvodno razlikuje "nisi napisao planTask" od "napisao si ga u obliku koji red ne poznaje".
+    # `T7` ili `T017` se namjerno ne popravljaju: to bi bilo nagadjanje koje bi model pokrenulo nad krivim
+    # zadatkom.
+    raw_plan_task = scope.get("planTask")
+    plan_task = raw_plan_task.strip().upper() if isinstance(raw_plan_task, str) else None
+    plan_task_rejected = ""
+    if plan_task is not None and not _PLAN_TASK_RE.fullmatch(plan_task):
+        # Pamti se ono sto je operater NAPISAO (samo obrezano), ne normalizirani oblik: poruka mu mora vratiti
+        # njegov tekst, inace trazi nesto sto nikad nije upisao.
+        plan_task_rejected = redact_text(raw_plan_task.strip())[0][:20]
+        plan_task = None
     return {
         "kind": kind,
         "fingerprint": fp,
@@ -131,7 +141,8 @@ def normalize_signal(raw: dict) -> dict | None:
         "redactions": hits,
         "reproduction": redact_text(str(raw.get("reproduction") or ""))[0][:1000],
         "expected_outcome": redact_text(str(raw.get("expected_outcome") or ""))[0][:500],
-        "scope": {"paths": paths[:20], "area": redact_text(str(scope.get("area") or ""))[0][:100], "planTask": plan_task},
+        "scope": {"paths": paths[:20], "area": redact_text(str(scope.get("area") or ""))[0][:100],
+                  "planTask": plan_task, "planTaskRejected": plan_task_rejected},
         "priority": int(raw.get("priority", DEFAULT_PRIORITY.get(kind, 0))),
         "url": redact_text(str(raw.get("url") or ""))[0][:300],
     }

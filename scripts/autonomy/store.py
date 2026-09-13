@@ -188,6 +188,12 @@ class Store:
         self._set_setting(f"{name}_count", str(value))
         return value
 
+    def _unbump_daily(self, name: str, now: int) -> int:
+        """Vrati potrosen slot; nikad ispod nule, i nikad preko granice UTC dana (`_daily` prvo resetira)."""
+        value = max(self._daily(name, now) - 1, 0)
+        self._set_setting(f"{name}_count", str(value))
+        return value
+
     def daily_counter(self, name: str, now: int) -> int:
         with self._immediate():
             return self._daily(name, now)
@@ -216,17 +222,35 @@ class Store:
 
     # -- zadaci ------------------------------------------------------------------------------
     def enqueue(self, signal: dict, now: int | None = None) -> str:
-        """Jedan signal_key = jedan zadatak. Ponovljeni signal samo povecava `occurrences`."""
+        """Jedan signal_key = jedan zadatak. Ponovljeni signal povecava `occurrences`.
+
+        Ponovljeni signal s IZMIJENJENIM opsegom je operaterov ISPRAVAK, ne isti dogadjaj: fingerprint pokriva
+        samo (vrsta, lokacija, simptom), pa je do 2026-09-13 dopisan `planTask` u inbox datoteci tiho nestajao,
+        zadatak je zauvijek ostajao `needs_human`, a jedini izlaz je bio rucni zahvat u SQLite. Zato se opseg
+        osvjezi, a zadatak koji ceka COVJEKA vrati u red: covjek je upravo odgovorio, ispravkom signala.
+        Zadaci u drugim stanjima (`blocked`, `failed`, aktivni) se NE diraju, da ispravak ne postane put kojim
+        se zaobilazi zaustavljanje.
+        """
         now = int(now if now is not None else signal.get("observed_at") or self._now_hint())
         key = signal["signal_key"]
         with self._immediate():
-            row = self.conn.execute("SELECT id FROM tasks WHERE signal_key = ?", (key,)).fetchone()
+            row = self.conn.execute("SELECT id, status, scope_json FROM tasks WHERE signal_key = ?", (key,)).fetchone()
             if row:
                 self.conn.execute(
                     "UPDATE tasks SET occurrences = occurrences + 1, last_seen_at = ?, updated_at = ? WHERE id = ?",
                     (now, now, row["id"]),
                 )
-                self._event(row["id"], "signal_repeated", {"signal_key": key}, now)
+                scope_json = _dumps(signal.get("scope") or {})
+                if scope_json == row["scope_json"]:
+                    self._event(row["id"], "signal_repeated", {"signal_key": key}, now)
+                    return row["id"]
+                self.conn.execute("UPDATE tasks SET scope_json = ?, signal_json = ? WHERE id = ?",
+                                  (scope_json, _dumps(signal), row["id"]))
+                self._event(row["id"], "signal_amended", {"signal_key": key, "scope": signal.get("scope") or {}}, now)
+                if row["status"] == "needs_human":
+                    self.conn.execute("UPDATE tasks SET status = 'queued', next_run_at = ? WHERE id = ? AND status = 'needs_human'",
+                                      (now, row["id"]))
+                    self._event(row["id"], "status:queued", {"from": "needs_human", "reason": "signal_amended"}, now)
                 return row["id"]
             task_id = str(uuid.uuid4())
             self.conn.execute(
@@ -326,6 +350,12 @@ class Store:
             # blocked slucajeva ne mijenja. Pop se izvodi UVIJEK, da zastavica ne procuri u zapis dogadjaja.
             if payload.pop("refund_attempt", target in REFUND_STATUSES):
                 self.conn.execute("UPDATE tasks SET attempts = MAX(attempts - 1, 0) WHERE id = ?", (task_id,))
+            # Dnevni slot posla (`maxNewJobsPerDay`) ogranicava MODELSKU potrosnju, pa ga vraca samo pozivatelj
+            # koji tvrdi da provider nije ni pokrenut. Bez toga tri signala bez ciljnog zadatka potrose sva tri
+            # slota dana i izgladne bas onaj posao koji bi prosao (izmjereno 2026-09-13). Poziv koji JEST krenuo
+            # slot trosi i kad je ishod bezvrijedan, inace bi pokvaren provider vrtio model u krug.
+            if payload.pop("refund_daily_job", False):
+                self._unbump_daily("jobs", now)
             if "next_run_at" in payload:
                 self.conn.execute("UPDATE tasks SET next_run_at = ? WHERE id = ?", (int(payload["next_run_at"]), task_id))
             if target not in ACTIVE_STATUSES:

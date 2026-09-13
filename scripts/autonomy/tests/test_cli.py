@@ -33,16 +33,22 @@ def ci_source(conclusion="failure"):
 
 
 class RecordingAdapters:
-    def __init__(self, verdicts=("needs_verification",) * 3, complete=True, publish_status="proposed", change_class="auto_low_risk"):
+    def __init__(self, verdicts=("needs_verification",) * 3, complete=True, publish_status="proposed", change_class="auto_low_risk",
+                 extra=None):
         self.calls = []
         self.verdicts = list(verdicts)
         self.complete = complete
         self.publish_status = publish_status
         self.change_class = change_class
+        # Polja koja adapter tvrdi uz verdict (`attempt_spent`, `provider_called`); zadano ih nema, pa je
+        # zateceno ponasanje nepromijenjeno.
+        self.extra = dict(extra or {})
 
     def run_phase(self, task, phase, profile):
         self.calls.append(("run", phase))
-        return {"verdict": self.verdicts.pop(0), "reason": "fake", "provider": "fake", "requested_model": "x", "reported_models": ["x"]}
+        result = {"verdict": self.verdicts.pop(0), "reason": "fake", "provider": "fake", "requested_model": "x", "reported_models": ["x"]}
+        result.update(self.extra)
+        return result
 
     def classify(self, task):
         self.calls.append(("classify",))
@@ -132,6 +138,29 @@ class TickTest(unittest.TestCase):
             self.assertEqual(out["outcome"], "blocked")
         finally:
             store2.close()
+
+    def test_blocked_without_a_started_call_refunds_only_the_attempt(self):
+        """Spoj koji je nedostajao: `attempt_spent` iz radnika mora stici do baze i kroz granu `blocked`.
+
+        BASELINE: blocked bez te tvrdnje i dalje trosi pokusaj (staro ponasanje).
+        MUTACIJA: uz tvrdnju se pokusaj vraca, ali dnevni slot NE, jer je poziv providera vec krenuo.
+        """
+        base = RecordingAdapters(verdicts=("blocked",))
+        out = cli.tick(config(mode="propose"), NOW, False, store=self.store, home=self.home, sources=ci_source(),
+                       adapters=base, profile=profile())
+        self.assertEqual(out["outcome"], "blocked")
+        self.assertEqual(self.store.get_task(out["claimed"])["attempts"], 1, "bez tvrdnje pokusaj ostaje potrosen")
+        self.store.transition(out["claimed"], "blocked", "queued", {}, NOW + 1)
+
+        adapters = RecordingAdapters(verdicts=("blocked",), extra={"attempt_spent": False,
+                                                                   "reason": "provider_unusable: codex sandbox"})
+        out = cli.tick(config(mode="propose"), NOW + 2, False, store=self.store, home=self.home, sources=ci_source(),
+                       adapters=adapters, profile=profile())
+        self.assertEqual(out["outcome"], "blocked")
+        task = self.store.get_task(out["claimed"])
+        self.assertEqual(task["attempts"], 1, "drugi claim je vracen; ostaje samo pokusaj iz prvog ticka")
+        self.assertEqual(self.store.daily_counter("jobs", NOW + 2), 2,
+                         "provider JE pokrenut u oba ticka, pa dnevni slot ostaje potrosen")
 
     def test_paused_store_does_nothing(self):
         self.store.set_paused(True)
@@ -278,7 +307,10 @@ class ReviewWithoutQueueWriteTest(unittest.TestCase):
         self.task = {"id": "task-1", "signal": {"scope": {"planTask": "T01"}}}
 
     def run_phase(self, phase, prep):
+        # Git okolina se mjeri zasebno (ImplementWorktreeGuardTest i TickPlanTaskTest); ovdje bi njezin izostanak
+        # samo maskirao ono sto se mjeri, jer je fixture repo obican direktorij, ne worktree.
         with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "implementation_worktree_blocked", return_value=None), \
              mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
             return self.adapters.run_phase(self.task, phase, profile())
 
@@ -342,12 +374,15 @@ class TickPlanTaskTest(unittest.TestCase):
     def tearDown(self):
         self.store.close()
 
-    def run_tick(self, sources, now=NOW):
-        adapters = GatedAdapters(config(mode="propose", workerRepoPath=self.repo), self.home)
+    def run_tick(self, sources, now=NOW, cfg=None, worktree_ok=True):
+        cfg = cfg or config(mode="propose", workerRepoPath=self.repo)
+        adapters = GatedAdapters(cfg, self.home)
         prep = mock.Mock(return_value=fake_job())
-        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+        guard = mock.patch.object(cli, "implementation_worktree_blocked", return_value=None) if worktree_ok \
+            else mock.patch.object(cli, "implementation_worktree_blocked", wraps=cli.implementation_worktree_blocked)
+        with mock.patch.object(cli, "prepare_job_via_node", prep), guard, \
              mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
-            out = cli.tick(config(mode="propose", workerRepoPath=self.repo), now, False, store=self.store,
+            out = cli.tick(cfg, now, False, store=self.store,
                            home=self.home, sources=sources, adapters=adapters, profile=profile())
         return out, prep
 
@@ -379,6 +414,145 @@ class TickPlanTaskTest(unittest.TestCase):
         self.assertEqual([p.get("agent") for p in out["phases"]][:3], ["astra", "sonnet", "astra"])
         self.assertEqual(prep.call_count, 3)
         self.assertEqual([c.args[1] for c in prep.call_args_list], ["T01", "T01", "T01"])
+
+    def test_implement_never_starts_a_writing_agent_in_a_shared_checkout(self):
+        """Popravak tocke 1 je fazu `implement` prvi put ucinio DOSTIZNOM, pa preduvjeti moraju postojati i ovdje.
+
+        Kontroler posao priprema kroz `prepare`, dakle bez `--execute`, i providera pokrece sam: tri provjere iz
+        `scripts/agents/cli.mjs` ga inace nikad ne dotaknu. Fixture repo nije git worktree, sto je tocno stanje
+        instalacijskog checkouta na masteru.
+        """
+        out, prep = self.run_tick(inbox_source("T01"), worktree_ok=False)
+        self.assertEqual(out["outcome"], "blocked", out)
+        last = out["phases"][-1]
+        self.assertEqual(last["phase"], "implementing")
+        self.assertTrue(str(last["reason"]).startswith("implement_unsafe"), out["phases"])
+        self.assertEqual(prep.call_count, 1, "priprema je izvedena samo za plan; implementacija nije ni krenula")
+        task = self.store.get_task(out["claimed"])
+        self.assertEqual(task["attempts"], 0, "blokada prije poziva ne trosi pokusaj")
+        self.assertEqual(self.store.daily_counter("jobs", NOW), 1,
+                         "plan JE pozvao model, pa se dnevni slot NE vraca")
+
+
+class DailyJobSlotTest(unittest.TestCase):
+    """Signali bez ciljnog zadatka ne smiju pojesti dan (nalaz 2026-09-13 nad cli.py).
+
+    Izmjereno prije popravka: izvor `ci` prati tri workflowa; kad su sva tri crvena, tri ticka zavrse kao
+    `needs_human` bez ijednog poziva modela, ali svaki potrosi jedan od tri dnevna slota, pa cetvrti tick javi
+    `idle: ... limit dosegnut` i signal s ispravnim `planTask` toga dana nikad ne dodje na red.
+    """
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo, maxNewJobsPerDay=3)
+
+    def tearDown(self):
+        self.store.close()
+
+    def sources(self):
+        # Tri crvena workflowa (prioritet 40, bez planTask) i jedan rucni signal s ispravnim ciljem (prioritet
+        # 25), dakle POSLJEDNJI u redu. Tocno raspored iz izmjerenog slucaja.
+        red = [dict(kind="ci_failure", location=f"check/w{n}@master", symptom=f"w{n} conclusion=failure",
+                    source_revision=SHA, observed_at=NOW - 60, scope={"area": "ci"}) for n in range(3)]
+        ready = dict(kind="manual", location="inbox/t01", symptom="pokreni T01", source_revision=SHA,
+                     observed_at=NOW - 60, scope={"area": "repo", "planTask": "T01"})
+        return [{"id": "inbox", "kind": "inbox", "items": red + [ready]}]
+
+    def run_tick(self, now):
+        adapters = GatedAdapters(self.cfg, self.home)
+        prep = mock.Mock(return_value=fake_job())
+        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "implementation_worktree_blocked", return_value=None), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            return cli.tick(self.cfg, now, False, store=self.store, home=self.home, sources=self.sources(),
+                            adapters=adapters, profile=profile()), prep
+
+    def test_three_signals_without_a_plan_task_do_not_starve_the_one_that_would_pass(self):
+        for n in range(3):
+            out, prep = self.run_tick(NOW + n)
+            self.assertEqual(out["outcome"], "needs_human", out)
+            self.assertEqual(prep.call_count, 0, "nijedan poziv modela nije krenuo")
+            self.assertEqual(self.store.daily_counter("jobs", NOW + n), 0,
+                             "slot koji nije potrosio model mora se vratiti")
+        out, prep = self.run_tick(NOW + 3)
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual(prep.call_count, 3, "sve tri faze ispravnog zadatka su izvedene")
+        self.assertEqual(self.store.daily_counter("jobs", NOW + 3), 1, "tek ovaj posao je potrosio slot")
+
+    def test_without_the_slot_refund_the_fourth_tick_is_idle(self):
+        """MUTACIJA nad mehanizmom: kad `refund_daily_job` nestane, cetvrti tick vise ne dobije posao.
+
+        Time je dokazano da zelenilo iznad dolazi bas od povrata slota, a ne od necega uzvodno.
+        """
+        real = Store.transition
+
+        def without_refund(store, task_id, expected, target, payload=None, now=None):
+            payload = dict(payload or {})
+            payload.pop("refund_daily_job", None)
+            return real(store, task_id, expected, target, payload, now)
+
+        with mock.patch.object(Store, "transition", without_refund):
+            for n in range(3):
+                self.assertEqual(self.run_tick(NOW + n)[0]["outcome"], "needs_human")
+            self.assertEqual(self.store.daily_counter("jobs", NOW + 2), 3)
+            out, prep = self.run_tick(NOW + 3)
+        self.assertIn("idle", out["outcome"])
+        self.assertEqual(prep.call_count, 0)
+
+
+class AmendedSignalTest(unittest.TestCase):
+    """Operaterov ispravak inbox datoteke mora stici do zadatka (nalaz 2026-09-13 nad signals.py/store.py)."""
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo)
+
+    def tearDown(self):
+        self.store.close()
+
+    def run_tick(self, sources, now):
+        adapters = GatedAdapters(self.cfg, self.home)
+        prep = mock.Mock(return_value=fake_job())
+        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "implementation_worktree_blocked", return_value=None), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            return cli.tick(self.cfg, now, False, store=self.store, home=self.home, sources=sources,
+                            adapters=adapters, profile=profile()), prep
+
+    def test_a_corrected_plan_task_reaches_the_task_on_the_next_tick(self):
+        """BASELINE: krivo napisan `planTask` je needs_human uz razlog koji IMENUJE oblik.
+
+        MUTACIJA (operaterov ispravak): ista datoteka s ispravnim `T01`, isti fingerprint, i zadatak se vraca
+        u red pa prolazi. Prije popravka je `signal_json` bio zamrznut na prvom upisu, zadatak je zauvijek
+        ostajao `needs_human`, a jedini izlaz je bio rucni zahvat u SQLite.
+        """
+        out, prep = self.run_tick(inbox_source("T7"), NOW)
+        self.assertEqual(out["outcome"], "needs_human")
+        self.assertEqual(prep.call_count, 0)
+        task_id = out["claimed"]
+        payload = json.loads(self.store.events(task_id)[-1]["sanitized_payload"])
+        self.assertIn("nije u obliku Tnn", payload["reason"], payload)
+        self.assertIn("T7", payload["reason"], "poruka mora reci STO je operater napisao")
+
+        out, prep = self.run_tick(inbox_source("T01"), NOW + 1)
+        self.assertEqual(out["claimed"], task_id, "ispravak ne stvara novi zadatak")
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual(prep.call_count, 3)
+        self.assertEqual([c.args[1] for c in prep.call_args_list], ["T01"] * 3)
+
+    def test_a_missing_plan_task_says_so_and_a_repeated_identical_signal_stays_put(self):
+        out, _ = self.run_tick(inbox_source(None), NOW)
+        payload = json.loads(self.store.events(out["claimed"])[-1]["sanitized_payload"])
+        self.assertIn("signal nema planTask", payload["reason"])
+        # NEGATIVNA KONTROLA: isti signal jos jednom, bez ijedne promjene, ne smije vratiti zadatak u red.
+        again, prep = self.run_tick(inbox_source(None), NOW + 1)
+        self.assertIn("idle", again["outcome"], again)
+        self.assertEqual(prep.call_count, 0)
+        self.assertEqual(self.store.get_task(out["claimed"])["status"], "needs_human")
 
 
 class BillingProfileTest(unittest.TestCase):

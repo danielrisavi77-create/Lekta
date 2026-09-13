@@ -32,9 +32,12 @@ QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b42
 LOGIN_RE = re.compile(r"(?i)not logged in|login required|please (?:run|sign in|log in)|unauthori[sz]ed|\b401\b|invalid api key|authentication failed|session expired|token expired")
 # Potpis NEUPOTREBLJIVE izvrsne okoline providera (Codex na Windowsu, izmjereno 2026-09-13 u zadatku 26ba9cf7):
 # svaki `exec` je odbijen pa model ne procita NISTA, a ipak uredno posalje `turn.completed`. Bez ovoga faza
-# plana prodje VAKUUMSKI kao `needs_verification`. Trazi se ISKLJUCIVO u stderru: model koji radi bas na tom
-# kvaru istu frazu doslovno napise u `agent_message` na stdoutu, pa bi skeniranje stdouta dalo lazni `blocked`.
+# plana prodje VAKUUMSKI kao `needs_verification`.
 SANDBOX_RE = re.compile(r"(?i)apply deny-read ACLs|Failed to create unified exec process")
+# Modelova PROZA u NDJSON izlazu. Potpis se u njoj NE priznaje: model koji radi bas na tom kvaru istu frazu
+# doslovno napise u svojoj poruci (u artefaktu 26ba9cf7 su obje fraze iskljucivo u `agent_message`). Sve ostalo
+# u NDJSON-u je strojno (`error`, izlaz naredbi) i skenira se, jer codex isti kvar zna prijaviti i strukturirano.
+PROSE_ITEM_TYPES = ("agent_message", "reasoning", "agent_reasoning", "todo_list")
 
 _IS_WINDOWS = os.name == "nt"
 
@@ -233,9 +236,110 @@ def prepare_job_via_node(root: str, task_id: str, phase: str, agent: str, *, tim
     return job
 
 
-def sandbox_unusable(stderr: str) -> bool:
-    """Je li providerova izvrsna okolina odbila SVAKI poziv. Samo stderr, nikad modelov tekst sa stdouta."""
-    return bool(SANDBOX_RE.search(stderr or ""))
+def ndjson_events(stdout: str) -> list[dict]:
+    """Redci NDJSON izlaza koji su valjani JSON objekti; neispravan redak se preskace, ne rusi citanje."""
+    events: list[dict] = []
+    for line in (stdout or "").splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(event, dict):
+            events.append(event)
+    return events
+
+
+def _item_type(event: dict) -> str:
+    item = event.get("item")
+    return str(item.get("type") or "") if isinstance(item, dict) else ""
+
+
+def machine_stdout(stdout: str) -> str:
+    """NDJSON stdout BEZ modelove proze: ostaju strojne stavke (greske, izlaz naredbi), svaka kao jedan redak."""
+    return "\n".join(json.dumps(e, ensure_ascii=False) for e in ndjson_events(stdout) if _item_type(e) not in PROSE_ITEM_TYPES)
+
+
+def sandbox_unusable(stderr: str, stdout: str = "", command: str | None = None) -> bool:
+    """Je li providerova izvrsna okolina odbila SVAKI poziv.
+
+    Stderr se cita cijeli: ondje su `codex_core::tools::router` redci iz izmjerenog artefakta. Stdout se cita
+    kao NDJSON i to SAMO strojne stavke, pa gard vidi i codex koji isti kvar prijavi strukturirano (bez ijednog
+    retka na stderru), a modelova proza ga ne moze okinuti. Claudeov `-p --output-format json` nije NDJSON nego
+    jedan objekt s modelovim tekstom, pa se za njega stdout ne skenira.
+    """
+    if SANDBOX_RE.search(stderr or ""):
+        return True
+    if command == "claude":
+        return False
+    return bool(SANDBOX_RE.search(machine_stdout(stdout)))
+
+
+def successful_tool_calls(command: str, stdout: str) -> int | None:
+    """Koliko je DOKAZANO uspjesnih citanja ili izvrsavanja provider zabiljezio u vlastitom izlazu.
+
+    Vlastiti brojac mehanizma, ne nizvodna mjera: nula znaci da faza nije procitala ni izvrsila nista, ma sto
+    pisalo u zavrsnoj poruci. `None` je NEPOZNATO i ne smije nista blokirati; Claude `-p --output-format json`
+    vraca jedan sazetak bez popisa alata, pa se za njega broj ne moze izmjeriti.
+
+    Popis je namjerno DENY (proza i greske), ne ALLOW (imena alata): allow lista bi na prvom preimenovanju
+    stavke tiho pala na nulu i blokirala svaki ispravan rad, dakle gard koji gasi ono sto stiti.
+    """
+    if command == "claude":
+        return None
+    total = 0
+    for event in ndjson_events(stdout):
+        if str(event.get("type") or "") != "item.completed":
+            continue
+        item = event.get("item")
+        if not isinstance(item, dict):
+            continue
+        kind = str(item.get("type") or "")
+        if kind in PROSE_ITEM_TYPES or kind == "error":
+            continue
+        exit_code = item.get("exit_code")
+        if exit_code is not None and exit_code != 0:
+            continue
+        if str(item.get("status") or "") == "failed":
+            continue
+        total += 1
+    return total
+
+
+def _git_output(repo: str, args: list[str]) -> tuple[int, str]:
+    out = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, check=False, shell=False, timeout=30)
+    return out.returncode, out.stdout.strip()
+
+
+def implementation_worktree_blocked(repo: str, *, git=None) -> str | None:
+    """Razlog zasto se agent S PRAVOM PISANJA ne smije pokrenuti u `repo`, ili None.
+
+    Ista tri preduvjeta koja `scripts/agents/cli.mjs run --execute` namece rucnom toku: zaseban git worktree,
+    feature grana, cisto stablo. Kontroler posao priprema kroz `prepare` (dakle BEZ `--execute`) i providera
+    pokrece sam, pa bi bez ove provjere pisao modelom izravno u instalacijski checkout na masteru, koji dijeli
+    s ljudskim radom. Do 2026-09-13 se to nije moglo dogoditi samo zato sto `implement` nikad nije bio dostizan.
+    """
+    run = git or (lambda args: _git_output(repo, args))
+    try:
+        values = []
+        for args in (["rev-parse", "--git-dir"], ["rev-parse", "--git-common-dir"],
+                     ["branch", "--show-current"], ["status", "--porcelain"]):
+            code, out = run(args)
+            if code != 0:
+                return f"implement_unsafe: git {' '.join(args)} nije uspio"
+            values.append(out)
+    except (OSError, subprocess.SubprocessError) as exc:
+        return f"implement_unsafe: git nije dostupan ({type(exc).__name__})"
+    git_dir, common_dir, branch, dirty = values
+    if os.path.realpath(os.path.join(repo, git_dir)) == os.path.realpath(os.path.join(repo, common_dir)):
+        return "implement_unsafe: nije zaseban git worktree"
+    if not branch or branch in ("master", "main"):
+        return f"implement_unsafe: {branch or 'odvojena glava'} nije feature grana"
+    if dirty:
+        return "implement_unsafe: radno stablo nije cisto"
+    return None
 
 
 def classify_stream(text: str) -> str | None:
@@ -287,7 +391,7 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
         "verdict": "blocked", "reason": None, "phase": phase, "provider": job.get("command"),
         "requested_model": job.get("requestedModel"), "reported_models": [], "exit_code": None,
         "process_tree_stopped": True, "isolated": None, "artifact_paths": [], "base_sha": job.get("baseSha"),
-        "candidate_sha": None, "launcher": None, "duration_s": 0.0,
+        "candidate_sha": None, "launcher": None, "duration_s": 0.0, "successful_tool_calls": None,
     }
     if phase not in ("plan", "implement", "review"):
         result["reason"] = f"nepoznata faza: {phase}"
@@ -361,7 +465,7 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
 
     # PRIJE classify_stream i PRIJE parse_provider_output: providerov `turn.completed` uz odbijen exec je lazno
     # zeleno, ne uspjeh. Pokusaj se ne trosi jer poziv nije ni mogao poceti raditi.
-    if sandbox_unusable(stderr):
+    if sandbox_unusable(stderr, stdout, str(job.get("command"))):
         result["verdict"] = "blocked"
         result["reason"] = "provider_unusable: codex sandbox"
         result["attempt_spent"] = False
@@ -382,6 +486,15 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if not model_matches(result["requested_model"], parsed["reported_models"]):
         result["verdict"] = "failed"
         result["reason"] = f"model_mismatch: trazen {result['requested_model']}, prijavljen {parsed['reported_models']}"
+        return result
+    # Opcenitije od potpisa sandboxa: plan i pregled su CITANJE, pa faza bez ijednog uspjesnog citanja ili
+    # izvrsavanja nije uspjeh nego prazan hod, bez obzira na to kojom se porukom provider pravdao. Nula je
+    # mjerodavna samo kad se broj MOZE izmjeriti; `None` (Claude) ne blokira nista.
+    result["successful_tool_calls"] = successful_tool_calls(str(job.get("command")), stdout)
+    if phase in ("plan", "review") and result["successful_tool_calls"] == 0:
+        result["verdict"] = "blocked"
+        result["reason"] = f"no_tool_use: faza {phase} bez ijednog uspjesnog citanja ili izvrsavanja"
+        result["attempt_spent"] = False
         return result
     result["verdict"] = "needs_verification"
     result["reason"] = "CLI je zavrsio strukturiranim uspjehom; nista jos nije provjereno"
