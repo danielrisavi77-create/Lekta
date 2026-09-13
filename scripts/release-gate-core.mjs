@@ -232,6 +232,7 @@ export function collectReleaseGate({
   git = defaultGit(rootDir),
   requiredIds = requiredTierIds(),
   treeDigest = null,
+  skipArtifactIdentity = false,
 } = {}) {
   const required = env.LEKTA_REQUIRE_RELEASE_PROOF === '1';
   const maxAgeDays = Number(env.LEKTA_PROOF_MAX_AGE_DAYS ?? '14');
@@ -246,9 +247,28 @@ export function collectReleaseGate({
   // ISTI izvor kojim je `write-build-info.mjs` odlucio sto upisati; time se dvije strane ne mogu raziti.
   const expectedCommit = resolveCommit(env, (cmd) => git.exec(cmd));
 
+  // IDENTITET ARTEFAKTA SE NE MJERI PRIJE NEGO ARTEFAKT POSTOJI.
+  //
+  // Slucajevi (a) i (b) govore o `dist/`, a `dist/build-info.json` nastaje tek u lancu gradnje
+  // (`build-production.mjs`, korak `build-info`). U postupku ciste ovjere (korak 5 u
+  // docs/deploy/RELEASE_PROOF_WORKFLOW.md) se poslije proof-only commita provjerava SAMO je li dokaz
+  // jos svjez, a artefakta tada jos nema: gate koji ondje bezuvjetno pada na (a) ne mjeri dokaz nego
+  // redoslijed, i to porukom koja salje u krivom smjeru ("npm run build-info nije prosao?").
+  //
+  // Zato SUZENJE, nikad gasenje: `skipArtifactIdentity` iskljucuje TOCNO (a) i (b) i to glasno
+  // imenuje u ispisu; presude (c), (d) i (e) ostaju netaknute. Da se ne bi tiho uvuklo u lanac objave,
+  // `verify-deploy-dist.mjs` tu zastavicu odbija, a `tests/release-gate-wiring.test.ts` tvrdi da je
+  // nijedan potrosac u lancu objave ne prosljedjuje.
   const buildInfoPath = path.join(distDir, 'build-info.json');
   const raw = fs.existsSync(buildInfoPath) ? fs.readFileSync(buildInfoPath, 'utf8') : null;
-  const bi = buildInfoVerdict({ raw, expectedCommit });
+  const bi = skipArtifactIdentity
+    ? {
+      blocking: [],
+      conditional: [],
+      notes: ['identitet artefakta NIJE mjeren (--proof-only): dist/build-info.json nastaje tek u lancu gradnje, a tu tvrdnju daje verify-deploy-dist'],
+      commit: null,
+    }
+    : buildInfoVerdict({ raw, expectedCommit });
 
   const proofPath = path.join(rootDir, 'docs', 'generated', 'RELEASE_PROOF.json');
   const exists = fs.existsSync(proofPath);
@@ -282,6 +302,43 @@ export function collectReleaseGate({
     head,
     expectedCommit,
     buildInfoCommit: bi.commit,
+    artifactIdentityMeasured: !skipArtifactIdentity,
+  };
+}
+
+/**
+ * ZAVRSNI REDAK ISPISA, i zasto nije kozmetika.
+ *
+ * Mek gate (razvojni CI, bez `LEKTA_REQUIRE_RELEASE_PROOF=1`) namjerno ne pada na "ne znam" i na
+ * zastarjeli dokaz. To je odluka o STROGOSTI, ne tvrdnja o dokazu. Do 2026-09-13 je ta razlika u
+ * ispisu nestajala: skripta bi ispisala upozorenje `ZASTARJELO`, pa kao ZADNJI redak `OK: ... stoje`
+ * i izasla s 0. Operater cita zadnji redak i izlazni kod, pa je iz toga zakljucivao da je svjezina
+ * potvrdjena, a nije bila ni izmjerena kao pad.
+ *
+ * `scripts/release-proof-core.mjs` isto pravilo vec ima za pojedinacnu presudu ("`stale` i `unknown`
+ * nikad ne sadrze OK"); ovdje vrijedi za zbroj: rijec OK se ne pojavljuje ni u jednom ishodu osim
+ * onoga u kojem NEMA nijednog nalaza.
+ *
+ * @param gate       povratna vrijednost `collectReleaseGate`
+ * @param opseg.ok    tvrdnja koja se smije izreci SAMO kad nema nijednog nalaza
+ * @param opseg.scope sto je ovaj poziv uopce mjerio (imenuje se i kad se nista ne potvrdjuje)
+ */
+export function gateSummaryLine(gate, { ok, scope }) {
+  const { failures = [], warnings = [], required = false } = gate ?? {};
+  if (failures.length) {
+    return { level: 'fail', text: `gate izdanja je PAO (nalaza: ${failures.length}): ${scope}.` };
+  }
+  if (warnings.length) {
+    return {
+      level: 'unconfirmed',
+      text:
+        `NIJE POTVRDJENO (nalaza: ${warnings.length}): ${scope}. Gornji nalazi nisu izmjereni kao pad `
+        + 'jer je gate MEK (LEKTA_REQUIRE_RELEASE_PROOF nije 1), pa ovo NIJE potvrda dokaza izdanja.',
+    };
+  }
+  return {
+    level: 'ok',
+    text: `OK: ${ok}${required ? '' : ' (gate je MEK: LEKTA_REQUIRE_RELEASE_PROOF nije 1)'}.`,
   };
 }
 

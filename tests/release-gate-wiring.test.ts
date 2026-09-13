@@ -35,6 +35,17 @@ describe('lanac objave zove PUNI gate', () => {
     }
   });
 
+  it('nijedan potrosac ne prosljedjuje --proof-only', () => {
+    // `--proof-only` postoji za korak 5 postupka, kad artefakta jos nema. U lancu objave bi znacio
+    // objavu bez ijedne tvrdnje o tome KOJI je build objavljen, dakle slucajeve (a) i (b) iz plana T19.
+    for (const [ime, tekst] of [['netlify.toml', NETLIFY], ['check.yml', CHECK_YML], ['VERIFY_STEP', VERIFY_STEP]] as const) {
+      expect(tekst, ime).not.toContain('--proof-only');
+    }
+    // Gard koji se oslanja samo na citanje konfiguracije ne bi vidio rucni poziv; deploy gate zato
+    // zastavicu i sam odbija (mjereno kao proces u tests/release-gate-cli.test.ts).
+    expect(DEPLOY_GATE).toContain("ARGV.includes('--proof-only')");
+  });
+
   it('deploy gate zove collectReleaseGate tocno jednom i svaki nalaz vodi u fail()', () => {
     const pozivi = DEPLOY_GATE.match(/collectReleaseGate\(/g) ?? [];
     expect(pozivi).toHaveLength(1);
@@ -62,6 +73,28 @@ describe('razvojni CI i release gate su dvije razlicite strogosti', () => {
     // stalna crvena koju svi nauce ignorirati, i time bi se izgubio i signal koji nadzor daje.
     expect(SMOKE_YML).toContain('--expect-commit');
     expect(SMOKE_YML).not.toContain('--strict-commit');
+  });
+});
+
+describe('operativni dokumenti opisuju isti korak istim naredbama', () => {
+  /**
+   * DVA DOKUMENTA O ISTOM KORAKU (nalaz pregleda, 2026-09-13). Kanonska lista spremnosti izdanja je
+   * propisivala smoke BEZ `--strict-commit` i uz to tvrdila da zaustavlja kad "commit nije kandidat".
+   * Bez te zastavice je neslaganje upozorenje uz izlaz 0, pa bi operater koji cita tu listu potvrdio
+   * krivu objavu uz zeleno.
+   */
+  it('release-readiness.md propisuje STROGI smoke za objavu', () => {
+    const readiness = procitaj('docs/quality/release-readiness.md');
+    const redak = readiness.split('\n').find((l) => l.startsWith('| objava |'));
+    expect(redak, 'redak "objava" u tablici obveznih provjera').toBeTruthy();
+    expect(redak).toContain('--strict-commit');
+  });
+
+  it('RELEASE_PROOF_WORKFLOW.md ne propisuje zastavicu koju skripta ne poznaje', () => {
+    const wf = procitaj('docs/deploy/RELEASE_PROOF_WORKFLOW.md');
+    expect(wf).toContain('--proof-only');
+    expect(wf).toContain('--strict-commit');
+    expect(procitaj('scripts/verify-release-proof.mjs')).toContain("argv.includes('--proof-only')");
   });
 });
 

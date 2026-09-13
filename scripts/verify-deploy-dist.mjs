@@ -13,7 +13,7 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
-import { collectReleaseGate } from './release-gate-core.mjs';
+import { collectReleaseGate, gateSummaryLine } from './release-gate-core.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); process.exit(1); };
@@ -39,6 +39,13 @@ const DIST_ARG = argValue('dist');
 if ((ROOT_ARG || DIST_ARG) && !PROOF_GATE_ONLY) {
   fail('--root i --dist su dopusteni SAMO uz --proof-gate-only; deploy gate se ne preusmjerava na drugo stablo');
 }
+// `--proof-only` (suzenje na dokaz, BEZ identiteta artefakta) postoji samo u `verify-release-proof.mjs`,
+// za korak 5 postupka, kad artefakta jos nema. Ovdje bi znacilo objavu bez ijedne tvrdnje o tome KOJI je
+// build objavljen, dakle tocno slucajeve (a) i (b) iz plana T19. Zato se ODBIJA, a ne presutno ignorira:
+// zastavica koja tiho ne radi nista je gora od nepostojece.
+if (ARGV.includes('--proof-only')) {
+  fail('--proof-only ne postoji u deploy gateu: pri objavi se identitet artefakta mora izmjeriti, ne preskociti (za korak 5 postupka postoji `npm run release:proof-gate -- --proof-only`)');
+}
 const ROOT = ROOT_ARG ? path.resolve(ROOT_ARG) : REPO_ROOT;
 const DIST = DIST_ARG ? path.resolve(DIST_ARG) : path.join(ROOT, 'dist');
 
@@ -63,7 +70,12 @@ if (!fs.existsSync(DIST)) fail('dist/ ne postoji');
   }
   if (gate.failures.length) fail(gate.failures.join(os.EOL));
   if (PROOF_GATE_ONLY) {
-    console.log('[verify-deploy-dist] OK: SAMO gate dokaza i identiteta artefakta (ostale provjere dist/ NISU izvedene).');
+    // Zadnji redak ne smije tvrditi vise od izmjerenoga: uz upozorenja (mek gate) se ne pise "OK".
+    const sazetak = gateSummaryLine(gate, {
+      ok: 'SAMO gate dokaza i identiteta artefakta (ostale provjere dist/ NISU izvedene)',
+      scope: 'SAMO gate dokaza i identiteta artefakta (ostale provjere dist/ NISU izvedene)',
+    });
+    console.log(`[verify-deploy-dist] ${sazetak.text}`);
     process.exit(0);
   }
 }

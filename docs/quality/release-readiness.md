@@ -26,7 +26,13 @@ ponovno proizvodi. Bez artefakta redak nije zelen.
 | dokaz izdanja | `npm run release:check` | `RELEASE_PROOF.json`, `complete: true`, `dirtyWorkingTree: false` | `complete: false` ili dokaz stariji od izvora (`treeDigest` razlicit) |
 | stvarni korpus | `LEKTA_LOCAL_CORPUS=1 ... repair-real-corpus.mts` | `repair-real-corpus.local.json` (izvan repozitorija) | `integrityFailureCount > 0` ili neobjasnjena `passRegressionCount > 0` u release skupu |
 | ovisnosti | `node scripts/npm-audit-ratchet.mjs` | ratchet `data/security/npm-audit-ratchet.json` | broj high/critical iznad stropa |
-| objava | `node scripts/post-deploy-smoke.mjs --require-build-info --expect-commit <sha>` | izlaz smokea, exit 0 | build-info nedostaje ili commit nije kandidat |
+| objava | `node scripts/post-deploy-smoke.mjs --require-build-info --expect-commit <sha> --strict-commit` | izlaz smokea, exit 0 | build-info nedostaje, identitet objave se ne da procitati, ili objavljeni sha nije kandidat |
+
+`--strict-commit` nije ukras: BEZ njega je neslaganje sha-a samo `::warning::` uz izlaz 0, jer je ta
+zastavica (bez stroge) periodicki nadzor nad namjerno zakljucanom objavom. Zavrsna potvrda izdanja
+mora biti stroga. Cijeli postupak ovjere i proof-only commita stoji u
+`docs/deploy/RELEASE_PROOF_WORKFLOW.md`; oba dokumenta opisuju isti korak i drzi ih usaglasenima
+`tests/release-gate-wiring.test.ts`.
 
 ## Kriteriji koje pilot dodaje (T15)
 

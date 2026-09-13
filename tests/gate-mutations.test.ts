@@ -43,7 +43,7 @@ import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
-import { buildInfoVerdict, releaseProofVerdict } from '../scripts/release-gate-core.mjs';
+import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict } from '../scripts/release-gate-core.mjs';
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
 import { proofSourceProblems } from '../src/verification/completion-ledger';
@@ -1377,6 +1377,26 @@ const MUTATIONS: Mutation[] = [
         head: 'a'.repeat(40),
         nowMs: DOKAZ_SADA,
       }).notes.join(' ').includes('dokaz o provjerama OK'),
+  },
+  {
+    id: 'objava/mek-gate-zavrsava-s-ok-uz-nalaz',
+    imitates:
+      'gate koji uz upozorenje `ZASTARJELO` kao ZADNJI redak ispise "OK: ... stoje" i izadje s 0. Mekoca je '
+      + 'odluka o STROGOSTI (razvojni CI dokaz ne pece jer trazi Word), ne tvrdnja o dokazu, a operater cita '
+      + 'bas taj redak i izlazni kod. `release-proof-core.mjs` isto pravilo vec ima za pojedinacnu presudu '
+      + '("stale i unknown nikad ne sadrze OK"); ovo je isti kvar na razini zbroja',
+    caught: () => {
+      const t = gateSummaryLine(
+        { failures: [], warnings: ['dokaz o provjerama: ZASTARJELO: ...'], required: false },
+        { ok: 'identitet artefakta i dokaz izdanja stoje', scope: 'identitet artefakta i dokaz izdanja' },
+      );
+      return t.level === 'unconfirmed' && !t.text.includes('OK') && t.text.includes('NIJE POTVRDJENO');
+    },
+    cleanBefore: () =>
+      gateSummaryLine(
+        { failures: [], warnings: [], required: true },
+        { ok: 'identitet artefakta i dokaz izdanja stoje', scope: 'identitet artefakta i dokaz izdanja' },
+      ).text.startsWith('OK: '),
   },
   {
     id: 'nadzor/objavljena-je-druga-verzija-a-smoke-suti',
