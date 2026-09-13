@@ -276,16 +276,24 @@ class WorkerTest(unittest.TestCase):
         self.assertFalse(sandbox_unusable("", SANDBOX_STDOUT, "codex"), "benigna greska ne smije okinuti gard")
         self.assertTrue(sandbox_unusable("", SANDBOX_STDOUT_STRUCTURED, "codex"))
 
-    def test_prose_is_stripped_before_the_signature_is_looked_for(self):
+    def test_only_cli_errors_are_scanned_for_the_signature(self):
         machine = machine_stdout(SANDBOX_STDOUT)
-        self.assertIn("Skill descriptions were shortened", machine, "strojna stavka ostaje")
+        self.assertIn("Skill descriptions were shortened", machine, "greska CLI-ja ostaje u opsegu")
         self.assertNotIn("apply deny-read ACLs", machine, "modelova proza se ne skenira")
         self.assertIn("apply deny-read ACLs", machine_stdout(SANDBOX_STDOUT_STRUCTURED))
-        # Claudeov izlaz je JEDAN objekt s modelovim tekstom, ne NDJSON; njegov stdout se zato ne skenira.
-        claude_out = json.dumps({"subtype": "success", "is_error": False,
-                                 "result": "pao je apply deny-read ACLs, nisam mogao citati"})
-        self.assertTrue(sandbox_unusable("", claude_out, "codex"), "kao NDJSON bi ovo pogodilo")
-        self.assertFalse(sandbox_unusable("", claude_out, "claude"))
+        # Izlaz naredbe se NE skenira, i to je nuzno: ovaj repozitorij frazu sada sadrzi (runbook, ovi
+        # testovi), pa bi agent koji tijekom plana procita runbook inace bio proglasen blokiranim.
+        read_the_runbook = json.dumps({"type": "item.completed", "item": {
+            "id": "item_t", "type": "command_execution", "command": "bash -lc 'cat docs/agents/autonomy-runbook.md'",
+            "aggregated_output": "potpis je `apply deny-read ACLs` i `Failed to create unified exec process`",
+            "exit_code": 0, "status": "completed"}})
+        self.assertFalse(sandbox_unusable("", read_the_runbook, "codex"),
+                         "citanje dokumentacije o kvaru nije kvar")
+        self.assertEqual(successful_tool_calls("codex", read_the_runbook), 1, "to je i dalje uspjesno citanje")
+        # Claudeov izlaz je JEDAN objekt s modelovim tekstom, ne NDJSON; njegov stdout se ne skenira uopce.
+        errorish = json.dumps({"type": "error", "message": "apply deny-read ACLs"})
+        self.assertTrue(sandbox_unusable("", errorish, "codex"))
+        self.assertFalse(sandbox_unusable("", errorish, "claude"))
 
     def test_sandbox_signature_matches_both_known_forms_and_nothing_else(self):
         self.assertTrue(sandbox_unusable('Rejected("Failed to create unified exec process: x")'))

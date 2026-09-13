@@ -84,9 +84,11 @@ python -m scripts.autonomy.cli report
 - **Codex koji je zavrsio uz odbijen exec je `blocked`, ne uspjeh.** Kad se pojavi potpis neupotrebljive
   izvrsne okoline (`apply deny-read ACLs`, `Failed to create unified exec process`), verdict je `blocked` uz
   razlog `provider_unusable: codex sandbox`, i pokusaj se ne trosi. Trazi se u STDERRU (ondje su
-  `codex_core::tools::router` redci iz izmjerenog artefakta) i u STDOUT NDJSON-u, ali ondje samo u STROJNIM
-  stavkama: modelova proza (`agent_message`, `reasoning`) se preskace, jer model koji radi bas na tom kvaru
-  istu frazu doslovno napise u svojoj poruci. Provjera ide prije `classify_stream` i prije parsiranja izlaza,
+  `codex_core::tools::router` redci iz izmjerenog artefakta) i u STDOUT NDJSON-u, ali ondje samo u `error`
+  stavkama, dakle u greskama koje javlja sam CLI. Modelova poruka se preskace, jer model koji radi bas na tom
+  kvaru istu frazu doslovno napise; izlaz naredbi se preskace, jer ovaj repozitorij frazu sada i sadrzi (ovaj
+  runbook), pa bi agent koji ga tijekom plana procita inace bio proglasen blokiranim. Sandbox koji odbija
+  svaki exec ionako ne moze proizvesti izlaz naredbe. Provjera ide prije `classify_stream` i prije parsiranja,
   jer model u tom stanju uredno posalje `turn.completed` (izmjereno 2026-09-13, artefakt
   `26ba9cf7-.../planning-f8994dab`).
 - **Plan i pregled bez ijednog uspjesnog citanja ili izvrsavanja nikad nisu `needs_verification`.** Mehanizam

@@ -34,9 +34,8 @@ LOGIN_RE = re.compile(r"(?i)not logged in|login required|please (?:run|sign in|l
 # svaki `exec` je odbijen pa model ne procita NISTA, a ipak uredno posalje `turn.completed`. Bez ovoga faza
 # plana prodje VAKUUMSKI kao `needs_verification`.
 SANDBOX_RE = re.compile(r"(?i)apply deny-read ACLs|Failed to create unified exec process")
-# Modelova PROZA u NDJSON izlazu. Potpis se u njoj NE priznaje: model koji radi bas na tom kvaru istu frazu
-# doslovno napise u svojoj poruci (u artefaktu 26ba9cf7 su obje fraze iskljucivo u `agent_message`). Sve ostalo
-# u NDJSON-u je strojno (`error`, izlaz naredbi) i skenira se, jer codex isti kvar zna prijaviti i strukturirano.
+# Modelova PROZA u NDJSON izlazu: sto god model kaze, nije citanje ni izvrsavanje. Sluzi brojacu uspjesnih
+# poziva alata; potpis kvara se trazi uze, samo u `error` stavkama (vidi `machine_stdout`).
 PROSE_ITEM_TYPES = ("agent_message", "reasoning", "agent_reasoning", "todo_list")
 
 _IS_WINDOWS = os.name == "nt"
@@ -258,8 +257,20 @@ def _item_type(event: dict) -> str:
 
 
 def machine_stdout(stdout: str) -> str:
-    """NDJSON stdout BEZ modelove proze: ostaju strojne stavke (greske, izlaz naredbi), svaka kao jedan redak."""
-    return "\n".join(json.dumps(e, ensure_ascii=False) for e in ndjson_events(stdout) if _item_type(e) not in PROSE_ITEM_TYPES)
+    """Dijelovi NDJSON stdouta u kojima potpis kvara ima smisla traziti: GRESKE koje javlja sam CLI.
+
+    Dvoje se namjerno preskace, i oba puta zbog istog razreda laznog pozitivnog nalaza. Modelova proza, jer
+    model koji radi bas na tom kvaru frazu doslovno napise u svojoj poruci. IZLAZ NAREDBI, jer ovaj
+    repozitorij frazu sada i SADRZI (runbook, ovi testovi, komentari), pa bi agent koji tijekom plana procita
+    runbook okinuo gard na savrseno ispravnom radu. Sandbox koji odbija svaki exec ionako ne moze proizvesti
+    izlaz naredbe: kvar se javlja kao greska CLI-ja, na stderru ili kao `error` stavka.
+    """
+    out = []
+    for event in ndjson_events(stdout):
+        item = event.get("item") if isinstance(event.get("item"), dict) else None
+        if str((item or event).get("type") or "") == "error":
+            out.append(json.dumps(item or event, ensure_ascii=False))
+    return "\n".join(out)
 
 
 def sandbox_unusable(stderr: str, stdout: str = "", command: str | None = None) -> bool:
