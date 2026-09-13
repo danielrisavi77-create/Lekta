@@ -48,7 +48,36 @@ python -m scripts.autonomy.cli report
 - `tick`: u `observe` upisuje signale i staje. U `propose` i `auto_low_risk` uzima najvise jedan posao
   (dnevni limit 3, 2 pokusaja po zadatku) i vodi ga planning -> implementing -> reviewing -> verifying ->
   ready_to_publish -> publishing, svaku fazu biljezi prije i poslije. `waiting_quota` i `needs_login` ne
-  trose pokusaj.
+  trose pokusaj, a od 2026-09-13 ni `no_ready_plan_task` ni `provider_unusable` (vidi nize).
+
+### Sto se trazi prije ijednog poziva modela (od 2026-09-13)
+
+- **Ciljni zadatak mora biti razrjesiv i `ready`.** Signal ga nosi u `scope.planTask` (oblik `T` + dvije
+  znamenke); kontroler ga trazi u `docs/agents/tasks.json`, koji cita SAMO za citanje i nikad ne mijenja.
+  Zadatak mora biti `ready` i sve ovisnosti `done`. Bez toga faza zavrsava kao `needs_human` uz razlog
+  `no_ready_plan_task: ...`, BEZ poziva modela i bez potrosenog pokusaja. Do tog datuma je kontroler slao
+  `planTask or "T00"` bez ijedne provjere: T00 je `done`, pa je plan trosio poziv modela, a implementacija
+  je odmah padala u `prepareJob` na `T00 must be ready`. Signal iz CI-ja nema `planTask`, pa se ciljni
+  zadatak zada kroz `inbox` izvor (`<home>/inbox/*.json`, `scope: {"planTask": "T17"}`).
+- **Faza pregleda se tvrdi iz kontrolerove evidencije, ne iz reda.** Kontroler pamti tko je implementirao
+  zadatak u ISTOM ticku i prosljedjuje to `scripts/agents/cli.mjs prepare` kroz nove, strogo opcionalne
+  opcije `--override-status in_review --override-implementer <agent>`. `prepareJob` ih primjenjuje samo u
+  `review` grani; `implement` i dalje cita sirovi status iz reda, pa override nije put kojim bi se zaobisla
+  provjera spremnosti. Pravilo "pregled trazi drugog providera" i dalje vrijedi. Bez tih opcija je rucni tok
+  `npm run agents prepare/run` nepromijenjen. Kad kontroler nema zapis o implementatoru (npr. tick koji nije
+  sam odradio implementaciju), pregled je `blocked` uz `implementer_unknown`; implementator se ne pogadja,
+  jer bi pogodak mogao biti isti provider kao recenzent i tiho ugasiti pravilo o drugom provideru.
+- **Codex koji je zavrsio uz odbijen exec je `blocked`, ne uspjeh.** Kad se u STDERRU providera pojavi potpis
+  neupotrebljive izvrsne okoline (`apply deny-read ACLs`, `Failed to create unified exec process`), verdict je
+  `blocked` uz razlog `provider_unusable: codex sandbox`, i pokusaj se ne trosi. Provjera ide prije
+  `classify_stream` i prije parsiranja izlaza, jer model u tom stanju uredno posalje `turn.completed` i u
+  `agent_message` napise da nije mogao procitati repozitorij (izmjereno 2026-09-13, artefakt
+  `26ba9cf7-.../planning-f8994dab`).
+
+  GRANICA TOG GARDA, da ne ostane precutna: mehanizirano je samo prepoznavanje POZNATOG potpisa, i to samo u
+  stderru (stdout se namjerno ne skenira, jer model koji radi bas na tom kvaru istu frazu doslovno citira u
+  svojoj poruci). Opcenito pravilo "plan ili pregled bez ijednog uspjesnog citanja ili izvrsenja ne smije biti
+  `needs_verification`" NIJE pokriveno: drugi oblik iste stete jos prolazi kao uspjeh.
 - `pause`: trajno (prezivi restart i novi proces); novi claim je nemoguc dok `resume` ne prodje.
   `resume` ne ponistava `needs_login`, `billing_unknown` ni zamrzavanje objava nakon povrata.
 - `status` i `report`: `status.json` i `status.md` (zadnji poll, aktivni posao, brojaci, upozorenja
