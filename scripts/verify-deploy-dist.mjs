@@ -10,17 +10,63 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 import { LEGAL_PAGES } from './lib/legal-pages.mjs';
-import { treeDigestFromLsTree, proofStaleness, formatStaleness } from './release-proof-core.mjs';
+import { collectReleaseGate } from './release-gate-core.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DIST = path.join(ROOT, 'dist');
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); process.exit(1); };
 
+// SAMO GATE DOKAZA (`--proof-gate-only`), i samo uz njega preusmjeravanje stabla (`--root`, `--dist`).
+//
+// Postoji iz jednog razloga: gate koji zivi unutar linearne skripte moze se inace mjeriti jedino nad
+// stvarnim `dist/` repozitorija, pa se u praksi mjeri cista funkcija a NE ozicenje, sto je tocno onaj
+// oblik laznog zelenog na koji CLAUDE.md upozorava. S ovom zastavicom se ista ulazna tocka vrti kao
+// pravi proces nad sintetickim stablom, pa test mjeri izlazni kod i poruku
+// (`tests/verify-deploy-dist-proof-gate-cli.test.ts`).
+//
+// Preusmjeravanje je vezano uz nju da se deploy gate ne bi mogao slucajno uperiti u drugo stablo, a
+// `tests/release-gate-wiring.test.ts` tvrdi da je nijedan potrosac u lancu objave ne koristi.
+const ARGV = process.argv.slice(2);
+const PROOF_GATE_ONLY = ARGV.includes('--proof-gate-only');
+const argValue = (name) => {
+  const i = ARGV.indexOf(`--${name}`);
+  return i >= 0 && ARGV[i + 1] ? ARGV[i + 1] : null;
+};
+const ROOT_ARG = argValue('root');
+const DIST_ARG = argValue('dist');
+if ((ROOT_ARG || DIST_ARG) && !PROOF_GATE_ONLY) {
+  fail('--root i --dist su dopusteni SAMO uz --proof-gate-only; deploy gate se ne preusmjerava na drugo stablo');
+}
+const ROOT = ROOT_ARG ? path.resolve(ROOT_ARG) : REPO_ROOT;
+const DIST = DIST_ARG ? path.resolve(DIST_ARG) : path.join(ROOT, 'dist');
+
 if (!fs.existsSync(DIST)) fail('dist/ ne postoji');
+
+// 0. IDENTITET ARTEFAKTA I DOKAZ IZDANJA (plan T19).
+//
+// Pet negativnih slucajeva koji moraju zaustaviti objavu zive u `release-gate-core.mjs`, zajedno s
+// obrazlozenjem: nedostajuci ili neispravan `build-info.json`, `build-info.json` s commitom koji nije
+// onaj koji se gradi, dokaz `stale` ili `unknown`, izvor promijenjen nakon ovjere, i obavezna razina
+// bez zapisanog prolaza. Ovdje je samo ozicenje.
+//
+// Gate je PRVI korak, ne zadnji: build koji ne zna koji je, ili nosi dokaz koji ne vrijedi, nema smisla
+// dalje provjeravati. "Ne znam" (nerazrjesiv commit, dokaz bez otiska) uz `LEKTA_REQUIRE_RELEASE_PROOF=1`
+// je PAD, ne prolaz; bez te zastavice je glasno upozorenje.
+{
+  const gate = collectReleaseGate({ rootDir: ROOT, distDir: DIST, env: process.env });
+  for (const n of gate.notes) console.log(`[verify-deploy-dist] ${n}`);
+  for (const w of gate.warnings) {
+    console.warn(`[verify-deploy-dist] UPOZORENJE: ${w}`);
+    console.warn('  Pokreni `npm run release:check`, pa postavi LEKTA_REQUIRE_RELEASE_PROOF=1 da gate postane tvrd.');
+  }
+  if (gate.failures.length) fail(gate.failures.join(os.EOL));
+  if (PROOF_GATE_ONLY) {
+    console.log('[verify-deploy-dist] OK: SAMO gate dokaza i identiteta artefakta (ostale provjere dist/ NISU izvedene).');
+    process.exit(0);
+  }
+}
 
 // 1. HTML bez dev alata. Do reza naslovnice (2026-09-05) je setup modal i QA konzola nosio SAMO
 //    index.html; sada zive na /rad/, pa se provjerava svaka stranica koja ih uopce moze imati.
@@ -48,16 +94,9 @@ for (const f of assets) {
 // 3. pravne stranice postoje i sadrze ocekivane markere
 // Popis je izdvojen u scripts/lib/legal-pages.mjs jer ga dijeli i post-deploy smoke; dok je bio
 // prepisan na dva mjesta, nova stranica se lako dodala samo u jedan alat.
-// Identitet builda (vanjski audit 2026-09-08, nalaz 3): `dist/build-info.json` pise `npm run build-info`
-// odmah nakon `vite build`; `post-deploy-smoke` ga cita sa zive stranice i usporedjuje s masterom.
-// Bez njega objavljeni commit nije citljiv nigdje osim po ponasanju u pregledniku.
-{
-  const p = path.join(DIST, 'build-info.json');
-  if (!fs.existsSync(p)) fail('dist/build-info.json ne postoji (npm run build-info nije prosao?)');
-  let info = null;
-  try { info = JSON.parse(fs.readFileSync(p, 'utf8')); } catch { fail('dist/build-info.json nije valjan JSON'); }
-  if (info && !/^[0-9a-f]{40}$/.test(String(info.commit ?? ''))) fail('dist/build-info.json nema 40-znamenkasti commit');
-}
+// Identitet builda (vanjski audit 2026-09-08, nalaz 3) provjerava korak 0 gore: `dist/build-info.json`
+// pise `npm run build-info` odmah nakon `vite build`, a od 2026-09-13 se usporedjuje i s commitom koji
+// se STVARNO gradi, ne samo s oblikom sha-a.
 
 for (const [file, marker] of LEGAL_PAGES) {
   const p = path.join(DIST, file);
@@ -424,129 +463,11 @@ if (fs.existsSync(naslovnicaDir)) {
   }
 }
 
-// DOKAZ O IZVEDENIM RAZINAMA PROVJERE (audit P0-13, P0-12).
-//
-// `npm run check` je samo Tier 0: ne otvara dokument nijednim stvarnim uredivacem. Tier 1
-// (python-docx) i Tier 2 (pravi Word) postoje kao skripte, ali su se pokretali rucno i odvojeno,
-// pa se za konkretan commit nije moglo reci JESU LI uopce izvedeni. `npm run release:check` vrti
-// sve razine i ostavlja potpisan trag; ovdje se taj trag provjerava.
-//
-// Gate je vezan uz `LEKTA_REQUIRE_RELEASE_PROOF=1`, a ne ukljucen bezuvjetno, jer bi inace prvi
-// sljedeci deploy pao dok vlasnik ne odvrti visesatni lanac. Kad ga jednom odvrti, postavi
-// zastavicu i dokaz postaje obavezan.
-{
-  /**
-   * Je li dokaz zastario u odnosu na ono sto se gradi: OTISAK STABLA, ne git povijest.
-   *
-   * Ne moze se samo usporediti `proof.commit !== HEAD`, jer je sam dokaz datoteka u repozitoriju:
-   * cim ga commitas, HEAD se pomakne i dokaz bi UVIJEK ispao zastario (koka i jaje). Zato dokaz nosi
-   * otisak stabla BEZ same datoteke dokaza (`treeDigest`, vidi `release-proof-core.mjs`), a ovdje se
-   * isti otisak racuna iz `git ls-tree -r <head>` i usporedjuje.
-   *
-   * DO 2026-09-09 OVDJE JE STAJAO `git diff --name-only <commitDokaza> <head>` S CATCH GRANOM KOJA JE
-   * VRACALA "NIJE ZASTARIO". U plitkom klonu (Netlify, CI bez fetch-depth) stari commit ne postoji
-   * ("fatal: bad object"), pa je gate ispisao "dokaz o provjerama OK" nad dokazom od kojeg se
-   * promijenilo 425 datoteka, dok je isti build u punom klonu padao (vanjski audit 2026-09-08,
-   * nalaz 1). `ls-tree` treba samo stablo HEAD-a, pa radi jednako u oba klona; a kad ni on ne uspije,
-   * presuda je `unknown`, sto je uz obavezan dokaz PAD, ne prolaz. "Ne znam" nikad ne izlazi kao zeleno.
-   */
-  const headDigestFor = (ref) => {
-    if (!ref) return null;
-    try {
-      return treeDigestFromLsTree(execSync(`git ls-tree -r ${ref}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
-    } catch {
-      return null;
-    }
-  };
-
-  // Najveca dopustena starost dokaza. Podesivo, jer je 14 dana odluka o riziku, a ne cinjenica.
-  const MAX_PROOF_AGE_DAYS = Number(process.env.LEKTA_PROOF_MAX_AGE_DAYS ?? '14');
-  const proofAgeDays = (proof) => {
-    const t = Date.parse(String(proof?.createdAt ?? ''));
-    if (!Number.isFinite(t)) return Number.POSITIVE_INFINITY; // bez vremena ne mozemo tvrditi da je svjez
-    return Math.floor((Date.now() - t) / 86_400_000);
-  };
-
-  const proofPath = path.join(ROOT, 'docs', 'generated', 'RELEASE_PROOF.json');
-  const required = process.env.LEKTA_REQUIRE_RELEASE_PROOF === '1';
-  const complain = (msg) => {
-    if (required) fail(`dokaz o provjerama: ${msg}`);
-    console.warn(`[verify-deploy-dist] UPOZORENJE: dokaz o provjerama: ${msg}`);
-    console.warn('  Pokreni `npm run release:check`, pa postavi LEKTA_REQUIRE_RELEASE_PROOF=1 da gate postane tvrd.');
-  };
-
-  // `COMMIT_REF` postavlja Netlify; ako se ne da razrijesiti u ovom klonu, pada se na HEAD; ako ni
-  // to ne ide, `head` ostaje prazan i presuda nize je `unknown` (do 2026-09-09 prazan `head` je
-  // TIHO PRESKAKAO provjeru zastarjelosti kroz `head &&`).
-  const resolvable = (ref) => {
-    try {
-      execSync(`git cat-file -e ${ref}^{commit}`, { cwd: ROOT, stdio: 'ignore' });
-      return true;
-    } catch {
-      return false;
-    }
-  };
-  let head = process.env.COMMIT_REF || '';
-  if (head && !resolvable(head)) head = '';
-  if (!head) {
-    try {
-      head = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
-    } catch {
-      head = '';
-    }
-  }
-
-  if (!fs.existsSync(proofPath)) {
-    complain('docs/generated/RELEASE_PROOF.json ne postoji');
-  } else {
-    let proof = null;
-    try {
-      proof = JSON.parse(fs.readFileSync(proofPath, 'utf8'));
-    } catch {
-      complain('RELEASE_PROOF.json nije valjan JSON');
-    }
-    if (proof) {
-      if (!proof.complete) {
-        const missing = Array.isArray(proof.missingRequired) ? proof.missingRequired.join(', ') : '?';
-        complain(`nije potpun, bez prolaza ostaju: ${missing}`);
-      } else if (proofStaleness(proof, headDigestFor(head)).verdict !== 'fresh') {
-        // Zastario dokaz je opasniji od nikakvog: izgleda kao potvrda za kod koji nije provjeren.
-        // `unknown` (nema otiska, nema `head`, `ls-tree` pao) se namjerno tretira ISTO kao `stale`.
-        const status = proofStaleness(proof, headDigestFor(head));
-        complain(formatStaleness(status, proof.commit, head));
-      } else if (proof.dirtyWorkingTree) {
-        complain('nastao je nad NECISTIM radnim stablom, pa ne pokriva sve sto se gradi');
-      } else if (proofAgeDays(proof) > MAX_PROOF_AGE_DAYS) {
-        // STAROST, ODVOJENO OD ZASTARJELOSTI PO COMMITU (audit P0-03).
-        //
-        // `staleAgainst` hvata promjenu KODA, ali ne i protek VREMENA. Dokaz smije ostati "svjez"
-        // po toj mjeri mjesecima ako se izmedju mijenjao samo sam dokaz, a Tier 1 i Tier 2 ovise o
-        // stvarima izvan repozitorija: verziji Worda, LibreOfficea, pythona i python-docxa. Prolaz
-        // od prije pola godine ne govori nista o tome kako se paket danas otvara.
-        complain(
-          `star je ${proofAgeDays(proof)} dana (dopusteno ${MAX_PROOF_AGE_DAYS}); Tier 1 i Tier 2 ovise o ` +
-          'verzijama Worda/LibreOfficea izvan repozitorija, pa stari prolaz ne dokazuje danasnje ponasanje',
-        );
-      } else {
-        console.log(`[verify-deploy-dist] ${formatStaleness(proofStaleness(proof, headDigestFor(head)), proof.commit, head)}.`);
-      }
-      // POTPUN DOKAZ NIJE ISTO STO I PUN DOKAZ, i to se ispisuje UVIJEK, i uz OK.
-      //
-      // `complete` znaci samo da je svaka OBAVEZNA razina prosla. Neobavezna razina (od 2026-09-06
-      // `extraction`, jer staging Supabase stoji INACTIVE) ostaje `unavailable`, a dokaz je i dalje
-      // "potpun". Bez ovog ispisa bi u dnevniku builda stajalo samo "OK", pa bi ustupak postao
-      // nevidljiv tocno ondje gdje se objavljuje.
-      const rupe = Array.isArray(proof?.results) ? proof.results.filter((r) => r && r.status !== 'pass') : [];
-      if (rupe.length) {
-        console.log(`[verify-deploy-dist] NIJE IZMJERENO (${rupe.length}), a dokaz se svejedno smatra potpunim:`);
-        for (const r of rupe) {
-          console.log(`  ${String(r.id)}: ${String(r.status)}${r.reason ? ` (${r.reason})` : ''} -- ${String(r.label ?? '')}`);
-        }
-        console.log('  To su svjesni ustupci, ne prolazi. Razlog i put natrag stoje uz razinu u scripts/release-check.mjs.');
-      }
-    }
-  }
-}
+// DOKAZ O IZVEDENIM RAZINAMA PROVJERE (audit P0-13, P0-12) se od 2026-09-13 izvodi u koraku 0 na vrhu
+// ove datoteke, kroz `collectReleaseGate` (scripts/release-gate-core.mjs). Ondje stoji i cijelo
+// obrazlozenje: zasto otisak stabla a ne `git diff` medju commitovima, zasto je `unknown` pad jednako
+// kao `stale`, i zasto se potpunost dokaza RACUNA iz `results[]` umjesto da se polje `complete` uzme
+// na rijec. Provjera je premjestena na pocetak jer build koji ne zna koji je nema smisla dalje mjeriti.
 
 // PRAVNI IDENTITET PRUZATELJA (audit A26-01, LEG-01/02/03).
 //
