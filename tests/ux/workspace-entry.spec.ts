@@ -35,11 +35,10 @@ const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
  * iznad, tako da svaki test koji dolazi do dna ekrana prvo raščisti traku.
  */
 async function odbijAnalitiku(page: Page): Promise<void> {
-  const odbij = page.locator('#analyticsDecline');
-  if (await odbij.isVisible().catch(() => false)) {
-    await odbij.click();
-    await expect(page.locator('#consentBanner')).toBeHidden();
-  }
+  // Bez isVisible() (ux-tok-gard gleda cijeli spec, vidi document-revisions.spec.ts i
+  // workspace-a11y.spec.ts): traka je opcionalna, pa se odbija klikom s kratkim rokom umjesto
+  // ocitavanjem stanja prije klika, sto je bila utrka.
+  await page.locator('#analyticsDecline').click({ timeout: 3_000 }).catch(() => {});
 }
 
 test('/rad/: radni prostor je vidljiv ODMAH, bez ijednog klika', async ({ page }) => {
