@@ -356,6 +356,27 @@ test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', 
    * vremena; ispisan broj bi tvrdio preciznost koju nema. Tvrdnja gleda cijeli vidljivi tekst
    * prikaza, ne pojedini element, jer bi provjera po ID-u prosla cim se broj preseli drugamo.
    */
+  /**
+   * UZROK (izmjereno na CI-ju, webkit, 2026-09-13): `startSpeculativeAnalysis` (app.ts, retci
+   * 1000-1011) krece 450 ms nakon promjene u `#wizardView`, dakle odmah nakon odabira datoteke,
+   * dok korisnik jos potvrdjuje profil. Fixture je sitan, worker tipicno gotov za 0,3-0,8 s
+   * (vidi komentar u analyze-docx-client.ts), pa na brzom CI stroju spekulacija zna zavrsiti
+   * PRIJE klika na potvrdu. `runAnalysis` (app.ts oko retka 1019, `_specHit`) tada posvoji vec
+   * GOTOV `_spec.promise`, pa `renderView('analiza')` postavi `#progressView` vidljivim i odmah
+   * ga skine u ISTOJ mikrozadaci: prvo Playwright ocitanje vec zatekne `resultView`. Prvi pokusaj
+   * je zato vidio 30 ocitanja "hidden" kroz punih 15 s (retry na ISTOM commitu prolazi, jer je
+   * drugi stroj/trenutak sporiji; lokalno na Windowsu isto prolazi).
+   *
+   * POPRAVAK ostaje deterministican bez slabljenja tvrdnje: usporava se MREZNI zahtjev za
+   * skriptu workera (jedini mrezni trag analize; sama provjera dokumenta je lokalna), tako da
+   * spekulacija sigurno jos traje kad klik na potvrdu stigne, a ekran provjere ostane vidljiv
+   * dovoljno dugo da ga se stvarno izmjeri.
+   */
+  await page.route('**/analyze-docx.worker*', async (route) => {
+    await new Promise((r) => { setTimeout(r, 2_500); });
+    await route.continue();
+  });
+
   await page.goto('/rad/');
   await cekajApp(page);
   await odbijAnalitiku(page); // vidi NALAZ C: potvrda profila zna zavrsiti iza trake privole
