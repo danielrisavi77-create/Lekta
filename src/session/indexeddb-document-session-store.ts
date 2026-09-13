@@ -1,6 +1,7 @@
 import {
   applyLocalDocumentSessionUpdate,
   LOCAL_DOCUMENT_TTL_MS,
+  isExpiredLocalDocumentSessionRecord,
   isLocalDocumentSessionId,
   sanitizeLocalDocumentSession,
   summarizeLocalDocumentSession,
@@ -26,7 +27,9 @@ export type LocalDocumentSessionStoreErrorCode =
   | 'transaction'
   | 'not-found'
   | 'invalid-record'
-  | 'conflict';
+  | 'conflict'
+  /** Zapis postoji, ali mu je rok od 24 h prosao (C7). Razlikuje se od `not-found` da sucelje moze reci istinu. */
+  | 'expired';
 
 export interface LocalDocumentSessionStorageInfo {
   kind: 'indexeddb' | 'memory';
@@ -54,6 +57,7 @@ function messageFor(code: LocalDocumentSessionStoreErrorCode): string {
     case 'not-found': return 'Lokalna dokumentna sesija više ne postoji ili je istekla.';
     case 'invalid-record': return 'Lokalna dokumentna sesija nije valjana.';
     case 'conflict': return 'Rad je u međuvremenu spremljen s drugog mjesta; promjena nije primijenjena.';
+    case 'expired': return 'Lokalni zapis rada je istekao (24 sata); promjena nije primijenjena.';
   }
 }
 
@@ -156,6 +160,8 @@ export class MemoryDocumentSessionStore implements LocalDocumentSessionStore {
     expectedRevision?: number,
   ): Promise<LocalDocumentSessionV1> {
     const now = this.currentTime();
+    // Istek se gleda PRIJE `get`, jer `get` istekao zapis brise i vraca `null`, cime bi razlog nestao.
+    if (isExpiredLocalDocumentSessionRecord(this.records.get(id), now)) throw storeError('expired');
     const current = await this.get(id, now);
     if (!current) throw storeError('not-found');
     // Ista semantika kao kod trajne pohrane, inace testovi rute mjere drukciji ugovor od produkcije.
@@ -335,6 +341,9 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
       }
       citanje.onerror = () => { fail('request', citanje.error); };
       citanje.onsuccess = () => {
+        // Istekao zapis dobiva VLASTITI kod (C7): sanitizacija ga inace svede na `not-found`, a
+        // korisniku je razlika izmedju "rok je prosao" i "zapisa nema" upravo ono sto treba znati.
+        if (isExpiredLocalDocumentSessionRecord(citanje.result, now)) { fail('expired'); prekini(); return; }
         const current = sanitizeLocalDocumentSession(citanje.result, now);
         if (!current) { fail('not-found'); prekini(); return; }
 

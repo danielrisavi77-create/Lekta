@@ -7,6 +7,7 @@ import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
 import { createConfirmedProfile } from './confirmed-profile';
 import { createRepairSelectionMemory } from './repair-selection';
+import { createSaveIndicator } from './save-indicator';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
@@ -101,6 +102,11 @@ async function start(): Promise<void> {
 
   const storage = detectStorage();
   let sessionId: string | null = null;
+  // C7: JEDAN indikator stanja zapisa za SVA cetiri proizvodjaca ishoda (dokument, revizije, profil,
+  // odabir). Zivi u `#radDocBar` (vidljiv tek uz dokument, izrecena odluka u `save-indicator.ts`).
+  // `storage-off` ide odmah, da nijedan kasniji dogadjaj ne moze proizvesti tvrdnju o zapisu bez pohrane.
+  const indikator = createSaveIndicator({ mount: () => document.getElementById('radDocSave') });
+  indikator.apply({ kind: storage.kind === 'available' ? 'storage-on' : 'storage-off' });
   // Stanje se DRZI i osvjezava. Zapisano jednom pri ucitavanju, tvrdilo bi `empty` i nakon sto
   // korisnik ucita dokument; ustajala tvrdnja o stanju gora je od nikakve, jer je netko procita.
   // Knjiga sesije. Do 2026-09-12 je ovdje zivio i upis `data-workspace-state` na <html>; atribut
@@ -136,6 +142,7 @@ async function start(): Promise<void> {
     esc: (v) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'),
     status: showStatus,
     track: trackWorkspaceEvent,
+    onSaveEvent: indikator.apply,
   });
   // C4: potvrdjeni profil se pamti uz sesiju i vraca pri obnovi. Pretplata ide PRIJE
   // `openWorkspace` iz istog razloga kao gore: objava ide nad kopijom skupa pretplatnika.
@@ -145,6 +152,7 @@ async function start(): Promise<void> {
     apply: applyConfirmedProfileSelection,
     status: showStatus,
     track: trackWorkspaceEvent,
+    onSaveEvent: indikator.apply,
   });
   subscribeProfileConfirmed((event) => profil.onConfirmed(event));
   // C6: odabir popravaka se pamti po identitetu (`fixerId|ruleId`) i vraca na PRVI panel ciji se
@@ -155,8 +163,15 @@ async function start(): Promise<void> {
     sessionId: () => sessionId,
     status: showStatus,
     track: trackWorkspaceEvent,
+    onSaveEvent: indikator.apply,
   });
   subscribeRepairPanelReady((event) => odabir.onPanel(event));
+  // C7: ZATVARANJE KARTICE. Pisac koalescira 250 ms, a `dispose()` ono sto ceka ODBACUJE, pa se do
+  // C7 zadnja odluka prije zatvaranja tiho gubila dok je indikator pokazivao "Zapisujem". `pagehide`
+  // (ne `beforeunload`: ovaj se okida i pri bfcache-u i na mobilnom) prazni OBA pisca odmah. Ishod
+  // stize kroz `onOutcome` kao i inace, pa indikator ostaje na `saving` dok zapis stvarno ne prodje;
+  // "saving koje nikad ne zavrsi" tako nikad ne postane "spremljeno".
+  window.addEventListener('pagehide', () => { void profil.flush(); void odabir.flush(); });
   subscribeAnalyzerResultReady((event) => {
     revisions.onResult(event.result);
     // T13: komentari iz paketa postaju lokalni zadaci; bez komentara sekcija ostaje skrivena. Citanje paketa je lokalno.
@@ -182,8 +197,14 @@ async function start(): Promise<void> {
     // Drugi dokument: snimka odabira iz sesije opisuje ponudu koja za njega nikad nece nastati.
     odabir.forget();
     void (async () => {
+      indikator.apply({ kind: 'queued' });
       const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
       upisi(afterPersist(context, out.kind === 'persisted'));
+      // Zapis dokumenta je isti razred cinjenice kao zapis profila: `persisted` je potvrdjen upis,
+      // `skipped` znaci da pohrane nema, `failed` da ju je pohrana odbila.
+      indikator.apply(out.kind === 'skipped'
+        ? { kind: 'storage-off' }
+        : { kind: 'outcome', outcome: out.kind === 'persisted' ? { kind: 'written', revision: 0, at: Date.now() } : { kind: 'failed', reason: 'persist' } });
       if (out.kind !== 'persisted') { showStatus(out.notice); return; }
       sessionId = out.sessionId;
       // `replaceState`, ne `pushState`: zapis sesije nije korisnikova navigacija, pa ne smije

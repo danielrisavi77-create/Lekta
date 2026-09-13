@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { readSelectionIds, type SelectionIds } from '../src/ui/profile-selection-ids';
 import { subscribeProfileConfirmed, type ProfileConfirmed } from '../src/ui/profile-confirmed-events';
 import { createConfirmedProfile, NOTICE_PROFILE_MISMATCH } from '../src/routes/workspace/confirmed-profile';
+import { profileUpdatesInFlight, profileUpdatesSettled } from '../src/ui/profile-update-signal';
 
 /**
  * OBNOVA POTVRDJENOG PROFILA IZ SESIJE (korak C4, 2026-09-12), nad stvarnom radnom povrsinom
@@ -64,8 +65,28 @@ type Api = typeof import('../src/ui/app');
  * Prije demontaze se ceka da se asinkroni `updateProfile` (lijeno ucitavanje pravila) smiri: nakon
  * `disposeAnalyzerApp` `$()` pada na globalni `document` bez obrasca, pa bi obecanje u letu puklo
  * kao neobradjeno odbijanje i oborilo cijeli run, iako tvrdnje testa prolaze.
+ *
+ * SIGNAL, NE SAT (C7, 2026-09-13). Do C7 je ovdje stajao fiksni tajmer od 400 ms, koji je pod
+ * opterecenjem vec jednom pao ("URL is not a constructor") i na zelenom gateu ostavljao neobradjene
+ * poruke. `profileUpdatesSettled()` se ispuni kad nijedan `updateProfile` nije u letu, pa cekanje
+ * mjeri dogadjaj, a ne vrijeme. Rok je samo osigurac protiv repa koji nikad ne zavrsi.
  */
-const settle = (ms = 400) => new Promise<void>((r) => setTimeout(r, ms));
+async function settle(): Promise<void> {
+  // Rucka tajmera se cuva i cisti u finally: inace svaki poziv ostavlja jedan zivi setTimeout od
+  // 30 s koji nadzivi test i drzi event loop (adversarijalna provjera C7, nalaz 2).
+  let tajmer: ReturnType<typeof setTimeout> | undefined;
+  const rok = new Promise<never>((_, reject) => {
+    tajmer = setTimeout(() => reject(new Error('updateProfile se nije smirio u 30 s')), 30_000);
+  });
+  try {
+    await Promise.race([profileUpdatesSettled(), rok]);
+  } finally {
+    clearTimeout(tajmer);
+  }
+  // SENTINEL: signal je ispunjen tek kad brojac repova stoji na nuli; inace bi se demontaza dogodila
+  // usred repa, sto je tocno kvar koji je tajmer skrivao.
+  expect(profileUpdatesInFlight()).toBe(0);
+}
 
 async function withMountedApp<T>(fn: (api: Api, doc: Document) => Promise<T>): Promise<T> {
   const api = await import('../src/ui/app');

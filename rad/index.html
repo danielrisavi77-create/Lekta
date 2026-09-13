@@ -20,6 +20,10 @@
     <a class="logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
     <div class="rad-doc hidden" id="radDocBar">
       <span class="rad-doc-name" id="radDocName"></span>
+      <!-- C7: STANJE LOKALNOG ZAPISA. Trajno stanje, ne obavijest: BEZ role=status i BEZ aria-live,
+           inace bi svaki klik ponavljao "Spremljeno" citacu ekrana. Jednokratne obavijesti ostaju u
+           #workspace-status. Pise ga iskljucivo save-indicator.ts; skriven dok nema sto reci. -->
+      <span class="rad-doc-save" id="radDocSave" data-save-state="idle" hidden></span>
       <!-- ZNACKA GOVORI O ANALIZI, i to je vazna razlika. Analiza radi u pregledniku i dokument
            ne odlazi nikamo. Automatski popravak je jedini tok koji dokument SALJE na posluzitelj,
            i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora

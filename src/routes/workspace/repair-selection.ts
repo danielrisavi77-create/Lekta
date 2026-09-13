@@ -31,6 +31,7 @@ import {
 } from '../../ui/repair-selection';
 import type { LocalDocumentSessionStore, RepairSelectionSnapshot } from '../../session/local-document-session';
 import { createSessionWriter, type SessionWriteOutcome, type SessionWriter } from '../../session/session-writer';
+import type { SaveEvent } from './save-state';
 
 export interface RepairSelectionMemoryDeps {
   /** Pohrana sesija; `null` kad nije dostupna (tada se nista ne ceka ni ne obecava). */
@@ -44,6 +45,8 @@ export interface RepairSelectionMemoryDeps {
   clearTimeoutImpl?: (handle: unknown) => void;
   /** Ima li stavka naprednu formu; zadano `advancedFormFor(item) !== null`. Injektirano radi testova. */
   isAdvanced?: (item: RepairableItem) => boolean;
+  /** Indikator spremanja (C7), isti ugovor kao u `confirmed-profile.ts`: `queued` pri predaji pisacu, `outcome` na ishod. */
+  onSaveEvent?: (event: SaveEvent) => void;
 }
 
 export type RepairSelectionRestoreOutcome = 'none' | 'applied' | 'digest-mismatch' | 'schema';
@@ -95,6 +98,7 @@ export function createRepairSelectionMemory(deps: RepairSelectionMemoryDeps) {
   function onOutcome(outcome: SessionWriteOutcome): void {
     state.lastOutcome = outcome;
     state.claimedSaved = outcome.kind === 'written';
+    deps.onSaveEvent?.({ kind: 'outcome', outcome });
     if (outcome.kind === 'written') { deps.track?.('session_repair_selection_written'); return; }
     deps.track?.('session_repair_selection_not_saved', { kind: outcome.kind });
     deps.status(outcome.kind === 'conflict' ? NOTICE_SELECTION_CONFLICT : NOTICE_SELECTION_NOT_SAVED);
@@ -136,6 +140,7 @@ export function createRepairSelectionMemory(deps: RepairSelectionMemoryDeps) {
     const w = writerNow();
     if (!w) return;
     state.writes += 1;
+    deps.onSaveEvent?.({ kind: 'queued' });
     w.enqueue({ workspace: { stage: 'repairPlan', repairSelection: snapshot } });
   }
 

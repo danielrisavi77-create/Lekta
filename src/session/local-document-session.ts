@@ -358,6 +358,20 @@ type ValidLocalDocumentSessionRecord = Record<string, unknown> & {
   expiresAt: number;
 };
 
+/**
+ * JE LI ZAPIS ISTEKAO, kao razlikovan odgovor (korak C7, 2026-09-13).
+ *
+ * `sanitizeLocalDocumentSession` vraca `null` i za istekao i za nevaljan zapis, pa je zapis nakon
+ * isteka od 24 h (`LOCAL_DOCUMENT_TTL_MS`) do C7 zavrsavao kao `not-found` iz pohrane i kao
+ * `failed/unknown` u sucelju: korisnik je citao "zapis nije uspio" za rad kojem je jednostavno
+ * istekao rok. Ovdje se gleda SAMO rok, nad sirovim zapisom, prije sanitizacije; ostale nevaljanosti
+ * ostaju ono sto jesu. Rok se NE mijenja.
+ */
+export function isExpiredLocalDocumentSessionRecord(value: unknown, now: number): boolean {
+  if (!isRecord(value) || !isFiniteTimestamp(value.expiresAt) || !isFiniteTimestamp(now)) return false;
+  return value.expiresAt <= now;
+}
+
 function validLocalDocumentSessionRecord(
   value: unknown,
   now: number,

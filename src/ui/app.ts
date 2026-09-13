@@ -39,7 +39,8 @@ import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../su
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
 import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
-import { renderRepairPanel, renderConfirmation, advancedFormFor, DEEP_TOGGLE_HTML, buildRepairItemList, buildRepairPanelHandle, type RepairPanelHandle } from './repair-panel';
+import { renderRepairPanel, renderConfirmation, advancedFormFor, DEEP_TOGGLE_HTML, DEEP_CAPABLE, buildRepairItemList, buildRepairPanelHandle, type RepairPanelHandle } from './repair-panel';
+import { trackProfileUpdate } from './profile-update-signal';
 import { bindRepairWorkflow } from './repair-workflow-binding';
 import { recoveryFor } from '../repair/recovery-policy';
 import { renderRepairRecovery } from './repair-recovery-view';
@@ -796,7 +797,8 @@ function workTypeLabel(v: any){return (WORK_TYPE_LABELS as any)[v]||v}
 // BL-P0-05-1 + faza B: teska profilna pravila stizu PO PROFILU (ensureProfileRules(id) preko
 // providera). updateProfile cita currentProfile()->definition.rules pa mora pricekati dohvat;
 // picker/hero rade odmah. Kvar dohvata currentProfile posteno degradira (vidi branu gore).
-async function updateProfile(){
+function updateProfile(){return trackProfileUpdate(_updateProfile())}
+async function _updateProfile(){
  await ensureRulesForCurrentSelection(currentDefinitionId,ensureProfileRules);
  const {p}=currentProfile(),sel=p.selection,sm=(PROFILE_STATUS as any)[p.statusKey]||PROFILE_STATUS.generic,am=p.authority||PROFILE_AUTHORITY.generic;
  const sourceHtml=p.sources?.length?`<div class="source-stack">${p.sources.map((s: any)=>`<div class="source-line">Službeni izvor: <a href="${escapeHtml(safeHref(s.url))}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a></div>`).join('')}${p.verifiedAt?`<div class="source-line">Ručno provjereno: ${escapeHtml(new Date(p.verifiedAt+'T12:00:00').toLocaleDateString('hr-HR'))}${p.documentDate?' · Dokument: '+escapeHtml(p.documentDate):''}${academicYearFromDate(p.verifiedAt)?' · ak. godina verifikacije: '+escapeHtml(academicYearFromDate(p.verifiedAt)):''}</div>`:''}</div>`:`<div class="source-line">Posebna pravila još nisu povezana s provjerenim službenim izvorom. Primjenjuje se generička provjera.</div>`;
@@ -1899,7 +1901,6 @@ async function renderRepairSection(r: any){
 // -> auth -> uploadRepair (repair-docx) -> preuzmi vraceni docx + lokalni recheck spremnosti.
 // Doslovni tekst rada ne ide u meta (samo otisak-struktura + sanitizirani signali). Fixer DEEP flag
 // se salje kao param (server pokrene ISTE fixere, tamne K5/K6/K7 sam preskace dok WS-4 ne prodje).
-const _SERVER_DEEP_FIXERS=new Set(['font-fixer','line-spacing-fixer','alignment-fixer','paragraph-spacing-fixer','footnote-spacing-fixer']);
 // Hrvatska sklonidba uz broj: 1 izmjena, 2-4 izmjene, 5+ izmjena (iznimka 11-14 -> izmjena).
 function _plIzmjena(n: number){const d=n%10,dd=n%100;if(d===1&&dd!==11)return`${n} izmjena`;if(d>=2&&d<=4&&!(dd>=12&&dd<=14))return`${n} izmjene`;return`${n} izmjena`}
 // K4: literatura za provjeru postojanja u hrvatskom korpusu (placeni dodatak uz popravak). Naslov se
@@ -1992,7 +1993,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   verify:async(out: any)=>out?.kind==='ok'?{ok:true}:{ok:false,error:String(out?.kind||'nepoznat ishod')}});
  // Isti v2 dubinski preklopnik i disclosure recenica kao lokalni panel (RE-35: prije je serverski
  // put PRISILNO ukljucivao deep bez ijedne rijeci u copyju).
- const deepAvailable=items.some((i: any)=>_SERVER_DEEP_FIXERS.has(i.fixerId));
+ const deepAvailable=items.some((i: any)=>DEEP_CAPABLE.has(i.fixerId));
  let deepToggle: any=null;
  if(deepAvailable){
   const deepRow=document.createElement('label');deepRow.className='lekta-repair-panel__deep';
@@ -2052,7 +2053,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const okTextIds=new Set(Array.from(wrap.querySelectorAll('[data-text-apply]')).filter((c: any)=>c.checked).map((c: any)=>c.value));
    const deep=deepToggle?.checked===true;
    const chosen=[...chosenItems,...textItems.filter((it: any)=>okTextIds.has(it.ruleId))];
-   const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&_SERVER_DEEP_FIXERS.has(it.fixerId))?{...it.params,deep:true}:it.params}));
+   const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&DEEP_CAPABLE.has(it.fixerId))?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
    const {buildRepairMeta}=await loadRepairClient();
    // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,

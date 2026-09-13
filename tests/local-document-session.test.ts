@@ -1446,4 +1446,43 @@ describe('IndexedDbDocumentSessionStore', () => {
     expect((await store.get(SESSION_ID))?.workspace?.stage,
       'podmetnut bezuvjetan upis MORA pregaziti, inace tvrdnja o CAS-u ne znaci nista').toBe('profile');
   });
+
+  /**
+   * ISTEK 24 h U TRAJNOJ POHRANI (C7, adversarijalna provjera 2026-09-13).
+   *
+   * Memorijska pohrana je imala gard za kod `expired`, produkcijska (IndexedDB) NIJE: kad se u
+   * `update` ukloni redak s `fail('expired')`, istekao zapis prolazi kroz sanitizaciju i javi
+   * `not-found`, a sva tri test skupa ostaju zelena. Ovaj test zatvara tu rupu.
+   *
+   * Sentinel: zapis prije isteka STVARNO postoji (`get` ga vraca), inace bi `expired` i `not-found`
+   * bili nerazlucivi nad praznom bazom i tvrdnja bi bila vakuumska.
+   * Kontrola: isti zapis se PRIJE isteka uredno azurira, inace tvrdnja o odbijanju vrijedi i za
+   * pokvaren store.
+   */
+  it('update na istekao zapis u IndexedDB pohrani javlja expired, ne not-found', async () => {
+    let sat = CREATED_AT + 1_000;
+    const fake = new FakeIndexedDbFactory();
+    const store = new IndexedDbDocumentSessionStore({
+      indexedDB: fake as unknown as IDBFactory,
+      keyRange: fakeKeyRange(),
+      now: () => sat,
+    });
+    await store.put(makeSession());
+
+    // SENTINEL: zapis postoji prije isteka.
+    await expect(store.get(SESSION_ID)).resolves.toMatchObject({ id: SESSION_ID });
+    expect(fake.database.records.has(SESSION_ID), 'sentinel: zapis mora biti u bazi').toBe(true);
+
+    // KONTROLA: prije isteka update prolazi.
+    await expect(store.update(SESSION_ID, { workspace: { stage: 'results' } }))
+      .resolves.toMatchObject({ id: SESSION_ID, workspace: { stage: 'results' } });
+
+    // Sat prelazi apsolutni rok (update ga ne produljuje: expiresAt = createdAt + TTL).
+    sat = CREATED_AT + LOCAL_DOCUMENT_TTL_MS + 1;
+    const greska = await store.update(SESSION_ID, { workspace: { stage: 'comparison' } })
+      .then(() => null, (e: unknown) => e);
+    expect(greska).toBeInstanceOf(LocalDocumentSessionStoreError);
+    expect((greska as LocalDocumentSessionStoreError).code,
+      'istek mora imati VLASTITI kod; not-found bi sucelju rekao "zapisa nema" umjesto "rok je prosao"').toBe('expired');
+  });
 });

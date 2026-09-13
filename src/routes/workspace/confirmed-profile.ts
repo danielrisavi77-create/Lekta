@@ -26,6 +26,7 @@
 import type { ProfileConfirmed } from '../../ui/profile-confirmed-events';
 import type { ConfirmedProfileSnapshot, LocalDocumentSessionStore } from '../../session/local-document-session';
 import { createSessionWriter, type SessionWriteOutcome, type SessionWriter } from '../../session/session-writer';
+import type { SaveEvent } from './save-state';
 
 export interface ConfirmedProfileDeps {
   /** Pohrana sesija; `null` kad nije dostupna (tada se nista ne ceka ni ne obecava). */
@@ -39,6 +40,11 @@ export interface ConfirmedProfileDeps {
   /** Tajmeri pisaca, injektirani radi testova bez cekanja. */
   setTimeoutImpl?: (fn: () => void, ms: number) => unknown;
   clearTimeoutImpl?: (handle: unknown) => void;
+  /**
+   * Indikator spremanja (C7): `queued` kad snimka ode pisacu, `outcome` kad pisac javi ishod. Neobavezan,
+   * jer modul mora raditi i bez zaglavlja; jednokratna obavijest kroz `status` ostaje neovisno o njemu.
+   */
+  onSaveEvent?: (event: SaveEvent) => void;
 }
 
 export type ConfirmedProfileRestore = 'none' | 'applied' | 'mismatch';
@@ -83,6 +89,7 @@ export function createConfirmedProfile(deps: ConfirmedProfileDeps) {
   function onOutcome(outcome: SessionWriteOutcome): void {
     state.lastOutcome = outcome;
     state.claimedSaved = outcome.kind === 'written';
+    deps.onSaveEvent?.({ kind: 'outcome', outcome });
     if (outcome.kind === 'written') { deps.track?.('session_profile_written'); return; }
     deps.track?.('session_profile_not_saved', { kind: outcome.kind });
     deps.status(outcome.kind === 'conflict' ? NOTICE_PROFILE_CONFLICT : NOTICE_PROFILE_NOT_SAVED);
@@ -110,6 +117,7 @@ export function createConfirmedProfile(deps: ConfirmedProfileDeps) {
     if (!w) { state.pending = snapshot; return; }
     state.pending = null;
     state.writes += 1;
+    deps.onSaveEvent?.({ kind: 'queued' });
     w.enqueue({ profile: snapshot });
   }
 

@@ -91,7 +91,15 @@ function bajtova(rel: string): number {
 // adapter placa iz tog viska i brojka ide na IZMJERENO. Prema stanju prije E2 to je -4639. Sva
 // logika (kljuc, otisak, obnova, pisac) zivi u src/ui/repair-selection.ts i
 // src/routes/workspace/repair-selection.ts, ne u app.ts.
-const BUDZET_APP = 359013;
+// PAKET C, korak C7 (2026-09-13): 359013 -> 359005. Racunica:
+//   `updateProfile` omotan signalom: `function updateProfile(){return trackProfileUpdate(_updateProfile())}`
+//   + preimenovanje tijela u `_updateProfile` + uvoz iz ./profile-update-signal                  +134
+//   `_SERVER_DEEP_FIXERS` (lokalni duplikat skupa koji vec izvozi repair-panel kao DEEP_CAPABLE)
+//   obrisan, dva mjesta koristenja preusmjerena, ime dodano u postojeci uvoz                    -142
+//   neto                                                                                          -8
+// Indikator (save-state, save-indicator), istek (expired) i pagehide zive u src/routes/workspace/**
+// i src/session/**, ne u app.ts; app.ts je dobio samo jedan redak omotaca, placen duplikatom.
+const BUDZET_APP = 359005;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

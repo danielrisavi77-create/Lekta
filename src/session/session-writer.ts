@@ -31,6 +31,8 @@ export type SessionWriteOutcome =
   /** Dvije uzastopne kolizije. Sucelje tada NE SMIJE reci "spremljeno". */
   | { kind: 'conflict' }
   | { kind: 'quota' }
+  /** Zapis sesije je istekao (24 h). Nije kvar pohrane nego rok; sucelje kaze "rad je istekao" (C7). */
+  | { kind: 'expired' }
   | { kind: 'failed'; reason: string };
 
 export interface SessionWriterDeps {
@@ -90,6 +92,7 @@ export function createSessionWriter(id: string, deps: SessionWriterDeps): Sessio
       return javi({ kind: 'written', revision: zapisano.revision ?? 0, at: now() });
     } catch (prvi) {
       if (kodGreske(prvi) === 'quota') return javi({ kind: 'quota' });
+      if (kodGreske(prvi) === 'expired') return javi({ kind: 'expired' });
       if (kodGreske(prvi) !== 'conflict') return javi({ kind: 'failed', reason: kodGreske(prvi) });
 
       // SUKOB: netko je pomaknuo zapis. Ne gazi se; cita se svjeze stanje i patch se SPOJI preko
@@ -108,6 +111,7 @@ export function createSessionWriter(id: string, deps: SessionWriterDeps): Sessio
         return javi({ kind: 'written', revision: zapisano.revision ?? 0, at: now() });
       } catch (drugi) {
         if (kodGreske(drugi) === 'quota') return javi({ kind: 'quota' });
+        if (kodGreske(drugi) === 'expired') return javi({ kind: 'expired' });
         // Druga kolizija zaredom: ne pokusava se u nedogled. Sucelje mora reci istinu.
         if (kodGreske(drugi) === 'conflict') return javi({ kind: 'conflict' });
         return javi({ kind: 'failed', reason: kodGreske(drugi) });
