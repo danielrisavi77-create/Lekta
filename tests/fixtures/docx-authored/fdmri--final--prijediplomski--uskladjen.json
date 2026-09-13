@@ -1,0 +1,46 @@
+{
+  "profileId": "fdmri-zavrsni",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "fdmri--final--prijediplomski",
+    "unitId": "fdmri",
+    "workType": "final",
+    "level": "prijediplomski",
+    "program": "Prijediplomski/integrirani studij (zavrsni rad), Fakultet dentalne medicine Rijeka",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": null
+  },
+  "prose": {
+    "id": "fdmri--final--prijediplomski",
+    "words": 5472,
+    "authoring": {
+      "method": "Prozu je u jednom prolazu napisao jezični model (Claude Opus 5, agent Claude Code), vođen skillom katedra-lite v1.9.41 u autopilot putu: profil fakulteta NIJE razriješen jer fdmri nije u Katedrinu registryju (dostupni: efzg, fpzg), pa je rad uveden s --fakultet-izvan-registryja i svi su formalni nalazi savjetodavni. Perspective map s tri razlikovane perspektive prošao je validaciju, plan je uveden kroz plan_state.py, prošao PLAN GATE i odobren s actor=full-auto (sha256:4d96821afc0a), a tekst je pisan po odobrenoj strukturi od 7 poglavlja i 65 odlomaka (prvi prolaz dao je 45 odlomaka i 3917 rijeci, pa je jednim dopisivanjem od 20 novih odlomaka doveden na ciljanih 5500). Os dijelova (dijelovi.py --sij) nije se mogla zasijati jer traži razriješen profil; taj je korak prijavljen kao alat pukao, ne kao prošao. Sadržaj je IZMIŠLJEN i služi isključivo kao testni ulaz za Lektu: nijedna osoba, ustanova ni izmjereni podatak nisu stvarni, autorica i mentorica na naslovnici su izmišljene osobe, a rad nije predan nigdje niti je namijenjen predaji. Od 20 bibliografskih jedinica tri su stvarne i provjerene kroz CrossRef API (HTTP 200 uz podudaran naslov i časopis), jedna nosi očito izmišljen DOI, a preostalih 16 su izmišljene zamjenske jedinice s izmišljenim časopisima i nakladnicima. Oblikovanje (font, prored 2,0, margine, naslovnica, numeracija stranica) NIJE dio ovog izlaza; dodaje ga Lektin generator iz vlastitih pravila profila fdmri-zavrsni.",
+      "tool": "Claude Code (Claude Opus 5) + katedra-lite v1.9.41 (katedra-pkg 1.9.41)",
+      "date": "2026-09-13"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row fdmri--final--prijediplomski",
+    "generatedAt": "2026-09-13T10:16:48.428Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "stil/tijelo-nije-normal",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/libreoffice"
+    ]
+  },
+  "toolLimitations": []
+}

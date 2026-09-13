@@ -1,0 +1,69 @@
+{
+  "profileId": "grad-diplomski",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "grad--graduate--diplomski",
+    "unitId": "grad",
+    "workType": "graduate",
+    "level": "diplomski",
+    "program": "Diplomski studiji Građevinskog fakulteta",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "grad-graduate"
+  },
+  "prose": {
+    "id": "grad--graduate--diplomski",
+    "words": 10708,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmišljena imena. Rad je pojmovno-raspravni pregled bez vlastitog empirijskog istraživanja: ne mjeri zgrade, ne izvodi numeričke analize i ne donosi nijedan podatak o stvarnim obnovama, pa nijedna brojka u tekstu ne opisuje izmjereni ishod. Sve tvrdnje o praksi pisane su kao opis obrasca, s ogradom, nikad kao tvrdnja o učestalosti. Sedam jedinica literature POTVRĐENO je kroz CrossRef API uz HTTP 200 i prepisano iz odgovora (Magenes i Calvi 1997; Anagnostopoulos i Moretti 2008, dijelovi 1 i 2; Ferreira, Mendes i Silva 2019; Salaman i sur. 2022; Ducom, Jaafari i Stepinac 2026; izvještaj o zagrebačkom potresu 2020 u časopisu Građevinar). Za taj izvještaj CrossRef ne vraća autore, pa je naveden po naslovu i časopisu umjesto da se autorstvo pripiše iz sjećanja. Četiri jedinice (Vrbanić i Škorić 2023, Kovačević 2024, Marinić i Horvat 2021, Pavlović i Benić 2022) izmišljene su namjerno, s DOI-jem koji se ne razrješava, da provjera postojanja može vratiti i negativan ishod. Norme, propisi i knjige navedeni su bez DOI-ja; brojevi Narodnih novina nisu upisani jer ih ova sesija nije mogla potvrditi iz izvora (katedra-lite pravila 2 i 28), pa se radije izostavljaju nego pogađaju.",
+      "tool": "Claude Code (Claude Opus 5) + katedra-lite v1.9.41 (katedra-pkg 870022d)",
+      "date": "2026-09-13"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row grad--graduate--diplomski --messy",
+    "generatedAt": "2026-09-13T10:15:27.488Z"
+  },
+  "mutations": {
+    "tabInHeading": 28,
+    "emptyParagraphBurst": 30,
+    "manualToc": 1,
+    "dotLeaderTabs": 1,
+    "csOnlyFonts": 4,
+    "biblioAsHeading": 2,
+    "commentsPart": 2,
+    "allLevelThree": 34,
+    "wrongBodyFont": 1,
+    "letterPaper": 1,
+    "paragraphSpacingNoise": 1
+  },
+  "mutationsNotApplicable": {
+    "singleLineSpacing": "profil ne trazi prored 1,5, pa ga nema sto pokvariti"
+  },
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "paket/komentari",
+      "stil/tijelo-nije-normal",
+      "naslov/tab-u-naslovu",
+      "naslov/samo-razina-3",
+      "tab/tocke-vodic",
+      "font/samo-cs-eastAsia",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice",
+      "opseg/prazni-preko-20"
+    ]
+  },
+  "toolLimitations": [
+    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
+  ]
+}
