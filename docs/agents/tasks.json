@@ -162,17 +162,17 @@
     {
       "id": "T16",
       "title": "Aktualno polazište i jedinstven plan do live",
-      "status": "in_review",
+      "status": "done",
       "implementationAgent": "opus",
       "dependsOn": [
         "T00"
       ],
-      "note": "P0. Dokaz: validator reda prolazi bez ciklusa i bez dva kanonska statusa, svaki potvrdjeni nalaz ima vlasnicki T zadatak, i nema blanket tvrdnje o postotku dovrsenosti. Program unesen iz docs/agents/plan-do-live-2026-09-12.md."
+      "note": "P0. Dokaz: validator reda prolazi bez ciklusa i bez dva kanonska statusa, svaki potvrdjeni nalaz ima vlasnicki T zadatak, i nema blanket tvrdnje o postotku dovrsenosti. Program unesen iz docs/agents/plan-do-live-2026-09-12.md. done 2026-09-13: PR #78 spojen u master 528fbae7; otvoren ostaje nalaz 5 (nema testa koji vrti validator nad stvarnim tasks.json)"
     },
     {
       "id": "T17",
       "title": "Dokazati postojeći workflow agenata bez dodatne naplate",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T16"
       ],
@@ -181,7 +181,7 @@
     {
       "id": "T18",
       "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T16"
       ],
@@ -190,7 +190,7 @@
     {
       "id": "T19",
       "title": "Pouzdana produkcijska gradnja i dokaz izdanja",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T16"
       ],
@@ -230,7 +230,7 @@
     {
       "id": "T23",
       "title": "Urediti katalog, cijene i prava proizvoda",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T16"
       ],
@@ -261,7 +261,7 @@
     {
       "id": "T26",
       "title": "Potvrditi točnost lokalne DOCX analize",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T16"
       ],
@@ -423,7 +423,7 @@
     {
       "id": "T41",
       "title": "Sanirati ovisnosti i dovršiti održivu provjeru koda",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T16"
       ],
@@ -526,5 +526,5 @@
       "note": "P0. Dokaz: javni artefakt odgovara dokazanoj verziji, svi ukljuceni tokovi rade, prvi tjedan nadzora je obradjen bez nerazrijesenog kriticnog signala i operacije su predane uz runbook."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done)."
 }
