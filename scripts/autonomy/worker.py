@@ -251,11 +251,6 @@ def ndjson_events(stdout: str) -> list[dict]:
     return events
 
 
-def _item_type(event: dict) -> str:
-    item = event.get("item")
-    return str(item.get("type") or "") if isinstance(item, dict) else ""
-
-
 def machine_stdout(stdout: str) -> str:
     """Dijelovi NDJSON stdouta u kojima potpis kvara ima smisla traziti: GRESKE koje javlja sam CLI.
 
@@ -277,9 +272,9 @@ def sandbox_unusable(stderr: str, stdout: str = "", command: str | None = None) 
     """Je li providerova izvrsna okolina odbila SVAKI poziv.
 
     Stderr se cita cijeli: ondje su `codex_core::tools::router` redci iz izmjerenog artefakta. Stdout se cita
-    kao NDJSON i to SAMO strojne stavke, pa gard vidi i codex koji isti kvar prijavi strukturirano (bez ijednog
-    retka na stderru), a modelova proza ga ne moze okinuti. Claudeov `-p --output-format json` nije NDJSON nego
-    jedan objekt s modelovim tekstom, pa se za njega stdout ne skenira.
+    kao NDJSON i to samo `error` stavke (vidi `machine_stdout`), pa gard vidi i codex koji isti kvar prijavi
+    strukturirano, bez ijednog retka na stderru. Claudeov `-p --output-format json` nije NDJSON nego jedan
+    objekt s modelovim tekstom, pa se za njega stdout ne skenira uopce.
     """
     if SANDBOX_RE.search(stderr or ""):
         return True
