@@ -169,3 +169,48 @@ describe('agent process boundary helpers', () => {
     expect(call.options).toMatchObject({ input: undefined, shell: false });
   });
 });
+
+// Autonomni kontroler ne smije pisati u docs/agents/tasks.json (koordinatorova domena), a fazu pregleda
+// prepareJob je dosad citao iskljucivo iz njega, pa review nije mogao proci ni kad je planTask ispravan.
+describe('review phase asserted by the controller, not by the queue file', () => {
+  it('still refuses a review the queue has not marked in_review', () => {
+    expect(() => prepareJob(queue(), 'T01', 'review', 'astra')).toThrow(/in_review/);
+    expect(() => prepareJob(queue(), 'T01', 'review', 'astra', undefined, {})).toThrow(/in_review/);
+  });
+  it('accepts an explicit override and leaves the queue object untouched', () => {
+    const q = queue();
+    const job = prepareJob(q, 'T01', 'review', 'astra', undefined, {
+      overrideTask: { status: 'in_review', implementationAgent: 'sonnet' },
+    });
+    expect(job.command).toBe('codex');
+    expect(job.args).toContain('read-only');
+    expect(q.tasks[1].status).toBe('ready');
+    expect(q.tasks[1].implementationAgent).toBeUndefined();
+    // Prompt nosi PRAVI zadatak iz reda, ne kontrolerovu tvrdnju o fazi.
+    expect(job.prompt).toContain('"status": "ready"');
+    expect(job.prompt).not.toContain('in_review');
+  });
+  it('keeps the different-provider rule biting through the override', () => {
+    expect(() => prepareJob(queue(), 'T01', 'review', 'astra', undefined, {
+      overrideTask: { status: 'in_review', implementationAgent: 'sol' },
+    })).toThrow(/different provider/);
+    expect(() => prepareJob(queue(), 'T01', 'review', 'astra', undefined, {
+      overrideTask: { status: 'in_review', implementationAgent: 'astra' },
+    })).toThrow(/implementationAgent/);
+    expect(() => prepareJob(queue(), 'T01', 'review', 'astra', undefined, {
+      overrideTask: { status: 'in_review', implementationAgent: 'nobody' },
+    })).toThrow(/implementationAgent/);
+  });
+  it('cannot be used to loosen the implement readiness check', () => {
+    const q = queue();
+    q.tasks[1].status = 'blocked';
+    expect(() => prepareJob(q, 'T01', 'implement', 'sol', undefined, {
+      overrideTask: { status: 'ready' },
+    })).toThrow(/ready/);
+    const p = queue();
+    p.tasks[0].status = 'ready';
+    expect(() => prepareJob(p, 'T01', 'implement', 'sol', undefined, {
+      overrideTask: { status: 'ready', dependsOn: [] },
+    })).toThrow(/T00/);
+  });
+});

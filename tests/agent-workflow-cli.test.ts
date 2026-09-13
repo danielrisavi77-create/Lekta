@@ -118,3 +118,72 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     expect(unsupported.stdout).toContain('grok: grok 1.0.33 (old) [unsupported; minimum 1.0.34]');
   });
 });
+
+// Sam `prepare` ne dira git ni providera, pa se ugovor opcija mjeri na SVAKOJ platformi (proces iznad je
+// preskocen na Windowsu jer lazni provider ima POSIX shebang).
+describe('option contract of the actual CLI process', () => {
+  function bare() {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-agents-opt-'));
+    roots.push(root);
+    mkdirSync(join(root, 'docs/agents'), { recursive: true });
+    writeFileSync(join(root, 'docs/agents/tasks.json'), JSON.stringify({ tasks: [
+      { id: 'T00', title: 'Audit', status: 'ready', dependsOn: [] },
+    ] }));
+    const run = (...args: string[]) => spawnSync(process.execPath, [cli, ...args], {
+      cwd: root, encoding: 'utf8', timeout: 20_000, env: { ...process.env },
+    });
+    return { root, run };
+  }
+
+  it('prepares a review from the controller assertion without touching the queue file', () => {
+    const { root, run } = bare();
+    const before = readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8');
+    const plain = run('prepare', 'T00', '--phase', 'review', '--agent', 'astra', '--subscription');
+    expect(plain.status).toBe(1);
+    expect(plain.stderr).toContain('in_review');
+    const result = run('prepare', 'T00', '--phase', 'review', '--agent', 'astra', '--subscription',
+      '--override-status', 'in_review', '--override-implementer', 'sonnet');
+    expect(result.status, result.stderr).toBe(0);
+    const job = JSON.parse(result.stdout);
+    expect(job.dryRun).toBe(true);
+    expect(job.command).toBe('codex');
+    expect(job.args).toContain('read-only');
+    expect(readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8')).toBe(before);
+  });
+
+  it('refuses half an override, an override outside review, and an unknown option', () => {
+    const { run } = bare();
+    const half = run('prepare', 'T00', '--phase', 'review', '--agent', 'astra', '--subscription', '--override-status', 'in_review');
+    expect(half.status).toBe(1);
+    expect(half.stderr).toContain('together');
+    const wrongPhase = run('prepare', 'T00', '--phase', 'plan', '--agent', 'astra', '--subscription',
+      '--override-status', 'in_review', '--override-implementer', 'sonnet');
+    expect(wrongPhase.status).toBe(1);
+    expect(wrongPhase.stderr).toContain('review only');
+    // Override ne smije postati put kojim se zaobilazi provjera spremnosti u fazi implementacije.
+    const implement = run('prepare', 'T00', '--phase', 'implement', '--agent', 'sonnet', '--subscription',
+      '--override-status', 'ready', '--override-implementer', 'sonnet');
+    expect(implement.status).toBe(1);
+    expect(implement.stderr).toContain('review only');
+    const unknown = run('prepare', 'T00', '--phase', 'review', '--agent', 'astra', '--subscription', '--override-task', 'T00');
+    expect(unknown.status).toBe(1);
+    expect(unknown.stderr).toContain('Invalid option');
+  });
+
+  it('keeps the different-provider rule when the controller names the implementer', () => {
+    const { root, run } = bare();
+    const before = readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8');
+    const same = run('prepare', 'T00', '--phase', 'review', '--agent', 'astra', '--subscription',
+      '--override-status', 'in_review', '--override-implementer', 'sol');
+    expect(same.status).toBe(1);
+    expect(same.stderr).toContain('different provider');
+    expect(readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8')).toBe(before);
+  });
+
+  it('leaves the manual flow byte for byte unchanged when no override is given', () => {
+    const { run } = bare();
+    const job = JSON.parse(run('prepare', 'T00', '--phase', 'plan', '--agent', 'astra', '--subscription').stdout);
+    expect(job.args).toEqual(['exec', '--model', 'gpt-6-astra', '--sandbox', 'read-only', '--json', '-']);
+    expect(job.billingMode).toBe('subscription');
+  });
+});
