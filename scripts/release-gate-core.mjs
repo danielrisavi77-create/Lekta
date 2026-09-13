@@ -7,7 +7,9 @@
 //   (a) `dist/build-info.json` ne postoji, nije JSON ili nema 40-znamenkasti commit
 //   (b) `dist/build-info.json` nosi DRUGI commit od onoga koji se gradi (identitet artefakta)
 //   (c) dokaz izdanja je `stale` ili `unknown` prema otisku stabla
-//   (d) praceni izvor se promijenio nakon ovjere (isto mjerenje kao (c): otisak stabla se razisao)
+//   (d) praceni izvor se promijenio nakon ovjere, i to na DVA nacina:
+//         d1  promjena je COMMITANA  -> otisak stabla se razisao (isto mjerenje kao (c))
+//         d2  promjena NIJE commitana -> otisak je i dalje jednak, a u artefakt ulazi drugi kod
 //   (e) obavezna razina nema zapisan prolaz u `results[]`
 //
 // ZASTO ZASEBAN MODUL. `verify-deploy-dist.mjs` je linearna skripta koja se pri uvozu odmah izvrsi i
@@ -25,7 +27,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
-import { proofStaleness, formatStaleness, treeDigestFromLsTree } from './release-proof-core.mjs';
+import { proofStaleness, formatStaleness, treeDigestFromLsTree, PROOF_PATH } from './release-proof-core.mjs';
 import { resolveCommit } from './write-build-info.mjs';
 import { requiredTierIds } from './release-tiers.mjs';
 
@@ -187,6 +189,81 @@ export function releaseProofVerdict({
   return { blocking: [], conditional, notes };
 }
 
+/**
+ * Pracene staze s NECOMMITANOM izmjenom, iz ispisa `git status --porcelain --untracked-files=no`.
+ *
+ * Redci su oblika `XY<razmak><staza>`, uz `stara -> nova` kod preimenovanja i navodnike oko staza s
+ * posebnim znakovima. Netrackane (`??`) i ignorirane (`!!`) staze se preskacu, kao i staze koje su
+ * izuzete iz otiska stabla; time se mjeri TOCNO ona populacija koju pokriva `treeDigest`, ne siri skup.
+ *
+ * Vraca `null` kad ispisa nema (git nije uspio, ovo nije git stablo): "ne znam" se imenuje, ne
+ * pretvara u "cisto".
+ */
+export function changedTrackedPaths(porcelainText, excludePaths = [PROOF_PATH]) {
+  if (typeof porcelainText !== 'string') return null;
+  const excluded = new Set(excludePaths);
+  const staze = [];
+  for (const raw of porcelainText.replace(/\r\n/g, '\n').split('\n')) {
+    const line = raw.replace(/\s+$/, '');
+    if (!line) continue;
+    const oznaka = line.slice(0, 2);
+    if (oznaka === '??' || oznaka === '!!') continue;
+    const rep = line.slice(3);
+    const strelica = rep.indexOf(' -> ');
+    const kandidati = strelica >= 0 ? [rep.slice(0, strelica), rep.slice(strelica + 4)] : [rep];
+    for (const k of kandidati) {
+      const s = k.startsWith('"') && k.endsWith('"') ? k.slice(1, -1) : k;
+      if (!s || excluded.has(s)) continue;
+      if (!staze.includes(s)) staze.push(s);
+    }
+  }
+  return staze.sort();
+}
+
+/**
+ * Presuda o STABLU IZ KOJEG SE GRADI (negativni slucaj d2).
+ *
+ * ZASTO POSTOJI, iako zastarjelost vec ima mjerenje: `treeDigest` se racuna iz `git ls-tree`, dakle iz
+ * COMMITANOG stabla. Necommitana izmjena pracene datoteke je u tom pogledu nevidljiva: `vite build` je
+ * ugradi u artefakt, a otisak ostane jednak onome u dokazu, pa presuda izadje kao `fresh`. Objavi se
+ * kod koji nijedna razina dokaza nije mjerila, uz zeleno na svim ostalim provjerama.
+ *
+ * Cistocu stabla je do 2026-09-13 mjerio samo `release-check.mjs`, i to u trenutku PECENJA dokaza
+ * (`proof.dirtyWorkingTree`). To je druga tvrdnja o drugom trenutku: govori kakvo je stablo bilo dok se
+ * dokaz pekao, ne kakvo je dok se gradi. Za Netlify (gradnja iz svjezeg checkouta) razlika je bez
+ * ucinka, ali dokumentirani put objave je bas rucna lokalna gradnja iz worktreea.
+ *
+ * Nalaz je UVJETAN, kao i ostale tvrdnje o dokazu: uz tvrd gate je pad, bez njega upozorenje, jer
+ * razvojna gradnja iz necistog stabla je normalna i nije nalaz o objavi.
+ *
+ * GRANICA KOJU OVO NE MJERI, i to se ne presucuje: netrackane datoteke nisu ni u otisku stabla pa nisu
+ * ni ovdje. Tracked modul koji uvozi netrackan modul je zaseban razred i hvata ga `npm run orphan-scan`.
+ */
+export function workingTreeVerdict({ status, excludePaths = [PROOF_PATH], maxNamed = 5 } = {}) {
+  const conditional = [];
+  const notes = [];
+  const staze = changedTrackedPaths(status, excludePaths);
+  if (staze === null) {
+    conditional.push(
+      'stablo koje se gradi: cistoca NIJE izmjerena (`git status` nije uspio ili ovo nije git stablo), '
+        + 'pa se ne zna gradi li se ono sto je ovjereno',
+    );
+    return { conditional, notes, dirtyPaths: null };
+  }
+  if (!staze.length) {
+    notes.push(`stablo koje se gradi je cisto (nijedna pracena datoteka nema necommitanu izmjenu, uz izuzet ${PROOF_PATH})`);
+    return { conditional, notes, dirtyPaths: [] };
+  }
+  const visak = staze.length > maxNamed ? ` i jos ${staze.length - maxNamed}` : '';
+  conditional.push(
+    `stablo koje se gradi ima NECOMMITANE izmjene pracenih datoteka (${staze.length}): `
+      + `${staze.slice(0, maxNamed).join(', ')}${visak}. Otisak stabla se racuna iz \`git ls-tree\`, dakle iz `
+      + 'COMMITANOG stabla, pa te izmjene NE cine dokaz zastarjelim, a u artefakt ulaze: dokaz izdanja tada '
+      + 'ne pokriva kod koji se objavljuje.',
+  );
+  return { conditional, notes, dirtyPaths: staze };
+}
+
 /** Git pogledi koje gate treba; injektabilni iskljucivo da bi se lanac mogao mjeriti bez pravog repozitorija. */
 export function defaultGit(rootDir) {
   return {
@@ -208,6 +285,14 @@ export function defaultGit(rootDir) {
     lsTree(ref) {
       try {
         return execSync(`git ls-tree -r ${ref}`, { cwd: rootDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+      } catch {
+        return null;
+      }
+    },
+    statusPorcelain() {
+      try {
+        // `--untracked-files=no`: netrackano nije u otisku stabla, pa nije ni ovdje (vidi workingTreeVerdict).
+        return execSync('git status --porcelain --untracked-files=no', { cwd: rootDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
       } catch {
         return null;
       }
@@ -293,16 +378,25 @@ export function collectReleaseGate({
     maxAgeDays,
   });
 
-  const conditional = [...bi.conditional, ...pv.conditional];
+  // (d2) STABLO IZ KOJEG SE GRADI, a ne samo stablo za koje dokaz tvrdi da ga pokriva.
+  //
+  // Mjeri se i uz `--proof-only`: suzenje se tice ARTEFAKTA ((a) i (b)), a ovo je tvrdnja o izvoru, pa
+  // je u koraku 5 postupka jednako relevantna kao zastarjelost.
+  const wt = workingTreeVerdict({
+    status: typeof git.statusPorcelain === 'function' ? git.statusPorcelain() : null,
+  });
+
+  const conditional = [...bi.conditional, ...pv.conditional, ...wt.conditional];
   return {
     failures: [...bi.blocking, ...pv.blocking, ...(required ? conditional : [])],
     warnings: required ? [] : conditional,
-    notes: [...bi.notes, ...pv.notes],
+    notes: [...bi.notes, ...pv.notes, ...wt.notes],
     required,
     head,
     expectedCommit,
     buildInfoCommit: bi.commit,
     artifactIdentityMeasured: !skipArtifactIdentity,
+    dirtyPaths: wt.dirtyPaths,
   };
 }
 

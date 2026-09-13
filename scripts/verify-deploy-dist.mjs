@@ -24,7 +24,7 @@ const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); proc
 // stvarnim `dist/` repozitorija, pa se u praksi mjeri cista funkcija a NE ozicenje, sto je tocno onaj
 // oblik laznog zelenog na koji CLAUDE.md upozorava. S ovom zastavicom se ista ulazna tocka vrti kao
 // pravi proces nad sintetickim stablom, pa test mjeri izlazni kod i poruku
-// (`tests/verify-deploy-dist-proof-gate-cli.test.ts`).
+// (`tests/release-gate-cli.test.ts`).
 //
 // Preusmjeravanje je vezano uz nju da se deploy gate ne bi mogao slucajno uperiti u drugo stablo, a
 // `tests/release-gate-wiring.test.ts` tvrdi da je nijedan potrosac u lancu objave ne koristi.
@@ -55,8 +55,9 @@ if (!fs.existsSync(DIST)) fail('dist/ ne postoji');
 //
 // Pet negativnih slucajeva koji moraju zaustaviti objavu zive u `release-gate-core.mjs`, zajedno s
 // obrazlozenjem: nedostajuci ili neispravan `build-info.json`, `build-info.json` s commitom koji nije
-// onaj koji se gradi, dokaz `stale` ili `unknown`, izvor promijenjen nakon ovjere, i obavezna razina
-// bez zapisanog prolaza. Ovdje je samo ozicenje.
+// onaj koji se gradi, dokaz `stale` ili `unknown`, izvor promijenjen nakon ovjere (commitano, pa se
+// razisao otisak, ILI necommitano, pa je stablo iz kojeg se gradi necisto), i obavezna razina bez
+// zapisanog prolaza. Ovdje je samo ozicenje.
 //
 // Gate je PRVI korak, ne zadnji: build koji ne zna koji je, ili nosi dokaz koji ne vrijedi, nema smisla
 // dalje provjeravati. "Ne znam" (nerazrjesiv commit, dokaz bez otiska) uz `LEKTA_REQUIRE_RELEASE_PROOF=1`

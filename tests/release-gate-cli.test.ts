@@ -15,7 +15,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { spawnSync } from 'node:child_process';
 import { rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { makeHealthyTree, proofObject, writeBuildInfo, writeProof, type GateTree } from './helpers/release-gate-tree';
+import { dirtyTrackedFile, makeHealthyTree, proofObject, writeBuildInfo, writeProof, type GateTree } from './helpers/release-gate-tree';
 
 const SCRIPTS = resolve(process.cwd(), 'scripts');
 const PROOF_CLI = join(SCRIPTS, 'verify-release-proof.mjs');
@@ -105,6 +105,32 @@ describe('gate izdanja kao PROCES: pet negativnih slucajeva zaustavlja objavu', 
     }
   }, 120_000);
 
+  /**
+   * DRUGI OBLIK SLUCAJA (d), onaj koji je do 2026-09-13 prolazio: izmjena NIJE commitana. Otisak stabla
+   * se racuna iz `git ls-tree`, pa ostaje jednak onome u dokazu i presuda je `fresh`; gradnja bi
+   * svejedno ugradila izmijenjeni izvor. Mjeri se i to da stari mehanizam pritom suti, inace se ne zna
+   * koji je od dva mehanizma uopce reagirao.
+   */
+  it('(d2) izvor promijenjen poslije ovjere, ali NECOMMITAN: otisak je jednak, objava svejedno staje', () => {
+    tree = makeHealthyTree();
+    const staza = dirtyTrackedFile(tree);
+    for (const r of [proofCli(tree, TVRDO), deployCli(tree, TVRDO)]) {
+      expect(r.code, r.out).toBe(1);
+      expect(r.out).toContain('NECOMMITANE izmjene pracenih datoteka');
+      expect(r.out).toContain(staza);
+      expect(r.out).not.toContain('ZASTARJELO');
+    }
+  }, 120_000);
+
+  it('(d2) i uz --proof-only, jer je to tvrdnja o izvoru, ne o artefaktu', () => {
+    tree = makeHealthyTree();
+    rmSync(join(tree.dist, 'build-info.json'));
+    dirtyTrackedFile(tree);
+    const r = proofCli(tree, TVRDO, ['--proof-only']);
+    expect(r.code, r.out).toBe(1);
+    expect(r.out).toContain('NECOMMITANE izmjene pracenih datoteka');
+  }, 120_000);
+
   it('(e) obavezna razina bez zapisanog prolaza, uz complete: true', () => {
     tree = makeHealthyTree();
     const bezUx = (proofObject(tree).results as Array<{ id: string }>).filter((r) => r.id !== 'ux');
@@ -142,6 +168,17 @@ describe('mek gate (razvojni CI) ostaje mek, i to se ne smije tiho promijeniti',
     const r = proofCli(tree);
     expect(zadnjiRedak(r.stdout), r.out).toContain('NIJE POTVRDJENO');
     expect(zadnjiRedak(r.stdout), r.out).not.toContain('OK');
+  }, 120_000);
+
+  it('necisto stablo bez tvrde zastavice ne obara razvojnu gradnju', () => {
+    // Razvojna gradnja iz necistog stabla je svakodnevna i nije nalaz o objavi; tvrd gate je taj koji je
+    // odbija (gore, (d2)). Da je ovdje pad, `npm run build` bi lokalno bio crven svaki put.
+    tree = makeHealthyTree();
+    dirtyTrackedFile(tree);
+    const r = proofCli(tree);
+    expect(r.code, r.out).toBe(0);
+    expect(r.out).toContain('NECOMMITANE izmjene pracenih datoteka');
+    expect(zadnjiRedak(r.stdout), r.out).toContain('NIJE POTVRDJENO');
   }, 120_000);
 
   it('BASELINE: bez ijednog nalaza zadnji redak smije tvrditi OK', () => {

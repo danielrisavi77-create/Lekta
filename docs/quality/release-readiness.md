@@ -34,6 +34,10 @@ mora biti stroga. Cijeli postupak ovjere i proof-only commita stoji u
 `docs/deploy/RELEASE_PROOF_WORKFLOW.md`; oba dokumenta opisuju isti korak i drzi ih usaglasenima
 `tests/release-gate-wiring.test.ts`.
 
+`dirtyWorkingTree: false` u dokazu govori o trenutku PECENJA dokaza, ne o trenutku gradnje. Cistocu
+stabla iz kojeg se STVARNO gradi mjeri deploy gate (poruka `NECOMMITANE izmjene pracenih datoteka`),
+jer se otisak stabla racuna iz commitanog stabla pa necommitanu izmjenu po konstrukciji ne vidi.
+
 ## Kriteriji koje pilot dodaje (T15)
 
 - Nema otvorene prepreke koja onemogucuje osnovni tok (zadaci 1 do 3 protokola). Otvorena prepreka ide u tablicu

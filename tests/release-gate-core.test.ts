@@ -27,12 +27,15 @@ import {
 } from '../scripts/release-gate-core.mjs';
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import {
+  commitProof,
+  dirtyTrackedFile,
   makeHealthyTree,
   proofObject,
   writeBuildInfo,
   writeProof,
   type GateTree,
 } from './helpers/release-gate-tree';
+import { changedTrackedPaths, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
 
 const TVRDO = { LEKTA_REQUIRE_RELEASE_PROOF: '1', COMMIT_REF: '' } as NodeJS.ProcessEnv;
 const MEKO = { COMMIT_REF: '' } as NodeJS.ProcessEnv;
@@ -165,6 +168,79 @@ describe('(c) i (d) dokaz je stale ili unknown', () => {
   });
 });
 
+/**
+ * (d2) IZMJENA KOJA NIJE COMMITANA, dakle onaj oblik slucaja (d) koji otisak stabla po konstrukciji ne
+ * vidi: `git ls-tree` cita COMMITANO stablo, a `vite build` gradi iz radnog. Do 2026-09-13 je gate mjerio
+ * samo otisak, pa je gradnja iz necistog stabla prolazila kao `fresh`, s tocnim identitetom artefakta i
+ * bez ijednog nalaza.
+ *
+ * Svaka tvrdnja ovdje mjeri VLASTITI mehanizam: uz izmjenu se tvrdi i da presuda o zastarjelosti i dalje
+ * SUTI (`ZASTARJELO` se ne pojavljuje), jer bi inace nalaz mogao doci od starog mehanizma, a novi biti
+ * mrtav kod (CLAUDE.md: "mjera koja se popravi ne dokazuje da tvoj zahvat radi").
+ */
+describe('(d2) necommitana izmjena pracenog izvora', () => {
+  it('zaustavlja objavu iako je otisak stabla i dalje jednak', () => {
+    tree = makeHealthyTree();
+    const staza = dirtyTrackedFile(tree);
+    const r = gate(tree);
+    expect(spojeno(r.failures)).toContain('NECOMMITANE izmjene pracenih datoteka');
+    expect(spojeno(r.failures)).toContain(staza);
+    // Stari mehanizam je ovdje tocan i tih: stablo dokaza i commitano stablo su jednaki.
+    expect(spojeno(r.failures)).not.toContain('ZASTARJELO');
+    expect(spojeno(r.notes)).toContain('dokaz o provjerama OK');
+    expect(r.dirtyPaths).toEqual([staza]);
+  });
+
+  it('bez tvrde zastavice je upozorenje, ne pad (razvojna gradnja iz necistog stabla je normalna)', () => {
+    tree = makeHealthyTree();
+    dirtyTrackedFile(tree);
+    const r = gate(tree, MEKO);
+    expect(spojeno(r.failures)).toBe('');
+    expect(spojeno(r.warnings)).toContain('NECOMMITANE izmjene pracenih datoteka');
+  });
+
+  it('BASELINE: cisto stablo prolazi i to se imenuje u ispisu', () => {
+    tree = makeHealthyTree();
+    const r = gate(tree);
+    expect(spojeno(r.failures)).toBe('');
+    expect(spojeno(r.notes)).toContain('stablo koje se gradi je cisto');
+    expect(r.dirtyPaths).toEqual([]);
+  });
+
+  it('sam dokaz smije biti necommitan: izuzet je iz otiska, pa je izuzet i ovdje', () => {
+    tree = makeHealthyTree();
+    commitProof(tree);
+    // Ista datoteka, drugi sadrzaj: `git status` je prijavljuje kao izmijenjenu pracenu datoteku.
+    writeProof(tree, proofObject(tree, { createdAt: new Date(Date.now() - 1000).toISOString() }));
+    const r = gate(tree);
+    expect(spojeno(r.failures)).toBe('');
+    expect(r.dirtyPaths).toEqual([]);
+  });
+
+  it('cistoca koju se ne da izmjeriti je "ne znam", ne "cisto"', () => {
+    tree = makeHealthyTree();
+    // Git bez `statusPorcelain` (stariji injektirani pogled, alat kojeg nema): mek gate upozorava, tvrd pada.
+    const bezStatusa = { rootDir: tree.root, distDir: tree.dist, git: slijepiGit({ status: false }) };
+    expect(spojeno(collectReleaseGate({ ...bezStatusa, env: MEKO }).warnings)).toContain('cistoca NIJE izmjerena');
+    expect(spojeno(collectReleaseGate({ ...bezStatusa, env: TVRDO }).failures)).toContain('cistoca NIJE izmjerena');
+  });
+
+  it('changedTrackedPaths: netrackano i ignorirano nisu izmjena, preimenovanje jest', () => {
+    expect(changedTrackedPaths('?? gate.log\n!! dist/index.html\n')).toEqual([]);
+    expect(changedTrackedPaths(' M src/ui/app.ts\nA  tests/novo.ts\n')).toEqual(['src/ui/app.ts', 'tests/novo.ts']);
+    expect(changedTrackedPaths('R  staro.ts -> novo.ts\n')).toEqual(['novo.ts', 'staro.ts']);
+    expect(changedTrackedPaths(' M docs/generated/RELEASE_PROOF.json\n')).toEqual([]);
+    expect(changedTrackedPaths(null)).toBeNull();
+  });
+
+  it('workingTreeVerdict imenuje najvise nekoliko staza, ali uvijek javi koliko ih je', () => {
+    const status = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((s) => ` M src/${s}.ts`).join('\n');
+    const poruka = workingTreeVerdict({ status }).conditional.join(' ');
+    expect(poruka).toContain('(7)');
+    expect(poruka).toContain('i jos 2');
+  });
+});
+
 describe('(e) obavezna razina bez zapisanog prolaza', () => {
   it('razina koje NEMA u results[] pada iako dokaz o sebi tvrdi complete: true', () => {
     tree = makeHealthyTree();
@@ -252,9 +328,14 @@ describe('ciste presude (jedinicno, bez diska)', () => {
   });
 });
 
-/** Git koji nista ne zna: klon bez `.git`, plitak checkout bez HEAD-a, alat kojeg nema u PATH-u. */
-function slijepiGit() {
-  return {
+/**
+ * Git koji nista ne zna: klon bez `.git`, plitak checkout bez HEAD-a, alat kojeg nema u PATH-u.
+ *
+ * `status: false` ispusta i sam pogled `statusPorcelain`, dakle oblik u kojem gate dobije pogled BEZ te
+ * sposobnosti; to se mora ponasati kao "ne znam", ne kao "cisto".
+ */
+function slijepiGit({ status = true }: { status?: boolean } = {}) {
+  const g: Record<string, unknown> = {
     resolvable: () => false,
     head: () => '',
     lsTree: () => null,
@@ -262,4 +343,6 @@ function slijepiGit() {
       throw new Error('git nije dostupan');
     },
   };
+  if (status) g.statusPorcelain = () => null;
+  return g;
 }

@@ -81,6 +81,28 @@ export function writeProof(tree: GateTree, proof: unknown): void {
   );
 }
 
+/**
+ * NECOMMITANA izmjena PRACENE datoteke, dakle stanje koje otisak stabla po konstrukciji ne vidi
+ * (`git ls-tree` cita commitano stablo). Vraca stazu koju gate mora imenovati.
+ */
+export function dirtyTrackedFile(tree: GateTree, text = 'necommitana izmjena poslije ovjere\n'): string {
+  writeFileSync(join(tree.root, 'README.md'), text, 'utf8');
+  return 'README.md';
+}
+
+/**
+ * Dokaz kao PRACENA datoteka. U otisku stabla je izuzet (`PROOF_PATH`), pa commitanje ne mijenja
+ * `freshDigest`; potrebno je da bi se moglo mjeriti da je izuzet i iz provjere cistoce stabla.
+ */
+export function commitProof(tree: GateTree): void {
+  git(tree.root, 'add', 'docs/generated/RELEASE_PROOF.json');
+  git(tree.root, 'commit', '-q', '-m', 'dokaz izdanja');
+  // Proof-only commit pomice HEAD, pa se za njim mora povesti i identitet artefakta; otisak stabla se
+  // NE mijenja, jer je bas ta datoteka iz njega izuzeta. To je koka i jaje iz koraka 5 postupka.
+  tree.head = git(tree.root, 'rev-parse', 'HEAD').trim();
+  writeBuildInfo(tree);
+}
+
 /** Zdravo stablo: sve na mjestu, gate mora proci i uz tvrd `LEKTA_REQUIRE_RELEASE_PROOF=1`. */
 export function makeHealthyTree(): GateTree {
   const tree = makeGateTree();

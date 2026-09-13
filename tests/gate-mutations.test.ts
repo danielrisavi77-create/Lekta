@@ -43,7 +43,7 @@ import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
-import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict } from '../scripts/release-gate-core.mjs';
+import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
 import { proofSourceProblems } from '../src/verification/completion-ledger';
@@ -1377,6 +1377,40 @@ const MUTATIONS: Mutation[] = [
         head: 'a'.repeat(40),
         nowMs: DOKAZ_SADA,
       }).notes.join(' ').includes('dokaz o provjerama OK'),
+  },
+  {
+    id: 'objava/necommitana-izmjena-izvora-prolazi-kao-ovjerena',
+    imitates:
+      'gradnja iz NECISTOG stabla: izvor je promijenjen poslije ovjere, ali izmjena nije commitana. Otisak '
+      + 'stabla se racuna iz `git ls-tree`, dakle iz commitanog stabla, pa presuda o zastarjelosti ostaje '
+      + '`fresh` i objavi se kod koji nijedna razina dokaza nije mjerila. Mjeri se i to da stari mehanizam '
+      + 'pritom SUTI, inace bi novi mogao biti mrtav kod uz nalaz koji dolazi s druge strane',
+    caught: () => {
+      const nalaz = workingTreeVerdict({ status: ' M src/ui/app.ts\n' }).conditional.join(' ');
+      const otisakSuti = releaseProofVerdict({
+        exists: true,
+        proof: DOKAZ_BAZA,
+        headDigest: DOKAZ_BAZA.treeDigest,
+        head: 'a'.repeat(40),
+        nowMs: DOKAZ_SADA,
+      }).conditional.length === 0;
+      return nalaz.includes('NECOMMITANE izmjene pracenih datoteka') && nalaz.includes('src/ui/app.ts') && otisakSuti;
+    },
+    cleanBefore: () => {
+      const cisto = workingTreeVerdict({ status: '' });
+      // Netrackana datoteka nije u otisku stabla, pa nije ni nalaz: inace bi svaki lokalni log bio pad.
+      const netrackano = workingTreeVerdict({ status: '?? gate.log\n' });
+      return cisto.conditional.length === 0 && netrackano.conditional.length === 0;
+    },
+  },
+  {
+    id: 'objava/neizmjerena-cistoca-stabla-prolazi-kao-cista',
+    imitates:
+      '`git status` padne (nije git stablo, plitak checkout bez radnog stabla, git nije u PATH-u), a gate to '
+      + 'procita kao "nema izmjena". To je isti razred kvara kao plitki klon iz vanjskog audita 2026-09-08: '
+      + 'provjera koja u catch grani vrati zeleno. "Ne znam" se mora imenovati i uz tvrd gate pasti',
+    caught: () => workingTreeVerdict({ status: null }).conditional.join(' ').includes('cistoca NIJE izmjerena'),
+    cleanBefore: () => workingTreeVerdict({ status: '' }).notes.join(' ').includes('stablo koje se gradi je cisto'),
   },
   {
     id: 'objava/mek-gate-zavrsava-s-ok-uz-nalaz',

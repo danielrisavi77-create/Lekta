@@ -28,11 +28,24 @@ sto `netlify.toml` postavlja):
 | a | `dist/build-info.json` nedostaje, nije JSON ili nema 40-znamenkasti commit | `verify-deploy-dist`; `verify-release-proof` BEZ `--proof-only` | `dist/build-info.json ne postoji` |
 | b | `dist/build-info.json` nosi commit koji NIJE onaj koji se gradi | isto | `artefakt nema identitet builda` |
 | c | dokaz je `stale` ili `unknown` | `verify-deploy-dist`, `verify-release-proof` (uvijek) | `ZASTARJELO` / `NE ZNAM` |
-| d | praceni izvor promijenjen poslije ovjere (otisak stabla se razisao) | isto | `ZASTARJELO` |
+| d1 | praceni izvor promijenjen poslije ovjere i COMMITAN (otisak stabla se razisao) | isto | `ZASTARJELO` |
+| d2 | praceni izvor promijenjen poslije ovjere i NECOMMITAN (gradi se iz necistog stabla) | isto | `NECOMMITANE izmjene pracenih datoteka` |
 | e | obavezna razina bez zapisanog prolaza u `results[]` | isto | `obavezne razine bez zapisanog prolaza` |
 
-Uz zivu stranicu dolazi i sesti, koji se ne moze izmjeriti na build stroju: OBJAVLJENA verzija nije
+Uz zivu stranicu dolazi i jos jedan, koji se ne moze izmjeriti na build stroju: OBJAVLJENA verzija nije
 ona koja se tvrdi. To hvata `post-deploy-smoke` uz `--strict-commit` (korak 7).
+
+ZASTO (d) IMA DVA OBLIKA. Otisak stabla se racuna iz `git ls-tree`, dakle iz COMMITANOG stabla, a
+`vite build` gradi iz RADNOG. Necommitana izmjena pracene datoteke je zato u otisku nevidljiva: presuda
+ostaje `fresh`, identitet artefakta je tocan, a u objavljeni bundle udje kod koji nijedna razina dokaza
+nije mjerila. Cistocu stabla je do 2026-09-13 mjerio samo `release-check.mjs`, i to u trenutku PECENJA
+dokaza (`proof.dirtyWorkingTree`, redak 6 u dokazu); to je tvrdnja o DRUGOM TRENUTKU i rupu iz koraka 6
+nije mogla vidjeti. Za Netlify je rupa nedostizna (gradi se iz svjezeg checkouta), ali dokumentirani put
+objave je bas rucna lokalna gradnja, pa gate cistocu sada mjeri i u trenutku gradnje.
+
+Mjeri se TOCNO ona populacija koju pokriva otisak: pracene datoteke, uz izuzet sam dokaz (koji se smije
+mijenjati, vidi koka i jaje gore). Netrackane datoteke nisu ni u otisku pa nisu ni ovdje; tracked modul
+koji uvozi netrackan modul je zaseban razred i hvata ga `npm run orphan-scan`.
 
 Slucajevi (a) i (b) padaju UVIJEK, i bez tvrde zastavice: ondje se ZNA da je artefakt kriv. Slucajevi
 (c) do (e) su bez zastavice glasno upozorenje, jer razvojni CI (`dist-gate` u `.github/workflows/check.yml`)
@@ -93,6 +106,13 @@ Mekoca je odluka o strogosti, ne potvrda dokaza; uz nalaz zavrsni redak glasi `N
    provjerava da taj zapis nosi SHA stabla koje se stvarno gradi, ukljucujuci proof-only commit iz
    koraka 5. `npm run build` sam ne izradjuje generirane stranice i ne prolazi kroz gate.
 
+   GRADI SE IZ CISTOG STABLA, i to gate sada i mjeri: necommitana izmjena pracene datoteke ulazi u
+   bundle a otisak stabla je ne vidi (slucaj d2 gore). Ako je nesto ostalo neccommitano, gate imenuje
+   staze; commitaj ih i PONOVI ovjeru od koraka 3, jer dokaz tada pokriva drugo stablo. Sam lanac
+   gradnje ne dira nijednu pracenu datoteku (mjereno 2026-09-13: puni `build-production.mjs --skip-verify`
+   ostavlja `git status --porcelain --untracked-files=no` prazan), pa nalaz u ovom koraku uvijek znaci
+   tudju ili zaboravljenu izmjenu, ne trag gradnje.
+
    Tek POSLIJE ovog koraka ima smisla i puni gate bez zastavice (`npm run release:proof-gate`), jer
    artefakt tada postoji; on je u lancu ionako vec prosao, pa je to samo brza ponovna provjera.
 7. **Nakon promocije potvrdi objavljenu verziju**, iz checkouta stvarno objavljenog izdanja:
@@ -142,8 +162,9 @@ vise ne opisuju stvarno ponasanje skripti.
 
 ## Gdje su dokazi da ovo grize
 
-- `tests/release-gate-core.test.ts` - svih pet negativnih slucajeva nad stvarnim datotekama i pravim
-  git stablom, svaki uz baseline.
+- `tests/release-gate-core.test.ts` - svi negativni slucajevi nad stvarnim datotekama i pravim git
+  stablom, svaki uz baseline. Kod (d2) se tvrdi i da presuda o zastarjelosti pritom SUTI, inace se ne
+  zna koji je od dva mehanizma reagirao (CLAUDE.md: mjera koja se popravi ne dokazuje da zahvat radi).
 - `tests/release-gate-cli.test.ts` - iste tvrdnje kroz PRAVE procese (`node scripts/...`), pa se mjeri
   izlazni kod i poruka, ne samo povratna vrijednost.
 - `tests/post-deploy-smoke-strict-commit-cli.test.ts` - strogi i blagi mod nad pravim lokalnim
