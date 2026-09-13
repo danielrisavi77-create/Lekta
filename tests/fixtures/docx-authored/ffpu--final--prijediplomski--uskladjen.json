@@ -1,0 +1,49 @@
+{
+  "profileId": "ffpu-zavrsni",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "ffpu--final--prijediplomski",
+    "unitId": "ffpu",
+    "workType": "final",
+    "level": "prijediplomski",
+    "program": "Sveučilišni prijediplomski studij Arheologija",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "ffpu"
+  },
+  "prose": {
+    "id": "ffpu--final--prijediplomski",
+    "words": 5421,
+    "authoring": {
+      "method": "SINTETSKI TESTNI ULAZ ZA LEKTU, ne studentski rad i ne za predaju. Autorica (Tena Lovrić) i mentor (doc. dr. sc. Vedran Barbić) su izmišljena imena, tema i argumentacija su izmišljene, rad nema nijedan vlastiti empirijski podatak, nijedan teren i nijednu brojku, i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje ni građu ijedne stvarne ustanove ili nalazišta. Pripisivanja poznatim autorima (Harris, Schiffer, Binford, Clarke, Childe, Barker, Roskams, Carver, Hodder, Hodder i Hutson, Lucas, Shanks i Tilley, Trigger, Wylie, Renfrew i Bahn, Olsen) drže se OPĆEPOZNATIH POJMOVNIH pozicija tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite, željezno pravilo 28), pa se citira djelo u cjelini. Kovačević (2026) je izmišljena jedinica s izmišljenim DOI-jem, namjerno, da provjera postojanja može vratiti i not-found. VOĐENJE: rad je stvarno vođen skillom katedra-lite v1.9.41 (paket ~/.katedra-pkg, 870022d), u autopilot putu iz SKILL.md 0.1. IZVRŠENI KORACI: 0.0 dohvat paketa i drift.py --kratko (kartica i repo iste, SKILL.md 25df8aee5bb2, 74 skripte); 0.1 guard (nema .katedra/stanje.json, dakle novi projekt); ucitavanje.py --mod 2 (popis štiva izračunat, ne pogođen); profile_resolver.py --fakultet ffpu (NIJE razriješio profil, v. PRESKOČENO); stanje_init.py --fakultet-izvan-registryja ffpu s upisanim ograničenjem, pa --set jezik=hr; razina.py --postavi preddiplomski-3 --citatelj mentor --tema-poznata ne; dijelovi.py --sij i --status (21 traženi dio, pokrivenost 7 strojno / 7 ručno / 7 nepokriveno); perspective_map.py init, tri perspektive (procesna, formacijska, interpretativna), validate ready=true, distinct=3; plan.md sa strukturom unutar ograde STRUKTURA i s opisom sadržaja i izvora po svakom potpoglavlju; plan_state.py init --teza --budzet 22, import plan.md, status; gate.py --faza plan (6 prošlo, 0 nalaza, 0 preskočeno, 0 alat pukao, izlazni kod 0); plan_state.py odobri --actor full-auto (PLAN GATE PASS, sha256:1f39b0824d63); stanje_init.py --set plan_odobren=true i --set mod=pisanje; plan_state.py odstupanje (zabilježeno odstupanje od rukopisa u markdownu, v. niže); pisanje po planu pa provjeri_zamke_proze.py, check_ai_style.py i provjeri_jezik.py nad tijelom rada. ODSTUPANJE OD PLANA, zabilježeno kroz plan_state.py odstupanje: rukopis se ne vodi u .katedra/poglavlja/*.md nego se proza piše izravno u JSON po vanjskoj shemi naručitelja (src/corpus/prose-schema.ts), a markdown se iz njega izvodi samo radi stilskih alata; razlog je što je isporuka JSON datoteka za Lektin sintetski korpus, a ne .docx, pa bi markdown kao izvor istine ovdje značio drugu kopiju istoga teksta. PRESKOČENO I ZAŠTO: (1) profile_resolver.py nije razriješio profil jer katedra registry ima rute samo za efzg i fpzg; rad je upisan kao --fakultet-izvan-registryja ffpu, pa su svi formalni nalazi savjetodavni, a pravila oblika (Arial 12, prored 1,5, margine 2,5 cm, A4, obvezan sadržaj bez numeracije stranica, sedam obveznih dijelova) dolaze iz Lektina profila ffpu-zavrsni, ne iz katedre. (2) dijelovi.py je sijao bez profila, pa je zasijano samo ono što registar traži uvijek; razlika je zabilježena, ne izglađena. (3) gate.py --faza pisanje, audit i predaja NIJE pokretan, jer traži .docx, a ovaj zadatak izrijekom proizvodi samo prozu; dokument gradi Lektin generator iz vlastitih profila. (4) rad-audit, rad-docx, fpzg-diplomski i replikacija-pspp nisu zvani, iz istoga razloga (rad nema dokumenta ni brojki). (5) verify_sources.py, evidence_ingest.py i evidence_gate.py nisu pokretani jer nijedan izvor nije lokalno dostupan kao datoteka, pa bi ingest bio prazan; umjesto toga su dva DOI-ja provjerena izravno kroz CrossRef. (6) pretraga.py jer stvarne pretrage baza nije ni bilo (literatura je odabrana iz općepoznatog kanona), primjerci.py jer nema obranjenih radova za mjerenje. PROVJERA DOI-JEVA: 10.2307/279771 (CrossRef HTTP 200, naslov Toward the Identification of Formation Processes, Schiffer, American Antiquity 48(4), 675-706, 1983) i 10.2307/278380 (CrossRef HTTP 200, naslov Archaeology as Anthropology, Binford, American Antiquity 28(2), 217-225, 1962) označeni su kao real. 10.99999/cta.2026.1200712 uz izmišljenu jedinicu Kovačević (2026) namjerno je neistinit, kao negativna kontrola. OPSEG: 43 odlomka izračunata su prije pisanja iz zadanih 5500 riječi uz 120 do 130 riječi po odlomku i nijedan nije naknadno dodan ni uklonjen. FUSNOTE: rad ih namjerno nosi šest iako profil ffpu-zavrsni fusnote ne propisuje, jer sintetski generator fusnote uopće ne emitira pa ih u korpus može unijeti samo proza; sve su meta-napomene o opsegu pojma i o statusu primjera, nijedna ne nosi tvrdnju rada. OPSEG, IZMJERENO: broj odlomaka pogođen je iz prve (43 planirana, 43 napisana, nijedan dodan ni uklonjen), ali duljina nije: prvi prolaz dao je 4415 riječi uz prosjek 102,7, pa je jedan kalibracijski prolaz produljio SVAKI postojeći odlomak jednom rečenicom i podigao prosjek na 125,1. Završno stanje je 5421 riječ naspram zadanih 5500 (-1,4 %), bez ijednog dodanog odlomka. STILSKI PROLAZI I NJIHOVO MJERENJE: check_ai_style.py je u prvom prolazu imao TRI blokirajuća nalaza (kohezija 13,9/1000 u Uvodu uz prag 15,0; medijan rečenice 19 u 3. i u 4. poglavlju uz prag 20 do 24). Popravljeni su s 28 doslovnih zamjena, od kojih svaka mora pogoditi točno jednom (dva nova vezna sredstva u Uvodu, 20 spajanja kratkih rečenica u 3. i 4. poglavlju, 6 zamjena dominantnoga veznika jer). Poslije toga: check_ai_style.py izlazni kod 0 i nula blokirajućih nalaza, medijani 21 do 23, kohezija Uvoda 17,8, 22 različita vezna sredstva u cijelom radu (cilj 20). PRAVILO 31 (prolaz kroz spojene rečenice rukom) našao je da su sva 21 spojena mjesta gramatički ispravna. ZAMKA KOJU JE MJERENJE UHVATILO: prvi stilski prolaz podigao je kvantifikatore dosega uz citat sa 6 na 7 (spajanje rečenice uz Lucasa uvelo je svaki zapis), pa je ta rečenica prepisana i --usporedi poslije toga javlja nijedna provjera nije lošija nego prije. PRESUDA O PREOSTALIH 6 NALAZA provjeri_zamke_proze.py (f): svih šest je lint-wrong. U četiri slučaja kvantifikator je dio univerzalne tvrdnje koju iznosi sam citirani izvor (sve što se dogodilo poslije uz Schiffera, svaki predmet ostao ondje gdje je pao uz Binforda i njegovu kritiku te pretpostavke, svaka linija dokaza uz Wylieja, svaki pokazatelj uz Kovačevića), a u dva je prva redni broj u nabrajanju, ne kvantifikator dosega. provjeri_jezik.py: 0 pravopisnih i gramatičkih te 0 stilskih nalaza (dva stilska iz prvoga prolaza, isti kao zamjenica i putem kao suvišno, ispravljena su). Zamke proze: dvotočka 2,2/1000 uz prag 3,0, spojna crtica 0, ponovljen kostur odlomka 0, rečenice spojene zarezom 0.",
+      "tool": "Claude (Opus 5) kroz Claude Code, vođeno skillom katedra-lite v1.9.41 (katedra-pkg 870022d)",
+      "date": "2026-09-13"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row ffpu--final--prijediplomski",
+    "generatedAt": "2026-09-13T09:02:28.043Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "stil/tijelo-nije-normal",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice"
+    ]
+  },
+  "toolLimitations": [
+    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
+  ]
+}

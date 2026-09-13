@@ -1,0 +1,45 @@
+{
+  "profileId": "vuv-zavrsni",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "vuv--final--prijediplomski",
+    "unitId": "vuv",
+    "workType": "final",
+    "level": "prijediplomski",
+    "program": "Prijediplomski stručni studiji (završni rad, Veleučilište u Virovitici)",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "vuv-final"
+  },
+  "prose": {
+    "id": "vuv--final--prijediplomski",
+    "words": 5482,
+    "authoring": {
+      "method": "Prozu je u jednom prolazu napisao jezični model (Claude Opus 5, agent Claude Code), vođen skillom katedra-lite v1.9.41 u autopilot putu: profil fakulteta NIJE razriješen jer vuv nije u Katedrinu registryju (dostupni: efzg, fpzg), pa je rad uveden kroz stanje_init.py s admisijom nije-admitiran i dva zapisana ograničenja, a svi formalni nalazi ostaju savjetodavni. Perspective map nosi četiri razlučene perspektive, plan je uvezen iz plana i programa, dopunjen opisom sadržaja i planiranim izvorima po svakom od 12 potpoglavlja, prošao PLAN GATE i odobren s actor=full-auto; tekst je pisan po odobrenoj strukturi, a nakon mjerenja opsega dopunjen s 17 odlomaka na 61 (odstupanje od plana zabilježeno u plan.json; ciljani opseg retka matrice je 5500 riječi). Sadržaj je IZMIŠLJEN i služi isključivo kao testni ulaz za Lektu: nijedan podatak, ustanova, osoba ni istraživanje nisu stvarni, autor i mentor na naslovnici su izmišljene osobe, a rad nije predan nigdje niti je namijenjen predaji. Od 18 bibliografskih jedinica sedam je stvarnih i provjerenih izravno kroz CrossRef API (HTTP 200 uz podudaran naslov, časopis, godište i stranice), dvije nose očito izmišljen DOI, a preostalih devet su izmišljene zamjenske jedinice s izmišljenim hrvatskim časopisima i nakladnicima. Citatni stil je APA 7 (autor, godina u tijelu; abecedni popis literature), jer taj stil nijedno dosad napisano tijelo sintetskog korpusa nije nosilo. Oblikovanje (font, prored, margine, naslovnica, numeracija) NIJE dio ovog izlaza; dodaje ga Lektin generator iz vlastitih pravila profila vuv-zavrsni.",
+      "tool": "Claude Code (Claude Opus 5) + katedra-lite v1.9.41 (katedra-pkg 870022d)",
+      "date": "2026-09-13"
+    }
+  },
+  "provenance": {
+    "tool": "word",
+    "toolPath": "C:\\Program Files (x86)\\Microsoft Office\\Office14\\WINWORD.EXE",
+    "os": "win32 x64",
+    "command": "npm run corpus-gen:word -- --row vuv--final--prijediplomski",
+    "generatedAt": "2026-09-13T09:05:02.045Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/deflate",
+      "rsid/svaki-odlomak",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/word"
+    ]
+  },
+  "toolLimitations": []
+}

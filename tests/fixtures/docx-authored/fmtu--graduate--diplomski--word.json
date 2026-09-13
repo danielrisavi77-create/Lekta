@@ -1,0 +1,45 @@
+{
+  "profileId": "fmtu-diplomski",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "fmtu--graduate--diplomski",
+    "unitId": "fmtu",
+    "workType": "graduate",
+    "level": "diplomski",
+    "program": "Diplomski studij Marketing u turizmu",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "fmtu-graduate"
+  },
+  "prose": {
+    "id": "fmtu--graduate--diplomski",
+    "words": 10896,
+    "authoring": {
+      "method": "SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor na naslovnici su izmišljene osobe, tema i cijeli tekst su autorski napisani za potrebe testiranja, nema nijednog vlastitog empirijskog podatka, nijedne brojke pripisane stvarnoj destinaciji ili ustanovi i nijedne tvrdnje o stvarnom stanju bilo kojeg mjesta. Rad je izrijekom pojmovno-raspravni, bez poglavlja s rezultatima, jer bi nalazi iz izmišljene građe bili neistiniti i kad je rad označen kao testni. Pripisivanja poznatim djelima (Grönroos 1984; Oliver 1980; Keller 1993; Gartner 1994; Otto i Ritchie 1996; Zeithaml, Berry i Parasuraman 1996; Baloglu i McCleary 1999; Blain, Levy i Ritchie 2005; Konecnik i Gartner 2007; Pike i Page 2014) drže se općepoznatih pojmovnih doprinosa tih radova i ne pripisuju im pojedinačne brojčane nalaze. BROJEVI STRANICA SE U TIJELU NE NAVODE, i to je odluka po katedra-lite pravilu 28: ova sesija nijedan lokator nije mogla potvrditi iz same datoteke izvora, pa se stranica ne izmišlja; citatni dijalekt ostaje autor-godina bez lokatora, a ne autor-godina s nepotvrđenom stranicom. DOI-ji: deset jedinica označenih kao real provjereno je u ovoj sesiji kroz https://api.crossref.org/works/<doi> i svaka je vratila HTTP 200 s podudarnim autorima, naslovom, časopisom, godištem, brojem i paginacijom; dvije jedinice označene kao fake (Rukavina 2024, Horvatin 2022) provjerene su istim putem i vratile su HTTP 404. Preostalih šest jedinica su izmišljene hrvatske knjige s izmišljenim nakladnicima i nose doiKind none. CITATNI STIL je Chicago autor-godina (prezime i godina u tijelu, abecedni popis literature s godinom iza autora), jer je taj stil u matrici nositelj samo dvaju redaka (fmtu--final i fmtu--graduate) i dosad nijedno napisano tijelo sintetskog korpusa nije ga imalo; generator ga ne čita iz pravila profila, pa se dokazuje isključivo napisanim radom. ALAT: katedra-lite je stvarno vodio rad, u autopilot načinu. Izvršeno: 0.0 dohvat paketa (lokalni klon $HOME/.katedra-pkg, VERSION 1.9.41, HEAD 870022d od 2026-09-10); 0.3 routing u mod 2 i učitana isključivo references/pisanje.md, po izričitoj uputi o štednji konteksta; pisanje po §1.3 (struktura odlomka) i §3 (stil, zabranjene prazne fraze i prazni šavovi, bez popisa u tijelu rada); opseg planiran unaprijed iz ciljanih 11000 riječi retka matrice i pogođen u jednom prolazu (izmjereno 10896 riječi u 140 odlomaka, odstupanje 0,9 posto, bez kruga dopisivanja); provjeri_zamke_proze.py i check_ai_style.py nad tijelom, oba izlazni kod 0 i bez ijednog blokirajućeg nalaza (ritam: medijan 20,0, prosjek 20,3, najdulja rečenica 44; kohezija 15,1 na 1000 riječi uz 18 veznih sredstava; nula rečenica spojenih zarezom uz veliko slovo, nula spojnih crtica, nula kvantifikatora dosega uz citat). SVJESNO OSTAVLJENA savjetodavna upozorenja: dvotočka 4,5 na 1000 riječi uz preporučenih 3,0, veznici jer 53 i pa 43 puta, standardna devijacija duljine rečenice 7,6 uz preporučenih 8,0, sedam ponovljenih kostura odlomka i fraza Time se pet puta. Ostavljena su jer bi njihovo uklanjanje po katedra-lite pravilu 31 lako rodilo drugi tik, a nijedno nije blokirajuće; korpusu je pritom korisnije tijelo s izmjerenim i imenovanim stilskim profilom nego tijelo zaglađeno u više krugova. PRESKOČENO i zašto: profile_resolver.py jer fmtu nije u Katedrinu registryju fakulteta (registry rutira samo efzg i fpzg), pa nijedno formalno pravilo ovoga rada nije provjereno iz službenih uputa nego dolazi iz Lektina profila fmtu-diplomski; stanje_init.py, dijelovi.py, razina.py i plan lanac jer se ne vodi projekt nego se isporučuje samo prozno tijelo u JSON shemi; svi alati koji traže .docx ili .pdf (check_rules.py, check_paragraphs.py, provjeri_sazetak.py, provjeri_literaturu.py, provjeri_prikaze.py, engine.py faze A-G, gate.py) jer oblikovanje, naslovnicu, sadržaj i popis literature gradi Lektin generator iz vlastitih pravila profila, ne Katedra; verify_sources.py i evidence lanac jer nijedan izvor nije lokalno dostupan kao datoteka, a provjera postojanja je umjesto toga napravljena izravno kroz CrossRef; pretraga.py, primjerci.py i slicnost.py jer stvarne pretrage baza nije bilo i jer nema obranjenih radova te jedinice za mjerenje. SHEMA je provjerena neovisno, izvornom funkcijom validateProseBody i validateProseAgainstRow iz Lektina src/corpus/prose-schema.ts (transpilirano esbuildom iz izoliranog worktreea i pokrenuto nad ovom datotekom), uz negativnu kontrolu kojom je pokazano da provjera uopće grize. OBLIKOVANJE (font, prored, margine, format stranice, numeracija) NIJE dio ovog izlaza; dodaje ga Lektin generator iz pravila profila fmtu-diplomski.",
+      "tool": "Claude Code (Claude Opus 5) + katedra-lite v1.9.41 (katedra-pkg 870022d)",
+      "date": "2026-09-13"
+    }
+  },
+  "provenance": {
+    "tool": "word",
+    "toolPath": "C:\\Program Files (x86)\\Microsoft Office\\Office14\\WINWORD.EXE",
+    "os": "win32 x64",
+    "command": "npm run corpus-gen:word -- --row fmtu--graduate--diplomski",
+    "generatedAt": "2026-09-13T09:05:57.592Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/deflate",
+      "rsid/svaki-odlomak",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/word"
+    ]
+  },
+  "toolLimitations": []
+}

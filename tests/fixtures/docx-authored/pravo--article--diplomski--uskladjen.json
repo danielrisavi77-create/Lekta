@@ -1,0 +1,46 @@
+{
+  "profileId": "pravo-opci-pravni-akademski-rad",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "pravo--article--diplomski",
+    "unitId": "pravo",
+    "workType": "article",
+    "level": "diplomski",
+    "program": "Stručni diplomski studij Javna uprava",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "pravo-graduate"
+  },
+  "prose": {
+    "id": "pravo--article--diplomski",
+    "words": 5042,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmišljene osobe, brojke i primjeri su konstruirani, a nijedan redak nije preuzet iz stvarnog rada niti smije postati izvor bodovanog pravila. Tijelo je napisano u jednom prolazu, prema ciljanom opsegu iz retka matrice, i nosi oblike na kojima motor stvarno pada: kose unakrsne upute, fusnotno citiranje pravnih akata, natpis vrste rada velikim slovima i mješovite DOI oznake.",
+      "tool": "katedra-lite 1.9.40 (autopilot)",
+      "date": "2026-09-13"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row pravo--article--diplomski",
+    "generatedAt": "2026-09-13T09:02:45.647Z"
+  },
+  "mutations": {},
+  "mutationsNotApplicable": {},
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "stil/tijelo-nije-normal",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "proizvodjac/libreoffice"
+    ]
+  },
+  "toolLimitations": []
+}
