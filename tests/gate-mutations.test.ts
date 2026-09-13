@@ -1362,6 +1362,73 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'petlja/nemjerljiva-provjera-procitana-kao-rijesena-os',
+    imitates:
+      'os `footnote-typography` prestane proizvoditi FUSNOTU (netko digne emitiranje iz graditelja, ' +
+      'ili profil izgubi `footnoteSize`), pa provjera `footnote.format` na takvom dokumentu dolazi kao ' +
+      '`unmeasurable`, dakle `max 0`. `axisResolved` vraca `true` cim je `max === 0`, pa se os prijavi ' +
+      'kao SAVRSENO rijesena na svih 53 profila iako popravak nije ni pozvan: `pass` ostaje isti, ' +
+      'nijedna zbirna brojka se ne mice, a matrica dobije 53 celije laznog dokaza `resolved`. Isti ' +
+      'razred kao vakuumsko zeleno u hijerarhiji naslova, i kao `page.numbers.position` na dokumentu ' +
+      'bez broja stranice. Izmjereno 2026-09-13 pri uvodjenju osi: `footnoteTypographyFixer` nad ' +
+      'dokumentom bez `word/footnotes.xml` vraca `unsupported-structure` i u changelog NE ulazi, pa je ' +
+      'changelog jedini svjedok koji tu zamku razlikuje od stvarnog rjesenja',
+    caught: () => {
+      type Redak = { profileId: string; violated: string[]; axesResolved: string[]; fixersChanged: string[] };
+      // Doslovno iz `run-closed-loop.mts`: nebodovana provjera se broji kao rijesena.
+      const axisResolved = (check: { earned?: number; max?: number } | undefined): boolean => {
+        if (!check) return false;
+        return (check.max ?? 0) === 0 || (check.earned ?? 0) >= (check.max ?? 0);
+      };
+      // Ista tvrdnja kao gard u `tests/closed-loop-report.test.ts`.
+      const provjeri = (rows: Redak[]) => {
+        const sPravilima = rows.filter((r) => r.violated.includes('footnote-typography'));
+        if (sPravilima.length <= 40) return true; // os je nestala iz generatora
+        if (sPravilima.some((r) => !r.axesResolved.includes('footnote-typography'))) return true;
+        return sPravilima.some((r) => !r.fixersChanged.includes('footnote-typography-fixer'));
+      };
+      const redci = (n: number, mk: (i: number) => Partial<Redak>): Redak[] =>
+        Array.from({ length: n }, (_, i) => ({
+          profileId: `p${i}`,
+          violated: ['footnote-typography'],
+          axesResolved: ['footnote-typography'],
+          fixersChanged: ['footnote-typography-fixer'],
+          ...mk(i),
+        }));
+
+      // 0) Zamka sama: provjera bez ijedne mjerljive dimenzije prolazi kao rijesena.
+      const zamkaPostoji = axisResolved({ earned: 0, max: 0 }) && !axisResolved({ earned: 2, max: 6 });
+      // 1) Os je nestala iz generatora: nijedan redak je vise ne krsi.
+      const nestala = provjeri([{ profileId: 'a', violated: ['font'], axesResolved: ['font'], fixersChanged: ['font-fixer'] }]);
+      // 2) Uvjet se osuo na sacicu profila umjesto na 53: pad ispod praga se vidi.
+      const osula = provjeri(redci(12, () => ({})));
+      // 3) Os se krsi, ali ju popravak vise ne zatvara.
+      const nerijesena = provjeri(redci(53, (i) => (i === 9 ? { axesResolved: [] } : {})));
+      // 4) SRZ: os je "rijesena" na svima, a fixer nijednom nije usao u changelog. Tocno tako
+      //    izgleda dokument bez fusnota, i tocno to `axesResolved` sam ne moze razlikovati.
+      const nemjerljiva = provjeri(redci(53, () => ({ fixersChanged: ['font-fixer'] })));
+      return zamkaPostoji && nestala && osula && nerijesena && nemjerljiva;
+    },
+    /**
+     * Netrivijalnost: izmjereno stanje (53 profila, svi zatvoreni, fixer svuda u changelogu) NE
+     * smije dati nalaz. Bez ove polovice bi prosao i gard koji vristi na svaki izvjestaj.
+     */
+    cleanBefore: () => {
+      const rows = Array.from({ length: 53 }, (_, i) => ({
+        profileId: `p${i}`,
+        violated: ['footnote-typography'],
+        axesResolved: ['footnote-typography'],
+        fixersChanged: ['footnote-typography-fixer'],
+      }));
+      const sPravilima = rows.filter((r) => r.violated.includes('footnote-typography'));
+      return (
+        sPravilima.length > 40 &&
+        !sPravilima.some((r) => !r.axesResolved.includes('footnote-typography')) &&
+        !sPravilima.some((r) => !r.fixersChanged.includes('footnote-typography-fixer'))
+      );
+    },
+  },
+  {
     id: 'petlja/glavni-prolaz-zaboravi-tko-je-mijenjao',
     imitates:
       'glavni prolaz closed-loopa prestane biljeziti identitet fixera koji su promijenili dokument, ' +

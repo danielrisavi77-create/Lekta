@@ -1031,14 +1031,14 @@
       },
       "cellSummary": {
         "cellCount": 248,
-        "coveredCount": 73,
-        "uncoveredCount": 175,
-        "resolvedCount": 17,
+        "coveredCount": 74,
+        "uncoveredCount": 174,
+        "resolvedCount": 18,
         "byReason": {
           "profil-ne-propisuje-os": 142,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 16,
           "trazi-ulaz-izvan-dokumenta": 16,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -1395,14 +1395,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -1462,14 +1462,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 25,
-        "uncoveredCount": 37,
-        "resolvedCount": 11,
+        "coveredCount": 27,
+        "uncoveredCount": 35,
+        "resolvedCount": 13,
         "byReason": {
           "profil-ne-propisuje-os": 27,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -1520,14 +1520,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -1573,14 +1573,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -1961,14 +1961,14 @@
       },
       "cellSummary": {
         "cellCount": 124,
-        "coveredCount": 48,
-        "uncoveredCount": 76,
-        "resolvedCount": 20,
+        "coveredCount": 52,
+        "uncoveredCount": 72,
+        "resolvedCount": 24,
         "byReason": {
           "profil-ne-propisuje-os": 56,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 4,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 8,
           "trazi-ulaz-izvan-dokumenta": 8,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -2014,14 +2014,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -2068,14 +2068,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -2124,14 +2124,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -2179,14 +2179,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -3999,14 +3999,14 @@
       },
       "cellSummary": {
         "cellCount": 186,
-        "coveredCount": 74,
-        "uncoveredCount": 112,
-        "resolvedCount": 32,
+        "coveredCount": 75,
+        "uncoveredCount": 111,
+        "resolvedCount": 33,
         "byReason": {
           "profil-ne-propisuje-os": 87,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 12,
           "trazi-ulaz-izvan-dokumenta": 12,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -4335,14 +4335,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 10,
-            "uncoveredCount": 21,
-            "resolvedCount": 3,
+            "coveredCount": 11,
+            "uncoveredCount": 20,
+            "resolvedCount": 4,
             "byReason": {
               "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -6806,14 +6806,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 26,
-        "uncoveredCount": 36,
-        "resolvedCount": 12,
+        "coveredCount": 28,
+        "uncoveredCount": 34,
+        "resolvedCount": 14,
         "byReason": {
           "profil-ne-propisuje-os": 26,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -6866,14 +6866,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -6923,14 +6923,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -7045,14 +7045,14 @@
       },
       "cellSummary": {
         "cellCount": 279,
-        "coveredCount": 119,
-        "uncoveredCount": 160,
-        "resolvedCount": 51,
+        "coveredCount": 125,
+        "uncoveredCount": 154,
+        "resolvedCount": 57,
         "byReason": {
           "profil-ne-propisuje-os": 118,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 6,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 18,
           "trazi-ulaz-izvan-dokumenta": 18,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -7224,14 +7224,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -7280,14 +7280,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -7388,14 +7388,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -7442,14 +7442,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -7498,14 +7498,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 16,
-            "uncoveredCount": 15,
-            "resolvedCount": 6,
+            "coveredCount": 17,
+            "uncoveredCount": 14,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 10,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -7554,14 +7554,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -9095,14 +9095,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 26,
-        "uncoveredCount": 36,
-        "resolvedCount": 12,
+        "coveredCount": 28,
+        "uncoveredCount": 34,
+        "resolvedCount": 14,
         "byReason": {
           "profil-ne-propisuje-os": 26,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -9148,14 +9148,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -9203,14 +9203,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -10519,14 +10519,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 24,
-        "uncoveredCount": 38,
-        "resolvedCount": 10,
+        "coveredCount": 26,
+        "uncoveredCount": 36,
+        "resolvedCount": 12,
         "byReason": {
           "profil-ne-propisuje-os": 28,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -10572,14 +10572,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -10626,14 +10626,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -11529,14 +11529,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 24,
-        "uncoveredCount": 38,
-        "resolvedCount": 10,
+        "coveredCount": 26,
+        "uncoveredCount": 36,
+        "resolvedCount": 12,
         "byReason": {
           "profil-ne-propisuje-os": 28,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -11582,14 +11582,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -11636,14 +11636,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -13332,14 +13332,14 @@
       },
       "cellSummary": {
         "cellCount": 31,
-        "coveredCount": 13,
-        "uncoveredCount": 18,
-        "resolvedCount": 6,
+        "coveredCount": 14,
+        "uncoveredCount": 17,
+        "resolvedCount": 7,
         "byReason": {
           "profil-ne-propisuje-os": 13,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 2,
           "trazi-ulaz-izvan-dokumenta": 2,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -13393,14 +13393,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -14124,14 +14124,14 @@
       },
       "cellSummary": {
         "cellCount": 31,
-        "coveredCount": 10,
-        "uncoveredCount": 21,
-        "resolvedCount": 3,
+        "coveredCount": 11,
+        "uncoveredCount": 20,
+        "resolvedCount": 4,
         "byReason": {
           "profil-ne-propisuje-os": 16,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 2,
           "trazi-ulaz-izvan-dokumenta": 2,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -14173,14 +14173,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 10,
-            "uncoveredCount": 21,
-            "resolvedCount": 3,
+            "coveredCount": 11,
+            "uncoveredCount": 20,
+            "resolvedCount": 4,
             "byReason": {
               "profil-ne-propisuje-os": 16,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -15521,14 +15521,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 26,
-        "uncoveredCount": 36,
-        "resolvedCount": 12,
+        "coveredCount": 28,
+        "uncoveredCount": 34,
+        "resolvedCount": 14,
         "byReason": {
           "profil-ne-propisuje-os": 26,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -15574,14 +15574,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -15631,14 +15631,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -16703,14 +16703,14 @@
       },
       "cellSummary": {
         "cellCount": 93,
-        "coveredCount": 38,
-        "uncoveredCount": 55,
-        "resolvedCount": 17,
+        "coveredCount": 41,
+        "uncoveredCount": 52,
+        "resolvedCount": 20,
         "byReason": {
           "profil-ne-propisuje-os": 40,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 3,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -16757,14 +16757,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -16813,14 +16813,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -16869,14 +16869,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -16928,14 +16928,14 @@
       },
       "cellSummary": {
         "cellCount": 31,
-        "coveredCount": 13,
-        "uncoveredCount": 18,
-        "resolvedCount": 6,
+        "coveredCount": 14,
+        "uncoveredCount": 17,
+        "resolvedCount": 7,
         "byReason": {
           "profil-ne-propisuje-os": 13,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 1,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 2,
           "trazi-ulaz-izvan-dokumenta": 2,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -16981,14 +16981,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -19208,14 +19208,14 @@
       },
       "cellSummary": {
         "cellCount": 403,
-        "coveredCount": 193,
-        "uncoveredCount": 210,
-        "resolvedCount": 98,
+        "coveredCount": 201,
+        "uncoveredCount": 202,
+        "resolvedCount": 107,
         "byReason": {
           "profil-ne-propisuje-os": 147,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 8,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 26,
           "trazi-ulaz-izvan-dokumenta": 26,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 3
@@ -19261,14 +19261,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 17,
-            "uncoveredCount": 14,
-            "resolvedCount": 10,
+            "coveredCount": 18,
+            "uncoveredCount": 13,
+            "resolvedCount": 11,
             "byReason": {
               "profil-ne-propisuje-os": 9,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -19315,14 +19315,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 17,
-            "uncoveredCount": 14,
-            "resolvedCount": 10,
+            "coveredCount": 18,
+            "uncoveredCount": 13,
+            "resolvedCount": 11,
             "byReason": {
               "profil-ne-propisuje-os": 9,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -19369,14 +19369,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 17,
-            "uncoveredCount": 14,
-            "resolvedCount": 10,
+            "coveredCount": 18,
+            "uncoveredCount": 13,
+            "resolvedCount": 11,
             "byReason": {
               "profil-ne-propisuje-os": 9,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -19425,7 +19425,7 @@
             "cellCount": 31,
             "coveredCount": 18,
             "uncoveredCount": 13,
-            "resolvedCount": 10,
+            "resolvedCount": 11,
             "byReason": {
               "profil-ne-propisuje-os": 9,
               "univerzalna-higijena-bez-dokaza": 0,
@@ -19533,14 +19533,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 18,
-            "uncoveredCount": 13,
-            "resolvedCount": 10,
+            "coveredCount": 19,
+            "uncoveredCount": 12,
+            "resolvedCount": 11,
             "byReason": {
               "profil-ne-propisuje-os": 7,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 1
@@ -19589,14 +19589,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 18,
-            "uncoveredCount": 13,
-            "resolvedCount": 10,
+            "coveredCount": 19,
+            "uncoveredCount": 12,
+            "resolvedCount": 11,
             "byReason": {
               "profil-ne-propisuje-os": 7,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 1
@@ -19649,14 +19649,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -19767,14 +19767,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -19821,14 +19821,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -25199,14 +25199,14 @@
       },
       "cellSummary": {
         "cellCount": 1333,
-        "coveredCount": 492,
-        "uncoveredCount": 841,
-        "resolvedCount": 169,
+        "coveredCount": 499,
+        "uncoveredCount": 834,
+        "resolvedCount": 176,
         "byReason": {
           "profil-ne-propisuje-os": 662,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 7,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 86,
           "trazi-ulaz-izvan-dokumenta": 86,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -26224,14 +26224,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -26278,14 +26278,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -26514,14 +26514,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -26568,14 +26568,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -26725,14 +26725,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -26778,14 +26778,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -26925,14 +26925,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -27796,14 +27796,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 26,
-        "uncoveredCount": 36,
-        "resolvedCount": 12,
+        "coveredCount": 28,
+        "uncoveredCount": 34,
+        "resolvedCount": 14,
         "byReason": {
           "profil-ne-propisuje-os": 26,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -27851,14 +27851,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -27907,14 +27907,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -29537,14 +29537,14 @@
       },
       "cellSummary": {
         "cellCount": 279,
-        "coveredCount": 92,
-        "uncoveredCount": 187,
-        "resolvedCount": 29,
+        "coveredCount": 95,
+        "uncoveredCount": 184,
+        "resolvedCount": 32,
         "byReason": {
           "profil-ne-propisuje-os": 148,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 3,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 18,
           "trazi-ulaz-izvan-dokumenta": 18,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -29585,14 +29585,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -29634,14 +29634,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -29968,14 +29968,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 12,
-            "uncoveredCount": 19,
-            "resolvedCount": 5,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
+            "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -30203,14 +30203,14 @@
       },
       "cellSummary": {
         "cellCount": 62,
-        "coveredCount": 26,
-        "uncoveredCount": 36,
-        "resolvedCount": 12,
+        "coveredCount": 28,
+        "uncoveredCount": 34,
+        "resolvedCount": 14,
         "byReason": {
           "profil-ne-propisuje-os": 26,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4,
           "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -30258,14 +30258,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -30314,14 +30314,14 @@
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 13,
-            "uncoveredCount": 18,
-            "resolvedCount": 6,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 7,
             "byReason": {
               "profil-ne-propisuje-os": 13,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2,
               "pomocni-fixer-dokaz-nosi-pozivatelj": 0
@@ -30919,21 +30919,21 @@
     "syntheticClosedLoopPassCount": 372,
     "syntheticClosedLoopNotRunCount": 0,
     "cellCount": 12617,
-    "coveredCellCount": 4853,
-    "uncoveredCellCount": 7764,
-    "resolvedCellCount": 1934
+    "coveredCellCount": 4905,
+    "uncoveredCellCount": 7712,
+    "resolvedCellCount": 1987
   },
   "cellSummary": {
     "cellCount": 12617,
-    "coveredCount": 4853,
-    "uncoveredCount": 7764,
-    "resolvedCount": 1934,
-    "authoredCount": 1,
+    "coveredCount": 4905,
+    "uncoveredCount": 7712,
+    "resolvedCount": 1987,
+    "authoredCount": 0,
     "byReason": {
       "profil-ne-propisuje-os": 6080,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 52,
+      "nema-dokaza": 0,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814,
       "pomocni-fixer-dokaz-nosi-pozivatelj": 4

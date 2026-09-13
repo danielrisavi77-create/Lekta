@@ -80,6 +80,11 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'bibliography',
   'paragraph-spacing',
   'footnote-spacing',
+  /**
+   * Oblikovanje teksta fusnota (font, velicina, prored, poravnanje) prema profilu. UVJETNA os,
+   * krsi se u DEFINICIJI stila `FootnoteText`; obrazlozenje je uz sam blok nize.
+   */
+  'footnote-typography',
   /** Obje se krse SAMO u paginiranoj inacici (`pageNumberFooter`), nikad u zadanoj. */
   'page-number-alignment',
   'page-number-start',
@@ -390,24 +395,70 @@ export async function buildViolatingDocx(
     }
 
     /**
-     * `footnote-spacing`: fusnota nosi razmak PRIJE i POSLIJE, a profil trazi nulu.
+     * FUSNOTE: DVIJE osi, JEDNA fusnota i JEDAN stil `FootnoteText`.
      *
-     * UVJETNA os: krsi se samo uz `checkFootnoteParagraphSpacingZero === true` (izmjereno: 4 profila,
-     * svi Pravo). Bez tog uvjeta bi se `footnote-spacing-fixer` nudio profilima koji razmak fusnote ne
-     * propisuju, dakle po izmisljenom pravilu.
+     * `footnote-spacing`: fusnota nosi razmak PRIJE i POSLIJE, a profil trazi nulu. UVJETNA os:
+     * krsi se samo uz `checkFootnoteParagraphSpacingZero === true` (izmjereno: 4 profila, svi Pravo).
+     * Bez tog uvjeta bi se `footnote-spacing-fixer` nudio profilima koji razmak fusnote ne propisuju,
+     * dakle po izmisljenom pravilu.
      *
-     * FUSNOTA ODGOVARA PROFILU U SVEMU OSTALOM, i to je nuzno a ne uljudno: ta cetiri profila nose
-     * `legalFootnoteProfile`, `footnoteFont`, `footnoteSize`, `footnoteSpacing`, `footnoteJustify` i
-     * `footnoteEndPeriod`. Fusnota koja krsi vise od jedne osi pomijesala bi uzroke, a taj razred
-     * sudara je u ovom generatoru vec dvaput oborio pokrivenost (prazni odlomci, naslovi).
+     * `footnote-typography`: font, velicina, prored i poravnanje teksta fusnota odstupaju od onoga
+     * sto profil propisuje. UVJETNA os: krsi se samo kad profil propisuje barem jednu od tri
+     * dimenzije koje `footnoteTypographyRepairableItem` cita (`footnoteFont`, `footnoteSize`,
+     * `footnoteSpacing`); izmjereno 2026-09-13: 53 profila od 407, i taj se skup poklapa s kapijom
+     * `PROFILE_GATE['footnote-typography-fixer']` i s uvjetom pod kojim provjera `footnote.format`
+     * uopce nastaje (`_fnPropisuje` u `src/scoring/evaluate/formatting.ts`).
      *
-     * Oznaka fusnote ide u TIJELO (`w:footnoteReference`), jer bez nje analiza vidi datoteku fusnota
-     * bez ijedne oznake, sto nije rad nego paket.
+     * ZASTO JE OS UOPCE TREBALA: do 2026-09-12 je provjera "Oblikovanje fusnota" visjela o
+     * `legalFootnoteProfile`, pa je 48 profila koji fusnote oblikovno propisuju ostajalo nemjereno.
+     * Commit `b00ec6ef` ju je oslobodio, i time su njihove celije pravedno pale na `nema-dokaza`
+     * (izmjereno: 52), jer generator tu os nikad nije krsio. Fixer se nudio, a nije se imao na cemu
+     * dokazati.
+     *
+     * KRSI SE U DEFINICIJI STILA, NE IZRAVNIM OBLIKOVANJEM. `patchFootnoteTypography` i
+     * `patchFootnoteTextLineSpacing` pisu tocno u stil `FootnoteText` i izricito ne izmisljaju stil
+     * kojeg dokument nema. Isti razred kvara je ovaj generator vec dvaput ugrizao (`heading-format`,
+     * `footnote-spacing`): uz izravni `w:rFonts`/`w:sz` na runovima stavka se gradi, ulazi u
+     * zahtjeve, fixer se pozove, a changelog ostane prazan.
+     *
+     * ZATO FUSNOTA NEMA IZRAVNO OBLIKOVANJE kad je tipografska os ukljucena: izravni `w:rFonts`,
+     * `w:sz`, `w:spacing` i `w:jc` NADJACAVAJU stil, pa bi dokument sa stilom koji odstupa i runom
+     * koji pogadja profil svejedno bio izmjeren kao ISPRAVAN i os se ne bi mogla ni prekrsiti.
+     *
+     * Oznaka fusnote ide u TIJELO (`w:footnoteReference`) i IZA recenicne tocke, jer bez nje analiza
+     * vidi datoteku fusnota bez ijedne oznake (nije rad nego paket), a ispred tocke bi dokument
+     * krsio i os polozaja oznake (`checkFootnoteMarkerPosition`), pa bi se uzroci pomijesali.
      */
-    const fnSpacing = (profile as { checkFootnoteParagraphSpacingZero?: unknown } | null)?.checkFootnoteParagraphSpacingZero;
-    if (wants(structural, 'footnote-spacing') && fnSpacing === true) {
-      const fnFont = ((profile as { footnoteFont?: unknown[] } | null)?.footnoteFont ?? [])[0];
-      const fnSize = ((profile as { footnoteSize?: unknown[] } | null)?.footnoteSize ?? [])[0];
+    const fnSpacingZero = (profile as { checkFootnoteParagraphSpacingZero?: unknown } | null)?.checkFootnoteParagraphSpacingZero;
+    const krsiRazmakFusnote = wants(structural, 'footnote-spacing') && fnSpacingZero === true;
+
+    /**
+     * `footnoteSize` je na zivim profilima cas `[10]` cas `10`, pa se citaju OBA oblika.
+     *
+     * Nije uljudnost nego izmjereno stanje: 44 profila nose polje, 9 goli broj. Citanje samo
+     * `footnoteSize[0]` bi tih 9 tiho ispustilo, a ispustena os ne pada nego NESTANE, sto je tocno
+     * razred kvara koji ovaj repozitorij zove vakuumskim zelenim.
+     */
+    const fnFontTarget = (() => {
+      const fonts = (profile as { footnoteFont?: unknown } | null)?.footnoteFont;
+      return Array.isArray(fonts) && typeof fonts[0] === 'string' && fonts[0] ? (fonts[0] as string) : undefined;
+    })();
+    const fnSizeTarget = (() => {
+      const raw = (profile as { footnoteSize?: unknown } | null)?.footnoteSize;
+      const first = Array.isArray(raw) ? raw[0] : raw;
+      const n = Number(first);
+      return Number.isFinite(n) && n > 0 ? n : undefined;
+    })();
+    const fnLineTarget = (() => {
+      const n = Number((profile as { footnoteSpacing?: unknown } | null)?.footnoteSpacing);
+      return Number.isFinite(n) && n > 0 ? n : undefined;
+    })();
+    const fnJustifyTarget = (profile as { footnoteJustify?: unknown } | null)?.footnoteJustify === true;
+    const krsiTipografijuFusnote =
+      wants(structural, 'footnote-typography') &&
+      (fnFontTarget !== undefined || fnSizeTarget !== undefined || fnLineTarget !== undefined);
+
+    if (krsiRazmakFusnote || krsiTipografijuFusnote) {
       paragraphs.push({
         raw:
           // Oznaka ide IZA recenicnog znaka: profil to propisuje, a izmjereno je i obrnuto
@@ -416,23 +467,62 @@ export async function buildViolatingDocx(
           '<w:r><w:rPr><w:rStyle w:val="FootnoteReference"/><w:vertAlign w:val="superscript"/></w:rPr>' +
           '<w:footnoteReference w:id="1"/></w:r></w:p>',
       });
-      // Razmak ide u STIL (fixer pise ondje), ostalo u fusnotu, da se krsi TOCNO jedna os.
+
+      /**
+       * Stil se slaze PO OSIMA: svaka upisuje samo svoja polja, pa se uzroci ne mijesaju ni kad su
+       * obje ukljucene (4 profila). Redoslijed unutar `w:pPr` prati shemu (`w:spacing` pa `w:jc`), a
+       * `w:pPr` ide ispred `w:rPr` unutar `w:style`.
+       */
+      const fnSpacingAttrs: string[] = [];
+      if (krsiRazmakFusnote) fnSpacingAttrs.push('w:before="120" w:after="120"');
+      if (krsiTipografijuFusnote && fnLineTarget !== undefined) {
+        fnSpacingAttrs.push(`w:line="${otherSpacing(fnLineTarget)}" w:lineRule="auto"`);
+      }
+      const fnPPr: string[] = [];
+      if (fnSpacingAttrs.length) fnPPr.push(`<w:spacing ${fnSpacingAttrs.join(' ')}/>`);
+      // Poravnanje se krsi samo kad ga profil propisuje; `faOk` je inace prazno istinit, pa bi
+      // krivo poravnanje bilo krsenje pravila koje nitko nije postavio.
+      if (krsiTipografijuFusnote && fnJustifyTarget) fnPPr.push('<w:jc w:val="left"/>');
+      const fnRPr: string[] = [];
+      if (krsiTipografijuFusnote && fnFontTarget !== undefined) {
+        const krivFont = otherFont(fnFontTarget);
+        fnRPr.push(`<w:rFonts w:ascii="${krivFont}" w:hAnsi="${krivFont}"/>`);
+      }
+      if (krsiTipografijuFusnote && fnSizeTarget !== undefined) {
+        fnRPr.push(`<w:sz w:val="${Math.round(otherSizePt(fnSizeTarget) * 2)}"/>`);
+      }
+
       footnoteStyle =
         '<w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="footnote text"/>' +
-        '<w:pPr><w:spacing w:before="120" w:after="120"/></w:pPr></w:style>' +
+        (fnPPr.length ? `<w:pPr>${fnPPr.join('')}</w:pPr>` : '') +
+        (fnRPr.length ? `<w:rPr>${fnRPr.join('')}</w:rPr>` : '') +
+        '</w:style>' +
         // Znakovni stil oznake: Word ga upise u svaki dokument s fusnotama, pa bez njega dokument
-        // krsi i os polozaja oznake, a htjeli smo krsiti TOCNO jednu.
+        // krsi i os polozaja oznake, a htjeli smo krsiti TOCNO one osi koje profil propisuje.
         '<w:style w:type="character" w:styleId="FootnoteReference"><w:name w:val="footnote reference"/>' +
         '<w:rPr><w:vertAlign w:val="superscript"/></w:rPr></w:style>';
+
       footnotes.push({
         text: 'Izvor uz tvrdnju iz tijela rada.',
         styleId: 'FootnoteText',
-        ...(typeof fnFont === 'string' ? { font: fnFont } : {}),
-        ...(typeof fnSize === 'number' ? { sizePt: fnSize } : {}),
-        spacingLine: 240,
-        jc: 'both',
+        /**
+         * Bez tipografske osi fusnota ODGOVARA profilu u svemu ostalom, i to je nuzno a ne uljudno:
+         * ta cetiri profila nose i `footnoteFont`, `footnoteSize`, `footnoteSpacing` i
+         * `footnoteJustify`, pa bi fusnota koja krsi vise osi pomijesala uzroke.
+         *
+         * S tipografskom osi izravnog oblikovanja NEMA, jer ono nadjacava stil (vidi gore).
+         */
+        ...(krsiTipografijuFusnote
+          ? {}
+          : {
+              ...(fnFontTarget !== undefined ? { font: fnFontTarget } : {}),
+              ...(fnSizeTarget !== undefined ? { sizePt: fnSizeTarget } : {}),
+              spacingLine: 240,
+              jc: 'both' as const,
+            }),
       });
-      violated.push('footnote-spacing');
+      if (krsiRazmakFusnote) violated.push('footnote-spacing');
+      if (krsiTipografijuFusnote) violated.push('footnote-typography');
     }
 
     if (wants(structural, 'link-doi')) {

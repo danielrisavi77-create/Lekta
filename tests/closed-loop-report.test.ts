@@ -169,6 +169,40 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
   });
 
   /**
+   * Os `footnote-typography` je UVJETNA, i jedina kojoj je nevidljivi pad DVOSTRUK.
+   *
+   * Krsi se samo kad profil propisuje barem jednu dimenziju oblikovanja fusnota (izmjereno
+   * 2026-09-13: 53 profila od 407, isti skup koji prolazi kapiju
+   * `PROFILE_GATE['footnote-typography-fixer']`). Do 2026-09-12 je provjera `footnote.format` visjela
+   * o `legalFootnoteProfile`, pa je 48 tih profila ostajalo nemjereno; `b00ec6ef` ju je oslobodio i
+   * njihove su celije pravedno pale na `nema-dokaza` (izmjereno: 52).
+   *
+   * PRVA TVRDNJA je ista kao kod ostalih uvjetnih osi: os mora biti prekrsena i zatvorena.
+   *
+   * DRUGA TVRDNJA postoji jer je ovdje `axesResolved` SAM PO SEBI nedovoljan. Na dokumentu BEZ
+   * fusnota `footnote.format` dolazi kao `unmeasurable`, dakle `max 0`, a `axisResolved` vraca
+   * `true` cim je `max === 0`. Nestanak fusnota iz generatora bi se zato procitao kao savrseno
+   * rijesena os na svih 53 profila: `pass` ostaje isti, nijedna zbirna brojka se ne mice, a matrica
+   * bi nosila 53 celije laznog dokaza `resolved`. Zato se uz rjesenje trazi i da je
+   * `footnote-typography-fixer` doista upisan u changelog; fixer nad dokumentom bez fusnota vraca
+   * `unsupported-structure` i u changelog ne ulazi.
+   */
+  it('os oblikovanja fusnota je prekrsena i rijesena na svakom profilu koji ju propisuje', () => {
+    type Redak = { profileId: string; violated: string[]; axesResolved: string[]; fixersChanged?: string[] };
+    const sPravilima = (report.rows as unknown as Redak[]).filter((r) => r.violated.includes('footnote-typography'));
+    // Anti-vakuum: prazan skup bi obje tvrdnje nize ucinio istinitima ni nad cim.
+    expect(sPravilima.length, 'nijedan profil ne krsi os; generator je prestao emitirati fusnote').toBeGreaterThan(40);
+    const nerijeseni = sPravilima
+      .filter((r) => !r.axesResolved.includes('footnote-typography'))
+      .map((r) => r.profileId);
+    expect(nerijeseni, 'os je prekrsena a popravak ju nije zatvorio').toEqual([]);
+    const bezZahvata = sPravilima
+      .filter((r) => !(r.fixersChanged ?? []).includes('footnote-typography-fixer'))
+      .map((r) => r.profileId);
+    expect(bezZahvata, 'os je "rijesena" a fixer nije upisan u changelog: provjera je nemjerljiva (max 0)').toEqual([]);
+  });
+
+  /**
    * Os `page-number-start` je najkrhkija od svih uvjetnih, jer visi o TRI stvari odjednom.
    *
    * 1. Prednja sekcija mora imati VLASTITO zivo podnozje. Presuda glasi

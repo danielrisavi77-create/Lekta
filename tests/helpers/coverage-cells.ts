@@ -203,6 +203,7 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'paragraph-spacing-fixer': 'paragraph-spacing',
   'page-number-alignment-fixer': 'page-number-alignment',
   'footnote-spacing-fixer': 'footnote-spacing',
+  'footnote-typography-fixer': 'footnote-typography',
   'page-numbering-fixer': 'page-number-start',
   'bibliography-repair-fixer': 'bibliography',
 };
@@ -406,6 +407,14 @@ const RESOLVED_AXIS_FIXER: Record<string, string | readonly string[]> = {
   'page-number-alignment': 'page-number-alignment-fixer',
   /** `footnote.spacing` (max 3) emitira se tocno za profile s `checkFootnoteParagraphSpacingZero`. */
   'footnote-spacing': 'footnote-spacing-fixer',
+  /**
+   * `footnote.format` (max 6) emitira se tocno za profile koji ijednu dimenziju fusnota propisuju,
+   * dakle za istih 53 koje generator ovom osi pogadja. Matrica za `footnote-typography-fixer` IMA
+   * redke (`checkId: 'footnote.format'`), ali `axesResolved` nosi IME OSI, ne `checkId`, pa dokaz
+   * mora doci ovim putem; inace bi `loopCovered` ostao prazan i 52 celije bi i dalje citale
+   * `nema-dokaza`.
+   */
+  'footnote-typography': 'footnote-typography-fixer',
   /** Mjeri se samo u paginiranoj inacici, i samo za profil koji pocetak numeriranja propisuje. */
   'page-number-start': 'page-numbering-fixer',
 };

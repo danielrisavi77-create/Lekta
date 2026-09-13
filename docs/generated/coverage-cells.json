@@ -9,15 +9,15 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4853,
-    "uncoveredCount": 7764,
-    "resolvedCount": 1934,
-    "authoredCount": 1,
+    "coveredCount": 4905,
+    "uncoveredCount": 7712,
+    "resolvedCount": 1987,
+    "authoredCount": 0,
     "byReason": {
       "profil-ne-propisuje-os": 6080,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 52,
+      "nema-dokaza": 0,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814,
       "pomocni-fixer-dokaz-nosi-pozivatelj": 4
@@ -3676,8 +3676,13 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-integrirani-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3956,8 +3961,13 @@
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -4236,8 +4246,13 @@
     {
       "profileId": "pravo-javna-uprava-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-javna-uprava-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -4518,10 +4533,10 @@
       "fixerId": "footnote-typography-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "authored",
-        "strength": "applied",
-        "track": "authored",
-        "artifactId": "pravo--final--prijediplomski--neuredan.docx"
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-porezni-prijediplomski",
+        "checkIds": []
       }
     },
     {
@@ -5084,8 +5099,13 @@
     {
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalni-rad-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -5369,8 +5389,13 @@
     {
       "profileId": "pravo-socijalna-politika-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-socijalna-politika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -5629,8 +5654,13 @@
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-opci-pravni-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -6132,8 +6162,13 @@
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-specijalisticki-pravni-opci",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -6387,8 +6422,13 @@
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pravo-doktorski-pravne-znanosti",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
@@ -13515,8 +13555,13 @@
     {
       "profileId": "fpz-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpz-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpz-zavrsni",
@@ -13767,8 +13812,13 @@
     {
       "profileId": "fpz-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpz-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpz-diplomski",
@@ -31476,8 +31526,13 @@
     {
       "profileId": "hks-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:hks-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "hks-diplomski",
@@ -49093,8 +49148,13 @@
     {
       "profileId": "kbfst-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:kbfst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kbfst-diplomski",
@@ -50938,8 +50998,13 @@
     {
       "profileId": "veleri-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:veleri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "veleri-zavrsni",
@@ -51199,8 +51264,13 @@
     {
       "profileId": "veleri-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:veleri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "veleri-diplomski",
@@ -51714,8 +51784,13 @@
     {
       "profileId": "mev-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mev-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mev-zavrsni",
@@ -52716,8 +52791,13 @@
     {
       "profileId": "vuv-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuv-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuv-zavrsni",
@@ -52977,8 +53057,13 @@
     {
       "profileId": "vuv-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuv-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuv-diplomski",
@@ -54445,8 +54530,13 @@
     {
       "profileId": "ffri-germanistika-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffri-germanistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -54707,8 +54797,13 @@
     {
       "profileId": "ffri-germanistika-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffri-germanistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-germanistika-diplomski",
@@ -55227,8 +55322,13 @@
     {
       "profileId": "ffri-povum-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffri-povum-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -55482,8 +55582,13 @@
     {
       "profileId": "ffri-povum-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffri-povum-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-povum-diplomski",
@@ -55744,8 +55849,13 @@
     {
       "profileId": "ffri-kulturalni-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffri-kulturalni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -56014,8 +56124,13 @@
     {
       "profileId": "fpzpu-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzpu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzpu-zavrsni",
@@ -56269,8 +56384,13 @@
     {
       "profileId": "fpzpu-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fpzpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -65504,8 +65624,13 @@
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unizd-klasicna-filologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
@@ -65759,8 +65884,13 @@
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unizd-klasicna-filologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
@@ -66948,8 +67078,13 @@
     {
       "profileId": "unizd-germanistika-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unizd-germanistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
@@ -67203,8 +67338,13 @@
     {
       "profileId": "unizd-germanistika-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unizd-germanistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-germanistika-diplomski",
@@ -67953,8 +68093,13 @@
     {
       "profileId": "unizd-povijest-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unizd-povijest-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-zavrsni",
@@ -68207,8 +68352,13 @@
     {
       "profileId": "unizd-povijest-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unizd-povijest-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -68936,8 +69086,13 @@
     {
       "profileId": "unizd-sociologija-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:unizd-sociologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-sociologija-diplomski",
@@ -73178,8 +73333,13 @@
     {
       "profileId": "mev-zavrsni-drustveni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mev-zavrsni-drustveni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mev-zavrsni-drustveni",
@@ -73440,8 +73600,13 @@
     {
       "profileId": "mev-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mev-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mev-diplomski",
@@ -75742,8 +75907,13 @@
     {
       "profileId": "aspira-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:aspira-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-zavrsni",
@@ -75997,8 +76167,13 @@
     {
       "profileId": "aspira-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:aspira-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-diplomski",
@@ -77218,8 +77393,13 @@
     {
       "profileId": "vuka-poslovni-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -77468,8 +77648,13 @@
     {
       "profileId": "vuka-poslovni-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -84633,8 +84818,13 @@
     {
       "profileId": "alu-konzerviranje-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:alu-konzerviranje-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-konzerviranje-diplomski",
@@ -86899,8 +87089,13 @@
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vuka-poslovni-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -94176,8 +94371,13 @@
     {
       "profileId": "ffpu-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffpu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffpu-zavrsni",
@@ -94436,8 +94636,13 @@
     {
       "profileId": "ffpu-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffpu-diplomski",
@@ -94696,8 +94901,13 @@
     {
       "profileId": "fipu-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fipu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fipu-zavrsni",
@@ -94956,8 +95166,13 @@
     {
       "profileId": "mfpu-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mfpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mfpu-diplomski",
@@ -95216,8 +95431,13 @@
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mapu-glazbena-pedagogija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
@@ -95476,8 +95696,13 @@
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mapu-glazbena-pedagogija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
@@ -95738,8 +95963,13 @@
     {
       "profileId": "apuri-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:apuri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "apuri-zavrsni",
@@ -95991,8 +96221,13 @@
     {
       "profileId": "apuri-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:apuri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "apuri-diplomski",
@@ -98251,8 +98486,13 @@
     {
       "profileId": "fipu-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fipu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fipu-diplomski",
@@ -98998,8 +99238,13 @@
     {
       "profileId": "aspira-zavrsni-en",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:aspira-zavrsni-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-zavrsni-en",
@@ -99253,8 +99498,13 @@
     {
       "profileId": "aspira-diplomski-en",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:aspira-diplomski-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-diplomski-en",
@@ -101326,8 +101576,13 @@
     {
       "profileId": "ffri-kroatistika-zavrsni",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffri-kroatistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-kroatistika-zavrsni",
@@ -102074,8 +102329,13 @@
     {
       "profileId": "efzg-seminarski",
       "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:efzg-seminarski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efzg-seminarski",

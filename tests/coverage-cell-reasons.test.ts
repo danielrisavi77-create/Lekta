@@ -18,7 +18,9 @@
 import { describe, expect, it } from 'vitest';
 import { REPAIR_SURFACE } from '../src/repair/repair-surface';
 import cells from '../docs/generated/coverage-cells.json';
-import { ASSISTED_RULE_GATE, PROFILE_GATE } from './helpers/coverage-cells';
+import { ASSISTED_RULE_GATE, PROFILE_GATE, buildCoverageCells } from './helpers/coverage-cells';
+import { buildRepairCoverageMatrix } from './helpers/repair-coverage';
+import authoredNet from '../docs/generated/repair-net.json';
 import { liveProfile } from './helpers/live-profile';
 
 type Dokaz = { kind?: string; strength?: string; track?: string; artifactId?: string };
@@ -167,11 +169,51 @@ describe('razlog nepokrivene celije', () => {
 describe('dokaz iz trake `authored` se ne smije stopiti sa stvarnim radom', () => {
   const authored = pokrivene.filter((c) => c.evidence?.kind === 'authored');
 
+  /**
+   * OVA TVRDNJA I ONA O ZBROJU NIZE SU DANAS PRAZNO ISTINITE, i to je svjesno stanje, ne previd.
+   *
+   * `authoredCount` je u commitanom artefaktu 0, jer je jedinu celiju koja je pocivala na nasoj
+   * prozi (`pravo-porezni-prijediplomski / footnote-typography-fixer`) nadglasao JACI dokaz
+   * `closed-loop/resolved`. Obje tvrdnje zato filtriraju prazan niz.
+   *
+   * ZIVI DOKAZ ISTE INVARIJANTE je tvrdnja NIZE, koja lanac vrti nad stvarnim `repair-net.json` uz
+   * namjerno prazan closed-loop, pa jace trake ne mogu nadglasati nista. Ove dvije ozive same cim
+   * se dokaz iz proze vrati, pa se ne brisu; brisanje bi ostavilo rupu tocno u trenutku kad opet
+   * zatreba.
+   */
   it('nijedan dokaz iz nase proze ne nosi traku stvarnog rada ni jacinu `resolved`', () => {
-    // Anti-vakuum: da ih nema nijedne, tvrdnja bi prolazila ni nad cim.
-    expect(authored.length, 'nijedna celija ne pociva na nasoj prozi; izvor je otpao').toBeGreaterThan(0);
     const krivo = authored.filter((c) => c.evidence?.track !== 'authored' || c.evidence?.strength !== 'applied');
     expect(krivo.map((c) => `${c.profileId}|${c.fixerId}`)).toEqual([]);
+  });
+
+  /**
+   * ANTI-VAKUUM MJERI ULAZ, NE IZLAZ, i to je ispravak iz 2026-09-13.
+   *
+   * Dotad je ovdje stajalo `expect(authored.length).toBeGreaterThan(0)` nad COMMITANIM artefaktom.
+   * Ta tvrdnja mjeri krivu stvar: traka `authored` je ZADNJA u lancu dokaza, pa broj celija koje na
+   * njoj ostanu pada cim ju neka jaca traka nadglasa na istom paru. Izmjereno istog dana: uvodjenje
+   * osi `footnote-typography` dalo je paru `pravo-porezni-prijediplomski / footnote-typography-fixer`
+   * dokaz `closed-loop/resolved`, a to je bila JEDINA celija koja je pocivala na nasoj prozi, pa je
+   * `authoredCount` pao 1 -> 0. Gard je time pao na POBOLJSANJU pokrivenosti, sto je kriva presuda.
+   *
+   * Pitanje koje anti-vakuum treba postaviti je "je li grana ziva i ispravno oznacena", a ne "je li
+   * ju netko nadglasao". Zato se lanac vrti nad STVARNIM `repair-net.json`, uz namjerno PRAZAN
+   * closed-loop i prazan stvarni korpus: tada jace trake ne mogu nadglasati nijednu celiju, pa se
+   * vidi sto traka `authored` doista nosi. Tri tvrdnje iz zaglavlja ostaju netaknute.
+   */
+  it('grana `authored` je ziva: bez jacih traka i dalje daje dokaz, i to ispravno oznacen', () => {
+    const samoProza = buildCoverageCells(
+      buildRepairCoverageMatrix(),
+      { rows: [] } as unknown as Parameters<typeof buildCoverageCells>[1],
+      { results: [] } as unknown as Parameters<typeof buildCoverageCells>[2],
+      authoredNet as unknown as Parameters<typeof buildCoverageCells>[3],
+    );
+    const izProze = samoProza.cells.filter((c) => c.status === 'pokriveno' && c.evidence.kind === 'authored');
+    expect(izProze.length, 'traka `authored` ne daje nijedan dokaz; izvor je otpao').toBeGreaterThan(0);
+    const krivo = izProze.filter((c) => c.evidence.track !== 'authored' || c.evidence.strength !== 'applied');
+    expect(krivo.map((c) => `${c.profileId}|${c.fixerId}`), 'dokaz iz proze nosi krivu traku ili jacinu').toEqual([]);
+    // Sazetak mora brojati bas te celije, inace se ovisnost o vlastitom tekstu gubi u zbroju.
+    expect(samoProza.summary.authoredCount).toBe(izProze.length);
   });
 
   it('sazetak broji tocno onoliko koliko celija doista pociva na nasoj prozi', () => {

@@ -127,6 +127,18 @@ const AXIS_CHECK_ID: Record<string, string> = {
    */
   'footnote-spacing': 'footnote.spacing',
   /**
+   * `footnote.format` je BODOVANA (max 6) na svakom profilu koji ijednu od cetiri dimenzije fusnota
+   * propisuje. Do 2026-09-12 je visjela o `legalFootnoteProfile` (5 profila); `b00ec6ef` ju je
+   * oslobodio, pa je emitira svih 53 profila koje generator ovom osi i pogadja. Skupovi se time
+   * POKLAPAJU, kao kod `paragraph-spacing`, pa os smije nositi `resolved`.
+   *
+   * ZAMKA: na dokumentu BEZ fusnota ta provjera dolazi kao `unmeasurable` (`max 0`), a `axisResolved`
+   * vraca `true` cim je `max === 0`. Zato gard u `tests/closed-loop-report.test.ts` uz `axesResolved`
+   * trazi i da je `footnote-typography-fixer` doista upisan u changelog; bez tog para bi nestanak
+   * fusnota iz generatora izgledao kao savrseno rijesena os.
+   */
+  'footnote-typography': 'footnote.format',
+  /**
    * `page.numbers.start` je bodovana (max 4) SAMO na dokumentu s dvije zive sekcije, uz prijelom
    * neposredno prije Uvoda i prednju sekciju s VLASTITIM podnozjem. Pad je `earned 2`, nikad 0:
    * `earned = startOk ? 4 : 2`. Bez vlastitog podnozja `!before.hasAnyPageField` spasi presudu i
