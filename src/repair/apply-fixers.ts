@@ -1001,23 +1001,74 @@ export function detectIntegrityFailure(
   removedPackageParts: readonly string[],
   originalXmlParts: Readonly<Record<string, string>>,
 ): IntegrityFailure | null {
+  /**
+   * NEVEZAN PREFIKS SE PRIJAVLJUJE SAMO AKO SMO GA MI UVELI (RE-60), i to po PREFIKSU, ne po dijelu.
+   *
+   * Zasto ne "je li ulazni dio prolazio": izuzece po dijelu gasi provjeru za CIJELI taj dio, pa
+   * dokument koji je vec stigao s jednim nevezanim prefiksom (VML crtez s `v:`/`o:` iz alata koji
+   * ih ne deklarira na korijenu) dobiva besplatnu propusnicu i za NOV prefiks koji je umetnuo
+   * popravak. Izmjereno 2026-09-12: `<w:hyperlink r:id>` bez deklaracije prolazio je uz
+   * `integrityFailure === null` cim je ulaz imao `v:`. Zato se usporedjuju SKUPOVI prefiksa.
+   *
+   * Osnovica za DODAN dio (ime kojeg u ulazu nema) je unija svih ulaznih dijelova: fixeri koji
+   * dodaju dio (`section-surgery-fixer` klonira korisnikov `word/footer1.xml` u `word/footer2.xml`)
+   * prenose TUDJI sadrzaj doslovno, pa bi mjerenje protiv praznog skupa odbilo cijeli popravak
+   * zbog prefiksa koji je autor dokumenta vec imao.
+   */
+  const baselineCache = new Map<string, ReadonlySet<string> | null>();
+  let unionBaseline: ReadonlySet<string> | null | undefined;
+  /** `null` znaci "osnovica nije mjerljiva" (ulaz je strukturno pokvaren pa je popis nepotpun). */
+  const unboundOf = (xml: string): ReadonlySet<string> | null => {
+    const scan = scanXmlWellFormed(xml, { namespaces: true });
+    if (!scan.ok && scan.kind !== 'namespace') return null;
+    return new Set((scan.unboundPrefixes ?? []).map((u) => u.prefix));
+  };
+  const baselineFor = (name: string): ReadonlySet<string> | null => {
+    const before = originalXmlParts[name];
+    if (before !== undefined) {
+      if (!baselineCache.has(name)) baselineCache.set(name, unboundOf(before));
+      return baselineCache.get(name) ?? null;
+    }
+    if (unionBaseline === undefined) {
+      let union: Set<string> | null = new Set<string>();
+      for (const xml of Object.values(originalXmlParts)) {
+        const set = unboundOf(xml);
+        if (set === null) { union = null; break; }
+        for (const prefix of set) union.add(prefix);
+      }
+      unionBaseline = union;
+    }
+    return unionBaseline;
+  };
+
   for (const part of changedXmlParts) {
     if (part.xml.length === 0) {
       return { part: part.name, problem: 'dio paketa je nakon popravka prazan' };
     }
-    const scan = scanXmlWellFormed(part.xml);
-    if (!scan.ok) {
-      // Ulaz se skenira SAMO ovdje, na vec propalom izlazu: normalan tijek time ne placi nista,
-      // a poruka ne optuzuje nas za kvar koji je dosao s dokumentom (ni obrnuto).
-      const before = originalXmlParts[part.name];
-      const preexisting = before !== undefined && !scanXmlWellFormed(before).ok;
-      return {
-        part: part.name,
-        problem: scan.problem ?? 'XML nije dobro oblikovan',
-        ...(scan.offset != null ? { offset: scan.offset } : {}),
-        ...(preexisting ? { preexisting: true } : {}),
-      };
+    const scan = scanXmlWellFormed(part.xml, { namespaces: true });
+    if (scan.ok) continue;
+    /**
+     * STRUKTURA SE PRIJAVLJUJE BEZUVJETNO. Skener strukturni kvar vraca odmah, a nevezane
+     * prefikse tek na kraju, pa `kind === 'namespace'` znaci da strukturnog kvara NEMA. Bez tog
+     * redoslijeda bi izuzece nize progutalo i strukturni kvar koji je popravak uveo.
+     */
+    if (scan.kind === 'namespace') {
+      const baseline = baselineFor(part.name);
+      if (baseline === null) continue;
+      const novi = (scan.unboundPrefixes ?? []).filter((u) => !baseline.has(u.prefix));
+      if (novi.length === 0) continue;
+      return { part: part.name, problem: novi[0].detail, offset: novi[0].offset };
     }
+    // Ulaz se skenira SAMO ovdje, na vec propalom izlazu: normalan tijek time ne placi nista,
+    // a poruka ne optuzuje nas za kvar koji je dosao s dokumentom (ni obrnuto).
+    const before = originalXmlParts[part.name];
+    const preexisting = before !== undefined && !scanXmlWellFormed(before).ok;
+    return {
+      part: part.name,
+      problem: scan.problem ?? 'XML nije dobro oblikovan',
+      ...(scan.offset != null ? { offset: scan.offset } : {}),
+      ...(preexisting ? { preexisting: true } : {}),
+    };
   }
   // Nestali dio je jednako fatalan kao neispravan XML, a skener ga po definiciji ne vidi.
   // Jedini dopusteni gubitak je onaj koji je fixer izricito zatrazio (final-document-inspector

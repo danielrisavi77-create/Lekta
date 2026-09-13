@@ -129,10 +129,19 @@ async function buildCases(): Promise<DispatchCase[]> {
   const legalFootnotes = `<w:footnotes ${WORD_NS}><w:footnote w:id="1"><w:p><w:r><w:t>ibid., str. 5.</w:t></w:r></w:p></w:footnote></w:footnotes>`;
   cases.push({ fixerId: 'legal-footnote-repair-fixer', params: { version: 1, markers: [{ paragraphIndex: 1, start: 6, end: 7, footnoteId: 1, anchorFingerprint: legalMarkerAnchorFingerprint(1, 6, 7, 'Tekst 1.'), confirmed: true }], operations: [{ id: 'op-1', footnoteId: 1, kind: 'fix-ibid', anchorFingerprint: legalFootnoteAnchorFingerprint(1, 'ibid., str. 5.'), start: 0, end: 14, replacementText: 'Ibid., str. 5.', confirmed: true, reason: 'standardizacija' }], bibliographyLinks: [] }, bytes: await packageDoc({ documentXml: legalDocument, footnotesXml: legalFootnotes }) });
 
+  /**
+   * `cp:` i `dc:` se MORAJU deklarirati, kao u svakom stvarnom `docProps/core.xml`.
+   *
+   * Do 2026-09-12 su ovdje stajali nedeklarirani, dakle sinteticki ulaz koji nijedan pravi Word
+   * dokument nema i koji nijedan XML parser ne prihvaca. Vrata integriteta ga TOLERIRAJU, jer
+   * nevezan prefiks prijavljuju samo kad ga je uveo popravak (RE-60), pa ovaj ulaz nikad nije ni
+   * mogao pasti. Deklaracije su svejedno dopisane: sinteticki ulaz koji se pretvara da je Wordov
+   * dokument treba i izgledati kao Wordov dokument, inace mjeri oblik koji u produkciji ne postoji.
+   */
   const inspectorPackage = {
     'word/settings.xml': `<w:settings ${WORD_NS}><w:trackRevisions/></w:settings>`,
     'word/comments.xml': `<w:comments ${WORD_NS}><w:comment w:id="7"><w:p><w:r><w:t>Komentar</w:t></w:r></w:p></w:comment></w:comments>`,
-    'docProps/core.xml': '<cp:coreProperties><dc:creator>Autor</dc:creator></cp:coreProperties>',
+    'docProps/core.xml': '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:creator>Autor</dc:creator></cp:coreProperties>',
   };
   const inspectorDocument = documentXml('<w:p><w:ins w:id="3"><w:r><w:t>novo</w:t></w:r></w:ins><w:commentRangeStart w:id="7"/><w:r><w:rPr><w:vanish/></w:rPr><w:t>skriveno</w:t></w:r><w:commentRangeEnd w:id="7"/><w:r><w:commentReference w:id="7"/></w:r></w:p>');
   const inspectorAnalysis = analyzeFinalDocumentInspector({ parts: { ...inspectorPackage, 'word/document.xml': inspectorDocument } });
@@ -154,7 +163,7 @@ async function buildCases(): Promise<DispatchCase[]> {
   const fieldDocument = documentXml('<w:p><w:fldSimple w:instr=" PAGE "><w:r><w:t>1</w:t></w:r></w:fldSimple></w:p>');
   const fieldAnalysis = analyzeFieldIntegrity({ parts: { 'word/document.xml': fieldDocument, 'word/settings.xml': '<w:settings/>' } });
   const field = fieldAnalysis.fields[0];
-  cases.push({ fixerId: 'field-integrity-fixer', params: { version: 1, fields: [{ id: field.id, part: field.part, anchorFingerprint: field.anchorFingerprint, action: 'mark-dirty', confirmed: true }], settings: { updateFieldsOnOpen: true } }, bytes: await packageDoc({ documentXml: fieldDocument, packageXmlParts: { 'word/settings.xml': '<w:settings/>' } }) });
+  cases.push({ fixerId: 'field-integrity-fixer', params: { version: 1, fields: [{ id: field.id, part: field.part, anchorFingerprint: field.anchorFingerprint, action: 'mark-dirty', confirmed: true }], settings: { updateFieldsOnOpen: true } }, bytes: await packageDoc({ documentXml: fieldDocument, packageXmlParts: { 'word/settings.xml': `<w:settings ${WORD_NS}/>` } }) });
 
   const typographyDocument = documentXml('<w:p><w:r><w:rPr><w:b/></w:rPr><w:t>Ovo  je tekst...</w:t><w:tab/></w:r></w:p>');
   const typographyAnalysis = analyzeTypographyStructure(typographyDocument);
@@ -163,7 +172,7 @@ async function buildCases(): Promise<DispatchCase[]> {
 
   const consistencyDocument = documentXml('<w:p><w:r><w:rPr><w:b/></w:rPr><w:t>EU</w:t></w:r><w:r><w:t> ostaje</w:t></w:r></w:p>');
   const consistencyParagraph = consistencyDocument.match(/<w:p>[\s\S]*?<\/w:p>/)![0];
-  cases.push({ fixerId: 'consistency-fixer', params: { version: 1, groups: [{ id: 'g', zone: 'terminology', canonicalText: 'Europska unija', confirmed: true }], replacements: [{ id: 'r', groupId: 'g', part: 'word/document.xml', paragraphIndex: 1, start: 0, end: 2, before: 'EU', replacementText: 'Europska unija', anchorFingerprint: paragraphFingerprint(consistencyParagraph), confirmed: true }] }, bytes: await packageDoc({ documentXml: consistencyDocument, packageXmlParts: { 'docProps/core.xml': '<cp:coreProperties><dc:title>Stari naslov</dc:title></cp:coreProperties>' } }) });
+  cases.push({ fixerId: 'consistency-fixer', params: { version: 1, groups: [{ id: 'g', zone: 'terminology', canonicalText: 'Europska unija', confirmed: true }], replacements: [{ id: 'r', groupId: 'g', part: 'word/document.xml', paragraphIndex: 1, start: 0, end: 2, before: 'EU', replacementText: 'Europska unija', anchorFingerprint: paragraphFingerprint(consistencyParagraph), confirmed: true }] }, bytes: await packageDoc({ documentXml: consistencyDocument, packageXmlParts: { 'docProps/core.xml': '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>Stari naslov</dc:title></cp:coreProperties>' } }) });
 
   const requiredDocument = documentXml('<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>');
   const requiredAnchor = extractBodyParagraphs(requiredDocument)[0];

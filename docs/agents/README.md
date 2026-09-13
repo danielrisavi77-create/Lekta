@@ -89,7 +89,8 @@ prethodno sprema `git diff` i provjere u datoteke navedene u zadatku. Nalaze uvi
 
 ## Ugovor reda zadataka
 
-`tasks.json` je jedini statusni registar. `development-plan.md` daje opseg i kriterije T00-T15.
+`tasks.json` je jedini statusni registar. `development-plan.md` daje opseg i kriterije T00-T47; T16-T47 su Podplan F,
+koji indeksira vendorani program `docs/agents/plan-do-live-2026-09-12.md`.
 Put je `blocked -> ready -> in_progress -> in_review -> done`. Povratak na `ready` znaci
 novi pokusaj nakon pregledane i spremljene prethodne promjene, ne slijepi nastavak preko nje.
 Runner provjerava strukturu, ovisnosti, uloge i uvjete pokretanja; koordinator rucno potvrduje
@@ -153,4 +154,4 @@ npm run agents -- prepare T02 --phase plan --agent astra --subscription
 
 Trajni raspored, red zadataka, politika opsega, dokaz i izdavac zive u `scripts/autonomy/` (Python,
 stdlib) i pozivaju ovaj runner samo za pripremu i izvrsenje jednog poziva. Upute: `docs/agents/autonomy-runbook.md`;
-polazna tocka: `docs/agents/autonomy-baseline.md`; status zadataka T00 do T15: `docs/quality/lekta-plan-status.md`.
+polazna tocka: `docs/agents/autonomy-baseline.md`; status zadataka T00 do T47: `docs/quality/lekta-plan-status.md`.
