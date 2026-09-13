@@ -21,7 +21,8 @@ STATUSES = (
     "monitoring", "done", "waiting_quota", "needs_login", "needs_human", "blocked", "failed",
 )
 ACTIVE_STATUSES = ("planning", "implementing", "reviewing", "verifying", "ready_to_publish", "publishing", "monitoring")
-# Stanja koja NE trose implementacijski pokusaj: poziv nije ni poceo (plan 5.2).
+# Stanja koja NE trose implementacijski pokusaj: poziv nije ni poceo (plan 5.2). Za ostale ciljeve pozivatelj
+# to moze tvrditi po slucaju, kroz `refund_attempt` u payloadu `transition()`.
 REFUND_STATUSES = ("waiting_quota", "needs_login")
 LEASE_RESOURCE = "worker"
 DEFAULT_LEASE_SECONDS = 3 * 3600
@@ -320,7 +321,10 @@ class Store:
             ).rowcount
             if changed != 1:
                 raise TransitionConflict(f"zadatak {task_id} nije u stanju {expected}")
-            if target in REFUND_STATUSES and payload.pop("refund_attempt", True):
+            # `refund_attempt` je EKSPLICITNA tvrdnja pozivatelja da poziv nije ni poceo trositi pokusaj.
+            # Bez njega vrijedi staro pravilo (samo REFUND_STATUSES), pa se semantika postojecih needs_human i
+            # blocked slucajeva ne mijenja. Pop se izvodi UVIJEK, da zastavica ne procuri u zapis dogadjaja.
+            if payload.pop("refund_attempt", target in REFUND_STATUSES):
                 self.conn.execute("UPDATE tasks SET attempts = MAX(attempts - 1, 0) WHERE id = ?", (task_id,))
             if "next_run_at" in payload:
                 self.conn.execute("UPDATE tasks SET next_run_at = ? WHERE id = ?", (int(payload["next_run_at"]), task_id))

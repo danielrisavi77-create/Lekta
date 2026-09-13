@@ -30,6 +30,11 @@ API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
 
 QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b429\b|overloaded|capacity")
 LOGIN_RE = re.compile(r"(?i)not logged in|login required|please (?:run|sign in|log in)|unauthori[sz]ed|\b401\b|invalid api key|authentication failed|session expired|token expired")
+# Potpis NEUPOTREBLJIVE izvrsne okoline providera (Codex na Windowsu, izmjereno 2026-09-13 u zadatku 26ba9cf7):
+# svaki `exec` je odbijen pa model ne procita NISTA, a ipak uredno posalje `turn.completed`. Bez ovoga faza
+# plana prodje VAKUUMSKI kao `needs_verification`. Trazi se ISKLJUCIVO u stderru: model koji radi bas na tom
+# kvaru istu frazu doslovno napise u `agent_message` na stdoutu, pa bi skeniranje stdouta dalo lazni `blocked`.
+SANDBOX_RE = re.compile(r"(?i)apply deny-read ACLs|Failed to create unified exec process")
 
 _IS_WINDOWS = os.name == "nt"
 
@@ -203,10 +208,21 @@ def resolve_launcher(command: str) -> dict:
     return {"command": command, "path": path, "kind": kind}
 
 
-def prepare_job_via_node(root: str, task_id: str, phase: str, agent: str, *, timeout: int = 60) -> dict:
-    """Priprema posla postojecim runnerom (scripts/agents/cli.mjs prepare). Ne poziva model."""
+def prepare_job_via_node(root: str, task_id: str, phase: str, agent: str, *, timeout: int = 60,
+                         override_status: str | None = None, override_implementer: str | None = None) -> dict:
+    """Priprema posla postojecim runnerom (scripts/agents/cli.mjs prepare). Ne poziva model.
+
+    `override_status` i `override_implementer` postoje samo za fazu `review`: kontroler tvrdi fazu iz VLASTITE
+    evidencije, jer `docs/agents/tasks.json` pise koordinator i kontroler ga nikad ne mijenja. Bez njih je argv
+    bajt za bajt isti kao prije, pa rucni `npm run agents prepare/run` ostaje nepromijenjen.
+    """
+    argv = ["node", os.path.join(root, "scripts", "agents", "cli.mjs"), "prepare", task_id, "--phase", phase, "--agent", agent, "--subscription"]
+    if override_status is not None:
+        argv += ["--override-status", str(override_status)]
+    if override_implementer is not None:
+        argv += ["--override-implementer", str(override_implementer)]
     result = subprocess.run(
-        ["node", os.path.join(root, "scripts", "agents", "cli.mjs"), "prepare", task_id, "--phase", phase, "--agent", agent, "--subscription"],
+        argv,
         cwd=root, capture_output=True, text=True, timeout=timeout, shell=False, check=False, env=scrubbed_env(),
     )
     if result.returncode != 0:
@@ -215,6 +231,11 @@ def prepare_job_via_node(root: str, task_id: str, phase: str, agent: str, *, tim
     if not job.get("dryRun"):
         raise RuntimeError("prepare je vratio nesto sto nije priprema")
     return job
+
+
+def sandbox_unusable(stderr: str) -> bool:
+    """Je li providerova izvrsna okolina odbila SVAKI poziv. Samo stderr, nikad modelov tekst sa stdouta."""
+    return bool(SANDBOX_RE.search(stderr or ""))
 
 
 def classify_stream(text: str) -> str | None:
@@ -336,6 +357,14 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if timed_out:
         result["verdict"] = "failed" if result["process_tree_stopped"] else "blocked"
         result["reason"] = "timeout" if result["process_tree_stopped"] else "timeout: stablo procesa NIJE dokazano ugaseno"
+        return result
+
+    # PRIJE classify_stream i PRIJE parse_provider_output: providerov `turn.completed` uz odbijen exec je lazno
+    # zeleno, ne uspjeh. Pokusaj se ne trosi jer poziv nije ni mogao poceti raditi.
+    if sandbox_unusable(stderr):
+        result["verdict"] = "blocked"
+        result["reason"] = "provider_unusable: codex sandbox"
+        result["attempt_spent"] = False
         return result
 
     stream_verdict = classify_stream(stderr) or classify_stream(stdout if result["exit_code"] != 0 else "")

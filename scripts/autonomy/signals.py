@@ -92,6 +92,9 @@ def fingerprint(kind: str, location: str, symptom: str) -> str:
     return digest[:32]
 
 
+_PLAN_TASK_RE = re.compile(r"T[0-9][0-9]")
+
+
 def normalize_signal(raw: dict) -> dict | None:
     """Iz sirovog zapisa u ugovor signala; None kad nedostaje vrsta, lokacija, simptom ili revizija."""
     if not isinstance(raw, dict):
@@ -111,6 +114,11 @@ def normalize_signal(raw: dict) -> dict | None:
     evidence, hits = redact_text(str(raw.get("evidence") or ""))
     scope = raw.get("scope") if isinstance(raw.get("scope"), dict) else {}
     paths = [p for p in (scope.get("paths") or []) if isinstance(p, str)]
+    # Ciljni zadatak iz koordinatorova reda. Do 2026-09-13 se ovaj kljuc TIHO gubio ovdje, pa nijedan signal
+    # nije mogao imati `planTask` i kontroler je svakoj fazi slao `T00`. Oblik je uzak (`T` + dvije znamenke,
+    # isto sto trazi validateQueue), jer vrijednost putuje u argv `scripts/agents/cli.mjs prepare`.
+    plan_task = scope.get("planTask")
+    plan_task = plan_task if isinstance(plan_task, str) and _PLAN_TASK_RE.fullmatch(plan_task) else None
     return {
         "kind": kind,
         "fingerprint": fp,
@@ -123,7 +131,7 @@ def normalize_signal(raw: dict) -> dict | None:
         "redactions": hits,
         "reproduction": redact_text(str(raw.get("reproduction") or ""))[0][:1000],
         "expected_outcome": redact_text(str(raw.get("expected_outcome") or ""))[0][:500],
-        "scope": {"paths": paths[:20], "area": redact_text(str(scope.get("area") or ""))[0][:100]},
+        "scope": {"paths": paths[:20], "area": redact_text(str(scope.get("area") or ""))[0][:100], "planTask": plan_task},
         "priority": int(raw.get("priority", DEFAULT_PRIORITY.get(kind, 0))),
         "url": redact_text(str(raw.get("url") or ""))[0][:300],
     }

@@ -310,6 +310,34 @@ def default_sources(config: dict, home: str) -> list[dict]:
     return sources
 
 
+def _resolve_ready_plan_task(repo: str, task: dict) -> tuple[str | None, str]:
+    """Ciljni zadatak iz koordinatorova reda, ili razlog zasto ga nema.
+
+    Cita `docs/agents/tasks.json` SAMO za citanje; kontroler taj red nikad ne mijenja. Do 2026-09-13 je
+    `run_phase` slao `planTask or "T00"` bez ijedne provjere, pa je faza plana trosila poziv modela nad
+    zadatkom koji je `done` (T00), a `implement` je odmah padao u prepareJob na `T00 must be ready`.
+    Zato se ovo razrjesava PRIJE ijednog poziva modela, a promasaj je `needs_human`, ne potrosen pokusaj.
+    """
+    plan_task = ((task.get("signal") or {}).get("scope") or {}).get("planTask")
+    if not isinstance(plan_task, str) or not plan_task:
+        return None, "no_ready_plan_task: signal nema planTask"
+    try:
+        with open(os.path.join(repo, "docs", "agents", "tasks.json"), encoding="utf-8") as fh:
+            queue = json.load(fh)
+        by_id = {t["id"]: t for t in queue["tasks"]}
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        return None, f"no_ready_plan_task: red zadataka nije citljiv ({type(exc).__name__})"
+    target = by_id.get(plan_task)
+    if target is None:
+        return None, f"no_ready_plan_task: {plan_task} nije u redu"
+    if target.get("status") != "ready":
+        return None, f"no_ready_plan_task: {plan_task} je {target.get('status')}, ne ready"
+    for dependency in target.get("dependsOn") or []:
+        if (by_id.get(dependency) or {}).get("status") != "done":
+            return None, f"no_ready_plan_task: ovisnost {dependency} nije done"
+    return plan_task, ""
+
+
 def _agent_for(config: dict, phase: str, task: dict) -> str:
     # Zadani autonomni raspored bez Fablea (plan 3.2): Codex vodi plan i pregled Claude implementacije,
     # Sonnet implementira; kad je implementator Sol, pregled radi Claude (drugi provider), ali nikad Fable.
@@ -329,16 +357,41 @@ class DefaultAdapters:
         self.config = config
         self.home = home
         self.repo = config.get("workerRepoPath") or os.getcwd()
+        # Tko je implementirao koji zadatak U OVOM ticku. Zivi koliko i adapter (jedan `_drive_task` prolaz) i
+        # zamjenjuje `task.implementationAgent` iz `docs/agents/tasks.json`, koji kontroler ne smije pisati.
+        self._implementer_by_task: dict[str, str] = {}
 
     def run_phase(self, task: dict, phase: str, profile: dict) -> dict:
         agent_phase = PHASE_TO_AGENT_PHASE[phase]
-        agent = _agent_for(self.config, phase, task)
+        # PRVO red, pa tek onda model. Bez razrjesivog `ready` zadatka ne kreće nijedan poziv i pokusaj ostaje.
+        plan_task, reason = _resolve_ready_plan_task(self.repo, task)
+        if plan_task is None:
+            return {"verdict": "needs_human", "reason": reason, "provider": None, "attempt_spent": False}
+        override_status = override_implementer = None
+        lookup_task = task
+        if agent_phase == "review":
+            # Recenzenta bira IMPLEMENTATOR iz ovog ticka, ne tasks.json. Bez zapisa nema pogadjanja: pogodjen
+            # implementator moze slucajno biti isti provider kao recenzent, cime bi pravilo o drugom provideru
+            # tiho otislo. Blokada je fail-safe i ne trosi pokusaj.
+            implementer = self._implementer_by_task.get(task["id"])
+            if implementer is None:
+                return {"verdict": "blocked", "reason": "implementer_unknown: ovaj tick nema zapis o implementatoru",
+                        "provider": None, "attempt_spent": False}
+            lookup_task = {**task, "implementationAgent": implementer}
+            override_status, override_implementer = "in_review", implementer
+        agent = _agent_for(self.config, phase, lookup_task)
         try:
-            job = prepare_job_via_node(self.repo, task["signal"].get("scope", {}).get("planTask") or "T00", agent_phase, agent)
+            job = prepare_job_via_node(self.repo, plan_task, agent_phase, agent,
+                                       override_status=override_status, override_implementer=override_implementer)
         except (RuntimeError, ValueError, OSError) as exc:
             return {"verdict": "blocked", "reason": f"prepare_failed: {type(exc).__name__}", "provider": None}
+        if agent_phase == "implement":
+            self._implementer_by_task[task["id"]] = agent
         art = os.path.join(self.home, "artifacts", task["id"], f"{phase}-{uuid.uuid4().hex[:8]}")
-        return run_phase(job, agent_phase, profile, cwd=self.repo, timeout_seconds=int(self.config.get("agentTimeoutMinutes", 30)) * 60, artifact_dir=art)
+        result = run_phase(job, agent_phase, profile, cwd=self.repo, timeout_seconds=int(self.config.get("agentTimeoutMinutes", 30)) * 60, artifact_dir=art)
+        result["agent"] = agent
+        result["plan_task"] = plan_task
+        return result
 
     def verify(self, task: dict) -> dict:
         def runner(argv):
@@ -439,14 +492,20 @@ def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict,
         store.record_event(task_id, f"phase_start:{phase}", {}, now)
         result = adapters.run_phase(task, phase, profile)
         store.record_run(task_id, phase, result, now, now)
-        summary["phases"].append({"phase": phase, "verdict": result.get("verdict"), "reason": result.get("reason")})
+        summary["phases"].append({"phase": phase, "verdict": result.get("verdict"), "reason": result.get("reason"),
+                                  "agent": result.get("agent")})
         verdict = result.get("verdict")
         if verdict in ("waiting_quota", "needs_login"):
             store.transition(task_id, status, verdict, {"reason": result.get("reason"), "next_run_at": now + 3600}, now)
             return verdict
-        if verdict == "blocked":
-            store.transition(task_id, status, "blocked", {"reason": result.get("reason")}, now)
-            return "blocked"
+        if verdict in ("blocked", "needs_human"):
+            # `attempt_spent: False` tvrdi adapter, i to samo kad poziv nije ni poceo (nema ciljnog zadatka,
+            # providerova izvrsna okolina odbija sve). Bez te tvrdnje ponasanje je staro: pokusaj je potrosen.
+            payload: dict = {"reason": result.get("reason")}
+            if not result.get("attempt_spent", True):
+                payload["refund_attempt"] = True
+            store.transition(task_id, status, verdict, payload, now)
+            return verdict
         if verdict != "needs_verification":
             store.transition(task_id, status, "failed", {"reason": result.get("reason")}, now)
             return "failed"
