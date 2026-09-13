@@ -363,7 +363,7 @@ class DefaultAdapters:
 
     def run_phase(self, task: dict, phase: str, profile: dict) -> dict:
         agent_phase = PHASE_TO_AGENT_PHASE[phase]
-        # PRVO red, pa tek onda model. Bez razrjesivog `ready` zadatka ne kreće nijedan poziv i pokusaj ostaje.
+        # PRVO red, pa tek onda model. Bez razrjesivog `ready` zadatka ne krece nijedan poziv i pokusaj ostaje.
         plan_task, reason = _resolve_ready_plan_task(self.repo, task)
         if plan_task is None:
             return {"verdict": "needs_human", "reason": reason, "provider": None, "attempt_spent": False}
