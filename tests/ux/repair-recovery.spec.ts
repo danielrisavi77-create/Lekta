@@ -58,8 +58,14 @@ const sendButton = (page: Page) => page.getByTestId('repair-workflow').locator('
 
 /** Klik na slanje; kad odabir sadrzi zahvat koji trazi potvrdu lokacije (K6), prvo se potvrdi, pa tek onda ide zahtjev. */
 async function send(page: Page) {
-  await sendButton(page).click();
+  const button = sendButton(page);
+  await button.click();
   const potvrdi = page.getByTestId('repair-workflow').locator('.lekta-repair-panel__confirm');
+  await expect.poll(async () => {
+    if (await potvrdi.isVisible().catch(() => false)) return 'confirm';
+    if (await button.isDisabled().catch(() => false)) return 'sending';
+    return 'waiting';
+  }, { timeout: 5_000 }).not.toBe('waiting');
   if (await potvrdi.isVisible().catch(() => false)) await potvrdi.click();
 }
 
