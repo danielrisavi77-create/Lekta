@@ -72,13 +72,17 @@ i njegov ratchet moraju biti u istom commitu.
 Svaka promjena prije commita mora proci:
 
 ```bash
-npm run check
-npm run orphan-scan
+npm run verify:change -- --base origin/master
 ```
 
-`npm run check` pokrece lint, TypeScript, Edge provjeru, Vitest i Vite build.
-Zahtijeva Deno; `check:edge` se ne preskace. Zeleni izlazni kod bez Vitest retka
-`Test Files` nije dovoljan dokaz.
+Router iz Git diffa bira domenske gateove, a `check` i `orphan-scan` izvodi za
+svaku poznatu promjenu. `check` pokrece lint, TypeScript, Edge provjeru, Vitest i
+Vite build te zahtijeva Deno. Zeleni izlazni kod bez Vitest retka `Test Files`
+nije dovoljan dokaz.
+
+Nepoznata putanja, nepokrenut ili nedostupan gate i nepotvrden manualni gate daju
+`needs_human` i izlaz 2, nikad prolaz. Detalji i strojni izvjestaj su u
+`.artifacts/verification-router/latest.json`.
 
 Stanje mastera je zasebno pitanje:
 
