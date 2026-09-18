@@ -1,970 +1,147 @@
-# CLAUDE.md - ThesisReady
+# Lekta
 
-Operativni vodič za rad na ovom repozitoriju. Pročitaj prije bilo kakve izmjene.
+Kompaktni kanonski vodič za cijeli repozitorij. Domenske upute zive uz kod i
+Claude Code ih ucitava tek kad radi u toj putanji. Ne dodaj `@` importe scoped
+vodiča u ovaj dokument.
 
-## Što je ovo
+## Projekt
 
-Klijentska web aplikacija (Vite + TypeScript) koja u pregledniku analizira `.docx`
-akademske radove i provjerava oblikovanje, strukturu, opseg i citiranje prema
-službenim profilima fakulteta (FPZG i Pravni fakultet u Zagrebu). Sva ANALIZA je
-lokalna: dokument se pritom ne šalje na poslužitelj. Postoji i monetizacija (paketi,
-narudžbe, payment linkovi), GDPR pravni tekstovi i ugrađena QA dijagnostika.
+Lekta je Vite aplikacija s TypeScript strict provjerom, Vitestom i happy-domom.
+U pregledniku lokalno analizira `.docx` akademske radove prema verificiranim
+profilima fakulteta. Nije Next.js projekt.
 
-Stack: Vite, TypeScript (strict), vitest + happy-dom, bez frontend frameworka.
-Za razliku od besplatne analize, repozitorij VIŠE NIJE bez backenda: placeni
-automatski popravak (`src/repair`, kad je `repairEndpoint` konfiguriran), narudžbe,
-waitlist i rokovi/podsjetnici idu na živi Supabase backend (`supabase/migrations`,
-`supabase/functions`). "Bez backenda" vrijedi samo za samu analizu, ne za proizvod
-u cjelini.
-Ovo NIJE Next.js projekt i nema veze s maturiraj.hr; ne miješaj konvencije.
+Analiza je lokalna. Placeni popravak, provjera izvora, narudzbe, waitlist, rokovi
+i podsjetnici koriste zivi Supabase backend.
 
-## Tvrdo pravilo: Lekta nikad ne generira niti ne prepravlja sadržaj rada
+## Granica proizvoda
 
-Lekta smije mjeriti, provjeravati, uspoređivati s pravilima i determinističkim putem
-popravljati FORMU (font, prored, margine, numeracija, format citata i slično). Lekta
-nikad ne piše, ne prepravlja i ne ocjenjuje rečenice, argumentaciju ili sadržaj rada,
-ni preko AI modela ni na bilo koji drugi način. Ovo nije samo namjera nego već
-arhitektonska činjenica: popravak nema model ni prompt (vidi "Popravak" niže),
-gramatika i pravopis su lokalni lintovi, savjetodavni, provjera citata je provjera
-postojanja preko CrossRefa, nikad generiranje teksta. Svaka nova značajka mora ostati
-unutar te granice.
+Lekta analizira i deterministicki popravlja FORMU. Nikad ne pise, prepravlja ili
+ocjenjuje recenice, argumentaciju ni akademski sadrzaj, ni modelom ni drugim putem.
+AI pisanje pripada odvojenom proizvodu i repozitoriju. Podaci smiju teci iz Lekte
+prema njemu, nikad obrnuto; formalna mjerodavnost ostaje Lektina.
 
-Razlog je poslovni, ne samo etički: institucionalna prodaja fakultetima (B2B, po
-ustanovi) i AI generiranje sadržaja studentskog rada se međusobno isključuju. Alat koji
-samo mjeri formu prema fakultetovim vlastitim, već objavljenim pravilima, fakultet može
-odobriti brzo, analogno alatu za provjeru izvornosti. Alat koji piše ili prepravlja
-argumentaciju je pitanje akademskog poštenja: ide na etičko povjerenstvo, sporo se
-odobrava ili se odbija. Ta granica čuva mogućnost prodaje instituciji, ne samo
-pojedinačnom studentu, i vrijedi i za copy i marketing (ne obećavaj "AI piše umjesto
-tebe").
+Osnovni mjerljivi ugovor je isti vidljivi autorski tekst prije i poslije Word
+`Fields.Update()`. Dopustene, usko definirane iznimke i njihovi testovi nalaze se
+u `src/repair/CLAUDE.md`.
 
-### Gdje je granica: test vidljivog teksta
+## Izvori istine
 
-Pravilo iznad ne zabranjuje sve što dira dokument, nego ono što mijenja SADRŽAJ. Razlika
-je mjerljiva, pa se ne rješava procjenom:
+- `ruleEntries` su autorski izvor istine za profilna pravila; `rules` je naslijedeni agregat.
+- Analiza cita samo profil slozen kroz `src/profiles/compose-profile.ts`.
+- Bodovana vrijednost mora odgovarati verificiranoj tvrdnji s izvorom, lokatorom i citatom.
+- Nepotvrden `sourcePage` ostaje `null`; ne pogadaj ga.
+- Studentski radovi sluze regresiji parsera, nikad kao izvor pravila.
+- Identitet provjere je `check.id`, ne hrvatski naslov.
 
-> Zahvat je dopušten ako tekst koji korisnik vidi na ekranu i u ispisu ostane isti,
-> **i prije i poslije osvježavanja polja u Wordu**. Mehanika ispod smije se mijenjati:
-> polja, sidra (bookmarkovi), stilovi, numeracija, relacije, dijelovi paketa.
+Detaljni ugovor i identiteti opisani su u `docs/decisions/SOURCE_OF_TRUTH.md`.
 
-Provjera je doslovna, ne teorijska: otvori dokument Wordom, pozovi `Fields.Update()`,
-usporedi tekst prije i poslije (`scripts/word-verify/`, Tier 2 u
-`docs/REAL_CORPUS_TESTING.md`). Testovi zato čitaju SPOJENI tekst odlomka, ne sirovi XML,
-jer se dio ovih kvarova u XML-u uopće ne vidi (RE-57, RE-58).
+## Privatnost i klasifikacija
 
-Pet postojećih popravaka SMIJE mijenjati vidljivi tekst i to je namjerno, jer je svaki od
-njih format, ne argumentacija: velika slova naslova (`heading-case-fixer`), hrvatska
-tehnička tipografija (`croatian-typography-fixer`), kanonizacija DOI-ja
-(`bibliography-repair-fixer`, `link-doi-fixer`), polje sadržaja (`toc-field-fixer`) i
-nedostajući obvezni naslov (`required-section-fixer`). Svaki traži izričitu potvrdu i
-nijedan ne dira rečenice tijela rada.
+`data/classification.json` odreduje sto smije u javni bundle; zadnje podudarno
+pravilo vrijedi. Neklasificirana nova putanja mora srusiti build.
 
-`required-section-fixer` je dodan 2026-08-30, odlukom vlasnika. Umeće ISKLJUČIVO natpis koji
-propisuje verificirano pravilo profila (`required-section-rules` sa `sourceId`, `sourcePage` i
-doslovnim citatom), nikakav sadržaj: izmjereno na jednom stvarnom radu razlika je 25 znakova, i to
-naslov "ključne riječi / keywords". Rezervirani tekst i komentar umeću se samo kad ih profil
-izričito traži. Granica je time ista kao za ostale: umeće se natpis koji je fakultet sam propisao,
-nikad rečenica rada.
+Draft evidence, ledger, source registry i `data/profiles/verified-profiles.json`
+nikad ne idu u preglednik. Ne uklanjaj `LEKTA-KANARINAC-*` ni top-level
+`kanarinac`; writeri moraju sacuvati nepoznate top-level kljuceve.
 
-Do 2026-08-30 taj popravak nikad nije ni radio: predodabir je tražio `confidence === 'high'`, a
-analiza nedostajućem dijelu po konstrukciji daje `medium` (`present ? 'high' : 'medium'`), pa je
-uvjet bio neispunjiv. Nakon popravka ga je lanac odbijao uz `stale-anchor`, jer je istovremeno
-INDEX_SHIFTING i ovisan o sidru; riješeno je time da sidro vrijedi uz podudaranje otiska ILI teksta
-odlomka. Vidi `docs/superpowers/specs/2026-08-29-prazni-asistirani-fixeri.md`.
+Produkcija dohvaća pravila po profilu. Kvar dohvata smije otvoreno degradirati na
+opcu provjeru, ali ne smije tiho bodovati djelomicni light profil.
 
-`toc-field-fixer` je dodan 2026-08-17, nakon što je real-corpus mjerenje pokazalo da mijenja
-vidljivi tekst na 5 od 12 radova. Obrazloženje: tekst sadržaja GENERIRA Word iz polja, nije
-autorov, pa je to mehanika ispod, a ne sadržaj rada.
+## Izolacija i Git
 
-POTVRĐENO 2026-08-19 Tier 2 oracleom (`npm run verify:word:toc`), doslovnom usporedbom teksta
-prije i poslije `Fields.Update()` na dokumentu koji sadržaj dobiva prvi put: Word otvara
-popravljeni paket bez popravka, svih 12 autorskih odlomaka ostaje netaknuto i prije i poslije
-osvježavanja, a svih 5 stavki sadržaja izvedeno je iz STVARNIH naslova dokumenta (ništa
-izmišljeno). Izuzeće više nije privremeno.
+Sav rad koji pise ide u vlastiti izolirani worktree ili clone izvan repozitorija.
+Zajednicko stablo sluzi samo citanju i mjerenju. Vise pisaca u istom stablu nije dopusteno.
 
-Ako se `toc-field-fixer` mijenja, ponovi tu provjeru: ona je jedini dokaz da izuzeće vrijedi.
-Pazi pritom na zamku koju je sam oracle prvo imao: stavka sadržaja nosi ISTI tekst kao naslov iz
-kojeg je izvedena, pa usporedba odlomaka "po članstvu" ne vidi ništa novo i lažno javi da polje
-nije živo. Sadržaj se zato čita izravno iz TOC raspona.
-
-### Dopušteno bez fakultetskog pravila (preporuke)
-
-Popravak se smije nuditi i kad ga nijedan profil ne propisuje, ali samo kao PREPORUKA:
-`violated: false`, `recommended: true`, BEZ `matchKeys`. Time se ne veže ni na jedan bodovan
-check i ne može pomaknuti ocjenu. Izmišljeno pravilo je ono koje OCJENJUJE; preporuka koju
-korisnik bira nije, i ne ruši argument za institucionalnu prodaju.
-
-Uvjeti su kumulativni: prolazi test vidljivog teksta, traži potvrdu, ne umeće nov tekst
-(bez profila se ne izmišljaju natpisi ni sekcije, nego se popravlja ono što već postoji), i
-jasno kaže korisniku da nije zahtjev fakulteta. Presedan su `empty-paragraph-fixer` i
-`croatian-typography-fixer`; noviji primjer su unakrsne upute na tablice i slike
-(`element-caption-fixer`, RE-59).
-
-Što OSTAJE zabranjeno bez obzira na sve gore: pisanje ili prepravljanje rečenica i
-argumentacije, generiranje sadržaja bilo kojim modelom, i bodovanje po pravilu koje nema
-službeni izvor.
-
-Ako proizvod ikad zatreba AI asistirano pisanje ili coaching (primjer: sestrinski
-proizvod Katedra, zaseban proizvod istog vlasnika), to ide u odvojen proizvod i
-repozitorij, nikad u Lektu. Podaci smiju teći iz Lekte prema drugom proizvodu
-(izvezena, informativna, neautoritativna projekcija Lektinih verificiranih pravila),
-nikad obrnuto, i taj drugi proizvod nikad ne smije tvrditi da je njegova provjera
-formalno mjerodavna: to ostaje isključivo Lektin posao. Vidi `src/integrations/`
-za konkretan, jednosmjeran izvoz podataka prema Katedri (`katedra-pack`).
-
-## Tvrdo pravilo: migracije idu iskljucivo kroz `supabase db push`
-
-MCP `apply_migration` se NE koristi nad Lektinim bazama. Razlog nije stil nego identitet:
-`db push` upisuje verziju iz imena datoteke (`0001`), a `apply_migration` timestamp
-(`20260719004453`), pri cemu ime ostaje u stupcu `name`. Iste migracije tako dobiju dva
-razlicita identiteta, ovisno o tome tko ih je i cime primijenio.
-
-Audit 2026-08-17 nasao je oba kvara koja iz toga slijede: produkcijski dnevnik je izgledao kao
-da gotovo nista nije primijenjeno (a bilo je 67 od 90), a staging je 38 migracija primijenio
-DVA PUTA, jednom kroz svaki od ta dva puta. Proslo je samo zato sto su ti zahvati idempotentni.
-
-- Stanje se provjerava s `npm run migration-identity` (usporedba po IMENU, ne po verziji).
-- Razlika izmedju repozitorija i deployanih Edge funkcija: `npm run deploy-drift`.
-- Dijagnoza i preostali koraci: `docs/deploy/MIGRATION_IDENTITY.md`.
-- Iznimka je iskljucivo baza koja se smije baciti.
-
-Svaka migracija mora biti idempotentna (`if not exists`, `drop ... if exists` prije `create`),
-jer se u praksi zna primijeniti vise puta.
-
-## Tvrdo pravilo: build gate
-
-Svaka promjena mora proći prije commita:
+Prije commita provjeri obje strane ciljnih putanja:
 
 ```bash
-npm run check   # oxlint && tsc --noEmit && check:edge && vitest run && vite build
+git diff --stat -- <putanje>
+git diff --cached --stat -- <putanje>
+npm run orphan-scan
 ```
 
-Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
+Commitaj s `git commit --only <putanje>`. Ne koristi `git add -A`, `git add .`,
+`git commit --amend` ni obican commit koji uzima cijeli indeks. Ne prepravljaj
+povijest dok druga sesija radi. Autorstvo se ne izvodi iz zajednickog Git identiteta.
 
-Gate TRAZI DENO, jer od 2026-09-01 ukljucuje `check:edge` (`deno check` nad
-`supabase/functions/**`). Ondje zivi serverski kod koji barata novcem, tudjim dokumentima i
-pravom pristupa, a `tsconfig.json` ima `include: ["src"]` pa ga tsc po konstrukciji ne vidi.
-Bez Dena korak PADA umjesto da se tiho preskoci, i to je namjerno: provjera koja se tiho
-preskoci jednaka je provjeri koje nema. Prije toga je rupa bila samo lokalna (CI ga je vrtio
-kao zaseban korak, i to samo na Node 20), pa se greska u Edge kodu vidjela tek nakon pusha.
+Generirane artefakte regeneriraj samo u cistom izoliranom stablu. Izvor, artefakt
+i njegov ratchet moraju biti u istom commitu.
 
-### Je li MASTER zelen: `npm run master-ci`
+## Tvrdi gate
 
-Lokalni gate ne odgovara na to pitanje. On mjeri tvoje radno stablo, a master zna biti crven
-danima a da to nitko ne vidi: 2026-09-02 su CETIRI uzastopna master commita bila crvena
-(`1f12c0be`, `5fd8c84b`, `f22eb616`, `8bb158a6`), a otkrila ih je sesija koja je mjerila nesto
-drugo. Provjeri to PRIJE nego se osloni na master (grananje, merge, dokaz).
+Svaka promjena prije commita mora proci:
 
-TRI ishoda, i to je cijela poanta: `0` zeleno, `1` CRVENO (uz broj UZASTOPNIH padova, koji je
-vazniji od zadnjeg), `2` NE ZNAM. "Ne znam" nikad ne izlazi kao zeleno.
-
-Alat NE koristi `gh`, i to je odluka o OVISNOSTI, ne o stanju alata. Izmjereno 2026-09-03: `gh`
-je visio na svakoj podnaredbi, ukljucujuci `gh auth status`, jedan poziv se nije vratio ni nakon
-439 s, dok je `api.github.com` istovremeno odgovarao za 0,32 s. Izmjereno 2026-09-04: isti `gh`
-na istom stroju vraca `gh auth status` za 0,3 s, a `gh run view --log-failed` radi i s njim su
-istog dana procitana dva CI loga koja API bez autentikacije ne daje (gitleaks nalaz, rule-claims).
-Dakle vjesanje je bilo PROLAZNO, a gard koji mora biti pouzdan ne smije ovisiti o alatu koji zna
-biti neprolazan; zato master-ci ostaje na izravnom API-ju (repozitorij je javan, autentikacija ne
-treba, ~1,8 s). Za RUCNO citanje logova `gh` je ispravan alat: probaj ga s kratkim rokom
-(`timeout 25 gh auth status`) umjesto da ga izbjegavas po sjecanju na jucerasnje mjerenje.
-Ako alat mijenjas: izlaz mora ici preko `process.exitCode`, jer
-`process.exit()` uz zivu `fetch` uticnicu rusi Node na Windowsu i vraca 127, cime ugovor o tri
-koda pukne bas kad gard treba biti pouzdan.
-
-### Gdje se gate mjeri: na IZOLIRANOM stablu, nikad na dijeljenom
-
-`npm run check` mjeri RADNO STABLO, ne HEAD. Kad vise sesija dijeli isto stablo, mjeri i tudje
-necommitane izmjene, pa laze u OBA smjera: zelen gate ne dokazuje zelen HEAD, a crven gate ne
-dokazuje kvar u tvom radu.
-
-Izmjereno 2026-08-30: run u dijeljenom stablu prijavio je 4 pale datoteke, a sve cetiri prolaze na
-cistom HEAD-u. `faculty-matrix` je pao jer su druge sesije uzivo prepisivale `data/profiles/**`, pa
-se zivi izracun razisao s commitanim artefaktom; `partial-credit-scales` je pao na `testTimeout`
-od 15 s, a na mirnom stroju trazi 16,5 s.
-
-- Gate ide u worktree IZVAN repozitorija (vitest excludea samo `.claude/**`) uz junction na
-  `node_modules`. Junction se stvara POSLIJE checkouta i ponovno nakon svakog `checkout -f`, koji
-  ga brise; bez njega gate padne na "'tsc' is not recognized", sto izgleda kao kvar koda a nije.
-- Ishod se cita iz retka `Test Files`, NIKAD iz izlaznog koda. Pozadinski zadatak zavrsava s
-  `[exited with code 0]` i kad je vitest crven.
-- Log ide u VLASTITU datoteku (`> gate.log 2>&1`): omotac cuva samo rep (~62 retka), pa se izgubi
-  koje su datoteke pale, a zna se samo koliko ih je.
-
-### Stroj je granica, i to se mjeri prije pokretanja
-
-Stroj ima 8 GB RAM-a i 4 jezgre, a suite 420 test datoteka i oko 4700 testova. Uz 7 aktivnih
-sesija ostaje 400 do 600 MB slobodno i puni gate umre na OOM-u.
-
-Potpis tog pada je lako zamijeniti za nalaz: log STANE poslije zelene datoteke, bez sazetka i bez
-poruke o gresci, dok `npm` vrati 1. Nula `FAIL` redaka + nema sazetka + npm 1 znaci ISCRPLJEN
-RESURS, ne regresiju; ne pripisuj to commitu. Prije mjerenja pogledaj slobodni RAM
-(`Get-CimInstance Win32_OperatingSystem`) i broj node procesa; ispod ~1 GB slobodno nema smisla ni
-pokretati. Kad stroj nije miran, dokaz se seli na CI (cist stroj) ili se ceka.
-
-## Tvrdo pravilo: paralelizam ide kroz IZOLACIJU, ne kroz vise pisaca
-
-Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u istom stablu.
-
-- Fan-out agenata je dopusten SAMO za citanje (pretraga, istrazivanje, prikupljanje nalaza).
-  Paralelno PISANJE u isto radno stablo nije dopusteno.
-- NE postoji pravilo koje na svaki prompt trosi jos agenata. Razlog stoji nize u ovom vodicu i
-  izmjeren je: vise prolaza ISTIM alatom nije provjera, nego slaganje. Drugo misljenje vrijedi
-  samo ako dolazi od DRUGOG alata, dakle `/codex:review`, odnosno `/codex:adversarial-review` za
-  parser, citation i repair kod. To pravilo vec postoji i treba ga primjenjivati dosljedno.
-- Uzko grlo ovog projekta nisu ideje nego stroj i dijeljeno stablo. Dodatni pisci trose upravo
-  onaj resurs kojeg nema i mnoze klasu kvara koja je 2026-08-30 kostala 24 h: golden snimka
-  commitana iz prljavog stabla opisivala je ponasanje ciji izvor u repou nikad nije bio commitan
-  (vidi `141f9848`), a krivnja je pala na nevin commit.
-
-### Izmjereno 2026-08-31: pravilo koje ovisi o pamcenju nije zastita
-
-Osam zivih sesija u istom stablu proizvelo je istoga dana TRI stete:
-
-    1  `git add <putanje> && git commit`  commitao je CIJELI indeks, ne navedene putanje:
-                                          21 tudja staged datoteka otisla je pod tudju poruku
-                                          (`cae64ef5`)
-    2  generator fixtura                  jedan prolaz izbrisao je NETRACKANU fixturu druge
-                                          sesije; netrackanu datoteku nista ne vraca. Dvije
-                                          fixture koje su bile commitane (`6ee596a5`) prezivjele
-                                          su isti prolaz netaknute
-    3  spor o autorstvu                   dvije sesije tvrdile su isti rad
-
-Treca nema tehnicko rjesenje NAKON sto se dogodi: dijeli se stablo, povijest, git identitet
-(`Daniel`) i reflog, pa nijedan git dokaz ne razlikuje tko je izvrsio naredbu. Prve dvije se
-poprave, treca ne.
-
-**Ne imenuj sesiju kojoj commit nisi provjerio.** Spor iz retka 3 nema rjesenje POSLIJE, ali ima
-jeftinu prevenciju PRIJE. Izmjereno 2026-09-03: jedna sesija je istoga dana dvaput pripisala rad
-krivoj sesiji, i oba puta onoj s kojom je o toj temi RAZGOVARALA, a ne onoj koja ga je izvela. Ime
-sugovornika popuni prazninu koju git ne moze popuniti, jer svi commitamo kao `Daniel`.
-
-Steta nije samo kozmeticka: drugi put je ponisten tudji rad, a objasnjenje je otislo sesiji koja ga
-nije napisala, pa strana koje se tice za to nije ni znala. U poruci drugoj sesiji zato pisi "autor
-tog commita", osim ako ime mozes potkrijepiti. Najcesce ne mozes, sto je razlog vise da ga ne
-izmisljas. Ako ti netko pripise tudji rad, javi ispravak i kad je pripis pohvalan: pohvala krivoj
-adresi jednako zavarava kao i primjedba.
-
-**Uredivacka sesija ide u VLASTITI `git worktree`.** Tada dvije sesije fizicki ne mogu pisati istu
-datoteku, a susret se dogadja pri mergeu, gdje ga git vidi i prijavi. Harness ima `EnterWorktree`;
-`worktree.baseRef: "head"` je vec postavljen. Zajednicko stablo ostaje samo za ono sto NE pise:
-citanje, mjerenje, pregled.
-
-**Gard, jer se na pamcenje ne racuna.** `PreToolUse` hook nad Bashem odbija tri naredbe koje su
-gornje stete i napravile: `git commit` bez `--only`, `git add -A`/`.`/`-u`, i `git commit --amend`.
-Izvrsava ga HARNESS, ne model, pa se ne zaobilazi zaboravom. Skripta stoji IZVAN repozitorija
-(`~/.claude/hooks/lekta-git-guard.mjs`), jer `.claude/hooks/` nije gitignoriran pa bi ondje bila
-netrackana datoteka, dakle tocno ono sto steta 2 opisuje. Ozicenje je u
-`.claude/settings.local.json`.
-
-Gard stiti od GRESKE, ne od odluke; sve tri stete bile su greske. Ako ti zatreba oblik koji odbija,
-javi tocnu naredbu i procijeni je li gard prestrog, nemoj ga zaobilaziti.
-
-Pri pisanju samog garda pojavio se isti razred kvara koji lovi: prva izvedba gradila je regex iz
-NIZA, escape se izgubio, `\s` je postao slovo `s`, i gard je izgledao ispravno a nije grizao
-nijedan od sedam blokirajucih slucajeva. Regexi su zato DOSLOVNI, a pokriveno je 12 slucajeva
-(pet dopustenih, sedam blokiranih).
-
-**Prakticna napomena o mirovanju:** uvjet "cekamo da sve sesije stanu" je nedostizan, jer nove
-dolaze brze nego sto stare zavrsavaju (izmjereno: cetiri nove u pet minuta). Zahvat nad dijeljenim
-stablom radi se u kratkom NAJAVLJENOM prozoru, a prije njega se izmjeri da pogodjene putanje nemaju
-zive izmjene (`git diff` prema indeksu prazan).
-
-## Tvrdo pravilo: bodovana vrijednost mora se slagati s verificiranom tvrdnjom
-
-Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
-(`data/profiles/<unit>/drafts/*.json`), a motor boduje iz naslijedjenog `rules` objekta
-(`composeAnalysisProfile` klonira `definition.rules`, NIKAD `ruleEntries`; svih 407 registriranih
-profila ima prazan `ruleEntries`). Do 2026-08-22 te dvije strane nitko nije usporedjivao.
-
-Prvo mjerenje: **40 parova (profil, os) kroz 23 profila** bodovalo je vrijednost koju njihova vlastita
-`verified` tvrdnja s citatom opovrgava. `unizd-pomorski-*`: izvor propisuje Merriweather 10 pt, motor
-je trazio Times New Roman/Arial/Calibri 11-12 pt, pa je rad koji tocno slijedi svoju uputu gubio
-bodove. Serverski popravak je uz to upisivao TNR 12 u studentov dokument, pod ruleId-em cija
-provenijencija kaze Merriweather 10.
-
-- Usporedbu radi `src/verification/scored-value-binding.ts`, po OSI a ne po kljucu `rules`: motor
-  vecinu dimenzija cita kroz par (zastavica, vrijednost), pa usporedba po kljucu daje lazne nalaze
-  (`paper-size: "A4"` proizvodi `paperSizes`, zrcalo nosi `requireA4`, ista odredba drukcije zapisana).
-  Izmjereno: usporedba po kljucu dala je 227 laznih `unbacked`.
-- Artefakt je `data/verification/scored-value-drift.json` (`npm run scored-value-drift`).
-  `advisory-demotion.ts` ga cita i GASI bodovanje osi s raskorakom dok vlasnik ne presudi; ta os
-  ispada i iz `repair-map.json`, inace popravak i dalje upisuje vrijednost iz zrcala.
-  Dokazni dosjei: `npm run drift-adjudicate` pa `npm run drift-dossiers`.
-- Gard: `tests/scored-value-drift.test.ts` (commitani artefakt = svjez izracun, ratchet koji smije
-  samo padati, negativne kontrole) i `tests/gate-mutations.test.ts`.
-- KRUGA NEMA I TO JE NAMJERNO: raskorak se racuna iskljucivo iz tvrdnji i `rules`, nikad iz demotije.
-  Provjera koja preskace vec demotirane osi sama sebe pobrise u sljedecem krugu (popis se isprazni,
-  demotija nestane, kvar se vrati). Zato `computeBaseDemotedAdvisory` stoji odvojeno od
-  `computeDemotedAdvisory`.
-- Demotija je PRIVREMENA i FAIL-SAFE, pa se radi strojno. UKLJUCIVANJE bodovanja trazi ljudski
-  potpis. Tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna: opovrgavajuci prolaz
-  2026-08-21 nasao je krivo pripisan opseg na 12 od 20 tvrdnji, a presuda 2026-08-23 je nasla 17
-  slucajeva gdje je krivo zrcalo i 2 gdje je kriva tvrdnja.
-- ZATVORENO 2026-08-24: raskoraka je NULA. Svih 37 presudjeno i potpisano
-  (`data/verification/drift-decisions.json`; 35 u korist tvrdnje, 2 protiv). Ratchet je spusten na 0,
-  pa svaki nov raskorak pada odmah. Tri su bila motor koji je velicinu NASLOVA bodovao kao tijelo
-  rada (`unizd-pomorski`, `unizd-germanistika`, `unizd-sociologija`), dva su bila Wordov tvornicki
-  rub iz netaknutog .docx predloska predstavljen kao pravilo (`ffst-*`, oba `claim-wrong`), a dva su
-  bila artefakt ALATA a ne podataka: presuditelj trazi centimetre a izvor pise milimetre, i izvor
-  ima tipfeler u imenu fonta.
-- GARD KOJI PRESTANE GRISTI KAD JE POSAO GOTOV nije gard: mutacija o demotiji uzimala je profil IZ
-  artefakta, pa bi s nulom raskoraka prolazila vakuumski. Sada raskorak PODMECE
-  (`computeDemotedAdvisory` prima skup za testove; produkcija ga nikad ne prosljedjuje).
-- `scored-coverage.json` se time NE mijenja i to nije nesklad koji treba poravnati: coverage mjeri
-  tvrdnje sljedive do izvora, demotija mjeri sto motor boduje. Dvije populacije, imenuju se.
-
-## Tvrdo pravilo: privatni sloj ne ide u javni bundle (klasifikacijski manifest)
-
-`data/classification.json` je jedini izvor istine o tome sto smije u javni browser bundle
-(PUBLIC/PRIVATE-IP/PROPRIETARY-DATA/SECURITY-SENSITIVE + bundle allowed/forbidden/derived;
-zadnje pravilo koje pogodi stazu vrijedi, kao .gitignore). Cuvaju ga TRI sloja:
-
-- `scripts/security/classification-guard.mjs` (vite plugin): javni build PADA ako
-  forbidden/derived ILI NEKLASIFICIRAN repo modul ude u Rollup graf s renderiranim
-  sadrzajem (deny-by-default). Grize dokazano (negativne kontrole 2026-08-23: probni
-  import scored-value-drift srusio build, dva puta). SENTINEL: nula mapiranih modula
-  = pad, ne cist prolaz (krivo slovo pogona na Windowsu inace daje tihi vakuum);
-  klasifikacija je case-insensitive jer je Windows FS case-insensitive pa bi
-  'DATA/...' import inace prosao kao nepokriven.
-- `scripts/verify-dist-classification.mjs`: post-build sken dist/ + dist-packs/ na
-  kanarince i never-markere; CI korak u check.yml + zadnji korak verify-deploy-dist.
-- `tests/classification.test.ts`: pokrivenost (ukljucujuci netracked), mrtva pravila,
-  postojanje kanarinaca u izvorima, prikovane presude.
-
-Kanarinci: sintetski (`LEKTA-KANARINAC-...` u publicSources izvora istine i top-level
-`kanarinac` kljuc u par draftova; writeri draftova MORAJU propagirati nepoznate top-level
-kljuceve) i prirodni (publicSources sha256 otisci). NE koristi source-registry
-`snapshotHash` kao kanarinca: za izvore s citatnim specom ista vrijednost NAMJERNO izlazi
-u bundle kao `spec.verifiedHash`. Never-markeri su KLJUC-oblik u TRI varijante ("k":,
-escapano \"k\": i minificirani identifier k: iza interpunkcije, jer rolldown kljuceve
-emitira BEZ navodnika); goli niz lazno pali na prozu u note poljima. `verifiedHash` NIJE
-marker: javni citatni specovi ga namjerno nose u bundleu (gate protiv zastarjelog speca).
-`verifiedBy` JEST marker (vracen 2026-08-23, potpis verifikatora ne mora biti javan):
-stripRuntimeDeadProvenance ga brise iz citatnih specova u bundleu (klijent cita samo
-verifiedAt), izvor i SEO generator su netaknuti. Drafts evidence tako cuvaju TRI kljuca
-(verifiedBy/reviewedBy/confirmedVia) + kanarinci + zabrana modula. Kanarinci u GENERIRANIM
-artefaktima (scored-value-drift, repair-params) idu kroz BUILDER, nikad rucno: regen bi ih
-izbrisao. Novi podatkovni direktorij ili nova staza bez razreda = crveni check; dodaj
-pravilo SVJESNO, uz biljesku.
-
-## Tvrdo pravilo: mjera koja se popravi ne dokazuje da tvoj zahvat radi
-
-Dva su nacina da zeleno bude lazno, i oba su izmjerena na vlastitom radu 2026-08-31.
-
-**1. MEHANIZAM MORA IMATI VLASTITI BROJAC.** Nizvodna mjera nije dokaz da tvoj zahvat radi: ona se
-moze popraviti iz drugog razloga. Dovlacenje citata u `extract-citation-sections.mjs` citalo je
-`String(pages[p])` nad objektom `{page, text}`, dakle pretrazivalo doslovno `"[object Object]"`, i
-nije radilo NISTA. Blokatori su u istom prolazu pali s 8 na 5, pa je izgledalo da mehanizam radi;
-popravak je zapravo dolazio od PRVENSTVA, drugog mehanizma u istoj izmjeni.
-
-Zato svaki dodan mehanizam nosi brojac koji se zapisuje u artefakt (`citedBackfilled` u
-`extractions/INDEX.json`), a gard tvrdi da je RAZLICIT OD NULE. Brojac na nuli znaci mrtav kod, ma
-sto nizvodna mjera pokazivala. Gard: `tests/citation-extraction-mechanism.test.ts`, mutacija
-`mehanizam/mrtav-kod-s-brojacem-na-nuli`.
-
-**2. GENERATOR ULAZA JE I SAM NEPROVJEREN dok mu ne dokazes da proizvodi oblik koji tvrdis da
-pokrivas.** Prolaz kroz N slucajeva vrijedi samo za oblike koje je generator STVARNO stvorio. Sweep
-nad detekcijom naslovnice davao je 402/402 i bio lazno zelen: lokativ je tvorio samo muskim
-obrascem (`-om`), pa klasa "zenski pridjev u lokativu" (`Muzickoj akademiji`) u testu nikad nije ni
-nastala. U stvarnosti je rusila cetiri jedinice; neovisni verifikator s vlastitim generatorom dobio
-je 398/402.
-
-Ovo NIJE isto sto i "gard bez dokaza da grize": ondje se dokazuje da GARD reagira, ovdje da
-GENERATOR proizvodi trazeni oblik. Repo se oslanja na sweepove (konformnost, korpus, rutiranje
-profila, detekcija), gdje ta razlika odlucuje je li mjerenje istinito.
-
-Posljedica za rad: kad brojka ostane ista a mehanizam se promijenio, provjeri IDENTITET, ne zbroj.
-Popis blokatora citatnih dosjea zato je imenovan, a ne prebrojan: 2026-08-31 je broj ostao 1 dok je
-`pravo` otisao a `pfri` dosao, i samo je imenovani popis to uhvatio.
-
-**3. GARD KOJI ZAHVAT PRIMIJENI JEDNOM ne moze vidjeti ugovor koji vrijedi samo na PRVU primjenu.**
-Idempotencija se ne dokazuje jednim prolazom, nego dvama i tvrdnjom da je drugi no-op.
-
-Izmjereno 2026-09-03 na `dominantDirectRunSize`: autor je napisao TRI testa da dokaze zastitu
-"brise dominantnu velicinu, manjinsku ostavlja", i sva tri su bila jednoprolazna, pa nijedan nije ni
-mogao vidjeti da zastita vrijedi samo na prvi klik. Na drugi klik manjinski potpis od 10 pt postane
-dominanta medju preostalima i nestane. Testovi nisu bili slabi nego su mjerili KRIVI BROJ PROLAZA;
-ista bi rupa postojala uz bilo koju vrijednost i bilo koji prag.
-
-**4. MJERA NAD POPULACIJOM KOJU SAM MIJENJAS ne moze konvergirati**, jer si uklanjas vlastiti ucinak
-iz vlastitog ulaza. `dominantDirectRunSize` je dominantu racunao samo medju runovima koji JOS nose
-`w:sz`; cim prvi prolaz skine stvarnu dominantu, tijelo prijedje na nasljedjivanje iz stila i nestane
-iz nazivnika, pa jucerasnja manjina postane "dominanta". Kaskada na stvarnom radu: 2461, 431, 2838,
-7, 28 runova, pet prolaza do mirovanja, uz 57 posto neuklonjenih velicina nakon PRVOG klika i
-changelog koji tvrdi da su uklonjene. Popravak (`6fa30bfc`): u nazivnik ulazi i tekst koji vrijednost
-NASLJEDJUJE.
-
-Isti razred, druga domena, isti dan: gard nad grafom modula brojao je `import type` bridove i uvoze
-napisane u KOMENTARIMA, pa je javljao 17 ciklusa kojih je stvarnih bilo nula (`2a137026`, `6bb28616`).
-
-**Postojeca invarijanta NIJE pokrivenost.** `repair-golden` idempotenciju vec tvrdi, ali samo nad
-vlastitim skupom zahtjeva i oblicima koje fixturi imaju; kroz gornji kvar je bio zelen i prije i
-poslije popravka, bez izmjene snimke. To je instanca pravila 2 gore: invarijanta postoji, ali nijedan
-ulaz nema oblik koji je obara. "Postoji test idempotencije" zato nije odgovor na pitanje pokriva li
-tvoju granu.
-
-## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
-
-Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
-i tvrdnju da ga gard prijavi. Stanje 2026-08-23: 18 mutacija, 18 uhvaceno.
-
-Razlog je izmjeren, ne nacelan. `paper-size` izvod je IGNORIRAO vrijednost i uvijek trazio A4, pa bi
-se tvrdnja `A3` "izvela" iz citata o A4; izgledao je zdravo dok se nije podmetnula kriva vrijednost.
-`audit_scored_quotes` nije prijavio citat s pokrivanjem 0,21 uz prag 0,85 jer ga je
-`has_scanned_pages` proglasio neprovjerivim, i drugi prolaz ISTIM alatom bi ga opet propustio.
-
-- Svaka mutacija ima i BASELINE tvrdnju (nemutiran ulaz mora biti cist), inace "prolazi" i gard koji
-  vristi na sve.
-- Vise prolaza istim alatom NIJE provjera. FER pilot: 7/7 citata doslovnih, a 4 od 5 tvrdnji
-  oboreno. Slaganje nije tocnost; razliku prave RAZLICITI alati i unakrsna usporedba artefakata.
-- Boolean nad pragom nije nalaz nego prijedlog: `claimQuoteInSource` je po pragu 0,85 oznacio 11
-  tvrdnji kao izmisljene, a mjerenje je pokazalo da su dvije (0,21), dok je devet parafraza
-  (0,62-0,81). Presuda zato nosi BROJ, ne zastavicu.
-
-### Drift gard koji trazi regeneraciju moze traziti da POKVARIS podatke
-
-Gardovi tipa "artefakt je ustajao, regeneriraj pa commitaj" pretpostavljaju da su svjez izracun i
-commitani artefakt racunati u ISTOJ okolini. Kad nisu, uputa iz poruke je tocno obrnuta od
-ispravnog poteza.
-
-Izmjereno 2026-08-24 na `scored-quote-audit.json`. CI je javio "ustajao (svjeze 144 nalaza,
-commitano 148)". Artefakt je bio ISPRAVAN, a CI je citao krivo:
-
-    bez `olefile` i bez rar pratitelja:  revidirano 1739, nerevidirano 193, nalaza 144
-    s `olefile` i rar pratiteljima:      revidirano 1932, nerevidirano   0, nalaza 148 (= commitano)
-
-Regeneracija bi ozelenila CI, izbacila 193 bodovana pravila iz revizije i obrisala CETIRI stvarna
-nalaza. Zeleno bi znacilo MANJE provjere.
-
-- PRIJE regeneracije bilo kojeg verifikacijskog artefakta usporedi i BROJ PROVJERENIH JEDINICA, ne
-  samo broj nalaza. Pad pokrivenosti uz manje nalaza je znak da citac zakazuje, ne da je artefakt
-  star.
-- Citac koji nedostaje ne baca nego vraca prazno: `doc97_text` cita `.doc` preko `olefile` i bez
-  njega vraca prazan string. Svaka takva ovisnost mora biti u CI `pip install`, inace gard ne moze
-  proci ni na ispravnim podacima.
-- Pratitelj uz izvor bez citaca (`-ocr.txt` za skenirani PDF, `-text.txt` za `.rar`) MORA biti
-  commitan. Tri mathos `.rar` predloska nisu imala nijedan (`git ls-files` ih je imao nula), pa je
-  artefakt bio reproducibilan samo na stroju na kojem je pecen.
-- ZAMKA U DIJAGNOSTICI: kad citac zakaze, razlog se prijavi kao "skeniran izvor bez tekstualnog
-  sloja (treba OCR)", jer `.doc` i `.rar` produ kroz dopusteni popis nastavaka i zavrse u istoj
-  grani kao skeniran PDF. Poruka salje na OCR, a nijedan od 21 pogodenog izvora nije skeniran PDF.
-  Ne vjeruj toj poruci: nabroji koji izvori vracaju prazan `document_text` i gledaj njihov nastavak.
-
-## Arhitektura (stanje i smjer)
-
-- `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
-  metodologija, svaki u svom JSON-u. Loaderi u `src/*` ih hidriraju i tipiziraju.
-- `src/ui/app.ts` je UI orkestrator (~1530 redaka, tipiziran, VISE NIJE `@ts-nocheck`):
-  UI, narudzbe, placanje i QA. Analiticka jezgra je izvucena: `analyzeDocx` + auditni
-  helperi zive u `src/analysis/analyze-docx.ts` (tipizirano), a analiza u pregledniku radi
-  u Web Workeru (`analyze-docx.worker.ts` + most `analyze-docx-client.ts` s inline
-  fallbackom; worker koristi isti @xmldom/xmldom DOMParser kao testovi, pa golden pokriva
-  worker putanju). Tipizacija app.ts je pragmaticna: `$`/`$$` i uvezene lookup-mape su `any`
-  na granici prema DOM-u/podacima, tijelo je vecinom `any`. CIJELI `src/` je sada bez ijedne
-  `@ts-nocheck` direktive (i generator-alati `src/tools/*-page.ts` i `src/shared/ui-boot.ts`
-  su tipizirani); tsc strict prolazi bez supresije.
-  Ulaz je `src/main.ts` (tanki bootstrap koji uvozi ui-boot i ui/app), NE monolit.
-
-## Option A: ruleEntries su izvor istine
-
-Pravila profila postoje u dva oblika:
-
-- `rules` - naslijeđeni agregirani objekt koji engine povijesno čita.
-- `ruleEntries` - granularna pravila s identitetom, autoritetom, izvorom,
-  `sourcePage`, `machineCheckable` i datumom verifikacije. Ovo je AUTORSKI izvor istine.
-
-`src/profiles/rule-compiler.ts` na učitavanju računa `effectiveRules`:
-
-```
-effectiveRules = clone(rules baseline) + svaki prepoznati ruleEntry preko njega
+```bash
+npm run check
+npm run orphan-scan
 ```
 
-Engine (`currentProfile` u `src/ui/app.ts`) čita `definition.effectiveRules`, uz fallback
-na `definition.rules`. Test `tests/rule-compiler.test.ts` dokazuje da je za trenutne
-podatke `effectiveRules` deep-equal `rules`, dakle uključenje kompajlera ne mijenja
-ponašanje.
+`npm run check` pokrece lint, TypeScript, Edge provjeru, Vitest i Vite build.
+Zahtijeva Deno; `check:edge` se ne preskace. Zeleni izlazni kod bez Vitest retka
+`Test Files` nije dovoljan dokaz.
 
-### Kako se od sada uređuje pravilo
+Stanje mastera je zasebno pitanje:
 
-1. Uredi odgovarajući `ruleEntry` u JSON profilu (ne `rules`).
-2. Ako `ruleEntry` za to pravilo ne postoji, dodaj ga s ispravnim `checkId`
-   (popis prepoznatih `checkId`-jeva je `COMPILED_CHECK_IDS` u `rule-compiler.ts`).
-3. Migracijski cilj: jednom kad je ključ izražen kao `ruleEntry`, OBRIŠI ga iz `rules`.
-   Overlay ga i dalje proizvodi pa engine ne vidi promjenu. Time nestaje dvostruko
-   održavanje. Nakon brisanja prilagodi faithfulness test (više neće biti pune
-   jednakosti za taj ključ; tada se oslanjamo na "nula diagnostics" + golden testove).
-4. Novi `checkId` koji još nije podržan: dodaj mapiranje u `applyEntry` u `rule-compiler.ts`
-   i pokrij testom. Bez mapiranja kompajler vraća diagnostic i pravilo se NE primjenjuje.
+```bash
+npm run master-ci
+```
 
-### Modalitet i opseg su dio tvrdnje, ne komentar
+Ishod je zeleno, CRVENO s brojem uzastopnih padova ili NE ZNAM. Nepoznato nikad
+ne tumaci kao zeleno.
 
-Svaki `ruleEntry` uz vrijednost nosi i `modality` (koliko jako izvor obvezuje) i `scope` (na koji dio
-rada se odnosi), uz `modalitySource` koji kaze tko ih je upisao.
+## Verifikacijska disciplina
 
-Razlog je izmjeren, ne stilski. FER pilot je oborio 4 od 5 tvrdnji i nijedna nije pala na krivom
-prijepisu nego na TUMACENJU (preporuka citana kao obveza, opis predloska kao propis). Opovrgavajuci
-prolaz je zatim nasao krivo pripisan OPSEG na 12 od 20 tvrdnji: vrijednost nije bila netocna nego
-PRESELJENA (naslovnica citana kao naslov, fusnota kao tijelo rada).
+- Svaki novi gard ima cisti baseline i mutaciju u `tests/gate-mutations.test.ts`.
+- Novi mehanizam ima vlastiti izravni signal; nizvodno poboljsanje nije dokaz uzroka.
+- Generator testa mora dokazati da proizvodi ciljanu klasu ulaza.
+- Idempotencija se dokazuje dvama prolazima; drugi mora biti no-op.
+- Podatke parsiraj, ne greppaj. Djelomican pad pipelinea mora oboriti mjerenje.
+- Tekstualne usporedbe normaliziraju CR; binarne fixture usporeduju sirove bajtove.
+- Ne koristi `git status`, izlazni kod ili ukupan broj kao odgovor na drugo pitanje.
 
-- `modality` ima SEST razina, jednu vise nego uobicajeno: `obligation` (`mora`/`duzan`), `directive`
-  (`treba`, goli indikativ, natuknicna specifikacija), `prohibition`, `recommendation`, `permission`,
-  `condition`. `directive` postoji jer FER dokument ima tri razine i nijedna FER tvrdnja nije bila u
-  najjacoj; da `treba` upadne u `obligation`, tocno taj nalaz bi nestao.
-- Prijedlog radi `npm run claim-modality` (`scripts/propose_claim_modality.py`), upis
-  `npm run claim-modality:apply`. Skript NE ODLUCUJE.
-- UGOVOR: mehanika nikad ne upisuje ublazen modalitet. Pripisivanje ublazavanja pravoj osi je
-  citanje, ne uzorak (`ferit`: *"Rad se pise na racunalu (preporuca se MS Word) uz prored od 1,5"* -
-  ublazavanje veze PROGRAM, ne prored). Svaka pojava ublazavanja ide covjeku.
-- Gard: `tests/claim-fields.test.ts` (vokabular, ugovor strojnog upisa, ratchet broja pravila bez
-  modaliteta koji smije samo padati).
-- Zatecено stanje 2026-08-22: 1404 od 1934 bodovanih pravila ima modalitet i opseg iz strojnog
-  izvoda, 530 ceka covjeka.
+Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
+`docs/incidents/`.
 
-### Hijerarhija pravila i uloga repozitorija
+## Domenski gateovi
 
-Ne izmišljaj pravila. Bodovana pravila smiju doći samo iz navedenih službenih izvora.
-Hijerarhija: aktualna odluka/pravilnik za godinu i vrstu rada > aktualna službena
-stranica studija > opće FPZG upute i citiranje > pisana uputa mentora/kolegija.
-Studentski radovi iz repozitorija služe ISKLJUČIVO regresijskom testiranju parsera,
-nikada kao izvor pravila. `sourcePage` koji nije potvrđen ostaje `null`, ne nagađaj ga.
+- Parser, audit ili citations: prvo golden koji biljezi zateceno ponasanje.
+- Repair ili OOXML isporuka: Tier 0 nije dokaz otvaranja u Wordu; prati scoped vodič.
+- Migracije: iskljucivo `supabase db push`; MCP `apply_migration` nije dopusten.
+- Netrivijalne promjene u repair, citations, docx ili security kodu traze
+  adversarijalni pregled drugog alata prije commita. Nalaz je advisory i mora se re-verificirati.
 
-## Parser: ne diraj bez golden testa
+## Koordinacija i drugo misljenje
 
-Legal Citation Engine i OOXML parser su teški regexi nad hrvatskim pravnim i
-akademskim formama i lako se kvare. Pravilo: ne mijenjaj parser, audit ni citation
-engine bez golden-file testa koji PRVO dokazuje zatečeno ponašanje.
+Astra ili Fable vodi zadatak i audit; Opus, Sonnet ili Sol implementira kod. Po
+zadatku su aktivni jedan koordinator i jedan pisac. Ugovor i lokalne naredbe su u
+`docs/agents/README.md`, a zajednicki red zadataka u `docs/agents/tasks.json`.
 
-- Golden harness: `tests/docx-golden.test.ts` + `tests/fixtures/docx/`.
-- Ubaci realne `.docx`, snimi baseline s `npm test -- -u`, pa refaktoriraj.
-- Suite se sam preskače bez fixtura; sada je AKTIVAN sa 6 realnih fixtura u tests/fixtures/docx/ (snapshoti commitani), izlozen kroz src/analysis/golden-entry.ts.
+Pregled dolazi od drugog providera: Astra pregledava Claude implementacije, Fable
+pregledava Sol. Modelski rezultat nije dokaz prolaza. Sva pravila izolacije,
+verifikacije i commitanja ostaju obvezna. Ako je instaliran Codex plugin, njegovi
+nalazi su advisory i svaki se mora neovisno potvrditi prije primjene.
 
-## Popravak: deterministican, per-fakultet kroz PODATKE
+## Routing
 
-U popravku nema modela ni prompta. "Recept" je niz `{fixerId, ruleId, params}` koji klijent slozi
-iz profila (`paramsForCheck` u `src/ui/repair-items.ts`). Zato je pravilo po fakultetu izrazeno kao
-podatak (`data/profiles/**`), nikad kao tekst upute.
+- `src/repair/CLAUDE.md`: deterministicki popravak, vidljivi tekst, delivery i Word oracle.
+- `src/citations/CLAUDE.md`: citatni parser, izvori, modalitet, scope i drift.
+- `src/docx/CLAUDE.md`: OOXML parser, golden fixture i integritet paketa.
+- `supabase/CLAUDE.md`: migracije, Edge Functions, sigurnost i deploy dokaz.
+- `scripts/autonomy/CLAUDE.md`: projekcije, mjerenja, mutacije i resursni gateovi.
 
-- CILJANU VRIJEDNOST od 2026-08-16 izvodi SERVER, ne klijent (`src/repair/param-authority.ts`).
-  Za poznat par (profileRef, ruleId) Edge funkcija uzima svoju pecenu vrijednost iz
-  `data/generated/repair-params-by-profile.json` i klijentovu IGNORIRA; klijentov `params` vrijedi
-  jos samo tamo gdje fakultetskog pravila nema (univerzalna higijena), i to odgovor oznaci kao
-  `paramSources[ruleId] === 'client'`. Prije toga je server samo tipski sanirao klijentovu
-  vrijednost, pa rucno skrojen zahtjev nije mogao biti razlikovan od profilnog.
-- Recept je zapisan u `docs/REPAIR_RECIPE.md`, GENERIRAN iz koda i profila (`npm run repair-recipe`,
-  izvor `src/repair/recipe.ts`). Ne uredjuj ga rucno; `tests/repair-recipe.test.ts` pada na drift.
-  Ista naredba pece i serverski autoritet I profile-rules artefakt (ulancano 2026-08-23,
-  jedan okidac za sve tri pecene projekcije; deploy oba projekta: `npm run
-  deploy:profile-rules`); `tests/repair-param-authority.test.ts` pada ako artefakt
-  odluta od recepta.
-- ISPORUKA IDE TEK NAKON PONOVNE PROVJERE (obrnuto od ugovora do 2026-08-16). Vrata integriteta
-  hvataju pokvaren paket, ali ne i SEMANTICKU regresiju, pa se `detectPassRegressions` izvodi PRIJE
-  nego sucelje preporuci preuzimanje: uz regresiju glavna ponuda je IZVORNI dokument. Popravljeni
-  se nikad ne zarobljava (ostaje kao sporedan izbor, a kad ponovna analiza padne, ostaje glavni uz
-  izricitu napomenu). Gard: `tests/repair-delivery-order.test.ts`.
-- Tok: dokument ide na server SAMO za popravak. Provjera izvora ide ZASEBNIM, usporednim pozivom
-  (`source-check`), a pohrana u "Moji popravci" dovrsava se u pozadini (`EdgeRuntime.waitUntil`),
-  pa odgovor nosi samo popravljeni docx.
-- Postenje: dok pohrana traje (`storagePending`), sucelje NE smije tvrditi da je spremljeno;
-  promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
-- Popravljeni paket se dokazuje u CETIRI razine (`docs/REAL_CORPUS_TESTING.md`, Tier model).
-  `npm run check` je samo Tier 0 (vlastiti strogi skener `src/repair/package-integrity.ts`) i NE
-  otvara dokument nijednim stvarnim uredivacem. Prije deploya repair motora rucno pokreni i
-  `npm run verify:strict-open:repaired` (Tier 1) te `npm run verify:word` / `verify:word:worst`
-  (Word COM, `OpenAndRepair=false`, Windows).
-  PAZI KOJU TIER 1 NAREDBU ZOVES: `npm run verify:strict-open` otvara ULAZNE fixture i o popravku ne
-  govori nista, jer popravak u njoj nikad nije pozvan; njegov prolaz "19/19" znaci samo da su nasi
-  fixturi valjani paketi. Dokaz motora je `verify:strict-open:repaired`, koji korpus prvo POPRAVI pa
-  lxml-om otvori IZLAZE. CI (`docx-strict-open.yml`) radi oboje i tako je i imenovano; zamka je samo
-  u rucnom receptu. Prazan skup je pritom crveno, ne tiho zeleno (`strict-open.py` to izricito
-  provjerava). Izmjereno 2026-08-30: 16 dokumenata, 14 promijenjenih i svih 14 provjereno lxml-om;
-  preostala 2 su `no-op` s nula promijenjenih fixera, dakle izlaz im je jednak ulazu.
-  TREBA LI TIER 2 UOPCE PONOVO: `npm run tier2-freshness`. Cita commit iz
-  `docs/generated/RELEASE_PROOF.json` i javi je li se `src/repair/` promijenio od tada; preskocena
-  Windows razina i dokaz snimljen nad prljavim stablom NISU prolaz. Ne uvodi vlastiti dnevnik, nego
-  cita postojeci. Izmjereno pri uvodjenju 2026-08-30: zapisani dokaz je stajao na `75904ef3`
-  (2026-08-23), a od tada je palo 8 commita nad motorom, i nista to nije reklo.
-  Oracle POSTOJI u `scripts/word-verify/`, ne gradi ga
-  ispocetka. KLJUC: `@xmldom/xmldom` ne baca i ne stvara `parsererror` na neispravnom XML-u, pa
-  provjera oslonjena na `parseXml` daje lazno zeleno (dokaz: `tests/repair-package-integrity.test.ts`).
-  DRUGI oblik istog lazno zelenog: kad vrata integriteta ODBIJU isporuku, `applyFixers` vraca
-  ULAZNE bajtove uz prazan changelog, pa harness bez izricite tvrdnje `integrityFailure === null`
-  to vidi kao uredan `no-op`, a sve ostale tvrdnje prolaze vakuumski nad originalom.
-
-## Mapa datoteka
-
-- `src/ui/app.ts` - UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
-- `src/analysis/analyze-docx.ts` - analyzeDocx + auditni helperi (jezgra analize).
-- `src/scoring/evaluate/measurements.ts` - DocumentMeasurements (faza D "cisti sav"): verzioniran
-  tip MJERLJIVIH cinjenica dokumenta (dominante, sekcije, markeri, brojaci, razmaci), BEZ ijednog
-  importa (Deno-ready). "Facts" polovica para; "rules" polovica je academic-core-export.ts. Zivi
-  aditivno u result.details.measurements (NIJE u goldenu; sanitizeAnalysisResult ga ne propusta na
-  mrezu). NIKAD ne nosi tekst rada (tests/measurements-tripwire.test.ts).
-- `src/scoring/evaluate/formatting.ts` - evaluateFormatting(measurements, profile, strict) ->
-  {checks, issues}: CISTA evaluacija ~40 bodova oblikovanja, preseljena BAJT-IDENTICNO iz jezgre
-  (blok Dominantni font .. oznake fusnota). Redoslijed checks/issues je ugovor goldena. Gard:
-  tests/evaluate-formatting.test.ts (ekvivalencija s pipelineom + deep-freeze cistoca + registriran
-  checkId). Analiza NE mutira profil (tests/profile-no-mutation.test.ts; opseg je lokalni scope).
-  SAV 2 (structure bez teksta) i dalje zivi u jezgri; citations/legal/toc/title/method OSTAJU
-  tekst-lokalni zauvijek.
-- `src/scoring/check-id-registry.ts` - STABILNI identiteti provjera (`page.margins` i sl.).
-  `Check` od 2026-08-16 ima `id`; korelacija prije/poslije popravka I mapiranje na fixer idu
-  po njemu (`src/analysis/check-fixer-map.ts` je kljucan po `checkId`, ne po naslovu), hrvatski
-  `title` je samo fallback za jos neregistrirane provjere i za prezentaciju. Naslov `Format
-  stranice (...)` je dinamican pa mu se ID izvodi (`page.size.*`, `isPaperSizeCheckId`).
-  Gard: `tests/check-fixer-map.test.ts` pada kad pravilo gadja checkId koji ne postoji (tako su
-  otkrivena dva MRTVA pravila pisana nad `where` oznakama, ne nad naslovima provjera).
-- `src/profiles/compose-profile.ts` - JEDINO mjesto gdje se slazu pravila koja ANALIZA cita:
-  baseline (ili profil) -> olaksani baseline za lagan rad -> overlay katedre (rulesByWorkType) ->
-  normalizeCheckFlags -> mentorov override -> scored/advisory demotija. REDOSLIJED JE UGOVOR
-  (demotija ide zadnja, override ju gasi). Do 2026-08-22 je taj lanac zivio unutar currentProfile()
-  nad DOM-om, pa ga nijedan test nije mjerio, a conformance matrica je vrtjela SIROVI profil iz
-  registra; demotija pritom gasi barem jednu bodovanu dimenziju na 383 od 407 profila.
-- `src/profiles/advisory-levers.ts` - poluge demotije. Dva ugovora koja se lako izgube: poluga mora
-  ugasiti SVE grane kojima engine boduje tu dimenziju (`paper-size` gasi i `requireA4` i
-  `paperSizes`, inace profil s vlastitim popisom formata i dalje gubi bodove na nebodovanom
-  pravilu), i demotija PRESKACE dimenziju koju je izricito propisao specificniji izvor
-  (`demotionProtectedBy`), jer advisory mapa govori samo o izvoru OSNOVNOG profila i ne smije
-  ponistiti uputu katedre. Zasticena dimenzija ne ulazi ni u `advisoryDimensions`. Od 2026-08-23 jos
-  dva, oba iz adversarijalnog prolaza nad vlastitim gardovima i oba tada latentna: zastita trazi da
-  overlay dimenziju PROPISE (vrijednost, ili zastavica na `true` kod booleovih osi), jer je gola
-  `checkFont: true` prije ponistavala demotiju bez ijedne vrijednosti pa se dalje bodovala bas ona
-  koju tvrdnja opovrgava; i PODPROVJERE PRATE RODITELJA (polozaj broja stranice, naslovnica bez
-  broja, numeriranje od Uvoda, tri podprovjere sadrzaja = 19 bodova su visile o tome je li polje
-  PRONADJENO, a ne boduje li se ta os). Zato i obratno: overlay koji propisuje DIJETE stiti
-  RODITELJA, inace taj isti gate tiho ugasi katedrin zahtjev.
-- `src/ui/work-selection.ts` - rutiranje odabira: vidljivi programi jedinice, kandidati za
-  (jedinica, program, vrsta rada) i izbor varijante. app.ts ih ZOVE (nije zrcalo). Krovni
-  ("Opći ...") program se skriva SAMO ako je redundantan, dakle ako je svaki profil koji ga gadja
-  dostizan i preko konkretnog studija; inace krovni profil postane nedostizan i broji se u
-  pokrivenosti a nitko ga ne moze odabrati.
-- `src/profiles/profile-rules-contract.ts` - ugovor rules-on-demand isporuke (v1): served polja
-  (heavy minus profileLabel/catalogPrograms/publicSources) + buildProfileRulesArtifact (injektiran
-  sha256; dijele ga generator `npm run gen-profile-rules-server`, Edge funkcija profile-rules i
-  drift test tests/profile-rules-server.test.ts). Artefakt: data/generated/profile-rules-server.json.
-- `src/report/profile-rules-client.ts` - klijent profile-rules endpointa (union ishoda, timeout,
-  JEDAN retry samo za unavailable). `src/profiles/profile-rules-local.ts` - dev provider iz lazy
-  chunkova (RUNTIME gate u app.ts wireProfileRulesProvider, NE build konstanta: chunkovi moraju
-  ostati u grafu dok bundleSizeGuard u fazi B2 zahtijeva heavy chunk).
-- PRAVILA PROFILA U PREGLEDNIKU (faza B): ensureProfileRules(profileId) dohvaca JEDAN profil preko
-  providera i prime-a njegove repair unose; currentProfile BACA ako definicija postoji a pravila
-  nisu ucitana (light indeks nosi djelomican rules objekt pa bi compose tiho bodovao po 2-4 kljuca),
-  a na 'failed' POSTENO degradira na opcu provjeru (definition=null, vidljiva oznaka + toast).
-  repairEntriesFor cita primed store s fallbackom na bulk mapu (testovi/skripte i dalje koriste
-  ensureRepairMapHeavy).
-- `src/repair/param-authority.ts` - serverski autoritet nad ciljanom vrijednoscu (vidi Popravak).
-- `src/repair/docx-budget.ts` - JEDAN izvor granica dokumenta (upload, dekompresija, broj
-  zapisa) za intake, analizu i popravak; ne uvodi nove granice mimo njega. VAZNO: analiza i
-  popravak ne mjere isto (analiza cita lijeno samo XML dijelove, popravak cijeli paket), pa se
-  jaz ne zatvara izjednacavanjem brojki nego `docxCapability()`, koji jos na intakeu iz zip
-  central directoryja kaze moze li se dokument POPRAVITI, a ne samo analizirati.
-- `src/repair/default-selection.ts` - `buildDefaultRepairRequests`: sto je PREDODABRANO kad
-  korisnik samo klikne Popravi (`violated !== false`, isto kao UI checkbox). Testovi koji
-  simuliraju korisnicki tok moraju ici kroz njega, inace mjere tok koji nitko ne izvodi.
-- `src/analysis/analyze-docx-client.ts` - most prema Web Workeru, inline fallback.
-- `src/profiles/rule-compiler.ts` - Option A: ruleEntries -> effectiveRules.
-- `src/profiles/profile-schema.ts` - tipovi profila i pravila.
-- `src/profiles/profile-validator.ts` - strukturna validacija profila.
-- `src/{catalog,submission,coverage,methodology,config}/*` - tanki loaderi.
-- `src/citations/*` - Legal Citation Engine i korpusna/CrossRef verifikacija citata.
-- `src/repair/*` - Repair Engine: XML fixeri (`fixers.ts`, `xml-patch.ts`), zip codec,
-  `apply-fixers.ts` (jezgra dijeljena s serverskim putem). Golden-zasticeno kao parser.
-  `recipe.ts` je build/docs sloj (NIJE u bundleu): iz njega se generira `docs/REPAIR_RECIPE.md`.
-- `src/report/*` - klijenti prema Supabase backendu (repair-client, source-check-client,
-  repair-history, auth).
-- `supabase/migrations/**`, `supabase/functions/**` - zivi backend (repair-docx, source-check,
-  waitlist, deadline-reminders, narudzbe); NIJE "bez backenda" iznad, vidi "Sto je ovo".
-- `data/**` - autorski podaci (profili, izvori, rokovi, katalog, coverage).
-- `tests/**` - vitest: registar, regresija, UI smoke, rule-compiler, docx-golden. Conformance
-  ima TRI analiticka sloja: SIROVI profil (`npm run conformance`, jedan slucaj po paru profil x
-  vrsta rada), fallback BASELINE (obitelji x svih 7 vrsta rada) i SLOZENI profil (uzorak: po jedan
-  profil za svaki obrazac demotije + sve katedre + mentorov override). Rutiranje
-  (jedinica, program, vrsta rada) -> profil je podatkovni test BEZ analiza (`tests/profile-routing`,
-  ~4.800 trojki), a struktura slaganja isto bez analiza (`tests/composed-profile`).
-  Sve tri matrice imaju tripwire uzorak u `npm run check`.
-
-Pravne stranice (`privatnost.html`, `uvjeti-koristenja.html` i dr.) generira
-`scripts/generate-legal-pages.mjs`, koji se u `netlify.toml` pokrece TEK NAKON
-`vite build`. Provjera tih linkova (goli `<a href>` na svim alat-stranicama i
-landingu, bez JS presretanja/modala kao na `index.html`) zahtijeva puni build
-lanac (`vite build && generate-citation-tools && generate-legal-pages`); sam
-`npm run dev` ili goli `vite build && vite preview` ce 404-ati jer datoteke jos
-ne postoje. `scripts/verify-deploy-dist.mjs` cuva da su u stvarnom `dist/` uvijek
-prisutne prije deploya.
-
-## Provenijencija fieldValidation (PID je identitet, ne sha256)
-
-Javni PDF uzorci u `fieldValidation.publicSources` identificiraju se PID-om
-(npr. `fkit:1301`), nikada preko sha256. nsk.hr repozitoriji (zir.nsk.hr,
-dr.nsk.hr, repozitorij.<fak>.unizg.hr) utiskuju jedinstveni watermark (~63 bajta
-u repu PDF-a) pri svakom preuzimanju, pa ponovni dohvat istog PID-a daje drugaciji
-sha. Zabiljezeni sha256 je otisak konkretne preuzete kopije u trenutku harvesta,
-ne reproducibilan integritetski hash. PDF-ovi se ne commitaju.
-
-Doktorska razina: jedini pouzdan izvor je dr.nsk.hr driver (openAccess) set
-(100% dc:type=Doktorski rad) ili dc.type/naslovnica po objektu. Institucijski
-`repozitorij.<fak>.unizg.hr` namespace je mijesan po razini (diplomski, zavrsni,
-doktorski) pa PID sam po sebi ne jamci doktorsku razinu; provjeri je iz PDF-a.
-Dohvat trazi pune browser headere (Accept, Accept-Language, Sec-Fetch-*), inace
-ModSecurity vraca HTTP 418.
+Inventar migriranih pravila je u `docs/decisions/CLAUDE_V2_RULE_INVENTORY.md`.
+Povijesni v1 vodič ostaje u `docs/incidents/CLAUDE_V1_FULL_CONTEXT_2026-09-18.md`.
+Aktualni backlog je u `docs/roadmap/PRODUCTION_BACKLOG.md` i issue trackeru.
 
 ## Konvencije
 
-- Hrvatski je default jezik sadržaja i komentara u domenskim datotekama.
-- Bez em i en crtica u tekstu; koristi zarez, dvotočku, zagrade ili zasebne rečenice.
-- TypeScript strict, cijeli `src/` bez `@ts-nocheck`. `any` je dopusten na granici prema
-  DOM-u i labavim podacima (UI glue: `$`/`$$`, lookup-mape); u novom logickom kodu izbjegavaj.
-- Bez localStorage hackova u novim modulima; postojeći `safeStorageGet/Set` ostaje.
-- Produkcijski kod, ne primjeri. Male, fokusirane promjene, svaki korak zelen.
-- U DIJELJENOM radnom stablu (vise sesija odjednom) `git commit -- <putanje>` uzima sadrzaj iz
-  RADNOG STABLA u trenutku commita, ne tvoju izmjenu. Generator druge sesije zna upasti izmedju
-  izmjene i commita, pa tudji rad zavrsi pod tvojom porukom (dogodilo se 2026-08-22, 63 retka).
-  Neposredno prije commita PONOVI `git diff --stat -- <putanje>` i usporedi s onim sto si mijenjao.
-  Ako je vec uslo, NE prepravljaj povijest dok druga sesija radi: amend joj moze pojesti commit.
-- TA JEDNA NAREDBA NIJE DOVOLJNA. `git diff` usporedjuje RADNO STABLO s INDEKSOM, a `git commit`
-  uzima ono sto je u INDEKSU za tvoje putanje. Kad je stablo IZA HEAD-a (tudji merge je vec usao,
-  a tvoje stablo jos drzi staru stranu) ili kad druga sesija ima nesto stagirano, ta dva pogleda
-  se razilaze. Zato uz nju ide i:
+- Hrvatski je zadani jezik domenskog sadrzaja i komentara.
+- Ne koristi em ni en crtice u tekstu.
+- `src/` ostaje TypeScript strict bez `@ts-nocheck`; novi logicki kod izbjegava `any`.
+- Ne uvodi nove `localStorage` hackove; koristi postojece sigurne omotace.
+- Produkcijski kod, male fokusirane promjene, svaki korak zelen.
 
-      git diff --cached --stat -- <putanje>
+## Zavrsna provjera
 
-  Izmjereno 2026-08-31, dva puta u istom danu. Prvi put je `git diff -- package.json` pokazao JEDAN
-  dodan redak, a `--cached` je glasio `3 10`: commit je pregazio spojeni `package.json` i izbacio
-  `oxlint` iz `check` te sest skripti. Drugi put je `git diff -- CLAUDE.md AGENTS.md` pokazao NULA
-  razlike, dok je `--cached` prijavio 46 OBRISANIH redaka tvrdih pravila, stagiranih iz druge
-  sesije; da je izostao, to bi brisanje otislo u commit pod tudjom porukom.
-- Koristi `git commit --only <putanje>`, ne `git add <putanje> && git commit`. Drugi oblik commita
-  CIJELI indeks, pa povuce sve sto je druga sesija stagirala. Dogodilo se 2026-08-30: commit od 11
-  datoteka odnio je 32, od cega 21 tudju.
-- U istom stablu pazi i na obrnut smjer: COMMITAN OVISNIK uz NECOMMITANU OVISNOST. Test ili modul
-  koji jest u repou trazi simbol koji postoji SAMO u radnom stablu, pa je grana zelena kod tebe a
-  crvena na cistom checkoutu. Dogodilo se 2026-08-30 cetiri puta u jednom danu (`buildOutcomeLine`,
-  `dropStaleFieldRegressions`, golden snimka bez izvora, zastarjeli izvedeni artefakti). `tsc` to NE
-  hvata jer `tsconfig.json` ima `include: ["src"]`, pa se `tests/**` ne typechecka; vidi se tek u
-  vitestu, u runtimeu, na kraju punog prolaza. Prije commita pusti `npm run orphan-scan` (sekunde).
-  Necommitana datoteka SAMA PO SEBI nije kvar: opasan je samo par u kojem je ovisnik vec commitan.
-
-### Cist worktree i orphan-scan odgovaraju na RAZLICITA pitanja
-
-Trebaju oba, jedan ne zamjenjuje drugoga:
-
-- `npm run orphan-scan` -> "je li grana crvena na cistom checkoutu". Sekunde, bez worktreea.
-- cist worktree (`git worktree add --detach <scratchpad>/x HEAD` + `mklink /J` za `node_modules`) ->
-  "je li gate zelen i je li izvedeni artefakt reproducibilan iz commitanog koda". Artefakte
-  (`docs/generated/**`, `dist-packs/**`, pecene projekcije) regeneriraj ISKLJUCIVO ondje, nikad u
-  dijeljenom stablu, inace u njih ude tudji necommitan rad. HEAD se mice, pa prije commita provjeri
-  `git log <regenHEAD>..HEAD --name-only`: ako je dirnut ijedan IZVOR artefakta, baci regeneraciju i
-  ponovi. Izvjestaj i njegov ratchet uvijek idu u ISTI commit.
-
-### Ustajala projekcija: SCREENING i PRESUDA su dva alata, ne jedan
-
-Pecena projekcija (`docs/generated/**`, `docs/REPAIR_RECIPE.md`, `data/generated/**`) zna zaostati za
-izvorom iz kojeg se izvodi. To se 2026-08-31/09-01 dogodilo SEST puta u jednom danu i svaki put je
-palo na SLJEDECU sesiju: zeleno koje ne znaci ono sto tvrdi, pa netko trosi cist worktree
-dokazujuci da kvar nije njegov.
-
-Postoje dva alata i namjerno se ne preklapaju:
-
-- `npm run projection-freshness` -> "je li se MOGLO pokvariti". Cita redoslijed commita (izvor
-  commitan poslije artefakta), traje sekunde. SCREENING: izmjereno je da je 3 od 3 puta pogodio a
-  sadrzaj bio identican, pa pogodak znaci "potvrdi", nikad "pokvareno". Zato je u `release:check`
-  namjerno `required: false` i NIJE u `npm run check`.
-- `npm run projection-verify` -> "je li se STVARNO pokvarilo". Regenerira u izoliranom worktreeu pa
-  usporedi bajtove; desetak minuta po projekciji. Bez argumenata provjerava samo ono sto je
-  screening prijavio (`--all`, `--only <id>` zaobilaze suzavanje). Tek RAZLIKA U SADRZAJU je nalaz.
-
-`git status` NIJE mjerodavan za ovo pitanje i zato ga nijedan od ta dva alata ne koristi: u
-regeneracijskom worktreeu je prijavio sest izmijenjenih datoteka kojima je sadrzaj bio jednak
-commitanom. Generator prepise datoteku s drugim zavrsecima redaka i git to prikaze kao izmjenu.
-`projection-verify` zato razlikuje `samo-eol` od `sadrzaj`; prvo nije nalaz, ali se i ne presucuje.
-
-Novu ulancanu projekciju dodaj u `PROJECTIONS` (`scripts/projection-freshness-core.mjs`), inace joj
-drift nitko ne vidi.
-
-### Gard koji cita datoteku s diska mora normalizirati CR
-
-Repo ima `core.autocrlf`, pa ISTA datoteka iz ISTOG commita ima dvije velicine na disku, ovisno samo
-o tome kako je stablo materijalizirano. Izmjereno 2026-09-03 na `src/ui/app.ts`, commit `54bb11e3`:
-
-    svjez `git worktree add`   368572 B   CR 2361, LF 2361   (CRLF)
-    dijeljeno radno stablo     366211 B   CR    0, LF 2361   (LF)
-    blob u gitu                366211 B
-
-Razlika je TOCNO broj redaka. Gard koji usporedjuje sirove bajtove zato mjeri KONFIGURACIJU GITA, ne
-sadrzaj repozitorija, i pada nasumicno po strojevima.
-
-Klasa je istog dana ugrizla DVA neovisna garda: `ui-module-budget` (`statSync().size`, CI zelen a
-svjez Windows worktree crven) i gard divergencije `rad/index.html` (diff u kojem obje strane izgledaju
-identicno). Potpis je oba puta isti: mjerenje koje izgleda uvjerljivo a mjeri stroj.
-
-Posljedica je gora od obicnog laznog crvenog, jer je asimetricna: kaznjava mjerenje u IZOLIRANOM
-stablu, koje ovaj vodic propisuje, a nagradjuje mjerenje u dijeljenom, koje odbija.
-
-- Mjerodavna referenca je BLOB, dakle ono sto mjeri CI: normaliziraj CR prije usporedbe velicine ili
-  sadrzaja.
-- Ne radi to regexom gradjenim kroz alat: escape se zna izgubiti (poznat razred u ovom repozitoriju,
-  vidi gard nad `git commit`). Brojanje bajtova (`b !== 0x0d`) nema tu zamku.
-- Pravilo vrijedi za TEKST. Za binarne fixture (`.docx`, slike) je sirova velicina ispravna mjera.
-
-### Pogled koji izgleda kao dokaz, a odgovara na drugo pitanje
-
-Isti dan, 2026-09-03, tri sesije su nasjele na tri razlicita pogleda koji su tocni za ono sto mjere,
-a citani su kao odgovor na pitanje koje ne mjere. Alat nije bio u krivu; citanje je bilo.
-
-    `git status` kaze          je li datoteka DIRNUTA
-    citali smo ga kao          je li SADRZAJ drukciji
-
-    `git log origin..HEAD`     sto jos nije na originu
-    citali smo ga kao          tko je ovo NAPISAO
-
-**Fantomska izmjena.** Uredis datoteku u glavnom stablu, a commitas je iz izoliranog worktreea. U
-glavnom stablu ostane ` M` iako je sadrzaj JEDNAK commitanom, jer se razlikuju samo zavrseci
-redaka. Sljedeca sesija to vidi kao tudji zivi rad: jedna je zbog toga cijeli merge preselila u
-izolirani worktree da ne pregazi nesto cega nije ni bilo, i vlasniku prijavila kao cinjenicu da
-tamo netko radi.
-
-    Ocisti izvorno stablo (`git checkout -- <putanja>`) cim si commitao iz drugog.
-
-Inace ostavljas datoteku koja moze i zavarati i biti pokupljena u tudji commit. Nalaz je sesije koja
-ga je i stvorila i poslije dijagnosticirala; vrijedi zapisati oba smjera, jer onaj tko tako radi ne
-vidi da je nesto ostavio, a onaj tko naidje ne moze iz `git status` razlikovati fantom od rada.
-
-**Lazno autorstvo.** U worktreeu koji je mergeao lokalnu granu, `git log origin..HEAD` nabraja i
-TUDJE jos nepushane commite. Sesija je tako u dobroj vjeri preuzela tudji commit kao svoj i javila
-da ga popravlja, dok ga je autor vec bio popravio, i to temeljitije. Autorstvo se u ovom
-repozitoriju ne izvodi iz povijesti (svi commitamo kao `Daniel`) nego iz SADRZAJA commita: tko
-objasnjava namjeru iznutra, detaljima koje citatelj ne moze znati.
-
-**Razlika prema CR pravilu iznad nije stilska.** Ondje gard mjeri krivu velicinu i pada nasumicno.
-Ovdje mjerenje uspije i vrati tocan broj, pa nema signala da je pitanje bilo krivo. Zato se ne
-rjesava opreznijim citanjem nego drugim pogledom: za sadrzaj usporedi sadrzaj uz normalizaciju CR,
-za autorstvo trazi potvrdu autora.
-
-### Nazivnik korpusa nije konstanta, i mijenja se bez ijedne promjene dokumenata
-
-Mjere nad stvarnim korpusom (`LEKTA_LOCAL_CORPUS=1`) imaju nazivnik koji odredjuju SIDECARI, ne
-direktorij. `sidecarAdmitted` iskljucuje dokument kad mu sidecar ima `synthetic: true`, a sidecare
-ureduju druge sesije. Populacija se time mijenja dok datoteke stoje netaknute.
-
-Izmjereno 2026-09-03, kroz tri sesije i jedan krivi zakljucak:
-
-    13:18   mjerenje daje 54 dokumenta      16 dopustenih commitanih + 38 lokalnih
-    13:43   oznaceno 8 sidecara
-    14:23   oznacen jos 1
-    poslije mjerenje daje 45 dokumenata      7 dopustenih commitanih + 38 lokalnih
-
-Lokalni direktorij je u oba mjerenja imao ISTIH 38 radova. Razliku je napravilo oznacavanje.
-
-ZASTO JE TO VAZNO: pad s 54 na 45 je prirodno pripisati gubitku podataka, i to se i dogodilo. Jedna
-sesija je zakljucila da je lokalni korpus pao s 47 na 38, druga je taj uzrok u dobroj vjeri unijela
-u handoff, a trece je mjerenje pokazalo da 47 aritmeticki ne prolazi (uz tadasnjih 16 commitanih
-dalo bi 63). Bez te provjere bi u dokumentu ostala uputa koja sljedecu sesiju salje u potragu za
-devet radova koji nikad nisu nestali.
-
-- Usporedivost dvaju stanja koda trazi isti skup DOPUSTENIH dokumenata, ne isti direktorij.
-- Prije usporedbe usporedi `documentCount` I `scope.localDocumentCount`; razlika u prvom uz jednak
-  drugi znaci da su se mijenjali sidecari, a ne korpus.
-- Artefakt je gitignoriran i SVAKI prolaz ga prepise, pa snimku sacuvaj izvan repozitorija prije
-  novog mjerenja. Mjerenje koje nitko nije sacuvao postoji samo kao recenica u porukama.
-
-### Podatke parsiraj, ne greppaj, i ne vjeruj provjeri koja je djelomicno pukla
-
-Izmjereno 2026-09-03, na provjeri koja je provjeravala drugu provjeru.
-
-Trebalo je utvrditi je li skup DOPUSTENIH dokumenata bio isti na tri mjerne tocke. Prvi pokusaj je
-brojao sidecare greppanjem `"synthetic": true` i vratio `dopusteno=8` na dvije od tri tocke, sto bi
-znacilo da se populacija mijenjala i da usporedba stanja koda ne vrijedi. Bilo je krivo iz DVA
-razloga odjednom:
-
-- `"synthetic":true` BEZ razmaka je jednako legitiman JSON, a obrazac s razmakom ga ne vidi. Provjera
-  time tiho vrati manji skup, i to izgleda kao nalaz.
-- Petlja je usput pala s `Permission denied`, ali je pad prosao kroz cjevovod i mjerenje je svejedno
-  ispisalo broj.
-
-Ponovljeno parsiranjem JSON-a (`JSON.parse` nad `git show`) dalo je 19 sidecara, 12 `synthetic`, 7
-dopustenih na SVE tri tocke, dakle populacija se nije mijenjala i usporedba vrijedi.
-
-- Podatke u ovom repozitoriju parsiraj kao JSON. Sidecari, profili i generirani artefakti pisu se
-  raznim alatima i razmaci, redoslijed kljuceva i zavrseci redaka nisu ugovor.
-- Provjera koja djelomicno pukne pa ipak vrati broj gora je od one koja padne: pad se primijeti,
-  krivi broj se koristi. Ako korak u cjevovodu moze pasti, neka obori mjerenje.
-- Uhvaceno je iskljucivo zato sto se `8` nije poklapalo s ranije izmjerenim `localDocumentCount: 38`,
-  dakle nepoklapanjem DVIJU brojki, a ne sumnjom u metodu. Obje strane su pritom bile vlastite
-  provjere iste sesije.
-
-## Modeli za koordinaciju i drugo misljenje
-
-Astra ili Fable vodi zadatak i audit; Opus, Sonnet ili Sol implementira kod. Jedan aktivni
-koordinator i jedan pisac po zadatku. Ugovor i lokalne naredbe su u `docs/agents/README.md`,
-a zajednicki red zadataka u `docs/agents/tasks.json`. Pregled dolazi od drugog providera:
-Astra pregledava Claude implementacije, Fable pregledava Sol. Modelski rezultat nije dokaz
-prolaza. Sva postojeca pravila provjera, izolacije i commitanja ostaju obavezna.
-
-Ako je lokalno instaliran Codex plugin (codex@openai-codex), dostupan je i ovaj put pregleda:
-
-- `/codex:review` prije commita netrivijalnih promjena; `/codex:adversarial-review`
-  za parser/citation/security kod i arhitektonske odluke (npr. backlog 6 backend).
-- Nalazi su ADVISORY: hard gate ostaje `npm run check` + golden testovi. Svaki
-  nalaz re-verificiraj prije primjene, ne preuzimaj tudje expecte.
-- `/codex:rescue` je default write-capable: za parser/citation kod trazi read-only
-  ili prvo snimi golden baseline; sve rescue izmjene moraju proci `npm run check`.
-- `AGENTS.md` je kompaktni derivat tvrdih pravila ovog vodica (Codex cita njega,
-  ne CLAUDE.md); kad mijenjas tvrdo pravilo, azuriraj obje datoteke.
-- Codexov Stop review gate je namjerno iskljucen (rucni review na commit-tockama).
-
-## Backlog (svaki je čist, samostalan task; Definition of Done = `npm run check` zelen)
-
-1. Golden harness s podacima: ubaci 5 do 10 realnih `.docx` fixtura i snimi baseline.
-   DoD: golden suite aktivan i zelen, snapshoti commitani.
-2. (GOTOVO) Option A kompajler i `effectiveRules` wiring. Sljedeći korak unutar ovoga:
-   ukloni iz `rules` ključeve koji su već u `ruleEntries`, profil po profil, i prilagodi
-   faithfulness test. DoD: nema dvostrukog vođenja za migrirane ključeve, check zelen.
-3. (GOTOVO) Razbijanje `src/ui/app.ts`: parser i citation engine su vec u
-   `src/{docx,audits,citations,scoring}`, `analyzeDocx` + auditni helperi u
-   `src/analysis/analyze-docx.ts`, a `@ts-nocheck` je skinut sa samog app.ts I sa svih
-   preostalih modula (5 generator-alata `src/tools/*-page.ts` + `src/shared/ui-boot.ts`);
-   CIJELI `src/` prolazi tsc strict bez supresije. Golden netaknut, check zelen.
-4. Popuni `sourcePage` za sve `ruleEntries` iz `source-registry` (ručno potvrđeno;
-   nepotvrđeno ostaje `null`). DoD: validator bez novih grešaka, check zelen.
-5. Dovrši preostale profile iz jednog tipiziranog izvora (ruleEntries). DoD: coverage
-   matrica i QA dijagnostika bez regresija, check zelen.
-6. (Proizvodna odluka, kad zatreba naplata) pravi backend za narudžbe i plaćanje
-   (Supabase), umjesto klijentskog JSON-a i Netlify forme.
-7. Uključi `scripts/` i `tests/` u `tsconfig.json` (`include` je danas samo `["src"]`, pa se ta
-   dva direktorija NE typechekaju u `npm run check`). Odgođeno 2026-08-30 odlukom vlasnika, uz
-   izmjerene brojke; nije "kad stigne" nego "ne dok se ne može u jednom potezu".
-
-   RUPA JE STVARNA I VEĆ JE KOŠTALA: `profileAxesViolated` je u `3dfab779` bio deklariran kao
-   obavezan u tipu `Row`, izračunat, a nikad upisan u izlazni objekt, i ništa to nije prijavilo.
-   Uključivanje bi zatvorilo i razred zbog kojeg postoji `npm run orphan-scan`: oba kvara koja su ga
-   iznjedrila (`buildOutcomeLine`, `dropStaleFieldRegressions`) su IMENOVANI uvozi, dakle TS2305.
-
-   Izmjereno 2026-08-30 privremenim tsconfigom koji nasljeđuje pravi (`include: [src, scripts,
-   tests]`, uz `types: ['node', 'vite/client']`; bez `node` mjerenje daje 235 lažnih `TS2591 Cannot
-   find name 'node:fs'`, dakle krivi alat daje krivi broj):
-
-     126 grešaka ukupno, NULA u `src/`   (produkcijski kod je tipski čist)
-      27  nedostaje obavezno svojstvo (TS2741/TS2739)   <- jedini opasan razred
-      20  Uint8Array -> BlobPart (TS2322)               artefakt novijeg TS-a, radi u izvođenju
-      44  implicitni any, 23 neiskorišteno              kozmetika
-
-   ZAŠTO NIJE MALI COMMIT, iako 21 od 27 opasnih dolazi iz JEDNOG krivog tipa: `ParaSpec` u
-   `tests/helpers/docx-builder.ts` ima `text: string` kao obavezno, dok su `empty?: true` i
-   `raw?: string` u istom tipu dokumentirani kao oblici koji "zanemaruju sva ostala polja". Tip
-   proturječi vlastitom komentaru i pozivatelji su u pravu. Ali ispravan popravak (razlikovana unija
-   `ParaTextSpec | ParaEmptySpec | ParaRawSpec`) je izmjeren i vraćen: TS2741 pada 27 -> 6, a UKUPNO
-   raste 132 -> 235, dakle +103 nove greške u 69 datoteka, zgusnute u `tests/corpus/catalog/*`, koji
-   `ParaSpec` objekte gradi programski i čita `p.text` izravno. Ta dva posla zato idu ZAJEDNO:
-   uključivanje bez popravka `ParaSpec`-a ne prolazi, a popravak bez uključivanja nema garda koji bi
-   ga držao.
-
-   NE POPRAVLJAJ `text?: string`: time tip počinje primati `{}`, graditelj tiho emitira prazan
-   odlomak, i 21 greška se zamijeni za tip koji više ništa ne tvrdi (isti razred kao `axisResolved`
-   koji vraća `true` čim je `max === 0`). Traži se unija, uz negativan test da `{}` NE prolazi
-   tipski (`@ts-expect-error`). Da unija odgovara stvarnosti vidi se već danas: `isBodyPara` u
-   `tests/corpus/catalog/atomic.ts` ručno sužava s `!p.raw && !p.empty && typeof p.text === 'string'`.
-
-   Dva sitna duga nađena usput, oba unutar ovog zadatka: `TOC_FIELD_PARA` nosi istovremeno `text: ''`
-   i `raw:` (mrtvo polje), a `'required-section'` nije u `STRUCTURAL_VIOLATION_IDS` iako ga commitani
-   `tests/violating-docx-required-section.test.ts` koristi (tri greške koje danas ništa ne prijavljuje).
-
-   DoD: `include` proširen, `npm run check` zelen, `ParaSpec` unija s negativnim testom.
+Prije tvrdnje da je zadatak gotov navedi tocne naredbe i svjeze rezultate. Ako
+okolina nije mogla izvrsiti obvezan gate, rezultat je neprovjeren, ne zelen.

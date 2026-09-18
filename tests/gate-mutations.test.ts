@@ -53,6 +53,11 @@ import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-r
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
+import {
+  REQUIRED_CONTEXT_FILES,
+  REQUIRED_SCOPED_GUIDES,
+  auditClaudeContext,
+} from '../scripts/verify-claude-context-core.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
@@ -1121,6 +1126,25 @@ const MUTATIONS: Mutation[] = [
       let dopusteni = 0;
       for (const st of SVA_STANJA) for (const dg of SVI_DOGADAJI) if (transition(st, dg) !== null) dopusteni += 1;
       return dopusteni === 9 && transition('dokument', 'pokreni-analizu') === null;
+    },
+  },
+  {
+    id: 'kontekst/root-prelazi-200-redaka',
+    imitates:
+      'root CLAUDE.md ponovno naraste povijesnim incidentima iznad granice pa se cijeli kontekst ' +
+      'ucitava u svaku sesiju umjesto samo u zadatke na koje se odnosi',
+    caught: () => {
+      const oversized = Array.from({ length: 201 }, (_, index) => `redak ${index + 1}`).join('\n');
+      return auditClaudeContext(oversized, new Set(REQUIRED_CONTEXT_FILES)).problems.some(
+        (problem) => problem.code === 'root-too-long',
+      );
+    },
+    cleanBefore: () => {
+      const compact = [
+        '# Lekta',
+        ...REQUIRED_SCOPED_GUIDES.map((path) => `- \`${path}\`: upute.`),
+      ].join('\n');
+      return auditClaudeContext(compact, new Set(REQUIRED_CONTEXT_FILES)).problems.length === 0;
     },
   },
   /**
