@@ -360,7 +360,7 @@
         "T20",
         "T27"
       ],
-      "note": "P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original."
+      "note": "P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original. Development dokaz za Lekta -> WordReplica EXE postoji kroz npm run repair:runner:e2e (stvarni claim/status HTTP tok); produkcijski dokaz ostaje blocked dok trusted potpisani runner i real-Word release gate ne prodju."
     },
     {
       "id": "T36",
