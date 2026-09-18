@@ -1,0 +1,307 @@
+{
+  "version": 1,
+  "defaults": {
+    "gates": ["check", "orphan-scan"]
+  },
+  "gates": [
+    {
+      "id": "check",
+      "kind": "command",
+      "label": "Puni lokalni gate",
+      "argv": ["npm", "run", "check"],
+      "covers": ["check-edge", "security-checks"],
+      "order": 10
+    },
+    {
+      "id": "orphan-scan",
+      "kind": "command",
+      "label": "Commitani ovisnik uz necommitanu ovisnost",
+      "argv": ["npm", "run", "orphan-scan"],
+      "order": 20
+    },
+    {
+      "id": "check-edge",
+      "kind": "command",
+      "label": "Deno typecheck Edge funkcija",
+      "argv": ["npm", "run", "check:edge"],
+      "requirements": { "executable": "deno" },
+      "order": 30
+    },
+    {
+      "id": "security-checks",
+      "kind": "command",
+      "label": "Fokusirani sigurnosni testovi",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/classification.test.ts",
+        "tests/parser-security.test.ts",
+        "tests/security-escaping.test.ts",
+        "tests/supabase-edge-imports.test.ts",
+        "tests/edge-function-config.test.ts",
+        "tests/edge-formdata-bounded.test.ts",
+        "tests/admin-auth.test.ts",
+        "tests/npm-audit-ratchet.test.ts",
+        "tests/migration-numbering.test.ts"
+      ],
+      "order": 40
+    },
+    {
+      "id": "verification-router-tests",
+      "kind": "command",
+      "label": "Verification Router i mutation testovi",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/verification-router.test.ts",
+        "tests/gate-mutations.test.ts"
+      ],
+      "order": 50
+    },
+    {
+      "id": "focused-repair-tests",
+      "kind": "command",
+      "label": "Fokusirani repair testovi",
+      "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "src/repair", "tests/repair"],
+      "order": 60
+    },
+    {
+      "id": "docx-golden-tests",
+      "kind": "command",
+      "label": "DOCX golden i integritet paketa",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/docx-golden.test.ts",
+        "tests/repair-package-integrity.test.ts"
+      ],
+      "order": 70
+    },
+    {
+      "id": "citation-tests",
+      "kind": "command",
+      "label": "Fokusirani citation testovi",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/citations",
+        "tests/citation",
+        "tests/bibliography",
+        "tests/corpus-footnote.test.ts"
+      ],
+      "order": 80
+    },
+    {
+      "id": "verify-claims",
+      "kind": "command",
+      "label": "Provjera tvrdnji pravila",
+      "argv": ["python", "scripts/verify_rule_claims.py"],
+      "requirements": { "executable": "python" },
+      "order": 90
+    },
+    {
+      "id": "scored-value-drift",
+      "kind": "command",
+      "label": "Svjezina scored-value drift artefakta",
+      "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "tests/scored-value-drift.test.ts"],
+      "order": 100
+    },
+    {
+      "id": "projection-freshness",
+      "kind": "command",
+      "label": "Screening svjezine projekcija",
+      "argv": ["npm", "run", "projection-freshness"],
+      "order": 110
+    },
+    {
+      "id": "conformance",
+      "kind": "command",
+      "label": "Konformnost profila",
+      "argv": ["npm", "run", "conformance"],
+      "order": 120
+    },
+    {
+      "id": "strict-open",
+      "kind": "command",
+      "label": "Strogo otvaranje popravljenih DOCX paketa",
+      "argv": ["npm", "run", "verify:strict-open:repaired"],
+      "requirements": { "executable": "python" },
+      "order": 130
+    },
+    {
+      "id": "slow",
+      "kind": "command",
+      "label": "Spori repair testovi",
+      "argv": ["npm", "run", "test:slow"],
+      "order": 140
+    },
+    {
+      "id": "migration-identity",
+      "kind": "command",
+      "label": "Identitet Supabase migracija",
+      "argv": ["npm", "run", "migration-identity"],
+      "requirements": {
+        "env": ["SUPABASE_ACCESS_TOKEN"],
+        "anyEnv": ["LEKTA_PROD_REF", "LEKTA_STAGING_REF"]
+      },
+      "order": 150
+    },
+    {
+      "id": "db-smoke",
+      "kind": "command",
+      "label": "Supabase DB smoke",
+      "argv": ["npm", "run", "smoke:db"],
+      "requirements": { "executable": "psql" },
+      "order": 160
+    },
+    {
+      "id": "word",
+      "kind": "command",
+      "label": "Pravi Microsoft Word oracle",
+      "argv": ["npm", "run", "verify:word"],
+      "requirements": {
+        "platforms": ["win32"],
+        "executable": "powershell"
+      },
+      "order": 170
+    },
+    {
+      "id": "ux",
+      "kind": "command",
+      "label": "Playwright UX",
+      "argv": ["npm", "run", "test:ux"],
+      "order": 180
+    },
+    {
+      "id": "adversarial-review",
+      "kind": "manual",
+      "label": "Adversarijalni pregled",
+      "order": 900
+    },
+    {
+      "id": "visual",
+      "kind": "manual",
+      "label": "Vizualni pregled",
+      "order": 910
+    },
+    {
+      "id": "needs-human",
+      "kind": "manual",
+      "label": "Ljudska klasifikacija nepoznate promjene",
+      "acknowledgeable": false,
+      "order": 1000
+    }
+  ],
+  "routes": [
+    {
+      "id": "verification-router",
+      "patterns": [
+        "config/verification-map.json",
+        "scripts/verification/**",
+        "tests/verification-router.test.ts",
+        "tests/gate-mutations.test.ts",
+        "package.json",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "docs/superpowers/specs/2026-09-18-verification-router-design.md",
+        "docs/superpowers/plans/2026-09-18-verification-router.md"
+      ],
+      "risk": "high",
+      "gates": ["verification-router-tests", "adversarial-review"]
+    },
+    {
+      "id": "repair",
+      "patterns": ["src/repair/**"],
+      "risk": "high",
+      "gates": ["focused-repair-tests", "strict-open", "slow", "word", "adversarial-review"]
+    },
+    {
+      "id": "docx-parser",
+      "patterns": ["src/docx/**", "src/audits/**", "src/analysis/**"],
+      "risk": "high",
+      "gates": ["docx-golden-tests", "strict-open", "word", "adversarial-review"]
+    },
+    {
+      "id": "citations",
+      "patterns": ["src/citations/**"],
+      "risk": "high",
+      "gates": ["citation-tests", "verify-claims", "adversarial-review"]
+    },
+    {
+      "id": "ui",
+      "patterns": ["src/ui/**", "src/styles/**", "index.html"],
+      "risk": "medium",
+      "gates": ["ux", "visual"]
+    },
+    {
+      "id": "supabase",
+      "patterns": ["supabase/**"],
+      "risk": "high",
+      "gates": ["check-edge", "migration-identity", "db-smoke", "security-checks", "adversarial-review"]
+    },
+    {
+      "id": "profile-data",
+      "patterns": ["data/profiles/**"],
+      "risk": "high",
+      "gates": ["verify-claims", "scored-value-drift", "projection-freshness", "conformance", "adversarial-review"]
+    },
+    {
+      "id": "source-general",
+      "patterns": ["src/**"],
+      "risk": "medium",
+      "gates": []
+    },
+    {
+      "id": "tests-general",
+      "patterns": ["tests/**"],
+      "risk": "medium",
+      "gates": []
+    },
+    {
+      "id": "scripts-general",
+      "patterns": ["scripts/**"],
+      "risk": "high",
+      "gates": ["adversarial-review"]
+    },
+    {
+      "id": "data-general",
+      "patterns": ["data/**"],
+      "risk": "high",
+      "gates": ["adversarial-review"]
+    },
+    {
+      "id": "docs",
+      "patterns": ["docs/**", "*.md"],
+      "risk": "low",
+      "gates": []
+    },
+    {
+      "id": "tooling-config",
+      "patterns": ["config/**", ".github/**", "*.json", "*.toml", "*.config.ts", "tsconfig.json", ".env.example"],
+      "risk": "high",
+      "gates": ["adversarial-review"]
+    },
+    {
+      "id": "discovery",
+      "patterns": ["discovery/**"],
+      "risk": "medium",
+      "gates": []
+    },
+    {
+      "id": "training-pipeline",
+      "patterns": ["training-pipeline/**"],
+      "risk": "high",
+      "gates": ["adversarial-review"]
+    },
+    {
+      "id": "public-assets",
+      "patterns": ["public/**", "assets/**", "rad/**"],
+      "risk": "medium",
+      "gates": ["ux", "visual"]
+    }
+  ]
+}

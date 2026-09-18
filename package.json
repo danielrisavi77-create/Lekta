@@ -49,6 +49,7 @@
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "npm run check:claude-context && oxlint && tsc --noEmit && npm run check:edge && vitest run && vite build",
+    "verify:change": "node scripts/verification/run-gates.mjs",
     "check:claude-context": "node scripts/verify-claude-context.mjs",
     "master-ci": "node scripts/master-ci-status.mjs",
     "check:edge": "node scripts/check-edge.mjs",

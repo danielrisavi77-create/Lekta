@@ -18,10 +18,13 @@ supabase/functions). Ovo NIJE Next.js projekt.
 Svaka promjena mora prije commita proci:
 
 ```bash
-npm run check   # oxlint && tsc --noEmit && check:edge && vitest run && vite build
+npm run verify:change -- --base origin/master
 ```
 
-Ako check pada, promjena nije gotova. Ne commitaj crveno.
+Router uvijek ukljucuje `check` (oxlint, TypeScript, check:edge, Vitest, Vite build) i
+`orphan-scan`, zatim dodaje domenske provjere iz `config/verification-map.json`.
+`UNKNOWN`, nedostupan gate ili nepotvrden manualni gate vracaju izlaz 2 i nisu prolaz.
+Ako bilo koji gate pada, promjena nije gotova. Ne commitaj crveno.
 
 Gate TRAZI DENO: od 2026-09-01 ukljucuje `check:edge` (`deno check` nad `supabase/functions/**`,
 serverski kod za novac, tudje dokumente i pravo pristupa; tsconfig `include: ["src"]` ga ne vidi).

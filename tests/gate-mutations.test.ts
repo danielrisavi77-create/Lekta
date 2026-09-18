@@ -42,6 +42,7 @@ import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
+import { selectGates, validateVerificationMap } from '../scripts/verification/select-gates.mjs';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { proofSourceProblems } from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
@@ -1288,6 +1289,39 @@ const MUTATIONS: Mutation[] = [
       + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
     caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
     cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
+  },
+  /**
+   * VERIFICATION ROUTER MORA PASTI ZATVORENO.
+   *
+   * Mutacija uklanja obje rute koje mogu klasificirati repair datoteku. Gard mora promijeniti
+   * rizik u unknown, vratiti needs_human i dodati nepreskocivi needs-human gate. Time se dokazuje
+   * da nova ili slucajno izbrisana domena ne moze tiho proci samo kroz zajednicke gateove.
+   */
+  {
+    id: 'verification-router/nepoznata-putanja-pada-zatvoreno',
+    imitates:
+      'konfiguracija izgubi domensku i opcu src rutu, a router nepoznatu repair promjenu svejedno '
+      + 'proglasi spremnom i propusti bez ljudske klasifikacije',
+    cleanBefore: () => {
+      const raw = JSON.parse(readFileSync(resolve(process.cwd(), 'config/verification-map.json'), 'utf8'));
+      const selection = selectGates(
+        [{ path: 'src/repair/apply-fixers.ts', sources: ['committed'] }],
+        validateVerificationMap(raw),
+      );
+      return selection.risk === 'high' && selection.status === 'ready' && selection.unknownPaths.length === 0;
+    },
+    caught: () => {
+      const raw = JSON.parse(readFileSync(resolve(process.cwd(), 'config/verification-map.json'), 'utf8'));
+      raw.routes = raw.routes.filter((route: { id: string }) => !['repair', 'source-general'].includes(route.id));
+      const selection = selectGates(
+        [{ path: 'src/repair/apply-fixers.ts', sources: ['committed'] }],
+        validateVerificationMap(raw),
+      );
+      return selection.risk === 'unknown'
+        && selection.status === 'needs_human'
+        && selection.unknownPaths.includes('src/repair/apply-fixers.ts')
+        && selection.gateIds.includes('needs-human');
+    },
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
