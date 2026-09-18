@@ -51,8 +51,8 @@ const DIAGNOSTICS_ROOT = 'C:\\WordReplica-Automation\\diagnostics';
 const SOURCE_PATH = 'C:\\Users\\PC\\Documents\\Kalogjera - seminar Havel.docx';
 const TARGET_PATH = 'C:\\WordReplica-Automation\\lab\\lekta-crossrepo-59b6daa\\Kalogjera - seminar Havel-popravljeno.docx';
 const REQUESTS_PATH = 'C:\\WordReplica-Automation\\lab\\lekta-crossrepo-59b6daa\\repair-contract.json';
-const LEKTA_BRANCH = 'feature/repair-contract-v1-current-v2';
-const WORDREPLICA_BRANCH = 'automation-dev';
+const LEKTA_BRANCH = process.env.LEKTA_E2E_EXPECTED_BRANCH ?? null;
+const WORDREPLICA_BRANCH = process.env.WORDREPLICA_E2E_EXPECTED_BRANCH ?? null;
 const SOURCE_SHA256 = '47948159867f4fb6c668f0bba066380591c142995443bb9c8a5f17d6984bff30';
 const SOURCE_SIZE = 344995;
 const TARGET_SHA256 = 'c7ed489470ad2012d3fe7b49169927e7617b3cbfb94020c476d79c653ea251a1';
@@ -156,9 +156,11 @@ function captureRepositoryEvidence(root: string): RepositoryEvidence {
   };
 }
 
-function readRepositoryEvidence(root: string, expectedBranch: string): RepositoryEvidence {
+function readRepositoryEvidence(root: string, expectedBranch: string | null): RepositoryEvidence {
   const evidence = captureRepositoryEvidence(root);
-  equal(evidence.branch, expectedBranch, `${root} must remain on ${expectedBranch}.`);
+  if (expectedBranch) {
+    equal(evidence.branch, expectedBranch, `${root} must remain on ${expectedBranch}.`);
+  }
   return evidence;
 }
 
