@@ -264,12 +264,22 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
       windowsHide: true,
     }).stdout.trim();
 
+    const lektaBranch = spawnSync('git.exe', ['branch', '--show-current'], {
+      cwd: root,
+      encoding: 'utf8',
+      windowsHide: true,
+    }).stdout.trim();
+    const wordReplicaBranch = spawnSync('git.exe', ['branch', '--show-current'], {
+      cwd: 'C:\\WordReplica-Automation\\repo',
+      encoding: 'utf8',
+      windowsHide: true,
+    }).stdout.trim();
     expect(evidence.lekta).toMatchObject({
-      branch: 'feature/repair-contract-v1-current-v2',
+      branch: lektaBranch,
       head: lektaHead,
     });
     expect(evidence.wordReplica).toMatchObject({
-      branch: 'automation-dev',
+      branch: wordReplicaBranch,
       head: wordReplicaHead,
     });
     expect(evidence.lekta.contentSha256).toMatch(/^[a-f0-9]{64}$/);
