@@ -48,11 +48,14 @@ describe('brzi WordReplica-Lekta integracijski gate', () => {
     );
 
     const confirmationBuild = app.indexOf('const confirmations=');
-    const upload = app.indexOf('uploadRepair(repairConfig()');
+    const requestDispatch = app.indexOf('pending={token:token||', confirmationBuild);
+    const controllerStart = app.indexOf('binding.controller.start()', confirmationBuild);
     const offer = app.indexOf('renderLocalRepairRunnerOffer(summary,out.localRepair');
+    expect(app).toContain('uploadRepair(repairConfig()');
     expect(confirmationBuild).toBeGreaterThan(-1);
-    expect(upload).toBeGreaterThan(confirmationBuild);
-    expect(offer).toBeGreaterThan(upload);
+    expect(requestDispatch).toBeGreaterThan(confirmationBuild);
+    expect(controllerStart).toBeGreaterThan(requestDispatch);
+    expect(offer).toBeGreaterThan(controllerStart);
   });
 
   it('izdaje local repair tek uz potvrde i vraca launch tek nakon trajne pohrane', () => {
