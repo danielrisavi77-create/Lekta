@@ -110,7 +110,9 @@
 /* Redak ispod papira je na STOLU, ne na papiru, pa ide na `--muted`. Mono jer nabraja format,
    uvjet i odrediste, dakle oznake; do Z7 su to bila dva odvojena retka. */
 .intake-meta{
-  margin-top:20px;color:var(--muted);font-family:var(--mono);font-size:var(--fs-mono-label);
+  /* 11px je mjera OZNAKE NA PAPIRU (zaglavlje, pecat, koraci, sitni otisak). Ovaj redak nosi
+     jedinu poveznicu ispod papira, pa ostaje na `--fs-ui-sm`, kao i predlozak (13px). */
+  margin-top:20px;color:var(--muted);font-family:var(--mono);font-size:var(--fs-ui-sm);
   letter-spacing:.04em;
 }
 .intake-meta a{color:var(--muted);text-underline-offset:4px}
