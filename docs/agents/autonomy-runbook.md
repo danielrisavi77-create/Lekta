@@ -72,15 +72,43 @@ python -m scripts.autonomy.cli report
   ne, jer bi to bilo pogadjanje) razlikuje se u razlogu: `planTask 'T7' nije u obliku Tnn`, a ne "signal nema
   planTask". Ispravak inbox datoteke se PRIMJENJUJE: isti otisak signala uz izmijenjen `scope` osvjezava zapis
   zadatka i vraca ga iz `needs_human` u red, pa sljedeci tick radi po ispravljenom cilju. Zadatak u `blocked`
-  se time NE budi. Dnevni slot posla (`maxNewJobsPerDay`) se pritom VRACA, jer ga nije potrosio nijedan poziv
+  se time NE budi, a od 2026-09-13 ni onaj koji ceka covjeka iz razloga koji ispravak signala ne rjesava:
+  budi se samo zaustavljanje na koje ispravak ODGOVARA (`no_ready_plan_task`), dok `PR ceka ljudski merge`,
+  `dokaz nepotpun`, `commit_failed` i zaustavljanje bez zapisanog razloga ostaju gdje jesu. Inace bi dopisan
+  `paths` unos u istoj inbox datoteci pokrenuo isti posao drugi put, uz tri nova poziva modela i drugi push.
+  Budjenje pritom vraca `attempts` na nulu: bez toga zadatak sa `attempts` na stropu postane `queued` koji
+  `claim` vise ne uzima (`attempts < max`) i nestane iz svakog upozorenja. Za taj slucaj `status.json` sada
+  nosi `queuedOverAttemptLimit` i upozorenje `queued iznad stropa pokusaja: n`. Dnevni slot posla (`maxNewJobsPerDay`) se pritom VRACA, jer ga nije potrosio nijedan poziv
   modela; bez toga tri crvena workflowa iz izvora `ci` pojedu dan i posao s ispravnim `planTask` nikad ne
   dodje na red. Slot se ne vraca cim je provider u tom poslu jednom pokrenut.
 - **Agent s pravom pisanja se ne pokrece u dijeljenom stablu.** Faza `implement` je popravkom iznad prvi put
   postala DOSTIZNA, a kontroler posao priprema kroz `prepare` (bez `--execute`), pa ga tri preduvjeta iz
-  `scripts/agents/cli.mjs` ne bi dotaknula. Kontroler ih zato provjerava sam: zaseban git worktree, feature
+  `scripts/agents/cli.mjs` ne bi dotaknula. Kontroler ih zato provjerava sam: vlastito radno stablo, feature
   grana, cisto stablo. Promasaj je `blocked` uz `implement_unsafe: ...`, prije poziva modela i bez potrosenog
-  pokusaja. `workerRepoPath` mora pokazivati na worktree na feature grani, ne na instalacijski checkout koji
-  Task Scheduler drzi na masteru.
+  pokusaja.
+
+  Tri stvari o tom gardu koje je izmjerila tek provjera 2026-09-13, i koje su sve tri bile kvar:
+
+  1. **Mjeri se prije PLANA, ne prije implementacije.** Inace posao koji nikako ne moze proci svejedno plati
+     puni poziv modela i dnevni slot, a uz `maxNewJobsPerDay=3` to je do tri uzaludna poziva dnevno.
+  2. **Cistoca se trazi samo na PRVOJ fazi posla.** Poslije nje stablo prlja sam kontroler (implementacija
+     pise datoteke), pa bi ista provjera oborila pregled vlastitog posla. Preostala dva preduvjeta vrijede na
+     svakoj fazi.
+  3. **`workerRepoPath` je izricit kljuc konfiguracije** (`config/autonomy.example.json`, zadano `null`).
+     Deklarirano stablo smije biti i ZASEBAN KLON na feature grani, ne samo povezan `git worktree`; gard je
+     prije usporedjivao `--git-dir` s `--git-common-dir` i odbijao klon, koji je posve siguran. Nedeklariran
+     `workerRepoPath` znaci cwd, dakle instalacijski checkout koji Task Scheduler drzi na masteru, i taj se
+     kao radnikovo stablo NE priznaje. Stanje se sada vidi unaprijed: `doctor.workerRepo` (staza, je li
+     deklarirano, razlog blokade) i upozorenje `implementacija blokirana: ...` u `status.json`, umjesto da se
+     saznaje iz prvog `blocked` ticka.
+- **Kontroler sam commita radnikovo stablo na kraju posla.** Commit ide POSLIJE pregleda a PRIJE
+  klasifikacije; snimka promjena (`git status`) uzima se u tom istom koraku PRIJE commita, pa klasifikacija,
+  verifikacija i objava i dalje vide sto je implementacija napisala. Bez toga se kontroler zakljuca poslije
+  TOCNO jednog posla: nizvodni lanac mjeri necommitane promjene, nista ih ne sprema, a gard iznad od sljedeceg
+  posla trazi cisto stablo. Netrackane datoteke ulaze u commit i broje se u klasifikaciji pojedinacno
+  (`git status --untracked-files=all`; bez toga git novu mapu sazme u jedan redak `src/`, pa bi kontrolna
+  datoteka u njoj prosla neprimijecena). Pad commita je `needs_human` uz `commit_failed: ...` i posao NE ide u
+  objavu. Commit ne gura nista na daljinu; `git push` ostaje iskljucivo u izdavacu.
 - **Codex koji je zavrsio uz odbijen exec je `blocked`, ne uspjeh.** Kad se pojavi potpis neupotrebljive
   izvrsne okoline (`apply deny-read ACLs`, `Failed to create unified exec process`), verdict je `blocked` uz
   razlog `provider_unusable: codex sandbox`, i pokusaj se ne trosi. Trazi se u STDERRU (ondje su
