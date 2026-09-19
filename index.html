@@ -46,6 +46,15 @@
       <a href="/moji-radovi/">Moji radovi</a>
       <a class="intake-nav-help" href="/saznaj-vise/#how" aria-label="Kako Lekta radi">?</a>
       <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
+      <!-- #displayBtn je NA ULAZU BEZ NATPISA, kao i lampa iznad, i to je isto ogranicenje, ne
+           previd. Odluka od 2026-09-06 (komentar na vrhu ove navigacije) kaze da ulaz nosi samo
+           dva odredista i kontrole BEZ natpisa, jer ekran ima jednu svrhu: ubaciti dokument.
+           Natpis uz jednu od dvije susjedne kontrole razbio bi i taj par. WCAG 2.5.3 (Label in
+           Name) ovdje po definiciji ne vrijedi, jer gumb nema vidljiv tekst; ono sto vrijedi
+           uvijek, pristupacno ime, nosi `aria-label`. Na `/rad/`, gdje navigacija natpise vec
+           ima, isti gumb ih dobiva. (Ime klase natpisa se ovdje NE navodi: gard u a11y paketu
+           trazi taj niz po cijeloj datoteci, pa bi ga i ovaj komentar oborio.)
+           Gard: tests/a11y-batch-2026-07-18.test.ts. -->
       <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i></button>
     </div>
   </nav>
