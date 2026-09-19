@@ -6,10 +6,10 @@
  * tvrdnje.
  *
  * SPECIFICNOST JE OVDJE IZMJERENA, NE PROCIJENJENA. `src/shared/page-chrome.css` DUPLICIRA
- * primitive pod `html:root` (0,2,0) i `html:root[data-theme="light"]` (0,2,1), namjerno, da tuku
+ * primitive pod `html:root` (0,1,1) i `html:root[data-theme="light"]` (0,2,1), namjerno, da tuku
  * bundle `:root`. Pravilo `[data-contrast="high"]` (0,1,0) bi ih zato izgubilo bez obzira na
- * redoslijed ucitavanja. Selektori ispod su birani da pobijede OBA, pa ucinak ne ovisi o tome kako
- * bundler poslozi listove.
+ * redoslijed ucitavanja. Selektori ispod su birani da pobijede SVE grane teme, pa ucinak ne ovisi
+ * o tome kako bundler poslozi listove; triple se racuna u testu, ne procjenjuje.
  *
  * Panel NE nudi izbor boja ni pomicanje elemenata (design/README.md): crvena ostaje jedini akcent u
  * svakoj kombinaciji, ovdje se ne pojavljuje nijedna nova boja marke.
@@ -38,11 +38,21 @@ html:root[data-reading-font="dyslexic"] {
 html:root[data-text-size="s"] { font-size: 15px; }
 html:root[data-text-size="l"] { font-size: 18px; }
 
-/* Pojacan kontrast. Drugi selektor postoji zbog `html:root[data-theme="light"]` (0,2,1) u
-   `page-chrome.css`, koji `--paper-line` postavlja na svjetliju vrijednost; bez njega bi u danjem
-   svjetlu linija ostala neojacana. */
-html:root[data-contrast="high"],
-html:root[data-theme="light"][data-contrast="high"] {
+/* Pojacan kontrast. SELEKTOR JE NAMJERNO PONOVLJEN (`[data-contrast="high"][data-contrast]`), i to
+   je izmjereno, ne stilski. Triple je (id, klasa/atribut/pseudo-klasa, element):
+
+     html:root                                      (0,1,1)   page-chrome.css, duplicirani primitivi
+     html:root[data-theme="light"]                  (0,2,1)   page-chrome.css, danje svjetlo
+     html:root:not([data-theme])                    (0,2,1)   sustavna grana "kao sustav"
+     html:root[data-contrast="high"]                (0,2,1)   <- IZJEDNACENO s obje grane iznad
+     html:root[data-contrast="high"][data-contrast] (0,3,1)   <- tuce obje, bez obzira na redoslijed
+
+   Uz stari, jednostruki oblik bi kombinacija "kao sustav" + svijetao OS + "pojacan kontrast"
+   ovisila o tome kako bundler poslozi listove: `--desk-muted` i `--paper-line` postavljaju OBJE
+   strane, a u izjednacenju pobjedjuje ona koja dolazi kasnije. Ponovljeni atribut podize samo
+   specificnost i ne mijenja koji elementi se pogadjaju. Gard: tests/display-settings.test.ts,
+   "SPECIFICNOST: kontrastna grana strogo tuce...". */
+html:root[data-contrast="high"][data-contrast] {
   --paper-muted: #4A4438;
   --desk-muted: var(--desk-ink);
   --paper-line: #B8AE96;

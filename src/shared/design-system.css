@@ -172,11 +172,18 @@
  * istih vrijednosti.
  *
  * SELEKTOR JE `html:root:not([data-theme])`, ne goli `:root:not([data-theme])`, i to je izmjereno:
- * `src/shared/page-chrome.css` DUPLICIRA sve primitive pod `html:root` specificnosti (0,2,0),
- * namjerno, da tuce bundle `:root`. Goli `:root:not([data-theme])` je takodjer (0,2,0), pa bi u
- * izjednacenju odlucio redoslijed ucitavanja, a page-chrome.css se ucitava poslije: danje svjetlo
- * iz sustava tiho se ne bi vidjelo ni na `/` ni na `/rad/`. `html:root:not([data-theme])` je
- * (0,3,0) i pobjedjuje bez obzira na redoslijed. Gard: tests/display-settings.test.ts.
+ * `src/shared/page-chrome.css` DUPLICIRA sve primitive pod `html:root`, namjerno, da tuce bundle
+ * `:root`, a ucitava se POSLIJE ovog lista. Triple je (id, klasa/atribut/pseudo-klasa, element):
+ *
+ *     :root                        (0,1,0)   bundle
+ *     html:root                    (0,1,1)   page-chrome.css, duplicirani primitivi
+ *     :root:not([data-theme])      (0,2,0)   goli oblik
+ *     html:root:not([data-theme])  (0,2,1)   <- ovdje
+ *
+ * Goli oblik bi duplicirani `html:root` jos i pobijedio, ali bi se izjednacio sa svakim pravilom
+ * oblika `:root[...]`, a u izjednacenju odlucuje redoslijed ucitavanja, koji ovaj list gubi.
+ * Zadrzan element daje (0,2,1) i uklanja tu ovisnost. Triple se RACUNA u testu, ne procjenjuje
+ * (tests/display-settings.test.ts); komentari su ga prije tvrdili rijecima i bili krivi.
  */
 @media (prefers-color-scheme: light) {
   html:root:not([data-theme]) {

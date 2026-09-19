@@ -121,8 +121,8 @@ html:root[data-theme="light"]{
  * SVE tokene obaju blokova, ne uzorak, jer je bas uzorak propustio `--red-on-desk` (jedini token
  * koji zivi samo ovdje, ne i u design-system.css): ostao je na tamnom #FF7A5C nad svijetlim stolom,
  * dakle 1,80:1 umjesto 4,94:1, i to na `.footer-col-h`, koji `/rad/` stvarno nosi.
- * Specificnost `html:root:not([data-theme])` je (0,3,0) i tuce `html:root` (0,2,0) bez obzira na
- * redoslijed ucitavanja.
+ * Specificnost `html:root:not([data-theme])` je (0,2,1) i tuce `html:root` (0,1,1) bez obzira na
+ * redoslijed ucitavanja; triple racuna tests/display-settings.test.ts, ne procjenjuje ga komentar.
  */
 @media (prefers-color-scheme:light){html:root:not([data-theme]){
   --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);

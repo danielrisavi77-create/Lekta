@@ -485,6 +485,102 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(blok).toContain('--desk: #DFD8C6');
   });
 
+  /**
+   * SPECIFICNOST SE RACUNA, NE PROCJENJUJE.
+   *
+   * Komentari u tri lista su je do sada tvrdili rijecima i BILI SU KRIVI: `html:root` je (0,1,1),
+   * a ne (0,2,0), pa je i zakljucak o tome tko koga tuce bio slucajno tocan. Kriva aritmetika je
+   * ovdje skupa: `html:root[data-contrast="high"]` (0,2,1) je bio IZJEDNACEN s
+   * `html:root:not([data-theme])` (0,2,1), a obje grane postavljaju `--desk-muted` i
+   * `--paper-line`, pa je kombinacija "kao sustav" + svijetao OS + "pojacan kontrast" ovisila o
+   * tome kako bundler poslozi listove.
+   *
+   * Brojac je namjerno malen i cita SAMO oblike koji se u ovim listovima pojavljuju.
+   */
+  type Triple = readonly [number, number, number];
+
+  const specificnost = (selektor: string): Triple => {
+    let a = 0; let b = 0; let c = 0;
+    let s = selektor.trim();
+    // `:not(X)` / `:is(X)` / `:has(X)` nose specificnost svog argumenta, a sami po sebi nista.
+    for (;;) {
+      const m = /:(?:not|is|has)\(([^()]*)\)/.exec(s);
+      if (!m) break;
+      const [ua, ub, uc] = specificnost(m[1]);
+      a += ua; b += ub; c += uc;
+      s = s.slice(0, m.index) + ' ' + s.slice(m.index + m[0].length);
+    }
+    const pojedi = (uzorak: RegExp): number => {
+      const n = (s.match(uzorak) ?? []).length;
+      s = s.replace(uzorak, ' ');
+      return n;
+    };
+    a += pojedi(/#[A-Za-z_-][\w-]*/g);
+    b += pojedi(/\[[^\]]*\]/g);      // atributi PRIJE elemenata: vrijednost nosi slova
+    b += pojedi(/\.[A-Za-z_-][\w-]*/g);
+    c += pojedi(/::[A-Za-z-]+/g);    // pseudo-element PRIJE pseudo-klase: dvije dvotocke
+    b += pojedi(/:[A-Za-z-]+/g);
+    c += pojedi(/[A-Za-z][\w-]*/g);
+    return [a, b, c] as const;
+  };
+
+  const strogoVeca = (x: Triple, y: Triple): boolean => {
+    for (let i = 0; i < 3; i += 1) if (x[i] !== y[i]) return x[i] > y[i];
+    return false;
+  };
+
+  /**
+   * Selektor bloka koji SADRZI zadanu deklaraciju. Trazi se unatrag od deklaracije (`{` koji joj
+   * prethodi), jer bi trazenje unaprijed uhvatilo `{` SLJEDECEG pravila; komentari se maknu, jer
+   * oba lista selektore objasnjavaju i rijecima (proza nije kod).
+   */
+  const selektorBloka = (sirovo: string, deklaracija: string): string => {
+    const css = sirovo.replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const od = css.indexOf(deklaracija);
+    expect(od, `deklaracija ${deklaracija} nije nadjena`).toBeGreaterThan(-1);
+    const otvaranje = css.lastIndexOf('{', od);
+    const granica = Math.max(css.lastIndexOf('}', otvaranje), css.lastIndexOf('{', otvaranje - 1));
+    return css.slice(granica + 1, otvaranje).trim().replace(/\s+/g, ' ');
+  };
+
+  /** Selektor koji u listu stoji DOSLOVNO; vraca ga bez zavrsne viticaste zagrade. */
+  const doslovanSelektor = (sirovo: string, doslovno: string): string => {
+    expect(sirovo.replace(/\/\*[\s\S]*?\*\//g, ' '), `list nema selektor ${doslovno}`).toContain(doslovno);
+    return doslovno.replace(/\s*\{$/, '');
+  };
+
+  it('BASELINE: brojac specificnosti daje poznate vrijednosti', () => {
+    // Bez ovoga bi gard ispod prolazio i s brojacem koji uvijek vraca istu vrijednost.
+    expect(specificnost('html:root')).toEqual([0, 1, 1]);
+    expect(specificnost(':root:not([data-theme])')).toEqual([0, 2, 0]);
+    expect(specificnost('html:root:not([data-theme])')).toEqual([0, 2, 1]);
+    expect(specificnost('html:root[data-theme="light"]')).toEqual([0, 2, 1]);
+    expect(specificnost('html:root[data-contrast="high"]')).toEqual([0, 2, 1]);
+    expect(specificnost('html:root[data-contrast="high"][data-contrast]')).toEqual([0, 3, 1]);
+    expect(strogoVeca([0, 3, 1], [0, 2, 1])).toBe(true);
+    expect(strogoVeca([0, 2, 1], [0, 2, 1]), 'izjednacenje NIJE pobjeda').toBe(false);
+    expect(strogoVeca([0, 2, 1], [0, 3, 1])).toBe(false);
+  });
+
+  it('SPECIFICNOST: kontrastna grana strogo tuce i sustavnu i svijetlu granu teme', () => {
+    const kontrast = specificnost(selektorBloka(CSS, '--paper-muted: #4A4438'));
+    const sustav = specificnost(doslovanSelektor(SUSTAV, 'html:root:not([data-theme]) {'));
+    const svijetlo = specificnost(doslovanSelektor(CHROME, 'html:root[data-theme="light"]{'));
+    expect(kontrast, 'kontrastna grana').toEqual([0, 3, 1]);
+    expect(sustav, 'sustavna grana').toEqual([0, 2, 1]);
+    expect(strogoVeca(kontrast, sustav), '"kao sustav" + svijetao OS + pojacan kontrast').toBe(true);
+    expect(strogoVeca(kontrast, svijetlo), 'danje svjetlo + pojacan kontrast').toBe(true);
+  });
+
+  it('MUTACIJA: stari, jednostruki kontrastni selektor NE tuce sustavnu granu', () => {
+    const stari = specificnost('html:root[data-contrast="high"]');
+    const sustav = specificnost(doslovanSelektor(SUSTAV, 'html:root:not([data-theme]) {'));
+    expect(stari).toEqual(sustav);
+    expect(strogoVeca(stari, sustav), 'stari selektor je bio IZJEDNACEN, dakle ovisan o redoslijedu').toBe(false);
+    // Kontrola: mutacija pada tocno na onome sto popravak mijenja, ne na svemu.
+    expect(strogoVeca(specificnost(selektorBloka(CSS, '--paper-muted: #4A4438')), sustav)).toBe(true);
+  });
+
   it('modul NE ulazi u route-shell: panel je oprema `/` i `/rad/`, ne dijeljene ljuske', () => {
     const shell = read('src/routes/shared/route-shell.ts');
     expect(shell).not.toContain('display-settings');
