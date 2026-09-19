@@ -74,7 +74,7 @@
 }
 .intake-cta{
   display:inline-flex;align-items:center;gap:9px;margin:26px 0 0;padding:13px 26px;
-  background:var(--brand);color:var(--on-brand,#fff);border-radius:9px;
+  background:var(--brand);color:var(--on-brand,#fff);border-radius:var(--radius-btn-lg);
   font-family:var(--ui);font-weight:650;font-size:.98rem;letter-spacing:.005em;
   box-shadow:0 10px 24px color-mix(in srgb,var(--brand) 26%,transparent);
   transition:transform .2s ease,box-shadow .2s ease;
@@ -97,13 +97,13 @@
 .intake-status:not(:empty){margin-top:10px;color:var(--text);font-family:var(--ui);font-weight:600;font-size:.9rem}
 .intake-error:not([hidden]){
   display:block;width:fit-content;margin-top:12px;padding:9px 14px;
-  border:1px solid color-mix(in srgb,var(--brand) 30%,transparent);border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--brand) 30%,transparent);border-radius:var(--radius-btn);
   background:color-mix(in srgb,var(--brand) 9%,transparent);color:var(--text);
   font-family:var(--ui);font-size:.9rem;font-weight:600;
 }
 .intake-memory-action:not([hidden]){
   display:inline-block;margin-top:12px;padding:10px 16px;
-  border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);
+  border:1px solid var(--line);border-radius:var(--radius-btn);background:var(--panel);color:var(--text);
   font:inherit;font-weight:650;font-size:.9rem;cursor:pointer;
 }
 .intake-memory-action:hover,.intake-memory-action:focus-visible{border-color:var(--brand)}

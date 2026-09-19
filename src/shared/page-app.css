@@ -151,7 +151,7 @@ details.more{margin-top:12px;border-top:1px dashed var(--line-strong);padding-to
 .analyze-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
 .analyze-profile{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--panel-2);font-size:12.5px;display:grid;gap:8px}.analyze-profile:empty{display:none}.analyze-profile .ap-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.analyze-profile .ap-path{color:var(--muted);font-weight:700}.analyze-profile .ap-warn{background:var(--warn-soft);border-radius:10px;padding:9px 11px;display:grid;gap:8px}.analyze-profile .ap-warn p{margin:0;color:var(--warn);font-weight:750;font-size:12.5px}.analyze-profile .ap-actions{display:flex;gap:8px;flex-wrap:wrap}
 .analyze-note{color:var(--muted);font-size:11.5px;line-height:1.5}
-.btn-lg{padding:14px 22px;font-size:15px;border-radius:14px}
+.btn-lg{padding:14px 22px;font-size:15px;border-radius:var(--radius-btn-lg)}
 /* Rezultat: "moguci problemi" je akcijska metrika -> amber akcent (jasno klikabilno). */
 .metric-jump{border-left:3px solid var(--warn)}
 .metric-jump b{color:var(--warn)}
@@ -668,7 +668,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 /* Tijekom aktivnog scrolla privremeno preskoci skupe sjene. Vracaju se nakon kratkog mirovanja,
    pa se izgled u mirovanju ne mijenja, a ulazak novih sekcija ne ceka ponovno crtanje sjena. */
 body.is-scrolling .section *{box-shadow:none!important}
-.btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:2px}
+.btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:var(--radius-btn)}
 .btn-secondary:hover{border-color:var(--text);background:transparent;color:var(--text)}
 /* Skrol na dio analize (klik "Analiziraj") i na rezultat ne smije zavuci ispod sticky topbara. */
 #progressView,#resultView{scroll-margin-top:84px}

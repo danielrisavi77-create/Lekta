@@ -69,7 +69,7 @@ a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px
 .mobile-menu{display:none}.mobile-nav{display:none}
 .nav-tools{position:relative;display:flex;align-items:center}.nav-tools-btn{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:0}.nav-tools:hover .nav-tools-btn,.nav-tools:focus-within .nav-tools-btn{color:var(--text)}.nav-tools-btn.active{color:var(--brand);font-weight:800}.nav-tools .caret{font-size:11px;transition:transform .18s var(--ease-out-3)}.nav-tools:hover .caret,.nav-tools-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}.nav-tools-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(-6px);min-width:214px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:8px;margin-top:12px;display:grid;gap:2px;opacity:0;visibility:hidden;transition:opacity .16s,transform .16s;z-index:40}.nav-tools-menu::before{content:"";position:absolute;top:-12px;left:0;right:0;height:12px}.nav-tools:hover .nav-tools-menu,.nav-tools-btn[aria-expanded="true"]~.nav-tools-menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}.nav-tools-menu a{padding:9px 11px;border-radius:9px;font-size:14px;font-weight:650;color:var(--text);text-decoration:none;white-space:nowrap}.nav-tools-menu a:hover{background:var(--brand-soft);color:var(--brand)}.nav-tools-menu a.active{color:var(--brand);font-weight:800;background:var(--brand-soft)}@media(prefers-reduced-motion:reduce){.nav-tools .caret,.nav-tools-menu{transition:none}}
 .icon-btn svg{width:19px;height:19px;display:block}
-.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform;transition-timing-function:var(--ease-out-3)}
+.btn{border:0;border-radius:var(--radius-btn);padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform;transition-timing-function:var(--ease-out-3)}
 .btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:default;transform:none}
 .btn-primary{background:var(--brand);color:var(--on-brand);box-shadow:0 10px 22px color-mix(in srgb,var(--brand) 26%,transparent)}
 .btn-secondary{background:var(--panel);border:1px solid var(--line-strong);color:var(--text)}
@@ -142,14 +142,14 @@ footer .ks-tick{width:11px;height:11px}
 .lampa-btn:hover{color:var(--desk-ink);border-color:var(--desk-muted)}
 .lampa-btn svg{width:13px;height:13px;flex:none}
 .icon-btn{border:1px solid var(--desk-line);border-radius:2px;background:transparent;color:var(--desk-ink)}
-.btn{border-radius:2px;font-family:var(--sans);font-weight:600;letter-spacing:.04em}
+.btn{border-radius:var(--radius-btn);font-family:var(--sans);font-weight:600;letter-spacing:.04em}
 .btn:hover{transform:none}
 .btn-primary{background:var(--paper);color:var(--paper-ink);border:none;box-shadow:4px 4px 0 var(--red);transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
 .btn-primary:hover{background:var(--paper);color:var(--paper-ink);transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--red)}
 .btn-primary:disabled{opacity:.45;transform:none;box-shadow:3px 3px 0 var(--desk-line)}
 .nav>.btn-primary{background:var(--red);color:var(--on-red);box-shadow:none;text-transform:uppercase;font-size:12.5px;letter-spacing:.05em;padding:11px 18px}
 .nav>.btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
-.btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:2px}
+.btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:var(--radius-btn)}
 .btn-secondary:hover{border-color:var(--text);background:transparent;color:var(--text)}
 /* Press-feedback (mikro-interakcija, korak 3): klik utisne. :not(:disabled) da onemoguceni gumbi ne
    reagiraju i da rade nad visespecificnim hover pravilima (npr. landing .nav>.btn-primary:hover).
