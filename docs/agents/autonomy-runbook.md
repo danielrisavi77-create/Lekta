@@ -101,17 +101,46 @@ python -m scripts.autonomy.cli report
      kao radnikovo stablo NE priznaje. Stanje se sada vidi unaprijed: `doctor.workerRepo` (staza, je li
      deklarirano, razlog blokade) i upozorenje `implementacija blokirana: ...` u `status.json`, umjesto da se
      saznaje iz prvog `blocked` ticka.
-- **Kontroler sam commita radnikovo stablo na kraju posla.** Commit ide POSLIJE pregleda a PRIJE
-  klasifikacije; snimka promjena (`git status`) uzima se u tom istom koraku PRIJE commita, pa klasifikacija,
-  verifikacija i objava i dalje vide sto je implementacija napisala. Bez toga se kontroler zakljuca poslije
-  TOCNO jednog posla: nizvodni lanac mjeri necommitane promjene, nista ih ne sprema, a gard iznad od sljedeceg
-  posla trazi cisto stablo. Netrackane datoteke ulaze u commit i broje se u klasifikaciji pojedinacno
-  (`git status --untracked-files=all`; bez toga git novu mapu sazme u jedan redak `src/`, pa bi kontrolna
-  datoteka u njoj prosla neprimijecena). Pad commita je `needs_human` uz `commit_failed: ...` i posao NE ide u
-  objavu. Commit ne gura nista na daljinu; `git push` ostaje iskljucivo u izdavacu. Isto vrijedi za posao
-  koji zavrsi PRIJE kraja (pregled odbio, kvota, blokada): ono sto je implementacija vec napisala sprema se
-  jednako, uz `unfinished: true` u dnevniku, jer bi inace isti kvar dosao na druga vrata i sljedeci posao bi
-  opet zatekao prljavo stablo.
+- **Kontroler commita SAMO ono sto je sam napisao, i to imenovanim stazama.** Commit ide POSLIJE pregleda a
+  PRIJE klasifikacije; snimka promjena (`git status --untracked-files=all`) uzima se u tom istom koraku PRIJE
+  commita, pa klasifikacija, verifikacija i objava i dalje vide sto je implementacija napisala (bez
+  `--untracked-files=all` git novu mapu sazme u jedan redak `src/`, pa bi kontrolna datoteka u njoj prosla
+  neprimijecena). Bez ikakvog commita se kontroler zakljuca poslije TOCNO jednog posla: nizvodni lanac mjeri
+  necommitane promjene, nista ih ne sprema, a gard od sljedeceg posla trazi cisto stablo. Isto vrijedi za
+  posao koji zavrsi PRIJE kraja (pregled odbio, kvota, blokada): ono sto je implementacija vec napisala
+  sprema se jednako, uz `unfinished: true` u dnevniku.
+
+  TRI OGRADE, i nijedna nije kozmetika. Izvedba od 2026-09-19 koja ih nije imala je ODBACENA jer je mjereno
+  radila upravo stetu koju CLAUDE.md zabranjuje: posao odbijen PRIJE ijedne faze isao je kroz isti put, a
+  `git add -A` je commitao covjekov necommitani rad pod kontrolerovom porukom, u zadanoj konfiguraciji
+  (`workerRepoPath: null`) na master granu instalacijskog checkouta. Gard "cisto stablo" bi se time sam
+  izlijecio i vise nikad ne bi okinuo.
+
+  1. **Nikad `git add -A` ni `git commit` bez `--only`.** Commitaju se tocno staze iz snimke
+     (`git add -- <staze>` pa `git commit --only ... -- <staze>`), pa tudja necommitana ILI vec stagirana
+     datoteka ostaje izvan commita. Staza koja izlazi iz radnog stabla (apsolutna, `..`) je odbijena.
+  2. **Sprema se samo ako je stablo na POCETKU posla bilo cisto i ako je faza `implement` stvarno pokrenuta.**
+     Inace je ishod `skipped` uz razlog, nijedna git naredba koja pise se ne izvrsi, i stablo ostaje
+     netaknuto. Radno stablo koje je gard proglasio necistim ostaje netaknuto i na drugom, i na svakom
+     sljedecem ticku.
+  3. **Pad ili odbijanje commita nisu uspjeh.** `failed` i `skipped` na kraju posla su `needs_human` uz
+     `commit_failed: ...`; posao NE ide u objavu. Commit ne gura nista na daljinu, `git push` ostaje
+     iskljucivo u izdavacu.
+- **Svaki posao ima VLASTITU granu, a dokaz pokriva sve sto bi objava gurnula.** Grana `autonomy/<8 znakova
+  id-a zadatka>` reze se od osnovice (`origin/<baseBranch>`, pa lokalni `<baseBranch>`) neposredno prije faze
+  `implement`, dakle prije jedine faze koja pise i dok je stablo jos cisto. Grana istog zadatka koja vec
+  postoji (drugi pokusaj) se PREUZIMA, ne reze ponovo, jer bi `checkout -B` tiho odbacio ono sto je raniji
+  pokusaj spremio.
+
+  Druga crta obrane: `changedPaths` u dokazu i u klasifikaciji nije samo radno stablo nego UNIJA radnog
+  stabla i `git diff <osnovica>...HEAD`. Bez toga je (izmjereno 2026-09-19) posao koji je pregled ODBIO
+  ostavljao commit na dijeljenoj grani, sljedeci posao je klasificirao i verificirao samo svoju snimku, a
+  `git push` bi gurnuo oboje; `controlFilesChanged` bi ostao prazan i u nacinu `auto_low_risk` bi na master
+  otisla izmjena `.github/` koju nijedna klasifikacija nije vidjela.
+
+  Osnovica koja se ne moze razrijesiti je fail-closed: klasifikacija je `needs_human` uz `base_unresolved`,
+  nikad `auto_low_risk`. Grana koja se ne moze preuzeti je `blocked` uz `job_branch_failed: ...`, bez
+  potrosenog pokusaja.
 - **Codex koji je zavrsio uz odbijen exec je `blocked`, ne uspjeh.** Kad se pojavi potpis neupotrebljive
   izvrsne okoline (`apply deny-read ACLs`, `Failed to create unified exec process`), verdict je `blocked` uz
   razlog `provider_unusable: codex sandbox`, i pokusaj se ne trosi. Trazi se u STDERRU (ondje su
