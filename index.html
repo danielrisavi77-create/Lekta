@@ -69,12 +69,42 @@
              `#intakeStage`, pa se stanje vidi NA papiru umjesto kao poruka ispod njega: isti
              predmet putuje kroz proizvod, a ne niz nepovezanih ekrana. -->
         <div class="intake-poziv">
+          <!-- ZAGLAVLJE OBRASCA (Z7). Papir je URUDZBENI LIST, ne plakat: gore lijevo cija je
+               knjiga, gore desno koji je list i u kojem je stanju. Broj lista je STVARAN redni
+               broj, ne ukras: koliko radova vec lezi u lokalnoj povijesti (`lekta.history.v2`,
+               isti izvor kao "Moji radovi"), plus ovaj. U HTML-u stoji "0001" pa stranica nikad
+               nije prazna; `src/routes/intake/list-number.ts` ga zamijeni nakon ucitavanja, a
+               sirina je rezervirana (cetiri znamenke, tabular-nums) da zamjena ne trzne redak. -->
+          <div class="intake-zaglavlje">
+            <span>Lekta · Ulazni list</span>
+            <span>Nº <span class="intake-list-broj" data-intake-list-broj>0001</span> · Nepregledano</span>
+          </div>
+          <!-- PECAT JE DEKORACIJA, I ZATO JE `aria-hidden`. Isto znacenje ("jos nije pregledano")
+               vec nosi tekst zaglavlja iznad, pa bi citac ekrana inace istu stvar cuo dvaput.
+               Nista se ne animira: pecat je otisnut, ne pada na papir. -->
+          <span class="intake-pecat" aria-hidden="true">Čeka provjeru</span>
           <span class="intake-kicker">Besplatna provjera · lokalno na uređaju</span>
           <h1 class="intake-title" id="intakeTitle">Ubaci rad.</h1>
           <p class="intake-lead">Provjerit ćemo <em class="intake-em">formu<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em> prije nego ga predaš.</p>
-          <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
-          <span class="intake-hint">ili ispusti dokument ovdje</span>
-          <span class="intake-brava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Dokument ostaje ovdje</span>
+          <span class="intake-akcija">
+            <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
+            <span class="intake-hint">ili ispusti dokument ovdje</span>
+          </span>
+          <!-- TRI KORAKA SU NA PAPIRU, ne ispod njega: obecanje "dokument ne odlazi" vrijedi samo
+               ako ga korisnik procita PRIJE nego klikne, a ne u podnozju stranice do kojeg nikad
+               ne dodje. Tekstovi su doslovno iz predloska (design/templates/intake/Intake.dc.html). -->
+          <ol class="intake-koraci">
+            <li><span class="intake-korak-br">01</span><span class="intake-korak-t">Ubaciš .docx. Ne treba prijava.</span></li>
+            <li><span class="intake-korak-br">02</span><span class="intake-korak-t">Provjera radi u tvom pregledniku. Dokument ne odlazi.</span></li>
+            <li><span class="intake-korak-br">03</span><span class="intake-korak-t">Dobiješ ocjenu i popis što popraviti prije predaje.</span></li>
+          </ol>
+          <!-- PODNOZJE PAPIRA zamjenjuje raniju `.intake-brava` (ikona brave + "Dokument ostaje
+               ovdje"): ista obveza, ali receno tocnije i uz drugu polovicu granice proizvoda
+               (provjeravamo FORMU, ne sadrzaj), na mjestu gdje obrazac inace nosi sitni otisak. -->
+          <div class="intake-foot" data-intake-foot>
+            <span>Dokument ostaje na uređaju</span>
+            <span>Provjeravamo formu, ne sadržaj</span>
+          </div>
         </div>
         <div class="intake-karta" aria-hidden="true">
           <span class="intake-karta-znak">W</span>
@@ -90,13 +120,16 @@
       <input class="intake-file-input" id="intakeFile" type="file" tabindex="-1" aria-hidden="true" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
     </div>
 
-    <p class="intake-meta" id="intakeMeta">.docx · do <strong data-upload-limit>dopuštene veličine</strong> · bez prijave</p>
+    <!-- JEDAN MONO REDAK ISPOD PAPIRA (Z7): sto se prima, sto ne treba i gdje pise kako radi.
+         Do Z7 su to bila dva odvojena retka (`.intake-meta` i `.intake-links`), pa je ista
+         sitna informacija stajala na dva mjesta. Granica uploada OSTAJE u njemu: gard
+         `tests/intake-entry-boundary.test.ts` trazi `data-upload-limit`, a predlozak ga nije
+         imao jer nije znao za uredajno ovisan iznos. -->
+    <p class="intake-meta" id="intakeMeta">.docx · do <strong data-upload-limit>dopuštene veličine</strong> · bez prijave · <a href="/saznaj-vise/#how">Kako radi?</a></p>
     <p class="intake-status" id="intakeStatus" aria-live="polite" aria-atomic="true"></p>
     <p class="intake-error" id="intakeError" role="alert" hidden></p>
     <button class="intake-memory-action" id="intakeMemoryAction" type="button" hidden>Otvori korektorski stol bez spremanja</button>
     <p class="intake-continue" id="intakeContinue" hidden></p>
-
-    <p class="intake-links"><a href="/saznaj-vise/#how">Kako radi?</a></p>
   </div>
 </section>
 </main>

@@ -108,7 +108,21 @@ function pravila(css: string): Array<{ selektor: string; tijelo: string }> {
   return out;
 }
 
-export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi: Nalaz[]; obitelji: Set<string> } {
+/**
+ * KOMENTARI NISU PODACI, i to vrijedi za OBJE polovice ovog lista.
+ *
+ * Globalni gard (`imenaBezFonta`) je komentare skidao od pocetka, jer je proza `--ink-serif:` u
+ * biljesci davala obitelji "Word" i "list papira". Provjera ULAZA to nije radila, i rupa je bila
+ * latentna tocno dok ulaz nije imao nijednu mono metu: `design-system.css` u uvodnoj biljesci
+ * pise `(--mono: brojevi, score, rule-kodovi, statusi, eyebrows)`, pa je citac tu recenicu citao
+ * kao definiciju tokena i prijavljivao obitelj "brojevi" koju nista ne ucitava. Izmjereno u Z7,
+ * cim je papir dobio mono oznake: pet laznih nalaza na pet selektora.
+ */
+const bezKomentara = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, ' ');
+
+export function provjeriGlasove(ulaz: Ulaz): { nalazi: Nalaz[]; obitelji: Set<string> } {
+  const { html, ucitane } = ulaz;
+  const cssTekstovi = ulaz.cssTekstovi.map(bezKomentara);
   const klase = new Set<string>();
   for (const m of html.matchAll(/class="([^"]+)"/g)) m[1].split(/\s+/).forEach((c) => c && klase.add(c));
   const ids = new Set(Array.from(html.matchAll(/id="([^"]+)"/g), (m) => m[1]));
@@ -232,17 +246,30 @@ describe('glasovi ulaza /', () => {
     expect(nalazi, nalazi.map((n) => `${n.vrsta}: ${n.selektor} -- ${n.detalj}`).join('\n')).toEqual([]);
   });
 
-  it('ulaz ucitava TOCNO dva glasa: Newsreader govori, Inter Tight oznacava', () => {
+  it('ulaz ucitava TOCNO tri glasa: Newsreader govori, Inter Tight oznacava, mono nosi podatke', () => {
+    // BROJ SE PROMIJENIO S DVA NA TRI U Z7, I TO JE ODLUKA, NE POPUSTANJE.
+    //
+    // Do Z7 je ulaz bio plakat i nije imao nijednu metu podatkovnog glasa, pa je mono bio cista
+    // cijena (mjerenje 2026-09-05, zbog kojeg je `fonts-document.ts` i razdvojen). Z7 papir je
+    // OBRAZAC: broj ulaznog lista, oznake zaglavlja, pecat stanja, brojevi koraka, sitni otisak i
+    // natpis gumba su po `design/README.md` tocno mono, jedini podatkovni glas. Mete sada postoje,
+    // pa bi izostavljanje obitelji znacilo da ih preglednik crta sustavnim `ui-monospace` (na
+    // Windowsu Consolas), dakle upravo kvar zbog kojeg ovaj list testova postoji.
+    //
+    // Cijena je JEDNA tezina (~28 kB: latin + latin-ext, koji hrvatski trazi), ne cijela obitelj.
     const { ucitane } = ulazSaDiska();
-    expect([...ucitane].sort()).toEqual(['Inter Tight Variable', 'Newsreader Variable']);
+    expect([...ucitane].sort()).toEqual(['IBM Plex Mono', 'Inter Tight Variable', 'Newsreader Variable']);
   });
 
-  it('podatkovni glasovi NE ulaze u graf ulaza', () => {
-    // Source Serif 4 i IBM Plex Mono imaju posao na `/rad/` i alat-stranicama, ne ovdje. Bez ove
-    // tvrdnje bi ih jedan uvoz vratio, i traka s brojkama bi opet dobila treci glas.
+  it('GLAS DOKUMENTA (Source Serif 4) i dalje NE ulazi u graf ulaza', () => {
+    // Granica se SUZILA, nije pala. Source Serif 4 zrcali Wordov izlaz u pregledima, a `/` nema
+    // nijedan pregled; bez ove tvrdnje bi ga jedan uvoz vratio zajedno s monoom.
     const graf = [...collectStaticGraph(ULAZ)].map((p) => p.split(/[\\/]/).join('/'));
     expect(graf.filter((p) => p.endsWith('/src/shared/fonts-document.ts'))).toEqual([]);
     expect(graf.some((p) => p.endsWith('/src/shared/fonts-core.ts'))).toBe(true);
+    // Mono dolazi kroz VLASTITI modul, ne kroz glas dokumenta: to je cijeli smisao razdvajanja.
+    expect(graf.some((p) => p.endsWith('/src/shared/fonts-data.ts'))).toBe(true);
+    expect([...ulazSaDiska().ucitane]).not.toContain('Source Serif 4 Variable');
   });
 
   it('rute s dokumentima I DALJE nose podatkovne glasove', () => {
@@ -316,8 +343,6 @@ describe('glasovi ulaza /', () => {
     return rep.length ? rep.join(' ') : null;
   }
 
-  /** Komentari NISU podaci: `--ink-serif:` u proznom komentaru davao je "Word" i "list papira". */
-  const bezKomentara = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, ' ');
 
   /** Cisti dio globalnog garda, izdvojen da se moze mutirati sintetskim ulazom. */
   function imenaBezFonta(listovi: Array<{ ime: string; css: string }>, ucitane: Set<string>): string[] {
@@ -407,6 +432,28 @@ describe('glasovi ulaza /', () => {
     }).nalazi.map((n) => n.vrsta)).toEqual(['nepoznat-token']);
   });
 
+  it('Z7: PROZA u komentaru nije definicija tokena, a stvarna definicija i dalje jest', () => {
+    // STVARAN NALAZ, ne izmisljen slucaj. `design-system.css` u uvodnoj biljesci pise
+    // `(--mono: brojevi, score, rule-kodovi, statusi, eyebrows)`. Dok ulaz nije imao nijednu mono
+    // metu, to nitko nije vidio; cim ih je Z7 papir dobio, gard je prijavio pet laznih nalaza s
+    // obitelji "brojevi". Provjera ulaza zato skida komentare, kao i globalna polovica lista.
+    const proza = '/* --mono: brojevi, score, statusi */';
+    const stvarno = ':root{--mono:"IBM Plex Mono",monospace}';
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [proza + stvarno + '.x{font-family:var(--mono)}'],
+      ucitane: new Set(['IBM Plex Mono']),
+    }).nalazi, 'proza u komentaru ne smije proizvesti obitelj').toEqual([]);
+    // MUTACIJA: ista recenica napisana kao STVARNA deklaracija mora i dalje pasti, inace bi
+    // skidanje komentara oslijepilo gard za pravi kvar.
+    const kvar = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--mono:brojevi,monospace}.x{font-family:var(--mono)}'],
+      ucitane: new Set(['IBM Plex Mono']),
+    }).nalazi;
+    expect(kvar.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(kvar[0].detalj).toContain('brojevi');
+  });
   it('Z6: visina retka kao token NIJE obitelj (`font: 700 var(--fs-ui)/var(--lh) Georgia, serif`)', () => {
     // Pozicijska heuristika ("zadnja referenca") je ovdje birala `--lh`, razrjesavala ga u "1.5" i
     // prijavljivala broj kao obitelj bez fonta. Oblik vrijednosti to rjesava bez redoslijeda.

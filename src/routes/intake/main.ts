@@ -2,9 +2,15 @@ import { uploadCapBytes } from '../../repair/docx-budget';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { createLocalDocumentSession, sessionFragment } from '../../session/local-document-session';
 import { mountIntakeController } from './intake-controller';
+import { prikaziUlazniListBroj } from './list-number';
 import { mountDisplaySettings } from '../../shared/display-settings';
 import { playIntakeEntry } from './intake-motion';
 import '../../shared/ui-boot';
+// PODATKOVNI GLAS (Z7): papir ulaza je od preslagivanja u obrazac dobio mete monoa (broj lista,
+// oznake zaglavlja, pecat, brojevi koraka, sitni otisak, natpis gumba). `ui-boot` nosi samo dva
+// glasa, pa bi bez ovoga `var(--mono)` pao na sustavni `ui-monospace` (na Windowsu Consolas).
+// Source Serif 4 i dalje NE ulazi: `fonts-data` je samo mono, jedna tezina.
+import '../../shared/fonts-data';
 import '../../shared/page-chrome.css';  // ulaz NE uvozi radnu povrsinu: vidi mjerenje u tom listu
 import './intake.css';
 // Prazan stol pod lampom: postojeci sloj dubine (snop, prasina, sjene) BEZ demo dokumenta i bez
@@ -80,6 +86,10 @@ function start(): void {
   mountDisplaySettings(document);
   const maxUploadBytes = uploadLimitForCurrentDevice();
   showUploadLimit(document, maxUploadBytes);
+  // Broj ulaznog lista (Z7) ide PRIJE sekvence: zamjena "0001" -> stvaran broj mora se dogoditi
+  // dok se papir jos slaze, a ne kao vidljiv skok nakon njega. Sirina je rezervirana u CSS-u
+  // (tabularne znamenke), pa se redak ne trzne ni kad broj poraste na cetiri znamenke.
+  prikaziUlazniListBroj(document);
   // Sekvenca ide PRIJE montaze kontrolera samo po redoslijedu poziva:
   // kontrolera samo po redoslijedu poziva: papir je klikabilan od prvog kadra jer se animiraju
   // iskljucivo `opacity` i `transform`.
