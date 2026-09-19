@@ -70,15 +70,47 @@ describe('pojacan kontrast u danjem svjetlu (Z6)', () => {
    * KOMENTARI NISU KOD: oba lista objasnjavaju specificnost rijecima, pa se selektor pojavi i u
    * prozi. Bez uklanjanja komentara gard trazi token u recenici i javlja da ga nema.
    */
+  /**
+   * REGEX SE NE GRADI KROZ TEMPLATE LITERAL. `\s` u template literalu NIJE escape sekvenca nego
+   * samo slovo `s`, pa je obrazac do sada glasio `--<token>s*:s*(...)`. Prolazio je slucajno (`s*`
+   * je matchao NULA slova pa je dvotocka odmah slijedila), ali je istovremeno gadjao
+   * `--paper-mutedsss:` i NIJE gadjao `--paper-muted : #4A4438`. To je imenovan razred kvara u
+   * ovom repozitoriju (gard nad `git commit`, kontrolni bajt u generiranom regexu).
+   */
+  // Izvor se uzima iz PRAVOG literalnog regexa (`.source`), pa u ovom listu nema nijednog
+  // backslasha unutar niza: escape koji prolazi kroz alat zna se izgubiti, i upravo se izgubio.
+  const OBRAZAC_VRIJEDNOSTI = /\s*:\s*([^;}]+)/.source;
+
   const tokenUBloku = (sirovo: string, selektor: string, token: string): string => {
     const css = sirovo.replace(/\/\*[\s\S]*?\*\//g, ' ');
     const od = css.indexOf(selektor);
     expect(od, `selektor ${selektor} nije nadjen`).toBeGreaterThan(-1);
     const blok = css.slice(css.indexOf('{', od), css.indexOf('}', od));
-    const m = new RegExp(`--${token}\s*:\s*([^;}]+)`).exec(blok);
+    const m = new RegExp('--' + token + OBRAZAC_VRIJEDNOSTI).exec(blok);
     expect(m, `token --${token} nije nadjen u bloku ${selektor}`).toBeTruthy();
     return m![1].trim();
   };
+
+  it('obrazac tokena hvata razmak prije dvotocke, a ne hvata duzi naziv', () => {
+    const ispravan = new RegExp('--paper-muted' + OBRAZAC_VRIJEDNOSTI);
+    expect(ispravan.exec('--paper-muted : #4A4438;')?.[1].trim(), 'razmak prije dvotocke').toBe('#4A4438');
+    expect(ispravan.exec('--paper-muted:#4A4438;')?.[1].trim()).toBe('#4A4438');
+    expect(ispravan.exec('--paper-mutedsss: #000;'), 'duzi naziv NIJE isti token').toBeNull();
+  });
+
+  it('MUTACIJA: obrazac s izgubljenim escapeom grijesi u oba smjera', () => {
+    // Doslovno ono u sto se `\s` unutar template literala srusi: obicno slovo `s`.
+    const pokvaren = new RegExp('--paper-muted' + 's*:s*([^;}]+)');
+    expect(pokvaren.exec('--paper-muted : #4A4438;'), 'lazno negativan').toBeNull();
+    expect(pokvaren.exec('--paper-mutedsss: #000;'), 'lazno pozitivan').not.toBeNull();
+    // BASELINE, i ujedno objasnjenje zasto kvar nikad nije pao: na obliku koji list STVARNO ima
+    // (`--token: vrijednost`) oba obrasca daju istu vrijednost cim se pozove `.trim()`, koji ovaj
+    // gard i inace zove. Razlikuju se samo u vodecem razmaku, koji `trim` pojede.
+    const ispravan = new RegExp('--paper-muted' + OBRAZAC_VRIJEDNOSTI);
+    const uzorak = '--paper-muted: #4A4438;';
+    expect(pokvaren.exec(uzorak)![1]).toBe(' #4A4438');
+    expect(pokvaren.exec(uzorak)![1].trim()).toBe(ispravan.exec(uzorak)![1].trim());
+  });
 
   const DISPLAY = read('src/shared/display-settings.css');
   const SUSTAV = read('src/shared/design-system.css');
