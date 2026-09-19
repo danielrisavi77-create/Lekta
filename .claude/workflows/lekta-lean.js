@@ -23,9 +23,7 @@
 export const meta = {
   name: 'lekta-lean',
   description: 'Manja, jeftinija verzija workflowa bez Fablea: light/standard/full modovi po velicini zadatka',
-  whenToUse:
-    'Kad zadatak NE dira parser/citation/repair/security/supabase (za to je lekta-no-fable-coding): docs, ' +
-    'status, config i tekst idu u mode light, kod izvan zasticenih podrucja u mode standard.',
+  whenToUse: 'Kad zadatak NE dira parser/citation/repair/security/supabase (za to je lekta-no-fable-coding): docs, status, config i tekst idu u mode light, kod izvan zasticenih podrucja u mode standard.',
   phases: [
     { title: 'Brief', detail: 'sazet popis datoteka, pravila i kriterija, bez punog izvidjaja repoa', model: 'sonnet' },
     { title: 'Implementacija', detail: 'jedan implementator u vlastitom worktreeu, testovi uz kod', model: 'opus' },
