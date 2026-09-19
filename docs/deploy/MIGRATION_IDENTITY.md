@@ -142,3 +142,25 @@ retke iz dnevnika. Umjesto toga se podmetnu privremene NETRACKANE prazne datotek
 (`<verzija>_privremeno_samo_u_bazi.sql`), push ide s `--include-all`, pa se datoteke izbrisu. Dnevnik ostaje
 cijel, `migration-identity` i dalje broji te verzije pod "samo u bazi". Detalji i izmjereno stanje:
 `docs/deploy/KANAL_A_UKLJUCIVANJE.md`.
+
+## Raspon verzija: Lekta od 0200, Katedra 0104 do 0199 (2026-09-19)
+
+Lektine migracije od 2026-09-19 nose prefiks od `0200` navise. Raspon `0104` do `0199` je
+rezerviran za Katedru, koja na stagingu `bnyemcnsphlitjradrst` dijeli istu tablicu
+`supabase_migrations.schema_migrations`. Razlog je isti kao u pravilu iznad: `db push`
+odlucuje po VERZIJI, dakle po vodecem broju prije prvog `_`, pa Lektina datoteka s vec
+zauzetom verzijom ne bi pala nego bi bila TIHO preskocena, a njezini objekti u bazi ne bi
+nastali.
+
+Izmjereno 2026-09-19: repozitorij je imao `0104_repair_local_claims`,
+`0105_repair_local_lifecycle` i `0106_repair_local_claim_recovery`, a staging verzije `0104`
+do `0114` (`agent_snapshot_privacy_and_cleanup` ... `agent_provider_execution_recovery`),
+dakle sudar na sve tri. Produkcija `zrrjttizjyfcxmcpgzml` nema nijednu od tih sest, pa je
+prenumeriranje u `0200`, `0201` i `0202` provedeno kao cisti rename u repozitoriju, bez
+ijedne promjene SQL sadrzaja i bez diranja zive baze.
+
+Gard je `tests/migration-numbering.test.ts` (`migrationRangeViolations`): svaka `.sql`
+migracija s cetveroznamenkastim prefiksom ispod `0200` mora biti na popisu naslijedjenih
+(103 datoteke, ratchet koji smije samo padati), inace test pada. Mutacija u istom testu
+dokazuje da gard grize: privremena `0150_x.sql` pada, `0203_x.sql` prolazi.
+

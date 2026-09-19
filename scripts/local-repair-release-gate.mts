@@ -8,9 +8,9 @@ export const EXPECTED_WORDREPLICA_ENGINE_VERSION = '0.1.0';
 export const EXPECTED_WORDREPLICA_SOURCE_BRANCH = 'automation-dev';
 
 const REQUIRED_MIGRATIONS = [
-  '0104_repair_local_claims.sql',
-  '0105_repair_local_lifecycle.sql',
-  '0106_repair_local_claim_recovery.sql',
+  '0200_repair_local_claims.sql',
+  '0201_repair_local_lifecycle.sql',
+  '0202_repair_local_claim_recovery.sql',
 ] as const;
 
 const REQUIRED_FUNCTIONS = [
