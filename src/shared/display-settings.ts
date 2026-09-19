@@ -8,6 +8,11 @@
  * SVAKA POSTAVKA ZIVI KAO `data-` ATRIBUT NA `<html>`, a ucinak je cisti CSS (`display-settings.css`).
  * Modul ne dira nijedan drugi element stranice i ne zna nista o analizi.
  *
+ * TAJ CSS OVAJ MODUL NE UVOZI, nego `src/shared/ui-boot.ts`, koji ucitavaju SVE rute. Razlog:
+ * pre-paint skripta atribute upisuje na svakoj stranici, a panel se montira samo na `/` i
+ * `/rad/`; da stil dolazi s panelom, izbor napravljen na `/` bio bi mrtav na `/saznaj-vise/`,
+ * `/moji-radovi/` i alat-stranicama. Stil prati ATRIBUT, ne kontrolu.
+ *
  * GUSTOCA SE NAMJERNO NE NUDI, iako je ALIGNMENT Z6 nabraja. Mjerenje Z4 (2026-09-19) pokazalo je
  * da samo 25 posto razmaka u proizvodu lezi na predlozenoj ljestvici, pa `--space-*` tokeni nisu ni
  * uvedeni: bez njih mnozitelj nema sto mnoziti, a kontrola koja ne mijenja nista gora je od one
@@ -20,7 +25,6 @@
  *                    zapisan uz `rememberTheme` u `src/routes/shared/route-shell.ts`).
  *   `lekta.display`  JEDAN JSON s cetiri polja, kroz `safeStorageGet/Set`.
  */
-import './display-settings.css';
 import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from './browser-storage';
 import { suprotnaTema, tamnoNaEkranu } from './display-prefs';
 

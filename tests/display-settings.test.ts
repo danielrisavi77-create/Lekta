@@ -592,6 +592,64 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     }
   });
 
+  /**
+   * UCINAK PRATI ATRIBUT, NE KONTROLU.
+   *
+   * Pre-paint skripta upisuje `data-reading-font`, `data-text-size`, `data-contrast` i
+   * `data-motion` na SVAKOJ stranici, a panel se montira samo na `/` i `/rad/`. Dok je stil dolazio
+   * s panelom, ta cetiri atributa su na ostalim rutama stajala MRTVA: korisnik izabere veci tekst
+   * na `/`, ode na `/saznaj-vise/` i ondje se ne dogodi nista.
+   */
+  const RUTE = [
+    'src/routes/intake/main.ts', 'src/routes/workspace/main.ts',
+    'src/routes/learn-more/main.ts', 'src/routes/my-work/main.ts',
+    'src/main.ts', 'src/shared/page-boot.ts',
+  ] as const;
+  const UVOZ_UCINKA = "import './display-settings.css'";
+
+  /** Dobiva li ruta ucinak postavki, i kojim putem. Cista funkcija, pa se smije mutirati. */
+  const rutaDobivaUcinak = (ruta: string, boot: string, panel: string): boolean => (
+    ruta.includes('display-settings.css')
+    || (/ui-boot/.test(ruta) && boot.includes(UVOZ_UCINKA))
+    || (ruta.includes('mountDisplaySettings') && panel.includes(UVOZ_UCINKA))
+  );
+
+  it('ucinak postavki ulazi kroz ui-boot, pa vrijedi na SVIM rutama', () => {
+    const boot = read('src/shared/ui-boot.ts');
+    const panel = read('src/shared/display-settings.ts');
+    expect(boot, 'ui-boot mora uvoziti ucinak postavki').toContain(UVOZ_UCINKA);
+    expect(panel, 'panel vise ne nosi vlastiti stil; inace ga rute bez panela opet nemaju')
+      .not.toContain(UVOZ_UCINKA);
+    for (const ruta of RUTE) {
+      const izvor = read(ruta);
+      expect(izvor, `${ruta} mora bootati ui-boot`).toMatch(/ui-boot/);
+      expect(izvor, `${ruta} ne smije uvoziti list dvaput`).not.toContain('display-settings.css');
+      expect(rutaDobivaUcinak(izvor, boot, panel), ruta).toBe(true);
+    }
+  });
+
+  it('JS panela ostaje samo na dvije rute koje gumb i imaju', () => {
+    const sMontazom = RUTE.filter((r) => read(r).includes('mountDisplaySettings(document)'));
+    expect(sMontazom).toEqual(['src/routes/intake/main.ts', 'src/routes/workspace/main.ts']);
+    // `/` je `routes/intake/main.ts`, `/rad/` je `routes/workspace/main.ts`; tocno one dvije
+    // stranice koje nose #displayBtn (tvrdnja iznad).
+    expect(read('index.html')).toContain('src="/src/routes/intake/main.ts"');
+    expect(read('rad/index.html')).toContain('src="/src/routes/workspace/main.ts"');
+  });
+
+  it('MUTACIJA: uz stari raspored (list uz panel) rute bez panela ostaju bez ucinka', () => {
+    const boot = read('src/shared/ui-boot.ts');
+    const panel = read('src/shared/display-settings.ts');
+    const bootBez = boot.replace(UVOZ_UCINKA + ';', '');
+    const panelS = UVOZ_UCINKA + ';\n' + panel;
+    expect(rutaDobivaUcinak(read('src/routes/learn-more/main.ts'), bootBez, panelS)).toBe(false);
+    expect(rutaDobivaUcinak(read('src/routes/my-work/main.ts'), bootBez, panelS)).toBe(false);
+    // Kontrola smjera: ruta S panelom je i tada radila, pa se kvar nije vidio ondje gdje se gledalo.
+    expect(rutaDobivaUcinak(read('src/routes/intake/main.ts'), bootBez, panelS)).toBe(true);
+    // BASELINE: sa STVARNIM izvorima obje rute bez panela dobivaju ucinak.
+    expect(rutaDobivaUcinak(read('src/routes/learn-more/main.ts'), boot, panel)).toBe(true);
+  });
+
   it('ui-boot ustupa #themeBtn panelu i postuje `system`', () => {
     const boot = read('src/shared/ui-boot.ts');
     expect(boot).toContain('btn.dataset.themeOwner');
