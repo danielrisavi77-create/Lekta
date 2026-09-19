@@ -196,9 +196,59 @@ bi u njihov repozitorij usla ustajala projekcija, tocno razred protiv kojeg ovaj
 ograda NEDOSTAJE i to je pravi dug; tako i jest, jer kvarovi nisu popravljeni. `Ograda: nema` bi
 tvrdilo da ograda ne pripada, sto bi bilo netocno i sakrilo bi dug. Dug im time raste s 25 na 28.
 
+## Val 2: tri rada, i cetiri stvari koje su se izmjerile tek na njima (2026-09-08)
+
+Vlasnik je izabrao ciljana tri retka umjesto sirokog vala, uz izricitu odluku da se `algebra` zadrzi
+i plati puna cijena njezina opsega. Iz toga su nastala tri prozna tijela i sest dokumenata:
+
+    fsb--article--diplomski           4.994 rijeci   65 odlomaka   commit 86eff536
+    arh--doctoral--poslijediplomski  15.803 rijeci  276 odlomaka   commit e62dfb4a
+    algebra--specialist--poslijedip. 19.929 rijeci  372 odlomka    commit d7ec1eda
+
+Commitanih `authored` dokumenata time je 17 (bilo 11). Oblika bez ijedne fixture je pet od 29, kao i
+prije vala: val 2 nije zatvarao oblike nego opseg i dubinu, a preostalih pet trazi Google Docs
+roundtrip i pakete koje ovaj stroj ne pravi.
+
+**1. Odnos proze i dokumenta je ADITIVAN, ne multiplikativan.** Vlasniku sam rekao da ~160 proznih
+odlomaka i 12.000 rijeci prelazi prag od 400 odlomaka. Netocno: graditelj dodaje priblizno stalnih
+100 odlomaka (predtekst, naslovi, literatura, natpisi prikaza), pa je za prag trebalo oko 22.000
+rijeci, a ne 12.000. Ista greska u drugom smjeru dala bi rad koji je platio opseg a nije dobio oblik.
+
+**2. `scope.words` ne mjeri dokument nego GLAVNI TEKST od Uvoda do Zakljucka.** Kalibrirano je iz
+`arh` para (razlika proza -> dokument ~1.150 rijeci) i po tome ciljano; provjera, medjutim, gleda uzu
+populaciju. Prvi prolaz `algebre` dao je 19.622 rijeci i PROSAO SAMO KROZ TOLERANCIJU od +-10%, uz to
+izrijekom napisano u detalju provjere. Dopisano je 593 rijeci; sada prolazi ravno. Fixtura koja
+prolazi kroz toleranciju dokazuje slabije od one koja prolazi ravno.
+
+**3. Vlastita proza je srusila validator, i to je bio nalaz o validatoru.** Poglavlje bez ijednog
+odlomka rusilo je `validateProseBody` (`Cannot read properties of undefined`) umjesto da proizvede
+imenovan nalaz. Kvar je bio latentan otkad shema postoji; nijedno tijelo iz vala 1 nije imalo taj
+oblik. Popravljeno u `86eff536` (`bodyParagraphs` uz `?? []` plus nalaz po poglavlju).
+
+**4. Moja vlastita izmjena ugasila je tudju mutaciju, a brojac je rastao.** Uvodjenje sekcija za
+doktorski i specijalisticki rad ubilo je `allLevelThree`: brojac je isao 29 -> 32, a detekcija je
+pala na 0. Korijen nije bio regex nego IME STILA, jer detektor oblika razinu naslova cita iz imena, a
+moji su stilovi poceli s `Naslov<znamenka>`. Preimenovani su u `Sekcija*`, a mutacija sada
+preusmjerava roditelje na `Heading_20_3` umjesto da ih preimenuje: preimenovanje bi skinulo
+`style:master-page-name` i unistilo bas sekcije zbog kojih izmjena postoji. Popravljeno u `e62dfb4a`.
+
+**Sitnica koja je jednom zavela:** `--messy` regenerira OBA primjerka, a goli `--row` samo usklađen.
+
+**Mreza nakon vala, 15 -> 17 dokumenata:**
+
+    consistency-fixer               15/0  -> 17/0   (mrtav, imenovan u ratchetu)
+    croatian-typography-fixer        8/8  ->  9/9
+    field-integrity-fixer           13/12 -> 14/13
+    final-document-inspector-fixer  15/15 -> 17/17
+    link-doi-fixer                  15/11 -> 17/13
+
+Popis mrtvih se nije promijenio i oba i dalje nose IZMJEREN razlog `no-target`.
+
 ## Sto ostaje
 
-1. Val 2 proze, prema 60 tijela, uz mjerenje nakon svakog vala.
+1. Daljnja proza, prema 60 tijela. Napisano je SEDAM (cetiri iz vala 1, tri iz vala 2), pa
+   preostaje 53. Odluka vlasnika iz vala 2 je da se ide ciljano, redak po redak s razlogom, a ne
+   sirinom: broj tijela nije sam po sebi mjera, jer 720 redaka daje samo 163 razlicita skupa pravila.
 2. Vlastito mjerenje za `consistency-fixer` i `citation-bibliography-sync-fixer`, s POTVRDJENIM
    odabirom, jer je to jedino stanje u kojem ta dva uopce mogu raditi.
 3. `apuri` nema Wordovu inacicu, a ostala tri je imaju. Nije zapisano je li izostala namjerno ili je

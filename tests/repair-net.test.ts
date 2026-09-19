@@ -75,6 +75,31 @@ describe('mreza nad fixerima: ugovor artefakta', () => {
     const zivi = artefakt.fixers.filter((f) => f.changed > 0);
     expect(zivi.length).toBeGreaterThan(0);
   });
+
+  /**
+   * `invalid-params` NIJE stanje dokumenta nego nas kvar.
+   *
+   * Ostali razlozi opisuju ULAZ: `no-target` znaci da mete nema, `already-ok` da je vec ispravno,
+   * `unsupported-structure` da dokument taj zahvat ne podnosi, `stale-anchor` da se sidro pomaklo.
+   * `invalid-params` jedini govori o POZIVU: motor je odbio zahtjev koji smo mi sastavili.
+   *
+   * IZMJERENO 2026-09-08: `heading-style-fixer` ga je vracao na cetiri dokumenta, jer je stavka
+   * isla kao `violated: true` s PRAZNIM popisom meta (kandidat postoji, nijedan nije predodabran),
+   * pa je zadani odabir slao zahtjev bez ijedne mete. Popravljeno u `src/ui/repair-items.ts`.
+   *
+   * Bez ove tvrdnje bi se takav kvar citao kao "fixer je mrtav" i trazio na krivom mjestu.
+   */
+  it('nijedan fixer ne vraca `invalid-params`, jer to opisuje NAS zahtjev, ne dokument', () => {
+    const losZahtjev = artefakt.fixers
+      .filter((f) => Number(f.reasons?.['invalid-params'] ?? 0) > 0)
+      .map((f) => `${f.fixerId} (${f.reasons['invalid-params']}x)`);
+    expect(
+      losZahtjev,
+      'zahtjev koji motor odbija sastavlja pozivatelj; popravi graditelja stavki, ne fixer',
+    ).toEqual([]);
+    // Anti-vakuum: tvrdnja iznad prolazi i nad praznim artefaktom, pa se trazi i stvarno mjerenje.
+    expect(artefakt.fixers.some((f) => f.requested > 0)).toBe(true);
+  });
 });
 
 describe('ratchet: popis mrtvih je imenovan i smije samo padati', () => {

@@ -190,6 +190,31 @@ async function observe(url, init = {}) {
  * `observeImpl` je injektabilan iskljucivo zato da se lanac moze provrtjeti bez mreze u testu;
  * u radu je uvijek pravi `observe`.
  */
+/**
+ * `build-info.json` mora postojati i nositi 40-znamenkasti commit (pise ga `scripts/write-build-info.mjs`
+ * u Netlify lancu). Bez njega se identitet OBJAVLJENOG builda ne da procitati sa zive stranice, pa se
+ * raskorak "javno naspram master" vidi tek usporedbom ponasanja u pregledniku (vanjski audit 2026-09-08,
+ * nalaz 3: stranica je danima stajala na commitu od 2026-09-06 a nista to nije reklo).
+ *
+ * Tvrdnja provjerava OBLIK, ne jednakost s masterom: zakljucana objava je namjerno stanje, pa se
+ * neslaganje commita javlja kao upozorenje u CLI-ju (`--expect-commit`), ne kao pad ovdje. Pad bi bio
+ * stalna crvena koju svi nauce ignorirati (isti argument kao u security-audit.yml).
+ */
+export function assertBuildInfo(obs) {
+  if (obs.status !== 200) return bad(`build-info.json: HTTP ${obs.status}`);
+  let body;
+  try { body = JSON.parse(obs.text || ''); } catch { return bad('build-info.json nije JSON'); }
+  if (!/^[0-9a-f]{40}$/.test(String(body?.commit ?? ''))) return bad('build-info.json nema 40-znamenkasti commit');
+  if (!Number.isFinite(Date.parse(String(body?.builtAt ?? '')))) return bad('build-info.json nema valjan builtAt');
+  return ok();
+}
+
+/** Commit iz `build-info.json`, ili `null` kad ga tvrdnja iznad ne bi priznala. */
+export function buildInfoCommit(obs) {
+  if (!assertBuildInfo(obs).ok) return null;
+  return JSON.parse(obs.text).commit;
+}
+
 export async function runSmoke({ site, functions, observeImpl = observe }) {
   const nalazi = [];
   /**
@@ -240,6 +265,23 @@ export async function runSmoke({ site, functions, observeImpl = observe }) {
     });
   }
 
+  // 3b. Identitet objavljenog builda. Sam oblik je nalaz; usporedbu s masterom radi CLI kao upozorenje.
+  //
+  // TRI ishoda, ne dva. 404 znaci da je objavljeni build stariji od `write-build-info` (zakljucana objava
+  // od 2026-09-06 ga nema), pa identitet objave NIJE poznat: to nije ni prolaz ni ispad, nego `unknown`.
+  // Izmjereno 2026-09-09: periodicki smoke je nad zivom stranicom bio crven ISKLJUCIVO zbog tog 404,
+  // dok su svih ostalih 27 provjera prolazile; stalna crvena koju svi nauce ignorirati je gora od
+  // upozorenja. `unknown` zato ne ruši operativni status (health, CSP, pravne stranice), ali CLI uz
+  // `--expect-commit` (provjera KONKRETNE objave) na njemu i dalje pada: nova objava build-info MORA imati.
+  const buildInfo = await observeImpl(`${site}/build-info.json`);
+  if (buildInfo && !buildInfo.transport && buildInfo.status === 404) {
+    nalazi.push({ id: 'build-info', host: 'site', status: 404, ok: false, unknown: true,
+      detail: 'build-info.json: HTTP 404; objavljeni build je stariji od write-build-info, identitet objave NEPOZNAT' });
+  } else {
+    const buildOk = zapisi('build-info', 'site', buildInfo, () => assertBuildInfo(buildInfo));
+    if (buildOk) nalazi[nalazi.length - 1].commit = buildInfoCommit(buildInfo);
+  }
+
   // 4. Edge funkcije.
   const health = await observeImpl(`${functions}/health`);
   zapisi('health', 'functions', health, () => assertHealth(health));
@@ -282,9 +324,12 @@ const STATUS_PRESRETACA = new Set([
 
 export function classifyRun(nalazi) {
   if (!nalazi.length) return 'inconclusive';
-  const pali = nalazi.filter((n) => !n.ok);
-  if (!pali.length) return 'ok';
-  if (pali.length !== nalazi.length) return 'fail';
+  // `unknown` nalaz (identitet objave nepoznat) nije ni prolaz ni pad: ne racuna se u `pali`, a sam po
+  // sebi ne moze dati `ok` jer `ok` trazi da NIJEDAN nalaz nije pao. Vidi runSmoke 3b.
+  const pali = nalazi.filter((n) => !n.ok && !n.unknown);
+  // Samo `unknown` nalazi, bez ijednog prolaza: nista nije dokazano, pa ni "ok".
+  if (!pali.length) return nalazi.some((n) => n.ok) ? 'ok' : 'inconclusive';
+  if (pali.length !== nalazi.filter((n) => !n.unknown).length) return 'fail';
   const hostovi = new Set(nalazi.map((n) => n.host));
   if (hostovi.size < 2) return 'fail';
   const sviTransportni = pali.every((n) => n.unreachable);
@@ -336,6 +381,11 @@ const MUTACIJE = [
   ['health uvijek 200 (OPS-01 regresija)', () => assertHealthRejectsPost({ status: 200 })],
   ['popravak radi bez tokena', () => assertRequiresAuth({ status: 200 }, 'repair-docx')],
   ['popravak puca prije autha', () => assertRequiresAuth({ status: 500 }, 'repair-docx')],
+  // Identitet builda (vanjski audit 2026-09-08, nalaz 3).
+  ['build-info nedostaje (lanac bez write-build-info)', () => assertBuildInfo({ status: 404, text: '' })],
+  ['build-info nije JSON (SPA fallback vratio HTML)', () => assertBuildInfo({ status: 200, text: '<html>x</html>' })],
+  ['build-info bez commita', () => assertBuildInfo({ status: 200, text: JSON.stringify({ builtAt: '2026-09-09T00:00:00Z' }) })],
+  ['build-info sa skracenim commitom', () => assertBuildInfo({ status: 200, text: JSON.stringify({ commit: 'abc123', builtAt: '2026-09-09T00:00:00Z' }) })],
 ];
 
 /**
@@ -372,6 +422,10 @@ const KLASIFIKACIJA = [
   // Zdravi slucajevi.
   ['sve prolazi -> ok', () => classifyRun([P('site'), P('functions')]) === 'ok'],
   ['prazan popis je neuvjerljiv, ne uspjeh', () => classifyRun([]) === 'inconclusive'],
+  // Identitet objave nepoznat (build-info 404) uz zdrave ostale provjere: operativno ok, ne pad.
+  ['build-info unknown uz zdrave provjere -> ok', () => classifyRun([F('site', 200, { ok: true }), F('site', 404, { unknown: true }), F('functions', 200, { ok: true })]) === 'ok'],
+  ['samo unknown nalaz, bez prolaza -> neuvjerljivo', () => classifyRun([F('site', 404, { unknown: true })]) === 'inconclusive'],
+  ['unknown ne skriva stvaran pad', () => classifyRun([F('site', 404, { unknown: true }), F('site', 500), F('functions', 200, { ok: true })]) === 'fail'],
 ];
 
 const BASELINE = [
@@ -383,6 +437,7 @@ const BASELINE = [
   ['health', () => assertHealth({ status: 200, text: ZDRAV_HEALTH })],
   ['health POST', () => assertHealthRejectsPost({ status: 405 })],
   ['auth', () => assertRequiresAuth({ status: 401 }, 'repair-docx')],
+  ['build-info', () => assertBuildInfo({ status: 200, text: JSON.stringify({ commit: 'a'.repeat(40), builtAt: '2026-09-09T00:00:00.000Z' }) })],
 ];
 
 function selfTest() {
@@ -438,12 +493,44 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     console.log(`[post-deploy-smoke] site=${site} functions=${functions}`);
     const nalazi = await runSmoke({ site, functions }).catch((e) => {
       console.error(`[post-deploy-smoke] FAIL: lanac je puknuo prije kraja: ${e?.message ?? e}`);
-      process.exit(1);
+      process.exitCode = 1;
+      return null;
     });
+    if (nalazi) {
     for (const n of nalazi) {
-      console.log(n.ok ? `  ok    ${n.id}` : `  ${n.unreachable ? '????' : 'FAIL'}  ${n.id}: ${n.detail}`);
+      console.log(n.ok ? `  ok    ${n.id}` : `  ${n.unreachable ? '????' : (n.unknown ? '????' : 'FAIL')}  ${n.id}: ${n.detail}`);
     }
-    const pali = nalazi.filter((n) => !n.ok);
+    // Objavljeni commit naspram ocekivanog (`--expect-commit`, u cronu `github.sha` mastera). UPOZORENJE, ne
+    // pad: zakljucana objava je namjerno stanje (vlasnik, 2026-09-09), a stalna crvena bi se naucila
+    // ignorirati. Da nema `build-info.json` uopce, to je vec nalaz `build-info` gore.
+    const expectCommit = String(arg('expect-commit', '')).trim();
+    const buildNalaz = nalazi.find((n) => n.id === 'build-info');
+    const objavljeno = buildNalaz?.commit ?? null;
+    if (objavljeno) console.log(`[post-deploy-smoke] objavljeni build: ${objavljeno.slice(0, 12)}`);
+    if (expectCommit && objavljeno && expectCommit !== objavljeno) {
+      console.log(`::warning::objavljena stranica je ${objavljeno.slice(0, 12)}, a master je ${expectCommit.slice(0, 12)}; objava zaostaje ili je zakljucana.`);
+    }
+    // Identitet objave NEPOZNAT (build-info 404). Dvije razlicite tvrdnje, dvije zastavice:
+    //  - `--expect-commit` je USPOREDBA s masterom u periodickom nadzoru (cron salje `github.sha`); tu je
+    //    nepoznat identitet upozorenje, kao i neslaganje commita, jer je zakljucana objava namjerno stanje.
+    //  - `--require-build-info` je provjera KONKRETNE objave (nakon deploya koji tvrdi da nosi build-info);
+    //    tu je 404 PAD, jer objava koja se tvrdi mora to i dokazati.
+    // Operativni status (health, CSP, pravne stranice) i dokaz identiteta se time ne mijesaju.
+    // IZLAZ IDE PREKO `process.exitCode`, NIKAD `process.exit()`: uz zivu fetch uticnicu `exit()` rusi Node
+    // na Windowsu (izmjereno 2026-09-09 u tests/post-deploy-smoke-build-info-cli.test.ts: kod 0xC0000409
+    // umjesto 1; isti razred kao u master-ci, vidi CLAUDE.md). Zato se ishod skupi u `kod` i postavi na kraju.
+    let kod = 0;
+    let identitetPao = false;
+    if (buildNalaz?.unknown) {
+      if (process.argv.includes('--require-build-info')) {
+        console.error('[post-deploy-smoke] FAIL: trazen je build-info.json (--require-build-info), a stranica ga nema; identitet objave se ne da potvrditi.');
+        kod = 1;
+        identitetPao = true;
+      } else {
+        console.log('::warning::identitet objavljenog builda je NEPOZNAT (build-info.json 404): objava je starija od write-build-info. Operativne provjere vrijede, dokaz identiteta ne; uz --require-build-info ovo je pad.');
+      }
+    }
+    const pali = nalazi.filter((n) => !n.ok && !n.unknown);
     const ishod = classifyRun(nalazi);
     if (ishod === 'inconclusive') {
       // IZLAZNI KOD 2, ne 1. Ovo NIJE tvrdnja da je produkcija pokvarena, nego da je nismo vidjeli.
@@ -452,12 +539,15 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       console.error('[post-deploy-smoke] NEUVJERLJIVO: nijedna provjera nije prosla, a oba pruzatelja'
         + ' (stranica i Edge) padaju istovjetno. To je gotovo uvijek promatrac bez mreze (egress'
         + ' politika, DNS, proxy), ne ispad. Provjeri dostupnost pa ponovi; ne tvrdi nista o produkciji.');
-      process.exit(2);
-    }
-    if (ishod === 'fail') {
+      kod = 2;
+    } else if (ishod === 'fail') {
       console.error(`[post-deploy-smoke] FAIL: ${pali.length} od ${nalazi.length} provjera pada nad zivom instalacijom.`);
-      process.exit(1);
+      kod = 1;
+    } else if (!identitetPao) {
+      const nepoznati = nalazi.filter((n) => n.unknown).length;
+      console.log(`[post-deploy-smoke] OK: ${nalazi.length - nepoznati} provjera nad zivom instalacijom${nepoznati ? `, ${nepoznati} s nepoznatim ishodom (vidi upozorenje)` : ''}.`);
     }
-    console.log(`[post-deploy-smoke] OK: ${nalazi.length} provjera nad zivom instalacijom.`);
+    process.exitCode = kod;
+    }
   }
 }

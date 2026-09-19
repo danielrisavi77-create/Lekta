@@ -6,7 +6,15 @@
  * i validator koji vristi na sve.
  */
 import { describe, expect, it } from 'vitest';
-import { validateProseBody, bodyParagraphs, wordCount, type ProseBody } from '../src/corpus/prose-schema';
+import {
+  validateProseBody,
+  validateProseAgainstRow,
+  bodyParagraphs,
+  wordCount,
+  type ProseBody,
+  type ProseRowClaim,
+} from '../src/corpus/prose-schema';
+import { buildFodt } from '../scripts/corpus-gen/prose-scenario.mts';
 
 /** Ispravno tijelo; svaki test mu kvari TOCNO jednu stvar. */
 function validBody(): ProseBody {
@@ -156,5 +164,93 @@ describe('shema proze: izvor je obavezan po prikazu', () => {
 
   it('prikazi s izvorom ne proizvode nalaz (baseline)', () => {
     expect(validateProseBody(validBody())).toEqual([]);
+  });
+});
+
+/**
+ * SEKCIJE: dug rad se dijeli na vise stilova stranice, sto u Wordu postaje vise `<w:sectPr>`.
+ *
+ * Zasto je ovo vlastiti gard, a ne posljedica duljine: oblik `opseg/sekcije-preko-3` je do sada bio
+ * nepokriven, i prvo objasnjenje u planu je glasilo da ga zatvara "jedan dulji rad". To je bilo
+ * KRIVO, i mjerenje je to pokazalo: svih jedanaest commitanih primjeraka ima tocno JEDNU sekciju
+ * bez obzira na opseg, jer sekcija nastaje iz stila stranice a ne iz broja odlomaka. Gard zato
+ * mjeri strukturu, a ne velicinu.
+ */
+describe('graditelj: sekcije nastaju iz stila stranice, ne iz duljine', () => {
+  const rules = { font: ['Times New Roman'], size: [12], spacing: 1.5, justify: true };
+  const opts = { rules, titleLines: ['SVEUCILISTE', 'Ime Prezime', 'NASLOV', 'Zagreb, 2026.'] };
+  const gradi = (workType: string): string =>
+    buildFodt({ ...validBody(), workType } as ProseBody, opts as Parameters<typeof buildFodt>[1]);
+
+  it('doktorski i specijalisticki dobivaju cetiri stila stranice', () => {
+    for (const wt of ['doctoral', 'specialist']) {
+      const f = gradi(wt);
+      expect((f.match(/<style:master-page /g) ?? []).length, wt).toBe(4);
+      expect((f.match(/style:master-page-name=/g) ?? []).length, wt).toBe(3);
+    }
+  });
+
+  /**
+   * NEGATIVNA KONTROLA, i nije kozmeticka: bez nje bi izmjena tiho promijenila svih jedanaest vec
+   * commitanih primjeraka, kojima bi tada trebalo mijenjati i tvrdnje o oblicima u sidecarima.
+   */
+  it('kratke vrste rada ostaju na jednoj sekciji, bajt-identicno starome', () => {
+    for (const wt of ['final', 'seminar', 'graduate', 'article']) {
+      const f = gradi(wt);
+      expect((f.match(/<style:master-page /g) ?? []).length, wt).toBe(1);
+      expect(f.includes('style:master-page-name='), wt).toBe(false);
+    }
+  });
+
+  it('podnozje je isto na svim stranicama, pa numeracija ne odluta po sekcijama', () => {
+    const f = gradi('doctoral');
+    const podnozja = f.match(/<style:footer>[\s\S]*?<\/style:footer>/g) ?? [];
+    expect(podnozja.length).toBe(4);
+    expect(new Set(podnozja).size).toBe(1);
+  });
+});
+
+/**
+ * GARD NAD SAMOOPISOM PROZE.
+ *
+ * `validateProseBody` mjeri tijelo SAMO PREMA SEBI, pa je prozno tijelo moglo tvrditi bilo koji
+ * `unitId`, `workType`, `level` ili `family` a da to nista ne prijavi. Generator prozu dohvaca po
+ * imenu datoteke, dakle po `row.id`, pa se `id` implicitno poklapa; sve ostalo je bilo slobodan
+ * tekst i jedno se od devet napisanih tijela stvarno razislo.
+ */
+describe('proza prema retku matrice', () => {
+  const redak = (): ProseRowClaim => ({
+    id: 'fpzg--final--prijediplomski',
+    unitId: 'fpzg',
+    workType: 'final',
+    level: 'prijediplomski',
+    family: 'social',
+  });
+
+  it('tijelo koje se slaze s retkom ne daje nijedan nalaz', () => {
+    expect(validateProseAgainstRow(validBody(), redak())).toEqual([]);
+  });
+
+  it('svako od pet polja se mjeri zasebno i imenuje se u nalazu', () => {
+    const polja: Array<[keyof ProseRowClaim, string]> = [
+      ['id', 'fpzg--graduate--diplomski'],
+      ['unitId', 'efzg'],
+      ['workType', 'graduate'],
+      ['level', 'diplomski'],
+      ['family', 'mixed'],
+    ];
+    for (const [polje, druga] of polja) {
+      const r = redak();
+      (r as unknown as Record<string, string>)[polje] = druga;
+      const nalazi = validateProseAgainstRow(validBody(), r);
+      expect(nalazi.length, polje).toBe(1);
+      expect(nalazi[0], polje).toContain(`${polje}: proza tvrdi`);
+      expect(nalazi[0], polje).toContain(druga);
+    }
+  });
+
+  it('vise razilazenja daje vise nalaza, ne jedan zbirni', () => {
+    const r = { ...redak(), unitId: 'efzg', family: 'stem' };
+    expect(validateProseAgainstRow(validBody(), r)).toHaveLength(2);
   });
 });

@@ -1,14 +1,23 @@
 {
   "schemaVersion": 1,
-  "corpusFingerprint": "d49f371f4beb57e52b28756b421b0c1d",
-  "measuredAt": "2026-09-05T17:58:06.244Z",
-  "measuredFromCommit": "91df26d64218a48c180a84e7a3ca4e477f72a258",
+  "corpusFingerprint": "8e5bd529d4f2b596ccf8fa0ef58c029d",
+  "measuredAt": "2026-09-10T08:28:07.311Z",
+  "measuredFromCommit": "59adbc8cc3b1cdecba6ef0487e8a26b7424cdd06",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
-  "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-05T17:59:15.444Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to, idemo na fakultete koji korpus nemaju). Cetvrti val korpusa: ustanova s naslovnice iz kataloga (134 jedinice; genericka imena razrjesava sveuciliste, najranije ime pobjedjuje), pa su usli radovi s ustanova koje korpus nije imao (HKS, Zdravstveno veleuciliste, Libertas); id dokumenta u ingestu je od ovog vala iz sadrzaja izvorne datoteke, pa su svi corpus-* id-jevi novi, a skup radova ponovno izgradjen istim pravilima dedupea (verzije istog rada svedene na jednog predstavnika). Radovi iz Desktop/Lekta-korpus ingesta uz zapis o dopustenju (local-testing), pseudonimizirani, uz rucno potvrdjene pojmove. Broj radova i parova je u ovoj ovjeri; vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
+  "environment": {
+    "wordVersion": null
+  },
+  "protocol": {
+    "holdoutExcluded": true,
+    "holdoutDocumentCount": 63,
+    "independentlyConfirmedCount": 0,
+    "derivedExpectationCount": 321
+  },
+  "signedBy": "Daniel",
+  "signedAt": "2026-09-12T22:00:26.856Z",
+  "signatureNote": "Potpis unesen po izricitoj uputi vlasnika 2026-09-12 (rijec: dajem ti dopustenje), kroz Claude Code; mjerenje 2026-09-10 nad 321 dokumentom, holdout skup ISKLJUCEN (nema --holdout-confirmed), Word verzija nije upisana jer izlaz korpusa nije otvoren u Wordu",
   "entries": [
     {
       "unitId": "efzg",
@@ -16,8 +25,8 @@
       "profileIds": [
         "efzg-zavrsni"
       ],
-      "documentCount": 13,
-      "cleanCount": 13,
+      "documentCount": 16,
+      "cleanCount": 16,
       "regressedChecks": []
     },
     {
@@ -26,8 +35,8 @@
       "profileIds": [
         "efzg-seminarski"
       ],
-      "documentCount": 7,
-      "cleanCount": 7,
+      "documentCount": 10,
+      "cleanCount": 10,
       "regressedChecks": []
     },
     {
@@ -56,8 +65,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 47,
-      "cleanCount": 47,
+      "documentCount": 78,
+      "cleanCount": 78,
       "regressedChecks": []
     },
     {
@@ -66,8 +75,8 @@
       "profileIds": [
         "fpzg-politologija-zavrsni"
       ],
-      "documentCount": 19,
-      "cleanCount": 19,
+      "documentCount": 33,
+      "cleanCount": 33,
       "regressedChecks": []
     },
     {
@@ -76,8 +85,8 @@
       "profileIds": [
         "fpzg-politologija-diplomski"
       ],
-      "documentCount": 31,
-      "cleanCount": 31,
+      "documentCount": 76,
+      "cleanCount": 76,
       "regressedChecks": []
     },
     {
@@ -86,8 +95,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 47,
-      "cleanCount": 47,
+      "documentCount": 78,
+      "cleanCount": 78,
       "regressedChecks": []
     },
     {
@@ -96,8 +105,18 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 47,
-      "cleanCount": 47,
+      "documentCount": 78,
+      "cleanCount": 78,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "fzsri",
+      "workType": "graduate",
+      "profileIds": [
+        "fzsri-diplomski"
+      ],
+      "documentCount": 2,
+      "cleanCount": 2,
       "regressedChecks": []
     },
     {
@@ -106,8 +125,8 @@
       "profileIds": [
         "hks-diplomski"
       ],
-      "documentCount": 4,
-      "cleanCount": 4,
+      "documentCount": 15,
+      "cleanCount": 15,
       "regressedChecks": []
     },
     {
@@ -116,8 +135,8 @@
       "profileIds": [
         "libertas-diplomski"
       ],
-      "documentCount": 2,
-      "cleanCount": 2,
+      "documentCount": 3,
+      "cleanCount": 3,
       "regressedChecks": []
     },
     {
@@ -146,8 +165,8 @@
       "profileIds": [
         "pravo-opci-pravni-akademski-rad"
       ],
-      "documentCount": 2,
-      "cleanCount": 2,
+      "documentCount": 9,
+      "cleanCount": 9,
       "regressedChecks": []
     },
     {
@@ -156,8 +175,8 @@
       "profileIds": [
         "pravo-opci-pravni-akademski-rad"
       ],
-      "documentCount": 2,
-      "cleanCount": 2,
+      "documentCount": 9,
+      "cleanCount": 9,
       "regressedChecks": []
     },
     {
@@ -166,8 +185,8 @@
       "profileIds": [
         "pravo-opci-pravni-akademski-rad"
       ],
-      "documentCount": 2,
-      "cleanCount": 2,
+      "documentCount": 9,
+      "cleanCount": 9,
       "regressedChecks": []
     },
     {
@@ -186,8 +205,8 @@
       "profileIds": [
         "zvu-zavrsni"
       ],
-      "documentCount": 2,
-      "cleanCount": 2,
+      "documentCount": 9,
+      "cleanCount": 9,
       "regressedChecks": []
     }
   ]

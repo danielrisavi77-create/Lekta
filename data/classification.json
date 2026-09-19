@@ -5,6 +5,7 @@
     { "pattern": "src/**", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "docs/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
     { "pattern": "scripts/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
+    { "pattern": "config/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Predlozak konfiguracije autonomnog kontrolera (bez tajni). Efektivna konfiguracija zivi IZVAN repozitorija (LEKTA_AUTONOMY_HOME); nista odavde ne ide u bundle." },
     { "pattern": "supabase/**", "class": "SECURITY-SENSITIVE", "bundle": "forbidden" },
     {
       "pattern": "tests/**",

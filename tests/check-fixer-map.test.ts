@@ -173,6 +173,41 @@ describe('repair-items: matchKeys moraju biti naslovi koje analiza stvarno emiti
     ).toBeLessThanOrEqual(KNOWN_UNMEASURABLE);
   });
 
+  /**
+   * SLIJEPA TOCKA OVOG GARDA, zatvorena 2026-09-09: sve tvrdnje iznad citaju `matchKeys: [...]`, pa
+   * stavka koja to polje NEMA nije ni u populaciji. Ratchet `KNOWN_UNMEASURABLE` time broji samo
+   * one koje su kljuceve barem pokusale imati.
+   *
+   * Rupa nije teoretska. Ista sesija je, "ciscenjem" pogodjenih kljuceva, htjela ta polja ukloniti
+   * s tri stavke; da je proslo, tri strukturno nemjerljive stavke ispale bi iz mjerenja, ratchet bi
+   * pao s 3 na 0 i izgledao BOLJE, a jaz izmedju ucinka i mjerenja ostao bi netaknut. Uhvatila su
+   * to dva postojeca garda (sentinel netrivijalnosti i `real-corpus` snimka), pa je zahvat vracen.
+   * Ovo je pouka pretocena u tvrdnju: izostanak polja mora se BROJATI, ne presutjeti.
+   *
+   * Izostanak sam po sebi NIJE kvar. `field-integrity-assisted` ga ima obrazlozeno: jedini kljuc
+   * koji je nosio (`Brojevi stranica`) bio je ziv ali krivi, a fixer PAGE polje kojeg nema ne moze
+   * stvoriti. Zato ratchet, a ne nula.
+   */
+  it('broj stavki BEZ ijednog `matchKeys` ne smije rasti', () => {
+    const BEZ_KLJUCEVA = 1; // `field-integrity-assisted`, obrazlozeno u `repair-items.ts`
+    const cist = SRC.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(?<!\S)\/\/[^\n]*/g, '');
+    const pocetci = [...cist.matchAll(/ruleId:\s*'/g)].map((m) => m.index ?? 0);
+    const stavke: string[] = [];
+    const bez: string[] = [];
+    pocetci.forEach((start, i) => {
+      const seg = cist.slice(start, i + 1 < pocetci.length ? pocetci[i + 1] : cist.length);
+      // Stavka popravka je objekt koji uz `ruleId` nosi i `fixerId`; ostali `ruleId` (zahtjevi,
+      // parametri) nisu stavke i ne smiju ulaziti u nazivnik.
+      if (!/fixerId:\s*'/.test(seg)) return;
+      const ime = /ruleId:\s*'((?:[^'\\]|\\.)*)'/.exec(seg)?.[1] ?? '?';
+      stavke.push(ime);
+      if (!/matchKeys:/.test(seg)) bez.push(ime);
+    });
+    // SENTINEL: prazna populacija bi dala nula bez kljuceva i savrseno zeleno.
+    expect(stavke.length, 'citac nije nasao stavke popravka').toBeGreaterThan(20);
+    expect(bez.length, `stavke bez ijednog matchKeya: ${bez.join(', ')}`).toBeLessThanOrEqual(BEZ_KLJUCEVA);
+  });
+
   /** Poimenicni popis neregistriranih kljuceva; svaki novi mora biti svjesna odluka. */
   it('popis neregistriranih kljuceva ne smije rasti', () => {
     const unregistered = [

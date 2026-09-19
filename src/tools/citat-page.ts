@@ -156,11 +156,11 @@ function populateFaculties() {
 }
 
 // Odabrani fakultet ide na glavni analizator kroz ?unit= (isti catalog unit ID prostor kao
-// ZAGREB_CATALOG); index.html#analyzer to cita preko applyUnitFromUrl (src/ui/app.ts) i
+// ZAGREB_CATALOG); `/` to cita preko applyUnitFromUrl (src/ui/app.ts) i
 // unaprijed postavi isti fakultet, umjesto da korisnik ponovno trazi ustanovu od nule.
 function syncCtaAnalyzerLink() {
   const unitId = ($('#f-faculty')?.value || '').trim();
-  const href = unitId ? `index.html?unit=${encodeURIComponent(unitId)}#analyzer` : 'index.html#analyzer';
+  const href = unitId ? `/?unit=${encodeURIComponent(unitId)}` : '/';
   $('#cta-analyzer')?.setAttribute('href', href);
   $('#c-success-cta-link')?.setAttribute('href', href);
 }

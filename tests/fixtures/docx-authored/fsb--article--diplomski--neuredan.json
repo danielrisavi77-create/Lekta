@@ -1,0 +1,60 @@
+{
+  "profileId": "fsb-opci-akademski-rad",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "fsb--article--diplomski",
+    "unitId": "fsb",
+    "workType": "article",
+    "level": "diplomski",
+    "program": "Diplomski studiji Fakulteta strojarstva i brodogradnje",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": "fsb-graduate"
+  },
+  "prose": {
+    "id": "fsb--article--diplomski",
+    "words": 4994,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, ne studentski rad i ne za predaju. Autor i mentor su izmišljena imena, tema je stvarna a obrada je autorska za potrebe testiranja, i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje niti donosi vlastiti empirijski podatak. Pripisivanja poznatim radovima (Paris i Erdogan, Jardine i suradnici, Si i suradnici, Lee i suradnici, Heng i suradnici, Sikorska i suradnici, Randall, Saxena i suradnici, Zio, ISO 13381-1) drže se općepoznatih pojmovnih doprinosa tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite pravilo 28), pa se citira djelo u cjelini. Kovačević (2026), Šimunić i Barić (2025), Grgić (2024) i Novosel (2023) su izmišljene jedinice, namjerno, da provjera postojanja može vratiti i not-found. ALAT: katedra-lite je STVARNO vodio rad, u autopilot načinu. Izvršeno: 0.0 dohvat paketa (lokalni katedra-pkg 1.9.22, 22fba58); 0.5 profile_resolver.py (PAO uz izlazni kod 2, jer Katedrin registar rutira samo efzg i fpzg, pa je FSB izvan njega); stanje_init.py uz --fakultet-izvan-registryja i imenovano ograničenje; razina.py --postavi diplomski --citatelj mentor; perspective_map.py init + tri perspektive + validate (ready: true, tri različite, bez blokada); plan_state.py init + import tablice + plan_gate; plan_state.py odobri --actor full-auto (PLAN GATE PASS, sha256:242c714dd918). OBLIK dokumenta NE dolazi iz Katedre nego iz Lektina profila fsb-opci-akademski-rad; katedra-lite je dao isključivo prozu.",
+      "tool": "katedra-lite 1.9.22 (autopilot)",
+      "date": "2026-09-07"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row fsb--article--diplomski --messy",
+    "generatedAt": "2026-09-07T18:37:33.016Z"
+  },
+  "mutations": {
+    "tabInHeading": 13,
+    "emptyParagraphBurst": 30,
+    "manualToc": 1,
+    "dotLeaderTabs": 1,
+    "csOnlyFonts": 4,
+    "biblioAsHeading": 2,
+    "commentsPart": 2,
+    "allLevelThree": 19
+  },
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "paket/komentari",
+      "stil/tijelo-nije-normal",
+      "naslov/tab-u-naslovu",
+      "naslov/samo-razina-3",
+      "tab/tocke-vodic",
+      "font/samo-cs-eastAsia",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice",
+      "opseg/prazni-preko-20"
+    ]
+  },
+  "toolLimitations": []
+}

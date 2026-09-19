@@ -20,7 +20,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { enumerateRows, composedRulesFor, type CorpusRow } from './rows.mts';
-import { validateProseBody, type ProseBody } from '../../src/corpus/prose-schema';
+import { validateProseBody, validateProseAgainstRow, type ProseBody } from '../../src/corpus/prose-schema';
 import { titleLinesFor, emitSidecar } from './emit.mts';
 
 const ROOT = resolve(join(dirname(fileURLToPath(import.meta.url)), '..', '..'));
@@ -71,7 +71,19 @@ async function generirajRedak(row: CorpusRow, outDir: string, wordPath: string):
     return;
   }
   const body = JSON.parse(readFileSync(prozaPath, 'utf8')) as ProseBody;
-  const nalazi = validateProseBody(body);
+  // Tijelo se provjerava PREMA SEBI i PREMA RETKU: do 2026-09-08 je proza mogla tvrditi bilo koji
+  // `unitId`, `workType`, `level` ili `family` a da to nista ne prijavi (mjereno: jedno od devet
+  // tijela se razilazilo dva dana).
+  const nalazi = [
+    ...validateProseBody(body),
+    ...validateProseAgainstRow(body, {
+      id: row.id,
+      unitId: row.unitId,
+      workType: row.workType,
+      level: row.level,
+      family: row.family,
+    }),
+  ];
   if (nalazi.length) {
     console.error(`  ${row.id}: proza ima ${nalazi.length} nalaz(a):`);
     for (const n of nalazi) console.error(`      ${n}`);

@@ -151,3 +151,73 @@ describe('AUD-14: veliko-pisan pocetak recenice ne guta susjednu narativnu citat
     expect(narrative.length).toBe(0);
   });
 });
+
+/**
+ * NASLA SINTETSKA FIXTURA `fpzg--project--diplomski` (2026-09-08).
+ *
+ * `extractCitations` NIJE prepoznavao pripovjednu citatnicu s lokatorom, dakle
+ * `Kumar (2022, str. 1470)`, iako je to standardan APA oblik i iako je broj stranice OBVEZAN uz
+ * doslovan navod. Dvije grane promase istovremeno: parentetska nadje godinu ali unutar zagrade
+ * nema autora (prefiks je prazan), a pripovjedna trazi da `)` dolazi ODMAH iza godine.
+ *
+ * Posljedica je bila bodovana, ne kozmeticka: `reference.uncited` (7 bodova) prijavljuje ispravno
+ * citiran izvor kao NECITIRAN, a `citation.recognized` (3 boda) podbrojava. Izmjereno na fixturi:
+ * 11 od 16 izvora javljeno kao necitirano, od cega je jedan bio bas ovaj oblik.
+ *
+ * Kontrole ispod iskljucuju svaki drugi uzrok (sufiks godine, autor, oblik zagrade) i drze granicu:
+ * lokator se prihvaca SAMO kao `str./s./p./pp.` ili kao dvotocje s brojem. Goli zarez s brojem
+ * (`(2022, 1470)`) NAMJERNO ostaje neprepoznat, jer bi `(2023, 45 posto)` tada postao citatnica.
+ */
+describe('AUD-16: pripovjedna citatnica s lokatorom', () => {
+  const cite = (text: string) => extractCitations([{ text }]);
+
+  it('"Kumar (2022, str. 1470)" prepoznaje Kumar 2022', () => {
+    const found = cite('Kumar (2022, str. 1470) opisuje metodu provjere.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2022' && /Kumar/.test(c.author))).toBe(true);
+  });
+
+  it('sufiks godine prezivljava lokator: "Marić (2023a, str. 47)" daje 2023a', () => {
+    const found = cite('Marić (2023a, str. 47) tvrdi da oznaka jamči previše.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2023a' && /Marić/.test(c.author))).toBe(true);
+  });
+
+  it('dvotocje kao lokator: "Horvat (2020: 15)" daje Horvat 2020', () => {
+    const found = cite('Horvat (2020: 15) navodi suprotno.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2020' && /Horvat/.test(c.author))).toBe(true);
+  });
+
+  it('raspon stranica: "Kumar (2022, str. 1470-1472)" i dalje daje Kumar 2022', () => {
+    const found = cite('Kumar (2022, str. 1470-1472) razraduje postupak.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2022' && /Kumar/.test(c.author))).toBe(true);
+  });
+
+  it('engleski lokator: "Graves (2016, pp. 12-14)" daje Graves 2016', () => {
+    const found = cite('Graves (2016, pp. 12-14) describes the practice.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2016' && /Graves/.test(c.author))).toBe(true);
+  });
+
+  it('kontrola: ista citatnica BEZ lokatora i dalje radi', () => {
+    const found = cite('Kumar (2022) opisuje metodu provjere.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2022' && /Kumar/.test(c.author))).toBe(true);
+  });
+
+  it('kontrola: isti lokator u ZAGRADNOM obliku i dalje radi', () => {
+    const found = cite('Isti zahtjev stoji drugdje (Marić, 2023a, str. 47).');
+    expect(found.some((c: any) => c.year === '2023a' && /Marić/.test(c.author))).toBe(true);
+  });
+
+  it('negativna kontrola: "(2019 - 2024)" iza velike rijeci nije citatnica', () => {
+    const found = cite('Razdoblje (2019 - 2024) obuhvaća dva mandata.');
+    expect(found.filter((c: any) => c.kind === 'narrative')).toHaveLength(0);
+  });
+
+  it('negativna kontrola: goli zarez s brojem "(2023, 45 posto)" nije citatnica', () => {
+    const found = cite('Ispitanici (2023, 45 posto) nisu odgovorili.');
+    expect(found.filter((c: any) => c.kind === 'narrative')).toHaveLength(0);
+  });
+
+  it('negativna kontrola: proza u zagradi iza godine ne prolazi kao lokator', () => {
+    const found = cite('Godina (2020 je bila prijelomna) za redakciju.');
+    expect(found.filter((c: any) => c.kind === 'narrative')).toHaveLength(0);
+  });
+});

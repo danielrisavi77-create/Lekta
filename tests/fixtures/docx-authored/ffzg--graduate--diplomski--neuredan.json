@@ -1,0 +1,63 @@
+{
+  "profileId": null,
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "ffzg--graduate--diplomski",
+    "unitId": "ffzg",
+    "workType": "graduate",
+    "level": "diplomski",
+    "program": "Diplomski studiji Filozofskog fakulteta",
+    "variant": null,
+    "fallbackFamily": "social",
+    "titlePageTemplateId": "ffzg-graduate"
+  },
+  "prose": {
+    "id": "ffzg--graduate--diplomski",
+    "words": 10767,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, nije studentski rad i ne ide na predaju. Autor i mentor su izmišljena imena, tema je stvarna a obrada je autorska za potrebe testiranja, i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje niti donosi vlastiti empirijski podatak. Rad je pojmovno-raspravni pregled, bez poglavlja s rezultatima, jer bi nalazi iz izmišljene građe bili neistiniti i kad je rad označen kao testni. Pripisivanja poznatim djelima (Iser, Booth, Fish, Jauss, Eco, Genette, Chatman, Culler, Prince, Rabinowitz, Schmid) drže se općepoznatih pojmovnih doprinosa tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite pravilo 28). Pet jedinica s DOI-jem POTVRĐENO je kroz CrossRef API uz HTTP 200 i prepisano iz odgovora (Iser 1978; Iser 1980; Eco 1979; Fish 1982; Scholes i Iser 1975). Boothov prilog u Companionu ima DOI, ali CrossRef za njega ne vraća godinu, pa je Booth naveden kao knjiga bez DOI-ja umjesto da se godina izmisli. Petrović (2024), Lukić i Barić (2023) te Horvat (2021) izmišljene su jedinice, namjerno, da provjera postojanja može vratiti i not-found. ALAT: katedra-lite je STVARNO vodio rad, u autopilot načinu. Izvršeno: profile_resolver.py (PAO uz poruku da registar rutira samo efzg i fpzg); stanje_init.py uz --fakultet-izvan-registryja ffzg i dva imenovana ograničenja; razina.py --postavi diplomski --citatelj mentor; perspective_map.py init + tri perspektive + validate (ready: true, tri različite); plan_state.py init + set teza + import + odobri --actor full-auto. PLAN GATE je iz prvog pokušaja PAO, jer potpoglavlje 1.3 nije imalo planirane izvore; nakon dopune prošao je (sha256:2d295cb42f73). OBLIK dokumenta dolazi iz Lektina fallbacka za obitelj social, ne iz Katedre.",
+      "tool": "katedra-lite 1.9.22 (autopilot)",
+      "date": "2026-09-08"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row ffzg--graduate--diplomski --messy",
+    "generatedAt": "2026-09-08T11:24:05.592Z"
+  },
+  "mutations": {
+    "tabInHeading": 24,
+    "emptyParagraphBurst": 30,
+    "manualToc": 1,
+    "dotLeaderTabs": 1,
+    "csOnlyFonts": 4,
+    "biblioAsHeading": 2,
+    "commentsPart": 2,
+    "allLevelThree": 30
+  },
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "paket/komentari",
+      "stil/tijelo-nije-normal",
+      "naslov/tab-u-naslovu",
+      "naslov/samo-razina-3",
+      "tab/tocke-vodic",
+      "font/samo-cs-eastAsia",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice",
+      "opseg/prazni-preko-20"
+    ]
+  },
+  "toolLimitations": [
+    "toc: libreoffice nije proizveo TOC polje (0 instrText/fldChar/fldSimple); os sadrzaja je NEPOKRIVENA ovim alatom"
+  ]
+}

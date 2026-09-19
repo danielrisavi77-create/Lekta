@@ -1,12 +1,14 @@
 import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
+import { potvrdiProfil } from './confirm-profile';
+import { cekajApp, cekajKorak } from './app-ready';
 
 // FER diplomski, prazni odlomci: profil ima wired repair-map fixere (font/margine/prored/format
 // papira) + universal fixeri (toc-field/bibliography-repair/section-surgery/consistency-engine)
 // koji su gotovo univerzalni za stvarne teze - dobar reprezentativan slucaj za "predugacak panel".
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
-async function analyzeAndOpenSubmissionTab(page: Page) {
+async function analyzeAndEnterRepairPhase(page: Page) {
   // NEMA tvrdog viewporta: velicinu daje projekt (Desktop Chrome ili Pixel 5). Dok je ovdje
   // stajalo 1440x1000, mobilni projekt je izvodio ISTI desktop scenarij drugi put, pa popravak,
   // dakle placeni dio proizvoda, nije imao nijednu mobilnu provjeru (UX-02).
@@ -53,6 +55,7 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     await odbij.click();
     await expect(page.locator('#consentBanner')).toBeHidden();
   }
+  await cekajApp(page);
   // Naslovnica obrasca je uklonjena 2026-09-07: na `/rad/` korisnik dolazi s dokumentom, pa je
   // carobnjak vidljiv odmah. Klik na `#uploadCtaBtn` ovdje vise nema metu; obrambeni oblik
   // (`if visible`) ne bi pao nego tiho postao no-op, sto je gore od pada.
@@ -60,28 +63,31 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   // Tok se razlikuje po sirini i to NIJE detalj testa: na uskom zaslonu carobnjak staje na koraku
   // 1 uz sticky CTA "Nastavi na profil", dok desktop odmah skoci na korak 2. Zato se ovdje ne
   // pretpostavlja korak nego se procita.
-  const wizard = page.locator('#wizardView');
-  if ((await wizard.getAttribute('data-step')) === '1') {
-    await page.locator('#stepToProfile').click();
-  }
-  await expect(wizard).toHaveAttribute('data-step', '2');
+  // Vidi `app-ready.ts`: korak 2 dolazi sam, a uvjetni klik je bio utrka nad trenutacnim
+  // ocitanjem, koja je znala pogoditi gumb sakriven u medjuvremenu.
+  await cekajKorak(page, '2');
   // KORACI 2 I 3 SU SPOJENI 2026-09-07: potvrda profila JEST pokretanje provjere, pa
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
   await expect(page.locator('#analyzeBtn')).toBeEnabled();
   await page.locator('#analyzeBtn').click();
-  const confirm = page.locator('[data-confirm-profile]');
-  if (await confirm.isVisible().catch(() => false)) await confirm.click();
+  await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
-  // Redizajn "Results Cockpit" seli SVE iza `#resultCockpit` u sklopljeni blok "Napredna
-  // provjera" (`ensureResultsCockpitAdvancedShell`), pa su ondje i kartice i stari tabovi.
-  // Otvara se onako kako to radi korisnik; bez toga `#tabbtn-submission` ima visinu 0 i klik
-  // ceka do timeouta, sto izgleda kao spor stroj a nije.
-  await page.locator('#resultCockpit [data-cockpit-action="open-findings"]').click();
-  // `#resultDetailsToggle` se NE pritisce: "Pregledaj nalaze" vec poziva `revealResultDetails()`,
-  // pa bi ga ovaj klik ZATVORIO (izmjereno na desktop-flow: tab s 45 px padne na 0 px).
-  await expect(page.locator('#tabbtn-submission')).toBeVisible();
-  await page.locator('#tabbtn-submission').click();
+  // DO PANELA SE OD 2026-09-12 DOLAZI ULASKOM U FAZU POPRAVKA (korak B3).
+  //
+  // Prije toga je panel fizicki zivio u kartici "Spremnost za predaju", pa je put do njega isao
+  // kroz otvaranje naprednog bloka i prebacivanje kartice. Ta mehanika vise ne postoji: mount je
+  // staticki element vlastite povrsine (`#repairView`). Tvrdnje ovog speca se NE mijenjaju, sve
+  // cetiri i dalje gledaju isti panel; mijenja se samo put kojim se do njega dolazi, i sada je to
+  // isti put kojim ide korisnik.
+  const safe = page.locator('#resultCockpit [data-cockpit-action="repair-safe"]');
+  const simulate = page.locator('#resultCockpit [data-cockpit-action="simulate-repair"]');
+  const safeEnabled = (await safe.count()) > 0 && (await safe.first().isEnabled());
+  const simulateEnabled = (await simulate.count()) > 0 && (await simulate.first().isEnabled());
+  // Tihi `if` bi ovdje nedostatak gumba pretvorio u prolaz nad praznim panelom.
+  expect(safeEnabled || simulateEnabled, 'ni repair-safe ni simulate-repair nisu omoguceni').toBe(true);
+  await (safeEnabled ? safe : simulate).first().click();
+  await expect(page.locator('#repairView'), 'CTA nije otvorio fazu popravka').toBeVisible();
 }
 
 /**
@@ -110,7 +116,7 @@ test.beforeAll(async ({ browser }) => {
   // tvrdnja se ne mijenja i nijedan test ne dobiva vise vremena.
   test.setTimeout(300_000);
   page = await browser.newPage();
-  await analyzeAndOpenSubmissionTab(page);
+  await analyzeAndEnterRepairPhase(page);
 });
 
 test.afterAll(async () => {
@@ -170,6 +176,27 @@ test('repair panel: Tier A "Uredi..." zamijeni ledger jednim fokusiranim modalom
   await itemModal.locator('.lekta-repair-ledger-back').click();
   await expect(itemModal).toHaveCount(0);
   await expect(ledger).toBeVisible();
+});
+
+test('repair panel: promjena stanja privatnosti stoji PRIJE gumba za slanje', async () => {
+  /**
+   * Osma tocka: "Za ovaj korak dokument ce se sigurno poslati Lekti. Original se ne mijenja.
+   * Ne strasno. Ne legalisticki. Ali potpuno jasno."
+   *
+   * REDOSLIJED JE CIJELI SADRZAJ TVRDNJE. Ista recenica ispod gumba je objasnjenje onoga sto se vec
+   * dogodilo, a iznad njega je odluka. Zato se mjeri POLOZAJ u DOM-u, ne samo postojanje.
+   */
+  const blok = page.locator('#repairPanelMount [data-privacy-prijelaz]');
+  await expect(blok).toBeVisible();
+  await expect(blok).toContainText('Original na tvom uređaju se ne mijenja');
+
+  const prijeGumba = await page.evaluate(() => {
+    const b = document.querySelector('#repairPanelMount [data-privacy-prijelaz]');
+    const g = document.querySelector('#repairPanelMount .lekta-repair-panel__download');
+    if (!b || !g) return false;
+    return (b.compareDocumentPosition(g) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+  });
+  expect(prijeGumba, 'obavijest o slanju mora stajati iznad gumba koji salje').toBe(true);
 });
 
 test('repair panel: konsenzus checkbox daje jasnu povratnu informaciju umjesto tihog no-opa', async () => {

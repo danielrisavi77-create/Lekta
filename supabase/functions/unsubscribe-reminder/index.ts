@@ -20,6 +20,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { verifyUnsubscribeToken } from '../_shared/reminder-token.ts';
+import { readFormDataBounded } from '../_shared/read-body.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -107,7 +108,11 @@ Deno.serve(async (req: Request) => {
   if (req.method === 'GET') {
     token = new URL(req.url).searchParams.get('token') ?? '';
   } else {
-    const body = await req.formData();
+    // Obrazac nosi samo token i radnju, pa je 16 KB red velicine iznad stvarnog; cita se omedjeno
+    // (vanjski audit 2026-09-08, nalaz 5: neomedjen multipart ni na malom obrascu nema granicu).
+    const bounded = await readFormDataBounded(req, 16 * 1024);
+    if (!bounded.ok) return page('<p>Zahtjev nije valjan.</p>', bounded.reason === 'too_large' ? 413 : 400);
+    const body = bounded.form;
     token = String(body.get('token') ?? '');
     action = body.get('action') === 'resubscribe' ? 'resubscribe' : 'unsubscribe';
   }

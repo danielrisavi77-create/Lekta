@@ -56,7 +56,7 @@ Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u i
 
 - Fan-out agenata je dopusten SAMO za citanje. Paralelno PISANJE u isto stablo nije dopusteno.
 - NE postoji pravilo koje na svaki prompt trosi jos agenata: vise prolaza ISTIM alatom nije
-  provjera nego slaganje. Drugo misljenje mora doci od DRUGOG alata (Codex), a netrivijalna
+  provjera nego slaganje. Drugo misljenje mora doci od DRUGOG alata (Codex ili Claude Code, ovisno o implementatoru), a netrivijalna
   promjena u src/repair, src/citations i src/docx trazi adversarijalni prolaz prije commita.
 - Dodatni pisci mnoze klasu kvara koja je 2026-08-30 kostala 24 h: commitan artefakt (golden
   snimka) opisivao je ponasanje ciji izvor u repou nikad nije bio commitan.
@@ -426,3 +426,11 @@ a mjerenje je svejedno ispisalo broj. `JSON.parse` nad `git show` dao je tocno: 
 synthetic, 7 dopustenih na sve tri tocke. Razmaci, redoslijed kljuceva i zavrseci redaka NISU ugovor.
 Provjera koja djelomicno pukne pa vrati broj gora je od one koja padne. Uhvaceno je nepoklapanjem
 dviju vlastitih brojki, ne sumnjom u metodu.
+
+## Koordinacija razvoja kroz modele
+
+Astra ili Fable vodi zadatak i audit; Opus, Sonnet ili Sol implementira kod. Jedan aktivni
+koordinator i jedan pisac po zadatku. Ugovor i lokalne naredbe su u `docs/agents/README.md`,
+a zajednicki red zadataka u `docs/agents/tasks.json`. Pregled dolazi od drugog providera:
+Astra pregledava Claude implementacije, Fable pregledava Sol. Modelski rezultat nije dokaz
+prolaza. Sva postojeca pravila provjera, izolacije i commitanja ostaju obavezna.

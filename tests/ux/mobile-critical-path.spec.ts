@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
+import { potvrdiProfil } from './confirm-profile';
+import { cekajApp, cekajKorak } from './app-ready';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -16,7 +18,15 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
  * ovdje pada.
  */
 test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page }) => {
+  /**
+   * ROK JE VECI OD ZADANIH 120 s, jer ovaj spec vrti PUNU analizu stvarnog .docx-a, a
+   * `mobile-webkit` je za to najsporiji motor u matrici. Susjedni `parser-parity` to vec biljezi
+   * izmjereno: Chromium dvije analize za ~3 min, WebKit na opterecenom stroju ne stigne ni u 10.
+   * Uz 120 s je ovo padalo kao "rezultat se nije pojavio", sto se cita kao kvar analize a nije.
+   */
+  test.setTimeout(Number(process.env.LEKTA_MOBILE_TIMEOUT_MS ?? 300_000));
   await page.goto('/rad/');
+  await cekajApp(page);
   await page.locator('#fileInput').setInputFiles(fixture);
   // Korak 2 dolazi SAM, bez klika na #stepToProfile (isto kao desktop). Popravljeno 2026-09-08:
   // `usesCompactUploadFlow` je bio vestigalni ostatak stare mobilne staze (Jul 25) koji je gasio
@@ -24,7 +34,7 @@ test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page })
   // mobitelu vec dobila raditi isti cilj "nula do jedan tap" kao desktop; #stepToProfile je uz
   // taj popravak i skriven na koraku 2 (`.lek-stepnav-1{display:none}`), pa bi klik na njega ovdje
   // sada samo timeoutao na nevidljivom gumbu.
-  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
+  await cekajKorak(page, '2');
 
   // Banner mora biti gore: bez njega ovaj test ne bi cuvao nista.
   await expect(page.locator('#consentBanner')).toBeVisible();
@@ -33,16 +43,19 @@ test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page })
   // `#stepToAnalyze` ("Nastavi na provjeru") vise ne postoji kao treci gumb za istu radnju
   // i `data-step` nikad ne postane 3. `#analyzeBtn` je vidljiv vec na koraku 2.
 
-  // POTVRDA JE PRIMARNA AKCIJA, pa se na nju ceka umjesto da se pogadja. Prijasnji oblik
-  // (`#analyzeBtn` pa `if (await confirm.isVisible())`) je bio utrka: `isVisible()` NE ceka,
-  // a kartica se crta u `updateProfile`, koji ceka pravila profila preko mreze. Na mobitelu je
-  // ocitanje stizalo prije kartice, potvrda se tiho preskakala, `runAnalysis` je izlazio na
-  // vratima potvrde, i test je padao na `#resultView` koji nikad ne postane vidljiv.
-  const confirm = page.locator('[data-confirm-profile]');
-  await expect(confirm).toBeVisible({ timeout: 30_000 });
-  await confirm.click();
+  await potvrdiProfil(page);
 
-  await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
-  await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
+  // ANALIZA MORA PRVO POCETI, i tek onda zavrsiti. Ovdje je do 2026-09-08 stajala samo tvrdnja
+  // da je `#progressView` SKRIVEN, a on je skriven i PRIJE nego analiza krene: prolazila je ne
+  // dokazujuci nista, pa je kvar uvijek stizao tek na sljedecem retku, kao "`#resultView` se nije
+  // pojavio". To je slalo dijagnozu u analizu, a stvarni kvar je bio u POKRETANJU.
+  //
+  // Dokaz pokretanja je `#wizardView`, ne `#progressView`, i razlika nije sitnicava: progres je
+  // vidljiv samo DOK analiza traje, pa bi tvrdnja o njegovoj vidljivosti bila nova utrka (brza
+  // analiza zavrsi prije prvog ocitanja). Carobnjak se sakrije na pocetku i OSTAJE skriven i na
+  // rezultatu, dakle signal se ZAKLJUCAVA i ne moze se propustiti.
+  await expect(page.locator('#wizardView')).toBeHidden({ timeout: 30_000 });
+  await expect(page.locator('#progressView')).toBeHidden({ timeout: 240_000 });
+  await expect(page.locator('#resultView')).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('#scoreLabel')).toHaveText('Automatska tehnička ocjena');
 });

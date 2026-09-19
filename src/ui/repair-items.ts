@@ -369,7 +369,7 @@ export function consistencyRepairableItem(result: any): RepairableItem[] {
     });
     return { version: 1, groups: groupParams, replacements };
   };
-  return [{ ruleId: 'consistency-engine-assisted', fixerId: 'consistency-fixer', label: 'Consistency Engine', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi odabrane kanonske varijante. Lekta mijenja samo potvrđene jednostavne tekstualne raspone, a original ostaje nepromijenjen.', consistencyForm: form, matchKeys: ['Dosljednost', 'Consistency Engine'] }];
+  return [{ ruleId: 'consistency-engine-assisted', fixerId: 'consistency-fixer', label: 'Ujednačavanje varijanti istog pojma', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi odabrane kanonske varijante. Lekta mijenja samo potvrđene jednostavne tekstualne raspone, a original ostaje nepromijenjen.', consistencyForm: form, matchKeys: ['Dosljednost', 'Consistency Engine'] }];
 }
 
 export function crossFileSubmissionRepairableItem(result: any, _profile: any): RepairableItem[] {
@@ -409,7 +409,7 @@ export function crossFileSubmissionRepairableItem(result: any, _profile: any): R
   return [{
     ruleId: 'cross-file-submission-consistency-assisted',
     fixerId: 'submission-metadata-fixer',
-    label: 'Cross-file Submission Consistency',
+    label: 'Metapodaci predajnog paketa: naslov i autor',
     params: form.buildParams(form),
     violated: issues.some((issue: any) => issue.status === 'mismatch' || issue.status === 'ambiguous'),
     requiresConfirmation: true,
@@ -693,7 +693,8 @@ export function headingStructureRepairableItem(result: any, profile: any): Repai
     fixerId: 'heading-style-fixer',
     label: 'Ručno oblikovani naslovi: primijeni Heading stilove',
     params: { targets, options: { pageBreakLevels, ...(numbering ? { numbering } : {}) } },
-    violated: true,
+    // Prazan `targets` je slao zahtjev bez mete (`invalid-params`); tests/repair-net.test.ts.
+    violated: targets.length > 0,
     matchKeys: ['Uporaba Word stilova naslova', 'Hijerarhija naslova'],
     headingCandidates: candidates,
     headingNumberingPlan: numberingPlan,
@@ -998,7 +999,7 @@ export function finalDocumentInspectorRepairableItem(result: any): RepairableIte
   return [{
     ruleId: 'final-document-inspector-assisted',
     fixerId: 'final-document-inspector-fixer',
-    label: 'Final Document Inspector',
+    label: 'Tragovi uređivanja: revizije, komentari i skriveni tekst',
     params: form.buildParams(form),
     violated: true,
     requiresConfirmation: true,
@@ -1012,7 +1013,7 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
   const integrity = result?.details?.fieldIntegrity;
   if (!integrity || !Array.isArray(integrity.fields)) return [];
   const fields = integrity.fields.filter((field: any) => field && field.kind !== 'unknown' && field.status !== 'broken' && field.status !== 'error-reference-not-found').map((field: any) => ({
-    id: String(field.id), part: String(field.part), kind: String(field.kind), instruction: String(field.instruction || ''), status: String(field.status), confidence: String(field.confidence || 'medium'), anchorFingerprint: String(field.anchorFingerprint), selected: field.status !== 'unsupported', evidence: Array.isArray(field.evidence) ? field.evidence.map(String) : [],
+    id: String(field.id), part: String(field.part), kind: String(field.kind), instruction: String(field.instruction || ''), status: String(field.status), confidence: String(field.confidence || 'medium'), anchorFingerprint: String(field.anchorFingerprint), action: field.kind === 'toc' && field.status === 'needs-render' && field.cachedResult === '' && /\bPAGEREF\b/i.test(String(field.instruction || '')) ? 'remove-orphan-control' as const : 'mark-dirty' as const, selected: field.status !== 'unsupported', evidence: Array.isArray(field.evidence) ? field.evidence.map(String) : [],
   }));
   const manualTocCandidates = (Array.isArray(integrity.manualTocCandidates) ? integrity.manualTocCandidates : []).map((candidate: any) => ({
     startParagraphIndex: Number(candidate.startParagraphIndex), endParagraphIndex: Number(candidate.endParagraphIndex), rawText: String(candidate.rawText || ''), anchorFingerprint: String(candidate.anchorFingerprint), selected: false,
@@ -1020,12 +1021,15 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
   const bookmarks = (Array.isArray(integrity.bookmarks) ? integrity.bookmarks : []).map((bookmark: any) => ({ name: String(bookmark.name), part: String(bookmark.part), status: String(bookmark.status), ...(bookmark.startFingerprint ? { targetFingerprint: String(bookmark.startFingerprint) } : {}), selected: false }));
   if (!fields.length && !manualTocCandidates.length && !bookmarks.length) return [];
   const form: import('./repair-panel').FieldIntegrityFormDefinition = { fields, manualTocCandidates, bookmarks, summary: `Pronađeno je ${integrity.summary?.totalFields || fields.length} Word polja. ${integrity.summary?.staleFields || 0} ima zastarjeli rezultat, ${integrity.summary?.brokenFields || 0} ima prekinut cilj, a ${manualTocCandidates.length} ručnih sadržaja može se zasebno zamijeniti živim TOC poljem.`, buildParams: () => ({}) };
-  form.buildParams = (current) => ({
+  form.buildParams = (current) => {
+    const selectedFields = current.fields.filter((field) => field.selected);
+    const selectedManualToc = current.manualTocCandidates.filter((candidate) => candidate.selected);
+    return ({
     version: 1,
-    fields: current.fields.filter((field) => field.selected).map((field) => ({ id: field.id, part: field.part, anchorFingerprint: field.anchorFingerprint, action: 'mark-dirty' as const, confirmed: true as const })),
-    settings: { updateFieldsOnOpen: true as const },
+    fields: selectedFields.map((field) => ({ id: field.id, part: field.part, anchorFingerprint: field.anchorFingerprint, action: field.action, confirmed: true as const })),
+    ...(selectedFields.some((field) => field.action === 'mark-dirty') || selectedManualToc.length ? { settings: { updateFieldsOnOpen: true as const } } : {}),
     ...(current.manualTocCandidates.some((candidate) => candidate.selected) ? { manualToc: current.manualTocCandidates.filter((candidate) => candidate.selected).map((candidate) => ({ startParagraphIndex: candidate.startParagraphIndex, endParagraphIndex: candidate.endParagraphIndex, anchorFingerprint: candidate.anchorFingerprint, action: 'replace-with-live-toc' as const, confirmed: true as const })) } : {}),
-  });
+  }); };
   /**
    * BEZ `matchKeys`, i to je nalaz a ne propust.
    *
@@ -1045,7 +1049,22 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
    * `final-document-inspector-fixer`, koji `matchKeys` uopce nema: ucinak postoji, ali ga nijedna
    * nasa provjera ne mjeri, pa se ta sutnja imenuje umjesto da se pokrije pogodjenim kljucem.
    */
-  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Field Integrity', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form }];
+  const removalOnly = form.fields.some((field) => field.selected)
+    && form.fields.filter((field) => field.selected).every((field) => field.action === 'remove-orphan-control')
+    && !form.manualTocCandidates.some((candidate) => candidate.selected)
+    && !form.bookmarks.some((bookmark) => bookmark.selected);
+  return [{
+    ruleId: 'field-integrity-assisted',
+    fixerId: 'field-integrity-fixer',
+    label: removalOnly ? 'Word polja i sidra: uklanjanje nevaljane skrivene kontrole' : 'Word polja i sidra: osvježavanje pri otvaranju',
+    params: form.buildParams(form),
+    violated: true,
+    requiresConfirmation: true,
+    confirmationText: removalOnly
+      ? 'Odobravam da se nevaljana skrivena kontrola Word polja ukloni iz nove popravljene kopije. Originalni dokument i vidljivi tekst ostaju nepromijenjeni.'
+      : 'Odobravam izmijeniti strukturu Word polja u novoj popravljenoj kopiji. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.',
+    fieldIntegrityForm: form,
+  }];
 }
 
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -1136,7 +1155,7 @@ export function sectionSurgeryRepairableItem(result: any, profile: any): Repaira
   if (!operationCount) return [];
   const form: SectionSurgeryFormDefinition = { sections: sectionForms, summary: `Pronađeno je ${sectionForms.length} Word sekcija i ${operationCount} profilnih operacija. Sigurne geometrijske i numeracijske promjene su predodabrane, a prekid veza zaglavlja/podnožja traži zasebnu potvrdu.`, buildParams: () => ({}) };
   form.buildParams = (current) => ({ version: 1, operations: current.sections.flatMap((section) => section.operations.filter((operation) => operation.selected && !operation.disabled).map((operation) => operation.operation)) });
-  return [{ ruleId: 'section-surgery-assisted', fixerId: 'section-surgery-fixer', label: 'Section Surgery Engine', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi promjene sekcija. Lekta može promijeniti margine, orijentaciju, numeriranje i nasljeđivanje zaglavlja/podnožja, ali ne mijenja tekst rada. Original ostaje nepromijenjen.', sectionSurgeryForm: form, matchKeys: ['Margine dokumenta'] }];
+  return [{ ruleId: 'section-surgery-assisted', fixerId: 'section-surgery-fixer', label: 'Sekcije: margine, orijentacija i numeracija', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi promjene sekcija. Lekta može promijeniti margine, orijentaciju, numeriranje i nasljeđivanje zaglavlja/podnožja, ali ne mijenja tekst rada. Original ostaje nepromijenjen.', sectionSurgeryForm: form, matchKeys: ['Margine dokumenta'] }];
 }
 
 export function legalFootnoteRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -1168,7 +1187,7 @@ export function legalFootnoteRepairableItem(result: any, profile: any): Repairab
   const hasActions = candidates.some((candidate: any) => candidate.operations.length) || markers.length || links.length;
   if (!hasActions) return [];
   return [{
-    ruleId: 'legal-footnote-repair-assisted', fixerId: 'legal-footnote-repair-fixer', label: 'Advanced Legal Footnote Repair', params: form.buildParams(form), violated: true, requiresConfirmation: true,
+    ruleId: 'legal-footnote-repair-assisted', fixerId: 'legal-footnote-repair-fixer', label: 'Fusnote: ručne oznake u prave Word fusnote', params: form.buildParams(form), violated: true, requiresConfirmation: true,
     confirmationText: 'Potvrdi pojedinačne promjene citatnog teksta. Ručni markeri pretvaraju se u stvarne Word fusnote samo uz sigurno postojeće sidro.', legalFootnoteRepairForm: form,
     matchKeys: ['Pravne fusnote', 'op. cit. → prvo navođenje', 'Slijed Ibid.', 'Propisi i uvedene kratice', 'Fusnote ↔ bibliografija'],
   }];
@@ -1268,7 +1287,7 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
   return [{
     ruleId: 'bibliography-repair-assisted',
     fixerId: 'bibliography-repair-fixer',
-    label: 'Bibliography Repair Engine',
+    label: 'Popis literature: sortiranje, ujednačavanje i duplikati',
     params: form.buildParams(form),
     violated: true,
     requiresConfirmation: true,

@@ -67,6 +67,8 @@ const DOMENA = {
   'record-completion-check': ['integracija', 'handoff prema Katedri ne biljezi ishod'],
   'redeem-referral-signup': ['rast', 'preporuke se ne priznaju'],
   'repair-docx': ['popravak', 'PLACENI popravak ne radi; glavni proizvod stoji'],
+  'repair-local-claim': ['popravak', 'program na racunalu ne moze jednokratno preuzeti placeni posao; serverska kopija ostaje dostupna'],
+  'repair-local-status': ['popravak', 'lokalni Word popravak ne moze potvrditi napredak ni dovrsetak; serverska kopija ostaje dostupna'],
   'send-reminders': ['rokovi', 'podsjetnici na rokove se ne salju'],
   'source-check': ['analiza', 'provjera postojanja izvora ne radi; placeni dodatak'],
   'unsubscribe-reminder': ['rokovi', 'odjava s podsjetnika ne radi; pravna obveza'],

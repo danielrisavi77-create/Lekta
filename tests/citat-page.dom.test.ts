@@ -24,7 +24,7 @@ function buildDom(): void {
       <div id="out-hint"></div>
       <button id="copyBtn"></button>
       <p id="c-success-cta"></p>
-      <a id="c-success-cta-link" href="index.html#analyzer"></a>
+      <a id="c-success-cta-link" href="/"></a>
       <div id="out-intext" hidden><span id="intextValue"></span></div>
       <button id="copyIntextBtn"></button>
       <button id="c-add-to-bulk" disabled></button>
@@ -85,7 +85,7 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
   it('B4: success-cta se pokaze uz gotov citat i nosi ?unit= odabranog fakulteta', () => {
     expect($('#c-success-cta').classList.contains('is-visible')).toBe(true);
     // Fakultet je 'efos' iz prethodnog testa ("odabir fakulteta ucita njegov stil").
-    expect($('#c-success-cta-link').getAttribute('href')).toBe('index.html?unit=efos#analyzer');
+    expect($('#c-success-cta-link').getAttribute('href')).toBe('/?unit=efos');
   });
 
   it('B4: prazan unos sakrije success-cta', () => {

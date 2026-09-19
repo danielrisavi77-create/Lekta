@@ -22,9 +22,22 @@ describe('prazan tab Spremnost za predaju: CTA', () => {
     const m = app.match(/\[data-open-phase\]'\);if\(ph\)\{([^}]*(?:\{[^}]*\}[^}]*)*)\}\}/);
     expect(m, 'delegirani handler za data-open-phase postoji').toBeTruthy();
     const body = m![1];
-    // Oblik je dobio opcionalni lanac (`?.`), jer nezasticeno citanje rusi montazu na stranici
-    // koja taj element nema. Tvrdnja je ista, i susjedna vec koristi isti oblik za #submissionPhase.
-    expect(body).toContain("$('#wizardView')?.classList.remove('hidden')");
+    // JAMSTVO JE ISTO, MEHANIZAM SE PROMIJENIO (2026-09-10).
+    //
+    // Do danas je povratak u carobnjak bio dva rucna dodira `hidden` nad `#resultView` i
+    // `#wizardView`, praceni s `setWizardStep(3)`. Ta dva dodira bila su suvisna: `setWizardStep`
+    // ide kroz `showWizardStep` pa `renderView`, koji `classList.toggle` nad SVE TRI povrsine
+    // postavlja identicno krajnje stanje. Uklonjeni su jer je prikaz dobio jednog pisca.
+    //
+    // Usput je vrijedno zapisati kako je gard istrunuo: opcionalni lanac (`?.`) dodan je svjesno i
+    // s razlogom (nezasticeno citanje rusi montazu na stranici koja taj element nema), ali je
+    // `tests/wizard-view-single-writer.test.ts` trazio iskljucivo oblik BEZ `?.`, pa je od tog
+    // trenutka bio zelen nad kodom koji ima tocno onaj kvar zbog kojeg postoji. Gard sada trazi
+    // oba oblika.
+    //
+    // `renderView` je uz to SIGURNIJI od uklonjenog koda: radi `if (el)` po elementu, pa stranica
+    // bez te povrsine i dalje prolazi bez iznimke.
+    expect(body, 'CTA mora vratiti u carobnjak na korak provjere').toContain('setWizardStep(3)');
     expect(body).toContain('.advanced-options');
     expect(body).toContain("$('#submissionPhase')?.focus()");
   });

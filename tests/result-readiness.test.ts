@@ -135,3 +135,55 @@ describe('spremnost: autoritet pravila odvojen od tezine nalaza', () => {
     expect(r.description).toContain('blokator');
   });
 });
+
+describe('slaganje glagola s rodom i brojem', () => {
+  /**
+   * Do 2026-09-08 je uz promjenjivu imenicu stajao FIKSAN glagol, pa je svaki rad s dva blokatora
+   * pisao "Pronađen je 2 blokatora". Kvar je bio vidljiv na svakom takvom radu, a nijedan test ga
+   * nije mjerio: postojeci su gledali `toContain('blokator')`, sto prolazi i uz krivi glagol.
+   */
+  const opis = (n: number, verificiran = true) => resultReadiness(
+    Array.from({ length: n }, (_, i) => ({ severity: 'error', title: `x${i}`, detail: '' } as any)),
+    verificiran ? { profileStatus: 'verified', ruleAuthority: 'official-source' } : { profileStatus: 'generic', ruleAuthority: 'generic' },
+  ).description;
+
+  it('muski rod: 1 / 2 / 5 dobivaju TRI razlicita glagolska oblika', () => {
+    expect(opis(1)).toContain('Pronađen je 1 blokator.');
+    expect(opis(2)).toContain('Pronađena su 2 blokatora.');
+    expect(opis(5)).toContain('Pronađeno je 5 blokatora.');
+  });
+
+  it('iznimka 11 do 14 ide u treci oblik unatoc zavrsnoj znamenki', () => {
+    // "11 blokator" i "Pronađen je 11" su oba kriva; iznimka vrijedi i za imenicu i za glagol.
+    expect(opis(11)).toContain('Pronađeno je 11 blokatora.');
+    expect(opis(12)).toContain('Pronađeno je 12 blokatora.');
+    expect(opis(21)).toContain('Pronađen je 21 blokator.');
+    expect(opis(22)).toContain('Pronađena su 22 blokatora.');
+  });
+
+  it('srednji rod na negenerickom profilu ima svoje oblike', () => {
+    expect(opis(1, false)).toContain('Pronađeno je 1 moguće odstupanje');
+    expect(opis(2, false)).toContain('Pronađena su 2 moguća odstupanja');
+    expect(opis(5, false)).toContain('Pronađeno je 5 mogućih odstupanja');
+  });
+
+  it('zenski rod: dorade', () => {
+    const d = (n: number) => resultReadiness(
+      Array.from({ length: n }, (_, i) => ({ severity: 'warning', title: `w${i}`, detail: '' } as any)),
+      { profileStatus: 'verified', ruleAuthority: 'official-source' },
+    ).description;
+    expect(d(1)).toContain('Pronađena je 1 dorada.');
+    expect(d(2)).toContain('Pronađene su 2 dorade.');
+    expect(d(5)).toContain('Pronađeno je 5 dorada.');
+  });
+
+  it('rucne provjere: glagol se slaze i u toj recenici', () => {
+    const r = (n: number) => resultReadiness(
+      Array.from({ length: n }, (_, i) => ({ severity: 'info', title: `i${i}`, detail: '' } as any)),
+      { profileStatus: 'verified', ruleAuthority: 'official-source' },
+    ).description;
+    expect(r(1)).toContain('ostala je 1 ručna provjera');
+    expect(r(2)).toContain('ostale su 2 ručne provjere');
+    expect(r(5)).toContain('ostalo je 5 ručnih provjera');
+  });
+});

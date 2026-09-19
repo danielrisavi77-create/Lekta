@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist, type StorageAvailability } from '../src/routes/workspace/bootstrap';
-import { initialContext } from '../src/routes/workspace/workspace-state';
+import { emptyLedger } from '../src/routes/workspace/workspace-state';
 import { sessionFragment } from '../src/session/local-document-session';
 import type { LocalDocumentSessionStore, LocalDocumentSessionV1 } from '../src/session/local-document-session';
 
@@ -31,7 +31,7 @@ const session = { id: ID } as unknown as LocalDocumentSessionV1;
 describe('otvaranje radne povrsine', () => {
   it('bez fragmenta i s pohranom: prazna povrsina, bez poruke', async () => {
     const out = await openWorkspace('', available(null));
-    expect(out.context.state).toBe('empty');
+    expect(out.session, 'bez fragmenta nema sto obnoviti').toBeNull();
     expect(out.notice).toBeNull();
     expect(out.offerLink).toBe(false);
   });
@@ -42,7 +42,7 @@ describe('otvaranje radne povrsine', () => {
     expect(out.notice).toMatch(/ostaje samo u ovoj kartici/i);
     // Stanje je prazno, ne `restoring`: bez pohrane nema sto obnavljati, pa bi `restoring`
     // bilo obecanje koje nitko ne moze ispuniti.
-    expect(out.context.state).toBe('empty');
+    expect(out.session, 'nema sto obnoviti').toBeNull();
   });
 
   it('bez pohrane se poveznica ne nudi NI KAD fragment izgleda valjano', async () => {
@@ -52,9 +52,9 @@ describe('otvaranje radne povrsine', () => {
     expect(out.offerLink).toBe(false);
   });
 
-  it('sesija pronadjena: stanje je `sessionReady`', async () => {
+  it('sesija pronadjena: dolazi do pozivatelja, bez poruke o gubitku', async () => {
     const out = await openWorkspace(sessionFragment(ID), available(session));
-    expect(out.context.state).toBe('sessionReady');
+    expect(out.session, 'pronadjena sesija mora doci do pozivatelja').not.toBeNull();
     expect(out.notice).toBeNull();
   });
 
@@ -67,13 +67,13 @@ describe('otvaranje radne povrsine', () => {
 
   it('sesija istekla ili obrisana: prazna povrsina uz jasnu poruku, ne greska', async () => {
     const out = await openWorkspace(sessionFragment(ID), available(null));
-    expect(out.context.state).toBe('empty');
+    expect(out.session, 'nema sto obnoviti').toBeNull();
     expect(out.notice).toMatch(/nije dostupan|istekla/i);
   });
 
   it('KVAR POHRANE ne rusi rutu nego degradira, uz poruku', async () => {
     const out = await openWorkspace(sessionFragment(ID), available(session, { throws: true }));
-    expect(out.context.state).toBe('empty');
+    expect(out.session, 'nema sto obnoviti').toBeNull();
     expect(out.notice).toBeTruthy();
     expect(out.offerLink).toBe(false);
   });
@@ -81,7 +81,7 @@ describe('otvaranje radne povrsine', () => {
   it('neispravan fragment se ne tumaci kao sesija', async () => {
     for (const bad of ['#session=nije-uuid', '#nesto-drugo', '#session=', '']) {
       const out = await openWorkspace(bad, available(session));
-      expect(out.context.state, `fragment ${bad}`).toBe('empty');
+      expect(out.session, `fragment ${bad}`).toBeNull();
     }
   });
 
@@ -197,42 +197,33 @@ describe('obnova dokumenta', () => {
 });
 
 
-describe('stanje prati stvarne dogadjaje', () => {
-  it('PRVI dokument je ponuda, pa se stanje makne s `empty`', () => {
-    // Bez ovoga atribut tvrdi `empty` dok dokument postoji, a netko ga procita i povjeruje.
-    const out = afterDocumentAccepted(initialContext(false));
-    expect(out.state).toBe('sessionReady');
-    expect(out.rejected).toBeNull();
-  });
-
-  it('SLJEDECI dokument je ZAMJENA, ne ponuda', () => {
-    // Iz `profile` stroj ne prihvaca `documentOffered`; kriva rijec znaci ODBIJEN prijelaz i
-    // stanje koje ostane na starom, dakle tocno onaj tihi kvar koji ovo popravlja.
-    const prvi = afterPersist(afterDocumentAccepted(initialContext(false)), true);
-    expect(prvi.state).toBe('profile');
-    const drugi = afterDocumentAccepted(prvi);
-    expect(drugi.state).toBe('sessionReady');
-    expect(drugi.rejected).toBeNull();
-  });
-
-  it('zamjena dokumenta ponistava zapis prethodne sesije', () => {
-    const prvi = afterPersist(afterDocumentAccepted(initialContext(false)), true);
-    expect(prvi.sessionPersisted).toBe(true);
-    expect(afterDocumentAccepted(prvi).sessionPersisted).toBe(false);
-  });
-
-  it('neuspjeh zapisa vodi dalje, ali bez poveznice', () => {
-    const out = afterPersist(afterDocumentAccepted(initialContext(false)), false);
-    expect(out.state).toBe('profile');
+describe('knjiga prati stvarne dogadjaje', () => {
+  /**
+   * OVAJ BLOK JE SUZEN U KORAKU B5, i vrijedi zapisati sto je nestalo i zasto.
+   *
+   * Prije su ovdje stajale tvrdnje da je PRVI dokument "ponuda" a SLJEDECI "zamjena", i da
+   * obnovljena sesija prihvaca dokument "bez odbijenog prijelaza". Sve tri su postojale zato sto
+   * je stroj stanja mogao prijelaz ODBITI: kriva rijec u pozivu znacila je stanje koje ostane na
+   * starom, dakle tih kvar. Knjiga sesije nema tablicu ni odbijanje, pa taj razred kvara ne moze
+   * nastati; tvrdnje o njemu bile bi tvrdnje o mehanici koje vise nema.
+   *
+   * Ostaje ono sto se i dalje moze pokvariti: sto zapis znaci za poveznicu.
+   */
+  it('prihvacen dokument je prisutan, ali jos nije zapisan', () => {
+    const out = afterDocumentAccepted(emptyLedger());
+    expect(out.documentPresent).toBe(true);
     expect(out.sessionPersisted).toBe(false);
   });
 
-  it('obnovljena sesija prihvaca dokument bez odbijenog prijelaza', () => {
-    // Obnova zavrsi u `sessionReady`, a obnovljen dokument prolazi kroz prijem pa opet stize
-    // ovamo. Bez grane za zamjenu, taj prijelaz bi bio odbijen.
-    const obnovljen = { ...initialContext(true), state: 'sessionReady' as const };
-    const out = afterDocumentAccepted(obnovljen);
-    expect(out.rejected).toBeNull();
-    expect(out.state).toBe('sessionReady');
+  it('zamjena dokumenta ponistava zapis prethodne sesije', () => {
+    const prvi = afterPersist(afterDocumentAccepted(emptyLedger()), true);
+    expect(prvi.sessionPersisted).toBe(true);
+    expect(afterDocumentAccepted(prvi).sessionPersisted, 'poveznica bi vodila na stari rad').toBe(false);
+  });
+
+  it('neuspjeh zapisa vodi dalje, ali bez poveznice', () => {
+    const out = afterPersist(afterDocumentAccepted(emptyLedger()), false);
+    expect(out.documentPresent, 'rad ostaje u kartici').toBe(true);
+    expect(out.sessionPersisted).toBe(false);
   });
 });

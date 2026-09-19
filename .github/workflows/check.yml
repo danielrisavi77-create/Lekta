@@ -42,6 +42,12 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
 
+      # setup-node uz Node 20 trenutno donosi npm 10, ali package.json zakljucava npm 11.11.0.
+      # Razlicite npm verzije razlicito tumace opcionalne peer zapise u lockfileu, pa matrica
+      # mora prije `npm ci` koristiti isti package manager kojim je lockfile proizveden.
+      - name: npm iz packageManager polja
+        run: npm install --global npm@11.11.0
+
       # supabase/functions/** je Deno kod izvan tsconfig.json include-a. Od 2026-09-01 je
       # `check:edge` DIO `npm run check`, pa Deno treba OBJEMA granama matrice, prije gatea.
       # Ranije je stajao kao zaseban korak samo na Node 20, pa je lokalni gate tu rupu imao
@@ -98,3 +104,44 @@ jobs:
 
       - name: UX viewport gate
         run: npm run test:ux
+
+  # KRITICNI PUT NAD PRODUKCIJSKIM ARTEFAKTOM (vanjski audit 2026-09-08, nalaz 3).
+  #
+  # `ux-gate` iznad vrti Playwright protiv `npm run dev`; `post-deploy-smoke` nad zivom stranicom nikad
+  # ne ucitava dokument. Nista dakle nije vrtjelo dokument -> profil -> nalaz -> popravak nad onim sto
+  # se stvarno objavljuje (minificiran bundle, `__DEV_TOOLS__=false`, generirane stranice). Ovaj job
+  # gradi ISTIM lancem kao netlify.toml, provjeri dist (bez obaveznog dokaza izdanja: dokaz se pece
+  # lokalno jer trazi Word, i to je vec tako), pa vrti `tests/ux-dist/**` kroz `vite preview`.
+  dist-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Node 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instaliraj ovisnosti
+        run: npm ci
+
+      - name: Instaliraj Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Produkcijski build (isti lanac kao netlify.toml)
+        # OKOLINA MORA BITI ISTA KAO `[build.environment]` u netlify.toml, inace ovaj job vrti
+        # isti lanac pod drugim uvjetima i zeleno ovdje ne znaci zeleno ondje. Gard nad tom
+        # jednakoscu: `tests/deploy-runtime-parity.test.ts`.
+        env:
+          LEKTA_SITE_ORIGIN: https://lektahr.netlify.app
+          DEPLOY: "1"
+        run: node scripts/build-production.mjs --skip-verify
+
+      - name: Provjera dist artefakta
+        run: node scripts/verify-deploy-dist.mjs
+
+      - name: Kriticni put nad dist/ (vite preview)
+        run: npm run test:ux:dist

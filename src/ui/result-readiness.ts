@@ -53,6 +53,28 @@ function plural(count: number, one: string, few: string, many: string): string {
  * Spremnost za predaju nije isto sto i tehnicka ocjena. Ova projekcija namjerno
  * cita samo vec postojeci rezultat analize i ne mijenja bodovanje ni parser.
  */
+/**
+ * Glagol se u hrvatskom slaze i s RODOM imenice i s BROJEM. Do 2026-09-08 je uz promjenjivu
+ * imenicu stajao FIKSAN glagol, pa je svaki rad s dva blokatora pisao "Pronađen je 2 blokatora",
+ * a svaki s dvije provjere "ostale su 2 ručne provjere" uz jedninu "ostale su 1".
+ *
+ *            1                     2 do 4                    5 i vise
+ *   m  Pronađen je 1 blokator      Pronađena su 2 blokatora  Pronađeno je 5 blokatora
+ *   ž  Pronađena je 1 dorada       Pronađene su 2 dorade     Pronađeno je 5 dorada
+ *   s  Pronađeno je 1 odstupanje   Pronađena su 2 odstupanja Pronađeno je 5 odstupanja
+ *
+ * ROD NE TREBA KAO PARAMETAR: glagol je i sam trooblicna rijec, pa ga bira ISTI `plural` koji
+ * vec bira imenicu. Prva izvedba je imala tip `Rod` i tablicu devet oblika; bila je tocna, ali
+ * je drugo mjesto na kojem se ista pravila o 1, 2-4 i 11-14 moraju odrzavati.
+ */
+function slozeno(
+  n: number,
+  glagol: readonly [string, string, string],
+  imenica: readonly [string, string, string],
+): string {
+  return `${plural(n, ...glagol)} ${n} ${plural(n, ...imenica)}`;
+}
+
 export function resultReadiness(issues: readonly Issue[] = [], authority?: ReadinessAuthority): ResultReadiness {
   const blockers = issues.filter((item) => item.severity === 'error').length;
   const improvements = issues.filter((item) => item.severity === 'warning').length;
@@ -67,13 +89,13 @@ export function resultReadiness(issues: readonly Issue[] = [], authority?: Readi
       ? {
           kind: 'blocked',
           label: 'Nije spremno za predaju',
-          description: `Pronađen je ${blockers} ${plural(blockers, 'blokator', 'blokatora', 'blokatora')}. Tehnička ocjena ne potvrđuje spremnost za predaju.`,
+          description: `${slozeno(blockers, ['Pronađen je', 'Pronađena su', 'Pronađeno je'], ['blokator', 'blokatora', 'blokatora'])}. Tehnička ocjena ne potvrđuje spremnost za predaju.`,
           ...counts,
         }
       : {
           kind: 'blocked',
           label: 'Provjeri prije predaje',
-          description: `Pronađeno je ${blockers} ${plural(blockers, 'moguće odstupanje', 'moguća odstupanja', 'mogućih odstupanja')}. Za ovaj profil pravila nisu potvrđena prema službenom izvoru, pa ovo nije nalaz o pravilu tvog fakulteta nego opća tehnička provjera.`,
+          description: `${slozeno(blockers, ['Pronađeno je', 'Pronađena su', 'Pronađeno je'], ['moguće odstupanje', 'moguća odstupanja', 'mogućih odstupanja'])}. Za ovaj profil pravila nisu potvrđena prema službenom izvoru, pa ovo nije nalaz o pravilu tvog fakulteta nego opća tehnička provjera.`,
           ...counts,
         };
   }
@@ -82,8 +104,8 @@ export function resultReadiness(issues: readonly Issue[] = [], authority?: Readi
       kind: 'needs-work',
       label: authoritative ? 'Treba doraditi prije predaje' : 'Provjeri prije predaje',
       description: authoritative
-        ? `Pronađeno je ${improvements} ${plural(improvements, 'dorada', 'dorade', 'dorada')}. Tehnička ocjena ne zamjenjuje završnu ručnu provjeru.`
-        : `Pronađeno je ${improvements} ${plural(improvements, 'moguće odstupanje', 'moguća odstupanja', 'mogućih odstupanja')}. Za ovaj profil pravila nisu potvrđena prema službenom izvoru, pa provjeri i s uputama svojeg studija.`,
+        ? `${slozeno(improvements, ['Pronađena je', 'Pronađene su', 'Pronađeno je'], ['dorada', 'dorade', 'dorada'])}. Tehnička ocjena ne zamjenjuje završnu ručnu provjeru.`
+        : `${slozeno(improvements, ['Pronađeno je', 'Pronađena su', 'Pronađeno je'], ['moguće odstupanje', 'moguća odstupanja', 'mogućih odstupanja'])}. Za ovaj profil pravila nisu potvrđena prema službenom izvoru, pa provjeri i s uputama svojeg studija.`,
       ...counts,
     };
   }
@@ -91,7 +113,7 @@ export function resultReadiness(issues: readonly Issue[] = [], authority?: Readi
     return {
       kind: 'manual-review',
       label: 'Potrebna je ručna provjera',
-      description: `Nema automatskih blokatora, ali ostale su ${manualReviews} ${plural(manualReviews, 'ručna provjera', 'ručne provjere', 'ručnih provjera')}.`,
+      description: `Nema automatskih blokatora, ali ${slozeno(manualReviews, ['ostala je', 'ostale su', 'ostalo je'], ['ručna provjera', 'ručne provjere', 'ručnih provjera'])}.`,
       ...counts,
     };
   }

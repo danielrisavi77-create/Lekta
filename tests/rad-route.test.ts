@@ -132,12 +132,36 @@ describe('ruta /rad/', () => {
 
   it('radna povrsina razumije Katedrin dolazak i demo scenu, koje su do reza zivjele samo na /', () => {
     const workspace = readFileSync(resolve(ROOT, 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
-    for (const modul of ['integration/katedra-entry', 'integration/katedra-result-cta', 'ui/hero-demo', 'ui/hero-depth']) {
+    // `ui/hero-demo` je uklonjen 2026-09-08: modul je bio MRTAV. Trazio je `.hero-demo` i
+    // `#heroReplay`, kojih nema ni u `index.html` ni u `rad/index.html`, pa je `setup()` odmah
+    // izlazio; prototip `prototype/analyzer-hero-demo.html` ima vlastiti `.ts` i `.css` i nikad
+    // nije koristio ovaj. Oba produkcijska ulaza su ga svejedno uvozila, dakle 8,6 KB isporuceno
+    // svakom korisniku za element koji ne postoji. Ostatak popisa je i dalje ugovor.
+    for (const modul of ['integration/katedra-entry', 'integration/katedra-result-cta', 'ui/hero-depth']) {
       expect(workspace, `${modul} je do reza uvozio samo src/main.ts`).toContain(modul);
     }
   });
 
   it('ima podrucje za posten status, i ono je skriveno dok nema sto reci', () => {
     expect(RAD).toMatch(/id="workspace-status"[^>]*role="status"[^>]*aria-live="polite"[^>]*hidden/);
+  });
+
+  /**
+   * C7: indikator spremanja je TRAJNO stanje unutar `#radDocBar`, obrnuto od `#workspace-status`:
+   * bez `aria-live` i bez `role=status`, inace bi svaki klik ponavljao "Spremljeno" citacu ekrana.
+   */
+  it('#radDocSave stoji unutar #radDocBar i NEMA aria-live ni role=status', () => {
+    const bar = RAD.indexOf('id="radDocBar"');
+    expect(bar, 'sentinel: nema #radDocBar').toBeGreaterThanOrEqual(0);
+    const kraj = RAD.indexOf('</div>', bar);
+    const unutar = RAD.slice(bar, kraj);
+    const tag = unutar.match(/<span[^>]*id="radDocSave"[^>]*>/)?.[0];
+    expect(tag, '#radDocSave mora biti unutar #radDocBar').toBeTruthy();
+    expect(tag).not.toContain('aria-live');
+    expect(tag).not.toContain('role=');
+    expect(tag).toContain('hidden');
+    // MUTACIJA (kopija HTML-a): ziva regija na indikatoru mora pasti na istoj tvrdnji.
+    const mutiran = tag!.replace('id="radDocSave"', 'id="radDocSave" aria-live="polite"');
+    expect(mutiran.includes('aria-live')).toBe(true);
   });
 });

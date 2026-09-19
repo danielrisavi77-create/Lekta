@@ -1,0 +1,63 @@
+{
+  "profileId": "arh-doktorski",
+  "synthetic": true,
+  "track": "authored",
+  "row": {
+    "id": "arh--doctoral--poslijediplomski",
+    "unitId": "arh",
+    "workType": "doctoral",
+    "level": "poslijediplomski",
+    "program": "Doktorski studij Arhitektonskog fakulteta",
+    "variant": null,
+    "fallbackFamily": null,
+    "titlePageTemplateId": null
+  },
+  "prose": {
+    "id": "arh--doctoral--poslijediplomski",
+    "words": 15803,
+    "authoring": {
+      "method": "Rad je SINTETSKI TESTNI ULAZ za Lektu, ne studentski rad, ne disertacija i ne za predaju. Autor i mentor su izmišljena imena, tema je stvarna a obrada je autorska za potrebe testiranja, i nijedna tvrdnja ne opisuje tuđe stvarno istraživanje niti donosi vlastiti empirijski podatak. Rad NEMA poglavlje s rezultatima empirijskog istraživanja, i to je namjerno: doktorat koji bi tvrdio nalaze iz izmišljene građe bio bi neistinit i kad je označen kao testni. Umjesto toga je pojmovno-usporedni, pa se tvrdnje izvode iz literature. Pripisivanja poznatim djelima (Douet, TICCIH, Oevermann i Mieg, Plevoets i Van Cleempoel, Brooker i Stone, ICOMOS Nara, Jokilehto, Feilden i Jokilehto, Vecco, Groat i Wang, Yin, Bullen i Love) drže se općepoznatih pojmovnih doprinosa tih djela; stranice se ne navode jer ih ova sesija nije mogla potvrditi iz same datoteke (katedra-lite pravilo 28), pa se citira djelo u cjelini. Marinović (2025), Zorić i Pavlović (2024), Horvat (2023) i Babić (2022) su izmišljene jedinice, namjerno, da provjera postojanja može vratiti i not-found. ALAT: katedra-lite je STVARNO vodio rad, u autopilot načinu. Izvršeno: dohvat paketa (katedra-pkg 1.9.22, 22fba58); profile_resolver.py (PAO uz izlazni kod 2, jer registar rutira samo efzg i fpzg); stanje_init.py uz --fakultet-izvan-registryja i imenovano ograničenje; razina.py --postavi poslijediplomski --citatelj mentor; perspective_map.py init + tri perspektive + validate (ready: true, tri različite); plan_state.py init + import tablice + odobri --actor full-auto (PLAN GATE PASS iz prvog pokušaja, sha256:701c5dd64623). OBLIK dokumenta dolazi iz Lektina profila arh-doktorski, ne iz Katedre.",
+      "tool": "katedra-lite 1.9.22 (autopilot)",
+      "date": "2026-09-07"
+    }
+  },
+  "provenance": {
+    "tool": "libreoffice",
+    "toolPath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+    "os": "win32 x64",
+    "command": "npx vite-node scripts/corpus-gen/generate.mts -- --row arh--doctoral--poslijediplomski --messy",
+    "generatedAt": "2026-09-07T19:56:14.680Z"
+  },
+  "mutations": {
+    "tabInHeading": 26,
+    "emptyParagraphBurst": 30,
+    "manualToc": 1,
+    "dotLeaderTabs": 1,
+    "csOnlyFonts": 4,
+    "biblioAsHeading": 2,
+    "commentsPart": 2,
+    "allLevelThree": 32
+  },
+  "shapes": {
+    "claimed": [
+      "zip/bit3",
+      "zip/deflate",
+      "paket/komentari",
+      "stil/tijelo-nije-normal",
+      "naslov/tab-u-naslovu",
+      "naslov/samo-razina-3",
+      "tab/tocke-vodic",
+      "font/samo-cs-eastAsia",
+      "xml/space-preserve",
+      "tekst/kosi-padez",
+      "tekst/biblio-kandidat",
+      "tekst/naslovnica-natpis",
+      "toc/rucno-tipkan",
+      "proizvodjac/libreoffice",
+      "opseg/odlomci-preko-400",
+      "opseg/prazni-preko-20",
+      "opseg/sekcije-preko-3"
+    ]
+  },
+  "toolLimitations": []
+}

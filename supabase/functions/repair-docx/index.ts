@@ -30,6 +30,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { readFormDataBounded, metaWithinBudget } from '../_shared/read-body.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
 import { readZip } from '../../../src/repair/zip-codec.ts';
@@ -52,6 +53,11 @@ import { runCorpusCheck, corpusConfigFromEnv } from '../_shared/corpus-check.ts'
 import { ConcurrencyGate, storageQuotaExceeded } from '../../../src/report/repair-limits.ts';
 import { decideCorpusContribution } from '../../../src/legal/corpus-consent.ts';
 import { corpusObjectPath, prepareCorpusCopy } from '../../../src/corpus/contribution.ts';
+import { parseRepairConfirmationReceipts } from '../../../src/repair/local-runner/confirmation-receipts.ts';
+import { provisionLocalRepairJob } from '../../../src/repair/local-runner/provision-service.ts';
+import { persistIssuedLocalRepairJob } from '../../../src/repair/local-runner/supabase-issue-adapter.ts';
+import type { IssuedLocalRepairJob, LocalRepairJobRecord } from '../../../src/repair/local-runner/issue-service.ts';
+import { settleRepairStorageHandoff, type RepairStorageResult } from '../../../src/repair/local-runner/storage-handoff.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -62,6 +68,11 @@ const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netl
 
 // Kill switch (isti obrazac kao preflight-start PREFLIGHT_DISABLED): iskljuci bez deploya.
 const REPAIR_DISABLED = (Deno.env.get('REPAIR_DISABLED') ?? '') === 'true';
+const LOCAL_REPAIR_ENABLED = Deno.env.get('REPAIR_LOCAL_ENABLED') === 'true'
+  && Deno.env.get('REPAIR_LOCAL_DISABLED') !== 'true';
+const LOCAL_REPAIR_PRIVATE_KEY = Deno.env.get('REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL') ?? '';
+const LOCAL_REPAIR_KEY_ID = Deno.env.get('REPAIR_CONTRACT_KEY_ID') ?? '';
+const LOCAL_REPAIR_LIFETIME_MS = 24 * 60 * 60 * 1_000;
 
 // Concurrency (AUDIT_MASTER.md poglavlje 9): repair-docx je imao file-size + dnevni cap po
 // korisniku/IP-u, ali nikakvu branu na PARALELNE teske zahtjeve unutar iste tople instance.
@@ -81,6 +92,8 @@ const REPAIR_STORAGE_DAILY_CAP = Number(Deno.env.get('REPAIR_STORAGE_DAILY_CAP')
 // vlastiti `20 * 1024 * 1024` uz komentar "Uskladi s klijentskim uploadMaxBytes", dakle uskladjenost
 // je ovisila o tome da se netko sjeti promijeniti dva mjesta. Env override ostaje za hitne zahvate.
 const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(DOCX_MAX_UPLOAD_BYTES));
+/** Granica `meta` dijela multiparta (JSON bez teksta rada). 256 KB je red velicine iznad stvarnog. */
+const META_MAX_BYTES = 256 * 1024;
 
 // Provjera postojanja domacih izvora u M4 korpusu (plan docs/PLAN_KORPUS_PROVJERA_IZVORA.md, K3).
 // Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan. Konfiguracija i
@@ -193,7 +206,8 @@ async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
   // preglednika i vise ne moze obrisati svoj dokument, pa se ti poslovi brisu automatski nakon
   // 30 dana (0033). Prijavljeni e-mailom zadrzavaju "dok ih sam ne obrise".
   anonymous: boolean;
-}): Promise<string | null> {
+  localRepairRecord?: LocalRepairJobRecord;
+}): Promise<RepairStorageResult | null> {
   const origPath = `${userId}/${jobId}/original.docx`;
   const resPath = `${userId}/${jobId}/fixed.docx`;
   const bucket = admin.storage.from('repair');
@@ -223,7 +237,18 @@ async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
     await bucket.remove([origPath, resPath]).catch(() => {});
     return null;
   }
-  return jobId;
+  let localRepairReady = false;
+  if (meta.localRepairRecord) {
+    try {
+      await persistIssuedLocalRepairJob(admin, meta.localRepairRecord);
+      localRepairReady = true;
+    } catch {
+      // Serverski rezultat je vec valjano pohranjen i ostaje neovisan. Claim
+      // funkcija ce lokalnom runneru iskreno vratiti da posao nije dostupan.
+      console.error('[repair-docx] local repair job insert failed');
+    }
+  }
+  return { jobId, localRepairReady };
 }
 
 Deno.serve(async (req: Request) => {
@@ -316,13 +341,21 @@ Deno.serve(async (req: Request) => {
     //    Iz meta je izostavljen tekst RADA (ostaju brojevi i enumi); jedina iznimka su `references`,
     //    tj. naslovi i godine iz popisa literature, koji su nuzni za provjeru postojanja izvora
     //    (korak 8). To nije novo otkrivanje jer cijeli .docx putuje u istom zahtjevu.
-    const clen = Number(req.headers.get('content-length') ?? '0');
-    if (clen && clen > MAX_DOCX_BYTES * 1.4) return json({ error: 'payload_too_large' }, 413);
-    let form: FormData;
-    try { form = await req.formData(); } catch { return json({ error: 'bad_request' }, 400); }
+    //    GRANICA JE BROJANJE, NE ZAGLAVLJE (vanjski audit 2026-09-08, nalaz 5). Do tada je ovdje
+    //    stajalo `if (clen && clen > MAX)` pa izravan poziv `formData()` nad zahtjevom: bez
+    //    `Content-Length` je `clen` 0, uvjet otpadne, i multipart se parsirao do kraja PRIJE ijedne
+    //    provjere velicine; `meta` se nije mjerio nikad. Sada se cijelo tijelo omedjuje streamom (`readFormDataBounded`), a
+    //    `meta` ima vlastitu granicu prije `JSON.parse`. Isti obrazac vec koriste client-error,
+    //    file-guarantee-claim, source-check i webhook-mor; ova je bila jedina s binarnim tijelom.
+    //    Faktor 1.4 je rezerva za multipart okvir; `META_MAX_BYTES` je red velicine iznad
+    //    stvarnog `meta` (brojevi, enumi, naslovi i godine iz literature).
+    const bounded = await readFormDataBounded(req, Math.floor(MAX_DOCX_BYTES * 1.4) + META_MAX_BYTES);
+    if (!bounded.ok) return json({ error: bounded.reason === 'too_large' ? 'payload_too_large' : 'bad_request' }, bounded.reason === 'too_large' ? 413 : 400);
+    const form = bounded.form;
     const filePart = form.get('file');
     const metaRaw = form.get('meta');
     if (!(filePart instanceof File) || typeof metaRaw !== 'string') return json({ error: 'bad_request' }, 400);
+    if (!metaWithinBudget(metaRaw, META_MAX_BYTES)) return json({ error: 'payload_too_large' }, 413);
 
     const docxBytes = new Uint8Array(await filePart.arrayBuffer());
     if (docxBytes.length === 0 || docxBytes.length > MAX_DOCX_BYTES) return json({ error: 'payload_too_large' }, 413);
@@ -599,18 +632,60 @@ Deno.serve(async (req: Request) => {
     // FALLBACK je namjeran: ako runtime nema waitUntil (lokalni serve, starija verzija), pohrana se
     // ceka kao dosad. Radije sporije nego izgubljen dokument.
     const jobId = storageAllowed ? crypto.randomUUID() : null;
+    const sourceFileName = String(meta.fileName || filePart.name || 'rad.docx');
+    const targetFileName = `${sourceFileName.replace(/\.docx$/i, '')}-popravljeno.docx`;
+    let issuedLocalRepair: IssuedLocalRepairJob | null = null;
+    if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {
+      const confirmations = parseRepairConfirmationReceipts(
+        meta.confirmations,
+        requests.length,
+        new Date(now),
+      );
+      const { count: existingLocalCount, error: existingLocalError } = await admin
+        .from('repair_local_jobs')
+        .select('job_id', { count: 'exact', head: true })
+        .eq('slot_id', slotId);
+      if (confirmations && !existingLocalError && (existingLocalCount ?? 0) === 0) {
+        const createdAt = new Date(now);
+        const provisioned = await provisionLocalRepairJob({
+          jobId,
+          userId: user.id,
+          slotId,
+          sourceBytes: docxBytes,
+          sourceFileName,
+          targetBytes: result.docxBytes,
+          targetFileName,
+          createdAt,
+          expiresAt: new Date(createdAt.getTime() + LOCAL_REPAIR_LIFETIME_MS),
+          requests,
+          confirmations,
+        }, {
+          enabled: true,
+          privateKeyPkcs8Base64Url: LOCAL_REPAIR_PRIVATE_KEY,
+          keyId: LOCAL_REPAIR_KEY_ID,
+        });
+        if (provisioned.ok) issuedLocalRepair = provisioned.issued;
+        else console.warn(`[repair-docx] local repair unavailable code=${provisioned.code}`);
+      } else if (existingLocalError) {
+        console.error('[repair-docx] local repair eligibility lookup failed');
+      } else if (!confirmations) {
+        console.warn('[repair-docx] local repair confirmations invalid');
+      }
+    }
     const tStore = performance.now();
     // Gate iznad je zajamcio meta.consentVersion === TERMS_VERSION, pa biljezimo AUTORITATIVNU serversku
     // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
     const storeTask = jobId ? (async () => {
       try {
-        const stored = await storeRepairJob(admin, user.id, jobId, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true });
+        const stored = await storeRepairJob(admin, user.id, jobId, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true, ...(issuedLocalRepair ? { localRepairRecord: issuedLocalRepair.record } : {}) });
         console.log(`[repair-docx] store job=${jobId} ok=${stored ? 1 : 0} ms=${ms(tStore)}`);
+        return stored;
       } catch (e) {
         // Tiho je bilo pogresno: klijentu obecavamo "Moji popravci", pa pad pohrane mora ostaviti trag.
         // U pozadinskom zadatku je ovaj log JEDINI trag: korisnik je odgovor vec dobio.
         console.error('[repair-docx] storeRepairJob threw', e instanceof Error ? e.message : e);
       }
+        return null;
     })() : null;
     // Kanal A: prilog korpusu uz ZASEBNU privolu (src/legal/corpus-consent.ts, spec 2026-09-05). Nikad ne utjece na
     // popravak ni na "Moji popravci": odluka govori samo hoce li se pseudonimizirana kopija IZVORNOG dokumenta pohraniti
@@ -654,29 +729,25 @@ Deno.serve(async (req: Request) => {
       }
     })() : null;
     const bg = (globalThis as any).EdgeRuntime?.waitUntil;
-    let msStore = 0;
-    if (storeTask) {
-      if (typeof bg === 'function') {
-        // Slot ostaje zauzet dok pohrana traje (DOCX-07). `storeTask` sam po sebi ne baca (ima
-        // vlastiti try/catch), ali `finally` je svejedno ispravan oblik: oslobadjanje ne smije
-        // ovisiti o tome hoce li netko kasnije dodati granu koja baca.
-        gateHandedOff = true;
-        const releaseAfterStore = releaseGate;
-        const releaseGlobalAfterStore = releaseGlobalSlot;
-        bg.call(
-          (globalThis as any).EdgeRuntime,
-          storeTask.finally(async () => {
-            // Oba slota drzi pohrana: per-instance i globalni. Globalni se oslobadja prvi jer je
-            // on stvarna granica; per-instance je jos samo jeftina lokalna zastita.
-            await releaseGlobalAfterStore?.();
-            releaseAfterStore?.();
-          }),
-        );
-      } else {
-        await storeTask;
-        msStore = ms(tStore);
-      }
-    }
+    const releaseAfterStore = releaseGate;
+    const releaseGlobalAfterStore = releaseGlobalSlot;
+    const handoff = await settleRepairStorageHandoff({
+      storeTask,
+      waitUntil: typeof bg === 'function'
+        ? (task) => {
+          bg.call(
+            (globalThis as any).EdgeRuntime,
+            task.finally(async () => {
+              await releaseGlobalAfterStore?.();
+              releaseAfterStore?.();
+            }),
+          );
+          gateHandedOff = true;
+        }
+        : null,
+      localLaunch: issuedLocalRepair?.launch ?? null,
+    });
+    const msStore = storeTask && !handoff.storagePending ? ms(tStore) : 0;
 
     // 9. Provjera izvora (naslijedjeni put) tek se sada preuzima. Za novog klijenta je ovo vec
     //    razrijesen null (provjeru vodi zaseban, usporedan poziv), pa se ne ceka nista.
@@ -698,9 +769,10 @@ Deno.serve(async (req: Request) => {
       // storagePending: pohrana jos traje u pozadini, pa jobId JEST rezerviran ali posao mozda jos
       // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno. Kad je
       // jobId null (storage-kvota dosegnuta), pending je uvijek false: pohrana nije ni pokusana.
-      slotId, jobId, storagePending: !!jobId && typeof bg === 'function', traceToken, fingerprint, sourceCheck,
+      slotId, jobId, storagePending: handoff.storagePending, traceToken, fingerprint, sourceCheck,
       // Kanal A: 'pending' znaci da pohrana JOS traje i sucelje ne smije tvrditi da je kopija pohranjena.
       corpusContribution: corpusDecision === 'accepted' ? 'pending' : corpusDecision,
+      localRepair: handoff.localRepair,
       // ruleId -> je li ciljanu vrijednost izveo SERVER iz profila ('profile') ili je preuzeta od
       // klijenta jer za to pravilo nema fakultetskog zapisa ('client'). Bez ovoga sucelje ne moze
       // posteno razlikovati "popravljeno prema pravilu tvog fakulteta" od "popravljeno prema

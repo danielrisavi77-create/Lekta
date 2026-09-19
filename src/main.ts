@@ -8,6 +8,5 @@ import './shared/ui-boot';
 import './ui/app';
 import './integration/katedra-entry';
 import './integration/katedra-result-cta';
-import './ui/hero-demo';
 import './ui/hero-depth';
 import './ui/korektorski';

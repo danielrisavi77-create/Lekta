@@ -205,10 +205,40 @@ export const MUTATIONS: Mutation[] = [
     why:
       'svi naslovi na razini 3 bez ijednog roditelja; hijerarhija tada prolazi VAKUUMSKI (6/6) sve dok ' +
       'popravak ne doda pravu razinu 1. Izmjereno na stvarnom radu corpus-0221',
-    apply: (fodt) =>
-      replaceCounted(fodt, /<text:h text:style-name="Heading_20_(\d)" text:outline-level="\d"/g, () =>
-        '<text:h text:style-name="Heading_20_3" text:outline-level="3"',
-      ),
+    /**
+     * Spusta SVAKI naslov na razinu 3, bez obzira na ime stila.
+     *
+     * Ranija izvedba gadjala je samo `Heading_20_N`. Kad je graditelj 2026-09-07 dobio sekcijske
+     * naslove (`SekcijaPredtekst` i drugi, koji nasljeduju `Heading_20_1` a nose promjenu stila
+     * stranice), ta tri naslova ostala su na razini 1, pa oblik "nijedan naslov nije razine 1" vise
+     * nije vrijedio. Mutacija je i dalje brojala 29 izmjena, a detektor je nalazio NULA: tocno
+     * razred laznog zelenog zbog kojeg tvrdnje o oblicima postoje.
+     *
+     * Zato se razina mijenja na svakom `<text:h>`, a imena stilova se ne diraju osim kod obicnih
+     * naslova. Sekcijskim stilovima se PRETPOSTAVLJA roditelj, jer bi im promjena imena ukinula
+     * `style:master-page-name`, dakle i sekcije, pa bi popravak jednog oblika pokvario drugi.
+     */
+    apply: (fodt) => {
+      const spusteniStilovi = replaceCounted(
+        fodt,
+        /<text:h text:style-name="Heading_20_(\d)" text:outline-level="\d"/g,
+        () => '<text:h text:style-name="Heading_20_3" text:outline-level="3"',
+      );
+      const spustenaRazina = replaceCounted(
+        spusteniStilovi.fodt,
+        /(<text:h text:style-name="(?!Heading_20_)[^"]+" text:outline-level=)"\d"/g,
+        (m) => `${m[1]}"3"`,
+      );
+      const preusmjerenRoditelj = replaceCounted(
+        spustenaRazina.fodt,
+        /(<style:style style:name="Sekcija[^"]*"[^>]*style:parent-style-name=)"Heading_20_1"/g,
+        (m) => `${m[1]}"Heading_20_3"`,
+      );
+      return {
+        fodt: preusmjerenRoditelj.fodt,
+        count: spusteniStilovi.count + spustenaRazina.count,
+      };
+    },
   },
 ];
 
