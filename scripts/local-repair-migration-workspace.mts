@@ -22,9 +22,9 @@ const DEFAULT_LOCAL_REPAIR_MIGRATION_POLICY: LocalRepairMigrationPolicy = Object
     '20260830195905_stavka_revoke_trigger_fn_execute.sql': '352fffe550fbd7d83bac934f36f95383fc1f5a1b5dae857a5cac5ee216a9072a',
   }),
   expectedPendingMigrationNames: Object.freeze([
-    '0104_repair_local_claims.sql',
-    '0105_repair_local_lifecycle.sql',
-    '0106_repair_local_claim_recovery.sql',
+    '0200_repair_local_claims.sql',
+    '0201_repair_local_lifecycle.sql',
+    '0202_repair_local_claim_recovery.sql',
   ]),
   windowsFetchGaps: Object.freeze({
     '0059': Object.freeze({ placeholder: '0059_Lekta', localName: '0059_secure_reminder_cron.sql' }),
@@ -117,7 +117,7 @@ export function parseAndVerifyLocalRepairMigrationDryRun(
   );
   if (!hasExactDryRunSet) {
     throw new Error(
-      'Supabase dry-run mora vratiti tocno migracije 0104, 0105 i 0106.',
+      'Supabase dry-run mora vratiti tocno migracije 0200, 0201 i 0202.',
     );
   }
   return migrationNames;
@@ -192,7 +192,7 @@ export function planLocalRepairMigrationWorkspace(
   );
   if (!hasExactPendingSet) {
     throw new Error(
-      'Release zahtijeva tocno tri nove Lekta migracije: 0104, 0105 i 0106.',
+      'Release zahtijeva tocno tri nove Lekta migracije: 0200, 0201 i 0202.',
     );
   }
   for (const [version, localName] of localNameByVersion) {
