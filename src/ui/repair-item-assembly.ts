@@ -62,6 +62,34 @@ export interface RepairAssemblyInput {
 }
 
 /**
+ * Fixeri koji mijenjaju AUTOROV TEKST i zato u sucelju NIKAD ne ulaze u "Popravi sve": sucelje ih
+ * prikazuje u zasebnoj sekciji s vlastitom kvacicom (po zadanom iskljucenom) i opcijom "samo
+ * prijedlog" (`renderTextItemsSection` u app.ts).
+ *
+ * Skup je namjerno OVDJE, a ne u app.ts: `buildAllRepairableItems` te stavke vraca zajedno s
+ * ostalima (harness ih tako mjeri od uvodjenja modula), pa pozivatelj koji ih zeli odvojiti mora
+ * znati koje su. Do E2 (2026-09-12) je app.ts to znao tako sto je `headingCaseRepairableItem`
+ * zvao ZASEBNO i nikad ga nije stavljao u glavni popis; nakon E2 app.ts vise ne zove nijednog
+ * graditelja izravno, pa razlikovanje mora doci iz istog modula koji popis slaze.
+ *
+ * NIJE isto sto i `TEXT_CHANGING_BY_DESIGN` u real-corpus harnessu: ondje su i popravci koji
+ * smiju mijenjati vidljivi tekst FORME (tipografija, DOI, sadrzaj) a ne traze zasebnu sekciju.
+ * Ovdje je samo ono sto dira recenice rada: velika slova naslova.
+ */
+export const SEPARATE_CONSENT_FIXER_IDS: ReadonlySet<string> = new Set(['heading-case-fixer']);
+
+/**
+ * Razdvaja pun popis na stavke za glavni panel i stavke koje traze zasebnu privolu.
+ * Redoslijed unutar obje polovice je redoslijed iz `buildAllRepairableItems`.
+ */
+export function splitSeparateConsentItems<T extends { fixerId: string }>(all: readonly T[]): { items: T[]; textItems: T[] } {
+  const items: T[] = [];
+  const textItems: T[] = [];
+  for (const item of all) (SEPARATE_CONSENT_FIXER_IDS.has(item.fixerId) ? textItems : items).push(item);
+  return { items, textItems };
+}
+
+/**
  * Pun popis ponudjenih stavki, istim redoslijedom i istim pravilima kao sucelje.
  *
  * Filtriranje na `violated` NIJE ovdje: o tome sto je PREDODABRANO odlucuje

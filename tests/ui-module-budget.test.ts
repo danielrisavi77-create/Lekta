@@ -48,10 +48,73 @@ function bajtova(rel: string): number {
 
 /** Izmjereno 2026-09-03. Brojke se SPUSTAJU kako kod izlazi iz `app.ts`, nikad ne dizu. */
 /**
- * Povijest: 359 -> 357 (T16 B5, telemetrija izasla u `src/ui/telemetry.ts`).
- * Spusta se na IZMJERENU vrijednost svaki put kad kod izadje, nikad se ne dize.
+ * Povijest: 359 -> 357 KB (T16 B5, telemetrija izasla u `src/ui/telemetry.ts`), pa 357 KB -> 363608 B
+ * (2026-09-12, paket B: dupli pisac prikaza, otisak profila, odabir profila, otkrivacki ples,
+ * keSiranje panela i sjena stroja stanja).
+ *
+ * ZASTO VISE NIJE OKRUGAO BROJ: svaka okrugla vrijednost iznad izmjerene je SKRIVENI ZRAK. Uz
+ * `357 * 1024` bi ostalo 1960 bajta u koje bi sljedeca izmjena mogla narasti a da gard suti, sto
+ * je upravo ono protiv cega ovaj ratchet postoji. Cijena je da svako sljedece vadjenje mora
+ * dirati i ovu brojku; to je posao, ne smetnja.
+ *
+ * SLJEDECI KORAK (paket C) DODAJE u `app.ts` uske adaptere. Brojka se zbog toga NE DIZE: adapteri
+ * se placaju novim vadjenjem iz iste datoteke. Ako se pojavi pritisak da se digne, to je znak da
+ * kod pripada drugom modulu, ne da je gard prestrog.
  */
-const BUDZET_APP = 357 * 1024;
+// SPAJANJE S MASTEROM 2026-09-12: 363608 -> 363789.
+//
+// Ovo NIJE dizanje brojke zato sto smeta, i racunica je zato ovdje:
+//   zajednicka osnova (59adbc8c)   365386 B
+//   master (PR #73, nova znacajka) 365552 B   (+166 prema osnovi)
+//   ova grana (paketi A i B)       363608 B   (-1778 prema osnovi)
+//   spojeno                        363789 B   (-1597 prema osnovi, i ispod OBA roditelja)
+//
+// Brojka se pomakla samo zato sto je u granu usla tudja legitimna znacajka, a spojena datoteka je
+// i dalje manja od obje strane. Pravilo ostaje: vlastiti rad se placa vadjenjem, ne dizanjem.
+// PAKET C, korak E1 + C4 (2026-09-12): 363789 -> 363652. Racunica:
+//   E1  applyFacultyContext + applyUnitFromUrl s komentarima -> src/ui/selection-entry.ts   -1344
+//   C4  potvrdiProfil, applyConfirmedProfileSelection, vezanje zastavice uz dokument, gard u
+//       applyDetectedContext, dva uvoza (obrazlozenje zivi u profile-confirmed-events.ts)      +1207
+//   neto                                                                                        -137
+// Adapter je placen vadjenjem iz iste datoteke, kako gornji komentar trazi; brojka ide DOLJE.
+// PAKET C, korak E2 (2026-09-12): 363652 -> 358698. Racunica:
+//   inline sastav ponude popravaka u renderRepairSection (dva niza od po 24 poziva graditelja,
+//   14 pomocnih konstanti, uvoz 27 imena iz repair-items) van; ostaje jedan poziv
+//   buildAllRepairableItems + splitSeparateConsentItems iz src/ui/repair-item-assembly.ts   -4954
+// Ovo nije cisto vadjenje nego preusmjeravanje na modul koji vec postoji (harness ga mjeri);
+// razlika u redoslijedu i clanstvu je imenovana u tests/repair-item-assembly-single-source.test.ts.
+// PAKET C, korak C6 (2026-09-12): 358698 -> 359013. Racunica:
+//   dispose() starog handlea prije prerendera, dva emitRepairPanelReady adaptera i dva uvoza    +373
+//   serverski handle: rucni objekt od tri metode zamijenjen s buildRepairPanelHandle(...)       -58
+//   neto                                                                                        +315
+// Odluka orkestratora paketa C: E2 je oslobodio 4954 B (363652 -> 358698) upravo za C6, pa se ovaj
+// adapter placa iz tog viska i brojka ide na IZMJERENO. Prema stanju prije E2 to je -4639. Sva
+// logika (kljuc, otisak, obnova, pisac) zivi u src/ui/repair-selection.ts i
+// src/routes/workspace/repair-selection.ts, ne u app.ts.
+// PAKET C, korak C7 (2026-09-13): 359013 -> 359005. Racunica:
+//   `updateProfile` omotan signalom: `function updateProfile(){return trackProfileUpdate(_updateProfile())}`
+//   + preimenovanje tijela u `_updateProfile` + uvoz iz ./profile-update-signal                  +134
+//   `_SERVER_DEEP_FIXERS` (lokalni duplikat skupa koji vec izvozi repair-panel kao DEEP_CAPABLE)
+//   obrisan, dva mjesta koristenja preusmjerena, ime dodano u postojeci uvoz                    -142
+//   neto                                                                                          -8
+// Indikator (save-state, save-indicator), istek (expired) i pagehide zive u src/routes/workspace/**
+// i src/session/**, ne u app.ts; app.ts je dobio samo jedan redak omotaca, placen duplikatom.
+// SPAJANJE S MASTEROM 2026-09-19 (tudji rast spojen s mastera, 164dd160, integracija potpisanog
+// WordReplica lokalnog popravka): 359005 -> 359005 (bez promjene). Racunica:
+//   ova grana (068451e8)     359005 B
+//   master (164dd160)        365552 B   (WordReplica local repair, nekoliko divergentnih commita)
+//   spojeno (prvi pokusaj)   359025 B   (+20 prema ovoj grani, iz sukobljenog uvoznog retka)
+//   spojeno (konacno)        359005 B   (+0, nakon sto je tsc prijavio TS6133 na uvoz koji vise
+//                                        nema pozivatelja u ovoj datoteci)
+// Jedini sukob u datoteci bio je uvozni redak iz ./repair-panel: HEAD je uvozio renderConfirmation,
+// DEEP_CAPABLE, buildRepairPanelHandle i trackProfileUpdate (wizard/repair-phase), master ih je
+// izostavio jer ih na svojoj strani ne koristi. Zadrzan je nadskup uvoza (sve sa HEAD-a), ali
+// masterov refaktor (WordReplica) je poziv `renderConfirmation(...)` premjestio iz app.ts u
+// src/ui/local-repair-confirmation-flow.ts (funkcija confirmRepairSelection, koja sama uvozi
+// renderConfirmation iz repair-panel.ts), pa je uvoz u app.ts ostao mrtav. Uklonjen je iz uvoza
+// (DEEP_CAPABLE i trackProfileUpdate ostaju, oba se i dalje koriste). Ostatak mastera je automatski
+// spojen bez sukoba.
+const BUDZET_APP = 359005;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //
@@ -68,7 +131,9 @@ const BUDZET_APP = 357 * 1024;
 // `BUDZET_APP` OSTAJE i NIJE isti slucaj. On ima cilj (monolit se rasplice) i taj se cilj mjeri
 // PADANJEM, uz pravilo da se spusta cim datoteka smrsavi. Dvaput u jednom danu je natjerao
 // selidbu objasnjenja iz `app.ts` u modul umjesto dizanja brojke, dakle radio je svoj posao.
-const MAX_HIDDEN_DODIRA = 97;
+// Spusteno 97 -> 81 (2026-09-10): dva dodira iz `[data-open-phase]` su izasla jer je
+// `setWizardStep(3)` kroz `renderView` vec postavljao isto stanje, pa su bili suvisni.
+const MAX_HIDDEN_DODIRA = 81;
 
 describe('src/ui: ratchet velicine, prije razbijanja a ne poslije', () => {
   it('app.ts ne raste', () => {

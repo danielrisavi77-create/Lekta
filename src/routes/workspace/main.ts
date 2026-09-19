@@ -1,15 +1,19 @@
 import {
-  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent,
+  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
-import { subscribeAnalyzerResultReady } from '../../ui/analyzer-document-events';
+import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../ui/analyzer-document-events';
+import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
+import { createConfirmedProfile } from './confirmed-profile';
+import { createRepairSelectionMemory } from './repair-selection';
+import { createSaveIndicator } from './save-indicator';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
 import {
   openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
   type StorageAvailability,
 } from './bootstrap';
-import { initialContext, type WorkspaceContext } from './workspace-state';
+import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
@@ -98,13 +102,18 @@ async function start(): Promise<void> {
 
   const storage = detectStorage();
   let sessionId: string | null = null;
+  // C7: JEDAN indikator stanja zapisa za SVA cetiri proizvodjaca ishoda (dokument, revizije, profil,
+  // odabir). Zivi u `#radDocBar` (vidljiv tek uz dokument, izrecena odluka u `save-indicator.ts`).
+  // `storage-off` ide odmah, da nijedan kasniji dogadjaj ne moze proizvesti tvrdnju o zapisu bez pohrane.
+  const indikator = createSaveIndicator({ mount: () => document.getElementById('radDocSave') });
+  indikator.apply({ kind: storage.kind === 'available' ? 'storage-on' : 'storage-off' });
   // Stanje se DRZI i osvjezava. Zapisano jednom pri ucitavanju, tvrdilo bi `empty` i nakon sto
   // korisnik ucita dokument; ustajala tvrdnja o stanju gora je od nikakve, jer je netko procita.
-  let context: WorkspaceContext = initialContext(false);
-  const showState = (next: WorkspaceContext): void => {
-    context = next;
-    document.documentElement.dataset.workspaceState = context.state;
-  };
+  // Knjiga sesije. Do 2026-09-12 je ovdje zivio i upis `data-workspace-state` na <html>; atribut
+  // je uklonjen jer NIJEDAN citatelj nije postojao (ni CSS, ni test, ni kod), pa je bio trosak bez
+  // korisnika. Stanje koje korisnik vidi pise `wizard-view.ts`.
+  let context: WorkspaceLedger = emptyLedger();
+  const upisi = (next: WorkspaceLedger): void => { context = next; };
 
   // OBNOVLJEN DOKUMENT SE NE ZAPISUJE PONOVNO. Do 2026-09-05 je i on prolazio kroz zapis, pa je
   // svako otvaranje `/rad/#session=X` stvaralo NOVU sesiju Y i brisalo X: poveznica iz
@@ -133,7 +142,36 @@ async function start(): Promise<void> {
     esc: (v) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'),
     status: showStatus,
     track: trackWorkspaceEvent,
+    onSaveEvent: indikator.apply,
   });
+  // C4: potvrdjeni profil se pamti uz sesiju i vraca pri obnovi. Pretplata ide PRIJE
+  // `openWorkspace` iz istog razloga kao gore: objava ide nad kopijom skupa pretplatnika.
+  const profil = createConfirmedProfile({
+    store: () => (storage.kind === 'available' ? storage.store : null),
+    sessionId: () => sessionId,
+    apply: applyConfirmedProfileSelection,
+    status: showStatus,
+    track: trackWorkspaceEvent,
+    onSaveEvent: indikator.apply,
+  });
+  subscribeProfileConfirmed((event) => profil.onConfirmed(event));
+  // C6: odabir popravaka se pamti po identitetu (`fixerId|ruleId`) i vraca na PRVI panel ciji se
+  // otisak ponude poklapa sa zapisanim. Panel se gradi tek nakon analize, pa pretplata prije
+  // `openWorkspace` ne moze zakasniti; stoji ovdje iz istog razloga kao ostale.
+  const odabir = createRepairSelectionMemory({
+    store: () => (storage.kind === 'available' ? storage.store : null),
+    sessionId: () => sessionId,
+    status: showStatus,
+    track: trackWorkspaceEvent,
+    onSaveEvent: indikator.apply,
+  });
+  subscribeRepairPanelReady((event) => odabir.onPanel(event));
+  // C7: ZATVARANJE KARTICE. Pisac koalescira 250 ms, a `dispose()` ono sto ceka ODBACUJE, pa se do
+  // C7 zadnja odluka prije zatvaranja tiho gubila dok je indikator pokazivao "Zapisujem". `pagehide`
+  // (ne `beforeunload`: ovaj se okida i pri bfcache-u i na mobilnom) prazni OBA pisca odmah. Ishod
+  // stize kroz `onOutcome` kao i inace, pa indikator ostaje na `saving` dok zapis stvarno ne prodje;
+  // "saving koje nikad ne zavrsi" tako nikad ne postane "spremljeno".
+  window.addEventListener('pagehide', () => { void profil.flush(); void odabir.flush(); });
   subscribeAnalyzerResultReady((event) => {
     revisions.onResult(event.result);
     // T13: komentari iz paketa postaju lokalni zadaci; bez komentara sekcija ostaje skrivena. Citanje paketa je lokalno.
@@ -150,27 +188,37 @@ async function start(): Promise<void> {
   });
 
   subscribeAnalyzerDocumentAccepted((event) => {
-    showState(afterDocumentAccepted(context));
+    upisi(afterDocumentAccepted(context));
     if (restoredFile !== null && event.file === restoredFile) {
-      showState(afterPersist(context, true));
+      upisi(afterPersist(context, true));
       showStatus(null);
       return;
     }
+    // Drugi dokument: snimka odabira iz sesije opisuje ponudu koja za njega nikad nece nastati.
+    odabir.forget();
     void (async () => {
+      indikator.apply({ kind: 'queued' });
       const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
-      showState(afterPersist(context, out.kind === 'persisted'));
+      upisi(afterPersist(context, out.kind === 'persisted'));
+      // Zapis dokumenta je isti razred cinjenice kao zapis profila: `persisted` je potvrdjen upis,
+      // `skipped` znaci da pohrane nema, `failed` da ju je pohrana odbila.
+      indikator.apply(out.kind === 'skipped'
+        ? { kind: 'storage-off' }
+        : { kind: 'outcome', outcome: out.kind === 'persisted' ? { kind: 'written', revision: 0, at: Date.now() } : { kind: 'failed', reason: 'persist' } });
       if (out.kind !== 'persisted') { showStatus(out.notice); return; }
       sessionId = out.sessionId;
       // `replaceState`, ne `pushState`: zapis sesije nije korisnikova navigacija, pa ne smije
       // dodati korak u povijest kroz koji se "natrag" vraca na praznu radnu povrsinu.
       history.replaceState(history.state, '', location.pathname + location.search + out.fragment);
       showStatus(null);
+      // Potvrda koja je stigla dok sesija jos nije imala adresu sada dobiva kamo ici.
+      void profil.flush();
     })();
   });
 
   const outcome = await openWorkspace(location.hash, storage);
   showStatus(outcome.notice);
-  showState(outcome.context);
+  upisi(outcome.context);
 
   if (outcome.session) {
     sessionId = outcome.session.id;
@@ -181,8 +229,13 @@ async function start(): Promise<void> {
     restoredFile = fileFromLocalDocumentSession(outcome.session);
     // Snimke revizija iz sesije (stariji zapisi ih nemaju): usporedba prezivi ponovno ucitavanje stranice.
     revisions.restore(outcome.session.workspace?.revision, outcome.session.workspace?.previousRevision);
+    // REDOSLIJED JE UGOVOR (gard: tests/thin-route-mount.test.ts). Profil sesije ide POSLIJE
+    // `initAnalyzerApp` (koje kroz `restorePreferences` vraca globalne postavke, koje bi ga inace
+    // pregazile) i PRIJE `restoreDocument` (cija detekcija iz dokumenta bi ga inace pregazila).
+    profil.restore(outcome.session.profile);
+    odabir.restore(outcome.session.workspace?.repairSelection);
     const restored = await restoreDocument(outcome.session, () => loadAnalyzerDocument(restoredFile!));
-    if (restored.kind === 'refused') showStatus(restored.notice);
+    if (restored.kind === 'refused') { odabir.forget(); showStatus(restored.notice); }
   }
 }
 
