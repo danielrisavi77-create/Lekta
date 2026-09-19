@@ -160,13 +160,8 @@
   font-size: .95rem;
   line-height: 1.55;
 }
-/* Presuda boja samo PRVU rijec naslova bila bi trik; umjesto toga tanki korektorski potez
-   uz rub kopije nosi ton. Isti jezik kao crvena olovka u herou. */
-.cockpit-hero__copy { border-left: 2px solid var(--ck-line); padding-left: clamp(.9rem, 1.6vw, 1.4rem); }
-.result-cockpit--blocked .cockpit-hero__copy { border-left-color: var(--ck-red); }
-.result-cockpit--needs-work .cockpit-hero__copy { border-left-color: var(--ck-amber); }
-.result-cockpit--manual-review .cockpit-hero__copy { border-left-color: var(--ck-blue); }
-.result-cockpit--clear .cockpit-hero__copy { border-left-color: var(--ck-green); }
+/* Ton presude NE nosi lijevi rub kopije (design/README.md, pravilo 3; ALIGNMENT Z3, 2026-09-19):
+   presudu vec nosi .cockpit-verdict kao oznaka, a boja prstena kao mjerac. */
 
 /* Tamni cip: jedini "stroj" na papiru, isti uredaj kao hero score kartica. */
 .cockpit-score {
@@ -389,16 +384,19 @@
   display: grid;
   grid-template-columns: 2.6rem minmax(0, 1fr);
   gap: 0 .5rem;
-  padding: 1rem 1.1rem 1rem .4rem;
+  padding: 1rem 1.1rem;
   border: 1px solid var(--ck-line);
-  border-left: 3px solid var(--ck-line);
   border-radius: var(--radius, 2px);
   background: color-mix(in srgb, var(--paper, #F7F3E8) 55%, white);
   transition: box-shadow .28s var(--ck-ease), transform .28s var(--ck-ease), border-color .28s var(--ck-ease);
 }
-.cockpit-finding--error { border-left-color: var(--ck-red); }
-.cockpit-finding--warning { border-left-color: var(--ck-amber); }
-.cockpit-finding--info { border-left-color: var(--ck-blue); }
+/* Ozbiljnost nosi EYEBROW (prva oznaka u __meta: tocka u zivom tonu + tekst u paper-safe tonu),
+   nikad obojeni lijevi rub (design/README.md, pravilo 3; Z3). Kartica lezi na papiru, koji je
+   svijetao u OBJE teme, pa tekst ne smije uzeti --warn/--scan iz tamne teme (ugodjeni za stol):
+   amber tekst je paper-safe literal, info tekst ostaje prigusen, ton mu nosi samo tocka. */
+.cockpit-finding--error { --finding-tone: var(--ck-red); --finding-tone-text: var(--ck-red-text); }
+.cockpit-finding--warning { --finding-tone: var(--ck-amber); --finding-tone-text: #8A5D14; }
+.cockpit-finding--info { --finding-tone: var(--ck-blue); }
 .cockpit-finding--confirmed, .cockpit-finding--ignored { opacity: .62; }
 @media (hover: hover) {
   .cockpit-finding:hover {
@@ -426,8 +424,20 @@
   letter-spacing: .1em;
   text-transform: uppercase;
 }
-.cockpit-finding--error .cockpit-finding__meta span:first-child { color: var(--ck-red-text); }
-.cockpit-finding--warning .cockpit-finding__meta span:first-child { color: #8A5D14; }
+.cockpit-finding__meta span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: var(--finding-tone-text, var(--ck-muted));
+}
+.cockpit-finding__meta span:first-child::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--finding-tone, currentColor);
+}
 .cockpit-finding__body h3 {
   margin: 0;
   font-family: var(--display-serif, Georgia, serif);
@@ -779,7 +789,6 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   gap: .1rem;
   padding: .7rem .8rem;
   border: 1px solid var(--ck-line);
-  border-left-width: 3px;
   border-radius: var(--radius, 2px);
 }
 .outlook__tile strong {
@@ -788,10 +797,12 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
-.outlook__tile span { color: var(--ck-muted); font-size: .74rem; line-height: 1.3; }
-.outlook__tile--auto { border-left-color: var(--ck-green); }
-.outlook__tile--assisted { border-left-color: var(--ck-blue); }
-.outlook__tile--manual { border-left-color: var(--ck-amber); }
+.outlook__tile span { display: inline-flex; align-items: center; gap: .4rem; color: var(--ck-muted); font-size: .74rem; line-height: 1.3; }
+/* Ton plocice nosi tocka uz natpis, ne lijevi rub (Z3). */
+.outlook__tile span::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 999px; background: var(--tile-tone, var(--ck-line)); }
+.outlook__tile--auto { --tile-tone: var(--ck-green); }
+.outlook__tile--assisted { --tile-tone: var(--ck-blue); }
+.outlook__tile--manual { --tile-tone: var(--ck-amber); }
 
 .outlook__ceiling { margin: 0; font-size: .88rem; line-height: 1.55; }
 .outlook__ceiling strong { font-family: var(--mono, monospace); font-variant-numeric: tabular-nums; }
