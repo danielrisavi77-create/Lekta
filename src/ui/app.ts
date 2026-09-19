@@ -378,7 +378,12 @@ function initLegacy(doc: Document,signal: AbortSignal){
  // Cjenik copy: dok su placene tarife "Uskoro" (soft-launch), staticni HTML nosi besplatnu poruku;
  // kad naplata proradi (paidOffersLive), vrati se placeni jamstveni/disclaimer copy s payment info.
  if(paidOffersLive()){const _gn=$('#guaranteeNote');if(_gn)_gn.innerHTML='✓ <strong>Jamstvo pokrivenosti:</strong> za profile označene kao potvrđeni, dakle ne za generičke ni savjetodavne, ako ti referada vrati rad zbog pravila koje je Lekta označila ispravnim, vraćamo novac i besplatno ručno popravimo. Prijava u roku od 30 dana od kupnje, uz dokaz i sporno pravilo. Jamčimo točnost provjere prema pravilniku, a ne ocjenu, prihvaćanje rada ni izvornost teksta (nije provjera plagijata).';const _pd=$('#pricingDisclaimer');if(_pd)_pd.textContent='Usluga provjerava oblikovanje, strukturu, opseg i citatnu tehniku prema dostupnim pravilima. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu, akademsku kvalitetu sadržaja ni odluku mentora ili povjerenstva. Plaćanje se provodi na sigurnoj stranici konfiguriranog payment providera.'}
- let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e: any){}if(theme)doc.documentElement.dataset.theme=theme;
+ // `system` (Z6, panel "Prilagodi prikaz") se izrazava ODSUTNOSCU atributa, pa se SIROVA vrijednost
+ // ne smije prepisati u `data-theme`. Bezuvjetni upis je `data-theme="system"` vracao odmah nakon
+ // montaze panela na `/rad/` i time gasio opciju "Kao sustav" na jednoj od dvije rute koje je nude:
+ // ni `:not([data-theme])` ni `[data-theme="light"]` vise ne bi pogodili, pa bi ruta ostala tamna
+ // bez obzira na `prefers-color-scheme`, dok bi radio u panelu i dalje pokazivao "Kao sustav".
+ let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e: any){}if(theme==='system')delete doc.documentElement.dataset.theme;else if(theme)doc.documentElement.dataset.theme=theme;
  if(location.search.includes('demo=1'))setTimeout(()=>{if(!signal.aborted)runDemo()},300);
  void trackEvent('landing_view');
 }

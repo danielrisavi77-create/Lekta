@@ -114,6 +114,27 @@ html:root[data-theme="light"]{
   --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
   --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
 }
+/*
+ * "KAO SUSTAV" (Z6): `data-theme` se UKLANJA, pa gornji `[data-theme="light"]` blok ne pogadja, a
+ * ovaj sloj primitive duplicira pod `html:root`, dakle ostali bi TAMNI na svijetlom sustavu.
+ * Vrijednosti su DOSLOVNA kopija bloka iznad; gard `tests/display-settings.test.ts` usporedjuje
+ * SVE tokene obaju blokova, ne uzorak, jer je bas uzorak propustio `--red-on-desk` (jedini token
+ * koji zivi samo ovdje, ne i u design-system.css): ostao je na tamnom #FF7A5C nad svijetlim stolom,
+ * dakle 1,80:1 umjesto 4,94:1, i to na `.footer-col-h`, koji `/rad/` stvarno nosi.
+ * Specificnost `html:root:not([data-theme])` je (0,3,0) i tuce `html:root` (0,2,0) bez obzira na
+ * redoslijed ucitavanja.
+ */
+@media (prefers-color-scheme:light){html:root:not([data-theme]){
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
+  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
+  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-desk:#A62B23;
+  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);
+  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
+  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
+  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
+  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
+}}
+
 /* Baza: mono je osnovni glas stranice, serif nosi naslove i duge opise */
 body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);overflow-x:clip}
 h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:400}
@@ -222,6 +243,9 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 @keyframes ksStampIn{0%{opacity:0;transform:rotate(-6deg) scale(2.2)}55%{opacity:1;transform:rotate(-6deg) scale(.95)}75%{transform:rotate(-6deg) scale(1.05)}100%{transform:rotate(-6deg) scale(1)}}
 @keyframes ksVendIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes ksSpotPulse{0%,100%{box-shadow:0 0 0 0 rgba(196,55,46,0)}50%{box-shadow:0 0 0 9px rgba(196,55,46,.16)}}/* Prigusenje `.85` na SVIJETLOM stolu spusta svaki token ispod praga (izmjereno: #A62B23 -> #af453b 3,95:1, #5F5645 -> #726a58 3,77:1, #665D4D -> #786f5f 3,48:1); ni `.92` ne pomaze (3,92:1). U svijetloj temi zato prigusenja nema, a stanje nosi BOJA, koja ondje vec postoji. U tamnoj temi `.85` prolazi i ostaje. */html:root[data-theme="light"] .ks-step,html:root[data-theme="light"] .ks-di{opacity:1}html:root[data-theme="light"] .ks-step:hover,html:root[data-theme="light"] .ks-di:hover{opacity:1}
+/* Ista korekcija za "kao sustav": bez atributa gornji selektor ne pogadja, pa bi na svijetlom
+   sustavu ostalo prigusenje `.85` koje komentar iznad mjeri kao pad ispod praga. */
+@media (prefers-color-scheme:light){html:root:not([data-theme]) .ks-step,html:root:not([data-theme]) .ks-di{opacity:1}html:root:not([data-theme]) .ks-step:hover,html:root:not([data-theme]) .ks-di:hover{opacity:1}}
 .ks-cta .btn-primary{font-size:14px;padding:19px 32px;text-transform:uppercase;letter-spacing:.04em}
 /* Mobilna/tablet navigacija: MORA biti na kraju sloja (appendana pravila gaze media blokove
    bez obzira na poziciju media querya). KS nav se skuplja vec na 1160px: siri je od starog,

@@ -11,7 +11,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   ZADANE_POSTAVKE, ZADANO_OSVJETLJENJE, PANEL_ID,
   applyDisplaySettings, applyOsvjetljenje, mountDisplaySettings,
@@ -19,6 +19,9 @@ import {
   type DisplaySettingsController,
 } from '../src/shared/display-settings';
 import { STORAGE_KEYS } from '../src/shared/browser-storage';
+import { pokretPrigusen, suprotnaTema, tamnoNaEkranu } from '../src/shared/display-prefs';
+import { playIntakeEntry } from '../src/routes/intake/intake-motion';
+import { initAnalyzerApp } from '../src/ui/app';
 
 const ROOT = resolve(__dirname, '..');
 /** Citanje s diska normalizira CR: repo ima `core.autocrlf` (CLAUDE.md). */
@@ -58,7 +61,33 @@ function spremljeno(): Record<string, unknown> {
   return JSON.parse(localStorage.getItem(DISPLAY_KEY) || 'null') as Record<string, unknown>;
 }
 
+/**
+ * SUSTAVNA PREFERENCIJA SE PODMECE, NE PRETPOSTAVLJA.
+ *
+ * Izmjereno: happy-dom prijavljuje `prefers-color-scheme: light` (dark = false), a raniji test je
+ * u komentaru tvrdio suprotno ("bez atributa ekran je tamna tema") i svejedno bio zelen, jer kod
+ * `matchMedia` uopce nije pitao. Test koji ovisi o tvornickoj postavci okoline mjeri okolinu, ne
+ * proizvod, pa se obje grane ovdje postavljaju izricito.
+ */
+function podmetniSustav(preferencije: Record<string, boolean>): () => void {
+  const prozor = window as unknown as { matchMedia?: unknown };
+  const izvorni = prozor.matchMedia;
+  prozor.matchMedia = (upit: string) => ({
+    matches: preferencije[upit] === true,
+    media: upit,
+    addEventListener() {}, removeEventListener() {},
+    addListener() {}, removeListener() {},
+    onchange: null,
+    dispatchEvent: () => false,
+  });
+  return () => { prozor.matchMedia = izvorni; };
+}
+
+const SUSTAV_TAMAN = { '(prefers-color-scheme: dark)': true };
+const SUSTAV_SVIJETAO = { '(prefers-color-scheme: dark)': false };
+
 let api: DisplaySettingsController | null = null;
+let vratiSustav: (() => void) | null = null;
 
 beforeEach(() => {
   localStorage.clear();
@@ -70,6 +99,8 @@ beforeEach(() => {
 afterEach(() => {
   api?.dispose();
   api = null;
+  vratiSustav?.();
+  vratiSustav = null;
   document.body.innerHTML = '';
 });
 
@@ -189,13 +220,35 @@ describe('Z6 postavke prikaza: panel', () => {
     expect(radio('lektaOsvjetljenje', 'dark').checked).toBe(true);
   });
 
-  it('iz `system` lampa vodi u SUPROTNO od onoga sto je na ekranu, ne u tisinu', () => {
+  // IZ `system` LAMPA MORA GLEDATI EKRAN, NE ATRIBUT. Ranija izvedba je racunala iz `data-theme`,
+  // kojeg u `system` nema, pa je uvijek tvrdila tamno: uz svijetli sustav je javljala "Lampa:
+  // ugasi" nad upaljenom lampom, a prvi klik je vodio u `light`, dakle u ono sto je vec na ekranu.
+  // Obje grane se mjere, jer je kvar vidljiv samo u jednoj.
+  it('iz `system` uz TAMAN sustav: stanje je tamno, prvi klik pali danje svjetlo', () => {
+    vratiSustav = podmetniSustav(SUSTAV_TAMAN);
     localStorage.setItem(THEME_KEY, 'system');
     api = postavi();
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
-    (document.getElementById('themeBtn') as HTMLButtonElement).click();
-    // Bez atributa ekran je tamna tema (zadano), pa prvi klik mora dati svjetlo.
+    const lampa = document.getElementById('themeBtn') as HTMLButtonElement;
+    expect(lampa.getAttribute('aria-pressed')).toBe('true');
+    expect(lampa.getAttribute('aria-label')).toBe('Lampa: ugasi');
+    lampa.click();
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+  });
+
+  it('iz `system` uz SVIJETAO sustav: stanje je svijetlo, prvi klik pali lampu', () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    localStorage.setItem(THEME_KEY, 'system');
+    api = postavi();
+    expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
+    const lampa = document.getElementById('themeBtn') as HTMLButtonElement;
+    expect(lampa.getAttribute('aria-pressed')).toBe('false');
+    expect(lampa.getAttribute('aria-label')).toBe('Lampa: upali');
+    expect(lampa.getAttribute('title')).toBe('Upali radnu lampu');
+    lampa.click();
+    // Kljucna tvrdnja: NE `light`. Klik koji vodi u vrijednost koja je vec na ekranu je tisina.
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(radio('lektaOsvjetljenje', 'dark').checked).toBe(true);
   });
 
   it('gumb otvara i zatvara; Escape zatvara i VRACA fokus na gumb', () => {
@@ -356,5 +409,268 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     const boot = read('src/shared/ui-boot.ts');
     expect(boot).toContain('btn.dataset.themeOwner');
     expect(boot).toContain("spremljenaTema !== 'system'");
+  });
+});
+
+describe('Z6 citanje STANJA, ne atributa', () => {
+  // Cetiri mjesta su darkness racunala iz `data-theme` (`display-settings.ts`, `ui-boot.ts` i dva
+  // puta `route-shell.ts`), a atribut u nacinu `system` NE POSTOJI. Citac je zato jedan i dijeljen;
+  // ovdje se mjeri njegovo ponasanje, a ne prepisuje njegova logika.
+  it('bez atributa odlucuje `prefers-color-scheme`, s atributom odlucuje atribut', () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    expect(tamnoNaEkranu(document)).toBe(false);
+    expect(suprotnaTema(document)).toBe('dark');
+    vratiSustav();
+    vratiSustav = podmetniSustav(SUSTAV_TAMAN);
+    expect(tamnoNaEkranu(document)).toBe(true);
+    expect(suprotnaTema(document)).toBe('light');
+    // Atribut NADJACAVA sustav u oba smjera: izricit izbor nije prijedlog.
+    document.documentElement.dataset.theme = 'light';
+    expect(tamnoNaEkranu(document)).toBe(false);
+    document.documentElement.dataset.theme = 'dark';
+    vratiSustav();
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    expect(tamnoNaEkranu(document)).toBe(true);
+  });
+
+  it('preglednik bez `matchMedia` dobiva ZADANO proizvoda (radna lampa), ne iznimku', () => {
+    const prozor = window as unknown as { matchMedia?: unknown };
+    const izvorni = prozor.matchMedia;
+    prozor.matchMedia = undefined;
+    try {
+      expect(tamnoNaEkranu(document)).toBe(true);
+      expect(pokretPrigusen(document)).toBe(false);
+    } finally {
+      prozor.matchMedia = izvorni;
+    }
+  });
+
+  it('NIJEDAN preklopnik teme vise ne racuna tamu iz `data-theme`', () => {
+    // Gard nad ODSUTNOSCU obrasca: kvar se vraca kao "ocito dovoljno" citanje atributa, jedno po
+    // jedno mjesto, i svako izgleda bezazleno. Popis je imenovan, ne prebrojan.
+    for (const put of ['src/shared/ui-boot.ts', 'src/routes/shared/route-shell.ts', 'src/shared/display-settings.ts']) {
+      const izvor = read(put);
+      expect(izvor, `${put} mora citati stanje kroz display-prefs`).toMatch(/from '[^']*display-prefs'/);
+      const sirovo = izvor.match(/dataset\.theme\s*(===|!==)\s*'(dark|light)'/g) ?? [];
+      expect(sirovo, `${put} opet racuna temu iz atributa: ${sirovo.join(', ')}`).toEqual([]);
+    }
+  });
+});
+
+describe('Z6 "Manje pokreta" zaustavlja i Web Animations API', () => {
+  // MJERI SE POKRET, NE PRISUTNOST CSS PRAVILA. `data-motion="reduce"` gasi `animation` i
+  // `transition`, a ulazna sekvenca na `/` animira kroz `element.animate()`, koji ni o jednom od
+  // ta dva svojstva ne ovisi: CSS ju nije mogao zaustaviti. Brojac poziva je zato jedini dokaz.
+  function brojacAnimacija(): { broj: () => number; vrati: () => void } {
+    const proto = Element.prototype as unknown as { animate?: unknown };
+    const izvorni = proto.animate;
+    let broj = 0;
+    proto.animate = function animate() { broj += 1; return { cancel() {}, finish() {} }; };
+    return { broj: () => broj, vrati: () => { proto.animate = izvorni; } };
+  }
+
+  function papir(): void {
+    document.body.innerHTML = '<div id="intakeDropzone">'
+      + '<p class="intake-kicker">a</p><h1 class="intake-title">b</h1>'
+      + '<p class="intake-lead">c</p><div class="intake-cta">d</div><p class="intake-hint">e</p>'
+      + '</div>';
+  }
+
+  it('BASELINE: bez prigusenja sekvenca stvarno animira', () => {
+    vratiSustav = podmetniSustav({});
+    const brojac = brojacAnimacija();
+    try {
+      papir();
+      playIntakeEntry(document);
+      expect(brojac.broj(), 'sekvenca ne animira nista; gard bi bio vakuumski zelen').toBeGreaterThan(0);
+    } finally { brojac.vrati(); }
+  });
+
+  it('`data-motion="reduce"` gasi SVE pozive `animate`, ne samo CSS animacije', () => {
+    vratiSustav = podmetniSustav({});
+    const brojac = brojacAnimacija();
+    try {
+      papir();
+      document.documentElement.dataset.motion = 'reduce';
+      playIntakeEntry(document);
+      expect(brojac.broj(), 'WAAPI sekvenca je odigrala uz rucno ugasen pokret').toBe(0);
+    } finally { brojac.vrati(); }
+  });
+
+  it('sustavni `prefers-reduced-motion` i dalje gasi sekvencu, bez ijednog atributa', () => {
+    vratiSustav = podmetniSustav({ '(prefers-reduced-motion: reduce)': true });
+    const brojac = brojacAnimacija();
+    try {
+      papir();
+      playIntakeEntry(document);
+      expect(brojac.broj()).toBe(0);
+      expect(pokretPrigusen(document)).toBe(true);
+    } finally { brojac.vrati(); }
+  });
+
+  it('preklopka u panelu doista upisuje atribut koji sekvenca cita', () => {
+    vratiSustav = podmetniSustav({});
+    api = postavi();
+    const preklopka = document.getElementById('lektaPokret') as HTMLInputElement;
+    preklopka.checked = true;
+    preklopka.dispatchEvent(new Event('change', { bubbles: true }));
+    expect(pokretPrigusen(document)).toBe(true);
+  });
+});
+
+/**
+ * PARITET SVIJETLIH GRANA.
+ *
+ * Isti izbor "kao sustav" pogadja DVA selektora: `html:root[data-theme="light"]` (izricit izbor) i
+ * `html:root:not([data-theme])` unutar `prefers-color-scheme: light` (sustav). Sve sto prvi
+ * postavlja mora postavljati i drugi, inace `system` daje TRECI izgled koji nitko nije nacrtao.
+ *
+ * Uzorak ovdje nije dovoljan i to je izmjereno: raniji gard je provjeravao dva tokena (`--paper`,
+ * `--desk`) i bio zelen dok je `--red-on-desk` ostajao na tamnom #FF7A5C nad svijetlim stolom
+ * (1,80:1 umjesto 4,94:1, na `.footer-col-h` koji `/rad/` stvarno nosi). Zato se usporedjuje
+ * CIJELA populacija tokena, a ne izabrani primjeri.
+ */
+function blokIza(css: string, selektor: string): string | null {
+  const pocetak = css.indexOf(selektor);
+  if (pocetak < 0) return null;
+  // Selektor SMIJE zavrsiti otvorenom viticom (tako se razlikuje blok tokena od pravila nad
+  // potomkom). Tada je ta viticasta VEC pronadjena, pa se ne smije traziti sljedeca: prvi pokusaj
+  // je zbog toga citao blok koji dolazi POSLIJE i prijavio 23 lazno nedostajuca tokena.
+  const otvorena = selektor.endsWith('{')
+    ? pocetak + selektor.length - 1
+    : css.indexOf('{', pocetak + selektor.length);
+  if (otvorena < 0) return null;
+  let dubina = 0;
+  for (let i = otvorena; i < css.length; i += 1) {
+    if (css[i] === '{') dubina += 1;
+    else if (css[i] === '}') {
+      dubina -= 1;
+      if (dubina === 0) return css.slice(otvorena + 1, i);
+    }
+  }
+  return null;
+}
+
+/** Razmaci i redoslijed nisu ugovor, pa se vrijednost normalizira prije usporedbe. */
+function tokeni(blok: string): Map<string, string> {
+  const mapa = new Map<string, string>();
+  for (const [, ime, vrijednost] of blok.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;}]+)/g)) {
+    mapa.set(ime, vrijednost.replace(/\s+/g, ' ').trim());
+  }
+  return mapa;
+}
+
+/** Vraca IMENOVANE razlike, nikad samo broj: 2026-08-31 je bas broj sakrio zamjenu jedne stavke. */
+function razlikeSvijetlihGrana(css: string): string[] {
+  const izricito = blokIza(css, 'html:root[data-theme="light"]{');
+  const sustav = blokIza(css, 'html:root:not([data-theme]){');
+  if (izricito === null) return ['nema bloka html:root[data-theme="light"]'];
+  if (sustav === null) return ['nema bloka html:root:not([data-theme])'];
+  const a = tokeni(izricito);
+  const b = tokeni(sustav);
+  const razlike: string[] = [];
+  for (const [ime, vrijednost] of a) {
+    if (!b.has(ime)) razlike.push(`nedostaje u sustavnoj grani: ${ime}`);
+    else if (b.get(ime) !== vrijednost) razlike.push(`razlicita vrijednost: ${ime}`);
+  }
+  for (const ime of b.keys()) if (!a.has(ime)) razlike.push(`visak u sustavnoj grani: ${ime}`);
+  return razlike;
+}
+
+describe('Z6 `system` daje ISTI izgled kao izricito danje svjetlo', () => {
+  it('page-chrome.css: svaki token izricite svijetle teme postoji i u sustavnoj grani', () => {
+    const css = read('src/shared/page-chrome.css');
+    expect(css).toContain('@media (prefers-color-scheme:light){html:root:not([data-theme]){');
+    const razlike = razlikeSvijetlihGrana(css);
+    expect(razlike, razlike.join('\n')).toEqual([]);
+    // Prirodni kanarinac: token koji NE postoji u design-system.css, pa ga je uzorak i propustio.
+    expect(blokIza(css, 'html:root:not([data-theme]){')).toContain('--red-on-desk:#A62B23');
+  });
+
+  it('page-chrome.css: i komponentne korekcije svijetle teme imaju sustavni par', () => {
+    const css = read('src/shared/page-chrome.css');
+    // `.ks-step`/`.ks-di` nose `opacity:.85`, a povratak na 1 je postojao samo pod izricitim
+    // atributom; u `system` je na svijetlom stolu ostajalo prigusenje koje komentar uz to pravilo
+    // sam mjeri kao pad ispod praga (3,95:1 / 3,77:1 / 3,48:1).
+    const izricite = [...css.matchAll(/html:root\[data-theme="light"\]\s+([^,{]+)/g)].map((m) => m[1].trim());
+    expect(izricite.length, 'nema nijedne komponentne korekcije; gard bi bio vakuumski').toBeGreaterThan(0);
+    for (const meta of izricite) {
+      expect(css, `nedostaje sustavni par za ${meta}`).toContain(`html:root:not([data-theme]) ${meta}`);
+    }
+  });
+
+  it('design-system.css: primitivi obiju svijetlih grana se poklapaju', () => {
+    // Ondje je grana pisana s razmacima i uvlakama, pa se poklapanje mjeri nad NORMALIZIRANIM
+    // vrijednostima, ne nad bajtovima.
+    const css = read('src/shared/design-system.css');
+    const izricito = tokeni(blokIza(css, '[data-theme="light"]') ?? '');
+    const sustav = tokeni(blokIza(css, 'html:root:not([data-theme])') ?? '');
+    expect(izricito.size, 'nema izricite svijetle teme u design-system.css').toBeGreaterThan(10);
+    for (const [ime, vrijednost] of izricito) {
+      expect(sustav.get(ime), `design-system.css: ${ime} nedostaje ili se razlikuje u sustavnoj grani`)
+        .toBe(vrijednost);
+    }
+  });
+
+  it('MUTACIJA: izostavljen i promijenjen token u sustavnoj grani MORAJU pasti', () => {
+    const cjelovit = 'html:root[data-theme="light"]{--a:#111;--b:#222}'
+      + '@media (prefers-color-scheme:light){html:root:not([data-theme]){--a:#111;--b:#222}}';
+    expect(razlikeSvijetlihGrana(cjelovit), 'BASELINE: nemutiran ulaz mora biti cist').toEqual([]);
+    const bezTokena = 'html:root[data-theme="light"]{--a:#111;--b:#222}'
+      + '@media (prefers-color-scheme:light){html:root:not([data-theme]){--a:#111}}';
+    expect(razlikeSvijetlihGrana(bezTokena)).toEqual(['nedostaje u sustavnoj grani: --b']);
+    const drugaVrijednost = 'html:root[data-theme="light"]{--a:#111;--b:#222}'
+      + '@media (prefers-color-scheme:light){html:root:not([data-theme]){--a:#111;--b:#999}}';
+    expect(razlikeSvijetlihGrana(drugaVrijednost)).toEqual(['razlicita vrijednost: --b']);
+  });
+});
+
+describe('Z6 na `/rad/`: naslijedjeni analizator ne gazi izbor "kao sustav"', () => {
+  // MJERI SE STVARNI REDOSLIJED S `/rad/`, NAD STVARNIM MARKUPOM TE STRANICE.
+  //
+  // `src/routes/workspace/main.ts` montira panel pa odmah zove `initAnalyzerApp`, a `initLegacy` je
+  // SIROVU vrijednost `lekta.theme` bezuvjetno upisivao u `data-theme`. Za `system` je to vracalo
+  // `data-theme="system"`, cime ni `:not([data-theme])` ni `[data-theme="light"]` vise ne pogadjaju,
+  // dok radio u panelu i dalje pokazuje "Kao sustav": kontrola izgleda ukljuceno a ne radi nista.
+  //
+  // Goli DOM ovdje ne bi bio dokaz: `initLegacy` bez `#analyzer` i `#dropzone` uopce ne krene
+  // (`hasLegacyPage`), pa bi test mjerio tok koji na `/rad/` nitko ne izvodi. Zato se ucitava
+  // stvarno tijelo `rad/index.html`, bez `<script>` oznaka (module loader happy-doma ih odbija).
+  const stranica = read('rad/index.html');
+  const tijelo = stranica.slice(stranica.indexOf('<body'), stranica.lastIndexOf('</body>'));
+  const markup = tijelo.slice(tijelo.indexOf('>') + 1).replace(/<script[\s\S]*?<\/script>/g, '');
+
+  let vratiFetch: (() => void) | null = null;
+
+  beforeEach(() => {
+    // Analizator na montazi dohvaca pravila profila; test ne smije ici na mrezu.
+    const globalno = globalThis as unknown as { fetch?: unknown };
+    const izvorni = globalno.fetch;
+    globalno.fetch = vi.fn(async () => new Response('{}', { status: 503 }));
+    vratiFetch = () => { globalno.fetch = izvorni; };
+  });
+
+  afterEach(() => { vratiFetch?.(); vratiFetch = null; });
+
+  function pokreniRutu(tema: string): string | null {
+    localStorage.setItem(THEME_KEY, tema);
+    document.body.innerHTML = markup;
+    expect(document.getElementById('analyzer'), 'rad/index.html mora nositi #analyzer').not.toBeNull();
+    expect(document.getElementById('dropzone'), 'rad/index.html mora nositi #dropzone').not.toBeNull();
+    api = mountDisplaySettings(document);
+    expect(api, 'rad/index.html mora nositi #displayBtn').not.toBeNull();
+    initAnalyzerApp(document);
+    return document.documentElement.getAttribute('data-theme');
+  }
+
+  it('`system` ostaje BEZ atributa i nakon sto se analizator montira', () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    expect(pokreniRutu('system')).toBeNull();
+    expect(radio('lektaOsvjetljenje', 'system').checked).toBe(true);
+  });
+
+  it('BASELINE: izricite teme analizator i dalje vraca, pa popravak nije "obrisi sve"', () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    expect(pokreniRutu('light')).toBe('light');
   });
 });

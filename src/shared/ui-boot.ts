@@ -17,6 +17,7 @@ import './premium.css'; // Korektorski stol+: dubina, vizualizacije i lagani 3D 
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';
+import { pokretPrigusen, suprotnaTema, tamnoNaEkranu } from './display-prefs';
 import { setupPremiumVisuals } from './premium-visuals';
 import { createFrameCoalescer } from './frame-coalescer';
 import { shouldDeferReveal } from './reveal-policy';
@@ -37,9 +38,12 @@ if (typeof document !== 'undefined' && !document.documentElement.dataset.theme) 
 }
 
 const EASE_OUT = [0.22, 1, 0.36, 1];
+// RUCNI IZBOR VRIJEDI JEDNAKO KAO SUSTAVNI. `data-motion="reduce"` iz panela "Prilagodi prikaz"
+// gasi CSS animacije i prijelaze, ali NE gasi `element.animate()`; WAAPI ne ovisi ni o svojstvu
+// `animation` ni o `transition`, pa ga `animation: none !important` ne dira. Svaki poziv ovdje
+// ide kroz `pokretPrigusen`, koji pita OBA izvora.
 function prefersReduced() {
-  return typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return pokretPrigusen(document);
 }
 
 // Motion se ucitava lijeno (zaseban chunk, ne blokira prvi paint); animacije su cisto
@@ -213,7 +217,9 @@ function setupThemeToggle() {
   // WCAG 2.5.3 (Label in Name): aria-label MORA sadrzavati vidljivi tekst gumba ("Lampa",
   // <span class="lampa-txt">), inace glasovna kontrola ("klikni Lampa") ne pogodi element.
   const reflect = () => {
-    const dark = document.documentElement.dataset.theme === 'dark';
+    // STANJE, NE ATRIBUT: u nacinu `system` atributa nema, pa je `=== 'dark'` tvrdio svijetlo i
+    // kad je sustav taman. Isti razred kvara kao u `display-settings.ts`; jedan citac za oba.
+    const dark = tamnoNaEkranu(document);
     btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
     btn.setAttribute('aria-label', dark ? 'Lampa: ugasi' : 'Lampa: upali');
     btn.setAttribute('title', dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu');
@@ -228,9 +234,9 @@ function setupThemeToggle() {
     // o ishodu. Provjera pri postavljanju bila bi tocna samo dok panel montira prije `boot()`, a
     // oslanjanje na taj redoslijed je upravo ono sto ovaj repozitorij zove laznim zelenim.
     if (btn.dataset.themeOwner) return;
-    const dark = document.documentElement.dataset.theme === 'dark';
-    document.documentElement.dataset.theme = dark ? 'light' : 'dark';
-    try { localStorage.setItem('lekta.theme', dark ? 'light' : 'dark'); } catch { /* storage odbijen */ }
+    const next = suprotnaTema(document);
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('lekta.theme', next); } catch { /* storage odbijen */ }
     reflect();
   });
 }

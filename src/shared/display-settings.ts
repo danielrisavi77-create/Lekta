@@ -22,6 +22,7 @@
  */
 import './display-settings.css';
 import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from './browser-storage';
+import { suprotnaTema, tamnoNaEkranu } from './display-prefs';
 
 export type Osvjetljenje = 'dark' | 'light' | 'system';
 export type PismoZaCitanje = 'default' | 'serif' | 'sans' | 'dyslexic';
@@ -379,16 +380,22 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   if (lampa) {
     lampa.dataset.themeOwner = 'display-settings';
     const odraz = (): void => {
-      const tamno = doc.documentElement.dataset.theme !== 'light';
+      // STANJE, NE ATRIBUT. U nacinu `system` atributa nema, pa ga je citanje `!== 'light'`
+      // proglasavalo tamnim i kad je sustav na danjem svjetlu: citac ekrana je tada dobivao
+      // "Lampa: ugasi" nad upaljenom lampom. `tamnoNaEkranu` pita `prefers-color-scheme` tocno
+      // kad atributa nema, dakle tocno ono sto CSS u tom trenutku radi.
+      const tamno = tamnoNaEkranu(doc);
       lampa.setAttribute('aria-pressed', tamno ? 'true' : 'false');
       lampa.setAttribute('aria-label', tamno ? 'Lampa: ugasi' : 'Lampa: upali');
       lampa.setAttribute('title', tamno ? 'Ugasi radnu lampu' : 'Upali radnu lampu');
     };
     odraz();
     lampa.addEventListener('click', () => {
-      // Lampa je preklopnik dviju tema. Iz `system` vodi u suprotnost od onoga sto je na ekranu,
-      // jer bi inace prvi klik izgledao kao da nije napravio nista.
-      spremiOsvjetljenje(doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
+      // Lampa je preklopnik dviju tema. Iz `system` vodi u suprotnost od onoga sto je NA EKRANU,
+      // jer bi inace prvi klik izgledao kao da nije napravio nista. Ranija izvedba je racunala iz
+      // atributa, kojeg u `system` nema, pa je uz svijetli sustav vodila u `light`, dakle u
+      // vrijednost koja se vizualno ne razlikuje od zatecene: tocno tisina koju komentar odbija.
+      spremiOsvjetljenje(suprotnaTema(doc));
       odraz();
     }, { signal });
   }

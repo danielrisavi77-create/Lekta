@@ -28,6 +28,8 @@ export interface RouteShellOptions {
   readonly privacySettingsAvailable: boolean;
 }
 
+import { suprotnaTema, tamnoNaEkranu } from '../../shared/display-prefs';
+
 const THEME_STORAGE_KEY = 'lekta.theme';
 
 /**
@@ -62,7 +64,10 @@ function activeHtmlElement(doc: Document): HTMLElement | null {
 }
 
 function reflectTheme(button: HTMLButtonElement, doc: Document): void {
-  const dark = doc.documentElement.dataset.theme !== 'light';
+  // STANJE, NE ATRIBUT. `system` (Z6) UKLANJA `data-theme`, pa je `!== 'light'` ovdje tvrdio tamno
+  // i na svijetlom sustavu: lampa bi javila "ugasi" nad upaljenom, a prvi klik vodio u `light`,
+  // dakle u ono sto je vec na ekranu.
+  const dark = tamnoNaEkranu(doc);
   button.setAttribute('aria-pressed', dark ? 'true' : 'false');
   button.setAttribute('aria-label', dark ? 'Lampa: ugasi' : 'Lampa: upali');
   button.title = dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu';
@@ -268,7 +273,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   theme.addEventListener(
     'click',
     () => {
-      const next = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      const next = suprotnaTema(doc);
       doc.documentElement.dataset.theme = next;
       reflectTheme(theme, doc);
       rememberTheme(next);
