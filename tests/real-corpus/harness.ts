@@ -13,6 +13,8 @@ import { inspectDocxParts } from '../../src/repair/package-integrity';
 import { readZip } from '../../src/repair/zip-codec';
 import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
 import { expectationProvenance, isHoldout, sidecarAdmitted, type CorpusSidecar, type ExpectationProvenance } from './corpus-track';
+import { findVerifiedProfile } from '../../src/profiles/profile-registry';
+import { ensureTemplatesHeavy, selectTemplate } from '../../src/title-pages/template-loader';
 
 export { sidecarAdmitted, ADMITTED_TRACKS, type CorpusTrack, type CorpusSidecar } from './corpus-track';
 
@@ -221,6 +223,26 @@ export interface RealCorpusReport {
   };
 }
 
+/**
+ * PREDLOZAK NASLOVNICE ZA PROFIL, izveden ISTOM funkcijom kojom ga izvodi aplikacija.
+ *
+ * `src/ui/app.ts` zove `selectTemplate(unitId, workType)` iz `src/title-pages/template-loader.ts`,
+ * a par (jedinica, vrsta rada) ovdje dolazi iz registra profila, jer sidecar stvarnog rada nosi samo
+ * `profileId`. Vrstu rada uzima kao i `resolveProfile` (`entry.workTypes[0] || 'final'`), pa se dva
+ * citanja istog profila ne mogu raziici.
+ *
+ * Do 2026-09-13 je ovdje stajao tvrdi `titleTemplate: null` uz napomenu da je odabir predloska korak
+ * u SUCELJU. To je bilo netocno i drzalo je `title-page-fixer` izvan svakog mjerenja: stavku gradi
+ * `repair-item-assembly` samo uz istinit `titleTemplate`, pa fixer nije bio ni pozvan.
+ *
+ * Trazi da su teski predlosci vec spojeni (`ensureTemplatesHeavy`), inace predlozak nema `elements`.
+ */
+export function titleTemplateForProfile(profileId: string) {
+  const verified = findVerifiedProfile(profileId) as { unitId?: string; workTypes?: string[] } | undefined;
+  if (!verified?.unitId) return null;
+  return selectTemplate(verified.unitId, verified.workTypes?.[0] ?? 'final').template;
+}
+
 function sidecarPath(root: string, fileName: string): string {
   return join(root, fileName.replace(/\.docx$/i, '.json'));
 }
@@ -392,10 +414,12 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
   };
 
   try {
+    await ensureTemplatesHeavy();
     const bytes = new Uint8Array(readFileSync(join(root, entry.fileName)));
     const beforeFile = new File([bytes], entry.fileName, { type: DOCX_MIME });
     const before = await analyzeFixture(beforeFile, { profileId: entry.profileId });
     const profile = resolveProfile(entry.profileId);
+    const titleTemplate = titleTemplateForProfile(entry.profileId);
     // ISTI sastavljac koji koristi sucelje (src/ui/repair-item-assembly.ts). Prije je harness
     // zvao samo dva graditelja, pa je mjerio uzu povrsinu od one koju korisnik stvarno dobije:
     // sirenje korpusa s 12 na 50 stvarnih radova nije pomaklo pokrivenost s 4 fixera jer
@@ -404,7 +428,8 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       result: before,
       profile,
       entries: repairEntriesFor(entry.profileId),
-      titleTemplate: null, // naslovnica trazi odabir predloska (UI korak), pa je izvan mjerenja
+      // Naslovnica NIJE izvan mjerenja: predlozak izvodi ista cista funkcija koju zove sucelje.
+      titleTemplate,
     });
     // Isti odabir kao UI checkbox (violated !== false): advisory preporuke su opt-in i NE ulaze
     // u zadani popravak. Bez ovoga je harness primjenjivao i preporuke pa je izvjestaj opisivao

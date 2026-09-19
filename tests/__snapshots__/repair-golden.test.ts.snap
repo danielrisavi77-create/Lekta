@@ -2889,7 +2889,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "fpzg-novinarstvo-bibliografija.docx": {
     "__kombinirano": {
-      "applied": 10,
+      "applied": 9,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -2927,17 +2927,13 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "after": "1 strukturnih dijelova umetnuto",
           "before": "1 nedostajućih dijelova",
         },
-        {
-          "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
-          "before": "Postojeći sadržaj naslovnice",
-        },
       ],
       "markers": {
         "directFormatting": {
           "directLeftJc": 0,
           "directLine": 0,
-          "runFonts": 7,
-          "runSz": 5,
+          "runFonts": 0,
+          "runSz": 0,
         },
         "docDefaults": {
           "ascii": "Times New Roman",
@@ -2984,6 +2980,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "link-doi-fixer-rule",
         "citation-bibliography-sync-fixer-rule",
         "empty-paragraph-fixer-rule",
+        "title-page-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -4241,60 +4238,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-stavke-za-ovaj-dokument",
     },
     "title-page-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
-          "before": "Postojeći sadržaj naslovnice",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 7,
-          "runSz": 5,
-        },
-        "docDefaults": {
-          "ascii": "Calibri",
-          "hAnsi": "Calibri",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "left",
-          "line": "259",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": {
-              "fmt": "decimal",
-              "start": "1",
-            },
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": true,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "ensureTitlePageNoNumber": true,
         "lines": [
@@ -4359,12 +4306,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "font": "Times New Roman",
               "sizePt": 12,
             },
-            "text": "Zagreb,, 2026.",
+            "text": "Zagreb, 2026.",
           },
         ],
         "paragraphCount": 9,
       },
-      "skipped": [],
+      "skipped": [
+        "title-page-fixer-rule",
+      ],
     },
     "toc-field-fixer": {
       "params": "nema-stavke-za-ovaj-dokument",
@@ -7919,7 +7868,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "pravo-integrirani-fusnote.docx": {
     "__kombinirano": {
-      "applied": 12,
+      "applied": 11,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -7965,17 +7914,13 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
           "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
-        {
-          "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
-          "before": "Postojeći sadržaj naslovnice",
-        },
       ],
       "markers": {
         "directFormatting": {
           "directLeftJc": 0,
           "directLine": 0,
-          "runFonts": 7,
-          "runSz": 7,
+          "runFonts": 0,
+          "runSz": 0,
         },
         "docDefaults": {
           "ascii": "Times New Roman",
@@ -8009,13 +7954,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
-            "titlePg": true,
+            "titlePg": false,
           },
         ],
       },
       "skipped": [
         "consistency-fixer-rule",
         "empty-paragraph-fixer-rule",
+        "title-page-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -9190,57 +9136,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-stavke-za-ovaj-dokument",
     },
     "title-page-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
-          "before": "Postojeći sadržaj naslovnice",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 7,
-          "runSz": 7,
-        },
-        "docDefaults": {
-          "ascii": "Calibri",
-          "hAnsi": "Calibri",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "left",
-          "line": "259",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": null,
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": true,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "ensureTitlePageNoNumber": true,
         "lines": [
@@ -9320,12 +9219,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "font": "Times New Roman",
               "sizePt": 12,
             },
-            "text": "Zagreb,, 2026.",
+            "text": "Zagreb, 2026.",
           },
         ],
         "paragraphCount": 9,
       },
-      "skipped": [],
+      "skipped": [
+        "title-page-fixer-rule",
+      ],
     },
     "toc-field-fixer": {
       "params": "nema-stavke-za-ovaj-dokument",
@@ -9333,7 +9234,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "pravo-socijalni-rad-fusnote.docx": {
     "__kombinirano": {
-      "applied": 10,
+      "applied": 9,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -9371,17 +9272,13 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
           "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
-        {
-          "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
-          "before": "Postojeći sadržaj naslovnice",
-        },
       ],
       "markers": {
         "directFormatting": {
           "directLeftJc": 0,
           "directLine": 0,
-          "runFonts": 7,
-          "runSz": 7,
+          "runFonts": 0,
+          "runSz": 0,
         },
         "docDefaults": {
           "ascii": "Times New Roman",
@@ -9415,7 +9312,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
-            "titlePg": true,
+            "titlePg": false,
           },
         ],
       },
@@ -9424,6 +9321,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "consistency-fixer-rule",
         "section-insert-fixer-rule",
         "empty-paragraph-fixer-rule",
+        "title-page-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -10409,57 +10307,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-stavke-za-ovaj-dokument",
     },
     "title-page-fixer": {
-      "applied": true,
-      "changelog": [
-        {
-          "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
-          "before": "Postojeći sadržaj naslovnice",
-        },
-      ],
-      "markers": {
-        "directFormatting": {
-          "directLeftJc": 0,
-          "directLine": 0,
-          "runFonts": 7,
-          "runSz": 7,
-        },
-        "docDefaults": {
-          "ascii": "Calibri",
-          "hAnsi": "Calibri",
-          "sz": "22",
-        },
-        "footer": {
-          "footerRefs": 1,
-          "parts": [
-            {
-              "hasPage": true,
-              "name": "word/footer1.xml",
-            },
-          ],
-        },
-        "normal": {
-          "jc": "left",
-          "line": "259",
-          "lineRule": "auto",
-        },
-        "sectPr": [
-          {
-            "pgMar": {
-              "bottom": "1417",
-              "left": "1701",
-              "right": "1417",
-              "top": "1417",
-            },
-            "pgNumType": null,
-            "pgSz": {
-              "h": "16838",
-              "w": "11906",
-            },
-            "titlePg": true,
-          },
-        ],
-      },
-      "noOpBitIdentican": false,
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
       "params": {
         "ensureTitlePageNoNumber": true,
         "lines": [
@@ -10539,12 +10390,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "font": "Times New Roman",
               "sizePt": 12,
             },
-            "text": "Zagreb,, 2026.",
+            "text": "Zagreb, 2026.",
           },
         ],
         "paragraphCount": 9,
       },
-      "skipped": [],
+      "skipped": [
+        "title-page-fixer-rule",
+      ],
     },
     "toc-field-fixer": {
       "params": "nema-stavke-za-ovaj-dokument",
@@ -19795,7 +19648,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "font": "Times New Roman",
               "sizePt": 12,
             },
-            "text": "Zagreb,, 2026.",
+            "text": "Zagreb, 2026.",
           },
         ],
         "paragraphCount": 19,

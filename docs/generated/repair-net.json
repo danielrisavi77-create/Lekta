@@ -3,14 +3,20 @@
   "note": "Mreza nad fixerima: koji je fixer zatrazen, koji je nesto promijenio, i zasto nije kad nije. Ulaz su `authored` fixture (synthetic: true), pa ovaj artefakt NE dira ljestvicu dokaza. TRI stanja, ne dva: `dead` je kvar, `awaiting` je fixer koji ceka ljudsku potvrdu, ostalo radi.",
   "summary": {
     "documentCount": 54,
-    "fixerCount": 21,
+    "fixerCount": 22,
     "deadCount": 0,
     "dead": [],
     "awaitingCount": 2,
     "awaiting": [
       "citation-bibliography-sync-fixer",
       "consistency-fixer"
-    ]
+    ],
+    "titlePage": {
+      "documentCount": 54,
+      "withTemplate": 45,
+      "offered": 1,
+      "changed": 1
+    }
   },
   "fixers": [
     {
@@ -270,6 +276,14 @@
       "awaitingConfirmation": 0
     },
     {
+      "fixerId": "title-page-fixer",
+      "requested": 1,
+      "changed": 1,
+      "reasons": {},
+      "deadOn": [],
+      "awaitingConfirmation": 0
+    },
+    {
       "fixerId": "toc-field-fixer",
       "requested": 5,
       "changed": 5,
@@ -317,6 +331,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "adu-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "format.font.dominant",
@@ -365,6 +380,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "adu-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -408,6 +424,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "adu-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -449,6 +466,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.hierarchy",
@@ -481,6 +499,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -514,6 +533,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -570,6 +590,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "apuri",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -619,6 +640,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "apuri",
       "rijeseno": [
         "page.margins"
       ],
@@ -655,6 +677,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "apuri",
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -703,6 +726,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -745,6 +769,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [
         "page.margins"
       ],
@@ -783,6 +808,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -832,6 +858,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "effectus-seminar",
       "rijeseno": [
         "format.font.dominant",
         "page.margins",
@@ -880,6 +907,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "effectus-seminar",
       "rijeseno": [
         "page.margins"
       ],
@@ -926,6 +954,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "effectus-seminar",
       "rijeseno": [
         "format.spacing.body"
       ],
@@ -977,6 +1006,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [
         "format.font.dominant",
         "page.margins",
@@ -1022,6 +1052,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [
         "page.margins"
       ],
@@ -1061,6 +1092,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": null,
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles",
@@ -1117,6 +1149,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "ffpu",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -1166,6 +1199,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "ffpu",
       "rijeseno": [
         "page.margins"
       ],
@@ -1205,6 +1239,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "ffpu",
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -1248,6 +1283,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "ffzg-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "format.font.dominant",
@@ -1294,6 +1330,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "ffzg-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -1333,6 +1370,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "ffzg-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -1386,6 +1424,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fmtu-graduate",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -1430,6 +1469,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fmtu-graduate",
       "rijeseno": [
         "page.margins"
       ],
@@ -1469,6 +1509,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fmtu-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "citation.author-year.missing-reference",
@@ -1537,6 +1578,7 @@
         "citation-bibliography-sync-fixer",
         "consistency-fixer"
       ],
+      "titleTemplateId": "fpzg-final",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -1592,6 +1634,7 @@
         "citation-bibliography-sync-fixer",
         "consistency-fixer"
       ],
+      "titleTemplateId": "fpzg-final",
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -1643,6 +1686,7 @@
         "citation-bibliography-sync-fixer",
         "consistency-fixer"
       ],
+      "titleTemplateId": "fpzg-final",
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -1699,6 +1743,7 @@
         "citation-bibliography-sync-fixer",
         "consistency-fixer"
       ],
+      "titleTemplateId": "fpzg-graduate",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -1750,6 +1795,7 @@
         "citation-bibliography-sync-fixer",
         "consistency-fixer"
       ],
+      "titleTemplateId": "fpzg-graduate",
       "rijeseno": [],
       "nerijeseno": [],
       "regresije": [],
@@ -1794,6 +1840,7 @@
         "citation-bibliography-sync-fixer",
         "consistency-fixer"
       ],
+      "titleTemplateId": "fpzg-graduate",
       "rijeseno": [],
       "nerijeseno": [],
       "regresije": [],
@@ -1832,6 +1879,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fsb-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "format.font.dominant",
@@ -1866,6 +1914,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fsb-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "page.numbers.present"
@@ -1902,6 +1951,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fsb-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "page.numbers.present"
@@ -1952,6 +2002,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fzsri-final",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -1994,6 +2045,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fzsri-final",
       "rijeseno": [
         "page.margins"
       ],
@@ -2031,6 +2083,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "fzsri-final",
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -2077,6 +2130,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "grad-graduate",
       "rijeseno": [
         "format.font.dominant"
       ],
@@ -2122,6 +2176,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "grad-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "element.link-form",
@@ -2165,6 +2220,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "grad-graduate",
       "rijeseno": [
         "format.spacing.body"
       ],
@@ -2216,6 +2272,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "mef-graduate",
       "rijeseno": [
         "format.font.dominant",
         "page.size.a4-list"
@@ -2257,6 +2314,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "mef-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -2294,6 +2352,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "mef-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "reference.uncited",
@@ -2346,6 +2405,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "pravo-graduate",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body"
@@ -2393,6 +2453,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "pravo-graduate",
       "rijeseno": [],
       "nerijeseno": [
         "footnote.format",
@@ -2438,6 +2499,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "pravo-graduate",
       "rijeseno": [
         "footnote.format"
       ],
@@ -2489,6 +2551,7 @@
         "line-spacing-fixer",
         "link-doi-fixer",
         "paragraph-spacing-fixer",
+        "title-page-fixer",
         "toc-field-fixer"
       ],
       "promijenili": [
@@ -2504,6 +2567,7 @@
         "line-spacing-fixer",
         "link-doi-fixer",
         "paragraph-spacing-fixer",
+        "title-page-fixer",
         "toc-field-fixer"
       ],
       "bezUcinka": [
@@ -2515,11 +2579,13 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "pravo-final",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
         "structure.heading.align",
         "structure.heading.format",
+        "toc.coverage",
         "toc.format"
       ],
       "nerijeseno": [
@@ -2536,10 +2602,11 @@
         "structure.heading.numbering",
         "structure.heading.word-styles",
         "structure.sections.profile",
-        "title.layout",
-        "toc.coverage"
+        "title.layout"
       ],
-      "regresije": [],
+      "regresije": [
+        "{\"id\":\"toc.page-numbers\",\"title\":\"Brojevi stranica u sadržaju\",\"category\":\"structure\",\"lostPoints\":3}"
+      ],
       "integrityFailure": null
     },
     {
@@ -2592,6 +2659,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "pravo-final",
       "rijeseno": [
         "structure.heading.align",
         "structure.heading.format"
@@ -2658,6 +2726,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "pravo-final",
       "rijeseno": [
         "footnote.format",
         "format.spacing.paragraph",
@@ -2728,6 +2797,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "vuv-final",
       "rijeseno": [
         "format.font.dominant",
         "format.spacing.body",
@@ -2776,6 +2846,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "vuv-final",
       "rijeseno": [
         "page.margins"
       ],
@@ -2812,6 +2883,7 @@
       "cekaPotvrdu": [
         "consistency-fixer"
       ],
+      "titleTemplateId": "vuv-final",
       "rijeseno": [],
       "nerijeseno": [
         "structure.heading.word-styles"
@@ -2820,7 +2892,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-13T11:28:32.408Z",
-  "generatedFromCommit": "ad6f2053008e4925a64247265a73fa429d94c237",
+  "generatedAt": "2026-09-13T15:25:18.401Z",
+  "generatedFromCommit": "8b1ce34784cefbb2ecda6a343c68dc50811503bd",
   "generator": "npm run repair-net -- --write"
 }

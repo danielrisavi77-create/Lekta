@@ -46,6 +46,7 @@ import {
   type ParagraphStyleFormattingRule,
   type ParagraphFormattingTarget,
 } from './xml-patch.ts';
+import { anchorTextOfXml, normalizeAnchorText } from './anchor-text.ts';
 import { upperCaseHeadings } from './heading-case.ts';
 import { stripDirectFormatting, type RunLevelResult } from './run-level.ts';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup.ts';
@@ -672,6 +673,102 @@ function patchTitlePageSection(section: string, margins?: TitlePageRepairTarget[
   return out.replace(/\/>$/, `>${marker}</w:sectPr>`);
 }
 
+/** Odlomak koji nosi samo prijelom stranice; kanonski oblik sidra kad izvorni odlomak nosi i tekst. */
+const TITLE_PAGE_BREAK_PARAGRAPH = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+
+/** Ima li odlomak ijedan vidljiv znak teksta (prazan `<w:t/>` i sami razmaci se ne broje). */
+function titlePageHasVisibleText(paragraphXml: string): boolean {
+  const runs = paragraphXml.match(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g) ?? [];
+  return runs.some((run) => run.replace(/<[^>]+>/g, '').trim() !== '');
+}
+
+/**
+ * KRAJ NASLOVNICE JE SIDRO U DOKUMENTU, NE BROJ ODLOMAKA.
+ *
+ * `paragraphCount` je izracunat nad ULAZNIM dokumentom (`firstPageParagraphs`, dakle do prvog
+ * prijeloma stranice). Cim ovaj fixer zamijeni k odlomaka s n redaka predloska, taj broj vise ne
+ * opisuje nista: na DRUGU primjenu istih parametara `slice(0, k)` zahvati n generiranih redaka PLUS
+ * k-n odlomaka TIJELA RADA i obrise ih. Izmjereno 2026-09-13 na `pravo-integrirani-fusnote.docx`
+ * (k=9, n=7): drugi prolaz je progutao "1. UVOD" i prvi odlomak uvoda.
+ *
+ * Isti korijen rusi i susjedne osi na PRVOJ primjeni: odlomak s prijelomom stranice bio je unutar
+ * zahvacenog raspona i nestajao je, pa `firstPageParagraphs` vise nije nalazio pouzdan kraj prve
+ * stranice (`confident: false`) i `title.order` i `title.layout` su s 3/3 padali na nebodovano 0/0.
+ *
+ * Sidro je TVRDI prijelom `<w:br w:type="page"/>`: on prekida sadrzaj svog odlomka, pa taj odlomak
+ * jos pripada naslovnici i granica je UKLJUCIVA. Nositelj se vraca u izlaz, pa drugi prolaz vidi
+ * isto sidro na indeksu `lines.length` i regenerira BAJT-IDENTICAN blok.
+ *
+ * `<w:lastRenderedPageBreak/>` NIJE sidro nego ODBIJANJE. Analiza ga doduse broji u `pageBreakAfter`,
+ * ali to je Wordov zapis o tome gdje se stranica prelomila pri ZADNJEM slaganju, a ne odluka autora:
+ * svaka izmjena fonta ili margina ga pomakne. Vezati rusilacki prepis za takvo stanje znaci vezati
+ * ga za zastarjeli raspored. Izmjereno 2026-09-13 na `word-veliki-neuredan.docx`: trag stoji 18
+ * odlomaka dublje, IZA prijeloma sekcije, pa bi naslovnica bila "omedjena" tek iza sadrzaja.
+ *
+ * Prozor pretrage je najveci od onoga sto je pozivatelj omedjio i onoga sto ovaj fixer sam
+ * proizvede (`lines.length + 1`, redci plus nositelj sidra), jer drugi prolaz mora vidjeti VLASTITI
+ * izlaz. Bez toga idempotencija vrijedi samo dok je n < k.
+ */
+function titlePageAnchor(selectedXml: readonly string[]): { end: number } | 'rendered-only' | null {
+  for (let i = 0; i < selectedXml.length; i += 1) {
+    if (/<w:br\b[^>]*\bw:type="page"/.test(selectedXml[i])) return { end: i };
+    if (/<w:lastRenderedPageBreak\b/.test(selectedXml[i])) return 'rendered-only';
+  }
+  return null;
+}
+
+/**
+ * POCETAK NASLOVNICE JE SADRZAJ, NE INDEKS 0.
+ *
+ * Kraj naslovnice je omedjen sidrom (vidi `titlePageAnchor`), ali je pocetak do 2026-09-13 bio
+ * PRETPOSTAVKA: raspon je uvijek krenuo od odlomka 0. Ta pretpostavka je kriva cim iznad naslovnice
+ * ista postoji, a to nije rijedak oblik: `tests/fixtures/docx-authored/pravo--final--prijediplomski--neuredan.docx`
+ * iznad naslovnice ima RUCNO PISAN SADRZAJ (sest odlomaka, "SADRZAJ", "1. UVOD 3", ...), pa je
+ * prepis odnio i njega.
+ *
+ * Omedjenje je zato POKRIVENOST, ne heuristika o tome kako naslovnica izgleda: zamjenjuje se samo
+ * neprekinut rep raspona u kojem je SVAKI odlomak ili prazan ili mu je vidljivi tekst sadrzan u
+ * nekom retku predloska koji upravo pisemo. Sto je iznad toga, ostaje netaknuto.
+ *
+ * Smjer usporedbe je namjerno JEDNOSMJERAN (redak sadrzi odlomak, nikad obrnuto): tako nijedan
+ * znak koji autor vidi ne moze nestati. Obrnuti smjer bi dugacak odlomak tijela rada koji slucajno
+ * sadrzi "Zagreb, 2026." proglasio pokrivenim i obrisao ga.
+ *
+ * Kad pokrivenost pukne UNUTAR naslovnice, ispravan ishod je ODBIJANJE, ne pogadjanje. Isti
+ * `--neuredan` primjerak: `inferValues` na njemu ne prepoznaje studij, autora ni naslov (rucni
+ * sadrzaj iznad naslovnice obara detekciju strukture), pa bi popravak koji se svejedno izvede
+ * obrisao IME AUTORA i NASLOV RADA. Popravak koji se nije izveo je manja steta od toga.
+ *
+ * Usporedjuje se ISTIM izvlakacem koji koriste sidra (`anchorTextOfXml`), dakle po slovima i
+ * brojkama: tabulator, prijelom, interpunkcija i velika slova ispadaju iz usporedbe, pa
+ * `"Mentor: izv. prof. dr. sc. Ivana Barac"` pokriva odlomak zapisan bez tocaka.
+ */
+function titlePageStart(selectedXml: readonly string[], lines: readonly TitlePageRepairLine[]): number | null {
+  const covers = lines.map((line) => normalizeAnchorText(line.text));
+  const covered = (xml: string): boolean => {
+    const text = anchorTextOfXml(xml);
+    if (!text) return true;
+    return covers.some((line) => line.includes(text));
+  };
+  let start: number | null = null;
+  for (let i = selectedXml.length - 1; i >= 0; i -= 1) {
+    if (!covered(selectedXml[i])) break;
+    if (titlePageHasVisibleText(selectedXml[i])) start = i;
+  }
+  // Nijedan odlomak s tekstom nije pokriven: naslovnicu nije moguce pouzdano omedjiti.
+  if (start === null) return null;
+  // POKRIVENOST IZNAD POCETKA ZNACI DA JE POCETAK KRIV, ne da je iznad jos jedna naslovnica.
+  // Bez ove provjere `--neuredan` primjerak nije odbijen nego PRESJECEN: pokriveni rep krece tek
+  // od mentora (iznad njega stoji nemapiran naslov rada), pa bi se sveuciliste i fakultet upisali
+  // JOS JEDNOM, ispod postojecih. Tekst se pritom ne gubi, dakle gard vidljivog teksta ostaje
+  // zelen, a naslovnica je udvostrucena. Zeleno koje ne znaci ono sto tvrdi.
+  for (let i = 0; i < start; i += 1) {
+    const text = anchorTextOfXml(selectedXml[i]);
+    if (text && covers.some((line) => line.includes(text))) return null;
+  }
+  return start;
+}
+
 /** Kontrolirano regenerira samo prvu stranicu po strukturiranom profilu. */
 export function titlePageFixer(parts: DocxXmlParts, target: TitlePageRepairTarget): FixerOutput {
   if (!parts.documentXml || !Number.isInteger(target?.paragraphCount) || target.paragraphCount < 1 || target.paragraphCount > 80) return NO_OP(parts, 'invalid-params');
@@ -680,8 +777,19 @@ export function titlePageFixer(parts: DocxXmlParts, target: TitlePageRepairTarge
   if (lines.length !== target.lines.length || lines.some((line) => line.text.length > 1000 || (line.group !== undefined && (!Number.isInteger(line.group) || line.group < 0 || line.group > 100)))) return NO_OP(parts, 'invalid-params');
   const ranges = titlePageParagraphRanges(parts.documentXml);
   if (ranges.length < target.paragraphCount) return NO_OP(parts, 'invalid-params');
-  const selected = ranges.slice(0, target.paragraphCount);
-  const selectedXml = selected.map((range) => parts.documentXml.slice(range.start, range.end));
+  const windowEnd = Math.min(ranges.length, Math.max(target.paragraphCount, lines.length + 1), 80);
+  const windowXml = ranges.slice(0, windowEnd).map((range) => parts.documentXml.slice(range.start, range.end));
+  const anchor = titlePageAnchor(windowXml);
+  if (anchor === 'rendered-only') return NO_OP(parts, 'unsupported-structure');
+  // Bez ijednog markera ostaje pozivateljev broj (stariji, rucno slozeni zahtjevi). Plan iz
+  // `buildTitlePageRepairPlan` ovdje ne moze zavrsiti: on trazi `paragraphs.confident`, a to je
+  // upravo postojanje jednog od dva markera iz `titlePageAnchor`.
+  const count = anchor ? anchor.end + 1 : target.paragraphCount;
+  // Raspon se omedjuje S OBJE strane: sidro daje kraj, pokrivenost predloskom pocetak.
+  const startIndex = titlePageStart(windowXml.slice(0, count), lines);
+  if (startIndex === null) return NO_OP(parts, 'unsupported-structure');
+  const selected = ranges.slice(startIndex, count);
+  const selectedXml = windowXml.slice(startIndex, count);
   if (selectedXml.some((xml, index) => /<w:(?:drawing|pict|object|fldSimple|instrText|sdt|ins|del)\b/.test(xml) || (index < selectedXml.length - 1 && /<w:sectPr\b/.test(xml)))) return NO_OP(parts, 'unsupported-structure');
   if (selectedXml.some((xml) => /<w:tbl\b|<w:txbxContent\b/.test(xml))) return NO_OP(parts, 'unsupported-structure');
 
@@ -691,10 +799,30 @@ export function titlePageFixer(parts: DocxXmlParts, target: TitlePageRepairTarge
     generated.push(titlePageParagraphXml(line, previousGroup));
     previousGroup = line.group;
   }
-  const lastSectPr = selectedXml.at(-1)?.match(/<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/)?.[0];
+  /**
+   * NOSITELJ SIDRA SE VRACA, jer bez njega prva stranica prestaje postojati kao stranica.
+   *
+   * Odlomak bez vidljivog teksta se cuva DOSLOVNO (tipican `<w:p><w:r><w:br w:type="page"/></w:r></w:p>`
+   * ostaje bajt-identican, pa drugi prolaz nad vlastitim izlazom daje isti XML). Odlomak koji uz
+   * prijelom nosi i tekst naslovnice zamjenjuje se kanonskim nositeljem: tekst je dio naslovnice
+   * koju upravo slazemo, a paginacija se cuva.
+   */
+  const anchorXml = anchor ? selectedXml.at(-1) : undefined;
+  const tail = anchorXml === undefined ? null : (titlePageHasVisibleText(anchorXml) ? TITLE_PAGE_BREAK_PARAGRAPH : anchorXml);
+  if (tail) generated.push(tail);
+  // `sectPr` se prepisuje samo kad zadnji zahvaceni odlomak NIJE sacuvan doslovno; inace bi isti
+  // `sectPr` zavrsio u dokumentu dvaput.
+  const sectPrSource = tail !== null && tail === anchorXml ? undefined : selectedXml.at(-1);
+  const lastSectPr = sectPrSource?.match(/<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/)?.[0];
   if (lastSectPr) generated[generated.length - 1] = generated[generated.length - 1].replace('</w:p>', `${lastSectPr}</w:p>`);
   let xml = parts.documentXml;
-  for (let i = selected.length - 1; i >= 0; i -= 1) xml = `${xml.slice(0, selected[i].start)}${i < generated.length ? generated[i] : ''}${xml.slice(selected[i].end)}`;
+  // Visak generiranih odlomaka (redaka predloska ima vise nego zahvacenih odlomaka) ide u ZADNJI
+  // zahvaceni raspon. Prije je petlja pisala `generated[i]` po indeksu i sve preko `selected.length`
+  // je TIHO NESTAJALO, pa bi bogatiji predlozak izgubio zavrsne retke naslovnice.
+  for (let i = selected.length - 1; i >= 0; i -= 1) {
+    const replacement = i === selected.length - 1 ? generated.slice(i).join('') : (generated[i] ?? '');
+    xml = `${xml.slice(0, selected[i].start)}${replacement}${xml.slice(selected[i].end)}`;
+  }
   if (target.ensureTitlePageNoNumber !== false || target.marginsCm) {
     let seen = false;
     xml = xml.replace(/<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/g, (section) => {

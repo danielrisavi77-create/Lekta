@@ -18,7 +18,10 @@ import {
   aggregateByFixer,
   deadFixers,
   awaitingConfirmationFixers,
+  titlePageMechanism,
+  titlePageMechanismProblems,
   type DocumentMeasurement,
+  type TitlePageMechanism,
 } from '../scripts/corpus-gen/net-core.mts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -43,6 +46,7 @@ interface Artefakt {
     dead: string[];
     awaitingCount: number;
     awaiting: string[];
+    titlePage?: TitlePageMechanism;
   };
   fixers: FixerRowJson[];
   documents: DocumentMeasurement[];
@@ -112,6 +116,42 @@ describe('mreza nad fixerima: ugovor artefakta', () => {
     ).toEqual([]);
     // Anti-vakuum: tvrdnja iznad prolazi i nad praznim artefaktom, pa se trazi i stvarno mjerenje.
     expect(artefakt.fixers.some((f) => f.requested > 0)).toBe(true);
+  });
+});
+
+/**
+ * MEHANIZAM NASLOVNICE IMA VLASTITI BROJAC, i to je jedina tvrdnja koja kaze da je putanja ziva.
+ *
+ * Do 2026-09-13 su `scripts/corpus-gen/net-core.mts` i `tests/real-corpus/harness.ts` predavali tvrdi
+ * `titleTemplate: null`, pozivajuci se na to da je odabir predloska korak u SUCELJU. Aplikacija ga
+ * izvodi CISTOM funkcijom `selectTemplate(unitId, workType)`, pa je razlog bio netocan, a posljedica
+ * mjerljiva: `repair-item-assembly` gradi stavku samo uz istinit `titleTemplate`, dakle
+ * `title-page-fixer` nije bio pozvan NI JEDNOM, na nijednom od 54 dokumenta.
+ *
+ * Nijedna nizvodna brojka to nije razlikovala od fixera koji je pozvan i nije imao sto raditi. Zato
+ * brojac, i zato tvrdnja da je RAZLICIT OD NULE.
+ */
+describe('mehanizam naslovnice: brojac, ne nizvodna mjera', () => {
+  it('artefakt nosi brojac naslovnice i on nije na nuli', () => {
+    const m = artefakt.summary.titlePage;
+    expect(m, 'artefakt nema brojac naslovnice; je li mreza pecena starim kodom?').toBeTruthy();
+    expect(titlePageMechanismProblems(m!), 'mehanizam naslovnice je mrtav').toEqual([]);
+    expect(m!.withTemplate).toBeGreaterThan(0);
+    expect(m!.changed).toBeGreaterThan(0);
+  });
+
+  it('brojac se slaze s pojedinacnim mjerenjima, pa ga se ne moze upisati mimo njih', () => {
+    // Sazetak nije nezavisan zapis nego izvod: kad bi se razisao, brojac bi mogao lagati sam za sebe.
+    expect(titlePageMechanism(artefakt.documents)).toEqual(artefakt.summary.titlePage);
+    const sPredloskom = artefakt.documents.filter((d) => d.titleTemplateId);
+    expect(sPredloskom.length).toBe(artefakt.summary.titlePage!.withTemplate);
+  });
+
+  it('fixer naslovnice je zatrazen i promijenio je dokument', () => {
+    const row = artefakt.fixers.find((f) => f.fixerId === 'title-page-fixer');
+    expect(row, '`title-page-fixer` nije ni zatrazen; predlozak se opet ne izvodi').toBeTruthy();
+    expect(row!.requested).toBeGreaterThan(0);
+    expect(row!.changed).toBeGreaterThan(0);
   });
 });
 

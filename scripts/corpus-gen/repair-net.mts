@@ -29,6 +29,8 @@ import {
   aggregateByFixer,
   deadFixers,
   awaitingConfirmationFixers,
+  titlePageMechanism,
+  titlePageMechanismProblems,
   type DocumentMeasurement,
 } from './net-core.mts';
 import { withProvenance } from '../lib/provenance.mjs';
@@ -79,24 +81,38 @@ async function run(): Promise<void> {
   for (const f of files) {
     const sidecar = join(dir, f.replace(/\.docx$/i, '.json'));
     let profileId: string | null = null;
+    // Jedinica i vrsta rada dolaze iz sidecara (`row`), dakle iz istog para iz kojeg ih sucelje cita
+    // iz korisnikova odabira. Bez njih `title-page-fixer` nikad ne dobije predlozak.
+    let selection: { unitId?: string | null; workType?: string | null } | null = null;
     try {
-      profileId = (JSON.parse(readFileSync(sidecar, 'utf8')) as { profileId?: string }).profileId ?? null;
+      const meta = JSON.parse(readFileSync(sidecar, 'utf8')) as {
+        profileId?: string;
+        row?: { unitId?: string; workType?: string };
+      };
+      profileId = meta.profileId ?? null;
+      selection = meta.row ? { unitId: meta.row.unitId ?? null, workType: meta.row.workType ?? null } : null;
     } catch {
       profileId = null;
     }
-    mjerenja.push(await measureDocument(join(dir, f), profileId));
+    mjerenja.push(await measureDocument(join(dir, f), profileId, selection));
   }
 
   const rows = aggregateByFixer(mjerenja);
   const mrtvi = deadFixers(rows);
   const cekaju = awaitingConfirmationFixers(rows);
+  const naslovnica = titlePageMechanism(mjerenja);
+  const naslovnicaProblemi = titlePageMechanismProblems(naslovnica);
 
   const ratchet: Ratchet = JSON.parse(readFileSync(RATCHET, 'utf8')) as Ratchet;
   const dopusteni = new Set(ratchet.dead.map((d) => d.fixerId));
   const novi = mrtvi.filter((f) => !dopusteni.has(f));
   const ozivjeli = ratchet.dead.map((d) => d.fixerId).filter((f) => !mrtvi.includes(f));
 
-  console.log(`dokumenata: ${mjerenja.length} | fixera zatrazeno: ${rows.length}\n`);
+  console.log(`dokumenata: ${mjerenja.length} | fixera zatrazeno: ${rows.length}`);
+  console.log(
+    `naslovnica: predlozak izveden ${naslovnica.withTemplate}, stavka izgradjena ${naslovnica.offered}, ` +
+      `dokument promijenjen ${naslovnica.changed}\n`,
+  );
   for (const r of rows) {
     // Tri stanja, ne dva: MRTAV je kvar, CEKA je stanje forme, prazno je uredan rad.
     const oznaka = cekaju.includes(r.fixerId) ? 'CEKA  ' : r.changed === 0 ? 'MRTAV ' : '      ';
@@ -114,6 +130,11 @@ async function run(): Promise<void> {
   if (ozivjeli.length) {
     console.error(`\nFIXER JE OZIVIO, a jos je na popisu mrtvih: ${ozivjeli.join(', ')}`);
     console.error('Skini ga s popisa; ratchet koji nosi rijesen slucaj propusta sljedeci s istim imenom.');
+    process.exitCode = 1;
+  }
+  if (naslovnicaProblemi.length) {
+    // Brojac na nuli je MRTAV MEHANIZAM, ne uredan prolaz; nizvodne mjere to ne razlikuju.
+    console.error(`\nMEHANIZAM NASLOVNICE: ${naslovnicaProblemi.join('; ')}`);
     process.exitCode = 1;
   }
   if (!novi.length && !ozivjeli.length) console.log('\nmreza: popis mrtvih fixera odgovara imenovanom ratchetu');
@@ -138,6 +159,12 @@ async function run(): Promise<void> {
          */
         awaitingCount: cekaju.length,
         awaiting: cekaju,
+        /**
+         * Vlastiti brojac mehanizma naslovnice. Bez njega se povratak na tvrdi `titleTemplate: null`
+         * ne vidi ni u jednoj nizvodnoj brojci: fixer koji nije POZVAN izgleda isto kao fixer koji
+         * je pozvan i nije imao sto raditi.
+         */
+        titlePage: naslovnica,
       },
       fixers: rows,
       documents: mjerenja,

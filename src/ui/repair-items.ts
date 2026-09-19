@@ -11,6 +11,7 @@ import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 import type { SectionNumberingTarget } from '../repair/xml-patch';
 import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX, dimensionForCheckId } from '../analysis/check-fixer-map';
+import { stableCheckId } from '../scoring/check-id-registry';
 import { normalizeAnchorText } from '../repair/anchor-text';
 import type { HeadingCandidate, HeadingStructureWarning } from '../analysis/heading-structure';
 import { headingNumberingRules } from '../analysis/heading-numbering';
@@ -732,6 +733,41 @@ function titlePageFields(plan: ReturnType<typeof buildTitlePageRepairPlan>, temp
   });
 }
 
+/**
+ * PROVJERE KOJE OVAJ POPRAVAK DOISTA MOZE RIJESITI, i ujedno jedini temelj za `violated`.
+ *
+ * Fixer slaze omedjenu prvu stranicu prema sluzbenom predlosku, pa pokriva PRISUTNOST elemenata
+ * (`title.elements`), njihov REDOSLIJED (`title.order`) i PORAVNANJE (`title.layout`, koji mjeri
+ * iskljucivo je li svaki prepoznati element centriran; predlozak svakom elementu pise `align`).
+ *
+ * `title.typography` ("Tipografija korica i naslovnice") NAMJERNO nije ovdje, i to nije propust:
+ * ta provjera trazi Times New Roman 14 bold za standardne elemente i 16 pt za naslov, dok
+ * `pravo-graduate` predlozak istim elementima propisuje 12 pt, a naslovu 20 pt. Fixer je po
+ * konstrukciji ne moze zadovoljiti, pa bi tvrdnja da ju cilja bila neistinita obecanje.
+ */
+/**
+ * Je li naslovnica DOISTA prekrsena.
+ *
+ * Do 2026-09-13 je ovdje stajao tvrdi `violated: true`, pa je stavka ulazila u zadani odabir
+ * (`violated !== false`) uvijek kad postoji verificiran sluzbeni predlozak i pouzdano omedjena prva
+ * stranica, bez obzira na to sto analiza o toj naslovnici kaze. Posljedica je izmjerena cim je
+ * harness dobio stvaran predlozak (2026-09-13, sinteticki korpus): na tri dokumenta kojima su SVE
+ * provjere naslovnice bile `pass` popravak ih je prepisivao i obarao, `title.elements` s 4/4 na 3/4
+ * i `title.order`/`title.layout` s 3/3 na nebodovanih 0/0.
+ *
+ * Regeneracija naslovnice je jednosmjerna: slobodne retke prve stranice preslikava na osam uloga
+ * predloska, pa nad vec uskladjenom naslovnicom moze samo izgubiti. Stavka i dalje POSTOJI i nudi
+ * se (`violated: false` je opt-in, ne brisanje), ali se ne primjenjuje sama od sebe.
+ */
+function titlePageViolated(checks: readonly AnalyzedCheck[], matchKeys: readonly string[]): boolean {
+  return matchKeys.some((title) => {
+    const id = stableCheckId(title);
+    if (!id) return false;
+    const check = checks.find((candidate) => (candidate.id ?? (candidate.title ? stableCheckId(candidate.title) : null)) === id);
+    return !!check && check.max > 0 && check.status !== 'pass';
+  });
+}
+
 /** Asistirani, službenim predloškom ograničeni popravak prve stranice. */
 export function titlePageRepairableItem(result: any, profile: any, template: TitlePageTemplate | null): RepairableItem[] {
   const plan = buildTitlePageRepairPlan(result, profile, template);
@@ -746,12 +782,11 @@ export function titlePageRepairableItem(result: any, profile: any, template: Tit
       ...(template.marginsCm ? { marginsCm: template.marginsCm } : {}),
     };
   };
-  return [{
+  const item: RepairableItem = {
     ruleId: 'title-page-repair-assisted',
     fixerId: 'title-page-fixer',
     label: 'Naslovnica: primijeni službeni raspored',
     params: buildParams(Object.fromEntries(fields.map((field) => [field.key, field.value]))),
-    violated: true,
     requiresConfirmation: true,
     confirmationText: 'Potvrdi podatke u obrascu. Zamijenit će se samo omeđena prva stranica; tekst rada, tablice i slike izvan nje ostaju netaknuti.',
     titlePageForm: {
@@ -759,8 +794,17 @@ export function titlePageRepairableItem(result: any, profile: any, template: Tit
       warnings: plan.warnings,
       buildParams,
     },
-    matchKeys: ['Elementi naslovne stranice', 'Redoslijed elemenata naslovnice', 'Naslovna stranica možda nije potpuna'],
-  }];
+    // 'Naslovna stranica možda nije potpuna' je bio naslov IZDANJA (issue), ne provjere: analiza ga
+    // kao check nikad ne emitira, pa je stajao samo u `unmappedMatchKeys` i nista nije mjerio.
+    // Zamjenjuje ga naslov provjere koju fixer stvarno cilja ('Raspored naslovne stranice' =
+    // `title.layout`, poravnanje elemenata naslovnice koje predlozak propisuje po elementu).
+    matchKeys: ['Elementi naslovne stranice', 'Redoslijed elemenata naslovnice', 'Raspored naslovne stranice'],
+  };
+  // `violated` se izvodi IZ ISTIH kljuceva koje stavka tvrdi da cilja, pa se popis ciljeva i uvjet
+  // primjene ne mogu raziici. Doslovan niz ostaje u stavci i zato sto ga `tests/check-fixer-map.test.ts`
+  // cita iz IZVORA: izdvajanje u konstantu bi ga sakrilo od tog garda.
+  item.violated = titlePageViolated(Array.isArray(result?.checks) ? result.checks : [], item.matchKeys ?? []);
+  return [item];
 }
 
 /**

@@ -14,6 +14,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
+import { ensureTemplatesHeavy, selectTemplate } from '../../src/title-pages/template-loader';
 import { repairEntriesFor } from '../../src/profiles/profile-runtime-maps';
 import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
 import { buildDefaultRepairRequests, hasActionableParams } from '../../src/repair/default-selection';
@@ -44,6 +45,15 @@ export interface DocumentMeasurement {
    * koristila, pa je oba zvala MRTVIMA. Da se jedan od njih doista pokvari, izgledalo bi identicno.
    */
   cekaPotvrdu: string[];
+  /**
+   * Predlozak naslovnice koji je mjerenje izvelo za ovaj dokument, ili `null` kad ga nema.
+   *
+   * BROJAC MEHANIZMA, ne ukras. Do 2026-09-13 je ovdje stajao tvrdi `titleTemplate: null` uz
+   * napomenu da je odabir predloska korak u sucelju, pa `title-page-fixer` nije bio pozvan NIJEDNOM,
+   * a nizvodne mjere (broj zatrazenih fixera, pokrivenost) to nisu mogle razlikovati od fixera koji
+   * se nudi i nema sto raditi. Bez vlastitog brojaca bi povratak na `null` opet bio nevidljiv.
+   */
+  titleTemplateId: string | null;
   rijeseno: string[];
   nerijeseno: string[];
   regresije: string[];
@@ -58,7 +68,37 @@ function failingChecks(checks: Array<{ id?: string; status?: string; max?: numbe
     .sort();
 }
 
-export async function measureDocument(path: string, profileId: string | null): Promise<DocumentMeasurement> {
+/**
+ * Odabir iz kojeg se izvodi predlozak naslovnice, isti par koji sucelje ima u stanju rezultata
+ * (`r.settings.selectionIds.unit`, `r.settings.workType`).
+ */
+export interface TitleSelection {
+  unitId?: string | null;
+  workType?: string | null;
+}
+
+/**
+ * Predlozak naslovnice za (jedinica, vrsta rada), ISTOM funkcijom kojom ga izvodi aplikacija.
+ *
+ * `src/ui/app.ts` (renderRepairSection) zove `selectTemplate(unitId, workType)` iz
+ * `src/title-pages/template-loader.ts`; ta je funkcija cista i mjerenje ju moze pozvati jednako.
+ * Tvrdnja da je odabir predloska "korak u sucelju" bila je netocna i drzala je `title-page-fixer`
+ * izvan svakog mjerenja.
+ *
+ * Pozivatelj mora prije ovoga awaitati `ensureTemplatesHeavy()`, inace predlozak nema `elements` i
+ * plan naslovnice tiho ispadne prazan.
+ */
+export function titleTemplateFor(selection: TitleSelection | null | undefined) {
+  if (!selection?.unitId) return null;
+  return selectTemplate(selection.unitId, selection.workType || 'final').template;
+}
+
+export async function measureDocument(
+  path: string,
+  profileId: string | null,
+  selection?: TitleSelection | null,
+): Promise<DocumentMeasurement> {
+  await ensureTemplatesHeavy();
   const bytes = new Uint8Array(readFileSync(path));
   const naziv = path.split(/[\\/]/).pop() as string;
   const before = await analyzeFixture(new File([bytes], naziv, { type: DOCX_MIME }), {
@@ -69,11 +109,13 @@ export async function measureDocument(path: string, profileId: string | null): P
   // graditelja cita `profile.ruleEntries`, kojega `resolveProfile` nema, pa bi bez njih ti fixeri
   // bili mrtvi bez ijedne poruke.
   const profile = profileId ? resolveProfile(profileId) : null;
+  const titleTemplate = titleTemplateFor(selection);
   const items = buildAllRepairableItems({
     result: before,
     profile,
     entries: profileId ? repairEntriesFor(profileId) : [],
-    titleTemplate: null, // naslovnica trazi UI odabir predloska, pa je izvan mjerenja
+    // Naslovnica NE trazi UI korak: predlozak se izvodi istom cistom funkcijom koju zove sucelje.
+    titleTemplate,
   });
   const requests = buildDefaultRepairRequests(items);
   const applied = await applyFixers(bytes, requests);
@@ -115,6 +157,7 @@ export async function measureDocument(path: string, profileId: string | null): P
     promijenili,
     bezUcinka,
     cekaPotvrdu,
+    titleTemplateId: titleTemplate?.id ?? null,
     rijeseno: prije.filter((id) => !poslije.includes(id)),
     nerijeseno: poslije.filter((id) => prije.includes(id)),
     regresije: detectPassRegressions(before.checks ?? [], after.checks ?? []).map((r: unknown) =>
@@ -176,4 +219,51 @@ export function awaitingConfirmationFixers(rows: readonly FixerRow[]): string[] 
   return rows
     .filter((r) => r.requested > 0 && r.changed === 0 && r.awaitingConfirmation === r.requested)
     .map((r) => r.fixerId);
+}
+
+/**
+ * BROJAC MEHANIZMA NASLOVNICE. Odgovara na pitanje na koje nizvodne mjere ne odgovaraju: je li
+ * mjerenje predlozak uopce IZVELO, koliko je puta stavka izgradjena i koliko puta je fixer doista
+ * promijenio dokument.
+ *
+ * Postoji zato sto se ista rupa vec dogodila: `titleTemplate: null` je bio tvrdo upisan na dva
+ * mjesta, fixer nije bio pozvan nijednom, a nijedna nizvodna brojka to nije razlikovala od fixera
+ * koji se nudi pa nema sto raditi. Brojac na nuli znaci MRTAV MEHANIZAM, ma sto matrica pokazivala.
+ */
+export interface TitlePageMechanism {
+  documentCount: number;
+  withTemplate: number;
+  offered: number;
+  changed: number;
+}
+
+export function titlePageMechanism(measurements: DocumentMeasurement[]): TitlePageMechanism {
+  return {
+    documentCount: measurements.length,
+    withTemplate: measurements.filter((m) => m.titleTemplateId).length,
+    offered: measurements.filter((m) => m.zatrazeno.includes('title-page-fixer')).length,
+    changed: measurements.filter((m) => m.promijenili.includes('title-page-fixer')).length,
+  };
+}
+
+/**
+ * Presuda nad brojacem: prazan niz znaci da je mehanizam ziv, inace imenuje sto je otkazalo.
+ *
+ * Prag je NULA, ne postotak: predlozak postoji za dio jedinica, a plan naslovnice uz to trazi
+ * `verified` + `official` predlozak, pouzdano omedjenu prvu stranicu i nijedan odlomak u tablici.
+ * Koliko ce ih proci je svojstvo korpusa; da NIJEDAN ne prodje znaci da je putanja mrtva.
+ */
+export function titlePageMechanismProblems(m: TitlePageMechanism): string[] {
+  const problems: string[] = [];
+  if (!m.documentCount) problems.push('mjerenje nema nijedan dokument, pa brojac ne znaci nista');
+  if (m.documentCount && !m.withTemplate) {
+    problems.push('nijedan dokument nije izveo predlozak naslovnice (je li `titleTemplate` opet tvrdi null?)');
+  }
+  if (m.withTemplate && !m.offered) {
+    problems.push('predlozak je izveden, a stavka naslovnice nije izgradjena ni jednom');
+  }
+  if (m.offered && !m.changed) {
+    problems.push('stavka naslovnice je zatrazena, a fixer nije promijenio nijedan dokument');
+  }
+  return problems;
 }

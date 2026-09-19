@@ -51,7 +51,9 @@ async function main(): Promise<void> {
     const m = /^(.*)--(uskladjen|neuredan)\.docx$/i.exec(f);
     if (!m) continue;
     const row = rows.get(m[1]);
-    const mjerenje = await measureDocument(join(dir, f), row?.routedProfileId ?? null);
+    const mjerenje = await measureDocument(join(dir, f), row?.routedProfileId ?? null, row
+      ? { unitId: row.unitId, workType: row.workType }
+      : null);
     nalazi.push({ ...mjerenje, rowId: m[1], varijanta: m[2] });
   }
 
