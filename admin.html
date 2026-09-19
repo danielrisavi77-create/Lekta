@@ -5,7 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light dark">
-<script>try{var _e=document.documentElement,_t=localStorage.getItem('lekta.theme')||'dark';if(_t!=='system')_e.dataset.theme=_t;var _d=JSON.parse(localStorage.getItem('lekta.display')||'{}')||{};if(_d.readingFont&&_d.readingFont!=='default')_e.dataset.readingFont=_d.readingFont;if(_d.textSize&&_d.textSize!=='m')_e.dataset.textSize=_d.textSize;if(_d.contrast==='high')_e.dataset.contrast='high';if(_d.motion==='reduce')_e.dataset.motion='reduce';}catch(e){}</script>
+<!-- PRE-PAINT TEMA CONTROL CENTRA JE VLASTITA, ne dijeljena (vraceno 2026-09-20, pregled Z6).
+     Ova stranica ima svoj sustav teme (src/admin/admin-theme.ts) koji PRATI SUSTAV: bazni :root je
+     svijetao, tamno se pali pod prefers-color-scheme:dark i pod [data-theme="dark"]. Zato namjerno
+     ne uvozi ui-boot ni display-settings.css. Prosirena skripta ostalih ruta bezuvjetno upisuje
+     data-theme="dark" i cetiri data- atributa prikaza, pa je Control Centru gasila prilagodbu
+     sustavu i nametala tamno i onome tko je izabrao svjetlo. Skripta zato ostaje na obliku s grane
+     design/z5-typo-pilot: vraca SAMO izricito spremljenu temu.
+     CSP: ovaj oblik ima vlastiti sha256 u public/_headers (druga stavka u script-src). -->
+<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <title>Lekta · Control Center</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" href="/favicon.ico" sizes="32x32">

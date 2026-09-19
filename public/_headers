@@ -4,12 +4,16 @@
 #
 # CSP je defense-in-depth: sav korisnicki unos vec ide kroz escapeHtml, a ovdje se blokira
 # ucitavanje vanjskih skripti/resursa i slanje podataka izvan self/https.
-# script-src NE koristi 'unsafe-inline': jedina dopustena inline skripta je FOUC prekidac teme,
-# preko sha256 hasha, pa bi svaka INJEKTIRANA inline skripta bila blokirana. Ista skripta (bajt
-# identicna, 106 znakova) stoji u index.html I u svih 6 stranica alata (citat/izjava/naslovnica/
-# literatura/kartice/alati); jedan hash pokriva sve jer CSP hash provjerava SADRZAJ, ne stranicu.
-#   VAZNO: ako mijenjas tu inline skriptu, promijeni je IDENTICNO u svih 7 datoteka (inace se
-#   izmijenjene blokiraju) i ponovno izracunaj hash pa ga azuriraj ovdje
+# script-src NE koristi 'unsafe-inline': jedine dopustene inline skripte su DVA oblika FOUC
+# prekidaca teme, oba preko sha256 hasha, pa bi svaka INJEKTIRANA inline skripta bila blokirana.
+#   1. xfdO4G1E... je PROSIRENI oblik (tema + cetiri atributa prikaza iz `lekta.display`, Z6). Bajt
+#      identican stoji u index.html, rad/, moji-radovi/, saznaj-vise/, u svih 6 stranica alata
+#      (citat/izjava/naslovnica/literatura/kartice/alati) i u dva landing mjerila.
+#   2. ws2+tIof... je KRATKI oblik i nosi ga SAMO admin.html (Control Center), jer ta stranica ima
+#      vlastiti sustav teme koji prati OS; prosireni oblik bi joj bezuvjetno nametnuo tamno.
+# Jedan hash pokriva sve stranice s istim tijelom jer CSP hash provjerava SADRZAJ, ne stranicu.
+#   VAZNO: ako mijenjas inline skriptu, promijeni je IDENTICNO u svim datotekama te skupine (inace
+#   se izmijenjene blokiraju) i ponovno izracunaj hash pa ga azuriraj ovdje
 #   (node: crypto.createHash('sha256').update(<tekst skripte>).digest('base64')).
 #   scripts/verify-deploy-dist.mjs (build gate) provjerava OVU whitelistu protiv SVAKOG inline
 #   <script> u dist/ i pada na svaki nepokriven hash, da se ova klasa buga uhvati prije deploya
@@ -43,7 +47,7 @@
 # preglednik blokira. To je namjerno: nepredvidjeni odljev podataka pada zatvoreno. `npm run dev`
 # ne koristi _headers pa HMR websocket ostaje raditi.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-xfdO4G1E9fQpFb0f8eF1/ifB477ghauiNVYHDHM1E00='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__ __CSP_LS__
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-xfdO4G1E9fQpFb0f8eF1/ifB477ghauiNVYHDHM1E00=' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__ __CSP_LS__
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

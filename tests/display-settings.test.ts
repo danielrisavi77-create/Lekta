@@ -414,18 +414,49 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(izvrsiPrePaint(staro, { 'lekta.theme': 'light' }).theme).toBe('light');
   });
 
-  it('SVE stranice s pre-paint skriptom nose bajt-identicnu skriptu', () => {
-    // Jedan CSP sha256 pokriva cijeli site (public/_headers); razilazenje na bilo kojoj stranici
-    // znaci da preglednik ondje blokira skriptu, dakle bljesak na tocno toj ruti.
+  it('SVE stranice PROIZVODA s pre-paint skriptom nose bajt-identicnu skriptu', () => {
+    // Jedan CSP sha256 pokriva cijelu ovu skupinu (public/_headers); razilazenje na bilo kojoj
+    // stranici znaci da preglednik ondje blokira skriptu, dakle bljesak na tocno toj ruti.
+    // admin.html NIJE u ovom popisu: vidi tvrdnju odmah ispod (vlastiti sustav teme).
     const stranice = [
       'index.html', 'rad/index.html', 'moji-radovi/index.html', 'saznaj-vise/index.html',
-      'admin.html', 'alati.html', 'citat.html', 'citati-i-literatura.html', 'izjava.html',
+      'alati.html', 'citat.html', 'citati-i-literatura.html', 'izjava.html',
       'kartice.html', 'landing_benchmark.html', 'landing_usporedba.html', 'literatura.html',
       'naslovnica.html',
     ];
     const kanon = tijeloSkripte(INDEX);
     for (const put of stranice) expect(tijeloSkripte(read(put)), put).toBe(kanon);
-    expect(stranice.length, 'popis stranica se suzio; provjeri je li ruta izgubila pre-paint').toBe(14);
+    expect(stranice.length, 'popis stranica se suzio; provjeri je li ruta izgubila pre-paint').toBe(13);
+    expect(stranice, 'admin.html ima VLASTITI sustav teme, ne smije se vratiti u ovaj popis')
+      .not.toContain('admin.html');
+  });
+
+  /**
+   * ADMIN.HTML JE IZUZET, I TO SE MJERI NAD NJEGOVIM SADRZAJEM (pregled Z6, 2026-09-20).
+   *
+   * Control Center ima vlastiti sustav teme (`src/admin/admin-theme.ts` + `admin-dashboard.css`):
+   * bazni `:root` je SVIJETAO, tamno se pali pod `prefers-color-scheme:dark` i pod
+   * `[data-theme="dark"]`. Stranica namjerno ne uvozi ni `ui-boot` ni `display-settings.css`.
+   *
+   * Prosirena skripta ostalih ruta radi tocno dvije stvari koje toj stranici smetaju: bezuvjetno
+   * upisuje `data-theme="dark"` (pa prilagodba sustavu prestaje postojati, i onaj tko koristi
+   * svijetli OS dobiva tamni Control Center) i upisuje cetiri `data-` atributa prikaza koje ondje
+   * nijedan list ne cita. Gard je zato nad ODSUTNOSCU oba obrasca, imenovano, a ne nad duljinom
+   * skripte: kratka skripta koja opet nosi zadani `dark` bila bi isti kvar.
+   */
+  it('admin.html NE nosi prosireni pre-paint (bez `lekta.display` i bez zadanog `dark`)', () => {
+    const admin = read('admin.html');
+    const tijelo = tijeloSkripte(admin);
+    expect(tijelo, 'admin.html mora imati vlastitu pre-paint skriptu').not.toBe('');
+    expect(tijelo, 'admin.html ne cita postavke prikaza').not.toContain('lekta.display');
+    expect(tijelo, 'admin.html ne smije bezuvjetno nametnuti tamnu temu').not.toContain("||'dark'");
+    expect(tijelo, 'admin.html ne upisuje atribute prikaza').not.toMatch(/data-?[Rr]eading[Ff]ont|readingFont|textSize/);
+    // Kontrola smjera: skripta i dalje VRACA izricit izbor, pa izuzece nije "obrisi sve".
+    expect(tijelo).toContain("localStorage.getItem('lekta.theme')");
+    // BASELINE: prosireni oblik STVARNO nosi oba obrasca, inace bi gornje tvrdnje bile vakuumske.
+    const prosireni = tijeloSkripte(INDEX);
+    expect(prosireni).toContain('lekta.display');
+    expect(prosireni).toContain("||'dark'");
   });
 
   it('obje stranice nose gumb #displayBtn uz #themeBtn', () => {
@@ -917,5 +948,110 @@ describe('Z6 na `/rad/`: naslijedjeni analizator ne gazi izbor "kao sustav"', ()
   it('BASELINE: izricite teme analizator i dalje vraca, pa popravak nije "obrisi sve"', () => {
     vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
     expect(pokreniRutu('light')).toBe('light');
+  });
+});
+
+/**
+ * Z6 PREGLED: USTUPANJE #themeBtn SE MJERI IZVODJENJEM, NE CITANJEM IZVORA.
+ *
+ * Do sada su ta dva ponasanja (`btn.dataset.themeOwner` i postovanje `system`) bila cuvana samo
+ * tvrdnjama nad TEKSTOM `ui-boot.ts`. Tekst dokazuje da niz postoji, ne da se izvodi u pravom
+ * trenutku, a tu je cijela razlika: provjera vlasnistva mora biti UNUTAR rukovatelja, jer panel
+ * gumb preuzima TEK POSLIJE (staticki uvoz `ui-boot` se izvede prije `start()` u
+ * `src/routes/intake/main.ts`, koji tek onda zove `mountDisplaySettings`). Ista tvrdnja citana iz
+ * teksta prolazi i kad provjera stoji u trenutku POSTAVLJANJA, dakle kad je bezvrijedna.
+ *
+ * Modul se ucitava dinamicki uz `vi.resetModules()`, jer mu je ponasanje u top-level kodu
+ * (zadana tamna tema) jednokratno po registru modula.
+ */
+describe('Z6 ui-boot: izvodjenje, ne tekst', () => {
+  /** Ucita `ui-boot` iznova, nad vec pripremljenim DOM-om i pohranom. */
+  async function ucitajUiBoot(): Promise<void> {
+    vi.resetModules();
+    await import('../src/shared/ui-boot');
+  }
+
+  it('uz spremljeno `system` ui-boot NE upisuje data-theme', async () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    localStorage.setItem(THEME_KEY, 'system');
+    document.body.innerHTML = navigacija();
+    await ucitajUiBoot();
+    expect(document.documentElement.hasAttribute('data-theme'),
+      '`system` je izricit izbor da temu odredi OS; atribut ga gasi').toBe(false);
+  });
+
+  it('BASELINE: bez spremljene teme ui-boot i dalje pali radnu lampu', async () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    document.body.innerHTML = navigacija();
+    await ucitajUiBoot();
+    // Bez ove kontrole bi gornja tvrdnja prolazila i nad modulom koji ne radi NISTA.
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+  });
+
+  it('kad panel preuzme gumb, klik mijenja temu TOCNO JEDNOM', async () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    document.body.innerHTML = navigacija();
+    await ucitajUiBoot();
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+    // Redoslijed je stvaran: ui-boot je listener vec prikacio, panel oznaku stavlja TEK SADA.
+    const btn = document.getElementById('themeBtn') as HTMLElement;
+    let panelKlikova = 0;
+    btn.dataset.themeOwner = 'panel';
+    btn.addEventListener('click', () => {
+      panelKlikova += 1;
+      document.documentElement.dataset.theme = suprotnaTema(document);
+    });
+
+    btn.click();
+    expect(panelKlikova, 'panel mora dobiti klik').toBe(1);
+    // Da je ui-bootov rukovatelj odradio, prvo bi postavio `light`, pa bi panel (registriran
+    // poslije njega) procitao suprotno od toga i vratio `dark`: dvije promjene, vidljiv treptaj.
+    expect(document.documentElement.getAttribute('data-theme'),
+      'tema je promijenjena dvaput; ui-boot nije ustupio gumb').toBe('light');
+  });
+
+  /**
+   * Doslovna izvedba rukovatelja, u dvije varijante koje se razlikuju SAMO po trenutku provjere.
+   * Replika je vezana uz produkciju tvrdnjom nad izvorom odmah ispod (provjera mora stajati IZA
+   * `addEventListener('click'`, dakle unutar rukovatelja).
+   */
+  function ozici(doc: Document, provjeraPriPostavljanju: boolean): void {
+    const btn = doc.getElementById('themeBtn') as HTMLElement | null;
+    if (!btn) return;
+    if (provjeraPriPostavljanju && btn.dataset.themeOwner) return;
+    btn.addEventListener('click', () => {
+      if (!provjeraPriPostavljanju && btn.dataset.themeOwner) return;
+      doc.documentElement.dataset.theme = suprotnaTema(doc);
+    });
+  }
+
+  function odigraj(provjeraPriPostavljanju: boolean): string | null {
+    document.body.innerHTML = navigacija();
+    document.documentElement.dataset.theme = 'dark';
+    ozici(document, provjeraPriPostavljanju);
+    const btn = document.getElementById('themeBtn') as HTMLElement;
+    btn.dataset.themeOwner = 'panel';
+    btn.addEventListener('click', () => { document.documentElement.dataset.theme = suprotnaTema(document); });
+    btn.click();
+    return document.documentElement.getAttribute('data-theme');
+  }
+
+  it('MUTACIJA: provjera vlasnistva premjestena u trenutak postavljanja pada', () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    // BASELINE: ispravan raspored (provjera u rukovatelju) daje jednu promjenu, kao ui-boot gore.
+    expect(odigraj(false), 'baseline mora biti cist').toBe('light');
+    // Mutacija: oznaka jos ne postoji kad se listener kaci, pa provjera nikad nikoga ne zaustavi.
+    expect(odigraj(true), 'mutacija nije promijenila ishod; gard ne grize').toBe('dark');
+  });
+
+  it('izvor stvarno drzi provjeru UNUTAR rukovatelja, pa replika iznad opisuje produkciju', () => {
+    const boot = read('src/shared/ui-boot.ts');
+    const kacenje = boot.indexOf("btn.addEventListener('click'");
+    const provjera = boot.indexOf('if (btn.dataset.themeOwner) return;');
+    expect(kacenje, 'nema klik rukovatelja na #themeBtn').toBeGreaterThan(0);
+    expect(provjera, 'nema provjere vlasnistva').toBeGreaterThan(0);
+    expect(provjera, 'provjera je izvan rukovatelja: vrijedi samo dok panel montira prije boota')
+      .toBeGreaterThan(kacenje);
   });
 });
