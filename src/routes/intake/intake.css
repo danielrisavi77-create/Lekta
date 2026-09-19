@@ -133,7 +133,6 @@
 .intake-continue:not([hidden]){display:block;margin-top:14px;color:var(--muted);font-family:var(--ui);font-size:var(--fs-ui)}
 .intake-continue a{color:var(--brand);font-weight:650}
 
-
 /* --- kratka navigacija ulaza ----------------------------------------------------------------- */
 /* Dva odredista i jedna kontrola. Vise od toga natjece se s jedinom radnjom ekrana. */
 .intake-nav{display:flex;align-items:center;gap:14px;margin-left:auto}
@@ -153,7 +152,12 @@
 /* Isti list, dva sadrzaja. Poziv nestaje cim dokument lezi na papiru, pa se stanje vidi NA
    predmetu umjesto kao poruka negdje ispod njega. `display` se prebacuje, ne `opacity`: skriveni
    poziv ne smije ostati u redoslijedu citaca ekrana ni hvatati fokus. */
-.intake-poziv{display:grid;justify-items:center}
+/* `position:relative` je SIDRO PECATA, i to je razlika koja se vidi tek na velikom ekranu.
+   Pecat je isprva bio sidren na sam papir, uz `top:58px` iz predloska. Papir ondje ima gornju
+   uvlaku od 34px, a ovdje `clamp(30px,5.5vw,52px)`, pa je na sirokom ekranu zaglavlje palo
+   nize od pecata i njegov desni natpis zavrsio ISPOD njega. Sidrenjem na `.intake-poziv` mjera
+   krece od prvog retka sadrzaja, dakle ista je na svakoj sirini. */
+.intake-poziv{position:relative;display:grid;justify-items:center}
 .intake-karta{display:none;justify-items:center;gap:0;text-align:center}
 .intake-stage[data-intake-state="checking"] .intake-poziv,
 .intake-stage[data-intake-state="saving"] .intake-poziv,
@@ -221,7 +225,7 @@
 .intake-list-broj{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 
 .intake-pecat{
-  position:absolute;top:58px;right:clamp(16px,4vw,40px);
+  position:absolute;top:44px;right:0;
   padding:8px 14px;border:2.5px solid var(--red);border-radius:2px;
   /* OKVIR ide na `--red` (nije tekst, pa prag 4,5:1 za njega ne vrijedi), a TEKST na
      `--red-on-soft`, koji je za tekst na svijetlim plohama vec izmjeren. Papir je svijetao u OBJE
@@ -286,8 +290,11 @@
   .intake-paper::before,.intake-paper::after{display:none}
   /* Tri stupca na 375 px daju stupac od stotinjak piksela i jednu rijec po retku. */
   .intake-koraci{grid-template-columns:1fr;gap:14px}
-  /* Pecat se seli DOLJE DESNO: gore bi na uskom ekranu prekrio naslov, koji je u Z7 mnogo veci. */
-  .intake-pecat{top:auto;bottom:clamp(16px,5vw,26px);right:clamp(12px,4vw,20px)}
+  /* PECAT NESTAJE ISPOD 600px, ne seli se. Papir je ondje uzi od same sirine pecata plus teksta
+     uz koji bi stajao, pa bi na svakom mjestu prekrio necije slovo: dolje desno podnozje, gore
+     nadnaslov, sredinom naslov. Gubitak je nikakav jer je pecat DEKORACIJA (`aria-hidden`), a
+     njegovo znacenje ("Nepregledano") i dalje stoji u zaglavlju, kao tekst. */
+  .intake-pecat{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   .intake-paper,.intake-cta{transition:none}
