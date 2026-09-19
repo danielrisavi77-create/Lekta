@@ -4,7 +4,12 @@
  * Dvije tvrdnje, i obje imaju mutaciju, jer gard bez dokaza da grize se ne racuna (CLAUDE.md):
  *   1. `design-system.css` definira svih 8 `--fs-*` koraka s TOCNO onim vrijednostima koje je
  *      ALIGNMENT propisao (token koji se tiho pomakne mijenja izgled svake migrirane deklaracije).
- *   2. Pilot datoteke (`intake.css`, `route-shell.css`) vise ne nose nijedan literal koji je jednak
+ *   2. NIJEDAN list u `src/` ne REDEFINIRA korak koji je `design-system.css` vec definirao.
+ *      Definicija koja postoji nije ista tvrdnja kao definicija koja VRIJEDI: isti razred kvara vec
+ *      je izmjeren na `--font-hand` (`page-chrome.css` je vracao Caveat preko ispravljenog
+ *      `design-system.css`, gard je bio zelen a preglednik je crtao Comic Sans; vidi
+ *      `tests/entry-fonts.test.ts`). Tokenizirana ljestvica ima tocno istu povrsinu napada.
+ *   3. Pilot datoteke (`intake.css`, `route-shell.css`) vise ne nose nijedan literal koji je jednak
  *      nekom koraku. Literali koji NE odgovaraju nijednom koraku (.88rem, .92rem, .85rem, .84rem,
  *      .98rem, 19px, 10px, clamp(1.05rem,2.4vw,1.35rem), te 1.8rem i 1rem u media queryju) smiju
  *      ostati i namjerno ih se ne izmislja u nove tokene.
@@ -13,7 +18,7 @@
  * dvije velicine ovisno o tome kako je stablo materijalizirano (CLAUDE.md).
  */
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -81,6 +86,48 @@ function zaostaliLiterali(css: string): string[] {
   return [...new Set(nalazi)].sort();
 }
 
+/**
+ * Svaka DEFINICIJA koraka ljestvice u zadanim listovima, redom kojim su listovi predani.
+ * `var(--fs-ui)` nije definicija (iza imena stoji `)`, ne `:`), pa upotreba ne pali gard.
+ */
+function definicijeKoraka(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
+  const imena = new Set(LJESTVICA.map(([ime]) => ime));
+  const nalazi: string[] = [];
+  for (const { ime, css } of listovi) {
+    for (const m of bezKomentara(css).matchAll(/(--fs-[\w-]+)\s*:/g)) {
+      if (imena.has(m[1])) nalazi.push(ime + ': ' + m[1]);
+    }
+  }
+  return nalazi;
+}
+
+/** Definicije koje dolaze POSLIJE prve za isti korak, dakle redefinicije. */
+function redefinicijeKoraka(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
+  const vidjeno = new Set<string>();
+  const nalazi: string[] = [];
+  for (const nalaz of definicijeKoraka(listovi)) {
+    const korak = nalaz.slice(nalaz.indexOf(': ') + 2);
+    if (vidjeno.has(korak)) nalazi.push(nalaz);
+    else vidjeno.add(korak);
+  }
+  return nalazi;
+}
+
+/**
+ * Svi CSS listovi u `src/`, s `design-system.css` PRVIM. Redoslijed je dio tvrdnje: prva definicija
+ * je ona iz izvora istine, pa je svaka sljedeca redefinicija bez obzira na to gdje lezi.
+ */
+const IZVOR_ISTINE = 'src/shared/design-system.css';
+
+function listoviSrc(): Array<{ ime: string; css: string }> {
+  // Relativna staza se GRADI pri obilasku (uvijek '/'), umjesto da se izvodi iz apsolutne:
+  // `join` na Windowsu vraca obrnutu kosu crtu, a `read()` i `IZVOR_ISTINE` govore '/'.
+  const hodaj = (rel: string): string[] => readdirSync(join(root, rel), { withFileTypes: true })
+    .flatMap((e) => (e.isDirectory() ? hodaj(rel + '/' + e.name) : [rel + '/' + e.name]));
+  const staze = hodaj('src').filter((x) => x.endsWith('.css')).sort();
+  const poredak = [IZVOR_ISTINE, ...staze.filter((x) => x !== IZVOR_ISTINE)];
+  return poredak.map((staza) => ({ ime: staza, css: read(staza) }));
+}
 const PILOT = ['src/routes/intake/intake.css', 'src/routes/shared/route-shell.css'];
 
 describe('Z5 tipografska ljestvica', () => {
@@ -93,6 +140,37 @@ describe('Z5 tipografska ljestvica', () => {
     expect(nedostajuciKoraci(':root{\n' + osnovica + '\n}'), 'baseline mora biti cist').toEqual([]);
     expect(nedostajuciKoraci(':root{\n' + osnovica.replace(': .9rem', ': .95rem') + '\n}')).toEqual(['--fs-ui']);
     expect(nedostajuciKoraci(':root{\n' + osnovica.replace(/\s*--fs-h2:[^;]+;/, '') + '\n}')).toEqual(['--fs-h2']);
+  });
+
+  it('NIJEDAN list u src/ ne redefinira korak koji design-system.css vec definira', () => {
+    const listovi = listoviSrc();
+    // Prazan obilazak nije cist nalaz: nula listova znaci da citanje ne radi.
+    expect(listovi.length, 'nula CSS listova u src/ znaci da obilazak ne radi').toBeGreaterThan(5);
+    expect(listovi[0].ime).toBe(IZVOR_ISTINE);
+    // Sentinel: izvor istine mora nositi SVIH 8 definicija, inace bi "nula redefinicija" bilo
+    // zeleno i nad stablom u kojem ljestvice uopce nema.
+    expect(definicijeKoraka([listovi[0]])).toHaveLength(LJESTVICA.length);
+    const nalazi = redefinicijeKoraka(listovi);
+    expect(nalazi, 'korak koji se redefinira drugdje mijenja izgled bez traga u izvoru istine').toEqual([]);
+  });
+
+  it('MUTACIJA: podmetnuta redefinicija koraka pada, a sama upotreba ne', () => {
+    const izvor = { ime: IZVOR_ISTINE, css: read(IZVOR_ISTINE) };
+    // Baseline: izvor istine sam sa sobom nema nijednu redefiniciju.
+    expect(redefinicijeKoraka([izvor]), 'baseline mora biti cist').toEqual([]);
+    // Mutacija iz naloga Z6: drugi list vraca `--fs-ui` na svoju vrijednost.
+    expect(redefinicijeKoraka([izvor, { ime: 'x.css', css: ':root{--fs-ui:.95rem}' }]))
+      .toEqual(['x.css: --fs-ui']);
+    // Mutacija: redefinicija unutar SAMOG izvora istine, poslije prve definicije.
+    expect(redefinicijeKoraka([{ ime: 'x.css', css: ':root{--fs-ui:.9rem}[data-x]{--fs-ui:.95rem}' }]))
+      .toEqual(['x.css: --fs-ui']);
+    // Negativne kontrole: upotreba nije definicija, komentar nije kod, a ime koje samo POCINJE
+    // kao korak (`--fs-ui-sm` naspram `--fs-ui`) broji se pod svoje ime.
+    expect(redefinicijeKoraka([izvor, { ime: 'x.css', css: '.a{font-size:var(--fs-ui)}' }])).toEqual([]);
+    expect(redefinicijeKoraka([izvor, { ime: 'x.css', css: '/* --fs-ui: .95rem */' }])).toEqual([]);
+    expect(redefinicijeKoraka([{ ime: 'x.css', css: ':root{--fs-ui:.9rem;--fs-ui-sm:.82rem}' }])).toEqual([]);
+    // Negativna kontrola: token koji NIJE korak ljestvice nije predmet ovog garda.
+    expect(redefinicijeKoraka([{ ime: 'x.css', css: ':root{--fs-neki:1rem}[data-x]{--fs-neki:2rem}' }])).toEqual([]);
   });
 
   it.each(PILOT)('%s ne nosi nijedan literal koji je jednak koraku', (staza) => {

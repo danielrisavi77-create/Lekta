@@ -229,9 +229,13 @@
 
 /* Ton nosi tocka uz natpis, ne lijevi rub (Z3, design/README.md pravilo 3). Uzorak je isti kao
    `.result-readiness strong::before` u `src/shared/page-app.css`. Blok je i dalje vidljivo
-   drukciji jer ima vlastitu podlogu i rub sa sve cetiri strane. */
+   drukciji jer ima vlastitu podlogu i rub sa sve cetiri strane.
+
+   `flex`, ne `inline-flex`: roditelj `.pv-prijelaz` je obican blok, pa bi `inline-flex` ostao na
+   inline razini i natpis bi se sveo na sirinu sadrzaja. Uzor `.result-readiness strong` smije biti
+   `inline-flex` jer mu je roditelj grid, koji dijete ionako blokificira; ovdje toga nema. */
 .pv-prijelaz__naslov {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 7px;
   margin: 0 0 0.25rem;

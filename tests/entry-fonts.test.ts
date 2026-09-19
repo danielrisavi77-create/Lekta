@@ -38,6 +38,23 @@ const SUSTAVNE = new Set([
 
 interface Nalaz { vrsta: 'nepoznat-token' | 'obitelj-bez-fonta'; selektor: string; detalj: string }
 
+/**
+ * Vrijednost koja po OBLIKU ne moze biti ime obitelji: duljina, goli broj ili izracun.
+ *
+ * Ovo je zamjena za pozicijsku heuristiku "obitelj je zadnja referenca". Pozicija je bila tocna
+ * samo za oblik koji je Z5 zatekao (`font: <tezina> var(--velicina)/<broj> var(--obitelj)`), a
+ * pada na dva oblika koja CSS jednako dopusta:
+ *   `font: 700 var(--fs-ui)/var(--lh) Georgia, serif`  zadnja referenca je VISINA RETKA
+ *   `font-family: var(--primary), var(--fallback)`     zadnja referenca je FALLBACK, ne ono
+ *                                                      sto se crta
+ * Oblik vrijednosti ne ovisi o redoslijedu, pa oba citanja daju isti ishod.
+ */
+function nijeObitelj(vrijednost: string): boolean {
+  const v = vrijednost.trim();
+  if (/^(clamp|calc|min|max)\s*\(/i.test(v)) return true;
+  return /^[+-]?[0-9.]+(px|rem|em|%|vw|vh|vmin|vmax|pt|pc|cm|mm|in|ch|ex|q)?$/i.test(v);
+}
+
 interface Ulaz {
   /** Sadrzaj svakog CSS lista koji ulaz ucitava. */
   cssTekstovi: string[];
@@ -136,13 +153,15 @@ export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi:
           nalazi.push({ vrsta: 'nepoznat-token', selektor, detalj: `${r[1]} nije definiran nigdje u listovima ulaza` });
         }
         if (nepoznati.length > 0) continue;
-        // OBITELJ JE ZADNJA REFERENCA, ne prva. U kratici `font:` redoslijed je propisan
-        // (`<tezina> <velicina>/<visina retka> <obitelj>`), pa obitelj stoji na kraju. Do Z5 je
-        // velicina bila literal pa je prva referenca slucajno bila i jedina; kad je velicina
-        // postala token (`font:italic 500 var(--fs-kicker)/1.3 var(--display-serif)`), citanje
-        // prve reference je `--fs-kicker` razrjesavalo u `clamp(.84rem` kao ime obitelji i davalo
-        // lazan nalaz. `font-family:` ima samo jednu referencu, pa je za nju prva i zadnja ista.
-        const ref = reference[reference.length - 1];
+        // OBITELJ JE PRVA REFERENCA KOJA PO OBLIKU MOZE BITI OBITELJ, ne prva i ne zadnja.
+        //
+        // Do Z6 je ovdje stajalo "zadnja referenca", sto je bilo tocno samo za oblik koji je Z5
+        // zatekao. `font: 700 var(--fs-ui)/var(--lh) Georgia, serif` zadnjom referencom cini
+        // VISINU RETKA, a `font-family: var(--primary), var(--fallback)` fallback, dakle ono sto
+        // se NE crta dok je prva ucitana. Oblik (duljina, broj, clamp) se cita iz vrijednosti, pa
+        // ne ovisi o redoslijedu; vidi `nijeObitelj`.
+        const ref = reference.find((r) => (tokeni.get(r[1]) ?? []).some((d) => !nijeObitelj(d)));
+        if (ref === undefined) continue;
         const definicije = tokeni.get(ref[1]);
         if (definicije === undefined) continue;
         // Obitelj se provjerava samo ako selektor uopce moze pogoditi stranicu: pravilo koje se
@@ -343,7 +362,7 @@ describe('glasovi ulaza /', () => {
     expect(nalazi[0].detalj).toContain('Caveat');
   });
 
-  it('kratica `font:` s tokeniziranom velicinom (Z5): obitelj je ZADNJA referenca', () => {
+  it('kratica `font:` s tokeniziranom velicinom (Z5): obitelj se bira po OBLIKU vrijednosti', () => {
     // Kontrola: velicina kao token nije obitelj, pa ispravno napisana kratica mora biti cista.
     // Bez ovoga je `var(--fs-kicker)` razrjesavan u "clamp(.84rem" i prijavljivan kao obitelj.
     const listovi = ':root{--fs-kicker:clamp(.84rem,1.7vw,.98rem);--display-serif:"Newsreader Variable",serif}';
@@ -367,6 +386,46 @@ describe('glasovi ulaza /', () => {
       cssTekstovi: [listovi + '.x{font:italic 500 var(--fs-nema)/1.3 var(--display-serif)}'],
       ucitane: new Set(['Newsreader Variable']),
     }).nalazi.map((n) => n.vrsta)).toEqual(['nepoznat-token']);
+  });
+
+  it('Z6: visina retka kao token NIJE obitelj (`font: 700 var(--fs-ui)/var(--lh) Georgia, serif`)', () => {
+    // Pozicijska heuristika ("zadnja referenca") je ovdje birala `--lh`, razrjesavala ga u "1.5" i
+    // prijavljivala broj kao obitelj bez fonta. Oblik vrijednosti to rjesava bez redoslijeda.
+    const tokeni = ':root{--fs-ui:.9rem;--lh:1.5;--display-serif:"Newsreader Variable",serif}';
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [tokeni + '.x{font: 700 var(--fs-ui)/var(--lh) Georgia, serif}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi).toEqual([]);
+    // MUTACIJA: cim ista kratica dobije referencu koja PO OBLIKU jest obitelj, gard je opet vidi.
+    const kvar = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--fs-ui:.9rem;--lh:1.5;--hand:"Caveat",cursive}'
+        + '.x{font: 700 var(--fs-ui)/var(--lh) var(--hand)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi;
+    expect(kvar.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(kvar[0].detalj).toContain('Caveat');
+  });
+
+  it('Z6: `font-family: var(--primary), var(--fallback)` mjeri PRVU, jer se ona crta', () => {
+    // Zadnja referenca je fallback, dakle ono sto se NE crta dok je prva ucitana. Kvar u prvoj se
+    // mora vidjeti i kad je fallback uredan.
+    const nalazi = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--primary:"Caveat",cursive;--fallback:"Newsreader Variable",serif}'
+        + '.x{font-family: var(--primary), var(--fallback)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi;
+    expect(nalazi.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(nalazi[0].detalj).toContain('--primary');
+    // Kontrola: uredna prva referenca je cista i kad je fallback obitelj bez fonta, jer se ne crta.
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--primary:"Newsreader Variable",serif;--fallback:"Caveat",cursive}'
+        + '.x{font-family: var(--primary), var(--fallback)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi).toEqual([]);
   });
 
   it('mutacija: token koji ne postoji (kvar tipa --font-mono)', () => {
