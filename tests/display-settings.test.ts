@@ -337,6 +337,97 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(skripta).toContain("localStorage.getItem('lekta.display')");
   });
 
+  /**
+   * PRE-PAINT SE IZVRSAVA, NE CITA.
+   *
+   * Do sada je ugovor bio mjeren tvrdnjama nad TEKSTOM skripte (`toContain`), a tekst ne kaze sto
+   * skripta RADI. Bljesak svijetle teme je tocno kvar koji tekstualna tvrdnja ne vidi: skripta je
+   * sadrzavala `_t!=='system'` i prolazila, a novom posjetitelju bez `lekta.theme` nije postavljala
+   * NISTA, pa je do prvog kadra vrijedila `@media (prefers-color-scheme: light)` grana i stranica
+   * je bljesnula svijetlo prije nego je `ui-boot` upisao tamnu temu.
+   *
+   * `document` se podmece kao objekt s jednim svojstvom, jer skripta iz njega cita tocno jedno
+   * (`documentElement`); `localStorage` je obicna mapa. Time test mjeri SKRIPTU, ne okolinu.
+   */
+  interface Stanje { theme: string | null; readingFont: string | null; textSize: string | null; contrast: string | null; motion: string | null }
+
+  const tijeloSkripte = (html: string): string => {
+    const m = /<script>([\s\S]*?)<\/script>/.exec(html);
+    expect(m, 'stranica nema inline pre-paint skriptu').not.toBeNull();
+    return m![1];
+  };
+
+  const izvrsiPrePaint = (tijelo: string, pohrana: Record<string, string>): Stanje => {
+    const doc = document.implementation.createHTMLDocument('pre-paint');
+    const korijen = doc.documentElement;
+    const lager = { getItem: (k: string) => (Object.prototype.hasOwnProperty.call(pohrana, k) ? pohrana[k] : null) };
+    // eslint-disable-next-line no-new-func
+    new Function('document', 'localStorage', tijelo)({ documentElement: korijen }, lager);
+    return {
+      theme: korijen.getAttribute('data-theme'),
+      readingFont: korijen.getAttribute('data-reading-font'),
+      textSize: korijen.getAttribute('data-text-size'),
+      contrast: korijen.getAttribute('data-contrast'),
+      motion: korijen.getAttribute('data-motion'),
+    };
+  };
+
+  it('PRAZNA POHRANA daje `data-theme="dark"`, dakle nema bljeska svijetle teme', () => {
+    // Zadano proizvoda je TAMNO (design/README.md: lampa je zadano, dan se pali rucno), pa
+    // sustavna grana NE smije vrijediti za posjetitelja koji nije nista izabrao.
+    expect(izvrsiPrePaint(tijeloSkripte(INDEX), {}).theme).toBe('dark');
+    expect(izvrsiPrePaint(tijeloSkripte(RAD), {}).theme).toBe('dark');
+  });
+
+  it('`system` ostavlja `<html>` BEZ atributa, `light` i `dark` ga postavljaju', () => {
+    const tijelo = tijeloSkripte(INDEX);
+    expect(izvrsiPrePaint(tijelo, { 'lekta.theme': 'system' }).theme).toBeNull();
+    expect(izvrsiPrePaint(tijelo, { 'lekta.theme': 'light' }).theme).toBe('light');
+    expect(izvrsiPrePaint(tijelo, { 'lekta.theme': 'dark' }).theme).toBe('dark');
+  });
+
+  it('cetiri polja prikaza se primjenjuju, a zadane vrijednosti NE ostavljaju trag', () => {
+    const tijelo = tijeloSkripte(INDEX);
+    const pun = izvrsiPrePaint(tijelo, {
+      'lekta.theme': 'light',
+      'lekta.display': JSON.stringify({ readingFont: 'serif', textSize: 'l', contrast: 'high', motion: 'reduce' }),
+    });
+    expect(pun).toEqual({ theme: 'light', readingFont: 'serif', textSize: 'l', contrast: 'high', motion: 'reduce' });
+    const zadano = izvrsiPrePaint(tijelo, {
+      'lekta.display': JSON.stringify({ readingFont: 'default', textSize: 'm', contrast: 'normal', motion: 'auto' }),
+    });
+    expect(zadano).toEqual({ theme: 'dark', readingFont: null, textSize: null, contrast: null, motion: null });
+  });
+
+  it('pokvaren `lekta.display` ne ostavlja stranicu bez teme', () => {
+    // Pohrana je tudji prostor; pad u pre-paint skripti znaci stranicu bez ijednog atributa.
+    expect(izvrsiPrePaint(tijeloSkripte(INDEX), { 'lekta.display': '{nije json' }).theme).toBe('dark');
+  });
+
+  it('MUTACIJA: stara skripta (bez zadanog `dark`) pada na praznoj pohrani', () => {
+    // Doslovno tijelo skripte prije ovog popravka. Ako novi gard ne bi grizao, i ovo bi prolazilo.
+    const staro = "try{var _e=document.documentElement,_t=localStorage.getItem('lekta.theme');"
+      + "if(_t&&_t!=='system')_e.dataset.theme=_t;}catch(e){}";
+    expect(izvrsiPrePaint(staro, {}).theme).toBeNull();
+    expect(izvrsiPrePaint(tijeloSkripte(INDEX), {}).theme).toBe('dark');
+    // Kontrola smjera: mutacija se razlikuje SAMO u tom jednom slucaju, ne u svima.
+    expect(izvrsiPrePaint(staro, { 'lekta.theme': 'light' }).theme).toBe('light');
+  });
+
+  it('SVE stranice s pre-paint skriptom nose bajt-identicnu skriptu', () => {
+    // Jedan CSP sha256 pokriva cijeli site (public/_headers); razilazenje na bilo kojoj stranici
+    // znaci da preglednik ondje blokira skriptu, dakle bljesak na tocno toj ruti.
+    const stranice = [
+      'index.html', 'rad/index.html', 'moji-radovi/index.html', 'saznaj-vise/index.html',
+      'admin.html', 'alati.html', 'citat.html', 'citati-i-literatura.html', 'izjava.html',
+      'kartice.html', 'landing_benchmark.html', 'landing_usporedba.html', 'literatura.html',
+      'naslovnica.html',
+    ];
+    const kanon = tijeloSkripte(INDEX);
+    for (const put of stranice) expect(tijeloSkripte(read(put)), put).toBe(kanon);
+    expect(stranice.length, 'popis stranica se suzio; provjeri je li ruta izgubila pre-paint').toBe(14);
+  });
+
   it('obje stranice nose gumb #displayBtn uz #themeBtn', () => {
     for (const [ime, html] of [['index', INDEX], ['rad', RAD]] as const) {
       expect(html, ime).toContain('id="displayBtn"');

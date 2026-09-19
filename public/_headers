@@ -43,7 +43,7 @@
 # preglednik blokira. To je namjerno: nepredvidjeni odljev podataka pada zatvoreno. `npm run dev`
 # ne koristi _headers pa HMR websocket ostaje raditi.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-+rN73rYE/D4yPd1vrci7z3UCX6w7LXCj/+XW+ZE8lqE='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__ __CSP_LS__
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-xfdO4G1E9fQpFb0f8eF1/ifB477ghauiNVYHDHM1E00='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__ __CSP_LS__
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
