@@ -10,6 +10,12 @@ export default defineConfig({
     // toolchain regresija koja tiho kolektira 0): inace `npm run check` laže zeleno. Vidi AUD-46.
     passWithNoTests: false,
     setupFiles: ['./tests/setup/xml-dom.ts'],
+    // Ovaj paket istodobno drži stvarne DOCX ZIP-ove, happy-dom i esbuild procese. Na
+    // podržanom 4-thread/8-GB Windows hostu Vitestov zadani worker count zasićuje CPU i
+    // memoriju te zdrave testove uspori 3-10x. Jedan worker ostavlja prostor internim
+    // esbuild i ZIP poslovima te uklanja lažne timeoute iz punog `npm run check` prolaza.
+    minWorkers: 1,
+    maxWorkers: 1,
     // Paralelne sesije drze git worktreeove pod .claude/worktrees/; default exclude ih ne
     // pokriva pa bi parent `npm run check` testirao TUDJU kopiju repoa (duplo testova +
     // tudi crveni padovi). Worktree sesija svoje testove vrti iz vlastitog cwd-a.
