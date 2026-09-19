@@ -20,9 +20,9 @@ export type PublicRouteGroupId = 'your-work' | 'rules-trust' | 'free-tools' | 'p
  * Vlak izdanja kojem odrediste pripada:
  *  - `core`: ruta postoji danas i prikazuje se.
  *  - `personal-space`: osobni prostor (`/moji-radovi/`), jos nije izgradjen.
- *  - `content-hub`: sadrzajna ruta `/saznaj-vise/`, jos nije izgradjena. Same SEKCIJE (#how,
- *    #checks, #trust-proof, #pricing, #faq) danas postoje na naslovnici, ali rute `/saznaj-vise/`
- *    nema, pa bi link vodio u 404.
+ *  - `content-hub`: sadrzajna ruta `/saznaj-vise/` (`saznaj-vise/index.html`) vec postoji i nosi
+ *    SEKCIJE #how, #checks, #trust-proof, #pricing, #faq; odrediste ostaje u ovom vlaku dok se ne
+ *    potvrdi da su sve njegove destinacije prebacene u `core`.
  */
 export type PublicRouteRelease = 'core' | 'personal-space' | 'content-hub';
 
