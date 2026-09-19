@@ -39,7 +39,7 @@ import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../su
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
 import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
-import { renderRepairPanel, renderConfirmation, advancedFormFor, DEEP_TOGGLE_HTML, DEEP_CAPABLE, buildRepairItemList, buildRepairPanelHandle, type RepairPanelHandle } from './repair-panel';
+import { renderRepairPanel, advancedFormFor, DEEP_TOGGLE_HTML, DEEP_CAPABLE, buildRepairItemList, buildRepairPanelHandle, type RepairPanelHandle } from './repair-panel';
 import { trackProfileUpdate } from './profile-update-signal';
 import { bindRepairWorkflow } from './repair-workflow-binding';
 import { recoveryFor } from '../repair/recovery-policy';
@@ -2033,6 +2033,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // RE-20: in-flight cuvar dijeljen izmedju glavnog gumba i "Nastavi svejedno" (koji zove isti go()):
  // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
  let inFlight=false;
+ const localRepairConfirmations=new Map<string,{confirmationText:string;confirmedAt:string}>();
  async function go(confirmedMismatch: boolean){
   if(inFlight)return;
   inFlight=true;
@@ -2056,6 +2057,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&DEEP_CAPABLE.has(it.fixerId))?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
    const {buildRepairMeta}=await loadRepairClient();
+   const {collectLocalRepairConfirmationReceipts}=await import('./local-repair-confirmation-flow');
+   const confirmations=collectLocalRepairConfirmationReceipts(chosen,localRepairConfirmations);
    // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,
    // koje vec imamo iz lokalne analize. Dok je bila dio odgovora popravka, korisnik je gledao
    // spinner i nakon sto je dokument bio gotov. Namjerno BEZ await: `checkSources` ne baca (svaki
@@ -2067,7 +2070,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      .catch((e: any)=>({kind:'unavailable',reason:e instanceof Error?e.message:'greska'}))
     :null;
    // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
-   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch,corpusConsent:corpusRow.checked()});
+   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,confirmations,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch,corpusConsent:corpusRow.checked()});
    const bytes=new Uint8Array(await file.arrayBuffer());
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
    // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".
@@ -2109,6 +2112,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}${unknownFixerNote(out)}`);
     const dlBtn: any=summary.querySelector('[data-repair-download]');
     if(dlBtn)dlBtn.onclick=()=>{void trackEvent('repair_download_started',{kind:'server'});downloadBlob(out.docxBytes,DOCX_MIME,out.fileName)};
+    if(out.localRepair){
+     const {renderLocalRepairRunnerOffer,localRepairRunnerConfig}=await import('../report/local-repair-runner-download');
+     renderLocalRepairRunnerOffer(summary,out.localRepair,localRepairRunnerConfig());
+    }
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0,ms:uploadMs});
     // K4: provjera izvora je DODATAK uz popravak. Kad je izostala (stari server, ugasena zastavica,
     // greska), buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema. Nikad ne javlja
@@ -2230,24 +2237,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    if(!lockButton){btn.disabled=false;btn.textContent=orig;binding.controller.backToPlan()}
   }
  }
- // RE-19: prikazi potvrdni korak PRIJE poziva go() kad je odabrana stavka koja trazi potvrdu
- // lokacije (K6 section-insert); go() se poziva tek iz "Potvrdi i popravi" (isti obrazac kao
- // lokalni panel). "Nastavi svejedno" (data-repair-confirm, tier_mismatch) zove go(true) izravno:
- // do te tocke je lokacija vec jednom potvrdjena u prvom pokusaju iste serije odabira.
- btn.onclick=()=>{
-  if(!consent.checked){
-   consentHint.hidden=false;
-   consentRow.classList.add('lekta-repair-panel__deep--alert');
-   consent.focus();
-   consentRow.scrollIntoView({behavior:'smooth',block:'center'});
-   return;
-  }
-  const needsConfirm=getCheckedItems().filter((it: any)=>it.requiresConfirmation);
-  if(needsConfirm.length){
-   renderConfirmation(confirmBox,needsConfirm,()=>{confirmBox.hidden=true;confirmBox.innerHTML='';void go(false)});
-   return;
-  }
-  void go(false);
+ // Potvrdni korak i receipt stanje zive u lijeno ucitanom modulu.
+ btn.onclick=async()=>{
+  const {confirmRepairSelection}=await import('./local-repair-confirmation-flow');
+  confirmRepairSelection({consent,consentHint,consentRow,wrap,textItems,getCheckedItems,confirmBox,confirmations:localRepairConfirmations,onConfirmed:()=>void go(false)});
  };
  return buildRepairPanelHandle(binding,items,deepToggle,wrap); // C6: isti ugovor handlea kao lokalni panel (dispose, onSelectionChange, deep)
 }

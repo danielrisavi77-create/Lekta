@@ -903,6 +903,15 @@ Datum: 2026-07-11.
   nalaz je lazni pozitiv (kao diagnosis-vs-note princip). Ako vlasnik ipak zeli manje CTA-ova,
   to je product/marketing odluka, ne tehnicki popravak.
 
+**BL-P3-18, Spremljeni nalaz analize uz lokalnu sesiju (radni prostor tri faze, C5)** (SVJESNO IZOSTAVLJENO, odluka vlasnika, 2026-09-13)
+- Preseljeno iz starog CLAUDE.md (stavka 8 u Backlogu, dodana u commitu 51dad411, prije podjele
+  vodica po domenama u b3c4fdb6). Razlog: najveca povrsina rizika u tom paketu (allowlist nad
+  `details`, tajne, granica od 32 KB, druga ocjena uz svjezu) za dobit od nekoliko sekundi, jer se
+  analiza pri obnovi sesije ionako pokrece iznova.
+- Uvjet povratka: IZMJERENO trajanje ponovne analize na velikom `.docx`-u koje korisnik stvarno
+  osjeti, zapisano uz brojku, fixture i stroj; procjena nije uvjet. Tek tada C5 ulazi u plan, i to
+  iza ugovora o jednom piscu `workspace` zapisa.
+
 **BL-P3-17, Prazan tab "Spremnost za predaju" u zadanoj fazi** (ux-09) — GOTOVO (2026-07-11)
 - Problem: u zadanoj fazi "Samo dokument" (currentSubmissionPhase default) tab je pokazivao slijepu
   poruku "nema administrativne checkliste" bez iduceg koraka; a tu vecina korisnika i zavrsi.

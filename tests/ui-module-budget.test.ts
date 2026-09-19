@@ -99,6 +99,21 @@ function bajtova(rel: string): number {
 //   neto                                                                                          -8
 // Indikator (save-state, save-indicator), istek (expired) i pagehide zive u src/routes/workspace/**
 // i src/session/**, ne u app.ts; app.ts je dobio samo jedan redak omotaca, placen duplikatom.
+// SPAJANJE S MASTEROM 2026-09-19 (tudji rast spojen s mastera, 164dd160, integracija potpisanog
+// WordReplica lokalnog popravka): 359005 -> 359005 (bez promjene). Racunica:
+//   ova grana (068451e8)     359005 B
+//   master (164dd160)        365552 B   (WordReplica local repair, nekoliko divergentnih commita)
+//   spojeno (prvi pokusaj)   359025 B   (+20 prema ovoj grani, iz sukobljenog uvoznog retka)
+//   spojeno (konacno)        359005 B   (+0, nakon sto je tsc prijavio TS6133 na uvoz koji vise
+//                                        nema pozivatelja u ovoj datoteci)
+// Jedini sukob u datoteci bio je uvozni redak iz ./repair-panel: HEAD je uvozio renderConfirmation,
+// DEEP_CAPABLE, buildRepairPanelHandle i trackProfileUpdate (wizard/repair-phase), master ih je
+// izostavio jer ih na svojoj strani ne koristi. Zadrzan je nadskup uvoza (sve sa HEAD-a), ali
+// masterov refaktor (WordReplica) je poziv `renderConfirmation(...)` premjestio iz app.ts u
+// src/ui/local-repair-confirmation-flow.ts (funkcija confirmRepairSelection, koja sama uvozi
+// renderConfirmation iz repair-panel.ts), pa je uvoz u app.ts ostao mrtav. Uklonjen je iz uvoza
+// (DEEP_CAPABLE i trackProfileUpdate ostaju, oba se i dalje koriste). Ostatak mastera je automatski
+// spojen bez sukoba.
 const BUDZET_APP = 359005;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
