@@ -100,6 +100,21 @@
   --font-hand: var(--display-serif);
   --font-doc: Georgia, "Times New Roman", serif;
 
+  /* Tipografska ljestvica (Z5, design/handoff/ALIGNMENT.md). Imenovani koraci su IZVEDENI iz vec
+     postojecih velicina u `intake.css`, `route-shell.css` i `result-visuals.css`, ne izmisljeni:
+     dodavanje tokena ne mijenja nijednu izracunatu vrijednost. Pilot migracije je namjerno uzak
+     (`intake.css` + `route-shell.css`); `page-app.css` se u ovom prolazu ne dira.
+     Literal koji NE odgovara TOCNO nekom koraku ostaje literal: novi korak se ne izmislja da bi se
+     zamjena poklopila, jer bi time tokenizacija tiho promijenila izgled. */
+  --fs-display: clamp(1.95rem,5.6vw,3.25rem);
+  --fs-h2: clamp(1.8rem,4vw,2.7rem);
+  --fs-lead: clamp(1rem,1.75vw,1.16rem);
+  --fs-kicker: clamp(.84rem,1.7vw,.98rem);
+  --fs-ui: .9rem;
+  --fs-ui-sm: .82rem;
+  --fs-ui-xs: .76rem;
+  --fs-mono-label: 11px;
+
   /* Radius: namjerno ostro (papirnati listovi) */
   --radius-xl: 2px;
   --radius: 2px;

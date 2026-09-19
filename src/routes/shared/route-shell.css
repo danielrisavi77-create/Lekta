@@ -51,7 +51,7 @@ a { color: inherit; }
 .intake-brand-mark { width: 36px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; border: 0; border-radius: 0; color: var(--on-red); background: var(--route-red); box-shadow: var(--paper-sh-sm); font: 800 1rem/1 var(--mono); transform: rotate(-2deg); }
 .route-links { margin-inline-start: auto; display: flex; align-items: center; gap: 8px; }
 .route-links a,
-.intake-my-work { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 8px 12px; border: 1px solid transparent; border-radius: 999px; color: var(--route-muted); background: transparent; text-decoration: none; font-size: .82rem; font-weight: 750; cursor: pointer; }
+.intake-my-work { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 8px 12px; border: 1px solid transparent; border-radius: 999px; color: var(--route-muted); background: transparent; text-decoration: none; font-size: var(--fs-ui-sm); font-weight: 750; cursor: pointer; }
 .route-links a:hover, .route-links a[aria-current="page"] { color: var(--route-ink); background: color-mix(in srgb, var(--route-paper) 64%, transparent); }
 .intake-my-work:hover,
 .intake-my-work:focus-visible { color: var(--route-ink); border-color: var(--route-line); background: color-mix(in srgb, var(--route-paper) 64%, transparent); }
@@ -67,7 +67,7 @@ a { color: inherit; }
 .route-footer { margin-top: 72px; padding: 30px 0 42px; border-top: 1px solid var(--route-line); color: var(--route-muted); }
 .route-footer-row { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
 .route-footer a { text-underline-offset: 4px; }
-.route-kicker { margin: 0 0 12px; color: var(--route-red); font-size: .76rem; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+.route-kicker { margin: 0 0 12px; color: var(--route-red); font-size: var(--fs-ui-xs); font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
 .route-button { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--route-line); border-radius: var(--radius-btn); padding: 10px 17px; background: var(--route-surface); color: var(--route-ink); font-weight: 800; text-decoration: none; cursor: pointer; }
 .route-button--primary { border-color: var(--route-primary-bg); background: var(--route-primary-bg); color: var(--route-primary-fg); box-shadow: var(--paper-sh-sm); }
 .route-trust { display: inline-flex; align-items: center; gap: 8px; color: var(--route-green); font-weight: 800; }
@@ -108,7 +108,7 @@ a { color: inherit; }
   grid-column: 1;
   margin: 0;
   align-self: center;
-  font: 650 clamp(1.8rem, 4vw, 2.7rem)/1 var(--display-serif);
+  font: 650 var(--fs-h2)/1 var(--display-serif);
   letter-spacing: -.035em;
 }
 
@@ -150,7 +150,7 @@ a { color: inherit; }
   display: flex;
   align-items: center;
   color: var(--red-deep);
-  font-size: .76rem;
+  font-size: var(--fs-ui-xs);
   font-weight: 900;
   letter-spacing: .055em;
   cursor: pointer;

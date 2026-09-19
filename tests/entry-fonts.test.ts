@@ -120,9 +120,8 @@ export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi:
       for (const m of tijelo.matchAll(/(?:^|[;{\s])font(?:-family)?\s*:\s*([^;}]+)/g)) {
         const vrijednost = m[1];
         // `var(--x)` bez fallbacka i `var(--x, fallback)`: oba nose ime tokena.
-        const ref = vrijednost.match(/var\(\s*(--[\w-]+)\s*(?:,([^)]*))?\)/);
-        if (!ref) continue;
-        const definicije = tokeni.get(ref[1]);
+        const reference = [...vrijednost.matchAll(/var\(\s*(--[\w-]+)\s*(?:,([^)]*))?\)/g)];
+        if (reference.length === 0) continue;
         // NEPOZNAT TOKEN SE PRIJAVLJUJE UVIJEK, i za selektor koji podudaranje ne vidi.
         //
         // Podudaranje selektora zna biti prekratko: `.skip-link` element UBACUJE JavaScript, pa ga
@@ -130,10 +129,22 @@ export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi:
         // token koji ne postoji (zove se `--sans`), pa je fallback na SVIH 14 ruta hvatao "Inter
         // Variable", obitelj koju nista ne ucitava. Nepostojeci token je kvar bez obzira na to
         // koga selektor pogadja: vrijednost tada bira fallback, dakle slucaj, a ne autor.
-        if (definicije === undefined) {
-          nalazi.push({ vrsta: 'nepoznat-token', selektor, detalj: `${ref[1]} nije definiran nigdje u listovima ulaza` });
-          continue;
+        // Provjeravaju se SVE reference u deklaraciji, ne samo prva: kratica `font:` ih od Z5
+        // (tipografska ljestvica) nosi dvije, velicinu i obitelj.
+        const nepoznati = reference.filter((r) => tokeni.get(r[1]) === undefined);
+        for (const r of nepoznati) {
+          nalazi.push({ vrsta: 'nepoznat-token', selektor, detalj: `${r[1]} nije definiran nigdje u listovima ulaza` });
         }
+        if (nepoznati.length > 0) continue;
+        // OBITELJ JE ZADNJA REFERENCA, ne prva. U kratici `font:` redoslijed je propisan
+        // (`<tezina> <velicina>/<visina retka> <obitelj>`), pa obitelj stoji na kraju. Do Z5 je
+        // velicina bila literal pa je prva referenca slucajno bila i jedina; kad je velicina
+        // postala token (`font:italic 500 var(--fs-kicker)/1.3 var(--display-serif)`), citanje
+        // prve reference je `--fs-kicker` razrjesavalo u `clamp(.84rem` kao ime obitelji i davalo
+        // lazan nalaz. `font-family:` ima samo jednu referencu, pa je za nju prva i zadnja ista.
+        const ref = reference[reference.length - 1];
+        const definicije = tokeni.get(ref[1]);
+        if (definicije === undefined) continue;
         // Obitelj se provjerava samo ako selektor uopce moze pogoditi stranicu: pravilo koje se
         // nikad ne primijeni ne crta nista, pa bi prijava bila lazna uzbuna.
         if (!mozePogoditi(selektor)) continue;
@@ -330,6 +341,32 @@ describe('glasovi ulaza /', () => {
     expect(nalazi).toHaveLength(1);
     expect(nalazi[0].vrsta).toBe('obitelj-bez-fonta');
     expect(nalazi[0].detalj).toContain('Caveat');
+  });
+
+  it('kratica `font:` s tokeniziranom velicinom (Z5): obitelj je ZADNJA referenca', () => {
+    // Kontrola: velicina kao token nije obitelj, pa ispravno napisana kratica mora biti cista.
+    // Bez ovoga je `var(--fs-kicker)` razrjesavan u "clamp(.84rem" i prijavljivan kao obitelj.
+    const listovi = ':root{--fs-kicker:clamp(.84rem,1.7vw,.98rem);--display-serif:"Newsreader Variable",serif}';
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [listovi + '.x{font:italic 500 var(--fs-kicker)/1.3 var(--display-serif)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi).toEqual([]);
+    // Mutacija: kvar u obitelji se kroz istu kraticu I DALJE vidi (gard nije samo usutkan).
+    const kvar = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--fs-kicker:clamp(.84rem,1.7vw,.98rem);--display-serif:"Caveat",cursive}'
+        + '.x{font:italic 500 var(--fs-kicker)/1.3 var(--display-serif)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi;
+    expect(kvar.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(kvar[0].detalj).toContain('Caveat');
+    // Mutacija: nepostojeci token na MJESTU VELICINE se i dalje prijavljuje, iako nije obitelj.
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [listovi + '.x{font:italic 500 var(--fs-nema)/1.3 var(--display-serif)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi.map((n) => n.vrsta)).toEqual(['nepoznat-token']);
   });
 
   it('mutacija: token koji ne postoji (kvar tipa --font-mono)', () => {
