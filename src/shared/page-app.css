@@ -761,59 +761,38 @@ body.is-scrolling .section *{box-shadow:none!important}
 .rail-form-title{font:600 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-ink);margin-right:auto}
 .rail-step{display:inline-flex;align-items:center;gap:7px;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);background:none;border:0;padding:0}
 .rail-step b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--paper-line);background:none;color:var(--paper-muted);font-size:9.5px;font-weight:600}
-/* TRAKA KORAKA: JEDAN BLOK, STANJE IZVEDENO IZ DOM-a ------------------------------------------
+/* TRAKA FAZA: STANJE JE PODATAK, PISE GA JEDINI PISAC PRIKAZA --------------------------------
  *
- * Do 2026-09-07 su stanja bila rasuta na tri mjesta i vozena razlicitim stvarima: `has-file`
- * (ima li datoteke), `data-step` (gdje je carobnjak) i zatecena paleta. Korak 4 tada nije ni
- * postojao, pa je faza popravka bila nevidljiva.
+ * Do 2026-09-10 je stanje izvodio `:has()` lanac iz `.hidden` i `data-step`. Tada je to bila
+ * ispravna odluka, i njezin je razlog vrijedan zapisa: pisaca prikaza bilo je vise, pa bi cetvrti,
+ * koji bi odrzavao kopiju za traku, mogao odlutati od njih; citanje ne moze odlutati jer kopije
+ * nema.
  *
- * ZASTO IZVOD IZ DOM-a, A NE VARIJABLA: stanje faze u `app.ts` ima TRI pisca (`renderView`,
- * `setWizardStep`, i dva mjesta koja skrivaju `#resultView` izravno). Cetvrti pisac koji bi
- * odrzavao kopiju za traku mogao bi se razici s njima; citanje `:has()` ne moze, jer nema kopije,
- * nego gleda ono sto ti pisci proizvedu. Konsolidacija tih pisaca je stvaran dug, ali zaseban
- * zadatak: ne mijesa se s izgledom.
+ * ZASTO SE SADA MIJENJA: od koraka A1 pisac je doista JEDAN (`renderView`), pa izvod iz DOM-a vise
+ * nista ne kupuje, a cijena je ostala. Lanac je vezao izgled uz MEHANIKU prikaza (koja je povrsina
+ * skrivena) umjesto uz FAZU, pa je svaka nova povrsina trazila jos jedan krak po stanju, a traka
+ * je usput tvrdila da korisnik popravlja cim je nalaz na ekranu.
  *
- * AKTIVAN je korak na kojem korisnik JEST; GOTOV je svaki prije njega. Cetvrti je aktivan dok je
- * nalaz na ekranu, jer se popravci biraju ondje.
+ * `data-state` je `gotov`, `aktivan` ili `slijedi`. CSS ga samo crta.
  */
 .rail-step[data-rail] b{background:none;border-color:var(--paper-line);color:var(--paper-muted)}
 .rail-step[data-rail]{color:var(--paper-muted)}
 
 /* aktivan */
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="1"]) .rail-step[data-rail="1"],
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="2"],
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="3"],
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"],
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="4"]{color:var(--paper-ink)}
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="1"]) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="3"] b,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="4"] b{
-  border-color:var(--red-deep);color:var(--red-deep);
-}
+.rail-step[data-state="aktivan"]{color:var(--paper-ink)}
+.rail-step[data-state="aktivan"] b{border-color:var(--red-deep);color:var(--red-deep)}
 
 /* gotov: kvacica umjesto broja, da se prijedjeni put vidi bez citanja */
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="1"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="2"] b,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b{
+.rail-step[data-state="gotov"] b{
   border-color:var(--pass);background:var(--pass);color:var(--on-brand,#fff);font-size:0;
 }
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="2"] b::after,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="2"] b::after,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="1"] b::after,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="2"] b::after,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b::after{
-  content:"\2713";font-size:11px;line-height:1;
-}
+.rail-step[data-state="gotov"] b::after{content:"\2713";font-size:11px;line-height:1}
+/* FAZA POPRAVKA: cetvrta povrsina, sestra ostalih triju (korak B3, 2026-09-12).
+ * Namjerno stedljivo: panel donosi vlastiti izgled, ovdje je samo okvir i zaglavlje s povratkom. */
+.repair-view{padding:30px}
+.repair-view__head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.repair-view__title{font:600 13px var(--sans);letter-spacing:.18em;text-transform:uppercase;margin:0;color:var(--paper-ink)}
+@media (max-width:720px){.repair-view{padding:12px}}
 .rail-line{width:14px;height:0;border-top:1px solid var(--paper-line);background:none;flex:none}
 .analyzer-body{padding:30px}
 .wizard-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:34px;align-items:start}
@@ -854,6 +833,14 @@ body.is-scrolling .section *{box-shadow:none!important}
 .override-box{border:0;border-top:1px dashed var(--paper-line);border-radius:0;background:none;padding:16px 0 0}
 .override-toggle span{font-family:var(--display-serif);font-size:13.5px;font-weight:600}
 .analyzer-wrap input[type="checkbox"],.modal input[type="checkbox"]{accent-color:var(--red-deep)}
+/* FOKUSNI PRSTEN NA KUCICI JE OUTLINE, NE BOX-SHADOW (korak D, 2026-09-13, izmjereno u WebKitu).
+ * Globalni `:focus-visible{outline:none;box-shadow:var(--focus)}` na izvornoj kucici u WebKitu daje
+ * `box-shadow: none` (sonda: `matches(':focus-visible')` true, `--focus` razrijesen, computed shadow
+ * `none`; isti gumbi u istom panelu prsten imaju). Korisnik tipkovnice u Safariju tako u panelu popravka
+ * ne vidi gdje mu je fokus na "Uskladi..." i "Razumijem i saljem...". Chromium prsten crta, pa se to
+ * nije vidjelo dok matrica preglednika nije dobila `workspace-a11y.spec.ts`. Outline se na kucici crta
+ * u svim motorima, pa vrijedi za sve, ne samo za WebKit. */
+input[type="checkbox"]:focus-visible{outline:2px solid var(--scan,var(--brand));outline-offset:2px}
 .override-toggle::after{content:"← mentor uvijek ima zadnju riječ";font-family:var(--font-hand);font-size:19px;color:var(--red-deep);transform:rotate(-2deg);margin-left:8px;font-weight:500;white-space:nowrap}
 /* pokretanje */
 .analyze-row{border-top:1.5px solid var(--paper-ink);padding-top:20px;margin-top:8px}
@@ -1376,10 +1363,7 @@ body.is-scrolling .section *{box-shadow:none!important}
 .wizard-rail{display:flex;gap:9px;padding:9px 16px;overflow:hidden}
 .wizard-rail .rail-form-title{display:none}
 .rail-step .rail-lbl{display:none}
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="1"]) .rail-step[data-rail="1"] .rail-lbl,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="2"]) .rail-step[data-rail="2"] .rail-lbl,
-.analyzer-wrap:has(#wizardView:not(.hidden)[data-step="3"]) .rail-step[data-rail="3"] .rail-lbl,
-.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="4"] .rail-lbl{display:inline}
+.rail-step[data-state="aktivan"] .rail-lbl{display:inline}
   .analyzer-body{padding:12px}
   #wizardView[data-step="1"] .dropzone{min-height:168px;padding:14px 12px}
   #dropzone::after{font-size:17px;top:6px}
@@ -1524,13 +1508,38 @@ a.mw-item-name:hover{text-decoration:underline}
  * nikad "stabilan" jer je layout viewport narastao). Isti razred kvara kao podnozje plana popravka. */
 .rad-doc-new-version{flex:0 0 auto;white-space:nowrap}
 
+/* C7: indikator stanja zapisa. `flex:0 0 auto` + `nowrap` iz istog razloga kao gumb iznad (traka na
+ * 393 px). Boja po tonu je DODATAK tekstu, nikad jedini nosac: natpis je uvijek prisutan, ton samo
+ * pojacava. Tonovi se vezu na postojece tokene (--ok, --warn, --muted), ne na nove boje. */
+.rad-doc-save{flex:0 0 auto;white-space:nowrap;font:500 12px/1.3 var(--ui);letter-spacing:.01em;color:var(--muted)}
+.rad-doc-save[data-save-tone="ok"]{color:var(--ok)}
+.rad-doc-save[data-save-tone="warn"]{color:var(--warn-strong,var(--warn))}
+
 @media(max-width:720px){
   /* Na uskom zaslonu ime datoteke ustupa mjesto kontrolama, ali ne nestaje: ono je jedini
    * podsjetnik KOJI se dokument gleda. Znacka odlazi jer je ista tvrdnja napisana u tijelu. */
   .nav-rad{gap:12px}
   .rad-doc{padding-left:12px;gap:8px;flex-wrap:wrap;align-items:center}
-  .rad-doc-local{display:none}
+  /* Do koraka D (2026-09-13) je ovdje stajalo `.rad-doc-local{display:none}`: klasa koju je komentar
+   * iznad vec proglasio greskom i koja u HTML-u NE POSTOJI, pa znacka na uskom zaslonu nikad nije
+   * odlazila. Izmjereno na 390 px (Chromium i WebKit jednako): traka je 106 px siroka, sadrzaj se slaze
+   * u CETIRI retka (ime, indikator, znacka, gumb nove verzije) i visok je 111 px u navigaciji od 66 px,
+   * pocinje na y=-22 i prelazi preko obrasca ispod. Znacka je jedan od ta cetiri retka. */
+  .nav-rad .local-badge{display:none}
   .rad-doc-new-version{flex-basis:100%;margin-left:0;font-size:12px;padding:4px 0}
+  /* Indikator ne gura ime: ime vec ima min-width:0 i skracuje se, a indikator je kratak i ostaje u istom retku. */
+  .rad-doc-save{font-size:11px}
+
+  /* Znacka je maknuta gore, ali traka je i dalje bila 76 px visoka u navigaciji od 66 px (tri
+   * retka: ime, indikator, gumb nove verzije), pocinjala na y=-5 i prelazila na obrazac ispod
+   * (izmjereno 2026-09-13, tvrdnja iz mutacije: top=-5,16). `.nav` ima fiksnu visinu
+   * (page-chrome.css), pa navigacija tu visinu ne prati; treba joj vlastiti red. `.nav-rad`
+   * postaje wrap SAMO na ovoj sirini, a `.rad-doc` dobiva `flex-basis:100%` i ide POSLIJE loga i
+   * desne skupine (`order`), ne izmedju njih: prvi red ostaje logo + lampa/prijava, drugi red je
+   * cijela traka dokumenta. `height:auto` na `.nav-rad` je nuzan jer bi inace fiksnih 66 px
+   * odsjekao drugi red. */
+  .nav-rad{flex-wrap:wrap;height:auto;padding-block:10px}
+  .rad-doc{flex-basis:100%;order:2}
 }
 
 /* LIST ZA PROMJENU PROFILA -----------------------------------------------------------------

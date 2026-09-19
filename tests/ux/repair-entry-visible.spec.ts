@@ -43,26 +43,37 @@ async function analyzeToResult(page: Page) {
   await expect(page.getByTestId('analysis-results')).toBeVisible();
 }
 
-/** Baseline + zavrsne tvrdnje koje dijele sva tri ulaza. */
+/**
+ * Baseline + zavrsne tvrdnje koje dijele sva tri ulaza.
+ *
+ * Od koraka B3 (2026-09-12) panel popravka vise ne zivi u sklopljenom bloku
+ * `#resultCockpitAdvancedContent` kartice "Spremnost za predaju", nego u vlastitoj povrsini
+ * `#repairView` (`rad/index.html`); ulazak vodi `enterRepairPhase` (`src/ui/repair-phase.ts`), koji
+ * sakriva `#resultView` i otkriva `#repairView`. Isto jamstvo (sklopljeno prije, otkriveno poslije,
+ * fokus unutar povrsine) sada se mjeri na novoj povrsini; uzor je vec preveden u
+ * `tests/ux-dist/critical-path.spec.ts` i `tests/ux/repair-cta-opens-panel.spec.ts`.
+ */
 async function expectCollapsedBaseline(page: Page) {
-  await expect(page.locator('#resultCockpitAdvancedContent'), 'napredni blok mora biti sklopljen prije klika').toBeHidden();
+  await expect(page.locator('#repairView'), 'povrsina popravka mora biti skrivena prije klika').toBeHidden();
+  await expect(page.locator('#resultView'), 'nalaz mora biti vidljiv prije klika').toBeVisible();
 }
 
 async function expectWorkflowRevealed(page: Page) {
-  await expect(page.locator('#resultCockpitAdvancedContent'), 'ulaz mora otvoriti napredni blok').toBeVisible();
+  await expect(page.locator('#repairView'), 'ulaz mora otvoriti povrsinu popravka').toBeVisible();
+  await expect(page.locator('#resultView'), 'nalaz i popravak ne smiju biti vidljivi istovremeno').toBeHidden();
   const workflow = page.getByTestId('repair-workflow');
   await expect(workflow, 'panel popravka mora biti vidljiv').toBeVisible();
   await expect(workflow).toContainText(/poprav/i);
-  // Fokus je na vidljivoj kontroli panela ILI na ciljanom retku ledgera: ledger modal zivi u <body> (ne u mountu),
-  // pa je za akciju konkretnog nalaza upravo njegov redak ispravno mjesto fokusa.
+  // Fokus je unutar #repairView (panel ILI ciljani redak ledgera): ledger modal zivi u <body>
+  // (ne u mountu), pa je za akciju konkretnog nalaza upravo njegov redak ispravno mjesto fokusa.
   const fokusUnutar = await page.evaluate(() => {
-    const m = document.getElementById('repairPanelMount');
+    const povrsina = document.getElementById('repairView');
     const ledger = document.querySelector('[data-lekta-repair-ledger-modal]:not(.hidden)');
     const a = document.activeElement;
     if (!a || a === document.body) return false;
-    return (!!m && m.contains(a)) || (!!ledger && ledger.contains(a));
+    return (!!povrsina && povrsina.contains(a)) || (!!ledger && ledger.contains(a));
   });
-  expect(fokusUnutar, 'fokus mora biti na vidljivoj kontroli unutar panela ili ledgera').toBe(true);
+  expect(fokusUnutar, 'fokus mora biti na vidljivoj kontroli unutar povrsine popravka ili ledgera').toBe(true);
 }
 
 test.describe('T02: svaki ulaz u popravak otkriva nastavak', () => {

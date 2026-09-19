@@ -105,4 +105,42 @@ describe('veza kontrolera i liste', () => {
     promjena(cb(1));
     expect(b.getState().selection.has('b')).toBe(false);
   });
+
+  /**
+   * C6: pretplata na promjenu javlja TOCNO JEDNOM po STVARNOJ promjeni skupa, i NIJEDNOM kad se
+   * postavi ista vrijednost. Bez toga bi ledger (koji salje `change` i kad se nista nije promijenilo)
+   * i `applySelection` s istim skupom proizvodili zapise u sesiju bez ijedne stvarne promjene.
+   */
+  it('onSelectionChanged: jednom po stvarnoj promjeni, nijednom za istu vrijednost, nikad poslije dispose', () => {
+    const b = bindRepairWorkflow({ items: ITEMS, listEl: list, sessionToken: 's1', run: async (ids) => ids, verify: async () => ({ ok: true }) });
+    let poziva = 0;
+    const off = b.onSelectionChanged(() => { poziva += 1; });
+    // Ista vrijednost kroz dogadjaj: `a` je vec odabran.
+    cb(0).checked = true;
+    promjena(cb(0));
+    expect(poziva, 'ista vrijednost nije promjena').toBe(0);
+    cb(1).checked = true;
+    promjena(cb(1));
+    expect(poziva).toBe(1);
+    // Ista vrijednost kroz plan: skup {a,b,c} je vec postavljen.
+    b.applySelection(['a', 'b', 'c']);
+    expect(poziva, 'applySelection s istim skupom ne javlja').toBe(1);
+    b.applySelection(['a']);
+    expect(poziva).toBe(2);
+    // Ledger pise `checked` bez dogadjaja; `syncFromList` (kroz selectedItems) javlja jednom.
+    cb(2).checked = true;
+    b.selectedItems(ITEMS);
+    expect(poziva).toBe(3);
+    b.selectedItems(ITEMS);
+    expect(poziva, 'ponovno citanje bez promjene ne javlja').toBe(3);
+    off();
+    b.applySelection(['b']);
+    expect(poziva, 'odjavljen slusac se ne zove').toBe(3);
+    const b2 = bindRepairWorkflow({ items: ITEMS, listEl: list, sessionToken: 's2', run: async (ids) => ids, verify: async () => ({ ok: true }) });
+    let poziva2 = 0;
+    b2.onSelectionChanged(() => { poziva2 += 1; });
+    b2.dispose();
+    b2.applySelection(['b']);
+    expect(poziva2, 'poslije dispose se ne javlja ni kroz applySelection').toBe(0);
+  });
 });

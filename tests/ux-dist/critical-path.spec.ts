@@ -82,18 +82,29 @@ test.describe('dist: kriticni put', () => {
     // Nalaz je vidljiv: ocjena ili sazetak postoji i ima sadrzaj.
     await expect(page.locator('#resultCockpit')).toBeVisible();
 
-    // CTA popravka mora otvoriti sklopljeni blok i dovesti panel u vidno polje (nalaz 2 iz istog audita,
-    // ovdje dokazan i na produkcijskom bundleu).
-    const advanced = page.locator('#resultCockpitAdvancedContent');
-    await expect(advanced, 'napredni blok je zadano sklopljen').toBeHidden();
+    // CTA popravka mora dovesti do VIDLJIVOG panela (nalaz 2 iz istog audita, ovdje dokazan i na
+    // produkcijskom bundleu). Do koraka B3 (2026-09-12) se to mjerilo kroz `#resultCockpitAdvancedContent`,
+    // sklopljeni blok u kojem je panel zivio; od B3 panel ima VLASTITU POVRSINU (`#repairView`) i taj blok
+    // vise nije na putu, pa je tvrdnja o njemu mjerila mehaniku koje nema (nad dist buildom je padala,
+    // izmjereno u koraku D). Jamstvo je isto kao u `tests/ux/repair-cta-opens-panel.spec.ts`: nalaz i
+    // popravak nisu vidljivi istovremeno, a panel je vidljiv i fokusiran.
+    const povrsina = page.locator('#repairView');
+    await expect(povrsina, 'povrsina popravka mora biti skrivena prije klika').toBeHidden();
     const safe = page.locator('#resultCockpit [data-cockpit-action="repair-safe"]');
     const simulate = page.locator('#resultCockpit [data-cockpit-action="simulate-repair"]');
     const safeEnabled = (await safe.count()) > 0 && (await safe.first().isEnabled());
     const simulateEnabled = (await simulate.count()) > 0 && (await simulate.first().isEnabled());
     expect(safeEnabled || simulateEnabled, 'ni repair-safe ni simulate-repair nisu omoguceni').toBe(true);
     await (safeEnabled ? safe : simulate).first().click();
-    await expect(advanced).toBeVisible();
+    await expect(povrsina, 'CTA popravka mora otvoriti fazu popravka').toBeVisible();
+    await expect(page.locator('#resultView'), 'nalaz i popravak ne smiju biti vidljivi istovremeno').toBeHidden();
     await expect(page.locator('#repairPanelMount')).toBeVisible();
+    const fokusUnutar = await page.evaluate(() => {
+      const m = document.getElementById('repairView');
+      const a = document.activeElement;
+      return !!m && !!a && m.contains(a);
+    });
+    expect(fokusUnutar, 'fokus mora biti unutar povrsine popravka').toBe(true);
   });
 
   test('produkcijski bundle ne nosi dev alate (kontrola da se mjeri dist, ne dev server)', async ({ page }) => {
