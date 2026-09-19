@@ -112,9 +112,27 @@ function postavi(korijen: HTMLElement, atribut: string, vrijednost: string | nul
   else korijen.setAttribute(atribut, vrijednost);
 }
 
+/**
+ * ZASTO `system` NIJE VRIJEDNOST ATRIBUTA, nego njegova ODSUTNOST.
+ *
+ * Ovo je ugovor koji vrijedi za SVAKI citac teme u proizvodu (pre-paint skripta u <head>,
+ * `ui-boot.ts`, `route-shell.ts`, naslijedjeni `src/ui/app.ts`), pa objasnjenje stoji ovdje, na
+ * jednom mjestu, umjesto da se prepisuje u svaki od njih.
+ *
+ * Atribut s vrijednoscu "system" ne bi bio neutralan nego TRECA, NEPOSTOJECA tema: ne bi ga
+ * pogodio ni `:not([data-theme])` (jer atribut postoji) ni `[data-theme="light"]` (jer vrijednost
+ * nije `light`), pa bi ruta ostala tamna bez obzira na `prefers-color-scheme`, dok bi radio u
+ * panelu i dalje pokazivao "Kao sustav". Izmjereno na `/rad/`: naslijedjeni analizator je SIROVU
+ * vrijednost iz pohrane bezuvjetno prepisivao u `data-theme` i time gasio "Kao sustav" na jednoj
+ * od dvije rute koje tu opciju uopce nude.
+ *
+ * ZADANO PROIZVODA JE TAMNO, i to nije isto sto i `system`. Kad pohrana NEMA `lekta.theme`,
+ * pre-paint skripta upisuje `data-theme="dark"`; sustavna grana vrijedi iskljucivo kad je
+ * `system` izricito spremljen. Bez toga bi novi posjetitelj na svijetlom OS-u dobio svijetlu
+ * stranicu do prvog kadra pa tamnu cim se boot izvrsi, dakle bljesak, i to u smjeru koji proizvod
+ * kao zadano uopce ne nudi (design/README.md: lampa je zadano, dan se pali rucno).
+ */
 export function applyOsvjetljenje(doc: Document, osvjetljenje: Osvjetljenje): void {
-  // `system` UKLANJA atribut: tek tada `@media (prefers-color-scheme)` u `design-system.css` moze
-  // doci do rijeci. Atribut s vrijednoscu "system" ne bi bio neutralan nego treca, nepostojeca tema.
   postavi(doc.documentElement, 'data-theme', osvjetljenje === 'system' ? null : osvjetljenje);
 }
 
