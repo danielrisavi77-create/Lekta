@@ -1,0 +1,361 @@
+/*
+ * PANEL "PRILAGODI PRIKAZ" (Z6) + ucinak svake postavke.
+ *
+ * Dva su dijela i namjerno su u istoj datoteci: ono sto panel IZGLEDA i ono sto panel RADI. Da su
+ * razdvojeni, ucinak bi se mogao ucitati bez kontrole ili obrnuto, a to su dvije polovice iste
+ * tvrdnje.
+ *
+ * SPECIFICNOST JE OVDJE IZMJERENA, NE PROCIJENJENA. `src/shared/page-chrome.css` DUPLICIRA
+ * primitive pod `html:root` (0,2,0) i `html:root[data-theme="light"]` (0,2,1), namjerno, da tuku
+ * bundle `:root`. Pravilo `[data-contrast="high"]` (0,1,0) bi ih zato izgubilo bez obzira na
+ * redoslijed ucitavanja. Selektori ispod su birani da pobijede OBA, pa ucinak ne ovisi o tome kako
+ * bundler poslozi listove.
+ *
+ * Panel NE nudi izbor boja ni pomicanje elemenata (design/README.md): crvena ostaje jedini akcent u
+ * svakoj kombinaciji, ovdje se ne pojavljuje nijedna nova boja marke.
+ */
+
+/* ---------- 1. UCINAK POSTAVKI ------------------------------------------------------------- */
+
+/* Pismo za citanje: preslikava se ISKLJUCIVO `--display-serif` (naslovi i dugi opisi). `--ui`
+   (glas sucelja) i `--mono` (podatkovni glas) ostaju netaknuti: promjena glasa sucelja nije
+   prilagodba citanja nego druga stranica. */
+html:root[data-reading-font="serif"] {
+  --display-serif: Georgia, "Times New Roman", serif;
+}
+html:root[data-reading-font="sans"] {
+  --display-serif: var(--ui);
+}
+/* NIJEDAN WEBFONT SE NE UCITAVA. OpenDyslexic i Atkinson Hyperlegible su pisma koja korisnik
+   instalira sam; ako ih nema, lanac pada na `--ui`, koji je ucitan. Skidanje pisma za disleksiju
+   svima koji ga ne trebaju kostalo bi vise nego sto vrijedi. */
+html:root[data-reading-font="dyslexic"] {
+  --display-serif: "OpenDyslexic", "Atkinson Hyperlegible", var(--ui);
+}
+
+/* Velicina teksta: korijenska velicina, pa se cijela `rem` ljestvica (Z5 `--fs-*`) pomakne s njom.
+   `m` nema pravilo jer nema ni atribut: 16 px je korijen preglednika. */
+html:root[data-text-size="s"] { font-size: 15px; }
+html:root[data-text-size="l"] { font-size: 18px; }
+
+/* Pojacan kontrast. Drugi selektor postoji zbog `html:root[data-theme="light"]` (0,2,1) u
+   `page-chrome.css`, koji `--paper-line` postavlja na svjetliju vrijednost; bez njega bi u danjem
+   svjetlu linija ostala neojacana. */
+html:root[data-contrast="high"],
+html:root[data-theme="light"][data-contrast="high"] {
+  --paper-muted: #4A4438;
+  --desk-muted: var(--desk-ink);
+  --paper-line: #B8AE96;
+}
+
+/* Manje pokreta: isti ucinak kao sustavna postavka, samo izabran rucno. `!important` je ovdje
+   ispravan alat, jer gasi animacije deklarirane bilo gdje u proizvodu, ukljucujuci inline stilove
+   koje pise JavaScript. */
+html:root[data-motion="reduce"] *,
+html:root[data-motion="reduce"] *::before,
+html:root[data-motion="reduce"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* ---------- 2. PANEL ------------------------------------------------------------------------ */
+
+.ps {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 60;
+  width: 440px;
+  max-width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-left: 1px solid var(--paper-line);
+  box-shadow: -18px 0 60px rgba(0, 0, 0, .5);
+  font: 400 var(--fs-ui)/1.5 var(--ui);
+  /* Klizi transformom, ne sirinom: sirina bi na svakom kadru ponovno slagala raspored panela.
+     Polozaj nosi klasa, a `hidden` ostaje jedini izvor istine o tome je li panel otvoren. */
+  transform: translateX(100%);
+  transition: transform .22s var(--ease, ease);
+}
+
+.ps--otvoren {
+  transform: translateX(0);
+}
+
+.ps[hidden] {
+  display: none;
+}
+
+.ps__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 26px 16px;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.ps__eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  font: 500 var(--fs-mono-label)/1 var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.ps__title {
+  margin: 0;
+  font: 500 1.35rem/1.1 var(--display-serif);
+  color: var(--paper-ink);
+}
+
+.ps__title:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.ps__close {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--paper-muted);
+  font: 500 var(--fs-ui-sm)/1 var(--mono);
+  cursor: pointer;
+}
+
+.ps__close:hover {
+  color: var(--paper-ink);
+  border-color: var(--paper-muted);
+}
+
+.ps__body {
+  padding: 8px 26px 12px;
+  overflow: auto;
+}
+
+.ps-ctrl {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.ps-ctrl:last-child {
+  border-bottom: 0;
+}
+
+.ps-ctrl--preklopka {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.ps-ctrl__lbl {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 0;
+  font: 600 var(--fs-ui-sm)/1.2 var(--ui);
+  color: var(--paper-ink);
+}
+
+.ps-ctrl__lbl small {
+  font: 400 var(--fs-mono-label)/1 var(--mono);
+  color: var(--paper-muted);
+  letter-spacing: .04em;
+}
+
+.ps-preklopka__opis {
+  margin: 4px 0 0;
+  max-width: 34ch;
+  font-size: var(--fs-ui-xs);
+  color: var(--paper-muted);
+}
+
+.ps-seg {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+  background: var(--paper-2);
+}
+
+.ps-seg__opcija {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+/* Radio ostaje u pristupačnom stablu i hvata fokus; skriven je samo vizualno. */
+.ps-seg__unos {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ps-seg__tekst {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font: 600 var(--fs-ui-sm)/38px var(--ui);
+  color: var(--paper-muted);
+}
+
+.ps-seg__unos:checked + .ps-seg__tekst {
+  background: var(--paper-ink);
+  color: var(--paper);
+}
+
+.ps-seg__unos:focus-visible + .ps-seg__tekst {
+  box-shadow: var(--focus);
+}
+
+/* Velicine se pokazuju SOBOM: tri koraka nose tri velicine istog slova. */
+.ps-seg--velicina .ps-seg__tekst {
+  font-family: var(--display-serif);
+  font-weight: 500;
+}
+
+.ps-seg--velicina .ps-seg__opcija:nth-child(1) .ps-seg__tekst { font-size: .85rem; }
+.ps-seg--velicina .ps-seg__opcija:nth-child(2) .ps-seg__tekst { font-size: 1rem; }
+.ps-seg--velicina .ps-seg__opcija:nth-child(3) .ps-seg__tekst { font-size: 1.2rem; }
+
+.ps-select {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius-btn);
+  background: var(--paper-2);
+  color: var(--paper-ink);
+  font: 500 var(--fs-ui)/1 var(--display-serif);
+}
+
+.ps-preklopka__unos {
+  width: 42px;
+  height: 24px;
+  min-width: 42px;
+  margin: 0;
+  appearance: none;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--paper-line);
+  position: relative;
+  cursor: pointer;
+}
+
+.ps-preklopka__unos::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--paper);
+  transition: transform .18s var(--ease, ease);
+}
+
+.ps-preklopka__unos:checked {
+  background: var(--red-deep);
+}
+
+.ps-preklopka__unos:checked::after {
+  transform: translateX(18px);
+}
+
+.ps-preklopka__unos:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.ps-uzorak {
+  padding: 14px 16px;
+  background: var(--paper-2);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+}
+
+.ps-uzorak__eyebrow {
+  font: 500 var(--fs-mono-label)/1 var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.ps-uzorak__tekst {
+  margin: 6px 0 0;
+  font: 400 1rem/1.5 var(--display-serif);
+  color: var(--paper-ink);
+}
+
+.ps__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 26px 20px;
+  border-top: 1px solid var(--paper-line);
+  font-size: var(--fs-ui-xs);
+  color: var(--paper-muted);
+}
+
+.ps__reset {
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius-btn);
+  background: none;
+  padding: 7px 12px;
+  color: var(--red-on-soft);
+  font: 600 var(--fs-ui-xs)/1 var(--ui);
+  cursor: pointer;
+}
+
+.ps__reset:hover {
+  border-color: var(--red-deep);
+  color: var(--red-deep);
+}
+
+/* Na uskom ekranu panel pokriva cijelu sirinu: 440 px na 360 px sirokom zaslonu je vodoravno
+   pomicanje, a to je tocno ono sto panel za prilagodbu prikaza ne smije proizvesti. */
+@media (max-width: 480px) {
+  .ps {
+    width: 100%;
+    border-left: 0;
+  }
+  .ps__head,
+  .ps__body,
+  .ps__foot {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+/* Postavka sustava vrijedi i bez kontrole u panelu. */
+@media (prefers-reduced-motion: reduce) {
+  .ps,
+  .ps-preklopka__unos::after {
+    transition: none;
+  }
+}

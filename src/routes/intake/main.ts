@@ -2,6 +2,7 @@ import { uploadCapBytes } from '../../repair/docx-budget';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { createLocalDocumentSession, sessionFragment } from '../../session/local-document-session';
 import { mountIntakeController } from './intake-controller';
+import { mountDisplaySettings } from '../../shared/display-settings';
 import { playIntakeEntry } from './intake-motion';
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';  // ulaz NE uvozi radnu povrsinu: vidi mjerenje u tom listu
@@ -74,6 +75,9 @@ async function offerContinuation(doc: Document, store: IndexedDbDocumentSessionS
 }
 
 function start(): void {
+  // Panel "Prilagodi prikaz" ide PRVI: postavke se primjenjuju prije nego se bilo sto animira,
+  // pa korisnik s `data-motion="reduce"` ne vidi ulaznu sekvencu koju je izricito iskljucio.
+  mountDisplaySettings(document);
   const maxUploadBytes = uploadLimitForCurrentDevice();
   showUploadLimit(document, maxUploadBytes);
   // Sekvenca ide PRIJE montaze kontrolera samo po redoslijedu poziva:

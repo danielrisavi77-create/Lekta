@@ -7,7 +7,7 @@
 <meta name="description" content="Radna povrsina za provjeru zavrsnog ili diplomskog rada. Dokument se analizira lokalno i ne napusta tvoj uredaj.">
 <meta name="robots" content="noindex, follow">
 <link rel="canonical" href="https://lektahr.netlify.app/rad/">
-<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
+<script>try{var _e=document.documentElement,_t=localStorage.getItem('lekta.theme');if(_t&&_t!=='system')_e.dataset.theme=_t;var _d=JSON.parse(localStorage.getItem('lekta.display')||'{}')||{};if(_d.readingFont&&_d.readingFont!=='default')_e.dataset.readingFont=_d.readingFont;if(_d.textSize&&_d.textSize!=='m')_e.dataset.textSize=_d.textSize;if(_d.contrast==='high')_e.dataset.contrast='high';if(_d.motion==='reduce')_e.dataset.motion='reduce';}catch(e){}</script>
 </head>
 <body>
 <header class="topbar">
@@ -38,6 +38,7 @@
     <div class="nav-rad-end">
       <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
       <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
+      <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i><span class="lampa-txt">Prikaz</span></button>
     </div>
   </nav>
 </header>

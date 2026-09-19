@@ -36,6 +36,25 @@ const SUSTAVNE = new Set([
   'segoe ui emoji', 'segoe ui symbol', 'emoji',
 ]);
 
+/**
+ * PISMA KOJA KORISNIK INSTALIRA SAM, i koja se NAMJERNO ne ucitavaju (Z6, `--display-serif` pod
+ * `data-reading-font="dyslexic"`).
+ *
+ * Gard inace tvrdi tocno suprotno ("ime bez ijednog @font-face je uvijek kvar"), i to s razlogom:
+ * preglednik tiho uzme sljedecu obitelj. Ovdje je to POSLJEDICA KOJU SE ZELI, a ne promasaj:
+ * OpenDyslexic i Atkinson Hyperlegible se ne smiju skidati svima koji ih ne trebaju, a lanac
+ * zavrsava na `var(--ui)`, koji JEST ucitan. Iznimka je zato imenovana i uska, ne prosirenje
+ * `SUSTAVNE`: bilo koje trece ime i dalje pada. Gard nad krajem lanca:
+ * `tests/display-settings.test.ts`.
+ */
+const LOKALNE = new Set(['opendyslexic', 'atkinson hyperlegible']);
+
+/** Obitelj koju nista ne ucitava, a to nije kvar: sustavna ili izricito dopustena lokalna. */
+const smijeBezFonta = (ime: string): boolean => {
+  const k = ime.toLowerCase();
+  return SUSTAVNE.has(k) || LOKALNE.has(k);
+};
+
 interface Nalaz { vrsta: 'nepoznat-token' | 'obitelj-bez-fonta'; selektor: string; detalj: string }
 
 /**
@@ -169,7 +188,7 @@ export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi:
         if (!mozePogoditi(selektor)) continue;
         for (const prva of new Set(definicije.flatMap((d) => razrijesi(d)))) {
           obitelji.add(prva);
-          if (SUSTAVNE.has(prva.toLowerCase())) continue;
+          if (smijeBezFonta(prva)) continue;
           if (!ucitane.has(prva)) {
             nalazi.push({ vrsta: 'obitelj-bez-fonta', selektor, detalj: `${ref[1]} trazi "${prva}", a ulaz za nju ne ucitava @font-face` });
           }
@@ -307,7 +326,7 @@ describe('glasovi ulaza /', () => {
       const css = bezKomentara(sirovo);
       const provjeri = (vrijednost: string, oznaka: string): void => {
         const ime = prvaObitelj(vrijednost);
-        if (!ime || SUSTAVNE.has(ime.toLowerCase()) || ucitane.has(ime)) return;
+        if (!ime || smijeBezFonta(ime) || ucitane.has(ime)) return;
         nalazi.push(`${kratko}: ${oznaka}"${ime}"`);
       };
       for (const { tijelo } of pravila(css)) {
@@ -480,6 +499,15 @@ describe('glasovi ulaza /', () => {
       + '.c{font:600 10px/1 var(--ui) !important}'
       + '.d{font-family:inherit}'
       + 'code{font-family:"IBM Plex Mono",ui-monospace,monospace}')).toEqual([]);
+  });
+
+  it('Z6: lokalno pismo za disleksiju je DOPUSTENO, bilo koje trece ime i dalje nije', () => {
+    // Kontrola: imenovana iznimka prolazi, i u tokenu i u deklaraciji.
+    expect(globalno(':root{--display-serif:"OpenDyslexic","Atkinson Hyperlegible",system-ui}')).toEqual([]);
+    expect(globalno('.a{font-family:"OpenDyslexic",system-ui}')).toEqual([]);
+    // MUTACIJA: iznimka je popis, ne rupa. Cetvrto ime pada kao i prije.
+    expect(globalno(':root{--display-serif:"Lexend Deca",system-ui}')).toEqual(['x.css: token -> "Lexend Deca"']);
+    expect(globalno('.a{font-family:"OpenDyslexicMono",system-ui}')).toEqual(['x.css: "OpenDyslexicMono"']);
   });
 
   it('mutacija: nevarijabilno ime uz varijabilni paket (kvar s demo.html)', () => {

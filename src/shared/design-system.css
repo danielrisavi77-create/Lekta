@@ -164,3 +164,53 @@
   --paper-sh: 0 2px 5px rgba(60, 50, 30, .18), 0 18px 44px rgba(60, 50, 30, .25);
   --paper-sh-sm: 0 1px 4px rgba(60, 50, 30, .15), 0 8px 22px rgba(60, 50, 30, .18);
 }
+
+/*
+ * "KAO SUSTAV" (Z6, panel "Prilagodi prikaz"). Kad korisnik izabere `system`, `data-theme` se s
+ * `<html>` UKLANJA, pa tek ovdje `prefers-color-scheme` moze doci do rijeci. Vrijednosti su
+ * DOSLOVNA kopija bloka iznad: nijedan primitiv se ne mijenja, dodaje se samo jos jedan put do
+ * istih vrijednosti.
+ *
+ * SELEKTOR JE `html:root:not([data-theme])`, ne goli `:root:not([data-theme])`, i to je izmjereno:
+ * `src/shared/page-chrome.css` DUPLICIRA sve primitive pod `html:root` specificnosti (0,2,0),
+ * namjerno, da tuce bundle `:root`. Goli `:root:not([data-theme])` je takodjer (0,2,0), pa bi u
+ * izjednacenju odlucio redoslijed ucitavanja, a page-chrome.css se ucitava poslije: danje svjetlo
+ * iz sustava tiho se ne bi vidjelo ni na `/` ni na `/rad/`. `html:root:not([data-theme])` je
+ * (0,3,0) i pobjedjuje bez obzira na redoslijed. Gard: tests/display-settings.test.ts.
+ */
+@media (prefers-color-scheme: light) {
+  html:root:not([data-theme]) {
+    /* Danje svjetlo: isti stol na dnevnom svjetlu */
+    --desk: #DFD8C6;
+    --desk-2: #D6CEB9;
+    --desk-ink: #26221B;
+    /* Zatamnjen s #655C4B 2026-08-31: prema `--desk-2` (#D6CEB9) je davao 4,20:1, ispod praga 4,5.
+       Prema svjetlijem `--desk` je prolazio (4,64:1), pa je bas tamnija podloga bila mjerodavna.
+       Ista vrijednost stoji i u inline tokenima `index.html`; drze se u paru. */
+    --desk-muted: #5F5645;
+    /* Zatamnjen s #98917E 2026-09-01: na svijetlom stolu je davao 2,2:1 pri 10-11 px. Na svijetloj
+       podlozi svaka boja koja prolazi AA mora biti tamna, pa se "faint" i "muted" nuzno priblize
+       (4,61 naspram 4,62); to je posljedica kontrasta, ne propust. Ista vrijednost stoji u inline
+       tokenima `index.html`; TREĆI put danas su se razisle, pa: mijenjaj obje u istom potezu. */
+    --desk-faint: #5F5645;
+    --desk-line: rgba(38, 34, 27, .16);
+    --paper: #FDFBF3;
+    --paper-2: #F3EEDF;
+    --paper-line: #E0D9C6;
+    --red: #C4372E;
+    --red-deep: #A62B23;
+    --red-soft: rgba(196, 55, 46, .1);
+    --on-red: #F7F3E8;
+    /* Zatamnjena s #1E7F4F 2026-09-01: na svijetlom stolu 3,51:1 pri 20 px, a 20 px normalne
+       tezine NIJE "veliki tekst" (prag je 24 px). Sada 4,91:1. Par s `index.html`. */
+    --pass: #17663F;
+    --pass-soft: rgba(30, 127, 79, .12);
+    --warn: #B77416;
+    --warn-soft: rgba(183, 116, 22, .14);
+    --warn-strong: #8A570E;
+    --scan: #1D3FBF;
+    --lamp: rgba(255, 255, 255, .25);
+    --paper-sh: 0 2px 5px rgba(60, 50, 30, .18), 0 18px 44px rgba(60, 50, 30, .25);
+    --paper-sh-sm: 0 1px 4px rgba(60, 50, 30, .15), 0 8px 22px rgba(60, 50, 30, .18);
+  }
+}

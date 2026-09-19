@@ -26,8 +26,14 @@ import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, A
 // nema spremljenu temu, postavi data-theme="dark" prije boota, pa #themeBtn preklopnik radi
 // prirodno (dark -> light = danje svjetlo). Namjerno bez pisanja u localStorage: eksplicitni
 // izbor ostaje korisnikov. FOUC skripta u <head> i dalje samo vraca SPREMLJENU temu.
+//
+// IZNIMKA JE `system` (Z6, panel "Prilagodi prikaz"): ta vrijednost je IZRICIT izbor da temu
+// odredi `prefers-color-scheme`, a odreduje je odsutnost atributa. Bez ove provjere bi boot
+// pregazio taj izbor tamnom temom na svakom ucitavanju, pa bi kontrola izgledala kao da ne radi.
 if (typeof document !== 'undefined' && !document.documentElement.dataset.theme) {
-  document.documentElement.dataset.theme = 'dark';
+  let spremljenaTema: string | null = null;
+  try { spremljenaTema = localStorage.getItem('lekta.theme'); } catch { /* pohrana odbijena */ }
+  if (spremljenaTema !== 'system') document.documentElement.dataset.theme = 'dark';
 }
 
 const EASE_OUT = [0.22, 1, 0.36, 1];
@@ -214,6 +220,14 @@ function setupThemeToggle() {
   };
   reflect();
   btn.addEventListener('click', () => {
+    // PREUZIMANJE GUMBA: na `/` i `/rad/` isti gumb ozicuje i panel "Prilagodi prikaz"
+    // (`src/shared/display-settings.ts`), jer ondje klik mora i osvjeziti radio u panelu i
+    // razumjeti vrijednost `system`. Dva ziva ozicenja preklopila bi temu dvaput, dakle nikako.
+    //
+    // Oznaka se cita UNUTAR rukovatelja, ne pri postavljanju: tako redoslijed montaze ne odlucuje
+    // o ishodu. Provjera pri postavljanju bila bi tocna samo dok panel montira prije `boot()`, a
+    // oslanjanje na taj redoslijed je upravo ono sto ovaj repozitorij zove laznim zelenim.
+    if (btn.dataset.themeOwner) return;
     const dark = document.documentElement.dataset.theme === 'dark';
     document.documentElement.dataset.theme = dark ? 'light' : 'dark';
     try { localStorage.setItem('lekta.theme', dark ? 'light' : 'dark'); } catch { /* storage odbijen */ }

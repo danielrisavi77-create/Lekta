@@ -43,6 +43,18 @@ function rememberTheme(theme: string): void {
   }
 }
 
+/**
+ * Spremljena tema kao SIROVA vrijednost, ili `null` kad pohrana zakaze ili je prazna.
+ * Zanima nas samo je li izabrano `system`; vracanje same teme radi pre-paint skripta u <head>.
+ */
+function storedTheme(): string | null {
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
 function activeHtmlElement(doc: Document): HTMLElement | null {
   const active = doc.activeElement;
   const HtmlElement = doc.defaultView?.HTMLElement;
@@ -191,7 +203,12 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   backdrop.append(dialog);
   layer.replaceChildren(backdrop);
 
-  if (!doc.documentElement.dataset.theme) doc.documentElement.dataset.theme = 'dark';
+  // `system` (Z6, panel "Prilagodi prikaz") je IZRICIT izbor da temu odredi `prefers-color-scheme`,
+  // a odreduje je ODSUTNOST atributa. Bez ove provjere bi korisnik koji na `/` izabere "kao sustav"
+  // na `/saznaj-vise/` i `/moji-radovi/` svejedno dobio tamnu temu, pa bi izbor izgledao pokvaren.
+  if (!doc.documentElement.dataset.theme && storedTheme() !== 'system') {
+    doc.documentElement.dataset.theme = 'dark';
+  }
   reflectTheme(theme, doc);
 
   let opener: HTMLElement | null = null;
