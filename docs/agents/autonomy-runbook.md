@@ -108,7 +108,10 @@ python -m scripts.autonomy.cli report
   posla trazi cisto stablo. Netrackane datoteke ulaze u commit i broje se u klasifikaciji pojedinacno
   (`git status --untracked-files=all`; bez toga git novu mapu sazme u jedan redak `src/`, pa bi kontrolna
   datoteka u njoj prosla neprimijecena). Pad commita je `needs_human` uz `commit_failed: ...` i posao NE ide u
-  objavu. Commit ne gura nista na daljinu; `git push` ostaje iskljucivo u izdavacu.
+  objavu. Commit ne gura nista na daljinu; `git push` ostaje iskljucivo u izdavacu. Isto vrijedi za posao
+  koji zavrsi PRIJE kraja (pregled odbio, kvota, blokada): ono sto je implementacija vec napisala sprema se
+  jednako, uz `unfinished: true` u dnevniku, jer bi inace isti kvar dosao na druga vrata i sljedeci posao bi
+  opet zatekao prljavo stablo.
 - **Codex koji je zavrsio uz odbijen exec je `blocked`, ne uspjeh.** Kad se pojavi potpis neupotrebljive
   izvrsne okoline (`apply deny-read ACLs`, `Failed to create unified exec process`), verdict je `blocked` uz
   razlog `provider_unusable: codex sandbox`, i pokusaj se ne trosi. Trazi se u STDERRU (ondje su

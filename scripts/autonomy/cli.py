@@ -550,6 +550,24 @@ def tick(config: dict, now: int, dry_run: bool, *, store: Store, home: str | Non
     return summary
 
 
+def _park_worker_tree(adapters, task: dict, store: Store, task_id: str, now: int) -> None:
+    """Spremi ono sto je implementacija vec napisala kad posao zavrsi PRIJE kraja.
+
+    Inace se kvar iz nalaza 2026-09-13 vraca kroz druga vrata: posao koji padne na pregledu ostavlja prljavo
+    stablo, a sljedeci posao gard odbija s `implement_unsafe: radno stablo nije cisto` i kontroler se opet
+    zakljuca. Commit je lokalan; objava ide iskljucivo kroz izdavaca i nju ovaj put nikad ne dosegne.
+
+    Zove se PRIJE prijelaza, pa `status:<verdict>` ostaje zadnji dogadaj zadatka: po njemu `Store.enqueue`
+    prepoznaje razlog zaustavljanja, a dnevnik i dalje cita kao prije.
+    """
+    try:
+        parked = adapters.commit(task)
+    except (OSError, subprocess.SubprocessError, RuntimeError) as exc:
+        parked = {"status": "failed", "reason": f"{type(exc).__name__}"}
+    store.record_event(task_id, "worker_commit", {"status": parked.get("status"), "sha": parked.get("sha"),
+                                                  "reason": parked.get("reason"), "unfinished": True}, now)
+
+
 def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict, now: int, summary: dict) -> str:
     task_id = task["id"]
     status = "planning"
@@ -565,6 +583,7 @@ def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict,
                                   "agent": result.get("agent")})
         verdict = result.get("verdict")
         if verdict in ("waiting_quota", "needs_login"):
+            _park_worker_tree(adapters, task, store, task_id, now)
             store.transition(task_id, status, verdict, {"reason": result.get("reason"), "next_run_at": now + 3600}, now)
             return verdict
         if verdict in ("blocked", "needs_human"):
@@ -579,9 +598,11 @@ def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict,
                 # prosao (izmjereno 2026-09-13 nad pravim `ci` izvorom iz config/autonomy.example.json).
                 if not provider_ever_called:
                     payload["refund_daily_job"] = True
+            _park_worker_tree(adapters, task, store, task_id, now)
             store.transition(task_id, status, verdict, payload, now)
             return verdict
         if verdict != "needs_verification":
+            _park_worker_tree(adapters, task, store, task_id, now)
             store.transition(task_id, status, "failed", {"reason": result.get("reason")}, now)
             return "failed"
         nxt = {"planning": "implementing", "implementing": "reviewing", "reviewing": "verifying"}[phase]

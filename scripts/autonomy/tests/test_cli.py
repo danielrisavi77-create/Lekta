@@ -660,6 +660,58 @@ class TwoJobsInARowTest(unittest.TestCase):
         self.assertEqual(second["outcome"], "blocked", second)
         self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
 
+    def test_a_job_that_dies_after_the_implementation_does_not_lock_the_next_one(self):
+        """Isti razred kvara, druga vrata: posao koji padne POSLIJE implementacije.
+
+        Bez spremanja nedovrsenog posla ostaje prljavo stablo, pa sljedeci posao gard odbija jednako kao u
+        testu iznad. Objava se pritom ne smije dogoditi: commit je lokalan, `git push` radi samo izdavac.
+        """
+        adapters = CommittingAdapters(self.cfg, self.home)
+        verdicts = {"plan": "needs_verification", "implement": "needs_verification", "review": "failed"}
+
+        def writing_run_phase(job, agent_phase, prof, **kwargs):
+            if agent_phase == "implement":
+                target = os.path.join(self.repo, "src", "autonomija", "pao.ts")
+                os.makedirs(os.path.dirname(target), exist_ok=True)
+                with open(target, "w", encoding="utf-8") as fh:
+                    fh.write("export const x = 1;" + chr(10))
+            return {"verdict": verdicts[agent_phase], "reason": "recenzent odbio"}
+
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", side_effect=writing_run_phase):
+            out = cli.tick(self.cfg, NOW, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom="posao koji pada"), adapters=adapters,
+                           profile=profile())
+        self.assertEqual(out["outcome"], "failed", out)
+        self.assertEqual(self.dirty(), "", "nedovrsen posao se sprema, inace zakljucava sljedeci")
+        events = [e["event_type"] for e in self.store.events(out["claimed"])]
+        self.assertEqual(events[-1], "status:failed", "razlog zaustavljanja mora ostati zadnji dogadaj")
+        parked = json.loads([e for e in self.store.events(out["claimed"])
+                             if e["event_type"] == "worker_commit"][-1]["sanitized_payload"])
+        self.assertEqual(parked["status"], "committed")
+        self.assertTrue(parked["unfinished"], parked)
+
+        second, _, _ = self.run_tick("posao poslije pada", NOW + 1)
+        self.assertEqual(second["outcome"], "proposed", second)
+
+    def test_a_job_that_never_wrote_anything_parks_nothing(self):
+        # KONTROLA: spremanje ne smije stvarati prazne commite kad implementacija nije ni krenula.
+        adapters = CommittingAdapters(self.cfg, self.home)
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.repo, capture_output=True, text=True,
+                              check=False).stdout.strip()
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "failed", "reason": "plan pao"}):
+            out = cli.tick(self.cfg, NOW, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom="plan koji pada"), adapters=adapters,
+                           profile=profile())
+        self.assertEqual(out["outcome"], "failed", out)
+        after = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.repo, capture_output=True, text=True,
+                               check=False).stdout.strip()
+        self.assertEqual(head, after, "prazan commit se ne stvara")
+        parked = json.loads([e for e in self.store.events(out["claimed"])
+                             if e["event_type"] == "worker_commit"][-1]["sanitized_payload"])
+        self.assertEqual(parked["status"], "clean")
+
     def test_a_failed_commit_stops_the_job_instead_of_publishing_uncommitted_work(self):
         adapters = RecordingAdapters(commit_result={"status": "failed", "reason": "git commit nije uspio: hook"})
         out = cli.tick(config(mode="propose", publisherEnabled=True, workerRepoPath=self.repo), NOW, False,
