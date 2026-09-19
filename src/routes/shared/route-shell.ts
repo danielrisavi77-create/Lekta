@@ -10,6 +10,7 @@
  * listenerima drzi jedan `AbortController` po dokumentu, pa remount ne ostavlja dvostruke listenere.
  */
 import { releasedPublicRouteGroups } from './public-route-directory';
+import '../../shared/design-system.css'; // route-shell.css je od Z1 samo alias na ove primitive
 import '../../shared/skip-link.css';
 import './route-shell.css';
 
