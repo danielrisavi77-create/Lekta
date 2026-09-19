@@ -1,0 +1,95 @@
+<!-- @dsCard group="Cjenik" name="Kartica paketa" subtitle="obicna, istaknuta Najbolja vrijednost, s gumbom Uskoro" width="1040" height="620" -->
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<title>Kartica paketa</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+  color-scheme:dark;
+  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
+  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
+  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
+  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
+  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
+  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
+  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
+  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
+  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-doc:Georgia,"Times New Roman",serif;
+  --radius:2px;--radius-pill:999px;
+  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
+}
+[data-theme="light"]{
+  color-scheme:light;
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
+  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
+  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
+  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
+  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
+  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
+  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
+  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
+  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
+}
+html,body{height:auto}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
+.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.dsc-item{display:grid;gap:9px;justify-items:start}
+.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
+.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
+.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
+.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
+</style>
+<style>
+.price-card{width:250px;background:var(--paper);color:var(--paper-ink);border-radius:0;box-shadow:var(--paper-sh);padding:26px 24px;position:relative;transform:rotate(-.7deg);display:flex;flex-direction:column;gap:14px}
+.price-card:nth-child(2){transform:rotate(.4deg)}
+.price-card:nth-child(3){transform:rotate(-.3deg)}
+.price-card h3{margin:0;font-family:var(--display-serif);font-weight:500;font-size:1.4rem}
+.price{font-family:var(--display-serif);font-weight:600;font-size:2.1rem;letter-spacing:-.02em;border-bottom:1.5px solid var(--paper-ink);padding-bottom:10px;margin:0}
+.price small{font-family:var(--display-serif);font-weight:400;font-size:.8rem;color:var(--paper-muted)}
+.features{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.features li{font-family:var(--display-serif);font-size:.82rem;color:var(--paper-muted);line-height:1.5;display:flex;gap:8px}
+.features li::before{content:"✓";color:#17663F;font-weight:700}
+.popular{position:absolute;top:-16px;right:14px;width:80px;height:80px;border:2px double #A62B23;border-radius:50%;display:grid;place-items:center;transform:rotate(9deg);color:#A62B23;background:color-mix(in srgb,var(--paper) 85%, transparent);font:600 7px var(--ui);letter-spacing:.1em;line-height:1.5;text-align:center;padding:10px;text-transform:uppercase}
+.price-btn{margin-top:auto;border:0;border-radius:9px;padding:11px 16px;font:650 .82rem var(--ui);cursor:pointer}
+.price-btn.solid{background:var(--red-deep);color:#F7F3E8}
+.price-btn.soon{background:var(--paper-line);color:var(--paper-muted);cursor:not-allowed}
+</style>
+</head>
+<body>
+<h1 class="dsc-h">Kartica paketa</h1>
+<p class="dsc-sub">Papir na stolu, blago zarotiran; istaknuta kartica nosi žig "najbolja vrijednost" umjesto boje pozadine. Dok su plaćene tarife soft-launch, gumb je "Uskoro" i onemogućen.</p>
+
+<div class="dsc-row" style="gap:36px;padding-top:14px">
+  <div class="price-card">
+    <h3>Osnovni</h3>
+    <p class="price">4,99 €<br><small>po dokumentu</small></p>
+    <ul class="features"><li>Puni izvještaj oblikovanja</li><li>Provjera citata (CrossRef)</li></ul>
+    <button class="price-btn soon" disabled>Uskoro</button>
+  </div>
+  <div class="price-card">
+    <span class="popular">Najbolja vrijednost</span>
+    <h3>Popravak</h3>
+    <p class="price">9,99 €<br><small>po dokumentu</small></p>
+    <ul class="features"><li>Sve iz Osnovnog</li><li>Automatski popravak forme</li><li>Ponovna provjera prije preuzimanja</li></ul>
+    <button class="price-btn soon" disabled>Uskoro</button>
+  </div>
+  <div class="price-card">
+    <h3>Institucija</h3>
+    <p class="price">Na upit<br><small>po ustanovi</small></p>
+    <ul class="features"><li>Fakultetski profil pravila</li><li>Izvještaj za katedru</li></ul>
+    <button class="price-btn solid">Zatraži ponudu</button>
+  </div>
+</div>
+</body>
+</html>
