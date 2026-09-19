@@ -142,3 +142,35 @@ retke iz dnevnika. Umjesto toga se podmetnu privremene NETRACKANE prazne datotek
 (`<verzija>_privremeno_samo_u_bazi.sql`), push ide s `--include-all`, pa se datoteke izbrisu. Dnevnik ostaje
 cijel, `migration-identity` i dalje broji te verzije pod "samo u bazi". Detalji i izmjereno stanje:
 `docs/deploy/KANAL_A_UKLJUCIVANJE.md`.
+
+## Stanje staginga izmjereno 2026-09-13 (Supabase MCP, samo citanje)
+
+Staging projekt `bnyemcnsphlitjradrst` je vracen iz INACTIVE u ACTIVE_HEALTHY 2026-09-13,
+nakon sto je vlasnik pauzirao projekt Matura app (free plan dopusta samo 2 aktivna projekta
+odjednom). Produkcija `zrrjttizjyfcxmcpgzml` je pritom ostala netaknuta.
+
+Migracijski identitet je izmjeren PO VERZIJI (repozitorij ima verzije 0001 do 0103, ukupno
+103 datoteke). Staging ima primijenjenih 93 od tih verzija; nedostaju mu 0058, 0059, 0060 i
+raspon 0086 do 0103, sto je ukupno 21 verzija. Staging uz to ima 11 verzija kojih u ovom
+repozitoriju uopce nema: 0104 do 0114, sto su migracije Katedra agent i billing sustava iz
+drugog repozitorija. Produkcija ima svih 103 verzije iz ovog repozitorija, plus jos 4 s
+timestamp identitetom (20260830005406, 20260830195311, 20260830195452, 20260830195905), sto
+je takodjer Katedra sprint.
+
+Napomena o imenu: produkcija nosi verzije 0058 do 0060, 0063 i 0066 pod imenima koja pocinju s
+"Lekta: ...", jer su povijesno primijenjene kroz `apply_migration`. Zbog toga usporedba po
+IMENU iz `npm run migration-identity` to prijavljuje kao odstupanje, dok je stanje po VERZIJI
+cisto.
+
+Edge funkcije na stagingu pokrivaju 6 od 25 funkcija iz repozitorija: `repair-docx`,
+`source-check`, `delete-repair-job` (verzija 3, deployana 2026-08-04), `cleanup-agent-payloads`,
+`profile-rules` i `katedra-agent-worker`. Nedostaje njih 19, medju kojima `create-checkout`,
+`webhook-mor`, `send-reminders` i `health`.
+
+Blokator za sljedeci korak (`npx supabase db push --project-ref bnyemcnsphlitjradrst
+--include-all`, jer remote nosi verzije 0104 i novije koje su novije od lokalnog stanja, pa
+gard trazi i `npm run deploy-drift` i `npm run migration-identity` uz `LEKTA_STAGING_REF`):
+`SUPABASE_ACCESS_TOKEN` u okolini ovog stroja vraca HTTP 401 na Management API, a Supabase CLI
+nije instaliran na ovom stroju. Treba vazeci osobni pristupni token prije nego se push moze
+pokrenuti. MCP `apply_migration` se za ovaj zahvat ne koristi, u skladu s tvrdim pravilom o
+identitetu verzije iznad.
