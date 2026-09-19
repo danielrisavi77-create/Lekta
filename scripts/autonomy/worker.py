@@ -363,32 +363,141 @@ def implementation_worktree_blocked(repo: str, *, git=None, dedicated: bool = Fa
 WORKER_COMMIT_TRAILER = "Autor izmjene je autonomni kontroler; pregled i merge su odvojeni koraci."
 
 
-def commit_worker_tree(repo: str, message: str, *, run=None) -> dict:
-    """Spremi ono sto je implementacija napisala, kao commit u radnikovu stablu.
+class UnsafeCommitPaths(ValueError):
+    """Staza koju kontroler ne smije commitati (apsolutna, izvan repozitorija, prazna)."""
 
-    Bez ovoga se kontroler zakljuca poslije TOCNO jednog posla: gard trazi cisto stablo prije implementacije, a
-    nizvodni lanac (klasifikacija, verifikacija, objava) mjeri upravo NECOMMITANE promjene i nista ih nikad ne
-    commita, pa je drugi posao trajno `implement_unsafe: radno stablo nije cisto` (nalaz 2026-09-13). Snimka
-    promjena se zato uzima PRIJE ovog poziva (`DefaultAdapters._snapshot`), a `git push` u izdavacu tek ovime
-    dobiva sadrzaj.
+
+def _safe_relative_paths(paths: list[str]) -> list[str]:
+    """Normaliziraj popis staza i odbij sve sto izlazi iz radnikova stabla.
+
+    Popis dolazi iz `git status --porcelain` istog stabla, pa bi u praksi uvijek bio relativan. Provjera
+    svejedno stoji: pozivatelj je kontroler koji taj popis prosljedjuje u `git add`, a tiho prihvacena
+    apsolutna staza ili `..` znaci pisanje izvan stabla za koje je gard dao dopustenje.
+    """
+    clean: list[str] = []
+    for raw in paths:
+        path = str(raw).strip().strip('"').replace("\\", "/")
+        if not path or os.path.isabs(path) or path.startswith("/"):
+            raise UnsafeCommitPaths(f"staza nije relativna: {raw!r}")
+        parts = [p for p in path.split("/") if p not in ("", ".")]
+        if any(p == ".." for p in parts):
+            raise UnsafeCommitPaths(f"staza izlazi iz stabla: {raw!r}")
+        if not parts:
+            raise UnsafeCommitPaths(f"prazna staza: {raw!r}")
+        clean.append("/".join(parts))
+    # Duplikati bi `git add` prihvatio, ali popis ide i u poruku dnevnika i u tvrdnje testova.
+    return sorted(dict.fromkeys(clean))
+
+
+def commit_worker_tree(repo: str, message: str, paths: list[str], *, run=None) -> dict:
+    """Spremi TOCNO navedene staze kao commit u radnikovu stablu.
+
+    Popis staza NIJE kozmetika nego cijela poanta ove funkcije. Do 2026-09-19 je ovdje stajao `git add -A` pa
+    `git commit`, i to je commitalo sve sto je u stablu prljavo, ukljucivo rad koji kontroler nije napisao;
+    izmjereno je da posao odbijen PRIJE ijedne faze tako commita tudje necommitane datoteke, u zadanoj
+    konfiguraciji na master granu instalacijskog checkouta. `git add -A` i `git commit` bez `--only` su i
+    oblik koji CLAUDE.md izricito zabranjuje i koji `~/.claude/hooks/lekta-git-guard.mjs` odbija ljudima, pa ga
+    automat pogotovo ne smije koristiti.
+
+    Pozivatelj (`DefaultAdapters.commit`) smije poslati samo staze iz snimke uzete NAKON sto je gard potvrdio
+    da je stablo na pocetku posla bilo cisto: tek tada je sve prljavo djelo implementacije iz ovog posla.
     """
     call = run or (lambda args: _git_output(repo, args))
     try:
-        code, dirty = call(["status", "--porcelain"])
-        if code != 0:
-            return {"status": "failed", "reason": "git status nije uspio"}
-        if not dirty.strip():
-            return {"status": "clean", "reason": "nista za spremiti"}
-        code, out = call(["add", "-A"])
+        safe = _safe_relative_paths(list(paths or []))
+    except UnsafeCommitPaths as exc:
+        return {"status": "failed", "reason": f"nesigurna staza: {exc}"}
+    if not safe:
+        return {"status": "clean", "reason": "nista za spremiti"}
+    try:
+        code, out = call(["add", "--", *safe])
         if code != 0:
             return {"status": "failed", "reason": "git add nije uspio"}
-        code, out = call(["commit", "-m", message])
+        code, out = call(["commit", "--only", "-m", message, "--", *safe])
         if code != 0:
             return {"status": "failed", "reason": f"git commit nije uspio: {out[:200]}"}
         code, sha = call(["rev-parse", "HEAD"])
-        return {"status": "committed", "sha": sha if code == 0 else None}
+        return {"status": "committed", "sha": sha if code == 0 else None, "paths": safe}
     except (OSError, subprocess.SubprocessError) as exc:
         return {"status": "failed", "reason": f"git nije dostupan ({type(exc).__name__})"}
+
+
+def resolve_base_ref(repo: str, base_branch: str, *, run=None) -> str | None:
+    """Lokalna referenca osnovice (`origin/master`, pa `master`), ili None kad je nema.
+
+    None NIJE "nema promjena": pozivatelj mora fail-closed, jer bez osnovice ne moze reci sto sve grana nosi.
+    """
+    call = run or (lambda args: _git_output(repo, args))
+    for ref in (f"origin/{base_branch}", str(base_branch)):
+        if not base_branch:
+            break
+        code, out = call(["rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"])
+        if code == 0 and out.strip():
+            return ref
+    return None
+
+
+def branch_changed_paths(repo: str, base_ref: str, *, run=None) -> list[str]:
+    """Staze koje grana nosi iznad osnovice, dakle sve sto bi `git push` te grane objavio.
+
+    Dokaz se racuna PO POSLU, a grana zivi duze od posla: bez ovoga klasifikacija i verifikacija vide samo
+    ono sto je napisao TEKUCI posao, dok bi objava gurnula i svaki raniji commit na istoj grani, ukljucivo
+    onaj koji je pregled odbio (izmjereno 2026-09-19: `.github/workflows/...` iz odbijenog posla proslo bi kao
+    promjena bez kontrolnih datoteka).
+    """
+    call = run or (lambda args: _git_output(repo, args))
+    code, out = call(["diff", "--name-only", f"{base_ref}...HEAD"])
+    if code != 0:
+        raise RuntimeError("git diff prema osnovici nije uspio")
+    return [line.strip() for line in out.splitlines() if line.strip()]
+
+
+def branch_changed_line_count(repo: str, base_ref: str, *, run=None) -> int:
+    call = run or (lambda args: _git_output(repo, args))
+    code, out = call(["diff", "--numstat", f"{base_ref}...HEAD"])
+    if code != 0:
+        return 0
+    total = 0
+    for line in out.splitlines():
+        parts = line.split(chr(9))
+        for p in parts[:2]:
+            if p.isdigit():
+                total += int(p)
+    return total
+
+
+def start_job_branch(repo: str, branch: str, base_ref: str, *, run=None) -> dict:
+    """Postavi radnikovo stablo na VLASTITU granu ovog posla.
+
+    Bez toga svi poslovi dijele jednu dugotrajnu granu: drugi posao naslijedi commite prvoga, `publish` ih sve
+    gura u isti PR, a `open_pull_request` se poziva za glavu koja vec ima otvoren PR. Izmjereno 2026-09-19:
+    `.github/workflows/...` iz posla koji je pregled ODBIO otisao bi u objavu drugog posla, a klasifikacija ga
+    ne bi ni vidjela.
+
+    Grana koja VEC postoji (isti zadatak, drugi pokusaj) se ne reze ponovo, nego preuzima: `checkout -B` bi
+    tiho odbacio ono sto je raniji pokusaj vec spremio. Osnovica je tada zajednicki predak, pa dokaz i dalje
+    pokriva sve sto bi objava gurnula.
+
+    Stablo mora biti cisto (gard prve faze to trazi). Fail-closed: prljavo stablo se NE premjesta.
+    """
+    call = run or (lambda args: _git_output(repo, args))
+    code, dirty = call(["status", "--porcelain"])
+    if code != 0:
+        return {"status": "failed", "reason": "git status nije uspio"}
+    if dirty.strip():
+        return {"status": "failed", "reason": "stablo nije cisto, grana posla se ne preuzima"}
+    code, _ = call(["rev-parse", "--verify", "--quiet", f"refs/heads/{branch}"])
+    if code == 0:
+        code, out = call(["checkout", branch])
+        if code != 0:
+            return {"status": "failed", "reason": f"git checkout nije uspio: {out[:200]}"}
+        code, base_sha = call(["merge-base", base_ref, "HEAD"])
+        return {"status": "ok", "branch": branch, "base_sha": base_sha if code == 0 else None, "created": False}
+    code, out = call(["checkout", "-b", branch, base_ref])
+    if code != 0:
+        return {"status": "failed", "reason": f"git checkout -b nije uspio: {out[:200]}"}
+    code, sha = call(["rev-parse", "HEAD"])
+    return {"status": "ok", "branch": branch, "base_sha": sha if code == 0 else None, "created": True}
 
 
 def classify_stream(text: str) -> str | None:
@@ -554,21 +663,35 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
 # Snapshot promjena u radnikovu stablu
 # --------------------------------------------------------------------------------------------
 def changed_paths(cwd: str) -> list[str]:
-    """Promijenjene staze, DATOTEKA PO DATOTEKA.
+    """Promijenjene staze radnog stabla, DATOTEKA PO DATOTEKA.
 
     `--untracked-files=all` nije kozmetika: bez njega git nov, netrackan DIREKTORIJ sazme u jedan redak
     (`src/`), pa klasifikacija (`explain_change`) presudjuje po imenu mape i ne vidi ni kontrolnu datoteku ni
-    stazu izvan dopustenih prefiksa u njoj. Izmjereno 2026-09-13 testom `TwoJobsInARowTest`, nakon sto je
-    kontroler prvi put poceo sam commitati ono sto implementacija napise.
+    stazu izvan dopustenih prefiksa u njoj. Izmjereno 2026-09-13 testom `TwoJobsInARowTest`.
+
+    Preimenovanje (`R`/`C`) nosi DVIJE staze u `-z` izlazu, novu pa staru. Obje se vracaju: popis ide i u
+    klasifikaciju (stara staza je obrisana, to je promjena) i u `git add`, koji bez stare staze ne bi zapisao
+    brisanje. Do 2026-09-19 se druga staza citala kao da ima status u prva tri znaka, pa je u popis ulazila
+    osakacena.
     """
     out = subprocess.run(["git", "status", "--porcelain", "-z", "--untracked-files=all"], cwd=cwd,
                          capture_output=True, text=True, check=False, shell=False)
     if out.returncode != 0:
         raise RuntimeError("git status nije uspio")
+    fields = [f for f in out.stdout.split(chr(0))]
     paths: list[str] = []
-    for entry in out.stdout.split("\x00"):
-        if len(entry) > 3:
-            paths.append(entry[3:])
+    i = 0
+    while i < len(fields):
+        entry = fields[i]
+        i += 1
+        if len(entry) <= 3:
+            continue
+        status, path = entry[:2], entry[3:]
+        paths.append(path)
+        if status[0] in ("R", "C") or status[1] in ("R", "C"):
+            if i < len(fields) and fields[i]:
+                paths.append(fields[i])
+                i += 1
     return paths
 
 

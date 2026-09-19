@@ -32,9 +32,10 @@ from .remote import load_remotes, token_fingerprint
 from .report import write_report
 from .signals import collect
 from .store import Store
-from .worker import (API_KEY_ENV, WORKER_COMMIT_TRAILER, changed_line_count, changed_paths, commit_worker_tree,
-                     implementation_worktree_blocked, prepare_job_via_node, resolve_launcher, run_phase,
-                     scrubbed_env)
+from .worker import (API_KEY_ENV, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
+                     changed_line_count, changed_paths, commit_worker_tree, implementation_worktree_blocked,
+                     prepare_job_via_node, resolve_base_ref, resolve_launcher, run_phase, scrubbed_env,
+                     start_job_branch)
 
 PHASE_ORDER = ("planning", "implementing", "reviewing", "verifying", "ready_to_publish", "publishing")
 PHASE_TO_AGENT_PHASE = {"planning": "plan", "implementing": "implement", "reviewing": "review"}
@@ -393,6 +394,19 @@ class DefaultAdapters:
         self._changes: dict | None = None
         # Je li u OVOM poslu ijedna faza vec prosla gard. Nakon prve, prljavo stablo je djelo samog kontrolera.
         self._phase_started = False
+        # Je li gard PRVE faze potvrdio da je stablo bilo CISTO. To je jedini razlog zbog kojeg kontroler
+        # smije reci da je prljavo stablo na kraju posla njegovo djelo. Kad je posao odbijen prije toga
+        # (nema ciljnog zadatka, stablo nije cisto, priprema pala), stablo nije njegovo i ostaje NETAKNUTO.
+        self._clean_at_start = False
+        # Je li faza `implement` stvarno pokrenula providera u ovom poslu. Bez nje kontroler nije napisao ni
+        # bajt, pa nema sto spremiti; svako spremanje bi bilo commit tudjeg rada.
+        self._implemented = False
+        # Grana i osnovica OVOG posla. Grana se reze prije implementacije, pa ono sto `publish` gura sadrzi
+        # tocno ono sto je ovaj posao napisao, a ne i commite ranijih (i odbijenih) poslova.
+        self._job_branch: str | None = None
+        self._base_ref: str | None = None
+        self._base_sha: str | None = None
+        self._base_error: str | None = None
 
     def run_phase(self, task: dict, phase: str, profile: dict) -> dict:
         agent_phase = PHASE_TO_AGENT_PHASE[phase]
@@ -406,11 +420,17 @@ class DefaultAdapters:
         # plan pa padne na `implement_unsafe`, a uz `maxNewJobsPerDay=3` to je do tri uzaludna poziva dnevno.
         # CISTOCA se trazi samo na PRVOJ fazi posla: poslije nje stablo prlja sam kontroler, pa bi ista provjera
         # oborila pregled vlastitog posla (izmjereno: `reviewing` je zavrsavao kao `radno stablo nije cisto`).
+        first_phase = not self._phase_started
         unsafe = implementation_worktree_blocked(self.repo, dedicated=self.repo_declared,
-                                                 require_clean=not self._phase_started)
+                                                 require_clean=first_phase)
         if unsafe:
             return {"verdict": "blocked", "reason": unsafe, "provider": None,
                     "attempt_spent": False, "provider_called": False}
+        if first_phase:
+            # Gard je upravo potvrdio da je stablo CISTO. Tek od ove tocke sve prljavo u njemu pripada ovom
+            # poslu, i tek od nje kontroler uopce smije pomisljati na spremanje. Posao odbijen prije toga
+            # ostavlja stablo netaknutim.
+            self._clean_at_start = True
         self._phase_started = True
         override_status = override_implementer = None
         lookup_task = task
@@ -435,27 +455,92 @@ class DefaultAdapters:
                     "attempt_spent": False, "provider_called": False}
         if agent_phase == "implement":
             self._implementer_by_task[task["id"]] = agent
+            if self._job_branch is None:
+                # Grana se reze neposredno prije JEDINE faze koja pise, i nad jos cistim stablom. Ranije
+                # (npr. u planu) bi svaki posao koji padne prije implementacije bez razloga premjestio
+                # radnikovo stablo na novu granu; kasnije bi commit vec bio na dijeljenoj grani.
+                started = self._start_job_branch(task)
+                if started is not None:
+                    return started
         art = os.path.join(self.home, "artifacts", task["id"], f"{phase}-{uuid.uuid4().hex[:8]}")
         result = run_phase(job, agent_phase, profile, cwd=self.repo, timeout_seconds=int(self.config.get("agentTimeoutMinutes", 30)) * 60, artifact_dir=art)
+        if agent_phase == "implement":
+            # Od ovog trenutka u stablu moze biti nesto sto je NAPISAO ovaj posao, pa ga kontroler smije
+            # spremiti. Zastavica se postavlja i kad verdict nije uspjeh: model je vec mogao pisati datoteke.
+            self._implemented = True
         result["agent"] = agent
         result["plan_task"] = plan_task
         return result
 
+    def _start_job_branch(self, task: dict) -> dict | None:
+        """Odrezi granu OVOG posla od osnovice. Vrati blokadu kad to ne uspije, inace None.
+
+        Dokaz se racuna po poslu, pa i grana mora biti po poslu. Dok su svi poslovi dijelili jednu granu,
+        `verify` je mjerio samo svoju snimku, a `publish` je gurao i commite ranijih, ukljucivo odbijenih
+        poslova; `controlFilesChanged` ih tako nikad nije vidio (izmjereno 2026-09-19).
+        """
+        base_branch = str(self.config.get("baseBranch") or "master")
+        base_ref = resolve_base_ref(self.repo, base_branch)
+        if base_ref is None:
+            # Fail-closed: bez osnovice se ne moze reci ni sto grana nosi ni od cega bi se rezala.
+            self._base_error = f"base_unresolved: nema lokalne reference za {base_branch}"
+            return {"verdict": "blocked", "reason": self._base_error, "provider": None,
+                    "attempt_spent": False, "provider_called": False}
+        branch = f"autonomy/{str(task.get('id'))[:8]}"
+        started = start_job_branch(self.repo, branch, base_ref)
+        if started.get("status") != "ok":
+            return {"verdict": "blocked", "reason": f"job_branch_failed: {started.get('reason')}",
+                    "provider": None, "attempt_spent": False, "provider_called": False}
+        self._job_branch = branch
+        self._base_ref = base_ref
+        self._base_sha = started.get("base_sha")
+        return None
+
     def _snapshot(self) -> dict:
+        """Sve sto bi objava gurnula: promjene radnog stabla PLUS commite grane iznad osnovice.
+
+        Dvije liste su namjerno odvojene. `worktree_paths` je jedino sto se smije commitati (to je napisala
+        implementacija ovog posla), a `paths` je ono sto klasifikacija i verifikacija moraju vidjeti, jer
+        `publish` gura CIJELU granu, ne samo zadnji commit.
+        """
         if self._changes is None:
-            self._changes = {"paths": changed_paths(self.repo), "lines": changed_line_count(self.repo)}
+            worktree = changed_paths(self.repo)
+            lines = changed_line_count(self.repo)
+            branch_paths: list[str] = []
+            if self._base_ref:
+                try:
+                    branch_paths = branch_changed_paths(self.repo, self._base_ref)
+                    lines += branch_changed_line_count(self.repo, self._base_ref)
+                except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
+                    self._base_error = f"base_diff_failed: {type(exc).__name__}"
+            elif self._base_error is None:
+                self._base_error = "base_unresolved: osnovica grane nije poznata"
+            self._changes = {"worktree_paths": worktree,
+                             "paths": sorted(dict.fromkeys([*worktree, *branch_paths])),
+                             "lines": lines}
         return self._changes
 
     def commit(self, task: dict) -> dict:
-        """Snimi promjene pa ih commitaj u radnikovu stablu; bez toga drugi posao nikad ne krene."""
+        """Spremi ono sto je IMPLEMENTACIJA OVOG POSLA napisala, i nista drugo.
+
+        Tri uvjeta su kumulativna i svaki je pokriven mutacijom: gard prve faze je potvrdio cisto stablo,
+        faza `implement` je stvarno pokrenuta, i commitaju se samo staze iz snimke. Do 2026-09-19 nijedan
+        nije stajao: posao odbijen PRIJE ijedne faze isao je kroz isti put, a `git add -A` je commitao tudji
+        necommitani rad, u zadanoj konfiguraciji na master granu instalacijskog checkouta.
+        """
+        if not self._clean_at_start:
+            return {"status": "skipped", "reason": "stablo nije bilo cisto na pocetku posla; nije nase"}
+        if not self._implemented:
+            return {"status": "skipped", "reason": "implementacija nije pokrenuta; nema sto spremiti"}
         snap = self._snapshot()
-        if not snap["paths"]:
+        paths = snap["worktree_paths"]
+        if not paths:
             return {"status": "clean", "reason": "implementacija nije nista promijenila"}
         signal = task.get("signal") or {}
         title = f"autonomija: {signal.get('kind', 'zadatak')} {str(signal.get('location') or '')[:60]}".strip()
         body = f"Signal: {task.get('signal_key')}"
         message = title + "\n\n" + body + "\n" + WORKER_COMMIT_TRAILER
-        return commit_worker_tree(self.repo, message)
+        return commit_worker_tree(self.repo, message, paths)
 
     def verify(self, task: dict) -> dict:
         def runner(argv):
@@ -471,8 +556,11 @@ class DefaultAdapters:
                 return None
 
         head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.repo, capture_output=True, text=True, check=False).stdout.strip()
+        # `paths` nosi i commite grane iznad osnovice, ne samo radno stablo: dokaz mora pokrivati sve sto bi
+        # `publish` gurnuo, inace `controlFilesChanged` ne vidi kontrolnu datoteku iz ranijeg commita.
         paths = self._snapshot()["paths"]
-        candidate = {"candidateSha": head, "baseSha": task.get("base_sha") or head, "changedPaths": paths}
+        candidate = {"candidateSha": head, "baseSha": self._base_sha or task.get("base_sha") or head,
+                     "changedPaths": paths}
         key_path = os.path.join(self.home, "verifier.key")
         key = open(key_path, "rb").read() if os.path.isfile(key_path) else b""
         return verify_candidate(candidate, self.config, runner=runner, read_proof=read_proof, signing_key=key or None,
@@ -480,6 +568,9 @@ class DefaultAdapters:
 
     def classify(self, task: dict) -> tuple[str, list[str]]:
         snap = self._snapshot()
+        if self._base_error:
+            # Klasifikacija bez poznate osnovice ne zna sto grana nosi, pa ne smije tvrditi nizak rizik.
+            return "needs_human", [self._base_error]
         return explain_change(snap["paths"], snap["lines"], self.config, root=self.repo)
 
     def publish(self, task: dict, evidence: dict, store: Store, now: int, change_class: str) -> dict:
@@ -551,11 +642,17 @@ def tick(config: dict, now: int, dry_run: bool, *, store: Store, home: str | Non
 
 
 def _park_worker_tree(adapters, task: dict, store: Store, task_id: str, now: int) -> None:
-    """Spremi ono sto je implementacija vec napisala kad posao zavrsi PRIJE kraja.
+    """Spremi ono sto je implementacija OVOG POSLA vec napisala kad posao zavrsi PRIJE kraja.
 
     Inace se kvar iz nalaza 2026-09-13 vraca kroz druga vrata: posao koji padne na pregledu ostavlja prljavo
     stablo, a sljedeci posao gard odbija s `implement_unsafe: radno stablo nije cisto` i kontroler se opet
     zakljuca. Commit je lokalan; objava ide iskljucivo kroz izdavaca i nju ovaj put nikad ne dosegne.
+
+    GRANICA, i to je cijela razlika prema izvedbi od 2026-09-19 koja je odbacena: odluku donosi
+    `adapters.commit`, koji odbija sve sto kontroler nije sam napisao. Posao odbijen PRIJE ijedne faze (nema
+    ciljnog zadatka, stablo nije cisto, priprema pala) tako prolazi ovuda bez ijedne git naredbe koja pise, i
+    stablo ostaje netaknuto. Prethodna izvedba je na tom istom putu radila `git add -A` i commitala tudji
+    necommitani rad, u zadanoj konfiguraciji na master granu instalacijskog checkouta.
 
     Zove se PRIJE prijelaza, pa `status:<verdict>` ostaje zadnji dogadaj zadatka: po njemu `Store.enqueue`
     prepoznaje razlog zaustavljanja, a dnevnik i dalje cita kao prije.
@@ -614,7 +711,9 @@ def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict,
     committed = adapters.commit(task)
     store.record_event(task_id, "worker_commit", {"status": committed.get("status"), "sha": committed.get("sha"),
                                                   "reason": committed.get("reason")}, now)
-    if committed.get("status") == "failed":
+    if committed.get("status") in ("failed", "skipped"):
+        # `skipped` znaci da kontroler nije smio spremiti (stablo nije bilo njegovo, ili implementacija nije
+        # ni pokrenuta). To nije uspjeh nego stanje u kojem se ne smije nastaviti prema objavi.
         store.transition(task_id, "verifying", "needs_human",
                          {"reason": f"commit_failed: {committed.get('reason')}"}, now)
         return "needs_human"

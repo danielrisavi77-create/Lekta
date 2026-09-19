@@ -9,9 +9,10 @@ import unittest
 from unittest import mock
 
 from scripts.autonomy.worker import (
-    ProcessTree, changed_paths, classify_stream, commit_worker_tree, diff_within_scope, implementation_worktree_blocked,
-    machine_stdout, model_matches, parse_provider_output, pid_alive, prepare_job_via_node, resolve_launcher,
-    run_phase, sandbox_unusable, scrubbed_env, successful_tool_calls,
+    ProcessTree, branch_changed_paths, changed_paths, classify_stream, commit_worker_tree, diff_within_scope,
+    implementation_worktree_blocked, machine_stdout, model_matches, parse_provider_output, pid_alive,
+    prepare_job_via_node, resolve_base_ref, resolve_launcher, run_phase, sandbox_unusable, scrubbed_env,
+    start_job_branch, successful_tool_calls,
 )
 
 
@@ -476,21 +477,22 @@ class DeclaredWorkerRepoTest(unittest.TestCase):
 
 
 class CommitWorkerTreeTest(unittest.TestCase):
-    """Bez commita se kontroler zakljuca poslije TOCNO jednog posla (nalaz 2026-09-13).
+    """Kontroler smije spremiti SAMO ono sto je sam napisao, i to imenovanim stazama.
 
-    Gard prije implementacije trazi cisto stablo, a nizvodni lanac (klasifikacija, verifikacija, objava)
-    mjeri upravo NECOMMITANE promjene, pa ih nitko nikad nije spremio. Ovdje se mjeri git STVARNO, a greske
-    se mjere ubrizganim `run`-om.
+    Do 2026-09-19 je ovdje stajao `git add -A` pa `git commit`. Izmjereno je da posao odbijen prije ijedne
+    faze tako commita tudji necommitani rad; to je i oblik koji CLAUDE.md zabranjuje ljudima
+    (`~/.claude/hooks/lekta-git-guard.mjs`), pa ga automat pogotovo ne smije koristiti. Git se ovdje mjeri
+    STVARNO, a greske ubrizganim `run`-om.
     """
 
-    def test_a_real_dirty_tree_becomes_a_commit_and_the_tree_is_clean_after(self):
+    def test_named_paths_become_a_commit_and_those_paths_are_clean_after(self):
         repo = git_repo()
         before = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
         with open(os.path.join(repo, "novo.txt"), "w", encoding="utf-8") as fh:
             fh.write("implementacija" + chr(10))
         with open(os.path.join(repo, "README.md"), "a", encoding="utf-8") as fh:
             fh.write("dopuna" + chr(10))
-        out = commit_worker_tree(repo, "autonomija: proba" + chr(10) * 2 + "tijelo")
+        out = commit_worker_tree(repo, "autonomija: proba" + chr(10) * 2 + "tijelo", ["novo.txt", "README.md"])
         self.assertEqual(out["status"], "committed", out)
         after = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
         self.assertEqual(out["sha"], after)
@@ -500,49 +502,169 @@ class CommitWorkerTreeTest(unittest.TestCase):
         files = subprocess.run(["git", "show", "--name-only", "--format=", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.split()
         self.assertEqual(sorted(files), ["README.md", "novo.txt"], "i NETRACKANA datoteka mora uci u commit")
 
+    def test_a_file_outside_the_named_paths_is_left_untouched(self):
+        """MUTACIJA nad zabranom `git add -A`: tudja datoteka koja NIJE u popisu mora ostati necommitana.
+
+        Ovo je tocno steta izmjerena 2026-09-19: covjekov necommitani rad u radnikovu stablu zavrsio je pod
+        kontrolerovom porukom. S `git add -A` ovaj test pada, sa `git add -- <staze>` prolazi.
+        """
+        repo = git_repo()
+        with open(os.path.join(repo, "nase.txt"), "w", encoding="utf-8") as fh:
+            fh.write("implementacija" + chr(10))
+        with open(os.path.join(repo, "tudje.txt"), "w", encoding="utf-8") as fh:
+            fh.write("covjekov necommitani rad" + chr(10))
+        out = commit_worker_tree(repo, "autonomija: proba", ["nase.txt"])
+        self.assertEqual(out["status"], "committed", out)
+        files = subprocess.run(["git", "show", "--name-only", "--format=", "HEAD"], cwd=repo, capture_output=True,
+                               text=True, check=False).stdout.split()
+        self.assertEqual(files, ["nase.txt"], "u commit smije samo imenovana staza")
+        dirty = subprocess.run(["git", "status", "--porcelain"], cwd=repo, capture_output=True, text=True,
+                               check=False).stdout
+        self.assertIn("tudje.txt", dirty, "tudja datoteka mora ostati necommitana")
+
+    def test_a_staged_foreign_change_does_not_ride_along(self):
+        """Druga vrata iste stete: tudja izmjena koju je netko vec STAGIRAO.
+
+        `git commit` bez `--only` uzima CIJELI indeks, pa bi stagirana tudja datoteka usla pod nasu poruku.
+        `--only <staze>` commita samo navedeno.
+        """
+        repo = git_repo()
+        with open(os.path.join(repo, "nase.txt"), "w", encoding="utf-8") as fh:
+            fh.write("implementacija" + chr(10))
+        with open(os.path.join(repo, "stagirano.txt"), "w", encoding="utf-8") as fh:
+            fh.write("tudje, vec u indeksu" + chr(10))
+        subprocess.run(["git", "add", "stagirano.txt"], cwd=repo, capture_output=True, text=True, check=False)
+        out = commit_worker_tree(repo, "autonomija: proba", ["nase.txt"])
+        self.assertEqual(out["status"], "committed", out)
+        files = subprocess.run(["git", "show", "--name-only", "--format=", "HEAD"], cwd=repo, capture_output=True,
+                               text=True, check=False).stdout.split()
+        self.assertEqual(files, ["nase.txt"])
+        dirty = subprocess.run(["git", "status", "--porcelain"], cwd=repo, capture_output=True, text=True,
+                               check=False).stdout
+        self.assertIn("stagirano.txt", dirty, "tudja stagirana datoteka mora ostati izvan commita")
+
+    def test_the_argv_never_contains_add_all_and_always_commits_only(self):
+        # Gard nad OBLIKOM naredbe, ne samo nad ishodom: `git add -A` i `git commit` bez `--only` su oblici
+        # koje CLAUDE.md izricito zabranjuje, pa ih prikivamo doslovno.
+        seen = []
+
+        def run(args):
+            seen.append(list(args))
+            return 0, "sha" if args[0] == "rev-parse" else ""
+
+        out = commit_worker_tree("/repo", "poruka", ["a.txt", "b/c.txt"], run=run)
+        self.assertEqual(out["status"], "committed", out)
+        self.assertEqual(seen[0], ["add", "--", "a.txt", "b/c.txt"])
+        self.assertEqual(seen[1], ["commit", "--only", "-m", "poruka", "--", "a.txt", "b/c.txt"])
+        for args in seen:
+            self.assertNotIn("-A", args)
+            self.assertNotIn("--all", args)
+            self.assertNotIn(".", args)
+
     def test_the_guard_accepts_the_tree_again_only_because_of_that_commit(self):
         # MUTACIJA nad mehanizmom: isto stablo, isti gard, bez commita. Tocno stanje koje je kontroler imao
-        # prije ovog popravka, i razlog zasto drugi posao nikad nije krenuo.
+        # prije popravka 2026-09-13, i razlog zasto drugi posao nikad nije krenuo.
         repo = git_repo()
         with open(os.path.join(repo, "novo.txt"), "w", encoding="utf-8") as fh:
             fh.write("implementacija" + chr(10))
         self.assertIn("nije cisto", implementation_worktree_blocked(repo, dedicated=True))
-        self.assertEqual(commit_worker_tree(repo, "autonomija: proba")["status"], "committed")
+        self.assertEqual(commit_worker_tree(repo, "autonomija: proba", ["novo.txt"])["status"], "committed")
         self.assertIsNone(implementation_worktree_blocked(repo, dedicated=True))
 
-    def test_a_clean_tree_is_reported_as_clean_and_creates_no_commit(self):
+    def test_an_empty_path_list_is_clean_and_creates_no_commit(self):
         repo = git_repo()
         before = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
-        out = commit_worker_tree(repo, "autonomija: nista")
+        with open(os.path.join(repo, "tudje.txt"), "w", encoding="utf-8") as fh:
+            fh.write("nije nase" + chr(10))
+        out = commit_worker_tree(repo, "autonomija: nista", [])
         self.assertEqual(out["status"], "clean", out)
         after = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
-        self.assertEqual(before, after, "prazan commit se ne stvara")
+        self.assertEqual(before, after, "prazan popis staza ne smije nista commitati")
+        dirty = subprocess.run(["git", "status", "--porcelain"], cwd=repo, capture_output=True, text=True,
+                               check=False).stdout
+        self.assertIn("tudje.txt", dirty)
+
+    def test_a_path_that_leaves_the_tree_is_refused(self):
+        # MUTACIJA: popis staza dolazi iz `git status`, ali funkcija ga prosljedjuje u `git add`. Apsolutna
+        # staza ili `..` znaci pisanje izvan stabla za koje je gard dao dopustenje.
+        for bad in ("../tudje.txt", "C:/Windows/system.ini", "/etc/passwd", "a/../../b.txt"):
+            out = commit_worker_tree("/repo", "poruka", [bad], run=lambda args: (0, ""))
+            self.assertEqual(out["status"], "failed", (bad, out))
+            self.assertIn("nesigurna staza", out["reason"], bad)
 
     def test_every_git_failure_is_reported_not_swallowed(self):
-        # Svaki od tri koraka pada zasebno: tiho progutan pad bi ostavio prljavo stablo uz tvrdnju da je
-        # spremljeno, dakle isti kvar samo bez traga u dnevniku.
-        calls = []
-
+        # Svaki korak pada zasebno: tiho progutan pad bi ostavio prljavo stablo uz tvrdnju da je spremljeno,
+        # dakle isti kvar samo bez traga u dnevniku.
         def failing(step):
             def run(args):
-                calls.append(args[0])
                 if args[0] == step:
                     return 1, "puklo"
-                return 0, " M x" if args[0] == "status" else ""
+                return 0, ""
             return run
 
-        for step, marker in (("status", "git status nije uspio"), ("add", "git add nije uspio"),
-                             ("commit", "git commit nije uspio")):
-            out = commit_worker_tree("/repo", "poruka", run=failing(step))
+        for step, marker in (("add", "git add nije uspio"), ("commit", "git commit nije uspio")):
+            out = commit_worker_tree("/repo", "poruka", ["x.txt"], run=failing(step))
             self.assertEqual(out["status"], "failed", (step, out))
             self.assertIn(marker, out["reason"])
 
         def boom(args):
             raise OSError("git nema")
 
-        out = commit_worker_tree("/repo", "poruka", run=boom)
+        out = commit_worker_tree("/repo", "poruka", ["x.txt"], run=boom)
         self.assertEqual(out["status"], "failed")
         self.assertIn("nije dostupan", out["reason"])
+
+
+class JobBranchTest(unittest.TestCase):
+    """Svaki posao ima VLASTITU granu, inace dokaz ne pokriva ono sto objava gura (nalaz 2026-09-19)."""
+
+    def test_a_new_branch_is_cut_from_the_base_and_carries_nothing_else(self):
+        repo = git_repo()
+        base = subprocess.run(["git", "rev-parse", "master"], cwd=repo, capture_output=True, text=True,
+                              check=False).stdout.strip()
+        out = start_job_branch(repo, "autonomy/aaaaaaaa", "master")
+        self.assertEqual(out["status"], "ok", out)
+        self.assertTrue(out["created"])
+        self.assertEqual(out["base_sha"], base)
+        self.assertEqual(branch_changed_paths(repo, "master"), [], "nova grana ne nosi nista iznad osnovice")
+
+    def test_an_existing_branch_is_taken_over_not_reset(self):
+        # Isti zadatak, drugi pokusaj: `checkout -B` bi tiho odbacio ono sto je raniji pokusaj spremio.
+        repo = git_repo()
+        start_job_branch(repo, "autonomy/aaaaaaaa", "master")
+        with open(os.path.join(repo, "prvi-pokusaj.txt"), "w", encoding="utf-8") as fh:
+            fh.write("x" + chr(10))
+        commit_worker_tree(repo, "autonomija: prvi pokusaj", ["prvi-pokusaj.txt"])
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True,
+                              check=False).stdout.strip()
+        subprocess.run(["git", "checkout", "-q", "master"], cwd=repo, capture_output=True, text=True, check=False)
+        out = start_job_branch(repo, "autonomy/aaaaaaaa", "master")
+        self.assertEqual(out["status"], "ok", out)
+        self.assertFalse(out["created"])
+        again = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True,
+                               check=False).stdout.strip()
+        self.assertEqual(head, again, "postojeca grana posla se preuzima, ne reze ponovo")
+        self.assertEqual(branch_changed_paths(repo, "master"), ["prvi-pokusaj.txt"],
+                         "dokaz mora vidjeti i ono sto je raniji pokusaj commitao")
+
+    def test_a_dirty_tree_is_never_moved(self):
+        # MUTACIJA: prljavo stablo. `checkout` bi tudje izmjene prenio na drugu granu ili odbio na pola puta.
+        repo = git_repo()
+        with open(os.path.join(repo, "tudje.txt"), "w", encoding="utf-8") as fh:
+            fh.write("covjekov rad" + chr(10))
+        branch_before = subprocess.run(["git", "branch", "--show-current"], cwd=repo, capture_output=True,
+                                       text=True, check=False).stdout.strip()
+        out = start_job_branch(repo, "autonomy/bbbbbbbb", "master")
+        self.assertEqual(out["status"], "failed", out)
+        self.assertIn("nije cisto", out["reason"])
+        branch_after = subprocess.run(["git", "branch", "--show-current"], cwd=repo, capture_output=True,
+                                      text=True, check=False).stdout.strip()
+        self.assertEqual(branch_before, branch_after, "stablo koje nije cisto ostaje gdje jest")
+
+    def test_the_base_ref_is_resolved_from_origin_first_then_local(self):
+        repo = git_repo()
+        self.assertEqual(resolve_base_ref(repo, "master"), "master")
+        self.assertIsNone(resolve_base_ref(repo, "ne-postoji"), "nepoznata osnovica je None, ne tiha nula")
 
 
 class CleanlinessOnlyOnTheFirstPhaseTest(unittest.TestCase):
