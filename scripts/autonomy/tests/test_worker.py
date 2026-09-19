@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import time
@@ -8,10 +9,29 @@ import unittest
 from unittest import mock
 
 from scripts.autonomy.worker import (
-    ProcessTree, classify_stream, diff_within_scope, implementation_worktree_blocked, machine_stdout,
-    model_matches, parse_provider_output, pid_alive, prepare_job_via_node, resolve_launcher, run_phase,
-    sandbox_unusable, scrubbed_env, successful_tool_calls,
+    ProcessTree, changed_paths, classify_stream, commit_worker_tree, diff_within_scope, implementation_worktree_blocked,
+    machine_stdout, model_matches, parse_provider_output, pid_alive, prepare_job_via_node, resolve_launcher,
+    run_phase, sandbox_unusable, scrubbed_env, successful_tool_calls,
 )
+
+
+def git_repo() -> str:
+    """Stvaran git repozitorij na feature grani, s jednim commitom. Za testove koji mjere git, ne odluku."""
+    repo = tempfile.mkdtemp()
+    def run(*args):
+        out = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, check=False, shell=False)
+        assert out.returncode == 0, (args, out.stderr)
+    run("init", "-q")
+    run("config", "user.email", "radnik@lokalno")
+    run("config", "user.name", "Radnik")
+    run("config", "commit.gpgsign", "false")
+    with open(os.path.join(repo, "README.md"), "w", encoding="utf-8") as fh:
+        fh.write("pocetak" + chr(10))
+    run("add", "README.md")
+    run("commit", "-qm", "pocetak")
+    run("checkout", "-qb", "wf/radnik")
+    return repo
+
 
 # Uspjesno izvrsavanje u codex NDJSON-u. Oblik je GRADJEN prema shemi stavke (`item.completed` +
 # `command_execution` s `exit_code`), a ne prepisan iz izmjerenog artefakta: taj artefakt je log KVARA i po
@@ -423,6 +443,165 @@ class ImplementWorktreeGuardTest(unittest.TestCase):
         # kad `workerRepoPath` pokazuje na instalacijski checkout ili na nesto sto uopce nije repozitorij.
         self.assertIsNotNone(implementation_worktree_blocked(tempfile.mkdtemp()))
 
+
+class DeclaredWorkerRepoTest(unittest.TestCase):
+    """Deklarirano radnikovo stablo (`workerRepoPath`) smije biti i ZASEBAN KLON, ne samo povezan worktree.
+
+    Nalaz 2026-09-13: gard je usporedivao `--git-dir` s `--git-common-dir`, pa je odbijao klon na feature
+    grani, koji je posve siguran i najprirodniji nacin da se `workerRepoPath` zadovolji. Ostala dva
+    preduvjeta (feature grana, cisto stablo) `dedicated` NE smije ugasiti; to je mutacija ispod.
+    """
+
+    CLONE = {("rev-parse", "--git-dir"): "/klon/.git",
+             ("rev-parse", "--git-common-dir"): "/klon/.git",
+             ("branch", "--show-current"): "wf/nesto",
+             ("status", "--porcelain"): ""}
+
+    def guard(self, *, dedicated, **over):
+        table = dict(self.CLONE)
+        table.update({tuple(k.split(" ")): v for k, v in over.items()})
+        return implementation_worktree_blocked("/klon", git=lambda args: (0, table[tuple(args)]), dedicated=dedicated)
+
+    def test_baseline_an_undeclared_clone_is_still_refused(self):
+        reason = self.guard(dedicated=False)
+        self.assertIn("nije zaseban git worktree ni deklariran workerRepoPath", reason)
+
+    def test_a_declared_clone_on_a_feature_branch_is_allowed(self):
+        self.assertIsNone(self.guard(dedicated=True))
+
+    def test_declaration_does_not_switch_off_the_other_two_preconditions(self):
+        # MUTACIJA: da `dedicated` preskace ostatak provjere, ova dva bi presutno prosla.
+        self.assertIn("nije feature grana", self.guard(dedicated=True, **{"branch --show-current": "master"}))
+        self.assertIn("nije cisto", self.guard(dedicated=True, **{"status --porcelain": " M src/ui/app.ts"}))
+
+
+class CommitWorkerTreeTest(unittest.TestCase):
+    """Bez commita se kontroler zakljuca poslije TOCNO jednog posla (nalaz 2026-09-13).
+
+    Gard prije implementacije trazi cisto stablo, a nizvodni lanac (klasifikacija, verifikacija, objava)
+    mjeri upravo NECOMMITANE promjene, pa ih nitko nikad nije spremio. Ovdje se mjeri git STVARNO, a greske
+    se mjere ubrizganim `run`-om.
+    """
+
+    def test_a_real_dirty_tree_becomes_a_commit_and_the_tree_is_clean_after(self):
+        repo = git_repo()
+        before = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
+        with open(os.path.join(repo, "novo.txt"), "w", encoding="utf-8") as fh:
+            fh.write("implementacija" + chr(10))
+        with open(os.path.join(repo, "README.md"), "a", encoding="utf-8") as fh:
+            fh.write("dopuna" + chr(10))
+        out = commit_worker_tree(repo, "autonomija: proba" + chr(10) * 2 + "tijelo")
+        self.assertEqual(out["status"], "committed", out)
+        after = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
+        self.assertEqual(out["sha"], after)
+        self.assertNotEqual(before, after, "commit mora stvarno pomaknuti HEAD")
+        dirty = subprocess.run(["git", "status", "--porcelain"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
+        self.assertEqual(dirty, "", "stablo mora ostati cisto, inace je sljedeci posao blokiran")
+        files = subprocess.run(["git", "show", "--name-only", "--format=", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.split()
+        self.assertEqual(sorted(files), ["README.md", "novo.txt"], "i NETRACKANA datoteka mora uci u commit")
+
+    def test_the_guard_accepts_the_tree_again_only_because_of_that_commit(self):
+        # MUTACIJA nad mehanizmom: isto stablo, isti gard, bez commita. Tocno stanje koje je kontroler imao
+        # prije ovog popravka, i razlog zasto drugi posao nikad nije krenuo.
+        repo = git_repo()
+        with open(os.path.join(repo, "novo.txt"), "w", encoding="utf-8") as fh:
+            fh.write("implementacija" + chr(10))
+        self.assertIn("nije cisto", implementation_worktree_blocked(repo, dedicated=True))
+        self.assertEqual(commit_worker_tree(repo, "autonomija: proba")["status"], "committed")
+        self.assertIsNone(implementation_worktree_blocked(repo, dedicated=True))
+
+    def test_a_clean_tree_is_reported_as_clean_and_creates_no_commit(self):
+        repo = git_repo()
+        before = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
+        out = commit_worker_tree(repo, "autonomija: nista")
+        self.assertEqual(out["status"], "clean", out)
+        after = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True, check=False).stdout.strip()
+        self.assertEqual(before, after, "prazan commit se ne stvara")
+
+    def test_every_git_failure_is_reported_not_swallowed(self):
+        # Svaki od tri koraka pada zasebno: tiho progutan pad bi ostavio prljavo stablo uz tvrdnju da je
+        # spremljeno, dakle isti kvar samo bez traga u dnevniku.
+        calls = []
+
+        def failing(step):
+            def run(args):
+                calls.append(args[0])
+                if args[0] == step:
+                    return 1, "puklo"
+                return 0, " M x" if args[0] == "status" else ""
+            return run
+
+        for step, marker in (("status", "git status nije uspio"), ("add", "git add nije uspio"),
+                             ("commit", "git commit nije uspio")):
+            out = commit_worker_tree("/repo", "poruka", run=failing(step))
+            self.assertEqual(out["status"], "failed", (step, out))
+            self.assertIn(marker, out["reason"])
+
+        def boom(args):
+            raise OSError("git nema")
+
+        out = commit_worker_tree("/repo", "poruka", run=boom)
+        self.assertEqual(out["status"], "failed")
+        self.assertIn("nije dostupan", out["reason"])
+
+
+class CleanlinessOnlyOnTheFirstPhaseTest(unittest.TestCase):
+    """Cistoca je preduvjet POCETKA posla, ne svake faze.
+
+    Popravak 2026-09-13 (`require_clean`) ima cijenu koju treba prikovati: nakon prve faze stablo prlja sam
+    kontroler, pa bi ista provjera oborila pregled VLASTITOG posla. Preostala dva preduvjeta ne smiju pasti
+    s njom, inace gard postane rupa kroz koju se pise u dijeljeno stablo.
+    """
+
+    DIRTY = {("rev-parse", "--git-dir"): "/repo/.git/worktrees/wt",
+             ("rev-parse", "--git-common-dir"): "/repo/.git",
+             ("branch", "--show-current"): "wf/nesto",
+             ("status", "--porcelain"): " M src/ui/app.ts"}
+
+    def guard(self, *, require_clean, **over):
+        table = dict(self.DIRTY)
+        table.update({tuple(k.split(" ")): v for k, v in over.items()})
+        return implementation_worktree_blocked("/repo", git=lambda args: (0, table[tuple(args)]),
+                                               require_clean=require_clean)
+
+    def test_baseline_the_default_still_refuses_a_dirty_tree(self):
+        self.assertIn("nije cisto", self.guard(require_clean=True))
+
+    def test_later_phases_may_see_what_the_implementation_wrote(self):
+        self.assertIsNone(self.guard(require_clean=False))
+
+    def test_dropping_the_cleanliness_check_does_not_drop_the_other_two(self):
+        # MUTACIJA: da `require_clean=False` gasi cijeli gard, ova dva bi presutno prosla.
+        self.assertIn("nije zaseban git worktree", self.guard(require_clean=False,
+                                                              **{"rev-parse --git-dir": "/repo/.git"}))
+        self.assertIn("nije feature grana", self.guard(require_clean=False,
+                                                       **{"branch --show-current": "master"}))
+
+
+class ChangedPathsTest(unittest.TestCase):
+    """Klasifikacija presudjuje po STAZAMA, pa staza mora biti datoteka, ne mapa.
+
+    `git status --porcelain` nov netrackan direktorij sazme u jedan redak (`src/`). Dok kontroler nije sam
+    commitao, to je bio tih detalj; otkako commita i objavljuje, po tom popisu se odlucuje je li promjena
+    `auto_low_risk`, pa bi kontrolna datoteka u novoj mapi prosla neprimijecena.
+    """
+
+    def setUp(self):
+        self.repo = git_repo()
+        os.makedirs(os.path.join(self.repo, "src", "autonomija"))
+        for name in ("a.ts", "b.ts"):
+            with open(os.path.join(self.repo, "src", "autonomija", name), "w", encoding="utf-8") as fh:
+                fh.write("export const x = 1;" + chr(10))
+
+    def test_a_new_untracked_directory_is_listed_file_by_file(self):
+        self.assertEqual(sorted(changed_paths(self.repo)),
+                         ["src/autonomija/a.ts", "src/autonomija/b.ts"])
+
+    def test_without_the_flag_git_collapses_the_directory(self):
+        # KONTROLA nad mehanizmom: ovo je ono sto je popis bio prije popravka, i razlog zasto je flag nuzan.
+        raw = subprocess.run(["git", "status", "--porcelain"], cwd=self.repo, capture_output=True, text=True,
+                             check=False).stdout.split()
+        self.assertEqual(raw, ["??", "src/"])
 
 if __name__ == "__main__":
     unittest.main()

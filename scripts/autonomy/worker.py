@@ -319,13 +319,25 @@ def _git_output(repo: str, args: list[str]) -> tuple[int, str]:
     return out.returncode, out.stdout.strip()
 
 
-def implementation_worktree_blocked(repo: str, *, git=None) -> str | None:
+def implementation_worktree_blocked(repo: str, *, git=None, dedicated: bool = False,
+                                    require_clean: bool = True) -> str | None:
     """Razlog zasto se agent S PRAVOM PISANJA ne smije pokrenuti u `repo`, ili None.
 
-    Ista tri preduvjeta koja `scripts/agents/cli.mjs run --execute` namece rucnom toku: zaseban git worktree,
+    Ista tri preduvjeta koja `scripts/agents/cli.mjs run --execute` namece rucnom toku: vlastito radno stablo,
     feature grana, cisto stablo. Kontroler posao priprema kroz `prepare` (dakle BEZ `--execute`) i providera
     pokrece sam, pa bi bez ove provjere pisao modelom izravno u instalacijski checkout na masteru, koji dijeli
     s ljudskim radom. Do 2026-09-13 se to nije moglo dogoditi samo zato sto `implement` nikad nije bio dostizan.
+
+    `dedicated` je operaterova tvrdnja da je `repo` zaseban radnikov checkout (postavljen `workerRepoPath` koji
+    NIJE stablo iz kojeg kontroler radi). Bez nje se trazi povezan `git worktree`. Ta razlika je popravak
+    krive osi: `--git-dir` naspram `--git-common-dir` odbija i ZASEBAN KLON na feature grani, koji je posve
+    siguran i najprirodniji nacin da se `workerRepoPath` zadovolji.
+
+    `require_clean` vrijedi za PRVU fazu posla, dok u stablu jos nema niceg sto je taj posao napisao. Poslije
+    nje stablo prlja sam kontroler (implementacija pise datoteke), pa bi ista provjera oborila pregled
+    VLASTITOG posla: izmjereno testom `TwoJobsInARowTest`, faza `reviewing` je zavrsavala kao
+    `implement_unsafe: radno stablo nije cisto`. Preostala dva preduvjeta (vlastito stablo, feature grana)
+    vrijede na svakoj fazi, jer se oni tijekom posla ne smiju promijeniti.
     """
     run = git or (lambda args: _git_output(repo, args))
     try:
@@ -339,13 +351,44 @@ def implementation_worktree_blocked(repo: str, *, git=None) -> str | None:
     except (OSError, subprocess.SubprocessError) as exc:
         return f"implement_unsafe: git nije dostupan ({type(exc).__name__})"
     git_dir, common_dir, branch, dirty = values
-    if os.path.realpath(os.path.join(repo, git_dir)) == os.path.realpath(os.path.join(repo, common_dir)):
-        return "implement_unsafe: nije zaseban git worktree"
+    if not dedicated and os.path.realpath(os.path.join(repo, git_dir)) == os.path.realpath(os.path.join(repo, common_dir)):
+        return "implement_unsafe: nije zaseban git worktree ni deklariran workerRepoPath"
     if not branch or branch in ("master", "main"):
         return f"implement_unsafe: {branch or 'odvojena glava'} nije feature grana"
-    if dirty:
+    if dirty and require_clean:
         return "implement_unsafe: radno stablo nije cisto"
     return None
+
+
+WORKER_COMMIT_TRAILER = "Autor izmjene je autonomni kontroler; pregled i merge su odvojeni koraci."
+
+
+def commit_worker_tree(repo: str, message: str, *, run=None) -> dict:
+    """Spremi ono sto je implementacija napisala, kao commit u radnikovu stablu.
+
+    Bez ovoga se kontroler zakljuca poslije TOCNO jednog posla: gard trazi cisto stablo prije implementacije, a
+    nizvodni lanac (klasifikacija, verifikacija, objava) mjeri upravo NECOMMITANE promjene i nista ih nikad ne
+    commita, pa je drugi posao trajno `implement_unsafe: radno stablo nije cisto` (nalaz 2026-09-13). Snimka
+    promjena se zato uzima PRIJE ovog poziva (`DefaultAdapters._snapshot`), a `git push` u izdavacu tek ovime
+    dobiva sadrzaj.
+    """
+    call = run or (lambda args: _git_output(repo, args))
+    try:
+        code, dirty = call(["status", "--porcelain"])
+        if code != 0:
+            return {"status": "failed", "reason": "git status nije uspio"}
+        if not dirty.strip():
+            return {"status": "clean", "reason": "nista za spremiti"}
+        code, out = call(["add", "-A"])
+        if code != 0:
+            return {"status": "failed", "reason": "git add nije uspio"}
+        code, out = call(["commit", "-m", message])
+        if code != 0:
+            return {"status": "failed", "reason": f"git commit nije uspio: {out[:200]}"}
+        code, sha = call(["rev-parse", "HEAD"])
+        return {"status": "committed", "sha": sha if code == 0 else None}
+    except (OSError, subprocess.SubprocessError) as exc:
+        return {"status": "failed", "reason": f"git nije dostupan ({type(exc).__name__})"}
 
 
 def classify_stream(text: str) -> str | None:
@@ -511,7 +554,15 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
 # Snapshot promjena u radnikovu stablu
 # --------------------------------------------------------------------------------------------
 def changed_paths(cwd: str) -> list[str]:
-    out = subprocess.run(["git", "status", "--porcelain", "-z"], cwd=cwd, capture_output=True, text=True, check=False, shell=False)
+    """Promijenjene staze, DATOTEKA PO DATOTEKA.
+
+    `--untracked-files=all` nije kozmetika: bez njega git nov, netrackan DIREKTORIJ sazme u jedan redak
+    (`src/`), pa klasifikacija (`explain_change`) presudjuje po imenu mape i ne vidi ni kontrolnu datoteku ni
+    stazu izvan dopustenih prefiksa u njoj. Izmjereno 2026-09-13 testom `TwoJobsInARowTest`, nakon sto je
+    kontroler prvi put poceo sam commitati ono sto implementacija napise.
+    """
+    out = subprocess.run(["git", "status", "--porcelain", "-z", "--untracked-files=all"], cwd=cwd,
+                         capture_output=True, text=True, check=False, shell=False)
     if out.returncode != 0:
         raise RuntimeError("git status nije uspio")
     paths: list[str] = []

@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "repository": "danielrisavi77-create/Lekta",
   "baseBranch": "master",
+  "workerRepoPath": null,
   "mode": "observe",
   "billingMode": "subscription_only",
   "allowApiBilling": false,

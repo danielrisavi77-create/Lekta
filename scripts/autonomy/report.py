@@ -15,7 +15,7 @@ def _iso(ts: int | None) -> str:
 
 
 def build_status(store, config: dict | None, now: int, last_tick: dict | None = None, doctor: dict | None = None) -> dict:
-    snap = store.snapshot(now)
+    snap = store.snapshot(now, max_attempts=(config or {}).get("maxAttemptsPerTask"))
     warnings: list[str] = []
     if snap["paused"]:
         warnings.append("paused")
@@ -25,7 +25,15 @@ def build_status(store, config: dict | None, now: int, last_tick: dict | None = 
         n = snap["tasksByStatus"].get(status, 0)
         if n:
             warnings.append(f"{status}: {n}")
+    stalled = snap.get("queuedOverAttemptLimit") or []
+    if stalled:
+        # `queued` iznad stropa pokusaja nije red nego tisina: tick ga preskace, a nijedno drugo upozorenje ga
+        # ne pokriva (nalaz 2026-09-13 nad putom `signal_amended`).
+        warnings.append(f"queued iznad stropa pokusaja: {len(stalled)}")
     if doctor:
+        worker_repo = doctor.get("workerRepo") or {}
+        if worker_repo.get("blocked"):
+            warnings.append(f"implementacija blokirana: {worker_repo['blocked']}")
         if not doctor.get("billing", {}).get("allowed"):
             warnings.append("billing_unknown: profil naplate nije potvrdjen, nema modelskih poziva")
         if doctor.get("word", {}).get("available") is False:
@@ -46,6 +54,7 @@ def build_status(store, config: dict | None, now: int, last_tick: dict | None = 
         "lastTick": last_tick,
         "activeTask": {k: snap["activeTask"][k] for k in ("id", "kind", "status", "attempts", "signal_key")} if snap["activeTask"] else None,
         "tasksByStatus": snap["tasksByStatus"],
+        "queuedOverAttemptLimit": [t["id"] for t in stalled],
         "jobsToday": snap["jobsToday"],
         "deploysToday": snap["deploysToday"],
         "lastVerifiedDeployment": snap["lastVerifiedDeployment"],

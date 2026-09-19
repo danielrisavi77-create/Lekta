@@ -24,6 +24,10 @@ ACTIVE_STATUSES = ("planning", "implementing", "reviewing", "verifying", "ready_
 # Stanja koja NE trose implementacijski pokusaj: poziv nije ni poceo (plan 5.2). Za ostale ciljeve pozivatelj
 # to moze tvrditi po slucaju, kroz `refund_attempt` u payloadu `transition()`.
 REFUND_STATUSES = ("waiting_quota", "needs_login")
+# Razlozi zaustavljanja na koje ISPRAVAK SIGNALA doista odgovara. Sve ostalo (`dokaz nepotpun`, `PR ceka
+# ljudski merge`) ceka covjeka iz razloga koji s opsegom signala nema veze, pa buditi zadatak zbog dopisanog
+# `paths` unosa znaci vrtjeti plan->implement->review drugi put za isti posao (nalaz 2026-09-13).
+AMENDABLE_STOP_REASONS = ("no_ready_plan_task",)
 LEASE_RESOURCE = "worker"
 DEFAULT_LEASE_SECONDS = 3 * 3600
 
@@ -248,9 +252,22 @@ class Store:
                                   (scope_json, _dumps(signal), row["id"]))
                 self._event(row["id"], "signal_amended", {"signal_key": key, "scope": signal.get("scope") or {}}, now)
                 if row["status"] == "needs_human":
-                    self.conn.execute("UPDATE tasks SET status = 'queued', next_run_at = ? WHERE id = ? AND status = 'needs_human'",
-                                      (now, row["id"]))
-                    self._event(row["id"], "status:queued", {"from": "needs_human", "reason": "signal_amended"}, now)
+                    stop = self._last_stop_reason(row["id"])
+                    if not str(stop or "").startswith(AMENDABLE_STOP_REASONS):
+                        # Zadatak ceka covjeka iz razloga koji ispravak signala ne rjesava. Bez ovoga bi svaka
+                        # izmjena opsega (a normalizacija ga dopunjuje i sama) probudila i posao koji vec ima
+                        # otvoren PR, pa bi se isti signal implementirao dva puta.
+                        self._event(row["id"], "signal_amended_not_woken", {"stop_reason": stop}, now)
+                        return row["id"]
+                    # Pokusaji se vracaju na nulu: covjek je odgovorio, pa je ovo NOV posao za isti fingerprint.
+                    # Bez toga zadatak sa `attempts` na stropu postane `queued` koji `claim` nikad ne uzme
+                    # (`attempts < max`), a nijedno upozorenje u `report.build_status` ne pokriva `queued`.
+                    self.conn.execute(
+                        "UPDATE tasks SET status = 'queued', attempts = 0, next_run_at = ? WHERE id = ? AND status = 'needs_human'",
+                        (now, row["id"]))
+                    self._event(row["id"], "status:queued",
+                                {"from": "needs_human", "reason": "signal_amended", "stop_reason": stop,
+                                 "attempts_reset": True}, now)
                 return row["id"]
             task_id = str(uuid.uuid4())
             self.conn.execute(
@@ -261,6 +278,18 @@ class Store:
             )
             self._event(task_id, "queued", {"signal_key": key, "kind": signal.get("kind")}, now)
             return task_id
+
+    def _last_stop_reason(self, task_id: str) -> str | None:
+        """Razlog zadnjeg prijelaza u `needs_human`, iz dnevnika dogadaja. Nema novog stupca: dnevnik ga vec nosi."""
+        row = self.conn.execute(
+            "SELECT sanitized_payload FROM events WHERE task_id = ? AND event_type = 'status:needs_human'"
+            " ORDER BY event_id DESC LIMIT 1", (task_id,)).fetchone()
+        if row is None:
+            return None
+        try:
+            return json.loads(row["sanitized_payload"]).get("reason")
+        except (ValueError, TypeError, AttributeError):
+            return None
 
     def get_task(self, task_id: str) -> dict | None:
         row = self.conn.execute("SELECT * FROM tasks WHERE id = ?", (task_id,)).fetchone()
@@ -412,7 +441,7 @@ class Store:
         return dict(row) if row else None
 
     # -- snimka za izvjestaj -----------------------------------------------------------------
-    def snapshot(self, now: int) -> dict:
+    def snapshot(self, now: int, max_attempts: int | None = None) -> dict:
         by_status = {r["status"]: r["n"] for r in self.conn.execute("SELECT status, COUNT(*) AS n FROM tasks GROUP BY status")}
         last_event = self.conn.execute("SELECT * FROM events ORDER BY event_id DESC LIMIT 1").fetchone()
         return {
@@ -420,6 +449,12 @@ class Store:
             "publishFrozen": self.is_frozen(),
             "policyVersion": self.policy_version(),
             "tasksByStatus": by_status,
+            # Zadaci koji su u redu, a `claim` ih vise ne moze uzeti (`attempts < max`). Bez ovoga takav posao
+            # nestane iz svakog upozorenja: `report.build_status` gleda needs_login/waiting_quota/needs_human/
+            # blocked, a `queued` nikad.
+            "queuedOverAttemptLimit": [dict(r) for r in self.conn.execute(
+                "SELECT id, attempts FROM tasks WHERE status = 'queued' AND attempts >= ? ORDER BY created_at",
+                (int(max_attempts),))] if max_attempts is not None else [],
             "activeTask": next((self._task(r) for r in self.conn.execute(
                 f"SELECT * FROM tasks WHERE status IN ({','.join('?' * len(ACTIVE_STATUSES))}) LIMIT 1", ACTIVE_STATUSES)), None),
             "lease": self.lease(),

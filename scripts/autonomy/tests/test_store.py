@@ -295,5 +295,93 @@ class StoreTest(unittest.TestCase):
         self.assertFalse(snap["publishFrozen"])
 
 
+class AmendedSignalWakeupTest(unittest.TestCase):
+    """Ispravak signala budi SAMO zaustavljanje na koje odgovara, i vraca pokusaje na nulu.
+
+    Nalaz 2026-09-13 nad prvom izvedbom ovog puta: budio je svaki `needs_human`, ukljucivo `PR ceka ljudski
+    merge` i `dokaz nepotpun`, a `attempts` nije dirao. Oba kvara imaju cijenu: prvi vrti isti posao drugi
+    put (tri nova poziva modela i drugi push), drugi stvara `queued` zadatak koji `claim` vise ne uzima
+    (`attempts < max`) i koji nestane iz svakog upozorenja, jer `report.build_status` `queued` ne gleda.
+    """
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.dir, "autonomy.sqlite"))
+        self.raw = dict(kind="ci_failure", location="check/ux-gate@master", symptom="ux-gate pada",
+                        source_revision=SHA, observed_at=NOW, scope={"area": "ci"})
+
+    def tearDown(self):
+        self.store.close()
+
+    def stop(self, reason, attempts=1, location=None):
+        """Zadatak koji ceka covjeka iz zadanog razloga, nakon `attempts` pokusaja."""
+        raw = dict(self.raw, location=location) if location else self.raw
+        task_id = self.store.enqueue(normalize_signal(raw), NOW)
+        for n in range(attempts):
+            claimed = self.store.claim("A", NOW + n, max_attempts=9, max_new_per_day=99)
+            self.assertIsNotNone(claimed)
+            target = "needs_human" if n == attempts - 1 else "queued"
+            self.store.transition(task_id, "planning", target, {"reason": reason} if target == "needs_human" else {}, NOW + n)
+        return task_id
+
+    def amend(self, task_id, plan_task="T17", at=NOW + 50, location=None):
+        amended = dict(self.raw, scope={"area": "ci", "planTask": plan_task})
+        if location:
+            amended["location"] = location
+        self.assertEqual(self.store.enqueue(normalize_signal(amended), at), task_id, "isti otisak, isti zadatak")
+        return self.store.get_task(task_id)
+
+    def test_baseline_an_answered_plan_task_wakes_the_task_and_clears_its_attempts(self):
+        task_id = self.stop("no_ready_plan_task: signal nema planTask", attempts=2)
+        self.assertEqual(self.store.get_task(task_id)["attempts"], 2)
+        task = self.amend(task_id)
+        self.assertEqual(task["status"], "queued")
+        self.assertEqual(task["attempts"], 0, "covjek je odgovorio, pa je ovo nov posao za isti otisak")
+        self.assertEqual(task["scope"]["planTask"], "T17")
+        self.assertIsNotNone(self.store.claim("A", NOW + 51, max_attempts=2, max_new_per_day=99),
+                             "bez nule pokusaja bi ovaj claim vratio None i zadatak bi bio trajno nepodizljiv")
+
+    def test_a_task_waiting_for_a_human_merge_is_not_woken_by_a_scope_edit(self):
+        # MUTACIJA: isti mehanizam, drugo zaustavljanje. Bez razlikovanja razloga bi dopisan `paths` unos u
+        # inbox datoteci pokrenuo isti posao drugi put, uz tri nova poziva modela i drugi push.
+        task_id = self.stop("PR ceka ljudski merge")
+        task = self.amend(task_id)
+        self.assertEqual(task["status"], "needs_human", "PR koji ceka covjeka se ne budi ispravkom opsega")
+        self.assertEqual(task["scope"]["planTask"], "T17", "zapis signala se svejedno osvjezava")
+        types = [e["event_type"] for e in self.store.events(task_id)]
+        self.assertEqual(types[-1], "signal_amended_not_woken", types)
+        payload = json.loads(self.store.events(task_id)[-1]["sanitized_payload"])
+        self.assertEqual(payload["stop_reason"], "PR ceka ljudski merge")
+
+    def test_an_incomplete_proof_and_an_unrecorded_reason_are_not_woken_either(self):
+        for n, reason in enumerate(("dokaz nepotpun", "commit_failed: git commit nije uspio", "publisher_not_configured")):
+            with self.subTest(reason=reason):
+                where = f"check/w{n}@master"
+                task_id = self.stop(reason, location=where)
+                self.assertEqual(self.amend(task_id, location=where)["status"], "needs_human")
+        # Zaustavljanje bez zapisanog razloga: fail-safe je NE buditi, jer se razlog ne moze provjeriti.
+        task_id = self.store.enqueue(normalize_signal(dict(self.raw, location="check/drugi@master")), NOW)
+        self.assertEqual(self.store.claim("A", NOW + 1, max_new_per_day=99)["id"], task_id)
+        self.store.transition(task_id, "planning", "needs_human", {}, NOW + 2)
+        amended = dict(self.raw, location="check/drugi@master", scope={"area": "ci", "planTask": "T17"})
+        self.store.enqueue(normalize_signal(amended), NOW + 3)
+        self.assertEqual(self.store.get_task(task_id)["status"], "needs_human")
+
+    def test_snapshot_names_queued_tasks_that_no_claim_can_take(self):
+        task_id = self.stop("no_ready_plan_task: signal nema planTask", attempts=2)
+        self.amend(task_id)
+        # BASELINE: nakon ispravka nema nikoga iznad stropa, jer su pokusaji vraceni na nulu.
+        self.assertEqual(self.store.snapshot(NOW + 60, max_attempts=2)["queuedOverAttemptLimit"], [])
+        # MUTACIJA: isti zadatak vracen u red BEZ nule pokusaja, dakle stanje koje je prva izvedba stvarala.
+        self.store.conn.execute("UPDATE tasks SET attempts = 2 WHERE id = ?", (task_id,))
+        self.store.conn.commit()
+        snap = self.store.snapshot(NOW + 61, max_attempts=2)
+        self.assertEqual([r["id"] for r in snap["queuedOverAttemptLimit"]], [task_id])
+        self.assertIsNone(self.store.claim("A", NOW + 62, max_attempts=2, max_new_per_day=99), "upozorenje mora opisivati STVARNO stanje")
+        self.assertEqual(snap["tasksByStatus"], {"queued": 1}, "brojac po statusu ga i dalje broji kao red")
+        # Bez zadanog stropa (stari pozivatelji) popis je prazan i nista se ne mijenja.
+        self.assertEqual(self.store.snapshot(NOW + 63)["queuedOverAttemptLimit"], [])
+
+
 if __name__ == "__main__":
     unittest.main()
