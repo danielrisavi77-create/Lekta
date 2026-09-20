@@ -46,7 +46,7 @@ export function validateQueue(queue) {
  * Grok (xAI) nema USD budget flag u runneru; headless cesto koristi `XAI_API_KEY` ili `grok login`.
  */
 export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
-export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable']);
+export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'build']);
 
 export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   const billingMode = options.billingMode ?? 'budget';
@@ -84,6 +84,7 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
       '-m', agent.model,
       '--output-format', 'json',
       '--max-turns', '20',
+      '--sandbox', phase === 'implement' ? 'workspace' : 'read-only',
     ];
     if (phase === 'implement') args.push('--always-approve');
   } else {
@@ -141,8 +142,10 @@ export function parseResult(command, stdout, exitCode) {
       if (result == null || typeof result !== 'object' || Array.isArray(result)) {
         return { ok: false, reportedModels: [] };
       }
-      if (result.is_error === true || result.ok === false || result.error != null
-          || result.type === 'error' || result.subtype === 'error') {
+      // The documented contract guarantees one JSON object, but not a stable success schema.
+      // Accept only the explicit result shape observed by this integration; unknown shapes fail closed.
+      if (result.type !== 'result' || result.is_error !== false || result.ok === false
+          || result.error != null || String(result.subtype ?? '').startsWith('error')) {
         return { ok: false, reportedModels: [] };
       }
       const reportedModels = [];
