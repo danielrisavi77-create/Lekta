@@ -230,6 +230,14 @@
    Oznaka se ovdje gradi MJEROM (11px), RAZMAKOM SLOVA i REZOM, a ne pismom. Ako vlasnik odluci
    da ulaz smije nositi treci glas, mijenja se ovaj blok I taj gard, zajedno.
 
+   ODLUKA 2026-09-20 (pregled Z7): mono se NE dodaje, ni kao treci glas ni samo za ove mete. Ulaz
+   `/` ucitava iskljucivo `src/shared/fonts-core.ts` (Inter Tight i Newsreader); IBM Plex Mono zivi
+   u `fonts-document.ts` i ide samo na dokumentne rute. Mono glas ovdje znacio bi jos jedno
+   preuzimanje fonta na PRVOJ stranici proizvoda, pa je odsutnost optimizacija, ne previd. Isto
+   vrijedi za natpis gumba (`.intake-cta` gore). Gardovi: `tests/entry-fonts.test.ts` (lanac
+   selektor -> token -> obitelj -> @font-face) i tvrdnja u `tests/intake-layout.test.ts` da ovaj
+   list uopce ne referencira `var(--mono)`.
+
    SVI OVI ELEMENTI ZIVE UNUTAR `.intake-poziv`, pa nestaju cim dokument legne na papir. Zaglavlje
    koje i dalje tvrdi "Nepregledano" nad dokumentom koji se upravo provjerava bilo bi netocno, a
    pecat bi se natjecao s karticom dokumenta na istom listu. */

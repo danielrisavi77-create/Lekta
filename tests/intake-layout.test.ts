@@ -281,6 +281,15 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
     // `tests/entry-fonts.test.ts`, a ovaj gard cuva da list uopce ne imenuje treci glas.
     expect(bezCssKomentara(CSS), 'mono je natrag na ulazu, bez ucitane obitelji')
       .not.toContain('var(--mono)');
+    // MUTACIJA: podmetnut `var(--mono)` gard mora VIDJETI. Tvrdnja o odsutnosti bez ovoga ne
+    // znaci nista: prosla bi i da detektor gleda krivu datoteku.
+    const sMonoom = CSS.replace('font-family:var(--ui)', 'font-family:var(--mono)');
+    expect(sMonoom, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(CSS);
+    expect(bezCssKomentara(sMonoom), 'gard ne vidi podmetnut mono').toContain('var(--mono)');
+    // KONTROLA SMJERA: spomen u KOMENTARU nije referenca, pa obrazlozenje odluke smije imenovati
+    // token koji se ne koristi (list ga u komentarima spominje vise puta).
+    expect(bezCssKomentara('/* mono bi ovdje bio var(--mono) */.a{font-family:var(--ui)}'))
+      .not.toContain('var(--mono)');
   });
 
   it('MUTACIJA: `Instrument Serif` pada u OBA zapisa, i kao kratica `font:`', () => {
@@ -387,6 +396,60 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
       .toEqual(['position:absolute']);
     // KONTROLA SMJERA: tudji blok s apsolutnim sidrenjem nije nalaz o pecatu.
     expect(pecatBlokovi('.intake-karta{position:absolute}')).toEqual([]);
+  });
+
+  /**
+   * Tijelo pravila za TOCNO zadani selektor (prvi nalaz), bez komentara.
+   *
+   * Usporedjuje se cijeli selektor, ne `includes`: `.intake-foot` i `.intake-footer` bi inace bili
+   * isti nalaz, a to su dva razlicita mjesta (podnozje PAPIRA i podnozje STRANICE).
+   */
+  function blokZa(css: string, selektor: string): string {
+    const pravila = [...bezCssKomentara(css).matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+    const nadjeno = pravila.find((r) => r[1].split(',').map((x) => x.trim()).includes(selektor));
+    return nadjeno ? nadjeno[2] : '';
+  }
+
+  it('zaglavlje je odvojeno HAIRLINEOM, ne vidljivom trakom', () => {
+    expect(blokZa(CSS, '.intake-zaglavlje')).toContain('border-bottom:1px solid var(--paper-line)');
+    // MUTACIJA: deblji i obojeni rub pretvara zaglavlje obrasca u traku sucelja.
+    const deblji = CSS.replace('border-bottom:1px solid var(--paper-line)', 'border-bottom:3px solid var(--red)');
+    expect(deblji, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(CSS);
+    expect(blokZa(deblji, '.intake-zaglavlje'), 'gard ne vidi zamijenjen rub')
+      .not.toContain('border-bottom:1px solid var(--paper-line)');
+    // BASELINE i kontrola smjera: pogadja se tocan selektor, i samo on.
+    expect(blokZa('.intake-zaglavlje{border-bottom:1px solid var(--paper-line)}', '.intake-zaglavlje'))
+      .toContain('1px solid');
+    expect(blokZa(CSS, '.intake-foot'), 'podnozje papira nije zaglavlje').not.toContain('border-bottom');
+    expect(blokZa(CSS, '.nepostojeci-selektor')).toBe('');
+  });
+
+  it('broj lista ima TABULARNE znamenke, pa zamjena 0001 u 0013 ne trzne redak', () => {
+    // Sirina broja je rezervirana u CSS-u: `list-number.ts` ga zamijeni nakon ucitavanja, a bez
+    // tabularnih znamenki bi desna strana zaglavlja skocila u trenutku zamjene.
+    expect(blokZa(CSS, '.intake-list-broj')).toContain('font-variant-numeric:tabular-nums');
+    // MUTACIJA: bez tog svojstva `font-feature-settings` ostaje, pa tvrdnja o njemu ne bi pala.
+    const bezTabularnih = CSS.replace('font-variant-numeric:tabular-nums;', '');
+    expect(bezTabularnih, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(CSS);
+    expect(blokZa(bezTabularnih, '.intake-list-broj'), 'gard ne vidi uklonjene tabularne znamenke')
+      .not.toContain('tabular-nums');
+  });
+
+  it('mete obrasca nose MJERU oznake (--fs-mono-label), jer glas nije na raspolaganju', () => {
+    // Ovo je druga polovica odluke o dva glasa: mono se ne ucitava, pa se oznaka gradi mjerom,
+    // razmakom slova i rezom. Ako mjera odluta, mete prestaju izgledati kao oznake obrasca.
+    for (const selektor of ['.intake-zaglavlje', '.intake-pecat', '.intake-foot', '.intake-korak-br']) {
+      expect(blokZa(CSS, selektor), selektor).toContain('font-size:var(--fs-mono-label)');
+    }
+    // Vrijednost se CITA iz jedinog izvora istine za tokene, ne prepisuje ovdje.
+    expect(read('src/shared/design-system.css')).toContain('--fs-mono-label: 11px');
+    // MUTACIJA: mjera upisana brojem mimo ljestvice (oznaka prestaje pratiti token).
+    const rucnaMjera = CSS.replace('font-weight:600;font-size:var(--fs-mono-label);', 'font-weight:600;font-size:13px;');
+    expect(rucnaMjera, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(CSS);
+    expect(blokZa(rucnaMjera, '.intake-zaglavlje'), 'gard ne vidi mjeru mimo tokena')
+      .not.toContain('font-size:var(--fs-mono-label)');
+    // KONTROLA SMJERA: mutacija pogadja SAMO zaglavlje, ostale mete ostaju na tokenu.
+    expect(blokZa(rucnaMjera, '.intake-pecat')).toContain('font-size:var(--fs-mono-label)');
   });
 });
 
