@@ -706,3 +706,22 @@
 @media (prefers-reduced-motion: reduce) {
   .lekta-repair-ledger-row--target { animation: none; background-color: rgba(26, 122, 84, 0.12); }
 }
+
+/* ==========================================================================
+   Z7 SERIF GOVORI (2026-09-20)
+
+   Zadani glas stranice je mono (`body` u `page-chrome.css`). Serif se zato DODJELJUJE, i to
+   samo onome sto govori: naslovi, presuda, dugi opisi i odlomci, pravni tekst, brojka presude
+   i cijena. Oznake, cipovi, statusi, gumbi, navigacija, mjere i brojevi u tablicama ostaju mono.
+
+   Sve sto je ovdje nabrojano dobiva rez 400, jer Instrument Serif drugi rez nema. Gdje je
+   tezina bila jedini nositelj hijerarhije, zamjenjuje ju kurziv (vidi blok o naglasku).
+   Gard: `tests/design-tokens.test.ts`.
+   ========================================================================== */
+
+.lekta-repair-panel__confirm-box p,
+.lekta-repair-panel__legal-footnote > p,
+.lekta-repair-panel__title-page-form > p,
+.lekta-repair-panel__title-page-warnings p,
+.lekta-repair-text > p,
+.lekta-repair-text__preview li { font-family: var(--display-serif); font-weight: 400; }

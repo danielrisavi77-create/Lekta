@@ -288,3 +288,19 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--ui);overfl
    citat.html: 3 cvora. Stranica koja `--mono` ne ucitava svejedno zavrsi na `ui-monospace`, sto je
    tocno ono sto je i prije bilo, pa ovo nigdje ne moze biti nazadak. */
 code,kbd,samp{font-family:var(--mono)}
+
+/* ==========================================================================
+   Z7 SERIF GOVORI (2026-09-20)
+
+   Zadani glas stranice je mono (`body` u `page-chrome.css`). Serif se zato DODJELJUJE, i to
+   samo onome sto govori: naslovi, presuda, dugi opisi i odlomci, pravni tekst, brojka presude
+   i cijena. Oznake, cipovi, statusi, gumbi, navigacija, mjere i brojevi u tablicama ostaju mono.
+
+   Sve sto je ovdje nabrojano dobiva rez 400, jer Instrument Serif drugi rez nema. Gdje je
+   tezina bila jedini nositelj hijerarhije, zamjenjuje ju kurziv (vidi blok o naglasku).
+   Gard: `tests/design-tokens.test.ts`.
+   ========================================================================== */
+
+.cta p,
+.tools-grid .tool-card p,
+.lekta-consent-banner p{font-family:var(--display-serif);font-weight:400}

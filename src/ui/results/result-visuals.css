@@ -1125,3 +1125,23 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .mt-status { font-size: .85rem; margin: .3rem 0; }
 .mt-zadatak[data-verification="formal-check-passed"] .mt-strojno { color: var(--ck-green-text, #1a7f5a); }
 .mt-prijedlog { font-size: .85rem; }
+
+/* ==========================================================================
+   Z7 SERIF GOVORI (2026-09-20)
+
+   Zadani glas stranice je mono (`body` u `page-chrome.css`). Serif se zato DODJELJUJE, i to
+   samo onome sto govori: naslovi, presuda, dugi opisi i odlomci, pravni tekst, brojka presude
+   i cijena. Oznake, cipovi, statusi, gumbi, navigacija, mjere i brojevi u tablicama ostaju mono.
+
+   Sve sto je ovdje nabrojano dobiva rez 400, jer Instrument Serif drugi rez nema. Gdje je
+   tezina bila jedini nositelj hijerarhije, zamjenjuje ju kurziv (vidi blok o naglasku).
+   Gard: `tests/design-tokens.test.ts`.
+   ========================================================================== */
+
+.cockpit-header p,
+.cockpit-hero__copy p,
+.cockpit-authority p,
+.cockpit-finding__answer p,
+.result-renderer-v1 .result-cockpit-advanced-head p,
+.rs--pitanje p,
+.outlook__manual li { font-family: var(--display-serif, Georgia, serif); font-weight: 400; }

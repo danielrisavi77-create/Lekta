@@ -1553,3 +1553,61 @@ a.mw-item-name:hover{text-decoration:underline}
   /* Na uskom zaslonu list uzima cijelu sirinu: bocni list od 560 px ondje nije list nego zaslon. */
   .modal--sheet{width:100vw}
 }
+
+/* ==========================================================================
+   Z7 SERIF GOVORI (2026-09-20)
+
+   Zadani glas stranice je mono (`body` u `page-chrome.css`). Serif se zato DODJELJUJE, i to
+   samo onome sto govori: naslovi, presuda, dugi opisi i odlomci, pravni tekst, brojka presude
+   i cijena. Oznake, cipovi, statusi, gumbi, navigacija, mjere i brojevi u tablicama ostaju mono.
+
+   Sve sto je ovdje nabrojano dobiva rez 400, jer Instrument Serif drugi rez nema. Gdje je
+   tezina bila jedini nositelj hijerarhije, zamjenjuje ju kurziv (vidi blok o naglasku).
+   Gard: `tests/design-tokens.test.ts`.
+   ========================================================================== */
+
+/* Odlomci i duga objasnjenja */
+.hero-copy>p,
+.section-head p,
+.step-card p,
+.check-card p,
+.analyzer-header p,
+.dropzone p,#dropzone p,#dropEmpty p,
+.progress-view p,
+.result-main>p,
+.issue p,
+.action-column>p,.action-item p,
+.gate-hero p,
+.legal-engine-head p,
+.deadline-board-head p,.deadline-card p,
+.history-card p,
+.validation-card p,.validation-card ul,
+.repair-entry p,
+.phase-item p,
+.qa-row p,
+.submission-item p,
+.lock-panel p,
+.handoff-strip p,
+.result-trust__body p,
+.finding-card>p,.finding-evidence p,
+.analyze-profile .ap-warn p,
+.cta p,
+.consent-banner p,
+.faq p,#faq .faq p,
+.sec-acc-desc,
+.profile-note,.subtle-help,.work-support,.methodology-help,
+.scoring-change-note,.setup-note,.department-note,.legal-engine-note,
+.preflight-note,.methodology-missing,
+.action-empty,.empty,
+.a4-page p,.ks-doc-paper p,
+.ks-cta p,.ks-tvrdnja p,.ks-koment p{font-family:var(--display-serif);font-weight:400}
+
+/* Pravni tekst (GDPR modali): cijeli blok je proza, ne samo naslovi */
+.legal-content,.legal-content p,.legal-content li{font-family:var(--display-serif);font-weight:400}
+
+/* Brojka presude u prstenu i natpis uz nju */
+.score-ring b{font-family:var(--display-serif);font-weight:400}
+
+/* Tekstualne veze unutar proze: serif u kurzivu, jer serif nema rez kojim bi se isticale */
+.legal-link,.consent-row a,.source-line a,.validation-source a,
+.result-trust__body a{font-family:var(--display-serif);font-weight:400;font-style:italic}
