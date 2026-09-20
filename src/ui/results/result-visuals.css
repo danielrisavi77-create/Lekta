@@ -851,7 +851,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   display: grid; grid-template-columns: 1.6rem 1fr; align-items: baseline; gap: .5rem;
   font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
 }
-.fsum-razina b { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right }
+.fsum-razina b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; text-align: right }
 .fsum-razina[data-ton='blok'] b { color: var(--red-deep, #8E2A22) }
 .fsum-razina[data-ton='dorada'] b { color: var(--warn, #A9741B) }
 .fsum-razina[data-ton='provjera'] b { color: var(--paper-muted, #6E6558) }
@@ -864,7 +864,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
 }
 .fsum-auto span { color: var(--paper-muted, #6E6558); font-size: 13px }
-.fsum-auto b { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F) }
+.fsum-auto b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F) }
 
 /* Ocjena: broj, kosa crta, natpis. Bez prstena, bez tamne plohe, bez halo sjaja. */
 .fsum-ocjena {
