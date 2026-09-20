@@ -212,20 +212,25 @@
   display: grid;
   gap: 10px;
 }
-/* Pecat stoji UZ ukupno, nikad preko teksta (Z11). */
+/*
+ * Pecat stoji UZ ukupno, nikad preko teksta (Z11). VIDLJIV je citacu ekrana (bez aria-hidden u
+ * JS-u), jer je jedini nositelj tvrdnje "ponovna provjera prije preuzimanja"; zato tekst mora
+ * proci AA (>=4.5) i na `--paper` i na `--paper-2`, u obje teme. `--pass` (okvir) na papiru ne
+ * prolazi za TEKST, pa boja teksta ide preko `--ok-on-soft`, tamnijeg para vec izmjerenog za
+ * papirnate podloge (tests/a11y-batch-2026-07-18.test.ts). Okvir smije ostati `--pass`.
+ */
 .pr-stamp {
   justify-self: start;
   padding: 6px 10px;
   border: 2px solid var(--pass);
   border-radius: 2px;
-  color: var(--pass);
-  font-size: 9px;
+  color: var(--ok-on-soft);
+  font-size: 11px;
   letter-spacing: .12em;
   text-transform: uppercase;
   line-height: 1.4;
   text-align: center;
   transform: rotate(-4deg);
-  opacity: .85;
 }
 .pr-total-amount {
   font-family: var(--display-serif);
@@ -259,9 +264,15 @@
   background: var(--red-deep);
   color: var(--paper);
 }
+/*
+ * Onemogucen gumb je i dalje tekst korisnik treba procitati (repo pravilo: priguseni gumb je uvijek
+ * kvar). `--paper-muted` na `--paper-line` mjeri 3,84:1, ispod AA. Najtamnija stvarna podloga je
+ * `--paper-2`, pa tekst ide u punoj tinti (`--paper-ink`) na njoj, bez opacityja.
+ */
 .pr-btn--soon {
-  background: var(--paper-line);
-  color: var(--paper-muted);
+  background: var(--paper-2);
+  color: var(--paper-ink);
+  border: 1px solid var(--paper-line);
   cursor: not-allowed;
 }
 .pr-btn:focus-visible {

@@ -7,9 +7,12 @@
  * mjestu gdje korisnik cijenu prvi put vidi.
  *
  * MODUL NEMA VLASTITE TEKSTOVE O CIJENI. Svi natpisi i sva formatiranja iznosa dolaze iz
- * `src/report/pricing.ts`, koji je jedini izvor. To nije stil nego gard: `tests/pricing-receipt.test.ts`
- * pada ako se u ovoj datoteci pojavi iznos kao literal, jer bi to bio novi izvor cijene u nastajanju,
- * a upravo je to bio kvar koji Z11 zatvara (tri izvora, tri razlicite cijene).
+ * `src/report/pricing.ts`, koji je jedini izvor NATPISA i ZADANIH iznosa. To nije stil nego gard:
+ * `tests/pricing-receipt.test.ts` pada ako se u ovoj datoteci pojavi iznos kao literal, jer bi to bio
+ * novi izvor cijene u nastajanju, a upravo je to bio kvar koji Z11 zatvara (tri izvora, tri razlicite
+ * cijene). ZIVA cijena na checkoutu smije doci iz products kataloga u bazi (`options.priceEur`):
+ * to nije novi izvor natpisa, samo primljen broj; `/saznaj-vise/` katalog nema, pa ondje racun pada
+ * na zadanu cijenu iz `WORK_TYPE_TIERS`.
  *
  * OVISNOSTI SU NAMJERNO PLITKE: cijene, tokeni i TIP plana. Plan se uvozi samo kao tip, pa se u
  * izvodjenju ne povlaci nista iz analizatora i racun se moze crtati na stranici koja analizator
@@ -64,6 +67,14 @@ export interface PricingReceiptOptions {
   readonly fileName?: string | null;
   /** Stvarni plan popravka iz analize; kad ga nema, opseg je opceniti popis. */
   readonly plan?: PricingReceiptPlan | null;
+  /**
+   * Ziva maloprodajna cijena s checkouta (`livePriceEur` u app.ts, iz products kataloga u bazi).
+   * Kad nije zadana, racun pada natrag na `WORK_TYPE_TIERS[workType].priceEur` iz `src/report/pricing.ts`
+   * (zadana cijena; koristi je npr. `/saznaj-vise/`, koja katalog nema). `pricing.ts` ostaje jedini
+   * izvor NATPISA i ZADANIH iznosa; ziva cijena na checkoutu smije doci iz kataloga, ne mijenja
+   * natpise ni format.
+   */
+  readonly priceEur?: number;
   /** Je li placeni sloj ziv. Neziv znaci gumb "Uskoro", nikad ponuda koja ne radi. */
   readonly live: boolean;
   /**
@@ -104,15 +115,40 @@ function el<K extends keyof HTMLElementTagNameMap>(
  *
  * Mjera uz redak je "zahvat", nikad cijena: cijena po komadu je upravo ono sto ovaj proizvod ne
  * naplacuje, pa je ne smije ni napisati.
+ *
+ * STVARNO STANJE PLANA (Z11): kad plan postoji, racun ne smije crtati `opsegOpci` kao da je
+ * izmjereno na ovom radu, ni kad je `sigurni` prazan. Ako plan nema NIJEDAN siguran zahvat, redak
+ * je istinita recenica (`opsegBezSigurnih`), ne opceniti popis; u oba slucaja racun uz imenovane
+ * zahvate ispisuje i broj sigurnih/odluka/rucnih, jer je to stvarno stanje tog rada.
  */
 function opsegRedci(plan: PricingReceiptPlan | null, windowDays: number): PricingScopeRow[] {
-  const iz_plana = (plan?.sigurni ?? []).slice(0, MAX_IMENOVANIH_ZAHVATA).map((stavka) => ({
-    label: stavka.prije && stavka.poslije
-      ? `${stavka.label} ${stavka.prije} → ${stavka.poslije}`
-      : stavka.label,
-    value: PRICING_COPY.opsegZahvat,
-  }));
-  const redci: PricingScopeRow[] = iz_plana.length > 0 ? iz_plana : [...PRICING_COPY.opsegOpci];
+  const redci: PricingScopeRow[] = [];
+  if (plan) {
+    const sigurni = plan.sigurni ?? [];
+    if (sigurni.length > 0) {
+      const imenovani = sigurni.slice(0, MAX_IMENOVANIH_ZAHVATA).map((stavka) => ({
+        label: stavka.prije && stavka.poslije
+          ? `${stavka.label} ${stavka.prije} → ${stavka.poslije}`
+          : stavka.label,
+        value: PRICING_COPY.opsegZahvat,
+      }));
+      redci.push(...imenovani);
+      if (sigurni.length > MAX_IMENOVANIH_ZAHVATA) {
+        redci.push({ label: `${PRICING_COPY.opsegJos} ${sigurni.length - MAX_IMENOVANIH_ZAHVATA}`, value: '' });
+      }
+      redci.push({ label: PRICING_COPY.opsegBrojSigurnih, value: String(sigurni.length) });
+    } else {
+      redci.push({ label: PRICING_COPY.opsegBezSigurnih, value: '' });
+    }
+    if ((plan.odluka ?? []).length > 0) {
+      redci.push({ label: PRICING_COPY.opsegBrojOdluka, value: String(plan.odluka.length) });
+    }
+    if ((plan.rucni ?? []).length > 0) {
+      redci.push({ label: PRICING_COPY.opsegBrojRucnih, value: String(plan.rucni.length) });
+    }
+  } else {
+    redci.push(...PRICING_COPY.opsegOpci);
+  }
   redci.push(PRICING_COPY.opsegIzvjestaj);
   redci.push({
     label: PRICING_COPY.opsegPonovneProvjere,
@@ -213,13 +249,13 @@ export function renderPricingReceipt(
 
   let opsegElement = opsegBlok(opsegRedci(options.plan ?? null, WORK_TYPE_TIERS[vrstaRada].windowDays));
 
-  // Ukupno + pecat. Pecat stoji UZ ukupno, ne preko teksta (Z11), i nosi ga aria-hidden jer je
-  // ponavljanje tvrdnje koju racun vec pise rijecima.
+  // Ukupno + pecat. Pecat stoji UZ ukupno, ne preko teksta (Z11). BEZ aria-hidden: pecat je JEDINI
+  // nositelj tvrdnje "ponovna provjera prije preuzimanja" (opseg dolje pise "ponovne provjere
+  // nakon ispravka", sto nije ista tvrdnja), pa citac ekrana mora doprijeti do njega.
   const ukupnoRed = el('div', 'pr-total');
   const ukupnoLijevo = el('span', 'pr-total-left');
   ukupnoLijevo.append(el('span', 'pr-eyebrow', PRICING_COPY.ukupnoNaslov));
   const pecat = el('span', 'pr-stamp');
-  pecat.setAttribute('aria-hidden', 'true');
   PRICING_COPY.pecat.forEach((redak, i) => {
     if (i > 0) pecat.append(el('br'));
     pecat.append(document.createTextNode(redak));
@@ -243,12 +279,15 @@ export function renderPricingReceipt(
 
   function osvjezi(): void {
     const tier = WORK_TYPE_TIERS[vrstaRada];
+    // Ziva cijena (options.priceEur) nadjacava zadanu iz WORK_TYPE_TIERS kad je zadana; vidi
+    // biljesku uz `priceEur` u PricingReceiptOptions.
+    const cijena = options.priceEur ?? tier.priceEur;
     placenaNapomena.textContent = `${tier.label} · ${PRICING_COPY.placenaStavkaNapomena}`;
-    placeniIznos.textContent = formatEurAmount(tier.priceEur);
+    placeniIznos.textContent = formatEurAmount(cijena);
 
-    // Ukupno je tier ILI nula. Broj zahvata se u ovoj aritmetici ne pojavljuje, i to je cijeli
+    // Ukupno je cijena ILI nula. Broj zahvata se u ovoj aritmetici ne pojavljuje, i to je cijeli
     // ugovor ovog racuna.
-    ukupnoIznos.textContent = formatEurPrice(popravakUkljucen ? tier.priceEur : 0);
+    ukupnoIznos.textContent = formatEurPrice(popravakUkljucen ? cijena : 0);
 
     const noviOpseg = opsegBlok(opsegRedci(options.plan ?? null, tier.windowDays));
     opsegElement.replaceWith(noviOpseg);
@@ -265,7 +304,7 @@ export function renderPricingReceipt(
       return;
     }
     const natpis = popravakUkljucen
-      ? `${PRICING_COPY.ctaPopravi} ${formatEurPrice(tier.priceEur)}`
+      ? `${PRICING_COPY.ctaPopravi} ${formatEurPrice(cijena)}`
       : PRICING_COPY.ctaBesplatno;
     const cta = options.cta as Partial<{ href: string; onClick: (s: PricingReceiptCtaState) => void }>;
 
@@ -284,7 +323,7 @@ export function renderPricingReceipt(
       gumb.addEventListener('click', () => rukovatelj({
         workType: vrstaRada,
         repairSelected: popravakUkljucen,
-        totalEur: popravakUkljucen ? tier.priceEur : 0,
+        totalEur: popravakUkljucen ? cijena : 0,
       }));
       ctaBlok.append(gumb);
       return;
@@ -318,7 +357,7 @@ export function renderPricingReceipt(
   return {
     element: omot,
     repairSelected: () => popravakUkljucen,
-    totalEur: () => (popravakUkljucen ? WORK_TYPE_TIERS[vrstaRada].priceEur : 0),
+    totalEur: () => (popravakUkljucen ? (options.priceEur ?? WORK_TYPE_TIERS[vrstaRada].priceEur) : 0),
     workType: () => vrstaRada,
     setWorkType: (workType: ReportWorkType) => {
       vrstaRada = workType;
