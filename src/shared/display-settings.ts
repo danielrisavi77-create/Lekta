@@ -30,27 +30,24 @@ import { suprotnaTema, tamnoNaEkranu } from './display-prefs';
 
 export type Osvjetljenje = 'dark' | 'light' | 'system';
 export type PismoZaCitanje = 'default' | 'serif' | 'sans' | 'dyslexic';
-export type VelicinaTeksta = 's' | 'm' | 'l';
 export type Kontrast = 'normal' | 'high';
 export type Pokret = 'auto' | 'reduce';
 
 export interface DisplaySettings {
   readonly readingFont: PismoZaCitanje;
-  readonly textSize: VelicinaTeksta;
   readonly contrast: Kontrast;
   readonly motion: Pokret;
 }
 
-/** Zadano stanje proizvoda: radna lampa, Newsreader, 16 px, bez pojacanja i bez prigusenja pokreta. */
+/** Zadano stanje proizvoda: radna lampa, Newsreader, bez pojacanja i bez prigusenja pokreta. */
 export const ZADANO_OSVJETLJENJE: Osvjetljenje = 'dark';
 export const ZADANE_POSTAVKE: DisplaySettings = {
-  readingFont: 'default', textSize: 'm', contrast: 'normal', motion: 'auto',
+  readingFont: 'default', contrast: 'normal', motion: 'auto',
 };
 
 const THEME_STORAGE_KEY = 'lekta.theme';
 const OSVJETLJENJA: readonly Osvjetljenje[] = ['dark', 'light', 'system'];
 const PISMA: readonly PismoZaCitanje[] = ['default', 'serif', 'sans', 'dyslexic'];
-const VELICINE: readonly VelicinaTeksta[] = ['s', 'm', 'l'];
 
 function jedanOd<T extends string>(dopusteni: readonly T[], vrijednost: unknown, zadano: T): T {
   return typeof vrijednost === 'string' && (dopusteni as readonly string[]).includes(vrijednost)
@@ -69,7 +66,9 @@ export function normalizeDisplaySettings(sirovo: unknown): DisplaySettings {
   const zapis = (typeof sirovo === 'object' && sirovo !== null ? sirovo : {}) as Record<string, unknown>;
   return {
     readingFont: jedanOd(PISMA, zapis.readingFont, ZADANE_POSTAVKE.readingFont),
-    textSize: jedanOd(VELICINE, zapis.textSize, ZADANE_POSTAVKE.textSize),
+    // `textSize` (stari zapis) se OVDJE NAMJERNO NE CITA: kontrola je uklonjena (Z7 pregled,
+    // 2026-09-20), pa i stari `{"textSize":"l"}` zapis mora tiho proci, bez iznimke i bez traga
+    // na `<html>`. Vidi biljesku uz uklonjeno mjesto u panelu, nize u ovoj datoteci.
     contrast: zapis.contrast === 'high' ? 'high' : 'normal',
     motion: zapis.motion === 'reduce' ? 'reduce' : 'auto',
   };
@@ -108,8 +107,8 @@ export function writeOsvjetljenje(osvjetljenje: Osvjetljenje): void {
  * Zadana vrijednost NE upisuje atribut, nego ga uklanja.
  *
  * Time `<html>` bez atributa znaci tocno "zadano", pa CSS ne treba pisati pravilo za zadani slucaj,
- * a `system` moze pustiti `prefers-color-scheme` da odluci. Pisanje `data-text-size="m"` bi radilo
- * jednako, ali bi ostavilo trag koji netko procita kao izbor, a nije.
+ * a `system` moze pustiti `prefers-color-scheme` da odluci. Pisanje `data-reading-font="default"`
+ * bi radilo jednako, ali bi ostavilo trag koji netko procita kao izbor, a nije.
  */
 function postavi(korijen: HTMLElement, atribut: string, vrijednost: string | null): void {
   if (vrijednost === null) korijen.removeAttribute(atribut);
@@ -143,7 +142,6 @@ export function applyOsvjetljenje(doc: Document, osvjetljenje: Osvjetljenje): vo
 export function applyDisplaySettings(doc: Document, postavke: DisplaySettings): void {
   const korijen = doc.documentElement;
   postavi(korijen, 'data-reading-font', postavke.readingFont === 'default' ? null : postavke.readingFont);
-  postavi(korijen, 'data-text-size', postavke.textSize === 'm' ? null : postavke.textSize);
   postavi(korijen, 'data-contrast', postavke.contrast === 'high' ? 'high' : null);
   postavi(korijen, 'data-motion', postavke.motion === 'reduce' ? 'reduce' : null);
 }
@@ -279,11 +277,14 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   }
   pismoBlok.append(pismoOznaka, pismo);
 
-  const velicina = segmenti<VelicinaTeksta>(doc, 'lektaVelicina', 'Veličina teksta', null, [
-    { value: 's', label: 'A', opis: 'Manje' },
-    { value: 'm', label: 'A', opis: 'Uobičajeno' },
-    { value: 'l', label: 'A', opis: 'Veće' },
-  ], 'ps-seg--velicina');
+  // KONTROLA "VELICINA TEKSTA" JE UKLONJENA (Z7 pregled, 2026-09-20), NE PROSIRENA.
+  //
+  // Mijenjala je samo KORIJENSKU velicinu (`html:root[data-text-size]`, 15/16/18 px), a
+  // tipografija radne povrsine je gotovo sva u px (`page-app.css`), ne u `rem`: korijen se
+  // pomakne, uzorak u panelu se vidno promijeni, a stvarni rad jedva. Kontrola koja ne mijenja
+  // nista je gora od one koje nema, jer korisnik vjeruje da je nesto promijenio (ista mjera kao
+  // uz izostavljenu gustocu, gore u ovoj datoteci). VRATI OVDJE kad `page-app.css` prijede na
+  // `rem` ljestvicu (Z5 `--fs-*`); dotad se ni pohrana ni pre-paint skripta ne dotice polja.
 
   const kontrast = preklopka(doc, 'lektaKontrast', 'Pojačan kontrast',
     'Tamnija tinta na papiru i izraženije linije, bez prigušenog teksta.');
@@ -299,7 +300,7 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   );
   primjer.append(uzorak);
 
-  tijelo.append(svjetlo.blok, pismoBlok, velicina.blok, kontrast.blok, pokret.blok, primjer);
+  tijelo.append(svjetlo.blok, pismoBlok, kontrast.blok, pokret.blok, primjer);
 
   const noga = el(doc, 'div', 'ps__foot');
   const vrati = el(doc, 'button', 'ps__reset', 'Vrati zadano');
@@ -312,7 +313,6 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   /** Sucelje uvijek pokazuje STANJE, nikad zadnji klik: jedan pisac, jedan citac. */
   const osvjezi = (): void => {
     for (const [vrijednost, unos] of svjetlo.unosi) unos.checked = vrijednost === osvjetljenje;
-    for (const [vrijednost, unos] of velicina.unosi) unos.checked = vrijednost === postavke.textSize;
     pismo.value = postavke.readingFont;
     kontrast.unos.checked = postavke.contrast === 'high';
     pokret.unos.checked = postavke.motion === 'reduce';
@@ -334,9 +334,6 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
 
   for (const [vrijednost, unos] of svjetlo.unosi) {
     unos.addEventListener('change', () => { if (unos.checked) spremiOsvjetljenje(vrijednost); }, { signal });
-  }
-  for (const [vrijednost, unos] of velicina.unosi) {
-    unos.addEventListener('change', () => { if (unos.checked) spremiPostavke({ textSize: vrijednost }); }, { signal });
   }
   pismo.addEventListener('change', () => {
     spremiPostavke({ readingFont: jedanOd(PISMA, pismo.value, 'default') });

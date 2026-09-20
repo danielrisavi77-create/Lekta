@@ -17,7 +17,7 @@ import './premium.css'; // Korektorski stol+: dubina, vizualizacije i lagani 3D 
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 // UCINAK POSTAVKI PRIKAZA (Z6) IDE OVDJE, NE UZ PANEL. Pre-paint skripta u <head> upisuje
-// `data-reading-font`, `data-text-size`, `data-contrast` i `data-motion` na SVAKOJ stranici, pa
+// `data-reading-font`, `data-contrast` i `data-motion` na SVAKOJ stranici, pa
 // bi bez ovog uvoza ti atributi na rutama koje panel ne montiraju (/saznaj-vise/, /moji-radovi/,
 // alat-stranice preko page-boot) stajali MRTVI: postavka koju je korisnik izabrao na `/` ondje ne
 // bi radila nista. Sam panel (JS) i dalje zivi samo na `/` i `/rad/`; ovdje ide iskljucivo stil.

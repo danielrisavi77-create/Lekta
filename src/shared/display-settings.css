@@ -33,10 +33,11 @@ html:root[data-reading-font="dyslexic"] {
   --display-serif: "OpenDyslexic", "Atkinson Hyperlegible", var(--ui);
 }
 
-/* Velicina teksta: korijenska velicina, pa se cijela `rem` ljestvica (Z5 `--fs-*`) pomakne s njom.
-   `m` nema pravilo jer nema ni atribut: 16 px je korijen preglednika. */
-html:root[data-text-size="s"] { font-size: 15px; }
-html:root[data-text-size="l"] { font-size: 18px; }
+/* KONTROLA "VELICINA TEKSTA" JE UKLONJENA (Z7 pregled, 2026-09-20), s njom i njezin selektor nad
+   korijenom. Mijenjala je samo korijensku velicinu (bila 15/16/18 px), a tipografija radne
+   povrsine je gotovo sva u px (`page-app.css`), ne u `rem` (Z5 `--fs-*`): korijen se pomakne,
+   uzorak u panelu se vidno promijeni, a stvarni rad jedva. VRATI OVDJE kad `page-app.css`
+   prijede na `rem`. */
 
 /* Pojacan kontrast. SELEKTOR JE NAMJERNO PONOVLJEN (`[data-contrast="high"][data-contrast]`), i to
    je izmjereno, ne stilski. Triple je (id, klasa/atribut/pseudo-klasa, element):
@@ -242,16 +243,6 @@ html:root[data-motion="reduce"] *::after {
 .ps-seg__unos:focus-visible + .ps-seg__tekst {
   box-shadow: var(--focus);
 }
-
-/* Velicine se pokazuju SOBOM: tri koraka nose tri velicine istog slova. */
-.ps-seg--velicina .ps-seg__tekst {
-  font-family: var(--display-serif);
-  font-weight: 500;
-}
-
-.ps-seg--velicina .ps-seg__opcija:nth-child(1) .ps-seg__tekst { font-size: .85rem; }
-.ps-seg--velicina .ps-seg__opcija:nth-child(2) .ps-seg__tekst { font-size: 1rem; }
-.ps-seg--velicina .ps-seg__opcija:nth-child(3) .ps-seg__tekst { font-size: 1.2rem; }
 
 .ps-select {
   min-height: 40px;

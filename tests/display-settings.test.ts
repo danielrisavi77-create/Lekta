@@ -91,7 +91,7 @@ let vratiSustav: (() => void) | null = null;
 
 beforeEach(() => {
   localStorage.clear();
-  for (const atribut of ['data-theme', 'data-reading-font', 'data-text-size', 'data-contrast', 'data-motion']) {
+  for (const atribut of ['data-theme', 'data-reading-font', 'data-contrast', 'data-motion']) {
     document.documentElement.removeAttribute(atribut);
   }
 });
@@ -109,11 +109,17 @@ describe('Z6 postavke prikaza: normalizacija', () => {
     expect(normalizeDisplaySettings(null)).toEqual(ZADANE_POSTAVKE);
     expect(normalizeDisplaySettings('nije objekt')).toEqual(ZADANE_POSTAVKE);
     expect(normalizeDisplaySettings(42)).toEqual(ZADANE_POSTAVKE);
-    expect(normalizeDisplaySettings({ readingFont: 'comic', textSize: 'xxl', contrast: 1, motion: [] }))
+    expect(normalizeDisplaySettings({ readingFont: 'comic', contrast: 1, motion: [] }))
       .toEqual(ZADANE_POSTAVKE);
-    // Djelomican zapis zadrzava ono sto je valjano i dopunjuje ostalo.
-    expect(normalizeDisplaySettings({ textSize: 'l' }))
-      .toEqual({ ...ZADANE_POSTAVKE, textSize: 'l' });
+  });
+
+  // Z7: kontrola "Velicina teksta" je uklonjena. STARI zapis koji jos nosi `textSize` (od
+  // korisnika koji ga je izabrao prije uklanjanja) mora tiho proci: bez iznimke i bez tog polja
+  // u normaliziranom rezultatu, jer normalizeDisplaySettings ga vise ne cita.
+  it('stari zapis s `textSize` se IGNORIRA: ne baca i ne ostavlja polje u rezultatu', () => {
+    expect(normalizeDisplaySettings({ textSize: 'l' })).toEqual(ZADANE_POSTAVKE);
+    expect(normalizeDisplaySettings({ textSize: 'l' })).not.toHaveProperty('textSize');
+    expect(() => normalizeDisplaySettings({ textSize: 'l' })).not.toThrow();
   });
 
   it('MUTACIJA: pokvaren JSON u localStorage ne baca nego pada na zadano', () => {
@@ -135,12 +141,14 @@ describe('Z6 postavke prikaza: normalizacija', () => {
 
 describe('Z6 postavke prikaza: atributi na <html>', () => {
   it('ZADANA vrijednost UKLANJA atribut, ne upisuje ga', () => {
-    applyDisplaySettings(document, { readingFont: 'serif', textSize: 'l', contrast: 'high', motion: 'reduce' });
+    applyDisplaySettings(document, { readingFont: 'serif', contrast: 'high', motion: 'reduce' });
     applyDisplaySettings(document, ZADANE_POSTAVKE);
     const korijen = document.documentElement;
-    for (const atribut of ['data-reading-font', 'data-text-size', 'data-contrast', 'data-motion']) {
+    for (const atribut of ['data-reading-font', 'data-contrast', 'data-motion']) {
       expect(korijen.hasAttribute(atribut), atribut).toBe(false);
     }
+    // Kontrola je uklonjena: `applyDisplaySettings` vise ne smije postaviti `data-text-size`.
+    expect(korijen.hasAttribute('data-text-size')).toBe(false);
   });
 
   it('`system` UKLANJA data-theme, dark i light ga postavljaju', () => {
@@ -167,9 +175,6 @@ describe('Z6 postavke prikaza: panel', () => {
     pismo.dispatchEvent(new Event('change', { bubbles: true }));
     expect(korijen.getAttribute('data-reading-font')).toBe('dyslexic');
 
-    izaberi(radio('lektaVelicina', 'l'));
-    expect(korijen.getAttribute('data-text-size')).toBe('l');
-
     const kontrast = document.getElementById('lektaKontrast') as HTMLInputElement;
     kontrast.checked = true;
     kontrast.dispatchEvent(new Event('change', { bubbles: true }));
@@ -180,31 +185,44 @@ describe('Z6 postavke prikaza: panel', () => {
     pokret.dispatchEvent(new Event('change', { bubbles: true }));
     expect(korijen.getAttribute('data-motion')).toBe('reduce');
 
-    // JEDAN JSON, cetiri polja; tema u njemu NE zivi (pre-paint je cita sirovu).
+    // JEDAN JSON, tri polja; tema u njemu NE zivi (pre-paint je cita sirovu).
     expect(spremljeno()).toEqual({
-      readingFont: 'dyslexic', textSize: 'l', contrast: 'high', motion: 'reduce',
+      readingFont: 'dyslexic', contrast: 'high', motion: 'reduce',
     });
     expect(Object.keys(spremljeno())).not.toContain('theme');
+    expect(Object.keys(spremljeno())).not.toContain('textSize');
+  });
+
+  it('kontrola "Velicina teksta" je uklonjena: nema radio grupe lektaVelicina u panelu', () => {
+    api = postavi();
+    expect(document.querySelector('input[name="lektaVelicina"]')).toBeNull();
+    expect(document.getElementById('lektaVelicina')).toBeNull();
   });
 
   it('ponovna inicijalizacija iz pohrane vraca atribute i stanje kontrola', () => {
     localStorage.setItem(THEME_KEY, 'system');
     localStorage.setItem(DISPLAY_KEY, JSON.stringify({
-      readingFont: 'sans', textSize: 's', contrast: 'high', motion: 'auto',
+      readingFont: 'sans', contrast: 'high', motion: 'auto',
     }));
     api = postavi();
     const korijen = document.documentElement;
     expect(korijen.hasAttribute('data-theme'), '`system` ne smije upisati atribut').toBe(false);
     expect(korijen.getAttribute('data-reading-font')).toBe('sans');
-    expect(korijen.getAttribute('data-text-size')).toBe('s');
     expect(korijen.getAttribute('data-contrast')).toBe('high');
     expect(korijen.hasAttribute('data-motion')).toBe(false);
     // Sucelje pokazuje STANJE, ne zadnji klik.
     expect(radio('lektaOsvjetljenje', 'system').checked).toBe(true);
-    expect(radio('lektaVelicina', 's').checked).toBe(true);
     expect((document.getElementById('lektaPismo') as HTMLSelectElement).value).toBe('sans');
     expect((document.getElementById('lektaKontrast') as HTMLInputElement).checked).toBe(true);
     expect((document.getElementById('lektaPokret') as HTMLInputElement).checked).toBe(false);
+  });
+
+  it('stari zapis s `textSize` u pohrani ne baca i ne postavlja `data-text-size` pri montazi', () => {
+    localStorage.setItem(DISPLAY_KEY, JSON.stringify({
+      readingFont: 'default', textSize: 'l', contrast: 'normal', motion: 'auto',
+    }));
+    expect(() => { api = postavi(); }).not.toThrow();
+    expect(document.documentElement.hasAttribute('data-text-size')).toBe(false);
   });
 
   it('klik na #themeBtn mijenja temu I sinkronizira radio u panelu', () => {
@@ -288,12 +306,12 @@ describe('Z6 postavke prikaza: panel', () => {
   it('"Vrati zadano" vraca i cetiri polja i osvjetljenje', () => {
     localStorage.setItem(THEME_KEY, 'light');
     localStorage.setItem(DISPLAY_KEY, JSON.stringify({
-      readingFont: 'dyslexic', textSize: 'l', contrast: 'high', motion: 'reduce',
+      readingFont: 'dyslexic', contrast: 'high', motion: 'reduce',
     }));
     api = postavi();
     (document.querySelector('.ps__reset') as HTMLButtonElement).click();
     expect(document.documentElement.getAttribute('data-theme')).toBe(ZADANO_OSVJETLJENJE);
-    for (const atribut of ['data-reading-font', 'data-text-size', 'data-contrast', 'data-motion']) {
+    for (const atribut of ['data-reading-font', 'data-contrast', 'data-motion']) {
       expect(document.documentElement.hasAttribute(atribut), atribut).toBe(false);
     }
     expect(spremljeno()).toEqual(ZADANE_POSTAVKE);
@@ -331,10 +349,12 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(skripta, 'ulaz mora imati pre-paint skriptu').not.toBe('');
     expect(inline(RAD)).toBe(skripta);
     expect(skripta).toContain("_t!=='system'");
-    for (const polje of ['readingFont', 'textSize', 'contrast', 'motion']) {
+    for (const polje of ['readingFont', 'contrast', 'motion']) {
       expect(skripta, `pre-paint ne primjenjuje ${polje}, pa ce ta postavka bljesnuti`).toContain(polje);
     }
     expect(skripta).toContain("localStorage.getItem('lekta.display')");
+    // Kontrola je uklonjena (Z7 pregled): pre-paint vise NE smije ni citati ni primjenjivati `textSize`.
+    expect(skripta).not.toContain('textSize');
   });
 
   /**
@@ -349,7 +369,7 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
    * `document` se podmece kao objekt s jednim svojstvom, jer skripta iz njega cita tocno jedno
    * (`documentElement`); `localStorage` je obicna mapa. Time test mjeri SKRIPTU, ne okolinu.
    */
-  interface Stanje { theme: string | null; readingFont: string | null; textSize: string | null; contrast: string | null; motion: string | null }
+  interface Stanje { theme: string | null; readingFont: string | null; contrast: string | null; motion: string | null }
 
   const tijeloSkripte = (html: string): string => {
     const m = /<script>([\s\S]*?)<\/script>/.exec(html);
@@ -366,7 +386,6 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     return {
       theme: korijen.getAttribute('data-theme'),
       readingFont: korijen.getAttribute('data-reading-font'),
-      textSize: korijen.getAttribute('data-text-size'),
       contrast: korijen.getAttribute('data-contrast'),
       motion: korijen.getAttribute('data-motion'),
     };
@@ -401,7 +420,7 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     const prazno = izvrsiSPracenjem({});
     if (prazno.theme !== null) nalazi.push(`nametnuta tema na praznoj pohrani: ${prazno.theme}`);
     const pun = izvrsiSPracenjem({
-      'lekta.display': JSON.stringify({ readingFont: 'serif', textSize: 'l', contrast: 'high', motion: 'reduce' }),
+      'lekta.display': JSON.stringify({ readingFont: 'serif', contrast: 'high', motion: 'reduce' }),
     });
     if (pun.citano.includes('lekta.display')) nalazi.push('cita lekta.display');
     const prikaz = pun.atributi.filter((ime) => ime !== 'data-theme');
@@ -423,17 +442,26 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(izvrsiPrePaint(tijelo, { 'lekta.theme': 'dark' }).theme).toBe('dark');
   });
 
-  it('cetiri polja prikaza se primjenjuju, a zadane vrijednosti NE ostavljaju trag', () => {
+  it('tri polja prikaza se primjenjuju, a zadane vrijednosti NE ostavljaju trag', () => {
     const tijelo = tijeloSkripte(INDEX);
     const pun = izvrsiPrePaint(tijelo, {
       'lekta.theme': 'light',
+      'lekta.display': JSON.stringify({ readingFont: 'serif', contrast: 'high', motion: 'reduce' }),
+    });
+    expect(pun).toEqual({ theme: 'light', readingFont: 'serif', contrast: 'high', motion: 'reduce' });
+    const zadano = izvrsiPrePaint(tijelo, {
+      'lekta.display': JSON.stringify({ readingFont: 'default', contrast: 'normal', motion: 'auto' }),
+    });
+    expect(zadano).toEqual({ theme: 'dark', readingFont: null, contrast: null, motion: null });
+  });
+
+  it('stari zapis s `textSize` u pre-paintu se ignorira: nema `data-text-size` na `<html>`', () => {
+    const tijelo = tijeloSkripte(INDEX);
+    const pun = izvrsiPrePaint(tijelo, {
       'lekta.display': JSON.stringify({ readingFont: 'serif', textSize: 'l', contrast: 'high', motion: 'reduce' }),
     });
-    expect(pun).toEqual({ theme: 'light', readingFont: 'serif', textSize: 'l', contrast: 'high', motion: 'reduce' });
-    const zadano = izvrsiPrePaint(tijelo, {
-      'lekta.display': JSON.stringify({ readingFont: 'default', textSize: 'm', contrast: 'normal', motion: 'auto' }),
-    });
-    expect(zadano).toEqual({ theme: 'dark', readingFont: null, textSize: null, contrast: null, motion: null });
+    expect(pun).toEqual({ theme: 'dark', readingFont: 'serif', contrast: 'high', motion: 'reduce' });
+    expect((pun as Record<string, unknown>).textSize).toBeUndefined();
   });
 
   it('pokvaren `lekta.display` ne ostavlja stranicu bez teme', () => {
@@ -466,6 +494,28 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(stranice.length, 'popis stranica se suzio; provjeri je li ruta izgubila pre-paint').toBe(13);
     expect(stranice, 'admin.html ima VLASTITI sustav teme, ne smije se vratiti u ovaj popis')
       .not.toContain('admin.html');
+  });
+
+  // Z7: kontrola "Velicina teksta" je uklonjena. Ni pre-paint (sve stranice iznad + admin.html) ni
+  // GENERATORI koji tu skriptu ugradjuju u staticke stranice (`scripts/generate-*.mjs`) vise ne
+  // smiju spominjati `textSize`/`data-text-size`, jer bi svaka novogenerirana stranica inace i
+  // dalje nosila ukinutu kontrolu.
+  it('NIJEDAN HTML u repou ni generator vise ne sadrzi `data-text-size`/`textSize` u pre-paintu', () => {
+    const stranice = [
+      'index.html', 'rad/index.html', 'moji-radovi/index.html', 'saznaj-vise/index.html',
+      'alati.html', 'citat.html', 'citati-i-literatura.html', 'izjava.html',
+      'kartice.html', 'landing_benchmark.html', 'landing_usporedba.html', 'literatura.html',
+      'naslovnica.html', 'admin.html',
+    ];
+    const generatori = [
+      'scripts/generate-faculty-pages.mjs', 'scripts/generate-title-page-tools.mjs',
+      'scripts/generate-competitor-pages.mjs', 'scripts/generate-citation-tools.mjs',
+    ];
+    for (const put of [...stranice, ...generatori]) {
+      const sadrzaj = read(put);
+      expect(sadrzaj, `${put} spominje textSize`).not.toContain('textSize');
+      expect(sadrzaj, `${put} spominje data-text-size`).not.toContain('data-text-size');
+    }
   });
 
   /**
@@ -514,12 +564,14 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
   it('CSS nosi ucinak svake kontrole, a nijedna ne uvodi novu boju marke', () => {
     for (const pravilo of [
       'data-reading-font="serif"', 'data-reading-font="sans"', 'data-reading-font="dyslexic"',
-      'data-text-size="s"', 'data-text-size="l"', 'data-contrast="high"', 'data-motion="reduce"',
+      'data-contrast="high"', 'data-motion="reduce"',
     ]) {
       expect(CSS, `nedostaje ucinak za ${pravilo}`).toContain(pravilo);
     }
-    expect(CSS).toContain('font-size: 15px');
-    expect(CSS).toContain('font-size: 18px');
+    // Kontrola "Velicina teksta" je uklonjena (Z7 pregled): CSS vise ne smije nositi ni njezin
+    // selektor ni njezine korijenske vrijednosti.
+    expect(CSS).not.toContain('data-text-size');
+    expect(CSS).not.toContain('ps-seg--velicina');
     expect(CSS).toContain('--paper-muted: #4A4438');
     expect(CSS).toContain('--desk-muted: var(--desk-ink)');
     expect(CSS).toContain('--paper-line: #B8AE96');
@@ -667,10 +719,10 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
   /**
    * UCINAK PRATI ATRIBUT, NE KONTROLU.
    *
-   * Pre-paint skripta upisuje `data-reading-font`, `data-text-size`, `data-contrast` i
-   * `data-motion` na SVAKOJ stranici, a panel se montira samo na `/` i `/rad/`. Dok je stil dolazio
-   * s panelom, ta cetiri atributa su na ostalim rutama stajala MRTVA: korisnik izabere veci tekst
-   * na `/`, ode na `/saznaj-vise/` i ondje se ne dogodi nista.
+   * Pre-paint skripta upisuje `data-reading-font`, `data-contrast` i `data-motion` na SVAKOJ
+   * stranici, a panel se montira samo na `/` i `/rad/`. Dok je stil dolazio s panelom, ta tri
+   * atributa su na ostalim rutama stajala MRTVA: korisnik izabere pismo za citanje na `/`, ode na
+   * `/saznaj-vise/` i ondje se ne dogodi nista.
    */
   const RUTE = [
     'src/routes/intake/main.ts', 'src/routes/workspace/main.ts',
