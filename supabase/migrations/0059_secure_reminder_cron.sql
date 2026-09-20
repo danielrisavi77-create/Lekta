@@ -50,20 +50,20 @@ begin
   -- Nalaz iz adversarijalnog pregleda (codex, 2026-09-20).
   --
   -- Vault ne mora postojati (lokalni Postgres bez supabase_vault), pa je i citanje zasticeno.
-  -- `select ... into` bez `strict` vraca null kad retka nema, a kod duplog imena uzima prvi;
-  -- `order by ... limit 1` cini taj izbor odredjenim i ponovljivim umjesto proizvoljnog.
+  -- `select ... into` bez `strict` vraca null kad retka nema, a kod duplog imena uzima prvi.
+  --
+  -- NAMJERNO BEZ `order by`: rukovatelj ispod je fail-quiet, pa bi svaki stupac koji ovdje
+  -- navedem a ne postoji u toj inacici vaulta bio progutan i pretvorio cijelu migraciju u tihi
+  -- no-op. Spekulativno ime stupca je gora cijena od dvosmislenosti kod duplog imena tajne, koje
+  -- Vault ionako ne bi smio dopustiti. Ne dodaji `order by` bez provjere sheme na zivoj bazi.
   begin
     select decrypted_secret into v_base_url
       from vault.decrypted_secrets
-     where name = 'lekta_functions_base_url'
-     order by created_at desc
-     limit 1;
+     where name = 'lekta_functions_base_url';
 
     select decrypted_secret into v_bearer
       from vault.decrypted_secrets
-     where name = 'lekta_cron_bearer'
-     order by created_at desc
-     limit 1;
+     where name = 'lekta_cron_bearer';
   exception when others then
     v_base_url := null;
     v_bearer := null;
