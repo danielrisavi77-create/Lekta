@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { AGENTS, PROMPT_FILE_PLACEHOLDER, prepareJob, parseResult, validateQueue } from './core.mjs';
+import { AGENTS, prepareJob, parseResult, resolvePromptFileArgs, validateQueue } from './core.mjs';
 
 const root = process.cwd();
 const git = (...args) => {
@@ -87,7 +87,7 @@ function main() {
     const promptFile = join(out, 'prompt.md');
     writeFileSync(promptFile, job.prompt);
     // Grok cita prompt iz datoteke; priprema je oznacila mjesto, ovdje se upisuje stvarna putanja.
-    const args = job.args.map(arg => (arg === PROMPT_FILE_PLACEHOLDER ? promptFile : arg));
+    const args = resolvePromptFileArgs(job.args, promptFile);
     // argv array + stdin, never a shell string. Existing CLI authentication is reused.
     releaseLock = false;
     const result = spawnSync(job.command, args, {

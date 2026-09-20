@@ -16,6 +16,21 @@ export const AGENTS = Object.freeze({
  */
 export const PROMPT_FILE_PLACEHOLDER = '__PROMPT_FILE__';
 
+/**
+ * Zamjena oznake stvarnom putanjom do prompt datoteke. Zivi OVDJE, a ne u pozivatelju, jer potrosaca
+ * `job.args` ima vise (rucni `cli.mjs`, autonomni `scripts/autonomy/worker.py`), a doslovna oznaka u
+ * argv znaci da provider trazi datoteku tog imena u cwd-u. Zato je zaostala oznaka greska, ne prolaz.
+ */
+export function resolvePromptFileArgs(args, promptFile) {
+  if (!args.some(arg => String(arg).includes(PROMPT_FILE_PLACEHOLDER))) return [...args];
+  if (typeof promptFile !== 'string' || !promptFile) throw new Error('Prompt file path is required for this provider');
+  const resolved = args.map(arg => (arg === PROMPT_FILE_PLACEHOLDER ? promptFile : arg));
+  if (resolved.some(arg => String(arg).includes(PROMPT_FILE_PLACEHOLDER))) {
+    throw new Error('Unsubstituted prompt file placeholder in args');
+  }
+  return resolved;
+}
+
 export function validateQueue(queue) {
   if (!Array.isArray(queue?.tasks) || !queue.tasks.length) throw new Error('Empty task queue');
   const tasks = new Map();

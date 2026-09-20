@@ -1,14 +1,17 @@
 import json
 import os
+import re
 import sys
 import tempfile
 import time
 import unittest
 
 from scripts.autonomy.worker import (
-    ProcessTree, classify_stream, diff_within_scope, model_matches, parse_provider_output, pid_alive,
-    resolve_launcher, run_phase, scrubbed_env,
+    PROMPT_FILE_PLACEHOLDER, ProcessTree, classify_stream, diff_within_scope, model_matches,
+    parse_provider_output, pid_alive, resolve_launcher, run_phase, scrubbed_env,
 )
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 FAKE_CLI = r'''
 import json, os, subprocess, sys, time
@@ -42,6 +45,14 @@ elif mode == "claude_ok":
 elif mode == "echo_prompt":
     assert "LEKTA task" in prompt
     print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
+elif mode == "prompt_file":
+    # Provider koji prompt cita iz datoteke: argv mora nositi STVARNU putanju, nikad oznaku.
+    path = sys.argv[1]
+    assert "__PROMPT_FILE__" not in path, "oznaka je dosla doslovno u argv: " + path
+    with open(path, encoding="utf-8") as fh:
+        body = fh.read()
+    assert "LEKTA task" in body, "prompt datoteka nema ocekivani sadrzaj"
+    print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
 '''
 
 
@@ -60,14 +71,14 @@ class WorkerTest(unittest.TestCase):
             fh.write(FAKE_CLI)
         self.pidfile = os.path.join(self.dir, "pids.txt")
 
-    def job(self, mode, command="codex", model="gpt-5.6-sol"):
+    def job(self, mode, command="codex", model="gpt-5.6-sol", extra_args=()):
         # Fake provider je python skripta; `command` je sys.executable pa launcher postoji na svakoj platformi.
         env = dict(os.environ, FAKE_MODE=mode, PIDFILE=self.pidfile)
-        return {"command": sys.executable, "args": [self.cli], "prompt": "LEKTA task T00. Phase: plan.",
+        return {"command": sys.executable, "args": [self.cli, *extra_args], "prompt": "LEKTA task T00. Phase: plan.",
                 "requestedModel": model, "_provider": command}, env
 
-    def run_fake(self, mode, timeout=60, prof=None, model="gpt-5.6-sol", provider="codex"):
-        job, env = self.job(mode, model=model)
+    def run_fake(self, mode, timeout=60, prof=None, model="gpt-5.6-sol", provider="codex", extra_args=()):
+        job, env = self.job(mode, model=model, extra_args=extra_args)
         # run_phase odreduje parser po `command`; za fake dajemo eksplicitni provider preko args parsera
         job["command"] = sys.executable
         result = run_phase(job, "plan", prof or profile(), cwd=self.dir, timeout_seconds=timeout, env=env,
@@ -124,6 +135,50 @@ class WorkerTest(unittest.TestCase):
     def test_prompt_travels_over_stdin_not_argv(self):
         result = self.run_fake("echo_prompt")
         self.assertEqual(result["verdict"], "needs_verification", result)
+
+    def test_prompt_file_placeholder_is_replaced_with_the_real_path(self):
+        # Grok prompt cita iz datoteke. Priprema ne zna izlazni direktorij, pa ostavlja oznaku;
+        # radnik je mora zamijeniti, inace bi provider trazio datoteku imena __PROMPT_FILE__ u cwd-u.
+        result = self.run_fake("prompt_file", extra_args=(PROMPT_FILE_PLACEHOLDER,))
+        self.assertEqual(result["verdict"], "needs_verification", result)
+        self.assertTrue(any(p.endswith("prompt.md") for p in result["artifact_paths"]))
+
+    def test_prompt_file_placeholder_without_artifact_dir_is_blocked(self):
+        job, env = self.job("prompt_file", extra_args=(PROMPT_FILE_PLACEHOLDER,))
+        result = run_phase(job, "plan", profile(), cwd=self.dir, env=env, artifact_dir=None)
+        self.assertEqual(result["verdict"], "blocked", result)
+        self.assertIn("prompt_file_unavailable", result["reason"])
+        self.assertIsNone(result["exit_code"], "proces se ne smije ni pokrenuti")
+
+    def test_unsubstituted_placeholder_never_reaches_a_provider(self):
+        # Oblik koji zamjena po jednakosti ne pokriva (spojen sa znakom jednakosti) mora pasti
+        # fail-safe, a ne otici providera kao doslovna oznaka.
+        joined = "--prompt-file=" + PROMPT_FILE_PLACEHOLDER
+        result = self.run_fake("prompt_file", extra_args=(joined,))
+        self.assertEqual(result["verdict"], "blocked", result)
+        self.assertIn("prompt_file_unsubstituted", result["reason"])
+        self.assertIsNone(result["exit_code"])
+
+    def test_prompt_placeholder_matches_core_mjs(self):
+        # Oznaka postoji u DVA jezika; preimenovanje na JS strani mora ovdje pasti, ne tiho razici.
+        with open(os.path.join(ROOT, "scripts", "agents", "core.mjs"), encoding="utf-8") as fh:
+            core = fh.read()
+        match = re.search(r"export const PROMPT_FILE_PLACEHOLDER = ['\"]([^'\"]+)['\"]", core)
+        self.assertIsNotNone(match, "core.mjs vise ne izvozi PROMPT_FILE_PLACEHOLDER")
+        self.assertEqual(match.group(1), PROMPT_FILE_PLACEHOLDER)
+
+    def test_grok_output_parses_as_a_single_json_object(self):
+        # Zrcalo parseResult('grok') iz core.mjs: JEDAN objekt, ne NDJSON.
+        ok = parse_provider_output("grok", json.dumps({"type": "result", "model": "grok-4.6"}), 0)
+        self.assertEqual((ok["ok"], ok["reported_models"]), (True, ["grok-4.6"]))
+        err = parse_provider_output("grok", json.dumps({"type": "result", "is_error": True, "model": "grok-4.6"}), 0)
+        self.assertFalse(err["ok"])
+        self.assertEqual(err["reported_models"], ["grok-4.6"], "model se prijavljuje i kad je poziv pao")
+        self.assertFalse(parse_provider_output("grok", json.dumps({"type": "error"}), 0)["ok"])
+        self.assertFalse(parse_provider_output("grok", json.dumps({"type": "result"}), 1)["ok"])
+        self.assertFalse(parse_provider_output("grok", "not json", 0)["ok"])
+        ndjson = chr(10).join([json.dumps({"type": "turn.started"}), json.dumps({"type": "turn.completed"})])
+        self.assertFalse(parse_provider_output("grok", ndjson, 0)["ok"], "NDJSON nije grok oblik")
 
     def test_billing_and_api_key_block_before_any_process_starts(self):
         job, env = self.job("codex_ok")

@@ -28,6 +28,11 @@ SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "S
 SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
 
+# Zrcalo `PROMPT_FILE_PLACEHOLDER` iz scripts/agents/core.mjs. Grok Build CLI prompt cita iz DATOTEKE,
+# pa priprema u `args` ostavlja ovu oznaku. SVAKI potrosac `job["args"]` mora je zamijeniti stvarnom
+# putanjom; podudarnost s JS stranom cuva test_prompt_placeholder_matches_core_mjs.
+PROMPT_FILE_PLACEHOLDER = "__PROMPT_FILE__"
+
 QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b429\b|overloaded|capacity")
 LOGIN_RE = re.compile(r"(?i)not logged in|login required|please (?:run|sign in|log in)|unauthori[sz]ed|\b401\b|invalid api key|authentication failed|session expired|token expired")
 
@@ -232,6 +237,19 @@ def parse_provider_output(command: str, stdout: str, exit_code: int | None) -> d
         out["reason"] = f"exit_code={exit_code}"
         return out
     try:
+        if command == "grok":
+            # Grok Build CLI vraca JEDAN JSON objekt (ne NDJSON kao Codex).
+            data = json.loads(stdout)
+            if not isinstance(data, dict):
+                out["reason"] = "grok: odgovor nije JSON objekt"
+                return out
+            if isinstance(data.get("model"), str):
+                out["reported_models"] = [data["model"]]
+            if data.get("is_error") is True or data.get("type") == "error":
+                out["reason"] = f"grok is_error/type={data.get('type')}"
+                return out
+            out["ok"] = True
+            return out
         if command == "claude":
             data = json.loads(stdout)
             out["ok"] = data.get("subtype") == "success" and data.get("is_error") is False
@@ -287,16 +305,31 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if launcher["path"] is None:
         result["reason"] = f"launcher_missing: {job.get('command')}"
         return result
-    argv = [launcher["path"], *[str(a) for a in job.get("args") or []]]
-    if any("\n" in a or "\x00" in a for a in argv):
-        result["reason"] = "argv sadrzi kontrolne znakove"
-        return result
+    # Prompt se pise PRIJE gradnje argv, jer za providera koji prompt cita iz DATOTEKE (Grok) priprema
+    # ne zna izlazni direktorij poziva, pa u args ostavlja oznaku koju tek ovdje mozemo zamijeniti.
+    prompt_path = None
     if artifact_dir:
         os.makedirs(artifact_dir, exist_ok=True)
         prompt_path = os.path.join(artifact_dir, "prompt.md")
         with open(prompt_path, "w", encoding="utf-8") as fh:
             fh.write(str(job.get("prompt") or ""))
         result["artifact_paths"].append(prompt_path)
+
+    raw_args = [str(a) for a in job.get("args") or []]
+    if PROMPT_FILE_PLACEHOLDER in raw_args:
+        if prompt_path is None:
+            result["reason"] = "prompt_file_unavailable: posao trazi prompt iz datoteke, a poziv nema artifact_dir"
+            return result
+        raw_args = [prompt_path if a == PROMPT_FILE_PLACEHOLDER else a for a in raw_args]
+    argv = [launcher["path"], *raw_args]
+    # Fail-safe: doslovna oznaka u argv znacila bi da provider trazi datoteku TOG IMENA u cwd-u, pa bi
+    # u najboljem slucaju pao s neinformativnom porukom, a u najgorem procitao zatecenu datoteku.
+    if any(PROMPT_FILE_PLACEHOLDER in a for a in argv):
+        result["reason"] = "prompt_file_unsubstituted: oznaka prompta je ostala u argv"
+        return result
+    if any("\n" in a or "\x00" in a for a in argv):
+        result["reason"] = "argv sadrzi kontrolne znakove"
+        return result
 
     tree = ProcessTree()
     stdout = stderr = ""

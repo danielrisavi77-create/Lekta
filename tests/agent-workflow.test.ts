@@ -1,7 +1,13 @@
 // @vitest-environment node
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { AGENTS, PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS, prepareJob, parseResult, validateQueue }
-  from '../scripts/agents/core.mjs';
+import { AGENTS, PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS, prepareJob, parseResult,
+  resolvePromptFileArgs, validateQueue } from '../scripts/agents/core.mjs';
+
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const readRepoFile = (relative: string) => readFileSync(join(repoRoot, relative), 'utf8');
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -144,5 +150,68 @@ describe('Grok Build CLI je treci provider', () => {
     // NDJSON je Codexov oblik; kao Grok rezultat ne smije proci.
     const ndjson = ['{"type":"result"}', '{"type":"result"}'].join(String.fromCharCode(10));
     expect(parseResult('grok', ndjson, 0).ok).toBe(false);
+  });
+});
+
+/**
+ * `job.args` su do Groka bili doslovno izvrsivi, pa nijedan potrosac nije morao nista zamijeniti.
+ * Oznaka prompta tu pretpostavku rusi, a potrosaca ima DVA: `scripts/agents/cli.mjs` (rucni put) i
+ * `scripts/autonomy/worker.py` (autonomni kontroler). Ovi testovi drze oba imenovana.
+ */
+describe('oznaka u args ima potrosaca koji je zamjenjuje', () => {
+  const preparedArgs = () => {
+    const jobs = [];
+    const ready = () => queue();
+    const blocked = () => { const q = queue(); q.tasks[1].status = 'blocked'; return q; };
+    const review = (agent: string) => { const q = queue(); q.tasks[1].status = 'in_review'; q.tasks[1].implementationAgent = agent; return q; };
+    for (const [name, agent] of Object.entries(AGENTS)) {
+      const budget = agent.command === 'claude' ? 3 : undefined;
+      if (agent.role === 'implementer') jobs.push(prepareJob(ready(), 'T01', 'implement', name, budget));
+      else {
+        jobs.push(prepareJob(blocked(), 'T01', 'plan', name, budget));
+        const other = Object.entries(AGENTS).find(([, a]) => a.role === 'implementer' && a.command !== agent.command);
+        if (other) jobs.push(prepareJob(review(other[0]), 'T01', 'review', name, budget));
+      }
+    }
+    return jobs.flatMap(job => job.args);
+  };
+
+  it('jedina oznaka u bilo kojem poslu je ona koju potrosaci poznaju', () => {
+    const args = preparedArgs();
+    expect(args.length).toBeGreaterThan(0);
+    const placeholders = [...new Set(args.filter(arg => /^__[A-Z0-9_]+__$/.test(arg)))];
+    // Nova oznaka bez potrosaca otisla bi providera doslovno; zato je popis zatvoren.
+    expect(placeholders).toEqual([PROMPT_FILE_PLACEHOLDER]);
+  });
+
+  it('zamjena oznake je zajednicka funkcija, ne prepisan izraz u pozivatelju', () => {
+    const args = prepareJob(queue(), 'T01', 'implement', 'grok').args;
+    const resolved = resolvePromptFileArgs(args, '/tmp/out/prompt.md');
+    expect(resolved).toContain('/tmp/out/prompt.md');
+    expect(resolved).not.toContain(PROMPT_FILE_PLACEHOLDER);
+    expect(resolved[resolved.indexOf('--prompt-file') + 1]).toBe('/tmp/out/prompt.md');
+    // Posao bez oznake prolazi nepromijenjen, pa Codex i Claude ne ovise o putanji prompta.
+    const codex = prepareJob(queue(), 'T01', 'implement', 'sol').args;
+    expect(resolvePromptFileArgs(codex, undefined)).toEqual(codex);
+    // Oznaka bez putanje je greska, ne tiho propustanje.
+    expect(() => resolvePromptFileArgs(args, '')).toThrow(/Prompt file/);
+    // Oblik koji zamjena po jednakosti ne pokriva mora pasti, ne otici providera doslovno.
+    expect(() => resolvePromptFileArgs([`--prompt-file=${PROMPT_FILE_PLACEHOLDER}`], '/tmp/p.md'))
+      .toThrow(/Unsubstituted/);
+  });
+
+  it('oba potrosaca job.args zamjenjuju oznaku prije poziva', () => {
+    // cli.mjs: argv se gradi zajednickom funkcijom, a `job.args` nikad ne ide izravno u spawn.
+    const cli = readRepoFile('scripts/agents/cli.mjs');
+    expect(cli).toContain('resolvePromptFileArgs(job.args, promptFile)');
+    expect(cli).not.toMatch(/spawnSync\(job\.command,\s*job\.args/);
+    expect(cli.indexOf('resolvePromptFileArgs(job.args')).toBeLessThan(cli.indexOf('spawnSync(job.command'));
+
+    // worker.py je drugi jezik pa ne moze uvesti funkciju; drzi ga vrijednost oznake i fail-safe grana.
+    // Ponasanje te grane dokazuju scripts/autonomy/tests/test_worker.py (unittest, izvan vitesta).
+    const worker = readRepoFile('scripts/autonomy/worker.py');
+    expect(worker).toContain(`PROMPT_FILE_PLACEHOLDER = "${PROMPT_FILE_PLACEHOLDER}"`);
+    expect(worker).toContain('prompt_file_unsubstituted');
+    expect(worker.indexOf('PROMPT_FILE_PLACEHOLDER in raw_args')).toBeLessThan(worker.indexOf('tree.start(argv'));
   });
 });
