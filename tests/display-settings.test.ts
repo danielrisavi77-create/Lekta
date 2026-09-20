@@ -372,6 +372,43 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     };
   };
 
+  /**
+   * TRI PREKRSAJA IZUZECA ZA admin.html, mjerena IZVODJENJEM (pregled Z7, 2026-09-20).
+   *
+   * Do sada je izuzece cuvala tvrdnja `not.toContain("||'dark'")`, dakle doslovan niz. Niz nije
+   * ponasanje: ista bi se tema nametnula napisana kao `_t || "dark"`, kroz ternarni izraz ili iz
+   * druge varijable, a gard bi ostao zelen. Skripta se zato POKRECE, kao i ostale ovdje.
+   *
+   * Vraca IMENOVAN popis, ne zastavicu, da se vidi KOJI je ugovor pao.
+   */
+  const prekrsajiIzuzeca = (tijelo: string): string[] => {
+    const nalazi: string[] = [];
+    const izvrsiSPracenjem = (pohrana: Record<string, string>) => {
+      const citano: string[] = [];
+      const doc = document.implementation.createHTMLDocument('pre-paint');
+      const korijen = doc.documentElement;
+      const lager = {
+        getItem: (k: string) => {
+          citano.push(k);
+          return Object.prototype.hasOwnProperty.call(pohrana, k) ? pohrana[k] : null;
+        },
+      };
+      // eslint-disable-next-line no-new-func
+      new Function('document', 'localStorage', tijelo)({ documentElement: korijen }, lager);
+      const atributi = [...korijen.attributes].map((a) => a.name).filter((ime) => ime.startsWith('data-'));
+      return { citano, atributi, theme: korijen.getAttribute('data-theme') };
+    };
+    const prazno = izvrsiSPracenjem({});
+    if (prazno.theme !== null) nalazi.push(`nametnuta tema na praznoj pohrani: ${prazno.theme}`);
+    const pun = izvrsiSPracenjem({
+      'lekta.display': JSON.stringify({ readingFont: 'serif', textSize: 'l', contrast: 'high', motion: 'reduce' }),
+    });
+    if (pun.citano.includes('lekta.display')) nalazi.push('cita lekta.display');
+    const prikaz = pun.atributi.filter((ime) => ime !== 'data-theme');
+    if (prikaz.length) nalazi.push(`upisuje atribute prikaza: ${prikaz.join(', ')}`);
+    return nalazi;
+  };
+
   it('PRAZNA POHRANA daje `data-theme="dark"`, dakle nema bljeska svijetle teme', () => {
     // Zadano proizvoda je TAMNO (design/README.md: lampa je zadano, dan se pali rucno), pa
     // sustavna grana NE smije vrijediti za posjetitelja koji nije nista izabrao.
@@ -444,19 +481,23 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
    * nijedan list ne cita. Gard je zato nad ODSUTNOSCU oba obrasca, imenovano, a ne nad duljinom
    * skripte: kratka skripta koja opet nosi zadani `dark` bila bi isti kvar.
    */
-  it('admin.html NE nosi prosireni pre-paint (bez `lekta.display` i bez zadanog `dark`)', () => {
+  it('admin.html NE nosi prosireni pre-paint: mjereno IZVODJENJEM, ne tekstom', () => {
     const admin = read('admin.html');
     const tijelo = tijeloSkripte(admin);
     expect(tijelo, 'admin.html mora imati vlastitu pre-paint skriptu').not.toBe('');
-    expect(tijelo, 'admin.html ne cita postavke prikaza').not.toContain('lekta.display');
-    expect(tijelo, 'admin.html ne smije bezuvjetno nametnuti tamnu temu').not.toContain("||'dark'");
-    expect(tijelo, 'admin.html ne upisuje atribute prikaza').not.toMatch(/data-?[Rr]eading[Ff]ont|readingFont|textSize/);
-    // Kontrola smjera: skripta i dalje VRACA izricit izbor, pa izuzece nije "obrisi sve".
-    expect(tijelo).toContain("localStorage.getItem('lekta.theme')");
-    // BASELINE: prosireni oblik STVARNO nosi oba obrasca, inace bi gornje tvrdnje bile vakuumske.
-    const prosireni = tijeloSkripte(INDEX);
-    expect(prosireni).toContain('lekta.display');
-    expect(prosireni).toContain("||'dark'");
+    expect(prekrsajiIzuzeca(tijelo)).toEqual([]);
+    // KONTROLA SMJERA: izuzece nije "obrisi sve". Izricit izbor i dalje vrijedi, u oba smjera.
+    expect(izvrsiPrePaint(tijelo, { 'lekta.theme': 'dark' }).theme).toBe('dark');
+    expect(izvrsiPrePaint(tijelo, { 'lekta.theme': 'light' }).theme).toBe('light');
+    // MUTACIJA I BASELINE ODJEDNOM: ista procedura nad PROSIRENIM oblikom (index.html) prijavi sva
+    // tri prekrsaja. Bez toga bi tvrdnja iznad bila vakuumska, jer ne bi bilo dokaza da procedura
+    // uopce moze nesto naci.
+    const prosireni = prekrsajiIzuzeca(tijeloSkripte(INDEX));
+    expect(prosireni, `prosireni oblik ne pada; procedura ne mjeri nista: ${prosireni.join(' | ')}`)
+      .toHaveLength(3);
+    expect(prosireni.join(' | ')).toContain('nametnuta tema na praznoj pohrani: dark');
+    expect(prosireni.join(' | ')).toContain('cita lekta.display');
+    expect(prosireni.join(' | ')).toContain('upisuje atribute prikaza');
   });
 
   it('obje stranice nose gumb #displayBtn uz #themeBtn', () => {
