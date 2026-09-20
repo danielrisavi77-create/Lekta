@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { AGENTS, prepareJob, parseResult, validateQueue } from './core.mjs';
+import { AGENTS, prepareJob, parseResult, validateQueue, PROMPT_ARG_PLACEHOLDER } from './core.mjs';
 
 const root = process.cwd();
 const git = (...args) => {
@@ -14,16 +14,18 @@ const git = (...args) => {
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol [--budget-usd N | --subscription] [--execute]');
+    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--execute]');
     return;
   }
   if (command === 'doctor') {
     if (rest.length) throw new Error('doctor takes no arguments');
-    for (const cli of ['git', 'node', 'deno', 'codex', 'claude']) {
-      const result = spawnSync(cli, ['--version'], { encoding: 'utf8', timeout: 10_000 });
-      console.log(`${cli}: ${result.status === 0 ? result.stdout.trim().split('\n')[0] : 'unavailable'}`);
+    for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) {
+      const versionArgs = cli === 'grok' ? ['version'] : ['--version'];
+      const result = spawnSync(cli, versionArgs, { encoding: 'utf8', timeout: 10_000 });
+      const line = (result.stdout || result.stderr || '').trim().split('\n')[0];
+      console.log(`${cli}: ${result.status === 0 ? line : 'unavailable'}`);
     }
-    console.log('Model access and login must be checked locally: codex login status; claude auth status. No model was called.');
+    console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login (or XAI_API_KEY). No model was called.');
     return;
   }
   const queue = JSON.parse(readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8'));
@@ -86,9 +88,12 @@ function main() {
     mkdirSync(out, { recursive: true });
     writeFileSync(join(out, 'prompt.md'), job.prompt);
     // argv array + stdin, never a shell string. Existing CLI authentication is reused.
+    // Grok requires `-p <prompt>` as an argv element; Codex/Claude take the prompt on stdin.
     releaseLock = false;
-    const result = spawnSync(job.command, job.args, {
-      cwd: root, input: job.prompt, encoding: 'utf8', shell: false,
+    const spawnArgs = job.args.map((arg) => (arg === PROMPT_ARG_PLACEHOLDER ? job.prompt : arg));
+    const usesPromptArg = job.args.includes(PROMPT_ARG_PLACEHOLDER);
+    const result = spawnSync(job.command, spawnArgs, {
+      cwd: root, input: usesPromptArg ? undefined : job.prompt, encoding: 'utf8', shell: false,
       timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
     });
     releaseLock = !result.error && !result.signal;
