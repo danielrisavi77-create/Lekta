@@ -21,8 +21,21 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = join(__dirname, '..');
+/**
+ * Sve datoteke koje sudjeluju u odluci smije li se objaviti.
+ *
+ * Popis se prosirio 2026-09-13, kad su razine i gate izdanja izdvojeni iz `release-check.mjs` u
+ * vlastite module: da je ostao na dvije datoteke, izvod bi tiho pao s 4 varijable na 2 i gard bi
+ * prestao stititi tocno ono zbog cega postoji. Zato nize stoji i tvrdnja o BROJU pronadjenih
+ * varijabli, koja upravo takav tihi pad hvata.
+ *
+ * 2026-09-20 merge T19 + master: zadrzani i novi moduli i `run-local-repair-release.mts`.
+ */
 const GATE_SCRIPTS = [
   'scripts/release-check.mjs',
+  'scripts/release-tiers.mjs',
+  'scripts/release-gate-core.mjs',
+  'scripts/verify-release-proof.mjs',
   'scripts/verify-deploy-dist.mjs',
   'scripts/run-local-repair-release.mts',
 ];
@@ -36,6 +49,9 @@ function gateVariables(): string[] {
   const found = new Set<string>();
   for (const relative of GATE_SCRIPTS) {
     const src = sourceOf(relative);
+    // `env.LEKTA_X` pokriva i `process.env.LEKTA_X` i injektiran `env` objekt (gate core prima
+    // okolinu kao parametar da bi bio mjerljiv), pa jedan obrazac hvata oba oblika.
+    for (const m of src.matchAll(/\benv\.(LEKTA_[A-Z0-9_]+)/g)) found.add(m[1]);
     for (const m of src.matchAll(/(?:process\.)?env\.([A-Z][A-Z0-9_]+)/g)) found.add(m[1]);
     for (const m of src.matchAll(
       /requiredEnvironmentValue\(\s*env,\s*'([A-Z0-9_]+)'/g,
@@ -74,7 +90,7 @@ describe('release/deploy varijable su dokumentirane', () => {
    * dokumentirana, potpun dokaz je NEDOSTIZAN, a to je tocno stanje zateceno 2026-08-30.
    */
   it('svaka OBVEZNA razina s `requiresEnv` ima dokumentiranu varijablu', () => {
-    const src = sourceOf('scripts/release-check.mjs');
+    const src = GATE_SCRIPTS.map((r) => sourceOf(r)).join('\n');
     const documented = documentedVariables();
     const offenders: string[] = [];
     for (const line of src.split('\n')) {

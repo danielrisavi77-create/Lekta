@@ -24,8 +24,11 @@ describe('versioning lokalnih WordReplica migracija', () => {
     const claimVersion = BigInt(claim!.split('_', 1)[0]);
     const lifecycleVersion = BigInt(lifecycle!.split('_', 1)[0]);
     const recoveryVersion = BigInt(recovery!.split('_', 1)[0]);
-    const provenProductionFourDigitHighWater = 103n;
-    expect(claimVersion).toBeGreaterThan(provenProductionFourDigitHighWater);
+    // Od 2026-09-19 Lekta krece od 0200: 0104 do 0199 su Katedrini na dijeljenom stagingu
+    // (bnyemcnsphlitjradrst dijeli supabase_migrations.schema_migrations), vidi
+    // tests/migration-numbering.test.ts i docs/deploy/MIGRATION_IDENTITY.md.
+    const katedraReservedFourDigitHighWater = 199n;
+    expect(claimVersion).toBeGreaterThan(katedraReservedFourDigitHighWater);
     expect(lifecycleVersion).toBeGreaterThan(claimVersion);
     expect(recoveryVersion).toBeGreaterThan(lifecycleVersion);
 
@@ -36,9 +39,10 @@ describe('versioning lokalnih WordReplica migracija', () => {
   it('release uputa navodi iste migracije koje gate stvarno provjerava', () => {
     const releaseGuide = readFileSync(join(root, 'docs', 'LOCAL_REPAIR_RELEASE.md'), 'utf8');
     const recoveryMigration = readFileSync(
-      join(migrationsDir, '0106_repair_local_claim_recovery.sql'), 'utf8');
+      join(migrationsDir, '0202_repair_local_claim_recovery.sql'), 'utf8');
 
-    expect(releaseGuide).toContain('migracije 0104-0106');
+    expect(releaseGuide).toContain('migracije 0200-0202');
+    expect(releaseGuide).not.toContain('migracije 0104-0106');
     expect(releaseGuide).not.toContain('migracije 0102-0104');
     expect(releaseGuide).not.toContain('migracije 0096-0098');
     expect(recoveryMigration).not.toContain('0096/0097');
@@ -64,9 +68,9 @@ describe('versioning lokalnih WordReplica migracija', () => {
         grant select on public.repair_jobs to service_role;
       `);
       const migrations = [
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ].map((name) => readFileSync(join(migrationsDir, name), 'utf8'));
 
       for (let round = 0; round < 2; round += 1) {

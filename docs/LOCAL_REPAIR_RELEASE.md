@@ -63,7 +63,7 @@ potpis, manifest, ocekivani publisher); te trostruko slaganje javnog Repair
 Contract fingerprinta (manifest, neovisni release input i javni kljuc izveden iz
 privatnog PKCS#8 P-256 kljuca). Provjerava i key id, engine verziju,
 `automation-dev` branch, pregledani source commit, cisto izvorno stablo, projekt i
-migracije 0104-0106. Ne povezuje projekt i ne radi mrezne promjene.
+migracije 0200-0202. Ne povezuje projekt i ne radi mrezne promjene.
 
 Testovi i implementacijska provjera u ovom repozitoriju ne izvode produkcijski
 deploy. Produkcijski release zahtijeva izriciti `--execute`, sve gateove i stvarni
@@ -108,8 +108,8 @@ povijesti. Za svaki execute stvara novi privremeni Supabase workspace i zatim:
    `zrrjttizjyfcxmcpgzml`;
 2. dohvaća stvarnu produkcijsku migracijsku povijest;
 3. provjerava svaku dohvaćenu verziju, naziv i odobreni SHA-256;
-4. nadopunjuje samo poznate Windows fetch gapove i lokalne migracije 0104-0106;
-5. zahtijeva da dry-run vrati tocno `0104`, `0105`, `0106`, tim redom i bez
+4. nadopunjuje samo poznate Windows fetch gapove i lokalne migracije 0200-0202;
+5. zahtijeva da dry-run vrati tocno `0200`, `0201`, `0202`, tim redom i bez
    duplikata;
 6. tek tada radi stvarni push, a privremeni workspace brise i nakon uspjeha i
    nakon greske.

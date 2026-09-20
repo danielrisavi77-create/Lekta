@@ -144,9 +144,9 @@ describe('automatizirani local-repair release CLI', () => {
         '0060_revoke_purge_rpc_roles.sql',
         '0063_deadline_reminder_tiers.sql',
         '0066_security_advisor_hardening.sql',
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ],
       fetchedMigrations: [
         { name: '0001_baseline.sql' },
@@ -193,14 +193,14 @@ describe('automatizirani local-repair release CLI', () => {
         '0060_revoke_purge_rpc_roles.sql',
         '0063_deadline_reminder_tiers.sql',
         '0066_security_advisor_hardening.sql',
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ],
       pendingMigrationNames: [
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ],
     });
   });
@@ -221,9 +221,9 @@ describe('automatizirani local-repair release CLI', () => {
       '0060_revoke_purge_rpc_roles.sql',
       '0063_deadline_reminder_tiers.sql',
       '0066_security_advisor_hardening.sql',
-      '0104_repair_local_claims.sql',
-      '0105_repair_local_lifecycle.sql',
-      '0106_repair_local_claim_recovery.sql',
+      '0200_repair_local_claims.sql',
+      '0201_repair_local_lifecycle.sql',
+      '0202_repair_local_claim_recovery.sql',
     ];
 
     expect(() => planLocalRepairMigrationWorkspace({
@@ -285,9 +285,9 @@ describe('automatizirani local-repair release CLI', () => {
     expect(() => planLocalRepairMigrationWorkspace({
       localMigrationNames: [
         '0001_baseline.sql',
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ],
       fetchedMigrations: [
         { name: '0001_baseline.sql' },
@@ -296,9 +296,9 @@ describe('automatizirani local-repair release CLI', () => {
     }, {
       approvedRemoteOnlyMigrations: {},
       expectedPendingMigrationNames: [
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ],
       windowsFetchGaps: {},
     })).toThrow(/duplicirani fetched migration version.*0001/i);
@@ -375,9 +375,9 @@ describe('automatizirani local-repair release CLI', () => {
       'dodatnu',
       [
         '0001_baseline.sql',
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
         '0107_unrelated_change.sql',
       ],
     ],
@@ -385,8 +385,8 @@ describe('automatizirani local-repair release CLI', () => {
       'nedostajucu',
       [
         '0001_baseline.sql',
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
       ],
     ],
   ])('zaustavlja release za %s pending migraciju', (_caseName, localMigrationNames) => {
@@ -431,7 +431,7 @@ describe('automatizirani local-repair release CLI', () => {
     })).toThrow(/tocno tri nove Lekta migracije/i);
   });
 
-  it('dopusta push samo kada Supabase dry-run vrati tocno 0104 do 0106', () => {
+  it('dopusta push samo kada Supabase dry-run vrati tocno 0200 do 0202', () => {
     expect(releaseCli).toHaveProperty('parseAndVerifyLocalRepairMigrationDryRun');
     const parseAndVerifyLocalRepairMigrationDryRun = (
       releaseCli as typeof releaseCli & {
@@ -441,34 +441,34 @@ describe('automatizirani local-repair release CLI', () => {
     const exactDryRun = [
       'DRY RUN: migrations will not be pushed to the database.',
       'Would push these migrations:',
-      ' • 0104_repair_local_claims.sql',
-      ' • 0105_repair_local_lifecycle.sql',
-      ' • 0106_repair_local_claim_recovery.sql',
+      ' • 0200_repair_local_claims.sql',
+      ' • 0201_repair_local_lifecycle.sql',
+      ' • 0202_repair_local_claim_recovery.sql',
       'Finished supabase db push.',
     ].join('\n');
 
     expect(parseAndVerifyLocalRepairMigrationDryRun(exactDryRun)).toEqual([
-      '0104_repair_local_claims.sql',
-      '0105_repair_local_lifecycle.sql',
-      '0106_repair_local_claim_recovery.sql',
+      '0200_repair_local_claims.sql',
+      '0201_repair_local_lifecycle.sql',
+      '0202_repair_local_claim_recovery.sql',
     ]);
     expect(() => parseAndVerifyLocalRepairMigrationDryRun([
       exactDryRun,
       ' • 0107_unrelated_change.sql',
-    ].join('\n'))).toThrow(/dry-run.*tocno migracije 0104, 0105 i 0106/i);
+    ].join('\n'))).toThrow(/dry-run.*tocno migracije 0200, 0201 i 0202/i);
     expect(() => parseAndVerifyLocalRepairMigrationDryRun([
       'Would push these migrations:',
-      ' • 0104_repair_local_claims.sql',
-      ' • 0105_repair_local_lifecycle.sql',
-      ' • 0106_repair_local_claim_recovery.sql',
-      ' • 0106_repair_local_claim_recovery.sql',
-    ].join('\n'))).toThrow(/dry-run.*tocno migracije 0104, 0105 i 0106/i);
+      ' • 0200_repair_local_claims.sql',
+      ' • 0201_repair_local_lifecycle.sql',
+      ' • 0202_repair_local_claim_recovery.sql',
+      ' • 0202_repair_local_claim_recovery.sql',
+    ].join('\n'))).toThrow(/dry-run.*tocno migracije 0200, 0201 i 0202/i);
     expect(() => parseAndVerifyLocalRepairMigrationDryRun([
       'Would push these migrations:',
-      ' • 0106_repair_local_claim_recovery.sql',
-      ' • 0105_repair_local_lifecycle.sql',
-      ' • 0104_repair_local_claims.sql',
-    ].join('\n'))).toThrow(/dry-run.*tocno migracije 0104, 0105 i 0106/i);
+      ' • 0202_repair_local_claim_recovery.sql',
+      ' • 0201_repair_local_lifecycle.sql',
+      ' • 0200_repair_local_claims.sql',
+    ].join('\n'))).toThrow(/dry-run.*tocno migracije 0200, 0201 i 0202/i);
   });
 
   it('kopira samo migracije iz provjerenog workspace plana', () => {
@@ -492,7 +492,7 @@ describe('automatizirani local-repair release CLI', () => {
     mkdirSync(local);
     mkdirSync(fetched);
     writeFileSync(join(local, '0059_gap.sql'), 'gap');
-    writeFileSync(join(local, '0104_new.sql'), 'new');
+    writeFileSync(join(local, '0200_new.sql'), 'new');
     writeFileSync(join(local, '0107_unrelated.sql'), 'unrelated');
     writeFileSync(join(fetched, '0001_existing.sql'), 'existing');
 
@@ -502,13 +502,13 @@ describe('automatizirani local-repair release CLI', () => {
         fetchedMigrationsDirectory: fetched,
         plan: {
           approvedExternalMigrationNames: [],
-          copyMigrationNames: ['0059_gap.sql', '0104_new.sql'],
-          pendingMigrationNames: ['0104_new.sql'],
+          copyMigrationNames: ['0059_gap.sql', '0200_new.sql'],
+          pendingMigrationNames: ['0200_new.sql'],
         },
       });
 
       expect(readFileSync(join(fetched, '0059_gap.sql'), 'utf8')).toBe('gap');
-      expect(readFileSync(join(fetched, '0104_new.sql'), 'utf8')).toBe('new');
+      expect(readFileSync(join(fetched, '0200_new.sql'), 'utf8')).toBe('new');
       expect(readFileSync(join(fetched, '0001_existing.sql'), 'utf8')).toBe('existing');
       expect(existsSync(join(fetched, '0107_unrelated.sql'))).toBe(false);
     } finally {
@@ -598,14 +598,14 @@ describe('automatizirani local-repair release CLI', () => {
         '20260830195905_stavka_revoke_trigger_fn_execute.sql',
       ],
       copyMigrationNames: [
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ],
       pendingMigrationNames: [
-        '0104_repair_local_claims.sql',
-        '0105_repair_local_lifecycle.sql',
-        '0106_repair_local_claim_recovery.sql',
+        '0200_repair_local_claims.sql',
+        '0201_repair_local_lifecycle.sql',
+        '0202_repair_local_claim_recovery.sql',
       ],
     };
 
@@ -619,9 +619,9 @@ describe('automatizirani local-repair release CLI', () => {
         return options.captureOutput ? {
           stdout: [
             'Would push these migrations:',
-            ' • 0104_repair_local_claims.sql',
-            ' • 0105_repair_local_lifecycle.sql',
-            ' • 0106_repair_local_claim_recovery.sql',
+            ' • 0200_repair_local_claims.sql',
+            ' • 0201_repair_local_lifecycle.sql',
+            ' • 0202_repair_local_claim_recovery.sql',
           ].join('\n'),
         } : {};
       },
@@ -665,9 +665,9 @@ describe('automatizirani local-repair release CLI', () => {
     const local = join(root, 'local');
     mkdirSync(local);
     writeFileSync(join(local, '0001_baseline.sql'), 'baseline');
-    writeFileSync(join(local, '0104_repair_local_claims.sql'), 'claims');
-    writeFileSync(join(local, '0105_repair_local_lifecycle.sql'), 'lifecycle');
-    writeFileSync(join(local, '0106_repair_local_claim_recovery.sql'), 'recovery');
+    writeFileSync(join(local, '0200_repair_local_claims.sql'), 'claims');
+    writeFileSync(join(local, '0201_repair_local_lifecycle.sql'), 'lifecycle');
+    writeFileSync(join(local, '0202_repair_local_claim_recovery.sql'), 'recovery');
     let workspace = '';
     let copiedDuringDryRun: Record<string, string> = {};
 
@@ -681,9 +681,9 @@ describe('automatizirani local-repair release CLI', () => {
               'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
           },
           expectedPendingMigrationNames: [
-            '0104_repair_local_claims.sql',
-            '0105_repair_local_lifecycle.sql',
-            '0106_repair_local_claim_recovery.sql',
+            '0200_repair_local_claims.sql',
+            '0201_repair_local_lifecycle.sql',
+            '0202_repair_local_claim_recovery.sql',
           ],
           windowsFetchGaps: {},
         },
@@ -698,37 +698,37 @@ describe('automatizirani local-repair release CLI', () => {
           }
           if (args[0] === 'db' && args.includes('--dry-run')) {
             copiedDuringDryRun = Object.fromEntries([
-              '0104_repair_local_claims.sql',
-              '0105_repair_local_lifecycle.sql',
-              '0106_repair_local_claim_recovery.sql',
+              '0200_repair_local_claims.sql',
+              '0201_repair_local_lifecycle.sql',
+              '0202_repair_local_claim_recovery.sql',
             ].map((name) => [name, readFileSync(join(fetched, name), 'utf8')]));
           }
           return options.captureOutput ? {
             stdout: [
               'Would push these migrations:',
-              ' • 0104_repair_local_claims.sql',
-              ' • 0105_repair_local_lifecycle.sql',
-              ' • 0106_repair_local_claim_recovery.sql',
+              ' • 0200_repair_local_claims.sql',
+              ' • 0201_repair_local_lifecycle.sql',
+              ' • 0202_repair_local_claim_recovery.sql',
             ].join('\n'),
           } : {};
         },
       })).toEqual({
         approvedExternalMigrationNames: ['20260910000000_approved_external.sql'],
         copyMigrationNames: [
-          '0104_repair_local_claims.sql',
-          '0105_repair_local_lifecycle.sql',
-          '0106_repair_local_claim_recovery.sql',
+          '0200_repair_local_claims.sql',
+          '0201_repair_local_lifecycle.sql',
+          '0202_repair_local_claim_recovery.sql',
         ],
         pendingMigrationNames: [
-          '0104_repair_local_claims.sql',
-          '0105_repair_local_lifecycle.sql',
-          '0106_repair_local_claim_recovery.sql',
+          '0200_repair_local_claims.sql',
+          '0201_repair_local_lifecycle.sql',
+          '0202_repair_local_claim_recovery.sql',
         ],
       });
       expect(copiedDuringDryRun).toEqual({
-        '0104_repair_local_claims.sql': 'claims',
-        '0105_repair_local_lifecycle.sql': 'lifecycle',
-        '0106_repair_local_claim_recovery.sql': 'recovery',
+        '0200_repair_local_claims.sql': 'claims',
+        '0201_repair_local_lifecycle.sql': 'lifecycle',
+        '0202_repair_local_claim_recovery.sql': 'recovery',
       });
       expect(workspace).not.toBe('');
       expect(existsSync(workspace)).toBe(false);
