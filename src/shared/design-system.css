@@ -146,6 +146,32 @@
   --focus: 0 0 0 2px var(--panel),0 0 0 4px var(--brand);
 }
 
+/* ==========================================================================
+   NAGLASAK PUTUJE S GLASOM (Z7, 2026-09-20)
+
+   `strong` i `b` su tvornicki 700. Instrument Serif nema nijedan rez iznad 400, a
+   `font-synthesis: none` iznad ne dopusta sintezu, pa taj zahtjev u serifu ne da NISTA:
+   naglasak tiho nestane. U Geist Monu je obrnuto, ondje naglasak nosi tezina 600.
+
+   Pravilo zato ne odlucuje samo, nego CITA par koji postavlja onaj tko je postavio i obitelj.
+   Svako pravilo sa serifnom obitelji nosi uza se `--emph-weight: 400; --emph-style: italic`;
+   te se dvije vrijednosti nasljedjuju, pa ih dobiva i potomak koji vlastito pravilo nema.
+   Kad ih nitko nije postavio, vrijedi mono zamjena (600, uspravno).
+
+   RUCAN POPIS SERIFNIH KONTEJNERA JE OVDJE VEC JEDNOM ZAKAZAO: prva izvedba Z7 popravka
+   nabrajala je `X strong, X b` po kontejneru, a `.pcard-path` (naziv fakulteta na `/rad/`) i
+   `.hero .lead` (alat-stranice) na popisu nisu bili, pa im je naglasak pao na 600 u serifu i
+   nestao s ekrana. Popis koji se odrzava rucno ne moze biti dokaz potpunosti.
+
+   OVDJE, A NE U `page-app.css`: taj list ne ucitavaju ni alat-stranice ni ulaz `/`, a ovaj
+   ucitava svaka ruta (`ui-boot`, `route-shell`). Gard: `tests/design-tokens.test.ts`.
+   ========================================================================== */
+strong,
+b {
+  font-weight: var(--emph-weight, 600);
+  font-style: var(--emph-style, normal);
+}
+
 [data-theme="light"] {
   /* Danje svjetlo: isti stol na dnevnom svjetlu */
   --desk: #DFD8C6;

@@ -127,6 +127,8 @@ html:root[data-motion="reduce"] *::after {
   margin: 0;
   font: 400 1.35rem/1.1 var(--display-serif);
   color: var(--paper-ink);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 
 .ps__title:focus-visible {
@@ -256,6 +258,8 @@ html:root[data-motion="reduce"] *::after {
   background: var(--paper-2);
   color: var(--paper-ink);
   font: 400 var(--fs-ui)/1 var(--display-serif);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 
 .ps-preklopka__unos {
@@ -314,6 +318,8 @@ html:root[data-motion="reduce"] *::after {
   margin: 6px 0 0;
   font: 400 1rem/1.5 var(--display-serif);
   color: var(--paper-ink);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 
 .ps__foot {

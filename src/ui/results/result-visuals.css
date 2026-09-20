@@ -114,6 +114,8 @@
   font-weight: 400;
   line-height: 1.15;
   letter-spacing: -.01em;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .cockpit-header p { margin: 0; color: var(--ck-muted); font-size: .82rem; }
 .cockpit-header__status {
@@ -152,6 +154,8 @@
   font-weight: 400;
   line-height: 1.02;
   letter-spacing: -.022em;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .cockpit-hero__copy p {
   margin: 0;
@@ -373,6 +377,8 @@
   font-size: 1.15rem;
   font-weight: 400;
   letter-spacing: -.01em;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 
 /* ---- Nalazi ----------------------------------------------------------------- */
@@ -444,6 +450,8 @@
   font-size: 1.08rem;
   font-weight: 400;
   line-height: 1.25;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .cockpit-finding__answer {
   display: grid;
@@ -825,6 +833,8 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   color: var(--ck-amber);
   font-family: var(--mono, monospace);
   font-variant-numeric: tabular-nums;
+  --emph-weight: 600;
+  --emph-style: normal;
 }
 
 .outlook__note { margin: 0; color: var(--ck-muted); font-size: .78rem; line-height: 1.5; }
@@ -845,13 +855,17 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   margin: 0 0 12px; font-family: var(--display-serif, Georgia, serif);
   font-weight: 400; font-size: clamp(1.45rem, 2.8vw, 2.15rem); line-height: 1.15;
   letter-spacing: -.01em; color: var(--paper-ink, #23201B);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .fsum-razine { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px }
 .fsum-razina {
   display: grid; grid-template-columns: 1.6rem 1fr; align-items: baseline; gap: .5rem;
   font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
-.fsum-razina b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; text-align: right }
+.fsum-razina b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; text-align: right;--emph-weight:600;--emph-style:normal }
 .fsum-razina[data-ton='blok'] b { color: var(--red-deep, #8E2A22) }
 .fsum-razina[data-ton='dorada'] b { color: var(--warn, #A9741B) }
 .fsum-razina[data-ton='provjera'] b { color: var(--paper-muted, #6E6558) }
@@ -862,9 +876,11 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .fsum-auto {
   margin: 12px 0 0; padding-top: 11px; border-top: 1px solid var(--paper-line, #E0D8C8);
   font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .fsum-auto span { color: var(--paper-muted, #6E6558); font-size: 13px }
-.fsum-auto b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F) }
+.fsum-auto b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F);--emph-weight:600;--emph-style:normal }
 
 /* Ocjena: broj, kosa crta, natpis. Bez prstena, bez tamne plohe, bez halo sjaja. */
 .fsum-ocjena {
@@ -886,6 +902,8 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   font-family: var(--display-serif, Georgia, serif); font-weight: 400;
   font-size: clamp(1rem, 1.95vw, 1.5rem);
   line-height: 1; font-variant-numeric: tabular-nums; color: var(--paper-ink, #23201B);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .fsum-ocjena span { font: 400 13px/1 var(--ui, system-ui); color: var(--paper-muted, #6E6558); margin-top: 2px }
 .fsum-ocjena small {
@@ -1144,7 +1162,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .cockpit-finding__answer p,
 .result-renderer-v1 .result-cockpit-advanced-head p,
 .rs--pitanje p,
-.outlook__manual li { font-family: var(--display-serif, Georgia, serif); font-weight: 400; }
+.outlook__manual li { font-family: var(--display-serif, Georgia, serif); font-weight: 400;--emph-weight:400;--emph-style:italic }
 
 /* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
    Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */

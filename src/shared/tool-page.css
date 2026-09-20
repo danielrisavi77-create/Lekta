@@ -64,7 +64,7 @@ a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px
 .shell{width:min(var(--max),calc(100% - 40px));margin:auto}
 .topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 96%,transparent);border-bottom:1px solid color-mix(in srgb,var(--line) 80%,transparent)}
 .nav{height:70px;display:flex;align-items:center;gap:22px}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-family:var(--display-serif);font-weight:400;font-size:21px;letter-spacing:-.01em;color:var(--text)}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-family:var(--display-serif);font-weight:400;font-size:21px;letter-spacing:-.01em;color:var(--text);--emph-weight:400;--emph-style:italic}
 .logo-tick{width:15px;height:13px;flex:0 0 auto;color:var(--brand);transform:translateY(1px)}
 .nav-links{display:flex;align-items:center;gap:20px;margin-left:auto}
 .nav-links a{text-decoration:none;color:var(--muted);font-weight:650;font-size:14px}
@@ -117,15 +117,15 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 /* ===== KS: Korektorski stol sloj ===== */
 /* ===== KS: Korektorski stol chrome (dijeljeni predlozak) ===== */
 ::selection{background:var(--red);color:#fff}
-h1,h2,h3,h4{font-family:var(--display-serif);font-weight:400}
+h1,h2,h3,h4{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
 .topbar{background:color-mix(in srgb,var(--desk) 96%,transparent);border-bottom:1px solid var(--desk-line)}
 .topbar.scrolled{background:color-mix(in srgb,var(--desk) 92%,transparent);border-bottom-color:var(--desk-line);box-shadow:none}
 .nav{height:66px;gap:24px}
-.logo{gap:12px;color:var(--desk-ink);font-family:var(--display-serif)}
-.ks-mark{position:relative;width:30px;height:30px;flex:none;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--display-serif);font-weight:400;font-size:19px;line-height:1}
+.logo{gap:12px;color:var(--desk-ink);font-family:var(--display-serif);--emph-weight:400;--emph-style:italic}
+.ks-mark{position:relative;width:30px;height:30px;flex:none;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--display-serif);font-weight:400;font-size:19px;line-height:1;--emph-weight:400;--emph-style:italic}
 .ks-tick{position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:var(--red);color:#F7F3E8;display:grid;place-items:center}
 .ks-tick svg{width:9px;height:9px;display:block}
-.logo-word{font-family:var(--display-serif);font-style:italic;font-weight:400;font-size:26px;letter-spacing:-.01em;color:var(--desk-ink)}
+.logo-word{font-family:var(--display-serif);font-style:italic;font-weight:400;font-size:26px;letter-spacing:-.01em;color:var(--desk-ink);--emph-weight:400;--emph-style:italic}
 footer .logo-word{font-size:21px}
 footer .ks-mark{width:24px;height:24px;font-size:15px}
 footer .ks-tick{width:11px;height:11px}
@@ -169,13 +169,13 @@ footer .ks-tick{width:11px;height:11px}
 /* a11y: --desk-faint na --desk pozadini daje ~2.6:1 (tamna) / ~2.2:1 (svijetla), duboko ispod
    WCAG AA 4.5:1 za 11px tekst; --desk-muted mjeri 5.2:1 / 4.6:1 (tests/a11y-batch-2026-07-18.test.ts). */
 .eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.18em;color:var(--desk-muted)}
-.hero h1{font-family:var(--display-serif);font-weight:400;letter-spacing:-.02em;color:var(--desk-ink)}
+.hero h1{font-family:var(--display-serif);font-weight:400;letter-spacing:-.02em;color:var(--desk-ink);--emph-weight:400;--emph-style:italic}
 .hero h1 .ink{font-style:italic;font-weight:400;color:var(--red)}
-.hero p.lead,.hero .lead{font-family:var(--display-serif);color:var(--desk-muted)}
+.hero p.lead,.hero .lead{font-family:var(--display-serif);color:var(--desk-muted);--emph-weight:400;--emph-style:italic}
 .backlink{font-family:var(--sans)}
 .backlink:hover{color:var(--red)}
 footer{border-top:1px solid var(--desk-line)}
-.footer-inner{color:var(--desk-muted);font-family:var(--display-serif);font-size:14px}
+.footer-inner{color:var(--desk-muted);font-family:var(--display-serif);font-size:14px;--emph-weight:400;--emph-style:italic}
 .footer-inner a:hover{color:var(--desk-ink)}
 body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--ui);overflow-x:clip;position:relative}
 .card .field label{font:500 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--paper-muted)}
@@ -303,7 +303,7 @@ code,kbd,samp{font-family:var(--mono)}
 
 .cta p,
 .tools-grid .tool-card p,
-.lekta-consent-banner p{font-family:var(--display-serif);font-weight:400}
+.lekta-consent-banner p{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
 
 /* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
    Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */

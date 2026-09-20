@@ -259,6 +259,8 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   margin: 0;
   color: var(--paper-ink);
   font: 600 14px/1.2 var(--ui);
+  --emph-weight: 600;
+  --emph-style: normal;
 }
 
 .premium-viz-card > p {
@@ -410,7 +412,7 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
  */
 .premium-tool-index__intro .premium-eyebrow { color: inherit; opacity: .72 }
 
-.premium-tool-index__intro h2 { max-width: 12ch; margin: 10px 0; color: inherit; font: 400 clamp(30px, 5vw, 58px)/.96 var(--display-serif) }
+.premium-tool-index__intro h2 { max-width: 12ch; margin: 10px 0; color: inherit; font: 400 clamp(30px, 5vw, 58px)/.96 var(--display-serif);--emph-weight:400;--emph-style:italic }
 .premium-tool-index__intro p { max-width: 42ch; margin: 0; color: color-mix(in srgb, var(--paper) 72%, transparent) }
 
 .premium-tool-index__signal {
@@ -423,7 +425,7 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   box-shadow: var(--premium-depth-2);
 }
 
-.premium-tool-index__signal strong { color: var(--paper-ink); font: 400 34px/1 var(--display-serif) }
+.premium-tool-index__signal strong { color: var(--paper-ink); font: 400 34px/1 var(--display-serif);--emph-weight:400;--emph-style:italic }
 .premium-tool-index__signal p { color: var(--paper-muted); font-size: 13px }
 
 .premium-data-grid {
@@ -515,7 +517,7 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
 .premium-tool-index__intro p,
 .premium-tool-index__signal p,
 .premium-viz-card > p,
-[data-premium-surface] .faq details p { font-family: var(--display-serif); font-weight: 400; }
+[data-premium-surface] .faq details p { font-family: var(--display-serif); font-weight: 400;--emph-weight:400;--emph-style:italic }
 
 /* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
    Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
