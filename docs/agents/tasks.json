@@ -190,11 +190,11 @@
     {
       "id": "T19",
       "title": "Pouzdana produkcijska gradnja i dokaz izdanja",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: proizvedeni artefakt ima tocan identitet, strogi smoke odbija pogresnu verziju, a negativni slucajevi (nedostajuci build-info, pogresan SHA, stale ili unknown dokaz) zaustavljaju objavu."
+      "note": "P0. Dokaz: proizvedeni artefakt ima tocan identitet, strogi smoke odbija pogresnu verziju, a negativni slucajevi (nedostajuci build-info, pogresan SHA, stale ili unknown dokaz) zaustavljaju objavu. | Spojen 2026-09-20 PR #89 merge 701e122c (T19 rez 1: negativni slučajevi gatea). Orkestrator higijena."
     },
     {
       "id": "T20",
