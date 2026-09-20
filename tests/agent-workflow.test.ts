@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { prepareJob, parseResult, validateQueue } from '../scripts/agents/core.mjs';
+import { prepareJob, parseResult, validateQueue, PROMPT_ARG_PLACEHOLDER } from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -17,6 +17,22 @@ describe('agent handoff', () => {
     expect(job.prompt).toContain('$(touch stolen)');
     expect(job.args.join(' ')).not.toContain('stolen');
   });
+  it('delivers the Grok prompt as an argv placeholder, never via a shell string', () => {
+    const q = queue();
+    q.tasks[1].title = 'Repair $(touch stolen) `echo secret`';
+    const job = prepareJob(q, 'T01', 'implement', 'build');
+    expect(job.command).toBe('grok');
+    expect(job.args[0]).toBe('--no-auto-update');
+    expect(job.args).toContain('-p');
+    expect(job.args).toContain(PROMPT_ARG_PLACEHOLDER);
+    expect(job.args).toContain('--always-approve');
+    expect(job.args).toContain('grok-4');
+    expect(job.args.join(' ')).not.toContain('stolen');
+    expect(job.prompt).toContain('$(touch stolen)');
+    const plan = prepareJob(q, 'T01', 'plan', 'grok');
+    expect(plan.args).not.toContain('--always-approve');
+    expect(plan.command).toBe('grok');
+  });
   it('refuses an implementation before its dependency is complete', () => {
     const q = queue();
     q.tasks[0].status = 'ready';
@@ -32,6 +48,8 @@ describe('agent handoff', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'astra')).toThrow(/role/);
     expect(() => prepareJob(queue(), 'T01', 'plan', 'sonnet')).toThrow(/role/);
     expect(() => prepareJob(queue(), 'T01', 'plan', 'unknown')).toThrow(/agent/);
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'grok')).toThrow(/role/);
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'build')).toThrow(/role/);
   });
   it('requires a caller-selected Claude budget and limits unattended tool access', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet')).toThrow(/budget/);
@@ -42,6 +60,15 @@ describe('agent handoff', () => {
     expect(job.args).not.toContain('bypassPermissions');
     expect(job.args[job.args.indexOf('--allowedTools') + 1]).not.toContain('Bash(npm run *)');
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet', Infinity)).toThrow(/budget/);
+  });
+  it('rejects same-provider review for Grok Build and allows cross-provider review', () => {
+    const q = queue();
+    q.tasks[1].status = 'in_review';
+    q.tasks[1].implementationAgent = 'build';
+    expect(() => prepareJob(q, 'T01', 'review', 'grok')).toThrow(/different provider/);
+    expect(prepareJob(q, 'T01', 'review', 'astra').command).toBe('codex');
+    q.tasks[1].implementationAgent = 'sol';
+    expect(prepareJob(q, 'T01', 'review', 'grok').command).toBe('grok');
   });
   it('rejects missing dependencies and dependency cycles', () => {
     const q = queue();
@@ -65,6 +92,14 @@ describe('provider results do not replace verification', () => {
       .toEqual({ ok: true, reportedModels: ['claude-opus-4-6'] });
     expect(parseResult('claude', 'not json', 0).ok).toBe(false);
   });
+  it('accepts parseable non-error Grok JSON and rejects explicit errors', () => {
+    expect(parseResult('grok', '', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4","ok":false}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"error":"boom"}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4","result":"done"}', 1).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4","result":"done"}', 0))
+      .toEqual({ ok: true, reportedModels: ['grok-4'] });
+  });
 });
 
 describe('subscription billing mode (autonomy profile)', () => {
@@ -83,5 +118,11 @@ describe('subscription billing mode (autonomy profile)', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet')).toThrow(/budget/);
     expect(prepareJob(queue(), 'T01', 'implement', 'sonnet', 3).billingMode).toBe('budget');
     expect(prepareJob(queue(), 'T01', 'implement', 'sol').args).not.toContain('--max-budget-usd');
+  });
+  it('allows Grok agents in subscription mode without a budget flag', () => {
+    const job = prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription' });
+    expect(job.command).toBe('grok');
+    expect(job.args).not.toContain('--max-budget-usd');
+    expect(job.billingMode).toBe('subscription');
   });
 });
