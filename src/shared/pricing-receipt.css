@@ -240,6 +240,9 @@
   gap: 8px;
 }
 .pr-btn {
+  /* CTA je u zivom stanju `<a>` (poveznica s odredistem), a u soft launchu `<button>`; pravilo zato
+     mora vrijediti za oba, pa i podcrtavanje poveznice mora pasti. */
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -14,6 +14,9 @@
  * OVISNOSTI SU NAMJERNO PLITKE: cijene, tokeni i TIP plana. Plan se uvozi samo kao tip, pa se u
  * izvodjenju ne povlaci nista iz analizatora i racun se moze crtati na stranici koja analizator
  * nema (`/saznaj-vise/`).
+ *
+ * ODREDISTE CTA-a DAJE POZIVATELJ (`options.cta`) i obavezno je. Racun zna reci cijenu, ali ne zna
+ * kamo kupnja vodi: to ovisi o stranici na kojoj visi. Vidi `PricingReceiptCta`.
  */
 import {
   PRICING_COPY,
@@ -34,6 +37,26 @@ import './pricing-receipt.css';
  */
 export type PricingReceiptPlan = Pick<RepairPlan, 'sigurni' | 'odluka' | 'rucni'>;
 
+/**
+ * ODREDISTE CTA GUMBA. Ili poveznica, ili rukovatelj; treceg nema, i to je namjerno UNIJA a ne
+ * objekt s dva neobavezna polja: `{}` tako ne prolazi tipski, pa se gumb bez ucinka ne moze
+ * napisati ni slucajno.
+ *
+ * Granicu je zapisala prethodna izvedba cjenika (`renderPricing` u `src/routes/learn-more/main.ts`,
+ * commit `1f23c9f9`): "Gumb bez ucinka je gori od poveznice koja vodi dalje". Prva izvedba ovog
+ * racuna ju je izgubila, pa je u zivom stanju crtala omogucen `<button>` bez ijednog slusaca.
+ */
+export type PricingReceiptCta =
+  | { readonly href: string }
+  | { readonly onClick: (stanje: PricingReceiptCtaState) => void };
+
+/** Sto rukovatelj CTA-a treba znati; racun mu ne daje DOM nego stanje koje je korisnik odabrao. */
+export interface PricingReceiptCtaState {
+  readonly workType: ReportWorkType;
+  readonly repairSelected: boolean;
+  readonly totalEur: number;
+}
+
 export interface PricingReceiptOptions {
   /** Naplatna vrsta rada; u opcenitom nacinu je samo pocetni odabir izbornika. */
   readonly workType: ReportWorkType;
@@ -43,6 +66,11 @@ export interface PricingReceiptOptions {
   readonly plan?: PricingReceiptPlan | null;
   /** Je li placeni sloj ziv. Neziv znaci gumb "Uskoro", nikad ponuda koja ne radi. */
   readonly live: boolean;
+  /**
+   * Kamo vodi CTA kad je placeni sloj ziv. OBAVEZNO je i kad `live` nije, jer se zastavica cita iz
+   * konfiguracije u izvodjenju: pozivatelj koji odrediste da samo "kad zatreba" ne zna kad zatreba.
+   */
+  readonly cta: PricingReceiptCta;
 }
 
 export interface PricingReceiptHandle {
@@ -236,12 +264,40 @@ export function renderPricingReceipt(
       ctaBlok.append(gumb, el('span', 'pr-cta-note', PRICING_COPY.ctaUskoroNapomena));
       return;
     }
-    const gumb = el('button', 'pr-btn pr-btn--live');
-    gumb.type = 'button';
-    gumb.textContent = popravakUkljucen
+    const natpis = popravakUkljucen
       ? `${PRICING_COPY.ctaPopravi} ${formatEurPrice(tier.priceEur)}`
       : PRICING_COPY.ctaBesplatno;
-    ctaBlok.append(gumb);
+    const cta = options.cta as Partial<{ href: string; onClick: (s: PricingReceiptCtaState) => void }>;
+
+    if (typeof cta?.href === 'string' && cta.href.length > 0) {
+      const veza = el('a', 'pr-btn pr-btn--live', natpis);
+      veza.href = cta.href;
+      veza.dataset.pr = 'cta-action';
+      ctaBlok.append(veza);
+      return;
+    }
+    if (typeof cta?.onClick === 'function') {
+      const gumb = el('button', 'pr-btn pr-btn--live', natpis);
+      gumb.type = 'button';
+      gumb.dataset.pr = 'cta-action';
+      const rukovatelj = cta.onClick;
+      gumb.addEventListener('click', () => rukovatelj({
+        workType: vrstaRada,
+        repairSelected: popravakUkljucen,
+        totalEur: popravakUkljucen ? tier.priceEur : 0,
+      }));
+      ctaBlok.append(gumb);
+      return;
+    }
+
+    // FAIL-SAFE za pozivatelja bez tipova (JS). Tip iznad ovo vec zabranjuje, pa ova grana nije
+    // druga ponuda nego zadnja crta: ziv sloj BEZ odredista ne smije dati omogucen gumb. Radije
+    // istina "Uskoro", koja u tom stanju i jest istina (odredista nema), nego gumb koji suti.
+    const zamjenski = el('button', 'pr-btn pr-btn--soon', PRICING_COPY.ctaUskoro);
+    zamjenski.type = 'button';
+    zamjenski.disabled = true;
+    zamjenski.setAttribute('aria-disabled', 'true');
+    ctaBlok.append(zamjenski);
   }
 
   preklopnik.addEventListener('change', () => {

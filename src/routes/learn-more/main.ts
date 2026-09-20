@@ -41,7 +41,10 @@ function renderChecks(root: HTMLElement): void {
  * Vrsta rada je pocetni odabir izbornika, jer na ovoj stranici jos nema analiziranog rada.
  */
 function renderCjenik(receiptRoot: HTMLElement | null, letterRoot: HTMLElement | null, live: boolean, contactEmail: string): void {
-  if (receiptRoot) renderPricingReceipt(receiptRoot, { workType: 'diplomski', live });
+  // ODREDISTE CTA-a: ova ruta NEMA analizator ni modal narudzbe (vidi biljesku iznad), pa kupnja
+  // ovdje ne moze poceti. Vodi se na ulaz, isto kamo vode i ostale CTA poveznice ove stranice, jer
+  // je poveznica koja vodi dalje bolja od gumba bez ucinka.
+  if (receiptRoot) renderPricingReceipt(receiptRoot, { workType: 'diplomski', live, cta: { href: '/#analyzer' } });
   if (letterRoot) renderPricingLetter(letterRoot, { contactEmail });
 }
 
