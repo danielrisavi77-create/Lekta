@@ -1,5 +1,5 @@
 /** Provider-neutral task handoff. No process execution or queue writes here. */
-export const PROMPT_ARG_PLACEHOLDER = '__LEKTA_PROMPT__';
+export const PROMPT_FILE_PLACEHOLDER = '__LEKTA_PROMPT_FILE__';
 
 export const AGENTS = Object.freeze({
   astra: { command: 'codex', model: 'gpt-6-astra', role: 'coordinator' },
@@ -76,11 +76,11 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   } else if (agent.command === 'claude') {
     args = ['-p', '--model', agent.model, '--output-format', 'json', '--max-turns', '20', '--permission-mode', 'dontAsk'];
   } else if (agent.command === 'grok') {
-    // Grok headless requires `-p <prompt>` (stdin is not documented). cli.mjs substitutes
-    // PROMPT_ARG_PLACEHOLDER with the real prompt as a separate argv element (no shell).
+    // Grok 1.0.34 supports --prompt-file. cli.mjs substitutes the artifact path so the
+    // complete task never appears in the process argv or shell history.
     args = [
       '--no-auto-update',
-      '-p', PROMPT_ARG_PLACEHOLDER,
+      '--prompt-file', PROMPT_FILE_PLACEHOLDER,
       '-m', agent.model,
       '--output-format', 'json',
       '--max-turns', '20',
@@ -142,9 +142,13 @@ export function parseResult(command, stdout, exitCode) {
       if (result == null || typeof result !== 'object' || Array.isArray(result)) {
         return { ok: false, reportedModels: [] };
       }
-      // The documented contract guarantees one JSON object, but not a stable success schema.
-      // Accept only the explicit result shape observed by this integration; unknown shapes fail closed.
-      if (result.type !== 'result' || result.is_error !== false || result.ok === false
+      const currentSuccess = typeof result.text === 'string' && result.text.trim().length > 0
+        && result.stopReason === 'end_turn'
+        && Number.isInteger(result.num_turns) && result.num_turns > 0
+        && result.modelUsage != null && typeof result.modelUsage === 'object'
+        && Object.keys(result.modelUsage).length > 0;
+      const legacySuccess = result.type === 'result' && result.is_error === false;
+      if ((!currentSuccess && !legacySuccess) || result.is_error === true || result.ok === false
           || result.error != null || String(result.subtype ?? '').startsWith('error')) {
         return { ok: false, reportedModels: [] };
       }
