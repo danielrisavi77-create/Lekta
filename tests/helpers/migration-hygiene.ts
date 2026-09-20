@@ -1,0 +1,385 @@
+/**
+ * Higijena SQL migracija: tajne i idempotencija crona.
+ *
+ * Postoji zbog izmjerenog kvara (2026-09-20). `0059_secure_reminder_cron.sql` je na staging bazi
+ * srusio `db push` lanac od 24 migracije s porukom
+ * "could not find valid entry for job send-deadline-reminders (SQLSTATE XX000)", jer je zvao
+ * `cron.unschedule('send-deadline-reminders')` BEZUVJETNO, a taj posao na stagingu nikad nije
+ * postojao (0012 ga samo opisuje u komentiranom runbooku). Ista je datoteka uz to nosila
+ * PRODUKCIJSKI URL i PRODUKCIJSKI Bearer kljuc, pa bi staging baza svaki dan u 8 h zvala
+ * produkcijsku funkciju za slanje podsjetnika stvarnim korisnicima.
+ *
+ * Gard je zato dvostruk i oba dijela moraju biti strojna, jer je oba propusta ljudsko oko
+ * propustilo kroz pregled:
+ *   1. nijedna migracija ne smije nositi tvrdo upisan endpoint projekta ni token-oblik kljuca,
+ *   2. svaki `cron.unschedule` mora biti zasticen, inace migracija nije idempotentna (tvrdo
+ *      pravilo repozitorija: migracija se u praksi primjenjuje vise puta i na vise okolina).
+ *
+ * ZASTO NE GOLA RIJEC "Bearer ": ispravna, popravljena migracija LEGITIMNO sadrzi niz
+ * `'Bearer ' || v_bearer` (zaglavlje se slaze iz vault tajne). Gard koji trazi golu rijec bio bi
+ * crven nad tocno onom datotekom koju zadatak trazi, a istovremeno bi propustio kljuc upisan u
+ * drukcijem formatu. Zato se trazi TOKEN-OBLIK: `Bearer` + razmak + najmanje 20 znakova tokena.
+ * Regexi su pisani doslovno u ovoj datoteci i provjereni okom (vodic: "Kontrolni bajt u
+ * generiranom regexu": regex slozen kroz alat izgubi escape i gard prestane gristi).
+ *
+ * STO OVAJ GARD NE MOZE, i to se ne prikriva: on cita TEKST, pa ga slaganje niza zaobilazi.
+ * `'https://' || 'ref.supabase.co/functions/v1/x'`, `chr(...)` ili `decode(..., 'base64')` daju u
+ * izvodjenju isti URL i isti kljuc, a u izvoru nema ni jednog ni drugog oblika. Gard je zato
+ * zastita od GRESKE (izmjereni kvar je bio obican doslovan niz), ne od namjere. Protiv namjere
+ * stoje pregled promjene i gitleaks nad povijescu, ne ovaj test. Nalaz iz adversarijalnog
+ * pregleda drugim alatom (codex, 2026-09-20).
+ */
+
+/** Jedan nalaz higijene nad jednom migracijom. */
+export interface MigrationHygieneProblem {
+  file: string;
+  kind: 'hardcoded-endpoint' | 'bearer-literal' | 'unguarded-unschedule';
+  detail: string;
+}
+
+/** Ulaz: ime datoteke i njezin sirovi SQL. */
+export interface MigrationFile {
+  file: string;
+  sql: string;
+}
+
+/** Raspon tijela jednog dollar-quote bloka (`do $$ ... $$`), bez samih oznaka. */
+export interface DollarBody {
+  start: number;
+  end: number;
+}
+
+interface ScanResult {
+  /** Tekst iste DULJINE kao ulaz, s komentarima zamijenjenim razmacima (novi redovi ostaju). */
+  stripped: string;
+  /** Tijela dollar-quote blokova; `do $$ ... $$` tijelo je upravo takav blok. */
+  dollarBodies: DollarBody[];
+}
+
+/** Otvara li se na poziciji `i` dollar-quote oznaka; vraca oznaku (npr. `$$` ili `$tag$`) ili null. */
+function dollarTagAt(sql: string, i: number): string | null {
+  if (sql[i] !== '$') return null;
+  let j = i + 1;
+  while (j < sql.length) {
+    const ch = sql[j];
+    if (ch === '$') return sql.slice(i, j + 1);
+    // Oznaka je identifikator; znamenka na prvom mjestu nije oznaka nego parametar ($1).
+    const isIdent = /[A-Za-z_]/.test(ch) || (j > i + 1 && /[0-9]/.test(ch));
+    if (!isIdent) return null;
+    j += 1;
+  }
+  return null;
+}
+
+/**
+ * Prodji kroz SQL svjestan stringova i komentara.
+ *
+ * Komentari (`--` do kraja retka i ugnijezdeni blok komentari) se BRISU, a sadrzaj stringova se
+ * CUVA: tvrdo upisan kljuc uvijek zivi UNUTAR stringa, pa bi brisanje stringova ubilo cijeli gard.
+ * Duljina se cuva da se indeks moze prevesti natrag u broj retka.
+ */
+function scanSql(sql: string): ScanResult {
+  const out: string[] = new Array(sql.length);
+  const dollarBodies: DollarBody[] = [];
+  for (let i = 0; i < sql.length; i += 1) out[i] = sql[i];
+
+  const blank = (from: number, to: number): void => {
+    for (let i = from; i < to && i < sql.length; i += 1) {
+      if (sql[i] !== '\n' && sql[i] !== '\r') out[i] = ' ';
+    }
+  };
+
+  let i = 0;
+  while (i < sql.length) {
+    const two = sql.slice(i, i + 2);
+
+    if (two === '--') {
+      let j = i;
+      while (j < sql.length && sql[j] !== '\n') j += 1;
+      blank(i, j);
+      i = j;
+      continue;
+    }
+
+    if (two === '/*') {
+      let depth = 1;
+      let j = i + 2;
+      while (j < sql.length && depth > 0) {
+        if (sql.slice(j, j + 2) === '/*') { depth += 1; j += 2; continue; }
+        if (sql.slice(j, j + 2) === '*/') { depth -= 1; j += 2; continue; }
+        j += 1;
+      }
+      blank(i, j);
+      i = j;
+      continue;
+    }
+
+    if (sql[i] === "'") {
+      let j = i + 1;
+      while (j < sql.length) {
+        if (sql[j] === "'" && sql[j + 1] === "'") { j += 2; continue; }
+        if (sql[j] === "'") { j += 1; break; }
+        j += 1;
+      }
+      i = j;
+      continue;
+    }
+
+    if (sql[i] === '"') {
+      let j = i + 1;
+      while (j < sql.length && sql[j] !== '"') j += 1;
+      i = j + 1;
+      continue;
+    }
+
+    const tag = dollarTagAt(sql, i);
+    if (tag) {
+      const bodyStart = i + tag.length;
+      const close = sql.indexOf(tag, bodyStart);
+      const bodyEnd = close === -1 ? sql.length : close;
+      dollarBodies.push({ start: bodyStart, end: bodyEnd });
+      // Tijelo se i dalje pretrazuje (unutra su naredbe koje gard mjeri), pa se preskace samo
+      // otvarajuca oznaka, ne i sadrzaj.
+      i = bodyStart;
+      continue;
+    }
+
+    i += 1;
+  }
+
+  return { stripped: out.join(''), dollarBodies };
+}
+
+/** Javno: SQL bez komentara, iste duljine. Izlozeno radi samotestiranja u testu. */
+export function stripSqlComments(sql: string): string {
+  return scanSql(sql).stripped;
+}
+
+/** Endpoint projekta tvrdo upisan u migraciju (a ne procitan iz vaulta). */
+const HARDCODED_ENDPOINT = /supabase\.co\/functions\/v1/;
+/** Host s doslovnim project-refom, i kad putanja nije `/functions/v1`. */
+const HARDCODED_PROJECT_HOST = /https:\/\/[a-z0-9]{16,}\.supabase\.co/;
+/** Token-oblik: `Bearer` + razmak + najmanje 20 znakova tokena. Vidi zaglavlje datoteke. */
+const BEARER_TOKEN_LITERAL = /Bearer\s+[A-Za-z0-9_\-.]{20,}/;
+
+/**
+ * Trazi se neosjetljivo na velicinu slova: SQL je case-insensitive, pa bi `CRON.UNSCHEDULE(`
+ * inace posve zaobislo gard, a da SQL radi jednako. Nalaz iz adversarijalnog pregleda (2026-09-20).
+ */
+const UNSCHEDULE_CALL = /cron\.unschedule\s*\(/gi;
+/** Idiom ovog repozitorija (0009, 0011, 0016, 0018, 0019, 0022, 0034, 0054). */
+const EXCEPTION_GUARD = /exception\s+when\s+others/i;
+/** Drugi valjan oblik: izricita provjera postojanja posla prije gasenja. */
+const JOB_EXISTS_GUARD = /if\s+exists\s*\(\s*select\s+1\s+from\s+cron\.job\b/gi;
+/** Ime posla unutar uvjeta te provjere; bez njega se zastita ne moze vezati uz konkretan posao. */
+const GUARD_JOBNAME = /\bjobname\s*=\s*'((?:[^']|'')*)'/i;
+/**
+ * Granice `if ... end if` bloka, ukljucujuci SVAKU granu koja zatvara pozitivnu.
+ *
+ * `end if` je naveden PRVI da ga kraca alternacija ne pojede; alternacija se na istom mjestu
+ * isprobava slijeva nadesno, pa je redoslijed ugovor, a ne stil.
+ *
+ * ZASTO SU `elsif` I `elseif` U POPISU (ispravak treceg kruga pregleda, 2026-09-20): u PL/pgSQL-u
+ * one zatvaraju pozitivnu granu tocno kao `else`, a prijasnja granica ih NIJE vidjela, jer u
+ * `elsif` uopce nema podniza `else`, a u `elseif` iza `else` nema granice rijeci. Izmjereno nad
+ * gardom kakav je bio commitan u 185e7762: ulaz u kojem `elsif` grana zove
+ * `cron.unschedule('a')` vracao je PRAZAN popis nalaza, a ta se grana izvodi tocno kad posla
+ * NEMA, dakle `db push` bi pao s XX000. To je cetvrta strana iste rupe (prve tri: neomedjen
+ * pogled unatrag, kriv posao, `else` grana), i razlog zasto se kljucne rijeci ovdje NABRAJAJU
+ * poimence umjesto da se zakljucuje iz oblika.
+ *
+ * `else if` (s razmakom) namjerno NIJE zaseban token: to je u PL/pgSQL-u ugnijezdeni `if` s
+ * vlastitim `end if`, pa ga postojeca dva tokena (`else`, pa `if`) vec obradjuju ispravno.
+ */
+const IF_BOUNDARY = /\bend\s+if\b|\belsif\b|\belseif\b|\belse\b|\bif\b/gi;
+/** Grane koje na dubini nula zatvaraju pozitivnu granu zastite. Vidi IF_BOUNDARY. */
+const BRANCH_CLOSERS = new Set(['else', 'elsif', 'elseif']);
+/** Doslovan argument `cron.unschedule('ime')`; varijabla ili izraz ne daju ime. */
+const UNSCHEDULE_LITERAL_ARG = /^\s*'((?:[^']|'')*)'/;
+
+function lineOf(text: string, index: number): number {
+  let line = 1;
+  for (let i = 0; i < index && i < text.length; i += 1) if (text[i] === '\n') line += 1;
+  return line;
+}
+
+/**
+ * Indeks zatvorene zagrade koja pripada otvorenoj na `open`, ili -1 kad je nema.
+ *
+ * Nizovi se preskacu, jer `where jobname = 'a)b'` inace zatvori zagradu na krivom mjestu. Komentari
+ * su vec obrisani (iste duljine), pa ih ovdje vise nema.
+ */
+function matchParen(text: string, open: number): number {
+  let depth = 0;
+  for (let i = open; i < text.length; i += 1) {
+    const ch = text[i];
+    if (ch === "'") {
+      i += 1;
+      while (i < text.length) {
+        if (text[i] === "'" && text[i + 1] === "'") { i += 2; continue; }
+        if (text[i] === "'") break;
+        i += 1;
+      }
+      continue;
+    }
+    if (ch === '(') depth += 1;
+    else if (ch === ')') {
+      depth -= 1;
+      if (depth === 0) return i;
+    }
+  }
+  return -1;
+}
+
+/**
+ * Pocetak pozitivne grane `if <uvjet> then`, mjereno od zatvorene zagrade provjere postojanja.
+ *
+ * Vraca -1 kad uvjet nije CIST, i to je namjerno strozi od pukog trazenja `then`: uvjet oblika
+ * `if exists (select 1 from cron.job ...) or true then` sintaksno je uredan, a pozitivna grana mu
+ * se izvodi i kad posla NEMA, dakle to nije zastita nego njezina krinka. `and` bi bio bezopasan
+ * (konjunkcija samo suzava), ali se ovdje svejedno odbija: gard radije javi ispravan a neobican
+ * oblik (glasan pad koji covjek rijesi) nego da propusti oblik koji tiho pada na `db push`.
+ */
+function positiveBranchStart(text: string, closeParen: number): number {
+  const tail = text.slice(closeParen + 1);
+  const then = /\bthen\b/i.exec(tail);
+  if (!then) return -1;
+  if (/\bor\b|\band\b/i.test(tail.slice(0, then.index))) return -1;
+  return closeParen + 1 + then.index + then[0].length;
+}
+
+/** Doslovno ime posla odmah iza otvorene zagrade poziva, ili null kad argument nije niz. */
+function literalJobName(stripped: string, after: number): string | null {
+  const hit = UNSCHEDULE_LITERAL_ARG.exec(stripped.slice(after, after + 200));
+  return hit ? hit[1].replace(/''/g, "'") : null;
+}
+
+/**
+ * Jesmo li na kraju `text` jos u POZITIVNOJ grani `if` bloka koji je poceo prije njega.
+ *
+ * Broji se balans: `if` otvara, `end if` zatvara. Cim balans padne ispod nule, blok koji nas zanima
+ * je ZATVOREN, pa sve iza njega vise nije pod njegovom zastitom. Ugnijezdeni `if ... end if` se
+ * pritom ponisti sam sa sobom i ne zatvara roditelja.
+ *
+ * `else`, `elsif` i `elseif` na dubini nula zatvaraju granu jednako kao `end if`, i to nije
+ * sitnica: poziv u bilo kojoj od tih grana provjere "postoji li posao" izvodi se tocno onda kad
+ * posla NEMA, pa bi priznati ga kao zasticen znacilo propustiti zajamcen pad, a ne povremen.
+ */
+function inPositiveIfBranch(text: string): boolean {
+  IF_BOUNDARY.lastIndex = 0;
+  let depth = 0;
+  for (;;) {
+    const hit = IF_BOUNDARY.exec(text);
+    if (!hit) break;
+    const token = hit[0].toLowerCase();
+    if (token.startsWith('end')) {
+      depth -= 1;
+      if (depth < 0) return false;
+    } else if (BRANCH_CLOSERS.has(token)) {
+      if (depth === 0) return false;
+    } else {
+      depth += 1;
+    }
+  }
+  return true;
+}
+
+/**
+ * Je li poziv `cron.unschedule` na poziciji `at` zasticen.
+ *
+ * Dva prihvacena oblika, namjerno oba: repozitorij danas koristi iskljucivo `begin ... exception
+ * when others then null; end;`, ali buduca migracija smije legitimno napisati
+ * `if exists (select 1 from cron.job where jobname = ...)`. Gard mora ostati SIGURNOSNI, ne
+ * stilski, inace postane prepreka ispravnom kodu.
+ *
+ * OBA SMJERA MORAJU BITI OMEDJENA, i to je ispravak nalaza iz drugog kruga pregleda (2026-09-20).
+ * Prozor UNAPRIJED je oduvijek stajao na prvom `begin` ili `end`, pa se rukovatelj iz kasnijeg,
+ * nepovezanog bloka ne moze posuditi. Pogled UNATRAG te zastite isprva NIJE imao: gledao je cijeli
+ * prefiks tijela, pa je JEDAN `if exists (select 1 from cron.job ...)` bilo gdje ranije u istom
+ * `do` bloku tiho proglasavao zasticenima sve kasnije pozive. Tocno taj oblik (migracija koja vodi
+ * DVA posla, prvi zasticen, drugi zaboravljen) reproducira blokator zbog kojeg ovaj gard postoji,
+ * a gard bi ga prijavio kao cist. Zato se sada trazi TROJE:
+ *   1. uvjet provjere je CIST, dakle `if exists (...) then` bez `or` / `and` privjesaka
+ *      (`positiveBranchStart`); `... or true then` je krinka, ne zastita,
+ *   2. poziv je u POZITIVNOJ grani te provjere (balans `if` / `end if`, a `else`, `elsif` i
+ *      `elseif` na dubini nula zatvaraju granu), i
+ *   3. provjera imenuje BAS taj posao, kad su oba imena doslovna.
+ * Kad ime nije doslovno (varijabla), usporedba imena se preskace i odlucuju 1 i 2; to je
+ * svjesna granica garda, ne previd.
+ */
+function unscheduleIsGuarded(stripped: string, body: DollarBody, at: number, len: number): boolean {
+  const rest = stripped.slice(at + len, body.end);
+  const stop = /\b(begin|end)\b/i.exec(rest);
+  const window = stop ? rest.slice(0, stop.index) : rest;
+  if (EXCEPTION_GUARD.test(window)) return true;
+
+  const before = stripped.slice(body.start, at);
+  const jobName = literalJobName(stripped, at + len);
+
+  JOB_EXISTS_GUARD.lastIndex = 0;
+  const candidates: { branchStart: number; name: string | null }[] = [];
+  for (;;) {
+    const hit = JOB_EXISTS_GUARD.exec(before);
+    if (!hit) break;
+    const open = before.indexOf('(', hit.index);
+    const close = open === -1 ? -1 : matchParen(before, open);
+    if (close === -1) continue;
+    const branchStart = positiveBranchStart(before, close);
+    if (branchStart === -1) continue;
+    const named = GUARD_JOBNAME.exec(before.slice(open + 1, close));
+    candidates.push({ branchStart, name: named ? named[1].replace(/''/g, "'") : null });
+  }
+
+  for (let k = candidates.length - 1; k >= 0; k -= 1) {
+    const candidate = candidates[k];
+    if (!inPositiveIfBranch(before.slice(candidate.branchStart))) continue;
+    if (jobName !== null && candidate.name !== null && candidate.name !== jobName) continue;
+    return true;
+  }
+
+  return false;
+}
+
+/** Sve povrede higijene nad zadanim skupom migracija. Prazan niz znaci cisto. */
+export function migrationHygieneProblems(files: MigrationFile[]): MigrationHygieneProblem[] {
+  const problems: MigrationHygieneProblem[] = [];
+
+  for (const { file, sql } of files) {
+    const { stripped, dollarBodies } = scanSql(sql);
+
+    const endpoint = HARDCODED_ENDPOINT.exec(stripped) ?? HARDCODED_PROJECT_HOST.exec(stripped);
+    if (endpoint) {
+      problems.push({
+        file,
+        kind: 'hardcoded-endpoint',
+        detail: `redak ${lineOf(stripped, endpoint.index)}: endpoint projekta tvrdo upisan u migraciju (mora doci iz vault tajne)`,
+      });
+    }
+
+    const bearer = BEARER_TOKEN_LITERAL.exec(stripped);
+    if (bearer) {
+      problems.push({
+        file,
+        kind: 'bearer-literal',
+        detail: `redak ${lineOf(stripped, bearer.index)}: token-oblik Bearer kljuca upisan u migraciju`,
+      });
+    }
+
+    UNSCHEDULE_CALL.lastIndex = 0;
+    for (;;) {
+      const hit = UNSCHEDULE_CALL.exec(stripped);
+      if (!hit) break;
+      const at = hit.index;
+      const body = dollarBodies.find((b) => at >= b.start && at < b.end);
+      if (!body || !unscheduleIsGuarded(stripped, body, at, hit[0].length)) {
+        problems.push({
+          file,
+          kind: 'unguarded-unschedule',
+          detail: `redak ${lineOf(stripped, at)}: cron.unschedule bez zastite (nije idempotentno: pada s XX000 ako posao ne postoji)`,
+        });
+      }
+    }
+  }
+
+  return problems;
+}

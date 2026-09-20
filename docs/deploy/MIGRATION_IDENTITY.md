@@ -195,3 +195,126 @@ gard trazi i `npm run deploy-drift` i `npm run migration-identity` uz `LEKTA_STA
 nije instaliran na ovom stroju. Treba vazeci osobni pristupni token prije nego se push moze
 pokrenuti. MCP `apply_migration` se za ovaj zahvat ne koristi, u skladu s tvrdim pravilom o
 identitetu verzije iznad.
+
+## Blokator 0059 na stagingu: nezasticen `cron.unschedule` i tvrd produkcijski kljuc (2026-09-20)
+
+`npx supabase db push --linked --include-all` prema stagingu `bnyemcnsphlitjradrst` (24 migracije u
+redu) prosao je 0058 i pao na 0059, na PRVOJ naredbi:
+
+    ERROR: could not find valid entry for job send-deadline-reminders (SQLSTATE XX000)
+
+Uzrok: `0059_secure_reminder_cron.sql` je bio jedan redak koji BEZUVJETNO zove
+`cron.unschedule('send-deadline-reminders')`. Taj posao na stagingu nikad nije postojao, jer ga
+nijedna migracija ne stvara: 0012 ga samo opisuje u komentiranom runbooku kao rucni korak. Migracija
+time nije bila idempotentna, sto krsi tvrdo pravilo ovog repozitorija. Svih ostalih deset poziva
+`cron.unschedule` u migracijama (0009, 0011, 0016 dva puta, 0018, 0019 dva puta, 0022, 0034, 0054)
+vec je bilo zasticeno idiomom `begin ... exception when others then null; end;`; samo 0059 nije.
+
+Drugi nalaz je tezi od blokatora. Ista je migracija u repozitoriju drzala PRODUKCIJSKI URL
+(`https://<prod-ref>.supabase.co/functions/v1/send-reminders`) i PRODUKCIJSKI Bearer kljuc,
+tvrdo upisane u tijelo cron naredbe. Da je push prosao, staging baza bi svaki dan u 8 h zvala
+PRODUKCIJSKU funkciju za slanje podsjetnika i slala poruke stvarnim korisnicima.
+
+### Popravak u repozitoriju
+
+0059 je prepisana kao jedan `do $$` blok koji:
+
+1. preskace sve uz `raise notice` ako pg_cron nije dostupan,
+2. cita `lekta_functions_base_url` i `lekta_cron_bearer` iz `vault.decrypted_secrets` (i samo to
+   citanje je zasticeno, jer vault ne mora postojati na lokalnom Postgresu),
+3. ako ijedna tajna fali, javi `notice` i izade NE DIRNUVSI zatecen posao,
+4. tek kad obje tajne postoje, gasi zatecen posao unutar
+   `begin ... exception when others then null; end;`, pa nepostojanje posla vise nije greska,
+   i zatim ga zakazuje ispocetka,
+5. naredbu za cron slaze kroz `format(... %L ...)`. To nije kozmetika: `cron.schedule` prima
+   naredbu kao TEKST koji se kasnije izvodi, pa je navodnjavanje jedina obrana od injekcije i od
+   pucanja na apostrofu u vrijednosti tajne.
+
+REDOSLIJED KORAKA 2 i 4 JE UGOVOR, ne stil. U prvoj izvedbi popravka unschedule je stajao PRIJE
+citanja tajni, pa bi ponovno pokretanje 0059 na produkciji (gdje posao radi, a vault tajne jos
+nisu postavljene) UGASILO posao i ne bi ga zamijenilo nicim: podsjetnici bi tiho prestali ici, a
+migracija bi prijavila uspjeh. Nasao je adversarijalni pregled drugim alatom (codex), kako
+`supabase/CLAUDE.md` i trazi za promjenu sigurnosne granice. Isti je pregled uocio i da je
+pretraga `cron.unschedule` u gardu bila osjetljiva na velicinu slova, pa bi je `CRON.UNSCHEDULE(`
+zaobislo. Oboje je popravljeno i pokriveno testom. Treci nalaz istog pregleda (slaganje niza
+zaobilazi tekstualni gard) nije popravljiv tekstualnom provjerom i zato je izricito zapisan kao
+granica garda u zaglavlju `tests/helpers/migration-hygiene.ts`, a ne presucen.
+
+Migracija je namjerno FAIL-QUIET, za razliku od susjednih cron migracija (0009, 0011, 0016, 0018,
+0019, 0022, 0034) koje su FAIL-CLOSED kad nema pg_crona. Ondje je rijec o retenciji osobnih
+podataka, pa je izostanak posla tiha povreda politike minimizacije. Ovdje je izostanak tajni
+ocekivano stanje na stagingu i u razvoju, a posljedica je samo da podsjetnici ne idu. Ta razlika je
+zapisana i u komentaru same migracije, da je sljedeca sesija ne "popravi" natrag u fail-closed i
+time vrati blokator.
+
+Gard protiv povratka: `tests/migration-secrets-hygiene.test.ts` (logika u
+`tests/helpers/migration-hygiene.ts`) nad SVIM migracijama tvrdi da nijedna ne nosi tvrdo upisan
+endpoint projekta ni token-oblik Bearer kljuca izvan SQL komentara, i da je svaki
+`cron.unschedule` zasticen. Mutacija koja dokazuje da gard grize je
+`migracija/tvrd-kljuc-i-nezasticen-unschedule` u `tests/gate-mutations.test.ts`.
+
+DRUGI KRUG PREGLEDA (isti dan) nasao je da je i sam gard imao rupu, i to bas u obliku kvara koji
+lovi. Zastita je priznavala dva oblika, `begin ... exception when others` i
+`if exists (select 1 from cron.job ...)`. Prvi je bio omedjen (prozor unaprijed staje na prvom
+`begin`, pa se rukovatelj iz kasnijeg nepovezanog bloka ne moze posuditi), drugi nije bio omedjen
+nikako: gledao je cijeli prefiks tijela `do` bloka. Posljedica je izmjerena nad gardom kakav je
+bio commitan: migracija koja vodi DVA posla, prvi zastiti `if exists` provjerom pa je zatvori s
+`end if`, a drugi zaboravi, prolazila je kao CISTA. To je doslovno blokator zbog kojeg ovaj
+odjeljak postoji, a oblik nije izmisljen: 0016 i 0019 vec vode dva posla u jednom bloku.
+Popravljeno tako da se sada trazi oboje, da je `if` blok te provjere na mjestu poziva jos OTVOREN
+(balans `if` naspram `end if`, pa ugnijezdene provjere i dalje prolaze) i da provjera imenuje BAS
+taj posao kad su oba imena doslovna. Pokriveno s tri nova testa u
+`tests/migration-secrets-hygiene.test.ts` (dva hvataju, jedan je negativna kontrola nad
+ugnijezdenim ispravnim oblikom) i prosirenom mutacijom u `tests/gate-mutations.test.ts`.
+
+Uz to je istom prilikom zatvorena i treca strana iste rupe, nadjena samoprovjerom a ne pregledom:
+poziv u ELSE grani provjere stoji IZA nje, pa bi ga balans priznao kao zasticen, a izvodi se
+tocno kad posla NEMA, dakle pada uvijek. `else` na dubini nula zato zatvara zasticenu granu
+jednako kao `end if`.
+
+TRECI KRUG PREGLEDA nasao je da je taj isti popravak zatvorio samo `else`, a `elsif` i `elseif`
+ostavio otvorenima, i da je prethodna inacica ovog odlomka tu rupu jos i proglasila namjernom.
+Nije bila: u PL/pgSQL-u sve tri grane zatvaraju pozitivnu granu jednako, a granica ih nije
+vidjela iz cisto leksickog razloga (u `elsif` nema podniza `else`, a u `elseif` iza `else` nema
+granice rijeci). Izmjereno nad gardom kakav je bio commitan u 185e7762: ulaz u kojem `elsif`
+grana zove `cron.unschedule('a')` vracao je PRAZAN popis nalaza. Ta se grana izvodi tocno kad
+posla nema, dakle `db push` bi pao s XX000, sto je doslovno blokator zbog kojeg gard postoji.
+Popravljeno nabrajanjem kljucnih rijeci poimence (`else`, `elsif`, `elseif`), uz napomenu da
+`else if` s razmakom nije medju njima jer je to ugnijezdeni `if` s vlastitim `end if`, koji
+postojeca dva tokena vec obradjuju ispravno.
+
+Istom prilikom je zatvorena i PETA strana, nadjena trazenjem ostatka istog razreda umjesto samo
+prijavljenog primjera: uvjet `if exists (select 1 from cron.job ...) or true then` sadrzi
+provjeru postojanja, izgleda kao zastita, a pozitivna grana mu se izvodi i kad posla nema. Gard
+sada trazi da uvjet bude CIST, dakle `if exists (...) then` bez privjeska. Odbija se i `and`
+privjezak, koji je zapravo bezopasan; ta je asimetrija svjesna, jer glasan pad nad ispravnim a
+neobicnim oblikom covjek rijesi u minuti, dok propusten oblik rusi `db push` na stagingu.
+
+Pokriveno sa sest novih tvrdnji u `tests/migration-secrets-hygiene.test.ts` (`elsif` i `elseif`
+grana, `or` i `and` privjezak, te dvije negativne kontrole: nepovezan kasniji blok s `elsif`
+granom i ime posla koje sadrzi zagradu) i trecim oblikom u mutaciji
+`migracija/tvrd-kljuc-i-nezasticen-unschedule`.
+
+### Sto mora napraviti vlasnik, RUCNO, na produkciji
+
+Produkcija `zrrjttizjyfcxmcpgzml` ima 0059 VEC primijenjenu (verzija je zapisana u dnevniku).
+Izmjena datoteke u repozitoriju zato ne mijenja nista na zivoj produkcijskoj bazi: postojeci cron
+posao `send-deadline-reminders` i dalje radi s URL-om i kljucem koji su u njega upisani u trenutku
+prve primjene. To je namjerno i ne dira se.
+
+Prije sljedeceg reschedulea tog posla na produkciji (svako ponovno pokretanje 0059 ili njoj
+ekvivalentne logike) vlasnik mora rucno postaviti dvije vault tajne, u SQL editoru ili kroz
+Dashboard (Project Settings -> Vault):
+
+    select vault.create_secret('https://<PROJECT_REF>.supabase.co', 'lekta_functions_base_url');
+    select vault.create_secret('<REMINDER_CRON_SECRET>',            'lekta_cron_bearer');
+
+Mapiranje imena je vazno i lako ga je promasiti: `lekta_cron_bearer` mora sadrzavati ISTU vrijednost
+kao Edge tajna `REMINDER_CRON_SECRET`. `supabase/functions/_shared/cron-auth.ts` je fail-closed i
+usporedjuje konstantno-vremenski, pa svaka druga vrijednost daje tihi 401, a cron nema kome
+prijaviti gresku. Bez postavljenih tajni migracija se i dalje primijeni uredno, ali posao NE zakaze
+i o tome javi `notice`.
+
+Neovisno o tome: kljuc koji je bio tvrdo upisan u 0059 ostaje u povijesti repozitorija i treba ga
+smatrati kompromitiranim. Rotacija `REMINDER_CRON_SECRET` (Edge tajna + vault tajna u istom potezu)
+je posao vlasnika i nije dio ove izmjene.
