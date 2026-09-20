@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Saznaj više" description="Redizajn /saznaj-vise/: jedan dugi svitak papira, 10 poglavlja s ljepljivom marginom, živi demo umjesto videa, svako poglavlje s vlastitim interaktivnim prizorom." -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}a{color:inherit}a:hover{color:#E4573D}
+@keyframes lmPull{from{opacity:0;transform:translateY(46px) rotate(-1.5deg)}to{opacity:1;transform:none}}
+@keyframes lmDraw{from{width:0}to{width:100%}}
+@keyframes lmStamp{0%{opacity:0;transform:rotate(-9deg) scale(1.6)}60%{opacity:1;transform:rotate(-9deg) scale(.96)}100%{opacity:.9;transform:rotate(-9deg) scale(1)}}
+@keyframes lmPrint{from{opacity:0;transform:translateY(-6px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:none;clip-path:inset(0)}}
+@keyframes lmFlip{from{transform:rotateY(-90deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes lmPeel{from{transform:rotate(-2deg) translateY(-10px);opacity:0}to{transform:none;opacity:1}}
+@keyframes lmDemoMargin{0%,20%{padding-left:22px}40%,100%{padding-left:44px}}
+@keyframes lmDemoLead{0%,40%{row-gap:7px}60%,100%{row-gap:12px}}
+@keyframes lmDemoHead{0%,60%{font-size:12px;color:#26221B}72%,100%{font-size:15px;color:#26221B}}
+@keyframes lmDemoStamp{0%,80%{opacity:0;transform:rotate(-9deg) scale(1.6)}88%{opacity:1;transform:rotate(-9deg) scale(.96)}100%{opacity:.9;transform:rotate(-9deg) scale(1)}}
+@keyframes lmCap1{0%,4%{opacity:0}8%,36%{opacity:1}40%,100%{opacity:0}}
+@keyframes lmCap2{0%,40%{opacity:0}44%,58%{opacity:1}62%,100%{opacity:0}}
+@keyframes lmCap3{0%,62%{opacity:0}66%,78%{opacity:1}82%,100%{opacity:0}}
+@keyframes lmCap4{0%,82%{opacity:0}86%,100%{opacity:1}}
+@keyframes lmGuide{0%,20%{left:22px;opacity:1}40%{left:44px;opacity:1}50%,100%{left:44px;opacity:0}}
+@keyframes lmBlink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}</style></helmet>
+<div style="min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace">
+<header style="display:flex;align-items:center;gap:24px;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:22px 0">
+<a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:29px;letter-spacing:-.01em">Lekta</span></a>
+<nav style="display:flex;align-items:center;gap:16px;margin-left:auto;font-size:13px;font-weight:500">
+<a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Moji radovi</a>
+<a href="#" style="display:inline-flex;align-items:center;padding:9px 16px;background:#C4372E;color:#F7F3E8;border-radius:2px;text-decoration:none;font-weight:500">Provjeri rad</a>
+<button type="button" aria-label="Lampa" style="display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid rgba(237,231,220,.16);border-radius:2px;background:transparent;color:rgba(237,231,220,.72);cursor:pointer"><span style="display:block;width:10px;height:10px;border-radius:50%;background:rgba(255,214,150,.9);box-shadow:0 0 12px rgba(255,214,150,.7)"></span></button>
+</nav>
+</header>
+<main data-screen-label="Saznaj više" style="width:min(1180px,calc(100% - 48px));margin:0 auto;padding:clamp(16px,4vh,48px) 0 96px;display:grid;justify-items:center">
+<div style="width:min(960px,100%);background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px 2px 0 0;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:0 clamp(20px,5vw,64px) 72px;position:relative">
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:14px;background:repeating-linear-gradient(90deg,#EFE9D9 0 18px,#F7F3E8 18px 36px);border-bottom:1px solid #DCD4BF"></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:11px;letter-spacing:.08em;color:#6E6656;padding:36px 0 14px;border-bottom:1px solid #DCD4BF"><span>Lekta · Kako radi</span><span>Svitak · 10 poglavlja</span></div>
+<div style="padding:44px 0 8px"><p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:20px;color:#A62B23">Za one koji prvo žele vidjeti</p><h1 style="margin:8px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(38px,6vw,84px);line-height:.95;letter-spacing:-.02em;text-wrap:balance">Kako Lekta čita rad.</h1><p style="margin:16px 0 0;max-width:52ch;font-family:'Instrument Serif',Georgia,serif;font-size:22px;line-height:1.4;color:#6E6656;text-wrap:pretty">Ne piše rad umjesto tebe. Pronalazi tehničke i citatne nedosljednosti koje je lako previdjeti pred predaju.</p>
+<div style="margin-top:28px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;border:1px solid #DCD4BF;border-radius:2px;background:#FBF8F0"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">CIJELI SVITAK PRIČA O</span>
+<sc-for list="{{ profiles }}" as="pr" hint-placeholder-count="3"><button type="button" onClick="{{ pr.pick }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:8px 12px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer;display:inline-flex;gap:8px;align-items:center" style-hover="background:#26221B;color:#F7F3E8"><sc-if value="{{ pr.on }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C4372E"></span></sc-if>{{ pr.label }}</button></sc-for>
+<span style="font-size:12px;color:#6E6656;margin-left:auto">margina {{ prof.marginCm }} · prored {{ prof.lead }} · {{ prof.style }}</span></div></div>
+
+<section id="kako" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:40px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">1.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Kako radi</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Tri lista iz jednog dosjea.</h2>
+<div style="margin-top:28px;display:inline-flex;align-items:center;gap:10px;padding:8px 14px;background:#26221B;color:#EDE7DC;border-radius:2px 2px 0 0;font-size:11px;letter-spacing:.08em"><span style="color:#E4573D">DOSJE</span><span>{{ prof.faculty }} · {{ prof.kind }} · {{ prof.style }}</span></div>
+<div style="position:relative;display:grid;gap:18px;padding:18px;border:1px solid #26221B;border-radius:0 2px 2px 2px">
+<sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+<article style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;padding:22px 24px;background:#FBF8F0;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(38,34,27,.08);animation:lmPull 1ms linear both;animation-timeline:view();animation-range:entry 0% entry 60%">
+<span style="font-size:11px;letter-spacing:.08em;color:#A62B23;padding-top:6px">{{ s.no }}</span>
+<div><h3 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:26px;line-height:1.1">{{ s.title }}</h3><p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#6E6656;max-width:56ch">{{ s.text }}</p></div>
+</article>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section id="demo" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">2.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Živi demo</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Pogledaj kako se stranica popravi.</h2>
+<p style="margin:10px 0 0;font-size:13px;line-height:1.55;color:#6E6656;max-width:56ch">Nije video. Ista pravila koja koristi provjera pomiču marginu, prored i naslov, pa padne pečat. Traje osam sekundi i ponavlja se.</p>
+<div style="margin-top:24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,220px);gap:20px;align-items:start;background:#26221B;padding:24px;border-radius:2px">
+<div style="position:relative;aspect-ratio:1/1.3;background:#F7F3E8;border-radius:1px;box-shadow:0 12px 30px rgba(0,0,0,.4);overflow:hidden">
+<sc-if value="{{ demoOff }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;inset:0;display:grid;padding:28px 22px;row-gap:7px;align-content:start;padding-left:22px"><span style="height:12px;width:60%;background:#26221B;opacity:.85;margin-bottom:6px;font-size:12px"></span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF;width:92%"></span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF;width:70%"></span><span style="height:5px;background:#DCD4BF;margin-top:8px"></span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF;width:84%"></span></div>
+<i aria-hidden="true" style="position:absolute;top:0;bottom:0;left:22px;border-left:1px dashed #C4372E"></i>
+<button type="button" onClick="{{ startDemo }}" style="position:absolute;inset:0;display:grid;place-items:center;background:rgba(38,34,27,.28);border:0;cursor:pointer;color:#F7F3E8;font-family:'Geist Mono',monospace"><span style="display:grid;gap:10px;justify-items:center"><span style="width:64px;height:64px;border-radius:50%;background:#C4372E;display:grid;place-items:center;font-size:22px;box-shadow:0 10px 30px rgba(0,0,0,.4)">▶</span><span style="font-size:12px;letter-spacing:.06em">pokreni · 8 s · bez zvuka</span></span></button>
+</sc-if>
+<sc-if value="{{ demoOn }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:grid;padding:28px 22px;align-content:start;animation:lmDemoMargin 8s ease-in-out infinite,lmDemoLead 8s ease-in-out infinite"><span style="display:block;font-family:'Instrument Serif',Georgia,serif;line-height:1.1;margin-bottom:6px;animation:lmDemoHead 8s ease-in-out infinite">3. Metodologija istraživanja</span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF;width:92%"></span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF;width:70%"></span><span style="height:5px;background:#DCD4BF;margin-top:8px"></span><span style="height:5px;background:#DCD4BF"></span><span style="height:5px;background:#DCD4BF;width:84%"></span></div>
+<i aria-hidden="true" style="position:absolute;top:0;bottom:0;border-left:1px dashed #C4372E;animation:lmGuide 8s ease-in-out infinite"></i>
+<i aria-hidden="true" style="position:absolute;top:0;bottom:0;left:44px;border-left:1px dashed #34996A;opacity:.7"></i>
+<div aria-hidden="true" style="position:absolute;right:18px;bottom:22px;padding:8px 14px;border:2.5px solid #34996A;border-radius:2px;color:#34996A;font-size:12px;letter-spacing:.14em;text-transform:uppercase;animation:lmDemoStamp 8s ease-in-out infinite">Spremno</div>
+<button type="button" onClick="{{ stopDemo }}" aria-label="Zaustavi demo" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border:0;border-radius:2px;background:rgba(38,34,27,.7);color:#F7F3E8;cursor:pointer;font-size:12px">■</button>
+</sc-if>
+</div>
+<div style="display:grid;gap:10px;font-size:12px;line-height:1.5;color:#EDE7DC;align-self:stretch;position:relative">
+<sc-if value="{{ demoOn }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0;position:absolute;inset:0 0 auto 0;animation:lmCap1 8s linear infinite"><b style="color:#E4573D;display:block;letter-spacing:.08em;font-size:11px">01 · Oblikovanje · {{ prof.faculty }}</b>Lijeva margina 2,3 cm → {{ prof.marginCm }}. {{ prof.marginWhy }}</p>
+<p style="margin:0;position:absolute;inset:0 0 auto 0;animation:lmCap2 8s linear infinite"><b style="color:#E4573D;display:block;letter-spacing:.08em;font-size:11px">02 · Oblikovanje</b>Prored 1,15 → {{ prof.lead }}. Pravilo F-04.</p>
+<p style="margin:0;position:absolute;inset:0 0 auto 0;animation:lmCap3 8s linear infinite"><b style="color:#E4573D;display:block;letter-spacing:.08em;font-size:11px">03 · Struktura</b>Naslov 1. razine 12 pt → {{ prof.h1pt }}, podebljano.</p>
+<p style="margin:0;position:absolute;inset:0 0 auto 0;animation:lmCap4 8s linear infinite"><b style="color:#34996A;display:block;letter-spacing:.08em;font-size:11px">Ponovna provjera</b>0 novih problema. Sadržaj nije dirnut.</p>
+</sc-if>
+<sc-if value="{{ demoOff }}" hint-placeholder-val="{{ true }}"><p style="margin:0;color:rgba(237,231,220,.72)">Ovdje se ispisuje što se u kojem trenutku mijenja.</p></sc-if>
+</div>
+</div>
+</div>
+</section>
+
+<section id="podcrta" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">3.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Što podcrta</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Klikni problem. Olovka ga podcrta.</h2>
+<p style="margin:10px 0 0;font-size:13px;line-height:1.55;color:#6E6656;max-width:56ch">Apstraktna pravila fakulteta pretvaramo u konkretan ispravak na stvarnom mjestu u radu. Pomoćna tehnička provjera, ne jamstvo prihvaćanja rada.</p>
+<div style="margin-top:24px;display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:20px;align-items:start">
+<div style="display:grid;gap:6px">
+<sc-for list="{{ issues }}" as="it" hint-placeholder-count="5">
+<button type="button" onClick="{{ it.pick }}" style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:baseline;text-align:left;padding:10px 12px;border:1px solid #DCD4BF;border-radius:2px;background:#FBF8F0;color:#26221B;cursor:pointer;font-family:'Geist Mono',monospace;font-size:12px" style-hover="border-color:#26221B"><span style="color:#A62B23;letter-spacing:.08em;font-size:11px">{{ it.no }}</span><span style="line-height:1.4"><sc-if value="{{ it.fixed }}" hint-placeholder-val="{{ false }}"><s style="color:#6E6656">{{ it.title }}</s> <b style="color:#34996A;font-size:10px">✓</b></sc-if><sc-if value="{{ it.pending }}" hint-placeholder-val="{{ true }}">{{ it.title }}</sc-if></span><sc-if value="{{ it.selected }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C4372E;align-self:center"></span></sc-if></button>
+</sc-for>
+</div>
+<div style="position:relative">
+<div style="background:#FBF8F0;border:1px solid #DCD4BF;padding:28px 28px 28px 40px;font-family:Georgia,'Times New Roman',serif;font-size:12.5px;line-height:1.7;color:#26221B;box-shadow:0 2px 6px rgba(38,34,27,.08);position:relative">
+<sc-if value="{{ markMargin }}" hint-placeholder-val="{{ false }}"><i aria-hidden="true" style="position:absolute;top:0;bottom:0;left:26px;border-left:2px solid #C4372E;animation:lmPull .4s ease both"></i><b style="position:absolute;left:4px;top:12px;font-family:'Geist Mono',monospace;font-size:9px;color:#C4372E;writing-mode:vertical-rl;letter-spacing:.06em">2,3 cm</b></sc-if>
+<sc-if value="{{ fixMargin }}" hint-placeholder-val="{{ false }}"><i aria-hidden="true" style="position:absolute;top:0;bottom:0;left:40px;border-left:2px solid #34996A;animation:lmPull .4s ease both"></i><b style="position:absolute;left:4px;top:12px;font-family:'Geist Mono',monospace;font-size:9px;color:#34996A;writing-mode:vertical-rl;letter-spacing:.06em">{{ prof.marginCm }}</b></sc-if>
+<p style="margin:0;font-weight:700">3. Metodologija istraživanja</p>
+<sc-if value="{{ fixHead }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 0;font-weight:700;color:#34996A;animation:lmPeel .35s ease both">3.1. Uzorak</p></sc-if>
+<p style="margin:2px 0 8px;font-weight:700;display:inline-block;position:relative">3.1.1. Uzorak i postupak<sc-if value="{{ markHead }}" hint-placeholder-val="{{ false }}"><i aria-hidden="true" style="position:absolute;left:0;bottom:-2px;height:2px;background:#C4372E;animation:lmDraw .5s ease both"></i></sc-if></p>
+<p style="margin:0 0 8px">Istraživanje je provedeno na prigodnom uzorku studenata Fakulteta političkih znanosti. Podaci su prikupljeni anonimnim upitnikom tijekom svibnja 2026. godine.</p>
+<p style="margin:0 0 8px">Prema <span style="position:relative;display:inline-block">Novak (2022)<sc-if value="{{ markCit }}" hint-placeholder-val="{{ true }}"><i aria-hidden="true" style="position:absolute;left:0;bottom:-2px;height:2px;background:#C4372E;animation:lmDraw .5s ease both"></i></sc-if></span>, percepcija obveze može utjecati na političko sudjelovanje, ali taj izvor nije naveden u završnom popisu literature.</p>
+<p style="margin:0 0 6px;font-weight:700">Rezultati istraživanja</p>
+<div style="position:relative;display:inline-grid;grid-template-columns:repeat(3,auto);gap:2px 18px;padding:6px 8px;border-top:1px solid #26221B;border-bottom:1px solid #26221B;font-size:11px"><b>Studij</b><b>Da</b><b>Ne</b><span>Politologija</span><span>64%</span><span>36%</span><sc-if value="{{ markTable }}" hint-placeholder-val="{{ false }}"><i aria-hidden="true" style="position:absolute;inset:-4px;border:2px solid #C4372E;border-radius:2px;animation:lmPull .4s ease both"></i></sc-if></div>
+<sc-if value="{{ fixTable }}" hint-placeholder-val="{{ false }}"><p style="margin:4px 0 0;font-size:10.5px;color:#34996A;animation:lmPeel .35s ease both">Tablica 1. Raspodjela odgovora prema studiju. Izvor: autorovo istraživanje.</p></sc-if>
+<sc-if value="{{ fixCit }}" hint-placeholder-val="{{ false }}"><p style="margin:10px 0 0;font-size:10.5px;color:#34996A;animation:lmPeel .35s ease both"><b>Literatura</b><br>Novak, I. (2022). <i>Politička obveza i sudjelovanje.</i> Zagreb: FPZG.</p></sc-if>
+<p style="margin:10px 0 0;color:#6E6656">… <span style="position:relative;display:inline-block">Prilozi slijede nakon popisa literature.<sc-if value="{{ markIzjava }}" hint-placeholder-val="{{ false }}"><i aria-hidden="true" style="position:absolute;left:0;bottom:-2px;height:2px;background:#C4372E;animation:lmDraw .5s ease both"></i></sc-if></span></p>
+</div>
+<sc-if value="{{ commentVisible }}" hint-placeholder-val="{{ true }}">
+<div style="margin:-18px 0 0 auto;width:min(300px,92%);background:#26221B;color:#EDE7DC;padding:14px 16px;border-radius:2px;box-shadow:0 12px 30px rgba(0,0,0,.35);transform:rotate(-1deg);animation:lmStamp .45s cubic-bezier(.22,1,.36,1) both;position:relative;z-index:1"><div style="font-size:10px;letter-spacing:.1em;color:#E4573D">{{ issue.code }}</div><p style="margin:8px 0 0;font-size:12.5px;line-height:1.5">{{ issue.text }}</p><div style="margin-top:10px;font-size:12px;color:#FFD696">{{ issue.fix }}</div>
+<sc-if value="{{ issueCanFix }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ fixIssue }}" style="margin-top:12px;font-family:'Geist Mono',monospace;font-size:12px;padding:8px 12px;border:0;border-radius:2px;background:#C4372E;color:#F7F3E8;cursor:pointer">Popravi ovo, sigurno</button></sc-if>
+<sc-if value="{{ issueDone }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;font-size:12px;color:#34996A">✓ Primijenjeno na papir. Sadržaj nije dirnut.</div></sc-if>
+<sc-if value="{{ issueManual }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;font-size:12px;color:rgba(237,231,220,.72)">Ručni zahvat. Otvori alat <a href="#alati" style="color:#FFD696">Izjava o izvornosti →</a></div></sc-if></div>
+</sc-if>
+</div>
+</div>
+</div>
+</section>
+
+<section id="privatnost" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">4.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Privatnost</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Rad ne mora napustiti računalo.</h2><button type="button" onClick="{{ togglePriv }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:8px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">{{ privLabel }}</button></div>
+<sc-if value="{{ privOpen }}" hint-placeholder-val="{{ true }}">
+<p style="margin:10px 0 0;font-size:13px;line-height:1.55;color:#6E6656;max-width:56ch">Pokušaj prevući dokument preko granice uređaja. Bez privole se odbija. Uključi ručnu uslugu i pokušaj ponovno.</p>
+<div style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap">
+<button type="button" onClick="{{ setAuto }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:9px 14px;border:1px solid #26221B;border-radius:2px;background:#26221B;color:#F7F3E8;cursor:pointer">Automatska provjera</button>
+<button type="button" onClick="{{ setManual }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:9px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">Ručna usluga · uz privolu</button>
+<span style="font-size:12px;color:#6E6656;align-self:center">način: <b style="color:#26221B">{{ privMode }}</b></span>
+</div>
+<div ref="{{ sceneRef }}" style="position:relative;margin-top:16px;height:230px;background:#26221B;border-radius:2px;overflow:hidden;user-select:none;touch-action:none">
+<div style="position:absolute;left:0;top:0;bottom:0;width:50%;display:grid;align-content:space-between;padding:16px;color:#EDE7DC;font-size:11px;letter-spacing:.06em"><span>TVOJE RAČUNALO</span><span style="color:#34996A">● analiza se događa ovdje</span></div>
+<div style="position:absolute;left:50%;transform:translateX(-50%);top:12px;padding:6px 12px;background:#191512;border:1px solid rgba(237,231,220,.16);border-radius:2px;font-size:11px;letter-spacing:.06em;color:#EDE7DC;white-space:nowrap">poslano na internet: <sc-if value="{{ crossed }}" hint-placeholder-val="{{ false }}"><b style="color:#E4573D">1,2 MB</b></sc-if><sc-if value="{{ notCrossed }}" hint-placeholder-val="{{ true }}"><b style="color:#34996A">0 B</b></sc-if></div>
+<div style="position:absolute;right:0;top:0;bottom:0;width:50%;display:grid;align-content:space-between;justify-items:end;padding:16px;color:rgba(237,231,220,.5);font-size:11px;letter-spacing:.06em;background:repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 6px,transparent 6px 12px)"><span>INTERNET</span><span>poslužitelj ▭</span></div>
+<i aria-hidden="true" style="position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed #E4573D"></i>
+<b style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);font-size:10px;letter-spacing:.14em;color:#E4573D;background:#26221B;padding:2px 8px">GRANICA UREĐAJA</b>
+<div onPointerDown="{{ dragStart }}" onPointerMove="{{ dragMove }}" onPointerUp="{{ dragEnd }}" onPointerCancel="{{ dragEnd }}" style="position:absolute;left:36px;top:60px;width:92px;height:118px;background:#F7F3E8;border-radius:1px;box-shadow:0 10px 24px rgba(0,0,0,.45);cursor:grab;display:grid;align-content:end;padding:10px;gap:4px;transition:transform .45s cubic-bezier(.34,1.56,.64,1);transform:translateX({{ docX }}px)"><span style="height:3px;background:#DCD4BF"></span><span style="height:3px;background:#DCD4BF;width:70%"></span><span style="height:3px;background:#DCD4BF"></span><b style="font-size:11px;color:#26221B;margin-top:6px">.docx</b><sc-if value="{{ consentStamp }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:8px;left:6px;right:6px;text-align:center;font-size:8px;letter-spacing:.1em;color:#34996A;border:1.5px solid #34996A;padding:3px 0;transform:rotate(-6deg)">PRIVOLA ✓</span></sc-if></div>
+<sc-if value="{{ bounced }}" hint-placeholder-val="{{ false }}"><div aria-live="polite" style="position:absolute;left:16px;bottom:44px;padding:8px 12px;border:2.5px solid #E4573D;border-radius:2px;color:#E4573D;font-size:11px;letter-spacing:.12em;text-transform:uppercase;animation:lmStamp .4s ease both;transform:rotate(-9deg)">Dokument ne prelazi</div></sc-if>
+<sc-if value="{{ crossed }}" hint-placeholder-val="{{ false }}"><div aria-live="polite" style="position:absolute;right:16px;bottom:44px;padding:8px 12px;border:2.5px solid #34996A;border-radius:2px;color:#34996A;font-size:11px;letter-spacing:.12em;text-transform:uppercase;animation:lmStamp .4s ease both;transform:rotate(-9deg)">Odobreno uz privolu</div></sc-if>
+</div>
+<ul style="margin:20px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:13px;line-height:1.5">
+<li style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px"><span style="color:#34996A">✓</span><span>Word dokument se pri automatskoj provjeri <b>ne šalje na poslužitelj</b>.</span></li>
+<li style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px"><span style="color:#34996A">✓</span><span>Sadržaj rada <b>ne sprema se</b> nakon lokalne provjere.</span></li>
+<li style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px"><span style="color:#34996A">✓</span><span>Svako slanje dokumenta na poslužitelj (ručna obrada, Provjera prije predaje, plaćeni popravak) traži <b>jasnu potvrdu i privolu</b>.</span></li>
+<li style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px"><span style="color:#34996A">✓</span><span>Analiza je <b>pravilima utemeljena, ne umjetna inteligencija</b>. Rad se ne šalje modelu na čitanje ni na učenje.</span></li>
+</ul>
+</sc-if>
+<sc-if value="{{ privClosed }}" hint-placeholder-val="{{ false }}"><p style="margin:10px 0 0;font-size:13px;color:#6E6656">4 tvrdnje · 1 prizor za isprobati</p></sc-if>
+</div>
+</section>
+
+<section id="dokazi" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">5.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Dokazi</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Ne moraš nam vjerovati na riječ.</h2><button type="button" onClick="{{ toggleProof }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:8px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">{{ proofLabel }}</button></div>
+<sc-if value="{{ proofOpen }}" hint-placeholder-val="{{ true }}">
+<p style="margin:10px 0 0;font-size:13px;line-height:1.55;color:#6E6656;max-width:56ch">Šest stvari koje možeš sam provjeriti. Okreni karticu za izvor.</p>
+<div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+<sc-for list="{{ proofs }}" as="p" hint-placeholder-count="6">
+<button type="button" onClick="{{ p.flip }}" style="text-align:left;min-height:170px;padding:16px;border:1px solid #DCD4BF;border-radius:2px;background:#FBF8F0;color:#26221B;cursor:pointer;font-family:'Geist Mono',monospace;display:grid;align-content:start;gap:8px;perspective:800px" style-hover="border-color:#26221B">
+<sc-if value="{{ p.front }}" hint-placeholder-val="{{ true }}"><span style="display:grid;gap:8px;animation:lmFlip .45s ease both"><span style="color:#34996A;font-size:14px">✓</span><b style="font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:20px;line-height:1.1">{{ p.title }}</b><span style="font-size:12px;line-height:1.5;color:#6E6656">{{ p.text }}</span><span style="font-size:11px;color:#A62B23;margin-top:auto">okreni za izvor ↻</span></span></sc-if>
+<sc-if value="{{ p.back }}" hint-placeholder-val="{{ false }}"><span style="display:grid;gap:8px;animation:lmFlip .45s ease both;background:#26221B;color:#EDE7DC;margin:-16px;padding:16px;min-height:170px;border-radius:2px"><span style="font-size:10px;letter-spacing:.1em;color:#E4573D">IZVOR</span><b style="font-size:13px;line-height:1.4">{{ p.source }}</b><span style="font-size:11px;line-height:1.5;color:rgba(237,231,220,.72)">{{ p.meta }}</span><span style="display:flex;justify-content:space-between;align-items:end;gap:8px;margin-top:auto"><span style="font-size:11px;color:#FFD696">{{ p.link }}</span><span aria-hidden="true" style="font-size:9px;letter-spacing:.1em;padding:3px 6px;border:1.5px solid #34996A;color:#34996A;transform:rotate(-6deg)">PROVJERENO {{ p.date }}</span></span></span></sc-if>
+</button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ proofClosed }}" hint-placeholder-val="{{ false }}"><p style="margin:10px 0 0;font-size:13px;color:#6E6656">6 kartica s izvorom na poleđini</p></sc-if>
+</div>
+</section>
+
+<section id="provjere" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">6.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Registar</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Sve što Lekta provjerava.</h2><button type="button" onClick="{{ toggleChecks }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:8px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">{{ checksLabel }}</button></div>
+<sc-if value="{{ checksOpen }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center"><input type="search" value="{{ query }}" onInput="{{ setQuery }}" placeholder="upiši: margina, citat, sažetak…" aria-label="Pretraži pravila" style="font-family:'Geist Mono',monospace;font-size:13px;padding:10px 12px;border:1px solid #26221B;border-radius:2px;background:#FBF8F0;color:#26221B;width:100%;box-sizing:border-box"><span style="font-size:12px;color:#6E6656">{{ checksCount }}</span></div>
+<div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end;padding:14px;background:#26221B;border-radius:2px;color:#EDE7DC">
+<label style="display:grid;gap:4px;font-size:11px;letter-spacing:.06em">TVOJA MARGINA (cm)<input type="number" step="0.1" value="{{ myMargin }}" onInput="{{ setMyMargin }}" style="font-family:'Geist Mono',monospace;font-size:14px;padding:8px 10px;border:1px solid rgba(237,231,220,.3);border-radius:2px;background:#191512;color:#EDE7DC;width:100%;box-sizing:border-box"></label>
+<label style="display:grid;gap:4px;font-size:11px;letter-spacing:.06em">TVOJ PRORED<input type="number" step="0.05" value="{{ myLead }}" onInput="{{ setMyLead }}" style="font-family:'Geist Mono',monospace;font-size:14px;padding:8px 10px;border:1px solid rgba(237,231,220,.3);border-radius:2px;background:#191512;color:#EDE7DC;width:100%;box-sizing:border-box"></label>
+<div style="display:grid;gap:4px;font-size:12px"><sc-if value="{{ marginOk }}" hint-placeholder-val="{{ false }}"><span style="color:#34996A">{{ marginVerdict }}</span></sc-if><sc-if value="{{ marginBad }}" hint-placeholder-val="{{ true }}"><span style="color:#E4573D">{{ marginVerdict }}</span></sc-if><sc-if value="{{ leadOk }}" hint-placeholder-val="{{ false }}"><span style="color:#34996A">{{ leadVerdict }}</span></sc-if><sc-if value="{{ leadBad }}" hint-placeholder-val="{{ true }}"><span style="color:#E4573D">{{ leadVerdict }}</span></sc-if></div>
+</div>
+<div style="margin-top:12px;border:1px solid #DCD4BF;border-radius:2px;background:#FBF8F0">
+<sc-for list="{{ checksFiltered }}" as="c" hint-placeholder-count="8">
+<div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:baseline;padding:10px 14px;border-bottom:1px solid #DCD4BF;font-size:12.5px;animation:lmPrint .3s ease both"><span style="font-size:11px;letter-spacing:.08em;color:#A62B23">{{ c.code }}</span><span>{{ c.name }}</span><span style="font-size:11px;color:#6E6656">{{ c.cat }}</span></div>
+</sc-for>
+</div>
+<div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+<sc-for list="{{ diffs }}" as="d" hint-placeholder-count="5">
+<div style="padding:12px 14px;border:1px solid #DCD4BF;border-radius:2px;display:grid;gap:4px;font-size:12px"><span style="font-size:10px;letter-spacing:.1em;color:#6E6656;text-transform:uppercase">{{ d.cat }}</span><del style="color:#A62B23">{{ d.before }}</del><ins style="text-decoration:none;color:#34996A">{{ d.after }}</ins></div>
+</sc-for>
+</div>
+<p style="margin:14px 0 0;font-size:12px;color:#6E6656">Rezultat je pomoćna tehnička provjera, a ne jamstvo prihvaćanja rada.</p>
+</sc-if>
+<sc-if value="{{ checksClosed }}" hint-placeholder-val="{{ true }}"><p style="margin:10px 0 0;font-size:13px;color:#6E6656">24 pravila u 5 skupina · pretraživo</p></sc-if>
+</div>
+</section>
+
+<section id="cjenik" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">7.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Cjenik</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Koliko pomoći trebaš?</h2><button type="button" onClick="{{ togglePrice }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:8px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">{{ priceLabel }}</button></div>
+<sc-if value="{{ priceOpen }}" hint-placeholder-val="{{ false }}">
+<p style="margin:10px 0 0;font-size:13px;line-height:1.55;color:#6E6656;max-width:56ch">Odaberi vrstu rada. Račun se ispiše sam. Automatska provjera uvijek ostaje na tvom uređaju i besplatna je.</p>
+<div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
+<sc-for list="{{ kinds }}" as="k" hint-placeholder-count="4">
+<button type="button" onClick="{{ k.pick }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:9px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer" style-hover="background:#26221B;color:#F7F3E8">{{ k.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ receiptVisible }}" hint-placeholder-val="{{ true }}">
+<div style="margin:20px 0 0;width:min(380px,100%);background:#FBF8F0;border:1px solid #DCD4BF;padding:18px 20px 26px;font-size:12.5px;position:relative;box-shadow:0 2px 6px rgba(38,34,27,.08);clip-path:polygon(0 0,100% 0,100% calc(100% - 6px),97% 100%,94% calc(100% - 6px),91% 100%,88% calc(100% - 6px),85% 100%,82% calc(100% - 6px),79% 100%,76% calc(100% - 6px),73% 100%,70% calc(100% - 6px),67% 100%,64% calc(100% - 6px),61% 100%,58% calc(100% - 6px),55% 100%,52% calc(100% - 6px),49% 100%,46% calc(100% - 6px),43% 100%,40% calc(100% - 6px),37% 100%,34% calc(100% - 6px),31% 100%,28% calc(100% - 6px),25% 100%,22% calc(100% - 6px),19% 100%,16% calc(100% - 6px),13% 100%,10% calc(100% - 6px),7% 100%,4% calc(100% - 6px),1% 100%,0 calc(100% - 6px))">
+<div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.1em;color:#6E6656;padding-bottom:10px;border-bottom:1px dashed #DCD4BF"><span>LEKTA · RAČUN</span><span>{{ kindLabel }}</span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0 0;animation:lmPrint .35s ease both;animation-delay:.1s"><span>Automatska provjera, lokalno</span><b>0,00 €</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0 0;animation:lmPrint .35s ease both;animation-delay:.45s"><span>Puni izvještaj s izvorima</span><b>4,99 €</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0 0;animation:lmPrint .35s ease both;animation-delay:.8s"><span>Automatski popravak forme</span><b>9,99 €</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0 0;animation:lmPrint .35s ease both;animation-delay:1.15s"><span>Ponovne provjere, {{ recheckDays }} dana</span><b>0,00 €</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding-top:10px;border-top:1px dashed #DCD4BF;font-size:14px;animation:lmPrint .35s ease both;animation-delay:1.5s"><b>Ukupno za popravak</b><b>14,98 €</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:11px;color:#6E6656;animation:lmPrint .35s ease both;animation-delay:1.8s"><span>Ručno bi trajalo</span><span>~ {{ manualTime }}</span></div>
+<p style="margin:12px 0 0;font-size:11px;color:#6E6656;line-height:1.5;animation:lmPrint .35s ease both;animation-delay:2s">Jedan rad, bez pretplate. Institucije: na upit.</p>
+<div style="margin:16px -20px -26px;padding:12px 20px 18px;border-top:2px dashed #DCD4BF;background:#F3E6A8;font-size:11px;line-height:1.5;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;transition:transform .3s cubic-bezier(.22,1,.36,1);cursor:default;animation:lmPrint .35s ease both;animation-delay:2.3s" style-hover="transform:translateY(8px) rotate(1deg)"><b style="font-size:10px;letter-spacing:.1em;border:1.5px solid #26221B;padding:4px 6px;transform:rotate(-4deg)">KUPON</b><span><b>Jamstvo:</b> ako ponovna provjera bodovanih pravila fakulteta ne prođe, vraćamo novac. Ne vrijedi za ocjenu, prihvaćanje rada ni izvornost.</span></div>
+</div>
+</sc-if>
+<p style="margin:16px 0 0;font-size:12px;line-height:1.55;color:#6E6656;max-width:60ch">Usluga provjerava oblikovanje, strukturu, opseg i citatnu tehniku prema dostupnim pravilima. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu, akademsku kvalitetu sadržaja ni odluku mentora ili povjerenstva.</p>
+</sc-if>
+<sc-if value="{{ priceClosed }}" hint-placeholder-val="{{ true }}"><p style="margin:10px 0 0;font-size:13px;color:#6E6656">3 stavke · provjera uvijek 0,00 €</p></sc-if>
+</div>
+</section>
+
+<section id="alati" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">8.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Pribor</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Sitnice koje štede zadnji sat.</h2><button type="button" onClick="{{ toggleTools }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:8px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">{{ toolsLabel }}</button></div>
+<sc-if value="{{ toolsOpen }}" hint-placeholder-val="{{ false }}">
+<p style="margin:10px 0 0;font-size:13px;line-height:1.55;color:#6E6656;max-width:56ch">Besplatni alati, bez učitavanja rada. Pribor na stolu: podigni ga.</p>
+<div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;padding:20px;background:#26221B;border-radius:2px">
+<sc-for list="{{ tools }}" as="t" hint-placeholder-count="6">
+<a href="#" style="display:grid;gap:6px;padding:16px 14px 14px;background:#F7F3E8;color:#26221B;border-radius:1px;text-decoration:none;box-shadow:0 2px 4px rgba(0,0,0,.4);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s" style-hover="transform:translateY(-8px) rotate(-1.2deg);box-shadow:0 18px 30px rgba(0,0,0,.5)"><span style="font-size:10px;letter-spacing:.1em;color:#A62B23">{{ t.code }}</span><b style="font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:20px;line-height:1.1">{{ t.title }}</b><span style="font-size:11.5px;line-height:1.5;color:#6E6656">{{ t.text }}</span>
+<sc-if value="{{ t.isCards }}" hint-placeholder-val="{{ false }}"><span style="display:grid;gap:4px;margin-top:6px"><input type="text" value="{{ cardText }}" onInput="{{ setCardText }}" placeholder="upiši rečenicu…" aria-label="Tekst za brojanje" style="font-family:'Geist Mono',monospace;font-size:11px;padding:6px 8px;border:1px solid #DCD4BF;border-radius:2px;background:#FBF8F0;width:100%;box-sizing:border-box"><b style="font-size:11px;color:#A62B23">{{ cardCount }}</b></span></sc-if>
+<sc-if value="{{ t.isCite }}" hint-placeholder-val="{{ false }}"><span style="display:block;margin-top:6px;padding:6px 8px;border:1px solid #DCD4BF;border-radius:2px;background:#FBF8F0;font-family:Georgia,serif;font-size:11px;line-height:1.5;color:#26221B">{{ citeExample }}</span></sc-if>
+<span style="font-size:11px;margin-top:6px">Otvori →</span></a>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ toolsClosed }}" hint-placeholder-val="{{ true }}"><p style="margin:10px 0 0;font-size:13px;color:#6E6656">6 alata · bez učitavanja rada</p></sc-if>
+</div>
+</section>
+
+<section id="faq" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">9.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Pitanja</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em">Prije nego učitaš dokument.</h2><button type="button" onClick="{{ toggleFaq }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:8px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">{{ faqLabel }}</button></div>
+<sc-if value="{{ faqOpen }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:20px;display:grid;gap:12px">
+<sc-for list="{{ faqs }}" as="f" hint-placeholder-count="7">
+<div style="display:grid;gap:0">
+<button type="button" onClick="{{ f.toggle }}" style="text-align:left;padding:14px 18px;border:0;border-radius:1px;background:#F3E6A8;color:#26221B;cursor:pointer;font-family:'Instrument Serif',Georgia,serif;font-size:19px;line-height:1.2;box-shadow:0 2px 4px rgba(38,34,27,.15);transform:rotate(-.4deg);position:relative;display:flex;justify-content:space-between;gap:14px" style-hover="transform:rotate(0)"><span>{{ f.q }}</span><span style="font-family:'Geist Mono',monospace;font-size:12px;color:#6E6656;flex:none">{{ f.mark }}</span></button>
+<sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}"><div style="margin:-2px 8px 0;padding:16px 18px;background:#FBF8F0;border:1px solid #DCD4BF;border-top:0;font-size:13px;line-height:1.6;color:#26221B;animation:lmPeel .35s ease both"><p style="margin:0">{{ f.a }}</p><sc-if value="{{ f.hasNote }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ f.pin }}" style="margin-top:12px;font-family:'Geist Mono',monospace;font-size:11px;padding:6px 10px;border:1px solid #26221B;border-radius:2px;background:#F3E6A8;color:#26221B;cursor:pointer">{{ f.pinLabel }}</button></sc-if></div></sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ faqClosed }}" hint-placeholder-val="{{ true }}"><p style="margin:10px 0 0;font-size:13px;color:#6E6656">7 pitanja</p></sc-if>
+</div>
+</section>
+
+<section id="cta" ref="{{ ctaRef }}" style="display:flex;flex-wrap:wrap;gap:16px 32px;padding:56px 0 0;margin-top:56px;border-top:1px solid #DCD4BF">
+<aside style="flex:0 1 150px;position:sticky;top:24px;align-self:flex-start;display:grid;gap:4px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;color:#A62B23">10.</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6656">Zadnja stavka</span></aside>
+<div style="flex:1 1 480px;min-width:0">
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:-.015em;text-wrap:balance">Nemoj prvi put otkriti problem kad ti rad vrati mentor.</h2>
+<div style="margin-top:24px;padding:22px 26px 26px;background:#FBF8F0;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(38,34,27,.08);transform:rotate(.4deg)">
+<div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:12px;border-bottom:1px solid #DCD4BF"><span>Lekta · Ulazni list</span><span>Nº 0002 · Nepregledano</span></div>
+<div style="margin-top:18px;font-size:13px;color:#6E6656">Datoteka</div>
+<div style="font-family:'Instrument Serif',Georgia,serif;font-size:28px;line-height:1.1;min-height:1.1em;margin-top:4px">{{ typed }}<span aria-hidden="true" style="display:inline-block;width:2px;height:.9em;background:#C4372E;vertical-align:-.1em;margin-left:2px;animation:lmBlink 1s steps(1) infinite"></span></div>
+<dl style="margin:16px 0 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;font-size:12px;line-height:1.5"><dt style="color:#6E6656">Profil</dt><dd style="margin:0">{{ prof.faculty }} · {{ prof.kind }} · {{ prof.style }}</dd><dt style="color:#6E6656">Popravak</dt><dd style="margin:0">14,98 € · ponovne provjere {{ prof.days }} dana</dd><dt style="color:#6E6656">Popravljeno u demu</dt><dd style="margin:0">{{ fixedCount }} od 4 sigurna zahvata</dd></dl>
+<sc-if value="{{ hasNotes }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><sc-for list="{{ notes }}" as="n" hint-placeholder-count="1"><span style="display:block;max-width:220px;padding:10px 12px;background:#F3E6A8;font-family:'Instrument Serif',Georgia,serif;font-size:14px;line-height:1.3;box-shadow:0 2px 4px rgba(38,34,27,.15);transform:rotate(-1.5deg);animation:lmPeel .35s ease both">{{ n }}</span></sc-for></div></sc-if>
+<div style="display:flex;align-items:center;gap:18px;margin-top:22px;flex-wrap:wrap"><a href="#" style="display:inline-flex;align-items:center;gap:9px;padding:14px 26px;background:#C4372E;color:#F7F3E8;border-radius:2px;font-weight:500;font-size:14px;letter-spacing:.02em;text-decoration:none;box-shadow:0 10px 24px rgba(0,0,0,.18)">Provjeri rad sada <span aria-hidden="true">→</span></a><span style="font-size:12px;color:#6E6656">Automatska provjera ostaje na tvom uređaju · bez registracije</span></div>
+</div>
+</div>
+</section>
+</div>
+<div aria-hidden="true" style="width:min(960px,100%);height:18px;background:#EFE9D9;border:1px solid #DCD4BF;border-top:0;border-radius:0 0 50% 50%/0 0 100% 100%;box-shadow:0 22px 60px rgba(0,0,0,.55)"></div>
+</main>
+<footer style="width:min(1180px,calc(100% - 48px));margin:0 auto;padding:0 0 28px;display:grid;gap:10px;justify-items:center;font-size:12px;color:rgba(237,231,220,.72)">
+<nav aria-label="Pravno" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center"><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Privatnost</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Uvjeti</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Obrada dokumenata</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Kolačići</a></nav>
+<p style="margin:0;text-align:center;line-height:1.5">© 2026 Lekta · Automatska provjera je lokalna · Nije provjera plagijata ni službena potvrda fakulteta</p>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { demo:false, issue:2, commentVisible:true, open:{priv:true,proof:true,checks:false,price:false,tools:false,faq:false}, mode:'auto', docX:0, drag:null, bounced:false, crossed:false, flipped:{}, query:'', kind:2, receiptVisible:true, faqOpen:{}, typed:'', profile:0, fixed:{}, myMargin:'2.3', myLead:'1.15', cardText:'', notes:{} };
+  PROFILES = [{label:'FPZG · Diplomski',faculty:'FPZG',kind:'Diplomski',style:'autor-godina',marginCm:'3,0 cm',margin:3,lead:'1,5',leadN:1.5,h1pt:'14 pt',days:14,kindIdx:2,marginWhy:'Profil traži 3 cm zbog uveza.',cite:'Novak, I. (2022). Politička obveza i sudjelovanje. Zagreb: FPZG.'},{label:'FFZG · Završni',faculty:'FFZG',kind:'Završni',style:'Chicago, fusnote',marginCm:'2,5 cm',margin:2.5,lead:'1,5',leadN:1.5,h1pt:'14 pt',days:7,kindIdx:1,marginWhy:'Profil traži 2,5 cm sa svih strana.',cite:'Ivan Novak, Politička obveza i sudjelovanje (Zagreb: FFZG, 2022), 41.'},{label:'EFZG · Seminarski',faculty:'EFZG',kind:'Seminarski',style:'Harvard',marginCm:'2,5 cm',margin:2.5,lead:'1,5',leadN:1.5,h1pt:'12 pt',days:7,kindIdx:0,marginWhy:'Profil traži 2,5 cm sa svih strana.',cite:'Novak, I. (2022) Politička obveza i sudjelovanje. Zagreb: EFZG.'}];
+  MANUAL = ['1 h 10 min','1 h 50 min','2 h 40 min','4 h 20 min'];
+  NOTES = {0:'Rad se šalje samo uz moju privolu.',2:'Ponovne provjere su besplatne unutar roka.'};
+  sceneRef = React.createRef(); ctaRef = React.createRef();
+  STEPS = [{no:'01',title:'Učitaj dokument',text:'Word za analizu sadržaja i oblikovanja. Konačni PDF za završnu tehničku kontrolu.'},{no:'02',title:'Odaberi pravila',text:'Fakultet, studij, vrsta rada, citatni stil i faza predaje: iz službenih odluka.'},{no:'03',title:'Dobij plan i popravak',text:'Prioritet, pravilo, izvor i način ispravka. Sigurne popravke oblikovanja preuzmi kao novi Word.'}];
+  ISSUES = [{no:'01',title:'Nedostaje bibliografski zapis',code:'LEKTA / CITATNICE · C-12',text:'Novak (2022) citiran je u tekstu, ali ga nema u popisu literature. Provjeri prezime i godinu pa dodaj puni zapis.',fix:'→ dodaj zapis u literaturu',mark:'cit'},{no:'02',title:'Preskočena hijerarhija naslova',code:'LEKTA / STRUKTURA · S-07',text:'Naslov 3.1.1. dolazi izravno nakon poglavlja 3., razina 3.1. ne postoji.',fix:'→ umetni razinu 3.1.',mark:'head'},{no:'03',title:'Tablica nema naslov i izvor',code:'LEKTA / ELEMENTI · S-12',text:'Tablica mora imati broj, naslov iznad i izvor ispod prema pravilima profila.',fix:'→ Reference, Umetni natpis',mark:'table'},{no:'04',title:'Nedostaje izjava o izvornosti',code:'LEKTA / PREDAJA · P-05',text:'Obvezna izjava o izvornosti nije pronađena prije priloga.',fix:'→ generiraj je u alatima',mark:'izjava'},{no:'05',title:'Lijeva margina 2,3 cm',code:'LEKTA / OBLIKOVANJE · F-03',text:'Profil traži lijevu marginu 3 cm zbog uveza; izmjereno je 2,3 cm kroz cijeli dokument.',fix:'→ Izgled, Margine, 3 cm',mark:'margin'}];
+  PROOFS = [{title:'Pravila su službena',text:'Svako bodovano pravilo ima izvor, stranicu i doslovan citat iz odluke, pravilnika ili službene stranice fakulteta. Izvore čita i strojna provjera, a konačnu odluku potpisuje čovjek.',source:'Registar profila fakulteta',meta:'Svako pravilo nosi izvor, stranicu i citat. Odluku potpisuje čovjek.',link:'/fakulteti/ →'},{title:'Izvor je uvijek vidljiv',text:'Npr. za FPZG diplomski rad: Pravila navođenja bibliografskih jedinica i citatnica na FPZG-u.',source:'Pravila navođenja bibliografskih jedinica i citatnica, FPZG',meta:'Službeni PDF fakulteta, otvara se u novom prozoru.',link:'fpzg.unizg.hr/… .pdf →'},{title:'Datum provjere je naveden',text:'Svaka fakultetska stranica nosi datum zadnje provjere svojih izvora, ne jedan opći datum za cijelu aplikaciju.',source:'Pokrivenost profila',meta:'Datum provjere po profilu, ne jedan za cijelu aplikaciju.',link:'/pokrivenost.html →'},{title:'Dokument ostaje lokalno',text:'Besplatna provjera se ne šalje na poslužitelj.',source:'Poglavlje 4. ovog svitka',meta:'Isprobaj granicu uređaja gore.',link:'#privatnost ↑'},{title:'Ovo Lekta može i ne može',text:'Može: oblikovanje, strukturu, opseg, citatnu tehniku. Ne može: plagijat, sličnost teksta, kvalitetu argumentacije, ocjenu ni prihvaćanje rada.',source:'Opseg usluge',meta:'Nije Turnitin. Nije službena potvrda fakulteta.',link:'Uvjeti →'},{title:'Poznata ograničenja',text:'Neki fakulteti još nemaju potvrđena pravila; ti profili su jasno označeni kao generički.',source:'Pokrivenost svih profila',meta:'Generički profili su označeni; opći tehnički audit bez tvrdnje o službenoj usklađenosti.',link:'/pokrivenost.html →'}];
+  CHECKS = [['F-01','Format papira A4','Oblikovanje'],['F-02','Margine prema profilu','Oblikovanje'],['F-03','Lijeva margina za uvez','Oblikovanje'],['F-04','Prored teksta','Oblikovanje'],['F-05','Font i veličina','Oblikovanje'],['F-06','Poravnanje odlomaka','Oblikovanje'],['S-01','Numeracija stranica','Struktura'],['S-02','Sadržaj kao Word polje','Struktura'],['S-03','Hijerarhija naslova','Struktura'],['S-04','Naslovnica s obveznim podacima','Struktura'],['S-05','Natpisi tablica i slika','Struktura'],['C-01','Citat u tekstu ima zapis u literaturi','Citiranje'],['C-02','Zapis u literaturi je citiran','Citiranje'],['C-03','Oblik citatnice po stilu','Citiranje'],['C-04','Poredak popisa literature','Citiranje'],['C-05','Oblik bibliografske jedinice','Citiranje'],['O-01','Opseg rada u karticama','Opseg'],['O-02','Duljina sažetka','Opseg'],['O-03','Broj ključnih riječi','Opseg'],['O-04','Duljina naslova','Opseg'],['P-01','Izjava o izvornosti','Predaja'],['P-02','Ime datoteke','Predaja'],['P-03','Metapodaci dokumenta','Predaja'],['P-04','Prilozi nakon literature','Predaja']].map(([code,name,cat])=>({code,name,cat}));
+  DIFFS = [{cat:'Oblikovanje',before:'Margina 2,3 cm',after:'Margina 3,0 cm'},{cat:'Struktura',before:'1. Uvod pa odmah 1.1.1.',after:'1. Uvod pa 1.1. podnaslov'},{cat:'Citiranje',before:'(Horvat, 2022) bez izvora',after:'Horvat (2022) u literaturi'},{cat:'Opseg',before:'Sažetak od 480 riječi',after:'Sažetak do 250 riječi'},{cat:'Predajni paket',before:'rad_KONACNO_v7.docx',after:'Prezime_Ime_rad.docx'}];
+  KINDS = [{label:'Seminarski',days:7},{label:'Završni',days:7},{label:'Diplomski',days:14},{label:'Doktorski',days:14}];
+  TOOLS = [{code:'01 / FAKULTETI',title:'Pravila po fakultetu',text:'Pronađi tehnička pravila baš za svoj fakultet i vrstu rada.'},{code:'02 / CITATI',title:'Citat generator',text:'Složi ispravan zapis prema odabranom stilu.'},{code:'03 / OPSEG',title:'Brojač kartica',text:'Preračunaj znakove u autorske kartice.'},{code:'04 / DOKUMENT',title:'Naslovnica',text:'Pripremi obvezne podatke za naslovnicu.'},{code:'05 / LITERATURA',title:'Sređivanje literature',text:'Ujednači redoslijed i zapis bibliografije.'},{code:'06 / PREDAJA',title:'Izjava o izvornosti',text:'Pronađi i pripremi obveznu izjavu.'}];
+  FAQS = [{q:'Šalje li se moj rad na internet?',a:'Ne šalje se. Rad ostaje na tvom uređaju sve dok mu ti ne kažeš drugačije. Besplatna automatska provjera oblikovanja je potpuno lokalna i ne napušta uređaj; analiza ne koristi umjetnu inteligenciju ni jezične modele, nego pravilima utemeljen softver koji lokalno čita strukturu dokumenta. Dokument se na poslužitelj šalje samo uz tvoju izričitu privolu i samo za usluge koje to traže: ručnu obradu, Provjeru prije predaje te plaćeni automatski popravak. Provjera prije predaje briše datoteku odmah nakon analize; plaćeni automatski popravak čuva izvorni i ispravljeni dokument dok ih sam ne obrišeš u Moji popravci.'},{q:'Može li aplikacija automatski ispraviti cijeli Word dokument?',a:'Ne cijeli dokument, nego odabrane tehničke elemente. Uz plan ispravaka Lekta automatski popravlja oblikovanje (margine, format papira, font, prored, poravnanje, razmake) te strukturu: numeriranje stranica i sekcije, polja sadržaja, oblikovanje naslova po razinama, naslovnicu, natpise tablica i slika, poredak i oblik popisa literature te usklađivanje citata s literaturom. Opseg ovisi o profilu tvog fakulteta i o složenosti dokumenta: na stvarnim radovima dio nalaza ostane za ručnu izmjenu, a izvještaj ti točno kaže koji. Popravlja se FORMA, nikad sadržaj: rečenice, argumentacija i tvoje tvrdnje ostaju netaknute. Popravljeni dokument se prije preuzimanja ponovno provjeri, a ako je neki popravak srušio provjeru koja je prije prolazila, preporučujemo izvorni dokument. Svaki rezultat treba tvoj završni pregled.'},{q:'Što ako nakon ispravka nešto još fali?',a:'Puna kupnja diplomskog i doktorskog rada uključuje 14 dana ponovnih provjera nakon ispravka (7 dana za seminarski i završni): učitaj ispravljenu verziju koliko god puta treba unutar tog roka, bez nove kupnje.'},{q:'Provjerava li Lekta plagijat ili sličnost teksta?',a:'Ne. Lekta provjerava oblikovanje, strukturu, opseg i citiranje prema pravilima fakulteta, ali ne uspoređuje tekst s drugim izvorima i nije zamjena za Turnitin ni druge alate za provjeru izvornosti. Provjeru izvornosti provodi fakultet.'},{q:'Je li rezultat službena potvrda fakulteta?',a:'Nije. Rezultat je pomoćna tehnička provjera prema odabranom profilu. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora.'},{q:'Zašto je moj fakultet označen kao generički profil?',a:'Ustanova je dostupna za odabir, ali posebna pravila još nisu povezana s provjerenim službenim izvorom. Aplikacija zato radi opći tehnički audit i dopušta unos posebnih uputa mentora, bez tvrdnje da je dokument službeno usklađen.'},{q:'Zašto neka citatnica možda nije prepoznata?',a:'Citatni stilovi imaju brojne varijante, a Word tekst može sadržavati polja, fusnote i posebne znakove. Aplikacija označava moguće probleme, ali rezultat treba provjeriti u kontekstu rada.'}];
+  pulse(key){ this.setState({[key]:false}); requestAnimationFrame(()=>this.setState({[key]:true})); }
+  toggle(k){ this.setState(s=>({open:{...s.open,[k]:!s.open[k]}})); }
+  componentDidMount(){
+    const el = this.ctaRef.current; if(!el || !('IntersectionObserver' in window)) return;
+    this.io = new IntersectionObserver(([e])=>{ if(e.isIntersecting && !this.typing){ this.typing=true; const full='Prezime_Ime_diplomski.docx'; let i=0; this.tick=setInterval(()=>{ i++; this.setState({typed:full.slice(0,i)}); if(i>=full.length) clearInterval(this.tick); },70); this.io.disconnect(); } },{threshold:.4});
+    this.io.observe(el);
+  }
+  componentWillUnmount(){ this.io && this.io.disconnect(); clearInterval(this.tick); }
+  dragStart = e => { e.currentTarget.setPointerCapture(e.pointerId); this.setState({drag:{x:e.clientX,base:this.state.docX},bounced:false,crossed:false}); };
+  dragMove = e => { const d=this.state.drag; if(!d) return; this.setState({docX:Math.max(0,d.base+e.clientX-d.x)}); };
+  dragEnd = () => {
+    const d=this.state.drag; if(!d) return;
+    const w = this.sceneRef.current ? this.sceneRef.current.clientWidth : 600;
+    const over = this.state.docX + 36 + 46 > w/2;
+    if(over && this.state.mode==='manual') this.setState({drag:null,docX:w-36-92-24,crossed:true});
+    else this.setState({drag:null,docX:0,bounced:over});
+  };
+  renderVals(){
+    const s=this.state, o=s.open, issue=this.ISSUES[s.issue], q=s.query.trim().toLowerCase(), prof=this.PROFILES[s.profile];
+    const mm=parseFloat(s.myMargin), ml=parseFloat(s.myLead), mOk=!isNaN(mm)&&mm>=prof.margin, lOk=!isNaN(ml)&&Math.abs(ml-prof.leadN)<.01;
+    const fixedCount=['cit','head','table','margin'].filter(k=>s.fixed[k]).length;
+    const notes=Object.keys(s.notes).filter(k=>s.notes[k]).map(k=>this.NOTES[k]);
+    const chars=s.cardText.length;
+    const steps=this.STEPS.map((st,i)=>i===1?{...st,text:`${prof.faculty}, ${prof.kind.toLowerCase()} rad, citatni stil ${prof.style}, konačna predaja: iz službenih odluka fakulteta.`}:st);
+    const checksFiltered = this.CHECKS.filter(c=>!q||c.name.toLowerCase().includes(q)||c.cat.toLowerCase().includes(q)||c.code.toLowerCase().includes(q));
+    const lbl = k => o[k] ? 'Sklopi' : 'Otvori';
+    return {
+      prof, profiles:this.PROFILES.map((p,i)=>({...p,on:i===s.profile,pick:()=>{ this.setState({profile:i,kind:p.kindIdx,fixed:{}}); this.pulse('receiptVisible'); }})),
+      fixMargin:!!s.fixed.margin, fixHead:!!s.fixed.head, fixTable:!!s.fixed.table, fixCit:!!s.fixed.cit,
+      issueCanFix:issue.mark!=='izjava'&&!s.fixed[issue.mark], issueDone:!!s.fixed[issue.mark], issueManual:issue.mark==='izjava',
+      fixIssue:()=>this.setState(st=>({fixed:{...st.fixed,[issue.mark]:true}})), fixedCount,
+      notCrossed:!s.crossed, marginOk:mOk, marginBad:!mOk, leadOk:lOk, leadBad:!lOk,
+      myMargin:s.myMargin, myLead:s.myLead, setMyMargin:e=>this.setState({myMargin:e.target.value}), setMyLead:e=>this.setState({myLead:e.target.value}),
+      marginVerdict:mOk?`F-02 prolazi (traži ${prof.marginCm})`:`F-02 pada (traži ${prof.marginCm})`,
+      leadVerdict:lOk?`F-04 prolazi (traži ${prof.lead})`:`F-04 pada (traži ${prof.lead})`,
+      manualTime:this.MANUAL[s.kind], cardText:s.cardText, setCardText:e=>this.setState({cardText:e.target.value}), cardCount:`${chars} znakova · ${(chars/1800).toFixed(2)} kartice`, citeExample:prof.cite,
+      notes, hasNotes:notes.length>0,
+      steps, demoOn:s.demo, demoOff:!s.demo, startDemo:()=>this.setState({demo:true}), stopDemo:()=>this.setState({demo:false}),
+      issues:this.ISSUES.map((it,i)=>({...it,selected:i===s.issue,fixed:!!s.fixed[it.mark],pending:!s.fixed[it.mark],pick:()=>{ this.setState({issue:i}); this.pulse('commentVisible'); }})),
+      issue, commentVisible:s.commentVisible, markCit:issue.mark==='cit', markHead:issue.mark==='head', markTable:issue.mark==='table', markIzjava:issue.mark==='izjava', markMargin:issue.mark==='margin',
+      privOpen:o.priv, privClosed:!o.priv, privLabel:lbl('priv'), togglePriv:()=>this.toggle('priv'),
+      privMode:s.mode==='auto'?'automatska':'ručna uz privolu', setAuto:()=>this.setState({mode:'auto',docX:0,crossed:false,bounced:false}), setManual:()=>this.setState({mode:'manual',docX:0,crossed:false,bounced:false}),
+      sceneRef:this.sceneRef, docX:s.docX, dragStart:this.dragStart, dragMove:this.dragMove, dragEnd:this.dragEnd, bounced:s.bounced, crossed:s.crossed, consentStamp:s.mode==='manual',
+      proofOpen:o.proof, proofClosed:!o.proof, proofLabel:lbl('proof'), toggleProof:()=>this.toggle('proof'),
+      proofs:this.PROOFS.map((p,i)=>({...p,date:'2026-09',front:!s.flipped[i],back:!!s.flipped[i],flip:()=>this.setState(st=>({flipped:{...st.flipped,[i]:!st.flipped[i]}}))})),
+      checksOpen:o.checks, checksClosed:!o.checks, checksLabel:lbl('checks'), toggleChecks:()=>this.toggle('checks'),
+      query:s.query, setQuery:e=>this.setState({query:e.target.value}), checksFiltered, checksCount:checksFiltered.length+' / 24', diffs:this.DIFFS,
+      priceOpen:o.price, priceClosed:!o.price, priceLabel:lbl('price'), togglePrice:()=>this.toggle('price'),
+      kinds:this.KINDS.map((k,i)=>({...k,pick:()=>{ this.setState({kind:i}); this.pulse('receiptVisible'); }})), kindLabel:this.KINDS[s.kind].label.toUpperCase(), recheckDays:this.KINDS[s.kind].days, receiptVisible:s.receiptVisible,
+      toolsOpen:o.tools, toolsClosed:!o.tools, toolsLabel:lbl('tools'), toggleTools:()=>this.toggle('tools'), tools:this.TOOLS.map((t,i)=>({...t,isCards:i===2,isCite:i===1})),
+      faqOpen:o.faq, faqClosed:!o.faq, faqLabel:lbl('faq'), toggleFaq:()=>this.toggle('faq'),
+      faqs:this.FAQS.map((f,i)=>({...f,open:!!s.faqOpen[i],mark:s.faqOpen[i]?'zalijepi':'odlijepi',hasNote:i in this.NOTES,pinLabel:s.notes[i]?'Makni s ulaznog lista':'Zalijepi na ulazni list ↓',pin:()=>this.setState(st=>({notes:{...st.notes,[i]:!st.notes[i]}})),toggle:()=>this.setState(st=>({faqOpen:{...st.faqOpen,[i]:!st.faqOpen[i]}}))})),
+      ctaRef:this.ctaRef, typed:s.typed
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!-- @dsCard group="Tokeni" name="Tipografija" subtitle="Newsreader display, Inter Tight UI, IBM Plex Mono podaci, Source Serif dokument" width="1040" height="820" -->
+<!-- @dsCard group="Tokeni" name="Tipografija" subtitle="dva glasa + jedan gost: Instrument Serif govori, Geist Mono oznacava i mjeri, Georgia glumi tudji rad; ljestvica, uloge, zabrane" width="960" height="900" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,98 +7,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-.voice{padding:18px 0;border-top:1px solid var(--desk-line)}
-.voice:first-of-type{border-top:0}
-.voice-sample{margin:6px 0 4px}
-.scale-row{display:grid;grid-template-columns:120px 1fr 90px;align-items:baseline;gap:14px;padding:9px 0;border-top:1px solid var(--desk-line)}
-.scale-row:first-child{border-top:0}
-.scale-row span:last-child{font-family:var(--mono);font-size:.72rem;color:var(--desk-faint);text-align:right}
-.scale-role{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--desk-faint)}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red:#E4573D;--red-deep:#C4372E;--red-on-soft:#A62B23;--sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--doc:Georgia,'Times New Roman',serif}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:28px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start}
+.voice{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-sm);padding:20px 22px;display:grid;gap:10px;min-height:250px}
+.voice .big{font-size:64px;line-height:.9;letter-spacing:-.02em}
+.voice .cap{color:var(--paper-muted);margin:0}
+.voice p{margin:0;font-size:11px;line-height:1.55;color:var(--paper-muted)}
+.voice ul{margin:0;padding:0;list-style:none;font-size:11px;display:grid;gap:3px}
+.voice li::before{content:"· "}
+.voice li.no{color:var(--red-on-soft)}
+.scale{display:grid;gap:0;border:1px solid var(--desk-line);border-radius:2px}
+.row{display:grid;grid-template-columns:150px 1fr 200px;gap:20px;align-items:baseline;padding:12px 18px;border-top:1px solid var(--desk-line)}
+.row:first-child{border-top:0}
+.row .k{font-size:10px;letter-spacing:.08em;color:var(--desk-faint)}
+.row .v{font-size:10px;color:var(--desk-muted);text-align:right}
+.s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px 26px;font-size:11px;line-height:1.55;color:var(--desk-muted)}
+.rules b{color:var(--desk-ink);font-weight:500}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Tipografija: četiri glasa</h1>
-<p class="dsc-sub">Svaki glas ima jednu funkciju. Miješanje (npr. mono kao UI font) je pogreška, ne stil.</p>
+<div><h1 class="dsc-h">Tipografija</h1><p class="dsc-sub">Dva glasa i jedan gost, strogo po funkciji. Zamjena za prijašnja četiri (Newsreader, Inter Tight, IBM Plex Mono, Source Serif): manje obitelji, oštrija razlika. Odluka vrijedi za cijeli proizvod (opcija a iz handoffa, Z7).</p></div>
 
-<div class="voice">
-  <div class="dsc-cap">--display-serif · Newsreader Variable → govori (naslovi, lead, brojke u traci)</div>
-  <div class="voice-sample" style="font-family:var(--display-serif);font-weight:500;font-size:2.4rem;line-height:1.05;letter-spacing:-.02em">Čitljivost prije ukrasa</div>
-  <div style="font-family:var(--display-serif);font-style:italic;font-size:1rem;color:var(--desk-muted)">kurziv nosi napomenu korektora, đ š č ć ž</div>
+<div class="three">
+  <div class="voice"><span class="cap">01 · Govori</span><span class="big" style="font-family:var(--display)">Aa <em>Aa</em></span><b style="font:400 15px var(--display)">Instrument Serif</b><p>Naslovi, presuda, dugi opisi, brojka u prstenu, tekstualne veze u kurzivu, korektorska bilješka na faksimilu. Jedna težina (400), kurziv nosi naglasak.</p><ul><li>display 52–120px, letter-spacing −.02em, line-height .92–1</li><li>tekst 17–24px, line-height 1.3–1.45</li><li class="no">nikad za gumbe, oznake, brojeve u tablici</li></ul></div>
+  <div class="voice"><span class="cap">02 · Označava i mjeri</span><span class="big" style="font-family:var(--mono);font-size:52px">Aa 07</span><b style="font:500 14px var(--mono)">Geist Mono</b><p>Sve što je sučelje ili podatak: gumbi, navigacija, eyebrow, kodovi pravila, brojevi, izmjereno → pravilnik, koraci, meta redovi, podnožje.</p><ul><li>UI 12–14px, letter-spacing .02em, težina 500</li><li>oznake 10–11px, letter-spacing .08–.14em</li><li>brojke uvijek tabularne</li><li class="no">nikad za rečenice duže od jednog retka</li></ul></div>
+  <div class="voice"><span class="cap">03 · Gost: tuđi rad</span><span class="big" style="font-family:var(--doc);font-size:56px">Aa</span><b style="font:400 15px var(--doc)">Georgia (Times na "poslije")</b><p>Isključivo tekst korisnikova dokumenta u faksimilu i isječak pravilnika. Ne učitava se kao webfont; sistemski, namjerno, jer glumi Word, ne Lektu.</p><ul><li>faksimil: 12pt ekvivalent, text-align justify</li><li>"poslije" sloj: Times New Roman, kako pravilnik traži</li><li class="no">nikad u sučelju</li></ul></div>
 </div>
 
-<div class="voice">
-  <div class="dsc-cap">--ui · Inter Tight → označava (gumbi, meta, greške, sitni tekst, navigacija)</div>
-  <div class="voice-sample" style="font-family:var(--ui);font-weight:650;font-size:1.05rem">Provjeri rad prije predaje</div>
-  <div style="font-family:var(--ui);font-size:.85rem;color:var(--desk-muted)">Regular 400 · Medium 500 · Semibold 650 · Bold 800</div>
-</div>
+<section><span class="cap">Ljestvica · imenovani koraci (Z5)</span>
+<div class="scale">
+  <div class="row"><span class="k">--fs-display</span><span class="s" style="font:400 72px/.92 var(--display);letter-spacing:-.02em">Ubaci rad.</span><span class="v">clamp(40px, 7vw, 120px) · presuda, ulaz</span></div>
+  <div class="row"><span class="k">--fs-h2</span><span class="s" style="font:400 40px/1 var(--display);letter-spacing:-.015em">Popravak završen.</span><span class="v">clamp(32px, 4.5vw, 56px) · naslov lista</span></div>
+  <div class="row"><span class="k">--fs-h3</span><span class="s" style="font:400 26px/1.1 var(--display)">Prored glavnog teksta je 1,15.</span><span class="v">26px · naslov nalaza</span></div>
+  <div class="row"><span class="k">--fs-lead</span><span class="s" style="font:400 21px/1.4 var(--display);color:var(--desk-muted)">Provjerit ćemo formu prije nego ga predaš.</span><span class="v">clamp(18px, 1.75vw, 24px) · lead</span></div>
+  <div class="row"><span class="k">--fs-link</span><span class="s" style="font:italic 17px/1 var(--display);color:var(--red)">Pokaži u dokumentu</span><span class="v">17px kurziv · bilješka, veza</span></div>
+  <div class="row"><span class="k">--fs-ui</span><span class="s" style="font:500 13px/1 var(--mono);letter-spacing:.02em">Napravi plan popravka →</span><span class="v">13px / 500 · gumbi, navigacija</span></div>
+  <div class="row"><span class="k">--fs-body-mono</span><span class="s" style="font:400 12px/1.5 var(--mono);color:var(--desk-muted)">Dokument ide na server samo za popravak i briše se nakon preuzimanja.</span><span class="v">12px · fusnote, objašnjenja</span></div>
+  <div class="row"><span class="k">--fs-label</span><span class="s" style="font:400 11px/1 var(--mono);letter-spacing:.08em;color:var(--red)">● Blokira predaju · page.margins</span><span class="v">11px · eyebrow, kod pravila</span></div>
+  <div class="row"><span class="k">--fs-micro</span><span class="s" style="font:400 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--desk-faint)">Lekta · Ulazni list · Nº 0001</span><span class="v">10px verzal · zaglavlje obrasca, pečat</span></div>
+</div></section>
 
-<div class="voice">
-  <div class="dsc-cap">--mono · IBM Plex Mono → JEDINI podatkovni glas (brojevi, ocjena, kodovi pravila, statusi, eyebrow)</div>
-  <div class="voice-sample" style="font-family:var(--mono);font-weight:600;font-size:2rem;font-variant-numeric:tabular-nums">78 / 100</div>
-  <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint)">PAGE.MARGINS · RULE-014 · BLOKIRA</div>
-</div>
-
-<div class="voice">
-  <div class="dsc-cap">--ink-serif · Source Serif 4 (fallback Georgia) → ISKLJUČIVO glas dokument-pregleda (naslovnica, izjava, citat, literatura kao zrcalo Worda). Nije globalni web font, ne učitava se preko Google Fonts.</div>
-  <div class="voice-sample" style="font-family:Georgia,'Times New Roman',serif;font-size:1.15rem;color:var(--desk-ink)">"Ovaj rad analizira utjecaj digitalizacije na visoko obrazovanje u Republici Hrvatskoj."</div>
-</div>
-
-<h2 class="dsc-h" style="margin-top:28px;font-size:1.05rem">Ljestvica veličina (izmjereno u result-visuals.css / route-shell.css)</h2>
-<div style="max-width:640px">
-  <div class="scale-row"><span class="scale-role">Eyebrow / mono</span><span style="font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--desk-muted)">SEKUNDARNI PREGLED</span><span>.62–.76rem</span></div>
-  <div class="scale-row"><span class="scale-role">Sitni tekst</span><span style="font-family:var(--ui);color:var(--desk-muted)">Meta, footer, disclaimer</span><span>.78–.85rem</span></div>
-  <div class="scale-row"><span class="scale-role">Tijelo</span><span style="font-family:var(--ui)">Odgovor nalaza, opis</span><span>.88–.95rem</span></div>
-  <div class="scale-row"><span class="scale-role">Bazni tekst</span><span style="font-family:var(--ui)">Paragraf stranice</span><span>15–16px</span></div>
-  <div class="scale-row"><span class="scale-role">Naslov kartice</span><span style="font-family:var(--display-serif);font-weight:500">Naslov nalaza</span><span>1.08–1.15rem</span></div>
-  <div class="scale-row"><span class="scale-role">Podnaslov sekcije</span><span style="font-family:var(--display-serif);font-weight:500">Sažetak kategorija</span><span>clamp 1.25–1.7rem</span></div>
-  <div class="scale-row"><span class="scale-role">Hero naslov</span><span style="font-family:var(--display-serif);font-weight:500">Nije spremno za predaju</span><span>clamp 1.9–3.1rem</span></div>
-  <div class="scale-role"></div>
-  <div class="scale-row"><span class="scale-role">Vrijednost prstena</span><span style="font-family:var(--mono);font-weight:600">78</span><span>2.1–2.6rem</span></div>
-</div>
-<p style="margin-top:18px;font-size:.72rem;color:var(--desk-faint);max-width:70ch">Napomena: repozitorij nema jedinstven brojčani tip-scale token; gornje vrijednosti su prepisane doslovno iz postojećih pravila (uglavnom <code>clamp()</code> i <code>rem</code> po komponenti), ne iz jedne skale.</p>
+<section><span class="cap">Pravila</span>
+<div class="rules">
+  <div><b>Verzal samo u mono</b> i samo ispod 12px (pečat, zaglavlje obrasca). Serif nikad u verzalu.</div>
+  <div><b>Kurziv = naglasak ili ruka.</b> Kurziv serifa nosi riječ presude, tekstualne veze i korektorsku bilješku. Ne koristi se za cijele odlomke.</div>
+  <div><b>Brojke su podatak,</b> pa idu u mono, osim jedne: ocjena u prstenu i cijena na računu su u serifu jer su presuda, ne mjerenje.</div>
+  <div><b>Bez em i en crtica</b> u tekstu; zarez, dvotočka, nova rečenica. Strelica → dopuštena samo u mono redu "izmjereno → pravilnik" i na gumbu.</div>
+</div></section>
 </body>
 </html>

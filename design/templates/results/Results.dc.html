@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Rezultat i popravak" description="Ekran /rad/ kao vodič u 4 koraka (nalazi, plan, plaćanje, rezultat) sa 6 stanja; tweak 'state' ih prebacuje" -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}body{min-height:100vh}a{color:inherit}a:hover{color:#E4573D}@keyframes lektaScan{0%{transform:translateY(0)}100%{transform:translateY(520px)}}@keyframes lektaBlink{0%,100%{opacity:1}50%{opacity:.3}}</style></helmet>
+<div style="position:relative;min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace;overflow:hidden">
+<div aria-hidden="true" style="position:absolute;top:-420px;right:-200px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.14),transparent 60%);pointer-events:none"></div>
+<header style="position:relative;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:22px 0">
+<a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;justify-self:start"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:29px;letter-spacing:-.01em">Lekta</span></a>
+<sc-if value="{{ showSteps }}" hint-placeholder-val="{{ true }}">
+<ol aria-label="Koraci" style="display:flex;gap:6px;align-items:center;margin:0;padding:0;list-style:none;font-size:11px;letter-spacing:.06em">
+<li style="display:flex;align-items:center;gap:6px"><sc-if value="{{ s1 }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#EDE7DC;color:#191512;font-weight:500">01 Nalazi</span></sc-if><sc-if value="{{ n1 }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid rgba(237,231,220,.16);color:rgba(237,231,220,.6)">01 Nalazi</span></sc-if></li>
+<li aria-hidden="true" style="width:14px;height:1px;background:rgba(237,231,220,.2)"></li>
+<li style="display:flex;align-items:center;gap:6px"><sc-if value="{{ s2 }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#EDE7DC;color:#191512;font-weight:500">02 Plan</span></sc-if><sc-if value="{{ n2 }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid rgba(237,231,220,.16);color:rgba(237,231,220,.6)">02 Plan</span></sc-if></li>
+<li aria-hidden="true" style="width:14px;height:1px;background:rgba(237,231,220,.2)"></li>
+<li style="display:flex;align-items:center;gap:6px"><sc-if value="{{ s3 }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#EDE7DC;color:#191512;font-weight:500">03 Plaćanje</span></sc-if><sc-if value="{{ n3 }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid rgba(237,231,220,.16);color:rgba(237,231,220,.6)">03 Plaćanje</span></sc-if></li>
+<li aria-hidden="true" style="width:14px;height:1px;background:rgba(237,231,220,.2)"></li>
+<li style="display:flex;align-items:center;gap:6px"><sc-if value="{{ s4 }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#EDE7DC;color:#191512;font-weight:500">04 Rezultat</span></sc-if><sc-if value="{{ n4 }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid rgba(237,231,220,.16);color:rgba(237,231,220,.6)">04 Rezultat</span></sc-if></li>
+</ol>
+</sc-if>
+<sc-if value="{{ noSteps }}" hint-placeholder-val="{{ false }}"><span></span></sc-if>
+<nav style="display:flex;align-items:center;gap:16px;justify-self:end;font-size:13px;font-weight:500">
+<a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Moji radovi</a>
+<button type="button" aria-label="Lampa" style="display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid rgba(237,231,220,.16);border-radius:8px;background:transparent;cursor:pointer"><span style="display:block;width:10px;height:10px;border-radius:50%;background:rgba(255,214,150,.9);box-shadow:0 0 12px rgba(255,214,150,.7)"></span></button>
+</nav>
+</header>
+<main style="position:relative;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:clamp(16px,4vh,40px) 0 64px;display:grid;gap:28px">
+
+<sc-if value="{{ isScanning }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Analiza u tijeku" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);align-items:center;min-height:60vh">
+<div>
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">diplomski-rad-final-v3.docx · 41 stranica</p>
+<h1 style="margin:16px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(40px,5.5vw,72px);line-height:.95;letter-spacing:-.02em;text-wrap:balance">Čitam formu rada.</h1>
+<p style="margin:18px 0 0;max-width:40ch;font-family:'Instrument Serif',Georgia,serif;font-size:21px;line-height:1.4;color:rgba(237,231,220,.72)">Dokument ostaje u tvom pregledniku. Sadržaj ne čitam, mjerim samo oblikovanje.</p>
+<ol style="margin:32px 0 0;padding:0;list-style:none;display:grid;gap:10px;max-width:38ch;font-size:13px">
+<li style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(237,231,220,.14)"><span>Margine i format stranice</span><span style="color:#34996A">✓</span></li>
+<li style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(237,231,220,.14)"><span>Font i prored</span><span style="color:#34996A">✓</span></li>
+<li style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(237,231,220,.14);color:#EDE7DC"><span>Naslovi i numeracija</span><span style="color:#E4573D;animation:lektaBlink 1.2s infinite">●</span></li>
+<li style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(237,231,220,.14);color:rgba(237,231,220,.5)"><span>Citati i literatura</span><span></span></li>
+<li style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(237,231,220,.14);border-bottom:1px solid rgba(237,231,220,.14);color:rgba(237,231,220,.5)"><span>Struktura i opseg</span><span></span></li>
+</ol>
+<p style="margin:18px 0 0;font-size:11px;letter-spacing:.06em;color:rgba(237,231,220,.6)">9 od 24 pravila · FPZG, diplomski rad</p>
+</div>
+<div style="position:relative;justify-self:center;width:min(420px,100%);aspect-ratio:1/1.35;background:#F7F3E8;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);transform:rotate(1deg);padding:48px 44px;display:grid;align-content:start;gap:9px;overflow:hidden">
+<div aria-hidden="true" style="height:12px;width:58%;background:#DCD4BF;margin-bottom:8px"></div>
+<div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:96%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:82%;background:#EFE9D9"></div>
+<div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9;margin-top:10px"></div><div aria-hidden="true" style="height:7px;width:94%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:66%;background:#EFE9D9"></div>
+<div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9;margin-top:10px"></div><div aria-hidden="true" style="height:7px;width:90%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:74%;background:#EFE9D9"></div>
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:2px;background:#E4573D;box-shadow:0 0 18px rgba(228,87,61,.6);animation:lektaScan 2.6s cubic-bezier(.4,0,.2,1) infinite alternate"></div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isBlocked }}" hint-placeholder-val="{{ true }}">
+<section data-screen-label="Rezultat: nije spremno" style="display:grid;gap:28px">
+<div style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:34px 48px 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:start">
+<div>
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">diplomski-rad-final-v3.docx · FPZG, diplomski rad · pravila provjerena prema službenim izvorima</p>
+<h1 style="margin:26px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(40px,5.5vw,72px);line-height:.95;letter-spacing:-.02em;text-wrap:balance">Nije spremno za predaju.</h1>
+<p style="margin:22px 0 0;font-family:'Instrument Serif',Georgia,serif;font-size:24px;line-height:1.3">6 stvari traže tvoju pažnju.</p>
+<ul style="margin:14px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px">
+<li style="display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C4372E"></span><b style="font-weight:600">1</b> blokira predaju</li>
+<li style="display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C98A2E"></span><b style="font-weight:600">3</b> treba doraditi</li>
+<li style="display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#4A6CF0"></span><b style="font-weight:600">2</b> trebaš provjeriti sam</li>
+</ul>
+<p style="margin:14px 0 0;padding-top:12px;border-top:1px solid #DCD4BF;font-size:14px;color:#6E6656;max-width:40ch">od toga <b style="color:#26221B;font-weight:600">3</b> mogu popraviti automatski. Ostale 3 ostaju tebi; automatika može doseći najviše <b style="color:#26221B;font-weight:600">88</b>.</p>
+<div style="display:flex;align-items:center;gap:18px;margin-top:28px;flex-wrap:wrap">
+<span style="display:inline-flex;align-items:center;gap:9px;padding:14px 24px;background:#C4372E;color:#F7F3E8;border-radius:2px;font-weight:500;font-size:14px;letter-spacing:.02em;cursor:pointer;white-space:nowrap">Napravi plan popravka →</span>
+<a href="#nalazi" style="font-size:13px;color:#6E6656;text-underline-offset:4px">Pregledaj nalaze ↓</a>
+</div>
+</div>
+<div style="display:grid;justify-items:center;gap:8px;padding-top:6px">
+<div style="position:relative;width:132px;height:132px;border-radius:50%;background:conic-gradient(#C4372E 0 71%,#DCD4BF 71% 100%);display:grid;place-items:center"><div style="width:110px;height:110px;border-radius:50%;background:#F7F3E8;display:grid;place-items:center;text-align:center"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:52px;line-height:1">71</span></div></div>
+<span style="font-size:11px;letter-spacing:.08em;color:#6E6656">tehnička ocjena / 100</span>
+</div>
+<sc-if value="{{ showStamp }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="position:absolute;bottom:30px;right:44px;padding:8px 14px;border:2.5px solid #C4372E;border-radius:2px;color:#C4372E;font-size:12px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-7deg);opacity:.85">Nije spremno</div></sc-if>
+</div>
+
+<div id="nalazi" style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start">
+<div style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:56px 64px;aspect-ratio:1/1.25;display:grid;align-content:start;gap:9px;overflow:hidden">
+<p style="position:absolute;top:18px;left:64px;right:64px;margin:0;display:flex;justify-content:space-between;font-size:10px;letter-spacing:.1em;color:#6E6656">Str. 3 od 41<span>Nalaz uz dokument</span></p>
+<div aria-hidden="true" style="height:12px;width:48%;background:#DCD4BF;margin-bottom:8px"></div>
+<div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:96%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:88%;background:#EFE9D9"></div>
+<div style="position:relative;margin:12px -20px 0;padding:10px 20px;background:rgba(196,55,46,.08);display:grid;gap:7px"><span aria-hidden="true" style="position:absolute;left:-30px;top:12px;width:8px;height:8px;border-radius:50%;background:#C4372E"></span><div style="height:7px;width:100%;background:#E3D8C4"></div><div style="height:7px;width:94%;background:#E3D8C4"></div><div style="height:7px;width:100%;background:#E3D8C4"></div><div style="height:7px;width:62%;background:#E3D8C4"></div></div>
+<div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9;margin-top:12px"></div><div aria-hidden="true" style="height:7px;width:90%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:100%;background:#EFE9D9"></div><div aria-hidden="true" style="height:7px;width:70%;background:#EFE9D9"></div>
+<div aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:64px;border-right:1px dashed #C4372E;opacity:.5"></div>
+<span aria-hidden="true" style="position:absolute;left:8px;top:50%;transform:rotate(-90deg);font-size:10px;letter-spacing:.1em;color:#A62B23;white-space:nowrap">2,0 cm</span>
+</div>
+<article style="background:#EFE9D9;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);padding:24px 28px 26px;display:grid;gap:14px;transform:rotate(.6deg)">
+<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.08em;color:#6E6656"><span>Nalaz 1 od 6</span><span style="display:inline-flex;gap:6px"><button type="button" aria-label="Prethodni" style="width:28px;height:28px;border:1px solid #DCD4BF;border-radius:999px;background:none;color:#6E6656;cursor:pointer">←</button><button type="button" aria-label="Sljedeći" style="width:28px;height:28px;border:1px solid #DCD4BF;border-radius:999px;background:none;color:#26221B;cursor:pointer">→</button></span></div>
+<p style="margin:0;display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;color:#A62B23"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:currentColor"></span>Blokira predaju · page.margins</p>
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:30px;line-height:1.1;letter-spacing:-.01em;text-wrap:balance">Lijeva margina je 2,0 cm, pravilnik traži 3,0 cm.</h2>
+<div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;padding:12px 14px;background:#F7F3E8;border:1px solid #DCD4BF;font-size:13px"><span><span style="display:block;font-size:10px;letter-spacing:.08em;color:#6E6656">izmjereno</span>2,0 cm</span><span aria-hidden="true" style="color:#6E6656">→</span><span><span style="display:block;font-size:10px;letter-spacing:.08em;color:#6E6656">pravilnik</span>3,0 cm</span></div>
+<p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:16px;line-height:1.4;color:#6E6656">„Lijeva margina iznosi 3 cm, ostale 2,5 cm.” <span style="font-family:'Geist Mono',monospace;font-size:11px">Pravilnik o diplomskom radu FPZG, str. 9</span></p>
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:6px"><span style="display:inline-flex;padding:11px 18px;background:#26221B;color:#F7F3E8;border-radius:2px;font-size:13px;cursor:pointer;white-space:nowrap;flex:none">Uključi u plan</span><a href="#" style="font-size:13px;color:#6E6656;text-underline-offset:4px">Zanemari</a></div>
+</article>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:stretch">
+<div style="background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);padding:22px 28px 24px;display:grid;gap:14px;align-content:start">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Gdje su nalazi · po odlomcima</p>
+<ol aria-label="Nalazi kroz dokument" style="display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;align-items:end;height:64px;margin:0;padding:0;list-style:none">
+<li style="height:38%;background:#DCD4BF;border-radius:1px"></li><li style="height:22%;background:#DCD4BF;border-radius:1px"></li><li style="height:60%;background:#C98A2E;border-radius:1px"></li><li style="height:30%;background:#DCD4BF;border-radius:1px"></li><li style="height:18%;background:#DCD4BF;border-radius:1px"></li><li style="height:45%;background:#DCD4BF;border-radius:1px"></li><li style="height:90%;background:#C4372E;border-radius:1px"></li><li style="height:26%;background:#DCD4BF;border-radius:1px"></li><li style="height:20%;background:#DCD4BF;border-radius:1px"></li><li style="height:34%;background:#DCD4BF;border-radius:1px"></li><li style="height:12%;background:#DCD4BF;border-radius:1px"></li><li style="height:55%;background:#C98A2E;border-radius:1px"></li><li style="height:28%;background:#DCD4BF;border-radius:1px"></li><li style="height:20%;background:#DCD4BF;border-radius:1px"></li><li style="height:70%;background:#C98A2E;border-radius:1px"></li><li style="height:24%;background:#DCD4BF;border-radius:1px"></li><li style="height:16%;background:#DCD4BF;border-radius:1px"></li><li style="height:40%;background:#4A6CF0;border-radius:1px"></li><li style="height:30%;background:#DCD4BF;border-radius:1px"></li><li style="height:22%;background:#DCD4BF;border-radius:1px"></li><li style="height:48%;background:#4A6CF0;border-radius:1px"></li><li style="height:18%;background:#DCD4BF;border-radius:1px"></li><li style="height:26%;background:#DCD4BF;border-radius:1px"></li><li style="height:14%;background:#DCD4BF;border-radius:1px"></li>
+</ol>
+<div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.08em;color:#6E6656"><span>1</span><span>312 odlomaka</span></div>
+<p style="margin:0;font-size:12px;color:#6E6656">3 nalaza vrijede za cijeli dokument (font, margine, prored) i nemaju jedno mjesto.</p>
+</div>
+<div style="background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);padding:22px 28px 24px;display:grid;gap:12px;align-content:start">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Po kategorijama</p>
+<div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Oblikovanje</span><span style="font-size:11px;color:#6E6656">18 / 30</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:60%;background:#26221B"></div></div></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Struktura</span><span style="font-size:11px;color:#6E6656">22 / 25</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:88%;background:#26221B"></div></div></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Citiranje</span><span style="font-size:11px;color:#6E6656">19 / 25</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:76%;background:#26221B"></div></div></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Elementi</span><span style="font-size:11px;color:#6E6656">12 / 20</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:60%;background:#26221B"></div></div></div>
+<a href="#" style="margin-top:6px;font-size:12px;color:#6E6656;text-underline-offset:4px">Sve provjere (24)</a>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isClear }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Rezultat: čisto" style="display:grid;gap:28px">
+<div style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:34px 48px 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:start">
+<div>
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">diplomski-rad-final-v4.docx · FPZG, diplomski rad · pravila provjerena prema službenim izvorima</p>
+<h1 style="margin:26px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(40px,5.5vw,72px);line-height:.95;letter-spacing:-.02em;text-wrap:balance">Nema automatskih tehničkih blokatora.</h1>
+<p style="margin:22px 0 0;font-family:'Instrument Serif',Georgia,serif;font-size:24px;line-height:1.3">2 stvari trebaš provjeriti sam.</p>
+<ul style="margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px;font-size:14px;max-width:52ch">
+<li style="display:grid;grid-template-columns:8px 1fr;gap:10px;align-items:start"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#4A6CF0;margin-top:6px"></span><span>Izjava o izvornosti: ne mogu provjeriti je li potpisana. <span style="color:#6E6656">Pravilnik, str. 4</span></span></li>
+<li style="display:grid;grid-template-columns:8px 1fr;gap:10px;align-items:start"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#4A6CF0;margin-top:6px"></span><span>Popis literature: 2 jedinice bez godine izdanja. <span style="color:#6E6656">Provjeri izvore</span></span></li>
+</ul>
+<p style="margin:14px 0 0;padding-top:12px;border-top:1px solid #DCD4BF;font-size:13px;color:#6E6656;max-width:48ch">Ovo nije provjera plagijata ni službena potvrda fakulteta. Forma je usklađena, sadržaj nisam čitao.</p>
+<div style="display:flex;align-items:center;gap:18px;margin-top:28px;flex-wrap:wrap">
+<span style="display:inline-flex;align-items:center;gap:9px;padding:14px 24px;background:#26221B;color:#F7F3E8;border-radius:2px;font-weight:500;font-size:14px;letter-spacing:.02em;cursor:pointer;white-space:nowrap">Preuzmi izvještaj (PDF)</span>
+<a href="#" style="font-size:13px;color:#6E6656;text-underline-offset:4px">Provjeri drugi rad</a>
+</div>
+</div>
+<div style="display:grid;justify-items:center;gap:8px;padding-top:6px">
+<div style="position:relative;width:132px;height:132px;border-radius:50%;background:conic-gradient(#34996A 0 96%,#DCD4BF 96% 100%);display:grid;place-items:center"><div style="width:110px;height:110px;border-radius:50%;background:#F7F3E8;display:grid;place-items:center"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:52px;line-height:1">96</span></div></div>
+<span style="font-size:11px;letter-spacing:.08em;color:#6E6656">tehnička ocjena / 100</span>
+</div>
+<sc-if value="{{ showStamp }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="position:absolute;bottom:30px;right:44px;padding:8px 14px;border:2.5px solid #176243;border-radius:2px;color:#176243;font-size:12px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-7deg);opacity:.85">Forma provjerena</div></sc-if>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px">
+<div style="background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);padding:22px 28px 24px;display:grid;gap:14px;align-content:start">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Gdje su nalazi · po odlomcima</p>
+<ol style="display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;align-items:end;height:64px;margin:0;padding:0;list-style:none"><li style="height:23%;background:#DCD4BF;border-radius:1px"></li><li style="height:13%;background:#DCD4BF;border-radius:1px"></li><li style="height:36%;background:#DCD4BF;border-radius:1px"></li><li style="height:18%;background:#4A6CF0;border-radius:1px"></li><li style="height:11%;background:#DCD4BF;border-radius:1px"></li><li style="height:27%;background:#DCD4BF;border-radius:1px"></li><li style="height:54%;background:#DCD4BF;border-radius:1px"></li><li style="height:16%;background:#DCD4BF;border-radius:1px"></li><li style="height:12%;background:#DCD4BF;border-radius:1px"></li><li style="height:20%;background:#DCD4BF;border-radius:1px"></li><li style="height:7%;background:#DCD4BF;border-radius:1px"></li><li style="height:33%;background:#DCD4BF;border-radius:1px"></li><li style="height:17%;background:#DCD4BF;border-radius:1px"></li><li style="height:12%;background:#DCD4BF;border-radius:1px"></li><li style="height:42%;background:#DCD4BF;border-radius:1px"></li><li style="height:14%;background:#DCD4BF;border-radius:1px"></li><li style="height:10%;background:#DCD4BF;border-radius:1px"></li><li style="height:24%;background:#DCD4BF;border-radius:1px"></li><li style="height:18%;background:#DCD4BF;border-radius:1px"></li><li style="height:13%;background:#DCD4BF;border-radius:1px"></li><li style="height:29%;background:#DCD4BF;border-radius:1px"></li><li style="height:11%;background:#4A6CF0;border-radius:1px"></li><li style="height:16%;background:#DCD4BF;border-radius:1px"></li><li style="height:8%;background:#DCD4BF;border-radius:1px"></li></ol>
+<div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.08em;color:#6E6656"><span>1</span><span>318 odlomaka</span></div>
+</div>
+<div style="background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);padding:22px 28px 24px;display:grid;gap:12px;align-content:start">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Po kategorijama</p>
+<div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Oblikovanje</span><span style="font-size:11px;color:#6E6656">30 / 30</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:100%;background:#26221B"></div></div></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Struktura</span><span style="font-size:11px;color:#6E6656">25 / 25</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:100%;background:#26221B"></div></div></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Citiranje</span><span style="font-size:11px;color:#6E6656">23 / 25</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:92%;background:#26221B"></div></div></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;font-size:13px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:17px">Elementi</span><span style="font-size:11px;color:#6E6656">18 / 20</span><div style="grid-column:1/-1;height:3px;background:#DCD4BF"><div style="height:100%;width:90%;background:#26221B"></div></div></div>
+<a href="#" style="margin-top:6px;font-size:12px;color:#6E6656;text-underline-offset:4px">Sve provjere (24)</a>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isPlan }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Plan popravka" style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;align-items:start">
+<div style="background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:34px 48px 40px;display:grid;gap:26px">
+<div><p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Plan popravka · diplomski-rad-final-v3.docx</p><h1 style="margin:14px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(36px,4.5vw,56px);line-height:1;letter-spacing:-.02em">Što ću popraviti, što odlučuješ ti, što ostaje tebi.</h1></div>
+<div style="display:grid;gap:10px">
+<p style="margin:0;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:8px;border-bottom:1px solid #DCD4BF"><span>Sigurni zahvati · 3</span><span>primijenit će se</span></p>
+<label style="display:grid;grid-template-columns:20px 1fr auto;gap:14px;align-items:center;padding:10px 0;cursor:pointer"><span aria-hidden="true" style="width:20px;height:20px;border:1.5px solid #26221B;background:#26221B;color:#F7F3E8;display:grid;place-items:center;font-size:12px">✓</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:19px">Lijeva margina</span><span style="font-size:12px;color:#6E6656">2,0 cm → 3,0 cm</span></label>
+<label style="display:grid;grid-template-columns:20px 1fr auto;gap:14px;align-items:center;padding:10px 0;border-top:1px solid #EFE9D9;cursor:pointer"><span aria-hidden="true" style="width:20px;height:20px;border:1.5px solid #26221B;background:#26221B;color:#F7F3E8;display:grid;place-items:center;font-size:12px">✓</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:19px">Prored glavnog teksta</span><span style="font-size:12px;color:#6E6656">1,15 → 1,5</span></label>
+<label style="display:grid;grid-template-columns:20px 1fr auto;gap:14px;align-items:center;padding:10px 0;border-top:1px solid #EFE9D9;cursor:pointer"><span aria-hidden="true" style="width:20px;height:20px;border:1.5px solid #26221B;background:#26221B;color:#F7F3E8;display:grid;place-items:center;font-size:12px">✓</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:19px">Numeracija stranica</span><span style="font-size:12px;color:#6E6656">nema → dolje desno</span></label>
+</div>
+<div style="display:grid;gap:10px">
+<p style="margin:0;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:8px;border-bottom:1px solid #DCD4BF"><span>Treba tvoju odluku · 1</span><span>isključeno dok ne potvrdiš</span></p>
+<label style="display:grid;grid-template-columns:20px 1fr auto;gap:14px 14px;align-items:center;padding:10px 0;cursor:pointer"><span aria-hidden="true" style="width:20px;height:20px;border:1.5px solid #26221B;background:transparent"></span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:19px">Font glavnog teksta</span><span style="font-size:12px;color:#6E6656">Calibri → Times New Roman</span><span style="grid-column:2/-1;font-size:13px;color:#6E6656;line-height:1.45">Mijenja prijelom cijelog rada: broj stranica može se promijeniti. Pravilnik traži Times New Roman 12 pt.</span></label>
+</div>
+<div style="display:grid;gap:10px">
+<p style="margin:0;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:8px;border-bottom:1px solid #DCD4BF"><span>Ostaje tebi · 2</span><span>automatika ne dira</span></p>
+<div style="display:grid;grid-template-columns:20px 1fr;gap:14px;align-items:start;padding:10px 0;color:#6E6656"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#4A6CF0;margin:6px"></span><span><span style="display:block;font-family:'Instrument Serif',Georgia,serif;font-size:19px;color:#26221B">Izjava o izvornosti nije potpisana</span><span style="font-size:13px">Potpis je tvoj. Predložak izjave je u pravilniku, str. 4.</span></span></div>
+<div style="display:grid;grid-template-columns:20px 1fr;gap:14px;align-items:start;padding:10px 0;border-top:1px solid #EFE9D9;color:#6E6656"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#4A6CF0;margin:6px"></span><span><span style="display:block;font-family:'Instrument Serif',Georgia,serif;font-size:19px;color:#26221B">2 jedinice literature bez godine</span><span style="font-size:13px">Godinu izdanja mora upisati autor; ne pogađam je.</span></span></div>
+</div>
+</div>
+<aside style="position:sticky;top:24px;background:#EFE9D9;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);padding:26px 28px 28px;display:grid;gap:18px;transform:rotate(.6deg)">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Narudžba</p>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:26px;line-height:1.1">Popravak forme<br><span style="font-size:17px;color:#6E6656">3 zahvata odabrana</span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:34px">9,99 €</span></div>
+<ul style="margin:0;padding:14px 0 0;border-top:1px solid #DCD4BF;list-style:none;display:grid;gap:8px;font-size:13px;line-height:1.4">
+<li style="display:grid;grid-template-columns:16px 1fr;gap:8px"><span style="color:#176243">✓</span>Margine, prored i numeracija po pravilniku FPZG</li>
+<li style="display:grid;grid-template-columns:16px 1fr;gap:8px"><span style="color:#176243">✓</span>Ponovna provjera prije preuzimanja</li>
+<li style="display:grid;grid-template-columns:16px 1fr;gap:8px;color:#6E6656"><span>✕</span>Ne piše ni ne prepravlja rečenice rada</li>
+<li style="display:grid;grid-template-columns:16px 1fr;gap:8px;color:#6E6656"><span>✕</span>Ne ocjenjuje argumentaciju ni sadržaj</li>
+</ul>
+<span style="display:inline-flex;justify-content:center;padding:14px 24px;background:#C4372E;color:#F7F3E8;border-radius:2px;font-weight:500;font-size:14px;letter-spacing:.02em;cursor:pointer;white-space:nowrap">Nastavi na plaćanje →</span>
+<p style="margin:0;font-size:12px;color:#6E6656;line-height:1.45">Dokument ide na server samo za popravak i briše se nakon preuzimanja. Izvornik ostaje kod tebe nepromijenjen.</p>
+</aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isPayment }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Plaćanje" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(24px,5vw,72px);align-items:start">
+<div style="padding-top:24px">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">Korak 3 od 4</p>
+<h1 style="margin:16px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(36px,4.5vw,60px);line-height:.98;letter-spacing:-.02em;text-wrap:balance">Plaćanje, pa popravak.</h1>
+<ol style="margin:28px 0 0;padding:0;list-style:none;display:grid;gap:0;max-width:40ch;font-size:14px;line-height:1.45;color:rgba(237,231,220,.72)">
+<li style="display:grid;grid-template-columns:32px 1fr;gap:10px;padding:12px 0;border-top:1px solid rgba(237,231,220,.14)"><span style="font-size:11px;color:#E4573D">01</span>Nakon plaćanja dokument se šalje na server samo za popravak forme.</li>
+<li style="display:grid;grid-template-columns:32px 1fr;gap:10px;padding:12px 0;border-top:1px solid rgba(237,231,220,.14)"><span style="font-size:11px;color:#E4573D">02</span>Popravljena verzija se ponovno provjerava prije nego ti je ponudim.</li>
+<li style="display:grid;grid-template-columns:32px 1fr;gap:10px;padding:12px 0;border-top:1px solid rgba(237,231,220,.14);border-bottom:1px solid rgba(237,231,220,.14)"><span style="font-size:11px;color:#E4573D">03</span>Preuzimaš novi .docx; izvornik ostaje kod tebe. Datoteka se briše sa servera.</li>
+</ol>
+</div>
+<form style="background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:34px 44px 40px;display:grid;gap:22px;min-width:0;overflow:hidden">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:16px;border-bottom:1px solid #DCD4BF"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:22px">Popravak forme<br><span style="font-size:15px;color:#6E6656">diplomski-rad-final-v3.docx · 3 zahvata</span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:32px">9,99 €</span></div>
+<label style="display:grid;gap:8px;font-size:11px;letter-spacing:.08em;color:#6E6656">E-pošta za račun<input type="email" placeholder="ime@primjer.hr" style="min-height:46px;padding:0 14px;border:1px solid #DCD4BF;border-radius:2px;background:#FDFBF3;color:#26221B;font:15px 'Geist Mono',monospace;width:100%;min-width:0;box-sizing:border-box"></label>
+<label style="display:grid;gap:8px;font-size:11px;letter-spacing:.08em;color:#6E6656">Broj kartice<input type="text" inputmode="numeric" placeholder="0000 0000 0000 0000" style="min-height:46px;padding:0 14px;border:1px solid #DCD4BF;border-radius:2px;background:#FDFBF3;color:#26221B;font:15px 'Geist Mono',monospace;width:100%;min-width:0;box-sizing:border-box"></label>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px"><label style="display:grid;gap:8px;font-size:11px;letter-spacing:.08em;color:#6E6656">Vrijedi do<input type="text" placeholder="MM / GG" style="min-height:46px;padding:0 14px;border:1px solid #DCD4BF;border-radius:2px;background:#FDFBF3;color:#26221B;font:15px 'Geist Mono',monospace;width:100%;min-width:0;box-sizing:border-box"></label><label style="display:grid;gap:8px;font-size:11px;letter-spacing:.08em;color:#6E6656">CVC<input type="text" placeholder="123" style="min-height:46px;padding:0 14px;border:1px solid #DCD4BF;border-radius:2px;background:#FDFBF3;color:#26221B;font:15px 'Geist Mono',monospace;width:100%;min-width:0;box-sizing:border-box"></label></div>
+<button type="button" style="min-height:50px;border:0;background:#C4372E;color:#F7F3E8;border-radius:2px;font:500 14px 'Geist Mono',monospace;letter-spacing:.02em;cursor:pointer">Plati 9,99 € i popravi</button>
+<p style="margin:0;font-size:12px;color:#6E6656;line-height:1.45;text-align:center">Plaćanje obrađuje Stripe. Lekta ne vidi podatke kartice. <a href="#" style="color:#A62B23">Uvjeti</a> · <a href="#" style="color:#A62B23">Obrada dokumenata</a></p>
+</form>
+</section>
+</sc-if>
+
+<sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Popravak gotov" style="display:grid;gap:28px">
+<div style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:34px 48px 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:start">
+<div>
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">diplomski-rad-final-v3.docx → diplomski-rad-final-v3-lekta.docx</p>
+<h1 style="margin:26px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(40px,5.5vw,72px);line-height:.95;letter-spacing:-.02em">Popravak završen.</h1>
+<p style="margin:22px 0 0;font-family:'Instrument Serif',Georgia,serif;font-size:24px;line-height:1.3">3 od 3 zahvata primijenjena. <span style="color:#176243">0 novih problema.</span></p>
+<table style="margin:22px 0 0;border-collapse:collapse;width:100%;max-width:560px;font-size:13px">
+<thead><tr style="font-size:10px;letter-spacing:.08em;color:#6E6656;text-align:left"><th style="padding:0 0 8px;font-weight:400"></th><th style="padding:0 0 8px;font-weight:400">prije</th><th style="padding:0 0 8px;font-weight:400">poslije</th></tr></thead>
+<tbody>
+<tr style="border-top:1px solid #DCD4BF"><td style="padding:10px 12px 10px 0;font-family:'Instrument Serif',Georgia,serif;font-size:17px">Lijeva margina</td><td style="padding:10px 12px 10px 0;color:#6E6656;text-decoration:line-through">2,0 cm</td><td style="padding:10px 0">3,0 cm</td></tr>
+<tr style="border-top:1px solid #DCD4BF"><td style="padding:10px 12px 10px 0;font-family:'Instrument Serif',Georgia,serif;font-size:17px">Prored</td><td style="padding:10px 12px 10px 0;color:#6E6656;text-decoration:line-through">1,15</td><td style="padding:10px 0">1,5</td></tr>
+<tr style="border-top:1px solid #DCD4BF;border-bottom:1px solid #DCD4BF"><td style="padding:10px 12px 10px 0;font-family:'Instrument Serif',Georgia,serif;font-size:17px">Numeracija stranica</td><td style="padding:10px 12px 10px 0;color:#6E6656;text-decoration:line-through">nema</td><td style="padding:10px 0">dolje desno</td></tr>
+</tbody></table>
+<div style="display:flex;align-items:center;gap:18px;margin-top:28px;flex-wrap:wrap">
+<span style="display:inline-flex;align-items:center;gap:9px;padding:14px 24px;background:#C4372E;color:#F7F3E8;border-radius:2px;font-weight:500;font-size:14px;letter-spacing:.02em;cursor:pointer;white-space:nowrap">Preuzmi popravljeni .docx ↓</span>
+<span style="display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border:1px solid #26221B;color:#26221B;border-radius:2px;font-size:14px;cursor:pointer">Ponovno provjeri novu verziju</span>
+</div>
+<p style="margin:18px 0 0;font-size:12px;color:#6E6656">Izvorni dokument ostaje nepromijenjen. 2 stvari i dalje ostaju tebi: izjava o izvornosti, godine u literaturi.</p>
+</div>
+<div style="display:grid;justify-items:center;gap:8px;padding-top:6px">
+<div style="position:relative;width:132px;height:132px;border-radius:50%;background:conic-gradient(#26221B 0 88%,#DCD4BF 88% 100%);display:grid;place-items:center"><div style="width:110px;height:110px;border-radius:50%;background:#F7F3E8;display:grid;place-items:center;text-align:center;line-height:1"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:52px">88</span></div></div>
+<span style="font-size:11px;letter-spacing:.08em;color:#6E6656;white-space:nowrap"><span style="text-decoration:line-through">71</span> → 88 / 100</span>
+</div>
+<sc-if value="{{ showStamp }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="position:absolute;bottom:30px;right:44px;padding:8px 14px;border:2.5px solid #176243;border-radius:2px;color:#176243;font-size:12px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-7deg);opacity:.85">Popravljeno</div></sc-if>
+</div>
+</section>
+</sc-if>
+
+</main>
+<footer style="position:relative;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:0 0 28px;display:grid;gap:10px;justify-items:center;font-size:12px;color:rgba(237,231,220,.6)">
+<nav aria-label="Pravno" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center"><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Privatnost</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Uvjeti</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Obrada dokumenata</a></nav>
+<p style="margin:0;text-align:center;line-height:1.5">© 2026 Lekta · Automatska provjera je lokalna · Nije provjera plagijata ni službena potvrda fakulteta</p>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;scanning&quot;,&quot;blocked&quot;,&quot;clear&quot;,&quot;plan&quot;,&quot;payment&quot;,&quot;done&quot;],&quot;default&quot;:&quot;blocked&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stanje&quot;},&quot;showStamp&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sadržaj&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.props.state ?? 'blocked';
+    const step = { scanning: 0, blocked: 1, clear: 1, plan: 2, payment: 3, done: 4 }[st] ?? 1;
+    return {
+      isScanning: st === 'scanning', isBlocked: st === 'blocked', isClear: st === 'clear', isPlan: st === 'plan', isPayment: st === 'payment', isDone: st === 'done',
+      showSteps: step > 0, noSteps: step === 0,
+      s1: step === 1, n1: step !== 1, s2: step === 2, n2: step !== 2, s3: step === 3, n3: step !== 3, s4: step === 4, n4: step !== 4,
+      showStamp: this.props.showStamp ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

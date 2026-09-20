@@ -1,4 +1,4 @@
-<!-- @dsCard group="Stanja" name="Banner privole" subtitle="uska traka na dnu, ne prekriva sadrzaj" width="960" height="360" -->
+<!-- @dsCard group="Stanja" name="Banner privole" subtitle="uska papirna traka na dnu, dvije jednake radnje, sto tocno mjerimo napisano prije gumba; nikad ne prekriva jedinu radnju ekrana" width="960" height="420" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,68 +7,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-body{min-height:320px;position:relative;padding-bottom:0}
-.page-mock{padding:26px;color:var(--desk-faint);font-size:.85rem}
-.consent-banner{position:absolute;left:18px;right:18px;bottom:18px;max-width:820px;margin:auto;padding:16px 18px;border:1px solid var(--desk-line);border-radius:12px;background:var(--desk-2);box-shadow:0 22px 60px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
-.consent-banner p{margin:0;color:var(--desk-muted);font-size:.78rem;max-width:52ch}
-.consent-actions{display:flex;gap:8px;flex:0 0 auto}
-.consent-actions button{border:0;border-radius:8px;padding:9px 14px;font:600 .78rem var(--ui);cursor:pointer}
-.consent-actions .accept{background:var(--red);color:var(--on-red)}
-.consent-actions .decline{background:transparent;color:var(--desk-muted);border:1px solid var(--desk-line)}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red-deep:#C4372E;--red-on-soft:#A62B23;--pass-ink:#176243;--sh-lg:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;min-height:420px;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);position:relative;overflow:hidden}
+.mock{padding:26px 30px;color:var(--desk-faint);font-size:12px;max-width:60ch;line-height:1.6}
+.mock h1{margin:0 0 6px;font:400 2rem/1 var(--display);color:var(--desk-ink)}
+.mock .sheet{margin-top:18px;width:300px;height:110px;background:var(--paper);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-lg);transform:rotate(-.4deg);display:grid;place-items:center;color:var(--paper-muted);font-size:11px}
+/* Traka: papir, ne tamni panel; klizne odozdo, ne prekriva list (body dobiva padding-bottom). */
+.consent{position:absolute;left:24px;right:24px;bottom:18px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:22px;align-items:center;padding:14px 20px 14px 18px;background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-lg);transform:rotate(-.25deg)}
+.consent .k{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-muted);writing-mode:vertical-rl;transform:rotate(180deg);border-left:1px solid var(--paper-line);padding-left:10px;line-height:1}
+.consent p{margin:0;font:400 15px/1.4 var(--display);color:var(--paper-ink);text-wrap:pretty}
+.consent p small{display:block;margin-top:4px;font:400 11px/1.5 var(--mono);color:var(--paper-muted)}
+.consent p small b{font-weight:500;color:var(--paper-ink)}
+.consent .acts{display:flex;gap:8px;align-items:center;flex:none}
+.b{border:0;border-radius:2px;padding:11px 16px;font:500 12px/1 var(--mono);letter-spacing:.02em;cursor:pointer;white-space:nowrap}
+.b.ink{background:var(--paper-ink);color:var(--paper)}
+.b.out{background:none;color:var(--paper-ink);box-shadow:inset 0 0 0 1.5px var(--paper-ink)}
+.b.link{background:none;padding:6px 4px;font:italic 15px var(--display);color:var(--red-on-soft)}
+/* Kompaktna nakon odluke: jedna linija u podnozju */
+.done{position:absolute;left:24px;right:24px;bottom:18px;display:none}
 </style>
 </head>
 <body>
-<div class="page-mock">Sadržaj stranice ostaje potpuno dostupan; traka ne prekriva ni gumb ni obrazac (rezerva prostora se dodaje na <code>body</code> dok traka stoji).</div>
-<div class="consent-banner">
-  <p>Koristimo kolačiće isključivo za osnovnu analitiku posjeta. Dokument koji analiziraš ostaje lokalno u pregledniku.</p>
-  <div class="consent-actions">
-    <button class="decline">Odbij</button>
-    <button class="accept">Prihvati</button>
-  </div>
-</div>
+<div class="mock"><h1>Ubaci rad.</h1>Traka stoji ISPOD lista, ne preko njega: <code>body</code> dobiva rezervu visine dok traka stoji, pa gumb za ubacivanje nikad nije zaklonjen. Papir umjesto tamnog panela, jer je to ista površina na kojoj korisnik potpisuje sve ostalo.<div class="sheet">list ostaje potpuno dostupan</div></div>
+
+<aside class="consent" role="dialog" aria-label="Kolačići">
+  <span class="k">Kolačići</span>
+  <p>Brojimo posjete. Dokument koji provjeravaš ne ulazi ni u jedan brojač.<small>Anonimna analitika posjeta (<b>1 kolačić</b>, 13 mjeseci). Bez oglasa, bez trećih strana. <b>Analiza rada ostaje u pregledniku</b> bez obzira na odabir.</small></p>
+  <div class="acts"><button class="b link">Postavke</button><button class="b out">Odbij</button><button class="b ink">Prihvati</button></div>
+</aside>
 </body>
 </html>

@@ -1,96 +1,82 @@
-<!-- @dsCard group="Tokeni" name="Razmaci i radiusi" subtitle="skala razmaka (pretpostavljena), radiusi 2px papir / 8-10px gumbi / pill" width="1040" height="620" -->
+<!-- @dsCard group="Tokeni" name="Razmaci, rubovi, pokret" subtitle="8px skala, radijus 2px svugdje osim znacki (pill) i tocaka; nagibi lista; dvije sjene; jedan ease i tri trajanja; reduced-motion gasi sve pomake" width="960" height="820" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-<title>Razmaci i radiusi</title>
+<title>Razmaci, rubovi, pokret</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-.space-row{display:flex;align-items:center;gap:14px;padding:7px 0}
-.space-bar{height:14px;background:var(--red);border-radius:2px}
-.space-label{width:70px;font-family:var(--mono);font-size:.72rem;color:var(--desk-faint)}
-.radius-box{width:120px;height:80px;display:grid;place-items:center;background:var(--paper);color:var(--paper-ink);font-family:var(--mono);font-size:.7rem}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red:#E4573D;--red-deep:#C4372E;--sh-lg:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);--sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1);--ease-press:cubic-bezier(.34,1.4,.5,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:28px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;align-items:start}
+.sp{display:grid;gap:6px}
+.sp .r{display:grid;grid-template-columns:90px 1fr 110px;gap:12px;align-items:center;font-size:11px;color:var(--desk-muted)}
+.sp .r i{display:block;height:10px;background:var(--red);opacity:.85}
+.sp .r span:last-child{text-align:right;color:var(--desk-faint);font-size:10px}
+.box{display:grid;place-items:center;height:64px;font-size:11px;color:var(--paper-ink);background:var(--paper);border:1px solid var(--paper-line)}
+.rad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.rad .it{display:grid;gap:8px;text-align:center;font-size:10px;color:var(--desk-muted)}
+.rad .it b{font-weight:500;color:var(--desk-ink)}
+.tilts{display:flex;gap:18px;align-items:end;height:110px;padding:0 10px}
+.tilts .p{width:70px;height:88px;background:var(--paper);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-sm);display:grid;place-items:end center;padding-bottom:6px;font-size:10px;color:var(--paper-muted)}
+.shadows{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:16px 0 6px}
+.shadows .p{height:80px;background:var(--paper);border:1px solid var(--paper-line);border-radius:2px;display:grid;place-items:center;font-size:10px;color:var(--paper-muted)}
+.motion{display:grid;gap:8px;font-size:11px;color:var(--desk-muted)}
+.motion .r{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--desk-line)}
+.motion .r:first-child{border:0}
+.motion b{font-weight:500;color:var(--desk-ink)}
+.motion .demo{height:6px;background:var(--desk-line);position:relative;overflow:hidden}
+.motion .demo i{position:absolute;left:0;top:0;bottom:0;width:30%;background:var(--red);animation:slide 2.4s var(--ease) infinite alternate}
+.motion .demo.press i{animation-timing-function:var(--ease-press);animation-duration:1.2s}
+@keyframes slide{to{left:70%}}
+.rules{font-size:11px;line-height:1.55;color:var(--desk-muted);display:grid;gap:8px}
+.rules b{color:var(--desk-ink);font-weight:500}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Razmaci i radiusi</h1>
-<p class="dsc-sub">Repozitorij nema imenovanu <code>--space-*</code> skalu; ovo je 8px-bazirana skala PRETPOSTAVLJENA iz stvarno korištenih vrijednosti razmaka (gap/padding) u result-visuals.css i intake.css. Radius pravilo je izričito propisano kao dio identiteta, neovisno o trenutnoj (nekonzistentnoj) implementaciji gumba u repozitoriju (viđeno 2px–13px ovisno o datoteci).</p>
+<div><h1 class="dsc-h">Razmaci, rubovi, pokret</h1><p class="dsc-sub">Fizika stola u brojkama. Skala je 8px (pretpostavljena iz koda, potvrđuje je Z4). Radijus je <b style="color:var(--desk-ink)">2px svugdje</b>, uključivo gumbe (jezik pečata); pill postoji samo za značke i korake, krug samo za prsten i točke. Ovo mijenja prijašnje pravilo "8–10px na gumbima".</p></div>
 
-<div class="dsc-cap" style="margin-bottom:6px">Razmaci (pretpostavljeno, 8px baza)</div>
-<div style="max-width:420px;margin-bottom:28px">
-  <div class="space-row"><span class="space-label">4px</span><span class="space-bar" style="width:4px"></span></div>
-  <div class="space-row"><span class="space-label">8px</span><span class="space-bar" style="width:8px"></span></div>
-  <div class="space-row"><span class="space-label">12px</span><span class="space-bar" style="width:12px"></span></div>
-  <div class="space-row"><span class="space-label">16px</span><span class="space-bar" style="width:16px"></span></div>
-  <div class="space-row"><span class="space-label">24px</span><span class="space-bar" style="width:24px"></span></div>
-  <div class="space-row"><span class="space-label">32px</span><span class="space-bar" style="width:32px"></span></div>
-  <div class="space-row"><span class="space-label">48px</span><span class="space-bar" style="width:48px"></span></div>
-  <div class="space-row"><span class="space-label">64px</span><span class="space-bar" style="width:64px"></span></div>
-</div>
+<div class="three">
+  <section><span class="cap">01 · Razmaci · --space-1 do --space-8</span>
+  <div class="sp">
+    <div class="r"><span>--space-1 · 4</span><i style="width:4px"></i><span>točka do teksta</span></div>
+    <div class="r"><span>--space-2 · 8</span><i style="width:8px"></i><span>unutar retka</span></div>
+    <div class="r"><span>--space-3 · 12</span><i style="width:12px"></i><span>stavke popisa</span></div>
+    <div class="r"><span>--space-4 · 16</span><i style="width:16px"></i><span>blokovi u kartici</span></div>
+    <div class="r"><span>--space-5 · 24</span><i style="width:24px"></i><span>padding kartice</span></div>
+    <div class="r"><span>--space-6 · 32</span><i style="width:32px"></i><span>padding lista</span></div>
+    <div class="r"><span>--space-7 · 48</span><i style="width:48px"></i><span>list do lista</span></div>
+    <div class="r"><span>--space-8 · 64</span><i style="width:64px"></i><span>sekcije stranice</span></div>
+  </div>
+  <p class="rules" style="margin-top:14px"><span><b>Gustoća</b> iz panela "Prilagodi prikaz" množi cijelu skalu: 0,8 / 1 / 1,25.</span></p></section>
 
-<div class="dsc-cap" style="margin-bottom:10px">Radiusi</div>
-<div class="dsc-row">
-  <div class="dsc-item">
-    <div class="radius-box" style="border-radius:2px;border:1px solid var(--paper-line)">2px</div>
-    <b style="font-size:.78rem">Papir / kartica nalaza</b>
-    <code style="font-family:var(--mono);font-size:.68rem;color:var(--desk-faint)">--radius: 2px</code>
+  <section><span class="cap">02 · Rubovi i nagibi</span>
+  <div class="rad">
+    <div class="it"><div class="box" style="border-radius:2px">2px</div><b>--radius</b>papir, kartice, gumbi, polja, pečat</div>
+    <div class="it"><div class="box" style="border-radius:999px;height:36px;align-self:center">pill</div><b>--radius-pill</b>značke, koraci, čipovi "gdje"</div>
+    <div class="it"><div class="box" style="border-radius:50%;width:64px;justify-self:center">○</div><b>50 %</b>prsten, točke, gumbi ← →</div>
   </div>
-  <div class="dsc-item">
-    <div class="radius-box" style="border-radius:9px;background:var(--red);color:var(--on-red)">9px</div>
-    <b style="font-size:.78rem">Gumb (primarni/sekundarni)</b>
-    <code style="font-family:var(--mono);font-size:.68rem;color:var(--desk-faint)">8–10px</code>
-  </div>
-  <div class="dsc-item">
-    <div class="radius-box" style="border-radius:999px;background:var(--red);color:var(--on-red)">pill</div>
-    <b style="font-size:.78rem">Značka / oznaka statusa</b>
-    <code style="font-family:var(--mono);font-size:.68rem;color:var(--desk-faint)">--radius-pill: 999px</code>
-  </div>
+  <span class="cap" style="margin-top:18px">Nagibi lista</span>
+  <div class="tilts"><div class="p" style="transform:rotate(-.4deg)">−0,4°</div><div class="p" style="transform:rotate(.6deg)">+0,6°</div><div class="p" style="transform:rotate(1.2deg)">+1,2°</div><div class="p" style="transform:rotate(-7deg);width:54px;height:30px;font-size:9px;letter-spacing:.1em;border:2px solid var(--red-deep);color:var(--red-deep);background:none;box-shadow:none;place-items:center;padding:0">−7° pečat</div></div>
+  <p class="rules" style="margin-top:6px"><span>Hover i fokus vraćaju list na 0°. Nikad dva susjedna lista s istim nagibom.</span></p></section>
+
+  <section><span class="cap">03 · Sjene i pokret</span>
+  <div class="shadows"><div class="p" style="box-shadow:var(--sh-lg)">--paper-sh · glavni list</div><div class="p" style="box-shadow:var(--sh-sm)">--paper-sh-sm · kartica, isječak</div></div>
+  <div class="motion">
+    <div class="r"><span><b>--ease</b><br>.22,1,.36,1</span><div class="demo"><i></i></div></div>
+    <div class="r"><span><b>--ease-press</b><br>.34,1.4,.5,1</span><div class="demo press"><i></i></div></div>
+    <div class="r"><span><b>Trajanja</b></span><span>150ms pritisak · 220ms hover, list · 340ms list odlazi, pečat pada</span></div>
+    <div class="r"><span><b>Što se animira</b></span><span>samo <code>transform</code> i <code>opacity</code>; nikad layout. Bilješke i klizač prije/poslije prate pokazivač bez tranzicije.</span></div>
+    <div class="r"><span><b>reduced-motion</b></span><span>gasi sve pomake; listovi ostaju nagnuti, stanja se mijenjaju trenutno.</span></div>
+  </div></section>
 </div>
-<p style="margin-top:20px;font-size:.72rem;color:var(--desk-faint);max-width:70ch">Namjerno oštri rubovi papira (2px) su dio identiteta "papirnati list", ne previd; potvrđeno komentarom u izvornom CSS-u ("Radius: namjerno ostro").</p>
 </body>
 </html>
