@@ -158,8 +158,15 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     // `role="button"` po accname racuna ime iz potomaka. Z7 je na papir dodao zaglavlje, tri pune
     // recenice koraka i podnozje, pa bi citac ekrana pri svakom fokusu izgovorio ~55 rijeci kao
     // IME JEDNOG GUMBA. `aria-label` prekida to racunanje.
-    const dz = doc.getElementById('intakeDropzone');
-    expect(dz, 'nema papira kao gumba').not.toBeNull();
+    // Od pregleda Z7 ulogu nosi UNUTARNJI omotac, a papir je ostao ploha koja hvata klik i
+    // ispustanje; vidi describe "koraci i podnozje nisu u gumbu" nize. Ime se zato mjeri ondje
+    // gdje uloga stvarno stoji, inace bi gard cuvao ime elementa koji vise nije gumb.
+    const papir = doc.getElementById('intakeDropzone');
+    expect(papir, 'nema papira').not.toBeNull();
+    expect(papir!.getAttribute('role'), 'papir opet nosi ulogu gumba, pa su mu koraci prezentacijski')
+      .toBeNull();
+    const dz = doc.querySelector('.intake-paper__gumb');
+    expect(dz, 'nema gumba na papiru').not.toBeNull();
     expect(dz!.getAttribute('role')).toBe('button');
     const ime = dz!.getAttribute('aria-label') ?? '';
     expect(ime, 'papir kao gumb nema izreceno ime').not.toBe('');
@@ -406,5 +413,100 @@ describe('Z7 broj ulaznog lista', () => {
     const pripis = /ista pohrana koju cita "Moji radovi"|isti izvor kao "Moji radovi"/;
     expect(read('src/routes/intake/list-number.ts')).not.toMatch(pripis);
     expect(HTML).not.toMatch(pripis);
+  });
+});
+
+/**
+ * A11Y: KORACI I PODNOZJE PAPIRA NISU SADRZAJ GUMBA (pregled Z7, 2026-09-20).
+ *
+ * Potomci elementa s ulogom `button` su po ARIA specifikaciji PREZENTACIJSKI: citac ekrana ih ne
+ * nudi kao zaseban sadrzaj, nego ih smota u ime gumba, a kad je ime izreceno (`aria-label`, sto Z7
+ * i radi) preskoci ih zajedno s njim. Do ovog popravka je to pogadjalo bas obecanje o privatnosti:
+ * "Provjera radi u tvom pregledniku. Dokument ne odlazi." bilo je nedostupno tocno onome tko papir
+ * ne moze vidjeti. Prvi prolaz Z7 je to IMENOVAO kao zateceno ogranicenje i ostavio; pregled je
+ * pokazao da se rjesava bez diranja toka uploada, pa je uloga presla na unutarnji omotac.
+ *
+ * MJERI SE ODNOS, NE IME KLASE: za zadani tekst se trazi predak koji ga skriva. Tako gard vrijedi i
+ * ako se markup preslozi drukcije nego danas, i pada cim se uloga vrati na plohu.
+ */
+describe('Z7 a11y: koraci i podnozje nisu u gumbu', () => {
+  const doc = ulaz();
+
+  /** Prvi predak zadanog teksta koji ga skriva citacu ekrana, ili `null` ako takvog nema. */
+  function skrivacTeksta(korijen: Document, ulomak: string): string | null {
+    const nosioci = [...korijen.querySelectorAll('*')]
+      .filter((el) => el.children.length === 0 && tekst(el).includes(ulomak));
+    expect(nosioci.length, `tekst nije nadjen u markupu: "${ulomak}"`).toBeGreaterThan(0);
+    for (const nosioc of nosioci) {
+      for (let el: Element | null = nosioc; el; el = el.parentElement) {
+        const oznaka = `<${el.tagName.toLowerCase()}${el.className ? `.${String(el.className).split(/\s+/)[0]}` : ''}>`;
+        if (el.getAttribute('aria-hidden') === 'true') return `aria-hidden na ${oznaka}`;
+        if (el.getAttribute('role') === 'button') return `role=button na ${oznaka}`;
+      }
+    }
+    return null;
+  }
+
+  const TEKSTOVI = [
+    'Ubaciš .docx. Ne treba prijava.',
+    'Provjera radi u tvom pregledniku. Dokument ne odlazi.',
+    'Dobiješ ocjenu i popis što popraviti prije predaje.',
+    'Dokument ostaje na uređaju',
+    'Provjeravamo formu, ne sadržaj',
+  ];
+
+  it.each(TEKSTOVI)('"%s" nije ni u gumbu ni pod aria-hidden', (frag) => {
+    expect(skrivacTeksta(doc, frag), `tekst je skriven citacu ekrana: ${skrivacTeksta(doc, frag)}`).toBeNull();
+  });
+
+  it('MUTACIJA: isti tekst unutar gumba, odnosno pod aria-hidden, gard PRIJAVI', () => {
+    const OBECANJE = 'Provjera radi u tvom pregledniku. Dokument ne odlazi.';
+    const sintetski = (markup: string): Document => {
+      const d = document.implementation.createHTMLDocument('mutacija');
+      d.body.innerHTML = markup;
+      return d;
+    };
+    // BASELINE: isti tekst u obicnom omotacu je cist, inace bi "prolazio" i gard koji vristi na sve.
+    expect(skrivacTeksta(sintetski(`<div><p>${OBECANJE}</p></div>`), OBECANJE)).toBeNull();
+    // Tocno zateceno stanje prije popravka: koraci kao potomci papira koji je i sam gumb.
+    expect(skrivacTeksta(sintetski(`<div role="button" aria-label="Odaberi"><ol><li>${OBECANJE}</li></ol></div>`), OBECANJE))
+      .toContain('role=button');
+    expect(skrivacTeksta(sintetski(`<div aria-hidden="true"><p>${OBECANJE}</p></div>`), OBECANJE))
+      .toContain('aria-hidden');
+    // I kad je predak posredan (gumb nije neposredni roditelj), jer se markup preslaguje.
+    expect(skrivacTeksta(sintetski(`<div role="button"><div><span><b>${OBECANJE}</b></span></div></div>`), OBECANJE))
+      .toContain('role=button');
+  });
+
+  it('uloga je UNUTAR papira, a papir je i dalje ploha koja hvata klik i ispustanje', () => {
+    const papir = doc.getElementById('intakeDropzone');
+    expect(papir, 'nema papira').not.toBeNull();
+    // Kontroler i ulazna sekvenca vise o `#intakeDropzone`: dok id ostaje na plohi, klik, tipka,
+    // `dragover` i `drop` hvata CIJELI papir, pa se tok uploada ne mijenja ovim popravkom.
+    expect(papir!.classList.contains('intake-paper')).toBe(true);
+    expect(papir!.hasAttribute('aria-busy'), 'kontroler upisuje aria-busy na plohu').toBe(true);
+    const gumb = papir!.querySelector('.intake-paper__gumb');
+    expect(gumb, 'gumb nije unutar papira').not.toBeNull();
+    expect(gumb!.getAttribute('tabindex'), 'gumb mora biti dohvatljiv tipkovnicom').toBe('0');
+    // Poziv na radnju je U gumbu, koraci i podnozje SU IZVAN njega, ali unutar istog papira.
+    expect(gumb!.querySelector('.intake-cta'), 'CTA je ispao iz gumba').not.toBeNull();
+    expect(gumb!.querySelector('.intake-koraci'), 'koraci su opet u gumbu').toBeNull();
+    expect(gumb!.querySelector('[data-intake-foot]'), 'podnozje je opet u gumbu').toBeNull();
+    expect(papir!.querySelector('.intake-poziv .intake-koraci'), 'koraci su ispali s papira').not.toBeNull();
+    expect(papir!.querySelector('.intake-poziv [data-intake-foot]'), 'podnozje je ispalo s papira').not.toBeNull();
+  });
+
+  it('raspored se NE mijenja: omotac gumba preuzima isti stupac', () => {
+    // Vizualno je papir i dalje jedan stupac: omotac mora nositi isti grid i punu sirinu, inace bi
+    // se centriranje i `justify-self:end` pecata razisli s onim sto je bilo prije podjele.
+    const blok = bezCssKomentara(CSS).match(/\.intake-paper__gumb\{[^}]*\}/)?.[0] ?? '';
+    expect(blok, 'nema pravila za omotac gumba').not.toBe('');
+    expect(blok).toContain('display:grid');
+    expect(blok).toContain('justify-items:center');
+    expect(blok).toContain('width:100%');
+    // Prsten fokusa se selio s plohe na `:has()`, jer ploha vise nije fokusabilna.
+    expect(bezCssKomentara(CSS), 'fokus i dalje visi o nefokusabilnoj plohi')
+      .not.toMatch(/\.intake-paper:focus-visible/);
+    expect(bezCssKomentara(CSS)).toContain('.intake-paper:has(.intake-paper__gumb:focus-visible)');
   });
 });

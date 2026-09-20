@@ -34,11 +34,18 @@
 }
 .intake-paper::after{inset:16px 6px -12px -5px;transform:rotate(-.7deg);opacity:.75}
 
-.intake-paper:hover,.intake-paper:focus-visible,.intake-paper.is-dragging{
+.intake-paper:hover,.intake-paper:has(.intake-paper__gumb:focus-visible),.intake-paper.is-dragging{
   transform:rotate(0) translateY(-4px);
   box-shadow:var(--paper-sh),0 0 0 1px color-mix(in srgb,var(--brand) 30%,transparent);
 }
-.intake-paper:focus-visible{outline:3px solid var(--focus);outline-offset:6px}
+/* PRSTEN FOKUSA CRTA CIJELI PAPIR, iako fokus od pregleda Z7 nosi unutarnji `.intake-paper__gumb`:
+   gumb je vizualno cijela ploha, pa bi prsten oko njegova okvira izgledao kao drugi predmet.
+   Zapisuje se kao BOX-SHADOW, jer je `--focus` (design-system.css) dvotonski box-shadow, a ne
+   debljina i boja ruba; dosadasnje `outline:3px solid var(--focus)` bila je neispravna
+   deklaracija koju preglednik odbacuje, pa papir na tipkovnicu nije imao nikakav prsten.
+   Sjena papira ostaje prva u popisu, da list i dalje lezi na stolu. */
+.intake-paper:has(.intake-paper__gumb:focus-visible){box-shadow:var(--paper-sh),var(--focus)}
+.intake-paper__gumb:focus-visible{outline:none}
 .intake-paper.is-dragging{border-color:var(--brand)}
 
 /* --- sadrzaj papira ----------------------------------------------------------------------- */
@@ -97,7 +104,7 @@
 /* Bez monoa se oznaka formata izdvaja REZOM, jer glas nije na raspolaganju. */
 .intake-cta b{font-weight:700}
 .intake-cta svg{width:17px;height:17px}
-.intake-paper:hover .intake-cta,.intake-paper:focus-visible .intake-cta{
+.intake-paper:hover .intake-cta,.intake-paper:has(.intake-paper__gumb:focus-visible) .intake-cta{
   transform:translateY(-2px);box-shadow:0 14px 30px color-mix(in srgb,var(--brand) 34%,transparent);
 }
 .intake-hint{color:var(--paper-muted);font-family:var(--ui);font-size:var(--fs-ui-sm)}
@@ -159,6 +166,11 @@
    nego sluzi stanjima papira: sadrzaj se prebacuje unutar ovog okvira. `justify-items:center`
    centrira sve osim pecata, koji se sam vraca na desni rub s `justify-self:end`. */
 .intake-poziv{position:relative;display:grid;justify-items:center}
+/* GUMB JE UNUTAR PAPIRA, NE SAM PAPIR (pregled Z7, 2026-09-20). Uloga `button` cini SVE potomke
+   prezentacijskima, pa su tri koraka i podnozje bili nevidljivi citacu ekrana; sada su gumbu
+   BRACA. Raspored se time ne mijenja: omotac preuzima isti stupac (`display:grid`,
+   `justify-items:center`, puna sirina), pa i razmaci i `justify-self:end` pecata ostaju isti. */
+.intake-paper__gumb{display:grid;justify-items:center;width:100%}
 .intake-karta{display:none;justify-items:center;gap:0;text-align:center}
 .intake-stage[data-intake-state="checking"] .intake-poziv,
 .intake-stage[data-intake-state="saving"] .intake-poziv,
@@ -316,9 +328,10 @@
 }
 @media (prefers-reduced-motion:reduce){
   .intake-paper,.intake-cta{transition:none}
-  .intake-paper:hover,.intake-paper:focus-visible,.intake-paper.is-dragging,
+  .intake-paper:hover,.intake-paper:has(.intake-paper__gumb:focus-visible),.intake-paper.is-dragging,
   .intake-stage.intake-leaving .intake-paper{transform:rotate(-.35deg)}
-  .intake-paper:hover .intake-cta,.intake-paper:focus-visible .intake-cta{transform:none}
+  .intake-paper:hover .intake-cta,
+  .intake-paper:has(.intake-paper__gumb:focus-visible) .intake-cta{transform:none}
 }
 
 /* Atribut mora pobijediti klasu: vidi ugovor 2 na vrhu datoteke. */
