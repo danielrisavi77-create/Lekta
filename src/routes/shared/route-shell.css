@@ -23,13 +23,18 @@
   --route-header-min-height: 68px;
   --route-shell-inline: 32px;
   --route-nav-gap: 22px;
-  /* Obitelj se NE postavlja na `:root`, nego na `body` (u `page-chrome.css`, zajedno s velicinom i
-     visinom retka). Razlog je mjerljiv, ne stilski: `:root` i `body` su razliciti elementi, pa o
-     naslijedjenom glasu odlucuje BLIZINA, a ne specificnost. Dok je ovdje stajalo
-     `font-family: var(--sans, ...)`, deklaracija na zivoj stranici nije mijenjala nista (blizi
-     `body` uvijek pobjeduje), ali je gard nad tezinama razrjesavao glas po specificnosti i zato
-     vidio mono ondje gdje preglednik crta serif. Jedna mrtva deklaracija drzala je gard slijepim
-     za svih 131 nalaz. Ne vracaj je. */
+  /* `font-family: var(--ui)` je namjerno ovdje, ne slucajan povratak stare deklaracije.
+     Gard u `tests/design-tokens.test.ts` (od commita de1b3eb9) korijen bira po BLIZINI, ne po
+     specificnosti: `:root` i `body` su razliciti elementi, pa naslijedjeni glas dolazi od
+     NAJBLIZEG pretka koji ga deklarira, a ne od pravila s vecim brojem u specificnosti. Zato
+     `:root` mono vise ne moze presutjeti `body` serif (svaki live list koji definira `body`
+     ostaje pobjednik na svojoj stranici); prijasnja bojazan da ce ovo drzati gard slijepim
+     vrijedila je samo dok je razrjesenje bilo po specificnosti. Deklaracija je ovdje zato da
+     ljuska rute (`route-shell.css`) ima definiran glas i BEZ `page-chrome.css`: ovaj modul jos
+     nije ozicen u nijednu rutu, ali prvi koji ga ukljuci bez `page-chrome.css` bez ove linije
+     dobiva tvornicki Times New Roman na cijeloj stranici, jer inace nijedan list ovog svijeta
+     ne postavlja obitelj. Nakon vracanja ove deklaracije gard i dalje daje 0 nalaza. */
+  font-family: var(--ui);
   background: var(--route-bg);
   color: var(--route-ink);
 }
