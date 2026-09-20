@@ -195,3 +195,74 @@ gard trazi i `npm run deploy-drift` i `npm run migration-identity` uz `LEKTA_STA
 nije instaliran na ovom stroju. Treba vazeci osobni pristupni token prije nego se push moze
 pokrenuti. MCP `apply_migration` se za ovaj zahvat ne koristi, u skladu s tvrdim pravilom o
 identitetu verzije iznad.
+
+## Blokator 0059 na stagingu: nezasticen `cron.unschedule` i tvrd produkcijski kljuc (2026-09-20)
+
+`npx supabase db push --linked --include-all` prema stagingu `bnyemcnsphlitjradrst` (24 migracije u
+redu) prosao je 0058 i pao na 0059, na PRVOJ naredbi:
+
+    ERROR: could not find valid entry for job send-deadline-reminders (SQLSTATE XX000)
+
+Uzrok: `0059_secure_reminder_cron.sql` je bio jedan redak koji BEZUVJETNO zove
+`cron.unschedule('send-deadline-reminders')`. Taj posao na stagingu nikad nije postojao, jer ga
+nijedna migracija ne stvara: 0012 ga samo opisuje u komentiranom runbooku kao rucni korak. Migracija
+time nije bila idempotentna, sto krsi tvrdo pravilo ovog repozitorija. Svih ostalih deset poziva
+`cron.unschedule` u migracijama (0009, 0011, 0016 dva puta, 0018, 0019 dva puta, 0022, 0034, 0054)
+vec je bilo zasticeno idiomom `begin ... exception when others then null; end;`; samo 0059 nije.
+
+Drugi nalaz je tezi od blokatora. Ista je migracija u repozitoriju drzala PRODUKCIJSKI URL
+(`https://<prod-ref>.supabase.co/functions/v1/send-reminders`) i PRODUKCIJSKI Bearer kljuc,
+tvrdo upisane u tijelo cron naredbe. Da je push prosao, staging baza bi svaki dan u 8 h zvala
+PRODUKCIJSKU funkciju za slanje podsjetnika i slala poruke stvarnim korisnicima.
+
+### Popravak u repozitoriju
+
+0059 je prepisana kao jedan `do $$` blok koji:
+
+1. preskace sve uz `raise notice` ako pg_cron nije dostupan,
+2. gasi zatecen posao unutar `begin ... exception when others then null; end;`, pa nepostojanje
+   posla vise nije greska,
+3. cita `lekta_functions_base_url` i `lekta_cron_bearer` iz `vault.decrypted_secrets` (i samo to
+   citanje je zasticeno, jer vault ne mora postojati na lokalnom Postgresu),
+4. zakazuje posao SAMO ako su obje tajne prisutne i neprazne; inace javi
+   `send-deadline-reminders nije zakazan: nema vault tajni` i ne napravi nista,
+5. naredbu za cron slaze kroz `format(... %L ...)`. To nije kozmetika: `cron.schedule` prima
+   naredbu kao TEKST koji se kasnije izvodi, pa je navodnjavanje jedina obrana od injekcije i od
+   pucanja na apostrofu u vrijednosti tajne.
+
+Migracija je namjerno FAIL-QUIET, za razliku od susjednih cron migracija (0009, 0011, 0016, 0018,
+0019, 0022, 0034) koje su FAIL-CLOSED kad nema pg_crona. Ondje je rijec o retenciji osobnih
+podataka, pa je izostanak posla tiha povreda politike minimizacije. Ovdje je izostanak tajni
+ocekivano stanje na stagingu i u razvoju, a posljedica je samo da podsjetnici ne idu. Ta razlika je
+zapisana i u komentaru same migracije, da je sljedeca sesija ne "popravi" natrag u fail-closed i
+time vrati blokator.
+
+Gard protiv povratka: `tests/migration-secrets-hygiene.test.ts` (logika u
+`tests/helpers/migration-hygiene.ts`) nad SVIM migracijama tvrdi da nijedna ne nosi tvrdo upisan
+endpoint projekta ni token-oblik Bearer kljuca izvan SQL komentara, i da je svaki
+`cron.unschedule` zasticen. Mutacija koja dokazuje da gard grize je
+`migracija/tvrd-kljuc-i-nezasticen-unschedule` u `tests/gate-mutations.test.ts`.
+
+### Sto mora napraviti vlasnik, RUCNO, na produkciji
+
+Produkcija `zrrjttizjyfcxmcpgzml` ima 0059 VEC primijenjenu (verzija je zapisana u dnevniku).
+Izmjena datoteke u repozitoriju zato ne mijenja nista na zivoj produkcijskoj bazi: postojeci cron
+posao `send-deadline-reminders` i dalje radi s URL-om i kljucem koji su u njega upisani u trenutku
+prve primjene. To je namjerno i ne dira se.
+
+Prije sljedeceg reschedulea tog posla na produkciji (svako ponovno pokretanje 0059 ili njoj
+ekvivalentne logike) vlasnik mora rucno postaviti dvije vault tajne, u SQL editoru ili kroz
+Dashboard (Project Settings -> Vault):
+
+    select vault.create_secret('https://<PROJECT_REF>.supabase.co', 'lekta_functions_base_url');
+    select vault.create_secret('<REMINDER_CRON_SECRET>',            'lekta_cron_bearer');
+
+Mapiranje imena je vazno i lako ga je promasiti: `lekta_cron_bearer` mora sadrzavati ISTU vrijednost
+kao Edge tajna `REMINDER_CRON_SECRET`. `supabase/functions/_shared/cron-auth.ts` je fail-closed i
+usporedjuje konstantno-vremenski, pa svaka druga vrijednost daje tihi 401, a cron nema kome
+prijaviti gresku. Bez postavljenih tajni migracija se i dalje primijeni uredno, ali posao NE zakaze
+i o tome javi `notice`.
+
+Neovisno o tome: kljuc koji je bio tvrdo upisan u 0059 ostaje u povijesti repozitorija i treba ga
+smatrati kompromitiranim. Rotacija `REMINDER_CRON_SECRET` (Edge tajna + vault tajna u istom potezu)
+je posao vlasnika i nije dio ove izmjene.

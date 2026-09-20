@@ -32,12 +32,13 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -2284,6 +2285,43 @@ const MUTATIONS: Mutation[] = [
           `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
       }]);
       return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    // Namjerno BEZ `axis`: ovo je gard nad SQL migracijama, ne nad bodovanom osi profila.
+    id: 'migracija/tvrd-kljuc-i-nezasticen-unschedule',
+    imitates:
+      '0059_secure_reminder_cron.sql je do 2026-09-20 bezuvjetno zvao cron.unschedule nad poslom ' +
+      'koji na stagingu ne postoji, pa je `db push` pao s "could not find valid entry for job ' +
+      'send-deadline-reminders" (SQLSTATE XX000) i srusio lanac od 24 migracije; ista je ' +
+      'datoteka u repozitoriju drzala produkcijski endpoint i produkcijski Bearer kljuc, pa bi ' +
+      'staging baza svaki dan u 8 h slala podsjetnike stvarnim korisnicima preko produkcije',
+    caught: () => {
+      // Doslovan oblik kvara kakav je stvarno bio u repozitoriju, slozen u memoriji: nijedna
+      // datoteka na disku se ne dira. Kljuc je sintetican (niz X-eva), ne onaj procureli.
+      const mutated = [{
+        file: '0059_secure_reminder_cron.sql',
+        sql:
+          "select cron.unschedule('send-deadline-reminders'); " +
+          "select cron.schedule('send-deadline-reminders', '0 8 * * *', " +
+          "'select net.http_post(url := ''https://abcdefghijklmnopqrst.supabase.co/functions/v1/send-reminders'', " +
+          "headers := jsonb_build_object(''Authorization'', ''Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXX''));');",
+      }];
+      const kinds = migrationHygieneProblems(mutated).map((p) => p.kind);
+      return (
+        kinds.includes('hardcoded-endpoint') &&
+        kinds.includes('bearer-literal') &&
+        kinds.includes('unguarded-unschedule')
+      );
+    },
+    // Baseline nad STVARNIM datotekama na disku: bez njega bi mutacija mogla "prolaziti" zato
+    // sto gard vristi na svaku migraciju, a ne zato sto je pogodio bas ovaj oblik.
+    cleanBefore: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'migrations');
+      const files = readdirSync(dir)
+        .filter((f) => f.endsWith('.sql'))
+        .map((file) => ({ file, sql: readFileSync(join(dir, file), 'utf8') }));
+      return files.length > 50 && migrationHygieneProblems(files).length === 0;
     },
   },
 ];
