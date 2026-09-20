@@ -249,7 +249,7 @@ let repairPanelHandle: RepairPanelHandle|null=null, repairPanelForResult: any=nu
 let repairPanelItems: any[]=[], repairPanelTextItems: any[]=[];
 let preflightPanel: PreflightPanel|null=null, preflightPanelForResult: any=null;
 /* WORK_TYPE_LABELS se uvozi iz config-loader (data/work-type-labels.json).
-   CHECK_ITEMS i PRICING_TIERS vise nisu ovdje: popis provjera i cjenik zive na `/saznaj-vise/`,
+   CHECK_ITEMS i cjenik vise nisu ovdje: popis provjera i cjenik zive na `/saznaj-vise/`,
    koji ih sam prikazuje (`src/routes/learn-more/main.ts`). Analizator ih je crtao u elemente
    kojih na `/` od 2026-09-03 nema, pa je to bio mrtav kod s drugom kopijom istog prikaza. */
 const VALID_WORK_TYPES=new Set(Object.keys(WORK_TYPE_LABELS));
@@ -312,8 +312,9 @@ subscribeAnalyzerDocumentSettled((e)=>{if(!_sessionProfileApplied)return;if(e.ki
 /* SOCIAL_METHOD_REGISTRY i SOCIAL_METHOD_SOURCE se uvoze iz methodology-loader (data/methodology) */
 // Ponuda ima tri tiera: besplatna automatska provjera (teaser), puni izvjestaj po
 // vrsti rada (otkljucava se u rezultatu), i rucno uredivanje (ljudski servis preko
-// obrasca narudzbe). Ovo je izvor istine za landing sekciju Paketi.
-// PRICING_TIERS zive u `config/pricing-tiers` (vidi ondje zasto).
+// obrasca narudzbe).
+// Cjenik `/saznaj-vise/` se od Z11 crta kao racun iz `src/report/pricing.ts`, jedinog izvora
+// cijene; zaseban marketinski popis koji je ovdje nekad zivio je uklonjen.
 /**
  * Paketi RUCNE obrade (obrazac narudzbe), NE cjenik automatskog popravka.
  *

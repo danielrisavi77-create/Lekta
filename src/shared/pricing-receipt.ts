@@ -1,7 +1,7 @@
 /**
  * CJENIK KAO RACUN NA STOLU (Z11, `design/templates/pricing/Pricing.dc.html`).
  *
- * Racun ima dvije stavke i jednu istinu: lokalna provjera je 0,00 i uvijek ukljucena, a popravak
+ * Racun ima dvije stavke i jednu istinu: lokalna provjera je bez naplate i uvijek ukljucena, a popravak
  * forme je JEDNA cijena po vrsti rada. Iznos NIKAD ne ovisi o broju odabranih zahvata; to je isti
  * ugovor koji nad panelom popravka cuva ledger u `src/ui/repair-price-slider.ts`, samo izrecen na
  * mjestu gdje korisnik cijenu prvi put vidi.
@@ -151,7 +151,7 @@ export function renderPricingReceipt(
     izbornikBlok.append(oznaka, izbornik);
   }
 
-  // Stavka 1: uvijek ukljucena i uvijek 0,00.
+  // Stavka 1: uvijek ukljucena i uvijek bez naplate.
   const besplatniRed = el('div', 'pr-line pr-line--fixed');
   const besplatnaKvacica = el('span', 'pr-tick pr-tick--fixed', '✓');
   besplatnaKvacica.setAttribute('aria-hidden', 'true');

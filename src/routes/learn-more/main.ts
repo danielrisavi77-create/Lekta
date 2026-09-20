@@ -1,6 +1,7 @@
 import { CHECK_ITEMS } from '../../config/config-loader';
 import { renderSiteStats } from '../shared/site-stats-strip';
-import { PRICING_TIERS } from '../../config/pricing-tiers';
+import { renderPricingReceipt } from '../../shared/pricing-receipt';
+import { renderPricingLetter } from '../../shared/pricing-letter';
 import { loadProductionConfig, paidOffersLive } from '../../config/production-config';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
@@ -10,16 +11,17 @@ import '../../shared/page-app.css';
 /**
  * ULAZ RUTE `/saznaj-vise/`.
  *
- * Stranicu cini devet landing sekcija, a samo DVIJE trebaju JS: `#checkGrid` i `#pricingGrid`.
- * Ostalih sedam je staticki sadrzaj i ovdje se ne dira.
+ * Stranicu cini devet landing sekcija, a samo DVIJE trebaju JS: popis provjera (`#checkGrid`) i
+ * cjenik (`#pricingReceipt` + `#pricingLetter`). Ostalih sedam je staticki sadrzaj i ne dira se.
  *
  * NE UVOZI `src/ui/app.ts`. To je cijela poanta ove rute: analizator nosi svoje modulsko stanje,
  * intake gate, Web Worker i pola megabajta grafa, a ovoj stranici treba popis provjera i cjenik.
  * Izmjereno pri uvodjenju: da bi ozicenje analizatora radilo na stranici bez radne povrsine,
  * trebalo bi ograditi 154 pristupa DOM-u kroz 39 funkcija. Namjenski ulaz ne treba nijedan.
  *
- * Zato su `PRICING_TIERS` i produkcijska konfiguracija prethodno izdvojeni iz `app.ts`: bez toga
- * bi ovaj uvoz povukao analizator natrag.
+ * Zato su cjenik i produkcijska konfiguracija izdvojeni iz `app.ts`: bez toga bi ovaj uvoz povukao
+ * analizator natrag. Racun cijenu dobiva iz `src/report/pricing.ts`, a plan popravka uvozi samo kao
+ * TIP, pa ni on ne povlaci nista iz analizatora.
  */
 
 function renderChecks(root: HTMLElement): void {
@@ -29,24 +31,18 @@ function renderChecks(root: HTMLElement): void {
 }
 
 /**
- * Cjenik. Oblik je NAMJERNO isti kao u `app.ts`: ista klasa, isti redoslijed, ista oznaka.
- * Dvije kopije istog prikaza razisle bi se, pa se razlika mjeri gardom
- * (`tests/learn-more-route.test.ts`), a ne pamcenjem.
+ * CJENIK (Z11): racun na stolu + pismo za instituciju, iz JEDNOG izvora cijene.
+ *
+ * Prije ovoga su tri kartice cjenika crtale zaseban marketinski popis koji nije bio
+ * uskladjen s naplatom: nosio je nizu pocetnu cijenu od stvarne i paket rucnog uredjivanja kojeg
+ * naplata uopce ne poznaje. Ova ruta zato vise ne zna nijedan iznos; zna samo GDJE se racun montira
+ * i je li placena ponuda ziva.
+ *
+ * Vrsta rada je pocetni odabir izbornika, jer na ovoj stranici jos nema analiziranog rada.
  */
-function renderPricing(root: HTMLElement, live: boolean): void {
-  root.innerHTML = PRICING_TIERS.map((p) => {
-    const soon = p.id !== 'free' && !live;
-    const badge = soon ? '<span class="popular soon">USKORO</span>' : (p.featured ? '<span class="popular">PREPORUČENO</span>' : '');
-    // NAPOMENA O GRANICI: kad placena ponuda ozivi, `order` staza treba odrediste. Modal narudzbe
-    // zivi u zatecenoj stranici i ova ruta ga NE nosi, pa se takav paket vodi na pocetak umjesto
-    // da dobije gumb koji nista ne radi. Gumb bez ucinka je gori od poveznice koja vodi dalje.
-    const cta = soon
-      ? '<button class="btn btn-secondary" type="button" disabled aria-disabled="true">Uskoro</button>'
-      : (p.cta.order
-        ? `<a class="btn btn-secondary" href="/?paket=${p.cta.order}">${p.cta.label}</a>`
-        : `<a class="btn ${p.featured ? 'btn-primary' : 'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);
-    return `<article class="price-card ${p.featured ? 'featured' : ''}${soon ? ' soon' : ''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map((x) => `<li>${x}</li>`).join('')}</ul>${cta}</article>`;
-  }).join('');
+function renderCjenik(receiptRoot: HTMLElement | null, letterRoot: HTMLElement | null, live: boolean, contactEmail: string): void {
+  if (receiptRoot) renderPricingReceipt(receiptRoot, { workType: 'diplomski', live });
+  if (letterRoot) renderPricingLetter(letterRoot, { contactEmail });
 }
 
 function start(): void {
@@ -58,10 +54,15 @@ function start(): void {
   const checks = document.getElementById('checkGrid');
   if (checks) renderChecks(checks);
 
-  const pricing = document.getElementById('pricingGrid');
   // Konfiguracija se cita JEDNOM i prosljedjuje: funkcije je primaju kao argument bas zato da
   // dvije strane ne mogu vidjeti razlicito stanje.
-  if (pricing) renderPricing(pricing, paidOffersLive(loadProductionConfig()));
+  const productionConfig = loadProductionConfig();
+  renderCjenik(
+    document.getElementById('pricingReceipt'),
+    document.getElementById('pricingLetter'),
+    paidOffersLive(productionConfig),
+    productionConfig.contactEmail,
+  );
 }
 
 start();
