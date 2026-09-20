@@ -1,10 +1,27 @@
 /** Provider-neutral task handoff. No process execution or queue writes here. */
+export const PROMPT_FILE_PLACEHOLDER = '__LEKTA_PROMPT_FILE__';
+export const GROK_MIN_VERSION = '1.0.34';
+
+export function parseGrokVersion(output) {
+  const match = String(output ?? '').match(/\b(\d+)\.(\d+)\.(\d+)\b/);
+  if (!match) return { version: null, supported: false };
+  const version = match.slice(1, 4).map(Number);
+  const minimum = GROK_MIN_VERSION.split('.').map(Number);
+  const supported = version[0] > minimum[0]
+    || (version[0] === minimum[0] && version[1] > minimum[1])
+    || (version[0] === minimum[0] && version[1] === minimum[1] && version[2] >= minimum[2]);
+  return { version: match[0], supported };
+}
+
 export const AGENTS = Object.freeze({
   astra: { command: 'codex', model: 'gpt-6-astra', role: 'coordinator' },
   fable: { command: 'claude', model: 'fable', role: 'coordinator' },
   opus: { command: 'claude', model: 'opus', role: 'implementer' },
   sonnet: { command: 'claude', model: 'sonnet', role: 'implementer' },
   sol: { command: 'codex', model: 'gpt-5.6-sol', role: 'implementer' },
+  // Grok Build CLI (https://docs.x.ai/build/overview). Default model grok-4.6 = current coding recommendation (docs.x.ai/docs/models, 2026-09-20).
+  grok: { command: 'grok', model: 'grok-4.6', role: 'coordinator' },
+  build: { command: 'grok', model: 'grok-4.6', role: 'implementer' },
 });
 
 export function validateQueue(queue) {
@@ -38,9 +55,10 @@ export function validateQueue(queue) {
  *  - `subscription`: autonomni profil; NEMA budzeta jer se ne smije ni doci do naplate: Fable je iskljucen
  *    (nije u paketu), API kljuc u okolini je odbijen u CLI-ju, a poziv ide iskljucivo kroz prijavljenu
  *    pretplatu. Lazni pozitivan budzet se ovdje ne unosi da bi "prosla" stara validacija.
+ * Grok (xAI) nema USD budget flag u runneru; headless cesto koristi `XAI_API_KEY` ili `grok login`.
  */
 export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
-export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable']);
+export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'build']);
 
 export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   const billingMode = options.billingMode ?? 'budget';
@@ -64,9 +82,26 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
     if (!implementation || implementation.role !== 'implementer') throw new Error('Missing implementationAgent');
     if (implementation.command === agent.command) throw new Error('Review requires a different provider');
   }
-  const args = agent.command === 'codex'
-    ? ['exec', '--model', agent.model, '--sandbox', phase === 'implement' ? 'workspace-write' : 'read-only', '--json', '-']
-    : ['-p', '--model', agent.model, '--output-format', 'json', '--max-turns', '20', '--permission-mode', 'dontAsk'];
+  let args;
+  if (agent.command === 'codex') {
+    args = ['exec', '--model', agent.model, '--sandbox', phase === 'implement' ? 'workspace-write' : 'read-only', '--json', '-'];
+  } else if (agent.command === 'claude') {
+    args = ['-p', '--model', agent.model, '--output-format', 'json', '--max-turns', '20', '--permission-mode', 'dontAsk'];
+  } else if (agent.command === 'grok') {
+    // Grok 1.0.34 supports --prompt-file. cli.mjs substitutes the artifact path so the
+    // complete task never appears in the process argv or shell history.
+    args = [
+      '--no-auto-update',
+      '--prompt-file', PROMPT_FILE_PLACEHOLDER,
+      '-m', agent.model,
+      '--output-format', 'json',
+      '--max-turns', '20',
+      '--sandbox', phase === 'implement' ? 'workspace' : 'read-only',
+    ];
+    if (phase === 'implement') args.push('--always-approve');
+  } else {
+    throw new Error(`Unsupported agent command: ${agent.command}`);
+  }
   if (billingMode === 'subscription' && SUBSCRIPTION_EXCLUDED_AGENTS.includes(agentName)) {
     throw new Error(`${agentName} is not included in the subscription profile`);
   }
@@ -104,6 +139,36 @@ export function parseResult(command, stdout, exitCode) {
       const result = JSON.parse(stdout);
       return { ok: result.subtype === 'success' && result.is_error === false,
         reportedModels: Object.keys(result.modelUsage ?? {}) };
+    }
+    if (command === 'grok') {
+      // Official docs: `--output-format json` emits one JSON object at the end.
+      // Exact success schema is not fully documented; refuse explicit errors and require parseable JSON.
+      const text = stdout.trim();
+      let result;
+      try {
+        result = JSON.parse(text);
+      } catch {
+        const lines = text.split('\n').filter(Boolean);
+        result = JSON.parse(lines[lines.length - 1]);
+      }
+      if (result == null || typeof result !== 'object' || Array.isArray(result)) {
+        return { ok: false, reportedModels: [] };
+      }
+      const currentSuccess = typeof result.text === 'string' && result.text.trim().length > 0
+        && result.stopReason === 'end_turn'
+        && Number.isInteger(result.num_turns) && result.num_turns > 0
+        && result.modelUsage != null && typeof result.modelUsage === 'object'
+        && Object.keys(result.modelUsage).length > 0;
+      if (!currentSuccess || result.is_error === true || result.ok === false
+          || result.error != null || String(result.subtype ?? '').startsWith('error')) {
+        return { ok: false, reportedModels: [] };
+      }
+      const reportedModels = [];
+      if (typeof result.model === 'string') reportedModels.push(result.model);
+      if (result.modelUsage && typeof result.modelUsage === 'object') {
+        reportedModels.push(...Object.keys(result.modelUsage));
+      }
+      return { ok: true, reportedModels: [...new Set(reportedModels)] };
     }
     const events = stdout.trim().split('\n').map(line => JSON.parse(line));
     return { ok: events.some(e => e.type === 'turn.completed') && !events.some(e => ['turn.failed', 'error'].includes(e.type)),

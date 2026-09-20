@@ -1,0 +1,102 @@
+<!-- @dsCard group="Rezultat" name="Prsten ocjene" subtitle="blokira / dorada / rucna provjera / cisto / opca provjera / unscored" width="1080" height="440" -->
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<title>Prsten ocjene</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+  color-scheme:dark;
+  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
+  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
+  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
+  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
+  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
+  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
+  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
+  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
+  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-doc:Georgia,"Times New Roman",serif;
+  --radius:2px;--radius-pill:999px;
+  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
+}
+[data-theme="light"]{
+  color-scheme:light;
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
+  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
+  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
+  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
+  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
+  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
+  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
+  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
+  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
+}
+html,body{height:auto}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
+.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.dsc-item{display:grid;gap:9px;justify-items:start}
+.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
+.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
+.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
+.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
+</style>
+<style>
+.ring-card{width:150px;height:150px;border-radius:2px;display:grid;place-items:center;background:linear-gradient(180deg,var(--desk-2) 0%,var(--desk) 100%);box-shadow:var(--paper-sh-sm);position:relative}
+.ring{width:104px;height:104px;border-radius:50%;position:relative;display:grid;place-items:center}
+.ring::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--tone,#666) calc(var(--pct,0)*1%), rgba(237,231,220,.12) 0)}
+.ring::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--desk)}
+.ring-val{position:relative;z-index:1;font-family:var(--mono);font-weight:600;font-size:1.9rem;color:var(--desk-ink);font-variant-numeric:tabular-nums}
+.ring-val small{display:block;font-size:.6rem;color:rgba(237,231,220,.5);font-weight:500}
+.ring-status{position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);border-radius:999px;background:var(--desk);box-shadow:0 0 0 1px rgba(237,231,220,.16);font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;white-space:nowrap}
+.ring-dashed::before{background:none;border:2px dashed rgba(237,231,220,.35)}
+.ring-empty::before{background:rgba(237,231,220,.10)}
+</style>
+</head>
+<body>
+<h1 class="dsc-h">Prsten ocjene</h1>
+<p class="dsc-sub">Presuda je BOJA, ne dekoracija: crvena blokira predaju, jantarna traži doradu, plava traži ručnu provjeru, zelena je čisto. Opća provjera (bez prepoznatog profila) ima isprekidan rub jer ocjena nije mjerodavna za točan fakultet.</p>
+<div class="dsc-row">
+
+<div class="dsc-item">
+  <div class="ring-card"><div class="ring" style="--tone:#E4573D;--pct:34"><span class="ring-val">34<small>/ 100</small></span></div><span class="ring-status" style="color:#E4573D">Blokira</span></div>
+  <div class="dsc-cap" style="margin-top:16px">Blokira predaju</div>
+</div>
+
+<div class="dsc-item">
+  <div class="ring-card"><div class="ring" style="--tone:#C98A2E;--pct:68"><span class="ring-val">68<small>/ 100</small></span></div><span class="ring-status" style="color:#C98A2E">Dorada</span></div>
+  <div class="dsc-cap" style="margin-top:16px">Treba doradu</div>
+</div>
+
+<div class="dsc-item">
+  <div class="ring-card"><div class="ring" style="--tone:#4A6CF0;--pct:81"><span class="ring-val">81<small>/ 100</small></span></div><span class="ring-status" style="color:#4A6CF0">Ručna provjera</span></div>
+  <div class="dsc-cap" style="margin-top:16px">Treba ručnu provjeru</div>
+</div>
+
+<div class="dsc-item">
+  <div class="ring-card"><div class="ring" style="--tone:#34996A;--pct:96"><span class="ring-val">96<small>/ 100</small></span></div><span class="ring-status" style="color:#34996A">Čisto</span></div>
+  <div class="dsc-cap" style="margin-top:16px">Spremno, čisto</div>
+</div>
+
+<div class="dsc-item">
+  <div class="ring-card"><div class="ring ring-dashed"><span class="ring-val">57<small>/ 100</small></span></div><span class="ring-status" style="color:rgba(237,231,220,.7)">Opća provjera</span></div>
+  <div class="dsc-cap" style="margin-top:16px">Fakultet nije prepoznat</div>
+</div>
+
+<div class="dsc-item">
+  <div class="ring-card"><div class="ring ring-empty"><span class="ring-val">—<small>nema ocjene</small></span></div><span class="ring-status" style="color:rgba(237,231,220,.55)">Unscored</span></div>
+  <div class="dsc-cap" style="margin-top:16px">Nema bodovanih pravila</div>
+</div>
+
+</div>
+</body>
+</html>

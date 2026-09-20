@@ -1,4 +1,5 @@
 import './result-visuals.css';
+import { claimBadgeHtml } from '../profile-claim';
 import type { VisualFindingModel, VisualResultModel } from './visual-result-model';
 import { categorySummaryHtml } from './category-summary';
 import { priorityFindingsHtml } from './priority-findings';
@@ -23,7 +24,8 @@ export type ResultsCockpitAction =
   | { kind: 'preview-location'; paragraphIndex: number; footnoteId?: number }
   | { kind: 'open-findings' }
   | { kind: 'simulate-repair' }
-  | { kind: 'repair-safe' };
+  | { kind: 'repair-safe'; ruleIds?: string[] }
+  | { kind: 'plan-opened' };
 
 /**
  * KOREKTORSKI STOL kao izvor. Ljuska NE zna kako se crta dokument: `mountDocument` joj se
@@ -84,12 +86,17 @@ export function authorityHtml(model: VisualResultModel['authority']): string {
 
 function headerHtml(model: VisualResultModel): string {
   const confirmation = model.header.profileConfirmed ? 'Profil potvrđen' : 'Profil nije potvrđen';
-  return `<header class="cockpit-header" data-cockpit-header><div><span class="cockpit-kicker">Rezultat provjere</span><h2>${escapeHtml(model.header.documentName)}</h2><p>${escapeHtml(model.header.profile)} · ${escapeHtml(model.header.authorityLabel)}</p></div><span class="cockpit-header__status ${model.header.profileConfirmed ? 'cockpit-header__status--confirmed' : ''}"><span aria-hidden="true">${model.header.profileConfirmed ? '✓' : 'ℹ'}</span>${confirmation}</span></header>`;
+  return `<header class="cockpit-header" data-cockpit-header><div><span class="cockpit-kicker">Rezultat provjere</span><h2>${escapeHtml(model.header.documentName)}</h2><p>${escapeHtml(model.header.profile)} · ${escapeHtml(model.header.authorityLabel)}</p>${claimBadgeHtml(model.header.evidenceClaim, escapeHtml)}</div><span class="cockpit-header__status ${model.header.profileConfirmed ? 'cockpit-header__status--confirmed' : ''}"><span aria-hidden="true">${model.header.profileConfirmed ? '✓' : 'ℹ'}</span>${confirmation}</span></header>`;
 }
 
+/**
+ * `repair-entry` (plan T02) je OMOGUCEN opci ulaz u popravak: "Popravi sigurne stavke" kad dokument ima automatskih
+ * stavki, inace "Simuliraj popravak". Oznaka je uvijek na tocno jednom gumbu koji se stvarno moze kliknuti, pa test
+ * ne mora birati izmedju dva gumba, a onemogucen gumb nikad ne nosi oznaku ulaza.
+ */
 function actionRowHtml(model: VisualResultModel, repairAvailable: boolean): string {
   const safeDisabled = !repairAvailable || model.signals.automaticFixes <= 0;
-  return `<section class="cockpit-actions" aria-label="Sljedeći koraci"><button type="button" class="button button-primary" data-cockpit-action="open-findings">Pregledaj nalaze</button><button type="button" class="button button-secondary" data-cockpit-action="simulate-repair"${repairAvailable ? '' : ' disabled'}>Simuliraj popravak</button><button type="button" class="button button-secondary" data-cockpit-action="repair-safe"${safeDisabled ? ' disabled' : ''}>Popravi sigurne stavke <span class="cockpit-actions__count">${escapeHtml(model.signals.automaticFixes)}</span></button></section>`;
+  return `<section class="cockpit-actions" aria-label="Sljedeći koraci"><button type="button" class="button button-primary" data-cockpit-action="open-findings">Pregledaj nalaze</button><button type="button" class="button button-secondary" data-cockpit-action="simulate-repair"${safeDisabled && repairAvailable ? ' data-testid="repair-entry"' : ''}${repairAvailable ? '' : ' disabled'}>Simuliraj popravak</button><button type="button" class="button button-secondary" data-cockpit-action="repair-safe"${safeDisabled ? '' : ' data-testid="repair-entry"'}${safeDisabled ? ' disabled' : ''}>Popravi sigurne stavke <span class="cockpit-actions__count">${escapeHtml(model.signals.automaticFixes)}</span></button></section>`;
 }
 
 export function resultRendererFor(doc: Document): ResultsRenderer {
@@ -166,6 +173,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
         esc: escapeHtml,
         // Prazan plan se ne nudi: gumb koji vodi na "nema zahvata" je losiji od izostanka gumba.
         planHtml: plan.prazan ? null : repairPlanHtml(plan, escapeHtml),
+        plan: plan.prazan ? null : plan,
         // NA USKOM EKRANU SE DOKUMENT NE CRTA. Raspored 58/42 ondje nema smisla, pa ga CSS
         // sakrije, a tada je `clientWidth` nula. Bez ove provjere bi se faksimil svejedno
         // renderirao: desetci odlomaka u A4 listovima za posao koji nitko nece vidjeti, i to

@@ -10,6 +10,7 @@ import {
   type FindingViewModel,
 } from '../finding-view-model';
 import { resultReadiness, type ReadinessAuthority, type ResultReadiness } from '../result-readiness';
+import { profileClaimFor, type ProfileClaim } from '../profile-claim';
 
 export type VisualAuthorityKind = 'verified' | 'limited' | 'generic';
 
@@ -35,6 +36,8 @@ export interface VisualResultHeaderModel {
   profileStatus: string | null;
   profileConfirmed: boolean;
   authorityLabel: string;
+  /** Razina i osnova dokaza profila, ISTA projekcija kao na kartici profila (T05). `null` bez profila. */
+  evidenceClaim: ProfileClaim | null;
 }
 
 export type VisualScoreModel =
@@ -109,6 +112,7 @@ export interface VisualResultInput extends FindingResultInput {
   profileStatus?: string | null;
   capabilities?: Partial<VisualResultCapabilities>;
   details?: FindingResultInput['details'] & {
+    profileDefinitionId?: string | null;
     ruleAuthority?: string | null;
   };
 }
@@ -273,6 +277,8 @@ function headerModel(result: VisualResultInput, authority: VisualAuthorityKind):
     profileStatus: trimString(result.profileStatus),
     profileConfirmed: authority === 'verified',
     authorityLabel: authority === 'verified' ? 'Pravila provjerena prema službenim izvorima' : 'Opseg provjere ima ograničenja',
+    // Isti izvor kao kartica profila (`profileClaimFor` nad definicijom); rezultat ne smije tvrditi drugu razinu.
+    evidenceClaim: profileClaimFor(trimString(result.details?.profileDefinitionId)),
   };
 }
 function categoryModels(input: VisualResultInput['categories']): VisualCategoryModel[] {

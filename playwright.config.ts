@@ -106,11 +106,26 @@ export default defineConfig({
      * nijednom nisu odvrtjeli ovu suite, pa bi ih odmah proglasiti blokirajucima znacilo pustiti
      * u gate nesto sto nitko nije vidio kako se ponasa. Vrte se u zasebnom `browser-matrix`
      * workflowu, vidljivo; u obavezne provjere se PROMICU tek nakon prvog zelenog prolaza.
+     *
+     * RADNI PROSTOR TRI FAZE (korak D, 2026-09-13). Specovi radnog prostora `/rad/` (ulaz, CTA
+     * popravka, povratak odabira, indikator spremanja, pristupacnost, sirine zaslona) ulaze u
+     * allowliste WebKita i mobilnog WebKita, jer bas ondje zive razlike koje Chromium ne vidi:
+     * fokus poslije `display:none`, `inert`, `scrollIntoView` i IndexedDB u Safariju. Firefox
+     * dobiva ulaz, pristupacnost i sirine; ostali specovi mjere IndexedDB tok koji je vec pokriven
+     * u WebKitu i na Chromiumu, pa bi trostruko vrtjenje samo trosilo stroj matrice.
+     *
+     * ALLOWLISTA JE PO IMENU DATOTEKE, pa nov spec ovdje NE ulazi sam: `--list` na projektu prije
+     * dodavanja daje 0 testova za tu datoteku, i to je cijena koja se placa svjesno (matrica ostaje
+     * popis onoga sto je netko vidio kako se ponasa, ne sve sto postoji). Izmjereno pri dodavanju:
+     * `webkit --list` nad workspace-entry davao je 0 testova, poslije 10; roadmap-v2 (sentinel, vec u
+     * allowlisti) davao je 2 prije i poslije, pa mjerenje nije bilo pokvareno.
      */
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /(roadmap-v2|desktop-flow|parser-parity)\.spec\.ts/ },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testMatch: /(roadmap-v2|desktop-flow|parser-parity)\.spec\.ts/ },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] },
+      testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|workspace-a11y|workspace-viewports)\.spec\.ts/ },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] },
+      testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports)\.spec\.ts/ },
     { name: 'mobile-webkit', use: { ...devices['iPhone 13'] },
-      testMatch: /(roadmap-v2|mobile-critical-path)\.spec\.ts/ },
+      testMatch: /(roadmap-v2|mobile-critical-path|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports)\.spec\.ts/ },
   ],
   /**
    * Dizanje posluzitelja traje MNOGO duze na hladno nego na toplo, pa je 120 s bila granica koja

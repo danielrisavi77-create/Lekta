@@ -2,8 +2,14 @@ import { uploadCapBytes } from '../../repair/docx-budget';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { createLocalDocumentSession, sessionFragment } from '../../session/local-document-session';
 import { mountIntakeController } from './intake-controller';
+import { prikaziUlazniListBroj } from './list-number';
+import { mountDisplaySettings } from '../../shared/display-settings';
 import { playIntakeEntry } from './intake-motion';
 import '../../shared/ui-boot';
+// ULAZ NOSI TOCNO DVA GLASA, i to je odluka vlasnika, ne propust. Z7 papir ima mete koje
+// `design/README.md` drzi podatkovnim glasom (broj lista, oznake zaglavlja, pecat, brojevi
+// koraka), ali nalog Z7 zabranjuje dodavanje webfonta, pa se te mete crtaju `var(--ui)`-jem uz
+// mjeru i razmak slova. Gard: `tests/entry-fonts.test.ts`.
 import '../../shared/page-chrome.css';  // ulaz NE uvozi radnu povrsinu: vidi mjerenje u tom listu
 import './intake.css';
 // Prazan stol pod lampom: postojeci sloj dubine (snop, prasina, sjene) BEZ demo dokumenta i bez
@@ -74,8 +80,15 @@ async function offerContinuation(doc: Document, store: IndexedDbDocumentSessionS
 }
 
 function start(): void {
+  // Panel "Prilagodi prikaz" ide PRVI: postavke se primjenjuju prije nego se bilo sto animira,
+  // pa korisnik s `data-motion="reduce"` ne vidi ulaznu sekvencu koju je izricito iskljucio.
+  mountDisplaySettings(document);
   const maxUploadBytes = uploadLimitForCurrentDevice();
   showUploadLimit(document, maxUploadBytes);
+  // Broj ulaznog lista (Z7) ide PRIJE sekvence: zamjena "0001" -> stvaran broj mora se dogoditi
+  // dok se papir jos slaze, a ne kao vidljiv skok nakon njega. Sirina je rezervirana u CSS-u
+  // (tabularne znamenke), pa se redak ne trzne ni kad broj poraste na cetiri znamenke.
+  prikaziUlazniListBroj(document);
   // Sekvenca ide PRIJE montaze kontrolera samo po redoslijedu poziva:
   // kontrolera samo po redoslijedu poziva: papir je klikabilan od prvog kadra jer se animiraju
   // iskljucivo `opacity` i `transform`.

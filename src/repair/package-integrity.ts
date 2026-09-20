@@ -22,6 +22,43 @@ export interface XmlScanResult {
   problem?: string;
   /** Priblizna pozicija u stringu, za lakse trazenje u velikom XML-u. */
   offset?: number;
+  /**
+   * Razred greske. `namespace` je jedini koji se mjeri i na ULAZU pa prijavljuje samo kad je NOV
+   * (vidi `detectIntegrityFailure`); sve ostalo je bezuvjetno fatalno.
+   *
+   * STRUKTURA IMA PRVENSTVO: strukturna greska prekida skeniranje odmah, a nevezani prefiksi se
+   * skupljaju i javljaju tek na kraju. Bez tog redoslijeda bi dio s OBA kvara bio prijavljen kao
+   * `namespace`, pa bi ga izuzece za vec postojeci prefiks propustilo ZAJEDNO sa strukturnim
+   * kvarom. Izmjereno 2026-09-12: RE-47 oblik (`<w:fldChar .../ w:dirty="true">`) je prolazio kroz
+   * vrata integriteta samo zato sto je ulaz imao nevezan prefiks na korijenu.
+   */
+  kind?: 'structure' | 'namespace';
+  /**
+   * SVI nevezani prefiksi dijela, po prvoj pojavi (samo uz `options.namespaces`, i samo kad je
+   * `kind === 'namespace'`). Popis, a ne jedan nalaz, jer vrata integriteta usporedjuju SKUP
+   * prefiksa ulaza i izlaza: da se javlja samo prvi, jedan vec postojeci nevezan prefiks bi sakrio
+   * svaki NOV koji je popravak uveo.
+   */
+  unboundPrefixes?: readonly UnboundPrefix[];
+}
+
+/** Jedan nevezan prefiks: ime, mjesto prve pojave i citljiv opis. */
+export interface UnboundPrefix {
+  prefix: string;
+  offset: number;
+  detail: string;
+}
+
+export interface XmlScanOptions {
+  /**
+   * Uz strukturu provjeri i da svako ime s prefiksom ima `xmlns:` deklaraciju U DOSEGU (RE-60).
+   *
+   * NIJE zadano, i to je odluka: minimalni sinteticki dijelovi kroz ovaj repozitorij namjerno
+   * izostavljaju deklaracije (`<w:styles>` bez `xmlns:w`), sto stvaran Word dokument nikad ne
+   * radi. Bezuvjetna provjera bi ih sve proglasila neispravnima, a mjeri se tudji sinteticki ulaz,
+   * ne nas popravak. Ukljucuje je vratima integriteta, gdje se usporedjuje s ulazom.
+   */
+  namespaces?: boolean;
 }
 
 export interface PartInspection {
@@ -68,13 +105,60 @@ function isNameStart(ch: string): boolean {
  *   - nezatvoren navodnik u vrijednosti atributa,
  *   - nebalansirane ili krivo ugnijezdjene tagove,
  *   - samostalan `<` u tekstu,
- *   - `&` koji ne zapocinje valjan entitet.
+ *   - `&` koji ne zapocinje valjan entitet,
+ *   - uz `options.namespaces`: prefiks (`r:id`, `w:val`) koji u DOSEGU nema `xmlns:` deklaraciju
+ *     (RE-60).
  *
  * Namjerno NE validira shemu (to je posao Tier 1/2 oraclea: python-docx, Word).
+ *
+ * ZASTO I VEZANJE PREFIKSA: nevezan prefiks nije stvar sheme nego namespace-well-formedness, i
+ * @xmldom/xmldom ga odbija s `NamespaceError: prefix is non-null and namespace is null`, kao i
+ * lxml (`Namespace prefix r for id on hyperlink is not defined`) i Word. Do 2026-09-12 je
+ * `link-doi-fixer` umetao `<w:hyperlink r:id="...">` bez deklaracije na korijenu kad je dokument
+ * `xmlns:r` deklarirao LOKALNO na nekom drugom elementu, a `integrityFailure` je ostajao `null`
+ * jer skener doseg nije pratio. Provjera zato ide kroz postojeci `stack` (deklaracija vrijedi od
+ * elementa na kojem stoji do njegova zatvaranja), NIKAD kao globalni regex nad cijelim nizom:
+ * globalni regex bi ponovio tocno onu gresku koja se popravlja.
  */
-export function scanXmlWellFormed(xml: string): XmlScanResult {
-  const fail = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset });
-  const stack: Array<{ name: string; offset: number }> = [];
+export function scanXmlWellFormed(xml: string, options: XmlScanOptions = {}): XmlScanResult {
+  const checkNamespaces = options.namespaces === true;
+  const fail = (problem: string, offset: number): XmlScanResult => ({ ok: false, problem, offset, kind: 'structure' });
+  const stack: Array<{ name: string; offset: number; declared: string[] }> = [];
+  /**
+   * Nevezani prefiksi se SKUPLJAJU, ne prijavljuju odmah. Dva razloga, oba izmjerena:
+   * struktura mora imati prvenstvo (vidi `XmlScanResult.kind`), a vrata integriteta trebaju CIJELI
+   * skup da bi razlikovala nov prefiks od onog koji je dosao s dokumentom.
+   */
+  const unbound = new Map<string, UnboundPrefix>();
+  const noteUnbound = (prefix: string, offset: number, detail: string): void => {
+    if (!unbound.has(prefix)) unbound.set(prefix, { prefix, offset, detail });
+  };
+  /**
+   * Prefiksi deklarirani u trenutnom dosegu, s brojem razina koje ih deklariraju. Brojac, a ne
+   * skup, jer isti prefiks smije biti redeklariran dublje u stablu; tek kad i zadnja razina koja
+   * ga deklarira nestane, prefiks izlazi iz dosega.
+   */
+  const declaredPrefixes = new Map<string, number>();
+  const declare = (prefixes: readonly string[]): void => {
+    for (const prefix of prefixes) declaredPrefixes.set(prefix, (declaredPrefixes.get(prefix) ?? 0) + 1);
+  };
+  const undeclare = (prefixes: readonly string[]): void => {
+    for (const prefix of prefixes) {
+      const left = (declaredPrefixes.get(prefix) ?? 0) - 1;
+      if (left > 0) declaredPrefixes.set(prefix, left);
+      else declaredPrefixes.delete(prefix);
+    }
+  };
+  /** Vraca nevezan prefiks imena, ili `null` kad je ime bez prefiksa ili je prefiks vezan. */
+  const unboundPrefixOf = (qname: string): string | null => {
+    const colon = qname.indexOf(':');
+    if (colon <= 0) return null;
+    const prefix = qname.slice(0, colon);
+    // `xml` i `xmlns` su vezani po definiciji (Namespaces in XML 1.0, sec. 3) i nikad se ne
+    // deklariraju; bez ovog izuzeca bi `xml:space` i `xmlns:w` bili lazni nalazi.
+    if (prefix === 'xml' || prefix === 'xmlns') return null;
+    return (declaredPrefixes.get(prefix) ?? 0) > 0 ? null : prefix;
+  };
   let i = 0;
 
   while (i < xml.length) {
@@ -121,6 +205,7 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
       const open = stack.pop();
       if (!open) return fail(`zatvarajuci tag </${name}> bez otvarajuceg`, lt);
       if (open.name !== name) return fail(`ocekivan </${open.name}>, a nadjen </${name}>`, lt);
+      undeclare(open.declared);
       i = j + 1;
       continue;
     }
@@ -174,7 +259,24 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
       j = close + 1;
     }
 
-    if (!selfClosing) stack.push({ name, offset: lt });
+    /**
+     * Deklaracije s OVOG elementa vrijede i za njegovo VLASTITO ime i za njegove atribute, pa se
+     * upisuju tek kad su svi atributi procitani, a provjera ide odmah nakon toga.
+     */
+    const declaredHere: string[] = [];
+    if (checkNamespaces) {
+      for (const attr of seenAttrs) if (attr.startsWith('xmlns:') && attr.length > 6) declaredHere.push(attr.slice(6));
+      declare(declaredHere);
+      const unboundName = unboundPrefixOf(name);
+      if (unboundName) noteUnbound(unboundName, lt, `prefiks ${unboundName}: u <${name}> nema xmlns deklaraciju u dosegu`);
+      for (const attr of seenAttrs) {
+        const unboundAttr = unboundPrefixOf(attr);
+        if (unboundAttr) noteUnbound(unboundAttr, lt, `prefiks ${unboundAttr}: u atributu ${attr} (<${name}>) nema xmlns deklaraciju u dosegu`);
+      }
+    }
+
+    if (selfClosing) undeclare(declaredHere);
+    else stack.push({ name, offset: lt, declared: declaredHere });
     i = j;
   }
 
@@ -184,6 +286,10 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
     if (open.length) {
       const last = open[open.length - 1];
       return fail(`tag <${last.name}> nije zatvoren`, last.offset);
+    }
+    if (unbound.size) {
+      const list = [...unbound.values()];
+      return { ok: false, problem: list[0].detail, offset: list[0].offset, kind: 'namespace', unboundPrefixes: list };
     }
     return { ok: true };
   }

@@ -27,6 +27,7 @@ import { DOMParser } from '@xmldom/xmldom';
 import { parseXml } from '../src/docx/parser';
 import { readZip } from '../src/repair/zip-codec';
 import { scanXmlWellFormed, checkSchemaInvalidContent } from '../src/repair/package-integrity';
+import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FIXTURE_DIR = join(here, 'fixtures', 'docx');
@@ -110,6 +111,191 @@ describe('A0: duplikat atributa na istom elementu', () => {
   it('isti atribut na RAZLICITIM elementima je uredan', () => {
     const xml = '<?xml version="1.0"?><w:body xmlns:w="urn:x"><w:p w:id="1"/><w:p w:id="1"/></w:body>';
     expect(scanXmlWellFormed(xml).ok).toBe(true);
+  });
+});
+
+/**
+ * RE-60 (2026-09-12): NEVEZAN PREFIKS, razred koji je skener propustao jer nije pratio DOSEG.
+ *
+ * `link-doi-fixer` je `xmlns:r` na korijenu trazio uzorkom `/xmlns:r=["']/` nad cijelim
+ * `document.xml`, dakle bilo gdje. Dokument koji prefiks deklarira LOKALNO na nekom elementu
+ * (legalan XML) time je prolazio kao vec deklariran, fixer je umetnuo `<w:hyperlink r:id="...">` u
+ * tijelo izvan dosega te deklaracije, a `integrityFailure` je ostajao `null` jer skener imena s
+ * prefiksom uopce nije provjeravao. @xmldom/xmldom, lxml i Word takav dio odbijaju
+ * (`NamespaceError: prefix is non-null and namespace is null`).
+ *
+ * Gard mora imati oba dokaza: da GRIZE na nevezanom prefiksu i da NE VRISTI na ispravnim oblicima
+ * (deklaracija na korijenu, deklaracija na pretku, `xml:`/`xmlns:` koji se nikad ne deklariraju).
+ */
+describe('A0: prefiks bez xmlns deklaracije u dosegu', () => {
+  const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+
+  it('GRIZE: r: u tijelu dok je xmlns:r deklariran LOKALNO na drugom elementu', () => {
+    const xml =
+      `<w:document xmlns:w="${W}"><w:body>`
+      + '<w:p><w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink></w:p>'
+      + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL}"/></w:sectPr>`
+      + '</w:body></w:document>';
+    // BASELINE: doista je nevaljan i po DRUGOM alatu, ne samo po nasem skeneru. Ovu klasu xmldom
+    // ne prijavljuje kroz `onError` nego BACA, za razliku od RE-47 oblika iznad.
+    expect(() => xmldomErrors(xml)).toThrow(/NamespaceError/);
+    const result = scanXmlWellFormed(xml, { namespaces: true });
+    expect(result.ok).toBe(false);
+    expect(result.problem).toMatch(/prefiks r:/);
+  });
+
+  it('GRIZE i kad je nevezan prefiks u IMENU elementa', () => {
+    expect(scanXmlWellFormed(`<w:document xmlns:w="${W}"><w:body><m:oMath/></w:body></w:document>`, { namespaces: true }).ok).toBe(false);
+  });
+
+  it('BASELINE: deklaracija na KORIJENU je uredna', () => {
+    const xml =
+      `<w:document xmlns:w="${W}" xmlns:r="${REL}"><w:body>`
+      + '<w:p><w:hyperlink r:id="rId1"><w:r><w:t xml:space="preserve">x</w:t></w:r></w:hyperlink></w:p>'
+      + '</w:body></w:document>';
+    expect(xmldomErrors(xml)).toEqual([]);
+    expect(scanXmlWellFormed(xml, { namespaces: true }).ok).toBe(true);
+  });
+
+  it('BASELINE: deklaracija na PRETKU vrijedi za cijelo podstablo', () => {
+    const xml = `<w:document xmlns:w="${W}"><w:body xmlns:r="${REL}"><w:p><w:hyperlink r:id="rId1"/></w:p></w:body></w:document>`;
+    expect(scanXmlWellFormed(xml, { namespaces: true }).ok).toBe(true);
+  });
+
+  it('DOSEG SE ZATVARA: prefiks nakon zatvaranja elementa koji ga je deklarirao vise ne vrijedi', () => {
+    const xml =
+      `<w:document xmlns:w="${W}"><w:body>`
+      + `<w:p xmlns:r="${REL}"><w:hyperlink r:id="rId1"/></w:p>`
+      + '<w:p><w:hyperlink r:id="rId2"/></w:p>'
+      + '</w:body></w:document>';
+    const result = scanXmlWellFormed(xml, { namespaces: true });
+    expect(result.ok, 'druga hiperveza je izvan dosega deklaracije s prvog odlomka').toBe(false);
+    expect(result.problem).toMatch(/prefiks r:/);
+  });
+
+  it('NE VRISTI: xml: i xmlns: se po definiciji ne deklariraju', () => {
+    expect(scanXmlWellFormed(`<w:t xmlns:w="${W}" xml:space="preserve">x</w:t>`, { namespaces: true }).ok).toBe(true);
+  });
+
+  it('NE VRISTI: imena bez prefiksa i default namespace', () => {
+    expect(scanXmlWellFormed('<Relationships xmlns="urn:x"><Relationship Id="rId1"/></Relationships>', { namespaces: true }).ok).toBe(true);
+  });
+
+  /**
+   * PROVJERA JE OPT-IN, i to je odluka, ne propust. Minimalni sinteticki dijelovi kroz ovaj
+   * repozitorij namjerno izostavljaju deklaracije (`<w:styles>` bez `xmlns:w`; izmjereno: 25
+   * testova u `src/repair/apply-fixers.test.ts` gradi takve ulaze). Bezuvjetna provjera bi mjerila
+   * tudji sinteticki ulaz umjesto naseg zahvata.
+   */
+  it('bez opcije se vezanje NE provjerava (zadano ponasanje ostaje netaknuto)', () => {
+    const xml = `<w:document xmlns:w="${W}"><w:body><w:p><w:hyperlink r:id="rId1"/></w:p></w:body></w:document>`;
+    expect(scanXmlWellFormed(xml).ok).toBe(true);
+    expect(scanXmlWellFormed(xml, { namespaces: true }).ok).toBe(false);
+  });
+
+  /**
+   * VRATA PRIJAVLJUJU SAMO ONO STO SMO MI UVELI, isto pravilo koje vec vrijedi za strukturu paketa.
+   * Nevezan prefiks koji je stigao S DOKUMENTOM nije nas kvar i ne smije zaustaviti isporuku;
+   * nevezan prefiks u dijelu ciji je ULAZ bio valjan jest.
+   */
+  describe('vrata integriteta: nevezan prefiks samo kad je NOV', () => {
+    const valjanUlaz =
+      `<w:document xmlns:w="${W}"><w:body><w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p>`
+      + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL}"/></w:sectPr>`
+      + '</w:body></w:document>';
+    const losIzlaz = valjanUlaz.replace('<w:r><w:t>doi:10.1234/abc</w:t></w:r>', '<w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink>');
+    const dobarIzlaz = losIzlaz.replace('<w:document ', `<w:document xmlns:r="${REL}" `);
+    const gate = (ulaz: string, izlaz: string) =>
+      detectIntegrityFailure([{ name: 'word/document.xml', xml: izlaz }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': ulaz });
+
+    it('NOV nevezan prefiks zaustavlja isporuku', () => {
+      expect(gate(valjanUlaz, losIzlaz)?.problem).toMatch(/prefiks r:/);
+    });
+
+    it('BASELINE: ispravan izlaz prolazi', () => {
+      expect(gate(valjanUlaz, dobarIzlaz)).toBeNull();
+    });
+
+    it('nevezan prefiks koji je VEC bio na ulazu ne zaustavlja isporuku', () => {
+      const vecPokvarenUlaz = `<w:document xmlns:w="${W}"><w:body><w:p><w:hyperlink r:id="rId1"/></w:p></w:body></w:document>`;
+      const istiKvarNaIzlazu = vecPokvarenUlaz.replace('<w:p>', '<w:p w:rsidR="00AA">');
+      expect(gate(vecPokvarenUlaz, istiKvarNaIzlazu)).toBeNull();
+    });
+
+    /**
+     * IZUZECE JE PO PREFIKSU, NE PO DIJELU (nalaz pregleda, 2026-09-12).
+     *
+     * Izuzece po dijelu ("ulazni dio je i sam padao, pusti ga") daje besplatnu propusnicu svakom
+     * NOVOM prefiksu u tom istom dijelu. Ulaz ovdje ima VML crtez (`v:`/`o:` bez deklaracije na
+     * korijenu, oblik koji stvarno dolazi iz alata koji `document.xml` pisu sami), popravak umece
+     * `<w:hyperlink r:id>` bez deklaracije, i stari oblik garda je vratio `null`.
+     */
+    it('NOV prefiks se prijavljuje i kad je dio VEC imao neki drugi nevezan prefiks', () => {
+      const ulazSVml = `<w:document xmlns:w="${W}"><w:body><w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p><w:p><v:shape o:spid="x"/></w:p></w:body></w:document>`;
+      const izlazSLinkom = ulazSVml.replace('<w:r><w:t>doi:10.1234/abc</w:t></w:r>', '<w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink>');
+      const nalaz = gate(ulazSVml, izlazSLinkom);
+      expect(nalaz?.problem, 'prijavljuje se r:, prefiks koji je uveo popravak').toMatch(/prefiks r:/);
+      expect(nalaz?.problem, 'v: i o: su dosli s dokumentom i ne smiju se pripisati popravku').not.toMatch(/prefiks [vo]:/);
+      // BASELINE: isti ulaz bez naseg zahvata i dalje prolazi, dakle gard ne vristi na tudji v:/o:.
+      expect(gate(ulazSVml, ulazSVml.replace('<w:body>', '<w:body w:rsidR="00AA">'))).toBeNull();
+    });
+
+    /**
+     * STRUKTURA IMA PRVENSTVO NAD NAMESPACEOM (nalaz pregleda, 2026-09-12).
+     *
+     * Stari oblik garda je na `kind === 'namespace' && preexisting` odbacivao CIJELI nalaz za taj
+     * dio. Kad ulaz pada na namespaceu (korijen bez `xmlns:w`, oblik koji 25 sintetickih testova u
+     * `src/repair/apply-fixers.test.ts` gradi), strukturni RE-47 kvar koji je popravak UVEO
+     * isporucivao se uz `integrityFailure === null`, dakle gard koji cijeli motor stiti bio je
+     * mrtav tocno na svom izvornom razredu.
+     */
+    it('RE-47 strukturni kvar se prijavljuje i kad ulaz pada na nevezanom prefiksu', () => {
+      const sintetickiUlaz = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t></w:r></w:p></w:body></w:document>';
+      expect(scanXmlWellFormed(sintetickiUlaz, { namespaces: true }).kind, 'ulaz pada SAMO na namespaceu').toBe('namespace');
+      const pokvarenIzlaz = sintetickiUlaz.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>');
+      expect(gate(sintetickiUlaz, pokvarenIzlaz)?.problem).toMatch(/iza kose crte/);
+      // BASELINE: bezopasna izmjena istog sintetickog dijela i dalje prolazi.
+      expect(gate(sintetickiUlaz, sintetickiUlaz.replace('doi:10.1/a', 'https://doi.org/10.1/a'))).toBeNull();
+    });
+
+    /**
+     * DODAN dio nema istoimeni ulaz, pa mu je osnovica UNIJA ulaznih dijelova.
+     *
+     * `section-surgery-fixer` klonira korisnikov `word/footer1.xml` u novi `word/footer2.xml`
+     * doslovno (`content = parts.packageXmlParts[oldName]`). Mjereno protiv praznog skupa, autorov
+     * VML zaglavni crtez bi oborio CIJELI popravak i korisnik bi dobio "nista nije primijenjeno"
+     * za bajtove koje isti gard pod izvornim imenom tolerira.
+     */
+    it('DODAN dio koji klonira ulazni dio ne zaustavlja isporuku', () => {
+      const footer = `<w:ftr xmlns:w="${W}"><w:p><w:r><w:pict><v:shape o:spid="x"/></w:pict></w:r></w:p></w:ftr>`;
+      const ulazni = { 'word/document.xml': `<w:document xmlns:w="${W}"><w:body/></w:document>`, 'word/footer1.xml': footer };
+      const dodan = (xml: string) => detectIntegrityFailure(
+        [{ name: 'word/footer2.xml', xml }],
+        ['word/document.xml', 'word/footer1.xml'],
+        ['word/document.xml', 'word/footer1.xml', 'word/footer2.xml'],
+        [],
+        ulazni,
+      );
+      expect(dodan(footer)).toBeNull();
+      // GARD SVEJEDNO GRIZE: prefiks kojeg u ulazu NEMA nigdje je nas, i u dodanom dijelu.
+      expect(dodan(footer.replace('<w:p>', '<w:p><w:hyperlink r:id="rId1"/>'))?.problem).toMatch(/prefiks r:/);
+    });
+  });
+
+  /**
+   * Skener vraca CIJELI popis nevezanih prefiksa, a ne samo prvi. Vrata integriteta na tom popisu
+   * usporedjuju skupove; da se javlja samo prvi nalaz, jedan vec postojeci prefiks bi sakrio svaki
+   * nov (tocno kvar koji je pregled nasao).
+   */
+  it('popis nevezanih prefiksa je potpun, a struktura ga prekida', () => {
+    const xml = `<w:document xmlns:w="${W}"><w:body><v:shape o:spid="x"/><w:hyperlink r:id="rId1"/></w:body></w:document>`;
+    const scan = scanXmlWellFormed(xml, { namespaces: true });
+    expect(scan.unboundPrefixes?.map((u) => u.prefix)).toEqual(['v', 'o', 'r']);
+    const sStrukturnimKvarom = xml.replace('<w:hyperlink r:id="rId1"/>', '<w:hyperlink r:id="rId1"/ w:x="1">');
+    const drugi = scanXmlWellFormed(sStrukturnimKvarom, { namespaces: true });
+    expect(drugi.kind, 'strukturni kvar prekida skeniranje prije nego se popis zatvori').toBe('structure');
+    expect(drugi.unboundPrefixes).toBeUndefined();
   });
 });
 
