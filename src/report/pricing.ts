@@ -53,6 +53,13 @@ export function windowDaysFor(workType: string): number {
  * modul sa stvarnom naplatom. Stranica je tvrdila jedno a naplata radila drugo; prva dva izvora su
  * uklonjena u Z11. Prikaz koji nosi VLASTITI tekst o cijeni je treci takav izvor u nastajanju, pa ga
  * `tests/pricing-receipt.test.ts` izricito zabranjuje (nijedan iznos kao literal u modulu prikaza).
+ *
+ * OVAJ MODUL JE JEDINI IZVOR NATPISA I ZADANIH IZNOSA (`WORK_TYPE_TIERS`), NE NUZNO ZIVE CIJENE NA
+ * CHECKOUTU. Stvarna maloprodajna cijena na checkoutu dolazi iz products kataloga u bazi
+ * (`livePriceEur` u `src/ui/app.ts`, preko `src/catalog/products-catalog.ts`) i smije nadjacati
+ * ZADANI iznos odavde; racun prikaza (`renderPricingReceipt`) to prima kao `options.priceEur`, bez
+ * vlastitog teksta o cijeni, pa to nije novi izvor. `/saznaj-vise/` katalog nema (opcenita stranica
+ * bez analize), pa ondje racun uvijek prikazuje ZADANU cijenu iz `WORK_TYPE_TIERS`.
  * -------------------------------------------------------------------------------------------- */
 
 /** Iznos kako se pise u hrvatskom cjeniku: decimalni zarez, uvijek dvije znamenke. */
@@ -107,6 +114,21 @@ export const PRICING_COPY = {
   opsegPonovneProvjere: 'Ponovne provjere nakon ispravka',
   opsegDana: 'dana',
 
+  /**
+   * Stvarno stanje plana popravka (Z11), ne opceniti popis: koliko je zahvata vec sigurno
+   * predodabrano, koliko trazi tvoju potvrdu, i koliko ih automatika ne dira nego ih rjesavas sam.
+   */
+  opsegBrojSigurnih: 'Sigurno, bez potvrde',
+  opsegBrojOdluka: 'Traži tvoju potvrdu',
+  opsegBrojRucnih: 'Rješavaš sam',
+  /** Prefiks retka kad je imenovanih zahvata vise od MAX_IMENOVANIH_ZAHVATA. */
+  opsegJos: 'i još',
+  /**
+   * Kad plan nema nijedan siguran zahvat, opceniti popis (`opsegOpci`) bi lagao da je nesto
+   * izmjereno i predodabrano; ova recenica kaze istinu o KONKRETNOM radu.
+   */
+  opsegBezSigurnih: 'Automatika za ovaj rad nema nijedan siguran zahvat.',
+
   ukupnoNaslov: 'Ukupno · po dokumentu',
   pecat: ['Ponovna provjera', 'prije preuzimanja'] as readonly string[],
 
@@ -125,5 +147,12 @@ export const PRICING_COPY = {
    *
    * Isti test kao za "24 pravila" gore: ostaje samo ono što izvor u repozitoriju potkrepljuje.
    */
-  sitniTekst: 'Bez pretplate · bez prijave za provjeru · dokument ide na server samo za popravak i ostaje u Moji popravci dok ga sam ne obrišeš · cijene s PDV-om',
+  /**
+   * "cijene s PDV-om" je UKLONJENO (Z11): nijedan izvor u repozitoriju ne potvrdjuje da su iznosi
+   * PDV-inkluzivni. `src/legal/legal-content.ts` kaze samo da racun s PDV-om IZDAJE konfigurirani
+   * Merchant of Record, ne da je PDV vec ukljucen u prikazani iznos; `docs/PRE_LAUNCH_CHECKLIST.md`
+   * vodi PDV kao otvoreno P1 pitanje. Isti test kao za "24 pravila" i "brise se nakon preuzimanja"
+   * gore: ostaje samo ono sto izvor potkrepljuje.
+   */
+  sitniTekst: 'Bez pretplate · bez prijave za provjeru · dokument ide na server samo za popravak i ostaje u Moji popravci dok ga sam ne obrišeš',
 } as const;
