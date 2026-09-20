@@ -125,6 +125,126 @@ describe('racun ispisuje cijenu i prozor iz pricing.ts', () => {
 });
 
 /* ---------------------------------------------------------------------------------------------- *
+ * Ziva cijena s checkouta (priceEur) nadjacava zadanu iz pricing.ts
+ * ---------------------------------------------------------------------------------------------- */
+
+describe('options.priceEur nadjacava zadanu cijenu iz WORK_TYPE_TIERS', () => {
+  it('kad je priceEur zadan, ispisuje se on, ne zadana cijena tiera', () => {
+    const host = mount();
+    const racun = renderPricingReceipt(host, {
+      workType: 'diplomski', live: true, cta: ULAZ, priceEur: 4.5,
+    });
+    expect(tekst(host, 'repair-amount')).toBe(formatEurAmount(4.5));
+    expect(tekst(host, 'total')).toBe(formatEurPrice(4.5));
+    expect(racun.totalEur()).toBe(4.5);
+    expect(tekst(host, 'cta')).toBe(`${PRICING_COPY.ctaPopravi} ${formatEurPrice(4.5)}`);
+  });
+
+  it('bez priceEur, i dalje pada natrag na zadanu cijenu iz WORK_TYPE_TIERS', () => {
+    const host = mount();
+    renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
+    expect(tekst(host, 'total')).toBe(formatEurPrice(WORK_TYPE_TIERS.diplomski.priceEur));
+  });
+});
+
+/* ---------------------------------------------------------------------------------------------- *
+ * Plan popravka: stvarno stanje (sigurno / odluka / rucno), "i jos N", prazan sigurni
+ * ---------------------------------------------------------------------------------------------- */
+
+function stavka(oznaka: string) {
+  return { ruleId: oznaka, label: `Zahvat ${oznaka}`, prije: null, poslije: null, potvrda: null, preporuka: false };
+}
+function rucniStavka(oznaka: string) {
+  return { naslov: `Rucno ${oznaka}`, razlog: 'razlog' };
+}
+
+describe('opseg racuna prikazuje stvarno stanje plana (Z11)', () => {
+  it('plan 0 sigurnih / 3 odluke / 2 rucna: BEZ opcenitog popisa, sa recenicom i brojevima', () => {
+    const host = mount();
+    renderPricingReceipt(host, {
+      workType: 'diplomski', live: false, cta: ULAZ, fileName: 'rad.docx',
+      plan: {
+        sigurni: [],
+        odluka: [stavka('a'), stavka('b'), stavka('c')],
+        rucni: [rucniStavka('a'), rucniStavka('b')],
+      },
+    });
+    const opseg = tekst(host, 'scope');
+    expect(opseg).toContain(PRICING_COPY.opsegBezSigurnih);
+    // Opceniti popis NIJE izmjeren na ovom radu, pa se ne smije prikazati kao da jest.
+    for (const redak of PRICING_COPY.opsegOpci) expect(opseg).not.toContain(redak.label);
+    expect(opseg).toContain(PRICING_COPY.opsegBrojOdluka);
+    expect(opseg).toContain('3');
+    expect(opseg).toContain(PRICING_COPY.opsegBrojRucnih);
+    expect(opseg).toContain('2');
+  });
+
+  it('plan sa 7 sigurnih: imenuje MAX_IMENOVANIH_ZAHVATA (3) i dodaje "i jos 4"', () => {
+    const host = mount();
+    renderPricingReceipt(host, {
+      workType: 'diplomski', live: false, cta: ULAZ, fileName: 'rad.docx',
+      plan: {
+        sigurni: Array.from({ length: 7 }, (_, i) => stavka(String(i))),
+        odluka: [], rucni: [],
+      },
+    });
+    const opseg = tekst(host, 'scope');
+    expect(opseg).toContain('Zahvat 0');
+    expect(opseg).toContain('Zahvat 1');
+    expect(opseg).toContain('Zahvat 2');
+    expect(opseg).not.toContain('Zahvat 3');
+    expect(opseg).toContain(`${PRICING_COPY.opsegJos} 4`);
+    expect(opseg).toContain(PRICING_COPY.opsegBrojSigurnih);
+    expect(opseg).toContain('7');
+  });
+
+  it('bez plana (opcenit racun): i dalje crta opceniti popis, jer NISTA nije izmjereno', () => {
+    const host = mount();
+    renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
+    const opseg = tekst(host, 'scope');
+    for (const redak of PRICING_COPY.opsegOpci) expect(opseg).toContain(redak.label);
+    expect(opseg).not.toContain(PRICING_COPY.opsegBezSigurnih);
+  });
+});
+
+/* ---------------------------------------------------------------------------------------------- *
+ * Pecat "ponovna provjera prije preuzimanja": vidljiv citacu ekrana, dovoljan kontrast (Z11)
+ * ---------------------------------------------------------------------------------------------- */
+
+describe('pecat racuna je vidljiv citacu ekrana', () => {
+  it('pecat NEMA aria-hidden: jedini je nositelj tvrdnje o ponovnoj provjeri prije preuzimanja', () => {
+    const host = mount();
+    renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
+    const pecat = host.querySelector('.pr-stamp')!;
+    expect(pecat.hasAttribute('aria-hidden')).toBe(false);
+    expect(pecat.textContent).toContain(PRICING_COPY.pecat.join(''));
+  });
+
+  it('CSS pecata ne postavlja opacity (prigusenje bi srusilo efektivni kontrast)', () => {
+    const css = read('src/shared/pricing-receipt.css');
+    const blok = css.slice(css.indexOf('.pr-stamp {'), css.indexOf('}', css.indexOf('.pr-stamp {')));
+    expect(blok).not.toMatch(/opacity\s*:/);
+    expect(blok).toMatch(/font-size:\s*11px/);
+  });
+});
+
+/* ---------------------------------------------------------------------------------------------- *
+ * "cijene s PDV-om" nema izvor u repozitoriju (Z11)
+ * ---------------------------------------------------------------------------------------------- */
+
+describe('PRICING_COPY ne tvrdi PDV bez izvora', () => {
+  it('nijedan natpis u PRICING_COPY ne spominje PDV', () => {
+    const spojeno = JSON.stringify(PRICING_COPY);
+    expect(spojeno).not.toMatch(/PDV/i);
+  });
+
+  it('MUTACIJA: vracena "s PDV-om" tvrdnja u sitniTekst pada gard', () => {
+    const mutiran = { ...PRICING_COPY, sitniTekst: `${PRICING_COPY.sitniTekst} · cijene s PDV-om` };
+    expect(JSON.stringify(mutiran)).toMatch(/PDV/i);
+  });
+});
+
+/* ---------------------------------------------------------------------------------------------- *
  * 2. Preklopnik i neovisnost iznosa o broju zahvata
  * ---------------------------------------------------------------------------------------------- */
 
@@ -347,6 +467,19 @@ describe('soft launch i pismo za instituciju', () => {
  */
 const ISTINA_O_RETENCIJI = 'dok ih sam ne obrišeš u Moji popravci';
 
+/**
+ * STVARNI GARD, ne prepisana recenica u testu: tvrdi da sitni tekst upucuje na "Moji popravci" i
+ * NE tvrdi brisanje nakon preuzimanja. Mutacija ispod poziva OVU funkciju nad kopijom
+ * `PRICING_COPY`, ne nad literalom kojem se testira samo sam sebi (CLAUDE.md, "gard bez dokaza da
+ * grize se ne racuna"): prije ove izmjene mutacija je gradila string i tvrdila stvari O NJEMU, sto
+ * ne moze pasti niti da je stvarni `PRICING_COPY.sitniTekst` prekrsi.
+ */
+function sitniTekstSlaze(sitniTekst: string): boolean {
+  return !sitniTekst.includes('briše se nakon preuzimanja')
+    && sitniTekst.includes('Moji popravci')
+    && sitniTekst.includes('dok ga sam ne obrišeš');
+}
+
 describe('sitni tekst racuna se slaze sa stvarnom retencijom', () => {
   it('FAQ na istoj stranici i dalje tvrdi retenciju do korisnikova brisanja', () => {
     // BASELINE za tvrdnju ispod: ako FAQ promijeni rijeci, gard se mora raspasti ovdje, ne tiho.
@@ -354,9 +487,7 @@ describe('sitni tekst racuna se slaze sa stvarnom retencijom', () => {
   });
 
   it('racun ne tvrdi brisanje nakon preuzimanja, nego upucuje na Moji popravci', () => {
-    expect(PRICING_COPY.sitniTekst).not.toContain('briše se nakon preuzimanja');
-    expect(PRICING_COPY.sitniTekst).toContain('Moji popravci');
-    expect(PRICING_COPY.sitniTekst).toContain('dok ga sam ne obrišeš');
+    expect(sitniTekstSlaze(PRICING_COPY.sitniTekst)).toBe(true);
   });
 
   it('tvrdnja je ZIVA na stranici, dakle stvarno se i renderira', () => {
@@ -366,10 +497,19 @@ describe('sitni tekst racuna se slaze sa stvarnom retencijom', () => {
     expect(host.textContent).not.toContain('briše se nakon preuzimanja');
   });
 
-  it('MUTACIJA: vracena tvrdnja o brisanju nakon preuzimanja pada gard', () => {
-    const mutirano = 'Bez pretplate · dokument ide na server samo za popravak i briše se nakon preuzimanja';
-    expect(mutirano).toContain('briše se nakon preuzimanja');
-    expect(mutirano).not.toContain('Moji popravci');
+  it('MUTACIJA: vracena tvrdnja o brisanju nakon preuzimanja pada STVARNI gard', () => {
+    // Kopija PRICING_COPY s vracenom starom (netocnom) recenicom, proslijedjena ISTOJ funkciji
+    // koja mjeri pravu vrijednost iznad; ne novi, izmisljeni string.
+    const mutiran = {
+      ...PRICING_COPY,
+      sitniTekst: 'Bez pretplate · dokument ide na server samo za popravak i briše se nakon preuzimanja',
+    };
+    expect(sitniTekstSlaze(mutiran.sitniTekst)).toBe(false);
+  });
+
+  it('MUTACIJA: sitniTekst bez "Moji popravci" pada STVARNI gard', () => {
+    const mutiran = { ...PRICING_COPY, sitniTekst: 'Bez pretplate · bez prijave za provjeru' };
+    expect(sitniTekstSlaze(mutiran.sitniTekst)).toBe(false);
   });
 });
 
@@ -392,8 +532,11 @@ const MODULI_PRIKAZA = [
 /**
  * Stari izvori cijene. Vokabular je doslovan, ne gradjen iz niza: escape se kroz alat zna izgubiti,
  * a to je poznat razred kvara u ovom repozitoriju (gard nad `git commit`, kontrolni bajt u regexu).
+ *
+ * `price:\s*(39|69|99)\b` i `priceEur:\s*(39|69|99)\b` (Z11) hvataju NUMERICKI oblik uklonjenog
+ * `PACKAGES` popisa (39/69/99 EUR) bez znaka `€`, npr. kad bi se vratio kao JS objekt polje.
  */
-const STARI_IZVORI = /39 €|69 €|99 €|od 3,99|pricing-tiers|PRICING_TIERS/;
+const STARI_IZVORI = /39 €|69 €|99 €|od 3,99|pricing-tiers|PRICING_TIERS|price:\s*(39|69|99)\b|priceEur:\s*(39|69|99)\b/;
 
 const PODRUCJA = ['src', 'data', 'saznaj-vise', 'index.html'];
 
@@ -492,6 +635,16 @@ describe('gard: cijena ima tocno jedan izvor', () => {
         ? "import { PRICING_TIERS } from '../../config/pricing-tiers';"
         : read(f);
     expect(starePojave(mutirano)).toEqual(['src/routes/learn-more/main.ts:1']);
+  });
+
+  it('MUTACIJA: vracen PACKAGES popis u NUMERICKOM obliku (bez €) pada gard', () => {
+    // Doslovno ono sto bi izgledalo kao vraceni PACKAGES: JS objekt s `price: 39` bez znaka €,
+    // koji stari (predznakovni) oblik STARI_IZVORI ne bi uhvatio.
+    const mutirano = (f: string): string =>
+      f === 'src/ui/app.ts'
+        ? "const PACKAGES=[{id:'format',name:'Formatiranje rada',price: 39,desc:'x'}];"
+        : read(f);
+    expect(starePojave(mutirano)).toEqual(['src/ui/app.ts:1']);
   });
 
   it('pricing.ts je JEDINI nositelj iznosa po vrsti rada', () => {

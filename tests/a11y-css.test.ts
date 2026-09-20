@@ -135,3 +135,76 @@ describe('pojacan kontrast u danjem svjetlu (Z6)', () => {
     expect(ratio(pojacan, paper)).toBeGreaterThan(ratio(zadani, paper));
   });
 });
+
+/**
+ * RACUN (Z11): PECAT I ONEMOGUCEN "USKORO" GUMB PROLAZE AA NA OBJE PAPIRNATE PODLOGE, U OBJE TEME.
+ *
+ * `pricing-receipt.css` nije u popisu `PAGES` iznad (nije stranica, nego dijeljeni CSS uvezen u
+ * vise ruta), pa dobiva vlastiti kontrastni test, istim racunom kao ostatak ove datoteke.
+ * `--ok-on-soft` i `--paper-ink` su definirani JEDNOM u `:root` (ne mijenjaju se po temi), a
+ * `--paper`/`--paper-2` se mijenjaju po temi, pa se provjeravaju OBJE varijante.
+ */
+describe('racun: pecat i onemoguceni gumb "Uskoro" kontrast (Z11)', () => {
+  const AA = 4.5;
+  type Rgb = readonly [number, number, number];
+  const hex = (value: string): Rgb => {
+    const h = value.replace('#', '').trim();
+    return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)) as unknown as Rgb;
+  };
+  const channel = (v: number): number => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = ([r, g, b]: Rgb): number => 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  const ratio = (a: Rgb, b: Rgb): number => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const OBRAZAC_VRIJEDNOSTI = /\s*:\s*([^;}]+)/.source;
+  const tokenUBloku = (sirovo: string, selektor: string, token: string): string => {
+    const css = sirovo.replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const od = css.indexOf(selektor);
+    expect(od, `selektor ${selektor} nije nadjen`).toBeGreaterThan(-1);
+    const blok = css.slice(css.indexOf('{', od), css.indexOf('}', od));
+    const m = new RegExp('--' + token + OBRAZAC_VRIJEDNOSTI).exec(blok);
+    expect(m, `token --${token} nije nadjen u bloku ${selektor}`).toBeTruthy();
+    return m![1].trim();
+  };
+
+  const SUSTAV = read('src/shared/design-system.css');
+  const RACUN = read('src/shared/pricing-receipt.css');
+
+  const okOnSoft = hex(tokenUBloku(SUSTAV, ':root {', 'ok-on-soft'));
+  const paperInk = hex(tokenUBloku(SUSTAV, ':root {', 'paper-ink'));
+  const paperTamno = hex(tokenUBloku(SUSTAV, ':root {', 'paper'));
+  const paper2Tamno = hex(tokenUBloku(SUSTAV, ':root {', 'paper-2'));
+  const paperSvijetlo = hex(tokenUBloku(SUSTAV, '[data-theme="light"] {', 'paper'));
+  const paper2Svijetlo = hex(tokenUBloku(SUSTAV, '[data-theme="light"] {', 'paper-2'));
+
+  it('CSS stvarno koristi --ok-on-soft na pecatu i --paper-ink/--paper-2 na gumbu "Uskoro"', () => {
+    const pecatBlok = RACUN.slice(RACUN.indexOf('.pr-stamp {'), RACUN.indexOf('}', RACUN.indexOf('.pr-stamp {')));
+    expect(pecatBlok).toContain('color: var(--ok-on-soft)');
+    const gumbBlok = RACUN.slice(RACUN.indexOf('.pr-btn--soon {'), RACUN.indexOf('}', RACUN.indexOf('.pr-btn--soon {')));
+    expect(gumbBlok).toContain('color: var(--paper-ink)');
+    expect(gumbBlok).toContain('background: var(--paper-2)');
+    expect(gumbBlok).not.toMatch(/opacity\s*:/);
+  });
+
+  it('pecat (--ok-on-soft na papiru) prolazi AA u OBJE teme', () => {
+    expect(ratio(okOnSoft, paperTamno), 'tamna tema, --paper').toBeGreaterThanOrEqual(AA);
+    expect(ratio(okOnSoft, paper2Tamno), 'tamna tema, --paper-2').toBeGreaterThanOrEqual(AA);
+    expect(ratio(okOnSoft, paperSvijetlo), 'svijetla tema, --paper').toBeGreaterThanOrEqual(AA);
+    expect(ratio(okOnSoft, paper2Svijetlo), 'svijetla tema, --paper-2').toBeGreaterThanOrEqual(AA);
+  });
+
+  it('gumb "Uskoro" (--paper-ink na --paper-2) prolazi AA u OBJE teme', () => {
+    expect(ratio(paperInk, paper2Tamno), 'tamna tema').toBeGreaterThanOrEqual(AA);
+    expect(ratio(paperInk, paper2Svijetlo), 'svijetla tema').toBeGreaterThanOrEqual(AA);
+  });
+
+  it('MUTACIJA: staro stanje gumba (--paper-muted na --paper-line) pada AA', () => {
+    const paperMuted = hex(tokenUBloku(SUSTAV, ':root {', 'paper-muted'));
+    const paperLine = hex(tokenUBloku(SUSTAV, ':root {', 'paper-line'));
+    expect(ratio(paperMuted, paperLine)).toBeLessThan(AA);
+  });
+});
