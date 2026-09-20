@@ -1,8 +1,34 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { AGENTS, prepareJob, parseResult, validateQueue } from './core.mjs';
+import { fileURLToPath } from 'node:url';
+import { AGENTS, prepareJob, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
+
+export function buildSpawnArgs(job, promptFile) {
+  if (!job || !Array.isArray(job.args)) throw new Error('Job without args cannot be spawned');
+  if (job.args.includes(PROMPT_FILE_PLACEHOLDER) && !promptFile) throw new Error('Prompt file path is required');
+  const args = job.args.map((arg) => (arg === PROMPT_FILE_PLACEHOLDER ? promptFile : arg));
+  if (args.includes(PROMPT_FILE_PLACEHOLDER)) throw new Error('Unsubstituted prompt file placeholder in args');
+  return args;
+}
+
+export function spawnJob(job, promptFile, cwd, spawn = spawnSync) {
+  const args = buildSpawnArgs(job, promptFile);
+  const promptInFile = job.args.includes(PROMPT_FILE_PLACEHOLDER);
+  return spawn(job.command, args, {
+    cwd, input: promptInFile ? undefined : job.prompt, encoding: 'utf8', shell: false,
+    timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
+  });
+}
+
+export function isEntryModule(moduleUrl, argv1) {
+  if (!argv1) return false;
+  const real = (path) => { try { return realpathSync(path); } catch { return resolve(path); } };
+  const self = real(fileURLToPath(moduleUrl));
+  const entry = real(resolve(argv1));
+  return process.platform === 'win32' ? self.toLowerCase() === entry.toLowerCase() : self === entry;
+}
 
 const root = process.cwd();
 const git = (...args) => {
@@ -14,16 +40,18 @@ const git = (...args) => {
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol [--budget-usd N | --subscription] [--execute]');
+    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--execute]');
     return;
   }
   if (command === 'doctor') {
     if (rest.length) throw new Error('doctor takes no arguments');
-    for (const cli of ['git', 'node', 'deno', 'codex', 'claude']) {
-      const result = spawnSync(cli, ['--version'], { encoding: 'utf8', timeout: 10_000 });
-      console.log(`${cli}: ${result.status === 0 ? result.stdout.trim().split('\n')[0] : 'unavailable'}`);
+    for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) {
+      const versionArgs = cli === 'grok' ? ['version'] : ['--version'];
+      const result = spawnSync(cli, versionArgs, { encoding: 'utf8', timeout: 10_000 });
+      const line = (result.stdout || result.stderr || '').trim().split('\n')[0];
+      console.log(`${cli}: ${result.status === 0 ? line : 'unavailable'}`);
     }
-    console.log('Model access and login must be checked locally: codex login status; claude auth status. No model was called.');
+    console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login (or XAI_API_KEY). No model was called.');
     return;
   }
   const queue = JSON.parse(readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8'));
@@ -86,11 +114,9 @@ function main() {
     mkdirSync(out, { recursive: true });
     writeFileSync(join(out, 'prompt.md'), job.prompt);
     // argv array + stdin, never a shell string. Existing CLI authentication is reused.
+    // Grok requires `-p <prompt>` as an argv element; Codex/Claude take the prompt on stdin.
     releaseLock = false;
-    const result = spawnSync(job.command, job.args, {
-      cwd: root, input: job.prompt, encoding: 'utf8', shell: false,
-      timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
-    });
+    const result = spawnJob(job, join(out, 'prompt.md'), root);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
@@ -110,7 +136,9 @@ function main() {
   }
 }
 
-try { main(); } catch (error) {
-  console.error(`[agents] ${error.message}`);
-  process.exitCode = 1;
+if (isEntryModule(import.meta.url, process.argv[1])) {
+  try { main(); } catch (error) {
+    console.error(`[agents] ${error.message}`);
+    process.exitCode = 1;
+  }
 }

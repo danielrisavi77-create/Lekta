@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { prepareJob, parseResult, validateQueue } from '../scripts/agents/core.mjs';
+import { prepareJob, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -17,6 +17,24 @@ describe('agent handoff', () => {
     expect(job.prompt).toContain('$(touch stolen)');
     expect(job.args.join(' ')).not.toContain('stolen');
   });
+  it('delivers the Grok prompt through a file placeholder, never in argv', () => {
+    const q = queue();
+    q.tasks[1].title = 'Repair $(touch stolen) `echo secret`';
+    const job = prepareJob(q, 'T01', 'implement', 'build');
+    expect(job.command).toBe('grok');
+    expect(job.args[0]).toBe('--no-auto-update');
+    expect(job.args).toContain('--prompt-file');
+    expect(job.args).toContain(PROMPT_FILE_PLACEHOLDER);
+    expect(job.args).toContain('--always-approve');
+    expect(job.args).toContain('grok-4.6');
+    expect(job.args.slice(job.args.indexOf('--sandbox'), job.args.indexOf('--sandbox') + 2)).toEqual(['--sandbox', 'workspace']);
+    expect(job.args.join(' ')).not.toContain('stolen');
+    expect(job.prompt).toContain('$(touch stolen)');
+    const plan = prepareJob(q, 'T01', 'plan', 'grok');
+    expect(plan.args).not.toContain('--always-approve');
+    expect(plan.args.slice(plan.args.indexOf('--sandbox'), plan.args.indexOf('--sandbox') + 2)).toEqual(['--sandbox', 'read-only']);
+    expect(plan.command).toBe('grok');
+  });
   it('refuses an implementation before its dependency is complete', () => {
     const q = queue();
     q.tasks[0].status = 'ready';
@@ -32,6 +50,8 @@ describe('agent handoff', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'astra')).toThrow(/role/);
     expect(() => prepareJob(queue(), 'T01', 'plan', 'sonnet')).toThrow(/role/);
     expect(() => prepareJob(queue(), 'T01', 'plan', 'unknown')).toThrow(/agent/);
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'grok')).toThrow(/role/);
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'build')).toThrow(/role/);
   });
   it('requires a caller-selected Claude budget and limits unattended tool access', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet')).toThrow(/budget/);
@@ -42,6 +62,15 @@ describe('agent handoff', () => {
     expect(job.args).not.toContain('bypassPermissions');
     expect(job.args[job.args.indexOf('--allowedTools') + 1]).not.toContain('Bash(npm run *)');
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet', Infinity)).toThrow(/budget/);
+  });
+  it('rejects same-provider review for Grok Build and allows cross-provider review', () => {
+    const q = queue();
+    q.tasks[1].status = 'in_review';
+    q.tasks[1].implementationAgent = 'build';
+    expect(() => prepareJob(q, 'T01', 'review', 'grok')).toThrow(/different provider/);
+    expect(prepareJob(q, 'T01', 'review', 'astra').command).toBe('codex');
+    q.tasks[1].implementationAgent = 'sol';
+    expect(prepareJob(q, 'T01', 'review', 'grok').command).toBe('grok');
   });
   it('rejects missing dependencies and dependency cycles', () => {
     const q = queue();
@@ -65,6 +94,21 @@ describe('provider results do not replace verification', () => {
       .toEqual({ ok: true, reportedModels: ['claude-opus-4-6'] });
     expect(parseResult('claude', 'not json', 0).ok).toBe(false);
   });
+  it('accepts parseable non-error Grok JSON and rejects explicit errors', () => {
+    expect(parseResult('grok', '', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4.6","ok":false}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"error":"boom"}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 1).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 0).ok).toBe(false);
+    const liveShape = JSON.stringify({
+      text: 'LEKTA_GROK_SMOKE_OK', stopReason: 'end_turn', num_turns: 1,
+      modelUsage: { 'grok-4.6-build': { modelCalls: 1 } },
+    });
+    expect(parseResult('grok', liveShape, 0))
+      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+    expect(parseResult('grok', JSON.stringify({ text: '', stopReason: 'end_turn', num_turns: 1, modelUsage: {} }), 0).ok).toBe(false);
+    expect(parseResult('grok', '{"type":"result","is_error":true,"model":"grok-4.6"}', 0).ok).toBe(false);
+  });
 });
 
 describe('subscription billing mode (autonomy profile)', () => {
@@ -83,5 +127,31 @@ describe('subscription billing mode (autonomy profile)', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet')).toThrow(/budget/);
     expect(prepareJob(queue(), 'T01', 'implement', 'sonnet', 3).billingMode).toBe('budget');
     expect(prepareJob(queue(), 'T01', 'implement', 'sol').args).not.toContain('--max-budget-usd');
+  });
+  it('rejects Grok agents in the subscription profile because xAI billing is not covered', () => {
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription' }))
+      .toThrow(/not included/);
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }))
+      .toThrow(/not included/);
+  });
+});
+
+
+describe('agent process boundary helpers', () => {
+  it('spawns Grok with a prompt file, no prompt argv, no stdin and no shell', async () => {
+    const { spawnJob } = await import('../scripts/agents/cli.mjs');
+    const job = prepareJob(queue(), 'T01', 'plan', 'grok');
+    let call: { command?: string; args?: string[]; options?: Record<string, unknown> } = {};
+    const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
+      call = { command, args, options };
+      return { status: 0, stdout: '{"type":"result","is_error":false}', stderr: '' };
+    };
+    const promptFile = '/tmp/lekta-prompt.md';
+    spawnJob(job, promptFile, process.cwd(), fakeSpawn as never);
+    expect(call.command).toBe('grok');
+    expect(call.args).toContain(promptFile);
+    expect(call.args).not.toContain(job.prompt);
+    expect(call.args).not.toContain(PROMPT_FILE_PLACEHOLDER);
+    expect(call.options).toMatchObject({ input: undefined, shell: false });
   });
 });
