@@ -1,8 +1,33 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { AGENTS, prepareJob, parseResult, validateQueue, PROMPT_ARG_PLACEHOLDER } from './core.mjs';
+
+export function buildSpawnArgs(job) {
+  if (!job || !Array.isArray(job.args)) throw new Error('Job without args cannot be spawned');
+  const args = job.args.map((arg) => (arg === PROMPT_ARG_PLACEHOLDER ? job.prompt : arg));
+  if (args.includes(PROMPT_ARG_PLACEHOLDER)) throw new Error('Unsubstituted prompt placeholder in args');
+  return args;
+}
+
+export function spawnJob(job, cwd, spawn = spawnSync) {
+  const args = buildSpawnArgs(job);
+  const promptInArgs = job.args.includes(PROMPT_ARG_PLACEHOLDER);
+  return spawn(job.command, args, {
+    cwd, input: promptInArgs ? undefined : job.prompt, encoding: 'utf8', shell: false,
+    timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
+  });
+}
+
+export function isEntryModule(moduleUrl, argv1) {
+  if (!argv1) return false;
+  const real = (path) => { try { return realpathSync(path); } catch { return resolve(path); } };
+  const self = real(fileURLToPath(moduleUrl));
+  const entry = real(resolve(argv1));
+  return process.platform === 'win32' ? self.toLowerCase() === entry.toLowerCase() : self === entry;
+}
 
 const root = process.cwd();
 const git = (...args) => {
@@ -90,12 +115,7 @@ function main() {
     // argv array + stdin, never a shell string. Existing CLI authentication is reused.
     // Grok requires `-p <prompt>` as an argv element; Codex/Claude take the prompt on stdin.
     releaseLock = false;
-    const spawnArgs = job.args.map((arg) => (arg === PROMPT_ARG_PLACEHOLDER ? job.prompt : arg));
-    const usesPromptArg = job.args.includes(PROMPT_ARG_PLACEHOLDER);
-    const result = spawnSync(job.command, spawnArgs, {
-      cwd: root, input: usesPromptArg ? undefined : job.prompt, encoding: 'utf8', shell: false,
-      timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
-    });
+    const result = spawnJob(job, root);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
@@ -115,7 +135,9 @@ function main() {
   }
 }
 
-try { main(); } catch (error) {
-  console.error(`[agents] ${error.message}`);
-  process.exitCode = 1;
+if (isEntryModule(import.meta.url, process.argv[1])) {
+  try { main(); } catch (error) {
+    console.error(`[agents] ${error.message}`);
+    process.exitCode = 1;
+  }
 }
