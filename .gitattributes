@@ -31,3 +31,10 @@ data/generated/** text eol=lf
 # Isti razred: dosjei verifikacije (120 datoteka) pise generator s LF. Blobovi su vec LF,
 # provjereno po datoteci, pa pravilo nista ne prekonvertira.
 data/verification/** text eol=lf
+
+# Vendorani program do javnog lansiranja. `docs/quality/lekta-plan-status.md` tvrdi da je ta datoteka
+# bajt jednaka izvoru (sha256 `1b2af479...`), a uz `core.autocrlf=true` bi je svjez checkout
+# materijalizirao s CRLF, pa bi tvrdnja pala svugdje osim na stroju na kojem je mjerena.
+# Izmjereno 2026-09-12: blob je 104606 bajtova, CR=0, LF=991, pa pravilo NISTA ne prekonvertira;
+# mijenja se iskljucivo ono sto checkout upisuje na disk.
+docs/agents/plan-do-live-2026-09-12.md text eol=lf

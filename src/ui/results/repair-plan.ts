@@ -119,3 +119,38 @@ export function buildRepairPlan(
     prazan: sigurni.length === 0 && odluka.length === 0 && rucni.length === 0,
   };
 }
+
+/**
+ * ODABIR U PLANU (T09). Plan sada ima STVARNE kontrole: svaka stavka iz "Sigurni zahvati" i "Treba tvoju odluku" je
+ * checkbox vezan na jedan `ruleId`. Ove dvije funkcije su cista logika ispod tih kontrola: zadani odabir (sigurni
+ * ukljuceni, odluke iskljucene, isto kao dosadasnji prikaz) i sazetak onoga sto ce se poslati.
+ *
+ * Grupiranje je samo PRIKAZ: svaki checkbox mijenja tocno jedan `ruleId`, pa iskljucivanje jednog zahvata ne moze
+ * tiho ukljuciti drugi. Rucne stavke nemaju kontrolu, jer se ne mogu poslati.
+ */
+export function defaultPlanSelection(plan: RepairPlan): string[] {
+  return plan.sigurni.map((s) => s.ruleId);
+}
+
+export interface PlanSelectionSummary {
+  count: number;
+  /** Oznake odabranih zahvata, u redoslijedu plana (sigurni pa odluke). */
+  labels: string[];
+  /** Odabrane odluke koje traze potvrdu; prikazuju se PRIJE slanja s razlogom. */
+  needsConfirmation: PlanStavka[];
+}
+
+export function planSelectionSummary(plan: RepairPlan, selectedRuleIds: Iterable<string>): PlanSelectionSummary {
+  const sel = new Set(selectedRuleIds);
+  const odabrane = [...plan.sigurni, ...plan.odluka].filter((s) => sel.has(s.ruleId));
+  return {
+    count: odabrane.length,
+    labels: odabrane.map((s) => s.label),
+    needsConfirmation: odabrane.filter((s) => s.potvrda !== null),
+  };
+}
+
+/** `ruleId`-evi svih stavki koje imaju kontrolu u planu; sve izvan toga plan ne smije poslati. */
+export function selectablePlanRuleIds(plan: RepairPlan): Set<string> {
+  return new Set([...plan.sigurni, ...plan.odluka].map((s) => s.ruleId));
+}

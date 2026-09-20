@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+// Isti parser koji vrti produkcijski Web Worker analize (src/docx/xml-dom-install.ts).
+import { DOMParser } from '@xmldom/xmldom';
 import { extractBodyParagraphs } from '../analysis/typography-structure';
 import { linkDoiFixer, type LinkDoiFixParams } from './link-doi-fixer';
 
@@ -289,6 +291,99 @@ describe('link DOI fixer', () => {
         operations: [first, { ...first, id: 'y', start: first.start + 2, end: first.end + 2 }],
       };
       expect(linkDoiFixer(partsOf(), params).reason).toBe('invalid-params');
+    });
+  });
+
+  /**
+   * RE-60 (2026-09-12): `xmlns:r` deklariran LOKALNO na nekom elementu, a ne na korijenu.
+   *
+   * `ensureRNamespace` je postojanje deklaracije provjeravao uzorkom `/xmlns:r=["']/` nad CIJELIM
+   * `document.xml`, dakle BILO GDJE. Dokument koji prefiks deklarira lokalno (posve legalan XML,
+   * i to oblik koji nas vlastiti graditelj fixtura pise na `w:footerReference`) time je prolazio
+   * kao "vec ima deklaraciju", pa se na korijen nije upisivalo nista. Hiperveza se zatim umetne u
+   * TIJELO, izvan dosega te lokalne deklaracije, i izlazni `word/document.xml` prestane biti
+   * namespace-well-formed.
+   *
+   * Ispravan uzorak vec postoji u istom repozitoriju, u `xml-patch.ts`
+   * (`ensureRelationshipsNamespace`): sidri se na korijenski tag, `/<w:document\b[^>]*\sxmlns:r=/`.
+   *
+   * XML JE SASTAVLJEN RUCNO, namjerno: `tests/helpers/docx-builder.ts` lokalnu deklaraciju danas
+   * pise samo na `w:footerReference`, i to je grana koja se mijenja neovisno o ovom fixeru. Da se
+   * reprodukcija oslanja na graditelja, prva promjena graditelja bi je tiho ugasila, bez ijednog
+   * crvenog signala (CLAUDE.md: "generator ulaza je i sam neprovjeren").
+   *
+   * @xmldom/xmldom, koji na obicnom lose oblikovanom XML-u NE baca, ovdje BACA
+   * `ParseError ... NamespaceError: prefix is non-null and namespace is null`, i to je tvrdnja
+   * nize.
+   */
+  describe('xmlns:r se sidri na korijen, ne bilo gdje u dokumentu', () => {
+    const REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+    const TEXT = 'doi:10.1234/abc';
+    /** Korijen NEMA `xmlns:r`; deklaracija zivi lokalno na `w:footerReference` u `w:sectPr`. */
+    const localDecl =
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+      + `<w:p><w:r><w:t>${TEXT}</w:t></w:r></w:p>`
+      + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL_NS}"/></w:sectPr>`
+      + '</w:body></w:document>';
+    /** Kontrola: isti dokument BEZ ijedne `xmlns:r` deklaracije (put koji je oduvijek radio). */
+    const noDecl =
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+      + `<w:p><w:r><w:t>${TEXT}</w:t></w:r></w:p>`
+      + '</w:body></w:document>';
+    const partsOf = (xml: string) => ({ documentXml: xml, stylesXml: '', documentRelsXml: '<Relationships></Relationships>' });
+    const params = (xml: string): LinkDoiFixParams => ({
+      version: 1,
+      operations: [{
+        id: 'doi', part: 'word/document.xml', paragraphIndex: 1, start: 0, end: TEXT.length,
+        anchorFingerprint: extractBodyParagraphs(xml)[0].fingerprint,
+        before: TEXT, replacementText: 'https://doi.org/10.1234/abc', targetUrl: 'https://doi.org/10.1234/abc',
+        action: 'make-hyperlink', confirmed: true,
+      }],
+    });
+    const parse = (xml: string): void => { new DOMParser().parseFromString(xml, 'text/xml'); };
+
+    it('BASELINE: ULAZ s lokalnom deklaracijom je valjan XML (kvar dolazi od zahvata, ne od ulaza)', () => {
+      expect(() => parse(localDecl)).not.toThrow();
+      expect(/<w:document\b[^>]*\sxmlns:r=/.test(localDecl), 'korijen namjerno NEMA xmlns:r').toBe(false);
+      expect(localDecl).toContain(`xmlns:r="${REL_NS}"`);
+    });
+
+    it('izlaz je namespace-well-formed: korijen nosi xmlns:r, umetnut r:id je vezan', () => {
+      const result = linkDoiFixer(partsOf(localDecl), params(localDecl));
+      expect(result.applied).toBe(true);
+      const out = result.parts.documentXml;
+      // BASELINE za tvrdnje nize: zahvat je doista umetnuo hipervezu s `r:id`.
+      expect(out).toMatch(/<w:hyperlink\b[^>]*\br:id=/);
+      expect(/<w:document\b[^>]*\sxmlns:r=/.test(out), 'korijen mora dobiti xmlns:r').toBe(true);
+      expect(() => parse(out), 'nevezan prefiks r: daje NamespaceError').not.toThrow();
+      // Lokalna deklaracija je autorova i ostaje netaknuta.
+      expect(out).toContain('<w:footerReference w:type="default" r:id="rId9"');
+    });
+
+    it('KONTROLA: dokument bez ijedne deklaracije i dalje dobiva xmlns:r na korijen', () => {
+      const out = linkDoiFixer(partsOf(noDecl), params(noDecl)).parts.documentXml;
+      expect(/<w:document\b[^>]*\sxmlns:r=/.test(out)).toBe(true);
+      expect(() => parse(out)).not.toThrow();
+    });
+
+    it('KONTROLA: korijen koji vec ima xmlns:r ne dobiva drugu deklaraciju', () => {
+      const withRoot = noDecl.replace('<w:document ', `<w:document xmlns:r="${REL_NS}" `);
+      const out = linkDoiFixer(partsOf(withRoot), params(withRoot)).parts.documentXml;
+      expect((out.match(/xmlns:r=/g) ?? []).length, 'atribut ponovljen na istom elementu je fatalna XML greska').toBe(1);
+      expect(() => parse(out)).not.toThrow();
+    });
+
+    /**
+     * IDEMPOTENCIJA: ugovor koji jednoprolazni test po konstrukciji ne vidi (CLAUDE.md, tocka 3).
+     * Drugi prolaz nad VEC popravljenim dokumentom ne smije dodati drugi `xmlns:r` ni promijeniti
+     * ijedan bajt.
+     */
+    it('druga primjena je bajt-identican no-op', () => {
+      const first = linkDoiFixer(partsOf(localDecl), params(localDecl));
+      const second = linkDoiFixer({ ...partsOf(first.parts.documentXml), documentRelsXml: first.parts.documentRelsXml }, params(localDecl));
+      expect(second.parts.documentXml).toBe(first.parts.documentXml);
+      expect((first.parts.documentXml.match(/xmlns:r=/g) ?? []).length, 'jedna na korijenu, jedna autorova lokalna').toBe(2);
+      expect(() => parse(second.parts.documentXml)).not.toThrow();
     });
   });
 });

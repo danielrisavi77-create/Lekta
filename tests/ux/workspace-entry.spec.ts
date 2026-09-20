@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp, cekajKorak } from './app-ready';
 
@@ -11,6 +11,35 @@ const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
  * analizatorske selektore, a mjeri po DATOTECI (po testu ne moze bez parsiranja). Tvrdnje o ulazu
  * i tvrdnje o radnom prostoru zato ne smiju dijeliti datoteku.
  */
+
+/**
+ * NALAZ C (2026-09-13): ova datoteka NIKAD nije odbijala traku privole analitike
+ * (`#consentBanner`), za razliku od `repair-entry-visible.spec.ts` i
+ * `repair-cta-opens-panel.spec.ts`, koje je odbijaju prije prvog klika. Na mobile-webkit
+ * (uzak viewport) traka na dnu ekrana zna preklopiti gumb `[data-confirm-profile]` i
+ * `[data-change-profile]`, pa Playwright ulazi u petlju "subtree intercepts pointer events" i
+ * ponovno racuna tocku klika dok se traka ne makne s puta.
+ *
+ * IZMJERENO trace-om (`tests/ux/workspace-entry.spec.ts:368`, test "sazetak", mobile-webkit,
+ * reproducirano 2 od 3 ponovljena prolaza): klik na `[data-confirm-profile]` pokusan je PET puta
+ * (41285->52124 ms, ~10,8 s), cetiri puta presrela ga je `#consentBanner` podstablo, dok se tocka
+ * klika pomicala s (130, 554) na (130, 323) jer se stranica u medjuvremenu pomicala. Deseterosekundni
+ * gubitak je sam po sebi bezopasan, ali trosi budzet `expect(...).toBeVisible({timeout:90_000})` koji
+ * slijedi: na opterecenom stroju analiza katkad potrosi preostalih ~80 s, pa test udari u zadani rok
+ * izvrsavanja (120 s) prije nego stigne vlastiti 90 s rok tvrdnje. Isti potpis (klik odbijen zbog
+ * trake, gumb ostaje neklinut) objasnjava i ranije padove `#profileSheet` (korak Pravila,
+ * `[data-change-profile]`) i `#progressView` (ekran provjere) u istoj datoteci.
+ *
+ * POPRAVAK je u TESTU, ne u aplikaciji: traka postoji da bi svaki UX spec mogao provjeriti privolu,
+ * pa se NE brise iz app.ts; ovaj helper je samo prijevod istog idioma koji vec koriste dva spec-a
+ * iznad, tako da svaki test koji dolazi do dna ekrana prvo raščisti traku.
+ */
+async function odbijAnalitiku(page: Page): Promise<void> {
+  // Bez isVisible() (ux-tok-gard gleda cijeli spec, vidi document-revisions.spec.ts i
+  // workspace-a11y.spec.ts): traka je opcionalna, pa se odbija klikom s kratkim rokom umjesto
+  // ocitavanjem stanja prije klika, sto je bila utrka.
+  await page.locator('#analyticsDecline').click({ timeout: 3_000 }).catch(() => {});
+}
 
 test('/rad/: radni prostor je vidljiv ODMAH, bez ijednog klika', async ({ page }) => {
   /**
@@ -44,6 +73,7 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
    */
   await page.goto('/rad/');
   await cekajApp(page);
+  await odbijAnalitiku(page); // vidi NALAZ C: klik na data-change-profile zna zavrsiti iza trake
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   // Korak 2 dolazi SAM kad je detekcija pouzdana (`isConfidentDetection`), bez klika na
   // "Nastavi na profil". To je i smisao "nula do jedan tap": kad je studij prepoznat iz
@@ -93,7 +123,12 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#radDocBar')).toBeVisible();
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
-  await expect(page.locator('.nav-rad .local-badge')).toBeVisible();
+  // ZNACKA "Lokalno" u zaglavlju je NAMJERNO skrivena na uskom zaslonu (`page-app.css`,
+  // `max-width:720px`), jer ista tvrdnja stoji napisana u tijelu (`workspace-viewports.spec.ts` to
+  // vec mjeri na 390 px). Ovaj spec prvi put ulazi u `mobile-webkit` (iPhone 13, 390 px) korakom D
+  // 2026-09-13, bez lokalnog prolaza; dodan je ovdje, ne u CSS-u, koji ostaje netaknut.
+  const sirok = (page.viewportSize()?.width ?? 0) > 720;
+  await expect(page.locator('.nav-rad .local-badge')).toBeVisible({ visible: sirok });
 
   // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
   // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav
@@ -218,6 +253,8 @@ test('/rad/ traka koraka: na mobitelu postoji, u jednom retku, s natpisom samo n
    * natpisa se na 390 px lome u TRI retka i uzimaju 108 px pregiba (izmjereno). Posljedica je
    * ipak bila da mobilni korisnik nema NIKAKAV pokazatelj polozaja u toku, dok ga desktop ima.
    *
+   * Od 2026-09-10 koraka su TRI, ne cetiri, i nose korisnicke faze umjesto koraka carobnjaka.
+   *
    * Rjesenje nije bilo sakriti traku nego natpise. Brojevi nose redoslijed, natpis se cuva samo
    * na aktivnom koraku, i cijela informacija stane u jedan redak (40 px umjesto 108).
    *
@@ -244,10 +281,16 @@ test('/rad/ traka koraka: na mobitelu postoji, u jednom retku, s natpisom samo n
       snatpisom: koraci.filter((k) => k.natpisVidljiv).length,
       ukupno: koraci.length,
       prelijeva: r.scrollWidth > r.clientWidth + 1,
+      aktivnih: r.querySelectorAll('[aria-current="step"]').length,
+      skriveniOdCitaca: r.getAttribute('aria-hidden') === 'true',
     };
   });
 
-  expect(m.ukupno, 'traka mora imati sva cetiri koraka').toBe(4);
+  expect(m.ukupno, 'traka mora imati sve tri faze').toBe(3);
+  // Traka je od 2026-09-10 IZLOZENA citacu ekrana (prije je bila `aria-hidden`), pa se to i
+  // mjeri: tocno jedan korak nosi `aria-current`, inace bi dva "trenutacno" zvucala tocno.
+  expect(m.aktivnih, 'tocno jedan korak smije biti oznacen kao trenutacni').toBe(1);
+  expect(m.skriveniOdCitaca, 'traka vise ne smije biti aria-hidden').toBe(false);
   // Jedan redak: razlika u `y` je poravnanje osnovice, ne prelom. Prag od 8 px je iznad te
   // razlike (izmjereno 0,9 px) a daleko ispod visine retka (~22 px), pa razlikuje to dvoje.
   expect(m.raspony, 'koraci su se prelomili u vise redaka').toBeLessThan(8);
@@ -270,7 +313,7 @@ test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', asy
    */
   const jedan = async (gdje: string) => {
     const vidljivi = await page.evaluate(() =>
-      ['wizardView', 'progressView', 'resultView']
+      ['wizardView', 'progressView', 'resultView', 'repairView']
         .filter((id) => { const el = document.getElementById(id); return el && !el.classList.contains('hidden'); }));
     expect(vidljivi, `${gdje}: vidljivo ${vidljivi.length} prikaza umjesto jednog (${vidljivi.join(',')})`)
       .toHaveLength(1);
@@ -281,6 +324,7 @@ test('/rad/ faza carobnjaka: kroz cijeli tok je vidljiv TOCNO jedan prikaz', asy
   expect(await jedan('na dolasku')).toBe('wizardView');
 
   await cekajApp(page);
+  await odbijAnalitiku(page); // vidi NALAZ C: potvrda profila zna zavrsiti iza trake privole
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await cekajKorak(page, '2');
   expect(await jedan('poslije uploada')).toBe('wizardView');
@@ -312,8 +356,30 @@ test('/rad/ ekran provjere: faze i ime dokumenta, bez postotka i bez spinnera', 
    * vremena; ispisan broj bi tvrdio preciznost koju nema. Tvrdnja gleda cijeli vidljivi tekst
    * prikaza, ne pojedini element, jer bi provjera po ID-u prosla cim se broj preseli drugamo.
    */
+  /**
+   * UZROK (izmjereno na CI-ju, webkit, 2026-09-13): `startSpeculativeAnalysis` (app.ts, retci
+   * 1000-1011) krece 450 ms nakon promjene u `#wizardView`, dakle odmah nakon odabira datoteke,
+   * dok korisnik jos potvrdjuje profil. Fixture je sitan, worker tipicno gotov za 0,3-0,8 s
+   * (vidi komentar u analyze-docx-client.ts), pa na brzom CI stroju spekulacija zna zavrsiti
+   * PRIJE klika na potvrdu. `runAnalysis` (app.ts oko retka 1019, `_specHit`) tada posvoji vec
+   * GOTOV `_spec.promise`, pa `renderView('analiza')` postavi `#progressView` vidljivim i odmah
+   * ga skine u ISTOJ mikrozadaci: prvo Playwright ocitanje vec zatekne `resultView`. Prvi pokusaj
+   * je zato vidio 30 ocitanja "hidden" kroz punih 15 s (retry na ISTOM commitu prolazi, jer je
+   * drugi stroj/trenutak sporiji; lokalno na Windowsu isto prolazi).
+   *
+   * POPRAVAK ostaje deterministican bez slabljenja tvrdnje: usporava se MREZNI zahtjev za
+   * skriptu workera (jedini mrezni trag analize; sama provjera dokumenta je lokalna), tako da
+   * spekulacija sigurno jos traje kad klik na potvrdu stigne, a ekran provjere ostane vidljiv
+   * dovoljno dugo da ga se stvarno izmjeri.
+   */
+  await page.route('**/analyze-docx.worker*', async (route) => {
+    await new Promise((r) => { setTimeout(r, 2_500); });
+    await route.continue();
+  });
+
   await page.goto('/rad/');
   await cekajApp(page);
+  await odbijAnalitiku(page); // vidi NALAZ C: potvrda profila zna zavrsiti iza trake privole
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
   await potvrdiProfil(page);
@@ -365,6 +431,7 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
    */
   await page.goto('/rad/');
   await cekajApp(page);
+  await odbijAnalitiku(page); // vidi NALAZ C: potvrda profila zna zavrsiti iza trake privole
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
   await potvrdiProfil(page);

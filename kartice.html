@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="color-scheme" content="light dark">
 <title>Besplatni brojač kartica, riječi i znakova - Lekta</title>
-<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
+<script>try{var _e=document.documentElement,_t=localStorage.getItem('lekta.theme')||'dark';if(_t!=='system')_e.dataset.theme=_t;var _d=JSON.parse(localStorage.getItem('lekta.display')||'{}')||{};if(_d.readingFont&&_d.readingFont!=='default')_e.dataset.readingFont=_d.readingFont;if(_d.contrast==='high')_e.dataset.contrast='high';if(_d.motion==='reduce')_e.dataset.motion='reduce';}catch(e){}</script>
 <style>
 @media print{.topbar,.cta,.kt-actions,.out-bar,.hero-back,.sibling,footer{display:none!important}.out-panel{position:static}}
 
@@ -134,9 +134,9 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 <body>
 <header class="topbar">
   <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="index.html#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+    <a class="logo" href="/#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
     <div class="nav-links">
-      <a href="index.html#how">Kako radi</a>
+      <a href="/saznaj-vise/#how">Kako radi</a>
       <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
       <div class="nav-tools">
         <button class="nav-tools-btn active" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">▾</span></button>
@@ -149,14 +149,14 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
           <a href="izjava.html">Izjava o izvornosti</a>
         </div>
       </div>
-      <a href="index.html#pricing">Paketi</a>
+      <a href="/saznaj-vise/#pricing">Paketi</a>
     </div>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
     <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
-    <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
+    <a class="btn btn-primary btn-sm" href="/">Provjeri rad</a>
   </nav>
   <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
-    <a href="index.html#how">Kako radi</a>
+    <a href="/saznaj-vise/#how">Kako radi</a>
     <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
     <a href="alati.html">Svi alati</a>
     <a href="citat.html">Citat generator</a>
@@ -164,15 +164,15 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
     <a href="naslovnica.html">Naslovnica</a>
     <a href="literatura.html">Sređivanje literature</a>
     <a href="izjava.html">Izjava o izvornosti</a>
-    <a href="index.html#pricing">Paketi</a>
-    <a class="btn btn-primary" href="index.html#analyzer">Provjeri rad</a>
+    <a href="/saznaj-vise/#pricing">Paketi</a>
+    <a class="btn btn-primary" href="/">Provjeri rad</a>
   </div>
 </header>
 
 <main data-premium-surface="counter-tool">
 <section class="hero">
   <div class="shell">
-    <div class="hero-back"><a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a></div>
+    <div class="hero-back"><a class="backlink" href="/#top">&larr; Natrag na Lektu</a></div>
     <span class="eyebrow">Besplatan alat, bez registracije</span>
     <h1>Brojač <span class="ink">kartica, riječi i znakova</span></h1>
     <p class="lead">Zalijepi tekst pa u stvarnom vremenu vidiš broj kartica, riječi, znakova, rečenica i odlomaka. Jedna autorska kartica je 1800 znakova s razmacima.</p>
@@ -240,7 +240,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
         </div>
         <div class="sr-only" id="kt-copy-status" role="status" aria-live="polite"></div>
         <div class="note"><b>Napomena:</b> kartica se u lekturi i prijevodu obično računa kao 1800 znakova s razmacima. Neki fakulteti ili izdavači koriste drukčiju mjeru (npr. broj riječi ili 1500 znakova bez razmaka), pa opseg uvijek provjeri prema uputama svog studija ili mentora.</div>
-        <p class="success-cta" id="kt-success-cta">✓ Opseg izbrojan.&nbsp;<a href="index.html#analyzer">Provjeri prati li i ostatak rada pravila tvog fakulteta →</a></p>
+        <p class="success-cta" id="kt-success-cta">✓ Opseg izbrojan.&nbsp;<a href="/">Provjeri prati li i ostatak rada pravila tvog fakulteta →</a></p>
       </div>
     </div>
   </div>
@@ -275,7 +275,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
       <h2>Broj kartica je početak</h2>
       <p>Lekta mjeri margine, stilove, numeraciju, sadržaj, citate i literaturu prema verificiranom profilu tvog fakulteta. Besplatan teaser, dokument ostaje na tvom uređaju.</p>
       <a class="btn btn-primary" href="index.html?utm_source=alat_kartice&utm_medium=organic&utm_campaign=free_tool#analyzer">Besplatno provjeri rad &rarr;</a>
-      <p class="cta-upsell">Za cijeli rad: <a href="index.html#pricing">puni izvještaj ili ljudska lektura &rarr;</a></p>
+      <p class="cta-upsell">Za cijeli rad: <a href="/saznaj-vise/#pricing">puni izvještaj ili ljudska lektura &rarr;</a></p>
     </div>
     <p class="disclaimer">Lekta radi pomoćnu tehničku provjeru i ne zamjenjuje službene upute ustanove, studija, kolegija ni mentora.</p>
   </div>
@@ -283,17 +283,17 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 </main>
 
 <footer><div class="shell footer-inner">
-  <a class="logo" href="index.html#top" style="font-size:16px"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+  <a class="logo" href="/#top" style="font-size:16px"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
   <span>&copy; 2026 &middot; Zagreb</span>
   <div class="footer-links">
-    <a href="index.html#analyzer">Provjera</a>
+    <a href="/">Provjera</a>
     <a href="alati.html">Svi alati</a>
     <a href="citat.html">Citat generator</a>
     <a href="naslovnica.html">Naslovnica</a>
     <a href="literatura.html">Sređivanje literature</a>
     <a href="izjava.html">Izjava o izvornosti</a>
     <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
-    <a href="index.html#pricing">Paketi</a>
+    <a href="/saznaj-vise/#pricing">Paketi</a>
     <a href="/privatnost.html">Privatnost</a>
     <a href="/uvjeti-koristenja.html">Uvjeti</a>
     <a href="/odricanje-od-odgovornosti.html">Odricanje</a>
@@ -301,7 +301,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
     <a href="/kolacici.html">Kolačići</a>
     <a href="/pravila-povrata.html">Pravila kupnje i povrata</a>
     <a href="/garancija.html">Garancija</a>
-    <a href="index.html#top">Natrag na glavnu</a>
+    <a href="/#top">Natrag na glavnu</a>
   </div>
 </div></footer>
 

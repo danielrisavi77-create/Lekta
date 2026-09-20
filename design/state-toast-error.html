@@ -1,0 +1,74 @@
+<!-- @dsCard group="Stanja" name="Toast i inline greska na papiru" subtitle="obavijest u kutu + inline greska unutar obrasca" width="900" height="480" -->
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<title>Toast i inline greška na papiru</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+  color-scheme:dark;
+  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
+  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
+  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
+  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
+  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
+  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
+  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
+  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
+  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-doc:Georgia,"Times New Roman",serif;
+  --radius:2px;--radius-pill:999px;
+  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
+}
+[data-theme="light"]{
+  color-scheme:light;
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
+  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
+  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
+  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
+  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
+  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
+  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
+  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
+  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
+}
+html,body{height:auto}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
+.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.dsc-item{display:grid;gap:9px;justify-items:start}
+.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
+.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
+.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
+.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
+</style>
+<style>
+.toast{width:320px;background:var(--desk-ink);color:var(--desk);padding:12px 14px;border-radius:12px;box-shadow:0 22px 60px rgba(0,0,0,.4);font-size:.82rem;font-family:var(--ui)}
+.paper-mini{width:320px;background:var(--paper);color:var(--paper-ink);padding:20px;border-radius:6px;box-shadow:var(--paper-sh-sm)}
+.intake-error{display:inline-flex;width:fit-content;margin-top:4px;padding:9px 14px;border:1px solid color-mix(in srgb,var(--red) 30%, transparent);border-radius:10px;background:color-mix(in srgb,var(--red) 9%, transparent);color:var(--paper-ink);font-family:var(--ui);font-size:.85rem;font-weight:600}
+</style>
+</head>
+<body>
+<h1 class="dsc-h">Toast i inline greška na papiru</h1>
+<p class="dsc-sub">Toast je kratkotrajna povratna informacija u kutu ekrana; inline greška živi UNUTAR papira, uz tekst na <code>--paper-ink</code>, s crvenom pozadinom razrijeđenom preko <code>color-mix</code>.</p>
+
+<div class="dsc-row">
+  <div class="dsc-item"><div class="toast">Popravak je spremljen u "Moji radovi".</div><div class="dsc-cap">Toast (uspjeh)</div></div>
+  <div class="dsc-item">
+    <div class="paper-mini">
+      <p style="margin:0 0 10px;font-family:var(--display-serif);color:var(--paper-ink)">Učitaj dokument (.docx)</p>
+      <div class="intake-error">Dokument je prevelik. Najveća dopuštena veličina je 25 MB.</div>
+    </div>
+    <div class="dsc-cap">Inline greška na papiru</div>
+  </div>
+</div>
+</body>
+</html>

@@ -17,7 +17,9 @@ prepisane iz plana. Plan je nastao nad HEAD-om `7bdd7085`; ovaj dokument mjeri m
 PR #60 je integriran kroz merge, ne resetiran: `scripts/agents/core.mjs`, `scripts/agents/cli.mjs`,
 `docs/agents/README.md`, `docs/agents/tasks.json`, `docs/agents/development-plan.md` (identican
 drugom planu iz maila, do zamjene crtica) i dva vitest testa. Njegov `development-plan.md` je jedini
-izvor zadataka T00 do T15; status po zadatku je u `docs/quality/lekta-plan-status.md`.
+izvor zadataka; opseg je od 2026-09-12 prosiren na T00 do T47, gdje su T16 do T47 Podplan F i
+indeksiraju vendorani program `docs/agents/plan-do-live-2026-09-12.md`. Status po zadatku je u
+`docs/quality/lekta-plan-status.md`.
 
 ## Alati na stroju (izmjereno)
 

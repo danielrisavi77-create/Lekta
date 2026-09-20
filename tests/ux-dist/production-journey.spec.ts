@@ -90,6 +90,8 @@ test.describe('dist: putovanje od pocetne stranice', () => {
     // Dokument je VEC ucitan: korak 2 bez ponovnog ubacivanja, i bez marketinskog uvoda.
     await cekajKorak(page, '2');
     await expect(page.locator('#analyzer')).toBeVisible();
+    // Plan T03: stabilna oznaka `document-profile` na kartici profila, koja na obnovljenoj sesiji vec stoji.
+    await expect(page.getByTestId('document-profile')).toBeVisible();
 
     // Obnovljena sesija ide korak dalje od rucnog ubacivanja: radni prostor ODMAH nudi karticu potvrde
     // profila ("Potvrdi i provjeri"), a #analyzeBtn stoji iza nje i nije klikabilan (izmjereno lokalno
@@ -102,15 +104,19 @@ test.describe('dist: putovanje od pocetne stranice', () => {
     }
     await potvrdiProfil(page);
     await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
-    await expect(page.locator('#resultCockpit')).toBeVisible();
+    await expect(page.getByTestId('analysis-results')).toBeVisible();
 
-    // Plan popravka je dostupan iz rezultata (isti CTA kao critical-path, ovdje kao kraj putovanja od `/`).
-    const safe = page.locator('#resultCockpit [data-cockpit-action="repair-safe"]');
+    // Plan popravka je dostupan iz rezultata (plan T03: `repair-entry` -> `repair-workflow`). Opci ulaz je
+    // "Popravi sigurne stavke"; kad za dokument nema automatskih stavki, on je onemogucen i onda vrijedi
+    // "Simuliraj". Jedan od dva MORA biti omogucen, inace tvrdnja pada umjesto da tok ostane nemjeren.
+    const entry = page.getByTestId('repair-entry');
     const simulate = page.locator('#resultCockpit [data-cockpit-action="simulate-repair"]');
-    const safeEnabled = (await safe.count()) > 0 && (await safe.first().isEnabled());
+    const entryEnabled = (await entry.count()) > 0 && (await entry.first().isEnabled());
     const simulateEnabled = (await simulate.count()) > 0 && (await simulate.first().isEnabled());
-    expect(safeEnabled || simulateEnabled, 'ni repair-safe ni simulate-repair nisu omoguceni').toBe(true);
-    await (safeEnabled ? safe : simulate).first().click();
+    expect(entryEnabled || simulateEnabled, 'ni repair-entry ni simulate-repair nisu omoguceni').toBe(true);
+    await (entryEnabled ? entry : simulate).first().click();
     await expect(page.locator('#repairPanelMount')).toBeVisible();
+    await expect(page.getByTestId('repair-workflow')).toBeVisible();
+    await expect(page.getByTestId('repair-workflow')).toContainText(/poprav/i);
   });
 });

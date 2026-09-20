@@ -349,6 +349,13 @@ DVA PUTA, jednom kroz svaki od ta dva puta. Proslo je samo zato sto su ti zahvat
 Svaka migracija mora biti idempotentna (`if not exists`, `drop ... if exists` prije `create`),
 jer se u praksi zna primijeniti vise puta.
 
+RASPON VERZIJA (2026-09-19): Lektine migracije nose prefiks od `0200` navise; `0104` do
+`0199` su rezervirani za Katedru, koja na stagingu `bnyemcnsphlitjradrst` dijeli istu tablicu
+`supabase_migrations.schema_migrations`. `db push` odlucuje po VERZIJI (vodeci broj prije
+prvog `_`), pa se sudar ne prijavi nego se migracija TIHO preskoci. Izmjereno 2026-09-19:
+repo je imao 0104 do 0106, staging 0104 do 0114. Gard i mutacija:
+`tests/migration-numbering.test.ts`.
+
 ## Dijeljeno radno stablo
 
 `git commit -- <putanje>` uzima sadrzaj iz RADNOG STABLA u trenutku commita, ne tvoju izmjenu.

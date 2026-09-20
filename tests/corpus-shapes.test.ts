@@ -255,7 +255,8 @@ const OBLICI_BEZ_IJEDNE_FIXTURE: DocxShapeId[] = [
   'paket/bez-png-default',
   'paket/comments-prazan',
   'proizvodjac/google-docs',
-  'gdocs/potpis',
+  // 'gdocs/potpis' je izasao 2026-09-12: nosi ga jedna od dvije nove sinteticke fixture (T12 `synthetic-fpzg-zavrsni-verzija-2`,
+  // T13 `synthetic-mentor-komentari`), obje `synthetic: true` pa ne ulaze u dokaz, ali oblik JEST pokriven fixtureom.
 ];
 
 /**
