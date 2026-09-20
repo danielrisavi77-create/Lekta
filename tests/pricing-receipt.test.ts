@@ -23,7 +23,11 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
-import { renderPricingReceipt, type PricingReceiptPlan } from '../src/shared/pricing-receipt';
+import {
+  renderPricingReceipt,
+  type PricingReceiptCta,
+  type PricingReceiptPlan,
+} from '../src/shared/pricing-receipt';
 import { renderPricingLetter } from '../src/shared/pricing-letter';
 import {
   PRICING_COPY,
@@ -41,6 +45,9 @@ function mount(): HTMLElement {
   document.body.replaceChildren(host);
   return host;
 }
+
+/** Odrediste CTA-a u testovima. Racun ga trazi uvijek, pa ga i tvrdnje o necem drugom moraju dati. */
+const ULAZ: PricingReceiptCta = { href: '/#analyzer' };
 
 const tekst = (host: HTMLElement, pr: string): string =>
   host.querySelector<HTMLElement>(`[data-pr="${pr}"]`)?.textContent ?? '';
@@ -69,7 +76,7 @@ describe('racun ispisuje cijenu i prozor iz pricing.ts', () => {
   it.each([...WORK_TYPE_ORDER])('%s: iznos i dani su tierovi, ne prepisane vrijednosti', (workType) => {
     const tier = WORK_TYPE_TIERS[workType];
     const host = mount();
-    renderPricingReceipt(host, { workType, live: false });
+    renderPricingReceipt(host, { workType, live: false, cta: ULAZ });
 
     expect(tekst(host, 'repair-amount')).toBe(formatEurAmount(tier.priceEur));
     expect(tekst(host, 'total')).toBe(formatEurPrice(tier.priceEur));
@@ -80,14 +87,14 @@ describe('racun ispisuje cijenu i prozor iz pricing.ts', () => {
 
   it('besplatna stavka je uvijek nula i uvijek prisutna', () => {
     const host = mount();
-    renderPricingReceipt(host, { workType: 'diplomski', live: false });
+    renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
     expect(tekst(host, 'free-amount')).toBe(formatEurAmount(0));
     expect(host.textContent).toContain(PRICING_COPY.besplatnaStavka);
   });
 
   it('opcenit racun nosi izbornik vrste rada, a racun iz analize ne nosi', () => {
     const opcenit = mount();
-    renderPricingReceipt(opcenit, { workType: 'seminarski', live: false });
+    renderPricingReceipt(opcenit, { workType: 'seminarski', live: false, cta: ULAZ });
     expect(opcenit.querySelector('[data-pr="worktype"]')).toBeTruthy();
     expect(tekst(opcenit, 'subject')).toBe(PRICING_COPY.opciPredmet);
 
@@ -95,6 +102,7 @@ describe('racun ispisuje cijenu i prozor iz pricing.ts', () => {
     renderPricingReceipt(osoban, {
       workType: 'diplomski',
       live: false,
+      cta: ULAZ,
       fileName: 'diplomski-rad-final-v3.docx',
       plan: planSa(2),
     });
@@ -105,7 +113,7 @@ describe('racun ispisuje cijenu i prozor iz pricing.ts', () => {
 
   it('izbornik vrste rada prevede odabir u cijenu tog tiera', () => {
     const host = mount();
-    const racun = renderPricingReceipt(host, { workType: 'seminarski', live: false });
+    const racun = renderPricingReceipt(host, { workType: 'seminarski', live: false, cta: ULAZ });
     const izbornik = host.querySelector<HTMLSelectElement>('[data-pr="worktype"]')!;
     izbornik.value = 'doktorski';
     izbornik.dispatchEvent(new Event('change'));
@@ -123,7 +131,7 @@ describe('racun ispisuje cijenu i prozor iz pricing.ts', () => {
 describe('preklopnik popravka', () => {
   it('iskljucen daje nulu, ukljucen daje cijenu tiera', () => {
     const host = mount();
-    const racun = renderPricingReceipt(host, { workType: 'diplomski', live: false });
+    const racun = renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
     const preklopnik = host.querySelector<HTMLInputElement>('[data-pr="toggle"]')!;
 
     expect(racun.repairSelected()).toBe(true);
@@ -142,7 +150,7 @@ describe('preklopnik popravka', () => {
 
   it('opseg se skriva kad popravak nije odabran, jer tada nije ukljucen u cijenu', () => {
     const host = mount();
-    renderPricingReceipt(host, { workType: 'diplomski', live: false });
+    renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
     const opseg = host.querySelector<HTMLElement>('[data-pr="scope"]')!;
     expect(opseg.hidden).toBe(false);
 
@@ -178,13 +186,13 @@ describe('preklopnik popravka', () => {
   it('IZNOS NE OVISI O BROJU ZAHVATA: plan s 1 i plan s 9 daju isti iznos', () => {
     const jedan = mount();
     const a = renderPricingReceipt(jedan, {
-      workType: 'diplomski', live: false, fileName: 'rad.docx', plan: planSa(1),
+      workType: 'diplomski', live: false, cta: ULAZ, fileName: 'rad.docx', plan: planSa(1),
     });
     const iznosJedan = tekst(jedan, 'total');
 
     const devet = mount();
     const b = renderPricingReceipt(devet, {
-      workType: 'diplomski', live: false, fileName: 'rad.docx', plan: planSa(9),
+      workType: 'diplomski', live: false, cta: ULAZ, fileName: 'rad.docx', plan: planSa(9),
     });
 
     expect(tekst(devet, 'total')).toBe(iznosJedan);
@@ -197,6 +205,7 @@ describe('preklopnik popravka', () => {
     renderPricingReceipt(host, {
       workType: 'diplomski',
       live: false,
+      cta: ULAZ,
       fileName: 'rad.docx',
       plan: {
         sigurni: [{
@@ -221,7 +230,7 @@ describe('preklopnik popravka', () => {
 describe('soft launch i pismo za instituciju', () => {
   it('neziv placeni sloj daje onemogucen gumb "Uskoro" uz besplatnu recenicu', () => {
     const host = mount();
-    renderPricingReceipt(host, { workType: 'diplomski', live: false });
+    renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
     const gumb = host.querySelector<HTMLButtonElement>('[data-pr="cta"] button')!;
 
     expect(gumb.textContent).toBe(PRICING_COPY.ctaUskoro);
@@ -230,20 +239,82 @@ describe('soft launch i pismo za instituciju', () => {
     expect(tekst(host, 'cta')).toContain('Provjera radi već sad, besplatno');
   });
 
-  it('ziv placeni sloj mijenja rijec gumba po stanju preklopnika', () => {
+  it('ziv placeni sloj mijenja rijec CTA-a po stanju preklopnika', () => {
     const host = mount();
-    renderPricingReceipt(host, { workType: 'diplomski', live: true });
-    const gumb = () => host.querySelector<HTMLButtonElement>('[data-pr="cta"] button')!;
+    renderPricingReceipt(host, { workType: 'diplomski', live: true, cta: ULAZ });
+    const cta = () => host.querySelector<HTMLElement>('[data-pr="cta-action"]')!;
 
-    expect(gumb().disabled).toBe(false);
-    expect(gumb().textContent).toBe(
+    expect(cta().textContent).toBe(
       `${PRICING_COPY.ctaPopravi} ${formatEurPrice(WORK_TYPE_TIERS.diplomski.priceEur)}`,
     );
 
     const preklopnik = host.querySelector<HTMLInputElement>('[data-pr="toggle"]')!;
     preklopnik.checked = false;
     preklopnik.dispatchEvent(new Event('change'));
-    expect(gumb().textContent).toBe(PRICING_COPY.ctaBesplatno);
+    expect(cta().textContent).toBe(PRICING_COPY.ctaBesplatno);
+  });
+
+  /**
+   * CTA U ZIVOM STANJU MORA NEKAMO VODITI.
+   *
+   * Prva izvedba je ondje crtala omogucen `<button>` i nijednom mu slusacu nije dala ime: klik nije
+   * radio nista. Tvrdnja iznad to nije mogla vidjeti, jer je mjerila `textContent` i `disabled`, a
+   * oboje je istina i za gumb koji suti. Zato se mjeri UCINAK: poveznica ima odrediste, rukovatelj
+   * se pozove na klik.
+   *
+   * Granicu je zapisala prethodna izvedba cjenika: "Gumb bez ucinka je gori od poveznice koja vodi
+   * dalje" (`renderPricing`, commit `1f23c9f9`).
+   */
+  it('CTA s poveznicom je <a> sa stvarnim odredistem, ne mrtav gumb', () => {
+    const host = mount();
+    renderPricingReceipt(host, { workType: 'diplomski', live: true, cta: { href: '/#analyzer' } });
+    const cta = host.querySelector<HTMLElement>('[data-pr="cta-action"]')!;
+
+    expect(cta.tagName).toBe('A');
+    expect((cta as HTMLAnchorElement).getAttribute('href')).toBe('/#analyzer');
+    // Onemogucen `<a>` ne postoji; gard je da CTA nije `<button>` bez slusaca.
+    expect(host.querySelector('[data-pr="cta"] button')).toBeNull();
+  });
+
+  it('CTA s rukovateljem zove rukovatelja na klik, i to sa stanjem racuna', () => {
+    const pozivi: Array<{ workType: string; repairSelected: boolean; totalEur: number }> = [];
+    const host = mount();
+    renderPricingReceipt(host, {
+      workType: 'zavrsni',
+      live: true,
+      cta: { onClick: (stanje) => pozivi.push({ ...stanje }) },
+    });
+
+    const gumb = host.querySelector<HTMLButtonElement>('[data-pr="cta-action"]')!;
+    expect(gumb.tagName).toBe('BUTTON');
+    expect(gumb.disabled).toBe(false);
+    gumb.click();
+    expect(pozivi).toEqual([{
+      workType: 'zavrsni', repairSelected: true, totalEur: WORK_TYPE_TIERS.zavrsni.priceEur,
+    }]);
+
+    // Rukovatelj mora vidjeti STANJE u trenutku klika, ne ono od crtanja.
+    const preklopnik = host.querySelector<HTMLInputElement>('[data-pr="toggle"]')!;
+    preklopnik.checked = false;
+    preklopnik.dispatchEvent(new Event('change'));
+    host.querySelector<HTMLButtonElement>('[data-pr="cta-action"]')!.click();
+    expect(pozivi[1]).toEqual({ workType: 'zavrsni', repairSelected: false, totalEur: 0 });
+  });
+
+  /**
+   * MUTACIJA nad samim gardom: CTA bez ucinka mora pasti. Poziva se kroz `as unknown`, jer tip vec
+   * zabranjuje `{}`; ovo mjeri IZVODJENJE, dakle pozivatelja bez tipova (JS), i tvrdi da ni tada ne
+   * nastane omogucen gumb koji suti.
+   */
+  it('MUTACIJA: ziv sloj bez odredista ne daje omogucen gumb', () => {
+    const host = mount();
+    renderPricingReceipt(host, {
+      workType: 'diplomski', live: true, cta: ({} as unknown) as PricingReceiptCta,
+    });
+    expect(host.querySelector('[data-pr="cta-action"]')).toBeNull();
+    const gumb = host.querySelector<HTMLButtonElement>('[data-pr="cta"] button')!;
+    expect(gumb.disabled).toBe(true);
+    expect(gumb.textContent).toBe(PRICING_COPY.ctaUskoro);
   });
 
   it('pismo nosi tekst predloska, kontakt iz konfiguracije i NEMA datum', () => {
@@ -259,6 +330,46 @@ describe('soft launch i pismo za instituciju', () => {
     const sadrzaj = host.textContent ?? '';
     expect(sadrzaj).not.toMatch(/\d{1,2}\.\s?\d{1,2}\.\s?\d{4}/);
     expect(sadrzaj).not.toMatch(/\b(19|20)\d{2}\b/);
+  });
+});
+
+/* ---------------------------------------------------------------------------------------------- *
+ * Sitni tekst racuna ne smije tvrditi retenciju koju proizvod nema
+ * ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Cjenik je mjesto gdje korisnik prvi put cita sto se s dokumentom dogadja, pa je i mjesto gdje
+ * neistina o tome najskuplje kosta: tko vjeruje da je dokument obrisan, nece ga obrisati.
+ *
+ * Mjeri se protiv DRUGOG izvora na ISTOJ stranici (FAQ na `/saznaj-vise/`), a ne protiv prepisane
+ * recenice u testu: tautoloska tvrdnja "tekst je jednak sam sebi" ne moze pasti. Kad se retencija
+ * jednom promijeni, ovaj gard trazi da se promijene OBA mjesta.
+ */
+const ISTINA_O_RETENCIJI = 'dok ih sam ne obrišeš u Moji popravci';
+
+describe('sitni tekst racuna se slaze sa stvarnom retencijom', () => {
+  it('FAQ na istoj stranici i dalje tvrdi retenciju do korisnikova brisanja', () => {
+    // BASELINE za tvrdnju ispod: ako FAQ promijeni rijeci, gard se mora raspasti ovdje, ne tiho.
+    expect(read('saznaj-vise/index.html')).toContain(ISTINA_O_RETENCIJI);
+  });
+
+  it('racun ne tvrdi brisanje nakon preuzimanja, nego upucuje na Moji popravci', () => {
+    expect(PRICING_COPY.sitniTekst).not.toContain('briše se nakon preuzimanja');
+    expect(PRICING_COPY.sitniTekst).toContain('Moji popravci');
+    expect(PRICING_COPY.sitniTekst).toContain('dok ga sam ne obrišeš');
+  });
+
+  it('tvrdnja je ZIVA na stranici, dakle stvarno se i renderira', () => {
+    const host = mount();
+    renderPricingReceipt(host, { workType: 'diplomski', live: false, cta: ULAZ });
+    expect(host.textContent).toContain('Moji popravci');
+    expect(host.textContent).not.toContain('briše se nakon preuzimanja');
+  });
+
+  it('MUTACIJA: vracena tvrdnja o brisanju nakon preuzimanja pada gard', () => {
+    const mutirano = 'Bez pretplate · dokument ide na server samo za popravak i briše se nakon preuzimanja';
+    expect(mutirano).toContain('briše se nakon preuzimanja');
+    expect(mutirano).not.toContain('Moji popravci');
   });
 });
 
