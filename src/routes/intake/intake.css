@@ -60,12 +60,12 @@
   /* --brand (--red) mjeri 3,3:1 na --paper u tamnoj temi: tekst na papiru trazi tamniji
      par (--red-on-soft, vec izmjeren za "tekst na soft podlogama" u design-system.css). */
   color:var(--red-on-soft, #A62B23);
-  font:italic 500 var(--fs-kicker)/1.3 var(--display-serif);
+  font:italic 400 var(--fs-kicker)/1.3 var(--display-serif);
   letter-spacing:.005em;
 }
 .intake-title{
   margin:10px 0 0;max-width:16ch;color:var(--paper-ink);
-  font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;
+  font-family:var(--display-serif);font-weight:400;
   /* Z7 SVJESNO IZLAZI IZ LJESTVICE, i to je jedini takav slucaj na ulazu. `--fs-display` je
      krovna velicina proizvoda (clamp do 3,25rem) i vrijedi za naslove KOJI DIJELE EKRAN s drugim
      sadrzajem. Ovdje naslov nije jedan od elemenata nego sam ekran: ulaz ima jednu radnju i jedan
@@ -81,7 +81,7 @@
 }
 .intake-lead{
   margin:18px 0 0;max-width:44ch;color:var(--paper-muted);
-  font-family:var(--display-serif);font-optical-sizing:auto;
+  font-family:var(--display-serif);
   font-size:var(--fs-lead);line-height:1.5;letter-spacing:-.003em;text-wrap:balance;
 }
 /* RED RADNJE: gumb i uputa za ispustanje stoje JEDAN UZ DRUGI (Z7), jer su ista radnja izvedena
@@ -190,8 +190,8 @@
 }
 .intake-karta .intake-file-name{
   max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  color:var(--paper-ink);font-family:var(--display-serif);font-optical-sizing:auto;
-  font-weight:600;font-size:clamp(1.05rem,2.4vw,1.35rem);letter-spacing:-.01em;
+  color:var(--paper-ink);font-family:var(--display-serif);
+  font-weight:400;font-size:clamp(1.05rem,2.4vw,1.35rem);letter-spacing:-.01em;
 }
 .intake-karta-velicina{margin-top:4px;color:var(--paper-muted);font-family:var(--ui);font-size:.84rem}
 

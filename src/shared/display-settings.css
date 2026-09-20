@@ -125,7 +125,7 @@ html:root[data-motion="reduce"] *::after {
 
 .ps__title {
   margin: 0;
-  font: 500 1.35rem/1.1 var(--display-serif);
+  font: 400 1.35rem/1.1 var(--display-serif);
   color: var(--paper-ink);
 }
 
@@ -255,7 +255,7 @@ html:root[data-motion="reduce"] *::after {
   border-radius: var(--radius-btn);
   background: var(--paper-2);
   color: var(--paper-ink);
-  font: 500 var(--fs-ui)/1 var(--display-serif);
+  font: 400 var(--fs-ui)/1 var(--display-serif);
 }
 
 .ps-preklopka__unos {

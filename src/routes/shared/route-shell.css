@@ -47,7 +47,7 @@ a { color: inherit; }
 .intake-topbar { min-height: var(--route-header-min-height); display: flex; align-items: center; gap: var(--route-nav-gap); }
 .intake-topbar { position: sticky; inset-block-start: 0; z-index: 30; width: min(1120px, calc(100% - var(--route-shell-inline))); margin-inline: auto; }
 .route-brand,
-.intake-brand { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; color: var(--route-ink); text-decoration: none; font: 700 1.35rem/1 var(--display-serif); letter-spacing: -.02em; }
+.intake-brand { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; color: var(--route-ink); text-decoration: none; font: 400 1.35rem/1 var(--display-serif); letter-spacing: -.02em; }
 .route-mark,
 .intake-brand-mark { width: 36px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; border: 0; border-radius: 0; color: var(--on-red); background: var(--route-red); box-shadow: var(--paper-sh-sm); font: 800 1rem/1 var(--mono); transform: rotate(-2deg); }
 .route-links { margin-inline-start: auto; display: flex; align-items: center; gap: 8px; }
@@ -109,7 +109,7 @@ a { color: inherit; }
   grid-column: 1;
   margin: 0;
   align-self: center;
-  font: 650 var(--fs-h2)/1 var(--display-serif);
+  font: 400 var(--fs-h2)/1 var(--display-serif);
   letter-spacing: -.035em;
 }
 

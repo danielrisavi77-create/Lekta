@@ -111,7 +111,7 @@
   margin: .25rem 0 .15rem;
   font-family: var(--display-serif, Georgia, serif);
   font-size: clamp(1.25rem, 2.4vw, 1.7rem);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.15;
   letter-spacing: -.01em;
 }
@@ -149,7 +149,7 @@
   max-width: 18ch;
   font-family: var(--display-serif, Georgia, serif);
   font-size: clamp(1.9rem, 4.4vw, 3.1rem);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.02;
   letter-spacing: -.022em;
 }
@@ -371,7 +371,7 @@
   margin: 0;
   font-family: var(--display-serif, Georgia, serif);
   font-size: 1.15rem;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -.01em;
 }
 
@@ -442,7 +442,7 @@
   margin: 0;
   font-family: var(--display-serif, Georgia, serif);
   font-size: 1.08rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.25;
 }
 .cockpit-finding__answer {
@@ -843,7 +843,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 }
 .fsum-naslov {
   margin: 0 0 12px; font-family: var(--display-serif, Georgia, serif);
-  font-weight: 500; font-size: clamp(1.45rem, 2.8vw, 2.15rem); line-height: 1.15;
+  font-weight: 400; font-size: clamp(1.45rem, 2.8vw, 2.15rem); line-height: 1.15;
   letter-spacing: -.01em; color: var(--paper-ink, #23201B);
 }
 .fsum-razine { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px }
@@ -883,7 +883,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
  * svaka promjena jedne trazila da netko provjeri drugu. Sada dijele OBLIK `clamp`-a s istim
  * omjerom (2,15/1,5 = 2,8/1,95 = 1,45/1,0 ~ 1,43), pa odnos vrijedi po konstrukciji. */
 .fsum-ocjena b {
-  font-family: var(--display-serif, Georgia, serif); font-weight: 500;
+  font-family: var(--display-serif, Georgia, serif); font-weight: 400;
   font-size: clamp(1rem, 1.95vw, 1.5rem);
   line-height: 1; font-variant-numeric: tabular-nums; color: var(--paper-ink, #23201B);
 }

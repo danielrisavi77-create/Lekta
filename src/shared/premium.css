@@ -423,7 +423,7 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   box-shadow: var(--premium-depth-2);
 }
 
-.premium-tool-index__signal strong { color: var(--paper-ink); font: 500 34px/1 var(--display-serif) }
+.premium-tool-index__signal strong { color: var(--paper-ink); font: 400 34px/1 var(--display-serif) }
 .premium-tool-index__signal p { color: var(--paper-muted); font-size: 13px }
 
 .premium-data-grid {
