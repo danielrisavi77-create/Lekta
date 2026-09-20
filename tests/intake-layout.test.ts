@@ -80,7 +80,10 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     expect(pecat!.getAttribute('aria-hidden')).toBe('true');
     expect(pecat!.hasAttribute('role')).toBe(false);
     expect(pecat!.hasAttribute('tabindex')).toBe(false);
-    // Znacenje "jos nije pregledano" vec nosi zaglavlje, pa citac ekrana ne gubi nista.
+    // Znacenje "jos nije pregledano" vec nosi zaglavlje, pa citac ekrana koji pecat s pravom
+    // preskoci ne gubi nista. To vrijedi TEK od pregleda Z7 nize (do njega je zaglavlje bilo
+    // potomak gumba, dakle jednako nedostupno kao pecat); vidi describe "zaglavlje, kicker,
+    // naslov i uvod nisu u gumbu" nize.
     expect(tekst(doc.querySelector('.intake-zaglavlje'))).toContain('Nepregledano');
   });
 
@@ -565,26 +568,37 @@ describe('Z7 broj ulaznog lista', () => {
 });
 
 /**
- * A11Y: KORACI I PODNOZJE PAPIRA NISU SADRZAJ GUMBA (pregled Z7, 2026-09-20).
+ * A11Y: ZAGLAVLJE, KICKER, NASLOV, UVOD, KORACI I PODNOZJE PAPIRA NISU SADRZAJ GUMBA
+ * (pregled Z7, 2026-09-20).
  *
  * Potomci elementa s ulogom `button` su po ARIA specifikaciji PREZENTACIJSKI: citac ekrana ih ne
  * nudi kao zaseban sadrzaj, nego ih smota u ime gumba, a kad je ime izreceno (`aria-label`, sto Z7
  * i radi) preskoci ih zajedno s njim. Do ovog popravka je to pogadjalo bas obecanje o privatnosti:
  * "Provjera radi u tvom pregledniku. Dokument ne odlazi." bilo je nedostupno tocno onome tko papir
- * ne moze vidjeti. Prvi prolaz Z7 je to IMENOVAO kao zateceno ogranicenje i ostavio; pregled je
- * pokazao da se rjesava bez diranja toka uploada, pa je uloga presla na unutarnji omotac.
+ * ne moze vidjeti, a isto je vrijedilo za "Ubaci rad." i uvodnu rijecenicu, koje `aria-labelledby`
+ * na `#intakeStage` i sam `<h1>` obecavaju kao sadrzaj stranice. Prvi prolaz Z7 je to IMENOVAO kao
+ * zateceno ogranicenje i djelomicno ostavio (koraci i podnozje su izasli, zaglavlje/naslov/uvod
+ * nisu); ovaj pregled izvlaci i preostalo, bez diranja toka uploada.
  *
- * MJERI SE ODNOS, NE IME KLASE: za zadani tekst se trazi predak koji ga skriva. Tako gard vrijedi i
- * ako se markup preslozi drukcije nego danas, i pada cim se uloga vrati na plohu.
+ * MJERI SE ODNOS, NE IME KLASE: za zadani tekst se trazi NAJDUBLJI element koji ga u cijelosti
+ * nosi (nijedno njegovo dijete ga ne nosi u cijelosti), pa se od njega ide prema korijenu i trazi
+ * skrivac. Trazenje najdubljeg elementa, a ne liste (elementa bez DJECE), je namjerno: uvodna
+ * rijecenica ima podvucenu rijec u `<em>` s ukrasnim SVG-om, pa je tekst "Provjerit ćemo formu"
+ * razdvojen izmedju teksta izravno u `<p>` i teksta u `<em>`; nijedan LIST ga ne nosi u cijelosti,
+ * ali `<p>` (ciji child `<em>` ga NE nosi u cijelosti) da. Gard vrijedi i ako se markup preslozi
+ * drukcije nego danas, i pada cim se uloga vrati na plohu.
  */
-describe('Z7 a11y: koraci i podnozje nisu u gumbu', () => {
+describe('Z7 a11y: zaglavlje, kicker, naslov, uvod, koraci i podnozje nisu u gumbu', () => {
   const doc = ulaz();
 
-  /** Prvi predak zadanog teksta koji ga skriva citacu ekrana, ili `null` ako takvog nema. */
+  /** Najdublji predak zadanog teksta koji ga skriva citacu ekrana, ili `null` ako takvog nema. */
   function skrivacTeksta(korijen: Document, ulomak: string): string | null {
-    const nosioci = [...korijen.querySelectorAll('*')]
-      .filter((el) => el.children.length === 0 && tekst(el).includes(ulomak));
-    expect(nosioci.length, `tekst nije nadjen u markupu: "${ulomak}"`).toBeGreaterThan(0);
+    const sviKoNose = [...korijen.querySelectorAll('*')].filter((el) => tekst(el).includes(ulomak));
+    expect(sviKoNose.length, `tekst nije nadjen u markupu: "${ulomak}"`).toBeGreaterThan(0);
+    // Najdublji: nijedno DIJETE ne nosi cijeli ulomak (inace bi to dijete bilo tocnija tvrdnja).
+    const nosioci = sviKoNose.filter(
+      (el) => ![...el.children].some((dijete) => tekst(dijete).includes(ulomak)),
+    );
     for (const nosioc of nosioci) {
       for (let el: Element | null = nosioc; el; el = el.parentElement) {
         const oznaka = `<${el.tagName.toLowerCase()}${el.className ? `.${String(el.className).split(/\s+/)[0]}` : ''}>`;
@@ -596,6 +610,10 @@ describe('Z7 a11y: koraci i podnozje nisu u gumbu', () => {
   }
 
   const TEKSTOVI = [
+    'Ubaci rad.',
+    'Provjerit ćemo formu',
+    'Nepregledano',
+    'Ulazni list',
     'Ubaciš .docx. Ne treba prijava.',
     'Provjera radi u tvom pregledniku. Dokument ne odlazi.',
     'Dobiješ ocjenu i popis što popraviti prije predaje.',
@@ -624,6 +642,12 @@ describe('Z7 a11y: koraci i podnozje nisu u gumbu', () => {
     // I kad je predak posredan (gumb nije neposredni roditelj), jer se markup preslaguje.
     expect(skrivacTeksta(sintetski(`<div role="button"><div><span><b>${OBECANJE}</b></span></div></div>`), OBECANJE))
       .toContain('role=button');
+    // I kad je TEKST SAM razdvojen preko inline elementa (kao "formu" u `.intake-em`): nijedan
+    // list ga ne nosi u cijelosti, ali gard ide na najdublji element koji ga NOSI (ovdje <p>).
+    expect(skrivacTeksta(
+      sintetski(`<div role="button" aria-label="Odaberi"><p>Provjerit ćemo <em>formu<svg><path/></svg></em> prije.</p></div>`),
+      'Provjerit ćemo formu',
+    )).toContain('role=button');
   });
 
   it('uloga je UNUTAR papira, a papir je i dalje ploha koja hvata klik i ispustanje', () => {
@@ -636,12 +660,23 @@ describe('Z7 a11y: koraci i podnozje nisu u gumbu', () => {
     const gumb = papir!.querySelector('.intake-paper__gumb');
     expect(gumb, 'gumb nije unutar papira').not.toBeNull();
     expect(gumb!.getAttribute('tabindex'), 'gumb mora biti dohvatljiv tipkovnicom').toBe('0');
-    // Poziv na radnju je U gumbu, koraci i podnozje SU IZVAN njega, ali unutar istog papira.
+    // Poziv na radnju je U gumbu; zaglavlje, pecat, kicker, naslov, uvod, koraci i podnozje su SVI
+    // IZVAN njega, ali unutar istog papira.
     expect(gumb!.querySelector('.intake-cta'), 'CTA je ispao iz gumba').not.toBeNull();
     expect(gumb!.querySelector('.intake-koraci'), 'koraci su opet u gumbu').toBeNull();
     expect(gumb!.querySelector('[data-intake-foot]'), 'podnozje je opet u gumbu').toBeNull();
+    expect(gumb!.querySelector('.intake-zaglavlje'), 'zaglavlje je u gumbu').toBeNull();
+    expect(gumb!.querySelector('.intake-pecat'), 'pecat je u gumbu').toBeNull();
+    expect(gumb!.querySelector('.intake-kicker'), 'kicker je u gumbu').toBeNull();
+    expect(gumb!.querySelector('#intakeTitle'), 'naslov je u gumbu').toBeNull();
+    expect(gumb!.querySelector('.intake-lead'), 'uvod je u gumbu').toBeNull();
     expect(papir!.querySelector('.intake-poziv .intake-koraci'), 'koraci su ispali s papira').not.toBeNull();
     expect(papir!.querySelector('.intake-poziv [data-intake-foot]'), 'podnozje je ispalo s papira').not.toBeNull();
+    expect(papir!.querySelector('.intake-poziv .intake-zaglavlje'), 'zaglavlje je ispalo s papira').not.toBeNull();
+    expect(papir!.querySelector('.intake-poziv .intake-pecat'), 'pecat je ispao s papira').not.toBeNull();
+    expect(papir!.querySelector('.intake-poziv .intake-kicker'), 'kicker je ispao s papira').not.toBeNull();
+    expect(papir!.querySelector('.intake-poziv #intakeTitle'), 'naslov je ispao s papira').not.toBeNull();
+    expect(papir!.querySelector('.intake-poziv .intake-lead'), 'uvod je ispao s papira').not.toBeNull();
   });
 
   it('raspored se NE mijenja: omotac gumba preuzima isti stupac', () => {
@@ -656,5 +691,45 @@ describe('Z7 a11y: koraci i podnozje nisu u gumbu', () => {
     expect(bezCssKomentara(CSS), 'fokus i dalje visi o nefokusabilnoj plohi')
       .not.toMatch(/\.intake-paper:focus-visible/);
     expect(bezCssKomentara(CSS)).toContain('.intake-paper:has(.intake-paper__gumb:focus-visible)');
+  });
+});
+
+/**
+ * `intake-motion.ts` NE SMIJE GADJATI KLASU KOJU `index.html` NEMA (pregled Z7, 2026-09-20).
+ *
+ * `.intake-links` je do ovog pregleda bila u zavrsnoj skupini animacije, a rez (Z7, spajanje u
+ * jedan redak ispod papira) ju je izbrisao iz markupa i stila, ali ne i iz `intake-motion.ts`.
+ * `querySelector` na nepostojecu klasu tiho vraca `null` (`if (el) pokreni(...)` je vec zapadala
+ * na to), pa je izostanak bio nevidljiv dok se ne pobroje same klase.
+ */
+describe('intake-motion.ts ne referencira klasu koja ne postoji u index.html', () => {
+  const MOTION = read('src/routes/intake/intake-motion.ts');
+
+  /** Svako ime klase iz argumenata querySelector/querySelectorAll, i selektor sa zarezima brojeci vise klasa (`.a, .b`). */
+  function klaseIzUpita(izvor: string): string[] {
+    const nizovi = [...izvor.matchAll(/querySelector(?:All)?\(['"]([^'"]+)['"]\)/g)].map((m) => m[1]);
+    const klase: string[] = [];
+    for (const niz of nizovi) klase.push(...[...niz.matchAll(/\.([a-zA-Z0-9-]+)/g)].map((m) => m[1]));
+    return klase;
+  }
+
+  /** Postoji li ime klase u HTML-u, bez obzira nosi li element jos koju drugu klasu. */
+  const klasaPostoji = (klasa: string): boolean => new RegExp(`class="[^"]*\\b${klasa}\\b`).test(HTML);
+
+  it('svaka `.klasa` iz querySelector/querySelectorAll poziva postoji u markupu', () => {
+    const klase = klaseIzUpita(MOTION);
+    expect(klase.length, 'modul ne gadja nijednu klasu preko querySelector(All)').toBeGreaterThan(0);
+    const nedostaje = klase.filter((k) => !klasaPostoji(k));
+    expect(nedostaje, `klasa iz intake-motion.ts nema u index.html: ${nedostaje.join(', ')}`).toEqual([]);
+  });
+
+  it('MUTACIJA: podmetnuta nepostojeca klasa gard PRIJAVI', () => {
+    const sMrtvom = MOTION.replace(
+      "doc.getElementById('intakeMeta')",
+      "doc.getElementById('intakeMeta'), doc.querySelector('.intake-links')",
+    );
+    expect(sMrtvom, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(MOTION);
+    const nedostaje = klaseIzUpita(sMrtvom).filter((k) => !klasaPostoji(k));
+    expect(nedostaje, 'gard ne vidi podmetnutu mrtvu klasu').toContain('intake-links');
   });
 });

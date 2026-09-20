@@ -68,9 +68,11 @@ export function playIntakeEntry(doc: Document): void {
     ], SADRZAJ_MS, 90 + i * KORAK_MS);
   });
 
-  // Brojke i poveznice dolaze zadnje i tise: signal povjerenja, ne glavni glas stranice. Bez pomaka,
-  // samo pojavljivanje, da oko ostane na papiru.
-  const rep = [doc.getElementById('intakeMeta'), doc.querySelector('.intake-stats'), doc.querySelector('.intake-links')];
+  // Redak ispod papira dolazi zadnji i tise: signal povjerenja, ne glavni glas stranice. Bez
+  // pomaka, samo pojavljivanje, da oko ostane na papiru. `.intake-links` je klasa koju je ulaz
+  // izgubio (spojena u `#intakeMeta`); `.intake-stats` u `index.html` nikad nije postojala, pa je
+  // ovaj `querySelector` od pocetka tiho vracao `null`. Pregled Z7 uklanja obje mrtve referencije.
+  const rep = [doc.getElementById('intakeMeta')];
   rep.forEach((el, i) => {
     if (el) pokreni(el, [{ opacity: 0 }, { opacity: 1 }], REP_MS, 240 + i * 70);
   });

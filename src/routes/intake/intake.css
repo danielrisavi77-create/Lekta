@@ -116,8 +116,9 @@
 
 /* --- ispod papira ------------------------------------------------------------------------- */
 .intake-meta,.intake-status,.intake-error,.intake-continue{max-width:60ch;margin:0 auto}
-/* Redak ispod papira je na STOLU, ne na papiru, pa ide na `--muted`. Mono jer nabraja format,
-   uvjet i odrediste, dakle oznake; do Z7 su to bila dva odvojena retka. */
+/* Redak ispod papira je na STOLU, ne na papiru, pa ide na `--muted`. Glas je `--ui`, ne mono:
+   odluka 2026-09-20 (pregled Z7) mono ne dodaje na ulaz ni kao treci glas (vidi biljesku uz
+   `.intake-cta`); do Z7 su ovo bila dva odvojena retka. */
 .intake-meta{
   /* 11px je mjera OZNAKE NA PAPIRU (zaglavlje, pecat, koraci, sitni otisak). Ovaj redak nosi
      jedinu poveznicu ispod papira, pa ostaje na `--fs-ui-sm`, kao i predlozak (13px).
@@ -167,9 +168,11 @@
    centrira sve osim pecata, koji se sam vraca na desni rub s `justify-self:end`. */
 .intake-poziv{position:relative;display:grid;justify-items:center}
 /* GUMB JE UNUTAR PAPIRA, NE SAM PAPIR (pregled Z7, 2026-09-20). Uloga `button` cini SVE potomke
-   prezentacijskima, pa su tri koraka i podnozje bili nevidljivi citacu ekrana; sada su gumbu
-   BRACA. Raspored se time ne mijenja: omotac preuzima isti stupac (`display:grid`,
-   `justify-items:center`, puna sirina), pa i razmaci i `justify-self:end` pecata ostaju isti. */
+   prezentacijskima, pa su zaglavlje, pecat, kicker, naslov, uvod, tri koraka i podnozje bili
+   nevidljivi citacu ekrana; svi su sada gumbu BRACA unutar `.intake-poziv`, a gumb sam nosi samo
+   `.intake-akcija`. Raspored se time ne mijenja: `.intake-poziv` je vec isti stupac
+   (`display:grid`, `justify-items:center`) koji je gumb ranije preuzimao, pa razmaci i
+   `justify-self:end` pecata ostaju isti. */
 .intake-paper__gumb{display:grid;justify-items:center;width:100%}
 .intake-karta{display:none;justify-items:center;gap:0;text-align:center}
 .intake-stage[data-intake-state="checking"] .intake-poziv,

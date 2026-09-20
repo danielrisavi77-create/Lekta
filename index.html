@@ -64,13 +64,15 @@
   <div class="intake-shell">
     <div class="intake-desk" id="paperCover">
       <!-- PAPIR JE PLOHA, GUMB JE UNUTAR NJEGA (pregled Z7, 2026-09-20).
-           Do ovog popravka je `role="button"` stajao na samom papiru, pa su tri koraka i podnozje
-           bili POTOMCI gumba. Potomci elementa s ulogom `button` su po ARIA specifikaciji
-           prezentacijski: citac ekrana ih ne cita kao zaseban sadrzaj, nego ih (bez `aria-label`)
-           smota u ime gumba, a s njim ih preskoci. Obecanje "Provjera radi u tvom pregledniku.
-           Dokument ne odlazi." je time bilo nevidljivo bas onome tko ga ne moze vidjeti na ekranu.
-           Zato je uloga preseljena na unutarnji `.intake-paper__gumb`, a koraci i podnozje stoje
-           kao njegova BRACA unutar istog papira.
+           Do ovog popravka je `role="button"` stajao na samom papiru, pa su zaglavlje, pecat,
+           naslov, uvod, tri koraka i podnozje bili POTOMCI gumba. Potomci elementa s ulogom
+           `button` su po ARIA specifikaciji prezentacijski: citac ekrana ih ne cita kao zaseban
+           sadrzaj, nego ih (bez `aria-label`) smota u ime gumba, a s njim ih preskoci. Obecanje
+           "Provjera radi u tvom pregledniku. Dokument ne odlazi." je time bilo nevidljivo bas
+           onome tko ga ne moze vidjeti na ekranu; ista sudbina je zadesila i naslov "Ubaci rad."
+           i uvodnu rijecenicu, koje `aria-labelledby` i `intake-lead` obecavaju kao sadrzaj stranice.
+           Zato je uloga OSTALA na unutarnjem `.intake-paper__gumb`, a zaglavlje, pecat, kicker,
+           naslov i uvod su mu sada BRACA unutar istog papira, kao i koraci i podnozje.
            TOK UPLOADA SE NE MIJENJA: `#intakeDropzone` ostaje na papiru, pa klik i ispustanje
            i dalje hvata CIJELA ploha (kontroler i ulazna sekvenca vise njega). Klik i tipka s
            gumba dolaze do te plohe podizanjem dogadaja (bubbling).
@@ -81,31 +83,32 @@
              `#intakeStage`, pa se stanje vidi NA papiru umjesto kao poruka ispod njega: isti
              predmet putuje kroz proizvod, a ne niz nepovezanih ekrana. -->
         <div class="intake-poziv">
+          <!-- ZAGLAVLJE OBRASCA (Z7). Papir je URUDZBENI LIST, ne plakat: gore lijevo cija je
+               knjiga, gore desno koji je list i u kojem je stanju. Broj lista je STVARAN redni
+               broj, ne ukras: koliko ZAVRSENIH analiza ovaj preglednik pamti u `lekta.history.v2`,
+               plus ova. TO NIJE ISTI SKUP KAO "Moji radovi": ta ruta lokalne radove cita iz
+               IndexedDB sesija, pa dokument ostavljen prije kraja analize ondje postoji, a ovdje
+               se ne broji. Tocna granica i njezine posljedice stoje u
+               `src/routes/intake/list-number.ts`. U HTML-u stoji "0001" pa stranica nikad nije
+               prazna; taj modul ga zamijeni nakon ucitavanja, a sirina je rezervirana (cetiri
+               znamenke, tabular-nums) da zamjena ne trzne redak. -->
+          <div class="intake-zaglavlje">
+            <span>Lekta · Ulazni list</span>
+            <span>Nº <span class="intake-list-broj" data-intake-list-broj>0001</span> · Nepregledano</span>
+          </div>
+          <!-- PECAT JE DEKORACIJA, I ZATO JE `aria-hidden`. Isto znacenje ("jos nije pregledano")
+               vec nosi tekst zaglavlja iznad, pa bi citac ekrana inace istu stvar cuo dvaput.
+               Nista se ne animira: pecat je otisnut, ne pada na papir. -->
+          <span class="intake-pecat" aria-hidden="true">Čeka provjeru</span>
+          <span class="intake-kicker">Besplatna provjera · lokalno na uređaju</span>
+          <h1 class="intake-title" id="intakeTitle">Ubaci rad.</h1>
+          <p class="intake-lead">Provjerit ćemo <em class="intake-em">formu<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em> prije nego ga predaš.</p>
           <!-- IME GUMBA SE IZRICE, NE SKUPLJA IZ SADRZAJA. `role="button"` po accname racuna ime
                iz potomaka, pa je do Z7 citac ekrana izgovarao cijeli poziv (~25 rijeci).
                `aria-label` prekida to racunanje i daje jedno ime za jednu radnju. Unutar gumba
-               ostaje SAMO poziv na radnju; koraci i podnozje su ispod njega, kao zaseban sadrzaj. -->
+               ostaje SAMO poziv na radnju; zaglavlje, naslov, uvod, koraci i podnozje su mu braca
+               na papiru, kao zaseban sadrzaj. -->
           <div class="intake-paper__gumb" role="button" tabindex="0" aria-label="Odaberi .docx dokument ili ga ispusti ovdje" aria-controls="intakeFile" aria-describedby="intakeMeta">
-            <!-- ZAGLAVLJE OBRASCA (Z7). Papir je URUDZBENI LIST, ne plakat: gore lijevo cija je
-                 knjiga, gore desno koji je list i u kojem je stanju. Broj lista je STVARAN redni
-                 broj, ne ukras: koliko ZAVRSENIH analiza ovaj preglednik pamti u `lekta.history.v2`,
-                 plus ova. TO NIJE ISTI SKUP KAO "Moji radovi": ta ruta lokalne radove cita iz
-                 IndexedDB sesija, pa dokument ostavljen prije kraja analize ondje postoji, a ovdje
-                 se ne broji. Tocna granica i njezine posljedice stoje u
-                 `src/routes/intake/list-number.ts`. U HTML-u stoji "0001" pa stranica nikad nije
-                 prazna; taj modul ga zamijeni nakon ucitavanja, a sirina je rezervirana (cetiri
-                 znamenke, tabular-nums) da zamjena ne trzne redak. -->
-            <div class="intake-zaglavlje">
-              <span>Lekta · Ulazni list</span>
-              <span>Nº <span class="intake-list-broj" data-intake-list-broj>0001</span> · Nepregledano</span>
-            </div>
-            <!-- PECAT JE DEKORACIJA, I ZATO JE `aria-hidden`. Isto znacenje ("jos nije pregledano")
-                 vec nosi tekst zaglavlja iznad, pa bi citac ekrana inace istu stvar cuo dvaput.
-                 Nista se ne animira: pecat je otisnut, ne pada na papir. -->
-            <span class="intake-pecat" aria-hidden="true">Čeka provjeru</span>
-            <span class="intake-kicker">Besplatna provjera · lokalno na uređaju</span>
-            <h1 class="intake-title" id="intakeTitle">Ubaci rad.</h1>
-            <p class="intake-lead">Provjerit ćemo <em class="intake-em">formu<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em> prije nego ga predaš.</p>
             <span class="intake-akcija">
               <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
               <span class="intake-hint">ili ispusti dokument ovdje</span>
