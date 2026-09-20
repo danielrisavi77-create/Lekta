@@ -7,9 +7,9 @@ export const AGENTS = Object.freeze({
   opus: { command: 'claude', model: 'opus', role: 'implementer' },
   sonnet: { command: 'claude', model: 'sonnet', role: 'implementer' },
   sol: { command: 'codex', model: 'gpt-5.6-sol', role: 'implementer' },
-  // Grok Build CLI (https://docs.x.ai/build/overview). Model id is a default; override locally with -m via alias edits.
-  grok: { command: 'grok', model: 'grok-4', role: 'coordinator' },
-  build: { command: 'grok', model: 'grok-4', role: 'implementer' },
+  // Grok Build CLI (https://docs.x.ai/build/overview). Default model grok-4.6 = current coding recommendation (docs.x.ai/docs/models, 2026-09-20).
+  grok: { command: 'grok', model: 'grok-4.6', role: 'coordinator' },
+  build: { command: 'grok', model: 'grok-4.6', role: 'implementer' },
 });
 
 export function validateQueue(queue) {
