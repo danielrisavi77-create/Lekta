@@ -172,6 +172,12 @@
   gap: 7px;
   padding: 10px 0 4px 32px;
 }
+/*
+ * `hidden` NIJE dovoljan sam: autorski `display:grid` pobjedjuje UA pravilo `[hidden]`, pa bi opseg
+ * ostao vidljiv i kad je popravak iskljucen. Isti obrazac vec nose `.tab-details[hidden]` i
+ * `.ks-video-play[hidden]` u page-app.css, i to je jedini razlog zasto postoje.
+ */
+.pr-scope[hidden] { display: none; }
 .pr-scope-title {
   font-size: var(--fs-mono-label);
   letter-spacing: .14em;
