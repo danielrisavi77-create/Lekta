@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light dark">
+<!-- PRE-PAINT TEMA CONTROL CENTRA JE VLASTITA, ne dijeljena (vraceno 2026-09-20, pregled Z6).
+     Ova stranica ima svoj sustav teme (src/admin/admin-theme.ts) koji PRATI SUSTAV: bazni :root je
+     svijetao, tamno se pali pod prefers-color-scheme:dark i pod [data-theme="dark"]. Zato namjerno
+     ne uvozi ui-boot ni display-settings.css. Prosirena skripta ostalih ruta bezuvjetno upisuje
+     data-theme="dark" i cetiri data- atributa prikaza, pa je Control Centru gasila prilagodbu
+     sustavu i nametala tamno i onome tko je izabrao svjetlo. Skripta zato ostaje na obliku s grane
+     design/z5-typo-pilot: vraca SAMO izricito spremljenu temu.
+     CSP: ovaj oblik ima vlastiti sha256 u public/_headers (druga stavka u script-src). -->
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <title>Lekta · Control Center</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">

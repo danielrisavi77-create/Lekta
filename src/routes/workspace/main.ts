@@ -16,6 +16,7 @@ import {
 import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
+import { mountDisplaySettings } from '../../shared/display-settings';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
@@ -96,6 +97,9 @@ function showStatus(text: string | null): void {
 }
 
 async function start(): Promise<void> {
+  // Panel "Prilagodi prikaz" prije analizatora: postavke prikaza ne ovise ni o dokumentu ni o
+  // pohrani, pa nema razloga da korisnik ceka na njih.
+  mountDisplaySettings(document);
   // Montaza ide PRVA: radna povrsina mora biti upotrebljiva i kad pohrana zakaze. Vezanje
   // upotrebljivosti uz pohranu bilo bi tocno obrnuto od ugovora o degradaciji.
   initAnalyzerApp(document);

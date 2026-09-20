@@ -186,6 +186,65 @@ describe('themeBtn label-in-name (AUD a11y #Izjava-2, WCAG 2.5.3)', () => {
     expect(html, 'lampa na ulazu nema natpis, pa ga ne smije ni glumiti').not.toContain('lampa-txt');
   });
 
+  /**
+   * ISTO OGRANICENJE VRIJEDI I ZA #displayBtn (Z6, panel "Prilagodi prikaz").
+   *
+   * Pitanje je bilo treba li gumb na ulazu dobiti vidljiv natpis. Ne treba, i razlog NIJE lampa
+   * nego NAVIGACIJA ULAZA: odluka od 2026-09-06, zapisana u komentaru te navigacije u index.html,
+   * kaze da `/` nosi samo dva odredista i kontrole bez natpisa, jer ekran ima jednu svrhu. Zabrana
+   * klase `lampa-txt` u ovom listu je posljedica te odluke, ne tvrdnja o lampi kao takvoj, pa bi
+   * natpis pod drugim imenom klase zaobisao gard a ne i odluku.
+   *
+   * Na `/rad/`, gdje navigacija natpise vec ima, isti gumb ih DOBIVA; ondje onda vrijedi i 2.5.3,
+   * pa vidljivi tekst mora biti sadrzan u pristupacnom imenu.
+   */
+  /** Vidljivi natpisi gumba u navigaciji; cista funkcija, pa se smije mutirati. */
+  const natpisiGumba = (html: string): string[] => (
+    [...html.matchAll(/<button[^>]*class="lampa-btn[^"]*"[^>]*>([\s\S]*?)<\/button>/g)]
+      .map((m) => m[1].replace(/<[^>]*>/g, '').trim())
+      .filter((t) => t !== '')
+  );
+
+  it('ulaz `/`: #displayBtn je bez natpisa, kao i lampa, ali s pristupacnim imenom', () => {
+    const html = read('index.html');
+    const tag = html.match(/<button class="lampa-btn[^"]*" id="displayBtn"[^>]*>/)?.[0] ?? '';
+    expect(tag, 'nema #displayBtn na ulazu').not.toBe('');
+    expect(tag).toContain('aria-label="Prilagodi prikaz"');
+    expect(tag).toContain('aria-expanded="false"');
+    expect(natpisiGumba(html), 'ulaz nosi kontrole BEZ natpisa (odluka 2026-09-06)').toEqual([]);
+  });
+
+  it('MUTACIJA: natpis pod drugom klasom bi zaobisao staru zabranu, ali ne i ovaj gard', () => {
+    const html = read('index.html');
+    const podmetnut = html.replace(
+      '<i data-lucide="sliders-horizontal"></i></button>',
+      '<i data-lucide="sliders-horizontal"></i><span class="display-txt">Prikaz</span></button>',
+    );
+    expect(podmetnut, 'podmetanje se nije primilo; provjeri oznaku gumba').not.toBe(html);
+    expect(podmetnut).not.toContain('lampa-txt');   // stara zabrana ga NE bi vidjela
+    expect(natpisiGumba(podmetnut)).toEqual(['Prikaz']); // ovaj gard ga vidi
+    // BASELINE: nemutiran ulaz je cist, inace bi "prolazio" i gard koji vristi na sve.
+    expect(natpisiGumba(html)).toEqual([]);
+  });
+
+  it('`/rad/`: #displayBtn IMA natpis, i vidljivi tekst je sadrzan u pristupacnom imenu (2.5.3)', () => {
+    const html = read('rad/index.html');
+    const gumb = html.match(/<button class="lampa-btn" id="displayBtn"[\s\S]*?<\/button>/)?.[0] ?? '';
+    expect(gumb, 'nema #displayBtn na radnoj povrsini').not.toBe('');
+    const ime = gumb.match(/aria-label="([^"]*)"/)?.[1] ?? '';
+    const vidljivo = gumb.replace(/<[^>]*>/g, '').trim();
+    expect(vidljivo, 'na `/rad/` gumb nosi natpis').toBe('Prikaz');
+    expect(ime).toBe('Prilagodi prikaz');
+    // Usporedba je NEOSJETLJIVA NA VELICINU SLOVA, i to je izmjereno na ovom paru: ime je
+    // "Prilagodi prikaz", natpis "Prikaz", pa doslovno `includes` daje false. WCAG Understanding
+    // za 2.5.3 podudaranje gleda bez obzira na velicinu slova, a glasovna kontrola ("klikni
+    // Prikaz") jednako tako. Doslovna usporedba bi ovdje javila kvar kojeg nema.
+    expect(ime.toLowerCase().includes(vidljivo.toLowerCase()),
+      'WCAG 2.5.3: vidljivi tekst mora biti u pristupacnom imenu').toBe(true);
+    // Kontrola smjera: gard bi pao da natpis nije dio imena.
+    expect(ime.toLowerCase().includes('kontrast')).toBe(false);
+  });
+
   it.each(PAGES_S_IZBORNIKOM)('%s: #themeBtn staticki (pre-boot) aria-label sadrzi vidljivu rijec "Lampa"', (page) => {
     const html = read(page);
     const tag = html.match(/<button class="lampa-btn" id="themeBtn"[^>]*>/)?.[0] ?? '';
