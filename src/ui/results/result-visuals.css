@@ -849,7 +849,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .fsum-razine { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px }
 .fsum-razina {
   display: grid; grid-template-columns: 1.6rem 1fr; align-items: baseline; gap: .5rem;
-  font: 400 15px/1.45 var(--ui, system-ui); color: var(--paper-ink, #23201B);
+  font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
 }
 .fsum-razina b { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right }
 .fsum-razina[data-ton='blok'] b { color: var(--red-deep, #8E2A22) }
@@ -861,7 +861,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
  * kad se ne zbroji, izgleda kao kvar. */
 .fsum-auto {
   margin: 12px 0 0; padding-top: 11px; border-top: 1px solid var(--paper-line, #E0D8C8);
-  font: 400 15px/1.45 var(--ui, system-ui); color: var(--paper-ink, #23201B);
+  font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
 }
 .fsum-auto span { color: var(--paper-muted, #6E6558); font-size: 13px }
 .fsum-auto b { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F) }

@@ -49,13 +49,17 @@
 .intake-paper.is-dragging{border-color:var(--brand)}
 
 /* --- sadrzaj papira ----------------------------------------------------------------------- */
-/* DVA GLASA, PODJELA PO FUNKCIJI (2026-09-05). Newsreader GOVORI (nadnaslov, naslov, lead,
-   brojke u traci), Inter Tight OZNACAVA (gumb, meta, greska, sitni tekst). Mono je s ulaza
-   otisao jer ovdje nije nosio nijedan podatak; ostaje na `/rad/`, gdje jest podatkovni glas.
+/* DVA GLASA, PODJELA PO FUNKCIJI. Display serif GOVORI (nadnaslov, naslov, lead, tekst koraka),
+   mono OZNACAVA I MJERI (zaglavlje obrasca, pecat, brojevi koraka, gumb, meta, podnozje).
 
-   NADNASLOV JE DO DANAS TRAZIO TOKEN KOJI NE POSTOJI: `var(--font-mono, ...)`, a token se zove
+   OD Z7 (2026-09-20) ULAZ UCITAVA ISTE DVIJE OBITELJI KAO OSTATAK PROIZVODA, pa mono ovdje vise
+   nije "treci glas koji bi trebalo skinuti" nego jedan od dva koja stranica ionako nosi. Raniji
+   blokovi u ovoj datoteci tvrdili su suprotno; ta je odluka izricito ukinuta, i njezin gard s njom.
+
+   NADNASLOV JE JEDNOM TRAZIO TOKEN KOJI NE POSTOJI: `var(--font-mono, ...)`, a token se zove
    `--mono`. Fallback je zato hvatao sustavni `ui-monospace` (na Windowsu Consolas), dakle
-   obitelj koju nitko nije izabrao i koja se ne ucitava. Ista klasa kvara kao `--font-hand`. */
+   obitelj koju nitko nije izabrao i koja se ne ucitava. Lanac i dalje cuva
+   `tests/entry-fonts.test.ts`. */
 .intake-kicker{
   /* --brand (--red) mjeri 3,3:1 na --paper u tamnoj temi: tekst na papiru trazi tamniji
      par (--red-on-soft, vec izmjeren za "tekst na soft podlogama" u design-system.css). */
@@ -70,7 +74,7 @@
      krovna velicina proizvoda (clamp do 3,25rem) i vrijedi za naslove KOJI DIJELE EKRAN s drugim
      sadrzajem. Ovdje naslov nije jedan od elemenata nego sam ekran: ulaz ima jednu radnju i jedan
      glas. Token se zato NE dira (mijenjao bi svaku drugu rutu), nego se prepisuje lokalno, uz ovo
-     obrazlozenje. Obitelj ostaje Newsreader: predlozak je preuzet kao RASPORED, ne kao pismo. */
+     obrazlozenje. Obitelj je display serif proizvoda, isti koji trazi i predlozak. */
   font-size:clamp(40px,7vw,120px);line-height:.92;letter-spacing:-.02em;text-wrap:balance;
 }
 /* Rucna podcrta ispod zadnje rijeci: istu putanju ispisuje hero-depth.ts (`--crta-len`). */
@@ -92,16 +96,14 @@
 .intake-cta{
   display:inline-flex;align-items:center;gap:9px;padding:13px 26px;
   background:var(--brand);color:var(--on-brand,#fff);border-radius:var(--radius-btn-lg);
-  /* GLAS JE INTER TIGHT, NE MONO, I TO JE ODLUKA IZ NALOGA, NE PREVID. Predlozak natpis gumba
-     crta monoom, a `design/README.md` mono doista drzi podatkovnim glasom. Ali nalog Z7 izricito
-     kaze "NE dodaj nikakav webfont", a ulaz mono NE ucitava: `var(--mono)` bi ovdje pao na
-     sustavni `ui-monospace` (na Windowsu Consolas), dakle tocno kvar zbog kojeg
-     `tests/entry-fonts.test.ts` postoji. Preuzima se MJERA predloska (14px, .02em), ne pismo. */
-  font-family:var(--ui);font-weight:650;font-size:14px;letter-spacing:.02em;
+  /* GLAS JE MONO, kako predlozak i trazi: gumb je pecat, ne recenica. Mjera je isto iz
+     predloska (14px, razmak .02em). Do Z7 je ovdje stajao glas sucelja uz biljesku da mono nije
+     na raspolaganju; sada jest, jer ga ulaz ucitava kao i svaka druga ruta. */
+  font-family:var(--mono);font-weight:650;font-size:14px;letter-spacing:.02em;
   box-shadow:0 10px 24px color-mix(in srgb,var(--brand) 26%,transparent);
   transition:transform .2s ease,box-shadow .2s ease;
 }
-/* Bez monoa se oznaka formata izdvaja REZOM, jer glas nije na raspolaganju. */
+/* Oznaka formata se unutar mono natpisa izdvaja REZOM. */
 .intake-cta b{font-weight:700}
 .intake-cta svg{width:17px;height:17px}
 .intake-paper:hover .intake-cta,.intake-paper:has(.intake-paper__gumb:focus-visible) .intake-cta{
@@ -226,20 +228,18 @@
 /* Papir je OBRAZAC. Zaglavlje gore (cija knjiga, koji list, koje stanje), pecat kao stanje koje se
    vidi bez citanja, tri koraka kao postupak, sitni otisak dolje.
 
-   GLAS JE INTER TIGHT, NE MONO. `design/README.md` te mete (brojevi, oznake, statusi) drzi
-   podatkovnim glasom, dakle IBM Plex Mono, ali nalog Z7 zabranjuje dodavanje webfonta, a ulaz
-   mono NE ucitava. `var(--mono)` bi zato pao na sustavni `ui-monospace` (na Windowsu Consolas):
-   obitelj koju nitko nije izabrao, tocno kvar zbog kojeg `tests/entry-fonts.test.ts` postoji.
-   Oznaka se ovdje gradi MJEROM (11px), RAZMAKOM SLOVA i REZOM, a ne pismom. Ako vlasnik odluci
-   da ulaz smije nositi treci glas, mijenja se ovaj blok I taj gard, zajedno.
+   GLAS JE MONO, kako `design/README.md` te mete (brojevi, oznake, statusi) i propisuje. Do Z7 su
+   ovdje stajala dva bloka koja su tvrdila suprotno, oba iz istog razloga: ulaz tada nije ucitavao
+   mono, pa bi `var(--mono)` pao na sustavni `ui-monospace` (na Windowsu Consolas), dakle na
+   obitelj koju nitko nije izabrao. Odluka vlasnika 2026-09-20 mijenja bas tu pretpostavku: ulaz
+   nosi iste dvije obitelji kao ostatak proizvoda, pa mono ovdje nije nov font nego onaj koji je
+   ionako u paketu. Tvrdnja u `tests/intake-layout.test.ts` da ovaj list ne referencira
+   `var(--mono)` uklonjena je zajedno sa svojim razlogom; lanac selektor -> token -> obitelj ->
+   @font-face i dalje cuva `tests/entry-fonts.test.ts`.
 
-   ODLUKA 2026-09-20 (pregled Z7): mono se NE dodaje, ni kao treci glas ni samo za ove mete. Ulaz
-   `/` ucitava iskljucivo `src/shared/fonts-core.ts` (Inter Tight i Newsreader); IBM Plex Mono zivi
-   u `fonts-document.ts` i ide samo na dokumentne rute. Mono glas ovdje znacio bi jos jedno
-   preuzimanje fonta na PRVOJ stranici proizvoda, pa je odsutnost optimizacija, ne previd. Isto
-   vrijedi za natpis gumba (`.intake-cta` gore). Gardovi: `tests/entry-fonts.test.ts` (lanac
-   selektor -> token -> obitelj -> @font-face) i tvrdnja u `tests/intake-layout.test.ts` da ovaj
-   list uopce ne referencira `var(--mono)`.
+   MJERA OSTAJE (`--fs-mono-label`, 11px) i uz mono: oznaka se gradi mjerom I pismom, ne samo
+   jednim od toga. TEKST KORAKA NIJE OZNAKA nego recenica, pa on ostaje na serifu: README mono
+   izricito zabranjuje za recenice duze od jednog retka, a te se na uskom ekranu lome.
 
    SVI OVI ELEMENTI ZIVE UNUTAR `.intake-poziv`, pa nestaju cim dokument legne na papir. Zaglavlje
    koje i dalje tvrdi "Nepregledano" nad dokumentom koji se upravo provjerava bilo bi netocno, a
@@ -247,7 +247,7 @@
 .intake-zaglavlje{
   display:flex;justify-content:space-between;align-items:baseline;gap:16px;
   width:100%;padding-bottom:14px;border-bottom:1px solid var(--paper-line);
-  color:var(--paper-muted);font-family:var(--ui);font-weight:600;font-size:var(--fs-mono-label);
+  color:var(--paper-muted);font-family:var(--mono);font-weight:600;font-size:var(--fs-mono-label);
   letter-spacing:.08em;text-align:left;
 }
 /* Sirina broja je REZERVIRANA: `list-number.ts` ga zamijeni nakon ucitavanja, a bez tabularnih
@@ -269,7 +269,7 @@
   /* OKVIR ide na `--red` (nije tekst, pa prag 4,5:1 za njega ne vrijedi), a TEKST na
      `--red-on-soft`, koji je za tekst na svijetlim plohama vec izmjeren. Papir je svijetao u OBJE
      teme, pa isti par vrijedi u obje. */
-  color:var(--red-on-soft);font-family:var(--ui);font-weight:700;font-size:var(--fs-mono-label);
+  color:var(--red-on-soft);font-family:var(--mono);font-weight:700;font-size:var(--fs-mono-label);
   letter-spacing:.12em;text-transform:uppercase;line-height:1;
   transform:rotate(-9deg);transform-origin:100% 50%;pointer-events:none;
 }
@@ -281,16 +281,16 @@
 }
 .intake-koraci li{display:grid;gap:6px}
 .intake-korak-br{
-  color:var(--red-on-soft);font-family:var(--ui);font-weight:700;
+  color:var(--red-on-soft);font-family:var(--mono);font-weight:700;
   font-size:var(--fs-mono-label);letter-spacing:.08em;
 }
-.intake-korak-t{color:var(--paper-ink);font-family:var(--ui);font-size:13px;line-height:1.45}
+.intake-korak-t{color:var(--paper-ink);font-family:var(--display-serif);font-size:13px;line-height:1.45}
 
 /* Podnozje papira zamjenjuje raniju `.intake-brava`: ista obveza, ali izrecena tocnije i uz drugu
    polovicu granice proizvoda (provjeravamo FORMU, ne sadrzaj). */
 .intake-foot{
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;width:100%;margin-top:26px;
-  color:var(--paper-muted);font-family:var(--ui);font-weight:600;
+  color:var(--paper-muted);font-family:var(--mono);font-weight:600;
   font-size:var(--fs-mono-label);letter-spacing:.04em;
 }
 
@@ -303,7 +303,7 @@
 .intake-footer-pravno a:hover,.intake-footer-pravno a:focus-visible{color:var(--brand);text-decoration:underline}
 .intake-footer-nota{
   margin:10px 0 0;text-align:center;color:var(--muted-2,var(--muted));
-  font-family:var(--ui);font-size:var(--fs-ui-xs);line-height:1.5;
+  font-family:var(--display-serif);font-size:var(--fs-ui-xs);line-height:1.5;
 }
 
 /* --- stanja ------------------------------------------------------------------------------- */

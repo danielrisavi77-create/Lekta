@@ -799,7 +799,7 @@ body.is-scrolling .section *{box-shadow:none!important}
 #dropzone.has-file{border-color:var(--pass);background:var(--pass-soft)}
 #dropzone.has-error{border-color:var(--red-deep);background:var(--red-soft)}
 #dropEmpty h3{font-family:var(--display-serif);font-weight:400;font-size:22px;margin:10px 0 0;color:var(--paper-ink)}
-#dropEmpty p{font:12px var(--sans);color:var(--paper-muted);margin:8px 0 18px}
+#dropEmpty p{font:12px var(--display-serif);color:var(--paper-muted);margin:8px 0 18px}
 .upload-icon{color:var(--paper-muted);background:none;border:0}
 .selected-file{background:#fff;border:1px solid var(--paper-line);border-radius:0;box-shadow:var(--paper-sh-sm);transform:rotate(-.5deg);padding:16px 18px}
 .selected-file .file-icon{width:42px;height:42px;border-radius:0;background:#2B579A;color:#fff;font-weight:700;font-size:17px;display:grid;place-items:center}
@@ -863,7 +863,7 @@ input[type="checkbox"]:focus-visible{outline:2px solid var(--scan,var(--brand));
 .ready-stamp{border:2.5px double var(--pass);color:var(--pass);background:none;font:600 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;padding:9px 13px;border-radius:999px;transform:rotate(-4deg);box-shadow:none}
 #resultTitle{font-family:var(--display-serif);font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em}
 #resultSubtitle{font-family:var(--display-serif);font-size:15px;color:var(--paper-muted);line-height:1.7}
-.result-readiness{display:grid;gap:3px;margin:0 0 14px;padding:10px 12px;background:var(--paper-2);font:500 13px/1.45 var(--sans);color:var(--paper-muted)}
+.result-readiness{display:grid;gap:3px;margin:0 0 14px;padding:10px 12px;background:var(--paper-2);font:500 13px/1.45 var(--display-serif);color:var(--paper-muted)}
 .result-readiness strong{display:inline-flex;align-items:center;gap:7px;font:800 13px/1.3 var(--sans);color:var(--paper-ink)}
 /* Ton spremnosti nosi tocka uz natpis, ne lijevi rub (Z3). */
 .result-readiness strong::before{content:"";flex:none;width:7px;height:7px;border-radius:999px;background:var(--readiness-tone,var(--paper-muted))}
@@ -879,7 +879,7 @@ input[type="checkbox"]:focus-visible{outline:2px solid var(--scan,var(--brand));
 .result-readiness--needs-work{--readiness-tone:var(--warn-strong);background:#fff8e8}
 .result-readiness--manual-review{--readiness-tone:var(--scan);background:#f2f7ff}
 .result-readiness--clear{--readiness-tone:var(--pass);background:var(--pass-soft)}
-.result-trust{margin:-4px 0 14px;border:1px solid var(--paper-line);background:var(--paper);font:13px/1.45 var(--sans);color:var(--paper-muted)}
+.result-trust{margin:-4px 0 14px;border:1px solid var(--paper-line);background:var(--paper);font:13px/1.45 var(--display-serif);color:var(--paper-muted)}
 .result-trust summary{cursor:pointer;padding:10px 12px;font-weight:700;color:var(--paper-ink)}
 .result-trust__body{padding:0 12px 12px}.result-trust__body p{margin:7px 0}.result-trust__body strong{color:var(--paper-ink)}.result-trust__body a{color:var(--scan);font-weight:700}
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1.5px solid var(--paper-ink);border-radius:0;background:none;overflow:hidden}
@@ -1090,7 +1090,7 @@ input[type="checkbox"]:focus-visible{outline:2px solid var(--scan,var(--brand));
 .ks-koment-0{top:208px}.ks-koment-1{top:96px}.ks-koment-2{top:330px}.ks-koment-3{top:430px}.ks-koment-4{top:40px}
 .ks-doc-grid[data-issue="0"] .ks-koment-0,.ks-doc-grid[data-issue="1"] .ks-koment-1,.ks-doc-grid[data-issue="2"] .ks-koment-2,.ks-doc-grid[data-issue="3"] .ks-koment-3,.ks-doc-grid[data-issue="4"] .ks-koment-4{opacity:1}
 .ks-koment-code{font:600 9.5px var(--sans);letter-spacing:.16em;color:var(--red);text-transform:uppercase}
-.ks-koment p{margin:8px 0 0;font:11.5px/1.65 var(--sans);color:var(--desk-muted)}
+.ks-koment p{margin:8px 0 0;font:11.5px/1.65 var(--display-serif);color:var(--desk-muted)}
 .ks-koment-fix{margin-top:10px;font-family:var(--font-hand);font-size:20px;color:var(--pass);transform:rotate(-1deg);font-weight:400}
 /* popis provjera: akordeon kao list papira */
 #provjere-popis{padding:0 0 96px}
@@ -1304,15 +1304,15 @@ input[type="checkbox"]:focus-visible{outline:2px solid var(--scan,var(--brand));
 .finding-priority{display:inline-flex;align-items:center;gap:7px;color:var(--finding-tone-text,var(--paper-muted))}
 .finding-priority::before{content:"";flex:none;width:7px;height:7px;border-radius:999px;background:var(--finding-tone,currentColor)}
 .finding-card h4{font-family:var(--display-serif);font-size:18px;line-height:1.25;margin:0 0 7px;color:var(--paper-ink)}
-.finding-card>p{font:400 14px/1.5 var(--sans);margin:0 0 10px;color:var(--paper-muted)}
+.finding-card>p{font:400 14px/1.5 var(--display-serif);margin:0 0 10px;color:var(--paper-muted)}
 .finding-evidence{background:var(--paper-2);border:1px dashed var(--paper-line);padding:8px 10px;margin:9px 0}
 .finding-evidence span,.finding-source>span{font:700 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted)}
-.finding-evidence p{font:500 13px/1.4 var(--sans);margin:3px 0 0;color:var(--paper-ink)}
+.finding-evidence p{font:500 13px/1.4 var(--display-serif);margin:3px 0 0;color:var(--paper-ink)}
 .finding-location{margin:10px 0}
-.finding-scope{font:600 12.5px/1.4 var(--sans);color:var(--paper-muted)}
+.finding-scope{font:600 12.5px/1.4 var(--display-serif);color:var(--paper-muted)}
 .finding-scope--jump{border:0;background:none;padding:0;color:var(--scan);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .finding-scope--muted{font-weight:400;font-style:italic}
-.finding-source{font:400 12px/1.45 var(--sans);margin-top:8px;color:var(--paper-muted);overflow-wrap:anywhere}
+.finding-source{font:400 12px/1.45 var(--display-serif);margin-top:8px;color:var(--paper-muted);overflow-wrap:anywhere}
 .finding-source a{color:var(--scan)}
 .finding-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;min-height:1px}
 .finding-ignore-form{display:flex;align-items:end;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--paper-line)}
@@ -1321,14 +1321,14 @@ input[type="checkbox"]:focus-visible{outline:2px solid var(--scan,var(--brand));
 .finding-ignore-form small{display:block;margin-top:4px;font:400 11px/1.35 var(--sans);color:var(--paper-muted)}
 .finding-ignore-buttons{display:flex;gap:7px;flex-wrap:wrap}
 .finding-ignored-reason{font-style:italic}
-.finding-status-note{margin:10px 0 0;font:600 12px/1.45 var(--sans)!important;color:var(--paper-muted)!important}
+.finding-status-note{margin:10px 0 0;font:600 12px/1.45 var(--display-serif)!important;color:var(--paper-muted)!important}
 @media(max-width:900px){.finding-list--top{grid-template-columns:1fr}}
 @media(max-width:720px){
   .lek-head-cta{display:none}
   #analyzer{padding-top:8px}
   .lek-head-copy h1{font-size:clamp(27px,8vw,34px);line-height:1.03;margin-top:7px}
   .lek-head-copy h1 br{display:none}
-  .lek-head-copy .lek-top-lead{font-family:var(--sans);font-size:16px;line-height:1.38;margin-top:9px;max-width:none}
+  .lek-head-copy .lek-top-lead{font-family:var(--display-serif);font-size:16px;line-height:1.38;margin-top:9px;max-width:none}
   .analyzer-wrap{box-shadow:none}
   /* TRAKA KORAKA OSTAJE I NA MOBITELU, samo zbijena.
  *
@@ -1434,9 +1434,9 @@ a.mw-item-name:hover{text-decoration:underline}
 .ap-ustanova{font:400 clamp(1.05rem,2vw,1.3rem)/1.2 var(--display-serif);color:var(--paper-ink);letter-spacing:-.01em}
 .ap-studij{font:400 .98rem/1.35 var(--display-serif);color:var(--paper-ink)}
 .ap-vrsta{font:500 .86rem/1.4 var(--sans);color:var(--paper-muted)}
-.ap-red{display:flex;gap:8px;align-items:baseline;margin-top:9px;font:500 .8rem/1.4 var(--sans);color:var(--paper-muted)}
+.ap-red{display:flex;gap:8px;align-items:baseline;margin-top:9px;font:500 .8rem/1.4 var(--display-serif);color:var(--paper-muted)}
 .ap-red b{font-weight:650;color:var(--paper-ink);font-variant-numeric:tabular-nums}
-.ap-upozorenje{margin:0;padding:10px 12px;border-radius:8px;font:500 .86rem/1.5 var(--sans);
+.ap-upozorenje{margin:0;padding:10px 12px;border-radius:8px;font:500 .86rem/1.5 var(--display-serif);
   color:var(--paper-ink);background:color-mix(in srgb,var(--brand) 10%,transparent);
   border:1px solid color-mix(in srgb,var(--brand) 30%,transparent)}
 .ap-akcije{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
