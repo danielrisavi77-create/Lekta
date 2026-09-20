@@ -152,6 +152,29 @@ describe('preklopnik popravka', () => {
     expect(host.querySelector<HTMLElement>('[data-pr="scope"]')!.hidden).toBe(true);
   });
 
+  /**
+   * ATRIBUT `hidden` SAM NE SKRIVA NISTA kad autorski CSS elementu daje `display`.
+   *
+   * Tvrdnja iznad je prolazila, a preglednik bi opseg svejedno crtao: `.pr-scope{display:grid}` je
+   * AUTORSKO pravilo i pobjedjuje UA pravilo `[hidden]{display:none}` bez obzira na specificnost.
+   * Zato repozitorij i ima `.tab-details[hidden]`, `.result-details[hidden]` i `.ks-video-play[hidden]`
+   * u `page-app.css`; globalnog `[hidden]` pravila NEMA.
+   *
+   * Ovo je onaj razred laznog zelenog gdje gard mjeri svojstvo u DOM-u, a ne ono sto se nacrta, pa
+   * se mjeri CSS: `opseg.hidden === true` je istina i kad je element vidljiv.
+   */
+  it('CSS stvarno skriva opseg, ne samo atribut hidden', () => {
+    const css = read('src/shared/pricing-receipt.css').replace(/\s+/g, '');
+    expect(css).toContain('.pr-scope[hidden]{display:none');
+  });
+
+  it('MUTACIJA: bez pravila .pr-scope[hidden] gard pada', () => {
+    const mutirano = read('src/shared/pricing-receipt.css')
+      .replace('.pr-scope[hidden] { display: none; }', '')
+      .replace(/\s+/g, '');
+    expect(mutirano).not.toContain('.pr-scope[hidden]{display:none');
+  });
+
   it('IZNOS NE OVISI O BROJU ZAHVATA: plan s 1 i plan s 9 daju isti iznos', () => {
     const jedan = mount();
     const a = renderPricingReceipt(jedan, {
