@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { prepareJob, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
+import { readFileSync } from 'node:fs';
+import { prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -107,7 +108,20 @@ describe('provider results do not replace verification', () => {
     expect(parseResult('grok', liveShape, 0))
       .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
     expect(parseResult('grok', JSON.stringify({ text: '', stopReason: 'end_turn', num_turns: 1, modelUsage: {} }), 0).ok).toBe(false);
+    expect(parseResult('grok', '{"type":"result","is_error":false,"model":"grok-4.6"}', 0).ok).toBe(false);
     expect(parseResult('grok', '{"type":"result","is_error":true,"model":"grok-4.6"}', 0).ok).toBe(false);
+  });
+  it('accepts the captured Grok 1.0.34 contract fixture', () => {
+    const stdout = readFileSync('tests/fixtures/grok-result-1.0.34.json', 'utf8');
+    expect(parseResult('grok', stdout, 0))
+      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+  });
+  it('classifies Grok versions against the verified minimum', () => {
+    expect(parseGrokVersion('grok 1.0.34 (3736acbc8658)'))
+      .toEqual({ version: '1.0.34', supported: true });
+    expect(parseGrokVersion('grok 1.0.33 (old)'))
+      .toEqual({ version: '1.0.33', supported: false });
+    expect(parseGrokVersion('unexpected')).toEqual({ version: null, supported: false });
   });
 });
 
