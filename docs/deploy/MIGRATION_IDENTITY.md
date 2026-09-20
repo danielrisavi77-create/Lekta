@@ -253,6 +253,20 @@ endpoint projekta ni token-oblik Bearer kljuca izvan SQL komentara, i da je svak
 `cron.unschedule` zasticen. Mutacija koja dokazuje da gard grize je
 `migracija/tvrd-kljuc-i-nezasticen-unschedule` u `tests/gate-mutations.test.ts`.
 
+DRUGI KRUG PREGLEDA (isti dan) nasao je da je i sam gard imao rupu, i to bas u obliku kvara koji
+lovi. Zastita je priznavala dva oblika, `begin ... exception when others` i
+`if exists (select 1 from cron.job ...)`. Prvi je bio omedjen (prozor unaprijed staje na prvom
+`begin`, pa se rukovatelj iz kasnijeg nepovezanog bloka ne moze posuditi), drugi nije bio omedjen
+nikako: gledao je cijeli prefiks tijela `do` bloka. Posljedica je izmjerena nad gardom kakav je
+bio commitan: migracija koja vodi DVA posla, prvi zastiti `if exists` provjerom pa je zatvori s
+`end if`, a drugi zaboravi, prolazila je kao CISTA. To je doslovno blokator zbog kojeg ovaj
+odjeljak postoji, a oblik nije izmisljen: 0016 i 0019 vec vode dva posla u jednom bloku.
+Popravljeno tako da se sada trazi oboje, da je `if` blok te provjere na mjestu poziva jos OTVOREN
+(balans `if` naspram `end if`, pa ugnijezdene provjere i dalje prolaze) i da provjera imenuje BAS
+taj posao kad su oba imena doslovna. Pokriveno s tri nova testa u
+`tests/migration-secrets-hygiene.test.ts` (dva hvataju, jedan je negativna kontrola nad
+ugnijezdenim ispravnim oblikom) i prosirenom mutacijom u `tests/gate-mutations.test.ts`.
+
 ### Sto mora napraviti vlasnik, RUCNO, na produkciji
 
 Produkcija `zrrjttizjyfcxmcpgzml` ima 0059 VEC primijenjenu (verzija je zapisana u dnevniku).

@@ -2308,10 +2308,29 @@ const MUTATIONS: Mutation[] = [
           "headers := jsonb_build_object(''Authorization'', ''Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXX''));');",
       }];
       const kinds = migrationHygieneProblems(mutated).map((p) => p.kind);
+
+      // Drugi oblik istog kvara, dodan nakon drugog kruga pregleda (2026-09-20): migracija koja
+      // vodi DVA posla, prvi zastiti `if exists` provjerom, drugi zaboravi. Gard je taj oblik do
+      // ispravka prijavljivao kao CIST, jer je pogled unatrag gledao cijeli prefiks tijela bloka.
+      const borrowed = [{
+        file: '9999_borrowed_guard.sql',
+        sql: [
+          'do $$',
+          'begin',
+          "  if exists (select 1 from cron.job where jobname = 'purge-x') then",
+          "    perform cron.unschedule('purge-x');",
+          '  end if;',
+          "  perform cron.unschedule('send-deadline-reminders');",
+          'end $$;',
+        ].join('\n'),
+      }];
+      const borrowedKinds = migrationHygieneProblems(borrowed).map((p) => p.kind);
+
       return (
         kinds.includes('hardcoded-endpoint') &&
         kinds.includes('bearer-literal') &&
-        kinds.includes('unguarded-unschedule')
+        kinds.includes('unguarded-unschedule') &&
+        borrowedKinds.includes('unguarded-unschedule')
       );
     },
     // Baseline nad STVARNIM datotekama na disku: bez njega bi mutacija mogla "prolaziti" zato

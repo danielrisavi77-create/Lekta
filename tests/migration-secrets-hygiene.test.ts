@@ -208,4 +208,69 @@ describe('migration-hygiene gard grize', () => {
     ];
     expect(migrationHygieneProblems(alt)).toEqual([]);
   });
+
+  /**
+   * Nalaz drugog kruga pregleda (2026-09-20): pogled UNATRAG nije bio omedjen, pa je JEDAN
+   * `if exists (select 1 from cron.job ...)` bilo gdje ranije u istom `do` bloku proglasavao
+   * zasticenima sve kasnije pozive. Oblik nije izmisljen: 0016 i 0019 vec vode dva posla u jednom
+   * bloku, pa je "zastiti prvi, zaboravi drugi" ocekivana buduca greska. Izmjereno nad gardom
+   * kakav je bio commitan u 74491b44: `migrationHygieneProblems` je nad ovim ulazom vracao PRAZAN
+   * popis, a `db push` bi pao s XX000, dakle bas blokator zbog kojeg ovaj gard postoji.
+   */
+  it('ne da se prevariti if-exists zastitom koja je ZATVORENA prije poziva', () => {
+    const mutated = [{
+      file: '9999_two_jobs.sql',
+      sql: [
+        'do $$',
+        'begin',
+        "  if exists (select 1 from cron.job where jobname = 'purge-x') then",
+        "    perform cron.unschedule('purge-x');",
+        '  end if;',
+        "  perform cron.unschedule('send-deadline-reminders');",
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
+  });
+
+  /**
+   * Druga polovica iste zastite: provjera mora imenovati BAS onaj posao koji se gasi. Ovdje je
+   * blok jos otvoren, pa ga balans `if`/`end if` ne odbacuje; odbacuje ga tek usporedba imena.
+   */
+  it('ne prihvaca if-exists nad DRUGIM poslom, i kad je blok jos otvoren', () => {
+    const mutated = [{
+      file: '9999_wrong_job.sql',
+      sql: [
+        'do $$',
+        'begin',
+        "  if exists (select 1 from cron.job where jobname = 'purge-x') then",
+        "    perform cron.unschedule('send-deadline-reminders');",
+        '  end if;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
+  });
+
+  /**
+   * Negativna kontrola za gornja dva: omedjivanje ne smije poceti prijavljivati ISPRAVAN kod.
+   * Ugnijezdeni `if ... end if` ponisti sam sebe i ne zatvara roditeljsku zastitu.
+   */
+  it('prihvaca ugnijezdene if-exists zastite nad dva posla', () => {
+    const alt = [{
+      file: '9999_nested.sql',
+      sql: [
+        'do $$',
+        'begin',
+        "  if exists (select 1 from cron.job where jobname = 'a') then",
+        "    if exists (select 1 from cron.job where jobname = 'b') then",
+        "      perform cron.unschedule('b');",
+        '    end if;',
+        "    perform cron.unschedule('a');",
+        '  end if;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(alt)).toEqual([]);
+  });
 });

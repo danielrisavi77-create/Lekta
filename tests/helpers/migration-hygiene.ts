@@ -170,12 +170,47 @@ const UNSCHEDULE_CALL = /cron\.unschedule\s*\(/gi;
 /** Idiom ovog repozitorija (0009, 0011, 0016, 0018, 0019, 0022, 0034, 0054). */
 const EXCEPTION_GUARD = /exception\s+when\s+others/i;
 /** Drugi valjan oblik: izricita provjera postojanja posla prije gasenja. */
-const JOB_EXISTS_GUARD = /if\s+exists\s*\(\s*select\s+1\s+from\s+cron\.job/i;
+const JOB_EXISTS_GUARD = /if\s+exists\s*\(\s*select\s+1\s+from\s+cron\.job\b/gi;
+/** Ime posla unutar uvjeta te provjere; bez njega se zastita ne moze vezati uz konkretan posao. */
+const GUARD_JOBNAME = /\bjobname\s*=\s*'((?:[^']|'')*)'/i;
+/** Granice `if ... end if` bloka. `end if` je naveden PRVI da ne bude pojeden kracom alternacijom. */
+const IF_BOUNDARY = /\bend\s+if\b|\bif\b/gi;
+/** Doslovan argument `cron.unschedule('ime')`; varijabla ili izraz ne daju ime. */
+const UNSCHEDULE_LITERAL_ARG = /^\s*'((?:[^']|'')*)'/;
 
 function lineOf(text: string, index: number): number {
   let line = 1;
   for (let i = 0; i < index && i < text.length; i += 1) if (text[i] === '\n') line += 1;
   return line;
+}
+
+/** Doslovno ime posla odmah iza otvorene zagrade poziva, ili null kad argument nije niz. */
+function literalJobName(stripped: string, after: number): string | null {
+  const hit = UNSCHEDULE_LITERAL_ARG.exec(stripped.slice(after, after + 200));
+  return hit ? hit[1].replace(/''/g, "'") : null;
+}
+
+/**
+ * Je li `if` blok koji je poceo prije `text` jos otvoren na kraju `text`.
+ *
+ * Broji se balans: `if` otvara, `end if` zatvara. Cim balans padne ispod nule, blok koji nas
+ * zanima je ZATVOREN, pa sve iza njega vise nije pod njegovom zastitom. Ugnijezdeni `if ... end if`
+ * se pritom ponisti sam sa sobom i ne zatvara roditelja.
+ */
+function ifBlockStillOpen(text: string): boolean {
+  IF_BOUNDARY.lastIndex = 0;
+  let depth = 0;
+  for (;;) {
+    const hit = IF_BOUNDARY.exec(text);
+    if (!hit) break;
+    if (hit[0][0] === 'e' || hit[0][0] === 'E') {
+      depth -= 1;
+      if (depth < 0) return false;
+    } else {
+      depth += 1;
+    }
+  }
+  return true;
 }
 
 /**
@@ -186,18 +221,46 @@ function lineOf(text: string, index: number): number {
  * `if exists (select 1 from cron.job where jobname = ...)`. Gard mora ostati SIGURNOSNI, ne
  * stilski, inace postane prepreka ispravnom kodu.
  *
- * Prozor unaprijed staje na PRVOM `begin` ili `end`, sto god dodje prije. Bez zaustavljanja na
- * `begin` gard ne grize: nezasticen unschedule na vrhu bloka "posudio" bi `exception when others`
- * iz nekog kasnijeg, nepovezanog `begin ... end` bloka u istoj migraciji i prosao vakuumski.
+ * OBA SMJERA MORAJU BITI OMEDJENA, i to je ispravak nalaza iz drugog kruga pregleda (2026-09-20).
+ * Prozor UNAPRIJED je oduvijek stajao na prvom `begin` ili `end`, pa se rukovatelj iz kasnijeg,
+ * nepovezanog bloka ne moze posuditi. Pogled UNATRAG te zastite isprva NIJE imao: gledao je cijeli
+ * prefiks tijela, pa je JEDAN `if exists (select 1 from cron.job ...)` bilo gdje ranije u istom
+ * `do` bloku tiho proglasavao zasticenima sve kasnije pozive. Tocno taj oblik (migracija koja vodi
+ * DVA posla, prvi zasticen, drugi zaboravljen) reproducira blokator zbog kojeg ovaj gard postoji,
+ * a gard bi ga prijavio kao cist. Zato se sada trazi oboje:
+ *   1. `if` blok te provjere jos je OTVOREN na mjestu poziva (balans `if` / `end if`), i
+ *   2. provjera imenuje BAS taj posao, kad su oba imena doslovna.
+ * Kad ime nije doslovno (varijabla), usporedba se preskace i odlucuje samo balans; to je
+ * svjesna granica garda, ne previd.
  */
 function unscheduleIsGuarded(stripped: string, body: DollarBody, at: number, len: number): boolean {
-  const before = stripped.slice(body.start, at);
-  if (JOB_EXISTS_GUARD.test(before)) return true;
-
   const rest = stripped.slice(at + len, body.end);
   const stop = /\b(begin|end)\b/i.exec(rest);
   const window = stop ? rest.slice(0, stop.index) : rest;
-  return EXCEPTION_GUARD.test(window);
+  if (EXCEPTION_GUARD.test(window)) return true;
+
+  const before = stripped.slice(body.start, at);
+  const jobName = literalJobName(stripped, at + len);
+
+  JOB_EXISTS_GUARD.lastIndex = 0;
+  const candidates: { end: number; name: string | null }[] = [];
+  for (;;) {
+    const hit = JOB_EXISTS_GUARD.exec(before);
+    if (!hit) break;
+    const end = hit.index + hit[0].length;
+    const condition = before.slice(end, end + 200).split(')')[0] ?? '';
+    const named = GUARD_JOBNAME.exec(condition);
+    candidates.push({ end, name: named ? named[1].replace(/''/g, "'") : null });
+  }
+
+  for (let k = candidates.length - 1; k >= 0; k -= 1) {
+    const candidate = candidates[k];
+    if (!ifBlockStillOpen(before.slice(candidate.end))) continue;
+    if (jobName !== null && candidate.name !== null && candidate.name !== jobName) continue;
+    return true;
+  }
+
+  return false;
 }
 
 /** Sve povrede higijene nad zadanim skupom migracija. Prazan niz znaci cisto. */
