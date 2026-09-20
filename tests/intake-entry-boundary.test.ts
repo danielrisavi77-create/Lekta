@@ -105,7 +105,14 @@ describe('cisti ulaz /', () => {
     expect(html).toMatch(/id="intakeStatus"[^>]*aria-live="polite"/);
     expect(html).toMatch(/id="intakeError"[^>]*role="alert"/);
     expect(html).toMatch(/id="intakeFile"[^>]*tabindex="-1"[^>]*aria-hidden="true"/);
-    expect(html).toMatch(/id="intakeDropzone"[^>]*role="button"[^>]*tabindex="0"/);
+    // ULOGA GUMBA JE OD PREGLEDA Z7 NA UNUTARNJEM OMOTACU: dok je stajala na plohi, tri koraka i
+    // podnozje papira bili su njezini potomci, dakle po ARIA specifikaciji prezentacijski i
+    // nedostupni citacu ekrana. Ploha zadrzava ID, jer o njemu vise kontroler i ulazna sekvenca,
+    // pa se klik i ispustanje (dakle tok uploada) ovim ne mijenjaju.
+    expect(html).toMatch(/id="intakeDropzone"[^>]*aria-busy="false"/);
+    expect(html, 'uloga gumba se vratila na plohu').not.toMatch(/id="intakeDropzone"[^>]*role="button"/);
+    expect(html).toMatch(/class="intake-paper__gumb"[^>]*role="button"[^>]*tabindex="0"/);
+    expect(html).toMatch(/class="intake-paper__gumb"[^>]*aria-label="[^"]+"/);
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
     expect(new Set(ids).size).toBe(ids.length);
   });

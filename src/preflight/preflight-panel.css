@@ -82,7 +82,6 @@
   padding: 0.6rem 0.8rem;
   border-radius: 0.55rem;
   background: var(--surface-muted, #f6f5f2);
-  border-left: 3px solid var(--brand, #1d3fbf);
   font-size: 0.9rem;
   margin-bottom: 0.85rem;
 }
@@ -120,18 +119,18 @@
 .pf-finding {
   padding: 0.7rem 0.85rem;
   border-radius: 0.55rem;
-  border-left: 3px solid var(--muted, #9ca3af);
   background: var(--card, #fff);
   border: 1px solid var(--line, #e4e4e7);
-  border-left-width: 3px;
   margin-bottom: 0.55rem;
 }
-.pf-finding h5 { margin: 0 0 0.25rem; font-size: 0.92rem; }
+/* Ton nalaza nosi tocka uz naslov, ne lijevi rub (design/README.md, pravilo 3; Z3). */
+.pf-finding h5 { display: flex; align-items: center; gap: 7px; margin: 0 0 0.25rem; font-size: 0.92rem; }
+.pf-finding h5::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 999px; background: var(--pf-tone, var(--muted, #9ca3af)); }
 .pf-finding p { margin: 0.15rem 0; font-size: 0.88rem; color: var(--ink, #191d23); }
-.pf-finding.pf-good { border-left-color: var(--ok, #1d6b3f); }
-.pf-finding.pf-warn { border-left-color: #96700a; }
-.pf-finding.pf-bad { border-left-color: #b3261e; }
-.pf-finding.pf-neutral { border-left-color: var(--muted, #9ca3af); }
+.pf-finding.pf-good { --pf-tone: var(--ok, #1d6b3f); }
+.pf-finding.pf-warn { --pf-tone: #96700a; }
+.pf-finding.pf-bad { --pf-tone: #b3261e; }
+.pf-finding.pf-neutral { --pf-tone: var(--muted, #9ca3af); }
 
 .pf-evidence {
   margin: 0.35rem 0 0;

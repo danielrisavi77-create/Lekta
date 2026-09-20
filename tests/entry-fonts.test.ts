@@ -36,7 +36,43 @@ const SUSTAVNE = new Set([
   'segoe ui emoji', 'segoe ui symbol', 'emoji',
 ]);
 
+/**
+ * PISMA KOJA KORISNIK INSTALIRA SAM, i koja se NAMJERNO ne ucitavaju (Z6, `--display-serif` pod
+ * `data-reading-font="dyslexic"`).
+ *
+ * Gard inace tvrdi tocno suprotno ("ime bez ijednog @font-face je uvijek kvar"), i to s razlogom:
+ * preglednik tiho uzme sljedecu obitelj. Ovdje je to POSLJEDICA KOJU SE ZELI, a ne promasaj:
+ * OpenDyslexic i Atkinson Hyperlegible se ne smiju skidati svima koji ih ne trebaju, a lanac
+ * zavrsava na `var(--ui)`, koji JEST ucitan. Iznimka je zato imenovana i uska, ne prosirenje
+ * `SUSTAVNE`: bilo koje trece ime i dalje pada. Gard nad krajem lanca:
+ * `tests/display-settings.test.ts`.
+ */
+const LOKALNE = new Set(['opendyslexic', 'atkinson hyperlegible']);
+
+/** Obitelj koju nista ne ucitava, a to nije kvar: sustavna ili izricito dopustena lokalna. */
+const smijeBezFonta = (ime: string): boolean => {
+  const k = ime.toLowerCase();
+  return SUSTAVNE.has(k) || LOKALNE.has(k);
+};
+
 interface Nalaz { vrsta: 'nepoznat-token' | 'obitelj-bez-fonta'; selektor: string; detalj: string }
+
+/**
+ * Vrijednost koja po OBLIKU ne moze biti ime obitelji: duljina, goli broj ili izracun.
+ *
+ * Ovo je zamjena za pozicijsku heuristiku "obitelj je zadnja referenca". Pozicija je bila tocna
+ * samo za oblik koji je Z5 zatekao (`font: <tezina> var(--velicina)/<broj> var(--obitelj)`), a
+ * pada na dva oblika koja CSS jednako dopusta:
+ *   `font: 700 var(--fs-ui)/var(--lh) Georgia, serif`  zadnja referenca je VISINA RETKA
+ *   `font-family: var(--primary), var(--fallback)`     zadnja referenca je FALLBACK, ne ono
+ *                                                      sto se crta
+ * Oblik vrijednosti ne ovisi o redoslijedu, pa oba citanja daju isti ishod.
+ */
+function nijeObitelj(vrijednost: string): boolean {
+  const v = vrijednost.trim();
+  if (/^(clamp|calc|min|max)\s*\(/i.test(v)) return true;
+  return /^[+-]?[0-9.]+(px|rem|em|%|vw|vh|vmin|vmax|pt|pc|cm|mm|in|ch|ex|q)?$/i.test(v);
+}
 
 interface Ulaz {
   /** Sadrzaj svakog CSS lista koji ulaz ucitava. */
@@ -72,7 +108,21 @@ function pravila(css: string): Array<{ selektor: string; tijelo: string }> {
   return out;
 }
 
-export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi: Nalaz[]; obitelji: Set<string> } {
+/**
+ * KOMENTARI NISU PODACI, i to vrijedi za OBJE polovice ovog lista.
+ *
+ * Globalni gard (`imenaBezFonta`) je komentare skidao od pocetka, jer je proza `--ink-serif:` u
+ * biljesci davala obitelji "Word" i "list papira". Provjera ULAZA to nije radila, i rupa je bila
+ * latentna tocno dok ulaz nije imao nijednu mono metu: `design-system.css` u uvodnoj biljesci
+ * pise `(--mono: brojevi, score, rule-kodovi, statusi, eyebrows)`, pa je citac tu recenicu citao
+ * kao definiciju tokena i prijavljivao obitelj "brojevi" koju nista ne ucitava. Izmjereno u Z7,
+ * cim je papir dobio mono oznake: pet laznih nalaza na pet selektora.
+ */
+const bezKomentara = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, ' ');
+
+export function provjeriGlasove(ulaz: Ulaz): { nalazi: Nalaz[]; obitelji: Set<string> } {
+  const { html, ucitane } = ulaz;
+  const cssTekstovi = ulaz.cssTekstovi.map(bezKomentara);
   const klase = new Set<string>();
   for (const m of html.matchAll(/class="([^"]+)"/g)) m[1].split(/\s+/).forEach((c) => c && klase.add(c));
   const ids = new Set(Array.from(html.matchAll(/id="([^"]+)"/g), (m) => m[1]));
@@ -120,9 +170,8 @@ export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi:
       for (const m of tijelo.matchAll(/(?:^|[;{\s])font(?:-family)?\s*:\s*([^;}]+)/g)) {
         const vrijednost = m[1];
         // `var(--x)` bez fallbacka i `var(--x, fallback)`: oba nose ime tokena.
-        const ref = vrijednost.match(/var\(\s*(--[\w-]+)\s*(?:,([^)]*))?\)/);
-        if (!ref) continue;
-        const definicije = tokeni.get(ref[1]);
+        const reference = [...vrijednost.matchAll(/var\(\s*(--[\w-]+)\s*(?:,([^)]*))?\)/g)];
+        if (reference.length === 0) continue;
         // NEPOZNAT TOKEN SE PRIJAVLJUJE UVIJEK, i za selektor koji podudaranje ne vidi.
         //
         // Podudaranje selektora zna biti prekratko: `.skip-link` element UBACUJE JavaScript, pa ga
@@ -130,16 +179,30 @@ export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi:
         // token koji ne postoji (zove se `--sans`), pa je fallback na SVIH 14 ruta hvatao "Inter
         // Variable", obitelj koju nista ne ucitava. Nepostojeci token je kvar bez obzira na to
         // koga selektor pogadja: vrijednost tada bira fallback, dakle slucaj, a ne autor.
-        if (definicije === undefined) {
-          nalazi.push({ vrsta: 'nepoznat-token', selektor, detalj: `${ref[1]} nije definiran nigdje u listovima ulaza` });
-          continue;
+        // Provjeravaju se SVE reference u deklaraciji, ne samo prva: kratica `font:` ih od Z5
+        // (tipografska ljestvica) nosi dvije, velicinu i obitelj.
+        const nepoznati = reference.filter((r) => tokeni.get(r[1]) === undefined);
+        for (const r of nepoznati) {
+          nalazi.push({ vrsta: 'nepoznat-token', selektor, detalj: `${r[1]} nije definiran nigdje u listovima ulaza` });
         }
+        if (nepoznati.length > 0) continue;
+        // OBITELJ JE PRVA REFERENCA KOJA PO OBLIKU MOZE BITI OBITELJ, ne prva i ne zadnja.
+        //
+        // Do Z6 je ovdje stajalo "zadnja referenca", sto je bilo tocno samo za oblik koji je Z5
+        // zatekao. `font: 700 var(--fs-ui)/var(--lh) Georgia, serif` zadnjom referencom cini
+        // VISINU RETKA, a `font-family: var(--primary), var(--fallback)` fallback, dakle ono sto
+        // se NE crta dok je prva ucitana. Oblik (duljina, broj, clamp) se cita iz vrijednosti, pa
+        // ne ovisi o redoslijedu; vidi `nijeObitelj`.
+        const ref = reference.find((r) => (tokeni.get(r[1]) ?? []).some((d) => !nijeObitelj(d)));
+        if (ref === undefined) continue;
+        const definicije = tokeni.get(ref[1]);
+        if (definicije === undefined) continue;
         // Obitelj se provjerava samo ako selektor uopce moze pogoditi stranicu: pravilo koje se
         // nikad ne primijeni ne crta nista, pa bi prijava bila lazna uzbuna.
         if (!mozePogoditi(selektor)) continue;
         for (const prva of new Set(definicije.flatMap((d) => razrijesi(d)))) {
           obitelji.add(prva);
-          if (SUSTAVNE.has(prva.toLowerCase())) continue;
+          if (smijeBezFonta(prva)) continue;
           if (!ucitane.has(prva)) {
             nalazi.push({ vrsta: 'obitelj-bez-fonta', selektor, detalj: `${ref[1]} trazi "${prva}", a ulaz za nju ne ucitava @font-face` });
           }
@@ -184,6 +247,12 @@ describe('glasovi ulaza /', () => {
   });
 
   it('ulaz ucitava TOCNO dva glasa: Newsreader govori, Inter Tight oznacava', () => {
+    // BROJ JE OSTAO DVA I KROZ Z7, iako je papir ulaza preslozen u obrazac i time dobio mete koje
+    // `design/README.md` drzi podatkovnim glasom (broj lista, oznake zaglavlja, pecat, brojevi
+    // koraka). Prvi prolaz Z7 je zbog njih uveo treci glas i ovu tvrdnju prosirio na tri imena;
+    // pregled je to odbio, jer nalog Z7 izricito kaze "NE dodaj nikakav webfont", pa je gard bio
+    // prilagodjen promjeni umjesto obrnuto. Mete se zato crtaju `var(--ui)`-jem uz mjeru (11px),
+    // razmak slova i rez; ako vlasnik ikad odluci drukcije, mijenja se OVA tvrdnja, svjesno.
     const { ucitane } = ulazSaDiska();
     expect([...ucitane].sort()).toEqual(['Inter Tight Variable', 'Newsreader Variable']);
   });
@@ -194,6 +263,13 @@ describe('glasovi ulaza /', () => {
     const graf = [...collectStaticGraph(ULAZ)].map((p) => p.split(/[\\/]/).join('/'));
     expect(graf.filter((p) => p.endsWith('/src/shared/fonts-document.ts'))).toEqual([]);
     expect(graf.some((p) => p.endsWith('/src/shared/fonts-core.ts'))).toBe(true);
+    // IMENOVANA ZABRANA ZA MODUL KOJI JE POSTOJAO. Prvi prolaz Z7 je mono doveo kroz zaseban
+    // `src/shared/fonts-data.ts`, dakle mimo glasa dokumenta, pa ga tvrdnja iznad ne bi vidjela.
+    // Modul je uklonjen; ova tvrdnja cuva da se ne vrati sporednim vratima.
+    expect(graf.filter((p) => p.endsWith('/src/shared/fonts-data.ts'))).toEqual([]);
+    const { ucitane } = ulazSaDiska();
+    expect([...ucitane]).not.toContain('Source Serif 4 Variable');
+    expect([...ucitane]).not.toContain('IBM Plex Mono');
   });
 
   it('rute s dokumentima I DALJE nose podatkovne glasove', () => {
@@ -267,8 +343,6 @@ describe('glasovi ulaza /', () => {
     return rep.length ? rep.join(' ') : null;
   }
 
-  /** Komentari NISU podaci: `--ink-serif:` u proznom komentaru davao je "Word" i "list papira". */
-  const bezKomentara = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, ' ');
 
   /** Cisti dio globalnog garda, izdvojen da se moze mutirati sintetskim ulazom. */
   function imenaBezFonta(listovi: Array<{ ime: string; css: string }>, ucitane: Set<string>): string[] {
@@ -277,7 +351,7 @@ describe('glasovi ulaza /', () => {
       const css = bezKomentara(sirovo);
       const provjeri = (vrijednost: string, oznaka: string): void => {
         const ime = prvaObitelj(vrijednost);
-        if (!ime || SUSTAVNE.has(ime.toLowerCase()) || ucitane.has(ime)) return;
+        if (!ime || smijeBezFonta(ime) || ucitane.has(ime)) return;
         nalazi.push(`${kratko}: ${oznaka}"${ime}"`);
       };
       for (const { tijelo } of pravila(css)) {
@@ -332,6 +406,94 @@ describe('glasovi ulaza /', () => {
     expect(nalazi[0].detalj).toContain('Caveat');
   });
 
+  it('kratica `font:` s tokeniziranom velicinom (Z5): obitelj se bira po OBLIKU vrijednosti', () => {
+    // Kontrola: velicina kao token nije obitelj, pa ispravno napisana kratica mora biti cista.
+    // Bez ovoga je `var(--fs-kicker)` razrjesavan u "clamp(.84rem" i prijavljivan kao obitelj.
+    const listovi = ':root{--fs-kicker:clamp(.84rem,1.7vw,.98rem);--display-serif:"Newsreader Variable",serif}';
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [listovi + '.x{font:italic 500 var(--fs-kicker)/1.3 var(--display-serif)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi).toEqual([]);
+    // Mutacija: kvar u obitelji se kroz istu kraticu I DALJE vidi (gard nije samo usutkan).
+    const kvar = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--fs-kicker:clamp(.84rem,1.7vw,.98rem);--display-serif:"Caveat",cursive}'
+        + '.x{font:italic 500 var(--fs-kicker)/1.3 var(--display-serif)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi;
+    expect(kvar.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(kvar[0].detalj).toContain('Caveat');
+    // Mutacija: nepostojeci token na MJESTU VELICINE se i dalje prijavljuje, iako nije obitelj.
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [listovi + '.x{font:italic 500 var(--fs-nema)/1.3 var(--display-serif)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi.map((n) => n.vrsta)).toEqual(['nepoznat-token']);
+  });
+
+  it('Z7: PROZA u komentaru nije definicija tokena, a stvarna definicija i dalje jest', () => {
+    // STVARAN NALAZ, ne izmisljen slucaj. `design-system.css` u uvodnoj biljesci pise
+    // `(--mono: brojevi, score, rule-kodovi, statusi, eyebrows)`. Dok ulaz nije imao nijednu mono
+    // metu, to nitko nije vidio; cim ih je Z7 papir dobio, gard je prijavio pet laznih nalaza s
+    // obitelji "brojevi". Provjera ulaza zato skida komentare, kao i globalna polovica lista.
+    const proza = '/* --mono: brojevi, score, statusi */';
+    const stvarno = ':root{--mono:"IBM Plex Mono",monospace}';
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [proza + stvarno + '.x{font-family:var(--mono)}'],
+      ucitane: new Set(['IBM Plex Mono']),
+    }).nalazi, 'proza u komentaru ne smije proizvesti obitelj').toEqual([]);
+    // MUTACIJA: ista recenica napisana kao STVARNA deklaracija mora i dalje pasti, inace bi
+    // skidanje komentara oslijepilo gard za pravi kvar.
+    const kvar = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--mono:brojevi,monospace}.x{font-family:var(--mono)}'],
+      ucitane: new Set(['IBM Plex Mono']),
+    }).nalazi;
+    expect(kvar.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(kvar[0].detalj).toContain('brojevi');
+  });
+  it('Z6: visina retka kao token NIJE obitelj (`font: 700 var(--fs-ui)/var(--lh) Georgia, serif`)', () => {
+    // Pozicijska heuristika ("zadnja referenca") je ovdje birala `--lh`, razrjesavala ga u "1.5" i
+    // prijavljivala broj kao obitelj bez fonta. Oblik vrijednosti to rjesava bez redoslijeda.
+    const tokeni = ':root{--fs-ui:.9rem;--lh:1.5;--display-serif:"Newsreader Variable",serif}';
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [tokeni + '.x{font: 700 var(--fs-ui)/var(--lh) Georgia, serif}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi).toEqual([]);
+    // MUTACIJA: cim ista kratica dobije referencu koja PO OBLIKU jest obitelj, gard je opet vidi.
+    const kvar = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--fs-ui:.9rem;--lh:1.5;--hand:"Caveat",cursive}'
+        + '.x{font: 700 var(--fs-ui)/var(--lh) var(--hand)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi;
+    expect(kvar.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(kvar[0].detalj).toContain('Caveat');
+  });
+
+  it('Z6: `font-family: var(--primary), var(--fallback)` mjeri PRVU, jer se ona crta', () => {
+    // Zadnja referenca je fallback, dakle ono sto se NE crta dok je prva ucitana. Kvar u prvoj se
+    // mora vidjeti i kad je fallback uredan.
+    const nalazi = provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--primary:"Caveat",cursive;--fallback:"Newsreader Variable",serif}'
+        + '.x{font-family: var(--primary), var(--fallback)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi;
+    expect(nalazi.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
+    expect(nalazi[0].detalj).toContain('--primary');
+    // Kontrola: uredna prva referenca je cista i kad je fallback obitelj bez fonta, jer se ne crta.
+    expect(provjeriGlasove({
+      html: '<div class="x">t</div>',
+      cssTekstovi: [':root{--primary:"Newsreader Variable",serif;--fallback:"Caveat",cursive}'
+        + '.x{font-family: var(--primary), var(--fallback)}'],
+      ucitane: new Set(['Newsreader Variable']),
+    }).nalazi).toEqual([]);
+  });
+
   it('mutacija: token koji ne postoji (kvar tipa --font-mono)', () => {
     const nalazi = provjeriGlasove({ ...OSNOVA, cssTekstovi: ['.x{font:650 11px/1.4 var(--font-mono,ui-monospace,monospace)}'] }).nalazi;
     expect(nalazi).toHaveLength(1);
@@ -384,6 +546,15 @@ describe('glasovi ulaza /', () => {
       + '.c{font:600 10px/1 var(--ui) !important}'
       + '.d{font-family:inherit}'
       + 'code{font-family:"IBM Plex Mono",ui-monospace,monospace}')).toEqual([]);
+  });
+
+  it('Z6: lokalno pismo za disleksiju je DOPUSTENO, bilo koje trece ime i dalje nije', () => {
+    // Kontrola: imenovana iznimka prolazi, i u tokenu i u deklaraciji.
+    expect(globalno(':root{--display-serif:"OpenDyslexic","Atkinson Hyperlegible",system-ui}')).toEqual([]);
+    expect(globalno('.a{font-family:"OpenDyslexic",system-ui}')).toEqual([]);
+    // MUTACIJA: iznimka je popis, ne rupa. Cetvrto ime pada kao i prije.
+    expect(globalno(':root{--display-serif:"Lexend Deca",system-ui}')).toEqual(['x.css: token -> "Lexend Deca"']);
+    expect(globalno('.a{font-family:"OpenDyslexicMono",system-ui}')).toEqual(['x.css: "OpenDyslexicMono"']);
   });
 
   it('mutacija: nevarijabilno ime uz varijabilni paket (kvar s demo.html)', () => {

@@ -1,7 +1,7 @@
-# LEKTA: koordinacija razvoja kroz Codex i Claude Code
+# LEKTA: koordinacija razvoja kroz Codex, Claude Code i Grok CLI
 
-GitHub cuva plan, red zadataka, promjene i dokaze. ChatGPT/Codex i Claude Code citaju isti
-repozitorij, ali ne dijele automatski razgovore, prijave ni memoriju. Ova prva verzija je
+GitHub cuva plan, red zadataka, promjene i dokaze. ChatGPT/Codex, Claude Code i Grok Build CLI
+citaju isti repozitorij, ali ne dijele automatski razgovore, prijave ni memoriju. Ova prva verzija je
 poluautomatska: lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
 rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi pozive.
 
@@ -11,20 +11,30 @@ rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi po
 | --- | --- | --- | --- |
 | Koordinator | Astra | `gpt-6-astra` | Prioriteti, brief, audit, pregled Claude implementacije |
 | Koordinator | Fable | `fable` | Prioriteti, brief, audit, pregled Sol implementacije |
+| Koordinator | Grok | `grok` | Prioriteti, brief, audit, pregled Codex/Claude implementacije |
 | Implementator | Opus | `opus` | Dodijeljena implementacija i dokazi |
 | Implementator | Sonnet | `sonnet` | Dodijeljena implementacija i dokazi |
 | Implementator | Sol | `gpt-5.6-sol` | Dodijeljena implementacija i dokazi |
+| Implementator | Build | `build` | Grok Build implementacija i dokazi (`command: grok`) |
 
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
 zadatka: izbor pratimo prema kvaliteti isporuke, ponovljenom radu, vremenu i stvarnoj potrosnji.
-Pregled treba drugi provider: Astra za Opus/Sonnet, Fable za Sol. Za netrivijalne promjene
-parsera, citata i DOCX-a ostaje obavezan adversarijalni pregled prema AGENTS.md.
+Pregled treba drugi provider (razlicit CLI `command`): Astra za Opus/Sonnet, Fable za Sol,
+Grok za Codex/Claude implementacije, a Codex/Claude za Build. Isti provider (npr. Grok pregleda
+Build) runner odbija. Za netrivijalne promjene parsera, citata i DOCX-a ostaje obavezan
+adversarijalni pregled prema AGENTS.md.
 
 ## Pocetak
 
-1. Instaliraj aktualne native Codex i Claude Code CLI alate i prijavi ih na svojem racunalu.
-   Provjeri `codex login status` i `claude auth status`. Skripta ne instalira alate niti prenosi prijave.
+1. Instaliraj aktualne native Codex, Claude Code i (po potrebi) Grok Build CLI alate i prijavi ih
+   na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login` (ili
+   `XAI_API_KEY` za headless). Grok: https://docs.x.ai/build/overview
+   (`curl -fsSL https://x.ai/cli/install.sh | bash` ili `npm install -g @xai-official/grok`).
+   Runner je verificiran s Grok CLI 1.0.34 i odbija oslanjanje na stariji JSON ugovor;
+   `doctor` oznacava instalaciju kao `supported` ili `unsupported; minimum 1.0.34`.
+   Skripta ne instalira alate niti prenosi prijave. Zadani model aliasa `grok`/`build` je `grok-4.6` (sluzbena preporuka za kod, 2026-09-20);
+   prilagodi u `scripts/agents/core.mjs` ako `grok models` pokaze drugaciji ID (npr. `grok-build-0.1`).
 2. Iz korijena repozitorija pokreni `npm run agents -- doctor` i `npm run agents -- list`.
 3. Pripremi prvi audit bez poziva modelu:
 
@@ -37,6 +47,12 @@ nije preporuka troska niti jamstvo iznosa na racunu:
 
 ```bash
 npm run agents -- prepare T00 --phase plan --agent fable --budget-usd 3
+```
+
+Isti audit preko Grok CLI (nema `--budget-usd`; auth je `grok login` ili `XAI_API_KEY`):
+
+```bash
+npm run agents -- prepare T00 --phase plan --agent grok
 ```
 
 Izlaz sadrzi model, argumente i cijeli prompt. `run` bez `--execute` takoder daje samo pripremu.
@@ -65,6 +81,7 @@ npm run agents -- run T01 --phase implement --agent opus --budget-usd 5 --execut
 ```
 
 Za Sonnet promijeni `--agent sonnet`. Za Sol koristi `--agent sol` i izostavi Claude budzet.
+Za Grok Build implementaciju koristi `--agent build` (takoder bez Claude budzeta).
 Priprema i implementacija citaju upute iz worktreea u kojem se naredba izvodi.
 Runner trazi cist worktree na zasebnoj grani prije implementacije. Lokalni Git lock dopusta
 samo jedan poziv ovog runnera odjednom preko svih worktreeva. Ne zakljucava GitHub ni druge
@@ -76,14 +93,21 @@ Runner nikad sam ne postavlja `done`, ne commita, ne pusha i ne objavljuje aplik
 Implementator vraca promjene i dokaze, a koordinator izvodi commit nakon svih postojecih
 provjera. To je podjela odgovornosti, ne zahtjev da vlasnik odobrava svaki commit.
 
-Za pregled postavi `status: "in_review"` i `implementationAgent: "opus"`, `"sonnet"` ili `"sol"`
-u zapisu zadatka. Pregled Opus/Sonnet promjene:
+Za pregled postavi `status: "in_review"` i `implementationAgent: "opus"`, `"sonnet"`, `"sol"` ili
+`"build"` u zapisu zadatka. Pregled Opus/Sonnet promjene:
 
 ```bash
 npm run agents -- run T01 --phase review --agent astra --execute
 ```
 
-Sol promjenu pregledava Fable, uz lokalno odabran `--budget-usd`. Preglednik cita diff/dokaze
+Sol promjenu pregledava Fable, uz lokalno odabran `--budget-usd`. Build (Grok) promjenu pregledava
+Astra ili Fable (drugi provider). Codex/Claude implementaciju moze pregledati Grok:
+
+```bash
+npm run agents -- run T01 --phase review --agent grok --execute
+```
+
+Preglednik cita diff/dokaze
 preko dostupnih alata; Claude pregled je ogranicen na citanje datoteka, pa mu koordinator
 prethodno sprema `git diff` i provjere u datoteke navedene u zadatku. Nalaze uvijek provjeri.
 
@@ -126,11 +150,16 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 - Nema automatskog nastavka, pokretanja podagenata ni automatskog spajanja grana.
   Claude koristi `dontAsk` i ogranicene alate; blokiranu potrebnu radnju izvrsi kroz svoju
   uobicajenu interaktivnu sesiju. Popis alata nije OS sandbox. Codex koristi svoj sandbox.
+  Grok koristi `--sandbox workspace` samo za implementaciju, a `--sandbox read-only` za plan i pregled;
+  `--always-approve` se dodaje samo implementaciji.
+- Ako Grok prijavi `bwrap: Creating new namespace failed: Operation not permitted`, rezultat sadrzi
+  dijagnostiku `grok_sandbox_unavailable`. Omoguci Bubblewrap/user namespace podrsku na hostu ili
+  pokreni runner na kompatibilnom hostu. Runner namjerno ne prelazi na `--sandbox off`.
 - CLI runner koristi native izvrsne datoteke. Ako Windows instalacija izlozi samo `.cmd`
   shim koji Node ne moze izravno pokrenuti, koristi native instalaciju ili pripremljeni
   prompt u interaktivnoj sesiji; runner ne ukljucuje shell radi zaobilazenja tog problema.
 
-## Sluzbeni izvori provjereni 2026-09-08
+## Sluzbeni izvori provjereni 2026-09-08 (Grok CLI dopuna 2026-09-20)
 
 - [Codex modeli](https://learn.chatgpt.com/docs/models)
 - [Codex neinteraktivni rad](https://learn.chatgpt.com/docs/non-interactive-mode)
@@ -138,6 +167,9 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 - [Claude CLI](https://code.claude.com/docs/en/cli-reference)
 - [Claude headless](https://code.claude.com/docs/en/headless)
 - [Claude autentifikacija](https://code.claude.com/docs/en/authentication)
+- [Grok Build overview](https://docs.x.ai/build/overview)
+- [Grok CLI reference](https://docs.x.ai/build/cli/reference)
+- [Grok headless & scripting](https://docs.x.ai/build/cli/headless-scripting)
 
 Lokalni testovi provjeravaju protokol i rukovanje rezultatima. Oni ne dokazuju da su
 racuni prijavljeni ili da je stvarni model isporucio kvalitetnu LEKTA promjenu.
@@ -145,8 +177,10 @@ racuni prijavljeni ili da je stvarni model isporucio kvalitetnu LEKTA promjenu.
 ## Pretplatnicki nacin i autonomni kontroler (2026-09-09)
 
 `--subscription` je drugi, odvojen nacin naplate runnera: Claude poziv ide bez `--max-budget-usd` (jer
-se do naplate ne smije ni doci), Fable je iskljucen (nije u paketu), a postavljen `ANTHROPIC_API_KEY` u
-okolini je greska prije pripreme. Rucni `--budget-usd` nacin je nepromijenjen.
+se do naplate ne smije ni doci), Fable i oba Grok aliasa (`grok`, `build`) iskljuceni su jer ih taj
+profil ne pokriva, a postavljen `ANTHROPIC_API_KEY` u okolini je greska prije pripreme. Grok se pokrece
+samo u rucnom nacinu uz zasebno provjerenu xAI prijavu ili API naplatu. Rucni `--budget-usd` nacin je
+nepromijenjen.
 
 ```bash
 npm run agents -- prepare T02 --phase plan --agent astra --subscription

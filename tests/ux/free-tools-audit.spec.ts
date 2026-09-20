@@ -701,9 +701,11 @@ for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'da
      * REDUCED-MOTION NIJE OVDJE UKRAS NEGO UVJET MJERENJA (CI crven 2026-09-09, `48c1fc9e`).
      *
      * `/index.html` pusta ulaznu sekvencu kroz Web Animations API (`intake-motion.ts`): zavrsna
-     * skupina (`#intakeMeta`, `.intake-stats`, `.intake-links`) ide 0 -> 1 s kasnjenjem do 380 ms i
-     * trajanjem 420, dakle zavrsava na ~800 ms. Test je mjerio na `fonts.ready` + 300 ms, pa je axe
-     * na CI-u uhvatio tekst USRED pojavljivanja i racunao kompozit, ne konacnu boju.
+     * skupina (u trenutku ovog nalaza `#intakeMeta`, `.intake-stats`, `.intake-links`; pregled Z7,
+     * 2026-09-20, uklonio je obje mrtve klase, pa skupina danas ima samo `#intakeMeta`) je isla
+     * 0 -> 1 s kasnjenjem do 380 ms i trajanjem 420, dakle zavrsavala na ~800 ms. Test je mjerio na
+     * `fonts.ready` + 300 ms, pa je axe na CI-u uhvatio tekst USRED pojavljivanja i racunao
+     * kompozit, ne konacnu boju.
      *
      * Brojke se poklapaju i to je ono sto dijagnozu zatvara: pale su `#69604f` (4,36) i `#6d6453`
      * (4,11) na `#dfd8c6`, a to je tocno `--desk-faint` (#5F5645, sam po sebi 5,09 i prolazi) uz

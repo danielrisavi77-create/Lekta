@@ -1,0 +1,85 @@
+<!-- @dsCard group="Osnove" name="Papir na stolu" subtitle="list sa sjenom, zaglavlje Obrazac LK-01 s koracima" width="900" height="560" -->
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<title>Papir na stolu</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+  color-scheme:dark;
+  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
+  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
+  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
+  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
+  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
+  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
+  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
+  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
+  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-doc:Georgia,"Times New Roman",serif;
+  --radius:2px;--radius-pill:999px;
+  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
+}
+[data-theme="light"]{
+  color-scheme:light;
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
+  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
+  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
+  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
+  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
+  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
+  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
+  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
+  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
+}
+html,body{height:auto}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
+.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.dsc-item{display:grid;gap:9px;justify-items:start}
+.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
+.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
+.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
+.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
+</style>
+<style>
+body{background:var(--desk)}
+.paper{width:640px;background:var(--paper);color:var(--paper-ink);border-radius:6px;box-shadow:var(--paper-sh);transform:rotate(-.35deg);position:relative}
+.paper::before{content:"";position:absolute;z-index:-1;inset:10px -5px -7px 6px;background:var(--paper-2);border:1px solid var(--paper-line);border-radius:6px;transform:rotate(.9deg)}
+.rail{display:flex;align-items:center;gap:14px;padding:14px 24px;border-bottom:1.5px solid var(--paper-ink);flex-wrap:wrap}
+.rail-title{font:600 11px var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-ink);margin-right:auto}
+.rail-step{display:inline-flex;align-items:center;gap:7px;font:500 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-muted)}
+.rail-step b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--paper-line);color:var(--paper-muted);font-size:9.5px;font-weight:600}
+.rail-step.active{color:var(--paper-ink)}
+.rail-step.active b{background:var(--red-deep);border-color:var(--red-deep);color:#fff}
+.paper-body{padding:32px 34px 38px}
+.paper-body h2{font-family:var(--display-serif);font-weight:500;font-size:1.6rem;margin:0 0 10px}
+.paper-body p{margin:0;color:var(--paper-muted);font-size:.92rem;line-height:1.6;max-width:46ch}
+</style>
+</head>
+<body>
+<h1 class="dsc-h">Papir na stolu</h1>
+<p class="dsc-sub">Sadržaj radi na "listovima" na tamnoj/svijetloj radnoj plohi. Dva-tri lista ispod (pseudo-elementi) daju debljinu snopa. Zaglavlje "Obrazac LK-01" prati wizard korake.</p>
+<div class="paper">
+  <div class="rail">
+    <span class="rail-title">Obrazac LK-01 · Tehnička provjera rada</span>
+    <span class="rail-step"><b>1</b> Dokument</span>
+    <span class="rail-step"><b>2</b> Pravila</span>
+    <span class="rail-step active"><b>3</b> Provjera</span>
+    <span class="rail-step"><b>4</b> Popravci</span>
+  </div>
+  <div class="paper-body">
+    <h2>Diplomski rad, FPZG</h2>
+    <p>Tekst na papiru ide isključivo na <code>--paper-ink</code>, nikad na <code>--text</code>: papir je svijetla ploha u obje teme.</p>
+  </div>
+</div>
+</body>
+</html>
