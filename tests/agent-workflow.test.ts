@@ -27,10 +27,12 @@ describe('agent handoff', () => {
     expect(job.args).toContain(PROMPT_ARG_PLACEHOLDER);
     expect(job.args).toContain('--always-approve');
     expect(job.args).toContain('grok-4.6');
+    expect(job.args.slice(job.args.indexOf('--sandbox'), job.args.indexOf('--sandbox') + 2)).toEqual(['--sandbox', 'workspace']);
     expect(job.args.join(' ')).not.toContain('stolen');
     expect(job.prompt).toContain('$(touch stolen)');
     const plan = prepareJob(q, 'T01', 'plan', 'grok');
     expect(plan.args).not.toContain('--always-approve');
+    expect(plan.args.slice(plan.args.indexOf('--sandbox'), plan.args.indexOf('--sandbox') + 2)).toEqual(['--sandbox', 'read-only']);
     expect(plan.command).toBe('grok');
   });
   it('refuses an implementation before its dependency is complete', () => {
@@ -97,8 +99,10 @@ describe('provider results do not replace verification', () => {
     expect(parseResult('grok', '{"model":"grok-4.6","ok":false}', 0).ok).toBe(false);
     expect(parseResult('grok', '{"error":"boom"}', 0).ok).toBe(false);
     expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 1).ok).toBe(false);
-    expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 0))
+    expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"type":"result","is_error":false,"model":"grok-4.6"}', 0))
       .toEqual({ ok: true, reportedModels: ['grok-4.6'] });
+    expect(parseResult('grok', '{"type":"result","is_error":true,"model":"grok-4.6"}', 0).ok).toBe(false);
   });
 });
 
@@ -119,10 +123,28 @@ describe('subscription billing mode (autonomy profile)', () => {
     expect(prepareJob(queue(), 'T01', 'implement', 'sonnet', 3).billingMode).toBe('budget');
     expect(prepareJob(queue(), 'T01', 'implement', 'sol').args).not.toContain('--max-budget-usd');
   });
-  it('allows Grok agents in subscription mode without a budget flag', () => {
-    const job = prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription' });
-    expect(job.command).toBe('grok');
-    expect(job.args).not.toContain('--max-budget-usd');
-    expect(job.billingMode).toBe('subscription');
+  it('rejects Grok agents in the subscription profile because xAI billing is not covered', () => {
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription' }))
+      .toThrow(/not included/);
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }))
+      .toThrow(/not included/);
+  });
+});
+
+
+describe('agent process boundary helpers', () => {
+  it('spawns Grok with the prompt as one argv element, no stdin and no shell', async () => {
+    const { spawnJob } = await import('../scripts/agents/cli.mjs');
+    const job = prepareJob(queue(), 'T01', 'plan', 'grok');
+    let call: { command?: string; args?: string[]; options?: Record<string, unknown> } = {};
+    const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
+      call = { command, args, options };
+      return { status: 0, stdout: '{"type":"result","is_error":false}', stderr: '' };
+    };
+    spawnJob(job, process.cwd(), fakeSpawn as never);
+    expect(call.command).toBe('grok');
+    expect(call.args).toContain(job.prompt);
+    expect(call.args).not.toContain(PROMPT_ARG_PLACEHOLDER);
+    expect(call.options).toMatchObject({ input: undefined, shell: false });
   });
 });
