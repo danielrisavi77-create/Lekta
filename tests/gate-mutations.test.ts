@@ -2466,6 +2466,7 @@ const MUTATIONS: Mutation[] = [
       }]);
       return audit.consumers.length === 1 && audit.unsafe.length === 0;
     },
+  },
 ];
 
 /** Tri stavke za C6 mutacije; `violated` uvijek boolean, kako to graditelji i vracaju. */
