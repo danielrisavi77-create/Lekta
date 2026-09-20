@@ -44,6 +44,9 @@ import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
+import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
+import { requiredTierIds } from '../scripts/release-tiers.mjs';
+import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
 import { proofSourceProblems } from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
@@ -134,6 +137,21 @@ function auditReleaseLaunchers(
       `const root = join(import.meta.dirname, '..');\n${item.source}`,
   })));
 }
+
+/**
+ * Zdrav dokaz izdanja za mutacije nad gateom objave: potpun, svjez i s prolazom na svakoj obaveznoj
+ * razini. Vrijeme je fiksno, jer bi inace mutacija o STAROSTI dokaza (14 dana) padala ovisno o danu.
+ */
+const DOKAZ_SADA = Date.parse('2026-09-13T00:00:00.000Z');
+const DOKAZ_BAZA = {
+  commit: 'a'.repeat(40),
+  treeDigest: 'd'.repeat(64),
+  dirtyWorkingTree: false,
+  createdAt: '2026-09-12T00:00:00.000Z',
+  complete: true,
+  missingRequired: [] as string[],
+  results: requiredTierIds().map((id: string) => ({ id, label: id, status: 'pass' })),
+};
 
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
@@ -1377,6 +1395,169 @@ const MUTATIONS: Mutation[] = [
       + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
     caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
     cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
+  },
+  // ---------------------------------------------------------------------------
+  // GATE IZDANJA (plan T19): pet stanja u kojima objavljeni artefakt ne odgovara onome sto je dokazano.
+  // Presude su ciste funkcije iz `scripts/release-gate-core.mjs`; da ozicenje stvarno zaustavi proces,
+  // mjeri `tests/release-gate-cli.test.ts` (prava skripta, pravi izlazni kod).
+  // ---------------------------------------------------------------------------
+  {
+    id: 'objava/build-info-s-tudjim-commitom-prolazi',
+    imitates:
+      'objavljen artefakt nosi identitet DRUGOG builda: `dist/` prekopiran iz drugog stabla, ili `build-info` '
+      + 'nije ponovno pisan nakon promjene koda. Do 2026-09-13 je gate provjeravao samo OBLIK sha-a (40 hex), '
+      + 'pa je bilo koji ispravno oblikovan commit prolazio, ukljucujuci tudji. Identitet artefakta iz plana T19 '
+      + 'time nije bio dokazan nicim',
+    caught: () =>
+      buildInfoVerdict({
+        raw: JSON.stringify({ commit: 'b'.repeat(40), builtAt: '2026-09-13T00:00:00Z' }),
+        expectedCommit: 'a'.repeat(40),
+      }).blocking.join(' ').includes('artefakt nema identitet builda'),
+    cleanBefore: () =>
+      buildInfoVerdict({
+        raw: JSON.stringify({ commit: 'a'.repeat(40), builtAt: '2026-09-13T00:00:00Z' }),
+        expectedCommit: 'a'.repeat(40),
+      }).blocking.length === 0,
+  },
+  {
+    id: 'objava/build-info-nedostaje-u-distu',
+    imitates:
+      '`npm run build-info` ispadne iz lanca gradnje ili padne, pa objavljena stranica nema nikakav citljiv '
+      + 'identitet: vanjski audit 2026-09-08 (nalaz 3) je tako nasao javnu stranicu koja je danima stajala na '
+      + 'starom commitu a da to nista nije moglo reci',
+    caught: () => buildInfoVerdict({ raw: null, expectedCommit: 'a'.repeat(40) }).blocking.length === 1,
+    cleanBefore: () =>
+      buildInfoVerdict({ raw: JSON.stringify({ commit: 'a'.repeat(40) }), expectedCommit: 'a'.repeat(40) }).blocking.length === 0,
+  },
+  {
+    id: 'objava/dokaz-tvrdi-potpunost-bez-zapisanog-prolaza',
+    imitates:
+      'dokaz izdanja koji o sebi tvrdi `complete: true`, a obavezne razine nema u `results[]`: dokaz pecen '
+      + 'starijim popisom razina, rucno uredjen dokaz, ili razina koja je ispala iz zapisa. Gate je do '
+      + '2026-09-13 citao polje `complete` umjesto da potpunost izracuna, pa tudju zastavicu nije imao cime '
+      + 'provjeriti',
+    caught: () => {
+      const bezWorda = requiredTierIds()
+        .filter((id: string) => id !== 'word')
+        .map((id: string) => ({ id, label: id, status: 'pass' }));
+      return releaseProofVerdict({
+        exists: true,
+        proof: { ...DOKAZ_BAZA, complete: true, missingRequired: [], results: bezWorda },
+        headDigest: DOKAZ_BAZA.treeDigest,
+        head: 'a'.repeat(40),
+        nowMs: DOKAZ_SADA,
+      })
+        .conditional.join(' ')
+        .includes('obavezne razine bez zapisanog prolaza');
+    },
+    cleanBefore: () =>
+      releaseProofVerdict({
+        exists: true,
+        proof: DOKAZ_BAZA,
+        headDigest: DOKAZ_BAZA.treeDigest,
+        head: 'a'.repeat(40),
+        nowMs: DOKAZ_SADA,
+      }).conditional.length === 0,
+  },
+  {
+    id: 'objava/izvor-promijenjen-poslije-ovjere',
+    imitates:
+      'praceni izvor se promijenio nakon sto je dokaz pecen, pa dokaz potvrdjuje kod koji se vise ne gradi. '
+      + 'Otisak stabla se tada razlikuje; `unknown` (nema otiska, `ls-tree` pao) se tretira jednako, jer je u '
+      + 'plitkom klonu upravo "ne znam" prolazilo kao zeleno (vanjski audit 2026-09-08, nalaz 1)',
+    caught: () => {
+      const razisao = releaseProofVerdict({
+        exists: true,
+        proof: DOKAZ_BAZA,
+        headDigest: 'f'.repeat(64),
+        head: 'a'.repeat(40),
+        nowMs: DOKAZ_SADA,
+      }).conditional.join(' ');
+      const neznam = releaseProofVerdict({
+        exists: true,
+        proof: { ...DOKAZ_BAZA, treeDigest: null },
+        headDigest: DOKAZ_BAZA.treeDigest,
+        head: 'a'.repeat(40),
+        nowMs: DOKAZ_SADA,
+      }).conditional.join(' ');
+      return razisao.includes('ZASTARJELO') && neznam.includes('NE ZNAM') && !neznam.includes('OK');
+    },
+    cleanBefore: () =>
+      releaseProofVerdict({
+        exists: true,
+        proof: DOKAZ_BAZA,
+        headDigest: DOKAZ_BAZA.treeDigest,
+        head: 'a'.repeat(40),
+        nowMs: DOKAZ_SADA,
+      }).notes.join(' ').includes('dokaz o provjerama OK'),
+  },
+  {
+    id: 'objava/necommitana-izmjena-izvora-prolazi-kao-ovjerena',
+    imitates:
+      'gradnja iz NECISTOG stabla: izvor je promijenjen poslije ovjere, ali izmjena nije commitana. Otisak '
+      + 'stabla se racuna iz `git ls-tree`, dakle iz commitanog stabla, pa presuda o zastarjelosti ostaje '
+      + '`fresh` i objavi se kod koji nijedna razina dokaza nije mjerila. Mjeri se i to da stari mehanizam '
+      + 'pritom SUTI, inace bi novi mogao biti mrtav kod uz nalaz koji dolazi s druge strane',
+    caught: () => {
+      const nalaz = workingTreeVerdict({ status: ' M src/ui/app.ts\n' }).conditional.join(' ');
+      const otisakSuti = releaseProofVerdict({
+        exists: true,
+        proof: DOKAZ_BAZA,
+        headDigest: DOKAZ_BAZA.treeDigest,
+        head: 'a'.repeat(40),
+        nowMs: DOKAZ_SADA,
+      }).conditional.length === 0;
+      return nalaz.includes('NECOMMITANE izmjene pracenih datoteka') && nalaz.includes('src/ui/app.ts') && otisakSuti;
+    },
+    cleanBefore: () => {
+      const cisto = workingTreeVerdict({ status: '' });
+      // Netrackana datoteka nije u otisku stabla, pa nije ni nalaz: inace bi svaki lokalni log bio pad.
+      const netrackano = workingTreeVerdict({ status: '?? gate.log\n' });
+      return cisto.conditional.length === 0 && netrackano.conditional.length === 0;
+    },
+  },
+  {
+    id: 'objava/neizmjerena-cistoca-stabla-prolazi-kao-cista',
+    imitates:
+      '`git status` padne (nije git stablo, plitak checkout bez radnog stabla, git nije u PATH-u), a gate to '
+      + 'procita kao "nema izmjena". To je isti razred kvara kao plitki klon iz vanjskog audita 2026-09-08: '
+      + 'provjera koja u catch grani vrati zeleno. "Ne znam" se mora imenovati i uz tvrd gate pasti',
+    caught: () => workingTreeVerdict({ status: null }).conditional.join(' ').includes('cistoca NIJE izmjerena'),
+    cleanBefore: () => workingTreeVerdict({ status: '' }).notes.join(' ').includes('stablo koje se gradi je cisto'),
+  },
+  {
+    id: 'objava/mek-gate-zavrsava-s-ok-uz-nalaz',
+    imitates:
+      'gate koji uz upozorenje `ZASTARJELO` kao ZADNJI redak ispise "OK: ... stoje" i izadje s 0. Mekoca je '
+      + 'odluka o STROGOSTI (razvojni CI dokaz ne pece jer trazi Word), ne tvrdnja o dokazu, a operater cita '
+      + 'bas taj redak i izlazni kod. `release-proof-core.mjs` isto pravilo vec ima za pojedinacnu presudu '
+      + '("stale i unknown nikad ne sadrze OK"); ovo je isti kvar na razini zbroja',
+    caught: () => {
+      const t = gateSummaryLine(
+        { failures: [], warnings: ['dokaz o provjerama: ZASTARJELO: ...'], required: false },
+        { ok: 'identitet artefakta i dokaz izdanja stoje', scope: 'identitet artefakta i dokaz izdanja' },
+      );
+      return t.level === 'unconfirmed' && !t.text.includes('OK') && t.text.includes('NIJE POTVRDJENO');
+    },
+    cleanBefore: () =>
+      gateSummaryLine(
+        { failures: [], warnings: [], required: true },
+        { ok: 'identitet artefakta i dokaz izdanja stoje', scope: 'identitet artefakta i dokaz izdanja' },
+      ).text.startsWith('OK: '),
+  },
+  {
+    id: 'nadzor/objavljena-je-druga-verzija-a-smoke-suti',
+    imitates:
+      'strogi smoke koji ne odbija pogresnu verziju: `--expect-commit` je neslaganje javljao kao `::warning::` '
+      + 'uz izlaz 0, i to i uz `--require-build-info` (ta zastavica hvata samo 404 na build-info.json). '
+      + 'Provjera konkretne objave time nije mogla razlikovati objavljenu od tvrdene verzije. Mjeri se i '
+      + 'SUPROTAN smjer, jer blagi cron nadzor nad zakljucanom objavom mora ostati zelen',
+    caught: () =>
+      commitIdentityVerdict({ expectCommit: 'a'.repeat(40), publishedCommit: 'b'.repeat(40), strict: true }).verdict === 'fail'
+      && commitIdentityVerdict({ expectCommit: 'a'.repeat(40), publishedCommit: null, strict: true }).verdict === 'fail',
+    cleanBefore: () =>
+      commitIdentityVerdict({ expectCommit: 'a'.repeat(40), publishedCommit: 'a'.repeat(40), strict: true }).verdict === 'ok'
+      && commitIdentityVerdict({ expectCommit: 'a'.repeat(40), publishedCommit: 'b'.repeat(40) }).verdict === 'warn',
   },
   {
     id: 'release/buduci-launcher-izravno-predaje-mts-nodeu',
