@@ -246,38 +246,50 @@ describe('glasovi ulaza /', () => {
     expect(nalazi, nalazi.map((n) => `${n.vrsta}: ${n.selektor} -- ${n.detalj}`).join('\n')).toEqual([]);
   });
 
-  it('ulaz ucitava TOCNO dva glasa: Newsreader govori, Inter Tight oznacava', () => {
-    // BROJ JE OSTAO DVA I KROZ Z7, iako je papir ulaza preslozen u obrazac i time dobio mete koje
-    // `design/README.md` drzi podatkovnim glasom (broj lista, oznake zaglavlja, pecat, brojevi
-    // koraka). Prvi prolaz Z7 je zbog njih uveo treci glas i ovu tvrdnju prosirio na tri imena;
-    // pregled je to odbio, jer nalog Z7 izricito kaze "NE dodaj nikakav webfont", pa je gard bio
-    // prilagodjen promjeni umjesto obrnuto. Mete se zato crtaju `var(--ui)`-jem uz mjeru (11px),
-    // razmak slova i rez; ako vlasnik ikad odluci drukcije, mijenja se OVA tvrdnja, svjesno.
+  it('ulaz ucitava TOCNO dva glasa: serif govori, mono oznacava', () => {
+    // IMENA SE IZVODE IZ `fonts-core.ts`, NE PREPISUJU. Odluka vlasnika 2026-09-20 (Z7, opcija a)
+    // zamijenila je cetiri obitelji s dvije; do tada je ovdje stajao doslovan popis, pa je svaka
+    // izmjena modula trazila i izmjenu garda, sto je tocno obrnuto od onoga sto gard treba raditi.
+    // Tvrdnja je sada: skup koji ulaz ucitava JEDNAK je skupu koji `fonts-core.ts` uvozi, i ima
+    // tocno dva clana. Ako se modulu doda treca obitelj, ovo pada bez prepisivanja imena.
     const { ucitane } = ulazSaDiska();
-    expect([...ucitane].sort()).toEqual(['Inter Tight Variable', 'Newsreader Variable']);
+    const izModula = new Set<string>();
+    for (const specifier of packageImports(resolve(ROOT, 'src/shared/fonts-core.ts'))) {
+      const obitelj = obiteljIzPaketa(specifier);
+      if (obitelj) izModula.add(obitelj);
+    }
+    expect(izModula.size, 'citanje fonts-core.ts ne daje nijednu obitelj, dakle mjeri krivo')
+      .toBeGreaterThan(0);
+    expect([...ucitane].sort()).toEqual([...izModula].sort());
+    expect([...ucitane].sort(), 'dva glasa i nijedan vise').toHaveLength(2);
   });
 
-  it('podatkovni glasovi NE ulaze u graf ulaza', () => {
-    // Source Serif 4 i IBM Plex Mono imaju posao na `/rad/` i alat-stranicama, ne ovdje. Bez ove
-    // tvrdnje bi ih jedan uvoz vratio, i traka s brojkama bi opet dobila treci glas.
-    const graf = [...collectStaticGraph(ULAZ)].map((p) => p.split(/[\\/]/).join('/'));
-    expect(graf.filter((p) => p.endsWith('/src/shared/fonts-document.ts'))).toEqual([]);
-    expect(graf.some((p) => p.endsWith('/src/shared/fonts-core.ts'))).toBe(true);
-    // IMENOVANA ZABRANA ZA MODUL KOJI JE POSTOJAO. Prvi prolaz Z7 je mono doveo kroz zaseban
-    // `src/shared/fonts-data.ts`, dakle mimo glasa dokumenta, pa ga tvrdnja iznad ne bi vidjela.
-    // Modul je uklonjen; ova tvrdnja cuva da se ne vrati sporednim vratima.
-    expect(graf.filter((p) => p.endsWith('/src/shared/fonts-data.ts'))).toEqual([]);
-    const { ucitane } = ulazSaDiska();
-    expect([...ucitane]).not.toContain('Source Serif 4 Variable');
-    expect([...ucitane]).not.toContain('IBM Plex Mono');
-  });
-
-  it('rute s dokumentima I DALJE nose podatkovne glasove', () => {
-    // Suzavanje ulaza ne smije osiromasiti `/rad/`: ondje mono nosi ocjene i sifre pravila, a
-    // Source Serif zrcali Wordov izlaz u pregledima.
-    for (const ulaz of ['src/routes/workspace/main.ts', 'src/tools/citat-page.ts']) {
+  it('nijedna ruta ne ucitava fontove mimo `fonts-core.ts`', () => {
+    // ZASEBAN MODUL ZA "PODATKOVNE GLASOVE" VISE NE POSTOJI, i to je posljedica Z7, ne cistka.
+    // Dok su obitelji bile cetiri, `fonts-document.ts` je dvije od njih drzao izvan ulaza `/`, da
+    // cisti ulaz ne skida mono bez mete. Sada su dvije i nosi ih svaka ruta, pa je modul uklonjen.
+    // Ime se i dalje imenuje: ovo je jedini nacin da se ne vrati tiho, s vlastitim uvozima.
+    const svi = ['src/routes/intake/main.ts', 'src/routes/workspace/main.ts',
+      'src/routes/my-work/main.ts', 'src/routes/learn-more/main.ts', 'src/tools/citat-page.ts'];
+    for (const ulaz of svi) {
       const graf = [...collectStaticGraph(resolve(ROOT, ulaz))].map((p) => p.split(/[\\/]/).join('/'));
-      expect(graf.some((p) => p.endsWith('/src/shared/fonts-document.ts')), ulaz).toBe(true);
+      expect(graf.filter((p) => /\/src\/shared\/fonts-(document|data)\.ts$/.test(p)), ulaz).toEqual([]);
+      expect(graf.some((p) => p.endsWith('/src/shared/fonts-core.ts')), ulaz).toBe(true);
+    }
+  });
+
+  it('SVE rute nose ISTE dvije obitelji', () => {
+    // Do Z7 je ovdje stajalo obrnuto: rute s dokumentom morale su nositi VISE od ulaza. Sada je
+    // tvrdnja jednakost, jer glas tudjeg rada nije vise webfont nego sistemska Georgia.
+    const ulazne = [...ulazSaDiska().ucitane].sort();
+    for (const ulaz of ['src/routes/workspace/main.ts', 'src/tools/citat-page.ts',
+      'src/routes/my-work/main.ts']) {
+      const ucitane = new Set<string>();
+      for (const specifier of packageImports(resolve(ROOT, ulaz))) {
+        const obitelj = obiteljIzPaketa(specifier);
+        if (obitelj) ucitane.add(obitelj);
+      }
+      expect([...ucitane].sort(), ulaz).toEqual(ulazne);
     }
   });
 
@@ -373,7 +385,11 @@ describe('glasovi ulaza /', () => {
     //   goli `monospace`  na citat.html (`<code>` bez ijednog pravila -> UA Courier New)
     // Nijedan od njih nije bio na ulazu, pa ih guard nad `/` po konstrukciji nije mogao vidjeti.
     const ucitane = sveUcitaneObitelji();
-    expect(ucitane.size, 'nula ucitanih obitelji znaci da citanje paketa ne radi, ne da ih nema').toBeGreaterThan(2);
+    // SENTINEL, NE OPIS STANJA: nula obitelji znaci da citanje `@fontsource` paketa ne radi, pa bi
+    // cijeli gard prosao vakuumski. Prag je bio `> 2` dok ih je bilo pet; Z7 ih je sveo na dvije,
+    // pa se prag spusta na `> 0` i uz njega stoji IMENOVANA tvrdnja o tome KOJE su to dvije.
+    expect(ucitane.size, 'nula ucitanih obitelji znaci da citanje paketa ne radi, ne da ih nema').toBeGreaterThan(0);
+    expect([...ucitane].sort()).toEqual(['Geist Mono Variable', 'Instrument Serif']);
 
     const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
       const p = resolve(dir, e.name);
@@ -385,6 +401,80 @@ describe('glasovi ulaza /', () => {
 
     const nalazi = imenaBezFonta(listovi, ucitane);
     expect(nalazi, 'ime bez ijednog @font-face je uvijek kvar: preglednik tiho uzme sljedecu obitelj').toEqual([]);
+  });
+
+  // --- UKLONJENE OBITELJI: ime se ne smije vratiti nijednim putem --------------------------
+
+  /**
+   * Cetiri obitelji koje je Z7 (2026-09-20) uklonio, plus Caveat, koji je otisao ranije.
+   *
+   * Trazi se i IME OBITELJI i IME PAKETA, jer se vracaju razlicitim putevima: obitelj kroz CSS
+   * ili inline stil, paket kroz `import` ili `package.json`. Zabrana samo jednog oblika ostavlja
+   * drugi otvorenim, a oba daju isti ishod: stranica koja crta pismo koje nitko nije izabrao.
+   */
+  const UKLONJENE = [
+    'Newsreader', 'Inter Tight', 'IBM Plex', 'Source Serif', 'Caveat',
+    'inter-tight', 'newsreader', 'source-serif', 'ibm-plex', 'fontsource/caveat',
+  ];
+
+  /** Cist dio garda, izdvojen da se moze mutirati sintetskim ulazom. */
+  function zabranjenaImena(datoteke: Array<{ ime: string; tekst: string }>): string[] {
+    const nalazi: string[] = [];
+    for (const { ime, tekst } of datoteke) {
+      for (const zabranjeno of UKLONJENE) {
+        if (tekst.includes(zabranjeno)) nalazi.push(`${ime}: ${zabranjeno}`);
+      }
+    }
+    return nalazi.sort();
+  }
+
+  /** Sve datoteke proizvoda u kojima se ime obitelji uopce moze pojaviti. */
+  function datotekeProizvoda(): Array<{ ime: string; tekst: string }> {
+    const hodaj = (dir: string): string[] => {
+      if (!existsSync(dir)) return [];
+      return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+        const put = resolve(dir, e.name);
+        if (e.isDirectory()) return e.name === 'node_modules' ? [] : hodaj(put);
+        return [put];
+      });
+    };
+    const korijeni = ['src', 'rad', 'saznaj-vise', 'moji-radovi', 'public', 'scripts'];
+    const putevi = korijeni.flatMap((k) => hodaj(resolve(ROOT, k)));
+    putevi.push(resolve(ROOT, 'index.html'), resolve(ROOT, 'package.json'));
+    return putevi
+      .filter((p) => /\.(css|ts|tsx|mts|mjs|js|html|json)$/.test(p) && existsSync(p))
+      .map((p) => ({ ime: p.slice(ROOT.length + 1).split(/[\\/]/).join('/'), tekst: readFileSync(p, 'utf8') }));
+  }
+
+  it('Z7: nijedna uklonjena obitelj se ne imenuje nigdje u proizvodu', () => {
+    const datoteke = datotekeProizvoda();
+    // SENTINEL: prazan obilazak bi "prosao" bez ijedne procitane datoteke.
+    expect(datoteke.length, 'nula datoteka znaci da obilazak ne radi, ne da su ciste')
+      .toBeGreaterThan(50);
+    expect(datoteke.some((d) => d.ime === 'package.json'), 'package.json nije procitan').toBe(true);
+    expect(zabranjenaImena(datoteke), 'uklonjena obitelj se vratila u proizvod').toEqual([]);
+  });
+
+  it('kontrola i mutacija: gard vidi svaki od pet oblika povratka', () => {
+    // BASELINE: tekst bez ijednog zabranjenog imena mora biti cist, inace bi "prolazio" i gard
+    // koji vristi na sve.
+    expect(zabranjenaImena([{ ime: 'a.css', tekst: ':root{--mono:"Geist Mono Variable",monospace}' }]))
+      .toEqual([]);
+    // MUTACIJE: po jedna za svaki put kojim se ime vraca.
+    expect(zabranjenaImena([{ ime: 'a.css', tekst: '.x{font-family:"Newsreader Variable",serif}' }]))
+      .toEqual(['a.css: Newsreader']);
+    expect(zabranjenaImena([{ ime: 'b.ts', tekst: "import '@fontsource-variable/inter-tight';" }]))
+      .toEqual(['b.ts: inter-tight']);
+    expect(zabranjenaImena([{ ime: 'c.json', tekst: '"@fontsource/ibm-plex-mono": "^5.2.7"' }]))
+      .toEqual(['c.json: ibm-plex']);
+    expect(zabranjenaImena([{ ime: 'd.html', tekst: '<p style="font-family:Source Serif 4">x</p>' }]))
+      .toEqual(['d.html: Source Serif']);
+    expect(zabranjenaImena([{ ime: 'e.css', tekst: '.hand{font:500 24px Caveat,cursive}' }]))
+      .toEqual(['e.css: Caveat']);
+    // KONTROLA: gard trazi DOSLOVNO ime, pa ne pada na tudju rijec koja ga sadrzi u drugom smislu
+    // (`currency-caveat` je razred autoriteta izvora, ne pismo).
+    expect(zabranjenaImena([{ ime: 'f.ts', tekst: "'official-source-with-currency-caveat'" }]))
+      .toEqual([]);
   });
 
   // --- NEGATIVNE KONTROLE: gard bez dokaza da grize ne racuna se -----------------------------

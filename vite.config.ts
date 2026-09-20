@@ -333,14 +333,19 @@ function bundleSizeGuard(devTools: boolean) {
 // crossorigin je OBAVEZAN i za same-origin (font fetch je uvijek CORS anonymous; bez atributa
 // preglednik preload ne bi uparivao s @font-face zahtjevom pa bi datoteku skinuo DVAPUT).
 // POPIS JE PO STRANICI, NE PO BUNDLEU. Do 2026-09-05 je plugin skenirao CIJELI bundle i ubacivao
-// isti popis u svaku stranicu, pa je cisti ulaz `/` preloadao IBM Plex Mono (15 kB) koji na njemu
-// nema nijednu metu, i to PRIJE fontova koje stvarno crta. Razdvajanje fontova po ruti
-// (`fonts-core` / `fonts-document`) samo po sebi to ne bi popravilo, jer datoteka i dalje postoji
-// u bundleu zbog `/rad/`. Zato se sada cita koje `.woff2` referenciraju CSS listovi TE stranice.
+// isti popis u svaku stranicu, pa je cisti ulaz `/` preloadao podatkovni mono koji na njemu nema
+// nijednu metu, i to PRIJE fontova koje stvarno crta. Zato se cita koje `.woff2` referenciraju
+// CSS listovi TE stranice.
+//
+// Z7 (2026-09-20) je obitelji sveo na dvije i sve rute nose iste, pa je podjela po stranici sada
+// bez ucinka. Ostaje svejedno: kad se popis mijenja, mijenja se ovdje i na jednom mjestu, a
+// sentinel ispod i dalje pada ako se imena razidju s onima koje `fonts-core.ts` ucitava. Prelaoda
+// se samo LATIN podskup: latin-ext nosi dijakritiku, ali je manji dio teksta iznad folda i ne
+// placa se cekanjem.
 function fontPreload() {
   const WANTED = [
-    /newsreader-latin-opsz-normal/, /newsreader-latin-opsz-italic/,
-    /inter-tight-latin-wght/, /ibm-plex-mono-latin-600/,
+    /instrument-serif-latin-400-normal/, /instrument-serif-latin-400-italic/,
+    /geist-mono-latin-wght-normal/,
   ];
   type Asset = { source?: string | Uint8Array };
   return {

@@ -582,14 +582,25 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect([...heksovi].sort(), 'panel smije nositi samo dva izmjerena tona kontrasta').toEqual(['#4A4438', '#B8AE96']);
   });
 
-  it('pismo za disleksiju NE ucitava webfont, a lanac zavrsava na ucitanom glasu', () => {
+  it('pismo za disleksiju NE ucitava webfont, a lanac zavrsava na citljivom pismu', () => {
     expect(CSS).not.toMatch(/@font-face|@import|https?:/);
     const m = /data-reading-font="dyslexic"\][^{]*\{([^}]*)\}/.exec(CSS);
     expect(m, 'nedostaje pravilo za disleksiju').not.toBeNull();
     expect(m![1]).toContain('"OpenDyslexic"');
-    // Kraj lanca je `var(--ui)`, obitelj koju proizvod STVARNO ucitava. Bez toga bi neinstalirano
-    // pismo palo na sustavni fallback, sto je upravo kvar zbog kojeg postoji tests/entry-fonts.
-    expect(m![1].trim().endsWith('var(--ui);')).toBe(true);
+    // KRAJ LANCA VISE NIJE `var(--ui)`, I TO JE POSLJEDICA Z7 (2026-09-20). Dok je glas sucelja
+    // bio sans, oslonac na njega je bio ispravan: obitelj se ucitava i cita se dobro. Od Z7 je
+    // `--ui` alias na mono, a monospace za duzi tekst je LOSIJI, ne bolji, pa bi postavka
+    // pristupacnosti korisniku koji nema instaliran OpenDyslexic pogorsala citanje umjesto da ga
+    // popravi. Lanac zato zavrsava na sistemskom sansu, koji preglednik uvijek ima.
+    const kraj = m![1].trim();
+    expect(kraj.endsWith('sans-serif;'), kraj).toBe(true);
+    expect(kraj, 'mono je najgori moguci kraj lanca za citanje').not.toContain('var(--ui)');
+    expect(kraj).not.toContain('var(--mono)');
+    // Isto vrijedi za izbor "sistemski sans": i on je do Z7 isao preko `--ui`.
+    const sans = /data-reading-font="sans"\][^{]*\{([^}]*)\}/.exec(CSS);
+    expect(sans, 'nedostaje pravilo za sistemski sans').not.toBeNull();
+    expect(sans![1]).not.toContain('var(--ui)');
+    expect(sans![1]).toContain('sans-serif');
   });
 
   it('SPECIFICNOST: grana `prefers-color-scheme` tuce duplicirane primitive iz page-chrome.css', () => {

@@ -294,3 +294,125 @@ describe('Z3 border-left akcent', () => {
     expect(css).toMatch(/\.pv-prijelaz__naslov::before\s*\{[^}]*border-radius:\s*999px/);
   });
 });
+
+/**
+ * Z7 (2026-09-20, opcija a): DVA GLASA I JEDAN GOST.
+ *
+ * Tri tvrdnje, svaka s mutacijom, jer gard bez dokaza da grize se ne racuna (CLAUDE.md):
+ *   1. Tokeni glasa imaju TOCNO propisanu vrijednost. Token koji se tiho pomakne mijenja pismo
+ *      na svakoj ruti, a nijedan postojeci test to ne bi vidio: lanac u `entry-fonts.test.ts`
+ *      pita samo je li obitelj UCITANA, ne je li ona koja je odlucena.
+ *   2. Nijedna deklaracija na display serifu ne trazi tezinu iznad 400. Instrument Serif taj rez
+ *      nema; bez `font-synthesis: none` preglednik ga razvuce, a s njim se zahtjev tiho ignorira.
+ *      Oba ishoda su kvar, i nijedan ne pada sam od sebe.
+ *   3. `font-synthesis: none` stoji na korijenu.
+ */
+describe('Z7: tokeni glasa i tezina na serifu', () => {
+  const DIZAJN = read('src/shared/design-system.css');
+  const ZRCALO = read('src/shared/page-chrome.css');
+
+  /** Vrijednost tokena iz lista, bez komentara i bez razmaka (razmaci nisu ugovor). */
+  function token(css: string, ime: string): string | null {
+    const m = bezKomentara(css).match(new RegExp(ime.replace('--', '--') + '\\s*:\\s*([^;}]+)'));
+    return m ? bezRazmaka(m[1]) : null;
+  }
+
+  const OCEKIVANO: ReadonlyArray<readonly [string, string]> = [
+    ['--display-serif', '"Instrument Serif",Georgia,"Times New Roman",serif'],
+    ['--mono', '"Geist Mono Variable","Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace'],
+    ['--ui', 'var(--mono)'],
+    ['--sans', 'var(--ui)'],
+    ['--ink-serif', 'var(--font-doc)'],
+    ['--font-hand', 'var(--display-serif)'],
+    ['--font-doc', 'Georgia,"Times New Roman",serif'],
+  ];
+
+  it('svaki token glasa nosi tocno odlucenu vrijednost', () => {
+    for (const [ime, vrijednost] of OCEKIVANO) {
+      expect(token(DIZAJN, ime), ime).toBe(bezRazmaka(vrijednost));
+    }
+  });
+
+  it('zrcalo u page-chrome.css se ne razilazi s izvorom', () => {
+    // STVARAN RAZRED KVARA, ne teorija: `page-chrome.css` redefinira vecinu tokena i vec je jednom
+    // vracao `--font-hand` na obitelj koju nista ne ucitava dok je gard bio zelen. Provjeravaju se
+    // samo tokeni koje zrcalo UOPCE definira; sto ne definira, nasljedjuje iz izvora.
+    let zrcaljenih = 0;
+    for (const [ime] of OCEKIVANO) {
+      const uZrcalu = token(ZRCALO, ime);
+      if (uZrcalu === null) continue;
+      zrcaljenih += 1;
+      expect(uZrcalu, `${ime} se u zrcalu razilazi od izvora`).toBe(token(DIZAJN, ime));
+    }
+    expect(zrcaljenih, 'zrcalo ne definira nijedan token glasa, dakle citanje mjeri krivo')
+      .toBeGreaterThan(0);
+  });
+
+  it('MUTACIJA: pomaknut token se vidi, a razmaci i dalje nisu ugovor', () => {
+    // BASELINE: nemutiran list je cist.
+    expect(token(':root{--mono:"Geist Mono Variable",monospace}', '--mono'))
+      .toBe('"GeistMonoVariable",monospace');
+    // MUTACIJA: druga obitelj na istom tokenu daje drugu vrijednost, dakle tvrdnja pada.
+    expect(token(':root{--mono:"IBM Plex Mono",monospace}', '--mono'))
+      .not.toBe('"GeistMonoVariable",monospace');
+    // KONTROLA SMJERA: isti popis s drugim razmacima i dalje prolazi.
+    expect(token(':root{--mono: "Geist Mono Variable" , monospace}', '--mono'))
+      .toBe('"GeistMonoVariable",monospace');
+  });
+
+  /** Deklaracije koje display serifu (ili njegovu aliasu) daju tezinu iznad 400. */
+  function tezineIznad400(css: string): string[] {
+    const SERIF = /var\(\s*--(?:display-serif|font-hand)\s*[,)]/;
+    const nalazi: string[] = [];
+    for (const blok of bezKomentara(css).matchAll(/\{([^{}]*)\}/g)) {
+      const tijelo = blok[1];
+      for (const m of tijelo.matchAll(/font\s*:\s*([^;}]*)/g)) {
+        if (!SERIF.test(m[1])) continue;
+        const prije = m[1].split('var(')[0];
+        const w = prije.match(/(?<![\w.])([1-9]\d{2})(?![\w.%])/);
+        if (w && Number(w[1]) > 400) nalazi.push(m[0].trim().slice(0, 70));
+      }
+      if (!new RegExp('font-family\\s*:\\s*' + SERIF.source).test(tijelo)) continue;
+      for (const m of tijelo.matchAll(/font-weight\s*:\s*([1-9]\d{2}|bold|bolder)/g)) {
+        if (m[1] === 'bold' || m[1] === 'bolder' || Number(m[1]) > 400) nalazi.push(m[0].trim());
+      }
+    }
+    return nalazi;
+  }
+
+  it('nijedan list u src/ ne trazi tezinu iznad 400 na display serifu', () => {
+    const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true })
+      .flatMap((e) => (e.isDirectory() ? hodaj(join(dir, e.name)) : [join(dir, e.name)]));
+    const listovi = hodaj(join(root, 'src')).filter((f) => f.endsWith('.css'));
+    expect(listovi.length, 'nula listova znaci da obilazak ne radi, ne da su cisti')
+      .toBeGreaterThan(5);
+    const nalazi = listovi.flatMap((f) => tezineIznad400(readFileSync(f, 'utf8'))
+      .map((n) => `${f.slice(root.length + 1).split(/[\\/]/).join('/')}: ${n}`));
+    expect(nalazi, 'Instrument Serif nema rez iznad 400; zahtjev se ili ignorira ili sintetizira')
+      .toEqual([]);
+  });
+
+  it('MUTACIJA: tezina iznad 400 se vidi u OBA zapisa, mono ostaje slobodan', () => {
+    // BASELINE.
+    expect(tezineIznad400('.a{font:400 20px/1 var(--display-serif)}')).toEqual([]);
+    expect(tezineIznad400('.a{font-family:var(--display-serif);font-weight:400}')).toEqual([]);
+    // MUTACIJA 1: kratica `font:`.
+    expect(tezineIznad400('.a{font:650 20px/1 var(--display-serif)}')).toHaveLength(1);
+    // MUTACIJA 2: odvojena `font-weight`, ukljucujuci oblik s fallbackom u `var()`.
+    expect(tezineIznad400('.a{font-family:var(--display-serif, Georgia);font-weight:600}'))
+      .toHaveLength(1);
+    // MUTACIJA 3: alias za biljesku korektora vodi na isto pismo.
+    expect(tezineIznad400('.a{font-family:var(--font-hand);font-weight:bold}')).toHaveLength(1);
+    // KONTROLA SMJERA: mono ima pune tezine, pa 600 na njemu NIJE nalaz.
+    expect(tezineIznad400('.a{font:600 11px/1 var(--mono)}')).toEqual([]);
+    expect(tezineIznad400('.a{font-family:var(--ui);font-weight:700}')).toEqual([]);
+    // KONTROLA: velicina od 500px nije tezina.
+    expect(tezineIznad400('.a{font:400 500px/1 var(--display-serif)}')).toEqual([]);
+  });
+
+  it('font-synthesis: none stoji na korijenu', () => {
+    const korijen = bezKomentara(DIZAJN).match(/:root\s*\{([\s\S]*?)\n\}/);
+    expect(korijen, 'blok :root nije pronadjen, dakle citanje mjeri krivo').not.toBeNull();
+    expect(bezRazmaka(korijen ? korijen[1] : '')).toContain('font-synthesis:none');
+  });
+});

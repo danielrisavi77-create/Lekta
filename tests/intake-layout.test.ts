@@ -3,14 +3,15 @@
  *
  * Papir je preslozen u OBRAZAC: zaglavlje s brojem lista, pecat stanja, veci naslov, tri koraka
  * postupka, sitni otisak u podnozju, gumb po mjeri predloska i jedan redak ispod papira. Preuzet
- * je samo RASPORED predloska; odlukom vlasnika (opcija b) ulaz zadrzava svoja DVA glasa
- * (Newsreader govori, Inter Tight oznacava), a `Instrument Serif` i `Geist Mono` se NE uvode.
+ * je samo RASPORED predloska; glasove je odlukom vlasnika 2026-09-20 (paket 2, opcija a)
+ * zamijenio CIJELI proizvod, pa ih ulaz ne bira sam.
  *
- * TRECI GLAS NIJE DODAN, i to je ishod pregleda. Prvi prolaz Z7 je mete koje `design/README.md`
- * drzi podatkovnima (broj lista, oznake, pecat, brojevi koraka) crtao `var(--mono)`-om i uz to na
- * ulaz dovukao IBM Plex Mono kao webfont, a gard o dva glasa prosirio na tri. Nalog to izricito
- * zabranjuje ("NE dodaj nikakav webfont"), pa su i font i token uklonjeni: mete se grade mjerom
- * (11px), razmakom slova i rezom. Gard nad ulazom ostaje `tests/entry-fonts.test.ts`.
+ * ODLUKA O MONOU JE OBRNUTA, i to je izmjena a ne ispravak. Paket 1 je mete koje `design/README.md`
+ * drzi podatkovnima (broj lista, oznake, pecat, brojevi koraka) crtao glasom sucelja, jer bi
+ * `var(--mono)` tada dovukao jos jedan webfont na PRVU stranicu proizvoda. Paket 2 tu pretpostavku
+ * ukida: ulaz ucitava iste dvije obitelji kao svaka druga ruta, pa mono ovdje nije nov font nego
+ * onaj koji je ionako u paketu. Tvrdnja da list ne referencira `var(--mono)` uklonjena je zajedno
+ * sa svojim razlogom. Gard nad lancem ostaje `tests/entry-fonts.test.ts`.
  *
  * TRI RAZINE, ODVOJENO:
  *   1. MARKUP: postoji li svaki od sedam elemenata i nosi li DOSLOVAN tekst, s dijakritikom, te
@@ -138,10 +139,10 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     expect(akcija, 'nema retka radnje').not.toBeNull();
     expect(akcija!.querySelector('.intake-cta')).not.toBeNull();
     expect(akcija!.querySelector('.intake-hint')).not.toBeNull();
-    // GLAS JE `--ui`, NE `--mono`. Predlozak natpis crta monoom, ali nalog Z7 zabranjuje dodavanje
-    // webfonta, a ulaz mono ne ucitava; `var(--mono)` bi ovdje pao na sustavni `ui-monospace`.
-    // Preuzeta je mjera predloska, ne pismo.
-    expect(CSS).toMatch(/\.intake-cta\{[^}]*font-family:var\(--ui\)/);
+    // GLAS JE MONO, kako predlozak i trazi: gumb je pecat, ne recenica. Do paketa 2 je ovdje
+    // stajala obrnuta tvrdnja, jer ulaz mono tada nije ucitavao pa bi token pao na sustavni
+    // `ui-monospace`. Mjera predloska (14px, .02em) vrijedi i dalje, uz pismo.
+    expect(CSS).toMatch(/\.intake-cta\{[^}]*font-family:var\(--mono\)/);
     expect(CSS).toMatch(/\.intake-cta\{[^}]*font-size:14px/);
     expect(CSS).toMatch(/\.intake-cta\{[^}]*letter-spacing:\.02em/);
     expect(CSS).toMatch(/\.intake-cta\{[^}]*border-radius:var\(--radius-btn-lg\)/);
@@ -274,24 +275,38 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
       .filter((v) => !/^1px\b/.test(v));
   }
 
-  it('sve obitelji dolaze iz DVA tokena, nijedna nije upisana imenom', () => {
-    // DVA, NE TRI. Prvi prolaz Z7 je mono mete papira crtao `var(--mono)`-om i uz to na ulaz
-    // dovukao IBM Plex Mono kao webfont; pregled je to odbio, jer nalog kaze "NE dodaj nikakav
-    // webfont". `var(--mono)` bez ucitane obitelji nije nesto izmedju nego treci kvar (sustavni
-    // `ui-monospace`, na Windowsu Consolas), pa je token uklonjen zajedno s fontom.
-    expect(obitelji(CSS)).toEqual(['var(--display-serif)', 'var(--ui)']);
-    // Token se ne smije vratiti ni kao "samo CSS, bez fonta": ulaz cuva
-    // `tests/entry-fonts.test.ts`, a ovaj gard cuva da list uopce ne imenuje treci glas.
-    expect(bezCssKomentara(CSS), 'mono je natrag na ulazu, bez ucitane obitelji')
+  it('sve obitelji dolaze iz TOKENA, nijedna nije upisana imenom', () => {
+    // Tri tokena, i sva tri su alias-lanci nad ISTE DVIJE obitelji: `--display-serif` je serif,
+    // `--mono` je mono, a `--ui` je od Z7 (paket 2) alias na `--mono`. Ime obitelji se u ovom
+    // listu ne smije pojaviti ni u jednom od tri zapisa; koja je obitelj iza tokena, mjeri
+    // `tests/entry-fonts.test.ts`.
+    expect(obitelji(CSS)).toEqual(['var(--display-serif)', 'var(--mono)', 'var(--ui)']);
+  });
+
+  it('mete obrasca crtaju se MONOOM, a recenice ne', () => {
+    // OVO JE IZMJENA ODLUKE IZ PAKETA 1, NE ISPRAVAK KVARA. Tada je ovdje stajala obrnuta tvrdnja
+    // (list ne smije referencirati `var(--mono)`), jer ulaz mono nije ucitavao pa bi token pao na
+    // sustavni `ui-monospace`. Sada ga ucitava, pa mete idu na mono kako predlozak i trazi.
+    const MONO = ['.intake-zaglavlje', '.intake-pecat', '.intake-korak-br', '.intake-foot',
+      '.intake-cta'];
+    for (const selektor of MONO) {
+      expect(blokZa(CSS, selektor), selektor).toContain('var(--mono)');
+    }
+    // TEKST KORAKA NIJE OZNAKA nego recenica koja se na uskom ekranu lomi u dva retka, a
+    // `design/README.md` mono za takve izricito zabranjuje. Ovo je druga polovica iste odluke:
+    // bez nje bi "mete idu na mono" tiho progutalo i prozu.
+    expect(blokZa(CSS, '.intake-korak-t'), 'tekst koraka je recenica, ne oznaka')
+      .toContain('var(--display-serif)');
+    expect(blokZa(CSS, '.intake-korak-t')).not.toContain('var(--mono)');
+    // MUTACIJA: mono vracen na glas sucelja gard mora VIDJETI. Bez ovoga bi tvrdnja prosla i da
+    // `blokZa` gleda krivu datoteku ili krivi selektor.
+    const bezMonoa = CSS.replace('font-family:var(--mono);font-weight:600;font-size:var(--fs-mono-label);\n  letter-spacing:.08em;text-align:left;',
+      'font-family:var(--ui);font-weight:600;font-size:var(--fs-mono-label);\n  letter-spacing:.08em;text-align:left;');
+    expect(bezMonoa, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(CSS);
+    expect(blokZa(bezMonoa, '.intake-zaglavlje'), 'gard ne vidi vracanje na glas sucelja')
       .not.toContain('var(--mono)');
-    // MUTACIJA: podmetnut `var(--mono)` gard mora VIDJETI. Tvrdnja o odsutnosti bez ovoga ne
-    // znaci nista: prosla bi i da detektor gleda krivu datoteku.
-    const sMonoom = CSS.replace('font-family:var(--ui)', 'font-family:var(--mono)');
-    expect(sMonoom, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(CSS);
-    expect(bezCssKomentara(sMonoom), 'gard ne vidi podmetnut mono').toContain('var(--mono)');
-    // KONTROLA SMJERA: spomen u KOMENTARU nije referenca, pa obrazlozenje odluke smije imenovati
-    // token koji se ne koristi (list ga u komentarima spominje vise puta).
-    expect(bezCssKomentara('/* mono bi ovdje bio var(--mono) */.a{font-family:var(--ui)}'))
+    // KONTROLA SMJERA: spomen u KOMENTARU nije deklaracija (list `--mono` spominje u obrazlozenju).
+    expect(blokZa('/* var(--mono) */.intake-korak-t{font-family:var(--display-serif)}', '.intake-korak-t'))
       .not.toContain('var(--mono)');
   });
 
@@ -306,13 +321,15 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
     // samo longhand, a `.intake-kicker` obitelj postavlja bas kraticom. Podmetanje ide na STVARAN
     // redak datoteke, ne na sintetski niz, pa mutacija pada cim taj redak nestane.
     const kraticom = CSS.replace(
-      'font:italic 500 var(--fs-kicker)/1.3 var(--display-serif)',
-      "font:italic 500 var(--fs-kicker)/1.3 'Instrument Serif',serif",
+      'font:italic 400 var(--fs-kicker)/1.3 var(--display-serif)',
+      "font:italic 400 var(--fs-kicker)/1.3 'Instrument Serif',serif",
     );
     expect(kraticom, 'podmetanje u kraticu se nije primilo; provjeri oznaku').not.toBe(CSS);
     expect(obitelji(kraticom), 'kratica `font:` prolazi neopazeno').toContain("'Instrument Serif',serif");
     // Isto vrijedi za drugu polovicu predloska (`Geist Mono`), da gard ne cuva samo jedno ime.
-    expect(obitelji(CSS.replace('font-family:var(--ui)', "font-family:'Geist Mono',monospace")))
+    // IME SE ZABRANJUJE I KAD JE OBITELJ UCITANA: ovaj list govori tokenima, pa je upisano ime
+    // zaobilazenje dizajn-sustava i onda kad se slucajno poklapa s odlucenom obitelji.
+    expect(obitelji(CSS.replace('font-family:var(--mono)', "font-family:'Geist Mono',monospace")))
       .toContain("'Geist Mono',monospace");
     // KONTROLA SMJERA: zamjena JEDNOG tokena DRUGIM tokenom nije nalaz, pa gard ne zabranjuje
     // legitimno preslagivanje glasova; ni visina retka u kratici nije obitelj.
