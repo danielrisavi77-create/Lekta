@@ -201,6 +201,89 @@ describe('Z5 tipografska ljestvica', () => {
   });
 });
 
+/**
+ * Z2: radiusi gumba (design/handoff/ALIGNMENT.md). Gumb je pecat, dijeli rub s papirom, pa
+ * `--radius-btn` i `--radius-btn-lg` postaju 2px, isto kao `--radius`. Provjera ima dvije tvrdnje:
+ *   1. Oba tokena u `design-system.css` doslovno iznose 2px.
+ *   2. Nijedan CSS u `src/` (osim `admin/**` i `demo/**`, koji imaju vlastiti sustav tokena) nema
+ *      LITERAL `border-radius` veci od 2px na selektoru koji sadrzi btn/button/cta, osim pilule
+ *      (999px) i kruga (50%) te imenovanih iznimki koje README izricito ne racuna kao gumb
+ *      (`.cta`, `.ks-cta`, `.success-cta` je zabiljezena napomena, ne prijava).
+ * Selektorski uzorak je isti onaj kojim je paket trazen (`grep -rn "border-radius" src --include=*.css
+ * | grep -iE "..."`), pa test i zahtjev gadaju istu populaciju.
+ */
+const GUMB_SELEKTOR = /\.(?:btn|[a-z-]*button|[a-z-]*cta|lampa-btn|intake-memory-action|intake-error|ps-[a-z-]*btn|display-[a-z-]*btn)\b/i;
+const GUMB_IZUZETE_DATOTEKE = ['src/admin/', 'src/demo/'];
+const GUMB_IZUZETI_SELEKTORI = ['.cta', '.ks-cta', '.success-cta'];
+
+/**
+ * Nalazi u JEDNOM listu: `selektor -> vrijednost` za svaki literal `border-radius` > 2px na
+ * selektoru koji izgleda kao gumb, bez pilule/kruga/tokena/imenovane iznimke. Cista funkcija nad
+ * stringom (kao `zaostaliLiterali` iznad), pa se mutacija podmece bez pisanja po disku.
+ */
+function gumbRadiusNalazi(css: string): string[] {
+  const nalazi: string[] = [];
+  const tijelo = bezKomentara(css);
+  const blokRegex = /([^{}]+)\{([^{}]*)\}/g;
+  let blok: RegExpExecArray | null;
+  while ((blok = blokRegex.exec(tijelo))) {
+    const selektor = blok[1].trim();
+    if (!GUMB_SELEKTOR.test(selektor)) continue;
+    const izuzet = selektor.split(',')
+      .some((dio) => GUMB_IZUZETI_SELEKTORI.includes(dio.trim().split(/[\s:]/)[0]));
+    if (izuzet) continue;
+    const radiusRegex = /border-radius\s*:\s*([^;]+);?/g;
+    let r: RegExpExecArray | null;
+    while ((r = radiusRegex.exec(blok[2]))) {
+      const vrijednost = r[1].trim();
+      if (/var\(/.test(vrijednost)) continue; // token, provjeren drugom tvrdnjom
+      if (/50%/.test(vrijednost)) continue; // krug (prsten, tocke, gumbi strelice)
+      const brojevi = [...vrijednost.matchAll(/(-?\d+(?:\.\d+)?)px/g)].map((x) => parseFloat(x[1]));
+      if (brojevi.length === 0) continue;
+      if (brojevi.length === 1 && brojevi[0] === 999) continue; // pilula (znacke, koraci, cipovi)
+      if (Math.max(...brojevi) > 2) nalazi.push(selektor + ' -> ' + vrijednost);
+    }
+  }
+  return nalazi;
+}
+
+describe('Z2 radiusi gumba', () => {
+  it('--radius-btn i --radius-btn-lg su 2px, isto kao --radius', () => {
+    const zbijeno = bezRazmaka(bezKomentara(read('src/shared/design-system.css')));
+    expect(zbijeno.includes('--radius:2px;')).toBe(true);
+    expect(zbijeno.includes('--radius-btn:2px;')).toBe(true);
+    expect(zbijeno.includes('--radius-btn-lg:2px;')).toBe(true);
+  });
+
+  it('MUTACIJA: token pomaknut s 2px pada', () => {
+    const zbijeno = (css: string): boolean => bezRazmaka(css).includes('--radius-btn:2px;');
+    expect(zbijeno(':root{--radius-btn:2px;}'), 'baseline mora biti cist').toBe(true);
+    expect(zbijeno(':root{--radius-btn:8px;}')).toBe(false);
+  });
+
+  it('nijedan gumb u src/ (osim admin/demo) nema literal border-radius > 2px', () => {
+    const staze = listoviSrc().map((l) => l.ime)
+      .filter((s) => !GUMB_IZUZETE_DATOTEKE.some((p) => s.startsWith(p)));
+    expect(staze.length, 'nula CSS listova znaci da obilazak ne radi').toBeGreaterThan(5);
+    const nalazi = staze.flatMap((staza) => gumbRadiusNalazi(read(staza)).map((n) => staza + ' :: ' + n));
+    expect(nalazi, 'gumb mora ici kroz --radius-btn/--radius-btn-lg ili ostati pilula/krug').toEqual([]);
+  });
+
+  it('MUTACIJA: podmetnut .btn{border-radius:8px} pada, a token ne', () => {
+    expect(gumbRadiusNalazi('.btn{border-radius:var(--radius-btn)}'), 'baseline mora biti cist').toEqual([]);
+    expect(gumbRadiusNalazi('.btn{border-radius:8px}')).toEqual(['.btn -> 8px']);
+    // Pilula i krug ostaju dopusteni na gumbu koji ih izricito trazi (znacka/cip, prsten/strelica).
+    expect(gumbRadiusNalazi('.route-cta{border-radius:999px}')).toEqual([]);
+    expect(gumbRadiusNalazi('.icon-button{border-radius:50%}')).toEqual([]);
+    // Imenovana iznimka (napomena, ne prijava) i datoteka izvan populacije (provjerava se na
+    // razini staze, ne ovdje) ne pale gard kad je selektor tocno taj.
+    expect(gumbRadiusNalazi('.success-cta{border-radius:10px}')).toEqual([]);
+    expect(gumbRadiusNalazi('.cta{border-radius:30px}')).toEqual([]);
+    // Negativna kontrola: selektor koji NIJE gumb (nema btn/button/cta) ne pale gard.
+    expect(gumbRadiusNalazi('.paper{border-radius:8px}')).toEqual([]);
+  });
+});
+
 describe('Z3 border-left akcent', () => {
   it('.pv-prijelaz nema lijevi rub kao presudu (design/README.md pravilo 3)', () => {
     const css = bezKomentara(read('src/ui/repair-panel.css'));
