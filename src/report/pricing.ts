@@ -22,10 +22,13 @@ export interface WorkTypeTier {
 
 export const WORK_TYPE_TIERS: Record<ReportWorkType, WorkTypeTier> = {
   seminarski: { workType: 'seminarski', label: 'Seminarski rad', priceEur: 3.99, windowDays: 7 },
-  zavrsni: { workType: 'zavrsni', label: 'Zavrsni rad', priceEur: 5.99, windowDays: 7 },
+  zavrsni: { workType: 'zavrsni', label: 'Završni rad', priceEur: 5.99, windowDays: 7 },
   diplomski: { workType: 'diplomski', label: 'Diplomski rad', priceEur: 9.99, windowDays: 14 },
   doktorski: { workType: 'doktorski', label: 'Doktorski rad', priceEur: 24.99, windowDays: 14 },
 };
+
+/** Vrste rada u redoslijedu cjenika (rastuca cijena); izbornik i testovi ih citaju odavde. */
+export const WORK_TYPE_ORDER: readonly ReportWorkType[] = ['seminarski', 'zavrsni', 'diplomski', 'doktorski'];
 
 export function isReportWorkType(value: unknown): value is ReportWorkType {
   return typeof value === 'string' && value in WORK_TYPE_TIERS;
@@ -40,3 +43,77 @@ export function tierFor(workType: string): WorkTypeTier | undefined {
 export function windowDaysFor(workType: string): number {
   return tierFor(workType)?.windowDays ?? 7;
 }
+
+/* -------------------------------------------------------------------------------------------- *
+ * NATPISI CJENIKA (Z11: jedan cjenik, jedan izvor).
+ *
+ * Iznosi i natpisi o iznosu zive OVDJE, a modul prikaza (`src/shared/pricing-receipt.ts`) ih samo
+ * ispisuje. Razlog je izmjeren, ne stilski: do 2026-09-20 su postojala TRI neuskladjena izvora
+ * cijene (`src/config/pricing-tiers.ts` s "od 3,99 EUR" i "od 39 EUR", `data/packages.json` s
+ * 9/39/69/99 EUR i ovaj modul sa stvarnom naplatom), pa je stranica tvrdila jedno a naplata radila
+ * drugo. Prikaz koji nosi VLASTITI tekst o cijeni je cetvrti takav izvor u nastajanju, zato ga
+ * `tests/pricing-receipt.test.ts` izricito zabranjuje (nijedan iznos kao literal u modulu prikaza).
+ * -------------------------------------------------------------------------------------------- */
+
+/** Iznos kako se pise u hrvatskom cjeniku: decimalni zarez, uvijek dvije znamenke. */
+export function formatEurAmount(value: number): string {
+  return value.toFixed(2).replace('.', ',');
+}
+
+/** Iznos s valutom; za ukupno i za natpis gumba. */
+export function formatEurPrice(value: number): string {
+  return `${formatEurAmount(value)} €`;
+}
+
+/** Redak opsega: sto je ukljuceno u cijenu i u kojoj mjeri (bez cijene po komadu). */
+export interface PricingScopeRow {
+  readonly label: string;
+  readonly value: string;
+}
+
+/**
+ * Natpisi racuna. Podatak, bez DOM-a: modul prikaza ne smije imati vlastite tekstove o cijeni.
+ * Tekst je doslovno iz `design/templates/pricing/Pricing.dc.html`, uz jednu namjernu iznimku koja
+ * je zabiljezena uz `besplatnaStavkaNapomena`.
+ */
+export const PRICING_COPY = {
+  racunNaslov: 'Račun prije kupnje',
+  /** Predmet racuna kad rad jos nije analiziran. */
+  opciPredmet: 'bilo koji .docx',
+  izbornikVrsteRada: 'Vrsta rada',
+
+  besplatnaStavka: 'Lokalna provjera forme',
+  /**
+   * Predlozak ovdje pise "24 pravila · ocjena · popis nalaza". Broj pravila je NAMJERNO izostavljen:
+   * nijedan izvor u repozitoriju ne tvrdi 24, a broj bodovanih provjera ovisi o profilu, pa bi ga
+   * cjenik tvrdio jace nego sto ga proizvod moze potkrijepiti.
+   */
+  besplatnaStavkaNapomena: 'Ocjena i popis nalaza. Uvijek uključeno, bez prijave.',
+
+  placenaStavka: 'Popravak forme i puni izvještaj',
+  /** Iza oznake vrste rada; cijena je jedna, koliko god zahvata korisnik odabere. */
+  placenaStavkaNapomena: 'jedna cijena, koliko god zahvata odabereš.',
+
+  opsegNaslov: 'Opseg · uključeno u cijenu',
+  /** Opseg kad rada jos nema: sto popravak pokriva, bez cijene po komadu. */
+  opsegOpci: [
+    { label: 'Margine, font, prored', value: 'zahvati' },
+    { label: 'Numeracija i naslovi', value: 'zahvati' },
+    { label: 'Format citata i literature', value: 'zahvati' },
+  ] as readonly PricingScopeRow[],
+  /** Mjera uz pojedinacni zahvat iz stvarnog plana popravka. */
+  opsegZahvat: 'zahvat',
+  opsegIzvjestaj: { label: 'Puni izvještaj s objašnjenjem svakog nalaza', value: 'PDF' } as PricingScopeRow,
+  opsegPonovneProvjere: 'Ponovne provjere nakon ispravka',
+  opsegDana: 'dana',
+
+  ukupnoNaslov: 'Ukupno · po dokumentu',
+  pecat: ['Ponovna provjera', 'prije preuzimanja'] as readonly string[],
+
+  ctaPopravi: 'Popravi za',
+  ctaBesplatno: 'Provjeri rad besplatno',
+  ctaUskoro: 'Uskoro',
+  ctaUskoroNapomena: 'Plaćeni sloj je u pripremi. Provjera radi već sad, besplatno.',
+
+  sitniTekst: 'Bez pretplate · bez prijave za provjeru · dokument ide na server samo za popravak i briše se nakon preuzimanja · cijene s PDV-om',
+} as const;
