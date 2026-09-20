@@ -2,7 +2,12 @@
 import { describe, expect, it } from 'vitest';
 import { AGENTS, PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS, prepareJob, parseResult,
   resolvePromptFileArgs, validateQueue } from '../scripts/agents/core.mjs';
-import { buildSpawnArgs } from '../scripts/agents/cli.mjs';
+import { buildSpawnArgs, isEntryModule, spawnJob } from '../scripts/agents/cli.mjs';
+import { spawnSync } from 'node:child_process';
+import { rmdirSync, symlinkSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -228,5 +233,104 @@ describe('oznaka u args ima potrosaca koji je zamjenjuje', () => {
 
     // Posao bez `args` je greska, ne prazan argv koji provider protumaci kao interaktivni poziv.
     expect(() => buildSpawnArgs({ command: 'grok' }, promptFile)).toThrow(/args/);
+  });
+});
+
+/**
+ * Prethodni krug je gard nad izgradnjom argumenata sveo na `buildSpawnArgs`, ali NIJEDNA tvrdnja
+ * nije vezala tu funkciju uz stvarni poziv provideru: mutacija `spawnSync(job.command, job.args, ...)`
+ * u `main()` prolazila je cijeli suite, a Grok bi u produkciji dobio doslovni `--prompt-file
+ * __PROMPT_FILE__` i trazio datoteku tog imena u cwd-u. Zato se ovdje izvodi `spawnJob`, jedini
+ * poziv provideru, i mjeri se ono sto proces STVARNO dobije. Tvrdnju nad izvorom `cli.mjs` (da
+ * `main()` taj poziv ne zaobilazi) drzi `tests/gate-mutations.test.ts`.
+ */
+describe('spawnJob je jedini poziv provideru i mjeri se ono sto proces dobije', () => {
+  type Recorded = { command: string; args: string[]; options: Record<string, unknown> };
+
+  const recorder = () => {
+    const calls: Recorded[] = [];
+    const spawn = (command: string, args: string[], options: Record<string, unknown>) => {
+      calls.push({ command, args, options });
+      return { status: 0, stdout: '', stderr: '', error: undefined, signal: null };
+    };
+    return { calls, spawn };
+  };
+
+  it('Grok dobije putanju prompta, nikad oznaku, i prompt ne prolazi kroz ljusku', () => {
+    const { calls, spawn } = recorder();
+    const promptFile = '/tmp/out/T01-1-2/prompt.md';
+    const job = prepareJob(queue(), 'T01', 'implement', 'grok');
+    spawnJob(job, promptFile, '/repo', spawn as never);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].command).toBe('grok');
+    expect(calls[0].args.join(' ')).not.toContain(PROMPT_FILE_PLACEHOLDER);
+    expect(calls[0].args[calls[0].args.indexOf('--prompt-file') + 1]).toBe(promptFile);
+    // argv je polje, tekst ide na stdin: naslov zadatka nikad ne postaje naredba ljuske.
+    expect(calls[0].options.shell).toBe(false);
+    expect(calls[0].options.input).toBe(job.prompt);
+    expect(calls[0].options.cwd).toBe('/repo');
+  });
+
+  it('Codex i Claude dobiju svoj argv nepromijenjen', () => {
+    const { calls, spawn } = recorder();
+    const codex = prepareJob(queue(), 'T01', 'implement', 'sol');
+    spawnJob(codex, '/tmp/out/prompt.md', '/repo', spawn as never);
+    expect(calls[0].args).toEqual(codex.args);
+    const claude = prepareJob(queue(), 'T01', 'implement', 'sonnet', 3);
+    spawnJob(claude, '/tmp/out/prompt.md', '/repo', spawn as never);
+    expect(calls[1].args).toEqual(claude.args);
+  });
+
+  it('posao bez args ne postaje prazan argv koji provider cita kao interaktivni poziv', () => {
+    const { calls, spawn } = recorder();
+    expect(() => spawnJob({ command: 'grok' }, '/tmp/p.md', '/repo', spawn as never)).toThrow(/args/);
+    expect(calls).toHaveLength(0);
+  });
+});
+
+/**
+ * Straza ulazne tocke koja usporeduje URL oblike (`import.meta.url === pathToFileURL(argv[1]).href`)
+ * je tocna samo dok u stazi nema poveznice. ESM ulaznu tocku Node razrjesava na realpath, pa
+ * `node <junction>\cli.mjs help` ispise NISTA i vrati 0. Junction na stablo je mehanizam koji ovaj
+ * repozitorij izricito propisuje za worktreeve, pa bi se `npm run agents -- run ... --execute` tiho
+ * pretvorio u no-op: nijedan model pozvan, nijedan artefakt napisan, a pozivatelj vidi exit 0.
+ */
+describe('cli.mjs se izvodi i kad je dohvacen kroz poveznicu', () => {
+  const agentsDir = resolve(process.cwd(), 'scripts/agents');
+  const cli = join(agentsDir, 'cli.mjs');
+  const runHelp = (entry: string) =>
+    spawnSync(process.execPath, [entry, 'help'], { encoding: 'utf8', timeout: 60_000 });
+
+  const withLink = (body: (link: string) => void) => {
+    const link = join(tmpdir(), `lekta-agents-${process.pid}-${Date.now()}`);
+    symlinkSync(agentsDir, link, process.platform === 'win32' ? 'junction' : 'dir');
+    try { body(link); } finally {
+      try { rmdirSync(link); } catch { try { unlinkSync(link); } catch { /* poveznica je vec uklonjena */ } }
+    }
+  };
+
+  it('help ispis nije prazan ni izravno ni kroz junction na scripts/agents', () => {
+    const direct = runHelp(cli);
+    // Tvrdi se ISPIS, ne izlazni kod: prazan ispis uz kod 0 je upravo kvar zbog kojeg test postoji.
+    expect(`${direct.stdout ?? ''}${direct.stderr ?? ''}`.trim()).not.toBe('');
+    expect(direct.stdout).toContain('--agent');
+    withLink((link) => {
+      const linked = runHelp(join(link, 'cli.mjs'));
+      expect(`${linked.stdout ?? ''}${linked.stderr ?? ''}`.trim(),
+        'cli.mjs kroz poveznicu nije ispisao nista: straza ulazne tocke nije okinula').not.toBe('');
+      expect(linked.stdout).toBe(direct.stdout);
+    });
+  });
+
+  it('straza okida na sebi i kroz poveznicu, a ne na tudjoj datoteci', () => {
+    const self = pathToFileURL(cli).href;
+    expect(isEntryModule(self, cli)).toBe(true);
+    expect(isEntryModule(self, join(agentsDir, 'core.mjs'))).toBe(false);
+    expect(isEntryModule(self, undefined as never)).toBe(false);
+    withLink((link) => {
+      expect(isEntryModule(self, join(link, 'cli.mjs'))).toBe(true);
+      // Kontrola: URL oblici se kroz poveznicu NE poklapaju, pa razlika dolazi od razrjesavanja staze.
+      expect(self === pathToFileURL(join(link, 'cli.mjs')).href).toBe(false);
+    });
   });
 });

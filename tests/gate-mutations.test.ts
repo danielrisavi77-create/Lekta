@@ -71,7 +71,11 @@ import { buildRepairPanelHandle } from '../src/ui/repair-panel';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import { PROMPT_FILE_PLACEHOLDER, prepareJob as prepareAgentJob } from '../scripts/agents/core.mjs';
-import { buildSpawnArgs } from '../scripts/agents/cli.mjs';
+import { buildSpawnArgs, isEntryModule } from '../scripts/agents/cli.mjs';
+import { rmdirSync, symlinkSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -289,6 +293,63 @@ function spawnArgsProblems(build: SpawnArgsBuilder): string[] {
       continue;
     }
     if (JSON.stringify(built) !== JSON.stringify(job.args)) problems.push(`${agent}-args-changed`);
+  }
+  return problems;
+}
+
+/** Izvor `scripts/agents/cli.mjs`, bez komentara: uvoz napisan u komentaru je poznat izvor laznih
+ * nalaza u ovom repozitoriju (gard nad grafom modula javio je 17 ciklusa kojih je bilo nula). */
+function cliSourceWithoutComments(source: string): string {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/^\s*\/\/.*$/gm, ' ')
+    .replace(/\s\/\/.*$/gm, ' ');
+}
+
+/**
+ * UGOVOR nad izvorom `cli.mjs`: jedini poziv provideru ide kroz `spawnJob`, koji argv gradi
+ * `buildSpawnArgs`-om, a `main()` ga ne zaobilazi.
+ *
+ * Postoji zato sto izvrsni gard nad `buildSpawnArgs` sam po sebi NE dokazuje da ga produkcijski put
+ * uopce zove: u prethodnom krugu je mutacija `spawnSync(job.command, job.args, ...)` u `main()`
+ * prolazila cijeli suite, jer su testovi funkciju samo uvozili. Vraca popis KRSENJA, pa se isti kod
+ * pusta nad stvarnim izvorom (baseline: prazno) i nad mutiranim (mora prijaviti).
+ */
+function cliSpawnSourceProblems(source: string): string[] {
+  const code = cliSourceWithoutComments(source);
+  const problems: string[] = [];
+  const calls = [...code.matchAll(/spawn\w*\(\s*job\.command\s*,([\s\S]*?),\s*\{/g)];
+  // SENTINEL: nula pogodaka znaci da je poziv provideru preimenovan ili nestao, ne da je cist.
+  if (!calls.length) problems.push('nema-poziva-provideru');
+  for (const call of calls) {
+    if (call[1].trim() !== 'buildSpawnArgs(job, promptFile)') problems.push(`sirovi-argv:${call[1].trim()}`);
+  }
+  const mainAt = code.indexOf('function main()');
+  if (mainAt < 0) problems.push('nema-main');
+  else if (!/\bspawnJob\(/.test(code.slice(mainAt))) problems.push('main-ne-zove-spawnJob');
+  return problems;
+}
+
+const CLI_SOURCE = () => readFileSync(resolve(process.cwd(), 'scripts/agents/cli.mjs'), 'utf8');
+
+/**
+ * UGOVOR nad strazom ulazne tocke `cli.mjs`, izmjeren nad STVARNOM poveznicom. Usporedba URL oblika
+ * (`import.meta.url === pathToFileURL(argv[1]).href`) kroz junction ne okida, pa se CLI pretvori u
+ * tihi no-op uz exit 0, a junction je mehanizam koji ovaj repozitorij propisuje za worktreeve.
+ */
+function entryGuardProblems(isEntry: (moduleUrl: string, argv1: string) => boolean): string[] {
+  const agentsDir = resolve(process.cwd(), 'scripts/agents');
+  const cli = join(agentsDir, 'cli.mjs');
+  const self = pathToFileURL(cli).href;
+  const link = join(tmpdir(), `lekta-entry-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  symlinkSync(agentsDir, link, process.platform === 'win32' ? 'junction' : 'dir');
+  const problems: string[] = [];
+  try {
+    if (!isEntry(self, cli)) problems.push('izravno-ne-okida');
+    if (!isEntry(self, join(link, 'cli.mjs'))) problems.push('kroz-poveznicu-ne-okida');
+    if (isEntry(self, join(agentsDir, 'core.mjs'))) problems.push('okida-na-tudjoj-datoteci');
+  } finally {
+    try { rmdirSync(link); } catch { try { unlinkSync(link); } catch { /* poveznica je vec uklonjena */ } }
   }
   return problems;
 }
@@ -2522,6 +2583,36 @@ const MUTATIONS: Mutation[] = [
     imitates: 'izgradnja argv-a dopisuje putanju prompta svakom provideru, pa Codex i Claude dobiju argument koji njihov CLI ne poznaje',
     caught: () => spawnArgsProblems((job, promptFile) => [...job.args, String(promptFile)]).includes('sol-args-changed'),
     cleanBefore: () => spawnArgsProblems(buildSpawnArgs as SpawnArgsBuilder).length === 0,
+  },
+  {
+    id: 'agents/cli-spawna-sirovi-argv',
+    imitates: 'spawnJob predaje job.args umjesto buildSpawnArgs, pa Grok dobije doslovni __PROMPT_FILE__ kao ime datoteke',
+    caught: () => {
+      const mutated = CLI_SOURCE().replace('buildSpawnArgs(job, promptFile), {', 'job.args, {');
+      // Bez stvarne izmjene mutacija ne mjeri nista, pa je nepodudaranje kvar mutacije, ne garda.
+      if (mutated === CLI_SOURCE()) return false;
+      return cliSpawnSourceProblems(mutated).some((p) => p.startsWith('sirovi-argv'));
+    },
+    cleanBefore: () => cliSpawnSourceProblems(CLI_SOURCE()).length === 0,
+  },
+  {
+    id: 'agents/cli-main-zaobilazi-spawnJob',
+    imitates: 'main() zove spawnSync izravno i preskoci spawnJob, pa izvrsni gard nad buildSpawnArgs mjeri kod koji produkcija ne izvodi',
+    caught: () => {
+      const mutated = CLI_SOURCE().replace(
+        'const result = spawnJob(job, promptFile, root);',
+        'const result = spawnSync(job.command, job.args, { cwd: root });');
+      if (mutated === CLI_SOURCE()) return false;
+      return cliSpawnSourceProblems(mutated).includes('main-ne-zove-spawnJob');
+    },
+    cleanBefore: () => cliSpawnSourceProblems(CLI_SOURCE()).length === 0,
+  },
+  {
+    id: 'agents/cli-straza-ulazne-tocke-kroz-poveznicu',
+    imitates: 'straza ulazne tocke usporeduje URL oblike, pa cli.mjs pokrenut kroz junction ne izvede nista i vrati exit 0 kao uspjeh',
+    caught: () => entryGuardProblems((moduleUrl, argv1) => moduleUrl === pathToFileURL(argv1).href)
+      .includes('kroz-poveznicu-ne-okida'),
+    cleanBefore: () => entryGuardProblems(isEntryModule as (m: string, a: string) => boolean).length === 0,
   },
 ];
 

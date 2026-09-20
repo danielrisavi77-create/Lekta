@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { AGENTS, prepareJob, parseResult, resolvePromptFileArgs, validateQueue } from './core.mjs';
 
 /**
@@ -16,6 +16,37 @@ import { AGENTS, prepareJob, parseResult, resolvePromptFileArgs, validateQueue }
 export function buildSpawnArgs(job, promptFile) {
   if (!job || !Array.isArray(job.args)) throw new Error('Job without args cannot be spawned');
   return resolvePromptFileArgs(job.args, promptFile);
+}
+
+/**
+ * Jedini poziv provideru. Postoji kao IZVEZENA funkcija s ubrizgivim `spawn` upravo zato da tvrdnja
+ * o argumentima mjeri ono sto proces stvarno dobije, a ne izraz prepisan u testu: gard nad
+ * `buildSpawnArgs` sam po sebi ne dokazuje da ga `main()` uopce zove, pa je mutacija
+ * `spawnSync(job.command, job.args, ...)` prolazila cijeli suite. Zadana vrijednost je stvarni
+ * `spawnSync`, pa produkcijski put ide kroz isti kod koji test izvodi.
+ */
+export function spawnJob(job, promptFile, cwd, spawn = spawnSync) {
+  // argv array + stdin, never a shell string. Existing CLI authentication is reused.
+  return spawn(job.command, buildSpawnArgs(job, promptFile), {
+    cwd, input: job.prompt, encoding: 'utf8', shell: false,
+    timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
+  });
+}
+
+/**
+ * Je li ova datoteka ULAZNA tocka procesa.
+ *
+ * Usporedba `import.meta.url === pathToFileURL(process.argv[1]).href` je TOCNA samo kad staza nema
+ * poveznice. ESM ulaznu tocku Node razrjesava na `realpath`, pa `node <junction>\cli.mjs help`
+ * ispise NISTA i vrati 0, a bas taj mehanizam (junction na stablo) ovaj repozitorij propisuje za
+ * worktreeve. Zato se usporeduju RAZRIJESENE staze, a ne URL oblici.
+ */
+export function isEntryModule(moduleUrl, argv1) {
+  if (!argv1) return false;
+  const real = (path) => { try { return realpathSync(path); } catch { return resolve(path); } };
+  const self = real(fileURLToPath(moduleUrl));
+  const entry = real(resolve(argv1));
+  return process.platform === 'win32' ? self.toLowerCase() === entry.toLowerCase() : self === entry;
 }
 
 const root = process.cwd();
@@ -100,14 +131,9 @@ function main() {
     mkdirSync(out, { recursive: true });
     const promptFile = join(out, 'prompt.md');
     writeFileSync(promptFile, job.prompt);
-    // Grok cita prompt iz datoteke; priprema je oznacila mjesto, ovdje se upisuje stvarna putanja.
-    const args = buildSpawnArgs(job, promptFile);
-    // argv array + stdin, never a shell string. Existing CLI authentication is reused.
+    // Grok cita prompt iz datoteke; priprema je oznacila mjesto, `spawnJob` upisuje stvarnu putanju.
     releaseLock = false;
-    const result = spawnSync(job.command, args, {
-      cwd: root, input: job.prompt, encoding: 'utf8', shell: false,
-      timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
-    });
+    const result = spawnJob(job, promptFile, root);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
@@ -129,8 +155,7 @@ function main() {
 
 // Pokrece se samo kad je ova datoteka ULAZNA tocka procesa. Bez toga bi uvoz iz testa izvrsio
 // `main()` nad argv vitesta, pa bi se gard nad izgradnjom argumenata uopce ne bi dao napisati.
-const isEntryModule = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
-if (isEntryModule) {
+if (isEntryModule(import.meta.url, process.argv[1])) {
   try { main(); } catch (error) {
     console.error(`[agents] ${error.message}`);
     process.exitCode = 1;
