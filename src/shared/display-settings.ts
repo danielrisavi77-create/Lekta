@@ -39,7 +39,7 @@ export interface DisplaySettings {
   readonly motion: Pokret;
 }
 
-/** Zadano stanje proizvoda: radna lampa, Newsreader, bez pojacanja i bez prigusenja pokreta. */
+/** Zadano stanje proizvoda: radna lampa, Instrument Serif, bez pojacanja i bez prigusenja pokreta. */
 export const ZADANO_OSVJETLJENJE: Osvjetljenje = 'dark';
 export const ZADANE_POSTAVKE: DisplaySettings = {
   readingFont: 'default', contrast: 'normal', motion: 'auto',
@@ -265,7 +265,7 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   pismo.id = 'lektaPismo';
   pismo.className = 'ps-select';
   for (const [vrijednost, natpis] of [
-    ['default', 'Newsreader (zadano)'],
+    ['default', 'Instrument Serif (zadano)'],
     ['serif', 'Sistemski serif'],
     ['sans', 'Sistemski sans'],
     ['dyslexic', 'Pismo za disleksiju'],

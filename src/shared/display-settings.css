@@ -18,19 +18,23 @@
 /* ---------- 1. UCINAK POSTAVKI ------------------------------------------------------------- */
 
 /* Pismo za citanje: preslikava se ISKLJUCIVO `--display-serif` (naslovi i dugi opisi). `--ui`
-   (glas sucelja) i `--mono` (podatkovni glas) ostaju netaknuti: promjena glasa sucelja nije
-   prilagodba citanja nego druga stranica. */
+   (glas sucelja) i `--mono` ostaju netaknuti: promjena glasa sucelja nije prilagodba citanja nego
+   druga stranica.
+
+   OD Z7 (2026-09-20) `--ui` JEST `--mono`, pa se izbori "sans" i "dyslexic" vise NE smiju na njega
+   oslanjati: citanje duzeg teksta u monospaceu je losije, a ne bolje, i to bi obesmislilo upravo
+   postavku pristupacnosti. Oba zato imenuju sistemski sans izravno. */
 html:root[data-reading-font="serif"] {
   --display-serif: Georgia, "Times New Roman", serif;
 }
 html:root[data-reading-font="sans"] {
-  --display-serif: var(--ui);
+  --display-serif: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 /* NIJEDAN WEBFONT SE NE UCITAVA. OpenDyslexic i Atkinson Hyperlegible su pisma koja korisnik
-   instalira sam; ako ih nema, lanac pada na `--ui`, koji je ucitan. Skidanje pisma za disleksiju
-   svima koji ga ne trebaju kostalo bi vise nego sto vrijedi. */
+   instalira sam; ako ih nema, lanac pada na sistemski sans, koji preglednik uvijek ima. Skidanje
+   pisma za disleksiju svima koji ga ne trebaju kostalo bi vise nego sto vrijedi. */
 html:root[data-reading-font="dyslexic"] {
-  --display-serif: "OpenDyslexic", "Atkinson Hyperlegible", var(--ui);
+  --display-serif: "OpenDyslexic", "Atkinson Hyperlegible", system-ui, sans-serif;
 }
 
 /* KONTROLA "VELICINA TEKSTA" JE UKLONJENA (Z7 pregled, 2026-09-20), s njom i njezin selektor nad

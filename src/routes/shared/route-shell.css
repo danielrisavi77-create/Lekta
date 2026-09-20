@@ -23,8 +23,9 @@
   --route-header-min-height: 68px;
   --route-shell-inline: 32px;
   --route-nav-gap: 22px;
-  /* `Inter` se u ovom proizvodu NE ucitava (glas sucelja je Inter Tight). Modul jos nije ozicen
-     ni u jednu rutu, pa se to nije vidjelo; ostavljeno bi bilo zamka za prvog tko ga ukljuci. */
+  /* Ovdje je stajalo golo ime obitelji koju proizvod ne ucitava. Modul jos nije ozicen ni u jednu
+     rutu, pa se to nije vidjelo; ostavljeno bi bilo zamka za prvog tko ga ukljuci. Glas sucelja se
+     uzima iskljucivo iz tokena (Z7: to je mono). */
   font-family: var(--sans, system-ui, sans-serif);
   background: var(--route-bg);
   color: var(--route-ink);

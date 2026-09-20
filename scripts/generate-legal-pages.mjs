@@ -45,36 +45,38 @@ async function loadLegal() {
   return factory();
 }
 
-// Brand tipografija (Newsreader) za h1/h4 umjesto generic Georgia/system-ui koje su pravne
+// Brand tipografija (display serif) za h1/h4 umjesto generic Georgia/system-ui koje su pravne
 // stranice do sad koristile - BEZ design-system.css/JS-a (stranice su namjerno skriptless,
 // vidi CSP komentar na vrhu). Ponovno koristi VEC izgradjeni woff2 iz glavnog Vite bundlea
 // preko @font-face + apsolutne /assets/ putanje (isti self-host izvor kao ui-boot.ts, isti
 // fajl, browser cache hit ako je posjetitelj vec bio na indexu); latin + latin-ext (hrvatska
 // dijakritika c/c/z/s/dj je u latin-ext rasponu). Kozmeticko poboljsanje pa NE smije srusiti
 // build ako datoteka nije nadjena (buduca promjena build konfiguracije) - tiho pada na Georgia.
-const NEWSREADER_SUBSETS = [
-  { pattern: /^newsreader-latin-opsz-normal.*\.woff2$/i, unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD' },
-  { pattern: /^newsreader-latin-ext-opsz-normal.*\.woff2$/i, unicodeRange: 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF' },
+// Obitelj je od Z7 (2026-09-20) staticka, s jednim rezom 400: vise nema osi opticke velicine,
+// pa je i `format` obican `woff2`, a `font-weight` jedna vrijednost.
+const DISPLAY_SERIF_SUBSETS = [
+  { pattern: /^instrument-serif-latin-400-normal.*\.woff2$/i, unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD' },
+  { pattern: /^instrument-serif-latin-ext-400-normal.*\.woff2$/i, unicodeRange: 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF' },
 ];
 
-function newsreaderFontFace() {
+function displaySerifFontFace() {
   const assetsDir = path.join(DIST, 'assets');
   if (!fs.existsSync(assetsDir)) return '';
   const files = fs.readdirSync(assetsDir);
-  return NEWSREADER_SUBSETS
+  return DISPLAY_SERIF_SUBSETS
     .map((s) => {
       const file = files.find((f) => s.pattern.test(f));
       if (!file) return '';
-      return `@font-face { font-family: "Newsreader Variable"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/assets/${file}") format("woff2-variations"); unicode-range: ${s.unicodeRange}; }`;
+      return `@font-face { font-family: "Instrument Serif"; font-style: normal; font-weight: 400; font-display: swap; src: url("/assets/${file}") format("woff2"); unicode-range: ${s.unicodeRange}; }`;
     })
     .filter(Boolean)
     .join('\n  ');
 }
-const NEWSREADER_FONT_FACE = newsreaderFontFace();
-const NEWSREADER_FALLBACK = NEWSREADER_FONT_FACE ? '"Newsreader Variable", ' : '';
+const DISPLAY_SERIF_FONT_FACE = displaySerifFontFace();
+const DISPLAY_SERIF_FALLBACK = DISPLAY_SERIF_FONT_FACE ? '"Instrument Serif", ' : '';
 
 const PAGE_STYLE = `
-  ${NEWSREADER_FONT_FACE}
+  ${DISPLAY_SERIF_FONT_FACE}
   /* ===== KS: Korektorski stol sloj ===== */
   /* Lekta Korektorski stol: pravni dokument kao list papira pod radnom lampom, korektorska crvena samo za akcente.
      Stranice su samostalne (ne ucitavaju design-system.css), pa tokeni istog imena zive lokalno. */
@@ -84,7 +86,7 @@ const PAGE_STYLE = `
     --paper:#F7F3E8; --paper-2:#F0EAD9; --paper-ink:#26221B; --paper-muted:#6E6656; --paper-line:#DCD4BF;
     --red:#E4573D; --red-deep:#C4372E;
     --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-    --font-serif:${NEWSREADER_FALLBACK}Georgia,"Times New Roman",serif;
+    --font-serif:${DISPLAY_SERIF_FALLBACK}Georgia,"Times New Roman",serif;
     --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   :root[data-theme="light"] {

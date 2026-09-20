@@ -1,13 +1,14 @@
 // Zajednicki boot za sve stranice (index, citat, usporedba):
-//  1. dva glasa koja nosi SVAKA stranica (Newsreader + Inter Tight; vidi `fonts-core.ts`),
+//  1. dva glasa koja nosi SVAKA stranica (Instrument Serif + Geist Mono; vidi `fonts-core.ts`),
 //  2. Lucide ikone: zamjenjuje <i data-lucide="..."> jedinstvenim stroke setom.
 // Bez mreze prema trecim stranama; font se bundla lokalno (unicode-range skida
 // samo latin i latin-ext za hrvatski sadrzaj).
 //
-// PODATKOVNI GLASOVI (Source Serif 4, IBM Plex Mono) OVDJE NAMJERNO VISE NISU: zive u
-// `fonts-document.ts` i uvozi ih stranica koja im ima mete. Do 2026-09-05 su stajali ovdje, pa
-// je i cisti ulaz `/` skidao mono koji na njemu nema nijednu metu. Stranice koje su ovaj modul
-// bootale IZRAVNO idu preko `page-boot.ts`, koji oba skupa spaja.
+// PODATKOVNIH GLASOVA KAO ZASEBNOG SKUPA VISE NEMA. Do 2026-09-20 su dvije obitelji zivjele u
+// `fonts-document.ts` i isle samo na rute s dokumentom, da cisti ulaz `/` ne skida mono bez mete.
+// Nakon Z7 su obje uklonjene iz proizvoda: glas tudjeg rada je sistemska Georgia koja se ne
+// ucitava, a Geist Mono nosi mete na svakoj ruti, ulaz ukljucen. Stranice koje su ovaj modul
+// bootale IZRAVNO i dalje idu preko `page-boot.ts`.
 import './fonts-core';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './design-system.css'; // JEDINI izvor tokena (boje/tipografija/radius/sjene/fokus) za sve stranice

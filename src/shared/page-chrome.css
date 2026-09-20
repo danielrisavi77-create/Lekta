@@ -84,9 +84,11 @@ html:root{
   --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
   --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
   --ease:cubic-bezier(.22,1,.36,1);--ease-pop:cubic-bezier(.34,1.4,.5,1);
-  /* Caveat je uklonjen 2026-09-05: nijedna ruta ga vise ne ucitava, pa je token uzivo padao na
-     sustavni `cursive` (Comic Sans na Windowsu). Isti token stoji i u design-system.css. */
+  /* Biljeska korektora ide kurzivom display serifa, ne zasebnom obitelji. Glas tudjeg rada je
+     sistemska Georgia i ne ucitava se; `--ink-serif` pokazuje na nju (Z7, 2026-09-20). Isti
+     tokeni stoje i u design-system.css. */
   --font-hand:var(--display-serif);--font-doc:Georgia,"Times New Roman",serif;
+  --ink-serif:var(--font-doc);
   --max:1280px;
   /* remap starih tokena: desk kontekst (razina stranice) */
   --bg:var(--desk);--panel:var(--paper);--panel-2:var(--desk-2);
@@ -100,8 +102,9 @@ html:root{
   --stamp:var(--red-deep);
   --shadow:var(--paper-sh);--shadow-sm:var(--paper-sh-sm);
   --radius-xl:2px;--radius:2px;--radius-sm:2px;
-  --ui:"Inter Tight Variable","Inter Tight",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  --sans:var(--ui);/* glas sucelja = Inter Tight; --mono ostaje IBM Plex Mono za podatke */
+  --mono:"Geist Mono Variable","Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ui:var(--mono);/* glas sucelja JE mono (Z7); imena --ui i --sans ostaju zbog zatecenih poziva */
+  --sans:var(--ui);
   --focus:0 0 0 2px var(--paper),0 0 0 4px var(--scan);
 }
 html:root[data-theme="light"]{

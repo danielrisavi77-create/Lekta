@@ -10,7 +10,8 @@ ostaje ostar na svakom DPI-ju.
 
 - `scene.html` — cijela scena (intro, 3 koraka, papir, kartice nalaza, pecat).
   Sav timeline je u `__seek(t)` na dnu; vremena su u sekundama. Fontovi su
-  self-hostani iz `fonts/` (Newsreader, IBM Plex Mono, Caveat), isti kao na siteu.
+  self-hostani iz `fonts/` (Instrument Serif, Geist Mono), isti kao na siteu;
+  rukopis korektora ide kurzivom serifa, ne zasebnom obitelji.
 - `capture.mjs` — snimi svih 1560 frameova u `frames/` (playwright + Chromium).
 - `probe.mjs` — brza kontrola: par kadrova na kljucnim t vrijednostima (`probe-*.png`).
 - `ambient.filter` — ffmpeg filtergraf ambijentalne glazbe (Cadd9 pad koji "dise" +

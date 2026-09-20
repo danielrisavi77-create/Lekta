@@ -6,14 +6,18 @@
  * DEFAULT ("radna lampa"; ui-boot postavi data-theme="dark" kad nema spremljene teme),
  * a data-theme="light" je "danje svjetlo". Sadrzaj zivi na papirima (--paper), a
  * korektorska CRVENA je jedini brand akcent; zelena i zuta ostaju za nalaze provjere.
- * Tipografija (cetiri glasa): Newsreader nosi naslove i duge opise za citanje
- * (--display-serif), Inter Tight je glas sucelja/funkcionalni sloj (--ui; --sans je
- * njegov alias radi zateceni 81 poziv), IBM Plex Mono je PODATKOVNI glas i SAMO to
- * (--mono: brojevi, score, rule-kodovi, statusi, eyebrows), Caveat je rukopis korektora
- * (--font-hand: kurziv display serifa, vidi biljesku uz token). Source Serif ostaje
- * ISKLJUCIVO glas dokument-pregleda (--ink-serif:
- * naslovnica/izjava/citat/literatura zrcale Word). Georgia (--font-doc) glumi tekst
- * "tudeg rada" u mockupima.
+ * Tipografija (dva glasa i jedan gost; odluka vlasnika 2026-09-20, Z7 opcija a, zamjenjuje
+ * prijasnja cetiri glasa):
+ *   Instrument Serif GOVORI (--display-serif): naslovi, presuda, dugi opisi, brojka u
+ *     prstenu, cijena, tekstualne veze u kurzivu, biljeska korektora (--font-hand je
+ *     njegov alias). Ima SAMO rez 400 i kurziv: nijedna deklaracija na njemu ne smije
+ *     traziti tezinu iznad 400, a hijerarhiju nosi velicina ili kurziv.
+ *   Geist Mono OZNACAVA I MJERI (--mono; --ui i --sans su njegovi aliasi radi zatecenih
+ *     poziva): gumbi, navigacija, eyebrow, sifre pravila, brojevi, koraci, meta redovi,
+ *     podnozje. Nikad za recenicu duzu od jednog retka: takav tekst ide na serif.
+ *   Georgia GLUMI TUDJI RAD (--font-doc; --ink-serif je preusmjeren na njega): tekst
+ *     korisnikova dokumenta u faksimilu i isjecak pravilnika. Sistemska je i NE ucitava
+ *     se; sloj "poslije" uzima Times New Roman jer ga pravilnik trazi.
  *
  * Stara imena tokena (--bg/--panel/--brand/--ok...) ostaju definirana kao remap na KS
  * primitive, pa postojeci CSS po stranicama dobiva novu paletu bez izmjena. Povrsine
@@ -86,19 +90,30 @@
   --shadow: var(--paper-sh);
   --shadow-sm: var(--paper-sh-sm);
 
-  /* Tipografija: cetiri glasa */
-  --display-serif: "Newsreader Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
-  --ink-serif: "Source Serif 4 Variable", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-  --ui: "Inter Tight Variable", "Inter Tight", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --sans: var(--ui); /* alias: glas sucelja je sada Inter Tight (bio IBM Plex Mono do 2026-07-18) */
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  /* Rukopis korektora vise NIJE zasebna obitelj. Caveat je uvozio jedino `src/ui/app.ts`
-     preko `src/main.ts`, a njega od reza ruta (2026-09-05) ne ucitava nijedna stranica, pa
-     je token uzivo padao na sustavni `cursive` (na Windowsu Comic Sans) na `/` i `/rad/`.
-     Biljeska korektora se sada pise KURZIVOM display serifa; "rukom pisano" nose nagib,
-     crvena i rotacija na mjestu upotrebe, ne peta obitelj. */
+  /* Tipografija: dva glasa i jedan gost (Z7, 2026-09-20) */
+  --display-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  /* Geist Mono je uzet u varijabilnoj inacici jer je mjerljivo manja od statickih rezova
+     (172.241 B naspram 1.564.438 B raspakirano), pa paket registrira ime s nastavkom
+     "Variable"; golo "Geist Mono" stoji iza njega kao fallback za lokalno instaliran rez. */
+  --mono: "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Glas sucelja JE mono (Z7). `--ui` i `--sans` ostaju kao imena zbog vise od 80 zatecenih
+     poziva; mijenjati ih u istom prolazu znacilo bi dirati svaki list bez ijedne vizualne
+     posljedice. Tko pise novi kod, neka zove `--mono` izravno. */
+  --ui: var(--mono);
+  --sans: var(--ui);
+  /* Rukopis korektora nije zasebna obitelj: biljeska se pise KURZIVOM display serifa, a
+     "rukom pisano" nose nagib, crvena i rotacija na mjestu upotrebe. */
   --font-hand: var(--display-serif);
+  /* Glas tudjeg rada je JEDAN, i sistemski je. Do Z7 je ovdje bio zaseban webfont za
+     dokument-preglede; sada `--ink-serif` i `--font-doc` pokazuju na isto pismo,
+     pa se za prikaz tudjeg dokumenta ne skida nijedan bajt. Token ostaje jer ga zove 30-ak
+     mjesta i jer imenuje NAMJERU (ovo je tudji rad, ne nase sucelje). */
   --font-doc: Georgia, "Times New Roman", serif;
+  --ink-serif: var(--font-doc);
+  /* Instrument Serif nema rez iznad 400, a Geist Mono se ne koristi podebljan iznad 600.
+     Bez ovoga preglednik SINTETIZIRA bold (razvlaci uspravni rez) i lazno podebljanje
+     izgleda kao postojeca tezina. Gard: tests/design-tokens.test.ts. */
+  font-synthesis: none;
 
   /* Tipografska ljestvica (Z5, design/handoff/ALIGNMENT.md). Imenovani koraci su IZVEDENI iz vec
      postojecih velicina u `intake.css`, `route-shell.css` i `result-visuals.css`, ne izmisljeni:

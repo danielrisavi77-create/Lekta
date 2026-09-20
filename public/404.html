@@ -24,8 +24,11 @@
     --radius-xl: 12px;
     --radius: 10px;
     --radius-pill: 999px;
-    --display-serif: "Newsreader Variable", Georgia, "Times New Roman", serif;
-    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    /* Ova stranica je samostalna i NE ucitava nijedan webfont (nema @font-face, nema bundlea),
+       pa obitelji proizvoda ovdje imenuje samo onaj tko ih ima lokalno instalirane. Zato su
+       stackovi sistemski: ono sto se stvarno crta pise i u tokenu. */
+    --display-serif: Georgia, "Times New Roman", serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     --focus: 0 0 0 2px var(--panel), 0 0 0 4px var(--brand);
   }
   @media (prefers-color-scheme: dark) {
@@ -45,7 +48,7 @@
   }
   * { box-sizing: border-box; }
   body {
-    font-family: "Inter Tight Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--mono);
     margin: 0; min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
     padding: 2rem 1rem;
@@ -141,10 +144,10 @@
     --radius: 2px;
     --radius-pill: 2px;
     --display-serif: Georgia, "Times New Roman", serif;
-    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   /* Sucelje govori monospaceom (sistemski fallback, stranica ne ucitava webfontove) */
-  body { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  body { font-family: var(--mono); }
   /* Papir: sadrzaj kartice pise tintom papira, ne tintom stola */
   .card {
     --text: #26221B;

@@ -4,24 +4,16 @@
 <meta charset="utf-8">
 <title>Lekta demo scena</title>
 <style>
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:200 800;src:url('fonts/newsreader-latin-opsz-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:200 800;src:url('fonts/newsreader-latin-ext-opsz-normal.woff2') format('woff2');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0}
-@font-face{font-family:'Newsreader';font-style:italic;font-weight:200 800;src:url('fonts/newsreader-latin-opsz-italic.woff2') format('woff2');unicode-range:U+0000-00FF}
-@font-face{font-family:'Newsreader';font-style:italic;font-weight:200 800;src:url('fonts/newsreader-latin-ext-opsz-italic.woff2') format('woff2');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0}
-@font-face{font-family:'Plex Mono';font-style:normal;font-weight:500;src:url('fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
-@font-face{font-family:'Plex Mono';font-style:normal;font-weight:500;src:url('fonts/ibm-plex-mono-latin-ext-500-normal.woff2') format('woff2');unicode-range:U+0100-024F}
-@font-face{font-family:'Plex Mono';font-style:normal;font-weight:600;src:url('fonts/ibm-plex-mono-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
-@font-face{font-family:'Plex Mono';font-style:normal;font-weight:600;src:url('fonts/ibm-plex-mono-latin-ext-600-normal.woff2') format('woff2');unicode-range:U+0100-024F}
-@font-face{font-family:'Caveat';font-style:normal;font-weight:500;src:url('fonts/caveat-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
-@font-face{font-family:'Caveat';font-style:normal;font-weight:500;src:url('fonts/caveat-latin-ext-500-normal.woff2') format('woff2');unicode-range:U+0100-024F}
-@font-face{font-family:'Caveat';font-style:normal;font-weight:600;src:url('fonts/caveat-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
-@font-face{font-family:'Caveat';font-style:normal;font-weight:600;src:url('fonts/caveat-latin-ext-600-normal.woff2') format('woff2');unicode-range:U+0100-024F}
-
-:root{
-  --desk:#191512;--ink:#EDE7DC;--muted:rgba(237,231,220,.55);--faint:rgba(237,231,220,.34);
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;src:url('fonts/instrument-serif-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;src:url('fonts/instrument-serif-latin-ext-400-normal.woff2') format('woff2');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;src:url('fonts/instrument-serif-latin-400-italic.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;src:url('fonts/instrument-serif-latin-ext-400-italic.woff2') format('woff2');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:'Geist Mono';font-style:normal;font-weight:100 900;src:url('fonts/geist-mono-latin-wght-normal.woff2') format('woff2-variations');unicode-range:U+0000-00FF}
+@font-face{font-family:'Geist Mono';font-style:normal;font-weight:100 900;src:url('fonts/geist-mono-latin-ext-wght-normal.woff2') format('woff2-variations');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0}
+--desk:#191512;--ink:#EDE7DC;--muted:rgba(237,231,220,.55);--faint:rgba(237,231,220,.34);
   --paper:#F7F3E8;--paper2:#EFE9D9;--pink:#26221B;--pmuted:#6E6656;--pline:#DCD4BF;
   --red:#E4573D;--redd:#C4372E;--pass:#2E8B5F;--passd:#1E7F4F;--scan:#4A6CF0;--amber:#C98A2E;
-  --serif:'Newsreader',Georgia,serif;--mono:'Plex Mono',Consolas,monospace;--hand:'Caveat',cursive;
+  --serif:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',Consolas,monospace;--hand:var(--serif);
   --doc:Georgia,'Times New Roman',serif;--docfix:'Times New Roman',Georgia,serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -33,13 +25,13 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
 #lamp{position:absolute;top:-560px;right:-260px;width:1500px;height:1500px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.16),transparent 62%)}
 #vig{position:absolute;inset:0;background:radial-gradient(ellipse 125% 115% at 50% 42%,transparent 58%,rgba(0,0,0,.5))}
 #edge{position:absolute;inset:0;box-shadow:inset 0 0 0 36px #000, inset 0 0 90px 40px rgba(0,0,0,.35)}
-#logo{position:absolute;top:40px;right:64px;font:italic 500 24px var(--serif);color:var(--faint);letter-spacing:.01em}
+#logo{position:absolute;top:40px;right:64px;font:italic 400 24px var(--serif);color:var(--faint);letter-spacing:.01em}
 
 /* intro kartica */
 #intro{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
 #intro .eyebrow{font:500 14px var(--mono);letter-spacing:.42em;color:var(--muted);text-transform:uppercase;margin-bottom:26px}
 #intro .l1{font:400 64px/1.12 var(--serif);letter-spacing:-.015em}
-#intro .l2{font:italic 460 64px/1.12 var(--serif);color:var(--red);letter-spacing:-.015em}
+#intro .l2{font:italic 400 64px/1.12 var(--serif);color:var(--red);letter-spacing:-.015em}
 
 /* korak naslovi lijevo */
 .korak{position:absolute;left:104px;top:92px;width:300px}
@@ -66,7 +58,7 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
 #draft .gr{right:23px;top:14px;bottom:14px;width:0;border-width:0 0 0 1px}
 #mline{position:absolute;left:0;right:0;top:462px;height:0;border-top:1.5px solid var(--redd)}
 /* rukopisne bilješke na papiru */
-.note{position:absolute;font-family:var(--hand);color:var(--redd);font-weight:500;white-space:nowrap}
+.note{position:absolute;font-family:var(--hand);font-style:italic;color:var(--redd);font-weight:400;white-space:nowrap}
 #n-slovo{top:22px;right:24px;font-size:19px;transform:rotate(-4deg)}
 #n-razina{top:88px;left:196px;font-size:17px;transform:rotate(-2deg)}
 #n-font{top:388px;left:196px;font-size:18px;transform:rotate(3deg)}
@@ -86,7 +78,7 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
 .card .bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--redd)}
 .card .in{padding:13px 16px 14px 18px}
 .card .code{font:600 10.5px var(--mono);letter-spacing:.22em;color:var(--redd);text-transform:uppercase}
-.card .tt{font:500 15.5px var(--serif);color:var(--pink);margin-top:5px}
+.card .tt{font:400 15.5px var(--serif);color:var(--pink);margin-top:5px}
 .card .conn{position:absolute;right:100%;top:50%;height:0;border-top:1px solid rgba(237,231,220,.28)}
 .card.ok .bar{background:var(--passd)}
 .card.ok .code{color:var(--passd)}
@@ -96,7 +88,7 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
 /* score kartica dolje lijevo */
 #score{position:absolute;left:96px;top:468px;width:300px;background:#141018;background:linear-gradient(160deg,#221c17,#171310);box-shadow:0 3px 8px rgba(0,0,0,.5),0 20px 50px rgba(0,0,0,.5);padding:22px 26px 20px;transform:rotate(-1.2deg)}
 #score .sk{font:600 11px var(--mono);letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
-#score .sn{font:500 64px/1.05 var(--serif);color:var(--ink);margin-top:6px}
+#score .sn{font:400 64px/1.05 var(--serif);color:var(--ink);margin-top:6px}
 #score .sn small{font:400 22px var(--serif);color:var(--muted)}
 #score .ss{font:500 12.5px var(--mono);margin-top:8px;color:var(--amber)}
 #score .ss.ok{color:#5FBF8F}
@@ -104,7 +96,7 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
 /* zeleni pecat + kvacice */
 #stamp{position:absolute;left:50%;top:47%;width:330px;height:330px;margin:-165px 0 0 -165px;color:#2E8B5F}
 #stamp svg{width:100%;height:100%;overflow:visible}
-.gnote{position:absolute;font-family:var(--hand);font-weight:600;color:#2E8B5F;white-space:nowrap}
+.gnote{position:absolute;font-family:var(--hand);font-style:italic;font-weight:400;color:#2E8B5F;white-space:nowrap}
 #g1{top:30px;right:14px;font-size:21px;transform:rotate(-5deg)}
 #g2{top:124px;right:26px;font-size:21px;transform:rotate(3deg)}
 #g3{bottom:170px;right:34px;font-size:21px;transform:rotate(-3deg)}
@@ -157,11 +149,11 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
         <g fill="currentColor">
           <path id="arcTop" d="M 165 165 m -96 0 a 96 96 0 1 1 192 0" fill="none"/>
           <path id="arcBot" d="M 165 165 m -96 0 a 96 96 0 1 0 192 0" fill="none"/>
-          <text style="font:600 34px 'Plex Mono',monospace;letter-spacing:.34em"><textPath href="#arcTop" startOffset="50%" text-anchor="middle">LEKTA</textPath></text>
-          <text x="165" y="158" text-anchor="middle" style="font:600 30px 'Plex Mono',monospace;letter-spacing:.14em">TEHNIČKI</text>
-          <text x="165" y="196" text-anchor="middle" style="font:600 30px 'Plex Mono',monospace;letter-spacing:.14em">UREDNO</text>
-          <text x="82" y="238" style="font:600 22px 'Plex Mono',monospace">★</text>
-          <text x="232" y="238" style="font:600 22px 'Plex Mono',monospace">★</text>
+          <text style="font:600 34px 'Geist Mono',monospace;letter-spacing:.34em"><textPath href="#arcTop" startOffset="50%" text-anchor="middle">LEKTA</textPath></text>
+          <text x="165" y="158" text-anchor="middle" style="font:600 30px 'Geist Mono',monospace;letter-spacing:.14em">TEHNIČKI</text>
+          <text x="165" y="196" text-anchor="middle" style="font:600 30px 'Geist Mono',monospace;letter-spacing:.14em">UREDNO</text>
+          <text x="82" y="238" style="font:600 22px 'Geist Mono',monospace">★</text>
+          <text x="232" y="238" style="font:600 22px 'Geist Mono',monospace">★</text>
         </g>
       </svg>
     </div>

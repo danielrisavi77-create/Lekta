@@ -603,7 +603,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
   .faq details::details-content{opacity:0;block-size:0;overflow-y:clip;transition:content-visibility var(--dur-3) allow-discrete,opacity var(--dur-3),block-size var(--dur-3)}
   .faq details[open]::details-content{opacity:1;block-size:auto}}
 
-/* --- Final CTA: velika Newsreader poruka na tinti --- */
+/* --- Final CTA: velika poruka u display serifu na tinti --- */
 .cta{background:var(--text);color:var(--bg);border-radius:var(--radius-xl)}
 .cta:after{display:none}
 .cta p{color:color-mix(in srgb,var(--bg) 76%,transparent)}

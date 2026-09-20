@@ -11,10 +11,9 @@
 // Ikone su inline SVG iz admin-charts.ts (ICONS), ne Lucide: grafovi ionako grade SVG rucno,
 // pa nema razloga vuci dodatnu ovisnost samo za par glifova.
 
-import '@fontsource-variable/inter-tight';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
-import '@fontsource/ibm-plex-mono/600.css';
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource-variable/geist-mono';
 import '../shared/skip-link.css';
 import '../shared/a11y.css';
 import './admin-dashboard.css';

@@ -125,7 +125,7 @@ h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weigh
 footer .logo-word{font-size:21px}
 footer .ks-mark{width:24px;height:24px;font-size:15px}
 footer .ks-tick{width:11px;height:11px}
-/* Nav: moderni Inter Tight (site-wide ujednacenje s landingom); crvena crtica
+/* Nav: glas sucelja iz tokena (site-wide ujednacenje s landingom); crvena crtica
    za hover I aktivnu (trenutnu) stavku, wordmark ostaje serif. */
 .nav-links a{position:relative;color:var(--desk-muted);font-family:var(--ui);font-weight:500;font-size:14.5px;letter-spacing:-.006em;padding:7px 11px;border-radius:4px;transition:color .16s var(--ease-out-3)}
 .nav-links a::after{content:"";position:absolute;left:11px;right:11px;bottom:4px;height:2px;background:var(--red);border-radius:2px;transform:scaleX(0);transform-origin:left center;transition:transform .2s var(--ease-out-3)}
@@ -280,7 +280,7 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 @media(max-width:640px){.tools-grid .tool-card{min-height:0}}
 
 /* `<code>` nije imao nijedno pravilo, pa je padao na UA monospace (Courier New na Windowsu) i na
-   alat-stranici stajao pokraj IBM Plex Mono kao treci glas. Izmjereno 2026-09-05 na citat.html:
-   3 cvora. Stranica koja `--mono` ne ucitava svejedno zavrsi na `ui-monospace`, sto je tocno ono
-   sto je i prije bilo, pa ovo nigdje ne moze biti nazadak. */
+   alat-stranici stajao pokraj ucitanog mono glasa kao treci glas. Izmjereno 2026-09-05 na
+   citat.html: 3 cvora. Stranica koja `--mono` ne ucitava svejedno zavrsi na `ui-monospace`, sto je
+   tocno ono sto je i prije bilo, pa ovo nigdje ne moze biti nazadak. */
 code,kbd,samp{font-family:var(--mono)}

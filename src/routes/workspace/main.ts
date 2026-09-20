@@ -17,7 +17,6 @@ import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import { mountDisplaySettings } from '../../shared/display-settings';
-import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
 import '../../shared/page-app.css';  // stil stranice; bez njega je ruta goli HTML
