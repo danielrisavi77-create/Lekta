@@ -28,6 +28,8 @@
 //   node scripts/post-deploy-smoke.mjs --site https://lektahr.netlify.app \
 //        --functions https://<ref>.supabase.co/functions/v1
 //   node scripts/post-deploy-smoke.mjs --self-test    (bez mreze)
+//   node scripts/post-deploy-smoke.mjs --require-build-info --expect-commit <sha> --strict-commit
+//        (provjera KONKRETNE objave: nepoznat ili drukciji sha je PAD; vidi commitIdentityVerdict)
 
 const DEFAULT_SITE = process.env.LEKTA_SITE_ORIGIN || 'https://lektahr.netlify.app';
 const DEFAULT_FUNCTIONS = process.env.LEKTA_FUNCTIONS_ORIGIN
@@ -213,6 +215,43 @@ export function assertBuildInfo(obs) {
 export function buildInfoCommit(obs) {
   if (!assertBuildInfo(obs).ok) return null;
   return JSON.parse(obs.text).commit;
+}
+
+/**
+ * OBJAVLJENA VERZIJA NASPRAM OCEKIVANE: dvije razlicite tvrdnje, dvije zastavice.
+ *
+ * `--expect-commit` sam po sebi je PERIODICKI NADZOR (cron salje `github.sha` mastera). Ondje je
+ * neslaganje upozorenje, i to je odluka vlasnika od 2026-09-09: javna objava je zakljucana i
+ * namjerno zaostaje za masterom, pa bi pad znacio stalnu crvenu koju svi nauce ignorirati.
+ *
+ * `--strict-commit` je PROVJERA KONKRETNE OBJAVE, korak 7 postupka u
+ * `docs/deploy/RELEASE_PROOF_WORKFLOW.md`: tvrdi se da je upravo objavljen zadani commit, pa je
+ * svako neslaganje pad. Bez njega "strogi smoke odbija pogresnu verziju" ne bi bilo istina ni uz
+ * `--require-build-info`: ta zastavica hvata samo 404 na `build-info.json`, nikad krivi sha.
+ *
+ * Nepoznat identitet (nema `build-info.json`, ili ga tvrdnja ne priznaje) uz strogi mod je TAKODJER
+ * pad: "ne znam koja je verzija objavljena" nije potvrda da je objavljena prava.
+ *
+ * @returns `{ verdict: 'skip' | 'ok' | 'warn' | 'fail', detail }`
+ */
+export function commitIdentityVerdict({ expectCommit, publishedCommit, strict = false }) {
+  const ocekivan = String(expectCommit ?? '').trim();
+  const objavljen = String(publishedCommit ?? '').trim();
+  if (!ocekivan) return { verdict: 'skip', detail: '' };
+  if (!objavljen) {
+    if (!strict) return { verdict: 'skip', detail: '' }; // vec pokriveno nalazom `build-info` i upozorenjem o nepoznatom identitetu
+    return {
+      verdict: 'fail',
+      detail: `strogi nadzor (--strict-commit): ocekivan je ${ocekivan.slice(0, 12)}, a identitet objave se ne da procitati `
+        + '(build-info.json nedostaje ili nije valjan), pa se objavljena verzija ne moze potvrditi',
+    };
+  }
+  if (objavljen === ocekivan) {
+    return { verdict: 'ok', detail: `objavljena stranica nosi ocekivani commit ${ocekivan.slice(0, 12)}` };
+  }
+  const razlika = `objavljena stranica je ${objavljen.slice(0, 12)}, a ocekivan je ${ocekivan.slice(0, 12)}`;
+  if (!strict) return { verdict: 'warn', detail: `${razlika}; objava zaostaje ili je zakljucana.` };
+  return { verdict: 'fail', detail: `strogi nadzor (--strict-commit): ${razlika}; objavljena verzija NIJE ona koja se tvrdi.` };
 }
 
 export async function runSmoke({ site, functions, observeImpl = observe }) {
@@ -428,6 +467,30 @@ const KLASIFIKACIJA = [
   ['unknown ne skriva stvaran pad', () => classifyRun([F('site', 404, { unknown: true }), F('site', 500), F('functions', 200, { ok: true })]) === 'fail'],
 ];
 
+/**
+ * Mutacije nad `commitIdentityVerdict`. Mjere se OBA smjera, jer su obje greske skupe iz suprotnih
+ * razloga: strogi mod koji propusti krivi sha cini objavu nedokazanom, a blagi mod koji pada na
+ * zaostaloj objavi gasi periodicki nadzor (odluka vlasnika 2026-09-09).
+ */
+const SHA_A = 'a'.repeat(40);
+const SHA_B = 'b'.repeat(40);
+const IDENTITET = [
+  ['strogi mod: krivi sha je PAD',
+    () => commitIdentityVerdict({ expectCommit: SHA_A, publishedCommit: SHA_B, strict: true }).verdict === 'fail'],
+  ['strogi mod: nepoznat identitet je PAD, ne prolaz',
+    () => commitIdentityVerdict({ expectCommit: SHA_A, publishedCommit: null, strict: true }).verdict === 'fail'],
+  ['strogi mod: podudaran sha prolazi',
+    () => commitIdentityVerdict({ expectCommit: SHA_A, publishedCommit: SHA_A, strict: true }).verdict === 'ok'],
+  ['blagi mod (cron): krivi sha je UPOZORENJE, ne pad',
+    () => commitIdentityVerdict({ expectCommit: SHA_A, publishedCommit: SHA_B }).verdict === 'warn'],
+  ['blagi mod (cron): nepoznat identitet ne dodaje drugu dojavu',
+    () => commitIdentityVerdict({ expectCommit: SHA_A, publishedCommit: null }).verdict === 'skip'],
+  ['bez --expect-commit nema tvrdnje ni u strogom modu',
+    () => commitIdentityVerdict({ expectCommit: '', publishedCommit: SHA_A, strict: true }).verdict === 'skip'],
+  ['razmaci oko sha-a ne smiju praviti lazno neslaganje',
+    () => commitIdentityVerdict({ expectCommit: ` ${SHA_A}\n`, publishedCommit: SHA_A, strict: true }).verdict === 'ok'],
+];
+
 const BASELINE = [
   ['naslovnica', () => assertHtmlOk({ status: 200, headers: ZDRAVA_ZAGLAVLJA, text: ZDRAV_HTML }, 'x')],
   ['pravni marker', () => assertContains({ text: ZDRAV_HTML }, 'AZOP', 'x')],
@@ -455,6 +518,10 @@ function selfTest() {
     if (!f()) { console.error(`  KLASIFIKACIJA FAIL  ${ime}`); pao++; }
     else console.log(`  ok          klasifikacija: ${ime}`);
   }
+  for (const [ime, f] of IDENTITET) {
+    if (!f()) { console.error(`  IDENTITET FAIL  ${ime}`); pao++; }
+    else console.log(`  ok          identitet: ${ime}`);
+  }
   // Izvlacenje resursa je i samo tvrdnja: prazan popis znaci da smoke ne bi provjerio NISTA.
   const nadjeni = extractLocalAssets(ZDRAV_HTML);
   if (nadjeni.length !== 2) { console.error(`  BASELINE FAIL  izvlacenje resursa: ${nadjeni.length}, ocekivano 2`); pao++; }
@@ -466,7 +533,7 @@ function selfTest() {
     process.exit(1);
   }
   console.log(`[post-deploy-smoke] SELF-TEST OK: ${BASELINE.length} baseline, ${MUTACIJE.length} mutacija (sve uhvacene), `
-    + `${KLASIFIKACIJA.length} tvrdnji o klasifikaciji.`);
+    + `${KLASIFIKACIJA.length} tvrdnji o klasifikaciji, ${IDENTITET.length} o identitetu objave.`);
 }
 
 // ---------------------------------------------------------------------------
@@ -500,16 +567,16 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     for (const n of nalazi) {
       console.log(n.ok ? `  ok    ${n.id}` : `  ${n.unreachable ? '????' : (n.unknown ? '????' : 'FAIL')}  ${n.id}: ${n.detail}`);
     }
-    // Objavljeni commit naspram ocekivanog (`--expect-commit`, u cronu `github.sha` mastera). UPOZORENJE, ne
-    // pad: zakljucana objava je namjerno stanje (vlasnik, 2026-09-09), a stalna crvena bi se naucila
-    // ignorirati. Da nema `build-info.json` uopce, to je vec nalaz `build-info` gore.
+    // Objavljeni commit naspram ocekivanog (`--expect-commit`, u cronu `github.sha` mastera). Bez
+    // `--strict-commit` je UPOZORENJE, ne pad: zakljucana objava je namjerno stanje (vlasnik, 2026-09-09),
+    // a stalna crvena bi se naucila ignorirati. Uz `--strict-commit` (provjera KONKRETNE objave, korak 7 u
+    // docs/deploy/RELEASE_PROOF_WORKFLOW.md) je pad. Presuda je u `commitIdentityVerdict`; da nema
+    // `build-info.json` uopce, to je vec nalaz `build-info` gore.
     const expectCommit = String(arg('expect-commit', '')).trim();
+    const strictCommit = process.argv.includes('--strict-commit');
     const buildNalaz = nalazi.find((n) => n.id === 'build-info');
     const objavljeno = buildNalaz?.commit ?? null;
     if (objavljeno) console.log(`[post-deploy-smoke] objavljeni build: ${objavljeno.slice(0, 12)}`);
-    if (expectCommit && objavljeno && expectCommit !== objavljeno) {
-      console.log(`::warning::objavljena stranica je ${objavljeno.slice(0, 12)}, a master je ${expectCommit.slice(0, 12)}; objava zaostaje ili je zakljucana.`);
-    }
     // Identitet objave NEPOZNAT (build-info 404). Dvije razlicite tvrdnje, dvije zastavice:
     //  - `--expect-commit` je USPOREDBA s masterom u periodickom nadzoru (cron salje `github.sha`); tu je
     //    nepoznat identitet upozorenje, kao i neslaganje commita, jer je zakljucana objava namjerno stanje.
@@ -521,6 +588,13 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     // umjesto 1; isti razred kao u master-ci, vidi CLAUDE.md). Zato se ishod skupi u `kod` i postavi na kraju.
     let kod = 0;
     let identitetPao = false;
+    // ZASTAVICA KOJA TIHO NE RADI NISTA JE GORA OD NEPOSTOJECE: `--strict-commit` bez `--expect-commit`
+    // nema s cim usporediti, pa bi izgledao kao stroga provjera a bio no-op. Zato je to pad.
+    if (strictCommit && !expectCommit) {
+      console.error('[post-deploy-smoke] FAIL: --strict-commit trazi i --expect-commit <sha>; bez njega nema s cim usporediti.');
+      kod = 1;
+      identitetPao = true;
+    }
     if (buildNalaz?.unknown) {
       if (process.argv.includes('--require-build-info')) {
         console.error('[post-deploy-smoke] FAIL: trazen je build-info.json (--require-build-info), a stranica ga nema; identitet objave se ne da potvrditi.');
@@ -529,6 +603,15 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       } else {
         console.log('::warning::identitet objavljenog builda je NEPOZNAT (build-info.json 404): objava je starija od write-build-info. Operativne provjere vrijede, dokaz identiteta ne; uz --require-build-info ovo je pad.');
       }
+    }
+    // Objavljena verzija naspram ocekivane (vidi `commitIdentityVerdict`).
+    const identitet = commitIdentityVerdict({ expectCommit, publishedCommit: objavljeno, strict: strictCommit });
+    if (identitet.verdict === 'ok') console.log(`[post-deploy-smoke] ${identitet.detail}`);
+    else if (identitet.verdict === 'warn') console.log(`::warning::${identitet.detail}`);
+    else if (identitet.verdict === 'fail') {
+      console.error(`[post-deploy-smoke] FAIL: ${identitet.detail}`);
+      kod = 1;
+      identitetPao = true;
     }
     const pali = nalazi.filter((n) => !n.ok && !n.unknown);
     const ishod = classifyRun(nalazi);

@@ -1,0 +1,76 @@
+<!-- @dsCard group="Stanja" name="Prilagodi prikaz" subtitle="korisnicke postavke izgleda, spremaju se u pregledniku; ne mijenjaju raspored ni sadrzaj" width="960" height="620" -->
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<title>Prilagodi prikaz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:dark;--desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;--pass:#34996A;--lamp:rgba(255,214,150,.15);--paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);--display-serif:"Newsreader",Georgia,serif;--ui:"Inter Tight",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--radius:2px;--radius-btn:8px;--radius-pill:999px}
+body{margin:0;min-height:620px;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);position:relative;overflow:hidden}
+.lamp{position:absolute;top:-500px;right:-200px;width:1100px;height:1100px;border-radius:50%;background:radial-gradient(circle,var(--lamp),transparent 62%);pointer-events:none}
+.mock{position:absolute;left:40px;top:44px;width:380px;color:var(--desk-faint);font-size:.82rem;line-height:1.55}
+.mock h2{margin:0 0 6px;font:500 1.5rem/1.1 var(--display-serif);color:var(--desk-ink)}
+.mock p{margin:0;max-width:40ch}
+.mock .sheet{margin-top:22px;padding:16px 18px;background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:var(--radius);box-shadow:var(--paper-sh);transform:rotate(-.5deg)}
+.mock .sheet .eyebrow{display:inline-flex;align-items:center;gap:7px;font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--red-on-soft)}
+.mock .sheet .eyebrow::before{content:"";width:7px;height:7px;border-radius:999px;background:currentColor}
+.mock .sheet h3{margin:8px 0 4px;font:500 1.05rem/1.25 var(--display-serif)}
+.mock .sheet p{color:var(--paper-muted);font-size:.8rem}
+.panel{position:absolute;right:0;top:0;bottom:0;width:440px;background:var(--paper);color:var(--paper-ink);border-left:1px solid var(--paper-line);box-shadow:-18px 0 60px rgba(0,0,0,.5);display:grid;grid-template-rows:auto 1fr auto}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 26px 16px;border-bottom:1px solid var(--paper-line)}
+.panel-head h1{margin:0;font:500 1.35rem/1.1 var(--display-serif)}
+.panel-head .eyebrow{display:block;margin-bottom:4px;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted)}
+.close{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--paper-line);border-radius:var(--radius-pill);background:none;color:var(--paper-muted);font:500 14px/1 var(--mono);cursor:pointer}
+.panel-body{padding:8px 26px 12px;overflow:auto;display:grid;gap:0}
+.ctrl{display:grid;gap:9px;padding:16px 0;border-bottom:1px solid var(--paper-line)}
+.ctrl:last-child{border-bottom:0}
+.ctrl label,.ctrl .lbl{display:flex;justify-content:space-between;align-items:baseline;font:600 .84rem/1.2 var(--ui)}
+.ctrl .lbl small,.ctrl label small{font:400 11px/1 var(--mono);color:var(--paper-muted);letter-spacing:.04em}
+.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;border:1px solid var(--paper-line);border-radius:var(--radius-btn);overflow:hidden;background:var(--paper-2)}
+.seg button{min-height:38px;padding:0 12px;border:0;background:transparent;color:var(--paper-muted);font:600 .8rem var(--ui);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--paper-ink);color:var(--paper)}
+.seg.size button{font-family:var(--display-serif);font-weight:500}
+.seg.size button:nth-child(1){font-size:.85rem}.seg.size button:nth-child(2){font-size:1rem}.seg.size button:nth-child(3){font-size:1.2rem}
+select{min-height:40px;padding:0 12px;border:1px solid var(--paper-line);border-radius:var(--radius-btn);background:var(--paper-2);color:var(--paper-ink);font:500 .88rem var(--display-serif)}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.toggle .sw{width:42px;height:24px;border-radius:999px;background:var(--paper-line);position:relative;flex:none;border:0;cursor:pointer}
+.toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .18s}
+.toggle .sw[aria-checked="true"]{background:var(--red-deep)}
+.toggle .sw[aria-checked="true"]::after{transform:translateX(18px)}
+.toggle p{margin:0;font-size:.78rem;color:var(--paper-muted);max-width:34ch}
+.sample{padding:14px 16px;background:var(--paper-2);border:1px solid var(--paper-line);border-radius:var(--radius)}
+.sample .eyebrow{font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted)}
+.sample p{margin:6px 0 0;font:400 1rem/1.5 var(--display-serif);color:var(--paper-ink)}
+.panel-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 26px 20px;border-top:1px solid var(--paper-line);font-size:.76rem;color:var(--paper-muted)}
+.panel-foot a{color:var(--red-on-soft);font-weight:600;text-decoration:none;text-underline-offset:4px}
+.panel-foot a:hover{text-decoration:underline}
+a{color:var(--red-on-soft)}a:hover{color:var(--red-deep)}
+</style>
+</head>
+<body>
+<div class="lamp"></div>
+<div class="mock">
+  <h2>Nije spremno za predaju.</h2>
+  <p>Panel klizne s desne strane kao list preko stola. Ostatak sučelja ostaje vidljiv pa korisnik odmah vidi učinak svake promjene.</p>
+  <div class="sheet"><span class="eyebrow">Kritično · page.margins</span><h3>Lijeva margina je 2,0 cm, pravilnik traži 3,0 cm</h3><p>Primjer kartice nalaza na koju se postavke primjenjuju u živo.</p></div>
+</div>
+<aside class="panel" aria-labelledby="pTitle">
+  <div class="panel-head"><div><span class="eyebrow">Postavke</span><h1 id="pTitle">Prilagodi prikaz</h1></div><button class="close" aria-label="Zatvori">✕</button></div>
+  <div class="panel-body">
+    <div class="ctrl"><span class="lbl">Osvjetljenje <small>lampa</small></span><div class="seg" role="group"><button aria-pressed="true">Radna lampa</button><button aria-pressed="false">Danje svjetlo</button><button aria-pressed="false">Kao sustav</button></div></div>
+    <div class="ctrl"><label for="fnt">Pismo za čitanje <small>naslovi i opisi</small></label><select id="fnt"><option>Newsreader (zadano)</option><option>Sistemski serif</option><option>Sistemski sans</option><option>Pismo za disleksiju</option></select></div>
+    <div class="ctrl"><span class="lbl">Veličina teksta <small>100 %</small></span><div class="seg size" role="group"><button aria-pressed="false">A</button><button aria-pressed="true">A</button><button aria-pressed="false">A</button></div></div>
+    <div class="ctrl"><span class="lbl">Gustoća</span><div class="seg" role="group"><button aria-pressed="false">Zbijeno</button><button aria-pressed="true">Uobičajeno</button><button aria-pressed="false">Prozračno</button></div></div>
+    <div class="ctrl toggle"><div><span class="lbl">Pojačan kontrast</span><p>Tamnija tinta na papiru, deblje linije, bez prigušenog teksta.</p></div><button class="sw" role="switch" aria-checked="false" aria-label="Pojačan kontrast"></button></div>
+    <div class="ctrl toggle"><div><span class="lbl">Manje pokreta</span><p>Bez klizanja papira i prijelaza. Prati postavku sustava ako je uključena.</p></div><button class="sw" role="switch" aria-checked="true" aria-label="Manje pokreta"></button></div>
+    <div class="ctrl"><div class="sample"><span class="eyebrow">Primjer</span><p>Lijeva margina je 2,0 cm, pravilnik traži 3,0 cm. Ovako će izgledati tekst nalaza.</p></div></div>
+  </div>
+  <div class="panel-foot"><span>Sprema se u ovom pregledniku. Ne utječe na dokument.</span><a href="#">Vrati zadano</a></div>
+</aside>
+</body>
+</html>

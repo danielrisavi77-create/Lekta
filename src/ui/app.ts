@@ -314,8 +314,6 @@ subscribeAnalyzerDocumentSettled((e)=>{if(!_sessionProfileApplied)return;if(e.ki
 // vrsti rada (otkljucava se u rezultatu), i rucno uredivanje (ljudski servis preko
 // obrasca narudzbe). Ovo je izvor istine za landing sekciju Paketi.
 // PRICING_TIERS zive u `config/pricing-tiers` (vidi ondje zasto).
-// Rucni paketi za obrazac narudzbe (ljudska usluga). Automatizirana provjera je gore
-// u PRICING_TIERS i ne prolazi kroz ovaj obrazac.
 /**
  * Paketi RUCNE obrade (obrazac narudzbe), NE cjenik automatskog popravka.
  *
@@ -378,7 +376,8 @@ function initLegacy(doc: Document,signal: AbortSignal){
  // Cjenik copy: dok su placene tarife "Uskoro" (soft-launch), staticni HTML nosi besplatnu poruku;
  // kad naplata proradi (paidOffersLive), vrati se placeni jamstveni/disclaimer copy s payment info.
  if(paidOffersLive()){const _gn=$('#guaranteeNote');if(_gn)_gn.innerHTML='✓ <strong>Jamstvo pokrivenosti:</strong> za profile označene kao potvrđeni, dakle ne za generičke ni savjetodavne, ako ti referada vrati rad zbog pravila koje je Lekta označila ispravnim, vraćamo novac i besplatno ručno popravimo. Prijava u roku od 30 dana od kupnje, uz dokaz i sporno pravilo. Jamčimo točnost provjere prema pravilniku, a ne ocjenu, prihvaćanje rada ni izvornost teksta (nije provjera plagijata).';const _pd=$('#pricingDisclaimer');if(_pd)_pd.textContent='Usluga provjerava oblikovanje, strukturu, opseg i citatnu tehniku prema dostupnim pravilima. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu, akademsku kvalitetu sadržaja ni odluku mentora ili povjerenstva. Plaćanje se provodi na sigurnoj stranici konfiguriranog payment providera.'}
- let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e: any){}if(theme)doc.documentElement.dataset.theme=theme;
+ // `system` (Z6) se izrazava ODSUTNOSCU atributa; zasto, stoji u src/shared/display-settings.ts.
+ let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e: any){}if(theme&&theme!=='system')doc.documentElement.dataset.theme=theme;
  if(location.search.includes('demo=1'))setTimeout(()=>{if(!signal.aborted)runDemo()},300);
  void trackEvent('landing_view');
 }

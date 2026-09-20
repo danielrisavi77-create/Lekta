@@ -56,6 +56,7 @@
     "smoke:db:mutation": "bash scripts/rate-slots-mutation-check.sh",
     "check:full": "npm run check && npm run test:slow",
     "release:check": "node scripts/release-check.mjs",
+    "release:proof-gate": "node scripts/verify-release-proof.mjs",
     "tier2-freshness": "node scripts/tier2-freshness.mjs",
     "projection-freshness": "node scripts/projection-freshness.mjs",
     "projection-verify": "node scripts/projection-verify.mjs",

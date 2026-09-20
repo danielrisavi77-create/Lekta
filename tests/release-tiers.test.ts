@@ -15,22 +15,25 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { TIERS } from '../scripts/release-tiers.mjs';
 
 const ROOT = join(__dirname, '..');
 const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as {
   scripts: Record<string, string>;
 };
-const releaseSrc = readFileSync(join(ROOT, 'scripts/release-check.mjs'), 'utf8');
-
 type Tier = { id: string; cmd: string; required: boolean };
 
-/** Razine se citaju iz izvora, ne prepisuju. */
+/**
+ * Razine se citaju iz izvora, ne prepisuju.
+ *
+ * Do 2026-09-13 se popis vadio REGEXOM iz `scripts/release-check.mjs`, jer se ta skripta pri uvozu
+ * odmah izvrsi pa se nije mogla uvesti. Otkad popis zivi u `scripts/release-tiers.mjs` (dijeli ga i
+ * gate pri deployu, koji potpunost dokaza racuna iz njega), cita se izravno. Razlika nije samo
+ * urednost: regex koji promasi vrati PRAZAN popis, a prazan popis prolazi svaku tvrdnju nize kao
+ * "nema udvajanja, sve skripte postoje", dakle vakuumski.
+ */
 function tiers(): Tier[] {
-  const out: Tier[] = [];
-  for (const m of releaseSrc.matchAll(/\{\s*id:\s*'([^']+)'[^}]*?cmd:\s*'([^']+)'([^}]*)\}/g)) {
-    out.push({ id: m[1], cmd: m[2], required: /required:\s*true/.test(m[3]) });
-  }
-  return out;
+  return TIERS as Tier[];
 }
 
 /** Sve npm skripte koje `name` pokrece, tranzitivno (ukljucujuci samu sebe). */
@@ -62,6 +65,12 @@ function duplicatedTiers(list: Tier[]): Array<[string, string]> {
 }
 
 describe('razine dokaza o izdanju', () => {
+  /** Prazan popis bi svaku tvrdnju nize ucinio vakuumskom, pa se prvo tvrdi da popis uopce postoji. */
+  it('popis razina je neprazan i dolazi iz zajednickog modula', () => {
+    expect(tiers().length).toBeGreaterThanOrEqual(9);
+    expect(tiers().map((t) => t.id)).toContain('check');
+  });
+
   it('nijedna razina nije vec pokrivena drugom razinom', () => {
     expect(duplicatedTiers(tiers())).toEqual([]);
   });

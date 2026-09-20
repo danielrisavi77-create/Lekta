@@ -42,3 +42,27 @@ ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-cli.test.ts:
 ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-cli.test.ts:generic-api-key:43
 ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-cli.test.ts:generic-api-key:48
 ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-gate.test.ts:generic-api-key:16
+
+# 2026-09-20: isti sinteticki wordreplica release-key markeri na T19 grani (drugi commit SHA).
+164dd1605a14798800114a360132dd1d6133583f:docs/superpowers/plans/2026-09-11-lekta-wordreplica-release-key-binding.md:generic-api-key:921
+164dd1605a14798800114a360132dd1d6133583f:docs/superpowers/specs/2026-09-11-lekta-wordreplica-release-key-binding-design.md:generic-api-key:75
+164dd1605a14798800114a360132dd1d6133583f:tests/fixtures/repair-local-status-v1/wordreplica-python.json:generic-api-key:2
+164dd1605a14798800114a360132dd1d6133583f:tests/fixtures/repair-local-status-v1/wordreplica-python.json:generic-api-key:3
+164dd1605a14798800114a360132dd1d6133583f:tests/repair-local-issue-service.test.ts:generic-api-key:48
+164dd1605a14798800114a360132dd1d6133583f:tests/repair-local-release-cli.test.ts:generic-api-key:106
+164dd1605a14798800114a360132dd1d6133583f:tests/repair-local-release-cli.test.ts:generic-api-key:83
+164dd1605a14798800114a360132dd1d6133583f:tests/repair-local-release-cli.test.ts:generic-api-key:87
+164dd1605a14798800114a360132dd1d6133583f:tests/repair-local-release-cli.test.ts:generic-api-key:92
+164dd1605a14798800114a360132dd1d6133583f:tests/repair-local-release-cli.test.ts:generic-api-key:99
+164dd1605a14798800114a360132dd1d6133583f:tests/repair-local-release-gate.test.ts:generic-api-key:16
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:docs/superpowers/plans/2026-09-11-lekta-wordreplica-release-key-binding.md:generic-api-key:921
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:docs/superpowers/specs/2026-09-11-lekta-wordreplica-release-key-binding-design.md:generic-api-key:75
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/fixtures/repair-local-status-v1/wordreplica-python.json:generic-api-key:2
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/fixtures/repair-local-status-v1/wordreplica-python.json:generic-api-key:3
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/repair-local-issue-service.test.ts:generic-api-key:48
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/repair-local-release-cli.test.ts:generic-api-key:106
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/repair-local-release-cli.test.ts:generic-api-key:83
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/repair-local-release-cli.test.ts:generic-api-key:87
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/repair-local-release-cli.test.ts:generic-api-key:92
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/repair-local-release-cli.test.ts:generic-api-key:99
+7c29e03569d388ecfe8f36f843e6e69531ae9dff:tests/repair-local-release-gate.test.ts:generic-api-key:16
