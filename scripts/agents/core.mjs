@@ -5,7 +5,16 @@ export const AGENTS = Object.freeze({
   opus: { command: 'claude', model: 'opus', role: 'implementer' },
   sonnet: { command: 'claude', model: 'sonnet', role: 'implementer' },
   sol: { command: 'codex', model: 'gpt-5.6-sol', role: 'implementer' },
+  grok: { command: 'grok', model: 'grok-4.6', role: 'implementer' },
+  'grok-audit': { command: 'grok', model: 'grok-4.6', role: 'coordinator' },
 });
+
+/**
+ * Grok Build CLI prima prompt iz DATOTEKE, ne sa stdina ni iz argv. Priprema ne poznaje izlazni
+ * direktorij poziva, pa u args ostavlja rezerviranu oznaku koju cli.mjs zamijeni stvarnom putanjom
+ * do `prompt.md` koji ionako pise. Time prompt nikad ne prolazi kroz argv kao ljuska.
+ */
+export const PROMPT_FILE_PLACEHOLDER = '__PROMPT_FILE__';
 
 export function validateQueue(queue) {
   if (!Array.isArray(queue?.tasks) || !queue.tasks.length) throw new Error('Empty task queue');
@@ -40,7 +49,7 @@ export function validateQueue(queue) {
  *    pretplatu. Lazni pozitivan budzet se ovdje ne unosi da bi "prosla" stara validacija.
  */
 export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
-export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable']);
+export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'grok-audit']);
 
 export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   const billingMode = options.billingMode ?? 'budget';
@@ -64,9 +73,17 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
     if (!implementation || implementation.role !== 'implementer') throw new Error('Missing implementationAgent');
     if (implementation.command === agent.command) throw new Error('Review requires a different provider');
   }
-  const args = agent.command === 'codex'
-    ? ['exec', '--model', agent.model, '--sandbox', phase === 'implement' ? 'workspace-write' : 'read-only', '--json', '-']
-    : ['-p', '--model', agent.model, '--output-format', 'json', '--max-turns', '20', '--permission-mode', 'dontAsk'];
+  let args;
+  if (agent.command === 'codex') {
+    args = ['exec', '--model', agent.model, '--sandbox', phase === 'implement' ? 'workspace-write' : 'read-only', '--json', '-'];
+  } else if (agent.command === 'grok') {
+    args = ['--no-auto-update', '--prompt-file', PROMPT_FILE_PLACEHOLDER, '--model', agent.model,
+      '--output-format', 'json', '--max-turns', '20'];
+    if (phase === 'implement') args.push('--always-approve');
+    else args.push('--sandbox', 'read-only');
+  } else {
+    args = ['-p', '--model', agent.model, '--output-format', 'json', '--max-turns', '20', '--permission-mode', 'dontAsk'];
+  }
   if (billingMode === 'subscription' && SUBSCRIPTION_EXCLUDED_AGENTS.includes(agentName)) {
     throw new Error(`${agentName} is not included in the subscription profile`);
   }
@@ -100,6 +117,14 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
 export function parseResult(command, stdout, exitCode) {
   if (exitCode !== 0) return { ok: false, reportedModels: [] };
   try {
+    if (command === 'grok') {
+      // Grok Build CLI vraca JEDAN JSON objekt (ne NDJSON kao Codex).
+      const result = JSON.parse(stdout);
+      if (result === null || typeof result !== 'object' || Array.isArray(result)) return { ok: false, reportedModels: [] };
+      const reportedModels = typeof result.model === 'string' ? [result.model] : [];
+      if (result.is_error === true || result.type === 'error') return { ok: false, reportedModels };
+      return { ok: true, reportedModels };
+    }
     if (command === 'claude') {
       const result = JSON.parse(stdout);
       return { ok: result.subtype === 'success' && result.is_error === false,

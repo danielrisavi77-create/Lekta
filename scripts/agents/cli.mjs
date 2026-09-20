@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { AGENTS, prepareJob, parseResult, validateQueue } from './core.mjs';
+import { AGENTS, PROMPT_FILE_PLACEHOLDER, prepareJob, parseResult, validateQueue } from './core.mjs';
 
 const root = process.cwd();
 const git = (...args) => {
@@ -14,12 +14,12 @@ const git = (...args) => {
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol [--budget-usd N | --subscription] [--execute]');
+    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|grok-audit [--budget-usd N | --subscription] [--execute]');
     return;
   }
   if (command === 'doctor') {
     if (rest.length) throw new Error('doctor takes no arguments');
-    for (const cli of ['git', 'node', 'deno', 'codex', 'claude']) {
+    for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) {
       const result = spawnSync(cli, ['--version'], { encoding: 'utf8', timeout: 10_000 });
       console.log(`${cli}: ${result.status === 0 ? result.stdout.trim().split('\n')[0] : 'unavailable'}`);
     }
@@ -84,10 +84,13 @@ function main() {
     const baseHead = git('rev-parse', 'HEAD');
     const out = join(root, '.artifacts/agents', `${id}-${Date.now()}-${process.pid}`);
     mkdirSync(out, { recursive: true });
-    writeFileSync(join(out, 'prompt.md'), job.prompt);
+    const promptFile = join(out, 'prompt.md');
+    writeFileSync(promptFile, job.prompt);
+    // Grok cita prompt iz datoteke; priprema je oznacila mjesto, ovdje se upisuje stvarna putanja.
+    const args = job.args.map(arg => (arg === PROMPT_FILE_PLACEHOLDER ? promptFile : arg));
     // argv array + stdin, never a shell string. Existing CLI authentication is reused.
     releaseLock = false;
-    const result = spawnSync(job.command, job.args, {
+    const result = spawnSync(job.command, args, {
       cwd: root, input: job.prompt, encoding: 'utf8', shell: false,
       timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
     });

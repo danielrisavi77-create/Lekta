@@ -14,11 +14,15 @@ rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi po
 | Implementator | Opus | `opus` | Dodijeljena implementacija i dokazi |
 | Implementator | Sonnet | `sonnet` | Dodijeljena implementacija i dokazi |
 | Implementator | Sol | `gpt-5.6-sol` | Dodijeljena implementacija i dokazi |
+| Implementator | Grok | `grok` | Dodijeljena implementacija i dokazi |
+| Koordinator | Grok audit | `grok` | Prioriteti, brief, audit, pregled Sol/Opus/Sonnet implementacije |
 
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
 zadatka: izbor pratimo prema kvaliteti isporuke, ponovljenom radu, vremenu i stvarnoj potrosnji.
-Pregled treba drugi provider: Astra za Opus/Sonnet, Fable za Sol. Za netrivijalne promjene
+Pregled treba drugi provider: Astra za Opus/Sonnet, Fable za Sol. Grok (CLI oznaka `grok`)
+implementira, `grok-audit` koordinira i pregledava Sol/Opus/Sonnet; Grokovu implementaciju pregledava
+Astra ili Fable, nikad drugi Grok, a `--subscription` ne ukljucuje Grok. Za netrivijalne promjene
 parsera, citata i DOCX-a ostaje obavezan adversarijalni pregled prema AGENTS.md.
 
 ## Pocetak

@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { prepareJob, parseResult, validateQueue } from '../scripts/agents/core.mjs';
+import { AGENTS, PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS, prepareJob, parseResult, validateQueue }
+  from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -83,5 +84,65 @@ describe('subscription billing mode (autonomy profile)', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sonnet')).toThrow(/budget/);
     expect(prepareJob(queue(), 'T01', 'implement', 'sonnet', 3).billingMode).toBe('budget');
     expect(prepareJob(queue(), 'T01', 'implement', 'sol').args).not.toContain('--max-budget-usd');
+  });
+});
+
+describe('Grok Build CLI je treci provider', () => {
+  it('gradi implement args i salje prompt izvan argv', () => {
+    const q = queue();
+    q.tasks[1].title = 'Repair $(touch stolen) `echo secret`';
+    const job = prepareJob(q, 'T01', 'implement', 'grok');
+    expect(job.command).toBe('grok');
+    expect(job.requestedModel).toBe('grok-4.6');
+    expect(job.args).toEqual(['--no-auto-update', '--prompt-file', PROMPT_FILE_PLACEHOLDER,
+      '--model', 'grok-4.6', '--output-format', 'json', '--max-turns', '20', '--always-approve']);
+    // Prompt ide u datoteku koju cli.mjs upise na mjesto oznake; u argv ga nema.
+    expect(job.prompt).toContain('$(touch stolen)');
+    expect(job.args.join(' ')).not.toContain('stolen');
+    expect(job.args).not.toContain(job.prompt);
+    expect(job.args).not.toContain('--max-budget-usd');
+  });
+  it('plan i review voze read-only sandbox bez odobravanja izmjena', () => {
+    const q = queue();
+    q.tasks[1].status = 'blocked';
+    const plan = prepareJob(q, 'T01', 'plan', 'grok-audit');
+    expect(plan.args).toEqual(['--no-auto-update', '--prompt-file', PROMPT_FILE_PLACEHOLDER,
+      '--model', 'grok-4.6', '--output-format', 'json', '--max-turns', '20', '--sandbox', 'read-only']);
+    expect(plan.args).not.toContain('--always-approve');
+    expect(AGENTS.grok.role).toBe('implementer');
+    expect(AGENTS['grok-audit'].role).toBe('coordinator');
+  });
+  it('grok-audit pregledava drugi provider, ali nikad vlastiti', () => {
+    const q = queue();
+    q.tasks[1].status = 'in_review';
+    q.tasks[1].implementationAgent = 'sol';
+    expect(() => prepareJob(q, 'T01', 'review', 'grok-audit')).not.toThrow();
+    q.tasks[1].implementationAgent = 'grok';
+    expect(() => prepareJob(q, 'T01', 'review', 'grok-audit')).toThrow(/different provider/);
+    // Obrnuti smjer: Astra i Fable ostaju dopusteni pregledatelji Groka.
+    expect(() => prepareJob(q, 'T01', 'review', 'astra')).not.toThrow();
+  });
+  it('pretplatnicki nacin ne ukljucuje Grok', () => {
+    expect(SUBSCRIPTION_EXCLUDED_AGENTS).toEqual(['fable', 'grok', 'grok-audit']);
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'grok', undefined, { billingMode: 'subscription' }))
+      .toThrow(/subscription/);
+    const q = queue();
+    q.tasks[1].status = 'blocked';
+    expect(() => prepareJob(q, 'T01', 'plan', 'grok-audit', undefined, { billingMode: 'subscription' }))
+      .toThrow(/subscription/);
+    // Baseline: isti poziv u rucnom nacinu prolazi, dakle zabrana dolazi od nacina naplate.
+    expect(prepareJob(q, 'T01', 'plan', 'grok-audit').billingMode).toBe('budget');
+  });
+  it('rezultat je jedan JSON objekt, a greska nije uspjeh', () => {
+    expect(parseResult('grok', '{"type":"result","model":"grok-4.6"}', 0))
+      .toEqual({ ok: true, reportedModels: ['grok-4.6'] });
+    expect(parseResult('grok', '{"type":"result","is_error":true,"model":"grok-4.6"}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"type":"error","message":"no credit"}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"type":"result"}', 0)).toEqual({ ok: true, reportedModels: [] });
+    expect(parseResult('grok', '{"type":"result"}', 1).ok).toBe(false);
+    expect(parseResult('grok', 'not json', 0).ok).toBe(false);
+    // NDJSON je Codexov oblik; kao Grok rezultat ne smije proci.
+    const ndjson = ['{"type":"result"}', '{"type":"result"}'].join(String.fromCharCode(10));
+    expect(parseResult('grok', ndjson, 0).ok).toBe(false);
   });
 });
