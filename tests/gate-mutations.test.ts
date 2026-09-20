@@ -70,6 +70,8 @@ import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItems
 import { buildRepairPanelHandle } from '../src/ui/repair-panel';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
+import { PROMPT_FILE_PLACEHOLDER, prepareJob as prepareAgentJob } from '../scripts/agents/core.mjs';
+import { buildSpawnArgs } from '../scripts/agents/cli.mjs';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -249,6 +251,47 @@ const RE60_MIXED_GATE = (output: string) =>
 const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t></w:r></w:p></w:body></w:document>';
 const RE60_SYNTHETIC_GATE = (output: string) =>
   detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
+
+/** Minimalan red zadataka za pripremu posla agenta; T01 je `ready`, ovisnost je `done`. */
+const agentQueue = () => ({ tasks: [
+  { id: 'T00', title: 'Baseline', status: 'done', dependsOn: [] },
+  { id: 'T01', title: 'Fix', status: 'ready', dependsOn: ['T00'] },
+] });
+
+type SpawnArgsBuilder = (job: { command: string; args: string[] }, promptFile?: string) => string[];
+
+/**
+ * UGOVOR nad izgradnjom konacnog argv-a u `scripts/agents/cli.mjs`. Vraca popis KRSENJA, pa se isti
+ * kod pusta i nad stvarnom `buildSpawnArgs` (baseline: prazno) i nad mutiranom izvedbom (mora
+ * prijaviti). Prva izvedba tog garda bila je tekstualna (`toContain` nad izvorom `cli.mjs`) i nije
+ * grizla: alias `const args = job.args` prolazi svaku takvu tvrdnju, a Groku salje doslovnu oznaku
+ * `__PROMPT_FILE__`, pa provider trazi datoteku tog imena u cwd-u umjesto stvarnog prompta.
+ */
+function spawnArgsProblems(build: SpawnArgsBuilder): string[] {
+  const promptFile = '/tmp/agents/T01-1-2/prompt.md';
+  const problems: string[] = [];
+  let grok: string[];
+  try {
+    grok = build(prepareAgentJob(agentQueue(), 'T01', 'implement', 'grok') as never, promptFile);
+  } catch {
+    return ['grok-build-threw'];
+  }
+  if (grok.join(' ').includes(PROMPT_FILE_PLACEHOLDER)) problems.push('grok-placeholder-survives');
+  if (!grok.includes(promptFile)) problems.push('grok-prompt-file-missing');
+  // Druga strana istog ugovora: provider bez oznake ne smije dobiti izmijenjen argv.
+  for (const [agent, budget] of [['sol', undefined], ['sonnet', 3]] as const) {
+    const job = prepareAgentJob(agentQueue(), 'T01', 'implement', agent, budget) as { command: string; args: string[] };
+    let built: string[];
+    try {
+      built = build(job, promptFile);
+    } catch {
+      problems.push(`${agent}-build-threw`);
+      continue;
+    }
+    if (JSON.stringify(built) !== JSON.stringify(job.args)) problems.push(`${agent}-args-changed`);
+  }
+  return problems;
+}
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -2466,6 +2509,19 @@ const MUTATIONS: Mutation[] = [
       }]);
       return audit.consumers.length === 1 && audit.unsafe.length === 0;
     },
+  },
+  // --- agent runner: oznaka prompta mora biti zamijenjena PRIJE spawna --------------------------
+  {
+    id: 'agents/spawn-args-doslovna-oznaka',
+    imitates: 'cli.mjs spawna job.args doslovno (alias umjesto zamjene), pa Grok dobije __PROMPT_FILE__ kao ime datoteke',
+    caught: () => spawnArgsProblems((job) => [...job.args]).includes('grok-placeholder-survives'),
+    cleanBefore: () => spawnArgsProblems(buildSpawnArgs as SpawnArgsBuilder).length === 0,
+  },
+  {
+    id: 'agents/spawn-args-dira-tudji-provider',
+    imitates: 'izgradnja argv-a dopisuje putanju prompta svakom provideru, pa Codex i Claude dobiju argument koji njihov CLI ne poznaje',
+    caught: () => spawnArgsProblems((job, promptFile) => [...job.args, String(promptFile)]).includes('sol-args-changed'),
+    cleanBefore: () => spawnArgsProblems(buildSpawnArgs as SpawnArgsBuilder).length === 0,
   },
 ];
 

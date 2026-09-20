@@ -94,6 +94,11 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   } else if (agent.command === 'grok') {
     args = ['--no-auto-update', '--prompt-file', PROMPT_FILE_PLACEHOLDER, '--model', agent.model,
       '--output-format', 'json', '--max-turns', '20'];
+    // NIJE DOKAZANO: implement grana nosi samo `--always-approve`, bez `--sandbox workspace-write`.
+    // Grok Build CLI nije instaliran na ovom racunalu (`grok --version` nema izvrsnog alata), pa se
+    // postojanje te zastavice ne moze provjeriti kroz `grok --help`. Nagadjan prekidac bi bio gori
+    // od izostanka: nepoznat argument obara poziv. Prije prvog stvarnog implement poziva Grokom
+    // vlasnik mora potvrditi radi li taj poziv bez sandboxa; do tada je ovo rucni, nadzirani put.
     if (phase === 'implement') args.push('--always-approve');
     else args.push('--sandbox', 'read-only');
   } else {
@@ -137,7 +142,12 @@ export function parseResult(command, stdout, exitCode) {
       const result = JSON.parse(stdout);
       if (result === null || typeof result !== 'object' || Array.isArray(result)) return { ok: false, reportedModels: [] };
       const reportedModels = typeof result.model === 'string' ? [result.model] : [];
-      if (result.is_error === true || result.type === 'error') return { ok: false, reportedModels };
+      // Uspjeh se TVRDI, ne pretpostavlja: prazan objekt `{}` nema nijedan dokaz dovrsenog kruga, pa
+      // je odsutnost `is_error` ne smije pretvoriti u prolaz. Zato se trazi `type === 'result'`, a
+      // svaki `subtype` koji pocinje s `error` (npr. `error_max_turns`) je neuspjeh kao i kod Claudea.
+      if (result.type !== 'result') return { ok: false, reportedModels };
+      if (result.is_error === true) return { ok: false, reportedModels };
+      if (typeof result.subtype === 'string' && result.subtype.startsWith('error')) return { ok: false, reportedModels };
       return { ok: true, reportedModels };
     }
     if (command === 'claude') {

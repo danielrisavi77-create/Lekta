@@ -1,13 +1,8 @@
 // @vitest-environment node
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { AGENTS, PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS, prepareJob, parseResult,
   resolvePromptFileArgs, validateQueue } from '../scripts/agents/core.mjs';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const readRepoFile = (relative: string) => readFileSync(join(repoRoot, relative), 'utf8');
+import { buildSpawnArgs } from '../scripts/agents/cli.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -147,6 +142,14 @@ describe('Grok Build CLI je treci provider', () => {
     expect(parseResult('grok', '{"type":"result"}', 0)).toEqual({ ok: true, reportedModels: [] });
     expect(parseResult('grok', '{"type":"result"}', 1).ok).toBe(false);
     expect(parseResult('grok', 'not json', 0).ok).toBe(false);
+    // Prazan objekt nema NIJEDAN dokaz dovrsenog kruga; odsutnost `is_error` nije uspjeh.
+    expect(parseResult('grok', '{}', 0).ok).toBe(false);
+    // Potroseni krugovi su neuspjeh i kod Claudea; `subtype` s prefiksom `error` ne smije proci.
+    expect(parseResult('grok', '{"type":"result","subtype":"error_max_turns"}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"type":"result","subtype":"error_during_execution"}', 0).ok).toBe(false);
+    // Baseline uz isti oblik: uredan `subtype` prolazi, pa odbijanje dolazi od prefiksa `error`.
+    expect(parseResult('grok', '{"type":"result","subtype":"success","model":"grok-4.6"}', 0))
+      .toEqual({ ok: true, reportedModels: ['grok-4.6'] });
     // NDJSON je Codexov oblik; kao Grok rezultat ne smije proci.
     const ndjson = ['{"type":"result"}', '{"type":"result"}'].join(String.fromCharCode(10));
     expect(parseResult('grok', ndjson, 0).ok).toBe(false);
@@ -155,8 +158,9 @@ describe('Grok Build CLI je treci provider', () => {
 
 /**
  * `job.args` su do Groka bili doslovno izvrsivi, pa nijedan potrosac nije morao nista zamijeniti.
- * Oznaka prompta tu pretpostavku rusi, a potrosaca ima DVA: `scripts/agents/cli.mjs` (rucni put) i
- * `scripts/autonomy/worker.py` (autonomni kontroler). Ovi testovi drze oba imenovana.
+ * Oznaka prompta tu pretpostavku rusi. Potrosac je `scripts/agents/cli.mjs` (rucni put); autonomni
+ * `scripts/autonomy/worker.py` Grok danas ne moze ni pokrenuti, jer uvijek salje `--subscription`, a
+ * `SUBSCRIPTION_EXCLUDED_AGENTS` tada baca. Zato je izvan ovog garda dok se o tome ne odluci zasebno.
  */
 describe('oznaka u args ima potrosaca koji je zamjenjuje', () => {
   const preparedArgs = () => {
@@ -200,18 +204,29 @@ describe('oznaka u args ima potrosaca koji je zamjenjuje', () => {
       .toThrow(/Unsubstituted/);
   });
 
-  it('oba potrosaca job.args zamjenjuju oznaku prije poziva', () => {
-    // cli.mjs: argv se gradi zajednickom funkcijom, a `job.args` nikad ne ide izravno u spawn.
-    const cli = readRepoFile('scripts/agents/cli.mjs');
-    expect(cli).toContain('resolvePromptFileArgs(job.args, promptFile)');
-    expect(cli).not.toMatch(/spawnSync\(job\.command,\s*job\.args/);
-    expect(cli.indexOf('resolvePromptFileArgs(job.args')).toBeLessThan(cli.indexOf('spawnSync(job.command'));
+  /**
+   * Prva izvedba ovog garda bila je TEKSTUALNA (`toContain` nad izvorom `cli.mjs`) i nije grizla:
+   * mutacija koja `resolvePromptFileArgs` ostavi kao mrtav izraz, a spawna alias `const args = job.args`,
+   * prolazi svaku takvu tvrdnju i Groku salje doslovnu oznaku. Zato se sada IZVODI ista funkcija koju
+   * `cli.mjs` stvarno predaje `spawnSync`. Mutaciju drzi `tests/gate-mutations.test.ts`.
+   */
+  it('cli.mjs gradi spawn argumente funkcijom koja oznaku stvarno zamijeni', () => {
+    const promptFile = '/tmp/out/T01-1-2/prompt.md';
+    const grok = buildSpawnArgs(prepareJob(queue(), 'T01', 'implement', 'grok'), promptFile);
+    expect(grok.join(' ')).not.toContain(PROMPT_FILE_PLACEHOLDER);
+    expect(grok).toContain(promptFile);
+    expect(grok[grok.indexOf('--prompt-file') + 1]).toBe(promptFile);
 
-    // worker.py je drugi jezik pa ne moze uvesti funkciju; drzi ga vrijednost oznake i fail-safe grana.
-    // Ponasanje te grane dokazuju scripts/autonomy/tests/test_worker.py (unittest, izvan vitesta).
-    const worker = readRepoFile('scripts/autonomy/worker.py');
-    expect(worker).toContain(`PROMPT_FILE_PLACEHOLDER = "${PROMPT_FILE_PLACEHOLDER}"`);
-    expect(worker).toContain('prompt_file_unsubstituted');
-    expect(worker.indexOf('PROMPT_FILE_PLACEHOLDER in raw_args')).toBeLessThan(worker.indexOf('tree.start(argv'));
+    // Provider bez oznake mora proci nepromijenjen, inace bi Codex i Claude ovisili o putanji prompta.
+    for (const agent of ['sol', 'sonnet'] as const) {
+      const job = prepareJob(queue(), 'T01', 'implement', agent, agent === 'sonnet' ? 3 : undefined);
+      expect(buildSpawnArgs(job, promptFile)).toEqual(job.args);
+    }
+    // I bez putanje prompta, jer je cli.mjs pise tek uz sam poziv.
+    const codex = prepareJob(queue(), 'T01', 'implement', 'sol');
+    expect(buildSpawnArgs(codex, undefined)).toEqual(codex.args);
+
+    // Posao bez `args` je greska, ne prazan argv koji provider protumaci kao interaktivni poziv.
+    expect(() => buildSpawnArgs({ command: 'grok' }, promptFile)).toThrow(/args/);
   });
 });

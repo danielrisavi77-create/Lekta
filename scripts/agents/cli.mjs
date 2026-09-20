@@ -2,7 +2,21 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { AGENTS, prepareJob, parseResult, resolvePromptFileArgs, validateQueue } from './core.mjs';
+
+/**
+ * Konacni argv za `spawnSync`, iz pripremljenog posla i putanje do vec upisanog `prompt.md`.
+ *
+ * Postoji kao IZVEZENA funkcija, a ne kao izraz u tijelu `main()`, jer je gard nad njom prije bio
+ * tekstualni (`toContain` nad izvorom ove datoteke) i nije grizao: mutacija koja `resolvePromptFileArgs`
+ * ostavi kao mrtav izraz, a spawna alias `const args = job.args`, prolazi svaku takvu tvrdnju i Groku
+ * salje doslovnu oznaku `__PROMPT_FILE__`. Ovako test poziva isti kod koji `main()` izvodi.
+ */
+export function buildSpawnArgs(job, promptFile) {
+  if (!job || !Array.isArray(job.args)) throw new Error('Job without args cannot be spawned');
+  return resolvePromptFileArgs(job.args, promptFile);
+}
 
 const root = process.cwd();
 const git = (...args) => {
@@ -87,7 +101,7 @@ function main() {
     const promptFile = join(out, 'prompt.md');
     writeFileSync(promptFile, job.prompt);
     // Grok cita prompt iz datoteke; priprema je oznacila mjesto, ovdje se upisuje stvarna putanja.
-    const args = resolvePromptFileArgs(job.args, promptFile);
+    const args = buildSpawnArgs(job, promptFile);
     // argv array + stdin, never a shell string. Existing CLI authentication is reused.
     releaseLock = false;
     const result = spawnSync(job.command, args, {
@@ -113,7 +127,12 @@ function main() {
   }
 }
 
-try { main(); } catch (error) {
-  console.error(`[agents] ${error.message}`);
-  process.exitCode = 1;
+// Pokrece se samo kad je ova datoteka ULAZNA tocka procesa. Bez toga bi uvoz iz testa izvrsio
+// `main()` nad argv vitesta, pa bi se gard nad izgradnjom argumenata uopce ne bi dao napisati.
+const isEntryModule = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isEntryModule) {
+  try { main(); } catch (error) {
+    console.error(`[agents] ${error.message}`);
+    process.exitCode = 1;
+  }
 }
