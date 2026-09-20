@@ -31,8 +31,8 @@ adversarijalni pregled prema AGENTS.md.
    na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login` (ili
    `XAI_API_KEY` za headless). Grok: https://docs.x.ai/build/overview
    (`curl -fsSL https://x.ai/cli/install.sh | bash` ili `npm install -g @xai-official/grok`).
-   Skripta ne instalira alate niti prenosi prijave. Zadani model aliasa `grok`/`build` je `grok-4`;
-   prilagodi u `scripts/agents/core.mjs` ako `grok models` pokaze drugaciji ID.
+   Skripta ne instalira alate niti prenosi prijave. Zadani model aliasa `grok`/`build` je `grok-4.6` (sluzbena preporuka za kod, 2026-09-20);
+   prilagodi u `scripts/agents/core.mjs` ako `grok models` pokaze drugaciji ID (npr. `grok-build-0.1`).
 2. Iz korijena repozitorija pokreni `npm run agents -- doctor` i `npm run agents -- list`.
 3. Pripremi prvi audit bez poziva modelu:
 
