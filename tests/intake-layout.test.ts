@@ -115,11 +115,14 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     expect(foot, 'nema podnozja papira').not.toBeNull();
     expect([...foot!.children].map((el) => tekst(el)))
       .toEqual(['Dokument ostaje na uređaju', 'Provjeravamo formu, ne sadržaj']);
-    // Stari oblik mora NESTATI, i iz markupa i iz stila; inace se vrati kao "bezopasan ostatak".
-    expect(bezHtmlKomentara(HTML), '.intake-brava je ostala u markupu').not.toContain('intake-brava');
+    // Stari oblik mora NESTATI iz CIJELE datoteke, komentare ukljucujuci (pregled Z7, 2026-09-20).
+    // Do sada je gard prikivao komentar koji ime spominje, pa bi njegovo uredjivanje rusilo test
+    // koji o markupu nista ne tvrdi. Obrazlozenje uklanjanja pripada poruci commita, ne markupu.
+    expect(HTML, '.intake-brava je ostala u markupu').not.toContain('intake-brava');
     expect(bezCssKomentara(CSS), '.intake-brava je ostala u stilu').not.toContain('.intake-brava');
-    // BASELINE: gard mjeri markup, ne datoteku; obrazlozenje uz uklanjanje smije spomenuti ime.
-    expect(HTML, 'obrazlozenje uklanjanja je nestalo iz markupa').toContain('intake-brava');
+    // KONTROLA: gard bi ime pronasao da ga ima; tvrdnja o odsutnosti bez ovoga ne dokazuje nista.
+    expect(`${HTML}<span class="intake-brava"></span>`, 'gard ne vidi ni podmetnuto ime')
+      .toContain('intake-brava');
   });
 
   it('CTA nosi MJERU predloska (14px, .02em), ali postojeci glas', () => {
