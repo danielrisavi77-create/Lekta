@@ -28,6 +28,8 @@ const ROOT = join(__dirname, '..');
  * vlastite module: da je ostao na dvije datoteke, izvod bi tiho pao s 4 varijable na 2 i gard bi
  * prestao stititi tocno ono zbog cega postoji. Zato nize stoji i tvrdnja o BROJU pronadjenih
  * varijabli, koja upravo takav tihi pad hvata.
+ *
+ * 2026-09-20 merge T19 + master: zadrzani i novi moduli i `run-local-repair-release.mts`.
  */
 const GATE_SCRIPTS = [
   'scripts/release-check.mjs',
@@ -35,6 +37,7 @@ const GATE_SCRIPTS = [
   'scripts/release-gate-core.mjs',
   'scripts/verify-release-proof.mjs',
   'scripts/verify-deploy-dist.mjs',
+  'scripts/run-local-repair-release.mts',
 ];
 
 function sourceOf(relative: string): string {
@@ -49,6 +52,10 @@ function gateVariables(): string[] {
     // `env.LEKTA_X` pokriva i `process.env.LEKTA_X` i injektiran `env` objekt (gate core prima
     // okolinu kao parametar da bi bio mjerljiv), pa jedan obrazac hvata oba oblika.
     for (const m of src.matchAll(/\benv\.(LEKTA_[A-Z0-9_]+)/g)) found.add(m[1]);
+    for (const m of src.matchAll(/(?:process\.)?env\.([A-Z][A-Z0-9_]+)/g)) found.add(m[1]);
+    for (const m of src.matchAll(
+      /requiredEnvironmentValue\(\s*env,\s*'([A-Z0-9_]+)'/g,
+    )) found.add(m[1]);
     for (const m of src.matchAll(/requiresEnv:\s*'([A-Z0-9_]+)'/g)) found.add(m[1]);
   }
   return [...found].sort();

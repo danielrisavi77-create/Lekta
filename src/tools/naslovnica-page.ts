@@ -198,7 +198,7 @@ async function render(): Promise<void> {
   if (docx) docx.disabled = !hasContent;
   $('#tp-success-cta')?.classList.toggle('is-visible', hasContent);
   const ctaUnitId = $('#tp-unit')?.value || '';
-  $('#tp-success-cta-link')?.setAttribute('href', ctaUnitId ? `index.html?unit=${encodeURIComponent(ctaUnitId)}#analyzer` : 'index.html#analyzer');
+  $('#tp-success-cta-link')?.setAttribute('href', ctaUnitId ? `/?unit=${encodeURIComponent(ctaUnitId)}` : '/');
   // Poveznica ima smisla samo kad kaskada nosi konkretan fakultet (syncUrl vec upisao ?fakultet=
   // u adresnu traku); prazan/rucni unos bez odabira daje golu pocetnu adresu, nista za dijeliti.
   const share = $('#tp-share');

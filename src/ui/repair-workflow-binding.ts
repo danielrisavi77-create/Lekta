@@ -47,6 +47,14 @@ export interface RepairWorkflowBinding<TResult> {
   /** Uskladi checkboxove s kontrolerom (npr. nakon sto je ledger pisao `checked` bez dogadjaja). */
   syncFromList(): void;
   getState(): RepairWorkflowState;
+  /**
+   * Javlja se TOCNO JEDNOM po stvarnoj promjeni skupa odabranih (usporedba serijaliziranog skupa),
+   * i NIJEDNOM kad se postavi ista vrijednost. Pokriva sve tri povrsine koje pisu odabir: skrivenu
+   * listu (`change`), ledger (salje bubbling `change` na checkbox, repair-price-slider) i plan
+   * (`applySelection`); `syncFromList` isto javlja, jer ledger zna pisati `checked` bez dogadjaja.
+   * Vraca odjavu. Poslije `dispose()` se vise ne javlja.
+   */
+  onSelectionChanged(cb: () => void): () => void;
   dispose(): void;
 }
 
@@ -69,6 +77,19 @@ export function bindRepairWorkflow<TResult>(opts: RepairWorkflowBindingOptions<T
   // Zadani odabir je isti kao dosadasnji DOM default: prekrseno je predodabrano, ostalo opt-in.
   controller.plan(items.map((i) => i.ruleId), items.filter((i) => i.violated !== false).map((i) => i.ruleId));
 
+  // C6: promjena se javlja po USPOREDBI serijaliziranog skupa, ne po dogadjaju. Ledger salje
+  // `change` i kad kontroler odbije (izvrsenje u tijeku) pa se checkbox vrati, a `applySelection`
+  // zna postaviti isto sto vec jest; ni jedno ni drugo nije promjena i ne smije pisati u sesiju.
+  const listeners = new Set<() => void>();
+  const serialize = (): string => items.map((i) => i.ruleId).filter((id) => controller.getState().selection.has(id)).join('\n');
+  let lastSerialized = serialize();
+  function notifyIfChanged(): void {
+    const now = serialize();
+    if (now === lastSerialized) return;
+    lastSerialized = now;
+    for (const cb of [...listeners]) cb();
+  }
+
   function reflect(): void {
     const sel = controller.getState().selection;
     for (const cb of checkboxes(listEl)) {
@@ -86,6 +107,7 @@ export function bindRepairWorkflow<TResult>(opts: RepairWorkflowBindingOptions<T
       // Kad kontroler odbije (izvrsenje u tijeku), checkbox se vraca na stanje kontrolera: odabir je zamrznut.
       if (!controller.setSelected(item.ruleId, cb.checked)) cb.checked = controller.getState().selection.has(item.ruleId);
     }
+    notifyIfChanged();
   }
 
   const onChange = (event: Event) => {
@@ -94,6 +116,7 @@ export function bindRepairWorkflow<TResult>(opts: RepairWorkflowBindingOptions<T
     const item = byIdx(cb);
     if (!item) return;
     if (!controller.setSelected(item.ruleId, cb.checked)) cb.checked = controller.getState().selection.has(item.ruleId);
+    notifyIfChanged();
   };
   listEl.addEventListener('change', onChange);
 
@@ -112,10 +135,20 @@ export function bindRepairWorkflow<TResult>(opts: RepairWorkflowBindingOptions<T
         if (controller.setSelected(item.ruleId, wanted.has(item.ruleId)) && wanted.has(item.ruleId)) applied += 1;
       }
       reflect();
+      notifyIfChanged();
       return applied;
     },
     syncFromList,
     getState: () => controller.getState(),
-    dispose: () => listEl.removeEventListener('change', onChange),
+    onSelectionChanged(cb: () => void): () => void {
+      listeners.add(cb);
+      return () => { listeners.delete(cb); };
+    },
+    dispose: () => {
+      listEl.removeEventListener('change', onChange);
+      // Bez brisanja pretplata bi stari panel, kroz `applySelection` iz plana, i dalje javljao
+      // promjene i prepisivao odabir novog panela u sesiji.
+      listeners.clear();
+    },
   };
 }

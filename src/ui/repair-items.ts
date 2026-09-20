@@ -1013,7 +1013,7 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
   const integrity = result?.details?.fieldIntegrity;
   if (!integrity || !Array.isArray(integrity.fields)) return [];
   const fields = integrity.fields.filter((field: any) => field && field.kind !== 'unknown' && field.status !== 'broken' && field.status !== 'error-reference-not-found').map((field: any) => ({
-    id: String(field.id), part: String(field.part), kind: String(field.kind), instruction: String(field.instruction || ''), status: String(field.status), confidence: String(field.confidence || 'medium'), anchorFingerprint: String(field.anchorFingerprint), selected: field.status !== 'unsupported', evidence: Array.isArray(field.evidence) ? field.evidence.map(String) : [],
+    id: String(field.id), part: String(field.part), kind: String(field.kind), instruction: String(field.instruction || ''), status: String(field.status), confidence: String(field.confidence || 'medium'), anchorFingerprint: String(field.anchorFingerprint), action: field.kind === 'toc' && field.status === 'needs-render' && field.cachedResult === '' && /\bPAGEREF\b/i.test(String(field.instruction || '')) ? 'remove-orphan-control' as const : 'mark-dirty' as const, selected: field.status !== 'unsupported', evidence: Array.isArray(field.evidence) ? field.evidence.map(String) : [],
   }));
   const manualTocCandidates = (Array.isArray(integrity.manualTocCandidates) ? integrity.manualTocCandidates : []).map((candidate: any) => ({
     startParagraphIndex: Number(candidate.startParagraphIndex), endParagraphIndex: Number(candidate.endParagraphIndex), rawText: String(candidate.rawText || ''), anchorFingerprint: String(candidate.anchorFingerprint), selected: false,
@@ -1021,12 +1021,15 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
   const bookmarks = (Array.isArray(integrity.bookmarks) ? integrity.bookmarks : []).map((bookmark: any) => ({ name: String(bookmark.name), part: String(bookmark.part), status: String(bookmark.status), ...(bookmark.startFingerprint ? { targetFingerprint: String(bookmark.startFingerprint) } : {}), selected: false }));
   if (!fields.length && !manualTocCandidates.length && !bookmarks.length) return [];
   const form: import('./repair-panel').FieldIntegrityFormDefinition = { fields, manualTocCandidates, bookmarks, summary: `Pronađeno je ${integrity.summary?.totalFields || fields.length} Word polja. ${integrity.summary?.staleFields || 0} ima zastarjeli rezultat, ${integrity.summary?.brokenFields || 0} ima prekinut cilj, a ${manualTocCandidates.length} ručnih sadržaja može se zasebno zamijeniti živim TOC poljem.`, buildParams: () => ({}) };
-  form.buildParams = (current) => ({
+  form.buildParams = (current) => {
+    const selectedFields = current.fields.filter((field) => field.selected);
+    const selectedManualToc = current.manualTocCandidates.filter((candidate) => candidate.selected);
+    return ({
     version: 1,
-    fields: current.fields.filter((field) => field.selected).map((field) => ({ id: field.id, part: field.part, anchorFingerprint: field.anchorFingerprint, action: 'mark-dirty' as const, confirmed: true as const })),
-    settings: { updateFieldsOnOpen: true as const },
+    fields: selectedFields.map((field) => ({ id: field.id, part: field.part, anchorFingerprint: field.anchorFingerprint, action: field.action, confirmed: true as const })),
+    ...(selectedFields.some((field) => field.action === 'mark-dirty') || selectedManualToc.length ? { settings: { updateFieldsOnOpen: true as const } } : {}),
     ...(current.manualTocCandidates.some((candidate) => candidate.selected) ? { manualToc: current.manualTocCandidates.filter((candidate) => candidate.selected).map((candidate) => ({ startParagraphIndex: candidate.startParagraphIndex, endParagraphIndex: candidate.endParagraphIndex, anchorFingerprint: candidate.anchorFingerprint, action: 'replace-with-live-toc' as const, confirmed: true as const })) } : {}),
-  });
+  }); };
   /**
    * BEZ `matchKeys`, i to je nalaz a ne propust.
    *
@@ -1046,7 +1049,22 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
    * `final-document-inspector-fixer`, koji `matchKeys` uopce nema: ucinak postoji, ali ga nijedna
    * nasa provjera ne mjeri, pa se ta sutnja imenuje umjesto da se pokrije pogodjenim kljucem.
    */
-  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Word polja i sidra: osvježavanje pri otvaranju', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form }];
+  const removalOnly = form.fields.some((field) => field.selected)
+    && form.fields.filter((field) => field.selected).every((field) => field.action === 'remove-orphan-control')
+    && !form.manualTocCandidates.some((candidate) => candidate.selected)
+    && !form.bookmarks.some((bookmark) => bookmark.selected);
+  return [{
+    ruleId: 'field-integrity-assisted',
+    fixerId: 'field-integrity-fixer',
+    label: removalOnly ? 'Word polja i sidra: uklanjanje nevaljane skrivene kontrole' : 'Word polja i sidra: osvježavanje pri otvaranju',
+    params: form.buildParams(form),
+    violated: true,
+    requiresConfirmation: true,
+    confirmationText: removalOnly
+      ? 'Odobravam da se nevaljana skrivena kontrola Word polja ukloni iz nove popravljene kopije. Originalni dokument i vidljivi tekst ostaju nepromijenjeni.'
+      : 'Odobravam izmijeniti strukturu Word polja u novoj popravljenoj kopiji. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.',
+    fieldIntegrityForm: form,
+  }];
 }
 
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {

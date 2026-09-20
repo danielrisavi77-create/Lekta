@@ -48,7 +48,8 @@
     "build-info": "node scripts/write-build-info.mjs",
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
-    "check": "oxlint && tsc --noEmit && npm run check:edge && vitest run && vite build",
+    "check": "npm run check:claude-context && oxlint && tsc --noEmit && npm run check:edge && vitest run && vite build",
+    "check:claude-context": "node scripts/verify-claude-context.mjs",
     "master-ci": "node scripts/master-ci-status.mjs",
     "check:edge": "node scripts/check-edge.mjs",
     "smoke:db": "psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/guarantee-evidence-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/repair-deletion-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/anon-purge-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/bonus-outbox-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql",
@@ -125,7 +126,11 @@
     "deploy-manifest": "node scripts/generate-deploy-manifest.mjs",
     "attest-corpus": "node scripts/attest-real-corpus.mjs",
     "branch-ci": "node scripts/master-ci-status.mjs --current",
-    "agents": "node scripts/agents/cli.mjs"
+    "agents": "node scripts/agents/cli.mjs",
+    "check:repair-integration": "tsc --noEmit && vitest run --config vitest.repair-integration.config.ts && vite build",
+    "repair:runner:e2e": "vite-node scripts/run-repair-runner-e2e.mts",
+    "release:repair:preflight": "tsx scripts/run-local-repair-release.mts",
+    "release:repair:deploy": "tsx scripts/run-local-repair-release.mts --execute"
   },
   "overrides": {
     "nanoid": "^3.3.18"
@@ -141,7 +146,10 @@
     "supabase": "^2.109.1",
     "typescript": "^7.0.2",
     "vite": "^8.1.4",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.4",
+    "@babel/parser": "^7.29.8",
+    "@electric-sql/pglite": "0.3.16",
+    "tsx": "4.23.13"
   },
   "dependencies": {
     "@fontsource-variable/inter-tight": "^5.2.7",
