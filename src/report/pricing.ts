@@ -49,9 +49,9 @@ export function windowDaysFor(workType: string): number {
  *
  * Iznosi i natpisi o iznosu zive OVDJE, a modul prikaza (`src/shared/pricing-receipt.ts`) ih samo
  * ispisuje. Razlog je izmjeren, ne stilski: do 2026-09-20 su postojala TRI neuskladjena izvora
- * cijene (`src/config/pricing-tiers.ts` s "od 3,99 EUR" i "od 39 EUR", `data/packages.json` s
- * 9/39/69/99 EUR i ovaj modul sa stvarnom naplatom), pa je stranica tvrdila jedno a naplata radila
- * drugo. Prikaz koji nosi VLASTITI tekst o cijeni je cetvrti takav izvor u nastajanju, zato ga
+ * cijene: marketinski popis koji je crtao `/saznaj-vise/`, stari popis paketa u `data/`, i ovaj
+ * modul sa stvarnom naplatom. Stranica je tvrdila jedno a naplata radila drugo; prva dva izvora su
+ * uklonjena u Z11. Prikaz koji nosi VLASTITI tekst o cijeni je treci takav izvor u nastajanju, pa ga
  * `tests/pricing-receipt.test.ts` izricito zabranjuje (nijedan iznos kao literal u modulu prikaza).
  * -------------------------------------------------------------------------------------------- */
 
