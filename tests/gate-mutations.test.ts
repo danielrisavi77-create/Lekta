@@ -2326,11 +2326,30 @@ const MUTATIONS: Mutation[] = [
       }];
       const borrowedKinds = migrationHygieneProblems(borrowed).map((p) => p.kind);
 
+      // Treci oblik, dodan nakon treceg kruga pregleda (2026-09-20): poziv u `elsif` grani
+      // provjere postojanja. Ta se grana izvodi tocno kad posla NEMA, pa je pad zajamcen, a gard
+      // ju je prije ispravka prijavljivao kao CIST, jer granica bloka nije poznavala `elsif`.
+      const elsifBranch = [{
+        file: '9999_elsif_branch.sql',
+        sql: [
+          'do $$',
+          'begin',
+          "  if exists (select 1 from cron.job where jobname = 'send-deadline-reminders') then",
+          '    null;',
+          '  elsif true then',
+          "    perform cron.unschedule('send-deadline-reminders');",
+          '  end if;',
+          'end $$;',
+        ].join('\n'),
+      }];
+      const elsifKinds = migrationHygieneProblems(elsifBranch).map((p) => p.kind);
+
       return (
         kinds.includes('hardcoded-endpoint') &&
         kinds.includes('bearer-literal') &&
         kinds.includes('unguarded-unschedule') &&
-        borrowedKinds.includes('unguarded-unschedule')
+        borrowedKinds.includes('unguarded-unschedule') &&
+        elsifKinds.includes('unguarded-unschedule')
       );
     },
     // Baseline nad STVARNIM datotekama na disku: bez njega bi mutacija mogla "prolaziti" zato

@@ -174,12 +174,26 @@ const JOB_EXISTS_GUARD = /if\s+exists\s*\(\s*select\s+1\s+from\s+cron\.job\b/gi;
 /** Ime posla unutar uvjeta te provjere; bez njega se zastita ne moze vezati uz konkretan posao. */
 const GUARD_JOBNAME = /\bjobname\s*=\s*'((?:[^']|'')*)'/i;
 /**
- * Granice `if ... end if` bloka, ukljucujuci njegovu `else` granu. `end if` je naveden PRVI da ga
- * kraca alternacija ne pojede. `else` je u popisu jer poziv u ELSE grani stoji IZA provjere, ali se
- * izvodi bas kad posla NEMA, dakle nije zasticen nego zajamceno pada. Rijeci `elsif` i `elseif`
- * granica namjerno NE hvata: `\belse\b` u njima nema granicu rijeci iza `else`.
+ * Granice `if ... end if` bloka, ukljucujuci SVAKU granu koja zatvara pozitivnu.
+ *
+ * `end if` je naveden PRVI da ga kraca alternacija ne pojede; alternacija se na istom mjestu
+ * isprobava slijeva nadesno, pa je redoslijed ugovor, a ne stil.
+ *
+ * ZASTO SU `elsif` I `elseif` U POPISU (ispravak treceg kruga pregleda, 2026-09-20): u PL/pgSQL-u
+ * one zatvaraju pozitivnu granu tocno kao `else`, a prijasnja granica ih NIJE vidjela, jer u
+ * `elsif` uopce nema podniza `else`, a u `elseif` iza `else` nema granice rijeci. Izmjereno nad
+ * gardom kakav je bio commitan u 185e7762: ulaz u kojem `elsif` grana zove
+ * `cron.unschedule('a')` vracao je PRAZAN popis nalaza, a ta se grana izvodi tocno kad posla
+ * NEMA, dakle `db push` bi pao s XX000. To je cetvrta strana iste rupe (prve tri: neomedjen
+ * pogled unatrag, kriv posao, `else` grana), i razlog zasto se kljucne rijeci ovdje NABRAJAJU
+ * poimence umjesto da se zakljucuje iz oblika.
+ *
+ * `else if` (s razmakom) namjerno NIJE zaseban token: to je u PL/pgSQL-u ugnijezdeni `if` s
+ * vlastitim `end if`, pa ga postojeca dva tokena (`else`, pa `if`) vec obradjuju ispravno.
  */
-const IF_BOUNDARY = /\bend\s+if\b|\belse\b|\bif\b/gi;
+const IF_BOUNDARY = /\bend\s+if\b|\belsif\b|\belseif\b|\belse\b|\bif\b/gi;
+/** Grane koje na dubini nula zatvaraju pozitivnu granu zastite. Vidi IF_BOUNDARY. */
+const BRANCH_CLOSERS = new Set(['else', 'elsif', 'elseif']);
 /** Doslovan argument `cron.unschedule('ime')`; varijabla ili izraz ne daju ime. */
 const UNSCHEDULE_LITERAL_ARG = /^\s*'((?:[^']|'')*)'/;
 
@@ -187,6 +201,51 @@ function lineOf(text: string, index: number): number {
   let line = 1;
   for (let i = 0; i < index && i < text.length; i += 1) if (text[i] === '\n') line += 1;
   return line;
+}
+
+/**
+ * Indeks zatvorene zagrade koja pripada otvorenoj na `open`, ili -1 kad je nema.
+ *
+ * Nizovi se preskacu, jer `where jobname = 'a)b'` inace zatvori zagradu na krivom mjestu. Komentari
+ * su vec obrisani (iste duljine), pa ih ovdje vise nema.
+ */
+function matchParen(text: string, open: number): number {
+  let depth = 0;
+  for (let i = open; i < text.length; i += 1) {
+    const ch = text[i];
+    if (ch === "'") {
+      i += 1;
+      while (i < text.length) {
+        if (text[i] === "'" && text[i + 1] === "'") { i += 2; continue; }
+        if (text[i] === "'") break;
+        i += 1;
+      }
+      continue;
+    }
+    if (ch === '(') depth += 1;
+    else if (ch === ')') {
+      depth -= 1;
+      if (depth === 0) return i;
+    }
+  }
+  return -1;
+}
+
+/**
+ * Pocetak pozitivne grane `if <uvjet> then`, mjereno od zatvorene zagrade provjere postojanja.
+ *
+ * Vraca -1 kad uvjet nije CIST, i to je namjerno strozi od pukog trazenja `then`: uvjet oblika
+ * `if exists (select 1 from cron.job ...) or true then` sintaksno je uredan, a pozitivna grana mu
+ * se izvodi i kad posla NEMA, dakle to nije zastita nego njezina krinka. `and` bi bio bezopasan
+ * (konjunkcija samo suzava), ali se ovdje svejedno odbija: gard radije javi ispravan a neobican
+ * oblik (glasan pad koji covjek rijesi) nego da propusti oblik koji tiho pada na `db push`.
+ */
+function positiveBranchStart(text: string, closeParen: number): number {
+  const tail = text.slice(closeParen + 1);
+  const then = /\bthen\b/i.exec(tail);
+  if (!then) return -1;
+  if (/\bor\b|\band\b/i.test(tail.slice(0, then.index))) return -1;
+  return closeParen + 1 + then.index + then[0].length;
 }
 
 /** Doslovno ime posla odmah iza otvorene zagrade poziva, ili null kad argument nije niz. */
@@ -202,9 +261,9 @@ function literalJobName(stripped: string, after: number): string | null {
  * je ZATVOREN, pa sve iza njega vise nije pod njegovom zastitom. Ugnijezdeni `if ... end if` se
  * pritom ponisti sam sa sobom i ne zatvara roditelja.
  *
- * `else` na dubini nula zatvara granu jednako kao `end if`, i to nije sitnica: poziv u ELSE grani
- * provjere "postoji li posao" izvodi se tocno onda kad posla NEMA, pa bi priznati ga kao zasticen
- * znacilo propustiti zajamcen pad.
+ * `else`, `elsif` i `elseif` na dubini nula zatvaraju granu jednako kao `end if`, i to nije
+ * sitnica: poziv u bilo kojoj od tih grana provjere "postoji li posao" izvodi se tocno onda kad
+ * posla NEMA, pa bi priznati ga kao zasticen znacilo propustiti zajamcen pad, a ne povremen.
  */
 function inPositiveIfBranch(text: string): boolean {
   IF_BOUNDARY.lastIndex = 0;
@@ -216,7 +275,7 @@ function inPositiveIfBranch(text: string): boolean {
     if (token.startsWith('end')) {
       depth -= 1;
       if (depth < 0) return false;
-    } else if (token === 'else') {
+    } else if (BRANCH_CLOSERS.has(token)) {
       if (depth === 0) return false;
     } else {
       depth += 1;
@@ -239,10 +298,13 @@ function inPositiveIfBranch(text: string): boolean {
  * prefiks tijela, pa je JEDAN `if exists (select 1 from cron.job ...)` bilo gdje ranije u istom
  * `do` bloku tiho proglasavao zasticenima sve kasnije pozive. Tocno taj oblik (migracija koja vodi
  * DVA posla, prvi zasticen, drugi zaboravljen) reproducira blokator zbog kojeg ovaj gard postoji,
- * a gard bi ga prijavio kao cist. Zato se sada trazi oboje:
- *   1. poziv je u POZITIVNOJ grani te provjere (balans `if` / `end if`, a `else` zatvara granu), i
- *   2. provjera imenuje BAS taj posao, kad su oba imena doslovna.
- * Kad ime nije doslovno (varijabla), usporedba se preskace i odlucuje samo balans; to je
+ * a gard bi ga prijavio kao cist. Zato se sada trazi TROJE:
+ *   1. uvjet provjere je CIST, dakle `if exists (...) then` bez `or` / `and` privjesaka
+ *      (`positiveBranchStart`); `... or true then` je krinka, ne zastita,
+ *   2. poziv je u POZITIVNOJ grani te provjere (balans `if` / `end if`, a `else`, `elsif` i
+ *      `elseif` na dubini nula zatvaraju granu), i
+ *   3. provjera imenuje BAS taj posao, kad su oba imena doslovna.
+ * Kad ime nije doslovno (varijabla), usporedba imena se preskace i odlucuju 1 i 2; to je
  * svjesna granica garda, ne previd.
  */
 function unscheduleIsGuarded(stripped: string, body: DollarBody, at: number, len: number): boolean {
@@ -255,19 +317,22 @@ function unscheduleIsGuarded(stripped: string, body: DollarBody, at: number, len
   const jobName = literalJobName(stripped, at + len);
 
   JOB_EXISTS_GUARD.lastIndex = 0;
-  const candidates: { end: number; name: string | null }[] = [];
+  const candidates: { branchStart: number; name: string | null }[] = [];
   for (;;) {
     const hit = JOB_EXISTS_GUARD.exec(before);
     if (!hit) break;
-    const end = hit.index + hit[0].length;
-    const condition = before.slice(end, end + 200).split(')')[0] ?? '';
-    const named = GUARD_JOBNAME.exec(condition);
-    candidates.push({ end, name: named ? named[1].replace(/''/g, "'") : null });
+    const open = before.indexOf('(', hit.index);
+    const close = open === -1 ? -1 : matchParen(before, open);
+    if (close === -1) continue;
+    const branchStart = positiveBranchStart(before, close);
+    if (branchStart === -1) continue;
+    const named = GUARD_JOBNAME.exec(before.slice(open + 1, close));
+    candidates.push({ branchStart, name: named ? named[1].replace(/''/g, "'") : null });
   }
 
   for (let k = candidates.length - 1; k >= 0; k -= 1) {
     const candidate = candidates[k];
-    if (!inPositiveIfBranch(before.slice(candidate.end))) continue;
+    if (!inPositiveIfBranch(before.slice(candidate.branchStart))) continue;
     if (jobName !== null && candidate.name !== null && candidate.name !== jobName) continue;
     return true;
   }

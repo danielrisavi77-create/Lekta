@@ -270,7 +270,30 @@ ugnijezdenim ispravnim oblikom) i prosirenom mutacijom u `tests/gate-mutations.t
 Uz to je istom prilikom zatvorena i treca strana iste rupe, nadjena samoprovjerom a ne pregledom:
 poziv u ELSE grani provjere stoji IZA nje, pa bi ga balans priznao kao zasticen, a izvodi se
 tocno kad posla NEMA, dakle pada uvijek. `else` na dubini nula zato zatvara zasticenu granu
-jednako kao `end if`; `elsif` i `elseif` granica namjerno ne hvata.
+jednako kao `end if`.
+
+TRECI KRUG PREGLEDA nasao je da je taj isti popravak zatvorio samo `else`, a `elsif` i `elseif`
+ostavio otvorenima, i da je prethodna inacica ovog odlomka tu rupu jos i proglasila namjernom.
+Nije bila: u PL/pgSQL-u sve tri grane zatvaraju pozitivnu granu jednako, a granica ih nije
+vidjela iz cisto leksickog razloga (u `elsif` nema podniza `else`, a u `elseif` iza `else` nema
+granice rijeci). Izmjereno nad gardom kakav je bio commitan u 185e7762: ulaz u kojem `elsif`
+grana zove `cron.unschedule('a')` vracao je PRAZAN popis nalaza. Ta se grana izvodi tocno kad
+posla nema, dakle `db push` bi pao s XX000, sto je doslovno blokator zbog kojeg gard postoji.
+Popravljeno nabrajanjem kljucnih rijeci poimence (`else`, `elsif`, `elseif`), uz napomenu da
+`else if` s razmakom nije medju njima jer je to ugnijezdeni `if` s vlastitim `end if`, koji
+postojeca dva tokena vec obradjuju ispravno.
+
+Istom prilikom je zatvorena i PETA strana, nadjena trazenjem ostatka istog razreda umjesto samo
+prijavljenog primjera: uvjet `if exists (select 1 from cron.job ...) or true then` sadrzi
+provjeru postojanja, izgleda kao zastita, a pozitivna grana mu se izvodi i kad posla nema. Gard
+sada trazi da uvjet bude CIST, dakle `if exists (...) then` bez privjeska. Odbija se i `and`
+privjezak, koji je zapravo bezopasan; ta je asimetrija svjesna, jer glasan pad nad ispravnim a
+neobicnim oblikom covjek rijesi u minuti, dok propusten oblik rusi `db push` na stagingu.
+
+Pokriveno sa sest novih tvrdnji u `tests/migration-secrets-hygiene.test.ts` (`elsif` i `elseif`
+grana, `or` i `and` privjezak, te dvije negativne kontrole: nepovezan kasniji blok s `elsif`
+granom i ime posla koje sadrzi zagradu) i trecim oblikom u mutaciji
+`migracija/tvrd-kljuc-i-nezasticen-unschedule`.
 
 ### Sto mora napraviti vlasnik, RUCNO, na produkciji
 

@@ -295,4 +295,96 @@ describe('migration-hygiene gard grize', () => {
     }];
     expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
   });
+
+  /**
+   * CETVRTA strana istog omedjivanja, nalaz treceg kruga pregleda (2026-09-20). `else` je bio
+   * zatvoren, `elsif` i `elseif` nisu: u `elsif` uopce nema podniza `else`, a u `elseif` iza
+   * `else` nema granice rijeci, pa ih granica bloka nije vidjela. Izmjereno nad gardom kakav je
+   * bio commitan u 185e7762: oba ova ulaza vracala su PRAZAN popis nalaza, a obje se grane
+   * izvode tocno kad posla NEMA, dakle `db push` bi pao s XX000. Semanticki su identicne `else`
+   * grani iznad, pa ih ovdje drzi test, a ne samo komentar.
+   */
+  it.each(['elsif', 'elseif'])('ne prihvaca cron.unschedule u %s grani provjere postojanja', (kw) => {
+    const mutated = [{
+      file: `9999_${kw}_branch.sql`,
+      sql: [
+        'do $$',
+        'begin',
+        "  if exists (select 1 from cron.job where jobname = 'a') then",
+        '    null;',
+        `  ${kw} true then`,
+        "    perform cron.unschedule('a');",
+        '  end if;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
+  });
+
+  /**
+   * Negativna kontrola za `elsif`: kljucna rijec sama po sebi nije nalaz. Kad `elsif` grana stoji
+   * u NEPOVEZANOM `if` bloku IZA zasticenog poziva, ispravan kod mora ostati cist. Bez ove
+   * tvrdnje bi gard mogao "hvatati" gornja dva samo zato sto vristi na svaku pojavu rijeci.
+   */
+  it('prihvaca zasticen poziv kad kasniji, nepovezan blok ima elsif granu', () => {
+    const alt = [{
+      file: '9999_elsif_later.sql',
+      sql: [
+        'do $$',
+        'begin',
+        "  if exists (select 1 from cron.job where jobname = 'a') then",
+        "    perform cron.unschedule('a');",
+        '  end if;',
+        '  if true then',
+        '    null;',
+        '  elsif false then',
+        '    null;',
+        '  end if;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(alt)).toEqual([]);
+  });
+
+  /**
+   * Peta strana: uvjet koji SADRZI provjeru postojanja, ali ne ovisi samo o njoj.
+   * `if exists (...) or true then` je sintaksno uredan i izgleda kao zastita, a pozitivna grana
+   * mu se izvodi i kad posla nema, dakle pad je opet zajamcen. Odbija se i `and` privjesak, koji
+   * je zapravo bezopasan: gard radije glasno javi ispravan a neobican oblik nego da propusti onaj
+   * koji tiho ruse `db push`. Ta je asimetrija namjerna i zapisana u `positiveBranchStart`.
+   */
+  it.each(['or true', 'and true'])('ne prihvaca provjeru postojanja s privjeskom `%s`', (tail) => {
+    const mutated = [{
+      file: '9999_compound.sql',
+      sql: [
+        'do $$',
+        'begin',
+        `  if exists (select 1 from cron.job where jobname = 'a') ${tail} then`,
+        "    perform cron.unschedule('a');",
+        '  end if;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
+  });
+
+  /**
+   * Negativna kontrola za omedjivanje uvjeta: zagrada se zatvara na PRAVOM mjestu i kad ime posla
+   * sadrzi zagradu. Bez preskakanja nizova bi `matchParen` stao prerano i cijela zastita bi
+   * otpala, dakle ispravan kod bi postao nalaz.
+   */
+  it('prihvaca zastitu kad ime posla sadrzi zagradu', () => {
+    const alt = [{
+      file: '9999_paren_name.sql',
+      sql: [
+        'do $$',
+        'begin',
+        "  if exists (select 1 from cron.job where jobname = 'a)b') then",
+        "    perform cron.unschedule('a)b');",
+        '  end if;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(alt)).toEqual([]);
+  });
 });
