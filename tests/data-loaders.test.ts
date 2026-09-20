@@ -12,7 +12,6 @@ import rawIndex from '../data/profiles/verified-profiles-index.json';
 import rawLegal from '../data/profiles/legal-departments.json';
 import rawCatalog from '../data/catalog/zagreb-catalog.json';
 import rawMatrix from '../data/coverage/institutional-coverage-matrix.json';
-import rawPackages from '../data/packages.json';
 import rawCheckItems from '../data/checks/check-items.json';
 
 import {
@@ -22,7 +21,7 @@ import {
 } from '../src/profiles/profile-registry';
 import { ZAGREB_CATALOG, allUnits, findUnit } from '../src/catalog/catalog-loader';
 import { INSTITUTIONAL_COVERAGE_MATRIX } from '../src/coverage/coverage-loader';
-import { PACKAGES, CHECK_ITEMS, workTypeLabel } from '../src/config/config-loader';
+import { CHECK_ITEMS, workTypeLabel } from '../src/config/config-loader';
 
 function manifestEntries(name: string): number {
   const row = manifest.find((m) => m.name === name);
@@ -43,9 +42,6 @@ describe('data loaderi: faithfulness (deep-equal s JSON-om)', () => {
   it('coverage matrica = raw JSON', () => {
     expect(INSTITUTIONAL_COVERAGE_MATRIX).toEqual(rawMatrix);
   });
-  it('paketi = raw JSON', () => {
-    expect(PACKAGES).toEqual(rawPackages);
-  });
   it('check stavke = raw JSON', () => {
     expect(CHECK_ITEMS).toEqual(rawCheckItems);
   });
@@ -61,8 +57,10 @@ describe('data loaderi: brojevi se slazu s manifestom', () => {
   it('katalog (29)', () => {
     expect(ZAGREB_CATALOG).toHaveLength(manifestEntries('ZAGREB_CATALOG'));
   });
-  it('paketi (4)', () => {
-    expect(PACKAGES).toHaveLength(manifestEntries('PACKAGES'));
+  it('paketi vise ne postoje: manifest ih ne smije tvrditi (Z11)', () => {
+    // Ne samo da je uvoz uklonjen nego manifest NE SMIJE nositi zapis o datoteci koje nema.
+    // Bez ove tvrdnje brisanje podatka i brisanje njegova zapisa mogu se raziici tiho.
+    expect(manifest.some((m) => m.name === 'PACKAGES')).toBe(false);
   });
 });
 
