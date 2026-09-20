@@ -114,12 +114,16 @@ Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
 
 ## Koordinacija i drugo misljenje
 
-Astra ili Fable vodi zadatak i audit; Opus, Sonnet ili Sol implementira kod. Po
-zadatku su aktivni jedan koordinator i jedan pisac. Ugovor i lokalne naredbe su u
-`docs/agents/README.md`, a zajednicki red zadataka u `docs/agents/tasks.json`.
+Astra, Fable ili `grok-audit` vodi zadatak i audit; Opus, Sonnet, Sol ili Grok
+implementira kod. Po zadatku su aktivni jedan koordinator i jedan pisac. Ugovor i
+lokalne naredbe su u `docs/agents/README.md`, a zajednicki red zadataka u
+`docs/agents/tasks.json`.
 
 Pregled dolazi od drugog providera: Astra pregledava Claude implementacije, Fable
-pregledava Sol. Modelski rezultat nije dokaz prolaza. Sva pravila izolacije,
+pregledava Sol. Grok (`--agent grok`) implementira, `--agent grok-audit` koordinira
+i pregledava Sol/Opus/Sonnet; Grokovu implementaciju pregledava Astra ili Fable,
+nikad drugi Grok, a `--subscription` ne ukljucuje Grok. Modelski rezultat nije dokaz
+prolaza. Sva pravila izolacije,
 verifikacije i commitanja ostaju obvezna. Ako je instaliran Codex plugin, njegovi
 nalazi su advisory i svaki se mora neovisno potvrditi prije primjene.
 

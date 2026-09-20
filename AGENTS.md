@@ -436,8 +436,10 @@ dviju vlastitih brojki, ne sumnjom u metodu.
 
 ## Koordinacija razvoja kroz modele
 
-Astra ili Fable vodi zadatak i audit; Opus, Sonnet ili Sol implementira kod. Jedan aktivni
-koordinator i jedan pisac po zadatku. Ugovor i lokalne naredbe su u `docs/agents/README.md`,
-a zajednicki red zadataka u `docs/agents/tasks.json`. Pregled dolazi od drugog providera:
-Astra pregledava Claude implementacije, Fable pregledava Sol. Modelski rezultat nije dokaz
-prolaza. Sva postojeca pravila provjera, izolacije i commitanja ostaju obavezna.
+Astra, Fable ili `grok-audit` vodi zadatak i audit; Opus, Sonnet, Sol ili Grok implementira kod.
+Jedan aktivni koordinator i jedan pisac po zadatku. Ugovor i lokalne naredbe su u
+`docs/agents/README.md`, a zajednicki red zadataka u `docs/agents/tasks.json`. Pregled dolazi od
+drugog providera: Astra pregledava Claude implementacije, Fable pregledava Sol. Grok (`--agent grok`)
+implementira, `--agent grok-audit` koordinira i pregledava Sol/Opus/Sonnet; Grokovu implementaciju
+pregledava Astra ili Fable, nikad drugi Grok, a `--subscription` ne ukljucuje Grok. Modelski rezultat
+nije dokaz prolaza. Sva postojeca pravila provjera, izolacije i commitanja ostaju obavezna.

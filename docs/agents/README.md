@@ -14,21 +14,27 @@ rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi po
 | Implementator | Opus | `opus` | Dodijeljena implementacija i dokazi |
 | Implementator | Sonnet | `sonnet` | Dodijeljena implementacija i dokazi |
 | Implementator | Sol | `gpt-5.6-sol` | Dodijeljena implementacija i dokazi |
-| Implementator | Grok | `grok` | Dodijeljena implementacija i dokazi |
-| Koordinator | Grok audit | `grok` | Prioriteti, brief, audit, pregled Sol/Opus/Sonnet implementacije |
+| Implementator | Grok | `grok-4.6` | Dodijeljena implementacija i dokazi |
+| Koordinator | Grok audit | `grok-4.6` | Prioriteti, brief, audit, pregled Sol/Opus/Sonnet implementacije |
 
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
 zadatka: izbor pratimo prema kvaliteti isporuke, ponovljenom radu, vremenu i stvarnoj potrosnji.
-Pregled treba drugi provider: Astra za Opus/Sonnet, Fable za Sol. Grok (CLI oznaka `grok`)
-implementira, `grok-audit` koordinira i pregledava Sol/Opus/Sonnet; Grokovu implementaciju pregledava
-Astra ili Fable, nikad drugi Grok, a `--subscription` ne ukljucuje Grok. Za netrivijalne promjene
-parsera, citata i DOCX-a ostaje obavezan adversarijalni pregled prema AGENTS.md.
+Stupac iznad nosi ID modela, ne prekidac naredbe. Vrijednosti za `--agent` su `astra`, `fable`,
+`opus`, `sonnet`, `sol`, `grok` i `grok-audit`; oba Grok unosa voze isti izvrsni alat `grok` i isti
+model `grok-4.6`, a razlikuje ih uloga.
+
+Pregled treba drugi provider: Astra za Opus/Sonnet, Fable za Sol. Grok (`--agent grok`) implementira,
+`--agent grok-audit` koordinira i pregledava Sol/Opus/Sonnet; Grokovu implementaciju pregledava Astra
+ili Fable, nikad drugi Grok, a `--subscription` ne ukljucuje Grok. Za netrivijalne promjene parsera,
+citata i DOCX-a ostaje obavezan adversarijalni pregled prema AGENTS.md.
 
 ## Pocetak
 
 1. Instaliraj aktualne native Codex i Claude Code CLI alate i prijavi ih na svojem racunalu.
    Provjeri `codex login status` i `claude auth status`. Skripta ne instalira alate niti prenosi prijave.
+   Za `--agent grok` i `--agent grok-audit` treba i Grok Build CLI (`grok`), instaliran i prijavljen
+   na istom racunalu; `npm run agents -- doctor` ga samo trazi u PATH-u i ne provjerava prijavu.
 2. Iz korijena repozitorija pokreni `npm run agents -- doctor` i `npm run agents -- list`.
 3. Pripremi prvi audit bez poziva modelu:
 
@@ -80,8 +86,10 @@ Runner nikad sam ne postavlja `done`, ne commita, ne pusha i ne objavljuje aplik
 Implementator vraca promjene i dokaze, a koordinator izvodi commit nakon svih postojecih
 provjera. To je podjela odgovornosti, ne zahtjev da vlasnik odobrava svaki commit.
 
-Za pregled postavi `status: "in_review"` i `implementationAgent: "opus"`, `"sonnet"` ili `"sol"`
-u zapisu zadatka. Pregled Opus/Sonnet promjene:
+Za pregled postavi `status: "in_review"` i `implementationAgent: "opus"`, `"sonnet"`, `"sol"` ili
+`"grok"` u zapisu zadatka. Runner odbija pregled istim providerom, pa Grokovu implementaciju
+pregledava Astra ili Fable, a Sol/Opus/Sonnet moze pregledati i `grok-audit`. Pregled Opus/Sonnet
+promjene:
 
 ```bash
 npm run agents -- run T01 --phase review --agent astra --execute
