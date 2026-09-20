@@ -313,8 +313,7 @@ subscribeAnalyzerDocumentSettled((e)=>{if(!_sessionProfileApplied)return;if(e.ki
 // Ponuda ima tri tiera: besplatna automatska provjera (teaser), puni izvjestaj po
 // vrsti rada (otkljucava se u rezultatu), i rucno uredivanje (ljudski servis preko
 // obrasca narudzbe).
-// Cjenik `/saznaj-vise/` se od Z11 crta kao racun iz `src/report/pricing.ts`, jedinog izvora
-// cijene; zaseban marketinski popis koji je ovdje nekad zivio je uklonjen.
+// Cjenik `/saznaj-vise/` je racun iz `src/report/pricing.ts` (Z11), jedinog izvora cijene.
 /**
  * Paketi RUCNE obrade (obrazac narudzbe), NE cjenik automatskog popravka.
  *
