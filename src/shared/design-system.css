@@ -120,10 +120,11 @@
   --radius: 2px;
   --radius-sm: 2px;
   --radius-pill: 999px;
-  /* Gumbi: 8 px zadano, 10 px veliki (CTA). 2 px ostaje iskljucivo za papir i kartice; do Z2
-     (2026-09-19) su gumbi imali 2/9/12/14 px ovisno o datoteci. design/handoff/ALIGNMENT.md */
-  --radius-btn: 8px;
-  --radius-btn-lg: 10px;
+  /* Gumbi: 2 px, isto kao --radius (gumb je pecat, dijeli rub s papirom; odluka 2026-09-19).
+     Zaseban token ostaje da se kasnije moze odvojiti. Do Z2 (2026-09-19) su gumbi imali
+     2/9/12/14 px ovisno o datoteci. design/handoff/ALIGNMENT.md */
+  --radius-btn: 2px;
+  --radius-btn-lg: 2px;
 
   /* Layout + fokus */
   --max: 1280px;
