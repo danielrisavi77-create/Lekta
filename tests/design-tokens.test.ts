@@ -758,13 +758,20 @@ describe('Z7: tokeni glasa i tezina na serifu', () => {
   }
 
   it('nijedan element u src/ ne dobiva tezinu iznad 400 na display serifu', () => {
-    // BASELINE KOJI SE NE MJERI OVDJE, NEGO SE PAMTI. Nula je smislena samo ako je populacija
-    // ikad bila razlicita od nule: na `187e327f` (2026-09-20, prije ovog kruga) isti izracun nad
-    // istim listovima davao je TOCNO 131 nalaz, sve uz obrazlozenje "serif iz korijen body".
-    // Broj je zabiljezen jer ga stablo poslije popravka vise ne moze proizvesti, pa bi bez njega
-    // ostalo nedokazano je li gard ista i mjerio. Mutacije nize dokazuju da grize i danas.
-    const BASELINE_PRIJE_POPRAVKA = 131;
-    expect(BASELINE_PRIJE_POPRAVKA).toBe(131);
+    // POVIJESNA BILJESKA (nije tvrdnja ovog testa, mjeri se dolje nad zivim stablom):
+    // stablo `187e327f` (stanje neposredno prije ovog kruga popravka), s DANASNJIM gardom
+    // (commit d2eb5fca, jer glasZa od tog commita prosiruje razrjesenje na potomke bez
+    // vlastitog pravila), daje TOCNO 133 nalaza. Broj NIJE 131: 131 je izmjerio stariji
+    // gard (de1b3eb9) nad istim stablom, prije nego je d2eb5fca prosirio obuhvat. Broj je
+    // dakle vezan uz par (stablo, verzija garda) i mijenja se kad se gard pojaca, pa ovdje
+    // ostaje samo kao komentar, ne kao tvrdnja koja usporeduje konstantu sa samom sobom.
+    // Reprodukcija (iz korijena repozitorija, Bash):
+    //   TMP=$(mktemp -d) && git archive 187e327f | (mkdir -p "$TMP/repo" && tar -x -C "$TMP/repo")
+    //   cp tests/design-tokens.test.ts "$TMP/repo/tests/design-tokens.test.ts"
+    //   cd "$TMP/repo" && <junction/symlink node_modules na postojecu instalaciju>
+    //   npx vitest run tests/design-tokens.test.ts -t "nijedan element u src/ ne dobiva tezinu iznad 400"
+    //   (test i dalje pada na donjoj tvrdnji, ali ispisuje duljinu niza nalaza; ta duljina je 133)
+    // Mutacije nize dokazuju da gard grize i danas; njih nosi mutacija, ne ova konstanta.
     const listovi = listoviSrc();
     expect(listovi.length, 'nula listova znaci da obilazak ne radi, ne da su cisti')
       .toBeGreaterThan(5);
