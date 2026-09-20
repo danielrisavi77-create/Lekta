@@ -325,23 +325,65 @@ describe('Z7 intake.css: nijedna nova obitelj, nijedan obojeni rub', () => {
     expect(debeliLijeviRubovi('.a{border-bottom:1px solid x;border-top:2px solid y}')).toEqual([]);
   });
 
-  it('pecat je STATICAN: ne uvodi ni animaciju ni prijelaz', () => {
-    const blok = bezCssKomentara(CSS).match(/\.intake-pecat\{[^}]*\}/)?.[0] ?? '';
-    expect(blok, 'nema pravila za pecat').not.toBe('');
-    expect(blok).not.toMatch(/animation|transition/);
-    expect(blok).toContain('pointer-events:none');
-    expect(blok).toContain('transform:rotate(-9deg)');
-    // PECAT JE U TOKU, NE IZNAD SADRZAJA. Pregled Z7 je izracunao da apsolutno sidrenje
-    // (`top:44px;right:0`) na sirokim ekranima pada preko desnog kraja naslova: na 1440px naslov
-    // zauzima x 50..488 od ~538px sadrzaja papira, a pecat x 402..538. Obje mjere su elasticne i
-    // rastu jedna prema drugoj, pa se sudar ne da popraviti pomakom; u toku ga raspored ucini
-    // nemogucim, jer pecat dobiva vlastiti redak. Rotacija ne ulazi u raspored pa ostaje.
-    expect(blok, 'pecat je opet izvan toka, sudar s naslovom je moguc').not.toContain('position:absolute');
-    expect(blok).toContain('justify-self:end');
-    expect(blok).toContain('border:2.5px solid var(--red)');
-    expect(blok).toContain('border-radius:2px');
+  /**
+   * SVI blokovi koji stiliziraju pecat, ukljucujuci one unutar `@media`.
+   *
+   * Do pregleda Z7 je gard citao samo PRVI `.intake-pecat{...}` nalaz, a list ima jos jedan (uski
+   * ekran). Zabrana koja vrijedi za jedan blok, a ne i za ostale, nije zabrana: vracanje apsolutnog
+   * sidrenja u medijski upit proslo bi neopazeno, a bas ondje je papir najuzi.
+   *
+   * Blokovi se broje obilaskom parova "selektor { tijelo }". Prelude `@media`-a se zalijepi na
+   * selektor prvog UNUTARNJEG pravila, sto ovdje ne smeta: filtrira se po tome sadrzi li selektor
+   * `.intake-pecat`, a ne po tome je li jednak njemu.
+   */
+  function pecatBlokovi(css: string): string[] {
+    return [...bezCssKomentara(css).matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter((m) => m[1].includes('.intake-pecat'))
+      .map((m) => m[2]);
+  }
+
+  it('pecat je STATICAN i U TOKU, u SVAKOM bloku koji ga stilizira', () => {
+    const blokovi = pecatBlokovi(CSS);
+    // Osnovni blok i blok za uski ekran; ako ih je manje, nesto je ispalo iz lista.
+    expect(blokovi.length, 'nema svih pravila za pecat').toBeGreaterThanOrEqual(2);
+    for (const blok of blokovi) {
+      expect(blok, 'pecat je dobio pokret').not.toMatch(/animation|transition/);
+      // PECAT JE U TOKU, NE IZNAD SADRZAJA. Pregled Z7 je izracunao da apsolutno sidrenje
+      // (`top:44px;right:0`) na sirokim ekranima pada preko desnog kraja naslova: na 1440px naslov
+      // zauzima x 50..488 od ~538px sadrzaja papira, a pecat x 402..538. Obje mjere su elasticne i
+      // rastu jedna prema drugoj, pa se sudar ne da popraviti pomakom; u toku ga raspored ucini
+      // nemogucim, jer pecat dobiva vlastiti redak. Rotacija ne ulazi u raspored pa ostaje.
+      expect(blok, 'pecat je opet izvan toka, sudar s naslovom je moguc').not.toContain('position:absolute');
+    }
+    const glavni = blokovi[0];
+    expect(glavni).toContain('pointer-events:none');
+    expect(glavni).toContain('transform:rotate(-9deg)');
+    expect(glavni).toContain('justify-self:end');
+    expect(glavni).toContain('border:2.5px solid var(--red)');
+    expect(glavni).toContain('border-radius:2px');
     // Tekst pecata ide na tamniji par (kontrast >= 4,5), okvir smije ostati na brand crvenoj.
-    expect(blok).toContain('color:var(--red-on-soft)');
+    expect(glavni).toContain('color:var(--red-on-soft)');
+  });
+
+  it('MUTACIJA: apsolutno sidrenje podmetnuto u DRUGI blok (unutar @media) mora pasti', () => {
+    // BASELINE: nemutiran list je cist u svim blokovima.
+    expect(pecatBlokovi(CSS).some((b) => b.includes('position:absolute'))).toBe(false);
+    const mutiran = CSS.replace(
+      '.intake-pecat{margin:12px 0 18px}',
+      '.intake-pecat{margin:12px 0 18px;position:absolute;top:44px;right:0}',
+    );
+    expect(mutiran, 'podmetanje se nije primilo; provjeri oznaku').not.toBe(CSS);
+    expect(pecatBlokovi(mutiran).some((b) => b.includes('position:absolute')), 'gard ne vidi drugi blok')
+      .toBe(true);
+    // DOKAZ DA JE PROMJENA GARDA STVARNA: stara jednoblokovna metoda istu mutaciju NE vidi.
+    const samoPrvi = bezCssKomentara(mutiran).match(/\.intake-pecat\{[^}]*\}/)?.[0] ?? '';
+    expect(samoPrvi, 'stari gard je ipak vidio mutaciju; usporedba je bezvrijedna')
+      .not.toContain('position:absolute');
+    // Blok unutar `@media` se broji kao zaseban, i kad je jedini u listu.
+    expect(pecatBlokovi('@media (max-width:600px){.intake-pecat{position:absolute}}'))
+      .toEqual(['position:absolute']);
+    // KONTROLA SMJERA: tudji blok s apsolutnim sidrenjem nije nalaz o pecatu.
+    expect(pecatBlokovi('.intake-karta{position:absolute}')).toEqual([]);
   });
 });
 
