@@ -115,5 +115,15 @@ export const PRICING_COPY = {
   ctaUskoro: 'Uskoro',
   ctaUskoroNapomena: 'Plaćeni sloj je u pripremi. Provjera radi već sad, besplatno.',
 
-  sitniTekst: 'Bez pretplate · bez prijave za provjeru · dokument ide na server samo za popravak i briše se nakon preuzimanja · cijene s PDV-om',
+  /**
+   * RETENCIJA SE NE SMIJE POGADJATI. Predlozak je ovdje pisao "briše se nakon preuzimanja", a to je
+   * neistina: popravljeni i izvorni dokument OSTAJU u "Moji popravci" dok ih korisnik sam ne obriše
+   * (`supabase/migrations/0026_repair_jobs.sql`, `src/ui/privacy-state.ts`, panel popravka u
+   * `src/ui/app.ts`). Najbliži dokaz je na ISTOJ stranici: FAQ na `/saznaj-vise/` piše da plaćeni
+   * popravak čuva oba dokumenta dok ih sam ne obrišeš, pa bi cjenik dvije sekcije više tvrdio
+   * suprotno. Posljedica nije kozmetička: korisnik koji vjeruje da je dokument obrisan ne obriše ga.
+   *
+   * Isti test kao za "24 pravila" gore: ostaje samo ono što izvor u repozitoriju potkrepljuje.
+   */
+  sitniTekst: 'Bez pretplate · bez prijave za provjeru · dokument ide na server samo za popravak i ostaje u Moji popravci dok ga sam ne obrišeš · cijene s PDV-om',
 } as const;
