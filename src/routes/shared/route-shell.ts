@@ -10,6 +10,7 @@
  * listenerima drzi jedan `AbortController` po dokumentu, pa remount ne ostavlja dvostruke listenere.
  */
 import { releasedPublicRouteGroups } from './public-route-directory';
+import '../../shared/design-system.css'; // route-shell.css je od Z1 samo alias na ove primitive
 import '../../shared/skip-link.css';
 import './route-shell.css';
 
@@ -27,6 +28,8 @@ export interface RouteShellOptions {
   readonly privacySettingsAvailable: boolean;
 }
 
+import { suprotnaTema, tamnoNaEkranu } from '../../shared/display-prefs';
+
 const THEME_STORAGE_KEY = 'lekta.theme';
 
 /**
@@ -42,6 +45,18 @@ function rememberTheme(theme: string): void {
   }
 }
 
+/**
+ * Spremljena tema kao SIROVA vrijednost, ili `null` kad pohrana zakaze ili je prazna.
+ * Zanima nas samo je li izabrano `system`; vracanje same teme radi pre-paint skripta u <head>.
+ */
+function storedTheme(): string | null {
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
 function activeHtmlElement(doc: Document): HTMLElement | null {
   const active = doc.activeElement;
   const HtmlElement = doc.defaultView?.HTMLElement;
@@ -49,7 +64,10 @@ function activeHtmlElement(doc: Document): HTMLElement | null {
 }
 
 function reflectTheme(button: HTMLButtonElement, doc: Document): void {
-  const dark = doc.documentElement.dataset.theme !== 'light';
+  // STANJE, NE ATRIBUT. `system` (Z6) UKLANJA `data-theme`, pa je `!== 'light'` ovdje tvrdio tamno
+  // i na svijetlom sustavu: lampa bi javila "ugasi" nad upaljenom, a prvi klik vodio u `light`,
+  // dakle u ono sto je vec na ekranu.
+  const dark = tamnoNaEkranu(doc);
   button.setAttribute('aria-pressed', dark ? 'true' : 'false');
   button.setAttribute('aria-label', dark ? 'Lampa: ugasi' : 'Lampa: upali');
   button.title = dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu';
@@ -190,7 +208,12 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   backdrop.append(dialog);
   layer.replaceChildren(backdrop);
 
-  if (!doc.documentElement.dataset.theme) doc.documentElement.dataset.theme = 'dark';
+  // `system` (Z6, panel "Prilagodi prikaz") je IZRICIT izbor da temu odredi `prefers-color-scheme`,
+  // a odreduje je ODSUTNOST atributa. Bez ove provjere bi korisnik koji na `/` izabere "kao sustav"
+  // na `/saznaj-vise/` i `/moji-radovi/` svejedno dobio tamnu temu, pa bi izbor izgledao pokvaren.
+  if (!doc.documentElement.dataset.theme && storedTheme() !== 'system') {
+    doc.documentElement.dataset.theme = 'dark';
+  }
   reflectTheme(theme, doc);
 
   let opener: HTMLElement | null = null;
@@ -250,7 +273,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   theme.addEventListener(
     'click',
     () => {
-      const next = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      const next = suprotnaTema(doc);
       doc.documentElement.dataset.theme = next;
       reflectTheme(theme, doc);
       rememberTheme(next);

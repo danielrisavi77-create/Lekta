@@ -22,7 +22,7 @@ export const FREE_TOOL_PAGES: FreeToolPage[] = [
   { route: '/naslovnica.html', name: 'naslovnica', primarySelector: '#tp-print', workspaceSelector: '.tool-workspace' },
   { route: '/literatura.html', name: 'literatura', primarySelector: '#lit-copy', workspaceSelector: '.tool-workspace' },
   { route: '/izjava.html', name: 'izjava', primarySelector: '#st-print', workspaceSelector: '.tool-workspace' },
-  { route: '/citati-i-literatura.html', name: 'citatni audit', primarySelector: 'main .cta a[href="index.html#analyzer"]' },
-  { route: '/landing_benchmark.html', name: 'benchmark', primarySelector: 'main .hero-actions a[href="index.html#analyzer"]' },
-  { route: '/landing_usporedba.html', name: 'usporedba', primarySelector: 'main .hero-actions a[href="index.html#analyzer"]' },
+  { route: '/citati-i-literatura.html', name: 'citatni audit', primarySelector: 'main .cta a[href="/"]' },
+  { route: '/landing_benchmark.html', name: 'benchmark', primarySelector: 'main .hero-actions a[href="/"]' },
+  { route: '/landing_usporedba.html', name: 'usporedba', primarySelector: 'main .hero-actions a[href="/"]' },
 ];

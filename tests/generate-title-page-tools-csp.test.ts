@@ -19,7 +19,9 @@ import rawCatalog from '../data/catalog/zagreb-catalog.json';
 const ROOT = join(fileURLToPath(import.meta.url), '..', '..');
 
 function foucScriptFrom(html: string): string | null {
-  const m = html.match(/<script>try\{var _t=localStorage\.getItem\('lekta\.theme'\)[^<]*<\/script>/);
+  // Z6: skripta vise ne pocinje temom nego zajednickom deklaracijom `_e`, jer uz temu primjenjuje
+  // i postavke prikaza (`lekta.display`). Sidro ostaje `<script>try{var _e=document.documentElement`.
+  const m = html.match(/<script>try\{var _e=document\.documentElement,_t=localStorage\.getItem\('lekta\.theme'\)[^<]*<\/script>/);
   return m ? m[0] : null;
 }
 

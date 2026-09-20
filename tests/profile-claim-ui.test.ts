@@ -10,7 +10,8 @@
  * nula profila od 410.
  */
 import { describe, it, expect } from 'vitest';
-import { profileClaimFor, claimSentence } from '../src/ui/profile-claim';
+import { profileClaimFor, claimSentence, claimBadgeHtml } from '../src/ui/profile-claim';
+import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import artifact from '../data/profiles/profile-claims.json';
 import status from '../data/profiles/profile-status.json';
 import registry from '../data/profiles/verified-profiles.json';
@@ -140,5 +141,64 @@ describe('rjecnik statusa ne smije tvrditi dokazan popravak', () => {
     const stvarne = statusEntries.map(([, v]) => v.label);
     expect(overclaims(stvarne), 'baseline: zatecene oznake su ciste').toEqual([]);
     expect(overclaims([...stvarne, 'Potvrđeni profil'])).toEqual(['Potvrđeni profil']);
+  });
+});
+
+/**
+ * T05, zadnja dva uvjeta iz plana: "za B prikazati generirani dokument; za C/D/E objasniti stvarne granice" i
+ * "na kartici profila i u rezultatu prikazati istu projekciju". Kartica (app.ts) i zaglavlje rezultata
+ * (results-cockpit.ts) zovu ISTU `claimBadgeHtml`, a zaglavlje rezultata dobiva projekciju iz istog izvora
+ * (`profileClaimFor` nad `details.profileDefinitionId`). Ovdje se tvrdi da su te dvije projekcije jednake i da
+ * recenica po osnovi kaze ono sto plan trazi.
+ */
+describe('T05: ista projekcija na kartici i u rezultatu, recenica po osnovi dokaza', () => {
+  const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  const idFor = (letter: string) => Object.keys(art.byProfile).find((id) => art.byProfile[id] === letter);
+
+  it('rezultat nosi istu razinu i osnovu kao kartica profila, za svaku razinu koja postoji', () => {
+    for (const letter of ['A', 'B', 'C', 'D', 'E']) {
+      const id = idFor(letter);
+      if (!id) continue;
+      const kartica = profileClaimFor(id);
+      const model = buildVisualResultModel({ checks: [], issues: [], details: { profileDefinitionId: id } } as never);
+      expect(model.header.evidenceClaim, `${letter} ${id}`).toEqual(kartica);
+      expect(claimBadgeHtml(model.header.evidenceClaim, esc)).toBe(claimBadgeHtml(kartica, esc));
+    }
+  });
+
+  it('bez profila rezultat ne izmislja razinu', () => {
+    const model = buildVisualResultModel({ checks: [], issues: [], details: {} } as never);
+    expect(model.header.evidenceClaim).toBeNull();
+    expect(claimBadgeHtml(null, esc)).toBe('');
+  });
+
+  it('oznaka nosi slovo i osnovu strojno citljivo, a punu recenicu u title', () => {
+    const id = idFor('B')!;
+    const claim = profileClaimFor(id)!;
+    const html = claimBadgeHtml(claim, esc);
+    expect(html).toContain('data-evidence-claim="B"');
+    expect(html).toContain('data-evidence-basis="synthetic"');
+    expect(html).toContain(`title="${esc(claimSentence(claim))}"`);
+  });
+
+  it('B kaze da je dokument generiran; C, D i E kazu da popravak nije dokazan; A ne dodaje nista', () => {
+    expect(claimSentence(profileClaimFor(idFor('B')!))).toMatch(/generiran/);
+    for (const letter of ['C', 'D', 'E']) {
+      const id = idFor(letter);
+      if (!id) continue;
+      const s = claimSentence(profileClaimFor(id));
+      expect(s, letter).toMatch(/nije dokazan/);
+      expect(s, letter).not.toMatch(/generiran/);
+    }
+    const a = profileClaimFor(idFor('A')!)!;
+    expect(claimSentence(a)).not.toMatch(/generiran|nije dokazan/);
+    // Recenica ljestvice ostaje doslovna i prva; dodatak o osnovi je iza nje.
+    expect(claimSentence(a).startsWith(`Razina dokaza A: ${a.label}.`)).toBe(true);
+  });
+
+  it('SENTINEL: ljestvica ima barem A, B i jednu od C/D/E, inace tvrdnje gore ne mjere nista', () => {
+    expect(idFor('A')).toBeTruthy();
+    expect(idFor('B')).toBeTruthy();
+    expect(idFor('C') || idFor('D') || idFor('E')).toBeTruthy();
   });
 });

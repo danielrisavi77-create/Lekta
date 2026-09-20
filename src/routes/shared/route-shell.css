@@ -1,20 +1,25 @@
+/* Paleta se NE definira ovdje: sve --route-* su aliasi na primitive iz src/shared/design-system.css
+   (jedini izvor istine za boje, obje teme). Do 2026-09-19 je ova datoteka nosila vlastitu paletu
+   (--route-red #9d2f29/#e36a60 uz --red #C4372E/#E4573D), pa su na istoj stranici bila dva crvena
+   tona; vidi design/handoff/ALIGNMENT.md, Z1. Tamna i svijetla tema dolaze iz primitiva, pa
+   [data-theme] blok ovdje vise ne postoji. */
 :root {
   color-scheme: light dark;
-  --route-bg: #e8dfcd;
-  --route-surface: #f7f0df;
-  --route-paper: #fffaf0;
-  --route-ink: #27231e;
-  --route-muted: #6f6659;
-  --route-line: #c9bda8;
-  --route-red: #9d2f29;
-  --route-green: #2d6749;
-  --route-primary-bg: #27231e;
-  --route-primary-fg: #fffaf0;
-  --route-shadow: 0 18px 48px rgb(66 48 28 / 18%);
-  --route-directory-paper: #fffaf0;
-  --route-directory-ink: #29231d;
-  --route-directory-muted: #756b5d;
-  --route-directory-line: #d0c3ad;
+  --route-bg: var(--desk);
+  --route-surface: var(--desk-2);
+  --route-paper: var(--paper);
+  --route-ink: var(--desk-ink);
+  --route-muted: var(--desk-muted);
+  --route-line: var(--desk-line);
+  --route-red: var(--red);
+  --route-green: var(--pass);
+  --route-primary-bg: var(--red);
+  --route-primary-fg: var(--on-red);
+  --route-shadow: var(--paper-sh);
+  --route-directory-paper: var(--paper);
+  --route-directory-ink: var(--paper-ink);
+  --route-directory-muted: var(--paper-muted);
+  --route-directory-line: var(--paper-line);
   --route-header-min-height: 68px;
   --route-shell-inline: 32px;
   --route-nav-gap: 22px;
@@ -23,20 +28,6 @@
   font-family: var(--sans, system-ui, sans-serif);
   background: var(--route-bg);
   color: var(--route-ink);
-}
-
-:root[data-theme="dark"] {
-  --route-bg: #191815;
-  --route-surface: #24211c;
-  --route-paper: #f3ead8;
-  --route-ink: #f2ecdf;
-  --route-muted: #b8ad9b;
-  --route-line: #4c4438;
-  --route-red: #e36a60;
-  --route-green: #77b992;
-  --route-primary-bg: #f3ead8;
-  --route-primary-fg: #191815;
-  --route-shadow: 0 24px 65px rgb(0 0 0 / 38%);
 }
 
 * { box-sizing: border-box; }
@@ -55,12 +46,12 @@ a { color: inherit; }
 .intake-topbar { min-height: var(--route-header-min-height); display: flex; align-items: center; gap: var(--route-nav-gap); }
 .intake-topbar { position: sticky; inset-block-start: 0; z-index: 30; width: min(1120px, calc(100% - var(--route-shell-inline))); margin-inline: auto; }
 .route-brand,
-.intake-brand { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; color: var(--route-ink); text-decoration: none; font: 700 1.35rem/1 Georgia, serif; letter-spacing: -.02em; }
+.intake-brand { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; color: var(--route-ink); text-decoration: none; font: 700 1.35rem/1 var(--display-serif); letter-spacing: -.02em; }
 .route-mark,
-.intake-brand-mark { width: 36px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; border: 0; border-radius: 0; color: #fff8e9; background: var(--route-red); box-shadow: 4px 4px 0 color-mix(in srgb, var(--route-ink) 35%, transparent); font: 800 1rem/1 ui-monospace, monospace; transform: rotate(-2deg); }
+.intake-brand-mark { width: 36px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; border: 0; border-radius: 0; color: var(--on-red); background: var(--route-red); box-shadow: var(--paper-sh-sm); font: 800 1rem/1 var(--mono); transform: rotate(-2deg); }
 .route-links { margin-inline-start: auto; display: flex; align-items: center; gap: 8px; }
 .route-links a,
-.intake-my-work { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 8px 12px; border: 1px solid transparent; border-radius: 999px; color: var(--route-muted); background: transparent; text-decoration: none; font-size: .82rem; font-weight: 750; cursor: pointer; }
+.intake-my-work { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 8px 12px; border: 1px solid transparent; border-radius: 999px; color: var(--route-muted); background: transparent; text-decoration: none; font-size: var(--fs-ui-sm); font-weight: 750; cursor: pointer; }
 .route-links a:hover, .route-links a[aria-current="page"] { color: var(--route-ink); background: color-mix(in srgb, var(--route-paper) 64%, transparent); }
 .intake-my-work:hover,
 .intake-my-work:focus-visible { color: var(--route-ink); border-color: var(--route-line); background: color-mix(in srgb, var(--route-paper) 64%, transparent); }
@@ -76,9 +67,9 @@ a { color: inherit; }
 .route-footer { margin-top: 72px; padding: 30px 0 42px; border-top: 1px solid var(--route-line); color: var(--route-muted); }
 .route-footer-row { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
 .route-footer a { text-underline-offset: 4px; }
-.route-kicker { margin: 0 0 12px; color: var(--route-red); font-size: .76rem; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
-.route-button { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--route-line); border-radius: 12px; padding: 10px 17px; background: var(--route-surface); color: var(--route-ink); font-weight: 800; text-decoration: none; cursor: pointer; }
-.route-button--primary { border-color: var(--route-primary-bg); background: var(--route-primary-bg); color: var(--route-primary-fg); box-shadow: 4px 4px 0 var(--route-red); }
+.route-kicker { margin: 0 0 12px; color: var(--route-red); font-size: var(--fs-ui-xs); font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+.route-button { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--route-line); border-radius: var(--radius-btn); padding: 10px 17px; background: var(--route-surface); color: var(--route-ink); font-weight: 800; text-decoration: none; cursor: pointer; }
+.route-button--primary { border-color: var(--route-primary-bg); background: var(--route-primary-bg); color: var(--route-primary-fg); box-shadow: var(--paper-sh-sm); }
 .route-trust { display: inline-flex; align-items: center; gap: 8px; color: var(--route-green); font-weight: 800; }
 
 [data-route-directory-backdrop] {
@@ -117,7 +108,7 @@ a { color: inherit; }
   grid-column: 1;
   margin: 0;
   align-self: center;
-  font: 650 clamp(1.8rem, 4vw, 2.7rem)/1 Georgia, serif;
+  font: 650 var(--fs-h2)/1 var(--display-serif);
   letter-spacing: -.035em;
 }
 
@@ -141,7 +132,7 @@ a { color: inherit; }
   padding: 9px 14px;
   border: 1px solid var(--route-directory-line);
   border-radius: 999px;
-  background: #f6ecda;
+  background: var(--paper-2);
   color: var(--route-directory-ink);
   font-weight: 800;
   cursor: pointer;
@@ -151,15 +142,15 @@ a { color: inherit; }
   min-width: 0;
   margin: 0;
   padding: 7px 12px 11px;
-  border: 1px solid #ded2bd;
-  background: #fffdf8;
+  border: 1px solid var(--paper-line);
+  background: var(--paper);
 }
 
 [data-route-directory-group] summary {
   display: flex;
   align-items: center;
-  color: #8f302b;
-  font-size: .76rem;
+  color: var(--red-deep);
+  font-size: var(--fs-ui-xs);
   font-weight: 900;
   letter-spacing: .055em;
   cursor: pointer;
@@ -169,7 +160,7 @@ a { color: inherit; }
   display: flex;
   align-items: center;
   padding: 8px 5px;
-  border-top: 1px solid #eee5d6;
+  border-top: 1px solid var(--paper-line);
   color: var(--route-directory-ink);
   text-decoration: none;
   font-size: .88rem;
@@ -177,13 +168,13 @@ a { color: inherit; }
 }
 
 [data-route-directory-group] > a:hover {
-  color: #8f302b;
+  color: var(--red-deep);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
 [data-route-directory-group] > a[aria-current] {
-  color: #8f302b;
+  color: var(--red-deep);
   font-weight: 900;
 }
 

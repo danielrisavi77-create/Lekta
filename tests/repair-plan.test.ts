@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { defaultSelectedItems } from '../src/repair/default-selection';
-import { buildRepairPlan, type PlanItemInput } from '../src/ui/results/repair-plan';
+import { buildRepairPlan, defaultPlanSelection, planSelectionSummary, selectablePlanRuleIds, type PlanItemInput } from '../src/ui/results/repair-plan';
 import { repairPlanHtml } from '../src/ui/results/repair-plan-view';
 import type { VisualFindingModel } from '../src/ui/results/visual-result-model';
 
@@ -191,5 +191,45 @@ describe('prikaz plana', () => {
   it('naziv i potvrda se ESKAPIRAJU, jer dolaze iz podataka', () => {
     const p = buildRepairPlan([STAVKA({ violated: true, label: '<img src=x>' })], [], true);
     expect(repairPlanHtml(p, esc)).not.toContain('<img');
+  });
+});
+
+describe('odabir u planu (T09)', () => {
+  const plan = buildRepairPlan([
+    STAVKA({ ruleId: 'a', label: 'Lijeva margina', violated: true }),
+    STAVKA({ ruleId: 'b', label: 'Izjava', violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi mjesto.' }),
+    STAVKA({ ruleId: 'c', label: 'Preporuka', violated: false, recommended: true }),
+    STAVKA({ ruleId: 'd', label: 'Uskladi sve', violated: false }),
+  ], [nalaz({ id: 'r', title: 'Rucno' })], true);
+
+  it('zadani odabir su tocno sigurni zahvati', () => {
+    expect(defaultPlanSelection(plan)).toEqual(['a']);
+  });
+
+  it('sazetak broji SAMO stavke koje plan nudi; nepoznat ili nekontroliran ruleId se ignorira', () => {
+    const s = planSelectionSummary(plan, ['a', 'c', 'd', 'nepoznat']);
+    expect(s.count).toBe(2);
+    expect(s.labels).toEqual(['Lijeva margina', 'Preporuka']);
+    expect(s.needsConfirmation).toEqual([]);
+    expect([...selectablePlanRuleIds(plan)].sort()).toEqual(['a', 'b', 'c']);
+  });
+
+  it('odabrana odluka s potvrdom se najavljuje, a iskljucen zahvat ne ukljucuje drugi', () => {
+    const s = planSelectionSummary(plan, ['b']);
+    expect(s.count).toBe(1);
+    expect(s.needsConfirmation.map((x) => x.ruleId)).toEqual(['b']);
+    expect(planSelectionSummary(plan, []).count).toBe(0);
+  });
+
+  it('prikaz: kvacice su pravi checkboxovi s labelom, rucne stavke bez kontrole', () => {
+    const html = repairPlanHtml(plan, esc);
+    expect(html).toContain('<input type="checkbox" class="rp-kvacica" id="rp-a" data-repair-plan-item="a" data-odabrano="da" checked />');
+    expect(html).toContain('<label class="rp-naziv" for="rp-a">Lijeva margina</label>');
+    expect(html).toContain('data-repair-plan-item="b" data-odabrano="ne" />');
+    expect(html).not.toContain('data-repair-plan-item="d"');
+    expect(html).toContain('data-testid="repair-plan-continue"');
+    expect(html).toContain('data-testid="repair-selected-summary"');
+    const rucni = html.slice(html.indexOf('rp-popis--rucno'));
+    expect(rucni).not.toContain('<input');
   });
 });

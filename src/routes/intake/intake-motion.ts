@@ -18,14 +18,20 @@
  *    `opacity` i `transform`, nikad `display`, `visibility` ni razmjestaj. Korisnik koji klikne
  *    tijekom sekvence dobiva file picker, ne cekanje.
  *
- * 2. `prefers-reduced-motion` GASI SEKVENCU U CIJELOSTI, a ne ubrzava je. Tada se ne poziva
- *    nijedna animacija, pa nema ni jednog kadra pomaka.
+ * 2. PRIGUSEN POKRET GASI SEKVENCU U CIJELOSTI, a ne ubrzava je. Tada se ne poziva nijedna
+ *    animacija, pa nema ni jednog kadra pomaka. Prigusenje ima DVA izvora i oba vrijede jednako:
+ *    sustavni `prefers-reduced-motion` i rucni `data-motion="reduce"` iz panela "Prilagodi prikaz".
+ *    Rucni se NE moze pokriti CSS-om: `animation: none !important` gasi CSS animacije, a ovdje se
+ *    animira kroz `element.animate()` (WAAPI), koji o svojstvu `animation` ne ovisi. Jedino mjesto
+ *    na kojem se rucni izbor tu moze postovati je ovaj `return`.
  *
  * 3. ZAVRSNO STANJE JE BAZNO STANJE. Elementi u HTML-u nemaju pocetnu neprozirnost 0 (bez JS-a i pri
  *    gresci stranica je potpuno vidljiva); sekvenca ih SAMA gura u pocetni kadar pa vraca, uz
  *    `fill: 'backwards'` da se pocetni kadar primijeni tek s pocetkom animacije. Obrnuto bi znacilo
  *    prazan zaslon svakome kome skripta ne prodje.
  */
+
+import { pokretPrigusen } from '../../shared/display-prefs';
 
 const PAPIR_MS = 560;
 const SADRZAJ_MS = 420;
@@ -36,11 +42,6 @@ const PODIZANJE_PX = 18;
 const PAPIR_ROTACIJA = '-.35deg';
 const MEKAN_DOSKOK = 'cubic-bezier(.22, 1, .36, 1)';
 
-function reducedMotion(): boolean {
-  return typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 function pokreni(el: Element, keyframes: Keyframe[], duration: number, delay = 0): void {
   // `fill: 'backwards'` drzi prvi kadar SAMO za trajanja kasnjenja; nakon zavrsetka element pada
   // natrag na stil iz CSS-a, pa animacija ne ostavlja inline stanje koje bi kasnije nesto pregazilo.
@@ -48,7 +49,7 @@ function pokreni(el: Element, keyframes: Keyframe[], duration: number, delay = 0
 }
 
 export function playIntakeEntry(doc: Document): void {
-  if (reducedMotion()) return;
+  if (pokretPrigusen(doc)) return;
   if (typeof Element === 'undefined' || typeof Element.prototype.animate !== 'function') return;
 
   const paper = doc.getElementById('intakeDropzone');
@@ -67,9 +68,11 @@ export function playIntakeEntry(doc: Document): void {
     ], SADRZAJ_MS, 90 + i * KORAK_MS);
   });
 
-  // Brojke i poveznice dolaze zadnje i tise: signal povjerenja, ne glavni glas stranice. Bez pomaka,
-  // samo pojavljivanje, da oko ostane na papiru.
-  const rep = [doc.getElementById('intakeMeta'), doc.querySelector('.intake-stats'), doc.querySelector('.intake-links')];
+  // Redak ispod papira dolazi zadnji i tise: signal povjerenja, ne glavni glas stranice. Bez
+  // pomaka, samo pojavljivanje, da oko ostane na papiru. `.intake-links` je klasa koju je ulaz
+  // izgubio (spojena u `#intakeMeta`); `.intake-stats` u `index.html` nikad nije postojala, pa je
+  // ovaj `querySelector` od pocetka tiho vracao `null`. Pregled Z7 uklanja obje mrtve referencije.
+  const rep = [doc.getElementById('intakeMeta')];
   rep.forEach((el, i) => {
     if (el) pokreni(el, [{ opacity: 0 }, { opacity: 1 }], REP_MS, 240 + i * 70);
   });

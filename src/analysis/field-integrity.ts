@@ -187,7 +187,11 @@ function scanFields(_part: string, xml: string): RawField[] {
     const raw = xml.slice(start, end);
     const instructions = [...raw.matchAll(/<w:instrText\b[^>]*>([\s\S]*?)<\/w:instrText>/gi)].map((item) => decodeXml(item[1])).join('');
     const separator = raw.search(/<w:fldChar\b[^>]*w:fldCharType=["']separate["']/i);
-    found.push({ raw, offset: start, instruction: instructions, cachedResult: cachedFieldResult(raw, separator >= 0 ? separator : undefined), dirty: dirtyFromTag(match[0]), paragraphIndex: partParagraphIndex(xml, start) });
+    found.push({
+      raw, offset: start, instruction: instructions,
+      cachedResult: separator >= 0 ? cachedFieldResult(raw, separator) : '',
+      dirty: dirtyFromTag(match[0]), paragraphIndex: partParagraphIndex(xml, start),
+    });
   }
   return found.sort((a, b) => a.offset - b.offset);
 }

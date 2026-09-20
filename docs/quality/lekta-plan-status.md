@@ -39,3 +39,81 @@ plan popravka s pravim kontrolama su zapisani kao D7 u planu audita. T11 do T15 
 | `scripts/agents/core.mjs`: pretplatnicki nacin | `--subscription`: bez budzeta, bez Fablea, odbija API kljuc u okolini; rucni `--budget-usd` nacin nepromijenjen |
 | post-deploy-smoke: `build-info` 404 | `unknown` ishod: `--expect-commit` (cron, usporedba s masterom) upozorava, novi `--require-build-info` (konkretna objava) pada; klasifikacija ne moze biti `ok` bez ijednog prolaza; izlaz preko `process.exitCode` (`process.exit()` uz zivu fetch uticnicu na Windowsu vraca 0xC0000409); test `tests/post-deploy-smoke-build-info-cli.test.ts` s pravim lokalnim posluziteljem; izmjereno nad zivom stranicom: 27 ok + 1 unknown, exit 0 odnosno 1 |
 | `npm run check` nad granom | ZELEN 2026-09-09 (izolirani worktree, `VITEST_MAX_THREADS=2`): oxlint, tsc, Deno 25 funkcija, vitest 516 datoteka / 5975 testova (1 datoteka i 4 testa preskoceni po dizajnu), vite build; `orphan-scan` cist. Smoke paket (3 datoteke, 23 testa) i 91 Python test pokrenuti odvojeno nakon zadnje izmjene smoke skripte, zeleni |
+
+## Krug 2026-09-10 do 2026-09-12: T02 do T15 (grana `plan/t02-t06-2026-09-10`)
+
+Vlasnikova rijec "Napravi sve iz plana T00 do T15" (2026-09-10) ukljucila je i datoteke redizajna `/rad/`. Sve
+promjene u `src/ui/app.ts` su unutar ratcheta (`ui-module-budget`): prostor je napravljen seljenjem dupliciranog koda
+(graditelj liste stavki, preklopnik dubinskog ciscenja, recenica ishoda) iz `app.ts` u `repair-panel.ts` i
+`repair-outcome-view.ts`.
+
+| zadatak | sto je izvedeno | dokaz |
+| --- | --- | --- |
+| T02 | `data-testid` na stvarnim elementima (`repair-entry` je UVIJEK omogucen gumb: sigurne stavke ili simulacija), tri ulaza u popravak | `tests/ux/repair-entry-visible.spec.ts`, 4 testa x 2 projekta zeleno |
+| T03 | dovrsetak: oznake `document-profile` (kartica profila na koraku 2) i `analysis-results`, `production-journey` do `repair-workflow` | `tests/ux-dist/production-journey.spec.ts` |
+| T05 | ista projekcija na kartici i u rezultatu, recenica po osnovi dokaza | `tests/profile-claim-ui.test.ts` (+5) |
+| T06 | holdout, provenijencija ocekivanja, verzija Worda u ovjeri, `mapLimited` (OOM nad 315 dokumenata), prvo mjerenje 321 dokumenta | `real-corpus-protocol.md` odjeljak 4, `tests/real-corpus-holdout.test.ts` |
+| T08 | kontroler vezan na lokalni i serverski panel; ledger emitira `change` | `tests/repair-workflow-binding.test.ts` |
+| T09 | pravi checkboxovi u planu, sazetak, odabir u kontroler; NALAZ USPUT: podnozje plana na mobilnom guralo gumb izvan ekrana (scrollWidth 393 -> 877), popravljeno gridom | `tests/ux/repair-plan-selection.spec.ts`, `tests/desk-mount.test.ts` (+4) |
+| T10 | provjereni ishod na oba puta, politika oporavka, `check-existing-job` prije ponavljanja | `tests/repair-recovery.test.ts`, `tests/ux/repair-recovery.spec.ts` (4 zeleno na chromiumu) |
+| T12 | nova verzija rada, snimke u sesiji, pitanje o povezivanju, sazetak razlike | `tests/document-revisions.test.ts` (15), `tests/ux/document-revisions.spec.ts` |
+| T13 | mentorovi komentari kao zadaci u ruti `/rad/`, fixture s komentarima generirana skriptom | `tests/mentor-tasks-ui.test.ts` (7), `tests/ux/mentor-tasks.spec.ts` |
+| T14 | registar dogadjaja toka, gard da se svaki emitira | `tests/product-journey-telemetry.test.ts`, `docs/quality/product-metrics.md` |
+| T15 | protokol pilota i spremnost izdanja | `usability-protocol.md`, `release-readiness.md`; pilot NIJE proveden (vlasnik) |
+
+Sto ostaje vlasniku: potpis ovjere korpusa nad 321 dokumentom (i odluka o `holdout` potvrdi), pilot s korisnicima,
+objava kandidata nakon novog dokaza izdanja nad spojenim masterom.
+
+## Krug 2026-09-12: unos programa T16 do T47 (grana `wf/t16-plan-do-live`)
+
+Program do javnog lansiranja iz vlasnikova plana unesen je u postojeci sustav. Ovo je DOKUMENTACIJSKI
+unos: nijedna datoteka izvan `docs/` nije dirana, nijedan artefakt u `docs/generated` ili
+`data/generated` nije regeneriran, i nijedan novi statusni sustav nije uveden.
+
+| stavka | vrijednost |
+| --- | --- |
+| novi `baselineCommit` | `afccbdd78af4d09f7ff9097adc45e05e3fc41287` (`origin/master` u trenutku unosa) |
+| prethodni `baselineCommit` | `7bdd70853392b092dfa271aef077118df4b18325` |
+| polaziste plana | master `7e52bc66551d7d920ab83810f87f0c52a10f8c16` |
+| razlika mastera od tog polazista | SAMO PR #74 i #75, oba "workflow bez Fablea" (`.claude/workflows/lekta-no-fable-coding.js`, `docs/agents/no-fable-workflow.md`); bez izmjene aplikacijskog koda, pa nalazi plana vrijede nepromijenjeni |
+| kanonski tekst programa | `docs/agents/plan-do-live-2026-09-12.md` (doslovna kopija, sha256 `1b2af479a68609df1571bc98f040a93ff896a27e1940c6d1b11ef012564ece46`) |
+| red zadataka | `docs/agents/tasks.json`, 48 zapisa (T00 do T47) |
+| opisi zadataka | `docs/agents/development-plan.md`, "Podplan F" |
+| nalazi i vlasnici | `docs/AUDIT_MASTER.md`, odjeljak 17 |
+
+### Sto je promijenjeno u redu zadataka
+
+- **T00 do T14:** nedirnuti. Provjereno usporedbom sa `HEAD:docs/agents/tasks.json`, 0 izmijenjenih zapisa.
+- **T15:** `ready` -> `blocked`, `dependsOn` `["T14"]` -> `["T14","T46"]`. Spremnost ovjerenog kandidata
+  (T46) je novi preduvjet pilota; stara biljeska je sacuvana i samo dopunjena.
+- **T16 do T47:** 32 nova zapisa. `id`, `title` i `dependsOn` su STROJNO preuzeti iz JSON bloka odjeljka
+  11 vendoranog plana i provjereni polje po polje (0 razlika). Svaki nosi `note` s prioritetom P0 ili P1
+  iz odjeljka 6 i jednom recenicom sto je dokaz zatvaranja.
+- **Svi T17 do T47 su NEZAPOCETI** (`blocked`, kako ih plan i postavlja). T16 je `in_review`, ne `done`:
+  ovaj commit ga izvodi, a `done` postavlja koordinator nakon prihvacenog dokaza. `implementationAgent`
+  je postojece polje sheme (`scripts/agents/core.mjs`, review faza), ne novo.
+
+### Dokaz ovog kruga
+
+| provjera | ishod |
+| --- | --- |
+| `npm run agents -- list` | prolazi, ispisuje svih 48 zadataka; validator (`validateQueue`) bez duplikata, ciklusa i nepoznatih statusa |
+| gard-mutacija nad prosirenim redom | baseline prolazi; odbijeno svih sest podmetnutih kvarova: duplikat `T20`, ciklus `T20` -> `T21` -> `T20`, samoovisnost `T47`, nepostojeca ovisnost `T99`, status `needs_verification`, ID `T100` |
+| usporedba s planom | `T16` do `T47`: 0 razlika u `id`, `title` i `dependsOn`; prioriteti u `note` i u Podplanu F poklapaju se s odjeljkom 6 (0 razlika) |
+| vendorani plan | bajt jednak izvoru NAKON normalizacije CR (sha256 iznad); 991 redak, UTF-8 bez BOM-a. Uz `core.autocrlf=true` ista datoteka na disku moze nositi CRLF ili LF ovisno o tome kako je stablo materijalizirano (CLAUDE.md, "Gard koji cita datoteku s diska mora normalizirati CR"), pa se jednakost mjeri nad blobom, ne nad sirovim bajtovima na disku; `.gitattributes` od ovog kruga prikiva `text eol=lf` za tu putanju |
+| citaci prave datoteke | `scripts/agents/cli.mjs` (validator iznad) i `scripts/autonomy/policy.py` (samo popis kontrolnih putanja, bez ogranicenja broja zapisa). Nijedan test ne tvrdi broj zadataka ni `baselineCommit`, pa nijedan test nije mijenjan |
+
+Sto NIJE dokazano ovim krugom: `tests/agent-workflow-cli.test.ts` je na Windowsu preskocen po dizajnu
+(`describe.skipIf(process.platform === 'win32')`, POSIX shebang u testnom izvrsnom programu), pa 4 od 4
+testa nisu izvedena. Taj test ionako gradi VLASTITI privremeni `tasks.json` s jednim zapisom i ne cita
+pravu datoteku, ali njegov prolaz nad ovom promjenom nije izmjeren lokalno; mjerodavan je CI.
+
+Sljedeci korak nije najnizi broj nego kritican put: `T18` -> `T20` -> `T22`/`T24` -> `T25`/`T27` -> `T30`
+-> `T44` -> `T46` -> `T15` -> `T47`. Koordinator postavlja zadatak u `ready` kad su mu ovisnosti `done`.
+
+## Krug 2026-09-13: T16 zatvoren, kriticni put otvoren
+
+`T16` je postavljen na `done`: PR #78 spojen u master `528fbae7`, gate zelen (531 datoteka, 6102 testa).
+Koordinator je programski postavio `ready` svakom zadatku ciju su sve ovisnosti `done`: `T17`, `T18`,
+`T19`, `T23`, `T26`, `T41`. `T15` ostaje `blocked` (ovisi jos o `T46`). Sljedeci koraci po kriticnom
+putu ostaju `T18` pa `T19`.
