@@ -49,43 +49,37 @@
 
 /* ---- Zajednicki ulazni pokret ---------------------------------------------
    Svaki blok nosi --i (redni broj u sekvenci). Jedan razred na korijenu pokrece sve. */
-.result-cockpit [data-cockpit-header],
-.result-cockpit .cockpit-hero__copy,
-.result-cockpit .cockpit-score,
-.result-cockpit .cockpit-primary,
+.result-cockpit .cockpit-steps,
+.result-cockpit .cockpit-sheet__lead,
+.result-cockpit .cockpit-ring-wrap,
 .result-cockpit .cockpit-section-heading,
 .result-cockpit .cockpit-finding,
 .result-cockpit .cockpit-categories,
-.result-cockpit .cockpit-actions,
-.result-cockpit .cockpit-advanced-toggle {
+.result-cockpit .cockpit-allchecks {
   opacity: 0;
   transform: translateY(10px);
 }
-.result-cockpit[data-entered] [data-cockpit-header],
-.result-cockpit[data-entered] .cockpit-hero__copy,
-.result-cockpit[data-entered] .cockpit-score,
-.result-cockpit[data-entered] .cockpit-primary,
+.result-cockpit[data-entered] .cockpit-steps,
+.result-cockpit[data-entered] .cockpit-sheet__lead,
+.result-cockpit[data-entered] .cockpit-ring-wrap,
 .result-cockpit[data-entered] .cockpit-section-heading,
 .result-cockpit[data-entered] .cockpit-finding,
 .result-cockpit[data-entered] .cockpit-categories,
-.result-cockpit[data-entered] .cockpit-actions,
-.result-cockpit[data-entered] .cockpit-advanced-toggle {
+.result-cockpit[data-entered] .cockpit-allchecks {
   opacity: 1;
   transform: none;
   transition: opacity .5s var(--ck-ease), transform .5s var(--ck-ease);
   transition-delay: calc(var(--i, 0) * 70ms);
 }
-.result-cockpit [data-cockpit-header] { --i: 0; }
-.result-cockpit .cockpit-hero__copy { --i: 1; }
-.result-cockpit .cockpit-score { --i: 2; }
-.result-cockpit .cockpit-primary { --i: 4; }
+.result-cockpit .cockpit-steps { --i: 0; }
+.result-cockpit .cockpit-sheet__lead { --i: 1; }
+.result-cockpit .cockpit-ring-wrap { --i: 3; }
 .result-cockpit .cockpit-priority .cockpit-section-heading { --i: 5; }
 .result-cockpit .cockpit-finding:nth-child(1) { --i: 6; }
 .result-cockpit .cockpit-finding:nth-child(2) { --i: 7; }
 .result-cockpit .cockpit-finding:nth-child(3) { --i: 8; }
 .result-cockpit .cockpit-categories { --i: 9; }
-.result-cockpit .cockpit-actions { --i: 10; }
-.result-cockpit .cockpit-advanced-toggle { --i: 11; }
+.result-cockpit .cockpit-allchecks { --i: 11; }
 
 /* ---- Zaglavlje -------------------------------------------------------------- */
 
@@ -98,74 +92,179 @@
   text-transform: uppercase;
 }
 
-.cockpit-header {
+.cockpit-steps {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: .9rem;
-  border-bottom: 1px solid var(--ck-line);
+  align-items: center;
+  gap: .35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.cockpit-header h2 {
-  margin: .25rem 0 .15rem;
-  font-family: var(--display-serif, Georgia, serif);
-  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -.01em;
-  --emph-weight: 400;
-  --emph-style: italic;
-}
-.cockpit-header p { margin: 0; color: var(--ck-muted); font-size: .82rem; }
-.cockpit-header__status {
+/* Pill je dopusten SAMO znackama, koracima i cipovima (design/README.md, Radiusi). */
+.cockpit-step {
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
-  padding: .3rem .6rem;
+  gap: .45rem;
+  padding: .4rem .75rem;
   border: 1px solid var(--ck-line);
   border-radius: var(--radius-pill, 999px);
   color: var(--ck-muted);
-  font-size: .74rem;
+  font-family: var(--mono, monospace);
+  font-size: .68rem;
+  letter-spacing: .06em;
+}
+/* AKTIVAN KORAK JE INVERZAN: tamna ploha, svijetli tekst. To je jedini korak koji se moze
+   raditi, pa je jedini koji smije nositi tezinu tinte. */
+.cockpit-step--active {
+  border-color: var(--ck-ink);
+  background: var(--ck-ink);
+  color: var(--paper, #F7F3E8);
+}
+.cockpit-step__num { font-variant-numeric: tabular-nums; opacity: .75; }
+.cockpit-step--active .cockpit-step__num { opacity: .6; }
+
+/* ---- List presude ------------------------------------------------------------
+   Jedan list nosi cijeli odgovor na "gdje sam i sto sad": eyebrow, presuda, sazetak,
+   doseg automatike, jedna radnja. Prsten i pecat stoje desno, u vlastitom stupcu. */
+
+.cockpit-sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+.cockpit-sheet__lead { display: grid; justify-items: start; gap: .9rem; }
+
+.cockpit-eyebrow {
+  margin: 0;
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  line-height: 1.5;
+}
+.cockpit-marks { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; }
+.cockpit-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .22rem .6rem;
+  border: 1px solid var(--ck-line);
+  border-radius: var(--radius-pill, 999px);
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .66rem;
   white-space: nowrap;
 }
-.cockpit-header__status--confirmed {
+.cockpit-mark--confirmed {
   border-color: color-mix(in srgb, var(--ck-green) 40%, transparent);
   color: var(--ck-green-text);
 }
 
-/* ---- Presuda + mjerac ------------------------------------------------------- */
-
-/* Dva stupca, dva retka: presuda i poziv jedno ispod drugoga u lijevom stupcu, a mjerac
-   preko oba retka desno. S jednim retkom je poziv padao ISPOD mjeraca, pa je izmedju teksta
-   i gumba zjapilo tristotinjak piksela praznine (visina cipa). */
-.cockpit-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-}
-.cockpit-hero__lead { display: grid; justify-items: start; gap: 1.6rem; }
-.cockpit-hero__copy h2 {
-  margin: .5rem 0 .55rem;
+/* PRESUDA JE NASLOV EKRANA. Do Z8 je bila sitna oznaka uz sazetak; sada je H1 u display
+   serifu, jer je to prva recenica koju korisnik cita i jedina koja odgovara na "smijem li
+   predati". Ton NE nosi lijevi rub (design/README.md, pravilo 3) nego prsten i pecat. */
+.cockpit-verdict-title {
+  margin: .2rem 0 0;
   max-width: 18ch;
   font-family: var(--display-serif, Georgia, serif);
-  font-size: clamp(1.9rem, 4.4vw, 3.1rem);
+  font-size: clamp(2rem, 5.2vw, 3.6rem);
   font-weight: 400;
-  line-height: 1.02;
-  letter-spacing: -.022em;
+  line-height: .98;
+  letter-spacing: -.02em;
+  text-wrap: balance;
   --emph-weight: 400;
   --emph-style: italic;
 }
-.cockpit-hero__copy p {
-  margin: 0;
-  max-width: 46ch;
-  color: var(--ck-muted);
-  font-size: .95rem;
-  line-height: 1.55;
+
+.cockpit-sheet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.1rem;
+  margin-top: .4rem;
 }
-/* Ton presude NE nosi lijevi rub kopije (design/README.md, pravilo 3; ALIGNMENT Z3, 2026-09-19):
-   presudu vec nosi .cockpit-verdict kao oznaka, a boja prstena kao mjerac. */
+/* Tekstualna poveznica, ne drugi gumb: druga radnja na ekranu smije postojati, ali ne smije
+   izgledati kao izbor ravnopravan primarnom pecatu. */
+.cockpit-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ck-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: .82rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.cockpit-link:hover { color: var(--ck-ink); }
+.cockpit-link:focus-visible { outline: none; box-shadow: var(--focus); }
+
+/* ---- Prsten presude i pecat --------------------------------------------------
+   Prsten je 132 px conic-gradient; boja luka je TON PRESUDE, ne ocjene. 50% radius je
+   dopusten samo prstenu, tockama presude i strelicama (design/README.md, Radiusi). */
+
+.cockpit-ring-wrap { display: grid; justify-items: center; gap: .55rem; }
+.cockpit-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: conic-gradient(var(--ring-tone, var(--ck-ink)) 0 calc(var(--ck-ring, 0) * 1%), var(--ck-line) 0);
+}
+.cockpit-ring__core {
+  display: grid;
+  place-items: center;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: var(--paper, #F7F3E8);
+  font-family: var(--display-serif, Georgia, serif);
+  font-size: 3.1rem;
+  font-weight: 400;
+  line-height: 1;
+  /* Serifni kontejner mora ponuditi kurziv kao naglasak: Instrument Serif reza iznad 400 nema
+     (gard `tests/design-tokens.test.ts`). Brojka ga ne koristi, ali pravilo vrijedi za sve. */
+  --emph-weight: 400;
+  --emph-style: italic;
+}
+.cockpit-ring[data-verdict-tone='blocked'] { --ring-tone: var(--ck-red); }
+.cockpit-ring[data-verdict-tone='needs-work'] { --ring-tone: var(--ck-amber); }
+.cockpit-ring[data-verdict-tone='manual-review'] { --ring-tone: var(--ck-blue); }
+.cockpit-ring[data-verdict-tone='clear'] { --ring-tone: var(--ck-green); }
+/* Nebodovan profil: luk je prazan, pa se vidi da brojka NIJE ocjena. */
+.cockpit-ring--nema .cockpit-ring__core { font-size: 2.4rem; }
+.cockpit-ring__label {
+  max-width: 16ch;
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .66rem;
+  letter-spacing: .08em;
+  text-align: center;
+}
+/* PECAT STOJI ISPOD PRSTENA, u toku, i nikad preko teksta: papir dobiva otisak dolje desno,
+   a ne pecat preko recenice koju korisnik jos cita. */
+.cockpit-stamp {
+  justify-self: end;
+  margin: .2rem 0 0;
+  padding: .45rem .8rem;
+  border: 2px solid currentColor;
+  border-radius: var(--radius, 2px);
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .66rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transform: rotate(-7deg);
+  opacity: .85;
+}
+.cockpit-stamp[data-verdict-tone='blocked'] { color: var(--ck-red-text); }
+.cockpit-stamp[data-verdict-tone='needs-work'] { color: var(--ck-amber); }
+.cockpit-stamp[data-verdict-tone='manual-review'] { color: var(--ck-blue); }
+.cockpit-stamp[data-verdict-tone='clear'] { color: var(--ck-green-text); }
 
 /* Tamni cip: jedini "stroj" na papiru, isti uredaj kao hero score kartica. */
 .cockpit-score {
@@ -578,47 +677,44 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 
 /* ---- Akcije + prekidac napredne provjere ------------------------------------ */
 
-.cockpit-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
-.cockpit-actions .button { flex: 0 1 auto; min-height: 2.7rem; }
-.cockpit-actions__count {
-  display: inline-grid;
-  place-items: center;
-  min-width: 1.35rem;
-  height: 1.35rem;
-  margin-left: .4rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, currentColor 14%, transparent);
-  font-family: var(--mono, monospace);
-  font-size: .7rem;
+/* SEKUNDARNI LISTOVI: DNA i kategorije u jednom redu, prigusenim tonom. Naslovi su manji od
+   onih iznad, jer ovo je pregled, a ne radnja; ton ostaje isti papir, samo tise. */
+.cockpit-secondary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 1.1rem;
+  align-items: start;
 }
-
-.cockpit-advanced-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  width: 100%;
-  padding: .85rem 1rem;
-  border: 1px dashed var(--ck-line);
+.cockpit-secondary > * { min-width: 0; }
+.cockpit-secondary .cockpit-section-heading h2 { font-size: .95rem; }
+.cockpit-secondary .cockpit-kicker { font-size: .62rem; }
+.cockpit-secondary .cockpit-dna,
+.cockpit-secondary .cockpit-categories {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--ck-line);
   border-radius: var(--radius, 2px);
+  color: var(--ck-muted);
+}
+.cockpit-secondary .cockpit-dna h2,
+.cockpit-secondary .cockpit-categories h2 { color: var(--ck-ink); }
+
+/* "Sve provjere (N)" je POVEZNICA, ne gumb preko cijele sirine: napredni panel je izlaz za
+   manjinu, pa ne smije tezinom konkurirati jedinoj radnji na listu presude. */
+.cockpit-allchecks {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 0;
+  border: 0;
   background: none;
   color: var(--ck-muted);
   cursor: pointer;
   font: inherit;
-  font-size: .85rem;
-  transition: border-color .25s var(--ck-ease), color .25s var(--ck-ease);
+  font-size: .78rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
-.cockpit-advanced-toggle:hover { border-color: var(--ck-ink); color: var(--ck-ink); }
-
-.cockpit-authority {
-  display: flex;
-  gap: .6rem;
-  align-items: flex-start;
-  color: var(--ck-muted);
-  font-size: .82rem;
-}
-.cockpit-authority__mark { color: var(--ck-green); }
-.cockpit-authority p { margin: .1rem 0 0; }
+.cockpit-allchecks:hover { color: var(--ck-ink); }
+.cockpit-allchecks:focus-visible { outline: none; box-shadow: var(--focus); }
 
 /* ---- Detalji provjere (zatecen ekran, sklopljen) ---------------------------- */
 
@@ -643,13 +739,15 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 
 @media (max-width: 780px) {
   .result-cockpit { padding: 1.25rem 1rem; gap: 1.5rem; }
-  .cockpit-hero { grid-template-columns: minmax(0, 1fr); }
-  .cockpit-hero__lead { justify-items: stretch; }
-  .cockpit-hero .cockpit-score { justify-self: stretch; min-width: 0; }
-  .cockpit-hero .cockpit-primary { justify-self: stretch; }
+  .cockpit-sheet { grid-template-columns: minmax(0, 1fr); }
+  .cockpit-sheet__lead { justify-items: stretch; }
+  /* Prsten ide POD presudu, lijevo poravnat s tekstom: centriran bi na 360 px razbio stupac. */
+  .cockpit-ring-wrap { justify-items: start; }
+  .cockpit-stamp { justify-self: start; }
+  .cockpit-sheet__actions .cockpit-primary { flex: 1 1 100%; justify-content: center; }
+  .cockpit-secondary { grid-template-columns: minmax(0, 1fr); }
   .cockpit-finding { grid-template-columns: 1.9rem minmax(0, 1fr); padding-right: .8rem; }
   .cockpit-finding__answer { grid-template-columns: minmax(0, 1fr); gap: .1rem; }
-  .cockpit-actions .button { flex: 1 1 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -659,15 +757,13 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
     transition: none !important;
     animation: none !important;
   }
-  .result-cockpit [data-cockpit-header],
-  .result-cockpit .cockpit-hero__copy,
-  .result-cockpit .cockpit-score,
-  .result-cockpit .cockpit-primary,
+  .result-cockpit .cockpit-steps,
+  .result-cockpit .cockpit-sheet__lead,
+  .result-cockpit .cockpit-ring-wrap,
   .result-cockpit .cockpit-section-heading,
   .result-cockpit .cockpit-finding,
   .result-cockpit .cockpit-categories,
-  .result-cockpit .cockpit-actions,
-  .result-cockpit .cockpit-advanced-toggle { opacity: 1; transform: none; }
+  .result-cockpit .cockpit-allchecks { opacity: 1; transform: none; }
   .halo__arc { --draw: 1; }
   .cockpit-category__bar > span { transform: scaleX(1); }
 }
@@ -781,64 +877,6 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   .dna__bar > i { transform: scaleY(1); transition: none; }
 }
 
-/* ---- Prije popravka: sto automatika moze ------------------------------------
-   Strop se prikazuje kao GRANICA, ne kao ishod. Procijenjene ocjene nakon odabranih
-   popravaka nema i ne smije je biti; jedini dokaz ishoda je ponovna analiza. */
-
-.cockpit-outlook { display: grid; gap: .75rem; }
-
-.outlook__tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: .6rem;
-}
-.outlook__tile {
-  display: grid;
-  gap: .1rem;
-  padding: .7rem .8rem;
-  border: 1px solid var(--ck-line);
-  border-radius: var(--radius, 2px);
-}
-.outlook__tile strong {
-  font-family: var(--mono, monospace);
-  font-size: 1.35rem;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
-.outlook__tile span { display: inline-flex; align-items: center; gap: .4rem; color: var(--ck-muted); font-size: .74rem; line-height: 1.3; }
-/* Ton plocice nosi tocka uz natpis, ne lijevi rub (Z3). */
-.outlook__tile span::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 999px; background: var(--tile-tone, var(--ck-line)); }
-.outlook__tile--auto { --tile-tone: var(--ck-green); }
-.outlook__tile--assisted { --tile-tone: var(--ck-blue); }
-.outlook__tile--manual { --tile-tone: var(--ck-amber); }
-
-.outlook__ceiling { margin: 0; font-size: .88rem; line-height: 1.55; }
-.outlook__ceiling strong { font-family: var(--mono, monospace); font-variant-numeric: tabular-nums; }
-
-.outlook__manual {
-  display: grid;
-  gap: .35rem;
-  padding: .75rem .85rem;
-  border: 1px dashed var(--ck-line);
-  border-radius: var(--radius, 2px);
-}
-.outlook__manual ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .25rem; }
-.outlook__manual li {
-  display: flex;
-  justify-content: space-between;
-  gap: .8rem;
-  font-size: .85rem;
-}
-.outlook__manual li span {
-  color: var(--ck-amber);
-  font-family: var(--mono, monospace);
-  font-variant-numeric: tabular-nums;
-  --emph-weight: 600;
-  --emph-style: normal;
-}
-
-.outlook__note { margin: 0; color: var(--ck-muted); font-size: .78rem; line-height: 1.5; }
-
 /* SAZETAK NALAZA -----------------------------------------------------------------------------
  *
  * Zamjenjuje tamni uredaj s halo prstenom (321x353 px), koji je drzao pogled prije nego je covjek
@@ -926,18 +964,7 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 
 /* Presuda kao OZNAKA, ne kao naslov. Odgovara na "smijem li predati"; sazetak ispod odgovara na
  * "sto da radim", i taj je odgovor razlog dolaska. */
-.cockpit-hero--sazetak { display: block }
-.cockpit-hero--sazetak .cockpit-hero__lead { display: grid; gap: 14px; justify-items: start }
-.cockpit-verdict {
-  display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px;
-  border: 1px solid currentColor; border-radius: 999px;
-  font: 600 10.5px/1 var(--sans, system-ui); letter-spacing: .1em; text-transform: uppercase;
-}
-.cockpit-verdict::before { content: '●'; font-size: 8px }
-.cockpit-verdict[data-verdict='blocked'] { color: var(--red-deep, #8E2A22) }
-.cockpit-verdict[data-verdict='warn'] { color: var(--warn, #A9741B) }
-.cockpit-verdict[data-verdict='ok'] { color: var(--pass, #2E8B5F) }
-.cockpit-hero--sazetak .fsum { width: 100% }
+.cockpit-sheet__lead .fsum { width: 100% }
 
 /* ==========================================================================
    KOREKTORSKI STOL
@@ -978,13 +1005,24 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 }
 .desk-prazno { margin: 0; padding: 1.5rem; text-align: center; color: var(--ck-muted); }
 
-.desk-nav { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
-.desk-nav__count { font-variant-numeric: tabular-nums; color: var(--ck-muted); font-size: .9rem; }
-.desk-nav__btn {
-  border: 1px solid var(--ck-line); background: transparent; color: inherit;
-  border-radius: 8px; padding: .45rem .8rem; font: inherit; cursor: pointer;
+/* PAGER: polozaj lijevo, dvije okrugle strelice desno (Z8). 50% radius je dopusten samo
+   prstenu, tockama presude i strelicama (design/README.md, Radiusi). */
+.desk-pager { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.desk-pager__count {
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .7rem;
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
 }
-.desk-nav__btn:hover:not(:disabled) { border-color: var(--ck-ink); }
+.desk-pager__btns { display: inline-flex; gap: .35rem; }
+.desk-nav__btn {
+  display: inline-grid; place-items: center;
+  width: 28px; height: 28px;
+  border: 1px solid var(--ck-line); background: transparent; color: var(--ck-muted);
+  border-radius: 50%; padding: 0; font: inherit; cursor: pointer;
+}
+.desk-nav__btn:hover:not(:disabled) { border-color: var(--ck-ink); color: var(--ck-ink); }
 /* Ugasen gumb je KRAJ POPISA, ne kvar: navigacija namjerno ne omata, pa se vidi da si gotov.
    Ostaje citljiv (ne prigusuje se u sivilo), jer prigusen `<button>` je uvijek kvar. */
 .desk-nav__btn:disabled { cursor: default; opacity: .45; }
@@ -1156,30 +1194,18 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
    Gard: `tests/design-tokens.test.ts`.
    ========================================================================== */
 
-.cockpit-header p,
-.cockpit-hero__copy p,
-.cockpit-authority p,
 .cockpit-finding__answer p,
 .result-renderer-v1 .result-cockpit-advanced-head p,
-.rs--pitanje p,
-.outlook__manual li { font-family: var(--display-serif, Georgia, serif); font-weight: 400;--emph-weight:400;--emph-style:italic }
+.rs--pitanje p { font-family: var(--display-serif, Georgia, serif); font-weight: 400;--emph-weight:400;--emph-style:italic }
 
 /* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
    Globalno mono pravilo (`strong,b{font-weight:600}`) sada stoji u `design-system.css`
    (oko retka 169), page-app.css ga vise nema. Ne vracaj ga u page-app.css: taj list se
    ucitava POSLIJE design-system.css s istom specificnoscu, pa bi njegovo pravilo pobijedilo
    var-mehanizam i vratilo tezinu 600 u serif, tocno kvar koji je popravljen u ovom krugu. */
-.cockpit-header p strong,
-.cockpit-header p b,
-.cockpit-hero__copy p strong,
-.cockpit-hero__copy p b,
-.cockpit-authority p strong,
-.cockpit-authority p b,
 .cockpit-finding__answer p strong,
 .cockpit-finding__answer p b,
 .result-renderer-v1 .result-cockpit-advanced-head p strong,
 .result-renderer-v1 .result-cockpit-advanced-head p b,
 .rs--pitanje p strong,
-.rs--pitanje p b,
-.outlook__manual li strong,
-.outlook__manual li b{font-weight:400;font-style:italic}
+.rs--pitanje p b{font-weight:400;font-style:italic}

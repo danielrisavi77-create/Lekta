@@ -98,28 +98,56 @@ export function summaryNaslov(ukupno: number): string {
 }
 
 /**
+ * Sto prikaz smije izostaviti ili dodati. Oboje je ODLUKA OKVIRA, ne sazetka: isti sazetak stoji
+ * i u listu presude (gdje ocjenu crta prsten, a strop pripada istoj recenici) i drugdje.
+ */
+export interface FindingSummaryPrikaz {
+  /**
+   * Strop automatike (`repairOutlook.ceilingScore`). Spaja se u ISTI redak kao "od toga N", jer
+   * su to dvije polovice jedne tvrdnje o dosegu automatike. `null` ili izostavljen kad strop nije
+   * poznat, i tada se druga polovica recenice ne pise umjesto da se brojka izmisli.
+   */
+  readonly strop?: number | null;
+  /** `false` kad ocjenu crta okvir (prsten presude); zadano se crta ovdje, kao i prije. */
+  readonly ocjena?: boolean;
+}
+
+/**
  * PRIKAZ. Ocjena je namjerno u istom bloku, ali kao sporedan podatak: mali broj desno, bez halo
  * prstena i bez tamnog uredaja. Ostaje na ekranu jer je i dalje istinita i korisna, samo vise
  * ne odreduje sto ce korisnik prvo procitati.
  */
-export function findingSummaryHtml(s: FindingSummary, esc: (v: string) => string): string {
+export function findingSummaryHtml(
+  s: FindingSummary,
+  esc: (v: string) => string,
+  prikaz: FindingSummaryPrikaz = {},
+): string {
   const razine = s.razine
     .map((r) => `<li class="fsum-razina" data-ton="${esc(r.ton)}"><b>${r.broj}</b> ${esc(r.tekst)}</li>`)
     .join('');
+  // Strop je GRANICA, ne obecanje, i zato stoji uz automatske popravke a ne uz ocjenu: govori
+  // dokle ta ista automatika najvise moze, pa je to jedna recenica s dvije brojke, ne dvije
+  // tvrdnje na dva mjesta ekrana.
+  const strop = typeof prikaz.strop === 'number' && Number.isFinite(prikaz.strop)
+    ? `, automatika može doseći najviše <b>${Math.round(prikaz.strop)}</b>`
+    : '';
   // "od toga" nosi cijelu tezinu razdvajanja osi: bez te dvije rijeci redak se cita kao jos jedan
   // pribrojnik, a on to nije.
   const auto = s.automatski === null
     ? ''
     // "mogu popraviti" je PRVO LICE (ja, Lekta), pa se ne mijenja po broju: "1 mogu popraviti"
     // i "3 mogu popraviti" su oba ispravna. Vlasnikova skica je vec tako napisana.
-    : `<p class="fsum-auto"><span>od toga</span> <b>${s.automatski}</b> mogu popraviti automatski</p>`;
-  const ocjena = s.ocjena === null
+    : `<p class="fsum-auto"><span>od toga</span> <b>${s.automatski}</b> mogu popraviti automatski${strop}</p>`;
+  const ocjenaTile = s.ocjena === null
     ? `<div class="fsum-ocjena fsum-ocjena--nema" data-cockpit-score="none"><b>${s.provjerenoPravila}</b>`
       + `<span>Provjereno ${s.provjerenoPravila} ${pluralHr(s.provjerenoPravila, ['pravilo', 'pravila', 'pravila'])}</span>`
       + '<small>ovaj profil ne boduje</small></div>'
     : `<div class="fsum-ocjena" data-cockpit-score="scored"><b>${s.ocjena.vrijednost}</b><span>/ ${s.ocjena.od}</span><small>tehnička ocjena</small></div>`;
+  const ocjena = prikaz.ocjena === false ? '' : ocjenaTile;
+  // NASLOV SAZETKA JE H2, ne H3: od Z8 presuda iznad njega je H1, pa bi H3 preskocio razinu i
+  // citac ekrana bi prijavio rupu u hijerarhiji. Razred ostaje isti, pa stilovi i mjere stoje.
   return `<div class="fsum" data-finding-summary>`
-    + `<div class="fsum-glavno"><h3 class="fsum-naslov">${esc(summaryNaslov(s.ukupno))}</h3>`
+    + `<div class="fsum-glavno"><h2 class="fsum-naslov">${esc(summaryNaslov(s.ukupno))}</h2>`
     + (razine ? `<ul class="fsum-razine">${razine}</ul>` : '')
     + auto + '</div>' + ocjena + '</div>';
 }

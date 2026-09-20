@@ -1,10 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import {
+  cockpitSteps,
+  cockpitStepsHtml,
   renderResultsCockpit,
   resultRendererFor,
   type ResultsCockpitAction,
+  type ResultsCockpitOptions,
 } from '../src/ui/results/results-cockpit';
+import type { RepairOutlookModel } from '../src/ui/results/repair-outlook';
 
 function result(overrides: Record<string, unknown> = {}) {
   return {
@@ -242,30 +246,39 @@ describe('Results Cockpit V1', () => {
     expect(mount.textContent).not.toContain('92');
   });
 
-  it('prikazuje dokument, profil i autoritet izvora u zaglavlju', () => {
+  it('prikazuje dokument, profil i autoritet izvora u eyebrowu lista presude', () => {
+    /**
+     * Z8: zaglavlje (`cockpit-header`) i zaseban blok autoriteta (`cockpit-authority`) su ukinuti;
+     * sve troje stoji u JEDNOM retku iznad presude. Namjera tvrdnje je ista kao prije: tri podatka
+     * o tome STO je mjereno i PO CEMU moraju biti na ekranu prije presude.
+     */
     const mount = document.createElement('section');
     const model = buildVisualResultModel(result({ file: { name: 'DIPLOMSKI_RAD.docx' } }));
 
     renderResultsCockpit(mount, model, { repairAvailable: true });
 
-    expect(mount.querySelector('[data-cockpit-header]')?.textContent).toContain('DIPLOMSKI_RAD.docx');
+    expect(mount.querySelector('[data-cockpit-eyebrow]')?.textContent).toContain('DIPLOMSKI_RAD.docx');
     expect(mount.textContent).toContain('FPZG / Politologija / Diplomski rad');
     expect(mount.textContent).toContain('Pravila provjerena prema službenim izvorima');
   });
 
-  it('usmjerava glavne akcije na postojeće callbacke', () => {
+  it('usmjerava preostale akcije lista presude na postojeće callbacke', () => {
+    /**
+     * Z8 gasi redak s TRI gumba: "Pregledaj nalaze", "Simuliraj popravak" i "Popravi sigurne
+     * stavke" vodili su u isti panel, pa je izbor medu njima bio lazan. Ostaje jedan primarni
+     * gumb i jedna tekstualna poveznica; `repair-safe` i dalje postoji kao radnja, ali ga emitira
+     * plan na stolu (`[data-repair-plan-go]`, vidi tests/desk-mount.test.ts).
+     */
     const mount = document.createElement('section');
     const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
     const model = buildVisualResultModel(result());
 
     renderResultsCockpit(mount, model, { repairAvailable: true, onAction });
     mount.querySelector<HTMLButtonElement>('[data-cockpit-action="open-findings"]')?.click();
-    mount.querySelector<HTMLButtonElement>('[data-cockpit-action="simulate-repair"]')?.click();
-    mount.querySelector<HTMLButtonElement>('[data-cockpit-action="repair-safe"]')?.click();
 
     expect(onAction).toHaveBeenNthCalledWith(1, { kind: 'open-findings' });
-    expect(onAction).toHaveBeenNthCalledWith(2, { kind: 'simulate-repair' });
-    expect(onAction).toHaveBeenNthCalledWith(3, { kind: 'repair-safe' });
+    expect(mount.querySelector('[data-cockpit-action="simulate-repair"]')).toBeNull();
+    expect(mount.querySelector('[data-cockpit-action="repair-safe"]')).toBeNull();
   });
 
   it('uses cockpit by default and allows an explicit legacy opt-out', () => {
@@ -285,7 +298,256 @@ describe('Results Cockpit V1', () => {
     renderResultsCockpit(mount, buildVisualResultModel(result()), { repairAvailable: true });
 
     expect(mount.dataset.cockpitExperience).toBe('correction-desk');
-    expect(mount.querySelector('[data-cockpit-hero]')).toBeTruthy();
+    expect(mount.querySelector('[data-cockpit-verdict-sheet]')).toBeTruthy();
     expect(mount.querySelectorAll('[data-cockpit-priority-card]')).toHaveLength(3);
+  });
+});
+
+/**
+ * Z8, PRVI KRUG: ekran `/rad/` kao vodic u cetiri koraka.
+ *
+ * Svaka tvrdnja ovdje ima MUTACIJU uz sebe: gard koji nije vidio vlastiti kvar ne dokazuje nista,
+ * a upravo ovaj sloj (prikaz) najlakse tiho odluta od modela.
+ */
+describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
+  const OUTLOOK: RepairOutlookModel = {
+    kind: 'available',
+    currentScore: 87,
+    ceilingScore: 94,
+    headroom: 7,
+    counts: { auto: 1, assisted: 0, manual: 2 },
+    manualItems: [],
+    preselected: 1,
+    atCeiling: false,
+  };
+
+  function renderaj(over: Record<string, unknown> = {}, options: Partial<ResultsCockpitOptions> = {}) {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result(over));
+    renderResultsCockpit(mount, model, { repairAvailable: true, ...options });
+    return { mount, model };
+  }
+
+  /** Stol s pravim nalazima; dokument se ne crta, jer faksimil nije predmet ove tvrdnje. */
+  function saStolom(over: Record<string, unknown> = {}) {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result(over));
+    renderResultsCockpit(mount, model, {
+      repairAvailable: true,
+      desk: {
+        items: model.findings.document.map((finding) => ({ finding, flagIndex: null })),
+        mountDocument: async () => null,
+      },
+    });
+    return { mount, model };
+  }
+
+  const klik = (el: Element | null) => (el as HTMLElement | null)?.click();
+
+  it('stepper ima cetiri koraka i tocno jedan aktivan', () => {
+    const { mount } = renderaj();
+    const koraci = [...mount.querySelectorAll('[data-cockpit-steps] .cockpit-step')];
+
+    expect(koraci).toHaveLength(4);
+    expect(koraci.map((k) => k.textContent)).toEqual(['01 Nalazi', '02 Plan', '03 Plaćanje', '04 Rezultat']);
+    expect(koraci.filter((k) => k.getAttribute('aria-current') === 'step')).toHaveLength(1);
+    expect(koraci[0].getAttribute('aria-current')).toBe('step');
+    expect(koraci[0].classList.contains('cockpit-step--active')).toBe(true);
+  });
+
+  it('neaktivni koraci su aria-disabled, a NE disabled, jer nisu kontrole', () => {
+    const { mount } = renderaj();
+    const neaktivni = [...mount.querySelectorAll('[data-cockpit-steps] .cockpit-step')].slice(1);
+
+    expect(neaktivni).toHaveLength(3);
+    for (const korak of neaktivni) {
+      expect(korak.getAttribute('aria-disabled')).toBe('true');
+      // `disabled` na `li` preglednik tiho zanemari, pa bi korak izgledao dostupan.
+      expect(korak.hasAttribute('disabled')).toBe(false);
+      expect(korak.tagName).toBe('LI');
+    }
+  });
+
+  it('stanje analize nema korake, jer nalaza jos nema', () => {
+    expect(cockpitSteps('scanning')).toEqual([]);
+    expect(cockpitStepsHtml(cockpitSteps('scanning'))).toBe('');
+    expect(cockpitSteps('findings')).toHaveLength(4);
+  });
+
+  it('MUTACIJA: dva aktivna koraka i korak s `disabled` padaju na istim tvrdnjama', () => {
+    const dvaAktivna = cockpitSteps('findings').map((k) => ({ ...k, active: true }));
+    const html = cockpitStepsHtml(dvaAktivna);
+    expect((html.match(/aria-current="step"/g) ?? []).length).not.toBe(1);
+    // Kontrola: neizmijenjen niz i dalje daje tocno jedan aktivan.
+    expect((cockpitStepsHtml(cockpitSteps('findings')).match(/aria-current="step"/g) ?? []).length).toBe(1);
+  });
+
+  it('list presude nosi TOCNO JEDAN primarni gumb', () => {
+    const { mount } = renderaj();
+    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]');
+
+    expect(list).toBeTruthy();
+    expect(list!.querySelectorAll('button.button-primary')).toHaveLength(1);
+    expect(list!.querySelector('[data-cockpit-primary]')?.textContent).toContain('Napravi plan popravka');
+    expect(list!.querySelector('[data-cockpit-action="open-findings"]')?.textContent).toContain('Pregledaj nalaze');
+  });
+
+  it('MUTACIJA: jos jedan primarni gumb na listu presude ruši tvrdnju o jednoj radnji', () => {
+    const { mount } = renderaj();
+    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!;
+    expect(list.querySelectorAll('button.button-primary')).toHaveLength(1);
+
+    const drugi = document.createElement('button');
+    drugi.className = 'button button-primary';
+    list.appendChild(drugi);
+    expect(list.querySelectorAll('button.button-primary').length === 1).toBe(false);
+  });
+
+  it('eyebrow spaja ime datoteke, profil i autoritet izvora u jedan redak', () => {
+    const { mount } = renderaj({ file: { name: 'DIPLOMSKI_RAD.docx' } });
+    const eyebrow = mount.querySelector('[data-cockpit-eyebrow]')?.textContent ?? '';
+
+    expect(eyebrow).toContain('DIPLOMSKI_RAD.docx');
+    expect(eyebrow).toContain('FPZG / Politologija / Diplomski rad');
+    expect(eyebrow).toContain('Pravila provjerena prema službenim izvorima');
+    // Zaseban blok autoriteta je ukinut; tvrdnja pada ako se vrati.
+    expect(mount.querySelector('[data-cockpit-authority]')).toBeNull();
+  });
+
+  it('spojena rečenica nosi OBA broja kad je strop poznat', () => {
+    const { mount } = renderaj({}, { repairOutlook: OUTLOOK });
+    const redak = mount.querySelector('.fsum-auto')?.textContent ?? '';
+
+    expect(redak).toContain('od toga');
+    expect(redak).toContain('mogu popraviti automatski');
+    expect(redak).toContain('automatika može doseći najviše');
+    expect(redak).toContain('94');
+  });
+
+  it('bez poznatog stropa druga polovica rečenice izostaje umjesto da se izmisli broj', () => {
+    const { mount } = renderaj({}, {
+      repairOutlook: { kind: 'unavailable', reason: 'Ovaj profil nema bodovanih provjera.' },
+    });
+    const redak = mount.querySelector('.fsum-auto')?.textContent ?? '';
+
+    expect(redak).toContain('mogu popraviti automatski');
+    expect(redak).not.toContain('automatika može doseći');
+    expect(redak).not.toContain('94');
+  });
+
+  it('MUTACIJA: strop koji se cita mimo modela ne bi pratio model', () => {
+    // Prava brojka dolazi iz `repairOutlook.ceilingScore`. Fiksni 88 iz predloska bi prosao na
+    // jednom profilu i lagao na svakom drugom.
+    const sStropom = renderaj({}, { repairOutlook: { ...OUTLOOK, ceilingScore: 71 } });
+    const redak = sStropom.mount.querySelector('.fsum-auto')?.textContent ?? '';
+    expect(redak).toContain('71');
+    expect(redak.includes('88')).toBe(false);
+  });
+
+  it('prsten nosi ton presude, a ne ton ocjene', () => {
+    const { mount } = renderaj();
+    const prsten = mount.querySelector<HTMLElement>('[data-cockpit-score]');
+    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]');
+
+    expect(prsten?.dataset.verdictTone).toBe('blocked');
+    expect(prsten?.dataset.verdictTone).toBe(list?.dataset.cockpitStatus);
+  });
+
+  it('MUTACIJA: prsten s prepisanim tonom razilazi se od presude', () => {
+    const { mount } = renderaj();
+    const prsten = mount.querySelector<HTMLElement>('[data-cockpit-score]')!;
+    const ton = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!.dataset.cockpitStatus;
+    expect(prsten.dataset.verdictTone).toBe(ton);
+
+    prsten.dataset.verdictTone = 'clear';
+    expect(prsten.dataset.verdictTone === ton).toBe(false);
+  });
+
+  it('pečat stoji IZVAN elementa s tekstom presude', () => {
+    const { mount } = renderaj();
+    const pecat = mount.querySelector<HTMLElement>('[data-cockpit-stamp]');
+    const presuda = mount.querySelector<HTMLElement>('[data-cockpit-verdict-title]');
+
+    expect(pecat).toBeTruthy();
+    expect(presuda?.textContent).toContain('Nije spremno za predaju');
+    // Struktura, ne pikseli: pecat nije potomak ni presude ni lijevog stupca s tekstom.
+    expect(presuda!.contains(pecat!)).toBe(false);
+    expect(mount.querySelector<HTMLElement>('[data-cockpit-sheet-lead]')!.contains(pecat!)).toBe(false);
+  });
+
+  it('desni pano stola prikazuje JEDNU karticu, a strelice mijenjaju prikazanu', () => {
+    const { mount, model } = saStolom();
+    const naslov = () => mount.querySelector('[data-desk-pane] .cockpit-finding h3')?.textContent;
+
+    expect(model.findings.document.length).toBeGreaterThan(1);
+    expect(mount.querySelectorAll('[data-desk-pane] article.cockpit-finding')).toHaveLength(1);
+    expect(mount.querySelector('[data-desk-pane] [data-desk-count]')?.textContent)
+      .toBe(`1 / ${model.findings.document.length}`);
+    const prvi = naslov();
+
+    klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--next'));
+    expect(mount.querySelector('[data-desk-pane] [data-desk-count]')?.textContent)
+      .toBe(`2 / ${model.findings.document.length}`);
+    expect(naslov()).not.toBe(prvi);
+
+    klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--prev'));
+    expect(naslov()).toBe(prvi);
+  });
+
+  it('`#resultCockpit article.cockpit-finding` i dalje pogađa barem jednu karticu', () => {
+    // Ugovor koji `tests/ux/desktop-flow.spec.ts` broji. Pager prikazuje jednu po jednu, pa je
+    // broj tocno 1; spec trazi samo "vise od nule", pa ostaje zelen bez izmjene.
+    const { mount } = saStolom();
+    expect(mount.querySelectorAll('article.cockpit-finding').length).toBeGreaterThan(0);
+  });
+
+  it('DNA i kategorije stoje u jednom redu ISPOD stola', () => {
+    const { mount } = saStolom();
+    const sekundarni = mount.querySelector<HTMLElement>('[data-cockpit-secondary]');
+    const stol = mount.querySelector<HTMLElement>('.cockpit-priority');
+
+    expect(sekundarni).toBeTruthy();
+    expect(sekundarni!.querySelector('[data-cockpit-category]')).toBeTruthy();
+    const djeca = [...mount.children];
+    expect(djeca.indexOf(sekundarni!)).toBeGreaterThan(djeca.indexOf(stol!));
+  });
+
+  it('poveznica "Sve provjere (N)" nosi STVARAN broj provjera i vodi na napredni panel', () => {
+    const provjere = [
+      { category: 'formatting', title: 'A', status: 'pass', earned: 2, max: 2, detail: '', issue: null, scored: true },
+      { category: 'formatting', title: 'B', status: 'fail', earned: 0, max: 2, detail: '', issue: null, scored: true },
+      { category: 'structure', title: 'C', status: 'informational', earned: 0, max: 0, detail: '', issue: null, scored: false },
+    ];
+    const onAdvancedToggle = vi.fn();
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({ checks: provjere }));
+    renderResultsCockpit(mount, model, { repairAvailable: true, onAdvancedToggle });
+
+    const veza = mount.querySelector<HTMLElement>('[data-cockpit-advanced]');
+    expect(model.signals.totalChecks).toBe(3);
+    expect(veza?.textContent).toBe('Sve provjere (3)');
+    expect(mount.querySelector('.cockpit-advanced-toggle')).toBeNull();
+    veza?.click();
+    expect(onAdvancedToggle).toHaveBeenCalledWith(true);
+  });
+
+  it('MUTACIJA: fiksan broj provjera iz predloška ne prati model', () => {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({
+      checks: [{ category: 'formatting', title: 'A', status: 'pass', earned: 2, max: 2, detail: '', issue: null, scored: true }],
+    }));
+    renderResultsCockpit(mount, model, { repairAvailable: true });
+
+    const tekst = mount.querySelector('[data-cockpit-advanced]')?.textContent;
+    expect(tekst).toBe(`Sve provjere (${model.signals.totalChecks})`);
+    // Predlozak pise "(24)"; da je brojka prepisana, tvrdnja iznad bi pala na svakom drugom radu.
+    expect(tekst === 'Sve provjere (24)').toBe(false);
+  });
+
+  it('zasebna sekcija "Sto automatika moze" je uklonjena iz DOM-a', () => {
+    const { mount } = renderaj({}, { repairOutlook: OUTLOOK });
+    expect(mount.querySelector('[data-cockpit-outlook]')).toBeNull();
+    // Model se i dalje koristi: strop je u sazetku.
+    expect(mount.querySelector('.fsum-auto')?.textContent).toContain('94');
   });
 });
