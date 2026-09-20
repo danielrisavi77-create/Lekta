@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { prepareJob, parseResult, validateQueue, PROMPT_ARG_PLACEHOLDER } from '../scripts/agents/core.mjs';
+import { prepareJob, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -17,14 +17,14 @@ describe('agent handoff', () => {
     expect(job.prompt).toContain('$(touch stolen)');
     expect(job.args.join(' ')).not.toContain('stolen');
   });
-  it('delivers the Grok prompt as an argv placeholder, never via a shell string', () => {
+  it('delivers the Grok prompt through a file placeholder, never in argv', () => {
     const q = queue();
     q.tasks[1].title = 'Repair $(touch stolen) `echo secret`';
     const job = prepareJob(q, 'T01', 'implement', 'build');
     expect(job.command).toBe('grok');
     expect(job.args[0]).toBe('--no-auto-update');
-    expect(job.args).toContain('-p');
-    expect(job.args).toContain(PROMPT_ARG_PLACEHOLDER);
+    expect(job.args).toContain('--prompt-file');
+    expect(job.args).toContain(PROMPT_FILE_PLACEHOLDER);
     expect(job.args).toContain('--always-approve');
     expect(job.args).toContain('grok-4.6');
     expect(job.args.slice(job.args.indexOf('--sandbox'), job.args.indexOf('--sandbox') + 2)).toEqual(['--sandbox', 'workspace']);
@@ -100,8 +100,13 @@ describe('provider results do not replace verification', () => {
     expect(parseResult('grok', '{"error":"boom"}', 0).ok).toBe(false);
     expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 1).ok).toBe(false);
     expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 0).ok).toBe(false);
-    expect(parseResult('grok', '{"type":"result","is_error":false,"model":"grok-4.6"}', 0))
-      .toEqual({ ok: true, reportedModels: ['grok-4.6'] });
+    const liveShape = JSON.stringify({
+      text: 'LEKTA_GROK_SMOKE_OK', stopReason: 'end_turn', num_turns: 1,
+      modelUsage: { 'grok-4.6-build': { modelCalls: 1 } },
+    });
+    expect(parseResult('grok', liveShape, 0))
+      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+    expect(parseResult('grok', JSON.stringify({ text: '', stopReason: 'end_turn', num_turns: 1, modelUsage: {} }), 0).ok).toBe(false);
     expect(parseResult('grok', '{"type":"result","is_error":true,"model":"grok-4.6"}', 0).ok).toBe(false);
   });
 });
@@ -133,7 +138,7 @@ describe('subscription billing mode (autonomy profile)', () => {
 
 
 describe('agent process boundary helpers', () => {
-  it('spawns Grok with the prompt as one argv element, no stdin and no shell', async () => {
+  it('spawns Grok with a prompt file, no prompt argv, no stdin and no shell', async () => {
     const { spawnJob } = await import('../scripts/agents/cli.mjs');
     const job = prepareJob(queue(), 'T01', 'plan', 'grok');
     let call: { command?: string; args?: string[]; options?: Record<string, unknown> } = {};
@@ -141,10 +146,12 @@ describe('agent process boundary helpers', () => {
       call = { command, args, options };
       return { status: 0, stdout: '{"type":"result","is_error":false}', stderr: '' };
     };
-    spawnJob(job, process.cwd(), fakeSpawn as never);
+    const promptFile = '/tmp/lekta-prompt.md';
+    spawnJob(job, promptFile, process.cwd(), fakeSpawn as never);
     expect(call.command).toBe('grok');
-    expect(call.args).toContain(job.prompt);
-    expect(call.args).not.toContain(PROMPT_ARG_PLACEHOLDER);
+    expect(call.args).toContain(promptFile);
+    expect(call.args).not.toContain(job.prompt);
+    expect(call.args).not.toContain(PROMPT_FILE_PLACEHOLDER);
     expect(call.options).toMatchObject({ input: undefined, shell: false });
   });
 });
