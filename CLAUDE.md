@@ -107,6 +107,8 @@ Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
 - Parser, audit ili citations: prvo golden koji biljezi zateceno ponasanje.
 - Repair ili OOXML isporuka: Tier 0 nije dokaz otvaranja u Wordu; prati scoped vodič.
 - Migracije: iskljucivo `supabase db push`; MCP `apply_migration` nije dopusten.
+- Migracije: prefiks od `0200` navise; `0104` do `0199` drzi Katedra na dijeljenom stagingu
+  (`db push` bi sudar tiho preskocio). Gard: `tests/migration-numbering.test.ts`.
 - Netrivijalne promjene u repair, citations, docx ili security kodu traze
   adversarijalni pregled drugog alata prije commita. Nalaz je advisory i mora se re-verificirati.
 

@@ -74,9 +74,9 @@ function fixture(
   const migrationsDirectory = join(root, 'migrations');
   mkdirSync(migrationsDirectory);
   for (const name of [
-    '0104_repair_local_claims.sql',
-    '0105_repair_local_lifecycle.sql',
-    '0106_repair_local_claim_recovery.sql',
+    '0200_repair_local_claims.sql',
+    '0201_repair_local_lifecycle.sql',
+    '0202_repair_local_claim_recovery.sql',
   ]) {
     writeFileSync(join(migrationsDirectory, name), '-- fixture');
   }
@@ -228,7 +228,7 @@ describe('Lekta local-repair release gate', () => {
     if ('removeMigration' in mutation) {
       const incomplete = join(root, 'incomplete-migrations');
       mkdirSync(incomplete);
-      writeFileSync(join(incomplete, '0104_repair_local_claims.sql'), '-- only one');
+      writeFileSync(join(incomplete, '0200_repair_local_claims.sql'), '-- only one');
       paths.migrationsDirectory = incomplete;
     }
 
