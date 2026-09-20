@@ -26,7 +26,7 @@ describe('agent handoff', () => {
     expect(job.args).toContain('-p');
     expect(job.args).toContain(PROMPT_ARG_PLACEHOLDER);
     expect(job.args).toContain('--always-approve');
-    expect(job.args).toContain('grok-4');
+    expect(job.args).toContain('grok-4.6');
     expect(job.args.join(' ')).not.toContain('stolen');
     expect(job.prompt).toContain('$(touch stolen)');
     const plan = prepareJob(q, 'T01', 'plan', 'grok');
@@ -94,11 +94,11 @@ describe('provider results do not replace verification', () => {
   });
   it('accepts parseable non-error Grok JSON and rejects explicit errors', () => {
     expect(parseResult('grok', '', 0).ok).toBe(false);
-    expect(parseResult('grok', '{"model":"grok-4","ok":false}', 0).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4.6","ok":false}', 0).ok).toBe(false);
     expect(parseResult('grok', '{"error":"boom"}', 0).ok).toBe(false);
-    expect(parseResult('grok', '{"model":"grok-4","result":"done"}', 1).ok).toBe(false);
-    expect(parseResult('grok', '{"model":"grok-4","result":"done"}', 0))
-      .toEqual({ ok: true, reportedModels: ['grok-4'] });
+    expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 1).ok).toBe(false);
+    expect(parseResult('grok', '{"model":"grok-4.6","result":"done"}', 0))
+      .toEqual({ ok: true, reportedModels: ['grok-4.6'] });
   });
 });
 
