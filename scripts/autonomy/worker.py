@@ -367,24 +367,62 @@ class UnsafeCommitPaths(ValueError):
     """Staza koju kontroler ne smije commitati (apsolutna, izvan repozitorija, prazna)."""
 
 
-def _safe_relative_paths(paths: list[str]) -> list[str]:
+# Apsolutna staza se NE prepoznaje preko `os.path.isabs`: taj odgovor ovisi o OS-u na kojem se kod vrti, pa
+# je isti gard na Windowsu grizao a na Linuxu propustao. `C:/Windows/system.ini` je na Linuxu obicna relativna
+# staza (mapa imena `C:`), a `C:x` je i na Windowsu "relativno na trenutnu mapu pogona C", dakle `isabs` ga ni
+# ondje ne vidi. Izmjereno 2026-09-20: CI job `unittest (3.12)` je na Linuxu pao tocno na tom razmaku.
+_DRIVE_PREFIX_RE = re.compile(r"^[A-Za-z]:")
+
+
+def _leaves_tree_via_link(repo: str, rel: str) -> bool:
+    """Vodi li staza izvan stabla kad se SLIJEDE veze (symlink na POSIX-u, junction na Windowsu).
+
+    Provjera znakova ne vidi `veza/tudje.txt` kad je `veza` symlink na mapu izvan repozitorija: niz je uredno
+    relativan, a `git add` bi pisao vani. Zato se, kad stablo stvarno postoji, usporedjuje i RAZRIJESENA staza.
+    Kad `repo` nije mapa (testovi s ubrizganim `run` i izmisljenim `/repo`), provjere nema jer ni veze ne moze
+    biti; string-provjere iznad vrijede uvijek.
+    """
+    try:
+        root = os.path.realpath(repo)
+        target = os.path.realpath(os.path.join(repo, rel))
+    except (OSError, ValueError):
+        return True
+    root_n = os.path.normcase(root).rstrip("\\/")
+    target_n = os.path.normcase(target)
+    return target_n != root_n and not target_n.startswith(root_n + os.sep)
+
+
+def _safe_relative_paths(paths: list[str], *, repo: str | None = None) -> list[str]:
     """Normaliziraj popis staza i odbij sve sto izlazi iz radnikova stabla.
 
     Popis dolazi iz `git status --porcelain` istog stabla, pa bi u praksi uvijek bio relativan. Provjera
     svejedno stoji: pozivatelj je kontroler koji taj popis prosljedjuje u `git add`, a tiho prihvacena
     apsolutna staza ili `..` znaci pisanje izvan stabla za koje je gard dao dopustenje.
+
+    Sve string-provjere su NEOVISNE O OS-U (ista presuda na Windowsu i na Linuxu), a razrjesavanje veza se
+    dodaje tek kad `repo` stvarno postoji.
     """
     clean: list[str] = []
+    check_links = bool(repo) and os.path.isdir(str(repo))
     for raw in paths:
         path = str(raw).strip().strip('"').replace("\\", "/")
-        if not path or os.path.isabs(path) or path.startswith("/"):
+        if not path:
+            raise UnsafeCommitPaths(f"prazna staza: {raw!r}")
+        if path.startswith("/"):
             raise UnsafeCommitPaths(f"staza nije relativna: {raw!r}")
+        if _DRIVE_PREFIX_RE.match(path):
+            raise UnsafeCommitPaths(f"staza nosi oznaku pogona: {raw!r}")
+        if path.startswith("~"):
+            raise UnsafeCommitPaths(f"staza pokazuje na kucnu mapu: {raw!r}")
         parts = [p for p in path.split("/") if p not in ("", ".")]
         if any(p == ".." for p in parts):
             raise UnsafeCommitPaths(f"staza izlazi iz stabla: {raw!r}")
         if not parts:
             raise UnsafeCommitPaths(f"prazna staza: {raw!r}")
-        clean.append("/".join(parts))
+        rel = "/".join(parts)
+        if check_links and _leaves_tree_via_link(str(repo), rel):
+            raise UnsafeCommitPaths(f"staza vodi izvan stabla preko veze: {raw!r}")
+        clean.append(rel)
     # Duplikati bi `git add` prihvatio, ali popis ide i u poruku dnevnika i u tvrdnje testova.
     return sorted(dict.fromkeys(clean))
 
@@ -401,18 +439,30 @@ def commit_worker_tree(repo: str, message: str, paths: list[str], *, run=None) -
 
     Pozivatelj (`DefaultAdapters.commit`) smije poslati samo staze iz snimke uzete NAKON sto je gard potvrdio
     da je stablo na pocetku posla bilo cisto: tek tada je sve prljavo djelo implementacije iz ovog posla.
+
+    U `git add` ide samo ono sto U STABLU JOS POSTOJI, i to nije kozmetika nego popravak kvara izmjerenog
+    2026-09-20: `git add -- <staza>` je za obrisanu datoteku i za STARU stranu preimenovanja pao s
+    `fatal: pathspec ... did not match any files` (staze vise nema ni u stablu ni u indeksu), cijeli commit je
+    izostao, stablo je ostalo prljavo i sljedeci posao bi se zakljucao na gardu cistog stabla. Izmjereno je i
+    da `git commit --only -- <staza>` te oblike zna sam (brisanje i preimenovanje su vec poznati indeksu ili
+    HEAD-u), dok NETRACKANA nova datoteka bez `git add` prolazi kroz `commit --only` s
+    `error: pathspec ... did not match any file(s) known to git`. Dakle: `add` za ono sto postoji, `commit
+    --only` za sve. Popis dolazi iz `git status` ISTOG stabla, pa staza koju git uopce ne poznaje ne moze
+    upasti.
     """
     call = run or (lambda args: _git_output(repo, args))
     try:
-        safe = _safe_relative_paths(list(paths or []))
+        safe = _safe_relative_paths(list(paths or []), repo=repo)
     except UnsafeCommitPaths as exc:
         return {"status": "failed", "reason": f"nesigurna staza: {exc}"}
     if not safe:
         return {"status": "clean", "reason": "nista za spremiti"}
+    present = [p for p in safe if os.path.exists(os.path.join(repo, p))]
     try:
-        code, out = call(["add", "--", *safe])
-        if code != 0:
-            return {"status": "failed", "reason": "git add nije uspio"}
+        if present:
+            code, out = call(["add", "--", *present])
+            if code != 0:
+                return {"status": "failed", "reason": "git add nije uspio"}
         code, out = call(["commit", "--only", "-m", message, "--", *safe])
         if code != 0:
             return {"status": "failed", "reason": f"git commit nije uspio: {out[:200]}"}
@@ -695,18 +745,50 @@ def changed_paths(cwd: str) -> list[str]:
     return paths
 
 
+def _untracked_line_count(cwd: str) -> int:
+    """Broj redaka u NETRACKANIM datotekama radnog stabla.
+
+    `git diff --numstat HEAD` po konstrukciji ne vidi netrackanu datoteku, pa je prag redaka za `auto_low_risk`
+    bio zaobidjen cim je posao stizao kao NOV modul: tisucu redaka novog koda brojalo se kao nula. Ignorirane
+    datoteke (`--exclude-standard`) ostaju izvan, isto kao u `changed_paths`, pa se dvije mjere slazu.
+    """
+    out = subprocess.run(["git", "ls-files", "--others", "--exclude-standard", "-z"], cwd=cwd,
+                         capture_output=True, text=True, check=False, shell=False)
+    if out.returncode != 0:
+        return 0
+    total = 0
+    for rel in out.stdout.split(chr(0)):
+        rel = rel.strip()
+        if not rel:
+            continue
+        try:
+            with open(os.path.join(cwd, rel), "rb") as fh:
+                last = b""
+                while True:
+                    chunk = fh.read(1 << 20)
+                    if not chunk:
+                        break
+                    total += chunk.count(b"\n")
+                    last = chunk[-1:]
+                if last and last != b"\n":
+                    total += 1
+        except OSError:
+            continue
+    return total
+
+
 def changed_line_count(cwd: str) -> int:
     out = subprocess.run(["git", "diff", "--numstat", "HEAD"], cwd=cwd, capture_output=True, text=True, check=False, shell=False)
     if out.returncode != 0:
         return -1
     total = 0
     for line in out.stdout.splitlines():
-        parts = line.split("\t")
+        parts = line.split(chr(9))
         if len(parts) >= 2:
             for p in parts[:2]:
                 if p.isdigit():
                     total += int(p)
-    return total
+    return total + _untracked_line_count(cwd)
 
 
 def diff_within_scope(changed: Iterable[str], allowed: Iterable[str]) -> tuple[bool, list[str]]:

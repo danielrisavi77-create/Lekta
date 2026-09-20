@@ -9,10 +9,10 @@ import unittest
 from unittest import mock
 
 from scripts.autonomy.worker import (
-    ProcessTree, branch_changed_paths, changed_paths, classify_stream, commit_worker_tree, diff_within_scope,
-    implementation_worktree_blocked, machine_stdout, model_matches, parse_provider_output, pid_alive,
-    prepare_job_via_node, resolve_base_ref, resolve_launcher, run_phase, sandbox_unusable, scrubbed_env,
-    start_job_branch, successful_tool_calls,
+    ProcessTree, UnsafeCommitPaths, _safe_relative_paths, branch_changed_paths, changed_line_count,
+    changed_paths, classify_stream, commit_worker_tree, diff_within_scope, implementation_worktree_blocked,
+    machine_stdout, model_matches, parse_provider_output, pid_alive, prepare_job_via_node, resolve_base_ref,
+    resolve_launcher, run_phase, sandbox_unusable, scrubbed_env, start_job_branch, successful_tool_calls,
 )
 
 
@@ -23,6 +23,12 @@ def git_repo() -> str:
         out = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, check=False, shell=False)
         assert out.returncode == 0, (args, out.stderr)
     run("init", "-q")
+    # Ime zadane grane NIJE konstanta: ovisi o `init.defaultBranch` stroja, pa je testni repozitorij na
+    # Windowsu dobivao `master`, a na CI-ju zna dobiti `main`. Tri testa granama osnovice tada mjere
+    # konfiguraciju stroja umjesto koda, isti razred kao CR pravilo u CLAUDE.md. Isto vrijedi za
+    # `core.autocrlf`, koji bi inace brojanju redaka dao dvije razlicite istine na dva stroja.
+    run("symbolic-ref", "HEAD", "refs/heads/master")
+    run("config", "core.autocrlf", "false")
     run("config", "user.email", "radnik@lokalno")
     run("config", "user.name", "Radnik")
     run("config", "commit.gpgsign", "false")
@@ -123,6 +129,24 @@ SANDBOX_STDOUT_STRUCTURED = "\n".join(
     + [TOOL_CALL_LINE,
        json.dumps({"type": "item.completed", "item": {"id": "item_0", "type": "error", "message": _ROUTER_MESSAGE}})]
     + _SANDBOX_LINES[3:]) + "\n"
+
+
+FIXTURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures")
+
+
+def fixture(name: str) -> str:
+    with open(os.path.join(FIXTURES, name), encoding="utf-8") as fh:
+        return fh.read()
+
+
+# DOSLOVNO snimljeni izlazi `codex exec --json` sa stroja, 2026-09-20, codex-cli 0.154.0. Recept i
+# provenijencija su u `fixtures/README.md`. Do tog dana je gard `no_tool_use` presudjivao po obliku
+# USPJEHA koji nitko nije izmjerio (jedini stvaran artefakt bio je log kvara), sto je i drugi MAJOR iz
+# pregleda PR-a #93.
+REAL_TOOL_USE_STDOUT = fixture("codex-exec-json-tool-use-2026-09-20.stdout.ndjson")
+REAL_TOOL_USE_STDERR = fixture("codex-exec-json-tool-use-2026-09-20.stderr.log")
+REAL_NO_TOOL_USE_STDOUT = fixture("codex-exec-json-no-tool-use-2026-09-20.stdout.ndjson")
+REAL_NO_TOOL_USE_STDERR = fixture("codex-exec-json-no-tool-use-2026-09-20.stderr.log")
 
 
 def profile(**over):
@@ -546,13 +570,21 @@ class CommitWorkerTreeTest(unittest.TestCase):
     def test_the_argv_never_contains_add_all_and_always_commits_only(self):
         # Gard nad OBLIKOM naredbe, ne samo nad ishodom: `git add -A` i `git commit` bez `--only` su oblici
         # koje CLAUDE.md izricito zabranjuje, pa ih prikivamo doslovno.
+        #
+        # Repozitorij je od 2026-09-20 STVARAN: u `git add` idu samo staze koje u stablu postoje, pa bi s
+        # izmisljenim `/repo` taj korak izostao i gard bi prikivao oblik naredbe koja se nikad ne izvrsi.
+        repo = git_repo()
+        os.makedirs(os.path.join(repo, "b"))
+        for rel in ("a.txt", "b/c.txt"):
+            with open(os.path.join(repo, rel), "w", encoding="utf-8") as fh:
+                fh.write("x" + chr(10))
         seen = []
 
         def run(args):
             seen.append(list(args))
             return 0, "sha" if args[0] == "rev-parse" else ""
 
-        out = commit_worker_tree("/repo", "poruka", ["a.txt", "b/c.txt"], run=run)
+        out = commit_worker_tree(repo, "poruka", ["a.txt", "b/c.txt"], run=run)
         self.assertEqual(out["status"], "committed", out)
         self.assertEqual(seen[0], ["add", "--", "a.txt", "b/c.txt"])
         self.assertEqual(seen[1], ["commit", "--only", "-m", "poruka", "--", "a.txt", "b/c.txt"])
@@ -587,14 +619,176 @@ class CommitWorkerTreeTest(unittest.TestCase):
     def test_a_path_that_leaves_the_tree_is_refused(self):
         # MUTACIJA: popis staza dolazi iz `git status`, ali funkcija ga prosljedjuje u `git add`. Apsolutna
         # staza ili `..` znaci pisanje izvan stabla za koje je gard dao dopustenje.
-        for bad in ("../tudje.txt", "C:/Windows/system.ini", "/etc/passwd", "a/../../b.txt"):
+        #
+        # Presuda mora biti ISTA na svakom OS-u. Do 2026-09-20 se oslanjala na `os.path.isabs`, pa je
+        # `C:/Windows/system.ini` na Windowsu bio odbijen a na Linuxu prihvacen kao mapa imena `C:`; CI job
+        # `unittest (3.12)` je pao tocno ovdje. Oblik `C:x` promasuje `isabs` i na Windowsu, pa je razmak
+        # dokaziv na oba stroja.
+        for bad in ("../tudje.txt", "C:/Windows/system.ini", "C:x", "c:/temp/x.txt", "/etc/passwd",
+                    "a/../../b.txt", "~/.ssh/id_rsa", '\\\\server/share/x.txt', '\\windows\\x.ini'):
             out = commit_worker_tree("/repo", "poruka", [bad], run=lambda args: (0, ""))
             self.assertEqual(out["status"], "failed", (bad, out))
             self.assertIn("nesigurna staza", out["reason"], bad)
 
+    def test_the_refusal_does_not_depend_on_the_host_os(self):
+        """Mehanizam ima VLASTITU tvrdnju, odvojeno od ishoda: oznaku pogona odbija svoje pravilo.
+
+        `os.path.isabs` je za ovu svrhu kriv alat i to se ovdje i mjeri, a ne pretpostavlja.
+        """
+        self.assertEqual(os.path.isabs("C:/Windows/system.ini"), os.name == "nt",
+                         "isabs daje razlicit odgovor po OS-u; zato se na njega ne smije osloniti")
+        self.assertFalse(os.path.isabs("C:x"), "drive-relative oblik promasuje isabs i na Windowsu")
+        for bad, marker in (("C:/Windows/system.ini", "oznaku pogona"), ("C:x", "oznaku pogona"),
+                            ("/etc/passwd", "nije relativna"), ("../x", "izlazi iz stabla"),
+                            ("~/.ssh/id_rsa", "kucnu mapu")):
+            with self.assertRaises(UnsafeCommitPaths, msg=bad) as ctx:
+                _safe_relative_paths([bad])
+            self.assertIn(marker, str(ctx.exception), bad)
+        # BASELINE: obicne staze moraju proci, inace bi "gard" bio samo zabrana rada.
+        self.assertEqual(_safe_relative_paths(["src/ui/app.ts", "./docs/x.md", "src/ui/app.ts"]),
+                         ["docs/x.md", "src/ui/app.ts"])
+
+    def test_a_path_through_a_link_out_of_the_tree_is_refused(self):
+        """Treci oblik iste stete, koji provjera znakova NE vidi: `veza/tudje.txt` je uredno relativan niz.
+
+        Symlink na POSIX-u, directory junction na Windowsu (`mklink /J` ne trazi ovlasti administratora).
+        Kad se veza ne da stvoriti, test se PRESKACE naglas umjesto da tiho prodje kao zelen.
+        """
+        repo = git_repo()
+        outside = tempfile.mkdtemp()
+        with open(os.path.join(outside, "tudje.txt"), "w", encoding="utf-8") as fh:
+            fh.write("nije nase" + chr(10))
+        link = os.path.join(repo, "veza")
+        if os.name == "nt":
+            made = subprocess.run(["cmd", "/c", "mklink", "/J", link, outside], capture_output=True,
+                                  text=True, check=False, shell=False)
+            if made.returncode != 0:
+                self.skipTest("junction se nije dao stvoriti: " + (made.stderr or made.stdout).strip())
+        else:
+            try:
+                os.symlink(outside, link, target_is_directory=True)
+            except (OSError, NotImplementedError) as exc:
+                self.skipTest("symlink se nije dao stvoriti: " + str(exc))
+        out = commit_worker_tree(repo, "poruka", ["veza/tudje.txt"])
+        self.assertEqual(out["status"], "failed", out)
+        self.assertIn("izvan stabla preko veze", out["reason"])
+        # BASELINE: staza u ISTOM stablu i dalje prolazi, pa provjera ne gasi ono sto stiti.
+        with open(os.path.join(repo, "nase.txt"), "w", encoding="utf-8") as fh:
+            fh.write("nase" + chr(10))
+        self.assertEqual(commit_worker_tree(repo, "autonomija: nase", ["nase.txt"])["status"], "committed")
+
+    def _names(self, repo):
+        out = subprocess.run(["git", "show", "--name-status", "-M", "--format=", "HEAD"], cwd=repo,
+                             capture_output=True, text=True, check=False, shell=False)
+        return out.stdout.split()
+
+    def _dirty(self, repo):
+        return subprocess.run(["git", "status", "--porcelain"], cwd=repo, capture_output=True, text=True,
+                              check=False, shell=False).stdout.strip()
+
+    def test_a_deleted_file_is_committed_as_a_deletion(self):
+        """MAJOR iz pregleda PR-a #93: kontroler se zakljuca cim implementacija nesto OBRISE.
+
+        Izmjereno 2026-09-20: `git add -- <staza>` za stazu koje vise nema zna pasti, commit tada izostane,
+        stablo ostane prljavo i gard cistog stabla obori SLJEDECI posao. Mjeri se stvaran git.
+        """
+        repo = git_repo()
+        with open(os.path.join(repo, "za-brisanje.txt"), "w", encoding="utf-8") as fh:
+            fh.write("nestaje" + chr(10))
+        self.assertEqual(commit_worker_tree(repo, "autonomija: dodaj", ["za-brisanje.txt"])["status"], "committed")
+        os.remove(os.path.join(repo, "za-brisanje.txt"))
+        out = commit_worker_tree(repo, "autonomija: obrisi", ["za-brisanje.txt"])
+        self.assertEqual(out["status"], "committed", out)
+        self.assertEqual(self._names(repo), ["D", "za-brisanje.txt"])
+        self.assertEqual(self._dirty(repo), "", "stablo mora ostati cisto, inace se kontroler zakljuca")
+
+    def test_a_staged_deletion_is_committed_too(self):
+        # Drugi oblik istog: implementacija je brisanje vec STAGIRALA (`git rm`). Tada staze nema ni u
+        # indeksu, pa je `git add` odbija, a `git commit --only` je zna iz HEAD-a.
+        repo = git_repo()
+        with open(os.path.join(repo, "stagirano-brisanje.txt"), "w", encoding="utf-8") as fh:
+            fh.write("nestaje" + chr(10))
+        self.assertEqual(commit_worker_tree(repo, "autonomija: dodaj", ["stagirano-brisanje.txt"])["status"],
+                         "committed")
+        subprocess.run(["git", "rm", "-q", "stagirano-brisanje.txt"], cwd=repo, capture_output=True, text=True,
+                       check=False, shell=False)
+        out = commit_worker_tree(repo, "autonomija: obrisi", ["stagirano-brisanje.txt"])
+        self.assertEqual(out["status"], "committed", out)
+        self.assertEqual(self._names(repo), ["D", "stagirano-brisanje.txt"])
+        self.assertEqual(self._dirty(repo), "")
+
+    def test_a_renamed_file_is_committed_as_a_rename(self):
+        """Preimenovanje nosi DVIJE staze, a stara vise ne postoji ni u stablu ni u indeksu.
+
+        Popis se uzima iz `changed_paths`, dakle iz istog izvora iz kojeg ga uzima i kontroler, pa test mjeri
+        stvaran tok a ne rucno slozenu listu.
+        """
+        repo = git_repo()
+        with open(os.path.join(repo, "staro.txt"), "w", encoding="utf-8") as fh:
+            fh.write("sadrzaj" + chr(10))
+        self.assertEqual(commit_worker_tree(repo, "autonomija: dodaj", ["staro.txt"])["status"], "committed")
+        subprocess.run(["git", "mv", "staro.txt", "novo.txt"], cwd=repo, capture_output=True, text=True,
+                       check=False, shell=False)
+        paths = changed_paths(repo)
+        self.assertEqual(sorted(paths), ["novo.txt", "staro.txt"], "obje strane preimenovanja")
+        out = commit_worker_tree(repo, "autonomija: preimenuj", paths)
+        self.assertEqual(out["status"], "committed", out)
+        names = self._names(repo)
+        self.assertTrue(names[0].startswith("R"), names)
+        self.assertEqual(names[1:], ["staro.txt", "novo.txt"])
+        self.assertEqual(self._dirty(repo), "")
+
+    def test_an_untracked_new_file_still_needs_the_add_step(self):
+        """Negativna kontrola popravka: `commit --only` SAM ne zna za netrackanu datoteku.
+
+        Izmjereno 2026-09-20: bez `git add` vraca `error: pathspec ... did not match any file(s) known to
+        git`. Zato se korak `add` nije smio ukloniti, nego samo suziti na ono sto u stablu postoji. Kad git
+        to jednog dana prihvati, ovaj test pada i tjera na ponovno mjerenje.
+        """
+        repo = git_repo()
+        with open(os.path.join(repo, "nov-modul.txt"), "w", encoding="utf-8") as fh:
+            fh.write("nov modul" + chr(10))
+        bez_adda = subprocess.run(["git", "commit", "--only", "-m", "bez adda", "--", "nov-modul.txt"],
+                                  cwd=repo, capture_output=True, text=True, check=False, shell=False)
+        self.assertNotEqual(bez_adda.returncode, 0, "netrackana datoteka bez `add` ne smije proci")
+        out = commit_worker_tree(repo, "autonomija: nov modul", ["nov-modul.txt"])
+        self.assertEqual(out["status"], "committed", out)
+        self.assertEqual(self._names(repo), ["A", "nov-modul.txt"])
+        self.assertEqual(self._dirty(repo), "")
+
+    def test_delete_rename_and_new_file_in_one_commit(self):
+        # Stvaran oblik jedne faze implementacije: nesto obrisano, nesto preimenovano, nesto novo. Sve troje
+        # u JEDNOM pozivu, jer kontroler zove `commit_worker_tree` tocno jednom po poslu.
+        repo = git_repo()
+        for rel in ("brise-se.txt", "preimenuje-se.txt"):
+            with open(os.path.join(repo, rel), "w", encoding="utf-8") as fh:
+                fh.write(rel + chr(10))
+        self.assertEqual(commit_worker_tree(repo, "autonomija: osnovica",
+                                            ["brise-se.txt", "preimenuje-se.txt"])["status"], "committed")
+        os.remove(os.path.join(repo, "brise-se.txt"))
+        subprocess.run(["git", "mv", "preimenuje-se.txt", "preimenovano.txt"], cwd=repo, capture_output=True,
+                       text=True, check=False, shell=False)
+        with open(os.path.join(repo, "novo.txt"), "w", encoding="utf-8") as fh:
+            fh.write("novo" + chr(10))
+        with open(os.path.join(repo, "tudje.txt"), "w", encoding="utf-8") as fh:
+            fh.write("covjekov necommitani rad" + chr(10))
+        nase = [p for p in changed_paths(repo) if p != "tudje.txt"]
+        out = commit_worker_tree(repo, "autonomija: sve troje", nase)
+        self.assertEqual(out["status"], "committed", out)
+        names = self._names(repo)
+        self.assertIn("brise-se.txt", names)
+        self.assertIn("preimenovano.txt", names)
+        self.assertIn("novo.txt", names)
+        self.assertNotIn("tudje.txt", names, "tudji rad nikad ne ulazi u commit")
+        self.assertEqual(self._dirty(repo), "?? tudje.txt", "ostaje tocno ono sto nije nase")
+
     def test_every_git_failure_is_reported_not_swallowed(self):
         # Svaki korak pada zasebno: tiho progutan pad bi ostavio prljavo stablo uz tvrdnju da je spremljeno,
-        # dakle isti kvar samo bez traga u dnevniku.
+        # dakle isti kvar samo bez traga u dnevniku. Staza mora POSTOJATI da bi se korak `add` uopce izveo.
+        repo = git_repo()
+        with open(os.path.join(repo, "x.txt"), "w", encoding="utf-8") as fh:
+            fh.write("x" + chr(10))
+
         def failing(step):
             def run(args):
                 if args[0] == step:
@@ -603,16 +797,171 @@ class CommitWorkerTreeTest(unittest.TestCase):
             return run
 
         for step, marker in (("add", "git add nije uspio"), ("commit", "git commit nije uspio")):
-            out = commit_worker_tree("/repo", "poruka", ["x.txt"], run=failing(step))
+            out = commit_worker_tree(repo, "poruka", ["x.txt"], run=failing(step))
             self.assertEqual(out["status"], "failed", (step, out))
             self.assertIn(marker, out["reason"])
 
         def boom(args):
             raise OSError("git nema")
 
-        out = commit_worker_tree("/repo", "poruka", ["x.txt"], run=boom)
+        out = commit_worker_tree(repo, "poruka", ["x.txt"], run=boom)
         self.assertEqual(out["status"], "failed")
         self.assertIn("nije dostupan", out["reason"])
+
+
+class ChangedLineCountTest(unittest.TestCase):
+    """Prag redaka odlucuje o `auto_low_risk`, pa mjera koja ne vidi NOVU datoteku otvara vrata bez ograde.
+
+    MINOR iz pregleda PR-a #93: `git diff --numstat HEAD` po konstrukciji ne vidi netrackanu datoteku, pa je
+    posao koji stize kao NOV modul mogao imati tisucu redaka a mjeriti se kao nula.
+    """
+
+    def test_untracked_files_are_counted_too(self):
+        repo = git_repo()
+        self.assertEqual(changed_line_count(repo), 0, "cisto stablo nema promijenjenih redaka")
+        with open(os.path.join(repo, "nov-modul.py"), "w", encoding="utf-8") as fh:
+            fh.write(chr(10).join("redak " + str(i) for i in range(120)) + chr(10))
+        self.assertEqual(changed_line_count(repo), 120, "netrackana nova datoteka nosi svojih 120 redaka")
+        with open(os.path.join(repo, "README.md"), "a", encoding="utf-8") as fh:
+            fh.write("dopuna" + chr(10))
+        self.assertEqual(changed_line_count(repo), 121, "trackana izmjena se i dalje broji, bez dvostrukog")
+
+    def test_the_last_line_without_a_newline_still_counts(self):
+        # Inace bi datoteka bez zavrsnog prijeloma bila za jedan redak manja nego sto jest.
+        repo = git_repo()
+        with open(os.path.join(repo, "bez-zavrsetka.txt"), "w", encoding="utf-8") as fh:
+            fh.write("a" + chr(10) + "b")
+        self.assertEqual(changed_line_count(repo), 2)
+        with open(os.path.join(repo, "prazna.txt"), "w", encoding="utf-8") as fh:
+            fh.write("")
+        self.assertEqual(changed_line_count(repo), 2, "prazna datoteka nema redaka")
+
+    def test_ignored_files_are_not_counted(self):
+        """Negativna kontrola: `node_modules` ne smije napuhati prag.
+
+        Granica je ista kao u `changed_paths` (`--exclude-standard`), pa se dvije mjere slazu.
+        """
+        repo = git_repo()
+        with open(os.path.join(repo, ".gitignore"), "w", encoding="utf-8") as fh:
+            fh.write("zanemareno/" + chr(10))
+        os.makedirs(os.path.join(repo, "zanemareno"))
+        with open(os.path.join(repo, "zanemareno", "veliko.txt"), "w", encoding="utf-8") as fh:
+            fh.write(("x" + chr(10)) * 500)
+        self.assertEqual(changed_line_count(repo), 1, "samo .gitignore, jedan redak")
+
+
+class RealCodexOutputShapeTest(unittest.TestCase):
+    """Gard `no_tool_use` izmjeren na STVARNOM izlazu Codexa, ne na obliku sastavljenom po shemi.
+
+    Drugi MAJOR iz pregleda PR-a #93: presuda je ovisila o obliku USPJESNOG NDJSON-a koji nigdje nije bio
+    izmjeren, jer je jedini stvaran artefakt bio log kvara. Oba fixtura su snimljena 2026-09-20 istim
+    receptom (`fixtures/README.md`), razlikuju se samo po `--sandbox`, i oba su zavrsila izlaznim kodom 0.
+    """
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.cli = os.path.join(self.dir, "fake_cli.py")
+        with open(self.cli, "w", encoding="utf-8") as fh:
+            fh.write(FAKE_CLI)
+
+    def replay(self, stdout_text, stderr_text, exit_code=0):
+        out = os.path.join(self.dir, "replay_stdout.log")
+        err = os.path.join(self.dir, "replay_stderr.log")
+        with open(out, "w", encoding="utf-8", newline="") as fh:
+            fh.write(stdout_text)
+        with open(err, "w", encoding="utf-8", newline="") as fh:
+            fh.write(stderr_text)
+        env = dict(os.environ, FAKE_MODE="replay", FAKE_STDOUT=out, FAKE_STDERR=err, FAKE_EXIT=str(exit_code))
+        job = {"command": sys.executable, "args": [self.cli], "prompt": "LEKTA task T00. Phase: plan.",
+               "requestedModel": "gpt-5.6-sol"}
+        return run_phase(job, "plan", profile(), cwd=self.dir, timeout_seconds=60, env=env,
+                         artifact_dir=os.path.join(self.dir, "art-replay"))
+
+    def test_the_measured_success_counts_as_one_tool_call(self):
+        # BASELINE: stvaran uspjeh mora proci, inace gard gasi ono sto stiti.
+        self.assertEqual(successful_tool_calls("codex", REAL_TOOL_USE_STDOUT), 1,
+                         "jedno stvarno izvrsavanje, i to tocno jedno")
+        ok = self.replay(REAL_TOOL_USE_STDOUT, REAL_TOOL_USE_STDERR)
+        self.assertEqual(ok["verdict"], "needs_verification", ok)
+        self.assertEqual(ok["successful_tool_calls"], 1)
+
+    def test_an_item_that_only_started_is_not_counted_twice(self):
+        # Iz ISTOG snimka: za jedno izvrsavanje Codex emitira i `item.started` (`exit_code: null`,
+        # `status: in_progress`) i `item.completed`. Da brojac gleda samo stavku, jedan poziv bi brojao dva.
+        self.assertIn('"type":"item.started"', REAL_TOOL_USE_STDOUT)
+        self.assertIn('"exit_code":null', REAL_TOOL_USE_STDOUT)
+        samo_start = chr(10).join(line for line in REAL_TOOL_USE_STDOUT.splitlines()
+                                  if '"type":"item.completed"' not in line)
+        self.assertIn('"command_execution"', samo_start, "ostao je zapoceti poziv alata")
+        self.assertEqual(successful_tool_calls("codex", samo_start), 0,
+                         "zapocet poziv nije dokaz da je nesto procitano")
+
+    def test_the_measured_vacuous_turn_is_blocked_by_the_counter(self):
+        """Stvaran lazno zeleni izlaz: `turn.completed`, izlazni kod 0, a model TVRDI sadrzaj datoteke.
+
+        Snimljeno 2026-09-20 uz `--sandbox read-only`: izvrsavanje je odbijeno, a Codex je svejedno zavrsio
+        uredno i model je naveo tocan prvi redak `AGENTS.md`, koji nikad nije procitao. Stderr je ovdje
+        namjerno zamijenjen benignim, pa presuda NE moze doci od potpisa sandboxa nego iskljucivo od brojaca.
+        """
+        self.assertEqual(successful_tool_calls("codex", REAL_NO_TOOL_USE_STDOUT), 0)
+        self.assertNotIn("apply deny-read ACLs", REAL_NO_TOOL_USE_STDOUT,
+                         "u ovom snimku model frazu nije citirao, pa je brojac jedini mehanizam")
+        self.assertIn("AGENTS.md", REAL_NO_TOOL_USE_STDOUT, "model tvrdi sadrzaj koji nije procitao")
+        blocked = self.replay(REAL_NO_TOOL_USE_STDOUT, BENIGN_STDERR)
+        self.assertEqual(blocked["verdict"], "blocked", blocked)
+        self.assertIn("no_tool_use", blocked["reason"])
+        self.assertFalse(blocked["attempt_spent"])
+
+    def test_the_same_run_with_its_own_stderr_is_blocked_as_unusable_sandbox(self):
+        # Isti snimak, ali s NJEGOVIM stvarnim stderrom: tada presudjuje potpis, i to ranije.
+        self.assertIn("apply deny-read ACLs", REAL_NO_TOOL_USE_STDERR)
+        blocked = self.replay(REAL_NO_TOOL_USE_STDOUT, REAL_NO_TOOL_USE_STDERR)
+        self.assertEqual(blocked["verdict"], "blocked", blocked)
+        self.assertIn("provider_unusable", blocked["reason"])
+        self.assertFalse(blocked["attempt_spent"])
+
+    def test_the_counter_falls_to_zero_when_the_measured_shape_changes(self):
+        """Gard PADA kad se oblik izlaza promijeni, i to mu je jedina svrha.
+
+        Cetiri kljuca o kojima brojac ovisi mijenjaju se zasebno; svaka mutacija mora spustiti broj na nulu.
+        Bez ovoga bi preimenovanje stavke u Codexu proslo nezapazeno, a svaka plan i review faza bi postala
+        `blocked` tek u produkciji, bez ijednog testa koji na to upozorava.
+        """
+        base = REAL_TOOL_USE_STDOUT
+        self.assertEqual(successful_tool_calls("codex", base), 1)
+        for old, novo in (('"type":"item.completed"', '"type":"item.finished"'),
+                          ('"exit_code":0', '"exit_code":2'),
+                          ('"status":"completed"', '"status":"failed"'),
+                          ('"type":"command_execution"', '"type":"agent_message"')):
+            self.assertIn(old, base, "fixture vise ne nosi kljuc o kojem gard ovisi: " + old)
+            self.assertEqual(successful_tool_calls("codex", base.replace(old, novo)), 0, old)
+        # GRANICA, imenovana a ne precutna: popis je DENY (proza i greske), ne ALLOW imena alata. Zato
+        # preimenovana stavka alata i dalje BROJI, i to je namjerno: allow lista bi na prvom preimenovanju
+        # pala na nulu i blokirala svaki ispravan rad, dakle gard koji gasi ono sto stiti.
+        self.assertEqual(successful_tool_calls("codex", base.replace('"type":"command_execution"',
+                                                                     '"type":"shell_call"')), 1,
+                         "nepoznato ime alata nije dokaz da nista nije izvrseno")
+
+    def test_the_signature_in_prose_alone_still_ends_the_phase_blocked(self):
+        """MINOR iz pregleda PR-a #93, zatvoren MJEROM i obrazlozenjem, ne promjenom garda.
+
+        Prigovor: kad potpis sandboxa stigne samo u modelovoj prozi, razlog je drugi. Razlog jest drugi, ali
+        ISHOD nije: faza koja nista nije procitala zavrsava kao `blocked` i ne trosi pokusaj, pa rupe nema.
+        Skeniranje proze bi vratilo lazni pozitivni nalaz zbog kojeg je i iskljuceno: ovaj repozitorij frazu
+        sada sadrzi (runbook, ovi testovi), pa bi agent koji tijekom plana procita runbook bio proglasen
+        blokiranim. Izmjereno 2026-09-20: u stvarnom padu potpis JEST bio na stderru, dakle na putu koji gard
+        pokriva.
+        """
+        proza = REAL_NO_TOOL_USE_STDOUT.replace(
+            "Pokrećem traženu naredbu bez izmjena.",
+            "Alat pada uz apply deny-read ACLs, pa nisam nista procitao.")
+        self.assertIn("apply deny-read ACLs", proza)
+        self.assertEqual(machine_stdout(proza), "", "proza se namjerno ne skenira")
+        self.assertFalse(sandbox_unusable("", proza, "codex"))
+        blocked = self.replay(proza, BENIGN_STDERR)
+        self.assertEqual(blocked["verdict"], "blocked", blocked)
+        self.assertIn("no_tool_use", blocked["reason"], "razlog je drugi, ishod isti")
+        self.assertFalse(blocked["attempt_spent"])
 
 
 class JobBranchTest(unittest.TestCase):
