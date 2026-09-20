@@ -4,12 +4,11 @@
  * NAVIGACIJA NE OMATA: stol na kojem se vrtis u krug ne moze odgovoriti na "jesam li gotov".
  *
  * KARTICU CRTA `priority-findings.ts`: druga izvedba iste kartice bi se s prvom razisla. Stol
- * dodaje samo svoje - traku o opsegu, popis i navigaciju.
+ * dodaje samo svoje - traku o opsegu, pager i vezu prema planu.
  */
 import type { DeskItem } from './desk-model';
 import { trakaZaOpseg } from './desk-model';
 import { priorityFindingHtml } from './priority-findings';
-import { queueHtml, queueRedci } from './desk-queue';
 import type { VisualFindingModel } from './visual-result-model';
 
 export interface DeskNav {
@@ -54,38 +53,54 @@ export function deskTraka(item: DeskItem): string | null {
   return null;
 }
 
+/**
+ * PAGER (Z8). Desna strana stola nosi JEDNU karticu, pa navigacija vise nije podnozje popisa nego
+ * zaglavlje kartice: polozaj "Nalaz 3 / 6" i dvije okrugle strelice.
+ *
+ * RIJEC "Nalaz" STOJI IZVAN `[data-desk-count]`, a brojka ostaje `nav.oznaka` ("3 / 6"). Taj
+ * element je ugovor: `tests/desk-mount.test.ts` cita tocno njegov tekst kao polozaj stola, pa bi
+ * upisivanje cijele recenice u njega pretvorilo mjeru polozaja u mjeru copyja. Predlozak pise
+ * "Nalaz 1 od 6"; ovdje je separator kosa crta, jer polozaj ima samo jedan zapis na ekranu.
+ *
+ * Razredi gumba se NE mijenjaju: `desk-nav__btn--prev/next` i prazan `data-desk-go` uz `disabled`
+ * su ugovor s delegacijom u `mountDesk` i s gardom da navigacija NE OMATA.
+ */
 export function deskNavHtml(nav: DeskNav, esc: (v: string) => string): string {
-  const gumb = (kamo: number | null, smjer: 'prev' | 'next', natpis: string): string =>
+  const gumb = (kamo: number | null, smjer: 'prev' | 'next', natpis: string, opis: string): string =>
     `<button type="button" class="desk-nav__btn desk-nav__btn--${smjer}" data-desk-go="${kamo ?? ''}"`
-    + `${kamo === null ? ' disabled' : ''}>${natpis}</button>`;
-  return '<nav class="desk-nav" data-desk-nav aria-label="Kretanje po nalazima">'
-    + gumb(nav.prethodni, 'prev', '<span aria-hidden="true">&#8592;</span> Prethodni')
-    + `<span class="desk-nav__count" data-desk-count>${esc(nav.oznaka)}</span>`
-    + gumb(nav.sljedeci, 'next', 'Sljedeći problem <span aria-hidden="true">&#8594;</span>')
-    + '</nav>';
+    + `${kamo === null ? ' disabled' : ''} aria-label="${esc(opis)}">`
+    + `<span aria-hidden="true">${natpis}</span></button>`;
+  return '<nav class="desk-pager" data-desk-nav aria-label="Kretanje po nalazima">'
+    + `<span class="desk-pager__count">Nalaz <span data-desk-count>${esc(nav.oznaka)}</span></span>`
+    + '<span class="desk-pager__btns">'
+    + gumb(nav.prethodni, 'prev', '&#8592;', 'Prethodni nalaz')
+    + gumb(nav.sljedeci, 'next', '&#8594;', 'Sljedeći nalaz')
+    + '</span></nav>';
 }
 
 /**
- * Desna strana stola: RED CEKANJA s otvorenim detaljem odabranog, pa navigacija.
+ * Desna strana stola: PAGER pa JEDNA kartica (Z8).
  *
- * Popis odgovara na "sto sve me ceka", navigacija na "vodi me redom". Oba su jeftina jer dijele
- * isti `data-desk-go`, a samo jedan od njih ne bi bio dovoljan: jedna kartica ne kaze je li
- * ostatak tezak ni sitan, a sam popis ne vodi kroz posao.
+ * Do Z8 je ovdje stajao red cekanja: svih N nalaza kao redci, s detaljem otvorenim na odabranom.
+ * Popis je odgovarao na "sto sve me ceka", ali je istu presudu iznosio drugi put (sazetak je vec
+ * broji po ozbiljnosti) i gurao karticu ispod pregiba. Z8 ostavlja JEDNU karticu i pager; "sto
+ * sve me ceka" preuzimaju brojka u pageru i DNA traka ispod stola.
  */
 export function deskPaneHtml(
   item: DeskItem<VisualFindingModel> | null,
   nav: DeskNav,
   repairAvailable: boolean,
   esc: (v: string) => string,
-  // OBAVEZAN, bez zadane vrijednosti. Zadano `[item]` je izmisljalo jednoclani popis, pa kad se ne
-  // bi poklopio s polozajem, NIJEDAN redak ne bi bio odabran i detalj bi tiho nestao s ekrana.
-  svi: readonly DeskItem<VisualFindingModel>[],
+  // OSTAJE U POTPISU iako ga pager ne cita: polozaj i ukupan broj dolaze iz `nav`, a cijeli popis
+  // treba prvom pozivatelju koji desnoj strani vrati pregled svih nalaza (drugi krug Z8, stanje
+  // plan). Uklanjanje bi promijenilo potpis koji `deskHtml` i testovi vec zovu pozicijski.
+  _svi: readonly DeskItem<VisualFindingModel>[],
   planDostupan = false,
 ): string {
   if (!item) return '<div class="desk-pane" data-desk-pane><p class="desk-prazno">Nema otvorenih nalaza.</p></div>';
   const traka = deskTraka(item);
   const detalj = (traka ? `<p class="desk-traka" data-desk-traka>${esc(traka)}</p>` : '')
-    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u "3 / 9" i u retku popisa.
+    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u pageru ("3 / 9").
     // Kad se dvije brojke na istom ekranu ne slazu, korisnik to cita kao kvar.
     + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1);
   // ULAZ U PLAN STOJI UZ NALAZE, jer se ondje i donosi odluka da se nesto popravi. Do 2026-09-08
@@ -95,10 +110,12 @@ export function deskPaneHtml(
     ? '<button type="button" class="desk-plan-open" data-desk-plan-open>Otvori plan ispravaka'
       + ' <span aria-hidden="true">&#8594;</span></button>'
     : '';
+  // PAGER JE ZAGLAVLJE KARTICE, ne podnozje popisa: kad je kartica jedna, polozaj i strelice
+  // moraju stajati iznad nje, inace korisnik do njih dode tek nakon cijelog nalaza.
   return '<div class="desk-pane" data-desk-pane>'
-    + queueHtml(queueRedci(svi, repairAvailable), nav.index, esc, detalj)
-    + uPlan
     + deskNavHtml(nav, esc)
+    + detalj
+    + uPlan
     + '</div>';
 }
 
