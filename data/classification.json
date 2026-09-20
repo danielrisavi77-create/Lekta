@@ -24,7 +24,6 @@
     { "pattern": "data/**", "class": "PROPRIETARY-DATA", "bundle": "forbidden" },
 
     { "pattern": "data/classification.json", "class": "PRIVATE-IP", "bundle": "forbidden" },
-    { "pattern": "data/packages.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/work-type-labels.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/work-type-scope.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/checks/**", "class": "PUBLIC", "bundle": "allowed" },

@@ -34,7 +34,6 @@ const TARGETS = [
   ['SOCIAL_METHOD_REGISTRY', 'methodology/social-methods.json'],
   ['SOCIAL_METHOD_SOURCE', 'methodology/social-method-source.json'],
   ['FPZG_SUBMISSION_CALENDAR', 'submission/fpzg-calendar.json'],
-  ['PACKAGES', 'packages.json'],
   ['CHECK_ITEMS', 'checks/check-items.json'],
   ['WORK_TYPE_LABELS', 'work-type-labels.json'],
 ];

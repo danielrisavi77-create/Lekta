@@ -1,24 +1,18 @@
 /**
- * Konfiguracija proizvoda: paketi, oznake vrsta rada, stavke QA checkliste
- * (CLAUDE.md backlog 1 i 3). Hidrira data/packages.json, data/work-type-labels.json,
- * data/checks/check-items.json. Tanak prolaz, bez logike.
+ * Konfiguracija proizvoda: oznake vrsta rada i stavke QA checkliste (CLAUDE.md backlog 1 i 3).
+ * Hidrira data/work-type-labels.json i data/checks/check-items.json. Tanak prolaz, bez logike.
+ *
+ * `PACKAGES` i `data/packages.json` su uklonjeni u Z11. Bio je to MRTAV izvoz: citao ga je samo
+ * `tests/data-loaders.test.ts`, i to da potvrdi da je jednak svojoj vlastitoj JSON datoteci, dakle
+ * tvrdnja koja ne moze pasti ni kad podatak nikome ne treba. Obrazac rucne narudzbe ima vlastiti
+ * popis u `src/ui/app.ts`, a cjenik placenog popravka zivi u tablici `products`; nijedno od toga
+ * nije ovisilo o ovoj datoteci. Audit CODE-08 ju je zadrzao da se ne mijenja podatkovni ugovor bez
+ * potrebe, ali Z11 tu potrebu daje: cjenik smije imati tocno jedan izvor, a ovo je bio cetvrti
+ * popis cijena u repozitoriju (9/39/69/99 EUR, koncept koji naplata vise ne poznaje).
  */
-import rawPackages from '../../data/packages.json';
 import rawWorkTypeLabels from '../../data/work-type-labels.json';
 import rawCheckItems from '../../data/checks/check-items.json';
-import type { PackageDef, CheckItem, WorkType } from '../profiles/profile-schema';
-
-/**
- * MRTAV IZVOZ, zadrzan namjerno (audit CODE-08).
- *
- * Ovo cita samo `tests/data-loaders.test.ts`, i to da bi potvrdio da je jednak svojoj vlastitoj
- * JSON datoteci. Aplikacija ga NE koristi: obrazac rucne narudzbe ima vlastiti popis u
- * `src/ui/app.ts`, a cjenik placenog popravka zivi u tablici `products`.
- *
- * Ne brisemo ga u sklopu remedijacije audita jer bi to bila promjena podatkovnog ugovora bez
- * potrebe, ali NE dodavaj mu nove citatelje: `data/packages.json` nije cjenik proizvoda.
- */
-export const PACKAGES = rawPackages as unknown as PackageDef[];
+import type { CheckItem, WorkType } from '../profiles/profile-schema';
 
 export const WORK_TYPE_LABELS =
   rawWorkTypeLabels as unknown as Record<WorkType, string>;
