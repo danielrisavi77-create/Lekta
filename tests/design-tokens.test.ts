@@ -298,14 +298,18 @@ describe('Z3 border-left akcent', () => {
 /**
  * Z7 (2026-09-20, opcija a): DVA GLASA I JEDAN GOST.
  *
- * Tri tvrdnje, svaka s mutacijom, jer gard bez dokaza da grize se ne racuna (CLAUDE.md):
+ * Cetiri tvrdnje, svaka s mutacijom, jer gard bez dokaza da grize se ne racuna (CLAUDE.md):
  *   1. Tokeni glasa imaju TOCNO propisanu vrijednost. Token koji se tiho pomakne mijenja pismo
  *      na svakoj ruti, a nijedan postojeci test to ne bi vidio: lanac u `entry-fonts.test.ts`
  *      pita samo je li obitelj UCITANA, ne je li ona koja je odlucena.
- *   2. Nijedna deklaracija na display serifu ne trazi tezinu iznad 400. Instrument Serif taj rez
+ *   2. Nijedan ELEMENT ne dobiva tezinu iznad 400 na display serifu. Instrument Serif taj rez
  *      nema; bez `font-synthesis: none` preglednik ga razvuce, a s njim se zahtjev tiho ignorira.
- *      Oba ishoda su kvar, i nijedan ne pada sam od sebe.
- *   3. `font-synthesis: none` stoji na korijenu.
+ *      Oba ishoda su kvar, i nijedan ne pada sam od sebe. Mjeri se POBJEDNIK kaskade, jer je
+ *      prva izvedba gledala samo pojedinacno pravilo i bila slijepa na doslovno ime obitelji,
+ *      na obitelj u drugom pravilu i na naslijedjen glas (vidi komentar uz `tezineIznad400`).
+ *   3. `font-synthesis: none` stoji na korijenu SVAKOG svijeta koji korijenu daje obitelj, ne
+ *      samo u `design-system.css`: `admin/` i `demo/` ga ne uvoze, pa su bas one dobile lazni
+ *      bold koji tvrdnja 2 sprecava drugdje.
  */
 describe('Z7: tokeni glasa i tezina na serifu', () => {
   const DIZAJN = read('src/shared/design-system.css');
@@ -360,57 +364,276 @@ describe('Z7: tokeni glasa i tezina na serifu', () => {
       .toBe('"GeistMonoVariable",monospace');
   });
 
-  /** Deklaracije koje display serifu (ili njegovu aliasu) daju tezinu iznad 400. */
-  function tezineIznad400(css: string): string[] {
-    const SERIF = /var\(\s*--(?:display-serif|font-hand)\s*[,)]/;
+  /**
+   * RAZLAGANJE KASKADE, NE PRETRAGA BLOKA. Prva izvedba ovog garda gledala je SAMO pravilo u
+   * kojem obitelj i tezina stoje zajedno, pa je bila slijepa na tri prolaza kojima serif stvarno
+   * stize do elementa, i sva tri su izmjerena na stablu nad kojim je bila zelena:
+   *   1. doslovno ime obitelji umjesto tokena (`font:600 20px 'Instrument Serif'`, 14 mjesta u
+   *      `demo.css`, u commitu koji je tu datoteku i mijenjao),
+   *   2. obitelj i tezina u DVA pravila nad istim elementom (`.faq summary{font-weight:850}` uz
+   *      `#faq .faq summary{font-family:var(--display-serif)}`),
+   *   3. NASLIJEDJEN glas, od pretka ili od korijena svijeta (`body{font:16px/1.6
+   *      var(--display-serif)}`), gdje element vlastitu obitelj uopce nema.
+   * Zato se racuna POBJEDNIK kaskade (specificnost, pa redoslijed), a ne prva deklaracija koja se
+   * nade. Kasnije pravilo koje tezinu vrati na 400 ili obitelj prebaci na mono gasi nalaz.
+   *
+   * GRANICE SU IMENOVANE, ne presucene: uvjeti `@media` se ne vrednuju (pravilo unutar upita
+   * broji se kao da uvijek vrijedi), `!important` se ne cita, a tvornicki rezovi preglednika
+   * (`h1`, `strong`, `b`, `summary` su podebljani bez ijedne nase deklaracije) nisu modelirani.
+   * Sve tri granice cine gard STROZIM ili jednako strogim, nikad blazim.
+   */
+  type Pravilo = {
+    ime: string;
+    sel: string;
+    red: number;
+    spec: number;
+    obitelj: string | null;
+    tezina: string | null;
+    sinteza: boolean;
+  };
+
+  const SERIF_OBITELJ = /var\(\s*--(?:display-serif|font-hand)\s*[,)]|Instrument Serif/i;
+  const MONO_OBITELJ = /var\(\s*--(?:mono|ui|sans)\s*[,)]|Geist Mono/i;
+  const KORIJENSKI = ['body', 'html', ':root'];
+
+  /** Svijet kojem list pripada: `admin/` i `demo/` imaju vlastiti korijen i vlastite tokene. */
+  const svijet = (ime: string): string =>
+    ime.includes('/admin/') ? 'admin' : ime.includes('/demo/') ? 'demo' : 'proizvod';
+
+  const dijeloviSelektora = (sel: string): string[] =>
+    sel.split(/\s+|>|\+|~/).map((x) => x.trim()).filter(Boolean);
+  const bezPseudo = (x: string): string => x.replace(/:{1,2}[a-z-]+(\([^)]*\))?/g, '');
+  const jePseudoElement = (sel: string): boolean =>
+    (dijeloviSelektora(sel).slice(-1)[0] ?? '').includes('::');
+  const subjekt = (sel: string): string => bezPseudo(dijeloviSelektora(sel).slice(-1)[0] ?? '');
+  const preciSelektora = (sel: string): string[] =>
+    dijeloviSelektora(sel).slice(0, -1).map(bezPseudo).filter(Boolean);
+
+  const jePodniz = (a: string[], b: string[]): boolean => {
+    let i = 0;
+    for (const x of b) if (i < a.length && a[i] === x) i += 1;
+    return i === a.length;
+  };
+
+  /**
+   * Mogu li dva selektora pogoditi ISTI element: jednak subjekt (zadnji slozeni dio), jednaka
+   * vrsta kutije (pseudoelement je vlastita), i preci kraceg su podniz predaka duljeg.
+   */
+  const istiElement = (x: string, y: string): boolean =>
+    subjekt(x) === subjekt(y)
+    && jePseudoElement(x) === jePseudoElement(y)
+    && (jePodniz(preciSelektora(x), preciSelektora(y))
+      || jePodniz(preciSelektora(y), preciSelektora(x)));
+
+  /** Specificnost (a,b,c) spljostena u jedan broj; sluzi usporedbi, nije CSS ugovor. */
+  const specificnost = (sel: string): number =>
+    (sel.match(/#[\w-]+/g) ?? []).length * 10000
+    + (sel.match(/\.[\w-]+|\[[^\]]*\]|:(?!:)[a-z-]+/g) ?? []).length * 100
+    + (sel.match(/(^|[\s>+~])[a-z][\w-]*|::[a-z-]+/g) ?? []).length;
+
+  /** Tezina kao broj; `normal`, `inherit` i slicno daju NaN, pa ne ulaze u usporedbu s 400. */
+  const tezinaBroj = (v: string): number =>
+    (v === 'bold' || v === 'bolder') ? 700 : (/^\d+$/.test(v) ? Number(v) : NaN);
+
+  const jaci = (a: Pravilo, b: Pravilo | null): Pravilo =>
+    !b || a.spec > b.spec || (a.spec === b.spec && a.red > b.red) ? a : b;
+
+  /** Sva pravila listova, s deklaracijom obitelji i tezine koja unutar TOG bloka pobjeduje. */
+  function pravilaIz(listovi: ReadonlyArray<{ ime: string; css: string }>): Pravilo[] {
+    const sva: Pravilo[] = [];
+    listovi.forEach(({ ime, css }, indeks) => {
+      for (const blok of bezKomentara(css).matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        const sel = blok[1].trim().replace(/\s+/g, ' ');
+        if (sel.startsWith('@') || /^[\d.]+%?$/.test(sel) || sel === 'from' || sel === 'to') continue;
+        const tijelo = blok[2];
+        let obitelj: string | null = null;
+        let tezina: string | null = null;
+        for (const m of tijelo.matchAll(/(?:^|[;{\s])font-family\s*:\s*([^;}]+)/g)) obitelj = m[1].trim();
+        for (const m of tijelo.matchAll(/(?:^|[;{\s])font\s*:\s*([^;}]+)/g)) {
+          if (/^inherit\b/.test(m[1].trim())) continue;
+          obitelj = m[1].trim();
+          // Kratica `font:` RESETIRA tezinu: bez broja ispred velicine to je 400, ne nasljedjivanje.
+          const w = m[1].split(/var\(|['"]/)[0].match(/(?<![\w.])([1-9]\d{2}|bold|bolder)(?![\w.%])/);
+          tezina = w ? w[1] : '400';
+        }
+        for (const m of tijelo.matchAll(/(?:^|[;{\s])font-weight\s*:\s*(\w+)/g)) tezina = m[1];
+        const sinteza = /font-synthesis\s*:\s*none/.test(tijelo);
+        if (obitelj === null && tezina === null && !sinteza) continue;
+        for (const jedan of sel.split(',').map((x) => x.trim()).filter(Boolean)) {
+          sva.push({
+            ime,
+            sel: jedan,
+            red: indeks * 1e7 + (blok.index ?? 0),
+            spec: specificnost(jedan),
+            obitelj,
+            tezina,
+            sinteza,
+          });
+        }
+      }
+    });
+    return sva;
+  }
+
+  /**
+   * Elementi kojima kaskada daje display serif I tezinu iznad 400. Glas se trazi u tri koraka,
+   * istim redom kojim ga nalazi preglednik: vlastita deklaracija, pa najjaci PREDAK koji obitelj
+   * deklarira, pa korijen tog svijeta.
+   */
+  function tezineIznad400(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
+    const sva = pravilaIz(listovi);
     const nalazi: string[] = [];
-    for (const blok of bezKomentara(css).matchAll(/\{([^{}]*)\}/g)) {
-      const tijelo = blok[1];
-      for (const m of tijelo.matchAll(/font\s*:\s*([^;}]*)/g)) {
-        if (!SERIF.test(m[1])) continue;
-        const prije = m[1].split('var(')[0];
-        const w = prije.match(/(?<![\w.])([1-9]\d{2})(?![\w.%])/);
-        if (w && Number(w[1]) > 400) nalazi.push(m[0].trim().slice(0, 70));
+    const vidjeno = new Set<string>();
+    for (const p of sva) {
+      if (p.tezina === null || !(tezinaBroj(p.tezina) > 400)) continue;
+      const kljuc = p.ime + '::' + p.sel;
+      if (vidjeno.has(kljuc)) continue;
+      vidjeno.add(kljuc);
+      let pobObitelj: Pravilo | null = null;
+      let pobTezina: Pravilo | null = null;
+      for (const q of sva) {
+        if (!istiElement(q.sel, p.sel)) continue;
+        if (q.obitelj !== null) pobObitelj = jaci(q, pobObitelj);
+        if (q.tezina !== null) pobTezina = jaci(q, pobTezina);
       }
-      if (!new RegExp('font-family\\s*:\\s*' + SERIF.source).test(tijelo)) continue;
-      for (const m of tijelo.matchAll(/font-weight\s*:\s*([1-9]\d{2}|bold|bolder)/g)) {
-        if (m[1] === 'bold' || m[1] === 'bolder' || Number(m[1]) > 400) nalazi.push(m[0].trim());
+      // Kasnije ili specificnije pravilo koje tezinu vraca na 400 gasi nalaz.
+      if (!pobTezina || !(tezinaBroj(pobTezina.tezina ?? '') > 400)) continue;
+      let glas = pobObitelj ? pobObitelj.obitelj : null;
+      let odakle = pobObitelj ? pobObitelj.sel : '';
+      if (glas === null) {
+        const preci = preciSelektora(p.sel);
+        let najblizi: Pravilo | null = null;
+        for (const q of sva) {
+          if (q.obitelj === null || !preci.includes(subjekt(q.sel))) continue;
+          najblizi = jaci(q, najblizi);
+        }
+        if (najblizi) {
+          glas = najblizi.obitelj;
+          odakle = 'predak ' + najblizi.sel;
+        }
       }
+      if (glas === null) {
+        let korijen: Pravilo | null = null;
+        for (const q of sva) {
+          if (q.obitelj === null || !KORIJENSKI.includes(q.sel)) continue;
+          if (svijet(q.ime) !== svijet(p.ime)) continue;
+          korijen = jaci(q, korijen);
+        }
+        if (korijen) {
+          glas = korijen.obitelj;
+          odakle = 'korijen ' + korijen.sel;
+        }
+      }
+      if (glas === null || !SERIF_OBITELJ.test(glas) || MONO_OBITELJ.test(glas)) continue;
+      nalazi.push(`${p.ime}: ${p.sel} -> ${pobTezina.tezina} (serif iz ${odakle})`);
     }
     return nalazi;
   }
 
-  it('nijedan list u src/ ne trazi tezinu iznad 400 na display serifu', () => {
-    const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true })
-      .flatMap((e) => (e.isDirectory() ? hodaj(join(dir, e.name)) : [join(dir, e.name)]));
-    const listovi = hodaj(join(root, 'src')).filter((f) => f.endsWith('.css'));
+  /** Svjetovi koji korijenu daju obitelj, a nigdje ne gase sintezu reza. */
+  function svjetoviBezSinteze(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
+    const sObitelji = new Set<string>();
+    const sGasilom = new Set<string>();
+    for (const p of pravilaIz(listovi)) {
+      if (!KORIJENSKI.includes(p.sel)) continue;
+      if (p.obitelj !== null) sObitelji.add(svijet(p.ime));
+      if (p.sinteza) sGasilom.add(svijet(p.ime));
+    }
+    return [...sObitelji].filter((s) => !sGasilom.has(s)).sort();
+  }
+
+  it('nijedan element u src/ ne dobiva tezinu iznad 400 na display serifu', () => {
+    const listovi = listoviSrc();
     expect(listovi.length, 'nula listova znaci da obilazak ne radi, ne da su cisti')
       .toBeGreaterThan(5);
-    const nalazi = listovi.flatMap((f) => tezineIznad400(readFileSync(f, 'utf8'))
-      .map((n) => `${f.slice(root.length + 1).split(/[\\/]/).join('/')}: ${n}`));
-    expect(nalazi, 'Instrument Serif nema rez iznad 400; zahtjev se ili ignorira ili sintetizira')
+    // SENTINEL: populacija mora sadrzavati i deklaracije iznad 400, inace bi prazan nalaz bio
+    // vakuumski zelen nad stablom u kojem takvih deklaracija uopce nema.
+    const teske = pravilaIz(listovi).filter((p) => p.tezina !== null && tezinaBroj(p.tezina) > 400);
+    expect(teske.length, 'nula deklaracija iznad 400 znaci da citanje mjeri krivo')
+      .toBeGreaterThan(50);
+    expect(tezineIznad400(listovi), 'Instrument Serif nema rez iznad 400; zahtjev se ili ignorira ili sintetizira')
       .toEqual([]);
   });
 
-  it('MUTACIJA: tezina iznad 400 se vidi u OBA zapisa, mono ostaje slobodan', () => {
-    // BASELINE.
-    expect(tezineIznad400('.a{font:400 20px/1 var(--display-serif)}')).toEqual([]);
-    expect(tezineIznad400('.a{font-family:var(--display-serif);font-weight:400}')).toEqual([]);
-    // MUTACIJA 1: kratica `font:`.
-    expect(tezineIznad400('.a{font:650 20px/1 var(--display-serif)}')).toHaveLength(1);
-    // MUTACIJA 2: odvojena `font-weight`, ukljucujuci oblik s fallbackom u `var()`.
-    expect(tezineIznad400('.a{font-family:var(--display-serif, Georgia);font-weight:600}'))
+  it('MUTACIJA: serif se vidi kroz token, doslovno ime, drugo pravilo, pretka i korijen', () => {
+    const l = (css: string, ime = 'x.css'): Array<{ ime: string; css: string }> => [{ ime, css }];
+    // BASELINE: rez 400 na serifu, u oba zapisa.
+    expect(tezineIznad400(l('.a{font:400 20px/1 var(--display-serif)}')), 'baseline').toEqual([]);
+    expect(tezineIznad400(l('.a{font-family:var(--display-serif);font-weight:400}')), 'baseline').toEqual([]);
+    // MUTACIJA 1: kratica `font:` s tokenom, jedini oblik koji je stari gard hvatao.
+    expect(tezineIznad400(l('.a{font:650 20px/1 var(--display-serif)}'))).toHaveLength(1);
+    // MUTACIJA 2: DOSLOVNO ime obitelji, bez tokena. Tocan oblik iz `demo.css`.
+    expect(tezineIznad400(l(".brand-mark{font:600 20px 'Instrument Serif',Georgia,serif}"))).toHaveLength(1);
+    // MUTACIJA 3: obitelj i tezina u DVA pravila, specificnije nosi obitelj (`.faq summary`).
+    expect(tezineIznad400(l('.faq summary{font-weight:850}#faq .faq summary{font-family:var(--display-serif)}')))
       .toHaveLength(1);
-    // MUTACIJA 3: alias za biljesku korektora vodi na isto pismo.
-    expect(tezineIznad400('.a{font-family:var(--font-hand);font-weight:bold}')).toHaveLength(1);
-    // KONTROLA SMJERA: mono ima pune tezine, pa 600 na njemu NIJE nalaz.
-    expect(tezineIznad400('.a{font:600 11px/1 var(--mono)}')).toEqual([]);
-    expect(tezineIznad400('.a{font-family:var(--ui);font-weight:700}')).toEqual([]);
-    // KONTROLA: velicina od 500px nije tezina.
-    expect(tezineIznad400('.a{font:400 500px/1 var(--display-serif)}')).toEqual([]);
+    // MUTACIJA 4: glas dolazi od PRETKA, element vlastitu obitelj nema.
+    expect(tezineIznad400(l('.hero{font-family:var(--display-serif)}.hero b{font-weight:700}'))).toHaveLength(1);
+    // MUTACIJA 5: glas dolazi od KORIJENA svijeta.
+    expect(tezineIznad400(l('body{font:16px/1.6 var(--display-serif)}.x{font-weight:800}'))).toHaveLength(1);
+    // MUTACIJA 6: alias biljeske korektora vodi na isto pismo, i s fallbackom u `var()`.
+    expect(tezineIznad400(l('.a{font-family:var(--font-hand);font-weight:bold}'))).toHaveLength(1);
+    expect(tezineIznad400(l('.a{font-family:var(--display-serif, Georgia);font-weight:600}'))).toHaveLength(1);
   });
 
-  it('font-synthesis: none stoji na korijenu', () => {
+  it('MUTACIJA: mono ostaje slobodan, a o nalazu odlucuje POBJEDNIK kaskade', () => {
+    const l = (css: string, ime = 'x.css'): Array<{ ime: string; css: string }> => [{ ime, css }];
+    // Geist Mono je varijabilan (100 do 900), pa tezina iznad 400 na njemu NIJE nalaz.
+    expect(tezineIznad400(l('.a{font:600 11px/1 var(--mono)}'))).toEqual([]);
+    expect(tezineIznad400(l('.a{font-family:var(--ui);font-weight:700}'))).toEqual([]);
+    expect(tezineIznad400(l(".a{font:600 10px 'Geist Mono Variable',monospace}"))).toEqual([]);
+    // KASNIJE pravilo koje tezinu vraca na 400 gasi nalaz (stvaran oblik: `.phase-title`).
+    expect(tezineIznad400(l('.t{font-weight:900}.t{font-family:var(--display-serif);font-weight:400}'))).toEqual([]);
+    // KASNIJE pravilo koje obitelj prebaci na mono takoder gasi nalaz (`.panel-title`).
+    expect(tezineIznad400(l('.p{font-weight:900}.p{font-family:var(--display-serif)}.p{font:600 10px var(--sans)}')))
+      .toEqual([]);
+    // OBRNUT redoslijed JEST nalaz: mono prvo, serif zadnji, tezina ostaje (`.local-badge`).
+    expect(tezineIznad400(l('.b{font:600 10px var(--ui)}.b{font-family:var(--display-serif)}'))).toHaveLength(1);
+    // SPECIFICNOST nadjacava redoslijed: goli `h2` serif gubi od `.card h2` mono (`premium.css`).
+    expect(tezineIznad400(l('.card h2{font:600 14px var(--ui)}h2{font-family:var(--display-serif)}'))).toEqual([]);
+    // Pseudoelement je vlastita kutija: obitelj na `::after` ne odlucuje o elementu.
+    expect(tezineIznad400(l('.o{font-weight:800}.o::after{font-family:var(--display-serif)}'))).toEqual([]);
+    // Razliciti preci, isti subjekt: `.a h2` ne uzima glas od `.b h2`.
+    expect(tezineIznad400(l('.a h2{font-family:var(--display-serif)}.b h2{font-weight:700}'))).toEqual([]);
+    // Svijet je granica: korijen `demo` ne odlucuje o listu iz `admin`.
+    expect(tezineIznad400([
+      { ime: 'src/demo/demo.css', css: ':root{font-family:var(--display-serif)}' },
+      { ime: 'src/admin/a.css', css: 'body{font-family:var(--mono)}.z{font-weight:800}' },
+    ])).toEqual([]);
+    // KONTROLA: velicina od 500px nije tezina.
+    expect(tezineIznad400(l('.a{font:400 500px/1 var(--display-serif)}'))).toEqual([]);
+  });
+
+  it('svaki svijet koji korijenu daje obitelj gasi i sintezu reza', () => {
+    const listovi = listoviSrc();
+    // Sentinel: bez vise svjetova s obitelji na korijenu tvrdnja bi bila vakuumski zelena.
+    const korijeni = pravilaIz(listovi).filter((p) => KORIJENSKI.includes(p.sel) && p.obitelj !== null);
+    expect(new Set(korijeni.map((p) => svijet(p.ime))).size, 'manje od dva svijeta s obitelji na korijenu')
+      .toBeGreaterThan(1);
+    expect(svjetoviBezSinteze(listovi), 'bez font-synthesis: none preglednik razvuce rez 400 u lazni bold')
+      .toEqual([]);
+  });
+
+  it('MUTACIJA: svijet bez font-synthesis: none pada, a gasilo drugog svijeta ne pomaze', () => {
+    // BASELINE: korijen s obitelji i gasilom u ISTOM pravilu.
+    expect(svjetoviBezSinteze([{ ime: 'src/a.css', css: ':root{font-synthesis:none;font-family:var(--display-serif)}' }]))
+      .toEqual([]);
+    // Gasilo smije stajati i u drugom korijenskom pravilu istog svijeta.
+    expect(svjetoviBezSinteze([{ ime: 'src/a.css', css: 'html{font-synthesis:none}body{font-family:var(--display-serif)}' }]))
+      .toEqual([]);
+    // MUTACIJA: obitelj bez gasila.
+    expect(svjetoviBezSinteze([{ ime: 'src/a.css', css: 'body{font-family:var(--display-serif)}' }]))
+      .toEqual(['proizvod']);
+    // MUTACIJA: gasilo u svijetu proizvoda ne pokriva `admin` ni `demo`. Tocan nalaz 2026-09-20:
+    // ni jedna ni druga stranica ne uvozi `design-system.css`, a body im je prebacen na serif.
+    expect(svjetoviBezSinteze([
+      { ime: 'src/shared/design-system.css', css: ':root{font-synthesis:none;font-family:var(--display-serif)}' },
+      { ime: 'src/admin/admin-dashboard.css', css: 'body{font-family:var(--display-serif)}' },
+      { ime: 'src/demo/demo.css', css: ':root{font-family:var(--mono)}' },
+    ])).toEqual(['admin', 'demo']);
+  });
+
+  it('font-synthesis: none stoji na korijenu izvora istine', () => {
     const korijen = bezKomentara(DIZAJN).match(/:root\s*\{([\s\S]*?)\n\}/);
     expect(korijen, 'blok :root nije pronadjen, dakle citanje mjeri krivo').not.toBeNull();
     expect(bezRazmaka(korijen ? korijen[1] : '')).toContain('font-synthesis:none');
