@@ -23,10 +23,13 @@
   --route-header-min-height: 68px;
   --route-shell-inline: 32px;
   --route-nav-gap: 22px;
-  /* Ovdje je stajalo golo ime obitelji koju proizvod ne ucitava. Modul jos nije ozicen ni u jednu
-     rutu, pa se to nije vidjelo; ostavljeno bi bilo zamka za prvog tko ga ukljuci. Glas sucelja se
-     uzima iskljucivo iz tokena (Z7: to je mono). */
-  font-family: var(--sans, system-ui, sans-serif);
+  /* Obitelj se NE postavlja na `:root`, nego na `body` (u `page-chrome.css`, zajedno s velicinom i
+     visinom retka). Razlog je mjerljiv, ne stilski: `:root` i `body` su razliciti elementi, pa o
+     naslijedjenom glasu odlucuje BLIZINA, a ne specificnost. Dok je ovdje stajalo
+     `font-family: var(--sans, ...)`, deklaracija na zivoj stranici nije mijenjala nista (blizi
+     `body` uvijek pobjeduje), ali je gard nad tezinama razrjesavao glas po specificnosti i zato
+     vidio mono ondje gdje preglednik crta serif. Jedna mrtva deklaracija drzala je gard slijepim
+     za svih 131 nalaz. Ne vracaj je. */
   background: var(--route-bg);
   color: var(--route-ink);
 }

@@ -52,12 +52,11 @@
  */
 
 *{box-sizing:border-box}
-/* NASLIJEDJENI GLAS STRANICE JE SERIF, NE GLAS SUCELJA (Z7, 2026-09-20). Do tada je `body`
-   nosio sans, koji je jednako podnosio i oznaku i odlomak, pa je nasljedjivanje bilo bezopasno.
-   Glas sucelja je od Z7 mono, a `design/README.md` ga izricito zabranjuje za recenicu duzu od
-   jednog retka. Mono se zato od sada trazi IZRICITO (gumbi, navigacija, oznake, mjere, brojevi),
-   a sve sto obitelj ne deklarira nasljedjuje serif. */
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--display-serif);min-width:320px}
+/* NASLIJEDJENI GLAS STRANICE JE GLAS SUCELJA, DAKLE MONO (Z7, popravak 2026-09-20).
+   Isti par kao u `page-chrome.css`: serif na `body` je tiho preuzeo svaki element koji vlastitu
+   obitelj ne deklarira, a Instrument Serif rez iznad 400 nema. Serif se od sada dodjeljuje
+   izricito (naslovi, duge recenice, podnozje), mono je zadani glas. */
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--ui);min-width:320px}
 a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px;box-shadow:var(--focus);border-radius:6px}
 @media (forced-colors:active){:focus-visible{outline:2px solid CanvasText}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -178,7 +177,7 @@ footer .ks-tick{width:11px;height:11px}
 footer{border-top:1px solid var(--desk-line)}
 .footer-inner{color:var(--desk-muted);font-family:var(--display-serif);font-size:14px}
 .footer-inner a:hover{color:var(--desk-ink)}
-body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--display-serif);overflow-x:clip;position:relative}
+body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--ui);overflow-x:clip;position:relative}
 .card .field label{font:500 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--paper-muted)}
 .card .btn-primary,.cta .btn-primary{background:var(--paper-ink);color:var(--paper);box-shadow:3px 3px 0 var(--red-deep)}
 .card .btn-primary:hover,.cta .btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-deep);background:var(--paper-ink);color:var(--paper)}
