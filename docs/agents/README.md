@@ -148,6 +148,8 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 - Nema automatskog nastavka, pokretanja podagenata ni automatskog spajanja grana.
   Claude koristi `dontAsk` i ogranicene alate; blokiranu potrebnu radnju izvrsi kroz svoju
   uobicajenu interaktivnu sesiju. Popis alata nije OS sandbox. Codex koristi svoj sandbox.
+  Grok koristi `--sandbox workspace` samo za implementaciju, a `--sandbox read-only` za plan i pregled;
+  `--always-approve` se dodaje samo implementaciji.
 - CLI runner koristi native izvrsne datoteke. Ako Windows instalacija izlozi samo `.cmd`
   shim koji Node ne moze izravno pokrenuti, koristi native instalaciju ili pripremljeni
   prompt u interaktivnoj sesiji; runner ne ukljucuje shell radi zaobilazenja tog problema.
@@ -170,8 +172,10 @@ racuni prijavljeni ili da je stvarni model isporucio kvalitetnu LEKTA promjenu.
 ## Pretplatnicki nacin i autonomni kontroler (2026-09-09)
 
 `--subscription` je drugi, odvojen nacin naplate runnera: Claude poziv ide bez `--max-budget-usd` (jer
-se do naplate ne smije ni doci), Fable je iskljucen (nije u paketu), a postavljen `ANTHROPIC_API_KEY` u
-okolini je greska prije pripreme. Rucni `--budget-usd` nacin je nepromijenjen.
+se do naplate ne smije ni doci), Fable i oba Grok aliasa (`grok`, `build`) iskljuceni su jer ih taj
+profil ne pokriva, a postavljen `ANTHROPIC_API_KEY` u okolini je greska prije pripreme. Grok se pokrece
+samo u rucnom nacinu uz zasebno provjerenu xAI prijavu ili API naplatu. Rucni `--budget-usd` nacin je
+nepromijenjen.
 
 ```bash
 npm run agents -- prepare T02 --phase plan --agent astra --subscription
