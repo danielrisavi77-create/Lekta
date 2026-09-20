@@ -3,20 +3,21 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AGENTS, prepareJob, parseResult, validateQueue, PROMPT_ARG_PLACEHOLDER } from './core.mjs';
+import { AGENTS, prepareJob, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 
-export function buildSpawnArgs(job) {
+export function buildSpawnArgs(job, promptFile) {
   if (!job || !Array.isArray(job.args)) throw new Error('Job without args cannot be spawned');
-  const args = job.args.map((arg) => (arg === PROMPT_ARG_PLACEHOLDER ? job.prompt : arg));
-  if (args.includes(PROMPT_ARG_PLACEHOLDER)) throw new Error('Unsubstituted prompt placeholder in args');
+  if (job.args.includes(PROMPT_FILE_PLACEHOLDER) && !promptFile) throw new Error('Prompt file path is required');
+  const args = job.args.map((arg) => (arg === PROMPT_FILE_PLACEHOLDER ? promptFile : arg));
+  if (args.includes(PROMPT_FILE_PLACEHOLDER)) throw new Error('Unsubstituted prompt file placeholder in args');
   return args;
 }
 
-export function spawnJob(job, cwd, spawn = spawnSync) {
-  const args = buildSpawnArgs(job);
-  const promptInArgs = job.args.includes(PROMPT_ARG_PLACEHOLDER);
+export function spawnJob(job, promptFile, cwd, spawn = spawnSync) {
+  const args = buildSpawnArgs(job, promptFile);
+  const promptInFile = job.args.includes(PROMPT_FILE_PLACEHOLDER);
   return spawn(job.command, args, {
-    cwd, input: promptInArgs ? undefined : job.prompt, encoding: 'utf8', shell: false,
+    cwd, input: promptInFile ? undefined : job.prompt, encoding: 'utf8', shell: false,
     timeout: 30 * 60 * 1000, killSignal: 'SIGKILL', maxBuffer: 32 * 1024 * 1024,
   });
 }
@@ -115,7 +116,7 @@ function main() {
     // argv array + stdin, never a shell string. Existing CLI authentication is reused.
     // Grok requires `-p <prompt>` as an argv element; Codex/Claude take the prompt on stdin.
     releaseLock = false;
-    const result = spawnJob(job, root);
+    const result = spawnJob(job, join(out, 'prompt.md'), root);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
