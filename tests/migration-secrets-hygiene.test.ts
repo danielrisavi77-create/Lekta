@@ -273,4 +273,26 @@ describe('migration-hygiene gard grize', () => {
     }];
     expect(migrationHygieneProblems(alt)).toEqual([]);
   });
+
+  /**
+   * Treca strana istog omedjivanja: poziv u ELSE grani stoji IZA provjere postojanja posla, ali se
+   * izvodi tocno kad posla NEMA, dakle ne pada povremeno nego uvijek. Balans zato mora tretirati
+   * `else` na dubini nula kao zatvaranje zasticene grane.
+   */
+  it('ne prihvaca cron.unschedule u ELSE grani provjere postojanja', () => {
+    const mutated = [{
+      file: '9999_else_branch.sql',
+      sql: [
+        'do $$',
+        'begin',
+        "  if exists (select 1 from cron.job where jobname = 'a') then",
+        '    null;',
+        '  else',
+        "    perform cron.unschedule('a');",
+        '  end if;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
+  });
 });

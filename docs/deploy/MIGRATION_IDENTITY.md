@@ -267,6 +267,11 @@ taj posao kad su oba imena doslovna. Pokriveno s tri nova testa u
 `tests/migration-secrets-hygiene.test.ts` (dva hvataju, jedan je negativna kontrola nad
 ugnijezdenim ispravnim oblikom) i prosirenom mutacijom u `tests/gate-mutations.test.ts`.
 
+Uz to je istom prilikom zatvorena i treca strana iste rupe, nadjena samoprovjerom a ne pregledom:
+poziv u ELSE grani provjere stoji IZA nje, pa bi ga balans priznao kao zasticen, a izvodi se
+tocno kad posla NEMA, dakle pada uvijek. `else` na dubini nula zato zatvara zasticenu granu
+jednako kao `end if`; `elsif` i `elseif` granica namjerno ne hvata.
+
 ### Sto mora napraviti vlasnik, RUCNO, na produkciji
 
 Produkcija `zrrjttizjyfcxmcpgzml` ima 0059 VEC primijenjenu (verzija je zapisana u dnevniku).

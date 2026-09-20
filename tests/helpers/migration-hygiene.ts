@@ -173,8 +173,13 @@ const EXCEPTION_GUARD = /exception\s+when\s+others/i;
 const JOB_EXISTS_GUARD = /if\s+exists\s*\(\s*select\s+1\s+from\s+cron\.job\b/gi;
 /** Ime posla unutar uvjeta te provjere; bez njega se zastita ne moze vezati uz konkretan posao. */
 const GUARD_JOBNAME = /\bjobname\s*=\s*'((?:[^']|'')*)'/i;
-/** Granice `if ... end if` bloka. `end if` je naveden PRVI da ne bude pojeden kracom alternacijom. */
-const IF_BOUNDARY = /\bend\s+if\b|\bif\b/gi;
+/**
+ * Granice `if ... end if` bloka, ukljucujuci njegovu `else` granu. `end if` je naveden PRVI da ga
+ * kraca alternacija ne pojede. `else` je u popisu jer poziv u ELSE grani stoji IZA provjere, ali se
+ * izvodi bas kad posla NEMA, dakle nije zasticen nego zajamceno pada. Rijeci `elsif` i `elseif`
+ * granica namjerno NE hvata: `\belse\b` u njima nema granicu rijeci iza `else`.
+ */
+const IF_BOUNDARY = /\bend\s+if\b|\belse\b|\bif\b/gi;
 /** Doslovan argument `cron.unschedule('ime')`; varijabla ili izraz ne daju ime. */
 const UNSCHEDULE_LITERAL_ARG = /^\s*'((?:[^']|'')*)'/;
 
@@ -191,21 +196,28 @@ function literalJobName(stripped: string, after: number): string | null {
 }
 
 /**
- * Je li `if` blok koji je poceo prije `text` jos otvoren na kraju `text`.
+ * Jesmo li na kraju `text` jos u POZITIVNOJ grani `if` bloka koji je poceo prije njega.
  *
- * Broji se balans: `if` otvara, `end if` zatvara. Cim balans padne ispod nule, blok koji nas
- * zanima je ZATVOREN, pa sve iza njega vise nije pod njegovom zastitom. Ugnijezdeni `if ... end if`
- * se pritom ponisti sam sa sobom i ne zatvara roditelja.
+ * Broji se balans: `if` otvara, `end if` zatvara. Cim balans padne ispod nule, blok koji nas zanima
+ * je ZATVOREN, pa sve iza njega vise nije pod njegovom zastitom. Ugnijezdeni `if ... end if` se
+ * pritom ponisti sam sa sobom i ne zatvara roditelja.
+ *
+ * `else` na dubini nula zatvara granu jednako kao `end if`, i to nije sitnica: poziv u ELSE grani
+ * provjere "postoji li posao" izvodi se tocno onda kad posla NEMA, pa bi priznati ga kao zasticen
+ * znacilo propustiti zajamcen pad.
  */
-function ifBlockStillOpen(text: string): boolean {
+function inPositiveIfBranch(text: string): boolean {
   IF_BOUNDARY.lastIndex = 0;
   let depth = 0;
   for (;;) {
     const hit = IF_BOUNDARY.exec(text);
     if (!hit) break;
-    if (hit[0][0] === 'e' || hit[0][0] === 'E') {
+    const token = hit[0].toLowerCase();
+    if (token.startsWith('end')) {
       depth -= 1;
       if (depth < 0) return false;
+    } else if (token === 'else') {
+      if (depth === 0) return false;
     } else {
       depth += 1;
     }
@@ -228,7 +240,7 @@ function ifBlockStillOpen(text: string): boolean {
  * `do` bloku tiho proglasavao zasticenima sve kasnije pozive. Tocno taj oblik (migracija koja vodi
  * DVA posla, prvi zasticen, drugi zaboravljen) reproducira blokator zbog kojeg ovaj gard postoji,
  * a gard bi ga prijavio kao cist. Zato se sada trazi oboje:
- *   1. `if` blok te provjere jos je OTVOREN na mjestu poziva (balans `if` / `end if`), i
+ *   1. poziv je u POZITIVNOJ grani te provjere (balans `if` / `end if`, a `else` zatvara granu), i
  *   2. provjera imenuje BAS taj posao, kad su oba imena doslovna.
  * Kad ime nije doslovno (varijabla), usporedba se preskace i odlucuje samo balans; to je
  * svjesna granica garda, ne previd.
@@ -255,7 +267,7 @@ function unscheduleIsGuarded(stripped: string, body: DollarBody, at: number, len
 
   for (let k = candidates.length - 1; k >= 0; k -= 1) {
     const candidate = candidates[k];
-    if (!ifBlockStillOpen(before.slice(candidate.end))) continue;
+    if (!inPositiveIfBranch(before.slice(candidate.end))) continue;
     if (jobName !== null && candidate.name !== null && candidate.name !== jobName) continue;
     return true;
   }
