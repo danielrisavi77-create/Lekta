@@ -43,32 +43,48 @@ begin
     return;
   end if;
 
-  -- Idempotencija: zatecen posao se gasi, ali njegovo NEPOSTOJANJE nije greska.
-  -- Isti idiom kao 0009/0011/0016/0018/0019/0022/0034/0054.
-  begin
-    perform cron.unschedule('send-deadline-reminders');
-  exception when others then
-    null; -- job jos ne postoji
-  end;
-
+  -- REDOSLIJED JE UGOVOR: tajne se citaju PRIJE nego se dira zatecen posao.
+  -- Obrnuti redoslijed (prvo unschedule, pa izlaz zbog tajni koje fale) na produkciji bi UGASIO
+  -- posao koji radi i ne bi ga zamijenio nicim, pa bi podsjetnici tiho prestali ici. Ovako
+  -- odsutnost tajni ne dira nista: zatecen posao ostaje tocno kakav je bio.
+  -- Nalaz iz adversarijalnog pregleda (codex, 2026-09-20).
+  --
   -- Vault ne mora postojati (lokalni Postgres bez supabase_vault), pa je i citanje zasticeno.
+  -- `select ... into` bez `strict` vraca null kad retka nema, a kod duplog imena uzima prvi;
+  -- `order by ... limit 1` cini taj izbor odredjenim i ponovljivim umjesto proizvoljnog.
   begin
     select decrypted_secret into v_base_url
       from vault.decrypted_secrets
-     where name = 'lekta_functions_base_url';
+     where name = 'lekta_functions_base_url'
+     order by created_at desc
+     limit 1;
 
     select decrypted_secret into v_bearer
       from vault.decrypted_secrets
-     where name = 'lekta_cron_bearer';
+     where name = 'lekta_cron_bearer'
+     order by created_at desc
+     limit 1;
   exception when others then
     v_base_url := null;
     v_bearer := null;
   end;
 
   if coalesce(v_base_url, '') = '' or coalesce(v_bearer, '') = '' then
-    raise notice 'send-deadline-reminders nije zakazan: nema vault tajni (lekta_functions_base_url / lekta_cron_bearer)';
+    raise notice 'send-deadline-reminders nije zakazan i zatecen posao nije dirnut: nema vault tajni (lekta_functions_base_url / lekta_cron_bearer)';
     return;
   end if;
+
+  -- Idempotencija: zatecen posao se gasi, ali njegovo NEPOSTOJANJE nije greska.
+  -- Isti idiom kao 0009/0011/0016/0018/0019/0022/0034/0054.
+  -- `exception when others` je namjerno sirok jer `cron.unschedule` nepostojanje posla javlja kao
+  -- XX000 (internal_error), a ne kao razred koji se moze uze uhvatiti. Cijena je prihvatljiva:
+  -- `cron.schedule` je upsert po imenu posla, pa progutan neuspjeh gasenja ne moze proizvesti
+  -- dvostruk posao, nego najgore ostavi stari raspored koji sljedeci redak ionako prepise.
+  begin
+    perform cron.unschedule('send-deadline-reminders');
+  exception when others then
+    null; -- job jos ne postoji
+  end;
 
   v_command := format(
     'select net.http_post(url := %L, headers := jsonb_build_object(%L, %L, %L, %L), body := %L::jsonb);',

@@ -160,6 +160,38 @@ describe('migration-hygiene gard grize', () => {
     expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
   });
 
+  /**
+   * Nalaz adversarijalnog pregleda (codex, 2026-09-20): SQL je neosjetljiv na velicinu slova, pa
+   * bi `CRON.UNSCHEDULE(` prije ovog popravka posve zaobislo gard, a radilo bi jednako.
+   */
+  it('hvata nezasticen unschedule i kad je pisan velikim slovima', () => {
+    const mutated = [{ file: '9999_upper.sql', sql: "SELECT CRON.UNSCHEDULE('send-deadline-reminders');" }];
+    expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
+  });
+
+  /**
+   * Isti pregled je tvrdio da gard prihvaca nezasticen unschedule cim se IGDJE u istom bloku
+   * nadje `exception when others`. Ta je tvrdnja NETOCNA i ovaj test je prikiva: prozor unaprijed
+   * staje na prvom `begin`, pa se rukovatelj iz kasnijeg, nepovezanog bloka ne moze posuditi.
+   */
+  it('ne da se prevariti rukovateljem iz KASNIJEG nepovezanog bloka', () => {
+    const mutated = [{
+      file: '9999_borrowed.sql',
+      sql: [
+        'do $$',
+        'begin',
+        "  perform cron.unschedule('send-deadline-reminders');",
+        '  begin',
+        '    null;',
+        '  exception when others then',
+        '    null;',
+        '  end;',
+        'end $$;',
+      ].join('\n'),
+    }];
+    expect(migrationHygieneProblems(mutated).map((p) => p.kind)).toEqual(['unguarded-unschedule']);
+  });
+
   it('prihvaca i drugi valjan oblik zastite (if exists nad cron.job)', () => {
     const alt = [
       {

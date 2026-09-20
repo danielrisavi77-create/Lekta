@@ -220,15 +220,25 @@ PRODUKCIJSKU funkciju za slanje podsjetnika i slala poruke stvarnim korisnicima.
 0059 je prepisana kao jedan `do $$` blok koji:
 
 1. preskace sve uz `raise notice` ako pg_cron nije dostupan,
-2. gasi zatecen posao unutar `begin ... exception when others then null; end;`, pa nepostojanje
-   posla vise nije greska,
-3. cita `lekta_functions_base_url` i `lekta_cron_bearer` iz `vault.decrypted_secrets` (i samo to
+2. cita `lekta_functions_base_url` i `lekta_cron_bearer` iz `vault.decrypted_secrets` (i samo to
    citanje je zasticeno, jer vault ne mora postojati na lokalnom Postgresu),
-4. zakazuje posao SAMO ako su obje tajne prisutne i neprazne; inace javi
-   `send-deadline-reminders nije zakazan: nema vault tajni` i ne napravi nista,
+3. ako ijedna tajna fali, javi `notice` i izade NE DIRNUVSI zatecen posao,
+4. tek kad obje tajne postoje, gasi zatecen posao unutar
+   `begin ... exception when others then null; end;`, pa nepostojanje posla vise nije greska,
+   i zatim ga zakazuje ispocetka,
 5. naredbu za cron slaze kroz `format(... %L ...)`. To nije kozmetika: `cron.schedule` prima
    naredbu kao TEKST koji se kasnije izvodi, pa je navodnjavanje jedina obrana od injekcije i od
    pucanja na apostrofu u vrijednosti tajne.
+
+REDOSLIJED KORAKA 2 i 4 JE UGOVOR, ne stil. U prvoj izvedbi popravka unschedule je stajao PRIJE
+citanja tajni, pa bi ponovno pokretanje 0059 na produkciji (gdje posao radi, a vault tajne jos
+nisu postavljene) UGASILO posao i ne bi ga zamijenilo nicim: podsjetnici bi tiho prestali ici, a
+migracija bi prijavila uspjeh. Nasao je adversarijalni pregled drugim alatom (codex), kako
+`supabase/CLAUDE.md` i trazi za promjenu sigurnosne granice. Isti je pregled uocio i da je
+pretraga `cron.unschedule` u gardu bila osjetljiva na velicinu slova, pa bi je `CRON.UNSCHEDULE(`
+zaobislo. Oboje je popravljeno i pokriveno testom. Treci nalaz istog pregleda (slaganje niza
+zaobilazi tekstualni gard) nije popravljiv tekstualnom provjerom i zato je izricito zapisan kao
+granica garda u zaglavlju `tests/helpers/migration-hygiene.ts`, a ne presucen.
 
 Migracija je namjerno FAIL-QUIET, za razliku od susjednih cron migracija (0009, 0011, 0016, 0018,
 0019, 0022, 0034) koje su FAIL-CLOSED kad nema pg_crona. Ondje je rijec o retenciji osobnih

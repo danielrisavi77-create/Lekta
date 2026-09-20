@@ -21,6 +21,13 @@
  * drukcijem formatu. Zato se trazi TOKEN-OBLIK: `Bearer` + razmak + najmanje 20 znakova tokena.
  * Regexi su pisani doslovno u ovoj datoteci i provjereni okom (vodic: "Kontrolni bajt u
  * generiranom regexu": regex slozen kroz alat izgubi escape i gard prestane gristi).
+ *
+ * STO OVAJ GARD NE MOZE, i to se ne prikriva: on cita TEKST, pa ga slaganje niza zaobilazi.
+ * `'https://' || 'ref.supabase.co/functions/v1/x'`, `chr(...)` ili `decode(..., 'base64')` daju u
+ * izvodjenju isti URL i isti kljuc, a u izvoru nema ni jednog ni drugog oblika. Gard je zato
+ * zastita od GRESKE (izmjereni kvar je bio obican doslovan niz), ne od namjere. Protiv namjere
+ * stoje pregled promjene i gitleaks nad povijescu, ne ovaj test. Nalaz iz adversarijalnog
+ * pregleda drugim alatom (codex, 2026-09-20).
  */
 
 /** Jedan nalaz higijene nad jednom migracijom. */
@@ -155,7 +162,11 @@ const HARDCODED_PROJECT_HOST = /https:\/\/[a-z0-9]{16,}\.supabase\.co/;
 /** Token-oblik: `Bearer` + razmak + najmanje 20 znakova tokena. Vidi zaglavlje datoteke. */
 const BEARER_TOKEN_LITERAL = /Bearer\s+[A-Za-z0-9_\-.]{20,}/;
 
-const UNSCHEDULE = 'cron.unschedule(';
+/**
+ * Trazi se neosjetljivo na velicinu slova: SQL je case-insensitive, pa bi `CRON.UNSCHEDULE(`
+ * inace posve zaobislo gard, a da SQL radi jednako. Nalaz iz adversarijalnog pregleda (2026-09-20).
+ */
+const UNSCHEDULE_CALL = /cron\.unschedule\s*\(/gi;
 /** Idiom ovog repozitorija (0009, 0011, 0016, 0018, 0019, 0022, 0034, 0054). */
 const EXCEPTION_GUARD = /exception\s+when\s+others/i;
 /** Drugi valjan oblik: izricita provjera postojanja posla prije gasenja. */
@@ -179,11 +190,11 @@ function lineOf(text: string, index: number): number {
  * `begin` gard ne grize: nezasticen unschedule na vrhu bloka "posudio" bi `exception when others`
  * iz nekog kasnijeg, nepovezanog `begin ... end` bloka u istoj migraciji i prosao vakuumski.
  */
-function unscheduleIsGuarded(stripped: string, body: DollarBody, at: number): boolean {
+function unscheduleIsGuarded(stripped: string, body: DollarBody, at: number, len: number): boolean {
   const before = stripped.slice(body.start, at);
   if (JOB_EXISTS_GUARD.test(before)) return true;
 
-  const rest = stripped.slice(at + UNSCHEDULE.length, body.end);
+  const rest = stripped.slice(at + len, body.end);
   const stop = /\b(begin|end)\b/i.exec(rest);
   const window = stop ? rest.slice(0, stop.index) : rest;
   return EXCEPTION_GUARD.test(window);
@@ -214,13 +225,13 @@ export function migrationHygieneProblems(files: MigrationFile[]): MigrationHygie
       });
     }
 
-    let from = 0;
+    UNSCHEDULE_CALL.lastIndex = 0;
     for (;;) {
-      const at = stripped.indexOf(UNSCHEDULE, from);
-      if (at === -1) break;
-      from = at + UNSCHEDULE.length;
+      const hit = UNSCHEDULE_CALL.exec(stripped);
+      if (!hit) break;
+      const at = hit.index;
       const body = dollarBodies.find((b) => at >= b.start && at < b.end);
-      if (!body || !unscheduleIsGuarded(stripped, body, at)) {
+      if (!body || !unscheduleIsGuarded(stripped, body, at, hit[0].length)) {
         problems.push({
           file,
           kind: 'unguarded-unschedule',
