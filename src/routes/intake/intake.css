@@ -85,15 +85,17 @@
 .intake-cta{
   display:inline-flex;align-items:center;gap:9px;padding:13px 26px;
   background:var(--brand);color:var(--on-brand,#fff);border-radius:var(--radius-btn-lg);
-  /* MONO NA GUMBU NIJE IZUZETAK OD CETIRI GLASA nego njihova primjena: natpis nosi oznaku
-     formata datoteke (`.docx`), dakle kod, a kod je podatkovni glas. */
-  font-family:var(--mono);font-size:14px;letter-spacing:.02em;
+  /* GLAS JE INTER TIGHT, NE MONO, I TO JE ODLUKA IZ NALOGA, NE PREVID. Predlozak natpis gumba
+     crta monoom, a `design/README.md` mono doista drzi podatkovnim glasom. Ali nalog Z7 izricito
+     kaze "NE dodaj nikakav webfont", a ulaz mono NE ucitava: `var(--mono)` bi ovdje pao na
+     sustavni `ui-monospace` (na Windowsu Consolas), dakle tocno kvar zbog kojeg
+     `tests/entry-fonts.test.ts` postoji. Preuzima se MJERA predloska (14px, .02em), ne pismo. */
+  font-family:var(--ui);font-weight:650;font-size:14px;letter-spacing:.02em;
   box-shadow:0 10px 24px color-mix(in srgb,var(--brand) 26%,transparent);
   transition:transform .2s ease,box-shadow .2s ease;
 }
-/* Ulaz ucitava SAMO tezinu 400 monoa (vidi `src/shared/fonts-data.ts`), pa bi svaka veca tezina
-   ovdje bila lazna podebljanost koju crta preglednik. Oznaka formata se izdvaja glasom, ne rezom. */
-.intake-cta b{font-weight:inherit}
+/* Bez monoa se oznaka formata izdvaja REZOM, jer glas nije na raspolaganju. */
+.intake-cta b{font-weight:700}
 .intake-cta svg{width:17px;height:17px}
 .intake-paper:hover .intake-cta,.intake-paper:focus-visible .intake-cta{
   transform:translateY(-2px);box-shadow:0 14px 30px color-mix(in srgb,var(--brand) 34%,transparent);
@@ -111,9 +113,10 @@
    uvjet i odrediste, dakle oznake; do Z7 su to bila dva odvojena retka. */
 .intake-meta{
   /* 11px je mjera OZNAKE NA PAPIRU (zaglavlje, pecat, koraci, sitni otisak). Ovaj redak nosi
-     jedinu poveznicu ispod papira, pa ostaje na `--fs-ui-sm`, kao i predlozak (13px). */
-  margin-top:20px;color:var(--muted);font-family:var(--mono);font-size:var(--fs-ui-sm);
-  letter-spacing:.04em;
+     jedinu poveznicu ispod papira, pa ostaje na `--fs-ui-sm`, kao i predlozak (13px).
+     Obitelj je `--ui`, ne `--mono`: ulaz mono ne ucitava (vidi biljesku uz `.intake-cta`). */
+  margin-top:20px;color:var(--muted);font-family:var(--ui);font-size:var(--fs-ui-sm);
+  letter-spacing:.02em;
 }
 .intake-meta a{color:var(--muted);text-underline-offset:4px}
 .intake-meta a:hover,.intake-meta a:focus-visible{color:var(--brand)}
@@ -152,11 +155,9 @@
 /* Isti list, dva sadrzaja. Poziv nestaje cim dokument lezi na papiru, pa se stanje vidi NA
    predmetu umjesto kao poruka negdje ispod njega. `display` se prebacuje, ne `opacity`: skriveni
    poziv ne smije ostati u redoslijedu citaca ekrana ni hvatati fokus. */
-/* `position:relative` je SIDRO PECATA, i to je razlika koja se vidi tek na velikom ekranu.
-   Pecat je isprva bio sidren na sam papir, uz `top:58px` iz predloska. Papir ondje ima gornju
-   uvlaku od 34px, a ovdje `clamp(30px,5.5vw,52px)`, pa je na sirokom ekranu zaglavlje palo
-   nize od pecata i njegov desni natpis zavrsio ISPOD njega. Sidrenjem na `.intake-poziv` mjera
-   krece od prvog retka sadrzaja, dakle ista je na svakoj sirini. */
+/* `position:relative` NIJE vise sidro pecata (pecat je od pregleda Z7 u toku, vidi `.intake-pecat`)
+   nego sluzi stanjima papira: sadrzaj se prebacuje unutar ovog okvira. `justify-items:center`
+   centrira sve osim pecata, koji se sam vraca na desni rub s `justify-self:end`. */
 .intake-poziv{position:relative;display:grid;justify-items:center}
 .intake-karta{display:none;justify-items:center;gap:0;text-align:center}
 .intake-stage[data-intake-state="checking"] .intake-poziv,
@@ -208,8 +209,14 @@
 
 /* --- zaglavlje, pecat, koraci i podnozje papira (Z7) ------------------------------------------ */
 /* Papir je OBRAZAC. Zaglavlje gore (cija knjiga, koji list, koje stanje), pecat kao stanje koje se
-   vidi bez citanja, tri koraka kao postupak, sitni otisak dolje. Sve je mono, jer je sve podatak:
-   brojevi, oznake i statusi su po `design/README.md` iskljucivo IBM Plex Mono.
+   vidi bez citanja, tri koraka kao postupak, sitni otisak dolje.
+
+   GLAS JE INTER TIGHT, NE MONO. `design/README.md` te mete (brojevi, oznake, statusi) drzi
+   podatkovnim glasom, dakle IBM Plex Mono, ali nalog Z7 zabranjuje dodavanje webfonta, a ulaz
+   mono NE ucitava. `var(--mono)` bi zato pao na sustavni `ui-monospace` (na Windowsu Consolas):
+   obitelj koju nitko nije izabrao, tocno kvar zbog kojeg `tests/entry-fonts.test.ts` postoji.
+   Oznaka se ovdje gradi MJEROM (11px), RAZMAKOM SLOVA i REZOM, a ne pismom. Ako vlasnik odluci
+   da ulaz smije nositi treci glas, mijenja se ovaj blok I taj gard, zajedno.
 
    SVI OVI ELEMENTI ZIVE UNUTAR `.intake-poziv`, pa nestaju cim dokument legne na papir. Zaglavlje
    koje i dalje tvrdi "Nepregledano" nad dokumentom koji se upravo provjerava bilo bi netocno, a
@@ -217,22 +224,31 @@
 .intake-zaglavlje{
   display:flex;justify-content:space-between;align-items:baseline;gap:16px;
   width:100%;padding-bottom:14px;border-bottom:1px solid var(--paper-line);
-  color:var(--paper-muted);font-family:var(--mono);font-size:var(--fs-mono-label);
+  color:var(--paper-muted);font-family:var(--ui);font-weight:600;font-size:var(--fs-mono-label);
   letter-spacing:.08em;text-align:left;
 }
 /* Sirina broja je REZERVIRANA: `list-number.ts` ga zamijeni nakon ucitavanja, a bez tabularnih
    znamenki bi "0001" i "0013" bili razlicite sirine pa bi se desna strana zaglavlja trznula. */
 .intake-list-broj{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 
+/* PECAT JE U TOKU, NE IZNAD SADRZAJA, i to je popravak izmjerenog sudara, ne stilska sitnica.
+   Predlozak ga sidri apsolutno u gornji desni kut. Izracunato za 1440px: sadrzaj papira je ~538px,
+   naslov `clamp(40px,7vw,120px)` daje 100,8px pa "Ubaci rad." mjeri ~437px i centriran zauzima
+   x 50..488; pecat je ~136px sirok uz `right:0`, dakle x 402..538, i nakon `rotate(-9deg)` pada
+   preko zadnjih slova naslova. Na 1920px je naslov na stropu od 120px i preklop je veci.
+   Apsolutno sidro se time ne da popraviti pomakom, jer su obje mjere elasticne i rastu jedna
+   prema drugoj; u toku je sudar NEMOGUC, jer raspored sam rezervira redak.
+   Zakret ostaje: rotacija ne ulazi u raspored, pa nakon nje nista ne moze nalegnuti na naslov.
+   `transform-origin` je desni rub, pa se natpis spusta ulijevo i ostaje u svojoj koloni. */
 .intake-pecat{
-  position:absolute;top:44px;right:0;
+  justify-self:end;margin:16px 0 24px;
   padding:8px 14px;border:2.5px solid var(--red);border-radius:2px;
   /* OKVIR ide na `--red` (nije tekst, pa prag 4,5:1 za njega ne vrijedi), a TEKST na
      `--red-on-soft`, koji je za tekst na svijetlim plohama vec izmjeren. Papir je svijetao u OBJE
      teme, pa isti par vrijedi u obje. */
-  color:var(--red-on-soft);font-family:var(--mono);font-size:var(--fs-mono-label);
+  color:var(--red-on-soft);font-family:var(--ui);font-weight:700;font-size:var(--fs-mono-label);
   letter-spacing:.12em;text-transform:uppercase;line-height:1;
-  transform:rotate(-9deg);pointer-events:none;
+  transform:rotate(-9deg);transform-origin:100% 50%;pointer-events:none;
 }
 
 .intake-koraci{
@@ -242,7 +258,8 @@
 }
 .intake-koraci li{display:grid;gap:6px}
 .intake-korak-br{
-  color:var(--red-on-soft);font-family:var(--mono);font-size:var(--fs-mono-label);letter-spacing:.08em;
+  color:var(--red-on-soft);font-family:var(--ui);font-weight:700;
+  font-size:var(--fs-mono-label);letter-spacing:.08em;
 }
 .intake-korak-t{color:var(--paper-ink);font-family:var(--ui);font-size:13px;line-height:1.45}
 
@@ -250,7 +267,8 @@
    polovicu granice proizvoda (provjeravamo FORMU, ne sadrzaj). */
 .intake-foot{
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;width:100%;margin-top:26px;
-  color:var(--paper-muted);font-family:var(--mono);font-size:var(--fs-mono-label);letter-spacing:.04em;
+  color:var(--paper-muted);font-family:var(--ui);font-weight:600;
+  font-size:var(--fs-mono-label);letter-spacing:.04em;
 }
 
 /* --- podnozje ulaza --------------------------------------------------------------------------- */
@@ -290,11 +308,11 @@
   .intake-paper::before,.intake-paper::after{display:none}
   /* Tri stupca na 375 px daju stupac od stotinjak piksela i jednu rijec po retku. */
   .intake-koraci{grid-template-columns:1fr;gap:14px}
-  /* PECAT NESTAJE ISPOD 600px, ne seli se. Papir je ondje uzi od same sirine pecata plus teksta
-     uz koji bi stajao, pa bi na svakom mjestu prekrio necije slovo: dolje desno podnozje, gore
-     nadnaslov, sredinom naslov. Gubitak je nikakav jer je pecat DEKORACIJA (`aria-hidden`), a
-     njegovo znacenje ("Nepregledano") i dalje stoji u zaglavlju, kao tekst. */
-  .intake-pecat{display:none}
+  /* PECAT OSTAJE I NA USKOM EKRANU. Dok je bio apsolutan, ovdje je morao nestati jer je papir uzi
+     od pecata plus teksta ispod njega, pa bi prekrio necije slovo. U toku mu raspored rezervira
+     vlastiti redak: na 375px sadrzaj papira mjeri ~291px, a pecat ~136px, dakle stane bez sudara.
+     Smanjuje se samo razmak, jer je na uskom ekranu svaki redak skuplji. */
+  .intake-pecat{margin:12px 0 18px}
 }
 @media (prefers-reduced-motion:reduce){
   .intake-paper,.intake-cta{transition:none}

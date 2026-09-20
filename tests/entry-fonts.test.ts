@@ -246,30 +246,30 @@ describe('glasovi ulaza /', () => {
     expect(nalazi, nalazi.map((n) => `${n.vrsta}: ${n.selektor} -- ${n.detalj}`).join('\n')).toEqual([]);
   });
 
-  it('ulaz ucitava TOCNO tri glasa: Newsreader govori, Inter Tight oznacava, mono nosi podatke', () => {
-    // BROJ SE PROMIJENIO S DVA NA TRI U Z7, I TO JE ODLUKA, NE POPUSTANJE.
-    //
-    // Do Z7 je ulaz bio plakat i nije imao nijednu metu podatkovnog glasa, pa je mono bio cista
-    // cijena (mjerenje 2026-09-05, zbog kojeg je `fonts-document.ts` i razdvojen). Z7 papir je
-    // OBRAZAC: broj ulaznog lista, oznake zaglavlja, pecat stanja, brojevi koraka, sitni otisak i
-    // natpis gumba su po `design/README.md` tocno mono, jedini podatkovni glas. Mete sada postoje,
-    // pa bi izostavljanje obitelji znacilo da ih preglednik crta sustavnim `ui-monospace` (na
-    // Windowsu Consolas), dakle upravo kvar zbog kojeg ovaj list testova postoji.
-    //
-    // Cijena je JEDNA tezina (~28 kB: latin + latin-ext, koji hrvatski trazi), ne cijela obitelj.
+  it('ulaz ucitava TOCNO dva glasa: Newsreader govori, Inter Tight oznacava', () => {
+    // BROJ JE OSTAO DVA I KROZ Z7, iako je papir ulaza preslozen u obrazac i time dobio mete koje
+    // `design/README.md` drzi podatkovnim glasom (broj lista, oznake zaglavlja, pecat, brojevi
+    // koraka). Prvi prolaz Z7 je zbog njih uveo treci glas i ovu tvrdnju prosirio na tri imena;
+    // pregled je to odbio, jer nalog Z7 izricito kaze "NE dodaj nikakav webfont", pa je gard bio
+    // prilagodjen promjeni umjesto obrnuto. Mete se zato crtaju `var(--ui)`-jem uz mjeru (11px),
+    // razmak slova i rez; ako vlasnik ikad odluci drukcije, mijenja se OVA tvrdnja, svjesno.
     const { ucitane } = ulazSaDiska();
-    expect([...ucitane].sort()).toEqual(['IBM Plex Mono', 'Inter Tight Variable', 'Newsreader Variable']);
+    expect([...ucitane].sort()).toEqual(['Inter Tight Variable', 'Newsreader Variable']);
   });
 
-  it('GLAS DOKUMENTA (Source Serif 4) i dalje NE ulazi u graf ulaza', () => {
-    // Granica se SUZILA, nije pala. Source Serif 4 zrcali Wordov izlaz u pregledima, a `/` nema
-    // nijedan pregled; bez ove tvrdnje bi ga jedan uvoz vratio zajedno s monoom.
+  it('podatkovni glasovi NE ulaze u graf ulaza', () => {
+    // Source Serif 4 i IBM Plex Mono imaju posao na `/rad/` i alat-stranicama, ne ovdje. Bez ove
+    // tvrdnje bi ih jedan uvoz vratio, i traka s brojkama bi opet dobila treci glas.
     const graf = [...collectStaticGraph(ULAZ)].map((p) => p.split(/[\\/]/).join('/'));
     expect(graf.filter((p) => p.endsWith('/src/shared/fonts-document.ts'))).toEqual([]);
     expect(graf.some((p) => p.endsWith('/src/shared/fonts-core.ts'))).toBe(true);
-    // Mono dolazi kroz VLASTITI modul, ne kroz glas dokumenta: to je cijeli smisao razdvajanja.
-    expect(graf.some((p) => p.endsWith('/src/shared/fonts-data.ts'))).toBe(true);
-    expect([...ulazSaDiska().ucitane]).not.toContain('Source Serif 4 Variable');
+    // IMENOVANA ZABRANA ZA MODUL KOJI JE POSTOJAO. Prvi prolaz Z7 je mono doveo kroz zaseban
+    // `src/shared/fonts-data.ts`, dakle mimo glasa dokumenta, pa ga tvrdnja iznad ne bi vidjela.
+    // Modul je uklonjen; ova tvrdnja cuva da se ne vrati sporednim vratima.
+    expect(graf.filter((p) => p.endsWith('/src/shared/fonts-data.ts'))).toEqual([]);
+    const { ucitane } = ulazSaDiska();
+    expect([...ucitane]).not.toContain('Source Serif 4 Variable');
+    expect([...ucitane]).not.toContain('IBM Plex Mono');
   });
 
   it('rute s dokumentima I DALJE nose podatkovne glasove', () => {

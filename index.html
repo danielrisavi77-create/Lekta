@@ -63,7 +63,16 @@
 <section class="intake-stage" id="intakeStage" data-intake-state="idle" aria-labelledby="intakeTitle">
   <div class="intake-shell">
     <div class="intake-desk" id="paperCover">
-      <div class="intake-paper" id="intakeDropzone" role="button" tabindex="0" aria-controls="intakeFile" aria-describedby="intakeMeta" aria-busy="false">
+      <!-- IME GUMBA SE IZRICE, NE SKUPLJA IZ SADRZAJA. `role="button"` po accname racuna ime iz
+           potomaka, pa je do Z7 citac ekrana izgovarao cijeli poziv (~25 rijeci). Z7 je na papir
+           dodao zaglavlje, tri pune recenice koraka i podnozje, cime bi to naraslo na ~55 rijeci
+           pri SVAKOM fokusu. `aria-label` prekida to racunanje i daje jedno ime za jednu radnju;
+           sadrzaj papira i dalje stoji, ali kao opis ekrana, ne kao natpis gumba.
+           OGRANICENJE KOJE SE IMENUJE: potomci `role="button"` su po ARIA specifikaciji
+           prezentacijski, pa se `<ol>` koraka ionako ne cuje kao popis. To je zatecena posljedica
+           uloge na papiru, starija od Z7, i ne rjesava se ovdje jer bi trazila promjenu toka
+           uploada (zasebna odluka). Gard: tests/intake-layout.test.ts. -->
+      <div class="intake-paper" id="intakeDropzone" role="button" tabindex="0" aria-label="Odaberi .docx dokument ili ga ispusti ovdje" aria-controls="intakeFile" aria-describedby="intakeMeta" aria-busy="false">
         <!-- PAPIR IMA DVA LICA. `intake-poziv` je poziv na radnju, `intake-karta` je isti taj list
              nakon sto na njemu lezi dokument. Prebacuje ih CSS preko `data-intake-state` na
              `#intakeStage`, pa se stanje vidi NA papiru umjesto kao poruka ispod njega: isti
@@ -71,10 +80,13 @@
         <div class="intake-poziv">
           <!-- ZAGLAVLJE OBRASCA (Z7). Papir je URUDZBENI LIST, ne plakat: gore lijevo cija je
                knjiga, gore desno koji je list i u kojem je stanju. Broj lista je STVARAN redni
-               broj, ne ukras: koliko radova vec lezi u lokalnoj povijesti (`lekta.history.v2`,
-               isti izvor kao "Moji radovi"), plus ovaj. U HTML-u stoji "0001" pa stranica nikad
-               nije prazna; `src/routes/intake/list-number.ts` ga zamijeni nakon ucitavanja, a
-               sirina je rezervirana (cetiri znamenke, tabular-nums) da zamjena ne trzne redak. -->
+               broj, ne ukras: koliko ZAVRSENIH analiza ovaj preglednik pamti u `lekta.history.v2`,
+               plus ova. TO NIJE ISTI SKUP KAO "Moji radovi": ta ruta lokalne radove cita iz
+               IndexedDB sesija, pa dokument ostavljen prije kraja analize ondje postoji, a ovdje
+               se ne broji. Tocna granica i njezine posljedice stoje u
+               `src/routes/intake/list-number.ts`. U HTML-u stoji "0001" pa stranica nikad nije
+               prazna; taj modul ga zamijeni nakon ucitavanja, a sirina je rezervirana (cetiri
+               znamenke, tabular-nums) da zamjena ne trzne redak. -->
           <div class="intake-zaglavlje">
             <span>Lekta · Ulazni list</span>
             <span>Nº <span class="intake-list-broj" data-intake-list-broj>0001</span> · Nepregledano</span>

@@ -6,11 +6,10 @@ import { prikaziUlazniListBroj } from './list-number';
 import { mountDisplaySettings } from '../../shared/display-settings';
 import { playIntakeEntry } from './intake-motion';
 import '../../shared/ui-boot';
-// PODATKOVNI GLAS (Z7): papir ulaza je od preslagivanja u obrazac dobio mete monoa (broj lista,
-// oznake zaglavlja, pecat, brojevi koraka, sitni otisak, natpis gumba). `ui-boot` nosi samo dva
-// glasa, pa bi bez ovoga `var(--mono)` pao na sustavni `ui-monospace` (na Windowsu Consolas).
-// Source Serif 4 i dalje NE ulazi: `fonts-data` je samo mono, jedna tezina.
-import '../../shared/fonts-data';
+// ULAZ NOSI TOCNO DVA GLASA, i to je odluka vlasnika, ne propust. Z7 papir ima mete koje
+// `design/README.md` drzi podatkovnim glasom (broj lista, oznake zaglavlja, pecat, brojevi
+// koraka), ali nalog Z7 zabranjuje dodavanje webfonta, pa se te mete crtaju `var(--ui)`-jem uz
+// mjeru i razmak slova. Gard: `tests/entry-fonts.test.ts`.
 import '../../shared/page-chrome.css';  // ulaz NE uvozi radnu povrsinu: vidi mjerenje u tom listu
 import './intake.css';
 // Prazan stol pod lampom: postojeci sloj dubine (snop, prasina, sjene) BEZ demo dokumenta i bez
