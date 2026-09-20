@@ -306,7 +306,10 @@ code,kbd,samp{font-family:var(--mono)}
 .lekta-consent-banner p{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
 
 /* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
-   Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
+   Globalno mono pravilo (`strong,b{font-weight:600}`) sada stoji u `design-system.css`
+   (oko retka 169), page-app.css ga vise nema. Ne vracaj ga u page-app.css: taj list se
+   ucitava POSLIJE design-system.css s istom specificnoscu, pa bi njegovo pravilo pobijedilo
+   var-mehanizam i vratilo tezinu 600 u serif, tocno kvar koji je popravljen u ovom krugu. */
 .cta p strong,
 .cta p b,
 .tools-grid .tool-card p strong,

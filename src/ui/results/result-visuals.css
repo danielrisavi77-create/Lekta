@@ -1165,7 +1165,10 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .outlook__manual li { font-family: var(--display-serif, Georgia, serif); font-weight: 400;--emph-weight:400;--emph-style:italic }
 
 /* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
-   Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
+   Globalno mono pravilo (`strong,b{font-weight:600}`) sada stoji u `design-system.css`
+   (oko retka 169), page-app.css ga vise nema. Ne vracaj ga u page-app.css: taj list se
+   ucitava POSLIJE design-system.css s istom specificnoscu, pa bi njegovo pravilo pobijedilo
+   var-mehanizam i vratilo tezinu 600 u serif, tocno kvar koji je popravljen u ovom krugu. */
 .cockpit-header p strong,
 .cockpit-header p b,
 .cockpit-hero__copy p strong,
