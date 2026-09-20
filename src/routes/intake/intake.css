@@ -361,3 +361,8 @@
    ========================================================================== */
 
 .intake-koraci li{font-family:var(--display-serif);font-weight:400}
+
+/* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
+   Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
+.intake-koraci li strong,
+.intake-koraci li b{font-weight:400;font-style:italic}

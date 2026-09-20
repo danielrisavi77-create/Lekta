@@ -304,3 +304,12 @@ code,kbd,samp{font-family:var(--mono)}
 .cta p,
 .tools-grid .tool-card p,
 .lekta-consent-banner p{font-family:var(--display-serif);font-weight:400}
+
+/* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
+   Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
+.cta p strong,
+.cta p b,
+.tools-grid .tool-card p strong,
+.tools-grid .tool-card p b,
+.lekta-consent-banner p strong,
+.lekta-consent-banner p b{font-weight:400;font-style:italic}

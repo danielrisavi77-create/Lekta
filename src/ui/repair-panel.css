@@ -725,3 +725,18 @@
 .lekta-repair-panel__title-page-warnings p,
 .lekta-repair-text > p,
 .lekta-repair-text__preview li { font-family: var(--display-serif); font-weight: 400; }
+
+/* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
+   Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
+.lekta-repair-panel__confirm-box p strong,
+.lekta-repair-panel__confirm-box p b,
+.lekta-repair-panel__legal-footnote > p strong,
+.lekta-repair-panel__legal-footnote > p b,
+.lekta-repair-panel__title-page-form > p strong,
+.lekta-repair-panel__title-page-form > p b,
+.lekta-repair-panel__title-page-warnings p strong,
+.lekta-repair-panel__title-page-warnings p b,
+.lekta-repair-text > p strong,
+.lekta-repair-text > p b,
+.lekta-repair-text__preview li strong,
+.lekta-repair-text__preview li b{font-weight:400;font-style:italic}

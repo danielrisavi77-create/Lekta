@@ -1145,3 +1145,20 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .result-renderer-v1 .result-cockpit-advanced-head p,
 .rs--pitanje p,
 .outlook__manual li { font-family: var(--display-serif, Georgia, serif); font-weight: 400; }
+
+/* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
+   Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
+.cockpit-header p strong,
+.cockpit-header p b,
+.cockpit-hero__copy p strong,
+.cockpit-hero__copy p b,
+.cockpit-authority p strong,
+.cockpit-authority p b,
+.cockpit-finding__answer p strong,
+.cockpit-finding__answer p b,
+.result-renderer-v1 .result-cockpit-advanced-head p strong,
+.result-renderer-v1 .result-cockpit-advanced-head p b,
+.rs--pitanje p strong,
+.rs--pitanje p b,
+.outlook__manual li strong,
+.outlook__manual li b{font-weight:400;font-style:italic}

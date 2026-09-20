@@ -516,3 +516,14 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
 .premium-tool-index__signal p,
 .premium-viz-card > p,
 [data-premium-surface] .faq details p { font-family: var(--display-serif); font-weight: 400; }
+
+/* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
+   Globalno mono pravilo (`strong,b{font-weight:600}`) stoji u `page-app.css`. */
+.premium-tool-index__intro p strong,
+.premium-tool-index__intro p b,
+.premium-tool-index__signal p strong,
+.premium-tool-index__signal p b,
+.premium-viz-card > p strong,
+.premium-viz-card > p b,
+[data-premium-surface] .faq details p strong,
+[data-premium-surface] .faq details p b{font-weight:400;font-style:italic}
