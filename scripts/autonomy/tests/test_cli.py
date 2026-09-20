@@ -10,6 +10,7 @@ from unittest import mock
 from scripts.autonomy import cli
 from scripts.autonomy.policy import is_control_path
 from scripts.autonomy.store import Store
+from scripts.autonomy.tests.test_worker import git_repo as worker_git_repo
 from scripts.autonomy.worker import branch_changed_paths
 
 NOW = 1_800_000_000
@@ -223,6 +224,11 @@ def make_git_repo(tasks=None):
         assert out.returncode == 0, (args, out.stderr)
 
     run("init", "-q")
+    # Ime zadane grane NIJE konstanta nego `init.defaultBranch` stroja, a ovi testovi tvrdo trebaju
+    # `master` (osnovica posla, `rev-parse master`, objava). Bez ovoga cetiri testa mjere konfiguraciju
+    # stroja umjesto koda i padaju na svakom stroju s `main`. Isto vrijedi za `core.autocrlf`.
+    run("symbolic-ref", "HEAD", "refs/heads/master")
+    run("config", "core.autocrlf", "false")
     run("config", "user.email", "radnik@lokalno")
     run("config", "user.name", "Radnik")
     run("config", "commit.gpgsign", "false")
@@ -1074,6 +1080,81 @@ class CliProcessTest(unittest.TestCase):
         self.assertTrue(os.path.isfile(os.path.join(home, "status.json")))
         with open(os.path.join(home, "status.md"), encoding="utf-8") as fh:
             self.assertNotIn("USD", fh.read())
+
+
+class TestRepoBranchIsNotTheMachinesTest(unittest.TestCase):
+    """Minor 3 iz PR #93, drugi krug: prvi popravak je zakrpao samo `test_worker.git_repo`, dok je
+    `make_git_repo` iz ISTE grane ostao na `init.defaultBranch` stroja, pa su cetiri nova testa padala
+    na svakom stroju s `main` (izmjereno: `Ran 200 tests ... FAILED (failures=4)`). Gard zato mjeri SVE
+    pomocnike koji rade `git init`, i to IMENOVANO, da sljedeci pomocnik ne moze proci nepokriven."""
+
+    HELPERS = {"test_cli.py": staticmethod(make_git_repo), "test_worker.py": staticmethod(worker_git_repo)}
+
+    @staticmethod
+    @contextlib.contextmanager
+    def machine_prefers_main():
+        """Stroj koji zadanu granu zove `main`. GIT_CONFIG_GLOBAL + NOSYSTEM, dakle bez dodirivanja
+        korisnikove konfiguracije."""
+        path = os.path.join(tempfile.mkdtemp(), "gitconfig")
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write("[init]" + chr(10) + "	defaultBranch = main" + chr(10))
+        prev = {k: os.environ.get(k) for k in ("GIT_CONFIG_GLOBAL", "GIT_CONFIG_NOSYSTEM")}
+        os.environ["GIT_CONFIG_GLOBAL"] = path
+        os.environ["GIT_CONFIG_NOSYSTEM"] = "1"
+        try:
+            yield
+        finally:
+            for key, value in prev.items():
+                if value is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = value
+
+    @staticmethod
+    def branches(repo):
+        out = subprocess.run(["git", "for-each-ref", "--format=%(refname:short)", "refs/heads"],
+                             cwd=repo, capture_output=True, text=True, check=False, shell=False)
+        return sorted(line.strip() for line in out.stdout.splitlines() if line.strip())
+
+    def test_every_helper_pins_master_even_when_the_machine_prefers_main(self):
+        with self.machine_prefers_main():
+            for name, helper in sorted(self.HELPERS.items()):
+                repo = helper.__func__()
+                with self.subTest(helper=name):
+                    self.assertIn("master", self.branches(repo), (name, self.branches(repo)))
+                    self.assertNotIn("main", self.branches(repo), (name, self.branches(repo)))
+
+    def test_mutation_without_the_pin_the_machine_wins(self):
+        """Negativna kontrola: bez `symbolic-ref` isti stroj daje `main`. Bez nje bi gard bio vakuumski
+        (prosao bi i na stroju na kojem podmetnuta konfiguracija uopce ne djeluje)."""
+        with self.machine_prefers_main():
+            repo = tempfile.mkdtemp()
+            def run(*args):
+                out = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True,
+                                     check=False, shell=False)
+                self.assertEqual(out.returncode, 0, (args, out.stderr))
+            run("init", "-q")
+            run("config", "user.email", "radnik@lokalno")
+            run("config", "user.name", "Radnik")
+            run("config", "commit.gpgsign", "false")
+            with open(os.path.join(repo, "a.txt"), "w", encoding="utf-8") as fh:
+                fh.write("x" + chr(10))
+            run("add", "a.txt")
+            run("commit", "-qm", "pocetak")
+            self.assertEqual(self.branches(repo), ["main"], self.branches(repo))
+
+    def test_no_helper_escapes_the_guard(self):
+        """Pokrivenost je IMENOVANA, ne prebrojana: svaka testna datoteka koja radi `git init` mora biti
+        u HELPERS. Tocno taj razmak je i propustio prvi popravak."""
+        here = os.path.dirname(os.path.abspath(__file__))
+        initializers = set()
+        for name in sorted(os.listdir(here)):
+            if not name.startswith("test_") or not name.endswith(".py"):
+                continue
+            with open(os.path.join(here, name), encoding="utf-8") as fh:
+                if 'run("init"' in fh.read():
+                    initializers.add(name)
+        self.assertEqual(initializers, set(self.HELPERS), (initializers, set(self.HELPERS)))
 
 
 if __name__ == "__main__":
