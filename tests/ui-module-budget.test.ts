@@ -114,7 +114,10 @@ function bajtova(rel: string): number {
 // renderConfirmation iz repair-panel.ts), pa je uvoz u app.ts ostao mrtav. Uklonjen je iz uvoza
 // (DEEP_CAPABLE i trackProfileUpdate ostaju, oba se i dalje koriste). Ostatak mastera je automatski
 // spojen bez sukoba.
-const BUDZET_APP = 359005;
+// Z11, KRUG Z11 (2026-09-20): 359005 -> 357396. Uklonjen cetvrti cjenik (`PACKAGES`, 39/69/99 EUR) i
+// pojednostavljena narudzba rucne obrade (bez odabira paketa/payment linka po paketu): -1609 B.
+// Datoteka je smrsavila, pa se budzet SPUSTA (CLAUDE.md: "ovo SMANJUJE app.ts... NE dizi budzet").
+const BUDZET_APP = 357396;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //
