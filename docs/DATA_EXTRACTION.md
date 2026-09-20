@@ -33,7 +33,6 @@ npm run extract-data
 | COVERAGE_STATUS_META | coverage/coverage-status-meta.json |
 | SOCIAL_METHOD_REGISTRY / _SOURCE | methodology/social-methods.json, social-method-source.json |
 | FPZG_SUBMISSION_CALENDAR | submission/fpzg-calendar.json |
-| PACKAGES | packages.json |
 | CHECK_ITEMS | checks/check-items.json |
 | WORK_TYPE_LABELS | work-type-labels.json |
 
