@@ -385,6 +385,46 @@ describe('Z7 broj ulaznog lista', () => {
     expect(tekst(doc.querySelector('.intake-zaglavlje'))).toBe('Lekta · Ulazni list Nº 0013 · Nepregledano');
   });
 
+  /**
+   * OZICENJE: `main.ts` STVARNO ZOVE UPIS BROJA (pregled Z7, 2026-09-20).
+   *
+   * Tvrdnje iznad mjere PONASANJE funkcije nad stvarnim markupom, ali nijedna nije citala
+   * `src/routes/intake/main.ts`. Brisanje poziva `prikaziUlazniListBroj(document)` zato je
+   * prolazilo zeleno: broj bi na stranici zauvijek ostao "0001", a suite bi to zvala ispravnim.
+   * Mjere se obje polovice, jer jedna bez druge ne vidi kvar: ponasanje (test iznad, nad
+   * `index.html` markupom) i ozicenje (ovdje).
+   *
+   * OGRANICENJE KOJE SE IMENUJE: ovo je tvrdnja nad TEKSTOM modula, ne nad njegovim izvodjenjem.
+   * `main.ts` na kraju zove `start()`, pa bi ga uvoz u testu POKRENUO (IndexedDB, kontroler,
+   * ulazna sekvenca, CSS uvozi) i mjerio bi okolinu umjesto poziva.
+   */
+  const bezTsKomentara = (src: string): string => src
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/^[ \t]*\/\/.*$/gm, ' ');
+  const pozivi = (src: string): string[] => [...bezTsKomentara(src).matchAll(/prikaziUlazniListBroj\s*\(/g)].map((m) => m[0]);
+
+  it('OZICENJE: main.ts uvozi i zove upis broja, i to PRIJE ulazne sekvence', () => {
+    const main = read('src/routes/intake/main.ts');
+    expect(main, 'main.ts ne uvozi upis broja')
+      .toMatch(/import \{[^}]*prikaziUlazniListBroj[^}]*\} from '\.\/list-number'/);
+    expect(pozivi(main), 'main.ts ne zove upis broja; broj bi zauvijek ostao 0001').toHaveLength(1);
+    // Redoslijed je dio ugovora: zamjena "0001" -> stvaran broj mora se dogoditi dok se papir jos
+    // slaze, a ne kao vidljiv skok nakon sekvence.
+    const cist = bezTsKomentara(main);
+    expect(cist.indexOf('prikaziUlazniListBroj('), 'upis broja je pao iza ulazne sekvence')
+      .toBeLessThan(cist.indexOf('playIntakeEntry('));
+    // MUTACIJA: brisanje poziva u KOPIJI teksta mora oboriti tvrdnju.
+    const bezPoziva = main.replace('prikaziUlazniListBroj(document);', '');
+    expect(bezPoziva, 'podmetanje se nije primilo; provjeri oblik poziva').not.toBe(main);
+    expect(pozivi(bezPoziva), 'gard ne vidi uklonjen poziv').toHaveLength(0);
+    // KONTROLA SMJERA: poziv koji stoji samo u komentaru NIJE ozicenje (komentari nisu kod, i taj
+    // razred laznog nalaza je u ovom repozitoriju vec izmjeren na grafu modula i UX specovima).
+    expect(pozivi('// prikaziUlazniListBroj(document);')).toHaveLength(0);
+    expect(pozivi('/* zove se ovako: prikaziUlazniListBroj(document) */')).toHaveLength(0);
+    // BASELINE: nad nemutiranim izvorom gard NE prijavljuje nista.
+    expect(pozivi(main)).toHaveLength(1);
+  });
+
   it('markup bez polja za broj ne baca (stranica bez zaglavlja i dalje radi)', () => {
     const prazan = document.implementation.createHTMLDocument('prazno');
     expect(() => prikaziUlazniListBroj(prazan)).not.toThrow();
