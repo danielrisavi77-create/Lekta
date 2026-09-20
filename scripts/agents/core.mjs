@@ -1,5 +1,17 @@
 /** Provider-neutral task handoff. No process execution or queue writes here. */
 export const PROMPT_FILE_PLACEHOLDER = '__LEKTA_PROMPT_FILE__';
+export const GROK_MIN_VERSION = '1.0.34';
+
+export function parseGrokVersion(output) {
+  const match = String(output ?? '').match(/\b(\d+)\.(\d+)\.(\d+)\b/);
+  if (!match) return { version: null, supported: false };
+  const version = match.slice(1, 4).map(Number);
+  const minimum = GROK_MIN_VERSION.split('.').map(Number);
+  const supported = version[0] > minimum[0]
+    || (version[0] === minimum[0] && version[1] > minimum[1])
+    || (version[0] === minimum[0] && version[1] === minimum[1] && version[2] >= minimum[2]);
+  return { version: match[0], supported };
+}
 
 export const AGENTS = Object.freeze({
   astra: { command: 'codex', model: 'gpt-6-astra', role: 'coordinator' },
@@ -147,8 +159,7 @@ export function parseResult(command, stdout, exitCode) {
         && Number.isInteger(result.num_turns) && result.num_turns > 0
         && result.modelUsage != null && typeof result.modelUsage === 'object'
         && Object.keys(result.modelUsage).length > 0;
-      const legacySuccess = result.type === 'result' && result.is_error === false;
-      if ((!currentSuccess && !legacySuccess) || result.is_error === true || result.ok === false
+      if (!currentSuccess || result.is_error === true || result.ok === false
           || result.error != null || String(result.subtype ?? '').startsWith('error')) {
         return { ok: false, reportedModels: [] };
       }

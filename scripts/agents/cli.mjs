@@ -3,7 +3,17 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AGENTS, prepareJob, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
+import { AGENTS, GROK_MIN_VERSION, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
+
+export function diagnoseProviderFailure(command, stderr) {
+  if (command === 'grok' && /bwrap:.*Creating new namespace failed: Operation not permitted/i.test(stderr ?? '')) {
+    return {
+      diagnostic: 'grok_sandbox_unavailable',
+      diagnosticMessage: 'Grok could not start its Bubblewrap sandbox on this host. Enable supported user namespaces or run it on a compatible host; the runner will not disable the sandbox.',
+    };
+  }
+  return { diagnostic: null, diagnosticMessage: null };
+}
 
 export function buildSpawnArgs(job, promptFile) {
   if (!job || !Array.isArray(job.args)) throw new Error('Job without args cannot be spawned');
@@ -49,7 +59,13 @@ function main() {
       const versionArgs = cli === 'grok' ? ['version'] : ['--version'];
       const result = spawnSync(cli, versionArgs, { encoding: 'utf8', timeout: 10_000 });
       const line = (result.stdout || result.stderr || '').trim().split('\n')[0];
-      console.log(`${cli}: ${result.status === 0 ? line : 'unavailable'}`);
+      if (cli === 'grok' && result.status === 0) {
+        const version = parseGrokVersion(line);
+        const support = version.supported ? 'supported' : `unsupported; minimum ${GROK_MIN_VERSION}`;
+        console.log(`${cli}: ${line} [${support}]`);
+      } else {
+        console.log(`${cli}: ${result.status === 0 ? line : 'unavailable'}`);
+      }
     }
     console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login (or XAI_API_KEY). No model was called.');
     return;
@@ -113,17 +129,19 @@ function main() {
     const out = join(root, '.artifacts/agents', `${id}-${Date.now()}-${process.pid}`);
     mkdirSync(out, { recursive: true });
     writeFileSync(join(out, 'prompt.md'), job.prompt);
-    // argv array + stdin, never a shell string. Existing CLI authentication is reused.
-    // Grok requires `-p <prompt>` as an argv element; Codex/Claude take the prompt on stdin.
+    // argv array, never a shell string. Existing CLI authentication is reused.
+    // Grok reads the prompt artifact; Codex/Claude take the prompt on stdin.
     releaseLock = false;
     const result = spawnJob(job, join(out, 'prompt.md'), root);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
     const parsed = parseResult(job.command, result.stdout ?? '', result.status);
+    const diagnosis = diagnoseProviderFailure(job.command, result.stderr ?? '');
     const report = { task: id, phase, agent, baseHead, requestedModel: AGENTS[agent].model,
       reportedModels: parsed.reportedModels, exitCode: result.status, signal: result.signal,
       error: result.error?.message ?? null,
+      ...diagnosis,
       retainedLock: releaseLock ? null : lock,
       status: parsed.ok && !result.error ? 'needs_verification' : 'failed',
       note: 'Queue unchanged. Coordinator must verify actual model, patch, required checks and independent review.' };

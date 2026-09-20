@@ -31,6 +31,8 @@ adversarijalni pregled prema AGENTS.md.
    na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login` (ili
    `XAI_API_KEY` za headless). Grok: https://docs.x.ai/build/overview
    (`curl -fsSL https://x.ai/cli/install.sh | bash` ili `npm install -g @xai-official/grok`).
+   Runner je verificiran s Grok CLI 1.0.34 i odbija oslanjanje na stariji JSON ugovor;
+   `doctor` oznacava instalaciju kao `supported` ili `unsupported; minimum 1.0.34`.
    Skripta ne instalira alate niti prenosi prijave. Zadani model aliasa `grok`/`build` je `grok-4.6` (sluzbena preporuka za kod, 2026-09-20);
    prilagodi u `scripts/agents/core.mjs` ako `grok models` pokaze drugaciji ID (npr. `grok-build-0.1`).
 2. Iz korijena repozitorija pokreni `npm run agents -- doctor` i `npm run agents -- list`.
@@ -150,6 +152,9 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
   uobicajenu interaktivnu sesiju. Popis alata nije OS sandbox. Codex koristi svoj sandbox.
   Grok koristi `--sandbox workspace` samo za implementaciju, a `--sandbox read-only` za plan i pregled;
   `--always-approve` se dodaje samo implementaciji.
+- Ako Grok prijavi `bwrap: Creating new namespace failed: Operation not permitted`, rezultat sadrzi
+  dijagnostiku `grok_sandbox_unavailable`. Omoguci Bubblewrap/user namespace podrsku na hostu ili
+  pokreni runner na kompatibilnom hostu. Runner namjerno ne prelazi na `--sandbox off`.
 - CLI runner koristi native izvrsne datoteke. Ako Windows instalacija izlozi samo `.cmd`
   shim koji Node ne moze izravno pokrenuti, koristi native instalaciju ili pripremljeni
   prompt u interaktivnoj sesiji; runner ne ukljucuje shell radi zaobilazenja tog problema.
