@@ -42,7 +42,7 @@ import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
-import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
+import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
@@ -1234,8 +1234,20 @@ const MUTATIONS: Mutation[] = [
     imitates:
       'zeleni security workflow koji broj high/critical nalaza u punom grafu samo ispise (continue-on-error), ' +
       'pa porast s 21 na 23 prodje neopazeno jer nista ne tvrdi strop',
-    caught: () => compareToRatchet(auditRatchet.fullGraphHighCritical + 1, auditRatchet).verdict === 'above',
-    cleanBefore: () => compareToRatchet(auditRatchet.fullGraphHighCritical, auditRatchet).verdict === 'equal',
+    caught: () => {
+      const packages = auditRatchet.fullGraphHighCriticalPackages;
+      const mutated = [...packages.slice(0, -1), '__novi-ranjivi-paket__'];
+      const audit = { vulnerabilities: Object.fromEntries(mutated.map((name) => [name, { severity: 'high' }])) };
+      return compareAuditToRatchet(audit, auditRatchet).verdict === 'above';
+    },
+    cleanBefore: () => {
+      const audit = {
+        vulnerabilities: Object.fromEntries(
+          auditRatchet.fullGraphHighCriticalPackages.map((name) => [name, { severity: 'high' }]),
+        ),
+      };
+      return compareAuditToRatchet(audit, auditRatchet).verdict === 'equal';
+    },
   },
   /**
    * Vanjski audit 2026-09-08, nalaz 1. Gate dokaza izdanja je zastarjelost mjerio `git diff`-om medju
