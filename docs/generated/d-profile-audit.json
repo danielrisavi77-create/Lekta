@@ -1,0 +1,2471 @@
+{
+  "schemaVersion": 1,
+  "summary": {
+    "profileCount": 37,
+    "registryProfileCount": 34,
+    "legalDepartmentProfileCount": 3,
+    "dispositionCounts": {
+      "manual-content-blocked": 31,
+      "needs-scored-rule": 3,
+      "repair-candidate": 3
+    }
+  },
+  "profiles": [
+    {
+      "profileId": "adu-produkcija-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "adu-produkcija-diplomski--page-count",
+          "checkId": "page-count",
+          "label": "Opseg teorijskog diplomskog rada (40-50 kartica)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "adu-produkcija-pravilnik-2017",
+          "sourcePage": "Odjeljak 6.3 Diplomski rad",
+          "quote": "Svaki student MA studija Odsjeka produkcije duzan je u 4. semestru napisati teorijski diplomski rad opsega 40-50 kartica, napisan u skladu sa sveucilisnim pravilima pisanja diplomskih radova.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "agr-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "agr-diplomski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (autor-godina)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 5. Pravila citiranja, a) Citiranje izvora u tekstu",
+          "quote": "prema Husnjaku (2014.) morfogenetska grada tla ... / prema morfogenetskoj gradi tla (Husnjak 2014.)",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-diplomski--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+          "quote": "Preporuke za tehnicko oblikovanje rada: rad se pise velicinom slova 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-diplomski--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+          "quote": "Preporuke za tehnicko oblikovanje rada: rad se pise velicinom slova 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-diplomski--margins",
+          "checkId": "margins",
+          "label": "Margine",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+          "quote": "margine rada trebaju iznositi 2,5 cm",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-diplomski--page-count",
+          "checkId": "page-count",
+          "label": "Opseg osnovnog teksta (stranice)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 1. Diplomski rad",
+          "quote": "Preporuka je da diplomski rad bude opsega 20 - 50 stranica osnovnog teksta na papiru A4 formata - bez naslovnice, sadrzaja, popisa literature i priloga",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-diplomski--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+          "quote": "stranice se numeriraju od sazetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "agr-diplomski--paper-size",
+          "checkId": "paper-size",
+          "label": "Format papira",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 1. Diplomski rad",
+          "quote": "Preporuka je da diplomski rad bude opsega 20 - 50 stranica osnovnog teksta na papiru A4 formata",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezne cjeline diplomskog rada",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 2. Struktura i sadrzaj diplomskog rada (str. 4)",
+          "quote": "sazetak s kljucnim rijecima (na HR i ENGL.) / sadrzaj / uvod / sredisnji dio rada / zakljucak ili zakljucna razmatranja / literatura",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-diplomski--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "agr-upute-diplomski-2019",
+          "sourcePage": "odjeljak 2. Struktura i sadrzaj diplomskog rada",
+          "quote": "Sadrzaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj zapocinju",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "agr-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "agr-zavrsni--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (autor-godina)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "4. Pravila citiranja i izrada popisa literature",
+          "quote": "Citiranje izvora - jedan autor / dva autora / vise autora (autor, godina)",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-zavrsni--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
+          "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-zavrsni--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
+          "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-zavrsni--margins",
+          "checkId": "margins",
+          "label": "Margine",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
+          "quote": "margine rada trebaju iznositi 2,5 cm",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-zavrsni--page-count",
+          "checkId": "page-count",
+          "label": "Opseg osnovnog teksta (stranice)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "1. Uvodne odrednice",
+          "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-zavrsni--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
+          "quote": "stranice se numeriraju od sazetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "agr-zavrsni--paper-size",
+          "checkId": "paper-size",
+          "label": "Format papira",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "1. Uvodne odrednice",
+          "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-zavrsni--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezne cjeline zavrsnog rada",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "odjeljak 2. Struktura i sadrzaj zavrsnog rada (str. 4)",
+          "quote": "naslov / sazetak (do 1000 znakova, 3-5 kljucnih rijeci) / sadrzaj / uvod / ... / zakljucak / popis literature",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "agr-zavrsni--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "agr-upute-zavrsni-2017",
+          "sourcePage": "2. Struktura i sadrzaj zavrsnog rada",
+          "quote": "Sadrzaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj zapocinju",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "algebra-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "algebra-diplomski--font",
+          "checkId": "font",
+          "label": "Font (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski--margins",
+          "checkId": "margins",
+          "label": "Margine (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski--paper-size",
+          "checkId": "paper-size",
+          "label": "Format papira A4 (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski--word-count",
+          "checkId": "word-count",
+          "label": "Opseg rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "algebra-pravilnik-radovi-2026",
+          "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+          "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "algebra-diplomski-odnosi-s-javnoscu--font",
+          "checkId": "font",
+          "label": "Font (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski-odnosi-s-javnoscu--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski-odnosi-s-javnoscu--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski-odnosi-s-javnoscu--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski-odnosi-s-javnoscu--margins",
+          "checkId": "margins",
+          "label": "Margine (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski-odnosi-s-javnoscu--paper-size",
+          "checkId": "paper-size",
+          "label": "Format papira A4 (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-diplomski-odnosi-s-javnoscu--word-count",
+          "checkId": "word-count",
+          "label": "Opseg rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "algebra-pravilnik-radovi-2026",
+          "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+          "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "algebra-specijalisticki",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "algebra-specijalisticki--font",
+          "checkId": "font",
+          "label": "Font (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-specijalisticki--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-specijalisticki--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-specijalisticki--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-specijalisticki--margins",
+          "checkId": "margins",
+          "label": "Margine (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-specijalisticki--paper-size",
+          "checkId": "paper-size",
+          "label": "Format papira A4 (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-specijalisticki--word-count",
+          "checkId": "word-count",
+          "label": "Opseg rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "algebra-pravilnik-radovi-2026",
+          "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+          "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "algebra-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "algebra-zavrsni--font",
+          "checkId": "font",
+          "label": "Font (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-zavrsni--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-zavrsni--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-zavrsni--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-zavrsni--margins",
+          "checkId": "margins",
+          "label": "Margine (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-zavrsni--paper-size",
+          "checkId": "paper-size",
+          "label": "Format papira A4 (predlozak, currency-rizik)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+          "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+          "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "algebra-zavrsni--word-count",
+          "checkId": "word-count",
+          "label": "Opseg rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "algebra-pravilnik-radovi-2026",
+          "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+          "quote": "Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "alu-doktorski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "alu-doktorski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (delegiran na sveucilisne smjernice)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "alu-pravila-smjernice-doktorandi",
+          "sourcePage": "Smjernice - disertacija",
+          "quote": "korektna upotreba citata",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "alu-doktorski--page-count",
+          "checkId": "page-count",
+          "label": "Opseg disertacije (kartice, minimum)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "alu-vodic-doktorski-2026",
+          "sourcePage": "5. Doktorski rad (model A, teorijski rad manjeg opsega)",
+          "quote": "teorijskog rada (disertacije) manjeg opsega u pisanom obliku od minimalno 30 kartica",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        },
+        {
+          "ruleId": "alu-doktorski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni dijelovi doktorskog rada",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "alu-vodic-doktorski-2026",
+          "sourcePage": "5. Doktorski rad",
+          "quote": "prakticnog rad (umjetnicko ostvarenje) i teorijskog rada",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "alu-grafika-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "alu-grafika-diplomski--page-count",
+          "checkId": "page-count",
+          "label": "Opseg pisanog obrazlozenja (15-25 kartica)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "alu-pravilnik-diplomski-2014",
+          "sourcePage": "Clanak 49 (Graficki odsjek)",
+          "quote": "Pisano obrazlozenje sastoji se od najmanje 15 a najvise 25 kartica teksta uz slikovni materijal koji ukljucuje i reprodukcije rada. Pisano obrazlozenje treba biti ispisano u maksimalnoj velicini formata A4 i tvrdo uvezano.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "arh-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "arh-diplomski--paper-size",
+          "checkId": "paper-size",
+          "label": "Format knjizice (A3) i izlozbenog postera (A0)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "arh-pravilnik-diplomski-2013",
+          "sourcePage": "clanak 16.",
+          "quote": "Cetiri primjerka knjizice velicine A3 koja sadrzi:",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "arh-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezne cjeline knjizice diplomskog rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "arh-pravilnik-diplomski-2013",
+          "sourcePage": "clanak 16.",
+          "quote": "pisani dio s obrazlozenjem projekta, tehnickim pokazateljima i literaturom/izvorima",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "arh-diplomski--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "arh-pravilnik-diplomski-2013",
+          "sourcePage": "clanak 16.",
+          "quote": "naslovnu stranicu, sadrzaj",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "dizajn-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "dizajn-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezne cjeline diplomskog rada (istrazivacko-teorijski + projektni dio)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "dizajn-pravilnik-diplomski-2016",
+          "sourcePage": "Clanak 3",
+          "quote": "Diplomski rad je cjelovita obrada utvrdjene teme, a sastoji se od dva dijela: istrazivacko-teorijskog dijela i projektnog dijela.",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "fesb-diplomski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (vlastiti brojcani sustav, nije imenovani standard)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fesb-upute-diplomski-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1]).",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "fesb-diplomski--font",
+          "checkId": "font",
+          "label": "Font (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-diplomski-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-diplomski--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-diplomski-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-diplomski--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-diplomski-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-diplomski--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-diplomski-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-diplomski--margins",
+          "checkId": "margins",
+          "label": "Margine (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-diplomski-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-diplomski--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica (od Uvoda, donji desni kut)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fesb-upute-diplomski-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Stranice teksta rada moraju biti numerirane, navodjenjem broja stranice u njezinom donjem, desnom uglu, pri cemu numeracija stranica zapocinje od prvog poglavlja (Uvod).",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "fesb-zavrsni--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (vlastiti brojcani sustav, nije imenovani standard)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fesb-upute-zavrsni-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1]).",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "fesb-zavrsni--font",
+          "checkId": "font",
+          "label": "Font (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-zavrsni-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-zavrsni--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-zavrsni-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-zavrsni--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-zavrsni-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-zavrsni--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-zavrsni-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-zavrsni--margins",
+          "checkId": "margins",
+          "label": "Margine (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fesb-upute-zavrsni-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5, preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fesb-zavrsni--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica (od Uvoda, donji desni kut)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fesb-upute-zavrsni-2017",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+          "quote": "Stranice teksta rada moraju biti numerirane, navodjenjem broja stranice u njezinom donjem, desnom uglu, pri cemu numeracija stranica zapocinje od prvog poglavlja (Uvod).",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "ffzg-informacijske-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "ffzg-informacijske-zavrsni--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (Harvard/APA, odreuje mentor)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "ffzg-inf-diplomski-2024",
+          "sourcePage": "odjeljak 3.6. Literatura",
+          "quote": "U radu je potrebno koristiti Harvardski, APA ili neki drugi stil citiranja, a odreuje ga mentor.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "ffzg-informacijske-zavrsni--font",
+          "checkId": "font",
+          "label": "Font",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "ffzg-inf-diplomski-2024",
+          "sourcePage": "odjeljak 3.8. Izgled i stilovi",
+          "quote": "Font moze biti Arial ili Times New Roman, a predlosci su dostupni na web stranicama Odsjeka.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "ffzg-informacijske-zavrsni--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "ffzg-inf-diplomski-2024",
+          "sourcePage": "odjeljak 3.1. Struktura rada",
+          "quote": "poglavlje od kojeg pocinje numeracija poglavlja i numeracija stranica",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "ffzg-informacijske-zavrsni--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezne cjeline rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "ffzg-inf-diplomski-2024",
+          "sourcePage": "odjeljak 3.1. Struktura rada",
+          "quote": "Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "ffzg-informacijske-zavrsni--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "ffzg-inf-diplomski-2024",
+          "sourcePage": "odjeljak 3.1. Struktura rada",
+          "quote": "Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        },
+        {
+          "ruleId": "ffzg-informacijske-zavrsni--word-count",
+          "checkId": "word-count",
+          "label": "Opseg teksta (najmanje 25 kartica)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "ffzg-inf-diplomski-2024",
+          "sourcePage": "odjeljak 3.2. Opseg rada",
+          "quote": "Zavrsni rad mora imati najmanje 25 kartica teksta (45.000 znakova s razmacima), a diplomski",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "fpz-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "fpz-diplomski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
+          "quote": "tue spoznaje i formulacije, odnosno navodi upotrijebljenu literaturu (izvor) i to moze ciniti",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-diplomski--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-diplomski--footnote-size",
+          "checkId": "footnote-size",
+          "label": "Velicina fusnota (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-diplomski--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-diplomski--margins",
+          "checkId": "margins",
+          "label": "Margine",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-diplomski--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 6.4. Uvod",
+          "quote": "ujedno i prva stranica rada, tj. stranica kojom zapocinje numeriranje (za numeraciju se",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "fpz-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni elementi diplomskog rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 3.2. Elementi diplomskog rada",
+          "quote": "Diplomski rad mora sadrzavati ove elemente, slozene redoslijedom prikazanim na slici",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "fpz-diplomski--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 6.3. Sadrzaj",
+          "quote": "Sadrzaj je obvezan.",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "fpz-zavrsni--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
+          "quote": "tue spoznaje i formulacije, odnosno navodi upotrijebljenu literaturu (izvor) i to moze ciniti",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-zavrsni--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-zavrsni--footnote-size",
+          "checkId": "footnote-size",
+          "label": "Velicina fusnota (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-zavrsni--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-zavrsni--margins",
+          "checkId": "margins",
+          "label": "Margine",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "fpz-upute-2026",
+          "sourcePage": "Odjeljak 7 \"Tehnicke upute za izradu zavrsnog i diplomskog rada\", str. 13",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm).",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "fpz-zavrsni--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 6.4. Uvod",
+          "quote": "ujedno i prva stranica rada, tj. stranica kojom zapocinje numeriranje (za numeraciju se",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "fpz-zavrsni--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni elementi zavrsnog rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 2.2. Elementi zavrsnog rada",
+          "quote": "Zavrsni rad mora imati ove elemente, slozene redoslijedom prikazanim na slici 1:",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "fpz-zavrsni--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+          "sourcePage": "odjeljak 6.3. Sadrzaj",
+          "quote": "Sadrzaj je obvezan.",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-av",
+      "disposition": "needs-scored-rule",
+      "rules": [
+        {
+          "ruleId": "fpzg-novinarstvo-zavrsni-av--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "fpzg-pravila-navodenja-citiranja",
+          "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+          "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "geof-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "geof-diplomski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (autor-godina)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "geof-naputak-ocjenski-2000",
+          "sourcePage": "odjeljak 1. Ustroj (kompozicija), Literatura",
+          "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "geof-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezatne cjeline ocjenskog rada",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "geof-naputak-ocjenski-2000",
+          "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+          "quote": "Rad ne mora nuzno",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "geof-diplomski--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "geof-naputak-ocjenski-2000",
+          "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+          "quote": "Obvezatni dijelovi oznaceni su zvjezdicom ( * )",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "geof-doktorski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "geof-doktorski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (autor-godina)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "geof-naputak-ocjenski-2000",
+          "sourcePage": "odjeljak 1. Ustroj (kompozicija), Literatura",
+          "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "geof-doktorski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezatne cjeline ocjenskog rada",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "geof-naputak-ocjenski-2000",
+          "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+          "quote": "Rad ne mora nuzno",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "geof-doktorski--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "geof-naputak-ocjenski-2000",
+          "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+          "quote": "Obvezatni dijelovi oznaceni su zvjezdicom ( * )",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "gradri-diplomski",
+      "disposition": "repair-candidate",
+      "rules": [
+        {
+          "ruleId": "gradri-diplomski--heading-rules",
+          "checkId": "heading-rules",
+          "label": "Pravila naslova (numerirano, razina 1 velika+bold, razina 2 bold, razina 3 bold+kurziv)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "gradri-upute-2022",
+          "sourcePage": "Odjeljak 3.1 \"Tekst opcenito\", str. 7",
+          "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba dodijeliti odgovarajuci naslov. Naslov poglavlja pise se VELIKIM PODEBLJANIM SLOVIMA, velicine 14 pt. Svako novo poglavlje treba poceti na novoj stranici. Prva razina potpoglavlja pise se malim podebljanim slovima velicine 12 pt., a druga razina potpoglavlja malim podebljanim kosim slovima velicine 12 pt.",
+          "disposition": "assisted-candidate",
+          "fixerId": "heading-style-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "gradri-zavrsni",
+      "disposition": "repair-candidate",
+      "rules": [
+        {
+          "ruleId": "gradri-zavrsni--heading-rules",
+          "checkId": "heading-rules",
+          "label": "Pravila naslova (numerirano, razina 1 velika+bold, razina 2 bold, razina 3 bold+kurziv)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "gradri-upute-2022",
+          "sourcePage": "Odjeljak 3.1 \"Tekst opcenito\", str. 7",
+          "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba dodijeliti odgovarajuci naslov. Naslov poglavlja pise se VELIKIM PODEBLJANIM SLOVIMA, velicine 14 pt. Svako novo poglavlje treba poceti na novoj stranici. Prva razina potpoglavlja pise se malim podebljanim slovima velicine 12 pt., a druga razina potpoglavlja malim podebljanim kosim slovima velicine 12 pt.",
+          "disposition": "assisted-candidate",
+          "fixerId": "heading-style-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "par-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "par-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni dio rada (izjava o akademskoj cestitosti)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "par-pravilnik-2023",
+          "sourcePage": "Clanak 10 stavak 2 (str. 3)",
+          "quote": "Izjava o akademskoj čestitosti sastavni je dio završnog / diplomskog rada.",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "par-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "par-zavrsni--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni dio rada (izjava o akademskoj cestitosti)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "par-pravilnik-2023",
+          "sourcePage": "Clanak 10 stavak 2 (str. 3)",
+          "quote": "Izjava o akademskoj čestitosti sastavni je dio završnog / diplomskog rada.",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "radno-socijalno-pravo",
+      "disposition": "repair-candidate",
+      "rules": [
+        {
+          "ruleId": "radno-socijalno-pravo--footnote-font",
+          "checkId": "footnote-font",
+          "label": "Font fusnota",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+          "sourcePage": "str. 3, odjeljak 2 (font fusnota implicitno)",
+          "quote": "Tip slova Times New Roman; za tekst u biljeskama velicina slova 10.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "radno-socijalno-pravo--footnote-size",
+          "checkId": "footnote-size",
+          "label": "Velicina fusnota",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+          "sourcePage": "str. 3, odjeljak 2",
+          "quote": "Za tekst u biljeskama (fusnotama) potrebno je koristiti velicinu slova 10.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "radno-socijalno-pravo--footnote-spacing",
+          "checkId": "footnote-spacing",
+          "label": "Prored fusnota",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+          "sourcePage": "str. 3, odjeljak 2 (bez proreda = jednostruki)",
+          "quote": "Za tekst u biljeskama potrebno je koristiti velicinu slova 10, bez proreda i razmaka nakon svake biljeske.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "radno-socijalno-pravo--heading-rules",
+          "checkId": "heading-rules",
+          "label": "Oblikovanje naslova po razinama",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+          "sourcePage": "str. 3, odjeljak 5 (Oznacavanje cjelina i sadrzaj)",
+          "quote": "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) oznacavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima.",
+          "disposition": "assisted-candidate",
+          "fixerId": "heading-style-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        },
+        {
+          "ruleId": "radno-socijalno-pravo--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeriranje stranica",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+          "sourcePage": "str. 3, odjeljak 2",
+          "quote": "Stranice trebaju biti oznacene arapskim brojevima (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "radno-socijalno-pravo--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+          "sourcePage": "str. 2, odjeljak 1 (Opce napomene)",
+          "quote": "Svi radovi moraju imati sadrzaj, uvod, razradu teme po smislenim cjelinama i zakljucak.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "legal-department"
+    },
+    {
+      "profileId": "riteh-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "riteh-diplomski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (numericki, uglate zagrade)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Upute, literatura",
+          "quote": "U tekstu se literatura navodi unutar pravokutnih zagrada [1]. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "riteh-diplomski--font",
+          "checkId": "font",
+          "label": "Font (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-diplomski--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-diplomski--heading-rules",
+          "checkId": "heading-rules",
+          "label": "Pravila naslova (numerirano, razina 1 velika slova)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Upute, tehnicko oblikovanje",
+          "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina potpoglavlja veličinom slova 12 pt.",
+          "disposition": "assisted-candidate",
+          "fixerId": "heading-style-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        },
+        {
+          "ruleId": "riteh-diplomski--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-diplomski--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-diplomski--margins",
+          "checkId": "margins",
+          "label": "Margine (preporuka, lijeva asimetricna)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "riteh-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "riteh-zavrsni--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (numericki, uglate zagrade)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Upute, literatura",
+          "quote": "U tekstu se literatura navodi unutar pravokutnih zagrada [1]. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "riteh-zavrsni--font",
+          "checkId": "font",
+          "label": "Font (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-zavrsni--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-zavrsni--heading-rules",
+          "checkId": "heading-rules",
+          "label": "Pravila naslova (numerirano, razina 1 velika slova)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Upute, tehnicko oblikovanje",
+          "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina potpoglavlja veličinom slova 12 pt.",
+          "disposition": "assisted-candidate",
+          "fixerId": "heading-style-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        },
+        {
+          "ruleId": "riteh-zavrsni--justify",
+          "checkId": "justify",
+          "label": "Poravnanje (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-zavrsni--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "riteh-zavrsni--margins",
+          "checkId": "margins",
+          "label": "Margine (preporuka, lijeva asimetricna)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "riteh-upute-radovi-2025",
+          "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+          "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "sociologija",
+      "disposition": "needs-scored-rule",
+      "rules": [
+        {
+          "ruleId": "sociologija--font",
+          "checkId": "font",
+          "label": "Font glavnog teksta",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-sociologija-upute",
+          "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+          "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sociologija--font-size",
+          "checkId": "font-size",
+          "label": "Velicina fonta glavnog teksta",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-sociologija-upute",
+          "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+          "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sociologija--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored glavnog teksta",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-sociologija-upute",
+          "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+          "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sociologija--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeriranje stranica",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-sociologija-upute",
+          "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+          "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sociologija--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni dijelovi rada",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-sociologija-upute",
+          "sourcePage": "odjeljak 'Opcenita struktura rada' (obvezni dijelovi rada)",
+          "quote": "Pisani rad mora imati: naslovnicu, kratak sadrzaj, uvod, razradu rada po poglavljima, zakljucak, popis literature i popis priloga (ukoliko ih ima).",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sociologija--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-sociologija-upute",
+          "sourcePage": "odjeljak 'Opcenita struktura rada' (obvezni dijelovi rada)",
+          "quote": "Kratak sadrzaj mora imati popis svih naslova poglavlja i potpoglavlja s odgovarajucom stranicom na kojoj poglavlje/potpoglavlje pocinje.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "legal-department"
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "sumfak-diplomski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (autor-godina)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Pravila citiranja i izrada popisa literature",
+          "quote": "Citirati se može izravno – koristeći navodnike, i neizravno – prepričavanjem, sažimanjem. Preporučuje se neizravno citiranje.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--font",
+          "checkId": "font",
+          "label": "Font",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "preporučuju se fontovi Arial, Times New Roman, Calibri",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--justify",
+          "checkId": "justify",
+          "label": "Obostrano poravnanje (justify)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "treba obostrano poravnati tekst (justify)",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--margins",
+          "checkId": "margins",
+          "label": "Margine",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "margine rada trebaju iznositi 2,5 cm",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--page-count",
+          "checkId": "page-count",
+          "label": "Opseg osnovnog teksta (stranice)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Diplomski rad",
+          "quote": "Preporuka je da diplomski rad bude opsega najmanje 30 stranica osnovnoga teksta na papiru formata A4 bez naslovnice, sadržaja, popisa literature i priloga.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Tehnicko oblikovanje rada",
+          "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "sumfak-diplomski--paper-size",
+          "checkId": "paper-size",
+          "label": "Format papira",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Diplomski rad",
+          "quote": "Preporuka je da diplomski rad bude opsega najmanje 30 stranica osnovnoga teksta na papiru formata A4 bez naslovnice, sadržaja, popisa literature i priloga.",
+          "disposition": "advisory-only",
+          "fixerId": "paper-size-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezne cjeline diplomskog rada",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+          "quote": "Dijelovi rada su sljedeći:",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-diplomski--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+          "quote": "Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "sumfak-zavrsni--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (autor-godina)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Pravila citiranja i izrada popisa literature",
+          "quote": "Citirati se može izravno – koristeći navodnike, i neizravno – prepričavanjem, sažimanjem. Preporučuje se neizravno citiranje.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--font",
+          "checkId": "font",
+          "label": "Font",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "preporučuju se fontovi Arial, Times New Roman, Calibri",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--justify",
+          "checkId": "justify",
+          "label": "Obostrano poravnanje (justify)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "treba obostrano poravnati tekst (justify)",
+          "disposition": "advisory-only",
+          "fixerId": "alignment-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--margins",
+          "checkId": "margins",
+          "label": "Margine",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+          "quote": "margine rada trebaju iznositi 2,5 cm",
+          "disposition": "advisory-only",
+          "fixerId": "margins-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeracija stranica",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Tehnicko oblikovanje rada",
+          "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezne cjeline zavrsnog rada",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+          "quote": "Dijelovi rada su sljedeći:",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "sumfak-zavrsni--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+          "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+          "quote": "Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "trgovacko-pravo",
+      "disposition": "needs-scored-rule",
+      "rules": [
+        {
+          "ruleId": "trgovacko-pravo--footnote-font",
+          "checkId": "footnote-font",
+          "label": "Font fusnota",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-trgovacko-upute",
+          "sourcePage": "str. 2, odjeljak FONT, PRORED (font fusnota implicitno)",
+          "quote": "Rad se pise upotrebom fonta Times New Roman velicine 12 s proredom 1,5; velicina fonta u biljeskama iznosi 10.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "trgovacko-pravo--footnote-size",
+          "checkId": "footnote-size",
+          "label": "Velicina fusnota",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-trgovacko-upute",
+          "sourcePage": "str. 2, odjeljak FONT, PRORED",
+          "quote": "Velicina fonta u biljeskama iznosi 10 s proredom 1,15 izmedu redova teksta.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "trgovacko-pravo--footnote-spacing",
+          "checkId": "footnote-spacing",
+          "label": "Prored fusnota",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-trgovacko-upute",
+          "sourcePage": "str. 2, odjeljak FONT, PRORED",
+          "quote": "Velicina fonta u biljeskama iznosi 10 s proredom 1,15 izmedu redova teksta.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "trgovacko-pravo--page-numbers",
+          "checkId": "page-numbers",
+          "label": "Numeriranje stranica",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-trgovacko-upute",
+          "sourcePage": "str. 2, odjeljak FONT, PRORED I DRUGE FORMALNOSTI",
+          "quote": "Stranice Rada moraju biti numerirane na doljnjem desnom rubu stranice (naslovna stranica se ne numerira).",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "trgovacko-pravo--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni dijelovi rada",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-trgovacko-upute",
+          "sourcePage": "str. 1, odjeljak STRUKTURA",
+          "quote": "Rad je nuzno strukturirati tako da sadrzi uvod, sredisnji dio rada, zakljucak te popis literature. Prije uvoda nalazi se sadrzaj rada. Prije uvoda potrebno je navesti popis koristenih kratica.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "trgovacko-pravo--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": false,
+          "sourceId": "pravo-katedra-trgovacko-upute",
+          "sourcePage": "str. 1, odjeljak STRUKTURA",
+          "quote": "Prije uvoda nalazi se sadrzaj rada sa svim poglavljima i oznacenim brojem stranica za svako poglavlje.",
+          "disposition": "advisory-only",
+          "fixerId": null,
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "legal-department"
+    },
+    {
+      "profileId": "umas-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "umas-diplomski--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni dijelovi rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "umas-pravilnik-zavrsni-diplomski-2019",
+          "sourcePage": "Članak 9. st. 2. t. c) (PDF str. 5; struktura navedena i u Cl. 9. st. 1. t. 1-6, PDF str. 4-5)",
+          "quote": "pisani rad treba biti u PDF-u kompletan: korica, naslovna stranica, Izjava o akademskoj čestitosti, sažetak ( TDK ) na hrvatskom i engleskom jeziku, ključne riječi na hrvatskom i engleskom jeziku, sadržaj, literatura - na isti način kao da je otisnut i uvezan.",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "umas-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "umas-zavrsni--required-sections",
+          "checkId": "required-sections",
+          "label": "Obvezni dijelovi rada",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "umas-pravilnik-zavrsni-diplomski-2019",
+          "sourcePage": "Članak 9. st. 2. t. c) (PDF str. 5; struktura navedena i u Cl. 9. st. 1. t. 1-6, PDF str. 4-5)",
+          "quote": "pisani rad treba biti u PDF-u kompletan: korica, naslovna stranica, Izjava o akademskoj čestitosti, sažetak ( TDK ) na hrvatskom i engleskom jeziku, ključne riječi na hrvatskom i engleskom jeziku, sadržaj, literatura - na isti način kao da je otisnut i uvezan.",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "unidu-elektro-diplomski--page-count",
+          "checkId": "page-count",
+          "label": "Najmanji opseg (50 stranica)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "unidu-elektro-upute-diplomski-eir",
+          "sourcePage": "Tocka o opsegu rada",
+          "quote": "Opsega je od najmanje 50 stranica i formata sukladno uobicajenim standardima publikacija.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "vsite-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "vsite-diplomski--page-count",
+          "checkId": "page-count",
+          "label": "Opseg (50-60 str.)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "vsite-pravilnik-2014",
+          "sourcePage": "Članak 7. st. 2",
+          "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        },
+        {
+          "ruleId": "vsite-diplomski--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "vsite-pravilnik-2014",
+          "sourcePage": "Članak 7. st. 2",
+          "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "vsite-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "vsite-zavrsni--page-count",
+          "checkId": "page-count",
+          "label": "Opseg (30-40 str.)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "vsite-pravilnik-2014",
+          "sourcePage": "Članak 7. st. 2",
+          "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+          "disposition": "manual-content",
+          "fixerId": null,
+          "reason": "pravilo mjeri opseg ili sadrzaj i ne smije se popravljati pisanjem rada"
+        },
+        {
+          "ruleId": "vsite-zavrsni--toc",
+          "checkId": "toc",
+          "label": "Sadrzaj",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "vsite-pravilnik-2014",
+          "sourcePage": "Članak 7. st. 2",
+          "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+          "disposition": "assisted-candidate",
+          "fixerId": "toc-field-fixer",
+          "reason": "postoji deterministicki assisted fixer koji trazi potvrdu zahvata"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "vuka-sigurnost-diplomski",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "vuka-sigurnost-diplomski--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (obavezno, numericki po redoslijedu)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "vuka-sigurnost-diplomski--font",
+          "checkId": "font",
+          "label": "Font (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "vuka-sigurnost-diplomski--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "vuka-sigurnost-diplomski--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "registry"
+    },
+    {
+      "profileId": "vuka-sigurnost-zavrsni",
+      "disposition": "manual-content-blocked",
+      "rules": [
+        {
+          "ruleId": "vuka-sigurnost-zavrsni--citation-style",
+          "checkId": "citation-style",
+          "label": "Stil citiranja (obavezno, numericki po redoslijedu)",
+          "status": "verified",
+          "scored": true,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "unsupported",
+          "fixerId": null,
+          "reason": "nema sigurnog deterministickog fixera za ovu dimenziju"
+        },
+        {
+          "ruleId": "vuka-sigurnost-zavrsni--font",
+          "checkId": "font",
+          "label": "Font (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "vuka-sigurnost-zavrsni--font-size",
+          "checkId": "font-size",
+          "label": "Velicina slova (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "advisory-only",
+          "fixerId": "font-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        },
+        {
+          "ruleId": "vuka-sigurnost-zavrsni--line-spacing",
+          "checkId": "line-spacing",
+          "label": "Prored (preporuka)",
+          "status": "advisory",
+          "scored": false,
+          "sourceId": "vuka-sigurnost-upute-2026",
+          "sourcePage": "Upute SIZ 2026",
+          "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+          "disposition": "advisory-only",
+          "fixerId": "line-spacing-fixer",
+          "reason": "pravilo nije bodovano i ne moze samo podici profil na B"
+        }
+      ],
+      "registryKind": "registry"
+    }
+  ]
+}
