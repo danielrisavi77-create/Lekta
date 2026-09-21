@@ -35,3 +35,24 @@ mutacija `supply-chain/porast-nalaza-nevidljiv`. Bez toga bi grupa C mogla naras
 
 - PR #63: `npm audit fix --package-lock-only`, pun graf 23 -> 14 (grupa C zatvorena).
 - Grana `deps/netlify-cli-27`: `netlify-cli` 26.2 -> 27.5.2, pun graf 14 -> 7. Preostalih 7: `@netlify/dev`, `@netlify/images`, `ipx`, `sharp`, `netlify-cli` (bez objavljenog popravka i u 27.x; iznimka grupe A ostaje do 2026-10-09) te `vite`/`vitest` (grupa B, zaseban PR s vitest 5).
+
+## Ponovna provjera 2026-09-21
+
+Provjera je ponovljena nad trenutačnim commitiranim `package-lock.json`, bez izmjene ovisnosti:
+
+- `npm run audit:ratchet`: puni graf ima **7 high/critical** nalaza, jednako ratchetu 7.
+- `npm audit --omit=dev --json`: produkcijski graf ima **0** low, moderate, high i critical nalaza.
+- Trenutačne zaključane izravno važne verzije su `netlify-cli` 27.5.2, `vitest` 2.1.9,
+  `vite` 8.1.4, `@netlify/dev` 5.0.5, `@netlify/images` 2.0.1, `ipx` 3.1.1 i `sharp` 0.34.5.
+- `npm run check:edge-lock -- --selftest` prolazi s 11 zaključanih modula, a
+  `npm run check:edge` prolazi za svih 27 Edge funkcija.
+- Lokalni toolchain je Node 24.14.1, npm 11.11.0 i Deno 2.9.3. CI provjerava Node 20 i 24,
+  instalira npm 11.11.0 i koristi Deno 2.x, što je usklađeno s `packageManager`, workflowom i
+  `supabase/functions/deno.json`.
+
+Ovo nije dokaz čiste instalacije: worktree trenutačno koristi junction na zajednički
+`node_modules`, a `npm ls` zato prijavljuje ekstrane pakete iz drugih stabala. Čista `npm ci`
+instalacija nije pokrenuta jer je na disku ostalo približno 262 MB; taj dokaz treba ponoviti u
+izoliranom stablu čim bude dostupno dovoljno prostora. TypeScript i dalje namjerno obuhvaća samo
+`src/`, dok se Edge kod provjerava zasebnim Deno gateom; izvan `src/` postoji 741 TypeScript/MTS
+datoteka, pa se široko proširenje obuhvata ne uvodi bez zasebnog, scoped plana.
