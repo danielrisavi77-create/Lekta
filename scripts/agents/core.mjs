@@ -60,6 +60,13 @@ export function validateQueue(queue) {
 export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
 export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'build']);
 
+/**
+ * `options.overrideTask` postoji SAMO za `phase === 'review'` i samo za autonomni kontroler: on zna tko je
+ * upravo implementirao zadatak, a `docs/agents/tasks.json` pise koordinator i kontroler ga ne smije mijenjati.
+ * Override se primjenjuje na dvije provjere pregleda (status, implementationAgent) i NIGDJE drugdje: prompt
+ * nosi pravi zadatak iz reda, `implement` grana i dalje cita sirovi status (inace bi override bio rupa kroz
+ * koju se zaobilazi provjera spremnosti), a pravilo "pregled trazi drugog providera" i dalje grize.
+ */
 export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   const billingMode = options.billingMode ?? 'budget';
   if (!BILLING_MODES.includes(billingMode)) throw new Error(`Unknown billing mode: ${billingMode}`);
@@ -77,8 +84,9 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
     }
   }
   if (phase === 'review') {
-    if (task.status !== 'in_review') throw new Error(`${id} must be in_review`);
-    const implementation = AGENTS[task.implementationAgent];
+    const effectiveTask = options.overrideTask ? { ...task, ...options.overrideTask } : task;
+    if (effectiveTask.status !== 'in_review') throw new Error(`${id} must be in_review`);
+    const implementation = AGENTS[effectiveTask.implementationAgent];
     if (!implementation || implementation.role !== 'implementer') throw new Error('Missing implementationAgent');
     if (implementation.command === agent.command) throw new Error('Review requires a different provider');
   }

@@ -161,6 +161,11 @@ def validate_config(cfg: dict) -> list[str]:
         problems.append("repository mora biti owner/name")
     if not isinstance(cfg.get("policyVersion"), str) or not cfg.get("policyVersion"):
         problems.append("policyVersion je obavezan")
+    worker_repo = cfg.get("workerRepoPath", None)
+    if worker_repo is not None and (not isinstance(worker_repo, str) or not worker_repo.strip()):
+        # Kljuc je NEOBAVEZAN i zadano `null` cuva staro ponasanje (radnikovo stablo je cwd), ali prazan niz je
+        # tipfeler koji bi tiho vratio isti fallback.
+        problems.append("workerRepoPath mora biti staza ili null")
     if not isinstance(cfg.get("publisherEnabled"), bool):
         problems.append("publisherEnabled mora biti bool")
     prefixes = cfg.get("autoLowRiskPathPrefixes")

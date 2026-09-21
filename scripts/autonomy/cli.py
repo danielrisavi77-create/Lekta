@@ -32,7 +32,10 @@ from .remote import load_remotes, token_fingerprint
 from .report import write_report
 from .signals import collect
 from .store import Store
-from .worker import API_KEY_ENV, changed_line_count, changed_paths, prepare_job_via_node, resolve_launcher, run_phase, scrubbed_env
+from .worker import (API_KEY_ENV, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
+                     changed_line_count, changed_paths, commit_worker_tree, implementation_worktree_blocked,
+                     prepare_job_via_node, resolve_base_ref, resolve_launcher, run_phase, scrubbed_env,
+                     start_job_branch)
 
 PHASE_ORDER = ("planning", "implementing", "reviewing", "verifying", "ready_to_publish", "publishing")
 PHASE_TO_AGENT_PHASE = {"planning": "plan", "implementing": "implement", "reviewing": "review"}
@@ -219,6 +222,20 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
     }
 
 
+def _worker_repo_state(config: dict | None) -> dict:
+    """Moze li implementacija uopce krenuti u ovoj instalaciji, i zasto ne.
+
+    Bez ovoga je jedini nacin da operater sazna da `workerRepoPath` nije postavljen bio tick koji zavrsi kao
+    `blocked`, a do 2026-09-13 ni to: `implement` nije bio dostizan pa se preduvjet nikad nije ni mjerio.
+    """
+    cfg = config or {}
+    declared = cfg.get("workerRepoPath")
+    repo = declared or os.getcwd()
+    dedicated = bool(declared) and os.path.realpath(repo) != os.path.realpath(os.getcwd())
+    return {"path": repo, "declared": bool(declared), "dedicated": dedicated,
+            "blocked": implementation_worktree_blocked(repo, dedicated=dedicated)}
+
+
 def doctor(*, config: dict | None, config_problems: list[str], write_profile: bool = False, attest: dict | None = None,
            home: str | None = None) -> dict:
     home = home or home_dir()
@@ -244,6 +261,7 @@ def doctor(*, config: dict | None, config_problems: list[str], write_profile: bo
         "repository": _repo_visibility((config or {}).get("repository")),
         "osIsolation": {"proven": False, "detail": "radnik i izdavac dijele OS korisnika dok se ne postavi zaseban identitet; produkcijska objava ostaje blokirana (plan 4)"},
         "publisher": _publisher_state(home, config),
+        "workerRepo": _worker_repo_state(config),
     }
     report["configFingerprint"] = _config_fingerprint(config, tools)
     previous = load_billing_profile(home)
@@ -310,6 +328,40 @@ def default_sources(config: dict, home: str) -> list[dict]:
     return sources
 
 
+def _resolve_ready_plan_task(repo: str, task: dict) -> tuple[str | None, str]:
+    """Ciljni zadatak iz koordinatorova reda, ili razlog zasto ga nema.
+
+    Cita `docs/agents/tasks.json` SAMO za citanje; kontroler taj red nikad ne mijenja. Do 2026-09-13 je
+    `run_phase` slao `planTask or "T00"` bez ijedne provjere, pa je faza plana trosila poziv modela nad
+    zadatkom koji je `done` (T00), a `implement` je odmah padao u prepareJob na `T00 must be ready`.
+    Zato se ovo razrjesava PRIJE ijednog poziva modela, a promasaj je `needs_human`, ne potrosen pokusaj.
+    """
+    scope = (task.get("signal") or {}).get("scope") or {}
+    plan_task = scope.get("planTask")
+    if not isinstance(plan_task, str) or not plan_task:
+        # Razlika je vazna operateru: nenapisan kljuc trazi dopunu inbox datoteke, a odbijen oblik ispravak.
+        # Jedna poruka za oba slucaja salje ga da trazi ono sto je vec napisao.
+        rejected = scope.get("planTaskRejected")
+        if rejected:
+            return None, f"no_ready_plan_task: planTask '{rejected}' nije u obliku Tnn"
+        return None, "no_ready_plan_task: signal nema planTask"
+    try:
+        with open(os.path.join(repo, "docs", "agents", "tasks.json"), encoding="utf-8") as fh:
+            queue = json.load(fh)
+        by_id = {t["id"]: t for t in queue["tasks"]}
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        return None, f"no_ready_plan_task: red zadataka nije citljiv ({type(exc).__name__})"
+    target = by_id.get(plan_task)
+    if target is None:
+        return None, f"no_ready_plan_task: {plan_task} nije u redu"
+    if target.get("status") != "ready":
+        return None, f"no_ready_plan_task: {plan_task} je {target.get('status')}, ne ready"
+    for dependency in target.get("dependsOn") or []:
+        if (by_id.get(dependency) or {}).get("status") != "done":
+            return None, f"no_ready_plan_task: ovisnost {dependency} nije done"
+    return plan_task, ""
+
+
 def _agent_for(config: dict, phase: str, task: dict) -> str:
     # Zadani autonomni raspored bez Fablea (plan 3.2): Codex vodi plan i pregled Claude implementacije,
     # Sonnet implementira; kad je implementator Sol, pregled radi Claude (drugi provider), ali nikad Fable.
@@ -329,16 +381,166 @@ class DefaultAdapters:
         self.config = config
         self.home = home
         self.repo = config.get("workerRepoPath") or os.getcwd()
+        # Je li radnikovo stablo OPERATER deklarirao. Prazan `workerRepoPath` znaci instalacijski checkout
+        # (`install-windows.ps1` pokrece zadatak s cwd = checkout), a to je stablo iz kojeg kontroler radi i u
+        # koje agent s pravom pisanja ne smije pisati. Deklaracija koja pokazuje bas na to stablo se ne priznaje.
+        self.repo_declared = (bool(config.get("workerRepoPath"))
+                              and os.path.realpath(self.repo) != os.path.realpath(os.getcwd()))
+        # Tko je implementirao koji zadatak U OVOM ticku. Zivi koliko i adapter (jedan `_drive_task` prolaz) i
+        # zamjenjuje `task.implementationAgent` iz `docs/agents/tasks.json`, koji kontroler ne smije pisati.
+        self._implementer_by_task: dict[str, str] = {}
+        # Snimka promjena radnikova stabla, uzeta PRIJE commita. Klasifikacija i verifikacija mjere ono sto je
+        # implementacija napisala, pa ne smiju citati `git status` nakon sto ga commit isprazni.
+        self._changes: dict | None = None
+        # Je li u OVOM poslu ijedna faza vec prosla gard. Nakon prve, prljavo stablo je djelo samog kontrolera.
+        self._phase_started = False
+        # Je li gard PRVE faze potvrdio da je stablo bilo CISTO. To je jedini razlog zbog kojeg kontroler
+        # smije reci da je prljavo stablo na kraju posla njegovo djelo. Kad je posao odbijen prije toga
+        # (nema ciljnog zadatka, stablo nije cisto, priprema pala), stablo nije njegovo i ostaje NETAKNUTO.
+        self._clean_at_start = False
+        # Je li faza `implement` stvarno pokrenula providera u ovom poslu. Bez nje kontroler nije napisao ni
+        # bajt, pa nema sto spremiti; svako spremanje bi bilo commit tudjeg rada.
+        self._implemented = False
+        # Grana i osnovica OVOG posla. Grana se reze prije implementacije, pa ono sto `publish` gura sadrzi
+        # tocno ono sto je ovaj posao napisao, a ne i commite ranijih (i odbijenih) poslova.
+        self._job_branch: str | None = None
+        self._base_ref: str | None = None
+        self._base_sha: str | None = None
+        self._base_error: str | None = None
 
     def run_phase(self, task: dict, phase: str, profile: dict) -> dict:
         agent_phase = PHASE_TO_AGENT_PHASE[phase]
-        agent = _agent_for(self.config, phase, task)
+        # PRVO red, pa tek onda model. Bez razrjesivog `ready` zadatka ne krece nijedan poziv i pokusaj ostaje.
+        plan_task, reason = _resolve_ready_plan_task(self.repo, task)
+        if plan_task is None:
+            return {"verdict": "needs_human", "reason": reason, "provider": None,
+                    "attempt_spent": False, "provider_called": False}
+        # Radnikovo stablo se provjerava na SVAKOJ fazi, dakle i prije plana. Posao koji ne moze proci kroz
+        # implementaciju ne smije prije toga potrositi poziv modela i dnevni slot: bez toga svaki tick placa puni
+        # plan pa padne na `implement_unsafe`, a uz `maxNewJobsPerDay=3` to je do tri uzaludna poziva dnevno.
+        # CISTOCA se trazi samo na PRVOJ fazi posla: poslije nje stablo prlja sam kontroler, pa bi ista provjera
+        # oborila pregled vlastitog posla (izmjereno: `reviewing` je zavrsavao kao `radno stablo nije cisto`).
+        first_phase = not self._phase_started
+        unsafe = implementation_worktree_blocked(self.repo, dedicated=self.repo_declared,
+                                                 require_clean=first_phase)
+        if unsafe:
+            return {"verdict": "blocked", "reason": unsafe, "provider": None,
+                    "attempt_spent": False, "provider_called": False}
+        if first_phase:
+            # Gard je upravo potvrdio da je stablo CISTO. Tek od ove tocke sve prljavo u njemu pripada ovom
+            # poslu, i tek od nje kontroler uopce smije pomisljati na spremanje. Posao odbijen prije toga
+            # ostavlja stablo netaknutim.
+            self._clean_at_start = True
+        self._phase_started = True
+        override_status = override_implementer = None
+        lookup_task = task
+        if agent_phase == "review":
+            # Recenzenta bira IMPLEMENTATOR iz ovog ticka, ne tasks.json. Bez zapisa nema pogadjanja: pogodjen
+            # implementator moze slucajno biti isti provider kao recenzent, cime bi pravilo o drugom provideru
+            # tiho otislo. Blokada je fail-safe i ne trosi pokusaj.
+            implementer = self._implementer_by_task.get(task["id"])
+            if implementer is None:
+                return {"verdict": "blocked", "reason": "implementer_unknown: ovaj tick nema zapis o implementatoru",
+                        "provider": None, "attempt_spent": False, "provider_called": False}
+            lookup_task = {**task, "implementationAgent": implementer}
+            override_status, override_implementer = "in_review", implementer
+        agent = _agent_for(self.config, phase, lookup_task)
         try:
-            job = prepare_job_via_node(self.repo, task["signal"].get("scope", {}).get("planTask") or "T00", agent_phase, agent)
+            job = prepare_job_via_node(self.repo, plan_task, agent_phase, agent,
+                                       override_status=override_status, override_implementer=override_implementer)
         except (RuntimeError, ValueError, OSError) as exc:
-            return {"verdict": "blocked", "reason": f"prepare_failed: {type(exc).__name__}", "provider": None}
+            # Priprema je node poziv bez modela; kad padne, ni jedan token nije potrosen, pa ni pokusaj ni
+            # dnevni slot ne smiju biti potroseni. Zadatak ostaje `blocked` i ceka covjeka, dakle ne vrti se u krug.
+            return {"verdict": "blocked", "reason": f"prepare_failed: {type(exc).__name__}", "provider": None,
+                    "attempt_spent": False, "provider_called": False}
+        if agent_phase == "implement":
+            self._implementer_by_task[task["id"]] = agent
+            if self._job_branch is None:
+                # Grana se reze neposredno prije JEDINE faze koja pise, i nad jos cistim stablom. Ranije
+                # (npr. u planu) bi svaki posao koji padne prije implementacije bez razloga premjestio
+                # radnikovo stablo na novu granu; kasnije bi commit vec bio na dijeljenoj grani.
+                started = self._start_job_branch(task)
+                if started is not None:
+                    return started
         art = os.path.join(self.home, "artifacts", task["id"], f"{phase}-{uuid.uuid4().hex[:8]}")
-        return run_phase(job, agent_phase, profile, cwd=self.repo, timeout_seconds=int(self.config.get("agentTimeoutMinutes", 30)) * 60, artifact_dir=art)
+        result = run_phase(job, agent_phase, profile, cwd=self.repo, timeout_seconds=int(self.config.get("agentTimeoutMinutes", 30)) * 60, artifact_dir=art)
+        if agent_phase == "implement":
+            # Od ovog trenutka u stablu moze biti nesto sto je NAPISAO ovaj posao, pa ga kontroler smije
+            # spremiti. Zastavica se postavlja i kad verdict nije uspjeh: model je vec mogao pisati datoteke.
+            self._implemented = True
+        result["agent"] = agent
+        result["plan_task"] = plan_task
+        return result
+
+    def _start_job_branch(self, task: dict) -> dict | None:
+        """Odrezi granu OVOG posla od osnovice. Vrati blokadu kad to ne uspije, inace None.
+
+        Dokaz se racuna po poslu, pa i grana mora biti po poslu. Dok su svi poslovi dijelili jednu granu,
+        `verify` je mjerio samo svoju snimku, a `publish` je gurao i commite ranijih, ukljucivo odbijenih
+        poslova; `controlFilesChanged` ih tako nikad nije vidio (izmjereno 2026-09-19).
+        """
+        base_branch = str(self.config.get("baseBranch") or "master")
+        base_ref = resolve_base_ref(self.repo, base_branch)
+        if base_ref is None:
+            # Fail-closed: bez osnovice se ne moze reci ni sto grana nosi ni od cega bi se rezala.
+            self._base_error = f"base_unresolved: nema lokalne reference za {base_branch}"
+            return {"verdict": "blocked", "reason": self._base_error, "provider": None,
+                    "attempt_spent": False, "provider_called": False}
+        branch = f"autonomy/{str(task.get('id'))[:8]}"
+        started = start_job_branch(self.repo, branch, base_ref)
+        if started.get("status") != "ok":
+            return {"verdict": "blocked", "reason": f"job_branch_failed: {started.get('reason')}",
+                    "provider": None, "attempt_spent": False, "provider_called": False}
+        self._job_branch = branch
+        self._base_ref = base_ref
+        self._base_sha = started.get("base_sha")
+        return None
+
+    def _snapshot(self) -> dict:
+        """Sve sto bi objava gurnula: promjene radnog stabla PLUS commite grane iznad osnovice.
+
+        Dvije liste su namjerno odvojene. `worktree_paths` je jedino sto se smije commitati (to je napisala
+        implementacija ovog posla), a `paths` je ono sto klasifikacija i verifikacija moraju vidjeti, jer
+        `publish` gura CIJELU granu, ne samo zadnji commit.
+        """
+        if self._changes is None:
+            worktree = changed_paths(self.repo)
+            lines = changed_line_count(self.repo)
+            branch_paths: list[str] = []
+            if self._base_ref:
+                try:
+                    branch_paths = branch_changed_paths(self.repo, self._base_ref)
+                    lines += branch_changed_line_count(self.repo, self._base_ref)
+                except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
+                    self._base_error = f"base_diff_failed: {type(exc).__name__}"
+            elif self._base_error is None:
+                self._base_error = "base_unresolved: osnovica grane nije poznata"
+            self._changes = {"worktree_paths": worktree,
+                             "paths": sorted(dict.fromkeys([*worktree, *branch_paths])),
+                             "lines": lines}
+        return self._changes
+
+    def commit(self, task: dict) -> dict:
+        """Spremi ono sto je IMPLEMENTACIJA OVOG POSLA napisala, i nista drugo.
+
+        Tri uvjeta su kumulativna i svaki je pokriven mutacijom: gard prve faze je potvrdio cisto stablo,
+        faza `implement` je stvarno pokrenuta, i commitaju se samo staze iz snimke. Do 2026-09-19 nijedan
+        nije stajao: posao odbijen PRIJE ijedne faze isao je kroz isti put, a `git add -A` je commitao tudji
+        necommitani rad, u zadanoj konfiguraciji na master granu instalacijskog checkouta.
+        """
+        if not self._clean_at_start:
+            return {"status": "skipped", "reason": "stablo nije bilo cisto na pocetku posla; nije nase"}
+        if not self._implemented:
+            return {"status": "skipped", "reason": "implementacija nije pokrenuta; nema sto spremiti"}
+        snap = self._snapshot()
+        paths = snap["worktree_paths"]
+        if not paths:
+            return {"status": "clean", "reason": "implementacija nije nista promijenila"}
+        signal = task.get("signal") or {}
+        title = f"autonomija: {signal.get('kind', 'zadatak')} {str(signal.get('location') or '')[:60]}".strip()
+        body = f"Signal: {task.get('signal_key')}"
+        message = title + "\n\n" + body + "\n" + WORKER_COMMIT_TRAILER
+        return commit_worker_tree(self.repo, message, paths)
 
     def verify(self, task: dict) -> dict:
         def runner(argv):
@@ -354,15 +556,22 @@ class DefaultAdapters:
                 return None
 
         head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.repo, capture_output=True, text=True, check=False).stdout.strip()
-        paths = changed_paths(self.repo)
-        candidate = {"candidateSha": head, "baseSha": task.get("base_sha") or head, "changedPaths": paths}
+        # `paths` nosi i commite grane iznad osnovice, ne samo radno stablo: dokaz mora pokrivati sve sto bi
+        # `publish` gurnuo, inace `controlFilesChanged` ne vidi kontrolnu datoteku iz ranijeg commita.
+        paths = self._snapshot()["paths"]
+        candidate = {"candidateSha": head, "baseSha": self._base_sha or task.get("base_sha") or head,
+                     "changedPaths": paths}
         key_path = os.path.join(self.home, "verifier.key")
         key = open(key_path, "rb").read() if os.path.isfile(key_path) else b""
         return verify_candidate(candidate, self.config, runner=runner, read_proof=read_proof, signing_key=key or None,
                                 created_at=_dt.datetime.now(tz=_dt.timezone.utc).isoformat(timespec="seconds"))
 
     def classify(self, task: dict) -> tuple[str, list[str]]:
-        return explain_change(changed_paths(self.repo), changed_line_count(self.repo), self.config, root=self.repo)
+        snap = self._snapshot()
+        if self._base_error:
+            # Klasifikacija bez poznate osnovice ne zna sto grana nosi, pa ne smije tvrditi nizak rizik.
+            return "needs_human", [self._base_error]
+        return explain_change(snap["paths"], snap["lines"], self.config, root=self.repo)
 
     def publish(self, task: dict, evidence: dict, store: Store, now: int, change_class: str) -> dict:
         # Izdavac postoji samo uz token ODVOJENOG GitHub identiteta u LEKTA_AUTONOMY_HOME/publisher-token; radnikova
@@ -432,32 +641,88 @@ def tick(config: dict, now: int, dry_run: bool, *, store: Store, home: str | Non
     return summary
 
 
+def _park_worker_tree(adapters, task: dict, store: Store, task_id: str, now: int) -> None:
+    """Spremi ono sto je implementacija OVOG POSLA vec napisala kad posao zavrsi PRIJE kraja.
+
+    Inace se kvar iz nalaza 2026-09-13 vraca kroz druga vrata: posao koji padne na pregledu ostavlja prljavo
+    stablo, a sljedeci posao gard odbija s `implement_unsafe: radno stablo nije cisto` i kontroler se opet
+    zakljuca. Commit je lokalan; objava ide iskljucivo kroz izdavaca i nju ovaj put nikad ne dosegne.
+
+    GRANICA, i to je cijela razlika prema izvedbi od 2026-09-19 koja je odbacena: odluku donosi
+    `adapters.commit`, koji odbija sve sto kontroler nije sam napisao. Posao odbijen PRIJE ijedne faze (nema
+    ciljnog zadatka, stablo nije cisto, priprema pala) tako prolazi ovuda bez ijedne git naredbe koja pise, i
+    stablo ostaje netaknuto. Prethodna izvedba je na tom istom putu radila `git add -A` i commitala tudji
+    necommitani rad, u zadanoj konfiguraciji na master granu instalacijskog checkouta.
+
+    Zove se PRIJE prijelaza, pa `status:<verdict>` ostaje zadnji dogadaj zadatka: po njemu `Store.enqueue`
+    prepoznaje razlog zaustavljanja, a dnevnik i dalje cita kao prije.
+    """
+    try:
+        parked = adapters.commit(task)
+    except (OSError, subprocess.SubprocessError, RuntimeError) as exc:
+        parked = {"status": "failed", "reason": f"{type(exc).__name__}"}
+    store.record_event(task_id, "worker_commit", {"status": parked.get("status"), "sha": parked.get("sha"),
+                                                  "reason": parked.get("reason"), "unfinished": True}, now)
+
+
 def _drive_task(task: dict, config: dict, store: Store, adapters, profile: dict, now: int, summary: dict) -> str:
     task_id = task["id"]
     status = "planning"
+    # Je li OVAJ posao ikad pokrenuo providera. Dnevni slot je po POSLU, ne po fazi: kad je plan vec potrosio
+    # poziv modela, slot je potrosen i kasnija blokada u implementaciji ga ne smije vratiti.
+    provider_ever_called = False
     for phase in ("planning", "implementing", "reviewing"):
         store.record_event(task_id, f"phase_start:{phase}", {}, now)
         result = adapters.run_phase(task, phase, profile)
+        provider_ever_called = provider_ever_called or bool(result.get("provider_called", True))
         store.record_run(task_id, phase, result, now, now)
-        summary["phases"].append({"phase": phase, "verdict": result.get("verdict"), "reason": result.get("reason")})
+        summary["phases"].append({"phase": phase, "verdict": result.get("verdict"), "reason": result.get("reason"),
+                                  "agent": result.get("agent")})
         verdict = result.get("verdict")
         if verdict in ("waiting_quota", "needs_login"):
+            _park_worker_tree(adapters, task, store, task_id, now)
             store.transition(task_id, status, verdict, {"reason": result.get("reason"), "next_run_at": now + 3600}, now)
             return verdict
-        if verdict == "blocked":
-            store.transition(task_id, status, "blocked", {"reason": result.get("reason")}, now)
-            return "blocked"
+        if verdict in ("blocked", "needs_human"):
+            # `attempt_spent: False` tvrdi adapter, i to samo kad poziv nije ni poceo (nema ciljnog zadatka,
+            # providerova izvrsna okolina odbija sve). Bez te tvrdnje ponasanje je staro: pokusaj je potrosen.
+            payload: dict = {"reason": result.get("reason")}
+            if not result.get("attempt_spent", True):
+                payload["refund_attempt"] = True
+                # Dnevni slot se vraca samo kad provider nije NI POKRENUT. Inace bi pokvaren provider (sandbox,
+                # prazan hod) vrtio model u krug bez ijedne granice. Kad poziv nije ni krenuo, slot mora natrag:
+                # tri CI signala bez ciljnog zadatka inace potrose sva tri dnevna slota i izgladne posao koji bi
+                # prosao (izmjereno 2026-09-13 nad pravim `ci` izvorom iz config/autonomy.example.json).
+                if not provider_ever_called:
+                    payload["refund_daily_job"] = True
+            _park_worker_tree(adapters, task, store, task_id, now)
+            store.transition(task_id, status, verdict, payload, now)
+            return verdict
         if verdict != "needs_verification":
+            _park_worker_tree(adapters, task, store, task_id, now)
             store.transition(task_id, status, "failed", {"reason": result.get("reason")}, now)
             return "failed"
         nxt = {"planning": "implementing", "implementing": "reviewing", "reviewing": "verifying"}[phase]
         store.transition(task_id, status, nxt, {}, now)
         status = nxt
+    # Radnikovo stablo se ISPRAZNI prije nego posao zavrsi: snimka promjena je uzeta unutar `commit`, pa je
+    # klasifikacija i verifikacija i dalje vide, a sljedeci posao zatekne cisto stablo. Bez ovoga se kontroler
+    # zakljuca poslije tocno jednog posla, jer gard prije implementacije trazi cisto stablo (nalaz 2026-09-13).
+    committed = adapters.commit(task)
+    store.record_event(task_id, "worker_commit", {"status": committed.get("status"), "sha": committed.get("sha"),
+                                                  "reason": committed.get("reason")}, now)
+    if committed.get("status") in ("failed", "skipped"):
+        # `skipped` znaci da kontroler nije smio spremiti (stablo nije bilo njegovo, ili implementacija nije
+        # ni pokrenuta). To nije uspjeh nego stanje u kojem se ne smije nastaviti prema objavi.
+        store.transition(task_id, "verifying", "needs_human",
+                         {"reason": f"commit_failed: {committed.get('reason')}"}, now)
+        return "needs_human"
     change_class, reasons = adapters.classify(task)
     store.record_event(task_id, "classified", {"class": change_class, "reasons": reasons}, now)
     evidence = adapters.verify(task)
     store.record_event(task_id, "verified", {"complete": evidence.get("complete"), "staleness": evidence.get("staleness"), "controlFilesChanged": evidence.get("controlFilesChanged")}, now)
-    summary["phases"].append({"phase": "verifying", "complete": evidence.get("complete"), "class": change_class})
+    summary["phases"].append({"phase": "verifying", "complete": evidence.get("complete"), "class": change_class,
+                              "commit": committed.get("status")})
     if not evidence.get("complete"):
         store.transition(task_id, "verifying", "needs_human", {"reason": "dokaz nepotpun", "staleness": evidence.get("staleness")}, now)
         return "needs_human"

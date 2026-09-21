@@ -82,7 +82,7 @@ function main() {
   const options = new Map();
   while (rest.length) {
     const key = rest.shift();
-    if (!['--agent', '--phase', '--budget-usd', '--execute', '--subscription'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
+    if (!['--agent', '--phase', '--budget-usd', '--execute', '--subscription', '--override-status', '--override-implementer'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
     const value = (key === '--execute' || key === '--subscription') ? true : rest.shift();
     if (!value || (typeof value === 'string' && value.startsWith('--'))) throw new Error(`Missing value: ${key}`);
     options.set(key, value);
@@ -98,7 +98,16 @@ function main() {
     const leaked = ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_API_KEY'].filter(name => process.env[name]);
     if (leaked.length) throw new Error(`subscription mode refuses API credentials in the environment: ${leaked.join(', ')}`);
   }
-  const job = prepareJob(queue, id, phase, agent, budget, { billingMode });
+  // Autonomni kontroler tvrdi fazu pregleda iz VLASTITE evidencije, jer tasks.json pise koordinator. Obje
+  // opcije idu zajedno i vrijede samo za `review`; bez njih je ponasanje identicno rucnom toku.
+  const overrideStatus = options.get('--override-status');
+  const overrideImplementer = options.get('--override-implementer');
+  if ((overrideStatus === undefined) !== (overrideImplementer === undefined)) {
+    throw new Error('--override-status and --override-implementer must be given together');
+  }
+  if (overrideStatus !== undefined && phase !== 'review') throw new Error('Override options apply to --phase review only');
+  const overrideTask = overrideStatus === undefined ? undefined : { status: overrideStatus, implementationAgent: overrideImplementer };
+  const job = prepareJob(queue, id, phase, agent, budget, overrideTask ? { billingMode, overrideTask } : { billingMode });
   if (!options.has('--execute')) {
     console.log(JSON.stringify({ dryRun: true, ...job }, null, 2));
     return;
