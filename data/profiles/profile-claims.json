@@ -10,15 +10,15 @@
   },
   "counts": {
     "E": 41,
-    "B": 292,
-    "D": 37,
+    "B": 294,
+    "D": 35,
     "C": 8,
     "A": 32
   },
   "countsByRegistry": {
     "E": 41,
-    "B": 292,
-    "D": 34,
+    "B": 294,
+    "D": 32,
     "C": 8,
     "A": 32
   },
@@ -276,8 +276,8 @@
     "grad-diplomski": "B",
     "grad-doktorski": "B",
     "grad-zavrsni": "B",
-    "gradri-diplomski": "D",
-    "gradri-zavrsni": "D",
+    "gradri-diplomski": "B",
+    "gradri-zavrsni": "B",
     "grafos-diplomski": "B",
     "grafos-zavrsni": "B",
     "grf-diplomski": "B",

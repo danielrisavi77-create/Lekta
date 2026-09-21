@@ -4,6 +4,18 @@
   "profilesWithoutSample": 402,
   "entries": [
     {
+      "profileId": "pravo-socijalna-politika-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 7
+    },
+    {
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 7
+    },
+    {
       "profileId": "algebra-diplomski",
       "unitId": "algebra",
       "facultyLabel": "Sveučilište Algebra Bernays",
@@ -268,13 +280,31 @@
       "offeredOptionCount": 6
     },
     {
-      "profileId": "pravo-socijalna-politika-diplomski",
+      "profileId": "pravo-integrirani-diplomski",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 6
     },
     {
-      "profileId": "pravo-socijalni-rad-diplomski",
+      "profileId": "pravo-javna-uprava-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 6
@@ -1228,43 +1258,13 @@
       "offeredOptionCount": 5
     },
     {
-      "profileId": "pravo-integrirani-diplomski",
-      "unitId": "pravo",
-      "facultyLabel": "Pravni fakultet",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "pravo-javna-uprava-diplomski",
-      "unitId": "pravo",
-      "facultyLabel": "Pravni fakultet",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "pravo-javna-uprava-prijediplomski",
-      "unitId": "pravo",
-      "facultyLabel": "Pravni fakultet",
-      "offeredOptionCount": 5
-    },
-    {
       "profileId": "pravo-opci-pravni-akademski-rad",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 5
     },
     {
-      "profileId": "pravo-porezni-prijediplomski",
-      "unitId": "pravo",
-      "facultyLabel": "Pravni fakultet",
-      "offeredOptionCount": 5
-    },
-    {
       "profileId": "pravo-socijalni-opci-akademski-rad",
-      "unitId": "pravo",
-      "facultyLabel": "Pravni fakultet",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "pravo-socijalni-rad-zavrsni",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 5
@@ -2056,6 +2056,24 @@
       "offeredOptionCount": 3
     },
     {
+      "profileId": "vuka-poslovni-diplomski",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 3
+    },
+    {
       "profileId": "vuka-prehrambena-zavrsni",
       "unitId": "vuka",
       "facultyLabel": "Veleučilište u Karlovcu",
@@ -2092,24 +2110,6 @@
       "offeredOptionCount": 2
     },
     {
-      "profileId": "vuka-poslovni-diplomski",
-      "unitId": "vuka",
-      "facultyLabel": "Veleučilište u Karlovcu",
-      "offeredOptionCount": 2
-    },
-    {
-      "profileId": "vuka-poslovni-opci-akademski-rad",
-      "unitId": "vuka",
-      "facultyLabel": "Veleučilište u Karlovcu",
-      "offeredOptionCount": 2
-    },
-    {
-      "profileId": "vuka-poslovni-zavrsni",
-      "unitId": "vuka",
-      "facultyLabel": "Veleučilište u Karlovcu",
-      "offeredOptionCount": 2
-    },
-    {
       "profileId": "vvg-diplomski",
       "unitId": "vvg",
       "facultyLabel": "Veleučilište Velika Gorica",
@@ -2137,6 +2137,18 @@
       "profileId": "ffzg-informacijske-zavrsni",
       "unitId": "ffzg",
       "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "gradri-diplomski",
+      "unitId": "gradri",
+      "facultyLabel": "Građevinski fakultet u Rijeci",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "gradri-zavrsni",
+      "unitId": "gradri",
+      "facultyLabel": "Građevinski fakultet u Rijeci",
       "offeredOptionCount": 1
     },
     {
@@ -2269,18 +2281,6 @@
       "profileId": "geof-opci-akademski-rad",
       "unitId": "geof",
       "facultyLabel": "Geodetski fakultet",
-      "offeredOptionCount": 0
-    },
-    {
-      "profileId": "gradri-diplomski",
-      "unitId": "gradri",
-      "facultyLabel": "Građevinski fakultet u Rijeci",
-      "offeredOptionCount": 0
-    },
-    {
-      "profileId": "gradri-zavrsni",
-      "unitId": "gradri",
-      "facultyLabel": "Građevinski fakultet u Rijeci",
       "offeredOptionCount": 0
     },
     {

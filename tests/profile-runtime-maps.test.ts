@@ -29,6 +29,7 @@ const ASSISTED_RULE_ENTRY_CHECK_IDS = new Set([
   'required-section-rules',
   'element-caption-rules',
   'table-figure-rescue-rules',
+  'heading-rules',
 ]);
 
 /** Ista logika kao scripts/gen-profile-runtime-maps.mts (izvor istine za pecenje). */
@@ -97,6 +98,7 @@ function expectedMaps() {
         sourcePage: e.sourcePage,
         quote: e.quote,
         value: e.value,
+        ...(e.checkId === 'heading-rules' && e.lastVerified != null ? { lastVerified: e.lastVerified } : {}),
       }));
     const all = [...r, ...assisted];
     if (all.length > 0) repair[id] = all;

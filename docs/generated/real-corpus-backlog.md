@@ -4,6 +4,22 @@
 
 Ukupno profila bez uzorka: **402/407**.
 
+## Pravni fakultet (pravo)
+
+- **pravo-socijalna-politika-diplomski** — 7 ponudjenih opcija
+- **pravo-socijalni-rad-diplomski** — 7 ponudjenih opcija
+- **pravo-integrirani-diplomski** — 6 ponudjenih opcija
+- **pravo-javna-uprava-diplomski** — 6 ponudjenih opcija
+- **pravo-javna-uprava-prijediplomski** — 6 ponudjenih opcija
+- **pravo-porezni-prijediplomski** — 6 ponudjenih opcija
+- **pravo-socijalni-rad-zavrsni** — 6 ponudjenih opcija
+- **pravo-doktorski-pravne-znanosti** — 5 ponudjenih opcija
+- **pravo-opci-pravni-akademski-rad** — 5 ponudjenih opcija
+- **pravo-socijalni-opci-akademski-rad** — 5 ponudjenih opcija
+- **pravo-specijalisticki-pravni-opci** — 5 ponudjenih opcija
+- **pravo-socijalne-djelatnosti-doktorski** — 4 ponudjenih opcija
+- **pravo-socijalne-djelatnosti-specijalisticki** — 4 ponudjenih opcija
+
 ## Sveučilište Algebra Bernays (algebra)
 
 - **algebra-diplomski** — 6 ponudjenih opcija
@@ -150,22 +166,6 @@ Ukupno profila bez uzorka: **402/407**.
 - **pmf-geografija-diplomski** — 5 ponudjenih opcija
 - **pmf-biologija-graduate** — 4 ponudjenih opcija
 - **pmf-geologija-graduate** — 3 ponudjenih opcija
-
-## Pravni fakultet (pravo)
-
-- **pravo-socijalna-politika-diplomski** — 6 ponudjenih opcija
-- **pravo-socijalni-rad-diplomski** — 6 ponudjenih opcija
-- **pravo-doktorski-pravne-znanosti** — 5 ponudjenih opcija
-- **pravo-integrirani-diplomski** — 5 ponudjenih opcija
-- **pravo-javna-uprava-diplomski** — 5 ponudjenih opcija
-- **pravo-javna-uprava-prijediplomski** — 5 ponudjenih opcija
-- **pravo-opci-pravni-akademski-rad** — 5 ponudjenih opcija
-- **pravo-porezni-prijediplomski** — 5 ponudjenih opcija
-- **pravo-socijalni-opci-akademski-rad** — 5 ponudjenih opcija
-- **pravo-socijalni-rad-zavrsni** — 5 ponudjenih opcija
-- **pravo-specijalisticki-pravni-opci** — 5 ponudjenih opcija
-- **pravo-socijalne-djelatnosti-doktorski** — 4 ponudjenih opcija
-- **pravo-socijalne-djelatnosti-specijalisticki** — 4 ponudjenih opcija
 
 ## Prehrambeno-tehnološki fakultet Osijek (ptfos)
 
@@ -739,12 +739,12 @@ Ukupno profila bez uzorka: **402/407**.
 ## Veleučilište u Karlovcu (vuka)
 
 - **vuka-lovstvo-zavrsni** — 3 ponudjenih opcija
+- **vuka-poslovni-diplomski** — 3 ponudjenih opcija
+- **vuka-poslovni-opci-akademski-rad** — 3 ponudjenih opcija
+- **vuka-poslovni-zavrsni** — 3 ponudjenih opcija
 - **vuka-prehrambena-zavrsni** — 3 ponudjenih opcija
 - **vuka-sigurnost-diplomski** — 3 ponudjenih opcija
 - **vuka-sigurnost-zavrsni** — 3 ponudjenih opcija
-- **vuka-poslovni-diplomski** — 2 ponudjenih opcija
-- **vuka-poslovni-opci-akademski-rad** — 2 ponudjenih opcija
-- **vuka-poslovni-zavrsni** — 2 ponudjenih opcija
 - **vuka-strojarski-diplomski** — 0 ponudjenih opcija
 - **vuka-strojarski-zavrsni** — 0 ponudjenih opcija
 
@@ -756,6 +756,11 @@ Ukupno profila bez uzorka: **402/407**.
 
 - **vvg-diplomski** — 2 ponudjenih opcija
 - **vvg-zavrsni** — 2 ponudjenih opcija
+
+## Građevinski fakultet u Rijeci (gradri)
+
+- **gradri-diplomski** — 1 ponudjenih opcija
+- **gradri-zavrsni** — 1 ponudjenih opcija
 
 ## Fakultet informatike i digitalnih tehnologija, Rijeka (inf)
 
@@ -773,11 +778,6 @@ Ukupno profila bez uzorka: **402/407**.
 - **geof-diplomski** — 0 ponudjenih opcija
 - **geof-doktorski** — 0 ponudjenih opcija
 - **geof-opci-akademski-rad** — 0 ponudjenih opcija
-
-## Građevinski fakultet u Rijeci (gradri)
-
-- **gradri-diplomski** — 0 ponudjenih opcija
-- **gradri-zavrsni** — 0 ponudjenih opcija
 
 ## Veleučilište PAR (par)
 
