@@ -8,7 +8,14 @@
  * commitani strop broj koji odgovara zapisu (inace ratchet nista ne drzi).
  */
 import { describe, it, expect } from 'vitest';
-import { countHighCritical, compareToRatchet, formatVerdict } from '../scripts/npm-audit-ratchet-core.mjs';
+import {
+  compareAuditToRatchet,
+  countHighCritical,
+  formatVerdict,
+  highCriticalPackageNames,
+  parseAuditResponse,
+  validateRatchet,
+} from '../scripts/npm-audit-ratchet-core.mjs';
 import ratchet from '../data/security/npm-audit-ratchet.json';
 
 const fixture = {
@@ -24,34 +31,78 @@ const fixture = {
 describe('npm audit ratchet: jezgra', () => {
   it('broji SAMO high i critical', () => {
     expect(countHighCritical(fixture)).toBe(2);
+    expect(highCriticalPackageNames(fixture)).toEqual(['a', 'b']);
   });
 
-  it('prazan ili nepostojeci graf daje 0, ne baca', () => {
+  it('valjan prazan vulnerabilities objekt broji 0', () => {
     expect(countHighCritical({ vulnerabilities: {} })).toBe(0);
-    expect(countHighCritical({})).toBe(0);
-    expect(countHighCritical(null)).toBe(0);
+    expect(parseAuditResponse({ vulnerabilities: {} })).toEqual({ vulnerabilities: {} });
+  });
+
+  it('nevaljan audit odgovor (error / bez vulnerabilities) baca, ne postaje nula', () => {
+    expect(() => parseAuditResponse({ error: { code: 'ENOTFOUND' } })).toThrow(/ENOTFOUND|greska/i);
+    expect(() => parseAuditResponse({})).toThrow(/vulnerabilities/);
+    expect(() => parseAuditResponse({ vulnerabilities: null })).toThrow(/vulnerabilities/);
+    expect(() => parseAuditResponse('{"error":{"code":"EAI_AGAIN"}}')).toThrow(/EAI_AGAIN|greska/i);
   });
 
   it('jednako stropu je equal (baseline)', () => {
-    expect(compareToRatchet(23, { fullGraphHighCritical: 23 }).verdict).toBe('equal');
+    expect(compareAuditToRatchet(fixture, {
+      fullGraphHighCritical: 2,
+      fullGraphHighCriticalPackages: ['a', 'b'],
+    }).verdict).toBe('equal');
   });
 
-  it('iznad stropa je above (mutacija: porast mora biti vidljiv)', () => {
-    const s = compareToRatchet(24, { fullGraphHighCritical: 23 });
+  it('novi identitet pada i kad ukupan broj ostane isti', () => {
+    const s = compareAuditToRatchet({
+      vulnerabilities: {
+        a: { severity: 'critical' },
+        novi: { severity: 'high' },
+      },
+    }, {
+      fullGraphHighCritical: 2,
+      fullGraphHighCriticalPackages: ['a', 'b'],
+    });
     expect(s.verdict).toBe('above');
-    expect(s.delta).toBe(1);
+    expect(s.unexpectedPackages).toEqual(['novi']);
+    expect(s.resolvedPackages).toEqual(['b']);
     expect(formatVerdict(s)).toMatch(/^FAIL/);
+    expect(formatVerdict(s)).toContain('novi');
   });
 
   it('ispod stropa je below i poziva na spustanje stropa, ne tihi prolaz', () => {
-    const s = compareToRatchet(22, { fullGraphHighCritical: 23 });
+    const s = compareAuditToRatchet({ vulnerabilities: { a: { severity: 'high' } } }, {
+      fullGraphHighCritical: 2,
+      fullGraphHighCriticalPackages: ['a', 'b'],
+    });
     expect(s.verdict).toBe('below');
     expect(formatVerdict(s)).toMatch(/Spusti fullGraphHighCritical/);
   });
 
   it('strop koji nije broj ne moze biti prolaz', () => {
-    expect(compareToRatchet(0, { fullGraphHighCritical: 'puno' as unknown as number }).verdict).toBe('above');
-    expect(compareToRatchet(0, {} as { fullGraphHighCritical: number }).verdict).toBe('above');
+    const empty = { vulnerabilities: {} };
+    expect(compareAuditToRatchet(empty, { fullGraphHighCritical: 'puno' as unknown as number }).verdict).toBe('above');
+    expect(compareAuditToRatchet(empty, {} as { fullGraphHighCritical: number }).verdict).toBe('above');
+  });
+
+  it('odbijanje iznimke bez vlasnika, mitigacije i buduceg roka nije prebaceno na dokumentaciju', () => {
+    const invalid = {
+      fullGraphHighCritical: 1,
+      fullGraphHighCriticalPackages: ['sharp'],
+      exceptions: [{
+        packages: ['sharp'],
+        owner: '',
+        mitigation: '',
+        expiresOn: '2026-09-20',
+        nextReviewOn: '2026-09-19',
+      }],
+    };
+    expect(validateRatchet(invalid, { today: '2026-09-21' })).toEqual(expect.arrayContaining([
+      expect.stringMatching(/owner/),
+      expect.stringMatching(/mitigation/),
+      expect.stringMatching(/istekla/),
+      expect.stringMatching(/pregled/),
+    ]));
   });
 });
 
@@ -61,10 +112,12 @@ describe('npm audit ratchet: commitani zapis', () => {
     expect(ratchet.fullGraphHighCritical).toBeGreaterThanOrEqual(0);
     expect(ratchet.measuredAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(ratchet.changeNote.length).toBeGreaterThan(40);
+    expect(ratchet.fullGraphHighCriticalPackages).toHaveLength(ratchet.fullGraphHighCritical);
+    expect(validateRatchet(ratchet, { today: '2026-09-21' })).toEqual([]);
   });
 
   it('prethodno mjerenje je zapisano da se promjena ne moze procitati kao tiha', () => {
-    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(14);
+    expect(ratchet.priorMeasurement.fullGraphHighCritical).toBe(7);
     expect(ratchet.priorMeasurement.measuredAt).toBe('2026-09-09');
   });
 });
