@@ -47,8 +47,11 @@ Nije koristen stvarni studentski rad ni osobni podatak.
 
 - Read-only `npm run migration-identity` s trenutnog repozitorijskog HEAD-a uspješno je usporedio oba projekta po imenu migracije. Produkcija ima 107 zapisa: 103 poklopljena, tri repozitorijske migracije 0200-0202 nedostaju, a četiri zapisa postoje samo u bazi. Staging ima 117 zapisa: svih 106 repozitorijskih migracija je prisutno, uz 11 dodatnih migracija druge cjeline 0104-0114. Nema dvostrukih identiteta.
 - Staging secret manifest je pregledan bez čitanja vrijednosti. Service role, DB URL i ostale tajne nisu iznesene u klijentski bundle. Staging build i dalje zahtijeva eksplicitne `VITE_LEKTA_SUPABASE_URL` i `VITE_LEKTA_SUPABASE_ANON_KEY`; bez njih razvojni fallback je lokalni Supabase, a ne produkcija. Produkcijski Netlify origin je zaseban.
+- Kanonski staging frontend je `https://lekta-staging.netlify.app` (Netlify projekt `lekta-staging`). Javni deployment bundle ima `mode=staging` i odabrani Supabase origin `https://bnyemcnsphlitjradrst.supabase.co`; produkcijski origin nije odabran.
+- Staging `ALLOWED_ORIGIN` postavljen je preko `supabase secrets set` na `https://lekta-staging.netlify.app`. Nakon toga OPTIONS za `repair-docx`, `source-check` i `profile-rules` vraća 200 i točan `Access-Control-Allow-Origin` samo za staging frontend; produkcijski origin i localhost ostaju bez tog headera.
+- `LEKTA_STAGING_ORIGIN` u lokalnom `.env` ostaje Supabase staging origin, jer `extraction-probe` izravno gađa `/functions/v1/profile-rules`. Probe je uspješno izveo 40 zahtjeva, dobio sedam distinct profila, bez evidence markera i ispod praga 25.
 - Auth settings staginga potvrđuju email prijavu, uključenu registraciju i isključene Google/GitHub providere. Supabase Auth javni settings endpoint ne izlaže redirect allow-listu.
-- OPTIONS probe na `repair-docx`, `source-check` i `profile-rules` vraća 200 i odgovarajuće metode, ali nijedan od poznatih origin-a (produkcijski Netlify, pretpostavljeni staging Netlify i lokalni portovi) nije dobio `Access-Control-Allow-Origin`. Staging frontend origin nije potvrđen, pa se CORS/redirect stavka ne označava kao završena niti se naslijepo mijenja `ALLOWED_ORIGIN`.
+- Auth redirect allow-lista nije izložena kroz javni settings endpoint; zato je provjerena dostupna frontend konfiguracija i CORS, dok se točan dashboard-only redirect popis ne tvrdi kao neovisno potvrđen.
 
 ## Ograničenje
 
