@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
@@ -153,7 +154,7 @@ describe('subscription billing mode (autonomy profile)', () => {
 
 describe('agent process boundary helpers', () => {
   it('spawns Grok with a prompt file, no prompt argv, no stdin and no shell', async () => {
-    const { spawnJob } = await import('../scripts/agents/cli.mjs');
+    const { spawnJob, resolveProviderInvocation } = await import('../scripts/agents/cli.mjs');
     const job = prepareJob(queue(), 'T01', 'plan', 'grok');
     let call: { command?: string; args?: string[]; options?: Record<string, unknown> } = {};
     const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
@@ -167,5 +168,15 @@ describe('agent process boundary helpers', () => {
     expect(call.args).not.toContain(job.prompt);
     expect(call.args).not.toContain(PROMPT_FILE_PLACEHOLDER);
     expect(call.options).toMatchObject({ input: undefined, shell: false });
+
+    const shimDir = '/npm-global';
+    const bootstrap = join(shimDir, 'node_modules', '@xai-official', 'grok', 'bin', 'grok-bootstrap.js');
+    const invocation = resolveProviderInvocation('grok', {
+      platform: 'win32',
+      cwd: shimDir,
+      pathEnv: '',
+      exists: (path) => path === bootstrap,
+    });
+    expect(invocation).toEqual({ command: process.execPath, argsPrefix: [bootstrap] });
   });
 });
