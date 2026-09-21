@@ -67,6 +67,7 @@ veličinu zaključanog `node_modules` stabla i dodatnu pričuvu prostora.
 
 ### Dopuna nakon čišćenja prostora 2026-09-21
 
-Nakon uklanjanja starih runtime cacheva ponovljen je puni 
-pm ci u čistom dependency sandboxu koji je sadržavao samo package.json i package-lock.json. Završio je s izlaznim kodom 0, uz dded 1152 packages, bez ENOSPC; 
-pm ls --depth=0 je pokazao zaključane verzije iz manifesta. To potvrđuje reproducibilnost instalacije ovisnosti. Puna instalacija u source worktreeu i dalje ostaje nepoznata jer je zaseban checkout ponovno iscrpio raspoloživi prostor.
+Nakon uklanjanja starih runtime cacheva ponovljen je puni `npm ci` u čistom dependency sandboxu koji je sadržavao samo `package.json` i `package-lock.json`. Završio je s izlaznim kodom 0, uz `added 1152 packages`, bez `ENOSPC`; `npm ls --depth=0` je pokazao zaključane verzije iz manifesta. To potvrđuje reproducibilnost instalacije ovisnosti. Puna instalacija u source worktreeu i dalje ostaje nepoznata jer je zaseban checkout ponovno iscrpio raspoloživi prostor.
+### Drugi puni source pokušaj 2026-09-21
+
+Na commitu a762a5ce kreiran je puni source worktree t41-clean2. Nakon NTFS kompresije pokrenut je puni `npm ci`; raspoloživih približno 410 MB nakon checkouta nije bilo dovoljno, instalacija je završila kodom 1 zbog `ENOSPC` i worktree je uklonjen. Puna instalacija u source worktreeu zato ostaje nepoznata; dependency sandbox iz prethodne dopune ostaje jedini potvrđeni čisti install.
