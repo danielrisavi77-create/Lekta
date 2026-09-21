@@ -23,6 +23,7 @@ import { buildCommandLine } from '../scripts/build-production.mjs';
  */
 const KORIJEN = process.cwd();
 const TOML = readFileSync(join(KORIJEN, 'netlify.toml'), 'utf8');
+const STAGING_TOML = readFileSync(join(KORIJEN, 'netlify.staging.toml'), 'utf8');
 const CI = readFileSync(join(KORIJEN, '.github/workflows/check.yml'), 'utf8');
 
 /** Blok `dist-gate` joba; sve tvrdnje gledaju SAMO njega, ne cijeli workflow. */
@@ -117,5 +118,13 @@ describe('produkcijski build: Netlify i CI se ne smiju razici', () => {
     // Prazan `dist-gate` blok bi obje tvrdnje iznad ucinio vakuumskima.
     expect(distGate().length).toBeGreaterThan(400);
     expect(TOML.length).toBeGreaterThan(400);
+  });
+});
+
+describe('staging build: javna objava mora nositi identitet artefakta', () => {
+  it('staging koristi isti build-production lanac koji upisuje build-info.json', () => {
+    const command = STAGING_TOML.match(/^\s*command\s*=\s*"([^"]+)"/m)?.[1];
+    expect(command, 'build command nije nadjen u netlify.staging.toml').toBe('node scripts/build-production.mjs');
+    expect(STAGING_TOML).not.toMatch(/^\s*command\s*=\s*"npm run build/m);
   });
 });

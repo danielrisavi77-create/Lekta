@@ -2,7 +2,9 @@
 # Netlify UI ili CLI secrets, nikad u ovaj repozitorij.
 
 [build]
-  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-title-page-tools && npm run generate-competitor-pages && node scripts/verify-deploy-dist.mjs"
+  # Staging mora koristiti isti lanac kao produkcija i CI. Taj lanac izmedju Vite builda i
+  # generatora upisuje dist/build-info.json, pa javna objava ima provjerljiv identitet.
+  command = "node scripts/build-production.mjs"
   publish = "dist"
 
 [build.environment]
