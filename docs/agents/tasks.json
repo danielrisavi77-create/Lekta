@@ -204,7 +204,7 @@
         "T18",
         "T19"
       ],
-      "note": "P0. Dokaz 2026-09-21: staging deploy repair-docx/delete-repair-job/profile-rules/client-error, source hashovi i dataset/ETag podudarni, 27-funkcijski manifest i konfiguracijski inventar osvježeni, smoke 24/24 operativnih provjera, npm run check 602 datoteke / 6.847 testova zeleno. Detalji: docs/agents/t20-live-evidence-2026-09-21.md. Produkcija nije mijenjana; preostali promotion i vlasnički paketi ostaju dokumentirani."
+      "note": "P0. Dokaz 2026-09-21: staging deploy repair-docx/delete-repair-job/profile-rules/client-error, source hashovi i dataset/ETag podudarni, 27-funkcijski manifest i konfiguracijski inventar osvježeni, staging build-info strogo potvrđen za commit 6908c4ac2770f4b1855d3d44b6f0ec06614ebbec, smoke 29/29, npm run check 603 datoteke / 6.850 testova zeleno. Detalji: docs/agents/t20-live-evidence-2026-09-21.md. Produkcija nije mijenjana; preostali promotion i vlasnički paketi ostaju dokumentirani."
     },
     {
       "id": "T21",

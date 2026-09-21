@@ -36,7 +36,15 @@ Nije korišten `--prune`, nije brisana `cleanup-agent-payloads` i nije dirana pr
 
 - `node scripts/post-deploy-smoke.mjs --site https://lekta-staging.netlify.app --functions https://bnyemcnsphlitjradrst.supabase.co/functions/v1`
 - Rezultat: 24 operativne provjere prolaze, uključujući HTML, sigurnosna zaglavlja, sve assete, pravne stranice, health i odbijanje neautoriziranog `repair-docx` poziva.
-- `build-info.json` još nije objavljen na staging Netlify deployu, pa je identitet javnog frontenda nepoznat. Smoke to prijavljuje kao warning; stroga produkcijska provjera i dalje mora tražiti build proof.
+- Početno mjerenje je pokazalo da `build-info.json` nedostaje na staroj staging objavi. Uzrok je bio zaseban staging build lanac koji je preskakao `npm run build-info`.
+
+## Staging build identity, naknadna provjera
+
+- `netlify.staging.toml` sada poziva `node scripts/build-production.mjs`, isti lanac kao produkcija i CI; guard u `tests/deploy-runtime-parity.test.ts` sprječava povratak na prepisani lanac.
+- Commit promjene: `6908c4ac2770f4b1855d3d44b6f0ec06614ebbec`.
+- Staging je ponovno izgrađen i objavljen na `https://lekta-staging.netlify.app`.
+- Strogi smoke s `--require-build-info --expect-commit 6908c4ac2770f4b1855d3d44b6f0ec06614ebbec --strict-commit` prolazi: 29/29 provjera, uključujući `build-info.json` i točan SHA.
+- Produkcijska objava nije mijenjana; njezin identitet i dalje se provjerava zasebnim release postupkom.
 
 ## Konfiguracijski inventar
 
