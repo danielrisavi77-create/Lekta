@@ -104,11 +104,25 @@ export function cockpitStepsHtml(steps: readonly CockpitStep[]): string {
     + '</ol>';
 }
 
-type ResultsCockpitFindingAction = Extract<ResultsCockpitAction, { findingId: string }>;
-function primaryAction(findings: readonly VisualFindingModel[], repairAvailable: boolean): ResultsCockpitFindingAction | null {
-  const repairable = findings.find((finding) => repairAvailable && finding.capabilities.repair);
-  if (repairable) return { kind: 'repair', findingId: repairable.id };
-  const previewable = findings.find((finding) => finding.capabilities.preview);
+/**
+ * Radnja JEDINOG primarnog gumba.
+ *
+ * ULAZ U POPRAVAK JE OPCI, NE PO NALAZU. Prva izvedba Z8 je ovdje vracala `{kind:'repair'}` za
+ * prvi popravljiv nalaz iz `findings.top`, dakle iz PRVA TRI. Dokument kojem su sva tri vodeca
+ * nalaza nepopravljiva, a popravljiv je cetvrti, tada je ostajao bez ijednog ulaza u popravak, i
+ * oznaka `repair-entry` bi s njega nestala. Stari redak `cockpit-actions` je imao suprotan ugovor:
+ * ulaz postoji UVIJEK kad je popravak dostupan. Taj ugovor ostaje, samo se sad nosi jedan gumb.
+ *
+ * `repair-safe` i `simulate-repair` su ISTE radnje koje je emitirao ukinuti redak; `app.ts` ih i
+ * dalje obraduje nepromijenjeno, pa se tok popravka ne mijenja, samo mu je ulaz jedan.
+ */
+function primaryAction(model: VisualResultModel, repairAvailable: boolean): ResultsCockpitAction | null {
+  if (repairAvailable) {
+    // Bez ijedne automatske stavke nema sto "sigurno" popraviti, pa je ulaz simulacija; natpis to
+    // i kaze, jer gumb koji obeca plan popravka nad praznim skupom laze.
+    return model.signals.automaticFixes > 0 ? { kind: 'repair-safe' } : { kind: 'simulate-repair' };
+  }
+  const previewable = model.findings.top.find((finding) => finding.capabilities.preview);
   return previewable ? { kind: 'preview', findingId: previewable.id } : null;
 }
 
@@ -128,19 +142,39 @@ function statusCopy(model: VisualResultModel): { label: string; description: str
  */
 function primaryButtonLabel(action: ResultsCockpitAction | null): string {
   if (!action) return 'Prikaži što treba provjeriti';
-  return action.kind === 'repair' ? 'Napravi plan popravka' : 'Otvori prvi nalaz';
+  if (action.kind === 'repair-safe') return 'Napravi plan popravka';
+  return action.kind === 'simulate-repair' ? 'Simuliraj popravak' : 'Otvori prvi nalaz';
 }
 
 /**
  * Prvi redak lista presude. AUTORITET IZVORA ZIVI OVDJE: do Z8 ga je crtao zaseban blok
  * (`cockpit-authority`, kvacica i dvije recenice), koji je uz zaglavlje ponavljao istu tvrdnju.
  * Prazni dijelovi se izbacuju, jer " · · " bez sadrzaja izgleda kao kvar.
+ *
+ * TRECI DIO JE `model.authority.label`, ne `header.authorityLabel`. Prva izvedba Z8 je uzela ovo
+ * drugo, pa je `model.authority` ostao bez ijednog citatelja u prikazu: s ekrana je nestala tvrdnja
+ * o IZVORU PRAVILA ("Djelomicno provjeren izvor") i ostala samo tvrdnja o opsegu provjere. To su
+ * dvije razlicite stvari i obje pripadaju ovom listu; opseg ide u ogradu ispod.
  */
 function eyebrowHtml(model: VisualResultModel): string {
-  const dijelovi = [model.header.documentName, model.header.profile, model.header.authorityLabel]
+  const dijelovi = [model.header.documentName, model.header.profile, model.authority.label]
     .filter((v): v is string => typeof v === 'string' && v.trim().length > 0)
     .map((v) => escapeHtml(v));
   return `<p class="cockpit-eyebrow" data-cockpit-eyebrow>${dijelovi.join(' · ')}</p>`;
+}
+
+/**
+ * OGRADA UZ PRESUDU. Zaseban blok autoriteta je ukinut, ali njegova DRUGA recenica nije ukras:
+ * kod neprovjerenog ili ogradjenog profila kaze da su nalazi moguca odstupanja, a ne potvrdjeni
+ * zahtjevi. Bez nje bi presuda tvrdila vise nego sto izvor nosi.
+ *
+ * Kod provjerenog izvora se umjesto nje pise OPSEG (`header.authorityLabel`): tamo je opis samo
+ * druga formulacija naljepnice koja vec stoji u eyebrowu, pa bi ista tvrdnja stajala dvaput.
+ */
+function caveatHtml(model: VisualResultModel): string {
+  const tekst = model.authority.kind === 'verified' ? model.header.authorityLabel : model.authority.description;
+  if (typeof tekst !== 'string' || !tekst.trim()) return '';
+  return `<p class="cockpit-caveat" data-cockpit-caveat="${escapeHtml(model.authority.kind)}">${escapeHtml(tekst)}</p>`;
 }
 
 /**
@@ -217,7 +251,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   drzac._desk = null;
   const stol = options.desk && options.desk.items.length ? options.desk : null;
   const status = statusCopy(model);
-  const action = primaryAction(model.findings.top, options.repairAvailable);
+  const action = primaryAction(model, options.repairAvailable);
   const advancedOpen = options.advancedOpen === true;
   const sazetak = findingSummary(model.signals, model.score, model.readiness.authoritative, options.repairAvailable);
   // STROP SE UZIMA SAMO KAD JE POZNAT. `unavailable` model (profil bez bodovanih provjera) nema
@@ -240,6 +274,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '<div class="cockpit-sheet__lead" data-cockpit-sheet-lead>',
     eyebrowHtml(model),
     marksHtml(model),
+    caveatHtml(model),
     '<h1 class="cockpit-verdict-title" id="cockpitVerdictTitle" data-cockpit-verdict-title data-verdict="',
     status.tone, '">', escapeHtml(status.label), '</h1>',
     // SAZETAK JE POSTOJECI MODUL. Ocjena se iz njega ISKLJUCUJE, jer je u listu presude crta
@@ -247,10 +282,17 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     findingSummaryHtml(sazetak, escapeHtml, { strop, ocjena: false }),
     '<div class="cockpit-sheet__actions">',
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
-    action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '',
-    // `repair-entry` je OZNAKA ULAZA U POPRAVAK i ostaje na jedinom gumbu koji u popravak vodi.
-    // Nosi je samo kad je radnja stvarno popravak; na "Otvori prvi nalaz" bi lagala.
-    options.repairAvailable && action?.kind === 'repair' ? ' data-testid="repair-entry"' : '',
+    action && 'findingId' in action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '',
+    // `data-cockpit-action` OSTAJE NA ULAZU U POPRAVAK. Redak s tri gumba je nestao, radnje nisu:
+    // sest Playwright specova (repair-panel, repair-cta-opens-panel, repair-selection-restore,
+    // workspace-a11y, workspace-viewports, ux-dist/critical-path) trazi bas ovaj atribut unutar
+    // `#resultCockpit` kao dokaz da ulaz u popravak postoji i da je omogucen.
+    action?.kind === 'repair-safe' || action?.kind === 'simulate-repair'
+      ? ' data-cockpit-action="' + action.kind + '"'
+      : '',
+    // `repair-entry` je OZNAKA OPCEG ULAZA U POPRAVAK i po ugovoru stoji na tocno jednom
+    // omogucenom gumbu kad god je popravak dostupan; vidi `primaryAction`.
+    options.repairAvailable ? ' data-testid="repair-entry"' : '',
     '>', primaryButtonLabel(action), ' <span aria-hidden="true">&#8594;</span></button>',
     '<button type="button" class="cockpit-link" data-cockpit-action="open-findings">Pregledaj nalaze',
     ' <span aria-hidden="true">&#8595;</span></button>',

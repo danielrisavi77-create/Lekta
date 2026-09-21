@@ -93,7 +93,7 @@ describe('Results Cockpit V1', () => {
     expect(mount.querySelector('[data-cockpit-action="advanced"]')).toBeTruthy();
   });
 
-  it('routes primary action to the first actionable finding', () => {
+  it('routes the primary action to the general repair entry', () => {
     const mount = document.createElement('section');
     const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
     const model = buildVisualResultModel(result());
@@ -105,10 +105,8 @@ describe('Results Cockpit V1', () => {
 
     mount.querySelector<HTMLButtonElement>('[data-cockpit-primary]')?.click();
 
-    expect(onAction).toHaveBeenCalledWith({
-      kind: 'repair',
-      findingId: model.findings.top[0]?.id,
-    });
+    // OPCI ULAZ, ne ulaz u prvi popravljiv nalaz iz `findings.top`: vidi `primaryAction`.
+    expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe' });
   });
 
   it('lets the user open a finding location and the advanced layer', () => {
@@ -259,15 +257,15 @@ describe('Results Cockpit V1', () => {
 
     expect(mount.querySelector('[data-cockpit-eyebrow]')?.textContent).toContain('DIPLOMSKI_RAD.docx');
     expect(mount.textContent).toContain('FPZG / Politologija / Diplomski rad');
-    expect(mount.textContent).toContain('Pravila provjerena prema službenim izvorima');
+    expect(mount.textContent).toContain('Provjereni fakultetski izvor');
   });
 
   it('usmjerava preostale akcije lista presude na postojeće callbacke', () => {
     /**
      * Z8 gasi redak s TRI gumba: "Pregledaj nalaze", "Simuliraj popravak" i "Popravi sigurne
      * stavke" vodili su u isti panel, pa je izbor medu njima bio lazan. Ostaje jedan primarni
-     * gumb i jedna tekstualna poveznica; `repair-safe` i dalje postoji kao radnja, ali ga emitira
-     * plan na stolu (`[data-repair-plan-go]`, vidi tests/desk-mount.test.ts).
+     * gumb i jedna tekstualna poveznica. RADNJE ostaju iste: primarni gumb i dalje emitira
+     * `repair-safe`, samo ih je sada jedan umjesto tri.
      */
     const mount = document.createElement('section');
     const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
@@ -277,8 +275,10 @@ describe('Results Cockpit V1', () => {
     mount.querySelector<HTMLButtonElement>('[data-cockpit-action="open-findings"]')?.click();
 
     expect(onAction).toHaveBeenNthCalledWith(1, { kind: 'open-findings' });
-    expect(mount.querySelector('[data-cockpit-action="simulate-repair"]')).toBeNull();
-    expect(mount.querySelector('[data-cockpit-action="repair-safe"]')).toBeNull();
+    // Tri gumba su pala na jedan: `simulate-repair` i `repair-safe` se ne crtaju istovremeno.
+    expect(mount.querySelectorAll('[data-cockpit-action="simulate-repair"]')).toHaveLength(0);
+    expect(mount.querySelectorAll('[data-cockpit-action="repair-safe"]')).toHaveLength(1);
+    expect(mount.querySelectorAll('[data-cockpit-primary]')).toHaveLength(1);
   });
 
   it('uses cockpit by default and allows an explicit legacy opt-out', () => {
@@ -404,14 +404,105 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
   });
 
   it('eyebrow spaja ime datoteke, profil i autoritet izvora u jedan redak', () => {
-    const { mount } = renderaj({ file: { name: 'DIPLOMSKI_RAD.docx' } });
+    const { mount, model } = renderaj({ file: { name: 'DIPLOMSKI_RAD.docx' } });
     const eyebrow = mount.querySelector('[data-cockpit-eyebrow]')?.textContent ?? '';
 
     expect(eyebrow).toContain('DIPLOMSKI_RAD.docx');
     expect(eyebrow).toContain('FPZG / Politologija / Diplomski rad');
-    expect(eyebrow).toContain('Pravila provjerena prema službenim izvorima');
+    // AUTORITET IZVORA je `model.authority.label`, a ne `header.authorityLabel` (opseg provjere):
+    // to su dvije razlicite tvrdnje i eyebrow nosi onu o IZVORU.
+    expect(model.authority.label).toBe('Provjereni fakultetski izvor');
+    expect(eyebrow).toContain(model.authority.label);
     // Zaseban blok autoriteta je ukinut; tvrdnja pada ako se vrati.
     expect(mount.querySelector('[data-cockpit-authority]')).toBeNull();
+  });
+
+  it('ograda ogradjenog profila ostaje na listu presude, ne nestaje s ekrana', () => {
+    /**
+     * Prva izvedba Z8 je autoritet uzela iz `header.authorityLabel`, pa `model.authority` vise
+     * nijedan prikaz nije citao: recenica "nalazi su moguca odstupanja, ne potvrdjeni zahtjevi"
+     * nestala je s ekrana umjesto da se premjesti. Ograda je tvrdnja o tome koliko izvor obvezuje
+     * i mora stajati uz presudu.
+     */
+    const { mount, model } = renderaj({ profileStatus: 'draft', details: { ruleAuthority: 'institution' } });
+
+    expect(model.authority.kind).toBe('limited');
+    expect(mount.querySelector('[data-cockpit-eyebrow]')?.textContent).toContain('Djelomično provjeren izvor');
+    expect(mount.querySelector('[data-cockpit-caveat]')?.textContent).toBe(model.authority.description);
+    expect(mount.textContent).toContain('moguća odstupanja');
+  });
+
+  it('MUTACIJA: ograda koja se cita iz krivog polja modela ne prati autoritet izvora', () => {
+    // Kontrola: ogradjen profil ima DRUGU ogradu od provjerenog. Da prikaz cita `header`, oba bi
+    // ekrana nosila isti tekst i ova bi tvrdnja pala.
+    const ogradjen = renderaj({ profileStatus: 'draft', details: { ruleAuthority: 'institution' } });
+    const provjeren = renderaj();
+    const a = ogradjen.mount.querySelector('[data-cockpit-caveat]')?.textContent ?? '';
+    const b = provjeren.mount.querySelector('[data-cockpit-caveat]')?.textContent ?? '';
+
+    expect(a).not.toBe('');
+    expect(b).not.toBe('');
+    expect(a === b).toBe(false);
+  });
+
+  it('opci ulaz u popravak stoji na primarnom gumbu i kad vodeca tri nalaza nisu popravljiva', () => {
+    /**
+     * UGOVOR `repair-entry`: kad je popravak dostupan, ulaz postoji UVIJEK i tocno jednom. Prva
+     * izvedba Z8 ga je vezala uz prvi popravljiv nalaz iz `findings.top`, pa je dokument kojem su
+     * sva tri vodeca nalaza nepopravljiva ostajao bez ijednog ulaza. Sest Playwright specova
+     * (`repair-panel`, `repair-cta-opens-panel`, `repair-selection-restore`, `workspace-a11y`,
+     * `workspace-viewports`, `ux-dist/critical-path`) trazi bas taj atribut unutar `#resultCockpit`.
+     */
+    const bezPopravka = {
+      capabilities: { repair: false, preview: true },
+      details: {
+        ruleAuthority: 'official-source',
+        triage: { counts: { auto: 2, assisted: 0, manual: 0, total: 2 }, findings: [] },
+      },
+    };
+    const { mount } = renderaj(bezPopravka);
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(mount.querySelectorAll('[data-testid="repair-entry"]')).toHaveLength(1);
+    expect(gumb?.dataset.testid).toBe('repair-entry');
+    expect(gumb?.dataset.cockpitAction).toBe('repair-safe');
+    expect(gumb?.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('bez ijedne automatske stavke ulaz je simulacija, jer plan popravka nad praznim skupom laze', () => {
+    const { mount } = renderaj({
+      details: {
+        ruleAuthority: 'official-source',
+        triage: { counts: { auto: 0, assisted: 1, manual: 2, total: 3 }, findings: [] },
+      },
+    });
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(gumb?.dataset.cockpitAction).toBe('simulate-repair');
+    expect(gumb?.textContent).toContain('Simuliraj popravak');
+    expect(gumb?.dataset.testid).toBe('repair-entry');
+  });
+
+  it('bez dostupnog popravka nema oznake ulaza, jer bi tvrdila ponudu koje nema', () => {
+    const { mount } = renderaj({}, { repairAvailable: false });
+
+    expect(mount.querySelectorAll('[data-testid="repair-entry"]')).toHaveLength(0);
+    expect(mount.querySelector('[data-cockpit-primary]')?.textContent).toContain('Otvori prvi nalaz');
+  });
+
+  it('MUTACIJA: ulaz vezan uz prva tri nalaza pada na dokumentu bez popravljivog vodeceg nalaza', () => {
+    // Stara izvedba: `findings.top.find((f) => f.capabilities.repair)`. Nad istim modelom vraca
+    // `undefined`, dakle nijedan ulaz; nova izvedba ga ipak daje.
+    const { mount, model } = renderaj({
+      capabilities: { repair: false, preview: true },
+      details: {
+        ruleAuthority: 'official-source',
+        triage: { counts: { auto: 2, assisted: 0, manual: 0, total: 2 }, findings: [] },
+      },
+    });
+
+    expect(model.findings.top.some((nalaz) => nalaz.capabilities.repair)).toBe(false);
+    expect(mount.querySelectorAll('[data-testid="repair-entry"]').length === 0).toBe(false);
   });
 
   it('spojena rečenica nosi OBA broja kad je strop poznat', () => {
@@ -492,6 +583,34 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
 
     klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--prev'));
     expect(naslov()).toBe(prvi);
+  });
+
+  it('red čekanja stoji ISPOD kartice i nabraja sve nalaze', () => {
+    /**
+     * Z8 vadi karticu iz reda cekanja i daje joj pager; red cekanja se time NE ukida (Z9 ga
+     * izricito trazi ispod kartice, a `tests/ux/korektorski-stol.spec.ts` ga mjeri kao ugovor).
+     * Detalj vise NE zivi u retku, inace bi isti nalaz bio nacrtan dvaput.
+     */
+    const { mount, model } = saStolom();
+    const redci = [...mount.querySelectorAll('[data-desk-queue] .dq-item')];
+    const kartica = mount.querySelector<HTMLElement>('[data-desk-pane] article.cockpit-finding');
+    const popis = mount.querySelector<HTMLElement>('[data-desk-queue]');
+
+    expect(redci).toHaveLength(model.findings.document.length);
+    expect(mount.querySelectorAll('[data-desk-queue] .cockpit-finding')).toHaveLength(0);
+    expect(mount.querySelectorAll('[data-desk-queue] .dq-item--open')).toHaveLength(1);
+    // Struktura, ne pikseli: popis slijedi karticu unutar istog panoa.
+    const djeca = [...(kartica!.parentElement?.children ?? [])];
+    expect(djeca.indexOf(popis!)).toBeGreaterThan(djeca.indexOf(kartica!));
+  });
+
+  it('MUTACIJA: red čekanja koji nabraja samo prikazani nalaz gubi odgovor na "što me još čeka"', () => {
+    const { mount, model } = saStolom();
+    const popis = mount.querySelector<HTMLElement>('[data-desk-queue]')!;
+    expect(popis.querySelectorAll('.dq-item')).toHaveLength(model.findings.document.length);
+
+    popis.querySelectorAll('.dq-item').forEach((redak, i) => { if (i > 0) redak.remove(); });
+    expect(popis.querySelectorAll('.dq-item').length === model.findings.document.length).toBe(false);
   });
 
   it('`#resultCockpit article.cockpit-finding` i dalje pogađa barem jednu karticu', () => {
