@@ -28,8 +28,9 @@ adversarijalni pregled prema AGENTS.md.
 ## Pocetak
 
 1. Instaliraj aktualne native Codex, Claude Code i (po potrebi) Grok Build CLI alate i prijavi ih
-   na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login` (ili
-   `XAI_API_KEY` za headless). Grok: https://docs.x.ai/build/overview
+   na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login`.
+   Lektin runner namjerno odbija xAI API kljuceve i Grok koristi samo preko pretplate.
+   Grok: https://docs.x.ai/build/overview
    (`curl -fsSL https://x.ai/cli/install.sh | bash` ili `npm install -g @xai-official/grok`).
    Runner je verificiran s Grok CLI 1.0.34 i odbija oslanjanje na stariji JSON ugovor;
    `doctor` oznacava instalaciju kao `supported` ili `unsupported; minimum 1.0.34`.
@@ -49,10 +50,10 @@ nije preporuka troska niti jamstvo iznosa na racunu:
 npm run agents -- prepare T00 --phase plan --agent fable --budget-usd 3
 ```
 
-Isti audit preko Grok CLI (nema `--budget-usd`; auth je `grok login` ili `XAI_API_KEY`):
+Isti audit preko Grok CLI (nema `--budget-usd`; auth je iskljucivo `grok login`):
 
 ```bash
-npm run agents -- prepare T00 --phase plan --agent grok
+npm run agents -- prepare T00 --phase plan --agent grok --grok-subscription
 ```
 
 Izlaz sadrzi model, argumente i cijeli prompt. `run` bez `--execute` takoder daje samo pripremu.
@@ -81,7 +82,7 @@ npm run agents -- run T01 --phase implement --agent opus --budget-usd 5 --execut
 ```
 
 Za Sonnet promijeni `--agent sonnet`. Za Sol koristi `--agent sol` i izostavi Claude budzet.
-Za Grok Build implementaciju koristi `--agent build` (takoder bez Claude budzeta).
+Za Grok Build implementaciju koristi `--agent build --grok-subscription` (takoder bez Claude budzeta).
 Priprema i implementacija citaju upute iz worktreea u kojem se naredba izvodi.
 Runner trazi cist worktree na zasebnoj grani prije implementacije. Lokalni Git lock dopusta
 samo jedan poziv ovog runnera odjednom preko svih worktreeva. Ne zakljucava GitHub ni druge
@@ -104,7 +105,7 @@ Sol promjenu pregledava Fable, uz lokalno odabran `--budget-usd`. Build (Grok) p
 Astra ili Fable (drugi provider). Codex/Claude implementaciju moze pregledati Grok:
 
 ```bash
-npm run agents -- run T01 --phase review --agent grok --execute
+npm run agents -- run T01 --phase review --agent grok --grok-subscription --execute
 ```
 
 Preglednik cita diff/dokaze
@@ -174,13 +175,32 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 Lokalni testovi provjeravaju protokol i rukovanje rezultatima. Oni ne dokazuju da su
 racuni prijavljeni ili da je stvarni model isporucio kvalitetnu LEKTA promjenu.
 
+## Grok samo preko pretplate na self-hosted runneru
+
+Workflow `Grok Subscription Smoke` namjerno radi samo rucnim `workflow_dispatch` pozivom na
+trajnom GitHub Actions runneru s oznakama `self-hosted`, `linux`, `x64` i `lekta-grok`.
+GitHub-hosted runner nije prikladan jer ne cuva interaktivnu grok.com prijavu izmedu poslova.
+
+Na runneru instaliraj podrzani Grok CLI i Bubblewrap, omoguci unprivileged user namespaces te
+pokreni `grok login` kao isti OS korisnik pod kojim radi GitHub runner servis. Provjeri `grok models`.
+Ne kopiraj `.grok/auth.json` u repozitorij, Actions secret ni artefakt.
+
+Workflow i odgovarajuci CLI nacin odbijaju `XAI_API_KEY` i `GROK_API_KEY` prije modelskog poziva:
+
+```bash
+npm run agents -- run T00 --phase plan --agent grok --grok-subscription --execute
+```
+
+Ovaj smoke je samo read-only dokaz prijave, sandboxa i aktualnog JSON ugovora. Ne odobrava
+implementaciju, merge ili deploy. Grok Build implementaciju i dalje mora pregledati drugi provider.
+
 ## Pretplatnicki nacin i autonomni kontroler (2026-09-09)
 
 `--subscription` je drugi, odvojen nacin naplate runnera: Claude poziv ide bez `--max-budget-usd` (jer
 se do naplate ne smije ni doci), Fable i oba Grok aliasa (`grok`, `build`) iskljuceni su jer ih taj
-profil ne pokriva, a postavljen `ANTHROPIC_API_KEY` u okolini je greska prije pripreme. Grok se pokrece
-samo u rucnom nacinu uz zasebno provjerenu xAI prijavu ili API naplatu. Rucni `--budget-usd` nacin je
-nepromijenjen.
+Claude profil ne pokriva, a postavljen `ANTHROPIC_API_KEY` u okolini je greska prije pripreme. Za
+Grok pretplatu koristi se odvojeni `--grok-subscription` profil opisan iznad. Grok aliasi se
+ne mogu pokrenuti bez tog profila; rucni `--budget-usd` nacin ostaje samo za ostale providere.
 
 ```bash
 npm run agents -- prepare T02 --phase plan --agent astra --subscription

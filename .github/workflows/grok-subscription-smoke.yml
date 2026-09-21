@@ -1,0 +1,35 @@
+name: Grok Subscription Smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: grok-subscription-smoke
+  cancel-in-progress: false
+
+jobs:
+  plan-smoke:
+    runs-on: [self-hosted, linux, x64, lekta-grok]
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install repository dependencies
+        run: npm ci
+      - name: Verify subscription-only Grok login
+        shell: bash
+        run: |
+          if [[ -n "${XAI_API_KEY:-}" || -n "${GROK_API_KEY:-}" ]]; then
+            echo "Refusing API credentials; this workflow must use grok.com subscription login." >&2
+            exit 1
+          fi
+          grok version
+          grok models
+      - name: Run read-only Grok plan smoke
+        run: npm run agents -- run T00 --phase plan --agent grok --grok-subscription --execute

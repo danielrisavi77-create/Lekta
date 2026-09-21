@@ -42,11 +42,12 @@ if ('${grokMode}' === 'sandbox-failure') {
 }
 console.log(JSON.stringify({ text: 'ok', stopReason: 'end_turn', num_turns: 1, modelUsage: { 'grok-4.6-build': { modelCalls: 1 } } }));
 `, { mode: 0o755 });
-  const run = (...args: string[]) => spawnSync(process.execPath, [cli, ...args], {
+  const runWithEnv = (env: NodeJS.ProcessEnv, ...args: string[]) => spawnSync(process.execPath, [cli, ...args], {
     cwd: root, encoding: 'utf8', timeout: 10_000,
-    env: { ...process.env, PATH: `${join(root, 'bin')}:${process.env.PATH}` },
+    env: { ...process.env, ...env, PATH: `${join(root, 'bin')}:${process.env.PATH}` },
   });
-  return { root, run };
+  const run = (...args: string[]) => runWithEnv({}, ...args);
+  return { root, run, runWithEnv };
 }
 
 // Native test executable uses a POSIX shebang. Pure protocol tests cover every platform.
@@ -93,7 +94,7 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
   });
   it('runs Grok through a prompt file with read-only sandbox and records its model evidence', () => {
     const { root, run } = fixture();
-    const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--execute');
+    const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--grok-subscription', '--execute');
     expect(result.status, result.stderr).toBe(0);
     const report = JSON.parse(result.stdout);
     expect(report.status).toBe('needs_verification');
@@ -102,7 +103,7 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
   });
   it('diagnoses an unavailable Bubblewrap sandbox without weakening it', () => {
     const { run } = fixture('turn.completed', 'sandbox-failure');
-    const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--execute');
+    const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--grok-subscription', '--execute');
     expect(result.status).toBe(1);
     const report = JSON.parse(result.stdout);
     expect(report).toMatchObject({ status: 'failed', diagnostic: 'grok_sandbox_unavailable' });
@@ -116,5 +117,27 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     const unsupported = fixture('turn.completed', 'old-version').run('doctor');
     expect(unsupported.status, unsupported.stderr).toBe(0);
     expect(unsupported.stdout).toContain('grok: grok 1.0.33 (old) [unsupported; minimum 1.0.34]');
+  });
+  it('refuses API credentials in Grok subscription mode before calling the provider', () => {
+    const { runWithEnv } = fixture();
+    const result = runWithEnv({ XAI_API_KEY: 'must-not-be-used' },
+      'prepare', 'T00', '--phase', 'plan', '--agent', 'grok', '--grok-subscription');
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('refuses API credentials');
+  });
+  it('refuses Grok without the dedicated subscription flag', () => {
+    const { run } = fixture();
+    const result = run('prepare', 'T00', '--phase', 'plan', '--agent', 'grok');
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('requires --grok-subscription');
+  });
+  it('refuses an unverified Grok CLI version in subscription mode', () => {
+    const { run } = fixture('turn.completed', 'old-version');
+    const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--grok-subscription', '--execute');
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('minimum 1.0.34');
   });
 });

@@ -2631,4 +2631,17 @@ describe('agent workflow guards', () => {
     expect(() => prepareJob(queue, 'T01', 'review', 'astra')).not.toThrow();
     expect(() => prepareJob(queue, 'T01', 'review', 'fable', 2)).toThrow(/different provider/);
   });
+
+  it('Grok subscription profil odbija mutaciju na drugi provider', async () => {
+    const { prepareJob } = await import('../scripts/agents/core.mjs');
+    const queue = { tasks: [
+      { id: 'T00', title: 'Baseline', status: 'done', dependsOn: [] },
+      { id: 'T01', title: 'Fix', status: 'ready', dependsOn: ['T00'] },
+    ] };
+
+    expect(() => prepareJob(queue, 'T01', 'plan', 'grok', undefined, { billingMode: 'grok_subscription' }))
+      .not.toThrow();
+    expect(() => prepareJob(queue, 'T01', 'plan', 'astra', undefined, { billingMode: 'grok_subscription' }))
+      .toThrow(/only supports Grok/);
+  });
 });

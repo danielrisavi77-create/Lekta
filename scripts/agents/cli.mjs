@@ -50,7 +50,7 @@ const git = (...args) => {
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--execute]');
+    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription | --grok-subscription] [--execute]');
     return;
   }
   if (command === 'doctor') {
@@ -67,7 +67,7 @@ function main() {
         console.log(`${cli}: ${result.status === 0 ? line : 'unavailable'}`);
       }
     }
-    console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login (or XAI_API_KEY). No model was called.');
+    console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login. Grok jobs refuse API credentials. No model was called.');
     return;
   }
   const queue = JSON.parse(readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8'));
@@ -82,8 +82,8 @@ function main() {
   const options = new Map();
   while (rest.length) {
     const key = rest.shift();
-    if (!['--agent', '--phase', '--budget-usd', '--execute', '--subscription'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
-    const value = (key === '--execute' || key === '--subscription') ? true : rest.shift();
+    if (!['--agent', '--phase', '--budget-usd', '--execute', '--subscription', '--grok-subscription'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
+    const value = (key === '--execute' || key === '--subscription' || key === '--grok-subscription') ? true : rest.shift();
     if (!value || (typeof value === 'string' && value.startsWith('--'))) throw new Error(`Missing value: ${key}`);
     options.set(key, value);
   }
@@ -91,17 +91,34 @@ function main() {
   const phase = options.get('--phase');
   const agent = options.get('--agent');
   const budget = options.has('--budget-usd') ? Number(options.get('--budget-usd')) : undefined;
-  const billingMode = options.has('--subscription') ? 'subscription' : 'budget';
+  if (options.has('--subscription') && options.has('--grok-subscription')) {
+    throw new Error('Choose either --subscription or --grok-subscription');
+  }
+  const billingMode = options.has('--grok-subscription')
+    ? 'grok_subscription'
+    : (options.has('--subscription') ? 'subscription' : 'budget');
   // Pretplatnicki nacin: postavljen API kljuc bi Claude `-p` poziv prebacio na API naplatu (dokumentirano
   // ponasanje CLI-ja), pa je to greska prije pripreme, ne upozorenje poslije poziva.
   if (billingMode === 'subscription') {
     const leaked = ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_API_KEY'].filter(name => process.env[name]);
     if (leaked.length) throw new Error(`subscription mode refuses API credentials in the environment: ${leaked.join(', ')}`);
   }
+  if (billingMode === 'grok_subscription') {
+    const leaked = ['XAI_API_KEY', 'GROK_API_KEY'].filter(name => process.env[name]);
+    if (leaked.length) throw new Error(`grok_subscription mode refuses API credentials in the environment: ${leaked.join(', ')}`);
+  }
   const job = prepareJob(queue, id, phase, agent, budget, { billingMode });
   if (!options.has('--execute')) {
     console.log(JSON.stringify({ dryRun: true, ...job }, null, 2));
     return;
+  }
+  if (billingMode === 'grok_subscription') {
+    const versionResult = spawnSync('grok', ['version'], { encoding: 'utf8', timeout: 10_000 });
+    const versionLine = (versionResult.stdout || versionResult.stderr || '').trim().split('\n')[0];
+    const version = parseGrokVersion(versionLine);
+    if (versionResult.status !== 0 || !version.supported) {
+      throw new Error(`grok_subscription requires Grok CLI minimum ${GROK_MIN_VERSION}; found ${version.version ?? 'unavailable'}`);
+    }
   }
   if (resolve(git('rev-parse', '--show-toplevel')) !== resolve(root)) throw new Error('Run from the repository root');
   const gitDir = resolve(root, git('rev-parse', '--git-dir'));

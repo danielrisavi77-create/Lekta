@@ -55,9 +55,10 @@ export function validateQueue(queue) {
  *  - `subscription`: autonomni profil; NEMA budzeta jer se ne smije ni doci do naplate: Fable je iskljucen
  *    (nije u paketu), API kljuc u okolini je odbijen u CLI-ju, a poziv ide iskljucivo kroz prijavljenu
  *    pretplatu. Lazni pozitivan budzet se ovdje ne unosi da bi "prosla" stara validacija.
- * Grok (xAI) nema USD budget flag u runneru; headless cesto koristi `XAI_API_KEY` ili `grok login`.
+ *  - `grok_subscription`: jedini Grok profil; dopusta samo `grok`/`build`, nema USD budzet i
+ *    zahtijeva da CLI prije poziva odbije xAI API vjerodajnice iz okoline.
  */
-export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
+export const BILLING_MODES = Object.freeze(['budget', 'subscription', 'grok_subscription']);
 export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'build']);
 
 export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
@@ -104,6 +105,13 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   }
   if (billingMode === 'subscription' && SUBSCRIPTION_EXCLUDED_AGENTS.includes(agentName)) {
     throw new Error(`${agentName} is not included in the subscription profile`);
+  }
+  if (agent.command === 'grok' && billingMode !== 'grok_subscription') {
+    throw new Error(`${agentName} requires --grok-subscription`);
+  }
+  if (billingMode === 'grok_subscription') {
+    if (agent.command !== 'grok') throw new Error('grok_subscription only supports Grok agents');
+    if (budget !== undefined) throw new Error('grok_subscription mode does not take --budget-usd');
   }
   if (agent.command === 'claude' && billingMode === 'subscription') {
     if (budget !== undefined) throw new Error('subscription mode does not take --budget-usd');

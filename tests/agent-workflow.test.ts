@@ -21,7 +21,7 @@ describe('agent handoff', () => {
   it('delivers the Grok prompt through a file placeholder, never in argv', () => {
     const q = queue();
     q.tasks[1].title = 'Repair $(touch stolen) `echo secret`';
-    const job = prepareJob(q, 'T01', 'implement', 'build');
+    const job = prepareJob(q, 'T01', 'implement', 'build', undefined, { billingMode: 'grok_subscription' });
     expect(job.command).toBe('grok');
     expect(job.args[0]).toBe('--no-auto-update');
     expect(job.args).toContain('--prompt-file');
@@ -31,7 +31,7 @@ describe('agent handoff', () => {
     expect(job.args.slice(job.args.indexOf('--sandbox'), job.args.indexOf('--sandbox') + 2)).toEqual(['--sandbox', 'workspace']);
     expect(job.args.join(' ')).not.toContain('stolen');
     expect(job.prompt).toContain('$(touch stolen)');
-    const plan = prepareJob(q, 'T01', 'plan', 'grok');
+    const plan = prepareJob(q, 'T01', 'plan', 'grok', undefined, { billingMode: 'grok_subscription' });
     expect(plan.args).not.toContain('--always-approve');
     expect(plan.args.slice(plan.args.indexOf('--sandbox'), plan.args.indexOf('--sandbox') + 2)).toEqual(['--sandbox', 'read-only']);
     expect(plan.command).toBe('grok');
@@ -71,7 +71,7 @@ describe('agent handoff', () => {
     expect(() => prepareJob(q, 'T01', 'review', 'grok')).toThrow(/different provider/);
     expect(prepareJob(q, 'T01', 'review', 'astra').command).toBe('codex');
     q.tasks[1].implementationAgent = 'sol';
-    expect(prepareJob(q, 'T01', 'review', 'grok').command).toBe('grok');
+    expect(prepareJob(q, 'T01', 'review', 'grok', undefined, { billingMode: 'grok_subscription' }).command).toBe('grok');
   });
   it('rejects missing dependencies and dependency cycles', () => {
     const q = queue();
@@ -150,11 +150,33 @@ describe('subscription billing mode (autonomy profile)', () => {
   });
 });
 
+describe('Grok subscription billing mode', () => {
+  it('rejects every Grok job unless the dedicated subscription mode is selected', () => {
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'grok'))
+      .toThrow(/requires --grok-subscription/);
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'build'))
+      .toThrow(/requires --grok-subscription/);
+  });
+
+  it('allows only Grok agents without a USD budget', () => {
+    const plan = prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'grok_subscription' });
+    const implementation = prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'grok_subscription' });
+
+    expect(plan.billingMode).toBe('grok_subscription');
+    expect(plan.args).not.toContain('--max-budget-usd');
+    expect(implementation.billingMode).toBe('grok_subscription');
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'astra', undefined, { billingMode: 'grok_subscription' }))
+      .toThrow(/only supports Grok/);
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', 3, { billingMode: 'grok_subscription' }))
+      .toThrow(/budget/);
+  });
+});
+
 
 describe('agent process boundary helpers', () => {
   it('spawns Grok with a prompt file, no prompt argv, no stdin and no shell', async () => {
     const { spawnJob } = await import('../scripts/agents/cli.mjs');
-    const job = prepareJob(queue(), 'T01', 'plan', 'grok');
+    const job = prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'grok_subscription' });
     let call: { command?: string; args?: string[]; options?: Record<string, unknown> } = {};
     const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
       call = { command, args, options };
