@@ -181,11 +181,11 @@
     {
       "id": "T18",
       "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
-      "status": "ready",
+      "status": "done",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka."
+      "note": "P0. Dokaz: staging auth, pravila, testni popravak, privatno preuzimanje, migracijski identitet i DB smoke su zeleni; T18 live dokaz je u docs/agents/t18-live-evidence-2026-09-20.md. Produkcija nije mijenjana."
     },
     {
       "id": "T19",
@@ -199,17 +199,17 @@
     {
       "id": "T20",
       "title": "Uskladiti Edge kod, pravila i konfiguraciju",
-      "status": "blocked",
+      "status": "done",
       "dependsOn": [
         "T18",
         "T19"
       ],
-      "note": "P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak."
+      "note": "P0. Dokaz 2026-09-21: staging deploy repair-docx/delete-repair-job/profile-rules/client-error, source hashovi i dataset/ETag podudarni, 27-funkcijski manifest i konfiguracijski inventar osvježeni, smoke 24/24 operativnih provjera, npm run check 602 datoteke / 6.847 testova zeleno. Detalji: docs/agents/t20-live-evidence-2026-09-21.md. Produkcija nije mijenjana; preostali promotion i vlasnički paketi ostaju dokumentirani."
     },
     {
       "id": "T21",
       "title": "Zatvoriti sigurnosne i autorizacijske rizike",
-      "status": "blocked",
+      "status": "ready",
       "dependsOn": [
         "T18",
         "T20"

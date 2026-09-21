@@ -230,11 +230,11 @@ Rasponi se dijelom preklapaju kroz istraživanje i čekanje vanjskih ovisnosti; 
 **Ovisi o:** T18, T19.  
 **Mjesta rada:** `supabase/deploy-manifest.json`, `supabase/functions/`, `scripts/deploy-drift.mjs`, `scripts/generate-deploy-manifest.mjs`, `src/config/production-config.ts`, `src/config/deployment.ts`, `data/generated/profile-rules-server.json`.
 
-- [ ] Napraviti sadržajnu usporedbu deploya s točnim commitom, uključujući lokalne importove i dataset, uz normalizaciju CRLF/LF gdje je primjerena.
-- [ ] U stagingu objaviti aktualni bounded multipart `repair-docx`, brisanje, `profile-rules` i `client-error`; provjeriti krajnji učinak i tek onda planirati produkcijsku promociju.
-- [ ] Generirati recipe/server pravila postojećom naredbom, potvrditi digest te klijentsko-serverski ugovor za stabilne check ID-eve i parametre.
-- [ ] Definirati pregledanu konfiguraciju okruženja za sve endpointove i feature flagove. Za svaku praznu vrijednost navesti vlasnički paket koji je dovršava; lokalni `?setup=1` nije distribucija produkcijske konfiguracije.
-- [ ] Za svih 25 funkcija zapisati JWT/CORS pravila, potrebne tajne bez vrijednosti, ovisnosti, verziju i aktivacijski status. Preflight/renderer/outbox aktiviraju se nakon T34/T35/T38, a ne prije svojih workera.
+- [x] Napraviti sadržajnu usporedbu deploya s točnim commitom, uključujući lokalne importe i dataset, uz normalizaciju CRLF/LF gdje je primjerena. Live source hashovi i `profile-rules` dataset/ETag podudaraju se; dokaz je u `docs/agents/t20-live-evidence-2026-09-21.md`.
+- [x] U stagingu objaviti aktualni bounded multipart `repair-docx`, brisanje, `profile-rules` i `client-error`; provjeriti krajnji učinak i tek onda planirati produkcijsku promociju.
+- [x] Generirati recipe/server pravila postojećom naredbom, potvrditi digest te klijentsko-serverski ugovor za stabilne check ID-eve i parametre.
+- [x] Definirati pregledanu konfiguraciju okruženja za sve endpointove i feature flagove. Prazne tajne za neaktivne workere i providere imenovane su u live dokazu s vlasničkim paketom; lokalni `?setup=1` nije distribucijska konfiguracija.
+- [x] Za svih 27 funkcija zapisati JWT/CORS pravila, potrebne tajne bez vrijednosti, ovisnosti, verziju i aktivacijski status. Preflight/renderer/outbox ostaju neaktivirani dok njihovi vlasnički paketi ne dovrše workere.
 
 **Gotovo kada:** potvrđena odstupanja osnovnog backenda nestanu na stagingu, server i klijent koriste isti kompatibilni skup pravila, a svaka preostala aktivacija ima konkretan zadatak. Završna produkcijska jednakost ponovno se provjerava u T47.
 
