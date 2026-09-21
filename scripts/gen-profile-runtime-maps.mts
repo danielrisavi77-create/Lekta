@@ -42,6 +42,7 @@ const ASSISTED_RULE_ENTRY_CHECK_IDS = new Set([
   'required-section-rules',
   'element-caption-rules',
   'table-figure-rescue-rules',
+  'heading-rules',
 ]);
 
 const advisoryMap: Record<string, string[]> = {};
@@ -134,6 +135,7 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
       sourcePage: e.sourcePage,
       quote: e.quote,
       value: e.value,
+      ...(e.checkId === 'heading-rules' && e.lastVerified != null ? { lastVerified: e.lastVerified } : {}),
     }));
   const allRepairEntries = [...repairEntries, ...assistedEntries];
   if (allRepairEntries.length > 0) repairMap[id] = allRepairEntries;

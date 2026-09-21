@@ -12521,10 +12521,15 @@
         "gradri-zavrsni",
         "gradri-diplomski"
       ],
-      "offeredOptionCount": 0,
-      "mappedOptionCount": 0,
-      "ruleIds": [],
-      "fixerIds": [],
+      "offeredOptionCount": 2,
+      "mappedOptionCount": 2,
+      "ruleIds": [
+        "gradri-diplomski--heading-rules",
+        "gradri-zavrsni--heading-rules"
+      ],
+      "fixerIds": [
+        "heading-format-fixer"
+      ],
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
         "gradri-zavrsni",
@@ -12568,11 +12573,17 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 0,
-          "mappedOptionCount": 0,
-          "ruleIds": [],
-          "fixerIds": [],
-          "templateIds": [],
+          "offeredOptionCount": 1,
+          "mappedOptionCount": 1,
+          "ruleIds": [
+            "gradri-zavrsni--heading-rules"
+          ],
+          "fixerIds": [
+            "heading-format-fixer"
+          ],
+          "templateIds": [
+            "headings-numbering"
+          ],
           "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
@@ -12613,11 +12624,17 @@
             "graduate"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 0,
-          "mappedOptionCount": 0,
-          "ruleIds": [],
-          "fixerIds": [],
-          "templateIds": [],
+          "offeredOptionCount": 1,
+          "mappedOptionCount": 1,
+          "ruleIds": [
+            "gradri-diplomski--heading-rules"
+          ],
+          "fixerIds": [
+            "heading-format-fixer"
+          ],
+          "templateIds": [
+            "headings-numbering"
+          ],
           "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
@@ -18772,8 +18789,8 @@
         "pravo-socijalne-djelatnosti-specijalisticki",
         "pravo-socijalne-djelatnosti-doktorski"
       ],
-      "offeredOptionCount": 65,
-      "mappedOptionCount": 65,
+      "offeredOptionCount": 72,
+      "mappedOptionCount": 72,
       "ruleIds": [
         "pravo-doktorski-pravne-znanosti--font",
         "pravo-doktorski-pravne-znanosti--font-size",
@@ -18782,16 +18799,19 @@
         "pravo-doktorski-pravne-znanosti--margins",
         "pravo-integrirani-diplomski--font",
         "pravo-integrirani-diplomski--font-size",
+        "pravo-integrirani-diplomski--heading-rules",
         "pravo-integrirani-diplomski--justify",
         "pravo-integrirani-diplomski--line-spacing",
         "pravo-integrirani-diplomski--margins",
         "pravo-javna-uprava-diplomski--font",
         "pravo-javna-uprava-diplomski--font-size",
+        "pravo-javna-uprava-diplomski--heading-rules",
         "pravo-javna-uprava-diplomski--justify",
         "pravo-javna-uprava-diplomski--line-spacing",
         "pravo-javna-uprava-diplomski--margins",
         "pravo-javna-uprava-prijediplomski--font",
         "pravo-javna-uprava-prijediplomski--font-size",
+        "pravo-javna-uprava-prijediplomski--heading-rules",
         "pravo-javna-uprava-prijediplomski--justify",
         "pravo-javna-uprava-prijediplomski--line-spacing",
         "pravo-javna-uprava-prijediplomski--margins",
@@ -18802,11 +18822,13 @@
         "pravo-opci-pravni-akademski-rad--margins",
         "pravo-porezni-prijediplomski--font",
         "pravo-porezni-prijediplomski--font-size",
+        "pravo-porezni-prijediplomski--heading-rules",
         "pravo-porezni-prijediplomski--justify",
         "pravo-porezni-prijediplomski--line-spacing",
         "pravo-porezni-prijediplomski--margins",
         "pravo-socijalna-politika-diplomski--font",
         "pravo-socijalna-politika-diplomski--font-size",
+        "pravo-socijalna-politika-diplomski--heading-rules",
         "pravo-socijalna-politika-diplomski--justify",
         "pravo-socijalna-politika-diplomski--line-spacing",
         "pravo-socijalna-politika-diplomski--margins",
@@ -18826,12 +18848,14 @@
         "pravo-socijalni-opci-akademski-rad--paper-size",
         "pravo-socijalni-rad-diplomski--font",
         "pravo-socijalni-rad-diplomski--font-size",
+        "pravo-socijalni-rad-diplomski--heading-rules",
         "pravo-socijalni-rad-diplomski--justify",
         "pravo-socijalni-rad-diplomski--line-spacing",
         "pravo-socijalni-rad-diplomski--margins",
         "pravo-socijalni-rad-diplomski--paper-size",
         "pravo-socijalni-rad-zavrsni--font",
         "pravo-socijalni-rad-zavrsni--font-size",
+        "pravo-socijalni-rad-zavrsni--heading-rules",
         "pravo-socijalni-rad-zavrsni--line-spacing",
         "pravo-socijalni-rad-zavrsni--margins",
         "pravo-socijalni-rad-zavrsni--paper-size",
@@ -18844,6 +18868,7 @@
       "fixerIds": [
         "alignment-fixer",
         "font-fixer",
+        "heading-format-fixer",
         "line-spacing-fixer",
         "margins-fixer",
         "paper-size-fixer"
@@ -18901,11 +18926,12 @@
             "graduate"
           ],
           "profileStatus": "verified",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 6,
+          "mappedOptionCount": 6,
           "ruleIds": [
             "pravo-integrirani-diplomski--font",
             "pravo-integrirani-diplomski--font-size",
+            "pravo-integrirani-diplomski--heading-rules",
             "pravo-integrirani-diplomski--justify",
             "pravo-integrirani-diplomski--line-spacing",
             "pravo-integrirani-diplomski--margins"
@@ -18913,11 +18939,13 @@
           "fixerIds": [
             "alignment-fixer",
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer",
             "margins-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -18954,11 +18982,12 @@
             "final"
           ],
           "profileStatus": "verified",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 6,
+          "mappedOptionCount": 6,
           "ruleIds": [
             "pravo-javna-uprava-prijediplomski--font",
             "pravo-javna-uprava-prijediplomski--font-size",
+            "pravo-javna-uprava-prijediplomski--heading-rules",
             "pravo-javna-uprava-prijediplomski--justify",
             "pravo-javna-uprava-prijediplomski--line-spacing",
             "pravo-javna-uprava-prijediplomski--margins"
@@ -18966,11 +18995,13 @@
           "fixerIds": [
             "alignment-fixer",
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer",
             "margins-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -19007,11 +19038,12 @@
             "graduate"
           ],
           "profileStatus": "verified",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 6,
+          "mappedOptionCount": 6,
           "ruleIds": [
             "pravo-javna-uprava-diplomski--font",
             "pravo-javna-uprava-diplomski--font-size",
+            "pravo-javna-uprava-diplomski--heading-rules",
             "pravo-javna-uprava-diplomski--justify",
             "pravo-javna-uprava-diplomski--line-spacing",
             "pravo-javna-uprava-diplomski--margins"
@@ -19019,11 +19051,13 @@
           "fixerIds": [
             "alignment-fixer",
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer",
             "margins-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -19060,11 +19094,12 @@
             "final"
           ],
           "profileStatus": "verified",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 6,
+          "mappedOptionCount": 6,
           "ruleIds": [
             "pravo-porezni-prijediplomski--font",
             "pravo-porezni-prijediplomski--font-size",
+            "pravo-porezni-prijediplomski--heading-rules",
             "pravo-porezni-prijediplomski--justify",
             "pravo-porezni-prijediplomski--line-spacing",
             "pravo-porezni-prijediplomski--margins"
@@ -19072,11 +19107,13 @@
           "fixerIds": [
             "alignment-fixer",
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer",
             "margins-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -19113,23 +19150,26 @@
             "final"
           ],
           "profileStatus": "verified",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 6,
+          "mappedOptionCount": 6,
           "ruleIds": [
             "pravo-socijalni-rad-zavrsni--font",
             "pravo-socijalni-rad-zavrsni--font-size",
+            "pravo-socijalni-rad-zavrsni--heading-rules",
             "pravo-socijalni-rad-zavrsni--line-spacing",
             "pravo-socijalni-rad-zavrsni--margins",
             "pravo-socijalni-rad-zavrsni--paper-size"
           ],
           "fixerIds": [
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer",
             "margins-fixer",
             "paper-size-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -19166,11 +19206,12 @@
             "graduate"
           ],
           "profileStatus": "verified",
-          "offeredOptionCount": 6,
-          "mappedOptionCount": 6,
+          "offeredOptionCount": 7,
+          "mappedOptionCount": 7,
           "ruleIds": [
             "pravo-socijalni-rad-diplomski--font",
             "pravo-socijalni-rad-diplomski--font-size",
+            "pravo-socijalni-rad-diplomski--heading-rules",
             "pravo-socijalni-rad-diplomski--justify",
             "pravo-socijalni-rad-diplomski--line-spacing",
             "pravo-socijalni-rad-diplomski--margins",
@@ -19179,12 +19220,14 @@
           "fixerIds": [
             "alignment-fixer",
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer",
             "margins-fixer",
             "paper-size-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -19221,11 +19264,12 @@
             "graduate"
           ],
           "profileStatus": "verified",
-          "offeredOptionCount": 6,
-          "mappedOptionCount": 6,
+          "offeredOptionCount": 7,
+          "mappedOptionCount": 7,
           "ruleIds": [
             "pravo-socijalna-politika-diplomski--font",
             "pravo-socijalna-politika-diplomski--font-size",
+            "pravo-socijalna-politika-diplomski--heading-rules",
             "pravo-socijalna-politika-diplomski--justify",
             "pravo-socijalna-politika-diplomski--line-spacing",
             "pravo-socijalna-politika-diplomski--margins",
@@ -19234,12 +19278,14 @@
           "fixerIds": [
             "alignment-fixer",
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer",
             "margins-fixer",
             "paper-size-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -20711,10 +20757,10 @@
         "uncoveredCount": 38,
         "resolvedCount": 10,
         "byReason": {
-          "profil-ne-propisuje-os": 26,
+          "profil-ne-propisuje-os": 28,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 4,
+          "nema-dokaza": 2,
           "ceka-ljudski-odabir": 4,
           "trazi-ulaz-izvan-dokumenta": 4
         }
@@ -20770,10 +20816,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 13,
+              "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
+              "nema-dokaza": 1,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -20835,10 +20881,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 13,
+              "profil-ne-propisuje-os": 14,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
+              "nema-dokaza": 1,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -24159,10 +24205,10 @@
         "uncoveredCount": 114,
         "resolvedCount": 30,
         "byReason": {
-          "profil-ne-propisuje-os": 84,
+          "profil-ne-propisuje-os": 90,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 6,
+          "nema-dokaza": 0,
           "ceka-ljudski-odabir": 12,
           "trazi-ulaz-izvan-dokumenta": 12
         }
@@ -24211,10 +24257,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -24264,10 +24310,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -24317,10 +24363,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -24370,10 +24416,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -24423,10 +24469,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -24476,10 +24522,10 @@
             "uncoveredCount": 19,
             "resolvedCount": 5,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -28974,17 +29020,20 @@
         "vuka-lovstvo-zavrsni",
         "vuka-poslovni-opci-akademski-rad"
       ],
-      "offeredOptionCount": 18,
-      "mappedOptionCount": 18,
+      "offeredOptionCount": 21,
+      "mappedOptionCount": 21,
       "ruleIds": [
         "vuka-lovstvo-zavrsni--font",
         "vuka-lovstvo-zavrsni--font-size",
         "vuka-lovstvo-zavrsni--paper-size",
         "vuka-poslovni-diplomski--font-size",
+        "vuka-poslovni-diplomski--heading-rules",
         "vuka-poslovni-diplomski--line-spacing",
         "vuka-poslovni-opci-akademski-rad--font-size",
+        "vuka-poslovni-opci-akademski-rad--heading-rules",
         "vuka-poslovni-opci-akademski-rad--line-spacing",
         "vuka-poslovni-zavrsni--font-size",
+        "vuka-poslovni-zavrsni--heading-rules",
         "vuka-poslovni-zavrsni--line-spacing",
         "vuka-prehrambena-zavrsni--font",
         "vuka-prehrambena-zavrsni--font-size",
@@ -28998,6 +29047,7 @@
       ],
       "fixerIds": [
         "font-fixer",
+        "heading-format-fixer",
         "line-spacing-fixer",
         "paper-size-fixer"
       ],
@@ -29050,18 +29100,21 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 2,
-          "mappedOptionCount": 2,
+          "offeredOptionCount": 3,
+          "mappedOptionCount": 3,
           "ruleIds": [
             "vuka-poslovni-zavrsni--font-size",
+            "vuka-poslovni-zavrsni--heading-rules",
             "vuka-poslovni-zavrsni--line-spacing"
           ],
           "fixerIds": [
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -29098,18 +29151,21 @@
             "graduate"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 2,
-          "mappedOptionCount": 2,
+          "offeredOptionCount": 3,
+          "mappedOptionCount": 3,
           "ruleIds": [
             "vuka-poslovni-diplomski--font-size",
+            "vuka-poslovni-diplomski--heading-rules",
             "vuka-poslovni-diplomski--line-spacing"
           ],
           "fixerIds": [
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -29425,18 +29481,21 @@
             "article"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 2,
-          "mappedOptionCount": 2,
+          "offeredOptionCount": 3,
+          "mappedOptionCount": 3,
           "ruleIds": [
             "vuka-poslovni-opci-akademski-rad--font-size",
+            "vuka-poslovni-opci-akademski-rad--heading-rules",
             "vuka-poslovni-opci-akademski-rad--line-spacing"
           ],
           "fixerIds": [
             "font-fixer",
+            "heading-format-fixer",
             "line-spacing-fixer"
           ],
           "templateIds": [
-            "basic-text-styles"
+            "basic-text-styles",
+            "headings-numbering"
           ],
           "realDocxSampleCount": 0,
           "automaticTests": {
@@ -30014,10 +30073,10 @@
         "uncoveredCount": 58,
         "resolvedCount": 14,
         "byReason": {
-          "profil-ne-propisuje-os": 44,
+          "profil-ne-propisuje-os": 45,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
+          "nema-dokaza": 1,
           "ceka-ljudski-odabir": 6,
           "trazi-ulaz-izvan-dokumenta": 6
         }
@@ -30117,10 +30176,10 @@
             "uncoveredCount": 20,
             "resolvedCount": 4,
             "byReason": {
-              "profil-ne-propisuje-os": 14,
+              "profil-ne-propisuje-os": 15,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
+              "nema-dokaza": 1,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -30367,8 +30426,8 @@
   "summary": {
     "facultyCount": 131,
     "profileCount": 407,
-    "offeredOptionCount": 1751,
-    "mappedOptionCount": 1751,
+    "offeredOptionCount": 1763,
+    "mappedOptionCount": 1763,
     "realDocxSampleCount": 7,
     "facultiesWithRealDocx": 5,
     "facultiesWithoutRealDocx": 126,
@@ -30391,10 +30450,10 @@
     "uncoveredCount": 7859,
     "resolvedCount": 1877,
     "byReason": {
-      "profil-ne-propisuje-os": 6107,
+      "profil-ne-propisuje-os": 6116,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 124,
+      "nema-dokaza": 115,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }

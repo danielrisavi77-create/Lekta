@@ -8778,6 +8778,62 @@
       "lastVerified": "2026-07-02"
     }
   ],
+  "gradri-diplomski": [
+    {
+      "ruleId": "gradri-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "gradri-upute-2022",
+      "sourcePage": "Odjeljak 3.1 \"Tekst opcenito\", str. 7",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba dodijeliti odgovarajuci naslov. Naslov poglavlja pise se VELIKIM PODEBLJANIM SLOVIMA, velicine 14 pt. Svako novo poglavlje treba poceti na novoj stranici. Prva razina potpoglavlja pise se malim podebljanim slovima velicine 12 pt., a druga razina potpoglavlja malim podebljanim kosim slovima velicine 12 pt.",
+      "value": {
+        "numberRequired": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true,
+            "bold": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-07-27"
+    }
+  ],
+  "gradri-zavrsni": [
+    {
+      "ruleId": "gradri-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "gradri-upute-2022",
+      "sourcePage": "Odjeljak 3.1 \"Tekst opcenito\", str. 7",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba dodijeliti odgovarajuci naslov. Naslov poglavlja pise se VELIKIM PODEBLJANIM SLOVIMA, velicine 14 pt. Svako novo poglavlje treba poceti na novoj stranici. Prva razina potpoglavlja pise se malim podebljanim slovima velicine 12 pt., a druga razina potpoglavlja malim podebljanim kosim slovima velicine 12 pt.",
+      "value": {
+        "numberRequired": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true,
+            "bold": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-07-27"
+    }
+  ],
   "grafos-diplomski": [
     {
       "ruleId": "grafos-diplomski--paper-size",
@@ -12233,6 +12289,35 @@
       "autoFixable": true,
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 3. Naslovi",
+      "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-06-30"
     }
   ],
   "pravo-javna-uprava-diplomski": [
@@ -12289,6 +12374,35 @@
       "autoFixable": true,
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 3. Naslovi",
+      "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-06-30"
     }
   ],
   "pravo-javna-uprava-prijediplomski": [
@@ -12345,6 +12459,35 @@
       "autoFixable": true,
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 3. Naslovi",
+      "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-06-30"
     }
   ],
   "pravo-opci-pravni-akademski-rad": [
@@ -12457,6 +12600,35 @@
       "autoFixable": true,
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 3. Naslovi",
+      "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-06-30"
     }
   ],
   "pravo-socijalna-politika-diplomski": [
@@ -12518,6 +12690,40 @@
       "autoFixable": true,
       "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+      "quote": "glavni naslovi trebaju biti oznaceni masnim slovima (bold), a podnaslovi kosim slovima (italic) s brojcanim oznacavanjem arapskim brojkama, pri cemu je iza zadnjeg broja potrebno staviti tocku (najvise 5 u nizu)",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 5,
+        "levels": {
+          "1": {
+            "bold": true
+          },
+          "2": {
+            "italic": true
+          },
+          "3": {
+            "italic": true
+          },
+          "4": {
+            "italic": true
+          },
+          "5": {
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-07-16"
     }
   ],
   "pravo-socijalne-djelatnosti-doktorski": [
@@ -12714,6 +12920,40 @@
       "autoFixable": true,
       "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+      "quote": "glavni naslovi trebaju biti oznaceni masnim slovima (bold), a podnaslovi kosim slovima (italic) s brojcanim oznacavanjem arapskim brojkama, pri cemu je iza zadnjeg broja potrebno staviti tocku (najvise 5 u nizu)",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 5,
+        "levels": {
+          "1": {
+            "bold": true
+          },
+          "2": {
+            "italic": true
+          },
+          "3": {
+            "italic": true
+          },
+          "4": {
+            "italic": true
+          },
+          "5": {
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-07-16"
     }
   ],
   "pravo-socijalni-rad-zavrsni": [
@@ -12765,6 +13005,40 @@
       "fixerId": "paper-size-fixer",
       "recommended": true,
       "value": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+      "quote": "glavni naslovi trebaju biti oznaceni masnim slovima (bold), a podnaslovi kosim slovima (italic) s brojcanim oznacavanjem arapskim brojkama, pri cemu je prije naslova, a iza zadnjeg broja potrebno staviti tocku, npr. 1. ...1.2. ...1.2.1... (najvise 5 u nizu)",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 5,
+        "levels": {
+          "1": {
+            "bold": true
+          },
+          "2": {
+            "italic": true
+          },
+          "3": {
+            "italic": true
+          },
+          "4": {
+            "italic": true
+          },
+          "5": {
+            "italic": true
+          }
+        }
+      },
+      "lastVerified": "2026-07-16"
     }
   ],
   "pravo-specijalisticki-pravni-opci": [
@@ -13321,6 +13595,30 @@
       "lastVerified": "2026-07-02"
     }
   ],
+  "radno-socijalno-pravo": [
+    {
+      "ruleId": "radno-socijalno-pravo--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+      "sourcePage": "str. 3, odjeljak 5 (Oznacavanje cjelina i sadrzaj)",
+      "quote": "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) oznacavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima.",
+      "value": {
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {},
+          "3": {}
+        }
+      },
+      "lastVerified": "2026-07-02"
+    }
+  ],
   "rgnf-diplomski": [
     {
       "ruleId": "rgnf-diplomski--font",
@@ -13469,6 +13767,25 @@
       "value": true,
       "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "riteh-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina potpoglavlja veličinom slova 12 pt.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          }
+        }
+      },
+      "lastVerified": "2026-07-02"
     }
   ],
   "riteh-zavrsni": [
@@ -13535,6 +13852,25 @@
       "value": true,
       "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "riteh-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina potpoglavlja veličinom slova 12 pt.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          }
+        }
+      },
+      "lastVerified": "2026-07-02"
     }
   ],
   "rrif-zavrsni": [
@@ -15535,6 +15871,34 @@
       "autoFixable": true,
       "sourcePage": "Upute, tehnicko oblikovanje",
       "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "unin-biomedicina-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 4,
+        "levels": {
+          "1": {
+            "uppercase": false
+          },
+          "2": {
+            "uppercase": false
+          },
+          "3": {
+            "uppercase": false
+          },
+          "4": {
+            "uppercase": false
+          }
+        }
+      },
+      "lastVerified": "2026-07-02"
     }
   ],
   "unin-biomedicina-zavrsni": [
@@ -15586,6 +15950,34 @@
       "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "Upute, tehnicko oblikovanje",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "unin-biomedicina-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 4,
+        "levels": {
+          "1": {
+            "uppercase": false
+          },
+          "2": {
+            "uppercase": false
+          },
+          "3": {
+            "uppercase": false
+          },
+          "4": {
+            "uppercase": false
+          }
+        }
+      },
       "lastVerified": "2026-07-02"
     }
   ],
@@ -15639,6 +16031,34 @@
       "autoFixable": true,
       "sourcePage": "Upute, tehnicko oblikovanje",
       "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "unin-drustveni-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 4,
+        "levels": {
+          "1": {
+            "uppercase": false
+          },
+          "2": {
+            "uppercase": false
+          },
+          "3": {
+            "uppercase": false
+          },
+          "4": {
+            "uppercase": false
+          }
+        }
+      },
+      "lastVerified": "2026-07-02"
     }
   ],
   "unin-drustveni-zavrsni": [
@@ -15690,6 +16110,34 @@
       "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "Upute, tehnicko oblikovanje",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "unin-drustveni-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 4,
+        "levels": {
+          "1": {
+            "uppercase": false
+          },
+          "2": {
+            "uppercase": false
+          },
+          "3": {
+            "uppercase": false
+          },
+          "4": {
+            "uppercase": false
+          }
+        }
+      },
       "lastVerified": "2026-07-02"
     }
   ],
@@ -15743,6 +16191,34 @@
       "autoFixable": true,
       "sourcePage": "Upute, tehnicko oblikovanje",
       "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "unin-tehnicki-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 4,
+        "levels": {
+          "1": {
+            "uppercase": false
+          },
+          "2": {
+            "uppercase": false
+          },
+          "3": {
+            "uppercase": false
+          },
+          "4": {
+            "uppercase": false
+          }
+        }
+      },
+      "lastVerified": "2026-07-02"
     }
   ],
   "unin-tehnicki-zavrsni": [
@@ -15794,6 +16270,34 @@
       "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "Upute, tehnicko oblikovanje",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "unin-tehnicki-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 4,
+        "levels": {
+          "1": {
+            "uppercase": false
+          },
+          "2": {
+            "uppercase": false
+          },
+          "3": {
+            "uppercase": false
+          },
+          "4": {
+            "uppercase": false
+          }
+        }
+      },
       "lastVerified": "2026-07-02"
     }
   ],
@@ -19569,6 +20073,34 @@
       "autoFixable": true,
       "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "vuka-poslovni-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "vuka-poslovni-upute",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "value": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      },
+      "lastVerified": "2026-08-24"
     }
   ],
   "vuka-poslovni-opci-akademski-rad": [
@@ -19591,6 +20123,34 @@
       "autoFixable": true,
       "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "vuka-poslovni-opci-akademski-rad--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "vuka-poslovni-upute",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "value": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      },
+      "lastVerified": "2026-08-24"
     }
   ],
   "vuka-poslovni-zavrsni": [
@@ -19613,6 +20173,34 @@
       "autoFixable": true,
       "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
       "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "vuka-poslovni-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "vuka-poslovni-upute",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "value": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      },
+      "lastVerified": "2026-08-24"
     }
   ],
   "vuka-prehrambena-zavrsni": [
@@ -20022,6 +20610,30 @@
       "fixerId": "alignment-fixer",
       "autoFixable": true,
       "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "zsem-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "status": "verified",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Naslovi poglavlja i potpoglavlja moraju biti kratki i jasni, te redom numerirani arapskim brojevima, najvise do tri (3) razine, ali ne vise od toga (Primjer 1., 1.1., 1.1.1.).",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "trailingDot": true,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "uppercase": true
+          },
+          "3": {}
+        }
+      },
       "lastVerified": "2026-07-02"
     }
   ],

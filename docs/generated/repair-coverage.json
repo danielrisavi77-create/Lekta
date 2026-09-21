@@ -55,31 +55,31 @@
     },
     {
       "profileId": "pravo-integrirani-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
-      "offeredOptionCount": 6
+      "offeredOptionCount": 7
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
-      "offeredOptionCount": 6
+      "offeredOptionCount": 7
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -843,11 +843,11 @@
     },
     {
       "profileId": "gradri-zavrsni",
-      "offeredOptionCount": 0
+      "offeredOptionCount": 1
     },
     {
       "profileId": "gradri-diplomski",
-      "offeredOptionCount": 0
+      "offeredOptionCount": 1
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -1215,11 +1215,11 @@
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
-      "offeredOptionCount": 2
+      "offeredOptionCount": 3
     },
     {
       "profileId": "vuka-poslovni-diplomski",
-      "offeredOptionCount": 2
+      "offeredOptionCount": 3
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
@@ -1375,7 +1375,7 @@
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
-      "offeredOptionCount": 2
+      "offeredOptionCount": 3
     },
     {
       "profileId": "foi-zavrsni",
@@ -2144,6 +2144,14 @@
       "recommended": false
     },
     {
+      "profileId": "pravo-integrirani-diplomski",
+      "ruleId": "pravo-integrirani-diplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
+      "recommended": false
+    },
+    {
       "profileId": "pravo-javna-uprava-prijediplomski",
       "ruleId": "pravo-javna-uprava-prijediplomski--font",
       "fixerId": "font-fixer",
@@ -2181,6 +2189,14 @@
       "fixerId": "alignment-fixer",
       "checkId": "justify",
       "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "ruleId": "pravo-javna-uprava-prijediplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
       "recommended": false
     },
     {
@@ -2224,6 +2240,14 @@
       "recommended": false
     },
     {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "ruleId": "pravo-javna-uprava-diplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
+      "recommended": false
+    },
+    {
       "profileId": "pravo-porezni-prijediplomski",
       "ruleId": "pravo-porezni-prijediplomski--font",
       "fixerId": "font-fixer",
@@ -2261,6 +2285,14 @@
       "fixerId": "alignment-fixer",
       "checkId": "justify",
       "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "ruleId": "pravo-porezni-prijediplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
       "recommended": false
     },
     {
@@ -2302,6 +2334,14 @@
       "checkId": "paper-size",
       "templateId": "basic-text-styles",
       "recommended": true
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
+      "ruleId": "pravo-socijalni-rad-zavrsni--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
+      "recommended": false
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -2352,6 +2392,14 @@
       "recommended": false
     },
     {
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "ruleId": "pravo-socijalni-rad-diplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
+      "recommended": false
+    },
+    {
       "profileId": "pravo-socijalna-politika-diplomski",
       "ruleId": "pravo-socijalna-politika-diplomski--font",
       "fixerId": "font-fixer",
@@ -2397,6 +2445,14 @@
       "fixerId": "alignment-fixer",
       "checkId": "justify",
       "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "pravo-socijalna-politika-diplomski",
+      "ruleId": "pravo-socijalna-politika-diplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
       "recommended": false
     },
     {
@@ -9496,6 +9552,22 @@
       "recommended": false
     },
     {
+      "profileId": "gradri-zavrsni",
+      "ruleId": "gradri-zavrsni--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
+      "recommended": false
+    },
+    {
+      "profileId": "gradri-diplomski",
+      "ruleId": "gradri-diplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
+      "recommended": false
+    },
+    {
       "profileId": "ffri-germanistika-zavrsni",
       "ruleId": "ffri-germanistika-zavrsni--font",
       "fixerId": "font-fixer",
@@ -12488,6 +12560,14 @@
       "recommended": false
     },
     {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": "vuka-poslovni-zavrsni--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
+      "recommended": false
+    },
+    {
       "profileId": "vuka-poslovni-diplomski",
       "ruleId": "vuka-poslovni-diplomski--font-size",
       "fixerId": "font-fixer",
@@ -12501,6 +12581,14 @@
       "fixerId": "line-spacing-fixer",
       "checkId": "line-spacing",
       "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": "vuka-poslovni-diplomski--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
       "recommended": false
     },
     {
@@ -13349,6 +13437,14 @@
       "fixerId": "line-spacing-fixer",
       "checkId": "line-spacing",
       "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": "vuka-poslovni-opci-akademski-rad--heading-rules",
+      "fixerId": "heading-format-fixer",
+      "checkId": "heading-rules",
+      "templateId": "headings-numbering",
       "recommended": false
     },
     {
@@ -16015,14 +16111,14 @@
   ],
   "summary": {
     "profileCount": 407,
-    "profileOptionCount": 1751,
-    "rowCount": 1751,
-    "fixerCount": 6,
+    "profileOptionCount": 1763,
+    "rowCount": 1763,
+    "fixerCount": 7,
     "registeredFixerCount": 31,
     "profileFixerCount": 5,
     "uiAssistedFixerCount": 25,
     "dispatchOnlyFixerCount": 1,
     "templateCount": 8,
-    "usedTemplateCount": 2
+    "usedTemplateCount": 3
   }
 }

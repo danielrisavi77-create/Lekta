@@ -609,7 +609,18 @@ export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profi
  * odluka. Oboje ostaje u rucnim uputama.
  */
 export function headingFormatRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
-  const rules = profile?.headingRules;
+  const entries = Array.isArray(profile?.ruleEntries) ? profile.ruleEntries as RuleEntry[] : undefined;
+  const ruleEntry = entries?.find((entry) =>
+    entry.checkId === 'heading-rules'
+      && ASSISTED_STATUSES.has(entry.status)
+      && entry.sourceId
+      && entry.sourcePage
+      && entry.quote,
+  );
+  // Kad je profil hidriran ruleEntries zapisom, heading-format mora imati isti dokazni lanac kao
+  // ostali asistirani fixeri. Legacy poziv bez ruleEntries ostaje podrzan za izolirane unit testove.
+  if (entries && !ruleEntry) return [];
+  const rules = ruleEntry?.value && typeof ruleEntry.value === 'object' ? ruleEntry.value as any : profile?.headingRules;
   if (!rules || typeof rules !== 'object') return [];
   const levels = rules.levels && typeof rules.levels === 'object' ? rules.levels : {};
   const maxLevel = Number(rules.maxLevel) || 3;
@@ -637,12 +648,13 @@ export function headingFormatRepairableItem(checks: AnalyzedCheck[], profile: an
 
   return [
     {
-      ruleId: 'heading-format-universal',
+      ruleId: ruleEntry?.ruleId || 'heading-format-universal',
       fixerId: 'heading-format-fixer',
       label: 'Oblikovanje naslova po razinama',
       params: { targets },
       violated: isViolated('heading-format', checks),
       matchKeys: [CHECK_TITLE['heading-format']],
+      ...(ruleEntry ? { authority: 'faculty-rule' as const, ...provenanceOf(ruleEntry) } : {}),
     },
   ];
 }

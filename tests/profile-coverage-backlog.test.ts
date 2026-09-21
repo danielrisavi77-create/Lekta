@@ -143,7 +143,7 @@ describe('generated profile coverage backlog', () => {
       registryProfileCount: 407,
       legalDepartmentProfileCount: 3,
       facultyCount: 131,
-      registryProfilesBelowB: 83,
+      registryProfilesBelowB: 81,
       legalDepartmentProfilesBelowB: 3,
     });
   });

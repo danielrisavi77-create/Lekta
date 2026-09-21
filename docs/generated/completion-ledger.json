@@ -5300,12 +5300,12 @@
       "programIds": [],
       "program": "missing",
       "rules": "verified",
-      "repair": "manual-only",
+      "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "D",
-      "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -5315,12 +5315,12 @@
         "scoredMachineCheckable": 1,
         "scoredTotal": 1,
         "bulkPending": 0,
-        "offeredRepairOptions": 0,
-        "facultySpecificRepairOptions": 0,
+        "offeredRepairOptions": 1,
+        "facultySpecificRepairOptions": 1,
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nijedna repair opcija nije ponudjena za ovaj profil"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -5330,12 +5330,12 @@
       "programIds": [],
       "program": "missing",
       "rules": "verified",
-      "repair": "manual-only",
+      "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "D",
-      "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -5345,12 +5345,12 @@
         "scoredMachineCheckable": 1,
         "scoredTotal": 1,
         "bulkPending": 0,
-        "offeredRepairOptions": 0,
-        "facultySpecificRepairOptions": 0,
+        "offeredRepairOptions": 1,
+        "facultySpecificRepairOptions": 1,
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nijedna repair opcija nije ponudjena za ovaj profil"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -7651,8 +7651,8 @@
         "scoredMachineCheckable": 12,
         "scoredTotal": 12,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -7683,8 +7683,8 @@
         "scoredMachineCheckable": 12,
         "scoredTotal": 12,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -7715,8 +7715,8 @@
         "scoredMachineCheckable": 12,
         "scoredTotal": 12,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -7831,8 +7831,8 @@
         "scoredMachineCheckable": 12,
         "scoredTotal": 12,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -7863,8 +7863,8 @@
         "scoredMachineCheckable": 11,
         "scoredTotal": 11,
         "bulkPending": 0,
-        "offeredRepairOptions": 6,
-        "facultySpecificRepairOptions": 5,
+        "offeredRepairOptions": 7,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -8039,8 +8039,8 @@
         "scoredMachineCheckable": 11,
         "scoredTotal": 11,
         "bulkPending": 0,
-        "offeredRepairOptions": 6,
-        "facultySpecificRepairOptions": 5,
+        "offeredRepairOptions": 7,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -8071,8 +8071,8 @@
         "scoredMachineCheckable": 10,
         "scoredTotal": 10,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -12512,8 +12512,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 2,
-        "facultySpecificRepairOptions": 2,
+        "offeredRepairOptions": 3,
+        "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -12542,8 +12542,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 2,
-        "facultySpecificRepairOptions": 2,
+        "offeredRepairOptions": 3,
+        "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -12572,8 +12572,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 2,
-        "facultySpecificRepairOptions": 2,
+        "offeredRepairOptions": 3,
+        "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -12602,8 +12602,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 2,
-        "facultySpecificRepairOptions": 2,
+        "offeredRepairOptions": 3,
+        "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -12632,8 +12632,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 2,
-        "facultySpecificRepairOptions": 2,
+        "offeredRepairOptions": 3,
+        "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -13137,9 +13137,9 @@
       "none": 29
     },
     "byRepair": {
-      "faculty-specific": 346,
+      "faculty-specific": 348,
       "universal-hygiene": 37,
-      "manual-only": 53
+      "manual-only": 51
     },
     "byProof": {
       "real-docx-pass": 42,
@@ -13182,9 +13182,9 @@
     },
     "byClaim": {
       "A": 38,
-      "B": 300,
+      "B": 302,
       "C": 8,
-      "D": 42,
+      "D": 40,
       "E": 48
     },
     "programGaps": 413,
@@ -13196,7 +13196,7 @@
     "nationalClaimBlockers": [
       "413 redaka nema evidentiran studijski program (sluzbeni Upisnik jos nije sinkroniziran)",
       "3 evidentiranih programa nema nijedan profil: fpzg: Sveučilišni prijediplomski studij Vojno vođenje i upravljanje; fpzg: Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi; pravo: Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
-      "98 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
+      "96 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
     ]
   }
 }

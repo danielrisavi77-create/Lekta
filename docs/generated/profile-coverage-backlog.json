@@ -5,22 +5,22 @@
     "legalDepartmentProfileCount": 3,
     "facultyCount": 131,
     "nullProfileRowCount": 3,
-    "registryProfilesBelowB": 83,
+    "registryProfilesBelowB": 81,
     "legalDepartmentProfilesBelowB": 3,
-    "profilesBelowB": 86,
-    "facultiesBelowB": 31,
+    "profilesBelowB": 84,
+    "facultiesBelowB": 30,
     "blockerCounts": {
       "complete": 32,
-      "real-corpus": 292,
+      "real-corpus": 294,
       "human-audit": 8,
-      "repair": 37,
+      "repair": 35,
       "source": 41
     },
     "registryClaimCounts": {
       "A": 32,
-      "B": 292,
+      "B": 294,
       "C": 8,
-      "D": 34,
+      "D": 32,
       "E": 41
     },
     "legalDepartmentClaimCounts": {
@@ -24694,12 +24694,12 @@
       "workTypes": [
         "graduate"
       ],
-      "claim": "D",
-      "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
-      "nextTarget": "B",
-      "blocker": "repair",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "nextTarget": "A",
+      "blocker": "real-corpus",
       "blockedReasons": [
-        "nijedna repair opcija nije ponudjena za ovaj profil"
+        "nema dokaza na stvarnom studentskom radu"
       ],
       "ledgerRows": [
         {
@@ -24709,12 +24709,12 @@
           "programIds": [],
           "program": "missing",
           "rules": "verified",
-          "repair": "manual-only",
+          "repair": "faculty-specific",
           "proof": "synthetic-pass",
           "proofSource": null,
           "assets": "generic",
-          "claim": "D",
-          "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
+          "claim": "B",
+          "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
           "assetDetail": {
             "titlePage": "exact-derived",
             "citation": "generic",
@@ -24724,12 +24724,12 @@
             "scoredMachineCheckable": 1,
             "scoredTotal": 1,
             "bulkPending": 0,
-            "offeredRepairOptions": 0,
-            "facultySpecificRepairOptions": 0,
+            "offeredRepairOptions": 1,
+            "facultySpecificRepairOptions": 1,
             "realDocxSamples": 0
           },
           "blockedReasons": [
-            "nijedna repair opcija nije ponudjena za ovaj profil"
+            "nema dokaza na stvarnom studentskom radu"
           ]
         }
       ],
@@ -24758,12 +24758,12 @@
       "workTypes": [
         "final"
       ],
-      "claim": "D",
-      "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
-      "nextTarget": "B",
-      "blocker": "repair",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "nextTarget": "A",
+      "blocker": "real-corpus",
       "blockedReasons": [
-        "nijedna repair opcija nije ponudjena za ovaj profil"
+        "nema dokaza na stvarnom studentskom radu"
       ],
       "ledgerRows": [
         {
@@ -24773,12 +24773,12 @@
           "programIds": [],
           "program": "missing",
           "rules": "verified",
-          "repair": "manual-only",
+          "repair": "faculty-specific",
           "proof": "synthetic-pass",
           "proofSource": null,
           "assets": "generic",
-          "claim": "D",
-          "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
+          "claim": "B",
+          "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
           "assetDetail": {
             "titlePage": "exact-derived",
             "citation": "generic",
@@ -24788,12 +24788,12 @@
             "scoredMachineCheckable": 1,
             "scoredTotal": 1,
             "bulkPending": 0,
-            "offeredRepairOptions": 0,
-            "facultySpecificRepairOptions": 0,
+            "offeredRepairOptions": 1,
+            "facultySpecificRepairOptions": 1,
             "realDocxSamples": 0
           },
           "blockedReasons": [
-            "nijedna repair opcija nije ponudjena za ovaj profil"
+            "nema dokaza na stvarnom studentskom radu"
           ]
         }
       ],
@@ -35305,8 +35305,8 @@
             "scoredMachineCheckable": 12,
             "scoredTotal": 12,
             "bulkPending": 0,
-            "offeredRepairOptions": 5,
-            "facultySpecificRepairOptions": 4,
+            "offeredRepairOptions": 6,
+            "facultySpecificRepairOptions": 5,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -35582,8 +35582,8 @@
             "scoredMachineCheckable": 12,
             "scoredTotal": 12,
             "bulkPending": 0,
-            "offeredRepairOptions": 5,
-            "facultySpecificRepairOptions": 4,
+            "offeredRepairOptions": 6,
+            "facultySpecificRepairOptions": 5,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -35844,8 +35844,8 @@
             "scoredMachineCheckable": 12,
             "scoredTotal": 12,
             "bulkPending": 0,
-            "offeredRepairOptions": 5,
-            "facultySpecificRepairOptions": 4,
+            "offeredRepairOptions": 6,
+            "facultySpecificRepairOptions": 5,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -36389,8 +36389,8 @@
             "scoredMachineCheckable": 12,
             "scoredTotal": 12,
             "bulkPending": 0,
-            "offeredRepairOptions": 5,
-            "facultySpecificRepairOptions": 4,
+            "offeredRepairOptions": 6,
+            "facultySpecificRepairOptions": 5,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -36651,8 +36651,8 @@
             "scoredMachineCheckable": 11,
             "scoredTotal": 11,
             "bulkPending": 0,
-            "offeredRepairOptions": 6,
-            "facultySpecificRepairOptions": 5,
+            "offeredRepairOptions": 7,
+            "facultySpecificRepairOptions": 6,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -37478,8 +37478,8 @@
             "scoredMachineCheckable": 11,
             "scoredTotal": 11,
             "bulkPending": 0,
-            "offeredRepairOptions": 6,
-            "facultySpecificRepairOptions": 5,
+            "offeredRepairOptions": 7,
+            "facultySpecificRepairOptions": 6,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -37723,8 +37723,8 @@
             "scoredMachineCheckable": 10,
             "scoredTotal": 10,
             "bulkPending": 0,
-            "offeredRepairOptions": 5,
-            "facultySpecificRepairOptions": 4,
+            "offeredRepairOptions": 6,
+            "facultySpecificRepairOptions": 5,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -55997,8 +55997,8 @@
             "scoredMachineCheckable": 4,
             "scoredTotal": 4,
             "bulkPending": 0,
-            "offeredRepairOptions": 2,
-            "facultySpecificRepairOptions": 2,
+            "offeredRepairOptions": 3,
+            "facultySpecificRepairOptions": 3,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -56105,8 +56105,8 @@
             "scoredMachineCheckable": 4,
             "scoredTotal": 4,
             "bulkPending": 0,
-            "offeredRepairOptions": 2,
-            "facultySpecificRepairOptions": 2,
+            "offeredRepairOptions": 3,
+            "facultySpecificRepairOptions": 3,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -56135,8 +56135,8 @@
             "scoredMachineCheckable": 4,
             "scoredTotal": 4,
             "bulkPending": 0,
-            "offeredRepairOptions": 2,
-            "facultySpecificRepairOptions": 2,
+            "offeredRepairOptions": 3,
+            "facultySpecificRepairOptions": 3,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -56165,8 +56165,8 @@
             "scoredMachineCheckable": 4,
             "scoredTotal": 4,
             "bulkPending": 0,
-            "offeredRepairOptions": 2,
-            "facultySpecificRepairOptions": 2,
+            "offeredRepairOptions": 3,
+            "facultySpecificRepairOptions": 3,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -56271,8 +56271,8 @@
             "scoredMachineCheckable": 4,
             "scoredTotal": 4,
             "bulkPending": 0,
-            "offeredRepairOptions": 2,
-            "facultySpecificRepairOptions": 2,
+            "offeredRepairOptions": 3,
+            "facultySpecificRepairOptions": 3,
             "realDocxSamples": 0
           },
           "blockedReasons": [
@@ -59803,16 +59803,13 @@
       ],
       "claimCounts": {
         "A": 0,
-        "B": 0,
+        "B": 2,
         "C": 0,
-        "D": 2,
+        "D": 0,
         "E": 0
       },
-      "lowestClaim": "D",
-      "profilesBelowB": [
-        "gradri-diplomski",
-        "gradri-zavrsni"
-      ]
+      "lowestClaim": "B",
+      "profilesBelowB": []
     },
     {
       "unitId": "grafos",

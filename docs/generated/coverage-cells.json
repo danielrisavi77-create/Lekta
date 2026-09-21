@@ -12,10 +12,10 @@
     "uncoveredCount": 7859,
     "resolvedCount": 1877,
     "byReason": {
-      "profil-ne-propisuje-os": 6107,
+      "profil-ne-propisuje-os": 6116,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 124,
+      "nema-dokaza": 115,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -27611,7 +27611,7 @@
       "profileId": "zsem-diplomski",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zsem-diplomski",
@@ -47978,7 +47978,7 @@
       "profileId": "riteh-zavrsni",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "riteh-zavrsni",
@@ -48233,7 +48233,7 @@
       "profileId": "riteh-diplomski",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "riteh-diplomski",
@@ -48982,7 +48982,7 @@
       "profileId": "unin-tehnicki-zavrsni",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -49236,7 +49236,7 @@
       "profileId": "unin-tehnicki-diplomski",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -49490,7 +49490,7 @@
       "profileId": "unin-biomedicina-zavrsni",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -49744,7 +49744,7 @@
       "profileId": "unin-biomedicina-diplomski",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -49998,7 +49998,7 @@
       "profileId": "unin-drustveni-zavrsni",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -50252,7 +50252,7 @@
       "profileId": "unin-drustveni-diplomski",
       "fixerId": "heading-format-fixer",
       "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-drustveni-diplomski",
