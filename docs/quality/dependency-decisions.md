@@ -64,3 +64,9 @@ Na čistom worktreeu `t41-clean`, odvojenom na commitu `a820f2a6`, pokrenut je
 pa nema dokaza da je puna čista instalacija završila. Privremeni worktree je uklonjen nakon
 neuspjeha. Ovaj rezultat se tretira kao **nepoznato**, ne kao prolaz; ponavljanje traži barem
 veličinu zaključanog `node_modules` stabla i dodatnu pričuvu prostora.
+
+### Dopuna nakon čišćenja prostora 2026-09-21
+
+Nakon uklanjanja starih runtime cacheva ponovljen je puni 
+pm ci u čistom dependency sandboxu koji je sadržavao samo package.json i package-lock.json. Završio je s izlaznim kodom 0, uz dded 1152 packages, bez ENOSPC; 
+pm ls --depth=0 je pokazao zaključane verzije iz manifesta. To potvrđuje reproducibilnost instalacije ovisnosti. Puna instalacija u source worktreeu i dalje ostaje nepoznata jer je zaseban checkout ponovno iscrpio raspoloživi prostor.
