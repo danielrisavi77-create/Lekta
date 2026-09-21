@@ -104,6 +104,7 @@
     "verify:claims:selftest": "python scripts/verify_rule_claims.py --selftest",
     "verify:source-hashes": "node scripts/verify-source-hashes.mjs",
     "completion-ledger": "vite-node scripts/generate-completion-ledger.mts",
+    "profile-coverage-backlog": "vite-node scripts/generate-profile-coverage-backlog.mts",
     "gen-profile-claims": "vite-node scripts/gen-profile-claims.mts",
     "citation-claim-coverage": "vite-node scripts/gen-citation-claim-coverage.mts",
     "corpus-evidence": "vite-node scripts/corpus-evidence.mts",
