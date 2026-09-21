@@ -56,3 +56,11 @@ instalacija nije pokrenuta jer je na disku ostalo približno 262 MB; taj dokaz t
 izoliranom stablu čim bude dostupno dovoljno prostora. TypeScript i dalje namjerno obuhvaća samo
 `src/`, dok se Edge kod provjerava zasebnim Deno gateom; izvan `src/` postoji 741 TypeScript/MTS
 datoteka, pa se široko proširenje obuhvata ne uvodi bez zasebnog, scoped plana.
+
+### Pokušaj čiste instalacije 2026-09-21
+
+Na čistom worktreeu `t41-clean`, odvojenom na commitu `a820f2a6`, pokrenut je
+`npm ci --ignore-scripts`. Instalacija je prekinuta s `ENOSPC` tijekom raspakiravanja,
+pa nema dokaza da je puna čista instalacija završila. Privremeni worktree je uklonjen nakon
+neuspjeha. Ovaj rezultat se tretira kao **nepoznato**, ne kao prolaz; ponavljanje traži barem
+veličinu zaključanog `node_modules` stabla i dodatnu pričuvu prostora.
