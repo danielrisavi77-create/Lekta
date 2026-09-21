@@ -205,9 +205,9 @@ Rasponi se dijelom preklapaju kroz istraživanje i čekanje vanjskih ovisnosti; 
 **Mjesta rada:** `supabase/config.toml`, `supabase/migrations/`, `scripts/migration-identity.mjs`, DB smoke skripte, postojeći deploy runbookovi.
 
 - [x] Osposobiti postojeći staging bnyemcnsphlitjradrst i provjeriti stvarni schema/auth/storage status. Dokaz je u docs/agents/t18-live-evidence-2026-09-21.md.
-- [ ] Usporediti identitet migracija s repozitorijem i popisom produkcije. Četiri dodatne migracije drugih cjelina sačuvati; zastarjele upute koje govore da produkcija ima samo pet migracija ispraviti.
-- [ ] Napraviti odvojene sintetičke korisnike A/B, proizvode u testnom načinu, privatni testni bucket i anonimizirane ili autorske fixture dokumente. Bez kopiranja stvarnih radova i osobnih podataka radi praktičnosti.
-- [ ] Provjeriti redirect URL-ove, CORS, domene, tajne po okruženju i nemogućnost da staging frontend slučajno koristi produkcijsku naplatu ili storage.
+- [x] Usporediti identitet migracija s repozitorijem i popisom produkcije. Četiri dodatne migracije drugih cjelina sačuvati; produkcija ima tri repozitorijske migracije koje nedostaju i četiri zapisa samo u bazi, što ostaje zaseban usklađivački zahvat. Dokaz je u `docs/agents/t18-live-evidence-2026-09-21.md`.
+- [x] Napraviti odvojene sintetičke korisnike A/B, proizvode u testnom načinu, privatni testni bucket i autorski fixture dokument. Bez kopiranja stvarnih radova i osobnih podataka radi praktičnosti.
+- [ ] Provjeriti redirect URL-ove, CORS, domene, tajne po okruženju i nemogućnost da staging frontend slučajno koristi produkcijsku naplatu ili storage. Tajne i build fallback su provjereni, ali staging frontend origin nije potvrđen, a CORS probe nije dobio `Access-Control-Allow-Origin`; ne mijenja se naslijepo.
 - [x] Izvesti DB smoke i migracijske provjere u namjenskoj testnoj bazi. Produkcijski dio ostaje otvoren zbog 401 i nedostupne produkcijske DB lozinke, opisano u dokazu.
 
 **Gotovo kada:** novi testni korisnik može proći auth → pravila → testni popravak → privatno preuzimanje u stagingu, DB provjere prolaze, a manifest jasno razlikuje okruženja. Nema neplanirane promjene produkcijskih podataka. Ako je obnova projekta ograničena računom ili planom, dokumentirati točan blokator i nastaviti ostale nepovezane zadatke.

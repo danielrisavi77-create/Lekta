@@ -15,6 +15,13 @@
 - RLS provjera: entitlements i document_slots imaju auth select, sedam restrictive trajnih politika postoji, anon nema execute nad helper funkcijama, authenticated ima execute.
 - Svi provjereni bucketi su privatni: academic-project-files, corpus, guarantee-evidence, katedra-temporary-materials i repair.
 
+## T18 A/B fixture set
+
+- Kreirana su dva odvojena sintetska Auth korisnika, A `t18-staging-a@invalid.lektahr.net` i B `t18-staging-b@invalid.lektahr.net`; oba se mogu prijaviti kroz password flow (HTTP 200). Nisu korišteni stvarni osobni podaci.
+- Kreirana su dva staging proizvoda `t18_staging_test_a` i `t18_staging_test_b`. Tablica `products` nema zaseban `test_mode` stupac, pa su proizvodi sigurno označeni s `active=false`, `price_eur=0.00` i `mor_product_id` koji završava s `_test_mode`. Nije pozvan checkout i nije diran produkcijski katalog.
+- Kreiran je privatni bucket `t18-private-fixtures` (DOCX MIME, 20 MiB). U njega je prenesen autorski fixture `t18/fer-diplomski-prazni-odlomci.docx` veličine 100090 bajtova.
+- Signed URL preuzima fixture s HTTP 200 i 100090 bajtova; izravni neautorizirani object GET vraća HTTP 400. Service role ključ nije zapisan na disk.
+
 ## Staging closed loop
 
 Koristen je sintetski fixture tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx.
@@ -36,6 +43,13 @@ Nije koristen stvarni studentski rad ni osobni podatak.
 - Bez autha: Auth health vraca 401, repair-docx 401, delete-repair-job 401, client-error GET 405.
 - Staging ima 28 aktivnih Edge funkcija; repair-docx je v5, source-check v5, delete-repair-job v4.
 
-## Ogranicenje
+## Migracijski identitet i okruženja
 
-Management API dopusta popis projekata i staging kljuceve, ali produkcijski migracijski i function endpoint za zrrjttizjyfcxmcpgzml vraca 401. Produkcijska DB lozinka nije dostupna u lokalnom okruzenju, pa se identitet produkcijskih migracija ne prikazuje kao zelen. Nema nikakve produkcijske promjene.
+- Read-only `npm run migration-identity` s trenutnog repozitorijskog HEAD-a uspješno je usporedio oba projekta po imenu migracije. Produkcija ima 107 zapisa: 103 poklopljena, tri repozitorijske migracije 0200-0202 nedostaju, a četiri zapisa postoje samo u bazi. Staging ima 117 zapisa: svih 106 repozitorijskih migracija je prisutno, uz 11 dodatnih migracija druge cjeline 0104-0114. Nema dvostrukih identiteta.
+- Staging secret manifest je pregledan bez čitanja vrijednosti. Service role, DB URL i ostale tajne nisu iznesene u klijentski bundle. Staging build i dalje zahtijeva eksplicitne `VITE_LEKTA_SUPABASE_URL` i `VITE_LEKTA_SUPABASE_ANON_KEY`; bez njih razvojni fallback je lokalni Supabase, a ne produkcija. Produkcijski Netlify origin je zaseban.
+- Auth settings staginga potvrđuju email prijavu, uključenu registraciju i isključene Google/GitHub providere. Supabase Auth javni settings endpoint ne izlaže redirect allow-listu.
+- OPTIONS probe na `repair-docx`, `source-check` i `profile-rules` vraća 200 i odgovarajuće metode, ali nijedan od poznatih origin-a (produkcijski Netlify, pretpostavljeni staging Netlify i lokalni portovi) nije dobio `Access-Control-Allow-Origin`. Staging frontend origin nije potvrđen, pa se CORS/redirect stavka ne označava kao završena niti se naslijepo mijenja `ALLOWED_ORIGIN`.
+
+## Ograničenje
+
+Produkcijsko čitanje funkcija i migracijskog identiteta sada je uspjelo read-only putem prijavljenog CLI-ja. Produkcijska usporedba nije zelena: tri repozitorijske migracije 0200-0202 nisu nađene, a četiri produkcijska zapisa nisu u repozitoriju. Nema nikakve produkcijske promjene; usklađivanje traži zasebnu odluku i migracijski plan.
