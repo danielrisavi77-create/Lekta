@@ -59,7 +59,9 @@ python -m scripts.autonomy.cli report
 Kanonski ugovor je `docs/agents/ORCHESTRATION.md`. Autonomni default ostaje Astra za plan,
 Sonnet za implementaciju i cross-provider review. `plannerAgent`, `implementerAgent` i
 `reviewerAgent` u konfiguraciji mogu eksplicitno odabrati podrzani alias; `auto` ne poziva
-dodatni provider samo radi "drugog misljenja".
+dodatni provider samo radi "drugog misljenja". `providerFallback=wait` zadrzava primarni provider
+ili blokira bez poziva; tek `providerFallback=authorized` dopusta prelazak na sljedeci vec odobreni
+provider/model.
 
 Ako je implementator Codex, auto-review koristi Grok samo kada je `grokEnabled=true` I Grokov
 provider profil stvarno dopusten; inace koristi Claude. Grok Build implementaciju auto-reviewa
