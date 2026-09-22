@@ -2,7 +2,8 @@
 
 Zadano je ZABRANJENO: nedostajuce polje profila znaci da poziv nije dopusten, nepoznata staza znaci
 `needs_human`. Pozitivan bool u profilu sam po sebi nije aktivacija: profil pise `doctor` iz stvarno
-provjerenih opazanja (`trusted_observation`), ne kandidatov kod.
+provjerenih opazanja (`trusted_observation`), ne kandidatov kod. Provider aliasi dolaze iz zajednickog
+`config/agent-providers.json` registra.
 """
 from __future__ import annotations
 
@@ -11,6 +12,8 @@ import os
 import posixpath
 import re
 from typing import Iterable
+
+from .provider_config import AGENT_PROVIDER, AGENT_ROLE
 
 REQUIRED_PROFILE_KEYS = (
     "subscription_verified",
@@ -177,17 +180,21 @@ def validate_config(cfg: dict) -> list[str]:
             problems.append(f"{key} mora biti false")
     if not isinstance(cfg.get("grokEnabled", False), bool):
         problems.append("grokEnabled mora biti bool")
+    coordinators = {name for name, role in AGENT_ROLE.items() if role == "coordinator"}
+    implementers = {name for name, role in AGENT_ROLE.items() if role == "implementer"}
     routing_agents = {
-        "plannerAgent": {"auto", "astra", "fable", "grok"},
-        "implementerAgent": {"auto", "opus", "sonnet", "sol", "build"},
-        "reviewerAgent": {"auto", "astra", "fable", "grok", "opus", "sonnet", "sol", "build"},
+        "plannerAgent": {"auto", *coordinators},
+        "implementerAgent": {"auto", *implementers},
+        "reviewerAgent": {"auto", *AGENT_PROVIDER.keys()},
     }
     for key, allowed in routing_agents.items():
         value = cfg.get(key, "auto")
         if not isinstance(value, str) or value not in allowed:
             problems.append(f"{key} mora biti jedan od {sorted(allowed)}")
-    if not cfg.get("grokEnabled", False) and any(cfg.get(key) in ("grok", "build") for key in routing_agents):
-        problems.append("grok/build routing trazi grokEnabled=true")
+    if not cfg.get("grokEnabled", False) and any(
+        AGENT_PROVIDER.get(str(cfg.get(key))) == "grok" for key in routing_agents
+    ):
+        problems.append("Grok routing trazi grokEnabled=true")
     if cfg.get("maxPaidActionsUsd") != 0 or isinstance(cfg.get("maxPaidActionsUsd"), bool):
         problems.append("maxPaidActionsUsd mora biti 0")
     if cfg.get("allowedRunnerClass") != "public_standard":
