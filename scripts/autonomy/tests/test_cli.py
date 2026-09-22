@@ -194,6 +194,21 @@ class TickTest(unittest.TestCase):
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}), "astra")
 
+    def test_auto_review_uses_grok_only_when_its_provider_profile_is_allowed(self):
+        cfg = config(grokEnabled=True)
+        blocked_profile = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {"grok": {"allowed": False, "approved_models": ["grok-4.6"]}},
+        }
+        allowed_profile = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {"grok": {"allowed": True, "approved_models": ["grok-4.6"]}},
+        }
+        task = {"implementationAgent": "sol"}
+        self.assertEqual(cli._agent_for(cfg, "reviewing", task, blocked_profile), "opus")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", task, allowed_profile), "grok")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "build"}, allowed_profile), "astra")
+
 
 
 QUEUE_FIXTURE = [
@@ -1046,6 +1061,33 @@ class BillingProfileTest(unittest.TestCase):
         self.assertEqual(prof["effective_auth"], "api_key")
         from scripts.autonomy.policy import billing_allowed
         self.assertFalse(billing_allowed(prof))
+
+    def test_grok_needs_cli_config_attestation_and_no_api_key(self):
+        doc = {
+            "logins": {"codex": {}, "claude": {}},
+            "tools": {"grok": {"available": True, "version": "grok 1.0.34"}},
+            "configFingerprint": "fg", "observedAt": "t",
+        }
+        attest = {
+            "extra_credits_disabled": False, "model_included": False, "models": [],
+            "grok_included": True, "grok_models": ["grok-4.6"],
+        }
+        from scripts.autonomy.policy import billing_allowed, provider_billing_allowed
+        prof = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        self.assertTrue(billing_allowed(prof))
+        self.assertTrue(provider_billing_allowed(prof, "grok", "grok-4.6"))
+        self.assertFalse(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+
+        old = os.environ.get("XAI_API_KEY")
+        os.environ["XAI_API_KEY"] = "xai-test"
+        try:
+            blocked = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        finally:
+            if old is None:
+                del os.environ["XAI_API_KEY"]
+            else:
+                os.environ["XAI_API_KEY"] = old
+        self.assertFalse(provider_billing_allowed(blocked, "grok", "grok-4.6"))
 
 
 class CliProcessTest(unittest.TestCase):
