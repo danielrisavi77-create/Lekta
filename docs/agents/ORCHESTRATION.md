@@ -16,7 +16,8 @@ Ne pozivaj Claude, Codex i Grok na svaki prompt. Vise prolaza istim providerom n
 
 ## Provideri i aliasi
 
-Izvor izvrsnih aliasa je `scripts/agents/core.mjs`:
+Jedini strojni izvor aliasa/provider/model/role podataka je `config/agent-providers.json`.
+Node `scripts/agents/core.mjs` i Python autonomy sloj ucitavaju isti registry:
 - Codex: `astra` (koordinator), `sol` (implementator)
 - Claude Code: `fable` (koordinator), `opus`, `sonnet` (implementatori)
 - Grok CLI: `grok` (koordinator/reviewer), `build` (implementator)
@@ -120,7 +121,7 @@ samoprocjenu modela.
 
 ## Grok contract
 
-Minimalna verificirana Grok CLI verzija je `1.0.34`.
+Minimalna verificirana Grok CLI verzija dolazi iz `config/agent-providers.json` (`grokMinVersion`, trenutno `1.0.34`).
 `doctor` i stvarni `run --execute` moraju odbiti stariju/nepoznatu verziju prije modelskog poziva.
 Plan/review koriste read-only sandbox; implementacija workspace sandbox. Runner ne smije automatski
 spustiti sandbox na off.
