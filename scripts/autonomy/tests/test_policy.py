@@ -4,7 +4,7 @@ import tempfile
 import unittest
 
 from scripts.autonomy.policy import (
-    PolicyError, billing_allowed, canonical_path, classify_change, explain_change,
+    PolicyError, billing_allowed, provider_billing_allowed, canonical_path, classify_change, explain_change,
     load_config, validate_config,
 )
 
@@ -35,6 +35,25 @@ class BillingPolicyTest(unittest.TestCase):
             self.assertFalse(billing_allowed(profile), key)
             profile[key] = False
             self.assertFalse(billing_allowed(profile), key)
+
+    def test_provider_profiles_are_independent_and_model_scoped(self):
+        profile = {
+            "configuration_unchanged": True,
+            "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        self.assertTrue(billing_allowed(profile))
+        self.assertTrue(provider_billing_allowed(profile, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(profile, "codex", "gpt-5.6-sol"))
+        self.assertFalse(provider_billing_allowed(profile, "claude", "sonnet"))
+        self.assertTrue(provider_billing_allowed(profile, "grok", "grok-4.6"))
+        profile["configuration_unchanged"] = False
+        self.assertFalse(billing_allowed(profile))
+        self.assertFalse(provider_billing_allowed(profile, "grok", "grok-4.6"))
 
 
 class PathPolicyTest(unittest.TestCase):
