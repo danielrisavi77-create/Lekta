@@ -434,8 +434,8 @@
       "verifyJwt": false,
       "declaredInConfig": true,
       "requiredSecrets": [
+        "LEMONSQUEEZY_STORE_ID",
         "LS_ALLOW_TEST_MODE",
-        "LS_STORE_ID",
         "MOR_WEBHOOK_SECRET",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
@@ -460,7 +460,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-10T21:51:32.117Z",
-  "generatedFromCommit": "8cf328cf03da8adee658373c24b7d71cab85bce4",
+  "generatedAt": "2026-09-22T20:22:42.258Z",
+  "generatedFromCommit": "4c9b140012a276e5c7d9bfe0051c0de142788b34",
   "generator": "npm run deploy-manifest"
 }

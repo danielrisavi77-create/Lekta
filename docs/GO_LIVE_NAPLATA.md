@@ -107,6 +107,27 @@ Env varijable (Supabase → Edge Functions → Secrets):
 - `MOR_WEBHOOK_SECRET` (LS signing secret)
 - `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`, `CHECKOUT_REDIRECT_URL`
 
+`LEMONSQUEEZY_STORE_ID` citaju OBJE funkcije naplate: `create-checkout` (na koju trgovinu ide
+kupnja) i `webhook-mor` (iz koje trgovine dogadjaj SMIJE doci, audit PAY-04). Do 2026-09-22 je
+webhook trazio zasebno ime `LS_STORE_ID`, koje nije stajalo ni u jednom runbooku; tko je slijedio
+ovaj dokument imao je checkout koji radi i webhook koji svaku kupnju odbija s `store_unverifiable`
+i vraca 200, pa je ni provider ne ponavlja. Ime je sada jedno.
+
+- `LS_ALLOW_TEST_MODE` = `1` SAMO dok traje testna kupnja (korak 7). U produkciji ostaje PRAZNO.
+  Prazna vrijednost znaci da dogadjaj iz testnog nacina rada ne daje pravo pristupa (audit PAY-05):
+  bez toga bi svatko tko zna LS test mode dobio placeni proizvod bez naplate. Kad zavrsi provjera
+  integracije, obrisi vrijednost i ponovi `supabase functions deploy webhook-mor`.
+
+Prije `supabase functions deploy` pokreni preflight u ISTOJ okolini u kojoj su tajne (izlazni kod
+1 i imenovana varijabla kad je prazna ili nedostaje):
+
+```
+npm run verify-naplata-secrets
+```
+
+Prazna vrijednost nije neutralna: `acceptEvent` je fail-closed, pa prazan `LEMONSQUEEZY_STORE_ID`
+odbija SVAKU kupnju, a odbijanje je tiho (200, bez retryja).
+
 ## 6. Klijentska konfiguracija (bez rebuilda)
 
 Dvije opcije, iste vrijednosti:

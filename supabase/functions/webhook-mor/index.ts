@@ -46,8 +46,13 @@ const WEBHOOK_SECRET = Deno.env.get('MOR_WEBHOOK_SECRET') ?? '';
  * Prazno = provjera porijekla se ne moze provesti, pa `acceptEvent` odbija SVE dogadjaje s
  * razlogom `store_unverifiable`. To je namjerno fail-closed: tise propustanje bi znacilo da
  * webhook prima dogadjaje bilo koje trgovine, a da nitko ne zna da gate nije konfiguriran.
+ *
+ * Ime tajne je 2026-09-22 ujednaceno s `create-checkout` (prije je ovdje stajao `LS_STORE_ID`).
+ * Dvije funkcije iste naplate citale su dvije razlicite tajne za istu trgovinu, pa je operater
+ * mogao postaviti samo jednu i vjerovati da je naplata konfigurirana: checkout bi radio, a webhook
+ * bi tiho odbijao svaku kupnju s `store_unverifiable`.
  */
-const LS_STORE_ID = Deno.env.get('LS_STORE_ID') ?? '';
+const LEMONSQUEEZY_STORE_ID = Deno.env.get('LEMONSQUEEZY_STORE_ID') ?? '';
 const PROVIDER = 'lemonsqueezy';
 
 function json(body: unknown, status = 200): Response {
@@ -325,7 +330,7 @@ Deno.serve(async (req: Request) => {
   // valjano potpisan dogadjaj tudje trgovine, ili dogadjaj iz testnog nacina rada, dodijelio
   // pravo pravo pristupa. Provjera ide PRIJE svakog upisa, ukljucujuci refund granu.
   const gate = acceptEvent(ev, {
-    expectedStoreId: LS_STORE_ID,
+    expectedStoreId: LEMONSQUEEZY_STORE_ID,
     allowTestMode: Deno.env.get('LS_ALLOW_TEST_MODE') === '1',
   });
   if (!gate.ok) {
@@ -334,7 +339,7 @@ Deno.serve(async (req: Request) => {
     console.error('webhook-mor event_refused', {
       reason: gate.reason,
       storeId: ev.storeId,
-      expectedStoreId: LS_STORE_ID,
+      expectedStoreId: LEMONSQUEEZY_STORE_ID,
       testMode: ev.testMode,
       orderId: ev.orderId,
     });
