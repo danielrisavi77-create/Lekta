@@ -174,10 +174,17 @@ def validate_config(cfg: dict) -> list[str]:
             problems.append(f"{key} mora biti false")
     if not isinstance(cfg.get("grokEnabled", False), bool):
         problems.append("grokEnabled mora biti bool")
-    for key in ("plannerAgent", "implementerAgent", "reviewerAgent"):
+    routing_agents = {
+        "plannerAgent": {"auto", "astra", "fable", "grok"},
+        "implementerAgent": {"auto", "opus", "sonnet", "sol", "build"},
+        "reviewerAgent": {"auto", "astra", "fable", "grok", "opus", "sonnet", "sol", "build"},
+    }
+    for key, allowed in routing_agents.items():
         value = cfg.get(key, "auto")
-        if not isinstance(value, str) or not value:
-            problems.append(f"{key} mora biti neprazan string")
+        if not isinstance(value, str) or value not in allowed:
+            problems.append(f"{key} mora biti jedan od {sorted(allowed)}")
+    if not cfg.get("grokEnabled", False) and any(cfg.get(key) in ("grok", "build") for key in routing_agents):
+        problems.append("grok/build routing trazi grokEnabled=true")
     if cfg.get("maxPaidActionsUsd") != 0 or isinstance(cfg.get("maxPaidActionsUsd"), bool):
         problems.append("maxPaidActionsUsd mora biti 0")
     if cfg.get("allowedRunnerClass") != "public_standard":
