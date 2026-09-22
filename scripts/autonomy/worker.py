@@ -20,7 +20,7 @@ import sys
 import time
 from typing import Iterable
 
-from .policy import PolicyError, billing_allowed, provider_billing_allowed, canonical_path
+from .policy import PolicyError, provider_billing_allowed, canonical_path
 from .provider_config import GROK_MIN_VERSION
 
 VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blocked")
