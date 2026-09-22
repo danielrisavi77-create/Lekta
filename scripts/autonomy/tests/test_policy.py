@@ -80,6 +80,10 @@ class PathPolicyTest(unittest.TestCase):
     def test_small_documentation_change_is_low_risk(self):
         self.assertEqual(classify_change(["docs/agents/autonomy-runbook.md"], 20, self.policy), "auto_low_risk")
 
+    def test_canonical_agent_policy_documents_are_control_files(self):
+        for path in ("docs/agents/ORCHESTRATION.md", "docs/agents/PROJECT_RULES.md"):
+            self.assertEqual(classify_change([path], 5, self.policy), "needs_human", path)
+
     def test_windows_separators_and_dot_segments_are_canonicalised(self):
         self.assertEqual(canonical_path("docs\\agents\\./x.md"), "docs/agents/x.md")
         self.assertEqual(classify_change(["src\\ui\\finding-view-model.ts"], 5, self.policy), "auto_low_risk")
