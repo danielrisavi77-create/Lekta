@@ -706,7 +706,7 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
         "requested_model": job.get("requestedModel"), "reported_models": [], "exit_code": None,
         "process_tree_stopped": True, "isolated": None, "artifact_paths": [], "base_sha": job.get("baseSha"),
         "candidate_sha": None, "launcher": None, "duration_s": 0.0, "successful_tool_calls": None,
-        "usage": _empty_usage(),
+        "usage": _empty_usage(), "provider_called": False, "attempt_spent": False,
     }
     if phase not in ("plan", "implement", "review"):
         result["reason"] = f"nepoznata faza: {phase}"
@@ -770,6 +770,9 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     timed_out = False
     try:
         popen = tree.start(argv, cwd=cwd, env=base_env, stdin_text=str(job.get("prompt") or ""))
+        # Od ove tocke provider proces je stvarno pokrenut; tek sada posao smije trositi attempt/daily slot.
+        result["provider_called"] = True
+        result["attempt_spent"] = True
         result["isolated"] = tree.isolated
         if not tree.isolated:
             tree.terminate_tree()
