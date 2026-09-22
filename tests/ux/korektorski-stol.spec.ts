@@ -98,7 +98,7 @@ test('klik na redak otvara SAMO njegov detalj', async ({ page }) => {
 
   // Doslovno po brifu: "Kliknes 03 i samo se njegov detalj otvori."
   await page.locator('[data-desk-queue] [data-desk-go="2"]').click();
-  await expect(page.locator('[data-desk-count]')).toHaveText(/^3 \/ \d+$/);
+  await expect(page.locator('[data-desk-count]')).toHaveText(/^3 od \d+$/);
   // Z8: jedna kartica u panou umjesto detalja unutar retka; "samo njegov detalj" se sad mjeri
   // time da je kartica jedna i da je odabran tocno taj redak.
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
@@ -107,7 +107,7 @@ test('klik na redak otvara SAMO njegov detalj', async ({ page }) => {
   // Popis i navigacija su DVA nacina rada nad istim stanjem, ne dva stanja: nakon klika na redak
   // navigacija nastavlja odande, a ne od pocetka.
   await page.locator('.desk-nav__btn--next').click();
-  await expect(page.locator('[data-desk-count]')).toHaveText(/^4 \/ \d+$/);
+  await expect(page.locator('[data-desk-count]')).toHaveText(/^4 od \d+$/);
   await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="3"]')).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
 });
@@ -119,20 +119,20 @@ test('navigacija stolom mijenja nalaz i ne omata na kraju', async ({ page }) => 
 
   const brojac = page.locator('[data-desk-count]');
   const prvi = await brojac.textContent();
-  expect(prvi).toMatch(/^1 \/ \d+$/);
+  expect(prvi).toMatch(/^1 od \d+$/);
 
   // Prvi nalaz: "Prethodni" je ugasen, jer navigacija namjerno ne omata.
   await expect(page.locator('.desk-nav__btn--prev')).toBeDisabled();
 
   const naslovPrije = await page.locator('[data-desk-pane] h3').first().textContent();
   await page.locator('.desk-nav__btn--next').click();
-  await expect(brojac).toHaveText(/^2 \/ \d+$/);
+  await expect(brojac).toHaveText(/^2 od \d+$/);
   const naslovPoslije = await page.locator('[data-desk-pane] h3').first().textContent();
   expect(naslovPoslije, 'drugi nalaz mora biti DRUGI, a ne isti pod novim brojem').not.toBe(naslovPrije);
 
   // Delegacija prezivi ponovno crtanje: drugi klik je onaj koji bi pao uz izravne slusace.
   await page.locator('.desk-nav__btn--next').click();
-  await expect(brojac).toHaveText(/^3 \/ \d+$/);
+  await expect(brojac).toHaveText(/^3 od \d+$/);
   await expect(page.locator('.desk-nav__btn--prev')).toBeEnabled();
 });
 
