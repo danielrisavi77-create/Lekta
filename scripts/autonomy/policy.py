@@ -195,6 +195,8 @@ def validate_config(cfg: dict) -> list[str]:
         AGENT_PROVIDER.get(str(cfg.get(key))) == "grok" for key in routing_agents
     ):
         problems.append("Grok routing trazi grokEnabled=true")
+    if cfg.get("providerFallback") not in ("wait", "authorized"):
+        problems.append("providerFallback mora biti wait ili authorized")
     if cfg.get("maxPaidActionsUsd") != 0 or isinstance(cfg.get("maxPaidActionsUsd"), bool):
         problems.append("maxPaidActionsUsd mora biti 0")
     if cfg.get("allowedRunnerClass") != "public_standard":
