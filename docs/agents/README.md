@@ -1,8 +1,9 @@
 # LEKTA: koordinacija razvoja kroz Codex, Claude Code i Grok CLI
 
 GitHub cuva plan, red zadataka, promjene i dokaze. ChatGPT/Codex, Claude Code i Grok Build CLI
-citaju isti repozitorij, ali ne dijele automatski razgovore, prijave ni memoriju. Ova prva verzija je
-poluautomatska: lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
+citaju isti repozitorij, ali ne dijele automatski razgovore, prijave ni memoriju. Kanonski routing,
+billing, context i provider-result ugovor je `docs/agents/ORCHESTRATION.md`; ovaj dokument je
+operativni runbook. Lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
 rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi pozive.
 
 ## Uloge
@@ -20,9 +21,10 @@ rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi po
 Jedan aktivni koordinator vodi zadatak. Drugi se ukljucuje kada treba neovisno misljenje,
 ne na svaki prompt. Ne postoji dokaz da ce odredeni model uvijek biti bolji za svaku vrstu
 zadatka: izbor pratimo prema kvaliteti isporuke, ponovljenom radu, vremenu i stvarnoj potrosnji.
-Pregled treba drugi provider (razlicit CLI `command`): Astra za Opus/Sonnet, Fable za Sol,
-Grok za Codex/Claude implementacije, a Codex/Claude za Build. Isti provider (npr. Grok pregleda
-Build) runner odbija. Za netrivijalne promjene parsera, citata i DOCX-a ostaje obavezan
+Pregled treba drugi provider (razlicit CLI `command`). Read-only review smije koristiti i alias
+koji je inace implementator jer faza review nema pravo pisanja; sigurnosna granica je provider
+separation. Astra ili Grok mogu pregledati Claude, Opus/Sonnet ili Grok mogu pregledati Codex,
+a Codex/Claude mogu pregledati Build. Isti provider (npr. Grok pregleda Build) runner odbija. Za netrivijalne promjene parsera, citata i DOCX-a ostaje obavezan
 adversarijalni pregled prema AGENTS.md.
 
 ## Pocetak
@@ -134,7 +136,7 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 
 ## Ogranicenja prve verzije
 
-- Prijava, dostupnost modela i stvarni poziv oba providera moraju se provjeriti na racunalu
+- Prijava, dostupnost modela i stvarni poziv svakog od tri providera moraju se provjeriti na racunalu
   koje ce izvrsavati zadatke. `doctor` provjerava izvrsne alate, ne pristup modelima.
 - Fable alias zahtijeva Claude Code >=2.1.255. Aliasi se mogu mijenjati. Runner biljezi
   trazeni model i modele prijavljene u rezultatu kada ih provider vrati; prazna lista znaci
@@ -176,10 +178,14 @@ racuni prijavljeni ili da je stvarni model isporucio kvalitetnu LEKTA promjenu.
 
 ## Pretplatnicki nacin i autonomni kontroler (2026-09-09)
 
-`--subscription` je drugi, odvojen nacin naplate runnera: Claude poziv ide bez `--max-budget-usd` (jer
-se do naplate ne smije ni doci), Fable i oba Grok aliasa (`grok`, `build`) iskljuceni su jer ih taj
-profil ne pokriva, a postavljen `ANTHROPIC_API_KEY` u okolini je greska prije pripreme. Grok se pokrece
-samo u rucnom nacinu uz zasebno provjerenu xAI prijavu ili API naplatu. Rucni `--budget-usd` nacin je
+`--subscription` je odvojen profil za ukljucene Codex/Claude modele: Claude poziv ide bez
+`--max-budget-usd`, Fable ostaje iskljucen iz autonomnog profila, a Anthropic API credential u okolini
+blokira Claude provider. Grok se ne smije lazno tretirati kao dio tog subscription poola.
+
+Za Grok postoji zaseban `--included-account` profil. Autonomija ga smije pripremiti samo za `grok`/
+`build`, a Python doctor ga dopusta tek kada je `grokEnabled=true`, Grok CLI dostupan, vlasnik izricito
+potvrdi ukljuceni account allowance/model i `XAI_API_KEY` nije u okolini. Time se Grok moze koristiti
+end-to-end bez toga da Claude/Codex login posredno autorizira xAI poziv. Rucni budget nacin ostaje
 nepromijenjen.
 
 ```bash
@@ -189,3 +195,26 @@ npm run agents -- prepare T02 --phase plan --agent astra --subscription
 Trajni raspored, red zadataka, politika opsega, dokaz i izdavac zive u `scripts/autonomy/` (Python,
 stdlib) i pozivaju ovaj runner samo za pripremu i izvrsenje jednog poziva. Upute: `docs/agents/autonomy-runbook.md`;
 polazna tocka: `docs/agents/autonomy-baseline.md`; status zadataka T00 do T47: `docs/quality/lekta-plan-status.md`.
+
+
+## Usage i routing telemetry
+
+Svaki stvarni `npm run agents -- run ... --execute` zapisuje sanitizirani redak u
+`.artifacts/agents/usage.jsonl`: task, fazu, provider, trazeni/prijavljeni model, izlazni status i
+normalizirani usage. Prompt i tajne se ne zapisuju u ledger.
+
+Autonomni worker sprema isti usage u rezultat faze, a Store ga dodaje sanitiziranom `run:<phase>`
+eventu. To je mjerenje za kasniju optimizaciju routea, ne automatska billing presuda.
+
+Za ukljucivanje Groka u autonomni profil primjer je:
+
+```bash
+python -m scripts.autonomy.cli doctor --write-profile \
+  --attest-extra-credits-disabled \
+  --attest-models gpt-6-astra,sonnet \
+  --attest-grok-included \
+  --attest-grok-models grok-4.6
+```
+
+To je vlasnicka attestacija; ne pretvara placeni API u ukljuceni allowance. Ako je prisutan
+`XAI_API_KEY`, Grok autonomni provider ostaje blokiran.
