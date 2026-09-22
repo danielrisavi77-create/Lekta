@@ -70,7 +70,8 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     const result = run('run', 'T00', '--phase', 'plan', '--agent', 'astra', '--execute');
     expect(result.status).toBe(1);
     expect(JSON.parse(result.stdout).status).toBe('failed');
-    expect(readdirSync(join(root, '.artifacts/agents'))).toHaveLength(1);
+    expect(existsSync(join(root, '.artifacts/agents/usage.jsonl'))).toBe(true);
+    expect(readdirSync(join(root, '.artifacts/agents')).some(name => name.startsWith('T00-'))).toBe(true);
   });
   it('retains the lock after a signal because child processes may still be alive', () => {
     const { root, run } = fixture('SIGTERM');
@@ -98,7 +99,10 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     const report = JSON.parse(result.stdout);
     expect(report.status).toBe('needs_verification');
     expect(report.reportedModels).toEqual(['grok-4.6-build']);
+    expect(report.usage.modelCalls).toBe(1);
     expect(readFileSync(join(report.artifacts, 'prompt.md'), 'utf8')).toContain('LEKTA task T00');
+    const ledger = readFileSync(join(root, '.artifacts/agents/usage.jsonl'), 'utf8').trim().split('\n').map(line => JSON.parse(line));
+    expect(ledger.at(-1)).toMatchObject({ task: 'T00', phase: 'plan', provider: 'grok', status: 'needs_verification' });
   });
   it('diagnoses an unavailable Bubblewrap sandbox without weakening it', () => {
     const { run } = fixture('turn.completed', 'sandbox-failure');
@@ -116,6 +120,13 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     const unsupported = fixture('turn.completed', 'old-version').run('doctor');
     expect(unsupported.status, unsupported.stderr).toBe(0);
     expect(unsupported.stdout).toContain('grok: grok 1.0.33 (old) [unsupported; minimum 1.0.34]');
+  });
+  it('refuses an unsupported Grok version before creating artifacts or calling the model', () => {
+    const { root, run } = fixture('turn.completed', 'old-version');
+    const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--execute');
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('Unsupported Grok CLI version');
+    expect(existsSync(join(root, '.artifacts'))).toBe(false);
   });
 });
 
@@ -185,5 +196,22 @@ describe('option contract of the actual CLI process', () => {
     const job = JSON.parse(run('prepare', 'T00', '--phase', 'plan', '--agent', 'astra', '--subscription').stdout);
     expect(job.args).toEqual(['exec', '--model', 'gpt-6-astra', '--sandbox', 'read-only', '--json', '-']);
     expect(job.billingMode).toBe('subscription');
+  });
+  it('supports the Grok included-account prepare profile and refuses XAI_API_KEY', () => {
+    const { run } = bare();
+    const ok = run('prepare', 'T00', '--phase', 'plan', '--agent', 'grok', '--included-account');
+    expect(ok.status, ok.stderr).toBe(0);
+    expect(JSON.parse(ok.stdout).billingMode).toBe('included_account');
+    const root = mkdtempSync(join(tmpdir(), 'lekta-agents-xai-'));
+    roots.push(root);
+    mkdirSync(join(root, 'docs/agents'), { recursive: true });
+    writeFileSync(join(root, 'docs/agents/tasks.json'), JSON.stringify({ tasks: [
+      { id: 'T00', title: 'Audit', status: 'ready', dependsOn: [] },
+    ] }));
+    const blocked = spawnSync(process.execPath, [cli, 'prepare', 'T00', '--phase', 'plan', '--agent', 'grok', '--included-account'], {
+      cwd: root, encoding: 'utf8', timeout: 20_000, env: { ...process.env, XAI_API_KEY: 'test-do-not-use' },
+    });
+    expect(blocked.status).toBe(1);
+    expect(blocked.stderr).toContain('refuses API credentials');
   });
 });
