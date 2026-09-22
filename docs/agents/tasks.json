@@ -219,13 +219,13 @@
     {
       "id": "T22",
       "title": "Dovršiti račun, prijavu i e-poštu",
-      "status": "ready",
+      "status": "in_progress",
       "dependsOn": [
         "T18",
         "T20",
         "T21"
       ],
-      "note": "P0. Dokaz: stvarne testne poruke stizu na namjenske adrese, sve sesijske grane daju ocekivani ishod, a anonimni korisnik nakon registracije zadrzava vlastiti rad i prava."
+      "note": "P0. T22 evidence 2026-09-22: lokalni auth/session/config testovi 79/79 zeleni i kod ima OTP, password, refresh i anonymous->email identity guard. Staging Auth vraca email=true, ali anonymous_users=false i POST /signup {} vraca 422 anonymous_provider_disabled. Stvarna dostava poruka i ocuvanje rada/prava nakon registracije jos nisu dokazani. Detalji: docs/agents/t22-auth-email-evidence-2026-09-22.md."
     },
     {
       "id": "T23",
