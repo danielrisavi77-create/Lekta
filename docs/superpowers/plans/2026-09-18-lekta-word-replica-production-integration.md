@@ -476,4 +476,3 @@ Production integration is complete only when one redacted release record contain
 12. Cleanup evidence limited to runner-owned artifacts, without an impossible claim about OS/browser traces.
 13. Twenty-four-hour observation result and explicit GA decision.
 14. Tested rollback path with named operator and confirmed access.
-
