@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Moji radovi" description="Popis radova spremljenih u pregledniku: verzije s ocjenama, rok predaje, dijeljenje s mentorom (samo nalazi, bez teksta); tweakovi 'share' i 'empty'" -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}a{color:inherit}a:hover{color:#E4573D}</style></helmet>
+<div style="position:relative;min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace;overflow:hidden">
+<div aria-hidden="true" style="position:absolute;top:-420px;right:-200px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.14),transparent 60%);pointer-events:none"></div>
+<header style="position:relative;display:flex;align-items:center;gap:24px;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:22px 0">
+<a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:29px;letter-spacing:-.01em">Lekta</span></a>
+<nav style="display:flex;align-items:center;gap:16px;margin-left:auto;font-size:13px;font-weight:500"><a href="#" style="color:#EDE7DC;text-decoration:none;border-bottom:1px solid #E4573D;padding-bottom:2px">Moji radovi</a><button type="button" aria-label="Lampa" style="display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid rgba(237,231,220,.16);border-radius:8px;background:transparent;cursor:pointer"><span style="display:block;width:10px;height:10px;border-radius:50%;background:rgba(255,214,150,.9);box-shadow:0 0 12px rgba(255,214,150,.7)"></span></button></nav>
+</header>
+<main data-screen-label="Moji radovi" style="position:relative;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:clamp(16px,4vh,40px) 0 64px;display:grid;gap:32px">
+<div style="display:flex;align-items:end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+<div><p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">Spremljeno u ovom pregledniku · ništa ne odlazi na server</p><h1 style="margin:14px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(40px,5.5vw,72px);line-height:.95;letter-spacing:-.02em">Moji radovi.</h1></div>
+<span style="display:inline-flex;align-items:center;gap:9px;padding:14px 24px;background:#C4372E;color:#F7F3E8;border-radius:2px;font-weight:500;font-size:14px;letter-spacing:.02em;cursor:pointer;white-space:nowrap">Ubaci novi rad ↓</span>
+</div>
+
+<sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+<section style="display:grid;justify-items:center;padding:40px 0">
+<div style="width:min(520px,100%);background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);transform:rotate(-.6deg);padding:44px 48px;display:grid;gap:14px;text-align:center;justify-items:center"><p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Stol je prazan</p><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:36px;line-height:1">Još nema nijednog rada.</h2><p style="margin:0;max-width:34ch;font-family:'Instrument Serif',Georgia,serif;font-size:18px;line-height:1.4;color:#6E6656">Kad ubaciš .docx, ovdje ostaju ocjena, nalazi i verzije. Tekst rada se ne sprema.</p></div>
+</section>
+</sc-if>
+
+<sc-if value="{{ hasWorks }}" hint-placeholder-val="{{ true }}">
+<section style="display:grid;gap:24px">
+
+<article style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:30px 40px 32px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:start">
+<div style="display:grid;gap:22px;min-width:0">
+<div><p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">FPZG · diplomski rad · zadnja provjera danas, 14:32</p><h2 style="margin:10px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(26px,3vw,38px);line-height:1.05;letter-spacing:-.015em;overflow-wrap:anywhere">Decentralizacija i fiskalni kapaciteti lokalne samouprave</h2><p style="margin:8px 0 0;font-size:12px;color:#6E6656">diplomski-rad-final-v3-lekta.docx</p></div>
+<div style="display:grid;gap:10px">
+<p style="margin:0;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:8px;border-bottom:1px solid #DCD4BF"><span>Verzije · 3</span><span>ocjena / 100</span></p>
+<ol style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;position:relative">
+<li aria-hidden="true" style="position:absolute;left:8%;right:8%;top:9px;border-top:1px solid #DCD4BF"></li>
+<li style="position:relative;display:grid;justify-items:center;gap:8px;text-align:center"><span style="width:18px;height:18px;border-radius:50%;background:#F7F3E8;border:1.5px solid #6E6656;display:grid;place-items:center"><span style="width:6px;height:6px;border-radius:50%;background:#6E6656"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:30px;line-height:1;color:#6E6656">71</span><span style="font-size:10px;letter-spacing:.06em;color:#6E6656">v1 · 12. 9.</span><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;color:#A62B23"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>nije spremno</span></li>
+<li style="position:relative;display:grid;justify-items:center;gap:8px;text-align:center"><span style="width:18px;height:18px;border-radius:50%;background:#F7F3E8;border:1.5px solid #6E6656;display:grid;place-items:center"><span style="width:6px;height:6px;border-radius:50%;background:#6E6656"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:30px;line-height:1;color:#6E6656">78</span><span style="font-size:10px;letter-spacing:.06em;color:#6E6656">v2 · 16. 9.</span><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;color:#8A570E"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>treba doraditi</span></li>
+<li style="position:relative;display:grid;justify-items:center;gap:8px;text-align:center"><span style="width:18px;height:18px;border-radius:50%;background:#26221B;border:1.5px solid #26221B"></span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:.75;margin-top:4px">88</span><span style="font-size:10px;letter-spacing:.06em;color:#26221B;font-weight:500">v3 · danas · popravljeno</span><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;color:#176243"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>nema blokatora</span></li>
+</ol>
+</div>
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:4px">
+<span style="display:inline-flex;padding:12px 20px;background:#26221B;color:#F7F3E8;border-radius:2px;font-size:13px;cursor:pointer;white-space:nowrap">Otvori korektorski stol</span>
+<span onClick="{{ openShare }}" style="display:inline-flex;padding:11px 20px;border:1px solid #26221B;color:#26221B;border-radius:2px;font-size:13px;cursor:pointer;white-space:nowrap">Podijeli s mentorom</span>
+<a href="#" style="font-size:13px;color:#6E6656;text-underline-offset:4px;margin-left:auto">Ukloni s stola</a>
+</div>
+</div>
+<aside style="display:grid;gap:14px;min-width:200px;padding:18px 20px;background:#EFE9D9;border:1px solid #DCD4BF;border-radius:2px;transform:rotate(1deg)">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Rok predaje</p>
+<p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:.9">11 dana</p>
+<p style="margin:0;font-size:12px;color:#6E6656">utorak, 30. rujna 2026</p>
+<label style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid #DCD4BF;font-size:12px;cursor:pointer">Podsjeti me 3 dana prije<span role="switch" aria-checked="true" style="width:38px;height:22px;border-radius:999px;background:#C4372E;position:relative;flex:none"><span style="position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:#F7F3E8"></span></span></label>
+<a href="#" style="font-size:11px;color:#A62B23;text-decoration:none;letter-spacing:.04em">Promijeni rok</a>
+</aside>
+</article>
+
+<article style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);padding:24px 40px 26px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:32px;align-items:center;transform:rotate(-.4deg)">
+<div style="min-width:0"><p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Pravni fakultet · seminarski rad · 3. lipnja 2026</p><h2 style="margin:8px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(22px,2.4vw,28px);line-height:1.1;letter-spacing:-.01em;overflow-wrap:anywhere">Načelo razmjernosti u upravnom postupku</h2><p style="margin:6px 0 0;display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#176243"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>nema blokatora · 1 verzija · predano</p></div>
+<span style="font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1">96</span>
+<span style="display:inline-flex;padding:11px 18px;border:1px solid #DCD4BF;color:#26221B;border-radius:2px;font-size:13px;cursor:pointer;white-space:nowrap">Otvori</span>
+</article>
+
+</section>
+</sc-if>
+</main>
+
+<sc-if value="{{ share }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-labelledby="shareTitle" style="position:fixed;inset:0;background:rgba(20,16,12,.62);display:grid;place-items:center;padding:24px;z-index:10">
+<div style="width:min(560px,100%);background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 30px 80px rgba(0,0,0,.6);padding:30px 36px 32px;display:grid;gap:20px;transform:rotate(-.5deg)">
+<div style="display:flex;justify-content:space-between;align-items:start;gap:12px"><div><p style="margin:0;font-size:11px;letter-spacing:.08em;color:#6E6656">Podijeli s mentorom</p><h2 id="shareTitle" style="margin:10px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:32px;line-height:1">Samo nalazi, bez teksta rada.</h2></div><button type="button" onClick="{{ closeShare }}" aria-label="Zatvori" style="width:34px;height:34px;border:1px solid #DCD4BF;border-radius:999px;background:none;color:#6E6656;cursor:pointer;flex:none">✕</button></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;font-size:12px;line-height:1.5">
+<ul style="margin:0;padding:0;list-style:none;display:grid;gap:6px"><li style="font-size:10px;letter-spacing:.08em;color:#6E6656;padding-bottom:6px;border-bottom:1px solid #DCD4BF">Mentor vidi</li><li>Ocjenu i presudu (88, nema blokatora)</li><li>Popis nalaza s pravilima</li><li>Verzije v1, v2, v3</li></ul>
+<ul style="margin:0;padding:0;list-style:none;display:grid;gap:6px;color:#6E6656"><li style="font-size:10px;letter-spacing:.08em;padding-bottom:6px;border-bottom:1px solid #DCD4BF">Mentor ne vidi</li><li>Tekst rada ni jedan odlomak</li><li>Datoteku .docx</li><li>Tvoje ime, osim ako ga upišeš</li></ul>
+</div>
+<label style="display:grid;gap:8px;font-size:11px;letter-spacing:.08em;color:#6E6656">Poveznica · vrijedi 14 dana<span style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px"><input type="text" readonly value="lekta.hr/m/7f3a-k2ne-91qd" style="min-height:44px;padding:0 14px;border:1px solid #DCD4BF;border-radius:2px;background:#FDFBF3;color:#26221B;font:14px 'Geist Mono',monospace;width:100%;min-width:0;box-sizing:border-box"><button type="button" style="min-height:44px;padding:0 18px;border:0;background:#C4372E;color:#F7F3E8;border-radius:2px;font:500 13px 'Geist Mono',monospace;cursor:pointer;white-space:nowrap">Kopiraj</button></span></label>
+<p style="margin:0;display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#6E6656">Poveznicu možeš poništiti bilo kad.<a href="#" style="color:#A62B23;text-decoration:none">Poništi poveznicu</a></p>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;share&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stanje&quot;},&quot;empty&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stanje&quot;}}">
+class Component extends DCLogic {
+  state = { share: null };
+  renderVals() {
+    const share = this.state.share ?? (this.props.share ?? false);
+    const empty = this.props.empty ?? false;
+    return { share, empty, hasWorks: !empty, openShare: () => this.setState({ share: true }), closeShare: () => this.setState({ share: false }) };
+  }
+}
+</script>
+</body>
+</html>

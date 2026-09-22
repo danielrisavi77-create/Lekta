@@ -1,4 +1,4 @@
-<!-- @dsCard group="Rezultat" name="Kartica nalaza" subtitle="kriticno / vazno / info, Popravljivo/Rucno, BEZ lijeve crtice" width="1040" height="760" -->
+<!-- @dsCard group="Rezultat" name="Kartica nalaza" subtitle="jedan nalaz: eyebrow s tockom (nikad border-left), naslov u serifu, izmjereno -> pravilnik, isjecak pravilnika, radnje; stanja: otvoren, ukljucen u plan, zanemaren, popravljen, ogradjen" width="960" height="1000" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,122 +7,104 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-body{background:var(--desk)}
-.finding{width:420px;display:grid;gap:.6rem;padding:1rem 1.1rem;border:1px solid var(--paper-line);border-radius:2px;background:color-mix(in srgb,var(--paper) 55%, white)}
-.f-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.f-eyebrow{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase}
-.f-eyebrow i{width:6px;height:6px;border-radius:50%;display:inline-block}
-.f-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--paper-line);color:var(--paper-muted)}
-.f-badge i{width:6px;height:6px;border-radius:50%}
-.f-badge.fix i{background:#17663F}
-.f-badge.fix{color:#17663F;border-color:#17663F}
-.f-badge.manual i{background:var(--paper-muted)}
-.finding h3{margin:0;font-family:var(--display-serif);font-weight:500;font-size:1.08rem;color:var(--paper-ink);line-height:1.25}
-.f-answer{display:grid;grid-template-columns:6.5rem 1fr;gap:.3rem .7rem;align-items:baseline}
-.f-answer strong{color:var(--paper-muted);font-family:var(--mono);font-size:.62rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase}
-.f-answer p{margin:0;font-size:.88rem;color:var(--paper-ink);line-height:1.5}
-.f-loc{justify-self:start;background:none;border:0;padding:0;color:var(--scan);font-size:.78rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:var(--ui)}
-.f-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.2rem}
-.f-actions button{border:1px solid var(--paper-line);background:none;border-radius:8px;padding:7px 12px;font:600 .74rem var(--ui);color:var(--paper-muted);cursor:pointer}
-.f-actions button.primary{border-color:var(--paper-ink);color:var(--paper-ink)}
-.f-actions button.quiet{border-color:transparent;text-decoration:underline;text-underline-offset:3px}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red-deep:#C4372E;--red-on-soft:#A62B23;--warn:#8A570E;--scan:#1D3FBF;--pass:#176243;--sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:28px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px;align-items:start}
+/* ===== Kartica ===== */
+.f{--tone:var(--red-on-soft);position:relative;background:var(--paper-2);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-sm);padding:20px 22px 22px;display:grid;gap:12px;transform:rotate(.5deg);transition:transform .22s var(--ease),box-shadow .22s}
+.f:hover{transform:rotate(0) translateY(-3px)}
+.f.tone-warn{--tone:var(--warn)}.f.tone-scan{--tone:var(--scan)}.f.tone-pass{--tone:var(--pass)}
+.f .head{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:10px;letter-spacing:.08em;color:var(--paper-muted)}
+.f .head .nav{display:inline-flex;gap:6px}.f .head .nav button{width:26px;height:26px;border:1px solid var(--paper-line);border-radius:999px;background:none;color:var(--paper-ink);cursor:pointer;font:inherit}
+/* Eyebrow s tockom nosi presudu. Ovo je JEDINO mjesto tona na kartici: rub ostaje neutralan. */
+.eyebrow{margin:0;display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;color:var(--tone)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.eyebrow code{font:inherit;color:var(--paper-muted)}
+.f h3{margin:0;font:400 26px/1.1 var(--display);letter-spacing:-.01em;text-wrap:balance}
+.f h3 s{text-decoration-color:var(--tone);text-decoration-thickness:1.5px}
+/* Mjerenje: izmjereno -> pravilnik, na bijelom umetku. */
+.meas{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;padding:10px 14px;background:var(--paper);border:1px solid var(--paper-line);font-size:13px}
+.meas span small{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);margin-bottom:2px}
+.meas .arr{color:var(--paper-muted)}
+.meas.wide{grid-template-columns:1fr}
+/* Isjecak pravilnika */
+.clip{position:relative;padding:12px 14px 12px 30px;background:#fff;border:1px solid var(--paper-line);font:400 11.5px/1.5 Georgia,'Times New Roman',serif;color:#3A342B}
+.clip .n{position:absolute;left:10px;top:12px;font:500 9px var(--mono);color:#9A9080}
+.clip mark{background:color-mix(in srgb,var(--tone) 14%,transparent);color:#26221B;box-shadow:inset 0 -2px 0 var(--tone)}
+.clip .src{display:flex;justify-content:space-between;margin-top:8px;font:400 10px var(--mono);letter-spacing:.06em;color:var(--paper-muted)}
+.clip .src a{color:var(--red-on-soft);text-decoration:none}
+/* Gdje u dokumentu */
+.where{display:flex;gap:6px;flex-wrap:wrap;font-size:10px;letter-spacing:.06em;color:var(--paper-muted)}
+.where span{padding:4px 8px;border:1px solid var(--paper-line);border-radius:999px}
+.where span.all{border-style:dashed}
+/* Radnje */
+.acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:4px}
+.b{border:0;border-radius:2px;padding:11px 16px;font:500 12px/1 var(--mono);letter-spacing:.02em;cursor:pointer;white-space:nowrap}
+.b-ink{background:var(--paper-ink);color:var(--paper)}
+.b-link{background:none;padding:0;font:italic 16px/1 var(--display);color:var(--red-on-soft);background:linear-gradient(var(--red-deep),var(--red-deep)) no-repeat 0 100%/0 2px;transition:background-size .25s var(--ease)}
+.b-link:hover{background-size:100% 2px}
+.b-quiet{background:none;color:var(--paper-muted);margin-left:auto;padding:8px 0}
+/* Stanja */
+.f.is-planned{box-shadow:var(--sh-sm),inset 0 0 0 1.5px var(--paper-ink)}
+.f .otisak{justify-self:start;padding:5px 9px;border:2px solid var(--pass);border-radius:2px;color:var(--pass);font-size:9px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-4deg)}
+.f.is-ignored{opacity:.62;background:var(--paper)}
+.f.is-ignored h3{text-decoration:line-through;text-decoration-color:var(--paper-muted);text-decoration-thickness:1px}
+.f .why{font-size:11px;color:var(--paper-muted);font-style:italic;font-family:var(--display);font-size:15px}
+.f.is-fixed .meas span:first-child{color:var(--paper-muted);text-decoration:line-through}
+.f.is-limited .eyebrow::before{background:transparent;border:1.5px dashed var(--tone)}
+.note{font-size:11px;line-height:1.55;color:var(--desk-muted);max-width:44ch}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Kartica nalaza</h1>
-<p class="dsc-sub">Presuda ide u eyebrow boju i točku (fixable/manual), NIKAD u <code>border-left</code> akcent kartice. Naslov je uvijek Newsreader, meta i akcije su Inter Tight, oznake su IBM Plex Mono.</p>
+<div><h1 class="dsc-h">Kartica nalaza</h1><p class="dsc-sub">Jedna kartica odgovara na četiri pitanja, tim redom: <b style="color:var(--desk-ink)">koliko je ozbiljno</b> (eyebrow s točkom, jedino mjesto tona), <b style="color:var(--desk-ink)">što je krivo</b> (naslov u serifu s brojkama), <b style="color:var(--desk-ink)">tko to kaže</b> (isječak pravilnika s označenom rečenicom) i <b style="color:var(--desk-ink)">što sad</b> (jedna tamna radnja, jedna bilješka, jedna tiha). Rub kartice nikad ne nosi boju.</p></div>
 
-<div class="dsc-row">
+<div class="grid">
+  <div><span class="cap">01 · Otvoren nalaz, blokira, s mjestom u dokumentu</span>
+  <article class="f"><div class="head"><span>Nalaz 2 od 6</span><span class="nav"><button aria-label="Prethodni">←</button><button aria-label="Sljedeći">→</button></span></div>
+  <p class="eyebrow">Blokira predaju · <code>paragraph.spacing</code></p>
+  <h3>Prored glavnog teksta je <s>1,15</s>, pravilnik traži 1,5.</h3>
+  <div class="meas"><span><small>izmjereno</small>1,15 · 287 odlomaka</span><span class="arr">→</span><span><small>pravilnik</small>1,5</span></div>
+  <div class="clip"><span class="n">12.</span>Rad se piše na papiru A4, jednostrano. <mark>Tekst se piše s proredom 1,5</mark>, pismom Times New Roman 12 pt, obostrano poravnat.<span class="src"><span>Pravilnik o diplomskom radu FPZG · str. 9</span><a href="#">Otvori PDF ↗</a></span></div>
+  <div class="where"><span class="all">cijeli rad</span><span>str. 3</span><span>str. 4</span><span>+ 38</span></div>
+  <div class="acts"><button class="b b-ink">Uključi u plan</button><button class="b b-link">Pokaži u dokumentu</button><button class="b b-quiet">Zanemari</button></div></article></div>
 
-<div class="finding">
-  <div class="f-top">
-    <span class="f-eyebrow" style="color:#A62B23"><i style="background:#A62B23"></i>Kritično · margine</span>
-    <span class="f-badge manual"><i></i>Ručno</span>
-  </div>
-  <h3>Lijeva margina je uža od propisane</h3>
-  <div class="f-answer"><strong>Nađeno</strong><p>2,3 cm</p><strong>Treba biti</strong><p>3,0 cm (pravilnik FPZG, čl. 4)</p></div>
-  <button class="f-loc" type="button">Poglavlje 2, str. 14 →</button>
-  <div class="f-actions">
-    <button class="primary">Prikaži detalje</button>
-    <button>Označi kao provjereno</button>
-    <button class="quiet">Zanemari…</button>
-  </div>
-</div>
+  <div><span class="cap">02 · Uključen u plan · otisak umjesto gumba</span>
+  <article class="f is-planned tone-warn"><div class="head"><span>Nalaz 3 od 6</span></div>
+  <p class="eyebrow">Treba doraditi · <code>heading.numbering</code></p>
+  <h3>Naslovi poglavlja nemaju brojeve.</h3>
+  <div class="meas"><span><small>izmjereno</small>0 od 5 naslova</span><span class="arr">→</span><span><small>pravilnik</small>1., 2., 3. …</span></div>
+  <div class="where"><span>str. 3</span><span>str. 11</span><span>str. 18</span><span>str. 24</span><span>str. 31</span></div>
+  <div class="acts"><span class="otisak">✓ U planu</span><button class="b b-link">Pokaži u dokumentu</button><button class="b b-quiet">Izbaci iz plana</button></div></article>
+  <p class="note" style="margin-top:12px">Tamni obrub 1,5px iznutra kaže "odabrano", bez boje presude; otisak zamjenjuje gumb da se stanje vidi i bez čitanja.</p></div>
 
-<div class="finding">
-  <div class="f-top">
-    <span class="f-eyebrow" style="color:#8A5D14"><i style="background:#C98A2E"></i>Važno · citiranje</span>
-    <span class="f-badge fix"><i></i>Popravljivo</span>
-  </div>
-  <h3>DOI nije u kanonskom obliku</h3>
-  <div class="f-answer"><strong>Nađeno</strong><p>doi: 10.1000/xyz</p><strong>Treba biti</strong><p>https://doi.org/10.1000/xyz</p></div>
-  <button class="f-loc" type="button">Popis literature, jed. 12 →</button>
-  <div class="f-actions">
-    <button class="primary">Prikaži detalje</button>
-    <button>Označi kao provjereno</button>
-    <button class="quiet">Zanemari…</button>
-  </div>
-</div>
+  <div><span class="cap">03 · Zanemaren · s razlogom, može se vratiti</span>
+  <article class="f is-ignored tone-scan"><div class="head"><span>Nalaz 5 od 6</span></div>
+  <p class="eyebrow">Ručna provjera · <code>footnote.year</code></p>
+  <h3>Bilješka 1 nema godinu izdanja.</h3>
+  <p class="why">„Izvor je zakonski tekst bez godine, mentor je potvrdio.”</p>
+  <div class="acts"><button class="b b-link">Vrati nalaz</button></div></article></div>
 
-<div class="finding">
-  <div class="f-top">
-    <span class="f-eyebrow" style="color:#1D3FBF"><i style="background:#4A6CF0"></i>Info · tipografija</span>
-    <span class="f-badge fix"><i></i>Popravljivo</span>
-  </div>
-  <h3>Navodnici nisu hrvatski (donji-gornji)</h3>
-  <div class="f-answer"><strong>Nađeno</strong><p>"citat" (engleski oblik)</p><strong>Treba biti</strong><p>„citat" (hrvatski oblik)</p></div>
-  <button class="f-loc" type="button">Poglavlje 3, str. 21 →</button>
-  <div class="f-actions">
-    <button class="primary">Prikaži detalje</button>
-    <button>Označi kao provjereno</button>
-    <button class="quiet">Zanemari…</button>
-  </div>
-</div>
+  <div><span class="cap">04 · Popravljen · nakon ponovne provjere</span>
+  <article class="f is-fixed tone-pass"><div class="head"><span>Nalaz 1 od 6</span></div>
+  <p class="eyebrow">Popravljeno · <code>page.margins</code></p>
+  <h3>Lijeva margina je 3,0 cm.</h3>
+  <div class="meas"><span><small>bilo</small>2,0 cm</span><span class="arr">→</span><span><small>sada</small>3,0 cm</span></div>
+  <div class="acts"><span class="otisak">✓ Prošlo ponovnu provjeru</span></div></article></div>
 
+  <div style="grid-column:1/-1"><span class="cap">05 · Ograđen · profil nije potvrđen, ista činjenica, slabija tvrdnja</span>
+  <article class="f is-limited tone-scan" style="max-width:520px"><div class="head"><span>Nalaz 1 od 4</span></div>
+  <p class="eyebrow">Moguće odstupanje · <code>page.margins</code></p>
+  <h3>Lijeva margina je 2,0 cm; profil za ovaj studij nije potvrđen.</h3>
+  <div class="meas wide"><span><small>izmjereno</small>2,0 cm · uobičajeno za hrvatske fakultete je 2,5 do 3,0 cm</span></div>
+  <div class="acts"><button class="b b-link">Pokaži u dokumentu</button><button class="b b-quiet">Zanemari</button></div></article>
+  <p class="note" style="margin-top:12px">Bez verificiranog izvora riječ "blokira" se ne pojavljuje (ista odluka koju čuva <code>result-readiness.ts</code>); točka je crtkana, nema isječka pravilnika jer ga nema.</p></div>
 </div>
 </body>
 </html>

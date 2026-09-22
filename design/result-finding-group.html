@@ -1,4 +1,4 @@
-<!-- @dsCard group="Rezultat" name="Grupa nalaza" subtitle="Treba pregled (2) otvoreno; U redu (18 provjera) sklopljeno" width="900" height="560" -->
+<!-- @dsCard group="Rezultat" name="Grupa nalaza" subtitle="red cekanja na stolu: grupe po presudi, aktivan redak, rijeseno prekrizeno rukopisom, napredak kao nit; kompaktna 'Prvo pogledaj' za uski ekran; prazno stanje s pecatom" width="960" height="900" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,72 +7,99 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-.group{width:520px;display:grid;gap:.7rem}
-.group-head{display:flex;align-items:center;gap:10px}
-.group-head h2{margin:0;font-family:var(--display-serif);font-weight:500;font-size:1.15rem;color:var(--desk-ink)}
-.group-count{font-family:var(--mono);font-size:.7rem;color:var(--desk-faint)}
-.mini{padding:.7rem .9rem;border:1px solid var(--paper-line);border-radius:2px;background:color-mix(in srgb,var(--paper) 55%, white);color:var(--paper-ink);font-size:.85rem;display:flex;justify-content:space-between;gap:10px}
-.mini span:first-child{font-weight:600}
-.mini span:last-child{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:#A62B23}
-.collapsed{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;border:1px dashed var(--desk-line);border-radius:2px;color:var(--desk-muted);font-family:var(--ui);font-size:.85rem;cursor:pointer}
-.collapsed b{color:var(--desk-ink);font-weight:600}
-.collapsed .chev{color:var(--desk-faint)}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red:#E4573D;--red-deep:#C4372E;--red-on-soft:#A62B23;--warn:#C98A2E;--warn-ink:#8A570E;--scan:#4A6CF0;--pass:#34996A;--pass-ink:#176243;--sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:28px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:34px;align-items:start}
+/* ===== Red cekanja (na stolu) ===== */
+.queue{display:grid;gap:14px;max-width:520px}
+.progress{display:grid;gap:8px}
+.progress .t{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.06em;color:var(--desk-muted)}
+.progress .t b{font-weight:500;color:var(--desk-ink)}
+.progress .bar{height:2px;background:var(--desk-line);position:relative}
+.progress .bar i{position:absolute;left:0;top:0;bottom:0;width:33.3%;background:var(--desk-ink)}
+.progress .bar i::after{content:"";position:absolute;right:-3px;top:-2px;width:6px;height:6px;border-radius:50%;background:var(--red)}
+.grp{display:grid;gap:2px}
+.grp h4{margin:8px 0 6px;display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--desk-faint)}
+.grp h4 i{width:7px;height:7px;border-radius:50%}
+.grp h4::after{content:"";flex:1;height:1px;background:var(--desk-line)}
+.grp h4 b{font-weight:500;color:var(--desk-muted)}
+.r{position:relative;display:grid;grid-template-columns:24px 8px 1fr auto;gap:12px;align-items:center;padding:11px 12px;border-radius:2px;color:var(--desk-muted);cursor:pointer;transition:background .18s,color .18s}
+.r:hover{background:rgba(237,231,220,.05);color:var(--desk-ink)}
+.r .n{font-size:11px;color:var(--desk-faint)}
+.r .d{width:8px;height:8px;border-radius:50%}
+.r .w{font-size:10px;letter-spacing:.06em;color:var(--desk-faint);white-space:nowrap}
+.r .w.all{border:1px dashed var(--desk-line);padding:2px 7px;border-radius:999px}
+.r.on{background:rgba(237,231,220,.09);color:var(--desk-ink)}
+.r.on .n{color:var(--desk-ink)}
+.r.on::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;background:var(--red);border-radius:1px}
+/* Rijeseno: rukopisna crta preko retka, u kurzivu serifa "riješeno", ne zelena pozadina. */
+.r.done{color:var(--desk-faint)}
+.r.done .title{position:relative}
+.r.done .title::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:1.5px;background:var(--red);transform:rotate(-1.2deg);transform-origin:left}
+.r.done .w{font:italic 13px var(--display);letter-spacing:0;color:var(--red);text-transform:none}
+.r.done .d{background:transparent!important;border:1.5px solid currentColor}
+/* Kompaktna lista na papiru (uski ekran, bez stola) */
+.paper{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-sm);padding:20px 22px;transform:rotate(.5deg);display:grid;gap:12px}
+.paper .cap{color:var(--paper-muted);margin:0}
+.paper h3{margin:0;font:400 24px/1.1 var(--display)}
+.top{margin:0;padding:0;list-style:none;display:grid}
+.top li{display:grid;grid-template-columns:8px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--paper-line)}
+.top li i{width:8px;height:8px;border-radius:50%;margin-top:7px}
+.top li b{display:block;font:400 17px/1.25 var(--display);font-weight:400}
+.top li small{display:block;font-size:10px;letter-spacing:.06em;color:var(--paper-muted);margin-top:3px}
+.top li .go{font:italic 15px var(--display);color:var(--red-on-soft);white-space:nowrap;padding-top:3px}
+.more{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--paper-line);font-size:11px;color:var(--paper-muted)}
+.more a{color:var(--red-on-soft);text-decoration:none}
+/* Prazno stanje */
+.empty{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-sm);padding:26px 24px;transform:rotate(-.6deg);display:grid;gap:10px;justify-items:start}
+.empty h3{margin:0;font:400 26px/1.05 var(--display)}
+.empty p{margin:0;font-size:12px;color:var(--paper-muted);line-height:1.5;max-width:36ch}
+.empty .stamp{padding:6px 10px;border:2px solid var(--pass-ink);border-radius:2px;color:var(--pass-ink);font-size:9px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-5deg);margin-top:6px}
+.note{font-size:11px;line-height:1.55;color:var(--desk-muted);max-width:46ch}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Grupa nalaza</h1>
-<p class="dsc-sub">Nalazi koji trebaju pregled stoje otvoreni; provjere koje su prošle se sklapaju u jedan red da ne guše prioritet.</p>
+<div><h1 class="dsc-h">Grupa nalaza</h1><p class="dsc-sub">Popis odgovara na "što me sve čeka", kartica na "što točno". Grupe idu po presudi (blokira, dorada, ručno), unutar grupe po redoslijedu na stolu; broj u retku je isti broj kao na kartici i u traci stranica. <b style="color:var(--desk-ink)">Riješeno se prekriži rukom</b>, ne oboji zeleno: korektor precrta, ne slavi. Napredak je nit s crvenom točkom, ne postotak.</p></div>
 
-<div class="group">
-  <div class="group-head"><h2>Treba pregled</h2><span class="group-count">(2)</span></div>
-  <div class="mini"><span>Lijeva margina je uža od propisane</span><span>Ručno</span></div>
-  <div class="mini"><span>DOI nije u kanonskom obliku</span><span style="color:#17663F">Popravljivo</span></div>
+<div class="grid">
+  <div><span class="cap">01 · Red čekanja na stolu · 2 od 6 riješeno, treći otvoren</span>
+  <div class="queue">
+    <div class="progress"><div class="t"><span><b>2</b> od 6 riješeno</span><span>preostalo: 1 blokira · 2 dorade · 1 ručno</span></div><div class="bar"><i></i></div></div>
+    <div class="grp"><h4><i style="background:var(--red)"></i>Blokira predaju <b>1 od 2</b></h4>
+      <div class="r done"><span class="n">01</span><span class="d" style="background:var(--red)"></span><span class="title">Lijeva margina 2,0 cm</span><span class="w">riješeno</span></div>
+      <div class="r on"><span class="n">02</span><span class="d" style="background:var(--red)"></span><span class="title">Prored 1,15</span><span class="w all">cijeli rad</span></div>
+    </div>
+    <div class="grp"><h4><i style="background:var(--warn)"></i>Treba doraditi <b>1 od 3</b></h4>
+      <div class="r done"><span class="n">03</span><span class="d" style="background:var(--warn)"></span><span class="title">Naslovi poglavlja bez broja</span><span class="w">riješeno</span></div>
+      <div class="r"><span class="n">04</span><span class="d" style="background:var(--warn)"></span><span class="title">Font Calibri umjesto Times</span><span class="w all">cijeli rad</span></div>
+      <div class="r"><span class="n">05</span><span class="d" style="background:var(--warn)"></span><span class="title">Sadržaj bez brojeva stranica</span><span class="w">str. 2</span></div>
+    </div>
+    <div class="grp"><h4><i style="background:var(--scan)"></i>Provjeri sam <b>0 od 1</b></h4>
+      <div class="r"><span class="n">06</span><span class="d" style="background:var(--scan)"></span><span class="title">Izjava o izvornosti</span><span class="w">str. 37</span></div>
+    </div>
+  </div></div>
 
-  <div class="collapsed"><span><b>U redu</b> (18 provjera)</span><span class="chev">⌄</span></div>
+  <div style="display:grid;gap:26px">
+    <div><span class="cap">02 · Kompaktno na papiru · uski ekran, bez stola</span>
+    <div class="paper"><span class="cap">Prvo pogledaj</span><h3>Tri stvari koje najviše vrijede.</h3>
+    <ol class="top">
+      <li><i style="background:var(--red-deep)"></i><span><b>Prored glavnog teksta 1,15</b><small>blokira · cijeli rad · popravljivo</small></span><span class="go">otvori →</span></li>
+      <li><i style="background:var(--red-deep)"></i><span><b>Lijeva margina 2,0 cm</b><small>blokira · cijeli rad · popravljivo</small></span><span class="go">otvori →</span></li>
+      <li><i style="background:var(--warn-ink)"></i><span><b>Naslovi poglavlja bez broja</b><small>dorada · 5 mjesta · popravljivo</small></span><span class="go">otvori →</span></li>
+    </ol>
+    <div class="more"><span>+ 3 nalaza</span><a href="#">Svi nalazi</a></div></div></div>
+
+    <div><span class="cap">03 · Prazno stanje</span>
+    <div class="empty"><span class="cap" style="color:var(--paper-muted);margin:0">Red čekanja</span><h3>Nema otvorenih nalaza.</h3><p>Sve što automatika mjeri je u redu. Dvije stvari i dalje provjeri sam: izjava i godine u literaturi.</p><span class="stamp">Forma provjerena</span></div>
+    <p class="note" style="margin-top:12px">Prazan red nije "sve savršeno": zeleni pečat govori o formi, rečenica ispod nabraja što ostaje autoru.</p></div>
+  </div>
 </div>
 </body>
 </html>

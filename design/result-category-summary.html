@@ -1,4 +1,4 @@
-<!-- @dsCard group="Rezultat" name="Sazetak kategorija" subtitle="4 trake s bodovima, sekundarni pregled" width="900" height="480" -->
+<!-- @dsCard group="Rezultat" name="Sazetak kategorija" subtitle="sekundaran presudi, nikad sam: cetiri kategorije kao tanke crte s bodovima, izgubljeni bodovi imenovani, ne obojeni; DNA rada uz njega; varijanta bez bodovanja" width="960" height="760" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,70 +7,83 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-.cat-grid{display:grid;gap:.9rem;width:520px}
-.cat{display:grid;gap:.4rem}
-.cat-head{display:flex;justify-content:space-between;align-items:baseline}
-.cat-head strong{font-family:var(--ui);font-weight:500;font-size:.9rem;color:var(--desk-ink)}
-.cat-head span{color:var(--desk-faint);font-family:var(--mono);font-size:.72rem}
-.cat-bar{height:6px;border-radius:999px;background:var(--desk-line);overflow:hidden}
-.cat-bar > span{display:block;height:100%;border-radius:inherit;background:var(--desk-ink)}
-.cat small{color:var(--desk-faint);font-family:var(--mono);font-size:.68rem}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red-deep:#C4372E;--red-on-soft:#A62B23;--warn:#C98A2E;--scan:#4A6CF0;--pass-ink:#176243;--sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:28px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:30px;align-items:start}
+.paper{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-sm);padding:20px 24px 22px;display:grid;gap:14px;align-content:start}
+.paper .cap{color:var(--paper-muted);margin:0;display:flex;justify-content:space-between}
+/* ===== Kategorije ===== */
+.cat{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:baseline;padding:8px 0;border-top:1px solid var(--paper-line)}
+.cat:first-of-type{border-top:0}
+.cat .name{font:400 18px/1.1 var(--display)}
+.cat .pts{font-size:11px;color:var(--paper-muted);font-variant-numeric:tabular-nums}
+.cat .pts b{font-weight:500;color:var(--paper-ink)}
+.cat .bar{grid-column:1/-1;height:3px;background:var(--paper-line);position:relative}
+.cat .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--paper-ink)}
+/* Izgubljeni bodovi su IMENOVANI, ne obojeni: kratka mono napomena sto ih je odnijelo. */
+.cat .lost{grid-column:1/-1;font-size:10px;letter-spacing:.04em;color:var(--paper-muted);display:flex;gap:6px;flex-wrap:wrap}
+.cat .lost span{padding:2px 7px;border:1px solid var(--paper-line);border-radius:999px}
+.cat .lost span.k{border-color:var(--red-on-soft);color:var(--red-on-soft)}
+.cat.full .bar i{background:var(--pass-ink)}
+.cat.full .pts b{color:var(--pass-ink)}
+.sum{display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;border-top:1.5px solid var(--paper-ink);font-size:11px;color:var(--paper-muted)}
+.sum b{font:400 24px/1 var(--display);color:var(--paper-ink)}
+/* Nebodovano */
+.cat.nb .bar{background:repeating-linear-gradient(90deg,var(--paper-line) 0 4px,transparent 4px 8px)}
+.cat.nb .pts{color:var(--paper-muted)}
+/* ===== DNA rada ===== */
+.dna{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;align-items:end;height:64px;margin:0;padding:0;list-style:none}
+.dna li{background:var(--paper-line);border-radius:1px;min-height:8%;position:relative;cursor:pointer;transition:transform .15s var(--ease)}
+.dna li:hover{transform:scaleY(1.08);transform-origin:bottom}
+.dna li.e{background:var(--red-deep)}.dna li.w{background:var(--warn)}.dna li.i{background:var(--scan)}
+.dna li.cur::after{content:"";position:absolute;left:50%;top:-8px;width:5px;height:5px;border-radius:50%;background:var(--paper-ink);transform:translateX(-50%)}
+.scale{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.08em;color:var(--paper-muted)}
+.wide{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border:1px dashed var(--paper-line);font-size:11px;color:var(--paper-muted);cursor:pointer}
+.wide b{font-weight:500;color:var(--paper-ink)}
+.fn{display:flex;gap:6px;align-items:center;font-size:10px;letter-spacing:.06em;color:var(--paper-muted)}
+.fn span{padding:3px 8px;border:1px solid var(--paper-line);border-radius:999px;color:var(--paper-ink)}
+.fn span i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--scan);margin-right:6px}
+.note{font-size:11px;line-height:1.55;color:var(--desk-muted);max-width:46ch}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Sažetak kategorija</h1>
-<p class="dsc-sub">Sekundarni pregled ispod glavne presude; ispuna trake je uvijek neutralna (--desk-ink), boja se ne troši ovdje jer nijedna kategorija sama nije presuda.</p>
+<div><h1 class="dsc-h">Sažetak kategorija</h1><p class="dsc-sub">Odgovara na "gdje sam izgubio bodove", i to je sve. Uvijek stoji ISPOD presude, nikad sam. Crte su tinta, ne semafor: kategorija koja je puna dobije zelenu crtu (izmjereno i prošlo), a izgubljeni bodovi su <b style="color:var(--desk-ink)">imenovani čipom</b>, ne obojeni. Uz njega stoji DNA rada: gdje po odlomcima leže nalazi.</p></div>
 
-<div class="cat-grid">
-  <div class="dsc-cap">Sekundarni pregled</div>
-  <div class="cat"><div class="cat-head"><strong>Oblikovanje</strong><span>92%</span></div><div class="cat-bar"><span style="width:92%"></span></div><small>23 / 25 bodova</small></div>
-  <div class="cat"><div class="cat-head"><strong>Struktura</strong><span>78%</span></div><div class="cat-bar"><span style="width:78%"></span></div><small>14 / 18 bodova</small></div>
-  <div class="cat"><div class="cat-head"><strong>Citiranje</strong><span>65%</span></div><div class="cat-bar"><span style="width:65%"></span></div><small>13 / 20 bodova</small></div>
-  <div class="cat"><div class="cat-head"><strong>Opseg</strong><span>100%</span></div><div class="cat-bar"><span style="width:100%"></span></div><small>10 / 10 bodova</small></div>
+<div class="grid">
+  <div><span class="cap">01 · Po kategorijama · bodovano, 71 / 100</span>
+  <section class="paper" style="transform:rotate(-.4deg)"><span class="cap"><span>Po kategorijama</span><span>bodovi</span></span>
+    <div class="cat"><span class="name">Oblikovanje</span><span class="pts"><b>18</b> / 30</span><div class="bar"><i style="width:60%"></i></div><div class="lost"><span class="k">margine −6</span><span class="k">prored −4</span><span>font −2</span></div></div>
+    <div class="cat"><span class="name">Struktura</span><span class="pts"><b>22</b> / 25</span><div class="bar"><i style="width:88%"></i></div><div class="lost"><span>brojevi naslova −3</span></div></div>
+    <div class="cat"><span class="name">Citiranje</span><span class="pts"><b>19</b> / 25</span><div class="bar"><i style="width:76%"></i></div><div class="lost"><span>bilješke −4</span><span>literatura −2</span></div></div>
+    <div class="cat full"><span class="name">Elementi</span><span class="pts"><b>12</b> / 12</span><div class="bar"><i style="width:100%"></i></div></div>
+    <div class="sum"><span>Ukupno · 24 pravila</span><b>71 <span style="font:inherit;font-size:11px;color:var(--paper-muted)">/ 100</span></b></div>
+  </section>
+  <p class="note" style="margin-top:12px">Crveni čip = isti nalaz koji blokira predaju; klik vodi na karticu. Zbroj čipova uvijek objašnjava razliku do maksimuma, pa nema "nevidljivih" bodova.</p></div>
+
+  <div style="display:grid;gap:26px">
+    <div><span class="cap">02 · DNA rada · gdje su nalazi po odlomcima</span>
+    <section class="paper" style="transform:rotate(.4deg)"><span class="cap"><span>Gdje su nalazi</span><span>312 odlomaka · 41 str.</span></span>
+      <ol class="dna" aria-label="Nalazi kroz dokument"><li style="height:38%"></li><li style="height:22%"></li><li class="w" style="height:60%"></li><li style="height:30%"></li><li style="height:18%"></li><li style="height:45%"></li><li class="e cur" style="height:90%"></li><li style="height:26%"></li><li style="height:20%"></li><li style="height:34%"></li><li style="height:12%"></li><li class="w" style="height:55%"></li><li style="height:28%"></li><li style="height:20%"></li><li class="w" style="height:70%"></li><li style="height:24%"></li><li style="height:16%"></li><li class="i" style="height:40%"></li><li style="height:30%"></li><li style="height:22%"></li><li class="i" style="height:48%"></li><li style="height:18%"></li><li style="height:26%"></li><li style="height:14%"></li></ol>
+      <div class="scale"><span>1</span><span>● trenutni nalaz</span><span>312</span></div>
+      <div class="wide"><span><b>3 nalaza</b> vrijede za cijeli dokument</span><span>font · margine · prored →</span></div>
+      <div class="fn">Fusnote<span><i></i>bilj. 1</span><span><i></i>bilj. 14</span></div>
+    </section></div>
+
+    <div><span class="cap">03 · Profil ne boduje · isti oblik, bez bodova</span>
+    <section class="paper" style="transform:rotate(-.3deg);gap:10px"><span class="cap"><span>Po kategorijama</span><span>ovaj profil ne boduje</span></span>
+      <div class="cat nb"><span class="name">Oblikovanje</span><span class="pts">3 nalaza</span><div class="bar"></div></div>
+      <div class="cat nb"><span class="name">Struktura</span><span class="pts">1 nalaz</span><div class="bar"></div></div>
+      <div class="cat nb"><span class="name">Citiranje</span><span class="pts">2 nalaza</span><div class="bar"></div></div>
+      <div class="sum"><span>Provjereno</span><b>24 <span style="font:inherit;font-size:11px;color:var(--paper-muted)">pravila</span></b></div>
+    </section></div>
+  </div>
 </div>
 </body>
 </html>

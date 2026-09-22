@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Prazna i greška stanja" description="Šest stanja (nema radova, nečitljiv .docx, prekinuta analiza, neuspjela naplata, bez mreže, nije pronađeno) u tri tona: pečat, bilješka, prazan list." -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"><style>body{margin:0;background:#1C1915}@keyframes stampIn{from{transform:rotate(-9deg) scale(1.6);opacity:0}to{transform:rotate(-9deg) scale(1);opacity:1}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style></helmet>
+<div data-screen-label="Stanje" style="min-height:100vh;display:grid;place-items:center;padding:72px 56px 48px;box-sizing:border-box;background:radial-gradient(ellipse 60% 50% at 50% 30%,#2A2620 0%,#1C1915 70%);font-family:'Geist Mono',ui-monospace,monospace;color:#F7F3E8">
+<div style="position:relative;width:100%;max-width:640px;background:#F7F3E8;color:#26221B;padding:56px 56px 48px;box-sizing:border-box;box-shadow:0 30px 60px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.12) inset">
+<div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6653;padding-bottom:12px;border-bottom:1px solid #DCD4BF">
+<span>Lekta · {{ st.sheet }}</span><span>{{ st.code }}</span>
+</div>
+<sc-if value="{{ isA }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:34px;right:36px;padding:8px 14px;border:2.5px solid #C4372E;color:#C4372E;font-size:13px;letter-spacing:.12em;text-transform:uppercase;transform:rotate(-9deg);animation:stampIn .35s cubic-bezier(.2,.9,.3,1.2) both;mix-blend-mode:multiply">{{ st.stamp }}</div>
+</sc-if>
+<sc-if value="{{ isB }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:-34px;right:-40px;width:240px;padding:16px 18px 18px;background:#F1E6B8;color:#4A4438;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:18px;line-height:1.3;transform:rotate(3deg);box-shadow:0 10px 22px rgba(0,0,0,.35);text-wrap:pretty"><span style="position:absolute;top:-8px;left:50%;width:56px;height:14px;margin-left:-28px;background:rgba(255,255,255,.35);border:1px solid rgba(0,0,0,.06);transform:rotate(-2deg)"></span>{{ st.note }}</div>
+</sc-if>
+<h1 style="margin:96px 0 16px;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(36px,6vw,56px);line-height:.95;letter-spacing:-.01em;text-wrap:pretty">{{ st.title }}</h1>
+<p style="margin:0 0 28px;font-size:14px;line-height:1.55;color:#4A4438;max-width:46ch;text-wrap:pretty">{{ st.body }}</p>
+<sc-if value="{{ isC }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;gap:14px;margin:0 0 32px">
+<div style="height:1px;background:repeating-linear-gradient(90deg,#B8AE96 0 6px,transparent 6px 10px)"></div>
+<div style="height:1px;background:repeating-linear-gradient(90deg,#B8AE96 0 6px,transparent 6px 10px);width:82%"></div>
+<div style="height:1px;background:repeating-linear-gradient(90deg,#B8AE96 0 6px,transparent 6px 10px);width:64%"></div>
+</div>
+</sc-if>
+<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+<sc-if value="{{ isInvite }}" hint-placeholder-val="{{ true }}"><button style="font:inherit;font-size:14px;letter-spacing:.02em;padding:14px 22px;border-radius:10px;border:0;background:#C4372E;color:#F7F3E8;cursor:pointer;box-shadow:0 6px 16px rgba(196,55,46,.28)" style-hover="background:#A82E26">{{ st.primary }}</button></sc-if>
+<sc-if value="{{ isRecover }}" hint-placeholder-val="{{ false }}"><button style="font:inherit;font-size:14px;letter-spacing:.02em;padding:14px 22px;border-radius:10px;border:0;background:#26221B;color:#F7F3E8;cursor:pointer" style-hover="background:#C4372E">{{ st.primary }}</button></sc-if>
+<a href="#" style="font-size:13px;color:#4A4438;text-decoration:underline;text-underline-offset:3px" style-hover="color:#C4372E">{{ st.secondary }}</a>
+</div>
+<div style="margin-top:40px;padding-top:12px;border-top:1px solid #DCD4BF;font-size:11px;color:#6E6653;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span>{{ st.foot }}</span><span>Dokument ostaje na uređaju</span></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;empty&quot;,&quot;unreadable&quot;,&quot;interrupted&quot;,&quot;payment&quot;,&quot;offline&quot;,&quot;notfound&quot;],&quot;default&quot;:&quot;empty&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stanje&quot;},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;],&quot;default&quot;:&quot;B&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ton (A pečat · B bilješka · C prazan list)&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const v = this.props.variant ?? 'B';
+    const k = this.props.state ?? 'empty';
+    const S = {
+      empty: { sheet:'Moji radovi', code:'0 radova', stamp:'Prazno', note:'Još nema ničega na stolu. Ubaci prvi rad.', title:'Stol je prazan.', body:'Kad ubaciš rad, ovdje ostaju verzije, ocjene i rok. Sve se čuva samo na ovom uređaju.', primary:'Ubaci prvi rad', secondary:'Kako radi provjera', foot:'Verzije se čuvaju lokalno' },
+      unreadable: { sheet:'Ulazni list', code:'Nº 0007 · Nečitljivo', stamp:'Nečitljivo', note:'Ovo nije .docx koji mogu otvoriti. Spremi kao Word dokument i probaj ponovno.', title:'Ne mogu pročitati ovaj dokument.', body:'Datoteka nije valjani .docx (možda je .doc, .pdf ili oštećena). Otvori rad u Wordu, odaberi Spremi kao → Word dokument (.docx) i ubaci ga ponovno.', primary:'Ubaci drugu datoteku', secondary:'Zašto samo .docx?', foot:'Datoteka nije poslana nikamo' },
+      interrupted: { sheet:'Provjera', code:'Nº 0007 · Prekinuto', stamp:'Prekinuto', note:'Analiza je stala na 61 %. Ništa nije izgubljeno, nastavi kad želiš.', title:'Provjera je prekinuta.', body:'Stranica se zatvorila ili je uređaj otišao u stanje mirovanja. Dokument je još na stolu; provjera kreće od početka i traje oko 20 sekundi.', primary:'Pokreni provjeru ponovno', secondary:'Ukloni dokument', foot:'Zadnji korak: prored i margine' },
+      payment: { sheet:'Narudžba', code:'Nº 0007 · Nenaplaćeno', stamp:'Nenaplaćeno', note:'Banka je odbila karticu. Plan popravka čeka, ništa nije naplaćeno.', title:'Naplata nije prošla.', body:'Kartica je odbijena ili je potvrda istekla. Plan popravka je spremljen; možeš pokušati istom ili drugom karticom. Nije naplaćeno ništa.', primary:'Pokušaj ponovno', secondary:'Vrati se na plan', foot:'Stripe · 9,99 €' },
+      offline: { sheet:'Stol', code:'Bez mreže', stamp:'Bez mreže', note:'Nema veze. Provjera radi i bez nje, popravak i naplata čekaju mrežu.', title:'Nema veze s mrežom.', body:'Provjera forme radi u potpunosti na uređaju i dostupna je. Popravak, naplata i pravila za nove fakultete čekaju dok se veza vrati.', primary:'Nastavi provjeru offline', secondary:'Pokušaj ponovno', foot:'Zadnja sinkronizacija pravila: 12. 9. 2026.' },
+      notfound: { sheet:'Registar', code:'404', stamp:'Nije u registru', note:'Ove stranice nema u registru. Možda je list premješten.', title:'Stranica nije pronađena.', body:'Adresa ne postoji ili je promijenjena. Vrati se na stol ili potraži fakultet u registru.', primary:'Na stol', secondary:'Registar fakulteta', foot:'Lekta · ulaz / registar / pribor' }
+    };
+    const invite = k === 'empty' || k === 'notfound';
+    return { st: S[k] || S.empty, isInvite: invite, isRecover: !invite, isA: v === 'A', isB: v === 'B', isC: v === 'C' };
+  }
+}
+</script>
+</body>
+</html>

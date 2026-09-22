@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Alat: naslovnica" description="Obitelj alata, prvi alat. Desni list je A4 u stvarnom omjeru i dominira; lijevo je uski blok bilješki s poljima kao korektorske napomene." -->
+<helmet><script src="./ds-base.js"></script><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}a{color:inherit}a:hover{color:#E4573D}
+@keyframes tlStamp{0%{opacity:0;transform:rotate(-12deg) scale(2)}60%{opacity:1;transform:rotate(-8deg) scale(.96)}100%{opacity:.92;transform:rotate(-8deg) scale(1)}}
+@keyframes tlRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}</style></helmet>
+<div data-screen-label="Alat: naslovnica C" style="min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace">
+<header style="display:flex;align-items:center;gap:16px 24px;flex-wrap:wrap;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:22px 0">
+<a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:29px;letter-spacing:-.01em">Lekta</span></a>
+<nav style="display:flex;align-items:center;gap:8px 14px;margin-left:auto;font-size:13px;font-weight:500;flex-wrap:wrap;justify-content:flex-end"><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Pribor</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Moji radovi</a><a href="#" style="display:inline-flex;align-items:center;padding:9px 16px;background:#C4372E;color:#F7F3E8;border-radius:2px;text-decoration:none;white-space:nowrap">Provjeri rad</a></nav>
+</header>
+<main style="width:min(1180px,calc(100% - 48px));margin:0 auto;padding:8px 0 80px">
+<nav aria-label="Pribor" style="display:flex;gap:14px;align-items:flex-end;padding:16px 0 18px;border-bottom:1px solid rgba(237,231,220,.12);overflow-x:auto;overflow-y:visible;scrollbar-width:none">
+<sc-for list="{{ tools }}" as="t" hint-placeholder-count="6">
+<sc-if value="{{ t.on }}" hint-placeholder-val="{{ false }}"><a href="#" aria-current="page" style="flex:none;display:grid;gap:6px;padding:12px 14px 10px;background:#F7F3E8;color:#26221B;border-radius:2px;text-decoration:none;transform:translateY(-8px) rotate(-1deg);box-shadow:0 14px 28px rgba(0,0,0,.5);min-width:132px"><span style="font-size:10px;letter-spacing:.1em;color:#A62B23">{{ t.code }}</span><b style="font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:17px;line-height:1.1">{{ t.title }}</b></a></sc-if>
+<sc-if value="{{ t.off }}" hint-placeholder-val="{{ true }}"><a href="#" style="flex:none;display:grid;gap:6px;padding:12px 14px 10px;background:#EFE9D9;color:#26221B;border-radius:2px;text-decoration:none;box-shadow:0 2px 4px rgba(0,0,0,.4);min-width:132px;transition:transform .25s cubic-bezier(.22,1,.36,1)" style-hover="transform:translateY(-6px)"><span style="font-size:10px;letter-spacing:.1em;color:#6E6656">{{ t.code }}</span><b style="font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:17px;line-height:1.1">{{ t.title }}</b></a></sc-if>
+</sc-for>
+</nav>
+<div style="padding:34px 0 22px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:end">
+<div><p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:19px;color:#E4573D">Besplatan alat, bez registracije</p><h1 style="margin:6px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(34px,5vw,60px);line-height:.98;letter-spacing:-.02em">Naslovnica rada.</h1><p style="margin:12px 0 0;max-width:56ch;font-size:13px;line-height:1.55;color:rgba(237,231,220,.72)">Odaberi fakultet pa se raspored slaže po njegovu predlošku. Sve lokalno, ništa se ne šalje.</p></div>
+<sc-if value="{{ askPrefill }}" hint-placeholder-val="{{ true }}"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 14px;background:linear-gradient(180deg,#C9A96A,#A98649);color:#26221B;border:1px solid #6E5A34;border-radius:2px;font-size:12px;animation:tlRise .3s ease both"><span>Iz tvog profila: <b>FPZG · Politologija · Diplomski</b>. Popuniti?</span><button type="button" onClick="{{ prefill }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:7px 12px;border:0;border-radius:2px;background:#26221B;color:#F7F3E8;cursor:pointer;white-space:nowrap">Da, popuni</button><button type="button" onClick="{{ dismissPrefill }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:7px 10px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">Ne</button></div></sc-if>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+<section aria-label="Podaci" style="flex:1 1 280px;max-width:340px;min-width:0;background:#F3E6A8;color:#26221B;border-radius:1px;box-shadow:0 2px 4px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.45);padding:22px 22px 26px;display:grid;gap:14px;transform:rotate(-1.2deg);position:sticky;top:20px">
+<div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:12px;border-bottom:1px solid #DCD4BF;white-space:nowrap"><span>Bilješke za naslovnicu</span><span>ceduljica</span></div>
+<label style="display:grid;gap:6px"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">FAKULTET S POPISA</span><select value="{{ instId }}" onChange="{{ setInst }}" defaultValue="fpzg" style="font-family:'Geist Mono',monospace;font-size:13px;padding:8px 0;border:0;border-bottom:1px solid #26221B;border-radius:0;background:transparent;color:#26221B;width:100%;box-sizing:border-box"><option value="">Slobodan unos / nije na popisu</option><option value="fpzg">Fakultet političkih znanosti · Zagreb</option><option value="pravo">Pravni fakultet · Zagreb</option><option value="ffzg">Filozofski fakultet · Zagreb</option><option value="efzg">Ekonomski fakultet · Zagreb</option><option value="ffri">Filozofski fakultet · Rijeka</option></select></label>
+<div style="display:grid;gap:12px">
+<sc-for list="{{ fields }}" as="f" hint-placeholder-count="10">
+<label style="display:grid;gap:5px"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">{{ f.label }}</span><input type="text" value="{{ f.value }}" onInput="{{ f.set }}" placeholder="{{ f.ph }}" style="font-family:'Geist Mono',monospace;font-size:13px;padding:8px 0;border:0;border-bottom:1px solid rgba(38,34,27,.35);border-radius:0;background:transparent;color:#26221B;width:100%;box-sizing:border-box;outline:none"></label>
+</sc-for>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:6px"><button type="button" onClick="{{ sample }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:9px 14px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer">Ubaci primjer</button><button type="button" onClick="{{ clear }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:9px 14px;border:0;background:transparent;color:#6E6656;cursor:pointer;text-decoration:underline;text-underline-offset:4px">Očisti</button></div>
+<p style="margin:0;font-size:11.5px;line-height:1.55;color:#6E6656">Raspored je uobičajen za hrvatske akademske radove. Neki fakulteti propisuju vlastiti predložak. Konačnu naslovnicu uskladi s uputama mentora.</p>
+</section>
+<section aria-label="Naslovnica" style="flex:3 1 380px;min-width:0;display:grid;gap:14px;justify-items:center"><div style="width:min(100%,620px);display:grid;gap:14px">
+<div style="position:relative;aspect-ratio:1/1.414;background:#FFFEFB;color:#1B1B1B;border:1px solid #DCD4BF;border-radius:1px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.5);padding:9% 8%;display:grid;grid-template-rows:auto 1fr auto 1fr auto;text-align:center;font-family:Georgia,'Times New Roman',serif;overflow:hidden">
+<sc-if value="{{ originOfficial }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="position:absolute;top:18px;right:14px;padding:6px 10px;border:2.5px solid #34996A;border-radius:2px;color:#34996A;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;animation:tlStamp .5s ease both">Službeni raspored</div></sc-if>
+<sc-if value="{{ originDerived }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="position:absolute;top:18px;right:14px;padding:6px 10px;border:2.5px solid #C98A2E;border-radius:2px;color:#C98A2E;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;animation:tlStamp .5s ease both">Izveden iz radova</div></sc-if>
+<sc-if value="{{ originGeneric }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="position:absolute;top:18px;right:14px;padding:6px 10px;border:2.5px dashed #6E6656;border-radius:2px;color:#6E6656;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap">Generički raspored</div></sc-if>
+<div style="display:grid;gap:4px;font-size:clamp(10px,1.4vw,15px);line-height:1.35">
+<sc-if value="{{ hasUni }}" hint-placeholder-val="{{ true }}"><span>{{ v.uni }}</span></sc-if><sc-if value="{{ noUni }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:block;height:.9em;width:46%;margin:0 auto;border-bottom:1px solid #C9C2B0"></span></sc-if>
+<sc-if value="{{ hasFac }}" hint-placeholder-val="{{ true }}"><b>{{ v.fac }}</b></sc-if><sc-if value="{{ noFac }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:block;height:.9em;width:56%;margin:0 auto;border-bottom:1px solid #C9C2B0"></span></sc-if>
+<sc-if value="{{ hasStudy }}" hint-placeholder-val="{{ true }}"><span style="color:#555;font-size:.88em">{{ v.study }}</span></sc-if><sc-if value="{{ noStudy }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:block;height:.9em;width:38%;margin:0 auto;border-bottom:1px solid #C9C2B0"></span></sc-if>
+</div>
+<div></div>
+<div style="display:grid;gap:8px">
+<sc-if value="{{ hasAuthor }}" hint-placeholder-val="{{ true }}"><span style="font-size:clamp(11px,1.5vw,16px)">{{ v.author }}</span></sc-if><sc-if value="{{ noAuthor }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:block;height:1em;width:34%;margin:0 auto;border-bottom:1px solid #C9C2B0"></span></sc-if>
+<sc-if value="{{ hasTitle }}" hint-placeholder-val="{{ true }}"><b style="font-size:clamp(14px,2.2vw,24px);line-height:1.2;text-transform:uppercase;letter-spacing:.015em;text-wrap:balance">{{ v.title }}</b></sc-if><sc-if value="{{ noTitle }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:grid;gap:8px;justify-items:center;padding:6px 0"><span style="display:block;height:1.2em;width:80%;border-bottom:1.5px solid #C9C2B0"></span><span style="display:block;height:1.2em;width:60%;border-bottom:1.5px solid #C9C2B0"></span></span></sc-if>
+<sc-if value="{{ hasWork }}" hint-placeholder-val="{{ true }}"><span style="font-size:clamp(9px,1.3vw,14px);letter-spacing:.08em;text-transform:uppercase;color:#555">{{ v.work }}</span></sc-if><sc-if value="{{ noWork }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:block;height:.9em;width:26%;margin:0 auto;border-bottom:1px solid #C9C2B0"></span></sc-if>
+<sc-if value="{{ hasCourse }}" hint-placeholder-val="{{ false }}"><span style="font-size:clamp(9px,1.3vw,13px);color:#555">Kolegij: {{ v.course }}</span></sc-if>
+</div>
+<div></div>
+<div style="display:grid;gap:6px;font-size:clamp(10px,1.4vw,14px)">
+<sc-if value="{{ hasMentor }}" hint-placeholder-val="{{ true }}"><span>Mentor: {{ v.mentor }}</span></sc-if><sc-if value="{{ noMentor }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:block;height:.9em;width:44%;margin:0 auto;border-bottom:1px solid #C9C2B0"></span></sc-if>
+<sc-if value="{{ hasJmbag }}" hint-placeholder-val="{{ false }}"><span style="color:#555;font-size:.9em">JMBAG: {{ v.jmbag }}</span></sc-if>
+<sc-if value="{{ hasPlace }}" hint-placeholder-val="{{ true }}"><span style="margin-top:10px">{{ v.place }}</span></sc-if><sc-if value="{{ noPlace }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:block;height:.9em;width:30%;margin:10px auto 0;border-bottom:1px solid #C9C2B0"></span></sc-if>
+</div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+<button type="button" style="font-family:'Geist Mono',monospace;white-space:nowrap;display:inline-flex;align-items:center;gap:9px;padding:13px 22px;background:#C4372E;color:#F7F3E8;border:0;border-radius:2px;font-weight:500;font-size:13px;cursor:pointer">Preuzmi .docx <span aria-hidden="true">↓</span></button>
+<button type="button" style="font-family:'Geist Mono',monospace;white-space:nowrap;padding:12px 16px;background:transparent;color:#EDE7DC;border:1px solid rgba(237,231,220,.4);border-radius:2px;font-size:12px;cursor:pointer">Spremi kao PDF</button>
+<button type="button" style="font-family:'Geist Mono',monospace;white-space:nowrap;padding:12px 16px;background:transparent;color:#EDE7DC;border:1px solid rgba(237,231,220,.4);border-radius:2px;font-size:12px;cursor:pointer">Kopiraj tekst</button>
+<span style="font-size:11.5px;color:rgba(237,231,220,.6);margin-left:auto">{{ originNote }}</span>
+</div>
+</div>
+</section>
+</div>
+<div style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px;padding-top:32px;border-top:1px solid rgba(237,231,220,.12)">
+<div><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:28px;line-height:1.05">Što ide na naslovnicu</h2><dl style="margin:16px 0 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 18px;font-size:12.5px;line-height:1.5"><dt style="color:#E4573D">Vrh</dt><dd style="margin:0;color:rgba(237,231,220,.8)">Sveučilište i fakultet, ponekad studij ili katedra.</dd><dt style="color:#E4573D">Autor</dt><dd style="margin:0;color:rgba(237,231,220,.8)">Ime i prezime studenta.</dd><dt style="color:#E4573D">Naslov</dt><dd style="margin:0;color:rgba(237,231,220,.8)">U sredini, istaknuto, bez točke na kraju.</dd><dt style="color:#E4573D">Mentor</dt><dd style="margin:0;color:rgba(237,231,220,.8)">S akademskom titulom, kod završnih i diplomskih radova.</dd><dt style="color:#E4573D">Dno</dt><dd style="margin:0;color:rgba(237,231,220,.8)">Mjesto i godina izrade.</dd></dl></div>
+<div><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:28px;line-height:1.05">Česta pitanja</h2><div style="margin-top:16px;display:grid;gap:8px"><sc-for list="{{ faqs }}" as="f" hint-placeholder-count="3"><div><button type="button" onClick="{{ f.toggle }}" style="width:100%;text-align:left;font-family:'Instrument Serif',Georgia,serif;font-size:17px;line-height:1.2;padding:10px 0;border:0;border-bottom:1px solid rgba(237,231,220,.12);background:transparent;color:#EDE7DC;cursor:pointer;display:flex;justify-content:space-between;gap:12px"><span>{{ f.q }}</span><span style="font-family:'Geist Mono',monospace;font-size:12px;color:rgba(237,231,220,.5)">{{ f.mark }}</span></button><sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:10px 0 6px;font-size:12.5px;line-height:1.6;color:rgba(237,231,220,.8);animation:tlRise .25s ease both">{{ f.a }}</p></sc-if></div></sc-for></div></div>
+</div>
+<div style="margin-top:48px;padding:26px 30px;background:#F7F3E8;color:#26221B;border-radius:2px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center;transform:rotate(-.3deg);box-shadow:0 12px 30px rgba(0,0,0,.45)"><div><p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:24px;line-height:1.1">Naslovnica je prva stranica. Provjeri cijeli rad.</p><p style="margin:6px 0 0;font-size:12.5px;color:#6E6656">Margine, stilovi, numeracija, sadržaj, citati i literatura po profilu tvog fakulteta. Dokument ostaje na uređaju.</p></div><a href="#" style="font-family:'Geist Mono',monospace;white-space:nowrap;display:inline-flex;align-items:center;gap:9px;padding:13px 22px;background:#C4372E;color:#F7F3E8;border-radius:2px;font-weight:500;font-size:13px;text-decoration:none">Besplatno provjeri rad →</a></div>
+<p style="margin:18px 0 0;text-align:center;font-size:11.5px;color:rgba(237,231,220,.5)">Lekta radi pomoćnu tehničku provjeru i ne zamjenjuje službene upute ustanove, studija, kolegija ni mentora.</p>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { instId:'fpzg', mounted:false, v:{uni:'Sveučilište u Zagrebu',fac:'Fakultet političkih znanosti',study:'Diplomski studij Politologije',author:'',title:'',work:'Diplomski rad',mentor:'',place:'Zagreb, 2026.',jmbag:'',course:''}, askPrefill:true, faqOpen:{} };
+  INSTS = [{id:'fpzg',name:'Fakultet političkih znanosti',city:'Zagreb',uni:'Sveučilište u Zagrebu',origin:'official'},{id:'pravo',name:'Pravni fakultet',city:'Zagreb',uni:'Sveučilište u Zagrebu',origin:'official'},{id:'ffzg',name:'Filozofski fakultet',city:'Zagreb',uni:'Sveučilište u Zagrebu',origin:'derived'},{id:'efzg',name:'Ekonomski fakultet',city:'Zagreb',uni:'Sveučilište u Zagrebu',origin:'derived'},{id:'ffri',name:'Filozofski fakultet',city:'Rijeka',uni:'Sveučilište u Rijeci',origin:'generic'}];
+  TOOLS = [{code:'01 / DOKUMENT',title:'Naslovnica'},{code:'02 / CITATI',title:'Citat generator'},{code:'03 / LITERATURA',title:'Sređivanje literature'},{code:'04 / OPSEG',title:'Brojač kartica'},{code:'05 / PREDAJA',title:'Izjava o izvornosti'},{code:'06 / FAKULTETI',title:'Pravila po fakultetu'}];
+  FIELDS = [['uni','SVEUČILIŠTE','npr. Sveučilište u Zagrebu'],['fac','FAKULTET, AKADEMIJA ILI ODJEL','npr. Fakultet političkih znanosti'],['study','STUDIJ, ODSJEK ILI SMJER','npr. Diplomski studij Politologije'],['author','IME I PREZIME','npr. Ana Anić'],['jmbag','JMBAG (opcionalno)','npr. 0123456789'],['course','KOLEGIJ (opcionalno)','npr. Lokalna politika'],['title','NASLOV RADA','Naslov rada'],['work','VRSTA RADA','Diplomski rad'],['mentor','MENTOR / MENTORICA','npr. dr. sc. Ivan Ivić'],['place','MJESTO I GODINA','Zagreb, 2026.']];
+  FAQS = [{q:'Što mora biti na naslovnici seminarskog rada?',a:'Naziv fakulteta, ime autora, naslov rada, vrsta rada, kolegij ili mentor te mjesto i godina. Točan raspored propisuje fakultet ili kolegij.'},{q:'Piše li se mentor na naslovnici?',a:'Kod završnih i diplomskih radova gotovo uvijek da, s akademskom titulom. Kod seminarskih ovisi o kolegiju.'},{q:'Numerira li se naslovnica?',a:'Ne prikazuje se broj na naslovnici; ona se u pravilu ne broji vidljivo, iako se računa kao stranica.'},{q:'Ima li moj fakultet poseban predložak?',a:'Za dio fakulteta alat ima predložak izveden iz službenih uputa ili javnih radova: odaberi fakultet s popisa pa se redoslijed i tipografija prilagode, a pečat na listu kaže odakle predložak dolazi.'}];
+  setV(k,val){ this.setState(s=>({v:{...s.v,[k]:val}})); }
+  renderVals(){
+    const s=this.state, v=s.v, inst=this.INSTS.find(i=>i.id===s.instId);
+    const origin = inst ? inst.origin : 'generic';
+    const has = k => !!(v[k]&&v[k].trim());
+    const out = { v, insts:this.INSTS, instId:s.instId, tools:this.TOOLS.map((t,i)=>({...t,on:i===0,off:i!==0})),
+      setInst:e=>{ const id=e.target.value, i=this.INSTS.find(x=>x.id===id); this.setState(st=>({instId:id,v:{...st.v,uni:i?i.uni:st.v.uni,fac:i?i.name:st.v.fac}})); },
+      fields:this.FIELDS.map(([k,label,ph])=>({label,ph,value:v[k],set:e=>this.setV(k,e.target.value)})),
+      sample:()=>this.setState({v:{uni:'Sveučilište u Zagrebu',fac:'Fakultet političkih znanosti',study:'Diplomski studij Politologije',author:'Ana Anić',title:'Percepcija političke obveze među studentima',work:'Diplomski rad',mentor:'dr. sc. Ivan Ivić',place:'Zagreb, 2026.',jmbag:'0123456789',course:''}}),
+      clear:()=>this.setState({v:{uni:'',fac:'',study:'',author:'',title:'',work:'',mentor:'',place:'',jmbag:'',course:''},instId:''}),
+      askPrefill:s.askPrefill, prefill:()=>this.setState({askPrefill:false,instId:'fpzg',v:{...v,uni:'Sveučilište u Zagrebu',fac:'Fakultet političkih znanosti',study:'Diplomski studij Politologije',work:'Diplomski rad'}}), dismissPrefill:()=>this.setState({askPrefill:false}),
+      originOfficial:origin==='official', originDerived:origin==='derived', originGeneric:origin==='generic',
+      originNote: origin==='official' ? 'Raspored iz službenih uputa fakulteta' : origin==='derived' ? 'Raspored izveden iz javno dostupnih radova' : 'Uobičajen raspored, bez predloška fakulteta',
+      faqs:this.FAQS.map((f,i)=>({...f,open:!!s.faqOpen[i],mark:s.faqOpen[i]?'zatvori':'otvori',toggle:()=>this.setState(st=>({faqOpen:{...st.faqOpen,[i]:!st.faqOpen[i]}}))}))
+    };
+    for (const k of ['uni','fac','study','author','title','work','mentor','place','jmbag','course']) { const K=k[0].toUpperCase()+k.slice(1); out['has'+K]=has(k); out['no'+K]=!has(k); }
+    return out;
+  }
+}
+</script>
+</body>
+</html>

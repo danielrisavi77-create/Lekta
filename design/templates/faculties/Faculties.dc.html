@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Po fakultetu" description="Indeks fakulteta. Indeks kao imenik na papiru: dva stupca, slova u margini, točkasti vodiči do pečata." -->
+<helmet><script src="./ds-base.js"></script><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}a{color:inherit}a:hover{color:#E4573D}
+@keyframes fkRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fkPull{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}</style></helmet>
+<div data-screen-label="Po fakultetu B" style="min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace;position:relative;overflow:hidden"><div aria-hidden="true" style="position:absolute;top:-360px;right:-160px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.14),transparent 60%);pointer-events:none"></div><header style="position:relative;display:flex;align-items:center;gap:16px 24px;flex-wrap:wrap;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:22px 0">
+<a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:29px;letter-spacing:-.01em">Lekta</span></a>
+<nav style="display:flex;align-items:center;gap:8px 14px;margin-left:auto;font-size:13px;font-weight:500;flex-wrap:wrap;justify-content:flex-end"><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Pribor</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Moji radovi</a><a href="#" style="display:inline-flex;align-items:center;padding:9px 16px;background:#C4372E;color:#F7F3E8;border-radius:2px;text-decoration:none;white-space:nowrap">Provjeri rad</a></nav></header><main style="position:relative;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:12px 0 80px"><div style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:end;padding-bottom:26px">
+<div><p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:19px;color:#E4573D">Pravila s izvorom i datumom provjere</p><h1 style="margin:6px 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(34px,5vw,60px);line-height:.98;letter-spacing:-.02em">Po fakultetu.</h1><p style="margin:12px 0 0;max-width:56ch;font-size:13px;line-height:1.55;color:rgba(237,231,220,.72)">{{ total }} jedinica u pet ustanova (ogledni izbor). Svako pravilo nosi izvor, stranicu i datum kad ga je čovjek provjerio.</p></div>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><a href="#" style="display:inline-flex;align-items:center;gap:8px;padding:10px 14px;background:linear-gradient(180deg,#C9A96A,#A98649);color:#26221B;border:1px solid #6E5A34;border-radius:2px;font-size:11.5px;letter-spacing:.04em;text-decoration:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#6E5A34"></span>Moj fakultet: FPZG · Diplomski →</a><a href="#" style="font-size:12px;color:rgba(237,231,220,.72);text-decoration:underline;text-underline-offset:4px;white-space:nowrap">Usporedi dva fakulteta</a></div></div><div style="background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:30px clamp(20px,5vw,56px) 40px;position:relative">
+<div style="display:flex;justify-content:space-between;gap:6px 16px;flex-wrap:wrap;font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:12px;border-bottom:1px solid #DCD4BF"><span>Lekta · Imenik fakulteta</span><span>{{ shown }} / {{ total }} jedinica</span></div>
+<div style="display:grid;gap:14px;padding:22px 0 18px"><label style="display:grid;gap:6px;padding:12px 18px;background:linear-gradient(180deg,#C9A96A,#A98649);color:#26221B;border:1px solid #6E5A34;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)"><span style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.75">Fakultet, odjel ili grad</span><input type="search" value="{{ query }}" onInput="{{ setQuery }}" placeholder="npr. političkih, pravo, Rijeka" style="font-family:'Instrument Serif',Georgia,serif;font-size:26px;line-height:1.1;border:0;background:transparent;color:#26221B;width:100%;outline:none;padding:0"></label><div style="display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center;font-size:11px;letter-spacing:.08em;color:#6E6656"><span>GRAD</span><sc-for list="{{ cities }}" as="c" hint-placeholder-count="4"><button type="button" onClick="{{ c.pick }}" style="font-family:'Geist Mono',monospace;font-size:11.5px;white-space:nowrap;padding:7px 11px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer;display:inline-flex;gap:8px;align-items:center"><sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:#E4573D"></span></sc-if>{{ c.name }}</button></sc-for><span style="margin-left:8px">RAZINA DOKAZA</span><sc-for list="{{ grades }}" as="g" hint-placeholder-count="5"><button type="button" onClick="{{ g.pick }}" title="{{ g.text }}" style="font-family:'Geist Mono',monospace;font-size:11.5px;white-space:nowrap;padding:7px 11px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;cursor:pointer;display:inline-flex;gap:8px;align-items:center;padding:7px 9px"><sc-if value="{{ g.on }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:#E4573D"></span></sc-if>{{ g.name }}</button></sc-for></div></div>
+<div style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:0 22px">
+<div aria-hidden="true" style="display:grid;gap:4px;align-content:start;position:sticky;top:20px;align-self:start"><sc-for list="{{ letters }}" as="l" hint-placeholder-count="12"><sc-if value="{{ l.lit }}" hint-placeholder-val="{{ false }}"><span style="text-align:center;font-family:'Instrument Serif',Georgia,serif;font-size:15px;line-height:1;background:#26221B;color:#F7F3E8;padding:4px 0">{{ l.ch }}</span></sc-if><sc-if value="{{ l.dim }}" hint-placeholder-val="{{ true }}"><span style="text-align:center;font-family:'Instrument Serif',Georgia,serif;font-size:15px;line-height:1;color:#C9C2B0;padding:4px 0">{{ l.ch }}</span></sc-if></sc-for></div>
+<div style="display:grid;gap:22px">
+<sc-for list="{{ insts }}" as="i" hint-placeholder-count="3">
+<section style="animation:fkRise .3s ease both"><button type="button" onClick="{{ i.toggleInst }}" aria-expanded="{{ i.expanded }}" style="width:100%;text-align:left;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:6px 0 8px;border:0;border-bottom:2px solid #26221B;background:transparent;color:#26221B;cursor:pointer;font-family:'Geist Mono',monospace"><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:26px;line-height:1">{{ i.name }}</h2><span style="font-size:11px;color:#6E6656">{{ i.city }} · {{ i.count }} jedinica · {{ i.total }} profila · izvori {{ i.checked }}</span><span style="margin-left:auto;font-size:11px;color:#6E6656">{{ i.mark }}</span></button>
+<sc-if value="{{ i.expanded }}" hint-placeholder-val="{{ true }}"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 28px;animation:fkRise .25s ease both">
+<sc-for list="{{ i.units }}" as="u" hint-placeholder-count="3">
+<div style="display:grid;gap:8px;padding:12px 0;border-bottom:1px dotted #C9C2B0"><div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><a href="#" style="font-family:'Instrument Serif',Georgia,serif;font-size:18px;line-height:1.1;text-decoration:none;color:#26221B" style-hover="color:#A62B23">{{ u.name }}</a><span style="flex:1;border-bottom:1px dotted #C9C2B0;margin:0 6px;transform:translateY(-4px)"></span><sc-if value="{{ u.verified }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:3px 6px;border:1.5px solid #34996A;color:#34996A;transform:rotate(-4deg);display:inline-block">Potvrđeno</span></sc-if><sc-if value="{{ u.partial }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:3px 6px;border:1.5px solid #C98A2E;color:#C98A2E;transform:rotate(-4deg);display:inline-block">Tehničko</span></sc-if><sc-if value="{{ u.research }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:3px 6px;border:1.5px dashed #6E6656;color:#6E6656;transform:rotate(-4deg);display:inline-block">U istraživanju</span></sc-if><sc-if value="{{ u.generic }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:3px 6px;border:1.5px dashed #C4372E;color:#C4372E;transform:rotate(-4deg);display:inline-block">Generičko</span></sc-if></div><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ u.works }}" as="w" hint-placeholder-count="3"><a href="#" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #DCD4BF;border-radius:2px;text-decoration:none;font-size:11.5px;color:#26221B;white-space:nowrap" style-hover="border-color:#26221B">{{ w.name }} <sc-if value="{{ w.verified }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:3px 6px;border:1.5px solid #34996A;color:#34996A;transform:none;display:inline-block;padding:2px 5px;font-size:8.5px">{{ w.grade }}</span></sc-if><sc-if value="{{ w.partial }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:3px 6px;border:1.5px solid #C98A2E;color:#C98A2E;transform:none;display:inline-block;padding:2px 5px;font-size:8.5px">{{ w.grade }}</span></sc-if><sc-if value="{{ w.weak }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:3px 6px;border:1.5px dashed #6E6656;color:#6E6656;transform:none;display:inline-block;padding:2px 5px;font-size:8.5px">{{ w.grade }}</span></sc-if></a></sc-for></div></div>
+</sc-for></div></sc-if></section></sc-for>
+<sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}"><div style="padding:26px;border:1px dashed #C9C2B0;border-radius:2px;display:grid;gap:12px;animation:fkRise .3s ease both"><p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:22px;line-height:1.15;color:#26221B">Tog fakulteta još nema u registru.</p><p style="margin:0;font-size:12.5px;line-height:1.55;color:#6E6656">Provjera ipak radi s generičkim profilom. Javimo ti kad pravila budu potvrđena.</p><sc-if value="{{ notNotified }}" hint-placeholder-val="{{ true }}"><div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;max-width:420px"><input type="email" value="{{ email }}" onInput="{{ setEmail }}" placeholder="ime@student.hr" aria-label="E-mail" style="font-family:'Geist Mono',monospace;font-size:13px;padding:9px 10px;border:1px solid #26221B;border-radius:2px;background:transparent;color:#26221B;width:100%;box-sizing:border-box"><button type="button" onClick="{{ notify }}" style="font-family:'Geist Mono',monospace;font-size:12px;padding:10px 14px;border:0;border-radius:2px;background:#C4372E;color:#F7F3E8;cursor:pointer;white-space:nowrap">Javi mi</button></div></sc-if><sc-if value="{{ notified }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:12px;color:#34996A">✓ Javimo se kad pravila budu potvrđena.</p></sc-if></div></sc-if>
+</div></div><div style="margin-top:36px;padding-top:24px;border-top:1px solid #DCD4BF;display:grid;gap:8px;font-size:11.5px;line-height:1.5;color:#6E6656"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase">Razina dokaza</span><sc-for list="{{ ladder }}" as="l" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:20px minmax(0,1fr);gap:12px"><b style="color:#E4573D">{{ l.k }}</b><span>{{ l.v }}</span></div></sc-for></div></div></main></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { query:'', city:'', grade:'', open:null, inst:'unizg', notified:false, email:'' };
+
+  INST = [
+   {id:'unizg',name:'Sveučilište u Zagrebu',city:'Zagreb',checked:'12. 9. 2026.',units:[
+    {id:'fpzg',name:'Fakultet političkih znanosti',status:'verified',grade:'A',programs:4,works:[['seminarski','verified','A'],['završni','verified','A'],['diplomski','verified','A']]},
+    {id:'pravo',name:'Pravni fakultet',status:'verified',grade:'A',programs:9,works:[['završni','partial','B'],['diplomski','verified','A']]},
+    {id:'ffzg',name:'Filozofski fakultet',status:'verified',grade:'A',programs:11,works:[['završni','partial','D'],['diplomski','verified','A']]},
+    {id:'efzg',name:'Ekonomski fakultet',status:'partial',grade:'B',programs:5,works:[['seminarski','generic','E'],['završni','verified','A'],['diplomski','partial','B']]},
+    {id:'fer',name:'Fakultet elektrotehnike i računarstva',status:'research',grade:'E',programs:2,works:[['završni','generic','E'],['diplomski','generic','E']]},
+    {id:'pmf',name:'Prirodoslovno-matematički fakultet',status:'verified',grade:'A',programs:6,works:[['diplomski','verified','A']]}
+   ]},
+   {id:'uniri',name:'Sveučilište u Rijeci',city:'Rijeka',checked:'4. 9. 2026.',units:[
+    {id:'ffri',name:'Filozofski fakultet',status:'partial',grade:'B',programs:7,works:[['završni','partial','B'],['diplomski','partial','B']]},
+    {id:'efri',name:'Ekonomski fakultet',status:'partial',grade:'B',programs:2,works:[['završni','partial','B'],['diplomski','partial','B']]},
+    {id:'riteh',name:'Tehnički fakultet',status:'research',grade:'D',programs:2,works:[['završni','research','D'],['diplomski','research','D']]}
+   ]},
+   {id:'unizd',name:'Sveučilište u Zadru',city:'Zadar',checked:'28. 8. 2026.',units:[
+    {id:'unizd-psihologija',name:'Odjel za psihologiju',status:'partial',grade:'B',programs:2,works:[['završni','partial','B'],['diplomski','partial','B']]},
+    {id:'unizd-kroatistika',name:'Odjel za kroatistiku',status:'generic',grade:'E',programs:2,works:[['završni','generic','E'],['diplomski','generic','E']]}
+   ]},
+   {id:'unist',name:'Sveučilište u Splitu',city:'Split',checked:'1. 9. 2026.',units:[
+    {id:'efst',name:'Ekonomski fakultet',status:'partial',grade:'B',programs:3,works:[['završni','partial','B'],['diplomski','partial','B']]},
+    {id:'pravst',name:'Pravni fakultet',status:'generic',grade:'E',programs:2,works:[['završni','generic','E'],['diplomski','generic','E']]}
+   ]},
+   {id:'algebra',name:'Algebra',city:'Zagreb',checked:'20. 8. 2026.',units:[
+    {id:'algebra',name:'Algebra sveučilište',status:'research',grade:'D',programs:4,works:[['završni','research','D'],['diplomski','research','D'],['specijalistički','research','D']]}
+   ]}
+  ];
+  LADDER = {A:'provjereno i popravljano prema službenim uputama, dokazano na stvarnom radu',B:'provjerava i popravlja prema službenim uputama (dokazano na generiranom dokumentu)',C:'ima službena pravila i automatski popravak, popravak još nije dokazan na dokumentu',D:'provjerava prema službenim uputama; automatski popravak pokriva samo opću higijenu dokumenta',E:'nema bodovanih pravila iz službenog izvora'};
+  LETTERS = 'ABCČĆDĐEFGHIJKLMNOPRSŠTUVZŽ'.split('');
+  norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d'); }
+  match(q,hay){ return this.norm(q).split(/\s+/).filter(Boolean).every(t=>hay.includes(t)); }
+  compute(){
+    const s=this.state, q=s.query.trim();
+    const insts = this.INST.map(inst=>{
+      const units = inst.units.filter(u=>{
+        const hay=this.norm(inst.name+' '+inst.city+' '+u.name);
+        if(q && !this.match(q,hay)) return false;
+        if(s.city && inst.city!==s.city) return false;
+        if(s.grade && u.grade!==s.grade) return false;
+        return true;
+      }).map(u=>({...u, open: s.open===u.id, verified:u.status==='verified', partial:u.status==='partial', research:u.status==='research', generic:u.status==='generic',
+        works:u.works.map(([w,st,g])=>({name:w,grade:g,verified:st==='verified',partial:st==='partial',weak:st==='research'||st==='generic'})),
+        toggle:()=>this.setState({open:s.open===u.id?null:u.id}) }));
+      return {...inst, units, count:units.length, total:inst.units.reduce((a,u)=>a+u.programs,0), show:units.length>0, expanded: s.inst===inst.id || !!q, mark:(s.inst===inst.id||!!q)?'sklopi ↑':'otvori ↓', toggleInst:()=>this.setState({inst:s.inst===inst.id?null:inst.id})};
+    }).filter(i=>i.show);
+    const shown = insts.reduce((a,i)=>a+i.count,0);
+    const lit = new Set(insts.flatMap(i=>i.units.map(u=>u.name[0].toUpperCase())));
+    return {insts, shown, lit, empty: shown===0};
+  }
+  common(){
+    const s=this.state, c=this.compute();
+    return { query:s.query, setQuery:e=>this.setState({query:e.target.value}), insts:c.insts, shown:c.shown, total:this.INST.reduce((a,i)=>a+i.units.length,0), empty:c.empty, notEmpty:!c.empty,
+      letters:this.LETTERS.map(ch=>({ch,lit:c.lit.has(ch),dim:!c.lit.has(ch)})),
+      cities:['Zagreb','Rijeka','Zadar','Split'].map(cn=>({name:cn,on:s.city===cn,pick:()=>this.setState({city:s.city===cn?'':cn})})),
+      grades:['A','B','C','D','E'].map(g=>({name:g,on:s.grade===g,pick:()=>this.setState({grade:s.grade===g?'':g}),text:this.LADDER[g]})),
+      notified:s.notified, notNotified:!s.notified, notify:()=>this.setState({notified:true}), email:s.email, setEmail:e=>this.setState({email:e.target.value}),
+      ladder:Object.entries(this.LADDER).map(([k,v])=>({k,v})) };
+  }
+  renderVals(){ return { ...this.common()  }; }
+}
+</script>
+</body>
+</html>

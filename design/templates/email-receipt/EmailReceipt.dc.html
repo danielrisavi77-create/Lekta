@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="E-mail: potvrda popravka" description="Potvrdni e-mail nakon naplate: račun na papiru, što je popravljeno, poveznica na preuzimanje. Tablice i inline stilovi za e-mail klijente." -->
+<helmet><style>body{margin:0;background:#1C1915}</style></helmet>
+<div data-screen-label="E-mail" style="padding:40px 16px;background:#1C1915;font-family:Georgia,'Times New Roman',serif;color:#26221B">
+<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;margin:0 auto;background:#F7F3E8;border-collapse:collapse">
+<tr><td style="padding:28px 40px 14px;border-bottom:1px solid #DCD4BF;font-family:Menlo,Consolas,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E6653">Lekta · Račun<span style="float:right">Nº {{ order }}</span></td></tr>
+<tr><td style="padding:36px 40px 8px"><h1 style="margin:0;font-weight:400;font-size:40px;line-height:1;letter-spacing:-.01em">Rad je popravljen.</h1></td></tr>
+<tr><td style="padding:0 40px 28px;font-size:16px;line-height:1.55;color:#4A4438">Popravljena verzija dokumenta <strong style="color:#26221B">{{ file }}</strong> spremna je za preuzimanje. Poveznica vrijedi 7 dana; nakon toga se datoteka briše s poslužitelja.</td></tr>
+<tr><td style="padding:0 40px 28px"><a href="#" style="display:inline-block;padding:14px 22px;background:#C4372E;color:#F7F3E8;text-decoration:none;font-family:Menlo,Consolas,monospace;font-size:14px;border-radius:10px">Preuzmi popravljeni .docx</a></td></tr>
+<tr><td style="padding:0 40px">
+<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;font-size:14px">
+<tr><td style="padding:10px 0;border-top:1px solid #DCD4BF;color:#4A4438">Ocjena forme</td><td style="padding:10px 0;border-top:1px solid #DCD4BF;text-align:right;font-family:Menlo,Consolas,monospace">{{ before }} → <strong style="color:#2E7D5B">{{ after }}</strong></td></tr>
+<tr><td style="padding:10px 0;border-top:1px solid #DCD4BF;color:#4A4438">Zahvati primijenjeni</td><td style="padding:10px 0;border-top:1px solid #DCD4BF;text-align:right;font-family:Menlo,Consolas,monospace">{{ fixes }}</td></tr>
+<tr><td style="padding:10px 0;border-top:1px solid #DCD4BF;color:#4A4438">Ostaje ručno</td><td style="padding:10px 0;border-top:1px solid #DCD4BF;text-align:right;font-family:Menlo,Consolas,monospace">{{ manual }}</td></tr>
+<tr><td style="padding:10px 0;border-top:1px solid #DCD4BF;color:#4A4438">Profil</td><td style="padding:10px 0;border-top:1px solid #DCD4BF;text-align:right;font-family:Menlo,Consolas,monospace">{{ profile }}</td></tr>
+<tr><td style="padding:14px 0;border-top:1px solid #26221B;border-bottom:1px solid #26221B;font-size:16px">Naplaćeno</td><td style="padding:14px 0;border-top:1px solid #26221B;border-bottom:1px solid #26221B;text-align:right;font-size:20px;font-family:Menlo,Consolas,monospace">{{ price }}</td></tr>
+</table></td></tr>
+<tr><td style="padding:24px 40px 0;font-size:13px;line-height:1.5;color:#4A4438">Ako ponovna provjera popravljene verzije ne prođe, vraćamo novac. Odgovori na ovaj e-mail ili piši na <a href="#" style="color:#C4372E">pomoc@lekta.hr</a>.</td></tr>
+<tr><td style="padding:28px 40px 24px;font-family:Menlo,Consolas,monospace;font-size:11px;color:#6E6653;border-top:1px solid #DCD4BF;margin-top:24px">Lekta · Zagreb · {{ date }}<br>Tekst rada nije poslan nikamo; e-mail sadrži samo ovaj sažetak. <a href="#" style="color:#6E6653">Uvjeti</a> · <a href="#" style="color:#6E6653">Privatnost</a></td></tr>
+</table>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { order: '0007', file: 'Diplomski_Horvat_v3.docx', before: '71', after: '88', fixes: '9 od 9', manual: '2 nalaza', profile: 'FPZG · Diplomski', price: '9,99 €', date: '22. 9. 2026.' };
+  }
+}
+</script>
+</body>
+</html>

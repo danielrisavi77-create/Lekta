@@ -1,4 +1,4 @@
-<!-- @dsCard group="Osnove" name="Papir na stolu" subtitle="list sa sjenom, zaglavlje Obrazac LK-01 s koracima" width="900" height="560" -->
+<!-- @dsCard group="Osnove" name="Papir na stolu" subtitle="pet vrsta lista (list, kartica, isjecak, racun, faksimil), anatomija snopa, nagibi, sjene, stanja: mirno, podignuto, prima dokument, odlazi" width="960" height="1000" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,79 +7,81 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-body{background:var(--desk)}
-.paper{width:640px;background:var(--paper);color:var(--paper-ink);border-radius:6px;box-shadow:var(--paper-sh);transform:rotate(-.35deg);position:relative}
-.paper::before{content:"";position:absolute;z-index:-1;inset:10px -5px -7px 6px;background:var(--paper-2);border:1px solid var(--paper-line);border-radius:6px;transform:rotate(.9deg)}
-.rail{display:flex;align-items:center;gap:14px;padding:14px 24px;border-bottom:1.5px solid var(--paper-ink);flex-wrap:wrap}
-.rail-title{font:600 11px var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-ink);margin-right:auto}
-.rail-step{display:inline-flex;align-items:center;gap:7px;font:500 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-muted)}
-.rail-step b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--paper-line);color:var(--paper-muted);font-size:9.5px;font-weight:600}
-.rail-step.active{color:var(--paper-ink)}
-.rail-step.active b{background:var(--red-deep);border-color:var(--red-deep);color:#fff}
-.paper-body{padding:32px 34px 38px}
-.paper-body h2{font-family:var(--display-serif);font-weight:500;font-size:1.6rem;margin:0 0 10px}
-.paper-body p{margin:0;color:var(--paper-muted);font-size:.92rem;line-height:1.6;max-width:46ch}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-3:#FDFBF3;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red:#E4573D;--red-deep:#C4372E;--red-on-soft:#A62B23;--pass:#176243;--sh-lg:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);--sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:30px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 30px;align-items:start}
+.item{display:grid;gap:12px}
+/* ===== Osnova lista ===== */
+.sheet{position:relative;background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-lg);padding:22px 24px;transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s}
+.sheet.tilt-a{transform:rotate(-.4deg)}.sheet.tilt-b{transform:rotate(.6deg)}.sheet.tilt-c{transform:rotate(1.2deg)}
+/* Snop: dva lista ispod, cisti CSS, bez cvorova. */
+.snop::before,.snop::after{content:"";position:absolute;z-index:-1;inset:10px -5px -7px 6px;background:var(--paper-2);border:1px solid var(--paper-line);border-radius:2px;transform:rotate(.9deg)}
+.snop::after{inset:16px 6px -12px -5px;transform:rotate(-.7deg);opacity:.75}
+.eyebrow{display:flex;justify-content:space-between;gap:12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);padding-bottom:10px;border-bottom:1px solid var(--paper-line)}
+.sheet h3{margin:14px 0 6px;font:400 26px/1.05 var(--display);letter-spacing:-.01em}
+.sheet p{margin:0;font-size:12px;line-height:1.5;color:var(--paper-muted)}
+.stamp{position:static;display:inline-block;justify-self:end;margin-top:16px;padding:6px 10px;border:2px solid var(--red-deep);border-radius:2px;color:var(--red-deep);font-size:9px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-7deg);opacity:.85}
+.sheet.snop{display:grid;align-content:start}
+/* Kartica: paper-2, crte kao na indeks kartici. */
+.card{background:var(--paper-2);box-shadow:var(--sh-sm);background-image:repeating-linear-gradient(to bottom,transparent 0 27px,var(--paper-line) 27px 28px);background-position:0 52px;background-origin:content-box}
+.card .eyebrow{border-color:var(--red-deep);color:var(--red-on-soft)}
+.card li{font:400 17px/28px var(--display);list-style:none}
+.card ol{margin:6px 0 0;padding:0}
+/* Isjecak: bijel, tanji, kao izrezak iz PDF-a. */
+.clip{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2),0 6px 18px rgba(0,0,0,.25);font:400 12px/1.55 Georgia,'Times New Roman',serif;color:#3A342B;padding:16px 18px 16px 34px}
+.clip .n{position:absolute;left:12px;top:16px;font:500 9px var(--mono);color:#9A9080}
+.clip mark{background:rgba(196,55,46,.14);color:#26221B;box-shadow:inset 0 -2px 0 var(--red-deep)}
+.clip .src{display:block;margin-top:10px;font:400 10px var(--mono);letter-spacing:.06em;color:var(--paper-muted)}
+/* Racun: perforirani rub gore i dolje. */
+.receipt{padding:26px 22px}
+.receipt::before,.receipt::after{content:"";position:absolute;left:0;right:0;height:8px;background:radial-gradient(circle at 6px 0,transparent 5px,var(--paper) 5.5px) 0 0/12px 8px}
+.receipt::before{top:-1px}.receipt::after{bottom:-1px;transform:scaleY(-1)}
+.receipt .line{display:flex;justify-content:space-between;gap:8px;font-size:11px;padding:6px 0;border-bottom:1px dashed var(--paper-line)}
+.receipt .tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;font:400 26px/1 var(--display)}
+.receipt .tot small{font:400 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--paper-muted)}
+/* Faksimil: tudji rad, Georgia, A4 omjer. */
+.fax{background:var(--paper-3);color:#1F1B16;aspect-ratio:1/1.3;padding:14% 12% 16% 12%;font:400 8px/1.5 Georgia,'Times New Roman',serif;text-align:justify;overflow:hidden}
+.fax b{display:block;text-align:center;margin-bottom:8px;font-size:9px}
+.fax .pg{position:absolute;right:12%;bottom:5%;font-size:8px;color:var(--paper-muted)}
+/* ===== Stanja ===== */
+.sheet.is-hover{transform:rotate(0) translateY(-4px)}
+.sheet.is-drop{border:1.5px dashed var(--red-deep);background:color-mix(in srgb,var(--paper) 94%,var(--red-deep));transform:rotate(0) scale(1.01)}
+.sheet.is-drop .eyebrow{color:var(--red-on-soft);border-color:var(--red-deep)}
+.sheet.is-leaving{transform:translateY(-34px) scale(.955);opacity:.35;box-shadow:0 40px 60px rgba(0,0,0,.18)}
+.sheet.is-leaving::before,.sheet.is-leaving::after{opacity:0}
+.sheet.is-selected{box-shadow:var(--sh-lg),0 0 0 2px var(--desk),0 0 0 4px var(--red)}
+.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;font-size:11px;line-height:1.55;color:var(--desk-muted)}
+.rules b{display:block;color:var(--desk-ink);font-weight:500;margin-bottom:4px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Papir na stolu</h1>
-<p class="dsc-sub">Sadržaj radi na "listovima" na tamnoj/svijetloj radnoj plohi. Dva-tri lista ispod (pseudo-elementi) daju debljinu snopa. Zaglavlje "Obrazac LK-01" prati wizard korake.</p>
-<div class="paper">
-  <div class="rail">
-    <span class="rail-title">Obrazac LK-01 · Tehnička provjera rada</span>
-    <span class="rail-step"><b>1</b> Dokument</span>
-    <span class="rail-step"><b>2</b> Pravila</span>
-    <span class="rail-step active"><b>3</b> Provjera</span>
-    <span class="rail-step"><b>4</b> Popravci</span>
-  </div>
-  <div class="paper-body">
-    <h2>Diplomski rad, FPZG</h2>
-    <p>Tekst na papiru ide isključivo na <code>--paper-ink</code>, nikad na <code>--text</code>: papir je svijetla ploha u obje teme.</p>
-  </div>
+<div><h1 class="dsc-h">Papir na stolu</h1><p class="dsc-sub">Sve što korisnik čita leži na papiru; stol je samo okvir. Pet vrsta lista, svaka s jednim poslom. Radijus 2px, nagib najviše 1,2°, dvije razine sjene. Tekst na papiru ide isključivo na <code>--paper-ink</code> u obje teme.</p></div>
+
+<section><span class="cap">01 · Pet vrsta lista</span>
+<div class="grid">
+  <div class="item"><div class="sheet snop tilt-a"><div class="eyebrow"><span>Lekta · Ulazni list</span><span>Nº 0001</span></div><h3>List</h3><p>Glavna ploha: presuda, ulaz, plan. Mono zaglavlje obrasca, display serif za govor, pečat dolje desno kad ima presudu.</p><span class="stamp">Čeka provjeru</span></div><span class="cap">List · snop od tri, sjena lg</span></div>
+  <div class="item"><div class="sheet card tilt-c"><div class="eyebrow"><span>Kako radi</span></div><ol><li>01 Ubaciš .docx</li><li>02 Provjera u pregledniku</li><li>03 Ocjena i nalazi</li></ol></div><span class="cap">Kartica · paper-2, crte, uz glavni list</span></div>
+  <div class="item"><div class="sheet clip tilt-b"><span class="n">12.</span>Rad se piše na papiru A4. <mark>Tekst se piše s proredom 1,5</mark>, pismom Times New Roman 12 pt. Lijeva margina iznosi 3 cm.<span class="src">Pravilnik FPZG · str. 9 · čl. 12</span></div><span class="cap">Isječak · bijel, Georgia, izvor u mono</span></div>
+  <div class="item"><div class="sheet receipt tilt-a"><div class="eyebrow" style="justify-content:center;border:0;padding:0 0 8px"><span>Račun prije kupnje</span></div><div class="line"><span>Lokalna provjera</span><span>0,00</span></div><div class="line"><span>Popravak forme</span><span>9,99</span></div><div class="tot"><small>Ukupno</small><span>9,99 €</span></div></div><span class="cap">Račun · perforiran rub, tabularne brojke</span></div>
+  <div class="item"><div class="sheet fax tilt-b"><b>UVOD</b>Lokalna samouprava u Republici Hrvatskoj prošla je kroz nekoliko valova reformi od 1993. godine, pri čemu je svaka ostavila trag u načinu raspodjele ovlasti. Cilj rada jest utvrditi u kojoj su mjeri te reforme promijenile odnos moći.<span class="pg">3</span></div><span class="cap">Faksimil · tuđi rad, Georgia, A4</span></div>
+  <div class="item"><div class="rules"><div><b>Nagibi</b>−0,4° glavni · +0,6° kartica · +1,2° sporedni. Nikad dva ista susjedna.</div><div><b>Sjene</b>lg za glavni list, sm za kartice i isječke. Bez sjene na faksimilu unutar panoa.</div></div><span class="cap">Pravila slaganja</span></div>
 </div>
+</section>
+
+<section><span class="cap">02 · Stanja lista</span>
+<div class="grid" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+  <div class="item"><div class="sheet snop tilt-a"><div class="eyebrow"><span>Mirno</span></div><h3 style="font-size:20px">Na stolu</h3></div><span class="cap">Mirno · nagib, snop</span></div>
+  <div class="item"><div class="sheet snop is-hover"><div class="eyebrow"><span>Hover</span></div><h3 style="font-size:20px">Podignut</h3></div><span class="cap">Podignut · ravno, −4px</span></div>
+  <div class="item"><div class="sheet snop is-drop"><div class="eyebrow"><span>Ispusti ovdje</span></div><h3 style="font-size:20px">Prima .docx</h3></div><span class="cap">Prima dokument · crtkan rub</span></div>
+  <div class="item"><div class="sheet snop is-leaving"><div class="eyebrow"><span>Odlazi</span></div><h3 style="font-size:20px">U mapu</h3></div><span class="cap">Odlazi · isti predmet putuje dalje</span></div>
+</div>
+</section>
 </body>
 </html>
