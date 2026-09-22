@@ -23,8 +23,8 @@ export type ResultsCockpitAction =
   | { kind: 'reopen'; findingId: string }
   | { kind: 'preview-location'; paragraphIndex: number; footnoteId?: number }
   | { kind: 'open-findings' }
-  | { kind: 'simulate-repair' }
-  | { kind: 'repair-safe'; ruleIds?: string[] }
+  | { kind: 'simulate-repair'; findingId?: string }
+  | { kind: 'repair-safe'; ruleIds?: string[]; findingId?: string }
   | { kind: 'plan-opened' };
 
 /**
@@ -114,16 +114,47 @@ export function cockpitStepsHtml(steps: readonly CockpitStep[]): string {
  * ulaz postoji UVIJEK kad je popravak dostupan. Taj ugovor ostaje, samo se sad nosi jedan gumb.
  *
  * `repair-safe` i `simulate-repair` su ISTE radnje koje je emitirao ukinuti redak; `app.ts` ih i
- * dalje obraduje nepromijenjeno, pa se tok popravka ne mijenja, samo mu je ulaz jedan.
+ * dalje obraduje istim putem, pa se tok popravka ne mijenja, samo mu je ulaz jedan. Uz radnju sad
+ * putuje i neobvezan `findingId` (vidi nize), koji `app.ts` koristi samo za predodabir retka u
+ * panelu; kad ga nema, panel se otvara bez mete, tocno kao prije.
  */
 function primaryAction(model: VisualResultModel, repairAvailable: boolean): ResultsCockpitAction | null {
   if (repairAvailable) {
+    // META POPRAVKA PUTUJE S OPCIM ULAZOM (popravak drugog kruga pregleda). Ulaz OSTAJE opci: vrsta
+    // radnje ne zavisi od pojedinog nalaza, pa dokument bez ijednog popravljivog nalaza i dalje
+    // dobiva ulaz. Ali kad popravljiv nalaz POSTOJI, njegov `findingId` ide uz radnju, jer je
+    // osnovica (e6ca53a1) s primarnog gumba emitirala `{kind:'repair', findingId}` i time panelu
+    // rekla KOJI redak predodabrati i osvijetliti. Bez toga je klik vodio u panel bez mete.
+    //
+    // CITA SE CIJELI `findings.document`, ne `findings.top`: prva izvedba Z8 je gledala samo prva
+    // tri nalaza, pa je dokument kojem je popravljiv tek cetvrti ostajao bez mete (i bez ulaza).
+    const target = model.findings.document.find((finding) => finding.capabilities.repair);
+    const meta = target ? { findingId: target.id } : {};
     // Bez ijedne automatske stavke nema sto "sigurno" popraviti, pa je ulaz simulacija; natpis to
     // i kaze, jer gumb koji obeca plan popravka nad praznim skupom laze.
-    return model.signals.automaticFixes > 0 ? { kind: 'repair-safe' } : { kind: 'simulate-repair' };
+    return model.signals.automaticFixes > 0
+      ? { kind: 'repair-safe', ...meta }
+      : { kind: 'simulate-repair', ...meta };
   }
   const previewable = model.findings.top.find((finding) => finding.capabilities.preview);
   return previewable ? { kind: 'preview', findingId: previewable.id } : null;
+}
+
+/**
+ * `findingId` radnje, kad ga radnja nosi. Optional polje znaci da `'findingId' in action` vise
+ * nije dovoljno (`repair-safe` bez mete ima kljuc odsutan, ali tip ga poznaje kao `string |
+ * undefined`), pa se prazna vrijednost ovdje svodi na `null` i atribut se ne crta prazan.
+ */
+function actionFindingId(action: ResultsCockpitAction | null): string | null {
+  if (!action || !('findingId' in action)) return null;
+  const id = action.findingId;
+  return typeof id === 'string' && id.trim().length > 0 ? id : null;
+}
+
+/** Atribut primarnog gumba; prazan niz kad radnja nema metu, da se ne crta `data-finding-id=""`. */
+function findingIdAttr(action: ResultsCockpitAction | null): string {
+  const id = actionFindingId(action);
+  return id ? ' data-finding-id="' + escapeHtml(id) + '"' : '';
 }
 
 function statusCopy(model: VisualResultModel): { label: string; description: string; tone: string } {
@@ -310,7 +341,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     caveatHtml(model),
     '<div class="cockpit-sheet__actions">',
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
-    action && 'findingId' in action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '',
+    findingIdAttr(action),
     // `data-cockpit-action` OSTAJE NA ULAZU U POPRAVAK. Redak s tri gumba je nestao, radnje nisu:
     // sest Playwright specova (repair-panel, repair-cta-opens-panel, repair-selection-restore,
     // workspace-a11y, workspace-viewports, ux-dist/critical-path) trazi bas ovaj atribut unutar

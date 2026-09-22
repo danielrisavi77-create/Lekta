@@ -1155,8 +1155,8 @@ function handleResultsCockpitAction(r: any,action: ResultsCockpitAction){
   }
   if(action.kind==='open-findings'){setResultsCockpitAdvanced(true);openTab('issues');$('#issuesList')?.scrollIntoView({behavior:'smooth',block:'start'});return}
   if(action.kind==='plan-opened'){void trackEvent('repair_plan_opened',{profileId:r?.details?.profileDefinitionId||''});return}
-  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){scrollToRepairPanel(r);if(action.kind==='repair-safe'&&action.ruleIds)repairPanelHandle?.applySelection(action.ruleIds);return}
   const finding=findingsFor(r).find(x=>x.id===action.findingId);
+  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){scrollToRepairPanel(r,finding);if('ruleIds' in action&&action.ruleIds)repairPanelHandle?.applySelection(action.ruleIds);return}
   if(!finding)return;
   if(action.kind==='preview'){
     void trackEvent('finding_opened',{category:finding.category});
