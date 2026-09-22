@@ -1,6 +1,15 @@
+import { readFileSync } from 'node:fs';
+
 /** Provider-neutral task handoff. No process execution or queue writes here. */
 export const PROMPT_FILE_PLACEHOLDER = '__LEKTA_PROMPT_FILE__';
-export const GROK_MIN_VERSION = '1.0.34';
+
+const PROVIDER_REGISTRY = JSON.parse(
+  readFileSync(new URL('../../config/agent-providers.json', import.meta.url), 'utf8'),
+);
+if (PROVIDER_REGISTRY?.schemaVersion !== 1 || !PROVIDER_REGISTRY?.agents) {
+  throw new Error('Unsupported config/agent-providers.json contract');
+}
+export const GROK_MIN_VERSION = String(PROVIDER_REGISTRY.grokMinVersion);
 
 export function parseGrokVersion(output) {
   const match = String(output ?? '').match(/\b(\d+)\.(\d+)\.(\d+)\b/);
@@ -13,16 +22,9 @@ export function parseGrokVersion(output) {
   return { version: match[0], supported };
 }
 
-export const AGENTS = Object.freeze({
-  astra: { command: 'codex', model: 'gpt-6-astra', role: 'coordinator' },
-  fable: { command: 'claude', model: 'fable', role: 'coordinator' },
-  opus: { command: 'claude', model: 'opus', role: 'implementer' },
-  sonnet: { command: 'claude', model: 'sonnet', role: 'implementer' },
-  sol: { command: 'codex', model: 'gpt-5.6-sol', role: 'implementer' },
-  // Grok Build CLI (https://docs.x.ai/build/overview). Default model grok-4.6 = current coding recommendation (docs.x.ai/docs/models, 2026-09-20).
-  grok: { command: 'grok', model: 'grok-4.6', role: 'coordinator' },
-  build: { command: 'grok', model: 'grok-4.6', role: 'implementer' },
-});
+export const AGENTS = Object.freeze(
+  Object.fromEntries(Object.entries(PROVIDER_REGISTRY.agents).map(([name, spec]) => [name, Object.freeze({ ...spec })])),
+);
 
 export function validateQueue(queue) {
   if (!Array.isArray(queue?.tasks) || !queue.tasks.length) throw new Error('Empty task queue');
@@ -58,8 +60,8 @@ export function validateQueue(queue) {
  * Grok (xAI) nema USD budget flag u runneru; headless cesto koristi `XAI_API_KEY` ili `grok login`.
  */
 export const BILLING_MODES = Object.freeze(['budget', 'subscription', 'included_account']);
-export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'build']);
-export const INCLUDED_ACCOUNT_AGENTS = Object.freeze(['grok', 'build']);
+export const INCLUDED_ACCOUNT_AGENTS = Object.freeze(Object.entries(AGENTS).filter(([, spec]) => spec.command === 'grok').map(([name]) => name));
+export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', ...INCLUDED_ACCOUNT_AGENTS]);
 
 /**
  * `options.overrideTask` postoji SAMO za `phase === 'review'` i samo za autonomni kontroler: on zna tko je
