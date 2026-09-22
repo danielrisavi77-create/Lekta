@@ -2644,3 +2644,105 @@ describe('agent workflow guards', () => {
     expect(() => prepareJob(queue, 'T01', 'review', 'fable', 2)).toThrow(/different provider/);
   });
 });
+
+/**
+ * GROK U PRETPLATNICKOM PROFILU (odluka vlasnika 2026-09-21).
+ *
+ * Stvarni kvar koji se imitira: runner je Grok drzao IZVAN pretplatnickog profila, a autonomni
+ * kontroler uvijek salje `--subscription`, pa Grok u autonomnom lancu nije mogao raditi uopce.
+ * Otvaranje profila ima cijenu: `XAI_API_KEY` u okolini bi CLI tiho prebacio s pretplate na naplatu
+ * po pozivu, sto je bas ono sto odluka zabranjuje. Zato su ovdje tri mutacije, svaka nad jednim
+ * gardom, uz baseline tvrdnju da nemutiran ulaz prolazi cist.
+ */
+describe('mutacije: Grok pretplatnicki profil', () => {
+  const grokQueue = () => ({ tasks: [
+    { id: 'T00', title: 'Baseline', status: 'done', dependsOn: [] },
+    { id: 'T01', title: 'Fix', status: 'ready', dependsOn: ['T00'] },
+  ] });
+  const XAI_ENV = { XAI_API_KEY: 'xai-placeholder-nije-pravi-kljuc' };
+
+  /** Tvrdnja koju cuva tocka 1: profil iskljucuje samo Fable. */
+  const excludedListProblems = (list: readonly string[]): string[] => {
+    const problems: string[] = [];
+    if (list.includes('grok') || list.includes('build')) problems.push('Grok alias iskljucen iz pretplate');
+    if (!list.includes('fable')) problems.push('Fable nije iskljucen');
+    return problems;
+  };
+
+  /** Tvrdnja koju cuva tocka 2: u pretplatnickom nacinu postavljen xAI kljuc obara pripremu. */
+  type PrepareJobFn = (
+    queue: unknown, id: string, phase: string, agent: string,
+    budget: undefined, options: Record<string, unknown>,
+  ) => unknown;
+  const refusesXaiKey = (prepare: PrepareJobFn): boolean => {
+    for (const [phase, agent] of [['plan', 'grok'], ['implement', 'build']] as const) {
+      let threw = false;
+      try {
+        prepare(grokQueue(), 'T01', phase, agent, undefined, { billingMode: 'subscription', env: XAI_ENV });
+      } catch {
+        threw = true;
+      }
+      if (!threw) return false;
+    }
+    return true;
+  };
+
+  /** Tvrdnja koju cuva tocka 3: zivi oblik greske nije uspjeh ni kad je izlazni kod 0. */
+  type ParseResultFn = (command: string, stdout: string, exitCode: number) => { ok: boolean };
+  const liveError = () => readFileSync(resolve(process.cwd(), 'tests/fixtures/agents/grok-error.json'), 'utf8');
+  const liveSuccess = () => readFileSync(resolve(process.cwd(), 'tests/fixtures/agents/grok-success.json'), 'utf8');
+  const judgesLiveShapes = (parse: ParseResultFn): boolean =>
+    parse('grok', liveSuccess(), 0).ok === true
+    && parse('grok', liveError(), 1).ok === false
+    && parse('grok', liveError(), 0).ok === false;
+
+  it('(a) popis iskljucenih koji opet sadrzi grok obara tvrdnju', async () => {
+    const { SUBSCRIPTION_EXCLUDED_AGENTS } = await import('../scripts/agents/core.mjs');
+    // BASELINE: stvarni popis je cist.
+    expect(excludedListProblems(SUBSCRIPTION_EXCLUDED_AGENTS)).toEqual([]);
+    expect([...SUBSCRIPTION_EXCLUDED_AGENTS]).toEqual(['fable']);
+    // MUTACIJA: povratak na stari popis.
+    expect(excludedListProblems(['fable', 'grok', 'build'])).toEqual(['Grok alias iskljucen iz pretplate']);
+    expect(excludedListProblems(['fable', 'grok'])).not.toEqual([]);
+    // Kontramutacija: brisanje Fablea iz popisa se takoder mora vidjeti.
+    expect(excludedListProblems([])).toContain('Fable nije iskljucen');
+  });
+
+  it('(b) prepareJob koji propusta posao uz postavljen XAI_API_KEY obara tvrdnju', async () => {
+    const { prepareJob } = await import('../scripts/agents/core.mjs');
+    // BASELINE: stvarni prepareJob odbija kljuc, a bez kljuca uredno pripremi posao.
+    expect(refusesXaiKey(prepareJob as PrepareJobFn)).toBe(true);
+    expect(() => prepareJob(grokQueue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env: {} }))
+      .not.toThrow();
+    // MUTACIJA: gard koji zanemari proslijedjenu okolinu (cita praznu umjesto stvarne).
+    const mutantIgnoresEnv: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
+      (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget, { ...options, env: {} });
+    expect(refusesXaiKey(mutantIgnoresEnv)).toBe(false);
+    // MUTACIJA: gard vezan uz ime agenta umjesto uz providera, pa alias `build` prodje.
+    const mutantOnlyGrokAlias: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
+      (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget,
+        agent === 'grok' ? options : { ...options, env: {} });
+    expect(refusesXaiKey(mutantOnlyGrokAlias)).toBe(false);
+  });
+
+  it('(c) parser koji zivu gresku proglasi uspjehom obara tvrdnju', async () => {
+    const { parseResult } = await import('../scripts/agents/core.mjs');
+    // BASELINE: stvarni parser presudi oba ziva oblika tocno.
+    expect(judgesLiveShapes(parseResult as ParseResultFn)).toBe(true);
+    // MUTACIJA: naivni parser "svaki parseable JSON bez is_error je uspjeh".
+    const mutantNaive: ParseResultFn = (_command, stdout, exitCode) => {
+      if (exitCode !== 0) return { ok: false };
+      try {
+        const parsed = JSON.parse(stdout);
+        return { ok: parsed?.is_error !== true };
+      } catch {
+        return { ok: false };
+      }
+    };
+    expect(mutantNaive('grok', liveError(), 0).ok).toBe(true);
+    expect(judgesLiveShapes(mutantNaive)).toBe(false);
+    // MUTACIJA: parser koji gleda samo izlazni kod.
+    const mutantExitCodeOnly: ParseResultFn = (_command, _stdout, exitCode) => ({ ok: exitCode === 0 });
+    expect(judgesLiveShapes(mutantExitCodeOnly)).toBe(false);
+  });
+});

@@ -177,9 +177,10 @@ racuni prijavljeni ili da je stvarni model isporucio kvalitetnu LEKTA promjenu.
 ## Pretplatnicki nacin i autonomni kontroler (2026-09-09)
 
 `--subscription` je drugi, odvojen nacin naplate runnera: Claude poziv ide bez `--max-budget-usd` (jer
-se do naplate ne smije ni doci), Fable i oba Grok aliasa (`grok`, `build`) iskljuceni su jer ih taj
-profil ne pokriva, a postavljen `ANTHROPIC_API_KEY` u okolini je greska prije pripreme. Grok se pokrece
-samo u rucnom nacinu uz zasebno provjerenu xAI prijavu ili API naplatu. Rucni `--budget-usd` nacin je
+se do naplate ne smije ni doci), samo je Fable iskljucen jer ga taj profil ne pokriva, a postavljen
+`ANTHROPIC_API_KEY` u okolini je greska prije pripreme. Grok radi u pretplatnickom profilu, ali
+iskljucivo na SuperGrok pretplatu kroz `grok login`, pa je `XAI_API_KEY` u tom nacinu zabranjen i
+obara pripremu, jer bi CLI inace presao na naplatu po pozivu. Rucni `--budget-usd` nacin je
 nepromijenjen.
 
 ```bash

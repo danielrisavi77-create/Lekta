@@ -1,7 +1,10 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
+import {
+  prepareJob, parseGrokVersion, parseResult, validateQueue,
+  PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS,
+} from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -116,6 +119,38 @@ describe('provider results do not replace verification', () => {
     expect(parseResult('grok', stdout, 0))
       .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
   });
+  /**
+   * ZIVE FIXTURE, snimljene na razvojnom stroju 2026-09-21 s Grok CLI 1.0.34 prijavljenim kroz
+   * `grok login --device-code`. Uspjesan `--output-format json` odgovor NEMA polje `type`; greska ga ima.
+   * `sessionId`, `requestId` i sadrzaj `thought` su redigirani jer nose identifikatore zive sesije.
+   * Svrha: `parseResult` se ne mijenja, ali svaka buduca izmjena parsera pada ako prestane tocno
+   * presuditi bas ZIVI oblik, a ne samo skraceni oblik iz rucno pisanih nizova iznad.
+   */
+  it('presuduje zive Grok 1.0.34 odgovore, i uspjeh i gresku', () => {
+    const success = readFileSync('tests/fixtures/agents/grok-success.json', 'utf8');
+    const failure = readFileSync('tests/fixtures/agents/grok-error.json', 'utf8');
+    expect(parseResult('grok', success, 0)).toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+    expect(parseResult('grok', failure, 1).ok).toBe(false);
+    // Cak i kad bi CLI pogresno izasao s 0, oblik greske sam po sebi nije uspjeh.
+    expect(parseResult('grok', failure, 0).ok).toBe(false);
+    // Fixture nosi ZIVI skup polja, ne samo ona koja parser gleda.
+    const parsed = JSON.parse(success);
+    expect(Object.keys(parsed).sort()).toEqual([
+      'modelUsage', 'num_turns', 'requestId', 'sessionId', 'stopReason',
+      'text', 'thought', 'total_cost_usd', 'total_cost_usd_ticks', 'usage',
+    ]);
+    expect(parsed.type).toBeUndefined();
+    expect(Object.keys(parsed.usage).sort()).toEqual([
+      'cache_creation_input_tokens', 'cache_read_input_tokens', 'input_tokens',
+      'output_tokens', 'reasoning_tokens', 'total_tokens',
+    ]);
+    expect(Object.keys(parsed.modelUsage)).toEqual(['grok-4.6-build']);
+    expect(JSON.parse(failure).type).toBe('error');
+    // Redakcija: nijedan zivi identifikator ni sadrzaj razmisljanja ne smije zavrsiti u repozitoriju.
+    expect(parsed.sessionId).toBe('00000000-0000-0000-0000-000000000000');
+    expect(parsed.requestId).toBe('00000000-0000-0000-0000-000000000001');
+    expect(parsed.thought).toBe('[redigirano]');
+  });
   it('classifies Grok versions against the verified minimum', () => {
     expect(parseGrokVersion('grok 1.0.34 (3736acbc8658)'))
       .toEqual({ version: '1.0.34', supported: true });
@@ -142,11 +177,47 @@ describe('subscription billing mode (autonomy profile)', () => {
     expect(prepareJob(queue(), 'T01', 'implement', 'sonnet', 3).billingMode).toBe('budget');
     expect(prepareJob(queue(), 'T01', 'implement', 'sol').args).not.toContain('--max-budget-usd');
   });
-  it('rejects Grok agents in the subscription profile because xAI billing is not covered', () => {
-    expect(() => prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription' }))
-      .toThrow(/not included/);
-    expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }))
-      .toThrow(/not included/);
+  /**
+   * Odluka vlasnika 2026-09-21: Grok radi na SuperGrok pretplatu (`grok login`), dakle oba aliasa
+   * moraju biti U pretplatnickom profilu. Popis iskljucenih je prikovan tocnom vrijednoscu jer je
+   * jedina stvar koja tu odluku moze tiho vratiti unatrag.
+   */
+  it('iskljucuje samo Fable iz pretplatnickog profila', () => {
+    expect([...SUBSCRIPTION_EXCLUDED_AGENTS]).toEqual(['fable']);
+    expect(Object.isFrozen(SUBSCRIPTION_EXCLUDED_AGENTS)).toBe(true);
+    expect(SUBSCRIPTION_EXCLUDED_AGENTS).not.toContain('grok');
+    expect(SUBSCRIPTION_EXCLUDED_AGENTS).not.toContain('build');
+  });
+  it('pusta oba Grok aliasa u pretplatnicki profil kad okolina nema xAI kljuc', () => {
+    const plan = prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env: {} });
+    expect(plan.command).toBe('grok');
+    expect(plan.billingMode).toBe('subscription');
+    expect(plan.args).not.toContain('--max-budget-usd');
+    const impl = prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription', env: {} });
+    expect(impl.command).toBe('grok');
+    expect(impl.args).toContain('--always-approve');
+    // Prazan kljuc nije postavljen kljuc.
+    expect(prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env: { XAI_API_KEY: '' } }).command)
+      .toBe('grok');
+  });
+  /**
+   * NOVI GARD: `XAI_API_KEY` bi Grok CLI prebacio s pretplate na naplatu po pozivu, pa je u
+   * pretplatnickom nacinu greska prije pripreme, po uzoru na `--budget-usd` za Claude.
+   */
+  it('odbija xAI kljuc u okolini u pretplatnickom nacinu, za oba aliasa', () => {
+    const env = { XAI_API_KEY: 'xai-placeholder' };
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env }))
+      .toThrow(/XAI_API_KEY/);
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription', env }))
+      .toThrow(/XAI_API_KEY/);
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env }))
+      .toThrow(/subscription/);
+    // Rucni nacin naplate je nepromijenjen: kljuc je ondje legitiman.
+    expect(prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { env }).command).toBe('grok');
+    expect(prepareJob(queue(), 'T01', 'implement', 'build', undefined, { env }).command).toBe('grok');
+    // Gard je uzak: ne dira ne-Grok providere.
+    expect(() => prepareJob(queue(), 'T01', 'implement', 'sol', undefined, { billingMode: 'subscription', env }))
+      .not.toThrow();
   });
 });
 

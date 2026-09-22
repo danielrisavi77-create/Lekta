@@ -1,0 +1,28 @@
+{
+  "text": "LEKTA_GROK_SMOKE_OK",
+  "stopReason": "end_turn",
+  "sessionId": "00000000-0000-0000-0000-000000000000",
+  "requestId": "00000000-0000-0000-0000-000000000001",
+  "thought": "[redigirano]",
+  "usage": {
+    "input_tokens": 3612,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 3584,
+    "output_tokens": 9,
+    "reasoning_tokens": 61,
+    "total_tokens": 3682
+  },
+  "num_turns": 1,
+  "total_cost_usd": 0.0148,
+  "total_cost_usd_ticks": 148,
+  "modelUsage": {
+    "grok-4.6-build": {
+      "inputTokens": 3612,
+      "outputTokens": 9,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 3584,
+      "modelCalls": 1,
+      "costUSD": 0.0148
+    }
+  }
+}
