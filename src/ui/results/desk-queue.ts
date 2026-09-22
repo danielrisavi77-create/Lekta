@@ -64,14 +64,15 @@ export function queueRedci(
  * Popis. `data-desk-go` je ISTI atribut koji koristi navigacija, pa klik na redak ide kroz
  * postojecu delegaciju u `mountDesk` i ne trazi drugi put kroz kod.
  *
- * `aria-expanded` i `aria-current` nisu ukras: bez njih citac ekrana najavljuje devet gumba koji
- * zvuce jednako, a upravo je razlika medju njima ono sto ovaj prikaz nudi.
+ * `aria-current` nije ukras: bez njega citac ekrana najavljuje devet gumba koji zvuce jednako, a
+ * upravo je razlika medju njima ono sto ovaj prikaz nudi. `aria-expanded` OVDJE NE STOJI: gumb ne
+ * otvara/zatvara nista na sebi (detalj nalaza crta zasebna kartica iznad popisa, vidi
+ * `desk-view.ts`), pa bi atribut tvrdio rasklopivo stanje koje ne postoji.
  */
 export function queueHtml(
   redci: readonly QueueRedak[],
   odabrani: number,
   esc: (v: string) => string,
-  detalj = '',
 ): string {
   if (!redci.length) return '';
   const stavke = redci.map((r) => {
@@ -81,16 +82,12 @@ export function queueHtml(
       : `<span class="dq-fix" data-fix="${r.automatski ? 'auto' : 'rucno'}">${r.automatski ? 'AUTO' : 'RUČNO'}</span>`;
     return `<li class="dq-item${jeOdabran ? ' dq-item--open' : ''}" data-ton="${r.ton}">`
       + `<button type="button" class="dq-btn" data-desk-go="${r.redni - 1}"`
-      + ` aria-expanded="${jeOdabran ? 'true' : 'false'}"${jeOdabran ? ' aria-current="true"' : ''}>`
+      + `${jeOdabran ? ' aria-current="true"' : ''}>`
       + `<span class="dq-num">${String(r.redni).padStart(2, '0')}</span>`
       + `<span class="dq-sev">${esc(r.oznaka)}</span>`
       + `<span class="dq-title">${esc(r.naslov)}</span>`
       + auto
       + '</button>'
-      // DETALJ SAMO ZA ODABRANI, doslovno po brifu ("kliknes 03 i samo se njegov detalj otvori").
-      // Ostali retci ne nose skriven sadrzaj: sakriven detalj u svih devet redaka bio bi isti onaj
-      // "card zoo", samo pod `display:none`, i placao bi se pri svakom ponovnom crtanju.
-      + (jeOdabran && detalj ? `<div class="dq-detalj">${detalj}</div>` : '')
       + '</li>';
   }).join('');
   return `<ol class="dq" data-desk-queue>${stavke}</ol>`;

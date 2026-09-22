@@ -75,19 +75,14 @@ describe('prikaz reda cekanja', () => {
     expect(html).toContain('data-desk-go="2"');
   });
 
-  it('DETALJ SE OTVARA SAMO NA ODABRANOM RETKU', () => {
-    // Doslovno po brifu: "kliknes 03 i samo se njegov detalj otvori".
-    const html = queueHtml(troje(), 1, esc, '<p id="detalj">tijelo</p>');
-    expect(html.match(/dq-detalj/g) ?? []).toHaveLength(1);
-    expect(html).toContain('aria-expanded="true"');
-    expect((html.match(/aria-expanded="false"/g) ?? []).length).toBe(2);
-  });
-
-  it('MUTACIJA: skriven detalj u SVAKOM retku bio bi isti card zoo', () => {
-    // Najvjerojatnija buduca "optimizacija" je iscrtati sve detalje pa ih sakriti CSS-om. Tada
-    // prikaz opet nosi N kartica, samo nevidljivih, i placa ih pri svakom ponovnom crtanju.
-    const html = queueHtml(troje(), 1, esc, '<p>tijelo</p>');
-    expect((html.match(/tijelo/g) ?? []).length).toBe(1);
+  it('GRANA NE POSTOJI: popis vise ne nosi skriven detalj ni aria-expanded', () => {
+    // Do Z8 je odabrani redak mogao nositi vlastiti `.dq-detalj` (i s njim `aria-expanded`), jer
+    // je gumb tada rasklapao/sklapao sadrzaj na sebi. Od Z8 kartica nalaza stoji zasebno iznad
+    // popisa (`desk-view.ts`), pa `queueHtml` vise NE prima detalj: grana je nedostizna i namjerno
+    // uklonjena, ne samo neiskoristena.
+    const html = queueHtml(troje(), 1, esc);
+    expect(html).not.toContain('dq-detalj');
+    expect(html).not.toContain('aria-expanded');
   });
 
   it('bez detalja se popis i dalje crta: pregled ne ovisi o odabiru', () => {
@@ -107,7 +102,7 @@ describe('prikaz reda cekanja', () => {
   });
 
   it('polozaj izvan raspona ne otvara nijedan redak, i ne rusi popis', () => {
-    const html = queueHtml(troje(), 99, esc, '<p>tijelo</p>');
+    const html = queueHtml(troje(), 99, esc);
     expect(html).toContain('Lijeva margina');
     expect(html).not.toContain('dq-detalj');
   });
