@@ -64,3 +64,16 @@ Novi framework, novi agent sustav, pisanje sadržaja, 407 fakulteta, konkuriranj
 - Spojeno: katedra-pkg #51 (Lite 2.0), Lekta #89 (T19 rez 1).
 - T18+ rade **druge sesije** — orkestrator ne ulazi bez OK.
 - Maturiraj #4 otvoren (billing RLS) — nije P0; čeka.
+
+## Audit 22. 9. 2026.
+
+Vlasnikov audit od 22. 9. 2026. je uklopljen u `tasks.json` (T48 do T51, prosireni note na postojecim zadacima). Ovdje je samo redoslijed kojim kod treba ici, od prvog prema zadnjem:
+
+1. Naplata, nalazi #3 i #4 (puni workflow, prije T24): webhook prihvaca samo order_created/paid i order_refunded, inbox pise prije provjere korisnika, needs_manual_link; jedno ime varijable za store ID u webhook-mor i create-checkout, uz preflight provjeru.
+2. Nalaz #10 (puni workflow): ukloniti policy corpus_contributions_update_own u migraciji 0203 ili kasnije, dodati RLS test da je PATCH tudjeg zapisa odbijen.
+3. Nalaz #11 (standard): unit, work i UTM parametri moraju preziviti prijelaz s pocetne stranice na /rad/.
+4. Nalaz #12 (light): dijakritici u sucelju i test koji zabranjuje popis ASCII zamjena.
+5. Nalaz #14 (puni workflow, docx): xmldom mora imati onError, osteceni document.xml vraca gresku umjesto ocjene.
+6. Nalaz #13 (T19 follow up): staging noindex, isti build lanac kao produkcija, Node 24.
+
+WordReplica (T51) namjerno nije u ovom redoslijedu: radi se skroz na kraju, zadnja, i za lansiranje ostaje iskljucena (REPAIR_LOCAL_ENABLED off).
