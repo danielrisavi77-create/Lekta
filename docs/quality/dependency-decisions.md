@@ -93,3 +93,14 @@ Preostalih sedam high/critical čvorova i njihov neposredni put:
 | `vitest` | critical, UI server arbitrary file read/execute i `@vitest/mocker` path traversal, uz vite/vite-node | `node_modules/vitest`; test runner u lokalnom/CI okruženju, nije runtime bundle | Daniel Risavi; ne izlagati Vitest UI, planirani major na 5.x uz puni gate; rok 2026-10-09 |
 
 Tri moderate čvora (`@vitest/mocker`, `esbuild`, `vite-node`) su podčvorovi iste Vitest/Vite razvojne grupe i ne uvode dodatni runtime put. Sljedeća obavezna provjera je 2026-10-01, a nova presuda mora postojati prije isteka 2026-10-09.
+
+## Puna čista razvojna instalacija 2026-09-22
+
+Nakon čišćenja prostora kreiran je novi izolirani source worktree na commitu
+`4ed205a3`. U njemu je `npm ci --ignore-scripts --prefer-offline` završio izlazom 0,
+instalirao 1154 paketa i završio audit nad 1156 paketa. `npm ls --depth=0` završio je
+izlazom 0 i pokazao zaključane izravne alate, uključujući `vite@8.1.4`, `vitest@2.1.9`,
+`typescript@7.0.2` i `netlify-cli@27.5.2`. U istom čistom stablu `npm audit --omit=dev`
+ima 0 low, moderate, high i critical nalaza, a `npm run audit:ratchet` javlja 7
+high/critical, jednako stropu. Time je ponovljiva puna razvojna instalacija potvrđena;
+upozorenje o 10 nalaza odnosi se samo na razvojni graf koji je već imenovan iznimkama.
