@@ -65,12 +65,39 @@ class PolicyError(ValueError):
 
 
 def billing_allowed(profile: dict | None) -> bool:
-    """Smije li se uopce pozvati model. Sve mora biti izricito True, a prijava mora biti pretplata."""
+    """Smije li kontroler uopce razmatrati modelski poziv.
+
+    Novi profili imaju provider-specificki `providers` objekt. Legacy profil bez njega ostaje
+    podrzan zbog starih instalacija i testova, ali vrijedi samo za subscription Codex/Claude tok.
+    """
     if not isinstance(profile, dict):
         return False
+    providers = profile.get("providers")
+    if isinstance(providers, dict):
+        if profile.get("configuration_unchanged") is not True or profile.get("trusted_observation") is not True:
+            return False
+        return any(isinstance(value, dict) and value.get("allowed") is True for value in providers.values())
     if profile.get("effective_auth") != "subscription":
         return False
     return all(profile.get(key) is True for key in REQUIRED_PROFILE_KEYS)
+
+
+def provider_billing_allowed(profile: dict | None, command: str, requested_model: str | None = None) -> bool:
+    """Fail-closed provjera TOCNOG providera/modela koji se sprema pokrenuti."""
+    if not billing_allowed(profile):
+        return False
+    providers = profile.get("providers") if isinstance(profile, dict) else None
+    if not isinstance(providers, dict):
+        return command in ("codex", "claude")
+    provider = providers.get(command)
+    if not isinstance(provider, dict) or provider.get("allowed") is not True:
+        return False
+    approved = provider.get("approved_models")
+    if requested_model and isinstance(approved, list) and approved:
+        req = requested_model.lower()
+        if not any(isinstance(model, str) and (req in model.lower() or model.lower() in req) for model in approved):
+            return False
+    return True
 
 
 def canonical_path(path: str) -> str:
@@ -145,6 +172,12 @@ def validate_config(cfg: dict) -> list[str]:
     for key in ("allowApiBilling", "allowPaidCredits", "fableEnabled", "externalDocumentUploadAllowed"):
         if cfg.get(key) is not False:
             problems.append(f"{key} mora biti false")
+    if not isinstance(cfg.get("grokEnabled", False), bool):
+        problems.append("grokEnabled mora biti bool")
+    for key in ("plannerAgent", "implementerAgent", "reviewerAgent"):
+        value = cfg.get(key, "auto")
+        if not isinstance(value, str) or not value:
+            problems.append(f"{key} mora biti neprazan string")
     if cfg.get("maxPaidActionsUsd") != 0 or isinstance(cfg.get("maxPaidActionsUsd"), bool):
         problems.append("maxPaidActionsUsd mora biti 0")
     if cfg.get("allowedRunnerClass") != "public_standard":
