@@ -25,7 +25,7 @@ import time
 import uuid
 from typing import Callable
 
-from .gate import verify_candidate
+from .gate import PROOF_PATH, verify_candidate
 from .policy import PolicyError, billing_allowed, explain_change, load_config
 from .publisher import publish_verified
 from .remote import load_remotes, token_fingerprint
@@ -373,6 +373,56 @@ def _agent_for(config: dict, phase: str, task: dict) -> str:
     return "astra" if implementer in ("opus", "sonnet") else "opus"
 
 
+def _verify_settle(repo: str) -> Callable[[], list[str]]:
+    """Vrati radnikovo stablo u stanje u kojem ga je verifikacija zatekla i reci sto je ipak ostalo prljavo.
+
+    `verify_candidate` bezuvjetno pokrece `npm run release:check`, a `scripts/release-check.mjs` na kraju
+    bezuvjetno prepise `docs/generated/RELEASE_PROOF.json`. Ta datoteka je TRACKANA, k tome je kontrolna
+    staza, a sadrzaj joj se razlikuje na svakom pokretanju jer nosi `createdAt`. Bez vracanja u stablu ostane
+    ` M docs/generated/RELEASE_PROOF.json`, pa SLJEDECI posao padne na `implement_unsafe: radno stablo nije
+    cisto`, `_clean_at_start` ostane False i `_park_worker_tree` vrati `skipped: nije nase`. Kontroler se tako
+    zakljuca poslije PRVOG posla koji uopce dodje do verifikacije, dakle kroz druga vrata od nalaza 2026-09-13.
+
+    Vraca se TOCNO jedna staza, i to sama datoteka dokaza, upisom BAJTOVA koje je verifikacija zatekla i bez
+    ijedne git naredbe koja pise: indeks se ne dira, `checkout` se ne zove, pa vracanje ne moze pojesti ni
+    tudju promjenu ni vlastiti commit. Sve ostalo se NE dira nego PRIJAVLJUJE: popis staza koje verifikacija nije smjela ostaviti ide u
+    manifest kao `treeResidue` i obara `complete`. Kad se stanje stabla ne moze izmjeriti, popis nosi razlog,
+    pa je ishod zatvoren umjesto tiho prazan.
+    """
+    proof_abs = os.path.join(repo, PROOF_PATH.replace("/", os.sep))
+    before_error: str | None = None
+    try:
+        before = set(changed_paths(repo))
+    except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
+        before, before_error = set(), f"git status nije uspio prije provjere ({type(exc).__name__})"
+    try:
+        with open(proof_abs, "rb") as fh:
+            proof_before: bytes | None = fh.read()
+    except OSError:
+        proof_before = None
+
+    def settle() -> list[str]:
+        try:
+            if proof_before is None:
+                if os.path.exists(proof_abs):
+                    os.remove(proof_abs)
+            else:
+                os.makedirs(os.path.dirname(proof_abs), exist_ok=True)
+                with open(proof_abs, "wb") as fh:
+                    fh.write(proof_before)
+        except OSError as exc:
+            return [f"<dokaz se nije dao vratiti: {type(exc).__name__}>"]
+        if before_error:
+            return [f"<{before_error}>"]
+        try:
+            after = set(changed_paths(repo))
+        except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
+            return [f"<git status nije uspio nakon provjere ({type(exc).__name__})>"]
+        return sorted(after - before)
+
+    return settle
+
+
 class DefaultAdapters:
     """Stvarni adapteri: node runner za pripremu posla, worker za poziv, gate za provjeru; izdavac je BLOKIRAN
     dok vlasnik ne konfigurira `remote` s odvojenim identitetom (plan 4: publisherEnabled=false zadano)."""
@@ -550,7 +600,7 @@ class DefaultAdapters:
 
         def read_proof():
             try:
-                with open(os.path.join(self.repo, "docs", "generated", "RELEASE_PROOF.json"), encoding="utf-8") as fh:
+                with open(os.path.join(self.repo, PROOF_PATH.replace("/", os.sep)), encoding="utf-8") as fh:
                     return json.load(fh)
             except (OSError, ValueError):
                 return None
@@ -564,7 +614,8 @@ class DefaultAdapters:
         key_path = os.path.join(self.home, "verifier.key")
         key = open(key_path, "rb").read() if os.path.isfile(key_path) else b""
         return verify_candidate(candidate, self.config, runner=runner, read_proof=read_proof, signing_key=key or None,
-                                created_at=_dt.datetime.now(tz=_dt.timezone.utc).isoformat(timespec="seconds"))
+                                created_at=_dt.datetime.now(tz=_dt.timezone.utc).isoformat(timespec="seconds"),
+                                settle=_verify_settle(self.repo))
 
     def classify(self, task: dict) -> tuple[str, list[str]]:
         snap = self._snapshot()

@@ -193,5 +193,70 @@ class TrustedLoaderTest(unittest.TestCase):
         json.dumps(m)  # serijalizabilan bez custom tipova
 
 
+class SettleTest(unittest.TestCase):
+    """`settle` je jedina tocka u kojoj verifikacija smije vratiti radnikovo stablo u zateceno stanje.
+
+    Dvije stvari se ovdje mjere i nijedna nije nizvodna: REDOSLIJED (mora ici poslije `read_proof`, inace
+    bi vracanje datoteke pojelo bas onaj svjez dokaz zbog kojeg se provjera pokrece) i UCINAK neprazna
+    popisa (`treeResidue` obara `complete` i `promotion_allowed`).
+    """
+
+    def test_settle_runs_exactly_once_and_after_the_proof_is_read(self):
+        order = []
+
+        def runner(argv):
+            if argv[:3] == ["npm", "run", "release:check"]:
+                order.append("release")
+                return 0, ""
+            order.append("ls-tree")
+            return 0, LS_TREE
+
+        def read_proof():
+            order.append("read_proof")
+            return proof()
+
+        def settle():
+            order.append("settle")
+            return []
+
+        m = verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner, read_proof=read_proof, signing_key=KEY, created_at="t",
+                             settle=settle)
+        self.assertEqual(order, ["release", "read_proof", "settle", "ls-tree"])
+        self.assertEqual(order.count("settle"), 1)
+        self.assertEqual(m["treeResidue"], [])
+        self.assertTrue(m["complete"], m)
+
+    def test_without_settle_the_behaviour_is_the_old_one(self):
+        """BASELINE: pozivatelj koji stablo ne dira dobiva prazan popis i isti ishod kao prije."""
+        m = good_manifest()
+        self.assertEqual(m["treeResidue"], [])
+        self.assertTrue(m["complete"], m)
+
+    def test_residue_blocks_the_manifest_and_the_promotion(self):
+        """MUTACIJA: verifikacija je ostavila trag u stablu; dokaz nad takvim stablom nije potpun."""
+        m = verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner_factory(), read_proof=lambda: proof(), signing_key=KEY,
+                             created_at="t", settle=lambda: ["src/ui/app.ts", "docs/generated/DRUGI.json"])
+        self.assertEqual(m["treeResidue"], ["docs/generated/DRUGI.json", "src/ui/app.ts"])
+        self.assertFalse(m["complete"], m)
+        self.assertFalse(promotion_allowed(load(m), CAND, REQUIRED))
+        # Kontrola: isti ulaz bez traga i dalje prolazi, pa gard ne gasi ono sto stiti.
+        self.assertTrue(promotion_allowed(load(good_manifest()), CAND, REQUIRED))
+
+    def test_residue_is_refused_even_when_a_signed_manifest_claims_completeness(self):
+        """Potpisan manifest s tragom i rucno postavljenim `complete` i dalje ne prolazi promociju."""
+        m = good_manifest()
+        forged = dict(m, treeResidue=["src/ui/app.ts"])
+        forged["signature"] = sign_manifest(forged, KEY)
+        evidence = load(forged)
+        self.assertTrue(evidence["signature_verified"], evidence)
+        self.assertFalse(promotion_allowed(evidence, CAND, REQUIRED))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -144,10 +144,16 @@ def verify_signature(manifest: dict, key: bytes) -> bool:
 def build_manifest(*, base_sha: str, candidate_sha: str, source_tree_hash: str | None, dependency_lock_hash: str | None,
                    artifact_hash: str | None, policy_version: str, tool_versions: dict, checks: dict[str, str],
                    staleness: dict, proof: dict | None, control_files_changed: list[str], created_at: str,
-                   exit_code: int | None) -> dict:
+                   exit_code: int | None, tree_residue: list[str] | None = None) -> dict:
+    # `tree_residue` su staze koje je SAMA verifikacija ostavila prljavima u radnikovu stablu, osim datoteke
+    # dokaza (nju pozivatelj vraca na zateceno stanje odmah po citanju). Neprazan popis znaci da je dokaz
+    # pecen nad stablom koje je provjera usput promijenila; to nije potpun dokaz, i ujedno je jedini izravan
+    # signal tog kvara. Prazan popis je normalno stanje i ne mijenja nista.
+    residue = sorted(str(item) for item in (tree_residue or []))
     required_ok = bool(checks) and all(v == "pass" for v in checks.values())
     complete = (
-        required_ok
+        not residue
+        and required_ok
         and staleness.get("verdict") == "fresh"
         and isinstance(proof, dict) and proof.get("complete") is True
         and proof.get("commit") == candidate_sha
@@ -171,16 +177,24 @@ def build_manifest(*, base_sha: str, candidate_sha: str, source_tree_hash: str |
         "proofComplete": proof.get("complete") if isinstance(proof, dict) else None,
         "releaseCheckExitCode": exit_code,
         "controlFilesChanged": sorted(control_files_changed),
+        "treeResidue": residue,
         "complete": complete,
     }
 
 
 def verify_candidate(candidate: dict, policy: dict, *, runner: Callable[[list[str]], tuple[int, str]],
                      read_proof: Callable[[], dict | None], tool_versions: dict | None = None,
-                     signing_key: bytes | None = None, created_at: str = "") -> dict:
+                     signing_key: bytes | None = None, created_at: str = "",
+                     settle: Callable[[], list[str]] | None = None) -> dict:
     """Pokrece obvezne provjere i vraca potpisan manifest. `runner(argv) -> (exit_code, stdout)` je jedini
     kontakt s vanjskim svijetom pa se cijeli tok testira bez npm-a. Kandidatov kod se NE izvrsava ovdje
-    osim kroz taj runner (koji u produkciji radi u odvojenom sandboxu)."""
+    osim kroz taj runner (koji u produkciji radi u odvojenom sandboxu).
+
+    `settle` se zove TOCNO jednom, odmah nakon sto je dokaz procitan: pozivatelj tada vraca
+    `docs/generated/RELEASE_PROOF.json` na zateceno stanje i vraca popis staza koje je provjera usput
+    ostavila prljavima. Redoslijed nije kozmetika: prije `read_proof` bi vracanje datoteke pojelo bas onaj
+    svjez dokaz zbog kojeg se provjera i pokrece. Bez `settle` ponasanje je staro (nista se ne vraca, popis
+    je prazan), pa pozivatelji koji stablo ne diraju ostaju netaknuti."""
     required = list(policy.get("requiredReleaseTiers") or [])
     candidate_sha = str(candidate.get("candidateSha") or "")
     base_sha = str(candidate.get("baseSha") or "")
@@ -188,6 +202,7 @@ def verify_candidate(candidate: dict, policy: dict, *, runner: Callable[[list[st
         raise ValueError("candidateSha i baseSha moraju biti puni 40-hex SHA")
     exit_code, _ = runner(["npm", "run", "release:check"])
     proof = read_proof()
+    residue = list(settle()) if settle is not None else []
     ls_code, ls_out = runner(["git", "ls-tree", "-r", candidate_sha])
     head_digest = tree_digest_from_ls_tree(ls_out) if ls_code == 0 else None
     staleness = proof_staleness(proof, head_digest)
@@ -199,6 +214,7 @@ def verify_candidate(candidate: dict, policy: dict, *, runner: Callable[[list[st
         dependency_lock_hash=candidate.get("dependencyLockHash"), artifact_hash=candidate.get("artifactHash"),
         policy_version=str(policy.get("policyVersion") or ""), tool_versions=tool_versions or {}, checks=checks,
         staleness=staleness, proof=proof, control_files_changed=control, created_at=created_at, exit_code=exit_code,
+        tree_residue=residue,
     )
     if signing_key:
         manifest["signature"] = sign_manifest(manifest, signing_key)
@@ -240,5 +256,6 @@ def promotion_allowed(evidence: dict, candidate_sha: str, required: list[str]) -
         and evidence.get("proofComplete") is True
         and (evidence.get("staleness") or {}).get("verdict") == "fresh"
         and not evidence.get("controlFilesChanged")
+        and not evidence.get("treeResidue")
         and all(checks.get(name) == "pass" for name in required)
     )

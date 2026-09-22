@@ -15,6 +15,7 @@ from scripts.autonomy.worker import branch_changed_paths
 
 NOW = 1_800_000_000
 SHA = "48c1fc9e85f50213e5b313bc67cfbc0a45a28607"
+PROOF_REL = "docs/generated/RELEASE_PROOF.json"
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 EXAMPLE = os.path.join(ROOT, "config", "autonomy.example.json")
 
@@ -738,6 +739,205 @@ class TwoJobsInARowTest(unittest.TestCase):
         self.assertNotIn("publish", [c[0] for c in adapters.calls], "neuspio commit ne smije zavrsiti objavom")
         payload = json.loads(self.store.events(out["claimed"])[-1]["sanitized_payload"])
         self.assertTrue(str(payload.get("reason", "")).startswith("commit_failed"), payload)
+
+
+COMMITTED_PROOF = {"commit": "0" * 40, "complete": True, "dirtyWorkingTree": False, "treeDigest": "stari",
+                   "createdAt": "2020-01-01T00:00:00.000Z", "missingRequired": [], "results": []}
+
+
+class ReleaseCheckAdapters(CommittingAdapters):
+    """Stvaran `commit` I STVARAN `verify`, ukljucivo vracanje stabla. Lazan je samo poziv `npm`.
+
+    Bez ovoga se ovaj razred kvara ne moze ni vidjeti: `GatedAdapters.verify` vraca gotov rjecnik i ne
+    pokrece nijednu naredbu, pa `docs/generated/RELEASE_PROOF.json` nikad ne bude prepisan.
+    """
+
+    def __init__(self, config, home):
+        super().__init__(config, home)
+        self.last_evidence = None
+
+    def verify(self, task):
+        # Zove se IZRAVNO `DefaultAdapters.verify` (a ne `super()`), jer `GatedAdapters` u lancu nosi laznu
+        # verifikaciju; ovdje se mjeri bas ona prava.
+        self.last_evidence = cli.DefaultAdapters.verify(self, task)
+        return self.last_evidence
+
+
+class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
+    """Kontroler se ne smije zakljucati poslije PRVOG posla koji dodje do VERIFIKACIJE.
+
+    Lanac: `_drive_task` prvo zove `adapters.commit` (stablo ostane cisto), pa odmah `adapters.verify`, a
+    `gate.verify_candidate` bezuvjetno pokrece `npm run release:check`. `scripts/release-check.mjs` na kraju
+    bezuvjetno prepise `docs/generated/RELEASE_PROOF.json`, koja je TRACKANA i nosi `createdAt`, pa se
+    razlikuje na svakom pokretanju. Bez popravka u stablu ostane ` M docs/generated/RELEASE_PROOF.json`,
+    sljedeci posao padne na `implement_unsafe: radno stablo nije cisto`, `_clean_at_start` ostane False i
+    `_park_worker_tree` vrati `skipped: nije nase`, dakle stablo se nikad ne ocisti samo.
+
+    Test NIJE vakuumski: `npm run release:check` je jedini presretnut poziv, i to tako da vjerno napise
+    dokaz s promjenjivim `createdAt`; sve ostalo (git, gard, commit, snimka, vracanje stabla) je stvarno, a
+    broj presretnutih poziva je zasebna tvrdnja, pa test ne moze proci tako da se verifikacija ne dogodi.
+    """
+
+    TRACKED_OTHER = "src/autonomija/vec-postoji.ts"
+
+    def setUp(self):
+        self.repo = make_git_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo)
+        self.npm_calls = []
+        self.extra_writes = []
+        self.proof_writes = 0
+        self._seed_tracked_files()
+
+    def tearDown(self):
+        self.store.close()
+
+    def _git(self, *args):
+        out = subprocess.run(["git", *args], cwd=self.repo, capture_output=True, text=True, check=False,
+                             shell=False)
+        assert out.returncode == 0, (args, out.stderr)
+        return out.stdout
+
+    def _seed_tracked_files(self):
+        """Datoteka dokaza mora biti TRACKANA, jer je takva i u produkcijskom stablu.
+
+        To nije kozmetika fixturea: `git status` netrackanu datoteku prijavljuje kao `??`, a trackanu kao
+        ` M`, i tek drugi oblik odgovara stanju koje kontroler stvarno zatekne. Uz nju se sije i jedna druga
+        trackana datoteka, koju koristi negativna kontrola.
+        """
+        for rel, payload in ((PROOF_REL, json.dumps(COMMITTED_PROOF, indent=2) + chr(10)),
+                             (self.TRACKED_OTHER, "export const vec = 1;" + chr(10))):
+            target = os.path.join(self.repo, rel.replace("/", os.sep))
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            with open(target, "w", encoding="utf-8") as fh:
+                fh.write(payload)
+        self._git("add", "--", PROOF_REL, self.TRACKED_OTHER)
+        self._git("commit", "-qm", "zateceno stanje")
+        assert self.dirty() == "", "fixture mora krenuti iz cistog stabla"
+
+    def dirty(self):
+        return subprocess.run(["git", "status", "--porcelain"], cwd=self.repo, capture_output=True, text=True,
+                              check=False, shell=False).stdout.strip()
+
+    def proof_on_disk(self):
+        with open(os.path.join(self.repo, PROOF_REL.replace("/", os.sep)), encoding="utf-8") as fh:
+            return fh.read()
+
+    def proof_in_head(self):
+        return self._git("show", "HEAD:" + PROOF_REL)
+
+    def write_proof(self):
+        """Vjerna simulacija `scripts/release-check.mjs`: isti izlaz, drugi `createdAt` na svakom pozivu."""
+        self.proof_writes += 1
+        payload = dict(COMMITTED_PROOF, commit="1" * 40,
+                       createdAt="2026-09-22T00:00:%02d.000Z" % self.proof_writes)
+        target = os.path.join(self.repo, PROOF_REL.replace("/", os.sep))
+        with open(target, "w", encoding="utf-8") as fh:
+            fh.write(json.dumps(payload, indent=2) + chr(10))
+
+    @contextlib.contextmanager
+    def npm_intercepted(self):
+        real_run = subprocess.run
+
+        def dispatch(argv, **kwargs):
+            if list(argv)[:3] == ["npm", "run", "release:check"]:
+                self.npm_calls.append(list(argv))
+                self.write_proof()
+                for rel in self.extra_writes:
+                    with open(os.path.join(self.repo, rel.replace("/", os.sep)), "a", encoding="utf-8") as fh:
+                        fh.write("// trag verifikacije " + str(len(self.npm_calls)) + chr(10))
+                return subprocess.CompletedProcess(list(argv), 0, "", "")
+            return real_run(argv, **kwargs)
+
+        with mock.patch.object(subprocess, "run", side_effect=dispatch):
+            yield
+
+    def run_tick(self, symptom, now, adapters_cls=ReleaseCheckAdapters):
+        adapters = adapters_cls(self.cfg, self.home)
+        written = "src/autonomija/" + symptom.replace(" ", "-") + ".ts"
+
+        def writing_run_phase(job, agent_phase, prof, **kwargs):
+            if agent_phase == "implement":
+                target = os.path.join(self.repo, written.replace("/", os.sep))
+                os.makedirs(os.path.dirname(target), exist_ok=True)
+                with open(target, "w", encoding="utf-8") as fh:
+                    fh.write("export const x = 1;" + chr(10))
+            return {"verdict": "needs_verification", "reason": "fake"}
+
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", side_effect=writing_run_phase), \
+             self.npm_intercepted():
+            out = cli.tick(self.cfg, now, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom=symptom), adapters=adapters, profile=profile())
+        return out, adapters, written
+
+    @staticmethod
+    def phase_reasons(summary):
+        return " | ".join(str(p.get("reason")) for p in summary["phases"])
+
+    def test_the_second_job_starts_because_verification_left_no_trace(self):
+        first, adapters, written = self.run_tick("prvi posao", NOW)
+        # (0) IZRAVAN SIGNAL da test nije vakuumski: verifikacija je STVARNO pokrenula release:check.
+        self.assertEqual(len(self.npm_calls), 1, "verifikacija mora pokrenuti release:check, inace se kvar ne vidi")
+        self.assertEqual(self.proof_writes, 1)
+        self.assertIsNotNone(adapters.last_evidence, "stvarni verify mora biti pozvan")
+        # (1) Stablo je poslije posla CISTO, i to se mjeri sadrzajno, ne izlaznim kodom.
+        self.assertEqual(self.dirty(), "", "verifikacija ne smije ostaviti trag u radnikovu stablu")
+        self.assertEqual(self.proof_on_disk(), self.proof_in_head(), "dokaz je vracen na HEAD stanje")
+        self.assertEqual(adapters.last_evidence["treeResidue"], [], adapters.last_evidence)
+        self.assertIn(written, self._git("show", "--name-only", "--format=", "HEAD"))
+        # (2) Drugi posao KRECE i ne pada na gardu cistog stabla.
+        second, _, written2 = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual([p["phase"] for p in second["phases"]][:3], ["planning", "implementing", "reviewing"])
+        self.assertNotIn("radno stablo nije cisto", self.phase_reasons(second), second)
+        self.assertNotIn("implement_unsafe", self.phase_reasons(second), second)
+        self.assertNotEqual(written, written2)
+        # Idempotencija: drugi prolaz je nad stablom isti no-op kao prvi.
+        self.assertEqual(len(self.npm_calls), 2)
+        self.assertEqual(self.dirty(), "")
+        self.assertEqual(self.proof_on_disk(), self.proof_in_head())
+
+    def test_mutation_without_the_restore_the_next_job_is_locked(self):
+        """MUTACIJA nad mehanizmom: isti tok, samo bez vracanja stabla. Tocno stanje prije ovog popravka."""
+        with mock.patch.object(cli, "_verify_settle", return_value=lambda: []):
+            first, _, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(len(self.npm_calls), 1, first)
+        self.assertIn("RELEASE_PROOF.json", self.dirty(), "bez vracanja dokaz ostaje promijenjen")
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_a_verification_that_touches_another_file_is_still_seen_as_dirty(self):
+        """NEGATIVNA KONTROLA: popravak je uzak. Bilo koja DRUGA trackana datoteka i dalje prlja stablo.
+
+        Da se vracanje prosirilo preko datoteke dokaza, ovaj test bi pao, a kontroler bi tiho gazio promjene
+        koje nisu njegove.
+        """
+        self.extra_writes = [self.TRACKED_OTHER]
+        first, adapters, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(adapters.last_evidence["treeResidue"], [self.TRACKED_OTHER], adapters.last_evidence)
+        self.assertFalse(adapters.last_evidence["complete"], "dokaz nad stablom koje je provjera promijenila nije potpun")
+        self.assertIn("vec-postoji.ts", self.dirty())
+        self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se svejedno vraca; kvar je uzak")
+        self.assertEqual(first["outcome"], "needs_human", first)
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_the_older_two_job_test_can_never_fail_on_this_input(self):
+        """VAKUUM-KONTROLA nad postojecim `TwoJobsInARowTest`.
+
+        Taj test nasljedjuje `GatedAdapters.verify`, koji vraca gotov rjecnik i ne pokrece NIJEDNU naredbu.
+        Ovdje se to mjeri, a ne pretpostavlja: isti tick s istim adapterima ne izvede nijedan `npm` poziv,
+        pa datoteka dokaza nikad ne bude prepisana i stablo ostane cisto bez obzira na popravak.
+        """
+        first, adapters, _ = self.run_tick("prvi posao", NOW, adapters_cls=CommittingAdapters)
+        self.assertEqual(first["outcome"], "proposed", first)
+        self.assertEqual(self.npm_calls, [], "lazna verifikacija ne pokrece nijednu naredbu")
+        self.assertEqual(self.proof_writes, 0)
+        self.assertEqual(self.proof_on_disk(), self.proof_in_head(), "dokaz nije ni dirnut")
+        self.assertIsNot(CommittingAdapters.verify, cli.DefaultAdapters.verify)
 
 
 class RealTreeAdapters(cli.DefaultAdapters):
