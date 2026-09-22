@@ -238,13 +238,21 @@ class WorkerTest(unittest.TestCase):
         self.assertFalse(blocked["provider_called"])
         self.assertFalse(blocked["attempt_spent"])
         job["command"] = "claude"
+        claude_profile = {
+            "configuration_unchanged": True,
+            "trusted_observation": True,
+            "fable_enabled": False,
+            "providers": {
+                "claude": {"allowed": True, "approved_models": ["gpt-5.6-sol", "fable"]},
+            },
+        }
         env["ANTHROPIC_API_KEY"] = "sk-ant-test"
-        api = run_phase(job, "plan", profile(), cwd=self.dir, env=env)
+        api = run_phase(job, "plan", claude_profile, cwd=self.dir, env=env)
         self.assertEqual(api["verdict"], "blocked")
         self.assertIn("api_key_present", api["reason"])
         job["requestedModel"] = "fable"
         del env["ANTHROPIC_API_KEY"]
-        fable = run_phase(job, "plan", profile(), cwd=self.dir, env=env)
+        fable = run_phase(job, "plan", claude_profile, cwd=self.dir, env=env)
         self.assertEqual(fable["verdict"], "blocked")
         self.assertIn("fable_disabled", fable["reason"])
         missing = run_phase({"command": "definitely-not-installed-xyz", "args": []}, "plan", profile(), cwd=self.dir, env=env)
