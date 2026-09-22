@@ -194,6 +194,31 @@ class TickTest(unittest.TestCase):
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}), "astra")
 
+    def test_auto_routing_falls_back_only_to_already_authorized_providers(self):
+        cfg = config(grokEnabled=True, implementerAgent="auto")
+        grok_only = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": False, "approved_models": ["gpt-6-astra", "gpt-5.6-sol"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet", "opus"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        self.assertEqual(cli._agent_for(cfg, "planning", {}, grok_only), "grok")
+        self.assertEqual(cli._agent_for(cfg, "implementing", {}, grok_only), "build")
+        self.assertIsNone(cli._agent_for(config(grokEnabled=False, implementerAgent="auto"), "planning", {}, grok_only))
+
+        claude_only = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": False, "approved_models": ["gpt-6-astra"]},
+                "claude": {"allowed": True, "approved_models": ["sonnet", "opus"]},
+                "grok": {"allowed": False, "approved_models": ["grok-4.6"]},
+            },
+        }
+        self.assertEqual(cli._agent_for(config(implementerAgent="auto"), "implementing", {}, claude_only), "sonnet")
+        self.assertEqual(cli._agent_for(config(), "reviewing", {"implementationAgent": "sol"}, claude_only), "opus")
+
     def test_auto_review_uses_grok_only_when_its_provider_profile_is_allowed(self):
         cfg = config(grokEnabled=True)
         blocked_profile = {
