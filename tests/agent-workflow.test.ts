@@ -158,8 +158,8 @@ describe('provider results do not replace verification', () => {
     const stdout = JSON.stringify({
       subtype: 'success', is_error: false,
       modelUsage: {
-        'claude-sonnet': { inputTokens: 7, outputTokens: 2, cacheReadInputTokens: 3, costUSD: 0.01, modelCalls: 1 },
-        'claude-opus': { inputTokens: 5, outputTokens: 1, cacheReadInputTokens: 2, costUSD: 0.02, modelCalls: 1 },
+        'claude-sonnet': { inputTokens: 7, outputTokens: 2, cacheReadInputTokens: 3, costUSD: 1, modelCalls: 1 },
+        'claude-opus': { inputTokens: 5, outputTokens: 1, cacheReadInputTokens: 2, costUSD: 2, modelCalls: 1 },
       },
     });
     expect(parseResult('claude', stdout, 0).usage).toEqual({
@@ -169,7 +169,7 @@ describe('provider results do not replace verification', () => {
       outputTokens: 3,
       reasoningOutputTokens: null,
       totalTokens: 15,
-      costUsd: 0.03,
+      costUsd: 3,
       modelCalls: 2,
     });
   });
