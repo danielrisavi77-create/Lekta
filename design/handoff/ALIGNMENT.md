@@ -11,7 +11,7 @@ Odrađeno u repou: Z2 (radiusi gumba), Z3 (border-left → točka), Z5 (`--fs-*`
 
 **Odluka o fontovima za sve daljnje zadatke (Z8 do Z23): opcija (b) vrijedi globalno.** Predlošci u `design/templates/` crtaju Instrument Serif + Geist Mono; kod ih preuzima kao RASPORED, MJERE i COPY, a obitelji preslikava: Instrument Serif → `var(--display-serif)`, Geist Mono → `var(--mono)` na rutama koje mono već učitavaju (`/rad/`, alati), inače `var(--ui)` s mjerom 11px i letter-spacingom. Ne dodaj webfontove. Ako autor kasnije odluči (a), mijenjaju se samo tri tokena.
 
-Nepočeto: Z1, Z8 do Z23. Redoslijed: Z1 → Z15 (traka) → Z8 → Z13 → Z9 → Z10 → Z11 → Z12 → Z14 → Z16 do Z23.
+Nepočeto: Z1, Z8 do Z26. Redoslijed: Z1 → Z15 (traka) → Z8 → Z13 → Z9 → Z10 → Z24 (cijene) → Z11 → Z12 → Z14 → Z16 do Z23 → Z25 → Z26.
 
 ---
 
@@ -400,6 +400,34 @@ Ne kreni u Z7 dok autor ne odabere (a) ili (b).
 **E-mail.** `design/templates/email-receipt/EmailReceipt.dc.html`. Šalje se nakon uspješne naplate (Stripe webhook). Tablični HTML, inline stilovi, sistemski fontovi (Georgia + Menlo/Consolas; webfontovi u e-mailu nisu pouzdani), širina 560px. Sadržaj: naslov, ime datoteke, gumb za preuzimanje (poveznica vrijedi 7 dana), račun (ocjena prije → poslije, zahvati, ostaje ručno, profil, naplaćeno), jamstvo, podnožje s napomenom da tekst rada nije poslan. Vrijednosti iz `repairDoneModel` i `packages.json`. Plain-text alternativa obvezna.
 
 **OG slika.** `design/state-og-image.html`, 1200×630. Renderiraj u PNG (Playwright) u `public/og.png` i postavi `og:image`, `twitter:card=summary_large_image` na svim rutama. Bez teksta manjeg od 18px.
+
+---
+
+## Z24. Jedna istina o cijenama
+
+**Problem.** Tri popisa: `data/packages.json` (Instant 9 / Formatiranje 39 / Predaja bez panike 69 / Premium 99), tablica `products` u Supabaseu (izvor za paywall, `products-catalog.ts`), i dizajn (`design/templates/pricing/Pricing.dc.html`: besplatna provjera + Popravak 9,99 € po dokumentu + Institucija na upit). Autor je potvrdio da vrijedi **dizajn**.
+
+**Rješenje.** (1) Migracija `products`: deaktiviraj retke koji ne odgovaraju (ostaje `repair` 9,99 € retail, po dokumentu, `slots_total 1`, `slot_window_days 7`; institucionalni kao `partner` bez cijene). (2) `packages.json` obriši ili svedi na isti sadržaj; `tests/products-catalog.test.ts` i sve što čita `packages.json` prilagodi. (3) `formatPriceEur` vraća `9,99 €` (znak, ne "EUR"), kao u dizajnu. (4) Cjenik (Z11) i kartica popravka (Z8 plan) čitaju cijenu iz kataloga, s fallbackom na `9,99 €` dok mreža ne odgovori.
+
+**Provjera.** Nijedan `.html`/`.ts` ne nosi 39, 69, 99 kao cijenu; `grep -n "39 €\|69 €\|99 €"` prazan.
+
+---
+
+## Z25. Izresci pravilnika za faksimil i stranicu fakulteta
+
+**Referenca.** Faksimil (Z9) i stranica fakulteta (Z18) crtaju "isječak pravilnika s podcrtanom rečenicom". Repo već ima OCR tekstove u `data/sources/<fakultet>/*-ocr.txt` i `source-registry.json`.
+
+**Rješenje.** Skripta `scripts/build-rule-snippets.mjs`: za svaki profil i pravilo iz `profile-rules-contract.ts` pronađi rečenicu u OCR tekstu (već postoji logika u `source-claim-check.ts`), zapiši `{ruleId, profileId, quote, sourceFile, page?, checkedAt}` u `data/generated/rule-snippets.json`. UI prikazuje `quote` u serifu na papiru s podcrtom, ispod `sourceFile` i datum provjere. Kad izreska nema, kartica pokazuje samo naziv izvora (bez izmišljenog citata). Ne prikazivati PDF stranicu (CSP `img-src 'self'`, težina).
+
+**Provjera.** Pokrivenost izrescima po profilu u `docs/generated/`; FPZG diplomski 100 %.
+
+---
+
+## Z26. Ikone i OG
+
+**Referenca.** `design/base-app-icons.html`, `design/state-og-image.html`.
+
+**Rješenje.** Zamijeni `public/favicon.svg` (pečat: rotirani crveni okvir + kurzivno L; za 16 px varijanta bez rotacije), izvezi `favicon.ico` (16+32), `apple-touch-icon.png` 180 (papir + pečat), `icon-512-maskable.png` (crveni), dodaj `site.webmanifest` s `theme_color #191512`, `background_color #F7F3E8`. OG: renderiraj `state-og-image.html` u `public/og.png` 1200×630 i postavi `og:title`, `og:description`, `og:image`, `twitter:card` na svim rutama kroz postojeće generatore. `tests/favicon.test.ts` proširi na manifest i og.
 
 ---
 
