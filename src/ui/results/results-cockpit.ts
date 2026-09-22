@@ -3,10 +3,10 @@ import { claimBadgeHtml } from '../profile-claim';
 import type { VisualFindingModel, VisualResultModel } from './visual-result-model';
 import { categorySummaryHtml } from './category-summary';
 import { priorityFindingsHtml } from './priority-findings';
-import { findingSummary, findingSummaryHtml } from './finding-summary';
+import { findingSummary, findingSummaryHtml, type FindingSummary } from './finding-summary';
+import { pluralHr } from './plural-hr';
 import { bindDocumentDna, documentDnaHtml } from './document-dna';
 import type { DocumentDnaModel } from '../../results/document-dna-model';
-import { repairOutlookHtml } from './repair-outlook-view';
 import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
 import type { DeskItem } from './desk-model';
@@ -46,13 +46,62 @@ export interface ResultsCockpitOptions {
   repairAvailable: boolean;
   /** DNA rada. Izostavljen kad rezultat nema mjerene odlomke; sekcija se tada ne crta. */
   documentDna?: DocumentDnaModel;
-  /** Sto automatika moze prije nego se pokrene. Izostavljen kad popravak nije dostupan. */
+  /**
+   * Sto automatika moze prije nego se pokrene. Od Z8 se NE crta kao zasebna sekcija: od cijelog
+   * modela se prikazuje jos samo `ceilingScore`, i to kao druga polovica recenice u sazetku.
+   */
   repairOutlook?: RepairOutlookModel;
   advancedOpen?: boolean;
   onAction?: (action: ResultsCockpitAction) => void;
   onAdvancedToggle?: (open: boolean) => void;
   /** Kad je prisutan i ima nalaza, stol zamjenjuje popis tri kartice. */
   desk?: ResultsCockpitDesk;
+}
+
+/**
+ * KORACI EKRANA `/rad/` (ALIGNMENT Z8). Ekran je vodic u cetiri koraka, a stepper je jedino
+ * mjesto koje to kaze PRIJE nego korisnik bilo sto klikne.
+ *
+ * STANJE ANALIZE NEMA KORAKE, i zato funkcija prima stanje umjesto da niz bude konstanta: dok
+ * Lekta jos cita rad nema nalaza, pa bi "01 Nalazi" tvrdio posao koji nije obavljen. Za
+ * `scanning` se vraca PRAZAN niz; to je ugovor koji drugi krug (stanja plan, payment, done)
+ * samo popunjava, bez diranja prikaza.
+ */
+export type CockpitStage = 'scanning' | 'findings' | 'plan' | 'payment' | 'done';
+
+export interface CockpitStep {
+  readonly id: Exclude<CockpitStage, 'scanning'>;
+  /** Dvoznamenkasta oznaka; stoji odvojeno od natpisa jer je mono brojka, a natpis rijec. */
+  readonly ordinal: string;
+  readonly label: string;
+  readonly active: boolean;
+}
+
+const KORACI: ReadonlyArray<readonly [CockpitStep['id'], string, string]> = [
+  ['findings', '01', 'Nalazi'],
+  ['plan', '02', 'Plan'],
+  ['payment', '03', 'Plaćanje'],
+  ['done', '04', 'Rezultat'],
+];
+
+export function cockpitSteps(stage: CockpitStage): readonly CockpitStep[] {
+  if (stage === 'scanning') return [];
+  return KORACI.map(([id, ordinal, label]) => ({ id, ordinal, label, active: id === stage }));
+}
+
+/**
+ * Neaktivan korak NIJE gumb i NE nosi `disabled`: taj atribut vrijedi samo za kontrole, pa bi na
+ * `li` bio tiho zanemaren, a citac ekrana bi korak najavio kao dostupan. `aria-disabled` kaze istu
+ * stvar na elementu koji kontrola nije. Klikabilni postaju tek kad drugi krug doda ta stanja.
+ */
+export function cockpitStepsHtml(steps: readonly CockpitStep[]): string {
+  if (!steps.length) return '';
+  return '<ol class="cockpit-steps" data-cockpit-steps aria-label="Koraci popravka">'
+    + steps.map((korak) =>
+      `<li class="cockpit-step${korak.active ? ' cockpit-step--active' : ''}" data-cockpit-step="${korak.id}"`
+      + (korak.active ? ' aria-current="step"' : ' aria-disabled="true"') + '>'
+      + `<span class="cockpit-step__num">${korak.ordinal}</span> ${escapeHtml(korak.label)}</li>`).join('')
+    + '</ol>';
 }
 
 type ResultsCockpitFindingAction = Extract<ResultsCockpitAction, { findingId: string }>;
@@ -66,37 +115,87 @@ function primaryAction(findings: readonly VisualFindingModel[], repairAvailable:
 function statusCopy(model: VisualResultModel): { label: string; description: string; tone: string } {
   if (model.readiness.kind === 'blocked') return { label: model.readiness.label || 'Nije spremno za predaju', description: model.readiness.description, tone: 'blocked' };
   if (model.readiness.kind === 'needs-work') return { label: model.readiness.label || 'Treba doraditi prije predaje', description: model.readiness.description, tone: 'needs-work' };
-  if (model.readiness.kind === 'manual-review') return { label: model.readiness.label || 'Potrebna je ru\u010Dna provjera', description: model.readiness.description, tone: 'manual-review' };
+  if (model.readiness.kind === 'manual-review') return { label: model.readiness.label || 'Potrebna je ručna provjera', description: model.readiness.description, tone: 'manual-review' };
   return { label: model.readiness.label || 'Nema automatskih blokatora', description: model.readiness.description, tone: 'clear' };
 }
 
+/**
+ * Natpis JEDINOG primarnog gumba na listu presude. Z8 trazi jednu radnju po ekranu, pa tri gumba
+ * iz `cockpit-actions` nestaju, a ovaj preuzima ime radnje zbog koje korisnik dolazi.
+ *
+ * NATPIS SE NE LAZE KAD RADNJE NEMA: bez popravljivog nalaza gumb ne vodi u plan popravka nego
+ * otvara prvi nalaz ili napredni panel, pa ondje i dalje nosi svoje staro ime.
+ */
 function primaryButtonLabel(action: ResultsCockpitAction | null): string {
-  if (!action) return 'Prika\u017Ei \u0161to treba provjeriti';
-  return action.kind === 'repair' ? 'Popravi automatski' : 'Otvori prvi nalaz';
-}
-
-export function authorityHtml(model: VisualResultModel['authority']): string {
-  const kind = model.authoritative ? 'verified' : 'limited';
-  return [
-    '<div class="cockpit-authority" data-cockpit-authority="', kind, '">',
-    '<span class="cockpit-authority__mark" aria-hidden="true">&#10003;</span>',
-    '<div><strong>', escapeHtml(model.label), '</strong><p>', escapeHtml(model.description), '</p></div></div>',
-  ].join('');
-}
-
-function headerHtml(model: VisualResultModel): string {
-  const confirmation = model.header.profileConfirmed ? 'Profil potvrđen' : 'Profil nije potvrđen';
-  return `<header class="cockpit-header" data-cockpit-header><div><span class="cockpit-kicker">Rezultat provjere</span><h2>${escapeHtml(model.header.documentName)}</h2><p>${escapeHtml(model.header.profile)} · ${escapeHtml(model.header.authorityLabel)}</p>${claimBadgeHtml(model.header.evidenceClaim, escapeHtml)}</div><span class="cockpit-header__status ${model.header.profileConfirmed ? 'cockpit-header__status--confirmed' : ''}"><span aria-hidden="true">${model.header.profileConfirmed ? '✓' : 'ℹ'}</span>${confirmation}</span></header>`;
+  if (!action) return 'Prikaži što treba provjeriti';
+  return action.kind === 'repair' ? 'Napravi plan popravka' : 'Otvori prvi nalaz';
 }
 
 /**
- * `repair-entry` (plan T02) je OMOGUCEN opci ulaz u popravak: "Popravi sigurne stavke" kad dokument ima automatskih
- * stavki, inace "Simuliraj popravak". Oznaka je uvijek na tocno jednom gumbu koji se stvarno moze kliknuti, pa test
- * ne mora birati izmedju dva gumba, a onemogucen gumb nikad ne nosi oznaku ulaza.
+ * Prvi redak lista presude. AUTORITET IZVORA ZIVI OVDJE: do Z8 ga je crtao zaseban blok
+ * (`cockpit-authority`, kvacica i dvije recenice), koji je uz zaglavlje ponavljao istu tvrdnju.
+ * Prazni dijelovi se izbacuju, jer " · · " bez sadrzaja izgleda kao kvar.
  */
-function actionRowHtml(model: VisualResultModel, repairAvailable: boolean): string {
-  const safeDisabled = !repairAvailable || model.signals.automaticFixes <= 0;
-  return `<section class="cockpit-actions" aria-label="Sljedeći koraci"><button type="button" class="button button-primary" data-cockpit-action="open-findings">Pregledaj nalaze</button><button type="button" class="button button-secondary" data-cockpit-action="simulate-repair"${safeDisabled && repairAvailable ? ' data-testid="repair-entry"' : ''}${repairAvailable ? '' : ' disabled'}>Simuliraj popravak</button><button type="button" class="button button-secondary" data-cockpit-action="repair-safe"${safeDisabled ? '' : ' data-testid="repair-entry"'}${safeDisabled ? ' disabled' : ''}>Popravi sigurne stavke <span class="cockpit-actions__count">${escapeHtml(model.signals.automaticFixes)}</span></button></section>`;
+function eyebrowHtml(model: VisualResultModel): string {
+  const dijelovi = [model.header.documentName, model.header.profile, model.header.authorityLabel]
+    .filter((v): v is string => typeof v === 'string' && v.trim().length > 0)
+    .map((v) => escapeHtml(v));
+  return `<p class="cockpit-eyebrow" data-cockpit-eyebrow>${dijelovi.join(' · ')}</p>`;
+}
+
+/**
+ * Dva sitna cipa uz eyebrow: je li profil potvrden i koja je razina dokaza. Oboje je zivjelo u
+ * zaglavlju koje Z8 gasi, a nijedno nije ukras: prvo kaze mjeri li se po pravom profilu, drugo
+ * na cemu ta pravila pocivaju. `claimBadgeHtml` je ISTA projekcija koju crta kartica profila.
+ */
+function marksHtml(model: VisualResultModel): string {
+  const potvrden = model.header.profileConfirmed;
+  const natpis = potvrden ? 'Profil potvrđen' : 'Profil nije potvrđen';
+  return '<p class="cockpit-marks">'
+    + `<span class="cockpit-mark${potvrden ? ' cockpit-mark--confirmed' : ''}">`
+    + `<span aria-hidden="true">${potvrden ? '✓' : 'ℹ'}</span> ${escapeHtml(natpis)}</span>`
+    + claimBadgeHtml(model.header.evidenceClaim, escapeHtml)
+    + '</p>';
+}
+
+/**
+ * Pecat presude. Doslovno iz predloska za `blocked` i `clear`; `needs-work` i `manual-review`
+ * predlozak nema, pa nose najblizu istinitu formulaciju iste presude. Pecat je UKRAS NA VEC
+ * IZRECENOJ PRESUDI (H1 kaze isto punim tekstom), pa je `aria-hidden` i nikad ne lezi preko
+ * teksta: stoji u stupcu prstena, ispod njega.
+ */
+const PECAT: Readonly<Record<string, string>> = {
+  blocked: 'Nije spremno',
+  'needs-work': 'Treba doradu',
+  'manual-review': 'Za ručnu provjeru',
+  clear: 'Forma provjerena',
+};
+
+/**
+ * Prsten ocjene (132 px, conic-gradient) i pecat ispod njega. Boja prstena je TON PRESUDE, ne
+ * ocjene: prsten koji je zelen dok pise "Nije spremno" bio bi druga presuda od one u naslovu.
+ *
+ * Nebodovan profil dobiva isti prsten s praznim lukom i brojem PROVJERENIH PRAVILA: bez toga bi
+ * nebodovan rezultat izgledao kao da provjera nije ni napravljena. Natpis stoji IZVAN elementa
+ * koji nosi `data-cockpit-score`, da ocjena ostane jedna brojka, a ne brojka plus recenica.
+ */
+function verdictRingHtml(sazetak: FindingSummary, tone: string): string {
+  const ocjena = sazetak.ocjena;
+  const udio = ocjena ? Math.max(0, Math.min(100, Math.round((ocjena.vrijednost / ocjena.od) * 100))) : 0;
+  const broj = ocjena ? ocjena.vrijednost : sazetak.provjerenoPravila;
+  const pravila = `${sazetak.provjerenoPravila} ${pluralHr(sazetak.provjerenoPravila, ['pravilo', 'pravila', 'pravila'])}`;
+  const opis = ocjena
+    ? `Tehnička ocjena ${ocjena.vrijednost} od ${ocjena.od}`
+    : `Provjereno ${pravila}, ovaj profil ne boduje`;
+  const natpis = ocjena ? 'tehnička ocjena / 100' : `Provjereno ${pravila} · ovaj profil ne boduje`;
+  return '<div class="cockpit-ring-wrap">'
+    + `<div class="cockpit-ring${ocjena ? '' : ' cockpit-ring--nema'}" data-cockpit-score="${ocjena ? 'scored' : 'none'}"`
+    + ` data-verdict-tone="${tone}" style="--ck-ring:${udio}" role="img" aria-label="${escapeHtml(opis)}">`
+    + `<span class="cockpit-ring__core">${broj}</span></div>`
+    + `<span class="cockpit-ring__label">${escapeHtml(natpis)}</span>`
+    + `<p class="cockpit-stamp" data-cockpit-stamp data-verdict-tone="${tone}" aria-hidden="true">`
+    + `${escapeHtml(PECAT[tone] ?? PECAT.clear)}</p>`
+    + '</div>';
 }
 
 export function resultRendererFor(doc: Document): ResultsRenderer {
@@ -120,39 +219,62 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   const status = statusCopy(model);
   const action = primaryAction(model.findings.top, options.repairAvailable);
   const advancedOpen = options.advancedOpen === true;
+  const sazetak = findingSummary(model.signals, model.score, model.readiness.authoritative, options.repairAvailable);
+  // STROP SE UZIMA SAMO KAD JE POZNAT. `unavailable` model (profil bez bodovanih provjera) nema
+  // sto obecati, pa se druga polovica recenice izostavlja umjesto da se izmisli brojka.
+  const strop = options.repairOutlook?.kind === 'available' ? options.repairOutlook.ceilingScore : null;
   mount.className = 'result-cockpit result-cockpit--' + status.tone;
   mount.dataset.cockpitExperience = 'correction-desk';
   mount.innerHTML = [
-    headerHtml(model),
-    // Presuda i poziv dijele JEDNU celiju resetke. Dok su bili dvije celije, visina mjeraca
-    // (visi od teksta) razvlacila je redak, pa je izmedju recenice i gumba zjapila praznina.
-    // SAZETAK JE NASLOV, PRESUDA JE OZNAKA. Do 2026-09-07 su ovdje bila DVA naslova koja se
-    // natjecu: presuda u velikom serifu ("Nije spremno za predaju") i njezin opis, koji je
-    // rijecima ponavljao ono sto sazetak kaze brojkama. Presuda ostaje, jer odgovara na pitanje
-    // "smijem li predati", ali kao sitna oznaka; sazetak odgovara na "sto da radim", i to je
-    // ono zbog cega korisnik dolazi.
-    '<div class="cockpit-hero cockpit-hero--sazetak" data-cockpit-hero data-cockpit-status="', status.tone, '">',
-    '<div class="cockpit-hero__lead">',
-    '<span class="cockpit-verdict" data-verdict="', status.tone, '">', escapeHtml(status.label), '</span>',
-    findingSummaryHtml(
-      findingSummary(model.signals, model.score, model.readiness.authoritative, options.repairAvailable),
-      escapeHtml,
-    ),
+    // Prvi krug Z8 zivi iskljucivo u koraku 01; stanja plan, payment i done dolaze u drugom.
+    cockpitStepsHtml(cockpitSteps('findings')),
+    // JEDAN LIST PRESUDE zamjenjuje `cockpit-header`, `cockpit-hero` i `cockpit-actions`.
+    //
+    // Do Z8 su na ekranu bila TRI zasebna bloka koja odgovaraju na isto pitanje ("gdje sam i sto
+    // sad"): zaglavlje s imenom datoteke, hero s presudom i sazetkom, i redak s tri gumba. Redak
+    // gumba je pritom trazio odluku izmedu "Pregledaj nalaze", "Simuliraj popravak" i "Popravi
+    // sigurne stavke", a sva tri vode u isti panel. Sada je jedan list: eyebrow, presuda, sazetak,
+    // jedna spojena recenica o dosegu automatike, JEDAN gumb i jedna tekstualna poveznica.
+    '<section class="cockpit-sheet" data-cockpit-verdict-sheet data-cockpit-status="', status.tone,
+    '" aria-labelledby="cockpitVerdictTitle">',
+    '<div class="cockpit-sheet__lead" data-cockpit-sheet-lead>',
+    eyebrowHtml(model),
+    marksHtml(model),
+    '<h1 class="cockpit-verdict-title" id="cockpitVerdictTitle" data-cockpit-verdict-title data-verdict="',
+    status.tone, '">', escapeHtml(status.label), '</h1>',
+    // SAZETAK JE POSTOJECI MODUL. Ocjena se iz njega ISKLJUCUJE, jer je u listu presude crta
+    // prsten desno; da oba crtaju ocjenu, ekran bi nosio dva mjeraca iste stvari.
+    findingSummaryHtml(sazetak, escapeHtml, { strop, ocjena: false }),
+    '<div class="cockpit-sheet__actions">',
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
-    action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '', '>', primaryButtonLabel(action), '</button>',
+    action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '',
+    // `repair-entry` je OZNAKA ULAZA U POPRAVAK i ostaje na jedinom gumbu koji u popravak vodi.
+    // Nosi je samo kad je radnja stvarno popravak; na "Otvori prvi nalaz" bi lagala.
+    options.repairAvailable && action?.kind === 'repair' ? ' data-testid="repair-entry"' : '',
+    '>', primaryButtonLabel(action), ' <span aria-hidden="true">&#8594;</span></button>',
+    '<button type="button" class="cockpit-link" data-cockpit-action="open-findings">Pregledaj nalaze',
+    ' <span aria-hidden="true">&#8595;</span></button>',
     '</div></div>',
+    verdictRingHtml(sazetak, status.tone),
+    '</section>',
     // STOL ZAMJENJUJE POPIS, ne stoji uz njega. Tri kartice i stol odgovaraju na isto pitanje
     // ("sto prvo"), pa bi jedno ispod drugoga bilo dvostruko citanje istih nalaza.
     '<section class="cockpit-priority', stol ? ' cockpit-priority--stol' : '', '" aria-labelledby="cockpitPriorityTitle">',
     '<div class="cockpit-section-heading"><span class="cockpit-kicker">', stol ? 'Korektorski stol' : 'Prvo pogledajte', '</span>',
-    '<h2 id="cockpitPriorityTitle">', stol ? 'Nalaz uz dokument' : 'Najva\u017Eniji nalazi', '</h2></div>',
+    '<h2 id="cockpitPriorityTitle">', stol ? 'Nalaz uz dokument' : 'Najvažniji nalazi', '</h2></div>',
     stol ? '<div data-desk-host></div>' : priorityFindingsHtml(model.findings.top, options.repairAvailable),
     '</section>',
+    // SEKUNDARNI LISTOVI: DNA i kategorije u JEDNOM redu ispod stola, prigusenim tonom. Oba su
+    // pregled, ne radnja, pa ne smiju tezinom konkurirati presudi i stolu iznad.
+    '<div class="cockpit-secondary" data-cockpit-secondary>',
     options.documentDna ? documentDnaHtml(options.documentDna) : '',
-    options.repairOutlook ? repairOutlookHtml(options.repairOutlook) : '',
     categorySummaryHtml(model.categories),
-    actionRowHtml(model, options.repairAvailable),
-    '<button type="button" class="cockpit-advanced-toggle" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="', advancedOpen ? 'true' : 'false', '"><span>Detalji provjere</span><span aria-hidden="true">&#65291;</span></button>',
+    // "Sve provjere (N)" zamjenjuje gumb "Detalji provjere" preko cijele sirine: ista meta
+    // (`data-cockpit-advanced`), ali oblik poveznice, jer je to izlaz za manjinu. N je STVARAN
+    // broj provjera iz modela; fiksna brojka bi lagala na svakom drugom profilu.
+    '<button type="button" class="cockpit-allchecks" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="',
+    advancedOpen ? 'true' : 'false', '">Sve provjere (', escapeHtml(model.signals.totalChecks), ')</button>',
+    '</div>',
   ].join('');
   mount.dataset.advancedOpen = String(advancedOpen);
   // Ulaz je JEDAN orkestriran trenutak, ne rasuti efekti: razred se pali u sljedecem kadru pa
@@ -192,9 +314,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     if (action) options.onAction?.(action);
     else options.onAdvancedToggle?.(true);
   });
-  (['open-findings', 'simulate-repair', 'repair-safe'] as const).forEach((kind) => {
-    mount.querySelector<HTMLButtonElement>(`[data-cockpit-action="${kind}"]`)?.addEventListener('click', () => options.onAction?.({ kind }));
-  });
+  mount.querySelector<HTMLButtonElement>('[data-cockpit-action="open-findings"]')?.addEventListener('click', () => options.onAction?.({ kind: 'open-findings' }));
   mount.querySelector<HTMLButtonElement>('[data-cockpit-advanced]')?.addEventListener('click', () => {
     const next = mount.dataset.advancedOpen !== 'true';
     mount.dataset.advancedOpen = String(next);
@@ -234,4 +354,3 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     if (findingId) options.onAction?.({ kind: 'reopen', findingId });
   }));
 }
-
