@@ -551,6 +551,25 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(mount.querySelector('[data-cockpit-primary]')?.textContent).toContain('Otvori prvi nalaz');
   });
 
+  it('primarni gumb nosi data-finding-id kad akcija ima findingId (bez popravka, s pregledljivim nalazom)', () => {
+    // `primaryAction` vraca `{kind:'preview', findingId}` kad popravak nije dostupan, ali prvi
+    // nalaz u `findings.top` ima moguc pregled. Panel popravka time zna koji nalaz predodabrati.
+    const { mount, model } = renderaj({}, { repairAvailable: false });
+    const action = { kind: 'preview' as const, findingId: model.findings.top.find((f) => f.capabilities.preview)!.id };
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(action.findingId).toBeTruthy();
+    expect(gumb?.dataset.findingId).toBe(action.findingId);
+  });
+
+  it('primarni gumb NEMA data-finding-id kad akcija nema findingId (nema pregledljivog nalaza)', () => {
+    const { mount } = renderaj({ capabilities: { repair: false, preview: false } }, { repairAvailable: false });
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(gumb?.dataset.findingId).toBeUndefined();
+    expect(gumb?.textContent).toContain('Prikaži što treba provjeriti');
+  });
+
   it('MUTACIJA: ulaz vezan uz prva tri nalaza pada na dokumentu bez popravljivog vodeceg nalaza', () => {
     // Stara izvedba: `findings.top.find((f) => f.capabilities.repair)`. Nad istim modelom vraca
     // `undefined`, dakle nijedan ulaz; nova izvedba ga ipak daje.
