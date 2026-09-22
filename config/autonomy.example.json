@@ -25,7 +25,7 @@
   "fableEnabled": false,
   "grokEnabled": false,
   "plannerAgent": "auto",
-  "implementerAgent": "sonnet",
+  "implementerAgent": "auto",
   "reviewerAgent": "auto",
   "externalDocumentUploadAllowed": false,
   "publisherEnabled": false,
