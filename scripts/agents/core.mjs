@@ -213,6 +213,15 @@ function modelUsageSummary(modelUsage) {
   return sumUsage(...Object.values(modelUsage).filter(value => value && typeof value === 'object'));
 }
 
+export function modelMatches(requested, reportedModels) {
+  if (!Array.isArray(reportedModels) || reportedModels.length === 0) return true;
+  const req = String(requested ?? '').toLowerCase();
+  return reportedModels.some(model => {
+    const actual = String(model ?? '').toLowerCase();
+    return Boolean(req) && (req.includes(actual) || actual.includes(req));
+  });
+}
+
 export function parseResult(command, stdout, exitCode) {
   const failed = () => ({ ok: false, reportedModels: [], usage: mergeUsage() });
   if (exitCode !== 0) return failed();
