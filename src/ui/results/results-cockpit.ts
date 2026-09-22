@@ -201,15 +201,17 @@ function marksHtml(model: VisualResultModel): string {
 }
 
 /**
- * Pecat presude. Doslovno iz predloska za `blocked` i `clear`; `needs-work` i `manual-review`
- * predlozak nema, pa nose najblizu istinitu formulaciju iste presude. Pecat je UKRAS NA VEC
- * IZRECENOJ PRESUDI (H1 kaze isto punim tekstom), pa je `aria-hidden` i nikad ne lezi preko
- * teksta: stoji u stupcu prstena, ispod njega.
+ * Pecat presude. DOSLOVNO iz predloska (Results.dc.html), i SAMO za stanja koja predlozak
+ * pokazuje: `blocked` ("Nije spremno") i `clear` ("Forma provjerena"). Predlozak NEMA pecat za
+ * `needs-work` ni `manual-review` (popravak drugog kruga: prva izvedba je ovdje izmisljala
+ * "Treba doradu" i "Za ručnu provjeru", sto nije copy iz predloska nego priblizna formulacija).
+ * Umjesto izmisljanja, ta dva stanja OSTAJU BEZ PECATA; presuda je i dalje puno izrecena u H1.
+ *
+ * Pecat je UKRAS NA VEC IZRECENOJ PRESUDI (H1 kaze isto punim tekstom), pa je `aria-hidden` i
+ * nikad ne lezi preko teksta: stoji u stupcu prstena, ispod njega.
  */
-const PECAT: Readonly<Record<string, string>> = {
+const PECAT: Readonly<Partial<Record<string, string>>> = {
   blocked: 'Nije spremno',
-  'needs-work': 'Treba doradu',
-  'manual-review': 'Za ručnu provjeru',
   clear: 'Forma provjerena',
 };
 
@@ -235,13 +237,19 @@ function verdictRingHtml(sazetak: FindingSummary, tone: string, marks = ''): str
     ? `Tehnička ocjena ${ocjena.vrijednost} od ${ocjena.od}`
     : `Provjereno ${pravila}, ovaj profil ne boduje`;
   const natpis = ocjena ? 'tehnička ocjena / 100' : `Provjereno ${pravila} · ovaj profil ne boduje`;
+  // PECAT SE NE CRTA KAD PREDLOZAK NEMA NATPIS ZA OVAJ TON: izmisljen natpis je gori od
+  // izostanka pecata, jer H1 vec izrice presudu punim tekstom.
+  const pecatNatpis = PECAT[tone];
+  const pecat = pecatNatpis
+    ? `<p class="cockpit-stamp" data-cockpit-stamp data-verdict-tone="${tone}" aria-hidden="true">`
+      + `${escapeHtml(pecatNatpis)}</p>`
+    : '';
   return '<div class="cockpit-ring-wrap">'
     + `<div class="cockpit-ring${ocjena ? '' : ' cockpit-ring--nema'}" data-cockpit-score="${ocjena ? 'scored' : 'none'}"`
     + ` data-verdict-tone="${tone}" style="--ck-ring:${udio}" role="img" aria-label="${escapeHtml(opis)}">`
     + `<span class="cockpit-ring__core">${broj}</span></div>`
     + `<span class="cockpit-ring__label">${escapeHtml(natpis)}</span>`
-    + `<p class="cockpit-stamp" data-cockpit-stamp data-verdict-tone="${tone}" aria-hidden="true">`
-    + `${escapeHtml(PECAT[tone] ?? PECAT.clear)}</p>`
+    + pecat
     + marks
     + '</div>';
 }
