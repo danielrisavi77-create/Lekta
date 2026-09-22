@@ -37,12 +37,14 @@ python -m scripts.autonomy.cli resume
 python -m scripts.autonomy.cli report
 ```
 
-- `doctor`: verzije alata, prijave (Codex, Claude, gh), API kljucevi u okolini (samo imena), Word COM,
-  disk i RAM, valjanost konfiguracije, OS izolacija. Nikad ne ispisuje vrijednost tokena.
-  `--write-profile` zapisuje profil naplate; `subscription_verified` dolazi iz stvarnog `auth status`
-  izlaza, a `extra_credits_disabled` i `model_included` postoje SAMO uz vlasnikove zastavice
-  `--attest-extra-credits-disabled` i `--attest-models gpt-5.6-sol,sonnet`. Bez toga
-  `billing_allowed` je False i nema modelskog poziva.
+- `doctor`: verzije alata, prijave (Codex, Claude, Grok CLI, gh), API credentiale u okolini (samo imena),
+  Word COM, disk i RAM, valjanost konfiguracije i OS izolaciju. Nikad ne ispisuje vrijednost tokena.
+  `--write-profile` zapisuje provider-specificki profil naplate. Codex/Claude allowance zahtijeva stvarni
+  account login te vlasnicke zastavice `--attest-extra-credits-disabled` i
+  `--attest-models gpt-6-astra,sonnet`. Grok je odvojen: trazi `grokEnabled=true`, dostupan CLI,
+  `--attest-grok-included` i `--attest-grok-models grok-4.6`. Prisutan `XAI_API_KEY` blokira Grok
+  included-account profil; Anthropic API credential blokira Claude subscription put. Jedan provider nikad
+  ne autorizira drugi.
 - `tick --dry-run`: skupi signale, ispise sto BI uslo u red; ne upisuje, ne uzima lease, ne zove model,
   ne otvara PR.
 - `tick`: u `observe` upisuje signale i staje. U `propose` i `auto_low_risk` uzima najvise jedan posao
@@ -50,6 +52,26 @@ python -m scripts.autonomy.cli report
   ready_to_publish -> publishing, svaku fazu biljezi prije i poslije. `waiting_quota` i `needs_login` ne
   trose pokusaj, a od 2026-09-13 ni `no_ready_plan_task`, `implement_unsafe`, `provider_unusable` ni
   `no_tool_use` (vidi nize). Dnevni slot posla vraca samo ishod u kojem provider NIJE ni pokrenut.
+
+## Provider routing, context i usage
+
+Kanonski ugovor je `docs/agents/ORCHESTRATION.md`. Autonomni default ostaje Astra za plan,
+Sonnet za implementaciju i cross-provider review. `plannerAgent`, `implementerAgent` i
+`reviewerAgent` u konfiguraciji mogu eksplicitno odabrati podrzani alias; `auto` ne poziva
+dodatni provider samo radi "drugog misljenja".
+
+Ako je implementator Codex, auto-review koristi Grok samo kada je `grokEnabled=true` I Grokov
+provider profil stvarno dopusten; inace koristi Claude. Grok Build implementaciju auto-reviewa
+Codex. Time routing ne trosi poziv na provider za koji se unaprijed zna da nije autoriziran.
+
+Modelski prompt vise ne zahtijeva ponovno citanje cijelog `AGENTS.md`, `CLAUDE.md` i ovog
+runbooka pri svakom pozivu. Host-specific root pravila ostaju ucitana svojim mehanizmom, a modelski
+poziv dobiva `ORCHESTRATION.md`, tocni zadatak i samo scoped upute za putanje koje stvarno dira.
+
+Rucni runner zapisuje normalizirani usage u `.artifacts/agents/usage.jsonl`. Autonomni worker
+vraca isti usage ugovor, a Store ga sprema u sanitizirani `run:<phase>` event. Polja koja provider
+ne prijavi ostaju `null`, ne lazna nula. Ledger je za usporedbu kvalitete/potrosnje i buduci routing,
+ne za samostalnu billing presudu.
 
 ### Sto se trazi prije ijednog poziva modela (od 2026-09-13)
 
