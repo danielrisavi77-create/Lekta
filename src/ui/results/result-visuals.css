@@ -162,6 +162,16 @@
   color: var(--ck-green-text);
 }
 
+/* OGRADA UZ PRESUDU. Jedan redak sitne proze: nosi tvrdnju o tome koliko izvor pravila obvezuje,
+   pa stoji iznad presude, ali prigusen, jer presudu izrice naslov a ne ograda. */
+.cockpit-caveat {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--ck-muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
 /* PRESUDA JE NASLOV EKRANA. Do Z8 je bila sitna oznaka uz sazetak; sada je H1 u display
    serifu, jer je to prva recenica koju korisnik cita i jedina koja odgovara na "smijem li
    predati". Ton NE nosi lijevi rub (design/README.md, pravilo 3) nego prsten i pecat. */
@@ -1032,6 +1042,9 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
    bez njega dug naslov razvuce redak i izgura oznaku AUTO izvan panoa.
    ========================================================================== */
 .dq { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+/* Od Z8 red cekanja stoji ISPOD kartice, pa mu treba vlastiti rez: bez njega se prvi redak cita
+   kao nastavak kartice iznad. Hairline, ne okvir, jer popis je pregled a ne drugi list. */
+.desk-pane > .dq { margin-top: .3rem; padding-top: .7rem; border-top: 1px solid var(--ck-line); }
 .dq-btn {
   width: 100%; display: grid;
   grid-template-columns: 2.2rem 5.5rem minmax(0, 1fr) auto;
@@ -1060,13 +1073,11 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 }
 .dq-fix[data-fix="auto"] { border-color: var(--ck-green, #1a7f5a); color: var(--ck-green-text, #1a7f5a); }
 
-/* Otvoren redak je JEDINI koji nosi detalj, pa smije uzeti i vizualnu tezinu. */
+/* Odabran redak je onaj koji kartica iznad upravo prikazuje, pa smije uzeti vizualnu tezinu:
+   bez toga popis ne kaze GDJE si u njemu. Detalj vise ne zivi u retku (Z8), pa `.dq-detalj`
+   i njegova pravila vise ne postoje. */
 .dq-item--open { border-radius: 10px; background: var(--ck-soft, rgba(0, 0, 0, .04)); }
 .dq-item--open > .dq-btn { border-color: var(--ck-line); }
-.dq-detalj { padding: .2rem .4rem .5rem; }
-/* Kartica unutar reda gubi vlastitu podlogu: ona je vec unutar otvorenog retka, pa bi dvostruki
-   okvir izgledao kao kartica u kartici. */
-.dq-detalj .cockpit-finding { border: 0; background: transparent; padding-left: 0; padding-right: 0; }
 
 @media (max-width: 900px) {
   .dq-btn { grid-template-columns: 2rem minmax(0, 1fr) auto; }

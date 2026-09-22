@@ -4,10 +4,11 @@
  * NAVIGACIJA NE OMATA: stol na kojem se vrtis u krug ne moze odgovoriti na "jesam li gotov".
  *
  * KARTICU CRTA `priority-findings.ts`: druga izvedba iste kartice bi se s prvom razisla. Stol
- * dodaje samo svoje - traku o opsegu, pager i vezu prema planu.
+ * dodaje samo svoje - traku o opsegu, pager, red cekanja i vezu prema planu.
  */
 import type { DeskItem } from './desk-model';
 import { trakaZaOpseg } from './desk-model';
+import { queueHtml, queueRedci } from './desk-queue';
 import { priorityFindingHtml } from './priority-findings';
 import type { VisualFindingModel } from './visual-result-model';
 
@@ -79,22 +80,21 @@ export function deskNavHtml(nav: DeskNav, esc: (v: string) => string): string {
 }
 
 /**
- * Desna strana stola: PAGER pa JEDNA kartica (Z8).
+ * Desna strana stola: PAGER, pa JEDNA kartica, pa RED CEKANJA (Z8).
  *
- * Do Z8 je ovdje stajao red cekanja: svih N nalaza kao redci, s detaljem otvorenim na odabranom.
- * Popis je odgovarao na "sto sve me ceka", ali je istu presudu iznosio drugi put (sazetak je vec
- * broji po ozbiljnosti) i gurao karticu ispod pregiba. Z8 ostavlja JEDNU karticu i pager; "sto
- * sve me ceka" preuzimaju brojka u pageru i DNA traka ispod stola.
+ * Do Z8 je kartica zivjela UNUTAR reda cekanja, kao detalj otvorenog retka, pa je s devet redaka
+ * iznad sebe pocinjala ispod pregiba. Z8 vadi karticu iz popisa i daje joj pager; popis se time NE
+ * ukida nego se spusta ISPOD kartice. Z9 ga ondje izricito i trazi ("ispod red cekanja"), i to je
+ * jedino mjesto na ekranu koje odgovara na "sto me jos ceka" imenom, a ne brojkom: pager kaze
+ * koliko ih je, DNA traka kakve su vrste, ali nijedno ne kaze STO.
  */
 export function deskPaneHtml(
   item: DeskItem<VisualFindingModel> | null,
   nav: DeskNav,
   repairAvailable: boolean,
   esc: (v: string) => string,
-  // OSTAJE U POTPISU iako ga pager ne cita: polozaj i ukupan broj dolaze iz `nav`, a cijeli popis
-  // treba prvom pozivatelju koji desnoj strani vrati pregled svih nalaza (drugi krug Z8, stanje
-  // plan). Uklanjanje bi promijenilo potpis koji `deskHtml` i testovi vec zovu pozicijski.
-  _svi: readonly DeskItem<VisualFindingModel>[],
+  // OBAVEZAN, bez zadane vrijednosti: red cekanja nabraja SVE nalaze, a ne samo prikazani.
+  svi: readonly DeskItem<VisualFindingModel>[],
   planDostupan = false,
 ): string {
   if (!item) return '<div class="desk-pane" data-desk-pane><p class="desk-prazno">Nema otvorenih nalaza.</p></div>';
@@ -112,10 +112,14 @@ export function deskPaneHtml(
     : '';
   // PAGER JE ZAGLAVLJE KARTICE, ne podnozje popisa: kad je kartica jedna, polozaj i strelice
   // moraju stajati iznad nje, inace korisnik do njih dode tek nakon cijelog nalaza.
+  //
+  // RED CEKANJA VISE NE NOSI DETALJ (cetvrti argument izostaje): kartica stoji iznad njega, pa bi
+  // isti nalaz bio nacrtan dvaput. Redci ostaju klikabilni kroz isti `data-desk-go`.
   return '<div class="desk-pane" data-desk-pane>'
     + deskNavHtml(nav, esc)
     + detalj
     + uPlan
+    + queueHtml(queueRedci(svi, repairAvailable), nav.index, esc)
     + '</div>';
 }
 
