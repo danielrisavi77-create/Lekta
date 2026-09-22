@@ -25,6 +25,13 @@ class BillingPolicyTest(unittest.TestCase):
         profile["effective_auth"] = "api_key"
         self.assertFalse(billing_allowed(profile))
 
+    def test_legacy_global_profile_cannot_authorize_a_real_provider(self):
+        profile = good_profile()
+        self.assertTrue(billing_allowed(profile), "legacy status ostaje citljiv radi migracije")
+        self.assertFalse(provider_billing_allowed(profile, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(profile, "claude", "sonnet"))
+        self.assertFalse(provider_billing_allowed(profile, "grok", "grok-4.6"))
+
     def test_every_required_field_is_load_bearing(self):
         for key in ("subscription_verified", "extra_credits_disabled", "model_included",
                     "configuration_unchanged", "trusted_observation"):
