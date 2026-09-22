@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -592,5 +593,61 @@ describe('glasovi ulaza /', () => {
       cssTekstovi: [':root{--ink:"Source Serif 4 Variable",serif}.nema-me-na-ulazu{font-family:var(--ink)}'],
     }).nalazi;
     expect(nalazi).toEqual([]);
+  });
+});
+
+/**
+ * FONTOVI SU OPCIJA (b): Newsreader / Inter Tight / IBM Plex Mono, bez novih webfontova.
+ * `Instrument Serif` i `Geist Mono` se NIKAD ne smiju pojaviti kao DEKLARIRANA obitelj.
+ *
+ * STARI KRITERIJ je bio `grep -rn 'Instrument|Geist' = 0` nad cijelim stablom, i bio je krivo
+ * formuliran: nasao je 13 LEGITIMNIH pogodaka koji nisu font-family/font deklaracije -- dva stara
+ * komentara "Editorial Instrument" u `page-app.css` (naziv CSS sloja, ne fonta) i namjerne
+ * mutacije u `tests/intake-layout.test.ts` koje UPRAVO OVAJ razred kvara podmecu da dokazu da
+ * drugi gard (`entry-fonts` sam) pada na njima. Obican `grep -rn` je i nedeterministican izvan
+ * ovog repozitorija (ovisi o cwd-u, lokalnim iskljucenjima); `git grep` nad TRACKANIM stablom je
+ * deterministican i gadja samo `src/**.css`.
+ *
+ * ISPRAVAN KRITERIJ: nijedna `font-family`/`font` DEKLARACIJA u `src/**.css` ne imenuje te dvije
+ * obitelji, i `package.json` nema `@fontsource/instrument-serif` ni `geist-mono` kao ovisnost.
+ */
+describe('Instrument Serif / Geist Mono nikad kao deklarirana obitelj (v2 kriterij)', () => {
+  function gitGrepFontDeklaracije(): string[] {
+    try {
+      const izlaz = execFileSync('git', [
+        'grep', '-nIE',
+        '(^|[;{])\\s*font(-family)?\\s*:[^;{}]*(Instrument Serif|Geist Mono)',
+        '--', 'src/**/*.css', 'src/*.css',
+      ], { cwd: ROOT, encoding: 'utf8' });
+      return izlaz.split('\n').filter(Boolean);
+    } catch (e: any) {
+      // `git grep` vraca exit 1 kad NEMA pogodaka (to je ocekivano, zeljeno stanje), a bilo koji
+      // drugi izlazni kod je stvarna greska alata (npr. van git stabla) koju gard mora prijaviti.
+      if (typeof e?.status === 'number' && e.status === 1) return [];
+      throw e;
+    }
+  }
+
+  it('nijedna font-family/font deklaracija u src/**.css ne imenuje Instrument Serif ni Geist Mono', () => {
+    expect(gitGrepFontDeklaracije()).toEqual([]);
+  });
+
+  it('MUTACIJA: gard STVARNO gadja deklaracije, ne bilo koji tekst', () => {
+    // Kontrola smjera: obrazac koji gard koristi mora pogoditi pravu deklaraciju kad ona postoji
+    // (dokaz da git grep poziv radi), a poznati legitimni pogoci (komentar, mutacija drugog testa)
+    // ostaju izvan te 13-clane liste jer NISU font-family/font deklaracije.
+    const obrazac = /(^|[;{])\s*font(-family)?\s*:[^;{}]*(Instrument Serif|Geist Mono)/;
+    expect(obrazac.test('.x{font-family:"Instrument Serif",serif}')).toBe(true);
+    expect(obrazac.test('.x{font: italic 400 1rem "Geist Mono",monospace}')).toBe(true);
+    expect(obrazac.test('/* Editorial Instrument sloj */')).toBe(false);
+  });
+
+  it('package.json nema @fontsource/instrument-serif ni geist-mono kao ovisnost', () => {
+    const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8'));
+    const sveOvisnosti = {
+      ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}), ...(pkg.optionalDependencies || {}),
+    };
+    expect(Object.keys(sveOvisnosti)).not.toContain('@fontsource/instrument-serif');
+    expect(Object.keys(sveOvisnosti)).not.toContain('geist-mono');
   });
 });
