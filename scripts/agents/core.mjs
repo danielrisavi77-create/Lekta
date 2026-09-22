@@ -147,7 +147,9 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
 }
 
 function numberOrNull(value) {
-  return Number.isFinite(Number(value)) ? Number(value) : null;
+  if (value == null || value === '' || typeof value === 'boolean') return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function emptyUsage() {
