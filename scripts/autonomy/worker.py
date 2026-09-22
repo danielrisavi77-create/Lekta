@@ -21,6 +21,7 @@ import time
 from typing import Iterable
 
 from .policy import PolicyError, billing_allowed, provider_billing_allowed, canonical_path
+from .provider_config import GROK_MIN_VERSION
 
 VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blocked")
 
@@ -29,7 +30,6 @@ SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
 CODEX_API_KEY_ENV = ("OPENAI_API_KEY",)
 GROK_API_KEY_ENV = ("XAI_API_KEY",)
-GROK_MIN_VERSION = (1, 0, 34)
 PROMPT_FILE_PLACEHOLDER = "__LEKTA_PROMPT_FILE__"
 
 QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b429\b|overloaded|capacity")
