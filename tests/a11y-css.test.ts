@@ -35,6 +35,20 @@ describe('velicina male mete 24px (BL-P3-04)', () => {
     const re = new RegExp(`\\.${cls}\\{[^}]*min-width:24px;min-height:24px;display:inline-grid;place-items:center[^}]*\\}`);
     expect(css).toMatch(re);
   });
+
+  // `.cockpit-link` i `.cockpit-allchecks` su tekstualne poveznice s `padding:0` u kokpitu
+  // rezultata (result-visuals.css): sirina je dovoljna (tekst), visina od ~20px nije bila. Ovdje
+  // je meta samo VISINA (min-height 24px), ne kvadratna 24x24 kao gore, jer poveznica ostaje
+  // sirok tekstualni redak, ne ikona.
+  const cockpitCss = read('src/ui/results/result-visuals.css');
+  it.each(['cockpit-link', 'cockpit-allchecks'])('.%s ima min-height 24px bez mijenjanja izgleda teksta', (cls) => {
+    // `^` na pocetku retka: obje klase se pojavljuju i kao dio KOMBINIRANIH selektora drugdje u
+    // datoteci (npr. `.result-cockpit .cockpit-allchecks {` za ulazni pokret), a to NIJE deklaracija
+    // koju ovaj gard cuva. Vlastiti blok pocinje tocno s `.<klasa> {` na pocetku retka.
+    const blok = new RegExp(`^\\.${cls} \\{[^}]*\\}`, 'm').exec(cockpitCss);
+    expect(blok, `blok .${cls} nije nadjen`).toBeTruthy();
+    expect(blok![0]).toMatch(/min-height:\s*24px/);
+  });
 });
 
 /**

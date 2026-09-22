@@ -198,6 +198,10 @@
 /* Tekstualna poveznica, ne drugi gumb: druga radnja na ekranu smije postojati, ali ne smije
    izgledati kao izbor ravnopravan primarnom pecatu. */
 .cockpit-link {
+  /* WCAG 2.5.8: 24px meta, bez mijenjanja izgleda teksta (isti font, ista podvucena crta). */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   padding: 0;
   border: 0;
   background: none;
@@ -706,6 +710,10 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .cockpit-allchecks {
   grid-column: 1 / -1;
   justify-self: start;
+  /* WCAG 2.5.8: 24px meta, bez mijenjanja izgleda teksta (isti font, ista podvucena crta). */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   padding: 0;
   border: 0;
   background: none;
