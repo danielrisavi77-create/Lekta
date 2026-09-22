@@ -18,6 +18,7 @@ import hashlib
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -218,7 +219,7 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
     claude_account = bool(claude.get("logged_in") and claude.get("method") == "subscription")
     grok_tool = tools.get("grok") or {}
     grok_available = bool(grok_tool.get("available"))
-    grok_match = __import__("re").search(r"\b(\d+)\.(\d+)\.(\d+)\b", str(grok_tool.get("version") or ""))
+    grok_match = re.search(r"\b(\d+)\.(\d+)\.(\d+)\b", str(grok_tool.get("version") or ""))
     grok_version = tuple(int(x) for x in grok_match.groups()) if grok_match else None
     grok_supported = grok_available and grok_version is not None and grok_version >= GROK_MIN_VERSION
     grok_attested = bool(attest.get("grok_included")) and bool(grok_models)
