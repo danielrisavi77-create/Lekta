@@ -32,7 +32,7 @@ from .remote import load_remotes, token_fingerprint
 from .report import write_report
 from .signals import collect
 from .store import Store
-from .worker import (API_KEY_ENV, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
+from .worker import (API_KEY_ENV, CODEX_API_KEY_ENV, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
                      changed_line_count, changed_paths, commit_worker_tree, implementation_worktree_blocked,
                      prepare_job_via_node, resolve_base_ref, resolve_launcher, run_phase, scrubbed_env,
                      start_job_branch)
@@ -204,6 +204,7 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
     odsutan XAI_API_KEY.
     """
     claude_api_env = any(os.environ.get(k) for k in API_KEY_ENV)
+    codex_api_env = any(os.environ.get(k) for k in CODEX_API_KEY_ENV)
     grok_api_env = bool(os.environ.get("XAI_API_KEY"))
     codex = doctor.get("logins", {}).get("codex", {})
     claude = doctor.get("logins", {}).get("claude", {})
@@ -220,7 +221,7 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
 
     providers = {
         "codex": {
-            "allowed": codex_account and common_attested and not claude_api_env,
+            "allowed": codex_account and common_attested and not codex_api_env,
             "auth": "chatgpt" if codex_account else "unknown",
             "approved_models": approved_models,
         },
@@ -239,7 +240,7 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
     subscription = codex_account or claude_account
     fingerprint = doctor["configFingerprint"]
     unchanged = previous.get("config_fingerprint") == fingerprint if previous else True
-    effective_auth = "api_key" if claude_api_env else ("subscription" if subscription else ("included_account" if providers["grok"]["allowed"] else "unknown"))
+    effective_auth = "api_key" if (claude_api_env or codex_api_env) else ("subscription" if subscription else ("included_account" if providers["grok"]["allowed"] else "unknown"))
     return {
         "effective_auth": effective_auth,
         "subscription_verified": subscription and not claude_api_env,
@@ -291,7 +292,7 @@ def doctor(*, config: dict | None, config_problems: list[str], write_profile: bo
         "mode": (config or {}).get("mode"),
         "tools": tools,
         "logins": logins,
-        "apiKeyEnvPresent": [k for k in (*API_KEY_ENV, "XAI_API_KEY") if os.environ.get(k)],
+        "apiKeyEnvPresent": [k for k in (*API_KEY_ENV, *CODEX_API_KEY_ENV, "XAI_API_KEY") if os.environ.get(k)],
         "word": _word_available(),
         "resources": _resources(),
         "repository": _repo_visibility((config or {}).get("repository")),
