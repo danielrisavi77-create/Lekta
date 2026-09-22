@@ -235,7 +235,7 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
     const completed = spawnSync(
       process.execPath,
       [
-        join(root, 'node_modules', 'vite-node', 'vite-node.mjs'),
+        join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs'),
         'scripts/run-repair-runner-e2e.mts',
         '--repository-evidence-only',
       ],

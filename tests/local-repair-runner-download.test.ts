@@ -28,15 +28,22 @@ async function config(): Promise<LocalRepairRunnerArtifactConfig> {
 }
 
 describe('local WordReplica runner download', () => {
-  it('jasno kaže da Word mora biti instaliran, ali aktivna licenca nije potrebna', async () => {
+  it('istinito opisuje Pure-DOCX runtime, sigurnost izvornika i ograničeno čišćenje', async () => {
     const mount = document.createElement('div');
 
     const offer = renderLocalRepairRunnerOffer(mount, launch, await config());
 
     expect(offer).not.toBeNull();
-    expect(mount.textContent).toMatch(/s instaliranim desktop Microsoft Wordom/i);
-    expect(mount.textContent).toMatch(/aktivna Word licenca nije potrebna/i);
-    expect(mount.textContent).toMatch(/završnu provjeru i otvaranje/i);
+    expect(mount.textContent).toMatch(/Windows 10\/11/i);
+    expect(mount.textContent).toMatch(/interni WordReplica motor/i);
+    expect(mount.textContent).toMatch(/lokalno izrađuje novi DOCX/i);
+    expect(mount.textContent).toMatch(/bez prepisivanja izvornika/i);
+    expect(mount.textContent).toMatch(/Microsoft Word nije potreban/i);
+    expect(mount.textContent).toMatch(/ne provjerava svaki korisnički run/i);
+    expect(mount.textContent).toMatch(/ponovno pokreni isti EXE/i);
+    expect(mount.textContent).toMatch(/uklanja osjetljive datoteke koje je sam stvorio/i);
+    expect(mount.textContent).toMatch(/Windows ili preglednik mogu zadržati vlastite tragove/i);
+    expect(mount.textContent).not.toMatch(/aktivna Word licenca nije potrebna/i);
   });
 
   it('nudi potpisani portable EXE i claim tajnu stavlja samo u lokalni naziv datoteke', async () => {
