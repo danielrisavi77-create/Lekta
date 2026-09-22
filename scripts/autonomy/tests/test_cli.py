@@ -27,8 +27,19 @@ def config(**over):
 
 
 def profile():
-    return dict(subscription_verified=True, extra_credits_disabled=True, effective_auth="subscription",
-                model_included=True, configuration_unchanged=True, trusted_observation=True)
+    return {
+        "subscription_verified": True,
+        "extra_credits_disabled": True,
+        "effective_auth": "subscription",
+        "model_included": True,
+        "configuration_unchanged": True,
+        "trusted_observation": True,
+        "providers": {
+            "codex": {"allowed": True, "auth": "chatgpt", "approved_models": ["gpt-6-astra", "gpt-5.6-sol"]},
+            "claude": {"allowed": True, "auth": "subscription", "approved_models": ["sonnet", "opus"]},
+            "grok": {"allowed": False, "auth": "unknown", "approved_models": ["grok-4.6"]},
+        },
+    }
 
 
 def ci_source(conclusion="failure"):
