@@ -148,8 +148,8 @@ function numberOrNull(value) {
   return Number.isFinite(Number(value)) ? Number(value) : null;
 }
 
-function mergeUsage(...parts) {
-  const out = {
+function emptyUsage() {
+  return {
     inputTokens: null,
     cachedInputTokens: null,
     cacheWriteInputTokens: null,
@@ -159,22 +159,28 @@ function mergeUsage(...parts) {
     costUsd: null,
     modelCalls: null,
   };
+}
+
+function usageFields(part) {
+  return {
+    inputTokens: part?.inputTokens ?? part?.input_tokens,
+    cachedInputTokens: part?.cachedInputTokens ?? part?.cached_input_tokens ?? part?.cacheReadInputTokens,
+    cacheWriteInputTokens: part?.cacheWriteInputTokens ?? part?.cache_write_input_tokens ?? part?.cacheCreationInputTokens,
+    outputTokens: part?.outputTokens ?? part?.output_tokens,
+    reasoningOutputTokens: part?.reasoningOutputTokens ?? part?.reasoning_output_tokens,
+    totalTokens: part?.totalTokens ?? part?.total_tokens,
+    costUsd: part?.costUsd ?? part?.costUSD ?? part?.total_cost_usd,
+    modelCalls: part?.modelCalls ?? part?.model_calls,
+  };
+}
+
+function mergeUsage(...parts) {
+  const out = emptyUsage();
   for (const part of parts) {
     if (!part || typeof part !== 'object') continue;
-    const fields = {
-      inputTokens: part.inputTokens ?? part.input_tokens,
-      cachedInputTokens: part.cachedInputTokens ?? part.cached_input_tokens ?? part.cacheReadInputTokens,
-      cacheWriteInputTokens: part.cacheWriteInputTokens ?? part.cache_write_input_tokens ?? part.cacheCreationInputTokens,
-      outputTokens: part.outputTokens ?? part.output_tokens,
-      reasoningOutputTokens: part.reasoningOutputTokens ?? part.reasoning_output_tokens,
-      totalTokens: part.totalTokens ?? part.total_tokens,
-      costUsd: part.costUsd ?? part.costUSD ?? part.total_cost_usd,
-      modelCalls: part.modelCalls ?? part.model_calls,
-    };
-    for (const [key, value] of Object.entries(fields)) {
+    for (const [key, value] of Object.entries(usageFields(part))) {
       const n = numberOrNull(value);
-      if (n == null) continue;
-      out[key] = out[key] == null ? n : out[key] + n;
+      if (n != null && out[key] == null) out[key] = n;
     }
   }
   if (out.totalTokens == null && out.inputTokens != null && out.outputTokens != null) {
@@ -183,9 +189,24 @@ function mergeUsage(...parts) {
   return out;
 }
 
+function sumUsage(...parts) {
+  const out = emptyUsage();
+  for (const part of parts) {
+    if (!part || typeof part !== 'object') continue;
+    for (const [key, value] of Object.entries(usageFields(part))) {
+      if (key === 'totalTokens') continue;
+      const n = numberOrNull(value);
+      if (n == null) continue;
+      out[key] = (out[key] ?? 0) + n;
+    }
+  }
+  if (out.inputTokens != null && out.outputTokens != null) out.totalTokens = out.inputTokens + out.outputTokens;
+  return out;
+}
+
 function modelUsageSummary(modelUsage) {
-  if (!modelUsage || typeof modelUsage !== 'object' || Array.isArray(modelUsage)) return mergeUsage();
-  return mergeUsage(...Object.values(modelUsage).filter(value => value && typeof value === 'object'));
+  if (!modelUsage || typeof modelUsage !== 'object' || Array.isArray(modelUsage)) return emptyUsage();
+  return sumUsage(...Object.values(modelUsage).filter(value => value && typeof value === 'object'));
 }
 
 export function parseResult(command, stdout, exitCode) {
