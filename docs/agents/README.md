@@ -2,8 +2,9 @@
 
 GitHub cuva plan, red zadataka, promjene i dokaze. ChatGPT/Codex, Claude Code i Grok Build CLI
 citaju isti repozitorij, ali ne dijele automatski razgovore, prijave ni memoriju. Kanonski routing,
-billing, context i provider-result ugovor je `docs/agents/ORCHESTRATION.md`; ovaj dokument je
-operativni runbook. Lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
+billing, context i provider-result ugovor je `docs/agents/ORCHESTRATION.md`; detaljne projektne
+invarijante su u `docs/agents/PROJECT_RULES.md`, dok je root `AGENTS.md` namjerno samo kratka mapa.
+Ovaj dokument je operativni runbook. Lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
 rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi pozive.
 
 ## Uloge
