@@ -28,6 +28,7 @@ from typing import Callable
 
 from .gate import verify_candidate
 from .policy import PolicyError, billing_allowed, provider_billing_allowed, explain_change, load_config
+from .provider_config import AGENT_PROVIDER, model_for
 from .publisher import publish_verified
 from .remote import load_remotes, token_fingerprint
 from .report import write_report
@@ -406,13 +407,6 @@ def _resolve_ready_plan_task(repo: str, task: dict) -> tuple[str | None, str]:
     return plan_task, ""
 
 
-AGENT_PROVIDER = {
-    "astra": "codex", "sol": "codex",
-    "fable": "claude", "opus": "claude", "sonnet": "claude",
-    "grok": "grok", "build": "grok",
-}
-
-
 def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None) -> str:
     """Deterministicki router. Eksplicitni config pobijedi; `auto` cuva sigurni default."""
 
@@ -431,7 +425,8 @@ def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None
     if provider == "claude":
         return "astra"
     if provider == "codex":
-        grok_ready = bool(config.get("grokEnabled")) and provider_billing_allowed(profile, "grok", "grok-4.6")
+        grok_model = model_for("grok")
+        grok_ready = bool(config.get("grokEnabled")) and provider_billing_allowed(profile, "grok", grok_model)
         return "grok" if grok_ready else "opus"
     if provider == "grok":
         return "astra"
