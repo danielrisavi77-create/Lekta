@@ -418,8 +418,10 @@ def _agent_allowed(config: dict, profile: dict | None, agent: str) -> bool:
         return False
     if agent == "fable" and not bool(config.get("fableEnabled")):
         return False
-    if profile is None:
-        return True  # test/rucni helper; stvarni tick predaje provider-specificki doctor profil
+    if profile is None or not isinstance(profile.get("providers"), dict):
+        # Legacy profil smije samo odabrati alias radi migracijskih/testnih putova.
+        # Stvarni worker i dalje odbija realni provider bez provider-specifickog doctor profila.
+        return True
     return provider_billing_allowed(profile, provider, model)
 
 
