@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
+import { modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from '../scripts/agents/core.mjs';
 
 const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
@@ -108,6 +108,15 @@ describe('agent handoff', () => {
     expect(() => validateQueue(q)).toThrow(/cycle/);
     q.tasks[0].dependsOn = ['MISSING'];
     expect(() => validateQueue(q)).toThrow(/MISSING/);
+  });
+});
+
+describe('requested model verification', () => {
+  it('accepts unknown evidence, compatible aliases and rejects an explicit different model', () => {
+    expect(modelMatches('grok-4.6', [])).toBe(true);
+    expect(modelMatches('grok-4.6', ['grok-4.6-build'])).toBe(true);
+    expect(modelMatches('gpt-6-astra', ['gpt-6-astra'])).toBe(true);
+    expect(modelMatches('gpt-6-astra', ['gpt-5.6-sol'])).toBe(false);
   });
 });
 
