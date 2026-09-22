@@ -26,7 +26,7 @@ import uuid
 from typing import Callable
 
 from .gate import verify_candidate
-from .policy import PolicyError, billing_allowed, explain_change, load_config
+from .policy import PolicyError, billing_allowed, provider_billing_allowed, explain_change, load_config
 from .publisher import publish_verified
 from .remote import load_remotes, token_fingerprint
 from .report import write_report
@@ -405,7 +405,7 @@ AGENT_PROVIDER = {
 }
 
 
-def _agent_for(config: dict, phase: str, task: dict) -> str:
+def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None) -> str:
     """Deterministicki router. Eksplicitni config pobijedi; `auto` cuva sigurni default."""
 
     if phase == "planning":
@@ -423,7 +423,8 @@ def _agent_for(config: dict, phase: str, task: dict) -> str:
     if provider == "claude":
         return "astra"
     if provider == "codex":
-        return "grok" if config.get("grokEnabled") else "opus"
+        grok_ready = bool(config.get("grokEnabled")) and provider_billing_allowed(profile, "grok")
+        return "grok" if grok_ready else "opus"
     if provider == "grok":
         return "astra"
     return "astra"
@@ -500,7 +501,7 @@ class DefaultAdapters:
                         "provider": None, "attempt_spent": False, "provider_called": False}
             lookup_task = {**task, "implementationAgent": implementer}
             override_status, override_implementer = "in_review", implementer
-        agent = _agent_for(self.config, phase, lookup_task)
+        agent = _agent_for(self.config, phase, lookup_task, profile)
         try:
             job = prepare_job_via_node(self.repo, plan_task, agent_phase, agent,
                                        override_status=override_status, override_implementer=override_implementer)
