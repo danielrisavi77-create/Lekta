@@ -266,9 +266,10 @@
   opacity: .85;
 }
 .cockpit-stamp[data-verdict-tone='blocked'] { color: var(--ck-red-text); }
-.cockpit-stamp[data-verdict-tone='needs-work'] { color: var(--ck-amber); }
-.cockpit-stamp[data-verdict-tone='manual-review'] { color: var(--ck-blue); }
 .cockpit-stamp[data-verdict-tone='clear'] { color: var(--ck-green-text); }
+/* `needs-work` i `manual-review` NEMAJU pecat (vidi PECAT u results-cockpit.ts): predlozak
+   Results.dc.html ne nosi natpis za ta stanja, a izmisljen natpis je gori od izostavljenog. Ova
+   dva pravila su zato namjerno izostavljena, ne zaboravljena. */
 
 /* Tamni cip: jedini "stroj" na papiru, isti uredaj kao hero score kartica. */
 .cockpit-score {
