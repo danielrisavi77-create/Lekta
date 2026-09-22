@@ -135,7 +135,7 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   const prompt = [
     `LEKTA task ${id}. Phase: ${phase}. Requested agent: ${agentName} (${agent.model}).`,
     'Follow the host-loaded root instructions. Read docs/agents/ORCHESTRATION.md before working; do not re-read root AGENTS.md/CLAUDE.md solely because of this prompt.',
-    'Read the matching task section in docs/agents/development-plan.md and only the scoped CLAUDE.md files for paths you actually inspect. Recheck findings against the current code.',
+    'Read the matching task section in docs/agents/development-plan.md, the relevant headings of docs/agents/PROJECT_RULES.md, and only scoped CLAUDE.md files for paths you actually inspect. Do not read the entire detailed rules file by default. Recheck findings against the current code.',
     phase === 'implement'
       ? 'Implement only this task in this worktree. Run the required checks. Do not edit the queue, commit, push, merge or deploy; return the patch and evidence to the coordinator.'
       : 'Read-only assessment. Do not modify files. Return a concrete brief or independent review with file references and evidence.',
