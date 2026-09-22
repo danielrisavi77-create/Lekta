@@ -1047,20 +1047,43 @@ class BillingProfileTest(unittest.TestCase):
         self.assertFalse(changed["configuration_unchanged"])
         self.assertFalse(billing_allowed(changed))
 
-    def test_api_key_env_forces_api_auth(self):
-        doc = {"logins": {"codex": {"logged_in": True, "method": "chatgpt"}, "claude": {}}, "configFingerprint": "f", "observedAt": "t"}
-        old = os.environ.get("ANTHROPIC_API_KEY")
+    def test_api_key_env_blocks_only_its_provider(self):
+        doc = {
+            "logins": {
+                "codex": {"logged_in": True, "method": "chatgpt"},
+                "claude": {"logged_in": True, "method": "subscription"},
+            },
+            "tools": {},
+            "configFingerprint": "f", "observedAt": "t",
+        }
+        attest = {"extra_credits_disabled": True, "model_included": True, "models": ["gpt-6-astra", "sonnet"]}
+        from scripts.autonomy.policy import billing_allowed, provider_billing_allowed
+
+        old_anthropic = os.environ.get("ANTHROPIC_API_KEY")
         os.environ["ANTHROPIC_API_KEY"] = "sk-ant-test"
         try:
-            prof = cli.build_billing_profile(doctor=doc, config=config(), attest={"extra_credits_disabled": True, "model_included": True}, previous={})
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
         finally:
-            if old is None:
+            if old_anthropic is None:
                 del os.environ["ANTHROPIC_API_KEY"]
             else:
-                os.environ["ANTHROPIC_API_KEY"] = old
+                os.environ["ANTHROPIC_API_KEY"] = old_anthropic
         self.assertEqual(prof["effective_auth"], "api_key")
-        from scripts.autonomy.policy import billing_allowed
-        self.assertFalse(billing_allowed(prof))
+        self.assertTrue(billing_allowed(prof), "Codex account i dalje je dopusten")
+        self.assertTrue(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(prof, "claude", "sonnet"))
+
+        old_openai = os.environ.get("OPENAI_API_KEY")
+        os.environ["OPENAI_API_KEY"] = "sk-openai-test"
+        try:
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
+        finally:
+            if old_openai is None:
+                del os.environ["OPENAI_API_KEY"]
+            else:
+                os.environ["OPENAI_API_KEY"] = old_openai
+        self.assertFalse(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertTrue(provider_billing_allowed(prof, "claude", "sonnet"))
 
     def test_grok_needs_cli_config_attestation_and_no_api_key(self):
         doc = {
