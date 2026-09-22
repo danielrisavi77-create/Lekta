@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync, appendFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AGENTS, GROK_MIN_VERSION, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
+import { AGENTS, GROK_MIN_VERSION, modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 
 export function diagnoseProviderFailure(command, stderr) {
   if (command === 'grok' && /bwrap:.*Creating new namespace failed: Operation not permitted/i.test(stderr ?? '')) {
@@ -164,13 +164,15 @@ function main() {
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
     const parsed = parseResult(job.command, result.stdout ?? '', result.status);
     const diagnosis = diagnoseProviderFailure(job.command, result.stderr ?? '');
+    const modelOk = modelMatches(AGENTS[agent].model, parsed.reportedModels);
     const report = { task: id, phase, agent, baseHead, requestedModel: AGENTS[agent].model,
       reportedModels: parsed.reportedModels, usage: parsed.usage, exitCode: result.status, signal: result.signal,
       error: result.error?.message ?? null,
+      modelMismatch: parsed.ok && !modelOk ? { requested: AGENTS[agent].model, reported: parsed.reportedModels } : null,
       ...diagnosis,
       retainedLock: releaseLock ? null : lock,
-      status: parsed.ok && !result.error ? 'needs_verification' : 'failed',
-      note: 'Queue unchanged. Coordinator must verify actual model, patch, required checks and independent review.' };
+      status: parsed.ok && modelOk && !result.error ? 'needs_verification' : 'failed',
+      note: 'Queue unchanged. Coordinator must verify patch, required checks and independent review; explicit model mismatch fails closed.' };
     writeFileSync(join(out, 'result.json'), JSON.stringify(report, null, 2) + '\n');
     const ledgerEntry = {
       observedAt: new Date().toISOString(), task: id, phase, agent, provider: job.command,
