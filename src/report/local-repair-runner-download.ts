@@ -107,14 +107,14 @@ export function renderLocalRepairRunnerOffer(
   const section = document.createElement('section');
   section.className = 'lekta-local-repair-offer';
   const title = document.createElement('strong');
-  title.textContent = 'Popravi dokument i u Wordu na ovom računalu';
+  title.textContent = 'Dovrši popravak lokalno na ovom računalu';
   const explanation = document.createElement('p');
-  explanation.textContent = 'Za Windows 10/11 s instaliranim desktop Microsoft Wordom. Aktivna Word licenca nije potrebna: program izrađuje novu DOCX kopiju, a Word koristi samo za završnu provjeru i otvaranje. Program je portable i vrijedi samo za ovaj plaćeni popravak.';
+  explanation.textContent = 'Za Windows 10/11. Interni WordReplica motor lokalno izrađuje novi DOCX bez prepisivanja izvornika. Microsoft Word nije potreban i program ne provjerava svaki korisnički run. Portable program vrijedi samo za ovaj plaćeni popravak. Nakon uspjeha uklanja osjetljive datoteke koje je sam stvorio, ali Windows ili preglednik mogu zadržati vlastite tragove. Ako se postupak prekine zbog kvara koji dopušta nastavak, ponovno pokreni isti EXE.';
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'btn btn-primary';
   button.dataset.localRepairRunnerDownload = '';
-  button.textContent = 'Preuzmi Word popravak na računalu';
+  button.textContent = 'Preuzmi popravak na ovom računalu';
   const status = document.createElement('p');
   status.className = 'muted';
   section.append(title, explanation, button, status);
@@ -135,7 +135,7 @@ export function renderLocalRepairRunnerOffer(
       status.textContent = 'Pokreni preuzeti EXE. Odabrat ćeš izlazni folder, a izvorni dokument ostaje netaknut.';
     } catch {
       button.disabled = false;
-      button.textContent = 'Pokušaj ponovno preuzeti Word popravak';
+      button.textContent = 'Pokušaj ponovno preuzeti program za popravak';
       status.textContent = 'Preuzimanje nije moguće ili program nije prošao sigurnosnu provjeru. Serverska verzija dokumenta ostaje dostupna.';
     }
   };
