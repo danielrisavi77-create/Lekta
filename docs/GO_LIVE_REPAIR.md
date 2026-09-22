@@ -181,6 +181,9 @@ Potvrdi da postoje (koriste ih repair-docx / delete-repair-job):
 Za prodaju (korak D), potvrdi LS tajne:
 
 - [ ] `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`, `MOR_WEBHOOK_SECRET`, `CHECKOUT_REDIRECT_URL`.
+- [ ] `LEMONSQUEEZY_STORE_ID` citaju OBJE funkcije naplate (`create-checkout` i `webhook-mor`).
+  Prazna vrijednost je fail-closed: webhook odbija svaku kupnju s `store_unverifiable`. Provjeri
+  preflightom u okolini deploya: `npm run verify-naplata-secrets` (izlazni kod 1 imenuje varijablu).
 
 ---
 

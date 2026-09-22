@@ -90,8 +90,12 @@ jednokratnu obavijest redovima s e-mailom kad fakultet dobije profil (dry-run po
 + `RESEND_API_KEY`/`NOTIFY_FROM` za stvarno slanje). Obje imaju `--from-file` za offline test.
 
 Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `DAILY_CAP`,
-`IP_HASH_SALT` (opcionalno, waitlist ip_hash salt), `MOR_WEBHOOK_SECRET`, te za create-checkout `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
-`CHECKOUT_REDIRECT_URL`. Webhook HMAC provjera potpisa je već implementirana
+`IP_HASH_SALT` (opcionalno, waitlist ip_hash salt), `MOR_WEBHOOK_SECRET`, te za naplatu `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
+`CHECKOUT_REDIRECT_URL`. `LEMONSQUEEZY_STORE_ID` citaju OBJE funkcije naplate: `create-checkout`
+(na koju trgovinu ide kupnja) i `webhook-mor` (iz koje trgovine dogadjaj smije doci, PAY-04; prazno
+znaci da webhook odbija SVE dogadjaje s `store_unverifiable`). Do 2026-09-22 je webhook citao
+zasebno ime `LS_STORE_ID`. Preflight prije deploya: `npm run verify-naplata-secrets`.
+Webhook HMAC provjera potpisa je već implementirana
 (`verifyLemonSignature`, timing-safe); dovoljno je postaviti `MOR_WEBHOOK_SECRET`. Nakon
 `db push` popuni `products.mor_product_id` stvarnim Lemon
 Squeezy variant id-jevima (checkout vraca 409 `product_not_mapped` dok je `null`).

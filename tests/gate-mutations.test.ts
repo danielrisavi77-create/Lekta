@@ -40,6 +40,8 @@ import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import { storeIdSecretProblems } from './helpers/naplata-env';
+import { naplataSecretsVerdict } from '../scripts/verify-naplata-secrets.mjs';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
@@ -2553,6 +2555,38 @@ const MUTATIONS: Mutation[] = [
         .filter((f) => f.endsWith('.sql'))
         .map((file) => ({ file, sql: readFileSync(join(dir, file), 'utf8') }));
       return files.length > 50 && migrationHygieneProblems(files).length === 0;
+    },
+  },
+
+  // --- naplata: tajne trgovine (blokeri lansiranja 2026-09-22) ---------------------------------
+  {
+    id: 'naplata/prazan-store-id',
+    imitates: 'Supabase secret LEMONSQUEEZY_STORE_ID postavljen na prazno: sucelje ga prikazuje kao postojeci, a acceptEvent svaku kupnju odbija s store_unverifiable i vraca 200, pa ni provider ne retryja',
+    caught: () =>
+      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '  ' })
+        .missing.includes('LEMONSQUEEZY_STORE_ID'),
+    cleanBefore: () =>
+      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '42' }).ok,
+  },
+  {
+    id: 'naplata/dva-imena-iste-tajne',
+    imitates: 'webhook-mor cita LS_STORE_ID a create-checkout LEMONSQUEEZY_STORE_ID: operater postavi jednu tajnu, checkout radi a webhook tiho odbija svaku placenu kupnju (stvarno stanje repozitorija do 2026-09-22)',
+    caught: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      const webhook = readFileSync(join(dir, 'webhook-mor', 'index.ts'), 'utf8');
+      const checkout = readFileSync(join(dir, 'create-checkout', 'index.ts'), 'utf8');
+      // MUTACIJA u memoriji: vrati staro ime u webhook-mor, disk se ne dira.
+      const mutated = webhook.replace("Deno.env.get('LEMONSQUEEZY_STORE_ID')", "Deno.env.get('LS_STORE_ID')");
+      if (mutated === webhook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return storeIdSecretProblems({ 'webhook-mor': mutated, 'create-checkout': checkout })
+        .some((p) => p.includes('LS_STORE_ID'));
+    },
+    cleanBefore: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      return storeIdSecretProblems({
+        'webhook-mor': readFileSync(join(dir, 'webhook-mor', 'index.ts'), 'utf8'),
+        'create-checkout': readFileSync(join(dir, 'create-checkout', 'index.ts'), 'utf8'),
+      }).length === 0;
     },
   },
 ];
