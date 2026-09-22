@@ -225,7 +225,7 @@
         "T20",
         "T21"
       ],
-      "note": "P0. T22 evidence 2026-09-22: lokalni auth/session/config testovi 79/79 zeleni i kod ima OTP, password, refresh i anonymous->email identity guard. Staging Auth vraca email=true, ali anonymous_users=false i POST /signup {} vraca 422 anonymous_provider_disabled. Stvarna dostava poruka i ocuvanje rada/prava nakon registracije jos nisu dokazani. Detalji: docs/agents/t22-auth-email-evidence-2026-09-22.md."
+      "note": "P0. T22 evidence 2026-09-22: lokalni auth/session/config testovi 79/79 zeleni; staging signup OTP poruka stvarno je stigla i potvrđena je kroz email_confirmed_at/last_sign_in_at, a sintetski račun je nakon probe uklonjen. Staging Auth i dalje ima anonymous_users=false, pa anonimno povezivanje i očuvanje rada/prava još nisu dokazani; email-change/reset i redirect lista također čekaju potvrdu. Detalji: docs/agents/t22-auth-email-evidence-2026-09-22.md."
     },
     {
       "id": "T23",

@@ -1,22 +1,23 @@
-﻿# T22 racun, prijava i e-posta, dokaz 2026-09-22
+# T22 racun, prijava i e-posta, dokaz 2026-09-22
 
 ## Presuda
 
 **T22 ostaje `in_progress` i nije spreman za zatvaranje.** Lokalni kod i testovi pokrivaju
 OTP, lozinku, osvjezavanje sesije, anonimnu sesiju, povezivanje e-maila i provjeru da se
-identitet ne promijeni. Staging ipak trenutno ne dopusta anonimne prijave, a u ovom prolazu
-nije potvrdena dostava stvarne poruke na namjensku adresu. Zbog toga nije dokazano da anonimni
-korisnik nakon registracije zadrzava vlastiti rad i prava.
+identitet ne promijeni. Staging ipak trenutno ne dopusta anonimne prijave. U ovom prolazu potvrdena je stvarna dostava i
+potvrda e-maila za obicni signup racun, ali nije dokazano da anonimni korisnik nakon registracije
+zadrzava vlastiti rad i prava.
 
-Ovaj prolaz je read-only. Nisu mijenjani Auth, SMTP, redirect URL-ovi, baza, Storage ni
-produkcija.
+Konfiguracijske postavke nisu mijenjane. Izveden je jedan kontrolirani staging signup test sa
+sintetskim racunom, a racun je nakon provjere ciljano obrisan. SMTP, redirect postavke, Storage i
+produkcija nisu mijenjani.
 
 ## Kriterij i identitet
 
 - Kriterij zadatka: stvarne testne poruke moraju stici na namjenske adrese, sve sesijske grane
   moraju dati ocekivani ishod, a anonimni korisnik nakon registracije mora zadrzati vlastiti rad
   i pripadajuca prava.
-- Repo/worktree: `agent/t20-edge-config`, pregledani commit `c05b3e7e`.
+- Repo/worktree: `agent/t20-edge-config`, pregledani commit `c2a13df3`.
 - Staging projekt: `bnyemcnsphlitjradrst`.
 - Produkcijski projekt nije diran.
 - Postojeci Management API token je istekao i vraca HTTP 401, pa ovaj zapis ne tvrdi da je
@@ -24,7 +25,7 @@ produkcija.
 
 ## Svjezi staging Auth probe
 
-Probe je izveden javnim staging anon keyem, bez stvaranja korisnika i bez slanja poruke.
+Početni settings probe izveden je javnim staging anon keyem, bez stvaranja korisnika i bez slanja poruke.
 
 | Probe | Ishod |
 |---|---|
@@ -36,6 +37,21 @@ Probe je izveden javnim staging anon keyem, bez stvaranja korisnika i bez slanja
 Najvazniji nalaz je `anonymous_users=false`. UI i `src/auth/session.ts` imaju tok za anonimnu
 sesiju i njeno povezivanje s e-mailom, ali ga staging konfiguracija trenutno odbija prije nego
 sto se moze provjeriti ocuvanje `user_id`, lokalnog rada i prava.
+
+## Svjezi dokaz stvarne e-mail dostave i potvrde
+
+Dana 2026-09-22 staging je primio jedan kontrolirani zahtjev na `/auth/v1/otp` s HTTP 200 za
+jednokratnu adresu. Mailbox je primio poruku od `noreply@mail.app.supabase.io` s predmetom
+`Confirm your email address`. Tijelo je nosilo Supabase `/auth/v1/verify` poveznicu tipa
+`signup`. Otvaranje poveznice je potvrdilo račun: read-only SQL snapshot staginga zabiljezio je
+`email_confirmed_at` i `last_sign_in_at` u `2026-09-22 11:35:38Z` za isti novi korisnicki ID.
+
+Nakon provjere sintetski račun je obrisan ciljanim staging SQL cleanupom, a naknadni upit je
+vratio `remaining=0`. Produkcija nije dirana. Ovaj prolaz dokazuje dostavu i osnovnu potvrdu
+običnog e-mail računa; ne dokazuje očuvanje anonimnog `user_id`, rada ili prava pri povezivanju.
+
+Predložak je u ovoj probi koristio zadani `redirect_to=http://localhost:3000`. Dozvoljeni
+staging redirect popis i konačni korisnički tok na staging frontendu ostaju za vlasničku potvrdu.
 
 ## Sto je dokazano u kodu i lokalnim testovima
 
@@ -73,8 +89,9 @@ dostavu niti anonimno povezivanje. Dokaz ostaje u
 
 1. Vlasnik mora omoguciti anonimne korisnike na stagingu ili potvrditi da je odabrana druga
    strategija koja cuva isti korisnicki identitet i vlasnistvo.
-2. Treba koristiti dvije namjenske testne adrese i potvrditi stvarni dolazak OTP/email-change
-   i reset poruke. HTTP 200 iz Auth API-ja nije dokaz dostave.
+2. Za potpuno zatvaranje treba potvrditi i email-change i reset poruku na namjenskim adresama.
+   Ovaj prolaz već dokazuje signup potvrdu stvarnim dolaskom poruke; HTTP 200 sam po sebi nije
+   dovoljan dokaz dostave.
 3. Treba izvesti anonimni rad, povezivanje e-maila, potvrdu linka u drugom browseru, reload i
    refresh tokena, pa provjeriti isti `user_id`, isti rad, ista prava i odjavu.
 4. Treba potvrditi dozvoljene redirect URL-ove i SMTP predloske/rate limite. Supabase zadani
