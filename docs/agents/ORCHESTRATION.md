@@ -112,8 +112,15 @@ Pocetni autonomni default:
 - plan -> `astra`
 - implement -> `sonnet`
 - review nakon Claude implementacije -> `astra`
-- review nakon Codex implementacije -> `opus`, ili `grok` ako je izricito omogucen kao reviewer
+- review nakon Codex implementacije -> `opus`, ili `grok` kada je Grok izricito omogucen
 - review nakon Grok Build implementacije -> `astra`
+
+`providerFallback` je stvarna granica potrosnje:
+- `wait` (zadano): ako primarni auto-provider nije autoriziran/dostupan, ne zovi drugi provider;
+- `authorized`: smije se uzeti sljedeci kandidat samo ako je njegov provider/model vec odobren u doctor profilu.
+
+Eksplicitno odabran `plannerAgent`/`implementerAgent`/`reviewerAgent` se ne preusmjerava; ako nije
+odobren, posao se blokira bez modelskog poziva.
 
 Ne uvodi "najbolji model" score dok ledger nema dovoljno usporedivih stvarnih zadataka. Kad se to uvede,
 score smije koristiti samo mjerljive ishode: gate pass, review nalazi, rework, trajanje i usage; nikad
