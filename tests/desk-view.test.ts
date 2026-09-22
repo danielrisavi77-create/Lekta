@@ -59,14 +59,14 @@ describe('navigacija stola', () => {
 
   it('prazan popis ne izmislja polozaj', () => {
     const n = deskNav(0, 4);
-    expect(n.oznaka).toBe('0 / 0');
+    expect(n.oznaka).toBe('0 od 0');
     expect(n.prethodni).toBeNull();
     expect(n.sljedeci).toBeNull();
   });
 
-  it('oznaka je 1-based, jer "0 / 6" korisnik cita kao kvar', () => {
-    expect(deskNav(6, 0).oznaka).toBe('1 / 6');
-    expect(deskNav(6, 5).oznaka).toBe('6 / 6');
+  it('oznaka je 1-based, jer "0 od 6" korisnik cita kao kvar', () => {
+    expect(deskNav(6, 0).oznaka).toBe('1 od 6');
+    expect(deskNav(6, 5).oznaka).toBe('6 od 6');
   });
 });
 
@@ -115,10 +115,10 @@ describe('traka o opsegu', () => {
 describe('desna strana stola', () => {
   it('redni broj kartice se SLAZE s brojem u navigaciji', () => {
     // Dvije brojke na istom ekranu koje se ne slazu citaju se kao kvar. Kartica dobiva
-    // `nav.index + 1`, isti broj koji stoji lijevo od kose crte.
+    // `nav.index + 1`, isti broj koji stoji lijevo od rijeci "od".
     const html = deskPaneHtml(stavka(), deskNav(6, 2), true, esc, popis(6));
     expect(html).toContain('>03<');
-    expect(html).toContain('3 / 6');
+    expect(html).toContain('3 od 6');
   });
 
   it('MUTACIJA: da kartica uzima vlastiti broj, brojke bi se razisle', () => {

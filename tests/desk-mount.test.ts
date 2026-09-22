@@ -75,7 +75,7 @@ const klik = (el: Element | null) => el?.dispatchEvent(new window.MouseEvent('cl
 describe('kretanje po stolu', () => {
   it('pocinje na prvom nalazu i broji od jedan', () => {
     montiraj();
-    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('1 / 3');
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('1 od 3');
   });
 
   it('"Sljedeci problem" pomice plocu, i to VISE OD JEDNOM', () => {
@@ -83,10 +83,10 @@ describe('kretanje po stolu', () => {
     const { handle } = montiraj();
     klik(sekcija.querySelector('.desk-nav__btn--next'));
     expect(handle.index).toBe(1);
-    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('2 / 3');
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('2 od 3');
     klik(sekcija.querySelector('.desk-nav__btn--next'));
     expect(handle.index).toBe(2);
-    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 / 3');
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 od 3');
   });
 
   it('na kraju popisa se ne omata', () => {
@@ -130,7 +130,7 @@ describe('mjesto aktivira nalaz', () => {
     await Promise.resolve();
     klik(mete.get(2)!);
     expect(handle.index).toBe(2);
-    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 / 3');
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 od 3');
   });
 
   it('zastavica BEZ nalaza ne pomice nista', async () => {
@@ -254,7 +254,7 @@ describe('plan ispravaka kao drugi nacin rada', () => {
     handle.goTo(2);
     klik(sekcija.querySelector('[data-desk-plan-open]'));
     klik(sekcija.querySelector('[data-desk-plan-close]'));
-    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 / 3');
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 od 3');
   });
 
   it('CTA plana salje radnju ljusci, jer plan ne izvodi popravak sam', () => {
@@ -345,7 +345,7 @@ describe('polozaj prezivljava ponovnu montazu', () => {
      */
     const { handle } = montiraj({ startIndex: 2 });
     expect(handle.index).toBe(2);
-    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 / 3');
+    expect(sekcija.querySelector('[data-desk-count]')?.textContent).toBe('3 od 3');
   });
 
   it('polozaj se STISCE kad se popis u medjuvremenu skratio', () => {
