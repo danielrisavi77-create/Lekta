@@ -1117,6 +1117,15 @@ class BillingProfileTest(unittest.TestCase):
                 os.environ["XAI_API_KEY"] = old
         self.assertFalse(provider_billing_allowed(blocked, "grok", "grok-4.6"))
 
+        old_version_doc = {
+            **doc,
+            "tools": {"grok": {"available": True, "version": "grok 1.0.33 (old)"}},
+            "configFingerprint": "fg-old",
+        }
+        old_version = cli.build_billing_profile(doctor=old_version_doc, config=config(grokEnabled=True), attest=attest, previous={})
+        self.assertFalse(provider_billing_allowed(old_version, "grok", "grok-4.6"))
+        self.assertFalse(old_version["providers"]["grok"]["cli_supported"])
+
 
 class CliProcessTest(unittest.TestCase):
     def run_cli(self, *args, home, config_path=None):
