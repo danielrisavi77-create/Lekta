@@ -417,6 +417,54 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(mount.querySelector('[data-cockpit-authority]')).toBeNull();
   });
 
+  it('redoslijed lista presude je eyebrow -> H1 -> sazetak -> ograda -> gumb + poveznica', () => {
+    /**
+     * ALIGNMENT Z8 (popravak drugog kruga): ograda izvora ide ISPOD sazetka, ne izmedju eyebrowa
+     * i H1, jer ogranicava upravo procitanu tvrdnju. `cockpit-marks` uopce nije dijete
+     * `cockpit-sheet__lead`; stoji uz prsten presude.
+     */
+    const { mount } = renderaj();
+    const lead = mount.querySelector<HTMLElement>('[data-cockpit-sheet-lead]')!;
+    const djeca = [...lead.children];
+    const indeks = (selector: string) => djeca.findIndex((el) => el.matches(selector));
+
+    const iEyebrow = indeks('[data-cockpit-eyebrow]');
+    const iNaslov = indeks('[data-cockpit-verdict-title]');
+    const iSazetak = indeks('[data-finding-summary]');
+    const iOgrada = indeks('[data-cockpit-caveat]');
+    const iRadnje = indeks('.cockpit-sheet__actions');
+
+    expect([iEyebrow, iNaslov, iSazetak, iOgrada, iRadnje]).toEqual([0, 1, 2, 3, 4]);
+    // `cockpit-marks` NIJE dijete lista presude: stoji uz prsten (`verdictRingHtml`).
+    expect(lead.querySelector('.cockpit-marks')).toBeNull();
+    expect(mount.querySelector('.cockpit-ring-wrap .cockpit-marks')).not.toBeNull();
+  });
+
+  it('MUTACIJA: ograda prije H1 (stari raspored) pada na tvrdnji o redoslijedu', () => {
+    // Prava mutacija mijenja ULAZ tako da renderer proizvede DRUGACIJI, ali i dalje STVARAN DOM
+    // (ovdje: rucno sastavljen ekvivalent stare, pogresne izvedbe Z8), i tvrdi da gard koji cuva
+    // redoslijed pada na njemu. Ne mijenja se vec iscrtan ispravan DOM.
+    const stariRaspored = document.createElement('div');
+    stariRaspored.dataset.cockpitSheetLead = '';
+    stariRaspored.innerHTML = '<p data-cockpit-eyebrow>eyebrow</p>'
+      + '<p class="cockpit-marks">marks</p>'
+      + '<p data-cockpit-caveat="verified">ograda</p>'
+      + '<h1 data-cockpit-verdict-title>Presuda</h1>'
+      + '<div data-finding-summary>sazetak</div>'
+      + '<div class="cockpit-sheet__actions">radnje</div>';
+
+    const djeca = [...stariRaspored.children];
+    const indeks = (selector: string) => djeca.findIndex((el) => el.matches(selector));
+    const poredak = [
+      indeks('[data-cockpit-eyebrow]'),
+      indeks('[data-cockpit-verdict-title]'),
+      indeks('[data-finding-summary]'),
+      indeks('[data-cockpit-caveat]'),
+      indeks('.cockpit-sheet__actions'),
+    ];
+    expect(poredak).not.toEqual([0, 1, 2, 3, 4]);
+  });
+
   it('ograda ogradjenog profila ostaje na listu presude, ne nestaje s ekrana', () => {
     /**
      * Prva izvedba Z8 je autoritet uzela iz `header.authorityLabel`, pa `model.authority` vise
