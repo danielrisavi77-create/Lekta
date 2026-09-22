@@ -409,16 +409,17 @@ def _resolve_ready_plan_task(repo: str, task: dict) -> tuple[str | None, str]:
 
 def _agent_allowed(config: dict, profile: dict | None, agent: str) -> bool:
     """Je li alias vec autoriziran bez ikakvog probnog modelskog poziva."""
-    if profile is None:
-        return True  # test/rucni helper; stvarni tick predaje provider-specificki doctor profil
     provider = AGENT_PROVIDER.get(agent)
     model = model_for(agent)
     if not provider or not model:
         return False
+    # Statičke feature zabrane vrijede i u test/manual helper putu bez doctor profila.
     if provider == "grok" and not bool(config.get("grokEnabled")):
         return False
     if agent == "fable" and not bool(config.get("fableEnabled")):
         return False
+    if profile is None:
+        return True  # test/rucni helper; stvarni tick predaje provider-specificki doctor profil
     return provider_billing_allowed(profile, provider, model)
 
 
