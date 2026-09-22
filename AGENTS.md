@@ -1,7 +1,8 @@
 # AGENTS.md - Lekta (ThesisReady)
 
-Kompaktna pravila za agente koji citaju AGENTS.md standard (Codex i drugi).
-Kanonski operativni vodic je CLAUDE.md; za netrivijalne zadatke procitaj i njega.
+Kompaktna projektna pravila za agente koji citaju AGENTS.md standard (Codex i drugi).
+Kanonski multi-provider ugovor je docs/agents/ORCHESTRATION.md. CLAUDE.md je host-specific
+projektni vodic za Claude Code; ne koristi ga kao zaseban izvor routing ili billing pravila.
 
 ## Sto je projekt
 
@@ -56,8 +57,9 @@ Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u i
 
 - Fan-out agenata je dopusten SAMO za citanje. Paralelno PISANJE u isto stablo nije dopusteno.
 - NE postoji pravilo koje na svaki prompt trosi jos agenata: vise prolaza ISTIM alatom nije
-  provjera nego slaganje. Drugo misljenje mora doci od DRUGOG alata (Codex ili Claude Code, ovisno o implementatoru), a netrivijalna
-  promjena u src/repair, src/citations i src/docx trazi adversarijalni prolaz prije commita.
+  provjera nego slaganje. Drugo misljenje mora doci od DRUGOG CLI providera (Codex, Claude Code
+  ili Grok, ovisno o implementatoru), prema docs/agents/ORCHESTRATION.md. Netrivijalna promjena
+  u src/repair, src/citations i src/docx trazi adversarijalni prolaz prije commita.
 - Dodatni pisci mnoze klasu kvara koja je 2026-08-30 kostala 24 h: commitan artefakt (golden
   snimka) opisivao je ponasanje ciji izvor u repou nikad nije bio commitan.
 
