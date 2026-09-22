@@ -28,6 +28,17 @@ export type ResultsCockpitAction =
   | { kind: 'plan-opened' };
 
 /**
+ * OPCI ulaz (jedini primarni gumb, `repair-safe`/`simulate-repair`) naspram PO-NALAZNOG ulaza
+ * (kartica nalaza / desk, radnja `repair`). `primaryAction` (nize) uvijek lijepi `findingId`
+ * PRVOG popravljivog nalaza uz `repair-safe` kao METU popravka, nikad kao korisnikov odabir, pa
+ * `app.ts` tu metu smije koristiti za ANIMACIJU cilja, ali NE smije njome preodabrati/najaviti
+ * pojedini nalaz kao da je korisnik bas njega trazio (popravak drugog kruga, Z8).
+ */
+export function isGeneralRepairEntry(action: ResultsCockpitAction): boolean {
+  return action.kind === 'repair-safe' || action.kind === 'simulate-repair';
+}
+
+/**
  * KOREKTORSKI STOL kao izvor. Ljuska NE zna kako se crta dokument: `mountDocument` joj se
  * predaje, jer je faksimil tezak modul koji se ucitava lijeno, a ovaj bi ga uvoz povukao u
  * graf ekrana rezultata.

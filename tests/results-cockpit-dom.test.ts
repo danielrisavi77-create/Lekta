@@ -6,6 +6,7 @@ import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import {
   cockpitSteps,
   cockpitStepsHtml,
+  isGeneralRepairEntry,
   renderResultsCockpit,
   resultRendererFor,
   type ResultsCockpitAction,
@@ -924,5 +925,28 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
       expect(onemogucen).toContain('opacity');
       expect(onemogucen).not.toContain('--ck-muted');
     });
+  });
+});
+
+describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)', () => {
+  // `handleResultsCockpitAction` u `app.ts` nije izvezen (tesko ga je izolirano montirati bez
+  // cijele aplikacije), pa se ovdje testira CISTA odluka koju on koristi: `isGeneralRepairEntry`
+  // (izvezena iz `results-cockpit.ts`, gdje i zivi `primaryAction` koji tu metu lijepi).
+  //
+  // BUG KOJI OVO CUVA: `primaryAction` uvijek prilijepi `findingId` PRVOG popravljivog nalaza uz
+  // `repair-safe`/`simulate-repair`, kao METU popravka, ne kao korisnikov odabir. Prije popravka
+  // je `app.ts` tu metu tumacio kao odabir i otvarao ledger modal s fokus-trapom, prisilno
+  // ukljucivao jedno pravilo i javljao toast s imenom pravila, iako je korisnik kliknuo OPCI gumb
+  // "Napravi plan popravka" bez ijednog konkretnog nalaza u ruci.
+  it('opci gumb (repair-safe / simulate-repair) je OPCI ulaz i s findingId metom i bez nje', () => {
+    expect(isGeneralRepairEntry({ kind: 'repair-safe', findingId: 'nalaz-1' })).toBe(true);
+    expect(isGeneralRepairEntry({ kind: 'repair-safe' })).toBe(true);
+    expect(isGeneralRepairEntry({ kind: 'simulate-repair', findingId: 'nalaz-1' })).toBe(true);
+    expect(isGeneralRepairEntry({ kind: 'repair-safe', ruleIds: ['r1'] })).toBe(true);
+  });
+
+  it('po-nalazni ulaz (kartica nalaza, radnja repair) NIJE opci ulaz', () => {
+    expect(isGeneralRepairEntry({ kind: 'repair', findingId: 'nalaz-1' })).toBe(false);
+    expect(isGeneralRepairEntry({ kind: 'preview', findingId: 'nalaz-1' })).toBe(false);
   });
 });

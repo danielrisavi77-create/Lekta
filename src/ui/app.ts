@@ -54,7 +54,7 @@ import { collectAllPreviewFlags } from '../preview/preview-anchors';
 import { resultReadiness, repairCeiling } from './result-readiness';
 import { renderProgressScan } from './progress-scan';
 import { buildVisualResultModel } from './results/visual-result-model';
-import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
+import { isGeneralRepairEntry, renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
 import { buildDocumentDnaModel } from '../results/document-dna-model';
 import { profileStatusForEvent } from './profile-status-event';
 import { buildExactEvidence } from './results/exact-evidence';
@@ -1156,7 +1156,7 @@ function handleResultsCockpitAction(r: any,action: ResultsCockpitAction){
   if(action.kind==='open-findings'){setResultsCockpitAdvanced(true);openTab('issues');$('#issuesList')?.scrollIntoView({behavior:'smooth',block:'start'});return}
   if(action.kind==='plan-opened'){void trackEvent('repair_plan_opened',{profileId:r?.details?.profileDefinitionId||''});return}
   const finding=findingsFor(r).find(x=>x.id===action.findingId);
-  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){scrollToRepairPanel(r,finding);if('ruleIds' in action&&action.ruleIds)repairPanelHandle?.applySelection(action.ruleIds);return}
+  if(isGeneralRepairEntry(action)){scrollToRepairPanel(r);if('ruleIds' in action&&action.ruleIds)repairPanelHandle?.applySelection(action.ruleIds);return}
   if(!finding)return;
   if(action.kind==='preview'){
     void trackEvent('finding_opened',{category:finding.category});
