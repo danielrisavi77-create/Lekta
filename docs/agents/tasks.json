@@ -223,7 +223,8 @@
       "dependsOn": [
         "T18",
         "T20",
-        "T21"
+        "T21",
+        "T49"
       ],
       "note": "P0. Dokaz: stvarne testne poruke stizu na namjenske adrese, sve sesijske grane daju ocekivani ishod, a anonimni korisnik nakon registracije zadrzava vlastiti rad i prava."
     },
@@ -243,7 +244,8 @@
       "dependsOn": [
         "T20",
         "T22",
-        "T23"
+        "T23",
+        "T48"
       ],
       "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag."
     },
@@ -358,7 +360,8 @@
       "status": "blocked",
       "dependsOn": [
         "T20",
-        "T27"
+        "T27",
+        "T50"
       ],
       "note": "P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original. Development dokaz za Lekta -> WordReplica EXE postoji kroz npm run repair:runner:e2e (stvarni claim/status HTTP tok); produkcijski dokaz ostaje blocked dok trusted potpisani runner i real-Word release gate ne prodju."
     },
@@ -452,7 +455,8 @@
         "T28",
         "T30",
         "T32",
-        "T37"
+        "T37",
+        "T49"
       ],
       "note": "P1. Dokaz: nema slomljenog javnog puta, pogresne ponude ni kontradiktorne tvrdnje, a crawl popis odgovara manifestu ruta i objavljenom artefaktu."
     },
@@ -521,10 +525,34 @@
       "status": "blocked",
       "dependsOn": [
         "T15",
-        "T46"
+        "T46",
+        "T48"
       ],
       "note": "P0. Dokaz: javni artefakt odgovara dokazanoj verziji, svi ukljuceni tokovi rade, prvi tjedan nadzora je obradjen bez nerazrijesenog kriticnog signala i operacije su predane uz runbook."
+    },
+    {
+      "id": "T48",
+      "title": "Pravni subjekt, placanje i DPA",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Vlasnicka radnja izvan repozitorija, kod je ne prati: otvoriti obrt, ishoditi OIB, otvoriti Lemon Squeezy payout racun i potpisati DPA sa Supabase i Netlify. Status azurira vlasnik nakon zavrsetka."
+    },
+    {
+      "id": "T49",
+      "title": "Domena i transakcijska e-posta",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Vlasnicka radnja izvan repozitorija, kod je ne prati: kupiti domenu, usmjeriti DNS na Netlify i postaviti SPF, DKIM i DMARC za transakcijsku e-postu. Status azurira vlasnik nakon zavrsetka."
+    },
+    {
+      "id": "T50",
+      "title": "Code-signing certifikat za WordReplica runner",
+      "status": "blocked",
+      "dependsOn": [
+        "T48"
+      ],
+      "note": "Vlasnicka radnja izvan repozitorija, kod je ne prati: nabaviti Authenticode certifikat za potpisivanje WordReplica runner EXE-a. Azure Artifact Signing za fizicke osobe dostupan je samo u SAD-u i Kanadi, pa je preduvjet postojanje obrta iz T48. Vidi docs/LOCAL_REPAIR_RELEASE.md, odjeljak 'Stanje: iskljuceno do certifikata'."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: dodani vlasnicki zadaci T48 (pravni subjekt i DPA), T49 (domena i transakcijska e-posta) i T50 (code-signing certifikat, ovisi o T48); T24, T47 sada ovise o T48, T22, T43 o T49, a T35 (WordReplica produkcijski dokaz) o T50, sve u skladu s docs/LOCAL_REPAIR_RELEASE.md."
 }

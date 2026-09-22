@@ -4,6 +4,53 @@ Ovaj postupak objavljuje jednu stabilnu, Authenticode-potpisanu WordReplica
 izvrsnu datoteku. Claim tajna nije u javnom URL-u ni u binarnom artefaktu;
 Lekta je dodaje samo lokalnom nazivu preuzete datoteke za jedan placeni posao.
 
+## Stanje: iskljuceno do certifikata
+
+Stanje na dan 2026-09-22: lokalni popravak na lansiranju ostaje ISKLJUCEN.
+
+1. **Nema code-signing certifikata.** Azure Artifact Signing za fizicke osobe
+   dostupan je samo u SAD-u i Kanadi. Obrt kao pravni subjekt jos ne postoji.
+   Oba koraka su vlasnicke radnje i vode se kao `T48` (pravni subjekt, OIB,
+   payout racun i DPA) i `T50` (Authenticode certifikat, ovisi o T48) u
+   `docs/agents/tasks.json`.
+2. **Sto je vec u kodu i inertno.** Edge funkcija `repair-docx` izdaje
+   `localLaunch` samo kad je `REPAIR_LOCAL_ENABLED=true` i
+   `REPAIR_LOCAL_DISABLED` nije `true`. Klijent nudi EXE preuzimanje samo kad
+   su postavljene `VITE_LEKTA_LOCAL_REPAIR_RUNNER_URL` i
+   `VITE_LEKTA_LOCAL_REPAIR_RUNNER_SHA256`. Migracije `0200` do `0202` i
+   funkcije `repair-local-claim` i `repair-local-status` nisu na produkciji;
+   zadnja produkcijska migracija je `0103`. Sve gore ostaje neaktivno dok se
+   ne provede release iz ovog dokumenta.
+3. **Tocni koraci za kasnije ukljucivanje**, redom, kroz
+   `scripts/run-local-repair-release.mts` (isti redoslijed provodi
+   `npm run release:repair:deploy` opisan nize u ovom dokumentu):
+   1. Provjeriti da `T48` i `T50` imaju status `done` u `docs/agents/tasks.json`
+      i da postoji trusted Authenticode certifikat s poznatim publisher
+      thumbprintom.
+   2. Zatraziti izricit OK vlasnika za konkretan release SHA prije bilo kojeg
+      koraka koji dira produkciju.
+   3. Pokrenuti fazu guard-disabled: prva remote mutacija postavlja samo
+      `REPAIR_LOCAL_DISABLED=true`, prije bilo koje druge promjene.
+   4. Provesti fail-closed migracijski workspace i stvarni `supabase db push`
+      za `0200` do `0202`, iskljucivo naredbom `supabase db push` u
+      privremenom, provjerenom workspaceu (nikad MCP `apply_migration`).
+   5. Deployati Edge funkcije `repair-local-claim`, `repair-local-status` i
+      `repair-docx`.
+   6. Postaviti secrete kroz ogranicen `--env-file` (privatni contract kljuc,
+      key id, `REPAIR_LOCAL_ENABLED=false`, `REPAIR_LOCAL_DISABLED=true`).
+   7. Objaviti runner: `npm run release:repair:preflight` pa
+      `npm run release:repair:deploy` s provjerenim artefaktom.
+   8. Aktivirati flow: `REPAIR_LOCAL_ENABLED=true` uz `REPAIR_LOCAL_DISABLED=true`
+      i dalje, zatim tek zadnja operacija `REPAIR_LOCAL_DISABLED=false`.
+
+   Svaki od ovih koraka trazi izricit OK vlasnika prije izvodenja, a
+   Authenticode provjere i fail-closed gate iz preflighta i deploya se ne
+   smiju slabiti ni preskakati radi brzine.
+4. **Sto vlasnik radi rucno na Windowsu**, izvan ovog repozitorija: build i
+   Authenticode potpis runnera u WordReplica stablu, `npm run verify:word`
+   Tier 2 provjera i Word COM testovi unutar WordReplice prije nego se
+   artefakt smatra kandidatom za release.
+
 ## Preduvjeti
 
 - WordReplica `BUILD_LEKTA_REPAIR_RUNNER.ps1` proizveo je `LektaRepair.exe` i
