@@ -230,11 +230,11 @@
     {
       "id": "T23",
       "title": "Urediti katalog, cijene i prava proizvoda",
-      "status": "ready",
+      "status": "in_progress",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: svaki ponudjeni SKU ima jednoznacno objasnjenje i MoR mapiranje, test potvrdjuje stvarnu cijenu i pravo, a stara kupnja ostaje ispravno prepoznata nakon promjene kataloga."
+      "note": "P0. T23 evidence 2026-09-22: staging read-only inventory vraca 17 aktivnih retail SKU-ova, svih 17 bez mor_product_id; migracije imaju 23 ukupna ID-a (20 Lekta, 3 Katedra), a partner redovi su skriveni RLS-om. Cijene, server-authority checkout i entitlement testovi 88/88 zeleni. Otvoreno: owner mora potvrditi stvarne MoR variant ID-eve i poslovnu odluku za dominirane do_obrane SKU-ove. Detalji: docs/agents/t23-catalog-evidence-2026-09-22.md."
     },
     {
       "id": "T24",
