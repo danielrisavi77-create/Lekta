@@ -110,8 +110,12 @@ describe('Results Cockpit V1', () => {
 
     mount.querySelector<HTMLButtonElement>('[data-cockpit-primary]')?.click();
 
-    // OPCI ULAZ, ne ulaz u prvi popravljiv nalaz iz `findings.top`: vidi `primaryAction`.
-    expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe' });
+    // OPCI ULAZ, ne ulaz u prvi popravljiv nalaz iz `findings.top`: vrsta radnje je `repair-safe`
+    // bez obzira na nalaz. Uz nju putuje meta popravka (`findingId` popravljivog nalaza iz cijelog
+    // `findings.document`), jer panel bez mete ne moze predodabrati redak; vidi `primaryAction`.
+    const meta = model.findings.document.find((finding) => finding.capabilities.repair);
+    expect(meta?.id).toBeTruthy();
+    expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id });
   });
 
   it('lets the user open a finding location and the advanced layer', () => {
@@ -585,6 +589,69 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(mount.querySelectorAll('[data-testid="repair-entry"]').length === 0).toBe(false);
   });
 
+  /**
+   * META POPRAVKA NA PRIMARNOM GUMBU (popravak drugog kruga pregleda). Kriterij prihvacanja trazi
+   * `data-finding-id` na primarnom gumbu KAD POSTOJI POPRAVLJIV NALAZ, a prva izvedba Z8 ga je u
+   * grani s dostupnim popravkom nikad nije emitirala: `app.ts` je panel otvarao bez mete, dok je
+   * osnovica (e6ca53a1) predodabirala i osvjetljavala bas onaj redak zbog kojeg je korisnik kliknuo.
+   *
+   * ULAZ JE NAMJERNO TEZAK SLUCAJ: jedini popravljiv nalaz je info nalaz (`priorityRank` 4), dakle
+   * IZVAN prva tri. Time se uz metu dokazuje i da se cita `findings.document`, ne `findings.top`.
+   */
+  describe('meta popravka na primarnom gumbu', () => {
+    const NASLOV_INFO = 'Naslov možda koristi ručno oblikovanje';
+
+    function saMetom(repairItems: readonly { fixerId: string; matchKeys: readonly string[] }[]) {
+      const mount = document.createElement('section');
+      const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
+      const model = buildVisualResultModel(
+        result({
+          details: {
+            ruleAuthority: 'official-source',
+            // Bez triage nalaza nijedan nalaz nije `autoRepairable`, pa popravljivost dolazi
+            // ISKLJUCIVO iz `repairItems` i test kontrolira koji je nalaz popravljiv.
+            triage: { counts: { auto: 2, assisted: 0, manual: 1, total: 3 }, findings: [] },
+          },
+        }),
+        { repairItems },
+      );
+      renderResultsCockpit(mount, model, { repairAvailable: true, onAction });
+      return { mount, model, onAction };
+    }
+
+    const gumbIz = (mount: HTMLElement) => mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    it('gumb nosi data-finding-id popravljivog nalaza i kad je nalaz izvan prva tri', () => {
+      const { mount, model, onAction } = saMetom([{ fixerId: 'heading-fixer', matchKeys: [NASLOV_INFO] }]);
+      const meta = model.findings.document.find((nalaz) => nalaz.capabilities.repair);
+
+      // Ciljana klasa ulaza: popravljiv nalaz POSTOJI, ali NIJE medju prva tri.
+      expect(meta?.title).toBe(NASLOV_INFO);
+      expect(model.findings.top.some((nalaz) => nalaz.capabilities.repair)).toBe(false);
+
+      const gumb = gumbIz(mount);
+      expect(gumb?.dataset.cockpitAction).toBe('repair-safe');
+      expect(gumb?.dataset.testid).toBe('repair-entry');
+      expect(gumb?.dataset.findingId).toBe(meta?.id);
+
+      gumb?.click();
+      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id });
+    });
+
+    it('MUTACIJA: bez ijednog popravljivog nalaza opci ulaz ostaje, ali mete nema', () => {
+      const { mount, model, onAction } = saMetom([]);
+
+      // Mutacija mijenja ULAZ (nijedan signal popravka) i vrti ISTE tvrdnje: da je atribut
+      // konstanta, ostao bi na gumbu i ovdje.
+      expect(model.findings.document.some((nalaz) => nalaz.capabilities.repair)).toBe(false);
+      expect(mount.querySelectorAll('[data-testid="repair-entry"]')).toHaveLength(1);
+      expect(gumbIz(mount)?.dataset.findingId).toBeUndefined();
+
+      gumbIz(mount)?.click();
+      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe' });
+    });
+  });
+
   it('spojena rečenica nosi OBA broja kad je strop poznat', () => {
     const { mount } = renderaj({}, { repairOutlook: OUTLOOK });
     const redak = mount.querySelector('.fsum-auto')?.textContent ?? '';
@@ -809,18 +876,28 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
       return CSS.slice(CSS.indexOf('{', od), CSS.indexOf('}', od));
     };
 
+    /**
+     * JEDAN predikat za oba prolaza. Prvi krug popravka je mutaciju pisao kao
+     * `expect('color: var(--ck-muted);').toContain('color: var(--ck-muted);')`, sto je niz koji
+     * sadrzi sam sebe: tvrdnja bi prosla i da je `result-visuals.css` prazan. Mutacija zato mora
+     * mijenjati ULAZ i ponovno vrtjeti ISTI predikat.
+     */
+    const punaTinta = (blok: string): boolean => !blok.includes('--ck-muted') && blok.includes('var(--ck-ink)');
+
     it('bazno pravilo .desk-nav__btn { } nema --ck-muted i nosi --ck-ink', () => {
-      const bazno = blokZa('.desk-nav__btn {');
-      expect(bazno).not.toContain('--ck-muted');
-      expect(bazno).toContain('var(--ck-ink)');
+      expect(punaTinta(blokZa('.desk-nav__btn {'))).toBe(true);
     });
 
-    it('MUTACIJA: staro pravilo (--ck-muted na baznom gumbu) bi ovdje palo', () => {
-      const staroPravilo = 'color: var(--ck-muted);';
-      expect(blokZa('.desk-nav__btn {')).not.toContain(staroPravilo);
-      // Kontrola: da je stara vrijednost i dalje u bloku, gornja tvrdnja bi pala na ovom istom
-      // predikatu, umjesto da bude tautoloski istinita bez obzira na sadrzaj CSS-a.
-      expect('color: var(--ck-muted);').toContain(staroPravilo);
+    it('MUTACIJA: vraceno staro pravilo (--ck-muted) obara isti predikat', () => {
+      const bazno = blokZa('.desk-nav__btn {');
+      const mutirano = bazno.replace('color: var(--ck-ink);', 'color: var(--ck-muted);');
+
+      // Generator mutacije dokazuje da je proizveo ciljanu klasu ulaza: zamjena se DOGODILA i
+      // mutirani blok stvarno nosi staru vrijednost. Bez ovih dvije tvrdnje bi zelena mutacija
+      // mogla znaciti samo da `replace` nije nasao sto zamijeniti.
+      expect(mutirano).not.toBe(bazno);
+      expect(mutirano).toContain('color: var(--ck-muted);');
+      expect(punaTinta(mutirano)).toBe(false);
     });
 
     it('onemogucen gumb i dalje ostaje citljiv (opacity, ne --ck-muted)', () => {
