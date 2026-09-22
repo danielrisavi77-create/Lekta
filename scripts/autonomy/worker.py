@@ -711,12 +711,8 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if phase not in ("plan", "implement", "review"):
         result["reason"] = f"nepoznata faza: {phase}"
         return result
-    if isinstance(profile, dict) and isinstance(profile.get("providers"), dict):
-        if not provider_billing_allowed(profile, str(job.get("command")), job.get("requestedModel")):
-            result["reason"] = f"billing_unknown: provider/model nije odobren ({job.get('command')} {job.get('requestedModel')})"
-            return result
-    elif not billing_allowed(profile):
-        result["reason"] = "billing_unknown: profil naplate nije potvrdjen"
+    if not provider_billing_allowed(profile, str(job.get("command")), job.get("requestedModel")):
+        result["reason"] = f"billing_unknown: provider/model nije odobren ({job.get('command')} {job.get('requestedModel')})"
         return result
     base_env = scrubbed_env(env)
     parent_env = os.environ if env is None else env
