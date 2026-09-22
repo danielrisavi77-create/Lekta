@@ -25,14 +25,14 @@ export interface DeskNav {
 /** Polozaj se STISCE u raspon, jer izvor indeksa je klik i moze zaostati za novim rezultatom. */
 export function deskNav(ukupno: number, index: number): DeskNav {
   const n = Math.max(0, Math.trunc(ukupno));
-  if (n === 0) return { index: 0, ukupno: 0, prethodni: null, sljedeci: null, oznaka: '0 / 0' };
+  if (n === 0) return { index: 0, ukupno: 0, prethodni: null, sljedeci: null, oznaka: '0 od 0' };
   const i = Math.min(Math.max(0, Math.trunc(index)), n - 1);
   return {
     index: i,
     ukupno: n,
     prethodni: i > 0 ? i - 1 : null,
     sljedeci: i < n - 1 ? i + 1 : null,
-    oznaka: `${i + 1} / ${n}`,
+    oznaka: `${i + 1} od ${n}`,
   };
 }
 
@@ -56,12 +56,13 @@ export function deskTraka(item: DeskItem): string | null {
 
 /**
  * PAGER (Z8). Desna strana stola nosi JEDNU karticu, pa navigacija vise nije podnozje popisa nego
- * zaglavlje kartice: polozaj "Nalaz 3 / 6" i dvije okrugle strelice.
+ * zaglavlje kartice: polozaj "Nalaz 3 od 6" i dvije okrugle strelice.
  *
- * RIJEC "Nalaz" STOJI IZVAN `[data-desk-count]`, a brojka ostaje `nav.oznaka` ("3 / 6"). Taj
+ * RIJEC "Nalaz" STOJI IZVAN `[data-desk-count]`, a brojka ostaje `nav.oznaka` ("3 od 6"). Taj
  * element je ugovor: `tests/desk-mount.test.ts` cita tocno njegov tekst kao polozaj stola, pa bi
  * upisivanje cijele recenice u njega pretvorilo mjeru polozaja u mjeru copyja. Predlozak pise
- * "Nalaz 1 od 6"; ovdje je separator kosa crta, jer polozaj ima samo jedan zapis na ekranu.
+ * "Nalaz 1 od 6", pa je Z8 pager uskladen s njim (MAJOR odluka orkestratora): stariji separator
+ * kosa crta zamijenjen je rijecju "od" u JEDNOM cvoru teksta, bez skrivenih duplikata za testove.
  *
  * Razredi gumba se NE mijenjaju: `desk-nav__btn--prev/next` i prazan `data-desk-go` uz `disabled`
  * su ugovor s delegacijom u `mountDesk` i s gardom da navigacija NE OMATA.
