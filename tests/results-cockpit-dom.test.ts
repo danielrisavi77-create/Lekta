@@ -742,6 +742,25 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(rucnaSamo.mount.querySelector('[data-cockpit-stamp]')).toBeNull();
   });
 
+  /**
+   * PUNI NATPIS PAGERA. `deskNav` vraca samo brojku ("1 od 6"), a rijec "Nalaz" stoji IZVAN
+   * `[data-desk-count]`, u `.desk-pager__count`. Dosad ju nije trazio nijedan gard: brojku su
+   * pokrivali `desk-view.test.ts` i Playwright, pa je "1 od 6" bez rijeci prolazilo neopazeno,
+   * iako sam broj ne kaze cega je to prvo od sest.
+   */
+  it('pager pise punim tekstom "Nalaz N od M", ne samo brojku', () => {
+    const { mount, model } = saStolom();
+    const natpis = () => mount.querySelector('[data-desk-pane] .desk-pager__count')?.textContent?.replace(/\s+/g, ' ').trim();
+    const ukupno = model.findings.document.length;
+
+    expect(natpis()).toBe(`Nalaz 1 od ${ukupno}`);
+
+    // MUTACIJA ULAZA: strelica mijenja prikazani nalaz, pa natpis MORA pratiti polozaj; fiksan
+    // natpis bi ovdje ostao na "Nalaz 1 od N".
+    klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--next'));
+    expect(natpis()).toBe(`Nalaz 2 od ${ukupno}`);
+  });
+
   it('desni pano stola prikazuje JEDNU karticu, a strelice mijenjaju prikazanu', () => {
     const { mount, model } = saStolom();
     const naslov = () => mount.querySelector('[data-desk-pane] .cockpit-finding h3')?.textContent;
