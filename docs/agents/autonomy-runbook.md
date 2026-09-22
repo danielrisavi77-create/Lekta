@@ -44,7 +44,8 @@ python -m scripts.autonomy.cli report
   `--attest-models gpt-6-astra,sonnet`. Grok je odvojen: trazi `grokEnabled=true`, dostupan CLI,
   `--attest-grok-included` i `--attest-grok-models grok-4.6`. Prisutan `XAI_API_KEY` blokira Grok
   included-account profil; Anthropic API credential blokira Claude subscription put. Jedan provider nikad
-  ne autorizira drugi.
+  ne autorizira drugi. Nakon nadogradnje s legacy globalnog billing profila ponovno pokreni
+  `doctor --write-profile`; stari profil ostaje citljiv za status, ali ne autorizira nijedan stvarni provider.
 - `tick --dry-run`: skupi signale, ispise sto BI uslo u red; ne upisuje, ne uzima lease, ne zove model,
   ne otvara PR.
 - `tick`: u `observe` upisuje signale i staje. U `propose` i `auto_low_risk` uzima najvise jedan posao
