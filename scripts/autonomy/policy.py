@@ -68,7 +68,7 @@ def billing_allowed(profile: dict | None) -> bool:
     """Smije li kontroler uopce razmatrati modelski poziv.
 
     Novi profili imaju provider-specificki `providers` objekt. Legacy profil bez njega ostaje
-    podrzan zbog starih instalacija i testova, ali vrijedi samo za subscription Codex/Claude tok.
+    citljiv radi migracije/statusa, ali ne autorizira nijedan stvarni model provider.
     """
     if not isinstance(profile, dict):
         return False
