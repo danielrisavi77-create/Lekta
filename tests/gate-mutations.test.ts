@@ -40,6 +40,7 @@ import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { storeIdSecretProblems } from './helpers/naplata-env';
+import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
 import { naplataSecretsVerdict } from '../scripts/verify-naplata-secrets.mjs';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -2173,7 +2174,36 @@ const MUTATIONS: Mutation[] = [
       }).length === 0;
     },
   },
+
+  // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------
+  {
+    id: 'rls/corpus-contributions-update-own',
+    imitates: 'policy corpus_contributions_update_own iz 0102: korisnik s vlastitim JWT-om mogao je PostgREST PATCH-em prepisati path, expires_at, consent_version i pseudonymization, dakle sam zapis o tome pod kojom je privolom sto pohranjeno',
+    caught: () => {
+      const files = corpusMigrations();
+      // MUTACIJA u memoriji: makni 0203 iz POPISA (disk se ne dira). To je zatečeno stanje
+      // repozitorija prije ove promjene, pa tvrdnja nije o izmisljenom kvaru.
+      const bez0203 = files.filter((m) => !m.file.startsWith('0203_'));
+      if (bez0203.length !== files.length - 1) return false;
+      return parseCorpusPolicyHistory(bez0203).remaining.includes('corpus_contributions_update_own');
+    },
+    cleanBefore: () => {
+      const history = parseCorpusPolicyHistory(corpusMigrations());
+      // createdCount stiti od vakuuma: pokvaren izvod bi dao prazan skup i "cist" baseline.
+      return history.createdCount >= 2 && history.remaining.length === 0;
+    },
+  },
 ];
+
+/** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
+function corpusMigrations(): MigrationFile[] {
+  const dir = resolve(process.cwd(), 'supabase', 'migrations');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((file) => ({ file, sql: readFileSync(join(dir, file), 'utf8') }));
+}
+
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it.each(MUTATIONS.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
     expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);
