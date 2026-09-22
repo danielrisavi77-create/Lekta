@@ -250,7 +250,7 @@ class WorkerTest(unittest.TestCase):
         self.assertIn("launcher_missing", missing["reason"])
 
     def test_child_env_has_no_secrets(self):
-        env = scrubbed_env({"PATH": "x", "ANTHROPIC_API_KEY": "a", "GITHUB_TOKEN": "b", "gh_token": "c",
+        env = scrubbed_env({"PATH": "x", "ANTHROPIC_API_KEY": "a", "XAI_API_KEY": "x", "GITHUB_TOKEN": "b", "gh_token": "c",
                             "SUPABASE_SERVICE_ROLE_KEY": "d", "NETLIFY_AUTH_TOKEN": "e", "HOME": "h", "NPM_TOKEN": "n"})
         self.assertEqual(sorted(env), ["HOME", "PATH"])
 
@@ -261,6 +261,19 @@ class WorkerTest(unittest.TestCase):
         claude = parse_provider_output("claude", json.dumps({"subtype": "success", "is_error": False, "modelUsage": {"claude-opus-5": {}}}), 0)
         self.assertEqual((claude["ok"], claude["reported_models"]), (True, ["claude-opus-5"]))
         self.assertFalse(parse_provider_output("claude", json.dumps({"subtype": "error_max_turns", "is_error": True}), 0)["ok"])
+        grok = parse_provider_output("grok", json.dumps({
+            "text": "ok", "stopReason": "end_turn", "num_turns": 1,
+            "usage": {"input_tokens": 10, "output_tokens": 4, "total_tokens": 14},
+            "total_cost_usd": 0.00001,
+            "modelUsage": {"grok-4.6-build": {"inputTokens": 10, "outputTokens": 4, "modelCalls": 1, "costUSD": 0.00001}},
+        }), 0)
+        self.assertEqual((grok["ok"], grok["reported_models"]), (True, ["grok-4.6-build"]))
+        self.assertEqual(grok["usage"]["totalTokens"], 14)
+        self.assertEqual(grok["usage"]["modelCalls"], 1)
+        real_codex = parse_provider_output("codex", REAL_TOOL_USE_STDOUT, 0)
+        self.assertEqual(real_codex["usage"]["inputTokens"], 53791)
+        self.assertEqual(real_codex["usage"]["cachedInputTokens"], 36352)
+        self.assertEqual(real_codex["usage"]["outputTokens"], 213)
         self.assertEqual(classify_stream("HTTP 429 Too Many Requests"), "waiting_quota")
         self.assertEqual(classify_stream("session expired, please log in"), "needs_login")
         self.assertIsNone(classify_stream("all good"))
@@ -378,6 +391,8 @@ class WorkerTest(unittest.TestCase):
     def test_tool_call_counter_is_unknown_for_claude_and_ignores_prose(self):
         self.assertIsNone(successful_tool_calls("claude", json.dumps({"subtype": "success"})),
                           "Claude ne prijavljuje popis alata; nepoznato ne smije blokirati")
+        self.assertIsNone(successful_tool_calls("grok", json.dumps({"text": "ok"})),
+                          "Grok JSON summary ne izlaže pouzdan per-tool brojac")
         self.assertEqual(successful_tool_calls("codex", SANDBOX_STDOUT), 0, "tri poruke modela nisu citanje")
         self.assertEqual(successful_tool_calls("codex", ""), 0)
         self.assertEqual(successful_tool_calls("codex", TOOL_CALL_LINE), 1)
@@ -406,6 +421,9 @@ class WorkerTest(unittest.TestCase):
             argv = seen["argv"]
             self.assertEqual(argv[-4:], ["--override-status", "in_review", "--override-implementer", "sonnet"])
             self.assertEqual(argv[argv.index("--phase") + 1], "review")
+            prepare_job_via_node(self.dir, "T17", "plan", "grok")
+            self.assertIn("--included-account", seen["argv"])
+            self.assertNotIn("--subscription", seen["argv"])
 
     def test_launcher_resolution_reports_shims(self):
         info = resolve_launcher(os.path.basename(sys.executable))
