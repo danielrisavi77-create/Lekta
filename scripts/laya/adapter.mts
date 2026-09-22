@@ -20,31 +20,83 @@ export interface DecisionSnapshot {
 }
 const STATUSES = new Set<EngineStatus>(['pass', 'warn', 'fail', 'informational', 'unmeasurable']);
 
-export function buildDecisionCases(input: DecisionSnapshot): DecisionCase[] {
-  assertLocalReviewAllowed(input?.provenance);
-  if (!Array.isArray(input.records) || input.records.length > 1000 || !Array.isArray(input.result?.checks)) {
+/** Cita samo vlastiti podatkovni descriptor, nikad getter ili naslijedjenu vrijednost.
+ * Provjera tipa VRIJEDNOSTI ostaje u postojecem ugovoru. Proxy nije dopusten ulaz
+ * pouzdanog in-process pozivatelja; ovaj adapter nije sandbox za izvrsivi JS.
+ */
+function ownValue<T extends object, K extends keyof T>(value: T, key: K, optional = false): T[K] {
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+    || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) {
     throw new DecisionContractError('INVALID_SNAPSHOT');
   }
-  const checks = input.result.checks.filter(check => check?.id === CHECK_ID);
+  const descriptor = Object.getOwnPropertyDescriptor(value, key);
+  if (!descriptor && optional) return undefined as T[K];
+  if (!descriptor || !Object.hasOwn(descriptor, 'value') || !descriptor.enumerable) {
+    throw new DecisionContractError('INVALID_SNAPSHOT');
+  }
+  return descriptor.value as T[K];
+}
+
+/** Sparse batch nije prazan batch. Kopija koristi samo vlastite data-indekse.
+ * Broj kljuceva odbija i ogromne sparse nizove prije petlje te vlastite map/filter
+ * metode. Nad ulazom se ne pozivaju njegove metode ni iterator.
+ */
+function denseValues<T>(value: readonly T[], maximum = Number.MAX_SAFE_INTEGER): T[] {
+  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+    throw new DecisionContractError('INVALID_SNAPSHOT');
+  }
+  const length: number = Object.getOwnPropertyDescriptor(value, 'length')!.value;
+  if (length > maximum || Reflect.ownKeys(value).length !== length + 1) {
+    throw new DecisionContractError('INVALID_SNAPSHOT');
+  }
+  const items: T[] = [];
+  for (let index = 0; index < length; index++) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+    if (!descriptor || !Object.hasOwn(descriptor, 'value') || !descriptor.enumerable) {
+      throw new DecisionContractError('INVALID_SNAPSHOT');
+    }
+    items.push(descriptor.value as T);
+  }
+  return items;
+}
+
+export function buildDecisionCases(input: DecisionSnapshot): DecisionCase[] {
+  const provenance = ownValue(input, 'provenance');
+  assertLocalReviewAllowed(provenance);
+  const documentRevisionId = ownValue(input, 'documentRevisionId');
+  const engineRevision = ownValue(input, 'engineRevision');
+  const profile = ownValue(input, 'profile');
+  const profileId = ownValue(profile, 'id');
+  const profileRevision = ownValue(profile, 'revision');
+  const result = ownValue(input, 'result');
+  const records = denseValues(ownValue(input, 'records'), 1000);
+  const checks = denseValues(ownValue(result, 'checks')).map(check => ({
+    id: ownValue(check, 'id', true), status: ownValue(check, 'status'),
+  })).filter(check => check.id === CHECK_ID);
   const rawStatus = checks.length === 1 ? checks[0].status : null;
   const engineCheckStatus: EngineStatus = checks.length === 0 ? 'missing' : checks.length > 1 ? 'ambiguous'
     : STATUSES.has(rawStatus as EngineStatus) ? rawStatus as EngineStatus : 'unknown';
   const seen = new Set<string>();
-  return input.records.map(record => {
-    if (!record || ![null, CHECK_ID].includes(record.checkId)
+  return records.map(source => {
+    const record: DecisionRecord = {
+      checkId: ownValue(source, 'checkId'), linkage: ownValue(source, 'linkage'),
+      paragraphIndex: ownValue(source, 'paragraphIndex'), recordIndex: ownValue(source, 'recordIndex'),
+      referenceText: ownValue(source, 'referenceText'), language: ownValue(source, 'language'),
+      extraction: ownValue(source, 'extraction'), rule: ownValue(source, 'rule'),
+    };
+    if (![null, CHECK_ID].includes(record.checkId)
       || !['explicit', 'uncertain'].includes(record.linkage)) throw new DecisionContractError('INVALID_SNAPSHOT');
-    const identity = { checkId: CHECK_ID, documentRevisionId: input.documentRevisionId,
-      profileId: input.profile?.id, profileRevision: input.profile?.revision,
+    const identity = { checkId: CHECK_ID, documentRevisionId, profileId, profileRevision,
       paragraphIndex: record.paragraphIndex, recordIndex: record.recordIndex };
     const caseId = decisionCaseId(identity);
     if (seen.has(caseId)) throw new DecisionContractError('DUPLICATE_IDENTITY');
     seen.add(caseId);
-    const audit: DecisionAudit = { engineRevision: input.engineRevision, engineCheckStatus,
+    const audit: DecisionAudit = { engineRevision, engineCheckStatus,
       linkage: record.checkId === CHECK_ID && checks.length === 1 ? record.linkage : 'uncertain' };
     const modelInput = validateModelInput({ referenceText: record.referenceText, language: record.language,
       extraction: record.extraction, rule: record.rule });
     // Kandidat je zaseban objekt. validateDecisionCase nakon provjere odvaja i ugnijezdene objekte.
-    const candidate: DecisionCase = { schemaVersion: 1, caseId, identity, provenance: input.provenance,
+    const candidate: DecisionCase = { schemaVersion: 1, caseId, identity, provenance,
       audit, modelInput, readiness: deriveReadiness(audit, modelInput) };
     return validateDecisionCase(candidate);
   });
