@@ -73,6 +73,20 @@ describe('agent handoff', () => {
     q.tasks[1].implementationAgent = 'sol';
     expect(prepareJob(q, 'T01', 'review', 'grok').command).toBe('grok');
   });
+  it('allows a read-only implementer alias to review a different provider', () => {
+    const q = queue();
+    q.tasks[1].status = 'in_review';
+    q.tasks[1].implementationAgent = 'sol';
+    const review = prepareJob(q, 'T01', 'review', 'opus', 2);
+    expect(review.command).toBe('claude');
+    expect(review.args).toContain('Read,Glob,Grep');
+    expect(review.args).not.toContain('Write');
+  });
+  it('uses the compact orchestration contract instead of forcing three root/runbook rereads', () => {
+    const job = prepareJob(queue(), 'T01', 'plan', 'astra');
+    expect(job.prompt).toContain('docs/agents/ORCHESTRATION.md');
+    expect(job.prompt).not.toContain('Read AGENTS.md, CLAUDE.md and docs/agents/README.md');
+  });
   it('rejects missing dependencies and dependency cycles', () => {
     const q = queue();
     q.tasks[0].dependsOn = ['T01'];
@@ -92,7 +106,7 @@ describe('provider results do not replace verification', () => {
   it('rejects Claude budget/turn errors even when stdout is valid JSON', () => {
     expect(parseResult('claude', '{"subtype":"error_max_turns","is_error":true}', 0).ok).toBe(false);
     expect(parseResult('claude', '{"subtype":"success","is_error":false,"modelUsage":{"claude-opus-4-6":{}}}', 0))
-      .toEqual({ ok: true, reportedModels: ['claude-opus-4-6'] });
+      .toMatchObject({ ok: true, reportedModels: ['claude-opus-4-6'] });
     expect(parseResult('claude', 'not json', 0).ok).toBe(false);
   });
   it('accepts parseable non-error Grok JSON and rejects explicit errors', () => {
@@ -106,7 +120,7 @@ describe('provider results do not replace verification', () => {
       modelUsage: { 'grok-4.6-build': { modelCalls: 1 } },
     });
     expect(parseResult('grok', liveShape, 0))
-      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+      .toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
     expect(parseResult('grok', JSON.stringify({ text: '', stopReason: 'end_turn', num_turns: 1, modelUsage: {} }), 0).ok).toBe(false);
     expect(parseResult('grok', '{"type":"result","is_error":false,"model":"grok-4.6"}', 0).ok).toBe(false);
     expect(parseResult('grok', '{"type":"result","is_error":true,"model":"grok-4.6"}', 0).ok).toBe(false);
@@ -114,7 +128,11 @@ describe('provider results do not replace verification', () => {
   it('accepts the captured Grok 1.0.34 contract fixture', () => {
     const stdout = readFileSync('tests/fixtures/grok-result-1.0.34.json', 'utf8');
     expect(parseResult('grok', stdout, 0))
-      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+      .toMatchObject({
+        ok: true,
+        reportedModels: ['grok-4.6-build'],
+        usage: { inputTokens: 10, outputTokens: 4, totalTokens: 14, costUsd: 0.00001, modelCalls: 1 },
+      });
   });
   it('classifies Grok versions against the verified minimum', () => {
     expect(parseGrokVersion('grok 1.0.34 (3736acbc8658)'))
@@ -122,6 +140,38 @@ describe('provider results do not replace verification', () => {
     expect(parseGrokVersion('grok 1.0.33 (old)'))
       .toEqual({ version: '1.0.33', supported: false });
     expect(parseGrokVersion('unexpected')).toEqual({ version: null, supported: false });
+  });
+  it('normalizes real Codex turn usage without counting cache twice', () => {
+    const stdout = readFileSync('scripts/autonomy/tests/fixtures/codex-exec-json-tool-use-2026-09-20.stdout.ndjson', 'utf8');
+    expect(parseResult('codex', stdout, 0).usage).toEqual({
+      inputTokens: 53791,
+      cachedInputTokens: 36352,
+      cacheWriteInputTokens: 0,
+      outputTokens: 213,
+      reasoningOutputTokens: 93,
+      totalTokens: 54004,
+      costUsd: null,
+      modelCalls: null,
+    });
+  });
+  it('aggregates Claude modelUsage into the same contract', () => {
+    const stdout = JSON.stringify({
+      subtype: 'success', is_error: false,
+      modelUsage: {
+        'claude-sonnet': { inputTokens: 7, outputTokens: 2, cacheReadInputTokens: 3, costUSD: 0.01, modelCalls: 1 },
+        'claude-opus': { inputTokens: 5, outputTokens: 1, cacheReadInputTokens: 2, costUSD: 0.02, modelCalls: 1 },
+      },
+    });
+    expect(parseResult('claude', stdout, 0).usage).toEqual({
+      inputTokens: 12,
+      cachedInputTokens: 5,
+      cacheWriteInputTokens: null,
+      outputTokens: 3,
+      reasoningOutputTokens: null,
+      totalTokens: 15,
+      costUsd: 0.03,
+      modelCalls: 2,
+    });
   });
 });
 
@@ -147,6 +197,14 @@ describe('subscription billing mode (autonomy profile)', () => {
       .toThrow(/not included/);
     expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }))
       .toThrow(/not included/);
+  });
+  it('uses a separate included-account profile only for Grok aliases', () => {
+    expect(prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'included_account' }).billingMode)
+      .toBe('included_account');
+    expect(prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'included_account' }).command)
+      .toBe('grok');
+    expect(() => prepareJob(queue(), 'T01', 'plan', 'astra', undefined, { billingMode: 'included_account' }))
+      .toThrow(/included-account/);
   });
 });
 
