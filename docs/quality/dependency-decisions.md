@@ -75,3 +75,21 @@ Na commitu a762a5ce kreiran je puni source worktree t41-clean2. Nakon NTFS kompr
 ### Čista produkcijska instalacija 2026-09-22
 
 U izoliranom Git worktreeu t41-clean-prod, sa sparse skupom koji uključuje package.json i package-lock.json, pokrenut je `npm ci --omit=dev --offline`. Završio je s izlaznim kodom 0, instalirao 22 produkcijska paketa i prijavio 0 ranjivosti. `npm ls --omit=dev --depth=0` je prošao bez ekstranih ili nedostajućih produkcijskih paketa. Puni razvojni graf i dalje nije stao na ovom disku; to ne mijenja rezultat produkcijskog audita.
+
+## Svježi advisory snapshot 2026-09-22
+
+`npm audit --json` nad aktualnim zaključanim grafom prijavio je 1 critical, 6 high i 3 moderate. Ratchet prati 7 high/critical; produkcijski `npm audit --omit=dev --json` ostaje na 0.
+
+Preostalih sedam high/critical čvorova i njihov neposredni put:
+
+| čvor | aktualni advisory | node u locku i izloženost | vlasnik, mitigacija i rok |
+| --- | --- | --- | --- |
+| `@netlify/dev` | high, dolazi preko `@netlify/images` | `node_modules/@netlify/dev`; razvojni Netlify CLI, ne ulazi u javni bundle | Daniel Risavi; lokalni/deploy pomoćnici izvan `npm run check`; zaseban PR, rok 2026-10-09 |
+| `@netlify/images` | high, dolazi preko `ipx` | `node_modules/@netlify/images`; isti razvojni CLI put | Daniel Risavi; ograničenje na lokalni CLI i zaseban upgrade pregled; rok 2026-10-09 |
+| `ipx` | high, dolazi preko `sharp` | `node_modules/ipx`; tranzitivni Netlify razvojni put | Daniel Risavi; ne koristi se u runtime bundleu, upgrade Netlify CLI u zasebnom PR-u; rok 2026-10-09 |
+| `sharp` | high, libvips CVE-2026-33327/33328/35590/35591 i libheif GHSA-g89c-p67h-r497, GHSA-2jg2-4ch7-h545 | `node_modules/sharp`; razvojni Netlify/images put | Daniel Risavi; ne dolazi u javni bundle, provjera `netlify dev` nakon upgradea; rok 2026-10-09 |
+| `netlify-cli` | high, put preko `@netlify/dev` i `@netlify/images` | `node_modules/netlify-cli`; lokalni CLI i deploy pomoćnici | Daniel Risavi; ne pokretati `npm audit fix --force`, zaseban major upgrade; rok 2026-10-09 |
+| `vite` | high, optimized-deps map path traversal, Windows UNC NTLM hash disclosure, Windows alternate-path fs.deny bypass i esbuild | `node_modules/vite-node/node_modules/vite` i `node_modules/vitest/node_modules/vite`; razvojni server/test put | Daniel Risavi; server nije produkcijski endpoint, upgrade Vitest 5 u zasebnom PR-u; rok 2026-10-09 |
+| `vitest` | critical, UI server arbitrary file read/execute i `@vitest/mocker` path traversal, uz vite/vite-node | `node_modules/vitest`; test runner u lokalnom/CI okruženju, nije runtime bundle | Daniel Risavi; ne izlagati Vitest UI, planirani major na 5.x uz puni gate; rok 2026-10-09 |
+
+Tri moderate čvora (`@vitest/mocker`, `esbuild`, `vite-node`) su podčvorovi iste Vitest/Vite razvojne grupe i ne uvode dodatni runtime put. Sljedeća obavezna provjera je 2026-10-01, a nova presuda mora postojati prije isteka 2026-10-09.
