@@ -71,6 +71,12 @@ class PathPolicyTest(unittest.TestCase):
     def test_example_config_is_valid(self):
         self.assertEqual(validate_config(self.policy), [])
 
+    def test_provider_fallback_is_explicit(self):
+        bad = dict(self.policy, providerFallback="anything")
+        self.assertTrue(any("providerFallback" in problem for problem in validate_config(bad)))
+        self.assertEqual(validate_config(dict(self.policy, providerFallback="wait")), [])
+        self.assertEqual(validate_config(dict(self.policy, providerFallback="authorized")), [])
+
     def test_small_documentation_change_is_low_risk(self):
         self.assertEqual(classify_change(["docs/agents/autonomy-runbook.md"], 20, self.policy), "auto_low_risk")
 
