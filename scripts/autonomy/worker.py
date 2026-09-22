@@ -27,6 +27,7 @@ VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blo
 SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "XAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_", "LEMONSQUEEZY_", "AWS_", "AZURE_")
 SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
+CODEX_API_KEY_ENV = ("OPENAI_API_KEY",)
 GROK_API_KEY_ENV = ("XAI_API_KEY",)
 GROK_MIN_VERSION = (1, 0, 34)
 PROMPT_FILE_PLACEHOLDER = "__LEKTA_PROMPT_FILE__"
@@ -719,8 +720,11 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
         return result
     base_env = scrubbed_env(env)
     parent_env = os.environ if env is None else env
+    if job.get("command") == "codex" and any(parent_env.get(k) for k in CODEX_API_KEY_ENV):
+        result["reason"] = "api_key_present: OPENAI_API_KEY bi mogao prebaciti Codex na API billing"
+        return result
     if job.get("command") == "claude" and any(parent_env.get(k) for k in API_KEY_ENV):
-        result["reason"] = "api_key_present: ANTHROPIC_API_KEY bi prebacio naplatu na API"
+        result["reason"] = "api_key_present: Anthropic API credential bi prebacio naplatu na API"
         return result
     if job.get("command") == "grok" and any(parent_env.get(k) for k in GROK_API_KEY_ENV):
         result["reason"] = "api_key_present: XAI_API_KEY bi prebacio Grok na API billing"
