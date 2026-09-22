@@ -71,3 +71,7 @@ Nakon uklanjanja starih runtime cacheva ponovljen je puni `npm ci` u čistom dep
 ### Drugi puni source pokušaj 2026-09-21
 
 Na commitu a762a5ce kreiran je puni source worktree t41-clean2. Nakon NTFS kompresije pokrenut je puni `npm ci`; raspoloživih približno 410 MB nakon checkouta nije bilo dovoljno, instalacija je završila kodom 1 zbog `ENOSPC` i worktree je uklonjen. Puna instalacija u source worktreeu zato ostaje nepoznata; dependency sandbox iz prethodne dopune ostaje jedini potvrđeni čisti install.
+
+### Čista produkcijska instalacija 2026-09-22
+
+U izoliranom Git worktreeu t41-clean-prod, sa sparse skupom koji uključuje package.json i package-lock.json, pokrenut je `npm ci --omit=dev --offline`. Završio je s izlaznim kodom 0, instalirao 22 produkcijska paketa i prijavio 0 ranjivosti. `npm ls --omit=dev --depth=0` je prošao bez ekstranih ili nedostajućih produkcijskih paketa. Puni razvojni graf i dalje nije stao na ovom disku; to ne mijenja rezultat produkcijskog audita.
