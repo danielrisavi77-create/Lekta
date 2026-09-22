@@ -150,8 +150,17 @@ REAL_NO_TOOL_USE_STDERR = fixture("codex-exec-json-no-tool-use-2026-09-20.stderr
 
 
 def profile(**over):
-    base = dict(subscription_verified=True, extra_credits_disabled=True, effective_auth="subscription",
-                model_included=True, configuration_unchanged=True, trusted_observation=True)
+    base = dict(
+        subscription_verified=True, extra_credits_disabled=True, effective_auth="subscription",
+        model_included=True, configuration_unchanged=True, trusted_observation=True,
+        providers={
+            "codex": {"allowed": True, "approved_models": ["gpt-5.6-sol", "gpt-6-astra"]},
+            "claude": {"allowed": True, "approved_models": ["gpt-5.6-sol", "sonnet", "opus", "fable"]},
+            "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            sys.executable: {"allowed": True, "approved_models": ["gpt-5.6-sol", "fable"]},
+            "definitely-not-installed-xyz": {"allowed": True, "approved_models": []},
+        },
+    )
     base.update(over)
     return base
 
