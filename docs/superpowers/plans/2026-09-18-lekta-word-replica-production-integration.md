@@ -27,7 +27,7 @@
 - Privatni contract kljuc, DB lozinka, Supabase token, Netlify token i signing PIN nikad ne idu u Git, argumente procesa, plan, standardni izlaz ili izvjestaj.
 - Lekta gate se mjeri u cistom izoliranom worktreeju. WordReplica release build se radi samo iz cistog `automation-dev` stabla.
 - Produkcijski release ne pocinje dok su Lekta feature commitovi ili WordReplica release commit samo lokalni. Oba repozitorija moraju imati pregledane i pushane tocne SHAs.
-- Izvrsenjem je WordReplica kandidat promaknut na `896778c4fa2536473ef3afebc088ba52f6710582`. Lekta jezgra integracije vec je squash-mergeana u `master` commitom `164dd160`; zavrsni pravni i release patch gradi se na aktualnom `origin/master` `98e905c0f4cba9065143144a0e8f970652515fbc`. Konacni release SHA ipak se ponovno snima tek nakon PR-a i zelenog CI-ja.
+- Izvrsenjem je WordReplica kandidat promaknut na `81f1f420de0e71b7c853059790bec7bf665ead53`. Lekta jezgra integracije vec je squash-mergeana u `master` commitom `164dd160`; zavrsni pravni i release patch gradi se na aktualnom `origin/master` `98e905c0f4cba9065143144a0e8f970652515fbc`. Konacni Lekta release SHA ponovno se snima nakon PR mergea i zelenog CI-ja na merge commitu.
 
 ## File and Responsibility Map
 
@@ -186,7 +186,9 @@ Expected: signature `Valid`; stvarni hash, velicina, publisher thumbprint, sourc
 
 **Produces:** Puni lokalni dokaz da isti par commitova prolazi oba repozitorija i stvarni EXE tok.
 
-- [ ] **Step 1: Run the complete WordReplica suite**
+**Execution checkpoint, 2026-09-22:** tocni par prije mergea je Lekta `2808cc381e4df0c4a27c2b0b528241ae7c5b4ad0` i WordReplica `81f1f420de0e71b7c853059790bec7bf665ead53`. WordReplica CI na tom SHA-u prosao je Linux i Windows non-Word suite. Golden runovi `20260922T094907Z_81f1f420` i `20260922T104855Z_81f1f420` imaju isti source SHA `2cf2207f673f0ff1613176c9ac696fc1d935b4760331df132a1ef3ca238c56d8`, G0-G9 `FULL PASS` i zavrsno stanje `FULL PASS x2 - PROMOTION READY`. Oba runa dokazala su namjerni checkpoint recovery nakon iscrpljenog kratkog COM retry budgeta na velikoj tablici. Cross-repo E2E prosao je dvaput na istim SHA-ovima, s atomarnim claimom, `processing -> completed`, punim QA prolazom, nepromijenjenim stablima i bez zaostalih Word procesa. Lekta izolirani `npm run check` prosao je s 604 test files i 6861 testova, a ponovljeni GitHub Foundation check je zelen. Adversarijalni pregled nije nasao novi actionable defect; ogranicenje dokaza je isti-provider self-review jer drugi agent nije bio dopusten u ovoj sesiji.
+
+- [x] **Step 1: Run the complete WordReplica suite**
 
 ```powershell
 C:\WordReplica-Automation\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider --basetemp C:\WordReplica-Automation\diagnostics\pytest-production-release
@@ -194,13 +196,13 @@ C:\WordReplica-Automation\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovi
 
 Expected: nula failures i nula errors. Preskoceni Windows/Word test nije dokaz za Word sloj i mora biti posebno evidentiran.
 
-- [ ] **Step 2: Run two same-commit WordReplica Golden oracles**
+- [x] **Step 2: Run two same-commit WordReplica Golden oracles**
 
 Pokreni kanonski Golden #1/oracle iz WordReplica `AGENTS.md` dvaput bez promjene commita, izvornog DOCX-a, Word builda ili fontova.
 
 Expected: oba izvjestaja imaju isti source SHA, isti `WORDREPLICA_RELEASE_SHA`, isti environment fingerprint i G0-G9 `FULL PASS`; drugi izvjestaj potvrduje promotion readiness. Ne zatvaraj nijedan Word proces koji nije dokazano vlasnistvo testa.
 
-- [ ] **Step 3: Run the complete Lekta gate in an isolated clean worktree**
+- [x] **Step 3: Run the complete Lekta gate in an isolated clean worktree**
 
 Before starting, verify at least 1 GB free RAM. Then run:
 
@@ -211,7 +213,7 @@ npm run check
 
 Read the `Test Files` summary, not only process exit code. Expected: nula failed test files, Deno Edge check green, Vite build green and no private-layer classification leak.
 
-- [ ] **Step 4: Run the real cross-repo executable E2E twice**
+- [x] **Step 4: Run the real cross-repo executable E2E twice**
 
 ```powershell
 npm run repair:runner:e2e
@@ -231,7 +233,7 @@ Expected on both runs, on unchanged SHAs:
 - output opens without Word repair;
 - diagnostics contain no claim token or private contract key.
 
-- [ ] **Step 5: Adversarially review the security boundary**
+- [x] **Step 5: Adversarially review the security boundary**
 
 Review claim replay, lost response recovery, sequence rollback, stale signed URL, wrong project/site, wrong key, wrong artifact, token disclosure, temporary secret ACL, cleanup target validation and kill-switch ordering. Every actionable finding is reverified and fixed through RED/GREEN before release SHAs are re-frozen.
 
