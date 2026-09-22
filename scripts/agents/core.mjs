@@ -77,7 +77,9 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   if (!task) throw new Error(`Unknown task: ${id}`);
   if (!agent) throw new Error(`Unknown agent: ${agentName}`);
   if (!['plan', 'implement', 'review'].includes(phase)) throw new Error('Invalid phase');
-  if ((phase === 'implement') !== (agent.role === 'implementer')) throw new Error('Invalid agent role for phase');
+  if (phase === 'implement' && agent.role !== 'implementer') throw new Error('Invalid agent role for implementation');
+  if (phase === 'plan' && agent.role !== 'coordinator') throw new Error('Invalid agent role for planning');
+  // Review is read-only and may use either alias role; provider separation below is the security boundary.
   if (phase === 'implement') {
     if (task.status !== 'ready') throw new Error(`${id} must be ready`);
     for (const dependency of task.dependsOn) {
