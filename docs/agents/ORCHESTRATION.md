@@ -44,14 +44,17 @@ Zadani autonomni izbor je Claude/Sonnet.
 Hostovi vec automatski ucitavaju vlastite root upute. Runner zato NE smije svakom pozivu ponovno
 narediti citanje svih root dokumenata.
 
+Root `AGENTS.md` je namjerno kratka mapa. Detaljne invarijante preseljene su u
+`docs/agents/PROJECT_RULES.md`, pa always-on context ne nosi cijelu povijest projekta.
+
 Minimalni context za modelski poziv:
 1. ovaj dokument;
 2. tocni zapis zadatka i odgovarajuci odjeljak `development-plan.md`;
-3. samo scoped `CLAUDE.md`/domenske upute za putanje koje se stvarno citaju ili mijenjaju;
+3. samo relevantni odjeljak/odjeljci `PROJECT_RULES.md` i scoped `CLAUDE.md` za putanje koje se stvarno diraju;
 4. relevantni diff, log ili dokaz.
 
 `docs/agents/README.md` je runbook za covjeka/operatora, ne obavezni prompt context.
-Povijesni incidenti se citaju samo kad su relevantni za isti razred kvara.
+Ne citaj cijeli `PROJECT_RULES.md` ni povijesne incidente po navici.
 
 ## Billing i usage
 
