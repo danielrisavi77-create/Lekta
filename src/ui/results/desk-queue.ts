@@ -10,7 +10,7 @@
  * kao jedna ljestvica.
  *
  * RIJECI SU IZ SAZETKA, ne nove: KRITICNO / VAZNO / PROVJERI su kratki oblici onoga sto sazetak
- * vec kaze. REDNI BROJ je polozaj iz "3 / 9"; dvije brojke koje se ne slazu citaju se kao kvar.
+ * vec kaze. REDNI BROJ je polozaj iz "3 od 9"; dvije brojke koje se ne slazu citaju se kao kvar.
  */
 import type { DeskItem } from './desk-model';
 import type { VisualFindingModel } from './visual-result-model';

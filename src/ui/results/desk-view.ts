@@ -101,7 +101,7 @@ export function deskPaneHtml(
   if (!item) return '<div class="desk-pane" data-desk-pane><p class="desk-prazno">Nema otvorenih nalaza.</p></div>';
   const traka = deskTraka(item);
   const detalj = (traka ? `<p class="desk-traka" data-desk-traka>${esc(traka)}</p>` : '')
-    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u pageru ("3 / 9").
+    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u pageru ("3 od 9").
     // Kad se dvije brojke na istom ekranu ne slazu, korisnik to cita kao kvar.
     + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1);
   // ULAZ U PLAN STOJI UZ NALAZE, jer se ondje i donosi odluka da se nesto popravi. Do 2026-09-08

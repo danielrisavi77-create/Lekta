@@ -162,8 +162,10 @@
   color: var(--ck-green-text);
 }
 
-/* OGRADA UZ PRESUDU. Jedan redak sitne proze: nosi tvrdnju o tome koliko izvor pravila obvezuje,
-   pa stoji iznad presude, ali prigusen, jer presudu izrice naslov a ne ograda. */
+/* OGRADA UZ PRESUDU. Jedan redak sitne proze: nosi tvrdnju o tome koliko izvor pravila obvezuje.
+   Stoji ISPOD sazetka (popravak drugog kruga, c2d9da7d), jer ogranicava upravo procitanu tvrdnju
+   o dosegu automatike, ne identitet dokumenta iznad naslova; prigusena je, jer presudu izrice
+   naslov a ne ograda. */
 .cockpit-caveat {
   max-width: 52ch;
   margin: 0;
