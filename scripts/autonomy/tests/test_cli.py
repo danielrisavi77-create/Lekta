@@ -223,21 +223,52 @@ class TickTest(unittest.TestCase):
         cfg = config(grokEnabled=True)
         blocked_profile = {
             "configuration_unchanged": True, "trusted_observation": True,
-            "providers": {"grok": {"allowed": False, "approved_models": ["grok-4.6"]}},
+            "providers": {
+                "grok": {"allowed": False, "approved_models": ["grok-4.6"]},
+                "claude": {"allowed": True, "approved_models": ["opus"]},
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+            },
         }
         allowed_profile = {
             "configuration_unchanged": True, "trusted_observation": True,
-            "providers": {"grok": {"allowed": True, "approved_models": ["grok-4.6"]}},
+            "providers": {
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+                "claude": {"allowed": True, "approved_models": ["opus"]},
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+            },
         }
         task = {"implementationAgent": "sol"}
-        self.assertEqual(cli._agent_for(cfg, "reviewing", task, blocked_profile), "opus")
+        self.assertIsNone(cli._agent_for(cfg, "reviewing", task, blocked_profile),
+                          "providerFallback=wait ne smije tiho trositi drugi provider")
+        self.assertEqual(cli._agent_for(config(grokEnabled=True, providerFallback="authorized"),
+                                        "reviewing", task, blocked_profile), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", task, allowed_profile), "grok")
         wrong_model = {
             "configuration_unchanged": True, "trusted_observation": True,
-            "providers": {"grok": {"allowed": True, "approved_models": ["grok-other"]}},
+            "providers": {
+                "grok": {"allowed": True, "approved_models": ["grok-other"]},
+                "claude": {"allowed": True, "approved_models": ["opus"]},
+            },
         }
-        self.assertEqual(cli._agent_for(cfg, "reviewing", task, wrong_model), "opus")
+        self.assertIsNone(cli._agent_for(cfg, "reviewing", task, wrong_model))
+        self.assertEqual(cli._agent_for(config(grokEnabled=True, providerFallback="authorized"),
+                                        "reviewing", task, wrong_model), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "build"}, allowed_profile), "astra")
+
+    def test_auto_plan_and_implementation_fallback_are_opt_in(self):
+        profile = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": False, "approved_models": ["gpt-6-astra", "gpt-5.6-sol"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        self.assertIsNone(cli._agent_for(config(grokEnabled=True), "planning", {}, profile))
+        self.assertIsNone(cli._agent_for(config(grokEnabled=True), "implementing", {}, profile))
+        fallback = config(grokEnabled=True, providerFallback="authorized")
+        self.assertEqual(cli._agent_for(fallback, "planning", {}, profile), "grok")
+        self.assertEqual(cli._agent_for(fallback, "implementing", {}, profile), "build")
 
 
 
