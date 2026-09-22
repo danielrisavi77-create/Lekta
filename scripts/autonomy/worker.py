@@ -711,10 +711,6 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if phase not in ("plan", "implement", "review"):
         result["reason"] = f"nepoznata faza: {phase}"
         return result
-    if not provider_billing_allowed(profile, str(job.get("command")), job.get("requestedModel")):
-        result["reason"] = f"billing_unknown: provider/model nije odobren ({job.get('command')} {job.get('requestedModel')})"
-        return result
-    base_env = scrubbed_env(env)
     parent_env = os.environ if env is None else env
     if job.get("command") == "codex" and any(parent_env.get(k) for k in CODEX_API_KEY_ENV):
         result["reason"] = "api_key_present: OPENAI_API_KEY bi mogao prebaciti Codex na API billing"
@@ -725,6 +721,10 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if job.get("command") == "grok" and any(parent_env.get(k) for k in GROK_API_KEY_ENV):
         result["reason"] = "api_key_present: XAI_API_KEY bi prebacio Grok na API billing"
         return result
+    if not provider_billing_allowed(profile, str(job.get("command")), job.get("requestedModel")):
+        result["reason"] = f"billing_unknown: provider/model nije odobren ({job.get('command')} {job.get('requestedModel')})"
+        return result
+    base_env = scrubbed_env(env)
     if job.get("command") == "claude" and str(job.get("requestedModel", "")).lower().startswith("fable") and not profile.get("fable_enabled"):
         result["reason"] = "fable_disabled: model nije u autonomnom profilu"
         return result
