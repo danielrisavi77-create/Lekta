@@ -87,8 +87,7 @@ Povijesni staging negativni testovi od 2026-09-21 dodatno su pokazali:
 - strani `can_read_agent_payload`: `false`;
 - `extraction-probe`: 27 zahtjeva, ograničenje na sedmom različitom profilu, bez evidence markera.
 
-Današnji Management API 401 onemogućuje ponovno čitanje advisora i direktni cross-user
-upit. To je dokazni gap, ne nalaz propusta.
+U izvornom prolazu Management API 401 onemogućio je ponovno čitanje advisora i direktni cross-user upit. To je tada bio dokazni gap, ne nalaz propusta. Read-only osvježenje s povezanim Supabase pristupom nalazi se u završnom odjeljku ovog dosjea.
 
 ## Naplata i webhook granica
 
@@ -102,8 +101,7 @@ za T24; T21 zbog toga ne daje tvrdnju da je cijeli komercijalni životni ciklus 
 
 ## Migracijska i Auth ograničenja
 
-- Lokalni repo ima 106 migracija. `npm run migration-identity` nije mogao dohvatiti živo
-  stanje jer nije postavljen valjan `LEKTA_*_REF` i Management token je 401.
+- Lokalni repo ima 106 migracija. U izvornom prolazu `npm run migration-identity` nije mogao dohvatiti živo stanje jer nije postavljen valjan `LEKTA_*_REF` i Management token je vraćao 401.
 - Staging remote-only raspon `0104` do `0114` pripada Katedra sustavu. Nije diran.
   Vlasnik te granice mora ga zasebno potvrditi prije bilo kakvog migration push-a.
 - Povijesni staging Auth presjek ima `password_hibp_enabled=false`; Supabase je odbio
@@ -115,8 +113,8 @@ za T24; T21 zbog toga ne daje tvrdnju da je cijeli komercijalni životni ciklus 
 
 | Radnja | Vlasnik | Rok / dokaz zatvaranja |
 |---|---|---|
-| Osvježiti Supabase read-only token i ponovno izvesti advisor, RLS i migration identity | Daniel Risavi / vlasnik Supabase projekta | prije T44; zapis s HTTP 200 i snapshotom rezultata |
-| Dodati `build-info.json` i vezati javni frontend uz commit; ponoviti header/CSP provjeru | T19 | prije javnog izdanja |
+| Održavati svježi Supabase advisor/RLS i migration snapshot | Daniel Risavi / vlasnik Supabase projekta | osvježeno 2026-09-22; ponoviti prije T44 |
+| Održavati `build-info.json` i vezu javnog frontenda uz commit | T19 | produkcija potvrđena 2026-09-22; staging izvorni commit još treba razriješiti |
 | Potvrditi granicu Katedra migracija 0104 do 0114 | vlasnik Katedra sustava | prije bilo kakvog `db push` |
 | Pozitivna checkout, webhook replay i refund proba | T24 | namjenska testna kupnja, točno jedno pravo i operativni trag |
 | HIBP odluka ostaje plan-limited bez Pro plana | Daniel Risavi | recheck 2026-10-01 |
@@ -126,3 +124,43 @@ za T24; T21 zbog toga ne daje tvrdnju da je cijeli komercijalni životni ciklus 
 T21 može prijeći u `done` kao neovisni sigurnosni pregled s presudom **NO-GO za javno
 izdanje**. T22 i T24 mogu nastaviti rad na stagingu, ali T44/T46 ne smiju tvrditi spremnost
 dok se ne zatvore identitet javnog artefakta, svježi DB snapshot i pozitivni komercijalni tok.
+
+## Read-only osvježenje dokaza, 2026-09-22
+
+Povezani Supabase Management API ponovno je radio bez ikakvog upisa. Svi upiti u ovom odjeljku bili su read-only; nisu mijenjani Auth, Storage, migracije, Edge funkcije ni podaci.
+
+### Advisor i RLS snapshot
+
+| Okruženje | RLS tablice | RLS bez politika | SECURITY DEFINER dostupan `authenticated` ulozi | `anon` SECURITY DEFINER izvršavanje |
+|---|---:|---:|---:|---:|
+| Staging `bnyemcnsphlitjradrst` | 72 | 23 INFO | 25 WARN | 0 |
+| Produkcija `zrrjttizjyfcxmcpgzml` | 71 | 22 INFO | 13 WARN | 0 |
+
+Staging advisor je u 10:05:56Z vratio 23 namjerno zatvorene servisne tablice, 25 SECURITY DEFINER upozorenja i HIBP zaštitu od kompromitiranih lozinki. Produkcijski advisor u 10:05:57Z dodatno vraća `pg_net` u `public`, 52 ponavljanja upozorenja o dopuštenim anonimnim prijavama i isti HIBP nalaz. Anonimne prijave su postojeća beta odluka opisana u `supabase/config.toml` i politici proizvoda, ali vlasnik mora potvrditi da ta odluka i dalje vrijedi za javno izdanje.
+
+### Edge auth i CORS
+
+Staging popis ima 28 aktivnih funkcija. `repair-docx`, `source-check`, `delete-repair-job`, `create-checkout`, `file-guarantee-claim`, `generate-report`, `redeem-referral-signup`, `withdraw-corpus-contribution`, `field-render`, `integrity-check`, `preflight-start`, `preflight-result`, `admin-stats` i `katedra-agent-worker` imaju `verify_jwt=true`. Namjerno javne funkcije ostaju odvojene (`health`, `profile-rules`, `client-error`, `webhook-mor` i ostale sink/cron funkcije).
+
+Svježe probe staginga:
+
+- `repair-docx`, `delete-repair-job`, `create-checkout` i `source-check` bez tokena vraćaju 401;
+- `webhook-mor` GET vraća 405, a `health` GET samo health odgovor;
+- `profile-rules` i `repair-docx` na `OPTIONS` daju `Access-Control-Allow-Origin` samo za `https://lekta-staging.netlify.app`, bez refleksije produkcijskog ili localhost origin-a;
+- u svim CORS odgovorima je `Vary: Origin`.
+
+### Identitet javnog artefakta
+
+- `https://lektahr.netlify.app/build-info.json` vraća commit `ee808385e836923493feb8c65c6e3c08716d84c5`, koji se podudara s udaljenom granom `release/2026-09-12`;
+- `https://lekta-staging.netlify.app/build-info.json` vraća commit `6908c4ac2770f4b1855d3d44b6f0ec06614ebbec`;
+- staging health još vraća `release=null` i `commit=null`, a staging commit nije razrješiv u ovoj lokalnoj Git povijesti ni kroz javni GitHub commit endpoint. To je preostali dokazni rizik identiteta staging izvora, ne dokaz sigurnosnog proboja.
+
+Produkcijski frontend svježe vraća CSP s ograničenim `connect-src`, HSTS s `preload`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, restriktivni `Referrer-Policy` i `Permissions-Policy` koja isključuje kameru, mikrofon, geolokaciju i payment.
+
+### Migracijska granica
+
+Staging sada ima 117 migracija: svih 106 lokalnih verzija plus remote-only raspon `0104` do `0114`, koji pripada Katedra sustavu. Produkcija ima 107 povijesnih zapisa i legacy nazive ili timestamp zapise koji nisu kanonski lokalni nazivi. Nijedan migration push nije izveden. Granica `0104–0114` ostaje vlasnički uvjet prije bilo kakvog novog `db push`.
+
+### Osvježena presuda
+
+Svježi advisor, SQL grant snapshot, Edge auth i CORS probe ne pokazuju potvrđeno čitanje ili mutaciju tuđih podataka, zaobilaženje prava ili neograničenu obradu. T21 ostaje **DONE kao neovisni sigurnosni pregled**, s presudom **NO-GO za javno izdanje** dok se ne izvedu pozitivni checkout/replay/refund dokazi iz T24, razriješi staging source identity i vlasnički potvrde anonimne prijave, Katedra migracijska granica i plan-limited HIBP odluka.

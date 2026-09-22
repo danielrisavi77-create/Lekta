@@ -214,7 +214,7 @@
         "T18",
         "T20"
       ],
-      "note": "P0. Zatvoreno 2026-09-22: svježi javni header/CORS/Edge probe i povijesni staging RLS/cross-user negativni testovi nisu potvrdili čitanje ili mutaciju tuđih podataka, zaobilaženje prava ni neograničenu obradu. Advisor iznimke imaju objašnjenje i vlasnika. Presuda je NO-GO za javno izdanje dok T19 ne veže javni frontend uz build-info/commit, vlasnik ne osvježi read-only DB snapshot, a T24 ne izvede pozitivni checkout/replay/refund dokaz. Detalji: docs/agents/t21-security-review-2026-09-22.md."
+      "note": "P0. Zatvoreno 2026-09-22: svježi header/CORS/Edge probe, advisor i SQL RLS/grant snapshot te povijesni cross-user negativni testovi nisu potvrdili čitanje ili mutaciju tuđih podataka, zaobilaženje prava ni neograničenu obradu. Produkcijski build-info sada odgovara release grani; staging build-info postoji, ali commit nije razrješiv u lokalnoj Git povijesti. Presuda ostaje NO-GO do pozitivnog T24 checkout/replay/refund dokaza i vlasničke potvrde staging identiteta, Katedra migracijske granice, anonimnih prijava i plan-limited HIBP odluke. Detalji: docs/agents/t21-security-review-2026-09-22.md."
     },
     {
       "id": "T22",
