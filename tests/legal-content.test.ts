@@ -82,6 +82,32 @@ describe('legal-content', () => {
     expect(docs.purchase.html).toContain('automatski popravak');
   });
 
+  it('lokalni WordReplica popravak ima potpun i ogranicen javni opis obrade', () => {
+    for (const kind of ['privacy', 'processing'] as const) {
+      const html = docs[kind].html;
+      expect(html, `${kind}: lokalni program`).toMatch(/lokalni|prijenosni/i);
+      expect(html, `${kind}: WordReplica`).toContain('WordReplica');
+      expect(html, `${kind}: novi DOCX`).toMatch(/novi DOCX/i);
+      expect(html, `${kind}: izvornik`).toMatch(/izvornik.{0,80}nepromijenjen/i);
+      expect(html, `${kind}: bez Worda`).toContain('Microsoft Word nije potreban');
+      expect(html, `${kind}: povratni podaci`).toMatch(/potpisan.{0,40}status/i);
+      expect(html, `${kind}: samo sažeci`).toMatch(/kriptografsk.{0,40}sažet/i);
+      expect(html, `${kind}: izlaz se ne šalje`).toMatch(/novi DOCX.{0,120}ne šalje/i);
+      expect(html, `${kind}: ograniceno ciscenje`).toMatch(/uklanja.{0,100}koje je sam stvorio/i);
+      expect(html, `${kind}: OS tragovi`).toMatch(/Windows.{0,100}preglednik.{0,100}trag/i);
+    }
+  });
+
+  it('uvjeti kupnje opisuju jednokratni runner i nastavak bez novog placenog slota', () => {
+    for (const kind of ['terms', 'purchase'] as const) {
+      const html = docs[kind].html;
+      expect(html, `${kind}: isti placeni popravak`).toMatch(/isti plaćeni popravak/i);
+      expect(html, `${kind}: vezani portable program`).toMatch(/portable|prijenosni/i);
+      expect(html, `${kind}: retry`).toMatch(/ponovno pokren/i);
+      expect(html, `${kind}: bez drugog slota`).toMatch(/ne troši.{0,50}(novi|drugi).{0,30}(popravak|slot)/i);
+    }
+  });
+
   it('guarantee definira svih 9 tocaka: rokove, dokaz, odluku, lijek i iskljucenja', () => {
     const html = docs.guarantee.html;
     expect(html).toContain('30 dana');            // rok podnosenja
