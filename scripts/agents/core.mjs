@@ -57,8 +57,9 @@ export function validateQueue(queue) {
  *    pretplatu. Lazni pozitivan budzet se ovdje ne unosi da bi "prosla" stara validacija.
  * Grok (xAI) nema USD budget flag u runneru; headless cesto koristi `XAI_API_KEY` ili `grok login`.
  */
-export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
+export const BILLING_MODES = Object.freeze(['budget', 'subscription', 'included_account']);
 export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'build']);
+export const INCLUDED_ACCOUNT_AGENTS = Object.freeze(['grok', 'build']);
 
 /**
  * `options.overrideTask` postoji SAMO za `phase === 'review'` i samo za autonomni kontroler: on zna tko je
@@ -113,6 +114,9 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   if (billingMode === 'subscription' && SUBSCRIPTION_EXCLUDED_AGENTS.includes(agentName)) {
     throw new Error(`${agentName} is not included in the subscription profile`);
   }
+  if (billingMode === 'included_account' && !INCLUDED_ACCOUNT_AGENTS.includes(agentName)) {
+    throw new Error(`${agentName} is not supported by the included-account profile`);
+  }
   if (agent.command === 'claude' && billingMode === 'subscription') {
     if (budget !== undefined) throw new Error('subscription mode does not take --budget-usd');
     const allowed = phase === 'implement'
@@ -128,8 +132,8 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   }
   const prompt = [
     `LEKTA task ${id}. Phase: ${phase}. Requested agent: ${agentName} (${agent.model}).`,
-    'Read AGENTS.md, CLAUDE.md and docs/agents/README.md before working.',
-    'Read the matching task section in docs/agents/development-plan.md. Recheck findings against the current code.',
+    'Follow the host-loaded root instructions. Read docs/agents/ORCHESTRATION.md before working; do not re-read root AGENTS.md/CLAUDE.md solely because of this prompt.',
+    'Read the matching task section in docs/agents/development-plan.md and only the scoped CLAUDE.md files for paths you actually inspect. Recheck findings against the current code.',
     phase === 'implement'
       ? 'Implement only this task in this worktree. Run the required checks. Do not edit the queue, commit, push, merge or deploy; return the patch and evidence to the coordinator.'
       : 'Read-only assessment. Do not modify files. Return a concrete brief or independent review with file references and evidence.',
@@ -140,17 +144,63 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   return { command: agent.command, args, prompt, requestedModel: agent.model, billingMode };
 }
 
+function numberOrNull(value) {
+  return Number.isFinite(Number(value)) ? Number(value) : null;
+}
+
+function mergeUsage(...parts) {
+  const out = {
+    inputTokens: null,
+    cachedInputTokens: null,
+    cacheWriteInputTokens: null,
+    outputTokens: null,
+    reasoningOutputTokens: null,
+    totalTokens: null,
+    costUsd: null,
+    modelCalls: null,
+  };
+  for (const part of parts) {
+    if (!part || typeof part !== 'object') continue;
+    const fields = {
+      inputTokens: part.inputTokens ?? part.input_tokens,
+      cachedInputTokens: part.cachedInputTokens ?? part.cached_input_tokens ?? part.cacheReadInputTokens,
+      cacheWriteInputTokens: part.cacheWriteInputTokens ?? part.cache_write_input_tokens ?? part.cacheCreationInputTokens,
+      outputTokens: part.outputTokens ?? part.output_tokens,
+      reasoningOutputTokens: part.reasoningOutputTokens ?? part.reasoning_output_tokens,
+      totalTokens: part.totalTokens ?? part.total_tokens,
+      costUsd: part.costUsd ?? part.costUSD ?? part.total_cost_usd,
+      modelCalls: part.modelCalls ?? part.model_calls,
+    };
+    for (const [key, value] of Object.entries(fields)) {
+      const n = numberOrNull(value);
+      if (n == null) continue;
+      out[key] = out[key] == null ? n : out[key] + n;
+    }
+  }
+  if (out.totalTokens == null && out.inputTokens != null && out.outputTokens != null) {
+    out.totalTokens = out.inputTokens + out.outputTokens;
+  }
+  return out;
+}
+
+function modelUsageSummary(modelUsage) {
+  if (!modelUsage || typeof modelUsage !== 'object' || Array.isArray(modelUsage)) return mergeUsage();
+  return mergeUsage(...Object.values(modelUsage).filter(value => value && typeof value === 'object'));
+}
+
 export function parseResult(command, stdout, exitCode) {
-  if (exitCode !== 0) return { ok: false, reportedModels: [] };
+  const failed = () => ({ ok: false, reportedModels: [], usage: mergeUsage() });
+  if (exitCode !== 0) return failed();
   try {
     if (command === 'claude') {
       const result = JSON.parse(stdout);
-      return { ok: result.subtype === 'success' && result.is_error === false,
-        reportedModels: Object.keys(result.modelUsage ?? {}) };
+      return {
+        ok: result.subtype === 'success' && result.is_error === false,
+        reportedModels: Object.keys(result.modelUsage ?? {}),
+        usage: mergeUsage(result.usage, modelUsageSummary(result.modelUsage), { costUsd: result.total_cost_usd ?? result.totalCostUSD }),
+      };
     }
     if (command === 'grok') {
-      // Official docs: `--output-format json` emits one JSON object at the end.
-      // Exact success schema is not fully documented; refuse explicit errors and require parseable JSON.
       const text = stdout.trim();
       let result;
       try {
@@ -159,29 +209,31 @@ export function parseResult(command, stdout, exitCode) {
         const lines = text.split('\n').filter(Boolean);
         result = JSON.parse(lines[lines.length - 1]);
       }
-      if (result == null || typeof result !== 'object' || Array.isArray(result)) {
-        return { ok: false, reportedModels: [] };
-      }
+      if (result == null || typeof result !== 'object' || Array.isArray(result)) return failed();
       const currentSuccess = typeof result.text === 'string' && result.text.trim().length > 0
         && result.stopReason === 'end_turn'
         && Number.isInteger(result.num_turns) && result.num_turns > 0
         && result.modelUsage != null && typeof result.modelUsage === 'object'
         && Object.keys(result.modelUsage).length > 0;
       if (!currentSuccess || result.is_error === true || result.ok === false
-          || result.error != null || String(result.subtype ?? '').startsWith('error')) {
-        return { ok: false, reportedModels: [] };
-      }
+          || result.error != null || String(result.subtype ?? '').startsWith('error')) return failed();
       const reportedModels = [];
       if (typeof result.model === 'string') reportedModels.push(result.model);
-      if (result.modelUsage && typeof result.modelUsage === 'object') {
-        reportedModels.push(...Object.keys(result.modelUsage));
-      }
-      return { ok: true, reportedModels: [...new Set(reportedModels)] };
+      if (result.modelUsage && typeof result.modelUsage === 'object') reportedModels.push(...Object.keys(result.modelUsage));
+      return {
+        ok: true,
+        reportedModels: [...new Set(reportedModels)],
+        usage: mergeUsage(result.usage, modelUsageSummary(result.modelUsage), { costUsd: result.total_cost_usd }),
+      };
     }
-    const events = stdout.trim().split('\n').map(line => JSON.parse(line));
-    return { ok: events.some(e => e.type === 'turn.completed') && !events.some(e => ['turn.failed', 'error'].includes(e.type)),
-      reportedModels: [...new Set(events.map(e => e.model).filter(model => typeof model === 'string'))] };
+    const events = stdout.trim().split('\n').filter(Boolean).map(line => JSON.parse(line));
+    const completed = events.findLast?.(e => e.type === 'turn.completed') ?? [...events].reverse().find(e => e.type === 'turn.completed');
+    return {
+      ok: Boolean(completed) && !events.some(e => ['turn.failed', 'error'].includes(e.type)),
+      reportedModels: [...new Set(events.map(e => e.model).filter(model => typeof model === 'string'))],
+      usage: mergeUsage(completed?.usage),
+    };
   } catch {
-    return { ok: false, reportedModels: [] };
+    return failed();
   }
 }
