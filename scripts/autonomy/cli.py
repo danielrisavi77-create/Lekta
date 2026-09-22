@@ -424,7 +424,7 @@ def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None
     if provider == "claude":
         return "astra"
     if provider == "codex":
-        grok_ready = bool(config.get("grokEnabled")) and provider_billing_allowed(profile, "grok")
+        grok_ready = bool(config.get("grokEnabled")) and provider_billing_allowed(profile, "grok", "grok-4.6")
         return "grok" if grok_ready else "opus"
     if provider == "grok":
         return "astra"
