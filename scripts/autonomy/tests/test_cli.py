@@ -16,6 +16,7 @@ from scripts.autonomy.worker import branch_changed_paths
 NOW = 1_800_000_000
 SHA = "48c1fc9e85f50213e5b313bc67cfbc0a45a28607"
 PROOF_REL = "docs/generated/RELEASE_PROOF.json"
+CORPUS_REL = "docs/generated/repair-real-corpus.json"
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 EXAMPLE = os.path.join(ROOT, "config", "autonomy.example.json")
 
@@ -743,6 +744,10 @@ class TwoJobsInARowTest(unittest.TestCase):
 
 COMMITTED_PROOF = {"commit": "0" * 40, "complete": True, "dirtyWorkingTree": False, "treeDigest": "stari",
                    "createdAt": "2020-01-01T00:00:00.000Z", "missingRequired": [], "results": []}
+# Ratchet korpusa onakav kakav stoji u stablu prije provjere. Oblik je skracen, ali staza i uloga su prave:
+# `docs/generated/repair-real-corpus.json` je TRACKANA i regenerira je obavezna razina `strict-open`.
+COMMITTED_CORPUS = {"summary": {"documentCount": 3, "changedDocumentCount": 0, "noOpCount": 3,
+                                "reviewCount": 0, "failCount": 0}, "results": []}
 
 
 class ReleaseCheckAdapters(CommittingAdapters):
@@ -767,14 +772,16 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
     """Kontroler se ne smije zakljucati poslije PRVOG posla koji dodje do VERIFIKACIJE.
 
     Lanac: `_drive_task` prvo zove `adapters.commit` (stablo ostane cisto), pa odmah `adapters.verify`, a
-    `gate.verify_candidate` bezuvjetno pokrece `npm run release:check`. `scripts/release-check.mjs` na kraju
-    bezuvjetno prepise `docs/generated/RELEASE_PROOF.json`, koja je TRACKANA i nosi `createdAt`, pa se
-    razlikuje na svakom pokretanju. Bez popravka u stablu ostane ` M docs/generated/RELEASE_PROOF.json`,
+    `gate.verify_candidate` bezuvjetno pokrece `npm run release:check`, a taj lanac ima VISE imenovanih
+    pisaca TRACKANIH staza: `scripts/release-check.mjs` prepise `docs/generated/RELEASE_PROOF.json` (nosi
+    `createdAt`, pa se razlikuje na svakom pokretanju), a obavezna razina `strict-open` kroz
+    `npm run repair-real-corpus:review` prepise `docs/generated/repair-real-corpus.json` (razlikuje se cim
+    se popravak promijeni). Bez popravka u stablu ostane ` M docs/generated/...`,
     sljedeci posao padne na `implement_unsafe: radno stablo nije cisto`, `_clean_at_start` ostane False i
     `_park_worker_tree` vrati `skipped: nije nase`, dakle stablo se nikad ne ocisti samo.
 
     Test NIJE vakuumski: `npm run release:check` je jedini presretnut poziv, i to tako da vjerno napise
-    dokaz s promjenjivim `createdAt`; sve ostalo (git, gard, commit, snimka, vracanje stabla) je stvarno, a
+    OBA artefakta iz `gate.VERIFY_ARTIFACT_PATHS`, svaki s promjenjivim sadrzajem; sve ostalo (git, gard, commit, snimka, vracanje stabla) je stvarno, a
     broj presretnutih poziva je zasebna tvrdnja, pa test ne moze proci tako da se verifikacija ne dogodi.
     """
 
@@ -807,12 +814,13 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         trackana datoteka, koju koristi negativna kontrola.
         """
         for rel, payload in ((PROOF_REL, json.dumps(COMMITTED_PROOF, indent=2) + chr(10)),
+                             (CORPUS_REL, json.dumps(COMMITTED_CORPUS, indent=2) + chr(10)),
                              (self.TRACKED_OTHER, "export const vec = 1;" + chr(10))):
             target = os.path.join(self.repo, rel.replace("/", os.sep))
             os.makedirs(os.path.dirname(target), exist_ok=True)
             with open(target, "w", encoding="utf-8") as fh:
                 fh.write(payload)
-        self._git("add", "--", PROOF_REL, self.TRACKED_OTHER)
+        self._git("add", "--", PROOF_REL, CORPUS_REL, self.TRACKED_OTHER)
         self._git("commit", "-qm", "zateceno stanje")
         assert self.dirty() == "", "fixture mora krenuti iz cistog stabla"
 
@@ -820,21 +828,30 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         return subprocess.run(["git", "status", "--porcelain"], cwd=self.repo, capture_output=True, text=True,
                               check=False, shell=False).stdout.strip()
 
-    def proof_on_disk(self):
-        with open(os.path.join(self.repo, PROOF_REL.replace("/", os.sep)), encoding="utf-8") as fh:
+    def on_disk(self, rel):
+        with open(os.path.join(self.repo, rel.replace("/", os.sep)), encoding="utf-8") as fh:
             return fh.read()
 
-    def proof_in_head(self):
-        return self._git("show", "HEAD:" + PROOF_REL)
+    def in_head(self, rel):
+        return self._git("show", "HEAD:" + rel)
 
-    def write_proof(self):
-        """Vjerna simulacija `scripts/release-check.mjs`: isti izlaz, drugi `createdAt` na svakom pozivu."""
+    def write_verification_artifacts(self):
+        """Vjerna simulacija OBA imenovana pisca iz `gate.VERIFY_ARTIFACT_PATHS`.
+
+        `scripts/release-check.mjs` bezuvjetno prepise dokaz, a obavezna razina `strict-open` kroz
+        `npm run verify:strict-open:repaired` -> `npm run repair-real-corpus:review` vrti
+        `scripts/repair-real-corpus.mts`, koji bezuvjetno prepise ratchet korpusa. Oba izlaza se ovdje
+        mijenjaju na svakom pozivu, jer se tako ponasaju i u produkciji: dokaz nosi `createdAt`, a ratchet
+        nove brojke cim se popravak promijeni.
+        """
         self.proof_writes += 1
         payload = dict(COMMITTED_PROOF, commit="1" * 40,
                        createdAt="2026-09-22T00:00:%02d.000Z" % self.proof_writes)
-        target = os.path.join(self.repo, PROOF_REL.replace("/", os.sep))
-        with open(target, "w", encoding="utf-8") as fh:
-            fh.write(json.dumps(payload, indent=2) + chr(10))
+        corpus = dict(COMMITTED_CORPUS, summary=dict(COMMITTED_CORPUS["summary"],
+                                                     changedDocumentCount=self.proof_writes))
+        for rel, body in ((PROOF_REL, payload), (CORPUS_REL, corpus)):
+            with open(os.path.join(self.repo, rel.replace("/", os.sep)), "w", encoding="utf-8") as fh:
+                fh.write(json.dumps(body, indent=2) + chr(10))
 
     @contextlib.contextmanager
     def npm_intercepted(self):
@@ -843,7 +860,7 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         def dispatch(argv, **kwargs):
             if list(argv)[:3] == ["npm", "run", "release:check"]:
                 self.npm_calls.append(list(argv))
-                self.write_proof()
+                self.write_verification_artifacts()
                 for rel in self.extra_writes:
                     with open(os.path.join(self.repo, rel.replace("/", os.sep)), "a", encoding="utf-8") as fh:
                         fh.write("// trag verifikacije " + str(len(self.npm_calls)) + chr(10))
@@ -884,7 +901,8 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         self.assertIsNotNone(adapters.last_evidence, "stvarni verify mora biti pozvan")
         # (1) Stablo je poslije posla CISTO, i to se mjeri sadrzajno, ne izlaznim kodom.
         self.assertEqual(self.dirty(), "", "verifikacija ne smije ostaviti trag u radnikovu stablu")
-        self.assertEqual(self.proof_on_disk(), self.proof_in_head(), "dokaz je vracen na HEAD stanje")
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel + " je vracen na HEAD stanje")
         self.assertEqual(adapters.last_evidence["treeResidue"], [], adapters.last_evidence)
         self.assertIn(written, self._git("show", "--name-only", "--format=", "HEAD"))
         # (2) Drugi posao KRECE i ne pada na gardu cistog stabla.
@@ -896,7 +914,8 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         # Idempotencija: drugi prolaz je nad stablom isti no-op kao prvi.
         self.assertEqual(len(self.npm_calls), 2)
         self.assertEqual(self.dirty(), "")
-        self.assertEqual(self.proof_on_disk(), self.proof_in_head())
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel)
 
     def test_mutation_without_the_restore_the_next_job_is_locked(self):
         """MUTACIJA nad mehanizmom: isti tok, samo bez vracanja stabla. Tocno stanje prije ovog popravka."""
@@ -920,6 +939,26 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         self.assertFalse(adapters.last_evidence["complete"], "dokaz nad stablom koje je provjera promijenila nije potpun")
         self.assertIn("vec-postoji.ts", self.dirty())
         self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se svejedno vraca; kvar je uzak")
+        self.assertNotIn("repair-real-corpus.json", self.dirty(), "ratchet korpusa se svejedno vraca")
+        self.assertEqual(first["outcome"], "needs_human", first)
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_restoring_only_the_proof_still_locks_the_controller(self):
+        """MUTACIJA nad DEKLARACIJOM: popis suzen na samu datoteku dokaza, tocno kako je glasio prvi popravak.
+
+        `npm run release:check` ima jos jednog imenovanog pisca trackane staze: obavezna razina `strict-open`
+        vrti `npm run repair-real-corpus:review`, a `scripts/repair-real-corpus.mts` bezuvjetno prepise
+        `docs/generated/repair-real-corpus.json`. Popravak koji vraca samo dokaz zato ne rjesava kvar nego ga
+        premjesta na drugu stazu; ovaj test to mjeri, umjesto da se uzme na rijec.
+        """
+        with mock.patch.object(cli, "VERIFY_ARTIFACT_PATHS", (PROOF_REL,)):
+            first, adapters, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(len(self.npm_calls), 1, first)
+        self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se i u mutaciji vraca")
+        self.assertIn("repair-real-corpus.json", self.dirty(), "suzen popis ostavlja ratchet korpusa prljavim")
+        self.assertEqual(adapters.last_evidence["treeResidue"], [CORPUS_REL], adapters.last_evidence)
         self.assertEqual(first["outcome"], "needs_human", first)
         second, _, _ = self.run_tick("drugi posao", NOW + 1)
         self.assertEqual(second["outcome"], "blocked", second)
@@ -936,7 +975,8 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         self.assertEqual(first["outcome"], "proposed", first)
         self.assertEqual(self.npm_calls, [], "lazna verifikacija ne pokrece nijednu naredbu")
         self.assertEqual(self.proof_writes, 0)
-        self.assertEqual(self.proof_on_disk(), self.proof_in_head(), "dokaz nije ni dirnut")
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel + " nije ni dirnut")
         self.assertIsNot(CommittingAdapters.verify, cli.DefaultAdapters.verify)
 
 

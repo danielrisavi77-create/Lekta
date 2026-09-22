@@ -25,7 +25,7 @@ import time
 import uuid
 from typing import Callable
 
-from .gate import PROOF_PATH, verify_candidate
+from .gate import PROOF_PATH, VERIFY_ARTIFACT_PATHS, verify_candidate
 from .policy import PolicyError, billing_allowed, explain_change, load_config
 from .publisher import publish_verified
 from .remote import load_remotes, token_fingerprint
@@ -376,49 +376,56 @@ def _agent_for(config: dict, phase: str, task: dict) -> str:
 def _verify_settle(repo: str) -> Callable[[], list[str]]:
     """Vrati radnikovo stablo u stanje u kojem ga je verifikacija zatekla i reci sto je ipak ostalo prljavo.
 
-    `verify_candidate` bezuvjetno pokrece `npm run release:check`, a `scripts/release-check.mjs` na kraju
-    bezuvjetno prepise `docs/generated/RELEASE_PROOF.json`. Ta datoteka je TRACKANA, k tome je kontrolna
-    staza, a sadrzaj joj se razlikuje na svakom pokretanju jer nosi `createdAt`. Bez vracanja u stablu ostane
-    ` M docs/generated/RELEASE_PROOF.json`, pa SLJEDECI posao padne na `implement_unsafe: radno stablo nije
-    cisto`, `_clean_at_start` ostane False i `_park_worker_tree` vrati `skipped: nije nase`. Kontroler se tako
-    zakljuca poslije PRVOG posla koji uopce dodje do verifikacije, dakle kroz druga vrata od nalaza 2026-09-13.
+    `verify_candidate` bezuvjetno pokrece `npm run release:check`, a taj lanac ima VISE imenovanih pisaca
+    TRACKANIH staza; svi su poimenice popisani u `gate.VERIFY_ARTIFACT_PATHS`, uz skript koji pise svaku od
+    njih. Bez vracanja u stablu ostane ` M docs/generated/...`, pa SLJEDECI posao padne na `implement_unsafe:
+    radno stablo nije cisto`, `_clean_at_start` ostane False i `_park_worker_tree` vrati `skipped: nije nase`.
+    Kontroler se tako zakljuca poslije PRVOG posla koji uopce dodje do verifikacije, dakle kroz druga vrata
+    od nalaza 2026-09-13.
 
-    Vraca se TOCNO jedna staza, i to sama datoteka dokaza, upisom BAJTOVA koje je verifikacija zatekla i bez
-    ijedne git naredbe koja pise: indeks se ne dira, `checkout` se ne zove, pa vracanje ne moze pojesti ni
-    tudju promjenu ni vlastiti commit. Sve ostalo se NE dira nego PRIJAVLJUJE: popis staza koje verifikacija nije smjela ostaviti ide u
-    manifest kao `treeResidue` i obara `complete`. Kad se stanje stabla ne moze izmjeriti, popis nosi razlog,
-    pa je ishod zatvoren umjesto tiho prazan.
+    Vracaju se TOCNO te staze, upisom BAJTOVA koje je verifikacija zatekla i bez ijedne git naredbe koja
+    pise: indeks se ne dira, `checkout` se ne zove, pa vracanje ne moze pojesti ni tudju promjenu ni vlastiti
+    commit. Sve ostalo se NE dira nego PRIJAVLJUJE: popis staza koje verifikacija nije smjela ostaviti ide u
+    manifest kao `treeResidue` i obara `complete`. Kad se stanje stabla ne moze izmjeriti, ili se artefakt ne
+    da vratiti, popis nosi razlog, pa je ishod zatvoren umjesto tiho prazan.
     """
-    proof_abs = os.path.join(repo, PROOF_PATH.replace("/", os.sep))
     before_error: str | None = None
     try:
         before = set(changed_paths(repo))
     except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
         before, before_error = set(), f"git status nije uspio prije provjere ({type(exc).__name__})"
-    try:
-        with open(proof_abs, "rb") as fh:
-            proof_before: bytes | None = fh.read()
-    except OSError:
-        proof_before = None
+    # Bajtovi ZATECENOG stanja, po jednoj stazi. `None` znaci da datoteke prije provjere nije ni bilo, pa se
+    # vraca njezinom odsutnoscu, a ne praznim sadrzajem.
+    snapshot: list[tuple[str, str, bytes | None]] = []
+    for rel in VERIFY_ARTIFACT_PATHS:
+        target = os.path.join(repo, rel.replace("/", os.sep))
+        try:
+            with open(target, "rb") as fh:
+                snapshot.append((rel, target, fh.read()))
+        except OSError:
+            snapshot.append((rel, target, None))
 
     def settle() -> list[str]:
-        try:
-            if proof_before is None:
-                if os.path.exists(proof_abs):
-                    os.remove(proof_abs)
-            else:
-                os.makedirs(os.path.dirname(proof_abs), exist_ok=True)
-                with open(proof_abs, "wb") as fh:
-                    fh.write(proof_before)
-        except OSError as exc:
-            return [f"<dokaz se nije dao vratiti: {type(exc).__name__}>"]
+        problems: list[str] = []
+        for rel, target, payload in snapshot:
+            try:
+                if payload is None:
+                    if os.path.exists(target):
+                        os.remove(target)
+                else:
+                    os.makedirs(os.path.dirname(target), exist_ok=True)
+                    with open(target, "wb") as fh:
+                        fh.write(payload)
+            except OSError as exc:
+                problems.append(f"<{rel} se nije dao vratiti: {type(exc).__name__}>")
         if before_error:
-            return [f"<{before_error}>"]
+            return sorted({*problems, f"<{before_error}>"})
         try:
             after = set(changed_paths(repo))
         except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
-            return [f"<git status nije uspio nakon provjere ({type(exc).__name__})>"]
-        return sorted(after - before)
+            problems.append(f"<git status nije uspio nakon provjere ({type(exc).__name__})>")
+            return sorted(set(problems))
+        return sorted({*problems, *(after - before)})
 
     return settle
 

@@ -1,12 +1,14 @@
 import copy
 import json
 import os
+import subprocess
 import tempfile
 import unittest
 
 from scripts.autonomy.gate import (
-    build_manifest, directory_digest, load_evidence, promotion_allowed, proof_staleness, release_proof_checks,
-    sign_manifest, tree_digest_from_ls_tree, verify_candidate,
+    CORPUS_REPORT_PATH, PROOF_PATH, VERIFY_ARTIFACT_PATHS, build_manifest, directory_digest, load_evidence,
+    promotion_allowed, proof_staleness, release_proof_checks, sign_manifest, tree_digest_from_ls_tree,
+    verify_candidate,
 )
 
 REQUIRED = ["check", "conformance", "slow", "ux", "strict-open", "word", "word-worst"]
@@ -256,6 +258,73 @@ class SettleTest(unittest.TestCase):
         evidence = load(forged)
         self.assertTrue(evidence["signature_verified"], evidence)
         self.assertFalse(promotion_allowed(evidence, CAND, REQUIRED))
+
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+
+
+def repo_text(rel):
+    with open(os.path.join(REPO_ROOT, rel.replace("/", os.sep)), encoding="utf-8") as fh:
+        return fh.read()
+
+
+def js_object_containing(text, needle):
+    """Izdvoji `{...}` blok koji sadrzi `needle`, brojanjem viticastih zagrada.
+
+    Trazi se CIJELI objekt razine, ne redak: tvrdnja "razina strict-open je obavezna" mora vrijediti nad
+    istim objektom u kojem stoji i njezina naredba, inace bi dva susjedna retka iz razlicitih razina prosla
+    kao da su jedna.
+    """
+    hit = text.index(needle)
+    start = text.rindex("{", 0, hit)
+    depth, i = 0, start
+    while i < len(text):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start:i + 1]
+        i += 1
+    raise AssertionError("neuravnotezene zagrade oko " + needle)
+
+
+class VerifyArtifactDeclarationTest(unittest.TestCase):
+    """Popis `VERIFY_ARTIFACT_PATHS` je POIMENICAN, pa mu treba sidro u stvarnom repozitoriju.
+
+    Bez ovoga bi popis tiho istrunuo: preimenovana staza, ugasena razina ili pisac koji vise ne pise dali bi
+    popravak koji vraca datoteku koju nitko ne prlja, a prava bi ostala prljava. Test zato ne provjerava
+    popis prema samom sebi nego prema `package.json`, `scripts/release-tiers.mjs` i stvarnim skriptama.
+
+    Tvrdi se i da je svaka staza TRACKANA: netrackanu datoteku `git status` prijavljuje kao `??` samo dok je
+    nije progutao `.gitignore`, a trackana je jedini oblik koji kontrolerovo stablo stvarno zaprlja.
+    """
+
+    def test_every_declared_artifact_is_tracked_in_this_repository(self):
+        for rel in VERIFY_ARTIFACT_PATHS:
+            out = subprocess.run(["git", "ls-files", "--error-unmatch", "--", rel], cwd=REPO_ROOT,
+                                 capture_output=True, text=True, check=False, shell=False)
+            self.assertEqual(out.returncode, 0, rel + " nije trackana: " + out.stderr.strip())
+            self.assertEqual(out.stdout.strip(), rel, rel)
+
+    def test_the_proof_writer_is_still_the_release_check_script(self):
+        scripts = json.loads(repo_text("package.json"))["scripts"]
+        self.assertIn("scripts/release-check.mjs", scripts["release:check"], scripts["release:check"])
+        self.assertIn("RELEASE_PROOF.json", repo_text("scripts/release-check.mjs"))
+        self.assertIn(PROOF_PATH, VERIFY_ARTIFACT_PATHS)
+
+    def test_a_required_tier_still_regenerates_the_corpus_ratchet(self):
+        """Lanac koji je prvi popravak propustio: strict-open -> repaired -> review -> ratchet korpusa."""
+        tier = js_object_containing(repo_text("scripts/release-tiers.mjs"), "id: 'strict-open'")
+        self.assertIn("required: true", tier, tier)
+        self.assertIn("cmd: 'npm run verify:strict-open:repaired'", tier, tier)
+        scripts = json.loads(repo_text("package.json"))["scripts"]
+        self.assertIn("repair-real-corpus:review", scripts["verify:strict-open:repaired"])
+        self.assertIn("scripts/repair-real-corpus.mts", scripts["repair-real-corpus:review"])
+        writer = repo_text("scripts/repair-real-corpus.mts")
+        self.assertIn("'repair-real-corpus.json'", writer)
+        self.assertIn("writeFileSync(join(root, 'docs', 'generated', reportPath)", writer)
+        self.assertIn(CORPUS_REPORT_PATH, VERIFY_ARTIFACT_PATHS)
 
 
 if __name__ == "__main__":

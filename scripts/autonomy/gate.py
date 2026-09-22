@@ -27,6 +27,22 @@ from .policy import is_control_path
 
 MANIFEST_SCHEMA_VERSION = 1
 PROOF_PATH = "docs/generated/RELEASE_PROOF.json"
+CORPUS_REPORT_PATH = "docs/generated/repair-real-corpus.json"
+# TRACKANI artefakti koje SAMA verifikacija regenerira, dakle staze koje `npm run release:check` prepise i
+# kad kandidat nije dirnuo nista u njima. Popis je poimenican, a ne izveden, jer svaki clan mora nositi IME
+# PISCA; zato uz svaku stazu stoji tocan lanac kojim se do pisca dolazi:
+#
+# * `docs/generated/RELEASE_PROOF.json` <- `scripts/release-check.mjs` (OUT, upis je bezuvjetan i na kraju
+#   svakog pokretanja). Sadrzaj se razlikuje na SVAKOM pokretanju jer nosi `createdAt`.
+# * `docs/generated/repair-real-corpus.json` <- obavezna razina `strict-open` iz `scripts/release-tiers.mjs`
+#   vrti `npm run verify:strict-open:repaired`, a taj skript prvo vrti `npm run repair-real-corpus:review`,
+#   dakle `scripts/repair-real-corpus.mts`, koji izvjestaj upisuje bezuvjetno. Sadrzaj se razlikuje tocno
+#   kad se popravak promijeni, a to je bas klasa zadataka zbog koje kontroler i postoji: artefakt je ratchet
+#   koji `tests/real-corpus.test.ts` usporedjuje s vlastitim pokretanjem.
+#
+# Popis NIJE popis "staza koje se smiju prljati". Sve izvan njega ostaje `treeResidue`, obara `complete` i
+# `promotion_allowed`; nova, neprijavljena staza je time glasna, ne tiha.
+VERIFY_ARTIFACT_PATHS = (PROOF_PATH, CORPUS_REPORT_PATH)
 TRUSTED_FIELDS = ("signature_verified", "hashes_verified", "policy_current", "complete_verified")
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 
@@ -190,9 +206,9 @@ def verify_candidate(candidate: dict, policy: dict, *, runner: Callable[[list[st
     kontakt s vanjskim svijetom pa se cijeli tok testira bez npm-a. Kandidatov kod se NE izvrsava ovdje
     osim kroz taj runner (koji u produkciji radi u odvojenom sandboxu).
 
-    `settle` se zove TOCNO jednom, odmah nakon sto je dokaz procitan: pozivatelj tada vraca
-    `docs/generated/RELEASE_PROOF.json` na zateceno stanje i vraca popis staza koje je provjera usput
-    ostavila prljavima. Redoslijed nije kozmetika: prije `read_proof` bi vracanje datoteke pojelo bas onaj
+    `settle` se zove TOCNO jednom, odmah nakon sto je dokaz procitan: pozivatelj tada vraca svaku stazu
+    iz `VERIFY_ARTIFACT_PATHS` na zateceno stanje i vraca popis staza koje je provjera usput ostavila
+    prljavima. Redoslijed nije kozmetika: prije `read_proof` bi vracanje datoteke pojelo bas onaj
     svjez dokaz zbog kojeg se provjera i pokrece. Bez `settle` ponasanje je staro (nista se ne vraca, popis
     je prazan), pa pozivatelji koji stablo ne diraju ostaju netaknuti."""
     required = list(policy.get("requiredReleaseTiers") or [])
