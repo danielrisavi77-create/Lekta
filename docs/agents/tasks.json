@@ -181,11 +181,11 @@
     {
       "id": "T18",
       "title": "Obnoviti staging i uskladiti migracijsku disciplinu",
-      "status": "ready",
+      "status": "in_progress",
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka."
+      "note": "P0. Dokaz: novi testni korisnik u stagingu prodje auth, pravila, testni popravak i privatno preuzimanje, migracijski identitet i DB smoke prolaze, bez neplanirane promjene produkcijskih podataka. 2026-09-20: staging 23 migracije primijenjene (0059-0103, 0200-0202), migration-identity nedostaje 0, 24 Edge funkcije deployane, deploy-drift 0 (PR #94, #97). Preostaje dokaz korisnickog toka (auth, pravila, testni popravak, privatno preuzimanje). Staging aktivan samo dok su Matura app i Pisac pauzirani."
     },
     {
       "id": "T19",
@@ -194,7 +194,7 @@
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: proizvedeni artefakt ima tocan identitet, strogi smoke odbija pogresnu verziju, a negativni slucajevi (nedostajuci build-info, pogresan SHA, stale ili unknown dokaz) zaustavljaju objavu. | Spojen 2026-09-20 PR #89 merge 701e122c (T19 rez 1: negativni slučajevi gatea). Orkestrator higijena."
+      "note": "P0. Dokaz: proizvedeni artefakt ima tocan identitet, strogi smoke odbija pogresnu verziju, a negativni slucajevi (nedostajuci build-info, pogresan SHA, stale ili unknown dokaz) zaustavljaju objavu. | Spojen 2026-09-20 PR #89 merge 701e122c (T19 rez 1: negativni slučajevi gatea). Orkestrator higijena. AUDIT 22.9.: #13 staging noindex + isti build lanac + Node 24; #40 pinati akcije, smoke --strict-commit, Dependabot za Deno i Python."
     },
     {
       "id": "T20",
@@ -204,7 +204,7 @@
         "T18",
         "T19"
       ],
-      "note": "P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak."
+      "note": "P0. Dokaz: potvrdjena odstupanja Edge koda nestanu na stagingu, server i klijent koriste isti kompatibilni digest pravila, a svaka preostala aktivacija ima konkretan vlasnicki zadatak. AUDIT 22.9.: #24 katedra-agent-worker verify_jwt=false."
     },
     {
       "id": "T21",
@@ -214,7 +214,7 @@
         "T18",
         "T20"
       ],
-      "note": "P0. Dokaz: nema potvrdjenog citanja ili mutacije tudjih podataka, zaobilaska prava ni neogranicene obrade, a negativni testovi padaju kad se zastita namjerno ukloni."
+      "note": "P0. Dokaz: nema potvrdjenog citanja ili mutacije tudjih podataka, zaobilaska prava ni neogranicene obrade, a negativni testovi padaju kad se zastita namjerno ukloni. AUDIT 22.9.: #10 drop policy corpus_contributions_update_own (migracija 0203+, RLS test); #23 readTextBounded u 8 javnih Edge funkcija; #25 demo kvota Katedre SECURITY DEFINER."
     },
     {
       "id": "T22",
@@ -223,7 +223,8 @@
       "dependsOn": [
         "T18",
         "T20",
-        "T21"
+        "T21",
+        "T49"
       ],
       "note": "P0. Dokaz: stvarne testne poruke stizu na namjenske adrese, sve sesijske grane daju ocekivani ishod, a anonimni korisnik nakon registracije zadrzava vlastiti rad i prava."
     },
@@ -243,9 +244,10 @@
       "dependsOn": [
         "T20",
         "T22",
-        "T23"
+        "T23",
+        "T48"
       ],
-      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag."
+      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag. AUDIT 22.9.: #3 webhook prihvaca samo order_created/paid i order_refunded, inbox prije provjere korisnika, needs_manual_link; #4 jedno ime varijable za store ID (webhook-mor cita LS_STORE_ID, create-checkout LEMONSQUEEZY_STORE_ID) + preflight; #7 PDV ukljucen; #26 tekst garancije."
     },
     {
       "id": "T25",
@@ -265,7 +267,7 @@
       "dependsOn": [
         "T16"
       ],
-      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera."
+      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera. AUDIT 22.9.: #14 xmldom onError (osteceni document.xml dobiva ocjenu umjesto greske); #16 CFB potpis za zasticen .docx; #17 w:vanish u bodovanju."
     },
     {
       "id": "T27",
@@ -275,7 +277,7 @@
         "T25",
         "T26"
       ],
-      "note": "P0. Dokaz: svaki od 31 registriranog fixera ima pozitivan i negativan dokaz, nula ostecenja i laznih uspjeha, a izvjestaj odvojeno prikazuje rijesene, nerijesene, preskocene i rucne stavke s tocnim nazivnicima."
+      "note": "P0. Dokaz: svaki od 31 registriranog fixera ima pozitivan i negativan dokaz, nula ostecenja i laznih uspjeha, a izvjestaj odvojeno prikazuje rijesene, nerijesene, preskocene i rucne stavke s tocnim nazivnicima. AUDIT 22.9.: #18 fixer koji pukne bez loga."
     },
     {
       "id": "T28",
@@ -285,7 +287,7 @@
         "T16",
         "T26"
       ],
-      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva."
+      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja."
     },
     {
       "id": "T29",
@@ -307,7 +309,7 @@
         "T27",
         "T28"
       ],
-      "note": "P1. Dokaz: stvarni korisnicki scenariji i snimke relevantnih stanja pokazuju da novi korisnik bez pomoci autora zavrsi tok, a svi prikazani ishodi odgovaraju backend i verifikacijskom stanju."
+      "note": "P1. Dokaz: stvarni korisnicki scenariji i snimke relevantnih stanja pokazuju da novi korisnik bez pomoci autora zavrsi tok, a svi prikazani ishodi odgovaraju backend i verifikacijskom stanju. AUDIT 22.9.: #11 unit/work/utm preziveti prijelaz s / na /rad/."
     },
     {
       "id": "T31",
@@ -360,7 +362,7 @@
         "T20",
         "T27"
       ],
-      "note": "P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original. Development dokaz za Lekta -> WordReplica EXE postoji kroz npm run repair:runner:e2e (stvarni claim/status HTTP tok); produkcijski dokaz ostaje blocked dok trusted potpisani runner i real-Word release gate ne prodju."
+      "note": "P1. Dokaz: popravljeni izlaz otvoren je u stvarnom Microsoft Wordu prije i nakon osvjezavanja polja, worker se oporavlja od loseg ulaza, a rezervni tok cuva original. Development dokaz za Lekta -> WordReplica EXE postoji kroz npm run repair:runner:e2e (stvarni claim/status HTTP tok); produkcijski dokaz ostaje blocked dok trusted potpisani runner i real-Word release gate ne prodju. AUDIT 22.9.: #15 WordReplica je drugi release track, sada T51 (blocked, dependsOn T47/T48, radi se skroz na kraju)."
     },
     {
       "id": "T36",
@@ -371,7 +373,7 @@
         "T22",
         "T25"
       ],
-      "note": "P0. Dokaz: svaki obecani rok i brisanje imaju dokaz na stvarnom objektu i metapodacima, korisnik ima funkcionalnu kontrolu svojih podataka, a tekst rada i e-posta ne zavrsavaju u nepotrebnim logovima."
+      "note": "P0. Dokaz: svaki obecani rok i brisanje imaju dokaz na stvarnom objektu i metapodacima, korisnik ima funkcionalnu kontrolu svojih podataka, a tekst rada i e-posta ne zavrsavaju u nepotrebnim logovima. AUDIT 22.9.: #22 purge webhook_events.raw_payload; #27 politika privatnosti field-render."
     },
     {
       "id": "T37",
@@ -382,7 +384,7 @@
         "T24",
         "T36"
       ],
-      "note": "P1. Dokaz: testni zahtjev prodje podnosenje, potvrdu, admin obradu, razrjesenje i obavijest korisniku, uz autorizaciju i trag promjena."
+      "note": "P1. Dokaz: testni zahtjev prodje podnosenje, potvrdu, admin obradu, razrjesenje i obavijest korisniku, uz autorizaciju i trag promjena. AUDIT 22.9.: #8 Lemon Squeezy imenovan kao prodavatelj; #9 povrat neiskoristenih slotova 14 dana; #28 Katedra top-upovi preko Stripea."
     },
     {
       "id": "T38",
@@ -452,9 +454,10 @@
         "T28",
         "T30",
         "T32",
-        "T37"
+        "T37",
+        "T49"
       ],
-      "note": "P1. Dokaz: nema slomljenog javnog puta, pogresne ponude ni kontradiktorne tvrdnje, a crawl popis odgovara manifestu ruta i objavljenom artefaktu."
+      "note": "P1. Dokaz: nema slomljenog javnog puta, pogresne ponude ni kontradiktorne tvrdnje, a crawl popis odgovara manifestu ruta i objavljenom artefaktu. AUDIT 22.9.: #12 dijakritici u sucelju + test zabranjenih ASCII oblika; #29 intake eventi; #30 sitemap-usporedba u robots.txt; #31 h1 i OG na /saznaj-vise/; #32 mrtvo sidro #analyzer."
     },
     {
       "id": "T44",
@@ -485,7 +488,8 @@
         "T40",
         "T41",
         "T42",
-        "T43"
+        "T43",
+        "T50"
       ],
       "note": "P0. Dokaz: sve obavezne grane matrice scenarija E01 do E36 imaju stvarni prolaz i evidenciju bez presucenog mocka; nedostupan servis je oznacen blocked ili unavailable, nikad pass."
     },
@@ -502,7 +506,7 @@
         "T39",
         "T41"
       ],
-      "note": "P0. Dokaz: kontrolirani kvar proizvede vidljiv signal, rollback i restore su stvarno izvedeni na testu, a svaka operativna obveza ima vlasnika i kratku naredbu."
+      "note": "P0. Dokaz: kontrolirani kvar proizvede vidljiv signal, rollback i restore su stvarno izvedeni na testu, a svaka operativna obveza ima vlasnika i kratku naredbu. AUDIT 22.9.: #33 hotfix procedura i tagovi; #34 SECURITY.md i security.txt; #35 incidenti i SLA."
     },
     {
       "id": "T46",
@@ -521,10 +525,48 @@
       "status": "blocked",
       "dependsOn": [
         "T15",
-        "T46"
+        "T46",
+        "T48"
       ],
       "note": "P0. Dokaz: javni artefakt odgovara dokazanoj verziji, svi ukljuceni tokovi rade, prvi tjedan nadzora je obradjen bez nerazrijesenog kriticnog signala i operacije su predane uz runbook."
+    },
+    {
+      "id": "T48",
+      "title": "Pravni subjekt i naplata: obrt, OIB, isplatni racun kod Lemon Squeezyja, DPA sa Supabaseom",
+      "status": "ready",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "VLASNIK: audit bloker 2, bez toga nema naplate; provider.json ima prazan OIB."
+    },
+    {
+      "id": "T49",
+      "title": "Domena, DNS, SPF/DKIM/DMARC i support sanducic",
+      "status": "ready",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "VLASNIK: audit nalaz 6; live je lektahr.netlify.app, send-reminders ocekuje podsjetnici@lekta.hr."
+    },
+    {
+      "id": "T50",
+      "title": "Opseg lansiranja (MVP) i datum go/no-go",
+      "status": "ready",
+      "dependsOn": [
+        "T16"
+      ],
+      "note": "VLASNIK: audit nalaz 5: T44 danas ovisi o 25 zadataka, kriticni lanac 14; nedovrseno iza *_DISABLED prekidaca."
+    },
+    {
+      "id": "T51",
+      "title": "WordReplica lokalni popravak: certifikat, hosting EXE-a, azuriranja",
+      "status": "blocked",
+      "dependsOn": [
+        "T47",
+        "T48"
+      ],
+      "note": "VLASNIK 2026-09-22: radi se skroz na kraju, zadnje; za lansiranje REPAIR_LOCAL_ENABLED ostaje iskljucen. Audit nalaz 15: merge 164dd160 i #104, migracije 0200-0202, Authenticode OV certifikat trazi pravni subjekt."
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21)."
 }
