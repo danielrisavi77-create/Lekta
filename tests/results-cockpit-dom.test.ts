@@ -651,6 +651,30 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(mount.querySelector<HTMLElement>('[data-cockpit-sheet-lead]')!.contains(pecat!)).toBe(false);
   });
 
+  it('copy pecata je DOSLOVNO iz predloska; needs-work i manual-review nemaju izmisljen pecat', () => {
+    /**
+     * Results.dc.html ima doslovan natpis pecata SAMO za `blocked` ("Nije spremno") i `clear`
+     * ("Forma provjerena"). Popravak drugog kruga: prije je ovdje stajao izmisljen natpis
+     * ("Treba doradu", "Za ručnu provjeru") koji predlozak ne sadrzi. Sada ta dva stanja nemaju
+     * pecat; presuda je i dalje puno izrecena u H1.
+     */
+    const blokiran = renderaj();
+    expect(blokiran.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('blocked');
+    expect(blokiran.mount.querySelector('[data-cockpit-stamp]')?.textContent).toBe('Nije spremno');
+
+    const cist = renderaj({ issues: [] });
+    expect(cist.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('clear');
+    expect(cist.mount.querySelector('[data-cockpit-stamp]')?.textContent).toBe('Forma provjerena');
+
+    const doradaSamo = renderaj({ issues: [{ severity: 'warning', category: 'formatting', title: 'X', detail: 'X', where: 'X' }] });
+    expect(doradaSamo.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('needs-work');
+    expect(doradaSamo.mount.querySelector('[data-cockpit-stamp]')).toBeNull();
+
+    const rucnaSamo = renderaj({ issues: [{ severity: 'info', category: 'structure', title: 'X', detail: 'X', where: 'X' }] });
+    expect(rucnaSamo.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('manual-review');
+    expect(rucnaSamo.mount.querySelector('[data-cockpit-stamp]')).toBeNull();
+  });
+
   it('desni pano stola prikazuje JEDNU karticu, a strelice mijenjaju prikazanu', () => {
     const { mount, model } = saStolom();
     const naslov = () => mount.querySelector('[data-desk-pane] .cockpit-finding h3')?.textContent;
