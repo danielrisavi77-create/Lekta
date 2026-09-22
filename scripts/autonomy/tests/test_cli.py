@@ -207,6 +207,11 @@ class TickTest(unittest.TestCase):
         task = {"implementationAgent": "sol"}
         self.assertEqual(cli._agent_for(cfg, "reviewing", task, blocked_profile), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", task, allowed_profile), "grok")
+        wrong_model = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {"grok": {"allowed": True, "approved_models": ["grok-other"]}},
+        }
+        self.assertEqual(cli._agent_for(cfg, "reviewing", task, wrong_model), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "build"}, allowed_profile), "astra")
 
 
