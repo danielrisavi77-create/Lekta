@@ -93,10 +93,14 @@ function main() {
   const budget = options.has('--budget-usd') ? Number(options.get('--budget-usd')) : undefined;
   if (options.has('--subscription') && options.has('--included-account')) throw new Error('Choose one billing profile');
   const billingMode = options.has('--included-account') ? 'included_account' : (options.has('--subscription') ? 'subscription' : 'budget');
-  // Pretplatnicki nacin: postavljen API kljuc bi Claude `-p` poziv prebacio na API naplatu (dokumentirano
-  // ponasanje CLI-ja), pa je to greska prije pripreme, ne upozorenje poslije poziva.
+  // Subscription profil je provider-specificki: tudji API credential ne smije ni autorizirati ni
+  // nepotrebno blokirati ovaj poziv. Credential odgovarajuceg providera je greska PRIJE pripreme.
   if (billingMode === 'subscription') {
-    const leaked = ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_API_KEY'].filter(name => process.env[name]);
+    const provider = AGENTS[agent]?.command;
+    const credentialNames = provider === 'codex'
+      ? ['OPENAI_API_KEY']
+      : (provider === 'claude' ? ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_API_KEY'] : []);
+    const leaked = credentialNames.filter(name => process.env[name]);
     if (leaked.length) throw new Error(`subscription mode refuses API credentials in the environment: ${leaked.join(', ')}`);
   }
   if (billingMode === 'included_account') {
