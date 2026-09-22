@@ -88,7 +88,10 @@ def provider_billing_allowed(profile: dict | None, command: str, requested_model
         return False
     providers = profile.get("providers") if isinstance(profile, dict) else None
     if not isinstance(providers, dict):
-        return command in ("codex", "claude")
+        # Legacy globalni profil ne moze dokazati KOJI je provider prijavljen. Za stvarne
+        # providere zato je fail-closed i trazi novi doctor profil. Nepoznati command ostaje
+        # dopusten samo testnom/process harnessu koji ne predstavlja vanjski model provider.
+        return command not in ("codex", "claude", "grok") and billing_allowed(profile)
     provider = providers.get(command)
     if not isinstance(provider, dict) or provider.get("allowed") is not True:
         return False
