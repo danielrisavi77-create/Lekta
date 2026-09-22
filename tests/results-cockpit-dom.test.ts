@@ -392,15 +392,23 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(list!.querySelector('[data-cockpit-action="open-findings"]')?.textContent).toContain('Pregledaj nalaze');
   });
 
-  it('MUTACIJA: jos jedan primarni gumb na listu presude ruši tvrdnju o jednoj radnji', () => {
-    const { mount } = renderaj();
-    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!;
-    expect(list.querySelectorAll('button.button-primary')).toHaveLength(1);
+  it('MUTACIJA: broj primarnih gumba ostaje JEDAN i kad ULAZ promijeni koju radnju gumb nosi', () => {
+    // Prava mutacija mijenja ULAZ i ponovno renderira, umjesto da doda gumb izravno u vec
+    // iscrtan DOM: ono drugo bi prosao i predikat bez obzira crta li `renderResultsCockpit`
+    // ijedan gumb ili deset, jer bi test sam dodao onaj koji broji.
+    //
+    // `repairAvailable: false` mijenja `primaryAction` u DRUGU granu (nema opceg ulaza u popravak,
+    // natpis postaje "Otvori prvi nalaz"), a ugovor "tocno jedan primarni gumb" mora vrijediti i
+    // ovdje, ne samo na baseline granu s popravkom.
+    const bezPopravka = renderaj({}, { repairAvailable: false });
+    const listBez = bezPopravka.mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!;
+    expect(listBez.querySelectorAll('button.button-primary')).toHaveLength(1);
+    expect(listBez.querySelector('[data-cockpit-primary]')?.textContent).toContain('Otvori prvi nalaz');
 
-    const drugi = document.createElement('button');
-    drugi.className = 'button button-primary';
-    list.appendChild(drugi);
-    expect(list.querySelectorAll('button.button-primary').length === 1).toBe(false);
+    const sPopravkom = renderaj();
+    const listS = sPopravkom.mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!;
+    expect(listS.querySelectorAll('button.button-primary')).toHaveLength(1);
+    expect(listS.querySelector('[data-cockpit-primary]')?.textContent).not.toContain('Otvori prvi nalaz');
   });
 
   it('eyebrow spaja ime datoteke, profil i autoritet izvora u jedan redak', () => {
@@ -592,14 +600,19 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(prsten?.dataset.verdictTone).toBe(list?.dataset.cockpitStatus);
   });
 
-  it('MUTACIJA: prsten s prepisanim tonom razilazi se od presude', () => {
-    const { mount } = renderaj();
-    const prsten = mount.querySelector<HTMLElement>('[data-cockpit-score]')!;
-    const ton = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!.dataset.cockpitStatus;
-    expect(prsten.dataset.verdictTone).toBe(ton);
+  it('MUTACIJA: prsten prati ton presude i kad ULAZ promijeni presudu u "clear"', () => {
+    // Prava mutacija mijenja ULAZ, ne vec iscrtan DOM: bez blokatora, dorada i rucnih provjera
+    // `resultReadiness` vraca `clear`, sto je DRUGI ton od baseline `blocked` testa iznad. Da je
+    // `verdictRingHtml` pozvan s prepisanim ili fiksnim tonom (npr. uvijek 'blocked'), ova tvrdnja
+    // bi pala na ovom, drugom modelu, dok bi baseline i dalje bio zelen.
+    const { mount } = renderaj({ issues: [] });
+    const prsten = mount.querySelector<HTMLElement>('[data-cockpit-score]');
+    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]');
 
-    prsten.dataset.verdictTone = 'clear';
-    expect(prsten.dataset.verdictTone === ton).toBe(false);
+    expect(list?.dataset.cockpitStatus).toBe('clear');
+    expect(prsten?.dataset.verdictTone).toBe('clear');
+    expect(prsten?.dataset.verdictTone).toBe(list?.dataset.cockpitStatus);
+    expect(prsten?.dataset.verdictTone).not.toBe('blocked');
   });
 
   it('pečat stoji IZVAN elementa s tekstom presude', () => {
@@ -652,12 +665,25 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(djeca.indexOf(popis!)).toBeGreaterThan(djeca.indexOf(kartica!));
   });
 
-  it('MUTACIJA: red čekanja koji nabraja samo prikazani nalaz gubi odgovor na "što me još čeka"', () => {
-    const { mount, model } = saStolom();
+  it('MUTACIJA: red čekanja prati BROJ nalaza kojih stol dobije, ne fiksnu brojku', () => {
+    // Prava mutacija mijenja ULAZ (koliko nalaza stol dobije) i ponovno renderira, umjesto da
+    // rucno makne redke iz vec iscrtanog DOM-a: to drugo bi bilo istinito bez obzira crta li
+    // `queueRedci` uopce iz `svi`, pa gard ne bi hvatao regresiju u pravom kodu.
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result());
+    expect(model.findings.document.length).toBeGreaterThan(1);
+    // ULAZ je namjerno OSAKACEN na jedan nalaz, kao da bi pozivatelj (buduci bug) proslijedio
+    // samo prikazani umjesto SVIH: ako `queueRedci` prestane citati `desk.items` i pocne crtati
+    // fiksan broj redaka, ova tvrdnja pada.
+    renderResultsCockpit(mount, model, {
+      repairAvailable: true,
+      desk: {
+        items: model.findings.document.slice(0, 1).map((finding) => ({ finding, flagIndex: null })),
+        mountDocument: async () => null,
+      },
+    });
     const popis = mount.querySelector<HTMLElement>('[data-desk-queue]')!;
-    expect(popis.querySelectorAll('.dq-item')).toHaveLength(model.findings.document.length);
-
-    popis.querySelectorAll('.dq-item').forEach((redak, i) => { if (i > 0) redak.remove(); });
+    expect(popis.querySelectorAll('.dq-item')).toHaveLength(1);
     expect(popis.querySelectorAll('.dq-item').length === model.findings.document.length).toBe(false);
   });
 
