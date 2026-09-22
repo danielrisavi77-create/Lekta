@@ -197,26 +197,60 @@ def _config_fingerprint(config: dict | None, tools: dict) -> str:
 
 
 def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, previous: dict) -> dict:
-    """Profil pise ISKLJUCIVO doctor, iz opazanja i vlasnikovih izricitih potvrda. Nedostajuce = zabrana.
+    """Provider-specificki profil iz stvarnih opazanja i vlasnikovih izricitih potvrda.
 
-    `extra_credits_disabled` i `model_included` se ne mogu procitati programski (nema univerzalnog billing
-    API-ja), pa ih vlasnik potvrdjuje zastavicama; bez toga ostaju False i nema modelskog poziva.
+    Nijedan provider ne nasljedjuje dopustenje drugoga. Grok account profil je fail-closed:
+    trazi omogucenje u configu, dostupni CLI, izricitu potvrdu ukljucenog allowancea/modela i
+    odsutan XAI_API_KEY.
     """
-    api_env = any(os.environ.get(k) for k in API_KEY_ENV)
-    codex = doctor["logins"].get("codex", {})
-    claude = doctor["logins"].get("claude", {})
-    subscription = bool(codex.get("logged_in") and codex.get("method") == "chatgpt") or bool(claude.get("logged_in") and claude.get("method") == "subscription")
+    claude_api_env = any(os.environ.get(k) for k in API_KEY_ENV)
+    grok_api_env = bool(os.environ.get("XAI_API_KEY"))
+    codex = doctor.get("logins", {}).get("codex", {})
+    claude = doctor.get("logins", {}).get("claude", {})
+    tools = doctor.get("tools", {})
+    config = config or {}
+    common_attested = bool(attest.get("extra_credits_disabled")) and bool(attest.get("model_included"))
+    approved_models = list(attest.get("models") or previous.get("approved_models") or [])
+    grok_models = list(attest.get("grok_models") or previous.get("grok_approved_models") or [])
+
+    codex_account = bool(codex.get("logged_in") and codex.get("method") == "chatgpt")
+    claude_account = bool(claude.get("logged_in") and claude.get("method") == "subscription")
+    grok_available = bool((tools.get("grok") or {}).get("available"))
+    grok_attested = bool(attest.get("grok_included")) and bool(grok_models)
+
+    providers = {
+        "codex": {
+            "allowed": codex_account and common_attested and not claude_api_env,
+            "auth": "chatgpt" if codex_account else "unknown",
+            "approved_models": approved_models,
+        },
+        "claude": {
+            "allowed": claude_account and common_attested and not claude_api_env,
+            "auth": "subscription" if claude_account else "unknown",
+            "approved_models": approved_models,
+        },
+        "grok": {
+            "allowed": bool(config.get("grokEnabled")) and grok_available and grok_attested and not grok_api_env,
+            "auth": "included_account" if grok_attested and not grok_api_env else ("api_key" if grok_api_env else "unknown"),
+            "approved_models": grok_models,
+        },
+    }
+
+    subscription = codex_account or claude_account
     fingerprint = doctor["configFingerprint"]
     unchanged = previous.get("config_fingerprint") == fingerprint if previous else True
+    effective_auth = "api_key" if claude_api_env else ("subscription" if subscription else ("included_account" if providers["grok"]["allowed"] else "unknown"))
     return {
-        "effective_auth": "api_key" if api_env else ("subscription" if subscription else "unknown"),
-        "subscription_verified": subscription and not api_env,
+        "effective_auth": effective_auth,
+        "subscription_verified": subscription and not claude_api_env,
         "extra_credits_disabled": bool(attest.get("extra_credits_disabled")),
         "model_included": bool(attest.get("model_included")),
         "configuration_unchanged": bool(unchanged),
         "trusted_observation": True,
-        "fable_enabled": bool((config or {}).get("fableEnabled")),
-        "approved_models": list(attest.get("models") or previous.get("approved_models") or []),
+        "fable_enabled": bool(config.get("fableEnabled")),
+        "approved_models": approved_models,
+        "grok_approved_models": grok_models,
+        "providers": providers,
         "config_fingerprint": fingerprint,
         "observed_at": doctor["observedAt"],
     }
@@ -240,9 +274,11 @@ def doctor(*, config: dict | None, config_problems: list[str], write_profile: bo
            home: str | None = None) -> dict:
     home = home or home_dir()
     tools = {name: _version(name) for name in ("git", "node", "npm", "python", "deno", "codex", "claude", "gh")}
+    tools["grok"] = _version("grok", ("version",))
     logins = {
         "codex": _login_status("codex", ("login", "status"), ("logged in",)),
         "claude": _login_status("claude", ("auth", "status"), ("logged in", "authenticated")),
+        "grok": {"logged_in": None, "method": "account", "detail": "CLI nema pouzdan noninteractive login-status ugovor; doctor trazi vlasnicku attestaciju"},
         "gh": _login_status("gh", ("auth", "status"), ("logged in",)),
     }
     report = {
@@ -255,7 +291,7 @@ def doctor(*, config: dict | None, config_problems: list[str], write_profile: bo
         "mode": (config or {}).get("mode"),
         "tools": tools,
         "logins": logins,
-        "apiKeyEnvPresent": [k for k in API_KEY_ENV if os.environ.get(k)],
+        "apiKeyEnvPresent": [k for k in (*API_KEY_ENV, "XAI_API_KEY") if os.environ.get(k)],
         "word": _word_available(),
         "resources": _resources(),
         "repository": _repo_visibility((config or {}).get("repository")),
@@ -273,7 +309,7 @@ def doctor(*, config: dict | None, config_problems: list[str], write_profile: bo
             json.dump(profile, fh, indent=2)
         report["billing"]["written"] = True
     if report["apiKeyEnvPresent"]:
-        report["billing"]["warning"] = "API kljuc u okolini: poziv bi isao na API naplatu; blokirano"
+        report["billing"]["warning"] = "API credential u okolini: odgovarajuci provider profil je blokiran i taj credential se ne prosljedjuje radniku"
     return report
 
 
@@ -362,15 +398,35 @@ def _resolve_ready_plan_task(repo: str, task: dict) -> tuple[str | None, str]:
     return plan_task, ""
 
 
+AGENT_PROVIDER = {
+    "astra": "codex", "sol": "codex",
+    "fable": "claude", "opus": "claude", "sonnet": "claude",
+    "grok": "grok", "build": "grok",
+}
+
+
 def _agent_for(config: dict, phase: str, task: dict) -> str:
-    # Zadani autonomni raspored bez Fablea (plan 3.2): Codex vodi plan i pregled Claude implementacije,
-    # Sonnet implementira; kad je implementator Sol, pregled radi Claude (drugi provider), ali nikad Fable.
+    """Deterministicki router. Eksplicitni config pobijedi; `auto` cuva sigurni default."""
+
     if phase == "planning":
-        return "astra"
+        chosen = str(config.get("plannerAgent") or "auto")
+        return "astra" if chosen == "auto" else chosen
     if phase == "implementing":
-        return str(config.get("implementerAgent") or "sonnet")
+        chosen = str(config.get("implementerAgent") or "sonnet")
+        return "sonnet" if chosen == "auto" else chosen
+
+    chosen = str(config.get("reviewerAgent") or "auto")
+    if chosen != "auto":
+        return chosen
     implementer = task.get("implementationAgent") or str(config.get("implementerAgent") or "sonnet")
-    return "astra" if implementer in ("opus", "sonnet") else "opus"
+    provider = AGENT_PROVIDER.get(str(implementer))
+    if provider == "claude":
+        return "astra"
+    if provider == "codex":
+        return "grok" if config.get("grokEnabled") else "opus"
+    if provider == "grok":
+        return "astra"
+    return "astra"
 
 
 class DefaultAdapters:
@@ -752,7 +808,9 @@ def main(argv: list[str] | None = None) -> int:
     d = sub.add_parser("doctor", help="verzije alata, prijave, naplata, Word, resursi; ne poziva model")
     d.add_argument("--write-profile", action="store_true", help="zapisi billing-profile.json iz opazanja i potvrda")
     d.add_argument("--attest-extra-credits-disabled", action="store_true", help="vlasnik potvrdjuje da su dodatni krediti iskljuceni")
-    d.add_argument("--attest-models", default="", help="modeli potvrdjeni unutar pretplate, odvojeni zarezom")
+    d.add_argument("--attest-models", default="", help="Codex/Claude modeli potvrdjeni unutar pretplate, odvojeni zarezom")
+    d.add_argument("--attest-grok-included", action="store_true", help="vlasnik potvrdjuje da Grok CLI koristi ukljuceni account allowance, ne API billing")
+    d.add_argument("--attest-grok-models", default="", help="Grok modeli potvrdjeni kao ukljuceni, odvojeni zarezom")
     sub.add_parser("status")
     t = sub.add_parser("tick")
     t.add_argument("--dry-run", action="store_true")
@@ -765,8 +823,13 @@ def main(argv: list[str] | None = None) -> int:
     home = home_dir()
     config, problems = load_effective_config()
     if args.command == "doctor":
-        attest = {"extra_credits_disabled": args.attest_extra_credits_disabled, "model_included": bool(args.attest_models),
-                  "models": [m.strip() for m in args.attest_models.split(",") if m.strip()]}
+        attest = {
+            "extra_credits_disabled": args.attest_extra_credits_disabled,
+            "model_included": bool(args.attest_models),
+            "models": [m.strip() for m in args.attest_models.split(",") if m.strip()],
+            "grok_included": args.attest_grok_included,
+            "grok_models": [m.strip() for m in args.attest_grok_models.split(",") if m.strip()],
+        }
         report = doctor(config=config, config_problems=problems, write_profile=args.write_profile, attest=attest, home=home)
         os.makedirs(home, exist_ok=True)
         with open(os.path.join(home, "doctor.json"), "w", encoding="utf-8") as fh:
