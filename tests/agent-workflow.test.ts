@@ -8,6 +8,21 @@ const queue = () => ({ tasks: [
   { id: 'T01', title: 'Repair proof', status: 'ready', dependsOn: ['T00'] },
 ] });
 
+describe('agent context budget contract', () => {
+  it('keeps root AGENTS as a compact map and detailed rules on demand', () => {
+    const root = readFileSync('AGENTS.md', 'utf8');
+    const detailed = readFileSync('docs/agents/PROJECT_RULES.md', 'utf8');
+    expect(root.split('\n').length).toBeLessThanOrEqual(120);
+    expect(root.length).toBeLessThan(8_000);
+    expect(root).toContain('docs/agents/PROJECT_RULES.md');
+    expect(detailed.length).toBeGreaterThan(20_000);
+
+    const job = prepareJob(queue(), 'T01', 'plan', 'astra');
+    expect(job.prompt).toContain('relevant headings of docs/agents/PROJECT_RULES.md');
+    expect(job.prompt).not.toContain('Read AGENTS.md, CLAUDE.md and docs/agents/README.md');
+  });
+});
+
 describe('agent handoff', () => {
   it('passes the complete task on stdin, never through a shell command', () => {
     const q = queue();
