@@ -1,10 +1,21 @@
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /** Provider-neutral task handoff. No process execution or queue writes here. */
 export const PROMPT_FILE_PLACEHOLDER = '__LEKTA_PROMPT_FILE__';
 
+function providerRegistryPath() {
+  if (String(import.meta.url).startsWith('file:')) {
+    return fileURLToPath(new URL('../../config/agent-providers.json', import.meta.url));
+  }
+  // Mutation harness ucitava ovaj modul kao data: URL. U tom slucaju nema hijerarhije
+  // URL-ova iz koje bi se mogla izvesti repo staza; gate se izvodi iz repo root CWD-a.
+  return resolve(process.cwd(), 'config/agent-providers.json');
+}
+
 const PROVIDER_REGISTRY = JSON.parse(
-  readFileSync(new URL('../../config/agent-providers.json', import.meta.url), 'utf8'),
+  readFileSync(providerRegistryPath(), 'utf8'),
 );
 if (PROVIDER_REGISTRY?.schemaVersion !== 1 || !PROVIDER_REGISTRY?.agents) {
   throw new Error('Unsupported config/agent-providers.json contract');
