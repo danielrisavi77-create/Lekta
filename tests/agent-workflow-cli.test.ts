@@ -197,6 +197,27 @@ describe('option contract of the actual CLI process', () => {
     expect(job.args).toEqual(['exec', '--model', 'gpt-6-astra', '--sandbox', 'read-only', '--json', '-']);
     expect(job.billingMode).toBe('subscription');
   });
+  it('refuses only the API credential belonging to the selected subscription provider', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-agents-billing-'));
+    roots.push(root);
+    mkdirSync(join(root, 'docs/agents'), { recursive: true });
+    writeFileSync(join(root, 'docs/agents/tasks.json'), JSON.stringify({ tasks: [
+      { id: 'T00', title: 'Audit', status: 'ready', dependsOn: [] },
+    ] }));
+
+    const codexBlocked = spawnSync(process.execPath, [cli, 'prepare', 'T00', '--phase', 'plan', '--agent', 'astra', '--subscription'], {
+      cwd: root, encoding: 'utf8', timeout: 20_000, env: { ...process.env, OPENAI_API_KEY: 'test-do-not-use' },
+    });
+    expect(codexBlocked.status).toBe(1);
+    expect(codexBlocked.stderr).toContain('OPENAI_API_KEY');
+
+    const claudeUnaffected = spawnSync(process.execPath, [cli, 'prepare', 'T00', '--phase', 'implement', '--agent', 'sonnet', '--subscription'], {
+      cwd: root, encoding: 'utf8', timeout: 20_000,
+      env: { ...process.env, OPENAI_API_KEY: 'test-do-not-use', ANTHROPIC_API_KEY: '' },
+    });
+    expect(claudeUnaffected.status, claudeUnaffected.stderr).toBe(0);
+  });
+
   it('supports the Grok included-account prepare profile and refuses XAI_API_KEY', () => {
     const { run } = bare();
     const ok = run('prepare', 'T00', '--phase', 'plan', '--agent', 'grok', '--included-account');
