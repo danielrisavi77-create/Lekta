@@ -407,15 +407,43 @@ def _resolve_ready_plan_task(repo: str, task: dict) -> tuple[str | None, str]:
     return plan_task, ""
 
 
-def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None) -> str:
-    """Deterministicki router. Eksplicitni config pobijedi; `auto` cuva sigurni default."""
+def _agent_allowed(config: dict, profile: dict | None, agent: str) -> bool:
+    """Je li alias vec autoriziran bez ikakvog probnog modelskog poziva."""
+    if profile is None:
+        return True  # test/rucni helper; stvarni tick predaje provider-specificki doctor profil
+    provider = AGENT_PROVIDER.get(agent)
+    model = model_for(agent)
+    if not provider or not model:
+        return False
+    if provider == "grok" and not bool(config.get("grokEnabled")):
+        return False
+    if agent == "fable" and not bool(config.get("fableEnabled")):
+        return False
+    return provider_billing_allowed(profile, provider, model)
+
+
+def _first_allowed(config: dict, profile: dict | None, candidates: tuple[str, ...]) -> str | None:
+    return next((agent for agent in candidates if _agent_allowed(config, profile, agent)), None)
+
+
+def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None) -> str | None:
+    """Deterministicki router bez dodatnog modelskog poziva.
+
+    Eksplicitni izbor se ne preusmjerava: ako nije autoriziran, worker ga fail-closed blokira.
+    `auto` bira prvi vec autorizirani provider/model prema stabilnom redoslijedu.
+    """
 
     if phase == "planning":
         chosen = str(config.get("plannerAgent") or "auto")
-        return "astra" if chosen == "auto" else chosen
+        if chosen != "auto":
+            return chosen
+        return _first_allowed(config, profile, ("astra", "grok"))
+
     if phase == "implementing":
         chosen = str(config.get("implementerAgent") or "sonnet")
-        return "sonnet" if chosen == "auto" else chosen
+        if chosen != "auto":
+            return chosen
+        return _first_allowed(config, profile, ("sonnet", "sol", "build"))
 
     chosen = str(config.get("reviewerAgent") or "auto")
     if chosen != "auto":
@@ -423,14 +451,12 @@ def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None
     implementer = task.get("implementationAgent") or str(config.get("implementerAgent") or "sonnet")
     provider = AGENT_PROVIDER.get(str(implementer))
     if provider == "claude":
-        return "astra"
+        return _first_allowed(config, profile, ("astra", "grok"))
     if provider == "codex":
-        grok_model = model_for("grok")
-        grok_ready = bool(config.get("grokEnabled")) and provider_billing_allowed(profile, "grok", grok_model)
-        return "grok" if grok_ready else "opus"
+        return _first_allowed(config, profile, ("grok", "opus"))
     if provider == "grok":
-        return "astra"
-    return "astra"
+        return _first_allowed(config, profile, ("astra", "opus"))
+    return _first_allowed(config, profile, ("astra", "grok", "opus"))
 
 
 class DefaultAdapters:
@@ -505,6 +531,9 @@ class DefaultAdapters:
             lookup_task = {**task, "implementationAgent": implementer}
             override_status, override_implementer = "in_review", implementer
         agent = _agent_for(self.config, phase, lookup_task, profile)
+        if agent is None:
+            return {"verdict": "blocked", "reason": f"provider_unavailable: nema autoriziranog agenta za {agent_phase}",
+                    "provider": None, "attempt_spent": False, "provider_called": False}
         try:
             job = prepare_job_via_node(self.repo, plan_task, agent_phase, agent,
                                        override_status=override_status, override_implementer=override_implementer)
