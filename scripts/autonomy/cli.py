@@ -422,28 +422,37 @@ def _agent_allowed(config: dict, profile: dict | None, agent: str) -> bool:
     return provider_billing_allowed(profile, provider, model)
 
 
-def _first_allowed(config: dict, profile: dict | None, candidates: tuple[str, ...]) -> str | None:
-    return next((agent for agent in candidates if _agent_allowed(config, profile, agent)), None)
+def _auto_pick(config: dict, profile: dict | None, candidates: tuple[str, ...]) -> str | None:
+    """Odaberi primarni alias; fallback koristi samo kad ga politika izricito dopusta."""
+    if not candidates:
+        return None
+    primary, *fallbacks = candidates
+    if _agent_allowed(config, profile, primary):
+        return primary
+    if str(config.get("providerFallback") or "wait") != "authorized":
+        return None
+    return next((agent for agent in fallbacks if _agent_allowed(config, profile, agent)), None)
 
 
 def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None) -> str | None:
     """Deterministicki router bez dodatnog modelskog poziva.
 
-    Eksplicitni izbor se ne preusmjerava: ako nije autoriziran, worker ga fail-closed blokira.
-    `auto` bira prvi vec autorizirani provider/model prema stabilnom redoslijedu.
+    Eksplicitni izbor se ne preusmjerava. Kod `auto` primarni provider ostaje stabilan; drugi
+    provider se koristi samo uz `providerFallback=authorized`, osim kada sama review politika
+    eksplicitno bira Grok kao preferirani cross-provider.
     """
 
     if phase == "planning":
         chosen = str(config.get("plannerAgent") or "auto")
         if chosen != "auto":
             return chosen
-        return _first_allowed(config, profile, ("astra", "grok"))
+        return _auto_pick(config, profile, ("astra", "grok"))
 
     if phase == "implementing":
         chosen = str(config.get("implementerAgent") or "sonnet")
         if chosen != "auto":
             return chosen
-        return _first_allowed(config, profile, ("sonnet", "sol", "build"))
+        return _auto_pick(config, profile, ("sonnet", "sol", "build"))
 
     chosen = str(config.get("reviewerAgent") or "auto")
     if chosen != "auto":
@@ -451,12 +460,13 @@ def _agent_for(config: dict, phase: str, task: dict, profile: dict | None = None
     implementer = task.get("implementationAgent") or str(config.get("implementerAgent") or "sonnet")
     provider = AGENT_PROVIDER.get(str(implementer))
     if provider == "claude":
-        return _first_allowed(config, profile, ("astra", "grok"))
+        return _auto_pick(config, profile, ("astra", "grok"))
     if provider == "codex":
-        return _first_allowed(config, profile, ("grok", "opus"))
+        candidates = ("grok", "opus") if bool(config.get("grokEnabled")) else ("opus",)
+        return _auto_pick(config, profile, candidates)
     if provider == "grok":
-        return _first_allowed(config, profile, ("astra", "opus"))
-    return _first_allowed(config, profile, ("astra", "grok", "opus"))
+        return _auto_pick(config, profile, ("astra", "opus"))
+    return _auto_pick(config, profile, ("astra", "grok", "opus"))
 
 
 class DefaultAdapters:
