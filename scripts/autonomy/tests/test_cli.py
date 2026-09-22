@@ -195,7 +195,7 @@ class TickTest(unittest.TestCase):
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}), "astra")
 
     def test_auto_routing_falls_back_only_to_already_authorized_providers(self):
-        cfg = config(grokEnabled=True, implementerAgent="auto")
+        cfg = config(grokEnabled=True, implementerAgent="auto", providerFallback="authorized")
         grok_only = {
             "configuration_unchanged": True, "trusted_observation": True,
             "providers": {
