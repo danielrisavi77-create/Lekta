@@ -573,12 +573,12 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(model.findings.document.length).toBeGreaterThan(1);
     expect(mount.querySelectorAll('[data-desk-pane] article.cockpit-finding')).toHaveLength(1);
     expect(mount.querySelector('[data-desk-pane] [data-desk-count]')?.textContent)
-      .toBe(`1 / ${model.findings.document.length}`);
+      .toBe(`1 od ${model.findings.document.length}`);
     const prvi = naslov();
 
     klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--next'));
     expect(mount.querySelector('[data-desk-pane] [data-desk-count]')?.textContent)
-      .toBe(`2 / ${model.findings.document.length}`);
+      .toBe(`2 od ${model.findings.document.length}`);
     expect(naslov()).not.toBe(prvi);
 
     klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--prev'));
