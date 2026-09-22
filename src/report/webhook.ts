@@ -36,6 +36,13 @@ export interface LemonWebhookPayload {
 
 export interface LemonEvent {
   eventName: string;
+  /**
+   * `data.attributes.status` doslovno (npr. `paid`, `pending`, `refunded`); prazno ako ga nema.
+   *
+   * Bez njega se `order_created` nije moglo razlikovati od PLACENOG `order_created`: Lemon Squeezy
+   * salje isti event_name i za narudzbu koja jos nije placena.
+   */
+  status: string;
   orderId: string;
   userId: string;
   /** LS variant id = products.mor_product_id (mapiranje proizvoda, sekcija 6.2). */
@@ -95,6 +102,7 @@ export function parseLemonEvent(payload: LemonWebhookPayload): LemonEvent {
   const data = payload.data ?? {};
   const attr = data.attributes ?? {};
   const eventName = String(meta.event_name ?? '');
+  const status = String(attr.status ?? '');
   const orderId = String(data.id ?? attr.order_id ?? '');
   const userId = String(meta.custom_data?.user_id ?? '');
   const variantId = String(attr.first_order_item?.variant_id ?? attr.variant_id ?? '');
@@ -105,6 +113,7 @@ export function parseLemonEvent(payload: LemonWebhookPayload): LemonEvent {
   const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
   return {
     eventName,
+    status,
     orderId,
     userId,
     variantId,
@@ -116,6 +125,48 @@ export function parseLemonEvent(payload: LemonWebhookPayload): LemonEvent {
     refundedCents: num(attr.refunded_amount),
     currency: String(attr.currency ?? '').toUpperCase(),
   };
+}
+
+/** Sto webhook smije napraviti s dogadjajem. */
+export type LemonEventKind = 'paid' | 'refund' | 'ignored' | 'needs_manual_link';
+
+export interface LemonClassification {
+  kind: LemonEventKind;
+  /** Kratak strojni razlog; upisuje se u `webhook_events.outcome_detail` i vraca pozivatelju. */
+  reason?: string;
+}
+
+/**
+ * ODLUKA STO S DOGADJAJEM (blokeri lansiranja, 2026-09-22). Cista funkcija; Edge funkcija ju samo
+ * zove.
+ *
+ * Do sada je handler obradjivao SVE sto je proslo potpis i porijeklo: `order_created` se tretirao
+ * kao placen bez gledanja na `attributes.status`, pa bi narudzba u statusu `pending` ili `failed`
+ * dobila puno pravo pristupa. Dogadjaji pretplata i licenci (`subscription_*`, `license_*`) nisu
+ * nasi, ali bi pali u istu granu i zavrsili kao `unknown_product`, dakle kao kvar koji netko treba
+ * gledati.
+ *
+ * Prihvacaju se tocno dvije stvari: `order_created` sa `status === 'paid'` i `order_refunded`. Sve
+ * ostalo je `ignored` s imenovanim razlogom, i to je 200, jer retry ne bi promijenio ishod.
+ *
+ * Povrat NE trazi `userId`: obrada ide po `order_id` (gasenje entitlementa, povlacenje referral
+ * nagrade), pa korisnik uz dogadjaj nije ni potreban. Placena narudzba BEZ
+ * `meta.custom_data.user_id` je pak stvaran slucaj (kupnja izvan naseg checkouta, izgubljen custom
+ * data): nju se ne smije odbaciti s 400, jer je novac naplacen. Zato `needs_manual_link`: dogadjaj
+ * ostaje u inboxu s tim ishodom i veze se rucno.
+ */
+export function classifyLemonEvent(
+  ev: Pick<LemonEvent, 'eventName' | 'status' | 'userId' | 'refunded'>,
+): LemonClassification {
+  if (ev.eventName === 'order_refunded') return { kind: 'refund' };
+  if (ev.eventName === 'order_created') {
+    // `order_created` koji vec nosi status `refunded` (ili zastavicu) je povrat, ne kupnja.
+    if (ev.refunded) return { kind: 'refund' };
+    if (ev.status !== 'paid') return { kind: 'ignored', reason: `order_status:${ev.status || 'nepoznat'}` };
+    if (!ev.userId) return { kind: 'needs_manual_link', reason: 'bez_user_id' };
+    return { kind: 'paid' };
+  }
+  return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName || 'nepoznat'}` };
 }
 
 const enc = new TextEncoder();

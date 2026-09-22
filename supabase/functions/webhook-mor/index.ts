@@ -9,7 +9,12 @@
 // od 2026-08-17 takav dogadjaj TRAJNO ostaje u webhook_events pa se moze replayati (PAY-06).
 // Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (store_id, test_mode) provjerava
 // se prije ijednog upisa: potpis dokazuje samo znanje tajne, ne i cija je trgovina (PAY-04/05).
-// Odluke (potpis, parsiranje, rok, kupon) su u testiranom coreu src/report/webhook.ts.
+// Od 2026-09-22 obradjuju se TOCNO dva dogadjaja: order_created sa attributes.status 'paid' i
+// order_refunded. Sve ostalo (neplacena narudzba, subscription_*, license_*, nepoznat event_name)
+// vraca 200 { ignored: true, reason } i biljezi se u inbox s ishodom 'ignored'. Placena narudzba bez
+// meta.custom_data.user_id vise ne vraca 400 nego ishod 'needs_manual_link' (novac je naplacen, pa
+// dogadjaj ne smije nestati); 400 ostaje samo za neispravan JSON i nedostajuci order_id.
+// Odluke (potpis, parsiranje, klasifikacija, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
@@ -23,6 +28,7 @@ import {
   PASS_COUPON_VALID_DAYS,
   buildEntitlementInsert,
   acceptEvent,
+  classifyLemonEvent,
   isFullRefund,
   type LemonEvent,
   type LemonWebhookPayload,
@@ -276,7 +282,16 @@ Deno.serve(async (req: Request) => {
   let parsed: LemonWebhookPayload;
   try { parsed = JSON.parse(raw) as LemonWebhookPayload; } catch { return json({ error: 'bad_request' }, 400); }
   const ev = parseLemonEvent(parsed);
-  if (!ev.orderId || !ev.userId) return json({ error: 'bad_request' }, 400);
+  // 400 SAMO za nedostajuci orderId: bez njega dogadjaj nema identitet, pa se ne moze ni zapisati u
+  // inbox ni kasnije replayati.
+  //
+  // userId se ovdje NAMJERNO vise ne trazi (2026-09-22). Prije je isti uvjet odbijao i placenu
+  // narudzbu bez `meta.custom_data.user_id`, i to PRIJE upisa u inbox, pa bi kupnja izvan naseg
+  // checkouta (ili izgubljen custom_data) nestala bez ikakvog traga iako je novac naplacen. Sada o
+  // tome odlucuje `classifyLemonEvent` nakon upisa u inbox: takav dogadjaj dobiva ishod
+  // `needs_manual_link` i veze se rucno. Povrat userId ionako nikad nije trebao, jer se obradjuje
+  // po `order_id`.
+  if (!ev.orderId) return json({ error: 'bad_request' }, 400);
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
@@ -347,8 +362,27 @@ Deno.serve(async (req: Request) => {
     return json({ ok: true, action: 'event_refused', reason: gate.reason }, 200);
   }
 
+  // KLASIFIKACIJA (cista odluka, src/report/webhook.ts). Ide TEK nakon inboxa i nakon gatea
+  // porijekla: dogadjaj koji nije nas ne smije se ni klasificirati, a kamoli obradjivati.
+  const decision = classifyLemonEvent(ev);
+
+  if (decision.kind === 'ignored') {
+    // Nije nas dogadjaj ili narudzba jos nije placena (`pending`, `failed`, `subscription_*`,
+    // `license_*`, nepoznat event_name). 200 jer retry ne bi promijenio ishod; trag ostaje u inboxu.
+    await settle('ignored', decision.reason);
+    return json({ ignored: true, reason: decision.reason ?? 'nepodrzan_dogadjaj' }, 200);
+  }
+
+  if (decision.kind === 'needs_manual_link') {
+    // PLACENA narudzba bez user_id. Novac je naplacen, pa 400 ne dolazi u obzir: dogadjaj ostaje u
+    // inboxu s ovim ishodom i veze se rucno na racun. ERROR razina jer to netko mora vidjeti.
+    console.error('webhook-mor needs_manual_link', { orderId: ev.orderId, variantId: ev.variantId });
+    await settle('needs_manual_link', decision.reason);
+    return json({ ok: true, action: 'needs_manual_link' }, 200);
+  }
+
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
-  if (ev.refunded) {
+  if (decision.kind === 'refund') {
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.
     if (!isFullRefund(ev)) {
