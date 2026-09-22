@@ -170,6 +170,9 @@ function eyebrowHtml(model: VisualResultModel): string {
  *
  * Kod provjerenog izvora se umjesto nje pise OPSEG (`header.authorityLabel`): tamo je opis samo
  * druga formulacija naljepnice koja vec stoji u eyebrowu, pa bi ista tvrdnja stajala dvaput.
+ *
+ * STOJI ISPOD SAZETKA (popravak drugog kruga), ne izmedju eyebrowa i H1: ograda ogranicava
+ * TVRDNJU KOJU KORISNIK UPRAVO PROCITAO (presudu i sazetak), pa dolazi nakon nje, ne prije nje.
  */
 function caveatHtml(model: VisualResultModel): string {
   const tekst = model.authority.kind === 'verified' ? model.header.authorityLabel : model.authority.description;
@@ -178,9 +181,14 @@ function caveatHtml(model: VisualResultModel): string {
 }
 
 /**
- * Dva sitna cipa uz eyebrow: je li profil potvrden i koja je razina dokaza. Oboje je zivjelo u
- * zaglavlju koje Z8 gasi, a nijedno nije ukras: prvo kaze mjeri li se po pravom profilu, drugo
- * na cemu ta pravila pocivaju. `claimBadgeHtml` je ISTA projekcija koju crta kartica profila.
+ * Dva sitna cipa: je li profil potvrden i koja je razina dokaza. Oboje je zivjelo u zaglavlju
+ * koje Z8 gasi, a nijedno nije ukras: prvo kaze mjeri li se po pravom profilu, drugo na cemu ta
+ * pravila pocivaju. `claimBadgeHtml` je ISTA projekcija koju crta kartica profila.
+ *
+ * STOJI UZ PRSTEN (popravak drugog kruga), ne izmedju eyebrowa i H1: prva izvedba Z8 je marks
+ * umetnula u tok teksta liste presude, pa je korisnik na dva cipa nailazio prije nego sto uopce
+ * procita presudu. `verdictRingHtml` ovaj HTML ugraduje u `cockpit-ring-wrap`, kao metapodatak o
+ * mjeracu, ne kao recenicu u prici.
  */
 function marksHtml(model: VisualResultModel): string {
   const potvrden = model.header.profileConfirmed;
@@ -212,8 +220,13 @@ const PECAT: Readonly<Record<string, string>> = {
  * Nebodovan profil dobiva isti prsten s praznim lukom i brojem PROVJERENIH PRAVILA: bez toga bi
  * nebodovan rezultat izgledao kao da provjera nije ni napravljena. Natpis stoji IZVAN elementa
  * koji nosi `data-cockpit-score`, da ocjena ostane jedna brojka, a ne brojka plus recenica.
+ *
+ * `marksHtml` STOJI OVDJE, ne u listu presude (ALIGNMENT Z8, popravak drugog kruga): oznake
+ * potvrde profila i razine dokaza su metapodatak o mjeracu, ne recenica koju se cita redom uz
+ * eyebrow i naslov. Parametar je opcionalan string vec spreman za umetanje, da ovaj modul ne
+ * mora znati za `VisualResultModel`.
  */
-function verdictRingHtml(sazetak: FindingSummary, tone: string): string {
+function verdictRingHtml(sazetak: FindingSummary, tone: string, marks = ''): string {
   const ocjena = sazetak.ocjena;
   const udio = ocjena ? Math.max(0, Math.min(100, Math.round((ocjena.vrijednost / ocjena.od) * 100))) : 0;
   const broj = ocjena ? ocjena.vrijednost : sazetak.provjerenoPravila;
@@ -229,6 +242,7 @@ function verdictRingHtml(sazetak: FindingSummary, tone: string): string {
     + `<span class="cockpit-ring__label">${escapeHtml(natpis)}</span>`
     + `<p class="cockpit-stamp" data-cockpit-stamp data-verdict-tone="${tone}" aria-hidden="true">`
     + `${escapeHtml(PECAT[tone] ?? PECAT.clear)}</p>`
+    + marks
     + '</div>';
 }
 
@@ -269,17 +283,23 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     // gumba je pritom trazio odluku izmedu "Pregledaj nalaze", "Simuliraj popravak" i "Popravi
     // sigurne stavke", a sva tri vode u isti panel. Sada je jedan list: eyebrow, presuda, sazetak,
     // jedna spojena recenica o dosegu automatike, JEDAN gumb i jedna tekstualna poveznica.
+    //
+    // REDOSLIJED (ALIGNMENT Z8, popravak drugog kruga): eyebrow -> H1 -> sazetak -> ograda -> gumb
+    // + poveznica. Prva izvedba Z8 je izmedu eyebrowa i H1 umetala `cockpit-marks` i
+    // `cockpit-caveat`: ograda je time izgledala kao dio identiteta dokumenta, prije nego korisnik
+    // uopce procita presudu. Ograda sad stoji ISPOD sazetka, gdje ogranicava upravo procitanu
+    // tvrdnju o dosegu automatike; oznake `cockpit-marks` (potvrda profila i razina dokaza) idu uz
+    // prsten ocjene, izvan toka teksta, jer su UKRAS NA PRESUDI, ne recenica koju se cita redom.
     '<section class="cockpit-sheet" data-cockpit-verdict-sheet data-cockpit-status="', status.tone,
     '" aria-labelledby="cockpitVerdictTitle">',
     '<div class="cockpit-sheet__lead" data-cockpit-sheet-lead>',
     eyebrowHtml(model),
-    marksHtml(model),
-    caveatHtml(model),
     '<h1 class="cockpit-verdict-title" id="cockpitVerdictTitle" data-cockpit-verdict-title data-verdict="',
     status.tone, '">', escapeHtml(status.label), '</h1>',
     // SAZETAK JE POSTOJECI MODUL. Ocjena se iz njega ISKLJUCUJE, jer je u listu presude crta
     // prsten desno; da oba crtaju ocjenu, ekran bi nosio dva mjeraca iste stvari.
     findingSummaryHtml(sazetak, escapeHtml, { strop, ocjena: false }),
+    caveatHtml(model),
     '<div class="cockpit-sheet__actions">',
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
     action && 'findingId' in action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '',
@@ -297,7 +317,10 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '<button type="button" class="cockpit-link" data-cockpit-action="open-findings">Pregledaj nalaze',
     ' <span aria-hidden="true">&#8595;</span></button>',
     '</div></div>',
-    verdictRingHtml(sazetak, status.tone),
+    // MARKS UZ PRSTEN: `verdictRingHtml` prima model i crta oznake UNUTAR `cockpit-ring-wrap`,
+    // ne u listu presude. `cockpit-sheet` ostaje grid od TOCNO dva izravna djeteta (`__lead` i
+    // `.cockpit-ring-wrap`); da marks stoji kao trece dijete, dvostupcani raspored bi se raspao.
+    verdictRingHtml(sazetak, status.tone, marksHtml(model)),
     '</section>',
     // STOL ZAMJENJUJE POPIS, ne stoji uz njega. Tri kartice i stol odgovaraju na isto pitanje
     // ("sto prvo"), pa bi jedno ispod drugoga bilo dvostruko citanje istih nalaza.
