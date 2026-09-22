@@ -32,7 +32,7 @@ from .remote import load_remotes, token_fingerprint
 from .report import write_report
 from .signals import collect
 from .store import Store
-from .worker import (API_KEY_ENV, CODEX_API_KEY_ENV, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
+from .worker import (API_KEY_ENV, CODEX_API_KEY_ENV, GROK_MIN_VERSION, WORKER_COMMIT_TRAILER, branch_changed_line_count, branch_changed_paths,
                      changed_line_count, changed_paths, commit_worker_tree, implementation_worktree_blocked,
                      prepare_job_via_node, resolve_base_ref, resolve_launcher, run_phase, scrubbed_env,
                      start_job_branch)
@@ -216,7 +216,11 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
 
     codex_account = bool(codex.get("logged_in") and codex.get("method") == "chatgpt")
     claude_account = bool(claude.get("logged_in") and claude.get("method") == "subscription")
-    grok_available = bool((tools.get("grok") or {}).get("available"))
+    grok_tool = tools.get("grok") or {}
+    grok_available = bool(grok_tool.get("available"))
+    grok_match = __import__("re").search(r"\b(\d+)\.(\d+)\.(\d+)\b", str(grok_tool.get("version") or ""))
+    grok_version = tuple(int(x) for x in grok_match.groups()) if grok_match else None
+    grok_supported = grok_available and grok_version is not None and grok_version >= GROK_MIN_VERSION
     grok_attested = bool(attest.get("grok_included")) and bool(grok_models)
 
     providers = {
@@ -231,9 +235,11 @@ def build_billing_profile(*, doctor: dict, config: dict | None, attest: dict, pr
             "approved_models": approved_models,
         },
         "grok": {
-            "allowed": bool(config.get("grokEnabled")) and grok_available and grok_attested and not grok_api_env,
+            "allowed": bool(config.get("grokEnabled")) and grok_supported and grok_attested and not grok_api_env,
             "auth": "included_account" if grok_attested and not grok_api_env else ("api_key" if grok_api_env else "unknown"),
             "approved_models": grok_models,
+            "cli_supported": grok_supported,
+            "cli_version": ".".join(map(str, grok_version)) if grok_version else None,
         },
     }
 
