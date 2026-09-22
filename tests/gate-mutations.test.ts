@@ -41,6 +41,7 @@ import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import { storeIdSecretProblems } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
+import { webhookHandlerProblems } from './helpers/webhook-handler-source';
 import { naplataSecretsVerdict } from '../scripts/verify-naplata-secrets.mjs';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
@@ -2175,6 +2176,34 @@ const MUTATIONS: Mutation[] = [
     },
   },
 
+  // --- naplata: webhook ne smije sam odlucivati sto je placeno ---------------------------------
+  {
+    id: 'naplata/webhook-400-bez-user-id',
+    imitates: 'stvarno stanje handlera do 2026-09-22: `if (!ev.orderId || !ev.userId) return 400` PRIJE upisa u inbox, pa bi placena narudzba bez meta.custom_data.user_id nestala bez traga iako je novac naplacen',
+    caught: () => {
+      const src = webhookMorSource();
+      // MUTACIJA u memoriji: vrati tocan uvjet koji je stajao u izvoru. Disk se ne dira.
+      const mutated = src.replace('if (!ev.orderId) return json', 'if (!ev.orderId || !ev.userId) return json');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return webhookHandlerProblems(mutated).some((p) => p.includes('user_id'));
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      return src.length > 2000 && webhookHandlerProblems(src).length === 0;
+    },
+  },
+  {
+    id: 'naplata/webhook-bez-klasifikatora',
+    imitates: 'odluka sto je placeno vracena u Edge funkciju: handler prestane zvati classifyLemonEvent, pa neplaceni order_created (status pending/failed) i subscription_* opet padnu u kupovnu granu',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.split('classifyLemonEvent(ev)').join("({ kind: 'paid' } as const)");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('classifyLemonEvent'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
   // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------
   {
     id: 'rls/corpus-contributions-update-own',
@@ -2194,6 +2223,11 @@ const MUTATIONS: Mutation[] = [
     },
   },
 ];
+
+/** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
+function webhookMorSource(): string {
+  return readFileSync(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'index.ts'), 'utf8');
+}
 
 /** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
 function corpusMigrations(): MigrationFile[] {
