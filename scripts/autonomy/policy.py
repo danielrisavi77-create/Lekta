@@ -43,6 +43,8 @@ CONTROL_PATH_PREFIXES = (
     "scripts/security/",
     "docs/generated/",
     "docs/agents/tasks.json",
+    "docs/agents/ORCHESTRATION.md",
+    "docs/agents/PROJECT_RULES.md",
     "data/",
     "supabase/",
     "tests/gate-mutations.test.ts",
