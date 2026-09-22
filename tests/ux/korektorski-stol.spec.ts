@@ -72,7 +72,10 @@ test('stol dijeli ekran 58/42: dokument lijevo, jedan nalaz desno', async ({ pag
   const redci = page.locator('[data-desk-queue] .dq-item');
   expect(await redci.count(), 'popis mora pokazati SVE nalaze, ne samo otvoreni').toBeGreaterThan(3);
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
-  await expect(page.locator('.dq-detalj')).toHaveCount(1);
+  // Z8: detalj je IZVADEN iz retka i podignut iznad popisa kao jedna kartica s pagerom, pa
+  // `.dq-detalj` vise ne postoji. Tvrdnja je ista ("tocno jedan otvoren detalj"), samo je sad
+  // mjeri kartica u panou (redak iznad) uz redak koji je u popisu oznacen kao odabran.
+  await expect(page.locator('[data-desk-queue] .dq-item--open')).toHaveCount(1);
 
   // OBJE OSI U RETKU: ozbiljnost lijevo, popravljivost desno. Bez druge osi popis ne odgovara na
   // "sto Lekta moze rijesiti", sto je pola onoga zbog cega je trazen.
@@ -96,7 +99,9 @@ test('klik na redak otvara SAMO njegov detalj', async ({ page }) => {
   // Doslovno po brifu: "Kliknes 03 i samo se njegov detalj otvori."
   await page.locator('[data-desk-queue] [data-desk-go="2"]').click();
   await expect(page.locator('[data-desk-count]')).toHaveText(/^3 \/ \d+$/);
-  await expect(page.locator('.dq-detalj')).toHaveCount(1);
+  // Z8: jedna kartica u panou umjesto detalja unutar retka; "samo njegov detalj" se sad mjeri
+  // time da je kartica jedna i da je odabran tocno taj redak.
+  await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
   await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="2"]')).toHaveAttribute('aria-expanded', 'true');
 
   // Popis i navigacija su DVA nacina rada nad istim stanjem, ne dva stanja: nakon klika na redak
@@ -104,7 +109,7 @@ test('klik na redak otvara SAMO njegov detalj', async ({ page }) => {
   await page.locator('.desk-nav__btn--next').click();
   await expect(page.locator('[data-desk-count]')).toHaveText(/^4 \/ \d+$/);
   await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="3"]')).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('.dq-detalj')).toHaveCount(1);
+  await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
 });
 
 test('navigacija stolom mijenja nalaz i ne omata na kraju', async ({ page }) => {
