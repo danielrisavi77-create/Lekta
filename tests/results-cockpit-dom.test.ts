@@ -1,4 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import {
   cockpitSteps,
@@ -9,6 +12,8 @@ import {
   type ResultsCockpitOptions,
 } from '../src/ui/results/results-cockpit';
 import type { RepairOutlookModel } from '../src/ui/results/repair-outlook';
+
+const cssRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 function result(overrides: Record<string, unknown> = {}) {
   return {
@@ -742,5 +747,43 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
     expect(mount.querySelector('[data-cockpit-outlook]')).toBeNull();
     // Model se i dalje koristi: strop je u sazetku.
     expect(mount.querySelector('.fsum-auto')?.textContent).toContain('94');
+  });
+
+  /**
+   * PAGER GUMB KOREKTORSKOG STOLA (popravak drugog kruga): omogucen `.desk-nav__btn` mora nositi
+   * PUNU TINTU (`--ck-ink`), ne prigusen ton (`--ck-muted`). Prigusen `<button>` je uvijek kvar
+   * (vidi komentar uz `:disabled` u `result-visuals.css`); prije popravka je bazno pravilo davalo
+   * `--ck-muted` i omogucenom i onemogucenom gumbu, pa se strelica nije razlikovala od kraja
+   * popisa. CSS se cita iz izvora, ne prepisuje: gard s prepisanom vrijednoscu ostaje zelen
+   * dokazujuci nesto o nizu koji vise nije u CSS-u.
+   */
+  describe('pager gumb: omogucen != prigusen', () => {
+    const CSS = readFileSync(join(cssRoot, 'src/ui/results/result-visuals.css'), 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const blokZa = (selektor: string): string => {
+      const od = CSS.indexOf(selektor);
+      expect(od, `selektor ${selektor} nije nadjen`).toBeGreaterThan(-1);
+      return CSS.slice(CSS.indexOf('{', od), CSS.indexOf('}', od));
+    };
+
+    it('bazno pravilo .desk-nav__btn { } nema --ck-muted i nosi --ck-ink', () => {
+      const bazno = blokZa('.desk-nav__btn {');
+      expect(bazno).not.toContain('--ck-muted');
+      expect(bazno).toContain('var(--ck-ink)');
+    });
+
+    it('MUTACIJA: staro pravilo (--ck-muted na baznom gumbu) bi ovdje palo', () => {
+      const staroPravilo = 'color: var(--ck-muted);';
+      expect(blokZa('.desk-nav__btn {')).not.toContain(staroPravilo);
+      // Kontrola: da je stara vrijednost i dalje u bloku, gornja tvrdnja bi pala na ovom istom
+      // predikatu, umjesto da bude tautoloski istinita bez obzira na sadrzaj CSS-a.
+      expect('color: var(--ck-muted);').toContain(staroPravilo);
+    });
+
+    it('onemogucen gumb i dalje ostaje citljiv (opacity, ne --ck-muted)', () => {
+      const onemogucen = blokZa('.desk-nav__btn:disabled {');
+      expect(onemogucen).toContain('opacity');
+      expect(onemogucen).not.toContain('--ck-muted');
+    });
   });
 });

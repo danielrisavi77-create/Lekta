@@ -1029,7 +1029,10 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .desk-nav__btn {
   display: inline-grid; place-items: center;
   width: 28px; height: 28px;
-  border: 1px solid var(--ck-line); background: transparent; color: var(--ck-muted);
+  /* PUNA TINTA KAD JE OMOGUCEN (popravak drugog kruga): `--ck-muted` je ovdje bila pogreska,
+     jer je omoguceni gumb time izgledao prigusen kao da nema kamo dalje. Prigusen `<button>`
+     je uvijek kvar; vidi komentar tri retka nize uz `:disabled`. */
+  border: 1px solid var(--ck-line); background: transparent; color: var(--ck-ink);
   border-radius: 50%; padding: 0; font: inherit; cursor: pointer;
 }
 .desk-nav__btn:hover:not(:disabled) { border-color: var(--ck-ink); color: var(--ck-ink); }
