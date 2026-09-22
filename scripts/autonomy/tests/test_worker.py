@@ -235,6 +235,8 @@ class WorkerTest(unittest.TestCase):
         self.assertEqual(blocked["verdict"], "blocked")
         self.assertIn("billing_unknown", blocked["reason"])
         self.assertIsNone(blocked["exit_code"])
+        self.assertFalse(blocked["provider_called"])
+        self.assertFalse(blocked["attempt_spent"])
         job["command"] = "claude"
         env["ANTHROPIC_API_KEY"] = "sk-ant-test"
         api = run_phase(job, "plan", profile(), cwd=self.dir, env=env)
