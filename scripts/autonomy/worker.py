@@ -724,13 +724,13 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if job.get("command") in GROK_COMMANDS and any(parent_env.get(k) for k in GROK_API_KEY_ENV):
         result["reason"] = "api_key_present: XAI_API_KEY bi Grok prebacio s pretplate na naplatu po pozivu"
         return result
+    if job.get("command") == "claude" and str(job.get("requestedModel", "")).lower().startswith("fable") and not profile.get("fable_enabled"):
+        result["reason"] = "fable_disabled: model nije u autonomnom profilu"
+        return result
     if not provider_billing_allowed(profile, str(job.get("command")), job.get("requestedModel")):
         result["reason"] = f"billing_unknown: provider/model nije odobren ({job.get('command')} {job.get('requestedModel')})"
         return result
     base_env = scrubbed_env(env)
-    if job.get("command") == "claude" and str(job.get("requestedModel", "")).lower().startswith("fable") and not profile.get("fable_enabled"):
-        result["reason"] = "fable_disabled: model nije u autonomnom profilu"
-        return result
     launcher = resolve_launcher(str(job.get("command")))
     result["launcher"] = launcher
     if launcher["path"] is None:
