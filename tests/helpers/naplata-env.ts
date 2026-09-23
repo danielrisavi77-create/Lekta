@@ -254,6 +254,33 @@ export function runbookSqlColumnProblems(runbook: string, migrationSql: string):
   return [...new Set(problems)];
 }
 
+/**
+ * Sva imena log redaka `webhook-mor <ime>` koje izvor Edge funkcije stvarno ispisuje
+ * (`console.error`/`console.warn`), izvedena iz izvora, ne popisana rucno.
+ */
+export function webhookMorLogNames(src: string): Set<string> {
+  const out = new Set<string>();
+  for (const m of src.matchAll(/console\.(?:error|warn)\(\s*'webhook-mor ([a-z_]+)'/g)) out.add(m[1]);
+  return out;
+}
+
+/**
+ * Nalazi o IMENIMA LOG REDAKA u runbooku (nalaz pregleda 2026-09-23): runbook je spominjao
+ * `webhook-mor ignored_unpaid_order`, redak koji izvor nikad nije ispisao (stvarno ime je
+ * `ignored_needs_attention`). Tko bi taj redak trazio u logu (npr. grepom) ne bi nasao nista i
+ * zakljucio da se ignorirane narudzbe uopce ne dogadjaju.
+ */
+export function runbookLogNameProblems(runbook: string, logNames: ReadonlySet<string>): string[] {
+  const problems: string[] = [];
+  const spomenuta = new Set<string>();
+  for (const m of runbook.matchAll(/`webhook-mor ([a-z_]+)`/g)) spomenuta.add(m[1]);
+  if (spomenuta.size === 0) problems.push('runbook ne spominje nijedno ime log retka webhook-mor (nema sto mjeriti)');
+  for (const ime of spomenuta) {
+    if (!logNames.has(ime)) problems.push(`runbook spominje webhook-mor ${ime}, a izvor taj redak ne ispisuje`);
+  }
+  return problems;
+}
+
 /** Koliko je upita nad `webhook_events` gard stvarno izmjerio; stiti baseline od vakuuma. */
 export function runbookSqlQueryCount(runbook: string): number {
   let n = 0;
