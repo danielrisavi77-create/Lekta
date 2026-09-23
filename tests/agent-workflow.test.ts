@@ -124,9 +124,14 @@ describe('provider results do not replace verification', () => {
    * uspjeh u 00:12:50, odmah nakon `grok login --device-code`, greska u 00:11:14, prije prijave.
    * Snimci su lezali u sesijskom scratchpadu (`grok-probe-live.log`, `grok-probe-workspace.log`); taj
    * je direktorij privremen i namjerno ne ide u repozitorij, pa su fixture jedini trajni zapis.
-   * Izmijenjena su TOCNO tri polja, jer nose identitet i sadrzaj zive sesije: `sessionId`, `requestId`
-   * i `thought`. Sve ostalo, ukljucujuci brojke potrosnje, doslovno je iz snimka; uvlaka i prijelomi
-   * redaka nisu mjerodavni jer parser radi `JSON.parse`.
+   * U USPJESNOM snimku izmijenjena su TOCNO tri polja, jer nose identitet i sadrzaj zive sesije:
+   * `sessionId`, `requestId` i `thought`. Sve ostalo, ukljucujuci brojke potrosnje, doslovno je iz
+   * snimka; uvlaka i prijelomi redaka nisu mjerodavni jer parser radi `JSON.parse`.
+   * Snimak GRESKE je cijeli i neizmijenjen, jer u njemu nema ni identifikatora ni kljuca. Vazno je da
+   * on NIJE samo JSON redak: CLI uz njega na isti tok ispise i plain-text blok `Error: Not signed in...`,
+   * pa je snimak viseredan. Bas zbog tog repa `JSON.parse` nad cijelim izlazom pada, presuda pada na
+   * granu sa zadnjim retkom, a i taj je redak proza. Zato se ispod strukturno cita PRVI redak, dok
+   * tvrdnja o presudi ostaje nad CIJELIM snimkom.
    * Zato test ispod, osim presude parsera, tvrdi jos dvoje sto rucno pisan fixture ne bi imao: zivi
    * skup polja i internu relaciju `total_cost_usd_ticks === total_cost_usd * 1e10`. Ta je relacija
    * jeftin dokaz da brojke nisu napisane nego izmjerene; rucno zaokruzena cijena je obara.
@@ -166,7 +171,14 @@ describe('provider results do not replace verification', () => {
     expect(u.reasoning_tokens).toBeLessThanOrEqual(u.output_tokens);
     expect(parsed.modelUsage['grok-4.6-build'].inputTokens).toBe(u.input_tokens);
     expect(parsed.modelUsage['grok-4.6-build'].cacheReadInputTokens).toBe(u.cache_read_input_tokens);
-    const failureParsed = JSON.parse(failure);
+    // Snimak greske je viseredan: JSON redak pa plain-text rep CLI-ja. Cijeli tekst nije JSON,
+    // i upravo to je razlog zasto ga parser presudjuje kroz granu sa zadnjim retkom.
+    const failureLines = failure.split(/\r?\n/).filter((line) => line.trim().length > 0);
+    expect(failureLines.length).toBeGreaterThan(1);
+    expect(() => JSON.parse(failure)).toThrow();
+    expect(failureLines[1]).toBe('Error: Not signed in. To authenticate without a browser, run:');
+    expect(failureLines.at(-1)).toMatch(/^Alternatively, set the XAI_API_KEY environment variable/);
+    const failureParsed = JSON.parse(failureLines[0]);
     expect(failureParsed.type).toBe('error');
     // Ziva poruka nije skracena: CLI sam nudi `XAI_API_KEY` kao izlaz, a bas to pretplatnicki
     // profil zabranjuje, pa je cijela recenica dio ugovora koji fixture cuva.
@@ -245,6 +257,43 @@ describe('subscription billing mode (autonomy profile)', () => {
     expect(() => prepareJob(queue(), 'T01', 'implement', 'sol', undefined, { billingMode: 'subscription', env }))
       .not.toThrow();
   });
+
+  /**
+   * NALAZ PREGLEDA 2026-09-22, zatvoren ovdje. Svi testovi iznad predaju `options.env` eksplicitno, pa
+   * je `const env = options.env ?? process.env;` u `scripts/agents/core.mjs` ostajao NEPROVJEREN: mutacija
+   * u `?? {}` ostavljala je cijeli paket zelen. A bas ta grana je jedina koja radi u produkciji, jer
+   * `scripts/agents/cli.mjs` zove `prepareJob(..., { billingMode })` bez `env`, isto kao i
+   * `prepare_job_via_node` iz `scripts/autonomy/worker.py`.
+   *
+   * Zato ovaj test NE predaje `options.env` nego privremeno postavlja STVARNI `process.env.XAI_API_KEY`
+   * i vraca ga u `finally`. Vrijednost je ocit rezervirani niz, ne kljuc.
+   */
+  it('cita stvarnu okolinu kad pozivatelj ne preda options.env, za oba aliasa', () => {
+    const before = process.env.XAI_API_KEY;
+    try {
+      delete process.env.XAI_API_KEY;
+      // Smjer 1: bez kljuca u stvarnoj okolini posao se priprema.
+      expect(prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }).command)
+        .toBe('grok');
+      expect(prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription' }).command)
+        .toBe('grok');
+      // Smjer 2: isti poziv uz kljuc u stvarnoj okolini baca.
+      process.env.XAI_API_KEY = 'xai-placeholder-nije-pravi-kljuc';
+      expect(() => prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }))
+        .toThrow(/XAI_API_KEY/);
+      expect(() => prepareJob(queue(), 'T01', 'implement', 'build', undefined, { billingMode: 'subscription' }))
+        .toThrow(/XAI_API_KEY/);
+      // Eksplicitno predana prazna okolina i dalje nadjacava stvarnu; zadana vrijednost je samo zadana.
+      expect(prepareJob(queue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env: {} }).command)
+        .toBe('grok');
+      // Rucni nacin naplate ostaje nepromijenjen i kad kljuc dolazi iz stvarne okoline.
+      expect(prepareJob(queue(), 'T01', 'plan', 'grok').command).toBe('grok');
+    } finally {
+      if (before === undefined) delete process.env.XAI_API_KEY;
+      else process.env.XAI_API_KEY = before;
+    }
+    expect(process.env.XAI_API_KEY).toBe(before);
+  });
 });
 
 
@@ -313,45 +362,57 @@ describe('review phase asserted by the controller, not by the queue file', () =>
 });
 
 /**
- * ZASTO OVAJ BLOK POSTOJI. Otvaranje pretplatnickog profila cini Grok posao pripremljivim, ali
- * presudu o ishodu u autonomnom lancu ne donosi `parseResult` iz `scripts/agents/core.mjs` nego
- * njegovo python zrcalo `parse_provider_output` u `scripts/autonomy/worker.py`. Fixture iznad
- * prikivaju samo JS stranu, pa bi bez ovoga ostalo neprimijeceno da zrcalo jos nema granu za Grok.
+ * ZASTO OVAJ BLOK POSTOJI. Presudu o ishodu u autonomnom lancu ne donosi `parseResult` iz
+ * `scripts/agents/core.mjs` nego njegovo python zrcalo `parse_provider_output` u
+ * `scripts/autonomy/worker.py`. Fixture iznad prikivaju samo JS stranu.
  *
- * IZMJERENO 2026-09-23 izravnim pozivom te funkcije nad commitanim fixturama (python, uvoz
- * `autonomy.worker` iz `scripts/`): viseredni uspjeh daje
- * `{ok: False, reason: 'neispravan ili truncirani JSON'}`, jednoredni uspjeh daje
- * `{ok: False, reason: 'codex bez turn.completed ili s greskom'}`, dok kontrolni Claude oblik daje
- * `{ok: True}`, sto pokazuje da sama funkcija radi. Dakle svaki USPJESAN Grok posao u autonomiji
- * dobiva verdict pada i kontroler ga moze ponavljati na teret pretplatnicke kvote.
+ * DO 2026-09-23 zrcalo NIJE imalo granu za Grok, pa je zivi Grok uspjeh padao u codex granu:
+ * viseredni oblik na `{ok: False, reason: 'neispravan ili truncirani JSON'}`, jednoredni na
+ * `{ok: False, reason: 'codex bez turn.completed ili s greskom'}`. Svaki USPJESAN Grok posao tako je
+ * dobivao verdict pada, a kontroler bi ga ponavljao do `maxAttemptsPerTask` na teret pretplatnicke
+ * kvote. Kvar je popravljen u istom krugu; ovaj blok vise ne prikiva kvar nego cuva popravak.
  *
- * `scripts/autonomy/**` je ovim zadatkom zabranjen za izmjenu, pa se kvar ovdje ne popravlja nego
- * PRIKIVA, zajedno s biljeskom u `docs/agents/README.md`. Test je dvosmjeran: cim zrcalo dobije
- * granu za Grok, tvrdnja ispod pada i tjera da se biljeska i ovaj blok maknu, umjesto da ostanu
- * kao zastarjela tvrdnja o kvaru koji vise ne postoji.
+ * Presudu zrcala mjere python testovi u `scripts/autonomy/tests/test_worker_grok.py`, nad ISTIM
+ * commitanim fixturama. Oni se ne vrte u `npm run check`, pa ovdje ostaje jeftina strukturna tvrdnja:
+ * tvrdi grane, ne ponasanje, i pada ako grana za Grok nestane iz tijela funkcije.
  */
-describe('python zrcalo presude jos ne poznaje Grok (prikovan poznat kvar)', () => {
+describe('python zrcalo presude poznaje Grok', () => {
   const mirrorSource = () => readFileSync('scripts/autonomy/worker.py', 'utf8');
   /** Tijelo funkcije se izdvaja strukturno, od njezine `def` do sljedece `def` u nultom stupcu. */
-  const parseProviderOutputBody = (source: string): string => {
+  const bodyOf = (source: string, name: string): string => {
     const lines = source.split(/\r?\n/);
-    const start = lines.findIndex((line) => line.startsWith('def parse_provider_output('));
-    // Preimenovanje funkcije ne smije tiho proci kao "nema grane za Grok".
+    const start = lines.findIndex((line) => line.startsWith(`def ${name}(`));
+    // Preimenovanje funkcije ne smije tiho proci kao "grana postoji".
     expect(start).toBeGreaterThan(-1);
     const rest = lines.slice(start + 1);
     const end = rest.findIndex((line) => line.startsWith('def '));
     return (end === -1 ? rest : rest.slice(0, end)).join('\n');
   };
 
-  it('zrcalo grana samo na claude, a inace trazi codex turn.completed', () => {
-    const body = parseProviderOutputBody(mirrorSource());
+  it('zrcalo grana na claude, na Grok i tek onda na codex turn.completed', () => {
+    const source = mirrorSource();
+    const body = bodyOf(source, 'parse_provider_output');
     expect(body).toContain('command == "claude"');
     expect(body).toContain('turn.completed');
-    // Jezgra tvrdnje: nijedna grana ne spominje Grok, pa uspjeh pada u codex granu.
-    expect(body.toLowerCase()).not.toContain('grok');
+    // Jezgra tvrdnje: Grok vise ne pada u codex granu.
+    expect(body).toContain('command in GROK_COMMANDS');
+    expect(body).toContain('_parse_grok_output');
+    // Grana mora i postojati, ne samo biti pozvana.
+    const grok = bodyOf(source, '_parse_grok_output');
+    expect(grok).toContain('end_turn');
+    expect(grok).toContain('modelUsage');
+    expect(source).toContain('GROK_COMMANDS = ("grok", "build")');
   });
 
-  it('zivi Grok uspjeh nema nista sto bi ga u codex grani spasilo', () => {
+  it('zrcalo odbija xAI kljuc u okolini prije pokretanja Groka', () => {
+    const source = mirrorSource();
+    expect(source).toContain('GROK_API_KEY_ENV = ("XAI_API_KEY",)');
+    expect(source).toContain('job.get("command") in GROK_COMMANDS and any(parent_env.get(k) for k in GROK_API_KEY_ENV)');
+    // Djetetova okolina ne smije nositi nijednu xAI varijablu.
+    expect(source).toMatch(/SECRET_ENV_PREFIXES = \([^)]*"XAI_"/s);
+  });
+
+  it('zivi Grok uspjeh bi u codex grani i dalje pao, pa grana nije kozmetika', () => {
     const success = readFileSync('tests/fixtures/agents/grok-success.json', 'utf8');
     const parsed = JSON.parse(success);
     // Codex grana trazi dogadjaj s `type === 'turn.completed'`; zivi uspjeh nema ni polje `type`.
@@ -360,13 +421,15 @@ describe('python zrcalo presude jos ne poznaje Grok (prikovan poznat kvar)', () 
     // Uz to je fixture viseredni JSON, pa `json.loads` po retku pada vec na prvom retku.
     expect(success.trim().split(/\r?\n/).length).toBeGreaterThan(1);
     expect(success.trim().split(/\r?\n/)[0].trim()).toBe('{');
-    // Suprotnost, radi kontrole: JS strana isti taj snimak presudjuje tocno.
+    // Kontrola: JS strana isti taj snimak presudjuje tocno.
     expect(parseResult('grok', success, 0)).toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
   });
 
-  it('biljeska o kvaru stoji u vodicu dok kvar traje', () => {
+  it('vodic opisuje zatvoren nalaz, ne otvoren kvar', () => {
     const readme = readFileSync('docs/agents/README.md', 'utf8');
     expect(readme).toContain('parse_provider_output');
     expect(readme).toContain('scripts/autonomy/worker.py');
+    expect(readme).toContain('test_worker_grok.py');
+    expect(readme).not.toContain('OTVORENO, IZMJERENO 2026-09-23');
   });
 });

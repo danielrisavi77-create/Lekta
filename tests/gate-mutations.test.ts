@@ -2691,10 +2691,21 @@ describe('mutacije: Grok pretplatnicki profil', () => {
   type ParseResultFn = (command: string, stdout: string, exitCode: number) => { ok: boolean };
   const liveError = () => readFileSync(resolve(process.cwd(), 'tests/fixtures/agents/grok-error.json'), 'utf8');
   const liveSuccess = () => readFileSync(resolve(process.cwd(), 'tests/fixtures/agents/grok-success.json'), 'utf8');
+  /**
+   * Snimak greske je viseredan (JSON redak pa plain-text rep CLI-ja), pa se mjeri i SAM JSON redak.
+   * Bez toga bi svaki naivni parser prolazio slucajno: cijeli tekst nije JSON, pa bi i on pao na
+   * `JSON.parse`. Tvrdnja mora drzati i za oblik koji je `--output-format json` obecao dati sam.
+   */
+  const liveErrorJsonLine = () => {
+    const line = liveError().split(/\r?\n/).find((candidate) => candidate.trim().length > 0);
+    if (!line) throw new Error('fixture greske je prazna');
+    return line;
+  };
   const judgesLiveShapes = (parse: ParseResultFn): boolean =>
     parse('grok', liveSuccess(), 0).ok === true
     && parse('grok', liveError(), 1).ok === false
-    && parse('grok', liveError(), 0).ok === false;
+    && parse('grok', liveError(), 0).ok === false
+    && parse('grok', liveErrorJsonLine(), 0).ok === false;
 
   it('(a) popis iskljucenih koji opet sadrzi grok obara tvrdnju', async () => {
     const { SUBSCRIPTION_EXCLUDED_AGENTS } = await import('../scripts/agents/core.mjs');
@@ -2714,10 +2725,12 @@ describe('mutacije: Grok pretplatnicki profil', () => {
     expect(refusesXaiKey(prepareJob as PrepareJobFn)).toBe(true);
     expect(() => prepareJob(grokQueue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env: {} }))
       .not.toThrow();
-    // MUTACIJA: gard koji zanemari proslijedjenu okolinu (cita praznu umjesto stvarne).
-    const mutantIgnoresEnv: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
+    // MUTACIJA (na razini POZIVA, ne garda): okolina s kljucem zamijenjena praznom. Ne opisuje
+    // izmjenu u `core.mjs` nego dokazuje da tvrdnja `refusesXaiKey` mjeri SADRZAJ okoline, a ne
+    // puku cinjenicu da poziv prodje. Gard koji bi env samo ignorirao hvata mutacija ispod.
+    const mutantEmptyEnvAtCallSite: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
       (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget, { ...options, env: {} });
-    expect(refusesXaiKey(mutantIgnoresEnv)).toBe(false);
+    expect(refusesXaiKey(mutantEmptyEnvAtCallSite)).toBe(false);
     // MUTACIJA: gard vezan uz ime agenta umjesto uz providera, pa alias `build` prodje.
     const mutantOnlyGrokAlias: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
       (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget,
@@ -2725,21 +2738,80 @@ describe('mutacije: Grok pretplatnicki profil', () => {
     expect(refusesXaiKey(mutantOnlyGrokAlias)).toBe(false);
   });
 
+  /**
+   * (b2) NALAZ PREGLEDA 2026-09-22. Gard u `core.mjs` cita okolinu kroz `options.env ?? process.env`.
+   * Svi testovi su `env` predavali eksplicitno, pa je mutacija `?? {}` ostavljala 144/144 zeleno, a
+   * bas ta zadana grana je jedina koja radi u produkciji: `scripts/agents/cli.mjs` zove
+   * `prepareJob(..., { billingMode })` bez `env`, kao i `prepare_job_via_node` iz `worker.py`.
+   *
+   * Zato ova tvrdnja NE predaje `options.env`, nego postavlja stvarni `process.env.XAI_API_KEY` i
+   * vraca ga u `finally`. Mutant je doslovno `options.env ?? {}`.
+   */
+  it('(b2) zadana okolina koja nije process.env obara tvrdnju', async () => {
+    const { prepareJob } = await import('../scripts/agents/core.mjs');
+    /** Poziva se BEZ `options.env`, dakle kroz zadanu granu garda. */
+    const refusesAmbientXaiKey = (prepare: PrepareJobFn): boolean => {
+      const before = process.env.XAI_API_KEY;
+      try {
+        process.env.XAI_API_KEY = XAI_ENV.XAI_API_KEY;
+        for (const [phase, agent] of [['plan', 'grok'], ['implement', 'build']] as const) {
+          let threw = false;
+          try {
+            prepare(grokQueue(), 'T01', phase, agent, undefined, { billingMode: 'subscription' });
+          } catch {
+            threw = true;
+          }
+          if (!threw) return false;
+        }
+        return true;
+      } finally {
+        if (before === undefined) delete process.env.XAI_API_KEY;
+        else process.env.XAI_API_KEY = before;
+      }
+    };
+    // BASELINE: bez kljuca u stvarnoj okolini posao se priprema, s kljucem baca.
+    const before = process.env.XAI_API_KEY;
+    try {
+      delete process.env.XAI_API_KEY;
+      expect(() => prepareJob(grokQueue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }))
+        .not.toThrow();
+    } finally {
+      if (before === undefined) delete process.env.XAI_API_KEY;
+      else process.env.XAI_API_KEY = before;
+    }
+    expect(refusesAmbientXaiKey(prepareJob as PrepareJobFn)).toBe(true);
+    // MUTACIJA: `const env = options.env ?? {}` umjesto `?? process.env`.
+    const mutantDefaultsToEmpty: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
+      (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget,
+        { ...options, env: (options as { env?: Record<string, string> }).env ?? {} });
+    expect(refusesAmbientXaiKey(mutantDefaultsToEmpty)).toBe(false);
+    // Kontrola: okolina je vracena u zateceno stanje.
+    expect(process.env.XAI_API_KEY).toBe(before);
+  });
+
   it('(c) parser koji zivu gresku proglasi uspjehom obara tvrdnju', async () => {
     const { parseResult } = await import('../scripts/agents/core.mjs');
     // BASELINE: stvarni parser presudi oba ziva oblika tocno.
     expect(judgesLiveShapes(parseResult as ParseResultFn)).toBe(true);
-    // MUTACIJA: naivni parser "svaki parseable JSON bez is_error je uspjeh".
+    // MUTACIJA: naivni parser "svaki parseable JSON bez is_error je uspjeh". Fallback na zadnji redak
+    // je isti kao u stvarnom parseru, pa je jedina razlika izostanak dokaza uspjeha.
     const mutantNaive: ParseResultFn = (_command, stdout, exitCode) => {
       if (exitCode !== 0) return { ok: false };
+      const text = stdout.trim();
+      let parsed: { is_error?: boolean } | null = null;
       try {
-        const parsed = JSON.parse(stdout);
-        return { ok: parsed?.is_error !== true };
+        parsed = JSON.parse(text);
       } catch {
-        return { ok: false };
+        const lines = text.split('\n').filter(Boolean);
+        try {
+          parsed = JSON.parse(lines[lines.length - 1]);
+        } catch {
+          return { ok: false };
+        }
       }
+      return { ok: parsed?.is_error !== true };
     };
-    expect(mutantNaive('grok', liveError(), 0).ok).toBe(true);
+    expect(mutantNaive('grok', liveErrorJsonLine(), 0).ok).toBe(true);
     expect(judgesLiveShapes(mutantNaive)).toBe(false);
     // MUTACIJA: parser koji gleda samo izlazni kod.
     const mutantExitCodeOnly: ParseResultFn = (_command, _stdout, exitCode) => ({ ok: exitCode === 0 });
@@ -2782,62 +2854,87 @@ describe('mutacije: Grok pretplatnicki profil', () => {
 });
 
 /**
- * MUTACIJE ZA PRIKOVAN KVAR PYTHON ZRCALA.
+ * MUTACIJE ZA GRANU GROKA U PYTHON ZRCALU PRESUDE.
  *
- * Nalaz pregleda 2026-09-22: nove fixture prikivaju samo JS `parseResult`, dok u autonomnom lancu
- * presudjuje `parse_provider_output` iz `scripts/autonomy/worker.py`, koje nema granu za Grok. Ta je
- * datoteka zadatkom zabranjena za izmjenu, pa je kvar prikovan testom u `tests/agent-workflow.test.ts`.
- * Ovdje se dokazuje da taj novi gard stvarno grize, i to u OBA smjera: mora vidjeti kad se grana za
- * Grok pojavi (jer tada biljeska u vodicu postaje neistinita) i ne smije se dati zavarati spomenom
- * rijeci `grok` izvan tijela te funkcije.
+ * Nalaz pregleda 2026-09-22 bio je da fixture prikivaju samo JS `parseResult`, dok u autonomnom lancu
+ * presudjuje `parse_provider_output` iz `scripts/autonomy/worker.py`, koje nije imalo granu za Grok.
+ * Kvar je zatvoren 2026-09-23: zrcalo sada grana na `GROK_COMMANDS` i zove `_parse_grok_output`.
+ * Ponasanje te grane mjere python testovi (`scripts/autonomy/tests/test_worker_grok.py`); oni se ne
+ * vrte u `npm run check`, pa `tests/agent-workflow.test.ts` strukturno tvrdi da grana POSTOJI.
+ * Ovdje se dokazuje da ta tvrdnja grize u OBA smjera: mora vidjeti kad grana nestane iz tijela
+ * funkcije i ne smije je spasiti spomen rijeci `grok` bilo gdje drugdje u datoteci.
  */
-describe('mutacije: prikovan kvar python zrcala presude', () => {
+describe('mutacije: grana Groka u python zrcalu presude', () => {
   const workerSource = () => readFileSync(resolve(process.cwd(), 'scripts/autonomy/worker.py'), 'utf8');
 
   /** Isti strukturni izdvajac kakav koristi gard: od `def` funkcije do sljedece `def` u nultom stupcu. */
-  const bodyOf = (source: string): string | null => {
+  const bodyOf = (source: string, name = 'parse_provider_output'): string | null => {
     const lines = source.split(/\r?\n/);
-    const start = lines.findIndex((line) => line.startsWith('def parse_provider_output('));
+    const start = lines.findIndex((line) => line.startsWith(`def ${name}(`));
     if (start === -1) return null;
     const rest = lines.slice(start + 1);
     const end = rest.findIndex((line) => line.startsWith('def '));
     return (end === -1 ? rest : rest.slice(0, end)).join('\n');
   };
 
-  /** Gard: vraca popis problema. Prazan popis znaci "kvar jos traje, biljeska u vodicu je istinita". */
+  /** Gard: vraca popis problema. Prazan popis znaci "zrcalo presudjuje Grok kao JS strana". */
   const mirrorProblems = (source: string): string[] => {
     const body = bodyOf(source);
     if (body === null) return ['funkcija parse_provider_output nije pronadjena'];
     const problems: string[] = [];
     if (!body.includes('command == "claude"')) problems.push('nema grane za claude');
     if (!body.includes('turn.completed')) problems.push('nema codex uvjeta turn.completed');
-    if (body.toLowerCase().includes('grok')) problems.push('zrcalo je dobilo granu za Grok');
+    if (!body.includes('command in GROK_COMMANDS')) problems.push('nema grane za Grok');
+    if (!body.includes('_parse_grok_output')) problems.push('grana za Grok ne zove zrcalo parsera');
+    const grok = bodyOf(source, '_parse_grok_output');
+    if (grok === null) problems.push('funkcija _parse_grok_output nije pronadjena');
+    else if (!grok.includes('end_turn') || !grok.includes('modelUsage')) {
+      problems.push('zrcalo Groka ne trazi strukturiran dokaz uspjeha');
+    }
     return problems;
   };
 
-  it('(e) zrcalo koje dobije granu za Grok obara prikovanu tvrdnju', () => {
+  it('(e) zrcalo koje izgubi granu za Grok obara tvrdnju', () => {
     const source = workerSource();
-    // BASELINE: stvarno stanje na disku je onakvo kakvim ga biljeska opisuje.
+    // BASELINE: stvarno stanje na disku prolazi cisto.
     expect(mirrorProblems(source)).toEqual([]);
-    // MUTACIJA: u tijelo funkcije ubacena grana za Grok, dakle kvar popravljen a biljeska zastarjela.
-    const fixed = source.replace('        if command == "claude":',
-      '        if command == "grok":\n            pass\n        if command == "claude":');
-    expect(fixed).not.toBe(source);
-    expect(mirrorProblems(fixed)).toEqual(['zrcalo je dobilo granu za Grok']);
-    // MUTACIJA: preimenovana funkcija ne smije proci kao "nema grane za Grok" (vakuumsko zeleno).
+    // MUTACIJA: povratak na stanje prije popravka, dakle grana izbacena iz tijela funkcije.
+    const regressed = source.replace(/ {8}if command in GROK_COMMANDS:\r?\n {12}return _parse_grok_output\(stdout, out\)\r?\n/,
+      '');
+    expect(regressed).not.toBe(source);
+    expect(mirrorProblems(regressed)).toEqual(['nema grane za Grok', 'grana za Grok ne zove zrcalo parsera']);
+    // MUTACIJA: grana ostaje, ali je tijelo zrcala zamijenjeno vakuumskim uspjehom bez dokaza.
+    const gutBody = (src: string, name: string): string => {
+      const lines = src.split(/\r?\n/);
+      const start = lines.findIndex((line) => line.startsWith(`def ${name}(`));
+      expect(start).toBeGreaterThan(-1);
+      const rest = lines.slice(start + 1);
+      const end = rest.findIndex((line) => line.startsWith('def '));
+      const bodyLength = end === -1 ? rest.length : end;
+      return [
+        ...lines.slice(0, start + 1), '    out["ok"] = True', '    return out', '', '',
+        ...lines.slice(start + 1 + bodyLength),
+      ].join('\n');
+    };
+    const gutted = gutBody(source, '_parse_grok_output');
+    expect(gutted).not.toBe(source);
+    expect(mirrorProblems(gutted)).toEqual(['zrcalo Groka ne trazi strukturiran dokaz uspjeha']);
+    // MUTACIJA: preimenovana funkcija ne smije proci kao "sve je na mjestu" (vakuumsko zeleno).
     const renamed = source.replace('def parse_provider_output(', 'def parse_provider_output_v2(');
     expect(renamed).not.toBe(source);
     expect(mirrorProblems(renamed)).toEqual(['funkcija parse_provider_output nije pronadjena']);
   });
 
-  it('(f) gard koji gleda cijelu datoteku umjesto tijela funkcije daje lazni alarm', () => {
+  it('(f) gard koji gleda cijelu datoteku umjesto tijela funkcije daje lazno zeleno', () => {
     const source = workerSource();
-    // Rijec `grok` drugdje u datoteci ne govori nista o presudi; ovdje se ubacuje kao komentar.
-    const mentionedElsewhere = `# spominje grok u komentaru\n${source}`;
-    // Stvarni gard je i dalje miran, jer gleda samo tijelo funkcije.
-    expect(mirrorProblems(mentionedElsewhere)).toEqual([]);
-    // MUTANT: naivni gard nad cijelom datotekom bi ovdje pogresno javio da je kvar popravljen.
-    const naive = (src: string): string[] => (src.toLowerCase().includes('grok') ? ['zrcalo je dobilo granu za Grok'] : []);
-    expect(naive(mentionedElsewhere)).not.toEqual([]);
+    // Grana izbacena iz tijela, ali rijec `grok` i dalje stoji drugdje u datoteci (komentari, konstante).
+    const regressed = source.replace(/ {8}if command in GROK_COMMANDS:\r?\n {12}return _parse_grok_output\(stdout, out\)\r?\n/,
+      '');
+    expect(regressed).toContain('GROK_COMMANDS = ("grok", "build")');
+    // Stvarni gard vidi regresiju, jer gleda tijelo funkcije.
+    expect(mirrorProblems(regressed)).not.toEqual([]);
+    // MUTANT: naivni gard nad cijelom datotekom bi ovdje pogresno javio da je sve u redu.
+    const naive = (src: string): string[] => (src.toLowerCase().includes('grok') ? [] : ['nema grane za Grok']);
+    expect(naive(regressed)).toEqual([]);
   });
 });

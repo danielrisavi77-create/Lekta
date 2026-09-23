@@ -187,25 +187,36 @@ nepromijenjen.
 npm run agents -- prepare T02 --phase plan --agent astra --subscription
 ```
 
-OTVORENO, IZMJERENO 2026-09-23: otvaranje profila cini Grok posao pripremljivim, ali ne jos i
-uporabljivim u autonomnom lancu. Presudu o ishodu ondje ne donosi `parseResult` iz
+ZATVORENO 2026-09-23: presudu o ishodu u autonomnom lancu ne donosi `parseResult` iz
 `scripts/agents/core.mjs` nego njegovo python zrcalo `parse_provider_output` u
-`scripts/autonomy/worker.py`, a ono nema granu za `grok`: zivi Grok uspjeh nema polje `type`, pa
-zavrsi u Codex JSONL grani i dobije verdict pada. Mjereno izravnim pozivom te funkcije nad commitanom
-fixturom `tests/fixtures/agents/grok-success.json`, ishodi su bili doslovno ovi:
+`scripts/autonomy/worker.py`. Zrcalo do tog datuma nije imalo granu za `grok`, pa je zivi Grok uspjeh
+(nema polje `type`) zavrsavao u Codex JSONL grani i dobivao verdict pada. Izmjereno izravnim pozivom
+te funkcije nad commitanom fixturom `tests/fixtures/agents/grok-success.json`, zateceni ishodi:
 
-| ulaz | verdict zrcala |
+| ulaz | verdict zrcala prije popravka |
 | --- | --- |
 | uspjeh, viseredni JSON (oblik fixture) | `ok=False`, `neispravan ili truncirani JSON` |
 | uspjeh, jednoredni JSON | `ok=False`, `codex bez turn.completed ili s greskom` |
 | greska uz izlazni kod 1 | `ok=False`, `exit_code=1` |
 | kontrola: Claude oblik uspjeha | `ok=True` |
 
-Kontrolni redak pokazuje da funkcija sama radi, dakle kvar je izostanak grane, a ne okolina. Dok se to
-ne popravi, svaki USPJESAN Grok posao u autonomiji izgleda kao pad i kontroler ga moze ponavljati na
-teret pretplatnicke kvote. Popravak pripada `scripts/autonomy/**` i nije dio ove grane; do tada je kvar
-prikovan testom u `tests/agent-workflow.test.ts`, koji pada cim zrcalo dobije granu za Grok i tako tjera
-da se ova biljeska ukloni umjesto da ostane kao zastarjela tvrdnja.
+Kontrolni redak pokazuje da je funkcija sama radila, dakle kvar je bio izostanak grane. Posljedica je
+bila skupa: svaki USPJESAN Grok posao izgledao je kao pad, pa bi ga kontroler ponavljao do
+`maxAttemptsPerTask` na teret pretplatnicke kvote. Zrcalo sada ima granu `_parse_grok_output`, pisanu
+doslovno prema `parseResult('grok', ...)`: uspjeh trazi neprazan `text`, `stopReason == "end_turn"`,
+`num_turns > 0` i neprazan `modelUsage`, a `reported_models` su kljucevi `modelUsage`. Presuda se mjeri
+python testovima u `scripts/autonomy/tests/test_worker_grok.py`, nad istim commitanim fixturama s
+kojima radi i JS strana; `tests/agent-workflow.test.ts` uz to strukturno tvrdi da grana postoji, jer se
+python testovi ne vrte u `npm run check`.
+
+Uz presudu ide i obrana u dubinu: prefiks `XAI_` je u `SECRET_ENV_PREFIXES`, pa nijedna xAI varijabla ne
+ulazi u okolinu djeteta, a `run_phase` posao s naredbom `grok` ili `build` uz postavljen `XAI_API_KEY`
+blokira prije pokretanja, isto kao Claude posao uz `ANTHROPIC_API_KEY`.
+
+PREOSTALI JAZ, izmjeren i zabiljezen, nije popravljen ovim krugom: `successful_tool_calls` broji NDJSON
+stavke, a Grok `--output-format json` ih ne emitira, pa vraca 0. `run_phase` nulu u fazama plan i review
+tumaci kao `no_tool_use` i blokira, bez trosenja pokusaja. Karakterizacijski test toga stoji u
+`scripts/autonomy/tests/test_worker_grok.py`.
 
 Trajni raspored, red zadataka, politika opsega, dokaz i izdavac zive u `scripts/autonomy/` (Python,
 stdlib) i pozivaju ovaj runner samo za pripremu i izvrsenje jednog poziva. Upute: `docs/agents/autonomy-runbook.md`;
