@@ -1552,6 +1552,45 @@ const MUTATIONS: Mutation[] = [
         ).length === 0),
   })),
   /**
+   * CETVRTI ADVERSARIJALNI PREGLED (2026-09-23, krug 5): gard je dokazivao SADRZAJ bloka straze, ali
+   * ne i njezinu DOSEZLJIVOST. Oba oblika nize su reproducirana nad stvarnim izvorom i oba su tada
+   * vracala prazan popis, iako javni neautenticirani endpoint ostaje ziv.
+   */
+  ...([
+    [
+      'edge/javni-endpoint-straza-ugnijezdena',
+      'straza javnog endpointa uvucena u drugi uvjet (`if (request.method === \'POST\')`), pa svaki GET ili '
+      + 'PUT prodje pokraj nje u createClient i RPC iako je lokalni popravak iskljucen',
+      (guard: string): string => `  if (request.method === 'POST') {\n${guard}  }\n`,
+      'straza zastavice je ugnijezdena u drugi blok umjesto na prvoj razini Deno.serve(...) handlera, pa se ne izvrsava na svakom zahtjevu',
+    ],
+    [
+      'edge/javni-endpoint-straza-mrtav-kod',
+      'straza javnog endpointa preseljena u pomocnu strelicu koja se nikad ne zove, pa je cijela zastita '
+      + 'mrtav kod a glava, polozaj i tijelo straze izgledaju ispravno',
+      (guard: string): string => `  const disabledResponse = (): Response | null => {\n${guard}    return null;\n  };\n`,
+      'straza zastavice je ugnijezdena u drugi blok umjesto na prvoj razini Deno.serve(...) handlera, pa se ne izvrsava na svakom zahtjevu',
+    ],
+  ] as const).map(([id, imitates, mutate, message]): Mutation => ({
+    id,
+    imitates,
+    caught: () => {
+      const source = readTextLf(resolve(process.cwd(), 'supabase/functions/repair-local-claim/index.ts'));
+      const from = source.indexOf('  if (!LOCAL_REPAIR_ENABLED) {');
+      const to = source.indexOf('\n  }\n', from) + '\n  }\n'.length;
+      if (from < 0 || to <= from) return false;
+      const guard = source.slice(from, to);
+      if (!guard.includes('return new Response(') || !guard.includes('status: 503')) return false;
+      const mutated = source.slice(0, from) + mutate(guard) + source.slice(to);
+      return mutated !== source && localRepairPublicEndpointProblems(mutated).includes(message);
+    },
+    cleanBefore: () =>
+      ['repair-local-claim', 'repair-local-status'].every((name) =>
+        localRepairPublicEndpointProblems(
+          readTextLf(resolve(process.cwd(), `supabase/functions/${name}/index.ts`)),
+        ).length === 0),
+  })),
+  /**
    * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,
    * inace bi dijakritici propustili osjetno vece tijelo od deklariranog.
    */

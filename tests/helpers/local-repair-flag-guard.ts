@@ -55,6 +55,12 @@
  *     praznim popisom, a funkcija bi nastavila raditi. Sada se vadi tijelo bloka i trazi da mu je
  *     jedini iskaz `return new Response(...)` sa `status: 503`.
  *
+ * CETVRTI ADVERSARIJALNI PREGLED (2026-09-23, krug 5) srusio je i tvrdnju iz tocke 6: tijelo straze
+ * se mjerilo, ali njezina DOSEZLJIVOST nije. Straza uvucena u `if (request.method === 'POST')` i
+ * straza preseljena u pomocnu strelicu koja se nikad ne zove obje su vracale prazan popis, a javni
+ * neautenticirani endpoint je ostajao ziv. Sada se trazi da `if` straze stoji na prvoj razini tijela
+ * `Deno.serve(...)` handlera, dakle da se izvrsi na svakom zahtjevu.
+ *
  * Ulaz se normalizira na LF (CLAUDE.md: "tekstualne usporedbe normaliziraju CR"), pa gard daje isti
  * popis nad CRLF i LF radnom kopijom. Bez toga bi doslovna usporedba s kanonskim nizom ovisila o
  * `core.autocrlf` stroja na kojem se gate vrti.
@@ -620,6 +626,62 @@ const SUPABASE_CLIENT = /\bcreateClient\s*\(/;
 /** Jedini dopusteni pocetak tijela straze: povratak iz handlera, ne puki izraz. */
 const GUARD_RETURN = /^\s*return\s+new\s+Response\s*\(/;
 const GUARD_STATUS_503 = /\bstatus\s*:\s*503\b/;
+/**
+ * Glava `Deno.serve(...)`. Straza smije stajati SAMO u tijelu tog handlera i to na njegovoj prvoj
+ * razini. Pregled 2026-09-23 (krug 5) je nad stvarnim izvorom reproducirao dva oblika koje je gard
+ * propustao s praznim popisom, a oba ostavljaju javnu povrsinu zivom: strazu uvucenu u drugi uvjet
+ * (`if (request.method === 'POST') { if (!LOCAL_REPAIR_ENABLED) { ... } }`, pa svaki GET prodje) i
+ * strazu preseljenu u pomocnu strelicu koja se nikad ne zove, cime cijela zastita postane mrtav kod.
+ * Provjere prije ove mjere samo BROJ straza i njihov polozaj prema `createClient(`, a provjera
+ * tijela samo sadrzaj bloka; nijedna ne pita izvrsava li se blok na svakom zahtjevu.
+ */
+const DENO_SERVE_HEAD = /\bDeno\.serve\s*\(/g;
+
+interface ServeBody {
+  /** Indeks `{` koji otvara tijelo handlera. */
+  open: number;
+  /** Indeks parne `}`. */
+  close: number;
+}
+
+/**
+ * Tijelo handlera koji `Deno.serve(...)` stvarno izvrsava. Trazi se prvi `{` unutar argumenta koji
+ * nije ugnijezden u oblu ili uglatu zagradu; time se preskoci lista parametara
+ * (`(request: Request)`) i anotacija tipa, a stane se bas na tijelu strelice.
+ */
+function serveHandlerBody(code: string): ServeBody | null {
+  const heads = [...code.matchAll(DENO_SERVE_HEAD)];
+  if (heads.length !== 1) return null;
+  const serveOpen = code.indexOf('(', heads[0].index ?? 0);
+  if (serveOpen < 0) return null;
+  const serveClose = matchingClose(code, serveOpen, '(');
+  if (serveClose < 0) return null;
+  let nested = 0;
+  for (let i = serveOpen + 1; i < serveClose; i += 1) {
+    const c = code[i];
+    if (c === '(' || c === '[') nested += 1;
+    else if (c === ')' || c === ']') nested -= 1;
+    else if (c === '{' && nested === 0) {
+      const close = matchingClose(code, i, '{');
+      return close < 0 ? null : { open: i, close };
+    }
+  }
+  return null;
+}
+
+/**
+ * Dubina viticastih zagrada na mjestu `at`, brojana od `from`. Kad je `from` bas `{` tijela
+ * handlera, iskaz na prvoj razini tijela ima dubinu 1, a sve ugnijezdeno (drugi `if`, `try`,
+ * pomocna funkcija) dubinu vecu od 1.
+ */
+function braceDepthFrom(code: string, from: number, at: number): number {
+  let depth = 0;
+  for (let i = from; i < at; i += 1) {
+    if (code[i] === '{') depth += 1;
+    else if (code[i] === '}') depth -= 1;
+  }
+  return depth;
+}
 
 /**
  * Popis problema u javnim runner endpointima `repair-local-claim` i `repair-local-status`.
@@ -654,6 +716,26 @@ export function localRepairPublicEndpointProblems(source: string): string[] {
   const client = SUPABASE_CLIENT.exec(codeOnly);
   if (guards.length === 1 && client && guards[0][0] > client.index) {
     problems.push('straza zastavice dolazi nakon stvaranja Supabase klijenta, dakle posao je vec krenuo');
+  }
+
+  /**
+   * Postojanje, polozaj i tijelo straze ne dokazuju da se straza IZVRSAVA. Pregled 2026-09-23
+   * (krug 5) je nad stvarnim izvorom `repair-local-claim` reproducirao dva oblika s praznim
+   * popisom: strazu uvucenu u `if (request.method === 'POST') { ... }` (svaki GET ili PUT prodje u
+   * createClient i RPC) i strazu preseljenu u strelicu koja se nikad ne zove, dakle mrtav kod.
+   * Zato se trazi da `if` straze stoji na PRVOJ razini tijela `Deno.serve(...)` handlera, dakle da
+   * se izvrsi na svakom zahtjevu.
+   */
+  const handler = serveHandlerBody(codeOnly);
+  if (!handler) {
+    problems.push('ne moze se odrediti tijelo Deno.serve(...) handlera, pa se izvrsavanje straze ne moze dokazati');
+  } else if (guards.length === 1) {
+    const guardAt = guards[0][0];
+    if (guardAt < handler.open || guardAt > handler.close) {
+      problems.push('straza zastavice je izvan tijela Deno.serve(...) handlera, pa se ne izvrsava na zahtjev');
+    } else if (braceDepthFrom(codeOnly, handler.open, guardAt) !== 1) {
+      problems.push('straza zastavice je ugnijezdena u drugi blok umjesto na prvoj razini Deno.serve(...) handlera, pa se ne izvrsava na svakom zahtjevu');
+    }
   }
 
   /**
