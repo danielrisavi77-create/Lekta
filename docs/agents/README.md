@@ -1,8 +1,9 @@
 # LEKTA: koordinacija razvoja kroz Codex, Claude Code i Grok CLI
 
 GitHub cuva plan, red zadataka, promjene i dokaze. ChatGPT/Codex, Claude Code i Grok Build CLI
-citaju isti repozitorij, ali ne dijele automatski razgovore, prijave ni memoriju. Ova prva verzija je
-poluautomatska: lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
+citaju isti repozitorij, ali ne dijele automatski razgovore, prijave ni memoriju. Kanonski routing,
+billing, context i provider-result ugovor je `docs/agents/ORCHESTRATION.md`; ovaj dokument je
+operativni runbook. Lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
 rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi pozive.
 
 ## Uloge
@@ -28,13 +29,14 @@ adversarijalni pregled prema AGENTS.md.
 ## Pocetak
 
 1. Instaliraj aktualne native Codex, Claude Code i (po potrebi) Grok Build CLI alate i prijavi ih
-   na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login` (ili
-   `XAI_API_KEY` za headless). Grok: https://docs.x.ai/build/overview
+   na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login`.
+   `XAI_API_KEY` je samo za svjesni rucni/API nacin; subscription/autonomy profil ga namjerno odbija.
+   Grok: https://docs.x.ai/build/overview
    (`curl -fsSL https://x.ai/cli/install.sh | bash` ili `npm install -g @xai-official/grok`).
    Runner je verificiran s Grok CLI 1.0.34 i odbija oslanjanje na stariji JSON ugovor;
    `doctor` oznacava instalaciju kao `supported` ili `unsupported; minimum 1.0.34`.
    Skripta ne instalira alate niti prenosi prijave. Zadani model aliasa `grok`/`build` je `grok-4.6` (sluzbena preporuka za kod, 2026-09-20);
-   prilagodi u `scripts/agents/core.mjs` ako `grok models` pokaze drugaciji ID (npr. `grok-build-0.1`).
+   prilagodi u `config/agent-providers.json` ako `grok models` pokaze drugaciji ID (npr. `grok-build-0.1`); Node i Python ucitavaju isti registry.
 2. Iz korijena repozitorija pokreni `npm run agents -- doctor` i `npm run agents -- list`.
 3. Pripremi prvi audit bez poziva modelu:
 
@@ -134,7 +136,7 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 
 ## Ogranicenja prve verzije
 
-- Prijava, dostupnost modela i stvarni poziv oba providera moraju se provjeriti na racunalu
+- Prijava, dostupnost modela i stvarni poziv svakog od tri providera moraju se provjeriti na racunalu
   koje ce izvrsavati zadatke. `doctor` provjerava izvrsne alate, ne pristup modelima.
 - Fable alias zahtijeva Claude Code >=2.1.255. Aliasi se mogu mijenjati. Runner biljezi
   trazeni model i modele prijavljene u rezultatu kada ih provider vrati; prazna lista znaci
@@ -213,11 +215,23 @@ Uz presudu ide i obrana u dubinu: prefiks `XAI_` je u `SECRET_ENV_PREFIXES`, pa 
 ulazi u okolinu djeteta, a `run_phase` posao s naredbom `grok` ili `build` uz postavljen `XAI_API_KEY`
 blokira prije pokretanja, isto kao Claude posao uz `ANTHROPIC_API_KEY`.
 
-PREOSTALI JAZ, izmjeren i zabiljezen, nije popravljen ovim krugom: `successful_tool_calls` broji NDJSON
-stavke, a Grok `--output-format json` ih ne emitira, pa vraca 0. `run_phase` nulu u fazama plan i review
-tumaci kao `no_tool_use` i blokira, bez trosenja pokusaja. Karakterizacijski test toga stoji u
-`scripts/autonomy/tests/test_worker_grok.py`.
+ZATVORENO u orchestration konsolidaciji: Grok `--output-format json` ne izlaže pouzdan per-tool
+brojac, pa `successful_tool_calls` za Grok sada vraca `None` (nepoznato), ne laznu nulu. Time uredan
+Grok plan/review ne pada kao `no_tool_use`; karakterizacijski test u
+`scripts/autonomy/tests/test_worker_grok.py` grize u oba smjera.
 
 Trajni raspored, red zadataka, politika opsega, dokaz i izdavac zive u `scripts/autonomy/` (Python,
 stdlib) i pozivaju ovaj runner samo za pripremu i izvrsenje jednog poziva. Upute: `docs/agents/autonomy-runbook.md`;
 polazna tocka: `docs/agents/autonomy-baseline.md`; status zadataka T00 do T47: `docs/quality/lekta-plan-status.md`.
+
+
+## Orchestration telemetry i context
+
+Provider aliasi/modeli/uloge dolaze iz jednog strojnog registra `config/agent-providers.json`, koji
+čitaju i Node runner i Python autonomy sloj. Root `AGENTS.md` je kratka always-on mapa; detaljne
+invarijante su u `docs/agents/PROJECT_RULES.md` i čitaju se samo po potrebi.
+
+Svaki stvarni ručni run zapisuje sanitizirani usage redak u `.artifacts/agents/usage.jsonl`.
+Autonomy isti normalizirani usage sprema u `run:<phase>` event. Ledger ne sadrži prompt, dokument
+ni tajne. Router je deterministički: `providerFallback=wait` ne troši drugi provider, a
+`providerFallback=authorized` dopušta samo već odobren provider/model, bez probe poziva.

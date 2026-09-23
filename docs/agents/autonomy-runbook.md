@@ -37,14 +37,25 @@ python -m scripts.autonomy.cli resume
 python -m scripts.autonomy.cli report
 ```
 
-- `doctor`: verzije alata, prijave (Codex, Claude, gh), API kljucevi u okolini (samo imena), Word COM,
-  disk i RAM, valjanost konfiguracije, OS izolacija. Nikad ne ispisuje vrijednost tokena.
-  `--write-profile` zapisuje profil naplate; `subscription_verified` dolazi iz stvarnog `auth status`
-  izlaza, a `extra_credits_disabled` i `model_included` postoje SAMO uz vlasnikove zastavice
-  `--attest-extra-credits-disabled` i `--attest-models gpt-5.6-sol,sonnet`. Bez toga
-  `billing_allowed` je False i nema modelskog poziva.
+- `doctor`: verzije alata, prijave (Codex, Claude, Grok CLI, gh), API credentiale u okolini (samo imena),
+  Word COM, disk i RAM, valjanost konfiguracije i OS izolaciju. Nikad ne ispisuje vrijednost tokena.
+  `--write-profile` zapisuje provider-specificki billing profil. Codex/Claude koriste stvarni account login
+  i vlasnicke `--attest-extra-credits-disabled --attest-models ...`. Grok u subscription profilu traži
+  `grokEnabled=true`, podržani CLI, `--attest-grok-included --attest-grok-models grok-4.6` i odsutan
+  `XAI_API_KEY`. Credential jednog providera ne autorizira niti blokira drugi.
 - `tick --dry-run`: skupi signale, ispise sto BI uslo u red; ne upisuje, ne uzima lease, ne zove model,
   ne otvara PR.
+## Provider routing, context i usage
+
+Kanonski ugovor je `docs/agents/ORCHESTRATION.md`. Zadani auto redoslijed ostaje Astra za plan
+i Sonnet za implementaciju. `providerFallback=wait` blokira bez drugog provider poziva; samo
+`providerFallback=authorized` dopušta sljedeći već autorizirani provider/model. Cross-provider
+review nikad ne koristi isti CLI provider kao implementator.
+
+Modelski prompt koristi kratki root kontekst, `ORCHESTRATION.md`, točan zadatak i samo relevantne
+odjeljke `PROJECT_RULES.md`/scoped uputa. Rucni runner sprema usage u
+`.artifacts/agents/usage.jsonl`; autonomy ga sprema u run event. Nepoznato usage polje je `null`.
+
 - `tick`: u `observe` upisuje signale i staje. U `propose` i `auto_low_risk` uzima najvise jedan posao
   (dnevni limit 3, 2 pokusaja po zadatku) i vodi ga planning -> implementing -> reviewing -> verifying ->
   ready_to_publish -> publishing, svaku fazu biljezi prije i poslije. `waiting_quota` i `needs_login` ne

@@ -28,8 +28,16 @@ def fixture(name: str) -> str:
 
 
 def profile(**over):
-    base = dict(subscription_verified=True, extra_credits_disabled=True, effective_auth="subscription",
-                model_included=True, configuration_unchanged=True, trusted_observation=True)
+    base = {
+        "configuration_unchanged": True,
+        "trusted_observation": True,
+        "fable_enabled": False,
+        "providers": {
+            "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+            "claude": {"allowed": True, "approved_models": ["sonnet", "opus"]},
+        },
+    }
     base.update(over)
     return base
 
@@ -120,14 +128,10 @@ class GrokVerdictTest(unittest.TestCase):
         # Zivi Grok uspjeh kroz codex granu i dalje pada; to je bas kvar koji je nova grana popravila.
         self.assertFalse(parse_provider_output("codex", fixture("grok-success.json"), 0)["ok"])
 
-    def test_known_remaining_gap_grok_reports_zero_tool_calls(self):
-        """KARAKTERIZACIJA, ne tvrdnja da je ispravno.
-
-        `successful_tool_calls` broji NDJSON stavke, a Grok `--output-format json` ih ne emitira, pa je
-        broj 0. `run_phase` za faze plan i review nulu tumaci kao `no_tool_use` i blokira, bez trosenja
-        pokusaja. Ovaj zadatak to NE mijenja; test biljezi zateceno ponasanje da se promjena vidi.
-        """
-        self.assertEqual(successful_tool_calls("grok", fixture("grok-success.json")), 0)
+    def test_grok_tool_use_is_unknown_not_false_zero(self):
+        """Grok summary JSON nema per-tool dogadaje; nepoznato ne smije postati lazna nula."""
+        self.assertIsNone(successful_tool_calls("grok", fixture("grok-success.json")))
+        self.assertIsNone(successful_tool_calls("build", fixture("grok-success.json")))
         self.assertIsNone(successful_tool_calls("claude", "{}"))
 
 
@@ -138,7 +142,8 @@ class GrokApiKeyGuardTest(unittest.TestCase):
         self.dir = os.path.dirname(os.path.abspath(__file__))
 
     def phase(self, command, env):
-        job = {"command": command, "args": [], "prompt": "p", "requestedModel": "grok-4.6"}
+        model = "gpt-6-astra" if command == "codex" else "grok-4.6"
+        job = {"command": command, "args": [], "prompt": "p", "requestedModel": model}
         # Launcher se podmece da ishod ne ovisi o tome je li Grok CLI instaliran na ovom stroju.
         with mock.patch("scripts.autonomy.worker.resolve_launcher",
                         side_effect=lambda c: {"command": c, "path": None, "kind": "missing"}):

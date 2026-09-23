@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import {
-  prepareJob, parseGrokVersion, parseResult, validateQueue,
+  modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue,
   PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS,
 } from '../scripts/agents/core.mjs';
 
@@ -10,6 +10,29 @@ const queue = () => ({ tasks: [
   { id: 'T00', title: 'Confirm baseline', status: 'done', dependsOn: [] },
   { id: 'T01', title: 'Repair proof', status: 'ready', dependsOn: ['T00'] },
 ] });
+
+describe('agent context and provider registry contract', () => {
+  it('keeps root AGENTS compact and detailed invariants on demand', () => {
+    const root = readFileSync('AGENTS.md', 'utf8');
+    const detailed = readFileSync('docs/agents/PROJECT_RULES.md', 'utf8');
+    expect(root.split('\n').length).toBeLessThanOrEqual(120);
+    expect(root.length).toBeLessThan(8_000);
+    expect(root).toContain('docs/agents/PROJECT_RULES.md');
+    expect(detailed.length).toBeGreaterThan(20_000);
+    const job = prepareJob(queue(), 'T01', 'plan', 'astra');
+    expect(job.prompt).toContain('docs/agents/ORCHESTRATION.md');
+    expect(job.prompt).toContain('relevant headings of docs/agents/PROJECT_RULES.md');
+    expect(job.prompt).not.toContain('Read AGENTS.md, CLAUDE.md and docs/agents/README.md');
+  });
+
+  it('loads provider aliases from the shared registry', () => {
+    const registry = JSON.parse(readFileSync('config/agent-providers.json', 'utf8'));
+    expect(registry.schemaVersion).toBe(1);
+    expect(registry.grokMinVersion).toBe('1.0.34');
+    expect(registry.agents.grok).toMatchObject({ command: 'grok', role: 'coordinator' });
+    expect(registry.agents.build).toMatchObject({ command: 'grok', role: 'implementer' });
+  });
+});
 
 describe('agent handoff', () => {
   it('passes the complete task on stdin, never through a shell command', () => {
@@ -75,6 +98,7 @@ describe('agent handoff', () => {
     expect(prepareJob(q, 'T01', 'review', 'astra').command).toBe('codex');
     q.tasks[1].implementationAgent = 'sol';
     expect(prepareJob(q, 'T01', 'review', 'grok').command).toBe('grok');
+    expect(prepareJob(q, 'T01', 'review', 'opus', 2).command).toBe('claude');
   });
   it('rejects missing dependencies and dependency cycles', () => {
     const q = queue();
@@ -95,7 +119,7 @@ describe('provider results do not replace verification', () => {
   it('rejects Claude budget/turn errors even when stdout is valid JSON', () => {
     expect(parseResult('claude', '{"subtype":"error_max_turns","is_error":true}', 0).ok).toBe(false);
     expect(parseResult('claude', '{"subtype":"success","is_error":false,"modelUsage":{"claude-opus-4-6":{}}}', 0))
-      .toEqual({ ok: true, reportedModels: ['claude-opus-4-6'] });
+      .toMatchObject({ ok: true, reportedModels: ['claude-opus-4-6'] });
     expect(parseResult('claude', 'not json', 0).ok).toBe(false);
   });
   it('accepts parseable non-error Grok JSON and rejects explicit errors', () => {
@@ -109,7 +133,7 @@ describe('provider results do not replace verification', () => {
       modelUsage: { 'grok-4.6-build': { modelCalls: 1 } },
     });
     expect(parseResult('grok', liveShape, 0))
-      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+      .toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
     expect(parseResult('grok', JSON.stringify({ text: '', stopReason: 'end_turn', num_turns: 1, modelUsage: {} }), 0).ok).toBe(false);
     expect(parseResult('grok', '{"type":"result","is_error":false,"model":"grok-4.6"}', 0).ok).toBe(false);
     expect(parseResult('grok', '{"type":"result","is_error":true,"model":"grok-4.6"}', 0).ok).toBe(false);
@@ -117,7 +141,7 @@ describe('provider results do not replace verification', () => {
   it('accepts the captured Grok 1.0.34 contract fixture', () => {
     const stdout = readFileSync('tests/fixtures/grok-result-1.0.34.json', 'utf8');
     expect(parseResult('grok', stdout, 0))
-      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+      .toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
   });
   /**
    * PROVENIJENCIJA FIXTURA. Oba su snimka nastala na razvojnom stroju 2026-09-21 s Grok CLI 1.0.34:
@@ -142,7 +166,7 @@ describe('provider results do not replace verification', () => {
   it('presuduje zive Grok 1.0.34 odgovore, i uspjeh i gresku', () => {
     const success = readFileSync('tests/fixtures/agents/grok-success.json', 'utf8');
     const failure = readFileSync('tests/fixtures/agents/grok-error.json', 'utf8');
-    expect(parseResult('grok', success, 0)).toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+    expect(parseResult('grok', success, 0)).toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
     expect(parseResult('grok', failure, 1).ok).toBe(false);
     // Cak i kad bi CLI pogresno izasao s 0, oblik greske sam po sebi nije uspjeh.
     expect(parseResult('grok', failure, 0).ok).toBe(false);
@@ -195,6 +219,38 @@ describe('provider results do not replace verification', () => {
     expect(parseGrokVersion('grok 1.0.33 (old)'))
       .toEqual({ version: '1.0.33', supported: false });
     expect(parseGrokVersion('unexpected')).toEqual({ version: null, supported: false });
+  });
+
+  it('normalizes Codex, Claude and Grok usage into one contract', () => {
+    const codexStdout = readFileSync('scripts/autonomy/tests/fixtures/codex-exec-json-tool-use-2026-09-20.stdout.ndjson', 'utf8');
+    expect(parseResult('codex', codexStdout, 0).usage).toMatchObject({
+      inputTokens: 53791, cachedInputTokens: 36352, outputTokens: 213,
+      reasoningOutputTokens: 93, totalTokens: 54004,
+    });
+
+    const grokStdout = readFileSync('tests/fixtures/grok-result-1.0.34.json', 'utf8');
+    expect(parseResult('grok', grokStdout, 0).usage).toMatchObject({
+      inputTokens: 10, outputTokens: 4, totalTokens: 14, costUsd: 0.00001, modelCalls: 1,
+    });
+
+    const claude = JSON.stringify({
+      subtype: 'success', is_error: false,
+      modelUsage: {
+        'claude-sonnet': { inputTokens: 7, outputTokens: 2, cacheReadInputTokens: 3, costUSD: 1, modelCalls: 1 },
+        'claude-opus': { inputTokens: 5, outputTokens: 1, cacheReadInputTokens: 2, costUSD: 2, modelCalls: 1 },
+      },
+    });
+    expect(parseResult('claude', claude, 0).usage).toMatchObject({
+      inputTokens: 12, cachedInputTokens: 5, outputTokens: 3,
+      totalTokens: 15, costUsd: 3, modelCalls: 2,
+    });
+  });
+
+  it('fails only an explicit requested-model mismatch', () => {
+    expect(modelMatches('grok-4.6', [])).toBe(true);
+    expect(modelMatches('grok-4.6', ['grok-4.6-build'])).toBe(true);
+    expect(modelMatches('gpt-6-astra', ['gpt-6-astra'])).toBe(true);
+    expect(modelMatches('gpt-6-astra', ['gpt-5.6-sol'])).toBe(false);
   });
 });
 
@@ -422,7 +478,7 @@ describe('python zrcalo presude poznaje Grok', () => {
     expect(success.trim().split(/\r?\n/).length).toBeGreaterThan(1);
     expect(success.trim().split(/\r?\n/)[0].trim()).toBe('{');
     // Kontrola: JS strana isti taj snimak presudjuje tocno.
-    expect(parseResult('grok', success, 0)).toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+    expect(parseResult('grok', success, 0)).toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
   });
 
   it('vodic opisuje zatvoren nalaz, ne otvoren kvar', () => {
