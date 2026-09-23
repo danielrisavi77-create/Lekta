@@ -1,9 +1,12 @@
 -- Lekta: jedinicna ekonomija po passu (pre-launch checklist P1 8-4).
--- Netto po passu = bruto - MoR naknada - procijenjeni compute trosak generacije izvjestaja.
--- Pokreni kao service role. Parametre (MoR fee) uskladi sa stvarnim uvjetima Lemon Squeezyja.
+-- Netto po passu = bruto - naknada pruzatelja naplate - procijenjeni compute trosak generacije.
+-- Pokreni kao service role. Parametre naknade uskladi sa stvarnim uvjetima Stripea.
+--
+-- VAZNO od 2026-09-23: Stripe NIJE Merchant of Record, pa se iz bruto iznosa jos odvaja PDV koji
+-- obracunava i prijavljuje vlasnik. Ovaj izracun daje netto PRIJE PDV-a.
 
 -- Pretpostavke (uredi prema stvarnom ugovoru):
---   MoR fee: 5% + 0,50 EUR po transakciji (Lemon Squeezy tipicno; provjeri svoj plan).
+--   Naknada: 1,5% + 0,25 EUR po EU kartici (Stripe standardni cjenik; provjeri svoj plan).
 --   Compute: generate-report je jedan Edge Function poziv + par SQL upita; procjena ~0,002 EUR
 --   po uspjesnoj generaciji (Supabase compute + invokacije). Broj generacija po passu iz
 --   report_generations (status in ('new_slot','recheck')) vezanih na slotove tog entitlementa.

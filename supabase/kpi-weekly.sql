@@ -1,5 +1,5 @@
 -- Lekta tjedni KPI (MONETIZATION_PLAN.md sekcija 12). Pokreni kao service role (psql ili
--- Supabase SQL editor). Checkout->purchase konverzija dolazi iz MoR (Lemon Squeezy) dashboarda;
+-- Supabase SQL editor). Checkout->purchase konverzija dolazi iz Stripe dashboarda;
 -- ovdje su DB-izvedivi KPI-jevi. Sve je agregatno, bez osobnih podataka.
 
 -- 1) Bruto EUR / tjedan po SKU (+ kupnje/refundi). Interne nagrade su vec iskljucene u viewu.

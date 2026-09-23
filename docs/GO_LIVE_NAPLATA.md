@@ -36,11 +36,11 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
    `migrations/0002_products_catalog.sql`.
 2. Za promjenu cijene koristi atomski `set_product_price` (upisuje `products` + `pricing_changelog`
    u istoj transakciji). Ručni `UPDATE price_eur` bez changeloga je prekršaj procesa (kriterij 14.12).
-3. **`products.mor_product_id`** popuni STVARNIM Lemon Squeezy variant id-jevima (vidi korak 5).
-   Dok je `null`, create-checkout vraća `409 product_not_mapped`.
-
-   Stanje 17.8.2026.: **svih 20 aktivnih proizvoda ima `mor_product_id = null`**, dakle checkout
-   je u produkciji neupotrebljiv (audit A26-02). Kod radi ispravno; nedostaje ovaj korak.
+3. **`products.mor_product_id` je NASLIJEĐEN i ne popunjava se.** Do 23.9.2026. je nosio variant
+   id Merchant of Record providera i bio uvjet za checkout (`409 product_not_mapped`); prelaskom
+   na Stripe taj uvjet je uklonjen. Iznos se računa iz `products.price_eur`, a webhook proizvod
+   traži po `products.id` iz Stripe `metadata[product_id]`. Stupac ostaje radi povijesnih zapisa,
+   audit A26-02 time prestaje biti blokada.
 
 ### 3.1 Cjenik koji sam sebi proturječi (audit A26-03, blokira launch)
 
@@ -68,15 +68,29 @@ Odluka je poslovna, ne tehnička, pa je ovdje ne propisujemo. Tri smislena izlaz
 i `pricing_changelog`); ručni `UPDATE price_eur` je prekršaj procesa (kriterij 14.12). Deaktivacija
 proizvoda nije promjena cijene pa ide običnim `UPDATE products SET active = false`, uz bilješku.
 
-## 4. Lemon Squeezy (Merchant of Record)
+## 4. Stripe (naplata)
 
-1. Otvori LS račun/trgovinu. Zabilježi **Store ID** i kreiraj **API key**.
-2. Za svaki naplatni proizvod kreiraj LS **product/variant**; njegov **variant id** upiši u
-   `products.mor_product_id` odgovarajućeg retka.
-3. **Webhook**: u LS postavi webhook na `…/functions/v1/webhook-mor`, zabilježi **signing secret**.
-   HMAC provjera potpisa je već implementirana (`verifyLemonSignature` u `src/report/webhook.ts`,
-   timing-safe, spojena u `functions/webhook-mor`); dovoljno je postaviti env `MOR_WEBHOOK_SECRET`
-   na taj signing secret. Ne treba mijenjati kod.
+Odluka vlasnika 23.9.2026.: naplata ide preko Stripea. **Stripe nije Merchant of Record**, pa PDV
+na prodaju potrošačima u EU (HR 25 %, izvan HR po OSS-u) obračunava i prijavljuje vlasnik, ne
+provider. Stripe Tax može izračunati iznos, ali ga ne prijavljuje. Cijene 4,99 do 24,99 tretiraju
+se kao bruto (s PDV-om) dok vlasnik ne odluči drukčije.
+
+1. Otvori Stripe račun i dovrši aktivaciju (poslovni podaci, bankovni račun).
+2. Iz **Developers → API keys** uzmi **Secret key** (`sk_…`) i **Publishable key** (`pk_…`).
+   Publishable ključ nije tajna, ali se ipak drži kao Edge secret: klijent ga dobiva u odgovoru
+   `create-checkout`, pa se zamjena test/live vidi odmah, bez novog builda.
+3. **Ne kreiraj Stripe proizvode.** Iznos dolazi iz `products.price_eur` pri svakom pozivu, pa
+   dvostruki cjenik (naš i Stripeov) ne postoji i ne može se razići.
+4. **Webhook**: u **Developers → Webhooks** dodaj endpoint `…/functions/v1/webhook-mor` (ime
+   funkcije je naslijeđeno, URL se namjerno ne mijenja) i pretplati ga na TOČNO dva događaja:
+   `payment_intent.succeeded` i `charge.refunded`. Sve ostalo webhook prima, upiše u inbox i
+   ignorira uz 200.
+5. Zabilježi **Signing secret** (`whsec_…`) i postavi ga kao `STRIPE_WEBHOOK_SECRET`. Provjera
+   `Stripe-Signature` je već implementirana (`verifyStripeSignature` u `src/report/webhook.ts`,
+   timing-safe, tolerancija 300 s protiv replaya); ne treba mijenjati kod.
+6. **Test vs live**: u testnom načinu događaji imaju `livemode = false` i webhook ih ODBIJA dok
+   se izričito ne postavi `STRIPE_ALLOW_TEST_MODE=1`. To je namjerno: testna kupnja ne smije
+   stvoriti pravo pristupa u produkciji. Nakon smoke testa obriši tu varijablu.
 
 ## 5. Deploy Edge Functiona
 
@@ -104,8 +118,10 @@ Env varijable (Supabase → Edge Functions → Secrets):
 
 - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`
 - `DAILY_CAP` (npr. 30 retail; partner cap se diže po računu)
-- `MOR_WEBHOOK_SECRET` (LS signing secret)
-- `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`, `CHECKOUT_REDIRECT_URL`
+- `STRIPE_WEBHOOK_SECRET` (Stripe signing secret, `whsec_…`)
+- `STRIPE_SECRET_KEY` (`sk_…`), `STRIPE_PUBLISHABLE_KEY` (`pk_…`)
+- opcionalno `STRIPE_ALLOW_TEST_MODE=1` (samo za smoke test) i `STRIPE_ACCOUNT_ID` (samo uz
+  Connect račun)
 
 ## 6. Klijentska konfiguracija (bez rebuilda)
 
@@ -127,8 +143,10 @@ prije checkouta i punog izvještaja te šalje pravi JWT. Bez njih se ponaša kao
 1. `?setup=1` → popuni endpointe + Supabase → Spremi.
 2. Analiziraj rad → „Otključaj puni izvještaj" → otvori se prijava e-mailom → upiši e-mail →
    stigne kod → potvrdi → poziv ide na generate-report s JWT-om.
-3. Ako server vrati 402 → prikaže se „Kupi paket" → checkout otvara Lemon Squeezy stranicu.
-4. Plati (LS test mode) → webhook kreira `entitlement` → ponovni „Otključaj" vraća puni izvještaj.
+3. Ako server vrati 402 → prikaže se „Kupi paket" → potvrda kupnje → Stripe Payment Element se
+   otvara U STRANICI (nema odlaska na vanjski checkout).
+4. Plati testnom karticom (uz privremeni `STRIPE_ALLOW_TEST_MODE=1`) → webhook kreira
+   `entitlement` → izvještaj se otključava odmah, bez povratka s vanjske stranice.
 5. Provjeri KPI upite (`supabase/kpi-weekly.sql`) i analytics viewove kao service role.
 
 ## 8. Što je već pokriveno (ne treba dirati)
