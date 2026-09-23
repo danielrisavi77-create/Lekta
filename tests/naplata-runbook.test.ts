@@ -18,13 +18,21 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
-import { handlerOutcomes, naplataRunbookProblems } from './helpers/naplata-env';
+import {
+  handlerOutcomes,
+  naplataRunbookProblems,
+  runbookSqlColumnProblems,
+  runbookSqlQueryCount,
+  webhookEventsColumns,
+} from './helpers/naplata-env';
+import { IGNORE_REASON_PREFIXES } from '../src/report/webhook';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p: string): string => readFileSync(resolve(ROOT, p), 'utf8');
 
 const RUNBOOK = read('docs/GO_LIVE_NAPLATA.md');
 const HANDLER = read('supabase/functions/webhook-mor/index.ts');
+const MIGRACIJA = read('supabase/migrations/0092_webhook_events_inbox.sql');
 
 describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizvodi', () => {
   it('mjerenje je netrivijalno (prazan izvod ne smije "proci")', () => {
@@ -36,8 +44,17 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
   });
 
   it('BASELINE: runbook nema nijedan od poznatih propusta', () => {
-    const problems = naplataRunbookProblems(RUNBOOK, handlerOutcomes(HANDLER));
+    const problems = naplataRunbookProblems(RUNBOOK, handlerOutcomes(HANDLER), IGNORE_REASON_PREFIXES);
     expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('gard grize: razlog iz outcome_detail bez retka u runbooku se prijavi', () => {
+    // Ishod `ignored` pokriva tri razloga s tri razlicite radnje; ime ishoda nije dovoljno.
+    const problems = naplataRunbookProblems(RUNBOOK, handlerOutcomes(HANDLER), [
+      ...IGNORE_REASON_PREFIXES,
+      'nov_razlog:',
+    ]);
+    expect(problems.join('; ')).toContain('nov_razlog:');
   });
 
   it('runbook opisuje postupak rucnog vezivanja, ne samo ime ishoda', () => {
@@ -63,5 +80,44 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
     // MUTACIJA: izmisljen ishod koji runbook ne poznaje. Dokazuje da popis nije zamrznut.
     const problems = naplataRunbookProblems(RUNBOOK, [...handlerOutcomes(HANDLER), 'nov_ishod']);
     expect(problems.join('; ')).toContain('nov_ishod');
+  });
+});
+
+/**
+ * UPIT KOJI SE NE MOZE IZVRSITI NIJE UPIT (nalaz pregleda 2026-09-23).
+ *
+ * Oba upita u sekciji 5.1 citala su i sortirala po `created_at`, stupcu kojeg `webhook_events`
+ * nema: migracija 0092 definira `received_at` i `processed_at`, a nijedna kasnija migracija tu
+ * tablicu ne dira. Operater bi u tjednu lansiranja umjesto popisa placenih narudzbi bez prava
+ * pristupa dobio `ERROR: 42703 column "created_at" does not exist`. Bas ti upiti su jedina zamjena
+ * za djelomicni indeks `webhook_events_unresolved`, koji ishode `needs_manual_link` i `ignored`
+ * namjerno ne pokriva.
+ *
+ * Stari gard to nije mogao vidjeti: trazio je samo da se niz `from webhook_events` negdje pojavi.
+ */
+describe('SQL upiti u runbooku gadjaju stupce koje tablica stvarno ima', () => {
+  it('mjerenje je netrivijalno (izvod stupaca i broj upita nisu prazni)', () => {
+    const stupci = webhookEventsColumns(MIGRACIJA);
+    expect(stupci).toContain('received_at');
+    expect(stupci).not.toContain('created_at');
+    expect(stupci.length).toBeGreaterThanOrEqual(10);
+    expect(runbookSqlQueryCount(RUNBOOK)).toBeGreaterThanOrEqual(2);
+  });
+
+  it('BASELINE: nijedan upit ne koristi nepostojeci stupac', () => {
+    const problems = runbookSqlColumnProblems(RUNBOOK, MIGRACIJA);
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('gard grize: vracanje na created_at se prijavi', () => {
+    // MUTACIJA u memoriji: tocno stanje runbooka prije ovog ispravka.
+    const mutated = RUNBOOK.split('received_at').join('created_at');
+    expect(mutated).not.toBe(RUNBOOK);
+    expect(runbookSqlColumnProblems(mutated, MIGRACIJA).join('; ')).toContain('created_at');
+  });
+
+  it('gard grize: runbook bez ijednog upita nad webhook_events se prijavi', () => {
+    const mutated = RUNBOOK.split('webhook_events').join('neka_druga_tablica');
+    expect(runbookSqlColumnProblems(mutated, MIGRACIJA).join('; ')).toContain('nema sto mjeriti');
   });
 });

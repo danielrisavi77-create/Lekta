@@ -96,10 +96,20 @@ proizvoda nije promjena cijene pa ide običnim `UPDATE products SET active = fal
 
 ## 5. Deploy Edge Functiona
 
+Obje funkcije naplate deployaj JEDNOM naredbom, koja preflight tajni nosi u sebi:
+
 ```
-supabase functions deploy create-checkout
+npm run deploy:naplata
+npm run deploy:naplata -- --project-ref <ref>   # kad projekt nije povezan preko `supabase link`
+```
+
+`deploy:naplata` prvo procita Supabase Edge secrets projekta i odbije deploy ako ijedna tajna
+naplate nedostaje ili je postavljena na prazno, pa tek onda deploya `create-checkout` i
+`webhook-mor`, tim redom. Zastavice za preskakanje preflighta NEMA: to je i razlog zasto deploy
+naplate vise nije goli `supabase functions deploy`. Ostale funkcije nisu dio naplate i idu zasebno:
+
+```
 supabase functions deploy generate-report
-supabase functions deploy webhook-mor
 supabase functions deploy file-guarantee-claim
 ```
 
@@ -132,10 +142,11 @@ i vraca 200, pa ga ni provider ne ponavlja. Ime je sada jedno.
 - `LS_ALLOW_TEST_MODE` = `1` SAMO dok traje testna kupnja (korak 7). U produkciji ostaje PRAZNO.
   Prazna vrijednost znaci da dogadjaj iz testnog nacina rada ne daje pravo pristupa (audit PAY-05):
   bez toga bi svatko tko zna LS test mode dobio placeni proizvod bez naplate. Kad zavrsi provjera
-  integracije, obrisi vrijednost i ponovi `supabase functions deploy webhook-mor`.
+  integracije, obriši vrijednost i ponovi `npm run deploy:naplata`.
 
-Prije `supabase functions deploy` pokreni preflight. On čita **Supabase Edge secrets projekta**
-(`supabase secrets list`), dakle okolinu u kojoj funkcija stvarno radi, a ne tvoju ljusku:
+Preflight čita **Supabase Edge secrets projekta** (`supabase secrets list`), dakle okolinu u kojoj
+funkcija stvarno radi, a ne tvoju ljusku. `npm run deploy:naplata` ga pokreće sam; zasebno se
+pokreće samo kad hoćeš provjeriti stanje bez deploya:
 
 ```
 npm run verify-naplata-secrets
@@ -153,8 +164,15 @@ odbija SVAKU kupnju, a odbijanje je tiho (200, bez retryja).
 ne dokazuje ništa o projektu iz kojeg `webhook-mor` radi), pa se koristi samo u CI koraku koji tajne
 sam prosljeđuje; skripta to i ispiše kao upozorenje.
 
-Preflight **nije** dio `npm run check` jer traži živi Supabase CLI i povezan projekt. To znači da ga
-netko mora pokrenuti: korak je ovdje, neposredno prije `supabase functions deploy`.
+Preflight **nije** dio `npm run check`: `check` se vrti bez živog Supabase CLI-ja i bez povezanog
+projekta, pa produkcijske tajne uopće ne vidi. Zato ga ne čuva zeleni `check` nego **put kojim se
+deploy naplate ide**: `npm run deploy:naplata` je jedina dokumentirana naredba za te dvije funkcije
+i preflight joj je prvi korak, bez zastavice koja ga preskače. Tko naplatu deploya golom CLI
+naredbom zaobilazi provjeru; taj put runbook više ne nudi.
+
+Skripta zove Supabase CLI iz `node_modules/.bin` (repo ga isporučuje kao devDependency), pa ne ovisi
+o globalnoj instalaciji. Ako se popis ipak ne može pročitati, ispiše se **i putanja CLI-ja koji je
+pokušan i doslovna poruka providera**, da se "nisam prijavljen" ne pomiješa s "tajna je prazna".
 
 ### 5.1 Ishodi u `webhook_events` (tko ih gleda i kako)
 
@@ -167,6 +185,7 @@ ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao service role):
 |---|---|---|
 | `needs_manual_link` | **plaćena** narudžba bez `meta.custom_data.user_id` (kupnja izvan našeg checkouta ili izgubljen custom_data). Novac je naplaćen, prava pristupa nema. | ručno veži na račun, vidi postupak niže |
 | `ignored` uz `outcome_detail` koji počinje s `order_status:` | narudžba nije plaćena (`pending`, `failed`, prazan status) | provjeri u LS sučelju; ako je naplaćena, radi se o promjeni statusa kod providera i to je kvar koda, ne podatka |
+| `ignored` uz `outcome_detail` koji počinje s `povrat_bez_order_refunded:` | stigao je događaj koji **nosi vraćen novac**, ali mu `data.id` nije id narudžbe (npr. `subscription_payment_refunded`, gdje je to id pretplatničkog računa) | provjeri u LS sučelju o kojoj se narudžbi radi i povrat obradi ručno; handler namjerno **ne** piše po tom id-u, jer bi gasio tuđi `entitlement`. Ako ovo stiže redovito, makni taj događaj iz pretplate (korak 4.4) |
 | `ignored` uz `outcome_detail` koji počinje s `nepodrzan_dogadjaj:` | pretplaćen je događaj koji nam ne treba | makni ga iz pretplate u LS (korak 4.4) |
 | `refused` | tuđa trgovina ili testni način rada (`store_mismatch`, `store_unverifiable`, `test_mode_refused`) | provjeri `LEMONSQUEEZY_STORE_ID` i `LS_ALLOW_TEST_MODE` |
 | `unknown_product` | `variant_id` nije u `products.mor_product_id` | popuni mapiranje pa replayaj |
@@ -174,17 +193,17 @@ ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao service role):
 
 ```sql
 -- Neriješeni događaji koje indeks NE pokriva (pokreni barem jednom dnevno u tjednu lansiranja).
-select id, created_at, event_name, order_id, outcome, outcome_detail
+select id, received_at, event_name, order_id, outcome, outcome_detail
 from webhook_events
 where outcome in ('needs_manual_link', 'ignored', 'refused')
-order by created_at desc
+order by received_at desc
 limit 100;
 
 -- Samo plaćene narudžbe koje čekaju ručno vezivanje.
-select id, created_at, order_id, raw_payload -> 'data' -> 'attributes' ->> 'user_email' as email
+select id, received_at, order_id, raw_payload -> 'data' -> 'attributes' ->> 'user_email' as email
 from webhook_events
 where outcome = 'needs_manual_link'
-order by created_at asc;
+order by received_at asc;
 ```
 
 **Ručno vezivanje (`needs_manual_link`)**, kao service role:
