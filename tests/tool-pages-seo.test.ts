@@ -60,10 +60,13 @@ describe('landing_usporedba.html mobilni nav: "Svi alati" (uskladjeno s kartice.
   // navu, ali to je vec postojeci, nepovezan gap koji ovaj popravak ne dira i ne popravlja.
   it('#mobileNav sadrzi link na alati.html', () => {
     const html = head('landing_usporedba.html');
-    // [^>]* na otvorenom div tagu: robusno na dodatne atribute (npr. role/aria-label) koji
-    // ne mijenjaju identitet elementa.
-    const nav = html.match(/<div class="mobile-nav" id="mobileNav"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
-    expect(nav).toContain('<a href="alati.html">Svi alati</a>');
+    // ALIGNMENT Z15 (2026-09-23): mobilni izbornik je od tada sistemski list iz `site-chrome`
+    // (`<nav class="site-chrome__sheet" id="mobileNav">`), a ne `<div class="mobile-nav">` s tri
+    // rucna linka; natpis je "Pribor", a odrediste `/alati.html`. Tvrdnja ostaje ista: mobilni
+    // izbornik ove stranice MORA voditi na rasadnik alata.
+    const nav = html.match(/<nav class="site-chrome__sheet" id="mobileNav"[\s\S]*?<\/nav>/)?.[0] ?? '';
+    expect(nav, 'sentinel: nema mobilnog lista #mobileNav').not.toBe('');
+    expect(nav).toContain('href="/alati.html"');
   });
 });
 
