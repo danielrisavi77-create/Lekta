@@ -123,12 +123,12 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#radDocBar')).toBeVisible();
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
-  // ZNACKA "Lokalno" u zaglavlju je NAMJERNO skrivena na uskom zaslonu (`page-app.css`,
-  // `max-width:720px`), jer ista tvrdnja stoji napisana u tijelu (`workspace-viewports.spec.ts` to
-  // vec mjeri na 390 px). Ovaj spec prvi put ulazi u `mobile-webkit` (iPhone 13, 390 px) korakom D
-  // 2026-09-13, bez lokalnog prolaza; dodan je ovdje, ne u CSS-u, koji ostaje netaknut.
-  const sirok = (page.viewportSize()?.width ?? 0) > 720;
-  await expect(page.locator('.site-chrome__doc .local-badge')).toBeVisible({ visible: sirok });
+  // ZNACKA "Lokalno" je od Z15 KRUGA POPRAVKA preselila iz pilule trake (`.site-chrome__doc`) u
+  // `#radDocMeta`, redak u tijelu ispod trake (izmjereno: pilula se na 1180px lomila u cetiri
+  // retka dok je znacku, spremanje i gumb nove verzije nosila zajedno s tockom i imenom). Znacka
+  // vise ne dijeli visinu zaglavlja sa stepperom, pa vise nema razloga da je siri zaslon skriva;
+  // ostaje vidljiva na svakoj sirini, dok postoji dokument.
+  await expect(page.locator('#radDocMeta .local-badge')).toBeVisible();
 
   // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
   // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav

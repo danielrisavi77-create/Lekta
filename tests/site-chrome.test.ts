@@ -639,22 +639,114 @@ describe('Z15 stanje nakon skrola', () => {
     // nasla u KOMENTARU koji opisuje stari kvar. Gard koji cita komentar ne mjeri stil.
     const css = bezKomentara(read('src/shared/site-chrome.css'));
     expect(css).toContain('.site-chrome[data-site-chrome="workspace"] .site-chrome__mid');
-    // Znacka "Lokalno" i ocjena i dalje odlaze na 720px, kako je odluceno prije Z15.
-    expect(css).toMatch(/@media \(max-width: 720px\) \{\s*\.site-chrome__doc \.local-badge/);
+    // Ocjena i dalje odlazi na 720px, kako je odluceno prije Z15 (znacka "Lokalno" je od ovog
+    // kruga popravka preselila iz trake u tijelo, pa vise nije njen sadrzaj).
+    expect(css).toMatch(/@media \(max-width: 720px\) \{\s*\.site-chrome__score/);
   });
 
-  it('zaglavlje `/rad/` na desktopu ostaje jedan red: bez wrapa NA SREDINI ili sa zbijenom znackom', () => {
-    // happy-dom ne racuna layout (nema pravog visinskog mjerenja), pa je tvrdnja STRUKTURNA:
-    // ili `.site-chrome__mid` na baznoj razini (izvan svih @media upita) nema `flex-wrap: wrap`,
-    // ili znacka "Lokalno" u traci dokumenta ima zbijeni oblik koji je mjeren i ne gura sirinu
-    // (5px/10px padding, 11px font - vidi komentar uz `.site-chrome__doc .local-badge` gore).
-    // Vizualnu visinu na 1180 px mjeri orkestrator (Playwright nije dio ovog kruga gatea).
-    const puni = bezKomentara(read('src/shared/site-chrome.css'));
-    const prviMedia = puni.indexOf('@media');
-    const bazniSloj = prviMedia === -1 ? puni : puni.slice(0, prviMedia);
-    const midWrapa = /\.site-chrome__mid\s*\{[^}]*flex-wrap:\s*wrap/.test(bazniSloj);
-    const znackaZbijena = /\.site-chrome__doc \.local-badge\s*\{[^}]*margin-top:\s*0[^}]*padding:\s*5px 10px[^}]*font-size:\s*var\(--fs-mono-label\)/.test(bazniSloj);
-    expect(midWrapa && !znackaZbijena, 'ni bez wrapa ni sa zbijenom znackom').toBe(false);
+  /**
+   * KRUG POPRAVKA (izmjereno na snimkama): sredina radne povrsine se na 1180px lomila u cetiri
+   * retka, jer je pilula `.site-chrome__doc` uz tocku i ime nosila i "Spremljeno HH:MM", znacku
+   * "Lokalno" i gumb "Ucitaj novu verziju ovog rada". Popravak razdvaja SADRZAJ (pilula nosi samo
+   * tocku, ime, ocjenu) od SMJESTAJA (sredina je na workspaceu IZRICITO stupac: pilula pa stepper,
+   * ne oslanjanje na `flex-wrap`), i preseljava preostala tri elementa u tijelo.
+   */
+  it('KRUG POPRAVKA: sredina radne povrsine je IZRICITO dvoredna (stupac), ne oslonjena na wrap', () => {
+    const bazniSloj = (() => {
+      const puni = bezKomentara(read('src/shared/site-chrome.css'));
+      const prviMedia = puni.indexOf('@media');
+      return prviMedia === -1 ? puni : puni.slice(0, prviMedia);
+    })();
+    const pravilo = bazniSloj.match(/\.site-chrome\[data-site-chrome="workspace"\] \.site-chrome__mid\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(pravilo, 'sentinel: nema pravila za sredinu na workspaceu u baznom sloju').not.toBe('');
+    expect(pravilo).toMatch(/flex-direction:\s*column/);
+    expect(pravilo).not.toMatch(/flex-wrap:\s*wrap\b/);
+  });
+
+  it('KRUG POPRAVKA: nakon skrola se sredina vraca u JEDAN red (prizor "03 NAKON SKROLA")', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    const pravilo = css.match(/\.site-chrome--scrolled\[data-site-chrome="workspace"\] \.site-chrome__mid\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(pravilo, 'sentinel: nema pravila za tanko stanje sredine na workspaceu').not.toBe('');
+    expect(pravilo).toMatch(/flex-direction:\s*row/);
+  });
+
+  it('KRUG POPRAVKA: workspace traka NE prikazuje cetiri odredista, ni na jednoj sirini', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    const bazniSloj = (() => {
+      const prviMedia = css.indexOf('@media');
+      return prviMedia === -1 ? css : css.slice(0, prviMedia);
+    })();
+    // Pravilo je u BAZNOM sloju (izvan @media), pa vrijedi na svakoj sirini, ne samo na uskoj
+    // gdje ih vec skriva zajednicko mobilno pravilo za sve varijante.
+    expect(bazniSloj).toMatch(/\.site-chrome\[data-site-chrome="workspace"\] \.site-chrome__dests[^{]*\{[^}]*display:\s*none/s);
+  });
+
+  it('MUTACIJA: uklonjeno pravilo za sakrivanje odredista na workspaceu pada', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    // BASELINE.
+    expect(css).toContain('.site-chrome[data-site-chrome="workspace"] .site-chrome__dests');
+    const bezPravila = css.replace(/\.site-chrome\[data-site-chrome="workspace"\] \.site-chrome__dests,\r?\n\.site-chrome\[data-site-chrome="workspace"\] \.site-chrome__hairline \{ display: none; \}\r?\n/, '');
+    expect(bezPravila, 'podmetanje se nije primilo; provjeri tocan tekst pravila').not.toBe(css);
+    expect(bezPravila).not.toContain('.site-chrome[data-site-chrome="workspace"] .site-chrome__dests');
+  });
+
+  it('KRUG POPRAVKA: pilula `/rad/` NE sadrzi vise znacku, spremanje ni gumb nove verzije', () => {
+    const header = zaglavlje(read('rad/index.html'));
+    const od = header.indexOf('id="radDocBar"');
+    expect(od, 'sentinel: nema #radDocBar').toBeGreaterThanOrEqual(0);
+    const doIdx = header.indexOf('<ol class="site-chrome__steps"', od);
+    expect(doIdx, 'sentinel: nema stepera nakon pilule').toBeGreaterThan(od);
+    const pilula = header.slice(od, doIdx);
+    expect(pilula).not.toContain('local-badge');
+    expect(pilula).not.toContain('data-save-state');
+    expect(pilula).not.toContain('data-testid="load-new-version"');
+    // BASELINE: pilula i dalje nosi tocku, ime i ocjenu.
+    expect(pilula).toContain('id="radDocName"');
+    expect(pilula).toContain('data-site-chrome-score');
+  });
+
+  it('KRUG POPRAVKA: znacka, spremanje i gumb nove verzije su PRISUTNI u tijelu rute, ne izgubljeni', () => {
+    const rad = read('rad/index.html');
+    const mainOd = rad.indexOf('<main id="workspace"');
+    const mainDo = rad.indexOf('</main>');
+    const tijelo = rad.slice(mainOd, mainDo);
+    expect(tijelo, 'sentinel: nema #radDocMeta u tijelu').toContain('id="radDocMeta"');
+    expect(tijelo).toContain('local-badge');
+    expect(tijelo).toContain('data-privacy-badge');
+    expect(tijelo).toContain('id="radDocSave"');
+    expect(tijelo).toContain('data-save-state="idle"');
+    expect(tijelo).toContain('id="radDocNewVersion"');
+    expect(tijelo).toContain('data-testid="load-new-version"');
+  });
+
+  it('MUTACIJA: brisanje #radDocMeta iz tijela vraca elemente u izgubljeno stanje', () => {
+    const rad = read('rad/index.html');
+    const od = rad.indexOf('<div class="rad-doc-meta shell hidden" id="radDocMeta">');
+    expect(od, 'sentinel: nema #radDocMeta bloka').toBeGreaterThanOrEqual(0);
+    const doIdx = rad.indexOf('</div>', rad.indexOf('radDocNewVersionInput', od)) + '</div>'.length;
+    const bezBloka = rad.slice(0, od) + rad.slice(doIdx);
+    expect(bezBloka).not.toBe(rad);
+    expect(bezBloka).not.toContain('id="radDocMeta"');
+    // `data-testid="load-new-version"` se NE koristi ovdje: tekst se pojavljuje i u OBJASNJENJU
+    // (komentar iznad bloka, koji ostaje), pa bi test bio slijep na stvarno brisanje. `id=` gumba
+    // taj sukob nema.
+    expect(bezBloka).not.toContain('id="radDocNewVersion"');
+  });
+
+  it('KRUG POPRAVKA: ime dokumenta u pilili ima nowrap + ellipsis u CSS-u, ne lomi u vise redaka', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    const pravilo = css.match(/\.rad-doc-name\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(pravilo, 'sentinel: nema pravila za .rad-doc-name').not.toBe('');
+    expect(pravilo).toMatch(/white-space:\s*nowrap/);
+    expect(pravilo).toMatch(/text-overflow:\s*ellipsis/);
+    expect(pravilo).toMatch(/overflow:\s*hidden/);
+  });
+
+  it('MUTACIJA: brisanje nowrap/ellipsis pravila s imena dokumenta pada', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    const bezPravila = css.replace(/\.rad-doc-name\s*\{[^}]*\}\n?/, '');
+    expect(bezPravila, 'podmetanje se nije primilo; provjeri tocan tekst selektora').not.toBe(css);
+    expect(bezPravila.match(/\.rad-doc-name\s*\{[^}]*\}/)).toBeNull();
   });
 
   it('mobilna mreza ima IZRICITO mjesto: logo i kontrole u prvom redu, sredina u drugom', () => {

@@ -147,21 +147,42 @@ describe('ruta /rad/', () => {
   });
 
   /**
-   * C7: indikator spremanja je TRAJNO stanje unutar `#radDocBar`, obrnuto od `#workspace-status`:
+   * C7: indikator spremanja je TRAJNO stanje unutar `#radDocMeta`, obrnuto od `#workspace-status`:
    * bez `aria-live` i bez `role=status`, inace bi svaki klik ponavljao "Spremljeno" citacu ekrana.
+   *
+   * KRUG POPRAVKA (Z15, izmjereno na snimkama): do ovog kruga je `#radDocSave` zivio unutar
+   * `#radDocBar` (pilula u traci), koja se na 1180px lomila u vise redaka jer joj je nedostajalo
+   * prostora za "Spremljeno HH:MM", znacku i gumb nove verzije. Sva tri su preseljena u
+   * `#radDocMeta`, novi redak u tijelu ispod trake; sama tvrdnja (bez zive regije) ostaje ista,
+   * mijenja se samo mjesto.
    */
-  it('#radDocSave stoji unutar #radDocBar i NEMA aria-live ni role=status', () => {
-    const bar = RAD.indexOf('id="radDocBar"');
-    expect(bar, 'sentinel: nema #radDocBar').toBeGreaterThanOrEqual(0);
-    const kraj = RAD.indexOf('</div>', bar);
-    const unutar = RAD.slice(bar, kraj);
+  it('#radDocSave stoji unutar #radDocMeta i NEMA aria-live ni role=status', () => {
+    const meta = RAD.indexOf('id="radDocMeta"');
+    expect(meta, 'sentinel: nema #radDocMeta').toBeGreaterThanOrEqual(0);
+    const kraj = RAD.indexOf('</div>', meta);
+    const unutar = RAD.slice(meta, kraj);
     const tag = unutar.match(/<span[^>]*id="radDocSave"[^>]*>/)?.[0];
-    expect(tag, '#radDocSave mora biti unutar #radDocBar').toBeTruthy();
+    expect(tag, '#radDocSave mora biti unutar #radDocMeta').toBeTruthy();
     expect(tag).not.toContain('aria-live');
     expect(tag).not.toContain('role=');
     expect(tag).toContain('hidden');
     // MUTACIJA (kopija HTML-a): ziva regija na indikatoru mora pasti na istoj tvrdnji.
     const mutiran = tag!.replace('id="radDocSave"', 'id="radDocSave" aria-live="polite"');
     expect(mutiran.includes('aria-live')).toBe(true);
+  });
+
+  /**
+   * KRUG POPRAVKA (Z15): pilula `#radDocBar` u traci vise NE smije nositi ova tri elementa, jer je
+   * upravo njihov smjestaj unutar pilule izmjereno lomio zaglavlje na 1180px u cetiri retka.
+   */
+  it('#radDocBar (pilula u traci) vise NE nosi znacku, spremanje ni gumb nove verzije', () => {
+    const bar = RAD.indexOf('id="radDocBar"');
+    expect(bar, 'sentinel: nema #radDocBar').toBeGreaterThanOrEqual(0);
+    const kraj = RAD.indexOf('<ol class="site-chrome__steps"', bar);
+    expect(kraj, 'sentinel: nema stepera nakon pilule').toBeGreaterThan(bar);
+    const pilula = RAD.slice(bar, kraj);
+    expect(pilula).not.toContain('id="radDocSave"');
+    expect(pilula).not.toContain('local-badge');
+    expect(pilula).not.toContain('id="radDocNewVersion"');
   });
 });

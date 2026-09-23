@@ -130,13 +130,13 @@ for (const { w, h, ime } of SIRINE) {
     await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
     await expect(page.locator('#radDocName')).toHaveText(DUGO_IME);
     await postaja(page, w, 'Profil');
-    // Na uskom zaslonu znacka "Lokalno" u zaglavlju ODLAZI (ista tvrdnja stoji u tijelu): do koraka D je
-    // to pravilo gadjalo klasu koje nema (`.rad-doc-local`), pa je znacka bila jedan od cetiri retka
-    // kojima je traka dokumenta na 390 px prerasla navigaciju (111 px u 66 px). Mjeri se computed
-    // `display`, ne prisutnost pravila.
+    // ZNACKA "Lokalno" JE OD Z15 KRUGA POPRAVKA U TIJELU, NE VISE U ZAGLAVLJU. Do ovog kruga je
+    // zivjela u pilili `.site-chrome__doc` i na uskom zaslonu je odlazila (`display:none`), jer je
+    // dijelila visinu zaglavlja sa stepperom i imenom. Sad je u `#radDocMeta`, ispod trake, gdje
+    // visina zaglavlja nije ogranicenje, pa ostaje vidljiva i na 390 px.
     if (w === 390) {
-      const znacka = await page.locator('.site-chrome__doc .local-badge').evaluate((el) => getComputedStyle(el).display);
-      expect(znacka, 'znacka u zaglavlju mora otici na 390 px').toBe('none');
+      const znacka = await page.locator('#radDocMeta .local-badge').evaluate((el) => getComputedStyle(el).display);
+      expect(znacka, 'znacka u tijelu mora ostati vidljiva i na 390 px').not.toBe('none');
 
       // LJEPLJIVO ZAGLAVLJE IMA PRORACUN, I TO JE NOVA OSNOVA GARDA (Z15, krug popravka).
       //
