@@ -70,3 +70,50 @@ describe('trapModal: povrat fokusa se ne oslanja na proteklo vrijeme', () => {
     expect(document.activeElement, 'WebKit put mora i dalje vracati fokus na stvarni okidac').toBe(trigger);
   });
 });
+
+/**
+ * NALAZ (2026-09-23): isti povrat fokusa pada u WebKitu iz DRUGOG razloga, koji je gornji popravak
+ * propustio. WebKit gumb ne fokusira na klik, ali fokus ne ostavlja ni na miru: fokusira NAJBLIZEG
+ * fokusabilnog PRETKA kliknutog elementa. Na `/rad/` je to `<main id="workspace">`, fokusabilan
+ * (`tabindex="-1"`) jer je meta preskocne poveznice (`src/shared/skip-link.ts`).
+ *
+ * IZMJERENO 2026-09-23 (`mobile-webkit`, sonda nad `/rad/`, capture slusaci na dokumentu):
+ *
+ *     17358 ms  pointerdown  BUTTON  (unutar [data-change-profile])
+ *     17358 ms  focusin      MAIN#workspace
+ *     17370 ms  click        BUTTON  (unutar [data-change-profile])
+ *
+ * Taj `focusin` dolazi iz ISTE geste i PRIJE `click`-a, pa je gornji slusac brisao zapis prije
+ * nego ga je `trapModal` stigao procitati; `_modalReturnFocus` je padao na `document.activeElement`,
+ * dakle na `<main>`. Mjereno nad zatecenim masterom (45208425): 9 od 10 prolaza
+ * `tests/ux/workspace-entry.spec.ts` ("list profila", mobile-webkit) palo je na toj tvrdnji.
+ *
+ * MUTACIJA (izvedena): u `modal-utils.ts` vracen bezuvjetni `_lastPointerTarget = null` -> test
+ * ispod pada (fokus zavrsi na `<main>`), dok prvi test u ovoj datoteci i dalje prolazi, pa je
+ * pokriveno oboje: i sto novo pravilo mora propustiti i sto i dalje mora potrositi.
+ */
+describe('trapModal: preglednik koji fokusira PRETKA okidaca', () => {
+  it('fokus se vraca na okidac kad je fokus usput otisao na njegova fokusabilnog pretka', () => {
+    document.body.innerHTML = `
+      <main id="workspace" tabindex="-1">
+        <button id="trigger3" data-change-profile>Promijeni</button>
+      </main>
+      <div id="modal3"><button class="modal-close">Zatvori</button></div>
+    `;
+    const trigger = document.getElementById('trigger3') as HTMLButtonElement;
+    const glavni = document.getElementById('workspace') as HTMLElement;
+    const modal = document.getElementById('modal3') as HTMLElement;
+
+    // Redoslijed dogadjaja tocno kako ga je sonda izmjerila u WebKitu.
+    trigger.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    glavni.focus();
+    // Sentinel: simulacija je stvarno pomaknula fokus na pretka; bez toga bi tvrdnja ispod
+    // prolazila i nad testom koji nista ne radi.
+    expect(document.activeElement, 'sentinel: pretak nije primio fokus').toBe(glavni);
+
+    trapModal(modal);
+    releaseModal(modal);
+
+    expect(document.activeElement, 'fokus se nije vratio na okidac nego na njegova pretka').toBe(trigger);
+  });
+});

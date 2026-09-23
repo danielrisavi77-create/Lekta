@@ -47,7 +47,38 @@ document.addEventListener(
   },
   true,
 );
-document.addEventListener('focusin', () => {
+/**
+ * TRECI ISPRAVAK (2026-09-23): "sljedeci focusin" NIJE uvijek dokaz da je zapis odradio svoje.
+ *
+ * WebKit gumbe ne fokusira na klik, ali fokus ne ostavlja ni na miru: fokusira NAJBLIZEG
+ * fokusabilnog PRETKA kliknutog elementa. Na `/rad/` je to `<main id="workspace">`, koji je
+ * fokusabilan (`tabindex="-1"`) jer je meta preskocne poveznice (`src/shared/skip-link.ts`).
+ *
+ * IZMJERENO 2026-09-23 (`mobile-webkit`, sonda nad `/rad/`, capture slusaci na dokumentu):
+ *
+ *     17358 ms  pointerdown  BUTTON  (unutar [data-change-profile])
+ *     17358 ms  focusin      MAIN#workspace
+ *     17370 ms  click        BUTTON  (unutar [data-change-profile])
+ *
+ * Taj `focusin` dolazi iz ISTE geste kao i `pointerdown`, i to PRIJE `click`-a, pa je brisao
+ * zapis prije nego ga je `trapModal` uopce stigao procitati. `_modalReturnFocus` je zatim padao
+ * na `document.activeElement`, dakle na `<main>`, i Escape je fokus vracao na `<main>` umjesto
+ * na "Promijeni". Mjereno nad zatecenim masterom: 9 od 10 prolaza
+ * `tests/ux/workspace-entry.spec.ts` ("list profila") palo je na toj tvrdnji.
+ *
+ * PRAVILO JE ZATO SUZENO, NE UKINUTO: zapis se trosi na svaki stvaran pomak fokusa, OSIM kad je
+ * novo fokusirano cvoriste PREDAK zapisanog elementa. Samo taj slucaj je WebKitova zamjena za
+ * fokus na gumbu i samo on dolazi iz iste geste. Tipkovnicki put ostaje siguran bez sata: fokus
+ * na samom okidacu je pomak na element koji NIJE predak starijeg zapisa, pa ga brise.
+ */
+document.addEventListener('focusin', (e) => {
+  const cilj = e.target;
+  if (
+    _lastPointerTarget
+    && cilj instanceof Node
+    && cilj !== _lastPointerTarget
+    && cilj.contains(_lastPointerTarget)
+  ) return;
   _lastPointerTarget = null;
 });
 
