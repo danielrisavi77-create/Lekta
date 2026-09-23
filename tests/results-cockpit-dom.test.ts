@@ -4,8 +4,6 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import {
-  cockpitSteps,
-  cockpitStepsHtml,
   isGeneralRepairEntry,
   renderResultsCockpit,
   resultRendererFor,
@@ -354,42 +352,33 @@ describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
 
   const klik = (el: Element | null) => (el as HTMLElement | null)?.click();
 
-  it('stepper ima cetiri koraka i tocno jedan aktivan', () => {
+  /**
+   * STEPPER JE OD Z15 U TRAKI, NE U KOKPITU.
+   *
+   * Do Z15 ga je crtao ovaj modul, pa je na `/rad/` stajao ispod ljepljive trake i bio
+   * djelomicno skriven (vidljivo na snimci). Model i crtanje su preseljeni u
+   * `src/shared/site-chrome.ts`, a tvrdnje o cetiri koraka, jednom aktivnom i `aria-disabled`
+   * nad neaktivnima zive u `tests/site-chrome.test.ts`, nad markupom `rad/index.html`.
+   *
+   * Ovdje ostaje tvrdnja koja pripada KOKPITU: da koraka u njemu vise NEMA. Bez nje bi selidba
+   * mogla ostaviti drugi, mrtvi stepper, dakle drugi izvor istine o istom vodicu.
+   */
+  it('kokpit vise NE crta stepper: on je u traki (Z15)', () => {
     const { mount } = renderaj();
-    const koraci = [...mount.querySelectorAll('[data-cockpit-steps] .cockpit-step')];
-
-    expect(koraci).toHaveLength(4);
-    expect(koraci.map((k) => k.textContent)).toEqual(['01 Nalazi', '02 Plan', '03 Plaćanje', '04 Rezultat']);
-    expect(koraci.filter((k) => k.getAttribute('aria-current') === 'step')).toHaveLength(1);
-    expect(koraci[0].getAttribute('aria-current')).toBe('step');
-    expect(koraci[0].classList.contains('cockpit-step--active')).toBe(true);
+    expect(mount.querySelectorAll('[data-cockpit-steps]')).toHaveLength(0);
+    expect(mount.querySelectorAll('.cockpit-step')).toHaveLength(0);
+    // BASELINE: kokpit se doista iscrtao, pa tvrdnja iznad nije vakuumska nad praznim mountom.
+    expect(mount.querySelector('[data-cockpit-verdict-sheet]')).not.toBeNull();
   });
 
-  it('neaktivni koraci su aria-disabled, a NE disabled, jer nisu kontrole', () => {
+  it('MUTACIJA: vraceni stepper u kokpitu bi pao na istoj tvrdnji', () => {
     const { mount } = renderaj();
-    const neaktivni = [...mount.querySelectorAll('[data-cockpit-steps] .cockpit-step')].slice(1);
-
-    expect(neaktivni).toHaveLength(3);
-    for (const korak of neaktivni) {
-      expect(korak.getAttribute('aria-disabled')).toBe('true');
-      // `disabled` na `li` preglednik tiho zanemari, pa bi korak izgledao dostupan.
-      expect(korak.hasAttribute('disabled')).toBe(false);
-      expect(korak.tagName).toBe('LI');
-    }
-  });
-
-  it('stanje analize nema korake, jer nalaza jos nema', () => {
-    expect(cockpitSteps('scanning')).toEqual([]);
-    expect(cockpitStepsHtml(cockpitSteps('scanning'))).toBe('');
-    expect(cockpitSteps('findings')).toHaveLength(4);
-  });
-
-  it('MUTACIJA: dva aktivna koraka i korak s `disabled` padaju na istim tvrdnjama', () => {
-    const dvaAktivna = cockpitSteps('findings').map((k) => ({ ...k, active: true }));
-    const html = cockpitStepsHtml(dvaAktivna);
-    expect((html.match(/aria-current="step"/g) ?? []).length).not.toBe(1);
-    // Kontrola: neizmijenjen niz i dalje daje tocno jedan aktivan.
-    expect((cockpitStepsHtml(cockpitSteps('findings')).match(/aria-current="step"/g) ?? []).length).toBe(1);
+    const podmetnut = mount.ownerDocument.createElement('ol');
+    podmetnut.dataset.cockpitSteps = '';
+    podmetnut.innerHTML = '<li class="cockpit-step">01 Nalazi</li>';
+    mount.prepend(podmetnut);
+    expect(mount.querySelectorAll('[data-cockpit-steps]')).toHaveLength(1);
+    expect(mount.querySelectorAll('.cockpit-step')).toHaveLength(1);
   });
 
   it('list presude nosi TOCNO JEDAN primarni gumb', () => {

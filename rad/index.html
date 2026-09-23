@@ -10,35 +10,69 @@
 <script>try{var _e=document.documentElement,_t=localStorage.getItem('lekta.theme')||'dark';if(_t!=='system')_e.dataset.theme=_t;var _d=JSON.parse(localStorage.getItem('lekta.display')||'{}')||{};if(_d.readingFont&&_d.readingFont!=='default')_e.dataset.readingFont=_d.readingFont;if(_d.contrast==='high')_e.dataset.contrast='high';if(_d.motion==='reduce')_e.dataset.motion='reduce';}catch(e){}</script>
 </head>
 <body>
-<header class="topbar">
-  <!-- ZAGLAVLJE RADNE POVRSINE, NE MARKETINGA. Brif vlasnika: "Marketing je zavrsio onog
-       trenutka kada je student ubacio svoj diplomski." Do 2026-09-07 je ovdje stajalo 12
-       marketinskih poveznica (Kako radi, Video, Usporedba, Benchmark, Paketi, Pitanja, sest
-       alata) plus CTA "Provjeri rad" koji vodi na stranicu na kojoj korisnik vec jest.
-       Ostaje ono sto radnoj povrsini treba: tko si, sto je ucitano, i gdje se to obraduje. -->
-  <nav class="shell nav nav-rad" aria-label="Radna povrsina">
-    <a class="logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <div class="rad-doc hidden" id="radDocBar">
-      <span class="rad-doc-name" id="radDocName"></span>
-      <!-- C7: STANJE LOKALNOG ZAPISA. Trajno stanje, ne obavijest: BEZ role=status i BEZ aria-live,
-           inace bi svaki klik ponavljao "Spremljeno" citacu ekrana. Jednokratne obavijesti ostaju u
-           #workspace-status. Pise ga iskljucivo save-indicator.ts; skriven dok nema sto reci. -->
-      <span class="rad-doc-save" id="radDocSave" data-save-state="idle" hidden></span>
-      <!-- ZNACKA GOVORI O ANALIZI, i to je vazna razlika. Analiza radi u pregledniku i dokument
-           ne odlazi nikamo. Automatski popravak je jedini tok koji dokument SALJE na posluzitelj,
-           i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora
-           mijenjati stanje, inace postaje tvrdnja koja vise nije istinita. -->
-      <span class="local-badge" data-privacy-badge title="Analiza radi u tvom pregledniku. Dokument ne odlazi s uredaja. Salje se samo ako narucis automatski popravak."><i data-lucide="lock"></i> Lokalno na ovom uređaju</span>
-      <!-- T12: nova verzija ISTOG rada. Datoteka ide kroz isti prijem kao prva; usporedbu nalaza radi ruta (revisions.ts). -->
-      <button type="button" class="btn btn-ghost btn-sm rad-doc-new-version hidden" id="radDocNewVersion" data-testid="load-new-version">Učitaj novu verziju ovog rada</button>
-      <input type="file" id="radDocNewVersionInput" accept=".docx" class="sr-only" tabindex="-1" aria-hidden="true">
+<!-- TRAKA JE SUSTAV, NE PO STRANICI (ALIGNMENT Z15). Izgled je u `src/shared/site-chrome.css`,
+     ponasanje u `src/shared/site-chrome.ts` (kvacica, stanje skrola, lampa, mobilni list, koraci).
+     Markup je STATICAN i jednak na svim stranicama, jer ga produkcijski gardovi citaju iz HTML-a
+     i jer navigacija mora raditi bez JavaScripta; jednakost mjeri `tests/site-chrome.test.ts`. -->
+<header class="topbar site-chrome" data-site-chrome="workspace" data-site-chrome-active="" data-site-chrome-stage="findings">
+  <span class="site-chrome__thread" aria-hidden="true"></span>
+  <div class="shell site-chrome__bar">
+    <div class="site-chrome__left">
+      <a class="logo site-chrome__logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+      <span class="site-chrome__hairline" aria-hidden="true"></span>
+      <nav class="site-chrome__dests" data-site-chrome-dests aria-label="Glavna navigacija">
+        <span class="site-chrome__marker" data-site-chrome-marker aria-hidden="true"></span>
+        <a class="site-chrome__dest" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="tools" href="/alati.html">Pribor</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu</a>
+      </nav>
     </div>
-    <!-- Desna skupina ima vlastiti omotac: `margin-left:auto` je prije visio o `.nav-links`,
-         a i `#authEntry` se zna sakriti, pa bi poravnanje ovisilo o tome sto je trenutno vidljivo. -->
-    <div class="nav-rad-end">
-      <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
-      <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
-      <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i><span class="lampa-txt">Prikaz</span></button>
+      <div class="site-chrome__mid" data-site-chrome-mid>
+        <span class="site-chrome__doc hidden" id="radDocBar">
+          <span class="site-chrome__dot" aria-hidden="true"></span>
+          <span class="rad-doc-name" id="radDocName"></span>
+          <span class="site-chrome__score" data-site-chrome-score hidden></span>
+          <!-- C7: STANJE LOKALNOG ZAPISA. Trajno stanje, ne obavijest: BEZ role=status i BEZ aria-live,
+               inace bi svaki klik ponavljao "Spremljeno" citacu ekrana. Jednokratne obavijesti ostaju u
+               #workspace-status. Pise ga iskljucivo save-indicator.ts; skriven dok nema sto reci. -->
+          <span class="rad-doc-save" id="radDocSave" data-save-state="idle" hidden></span>
+          <!-- ZNACKA GOVORI O ANALIZI, i to je vazna razlika. Analiza radi u pregledniku i dokument
+               ne odlazi nikamo. Automatski popravak je jedini tok koji dokument SALJE na posluzitelj,
+               i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora
+               mijenjati stanje, inace postaje tvrdnja koja vise nije istinita. -->
+          <span class="local-badge" data-privacy-badge title="Analiza radi u tvom pregledniku. Dokument ne odlazi s uredaja. Salje se samo ako narucis automatski popravak."><i data-lucide="lock"></i> Lokalno na ovom uređaju</span>
+          <!-- T12: nova verzija ISTOG rada. Datoteka ide kroz isti prijem kao prva; usporedbu nalaza radi ruta (revisions.ts). -->
+          <button type="button" class="btn btn-ghost btn-sm rad-doc-new-version hidden" id="radDocNewVersion" data-testid="load-new-version">Učitaj novu verziju ovog rada</button>
+          <input type="file" id="radDocNewVersionInput" accept=".docx" class="sr-only" tabindex="-1" aria-hidden="true">
+        </span>
+        <ol class="site-chrome__steps" data-site-chrome-steps aria-label="Koraci popravka"><li class="site-chrome__step site-chrome__step--active" data-site-chrome-step="findings" aria-current="step"><span class="site-chrome__step-num">01</span> Nalazi</li><li class="site-chrome__step" data-site-chrome-step="plan" aria-disabled="true"><span class="site-chrome__step-num">02</span> Plan</li><li class="site-chrome__step" data-site-chrome-step="payment" aria-disabled="true"><span class="site-chrome__step-num">03</span> Plaćanje</li><li class="site-chrome__step" data-site-chrome-step="done" aria-disabled="true"><span class="site-chrome__step-num">04</span> Rezultat</li></ol>
+      </div>
+      <div class="site-chrome__right">
+        <a class="site-chrome__work" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi</a>
+        <!-- MJEDENA PLOCICA PROFILA. Ladica profila (Z13) jos ne postoji, pa gumb NOSI "Uskoro"
+             i aria-disabled, umjesto da se ponasanje izmislja unaprijed. Natpis je "Profil", ne
+             "FPZG · Dipl." iz predloska: kratica fakulteta i razine dolazi iz registra profila, a
+             registar je 194 KB koje traka ne smije ucitati na svakoj stranici (pitanje F8). -->
+        <button class="site-chrome__plate" type="button" data-site-chrome-profile aria-disabled="true" title="Uskoro"><span class="site-chrome__plate-dot" aria-hidden="true"></span>Profil</button>
+        <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
+        <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i><span class="lampa-txt">Prikaz</span></button>
+        <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
+        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
+      </div>
+  </div>
+  <nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">
+    <span class="site-chrome__sheet-eyebrow">Izbornik</span>
+    <span class="site-chrome__sheet-pecat" aria-hidden="true">Profil</span>
+    <a class="site-chrome__sheet-item" href="/">Provjeri rad<small class="site-chrome__sheet-note">besplatno</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi<small class="site-chrome__sheet-note">3 min</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik<small class="site-chrome__sheet-note" data-site-chrome-note="price"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="tools" href="/alati.html">Pribor<small class="site-chrome__sheet-note" data-site-chrome-note="tools"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu<small class="site-chrome__sheet-note" data-site-chrome-note="profiles"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi<small class="site-chrome__sheet-note" data-site-chrome-note="work"></small></a>
+    <div class="site-chrome__sheet-foot">
+      <span><a href="/privatnost.html">Privatnost</a> &middot; <a href="/uvjeti-koristenja.html">Uvjeti</a> &middot; <a href="/obrada-dokumenata.html">Obrada</a></span>
+      <button class="site-chrome__sheet-aa" type="button" data-site-chrome-display-proxy>Aa &middot; Prikaz</button>
     </div>
   </nav>
 </header>
@@ -183,7 +217,21 @@
   </div>
 </section>
 </main>
-<footer><div class="shell"><div class="footer-grid"><div class="footer-brand"><a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a><p class="footer-copy">Tehnička provjera i priprema akademskih radova. Aplikacija ne piše sadržaj rada i ne zamjenjuje mentora, knjižničara, lektora, službene fakultetske upute ni provjeru plagijata ili sličnosti (nije Turnitin).</p><span class="local-badge"><i data-lucide="lock"></i> Automatska provjera je lokalna</span></div><nav class="footer-col" aria-label="Proizvod"><span class="footer-col-h">Proizvod</span><a href="#analyzer">Provjera</a><a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a><a href="/saznaj-vise/#pricing">Paketi</a><a href="/pokrivenost.html">Pokrivenost profila</a><a href="/fakulteti/">Pravila po fakultetu</a></nav><nav class="footer-col" aria-label="Alati"><span class="footer-col-h">Alati</span><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></nav><nav class="footer-col" aria-label="Pravno"><span class="footer-col-h">Pravno</span><a class="footer-link-btn legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a><a class="footer-link-btn legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a><a class="footer-link-btn legal-open" data-legal="disclaimer" href="/odricanje-od-odgovornosti.html">Odricanje</a><a class="footer-link-btn legal-open" data-legal="purchase" href="/pravila-povrata.html">Pravila kupnje i povrata</a><a class="footer-link-btn legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a><a class="footer-link-btn legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a><a class="footer-link-btn legal-open" data-legal="guarantee" href="/garancija.html">Garancija</a></nav><nav class="footer-col" aria-label="Ostalo"><span class="footer-col-h">Ostalo</span><button class="footer-link-btn" id="privacySettingsBtn">Postavke privatnosti</button></nav></div><div class="footer-bottom"><span>© 2026 Lekta · Zagreb</span><span>Nije provjera plagijata · Nije službena potvrda fakulteta</span></div></div></footer>
+<!-- PODNOZJE, PRAVNI MINIMUM (ALIGNMENT Z15). Cetiri poveznice, "Sve pravno" i jedna recenica;
+     copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html` (prizor 06). -->
+<footer class="site-footer" data-site-footer="legal"><div class="shell site-footer__inner">
+  <nav class="site-footer__pravno" aria-label="Pravno">
+    <a class="legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a>
+    <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
+    <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
+    <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
+    <a class="site-footer__sve" href="/uvjeti-koristenja.html">Sve pravno &rarr;</a>
+    <!-- POSTAVKE PRIVATNOSTI OSTAJU U PODNOZJU RADNE POVRSINE. Gumb ozicuje app.ts; pravni
+         minimum bez njega bio bi uzi od zatecenog stanja, a privola se mora dati promijeniti. -->
+    <button class="footer-link-btn" id="privacySettingsBtn" type="button">Postavke privatnosti</button>
+  </nav>
+  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
+</div></footer>
 <div class="modal-backdrop hidden" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderTitle"><div class="modal"><div class="modal-head"><h3 id="orderTitle">Naruči uređivanje dokumenta</h3><button class="modal-close" id="closeModal" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><div class="form-grid"><div class="field"><label for="orderName">Ime i prezime</label><input class="input" id="orderName" autocomplete="name" maxlength="120"></div><div class="field"><label for="orderEmail">E-mail</label><input class="input" id="orderEmail" type="email" autocomplete="email" maxlength="180"></div><div class="field full"><label for="orderDeadline">Rok predaje</label><input class="input" id="orderDeadline" type="datetime-local"></div><div class="field full"><label for="orderNotes">Napomena</label><textarea id="orderNotes" rows="4" maxlength="2000" placeholder="Vrsta rada, fakultet, posebne upute mentora…"></textarea></div></div><div class="order-upload"><label for="orderDocument">Dokument za ručnu obradu</label><input id="orderDocument" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div class="order-file-meta" id="orderFileMeta">Možeš ponovno odabrati dokument ili poslati onaj koji je već učitan u analizator. Datoteka se šalje samo nakon potvrde narudžbe.</div></div><div class="consent-box"><label class="consent-row"><input type="checkbox" id="orderConsent"><span>Prihvaćam <button type="button" class="footer-link-btn legal-link legal-open" data-legal="terms">Uvjete korištenja</button> i potvrđujem da sam pročitao/la <button type="button" class="footer-link-btn legal-link legal-open" data-legal="privacy">Obavijest o privatnosti</button>. Razumijem da se dokument prenosi samo radi izvršenja naručene usluge.</span></label><label class="consent-row"><input type="checkbox" id="orderMarketing"><span>Želim primati povremene obavijesti o novim provjerama i popustima. Ovo nije uvjet narudžbe.</span></label></div><div class="production-state" id="productionState"></div><div class="order-status hidden" id="orderStatus" role="status" aria-live="polite"></div><div class="secure-order-note"><i data-lucide="lock"></i><span>Podaci automatske analize ne sadrže tekst rada. Kod ručne usluge šalju se samo podaci obrasca i dokument koji izričito odabereš.</span></div><div class="modal-actions"><button class="btn btn-secondary" id="cancelOrder">Odustani</button><button class="btn btn-primary" id="submitOrder">Pošalji narudžbu</button></div></div></div></div>
 
 <div class="modal-backdrop hidden" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyTitle"><div class="modal"><div class="modal-head"><h3 id="historyTitle">Lokalna povijest analiza</h3><button class="modal-close" id="closeHistory" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><p class="history-privacy">Pohranjuju se samo naziv datoteke, rezultat, odabrani profil i broj problema. Sadržaj dokumenta i sama Word datoteka ne spremaju se.</p><div class="history-list" id="historyList"></div><div class="modal-actions"><button class="btn btn-secondary" id="clearHistory">Obriši povijest</button><button class="btn btn-primary" id="closeHistoryBottom">Zatvori</button></div></div></div></div>

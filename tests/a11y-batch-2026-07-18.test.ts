@@ -163,12 +163,42 @@ describe('WCAG kontrast: tp-badge (AUD a11y #2)', () => {
   });
 });
 
-describe('mobileNav landmark + aria-current (AUD a11y #4)', () => {
-  it.each(PAGES_S_IZBORNIKOM)('%s: #mobileNav ima role=navigation i aria-label', (page) => {
-    const html = read(page);
-    const tag = html.match(/<div class="mobile-nav" id="mobileNav"([^>]*)>/)?.[1] ?? '';
-    expect(tag).toMatch(/role="navigation"/);
-    expect(tag).toMatch(/aria-label="Mobilna navigacija"/);
+/**
+ * MOBILNI IZBORNIK JE OD Z15 JEDAN LIST ZA CIJELI PROIZVOD (`src/shared/site-chrome.css` +
+ * `site-chrome.ts`), pa markup nije vise `<div class="mobile-nav" role="navigation">` nego
+ * `<nav class="site-chrome__sheet" id="mobileNav">`.
+ *
+ * TVRDNJA SE NIJE OSLABILA, nego preselila na novi element: `<nav>` JE navigacijska prekretnica
+ * po HTML-u (pa `role="navigation"` na njemu ne treba), a IME je i dalje obvezno, jer stranica
+ * nosi tri navigacije (traka, mobilni list, podnozje) i bez imena se citacu ekrana ne razlikuju.
+ * Popis stranica je ISTI kao prije; strukturu trake mjeri `tests/site-chrome.test.ts`.
+ */
+describe('mobileNav landmark + aria-label (AUD a11y #4, markup Z15)', () => {
+  /** Cista funkcija nad tekstom, pa se smije mutirati. */
+  const listJeImenovanLandmark = (html: string): boolean =>
+    /<nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">/.test(html);
+
+  it.each(PAGES_S_IZBORNIKOM)('%s: #mobileNav je <nav> s aria-label', (page) => {
+    expect(listJeImenovanLandmark(read(page))).toBe(true);
+  });
+
+  it('ulaz `/` nosi ISTI list, jer je traka od Z15 sustav, ne po stranici', () => {
+    // Do Z15 je `index.html` bio iznimka (rez navigacije 2026-09-06 mu je uzeo hamburger). Traka
+    // je sada jedna za sve rute, pa iznimka vise ne stoji.
+    expect(listJeImenovanLandmark(read('index.html'))).toBe(true);
+  });
+
+  it('MUTACIJA: izgubljeno ime i list koji nije landmark oba padaju', () => {
+    const html = read('alati.html');
+    const bezImena = html.replace('<nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">',
+      '<nav class="site-chrome__sheet" id="mobileNav">');
+    expect(bezImena, 'podmetanje se nije primilo; provjeri oznaku lista').not.toBe(html);
+    expect(listJeImenovanLandmark(bezImena)).toBe(false);
+    const div = html.replace('<nav class="site-chrome__sheet" id="mobileNav"', '<div class="site-chrome__sheet" id="mobileNav"');
+    expect(div).not.toBe(html);
+    expect(listJeImenovanLandmark(div)).toBe(false);
+    // BASELINE: neizmijenjena stranica je cista, inace bi obje tvrdnje bile vakuumske.
+    expect(listJeImenovanLandmark(html)).toBe(true);
   });
 });
 

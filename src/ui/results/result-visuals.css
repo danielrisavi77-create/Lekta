@@ -49,7 +49,6 @@
 
 /* ---- Zajednicki ulazni pokret ---------------------------------------------
    Svaki blok nosi --i (redni broj u sekvenci). Jedan razred na korijenu pokrece sve. */
-.result-cockpit .cockpit-steps,
 .result-cockpit .cockpit-sheet__lead,
 .result-cockpit .cockpit-ring-wrap,
 .result-cockpit .cockpit-section-heading,
@@ -59,7 +58,6 @@
   opacity: 0;
   transform: translateY(10px);
 }
-.result-cockpit[data-entered] .cockpit-steps,
 .result-cockpit[data-entered] .cockpit-sheet__lead,
 .result-cockpit[data-entered] .cockpit-ring-wrap,
 .result-cockpit[data-entered] .cockpit-section-heading,
@@ -71,7 +69,6 @@
   transition: opacity .5s var(--ck-ease), transform .5s var(--ck-ease);
   transition-delay: calc(var(--i, 0) * 70ms);
 }
-.result-cockpit .cockpit-steps { --i: 0; }
 .result-cockpit .cockpit-sheet__lead { --i: 1; }
 .result-cockpit .cockpit-ring-wrap { --i: 3; }
 .result-cockpit .cockpit-priority .cockpit-section-heading { --i: 5; }
@@ -92,37 +89,9 @@
   text-transform: uppercase;
 }
 
-.cockpit-steps {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .35rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-/* Pill je dopusten SAMO znackama, koracima i cipovima (design/README.md, Radiusi). */
-.cockpit-step {
-  display: inline-flex;
-  align-items: center;
-  gap: .45rem;
-  padding: .4rem .75rem;
-  border: 1px solid var(--ck-line);
-  border-radius: var(--radius-pill, 999px);
-  color: var(--ck-muted);
-  font-family: var(--mono, monospace);
-  font-size: .68rem;
-  letter-spacing: .06em;
-}
-/* AKTIVAN KORAK JE INVERZAN: tamna ploha, svijetli tekst. To je jedini korak koji se moze
-   raditi, pa je jedini koji smije nositi tezinu tinte. */
-.cockpit-step--active {
-  border-color: var(--ck-ink);
-  background: var(--ck-ink);
-  color: var(--paper, #F7F3E8);
-}
-.cockpit-step__num { font-variant-numeric: tabular-nums; opacity: .75; }
-.cockpit-step--active .cockpit-step__num { opacity: .6; }
+/* KORACI (.cockpit-steps/.cockpit-step) SU OD Z15 U TRAKI: `src/shared/site-chrome.css`.
+   Pravila su ovdje UKLONJENA, ne ostavljena "za slucaj": mrtvi selektor je drugi izvor
+   istine o istom elementu, i prvi koji se razidje. */
 
 /* ---- List presude ------------------------------------------------------------
    Jedan list nosi cijeli odgovor na "gdje sam i sto sad": eyebrow, presuda, sazetak,
@@ -768,7 +737,6 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
     transition: none !important;
     animation: none !important;
   }
-  .result-cockpit .cockpit-steps,
   .result-cockpit .cockpit-sheet__lead,
   .result-cockpit .cockpit-ring-wrap,
   .result-cockpit .cockpit-section-heading,

@@ -133,41 +133,51 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 </style>
 </head>
 <body>
-<header class="topbar">
-  <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="/#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <div class="nav-links">
-      <a href="/saznaj-vise/#how">Kako radi</a>
-      <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
-      <div class="nav-tools">
-        <button class="nav-tools-btn active" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">▾</span></button>
-        <div class="nav-tools-menu">
-          <a href="alati.html">Svi alati</a>
-          <a href="citat.html">Citat generator</a>
-          <a href="kartice.html">Brojač kartica</a>
-          <a href="naslovnica.html">Naslovnica</a>
-          <a class="active" aria-current="page" href="literatura.html">Sređivanje literature</a>
-          <a href="izjava.html">Izjava o izvornosti</a>
-        </div>
-      </div>
-      <a href="/saznaj-vise/#pricing">Paketi</a>
+<!-- TRAKA JE SUSTAV, NE PO STRANICI (ALIGNMENT Z15). Izgled je u `src/shared/site-chrome.css`,
+     ponasanje u `src/shared/site-chrome.ts` (kvacica, stanje skrola, lampa, mobilni list, koraci).
+     Markup je STATICAN i jednak na svim stranicama, jer ga produkcijski gardovi citaju iz HTML-a
+     i jer navigacija mora raditi bez JavaScripta; jednakost mjeri `tests/site-chrome.test.ts`. -->
+<header class="topbar site-chrome" data-site-chrome="marketing" data-site-chrome-active="tools">
+  <span class="site-chrome__thread" aria-hidden="true"></span>
+  <div class="shell site-chrome__bar">
+    <div class="site-chrome__left">
+      <a class="logo site-chrome__logo" href="/#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+      <span class="site-chrome__hairline" aria-hidden="true"></span>
+      <nav class="site-chrome__dests" data-site-chrome-dests aria-label="Glavna navigacija">
+        <span class="site-chrome__marker" data-site-chrome-marker aria-hidden="true"></span>
+        <a class="site-chrome__dest" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="tools" href="/alati.html">Pribor</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu</a>
+      </nav>
     </div>
-    <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
-    <a class="btn btn-primary btn-sm" href="/">Provjeri rad</a>
-  </nav>
-  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
-    <a href="/saznaj-vise/#how">Kako radi</a>
-    <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
-    <a href="alati.html">Svi alati</a>
-    <a href="citat.html">Citat generator</a>
-    <a href="kartice.html">Brojač kartica</a>
-    <a href="naslovnica.html">Naslovnica</a>
-    <a class="active" aria-current="page" href="literatura.html">Sređivanje literature</a>
-    <a href="izjava.html">Izjava o izvornosti</a>
-    <a href="/saznaj-vise/#pricing">Paketi</a>
-    <a class="btn btn-primary" href="/">Provjeri rad</a>
+      <div class="site-chrome__mid" data-site-chrome-mid></div>
+      <div class="site-chrome__right">
+        <a class="site-chrome__work" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi</a>
+        <!-- MJEDENA PLOCICA PROFILA. Ladica profila (Z13) jos ne postoji, pa gumb NOSI "Uskoro"
+             i aria-disabled, umjesto da se ponasanje izmislja unaprijed. Natpis je "Profil", ne
+             "FPZG · Dipl." iz predloska: kratica fakulteta i razine dolazi iz registra profila, a
+             registar je 194 KB koje traka ne smije ucitati na svakoj stranici (pitanje F8). -->
+        <button class="site-chrome__plate" type="button" data-site-chrome-profile aria-disabled="true" title="Uskoro"><span class="site-chrome__plate-dot" aria-hidden="true"></span>Profil</button>
+        <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
+        <a class="site-chrome__stamp" href="/">Provjeri rad <span aria-hidden="true">&darr;</span></a>
+        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
+      </div>
   </div>
+  <nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">
+    <span class="site-chrome__sheet-eyebrow">Izbornik</span>
+    <span class="site-chrome__sheet-pecat" aria-hidden="true">Profil</span>
+    <a class="site-chrome__sheet-item" href="/">Provjeri rad<small class="site-chrome__sheet-note">besplatno</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi<small class="site-chrome__sheet-note">3 min</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik<small class="site-chrome__sheet-note" data-site-chrome-note="price"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="tools" href="/alati.html">Pribor<small class="site-chrome__sheet-note" data-site-chrome-note="tools"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu<small class="site-chrome__sheet-note" data-site-chrome-note="profiles"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi<small class="site-chrome__sheet-note" data-site-chrome-note="work"></small></a>
+    <div class="site-chrome__sheet-foot">
+      <span><a href="/privatnost.html">Privatnost</a> &middot; <a href="/uvjeti-koristenja.html">Uvjeti</a> &middot; <a href="/obrada-dokumenata.html">Obrada</a></span>
+      <button class="site-chrome__sheet-aa" type="button" data-site-chrome-display-proxy>Aa &middot; Prikaz</button>
+    </div>
+  </nav>
 </header>
 
 <main data-premium-surface="bibliography-tool">
@@ -274,27 +284,17 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 </section>
 </main>
 
-<footer><div class="shell footer-inner">
-  <a class="logo" href="/#top" style="font-size:16px"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-  <span>&copy; 2026 &middot; Zagreb</span>
-  <div class="footer-links">
-    <a href="/">Provjera</a>
-    <a href="alati.html">Svi alati</a>
-    <a href="citat.html">Citat generator</a>
-    <a href="kartice.html">Brojač kartica</a>
-    <a href="naslovnica.html">Naslovnica</a>
-    <a href="izjava.html">Izjava o izvornosti</a>
-    <a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a>
-    <a href="/saznaj-vise/#pricing">Paketi</a>
-    <a href="/privatnost.html">Privatnost</a>
-    <a href="/uvjeti-koristenja.html">Uvjeti</a>
-    <a href="/odricanje-od-odgovornosti.html">Odricanje</a>
-    <a href="/obrada-dokumenata.html">Obrada dokumenata</a>
-    <a href="/kolacici.html">Kolačići</a>
-    <a href="/pravila-povrata.html">Pravila kupnje i povrata</a>
-    <a href="/garancija.html">Garancija</a>
-    <a href="/#top">Natrag na glavnu</a>
-  </div>
+<!-- PODNOZJE, PRAVNI MINIMUM (ALIGNMENT Z15). Cetiri poveznice, "Sve pravno" i jedna recenica;
+     copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html` (prizor 06). -->
+<footer class="site-footer" data-site-footer="legal"><div class="shell site-footer__inner">
+  <nav class="site-footer__pravno" aria-label="Pravno">
+    <a class="legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a>
+    <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
+    <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
+    <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
+    <a class="site-footer__sve" href="/uvjeti-koristenja.html">Sve pravno &rarr;</a>
+  </nav>
+  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
 </div></footer>
 
 <script type="module" src="/src/tools/literatura-page.ts"></script>

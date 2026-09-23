@@ -9,6 +9,7 @@ import { bindDocumentDna, documentDnaHtml } from './document-dna';
 import type { DocumentDnaModel } from '../../results/document-dna-model';
 import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
+import { setSiteChromeScore } from '../../shared/site-chrome';
 import type { DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
 import { buildRepairPlan, type PlanItemInput } from './repair-plan';
@@ -69,51 +70,17 @@ export interface ResultsCockpitOptions {
   desk?: ResultsCockpitDesk;
 }
 
-/**
- * KORACI EKRANA `/rad/` (ALIGNMENT Z8). Ekran je vodic u cetiri koraka, a stepper je jedino
- * mjesto koje to kaze PRIJE nego korisnik bilo sto klikne.
+/*
+ * KORACI EKRANA `/rad/` SU OD Z15 U TRAKI, NE OVDJE.
  *
- * STANJE ANALIZE NEMA KORAKE, i zato funkcija prima stanje umjesto da niz bude konstanta: dok
- * Lekta jos cita rad nema nalaza, pa bi "01 Nalazi" tvrdio posao koji nije obavljen. Za
- * `scanning` se vraca PRAZAN niz; to je ugovor koji drugi krug (stanja plan, payment, done)
- * samo popunjava, bez diranja prikaza.
+ * Model (`siteChromeSteps`, isti identiteti i natpisi) i crtanje su preseljeni u
+ * `src/shared/site-chrome.ts`. Razlog je izmjeren okom na snimci: stepper je ovdje stajao na
+ * vrhu kokpita, dakle ISPOD ljepljive trake, i bio djelomicno skriven. Sredina trake na `/rad/`
+ * sad nosi ime dokumenta, ocjenu i korake, pa vodic kroz cetiri koraka stoji na jednom mjestu.
+ *
+ * `cockpitSteps` i `cockpitStepsHtml` su UKLONJENI, ne ostavljeni kao neupotrijebljeni izvoz:
+ * dva modela istih koraka su dva izvora istine koja se mogu razici.
  */
-export type CockpitStage = 'scanning' | 'findings' | 'plan' | 'payment' | 'done';
-
-export interface CockpitStep {
-  readonly id: Exclude<CockpitStage, 'scanning'>;
-  /** Dvoznamenkasta oznaka; stoji odvojeno od natpisa jer je mono brojka, a natpis rijec. */
-  readonly ordinal: string;
-  readonly label: string;
-  readonly active: boolean;
-}
-
-const KORACI: ReadonlyArray<readonly [CockpitStep['id'], string, string]> = [
-  ['findings', '01', 'Nalazi'],
-  ['plan', '02', 'Plan'],
-  ['payment', '03', 'Plaćanje'],
-  ['done', '04', 'Rezultat'],
-];
-
-export function cockpitSteps(stage: CockpitStage): readonly CockpitStep[] {
-  if (stage === 'scanning') return [];
-  return KORACI.map(([id, ordinal, label]) => ({ id, ordinal, label, active: id === stage }));
-}
-
-/**
- * Neaktivan korak NIJE gumb i NE nosi `disabled`: taj atribut vrijedi samo za kontrole, pa bi na
- * `li` bio tiho zanemaren, a citac ekrana bi korak najavio kao dostupan. `aria-disabled` kaze istu
- * stvar na elementu koji kontrola nije. Klikabilni postaju tek kad drugi krug doda ta stanja.
- */
-export function cockpitStepsHtml(steps: readonly CockpitStep[]): string {
-  if (!steps.length) return '';
-  return '<ol class="cockpit-steps" data-cockpit-steps aria-label="Koraci popravka">'
-    + steps.map((korak) =>
-      `<li class="cockpit-step${korak.active ? ' cockpit-step--active' : ''}" data-cockpit-step="${korak.id}"`
-      + (korak.active ? ' aria-current="step"' : ' aria-disabled="true"') + '>'
-      + `<span class="cockpit-step__num">${korak.ordinal}</span> ${escapeHtml(korak.label)}</li>`).join('')
-    + '</ol>';
-}
 
 /**
  * Radnja JEDINOG primarnog gumba.
@@ -321,11 +288,14 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // STROP SE UZIMA SAMO KAD JE POZNAT. `unavailable` model (profil bez bodovanih provjera) nema
   // sto obecati, pa se druga polovica recenice izostavlja umjesto da se izmisli brojka.
   const strop = options.repairOutlook?.kind === 'available' ? options.repairOutlook.ceilingScore : null;
+  // OCJENA IDE I U TRAKU (Z15). Kokpit je jedino mjesto koje je vec zna, pa je ovo uzak izlaz
+  // prema traki; bez montirane trake je no-op, pa kokpit ne mora znati na kojoj je ruti.
+  // NEBODOVAN MODEL NEMA STO POKAZATI U TRAKI: `unscored` (profil bez bodovanih provjera) daje
+  // `null`, pa celija ostaje skrivena umjesto da ispise nulu koja bi tvrdila ocjenu.
+  setSiteChromeScore(mount.ownerDocument, model.score.kind === 'scored' ? model.score.value : null);
   mount.className = 'result-cockpit result-cockpit--' + status.tone;
   mount.dataset.cockpitExperience = 'correction-desk';
   mount.innerHTML = [
-    // Prvi krug Z8 zivi iskljucivo u koraku 01; stanja plan, payment i done dolaze u drugom.
-    cockpitStepsHtml(cockpitSteps('findings')),
     // JEDAN LIST PRESUDE zamjenjuje `cockpit-header`, `cockpit-hero` i `cockpit-actions`.
     //
     // Do Z8 su na ekranu bila TRI zasebna bloka koja odgovaraju na isto pitanje ("gdje sam i sto

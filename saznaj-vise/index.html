@@ -10,14 +10,53 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Šalje li se moj rad na internet?","acceptedAnswer":{"@type":"Answer","text":"Ne šalje se. Rad ostaje na tvom uređaju sve dok mu ti ne kažeš drugačije. Besplatna automatska provjera oblikovanja je potpuno lokalna i ne napušta uređaj; analiza ne koristi umjetnu inteligenciju ni jezične modele, nego pravilima utemeljen softver koji lokalno čita strukturu dokumenta. Dokument se na poslužitelj šalje samo uz tvoju izričitu privolu i samo za usluge koje to traže: ručnu obradu, Provjeru prije predaje te plaćeni automatski popravak. Provjera prije predaje briše datoteku odmah nakon analize; plaćeni automatski popravak čuva izvorni i ispravljeni dokument dok ih sam ne obrišeš u Moji popravci."}},{"@type":"Question","name":"Može li aplikacija automatski ispraviti cijeli Word dokument?","acceptedAnswer":{"@type":"Answer","text":"Ne cijeli dokument, nego odabrane tehničke elemente. Uz plan ispravaka Lekta automatski popravlja oblikovanje (margine, format papira, font, prored, poravnanje, razmake) te strukturu: numeriranje stranica i sekcije, polja sadržaja, oblikovanje naslova po razinama, naslovnicu, natpise tablica i slika, poredak i oblik popisa literature te usklađivanje citata s literaturom. Opseg ovisi o profilu tvog fakulteta i o složenosti dokumenta: na stvarnim radovima dio nalaza ostane za ručnu izmjenu, a izvještaj ti točno kaže koji. Popravlja se FORMA, nikad sadržaj: rečenice, argumentacija i tvoje tvrdnje ostaju netaknute. Popravljeni dokument se prije preuzimanja ponovno provjeri, a ako je neki popravak srušio provjeru koja je prije prolazila, preporučujemo izvorni dokument. Svaki rezultat treba tvoj završni pregled."}},{"@type":"Question","name":"Što ako nakon ispravka nešto još fali?","acceptedAnswer":{"@type":"Answer","text":"Puna kupnja diplomskog i doktorskog rada uključuje 14 dana ponovnih provjera nakon ispravka (7 dana za seminarski i završni): učitaj ispravljenu verziju koliko god puta treba unutar tog roka, bez nove kupnje."}},{"@type":"Question","name":"Provjerava li Lekta plagijat ili sličnost teksta?","acceptedAnswer":{"@type":"Answer","text":"Ne. Lekta provjerava oblikovanje, strukturu, opseg i citiranje prema pravilima fakulteta, ali ne uspoređuje tekst s drugim izvorima i nije zamjena za Turnitin ni druge alate za provjeru izvornosti. Provjeru izvornosti provodi fakultet."}},{"@type":"Question","name":"Je li rezultat službena potvrda fakulteta?","acceptedAnswer":{"@type":"Answer","text":"Nije. Rezultat je pomoćna tehnička provjera prema odabranom profilu. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora."}},{"@type":"Question","name":"Zašto je moj fakultet označen kao generički profil?","acceptedAnswer":{"@type":"Answer","text":"Ustanova je dostupna za odabir, ali posebna pravila još nisu povezana s provjerenim službenim izvorom. Aplikacija zato radi opći tehnički audit i dopušta unos posebnih uputa mentora, bez tvrdnje da je dokument službeno usklađen."}},{"@type":"Question","name":"Zašto neka citatnica možda nije prepoznata?","acceptedAnswer":{"@type":"Answer","text":"Citatni stilovi imaju brojne varijante, a Word tekst može sadržavati polja, fusnote i posebne znakove. Aplikacija označava moguće probleme, ali rezultat treba provjeriti u kontekstu rada."}}]}</script>
 </head>
 <body>
-<nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <div class="nav-links"><a href="#how">Kako radi</a><a href="#video">Video</a><a href="#podcrta">Što provjerava</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="/fakulteti/">Po fakultetu</a><a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a><a href="#pricing">Paketi</a><a href="#faq">Pitanja</a></div>
-    <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
-    <a class="btn btn-primary btn-sm" href="/#analyzer">Provjeri rad</a>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
-    <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
+<!-- TRAKA JE SUSTAV, NE PO STRANICI (ALIGNMENT Z15). Izgled je u `src/shared/site-chrome.css`,
+     ponasanje u `src/shared/site-chrome.ts` (kvacica, stanje skrola, lampa, mobilni list, koraci).
+     Markup je STATICAN i jednak na svim stranicama, jer ga produkcijski gardovi citaju iz HTML-a
+     i jer navigacija mora raditi bez JavaScripta; jednakost mjeri `tests/site-chrome.test.ts`. -->
+<header class="topbar site-chrome" data-site-chrome="marketing" data-site-chrome-active="how">
+  <span class="site-chrome__thread" aria-hidden="true"></span>
+  <div class="shell site-chrome__bar">
+    <div class="site-chrome__left">
+      <a class="logo site-chrome__logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+      <span class="site-chrome__hairline" aria-hidden="true"></span>
+      <nav class="site-chrome__dests" data-site-chrome-dests aria-label="Glavna navigacija">
+        <span class="site-chrome__marker" data-site-chrome-marker aria-hidden="true"></span>
+        <a class="site-chrome__dest" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="tools" href="/alati.html">Pribor</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu</a>
+      </nav>
+    </div>
+      <div class="site-chrome__mid" data-site-chrome-mid></div>
+      <div class="site-chrome__right">
+        <a class="site-chrome__work" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi</a>
+        <!-- MJEDENA PLOCICA PROFILA. Ladica profila (Z13) jos ne postoji, pa gumb NOSI "Uskoro"
+             i aria-disabled, umjesto da se ponasanje izmislja unaprijed. Natpis je "Profil", ne
+             "FPZG · Dipl." iz predloska: kratica fakulteta i razine dolazi iz registra profila, a
+             registar je 194 KB koje traka ne smije ucitati na svakoj stranici (pitanje F8). -->
+        <button class="site-chrome__plate" type="button" data-site-chrome-profile aria-disabled="true" title="Uskoro"><span class="site-chrome__plate-dot" aria-hidden="true"></span>Profil</button>
+        <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
+        <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
+        <a class="site-chrome__stamp" href="/">Provjeri rad <span aria-hidden="true">&darr;</span></a>
+        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
+      </div>
+  </div>
+  <nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">
+    <span class="site-chrome__sheet-eyebrow">Izbornik</span>
+    <span class="site-chrome__sheet-pecat" aria-hidden="true">Profil</span>
+    <a class="site-chrome__sheet-item" href="/">Provjeri rad<small class="site-chrome__sheet-note">besplatno</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi<small class="site-chrome__sheet-note">3 min</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik<small class="site-chrome__sheet-note" data-site-chrome-note="price"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="tools" href="/alati.html">Pribor<small class="site-chrome__sheet-note" data-site-chrome-note="tools"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu<small class="site-chrome__sheet-note" data-site-chrome-note="profiles"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi<small class="site-chrome__sheet-note" data-site-chrome-note="work"></small></a>
+    <div class="site-chrome__sheet-foot">
+      <span><a href="/privatnost.html">Privatnost</a> &middot; <a href="/uvjeti-koristenja.html">Uvjeti</a> &middot; <a href="/obrada-dokumenata.html">Obrada</a></span>
+      <button class="site-chrome__sheet-aa" type="button" data-site-chrome-display-proxy>Aa &middot; Prikaz</button>
+    </div>
   </nav>
+</header>
 <main id="saznaj-vise">
 <section class="section" id="privatnost">
   <div class="shell">
@@ -201,6 +240,21 @@
 <section class="section section-soft" id="faq"><div class="shell"><div class="ks-sec-head" data-reveal><span class="ks-no" aria-hidden="true">7.</span><h2>Prije nego učitaš dokument<span class="ks-dot">.</span></h2></div><div class="faq"><details><summary>Šalje li se moj rad na internet?</summary><p>Ne šalje se. Rad ostaje na tvom uređaju sve dok mu ti ne kažeš drugačije. Besplatna automatska provjera oblikovanja je potpuno lokalna i ne napušta uređaj; analiza ne koristi umjetnu inteligenciju ni jezične modele, nego pravilima utemeljen softver koji lokalno čita strukturu dokumenta. Dokument se na poslužitelj šalje samo uz tvoju izričitu privolu i samo za usluge koje to traže: ručnu obradu, Provjeru prije predaje te plaćeni automatski popravak. Provjera prije predaje briše datoteku odmah nakon analize; plaćeni automatski popravak čuva izvorni i ispravljeni dokument dok ih sam ne obrišeš u Moji popravci.</p></details><details><summary>Može li aplikacija automatski ispraviti cijeli Word dokument?</summary><p>Ne cijeli dokument, nego odabrane tehničke elemente. Uz plan ispravaka Lekta automatski popravlja oblikovanje (margine, format papira, font, prored, poravnanje, razmake) te strukturu: numeriranje stranica i sekcije, polja sadržaja, oblikovanje naslova po razinama, naslovnicu, natpise tablica i slika, poredak i oblik popisa literature te usklađivanje citata s literaturom. Opseg ovisi o profilu tvog fakulteta i o složenosti dokumenta: na stvarnim radovima dio nalaza ostane za ručnu izmjenu, a izvještaj ti točno kaže koji. Popravlja se FORMA, nikad sadržaj: rečenice, argumentacija i tvoje tvrdnje ostaju netaknute. Popravljeni dokument se prije preuzimanja ponovno provjeri, a ako je neki popravak srušio provjeru koja je prije prolazila, preporučujemo izvorni dokument. Svaki rezultat treba tvoj završni pregled.</p></details><details><summary>Što ako nakon ispravka nešto još fali?</summary><p>Puna kupnja diplomskog i doktorskog rada uključuje 14 dana ponovnih provjera nakon ispravka (7 dana za seminarski i završni): učitaj ispravljenu verziju koliko god puta treba unutar tog roka, bez nove kupnje.</p></details><details><summary>Provjerava li Lekta plagijat ili sličnost teksta?</summary><p>Ne. Lekta provjerava oblikovanje, strukturu, opseg i citiranje prema pravilima fakulteta, ali ne uspoređuje tekst s drugim izvorima i nije zamjena za Turnitin ni druge alate za provjeru izvornosti. Provjeru izvornosti provodi fakultet.</p></details><details><summary>Je li rezultat službena potvrda fakulteta?</summary><p>Nije. Rezultat je pomoćna tehnička provjera prema odabranom profilu. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora.</p></details><details><summary>Zašto je moj fakultet označen kao generički profil?</summary><p>Ustanova je dostupna za odabir, ali posebna pravila još nisu povezana s provjerenim službenim izvorom. Aplikacija zato radi opći tehnički audit i dopušta unos posebnih uputa mentora, bez tvrdnje da je dokument službeno usklađen.</p></details><details><summary>Zašto neka citatnica možda nije prepoznata?</summary><p>Citatni stilovi imaju brojne varijante, a Word tekst može sadržavati polja, fusnote i posebne znakove. Aplikacija označava moguće probleme, ali rezultat treba provjeriti u kontekstu rada.</p></details></div></div></section>
 <section class="section ks-final"><div class="shell"><div class="ks-cta" data-reveal><div class="ks-cta-k">zadnja stavka na stolu</div><h2>Nemoj prvi put otkriti problem<br>kad ti rad <em class="h1-crta">vrati mentor<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em>.</h2><p>Provjeri dokument dok još imaš vremena nešto ispraviti. Predaja bez panike u zadnji čas.</p><a class="btn btn-primary btn-lg" href="/#analyzer">Provjeri rad sada →</a><div class="ks-cta-priv">Automatska provjera ostaje na tvom uređaju · bez registracije</div></div></div></section>
 </main>
+<!-- PODNOZJE, PRAVNI MINIMUM (ALIGNMENT Z15). Cetiri poveznice, "Sve pravno" i jedna recenica;
+     copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html` (prizor 06).
+     TODO (Z15, drugi krug): ova stranica po handoffu dobiva PUNO podnozje (kolofon, "Stanje stola",
+     potpis koji se puni tintom). Do tada nosi isti pravni minimum kao ulaz, jer podnozje bez pravnih
+     poveznica nije opcija. -->
+<footer class="site-footer" data-site-footer="legal"><div class="shell site-footer__inner">
+  <nav class="site-footer__pravno" aria-label="Pravno">
+    <a class="legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a>
+    <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
+    <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
+    <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
+    <a class="site-footer__sve" href="/uvjeti-koristenja.html">Sve pravno &rarr;</a>
+  </nav>
+  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
+</div></footer>
 <script type="module" src="/src/routes/learn-more/main.ts"></script>
 </body>
 </html>

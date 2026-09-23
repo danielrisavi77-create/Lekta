@@ -25,7 +25,13 @@ import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2
 // `design-system.css`. Specificnost je pritom mjerena, ne pretpostavljena (vidi zaglavlje tog
 // lista): `page-chrome.css` se ucitava JOS kasnije, pa ucinak ne smije ovisiti o redoslijedu.
 import './display-settings.css';
+// TRAKA I PODNOZJE KAO SUSTAV (Z15). List je JEDINI izvor izgleda trake i pravnog podnozja na
+// svim stranicama, a `site-chrome.ts` jedini izvor njihova ponasanja. Uvoz stoji POSLIJE
+// `tool-page.css`, jer taj list nosi zatecene `.topbar`/`.nav` ostatke; kolizija se ipak ne
+// rjesava redoslijedom nego specificnoscu (`header.site-chrome`), da ucinak ne ovisi o poretku.
+import './site-chrome.css';
 import { setupSkipLink } from './skip-link';
+import { mountSiteChrome } from './site-chrome';
 import { pokretPrigusen, suprotnaTema, tamnoNaEkranu } from './display-prefs';
 import { setupPremiumVisuals } from './premium-visuals';
 import { createFrameCoalescer } from './frame-coalescer';
@@ -191,31 +197,6 @@ function setupTilt() {
   });
 }
 
-// "Alati" padajuci izbornik kao disclosure: gumb otvara/zatvara klikom i tipkovnicom
-// (Enter/Space okidaju click na <button>), sto radi na touchu gdje hover ne postoji.
-// Na tool stranicama CSS otvara popis preko [aria-expanded="true"]; :hover ostaje za misa.
-function setupNavTools() {
-  const navs = [...document.querySelectorAll<HTMLElement>('.nav-tools')];
-  navs.forEach((nav) => {
-    const btn = nav.querySelector<HTMLElement>('.nav-tools-btn');
-    if (!btn) return;
-    btn.setAttribute('aria-expanded', 'false');
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation(); // ne daj document-klik listeneru da odmah zatvori
-      btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
-    });
-    nav.addEventListener('keydown', (e) => {
-      if ((e as KeyboardEvent).key === 'Escape') { btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
-    });
-  });
-  // Klik izvan zatvara sve otvorene izbornike.
-  if (navs.length) {
-    document.addEventListener('click', () => {
-      navs.forEach((nav) => nav.querySelector('.nav-tools-btn')?.setAttribute('aria-expanded', 'false'));
-    });
-  }
-}
-
 // Prebacivanje teme (svijetla/tamna) + sprema u lekta.theme. Pre-paint restore ostaje inline
 // u <head> svake stranice (izbjegava bljesak); ovdje je samo klik-ponasanje, jedan izvor za sve
 // stranice (prije duplicirano inline u svakom tool HTML-u i u app.ts za index).
@@ -250,34 +231,20 @@ function setupThemeToggle() {
   });
 }
 
-// Mobilni hamburger izbornik: #mobileMenuBtn otvara/zatvara #mobileNav, klik na link zatvara.
-function setupMobileNav() {
-  const btn = document.getElementById('mobileMenuBtn');
-  const nav = document.getElementById('mobileNav');
-  if (!btn || !nav) return;
-  btn.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  nav.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).closest('a')) {
-      nav.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  });
-}
-
-// Topbar dobiva hairline + blur tek nakon 24px scrolla (na vrhu je proziran, stopljen s papirom).
-function setupTopbarScroll() {
-  const bar = document.querySelector<HTMLElement>('header.topbar');
-  if (!bar) return;
-  const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 24);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-}
+// MOBILNI IZBORNIK I STANJE SKROLA SU OD Z15 U `site-chrome.ts`, NE OVDJE.
+//
+// `setupMobileNav` je otvarao `#mobileNav` bez upravljanja fokusom, bez Escapea i bez klika
+// izvan, a `setupTopbarScroll` je ukljucivao hairline na 24px. Traka Z15 ima jedan prag (40px),
+// jednu crvenu nit i jedan list koji pada na stol; dva ziva ozicenja istog gumba preklopila bi
+// izbornik dvaput, pa su ova dva ovdje UKLONJENA, a ne zadrzana kao rezerva.
+// Isto vrijedi za `setupNavTools`: padajuci "Alati" je nestao jer je Pribor sad odrediste trake.
 
 function boot() {
-  setupSkipLink(); renderIcons(); setupReveal(); pauseOffscreenMotion(); animateHero(); setupTilt(); setupPremiumVisuals(); setupNavTools(); setupThemeToggle(); setupMobileNav(); setupTopbarScroll();
+  // TRAKA IDE PRVA: ona preuzima `#themeBtn` (vidi `wireSiteLamp`), pa `setupThemeToggle` nize
+  // zatim ustupa. Ispravnost ne ovisi o ovom poretku (oznaka se cita UNUTAR rukovatelja), ali
+  // aria stanje lampe je time tocno od prvog kadra.
+  mountSiteChrome(document);
+  setupSkipLink(); renderIcons(); setupReveal(); pauseOffscreenMotion(); animateHero(); setupTilt(); setupPremiumVisuals(); setupThemeToggle();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);

@@ -144,20 +144,9 @@
 .intake-continue:not([hidden]){display:block;margin-top:14px;color:var(--muted);font-family:var(--ui);font-size:var(--fs-ui)}
 .intake-continue a{color:var(--brand);font-weight:650}
 
-/* --- kratka navigacija ulaza ----------------------------------------------------------------- */
-/* Dva odredista i jedna kontrola. Vise od toga natjece se s jedinom radnjom ekrana. */
-.intake-nav{display:flex;align-items:center;gap:14px;margin-left:auto}
-.intake-nav>a{
-  color:var(--muted);font-family:var(--ui);font-size:.88rem;font-weight:600;
-  text-decoration:none;text-underline-offset:4px;
-}
-.intake-nav>a:hover,.intake-nav>a:focus-visible{color:var(--brand);text-decoration:underline}
-/* Pomoc je diskretna, ali mora ostati META od 24 px (WCAG 2.5.8), pa je krug a ne goli znak. */
-.intake-nav-help{
-  display:inline-grid;place-items:center;min-width:26px;min-height:26px;
-  border:1px solid var(--line);border-radius:999px;line-height:1;
-}
-.intake-nav-help:hover,.intake-nav-help:focus-visible{border-color:var(--brand);text-decoration:none}
+/* NAVIGACIJA ULAZA JE OD Z15 DIJELJENA TRAKA (`src/shared/site-chrome.css`).
+   `.intake-nav` i `.intake-nav-help` su UKLONJENI: ulaz nosi istu traku kao ostale rute,
+   s cetiri odredista i kontrolama bez natpisa, pa vlastita kratka navigacija nema mete. */
 
 /* --- papir: drugo lice ------------------------------------------------------------------------ */
 /* Isti list, dva sadrzaja. Poziv nestaje cim dokument lezi na papiru, pa se stanje vidi NA
@@ -294,17 +283,9 @@
   font-size:var(--fs-mono-label);letter-spacing:.04em;
 }
 
-/* --- podnozje ulaza --------------------------------------------------------------------------- */
-.intake-footer{margin-top:clamp(28px,6vh,56px);padding-bottom:26px}
-.intake-footer-pravno{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 18px}
-.intake-footer-pravno a{
-  color:var(--muted);font-family:var(--ui);font-size:var(--fs-ui-sm);text-decoration:none;text-underline-offset:4px;
-}
-.intake-footer-pravno a:hover,.intake-footer-pravno a:focus-visible{color:var(--brand);text-decoration:underline}
-.intake-footer-nota{
-  margin:10px 0 0;text-align:center;color:var(--muted-2,var(--muted));
-  font-family:var(--ui);font-size:var(--fs-ui-xs);line-height:1.5;
-}
+/* PODNOZJE ULAZA JE OD Z15 DIJELJENO (`src/shared/site-chrome.css`, `.site-footer`).
+   `.intake-footer`, `.intake-footer-pravno` i `.intake-footer-nota` su UKLONJENI: ulaz nosi
+   isti pravni minimum kao ostale rute, a dva lista za isto podnozje su dva izvora istine. */
 
 /* --- stanja ------------------------------------------------------------------------------- */
 .intake-stage[data-intake-state="checking"] .intake-paper,

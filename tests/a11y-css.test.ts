@@ -222,3 +222,138 @@ describe('racun: pecat i onemoguceni gumb "Uskoro" kontrast (Z11)', () => {
     expect(ratio(paperMuted, paperLine)).toBeLessThan(AA);
   });
 });
+
+/**
+ * TRAKA I PODNOZJE Z15: KONTRAST TEKSTA U OBJE TEME I VELICINA MALE METE.
+ *
+ * Traka je JEDNA za cijeli proizvod, pa je i jedan pad kontrasta pad na svakoj stranici. Zato se
+ * ovdje mjeri lanac kao i u ostatku ovog lista: koji TOKEN `site-chrome.css` stvarno koristi ->
+ * vrijednost tog tokena iz `design-system.css` -> odnos prema podlozi koju traka stvarno ima.
+ *
+ * MJERODAVNE SU OBJE PODLOGE STOLA (`--desk` i `--desk-2`), i to je izmjereno: `--desk-muted` na
+ * svijetlom `--desk-2` daje 4,61:1, dakle prolazi tek za deseti dio, a na `--desk` 5,09:1. Uzorak
+ * od jedne podloge bi taj rub sakrio.
+ *
+ * VRIJEDNOSTI SE CITAJU IZ IZVORA. Prepisana boja ostaje zelena dokazujuci nesto o nizu koji vise
+ * nije u CSS-u; to je imenovan razred kvara u ovom repozitoriju.
+ */
+describe('Z15 traka: kontrast teksta u obje teme, meta >= 24px', () => {
+  const AA = 4.5;
+  const META = 24;
+  type Rgb = readonly [number, number, number];
+  const hex = (value: string): Rgb => {
+    const h = value.replace('#', '').trim();
+    return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)) as unknown as Rgb;
+  };
+  /** `rgba(...)` se MORA stopiti s podlogom prije mjerenja; prozirnost nije boja. */
+  const stopi = (value: string, bg: Rgb): Rgb => {
+    const m = value.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?\s*\)/);
+    if (!m) return hex(value);
+    const a = m[4] === undefined ? 1 : Number(m[4]);
+    return [1, 2, 3].map((i) => Math.round(a * Number(m[i]) + (1 - a) * bg[i - 1])) as unknown as Rgb;
+  };
+  const channel = (v: number): number => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = ([r, g, b]: Rgb): number => 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  const ratio = (a: Rgb, b: Rgb): number => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const OBRAZAC = /\s*:\s*([^;}]+)/.source;
+  const tokenUBloku = (sirovo: string, selektor: string, token: string): string => {
+    const css = sirovo.replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const od = css.indexOf(selektor);
+    expect(od, `selektor ${selektor} nije nadjen`).toBeGreaterThan(-1);
+    const blok = css.slice(css.indexOf('{', od), css.indexOf('}', od));
+    const m = new RegExp('--' + token + OBRAZAC).exec(blok);
+    expect(m, `token --${token} nije nadjen u bloku ${selektor}`).toBeTruthy();
+    return m![1].trim();
+  };
+
+  const SUSTAV = read('src/shared/design-system.css');
+  const TRAKA = read('src/shared/site-chrome.css');
+  const TEME: ReadonlyArray<readonly ['dark' | 'light', string]> = [
+    ['dark', ':root {'],
+    ['light', '[data-theme="light"] {'],
+  ];
+
+  it('traka STVARNO koristi mjerene tokene, pa mjerenje nije o tudjim vrijednostima', () => {
+    // Sentinel: bez ovoga bi preimenovanje tokena u listu ucinilo sve tvrdnje ispod vakuumskima.
+    expect(TRAKA).toContain('color: var(--desk-muted)');
+    expect(TRAKA).toContain('color: var(--desk-faint)');
+    expect(TRAKA).toContain('color: var(--on-red)');
+    expect(TRAKA).toContain('background: var(--red)');
+  });
+
+  it.each(TEME)('%s: prigusen i blijed tekst trake prolaze AA na OBJE podloge stola', (_tema, selektor) => {
+    const desk = hex(tokenUBloku(SUSTAV, selektor, 'desk'));
+    const desk2 = hex(tokenUBloku(SUSTAV, selektor, 'desk-2'));
+    for (const ime of ['desk-muted', 'desk-faint'] as const) {
+      const sirovo = tokenUBloku(SUSTAV, selektor, ime);
+      expect(ratio(stopi(sirovo, desk), desk), `--${ime} na --desk`).toBeGreaterThanOrEqual(AA);
+      expect(ratio(stopi(sirovo, desk2), desk2), `--${ime} na --desk-2`).toBeGreaterThanOrEqual(AA);
+    }
+  });
+
+  it.each(TEME)('%s: pecat "Provjeri rad" (--on-red na --red) prolazi AA', (_tema, selektor) => {
+    const red = hex(tokenUBloku(SUSTAV, selektor, 'red'));
+    const onRed = hex(tokenUBloku(SUSTAV, selektor, 'on-red'));
+    expect(ratio(onRed, red)).toBeGreaterThanOrEqual(AA);
+  });
+
+  it('mjedena plocica profila prolazi AA na TAMNIJEM kraju svog gradijenta', () => {
+    // Gradijent ide #C9A96A -> #A98649; mjerodavan je tamniji kraj, jer ondje je odnos najlosiji.
+    expect(ratio(hex('#26221B'), hex('#A98649'))).toBeGreaterThanOrEqual(AA);
+    // KONTROLA SMJERA: mjeri se stvarno TAMNIJI kraj, ne slucajno svjetliji.
+    expect(ratio(hex('#26221B'), hex('#A98649'))).toBeLessThan(ratio(hex('#26221B'), hex('#C9A96A')));
+  });
+
+  it('MUTACIJA: prozirnost se NE smije preskociti pri mjerenju', () => {
+    // `rgba(237,231,220,.72)` citan kao neproziran dao bi 13,5:1 umjesto 8,1:1 na tamnom stolu, pa
+    // bi gard prolazio i za ton koji je na ekranu gotovo neciljiv. Mjeri se stopljena vrijednost.
+    const desk = hex('#191512');
+    const stopljen = stopi('rgba(237, 231, 220, .40)', desk);
+    const kaoNeproziran = hex('#EDE7DC');
+    expect(ratio(stopljen, desk)).toBeLessThan(ratio(kaoNeproziran, desk));
+    // BASELINE: stvarni ton (.72) i dalje prolazi, dakle tvrdnja nije "sve pada".
+    expect(ratio(stopi('rgba(237, 231, 220, .72)', desk), desk)).toBeGreaterThanOrEqual(AA);
+  });
+
+  /** Interaktivne mete trake; ime je ugovor, pa se popis NE broji nego imenuje. */
+  const METE = [
+    '.site-chrome__dest',
+    '.site-chrome__work',
+    '.site-chrome__plate',
+    '.site-chrome__stamp',
+    '.site-chrome .lampa-btn',
+    '.site-chrome__burger',
+    '.site-chrome__sheet-item',
+    '.site-chrome__sheet-aa',
+    '.site-footer__pravno a',
+  ] as const;
+
+  /** Cista funkcija nad tekstom lista, pa se smije mutirati. */
+  const visinaMete = (css: string, selektor: string): number => {
+    const escapiran = selektor.replace(/[.*+?^${}()|[\]\\]/g, (znak) => '\\' + znak);
+    const re = new RegExp('(?:^|\\})\\s*' + escapiran + '\\s*\\{([^}]*)\\}', 'm');
+    const blok = re.exec(css.replace(/\/\*[\s\S]*?\*\//g, ' '));
+    if (!blok) return 0;
+    const m = /min-height:\s*(\d+(?:\.\d+)?)px/.exec(blok[1]);
+    return m ? Number(m[1]) : 0;
+  };
+
+  it.each(METE)('%s ima min-height >= 24px (WCAG 2.5.8)', (selektor) => {
+    expect(visinaMete(TRAKA, selektor)).toBeGreaterThanOrEqual(META);
+  });
+
+  it('MUTACIJA: izbrisan `min-height` se vidi, i mjeri se TOCAN selektor', () => {
+    const bez = TRAKA.replace(/(\.site-chrome__dest \{[^}]*)min-height: 24px;\s*/, '$1');
+    expect(bez, 'podmetanje se nije primilo; provjeri oznaku mete').not.toBe(TRAKA);
+    expect(visinaMete(bez, '.site-chrome__dest')).toBeLessThan(META);
+    // BASELINE i kontrola smjera: nepostojeci selektor daje 0, pa nula NIJE dokaz o postojanju.
+    expect(visinaMete(TRAKA, '.site-chrome__dest')).toBeGreaterThanOrEqual(META);
+    expect(visinaMete(TRAKA, '.site-chrome__nepostojece')).toBe(0);
+  });
+});

@@ -32,30 +32,49 @@
 <div class="ks-decor" aria-hidden="true"><div class="ks-lamp"></div><div class="ks-kava"></div></div>
 <div class="ks-progress" aria-hidden="true"><i></i></div>
 <div class="ks-vignette" aria-hidden="true"></div>
-<header class="topbar">
-  <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <!-- NAVIGACIJA ULAZA JE NAMJERNO KRATKA (2026-09-06).
-         Ekran ima jednu svrhu: ubaciti dokument. Devet stavki izbornika, padajuci "Alati", drugi
-         CTA ("Provjeri rad") i mobilni hamburger natjecali su se s njom, a vodili su na sadrzaj
-         koji zivi na `/saznaj-vise/`. Ostaju samo dva odredista koja korisnik na OVOM ekranu moze
-         trebati: povratak svom radu i objasnjenje sto se dogadja.
-         Lampa ostaje kao KONTROLA, ne kao navigacija, ali bez natpisa: tamna tema je zadana, pa bi
-         ulaz bez preklopnika bio gubitak, a ne pojednostavljenje. -->
-    <div class="intake-nav">
-      <a href="/moji-radovi/">Moji radovi</a>
-      <a class="intake-nav-help" href="/saznaj-vise/#how" aria-label="Kako Lekta radi">?</a>
-      <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
-      <!-- #displayBtn je NA ULAZU BEZ NATPISA, kao i lampa iznad, i to je isto ogranicenje, ne
-           previd. Odluka od 2026-09-06 (komentar na vrhu ove navigacije) kaze da ulaz nosi samo
-           dva odredista i kontrole BEZ natpisa, jer ekran ima jednu svrhu: ubaciti dokument.
-           Natpis uz jednu od dvije susjedne kontrole razbio bi i taj par. WCAG 2.5.3 (Label in
-           Name) ovdje po definiciji ne vrijedi, jer gumb nema vidljiv tekst; ono sto vrijedi
-           uvijek, pristupacno ime, nosi `aria-label`. Na `/rad/`, gdje navigacija natpise vec
-           ima, isti gumb ih dobiva. (Ime klase natpisa se ovdje NE navodi: gard u a11y paketu
-           trazi taj niz po cijeloj datoteci, pa bi ga i ovaj komentar oborio.)
-           Gard: tests/a11y-batch-2026-07-18.test.ts. -->
-      <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i></button>
+<!-- TRAKA JE SUSTAV, NE PO STRANICI (ALIGNMENT Z15). Izgled je u `src/shared/site-chrome.css`,
+     ponasanje u `src/shared/site-chrome.ts` (kvacica, stanje skrola, lampa, mobilni list, koraci).
+     Markup je STATICAN i jednak na svim stranicama, jer ga produkcijski gardovi citaju iz HTML-a
+     i jer navigacija mora raditi bez JavaScripta; jednakost mjeri `tests/site-chrome.test.ts`. -->
+<header class="topbar site-chrome" data-site-chrome="intake" data-site-chrome-active="">
+  <span class="site-chrome__thread" aria-hidden="true"></span>
+  <div class="shell site-chrome__bar">
+    <div class="site-chrome__left">
+      <a class="logo site-chrome__logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+      <span class="site-chrome__hairline" aria-hidden="true"></span>
+      <nav class="site-chrome__dests" data-site-chrome-dests aria-label="Glavna navigacija">
+        <span class="site-chrome__marker" data-site-chrome-marker aria-hidden="true"></span>
+        <a class="site-chrome__dest" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="tools" href="/alati.html">Pribor</a>
+        <a class="site-chrome__dest" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu</a>
+      </nav>
+    </div>
+      <div class="site-chrome__mid" data-site-chrome-mid></div>
+      <div class="site-chrome__right">
+        <a class="site-chrome__work" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi</a>
+        <!-- MJEDENA PLOCICA PROFILA. Ladica profila (Z13) jos ne postoji, pa gumb NOSI "Uskoro"
+             i aria-disabled, umjesto da se ponasanje izmislja unaprijed. Natpis je "Profil", ne
+             "FPZG · Dipl." iz predloska: kratica fakulteta i razine dolazi iz registra profila, a
+             registar je 194 KB koje traka ne smije ucitati na svakoj stranici (pitanje F8). -->
+        <button class="site-chrome__plate" type="button" data-site-chrome-profile aria-disabled="true" title="Uskoro"><span class="site-chrome__plate-dot" aria-hidden="true"></span>Profil</button>
+        <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i></button>
+        <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
+        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
+      </div>
+  </div>
+  <nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">
+    <span class="site-chrome__sheet-eyebrow">Izbornik</span>
+    <span class="site-chrome__sheet-pecat" aria-hidden="true">Profil</span>
+    <a class="site-chrome__sheet-item" href="/">Provjeri rad<small class="site-chrome__sheet-note">besplatno</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="how" href="/saznaj-vise/#how">Kako radi<small class="site-chrome__sheet-note">3 min</small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="pricing" href="/saznaj-vise/#cjenik">Cjenik<small class="site-chrome__sheet-note" data-site-chrome-note="price"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="tools" href="/alati.html">Pribor<small class="site-chrome__sheet-note" data-site-chrome-note="tools"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="faculties" href="/fakulteti/">Po fakultetu<small class="site-chrome__sheet-note" data-site-chrome-note="profiles"></small></a>
+    <a class="site-chrome__sheet-item" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi<small class="site-chrome__sheet-note" data-site-chrome-note="work"></small></a>
+    <div class="site-chrome__sheet-foot">
+      <span><a href="/privatnost.html">Privatnost</a> &middot; <a href="/uvjeti-koristenja.html">Uvjeti</a> &middot; <a href="/obrada-dokumenata.html">Obrada</a></span>
+      <button class="site-chrome__sheet-aa" type="button" data-site-chrome-display-proxy>Aa &middot; Prikaz</button>
     </div>
   </nav>
 </header>
@@ -156,18 +175,17 @@
   </div>
 </section>
 </main>
-<!-- PODNOZJE ULAZA JE SVEDENO NA PRAVNO (2026-09-06). Cetiri stupca poveznica (proizvod,
-     alati, pravno, ostalo) pripadaju `/saznaj-vise/`; ovdje su konkurirala jedinoj radnji.
-     Pravne poveznice OSTAJU i nisu predmet pojednostavljenja: privatnost, uvjeti i obrada
-     dokumenata moraju biti dohvatljivi s ekrana na kojem korisnik predaje dokument. -->
-<footer class="intake-footer"><div class="shell">
-  <nav class="intake-footer-pravno" aria-label="Pravno">
+<!-- PODNOZJE, PRAVNI MINIMUM (ALIGNMENT Z15). Cetiri poveznice, "Sve pravno" i jedna recenica;
+     copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html` (prizor 06). -->
+<footer class="site-footer" data-site-footer="legal"><div class="shell site-footer__inner">
+  <nav class="site-footer__pravno" aria-label="Pravno">
     <a class="legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a>
     <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
     <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
     <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
+    <a class="site-footer__sve" href="/uvjeti-koristenja.html">Sve pravno &rarr;</a>
   </nav>
-  <p class="intake-footer-nota">© 2026 Lekta · Automatska provjera je lokalna · Nije provjera plagijata ni službena potvrda fakulteta</p>
+  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
 </div></footer>
 <div class="toast-wrap" id="toastWrap" role="status" aria-live="polite" aria-atomic="false"></div>
 <script type="module" src="/src/routes/intake/main.ts"></script>
