@@ -20,7 +20,7 @@ import sys
 import time
 from typing import Iterable
 
-from .policy import PolicyError, billing_allowed, canonical_path
+from .policy import PolicyError, billing_allowed, canonical_path, path_escapes_root
 
 VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blocked")
 
@@ -367,60 +367,30 @@ class UnsafeCommitPaths(ValueError):
     """Staza koju kontroler ne smije commitati (apsolutna, izvan repozitorija, prazna)."""
 
 
-# Apsolutna staza se NE prepoznaje preko `os.path.isabs`: taj odgovor ovisi o OS-u na kojem se kod vrti, pa
-# je isti gard na Windowsu grizao a na Linuxu propustao. `C:/Windows/system.ini` je na Linuxu obicna relativna
-# staza (mapa imena `C:`), a `C:x` je i na Windowsu "relativno na trenutnu mapu pogona C", dakle `isabs` ga ni
-# ondje ne vidi. Izmjereno 2026-09-20: CI job `unittest (3.12)` je na Linuxu pao tocno na tom razmaku.
-_DRIVE_PREFIX_RE = re.compile(r"^[A-Za-z]:")
-
-
-def _leaves_tree_via_link(repo: str, rel: str) -> bool:
-    """Vodi li staza izvan stabla kad se SLIJEDE veze (symlink na POSIX-u, junction na Windowsu).
-
-    Provjera znakova ne vidi `veza/tudje.txt` kad je `veza` symlink na mapu izvan repozitorija: niz je uredno
-    relativan, a `git add` bi pisao vani. Zato se, kad stablo stvarno postoji, usporedjuje i RAZRIJESENA staza.
-    Kad `repo` nije mapa (testovi s ubrizganim `run` i izmisljenim `/repo`), provjere nema jer ni veze ne moze
-    biti; string-provjere iznad vrijede uvijek.
-    """
-    try:
-        root = os.path.realpath(repo)
-        target = os.path.realpath(os.path.join(repo, rel))
-    except (OSError, ValueError):
-        return True
-    root_n = os.path.normcase(root).rstrip("\\/")
-    target_n = os.path.normcase(target)
-    return target_n != root_n and not target_n.startswith(root_n + os.sep)
-
-
 def _safe_relative_paths(paths: list[str], *, repo: str | None = None) -> list[str]:
     """Normaliziraj popis staza i odbij sve sto izlazi iz radnikova stabla.
+
+    Pravila su JEDNA kopija: string-provjere su `policy.canonical_path` (uz `reject_home=True`, jer ovaj
+    popis ide u `git add`), a razrjesavanje veza je `policy.path_escapes_root`. Do 2026-09-21 su ovdje
+    stajale vlastite kopije obiju provjera i vec su se bile razisle: NUL bajt je vidjela samo politika,
+    `~` samo ovaj gard, a provjera veza se ovdje preskakala kad `repo` nije mapa. Parnost presuda cuva
+    `tests/test_path_guard_parity.py`.
 
     Popis dolazi iz `git status --porcelain` istog stabla, pa bi u praksi uvijek bio relativan. Provjera
     svejedno stoji: pozivatelj je kontroler koji taj popis prosljedjuje u `git add`, a tiho prihvacena
     apsolutna staza ili `..` znaci pisanje izvan stabla za koje je gard dao dopustenje.
 
-    Sve string-provjere su NEOVISNE O OS-U (ista presuda na Windowsu i na Linuxu), a razrjesavanje veza se
-    dodaje tek kad `repo` stvarno postoji.
+    Sve string-provjere su NEOVISNE O OS-U (ista presuda na Windowsu i na Linuxu); `os.path.isabs` je za
+    tu svrhu kriv alat i zato ga u lancu nema (`C:x` ga promasuje i na Windowsu).
     """
     clean: list[str] = []
-    check_links = bool(repo) and os.path.isdir(str(repo))
     for raw in paths:
-        path = str(raw).strip().strip('"').replace("\\", "/")
-        if not path:
-            raise UnsafeCommitPaths(f"prazna staza: {raw!r}")
-        if path.startswith("/"):
-            raise UnsafeCommitPaths(f"staza nije relativna: {raw!r}")
-        if _DRIVE_PREFIX_RE.match(path):
-            raise UnsafeCommitPaths(f"staza nosi oznaku pogona: {raw!r}")
-        if path.startswith("~"):
-            raise UnsafeCommitPaths(f"staza pokazuje na kucnu mapu: {raw!r}")
-        parts = [p for p in path.split("/") if p not in ("", ".")]
-        if any(p == ".." for p in parts):
-            raise UnsafeCommitPaths(f"staza izlazi iz stabla: {raw!r}")
-        if not parts:
-            raise UnsafeCommitPaths(f"prazna staza: {raw!r}")
-        rel = "/".join(parts)
-        if check_links and _leaves_tree_via_link(str(repo), rel):
+        path = str(raw).strip().strip('"')
+        try:
+            rel = canonical_path(path, reject_home=True)
+        except PolicyError as exc:
+            raise UnsafeCommitPaths(str(exc)) from exc
+        if repo is not None and path_escapes_root(str(repo), rel):
             raise UnsafeCommitPaths(f"staza vodi izvan stabla preko veze: {raw!r}")
         clean.append(rel)
     # Duplikati bi `git add` prihvatio, ali popis ide i u poruku dnevnika i u tvrdnje testova.

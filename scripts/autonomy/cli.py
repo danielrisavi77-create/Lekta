@@ -25,7 +25,7 @@ import time
 import uuid
 from typing import Callable
 
-from .gate import verify_candidate
+from .gate import PROOF_PATH, VERIFY_ARTIFACT_PATHS, verify_candidate
 from .policy import PolicyError, billing_allowed, explain_change, load_config
 from .publisher import publish_verified
 from .remote import load_remotes, token_fingerprint
@@ -373,6 +373,63 @@ def _agent_for(config: dict, phase: str, task: dict) -> str:
     return "astra" if implementer in ("opus", "sonnet") else "opus"
 
 
+def _verify_settle(repo: str) -> Callable[[], list[str]]:
+    """Vrati radnikovo stablo u stanje u kojem ga je verifikacija zatekla i reci sto je ipak ostalo prljavo.
+
+    `verify_candidate` bezuvjetno pokrece `npm run release:check`, a taj lanac ima VISE imenovanih pisaca
+    TRACKANIH staza; svi su poimenice popisani u `gate.VERIFY_ARTIFACT_PATHS`, uz skript koji pise svaku od
+    njih. Bez vracanja u stablu ostane ` M docs/generated/...`, pa SLJEDECI posao padne na `implement_unsafe:
+    radno stablo nije cisto`, `_clean_at_start` ostane False i `_park_worker_tree` vrati `skipped: nije nase`.
+    Kontroler se tako zakljuca poslije PRVOG posla koji uopce dodje do verifikacije, dakle kroz druga vrata
+    od nalaza 2026-09-13.
+
+    Vracaju se TOCNO te staze, upisom BAJTOVA koje je verifikacija zatekla i bez ijedne git naredbe koja
+    pise: indeks se ne dira, `checkout` se ne zove, pa vracanje ne moze pojesti ni tudju promjenu ni vlastiti
+    commit. Sve ostalo se NE dira nego PRIJAVLJUJE: popis staza koje verifikacija nije smjela ostaviti ide u
+    manifest kao `treeResidue` i obara `complete`. Kad se stanje stabla ne moze izmjeriti, ili se artefakt ne
+    da vratiti, popis nosi razlog, pa je ishod zatvoren umjesto tiho prazan.
+    """
+    before_error: str | None = None
+    try:
+        before = set(changed_paths(repo))
+    except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
+        before, before_error = set(), f"git status nije uspio prije provjere ({type(exc).__name__})"
+    # Bajtovi ZATECENOG stanja, po jednoj stazi. `None` znaci da datoteke prije provjere nije ni bilo, pa se
+    # vraca njezinom odsutnoscu, a ne praznim sadrzajem.
+    snapshot: list[tuple[str, str, bytes | None]] = []
+    for rel in VERIFY_ARTIFACT_PATHS:
+        target = os.path.join(repo, rel.replace("/", os.sep))
+        try:
+            with open(target, "rb") as fh:
+                snapshot.append((rel, target, fh.read()))
+        except OSError:
+            snapshot.append((rel, target, None))
+
+    def settle() -> list[str]:
+        problems: list[str] = []
+        for rel, target, payload in snapshot:
+            try:
+                if payload is None:
+                    if os.path.exists(target):
+                        os.remove(target)
+                else:
+                    os.makedirs(os.path.dirname(target), exist_ok=True)
+                    with open(target, "wb") as fh:
+                        fh.write(payload)
+            except OSError as exc:
+                problems.append(f"<{rel} se nije dao vratiti: {type(exc).__name__}>")
+        if before_error:
+            return sorted({*problems, f"<{before_error}>"})
+        try:
+            after = set(changed_paths(repo))
+        except (RuntimeError, OSError, subprocess.SubprocessError) as exc:
+            problems.append(f"<git status nije uspio nakon provjere ({type(exc).__name__})>")
+            return sorted(set(problems))
+        return sorted({*problems, *(after - before)})
+
+    return settle
+
+
 class DefaultAdapters:
     """Stvarni adapteri: node runner za pripremu posla, worker za poziv, gate za provjeru; izdavac je BLOKIRAN
     dok vlasnik ne konfigurira `remote` s odvojenim identitetom (plan 4: publisherEnabled=false zadano)."""
@@ -550,7 +607,7 @@ class DefaultAdapters:
 
         def read_proof():
             try:
-                with open(os.path.join(self.repo, "docs", "generated", "RELEASE_PROOF.json"), encoding="utf-8") as fh:
+                with open(os.path.join(self.repo, PROOF_PATH.replace("/", os.sep)), encoding="utf-8") as fh:
                     return json.load(fh)
             except (OSError, ValueError):
                 return None
@@ -564,7 +621,8 @@ class DefaultAdapters:
         key_path = os.path.join(self.home, "verifier.key")
         key = open(key_path, "rb").read() if os.path.isfile(key_path) else b""
         return verify_candidate(candidate, self.config, runner=runner, read_proof=read_proof, signing_key=key or None,
-                                created_at=_dt.datetime.now(tz=_dt.timezone.utc).isoformat(timespec="seconds"))
+                                created_at=_dt.datetime.now(tz=_dt.timezone.utc).isoformat(timespec="seconds"),
+                                settle=_verify_settle(self.repo))
 
     def classify(self, task: dict) -> tuple[str, list[str]]:
         snap = self._snapshot()

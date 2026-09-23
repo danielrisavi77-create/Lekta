@@ -73,21 +73,44 @@ def billing_allowed(profile: dict | None) -> bool:
     return all(profile.get(key) is True for key in REQUIRED_PROFILE_KEYS)
 
 
-def canonical_path(path: str) -> str:
-    """Kanonska repo-relativna staza ili PolicyError. Odbija apsolutne staze, pogone, `..`, NUL i prazno."""
-    if not isinstance(path, str) or not path or "\x00" in path:
-        raise PolicyError(f"neispravna staza: {path!r}")
+def canonical_path(path: str, *, reject_home: bool = False) -> str:
+    """Kanonska repo-relativna staza ili PolicyError. JEDINI izvor pravila o stazama u ovom paketu.
+
+    Odbija prazno, NUL bajt, apsolutnu stazu, oznaku pogona i `..`. `reject_home` dodatno odbija stazu koja
+    pocinje znakom `~`; to je UZI ugovor `worker.commit_worker_tree`-a, koji popis prosljedjuje u `git add`,
+    dok klasifikacija (`explain_change`) istu stazu smije vidjeti kao obicnu relativnu i presuditi
+    `needs_human`. Razlika je izricita i pokrivena testom parnosti, sto dvije odvojene kopije pravila nisu
+    bile: do 2026-09-21 je NUL bajt vidjela samo politika, a `~` samo gard u `worker.py`.
+
+    `os.path.isabs` je za ovu svrhu kriv alat i zato ga ovdje nema: `C:/Windows/x` je na Linuxu obicna mapa
+    imena `C:`, a `C:x` promasuje `isabs` i na Windowsu. Presuda mora biti ista na svakom OS-u.
+    """
+    if not isinstance(path, str) or not path:
+        raise PolicyError(f"prazna staza: {path!r}")
+    if "\x00" in path:
+        raise PolicyError(f"staza sadrzi NUL bajt: {path!r}")
     p = path.replace("\\", "/")
-    if p.startswith("/") or _DRIVE.match(p):
-        raise PolicyError(f"apsolutna staza nije dopustena: {path!r}")
+    if reject_home and p.startswith("~"):
+        raise PolicyError(f"staza pokazuje na kucnu mapu: {path!r}")
+    if p.startswith("/"):
+        raise PolicyError(f"staza nije relativna: {path!r}")
+    if _DRIVE.match(p):
+        raise PolicyError(f"staza nosi oznaku pogona: {path!r}")
     parts = [seg for seg in p.split("/") if seg not in ("", ".")]
-    if not parts or any(seg == ".." for seg in parts):
-        raise PolicyError(f"staza izlazi iz repozitorija ili je prazna: {path!r}")
+    if any(seg == ".." for seg in parts):
+        raise PolicyError(f"staza izlazi iz stabla: {path!r}")
+    if not parts:
+        raise PolicyError(f"prazna staza: {path!r}")
     return posixpath.join(*parts)
 
 
 def path_escapes_root(root: str, rel: str) -> bool:
-    """Provjera na disku: prati symlinke/junctione. True kad stvarna lokacija nije unutar `root`."""
+    """Provjera na disku: prati symlinke i junctione. True kad stvarna lokacija nije unutar `root`.
+
+    Provjera znakova ne vidi `veza/tudje.txt` kad je `veza` symlink ili junction na mapu izvan stabla: niz
+    je uredno relativan, a `git add` bi pisao vani. Kad `root` ne postoji (testovi s izmisljenim `/repo`),
+    `realpath` vraca stazu kakva jest, pa je odgovor False i nema laznog odbijanja.
+    """
     real_root = os.path.realpath(root)
     target = os.path.realpath(os.path.join(real_root, rel))
     try:
