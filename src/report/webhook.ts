@@ -107,7 +107,11 @@ export function parseLemonEvent(payload: LemonWebhookPayload): LemonEvent {
   const userId = String(meta.custom_data?.user_id ?? '');
   const variantId = String(attr.first_order_item?.variant_id ?? attr.variant_id ?? '');
   const referralCode = String(meta.custom_data?.referral_code ?? '');
-  const refunded = eventName === 'order_refunded' || attr.status === 'refunded' || attr.refunded === true;
+  // Status se za ODLUKE normalizira (trim + mala slova), a `status` polje ostaje doslovno, da se u
+  // inboxu vidi tocno ono sto je provider poslao. Bez normalizacije bi `Refunded` ili ` paid ` bili
+  // druga vrijednost od `refunded` odnosno `paid`, a razlika je izmedju ugasenog i zivog prava.
+  const statusKey = status.trim().toLowerCase();
+  const refunded = eventName === 'order_refunded' || statusKey === 'refunded' || attr.refunded === true;
   const storeId = attr.store_id != null ? String(attr.store_id) : '';
   const testMode = meta.test_mode === true || attr.test_mode === true;
   const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
@@ -146,8 +150,14 @@ export interface LemonClassification {
  * nasi, ali bi pali u istu granu i zavrsili kao `unknown_product`, dakle kao kvar koji netko treba
  * gledati.
  *
- * Prihvacaju se tocno dvije stvari: `order_created` sa `status === 'paid'` i `order_refunded`. Sve
- * ostalo je `ignored` s imenovanim razlogom, i to je 200, jer retry ne bi promijenio ishod.
+ * Prihvaca se tocno jedna kupnja: `order_created` sa statusom `paid` (usporedba ide nad statusom
+ * bez razmaka i u malim slovima). Povrat se prepoznaje SIRE, po `ev.refunded`, koja je istinita i
+ * za `order_refunded` i za bilo koji dogadjaj sa `attributes.status = 'refunded'` ili
+ * `attributes.refunded = true`. Sve ostalo je `ignored` s imenovanim razlogom, i to je 200, jer
+ * retry ne bi promijenio ishod.
+ *
+ * `ignored` NIJE tiho: handler svaki takav dogadjaj upisuje u inbox i logira. Vidi `isNotableIgnore`
+ * za razliku izmedju neplacene narudzbe (tice se novca) i dogadjaja koji nam uopce ne pripada.
  *
  * Povrat NE trazi `userId`: obrada ide po `order_id` (gasenje entitlementa, povlacenje referral
  * nagrade), pa korisnik uz dogadjaj nije ni potreban. Placena narudzba BEZ
@@ -158,15 +168,35 @@ export interface LemonClassification {
 export function classifyLemonEvent(
   ev: Pick<LemonEvent, 'eventName' | 'status' | 'userId' | 'refunded'>,
 ): LemonClassification {
-  if (ev.eventName === 'order_refunded') return { kind: 'refund' };
+  // POVRAT PRVI, po ZASTAVICI, prije imena dogadjaja (nalaz pregleda 2026-09-23).
+  //
+  // Prva verzija ove funkcije gledala je `ev.refunded` tek unutar `order_created`, pa je povrat
+  // prepoznavala iskljucivo po imenu `order_refunded`. Stari handler je u refund granu ulazio na
+  // `ev.refunded`, koju `parseLemonEvent` racuna i iz `attributes.status === 'refunded'` i iz
+  // `attributes.refunded === true`. Suzenje na ime bi znacilo: dogadjaj koji nosi vracen novac pod
+  // nekim drugim imenom zavrsi kao `ignored` s 200, entitlement ostane aktivan, referral nagrada se
+  // ne povuce, i to bez retryja. Zastavica je sira od imena i zato je ona ulaz u granu.
+  if (ev.refunded || ev.eventName === 'order_refunded') return { kind: 'refund' };
   if (ev.eventName === 'order_created') {
-    // `order_created` koji vec nosi status `refunded` (ili zastavicu) je povrat, ne kupnja.
-    if (ev.refunded) return { kind: 'refund' };
-    if (ev.status !== 'paid') return { kind: 'ignored', reason: `order_status:${ev.status || 'nepoznat'}` };
+    const status = ev.status.trim().toLowerCase();
+    if (status !== 'paid') return { kind: 'ignored', reason: `order_status:${status || 'nepoznat'}` };
     if (!ev.userId) return { kind: 'needs_manual_link', reason: 'bez_user_id' };
     return { kind: 'paid' };
   }
   return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName || 'nepoznat'}` };
+}
+
+/**
+ * Je li `ignored` dogadjaj takav da ga netko MORA pogledati.
+ *
+ * `order_created` koji nije placen tice se stvarne narudzbe i stvarnog novca: Lemon Squeezy nema
+ * `order_updated`, pa narudzba koja je ovdje odbijena kao neplacena nikad nece dobiti drugi
+ * dogadjaj. Ako se pretpostavka o vrijednosti `paid` ikad pokaze krivom, ovo je jedino mjesto na
+ * kojem se to vidi, i zato takav ishod ide u log kao greska. `subscription_*`, `license_*` i
+ * nepoznata imena su druga klasa: njih po runbooku ne bismo ni trebali primati.
+ */
+export function isNotableIgnore(c: Pick<LemonClassification, 'reason'>): boolean {
+  return String(c.reason ?? '').startsWith('order_status:');
 }
 
 const enc = new TextEncoder();
