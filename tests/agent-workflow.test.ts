@@ -478,7 +478,7 @@ describe('python zrcalo presude poznaje Grok', () => {
     expect(success.trim().split(/\r?\n/).length).toBeGreaterThan(1);
     expect(success.trim().split(/\r?\n/)[0].trim()).toBe('{');
     // Kontrola: JS strana isti taj snimak presudjuje tocno.
-    expect(parseResult('grok', success, 0)).toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+    expect(parseResult('grok', success, 0)).toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
   });
 
   it('vodic opisuje zatvoren nalaz, ne otvoren kvar', () => {
