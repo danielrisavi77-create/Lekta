@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
-import { resolve, join } from 'node:path';
+import { existsSync, readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
+import { delimiter, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AGENTS, GROK_MIN_VERSION, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 
@@ -32,6 +32,25 @@ export function spawnJob(job, promptFile, cwd, spawn = spawnSync) {
   });
 }
 
+export function resolveProviderInvocation(command, options = {}) {
+  const platform = options.platform ?? process.platform;
+  if (platform !== 'win32' || command !== 'grok') return { command, argsPrefix: [] };
+
+  const exists = options.exists ?? existsSync;
+  const cwd = options.cwd ?? process.cwd();
+  const pathEnv = options.pathEnv ?? process.env.PATH ?? '';
+  const packagePath = ['@xai-official', 'grok', 'bin', 'grok-bootstrap.js'];
+  const candidates = [
+    join(cwd, 'node_modules', ...packagePath),
+    ...String(pathEnv).split(delimiter).filter(Boolean).flatMap((dir) => [
+      join(dir, ...packagePath),
+      join(dir, 'node_modules', ...packagePath),
+    ]),
+  ];
+  const bootstrap = candidates.find((candidate, index) => candidates.indexOf(candidate) === index && exists(candidate));
+  return bootstrap ? { command: process.execPath, argsPrefix: [bootstrap] } : { command, argsPrefix: [] };
+}
+
 export function isEntryModule(moduleUrl, argv1) {
   if (!argv1) return false;
   const real = (path) => { try { return realpathSync(path); } catch { return resolve(path); } };
@@ -57,7 +76,8 @@ function main() {
     if (rest.length) throw new Error('doctor takes no arguments');
     for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) {
       const versionArgs = cli === 'grok' ? ['version'] : ['--version'];
-      const result = spawnSync(cli, versionArgs, { encoding: 'utf8', timeout: 10_000 });
+      const invocation = resolveProviderInvocation(cli, { cwd: root });
+      const result = spawnSync(invocation.command, [...invocation.argsPrefix, ...versionArgs], { encoding: 'utf8', timeout: 10_000 });
       const line = (result.stdout || result.stderr || '').trim().split('\n')[0];
       if (cli === 'grok' && result.status === 0) {
         const version = parseGrokVersion(line);
@@ -141,7 +161,11 @@ function main() {
     // argv array, never a shell string. Existing CLI authentication is reused.
     // Grok reads the prompt artifact; Codex/Claude take the prompt on stdin.
     releaseLock = false;
-    const result = spawnJob(job, join(out, 'prompt.md'), root);
+    const invocation = resolveProviderInvocation(job.command, { cwd: root });
+    const resolvedJob = invocation.argsPrefix.length
+      ? { ...job, command: invocation.command, args: [...invocation.argsPrefix, ...job.args] }
+      : job;
+    const result = spawnJob(resolvedJob, join(out, 'prompt.md'), root);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
