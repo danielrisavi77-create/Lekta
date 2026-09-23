@@ -357,6 +357,7 @@
       "declaredInConfig": true,
       "requiredSecrets": [
         "REPAIR_LOCAL_DISABLED",
+        "REPAIR_LOCAL_ENABLED",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
@@ -371,6 +372,7 @@
       "declaredInConfig": true,
       "requiredSecrets": [
         "REPAIR_LOCAL_DISABLED",
+        "REPAIR_LOCAL_ENABLED",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
@@ -460,7 +462,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-22T20:22:42.258Z",
-  "generatedFromCommit": "4c9b140012a276e5c7d9bfe0051c0de142788b34",
+  "generatedAt": "2026-09-23T12:44:54.467Z",
+  "generatedFromCommit": "2fffe3e31ad6b2c26fbca657084e79d0c09eb53d",
   "generator": "npm run deploy-manifest"
 }

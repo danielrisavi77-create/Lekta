@@ -258,4 +258,112 @@ describe('repair-docx: lokalni popravak iza zastavice', () => {
       expect(localRepairFlagProblems(mutated)).toEqual([]);
     });
   });
+
+  /**
+   * DRUGI ADVERSARIJALNI PREGLED (2026-09-23, krug 3). Svaki od sljedecih slucajeva je tada
+   * REPRODUCIRAN nad kopijom stvarnog izvora i gard je na njega vratio PRAZAN popis. Ovdje su svi
+   * negativne kontrole: bez njih bi tvrdnja "issuedLocalRepair je dosezljiv samo iza zastavice"
+   * bila jaca od onoga sto gard mjeri.
+   */
+  describe('rupe iz drugog adversarijalnog pregleda', () => {
+    it('deklaracija issuedLocalRepair inicijalizirana launchem umjesto s null', () => {
+      const mutated = edgeSource().replace(
+        'let issuedLocalRepair: IssuedLocalRepairJob | null = null;',
+        'let issuedLocalRepair: IssuedLocalRepairJob | null = rogueLaunch;',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      const problems = localRepairFlagProblems(mutated);
+      expect(problems).toContain('issuedLocalRepair se ne deklarira tocno jednom kao `let issuedLocalRepair: ... = null;`');
+      expect(problems).toContain('issuedLocalRepair se spominje izvan grane i izvan dopustenih oblika citanja');
+    });
+
+    it('destrukturirano pridruzivanje u issuedLocalRepair izvan grane', () => {
+      const mutated = edgeSource().replace(
+        'const tStore = performance.now();',
+        '({ issued: issuedLocalRepair } = rogueResult);\n    const tStore = performance.now();',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      expect(localRepairFlagProblems(mutated)).toContain(
+        'issuedLocalRepair se spominje izvan grane i izvan dopustenih oblika citanja',
+      );
+    });
+
+    /** Izdavac dovucen dinamicki ne postoji u statickoj slici uvoza, pa se popis imena ne bi pomogao. */
+    it('drugi izdavac dovucen dinamickim importom izvan grane', () => {
+      const mutated = edgeSource().replace(
+        'const tStore = performance.now();',
+        "const svc = await import('../../../src/repair/local-runner/issue-service.ts');\n"
+        + '    ({ issued: issuedLocalRepair } = await svc.issueLocalRepairJob(args));\n'
+        + '    const tStore = performance.now();',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      const problems = localRepairFlagProblems(mutated);
+      expect(problems).toContain('dinamicki import u repair-docx; gard ne moze znati koji se modul ucitava');
+      expect(problems).toContain(
+        'izdavac lokalnog popravka (issueLocalRepairJob) se spominje izvan grane koja provjerava LOCAL_REPAIR_ENABLED',
+      );
+      expect(problems).toContain('issuedLocalRepair se spominje izvan grane i izvan dopustenih oblika citanja');
+    });
+
+    /**
+     * Najvjerojatniji stvarni regresijski oblik: privremeno "forsiraj za lokalno testiranje" koje
+     * ostane u kodu. Zasjenjenje je unutar Deno.serve handlera legalno i prolazi `check:edge`.
+     */
+    it('zastavica zasjenjena lokalnom konstantom unutar handlera', () => {
+      const mutated = edgeSource().replace(
+        'if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+        'const LOCAL_REPAIR_ENABLED = true;\n    if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      expect(localRepairFlagProblems(mutated)).toContain(
+        'LOCAL_REPAIR_ENABLED se deklarira vise od jednom; lokalno zasjenjenje ponistava modul-konstantu',
+      );
+    });
+
+    /** `|| true` iza konjunkcije koja POCINJE zastavicom: prethodni oblik uvjeta je to propustao. */
+    it('alternativa dodana iza konjunkcije koja pocinje zastavicom', () => {
+      const mutated = edgeSource().replace(
+        'if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+        'if (LOCAL_REPAIR_ENABLED && Boolean(jobId) || true) {',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      expect(localRepairFlagProblems(mutated)).toContain(
+        'uvjet grane nije oblika `LOCAL_REPAIR_ENABLED && ...`, pa zastavica vise nije nuzan uvjet',
+      );
+    });
+
+    /** Uvjet prelomljen u dva retka: prethodni oblik ga uopce nije vidio i provjera se tiho preskakala. */
+    it('alternativa u uvjetu prelomljenom u dva retka', () => {
+      const mutated = edgeSource().replace(
+        'if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+        'if (LOCAL_REPAIR_ENABLED\n      || true) {',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      expect(localRepairFlagProblems(mutated)).toContain(
+        'uvjet grane nije oblika `LOCAL_REPAIR_ENABLED && ...`, pa zastavica vise nije nuzan uvjet',
+      );
+    });
+
+    /** Uvjet prelomljen u dva retka koji je ISPRAVAN ne smije biti lazna uzbuna. */
+    it('ispravan uvjet prelomljen u dva retka NE rusi gard', () => {
+      const mutated = edgeSource().replace(
+        'if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+        'if (LOCAL_REPAIR_ENABLED && !FREE_MODE\n      && jobId && slotId) {',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      expect(localRepairFlagProblems(mutated)).toEqual([]);
+    });
+
+    /** Zastavica upotrijebljena izvan svoje deklaracije i izvan uvjeta grane (npr. ternar u odgovoru). */
+    it('zastavica citana na trecem mjestu', () => {
+      const mutated = edgeSource().replace(
+        'const tStore = performance.now();',
+        'const forced = LOCAL_REPAIR_ENABLED ? 1 : 0;\n    const tStore = performance.now();',
+      );
+      expect(mutated).not.toEqual(edgeSource());
+      expect(localRepairFlagProblems(mutated)).toContain(
+        'LOCAL_REPAIR_ENABLED se spominje izvan svoje deklaracije i izvan uvjeta grane',
+      );
+    });
+  });
 });
