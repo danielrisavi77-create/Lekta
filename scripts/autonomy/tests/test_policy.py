@@ -68,6 +68,19 @@ class PathPolicyTest(unittest.TestCase):
     def test_example_config_is_valid(self):
         self.assertEqual(validate_config(self.policy), [])
 
+    def test_example_config_has_no_duplicate_json_keys(self):
+        def reject_duplicates(pairs):
+            out = {}
+            for key, value in pairs:
+                if key in out:
+                    raise ValueError(f"duplicate JSON key: {key}")
+                out[key] = value
+            return out
+
+        with open(EXAMPLE, encoding="utf-8") as fh:
+            parsed = json.load(fh, object_pairs_hook=reject_duplicates)
+        self.assertEqual(validate_config(parsed), [])
+
     def test_small_documentation_change_is_low_risk(self):
         self.assertEqual(classify_change(["docs/agents/autonomy-runbook.md"], 20, self.policy), "auto_low_risk")
 
