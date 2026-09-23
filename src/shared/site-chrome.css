@@ -125,6 +125,14 @@ header.site-chrome--scrolled {
 .site-chrome__doc .local-badge { margin-top: 0; padding: 5px 10px; font-size: 11px; letter-spacing: .02em; cursor: help; }
 .site-chrome__doc .local-badge svg { width: 12px; height: 12px; }
 
+/* `host.hidden` (site-chrome.ts, faza `scanning` bez koraka) postavlja atribut `[hidden]`, ali
+   autorski `display: flex` NIZE u ovom listu je jednake specificnosti (0,1,0) kao `[hidden]` i
+   pobjeduje po podrijetlu (UA list uvijek gubi od autorskog, bez obzira na redoslijed): traka je
+   ostajala vidljiva prije nego je dokument uopce odabran (Z15 popravak). `!important` je ovdje
+   namjeran, ne naviknuta navika: jedino tako `[hidden]` sigurno pobjedjuje SVAKO buduce
+   `display` pravilo na istom elementu. */
+[hidden] { display: none !important; }
+
 .site-chrome__steps {
   display: flex;
   align-items: center;

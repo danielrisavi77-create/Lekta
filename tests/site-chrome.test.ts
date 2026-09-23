@@ -30,6 +30,7 @@ import {
   siteChromeSteps,
   siteChromeToolCount,
   setSiteChromeScore,
+  setSiteChromeStage,
 } from '../src/shared/site-chrome';
 import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, formatEurAmount } from '../src/report/pricing';
 
@@ -164,7 +165,10 @@ describe('Z15: pecat i sredina po vrsti stranice', () => {
     expect(header).toContain('id="radDocName"');
     expect(header).toContain('data-site-chrome-score');
     expect(header).toContain('data-site-chrome-steps');
-    expect(header).toContain('data-site-chrome-stage="findings"');
+    // Z15 popravak: pocetna faza je BEZ koraka ("01 Nalazi" jos nije tocna tvrdnja dok dokument
+    // nije ni odabran). `site-chrome.ts` je preuzima na mount i tok analize je mijenja dalje
+    // (`tests/site-chrome.test.ts` "tok analize STVARNO zove setSiteChromeStage" ispod).
+    expect(header).toContain('data-site-chrome-stage="scanning"');
     const koraci = [...header.matchAll(/data-site-chrome-step="([^"]+)"/g)].map((m) => m[1]);
     expect(koraci).toEqual(['findings', 'plan', 'payment', 'done']);
   });
@@ -441,6 +445,48 @@ describe('Z15 stanje nakon skrola', () => {
     Object.defineProperty(doc.defaultView!, 'scrollY', { value: 12, configurable: true });
     doc.defaultView!.dispatchEvent(new Event('scroll'));
     expect(chrome.classList.contains('site-chrome--scrolled')).toBe(false);
+  });
+
+  it('`rad/index.html` pocinje bez faze (scanning): nijedan korak nije aktivan i traka je skrivena', () => {
+    // Z15 popravak: prije Z15 popravka je statican atribut tvrdio "findings" od prvog kadra, dakle
+    // prije nego je dokument uopce odabran. `scanning` vraca PRAZAN popis koraka (site-chrome.ts),
+    // pa `applySiteChromeStage` host sakrije - to je isto stanje kao "jos nema koraka".
+    expect(read('rad/index.html')).toContain('data-site-chrome-stage="scanning"');
+    expect(read('rad/index.html')).not.toContain('data-site-chrome-stage="findings"');
+    const doc = dom(zaglavlje(read('rad/index.html')));
+    mountSiteChrome(doc);
+    const steps = doc.querySelector<HTMLElement>('[data-site-chrome-steps]')!;
+    expect(steps.hidden).toBe(true);
+    for (const item of [...steps.querySelectorAll('[data-site-chrome-step]')]) {
+      expect(item.hasAttribute('aria-current')).toBe(false);
+      expect(item.getAttribute('aria-disabled')).toBe('true');
+    }
+  });
+
+  it('`setSiteChromeStage` je uzak izlaz prema traci: findings otkriva korake, scanning ih ponovno skriva', () => {
+    const doc = dom(zaglavlje(read('rad/index.html')));
+    mountSiteChrome(doc);
+    setSiteChromeStage(doc, 'findings');
+    const steps = doc.querySelector<HTMLElement>('[data-site-chrome-steps]')!;
+    expect(steps.hidden).toBe(false);
+    const nalazi = steps.querySelector('[data-site-chrome-step="findings"]')!;
+    expect(nalazi.getAttribute('aria-current')).toBe('step');
+    setSiteChromeStage(doc, 'scanning');
+    expect(steps.hidden).toBe(true);
+    expect(nalazi.hasAttribute('aria-current')).toBe(false);
+  });
+
+  it('tok analize STVARNO zove `setSiteChromeStage`, ne samo definira ga (mutacija: brisanje poziva)', () => {
+    // Tekstualna tvrdnja umjesto punog mounta rute: `main.ts` i `results-cockpit.ts` vuku puni
+    // analizator i DOM cijele radne povrsine, sto ovaj list namjerno ne mounta. Gard je zato nad
+    // IZVOROM, kao `ui-boot.ts vise ne ozicuje izbornik` gore - ista disciplina, ista slabost
+    // (ne vidi da je poziv na krivom mjestu), ista snaga (vidi da je poziv uklonjen).
+    const main = read('src/routes/workspace/main.ts');
+    expect(main).toContain("import { setSiteChromeStage }");
+    expect(main).toContain("setSiteChromeStage(document, 'scanning')");
+    const kokpit = read('src/ui/results/results-cockpit.ts');
+    expect(kokpit).toContain('setSiteChromeStage');
+    expect(kokpit).toContain("setSiteChromeStage(mount.ownerDocument, 'findings')");
   });
 
   it('sredina `/rad/` NE odlazi pod 820px, jer Z16 trazi stepper u dva reda', () => {

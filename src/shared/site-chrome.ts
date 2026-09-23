@@ -358,7 +358,11 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
 
   const steps = chrome.querySelector<HTMLElement>('[data-site-chrome-steps]');
   const stage = chrome.dataset.siteChromeStage;
-  if (steps) applySiteChromeStage(steps, isSiteChromeStage(stage) ? stage : 'findings');
+  // ZADANA FAZA JE `scanning` (bez koraka), NE `findings`. Prije nego je dokument odabran, traka ne
+  // smije tvrditi "01 Nalazi": to je posao koji jos nije obavljen (Z15 popravak). Stranica bez
+  // atributa ili s nepoznatom vrijednosti pada na isto sigurno stanje kao stranica koja ga eksplicitno
+  // postavi na `scanning`.
+  if (steps) applySiteChromeStage(steps, isSiteChromeStage(stage) ? stage : 'scanning');
 
   const refresh = (): void => markActiveDestination(chrome, active === '' ? null : active);
   const view = doc.defaultView;
@@ -400,4 +404,17 @@ export function setSiteChromeScore(doc: Document, score: number | null): void {
   if (score === null || !Number.isFinite(score)) { cell.hidden = true; cell.textContent = ''; return; }
   cell.hidden = false;
   cell.textContent = String(Math.round(score));
+}
+
+/**
+ * FAZA U TRAKI, IZ TOKA ANALIZE (Z15 popravak). Isti uzak izlaz kao `setSiteChromeScore`: pozivatelj
+ * (main.ts, results-cockpit.ts) ne treba drzati referencu na `SiteChromeHandle` iz `mountSiteChrome`,
+ * samo dokument. Bez montirane trake je no-op.
+ */
+export function setSiteChromeStage(doc: Document, stage: SiteChromeStage): void {
+  const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]');
+  const steps = chrome?.querySelector<HTMLElement>('[data-site-chrome-steps]');
+  if (!steps) return;
+  applySiteChromeStage(steps, stage);
+  if (chrome) chrome.dataset.siteChromeStage = stage;
 }

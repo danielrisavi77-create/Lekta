@@ -9,7 +9,7 @@ import { bindDocumentDna, documentDnaHtml } from './document-dna';
 import type { DocumentDnaModel } from '../../results/document-dna-model';
 import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
-import { setSiteChromeScore } from '../../shared/site-chrome';
+import { setSiteChromeScore, setSiteChromeStage } from '../../shared/site-chrome';
 import type { DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
 import { buildRepairPlan, type PlanItemInput } from './repair-plan';
@@ -293,6 +293,9 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   // NEBODOVAN MODEL NEMA STO POKAZATI U TRAKI: `unscored` (profil bez bodovanih provjera) daje
   // `null`, pa celija ostaje skrivena umjesto da ispise nulu koja bi tvrdila ocjenu.
   setSiteChromeScore(mount.ownerDocument, model.score.kind === 'scored' ? model.score.value : null);
+  // FAZA U TRAKI (Z15 popravak). Kokpit je ovdje jedino mjesto koje zna da su nalazi STVARNO
+  // nacrtani (main.ts vec javi `scanning` cim je dokument prihvacen, prije nego citanje zavrsi).
+  setSiteChromeStage(mount.ownerDocument, 'findings');
   mount.className = 'result-cockpit result-cockpit--' + status.tone;
   mount.dataset.cockpitExperience = 'correction-desk';
   mount.innerHTML = [

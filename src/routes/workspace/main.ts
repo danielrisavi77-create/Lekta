@@ -17,6 +17,7 @@ import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import { mountDisplaySettings } from '../../shared/display-settings';
+import { setSiteChromeStage } from '../../shared/site-chrome';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
@@ -192,6 +193,10 @@ async function start(): Promise<void> {
   });
 
   subscribeAnalyzerDocumentAccepted((event) => {
+    // Z15 popravak: faza u traci prati tok analize, ne stoji zauvijek na "01 Nalazi". Prihvacen
+    // dokument (prvi ili nova verzija) znaci da citanje POCINJE, pa traka gubi korake dok
+    // `renderResultsCockpit` (results-cockpit.ts) ne javi da su nalazi stvarno nacrtani.
+    setSiteChromeStage(document, 'scanning');
     upisi(afterDocumentAccepted(context));
     if (restoredFile !== null && event.file === restoredFile) {
       upisi(afterPersist(context, true));
