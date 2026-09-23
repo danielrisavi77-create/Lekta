@@ -344,14 +344,17 @@ Deno.serve(async (req: Request) => {
   if (!gate.ok) {
     // 200: dogadjaj je testni, tudji ili nas se ne tice, dakle za nas trajno neobradiv. Retry ga
     // ne bi popravio, a 5xx bi providera natjerao da ga ponavlja do isteka prozora.
-    const level = gate.reason === 'event_ignored' ? console.info : console.error;
-    level('webhook-mor event_refused', {
+    const detail = {
       reason: gate.reason,
       eventName: ev.eventName,
       livemode: ev.livemode,
       accountId: ev.accountId,
       orderId: ev.orderId,
-    });
+    };
+    // Ignorirana vrsta je ocekivan promet (Stripe salje mnogo toga), pa ne ide u ERROR kanal;
+    // odbijeno porijeklo ide, jer znaci ili krivu konfiguraciju ili pokusaj.
+    if (gate.reason === 'event_ignored') console.info('webhook-mor event_ignored', detail);
+    else console.error('webhook-mor event_refused', detail);
     await settle(gate.reason === 'event_ignored' ? 'ignored' : 'refused', gate.reason);
     return json({ ok: true, action: gate.reason === 'event_ignored' ? 'ignored' : 'event_refused', reason: gate.reason }, 200);
   }

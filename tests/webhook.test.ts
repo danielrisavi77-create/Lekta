@@ -288,6 +288,11 @@ describe('acceptEvent (porijeklo i vrsta dogadjaja)', () => {
     expect(acceptEvent({ ...ok, accountId: 'acct_nas' }, { ...OPTS, expectedAccountId: 'acct_nas' })).toEqual({
       ok: true,
     });
+    // Odsutan racun uz postavljeno ocekivanje NIJE dokaz da je dogadjaj nas.
+    expect(acceptEvent({ ...ok, accountId: '' }, { ...OPTS, expectedAccountId: 'acct_nas' })).toEqual({
+      ok: false,
+      reason: 'account_mismatch',
+    });
   });
 
   it('vrstu koju ne obradjujemo tiho ignorira, ne knjizi', () => {

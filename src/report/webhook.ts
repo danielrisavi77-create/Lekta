@@ -96,8 +96,10 @@ export function acceptEvent(
   | { ok: false; reason: 'livemode_unverifiable' | 'test_mode_refused' | 'account_mismatch' | 'event_ignored' } {
   if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
   if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
+  // Kad je ocekivani racun POSTAVLJEN, dogadjaj koji ga ne nosi je jednako neprihvatljiv kao
+  // dogadjaj s krivim racunom: odsutnost polja nije dokaz da je nas.
   const expected = String(opts.expectedAccountId ?? '').trim();
-  if (expected && ev.accountId && ev.accountId !== expected) return { ok: false, reason: 'account_mismatch' };
+  if (expected && ev.accountId !== expected) return { ok: false, reason: 'account_mismatch' };
   if (!(STRIPE_HANDLED_EVENTS as readonly string[]).includes(ev.eventName)) {
     return { ok: false, reason: 'event_ignored' };
   }
