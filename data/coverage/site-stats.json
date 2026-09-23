@@ -4,406 +4,540 @@
   "works": 526370,
   "units": {
     "adu": {
-      "kratica": "ADU"
+      "kratica": "ADU",
+      "naziv": "Akademija dramske umjetnosti"
     },
     "agr": {
-      "kratica": "AGR"
+      "kratica": "AGR",
+      "naziv": "Agronomski fakultet"
     },
     "algebra": {
-      "kratica": "Algebra"
+      "kratica": "Algebra",
+      "naziv": "Sveučilište Algebra Bernays"
     },
     "alu": {
-      "kratica": "ALU"
+      "kratica": "ALU",
+      "naziv": "Akademija likovnih umjetnosti"
     },
     "apuri": {
-      "kratica": "APURI"
+      "kratica": "APURI",
+      "naziv": "Akademija primijenjenih umjetnosti u Rijeci"
     },
     "arca": {
-      "kratica": "ARCA"
+      "kratica": "ARCA",
+      "naziv": "Veleučilište Arca (Split)"
     },
     "arh": {
-      "kratica": "ARH"
+      "kratica": "ARH",
+      "naziv": "Arhitektonski fakultet"
     },
     "aspira": {
-      "kratica": "ASPIRA"
+      "kratica": "ASPIRA",
+      "naziv": "Veleučilište Aspira"
     },
     "bak": {
-      "kratica": "BAK"
+      "kratica": "BAK",
+      "naziv": "Veleučilište Baltazar Zaprešić"
     },
     "biolos": {
-      "kratica": "BIOLOS"
+      "kratica": "BIOLOS",
+      "naziv": "Odjel za biologiju, Sveučilište u Osijeku"
     },
     "biotech": {
-      "kratica": "Biotech"
+      "kratica": "Biotech",
+      "naziv": "Fakultet biotehnologije i razvoja lijekova, Rijeka"
     },
     "btho": {
-      "kratica": "BTHO"
+      "kratica": "BTHO",
+      "naziv": "Biotehnicki odjel (UNISB)"
     },
     "effectus": {
-      "kratica": "Effectus"
+      "kratica": "Effectus",
+      "naziv": "EFFECTUS veleučilište"
     },
     "efos": {
-      "kratica": "EFOS"
+      "kratica": "EFOS",
+      "naziv": "Ekonomski fakultet u Osijeku"
     },
     "efri": {
-      "kratica": "EFRI"
+      "kratica": "EFRI",
+      "naziv": "Ekonomski fakultet u Rijeci"
     },
     "efst": {
-      "kratica": "EFST"
+      "kratica": "EFST",
+      "naziv": "Ekonomski fakultet u Splitu"
     },
     "efzg": {
-      "kratica": "EFZG"
+      "kratica": "EFZG",
+      "naziv": "Ekonomski fakultet"
     },
     "erf": {
-      "kratica": "ERF"
+      "kratica": "ERF",
+      "naziv": "Edukacijsko-rehabilitacijski fakultet"
     },
     "evtos": {
-      "kratica": "EVTOS"
+      "kratica": "EVTOS",
+      "naziv": "Evanđeosko teološko veleučilište (Osijek)"
     },
     "fazos": {
-      "kratica": "FAZOS"
+      "kratica": "FAZOS",
+      "naziv": "Fakultet agrobiotehničkih znanosti Osijek"
     },
     "fbf": {
-      "kratica": "FBF"
+      "kratica": "FBF",
+      "naziv": "Farmaceutsko-biokemijski fakultet"
     },
     "fdmri": {
-      "kratica": "FDMRI"
+      "kratica": "FDMRI",
+      "naziv": "Fakultet dentalne medicine Rijeka"
     },
     "fdmz": {
-      "kratica": "FDMZ"
+      "kratica": "FDMZ",
+      "naziv": "Fakultet za dentalnu medicinu i zdravstvo Osijek"
     },
     "fer": {
-      "kratica": "FER"
+      "kratica": "FER",
+      "naziv": "Fakultet elektrotehnike i računarstva"
     },
     "ferit": {
-      "kratica": "FERIT"
+      "kratica": "FERIT",
+      "naziv": "Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek"
     },
     "fesb": {
-      "kratica": "FESB"
+      "kratica": "FESB",
+      "naziv": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB)"
     },
     "fetpu": {
-      "kratica": "FETPU"
+      "kratica": "FETPU",
+      "naziv": "Fakultet ekonomije i turizma Dr. Mijo Mirković, Pula"
     },
     "ffos": {
-      "kratica": "FFOS"
+      "kratica": "FFOS",
+      "naziv": "Filozofski fakultet Osijek"
     },
     "ffpu": {
-      "kratica": "FFPU"
+      "kratica": "FFPU",
+      "naziv": "Filozofski fakultet u Puli"
     },
     "ffri": {
-      "kratica": "FFRI"
+      "kratica": "FFRI",
+      "naziv": "Filozofski fakultet u Rijeci"
     },
     "ffrz": {
-      "kratica": "FFRZ"
+      "kratica": "FFRZ",
+      "naziv": "Fakultet filozofije i religijskih znanosti"
     },
     "ffst": {
-      "kratica": "FFST"
+      "kratica": "FFST",
+      "naziv": "Filozofski fakultet u Splitu"
     },
     "ffzg": {
-      "kratica": "FFZG"
+      "kratica": "FFZG",
+      "naziv": "Filozofski fakultet"
     },
     "fgag": {
-      "kratica": "FGAG"
+      "kratica": "FGAG",
+      "naziv": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu"
     },
     "fhs": {
-      "kratica": "FHS"
+      "kratica": "FHS",
+      "naziv": "Fakultet hrvatskih studija"
     },
     "fipu": {
-      "kratica": "FIPU"
+      "kratica": "FIPU",
+      "naziv": "Fakultet informatike u Puli"
     },
     "fizos": {
-      "kratica": "FIZOS"
+      "kratica": "FIZOS",
+      "naziv": "Odjel za fiziku, Sveučilište u Osijeku"
     },
     "fizri": {
-      "kratica": "FIZRI"
+      "kratica": "FIZRI",
+      "naziv": "Fakultet za fiziku u Rijeci"
     },
     "fkit": {
-      "kratica": "FKIT"
+      "kratica": "FKIT",
+      "naziv": "Fakultet kemijskog inženjerstva i tehnologije"
     },
     "fmtu": {
-      "kratica": "FMTU"
+      "kratica": "FMTU",
+      "naziv": "Fakultet za menadžment u turizmu i ugostiteljstvu, Opatija"
     },
     "foi": {
-      "kratica": "FOI"
+      "kratica": "FOI",
+      "naziv": "Fakultet organizacije i informatike"
     },
     "foozos": {
-      "kratica": "FOOZOS"
+      "kratica": "FOOZOS",
+      "naziv": "Fakultet za odgojne i obrazovne znanosti Osijek"
     },
     "foozpu": {
-      "kratica": "FOOZPU"
+      "kratica": "FOOZPU",
+      "naziv": "Fakultet za odgojne i obrazovne znanosti, Pula"
     },
     "forenzika": {
-      "kratica": "Forenzika"
+      "kratica": "Forenzika",
+      "naziv": "Fakultet za forenzicke znanosti"
     },
     "fpz": {
-      "kratica": "FPZ"
+      "kratica": "FPZ",
+      "naziv": "Fakultet prometnih znanosti"
     },
     "fpzg": {
-      "kratica": "FPZG"
+      "kratica": "FPZG",
+      "naziv": "Fakultet političkih znanosti"
     },
     "fpzpu": {
-      "kratica": "FPZPU"
+      "kratica": "FPZPU",
+      "naziv": "Fakultet prirodnih znanosti u Puli"
     },
     "fsb": {
-      "kratica": "FSB"
+      "kratica": "FSB",
+      "naziv": "Fakultet strojarstva i brodogradnje"
     },
     "ftrr": {
-      "kratica": "FTRR"
+      "kratica": "FTRR",
+      "naziv": "Fakultet turizma i ruralnog razvoja u Pozegi"
     },
     "fzsri": {
-      "kratica": "FZSRI"
+      "kratica": "FZSRI",
+      "naziv": "Fakultet zdravstvenih studija u Rijeci"
     },
     "geof": {
-      "kratica": "GEOF"
+      "kratica": "GEOF",
+      "naziv": "Geodetski fakultet"
     },
     "grad": {
-      "kratica": "GRAD"
+      "kratica": "GRAD",
+      "naziv": "Građevinski fakultet"
     },
     "gradri": {
-      "kratica": "GRADRI"
+      "kratica": "GRADRI",
+      "naziv": "Građevinski fakultet u Rijeci"
     },
     "grafos": {
-      "kratica": "GRAFOS"
+      "kratica": "GRAFOS",
+      "naziv": "Gradevinski i arhitektonski fakultet Osijek"
     },
     "grf": {
-      "kratica": "GRF"
+      "kratica": "GRF",
+      "naziv": "Grafički fakultet"
     },
     "hks": {
-      "kratica": "HKS"
+      "kratica": "HKS",
+      "naziv": "Hrvatsko katoličko sveučilište"
     },
     "inf": {
-      "kratica": "INF"
+      "kratica": "INF",
+      "naziv": "Fakultet informatike i digitalnih tehnologija, Rijeka"
     },
     "iv": {
-      "kratica": "IV"
+      "kratica": "IV",
+      "naziv": "Istarsko veleučilište (Universita Istriana), Pula"
     },
     "kbf": {
-      "kratica": "KBF"
+      "kratica": "KBF",
+      "naziv": "Katolički bogoslovni fakultet"
     },
     "kbfdj": {
-      "kratica": "KBFDJ"
+      "kratica": "KBFDJ",
+      "naziv": "Katolicki bogoslovni fakultet u Djakovu"
     },
     "kbfst": {
-      "kratica": "KBFST"
+      "kratica": "KBFST",
+      "naziv": "Katolički bogoslovni fakultet u Splitu"
     },
     "kemos": {
-      "kratica": "KEMOS"
+      "kratica": "KEMOS",
+      "naziv": "Odjel za kemiju, Sveučilište u Osijeku"
     },
     "kif": {
-      "kratica": "KIF"
+      "kratica": "KIF",
+      "naziv": "Kineziološki fakultet"
     },
     "kifos": {
-      "kratica": "KIFOS"
+      "kratica": "KIFOS",
+      "naziv": "Kinezioloski fakultet Osijek"
     },
     "kifst": {
-      "kratica": "KIFST"
+      "kratica": "KIFST",
+      "naziv": "Kineziološki fakultet u Splitu"
     },
     "ktfst": {
-      "kratica": "KTFST"
+      "kratica": "KTFST",
+      "naziv": "Kemijsko-tehnološki fakultet u Splitu"
     },
     "libertas": {
-      "kratica": "Libertas"
+      "kratica": "Libertas",
+      "naziv": "Sveučilište Libertas"
     },
     "logri": {
-      "kratica": "LOGRI"
+      "kratica": "LOGRI",
+      "naziv": "Fakultet za logopediju Rijeka"
     },
     "mapu": {
-      "kratica": "MAPU"
+      "kratica": "MAPU",
+      "naziv": "Muzička akademija u Puli"
     },
     "matematika": {
-      "kratica": "Matematika"
+      "kratica": "Matematika",
+      "naziv": "Fakultet za matematiku u Rijeci"
     },
     "mathos": {
-      "kratica": "MATHOS"
+      "kratica": "MATHOS",
+      "naziv": "Fakultet primijenjene matematike i informatike (Osijek)"
     },
     "medri": {
-      "kratica": "MEDRI"
+      "kratica": "MEDRI",
+      "naziv": "Medicinski fakultet u Rijeci"
     },
     "mef": {
-      "kratica": "MEF"
+      "kratica": "MEF",
+      "naziv": "Medicinski fakultet"
     },
     "mefos": {
-      "kratica": "MEFOS"
+      "kratica": "MEFOS",
+      "naziv": "Medicinski fakultet Osijek"
     },
     "mefst": {
-      "kratica": "MEFST"
+      "kratica": "MEFST",
+      "naziv": "Medicinski fakultet u Splitu"
     },
     "mev": {
-      "kratica": "MEV"
+      "kratica": "MEV",
+      "naziv": "Međimursko veleučilište u Čakovcu"
     },
     "mfpu": {
-      "kratica": "MFPU"
+      "kratica": "MFPU",
+      "naziv": "Medicinski fakultet u Puli"
     },
     "more": {
-      "kratica": "MORE"
+      "kratica": "MORE",
+      "naziv": "Fakultet znanosti o moru"
     },
     "muza": {
-      "kratica": "MUZA"
+      "kratica": "MUZA",
+      "naziv": "Muzička akademija"
     },
     "odhz": {
-      "kratica": "ODHZ"
+      "kratica": "ODHZ",
+      "naziv": "Odjel društveno-humanističkih znanosti (UNISB)"
     },
     "oss": {
-      "kratica": "OSS"
+      "kratica": "OSS",
+      "naziv": "Sveucilisni odjel za strucne studije (Split)"
     },
     "ozs": {
-      "kratica": "OZS"
+      "kratica": "OZS",
+      "naziv": "Fakultet zdravstvenih znanosti (Split)"
     },
     "par": {
-      "kratica": "PAR"
+      "kratica": "PAR",
+      "naziv": "Veleučilište PAR"
     },
     "pbf": {
-      "kratica": "PBF"
+      "kratica": "PBF",
+      "naziv": "Prehrambeno-biotehnološki fakultet"
     },
     "pfri": {
-      "kratica": "PFRI"
+      "kratica": "PFRI",
+      "naziv": "Pomorski fakultet u Rijeci"
     },
     "pfst": {
-      "kratica": "PFST"
+      "kratica": "PFST",
+      "naziv": "Pomorski fakultet u Splitu"
     },
     "pmf": {
-      "kratica": "PMF"
+      "kratica": "PMF",
+      "naziv": "Prirodoslovno-matematički fakultet"
     },
     "pmfst": {
-      "kratica": "PMFST"
+      "kratica": "PMFST",
+      "naziv": "Prirodoslovno-matematicki fakultet u Splitu"
     },
     "pravo": {
-      "kratica": "PRAVO"
+      "kratica": "PRAVO",
+      "naziv": "Pravni fakultet"
     },
     "pravos": {
-      "kratica": "PRAVOS"
+      "kratica": "PRAVOS",
+      "naziv": "Pravni fakultet Osijek"
     },
     "pravri": {
-      "kratica": "PRAVRI"
+      "kratica": "PRAVRI",
+      "naziv": "Pravni fakultet u Rijeci"
     },
     "pravst": {
-      "kratica": "PRAVST"
+      "kratica": "PRAVST",
+      "naziv": "Pravni fakultet u Splitu"
     },
     "ptfos": {
-      "kratica": "PTFOS"
+      "kratica": "PTFOS",
+      "naziv": "Prehrambeno-tehnološki fakultet Osijek"
     },
     "pvzg": {
-      "kratica": "PVZG"
+      "kratica": "PVZG",
+      "naziv": "Poslovno veleučilište Zagreb"
     },
     "rgnf": {
-      "kratica": "RGNF"
+      "kratica": "RGNF",
+      "naziv": "Rudarsko-geološko-naftni fakultet"
     },
     "rit": {
-      "kratica": "RIT"
+      "kratica": "RIT",
+      "naziv": "RIT Croatia — Zagreb"
     },
     "riteh": {
-      "kratica": "RITEH"
+      "kratica": "RITEH",
+      "naziv": "Tehnički fakultet u Rijeci"
     },
     "rrif": {
-      "kratica": "RRIF"
+      "kratica": "RRIF",
+      "naziv": "Veleučilište RRiF"
     },
     "securus": {
-      "kratica": "Securus"
+      "kratica": "Securus",
+      "naziv": "Veleučilište menadžmenta i sigurnosti Securus (Pula)"
     },
     "sfsb": {
-      "kratica": "SFSB"
+      "kratica": "SFSB",
+      "naziv": "Strojarski fakultet u Slavonskom Brodu"
     },
     "sfzg": {
-      "kratica": "SFZG"
+      "kratica": "SFZG",
+      "naziv": "Stomatološki fakultet"
     },
     "simet": {
-      "kratica": "SIMET"
+      "kratica": "SIMET",
+      "naziv": "Metalurski fakultet"
     },
     "sois-ft": {
-      "kratica": "SOIS-FT"
+      "kratica": "SOIS-FT",
+      "naziv": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\""
     },
     "sumfak": {
-      "kratica": "SUMFAK"
+      "kratica": "SUMFAK",
+      "naziv": "Fakultet šumarstva i drvne tehnologije"
     },
     "teho": {
-      "kratica": "TEHO"
+      "kratica": "TEHO",
+      "naziv": "Tehnicki odjel (UNISB)"
     },
     "tfpu": {
-      "kratica": "TFPU"
+      "kratica": "TFPU",
+      "naziv": "Tehnicki fakultet u Puli"
     },
     "ttf": {
-      "kratica": "TTF"
+      "kratica": "TTF",
+      "naziv": "Tekstilno-tehnološki fakultet"
     },
     "tvz": {
-      "kratica": "TVZ"
+      "kratica": "TVZ",
+      "naziv": "Tehničko veleučilište u Zagrebu"
     },
     "uaos": {
-      "kratica": "UAOS"
+      "kratica": "UAOS",
+      "naziv": "Akademija za umjetnost i kulturu u Osijeku"
     },
     "ufri": {
-      "kratica": "UFRI"
+      "kratica": "UFRI",
+      "naziv": "Učiteljski fakultet u Rijeci"
     },
     "ufzg": {
-      "kratica": "UFZG"
+      "kratica": "UFZG",
+      "naziv": "Učiteljski fakultet"
     },
     "umas": {
-      "kratica": "UMAS"
+      "kratica": "UMAS",
+      "naziv": "Umjetnicka akademija u Splitu"
     },
     "unidu": {
-      "kratica": "UNIDU"
+      "kratica": "UNIDU",
+      "naziv": "Sveučilište u Dubrovniku"
     },
     "unin": {
-      "kratica": "UNIN"
+      "kratica": "UNIN",
+      "naziv": "Sveučilište Sjever"
     },
     "unizd": {
-      "kratica": "UNIZD"
+      "kratica": "UNIZD",
+      "naziv": "Sveučilište u Zadru"
     },
     "vef": {
-      "kratica": "VEF"
+      "kratica": "VEF",
+      "naziv": "Veterinarski fakultet"
     },
     "veleknin": {
-      "kratica": "Veleknin"
+      "kratica": "Veleknin",
+      "naziv": "Veleučilište Marko Marulić u Kninu"
     },
     "veleri": {
-      "kratica": "VELERI"
+      "kratica": "VELERI",
+      "naziv": "Veleučilište u Rijeci"
     },
     "vern": {
-      "kratica": "VERN"
+      "kratica": "VERN",
+      "naziv": "Sveučilište VERN'"
     },
     "vevu": {
-      "kratica": "VEVU"
+      "kratica": "VEVU",
+      "naziv": "Veleučilište Lavoslav Ružička u Vukovaru"
     },
     "vguk": {
-      "kratica": "VGUK"
+      "kratica": "VGUK",
+      "naziv": "Veleučilište u Križevcima"
     },
     "vhzk": {
-      "kratica": "VHZK"
+      "kratica": "VHZK",
+      "naziv": "Veleučilište Hrvatsko zagorje Krapina"
     },
     "vkjs": {
-      "kratica": "VKJS"
+      "kratica": "VKJS",
+      "naziv": "Veleučilište kriminalistike i javne sigurnosti"
     },
     "vnt": {
-      "kratica": "VNT"
+      "kratica": "VNT",
+      "naziv": "Veleučilište Nikola Tesla u Gospiću"
     },
     "vsig": {
-      "kratica": "VSIG"
+      "kratica": "VSIG",
+      "naziv": "Veleučilište Ivanić-Grad"
     },
     "vsite": {
-      "kratica": "VSITE"
+      "kratica": "VSITE",
+      "naziv": "Veleučilište suvremenih informacijskih tehnologija"
     },
     "vss": {
-      "kratica": "VSS"
+      "kratica": "VSS",
+      "naziv": "Veleučilište studija sigurnosti"
     },
     "vub": {
-      "kratica": "VUB"
+      "kratica": "VUB",
+      "naziv": "Veleučilište u Bjelovaru"
     },
     "vuka": {
-      "kratica": "VUKA"
+      "kratica": "VUKA",
+      "naziv": "Veleučilište u Karlovcu"
     },
     "vus": {
-      "kratica": "VUS"
+      "kratica": "VUS",
+      "naziv": "Veleučilište u Šibeniku"
     },
     "vuv": {
-      "kratica": "VUV"
+      "kratica": "VUV",
+      "naziv": "Veleučilište u Virovitici"
     },
     "vvg": {
-      "kratica": "VVG"
+      "kratica": "VVG",
+      "naziv": "Veleučilište Velika Gorica"
     },
     "zsem": {
-      "kratica": "ZSEM"
+      "kratica": "ZSEM",
+      "naziv": "Zagrebačka škola ekonomije i managementa"
     },
     "zvu": {
-      "kratica": "ZVU"
+      "kratica": "ZVU",
+      "naziv": "Zdravstveno veleučilište"
     }
   },
   "workTypes": {

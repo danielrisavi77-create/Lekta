@@ -12,31 +12,34 @@ import type { WorkType } from '../ui/work-selection';
  */
 
 /**
- * Jedna jedinica u pecenom indeksu.
+ * Jedna jedinica u pecenom indeksu: kratica za plocicu i puni naziv ustanove.
  *
- * NOSI SAMO `kratica`, IAKO JE NALOG F8 TRAZIO I `naziv`, i to iz dva izmjerena razloga:
+ * KRATICA JE IZVEDENA, NAZIV JE PRESLIKAN. Kratica nema izvor nigdje u podacima, pa se izvodi po
+ * pravilu zapisanom uz `unitKratica` ispod; naziv je doslovno `name` iz kataloga
+ * (`data/catalog/zagreb-catalog.json`), dakle projekcija postojeceg izvora u artefakt koji pece
+ * ISTI commit, a ne druga autorska tvrdnja.
  *
- *   1. JEDAN IZVOR. Naziv jedinice VEC ima izvor (`data/catalog/zagreb-catalog.json`, polje
- *      `name`), pa bi peceni duplikat bio DRUGI izvor iste tvrdnje: tocno ono sto CLAUDE.md
- *      ("Izvori istine") zabranjuje. Kratica drugi izvor NEMA nigdje, i zato se pece.
- *   2. PRORACUN TRAKE. `src/shared/site-chrome.ts` uvozi ovaj JSON, a `tests/route-shell-budget.test.ts`
- *      mjeri njegov bundle uz granicu od 8 KB gzip. Izmjereno 2026-09-23: indeks s nazivima je
- *      traku digao na 7842 B, dakle 350 B od granice, a bez naziva na 6216 B. Naziv je pritom
- *      BEZ POTROSACA u pregledniku: plocica pokazuje kraticu, a `title` ostaje "Uskoro" dok
- *      ladica Z13 ne postoji (odluka F8).
+ * PRORACUN TRAKE JE IZMJEREN, NE PROCIJENJEN. `src/shared/site-chrome.ts` uvozi ovaj JSON, pa
+ * `tests/route-shell-budget.test.ts` mjeri njegov bundle uz granicu od 8192 B gzip. Izmjereno u
+ * ovom stablu 2026-09-23 (`esbuild` + `gzipSync`, ista postavka kao gard): bez naziva 6458 B, s
+ * nazivom 8001 B, dakle 191 B ispod granice. Raniji zapis u ovom komentaru je tvrdio 6216 B i
+ * 7842 B; te brojke su bile iz starijeg stanja grane i nisu vise vrijedile, a tvrdnja da naziv
+ * "ne stane" pala je na vlastitom mjerenju.
  *
- * Zapisano kao F16 u `docs/agents/orchestrator-backlog.md`. Kad Z13 naziv zatreba, uzima ga iz
- * kataloga na ruti koja katalog vec ucitava, ne iz ovog indeksa.
+ * ZRAKA JE TANKA I TO JE DIO ODLUKE: sljedeci uvoz u traku vise ne stane, pa se naziv uklanja ili
+ * indeks lijeni prije nego sto traka dobije ijednu novu ovisnost. Prvi potrosac naziva je ladica
+ * Z13; do nje plocica pokazuje kraticu, a `title` ostaje "Uskoro".
  */
 export interface SiteStatsUnit {
   kratica: string;
+  naziv: string;
 }
 
 export interface SiteStats {
   profiles: number;
   institutions: number;
   works: number;
-  /** `unitId` -> kratica ustanove (F8); plocica profila u traci cita odavde. */
+  /** `unitId` -> kratica i naziv ustanove (F8); plocica profila u traci cita kraticu odavde. */
   units: Record<string, SiteStatsUnit>;
   /** Pohranjeni `workType` -> kratica razine rada (F8). */
   workTypes: Record<string, string>;
@@ -103,7 +106,7 @@ export function unitKratica(unitId: string): string {
 function unitIndex(): Record<string, SiteStatsUnit> {
   const out: Record<string, SiteStatsUnit> = {};
   for (const unit of allUnits().slice().sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))) {
-    out[unit.id] = { kratica: unitKratica(unit.id) };
+    out[unit.id] = { kratica: unitKratica(unit.id), naziv: unit.name };
   }
   return out;
 }
