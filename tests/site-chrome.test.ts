@@ -31,6 +31,7 @@ import {
   siteChromeToolCount,
   siteChromePlateLabel,
   setSiteChromeScore,
+  setSiteChromePlate,
   setSiteChromeStage,
   SITE_CHROME_PLATE_EMPTY,
 } from '../src/shared/site-chrome';
@@ -594,6 +595,33 @@ describe('Z15 stanje nakon skrola', () => {
     expect(kokpit).toContain("setSiteChromeStage(mount.ownerDocument, 'findings')");
   });
 
+  it('`setSiteChromePlate` je uzak izlaz prema traci: ponovno cita pohranu bez reloada', () => {
+    const doc = dom(zaglavlje(read('rad/index.html')));
+    mountSiteChrome(doc);
+    const slot = doc.querySelector<HTMLElement>('[data-site-chrome-profile-label]')!;
+    expect(slot.textContent).toBe(SITE_CHROME_PLATE_EMPTY);
+    localStorage.setItem('lekta.preferences.v2', JSON.stringify({ unit: 'fpzg', workType: 'graduate' }));
+    setSiteChromePlate(doc);
+    expect(slot.textContent).toBe('FPZG · Dipl.');
+    // Bez montirane trake je no-op, ne baca.
+    disposeSiteChrome(doc);
+    const golDoc = dom('<p>bez trake</p>');
+    expect(() => setSiteChromePlate(golDoc)).not.toThrow();
+  });
+
+  it('tok odabira STVARNO zove `setSiteChromePlate`, ne samo definira ga (mutacija: brisanje poziva)', () => {
+    // Isti razlog kao gard iznad za `setSiteChromeStage`: tekstualna tvrdnja umjesto punog mounta
+    // rute `/rad/` (`app.ts` vuce puni analizator i DOM cijele radne povrsine).
+    const app = read('src/ui/app.ts');
+    expect(app).toContain('setSiteChromePlate');
+    expect(app).toContain('setSiteChromePlate(document)');
+    // MUTACIJA: poziv bez definicije (uvoz uklonjen) ne bi prosao TypeScript, provjereno `npx tsc`;
+    // ovaj gard hvata obrnuto, cesce zaboravljen smjer - definicija bez stvarnog poziva u toku.
+    const bezPoziva = app.replace(';setSiteChromePlate(document)', '');
+    expect(bezPoziva, 'mutacija se nije primila; provjeri tocan tekst poziva').not.toBe(app);
+    expect(bezPoziva).not.toContain('setSiteChromePlate(document)');
+  });
+
   it('ocjena u traci se prazni pri novom dokumentu, ne cim novi kokpit nacrta svoju', () => {
     // Bez ovoga bi traka do prvog nacrtanog kokpita pokazivala ocjenu PROSLOG dokumenta dok
     // Lekta cita novi - ista lazna tvrdnja kao stepper prije Z15 popravka gore, samo na broju.
@@ -837,12 +865,19 @@ describe('F8 plocica profila: kratica iz pecenog indeksa', () => {
     expect(siteChromePlateLabel({ unit: 'nema-ga-u-indeksu' })).not.toBe('Nema-Ga-U-Indeksu');
   });
 
-  it('plocica cita ISTI put ucitavanja JSON-a kao traka s brojkama', () => {
+  it('plocica cita MALI pecen indeks (ne cijeli site-stats.json), iz ISTOG izracuna kao traka s brojkama', () => {
     // Bez ove tvrdnje bi plocica mogla dobiti drugi (zivi) izvor kratica, dakle drugi izvor istine.
+    // Krug popravka 2026-09-23: traka je uvozila `site-stats.json` (s nazivom svake jedinice, F16),
+    // sto ju je gurnulo na 8001 B gzip, 191 B ispod granice (`tests/route-shell-budget.test.ts`).
+    // Sada uvozi mali `unit-kratice.json`, bez `naziv` polja, pecen istim generatorom.
     const chrome = read('src/shared/site-chrome.ts');
     const strip = read('src/routes/shared/site-stats-strip.ts');
-    expect(chrome).toContain("data/coverage/site-stats.json'");
+    const generator = read('scripts/gen-site-stats.mts');
+    expect(chrome).toContain("data/coverage/unit-kratice.json'");
+    expect(chrome, 'traka vise ne smije uvoziti puni JSON s nazivima').not.toContain("data/coverage/site-stats.json'");
     expect(strip).toContain("data/coverage/site-stats.json'");
+    expect(generator, 'oba artefakta pece ISTA skripta').toContain('unit-kratice.json');
+    expect(generator).toContain('site-stats.json');
     expect(chrome, 'traka ne smije vuci registar profila').not.toContain('profile-registry');
     expect(chrome, 'traka ne smije vuci katalog').not.toContain('catalog-loader');
   });

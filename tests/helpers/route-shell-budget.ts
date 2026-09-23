@@ -24,8 +24,8 @@ const FORBIDDEN_SHELL_GRAPH_RULES = [
  * Zabranjeni rjecnik je heuristika nad PUTANJOM, pa pogadja i ono sto feature graf nije. Traka
  * (`src/shared/site-chrome.ts`, Z15) mora znati najnizu cijenu, a jedini izvor cijene je
  * `src/report/pricing.ts`: cista konfiguracija tierova, bez DOM-a, mreze i analizatora (izmjereno
- * 2026-09-23: cijeli graf trake je 5,0 KB gzip JS). Alternativa bi bila prepisan iznos u traci,
- * dakle drugi izvor cijene, tocno ono sto Z11 uklanja.
+ * 2026-09-23, drugi krug popravka: cijeli graf trake je 6,3 KB gzip JS). Alternativa bi bila
+ * prepisan iznos u traci, dakle drugi izvor cijene, tocno ono sto Z11 uklanja.
  *
  * Iznimka je STAZA, ne uzorak: `src/report/repair-history.ts` i dalje pada.
  */

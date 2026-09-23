@@ -12,23 +12,19 @@ import type { WorkType } from '../ui/work-selection';
  */
 
 /**
- * Jedna jedinica u pecenom indeksu: kratica za plocicu i puni naziv ustanove.
+ * Jedna jedinica u pecenom indeksu STRANICE `/saznaj-vise/`: kratica i puni naziv ustanove.
  *
  * KRATICA JE IZVEDENA, NAZIV JE PRESLIKAN. Kratica nema izvor nigdje u podacima, pa se izvodi po
  * pravilu zapisanom uz `unitKratica` ispod; naziv je doslovno `name` iz kataloga
  * (`data/catalog/zagreb-catalog.json`), dakle projekcija postojeceg izvora u artefakt koji pece
  * ISTI commit, a ne druga autorska tvrdnja.
  *
- * PRORACUN TRAKE JE IZMJEREN, NE PROCIJENJEN. `src/shared/site-chrome.ts` uvozi ovaj JSON, pa
- * `tests/route-shell-budget.test.ts` mjeri njegov bundle uz granicu od 8192 B gzip. Izmjereno u
- * ovom stablu 2026-09-23 (`esbuild` + `gzipSync`, ista postavka kao gard): bez naziva 6458 B, s
- * nazivom 8001 B, dakle 191 B ispod granice. Raniji zapis u ovom komentaru je tvrdio 6216 B i
- * 7842 B; te brojke su bile iz starijeg stanja grane i nisu vise vrijedile, a tvrdnja da naziv
- * "ne stane" pala je na vlastitom mjerenju.
- *
- * ZRAKA JE TANKA I TO JE DIO ODLUKE: sljedeci uvoz u traku vise ne stane, pa se naziv uklanja ili
- * indeks lijeni prije nego sto traka dobije ijednu novu ovisnost. Prvi potrosac naziva je ladica
- * Z13; do nje plocica pokazuje kraticu, a `title` ostaje "Uskoro".
+ * TRAKA (`src/shared/site-chrome.ts`) OVAJ TIP NE UVOZI. Do ovog kruga je uvozila CIJELI JSON s
+ * nazivom svake od 134 jedinica, pa je gzipani chrome JS izmjeren na 8001 B, 191 B ispod granice
+ * od 8192 B u `tests/route-shell-budget.test.ts` (`esbuild` + `gzipSync`). Naziv plocici ne treba
+ * (crta samo kraticu), pa traka sada uvozi mali `data/coverage/unit-kratice.json`
+ * (`PlateIndex`/`computePlateIndex` ispod), bez `naziv` polja; `npm run gen-site-stats` pece OBA
+ * artefakta iz ISTOG izracuna, pa se ne mogu raziciti.
  */
 export interface SiteStatsUnit {
   kratica: string;
@@ -78,11 +74,18 @@ const RAZINA_KRATICA: Partial<Record<WorkType, string>> = {
  * pravilo izvodjenja stoji ovdje, jer izvedena vrijednost se ne smije predstaviti kao tvrdnja s
  * izvorom (CLAUDE.md, "Izvori istine").
  *
+ * PRAVILO NIJE "prepoznaj akronim": kratki `id` se VERZALIZIRA bez obzira je li vec akronim ili
+ * skracena rijec, jer razlika izmedju to dvoje nije u podacima. Za `fpzg`, `pmf` verzal DAJE
+ * akronim; za `pravo`, `pravos`, `biolos` verzal daje samo velika slova skracene rijeci (PRAVO,
+ * PRAVOS, BIOLOS), sto formalno nije akronim, ali je citljivo i krace od punog imena, dakle bolje
+ * od nicega dok registar profila ne dobije vlastito polje `kratica` po jedinici (pitanje F16,
+ * `docs/agents/orchestrator-backlog.md`).
+ *
  * PRAVILO, u dva koraka i bez iznimaka:
- *   1. `id` se dijeli na `-`. Ako su SVA slova zajedno najvise sest (dakle id je vec akronim, npr.
- *      `fpzg`, `pmf`, `sois-ft`), svaki segment ide u VERZAL i spaja se crticom: FPZG, PMF, SOIS-FT.
- *   2. Inace je `id` ime, ne akronim (`algebra`, `matematika`, `libertas`), pa bi verzal dao
- *      sedam i vise znakova na plocici siroj od trake. Takav se pise velikim pocetnim slovom:
+ *   1. `id` se dijeli na `-`. Ako su SVA slova zajedno najvise sest (npr. `fpzg`, `pmf`, `pravo`,
+ *      `sois-ft`), svaki segment ide u VERZAL i spaja se crticom: FPZG, PMF, PRAVO, SOIS-FT.
+ *   2. Inace je `id` predugacko ime za verzal (`algebra`, `matematika`, `libertas`), pa bi verzal
+ *      dao sedam i vise znakova na plocici siroj od trake. Takav se pise velikim pocetnim slovom:
  *      Algebra, Matematika, Libertas.
  *
  * Granica od sest slova je izmjerena na stvarnom katalogu (2026-09-23): 125 od 134 jedinica ima
@@ -121,6 +124,37 @@ export function computeSiteStats(): SiteStats {
     institutions,
     works: CORPUS_STATS.works,
     units: unitIndex(),
+    workTypes: { ...RAZINA_KRATICA } as Record<string, string>,
+  };
+}
+
+/** Indeks za plocicu profila u traci: `unitId` -> KRATICA (bez naziva). Vidi `PlateIndex`. */
+export type PlateUnitIndex = Record<string, string>;
+
+export interface PlateIndex {
+  /** Broj verificiranih profila (F8 plocica pokazuje isti broj kao traka s brojkama). */
+  profiles: number;
+  units: PlateUnitIndex;
+  /** Pohranjeni `workType` -> kratica razine rada (F8). */
+  workTypes: Record<string, string>;
+}
+
+/**
+ * ZASEBAN, MALI ARTEFAKT ZA TRAKU (F8/Z15 MINOR, 2026-09-23).
+ *
+ * `src/shared/site-chrome.ts` je do ovog kruga uvozio CIJELI `site-stats.json`, ukljucujuci puni
+ * naziv svake od 134 jedinica; taj naziv plocici ne treba (crta samo kraticu), a gurao je gzipani
+ * chrome JS na 8001 B, 191 B ispod granice od 8192 B u `tests/route-shell-budget.test.ts`. Ovaj
+ * indeks nosi ISTU formulu i ISTO pravilo izvodjenja kratice, samo bez `naziv` polja, pa `npm run
+ * gen-site-stats` pece OBA artefakta iz JEDNOG izracuna i ne mogu se raziciti.
+ */
+export function computePlateIndex(): PlateIndex {
+  const profiles = VERIFIED_PROFILE_REGISTRY;
+  const units: PlateUnitIndex = {};
+  for (const [id, unit] of Object.entries(unitIndex())) units[id] = unit.kratica;
+  return {
+    profiles: profiles.length,
+    units,
     workTypes: { ...RAZINA_KRATICA } as Record<string, string>,
   };
 }

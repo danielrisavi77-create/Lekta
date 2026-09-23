@@ -18,8 +18,11 @@ import {
  * proracun je usmjeren na zivu: tvrdnja je time prestala biti o kodu koji korisnik nikad ne skine.
  *
  * Granica je ostala ISTA (8 KB JS / 12 KB CSS gzip) i rjecnik zabranjenih ulaza je isti, uz jednu
- * imenovanu iznimku (`src/report/pricing.ts`, obrazlozena u helperu). Izmjereno 2026-09-23:
- * 5020 B JS i 2168 B CSS gzip, dakle traka ima zraka, ali ne i dopustenje da uvuce feature graf.
+ * imenovanu iznimku (`src/report/pricing.ts`, obrazlozena u helperu). Izmjereno u ovom stablu
+ * 2026-09-23 (drugi krug popravka, `esbuild` + `gzipSync`): 6418 B JS i 2435 B CSS gzip. JS je
+ * PAO s 8001 B: traka od ovog kruga vise ne uvozi cijeli `site-stats.json` (s nazivom svake od 134
+ * jedinica) nego mali `data/coverage/unit-kratice.json` (F16/F17). Traka ima zraka, ali ne i
+ * dopustenje da uvuce feature graf.
  */
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');

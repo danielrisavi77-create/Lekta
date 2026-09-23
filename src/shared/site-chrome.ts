@@ -28,7 +28,7 @@
  * puni tintom) i ozicenje View Transitions API-ja. `view-transition-name: nav-marker` je u CSS-u
  * pripremljen, ali nista ne pokrece prijelaz izmedu dokumenata.
  */
-import SITE_STATS from '../../data/coverage/site-stats.json';
+import PLATE_INDEX from '../../data/coverage/unit-kratice.json';
 import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, formatEurAmount } from '../report/pricing';
 import { releasedPublicRouteGroups } from '../routes/shared/public-route-directory';
 import { STORAGE_KEYS, safeStorageGet } from './browser-storage';
@@ -116,9 +116,9 @@ export function siteChromeToolCount(): number {
   return group.destinations.filter((destination) => destination.id !== 'tools').length;
 }
 
-/** Broj profila iz pecenog `site-stats.json`, isto kao traka s brojkama na `/saznaj-vise/`. */
+/** Broj profila iz pecenog `unit-kratice.json`, isto kao traka s brojkama na `/saznaj-vise/`. */
 export function siteChromeProfileNote(): string {
-  const n = SITE_STATS.profiles;
+  const n = PLATE_INDEX.profiles;
   return `${n.toLocaleString('hr-HR')} ${hrPlural(n, 'profil', 'profila', 'profila')}`;
 }
 
@@ -129,11 +129,12 @@ export const SITE_CHROME_PLATE_EMPTY = 'Odaberi profil';
  * NATPIS MJEDENE PLOCICE (F8, odluka 2026-09-23): "FPZG · Dipl.".
  *
  * IZVOR JE PECEN INDEKS, NE REGISTAR PROFILA. Registar je 194 KB lazy chunk, a traka stoji na
- * svakoj stranici; zato `data/coverage/site-stats.json` (ISTI uvoz kojim
- * `src/routes/shared/site-stats-strip.ts` cita brojke) nosi `units[unitId].kratica` i
- * `workTypes[workType]`, a `npm run gen-site-stats` ih pece iz kataloga. Kratica je pritom
- * DETERMINISTICKI IZVEDENA iz `unitId`-a, ne verificirana tvrdnja s izvorom; pravilo izvodjenja i
- * razlog stoje u `src/coverage/site-stats.ts`.
+ * svakoj stranici; zato `data/coverage/unit-kratice.json` (MALI artefakt, BEZ naziva ustanove;
+ * usporedi `data/coverage/site-stats.json` koji naziv nosi za `/saznaj-vise/`) daje
+ * `units[unitId]` i `workTypes[workType]`, a `npm run gen-site-stats` pece OBA artefakta iz ISTOG
+ * izracuna (`computePlateIndex` u `src/coverage/site-stats.ts`). Kratica je pritom DETERMINISTICKI
+ * IZVEDENA iz `unitId`-a, ne verificirana tvrdnja s izvorom; pravilo izvodjenja i razlog stoje u
+ * `src/coverage/site-stats.ts`.
  *
  * NEPOZNATO NE BACA I NE IZMISLJA. Jedinica koje u indeksu nema (stara pohrana, korisnik je uredio
  * `localStorage`, jedinica uklonjena iz kataloga) daje zamjenski natpis, ne prazan gumb i ne
@@ -145,11 +146,11 @@ export const SITE_CHROME_PLATE_EMPTY = 'Odaberi profil';
 export function siteChromePlateLabel(zapis: unknown): string {
   const prefs = (typeof zapis === 'object' && zapis !== null ? zapis : {}) as Record<string, unknown>;
   const unitId = typeof prefs.unit === 'string' ? prefs.unit : '';
-  const units = SITE_STATS.units as Record<string, { kratica?: string } | undefined>;
-  const kratica = unitId !== '' ? units[unitId]?.kratica : undefined;
+  const units = PLATE_INDEX.units as Record<string, string | undefined>;
+  const kratica = unitId !== '' ? units[unitId] : undefined;
   if (typeof kratica !== 'string' || kratica === '') return SITE_CHROME_PLATE_EMPTY;
   const workType = typeof prefs.workType === 'string' ? prefs.workType : '';
-  const razine = SITE_STATS.workTypes as Record<string, string | undefined>;
+  const razine = PLATE_INDEX.workTypes as Record<string, string | undefined>;
   const razina = workType !== '' ? razine[workType] : undefined;
   return typeof razina === 'string' && razina !== '' ? `${kratica} · ${razina}` : kratica;
 }
@@ -385,7 +386,7 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
   }, { signal });
 }
 
-/**
+/*
  * "Aa · Prikaz" U MOBILNOM LISTU VISE NIJE POSREDNIK (F10, odluka 2026-09-23).
  *
  * Do F10 je panel "Prilagodi prikaz" zivio samo na `/` i `/rad/`, pa je gumb u listu bio POSREDNIK
@@ -483,6 +484,19 @@ export function setSiteChromeScore(doc: Document, score: number | null): void {
   if (score === null || !Number.isFinite(score)) { cell.hidden = true; cell.textContent = ''; return; }
   cell.hidden = false;
   cell.textContent = String(Math.round(score));
+}
+
+/**
+ * PLOCICA U TRAKI, NAKON STO KORISNIK ODABERE USTANOVU I VRSTU RADA. Isti uzak izlaz kao
+ * `setSiteChromeScore`: pozivatelj (`app.ts`) ne treba drzati referencu na `SiteChromeHandle` iz
+ * `mountSiteChrome`, samo dokument. Ponovno cita pohranu (`siteChromePlateFromStorage`), pa poziv
+ * nakon `savePreferences()` osvjezi plocicu bez reloada. Bez montirane trake je no-op.
+ */
+export function setSiteChromePlate(doc: Document): void {
+  const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]');
+  const slot = chrome?.querySelector<HTMLElement>('[data-site-chrome-profile-label]');
+  if (!slot) return;
+  slot.textContent = siteChromePlateFromStorage();
 }
 
 /**
