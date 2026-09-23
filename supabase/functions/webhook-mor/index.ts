@@ -9,7 +9,18 @@
 // od 2026-08-17 takav dogadjaj TRAJNO ostaje u webhook_events pa se moze replayati (PAY-06).
 // Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (store_id, test_mode) provjerava
 // se prije ijednog upisa: potpis dokazuje samo znanje tajne, ne i cija je trgovina (PAY-04/05).
-// Odluke (potpis, parsiranje, rok, kupon) su u testiranom coreu src/report/webhook.ts.
+// Od 2026-09-22 obradjuju se TOCNO dva dogadjaja: order_created sa attributes.status 'paid' i
+// order_refunded. Sve ostalo (neplacena narudzba, subscription_*, license_*, nepoznat event_name)
+// vraca 200 { ignored: true, reason } i biljezi se u inbox s ishodom 'ignored'. Placena narudzba bez
+// meta.custom_data.user_id vise ne vraca 400 nego ishod 'needs_manual_link' (novac je naplacen, pa
+// dogadjaj ne smije nestati); 400 ostaje samo za neispravan JSON i nedostajuci order_id.
+// Povrat se prepoznaje ISKLJUCIVO po imenu dogadjaja order_refunded (classifyLemonEvent u
+// src/report/webhook.ts); ev.refunded se vise ne koristi kao okidac. Drugi dogadjaj koji nosi
+// vracen novac (npr. subscription_payment_refunded, gdje je data.id id pretplatnickog racuna, ne
+// narudzbe) ide u 'ignored' s razlogom povrat_bez_order_refunded, ne u refund granu. Ishodi 'ignored'
+// i 'needs_manual_link' NISU u djelomicnom indeksu webhook_events_unresolved (0092), pa se nalaze
+// upitom po stupcu outcome; upiti i postupak su u docs/GO_LIVE_NAPLATA.md.
+// Odluke (potpis, parsiranje, klasifikacija, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
@@ -23,6 +34,8 @@ import {
   PASS_COUPON_VALID_DAYS,
   buildEntitlementInsert,
   acceptEvent,
+  classifyLemonEvent,
+  isNotableIgnore,
   isFullRefund,
   type LemonEvent,
   type LemonWebhookPayload,
@@ -46,8 +59,13 @@ const WEBHOOK_SECRET = Deno.env.get('MOR_WEBHOOK_SECRET') ?? '';
  * Prazno = provjera porijekla se ne moze provesti, pa `acceptEvent` odbija SVE dogadjaje s
  * razlogom `store_unverifiable`. To je namjerno fail-closed: tise propustanje bi znacilo da
  * webhook prima dogadjaje bilo koje trgovine, a da nitko ne zna da gate nije konfiguriran.
+ *
+ * Ime tajne je 2026-09-22 ujednaceno s `create-checkout` (prije je ovdje stajao `LS_STORE_ID`).
+ * Dvije funkcije iste naplate citale su dvije razlicite tajne za istu trgovinu, pa je operater
+ * mogao postaviti samo jednu i vjerovati da je naplata konfigurirana: checkout bi radio, a webhook
+ * bi tiho odbijao svaku kupnju s `store_unverifiable`.
  */
-const LS_STORE_ID = Deno.env.get('LS_STORE_ID') ?? '';
+const LEMONSQUEEZY_STORE_ID = Deno.env.get('LEMONSQUEEZY_STORE_ID') ?? '';
 const PROVIDER = 'lemonsqueezy';
 
 function json(body: unknown, status = 200): Response {
@@ -271,7 +289,16 @@ Deno.serve(async (req: Request) => {
   let parsed: LemonWebhookPayload;
   try { parsed = JSON.parse(raw) as LemonWebhookPayload; } catch { return json({ error: 'bad_request' }, 400); }
   const ev = parseLemonEvent(parsed);
-  if (!ev.orderId || !ev.userId) return json({ error: 'bad_request' }, 400);
+  // 400 SAMO za nedostajuci orderId: bez njega dogadjaj nema identitet, pa se ne moze ni zapisati u
+  // inbox ni kasnije replayati.
+  //
+  // userId se ovdje NAMJERNO vise ne trazi (2026-09-22). Prije je isti uvjet odbijao i placenu
+  // narudzbu bez `meta.custom_data.user_id`, i to PRIJE upisa u inbox, pa bi kupnja izvan naseg
+  // checkouta (ili izgubljen custom_data) nestala bez ikakvog traga iako je novac naplacen. Sada o
+  // tome odlucuje `classifyLemonEvent` nakon upisa u inbox: takav dogadjaj dobiva ishod
+  // `needs_manual_link` i veze se rucno. Povrat userId ionako nikad nije trebao, jer se obradjuje
+  // po `order_id`.
+  if (!ev.orderId) return json({ error: 'bad_request' }, 400);
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
@@ -325,7 +352,7 @@ Deno.serve(async (req: Request) => {
   // valjano potpisan dogadjaj tudje trgovine, ili dogadjaj iz testnog nacina rada, dodijelio
   // pravo pravo pristupa. Provjera ide PRIJE svakog upisa, ukljucujuci refund granu.
   const gate = acceptEvent(ev, {
-    expectedStoreId: LS_STORE_ID,
+    expectedStoreId: LEMONSQUEEZY_STORE_ID,
     allowTestMode: Deno.env.get('LS_ALLOW_TEST_MODE') === '1',
   });
   if (!gate.ok) {
@@ -334,7 +361,7 @@ Deno.serve(async (req: Request) => {
     console.error('webhook-mor event_refused', {
       reason: gate.reason,
       storeId: ev.storeId,
-      expectedStoreId: LS_STORE_ID,
+      expectedStoreId: LEMONSQUEEZY_STORE_ID,
       testMode: ev.testMode,
       orderId: ev.orderId,
     });
@@ -342,8 +369,56 @@ Deno.serve(async (req: Request) => {
     return json({ ok: true, action: 'event_refused', reason: gate.reason }, 200);
   }
 
+  // KLASIFIKACIJA (cista odluka, src/report/webhook.ts). Ide TEK nakon inboxa i nakon gatea
+  // porijekla: dogadjaj koji nije nas ne smije se ni klasificirati, a kamoli obradjivati.
+  const decision = classifyLemonEvent(ev);
+
+  if (decision.kind === 'ignored') {
+    // Nije nas dogadjaj ili narudzba jos nije placena (`pending`, `failed`, `subscription_*`,
+    // `license_*`, nepoznat event_name). 200 jer retry ne bi promijenio ishod; trag ostaje u inboxu.
+    //
+    // OVA GRANA SE LOGIRA UVIJEK (nalaz pregleda 2026-09-23). Odluka pociva na usporedbi statusa s
+    // `paid`, i to je pretpostavka o tudjem sustavu. Kad bi grana bila tiha, promjena vrijednosti
+    // statusa kod providera pretvorila bi SVAKU kupnju u `ignored` + 200 bez retryja, bez ijednog
+    // retka koji to pokazuje. Razlozi koji se ticu stvarnog novca (`order_status:*` za neplacenu
+    // narudzbu i `povrat_bez_order_refunded:*` za vracen novac pod imenom koje nije order_refunded)
+    // idu na ERROR razinu, po popisu `NOTABLE_IGNORE_PREFIXES`; tudji dogadjaj je konfiguracijski
+    // sum pa ide na WARN. Redovit upit nad
+    // inboxom po ishodu je u docs/GO_LIVE_NAPLATA.md (djelomicni indeks `webhook_events_unresolved`
+    // NE pokriva ovaj ishod, pa se filtrira po `outcome`).
+    const detalji = {
+      reason: decision.reason,
+      eventName: ev.eventName,
+      status: ev.status,
+      orderId: ev.orderId,
+      testMode: ev.testMode,
+    };
+    if (isNotableIgnore(decision)) console.error('webhook-mor ignored_needs_attention', detalji);
+    else console.warn('webhook-mor ignored_foreign_event', detalji);
+    await settle('ignored', decision.reason);
+    return json({ ignored: true, reason: decision.reason ?? 'nepodrzan_dogadjaj' }, 200);
+  }
+
+  if (decision.kind === 'needs_manual_link') {
+    // PLACENA narudzba bez user_id. Novac je naplacen, pa 400 ne dolazi u obzir: dogadjaj ostaje u
+    // inboxu s ovim ishodom i veze se rucno na racun. ERROR razina jer to netko mora vidjeti.
+    // Postupak razrjesenja i upit kojim se ti redci nalaze su u docs/GO_LIVE_NAPLATA.md, sekcija
+    // "Ishodi u webhook_events". Djelomicni indeks `webhook_events_unresolved` ovaj ishod NE
+    // pokriva, pa upit ide po stupcu `outcome`.
+    console.error('webhook-mor needs_manual_link', { orderId: ev.orderId, variantId: ev.variantId });
+    await settle('needs_manual_link', decision.reason);
+    return json({ ok: true, action: 'needs_manual_link' }, 200);
+  }
+
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
-  if (ev.refunded) {
+  //
+  // U ovu granu se ulazi SAMO iz dogadjaja `order_refunded` (odluka: `classifyLemonEvent`). To je
+  // jedini dogadjaj kojemu je `data.id` id NARUDZBE, a cijela grana nize pise po `ev.orderId`:
+  // gasi entitlement i povlaci referral nagrade. Dogadjaj pretplate koji nosi `refunded` (npr.
+  // `subscription_payment_refunded`) ima id RACUNA, pa bi po ovom putu pisao po tudjem kljucu;
+  // klasifikator ga zato zaustavlja kao `ignored` uz razlog `povrat_bez_order_refunded:*`, koji
+  // ide u log na ERROR razini. userId ovdje nije potreban: sve ide po `order_id`.
+  if (decision.kind === 'refund') {
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.
     if (!isFullRefund(ev)) {

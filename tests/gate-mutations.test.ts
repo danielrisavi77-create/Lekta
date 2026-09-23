@@ -32,13 +32,33 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import {
+  storeIdSecretProblems,
+  preflightSourceProblems,
+  refundClassificationProblems,
+  handlerOutcomes,
+  naplataRunbookProblems,
+  runbookSqlColumnProblems,
+  naplataDeployPathProblems,
+  readTextLf,
+} from './helpers/naplata-env';
+import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
+import { webhookHandlerProblems } from './helpers/webhook-handler-source';
+import {
+  naplataSecretsVerdict,
+  supabaseSecretsVerdict,
+  parseSupabaseSecretsList,
+  EMPTY_VALUE_DIGEST,
+} from '../scripts/verify-naplata-secrets.mjs';
+import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
+import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
 import auditRatchet from '../data/security/npm-audit-ratchet.json';
@@ -57,6 +77,7 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
+import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -114,6 +135,17 @@ function gateCodes(profile: ThesisProfile, sources: SourceEntry[] = SOURCES): st
   return runVerificationGate([profile], sources, { now: NOW }).map((e) => e.code);
 }
 
+function auditReleaseLaunchers(
+  sources: Parameters<typeof auditReleaseLaunchersRaw>[0],
+): ReturnType<typeof auditReleaseLaunchersRaw> {
+  return auditReleaseLaunchersRaw(sources.map((item) => ({
+    ...item,
+    source: `import { join } from 'node:path';\n` +
+      `import { spawnSync } from 'node:child_process';\n` +
+      `const root = join(import.meta.dirname, '..');\n${item.source}`,
+  })));
+}
+
 /**
  * Jedna mutacija: sto kvari, koji stvaran kvar imitira, i kako se mjeri da je uhvacena.
  * `baseline` mora biti PRAZAN/false na nemutiranom ulazu, inace tvrdnja nije o mutaciji.
@@ -167,6 +199,49 @@ function evidenceFor(ruleCheckId: string, checkId: string, title: string, catego
   } as never;
   return Object.keys(buildExactEvidence([check], [issue], [entry])).length;
 }
+
+/**
+ * RE-60. ULAZ je valjan: `xmlns:r` je deklariran LOKALNO na `w:footerReference`, sto je legalan
+ * XML. IZLAZ nosi hipervezu s `r:id` u tijelu, dakle izvan dosega te deklaracije, i vise nije
+ * namespace-well-formed (@xmldom/xmldom i lxml ga odbijaju). Kontrolni izlaz je isti dokument s
+ * deklaracijom na korijenu.
+ */
+const REL_NS_FOR_MUTATION = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+const RE60_INPUT =
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+  + '<w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p>'
+  + `<w:sectPr><w:footerReference w:type="default" r:id="rId9" xmlns:r="${REL_NS_FOR_MUTATION}"/></w:sectPr>`
+  + '</w:body></w:document>';
+const RE60_BAD_OUTPUT = RE60_INPUT.replace(
+  '<w:r><w:t>doi:10.1234/abc</w:t></w:r>',
+  '<w:hyperlink r:id="rId1" w:history="1"><w:r><w:t>https://doi.org/10.1234/abc</w:t></w:r></w:hyperlink>',
+);
+const RE60_GOOD_OUTPUT = RE60_BAD_OUTPUT.replace('<w:document ', `<w:document xmlns:r="${REL_NS_FOR_MUTATION}" `);
+/** Vrata integriteta nad JEDNIM promijenjenim dijelom; ostali argumenti su neutralni. */
+const re60Gate = (output: string) =>
+  detectIntegrityFailure(
+    [{ name: 'word/document.xml', xml: output }],
+    ['word/document.xml'],
+    ['word/document.xml'],
+    [],
+    { 'word/document.xml': RE60_INPUT },
+  );
+
+/** Ulaz s TUDJIM nevezanim prefiksima (VML crtez), pa izlaz koji uz to nosi NAS `r:id`. */
+const RE60_MIXED_INPUT =
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+  + '<w:p><w:r><w:t>doi:10.1234/abc</w:t></w:r></w:p><w:p><v:shape o:spid="x"/></w:p>'
+  + '</w:body></w:document>';
+const RE60_MIXED_BAD = RE60_MIXED_INPUT.replace(
+  '<w:r><w:t>doi:10.1234/abc</w:t></w:r>',
+  '<w:hyperlink r:id="rId1"><w:r><w:t>x</w:t></w:r></w:hyperlink>',
+);
+const RE60_MIXED_GATE = (output: string) =>
+  detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_MIXED_INPUT });
+/** Sinteticki ulaz bez ijedne deklaracije (oblik koji testovi ovog repozitorija masovno grade). */
+const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t></w:r></w:p></w:body></w:document>';
+const RE60_SYNTHETIC_GATE = (output: string) =>
+  detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1174,7 +1249,1238 @@ const MUTATIONS: Mutation[] = [
         }).rows,
       ).length === 0,
   },
+  /**
+   * RE-60 (2026-09-12). `link-doi-fixer` je umetao `<w:hyperlink r:id="...">` u tijelo dokumenta
+   * ciji korijen `xmlns:r` nema, jer je deklaraciju trazio BILO GDJE u nizu, a dokument ju je imao
+   * lokalno na `w:footerReference`. Izlaz vise nije namespace-well-formed (@xmldom/xmldom, lxml i
+   * Word ga odbijaju), a `integrityFailure` je ostajao `null` jer skener paketa doseg deklaracija
+   * nije pratio. Mutacija podmece tocno taj oblik; baseline je ISTI dokument s deklaracijom na
+   * korijenu, pa tvrdnja nije o tome da skener vristi na sve.
+   */
+  {
+    id: 'paket/nevezan-prefiks-u-document-xml',
+    imitates:
+      'popravljeni word/document.xml koristi prefiks r: izvan dosega njegove xmlns deklaracije, pa ga '
+      + 'Word odbija otvoriti dok vrata integriteta javljaju da je paket ispravan',
+    caught: () => re60Gate(RE60_BAD_OUTPUT) !== null,
+    cleanBefore: () => re60Gate(RE60_GOOD_OUTPUT) === null,
+  },
+  /**
+   * SUZENJE GARDA NE SMIJE GA OSLIJEPITI (nalaz pregleda, 2026-09-12).
+   *
+   * Nevezan prefiks se prijavljuje samo kad ga je uveo popravak. Da je to izuzece pisano PO DIJELU
+   * ("ulazni dio je i sam padao"), jedan prefiks koji je dosao s dokumentom gasio bi provjeru za
+   * cijeli taj dio, pa bi i NAS nov prefiks prosao. Mutacija podmece tocno taj par: ulaz s VML
+   * crtezom (`v:`/`o:` nedeklarirani) i izlaz koji uz to nosi nasu hipervezu s `r:id`.
+   */
+  {
+    id: 'paket/nov-prefiks-iza-vec-nevezanog-prefiksa',
+    imitates:
+      'popravak uvodi nevezan prefiks r: u dio koji je vec imao tudji nevezan prefiks v:, pa izuzece '
+      + 'za tudji ulaz propusta i nas vlastiti kvar',
+    caught: () => RE60_MIXED_GATE(RE60_MIXED_BAD)?.problem.includes('prefiks r:') === true,
+    cleanBefore: () => RE60_MIXED_GATE(RE60_MIXED_INPUT.replace('<w:body>', '<w:body w:rsidR="00AA">')) === null,
+  },
+  /**
+   * STRUKTURA IMA PRVENSTVO NAD NAMESPACEOM (nalaz pregleda, 2026-09-12).
+   *
+   * Ista rupa u drugom smjeru: kad ulazni dio pada na nevezanom prefiksu, izuzece ne smije progutati
+   * STRUKTURNI (RE-47) kvar koji je popravak uveo. Baseline je isti sinteticki ulaz uz bezopasnu
+   * izmjenu teksta.
+   */
+  {
+    id: 'paket/re47-iza-nevezanog-prefiksa-na-ulazu',
+    imitates:
+      'popravak proizvede atribut iza kose crte u dijelu ciji je ulaz vec imao nevezan prefiks, pa '
+      + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
+    caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
+    cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
+  },
+  {
+    id: 'release/buduci-launcher-izravno-predaje-mts-nodeu',
+    imitates:
+      'novi cetvrti Git-praceni TypeScript launcher nije rucno dodan na fiksni popis, pa izravno ' +
+      'predaje run-local-repair-release.mts Nodeu i na Windows Nodeu 20 pada prije Authenticode gatea',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/future-release-launcher.mts',
+        source: ['spawnSync(', 'process', ".execPath, [join(root, 'scripts', ",
+          "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/future-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/siguran-launcher-skriva-drugi-nepoznati-poziv',
+    imitates:
+      'datoteka s jednim urednim TSX pokretanjem sakriva drugi execFileSync koji istu .mts skriptu ' +
+      'izravno predaje Nodeu, pa fail-closed audit pogresno smatra cijelu datoteku sigurnom',
+    caught: () => {
+      const safeLaunch =
+        `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+        ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+          "'run-local-repair-release.mts')], {});"].join('');
+      const hiddenUnsafeLaunch = ['execFileSync(', 'process', ".execPath, [join(root, 'scripts', ",
+        "'run-local-repair-release.mts')]);"].join('');
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/mixed-release-launcher.mts',
+        source: `${safeLaunch}\n${hiddenUnsafeLaunch}`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/mixed-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/tsx-deklaracija-skriva-krivi-prvi-script-argument',
+    imitates:
+      'ispravna TSX putanja postoji negdje u datoteci, ali Node prvo dobiva drugi script argument, ' +
+      'pa kasniji tsxEntrypoint prije release naziva ne smije biti dovoljan za prolaz',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/misleading-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `const otherScript = join(root, 'scripts', 'other.mts');\n` +
+          ['spawnSync(', 'process', ".execPath, [otherScript, tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/misleading-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/hoistana-putanja-skrivena-iza-sigurnog-launchera',
+    imitates:
+      'putanja release entrypointa deklarirana je prije izravnog execFileSync poziva, pa tekstualni ' +
+      'audit nakon process' +
+      '.execPath ne vidi literal i siguran launcher maskira taj drugi poziv',
+    caught: () => {
+      const safeLaunch =
+        `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+        ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+          "'run-local-repair-release.mts')], {});"].join('');
+      const releaseBinding =
+        `const releaseScript = join(root, 'scripts', 'run-local-repair-release.mts');\n`;
+      const hiddenUnsafeLaunch = ['execFileSync(', 'process', '.execPath, [releaseScript]);'].join('');
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/hoisted-release-launcher.mts',
+        source: `${releaseBinding}${safeLaunch}\n${hiddenUnsafeLaunch}`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/hoisted-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/prefiksirani-callee-glumi-spawnsync',
+    imitates:
+      'myspawnSync zavrsava tekstom spawnSync pa ga regex pogresno prihvaca kao tocno poznati bare ' +
+      'callee iako je rijec o nepoznatom wrapperu bez pregledanog sigurnosnog ugovora',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/prefixed-callee-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['myspawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/prefixed-callee-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/lokalni-spawnsync-glumi-node-child-process',
+    imitates:
+      'lokalna funkcija spawnSync zasjeni provjereni node:child_process import, ali audit je prihvati ' +
+      'samo prema imenu pa release poziv ne mora pokrenuti pravi Node child process',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/shadowed-spawn-launcher.mts',
+        source:
+          `function launch() {\n` +
+          `  function spawnSync() { return { status: 0 }; }\n` +
+          `  const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['  spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});\n}"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchersRaw([{
+        relativePath: 'scripts/shadowed-spawn-launcher.mts',
+        source:
+          `import { join } from 'node:path';\n` +
+          `import { spawnSync } from 'node:child_process';\n` +
+          `const root = join(import.meta.dirname, '..');\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/zasjenjeni-tsx-binding-prolazi-na-globalnu-deklaraciju',
+    imitates:
+      'globalni tsxEntrypoint pokazuje na kanonski TSX, ali lokalni binding istog imena pokazuje na ' +
+      'drugu skriptu pa file-wide regex pogresno odobrava nesigurno pokretanje',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/shadowed-tsx-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `function launch() {\n  const tsxEntrypoint = join(root, 'scripts', 'other.mts');\n` +
+          ['  spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});\n}"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/shadowed-tsx-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/mutabilni-tsx-binding-nakon-promjene',
+    imitates:
+      'let binding najprije pokazuje na kanonski TSX pa se prije launch poziva preusmjeri na drugu ' +
+      'skriptu, dok audit pogresno vjeruje samo prvom initializeru',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/mutable-tsx-launcher.mts',
+        source:
+          `let tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `tsxEntrypoint = join(root, 'scripts', 'other.mts');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/mutable-tsx-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/destrukturirani-parametar-zasjenjuje-tsx-binding',
+    imitates:
+      'parametar iz object patterna lokalno zasjeni globalni kanonski tsxEntrypoint, ali audit koji ' +
+      'ne registrira destrukturirane bindinge pogresno razrijesi globalnu vrijednost',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/destructured-shadow-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `function launch({ tsxEntrypoint }) {\n` +
+          ['  spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});\n}"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/destructured-shadow-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/lokalni-process-glumi-node-global',
+    imitates:
+      'funkcijski parametar process zasjeni Node global, ali audit prihvati njegov execPath kao da ' +
+      'je provjereno izvrsno okruzenje stvarnog Node procesa',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/shadowed-process-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `function launch(process) {\n` +
+          ['  spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});\n}"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/shadowed-process-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/lokalni-join-glumi-node-path',
+    imitates:
+      'lokalna funkcija join vraca proizvoljnu skriptu, ali audit je prihvati samo zato sto se callee ' +
+      'zove join bez provjere da binding dolazi iz node:path importa',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/shadowed-join-launcher.mts',
+        source:
+          `function join() { return 'other.mts'; }\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/shadowed-join-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/uvjetna-putanja-nije-tocan-entrypoint',
+    imitates:
+      'drugi script argument uvjetno bira release ili drugu skriptu, ali rekurzivna pretraga samog ' +
+      'naziva datoteke pogresno odobrava cijeli izraz kao siguran',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/conditional-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, ready ? join(root, 'scripts', ",
+            "'run-local-repair-release.mts') : join(root, 'scripts', 'other.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/conditional-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/parser-greska-pada-zatvoreno',
+    imitates:
+      'Git-praceni kandidat s ostecenom TypeScript sintaksom ne smije nestati iz audita ili srusiti ' +
+      'test bez jasnog parse-error nalaza',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/broken-release-launcher.mts',
+        source: ['spawnSync(', 'process', ".execPath, [join(root, 'scripts', ",
+          "'run-local-repair-release.mts')], {"].join(''),
+      }]);
+      return audit.consumers.length === 1 &&
+        audit.unsafe[0] === 'scripts/broken-release-launcher.mts:parse-error';
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/broken-release-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/var-spawnsync-je-funkcijski-hoistan',
+    imitates:
+      'var spawnSync iz unutarnjeg bloka hoistan je na cijelu funkciju i zasjeni provjereni import, ' +
+      'ali audit ga pogresno ostavlja samo u blok-scopeu',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/var-spawn-launcher.mts',
+        source:
+          `function launch() {\n` +
+          `  if (false) { var spawnSync = fake; }\n` +
+          `  const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['  spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});\n}"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/var-spawn-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/var-process-je-funkcijski-hoistan',
+    imitates:
+      'var process iz unutarnjeg bloka hoistan je na cijelu funkciju i zasjeni Node global, ali ' +
+      'audit ga pogresno ostavlja samo u blok-scopeu',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/var-process-launcher.mts',
+        source:
+          `function launch() {\n` +
+          `  if (false) { var process = fake; }\n` +
+          `  const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['  spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});\n}"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/var-process-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/komentar-ne-smije-sakriti-process-execpath',
+    imitates:
+      'komentar izmedu process i .execPath uklanja tocni tekstualni podniz pa nesigurni izravni ' +
+      'Node-to-mts launcher potpuno nestane iz audita',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/commented-process-launcher.mts',
+        source: ['spawnSync(', 'process', " /* gap */ .execPath, [join(root, 'scripts', ",
+          "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/commented-process-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/runcaptured-nakon-ponovne-dodjele',
+    imitates:
+      'top-level function runCaptured je ponovno dodijeljena prije release poziva, ali audit je ' +
+      'smatra nepromjenjivom samo zato sto je deklarirana function sintaksom',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/run-repair-runner-e2e.mts',
+        source:
+          `function runCaptured(command, args) { return spawnSync(command, args); }\n` +
+          `runCaptured = fake;\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['runCaptured(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/run-repair-runner-e2e.mts',
+        source:
+          `function runCaptured(command, args) { return spawnSync(command, args); }\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['runCaptured(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/napadacki-root-ne-smije-biti-kanonski',
+    imitates:
+      'join provjerava samo zavrsetak putanje pa napadacki apsolutni korijen moze glumiti i TSX i ' +
+      'release entrypoint izvan stvarnog repozitorija',
+    caught: () => {
+      const audit = auditReleaseLaunchersRaw([{
+        relativePath: 'scripts/attacker-root-launcher.mts',
+        source:
+          `import { join } from 'node:path';\n` +
+          `import { spawnSync } from 'node:child_process';\n` +
+          `const root = '/attacker';\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/attacker-root-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/type-only-spawnsync-nije-runtime-import',
+    imitates:
+      'TypeScript type-only spawnSync import nema runtime vrijednost, ali audit ga pogresno smatra ' +
+      'stvarnim node:child_process launcherom',
+    caught: () => {
+      const audit = auditReleaseLaunchersRaw([{
+        relativePath: 'scripts/type-only-spawn-launcher.mts',
+        source:
+          `import { join } from 'node:path';\n` +
+          `import { type spawnSync } from 'node:child_process';\n` +
+          `const root = join(import.meta.dirname, '..');\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/type-only-spawn-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          ['spawnSync(', 'process', ".execPath, [tsxEntrypoint, join(root, 'scripts', ",
+            "'run-local-repair-release.mts')], {});"].join(''),
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/nepoznati-executable-oblik-ne-smije-nestati',
+    imitates:
+      'poziv s release argumentom i computed process execPath oblikom ne smije nestati iz consumer ' +
+      'popisa samo zato sto executable jos nije odobren kao siguran oblik',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/computed-executable-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process['execPath'], [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/computed-executable-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/for-of-ponistava-runcaptured-binding',
+    imitates:
+      'for-of assignment ponovno dodjeljuje top-level runCaptured prije release poziva, ali audit ' +
+      'prati samo obicne assignment i update izraze',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/run-repair-runner-e2e.mts',
+        source:
+          `function runCaptured(command, args) { return spawnSync(command, args); }\n` +
+          `for (runCaptured of replacements) { break; }\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `runCaptured(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/run-repair-runner-e2e.mts',
+        source:
+          `function runCaptured(command, args) { return spawnSync(command, args); }\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `runCaptured(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/parse-error-bez-tocnog-execpath-teksta',
+    imitates:
+      'ostecena Git-pracena release referenca pada otvoreno ako prije parse greske ne sadrzi oba ' +
+      'tocna tekstualna tokena process i execPath',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/broken-alias-launcher.mts',
+        source:
+          `spawnSync(nodeExecutable, [` +
+          `join(root, 'scripts', 'run-local-repair-release.mts')], {`,
+      }]);
+      return audit.consumers.length === 1 &&
+        audit.unsafe[0] === 'scripts/broken-alias-launcher.mts:parse-error';
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/broken-alias-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/nested-launcher-mora-imati-tocnu-root-dubinu',
+    imitates:
+      'launcher dvije mape ispod repozitorija koristi samo jedan parent segment pa audit prihvati ' +
+      'scripts mapu kao da je stvarni repo-root',
+    caught: () => {
+      const audit = auditReleaseLaunchersRaw([{
+        relativePath: 'scripts/nested/future-launcher.mts',
+        source:
+          `import { join } from 'node:path';\n` +
+          `import { spawnSync } from 'node:child_process';\n` +
+          `const root = join(import.meta.dirname, '..');\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchersRaw([{
+        relativePath: 'scripts/nested/future-launcher.mts',
+        source:
+          `import { join } from 'node:path';\n` +
+          `import { spawnSync } from 'node:child_process';\n` +
+          `const root = join(import.meta.dirname, '..', '..');\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/spawnsync-nakon-ponovne-dodjele',
+    imitates:
+      'provjereni spawnSync import ponovno je dodijeljen prije release poziva, ali callee trust ' +
+      'ignorira vec ponisteni immutable status bindinga',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/reassigned-spawn-launcher.mts',
+        source:
+          `spawnSync = fake;\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/reassigned-spawn-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/imenovani-function-expression-zasjenjuje-spawn',
+    imitates:
+      'vlastito ime named function expressiona vrijedi unutar njegova tijela i zasjeni vanjski ' +
+      'spawnSync import, ali audit taj unutarnji binding ne registrira',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/named-function-launcher.mts',
+        source:
+          `const holder = function spawnSync() {\n` +
+          `  const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `  spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});\n};`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/named-function-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/private-method-parametar-zasjenjuje-process',
+    imitates:
+      'ClassPrivateMethod je funkcijski scope pa njegov process parametar mora zasjeniti Node ' +
+      'global umjesto da release poziv pogresno prode kao siguran',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/private-method-launcher.mts',
+        source:
+          `class Launcher { #run(process) {\n` +
+          `  const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `  spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});\n} }`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/private-method-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/typescript-wrapper-ne-smije-sakriti-write',
+    imitates:
+      'TypeScript non-null wrapper oko assignment targeta ne smije sakriti ponovnu dodjelu ' +
+      'runCaptured bindinga prije release poziva',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/run-repair-runner-e2e.mts',
+        source:
+          `function runCaptured(command, args) { return spawnSync(command, args); }\n` +
+          `runCaptured! = fake;\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `runCaptured(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/run-repair-runner-e2e.mts',
+        source:
+          `function runCaptured(command, args) { return spawnSync(command, args); }\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `runCaptured(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/destrukturirani-execpath-alias-je-candidate',
+    imitates:
+      'destrukturirani execPath alias bez spremljenog init izraza potpuno nestane iz consumera ' +
+      'umjesto da bude otkriven i fail-closed odbijen',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/destructured-executable-launcher.mts',
+        source:
+          `const { execPath: nodeExecutable } = process;\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(nodeExecutable, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/destructured-executable-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/uvjetni-executable-je-candidate',
+    imitates:
+      'conditional executable koji u obje grane sadrzi process.execPath mora ostati vidljiv kao ' +
+      'nesiguran candidate umjesto da audit vrati prazan consumer popis',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/conditional-executable-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(flag ? process.execPath : process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/conditional-executable-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/optional-call-je-nesiguran-candidate',
+    imitates:
+      'optional spawnSync poziv moze pokrenuti release, ali OptionalCallExpression nije skupljen ' +
+      'pa potpuno nestane iz consumer i unsafe rezultata',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/optional-call-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync?.(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/optional-call-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/computed-destructured-execpath-je-candidate',
+    imitates:
+      'computed string kljuc u process destructuringu stvara execPath alias, ali provenance ga ne ' +
+      'prepoznaje pa launcher nestane iz audita',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/computed-destructure-launcher.mts',
+        source:
+          `const { ['execPath']: nodeExecutable } = process;\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(nodeExecutable, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/computed-destructure-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/aliased-process-destructured-execpath-je-candidate',
+    imitates:
+      'execPath destrukturiran iz immutable process aliasa mora ostati vidljiv kao nesiguran ' +
+      'candidate umjesto da provenance zahtijeva samo izravni process identifikator',
+    caught: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/aliased-destructure-launcher.mts',
+        source:
+          `const proc = process;\n` +
+          `const { execPath: nodeExecutable } = proc;\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(nodeExecutable, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/aliased-destructure-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'release/named-node-process-execpath-import-je-candidate',
+    imitates:
+      'valjani imenovani execPath import iz node:process predstavlja stvarni Node executable, ali ' +
+      'bez import provenance launcher potpuno nestane iz audita',
+    caught: () => {
+      const audit = auditReleaseLaunchersRaw([{
+        relativePath: 'scripts/imported-execpath-launcher.mts',
+        source:
+          `import { join } from 'node:path';\n` +
+          `import { spawnSync } from 'node:child_process';\n` +
+          `import { execPath as nodeExecutable } from 'node:process';\n` +
+          `const root = join(import.meta.dirname, '..');\n` +
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(nodeExecutable, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 1;
+    },
+    cleanBefore: () => {
+      const audit = auditReleaseLaunchers([{
+        relativePath: 'scripts/imported-execpath-launcher.mts',
+        source:
+          `const tsxEntrypoint = join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');\n` +
+          `spawnSync(process.execPath, [` +
+          `tsxEntrypoint, join(root, 'scripts', 'run-local-repair-release.mts')], {});`,
+      }]);
+      return audit.consumers.length === 1 && audit.unsafe.length === 0;
+    },
+  },
+  {
+    id: 'naplata/prazan-store-id',
+    imitates: 'Supabase secret LEMONSQUEEZY_STORE_ID postavljen na prazno: sucelje ga prikazuje kao postojeci, a acceptEvent svaku kupnju odbija s store_unverifiable i vraca 200, pa ni provider ne retryja',
+    caught: () =>
+      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '  ' })
+        .missing.includes('LEMONSQUEEZY_STORE_ID'),
+    cleanBefore: () =>
+      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '42' }).ok,
+  },
+  {
+    id: 'naplata/dva-imena-iste-tajne',
+    imitates: 'webhook-mor cita LS_STORE_ID a create-checkout LEMONSQUEEZY_STORE_ID: operater postavi jednu tajnu, checkout radi a webhook tiho odbija svaku placenu kupnju (stvarno stanje repozitorija do 2026-09-22)',
+    caught: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      const webhook = readTextLf(join(dir, 'webhook-mor', 'index.ts'));
+      const checkout = readTextLf(join(dir, 'create-checkout', 'index.ts'));
+      // MUTACIJA u memoriji: vrati staro ime u webhook-mor, disk se ne dira.
+      const mutated = webhook.replace("Deno.env.get('LEMONSQUEEZY_STORE_ID')", "Deno.env.get('LS_STORE_ID')");
+      if (mutated === webhook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return storeIdSecretProblems({ 'webhook-mor': mutated, 'create-checkout': checkout })
+        .some((p) => p.includes('LS_STORE_ID'));
+    },
+    cleanBefore: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      return storeIdSecretProblems({
+        'webhook-mor': readTextLf(join(dir, 'webhook-mor', 'index.ts')),
+        'create-checkout': readTextLf(join(dir, 'create-checkout', 'index.ts')),
+      }).length === 0;
+    },
+  },
+
+  // --- naplata: webhook ne smije sam odlucivati sto je placeno ---------------------------------
+  {
+    id: 'naplata/webhook-400-bez-user-id',
+    imitates: 'stvarno stanje handlera do 2026-09-22: `if (!ev.orderId || !ev.userId) return 400` PRIJE upisa u inbox, pa bi placena narudzba bez meta.custom_data.user_id nestala bez traga iako je novac naplacen',
+    caught: () => {
+      const src = webhookMorSource();
+      // MUTACIJA u memoriji: vrati tocan uvjet koji je stajao u izvoru. Disk se ne dira.
+      const mutated = src.replace('if (!ev.orderId) return json', 'if (!ev.orderId || !ev.userId) return json');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return webhookHandlerProblems(mutated).some((p) => p.includes('user_id'));
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      return src.length > 2000 && webhookHandlerProblems(src).length === 0;
+    },
+  },
+  {
+    id: 'naplata/webhook-bez-klasifikatora',
+    imitates: 'odluka sto je placeno vracena u Edge funkciju: handler prestane zvati classifyLemonEvent, pa neplaceni order_created (status pending/failed) i subscription_* opet padnu u kupovnu granu',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.split('classifyLemonEvent(ev)').join("({ kind: 'paid' } as const)");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('classifyLemonEvent'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  {
+    id: 'naplata/preflight-mjeri-ljusku',
+    imitates: 'prva verzija preflighta (2026-09-22): citao je process.env, dakle ljusku operatera, a tajne koje webhook-mor koristi zive u Supabase Edge Functions Secretsima. Izvezena varijabla u terminalu davala je zeleno iako je tajna u projektu prazna, pa bi acceptEvent svaku kupnju odbio s store_unverifiable i vratio 200',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: vrati zadani put na citanje ljuske. Disk se ne dira.
+      const mutated = src.replace('const read = readSupabaseSecrets(projectRef);', 'const read = { ok: true, rows: process.env };');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return preflightSourceProblems(mutated).some((p) => p.includes('process.env'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return src.length > 2000 && preflightSourceProblems(src).length === 0;
+    },
+  },
+  {
+    id: 'naplata/supabase-secret-postavljen-na-prazno',
+    imitates: 'tajna postavljena na PRAZNO u Supabase sucelju: u popisu postoji, izgleda konfigurirano, a acceptEvent je vidi isto kao da je nema i odbija svaku kupnju s 200 bez retryja',
+    caught: () => {
+      const popis = parseSupabaseSecretsList(
+        [
+          '  MOR_WEBHOOK_SECRET | 11aa',
+          '  LEMONSQUEEZY_API_KEY | 22bb',
+          `  LEMONSQUEEZY_STORE_ID | ${EMPTY_VALUE_DIGEST}`,
+        ].join('\n'),
+      );
+      if (popis.length !== 3) return false; // parser nije procitao popis: baseline bi bio vakuum
+      return supabaseSecretsVerdict(popis).missing.some(
+        (m: { name: string; reason: string }) => m.name === 'LEMONSQUEEZY_STORE_ID' && m.reason === 'prazna',
+      );
+    },
+    cleanBefore: () =>
+      supabaseSecretsVerdict(
+        parseSupabaseSecretsList(
+          ['  MOR_WEBHOOK_SECRET | 11aa', '  LEMONSQUEEZY_API_KEY | 22bb', '  LEMONSQUEEZY_STORE_ID | 33cc'].join('\n'),
+        ),
+      ).ok,
+  },
+  {
+    id: 'naplata/povrat-po-zastavici-umjesto-po-imenu',
+    imitates: 'sirenje refund grane na zastavicu ev.refunded (medjuverzija 2026-09-22): parseLemonEvent ju racuna i iz attributes.status i iz attributes.refunded, pa bi subscription_payment_refunded, kojemu je data.id id pretplatnickog RACUNA a ne narudzbe, izvrsio update entitlements ... where order_id = <tudji id> i povukao referral nagrade po njemu; ishod bi bio processed, dakle nevidljiv svakom upitu iz runbooka',
+    caught: () => {
+      // MUTACIJA: zamijeni ODLUKU sirom verzijom (funkcija, ne tekst izvora).
+      const siroko = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
+        if (ev.refunded || ev.eventName === 'order_refunded') return { kind: 'refund' };
+        if (ev.eventName === 'order_created') {
+          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
+          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
+        }
+        return { kind: 'ignored', reason: 'nepodrzan_dogadjaj:x' };
+      };
+      return refundClassificationProblems(siroko, NOTABLE_IGNORE_PREFIXES)
+        .some((p) => p.includes('subscription_payment_refunded'));
+    },
+    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+  {
+    id: 'naplata/povrat-pod-drugim-imenom-tiho-odbacen',
+    imitates: 'druga krajnost istog izbora: vracen novac pod imenom koje nije order_refunded zavrsi kao obican nepodrzan_dogadjaj, dakle WARN u logu i redak koji nitko ne gleda, pa nitko ne sazna da je povrat stigao i nije obradjen',
+    caught: () => {
+      const tiho = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
+        if (ev.eventName === 'order_refunded') return { kind: 'refund' };
+        if (ev.eventName === 'order_created') {
+          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
+          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
+        }
+        return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName}` };
+      };
+      return refundClassificationProblems(tiho, NOTABLE_IGNORE_PREFIXES).some((p) => p.includes('TIHO'));
+    },
+    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+
+  {
+    id: 'naplata/ignored-grana-bez-loga',
+    imitates: 'grana ignored bez ijednog log retka: odluka pociva na usporedbi statusa s paid, pa bi promjena vrijednosti kod providera pretvorila SVAKU kupnju u 200 bez retryja, a jedini trag bio bi redak u webhook_events koji ne pokriva ni djelomicni indeks webhook_events_unresolved',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src
+        .replace("if (isNotableIgnore(decision)) console.error('webhook-mor ignored_needs_attention', detalji);", '')
+        .replace("else console.warn('webhook-mor ignored_foreign_event', detalji);", '');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes("grana 'ignored' nema log retka"));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  {
+    id: 'naplata/runbook-ne-imenuje-order-refunded',
+    imitates: 'stanje runbooka do 2026-09-23: korak 3 je rekao samo "u LS postavi webhook", bez popisa dogadjaja. Handler od tada prepoznaje povrat samo iz dogadjaja koji stigne, pa operater koji pretplati minimalan skup (order_created) dobije naplatu koja radi i povrate koji se nikad ne obrade: entitlement ostaje paid, referral nagrada se ne povuce, i to bez ijedne greske',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      // MUTACIJA u memoriji: makni ime dogadjaja iz runbooka. Disk se ne dira.
+      const mutated = runbook.split('`order_refunded`').join('povrat');
+      if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return naplataRunbookProblems(mutated, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
+        .some((p) => p.includes('order_refunded'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const outcomes = handlerOutcomes(webhookMorSource());
+      // outcomes stiti od vakuuma: prazan izvod bi dao "cist" runbook bez ijedne provjere ishoda.
+      return outcomes.length >= 4
+        && naplataRunbookProblems(runbook, outcomes, IGNORE_REASON_PREFIXES).length === 0;
+    },
+  },
+  {
+    id: 'naplata/ishod-bez-retka-u-runbooku',
+    imitates: 'nov ishod u webhook_events koji trazi ljudsku radnju, a nigdje nije opisan: tocno stanje ishoda needs_manual_link do 2026-09-23, koji uz to ne ulazi ni u djelomicni indeks webhook_events_unresolved pa ga ni standardni upit nad neobradjenima ne vraca',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      // MUTACIJA: handler pocne pisati ishod koji runbook ne poznaje.
+      return naplataRunbookProblems(
+        runbook,
+        [...handlerOutcomes(webhookMorSource()), 'nov_ishod'],
+        IGNORE_REASON_PREFIXES,
+      ).some((p) => p.includes('nov_ishod'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      return naplataRunbookProblems(runbook, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
+        .length === 0;
+    },
+  },
+
+  {
+    id: 'naplata/runbook-upit-po-nepostojecem-stupcu',
+    imitates: 'stvarno stanje runbooka do 2026-09-23: oba upita u sekciji 5.1 citala su i sortirala po created_at, stupcu kojeg webhook_events nema (0092 ima received_at). Operater bi umjesto popisa placenih narudzbi bez prava pristupa dobio ERROR 42703, a bas ti upiti su jedina zamjena za djelomicni indeks koji ishod needs_manual_link ne pokriva',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const migracija = readTextLf(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'),
+      );
+      // MUTACIJA u memoriji: vrati ime stupca koje je ondje stajalo. Disk se ne dira.
+      const mutated = runbook.split('received_at').join('created_at');
+      if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return runbookSqlColumnProblems(mutated, migracija).some((p) => p.includes('created_at'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const migracija = readTextLf(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'),
+      );
+      return runbookSqlColumnProblems(runbook, migracija).length === 0;
+    },
+  },
+  {
+    id: 'naplata/deploy-zaobilazi-preflight',
+    imitates: 'stvarno stanje do 2026-09-23: runbook je deploy naplate slao na goli `supabase functions deploy webhook-mor`, a preflight je bio zaseban redak koji se moglo preskociti. Preskocen korak znaci deploy s praznim LEMONSQUEEZY_STORE_ID, a acceptEvent je fail-closed: svaka kupnja dobije refused i 200 bez retryja',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pkg = JSON.parse(readTextLf(resolve(process.cwd(), 'package.json')));
+      const preflight = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: vrati goli CLI poziv u runbook. `runbook` je vec normaliziran na LF
+      // (readTextLf), pa doslovni `\n` u uzorku pogadja redak i u checkoutu s core.autocrlf=true
+      // (izmjereno 2026-09-23: bez normalizacije ovaj `.replace` s CRLF izvorom ne pogodi nista, pa
+      // `mutated === runbook` i test padne na `not.toBe`, prije nego se uopce stigne do garda).
+      const mutated = runbook.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n');
+      if (mutated === runbook) return false;
+      return naplataDeployPathProblems(mutated, pkg, preflight).some((p) => p.includes('zaobilazi preflight'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pkg = JSON.parse(readTextLf(resolve(process.cwd(), 'package.json')));
+      const preflight = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return naplataDeployPathProblems(runbook, pkg, preflight).length === 0;
+    },
+  },
+  {
+    id: 'naplata/preflight-zove-goli-supabase',
+    imitates: 'stvarno stanje preflighta do 2026-09-23: spawnSync s golim imenom iz PATH-a, dok repo CLI isporucuje kao devDependency. Izmjereno: exit 1 uz "supabase is not recognized" JEDNAKO i kad su tajne ispravne i kad su prazne, pa gard ne razlikuje dva stanja koja mjeri i nauci operatera da ga preskoci',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: vrati goli poziv iz PATH-a.
+      const mutated = src.replace('const res = runSupabase(args);', "const res = spawnSync('supabase', args);");
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return preflightSourceProblems(mutated).some((p) => p.includes('PATH'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return src.length > 2000 && preflightSourceProblems(src).length === 0;
+    },
+  },
+
+  // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------
+  {
+    id: 'rls/corpus-contributions-update-own',
+    imitates: 'policy corpus_contributions_update_own iz 0102: korisnik s vlastitim JWT-om mogao je PostgREST PATCH-em prepisati path, expires_at, consent_version i pseudonymization, dakle sam zapis o tome pod kojom je privolom sto pohranjeno',
+    caught: () => {
+      const files = corpusMigrations();
+      // MUTACIJA u memoriji: makni 0203 iz POPISA (disk se ne dira). To je zatečeno stanje
+      // repozitorija prije ove promjene, pa tvrdnja nije o izmisljenom kvaru.
+      const bez0203 = files.filter((m) => !m.file.startsWith('0203_'));
+      if (bez0203.length !== files.length - 1) return false;
+      return parseCorpusPolicyHistory(bez0203).remaining.includes('corpus_contributions_update_own');
+    },
+    cleanBefore: () => {
+      const history = parseCorpusPolicyHistory(corpusMigrations());
+      // createdCount stiti od vakuuma: pokvaren izvod bi dao prazan skup i "cist" baseline.
+      return history.createdCount >= 2 && history.remaining.length === 0;
+    },
+  },
 ];
+
+/** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
+function webhookMorSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'index.ts'));
+}
+
+/** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
+function corpusMigrations(): MigrationFile[] {
+  const dir = resolve(process.cwd(), 'supabase', 'migrations');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((file) => ({ file, sql: readTextLf(join(dir, file)) }));
+}
+
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it.each(MUTATIONS.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
     expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);

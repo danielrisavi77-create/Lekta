@@ -1,0 +1,24 @@
+-- 0203: ukloni UPDATE policy `corpus_contributions_update_own` (blokeri lansiranja, 2026-09-22).
+--
+-- ZASTO. 0102 je uz tu tablicu ostavio policy `for update using (user_id = auth.uid())`, a komentar u
+-- istoj migraciji kaze da upis radi ISKLJUCIVO service role. To dvoje se ne slaze: policy je preko
+-- PostgREST-a dopustala korisniku s vlastitim JWT-om PATCH BILO KOJEG stupca svojeg retka, ne samo
+-- `withdrawn_at`. Time se moglo prepisati `path` (staza pseudonimizirane kopije u bucketu 'corpus'),
+-- `expires_at` (rok cuvanja od 36 mjeseci), `pseudonymization` (brojke o ciscenju), `consent_version`
+-- (koju je privolu korisnik vidio) ili `work_type`. To je zapis provenijencije i traga o privoli;
+-- korisnik ga ne smije mijenjati, jer bi time mijenjao dokaz o tome sto je i pod kojom privolom
+-- pohranjeno.
+--
+-- Povlacenje privole ne trpi: ono ide iskljucivo kroz Edge funkciju `withdraw-corpus-contribution`,
+-- koja radi service role klijentom (RLS je za nju neprimjenjiv) i koja prvo brise datoteku pa tek onda
+-- upisuje `withdrawn_at`. `corpus_contributions_select_own` OSTAJE, pa korisnik i dalje vidi svoje
+-- priloge (`src/report/corpus-contribution-client.ts` radi samo select).
+--
+-- Provjereno prije uklanjanja: nijedan klijentski (korisnicki JWT) UPDATE poziv nad ovom tablicom ne
+-- postoji u `src/` ni u `supabase/functions/`; `withdraw-corpus-contribution` i `repair-docx` koriste
+-- service role.
+--
+-- Idempotentno: migracije se u praksi primjenjuju vise puta (vidi CLAUDE.md), i iskljucivo kroz
+-- `supabase db push`.
+
+drop policy if exists corpus_contributions_update_own on corpus_contributions;
