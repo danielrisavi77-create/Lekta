@@ -90,6 +90,8 @@ import {
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
+import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
+import { handoffQueryProblems } from './helpers/handoff-query-contract';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
 import { buildRepairPanelHandle } from '../src/ui/repair-panel';
@@ -3054,6 +3056,25 @@ const MUTATIONS: Mutation[] = [
       // createdCount stiti od vakuuma: pokvaren izvod bi dao prazan skup i "cist" baseline.
       return history.createdCount >= 2 && history.remaining.length === 0;
     },
+  },
+
+  // --- prijenos konteksta `/` -> `/rad/`: bijela lista mora stvarno odbijati -------------------
+  {
+    id: 'handoff/bijela-lista-propusta-sve',
+    imitates: 'bijela lista prijenosa s ulaza koja propusta svaki kljuc, pa redirect, token i utm_<script> s javne poveznice prezive navigaciju na /rad/ (audit 22. 9., nalaz #11)',
+    caught: () => {
+      // MUTACIJA u memoriji: prepisana je SAMO odluka o kljucu, ostalo radi kao prava izvedba.
+      // To je najvjerojatniji oblik kvara, jer izgleda kao bezazleno pojednostavljenje.
+      const propustaSve = (search: string | null | undefined): string => {
+        if (search === null || search === undefined) return '';
+        const serialized = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search).toString();
+        return serialized ? `?${serialized}` : '';
+      };
+      return handoffQueryProblems(propustaSve).length > 0;
+    },
+    // Baseline nad STVARNOM izvedbom: bez njega bi mutacija mogla prolaziti zato sto ugovor
+    // vristi na sve, a ne zato sto je pogodio bas propusnu bijelu listu.
+    cleanBefore: () => handoffQueryProblems(buildHandoffQuery).length === 0,
   },
 ];
 
