@@ -317,10 +317,89 @@ describe('Z6 postavke prikaza: panel', () => {
     expect(spremljeno()).toEqual(ZADANE_POSTAVKE);
   });
 
-  it('bez #displayBtn se ne montira nista: nema <aside> koji se ne moze otvoriti', () => {
+  it('bez IJEDNOG otvaraca se ne montira nista: nema <aside> koji se ne moze otvoriti', () => {
     document.body.innerHTML = '<button id="themeBtn" type="button"></button>';
     expect(mountDisplaySettings(document)).toBeNull();
     expect(document.getElementById(PANEL_ID)).toBeNull();
+  });
+
+  /**
+   * F10 (odluka 2026-09-23): PANEL IMA DVA OTVARACA, `#displayBtn` I `[data-display-open]`.
+   *
+   * Gumb "Aa i Prikaz" u mobilnom listu je do F10 bio POSREDNIK koji je klik proslijedivao na
+   * `#displayBtn`, jer je panel zivio samo na `/` i `/rad/`. Sada je otvarac kao i traka; drugi
+   * `id` pritom NE dobiva, jer dva elementa s istim `id` ostaju nevaljan HTML.
+   */
+  it('otvarac iz mobilnog lista otvara ISTI panel, bez drugog #displayBtn', () => {
+    api = postavi(navigacija() + '<button type="button" data-display-open>Aa</button>');
+    const panel = document.getElementById(PANEL_ID)!;
+    const list = document.querySelector<HTMLElement>('[data-display-open]')!;
+    expect(panel.hidden, 'panel je zatvoren do prvog klika').toBe(true);
+    list.click();
+    expect(panel.hidden).toBe(false);
+    // JEDAN panel, ne dva: otvarac ga otvara, ne stvara vlastiti.
+    expect(document.querySelectorAll(`#${PANEL_ID}`)).toHaveLength(1);
+    expect(document.querySelectorAll('#displayBtn')).toHaveLength(1);
+    list.click();
+    expect(panel.hidden, 'drugi klik zatvara, kao i na gumbu u traci').toBe(true);
+  });
+
+  it('OBA otvaraca nose aria-expanded i aria-controls, i oba prate stanje panela', () => {
+    api = postavi(navigacija() + '<button type="button" data-display-open>Aa</button>');
+    const traka = document.getElementById('displayBtn')!;
+    const list = document.querySelector<HTMLElement>('[data-display-open]')!;
+    for (const el of [traka, list]) {
+      expect(el.getAttribute('aria-controls'), 'otvarac mora reci sto kontrolira').toBe(PANEL_ID);
+      expect(el.getAttribute('aria-expanded')).toBe('false');
+    }
+    // Stanje je JEDNO, pa ga oba moraju prijaviti: citac ekrana inace na jednom od njih laze.
+    list.click();
+    expect(traka.getAttribute('aria-expanded')).toBe('true');
+    expect(list.getAttribute('aria-expanded')).toBe('true');
+    api.close();
+    expect(traka.getAttribute('aria-expanded')).toBe('false');
+    expect(list.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('Esc vraca fokus na otvarac KOJI JE PANEL OTVORIO, ne uvijek na gumb u traci', () => {
+    // Na mobitelu je `#displayBtn` skriven (`display: none` pod 820px u site-chrome.css), pa bi
+    // fiksno vracanje fokusa ondje korisnika ostavilo na nefokusabilnom elementu.
+    api = postavi(navigacija() + '<button type="button" data-display-open>Aa</button>');
+    const list = document.querySelector<HTMLElement>('[data-display-open]')!;
+    list.click();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(document.getElementById(PANEL_ID)!.hidden).toBe(true);
+    expect(document.activeElement, 'fokus se nije vratio na otvarac iz lista').toBe(list);
+  });
+
+  it('BASELINE: otvaranje iz trake vraca fokus u traku, pa tvrdnja iznad nije vakuumska', () => {
+    api = postavi(navigacija() + '<button type="button" data-display-open>Aa</button>');
+    const traka = document.getElementById('displayBtn')!;
+    traka.click();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(document.activeElement).toBe(traka);
+  });
+
+  it('dispose cisti atribute SVIH otvaraca, ne samo prvog', () => {
+    const kontroler = postavi(navigacija() + '<button type="button" data-display-open>Aa</button>');
+    const list = document.querySelector<HTMLElement>('[data-display-open]')!;
+    // BASELINE: prije dispose-a atribut stoji.
+    expect(list.hasAttribute('aria-controls')).toBe(true);
+    kontroler.dispose();
+    expect(list.hasAttribute('aria-controls')).toBe(false);
+    expect(list.hasAttribute('aria-expanded')).toBe(false);
+    expect(document.getElementById('displayBtn')!.hasAttribute('aria-controls')).toBe(false);
+  });
+
+  it('panel radi i kad na stranici stoji SAMO otvarac iz lista (bez #displayBtn)', () => {
+    // Nije danasnji markup, ali je ugovor funkcije: otvarac je otvarac, bez obzira koji.
+    document.body.innerHTML = '<button id="themeBtn" type="button"></button>'
+      + '<button type="button" data-display-open>Aa</button>';
+    const kontroler = mountDisplaySettings(document);
+    expect(kontroler, 'otvarac postoji, pa montaza ne smije vratiti null').not.toBeNull();
+    api = kontroler!;
+    document.querySelector<HTMLElement>('[data-display-open]')!.click();
+    expect(document.getElementById(PANEL_ID)!.hidden).toBe(false);
   });
 
   it('dispose cisti panel, atribute gumba i oznaku preuzimanja lampe', () => {
@@ -705,7 +784,7 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(strogoVeca(specificnost(selektorBloka(CSS, '--paper-muted: #4A4438')), sustav)).toBe(true);
   });
 
-  it('modul NE ulazi u dijeljenu traku: panel je oprema `/` i `/rad/`', () => {
+  it('modul NE ulazi u dijeljenu traku, a montira ga ui-boot za sve rute', () => {
     // `src/routes/shared/route-shell.ts` je uklonjen u Z15 (mrtva ljuska koju nijedan ulaz nije
     // montirao); dijeljeni chrome je sada `src/shared/site-chrome.ts`, i on je STVARNO ozicen na
     // svakoj ruti preko `ui-boot.ts`. Tvrdnja je time postala jaca, ne slabija: mjeri modul koji
@@ -718,8 +797,12 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     // Traka lampu preuzima SAMO ako je slobodna, i unutar rukovatelja provjerava vlasnika, pa
     // panel na `/` i `/rad/` ostaje jedini koji mijenja temu (inace bi se preklopila dvaput).
     expect(chrome).toContain('btn.dataset.themeOwner');
+    // OD F10 PANEL MONTIRA `ui-boot.ts`, JEDNIM POZIVOM ZA SVE RUTE. Rute ga vise NE zovu, i to
+    // je druga strana iste tvrdnje: dva montera istog panela bila bi dva vlasnika lampe.
+    // `mountDisplaySettings` prethodnu montazu vec odbaci, ali dvostruk poziv ostaje besmislen.
+    expect(read('src/shared/ui-boot.ts')).toContain('mountDisplaySettings(document)');
     for (const ulaz of ['src/routes/intake/main.ts', 'src/routes/workspace/main.ts']) {
-      expect(read(ulaz), ulaz).toContain('mountDisplaySettings(document)');
+      expect(read(ulaz), `${ulaz}: panel montira ui-boot, ne ruta`).not.toContain('mountDisplaySettings(document)');
     }
   });
 
@@ -759,13 +842,42 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     }
   });
 
-  it('JS panela ostaje samo na dvije rute koje gumb i imaju', () => {
+  /**
+   * F10 (odluka 2026-09-23): PANEL JE NA SVIM RUTAMA, JEDNIM POZIVOM PO STRANICI.
+   *
+   * Prije F10 je JS panela zivio na tocno dvije rute, pa je gumb "Aa i Prikaz" u mobilnom listu
+   * ostalih 11 stranica bio POSREDNIK koji se pri montazi ukloni: kontrola koja se obeca i onda
+   * nestane. Tvrdnja se time okrenula: nijedna ruta panel ne smije montirati sama, a `ui-boot`,
+   * koji sve rute bootaju, mora.
+   */
+  it('JS panela dolazi kroz ui-boot, pa vrijedi na SVIM rutama, i to jednim pozivom', () => {
+    const boot = read('src/shared/ui-boot.ts');
+    expect((boot.match(/mountDisplaySettings\(document\)/g) ?? []).length,
+      'jedan poziv po stranici, inace se panel montira dvaput').toBe(1);
     const sMontazom = RUTE.filter((r) => read(r).includes('mountDisplaySettings(document)'));
-    expect(sMontazom).toEqual(['src/routes/intake/main.ts', 'src/routes/workspace/main.ts']);
-    // `/` je `routes/intake/main.ts`, `/rad/` je `routes/workspace/main.ts`; tocno one dvije
-    // stranice koje nose #displayBtn (tvrdnja iznad).
+    expect(sMontazom, 'nijedna ruta ne smije montirati panel sama').toEqual([]);
+    for (const ruta of RUTE) expect(read(ruta), `${ruta} mora bootati ui-boot`).toMatch(/ui-boot/);
+    // `/` je `routes/intake/main.ts`, `/rad/` je `routes/workspace/main.ts`; obje i dalje bootaju
+    // ui-boot, pa panel imaju kao i prije, samo drugim putem.
     expect(read('index.html')).toContain('src="/src/routes/intake/main.ts"');
     expect(read('rad/index.html')).toContain('src="/src/routes/workspace/main.ts"');
+  });
+
+  /** Stranice koje traku nose; svaka mora imati OTVARAC panela, inace je kontrola obecanje. */
+  const STRANICE_S_TRAKOM = [
+    'index.html', 'rad/index.html', 'alati.html', 'citat.html', 'izjava.html', 'kartice.html',
+    'literatura.html', 'naslovnica.html', 'citati-i-literatura.html', 'landing_usporedba.html',
+    'landing_benchmark.html', 'saznaj-vise/index.html', 'moji-radovi/index.html',
+  ] as const;
+
+  it.each(STRANICE_S_TRAKOM)('%s nosi JEDAN #displayBtn i otvarac u mobilnom listu', (rel) => {
+    const html = read(rel);
+    expect((html.match(/id="displayBtn"/g) ?? []).length,
+      'dva elementa s istim id su nevaljan HTML').toBe(1);
+    expect(html, 'mobilni list mora nositi otvarac, ne posrednik').toContain('data-display-open');
+    expect(html, 'posrednik je uklonjen, ne ostavljen uz novi').not.toContain('data-site-chrome-display-proxy');
+    // Otvarac u listu NEMA `id`, jer `#displayBtn` ostaje jedinstven u dokumentu.
+    expect(html).toContain('<button class="site-chrome__sheet-aa" type="button" data-display-open>');
   });
 
   it('MUTACIJA: uz stari raspored (list uz panel) rute bez panela ostaju bez ucinka', () => {
@@ -775,8 +887,10 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     const panelS = UVOZ_UCINKA + ';\n' + panel;
     expect(rutaDobivaUcinak(read('src/routes/learn-more/main.ts'), bootBez, panelS)).toBe(false);
     expect(rutaDobivaUcinak(read('src/routes/my-work/main.ts'), bootBez, panelS)).toBe(false);
-    // Kontrola smjera: ruta S panelom je i tada radila, pa se kvar nije vidio ondje gdje se gledalo.
-    expect(rutaDobivaUcinak(read('src/routes/intake/main.ts'), bootBez, panelS)).toBe(true);
+    // Kontrola smjera: ruta koja je panel montirala SAMA je i tada radila, pa se kvar nije vidio
+    // ondje gdje se gledalo. Rute to od F10 vise ne rade, pa se stari raspored glumi doslovno.
+    const starimRasporedom = read('src/routes/intake/main.ts') + '\nmountDisplaySettings(document);';
+    expect(rutaDobivaUcinak(starimRasporedom, bootBez, panelS)).toBe(true);
     // BASELINE: sa STVARNIM izvorima obje rute bez panela dobivaju ucinak.
     expect(rutaDobivaUcinak(read('src/routes/learn-more/main.ts'), boot, panel)).toBe(true);
   });
@@ -1088,27 +1202,45 @@ describe('Z6 ui-boot: izvodjenje, ne tekst', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 
-  it('kad panel preuzme gumb, klik mijenja temu TOCNO JEDNOM', async () => {
+  /**
+   * OD F10 PANEL PREUZIMA GUMB UNUTAR ISTOG `boot()`-a, pa se ustupanje mjeri nad PRAVIM panelom.
+   *
+   * Do F10 je panel montirala ruta (`routes/intake/main.ts`), dakle POSLIJE `ui-boot`-a, i ovaj
+   * test je tudjeg vlasnika glumio rucno prikacenim rukovateljem. Sada ga `ui-boot` montira sam,
+   * pa je tvrdnja postala jaca: mjeri se stvarni par (`setupThemeToggle` + panel), ne replika.
+   */
+  it('panel montiran iz ui-boota preuzme gumb, pa klik mijenja temu TOCNO JEDNOM', async () => {
     vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
     document.body.innerHTML = navigacija();
     await ucitajUiBoot();
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
 
-    // Redoslijed je stvaran: ui-boot je listener vec prikacio, panel oznaku stavlja TEK SADA.
     const btn = document.getElementById('themeBtn') as HTMLElement;
-    let panelKlikova = 0;
-    btn.dataset.themeOwner = 'panel';
-    btn.addEventListener('click', () => {
-      panelKlikova += 1;
-      document.documentElement.dataset.theme = suprotnaTema(document);
-    });
+    expect(btn.dataset.themeOwner, 'panel iz ui-boota mora preuzeti lampu').toBe('display-settings');
+    expect(document.getElementById(PANEL_ID), 'ui-boot mora montirati panel').not.toBeNull();
 
     btn.click();
-    expect(panelKlikova, 'panel mora dobiti klik').toBe(1);
-    // Da je ui-bootov rukovatelj odradio, prvo bi postavio `light`, pa bi panel (registriran
-    // poslije njega) procitao suprotno od toga i vratio `dark`: dvije promjene, vidljiv treptaj.
+    // Da su odradila OBA rukovatelja (ui-boot i panel), tema bi se promijenila dvaput i vratila na
+    // `dark`: vidljiv treptaj bez promjene. Jedna promjena znaci da je ui-boot ustupio gumb.
     expect(document.documentElement.getAttribute('data-theme'),
-      'tema je promijenjena dvaput; ui-boot nije ustupio gumb').toBe('light');
+      'tema je promijenjena dvaput ili nijednom; ui-boot nije ustupio gumb').toBe('light');
+    // Panel je jedini pisac, pa i njegov radio mora pokazivati novo stanje (jedan pisac, jedan citac).
+    expect(radio('lektaOsvjetljenje', 'light').checked).toBe(true);
+  });
+
+  it('MUTACIJA: dva ziva ozicenja iste lampe ponistavaju promjenu (zato ui-boot ustupa)', async () => {
+    vratiSustav = podmetniSustav(SUSTAV_SVIJETAO);
+    document.body.innerHTML = navigacija();
+    await ucitajUiBoot();
+    const btn = document.getElementById('themeBtn') as HTMLElement;
+    // BASELINE: s jednim piscem klik daje `light` (tvrdnja iznad).
+    // Podmetnut DRUGI pisac, tocno onakav kakav bi `ui-boot` bio bez provjere vlasnistva.
+    btn.addEventListener('click', () => {
+      document.documentElement.dataset.theme = suprotnaTema(document);
+    });
+    btn.click();
+    expect(document.documentElement.getAttribute('data-theme'),
+      'dva pisca moraju ponistiti promjenu; inace ovaj gard ne mjeri nista').toBe('dark');
   });
 
   /**

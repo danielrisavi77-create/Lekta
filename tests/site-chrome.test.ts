@@ -460,23 +460,59 @@ describe('Z15 mobilni list: otvaranje, Esc i fokus', () => {
     expect(btn.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('"Aa" u listu je POSREDNIK: bez `#displayBtn` se ukloni, s njim proslijedi klik', () => {
-    // Bez panela (alat-stranica) kontrola bez ucinka ne smije stajati na ekranu.
-    const bez = dom(zaglavlje(read('alati.html')));
-    mountSiteChrome(bez);
-    expect(bez.querySelector('[data-site-chrome-display-proxy]')).toBeNull();
-    disposeSiteChrome(bez);
+  /**
+   * F10 (odluka 2026-09-23): "Aa i Prikaz" U LISTU JE OTVARAC, NE POSREDNIK.
+   *
+   * Do F10 je panel "Prilagodi prikaz" zivio samo na `/` i `/rad/`, pa je gumb u listu bio
+   * posrednik (`data-site-chrome-display-proxy`) koji je klik proslijedivao na `#displayBtn`, a
+   * na ostalih 11 stranica se pri montazi UKLANJAO: kontrola koja se obeca i onda nestane.
+   * Panel se od F10 montira na svim rutama kroz `ui-boot.ts`, pa je gumb obican otvarac.
+   *
+   * OVAJ LIST MJERI SAMO TRAKU. Da otvarac stvarno otvara panel mjeri `tests/display-settings.test.ts`
+   * (ondje je i panel), jer traka panel NE UVOZI. Ovdje se cuva ono sto je trakin posao:
+   * posrednika vise nema, otvarac stoji na svakoj stranici, `#displayBtn` je jedinstven, i klik
+   * na otvarac ZATVARA list (inace panel iskoci ispod lista koji ga prekriva).
+   */
+  it('otvarac panela stoji u listu i NIJE uklonjen, a posrednika vise nema', () => {
+    for (const rel of ['alati.html', 'rad/index.html', 'saznaj-vise/index.html']) {
+      const doc = dom(zaglavlje(read(rel)));
+      mountSiteChrome(doc);
+      expect(doc.querySelector('[data-display-open]'), `${rel}: otvarac je uklonjen`).not.toBeNull();
+      expect(doc.querySelector('[data-site-chrome-display-proxy]'), `${rel}: posrednik je ostao`).toBeNull();
+      expect(doc.querySelectorAll('#displayBtn'), `${rel}: #displayBtn nije jedinstven`).toHaveLength(1);
+      disposeSiteChrome(doc);
+    }
+  });
 
-    // S panelom (`/rad/`) klik posrednika mora pogoditi bas `#displayBtn`, bez drugog istog id-a.
-    const sa = dom(zaglavlje(read('rad/index.html')));
-    mountSiteChrome(sa);
-    const proxy = sa.querySelector<HTMLElement>('[data-site-chrome-display-proxy]');
-    expect(proxy, '`/rad/` nosi panel, pa posrednik mora ostati').not.toBeNull();
-    let klikova = 0;
-    sa.getElementById('displayBtn')!.addEventListener('click', () => { klikova += 1; });
-    proxy!.click();
-    expect(klikova).toBe(1);
-    expect(sa.querySelectorAll('#displayBtn')).toHaveLength(1);
+  it('klik na otvarac panela ZATVARA mobilni list', () => {
+    const doc = dom(zaglavlje(read('alati.html')));
+    mountSiteChrome(doc);
+    const btn = doc.getElementById('mobileMenuBtn')!;
+    const sheet = doc.getElementById('mobileNav')!;
+    btn.click();
+    // BASELINE: list je otvoren, inace tvrdnja ispod ne dokazuje nista.
+    expect(sheet.classList.contains('open')).toBe(true);
+    doc.querySelector<HTMLElement>('[data-display-open]')!.click();
+    expect(sheet.classList.contains('open'), 'panel bi iskocio ispod otvorenog lista').toBe(false);
+  });
+
+  it('MUTACIJA: preimenovan otvarac ostavlja list otvoren, i traka vise ne uvozi posrednik', () => {
+    const header = zaglavlje(read('alati.html'));
+    // BASELINE je u testu iznad; ovdje se mjeri da tvrdnja ovisi BAS o imenu atributa.
+    const preimenovan = header.replace('data-display-open', 'data-nesto-drugo');
+    expect(preimenovan, 'podmetanje se nije primilo; provjeri oznaku otvaraca').not.toBe(header);
+    const doc = dom(preimenovan);
+    mountSiteChrome(doc);
+    doc.getElementById('mobileMenuBtn')!.click();
+    doc.querySelector<HTMLElement>('.site-chrome__sheet-aa')!.click();
+    expect(doc.getElementById('mobileNav')!.classList.contains('open'),
+      'mutacija nije promijenila ishod; gard ne mjeri ime atributa').toBe(true);
+    disposeSiteChrome(doc);
+
+    // Posrednik je UKLONJEN iz modula, ne ostavljen kao rezerva (Z15 pravilo).
+    const modul = read('src/shared/site-chrome.ts');
+    expect(modul).not.toContain('function wireDisplayProxy');
+    expect(modul).toContain("'a, [data-display-open]'");
   });
 });
 

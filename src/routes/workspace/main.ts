@@ -16,7 +16,6 @@ import {
 import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
-import { mountDisplaySettings } from '../../shared/display-settings';
 import { setSiteChromeScore, setSiteChromeStage } from '../../shared/site-chrome';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
@@ -98,9 +97,10 @@ function showStatus(text: string | null): void {
 }
 
 async function start(): Promise<void> {
-  // Panel "Prilagodi prikaz" prije analizatora: postavke prikaza ne ovise ni o dokumentu ni o
-  // pohrani, pa nema razloga da korisnik ceka na njih.
-  mountDisplaySettings(document);
+  // PANEL "PRILAGODI PRIKAZ" SE OD F10 (2026-09-23) MONTIRA U `shared/ui-boot.ts`, JEDNIM POZIVOM
+  // ZA SVE RUTE, pa poziva odavde vise nema. Uvjet zbog kojeg je stajao prvi (postavke prikaza ne
+  // ovise ni o dokumentu ni o pohrani, pa korisnik ne mora cekati na njih) je ocuvan: `ui-boot` se
+  // uvozi IZNAD ovog modula, a njegov `boot()` se izvrsi prije nego `start()` dotakne analizator.
   // Montaza ide PRVA: radna povrsina mora biti upotrebljiva i kad pohrana zakaze. Vezanje
   // upotrebljivosti uz pohranu bilo bi tocno obrnuto od ugovora o degradaciji.
   initAnalyzerApp(document);

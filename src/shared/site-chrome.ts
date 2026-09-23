@@ -300,8 +300,8 @@ function playLamp(doc: Document, btn: HTMLElement): void {
  * VLASNISTVO NAD LAMPOM SE NE OTIMA.
  *
  * Isti `#themeBtn` mogu ozicavati tri modula: ovaj, `ui-boot.ts` i panel "Prilagodi prikaz"
- * (`display-settings.ts`, samo na `/` i `/rad/`, jer ondje klik mora i osvjeziti radio). Dva ziva
- * ozicenja preklopila bi temu dvaput i ponistila je. Zato:
+ * (`display-settings.ts`, od F10 na SVIM rutama, jer klik mora i osvjeziti radio u panelu). Dva
+ * ziva ozicenja preklopila bi temu dvaput i ponistila je. Zato:
  *
  *   - ovaj modul preuzima gumb SAMO ako ga nitko nije preuzeo (`btn.dataset.themeOwner`),
  *   - panel montira POSLIJE i oznaku prepise na sebe; ovaj rukovatelj tada crta samo overlay,
@@ -314,12 +314,12 @@ function playLamp(doc: Document, btn: HTMLElement): void {
  *
  * Boja overlaya je boja CILJNE teme, a "ciljna" se racuna iz stanja PRIJE swapa. Dok je rukovatelj
  * stajao na samom gumbu, redoslijed registracije je odlucivao o boji: panel Z6 se montira pri
- * evaluaciji modula (`routes/intake/main.ts`, `routes/workspace/main.ts`), a ovaj modul na
- * `DOMContentLoaded`, pa je na `/` i `/rad/` panel PRVI prebacio temu i `playLamp` je citao vec
- * promijenjeno stanje. Izmjereno: prelazak u svijetlu temu crtao je TAMAN krug preko svijetle
- * stranice. Listeneri na istoj meti idu po redoslijedu registracije bez obzira na `capture`, ali
- * faza KAPTURE na dokumentu po specifikaciji ide prije ciljne faze na gumbu, pa ovako boja ne
- * ovisi o tome koji se modul montirao prvi.
+ * evaluaciji modula (`routes/intake/main.ts`, `routes/workspace/main.ts`; od F10 oba montira
+ * `ui-boot.ts`), a ovaj modul na `DOMContentLoaded`, pa je na `/` i `/rad/` panel PRVI prebacio
+ * temu i `playLamp` je citao vec promijenjeno stanje. Izmjereno: prelazak u svijetlu temu crtao
+ * je TAMAN krug preko svijetle stranice. Listeneri na istoj meti idu po redoslijedu registracije
+ * bez obzira na `capture`, ali faza KAPTURE na dokumentu po specifikaciji ide prije ciljne faze
+ * na gumbu, pa ovako boja ne ovisi o tome koji se modul montirao prvi.
  */
 export function wireSiteLamp(doc: Document, signal: AbortSignal): void {
   const btn = doc.getElementById('themeBtn');
@@ -371,7 +371,7 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
     if (sheet.classList.contains('open')) zatvori(true); else otvori();
   }, { signal });
   sheet.addEventListener('click', (event) => {
-    const meta = (event.target as HTMLElement | null)?.closest('a, [data-site-chrome-display-proxy]');
+    const meta = (event.target as HTMLElement | null)?.closest('a, [data-display-open]');
     if (meta) zatvori(false);
   }, { signal });
   doc.addEventListener('keydown', (event) => {
@@ -386,18 +386,18 @@ export function wireSiteMenu(doc: Document, signal: AbortSignal): void {
 }
 
 /**
- * "Aa" U MOBILNOM LISTU JE POSREDNIK, NE DRUGI GUMB. Dva elementa s istim `id` su nevaljan HTML,
- * a panel "Prilagodi prikaz" se vezuje tocno na `#displayBtn`. Posrednik zato samo proslijedi klik;
- * na stranicama koje panel ne montiraju (`#displayBtn` ne postoji) se ukloni, jer kontrola bez
- * ucinka je obecanje koje se ne ispuni.
+ * "Aa · Prikaz" U MOBILNOM LISTU VISE NIJE POSREDNIK (F10, odluka 2026-09-23).
+ *
+ * Do F10 je panel "Prilagodi prikaz" zivio samo na `/` i `/rad/`, pa je gumb u listu bio POSREDNIK
+ * (`data-site-chrome-display-proxy`) koji je klik proslijedivao na `#displayBtn`, a na stranicama
+ * bez panela se pri montazi UKLANJAO. Panel se od F10 montira na svim rutama kroz `ui-boot.ts`, pa
+ * posrednik nema koga posredovati: gumb u listu je obican otvarac `[data-display-open]` koji
+ * `display-settings.ts` ozicuje ravno na panel. `#displayBtn` pritom ostaje JEDINSTVEN u dokumentu
+ * (gard u `tests/site-chrome.test.ts`), jer dva elementa s istim `id` su i dalje nevaljan HTML.
+ *
+ * Ovaj modul time o panelu ne zna nista osim imena atributa u listu (gornji `wireSiteMenu` ga
+ * zatvara na klik), i to je namjerno: traka panel NE UVOZI (gard u `tests/display-settings.test.ts`).
  */
-function wireDisplayProxy(doc: Document, signal: AbortSignal): void {
-  const proxy = doc.querySelector<HTMLElement>('[data-site-chrome-display-proxy]');
-  if (!proxy) return;
-  const target = doc.getElementById('displayBtn');
-  if (!target) { proxy.remove(); return; }
-  proxy.addEventListener('click', () => target.click(), { signal });
-}
 
 const montirani = new WeakMap<Document, AbortController>();
 
@@ -457,7 +457,6 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
 
   wireSiteLamp(doc, signal);
   wireSiteMenu(doc, signal);
-  wireDisplayProxy(doc, signal);
 
   return {
     refresh,

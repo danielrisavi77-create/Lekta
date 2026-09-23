@@ -9,9 +9,10 @@
  * Modul ne dira nijedan drugi element stranice i ne zna nista o analizi.
  *
  * TAJ CSS OVAJ MODUL NE UVOZI, nego `src/shared/ui-boot.ts`, koji ucitavaju SVE rute. Razlog:
- * pre-paint skripta atribute upisuje na svakoj stranici, a panel se montira samo na `/` i
- * `/rad/`; da stil dolazi s panelom, izbor napravljen na `/` bio bi mrtav na `/saznaj-vise/`,
- * `/moji-radovi/` i alat-stranicama. Stil prati ATRIBUT, ne kontrolu.
+ * pre-paint skripta atribute upisuje na svakoj stranici, pa stil mora vrijediti svugdje bez obzira
+ * na to gdje kontrola stoji; stil prati ATRIBUT, ne kontrolu. Od F10 (2026-09-23) isti `ui-boot.ts`
+ * montira i SAM PANEL, dakle na svim rutama. Do tada je panel zivio samo na `/` i `/rad/`, pa je
+ * izbor napravljen na `/` bio mrtav na `/saznaj-vise/`, `/moji-radovi/` i alat-stranicama.
  *
  * GUSTOCA SE NAMJERNO NE NUDI, iako je ALIGNMENT Z6 nabraja. Mjerenje Z4 (2026-09-19) pokazalo je
  * da samo 25 posto razmaka u proizvodu lezi na predlozenoj ljestvici, pa `--space-*` tokeni nisu ni
@@ -213,15 +214,34 @@ export interface DisplaySettingsController {
 const montirani = new WeakMap<Document, DisplaySettingsController>();
 
 /**
- * Montira panel i gumb `#displayBtn`. Vraca `null` kad gumba nema (svaka stranica koja panel ne
- * nudi), jer tiho stvaranje `<aside>`-a bez nacina da ga se otvori ne bi bilo degradacija nego smece.
+ * OTVARACI PANELA: `#displayBtn` U TRACI I SVAKI `[data-display-open]`.
+ *
+ * Do F10 je panel imao tocno jedan otvarac, `#displayBtn`, i zivio samo na `/` i `/rad/`. Mobilni
+ * list je zato nosio POSREDNIK koji je klik proslijedivao na taj gumb, a na stranicama bez panela se
+ * pri montazi uklonio. Odluka F10 (2026-09-23) panel stavlja na SVE rute, pa posrednik nema koga
+ * posredovati: gumb u listu je od sada obican otvarac, `[data-display-open]`.
+ *
+ * DVA ELEMENTA S ISTIM `id` OSTAJU NEVALJAN HTML, i zato mobilni gumb `id` NE dobiva: `#displayBtn`
+ * je i dalje jedinstven u dokumentu (gard: `tests/site-chrome.test.ts`). Oba otvaraca dobivaju
+ * `aria-expanded` i `aria-controls`, jer oba stvarno kontroliraju isti panel.
+ */
+function otvaraciPanela(doc: Document): HTMLElement[] {
+  const glavni = doc.getElementById('displayBtn');
+  const ostali = [...doc.querySelectorAll<HTMLElement>('[data-display-open]')];
+  return glavni ? [glavni, ...ostali.filter((el) => el !== glavni)] : ostali;
+}
+
+/**
+ * Montira panel i njegove otvarace. Vraca `null` kad na stranici nema NIJEDNOG otvaraca, jer tiho
+ * stvaranje `<aside>`-a bez nacina da ga se otvori ne bi bilo degradacija nego smece.
  *
  * Panel NIJE modal: pozadina ostaje interaktivna, fokus se ne zarobljava, `inert` se ne postavlja.
  * Korisnik mora vidjeti ucinak svake promjene na stvarnom sadrzaju, a ne na zamracenoj stranici.
  */
 export function mountDisplaySettings(doc: Document): DisplaySettingsController | null {
   montirani.get(doc)?.dispose();
-  const gumb = doc.getElementById('displayBtn');
+  const gumbi = otvaraciPanela(doc);
+  const gumb = gumbi[0];
   if (!gumb) return null;
 
   const kontroler = new AbortController();
@@ -352,10 +372,17 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   }, { signal });
 
   const otvoren = (): boolean => !panel.hidden;
-  const open = (): void => {
+  /**
+   * FOKUS SE VRACA ONAMO ODAKLE JE DOSAO, NE UVIJEK U TRAKU. Panel od F10 ima dva otvaraca, pa bi
+   * fiksno vracanje na `#displayBtn` mobilnog korisnika nakon Esc-a ostavilo na gumbu koji je na
+   * njegovoj sirini `display: none`, dakle nefokusabilan: sljedeci Tab bio bi pocetak stranice.
+   */
+  let zadnjiOtvarac: HTMLElement = gumb;
+  const open = (izvor: HTMLElement = gumb): void => {
+    zadnjiOtvarac = izvor;
     if (otvoren()) return;
     panel.hidden = false;
-    gumb.setAttribute('aria-expanded', 'true');
+    for (const el of gumbi) el.setAttribute('aria-expanded', 'true');
     // KLIZANJE IDE U SLJEDECEM KADRU. Dok je `hidden`, element nema kutiju, pa prijelaz nema iz
     // cega krenuti i panel bi samo iskocio. `hidden` je pritom i dalje jedini izvor istine o tome
     // je li panel otvoren; klasa nosi samo polozaj.
@@ -373,13 +400,15 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
     // fokus vraca na gumb, inace citac ekrana nakratko stoji u elementu koji vise nije otvoren.
     panel.classList.remove('ps--otvoren');
     panel.hidden = true;
-    gumb.setAttribute('aria-expanded', 'false');
-    gumb.focus();
+    for (const el of gumbi) el.setAttribute('aria-expanded', 'false');
+    if (typeof zadnjiOtvarac.focus === 'function') zadnjiOtvarac.focus();
   };
 
-  gumb.setAttribute('aria-expanded', 'false');
-  gumb.setAttribute('aria-controls', PANEL_ID);
-  gumb.addEventListener('click', () => { if (otvoren()) close(); else open(); }, { signal });
+  for (const el of gumbi) {
+    el.setAttribute('aria-expanded', 'false');
+    el.setAttribute('aria-controls', PANEL_ID);
+    el.addEventListener('click', () => { if (otvoren()) close(); else open(el); }, { signal });
+  }
   zatvori.addEventListener('click', close, { signal });
   doc.addEventListener('keydown', (event) => {
     if ((event as KeyboardEvent).key === 'Escape' && otvoren()) {
@@ -428,8 +457,10 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
       montirani.delete(doc);
       kontroler.abort();
       panel.remove();
-      gumb.removeAttribute('aria-expanded');
-      gumb.removeAttribute('aria-controls');
+      for (const el of gumbi) {
+        el.removeAttribute('aria-expanded');
+        el.removeAttribute('aria-controls');
+      }
       if (lampa) delete lampa.dataset.themeOwner;
     },
   };

@@ -187,6 +187,7 @@
              JavaScripta pohranu ne moze procitati i ne smije tvrditi profil; `site-chrome.ts` ga
              zamijeni kraticom. -->
         <button class="site-chrome__plate" type="button" data-site-chrome-profile aria-disabled="true" title="Uskoro"><span class="site-chrome__plate-dot" aria-hidden="true"></span><span data-site-chrome-profile-label>Odaberi profil</span></button>
+        <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i></button>
         <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i></button>
         <a class="site-chrome__stamp" href="/">Provjeri rad <span aria-hidden="true">&darr;</span></a>
         <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
@@ -203,7 +204,7 @@
     <a class="site-chrome__sheet-item" data-site-chrome-dest="my-work" href="/moji-radovi/">Moji radovi<small class="site-chrome__sheet-note" data-site-chrome-note="work"></small></a>
     <div class="site-chrome__sheet-foot">
       <span><a href="/privatnost.html">Privatnost</a> &middot; <a href="/uvjeti-koristenja.html">Uvjeti</a> &middot; <a href="/obrada-dokumenata.html">Obrada</a></span>
-      <button class="site-chrome__sheet-aa" type="button" data-site-chrome-display-proxy>Aa &middot; Prikaz</button>
+      <button class="site-chrome__sheet-aa" type="button" data-display-open>Aa &middot; Prikaz</button>
     </div>
   </nav>
 </header>

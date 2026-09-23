@@ -18,9 +18,10 @@ import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 // UCINAK POSTAVKI PRIKAZA (Z6) IDE OVDJE, NE UZ PANEL. Pre-paint skripta u <head> upisuje
 // `data-reading-font`, `data-contrast` i `data-motion` na SVAKOJ stranici, pa
-// bi bez ovog uvoza ti atributi na rutama koje panel ne montiraju (/saznaj-vise/, /moji-radovi/,
+// bi bez ovog uvoza ti atributi na rutama koje panel nisu montirale (/saznaj-vise/, /moji-radovi/,
 // alat-stranice preko page-boot) stajali MRTVI: postavka koju je korisnik izabrao na `/` ondje ne
-// bi radila nista. Sam panel (JS) i dalje zivi samo na `/` i `/rad/`; ovdje ide iskljucivo stil.
+// bi radila nista. Od F10 (2026-09-23) ovaj modul montira i SAM PANEL (vidi `boot()` nize), pa
+// stil i kontrola dolaze istim putem na sve rute; do tada je panel zivio samo na `/` i `/rad/`.
 // Uvoz je NAMJERNO posljednji u nizu listova ovog modula, da ucinak dodje poslije primitiva iz
 // `design-system.css`. Specificnost je pritom mjerena, ne pretpostavljena (vidi zaglavlje tog
 // lista): `page-chrome.css` se ucitava JOS kasnije, pa ucinak ne smije ovisiti o redoslijedu.
@@ -32,6 +33,7 @@ import './display-settings.css';
 import './site-chrome.css';
 import { setupSkipLink } from './skip-link';
 import { mountSiteChrome } from './site-chrome';
+import { mountDisplaySettings } from './display-settings';
 import { pokretPrigusen, suprotnaTema, tamnoNaEkranu } from './display-prefs';
 import { setupPremiumVisuals } from './premium-visuals';
 import { createFrameCoalescer } from './frame-coalescer';
@@ -244,6 +246,22 @@ function boot() {
   // zatim ustupa. Ispravnost ne ovisi o ovom poretku (oznaka se cita UNUTAR rukovatelja), ali
   // aria stanje lampe je time tocno od prvog kadra.
   mountSiteChrome(document);
+  // PANEL "PRILAGODI PRIKAZ" (Z6) SE MONTIRA OVDJE, JEDNIM POZIVOM ZA SVE RUTE (F10, 2026-09-23).
+  //
+  // Do F10 su ga zvale `routes/intake/main.ts` i `routes/workspace/main.ts`, dakle tocno dvije
+  // rute, pa je kontrola postojala samo na `/` i `/rad/`, a gumb "Aa · Prikaz" u mobilnom listu
+  // ostalih 11 stranica se pri montazi UKLANJAO. Odluka F10(a) panel stavlja na sve rute.
+  //
+  // ZASTO OVDJE, A NE U `site-chrome.ts`: traka panel NE SMIJE uvoziti. `tests/display-settings.test.ts`
+  // to izricito mjeri ("modul NE ulazi u dijeljenu traku"), a razlog je proracun trake:
+  // `tests/route-shell-budget.test.ts` mjeri cijeli import graf `site-chrome.ts` uz granicu od 8 KB
+  // gzip, i panel bi u nju uvukao svoj graf. `ui-boot.ts` je jedini modul koji SVE rute vec bootaju
+  // a nije mjeren tim proracunom, pa je to jedino mjesto s kojeg jedan poziv pokriva sve rute.
+  //
+  // POZIV IDE POSLIJE trake, jer panel oznaku vlasnistva nad `#themeBtn` prepise na sebe; ispravnost
+  // o poretku ne ovisi (oznaka se cita unutar rukovatelja), ali ishod je time isti kao prije F10.
+  // Bez otvaraca na stranici je no-op koji vraca `null`, pa provjera po ruti nije potrebna.
+  mountDisplaySettings(document);
   setupSkipLink(); renderIcons(); setupReveal(); pauseOffscreenMotion(); animateHero(); setupTilt(); setupPremiumVisuals(); setupThemeToggle();
 }
 if (document.readyState === 'loading') {
