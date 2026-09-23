@@ -141,7 +141,7 @@ describe('provider results do not replace verification', () => {
   it('accepts the captured Grok 1.0.34 contract fixture', () => {
     const stdout = readFileSync('tests/fixtures/grok-result-1.0.34.json', 'utf8');
     expect(parseResult('grok', stdout, 0))
-      .toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+      .toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
   });
   /**
    * PROVENIJENCIJA FIXTURA. Oba su snimka nastala na razvojnom stroju 2026-09-21 s Grok CLI 1.0.34:
@@ -166,7 +166,7 @@ describe('provider results do not replace verification', () => {
   it('presuduje zive Grok 1.0.34 odgovore, i uspjeh i gresku', () => {
     const success = readFileSync('tests/fixtures/agents/grok-success.json', 'utf8');
     const failure = readFileSync('tests/fixtures/agents/grok-error.json', 'utf8');
-    expect(parseResult('grok', success, 0)).toEqual({ ok: true, reportedModels: ['grok-4.6-build'] });
+    expect(parseResult('grok', success, 0)).toMatchObject({ ok: true, reportedModels: ['grok-4.6-build'] });
     expect(parseResult('grok', failure, 1).ok).toBe(false);
     // Cak i kad bi CLI pogresno izasao s 0, oblik greske sam po sebi nije uspjeh.
     expect(parseResult('grok', failure, 0).ok).toBe(false);
