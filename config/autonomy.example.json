@@ -26,10 +26,38 @@
   "externalDocumentUploadAllowed": false,
   "publisherEnabled": false,
   "policyVersion": "2026-09-09.1",
-  "autoLowRiskPathPrefixes": ["docs/", "src/ui/", "src/routes/", "tests/ux/"],
-  "requiredReleaseTiers": ["check", "conformance", "slow", "ux", "strict-open", "word", "word-worst"],
+  "autoLowRiskPathPrefixes": [
+    "docs/",
+    "src/ui/",
+    "src/routes/",
+    "tests/ux/"
+  ],
+  "requiredReleaseTiers": [
+    "check",
+    "conformance",
+    "slow",
+    "ux",
+    "strict-open",
+    "word",
+    "word-worst"
+  ],
   "signalSources": [
-    { "id": "inbox", "kind": "inbox" },
-    { "id": "ci", "kind": "github_ci", "workflows": ["check", "ux-gate", "post-deploy-smoke"] }
-  ]
+    {
+      "id": "inbox",
+      "kind": "inbox"
+    },
+    {
+      "id": "ci",
+      "kind": "github_ci",
+      "workflows": [
+        "check",
+        "ux-gate",
+        "post-deploy-smoke"
+      ]
+    }
+  ],
+  "grokEnabled": false,
+  "plannerAgent": "auto",
+  "implementerAgent": "auto",
+  "reviewerAgent": "auto"
 }
