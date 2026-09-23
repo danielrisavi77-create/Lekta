@@ -3234,3 +3234,123 @@ describe('mutacije: grana Groka u python zrcalu presude', () => {
     expect(naive(regressed)).toEqual([]);
   });
 });
+
+/**
+ * MUTACIJE ZA RAZRJESAVANJE PROVIDERA NA WINDOWSU.
+ *
+ * Stvaran kvar, izmjeren na ovom stroju 2026-09-22: npm instalira `.cmd` shim, pa
+ * `spawnSync('codex', ['--version'], { shell: false })` vraca `error.code === 'ENOENT'`, a
+ * `npm run agents -- doctor` ispisuje `codex: unavailable` iako `codex --version` iz terminala daje
+ * `codex-cli 0.154.0`. Lazan negativ, ne odsutnost CLI-ja.
+ *
+ * Prva inacica popravka imala je tvrd uvjet nad imenom `grok` i tvrdo upisanu stazu paketa, pa je
+ * lijecila samo jednog providera. Sada je razrjesavanje podatkovna mapa. Ova skupina dokazuje da
+ * gubitak unosa iz te mape GRIZE: bez toga bismo se tiho vratili na ENOENT za Codex, a suite bi
+ * ostao zelen jer Grok i dalje radi.
+ */
+describe('mutacije: razrjesavanje providera po mapi paketnih ulaznih tocaka', () => {
+  type Invocation = { command: string; argsPrefix: string[] };
+  type ResolveOptions = {
+    platform: string;
+    cwd: string;
+    pathEnv: string;
+    exists: (path: string) => boolean;
+    entrypoints?: Record<string, readonly string[]>;
+  };
+  type ResolveFn = (command: string, options: ResolveOptions) => Invocation;
+
+  /**
+   * Ocekivane staze su ovdje napisane NEOVISNO o izvoru, iz `bin` polja stvarnih paketa na disku
+   * (`@xai-official/grok` -> `bin/grok-bootstrap.js`, `@openai/codex` -> `bin/codex.js`).
+   * Da se citaju iz iste mape koja se mjeri, tvrdnja bi bila vakuumska.
+   */
+  const EXPECTED_ENTRYPOINTS: Record<string, readonly string[]> = {
+    grok: ['@xai-official', 'grok', 'bin', 'grok-bootstrap.js'],
+    codex: ['@openai', 'codex', 'bin', 'codex.js'],
+  };
+  const SHIM_DIR = '/npm-global';
+
+  /** Gard: prazan popis znaci "svaki provider iz mape se razrjesava, a ne-provider ostaje netaknut". */
+  const resolverProblems = (
+    resolveFn: ResolveFn,
+    entrypoints: Record<string, readonly string[]>,
+  ): string[] => {
+    const problems: string[] = [];
+    for (const [provider, packagePath] of Object.entries(EXPECTED_ENTRYPOINTS)) {
+      const planted = join(SHIM_DIR, 'node_modules', ...packagePath);
+      const got = resolveFn(provider, {
+        platform: 'win32',
+        cwd: SHIM_DIR,
+        pathEnv: '',
+        exists: (path: string) => path === planted,
+        entrypoints,
+      });
+      if (got.command !== process.execPath || got.argsPrefix.length !== 1 || got.argsPrefix[0] !== planted) {
+        problems.push(`${provider} se ne razrjesava na paketnu ulaznu tocku`);
+      }
+    }
+    // Kontrola u drugom smjeru: sto nije npm shim ne smije se preusmjeriti na Node.
+    const claude = resolveFn('claude', {
+      platform: 'win32', cwd: SHIM_DIR, pathEnv: '', exists: () => true, entrypoints,
+    });
+    if (claude.command !== 'claude' || claude.argsPrefix.length !== 0) {
+      problems.push('claude je preusmjeren iako nije npm shim');
+    }
+    return problems;
+  };
+
+  it('(g) mapa koja izgubi unos za codex obara tvrdnju', async () => {
+    const { resolveProviderInvocation, PROVIDER_PACKAGE_ENTRYPOINTS } = await import('../scripts/agents/cli.mjs');
+    const real = PROVIDER_PACKAGE_ENTRYPOINTS as Record<string, readonly string[]>;
+    // BASELINE: stvarna mapa i stvarna funkcija prolaze cisto.
+    expect(resolverProblems(resolveProviderInvocation as ResolveFn, real)).toEqual([]);
+    expect(Object.keys(real).sort()).toEqual(['codex', 'grok']);
+    expect([...real.codex]).toEqual([...EXPECTED_ENTRYPOINTS.codex]);
+    expect([...real.grok]).toEqual([...EXPECTED_ENTRYPOINTS.grok]);
+    // MUTACIJA: povratak na stanje prije ovog popravka, kad je mapa (odnosno uvjet) znala samo Grok.
+    const bezCodexa = { grok: real.grok };
+    expect(resolverProblems(resolveProviderInvocation as ResolveFn, bezCodexa))
+      .toEqual(['codex se ne razrjesava na paketnu ulaznu tocku']);
+    // KONTRAMUTACIJA: gubitak Groka se mora vidjeti jednako, inace gard mjeri samo novi unos.
+    const bezGroka = { codex: real.codex };
+    expect(resolverProblems(resolveProviderInvocation as ResolveFn, bezGroka))
+      .toEqual(['grok se ne razrjesava na paketnu ulaznu tocku']);
+    // MUTACIJA: prazna mapa, dakle razrjesavanje ugaseno u cijelosti.
+    expect(resolverProblems(resolveProviderInvocation as ResolveFn, {}).sort())
+      .toEqual(['codex se ne razrjesava na paketnu ulaznu tocku', 'grok se ne razrjesava na paketnu ulaznu tocku']);
+  });
+
+  it('(h) kriva staza u mapi i rezolver koji sve pusta nepromijenjeno obaraju tvrdnju', async () => {
+    const { resolveProviderInvocation, PROVIDER_PACKAGE_ENTRYPOINTS } = await import('../scripts/agents/cli.mjs');
+    const real = PROVIDER_PACKAGE_ENTRYPOINTS as Record<string, readonly string[]>;
+    // MUTACIJA: unos pokazuje na `.cmd` shim umjesto na Node ulaznu tocku, dakle bas na ENOENT stazu.
+    const naShim = { ...real, codex: ['@openai', 'codex', 'bin', 'codex.cmd'] };
+    expect(resolverProblems(resolveProviderInvocation as ResolveFn, naShim))
+      .toEqual(['codex se ne razrjesava na paketnu ulaznu tocku']);
+    // MUTACIJA: rezolver s tvrdim uvjetom nad imenom, kakav je bio prije poopcavanja.
+    const mutantSamoGrok: ResolveFn = (command, options) => (command === 'grok'
+      ? (resolveProviderInvocation as ResolveFn)(command, options)
+      : { command, argsPrefix: [] });
+    expect(resolverProblems(mutantSamoGrok, real)).toEqual(['codex se ne razrjesava na paketnu ulaznu tocku']);
+    // MUTACIJA: rezolver koji sve preusmjerava, pa bi i Claude Code isao kroz Node.
+    const mutantSvePreusmjeri: ResolveFn = (command) => ({
+      command: process.execPath,
+      argsPrefix: [join(SHIM_DIR, 'node_modules', ...(EXPECTED_ENTRYPOINTS[command] ?? [command]))],
+    });
+    expect(resolverProblems(mutantSvePreusmjeri, real)).toEqual(['claude je preusmjeren iako nije npm shim']);
+  });
+
+  it('(i) fail-open kad paket nije nadjen ostaje, i ne prikriva izgubljen unos', async () => {
+    const { resolveProviderInvocation, PROVIDER_PACKAGE_ENTRYPOINTS } = await import('../scripts/agents/cli.mjs');
+    const real = PROVIDER_PACKAGE_ENTRYPOINTS as Record<string, readonly string[]>;
+    // BASELINE: nenadjen paket vraca golu naredbu, ne baca i ne izmislja stazu.
+    for (const provider of Object.keys(real)) {
+      expect((resolveProviderInvocation as ResolveFn)(provider, {
+        platform: 'win32', cwd: '/nigdje', pathEnv: '', exists: () => false, entrypoints: real,
+      })).toEqual({ command: provider, argsPrefix: [] });
+    }
+    // Tvrdnja koja bi bila vakuumska: gard iznad mjeri PODMETNUTU stazu, pa ga fail-open ne spasava.
+    expect(resolverProblems(resolveProviderInvocation as ResolveFn, { grok: real.grok }))
+      .toContain('codex se ne razrjesava na paketnu ulaznu tocku');
+  });
+});

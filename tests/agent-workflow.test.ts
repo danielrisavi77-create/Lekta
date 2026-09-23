@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { delimiter, join } from 'node:path';
 import {
   modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue,
   PROMPT_FILE_PLACEHOLDER, SUBSCRIPTION_EXCLUDED_AGENTS,
@@ -355,7 +356,7 @@ describe('subscription billing mode (autonomy profile)', () => {
 
 describe('agent process boundary helpers', () => {
   it('spawns Grok with a prompt file, no prompt argv, no stdin and no shell', async () => {
-    const { spawnJob } = await import('../scripts/agents/cli.mjs');
+    const { spawnJob, resolveProviderInvocation } = await import('../scripts/agents/cli.mjs');
     const job = prepareJob(queue(), 'T01', 'plan', 'grok');
     let call: { command?: string; args?: string[]; options?: Record<string, unknown> } = {};
     const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
@@ -369,6 +370,180 @@ describe('agent process boundary helpers', () => {
     expect(call.args).not.toContain(job.prompt);
     expect(call.args).not.toContain(PROMPT_FILE_PLACEHOLDER);
     expect(call.options).toMatchObject({ input: undefined, shell: false });
+
+    const shimDir = '/npm-global';
+    const bootstrap = join(shimDir, 'node_modules', '@xai-official', 'grok', 'bin', 'grok-bootstrap.js');
+    const invocation = resolveProviderInvocation('grok', {
+      platform: 'win32',
+      cwd: shimDir,
+      pathEnv: '',
+      exists: (path) => path === bootstrap,
+    });
+    expect(invocation).toEqual({ command: process.execPath, argsPrefix: [bootstrap] });
+  });
+});
+
+/**
+ * RAZRJESAVANJE PROVIDERA PO PODATKOVNOJ MAPI (izmjereno na ovom stroju 2026-09-22).
+ *
+ * Stvaran kvar: npm na Windowsu instalira `.cmd` shim, a ne izvrsnu datoteku. Zato
+ * `spawnSync('codex', ['--version'], { shell: false })` vraca `error.code === 'ENOENT'` i
+ * `agents doctor` je javljao `codex: unavailable` iako `codex --version` iz terminala daje
+ * `codex-cli 0.154.0`. To je LAZAN NEGATIV, ne odsutnost CLI-ja.
+ *
+ * Prva inacica popravka rjesavala je samo Grok, tvrdim uvjetom nad imenom naredbe i tvrdo
+ * upisanom stazom paketa. Ovdje se dokazuje da razrjesavanje sada ide po mapi
+ * `PROVIDER_PACKAGE_ENTRYPOINTS`, pa Codex dobiva isti lijek bez nove grane, a sve sto u mapi
+ * nije (npr. `claude`, koji nije npm shim) prolazi nepromijenjeno.
+ */
+describe('resolveProviderInvocation: mapa provider prema paketnoj ulaznoj tocki', () => {
+  const entry = (dir: string, ...parts: string[]) => join(dir, 'node_modules', ...parts);
+
+  it('na win32 razrjesava Codex na @openai/codex/bin/codex.js kroz Node', async () => {
+    const { resolveProviderInvocation } = await import('../scripts/agents/cli.mjs');
+    const shimDir = '/npm-global';
+    const codexEntry = entry(shimDir, '@openai', 'codex', 'bin', 'codex.js');
+    const invocation = resolveProviderInvocation('codex', {
+      platform: 'win32',
+      cwd: shimDir,
+      pathEnv: '',
+      exists: (path: string) => path === codexEntry,
+    });
+    expect(invocation).toEqual({ command: process.execPath, argsPrefix: [codexEntry] });
+    // Ista mapa i dalje razrjesava Grok; popravak nije zamijenio jedan provider drugim.
+    const grokEntry = entry(shimDir, '@xai-official', 'grok', 'bin', 'grok-bootstrap.js');
+    expect(resolveProviderInvocation('grok', {
+      platform: 'win32', cwd: shimDir, pathEnv: '', exists: (path: string) => path === grokEntry,
+    })).toEqual({ command: process.execPath, argsPrefix: [grokEntry] });
+  });
+
+  it('nepoznat provider vraca naredbu nepromijenjeno, i kad bi staza postojala', async () => {
+    const { resolveProviderInvocation } = await import('../scripts/agents/cli.mjs');
+    // Claude Code nije npm shim; razrjesavanje ga ne smije preusmjeriti na Node.
+    expect(resolveProviderInvocation('claude', {
+      platform: 'win32', cwd: '/npm-global', pathEnv: '', exists: () => true,
+    })).toEqual({ command: 'claude', argsPrefix: [] });
+    // Ni ostale naredbe iz doctora, koje su stvarne izvrsne datoteke.
+    for (const cli of ['git', 'node', 'deno']) {
+      expect(resolveProviderInvocation(cli, {
+        platform: 'win32', cwd: '/npm-global', pathEnv: '', exists: () => true,
+      })).toEqual({ command: cli, argsPrefix: [] });
+    }
+    // Kljucevi naslijedjeni s Object.prototype ne smiju proci kao poznat provider.
+    for (const poison of ['constructor', 'toString', 'hasOwnProperty']) {
+      expect(resolveProviderInvocation(poison, {
+        platform: 'win32', cwd: '/npm-global', pathEnv: '', exists: () => true,
+      })).toEqual({ command: poison, argsPrefix: [] });
+    }
+  });
+
+  it('izvan win32 vraca nepromijenjeno za SVE providere iz mape', async () => {
+    const { resolveProviderInvocation, PROVIDER_PACKAGE_ENTRYPOINTS } = await import('../scripts/agents/cli.mjs');
+    const providers = Object.keys(PROVIDER_PACKAGE_ENTRYPOINTS).sort();
+    expect(providers).toEqual(['codex', 'grok']);
+    for (const platform of ['linux', 'darwin']) {
+      for (const cli of providers) {
+        expect(resolveProviderInvocation(cli, {
+          platform, cwd: '/npm-global', pathEnv: '', exists: () => true,
+        })).toEqual({ command: cli, argsPrefix: [] });
+      }
+    }
+  });
+
+  it('kad paket nije nadjen vraca goli command (fail-open), za oba providera', async () => {
+    const { resolveProviderInvocation, PROVIDER_PACKAGE_ENTRYPOINTS } = await import('../scripts/agents/cli.mjs');
+    for (const cli of Object.keys(PROVIDER_PACKAGE_ENTRYPOINTS)) {
+      expect(resolveProviderInvocation(cli, {
+        platform: 'win32', cwd: '/nigdje', pathEnv: ['/bin', '/usr/bin'].join(delimiter), exists: () => false,
+      })).toEqual({ command: cli, argsPrefix: [] });
+    }
+  });
+
+  it('trazi u cwd/node_modules pa u svakom direktoriju PATH-a i njegovom node_modules', async () => {
+    const { resolveProviderInvocation } = await import('../scripts/agents/cli.mjs');
+    const codex = ['@openai', 'codex', 'bin', 'codex.js'];
+    const seen: string[] = [];
+    const found = resolveProviderInvocation('codex', {
+      platform: 'win32',
+      cwd: '/projekt',
+      pathEnv: ['/prvi', '/drugi'].join(delimiter),
+      exists: (path: string) => { seen.push(path); return path === join('/drugi', ...codex); },
+    });
+    expect(found).toEqual({ command: process.execPath, argsPrefix: [join('/drugi', ...codex)] });
+    expect(seen).toEqual([
+      join('/projekt', 'node_modules', ...codex),
+      join('/prvi', ...codex),
+      join('/prvi', 'node_modules', ...codex),
+      join('/drugi', ...codex),
+    ]);
+    // Prvi kandidat pobjedjuje: cwd/node_modules ima prednost pred PATH-om.
+    expect(resolveProviderInvocation('codex', {
+      platform: 'win32', cwd: '/projekt', pathEnv: '/prvi', exists: () => true,
+    })).toEqual({ command: process.execPath, argsPrefix: [join('/projekt', 'node_modules', ...codex)] });
+  });
+
+  it('doctor i spawnJob idu kroz istu funkciju, bez shell postavljenog na true', () => {
+    const source = readFileSync('scripts/agents/cli.mjs', 'utf8');
+    // Obje pozivne strane zovu razrjesavanje; ako jedna otpadne, ENOENT se vraca samo ondje.
+    const calls = source.match(/resolveProviderInvocation\(/g) ?? [];
+    expect(calls.length).toBeGreaterThanOrEqual(3);
+    expect(source).toContain('const invocation = resolveProviderInvocation(cli, { cwd: root });');
+    expect(source).toContain('const invocation = resolveProviderInvocation(job.command, { cwd: root });');
+    // Lijek nikad nije ljuska.
+    expect(source).not.toContain('shell: true');
+    expect(source).toContain('shell: false');
+    // Razrjesavanje je mapa, ne uvjet nad imenom naredbe.
+    expect(source).not.toMatch(/command !== ['"]grok['"]/);
+    expect(source).toContain('PROVIDER_PACKAGE_ENTRYPOINTS');
+  });
+});
+
+/**
+ * PROVJERA GROK VERZIJE PRIJE POSLA MORA ICI KROZ ISTI RESOLVER (regresija 2026-09-23).
+ *
+ * `run --execute` je prije provjeravao verziju golim `spawnSync('grok', ['version'])`, mimo
+ * `resolveProviderInvocation`. Na Windowsu to daje ENOENT na npm `.cmd` shimu (isti kvar kao
+ * doctor prije popravka), pa je SVAKI Grok posao padao s "Unsupported Grok CLI version: unknown"
+ * iako je CLI ispravan i doctor ga je ispravno prijavio kao podrzanog. Ovaj test podmece spawn
+ * koji biljezi stvarnu naredbu/argumente i dokazuje da provjera koristi razrjeseni `command`.
+ */
+describe('checkGrokVersion: provjera verzije ide kroz resolveProviderInvocation', () => {
+  it('na win32, uz podmetnut shim, zove process.execPath + bootstrap stazu, nikad shell', async () => {
+    const { checkGrokVersion } = await import('../scripts/agents/cli.mjs');
+    const shimDir = '/npm-global';
+    const bootstrap = join(shimDir, 'node_modules', '@xai-official', 'grok', 'bin', 'grok-bootstrap.js');
+    const calls: Array<{ command: string; args: string[]; options: Record<string, unknown> }> = [];
+    const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
+      calls.push({ command, args, options });
+      return { status: 0, stdout: 'grok 1.0.34 (test)', stderr: '' };
+    };
+    expect(() => checkGrokVersion({
+      cwd: shimDir, platform: 'win32', pathEnv: '', exists: (path: string) => path === bootstrap, spawn: fakeSpawn,
+    })).not.toThrow();
+    expect(calls).toHaveLength(1);
+    expect(calls[0].command).toBe(process.execPath);
+    expect(calls[0].args).toEqual([bootstrap, 'version']);
+    expect(calls[0].options).toMatchObject({ shell: false });
+    expect(calls[0].options.shell).not.toBe(true);
+  });
+
+  it('kad shim nije nadjen (fail-open), zove goli "grok" i i dalje nikad shell', async () => {
+    const { checkGrokVersion } = await import('../scripts/agents/cli.mjs');
+    const calls: Array<{ command: string; args: string[]; options: Record<string, unknown> }> = [];
+    const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
+      calls.push({ command, args, options });
+      return { status: 0, stdout: 'grok 1.0.34 (test)', stderr: '' };
+    };
+    checkGrokVersion({ cwd: '/nigdje', platform: 'win32', pathEnv: '', exists: () => false, spawn: fakeSpawn });
+    expect(calls).toEqual([{ command: 'grok', args: ['version'], options: expect.objectContaining({ shell: false }) }]);
+  });
+
+  it('baca kad razrijeseni provider prijavi nepodrzanu verziju', async () => {
+    const { checkGrokVersion } = await import('../scripts/agents/cli.mjs');
+    const fakeSpawn = () => ({ status: 0, stdout: 'grok 1.0.33 (old)', stderr: '' });
+    expect(() => checkGrokVersion({
+      cwd: '/npm-global', platform: 'win32', pathEnv: '', exists: () => false, spawn: fakeSpawn,
+    })).toThrow(/Unsupported Grok CLI version/);
   });
 });
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync, appendFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
-import { resolve, join } from 'node:path';
+import { existsSync, readFileSync, mkdirSync, writeFileSync, appendFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
+import { delimiter, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AGENTS, GROK_MIN_VERSION, modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 
@@ -32,6 +32,77 @@ export function spawnJob(job, promptFile, cwd, spawn = spawnSync) {
   });
 }
 
+/**
+ * Mapa provider -> ulazna tocka npm paketa, izmjerena na Windowsu 2026-09-22.
+ *
+ * Zasto postoji: npm na Windowsu ne instalira izvrsnu datoteku nego `.cmd` shim
+ * (`codex.cmd`, `grok.cmd`). `spawnSync('codex', ['--version'], { shell: false })` na takav shim
+ * vrati `ENOENT`, pa je `agents doctor` javljao `codex: unavailable` iako CLI radi iz terminala.
+ * To je LAZAN NEGATIV. Lijek nije ukljucivanje ljuske (to bi vratilo injekciju naredbenog retka),
+ * nego izravan poziv paketne ulazne tocke kroz Node.
+ *
+ * Razrjesavanje ide po ovoj mapi, ne po imenu u uvjetu, da dodavanje providera ne trazi novu granu.
+ * Vrijednost je `bin` staza iz `package.json` toga paketa:
+ *  - `@xai-official/grok` ima `bin.grok = 'bin/grok-bootstrap.js'`
+ *  - `@openai/codex` ima `bin.codex = 'bin/codex.js'`
+ * Claude Code namjerno NIJE ovdje: nije npm shim i pokrece se izravno, pa mora proci nepromijenjen.
+ */
+export const PROVIDER_PACKAGE_ENTRYPOINTS = Object.freeze(Object.assign(Object.create(null), {
+  grok: Object.freeze(['@xai-official', 'grok', 'bin', 'grok-bootstrap.js']),
+  codex: Object.freeze(['@openai', 'codex', 'bin', 'codex.js']),
+}));
+
+/**
+ * Vraca `{ command, argsPrefix }` kojim se provider pokrece bez ljuske.
+ * Nepoznat provider, ne-Windows platforma i nenadjen paket vracaju naredbu nepromijenjenu
+ * (fail-open: bolje pustiti pokusaj nego odbiti okolinu koju ovaj popravak ne opisuje).
+ */
+export function resolveProviderInvocation(command, options = {}) {
+  const platform = options.platform ?? process.platform;
+  const entrypoints = options.entrypoints ?? PROVIDER_PACKAGE_ENTRYPOINTS;
+  const known = entrypoints !== null && typeof entrypoints === 'object'
+    && Object.prototype.hasOwnProperty.call(entrypoints, command);
+  const packagePath = known ? entrypoints[command] : null;
+  if (platform !== 'win32' || !Array.isArray(packagePath) || packagePath.length === 0) {
+    return { command, argsPrefix: [] };
+  }
+
+  const exists = options.exists ?? existsSync;
+  const cwd = options.cwd ?? process.cwd();
+  const pathEnv = options.pathEnv ?? process.env.PATH ?? '';
+  const candidates = [
+    join(cwd, 'node_modules', ...packagePath),
+    ...String(pathEnv).split(delimiter).filter(Boolean).flatMap((dir) => [
+      join(dir, ...packagePath),
+      join(dir, 'node_modules', ...packagePath),
+    ]),
+  ];
+  const bootstrap = candidates.find((candidate, index) => candidates.indexOf(candidate) === index && exists(candidate));
+  return bootstrap ? { command: process.execPath, argsPrefix: [bootstrap] } : { command, argsPrefix: [] };
+}
+
+/**
+ * Provjera verzije Grok CLI-ja prije pokretanja posla. Ide kroz `resolveProviderInvocation`
+ * kao i doctor: gola `spawnSync('grok', ...)` na Windowsu daje ENOENT na npm `.cmd` shimu, pa
+ * bi svaki Grok posao pao s "Unsupported Grok CLI version: unknown" iako je CLI ispravan.
+ */
+export function checkGrokVersion(options = {}) {
+  const spawn = options.spawn ?? spawnSync;
+  const invocation = resolveProviderInvocation('grok', {
+    cwd: options.cwd ?? process.cwd(),
+    platform: options.platform,
+    exists: options.exists,
+    pathEnv: options.pathEnv,
+    entrypoints: options.entrypoints,
+  });
+  const versionRun = spawn(invocation.command, [...invocation.argsPrefix, 'version'], { encoding: 'utf8', timeout: 10_000, shell: false });
+  const versionLine = (versionRun.stdout || versionRun.stderr || '').trim().split('\n')[0];
+  const version = parseGrokVersion(versionLine);
+  if (versionRun.status !== 0 || !version.supported) {
+    throw new Error(`Unsupported Grok CLI version: ${version.version ?? 'unknown'}; minimum ${GROK_MIN_VERSION}`);
+  }
+}
+
 export function isEntryModule(moduleUrl, argv1) {
   if (!argv1) return false;
   const real = (path) => { try { return realpathSync(path); } catch { return resolve(path); } };
@@ -57,7 +128,8 @@ function main() {
     if (rest.length) throw new Error('doctor takes no arguments');
     for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) {
       const versionArgs = cli === 'grok' ? ['version'] : ['--version'];
-      const result = spawnSync(cli, versionArgs, { encoding: 'utf8', timeout: 10_000 });
+      const invocation = resolveProviderInvocation(cli, { cwd: root });
+      const result = spawnSync(invocation.command, [...invocation.argsPrefix, ...versionArgs], { encoding: 'utf8', timeout: 10_000 });
       const line = (result.stdout || result.stderr || '').trim().split('\n')[0];
       if (cli === 'grok' && result.status === 0) {
         const version = parseGrokVersion(line);
@@ -116,12 +188,7 @@ function main() {
     return;
   }
   if (job.command === 'grok') {
-    const versionRun = spawnSync('grok', ['version'], { encoding: 'utf8', timeout: 10_000, shell: false });
-    const versionLine = (versionRun.stdout || versionRun.stderr || '').trim().split('\n')[0];
-    const version = parseGrokVersion(versionLine);
-    if (versionRun.status !== 0 || !version.supported) {
-      throw new Error(`Unsupported Grok CLI version: ${version.version ?? 'unknown'}; minimum ${GROK_MIN_VERSION}`);
-    }
+    checkGrokVersion({ cwd: root });
   }
   if (resolve(git('rev-parse', '--show-toplevel')) !== resolve(root)) throw new Error('Run from the repository root');
   const gitDir = resolve(root, git('rev-parse', '--git-dir'));
@@ -152,7 +219,11 @@ function main() {
     // argv array, never a shell string. Existing CLI authentication is reused.
     // Grok reads the prompt artifact; Codex/Claude take the prompt on stdin.
     releaseLock = false;
-    const result = spawnJob(job, join(out, 'prompt.md'), root);
+    const invocation = resolveProviderInvocation(job.command, { cwd: root });
+    const resolvedJob = invocation.argsPrefix.length
+      ? { ...job, command: invocation.command, args: [...invocation.argsPrefix, ...job.args] }
+      : job;
+    const result = spawnJob(resolvedJob, join(out, 'prompt.md'), root);
     releaseLock = !result.error && !result.signal;
     writeFileSync(join(out, 'stdout.log'), result.stdout ?? '');
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');

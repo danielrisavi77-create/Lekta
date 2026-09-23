@@ -157,9 +157,15 @@ i dodatne domenske provjere. Lokalne logove koje treba zadrzati prenesi u PR/CI 
 - Ako Grok prijavi `bwrap: Creating new namespace failed: Operation not permitted`, rezultat sadrzi
   dijagnostiku `grok_sandbox_unavailable`. Omoguci Bubblewrap/user namespace podrsku na hostu ili
   pokreni runner na kompatibilnom hostu. Runner namjerno ne prelazi na `--sandbox off`.
-- CLI runner koristi native izvrsne datoteke. Ako Windows instalacija izlozi samo `.cmd`
-  shim koji Node ne moze izravno pokrenuti, koristi native instalaciju ili pripremljeni
-  prompt u interaktivnoj sesiji; runner ne ukljucuje shell radi zaobilazenja tog problema.
+- CLI runner nikad ne ukljucuje ljusku. Na Windowsu npm instalira `.cmd` shim, a ne izvrsnu
+  datoteku, pa `spawn` bez ljuske na takav shim vraca `ENOENT`. Zato `resolveProviderInvocation`
+  u `scripts/agents/cli.mjs` razrjesava providera po mapi `PROVIDER_PACKAGE_ENTRYPOINTS`
+  (`grok` -> `@xai-official/grok/bin/grok-bootstrap.js`, `codex` -> `@openai/codex/bin/codex.js`)
+  i pokrece paket izravno kroz Node. Isti put koriste i `doctor` i pokretanje posla. Provideri
+  koji nisu npm shim, poput Claude Codea, prolaze nepromijenjeno. Kad paket nije pronadjen,
+  razrjesavanje je fail-open: naredba ide dalje pod svojim imenom.
+  Izmjereno 2026-09-22: prije ovoga je `doctor` javljao `codex: unavailable` iako
+  `codex --version` iz terminala daje `codex-cli 0.154.0`; poslije javlja `codex: codex-cli 0.154.0`.
 
 ## Sluzbeni izvori provjereni 2026-09-08 (Grok CLI dopuna 2026-09-20)
 
