@@ -32,8 +32,8 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
