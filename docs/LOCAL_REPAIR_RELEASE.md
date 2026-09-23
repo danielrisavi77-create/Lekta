@@ -4,6 +4,52 @@ Ovaj postupak objavljuje jednu stabilnu, Authenticode-potpisanu WordReplica
 izvrsnu datoteku. Claim tajna nije u javnom URL-u ni u binarnom artefaktu;
 Lekta je dodaje samo lokalnom nazivu preuzete datoteke za jedan placeni posao.
 
+## Stanje: iskljuceno do certifikata
+
+Stanje na dan 2026-09-23: lokalni popravak ostaje iskljucen na lansiranju.
+Nema code signing certifikata; Azure Artifact Signing za fizicke osobe je
+dostupan samo u SAD-u i Kanadi, a obrt jos ne postoji. Vlasnicki zadaci u
+`docs/agents/tasks.json` su T48 (pravni subjekt), T52 (certifikat) i T51
+(WordReplica lokalni popravak, radi se zadnji). Dok ti zadaci ne prodju,
+`REPAIR_LOCAL_ENABLED` ostaje iskljucen na produkciji.
+
+Sto je vec u kodu i inertno:
+
+- Edge funkcija `repair-docx` izdaje `localLaunch` samo kad je
+  `REPAIR_LOCAL_ENABLED=true`, a `REPAIR_LOCAL_DISABLED` razlicit od `true`.
+- Klijent nudi EXE samo kad su postavljene
+  `VITE_LEKTA_LOCAL_REPAIR_RUNNER_URL` i
+  `VITE_LEKTA_LOCAL_REPAIR_RUNNER_SHA256`.
+- Migracije `0200` do `0202` i funkcije `repair-local-claim` te
+  `repair-local-status` nisu na produkciji; zadnja produkcijska migracija je
+  `0103`.
+
+Numerirani koraci kasnijeg ukljucivanja kroz
+`scripts/run-local-repair-release.mts` (`npm run release:repair:preflight`,
+`npm run release:repair:deploy`):
+
+1. Provjera da su T48 i T52 zavrseni te da postoji trusted certifikat s
+   poznatim publisher thumbprintom.
+2. Izricit OK vlasnika za konkretan release SHA.
+3. Faza guard-disabled: `REPAIR_LOCAL_DISABLED=true` ide prva.
+4. Fail-closed migracijski workspace i `supabase db push` za `0200` do `0202`,
+   nikad MCP `apply_migration`.
+5. Deploy funkcija `repair-local-claim`, `repair-local-status` i
+   `repair-docx`.
+6. Secreti kroz ogranicen `--env-file`: privatni contract kljuc, key id,
+   `REPAIR_LOCAL_ENABLED=false`, `REPAIR_LOCAL_DISABLED=true`.
+7. Objava runnera (publish).
+8. Aktivacija `REPAIR_LOCAL_ENABLED=true`.
+9. Tek zadnje `REPAIR_LOCAL_DISABLED=false`.
+
+Svaki deploy trazi izricit OK vlasnika za taj konkretan release, a
+Authenticode provjera i fail-closed gateovi iz ovog dokumenta se ne smiju
+slabiti radi brzine.
+
+Sto vlasnik radi rucno na Windowsu: build i Authenticode potpis runnera u
+WordReplica stablu, `npm run verify:word` Tier 2 i Word COM testovi u
+WordReplici.
+
 ## Preduvjeti
 
 - WordReplica `BUILD_LEKTA_REPAIR_RUNNER.ps1` proizveo je `LektaRepair.exe` i
