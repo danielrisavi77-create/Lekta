@@ -36,6 +36,9 @@ import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, formatEurAmount } from '../src/report
 const ROOT = resolve(__dirname, '..');
 const read = (rel: string): string => readFileSync(resolve(ROOT, rel), 'utf8');
 
+/** Stil bez komentara: gard nad CSS-om ne smije naci tvrdnju u tekstu koji preglednik ne cita. */
+const bezKomentara = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, '');
+
 /**
  * SVE stranice koje po nalogu Z15 nose traku. Popis je IMENOVAN, ne prebrojan: nova stranica koja
  * traku zaboravi montirati mora se vidjeti kao izostanak imena, ne kao promjena broja.
@@ -309,6 +312,33 @@ describe('Z15 lampa: overlay ciljne teme, tema i pohrana', () => {
     expect(doc.documentElement.dataset.theme).toBe('dark');
   });
 
+  it('BOJA OVERLAYA NE OVISI O REDOSLIJEDU MONTAZE: panel Z6 prebaci temu, krug je ipak ciljne boje', () => {
+    // KVAR KOJI OVO CUVA. `mountDisplaySettings` se na `/` i `/rad/` zove pri evaluaciji modula
+    // (`routes/intake/main.ts`, `routes/workspace/main.ts`), a `mountSiteChrome` na
+    // `DOMContentLoaded`, pa je panel svoj rukovatelj registrirao PRVI. Dok je lampa slusala klik
+    // na samom gumbu, rukovatelji su se izvodili po redoslijedu registracije: panel je temu vec
+    // prebacio, a `playLamp` je citao promijenjeno stanje i crtao krug boje iz koje se IZLAZI.
+    // Izmjereno: tema poslije klika `light`, overlay `dark`, dakle taman krug preko svijetle
+    // stranice. Popravak je faza KAPTURE na dokumentu, koja ide prije ciljne faze na gumbu.
+    const doc = dom(zaglavlje(read('rad/index.html')));
+    doc.documentElement.dataset.theme = 'dark';
+    const btn = doc.getElementById('themeBtn')!;
+    // TUDJI RUKOVATELJ, REGISTRIRAN PRVI, tocno kao panel Z6: preuzme vlasnistvo i prebaci temu.
+    btn.dataset.themeOwner = 'display-settings';
+    btn.addEventListener('click', () => {
+      doc.documentElement.dataset.theme = doc.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    });
+    mountSiteChrome(doc);
+    btn.click();
+    expect(doc.documentElement.dataset.theme, 'sentinel: vlasnik nije prebacio temu').toBe('light');
+    const overlay = doc.querySelector<HTMLElement>('.site-chrome__reveal');
+    expect(overlay, 'lampa nije nacrtala overlay').not.toBeNull();
+    expect(overlay!.dataset.siteChromeReveal, 'krug nije boje CILJNE teme').toBe('light');
+    // KONTROLA SMJERA, dakle dokaz da tvrdnja gore nije vakuumska: da se boja racunala POSLIJE
+    // swapa (stari kod), `lampOverlayTheme` bi nad istim dokumentom vratio suprotnu vrijednost.
+    expect(lampOverlayTheme(doc)).toBe('dark');
+  });
+
   it('VLASNISTVO: kad gumb preuzme panel Z6, traka temu NE mijenja (inace se preklopi dvaput)', () => {
     const doc = dom(zaglavlje(read('rad/index.html')));
     doc.documentElement.dataset.theme = 'dark';
@@ -416,11 +446,41 @@ describe('Z15 stanje nakon skrola', () => {
   it('sredina `/rad/` NE odlazi pod 820px, jer Z16 trazi stepper u dva reda', () => {
     // Bez ove tvrdnje bi pravilo "logo, lampa, hamburger" (Z15, marketinska traka) tiho odnijelo i
     // identitet dokumenta na radnoj povrsini, sto dva Playwright garda na 390 px mjere kao kvar.
-    const css = read('src/shared/site-chrome.css');
+    //
+    // KOMENTARI SE ODREZUJU PRIJE MJERENJA. Prva verzija ovog garda je trazila `grid-column: 1 / -1`
+    // po cijelom listu i ostala zelena nakon sto je pravilo preslo na `grid-area`, jer je taj niz
+    // nasla u KOMENTARU koji opisuje stari kvar. Gard koji cita komentar ne mjeri stil.
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
     expect(css).toContain('.site-chrome[data-site-chrome="workspace"] .site-chrome__mid');
-    expect(css).toMatch(/grid-column: 1 \/ -1/);
     // Znacka "Lokalno" i ocjena i dalje odlaze na 720px, kako je odluceno prije Z15.
     expect(css).toMatch(/@media \(max-width: 720px\) \{\s*\.site-chrome__doc \.local-badge/);
+  });
+
+  it('mobilna mreza ima IZRICITO mjesto: logo i kontrole u prvom redu, sredina u drugom', () => {
+    // Auto-placement je uz `grid-column: 1 / -1` na sredini davao TRI reda (logo / dokument /
+    // lampa+hamburger) i zaglavlje od 177 px na 390 px. Izricito mjesto to rjesava, a visinu na
+    // pravom pregledniku mjeri `tests/ux/workspace-viewports.spec.ts` (proracun 124 px).
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    const mobilni = css.match(/@media \(max-width: 819px\) \{[\s\S]*?\n\}/)?.[0] ?? '';
+    expect(mobilni, 'sentinel: nema mobilnog bloka').not.toBe('');
+    expect(mobilni).toMatch(/\.site-chrome__left \{ grid-area: 1 \/ 1 \/ 2 \/ 2; \}/);
+    expect(mobilni).toMatch(/\.site-chrome__right \{ grid-area: 1 \/ 2 \/ 2 \/ 3; \}/);
+    expect(mobilni).toMatch(/grid-area: 2 \/ 1 \/ 3 \/ -1;/);
+    // Tanko stanje na mobitelu NE smije dodavati 16 px: izmjereno 122 px naspram 113 px.
+    expect(mobilni).toMatch(/header\.site-chrome--scrolled \{ padding-block: 2px; \}/);
+  });
+
+  it('natpis koraka se na mobitelu skriva VIZUALNO, ne iz pristupacnog imena', () => {
+    // Cetiri pilule s natpisima su 330 px, pa na 390 px ne stoje uz ime dokumenta. `display: none`
+    // bi natpis izbacio i iz pristupacnog drveta, pa bi citac ekrana citao samo "01".
+    const header = zaglavlje(read('rad/index.html'));
+    const natpisi = [...header.matchAll(/class="site-chrome__step-label">([^<]+)</g)].map((m) => m[1]);
+    expect(natpisi).toEqual(['Nalazi', 'Plan', 'Plaćanje', 'Rezultat']);
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    const pravilo = css.match(/\.site-chrome__step-label \{[^}]*\}/)?.[0] ?? '';
+    expect(pravilo, 'sentinel: nema pravila za natpis koraka').not.toBe('');
+    expect(pravilo).toContain('clip-path: inset(50%)');
+    expect(pravilo, 'natpis nestao iz pristupacnog drveta').not.toContain('display: none');
   });
 
   it('list nosi ucinke tankog stanja: padding, blur, crvena nit i manji logo', () => {

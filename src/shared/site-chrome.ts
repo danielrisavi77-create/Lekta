@@ -134,9 +134,12 @@ export function siteChromeWorkNote(): string | null {
 }
 
 /**
- * Napomene mobilnog lista dolaze IZ IZVORA gdje izvor postoji. Predlozak crta "od 4,99 €",
- * "109 profila" i "2 rada"; nijedna od tih brojki nije prepisana, jer bi prva promjena cjenika
- * ili registra ucinila traku lazljivom. Copy bez izvora ("besplatno", "3 min") ostaje doslovan.
+ * Napomene mobilnog lista dolaze IZ IZVORA gdje izvor postoji. Predlozak crta najnizu cijenu, broj
+ * profila i broj zapamcenih radova kao GOTOVE brojke; nijedna od njih nije prepisana, jer bi prva
+ * promjena cjenika ili registra ucinila traku lazljivom. Iznosi se ovdje uz to NE SMIJU navesti ni
+ * u komentaru: `tests/pricing-receipt.test.ts` trazi da nijedan iznos iz `WORK_TYPE_TIERS` ne stoji
+ * nigdje u `src/` osim u `src/report/pricing.ts`, i pao je na ovom komentaru. Copy bez izvora
+ * ("besplatno", "3 min") ostaje doslovan.
  */
 export function siteChromeNote(kind: string): string | null {
   if (kind === 'price') return siteChromeLowestPrice();
@@ -227,12 +230,25 @@ function playLamp(doc: Document, btn: HTMLElement): void {
  *
  * Oznaka se cita UNUTAR rukovatelja, ne pri postavljanju: redoslijed montaze time ne odlucuje o
  * ishodu, sto je isti razlog zbog kojeg je tako napisan i `ui-boot.ts`.
+ *
+ * KAPTURA NA DOKUMENTU, NE BUBBLE NA GUMBU, I TO JE CIJELI POPRAVAK BOJE OVERLAYA.
+ *
+ * Boja overlaya je boja CILJNE teme, a "ciljna" se racuna iz stanja PRIJE swapa. Dok je rukovatelj
+ * stajao na samom gumbu, redoslijed registracije je odlucivao o boji: panel Z6 se montira pri
+ * evaluaciji modula (`routes/intake/main.ts`, `routes/workspace/main.ts`), a ovaj modul na
+ * `DOMContentLoaded`, pa je na `/` i `/rad/` panel PRVI prebacio temu i `playLamp` je citao vec
+ * promijenjeno stanje. Izmjereno: prelazak u svijetlu temu crtao je TAMAN krug preko svijetle
+ * stranice. Listeneri na istoj meti idu po redoslijedu registracije bez obzira na `capture`, ali
+ * faza KAPTURE na dokumentu po specifikaciji ide prije ciljne faze na gumbu, pa ovako boja ne
+ * ovisi o tome koji se modul montirao prvi.
  */
 export function wireSiteLamp(doc: Document, signal: AbortSignal): void {
   const btn = doc.getElementById('themeBtn');
   if (!btn) return;
   if (!btn.dataset.themeOwner) btn.dataset.themeOwner = 'site-chrome';
-  btn.addEventListener('click', () => {
+  doc.addEventListener('click', (event) => {
+    const meta = event.target as HTMLElement | null;
+    if (!meta || typeof meta.closest !== 'function' || meta.closest('#themeBtn') !== btn) return;
     playLamp(doc, btn);
     if (btn.dataset.themeOwner !== 'site-chrome') return;
     const next = suprotnaTema(doc);
@@ -242,7 +258,7 @@ export function wireSiteLamp(doc: Document, signal: AbortSignal): void {
     btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
     btn.setAttribute('aria-label', dark ? 'Lampa: ugasi' : 'Lampa: upali');
     btn.setAttribute('title', dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu');
-  }, { signal });
+  }, { capture: true, signal });
 }
 
 function fokusiraj(el: HTMLElement | null): void {

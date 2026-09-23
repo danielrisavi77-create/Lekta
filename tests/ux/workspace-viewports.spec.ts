@@ -138,37 +138,54 @@ for (const { w, h, ime } of SIRINE) {
       const znacka = await page.locator('.site-chrome__doc .local-badge').evaluate((el) => getComputedStyle(el).display);
       expect(znacka, 'znacka u zaglavlju mora otici na 390 px').toBe('none');
 
-      // TRAKA DOKUMENTA NE PRELAZI SVOJU NAVIGACIJU. Izmjereno u koraku D: `#radDocBar` je bio
-      // 76 px visok u navigaciji od 66 px (tri retka: ime, indikator, gumb nove verzije), pocinjao
-      // na y=-5 i prelazio na obrazac ispod. Okvir trake mora ostati unutar okvira `.nav-rad`, i
-      // ne smije dosegnuti `.analyzer-wrap`.
+      // LJEPLJIVO ZAGLAVLJE IMA PRORACUN, I TO JE NOVA OSNOVA GARDA (Z15, krug popravka).
+      //
+      // Do Z15 je tvrdnja bila "okvir `#radDocBar` je unutar okvira `.nav-rad`", jer je `.nav`
+      // imao FIKSNU visinu (66 px, `page-chrome.css`), pa je traka dokumenta od 76 px mogla
+      // prekoraciti svoj okvir. Traka Z15 je grid BEZ fiksne visine, a `#radDocBar` je njezin
+      // potomak u toku: okvir djeteta je tada po konstrukciji unutar okvira roditelja i ta tvrdnja
+      // vise ne moze pasti ni za koju visinu zaglavlja. Ista sudbina je i usporedba s
+      // `.analyzer-wrap`, koji u toku stoji ispod zaglavlja i pomice se s njim.
+      //
+      // Zato se mjeri ono sto je kvar stvarno bio: KOLIKO ZASLONA ZAGLAVLJE POJEDE. Proracun je
+      // 124 px na 390 px zaslona (16%), a stanja su izmjerena u Chromiumu nad stvarnim zaglavljem
+      // `rad/index.html` i stvarnim `site-chrome.css`: 177 px prije popravka (tri reda, lampa i
+      // hamburger ispod trake dokumenta), 113 px poslije (dva reda, uz vidljiv gumb "Ucitaj novu
+      // verziju"), 110 px nakon skrola, 88 px bez tog gumba. Prag pada na zatecenom stanju, dakle
+      // nije vakuumski; razlika do proracuna je rezerva za mjere pisma, koja u toj probi nije bila
+      // ucitana.
       const okviri = await page.evaluate(() => {
-        const bar = document.getElementById('radDocBar')?.getBoundingClientRect() ?? null;
-        const nav = document.querySelector('.site-chrome__bar')?.getBoundingClientRect() ?? null;
-        const wrap = document.querySelector('.analyzer-wrap')?.getBoundingClientRect() ?? null;
+        const box = (el: Element | null): { top: number; bottom: number; height: number } | null => {
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { top: r.top, bottom: r.bottom, height: r.height };
+        };
         return {
-          bar: bar ? { top: bar.top, bottom: bar.bottom, height: bar.height } : null,
-          nav: nav ? { top: nav.top, bottom: nav.bottom, height: nav.height } : null,
-          wrap: wrap ? { top: wrap.top } : null,
+          bar: box(document.getElementById('radDocBar')),
+          zaglavlje: box(document.querySelector('header.site-chrome')),
+          burger: box(document.getElementById('mobileMenuBtn')),
+          lampa: box(document.getElementById('themeBtn')),
         };
       });
-      // SENTINELI: bez visine oba okvira bi prazan/neiscrtan element lazno prosao usporedbu rubova.
+      // SENTINELI: bez visine bi prazan/neiscrtan element lazno prosao svaku usporedbu rubova.
       expect(okviri.bar?.height ?? 0, 'sentinel: #radDocBar nema visinu').toBeGreaterThan(0);
-      expect(okviri.nav?.height ?? 0, 'sentinel: .site-chrome__bar nema visinu').toBeGreaterThan(0);
+      expect(okviri.zaglavlje?.height ?? 0, 'sentinel: header.site-chrome nema visinu').toBeGreaterThan(0);
+      expect(okviri.burger?.height ?? 0, 'sentinel: #mobileMenuBtn nema visinu').toBeGreaterThan(0);
+      expect(okviri.lampa?.height ?? 0, 'sentinel: #themeBtn nema visinu').toBeGreaterThan(0);
       expect(
-        okviri.bar!.top,
-        `traka dokumenta pocinje (top=${okviri.bar!.top}) iznad svoje navigacije (top=${okviri.nav!.top})`,
-      ).toBeGreaterThanOrEqual(okviri.nav!.top);
+        okviri.zaglavlje!.height,
+        `ljepljivo zaglavlje pojede ${Math.round(okviri.zaglavlje!.height)} px od ${h} px zaslona`,
+      ).toBeLessThanOrEqual(124);
+      // PRVI RED JE LOGO, LAMPA, HAMBURGER (Z15). Kad su lampa i hamburger pali u TRECI red ispod
+      // trake dokumenta, ova dva praga su padala: burger.top je bio 136, a doc.top 51.
       expect(
-        okviri.bar!.bottom,
-        `traka dokumenta izlazi (bottom=${okviri.bar!.bottom}) izvan svoje navigacije (bottom=${okviri.nav!.bottom})`,
-      ).toBeLessThanOrEqual(okviri.nav!.bottom + 1);
-      if (okviri.wrap) {
-        expect(
-          okviri.bar!.bottom,
-          `traka dokumenta (bottom=${okviri.bar!.bottom}) preklapa obrazac (top=${okviri.wrap.top})`,
-        ).toBeLessThanOrEqual(okviri.wrap.top + 1);
-      }
+        okviri.burger!.bottom,
+        `hamburger (bottom=${okviri.burger!.bottom}) je ispod trake dokumenta (top=${okviri.bar!.top})`,
+      ).toBeLessThanOrEqual(okviri.bar!.top + 1);
+      expect(
+        okviri.lampa!.bottom,
+        `lampa (bottom=${okviri.lampa!.bottom}) je ispod trake dokumenta (top=${okviri.bar!.top})`,
+      ).toBeLessThanOrEqual(okviri.bar!.top + 1);
     }
 
     // PROVJERA U TIJEKU je prolazna; mjeri se oportunisticki (prikaz zna zavrsiti prije ocitanja),
@@ -182,6 +199,29 @@ for (const { w, h, ime } of SIRINE) {
       return Number(t.match(/^\d+/)?.[0] ?? NaN);
     });
     expect(brojNalaza, 'sentinel: fixture mora dati vise od 10 nalaza, inace test velikog broja nalaza nista ne mjeri').toBeGreaterThan(10);
+
+    if (w === 390) {
+      // TANKO STANJE NAKON SKROLA: proracun zaglavlja vrijedi i ondje, a ime dokumenta OSTAJE
+      // (Z15). Mjeri se TU, nad nalazom, a ne prije analize: prije nje stranica ne mora biti dulja
+      // od zaslona, pa se stanje nakon skrola ne bi dalo izazvati i tvrdnja bi tiho postala prazna.
+      const skrolano = await page.evaluate(() => {
+        window.scrollTo(0, 240);
+        return Math.round(window.scrollY);
+      });
+      // 40 px je prag tankog stanja (`SITE_CHROME_SCROLL_THRESHOLD` u `src/shared/site-chrome.ts`);
+      // ovdje stoji kao broj, jer ovaj list ne uvozi module aplikacije (nijedan `tests/ux/*` ne
+      // uvozi `src/`, a uvoz bi vukao JSON i pohranu u Playwrightov transform).
+      expect(skrolano, 'sentinel: nalaz se ne da skrolati, tanko stanje se ne da izmjeriti').toBeGreaterThan(40);
+      await expect(page.locator('header.site-chrome.site-chrome--scrolled')).toHaveCount(1);
+      const poslijeSkrola = await page.evaluate(() => {
+        const el = document.querySelector('header.site-chrome');
+        return el ? el.getBoundingClientRect().height : 0;
+      });
+      expect(poslijeSkrola, 'sentinel: zaglavlje nakon skrola nema visinu').toBeGreaterThan(0);
+      expect(poslijeSkrola, `zaglavlje nakon skrola pojede ${Math.round(poslijeSkrola)} px`).toBeLessThanOrEqual(124);
+      await expect(page.locator('#radDocName')).toBeVisible();
+      await page.evaluate(() => window.scrollTo(0, 0));
+    }
 
     // POPRAVAK, pa povratak. Jedan od dva CTA-a mora biti omogucen, tihi `if` bi prazninu pretvorio u prolaz.
     const safe = page.locator('#resultCockpit [data-cockpit-action="repair-safe"]');

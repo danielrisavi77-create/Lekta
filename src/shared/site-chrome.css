@@ -325,7 +325,17 @@ header.site-chrome--scrolled {
 }
 
 @media (max-width: 819px) {
-  .site-chrome__bar { grid-template-columns: 1fr auto; row-gap: 8px; }
+  .site-chrome__bar { grid-template-columns: 1fr auto; row-gap: 6px; }
+  /* IZRICITO MJESTO U MREZI, JER AUTO-PLACEMENT JE DAVAO TRI REDA.
+     Sa dva stupca i sredinom preko `grid-column: 1 / -1` auto-placement je logo stavljao u red 1,
+     sredinu u red 2 (puna sirina), a DESNU SKUPINU nije mogao natrag uz logo nego u red 3: lampa i
+     hamburger su zavrsili ISPOD trake dokumenta, a zaglavlje je na 390 px naraslo na 172 px na
+     zivoj stranici (21% zaslona), odnosno 177 px u probi s vidljivim gumbom nove verzije.
+     Komentar ispod je tvrdio suprotno od izmjerenog, sto je tocno razred kvara koji ovaj
+     repozitorij zove laznim zelenim. Mjera je sad u `tests/ux/workspace-viewports.spec.ts`
+     (proracun visine zaglavlja na 390 px, i prije i poslije skrola). */
+  .site-chrome__left { grid-area: 1 / 1 / 2 / 2; }
+  .site-chrome__right { grid-area: 1 / 2 / 2 / 3; }
   .site-chrome__hairline,
   .site-chrome__dests,
   .site-chrome__mid,
@@ -338,16 +348,53 @@ header.site-chrome--scrolled {
      izricito kaze da "stepper prelama u dva reda", dakle da sredina ostaje. Identitet dokumenta je
      uz to jedino sto korisniku radne povrsine na uskom ekranu treba u zaglavlju, a dva postojeca
      Playwright garda (`workspace-entry`, `workspace-viewports`) ga na 390 px mjere kao vidljivog.
-     Sredina zato pada u VLASTITI RED ispod loga, umjesto da se stisne uz hamburger. */
+     Sredina zato pada u VLASTITI RED (red 2) ISPOD prvog reda, koji ostaje logo + lampa + hamburger.
+     Pitanje F11 u `docs/agents/orchestrator-backlog.md` nosi odstupanje od doslovnog Z15. */
   .site-chrome[data-site-chrome="workspace"] .site-chrome__mid {
     display: flex;
-    grid-column: 1 / -1;
+    grid-area: 2 / 1 / 3 / -1;
     justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
     gap: 8px;
+    min-width: 0;
   }
-  .site-chrome[data-site-chrome="workspace"] .site-chrome__doc { max-width: 100%; }
-  .site-chrome__steps { flex-wrap: wrap; }
+  /* IME SE SKRACUJE, NE LOMI (`.rad-doc-name` vec nosi ellipsis), pa pilula ostaje jedan red.
+     JEDINA iznimka je gumb "Ucitaj novu verziju ovog rada": on se ne da stisnuti, a `overflow:
+     hidden` bi ga na 390 px odrezao, dakle sakrio zivu kontrolu. Zato uz njega pilula dobiva
+     drugi red (isto pravilo koje je `page-app.css` imao na `.rad-doc` do 720 px), i to je jedini
+     sadrzaj koji smije podici zaglavlje. */
+  .site-chrome[data-site-chrome="workspace"] .site-chrome__doc {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+    padding: 4px 9px;
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+  .site-chrome__doc .rad-doc-new-version { flex-basis: 100%; margin-left: 0; font-size: 12px; padding: 2px 0; }
+  /* KORACI BEZ NATPISA, ALI NE BEZ IMENA. Cetiri pilule s natpisima su 330 px, sto na 390 px ne
+     stoji uz ime dokumenta, pa se natpis vizualno skriva a ostaje u pristupacnom imenu koraka
+     (`clip-path`, ne `display:none`): citac ekrana i dalje cita "01 Nalazi". */
+  .site-chrome__steps { flex: 0 0 auto; flex-wrap: nowrap; }
+  .site-chrome__step { padding: 5px 8px; gap: 0; }
+  .site-chrome__step-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
   .site-chrome__burger { display: grid; }
+  /* TANKO STANJE NE SMIJE BITI DEBLJE OD DEBELOG. Na mobitelu zaglavlje ima dva reda, pa je
+     `padding-block: 8px` iz stanja nakon skrola dodavao 16 px, a prvi red se stisnuo samo 11 px:
+     izmjereno na 390 px, 122 px nakon skrola naspram 113 px prije njega. Proracun mjeri
+     `tests/ux/workspace-viewports.spec.ts`, i u skrolanom stanju. */
+  header.site-chrome--scrolled { padding-block: 2px; }
   .site-chrome__sheet.open {
     display: grid;
     gap: 4px;
