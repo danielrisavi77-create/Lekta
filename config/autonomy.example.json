@@ -59,9 +59,5 @@
         "post-deploy-smoke"
       ]
     }
-  ],
-  "grokEnabled": false,
-  "plannerAgent": "auto",
-  "implementerAgent": "auto",
-  "reviewerAgent": "auto"
+  ]
 }
