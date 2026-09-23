@@ -1449,6 +1449,109 @@ const MUTATIONS: Mutation[] = [
         ).length === 0),
   },
   /**
+   * TRECI ADVERSARIJALNI PREGLED (2026-09-23, krug 4) srusio je jos dvije tvrdnje. Prva: gard je
+   * deklaraciju zastavice mjerio po POCETKU izraza i po SPOMENU imena varijabli okoline unutar
+   * poziva, pa su cetiri oblika s drugacijim ishodom prolazila s praznim popisom. Sve cetiri
+   * mutacije nize su reproducirane nad KOPIJOM stvarnog izvora i svaka tvrdi TOCNU poruku.
+   */
+  ...([
+    [
+      'edge/lokalni-popravak-zadano-ukljuceno',
+      'zastavica postane zadano UKLJUCENA bez ijedne postavljene tajne (`Deno.env.get(...) ?? \'true\'`), '
+      + 'dakle tocno suprotno od stanja na lansiranju, a ime varijable okoline je i dalje u pozivu',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED') ?? 'true',\n"
+      + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),\n",
+      'deklaracija LOCAL_REPAIR_ENABLED nije doslovno kanonskog oblika; dopustene su samo razlike u bjelini i zavrsnom zarezu',
+    ],
+    [
+      'edge/lokalni-popravak-vrijednost-bez-okoline',
+      'procitana vrijednost prodje kroz ternar koji vraca isto u obje grane, pa zastavica vise ne ovisi '
+      + 'o okolini iako se varijabla doslovno cita',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),\n"
+      + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED') === 'true' ? 'off' : 'off',\n",
+      'deklaracija LOCAL_REPAIR_ENABLED nije doslovno kanonskog oblika; dopustene su samo razlike u bjelini i zavrsnom zarezu',
+    ],
+    [
+      'edge/lokalni-popravak-preoblikovana-vrijednost',
+      "`Deno.env.get('REPAIR_LOCAL_ENABLED')?.toLowerCase()`: tablica istine je dokazana nad SIROVIM "
+      + "ulazom (`'TRUE'` NE ukljucuje nista), pa preoblikovanje mijenja ishod mimo dokaza",
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED')?.toLowerCase(),\n"
+      + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),\n",
+      'deklaracija LOCAL_REPAIR_ENABLED nije doslovno kanonskog oblika; dopustene su samo razlike u bjelini i zavrsnom zarezu',
+    ],
+  ] as const).map(([id, imitates, fields, message]): Mutation => ({
+    id,
+    imitates,
+    caught: () => localRepairFlagProblems(
+      readTextLf(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts')).replace(
+        /const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled\(\{[\s\S]*?\}\);/,
+        `const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({\n${fields}});`,
+      ),
+    ).includes(message),
+    cleanBefore: () =>
+      localRepairFlagProblems(readTextLf(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'))).length === 0,
+  })),
+  {
+    id: 'edge/lokalni-popravak-alternativa-iza-poziva',
+    imitates:
+      'alternativa dopisana IZA poziva (`localRepairFlagEnabled({...}) || Deno.env.get(...) !== \'1\'`), pa '
+      + 'zastavica prestane ovisiti samo o cistoj funkciji nad kojom je tablica istine dokazana',
+    caught: () => localRepairFlagProblems(
+      readTextLf(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts')).replace(
+        /const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled\(\{[\s\S]*?\}\);/,
+        'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({\n'
+        + "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),\n"
+        + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),\n"
+        + "}) || Deno.env.get('REPAIR_LOCAL_FORCE') !== '1';",
+      ),
+    ).includes('izraz deklaracije LOCAL_REPAIR_ENABLED se nastavlja iza poziva localRepairFlagEnabled(...)'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readTextLf(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'))).length === 0,
+  },
+  /**
+   * Drugi dio istog pregleda: straza javnog endpointa se mjerila po glavi i po polozaju, ali ne i po
+   * tome PREKIDA li blok obradu. Sva tri oblika nize su tada vracala prazan popis; prvi i treci puste
+   * izvrsavanje dalje u `createClient` i RPC, drugi javno vrati 200.
+   */
+  ...([
+    [
+      'edge/javni-endpoint-straza-bez-returna',
+      'uklonjen `return` ispred `new Response(...)` u strazi javnog endpointa: odgovor se izgradi i baci, '
+      + 'a funkcija nastavi u createClient i RPC iako je lokalni popravak iskljucen',
+      (guard: string): string => guard.replace('return new Response(', 'new Response('),
+      'blok straze javnog endpointa ne pocinje s `return new Response(`, pa ne prekida obradu',
+    ],
+    [
+      'edge/javni-endpoint-straza-status-200',
+      'straza javnog endpointa vrati 200 umjesto 503, pa iskljucena znacajka javno izgleda kao da radi',
+      (guard: string): string => guard.replace('status: 503', 'status: 200'),
+      'odgovor straze javnog endpointa nema status: 503',
+    ],
+    [
+      'edge/javni-endpoint-prazna-straza',
+      'tijelo straze javnog endpointa ostane prazno (`if (!LOCAL_REPAIR_ENABLED) { }`), pa glava i polozaj '
+      + 'i dalje izgledaju ispravno a nista se ne gasi',
+      (): string => '  if (!LOCAL_REPAIR_ENABLED) {\n  }\n',
+      'blok straze javnog endpointa ne pocinje s `return new Response(`, pa ne prekida obradu',
+    ],
+  ] as const).map(([id, imitates, mutate, message]): Mutation => ({
+    id,
+    imitates,
+    caught: () => {
+      const source = readTextLf(resolve(process.cwd(), 'supabase/functions/repair-local-claim/index.ts'));
+      const from = source.indexOf('  if (!LOCAL_REPAIR_ENABLED) {');
+      const to = source.indexOf('\n  }\n', from) + '\n  }\n'.length;
+      if (from < 0 || to <= from) return false;
+      const mutated = source.slice(0, from) + mutate(source.slice(from, to)) + source.slice(to);
+      return mutated !== source && localRepairPublicEndpointProblems(mutated).includes(message);
+    },
+    cleanBefore: () =>
+      ['repair-local-claim', 'repair-local-status'].every((name) =>
+        localRepairPublicEndpointProblems(
+          readTextLf(resolve(process.cwd(), `supabase/functions/${name}/index.ts`)),
+        ).length === 0),
+  })),
+  /**
    * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,
    * inace bi dijakritici propustili osjetno vece tijelo od deklariranog.
    */
