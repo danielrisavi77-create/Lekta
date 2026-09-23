@@ -187,6 +187,26 @@ nepromijenjen.
 npm run agents -- prepare T02 --phase plan --agent astra --subscription
 ```
 
+OTVORENO, IZMJERENO 2026-09-23: otvaranje profila cini Grok posao pripremljivim, ali ne jos i
+uporabljivim u autonomnom lancu. Presudu o ishodu ondje ne donosi `parseResult` iz
+`scripts/agents/core.mjs` nego njegovo python zrcalo `parse_provider_output` u
+`scripts/autonomy/worker.py`, a ono nema granu za `grok`: zivi Grok uspjeh nema polje `type`, pa
+zavrsi u Codex JSONL grani i dobije verdict pada. Mjereno izravnim pozivom te funkcije nad commitanom
+fixturom `tests/fixtures/agents/grok-success.json`, ishodi su bili doslovno ovi:
+
+| ulaz | verdict zrcala |
+| --- | --- |
+| uspjeh, viseredni JSON (oblik fixture) | `ok=False`, `neispravan ili truncirani JSON` |
+| uspjeh, jednoredni JSON | `ok=False`, `codex bez turn.completed ili s greskom` |
+| greska uz izlazni kod 1 | `ok=False`, `exit_code=1` |
+| kontrola: Claude oblik uspjeha | `ok=True` |
+
+Kontrolni redak pokazuje da funkcija sama radi, dakle kvar je izostanak grane, a ne okolina. Dok se to
+ne popravi, svaki USPJESAN Grok posao u autonomiji izgleda kao pad i kontroler ga moze ponavljati na
+teret pretplatnicke kvote. Popravak pripada `scripts/autonomy/**` i nije dio ove grane; do tada je kvar
+prikovan testom u `tests/agent-workflow.test.ts`, koji pada cim zrcalo dobije granu za Grok i tako tjera
+da se ova biljeska ukloni umjesto da ostane kao zastarjela tvrdnja.
+
 Trajni raspored, red zadataka, politika opsega, dokaz i izdavac zive u `scripts/autonomy/` (Python,
 stdlib) i pozivaju ovaj runner samo za pripremu i izvrsenje jednog poziva. Upute: `docs/agents/autonomy-runbook.md`;
 polazna tocka: `docs/agents/autonomy-baseline.md`; status zadataka T00 do T47: `docs/quality/lekta-plan-status.md`.

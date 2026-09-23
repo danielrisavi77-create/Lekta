@@ -2745,4 +2745,99 @@ describe('mutacije: Grok pretplatnicki profil', () => {
     const mutantExitCodeOnly: ParseResultFn = (_command, _stdout, exitCode) => ({ ok: exitCode === 0 });
     expect(judgesLiveShapes(mutantExitCodeOnly)).toBe(false);
   });
+
+  /**
+   * (d) Cetvrta mutacija dolazi iz stvarnog nalaza pregleda 2026-09-22: prva inacica ove fixture
+   * bila je hibrid ZIVE SHEME i rucno napisanih brojki (`total_cost_usd: 0.0148` uz
+   * `total_cost_usd_ticks: 148`). Shema je bila tocna, pa su svi tadasnji testovi bili zeleni, a
+   * fixture je ipak lagala o mjerenju. Lijek je tvrdnja koja ne gleda samo imena polja nego i
+   * internu relaciju brojki: tick je 1e-10 USD, pa `ticks` mora biti `USD * 1e10`. Rucno
+   * zaokruzena cijena tu relaciju krsi za sedam redova velicine i odmah se vidi.
+   */
+  it('(d) fixture s rucno napisanim brojkama umjesto izmjerenih obara tvrdnju', () => {
+    type CostShape = { total_cost_usd: number; total_cost_usd_ticks: number };
+    const costProblems = (raw: string): string[] => {
+      const parsed = JSON.parse(raw) as CostShape;
+      const problems: string[] = [];
+      if (typeof parsed.total_cost_usd !== 'number' || typeof parsed.total_cost_usd_ticks !== 'number') {
+        problems.push('cijena nije brojcana');
+        return problems;
+      }
+      if (Math.round(parsed.total_cost_usd * 1e10) !== parsed.total_cost_usd_ticks) {
+        problems.push('ticks ne odgovaraju USD x 1e10, dakle brojka nije izmjerena');
+      }
+      return problems;
+    };
+    // BASELINE: commitana fixture nosi izmjerene brojke.
+    expect(costProblems(liveSuccess())).toEqual([]);
+    // MUTACIJA: doslovno one vrijednosti koje je pregled uhvatio kao izmisljene.
+    const handWritten = JSON.stringify({
+      ...JSON.parse(liveSuccess()), total_cost_usd: 0.0148, total_cost_usd_ticks: 148,
+    });
+    expect(costProblems(handWritten)).toEqual(['ticks ne odgovaraju USD x 1e10, dakle brojka nije izmjerena']);
+    // Kontramutacija: i sama cijena promijenjena uz zadrzane stare tickove se vidi.
+    const bumpedUsd = JSON.stringify({ ...JSON.parse(liveSuccess()), total_cost_usd: 0.02 });
+    expect(costProblems(bumpedUsd)).not.toEqual([]);
+  });
+});
+
+/**
+ * MUTACIJE ZA PRIKOVAN KVAR PYTHON ZRCALA.
+ *
+ * Nalaz pregleda 2026-09-22: nove fixture prikivaju samo JS `parseResult`, dok u autonomnom lancu
+ * presudjuje `parse_provider_output` iz `scripts/autonomy/worker.py`, koje nema granu za Grok. Ta je
+ * datoteka zadatkom zabranjena za izmjenu, pa je kvar prikovan testom u `tests/agent-workflow.test.ts`.
+ * Ovdje se dokazuje da taj novi gard stvarno grize, i to u OBA smjera: mora vidjeti kad se grana za
+ * Grok pojavi (jer tada biljeska u vodicu postaje neistinita) i ne smije se dati zavarati spomenom
+ * rijeci `grok` izvan tijela te funkcije.
+ */
+describe('mutacije: prikovan kvar python zrcala presude', () => {
+  const workerSource = () => readFileSync(resolve(process.cwd(), 'scripts/autonomy/worker.py'), 'utf8');
+
+  /** Isti strukturni izdvajac kakav koristi gard: od `def` funkcije do sljedece `def` u nultom stupcu. */
+  const bodyOf = (source: string): string | null => {
+    const lines = source.split(/\r?\n/);
+    const start = lines.findIndex((line) => line.startsWith('def parse_provider_output('));
+    if (start === -1) return null;
+    const rest = lines.slice(start + 1);
+    const end = rest.findIndex((line) => line.startsWith('def '));
+    return (end === -1 ? rest : rest.slice(0, end)).join('\n');
+  };
+
+  /** Gard: vraca popis problema. Prazan popis znaci "kvar jos traje, biljeska u vodicu je istinita". */
+  const mirrorProblems = (source: string): string[] => {
+    const body = bodyOf(source);
+    if (body === null) return ['funkcija parse_provider_output nije pronadjena'];
+    const problems: string[] = [];
+    if (!body.includes('command == "claude"')) problems.push('nema grane za claude');
+    if (!body.includes('turn.completed')) problems.push('nema codex uvjeta turn.completed');
+    if (body.toLowerCase().includes('grok')) problems.push('zrcalo je dobilo granu za Grok');
+    return problems;
+  };
+
+  it('(e) zrcalo koje dobije granu za Grok obara prikovanu tvrdnju', () => {
+    const source = workerSource();
+    // BASELINE: stvarno stanje na disku je onakvo kakvim ga biljeska opisuje.
+    expect(mirrorProblems(source)).toEqual([]);
+    // MUTACIJA: u tijelo funkcije ubacena grana za Grok, dakle kvar popravljen a biljeska zastarjela.
+    const fixed = source.replace('        if command == "claude":',
+      '        if command == "grok":\n            pass\n        if command == "claude":');
+    expect(fixed).not.toBe(source);
+    expect(mirrorProblems(fixed)).toEqual(['zrcalo je dobilo granu za Grok']);
+    // MUTACIJA: preimenovana funkcija ne smije proci kao "nema grane za Grok" (vakuumsko zeleno).
+    const renamed = source.replace('def parse_provider_output(', 'def parse_provider_output_v2(');
+    expect(renamed).not.toBe(source);
+    expect(mirrorProblems(renamed)).toEqual(['funkcija parse_provider_output nije pronadjena']);
+  });
+
+  it('(f) gard koji gleda cijelu datoteku umjesto tijela funkcije daje lazni alarm', () => {
+    const source = workerSource();
+    // Rijec `grok` drugdje u datoteci ne govori nista o presudi; ovdje se ubacuje kao komentar.
+    const mentionedElsewhere = `# spominje grok u komentaru\n${source}`;
+    // Stvarni gard je i dalje miran, jer gleda samo tijelo funkcije.
+    expect(mirrorProblems(mentionedElsewhere)).toEqual([]);
+    // MUTANT: naivni gard nad cijelom datotekom bi ovdje pogresno javio da je kvar popravljen.
+    const naive = (src: string): string[] => (src.toLowerCase().includes('grok') ? ['zrcalo je dobilo granu za Grok'] : []);
+    expect(naive(mentionedElsewhere)).not.toEqual([]);
+  });
 });
