@@ -59,7 +59,6 @@ import {
   EMPTY_VALUE_DIGEST,
 } from '../scripts/verify-naplata-secrets.mjs';
 import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
-import { localRepairFlagProblems, localRepairOfferProblems } from './helpers/local-repair-flag-guard';
 import {
   localRepairFlagProblems,
   localRepairOfferProblems,
