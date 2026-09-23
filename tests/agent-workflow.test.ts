@@ -498,6 +498,55 @@ describe('resolveProviderInvocation: mapa provider prema paketnoj ulaznoj tocki'
   });
 });
 
+/**
+ * PROVJERA GROK VERZIJE PRIJE POSLA MORA ICI KROZ ISTI RESOLVER (regresija 2026-09-23).
+ *
+ * `run --execute` je prije provjeravao verziju golim `spawnSync('grok', ['version'])`, mimo
+ * `resolveProviderInvocation`. Na Windowsu to daje ENOENT na npm `.cmd` shimu (isti kvar kao
+ * doctor prije popravka), pa je SVAKI Grok posao padao s "Unsupported Grok CLI version: unknown"
+ * iako je CLI ispravan i doctor ga je ispravno prijavio kao podrzanog. Ovaj test podmece spawn
+ * koji biljezi stvarnu naredbu/argumente i dokazuje da provjera koristi razrjeseni `command`.
+ */
+describe('checkGrokVersion: provjera verzije ide kroz resolveProviderInvocation', () => {
+  it('na win32, uz podmetnut shim, zove process.execPath + bootstrap stazu, nikad shell', async () => {
+    const { checkGrokVersion } = await import('../scripts/agents/cli.mjs');
+    const shimDir = '/npm-global';
+    const bootstrap = join(shimDir, 'node_modules', '@xai-official', 'grok', 'bin', 'grok-bootstrap.js');
+    const calls: Array<{ command: string; args: string[]; options: Record<string, unknown> }> = [];
+    const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
+      calls.push({ command, args, options });
+      return { status: 0, stdout: 'grok 1.0.34 (test)', stderr: '' };
+    };
+    expect(() => checkGrokVersion({
+      cwd: shimDir, platform: 'win32', pathEnv: '', exists: (path: string) => path === bootstrap, spawn: fakeSpawn,
+    })).not.toThrow();
+    expect(calls).toHaveLength(1);
+    expect(calls[0].command).toBe(process.execPath);
+    expect(calls[0].args).toEqual([bootstrap, 'version']);
+    expect(calls[0].options).toMatchObject({ shell: false });
+    expect(calls[0].options.shell).not.toBe(true);
+  });
+
+  it('kad shim nije nadjen (fail-open), zove goli "grok" i i dalje nikad shell', async () => {
+    const { checkGrokVersion } = await import('../scripts/agents/cli.mjs');
+    const calls: Array<{ command: string; args: string[]; options: Record<string, unknown> }> = [];
+    const fakeSpawn = (command: string, args: string[], options: Record<string, unknown>) => {
+      calls.push({ command, args, options });
+      return { status: 0, stdout: 'grok 1.0.34 (test)', stderr: '' };
+    };
+    checkGrokVersion({ cwd: '/nigdje', platform: 'win32', pathEnv: '', exists: () => false, spawn: fakeSpawn });
+    expect(calls).toEqual([{ command: 'grok', args: ['version'], options: expect.objectContaining({ shell: false }) }]);
+  });
+
+  it('baca kad razrijeseni provider prijavi nepodrzanu verziju', async () => {
+    const { checkGrokVersion } = await import('../scripts/agents/cli.mjs');
+    const fakeSpawn = () => ({ status: 0, stdout: 'grok 1.0.33 (old)', stderr: '' });
+    expect(() => checkGrokVersion({
+      cwd: '/npm-global', platform: 'win32', pathEnv: '', exists: () => false, spawn: fakeSpawn,
+    })).toThrow(/Unsupported Grok CLI version/);
+  });
+});
+
 // Autonomni kontroler ne smije pisati u docs/agents/tasks.json (koordinatorova domena), a fazu pregleda
 // prepareJob je dosad citao iskljucivo iz njega, pa review nije mogao proci ni kad je planTask ispravan.
 describe('review phase asserted by the controller, not by the queue file', () => {
