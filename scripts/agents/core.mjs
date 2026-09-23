@@ -55,10 +55,16 @@ export function validateQueue(queue) {
  *  - `subscription`: autonomni profil; NEMA budzeta jer se ne smije ni doci do naplate: Fable je iskljucen
  *    (nije u paketu), API kljuc u okolini je odbijen u CLI-ju, a poziv ide iskljucivo kroz prijavljenu
  *    pretplatu. Lazni pozitivan budzet se ovdje ne unosi da bi "prosla" stara validacija.
- * Grok (xAI) nema USD budget flag u runneru; headless cesto koristi `XAI_API_KEY` ili `grok login`.
+ * Grok (xAI) nema USD budget flag u runneru. Odluka vlasnika 2026-09-21: Grok ide ISKLJUCIVO na
+ * SuperGrok pretplatu kroz `grok login`, nikad na naplatu po pozivu, pa su aliasi `grok` i `build`
+ * unutar pretplatnickog profila. Jedini nacin da se ta odluka tiho izigra je `XAI_API_KEY` u okolini,
+ * jer bi CLI tada presao na API naplatu; zato je to greska prije pripreme, isto kao `--budget-usd`
+ * za Claude u pretplatnickom nacinu.
  */
 export const BILLING_MODES = Object.freeze(['budget', 'subscription']);
-export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'build']);
+export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable']);
+/** Kljucevi koji bi Grok CLI prebacili s pretplate na naplatu po pozivu. */
+export const GROK_BILLING_ENV_KEYS = Object.freeze(['XAI_API_KEY']);
 
 /**
  * `options.overrideTask` postoji SAMO za `phase === 'review'` i samo za autonomni kontroler: on zna tko je
@@ -69,6 +75,7 @@ export const SUBSCRIPTION_EXCLUDED_AGENTS = Object.freeze(['fable', 'grok', 'bui
  */
 export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   const billingMode = options.billingMode ?? 'budget';
+  const env = options.env ?? process.env;
   if (!BILLING_MODES.includes(billingMode)) throw new Error(`Unknown billing mode: ${billingMode}`);
   const tasks = validateQueue(queue);
   const task = tasks.get(id);
@@ -112,6 +119,17 @@ export function prepareJob(queue, id, phase, agentName, budget, options = {}) {
   }
   if (billingMode === 'subscription' && SUBSCRIPTION_EXCLUDED_AGENTS.includes(agentName)) {
     throw new Error(`${agentName} is not included in the subscription profile`);
+  }
+  // Okolina ulazi kroz `options.env` sa zadanom vrijednoscu `process.env` da je test moze podmetnuti;
+  // citanje `process.env` u tijelu bi ovaj gard ucinilo neprovjerljivim.
+  if (billingMode === 'subscription' && agent.command === 'grok') {
+    const leaked = GROK_BILLING_ENV_KEYS.filter((name) => env[name]);
+    if (leaked.length) {
+      throw new Error(
+        `subscription mode refuses xAI API credentials in the environment: ${leaked.join(', ')};`
+        + ' the Grok CLI would bill per call instead of using the SuperGrok subscription (grok login)',
+      );
+    }
   }
   if (agent.command === 'claude' && billingMode === 'subscription') {
     if (budget !== undefined) throw new Error('subscription mode does not take --budget-usd');

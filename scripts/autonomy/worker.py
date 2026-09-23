@@ -24,9 +24,16 @@ from .policy import PolicyError, billing_allowed, canonical_path, path_escapes_r
 
 VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blocked")
 
-SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_", "LEMONSQUEEZY_", "AWS_", "AZURE_")
+SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_",
+                       "LEMONSQUEEZY_", "AWS_", "AZURE_", "XAI_")
 SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
+# Grok radi iskljucivo na SuperGrok pretplatu (`grok login`); `XAI_API_KEY` bi CLI tiho prebacio na
+# naplatu po pozivu, pa je za Grok isto sto i ANTHROPIC_API_KEY za Claude: zabrana prije pokretanja.
+# Zivi posao uvijek nosi `command: "grok"` (oba aliasa, `grok` i `build`, dolaze iz istog polja u
+# `scripts/agents/core.mjs`); `build` je u popisu obrambeno, za slucaj da pozivatelj posalje ime aliasa.
+GROK_COMMANDS = ("grok", "build")
+GROK_API_KEY_ENV = ("XAI_API_KEY",)
 
 QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b429\b|overloaded|capacity")
 LOGIN_RE = re.compile(r"(?i)not logged in|login required|please (?:run|sign in|log in)|unauthori[sz]ed|\b401\b|invalid api key|authentication failed|session expired|token expired")
@@ -528,6 +535,58 @@ def classify_stream(text: str) -> str | None:
     return None
 
 
+def _parse_grok_output(stdout: str, out: dict) -> dict:
+    """Doslovno zrcalo grane `command === 'grok'` iz `parseResult` (scripts/agents/core.mjs).
+
+    Bez nje je zivi Grok uspjeh padao u codex granu: viseredni JSON obori `json.loads` po retku
+    (`neispravan ili truncirani JSON`), a jednoredni nema `turn.completed` (`codex bez turn.completed`).
+    Oba su ishoda verdict `failed`, pa bi kontroler USPJESAN posao ponavljao do `maxAttemptsPerTask`
+    i pritom trosio pretplatnicku kvotu.
+
+    Uvjeti su isti kao u JS-u: `--output-format json` daje JEDAN objekt (zadnji redak ako izlaz nosi
+    i prozu), uspjeh trazi neprazan `text`, `stopReason == "end_turn"`, cijeli `num_turns > 0` i
+    neprazan `modelUsage`, a svaki eksplicitan potpis greske obara presudu.
+
+    Dvije namjerne razlike prema JS-u, nijedna ne mijenja presudu:
+      - REDOSLIJED `reported_models` je sortiran, kao i u claude grani, jer `model_matches` gleda skup;
+      - retci se dijele `splitlines()` umjesto dijeljenja po znaku novog retka, pa CRLF izlaz ne
+        ostavi povratnik na kraju zadnjeg retka. `json.loads` bi ga svejedno progutao kao razmak,
+        dakle ista presuda; razlika je samo u tome sto se ne oslanja na oblik prijeloma.
+    """
+    text = stdout.strip()
+    try:
+        data = json.loads(text)
+    except ValueError:
+        lines = [line for line in text.splitlines() if line.strip()]
+        if not lines:
+            out["reason"] = "grok: prazan izlaz"
+            return out
+        data = json.loads(lines[-1])
+    if not isinstance(data, dict):
+        out["reason"] = "grok: izlaz nije JSON objekt"
+        return out
+    model_usage = data.get("modelUsage")
+    num_turns = data.get("num_turns")
+    current_success = (
+        isinstance(data.get("text"), str) and data["text"].strip() != ""
+        and data.get("stopReason") == "end_turn"
+        and isinstance(num_turns, int) and not isinstance(num_turns, bool) and num_turns > 0
+        and isinstance(model_usage, dict) and len(model_usage) > 0
+    )
+    if (not current_success or data.get("is_error") is True or data.get("ok") is False
+            or data.get("error") is not None
+            or str(data.get("subtype") or "").startswith("error")):
+        out["reason"] = "grok bez strukturiranog uspjeha ili s potpisom greske"
+        return out
+    reported = []
+    if isinstance(data.get("model"), str):
+        reported.append(data["model"])
+    reported.extend(model_usage.keys())
+    out["ok"] = True
+    out["reported_models"] = sorted(set(reported))
+    return out
+
+
 def parse_provider_output(command: str, stdout: str, exit_code: int | None) -> dict:
     """Zrcalo `parseResult` iz scripts/agents/core.mjs: uspjeh trazi strukturiran dokaz, ne samo exit 0."""
     out = {"ok": False, "reported_models": [], "reason": None}
@@ -542,6 +601,8 @@ def parse_provider_output(command: str, stdout: str, exit_code: int | None) -> d
             if not out["ok"]:
                 out["reason"] = f"claude subtype={data.get('subtype')}"
             return out
+        if command in GROK_COMMANDS:
+            return _parse_grok_output(stdout, out)
         events = [json.loads(line) for line in stdout.strip().splitlines() if line.strip()]
         types = {e.get("type") for e in events}
         out["ok"] = "turn.completed" in types and not ({"turn.failed", "error"} & types)
@@ -581,6 +642,12 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     parent_env = os.environ if env is None else env
     if job.get("command") == "claude" and any(parent_env.get(k) for k in API_KEY_ENV):
         result["reason"] = "api_key_present: ANTHROPIC_API_KEY bi prebacio naplatu na API"
+        return result
+    # Obrana u dubinu za Grok. `prepareJob` isti kljuc odbija u pretplatnickom nacinu, ali ovaj radnik
+    # moze dobiti posao i iz druge putanje, pa se ne oslanja na tudji gard. Ishod je verdict `blocked`,
+    # kao i za Claude: nijedna grana ove funkcije ne baca zbog okoline.
+    if job.get("command") in GROK_COMMANDS and any(parent_env.get(k) for k in GROK_API_KEY_ENV):
+        result["reason"] = "api_key_present: XAI_API_KEY bi Grok prebacio s pretplate na naplatu po pozivu"
         return result
     if job.get("command") == "claude" and str(job.get("requestedModel", "")).lower().startswith("fable") and not profile.get("fable_enabled"):
         result["reason"] = "fable_disabled: model nije u autonomnom profilu"
