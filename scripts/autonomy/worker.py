@@ -727,8 +727,9 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
     if job.get("command") == "claude" and str(job.get("requestedModel", "")).lower().startswith("fable") and not profile.get("fable_enabled"):
         result["reason"] = "fable_disabled: model nije u autonomnom profilu"
         return result
-    if not provider_billing_allowed(profile, str(job.get("command")), job.get("requestedModel")):
-        result["reason"] = f"billing_unknown: provider/model nije odobren ({job.get('command')} {job.get('requestedModel')})"
+    billing_command = "grok" if job.get("command") in GROK_COMMANDS else str(job.get("command"))
+    if not provider_billing_allowed(profile, billing_command, job.get("requestedModel")):
+        result["reason"] = f"billing_unknown: provider/model nije odobren ({billing_command} {job.get('requestedModel')})"
         return result
     base_env = scrubbed_env(env)
     launcher = resolve_launcher(str(job.get("command")))
