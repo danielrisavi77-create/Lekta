@@ -90,6 +90,16 @@ export function odredistaIzTrake(header: string): Array<{ id: string; href: stri
     .map((m) => ({ id: m[1], href: m[2], label: m[3] }));
 }
 
+/**
+ * Pravilo za natpis koraka iz MOBILNOG bloka (`@media (max-width: 819px)`), ne iz cijelog lista.
+ * Cista funkcija nad tekstom, pa se smije mutirati; prazan rezultat znaci da pravila ondje nema.
+ */
+export function mobilnoPraviloNatpisa(css: string): string {
+  const bezK = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const mobilni = bezK.match(/@media \(max-width: 819px\) \{[\s\S]*?\n\}/)?.[0] ?? '';
+  return mobilni.match(/\.site-chrome__step-label \{[^}]*\}/)?.[0] ?? '';
+}
+
 /** Odrediste poveznice "Sve pravno" iz podnozja; cista funkcija nad tekstom, pa se smije mutirati. */
 export function svePravnoOdrediste(foot: string): string | null {
   return foot.match(/<a class="site-footer__sve" href="([^"]+)">/)?.[1] ?? null;
@@ -624,17 +634,57 @@ describe('Z15 stanje nakon skrola', () => {
     expect(mobilni).toMatch(/header\.site-chrome--scrolled \{ padding-block: 2px; \}/);
   });
 
+  /**
+   * F13 (odluka 2026-09-23): ISPOD 820px KORACI SU "01 02 03 04", BEZ NATPISA.
+   *
+   * Cetiri pilule s natpisima su 330 px, pa na 390 px ne stoje uz ime dokumenta i zaglavlje probija
+   * proracun od 124 px koji mjeri `tests/ux/workspace-viewports.spec.ts`. `display: none` bi natpis
+   * izbacio i iz PRISTUPACNOG drveta, pa bi citac ekrana citao samo "01": zato vizualno skrivanje
+   * (`clip-path`), koje natpis ostavlja u imenu koraka.
+   *
+   * PRAVILO MORA BITI UNUTAR `@media (max-width: 819px)`, i to se mjeri odvojeno. Isti `clip-path`
+   * u OSNOVNOM sloju sakrio bi natpise na svakoj sirini, dakle i na 1180 px, gdje je stepper s
+   * natpisima cijela poanta koraka. Tvrdnja "pravilo postoji negdje u listu" bi oba stanja
+   * proglasila jednakima.
+   */
   it('natpis koraka se na mobitelu skriva VIZUALNO, ne iz pristupacnog imena', () => {
-    // Cetiri pilule s natpisima su 330 px, pa na 390 px ne stoje uz ime dokumenta. `display: none`
-    // bi natpis izbacio i iz pristupacnog drveta, pa bi citac ekrana citao samo "01".
     const header = zaglavlje(read('rad/index.html'));
     const natpisi = [...header.matchAll(/class="site-chrome__step-label">([^<]+)</g)].map((m) => m[1]);
-    expect(natpisi).toEqual(['Nalazi', 'Plan', 'Plaćanje', 'Rezultat']);
-    const css = bezKomentara(read('src/shared/site-chrome.css'));
-    const pravilo = css.match(/\.site-chrome__step-label \{[^}]*\}/)?.[0] ?? '';
-    expect(pravilo, 'sentinel: nema pravila za natpis koraka').not.toBe('');
+    // Natpisi dolaze iz MODELA koraka, ne iz prepisanog popisa: preimenovan korak pada ovdje.
+    expect(natpisi).toEqual(siteChromeSteps('findings').map((k) => k.label));
+    // Broj ostaje vidljiv, jer je on cijeli mobilni stepper ("01 02 03 04").
+    const brojevi = [...header.matchAll(/class="site-chrome__step-num">([^<]+)</g)].map((m) => m[1]);
+    expect(brojevi).toEqual(siteChromeSteps('findings').map((k) => k.ordinal));
+
+    const pravilo = mobilnoPraviloNatpisa(read('src/shared/site-chrome.css'));
+    expect(pravilo, 'sentinel: u mobilnom bloku nema pravila za natpis koraka').not.toBe('');
     expect(pravilo).toContain('clip-path: inset(50%)');
     expect(pravilo, 'natpis nestao iz pristupacnog drveta').not.toContain('display: none');
+  });
+
+  it('pravilo NIJE u osnovnom sloju, pa na sirokom zaslonu natpisi ostaju', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    const prviMedia = css.indexOf('@media');
+    const bazniSloj = prviMedia === -1 ? css : css.slice(0, prviMedia);
+    expect(bazniSloj, 'sentinel: nema baznog sloja').not.toBe('');
+    expect(bazniSloj, 'natpisi koraka bi nestali i na 1180 px').not.toContain('.site-chrome__step-label');
+  });
+
+  it('MUTACIJA: pravilo izvan mobilnog bloka i `display: none` umjesto clip-patha oba padaju', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    // BASELINE: nad stvarnim listom pravilo je u mobilnom bloku i skriva vizualno.
+    expect(mobilnoPraviloNatpisa(css)).toContain('clip-path: inset(50%)');
+
+    // 1. Preseljeno u osnovni sloj: `mobilnoPraviloNatpisa` ga vise ne nalazi, pa gard pada.
+    const izvanBloka = css.replace(/ {2}\.site-chrome__step-label \{[^}]*\}\r?\n/, '');
+    expect(izvanBloka, 'podmetanje se nije primilo; provjeri uvlaku pravila').not.toBe(css);
+    expect(mobilnoPraviloNatpisa(izvanBloka)).toBe('');
+
+    // 2. `display: none` u mobilnom bloku: natpis nestaje i iz pristupacnog drveta.
+    const sakriven = css.replace('clip-path: inset(50%)', 'display: none');
+    expect(sakriven).not.toBe(css);
+    expect(mobilnoPraviloNatpisa(sakriven)).toContain('display: none');
+    expect(mobilnoPraviloNatpisa(sakriven)).not.toContain('clip-path: inset(50%)');
   });
 
   it('list nosi ucinke tankog stanja: padding, blur, crvena nit i manji logo', () => {
