@@ -227,7 +227,12 @@
     <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
     <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
     <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
-    <a class="site-footer__sve" href="/uvjeti-koristenja.html">Sve pravno &rarr;</a>
+    <!-- F6 (odluka 2026-09-23, docs/agents/orchestrator-backlog.md): do Z20 "Sve pravno" vodi na
+         /privatnost.html, jer stranica koja nabraja SVE pravne dokumente jos ne postoji. Z20
+         ("Pravne stranice kao svezak") uvodi /pravno/ indeks i tada ovo odrediste ide na njega.
+         Privremeno odrediste NIJE proizvoljno: svaka stranica koju pece scripts/generate-legal-pages.mjs
+         u svom podnozju nabraja sve ostale pravne dokumente, pa poveznica vodi na popis, ne u prazno. -->
+    <a class="site-footer__sve" href="/privatnost.html">Sve pravno &rarr;</a>
     <!-- POSTAVKE PRIVATNOSTI OSTAJU U PODNOZJU RADNE POVRSINE. Gumb ozicuje app.ts; pravni
          minimum bez njega bio bi uzi od zatecenog stanja, a privola se mora dati promijeniti. -->
     <button class="footer-link-btn" id="privacySettingsBtn" type="button">Postavke privatnosti</button>

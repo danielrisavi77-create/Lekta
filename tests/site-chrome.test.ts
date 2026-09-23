@@ -33,6 +33,7 @@ import {
   setSiteChromeStage,
 } from '../src/shared/site-chrome';
 import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, formatEurAmount } from '../src/report/pricing';
+import { legalDocuments } from '../src/legal/legal-content';
 
 const ROOT = resolve(__dirname, '..');
 const read = (rel: string): string => readFileSync(resolve(ROOT, rel), 'utf8');
@@ -84,6 +85,11 @@ export function odredistaIzTrake(header: string): Array<{ id: string; href: stri
   const blok = header.slice(od, doIdx);
   return [...blok.matchAll(/<a class="site-chrome__dest" data-site-chrome-dest="([^"]+)" href="([^"]+)">([^<]+)<\/a>/g)]
     .map((m) => ({ id: m[1], href: m[2], label: m[3] }));
+}
+
+/** Odrediste poveznice "Sve pravno" iz podnozja; cista funkcija nad tekstom, pa se smije mutirati. */
+export function svePravnoOdrediste(foot: string): string | null {
+  return foot.match(/<a class="site-footer__sve" href="([^"]+)">/)?.[1] ?? null;
 }
 
 /** Kanonska poveznica stvarne stranice, iz `<link rel="canonical">` u njenom `<head>`. */
@@ -692,6 +698,59 @@ describe('Z15 podnozje: pravni minimum', () => {
     // BASELINE.
     expect(foot).toContain('Sve pravno');
     expect([...foot.matchAll(/data-legal="([^"]+)"/g)].map((m) => m[1])).toContain('cookies');
+  });
+
+  /**
+   * F6: "Sve pravno" VODI NA STRANICU KOJA POSTOJI.
+   *
+   * Odluka 2026-09-23 (docs/agents/orchestrator-backlog.md, Track F): do Z20 poveznica vodi na
+   * `/privatnost.html`, jer indeks `/pravno/` jos nije stvoren. Tvrdnja zato nije "href je ovaj
+   * tekst" nego "odrediste je medju stranicama koje generator STVARNO pece": prvo je prepisana
+   * vrijednost, drugo je mjera. Do 2026-09-23 je odrediste bilo `/uvjeti-koristenja.html`, isto
+   * tako generirana stranica; promijenjena je odlukom, ne kvarom.
+   */
+  const GENERIRANI_SLUGOVI = Object.values(legalDocuments()).map((doc) => doc.slug);
+  const GENERIRANA_ODREDISTA = GENERIRANI_SLUGOVI.map((slug) => `/${slug}.html`);
+
+  it('generator pravnih stranica NABRAJA "privatnost", pa odrediste nije obecanje', () => {
+    expect(GENERIRANI_SLUGOVI).toContain('privatnost');
+    // Popis se cita iz `legalDocuments()`, a generator mora pisati BAS te slugove: bez ove dvije
+    // tvrdnje bi gard mjerio modul koji skripta ne koristi, dakle ne bi mjerio nista o `dist/`.
+    const generator = read('scripts/generate-legal-pages.mjs');
+    expect(generator).toContain('legal.legalDocuments(');
+    expect(generator).toContain('`${doc.slug}.html`');
+  });
+
+  it.each(STRANICE)('%s: "Sve pravno" vodi na /privatnost.html i najavljuje Z20 indeks', (rel) => {
+    const foot = podnozje(read(rel));
+    expect(svePravnoOdrediste(foot)).toBe('/privatnost.html');
+    expect(GENERIRANA_ODREDISTA, 'odrediste nije medju pecenim pravnim stranicama')
+      .toContain(svePravnoOdrediste(foot));
+    // Privremenost mora stajati U MARKUPU, inace je sljedeca sesija cita kao konacnu odluku.
+    expect(foot, `${rel} ne najavljuje Z20 indeks`).toContain('Z20');
+    expect(foot).toContain('/pravno/');
+  });
+
+  it('MUTACIJA: odrediste koje generator ne pece pada, a izgubljena najava Z20 takodjer', () => {
+    const foot = podnozje(read('index.html'));
+    // BASELINE: neizmijenjeno podnozje je cisto, inace tvrdnje ispod nista ne dokazuju.
+    expect(svePravnoOdrediste(foot)).toBe('/privatnost.html');
+    expect(GENERIRANA_ODREDISTA).toContain('/privatnost.html');
+
+    // Z20 indeks JOS NE POSTOJI: da ga netko upise prije nego ga generator pece, gard pada.
+    const naIndeks = foot.replace('href="/privatnost.html">Sve pravno', 'href="/pravno/">Sve pravno');
+    expect(naIndeks, 'podmetanje se nije primilo; provjeri oznaku poveznice').not.toBe(foot);
+    expect(GENERIRANA_ODREDISTA).not.toContain(svePravnoOdrediste(naIndeks));
+
+    // Vracanje na staro odrediste je i dalje VALJANO (i ono je generirano), pa ovaj gard ne bi pao
+    // na njemu; ono sto pada je tvrdnja o dogovorenom odredistu, i zato stoji doslovno gore.
+    const staro = foot.replace('href="/privatnost.html">Sve pravno', 'href="/uvjeti-koristenja.html">Sve pravno');
+    expect(GENERIRANA_ODREDISTA).toContain(svePravnoOdrediste(staro));
+    expect(svePravnoOdrediste(staro)).not.toBe('/privatnost.html');
+
+    const bezNajave = foot.split('Z20').join('Z-dvadeset');
+    expect(bezNajave).not.toBe(foot);
+    expect(bezNajave).not.toContain('Z20');
   });
 
   it('`/rad/` zadrzava "Postavke privatnosti", jer privola se mora dati promijeniti', () => {
