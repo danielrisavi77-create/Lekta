@@ -4,6 +4,25 @@
  * Deno kod se pod vitestom ne izvodi, pa je jedino sto se moze mjeriti ono sto izvor DEKLARIRA:
  * koja imena tajni cita. To je manje od "funkcija radi", i tako je i imenovano.
  */
+import { readFileSync } from 'node:fs';
+
+/**
+ * Normalizira CRLF i usamljeni CR u LF (CLAUDE.md: "tekstualne usporedbe normaliziraju CR").
+ *
+ * Kvar koji ovo gasi (izmjereno 2026-09-23 u worktreeu s CRLF checkoutom, core.autocrlf=true):
+ * testovi koji nad procitanim runbookom rade `text.replace('nesto\n', ...)` s doslovnim `\n` u
+ * uzorku ne pogode redak koji na disku zavrsava s `\r\n`, pa `expect(mutated).not.toBe(izvor)`
+ * pada iako je mutacija namjeravana. Isti izvor u LF checkoutu (i na CI-ju) prolazi, sto skriva
+ * kvar dok se ne otvori radna kopija s drugom `core.autocrlf` postavkom.
+ */
+export function normalizeLf(text: string): string {
+  return text.replace(/\r\n?/g, '\n');
+}
+
+/** Cita tekstualnu datoteku s diska i odmah normalizira CRLF u LF (vidi {@link normalizeLf}). */
+export function readTextLf(path: string): string {
+  return normalizeLf(readFileSync(path, 'utf8'));
+}
 
 /** Sva imena koja izvor cita kroz `Deno.env.get('IME')`. */
 export function envNames(src: string): Set<string> {

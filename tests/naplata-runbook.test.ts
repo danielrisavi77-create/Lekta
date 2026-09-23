@@ -14,7 +14,6 @@
  * opise u runbooku. To je namjerno: dokumentacija ovdje nije uljudnost nego dio garda.
  */
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
@@ -26,11 +25,14 @@ import {
   runbookSqlQueryCount,
   webhookEventsColumns,
   webhookMorLogNames,
+  readTextLf,
 } from './helpers/naplata-env';
 import { IGNORE_REASON_PREFIXES } from '../src/report/webhook';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const read = (p: string): string => readFileSync(resolve(ROOT, p), 'utf8');
+// readTextLf: normalizira CRLF u LF pri citanju, da mutacije s doslovnim `\n` u ovoj datoteci
+// pogode redak i u checkoutu s core.autocrlf=true (vidi tests/helpers/naplata-env.ts).
+const read = (p: string): string => readTextLf(resolve(ROOT, p));
 
 const RUNBOOK = read('docs/GO_LIVE_NAPLATA.md');
 const HANDLER = read('supabase/functions/webhook-mor/index.ts');
@@ -82,6 +84,15 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
     // MUTACIJA: izmisljen ishod koji runbook ne poznaje. Dokazuje da popis nije zamrznut.
     const problems = naplataRunbookProblems(RUNBOOK, [...handlerOutcomes(HANDLER), 'nov_ishod']);
     expect(problems.join('; ')).toContain('nov_ishod');
+  });
+
+  it('naplataRunbookProblems daje isti rezultat nad CRLF i LF verzijom runbooka', () => {
+    const crlfRunbook = RUNBOOK.replace(/\n/g, '\r\n');
+    expect(crlfRunbook).not.toBe(RUNBOOK);
+    const outcomes = handlerOutcomes(HANDLER);
+    expect(naplataRunbookProblems(crlfRunbook, outcomes, IGNORE_REASON_PREFIXES)).toEqual(
+      naplataRunbookProblems(RUNBOOK, outcomes, IGNORE_REASON_PREFIXES),
+    );
   });
 });
 
@@ -151,5 +162,22 @@ describe('SQL upiti u runbooku gadjaju stupce koje tablica stvarno ima', () => {
   it('gard grize: runbook bez ijednog upita nad webhook_events se prijavi', () => {
     const mutated = RUNBOOK.split('webhook_events').join('neka_druga_tablica');
     expect(runbookSqlColumnProblems(mutated, MIGRACIJA).join('; ')).toContain('nema sto mjeriti');
+  });
+
+  /**
+   * DOKAZ CRLF NEOSJETLJIVOSTI (izmjereno 2026-09-23 u drugom worktreeu, core.autocrlf=true).
+   *
+   * `runbookSqlColumnProblems` vec razlikuje ograde koda s `\r?\n`, pa je funkcija sama po sebi
+   * neosjetljiva na zavrsetak redaka. Ovaj test to dokazuje umjesto da to samo tvrdi: umjetno
+   * vraca CRLF u i runbook i migraciju i pokazuje isti rezultat kao nad LF verzijom.
+   */
+  it('runbookSqlColumnProblems daje isti rezultat nad CRLF i LF verzijom runbooka i migracije', () => {
+    const crlfRunbook = RUNBOOK.replace(/\n/g, '\r\n');
+    const crlfMigracija = MIGRACIJA.replace(/\n/g, '\r\n');
+    expect(crlfRunbook).not.toBe(RUNBOOK);
+    expect(crlfMigracija).not.toBe(MIGRACIJA);
+    expect(runbookSqlColumnProblems(crlfRunbook, crlfMigracija)).toEqual(
+      runbookSqlColumnProblems(RUNBOOK, MIGRACIJA),
+    );
   });
 });

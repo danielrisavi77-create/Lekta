@@ -22,7 +22,7 @@
  * runbook i preflight imenuju.
  */
 import { describe, it, expect } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 
@@ -39,10 +39,14 @@ import {
   storeIdSecretProblems,
   preflightSourceProblems,
   naplataDeployPathProblems,
+  readTextLf,
+  normalizeLf,
 } from './helpers/naplata-env';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const source = (relative: string): string => readFileSync(resolve(ROOT, relative), 'utf8');
+// Normalizira CRLF u LF pri citanju: u checkoutu s core.autocrlf=true tekstualne datoteke
+// (runbook, .md, .mjs) dolaze s `\r\n`, a mutacije nize u ovoj datoteci trebaju doslovni `\n`.
+const source = (relative: string): string => readTextLf(resolve(ROOT, relative));
 
 const WEBHOOK_SRC = source('supabase/functions/webhook-mor/index.ts');
 const CHECKOUT_SRC = source('supabase/functions/create-checkout/index.ts');
@@ -258,5 +262,39 @@ describe('deploy naplate ide kroz preflight', () => {
   it('gard grize: zastavica za preskakanje preflighta se prijavi', () => {
     const mutated = `${PREFLIGHT}\n// argv.includes('--skip-preflight')\n`;
     expect(naplataDeployPathProblems(RUNBOOK, PKG, mutated).join('; ')).toContain('zastavicu za preskakanje');
+  });
+
+  /**
+   * DOKAZ CRLF NEOSJETLJIVOSTI (izmjereno 2026-09-23 u drugom worktreeu, core.autocrlf=true).
+   *
+   * `source()` sad cita kroz `readTextLf`, pa je `RUNBOOK` uvijek LF bez obzira na checkout. Ovaj
+   * test to ne pretpostavlja nego dokazuje: umjetno vraca CRLF (kakav bi dao checkout s
+   * autocrlf=true) i pokazuje da ISTA mutacija ('gard grize' test iznad, redak s
+   * `npm run deploy:naplata\n`) i dalje pogadja redak i daje ISTI nalaz kao LF verzija.
+   */
+  it('CRLF varijanta runbooka (kao iz autocrlf=true checkouta) daje isti nalaz kao LF', () => {
+    const crlfRunbook = RUNBOOK.replace(/\n/g, '\r\n');
+    expect(crlfRunbook).not.toBe(RUNBOOK);
+    expect(crlfRunbook.includes('\r\n')).toBe(true);
+
+    // BASELINE se poklapa bez obzira na zavrsetak redaka.
+    expect(naplataDeployPathProblems(crlfRunbook, PKG, PREFLIGHT)).toEqual(
+      naplataDeployPathProblems(RUNBOOK, PKG, PREFLIGHT),
+    );
+
+    // Ista mutacija kao redak 240 (goli `supabase functions deploy`), ali normalizirana kroz
+    // readTextLf PRIJE nego sto testni kod radi `.replace(...'\n', ...)`: to je tocno popravak,
+    // ne test nad sirovim CRLF ulazom bez normalizacije.
+    const normalizovan = normalizeLf(crlfRunbook);
+    const mutated = normalizovan.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n');
+    expect(mutated).not.toBe(normalizovan);
+    expect(naplataDeployPathProblems(mutated, PKG, PREFLIGHT)).toEqual(
+      naplataDeployPathProblems(
+        RUNBOOK.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n'),
+        PKG,
+        PREFLIGHT,
+      ),
+    );
+    expect(naplataDeployPathProblems(mutated, PKG, PREFLIGHT).join('; ')).toContain('zaobilazi preflight');
   });
 });
