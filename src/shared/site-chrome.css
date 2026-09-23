@@ -98,12 +98,41 @@ header.site-chrome--scrolled {
 .site-chrome__dest:hover { color: var(--desk-ink); background: color-mix(in srgb, var(--desk-ink) 6%, transparent); }
 .site-chrome__dest[aria-current="page"] { color: var(--desk-ink); font-weight: 500; }
 
+/* RADNA POVRSINA NEMA CETIRI ODREDISTA U TRACI (Z15, krug popravka). Markup ostaje ISTI na svim
+   stranicama (jednakost mjeri `tests/site-chrome.test.ts`, gard "ISTI markup na svim stranicama"),
+   jer traka bez JavaScripta i dalje mora biti valjana navigacija na strankama koje je nose; ovdje
+   se odjeljak samo sakriva NA workspace varijanti, na SVIM sirinama, jer `/rad/` vec ima svoju
+   navigaciju u mobilnom listu i nista drugo ne treba dijeliti prostor sa sredinom. Bez ovoga se
+   pilula dokumenta na 1180px sudarala s "Po fakultetu" i drugim odredistima. */
+.site-chrome[data-site-chrome="workspace"] .site-chrome__dests,
+.site-chrome[data-site-chrome="workspace"] .site-chrome__hairline { display: none; }
+
 .site-chrome__mid { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; min-width: 0; }
+/* SREDINA NA RADNOJ POVRSINI JE DVOREDNA (Z15, krug popravka): PRVI red pilula dokumenta (tocka +
+   ime + ocjena, jedan redak), DRUGI red stepper. Do ovog kruga je pilula uz to nosila "Spremljeno
+   HH:MM", znacku i gumb nove verzije, pa se na 1180px lomila u CETIRI retka (vidi rad-doc-meta.css
+   komentar u rad/index.html gdje su ta tri elementa preselila). Redoslijed je izricito STUPAC
+   (`flex-direction: column`), ne oslanjanje na `flex-wrap`, jer wrap ovisi o raspolozivoj sirini i
+   ne jamci TOCNO dva reda. */
+.site-chrome[data-site-chrome="workspace"] .site-chrome__mid {
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+/* NAKON SKROLA SREDINA VRACA U JEDAN RED (prizor "03 NAKON SKROLA" u Chrome.dc.html): tanko stanje
+   trake mora stati u budzet od 60px, sto dva stupca stack-a (pilula + stepper) ne bi. Pilula i
+   stepper su na uskom sirokom zaslonu dovoljno kompaktni da stanu jedan uz drugi. */
+.site-chrome--scrolled[data-site-chrome="workspace"] .site-chrome__mid {
+  flex-direction: row;
+  gap: 14px;
+}
 .site-chrome__doc {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   max-width: 360px;
+  min-width: 0;
   min-height: 24px;
   padding: 6px 12px;
   border: 1px solid var(--desk-line);
@@ -114,16 +143,20 @@ header.site-chrome--scrolled {
   color: var(--desk-muted);
 }
 .site-chrome__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex: none; }
-.site-chrome__score { font-family: var(--display-serif); font-size: 16px; color: var(--desk-ink); }
-/* ZBIJENI OBLIK ZNACKE "Lokalno na ovom uredjaju" U TRACI DOKUMENTA. `.local-badge` je bez ovoga
-   samo osnovni oblik iz page-chrome.css (13 px kurziv, padding 8px 13px, margin-top 4px), koji je
-   pisan za podnozje, ne za traku od 60px. Do Z15 popravka ovo pravilo je zivjelo u page-app.css na
-   `.nav-rad .local-badge`, a ovamo je preselio samo komentar koji ga najavljuje, ne i samo pravilo
-   (@media 720px ispod ovaj rad samo SKRIVA znacku, ne smanjuje je): rezultat je bio da je zaglavlje
-   `/rad/` na 1180 px sirine dvoredno (`.site-chrome__mid` gore ima `flex-wrap: wrap`). Gard:
-   `tests/site-chrome.test.ts`. */
-.site-chrome__doc .local-badge { margin-top: 0; padding: 5px 10px; font-size: var(--fs-mono-label); letter-spacing: .02em; cursor: help; }
-.site-chrome__doc .local-badge svg { width: 12px; height: 12px; }
+/* IME NE LOMI, SKRACUJE SE (Z15, krug popravka). Prije ovog pravila `.rad-doc-name` nije nosilo
+   NIKAKVU ogranicavajucu vrijednost (stari komentar nize u ovom listu je to tvrdio, mjerenje je
+   pokazalo suprotno), pa je dugo ime dokumenta pilulu i cijelu traku moglo gurnuti u vise redaka.
+   `flex: 0 1 auto` uz `min-width: 0` je flex-itemu koji bi se inace odbijao stisnuti ispod sirine
+   sadrzaja; `max-width: min(46ch, 100%)` je gornja granica koja radi i kad je pilula uza od 46ch. */
+.rad-doc-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(46ch, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-chrome__score { font-family: var(--display-serif); font-size: 16px; color: var(--desk-ink); flex: none; }
 
 /* `host.hidden` (site-chrome.ts, faza `scanning` bez koraka) postavlja atribut `[hidden]`, ali
    autorski `display: flex` NIZE u ovom listu je jednake specificnosti (0,1,0) kao `[hidden]` i
@@ -373,6 +406,7 @@ header.site-chrome--scrolled {
      Pitanje F11 u `docs/agents/orchestrator-backlog.md` nosi odstupanje od doslovnog Z15. */
   .site-chrome[data-site-chrome="workspace"] .site-chrome__mid {
     display: flex;
+    flex-direction: row;
     grid-area: 2 / 1 / 3 / -1;
     justify-content: flex-start;
     align-items: center;
@@ -380,20 +414,15 @@ header.site-chrome--scrolled {
     gap: 8px;
     min-width: 0;
   }
-  /* IME SE SKRACUJE, NE LOMI (`.rad-doc-name` vec nosi ellipsis), pa pilula ostaje jedan red.
-     JEDINA iznimka je gumb "Ucitaj novu verziju ovog rada": on se ne da stisnuti, a `overflow:
-     hidden` bi ga na 390 px odrezao, dakle sakrio zivu kontrolu. Zato uz njega pilula dobiva
-     drugi red (isto pravilo koje je `page-app.css` imao na `.rad-doc` do 720 px), i to je jedini
-     sadrzaj koji smije podici zaglavlje. */
+  /* IME SE SKRACUJE, NE LOMI (`.rad-doc-name`, gore u baznom sloju). Pilula sad nosi SAMO tocku,
+     ime i ocjenu (znacka, spremanje i gumb nove verzije su preseljeni u tijelo, Z15 krug popravka),
+     pa vise nema sadrzaja koji bi je gurao u drugi red na 390px. */
   .site-chrome[data-site-chrome="workspace"] .site-chrome__doc {
     flex: 1 1 auto;
     min-width: 0;
     max-width: none;
     padding: 4px 9px;
-    flex-wrap: wrap;
-    row-gap: 2px;
   }
-  .site-chrome__doc .rad-doc-new-version { flex-basis: 100%; margin-left: 0; font-size: 12px; padding: 2px 0; }
   /* KORACI BEZ NATPISA, ALI NE BEZ IMENA. Cetiri pilule s natpisima su 330 px, sto na 390 px ne
      stoji uz ime dokumenta, pa se natpis vizualno skriva a ostaje u pristupacnom imenu koraka
      (`clip-path`, ne `display:none`): citac ekrana i dalje cita "01 Nalazi". */
@@ -436,13 +465,25 @@ header.site-chrome--scrolled {
   }
   body:has(.site-chrome__sheet.open) { overflow: hidden; }
 }
-/* ZNACKA "Lokalno" I OCJENA ODLAZE NA 720px. Ista tvrdnja ("analiza je lokalna") stoji napisana u
-   tijelu stranice, a u zaglavlju je na 390 px bila jedan od redaka kojima je traka dokumenta
-   prerasla navigaciju. Do Z15 je to pravilo zivjelo u `page-app.css` na `.nav-rad .local-badge`;
-   gard koji ga mjeri computed `display`-em je `tests/ux/workspace-viewports.spec.ts`. */
+/* OCJENA U TRACI ODLAZI NA 720px, isto stanje kao prije Z15 kruga popravka. Znacka "Lokalno" vise
+   NE zivi u `.site-chrome__doc` (preselila je u `.rad-doc-meta` u tijelu, Z15 krug popravka), pa
+   nije vise sadrzaj trake i ovo pravilo je vise ne spominje; gard nad njom je nize, uz `.rad-doc-meta`.
+   Gard nad ocjenom je `tests/ux/workspace-viewports.spec.ts`. */
 @media (max-width: 720px) {
-  .site-chrome__doc .local-badge,
   .site-chrome__score { display: none; }
+}
+
+/* DOKUMENTOV RED U TIJELU (Z15, krug popravka). Spremanje, znacka "Lokalno" i gumb nove verzije
+   zive ovdje, u main-u ispod trake (rad/index.html #radDocMeta), otkad su preseljeni iz pilule
+   `.site-chrome__doc`: prostor ovdje nije ogranicen visinom zaglavlja, pa `.local-badge` ostaje u
+   punom obliku iz `page-chrome.css`, bez zbijanja koje je traka trazila. `class="shell"` na
+   `#radDocMeta` daje istu sirinu i centriranje kao ostali sadrzaj stranice. */
+.rad-doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 14px;
 }
 
 @keyframes siteChromeDrop {
