@@ -48,6 +48,7 @@ import {
   naplataRunbookProblems,
   runbookSqlColumnProblems,
   naplataDeployPathProblems,
+  readTextLf,
 } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
 import { webhookHandlerProblems } from './helpers/webhook-handler-source';
@@ -2589,8 +2590,8 @@ const MUTATIONS: Mutation[] = [
     imitates: 'webhook-mor cita LS_STORE_ID a create-checkout LEMONSQUEEZY_STORE_ID: operater postavi jednu tajnu, checkout radi a webhook tiho odbija svaku placenu kupnju (stvarno stanje repozitorija do 2026-09-22)',
     caught: () => {
       const dir = resolve(process.cwd(), 'supabase', 'functions');
-      const webhook = readFileSync(join(dir, 'webhook-mor', 'index.ts'), 'utf8');
-      const checkout = readFileSync(join(dir, 'create-checkout', 'index.ts'), 'utf8');
+      const webhook = readTextLf(join(dir, 'webhook-mor', 'index.ts'));
+      const checkout = readTextLf(join(dir, 'create-checkout', 'index.ts'));
       // MUTACIJA u memoriji: vrati staro ime u webhook-mor, disk se ne dira.
       const mutated = webhook.replace("Deno.env.get('LEMONSQUEEZY_STORE_ID')", "Deno.env.get('LS_STORE_ID')");
       if (mutated === webhook) return false; // nema sto mutirati: gard bi prolazio vakuumski
@@ -2600,8 +2601,8 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => {
       const dir = resolve(process.cwd(), 'supabase', 'functions');
       return storeIdSecretProblems({
-        'webhook-mor': readFileSync(join(dir, 'webhook-mor', 'index.ts'), 'utf8'),
-        'create-checkout': readFileSync(join(dir, 'create-checkout', 'index.ts'), 'utf8'),
+        'webhook-mor': readTextLf(join(dir, 'webhook-mor', 'index.ts')),
+        'create-checkout': readTextLf(join(dir, 'create-checkout', 'index.ts')),
       }).length === 0;
     },
   },
@@ -2638,14 +2639,14 @@ const MUTATIONS: Mutation[] = [
     id: 'naplata/preflight-mjeri-ljusku',
     imitates: 'prva verzija preflighta (2026-09-22): citao je process.env, dakle ljusku operatera, a tajne koje webhook-mor koristi zive u Supabase Edge Functions Secretsima. Izvezena varijabla u terminalu davala je zeleno iako je tajna u projektu prazna, pa bi acceptEvent svaku kupnju odbio s store_unverifiable i vratio 200',
     caught: () => {
-      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       // MUTACIJA u memoriji: vrati zadani put na citanje ljuske. Disk se ne dira.
       const mutated = src.replace('const read = readSupabaseSecrets(projectRef);', 'const read = { ok: true, rows: process.env };');
       if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
       return preflightSourceProblems(mutated).some((p) => p.includes('process.env'));
     },
     cleanBefore: () => {
-      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       return src.length > 2000 && preflightSourceProblems(src).length === 0;
     },
   },
@@ -2725,7 +2726,7 @@ const MUTATIONS: Mutation[] = [
     id: 'naplata/runbook-ne-imenuje-order-refunded',
     imitates: 'stanje runbooka do 2026-09-23: korak 3 je rekao samo "u LS postavi webhook", bez popisa dogadjaja. Handler od tada prepoznaje povrat samo iz dogadjaja koji stigne, pa operater koji pretplati minimalan skup (order_created) dobije naplatu koja radi i povrate koji se nikad ne obrade: entitlement ostaje paid, referral nagrada se ne povuce, i to bez ijedne greske',
     caught: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       // MUTACIJA u memoriji: makni ime dogadjaja iz runbooka. Disk se ne dira.
       const mutated = runbook.split('`order_refunded`').join('povrat');
       if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
@@ -2733,7 +2734,7 @@ const MUTATIONS: Mutation[] = [
         .some((p) => p.includes('order_refunded'));
     },
     cleanBefore: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       const outcomes = handlerOutcomes(webhookMorSource());
       // outcomes stiti od vakuuma: prazan izvod bi dao "cist" runbook bez ijedne provjere ishoda.
       return outcomes.length >= 4
@@ -2744,7 +2745,7 @@ const MUTATIONS: Mutation[] = [
     id: 'naplata/ishod-bez-retka-u-runbooku',
     imitates: 'nov ishod u webhook_events koji trazi ljudsku radnju, a nigdje nije opisan: tocno stanje ishoda needs_manual_link do 2026-09-23, koji uz to ne ulazi ni u djelomicni indeks webhook_events_unresolved pa ga ni standardni upit nad neobradjenima ne vraca',
     caught: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       // MUTACIJA: handler pocne pisati ishod koji runbook ne poznaje.
       return naplataRunbookProblems(
         runbook,
@@ -2753,7 +2754,7 @@ const MUTATIONS: Mutation[] = [
       ).some((p) => p.includes('nov_ishod'));
     },
     cleanBefore: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       return naplataRunbookProblems(runbook, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
         .length === 0;
     },
@@ -2763,9 +2764,9 @@ const MUTATIONS: Mutation[] = [
     id: 'naplata/runbook-upit-po-nepostojecem-stupcu',
     imitates: 'stvarno stanje runbooka do 2026-09-23: oba upita u sekciji 5.1 citala su i sortirala po created_at, stupcu kojeg webhook_events nema (0092 ima received_at). Operater bi umjesto popisa placenih narudzbi bez prava pristupa dobio ERROR 42703, a bas ti upiti su jedina zamjena za djelomicni indeks koji ishod needs_manual_link ne pokriva',
     caught: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
-      const migracija = readFileSync(
-        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'), 'utf8',
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const migracija = readTextLf(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'),
       );
       // MUTACIJA u memoriji: vrati ime stupca koje je ondje stajalo. Disk se ne dira.
       const mutated = runbook.split('received_at').join('created_at');
@@ -2773,9 +2774,9 @@ const MUTATIONS: Mutation[] = [
       return runbookSqlColumnProblems(mutated, migracija).some((p) => p.includes('created_at'));
     },
     cleanBefore: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
-      const migracija = readFileSync(
-        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'), 'utf8',
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const migracija = readTextLf(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'),
       );
       return runbookSqlColumnProblems(runbook, migracija).length === 0;
     },
@@ -2784,18 +2785,21 @@ const MUTATIONS: Mutation[] = [
     id: 'naplata/deploy-zaobilazi-preflight',
     imitates: 'stvarno stanje do 2026-09-23: runbook je deploy naplate slao na goli `supabase functions deploy webhook-mor`, a preflight je bio zaseban redak koji se moglo preskociti. Preskocen korak znaci deploy s praznim LEMONSQUEEZY_STORE_ID, a acceptEvent je fail-closed: svaka kupnja dobije refused i 200 bez retryja',
     caught: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
-      const pkg = JSON.parse(readFileSync(resolve(process.cwd(), 'package.json'), 'utf8'));
-      const preflight = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
-      // MUTACIJA u memoriji: vrati goli CLI poziv u runbook.
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pkg = JSON.parse(readTextLf(resolve(process.cwd(), 'package.json')));
+      const preflight = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: vrati goli CLI poziv u runbook. `runbook` je vec normaliziran na LF
+      // (readTextLf), pa doslovni `\n` u uzorku pogadja redak i u checkoutu s core.autocrlf=true
+      // (izmjereno 2026-09-23: bez normalizacije ovaj `.replace` s CRLF izvorom ne pogodi nista, pa
+      // `mutated === runbook` i test padne na `not.toBe`, prije nego se uopce stigne do garda).
       const mutated = runbook.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n');
       if (mutated === runbook) return false;
       return naplataDeployPathProblems(mutated, pkg, preflight).some((p) => p.includes('zaobilazi preflight'));
     },
     cleanBefore: () => {
-      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
-      const pkg = JSON.parse(readFileSync(resolve(process.cwd(), 'package.json'), 'utf8'));
-      const preflight = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pkg = JSON.parse(readTextLf(resolve(process.cwd(), 'package.json')));
+      const preflight = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       return naplataDeployPathProblems(runbook, pkg, preflight).length === 0;
     },
   },
@@ -2803,14 +2807,14 @@ const MUTATIONS: Mutation[] = [
     id: 'naplata/preflight-zove-goli-supabase',
     imitates: 'stvarno stanje preflighta do 2026-09-23: spawnSync s golim imenom iz PATH-a, dok repo CLI isporucuje kao devDependency. Izmjereno: exit 1 uz "supabase is not recognized" JEDNAKO i kad su tajne ispravne i kad su prazne, pa gard ne razlikuje dva stanja koja mjeri i nauci operatera da ga preskoci',
     caught: () => {
-      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       // MUTACIJA u memoriji: vrati goli poziv iz PATH-a.
       const mutated = src.replace('const res = runSupabase(args);', "const res = spawnSync('supabase', args);");
       if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
       return preflightSourceProblems(mutated).some((p) => p.includes('PATH'));
     },
     cleanBefore: () => {
-      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       return src.length > 2000 && preflightSourceProblems(src).length === 0;
     },
   },
@@ -2837,7 +2841,7 @@ const MUTATIONS: Mutation[] = [
 
 /** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
 function webhookMorSource(): string {
-  return readFileSync(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'index.ts'), 'utf8');
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'index.ts'));
 }
 
 /** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
@@ -2846,7 +2850,7 @@ function corpusMigrations(): MigrationFile[] {
   return readdirSync(dir)
     .filter((f) => f.endsWith('.sql'))
     .sort()
-    .map((file) => ({ file, sql: readFileSync(join(dir, file), 'utf8') }));
+    .map((file) => ({ file, sql: readTextLf(join(dir, file)) }));
 }
 
 /** Tri stavke za C6 mutacije; `violated` uvijek boolean, kako to graditelji i vracaju. */
