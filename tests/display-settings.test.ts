@@ -1005,6 +1005,39 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(html).toContain('<button class="site-chrome__sheet-aa" type="button" data-display-open>');
   });
 
+  /**
+   * TVRDNJA IZVEDENA IZ UVOZA, NE IZ RUCNOG POPISA (krug popravka 2026-09-23).
+   *
+   * `STRANICE_S_TRAKOM` iznad je popis odrzavan rucno; ova tvrdnja umjesto toga CITA svaki HTML u
+   * korijenu i `<podmapa>/index.html`, nalazi njegov ulazni modul (`<script type="module" src=...>`)
+   * i provjerava uvozi li taj modul `ui-boot` (izravno, kao sto `src/tools/*-page.ts` cine, ili
+   * kroz `shared/page-boot.ts`, koji sam uvozi `ui-boot`). Stranica koja tako uvozi ui-boot mora
+   * imati TOCNO JEDAN `#displayBtn`, jer je panel montiran za sve njih (F10); admin.html, demo.html
+   * i verification.html namjerno ostaju izvan (vlastiti sustav teme ili bez trake).
+   */
+  it('svaka stranica koja uvozi ui-boot ima TOCNO JEDAN #displayBtn', () => {
+    const stranice = [
+      'index.html', 'rad/index.html', 'moji-radovi/index.html', 'saznaj-vise/index.html',
+      'alati.html', 'citat.html', 'citati-i-literatura.html', 'izjava.html',
+      'kartice.html', 'landing_benchmark.html', 'landing_usporedba.html', 'literatura.html',
+      'naslovnica.html', 'admin.html', 'demo.html', 'verification.html',
+    ] as const;
+    const sUiBootom: string[] = [];
+    for (const stranica of stranice) {
+      const ulaz = read(stranica).match(/src="\/(src\/[^"]+)"/)?.[1];
+      expect(ulaz, `${stranica}: nema <script type="module" src="/src/...">`).toBeDefined();
+      if (ulaz && /ui-boot/.test(read(ulaz))) sUiBootom.push(stranica);
+    }
+    // SENTINEL: prazan popis bi donju petlju ucinio vakuumskim nalazom.
+    expect(sUiBootom.length, 'nijedna stranica ne uvozi ui-boot; provjeri regex').toBeGreaterThan(0);
+    expect(sUiBootom, 'admin/demo/verification NE smiju uvoziti ui-boot')
+      .not.toEqual(expect.arrayContaining(['admin.html', 'demo.html', 'verification.html']));
+    for (const stranica of sUiBootom) {
+      const html = read(stranica);
+      expect((html.match(/id="displayBtn"/g) ?? []).length, stranica).toBe(1);
+    }
+  });
+
   it('MUTACIJA: uz stari raspored (list uz panel) rute bez panela ostaju bez ucinka', () => {
     const boot = read('src/shared/ui-boot.ts');
     const panel = read('src/shared/display-settings.ts');
