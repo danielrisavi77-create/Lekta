@@ -58,6 +58,7 @@ import { provisionLocalRepairJob } from '../../../src/repair/local-runner/provis
 import { persistIssuedLocalRepairJob } from '../../../src/repair/local-runner/supabase-issue-adapter.ts';
 import type { IssuedLocalRepairJob, LocalRepairJobRecord } from '../../../src/repair/local-runner/issue-service.ts';
 import { settleRepairStorageHandoff, type RepairStorageResult } from '../../../src/repair/local-runner/storage-handoff.ts';
+import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -68,8 +69,12 @@ const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netl
 
 // Kill switch (isti obrazac kao preflight-start PREFLIGHT_DISABLED): iskljuci bez deploya.
 const REPAIR_DISABLED = (Deno.env.get('REPAIR_DISABLED') ?? '') === 'true';
-const LOCAL_REPAIR_ENABLED = Deno.env.get('REPAIR_LOCAL_ENABLED') === 'true'
-  && Deno.env.get('REPAIR_LOCAL_DISABLED') !== 'true';
+// Odluka je izdvojena u cistu funkciju (src/repair/local-runner/feature-flag.ts) da se moze
+// dokazati testom bez Dena i bez deploya; semantika je nepromijenjena.
+const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({
+  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),
+  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),
+});
 const LOCAL_REPAIR_PRIVATE_KEY = Deno.env.get('REPAIR_CONTRACT_PRIVATE_KEY_PKCS8_B64URL') ?? '';
 const LOCAL_REPAIR_KEY_ID = Deno.env.get('REPAIR_CONTRACT_KEY_ID') ?? '';
 const LOCAL_REPAIR_LIFETIME_MS = 24 * 60 * 60 * 1_000;
