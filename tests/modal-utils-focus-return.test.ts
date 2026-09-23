@@ -24,7 +24,7 @@
  * umjesto na `trigger`), jer izvrsavanje testa u vitestu traje bitno manje od 500 ms.
  */
 import { describe, it, expect } from 'vitest';
-import { trapModal, releaseModal } from '../src/ui/modal-utils';
+import { trapModal, releaseModal, okidacKlika } from '../src/ui/modal-utils';
 
 describe('trapModal: povrat fokusa se ne oslanja na proteklo vrijeme', () => {
   it('nepovezan raniji pointerdown (npr. traka privole) se ne koristi kao okidac kad je izmedju bilo pravog fokusa', () => {
@@ -115,5 +115,95 @@ describe('trapModal: preglednik koji fokusira PRETKA okidaca', () => {
     releaseModal(modal);
 
     expect(document.activeElement, 'fokus se nije vratio na okidac nego na njegova pretka').toBe(trigger);
+  });
+});
+
+/**
+ * NALAZ (2026-09-23, protivnicki pregled): suzeno pravilo iznad cuva zapis kad je fokusirano
+ * cvoriste PREDAK zapisanog elementa. Ali klik cesto pogodi POTOMKA okidaca, a preglednik tada
+ * fokusira sam okidac, sto je isti oblik odnosa u suprotnom smjeru.
+ *
+ * Put postoji u proizvodu: `src/ui/finding-view-model.ts:235` i `src/ui/results/priority-findings.ts:32`
+ * crtaju `<button ... data-finding-jump>Gdje: odlomak 7 <span aria-hidden="true">&#8594;</span></button>`,
+ * a nad tom strelicom nema `pointer-events:none`, pa je legitimna meta klika. Klik na nju otvara
+ * `#previewModal` (`src/ui/app.ts:1098` -> `openPreviewAt` -> `openPreview` -> `trapModal`).
+ *
+ * Bez normalizacije zapisa: `pointerdown` biljezi `<span>`, `focusin` na gumbu je predak pa se zapis
+ * NE brise, `trapModal` sprema `<span>`, a `releaseModal` zove `span.focus()`, sto je u pregledniku
+ * no-op (fokus zavrsi na `<body>`). Zato `pointerdown` zapisuje STVARNI OKIDAC: najblizeg
+ * fokusabilnog pretka kliknutog elementa.
+ *
+ * MUTACIJA (izvedena 2026-09-23, vitest): zapis se uzme kao `e.target`, bez `okidacKlika` ->
+ * `2 failed | 4 passed`, i to bas dva testa ispod (`document.activeElement` je `<span>`), dok
+ * cetiri ostala prolaze. Obrnuta mutacija (bezuvjetni `_lastPointerTarget = null` u slusacu
+ * `focusin`) daje takodjer `2 failed | 4 passed`, ali druga dva testa (oba WebKit puta), pa
+ * nijedno od dva pravila nije suvisno.
+ */
+describe('trapModal: klik pogodi POTOMKA okidaca', () => {
+  it('Chromium: klik na strelicu unutar gumba vraca fokus na gumb, ne na strelicu', () => {
+    document.body.innerHTML = `
+      <main id="workspace4" tabindex="-1">
+        <button id="trigger4" data-finding-jump>Gdje: odlomak 7 <span id="strelica4" aria-hidden="true">&#8594;</span></button>
+      </main>
+      <div id="modal4"><button class="modal-close">Zatvori</button></div>
+    `;
+    const trigger = document.getElementById('trigger4') as HTMLButtonElement;
+    const strelica = document.getElementById('strelica4') as HTMLElement;
+    const modal = document.getElementById('modal4') as HTMLElement;
+
+    // Chromium: pointerdown pogodi <span>, ali fokus dobije <button>.
+    strelica.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    trigger.focus();
+    expect(document.activeElement, 'sentinel: gumb nije primio fokus').toBe(trigger);
+
+    trapModal(modal);
+    releaseModal(modal);
+
+    expect(document.activeElement, 'fokus se vratio na nefokusabilnu strelicu umjesto na gumb').toBe(trigger);
+  });
+
+  it('WebKit: klik na strelicu uz fokus na pretku i dalje vraca fokus na gumb', () => {
+    document.body.innerHTML = `
+      <main id="workspace5" tabindex="-1">
+        <button id="trigger5" data-finding-jump>Gdje: odlomak 7 <span id="strelica5" aria-hidden="true">&#8594;</span></button>
+      </main>
+      <div id="modal5"><button class="modal-close">Zatvori</button></div>
+    `;
+    const trigger = document.getElementById('trigger5') as HTMLButtonElement;
+    const strelica = document.getElementById('strelica5') as HTMLElement;
+    const glavni = document.getElementById('workspace5') as HTMLElement;
+    const modal = document.getElementById('modal5') as HTMLElement;
+
+    // WebKit: pointerdown na <span>, fokus na najblizeg fokusabilnog PRETKA gumba (<main>).
+    strelica.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    glavni.focus();
+    expect(document.activeElement, 'sentinel: pretak nije primio fokus').toBe(glavni);
+
+    trapModal(modal);
+    releaseModal(modal);
+
+    expect(document.activeElement, 'fokus se nije vratio na okidac').toBe(trigger);
+  });
+});
+
+/**
+ * Izravna tvrdnja o samom pravilu, odvojeno od modala: sto `pointerdown` uopce smije zapisati.
+ */
+describe('okidacKlika: normalizacija kliknutog elementa', () => {
+  it('potomak gumba daje gumb, gumb daje sebe, a element bez fokusabilnog pretka daje null', () => {
+    document.body.innerHTML = `
+      <main id="workspace6" tabindex="-1">
+        <button id="gumb6">Tekst <span id="strelica6">&#8594;</span></button>
+        <div id="obicni6">Bez fokusa</div>
+        <button id="onemoguceni6" disabled>Ne moze <span id="strelica7">&#8594;</span></button>
+      </main>
+    `;
+    const gumb = document.getElementById('gumb6') as HTMLButtonElement;
+
+    expect(okidacKlika(document.getElementById('strelica6') as HTMLElement)).toBe(gumb);
+    expect(okidacKlika(gumb)).toBe(gumb);
+    // <main tabindex="-1"> nije tab-fokusabilan pa nije okidac; nema sto zapisati.
+    expect(okidacKlika(document.getElementById('obicni6') as HTMLElement)).toBeNull();
+    expect(okidacKlika(document.getElementById('strelica7') as HTMLElement)).toBeNull();
   });
 });

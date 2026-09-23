@@ -6,6 +6,29 @@
 let _modalReturnFocus: HTMLElement | null = null;
 let _modalDepth = 0;
 
+const FOKUSABILNI =
+  'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+/**
+ * CETVRTI ISPRAVAK (2026-09-23): zapis o kliku mora imenovati OKIDAC, ne bilo koji kliknuti cvor.
+ *
+ * Klik cesto pogodi POTOMKA gumba. U proizvodu: `<button data-finding-jump>Gdje: odlomak 7
+ * <span aria-hidden="true">&#8594;</span></button>` (`src/ui/finding-view-model.ts`,
+ * `src/ui/results/priority-findings.ts`); nad tom strelicom nema `pointer-events: none`, pa je
+ * legitimna meta klika koji otvara `#previewModal`. Preglednik tada fokusira sam GUMB, dakle
+ * PRETKA zapisanog `<span>`-a, sto je tocno oblik koji pravilo `focusin` ispod cuva. Bez ove
+ * normalizacije bi `trapModal` spremio `<span>`, a `releaseModal` bi zvao `span.focus()`, sto je
+ * u pregledniku no-op i fokus zavrsi na `<body>`.
+ *
+ * Zato se zapisuje najblizi TAB-fokusabilan predak (ili sam element ako je takav). Kad takvog
+ * pretka nema, zapisa nema: `trapModal` tada pada na `document.activeElement`, sto je bolje od
+ * pamcenja elementa koji fokus ionako ne moze primiti. `<main tabindex="-1">` namjerno NIJE
+ * okidac: programski je fokusabilan, ali nije meta tipkovnicke navigacije.
+ */
+export function okidacKlika(cilj: HTMLElement): HTMLElement | null {
+  return cilj.closest<HTMLElement>(FOKUSABILNI);
+}
+
 /**
  * ZADNJI ELEMENT NA KOJI JE KORISNIK KLIKNUO, GLOBALNO PRACEN (korak D, 2026-09-13).
  *
@@ -43,7 +66,7 @@ let _lastPointerTarget: HTMLElement | null = null;
 document.addEventListener(
   'pointerdown',
   (e) => {
-    if (e.target instanceof HTMLElement) _lastPointerTarget = e.target;
+    if (e.target instanceof HTMLElement) _lastPointerTarget = okidacKlika(e.target);
   },
   true,
 );
@@ -84,9 +107,7 @@ document.addEventListener('focusin', (e) => {
 
 export function modalFocusables(el: HTMLElement): HTMLElement[] {
   return [
-    ...el.querySelectorAll<HTMLElement>(
-      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])',
-    ),
+    ...el.querySelectorAll<HTMLElement>(FOKUSABILNI),
   ].filter((x) => x.offsetWidth || x.offsetHeight || x.getClientRects().length);
 }
 
