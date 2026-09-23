@@ -86,9 +86,25 @@ export function odredistaIzTrake(header: string): Array<{ id: string; href: stri
     .map((m) => ({ id: m[1], href: m[2], label: m[3] }));
 }
 
-function dom(html: string): Document {
+/** Kanonska poveznica stvarne stranice, iz `<link rel="canonical">` u njenom `<head>`. */
+function kanonskaOd(rel: string): string {
+  const html = read(rel);
+  const m = html.match(/<link rel="canonical" href="([^"]+)">/);
+  if (!m) throw new Error(`${rel}: nema <link rel="canonical">`);
+  return m[1]!;
+}
+
+/**
+ * `canonicalHref` je izostavljiv jer vecina testova ne ovisi o identitetu STRANICE, samo o
+ * markupu trake; `null` (zadano) ostavlja `<head>` prazan, pa `markActiveDestination` ne moze
+ * pogresno tvrditi "ovo JE ta stranica" (Z15 popravak F4). `document.head` se ovdje UVIJEK
+ * postavlja, ne samo kad je argument dan, jer test koji dodje NAKON testa sa kanonskim linkom
+ * bi ga inace naslijedio (isti `document` kroz cijeli list).
+ */
+function dom(html: string, canonicalHref: string | null = null): Document {
   document.documentElement.removeAttribute('data-theme');
   document.documentElement.removeAttribute('data-motion');
+  document.head.innerHTML = canonicalHref ? `<link rel="canonical" href="${canonicalHref}">` : '';
   document.body.innerHTML = html;
   return document;
 }
@@ -232,7 +248,7 @@ describe('Z15 koraci: model i primjena', () => {
 
 describe('Z15 kvacica: prati aktivno odrediste', () => {
   it('stranica pribora ima TOCNO jedno `aria-current="page"`, i to Pribor', () => {
-    const doc = dom(zaglavlje(read('alati.html')));
+    const doc = dom(zaglavlje(read('alati.html')), kanonskaOd('alati.html'));
     mountSiteChrome(doc);
     const aktivni = [...doc.querySelectorAll('[data-site-chrome-dest][aria-current="page"]')];
     // Dva su: jedan u traci, jedan u mobilnom listu; oba su ISTO odrediste.
@@ -243,6 +259,8 @@ describe('Z15 kvacica: prati aktivno odrediste', () => {
   });
 
   it('kvacica PUTUJE: promjena aktivnog odredista pomice metu', () => {
+    // Bez kanonske poveznice ovaj test namjerno ne tvrdi "page" naspram "true" (to je F4 test
+    // ispod); ovdje je predmet SAMO da se metu pomakne tocno jedno odrediste.
     const doc = dom(zaglavlje(read('alati.html')));
     const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]')!;
     const marker = doc.querySelector<HTMLElement>('[data-site-chrome-marker]')!;
@@ -250,7 +268,7 @@ describe('Z15 kvacica: prati aktivno odrediste', () => {
     expect(marker.dataset.siteChromeMarkerFor).toBe('tools');
     markActiveDestination(chrome, 'faculties');
     expect(marker.dataset.siteChromeMarkerFor).toBe('faculties');
-    expect([...doc.querySelectorAll('[data-site-chrome-dests] [aria-current="page"]')]
+    expect([...doc.querySelectorAll('[data-site-chrome-dests] [aria-current]')]
       .map((a) => a.getAttribute('data-site-chrome-dest'))).toEqual(['faculties']);
   });
 
@@ -265,13 +283,33 @@ describe('Z15 kvacica: prati aktivno odrediste', () => {
   });
 
   it('MUTACIJA: nepoznat identitet aktivnog odredista ne oznaci nista i ne pogodi pogresno', () => {
-    const doc = dom(zaglavlje(read('alati.html')));
+    const doc = dom(zaglavlje(read('alati.html')), kanonskaOd('alati.html'));
     const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]')!;
     markActiveDestination(chrome, 'nepostojece');
-    expect(doc.querySelectorAll('[aria-current="page"]')).toHaveLength(0);
+    expect(doc.querySelectorAll('[aria-current]')).toHaveLength(0);
     // BASELINE i kontrola smjera: poznat identitet i dalje oznaci tocno jedno odrediste u traci.
     markActiveDestination(chrome, 'tools');
     expect(doc.querySelectorAll('[data-site-chrome-dests] [aria-current="page"]')).toHaveLength(1);
+  });
+
+  /**
+   * F4 (Z15 popravak): `aria-current="page"` samo kad odrediste vodi BAS na ovu stranicu.
+   * Sest alat-stranica (citat, izjava, kartice, literatura, naslovnica, citati-i-literatura)
+   * dijeli `data-site-chrome-active="tools"` s `alati.html`, ali "Pribor" vodi NA `/alati.html`,
+   * ne na njih: prije popravka su sve dobivale "page", cega citac ekrana ne bi trebao tvrditi
+   * na sest razlicitih stranica istovremeno.
+   */
+  it('F4: sest alat-stranica dijeli odjeljak "tools" ali SAMO alati.html je "page"', () => {
+    for (const rel of ['citat.html', 'izjava.html', 'kartice.html', 'literatura.html', 'naslovnica.html', 'citati-i-literatura.html']) {
+      const doc = dom(zaglavlje(read('alati.html')), kanonskaOd(rel));
+      mountSiteChrome(doc);
+      const pribor = doc.querySelector('[data-site-chrome-dests] [data-site-chrome-dest="tools"]')!;
+      expect(pribor.getAttribute('aria-current'), `${rel}: "Pribor" ne bi smio tvrditi da je ova stranica`).toBe('true');
+      expect(doc.querySelectorAll('[aria-current="page"]'), rel).toHaveLength(0);
+    }
+    const nula = dom(zaglavlje(read('alati.html')), kanonskaOd('alati.html'));
+    mountSiteChrome(nula);
+    expect(nula.querySelector('[data-site-chrome-dests] [data-site-chrome-dest="tools"]')!.getAttribute('aria-current')).toBe('page');
   });
 });
 

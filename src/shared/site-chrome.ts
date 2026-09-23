@@ -159,19 +159,45 @@ function fillNotes(root: ParentNode): void {
 }
 
 /**
+ * PUTANJA TRENUTNE STRANICE, IZ `<link rel="canonical">`. Markup trake je isti predlozak na svih
+ * 13 stranica, pa `data-site-chrome-active="tools"` sam po sebi ne kaze JE LI ovo `/alati.html` ili
+ * jedna od sest alat-stranica koje isto pripadaju odjeljku "Pribor" a vode NA njega, ne jesu on.
+ * Kanonska poveznica je jedina vrijednost koja je vec razlicita po stranici bez dodirivanja HTML-a
+ * svake od njih (Z15 popravak F4).
+ */
+function trenutnaPutanja(doc: Document): string | null {
+  const href = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') ?? null;
+  if (!href) return null;
+  try { return new URL(href, 'https://lekta.invalid/').pathname; } catch { return null; }
+}
+
+/** Putanja odredista bez sidra/upita, u istom obliku kao `trenutnaPutanja`. */
+function putanjaOdredista(href: string): string {
+  return href.split('#')[0]!.split('?')[0]!;
+}
+
+/**
  * AKTIVNO ODREDISTE I KVACICA KOJA PUTUJE.
  *
  * `left` se racuna iz izmjerenih pravokutnika, pa je u pregledniku tocan, a u happy-domu nula.
  * Zato se uz stil upisuje i `data-site-chrome-marker-for`: identitet mete je ono sto se DA
  * provjeriti bez rasporeda, i tvrdnja "kvacica prati aktivno odrediste" ne ovisi o layout motoru.
+ *
+ * `aria-current="page"` SAMO kad odrediste vodi bas na OVU stranicu (kanonska putanja se poklapa
+ * s `href`-om, bez sidra); inace, dok je odjeljak aktivan, `aria-current="true"` kaze da stranica
+ * PRIPADA odjeljku, ne da je odrediste. Prije Z15 popravka je sest alat-stranica davalo "page" na
+ * "Pribor", iako link vodi na `/alati.html`, drugu stranicu (Z15 F4).
  */
 export function markActiveDestination(chrome: HTMLElement, active: string | null): void {
   const links = [...chrome.querySelectorAll<HTMLElement>('[data-site-chrome-dest]')];
+  const putanja = trenutnaPutanja(chrome.ownerDocument);
   let target: HTMLElement | null = null;
   for (const link of links) {
     const on = active !== null && link.dataset.siteChromeDest === active;
     if (on) {
-      link.setAttribute('aria-current', 'page');
+      const href = link.getAttribute('href');
+      const jeOvaStranica = putanja !== null && href !== null && putanjaOdredista(href) === putanja;
+      link.setAttribute('aria-current', jeOvaStranica ? 'page' : 'true');
       if (link.closest('[data-site-chrome-dests]')) target = link;
     } else {
       link.removeAttribute('aria-current');
