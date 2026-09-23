@@ -1,11 +1,24 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /** Provider-neutral task handoff. No process execution or queue writes here. */
 export const PROMPT_FILE_PLACEHOLDER = '__LEKTA_PROMPT_FILE__';
 
+function providerRegistryPath() {
+  try {
+    const here = new URL(import.meta.url);
+    if (here.protocol === 'file:') {
+      return fileURLToPath(new URL('../../config/agent-providers.json', here));
+    }
+  } catch {
+    // Mutation harness can load this module from a data: URL.
+  }
+  return resolve(process.cwd(), 'config/agent-providers.json');
+}
+
 const PROVIDER_REGISTRY = JSON.parse(
-  readFileSync(resolve(process.cwd(), 'config/agent-providers.json'), 'utf8'),
+  readFileSync(providerRegistryPath(), 'utf8'),
 );
 if (PROVIDER_REGISTRY?.schemaVersion !== 1 || !PROVIDER_REGISTRY?.agents) {
   throw new Error('Unsupported config/agent-providers.json contract');
