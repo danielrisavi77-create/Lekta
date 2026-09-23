@@ -70,7 +70,9 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     const result = run('run', 'T00', '--phase', 'plan', '--agent', 'astra', '--execute');
     expect(result.status).toBe(1);
     expect(JSON.parse(result.stdout).status).toBe('failed');
-    expect(readdirSync(join(root, '.artifacts/agents'))).toHaveLength(1);
+    const entries = readdirSync(join(root, '.artifacts/agents'));
+    expect(entries).toContain('usage.jsonl');
+    expect(entries.filter((name) => name.startsWith('T00-'))).toHaveLength(1);
   });
   it('retains the lock after a signal because child processes may still be alive', () => {
     const { root, run } = fixture('SIGTERM');
