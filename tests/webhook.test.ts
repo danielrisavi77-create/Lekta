@@ -73,6 +73,17 @@ describe('parseStripeEvent', () => {
     expect(ev.refundedCents).toBe(1699);
   });
 
+  it('charge.refunded bez payment_intent ne izmislja kljuc (ostaje prazan)', () => {
+    // Kljuc koji ne moze pogoditi nijedan entitlement lagao bi da je povrat proveden; Edge
+    // funkcija na prazan orderId vraca 400 i zapisuje failed, umjesto tihog 'refunded'.
+    const ev = parseStripeEvent({
+      type: 'charge.refunded',
+      livemode: true,
+      data: { object: { id: 'ch_bez_pi', amount: 500, amount_refunded: 500 } },
+    });
+    expect(ev.orderId).toBe('');
+  });
+
   it('djelomican povrat nosi manji refundedCents od totalCents', () => {
     const ev = parseStripeEvent({
       type: 'charge.refunded',

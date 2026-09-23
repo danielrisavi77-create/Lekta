@@ -116,7 +116,9 @@ export function parseStripeEvent(payload: StripeWebhookPayload): StripeEvent {
   const obj = payload.data?.object ?? {};
   const meta = obj.metadata ?? {};
   const isCharge = eventName.startsWith('charge.');
-  const orderId = String((isCharge ? obj.payment_intent : obj.id) ?? obj.payment_intent ?? obj.id ?? '');
+  // Kod naplate bez PaymentIntenta (naslijedjena izravna naplata) orderId ostaje PRAZAN, a ne
+  // charge id: kljuc koji ne moze pogoditi nijedan entitlement lagao bi da je povrat proveden.
+  const orderId = String((isCharge ? obj.payment_intent : (obj.id ?? obj.payment_intent)) ?? '');
   const refunded = eventName === 'charge.refunded' || obj.refunded === true;
   const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
   // PaymentIntent nosi stvarno naplaceno u `amount_received`; Charge ukupan iznos u `amount`.
