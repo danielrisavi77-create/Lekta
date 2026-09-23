@@ -196,6 +196,36 @@ class TickTest(unittest.TestCase):
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}), "astra")
 
+    def test_auto_provider_fallback_is_opt_in_and_zero_probe(self):
+        grok_only = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": False, "approved_models": ["gpt-6-astra", "gpt-5.6-sol"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet", "opus"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        wait = config(grokEnabled=True, implementerAgent="auto", providerFallback="wait")
+        self.assertIsNone(cli._agent_for(wait, "planning", {}, grok_only))
+        self.assertIsNone(cli._agent_for(wait, "implementing", {}, grok_only))
+        fallback = config(grokEnabled=True, implementerAgent="auto", providerFallback="authorized")
+        self.assertEqual(cli._agent_for(fallback, "planning", {}, grok_only), "grok")
+        self.assertEqual(cli._agent_for(fallback, "implementing", {}, grok_only), "build")
+
+    def test_review_router_never_uses_the_implementers_provider(self):
+        profile = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+                "claude": {"allowed": True, "approved_models": ["opus"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        cfg = config(grokEnabled=True, providerFallback="authorized")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}, profile), "astra")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}, profile), "grok")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "build"}, profile), "astra")
+
 
 
 QUEUE_FIXTURE = [
@@ -1275,20 +1305,70 @@ class BillingProfileTest(unittest.TestCase):
         self.assertFalse(changed["configuration_unchanged"])
         self.assertFalse(billing_allowed(changed))
 
-    def test_api_key_env_forces_api_auth(self):
-        doc = {"logins": {"codex": {"logged_in": True, "method": "chatgpt"}, "claude": {}}, "configFingerprint": "f", "observedAt": "t"}
-        old = os.environ.get("ANTHROPIC_API_KEY")
+    def test_api_credentials_block_only_their_provider(self):
+        doc = {
+            "logins": {
+                "codex": {"logged_in": True, "method": "chatgpt"},
+                "claude": {"logged_in": True, "method": "subscription"},
+            },
+            "tools": {},
+            "configFingerprint": "f", "observedAt": "t",
+        }
+        attest = {"extra_credits_disabled": True, "model_included": True,
+                  "models": ["gpt-6-astra", "sonnet"]}
+        from scripts.autonomy.policy import billing_allowed, provider_billing_allowed
+
+        before = os.environ.get("ANTHROPIC_API_KEY")
         os.environ["ANTHROPIC_API_KEY"] = "sk-ant-test"
         try:
-            prof = cli.build_billing_profile(doctor=doc, config=config(), attest={"extra_credits_disabled": True, "model_included": True}, previous={})
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
         finally:
-            if old is None:
+            if before is None:
                 del os.environ["ANTHROPIC_API_KEY"]
             else:
-                os.environ["ANTHROPIC_API_KEY"] = old
-        self.assertEqual(prof["effective_auth"], "api_key")
-        from scripts.autonomy.policy import billing_allowed
-        self.assertFalse(billing_allowed(prof))
+                os.environ["ANTHROPIC_API_KEY"] = before
+        self.assertTrue(billing_allowed(prof), "Codex account ostaje dopusten")
+        self.assertTrue(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(prof, "claude", "sonnet"))
+
+        before = os.environ.get("OPENAI_API_KEY")
+        os.environ["OPENAI_API_KEY"] = "sk-openai-test"
+        try:
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
+        finally:
+            if before is None:
+                del os.environ["OPENAI_API_KEY"]
+            else:
+                os.environ["OPENAI_API_KEY"] = before
+        self.assertFalse(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertTrue(provider_billing_allowed(prof, "claude", "sonnet"))
+
+    def test_grok_profile_requires_supported_cli_attestation_and_no_api_key(self):
+        doc = {
+            "logins": {"codex": {}, "claude": {}},
+            "tools": {"grok": {"available": True, "version": "grok 1.0.34"}},
+            "configFingerprint": "fg", "observedAt": "t",
+        }
+        attest = {"extra_credits_disabled": False, "model_included": False, "models": [],
+                  "grok_included": True, "grok_models": ["grok-4.6"]}
+        from scripts.autonomy.policy import provider_billing_allowed
+        prof = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        self.assertTrue(provider_billing_allowed(prof, "grok", "grok-4.6"))
+        old_doc = {**doc, "tools": {"grok": {"available": True, "version": "grok 1.0.33"}}}
+        self.assertFalse(provider_billing_allowed(
+            cli.build_billing_profile(doctor=old_doc, config=config(grokEnabled=True), attest=attest, previous={}),
+            "grok", "grok-4.6"))
+
+        before = os.environ.get("XAI_API_KEY")
+        os.environ["XAI_API_KEY"] = "xai-test"
+        try:
+            blocked = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        finally:
+            if before is None:
+                del os.environ["XAI_API_KEY"]
+            else:
+                os.environ["XAI_API_KEY"] = before
+        self.assertFalse(provider_billing_allowed(blocked, "grok", "grok-4.6"))
 
 
 class CliProcessTest(unittest.TestCase):

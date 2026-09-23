@@ -20,13 +20,23 @@ import sys
 import time
 from typing import Iterable
 
-from .policy import PolicyError, billing_allowed, canonical_path, path_escapes_root
+from .policy import PolicyError, provider_billing_allowed, canonical_path, path_escapes_root
+from .provider_config import GROK_MIN_VERSION
 
 VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blocked")
 
-SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_", "LEMONSQUEEZY_", "AWS_", "AZURE_")
+SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_",
+                       "LEMONSQUEEZY_", "AWS_", "AZURE_", "XAI_")
 SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
+CODEX_API_KEY_ENV = ("OPENAI_API_KEY",)
+# Grok radi iskljucivo na SuperGrok pretplatu (`grok login`); `XAI_API_KEY` bi CLI tiho prebacio na
+# naplatu po pozivu, pa je za Grok isto sto i ANTHROPIC_API_KEY za Claude: zabrana prije pokretanja.
+# Zivi posao uvijek nosi `command: "grok"` (oba aliasa, `grok` i `build`, dolaze iz istog polja u
+# `scripts/agents/core.mjs`); `build` je u popisu obrambeno, za slucaj da pozivatelj posalje ime aliasa.
+GROK_COMMANDS = ("grok", "build")
+GROK_API_KEY_ENV = ("XAI_API_KEY",)
+PROMPT_FILE_PLACEHOLDER = "__LEKTA_PROMPT_FILE__"
 
 QUOTA_RE = re.compile(r"(?i)rate.?limit|usage limit|quota|too many requests|\b429\b|overloaded|capacity")
 LOGIN_RE = re.compile(r"(?i)not logged in|login required|please (?:run|sign in|log in)|unauthori[sz]ed|\b401\b|invalid api key|authentication failed|session expired|token expired")
@@ -293,7 +303,7 @@ def successful_tool_calls(command: str, stdout: str) -> int | None:
     Popis je namjerno DENY (proza i greske), ne ALLOW (imena alata): allow lista bi na prvom preimenovanju
     stavke tiho pala na nulu i blokirala svaki ispravan rad, dakle gard koji gasi ono sto stiti.
     """
-    if command == "claude":
+    if command in ("claude", "grok", "build"):
         return None
     total = 0
     for event in ndjson_events(stdout):
@@ -528,9 +538,129 @@ def classify_stream(text: str) -> str | None:
     return None
 
 
+def _empty_usage() -> dict:
+    return {
+        "inputTokens": None, "cachedInputTokens": None, "cacheWriteInputTokens": None,
+        "outputTokens": None, "reasoningOutputTokens": None, "totalTokens": None,
+        "costUsd": None, "modelCalls": None,
+    }
+
+
+def _number(value):
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        return float(value) if isinstance(value, float) else int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _usage_fields(part: dict | None) -> dict:
+    part = part or {}
+    return {
+        "inputTokens": part.get("inputTokens", part.get("input_tokens")),
+        "cachedInputTokens": part.get("cachedInputTokens", part.get("cached_input_tokens",
+                             part.get("cacheReadInputTokens", part.get("cache_read_input_tokens")))),
+        "cacheWriteInputTokens": part.get("cacheWriteInputTokens", part.get("cache_write_input_tokens",
+                                part.get("cacheCreationInputTokens", part.get("cache_creation_input_tokens")))),
+        "outputTokens": part.get("outputTokens", part.get("output_tokens")),
+        "reasoningOutputTokens": part.get("reasoningOutputTokens", part.get("reasoning_output_tokens",
+                                  part.get("reasoning_tokens"))),
+        "totalTokens": part.get("totalTokens", part.get("total_tokens")),
+        "costUsd": part.get("costUsd", part.get("costUSD", part.get("total_cost_usd"))),
+        "modelCalls": part.get("modelCalls", part.get("model_calls")),
+    }
+
+
+def _merge_usage(*parts: dict | None) -> dict:
+    out = _empty_usage()
+    for part in parts:
+        if not isinstance(part, dict):
+            continue
+        for key, value in _usage_fields(part).items():
+            number = _number(value)
+            if number is not None and out[key] is None:
+                out[key] = number
+    if out["totalTokens"] is None and out["inputTokens"] is not None and out["outputTokens"] is not None:
+        out["totalTokens"] = out["inputTokens"] + out["outputTokens"]
+    return out
+
+
+def _sum_model_usage(model_usage) -> dict:
+    out = _empty_usage()
+    if not isinstance(model_usage, dict):
+        return out
+    for part in model_usage.values():
+        if not isinstance(part, dict):
+            continue
+        for key, value in _usage_fields(part).items():
+            if key == "totalTokens":
+                continue
+            number = _number(value)
+            if number is not None:
+                out[key] = (out[key] or 0) + number
+    if out["inputTokens"] is not None and out["outputTokens"] is not None:
+        out["totalTokens"] = out["inputTokens"] + out["outputTokens"]
+    return out
+
+
+def _parse_grok_output(stdout: str, out: dict) -> dict:
+    """Doslovno zrcalo grane `command === 'grok'` iz `parseResult` (scripts/agents/core.mjs).
+
+    Bez nje je zivi Grok uspjeh padao u codex granu: viseredni JSON obori `json.loads` po retku
+    (`neispravan ili truncirani JSON`), a jednoredni nema `turn.completed` (`codex bez turn.completed`).
+    Oba su ishoda verdict `failed`, pa bi kontroler USPJESAN posao ponavljao do `maxAttemptsPerTask`
+    i pritom trosio pretplatnicku kvotu.
+
+    Uvjeti su isti kao u JS-u: `--output-format json` daje JEDAN objekt (zadnji redak ako izlaz nosi
+    i prozu), uspjeh trazi neprazan `text`, `stopReason == "end_turn"`, cijeli `num_turns > 0` i
+    neprazan `modelUsage`, a svaki eksplicitan potpis greske obara presudu.
+
+    Dvije namjerne razlike prema JS-u, nijedna ne mijenja presudu:
+      - REDOSLIJED `reported_models` je sortiran, kao i u claude grani, jer `model_matches` gleda skup;
+      - retci se dijele `splitlines()` umjesto dijeljenja po znaku novog retka, pa CRLF izlaz ne
+        ostavi povratnik na kraju zadnjeg retka. `json.loads` bi ga svejedno progutao kao razmak,
+        dakle ista presuda; razlika je samo u tome sto se ne oslanja na oblik prijeloma.
+    """
+    text = stdout.strip()
+    try:
+        data = json.loads(text)
+    except ValueError:
+        lines = [line for line in text.splitlines() if line.strip()]
+        if not lines:
+            out["reason"] = "grok: prazan izlaz"
+            return out
+        data = json.loads(lines[-1])
+    if not isinstance(data, dict):
+        out["reason"] = "grok: izlaz nije JSON objekt"
+        return out
+    model_usage = data.get("modelUsage")
+    num_turns = data.get("num_turns")
+    current_success = (
+        isinstance(data.get("text"), str) and data["text"].strip() != ""
+        and data.get("stopReason") == "end_turn"
+        and isinstance(num_turns, int) and not isinstance(num_turns, bool) and num_turns > 0
+        and isinstance(model_usage, dict) and len(model_usage) > 0
+    )
+    if (not current_success or data.get("is_error") is True or data.get("ok") is False
+            or data.get("error") is not None
+            or str(data.get("subtype") or "").startswith("error")):
+        out["reason"] = "grok bez strukturiranog uspjeha ili s potpisom greske"
+        return out
+    reported = []
+    if isinstance(data.get("model"), str):
+        reported.append(data["model"])
+    reported.extend(model_usage.keys())
+    out["ok"] = True
+    out["reported_models"] = sorted(set(reported))
+    out["usage"] = _merge_usage(data.get("usage"), _sum_model_usage(model_usage),
+                                  {"costUsd": data.get("total_cost_usd")})
+    return out
+
+
 def parse_provider_output(command: str, stdout: str, exit_code: int | None) -> dict:
     """Zrcalo `parseResult` iz scripts/agents/core.mjs: uspjeh trazi strukturiran dokaz, ne samo exit 0."""
-    out = {"ok": False, "reported_models": [], "reason": None}
+    out = {"ok": False, "reported_models": [], "reason": None, "usage": _empty_usage()}
     if exit_code != 0:
         out["reason"] = f"exit_code={exit_code}"
         return out
@@ -539,13 +669,19 @@ def parse_provider_output(command: str, stdout: str, exit_code: int | None) -> d
             data = json.loads(stdout)
             out["ok"] = data.get("subtype") == "success" and data.get("is_error") is False
             out["reported_models"] = sorted((data.get("modelUsage") or {}).keys())
+            out["usage"] = _merge_usage(data.get("usage"), _sum_model_usage(data.get("modelUsage")),
+                                          {"costUsd": data.get("total_cost_usd", data.get("totalCostUSD"))})
             if not out["ok"]:
                 out["reason"] = f"claude subtype={data.get('subtype')}"
             return out
+        if command in GROK_COMMANDS:
+            return _parse_grok_output(stdout, out)
         events = [json.loads(line) for line in stdout.strip().splitlines() if line.strip()]
         types = {e.get("type") for e in events}
         out["ok"] = "turn.completed" in types and not ({"turn.failed", "error"} & types)
         out["reported_models"] = sorted({e["model"] for e in events if isinstance(e.get("model"), str)})
+        completed = next((e for e in reversed(events) if e.get("type") == "turn.completed"), None)
+        out["usage"] = _merge_usage(completed.get("usage") if isinstance(completed, dict) else None)
         if not out["ok"]:
             out["reason"] = "codex bez turn.completed ili s greskom"
         return out
@@ -570,42 +706,76 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
         "requested_model": job.get("requestedModel"), "reported_models": [], "exit_code": None,
         "process_tree_stopped": True, "isolated": None, "artifact_paths": [], "base_sha": job.get("baseSha"),
         "candidate_sha": None, "launcher": None, "duration_s": 0.0, "successful_tool_calls": None,
+        "usage": _empty_usage(), "provider_called": False, "attempt_spent": False,
     }
     if phase not in ("plan", "implement", "review"):
         result["reason"] = f"nepoznata faza: {phase}"
         return result
-    if not billing_allowed(profile):
-        result["reason"] = "billing_unknown: profil naplate nije potvrdjen"
-        return result
-    base_env = scrubbed_env(env)
     parent_env = os.environ if env is None else env
+    if job.get("command") == "codex" and any(parent_env.get(k) for k in CODEX_API_KEY_ENV):
+        result["reason"] = "api_key_present: OPENAI_API_KEY bi mogao prebaciti Codex na API billing"
+        return result
     if job.get("command") == "claude" and any(parent_env.get(k) for k in API_KEY_ENV):
-        result["reason"] = "api_key_present: ANTHROPIC_API_KEY bi prebacio naplatu na API"
+        result["reason"] = "api_key_present: Anthropic API credential bi prebacio naplatu na API"
+        return result
+    # Obrana u dubinu za Grok. `prepareJob` isti kljuc odbija u pretplatnickom nacinu, ali ovaj radnik
+    # moze dobiti posao i iz druge putanje, pa se ne oslanja na tudji gard. Ishod je verdict `blocked`,
+    # kao i za Claude: nijedna grana ove funkcije ne baca zbog okoline.
+    if job.get("command") in GROK_COMMANDS and any(parent_env.get(k) for k in GROK_API_KEY_ENV):
+        result["reason"] = "api_key_present: XAI_API_KEY bi Grok prebacio s pretplate na naplatu po pozivu"
         return result
     if job.get("command") == "claude" and str(job.get("requestedModel", "")).lower().startswith("fable") and not profile.get("fable_enabled"):
         result["reason"] = "fable_disabled: model nije u autonomnom profilu"
         return result
+    billing_command = "grok" if job.get("command") in GROK_COMMANDS else str(job.get("command"))
+    if not provider_billing_allowed(profile, billing_command, job.get("requestedModel")):
+        result["reason"] = f"billing_unknown: provider/model nije odobren ({billing_command} {job.get('requestedModel')})"
+        return result
+    base_env = scrubbed_env(env)
     launcher = resolve_launcher(str(job.get("command")))
     result["launcher"] = launcher
     if launcher["path"] is None:
         result["reason"] = f"launcher_missing: {job.get('command')}"
         return result
+    if job.get("command") == "grok":
+        try:
+            version_run = subprocess.run([launcher["path"], "version"], capture_output=True, text=True, timeout=15,
+                                         shell=False, check=False, env=base_env)
+            match = re.search(r"\b(\d+)\.(\d+)\.(\d+)\b", f"{version_run.stdout}\n{version_run.stderr}")
+            version = tuple(int(x) for x in match.groups()) if match else None
+        except (OSError, subprocess.TimeoutExpired):
+            version_run, version = None, None
+        if version_run is None or version_run.returncode != 0 or version is None or version < GROK_MIN_VERSION:
+            result["reason"] = f"unsupported_grok_version: {'.'.join(map(str, version)) if version else 'unknown'}"
+            return result
     argv = [launcher["path"], *[str(a) for a in job.get("args") or []]]
     if any("\n" in a or "\x00" in a for a in argv):
         result["reason"] = "argv sadrzi kontrolne znakove"
         return result
+    prompt_path = None
     if artifact_dir:
         os.makedirs(artifact_dir, exist_ok=True)
         prompt_path = os.path.join(artifact_dir, "prompt.md")
         with open(prompt_path, "w", encoding="utf-8") as fh:
             fh.write(str(job.get("prompt") or ""))
         result["artifact_paths"].append(prompt_path)
+    prompt_via_file = PROMPT_FILE_PLACEHOLDER in argv
+    if prompt_via_file:
+        if not prompt_path:
+            result["reason"] = "prompt_file_requires_artifact_dir"
+            return result
+        argv = [prompt_path if arg == PROMPT_FILE_PLACEHOLDER else arg for arg in argv]
+    if PROMPT_FILE_PLACEHOLDER in argv:
+        result["reason"] = "unsubstituted_prompt_file_placeholder"
+        return result
 
     tree = ProcessTree()
     stdout = stderr = ""
     timed_out = False
     try:
         popen = tree.start(argv, cwd=cwd, env=base_env, stdin_text=str(job.get("prompt") or ""))
+        result["provider_called"] = True
+        result["attempt_spent"] = True
         result["isolated"] = tree.isolated
         if not tree.isolated:
             tree.terminate_tree()
@@ -613,7 +783,8 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
             result["process_tree_stopped"] = False
             return result
         try:
-            stdout, stderr = popen.communicate(input=str(job.get("prompt") or "").encode("utf-8"), timeout=timeout_seconds)
+            stdin_payload = None if prompt_via_file else str(job.get("prompt") or "").encode("utf-8")
+            stdout, stderr = popen.communicate(input=stdin_payload, timeout=timeout_seconds)
             stdout = stdout.decode("utf-8", "replace")
             stderr = stderr.decode("utf-8", "replace")
         except subprocess.TimeoutExpired:
@@ -657,6 +828,7 @@ def run_phase(job: dict, phase: str, profile: dict, *, cwd: str, timeout_seconds
 
     parsed = parse_provider_output(str(job.get("command")), stdout, result["exit_code"])
     result["reported_models"] = parsed["reported_models"]
+    result["usage"] = parsed.get("usage") or _empty_usage()
     if not parsed["ok"]:
         result["verdict"] = "failed"
         result["reason"] = parsed["reason"]

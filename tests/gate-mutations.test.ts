@@ -40,6 +40,25 @@ import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
+import {
+  storeIdSecretProblems,
+  preflightSourceProblems,
+  refundClassificationProblems,
+  handlerOutcomes,
+  naplataRunbookProblems,
+  runbookSqlColumnProblems,
+  naplataDeployPathProblems,
+  readTextLf,
+} from './helpers/naplata-env';
+import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
+import { webhookHandlerProblems } from './helpers/webhook-handler-source';
+import {
+  naplataSecretsVerdict,
+  supabaseSecretsVerdict,
+  parseSupabaseSecretsList,
+  EMPTY_VALUE_DIGEST,
+} from '../scripts/verify-naplata-secrets.mjs';
+import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
@@ -2555,7 +2574,284 @@ const MUTATIONS: Mutation[] = [
       return files.length > 50 && migrationHygieneProblems(files).length === 0;
     },
   },
+
+  // --- naplata: tajne trgovine (blokeri lansiranja 2026-09-22) ---------------------------------
+  {
+    id: 'naplata/prazan-store-id',
+    imitates: 'Supabase secret LEMONSQUEEZY_STORE_ID postavljen na prazno: sucelje ga prikazuje kao postojeci, a acceptEvent svaku kupnju odbija s store_unverifiable i vraca 200, pa ni provider ne retryja',
+    caught: () =>
+      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '  ' })
+        .missing.includes('LEMONSQUEEZY_STORE_ID'),
+    cleanBefore: () =>
+      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '42' }).ok,
+  },
+  {
+    id: 'naplata/dva-imena-iste-tajne',
+    imitates: 'webhook-mor cita LS_STORE_ID a create-checkout LEMONSQUEEZY_STORE_ID: operater postavi jednu tajnu, checkout radi a webhook tiho odbija svaku placenu kupnju (stvarno stanje repozitorija do 2026-09-22)',
+    caught: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      const webhook = readTextLf(join(dir, 'webhook-mor', 'index.ts'));
+      const checkout = readTextLf(join(dir, 'create-checkout', 'index.ts'));
+      // MUTACIJA u memoriji: vrati staro ime u webhook-mor, disk se ne dira.
+      const mutated = webhook.replace("Deno.env.get('LEMONSQUEEZY_STORE_ID')", "Deno.env.get('LS_STORE_ID')");
+      if (mutated === webhook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return storeIdSecretProblems({ 'webhook-mor': mutated, 'create-checkout': checkout })
+        .some((p) => p.includes('LS_STORE_ID'));
+    },
+    cleanBefore: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      return storeIdSecretProblems({
+        'webhook-mor': readTextLf(join(dir, 'webhook-mor', 'index.ts')),
+        'create-checkout': readTextLf(join(dir, 'create-checkout', 'index.ts')),
+      }).length === 0;
+    },
+  },
+
+  // --- naplata: webhook ne smije sam odlucivati sto je placeno ---------------------------------
+  {
+    id: 'naplata/webhook-400-bez-user-id',
+    imitates: 'stvarno stanje handlera do 2026-09-22: `if (!ev.orderId || !ev.userId) return 400` PRIJE upisa u inbox, pa bi placena narudzba bez meta.custom_data.user_id nestala bez traga iako je novac naplacen',
+    caught: () => {
+      const src = webhookMorSource();
+      // MUTACIJA u memoriji: vrati tocan uvjet koji je stajao u izvoru. Disk se ne dira.
+      const mutated = src.replace('if (!ev.orderId) return json', 'if (!ev.orderId || !ev.userId) return json');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return webhookHandlerProblems(mutated).some((p) => p.includes('user_id'));
+    },
+    cleanBefore: () => {
+      const src = webhookMorSource();
+      return src.length > 2000 && webhookHandlerProblems(src).length === 0;
+    },
+  },
+  {
+    id: 'naplata/webhook-bez-klasifikatora',
+    imitates: 'odluka sto je placeno vracena u Edge funkciju: handler prestane zvati classifyLemonEvent, pa neplaceni order_created (status pending/failed) i subscription_* opet padnu u kupovnu granu',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.split('classifyLemonEvent(ev)').join("({ kind: 'paid' } as const)");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('classifyLemonEvent'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  {
+    id: 'naplata/preflight-mjeri-ljusku',
+    imitates: 'prva verzija preflighta (2026-09-22): citao je process.env, dakle ljusku operatera, a tajne koje webhook-mor koristi zive u Supabase Edge Functions Secretsima. Izvezena varijabla u terminalu davala je zeleno iako je tajna u projektu prazna, pa bi acceptEvent svaku kupnju odbio s store_unverifiable i vratio 200',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: vrati zadani put na citanje ljuske. Disk se ne dira.
+      const mutated = src.replace('const read = readSupabaseSecrets(projectRef);', 'const read = { ok: true, rows: process.env };');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return preflightSourceProblems(mutated).some((p) => p.includes('process.env'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return src.length > 2000 && preflightSourceProblems(src).length === 0;
+    },
+  },
+  {
+    id: 'naplata/supabase-secret-postavljen-na-prazno',
+    imitates: 'tajna postavljena na PRAZNO u Supabase sucelju: u popisu postoji, izgleda konfigurirano, a acceptEvent je vidi isto kao da je nema i odbija svaku kupnju s 200 bez retryja',
+    caught: () => {
+      const popis = parseSupabaseSecretsList(
+        [
+          '  MOR_WEBHOOK_SECRET | 11aa',
+          '  LEMONSQUEEZY_API_KEY | 22bb',
+          `  LEMONSQUEEZY_STORE_ID | ${EMPTY_VALUE_DIGEST}`,
+        ].join('\n'),
+      );
+      if (popis.length !== 3) return false; // parser nije procitao popis: baseline bi bio vakuum
+      return supabaseSecretsVerdict(popis).missing.some(
+        (m: { name: string; reason: string }) => m.name === 'LEMONSQUEEZY_STORE_ID' && m.reason === 'prazna',
+      );
+    },
+    cleanBefore: () =>
+      supabaseSecretsVerdict(
+        parseSupabaseSecretsList(
+          ['  MOR_WEBHOOK_SECRET | 11aa', '  LEMONSQUEEZY_API_KEY | 22bb', '  LEMONSQUEEZY_STORE_ID | 33cc'].join('\n'),
+        ),
+      ).ok,
+  },
+  {
+    id: 'naplata/povrat-po-zastavici-umjesto-po-imenu',
+    imitates: 'sirenje refund grane na zastavicu ev.refunded (medjuverzija 2026-09-22): parseLemonEvent ju racuna i iz attributes.status i iz attributes.refunded, pa bi subscription_payment_refunded, kojemu je data.id id pretplatnickog RACUNA a ne narudzbe, izvrsio update entitlements ... where order_id = <tudji id> i povukao referral nagrade po njemu; ishod bi bio processed, dakle nevidljiv svakom upitu iz runbooka',
+    caught: () => {
+      // MUTACIJA: zamijeni ODLUKU sirom verzijom (funkcija, ne tekst izvora).
+      const siroko = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
+        if (ev.refunded || ev.eventName === 'order_refunded') return { kind: 'refund' };
+        if (ev.eventName === 'order_created') {
+          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
+          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
+        }
+        return { kind: 'ignored', reason: 'nepodrzan_dogadjaj:x' };
+      };
+      return refundClassificationProblems(siroko, NOTABLE_IGNORE_PREFIXES)
+        .some((p) => p.includes('subscription_payment_refunded'));
+    },
+    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+  {
+    id: 'naplata/povrat-pod-drugim-imenom-tiho-odbacen',
+    imitates: 'druga krajnost istog izbora: vracen novac pod imenom koje nije order_refunded zavrsi kao obican nepodrzan_dogadjaj, dakle WARN u logu i redak koji nitko ne gleda, pa nitko ne sazna da je povrat stigao i nije obradjen',
+    caught: () => {
+      const tiho = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
+        if (ev.eventName === 'order_refunded') return { kind: 'refund' };
+        if (ev.eventName === 'order_created') {
+          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
+          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
+        }
+        return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName}` };
+      };
+      return refundClassificationProblems(tiho, NOTABLE_IGNORE_PREFIXES).some((p) => p.includes('TIHO'));
+    },
+    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+
+  {
+    id: 'naplata/ignored-grana-bez-loga',
+    imitates: 'grana ignored bez ijednog log retka: odluka pociva na usporedbi statusa s paid, pa bi promjena vrijednosti kod providera pretvorila SVAKU kupnju u 200 bez retryja, a jedini trag bio bi redak u webhook_events koji ne pokriva ni djelomicni indeks webhook_events_unresolved',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src
+        .replace("if (isNotableIgnore(decision)) console.error('webhook-mor ignored_needs_attention', detalji);", '')
+        .replace("else console.warn('webhook-mor ignored_foreign_event', detalji);", '');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes("grana 'ignored' nema log retka"));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  {
+    id: 'naplata/runbook-ne-imenuje-order-refunded',
+    imitates: 'stanje runbooka do 2026-09-23: korak 3 je rekao samo "u LS postavi webhook", bez popisa dogadjaja. Handler od tada prepoznaje povrat samo iz dogadjaja koji stigne, pa operater koji pretplati minimalan skup (order_created) dobije naplatu koja radi i povrate koji se nikad ne obrade: entitlement ostaje paid, referral nagrada se ne povuce, i to bez ijedne greske',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      // MUTACIJA u memoriji: makni ime dogadjaja iz runbooka. Disk se ne dira.
+      const mutated = runbook.split('`order_refunded`').join('povrat');
+      if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return naplataRunbookProblems(mutated, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
+        .some((p) => p.includes('order_refunded'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const outcomes = handlerOutcomes(webhookMorSource());
+      // outcomes stiti od vakuuma: prazan izvod bi dao "cist" runbook bez ijedne provjere ishoda.
+      return outcomes.length >= 4
+        && naplataRunbookProblems(runbook, outcomes, IGNORE_REASON_PREFIXES).length === 0;
+    },
+  },
+  {
+    id: 'naplata/ishod-bez-retka-u-runbooku',
+    imitates: 'nov ishod u webhook_events koji trazi ljudsku radnju, a nigdje nije opisan: tocno stanje ishoda needs_manual_link do 2026-09-23, koji uz to ne ulazi ni u djelomicni indeks webhook_events_unresolved pa ga ni standardni upit nad neobradjenima ne vraca',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      // MUTACIJA: handler pocne pisati ishod koji runbook ne poznaje.
+      return naplataRunbookProblems(
+        runbook,
+        [...handlerOutcomes(webhookMorSource()), 'nov_ishod'],
+        IGNORE_REASON_PREFIXES,
+      ).some((p) => p.includes('nov_ishod'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      return naplataRunbookProblems(runbook, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
+        .length === 0;
+    },
+  },
+
+  {
+    id: 'naplata/runbook-upit-po-nepostojecem-stupcu',
+    imitates: 'stvarno stanje runbooka do 2026-09-23: oba upita u sekciji 5.1 citala su i sortirala po created_at, stupcu kojeg webhook_events nema (0092 ima received_at). Operater bi umjesto popisa placenih narudzbi bez prava pristupa dobio ERROR 42703, a bas ti upiti su jedina zamjena za djelomicni indeks koji ishod needs_manual_link ne pokriva',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const migracija = readTextLf(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'),
+      );
+      // MUTACIJA u memoriji: vrati ime stupca koje je ondje stajalo. Disk se ne dira.
+      const mutated = runbook.split('received_at').join('created_at');
+      if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return runbookSqlColumnProblems(mutated, migracija).some((p) => p.includes('created_at'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const migracija = readTextLf(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'),
+      );
+      return runbookSqlColumnProblems(runbook, migracija).length === 0;
+    },
+  },
+  {
+    id: 'naplata/deploy-zaobilazi-preflight',
+    imitates: 'stvarno stanje do 2026-09-23: runbook je deploy naplate slao na goli `supabase functions deploy webhook-mor`, a preflight je bio zaseban redak koji se moglo preskociti. Preskocen korak znaci deploy s praznim LEMONSQUEEZY_STORE_ID, a acceptEvent je fail-closed: svaka kupnja dobije refused i 200 bez retryja',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pkg = JSON.parse(readTextLf(resolve(process.cwd(), 'package.json')));
+      const preflight = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: vrati goli CLI poziv u runbook. `runbook` je vec normaliziran na LF
+      // (readTextLf), pa doslovni `\n` u uzorku pogadja redak i u checkoutu s core.autocrlf=true
+      // (izmjereno 2026-09-23: bez normalizacije ovaj `.replace` s CRLF izvorom ne pogodi nista, pa
+      // `mutated === runbook` i test padne na `not.toBe`, prije nego se uopce stigne do garda).
+      const mutated = runbook.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n');
+      if (mutated === runbook) return false;
+      return naplataDeployPathProblems(mutated, pkg, preflight).some((p) => p.includes('zaobilazi preflight'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pkg = JSON.parse(readTextLf(resolve(process.cwd(), 'package.json')));
+      const preflight = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return naplataDeployPathProblems(runbook, pkg, preflight).length === 0;
+    },
+  },
+  {
+    id: 'naplata/preflight-zove-goli-supabase',
+    imitates: 'stvarno stanje preflighta do 2026-09-23: spawnSync s golim imenom iz PATH-a, dok repo CLI isporucuje kao devDependency. Izmjereno: exit 1 uz "supabase is not recognized" JEDNAKO i kad su tajne ispravne i kad su prazne, pa gard ne razlikuje dva stanja koja mjeri i nauci operatera da ga preskoci',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: vrati goli poziv iz PATH-a.
+      const mutated = src.replace('const res = runSupabase(args);', "const res = spawnSync('supabase', args);");
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return preflightSourceProblems(mutated).some((p) => p.includes('PATH'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return src.length > 2000 && preflightSourceProblems(src).length === 0;
+    },
+  },
+
+  // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------
+  {
+    id: 'rls/corpus-contributions-update-own',
+    imitates: 'policy corpus_contributions_update_own iz 0102: korisnik s vlastitim JWT-om mogao je PostgREST PATCH-em prepisati path, expires_at, consent_version i pseudonymization, dakle sam zapis o tome pod kojom je privolom sto pohranjeno',
+    caught: () => {
+      const files = corpusMigrations();
+      // MUTACIJA u memoriji: makni 0203 iz POPISA (disk se ne dira). To je zatečeno stanje
+      // repozitorija prije ove promjene, pa tvrdnja nije o izmisljenom kvaru.
+      const bez0203 = files.filter((m) => !m.file.startsWith('0203_'));
+      if (bez0203.length !== files.length - 1) return false;
+      return parseCorpusPolicyHistory(bez0203).remaining.includes('corpus_contributions_update_own');
+    },
+    cleanBefore: () => {
+      const history = parseCorpusPolicyHistory(corpusMigrations());
+      // createdCount stiti od vakuuma: pokvaren izvod bi dao prazan skup i "cist" baseline.
+      return history.createdCount >= 2 && history.remaining.length === 0;
+    },
+  },
 ];
+
+/** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
+function webhookMorSource(): string {
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'index.ts'));
+}
+
+/** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
+function corpusMigrations(): MigrationFile[] {
+  const dir = resolve(process.cwd(), 'supabase', 'migrations');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((file) => ({ file, sql: readTextLf(join(dir, file)) }));
+}
 
 /** Tri stavke za C6 mutacije; `violated` uvijek boolean, kako to graditelji i vracaju. */
 function C6_ITEMS() {
@@ -2642,5 +2938,299 @@ describe('agent workflow guards', () => {
     queue.tasks[1].status = 'in_review';
     expect(() => prepareJob(queue, 'T01', 'review', 'astra')).not.toThrow();
     expect(() => prepareJob(queue, 'T01', 'review', 'fable', 2)).toThrow(/different provider/);
+  });
+});
+
+/**
+ * GROK U PRETPLATNICKOM PROFILU (odluka vlasnika 2026-09-21).
+ *
+ * Stvarni kvar koji se imitira: runner je Grok drzao IZVAN pretplatnickog profila, a autonomni
+ * kontroler uvijek salje `--subscription`, pa Grok u autonomnom lancu nije mogao raditi uopce.
+ * Otvaranje profila ima cijenu: `XAI_API_KEY` u okolini bi CLI tiho prebacio s pretplate na naplatu
+ * po pozivu, sto je bas ono sto odluka zabranjuje. Zato su ovdje tri mutacije, svaka nad jednim
+ * gardom, uz baseline tvrdnju da nemutiran ulaz prolazi cist.
+ */
+describe('mutacije: Grok pretplatnicki profil', () => {
+  const grokQueue = () => ({ tasks: [
+    { id: 'T00', title: 'Baseline', status: 'done', dependsOn: [] },
+    { id: 'T01', title: 'Fix', status: 'ready', dependsOn: ['T00'] },
+  ] });
+  const XAI_ENV = { XAI_API_KEY: 'xai-placeholder-nije-pravi-kljuc' };
+
+  /** Tvrdnja koju cuva tocka 1: profil iskljucuje samo Fable. */
+  const excludedListProblems = (list: readonly string[]): string[] => {
+    const problems: string[] = [];
+    if (list.includes('grok') || list.includes('build')) problems.push('Grok alias iskljucen iz pretplate');
+    if (!list.includes('fable')) problems.push('Fable nije iskljucen');
+    return problems;
+  };
+
+  /** Tvrdnja koju cuva tocka 2: u pretplatnickom nacinu postavljen xAI kljuc obara pripremu. */
+  type PrepareJobFn = (
+    queue: unknown, id: string, phase: string, agent: string,
+    budget: undefined, options: Record<string, unknown>,
+  ) => unknown;
+  const refusesXaiKey = (prepare: PrepareJobFn): boolean => {
+    for (const [phase, agent] of [['plan', 'grok'], ['implement', 'build']] as const) {
+      let threw = false;
+      try {
+        prepare(grokQueue(), 'T01', phase, agent, undefined, { billingMode: 'subscription', env: XAI_ENV });
+      } catch {
+        threw = true;
+      }
+      if (!threw) return false;
+    }
+    return true;
+  };
+
+  /** Tvrdnja koju cuva tocka 3: zivi oblik greske nije uspjeh ni kad je izlazni kod 0. */
+  type ParseResultFn = (command: string, stdout: string, exitCode: number) => { ok: boolean };
+  const liveError = () => readFileSync(resolve(process.cwd(), 'tests/fixtures/agents/grok-error.json'), 'utf8');
+  const liveSuccess = () => readFileSync(resolve(process.cwd(), 'tests/fixtures/agents/grok-success.json'), 'utf8');
+  /**
+   * Snimak greske je viseredan (JSON redak pa plain-text rep CLI-ja), pa se mjeri i SAM JSON redak.
+   * Bez toga bi svaki naivni parser prolazio slucajno: cijeli tekst nije JSON, pa bi i on pao na
+   * `JSON.parse`. Tvrdnja mora drzati i za oblik koji je `--output-format json` obecao dati sam.
+   */
+  const liveErrorJsonLine = () => {
+    const line = liveError().split(/\r?\n/).find((candidate) => candidate.trim().length > 0);
+    if (!line) throw new Error('fixture greske je prazna');
+    return line;
+  };
+  const judgesLiveShapes = (parse: ParseResultFn): boolean =>
+    parse('grok', liveSuccess(), 0).ok === true
+    && parse('grok', liveError(), 1).ok === false
+    && parse('grok', liveError(), 0).ok === false
+    && parse('grok', liveErrorJsonLine(), 0).ok === false;
+
+  it('(a) popis iskljucenih koji opet sadrzi grok obara tvrdnju', async () => {
+    const { SUBSCRIPTION_EXCLUDED_AGENTS } = await import('../scripts/agents/core.mjs');
+    // BASELINE: stvarni popis je cist.
+    expect(excludedListProblems(SUBSCRIPTION_EXCLUDED_AGENTS)).toEqual([]);
+    expect([...SUBSCRIPTION_EXCLUDED_AGENTS]).toEqual(['fable']);
+    // MUTACIJA: povratak na stari popis.
+    expect(excludedListProblems(['fable', 'grok', 'build'])).toEqual(['Grok alias iskljucen iz pretplate']);
+    expect(excludedListProblems(['fable', 'grok'])).not.toEqual([]);
+    // Kontramutacija: brisanje Fablea iz popisa se takoder mora vidjeti.
+    expect(excludedListProblems([])).toContain('Fable nije iskljucen');
+  });
+
+  it('(b) prepareJob koji propusta posao uz postavljen XAI_API_KEY obara tvrdnju', async () => {
+    const { prepareJob } = await import('../scripts/agents/core.mjs');
+    // BASELINE: stvarni prepareJob odbija kljuc, a bez kljuca uredno pripremi posao.
+    expect(refusesXaiKey(prepareJob as PrepareJobFn)).toBe(true);
+    expect(() => prepareJob(grokQueue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription', env: {} }))
+      .not.toThrow();
+    // MUTACIJA (na razini POZIVA, ne garda): okolina s kljucem zamijenjena praznom. Ne opisuje
+    // izmjenu u `core.mjs` nego dokazuje da tvrdnja `refusesXaiKey` mjeri SADRZAJ okoline, a ne
+    // puku cinjenicu da poziv prodje. Gard koji bi env samo ignorirao hvata mutacija ispod.
+    const mutantEmptyEnvAtCallSite: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
+      (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget, { ...options, env: {} });
+    expect(refusesXaiKey(mutantEmptyEnvAtCallSite)).toBe(false);
+    // MUTACIJA: gard vezan uz ime agenta umjesto uz providera, pa alias `build` prodje.
+    const mutantOnlyGrokAlias: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
+      (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget,
+        agent === 'grok' ? options : { ...options, env: {} });
+    expect(refusesXaiKey(mutantOnlyGrokAlias)).toBe(false);
+  });
+
+  /**
+   * (b2) NALAZ PREGLEDA 2026-09-22. Gard u `core.mjs` cita okolinu kroz `options.env ?? process.env`.
+   * Svi testovi su `env` predavali eksplicitno, pa je mutacija `?? {}` ostavljala 144/144 zeleno, a
+   * bas ta zadana grana je jedina koja radi u produkciji: `scripts/agents/cli.mjs` zove
+   * `prepareJob(..., { billingMode })` bez `env`, kao i `prepare_job_via_node` iz `worker.py`.
+   *
+   * Zato ova tvrdnja NE predaje `options.env`, nego postavlja stvarni `process.env.XAI_API_KEY` i
+   * vraca ga u `finally`. Mutant je doslovno `options.env ?? {}`.
+   */
+  it('(b2) zadana okolina koja nije process.env obara tvrdnju', async () => {
+    const { prepareJob } = await import('../scripts/agents/core.mjs');
+    /** Poziva se BEZ `options.env`, dakle kroz zadanu granu garda. */
+    const refusesAmbientXaiKey = (prepare: PrepareJobFn): boolean => {
+      const before = process.env.XAI_API_KEY;
+      try {
+        process.env.XAI_API_KEY = XAI_ENV.XAI_API_KEY;
+        for (const [phase, agent] of [['plan', 'grok'], ['implement', 'build']] as const) {
+          let threw = false;
+          try {
+            prepare(grokQueue(), 'T01', phase, agent, undefined, { billingMode: 'subscription' });
+          } catch {
+            threw = true;
+          }
+          if (!threw) return false;
+        }
+        return true;
+      } finally {
+        if (before === undefined) delete process.env.XAI_API_KEY;
+        else process.env.XAI_API_KEY = before;
+      }
+    };
+    // BASELINE: bez kljuca u stvarnoj okolini posao se priprema, s kljucem baca.
+    const before = process.env.XAI_API_KEY;
+    try {
+      delete process.env.XAI_API_KEY;
+      expect(() => prepareJob(grokQueue(), 'T01', 'plan', 'grok', undefined, { billingMode: 'subscription' }))
+        .not.toThrow();
+    } finally {
+      if (before === undefined) delete process.env.XAI_API_KEY;
+      else process.env.XAI_API_KEY = before;
+    }
+    expect(refusesAmbientXaiKey(prepareJob as PrepareJobFn)).toBe(true);
+    // MUTACIJA: `const env = options.env ?? {}` umjesto `?? process.env`.
+    const mutantDefaultsToEmpty: PrepareJobFn = (queue, id, phase, agent, budget, options) =>
+      (prepareJob as PrepareJobFn)(queue, id, phase, agent, budget,
+        { ...options, env: (options as { env?: Record<string, string> }).env ?? {} });
+    expect(refusesAmbientXaiKey(mutantDefaultsToEmpty)).toBe(false);
+    // Kontrola: okolina je vracena u zateceno stanje.
+    expect(process.env.XAI_API_KEY).toBe(before);
+  });
+
+  it('(c) parser koji zivu gresku proglasi uspjehom obara tvrdnju', async () => {
+    const { parseResult } = await import('../scripts/agents/core.mjs');
+    // BASELINE: stvarni parser presudi oba ziva oblika tocno.
+    expect(judgesLiveShapes(parseResult as ParseResultFn)).toBe(true);
+    // MUTACIJA: naivni parser "svaki parseable JSON bez is_error je uspjeh". Fallback na zadnji redak
+    // je isti kao u stvarnom parseru, pa je jedina razlika izostanak dokaza uspjeha.
+    const mutantNaive: ParseResultFn = (_command, stdout, exitCode) => {
+      if (exitCode !== 0) return { ok: false };
+      const text = stdout.trim();
+      let parsed: { is_error?: boolean } | null = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        const lines = text.split('\n').filter(Boolean);
+        try {
+          parsed = JSON.parse(lines[lines.length - 1]);
+        } catch {
+          return { ok: false };
+        }
+      }
+      return { ok: parsed?.is_error !== true };
+    };
+    expect(mutantNaive('grok', liveErrorJsonLine(), 0).ok).toBe(true);
+    expect(judgesLiveShapes(mutantNaive)).toBe(false);
+    // MUTACIJA: parser koji gleda samo izlazni kod.
+    const mutantExitCodeOnly: ParseResultFn = (_command, _stdout, exitCode) => ({ ok: exitCode === 0 });
+    expect(judgesLiveShapes(mutantExitCodeOnly)).toBe(false);
+  });
+
+  /**
+   * (d) Cetvrta mutacija dolazi iz stvarnog nalaza pregleda 2026-09-22: prva inacica ove fixture
+   * bila je hibrid ZIVE SHEME i rucno napisanih brojki (`total_cost_usd: 0.0148` uz
+   * `total_cost_usd_ticks: 148`). Shema je bila tocna, pa su svi tadasnji testovi bili zeleni, a
+   * fixture je ipak lagala o mjerenju. Lijek je tvrdnja koja ne gleda samo imena polja nego i
+   * internu relaciju brojki: tick je 1e-10 USD, pa `ticks` mora biti `USD * 1e10`. Rucno
+   * zaokruzena cijena tu relaciju krsi za sedam redova velicine i odmah se vidi.
+   */
+  it('(d) fixture s rucno napisanim brojkama umjesto izmjerenih obara tvrdnju', () => {
+    type CostShape = { total_cost_usd: number; total_cost_usd_ticks: number };
+    const costProblems = (raw: string): string[] => {
+      const parsed = JSON.parse(raw) as CostShape;
+      const problems: string[] = [];
+      if (typeof parsed.total_cost_usd !== 'number' || typeof parsed.total_cost_usd_ticks !== 'number') {
+        problems.push('cijena nije brojcana');
+        return problems;
+      }
+      if (Math.round(parsed.total_cost_usd * 1e10) !== parsed.total_cost_usd_ticks) {
+        problems.push('ticks ne odgovaraju USD x 1e10, dakle brojka nije izmjerena');
+      }
+      return problems;
+    };
+    // BASELINE: commitana fixture nosi izmjerene brojke.
+    expect(costProblems(liveSuccess())).toEqual([]);
+    // MUTACIJA: doslovno one vrijednosti koje je pregled uhvatio kao izmisljene.
+    const handWritten = JSON.stringify({
+      ...JSON.parse(liveSuccess()), total_cost_usd: 0.0148, total_cost_usd_ticks: 148,
+    });
+    expect(costProblems(handWritten)).toEqual(['ticks ne odgovaraju USD x 1e10, dakle brojka nije izmjerena']);
+    // Kontramutacija: i sama cijena promijenjena uz zadrzane stare tickove se vidi.
+    const bumpedUsd = JSON.stringify({ ...JSON.parse(liveSuccess()), total_cost_usd: 0.02 });
+    expect(costProblems(bumpedUsd)).not.toEqual([]);
+  });
+});
+
+/**
+ * MUTACIJE ZA GRANU GROKA U PYTHON ZRCALU PRESUDE.
+ *
+ * Nalaz pregleda 2026-09-22 bio je da fixture prikivaju samo JS `parseResult`, dok u autonomnom lancu
+ * presudjuje `parse_provider_output` iz `scripts/autonomy/worker.py`, koje nije imalo granu za Grok.
+ * Kvar je zatvoren 2026-09-23: zrcalo sada grana na `GROK_COMMANDS` i zove `_parse_grok_output`.
+ * Ponasanje te grane mjere python testovi (`scripts/autonomy/tests/test_worker_grok.py`); oni se ne
+ * vrte u `npm run check`, pa `tests/agent-workflow.test.ts` strukturno tvrdi da grana POSTOJI.
+ * Ovdje se dokazuje da ta tvrdnja grize u OBA smjera: mora vidjeti kad grana nestane iz tijela
+ * funkcije i ne smije je spasiti spomen rijeci `grok` bilo gdje drugdje u datoteci.
+ */
+describe('mutacije: grana Groka u python zrcalu presude', () => {
+  const workerSource = () => readFileSync(resolve(process.cwd(), 'scripts/autonomy/worker.py'), 'utf8');
+
+  /** Isti strukturni izdvajac kakav koristi gard: od `def` funkcije do sljedece `def` u nultom stupcu. */
+  const bodyOf = (source: string, name = 'parse_provider_output'): string | null => {
+    const lines = source.split(/\r?\n/);
+    const start = lines.findIndex((line) => line.startsWith(`def ${name}(`));
+    if (start === -1) return null;
+    const rest = lines.slice(start + 1);
+    const end = rest.findIndex((line) => line.startsWith('def '));
+    return (end === -1 ? rest : rest.slice(0, end)).join('\n');
+  };
+
+  /** Gard: vraca popis problema. Prazan popis znaci "zrcalo presudjuje Grok kao JS strana". */
+  const mirrorProblems = (source: string): string[] => {
+    const body = bodyOf(source);
+    if (body === null) return ['funkcija parse_provider_output nije pronadjena'];
+    const problems: string[] = [];
+    if (!body.includes('command == "claude"')) problems.push('nema grane za claude');
+    if (!body.includes('turn.completed')) problems.push('nema codex uvjeta turn.completed');
+    if (!body.includes('command in GROK_COMMANDS')) problems.push('nema grane za Grok');
+    if (!body.includes('_parse_grok_output')) problems.push('grana za Grok ne zove zrcalo parsera');
+    const grok = bodyOf(source, '_parse_grok_output');
+    if (grok === null) problems.push('funkcija _parse_grok_output nije pronadjena');
+    else if (!grok.includes('end_turn') || !grok.includes('modelUsage')) {
+      problems.push('zrcalo Groka ne trazi strukturiran dokaz uspjeha');
+    }
+    return problems;
+  };
+
+  it('(e) zrcalo koje izgubi granu za Grok obara tvrdnju', () => {
+    const source = workerSource();
+    // BASELINE: stvarno stanje na disku prolazi cisto.
+    expect(mirrorProblems(source)).toEqual([]);
+    // MUTACIJA: povratak na stanje prije popravka, dakle grana izbacena iz tijela funkcije.
+    const regressed = source.replace(/ {8}if command in GROK_COMMANDS:\r?\n {12}return _parse_grok_output\(stdout, out\)\r?\n/,
+      '');
+    expect(regressed).not.toBe(source);
+    expect(mirrorProblems(regressed)).toEqual(['nema grane za Grok', 'grana za Grok ne zove zrcalo parsera']);
+    // MUTACIJA: grana ostaje, ali je tijelo zrcala zamijenjeno vakuumskim uspjehom bez dokaza.
+    const gutBody = (src: string, name: string): string => {
+      const lines = src.split(/\r?\n/);
+      const start = lines.findIndex((line) => line.startsWith(`def ${name}(`));
+      expect(start).toBeGreaterThan(-1);
+      const rest = lines.slice(start + 1);
+      const end = rest.findIndex((line) => line.startsWith('def '));
+      const bodyLength = end === -1 ? rest.length : end;
+      return [
+        ...lines.slice(0, start + 1), '    out["ok"] = True', '    return out', '', '',
+        ...lines.slice(start + 1 + bodyLength),
+      ].join('\n');
+    };
+    const gutted = gutBody(source, '_parse_grok_output');
+    expect(gutted).not.toBe(source);
+    expect(mirrorProblems(gutted)).toEqual(['zrcalo Groka ne trazi strukturiran dokaz uspjeha']);
+    // MUTACIJA: preimenovana funkcija ne smije proci kao "sve je na mjestu" (vakuumsko zeleno).
+    const renamed = source.replace('def parse_provider_output(', 'def parse_provider_output_v2(');
+    expect(renamed).not.toBe(source);
+    expect(mirrorProblems(renamed)).toEqual(['funkcija parse_provider_output nije pronadjena']);
+  });
+
+  it('(f) gard koji gleda cijelu datoteku umjesto tijela funkcije daje lazno zeleno', () => {
+    const source = workerSource();
+    // Grana izbacena iz tijela, ali rijec `grok` i dalje stoji drugdje u datoteci (komentari, konstante).
+    const regressed = source.replace(/ {8}if command in GROK_COMMANDS:\r?\n {12}return _parse_grok_output\(stdout, out\)\r?\n/,
+      '');
+    expect(regressed).toContain('GROK_COMMANDS = ("grok", "build")');
+    // Stvarni gard vidi regresiju, jer gleda tijelo funkcije.
+    expect(mirrorProblems(regressed)).not.toEqual([]);
+    // MUTANT: naivni gard nad cijelom datotekom bi ovdje pogresno javio da je sve u redu.
+    const naive = (src: string): string[] => (src.toLowerCase().includes('grok') ? [] : ['nema grane za Grok']);
+    expect(naive(regressed)).toEqual([]);
   });
 });
