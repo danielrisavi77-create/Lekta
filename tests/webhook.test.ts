@@ -2,8 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { createHmac } from 'node:crypto';
 
 import {
-  parseLemonEvent,
-  verifyLemonSignature,
+  parseStripeEvent,
+  parseStripeSignatureHeader,
+  verifyStripeSignature,
+  STRIPE_SIGNATURE_TOLERANCE_SECONDS,
+  STRIPE_HANDLED_EVENTS,
   isoAfterDays,
   isPassProduct,
   makePassCouponCode,
@@ -11,73 +14,173 @@ import {
   buildEntitlementInsert,
   acceptEvent,
   isFullRefund,
-  type LemonWebhookPayload,
+  type StripeWebhookPayload,
 } from '../src/report/webhook';
 
-describe('parseLemonEvent', () => {
-  it('order_created: izvlaci orderId, userId, variantId (mor_product_id)', () => {
-    const payload: LemonWebhookPayload = {
-      meta: { event_name: 'order_created', custom_data: { user_id: 'u1', product_id: 'slot_diplomski' } },
-      data: { id: 999, attributes: { status: 'paid', first_order_item: { variant_id: 555 } } },
+describe('parseStripeEvent', () => {
+  it('payment_intent.succeeded: orderId je PaymentIntent id, metadata daje korisnika i proizvod', () => {
+    const payload: StripeWebhookPayload = {
+      type: 'payment_intent.succeeded',
+      livemode: true,
+      data: {
+        object: {
+          id: 'pi_123',
+          amount: 999,
+          amount_received: 999,
+          currency: 'eur',
+          metadata: { user_id: 'u1', product_id: 'slot_diplomski' },
+        },
+      },
     };
-    expect(parseLemonEvent(payload)).toEqual({
-      eventName: 'order_created',
-      orderId: '999',
+    expect(parseStripeEvent(payload)).toEqual({
+      eventName: 'payment_intent.succeeded',
+      orderId: 'pi_123',
       userId: 'u1',
-      variantId: '555',
+      productId: 'slot_diplomski',
       referralCode: '',
       refunded: false,
-      // Polja porijekla i iznosa (audit PAY-03..05, PAY-09). Kad ih payload ne nosi, moraju biti
-      // prazna/null, NIKAD izmisljena vrijednost: `acceptEvent` na temelju praznog storeId odbija
-      // dogadjaj, a to je ispravno, jer neprovjerljivo porijeklo nije isto sto i ispravno.
-      storeId: '',
+      livemode: true,
       testMode: false,
-      totalCents: null,
+      accountId: '',
+      totalCents: 999,
       refundedCents: null,
-      currency: '',
+      currency: 'EUR',
     });
   });
-  it('izvlaci referral_code iz custom_data', () => {
-    const payload: LemonWebhookPayload = {
-      meta: { event_name: 'order_created', custom_data: { user_id: 'u1', referral_code: 'PART-9' } },
-      data: { id: 1, attributes: { first_order_item: { variant_id: 5 } } },
+
+  it('izvlaci referral_code iz metadata', () => {
+    const payload: StripeWebhookPayload = {
+      type: 'payment_intent.succeeded',
+      livemode: true,
+      data: { object: { id: 'pi_1', metadata: { user_id: 'u1', referral_code: 'PART-9' } } },
     };
-    expect(parseLemonEvent(payload).referralCode).toBe('PART-9');
+    expect(parseStripeEvent(payload).referralCode).toBe('PART-9');
   });
-  it('order_refunded -> refunded true', () => {
-    const payload: LemonWebhookPayload = {
-      meta: { event_name: 'order_refunded', custom_data: { user_id: 'u1' } },
-      data: { id: 999, attributes: { status: 'refunded' } },
+
+  it('charge.refunded: orderId je payment_intent iz naplate, ne charge id', () => {
+    // KLJUCNO: uplata i njezin povrat moraju dijeliti kljuc, inace refund ne pogodi entitlement.
+    const payload: StripeWebhookPayload = {
+      type: 'charge.refunded',
+      livemode: true,
+      data: {
+        object: { id: 'ch_999', payment_intent: 'pi_123', amount: 1699, amount_refunded: 1699, currency: 'eur' },
+      },
     };
-    expect(parseLemonEvent(payload).refunded).toBe(true);
+    const ev = parseStripeEvent(payload);
+    expect(ev.orderId).toBe('pi_123');
+    expect(ev.refunded).toBe(true);
+    expect(ev.totalCents).toBe(1699);
+    expect(ev.refundedCents).toBe(1699);
   });
+
+  it('djelomican povrat nosi manji refundedCents od totalCents', () => {
+    const ev = parseStripeEvent({
+      type: 'charge.refunded',
+      livemode: true,
+      data: { object: { payment_intent: 'pi_5', amount: 1699, amount_refunded: 500 } },
+    });
+    expect(isFullRefund(ev)).toBe(false);
+  });
+
+  it('livemode koji payload ne nosi ostaje null, NIKAD izmisljen', () => {
+    // `acceptEvent` na temelju null livemode odbija dogadjaj; neprovjerljivo porijeklo nije
+    // isto sto i ispravno (PAY-04/05).
+    const ev = parseStripeEvent({ type: 'payment_intent.succeeded', data: { object: { id: 'pi_1' } } });
+    expect(ev.livemode).toBeNull();
+    expect(ev.testMode).toBe(false);
+  });
+
   it('prazan payload ne baca (prazni stringovi)', () => {
-    const ev = parseLemonEvent({});
+    const ev = parseStripeEvent({});
     expect(ev.orderId).toBe('');
     expect(ev.userId).toBe('');
+    expect(ev.eventName).toBe('');
   });
 });
 
-describe('verifyLemonSignature (HMAC-SHA256)', () => {
-  const secret = 'whsec_test';
-  const raw = '{"meta":{"event_name":"order_created"}}';
-  const validSig = createHmac('sha256', secret).update(raw).digest('hex');
+describe('parseStripeSignatureHeader', () => {
+  it('rastavlja t i vise v1 vrijednosti', () => {
+    expect(parseStripeSignatureHeader('t=1700000000,v1=aa,v1=BB')).toEqual({
+      timestamp: 1700000000,
+      signatures: ['aa', 'bb'],
+    });
+  });
+  it('ignorira sheme koje ne razumijemo (npr. v0)', () => {
+    expect(parseStripeSignatureHeader('t=1,v0=zz,v1=aa').signatures).toEqual(['aa']);
+  });
+  it('zaglavlje bez t ili bez v1 je neispravno', () => {
+    expect(parseStripeSignatureHeader('v1=aa').timestamp).toBeNull();
+    expect(parseStripeSignatureHeader('t=1').signatures).toEqual([]);
+  });
+});
 
-  it('ispravan potpis -> true', async () => {
-    expect(await verifyLemonSignature(raw, validSig, secret)).toBe(true);
+/**
+ * PAY-04: potpis je JEDINI dokaz da dogadjaj dolazi od Stripea. Ovdje se dokazuje i da nosi
+ * vrijeme, pa presretnut valjan zahtjev ne vrijedi zauvijek.
+ */
+describe('verifyStripeSignature (HMAC-SHA256 nad `t.tijelo`)', () => {
+  const secret = 'whsec_test';
+  const raw = '{"type":"payment_intent.succeeded"}';
+  const nowMs = Date.UTC(2026, 8, 23, 12, 0, 0);
+  const t = Math.floor(nowMs / 1000);
+  const sign = (ts: number, key = secret, body = raw): string =>
+    createHmac('sha256', key).update(`${ts}.${body}`).digest('hex');
+
+  it('ispravan potpis unutar tolerancije -> ok', async () => {
+    expect(await verifyStripeSignature(raw, `t=${t},v1=${sign(t)}`, secret, nowMs)).toEqual({ ok: true });
   });
-  it('pogresan secret -> false', async () => {
-    expect(await verifyLemonSignature(raw, validSig, 'krivi')).toBe(false);
+
+  it('pogresan tajni kljuc -> odbijen', async () => {
+    const out = await verifyStripeSignature(raw, `t=${t},v1=${sign(t, 'krivi')}`, secret, nowMs);
+    expect(out).toEqual({ ok: false, reason: 'signature_mismatch' });
   });
-  it('pogresan potpis -> false', async () => {
-    expect(await verifyLemonSignature(raw, 'deadbeef', secret)).toBe(false);
+
+  it('izmijenjeno tijelo -> odbijen', async () => {
+    const out = await verifyStripeSignature('{"type":"drugo"}', `t=${t},v1=${sign(t)}`, secret, nowMs);
+    expect(out).toEqual({ ok: false, reason: 'signature_mismatch' });
   });
-  it('prazan secret ili potpis -> false', async () => {
-    expect(await verifyLemonSignature(raw, validSig, '')).toBe(false);
-    expect(await verifyLemonSignature(raw, null, secret)).toBe(false);
+
+  it('potpis stariji od tolerancije -> odbijen (replay)', async () => {
+    const old = t - STRIPE_SIGNATURE_TOLERANCE_SECONDS - 1;
+    // Potpis je matematicki ISPRAVAN za taj t; odbija ga iskljucivo provjera tolerancije.
+    const out = await verifyStripeSignature(raw, `t=${old},v1=${sign(old)}`, secret, nowMs);
+    expect(out).toEqual({ ok: false, reason: 'timestamp_out_of_tolerance' });
   });
-  it('velika/mala slova potpisa ne mijenjaju rezultat', async () => {
-    expect(await verifyLemonSignature(raw, validSig.toUpperCase(), secret)).toBe(true);
+
+  it('potpis iz buducnosti izvan tolerancije -> odbijen', async () => {
+    const future = t + STRIPE_SIGNATURE_TOLERANCE_SECONDS + 1;
+    const out = await verifyStripeSignature(raw, `t=${future},v1=${sign(future)}`, secret, nowMs);
+    expect(out).toEqual({ ok: false, reason: 'timestamp_out_of_tolerance' });
+  });
+
+  it('tocno na granici tolerancije jos prolazi', async () => {
+    const edge = t - STRIPE_SIGNATURE_TOLERANCE_SECONDS;
+    expect(await verifyStripeSignature(raw, `t=${edge},v1=${sign(edge)}`, secret, nowMs)).toEqual({ ok: true });
+  });
+
+  it('vise v1 vrijednosti: dovoljno je da se JEDNA podudara (rotacija tajne)', async () => {
+    const header = `t=${t},v1=${'0'.repeat(64)},v1=${sign(t)}`;
+    expect(await verifyStripeSignature(raw, header, secret, nowMs)).toEqual({ ok: true });
+  });
+
+  it('prazan tajni kljuc ili nedostajuce zaglavlje -> odbijen (fail-closed)', async () => {
+    expect(await verifyStripeSignature(raw, `t=${t},v1=${sign(t)}`, '', nowMs)).toEqual({
+      ok: false,
+      reason: 'missing_secret',
+    });
+    expect(await verifyStripeSignature(raw, null, secret, nowMs)).toEqual({ ok: false, reason: 'missing_signature' });
+  });
+
+  it('neispravno zaglavlje -> odbijen', async () => {
+    expect(await verifyStripeSignature(raw, 'bezicega', secret, nowMs)).toEqual({
+      ok: false,
+      reason: 'malformed_header',
+    });
+  });
+
+  it('velika slova potpisa ne mijenjaju rezultat', async () => {
+    const header = `t=${t},v1=${sign(t).toUpperCase()}`;
+    expect(await verifyStripeSignature(raw, header, secret, nowMs)).toEqual({ ok: true });
   });
 });
 
@@ -86,8 +189,8 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
   it('slot proizvod: tocan product_id/work_type/slots_total + rok = now + purchase_window_days', () => {
     const row = buildEntitlementInsert(
       { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90 },
-      { userId: 'u1', orderId: 'o1' },
-      'lemonsqueezy',
+      { userId: 'u1', orderId: 'pi_123' },
+      'stripe',
       now,
     );
     expect(row).toEqual({
@@ -95,16 +198,16 @@ describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
       work_type: 'diplomski',
       slots_total: 1,
       product_id: 'slot_diplomski',
-      order_id: 'o1',
-      provider: 'lemonsqueezy',
+      order_id: 'pi_123',
+      provider: 'stripe',
       purchase_expires_at: new Date(now + 90 * 86400000).toISOString(),
     });
   });
   it('pass proizvod nosi 6 seminarskih slotova', () => {
     const row = buildEntitlementInsert(
       { id: 'pass_semestralni', workType: 'seminarski', slotsTotal: 6, purchaseWindowDays: 180 },
-      { userId: 'u1', orderId: 'o2' },
-      'lemonsqueezy',
+      { userId: 'u1', orderId: 'pi_2' },
+      'stripe',
       now,
     );
     expect(row.slots_total).toBe(6);
@@ -136,36 +239,53 @@ describe('pass kupon', () => {
 });
 
 /**
- * PAY-04 / PAY-05: ispravan HMAC potpis dokazuje samo da posiljatelj zna tajnu. Ne dokazuje da
- * dogadjaj pripada NASOJ trgovini ni da dolazi iz produkcijskog nacina rada. Bez ovog gatea bi
- * valjano potpisan dogadjaj tudje trgovine, ili testna kupnja, proizveli pravo pravo pristupa.
+ * PAY-04 / PAY-05: ispravan potpis dokazuje samo da posiljatelj zna tajnu. Ne dokazuje da
+ * dogadjaj dolazi iz produkcijskog nacina rada ni da je vrsta koju uopce znamo knjiziti. Bez
+ * ovog gatea bi valjano potpisana TESTNA kupnja proizvela pravo pravo pristupa.
  */
-describe('acceptEvent (porijeklo dogadjaja)', () => {
-  const OPTS = { expectedStoreId: '42', allowTestMode: false };
+describe('acceptEvent (porijeklo i vrsta dogadjaja)', () => {
+  const OPTS = { allowTestMode: false };
+  const ok = { livemode: true, eventName: 'payment_intent.succeeded', accountId: '' };
 
-  it('prihvaca dogadjaj nase trgovine iz produkcijskog nacina', () => {
-    expect(acceptEvent({ storeId: '42', testMode: false }, OPTS)).toEqual({ ok: true });
-  });
-
-  it('odbija tudju trgovinu', () => {
-    expect(acceptEvent({ storeId: '99', testMode: false }, OPTS)).toEqual({ ok: false, reason: 'store_mismatch' });
+  it('prihvaca produkcijski dogadjaj vrste koju obradjujemo', () => {
+    expect(acceptEvent(ok, OPTS)).toEqual({ ok: true });
+    expect(acceptEvent({ ...ok, eventName: 'charge.refunded' }, OPTS)).toEqual({ ok: true });
   });
 
   it('odbija testni nacin rada dok nije izricito dopusten', () => {
-    expect(acceptEvent({ storeId: '42', testMode: true }, OPTS)).toEqual({ ok: false, reason: 'test_mode_refused' });
-    expect(acceptEvent({ storeId: '42', testMode: true }, { ...OPTS, allowTestMode: true })).toEqual({ ok: true });
+    expect(acceptEvent({ ...ok, livemode: false }, OPTS)).toEqual({ ok: false, reason: 'test_mode_refused' });
+    expect(acceptEvent({ ...ok, livemode: false }, { allowTestMode: true })).toEqual({ ok: true });
   });
 
   /**
-   * Fail-closed: nekonfiguriran ili nedostajuci store id NE SMIJE znaciti "propusti sve". Tise
-   * propustanje bi znacilo da webhook prima dogadjaje bilo koje trgovine, a da nitko ne zna da
-   * gate uopce nije aktivan.
+   * Fail-closed: livemode koji payload ne nosi NE SMIJE znaciti "vjerojatno produkcija".
+   * Isti duh kao raniji prazan store id koji je odbijao sve.
    */
   it('odbija kad porijeklo nije provjerljivo', () => {
-    expect(acceptEvent({ storeId: '42', testMode: false }, { ...OPTS, expectedStoreId: '' }))
-      .toEqual({ ok: false, reason: 'store_unverifiable' });
-    expect(acceptEvent({ storeId: '', testMode: false }, OPTS))
-      .toEqual({ ok: false, reason: 'store_unverifiable' });
+    expect(acceptEvent({ ...ok, livemode: null }, OPTS)).toEqual({ ok: false, reason: 'livemode_unverifiable' });
+    expect(acceptEvent({ ...ok, livemode: null }, { allowTestMode: true })).toEqual({
+      ok: false,
+      reason: 'livemode_unverifiable',
+    });
+  });
+
+  it('odbija tudji Connect racun kad je ocekivani postavljen', () => {
+    expect(acceptEvent({ ...ok, accountId: 'acct_tudji' }, { ...OPTS, expectedAccountId: 'acct_nas' })).toEqual({
+      ok: false,
+      reason: 'account_mismatch',
+    });
+    expect(acceptEvent({ ...ok, accountId: 'acct_nas' }, { ...OPTS, expectedAccountId: 'acct_nas' })).toEqual({
+      ok: true,
+    });
+  });
+
+  it('vrstu koju ne obradjujemo tiho ignorira, ne knjizi', () => {
+    expect(acceptEvent({ ...ok, eventName: 'customer.created' }, OPTS)).toEqual({ ok: false, reason: 'event_ignored' });
+    expect(acceptEvent({ ...ok, eventName: '' }, OPTS)).toEqual({ ok: false, reason: 'event_ignored' });
+  });
+
+  it('obradjuju se tocno dvije vrste dogadjaja', () => {
+    expect([...STRIPE_HANDLED_EVENTS]).toEqual(['payment_intent.succeeded', 'charge.refunded']);
   });
 });
 

@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest';
 
 import {
   resolveCheckout,
-  buildLemonSqueezyCheckout,
+  buildStripePaymentIntentParams,
+  stripeAmountCents,
+  stripeIdempotencyKey,
   checkoutRequestPayload,
   createCheckout,
   checkoutMismatch,
@@ -20,7 +22,7 @@ function product(over: Partial<Product> = {}): Product {
     slotWindowDays: 14,
     purchaseWindowDays: 90,
     priceEur: 9.99,
-    morProductId: 'ls-variant-123',
+    morProductId: null,
     manualFulfillment: false,
     active: true,
     sort: 30,
@@ -109,32 +111,82 @@ describe('checkoutMismatch (WS-5 enforcement pri kupnji)', () => {
   });
 });
 
-describe('buildLemonSqueezyCheckout', () => {
-  it('nosi user_id i product_id u custom podacima', () => {
-    const body = buildLemonSqueezyCheckout({
-      storeId: '1',
-      variantId: 'v9',
-      userId: 'u1',
-      productId: 'slot_diplomski',
+describe('buildStripePaymentIntentParams', () => {
+  const base = { amountCents: 999, currency: 'eur', userId: 'u1', productId: 'slot_diplomski' };
+
+  function fields(body: string): Record<string, string> {
+    return Object.fromEntries(new URLSearchParams(body).entries());
+  }
+
+  it('salje iznos u centima, valutu i automatske nacine placanja', () => {
+    expect(fields(buildStripePaymentIntentParams(base))).toMatchObject({
+      amount: '999',
+      currency: 'eur',
+      'automatic_payment_methods[enabled]': 'true',
     });
-    expect(body.data.attributes.checkout_data).toEqual({ custom: { user_id: 'u1', product_id: 'slot_diplomski' } });
-    expect(body.data.relationships.variant.data.id).toBe('v9');
-    expect(body.data.relationships.store.data.id).toBe('1');
   });
-  it('dodaje referral_code samo kad postoji', () => {
-    const withRef = buildLemonSqueezyCheckout({ storeId: '1', variantId: 'v', userId: 'u', productId: 'p', referralCode: 'R' });
-    expect((withRef.data.attributes.checkout_data as any).custom.referral_code).toBe('R');
-    const withoutRef = buildLemonSqueezyCheckout({ storeId: '1', variantId: 'v', userId: 'u', productId: 'p' });
-    expect('referral_code' in (withoutRef.data.attributes.checkout_data as any).custom).toBe(false);
+
+  it('metadata nosi user_id i KATALOSKI product_id (ne naslijedjeni variant id)', () => {
+    const f = fields(buildStripePaymentIntentParams(base));
+    expect(f['metadata[user_id]']).toBe('u1');
+    // Webhook po ovoj vrijednosti trazi `products.id`. Da ovdje stoji bilo sto drugo, svaka bi
+    // uplata zavrsila kao `unknown_product` i entitlement ne bi nastao.
+    expect(f['metadata[product_id]']).toBe('slot_diplomski');
   });
-  it('dodaje redirect_url samo kad postoji', () => {
-    const body = buildLemonSqueezyCheckout({ storeId: '1', variantId: 'v', userId: 'u', productId: 'p', redirectUrl: 'https://lekta.hr/ok' });
-    expect((body.data.attributes as any).product_options).toEqual({ redirect_url: 'https://lekta.hr/ok' });
+
+  it('referral_code i receipt_email samo kad postoje', () => {
+    const withAll = fields(buildStripePaymentIntentParams({ ...base, referralCode: 'PART-9', receiptEmail: 'a@b.hr' }));
+    expect(withAll['metadata[referral_code]']).toBe('PART-9');
+    expect(withAll.receipt_email).toBe('a@b.hr');
+    const without = fields(buildStripePaymentIntentParams(base));
+    expect('metadata[referral_code]' in without).toBe(false);
+    expect('receipt_email' in without).toBe(false);
+  });
+
+  it('valuta ide malim slovima', () => {
+    expect(fields(buildStripePaymentIntentParams({ ...base, currency: 'EUR' })).currency).toBe('eur');
+  });
+});
+
+describe('stripeAmountCents (kriterij 14.2: iznos je serverski)', () => {
+  it('pretvara eure u cijele cente', () => {
+    expect(stripeAmountCents(9.99)).toBe(999);
+    expect(stripeAmountCents(24.99)).toBe(2499);
+    expect(stripeAmountCents(4.9)).toBe(490);
+  });
+  it('zaokruzuje pogresku zapisa u pokretnom zarezu, ne krati je', () => {
+    // 16.99 * 100 = 1698.9999999999998 u IEEE 754; skracivanje bi naplatilo cent manje.
+    expect(stripeAmountCents(16.99)).toBe(1699);
+  });
+});
+
+describe('stripeIdempotencyKey', () => {
+  it('isti ulaz daje isti kljuc', () => {
+    expect(stripeIdempotencyKey('u1', 'p1', '2026-09-23T10:00:00.000Z')).toBe(
+      stripeIdempotencyKey('u1', 'p1', '2026-09-23T10:00:00.000Z'),
+    );
+  });
+  it('razlicit korisnik ili proizvod daje razlicit kljuc', () => {
+    const a = stripeIdempotencyKey('u1', 'p1', 'T');
+    expect(stripeIdempotencyKey('u2', 'p1', 'T')).not.toBe(a);
+    expect(stripeIdempotencyKey('u1', 'p2', 'T')).not.toBe(a);
+  });
+  it('OGRANICENJE: drugo vrijeme privole daje drugi kljuc (nije puna idempotencija)', () => {
+    // Zapisano kao TVRDNJA, ne kao propust koji se precutkuje: dva odvojena klika istog
+    // korisnika imaju razlicit serverski timestamp privole, pa daju dva PaymentIntenta.
+    expect(stripeIdempotencyKey('u1', 'p1', 'T1')).not.toBe(stripeIdempotencyKey('u1', 'p1', 'T2'));
   });
 });
 
 describe('createCheckout (klijent, injektabilan fetch)', () => {
   const config = { endpoint: 'https://edge/create-checkout' };
+  const OK_BODY = {
+    clientSecret: 'pi_123_secret_abc',
+    paymentIntentId: 'pi_123',
+    amountCents: 999,
+    currency: 'eur',
+    publishableKey: 'pk_test_1',
+  };
   function res(status: number, body: unknown): Response {
     return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
   }
@@ -143,17 +195,22 @@ describe('createCheckout (klijent, injektabilan fetch)', () => {
     const out = await createCheckout({ endpoint: '' }, 'jwt', 'slot_diplomski');
     expect(out.kind).toBe('error');
   });
-  it('200 s checkoutUrl -> ok', async () => {
-    const out = await createCheckout(config, 'jwt', 'slot_diplomski', null, async () =>
-      res(200, { checkoutUrl: 'https://ls/checkout/x' }),
-    );
-    expect(out).toEqual({ kind: 'ok', checkoutUrl: 'https://ls/checkout/x' });
+  it('200 s clientSecret -> ok', async () => {
+    const out = await createCheckout(config, 'jwt', 'slot_diplomski', null, async () => res(200, OK_BODY));
+    expect(out).toEqual({
+      kind: 'ok',
+      clientSecret: 'pi_123_secret_abc',
+      paymentIntentId: 'pi_123',
+      amountCents: 999,
+      currency: 'eur',
+      publishableKey: 'pk_test_1',
+    });
   });
   it('salje Authorization header i samo productId u tijelu', async () => {
     let seen: RequestInit | undefined;
     await createCheckout(config, 'jwt-token', 'slot_diplomski', 'REF', async (_url, init) => {
       seen = init;
-      return res(200, { checkoutUrl: 'x' });
+      return res(200, OK_BODY);
     });
     // Prvo dokazi da je zahtjev POSLAN: bez ovoga `seen?.headers` kratko spoji na
     // undefined i test pukne TypeErrorom umjesto da padne na tvrdnji (oxlint P1-20).
@@ -166,8 +223,11 @@ describe('createCheckout (klijent, injektabilan fetch)', () => {
     expect((await createCheckout(config, 'j', 'p', null, async () => res(403, {}))).kind).toBe('forbidden');
     expect((await createCheckout(config, 'j', 'p', null, async () => res(404, {}))).kind).toBe('not_found');
   });
-  it('200 bez checkoutUrl -> error', async () => {
-    const out = await createCheckout(config, 'j', 'p', null, async () => res(200, {}));
-    expect(out.kind).toBe('error');
+  it('200 bez clientSecret ili bez publishableKey -> error', async () => {
+    expect((await createCheckout(config, 'j', 'p', null, async () => res(200, {}))).kind).toBe('error');
+    const bezKljuca = await createCheckout(config, 'j', 'p', null, async () =>
+      res(200, { ...OK_BODY, publishableKey: '' }),
+    );
+    expect(bezKljuca.kind).toBe('error');
   });
 });

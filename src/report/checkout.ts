@@ -3,9 +3,13 @@
  *
  * Cijena je UVIJEK serverska odluka. Klijent salje samo `productId` (+ opcionalni
  * `referralCode`), nikad iznos ni popust (kriterij 14.1). Ciste, testabilne funkcije:
- * `resolveCheckout` (server logika create-checkout Edge Functiona) i `buildLemonSqueezyCheckout`
- * (tijelo LS API poziva). `createCheckout` je klijentski orkestrator s injektabilnim `fetch`
- * i injektiranim Supabase JWT-om (isti uzorak kao report-client).
+ * `resolveCheckout` (server logika create-checkout Edge Functiona) i
+ * `buildStripePaymentIntentParams` (tijelo Stripe PaymentIntent poziva). `createCheckout` je
+ * klijentski orkestrator s injektabilnim `fetch` i injektiranim Supabase JWT-om (isti uzorak
+ * kao report-client).
+ *
+ * Naplata je od 2026-09-23 Stripe (odluka vlasnika, F18 u docs/agents/orchestrator-backlog.md).
+ * Stripe NIJE Merchant of Record, pa obracun i prijava PDV-a ostaju na vlasniku.
  */
 
 import type { Product } from '../catalog/products-catalog.ts';
@@ -69,37 +73,63 @@ export function checkoutMismatch(
   return { block: true, suggestedWorkType: estimateWorkType(sig).workType };
 }
 
-export interface LemonCheckoutContext {
-  /** Lemon Squeezy store id. */
-  storeId: string;
-  /** LS variant id (mapiran preko products.mor_product_id). */
-  variantId: string;
+/** Kontekst iz kojeg se gradi Stripe PaymentIntent. Iznos je uvijek serverski izveden. */
+export interface StripePaymentIntentContext {
+  /** Iznos u NAJMANJOJ jedinici valute (centi), izveden iz `products.price_eur`. */
+  amountCents: number;
+  /** ISO 4217 kod malim slovima, npr. `eur`. */
+  currency: string;
   userId: string;
+  /** Katalozni `products.id` (NE naslijedjeni `mor_product_id`); webhook po njemu trazi proizvod. */
   productId: string;
   referralCode?: string | null;
-  /** URL na koji LS vraca kupca nakon placanja. */
-  redirectUrl?: string;
+  /** E-mail iz JWT-a; Stripe na njega salje potvrdu o placanju. */
+  receiptEmail?: string | null;
+}
+
+/** Iznos u centima iz cijene u eurima. Zaokruzuje se, jer Stripe prima samo cijele cente. */
+export function stripeAmountCents(priceEur: number): number {
+  return Math.round(priceEur * 100);
 }
 
 /**
- * Tijelo Lemon Squeezy `POST /v1/checkouts` poziva. `custom` nosi user_id i product_id
- * (webhook ih cita za atribuciju, sekcija 6/8); referral_code samo ako postoji.
+ * Tijelo `POST https://api.stripe.com/v1/payment_intents` (form-urlencoded, ne JSON).
+ *
+ * `metadata[product_id]` nosi KATALOZNI id proizvoda, pa webhook proizvod trazi po
+ * `products.id`. Naslijedjeni stupac `products.mor_product_id` time vise nije ni u jednom
+ * zivom putu naplate.
  */
-export function buildLemonSqueezyCheckout(ctx: LemonCheckoutContext) {
-  const custom: Record<string, string> = { user_id: ctx.userId, product_id: ctx.productId };
-  if (ctx.referralCode) custom.referral_code = ctx.referralCode;
-  const attributes: Record<string, unknown> = { checkout_data: { custom } };
-  if (ctx.redirectUrl) attributes.product_options = { redirect_url: ctx.redirectUrl };
-  return {
-    data: {
-      type: 'checkouts',
-      attributes,
-      relationships: {
-        store: { data: { type: 'stores', id: String(ctx.storeId) } },
-        variant: { data: { type: 'variants', id: String(ctx.variantId) } },
-      },
-    },
-  };
+export function buildStripePaymentIntentParams(ctx: StripePaymentIntentContext): string {
+  const params = new URLSearchParams();
+  params.set('amount', String(ctx.amountCents));
+  params.set('currency', ctx.currency.toLowerCase());
+  params.set('automatic_payment_methods[enabled]', 'true');
+  params.set('metadata[user_id]', ctx.userId);
+  params.set('metadata[product_id]', ctx.productId);
+  if (ctx.referralCode) params.set('metadata[referral_code]', ctx.referralCode);
+  if (ctx.receiptEmail) params.set('receipt_email', ctx.receiptEmail);
+  return params.toString();
+}
+
+/**
+ * Deterministican `Idempotency-Key` za Stripe poziv.
+ *
+ * OGRANICENJE koje se ne smije predstaviti kao potpuna idempotencija: vrijeme privole je
+ * serversko i razlikuje se od pokusaja do pokusaja, pa dva odvojena klika istog korisnika na
+ * isti proizvod daju DVA kljuca i dva PaymentIntenta. Kljuc stiti od dvostruke naplate unutar
+ * JEDNOG pokusaja (mrezni retry), ne od dva odvojena pokusaja. Protiv drugog stoje dnevni cap
+ * u create-checkoutu i unique(provider, order_id) pri knjizenju.
+ */
+export function stripeIdempotencyKey(userId: string, productId: string, consentedAt: string): string {
+  return `lekta:pi:${userId}:${productId}:${consentedAt}`;
+}
+
+/** Odgovor Stripe PaymentIntent API-ja, onoliko koliko citamo. */
+export interface StripePaymentIntentResponse {
+  id?: string;
+  client_secret?: string;
+  amount?: number;
+  currency?: string;
 }
 
 export interface CheckoutClientConfig {
@@ -125,8 +155,20 @@ export interface CheckoutConsent {
   termsVersion: string;
 }
 
+/**
+ * Ishod checkouta. Od prelaska na Stripe (F18) `ok` ne nosi vise hosted checkout URL nego
+ * `clientSecret` za Payment Element koji se montira U STRANICI; `publishableKey` dolazi sa
+ * servera da klijent nema build-time env varijablu.
+ */
 export type CreateCheckoutOutcome =
-  | { kind: 'ok'; checkoutUrl: string }
+  | {
+      kind: 'ok';
+      clientSecret: string;
+      paymentIntentId: string;
+      amountCents: number;
+      currency: string;
+      publishableKey: string;
+    }
   | { kind: 'unauthorized' }
   | { kind: 'forbidden' }
   | { kind: 'not_found' }
@@ -179,15 +221,30 @@ export async function createCheckout(
   }
 
   if (res.status === 200) {
-    const data = (await res.json().catch(() => ({}))) as { checkoutUrl?: string };
-    if (data.checkoutUrl) return { kind: 'ok', checkoutUrl: data.checkoutUrl };
-    return { kind: 'error', status: 200, message: 'nedostaje checkoutUrl' };
+    const data = (await res.json().catch(() => ({}))) as {
+      clientSecret?: string;
+      paymentIntentId?: string;
+      amountCents?: number;
+      currency?: string;
+      publishableKey?: string;
+    };
+    if (data.clientSecret && data.publishableKey) {
+      return {
+        kind: 'ok',
+        clientSecret: String(data.clientSecret),
+        paymentIntentId: String(data.paymentIntentId ?? ''),
+        amountCents: Number(data.amountCents ?? 0),
+        currency: String(data.currency ?? 'eur'),
+        publishableKey: String(data.publishableKey),
+      };
+    }
+    return { kind: 'error', status: 200, message: 'nedostaje clientSecret' };
   }
   if (res.status === 401) return { kind: 'unauthorized' };
   if (res.status === 403) return { kind: 'forbidden' };
   if (res.status === 404) return { kind: 'not_found' };
-  // 409: nedvosmislen nesklad vrste rada (tier_mismatch) ILI serverska nemapiranost proizvoda.
-  // Razlikuje se po error polju; klijent na tier_mismatch ponudi predlozeni tier ili potvrdu.
+  // 409: nedvosmislen nesklad vrste rada (tier_mismatch). Razlikuje se po error polju; klijent
+  // na tier_mismatch ponudi predlozeni tier ili potvrdu.
   if (res.status === 409) {
     const data = (await res.json().catch(() => ({}))) as { error?: string; suggestedWorkType?: string };
     if (data?.error === 'tier_mismatch') return { kind: 'tier_mismatch', suggestedWorkType: String(data.suggestedWorkType ?? '') };
