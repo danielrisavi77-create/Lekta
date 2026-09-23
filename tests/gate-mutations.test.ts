@@ -45,6 +45,8 @@ import {
   refundClassificationProblems,
   handlerOutcomes,
   naplataRunbookProblems,
+  runbookSqlColumnProblems,
+  naplataDeployPathProblems,
 } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
 import { webhookHandlerProblems } from './helpers/webhook-handler-source';
@@ -54,7 +56,7 @@ import {
   parseSupabaseSecretsList,
   EMPTY_VALUE_DIGEST,
 } from '../scripts/verify-naplata-secrets.mjs';
-import { classifyLemonEvent } from '../src/report/webhook';
+import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
@@ -2255,29 +2257,47 @@ const MUTATIONS: Mutation[] = [
       ).ok,
   },
   {
-    id: 'naplata/povrat-samo-po-imenu-dogadjaja',
-    imitates: 'suzenje povrata na event_name === order_refunded: stari handler je u refund granu ulazio na ev.refunded (i iz attributes.status refunded i iz attributes.refunded true), pa bi dogadjaj s vracenim novcem pod drugim imenom postao ignored + 200, entitlement ostao aktivan, a referral nagrada nepovucena',
+    id: 'naplata/povrat-po-zastavici-umjesto-po-imenu',
+    imitates: 'sirenje refund grane na zastavicu ev.refunded (medjuverzija 2026-09-22): parseLemonEvent ju racuna i iz attributes.status i iz attributes.refunded, pa bi subscription_payment_refunded, kojemu je data.id id pretplatnickog RACUNA a ne narudzbe, izvrsio update entitlements ... where order_id = <tudji id> i povukao referral nagrade po njemu; ishod bi bio processed, dakle nevidljiv svakom upitu iz runbooka',
     caught: () => {
-      // MUTACIJA: zamijeni ODLUKU uzom verzijom (ne tekstom izvora nego funkcijom).
-      const usko = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
-        if (ev.eventName === 'order_refunded') return { kind: 'refund' };
+      // MUTACIJA: zamijeni ODLUKU sirom verzijom (funkcija, ne tekst izvora).
+      const siroko = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
+        if (ev.refunded || ev.eventName === 'order_refunded') return { kind: 'refund' };
         if (ev.eventName === 'order_created') {
-          if (ev.status !== 'paid') return { kind: 'ignored', reason: `order_status:${ev.status}` };
+          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
           return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
         }
-        return { kind: 'ignored' };
+        return { kind: 'ignored', reason: 'nepodrzan_dogadjaj:x' };
       };
-      return refundClassificationProblems(usko).some((p) => p.includes('order_updated'));
+      return refundClassificationProblems(siroko, NOTABLE_IGNORE_PREFIXES)
+        .some((p) => p.includes('subscription_payment_refunded'));
     },
-    cleanBefore: () => refundClassificationProblems(classifyLemonEvent).length === 0,
+    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
   },
+  {
+    id: 'naplata/povrat-pod-drugim-imenom-tiho-odbacen',
+    imitates: 'druga krajnost istog izbora: vracen novac pod imenom koje nije order_refunded zavrsi kao obican nepodrzan_dogadjaj, dakle WARN u logu i redak koji nitko ne gleda, pa nitko ne sazna da je povrat stigao i nije obradjen',
+    caught: () => {
+      const tiho = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
+        if (ev.eventName === 'order_refunded') return { kind: 'refund' };
+        if (ev.eventName === 'order_created') {
+          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
+          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
+        }
+        return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName}` };
+      };
+      return refundClassificationProblems(tiho, NOTABLE_IGNORE_PREFIXES).some((p) => p.includes('TIHO'));
+    },
+    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+
   {
     id: 'naplata/ignored-grana-bez-loga',
     imitates: 'grana ignored bez ijednog log retka: odluka pociva na usporedbi statusa s paid, pa bi promjena vrijednosti kod providera pretvorila SVAKU kupnju u 200 bez retryja, a jedini trag bio bi redak u webhook_events koji ne pokriva ni djelomicni indeks webhook_events_unresolved',
     caught: () => {
       const src = webhookMorSource();
       const mutated = src
-        .replace("if (isNotableIgnore(decision)) console.error('webhook-mor ignored_unpaid_order', detalji);", '')
+        .replace("if (isNotableIgnore(decision)) console.error('webhook-mor ignored_needs_attention', detalji);", '')
         .replace("else console.warn('webhook-mor ignored_foreign_event', detalji);", '');
       if (mutated === src) return false;
       return webhookHandlerProblems(mutated).some((p) => p.includes("grana 'ignored' nema log retka"));
@@ -2293,14 +2313,15 @@ const MUTATIONS: Mutation[] = [
       // MUTACIJA u memoriji: makni ime dogadjaja iz runbooka. Disk se ne dira.
       const mutated = runbook.split('`order_refunded`').join('povrat');
       if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
-      return naplataRunbookProblems(mutated, handlerOutcomes(webhookMorSource()))
+      return naplataRunbookProblems(mutated, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
         .some((p) => p.includes('order_refunded'));
     },
     cleanBefore: () => {
       const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
       const outcomes = handlerOutcomes(webhookMorSource());
       // outcomes stiti od vakuuma: prazan izvod bi dao "cist" runbook bez ijedne provjere ishoda.
-      return outcomes.length >= 4 && naplataRunbookProblems(runbook, outcomes).length === 0;
+      return outcomes.length >= 4
+        && naplataRunbookProblems(runbook, outcomes, IGNORE_REASON_PREFIXES).length === 0;
     },
   },
   {
@@ -2309,12 +2330,72 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
       // MUTACIJA: handler pocne pisati ishod koji runbook ne poznaje.
-      return naplataRunbookProblems(runbook, [...handlerOutcomes(webhookMorSource()), 'nov_ishod'])
-        .some((p) => p.includes('nov_ishod'));
+      return naplataRunbookProblems(
+        runbook,
+        [...handlerOutcomes(webhookMorSource()), 'nov_ishod'],
+        IGNORE_REASON_PREFIXES,
+      ).some((p) => p.includes('nov_ishod'));
     },
     cleanBefore: () => {
       const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
-      return naplataRunbookProblems(runbook, handlerOutcomes(webhookMorSource())).length === 0;
+      return naplataRunbookProblems(runbook, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
+        .length === 0;
+    },
+  },
+
+  {
+    id: 'naplata/runbook-upit-po-nepostojecem-stupcu',
+    imitates: 'stvarno stanje runbooka do 2026-09-23: oba upita u sekciji 5.1 citala su i sortirala po created_at, stupcu kojeg webhook_events nema (0092 ima received_at). Operater bi umjesto popisa placenih narudzbi bez prava pristupa dobio ERROR 42703, a bas ti upiti su jedina zamjena za djelomicni indeks koji ishod needs_manual_link ne pokriva',
+    caught: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const migracija = readFileSync(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'), 'utf8',
+      );
+      // MUTACIJA u memoriji: vrati ime stupca koje je ondje stajalo. Disk se ne dira.
+      const mutated = runbook.split('received_at').join('created_at');
+      if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return runbookSqlColumnProblems(mutated, migracija).some((p) => p.includes('created_at'));
+    },
+    cleanBefore: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const migracija = readFileSync(
+        resolve(process.cwd(), 'supabase', 'migrations', '0092_webhook_events_inbox.sql'), 'utf8',
+      );
+      return runbookSqlColumnProblems(runbook, migracija).length === 0;
+    },
+  },
+  {
+    id: 'naplata/deploy-zaobilazi-preflight',
+    imitates: 'stvarno stanje do 2026-09-23: runbook je deploy naplate slao na goli `supabase functions deploy webhook-mor`, a preflight je bio zaseban redak koji se moglo preskociti. Preskocen korak znaci deploy s praznim LEMONSQUEEZY_STORE_ID, a acceptEvent je fail-closed: svaka kupnja dobije refused i 200 bez retryja',
+    caught: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const pkg = JSON.parse(readFileSync(resolve(process.cwd(), 'package.json'), 'utf8'));
+      const preflight = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      // MUTACIJA u memoriji: vrati goli CLI poziv u runbook.
+      const mutated = runbook.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n');
+      if (mutated === runbook) return false;
+      return naplataDeployPathProblems(mutated, pkg, preflight).some((p) => p.includes('zaobilazi preflight'));
+    },
+    cleanBefore: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const pkg = JSON.parse(readFileSync(resolve(process.cwd(), 'package.json'), 'utf8'));
+      const preflight = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      return naplataDeployPathProblems(runbook, pkg, preflight).length === 0;
+    },
+  },
+  {
+    id: 'naplata/preflight-zove-goli-supabase',
+    imitates: 'stvarno stanje preflighta do 2026-09-23: spawnSync s golim imenom iz PATH-a, dok repo CLI isporucuje kao devDependency. Izmjereno: exit 1 uz "supabase is not recognized" JEDNAKO i kad su tajne ispravne i kad su prazne, pa gard ne razlikuje dva stanja koja mjeri i nauci operatera da ga preskoci',
+    caught: () => {
+      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      // MUTACIJA u memoriji: vrati goli poziv iz PATH-a.
+      const mutated = src.replace('const res = runSupabase(args);', "const res = spawnSync('supabase', args);");
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return preflightSourceProblems(mutated).some((p) => p.includes('PATH'));
+    },
+    cleanBefore: () => {
+      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      return src.length > 2000 && preflightSourceProblems(src).length === 0;
     },
   },
 

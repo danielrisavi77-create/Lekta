@@ -66,11 +66,18 @@ integracija (DB, RLS, webhook potpis) provjerava se u Supabase okruzenju.
 
 ```
 supabase db push                              # migracije
+npm run deploy:naplata                        # create-checkout + webhook-mor, uz preflight tajni
 supabase functions deploy generate-report
-supabase functions deploy webhook-mor
 supabase functions deploy faculty-request --no-verify-jwt   # anoniman waitlist upis
 supabase functions deploy field-render
 ```
+
+Funkcije naplate (`create-checkout`, `webhook-mor`) idu kroz `npm run deploy:naplata`, a ne kroz
+goli `supabase functions deploy`: ta naredba prvo procita Supabase Edge secrets projekta i odbije
+deploy ako `LEMONSQUEEZY_STORE_ID`, `LEMONSQUEEZY_API_KEY` ili `MOR_WEBHOOK_SECRET` nedostaje ili je
+postavljen na prazno. Prazna vrijednost nije neutralna: `acceptEvent` je fail-closed pa webhook
+svaku kupnju odbija s `store_unverifiable` i vraca 200, dakle ni provider je ne ponavlja. Detalji su
+u `docs/GO_LIVE_NAPLATA.md`.
 
 Završno osvježavanje Word polja (`field-render`) je samo autentificirani Edge
 proxy. LibreOffice se ne pokreće u Edge runtimeu, nego u zasebnom privatnom

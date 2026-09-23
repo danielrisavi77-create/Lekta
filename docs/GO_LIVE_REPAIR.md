@@ -133,7 +133,8 @@ Deploy nije atomaran, pa oba smjera moraju biti sigurna:
 Kad svi klijenti budu novi, korpusna grana u `repair-docx` moze nestati.
 
 > Napomena: `create-checkout` je već deployan ali STAR (prije WS-5 tier_mismatch enforcementa).
-> Prije prodaje ga redeployaj isto komandom `npx supabase functions deploy create-checkout ...`.
+> Prije prodaje ga redeployaj s `npm run deploy:naplata` (ta naredba nosi preflight tajni naplate
+> i deploya `create-checkout` i `webhook-mor`; vidi `docs/GO_LIVE_NAPLATA.md`).
 
 ---
 

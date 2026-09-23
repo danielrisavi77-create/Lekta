@@ -378,8 +378,10 @@ Deno.serve(async (req: Request) => {
     // OVA GRANA SE LOGIRA UVIJEK (nalaz pregleda 2026-09-23). Odluka pociva na usporedbi statusa s
     // `paid`, i to je pretpostavka o tudjem sustavu. Kad bi grana bila tiha, promjena vrijednosti
     // statusa kod providera pretvorila bi SVAKU kupnju u `ignored` + 200 bez retryja, bez ijednog
-    // retka koji to pokazuje. Neplacena narudzba (`order_status:*`) tice se stvarnog novca pa ide
-    // na ERROR razinu; tudji dogadjaj je konfiguracijski sum pa ide na WARN. Redovit upit nad
+    // retka koji to pokazuje. Razlozi koji se ticu stvarnog novca (`order_status:*` za neplacenu
+    // narudzbu i `povrat_bez_order_refunded:*` za vracen novac pod imenom koje nije order_refunded)
+    // idu na ERROR razinu, po popisu `NOTABLE_IGNORE_PREFIXES`; tudji dogadjaj je konfiguracijski
+    // sum pa ide na WARN. Redovit upit nad
     // inboxom po ishodu je u docs/GO_LIVE_NAPLATA.md (djelomicni indeks `webhook_events_unresolved`
     // NE pokriva ovaj ishod, pa se filtrira po `outcome`).
     const detalji = {
@@ -389,7 +391,7 @@ Deno.serve(async (req: Request) => {
       orderId: ev.orderId,
       testMode: ev.testMode,
     };
-    if (isNotableIgnore(decision)) console.error('webhook-mor ignored_unpaid_order', detalji);
+    if (isNotableIgnore(decision)) console.error('webhook-mor ignored_needs_attention', detalji);
     else console.warn('webhook-mor ignored_foreign_event', detalji);
     await settle('ignored', decision.reason);
     return json({ ignored: true, reason: decision.reason ?? 'nepodrzan_dogadjaj' }, 200);
@@ -408,9 +410,12 @@ Deno.serve(async (req: Request) => {
 
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
   //
-  // U ovu granu se ulazi po `ev.refunded` (ime `order_refunded`, ili `attributes.status = refunded`,
-  // ili `attributes.refunded = true`), tocno kao prije klasifikacije. userId ovdje nije potreban:
-  // sve ide po `order_id`.
+  // U ovu granu se ulazi SAMO iz dogadjaja `order_refunded` (odluka: `classifyLemonEvent`). To je
+  // jedini dogadjaj kojemu je `data.id` id NARUDZBE, a cijela grana nize pise po `ev.orderId`:
+  // gasi entitlement i povlaci referral nagrade. Dogadjaj pretplate koji nosi `refunded` (npr.
+  // `subscription_payment_refunded`) ima id RACUNA, pa bi po ovom putu pisao po tudjem kljucu;
+  // klasifikator ga zato zaustavlja kao `ignored` uz razlog `povrat_bez_order_refunded:*`, koji
+  // ide u log na ERROR razini. userId ovdje nije potreban: sve ide po `order_id`.
   if (decision.kind === 'refund') {
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.

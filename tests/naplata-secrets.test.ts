@@ -22,18 +22,24 @@
  * runbook i preflight imenuju.
  */
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 import {
   NAPLATA_SECRETS,
   naplataSecretsVerdict,
   parseSupabaseSecretsList,
   supabaseSecretsVerdict,
+  resolveSupabaseCli,
   EMPTY_VALUE_DIGEST,
 } from '../scripts/verify-naplata-secrets.mjs';
-import { envNames, storeIdSecretProblems } from './helpers/naplata-env';
+import {
+  envNames,
+  storeIdSecretProblems,
+  preflightSourceProblems,
+  naplataDeployPathProblems,
+} from './helpers/naplata-env';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = (relative: string): string => readFileSync(resolve(ROOT, relative), 'utf8');
@@ -169,12 +175,88 @@ describe('preflight naplate: mjeri Supabase Edge secrets, ne lokalnu ljusku', ()
   it('skripta zove `supabase secrets list`, a lokalnu ljusku samo na izricit --env', () => {
     // Staticka provjera izvora: bez nje bi funkcije mogle biti tocne, a CLI i dalje citati ljusku.
     const src = source('scripts/verify-naplata-secrets.mjs');
-    expect(src).toContain("spawnSync('supabase'");
     expect(src).toContain("['secrets', 'list'");
     expect(src).toContain("argv.includes('--env')");
     // Zadani put NE smije gledati process.env: on se cita tek unutar --env grane.
     const zadano = src.slice(src.indexOf("} else {", src.indexOf("argv.includes('--env')")));
     expect(zadano).not.toContain('process.env');
     expect(zadano).toContain('readSupabaseSecrets');
+  });
+
+  it('BASELINE: izvor preflighta nema nijedan poznat propust', () => {
+    const problems = preflightSourceProblems(source('scripts/verify-naplata-secrets.mjs'));
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+});
+
+/**
+ * GDJE JE CLI, i zasto to nije svejedno.
+ *
+ * IZMJERENO 2026-09-23 u ovom worktreeu: `node scripts/verify-naplata-secrets.mjs` je s golim
+ * imenom izlazio s 1 uz `'supabase' is not recognized as an internal or external command`, dok
+ * `./node_modules/.bin/supabase --version` ispisuje 2.109.1. Gard je time bio crven JEDNAKO i kad
+ * su tajne ispravne i kad je `LEMONSQUEEZY_STORE_ID` prazan, dakle nije razlikovao dva stanja koja
+ * je trebao razlikovati.
+ */
+describe('preflight razrjesava Supabase CLI iz repozitorija', () => {
+  it('uzima node_modules/.bin kad postoji, po platformi', () => {
+    const postoji = () => true;
+    expect(resolveSupabaseCli('/repo', 'win32', postoji)).toBe(join('/repo', 'node_modules', '.bin', 'supabase.cmd'));
+    expect(resolveSupabaseCli('/repo', 'linux', postoji)).toBe(join('/repo', 'node_modules', '.bin', 'supabase'));
+  });
+
+  it('pada natrag na globalnu instalaciju samo kad lokalne nema', () => {
+    expect(resolveSupabaseCli('/repo', 'win32', () => false)).toBe('supabase');
+  });
+
+  it('u ovom repozitoriju se STVARNO razrjesava na lokalni CLI (ne na goli PATH)', () => {
+    // Ovo je tvrdnja o disku, ne o funkciji: da lokalni CLI doista postoji tamo gdje ga trazimo.
+    const cli = resolveSupabaseCli();
+    expect(cli, cli).not.toBe('supabase');
+    expect(existsSync(cli)).toBe(true);
+  });
+});
+
+/**
+ * PUT DEPLOYA. Preflight koji nitko ne pokrene nije obrana: do 2026-09-23 ga nije dosezao nijedan
+ * automatski put (`npm run check` ga ne vidi, `release:check` ne zna za naplatu), pa je jedina
+ * brana bila da se operater sjeti retka iz runbooka. Sada je deploy naplate jedna naredba koja
+ * preflight nosi u sebi.
+ *
+ * Granica tvrdnje, izricito: ovo NE dokazuje da ijedan CI ili gate pokrece preflight. Dokazuje da
+ * put kojim runbook salje operatera ne moze zaobici provjeru.
+ */
+describe('deploy naplate ide kroz preflight', () => {
+  const RUNBOOK = source('docs/GO_LIVE_NAPLATA.md');
+  const PKG = JSON.parse(source('package.json')) as { scripts?: Record<string, string> };
+  const PREFLIGHT = source('scripts/verify-naplata-secrets.mjs');
+
+  it('BASELINE: put deploya nema nijedan poznat propust', () => {
+    const problems = naplataDeployPathProblems(RUNBOOK, PKG, PREFLIGHT);
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('gard grize: runbook koji vraca goli supabase functions deploy se prijavi', () => {
+    const mutated = RUNBOOK.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n');
+    expect(mutated).not.toBe(RUNBOOK);
+    expect(naplataDeployPathProblems(mutated, PKG, PREFLIGHT).join('; ')).toContain('zaobilazi preflight');
+  });
+
+  it('gard grize: npm skripta bez --deploy se prijavi', () => {
+    const mutated = { scripts: { 'deploy:naplata': 'supabase functions deploy webhook-mor' } };
+    expect(naplataDeployPathProblems(RUNBOOK, mutated, PREFLIGHT).join('; ')).toContain('preflight');
+  });
+
+  it('gard grize: deploy prije presude o tajnama se prijavi', () => {
+    // MUTACIJA u memoriji: makni presudu, pa deploy poziv ostaje bez provjere ispred sebe.
+    const mutated = PREFLIGHT.replace('const verdict = supabaseSecretsVerdict(read.rows);', '');
+    expect(mutated).not.toBe(PREFLIGHT);
+    expect(naplataDeployPathProblems(RUNBOOK, PKG, mutated).join('; '))
+      .toContain('ne deploya tek nakon presude');
+  });
+
+  it('gard grize: zastavica za preskakanje preflighta se prijavi', () => {
+    const mutated = `${PREFLIGHT}\n// argv.includes('--skip-preflight')\n`;
+    expect(naplataDeployPathProblems(RUNBOOK, PKG, mutated).join('; ')).toContain('zastavicu za preskakanje');
   });
 });
