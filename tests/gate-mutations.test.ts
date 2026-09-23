@@ -59,6 +59,7 @@ import {
   EMPTY_VALUE_DIGEST,
 } from '../scripts/verify-naplata-secrets.mjs';
 import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
+import { localRepairFlagProblems, localRepairOfferProblems } from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
@@ -1229,6 +1230,67 @@ const MUTATIONS: Mutation[] = [
     caught: () => hasUnboundedFormData('const clen = Number(h ?? "0"); if (clen && clen > MAX) return r413(); const form = await req.formData();'),
     cleanBefore: () =>
       !hasUnboundedFormData(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')),
+  },
+  /**
+   * Lansiranje 2026-09 ide BEZ lokalnog popravka (nema code-signing certifikata za runner), pa je
+   * jedino sto stoji izmedju korisnika i ponude zastavica `REPAIR_LOCAL_ENABLED`. Do 2026-09-22 je
+   * bila inline izraz u module-scope konstanti Edge funkcije: nedostupna svakom testu, jer se ta
+   * datoteka u Vitestu ne izvrsava. Izdvojena je u `localRepairFlagEnabled`, a ove dvije mutacije
+   * cuvaju bas ono sto tada moze tiho puknuti: da se odluka vrati u inline izraz (pa opet ostane
+   * bez tablice istine) i da se `issuedLocalRepair` postavi mimo grane sa zastavicom.
+   */
+  {
+    id: 'edge/lokalni-popravak-zastavica-inline',
+    imitates:
+      'zastavica lokalnog popravka vracena u inline izraz nad Deno.env, pa se semantika (ukljucujuci ' +
+      "'TRUE' koje NE ukljucuje nista) vise ne moze dokazati nijednim testom bez deploya",
+    caught: () => localRepairFlagProblems([
+      "const LOCAL_REPAIR_ENABLED = Deno.env.get('REPAIR_LOCAL_ENABLED') === 'true'",
+      "  && Deno.env.get('REPAIR_LOCAL_DISABLED') !== 'true';",
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED) { issuedLocalRepair = await issue(); }',
+      'return json({ localLaunch: issuedLocalRepair?.launch ?? null });',
+    ].join('\n')).length > 0,
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  {
+    id: 'edge/lokalni-popravak-mimo-zastavice',
+    imitates:
+      'drugo mjesto u repair-docx koje postavlja `issuedLocalRepair` izvan grane sa zastavicom, pa ' +
+      'odgovor ponese localLaunch i kad je lokalni popravak ugasen',
+    caught: () => localRepairFlagProblems([
+      "import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';",
+      'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),",
+      "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),",
+      '});',
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED) { /* prazno */ }',
+      'issuedLocalRepair = await provisionLocalRepairJob(args);',
+      'return json({ localLaunch: issuedLocalRepair?.launch ?? null });',
+    ].join('\n')).includes('issuedLocalRepair se postavlja izvan grane koja provjerava LOCAL_REPAIR_ENABLED'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Klijentska strana istog toka: ponuda runnera se u app.ts dohvaca dinamickim importom UNUTAR
+   * grane `if(out.localRepair)`. Kad bi se import podigao izvan grane, modul bi se dohvacao i u
+   * buildu bez `VITE_LEKTA_LOCAL_REPAIR_RUNNER_*`, gdje ponuda ionako ne moze nastati.
+   */
+  {
+    id: 'ui/ponuda-lokalnog-runnera-izvan-grane',
+    imitates:
+      'dinamicki import modula local-repair-runner-download podignut izvan grane if(out.localRepair), ' +
+      'pa se ponuda lokalnog popravka dohvaca i kad server nije izdao launch',
+    caught: () => localRepairOfferProblems([
+      "const mod = await import('../report/local-repair-runner-download');",
+      'if(out.localRepair){',
+      ' mod.renderLocalRepairRunnerOffer(summary,out.localRepair,mod.localRepairRunnerConfig());',
+      '}',
+    ].join('\n')).length > 0,
+    cleanBefore: () =>
+      localRepairOfferProblems(readFileSync(resolve(process.cwd(), 'src/ui/app.ts'), 'utf8')).length === 0,
   },
   /**
    * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,

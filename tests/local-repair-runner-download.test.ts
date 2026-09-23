@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  localRepairRunnerConfig,
   renderLocalRepairRunnerOffer,
   type LocalRepairRunnerArtifactConfig,
 } from '../src/report/local-repair-runner-download.ts';
@@ -86,6 +87,23 @@ describe('local WordReplica runner download', () => {
     await vi.waitFor(() => expect(mount.textContent).toMatch(/nije moguće|provjeru/i));
 
     expect(downloaded).not.toHaveBeenCalled();
+  });
+
+  /**
+   * Lansiranje ide BEZ lokalnog popravka: u buildu nema `.env`, pa su
+   * VITE_LEKTA_LOCAL_REPAIR_RUNNER_URL i _SHA256 prazni. Gornji slucajevi to vjezbaju nad RUCNO
+   * sastavljenim configom, sto ne dokazuje da isti put daje i stvarna `localRepairRunnerConfig()`.
+   * Ovaj test ide kroz nju, dakle kroz DEPLOYMENT_CONFIG, i tvrdi da ponuda tada uopce ne postoji.
+   */
+  it('bez postavljenih VITE_LEKTA_LOCAL_REPAIR_RUNNER_* varijabli ponude nema', () => {
+    const live = localRepairRunnerConfig();
+
+    expect(live).toEqual({ url: '', sha256: '' });
+
+    const mount = document.createElement('div');
+    expect(renderLocalRepairRunnerOffer(mount, launch, live)).toBeNull();
+    expect(mount.childElementCount).toBe(0);
+    expect(mount.textContent).toBe('');
   });
 
   it('ne prikazuje gumb bez HTTPS artefakta i prikovanog SHA-256 hasha', async () => {
