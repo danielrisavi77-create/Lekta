@@ -21,9 +21,11 @@ import { dirname, resolve } from 'node:path';
 import {
   handlerOutcomes,
   naplataRunbookProblems,
+  runbookLogNameProblems,
   runbookSqlColumnProblems,
   runbookSqlQueryCount,
   webhookEventsColumns,
+  webhookMorLogNames,
 } from './helpers/naplata-env';
 import { IGNORE_REASON_PREFIXES } from '../src/report/webhook';
 
@@ -80,6 +82,36 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
     // MUTACIJA: izmisljen ishod koji runbook ne poznaje. Dokazuje da popis nije zamrznut.
     const problems = naplataRunbookProblems(RUNBOOK, [...handlerOutcomes(HANDLER), 'nov_ishod']);
     expect(problems.join('; ')).toContain('nov_ishod');
+  });
+});
+
+/**
+ * IME LOG RETKA KOJE IZVOR NE ISPISUJE NIJE IME (nalaz pregleda 2026-09-23).
+ *
+ * Runbook je spominjao `webhook-mor ignored_unpaid_order`, redak koji `webhook-mor/index.ts` nikad
+ * nije pisao (stvarno ime je `ignored_needs_attention`). Popis imena se izvodi iz izvora, ne
+ * prepisuje rucno, pa promjena imena u kodu bez pratece izmjene runbooka obara ovaj test.
+ */
+describe('runbook imenuje samo log retke koji stvarno postoje u izvoru webhook-mor', () => {
+  it('mjerenje je netrivijalno (izvod imena iz izvora nije prazan)', () => {
+    const imena = webhookMorLogNames(HANDLER);
+    expect(imena.size).toBeGreaterThanOrEqual(5);
+    expect(imena.has('needs_manual_link')).toBe(true);
+    expect(imena.has('ignored_needs_attention')).toBe(true);
+    expect(imena.has('ignored_foreign_event')).toBe(true);
+  });
+
+  it('BASELINE: runbook ne spominje nijedno izmisljeno ime', () => {
+    const problems = runbookLogNameProblems(RUNBOOK, webhookMorLogNames(HANDLER));
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('gard grize: ime koje izvor ne ispisuje se prijavi', () => {
+    // MUTACIJA: tocno stanje runbooka prije ispravka (pogresno ime umjesto stvarnog).
+    const mutated = RUNBOOK.split('`webhook-mor ignored_needs_attention`').join('`webhook-mor ignored_unpaid_order`');
+    expect(mutated).not.toBe(RUNBOOK);
+    const problems = runbookLogNameProblems(mutated, webhookMorLogNames(HANDLER));
+    expect(problems.join('; ')).toContain('ignored_unpaid_order');
   });
 });
 

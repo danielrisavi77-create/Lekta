@@ -14,9 +14,11 @@
 // vraca 200 { ignored: true, reason } i biljezi se u inbox s ishodom 'ignored'. Placena narudzba bez
 // meta.custom_data.user_id vise ne vraca 400 nego ishod 'needs_manual_link' (novac je naplacen, pa
 // dogadjaj ne smije nestati); 400 ostaje samo za neispravan JSON i nedostajuci order_id.
-// Povrat se prepoznaje SIRE od imena dogadjaja: po ev.refunded, dakle i iz attributes.status
-// 'refunded' i iz attributes.refunded true, kao i prije klasifikacije. Ishodi 'ignored' i
-// 'needs_manual_link' NISU u djelomicnom indeksu webhook_events_unresolved (0092), pa se nalaze
+// Povrat se prepoznaje ISKLJUCIVO po imenu dogadjaja order_refunded (classifyLemonEvent u
+// src/report/webhook.ts); ev.refunded se vise ne koristi kao okidac. Drugi dogadjaj koji nosi
+// vracen novac (npr. subscription_payment_refunded, gdje je data.id id pretplatnickog racuna, ne
+// narudzbe) ide u 'ignored' s razlogom povrat_bez_order_refunded, ne u refund granu. Ishodi 'ignored'
+// i 'needs_manual_link' NISU u djelomicnom indeksu webhook_events_unresolved (0092), pa se nalaze
 // upitom po stupcu outcome; upiti i postupak su u docs/GO_LIVE_NAPLATA.md.
 // Odluke (potpis, parsiranje, klasifikacija, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //

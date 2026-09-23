@@ -189,6 +189,7 @@ ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao service role):
 | `ignored` uz `outcome_detail` koji počinje s `nepodrzan_dogadjaj:` | pretplaćen je događaj koji nam ne treba | makni ga iz pretplate u LS (korak 4.4) |
 | `refused` | tuđa trgovina ili testni način rada (`store_mismatch`, `store_unverifiable`, `test_mode_refused`) | provjeri `LEMONSQUEEZY_STORE_ID` i `LS_ALLOW_TEST_MODE` |
 | `unknown_product` | `variant_id` nije u `products.mor_product_id` | popuni mapiranje pa replayaj |
+| `failed` | upis u bazu je pao (`manual_order_insert`, `product_without_work_type`, `entitlement_insert`); događaj je potpisan i platio je, ali entitlement ili manualna narudžba nisu nastali | provjeri `outcome_detail` za razlog i bazu (npr. nedostaje `work_type` na proizvodu), popravi pa replayaj |
 | `processed` | događaj je obrađen do kraja (kupnja, povrat, djelomični povrat ili ručno vezan redak) | ništa |
 
 ```sql
@@ -210,16 +211,32 @@ order by received_at asc;
 
 1. Iz `raw_payload` pročitaj `order_id`, `user_email` i `variant_id` (`data.attributes.first_order_item.variant_id`).
 2. Nađi ili otvori Supabase korisnika za taj e-mail i zabilježi njegov `user_id`.
-3. Nađi proizvod: `select id, work_type, slots_total, purchase_window_days from products where mor_product_id = '<variant_id>'`.
-4. Upiši `entitlements` redak s tim `user_id`, `order_id`, `provider = 'lemonsqueezy'`,
-   `work_type`, `slots_total` i `purchase_expires_at = now() + purchase_window_days`.
-   Jedinstvenost `(provider, order_id)` iz migracije 0001 sprječava dvostruki upis.
+3. Nađi proizvod: `select id as product_id, work_type, slots_total, purchase_window_days from products
+   where mor_product_id = '<variant_id>'`. Taj `id` je `products.id`, isti `product_id` koji čita
+   `generate-report` (spaja se na `products(slot_window_days)` preko view-a iz migracije 0008), pa
+   mora ući u entitlement, ne ostati samo u ovom koraku.
+4. Upiši redak s `product_id` iz koraka 3 i rokom izračunatim iz `purchase_window_days` istog retka:
+
+   ```sql
+   insert into entitlements (user_id, work_type, slots_total, product_id, order_id, provider, purchase_expires_at)
+   select '<user_id>', p.work_type, p.slots_total, p.id, '<order_id>', 'lemonsqueezy',
+          now() + (p.purchase_window_days * interval '1 day')
+   from products p
+   where p.id = '<product_id>'
+   on conflict (provider, order_id) do nothing;
+   ```
+
+   `unique (provider, order_id)` u migraciji 0001 je pravi unique constraint (ne samo indeks), pa
+   `on conflict` cilja izravno na njega i drugi pokušaj za isti `order_id` ne udvostručuje redak.
+   Stupci ovdje su isti koje pri kupnji piše `buildEntitlementInsert` u `src/report/webhook.ts`.
 5. Zatvori trag: `update webhook_events set outcome = 'processed', outcome_detail = 'rucno_vezano'
    where id = '<id>'`, pa taj redak više ne ispada u upitu iznad.
 
-U logu Edge funkcije isti slučajevi imaju imenovane retke: `webhook-mor needs_manual_link`,
-`webhook-mor ignored_unpaid_order` (ERROR, tiče se novca) i `webhook-mor ignored_foreign_event`
-(WARN, konfiguracijski šum). Log ističe, baza ne, pa je upit iznad mjerodavan.
+U logu Edge funkcije isti slučajevi imaju imenovane retke: `webhook-mor needs_manual_link`
+(ERROR, plaćena narudžba bez prava pristupa), `webhook-mor ignored_needs_attention` (ERROR, tiče se
+novca: neplaćena narudžba ili povrat pod imenom događaja koje nije `order_refunded`) i
+`webhook-mor ignored_foreign_event` (WARN, konfiguracijski šum). Log ističe, baza ne, pa je upit
+iznad mjerodavan.
 
 ## 6. Klijentska konfiguracija (bez rebuilda)
 
