@@ -115,6 +115,15 @@ header.site-chrome--scrolled {
 }
 .site-chrome__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex: none; }
 .site-chrome__score { font-family: var(--display-serif); font-size: 16px; color: var(--desk-ink); }
+/* ZBIJENI OBLIK ZNACKE "Lokalno na ovom uredjaju" U TRACI DOKUMENTA. `.local-badge` je bez ovoga
+   samo osnovni oblik iz page-chrome.css (13 px kurziv, padding 8px 13px, margin-top 4px), koji je
+   pisan za podnozje, ne za traku od 60px. Do Z15 popravka ovo pravilo je zivjelo u page-app.css na
+   `.nav-rad .local-badge`, a ovamo je preselio samo komentar koji ga najavljuje, ne i samo pravilo
+   (@media 720px ispod ovaj rad samo SKRIVA znacku, ne smanjuje je): rezultat je bio da je zaglavlje
+   `/rad/` na 1180 px sirine dvoredno (`.site-chrome__mid` gore ima `flex-wrap: wrap`). Gard:
+   `tests/site-chrome.test.ts`. */
+.site-chrome__doc .local-badge { margin-top: 0; padding: 5px 10px; font-size: 11px; letter-spacing: .02em; cursor: help; }
+.site-chrome__doc .local-badge svg { width: 12px; height: 12px; }
 
 .site-chrome__steps {
   display: flex;

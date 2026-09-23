@@ -456,6 +456,20 @@ describe('Z15 stanje nakon skrola', () => {
     expect(css).toMatch(/@media \(max-width: 720px\) \{\s*\.site-chrome__doc \.local-badge/);
   });
 
+  it('zaglavlje `/rad/` na desktopu ostaje jedan red: bez wrapa NA SREDINI ili sa zbijenom znackom', () => {
+    // happy-dom ne racuna layout (nema pravog visinskog mjerenja), pa je tvrdnja STRUKTURNA:
+    // ili `.site-chrome__mid` na baznoj razini (izvan svih @media upita) nema `flex-wrap: wrap`,
+    // ili znacka "Lokalno" u traci dokumenta ima zbijeni oblik koji je mjeren i ne gura sirinu
+    // (5px/10px padding, 11px font - vidi komentar uz `.site-chrome__doc .local-badge` gore).
+    // Vizualnu visinu na 1180 px mjeri orkestrator (Playwright nije dio ovog kruga gatea).
+    const puni = bezKomentara(read('src/shared/site-chrome.css'));
+    const prviMedia = puni.indexOf('@media');
+    const bazniSloj = prviMedia === -1 ? puni : puni.slice(0, prviMedia);
+    const midWrapa = /\.site-chrome__mid\s*\{[^}]*flex-wrap:\s*wrap/.test(bazniSloj);
+    const znackaZbijena = /\.site-chrome__doc \.local-badge\s*\{[^}]*margin-top:\s*0[^}]*padding:\s*5px 10px[^}]*font-size:\s*11px/.test(bazniSloj);
+    expect(midWrapa && !znackaZbijena, 'ni bez wrapa ni sa zbijenom znackom').toBe(false);
+  });
+
   it('mobilna mreza ima IZRICITO mjesto: logo i kontrole u prvom redu, sredina u drugom', () => {
     // Auto-placement je uz `grid-column: 1 / -1` na sredini davao TRI reda (logo / dokument /
     // lampa+hamburger) i zaglavlje od 177 px na 390 px. Izricito mjesto to rjesava, a visinu na
@@ -625,6 +639,36 @@ describe('Z15: stari markup i mrtva pravila su UKLONJENI, ne ostavljeni uz nove'
     expect(boot).toContain("import './site-chrome.css'");
     for (const stari of ['setupMobileNav(', 'setupTopbarScroll(', 'setupNavTools(']) {
       expect(boot, `${stari} bi bio drugo zivo ozicenje istog gumba`).not.toContain(stari);
+    }
+  });
+
+  /** Selektori koje traka vise ne koristi nigdje: stari .nav-rad blok radne povrsine (page-app.css),
+   * stara marketinska navigacija (.nav-links/.mobile-nav/.mobile-menu) i staro podnozje
+   * (.footer-bottom). Provjera je nad CSS-om bez komentara: komentar smije SPOMENUTI ime klase kao
+   * povijesnu biljesku, pravilo ga smije definirati - ni jedno ni drugo ne smije PRAVILO ostaviti. */
+  const MRTVI_SELEKTORI = ['.nav-links', '.mobile-nav', '.mobile-menu', '.footer-bottom', '.nav-rad', '.rad-doc'];
+
+  it('dijeljeni listovi radne povrsine (page-app.css, premium.css) ne nose mrtve selektore', () => {
+    for (const list of ['src/shared/page-app.css', 'src/shared/premium.css']) {
+      const css = bezKomentara(read(list));
+      for (const selektor of MRTVI_SELEKTORI) {
+        expect(css, `${list} i dalje nosi ${selektor}`).not.toContain(selektor);
+      }
+    }
+  });
+
+  /** `alati.html` je jedina sadrzajna stranica u dopustenom popisu putanja za Z15 popravak F1
+   * (docs/agents/orchestrator-backlog.md F14 raspravlja opseg): njen inline <style> je ociscen.
+   * `citat.html`, `izjava.html`, `kartice.html`, `literatura.html`, `naslovnica.html`,
+   * `citati-i-literatura.html`, `landing_usporedba.html`, `landing_benchmark.html` I DALJE nose
+   * `.nav-links`/`.mobile-nav`/`.mobile-menu` u inline <style> blokovima (isti mrtvi razred), ali
+   * NISU u dopustenom popisu putanja ovog kruga popravka, pa gard nad njima namjerno NIJE ovdje:
+   * dodavanje bi ih ili slagalo kao MRTVE bez ovlasti za popravak, ili tiho preskocilo tvrdnju o
+   * "svugdje". Prosirenje je F14 pitanje vlasniku. */
+  it('`alati.html` inline <style> ne nosi mrtve selektore', () => {
+    const style = read('alati.html').replace(/\/\*[\s\S]*?\*\//g, ' ');
+    for (const selektor of MRTVI_SELEKTORI) {
+      expect(style, `alati.html i dalje nosi ${selektor}`).not.toContain(selektor);
     }
   });
 });

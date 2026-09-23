@@ -80,8 +80,7 @@
   color: var(--red-on-soft) !important;
 }
 
-[data-premium-surface="analyzer"] #pricingDisclaimer,
-body:has(main[data-premium-surface="analyzer"]) .footer-bottom {
+[data-premium-surface="analyzer"] #pricingDisclaimer {
   color: var(--desk-muted) !important;
 }
 
