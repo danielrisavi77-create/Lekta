@@ -86,6 +86,7 @@ class PathPolicyTest(unittest.TestCase):
         for control in ("tests/gate-mutations.test.ts", "scripts/autonomy/policy.py", ".github/workflows/check.yml",
                         "package.json", "data/security/npm-audit-ratchet.json", "docs/generated/RELEASE_PROOF.json",
                         "config/autonomy.example.json", "supabase/functions/repair-docx/index.ts", "CLAUDE.md",
+                        "docs/agents/ORCHESTRATION.md", "docs/agents/PROJECT_RULES.md",
                         "tests/docx-golden.test.ts"):
             verdict, reasons = explain_change([control], 1, self.policy)
             self.assertEqual(verdict, "needs_human", control)
