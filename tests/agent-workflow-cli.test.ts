@@ -98,7 +98,14 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     const report = JSON.parse(result.stdout);
     expect(report.status).toBe('needs_verification');
     expect(report.reportedModels).toEqual(['grok-4.6-build']);
+    expect(report.usage.modelCalls).toBe(1);
     expect(readFileSync(join(report.artifacts, 'prompt.md'), 'utf8')).toContain('LEKTA task T00');
+    const ledger = readFileSync(join(root, '.artifacts/agents/usage.jsonl'), 'utf8')
+      .trim().split('\n').map(line => JSON.parse(line));
+    expect(ledger.at(-1)).toMatchObject({
+      task: 'T00', phase: 'plan', provider: 'grok', status: 'needs_verification',
+      usage: { modelCalls: 1 },
+    });
   });
   it('diagnoses an unavailable Bubblewrap sandbox without weakening it', () => {
     const { run } = fixture('turn.completed', 'sandbox-failure');
@@ -116,6 +123,13 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     const unsupported = fixture('turn.completed', 'old-version').run('doctor');
     expect(unsupported.status, unsupported.stderr).toBe(0);
     expect(unsupported.stdout).toContain('grok: grok 1.0.33 (old) [unsupported; minimum 1.0.34]');
+  });
+  it('refuses an unsupported Grok version before creating model artifacts', () => {
+    const { root, run } = fixture('turn.completed', 'old-version');
+    const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--execute');
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('Unsupported Grok CLI version');
+    expect(existsSync(join(root, '.artifacts'))).toBe(false);
   });
 });
 
