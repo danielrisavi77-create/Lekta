@@ -139,6 +139,13 @@ Redoslijed je namjerno fiksan i disabled-first:
     `REPAIR_LOCAL_DISABLED=true` i dalje cuva flow;
 11. zadnja operacija aktivira flow postavljanjem `REPAIR_LOCAL_DISABLED=false`.
 
+Sve tri funkcije citaju istu zastavicu (`src/repair/local-runner/feature-flag.ts`:
+`REPAIR_LOCAL_ENABLED === 'true'` i `REPAIR_LOCAL_DISABLED !== 'true'`), pa su
+`repair-local-claim` i `repair-local-status` zadano iskljucene i vracaju 503 sve
+do koraka 11. Prije 2026-09-23 su te dvije javne funkcije (verifyJwt: false)
+ovisile samo o `REPAIR_LOCAL_DISABLED`, dakle bile su zive dok ga netko ne
+postavi; ishod nakon koraka 11 je isti kao i prije.
+
 Svaka secret faza koristi jednu `supabase secrets set --env-file` naredbu.
 Privremeni folder i datoteka dobivaju ograniceni ACL/chmod, privatna vrijednost
 nije u argumentima ni logovima, a cleanup kvar zaustavlja release. Svaki drugi

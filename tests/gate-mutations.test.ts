@@ -59,6 +59,11 @@ import {
   EMPTY_VALUE_DIGEST,
 } from '../scripts/verify-naplata-secrets.mjs';
 import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
+import {
+  localRepairFlagProblems,
+  localRepairOfferProblems,
+  localRepairPublicEndpointProblems,
+} from './helpers/local-repair-flag-guard';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareAuditToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
@@ -1229,6 +1234,219 @@ const MUTATIONS: Mutation[] = [
     caught: () => hasUnboundedFormData('const clen = Number(h ?? "0"); if (clen && clen > MAX) return r413(); const form = await req.formData();'),
     cleanBefore: () =>
       !hasUnboundedFormData(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')),
+  },
+  /**
+   * Lansiranje 2026-09 ide BEZ lokalnog popravka (nema code-signing certifikata za runner), pa je
+   * jedino sto stoji izmedju korisnika i ponude zastavica `REPAIR_LOCAL_ENABLED`. Do 2026-09-22 je
+   * bila inline izraz u module-scope konstanti Edge funkcije: nedostupna svakom testu, jer se ta
+   * datoteka u Vitestu ne izvrsava. Izdvojena je u `localRepairFlagEnabled`, a ove dvije mutacije
+   * cuvaju bas ono sto tada moze tiho puknuti: da se odluka vrati u inline izraz (pa opet ostane
+   * bez tablice istine) i da se `issuedLocalRepair` postavi mimo grane sa zastavicom.
+   */
+  {
+    id: 'edge/lokalni-popravak-zastavica-inline',
+    imitates:
+      'zastavica lokalnog popravka vracena u inline izraz nad Deno.env, pa se semantika (ukljucujuci ' +
+      "'TRUE' koje NE ukljucuje nista) vise ne moze dokazati nijednim testom bez deploya",
+    caught: () => localRepairFlagProblems([
+      "const LOCAL_REPAIR_ENABLED = Deno.env.get('REPAIR_LOCAL_ENABLED') === 'true'",
+      "  && Deno.env.get('REPAIR_LOCAL_DISABLED') !== 'true';",
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED) { issuedLocalRepair = await issue(); }',
+      'return json({ localLaunch: issuedLocalRepair?.launch ?? null });',
+    ].join('\n')).includes('LOCAL_REPAIR_ENABLED se ne racuna pozivom localRepairFlagEnabled(...)'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  {
+    id: 'edge/lokalni-popravak-mimo-zastavice',
+    imitates:
+      'drugo mjesto u repair-docx koje postavlja `issuedLocalRepair` izvan grane sa zastavicom, pa ' +
+      'odgovor ponese localLaunch i kad je lokalni popravak ugasen',
+    caught: () => localRepairFlagProblems([
+      "import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';",
+      'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),",
+      "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),",
+      '});',
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED) { /* prazno */ }',
+      'issuedLocalRepair = await provisionLocalRepairJob(args);',
+      'return json({ localLaunch: issuedLocalRepair?.launch ?? null });',
+    ].join('\n')).includes('issuedLocalRepair se postavlja izvan grane koja provjerava LOCAL_REPAIR_ENABLED'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Klijentska strana istog toka: ponuda runnera se u app.ts dohvaca dinamickim importom UNUTAR
+   * grane `if(out.localRepair)`. Kad bi se import podigao izvan grane, modul bi se dohvacao i u
+   * buildu bez `VITE_LEKTA_LOCAL_REPAIR_RUNNER_*`, gdje ponuda ionako ne moze nastati.
+   */
+  {
+    id: 'ui/ponuda-lokalnog-runnera-izvan-grane',
+    imitates:
+      'dinamicki import modula local-repair-runner-download podignut izvan grane if(out.localRepair), ' +
+      'pa se ponuda lokalnog popravka dohvaca i kad server nije izdao launch',
+    caught: () => localRepairOfferProblems([
+      "const mod = await import('../report/local-repair-runner-download');",
+      'if(out.localRepair){',
+      ' mod.renderLocalRepairRunnerOffer(summary,out.localRepair,mod.localRepairRunnerConfig());',
+      '}',
+    ].join('\n')).length > 0,
+    cleanBefore: () =>
+      localRepairOfferProblems(readFileSync(resolve(process.cwd(), 'src/ui/app.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Pregled 2026-09-23 je nasao dvije rupe u prvoj verziji garda i obje su ovdje zatvorene vlastitom
+   * mutacijom. Prva: gard je gledao ARGUMENT `localLaunch`, a ne POLJE odgovora, pa se launch mogao
+   * pustiti klijentu iz drugog izvora uz zelen gate.
+   */
+  {
+    id: 'edge/lokalni-popravak-launch-u-odgovoru',
+    imitates:
+      'polje localRepair u odgovoru repair-docx popunjeno mimo handoffa, pa klijent dobije valjan ' +
+      'launch i kad je zastavica REPAIR_LOCAL_ENABLED ugasena',
+    caught: () => localRepairFlagProblems([
+      "import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';",
+      'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),",
+      "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),",
+      '});',
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED) { issuedLocalRepair = await provisionLocalRepairJob(args); }',
+      'const handoff = await settleRepairStorageHandoff({ localLaunch: issuedLocalRepair?.launch ?? null });',
+      'return json({ localRepair: rogueLaunch });',
+    ].join('\n')).includes('polje localRepair u odgovoru dolazi iz izvora koji nije handoff.localRepair'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Adversarijalni pregled drugog alata (2026-09-23) pokazao je da gard koji samo trazi tekst
+   * `if (LOCAL_REPAIR_ENABLED` ne vidi ostatak uvjeta, pa `|| true` bezuvjetno izdaje posao.
+   */
+  {
+    id: 'edge/lokalni-popravak-uvjet-grane',
+    imitates:
+      'zastavica prestane biti nuzan uvjet grane (`if (LOCAL_REPAIR_ENABLED || true)`), pa se lokalni ' +
+      'popravak izdaje i kad je ugasena',
+    caught: () => localRepairFlagProblems([
+      "import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';",
+      'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),",
+      "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),",
+      '});',
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED || true) { issuedLocalRepair = await provisionLocalRepairJob(args); }',
+      'const handoff = await settleRepairStorageHandoff({ localLaunch: issuedLocalRepair?.launch ?? null });',
+      'return json({ localRepair: handoff.localRepair });',
+    ].join('\n')).includes('uvjet grane nije oblika `LOCAL_REPAIR_ENABLED && ...`, pa zastavica vise nije nuzan uvjet'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Druga rupa: ponuda preseljena u omotac pod drugim imenom, koji se ucitava BEZUVJETNO, a grana
+   * samo odlucuje hoce li se pozvati. Gard sada prijavljuje svaki dinamicki import cija staza
+   * spominje i "local" i "repair", osim izricito popisanih modula koji nisu ponuda.
+   */
+  {
+    id: 'ui/ponuda-lokalnog-runnera-u-omotacu',
+    imitates:
+      'ponuda lokalnog popravka preseljena u omotac pod neutralnim imenom koji se ucitava bezuvjetno, ' +
+      'pa se modul dohvaca na svakom serverskom popravku iako launcha nema',
+    caught: () => localRepairOfferProblems([
+      "const offer = await import('../report/local-repair-offer');",
+      'if(out.localRepair){',
+      ' offer.show(summary,out.localRepair);',
+      '}',
+    ].join('\n')).includes('modul ponude lokalnog popravka se dohvaca izvan grane if(out.localRepair)'),
+    cleanBefore: () =>
+      localRepairOfferProblems(readFileSync(resolve(process.cwd(), 'src/ui/app.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * DRUGI ADVERSARIJALNI PREGLED (2026-09-23, krug 3) srusio je cetiri tvrdnje prethodne verzije
+   * garda. Svaka od sljedecih mutacija je bas taj slucaj, reproduciran nad KOPIJOM stvarnog izvora
+   * u memoriji (datoteka na disku se ne dira), i svaka tvrdi TOCNU poruku, ne `length > 0`: inace
+   * bi ju zadovoljio i gard kojem je provjera te osi potpuno uklonjena.
+   */
+  {
+    id: 'edge/lokalni-popravak-zasjenjena-zastavica',
+    imitates:
+      'privremeno "forsiraj za lokalno testiranje" koje ostane u kodu: `const LOCAL_REPAIR_ENABLED = true;` '
+      + 'unutar Deno.serve handlera zasjeni modul-konstantu, prolazi check:edge i izdaje posao uz ugasenu zastavicu',
+    caught: () => localRepairFlagProblems(
+      readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8').replace(
+        'if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+        'const LOCAL_REPAIR_ENABLED = true;\n    if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+      ),
+    ).includes('LOCAL_REPAIR_ENABLED se deklarira vise od jednom; lokalno zasjenjenje ponistava modul-konstantu'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  {
+    id: 'edge/lokalni-popravak-destrukturirano-izdavanje',
+    imitates:
+      'izdavanje posla izvan grane preko destrukturiranog pridruzivanja `({ issued: issuedLocalRepair } = ...)`, '
+      + 'oblik koji obrazac za pridruzivanje ne prepoznaje jer iza imena dolazi viticasta zagrada',
+    caught: () => localRepairFlagProblems(
+      readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8').replace(
+        'const tStore = performance.now();',
+        '({ issued: issuedLocalRepair } = rogueResult);\n    const tStore = performance.now();',
+      ),
+    ).includes('issuedLocalRepair se spominje izvan grane i izvan dopustenih oblika citanja'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  {
+    id: 'edge/lokalni-popravak-deklaracija-s-launchem',
+    imitates:
+      'launch upisan vec u DEKLARACIJU `let issuedLocalRepair: IssuedLocalRepairJob | null = rogueLaunch;`, '
+      + 'koju je prethodna verzija garda izuzimala u cijelosti pa nikakva pocetna vrijednost nije smetala',
+    caught: () => localRepairFlagProblems(
+      readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8').replace(
+        'let issuedLocalRepair: IssuedLocalRepairJob | null = null;',
+        'let issuedLocalRepair: IssuedLocalRepairJob | null = rogueLaunch;',
+      ),
+    ).includes('issuedLocalRepair se ne deklarira tocno jednom kao `let issuedLocalRepair: ... = null;`'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  {
+    id: 'edge/lokalni-popravak-uvjet-prelomljen',
+    imitates:
+      'alternativa u uvjetu grane prelomljenom u dva retka (`if (LOCAL_REPAIR_ENABLED\n      || true)`), koju '
+      + 'obrazac nad jednim retkom uopce ne vidi pa se provjera oblika uvjeta tiho preskoci',
+    caught: () => localRepairFlagProblems(
+      readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8').replace(
+        'if (LOCAL_REPAIR_ENABLED && !FREE_MODE && jobId && slotId) {',
+        'if (LOCAL_REPAIR_ENABLED\n      || true) {',
+      ),
+    ).includes('uvjet grane nije oblika `LOCAL_REPAIR_ENABLED && ...`, pa zastavica vise nije nuzan uvjet'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Isti pregled, peti nalaz: tvrdnja "integracija je iskljucena" bila je dokazana samo za
+   * repair-docx i klijenta, a javni `repair-local-claim` i `repair-local-status` (verifyJwt: false)
+   * gasio je samo kill switch REPAIR_LOCAL_DISABLED, koji se na lansiranju ne postavlja.
+   */
+  {
+    id: 'edge/javni-runner-endpoint-fail-open',
+    imitates:
+      'javni neautenticirani runner endpoint koji se gasi samo kill switchem REPAIR_LOCAL_DISABLED, pa je '
+      + 'bez ijedne postavljene varijable ZIV iako je lokalni popravak iskljucen (fail-open)',
+    caught: () => localRepairPublicEndpointProblems(
+      readFileSync(resolve(process.cwd(), 'supabase/functions/repair-local-claim/index.ts'), 'utf8')
+        .replace(
+          /const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled\(\{[\s\S]*?\}\);/,
+          "const LOCAL_REPAIR_DISABLED = Deno.env.get('REPAIR_LOCAL_DISABLED') === 'true';",
+        )
+        .replace('if (!LOCAL_REPAIR_ENABLED) {', 'if (LOCAL_REPAIR_DISABLED) {'),
+    ).includes('LOCAL_REPAIR_ENABLED se ne racuna pozivom localRepairFlagEnabled(...)'),
+    cleanBefore: () =>
+      ['repair-local-claim', 'repair-local-status'].every((name) =>
+        localRepairPublicEndpointProblems(
+          readFileSync(resolve(process.cwd(), `supabase/functions/${name}/index.ts`), 'utf8'),
+        ).length === 0),
   },
   /**
    * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,
