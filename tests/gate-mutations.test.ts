@@ -91,7 +91,7 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 import { sidecarAdmitted } from './real-corpus/corpus-track';
 import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
 import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
-import { handoffQueryProblems } from './helpers/handoff-query-contract';
+import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
 import { buildRepairPanelHandle } from '../src/ui/repair-panel';
@@ -3075,6 +3075,26 @@ const MUTATIONS: Mutation[] = [
     // Baseline nad STVARNOM izvedbom: bez njega bi mutacija mogla prolaziti zato sto ugovor
     // vristi na sve, a ne zato sto je pogodio bas propusnu bijelu listu.
     cleanBefore: () => handoffQueryProblems(buildHandoffQuery).length === 0,
+  },
+
+  // --- prijenos konteksta: produkcijska veza u main.ts, ne samo ubrizgana ovisnost -------------
+  {
+    id: 'handoff/main-ts-gubi-location-search',
+    imitates: 'refaktor ili merge koji iz src/routes/intake/main.ts izgubi `handoffSearch: window.location.search`, pa prijenos radi u testovima a u pregledniku ne postoji (audit 22. 9., nalaz #11)',
+    caught: () => {
+      const stvarni = readFileSync(resolve(process.cwd(), 'src/routes/intake/main.ts'), 'utf8');
+      // MUTACIJA 1: redak nestaje, tocno onako kako bi ga izgubio revert ili merge.
+      const bezRetka = stvarni.replace(/^.*handoffSearch\s*:.*$/m, '');
+      // MUTACIJA 2: redak ostaje, ali je izvor zamijenjen praznim nizom. To je podmukliji oblik,
+      // jer ovisnost je i dalje ondje pa povrsan pregled diffa ne vidi da je prijenos mrtav.
+      const prazanIzvor = stvarni.replace(/handoffSearch\s*:\s*window\.location\.search/, "handoffSearch: ''");
+      return intakeHandoffWiringProblems(bezRetka).length > 0
+        && intakeHandoffWiringProblems(prazanIzvor).length > 0;
+    },
+    // Baseline nad STVARNIM izvorom: mutacija vrijedi samo ako cisto stanje daje prazan popis.
+    cleanBefore: () => intakeHandoffWiringProblems(
+      readFileSync(resolve(process.cwd(), 'src/routes/intake/main.ts'), 'utf8'),
+    ).length === 0,
   },
 ];
 

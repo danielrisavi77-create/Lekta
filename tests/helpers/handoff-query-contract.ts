@@ -57,3 +57,46 @@ export function handoffQueryProblems(build: HandoffQueryBuilder): string[] {
 
   return problems;
 }
+
+/**
+ * UGOVOR NAD PRODUKCIJSKOM VEZOM U `src/routes/intake/main.ts`.
+ *
+ * ZASTO POSTOJI: pregled je izmjerio rupu, nije je pretpostavio. Brisanjem JEDNOG retka
+ * (`handoffSearch: window.location.search`) iz `main.ts` cijeli prijenos prestaje raditi u
+ * pregledniku, a svi testovi ostaju zeleni, jer svaki od njih `handoffSearch` ubrizgava rucno kroz
+ * ovisnosti kontrolera i time nikad ne dotice stvarnu vezu. Tako bi buduci refaktor, revert ili
+ * merge tiho vratio nalaz #11 iz audita 22. 9. (student sa SEO stranice fakulteta opet dobiva
+ * genericki obrazac) bez ijednog crvenog signala.
+ *
+ * CLAUDE.md, "Verifikacijska disciplina": novi mehanizam mora imati vlastiti izravni signal.
+ * Provjera je nad IZVOROM jer je to jedini sloj na kojem se ta veza vidi; isti idiom vec koristi
+ * `tests/intake-entry-boundary.test.ts` za `uploadCapBytes` i `deviceMemory`.
+ *
+ * Vraca popis PREKRSENIH tvrdnji; prazan popis znaci da je veza na mjestu.
+ */
+export function intakeHandoffWiringProblems(mainSource: string): string[] {
+  const problems: string[] = [];
+  const fail = (message: string): void => { problems.push(message); };
+
+  const mountIndex = mainSource.indexOf('mountIntakeController(');
+  if (mountIndex < 0) {
+    fail('mountIntakeController se ne poziva iz main.ts');
+    return problems;
+  }
+
+  // Gleda se SAMO tijelo poziva, da tvrdnju ne moze lazno zadovoljiti spomen u komentaru negdje
+  // drugdje u datoteci.
+  const callBody = mainSource.slice(mountIndex);
+  const wiring = /handoffSearch\s*:\s*([^,\n]+)/.exec(callBody);
+  if (!wiring) {
+    fail('mountIntakeController se poziva bez handoffSearch: kontekst sa `/?unit=...` se gubi');
+    return problems;
+  }
+
+  const value = wiring[1].trim();
+  if (!/^(?:window\.)?location\.search$/.test(value)) {
+    fail(`handoffSearch ne dolazi iz location.search nego iz \`${value}\``);
+  }
+
+  return problems;
+}

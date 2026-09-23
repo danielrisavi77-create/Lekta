@@ -4,12 +4,20 @@
  * ZASTO POSTOJI: SEO stranice fakulteta i citatni alati vode na `/?unit=<id>&utm_source=...`
  * (`scripts/generate-faculty-pages.mjs`, `scripts/generate-citation-tools.mjs`). Ulaz je od reza
  * naslovnice samo upload i navigira na `/rad/#session=<uuid>`, bez ikakvog querya, pa su se i
- * fakultet i UTM atribucija gubili na prvom koraku. Student sa stranice svog fakulteta dobivao je
- * genericki obrazac, a izvor posjeta nije stizao nikamo.
+ * fakultet i oznake izvora gubili na prvom koraku. Student sa stranice svog fakulteta dobivao je
+ * genericki obrazac.
  *
- * ODREDISTE VEC ZNA CITATI OVAJ QUERY: `src/ui/selection-entry.ts` (`urlSelection`) cita
- * `unit`, `work` i `project`, a `src/ui/app.ts` ga poziva kroz `applyUnitFromUrl`. Ovdje se dakle
- * ne uvodi novo tumacenje, nego se postojeci ulaz prestaje gubiti u prijenosu.
+ * STO ODREDISTE STVARNO CITA, A STO SAMO NOSI (izmjereno 23. 9. 2026, grep po `src/`):
+ *  - `unit`, `work` i `project` KONZUMIRA `src/ui/selection-entry.ts` (`urlSelection`), kojeg
+ *    `src/ui/app.ts` zove kroz `applyUnitFromUrl`. Za te tri kljuceve prijenos stvarno mijenja
+ *    ono sto student vidi: predodabir profila umjesto generickog obrasca.
+ *  - `utm_*` kljuceve u ovom trenutku NE CITA nijedan potrosac u aplikaciji. `src/ui/telemetry.ts`
+ *    salje `path: location.pathname`, bez `location.search`, a `sanitizeEventData` propusta samo
+ *    kljuceve s popisa `DOPUSTENI_KLJUCEVI`, na kojem nema nijednog utm polja; u `index.html` ni u
+ *    `rad/index.html` nema analitike trece strane koja bi procitala punu adresu. Prijenos ih dakle
+ *    zadrzava u adresnoj traci i time ostavlja OTVORENIM put do atribucije, ali je sam po sebi ne
+ *    uspostavlja. Tko god je bude uspostavljao, mora to uciniti uz privolu i na strani potrosaca;
+ *    ovdje se ne smije tvrditi da je atribucija rijesena.
  *
  * BIJELA LISTA, NE FILTAR CRNE LISTE. Prenose se tocno `unit`, `work`, `project` i `utm_*`
  * kljucevi. Sve ostalo se odbacuje bez iznimke, jer je ovo javno dosegljiv ulaz: proizvoljan
