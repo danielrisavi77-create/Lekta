@@ -1,22 +1,28 @@
-// Lekta Edge Function: webhook-mor (Deno, Supabase). Merchant of Record: Lemon Squeezy.
+// Lekta Edge Function: webhook-mor (Deno, Supabase). Pruzatelj naplate: Stripe.
 // Spec: docs/MONETIZATION_PLAN.md sekcija 6 (webhook delte) + MONETIZATION_AND_ANTI_ABUSE.md 7.
 //
-// Na uspjesnu kupnju kreira entitlement; idempotentno preko unique (provider, order_id)
-// (migracija 0001). Proizvod se mapira iz baze `products` po mor_product_id (LS variant),
-// ne vise iz hardkodirane liste. Rok potrosnje je po proizvodu (purchase_window_days).
+// Ime funkcije (`webhook-mor`) je naslijedjeno iz vremena Merchant of Record providera i
+// namjerno se NE mijenja: ono je vec upisano u produkcijski URL i deploy manifest. Stripe nije
+// Merchant of Record, pa PDV obracunava i prijavljuje vlasnik (odluka 2026-09-23, F18).
+//
+// Obradjuju se dva dogadjaja: `payment_intent.succeeded` (knjizi entitlement) i
+// `charge.refunded` (povrat). Kljuc knjizenja je PaymentIntent id, isti za uplatu i povrat.
+// Idempotentno preko unique (provider, order_id) (migracija 0001). Proizvod se trazi u bazi
+// `products` po KATALOSKOM id-u iz `metadata[product_id]`, ne po naslijedjenom mapiranju.
+// Rok potrosnje je po proizvodu (purchase_window_days).
 // manual_fulfillment (premium_human) -> manual_orders. Pass -> izdaje -20% kupon (coupon_grants).
 // Nepoznat proizvod -> log + 200 (bez entitlementa) da provider ne retry-a beskonacno (6.2);
 // od 2026-08-17 takav dogadjaj TRAJNO ostaje u webhook_events pa se moze replayati (PAY-06).
-// Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (store_id, test_mode) provjerava
-// se prije ijednog upisa: potpis dokazuje samo znanje tajne, ne i cija je trgovina (PAY-04/05).
+// Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (livemode, vrsta dogadjaja)
+// provjerava se prije ijednog upisa: potpis dokazuje samo znanje tajne (PAY-04/05).
 // Odluke (potpis, parsiranje, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { readTextBounded } from '../_shared/read-body.ts';
 import {
-  verifyLemonSignature,
-  parseLemonEvent,
+  verifyStripeSignature,
+  parseStripeEvent,
   isoAfterDays,
   isPassProduct,
   makePassCouponCode,
@@ -24,8 +30,8 @@ import {
   buildEntitlementInsert,
   acceptEvent,
   isFullRefund,
-  type LemonEvent,
-  type LemonWebhookPayload,
+  type StripeEvent,
+  type StripeWebhookPayload,
 } from '../../../src/report/webhook.ts';
 import { mapProductRow, type Product } from '../../../src/catalog/products-catalog.ts';
 import {
@@ -39,16 +45,17 @@ import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const WEBHOOK_SECRET = Deno.env.get('MOR_WEBHOOK_SECRET') ?? '';
 /**
- * Lemon Squeezy store id iz kojeg SMIJU dolaziti dogadjaji (audit PAY-04).
+ * Signing secret Stripe webhook endpointa (`whsec_...`).
  *
- * Prazno = provjera porijekla se ne moze provesti, pa `acceptEvent` odbija SVE dogadjaje s
- * razlogom `store_unverifiable`. To je namjerno fail-closed: tise propustanje bi znacilo da
- * webhook prima dogadjaje bilo koje trgovine, a da nitko ne zna da gate nije konfiguriran.
+ * Prazno = potpis se ne moze provjeriti, pa `verifyStripeSignature` odbija SVE dogadjaje s
+ * razlogom `missing_secret`. Namjerno fail-closed: tise propustanje bi znacilo da webhook prima
+ * dogadjaje bilo koga, a da nitko ne zna da gate nije konfiguriran.
  */
-const LS_STORE_ID = Deno.env.get('LS_STORE_ID') ?? '';
-const PROVIDER = 'lemonsqueezy';
+const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';
+/** Ocekivani Stripe Connect racun; prazno = obican racun, provjera se preskace. */
+const STRIPE_ACCOUNT_ID = Deno.env.get('STRIPE_ACCOUNT_ID') ?? '';
+const PROVIDER = 'stripe';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
@@ -62,7 +69,7 @@ async function resolveReferrer(admin: any, code: string): Promise<string | null>
 }
 
 // Atribucija referala (sekcija 8): tek uz TEK kreiran entitlement (pozivatelj to jamci).
-async function attributeReferral(admin: any, ev: LemonEvent): Promise<void> {
+async function attributeReferral(admin: any, ev: StripeEvent): Promise<void> {
   const referrerUserId = await resolveReferrer(admin, ev.referralCode);
   if (!referrerUserId) return; // nepoznat kod
 
@@ -136,7 +143,7 @@ async function attributeReferral(admin: any, ev: LemonEvent): Promise<void> {
     console.error('webhook-mor referral_reward_failed', { orderId: ev.orderId, code: (rewardErr as any).code });
   }
 
-  // welcome kupon za referred (zapis; primjena -20% na LS checkoutu je integracija). AUD-28:
+  // welcome kupon za referred (zapis; primjena -20% pri naplati je integracija). AUD-28:
   // ON CONFLICT (source_order_id, reason) DO NOTHING preko coupon_grants_order_reason_key (0024).
   await admin.from('coupon_grants').upsert({
     user_id: ev.userId,
@@ -145,7 +152,7 @@ async function attributeReferral(admin: any, ev: LemonEvent): Promise<void> {
     source_order_id: ev.orderId,
     expires_at: isoAfterDays(Date.now(), 120),
   }, { onConflict: 'source_order_id,reason', ignoreDuplicates: true });
-  void REFERRAL_WELCOME_DISCOUNT; // -20% se postavlja u LS discount konfiguraciji (TODO)
+  void REFERRAL_WELCOME_DISCOUNT; // -20% se postavlja u Stripe kupon konfiguraciji (TODO)
 }
 
 // Refund izvorne kupnje povlaci NEPOTROSENU referral nagradu (potrosenu pusti, false-allow).
@@ -201,7 +208,7 @@ async function pullReferralSignupReward(admin: any, orderId: string): Promise<vo
 type BonusKind = 'referrer_reward' | 'pass_coupon' | 'referral_attribution';
 
 /** Koje obveze ovaj order uopce stvara. Jedno mjesto, da se upis i izvrsenje ne raziđu. */
-function plannedBonuses(ev: LemonEvent, product: Product): Array<{ kind: BonusKind; payload: Record<string, unknown> }> {
+function plannedBonuses(ev: StripeEvent, product: Product): Array<{ kind: BonusKind; payload: Record<string, unknown> }> {
   const out: Array<{ kind: BonusKind; payload: Record<string, unknown> }> = [
     { kind: 'referrer_reward', payload: { userId: ev.userId, workType: product.workType ?? '' } },
   ];
@@ -221,7 +228,7 @@ function plannedBonuses(ev: LemonEvent, product: Product): Array<{ kind: BonusKi
  *
  * Ne baca: upis outboxa ne smije srusiti handler kojem je jezgra (entitlement) vec uspjela.
  */
-async function enqueueBonuses(admin: any, ev: LemonEvent, product: Product): Promise<void> {
+async function enqueueBonuses(admin: any, ev: StripeEvent, product: Product): Promise<void> {
   const rows = plannedBonuses(ev, product).map((b) => ({
     user_id: ev.userId, order_id: ev.orderId, kind: b.kind, payload: b.payload,
   }));
@@ -259,19 +266,24 @@ Deno.serve(async (req: Request) => {
   // procitano. `req.text()` bez granice znaci da nepotpisan zahtjev moze alocirati koliko god
   // posiljatelj hoce, prije nego je ijedna provjera stigla reci ne.
   //
-  // Granica je namjerno velikodusna prema stvarnom prometu: najveci Lemon Squeezy `order_created`
-  // s punim `meta.custom_data` i stavkama je reda velicine desetak KiB.
+  // Granica je namjerno velikodusna prema stvarnom prometu: najveci Stripe `payment_intent.*`
+  // dogadjaj s punim objektom i metadatom je reda velicine desetak KiB.
   const rawBody = await readTextBounded(req, MAX_WEBHOOK_BODY_BYTES);
   if (!rawBody.ok) return json({ error: 'payload_too_large' }, 413);
   const raw = rawBody.text;
-  if (!(await verifyLemonSignature(raw, req.headers.get('X-Signature'), WEBHOOK_SECRET))) {
+  // Potpis nosi i vrijeme (`t=`): stari valjan zahtjev se odbija, pa presretnut zahtjev nije
+  // vjecno upotrebljiv (replay). Razlog ide u log, klijent dobije samo genericko.
+  const sig = await verifyStripeSignature(raw, req.headers.get('Stripe-Signature'), WEBHOOK_SECRET);
+  if (!sig.ok) {
+    console.error('webhook-mor invalid_signature', { reason: sig.reason });
     return json({ error: 'invalid_signature' }, 401);
   }
   // JSON se parsira TOCNO JEDNOM i tek nakon sto je potpis prosao.
-  let parsed: LemonWebhookPayload;
-  try { parsed = JSON.parse(raw) as LemonWebhookPayload; } catch { return json({ error: 'bad_request' }, 400); }
-  const ev = parseLemonEvent(parsed);
-  if (!ev.orderId || !ev.userId) return json({ error: 'bad_request' }, 400);
+  let parsed: StripeWebhookPayload;
+  try { parsed = JSON.parse(raw) as StripeWebhookPayload; } catch { return json({ error: 'bad_request' }, 400); }
+  const ev = parseStripeEvent(parsed);
+  // orderId se NE trazi ovdje nego tek nakon gatea: dogadjaji koje ne obradjujemo (a Stripe ih
+  // salje mnogo) nemaju PaymentIntent, a moraju zavrsiti u inboxu i dobiti 200, ne 400.
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
@@ -279,7 +291,7 @@ Deno.serve(async (req: Request) => {
   //
   // Bez ovoga je pad izmedju potpisa i entitlementa gubio dogadjaj bez traga, a nemapiran
   // proizvod je vracao 200 pa ga provider vise nikad ne bi poslao: korisnik plati, entitlement
-  // ne nastane, jedini trag je redak u logu koji istekne. Lemon Squeezy retry prozor je
+  // ne nastane, jedini trag je redak u logu koji istekne. Providerov retry prozor je
   // ogranicen, pa se na njega nije smjelo oslanjati kao na mehanizam oporavka.
   //
   // Upis inboxa NE SMIJE srusiti obradu: ako on padne, kupnja je i dalje vaznija od zapisa.
@@ -292,7 +304,8 @@ Deno.serve(async (req: Request) => {
           provider: PROVIDER,
           event_name: ev.eventName,
           order_id: ev.orderId,
-          store_id: ev.storeId || null,
+          // Stripe nema pojam trgovine; kad dogadjaj nosi Connect racun, on ide u isti stupac.
+          store_id: ev.accountId || null,
           test_mode: ev.testMode,
           raw_payload: JSON.parse(raw),
           signature_valid: true,
@@ -320,26 +333,34 @@ Deno.serve(async (req: Request) => {
     }
   };
 
-  // PORIJEKLO DOGADJAJA (audit PAY-04/PAY-05). Ispravan HMAC potpis dokazuje samo da posiljatelj
-  // zna tajnu, NE i da dogadjaj pripada nasoj trgovini i nasem okruzenju. Bez ove provjere bi
-  // valjano potpisan dogadjaj tudje trgovine, ili dogadjaj iz testnog nacina rada, dodijelio
+  // PORIJEKLO I VRSTA DOGADJAJA (audit PAY-04/PAY-05). Ispravan potpis dokazuje samo da
+  // posiljatelj zna tajnu, NE i da dogadjaj dolazi iz naseg produkcijskog okruzenja ni da je
+  // vrsta koju znamo knjiziti. Bez ove provjere bi valjano potpisan testni dogadjaj dodijelio
   // pravo pravo pristupa. Provjera ide PRIJE svakog upisa, ukljucujuci refund granu.
   const gate = acceptEvent(ev, {
-    expectedStoreId: LS_STORE_ID,
-    allowTestMode: Deno.env.get('LS_ALLOW_TEST_MODE') === '1',
+    allowTestMode: Deno.env.get('STRIPE_ALLOW_TEST_MODE') === '1',
+    expectedAccountId: STRIPE_ACCOUNT_ID,
   });
   if (!gate.ok) {
-    // 200: dogadjaj je tudji ili testni, dakle za nas trajno neobradiv. Retry ga ne bi popravio,
-    // a 5xx bi providera natjerao da ga ponavlja do isteka prozora.
-    console.error('webhook-mor event_refused', {
+    // 200: dogadjaj je testni, tudji ili nas se ne tice, dakle za nas trajno neobradiv. Retry ga
+    // ne bi popravio, a 5xx bi providera natjerao da ga ponavlja do isteka prozora.
+    const level = gate.reason === 'event_ignored' ? console.info : console.error;
+    level('webhook-mor event_refused', {
       reason: gate.reason,
-      storeId: ev.storeId,
-      expectedStoreId: LS_STORE_ID,
-      testMode: ev.testMode,
+      eventName: ev.eventName,
+      livemode: ev.livemode,
+      accountId: ev.accountId,
       orderId: ev.orderId,
     });
-    await settle('refused', gate.reason);
-    return json({ ok: true, action: 'event_refused', reason: gate.reason }, 200);
+    await settle(gate.reason === 'event_ignored' ? 'ignored' : 'refused', gate.reason);
+    return json({ ok: true, action: gate.reason === 'event_ignored' ? 'ignored' : 'event_refused', reason: gate.reason }, 200);
+  }
+
+  // Od ovdje se dogadjaj stvarno knjizi, pa je PaymentIntent id (kljuc) obavezan.
+  if (!ev.orderId) {
+    console.error('webhook-mor missing_payment_intent', { eventName: ev.eventName });
+    await settle('failed', 'missing_payment_intent');
+    return json({ error: 'bad_request' }, 400);
   }
 
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
@@ -362,16 +383,25 @@ Deno.serve(async (req: Request) => {
     return json({ ok: true, action: 'refunded' });
   }
 
-  // proizvod iz kataloga po mor_product_id (sekcija 6.2)
-  const { data: prow } = await admin.from('products').select('*').eq('mor_product_id', ev.variantId).maybeSingle();
+  // Od ovdje nadalje se knjizi pravo pristupa, pa je vlasnik dogadjaja obavezan.
+  if (!ev.userId) {
+    console.error('webhook-mor missing_user_metadata', { orderId: ev.orderId });
+    await settle('failed', 'missing_user_metadata');
+    return json({ error: 'bad_request' }, 400);
+  }
+
+  // proizvod iz kataloga po KATALOSKOM id-u iz metadata (sekcija 6.2). Prije 2026-09-23 se
+  // trazio po `mor_product_id`; taj put je uklonjen zajedno s MoR providerom, jer bi inace
+  // svaka Stripe uplata tiho zavrsila kao `unknown_product`.
+  const { data: prow } = await admin.from('products').select('*').eq('id', ev.productId).maybeSingle();
   const product = prow ? mapProductRow(prow as Record<string, unknown>) : null;
   if (!product) {
     // Nepoznat id -> log ERROR + alert; 200 bez entitlementa da provider ne retry-a (6.2).
-    console.error('webhook-mor unknown_product', { variantId: ev.variantId, orderId: ev.orderId });
-    // I dalje 200: retry ne bi popravio nedostajuce mapiranje, samo bi potrosio providerov prozor.
+    console.error('webhook-mor unknown_product', { productId: ev.productId, orderId: ev.orderId });
+    // I dalje 200: retry ne bi popravio nepostojec proizvod, samo bi potrosio providerov prozor.
     // Razlika je u tome sto dogadjaj sada TRAJNO postoji u webhook_events, pa se nakon ispravka
-    // `products.mor_product_id` moze replayati umjesto da placena kupnja ostane bez traga.
-    await settle('unknown_product', `variantId=${ev.variantId}`);
+    // kataloga moze replayati umjesto da placena kupnja ostane bez traga.
+    await settle('unknown_product', `productId=${ev.productId}`);
     return json({ ok: true, action: 'unknown_product_logged' }, 200);
   }
 
@@ -417,7 +447,7 @@ Deno.serve(async (req: Request) => {
 
   // AUD-28: entitlement je JEZGRA i vec je kreiran (idempotentan preko unique(provider,order_id)).
   // Post-entitlement bonusi (referrer nagrada, pass kupon, referral atribucija) NE SMIJU srusiti
-  // handler u 500 ako transientno padnu: LS bi retryjao, pogodio 23505 na entitlementu gore i vratio
+  // handler u 500 ako transientno padnu: provider bi retryjao, pogodio 23505 na entitlementu i vratio
   // 'duplicate_ignored', pa bi kupon/atribucija za taj order ostali TRAJNO nekreirani. Zato svaki
   // bonus lovi svoju gresku i nastavlja (logira se), a jezgra ostaje uspjesna (200). Pred-entitlement
   // greske i dalje idu na top-level catch -> 500 -> LS retry (tada entitlement bude kreiran).
@@ -448,7 +478,7 @@ Deno.serve(async (req: Request) => {
       // Redak ostaje `pending`: radnik ga ponovi. Prije je ovdje zavrsavao trag.
       console.error('webhook-mor pass_coupon_failed', { orderId: ev.orderId, error: String(e) });
     }
-    // TODO(integracija): kreiraj -20% Lemon Squeezy discount (vrijedi na slot_zavrsni/slot_diplomski)
+    // TODO(integracija): kreiraj -20% Stripe kupon (vrijedi na slot_zavrsni/slot_diplomski)
     // i posalji kod korisniku mailom. Zakljucaj da ne vrijedi na partner proizvode (sekcija 7).
   }
 
@@ -466,8 +496,8 @@ Deno.serve(async (req: Request) => {
   await settle('processed', 'entitlement_created');
   return json({ ok: true, action: 'entitlement_created' });
  } catch (e) {
-  // Pred-entitlement greska (potpis, parsiranje, entitlement insert): vrati 500 pa LS retryja i
-  // entitlement na kraju bude kreiran. Post-entitlement bonusi su vec ulovljeni gore, ne dolaze ovamo.
+  // Pred-entitlement greska (potpis, parsiranje, entitlement insert): vrati 500 pa provider
+  // retryja i entitlement na kraju bude kreiran. Post-entitlement bonusi su vec ulovljeni gore.
   console.error('[webhook-mor]', e);
   return json({ error: 'internal' }, 500);
  }

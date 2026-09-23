@@ -1,14 +1,26 @@
 // Lekta Edge Function: create-checkout (Deno, Supabase).
-// Spec: docs/MONETIZATION_PLAN.md sekcija 5, korak 15.2. Merchant of Record: Lemon Squeezy.
+// Spec: docs/MONETIZATION_PLAN.md sekcija 5, korak 15.2. Pruzatelj naplate: Stripe (F18,
+// odluka vlasnika 2026-09-23). Stripe NIJE Merchant of Record: PDV ostaje obveza vlasnika.
 //
 // Ulaz: { productId, referralCode? }. Auth (Supabase JWT) je obavezan (401 bez njega).
-// Cijena je serverska odluka: klijent salje samo productId, server cita `products` (0002).
+// Cijena je serverska odluka: klijent salje samo productId, server cita `products` (0002) i
+// iz `price_eur` racuna iznos u centima. Klijentov iznos se NIKAD ne cita (kriterij 14.1/14.2).
 // Partner proizvod trazi aktivan partner_accounts red (403 inace; tablica dolazi u koraku 4).
-// Tanki omotac: odluka i tijelo LS poziva su u testiranom coreu src/report/checkout.ts.
+// Tanki omotac: odluka i tijelo Stripe poziva su u testiranom coreu src/report/checkout.ts.
+//
+// Odgovor 200 nosi `clientSecret` PaymentIntenta i `publishableKey`; Payment Element se montira
+// u stranici, pa nema odlaska na hosted checkout ni povratnog redirecta.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
-import { resolveCheckout, buildLemonSqueezyCheckout, checkoutMismatch } from '../../../src/report/checkout.ts';
+import {
+  resolveCheckout,
+  buildStripePaymentIntentParams,
+  stripeAmountCents,
+  stripeIdempotencyKey,
+  checkoutMismatch,
+  type StripePaymentIntentResponse,
+} from '../../../src/report/checkout.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { canonicalConsentText, consentTextMatches } from '../../../src/legal/consent-text.ts';
@@ -16,11 +28,12 @@ import { canonicalConsentText, consentTextMatches } from '../../../src/legal/con
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
-const LS_API_KEY = Deno.env.get('LEMONSQUEEZY_API_KEY') ?? '';
-const LS_STORE_ID = Deno.env.get('LEMONSQUEEZY_STORE_ID') ?? '';
-const REDIRECT_URL = Deno.env.get('CHECKOUT_REDIRECT_URL') ?? '';
+const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') ?? '';
+// Publishable kljuc NIJE tajna, ali se drzi na serveru da klijent nema build-time env varijablu
+// i da se zamjena kljuca (test -> live) vidi odmah, bez novog builda.
+const STRIPE_PUBLISHABLE_KEY = Deno.env.get('STRIPE_PUBLISHABLE_KEY') ?? '';
 // Dnevni limit kreiranja checkouta po korisniku (SEC-06, AUD-23/35): bez njega prijavljeni korisnik
-// moze u petlji okidati LS checkout pozive i puniti checkout_consents. Isti obrazac kao DAILY_CAP u
+// moze u petlji okidati Stripe pozive i puniti checkout_consents. Isti obrazac kao DAILY_CAP u
 // generate-report.
 const CHECKOUT_DAILY_CAP = Number(Deno.env.get('CHECKOUT_DAILY_CAP') ?? '20');
 
@@ -133,16 +146,29 @@ Deno.serve(async (req: Request) => {
 
   const resolution = resolveCheckout(product, { isPartnerActive });
   if (!resolution.ok) return json({ error: resolution.error }, resolution.status);
-  if (!product!.morProductId) return json({ error: 'product_not_mapped' }, 409); // popuni products.mor_product_id
+  // NAPOMENA: uvjet `products.mor_product_id` (naslijedjeni MoR variant id) je uklonjen 2026-09-23.
+  // Stripe iznos dolazi iz `products.price_eur`, pa mapiranje po proizvodu vise ne postoji;
+  // stupac ostaje u shemi kao naslijedjen i nijedan zivi put naplate ga ne cita.
 
-  // WS-5 enforcement: nedvosmislen nesklad vrste rada -> 409 PRIJE biljezenja pristanka i LS poziva
-  // (ne trosimo consent zapis ni LS sesiju na kupnju koju odbijamo). Granicno se ne blokira
-  // (fail-open); backstop je i u repair-docx prije trosenja slota. Isti ciljni modul (work-type-estimate).
+  // Konfiguracija naplate mora biti potpuna PRIJE nego se korisniku obeca placanje.
+  if (!STRIPE_SECRET_KEY || !STRIPE_PUBLISHABLE_KEY) {
+    console.error('[create-checkout] stripe_not_configured');
+    return json({ error: 'checkout_unavailable' }, 503);
+  }
+  const amountCents = stripeAmountCents(Number(product!.priceEur));
+  if (!Number.isFinite(amountCents) || amountCents <= 0) {
+    console.error('[create-checkout] invalid_price', { productId, priceEur: product!.priceEur });
+    return json({ error: 'product_misconfigured' }, 500);
+  }
+
+  // WS-5 enforcement: nedvosmislen nesklad vrste rada -> 409 PRIJE biljezenja pristanka i Stripe
+  // poziva (ne trosimo consent zapis ni PaymentIntent na kupnju koju odbijamo). Granicno se ne
+  // blokira (fail-open); backstop je i u repair-docx prije trosenja slota. Isti ciljni modul.
   const mm = checkoutMismatch(product!.workType, signals, confirmedMismatch);
   if (mm.block) return json({ error: 'tier_mismatch', suggestedWorkType: mm.suggestedWorkType }, 409);
 
-  // trajno zabiljezi pristanak PRIJE redirecta na placanje (P0 1-1). Ako se ne moze zapisati,
-  // ne saljemo korisnika na placanje bez zapisanog pristanka.
+  // trajno zabiljezi pristanak PRIJE nego se otvori placanje (P0 1-1). Ako se ne moze zapisati,
+  // ne puste se korisnika na placanje bez zapisanog pristanka.
   const { error: consentErr } = await admin.from('checkout_consents').insert({
     user_id: user.id,
     product_id: productId,
@@ -158,35 +184,42 @@ Deno.serve(async (req: Request) => {
   });
   if (consentErr) return json({ error: 'consent_not_recorded' }, 500);
 
-  // Lemon Squeezy checkout create (mor_product_id = LS variant id)
-  const lsBody = buildLemonSqueezyCheckout({
-    storeId: LS_STORE_ID,
-    variantId: product!.morProductId,
-    userId: user.id,
-    productId,
-    referralCode,
-    redirectUrl: REDIRECT_URL || undefined,
-  });
-  const lsRes = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
+  // Stripe PaymentIntent. Iznos je serverski (products.price_eur), metadata nosi katalozni
+  // products.id po kojem webhook nalazi proizvod.
+  const stripeRes = await fetch('https://api.stripe.com/v1/payment_intents', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/vnd.api+json',
-      Accept: 'application/vnd.api+json',
-      Authorization: `Bearer ${LS_API_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${STRIPE_SECRET_KEY}`,
+      // Deterministican kljuc: mrezni retry istog pokusaja ne stvara drugi PaymentIntent.
+      // Ne pokriva dva odvojena klika (vidi komentar uz stripeIdempotencyKey).
+      'Idempotency-Key': stripeIdempotencyKey(user.id, productId, consentedAt),
     },
-    body: JSON.stringify(lsBody),
+    body: buildStripePaymentIntentParams({
+      amountCents,
+      currency: 'eur',
+      userId: user.id,
+      productId,
+      referralCode,
+      receiptEmail: user.email ?? null,
+    }),
   });
-  if (!lsRes.ok) {
-    // AUD-26: ne prosljeduj sirovo LS tijelo greske klijentu (otkriva internu strukturu providera).
+  if (!stripeRes.ok) {
+    // AUD-26: ne prosljeduj sirovo tijelo greske klijentu (otkriva internu strukturu providera).
     // Logiraj detalj serverski (Edge logovi = error tracking, P0 8-1), klijentu vrati genericko.
-    console.error('[create-checkout] lemonsqueezy', lsRes.status, await lsRes.text());
+    console.error('[create-checkout] stripe', stripeRes.status, await stripeRes.text());
     return json({ error: 'checkout_failed' }, 502);
   }
-  const lsJson = (await lsRes.json()) as any;
-  const checkoutUrl = lsJson?.data?.attributes?.url;
-  if (!checkoutUrl) return json({ error: 'no_checkout_url' }, 502);
+  const intent = (await stripeRes.json()) as StripePaymentIntentResponse;
+  if (!intent?.client_secret) return json({ error: 'no_client_secret' }, 502);
 
-  return json({ checkoutUrl });
+  return json({
+    clientSecret: intent.client_secret,
+    paymentIntentId: intent.id ?? '',
+    amountCents: intent.amount ?? amountCents,
+    currency: intent.currency ?? 'eur',
+    publishableKey: STRIPE_PUBLISHABLE_KEY,
+  });
  } catch (e) {
   console.error('[create-checkout]', e); // Supabase Edge Function logovi = error tracking (P0 8-1)
   return json({ error: 'internal' }, 500);
