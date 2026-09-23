@@ -33,18 +33,6 @@
           <span class="site-chrome__dot" aria-hidden="true"></span>
           <span class="rad-doc-name" id="radDocName"></span>
           <span class="site-chrome__score" data-site-chrome-score hidden></span>
-          <!-- C7: STANJE LOKALNOG ZAPISA. Trajno stanje, ne obavijest: BEZ role=status i BEZ aria-live,
-               inace bi svaki klik ponavljao "Spremljeno" citacu ekrana. Jednokratne obavijesti ostaju u
-               #workspace-status. Pise ga iskljucivo save-indicator.ts; skriven dok nema sto reci. -->
-          <span class="rad-doc-save" id="radDocSave" data-save-state="idle" hidden></span>
-          <!-- ZNACKA GOVORI O ANALIZI, i to je vazna razlika. Analiza radi u pregledniku i dokument
-               ne odlazi nikamo. Automatski popravak je jedini tok koji dokument SALJE na posluzitelj,
-               i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora
-               mijenjati stanje, inace postaje tvrdnja koja vise nije istinita. -->
-          <span class="local-badge" data-privacy-badge title="Analiza radi u tvom pregledniku. Dokument ne odlazi s uredaja. Salje se samo ako narucis automatski popravak."><i data-lucide="lock"></i> Lokalno na ovom uređaju</span>
-          <!-- T12: nova verzija ISTOG rada. Datoteka ide kroz isti prijem kao prva; usporedbu nalaza radi ruta (revisions.ts). -->
-          <button type="button" class="btn btn-ghost btn-sm rad-doc-new-version hidden" id="radDocNewVersion" data-testid="load-new-version">Učitaj novu verziju ovog rada</button>
-          <input type="file" id="radDocNewVersionInput" accept=".docx" class="sr-only" tabindex="-1" aria-hidden="true">
         </span>
         <ol class="site-chrome__steps" data-site-chrome-steps aria-label="Koraci popravka"><li class="site-chrome__step site-chrome__step--active" data-site-chrome-step="findings" aria-current="step"><span class="site-chrome__step-num">01</span> <span class="site-chrome__step-label">Nalazi</span></li><li class="site-chrome__step" data-site-chrome-step="plan" aria-disabled="true"><span class="site-chrome__step-num">02</span> <span class="site-chrome__step-label">Plan</span></li><li class="site-chrome__step" data-site-chrome-step="payment" aria-disabled="true"><span class="site-chrome__step-num">03</span> <span class="site-chrome__step-label">Plaćanje</span></li><li class="site-chrome__step" data-site-chrome-step="done" aria-disabled="true"><span class="site-chrome__step-num">04</span> <span class="site-chrome__step-label">Rezultat</span></li></ol>
       </div>
@@ -62,7 +50,7 @@
         <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
         <button class="lampa-btn" id="displayBtn" type="button" aria-label="Prilagodi prikaz" aria-expanded="false" aria-controls="lektaPrikazPanel" title="Prilagodi prikaz"><i data-lucide="sliders-horizontal"></i><span class="lampa-txt">Prikaz</span></button>
         <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
-        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
+        <button class="site-chrome__burger" id="mobileMenuBtn" type="button" data-site-chrome-menu aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobileNav"><span class="site-chrome__burger-glif" aria-hidden="true"><i></i><i></i></span></button>
       </div>
   </div>
   <nav class="site-chrome__sheet" id="mobileNav" aria-label="Mobilna navigacija">
@@ -83,6 +71,27 @@
   </nav>
 </header>
 <main id="workspace" data-premium-surface="analyzer">
+<!-- C7 / T12 / ZNACKA: DOKUMENTOV RED ZAGLAVLJA, PRESELJEN IZ TRAKE U TIJELO (Z15, KRUG POPRAVKA).
+     Do ovog kruga su ova tri elementa zivjela UNUTAR pilule `.site-chrome__doc`, koja se na 1180px
+     lomila u vise redaka (natpis "Spremljeno HH:MM", znacka i gumb nisu stali u jedan red pilule
+     zajedno s tockom i imenom) i preklapala odredista trake. Pilula sad nosi SAMO tocku, ime i
+     ocjenu, jedan redak; ova tri ostaju ovdje, gdje visina zaglavlja ne ogranicava sadrzaj. Isti
+     podaci, isti data-* ugovori (`data-save-state`, `data-privacy-badge`, `data-testid="load-new-version"`),
+     samo drugo mjesto: `wireDocumentBar` u main.ts ih i dalje ozicuje po `id`, ne po polozaju u DOM-u. -->
+<div class="rad-doc-meta shell hidden" id="radDocMeta">
+  <!-- C7: STANJE LOKALNOG ZAPISA. Trajno stanje, ne obavijest: BEZ role=status i BEZ aria-live,
+       inace bi svaki klik ponavljao "Spremljeno" citacu ekrana. Jednokratne obavijesti ostaju u
+       #workspace-status. Pise ga iskljucivo save-indicator.ts; skriven dok nema sto reci. -->
+  <span class="rad-doc-save" id="radDocSave" data-save-state="idle" hidden></span>
+  <!-- ZNACKA GOVORI O ANALIZI, i to je vazna razlika. Analiza radi u pregledniku i dokument
+       ne odlazi nikamo. Automatski popravak je jedini tok koji dokument SALJE na posluzitelj,
+       i to tek na izricitu narudzbu. Ako popravak ikad dode u isti pogled, ova znacka mora
+       mijenjati stanje, inace postaje tvrdnja koja vise nije istinita. -->
+  <span class="local-badge" data-privacy-badge title="Analiza radi u tvom pregledniku. Dokument ne odlazi s uredaja. Salje se samo ako narucis automatski popravak."><i data-lucide="lock"></i> Lokalno na ovom uređaju</span>
+  <!-- T12: nova verzija ISTOG rada. Datoteka ide kroz isti prijem kao prva; usporedbu nalaza radi ruta (revisions.ts). -->
+  <button type="button" class="btn btn-ghost btn-sm rad-doc-new-version hidden" id="radDocNewVersion" data-testid="load-new-version">Učitaj novu verziju ovog rada</button>
+  <input type="file" id="radDocNewVersionInput" accept=".docx" class="sr-only" tabindex="-1" aria-hidden="true">
+</div>
 <p id="workspace-status" role="status" aria-live="polite" hidden></p>
 <section class="section section-soft" id="analyzer">
   <div class="shell">

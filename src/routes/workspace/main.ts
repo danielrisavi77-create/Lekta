@@ -62,11 +62,18 @@ function detectStorage(): StorageAvailability {
  * Ime se namjerno pojavljuje tek NA PRIHVAT, ne na odabir: traka govori na cemu Lekta radi, a
  * ne koju je datoteku korisnik dotaknuo. Odbijen dokument tako nikad ne provede trenutak u
  * zaglavlju kao da je prihvacen.
+ *
+ * DVA CVORA, JEDAN UVJET (Z15, KRUG POPRAVKA). `#radDocBar` (pilula u traci: tocka, ime, ocjena)
+ * i `#radDocMeta` (spremanje, znacka, gumb nove verzije, u tijelu ispod trake) se pokazuju i
+ * skrivaju ZAJEDNO, jer opisuju isti dokument; razdvojeni su samo zato sto pilula u traci ima
+ * ogranicenu visinu, a tijelo nema. Bez ovog drugog cvora bi znacka i gumb ostali trajno skriveni
+ * nakon preseljenja iz pilule (Z15 popravak F-preseljenje).
  */
 function wireDocumentBar(onNewVersion: (file: File) => void): void {
   const bar = document.getElementById('radDocBar');
   const name = document.getElementById('radDocName');
   if (!bar || !name) return;
+  const meta = document.getElementById('radDocMeta');
   const newVersionBtn = document.getElementById('radDocNewVersion') as HTMLButtonElement | null;
   const newVersionInput = document.getElementById('radDocNewVersionInput') as HTMLInputElement | null;
   subscribeAnalyzerDocumentSettled((event) => {
@@ -75,6 +82,7 @@ function wireDocumentBar(onNewVersion: (file: File) => void): void {
     name.textContent = file ? file.name : '';
     name.title = file ? file.name : '';
     bar.classList.toggle('hidden', !file);
+    meta?.classList.toggle('hidden', !file);
     // T12: nova verzija ima smisla tek kad postoji dokument s kojim se usporedjuje.
     newVersionBtn?.classList.toggle('hidden', !file);
   });
