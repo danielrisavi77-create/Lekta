@@ -357,3 +357,28 @@ describe('Z15 traka: kontrast teksta u obje teme, meta >= 24px', () => {
     expect(visinaMete(TRAKA, '.site-chrome__nepostojece')).toBe(0);
   });
 });
+
+describe('lampa: overlay boje CILJNE teme cita token, ne duplicira ga (Z15 popravak F5)', () => {
+  const chrome = read('src/shared/site-chrome.css');
+  const sustav = read('src/shared/design-system.css');
+
+  it('.site-chrome__reveal cita `var(--desk)`, ne literal', () => {
+    expect(chrome).toContain('.site-chrome__reveal {');
+    const blok = /\.site-chrome__reveal \{([^}]*)\}/.exec(chrome)?.[1] ?? '';
+    expect(blok).toContain('background: var(--desk)');
+    expect(chrome).not.toContain('background: #191512');
+    expect(chrome).not.toContain('background: #DFD8C6');
+  });
+
+  it('`[data-theme="dark"]` u design-system.css postavlja `--desk` za NEROOT elemente', () => {
+    // `:root` sam po sebi ne pokriva overlay (drugi element s istim atributom); bez ovog retka bi
+    // overlay ciljne tamne teme naslijedio boju TRENUTNOG <html>-a, ne cilja.
+    expect(sustav).toMatch(/\[data-theme="dark"\]\s*\{\s*--desk:\s*#191512;?\s*\}/);
+  });
+
+  it('MUTACIJA: brisanje `[data-theme="dark"]` retka pada', () => {
+    const bez = sustav.replace(/\[data-theme="dark"\]\s*\{\s*--desk:\s*#191512;?\s*\}\s*/, '');
+    expect(bez, 'podmetanje se nije primilo').not.toBe(sustav);
+    expect(bez).not.toMatch(/\[data-theme="dark"\]\s*\{\s*--desk:/);
+  });
+});

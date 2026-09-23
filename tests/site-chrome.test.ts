@@ -342,6 +342,9 @@ describe('Z15 lampa: overlay ciljne teme, tema i pohrana', () => {
     const overlay = doc.querySelector<HTMLElement>('.site-chrome__reveal');
     expect(overlay, 'lampa nije nacrtala overlay').not.toBeNull();
     expect(overlay!.dataset.siteChromeReveal).toBe('light');
+    // Z15 popravak F5: overlay nosi VLASTITI data-theme (ciljne teme), da CSS procita
+    // `var(--desk)` cilja umjesto onoga sto trenutno stoji na <html>-u.
+    expect(overlay!.dataset.theme).toBe('light');
     overlay!.remove();
 
     // PRIGUSEN POKRET: samo swap, bez otkrivanja. Isto vrijedi za `prefers-reduced-motion`, koji
@@ -558,7 +561,7 @@ describe('Z15 stanje nakon skrola', () => {
     const prviMedia = puni.indexOf('@media');
     const bazniSloj = prviMedia === -1 ? puni : puni.slice(0, prviMedia);
     const midWrapa = /\.site-chrome__mid\s*\{[^}]*flex-wrap:\s*wrap/.test(bazniSloj);
-    const znackaZbijena = /\.site-chrome__doc \.local-badge\s*\{[^}]*margin-top:\s*0[^}]*padding:\s*5px 10px[^}]*font-size:\s*11px/.test(bazniSloj);
+    const znackaZbijena = /\.site-chrome__doc \.local-badge\s*\{[^}]*margin-top:\s*0[^}]*padding:\s*5px 10px[^}]*font-size:\s*var\(--fs-mono-label\)/.test(bazniSloj);
     expect(midWrapa && !znackaZbijena, 'ni bez wrapa ni sa zbijenom znackom').toBe(false);
   });
 

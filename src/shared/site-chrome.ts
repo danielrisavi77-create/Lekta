@@ -228,7 +228,12 @@ function playLamp(doc: Document, btn: HTMLElement): void {
   if (pokretPrigusen(doc)) return;
   const overlay = doc.createElement('div');
   overlay.className = 'site-chrome__reveal';
-  overlay.dataset.siteChromeReveal = lampOverlayTheme(doc);
+  const cilj = lampOverlayTheme(doc);
+  overlay.dataset.siteChromeReveal = cilj;
+  // Z15 popravak F5: `data-theme` CILJNE teme na overlayu (ne na <html>, koji tek treba
+  // preci u nju) je jedini nacin da CSS procita `var(--desk)` CILJA umjesto trenutnog stanja,
+  // bez duplog zapisa boje (design-system.css ostaje jedini izvor tokena).
+  overlay.dataset.theme = cilj;
   overlay.setAttribute('aria-hidden', 'true');
   if (typeof btn.getBoundingClientRect === 'function') {
     const r = btn.getBoundingClientRect();

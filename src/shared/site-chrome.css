@@ -122,7 +122,7 @@ header.site-chrome--scrolled {
    (@media 720px ispod ovaj rad samo SKRIVA znacku, ne smanjuje je): rezultat je bio da je zaglavlje
    `/rad/` na 1180 px sirine dvoredno (`.site-chrome__mid` gore ima `flex-wrap: wrap`). Gard:
    `tests/site-chrome.test.ts`. */
-.site-chrome__doc .local-badge { margin-top: 0; padding: 5px 10px; font-size: 11px; letter-spacing: .02em; cursor: help; }
+.site-chrome__doc .local-badge { margin-top: 0; padding: 5px 10px; font-size: var(--fs-mono-label); letter-spacing: .02em; cursor: help; }
 .site-chrome__doc .local-badge svg { width: 12px; height: 12px; }
 
 /* `host.hidden` (site-chrome.ts, faza `scanning` bez koraka) postavlja atribut `[hidden]`, ali
@@ -256,16 +256,20 @@ header.site-chrome--scrolled {
 .site-chrome__burger-glif { display: grid; gap: 5px; width: 16px; }
 .site-chrome__burger-glif i { display: block; height: 1.5px; background: currentColor; }
 
-/* LAMPA: overlay boje CILJNE teme otkriva stol iz sredista gumba, zatim nestaje. */
+/* LAMPA: overlay boje CILJNE teme otkriva stol iz sredista gumba, zatim nestaje. Boja NIJE
+   duplicirana ovdje (Z15 popravak F5): `data-theme` ciljne teme stoji na SAMOM overlayu
+   (site-chrome.ts), pa `[data-theme="light"] { --desk: ... }` (design-system.css) taj token
+   postavlja unutar overlayeva vlastitog podstabla bez obzira na trenutnu temu <html>-a, i ovdje
+   se samo cita `var(--desk)`. `data-site-chrome-reveal` ostaje kao stabilan identitet za testove
+   (site-chrome.test.ts) neovisan o vrijednosti tokena. */
 .site-chrome__reveal {
   position: fixed;
   inset: 0;
   z-index: 250;
   pointer-events: none;
+  background: var(--desk);
   animation: siteChromeReveal .9s var(--ease-out-3, ease) both;
 }
-.site-chrome__reveal[data-site-chrome-reveal="dark"] { background: #191512; }
-.site-chrome__reveal[data-site-chrome-reveal="light"] { background: #DFD8C6; }
 @keyframes siteChromeReveal {
   from { clip-path: circle(0 at var(--lx, 90%) var(--ly, 40px)); }
   to { clip-path: circle(160% at var(--lx, 90%) var(--ly, 40px)); }

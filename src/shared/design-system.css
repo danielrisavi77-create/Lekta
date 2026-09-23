@@ -131,6 +131,13 @@
   --focus: 0 0 0 2px var(--panel),0 0 0 4px var(--brand);
 }
 
+/* `--desk` TAMNE teme SAMO za `[data-theme="dark"]`, ne za sve tokene: `:root` iznad vec vrijedi
+   za <html data-theme="dark">, ali `:root` NE PROSIRUJE pravilo na drugi, unutarnji element koji
+   nosi isti atribut (lampin overlay u site-chrome.css cita `var(--desk)` s VLASTITOG data-theme,
+   ne s <html>-a, jer ciljna tema pri kliku jos nije primijenjena na <html>). Namjerno usko: ostali
+   KS primitivi ovdje nemaju takvog potrosaca, pa se ne dupliciraju dok ne zatreba. */
+[data-theme="dark"] { --desk: #191512; }
+
 [data-theme="light"] {
   /* Danje svjetlo: isti stol na dnevnom svjetlu */
   --desk: #DFD8C6;
