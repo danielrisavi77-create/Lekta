@@ -100,6 +100,15 @@ export function mobilnoPraviloNatpisa(css: string): string {
   return mobilni.match(/\.site-chrome__step-label \{[^}]*\}/)?.[0] ?? '';
 }
 
+/**
+ * Tijela svih inline `<style>` blokova stranice, BEZ komentara. Cista funkcija nad tekstom, pa se
+ * smije mutirati; prazan niz znaci da stranica inline stila nema (i gard nad njom bi bio prazan).
+ */
+export function inlineStilovi(html: string): string[] {
+  return [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
+    .map((m) => m[1].replace(/\/\*[\s\S]*?\*\//g, ' '));
+}
+
 /** Odrediste poveznice "Sve pravno" iz podnozja; cista funkcija nad tekstom, pa se smije mutirati. */
 export function svePravnoOdrediste(foot: string): string | null {
   return foot.match(/<a class="site-footer__sve" href="([^"]+)">/)?.[1] ?? null;
@@ -1025,18 +1034,46 @@ describe('Z15: stari markup i mrtva pravila su UKLONJENI, ne ostavljeni uz nove'
     }
   });
 
-  /** `alati.html` je jedina sadrzajna stranica u dopustenom popisu putanja za Z15 popravak F1
-   * (docs/agents/orchestrator-backlog.md F14 raspravlja opseg): njen inline <style> je ociscen.
-   * `citat.html`, `izjava.html`, `kartice.html`, `literatura.html`, `naslovnica.html`,
-   * `citati-i-literatura.html`, `landing_usporedba.html`, `landing_benchmark.html` I DALJE nose
-   * `.nav-links`/`.mobile-nav`/`.mobile-menu` u inline <style> blokovima (isti mrtvi razred), ali
-   * NISU u dopustenom popisu putanja ovog kruga popravka, pa gard nad njima namjerno NIJE ovdje:
-   * dodavanje bi ih ili slagalo kao MRTVE bez ovlasti za popravak, ili tiho preskocilo tvrdnju o
-   * "svugdje". Prosirenje je F14 pitanje vlasniku. */
-  it('`alati.html` inline <style> ne nosi mrtve selektore', () => {
-    const style = read('alati.html').replace(/\/\*[\s\S]*?\*\//g, ' ');
+  /**
+   * INLINE `<style>` SVIH DEVET SADRZAJNIH STRANICA (dovrseno 2026-09-23).
+   *
+   * Do sad je gard pokrivao SAMO `alati.html`, jer je u krugu popravka Z15 F1 samo ona bila u
+   * dopustenom popisu putanja; ostalih osam stranica je i dalje nosilo `.nav-links`,
+   * `.mobile-nav` i `.mobile-menu` u inline listovima, a biljeska ovdje je to zvala F14
+   * pitanjem vlasniku. Pravila su sad uklonjena i gard pokriva sve stranice, pa "uklonjeno, ne
+   * ostavljeno uz novo" prestaje biti tvrdnja o jednoj datoteci.
+   *
+   * MJERI SE TIJELO `<style>`, NE CIJELA STRANICA, i komentari se prvo skidaju: mrtvo je
+   * PRAVILO, a ime klase u komentaru smije ostati kao povijesna biljeska (isto pravilo koje
+   * vrijedi za dijeljene listove gore).
+   */
+  const S_INLINE_STILOM = [
+    'alati.html', 'citat.html', 'izjava.html', 'kartice.html', 'literatura.html',
+    'naslovnica.html', 'citati-i-literatura.html', 'landing_usporedba.html',
+    'landing_benchmark.html',
+  ] as const;
+
+  it.each(S_INLINE_STILOM)('%s: inline <style> ne nosi mrtve selektore', (rel) => {
+    const blokovi = inlineStilovi(read(rel));
+    // SENTINEL: stranica bez ijednog inline <style> bloka bi prolazila vakuumski.
+    expect(blokovi.length, `${rel} nema inline <style>; gard bi bio prazan`).toBeGreaterThan(0);
     for (const selektor of MRTVI_SELEKTORI) {
-      expect(style, `alati.html i dalje nosi ${selektor}`).not.toContain(selektor);
+      expect(blokovi.join('\n'), `${rel} i dalje nosi ${selektor}`).not.toContain(selektor);
     }
+  });
+
+  it('MUTACIJA: vraceno mrtvo pravilo pada, a isto ime u KOMENTARU ne', () => {
+    const cista = read('citat.html');
+    // BASELINE: neizmijenjena stranica je cista, inace obje tvrdnje ispod nista ne dokazuju.
+    expect(inlineStilovi(cista).join('\n')).not.toContain('.mobile-nav');
+
+    const vraceno = cista.replace('</style>', '.mobile-nav.open{background:#fff}\n</style>');
+    expect(vraceno, 'podmetanje se nije primilo; provjeri zatvaranje <style>').not.toBe(cista);
+    expect(inlineStilovi(vraceno).join('\n')).toContain('.mobile-nav');
+
+    // Komentar koji ime SPOMINJE smije ostati: gard mjeri pravila, ne povijesne biljeske.
+    const uKomentaru = cista.replace('</style>', '/* nekad je ovdje bio .mobile-nav blok */\n</style>');
+    expect(uKomentaru).not.toBe(cista);
+    expect(inlineStilovi(uKomentaru).join('\n')).not.toContain('.mobile-nav');
   });
 });

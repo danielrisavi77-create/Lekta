@@ -100,7 +100,7 @@
 .cta-upsell a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:18px auto 0;max-width:760px}
 
-@media(max-width:820px){.grid{grid-template-columns:1fr}.out-panel{position:static}.nav-links{display:none}.hero{padding:32px 0 2px}}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.out-panel{position:static}.hero{padding:32px 0 2px}}
 
 /* Fraunces samo na kromu stranice (hero, naslovi kartica, naslovi sekcija, cta); dodaje se zadnji pa pobjeduje kaskadu, mijenja samo boju/font */
 .hero h1,
@@ -128,15 +128,6 @@
 @media(max-width:820px){
 .lampa-txt{display:none}
 .lampa-btn{padding:8px 10px}
-.mobile-nav.open{background:var(--paper);color:var(--paper-ink);border-bottom:0;box-shadow:var(--paper-sh)}
-/* !important: tool-page.css (ui-boot, JS-injektiran POSLIJE ovog inline <style>) nosi vlastiti
-   .mobile-nav a:not(.btn){color:var(--text)} iste specificnosti, kasnije ucitan pa inace pobjedjuje
-   (isti gotcha kao literatura.html .ink komentar) - bez ovoga tekst ostaje --desk-ink na paper
-   pozadini, ~2,6:1 kontrast. background gore ne treba !important (ne gubi cascade, provjereno). */
-.mobile-nav a:not(.btn){color:var(--paper-ink)!important;border-bottom:1px solid var(--paper-line)}
-.mobile-nav a:not(.btn):hover{color:var(--red-deep)}
-.mobile-nav .btn-primary{background:var(--red);color:var(--on-red);box-shadow:none}
-.mobile-nav .btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
 }
 </style>
 </head>
