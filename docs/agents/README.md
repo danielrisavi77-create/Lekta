@@ -36,7 +36,7 @@ adversarijalni pregled prema AGENTS.md.
    Runner je verificiran s Grok CLI 1.0.34 i odbija oslanjanje na stariji JSON ugovor;
    `doctor` oznacava instalaciju kao `supported` ili `unsupported; minimum 1.0.34`.
    Skripta ne instalira alate niti prenosi prijave. Zadani model aliasa `grok`/`build` je `grok-4.6` (sluzbena preporuka za kod, 2026-09-20);
-   prilagodi u `scripts/agents/core.mjs` ako `grok models` pokaze drugaciji ID (npr. `grok-build-0.1`).
+   prilagodi u `config/agent-providers.json` ako `grok models` pokaze drugaciji ID (npr. `grok-build-0.1`); Node i Python ucitavaju isti registry.
 2. Iz korijena repozitorija pokreni `npm run agents -- doctor` i `npm run agents -- list`.
 3. Pripremi prvi audit bez poziva modelu:
 
