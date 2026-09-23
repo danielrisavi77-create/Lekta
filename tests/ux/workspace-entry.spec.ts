@@ -128,7 +128,7 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   // vec mjeri na 390 px). Ovaj spec prvi put ulazi u `mobile-webkit` (iPhone 13, 390 px) korakom D
   // 2026-09-13, bez lokalnog prolaza; dodan je ovdje, ne u CSS-u, koji ostaje netaknut.
   const sirok = (page.viewportSize()?.width ?? 0) > 720;
-  await expect(page.locator('.nav-rad .local-badge')).toBeVisible({ visible: sirok });
+  await expect(page.locator('.site-chrome__doc .local-badge')).toBeVisible({ visible: sirok });
 
   // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
   // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav
@@ -139,7 +139,7 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
 
 test('/rad/ zaglavlje: dugo ime datoteke se skracuje, a ne gura kontrole s ekrana', async ({ page }) => {
   /**
-   * STVARAN RIZIK, IZMJEREN: `.rad-doc` je flex stavka, a flex stavka se po zadanome NE SMIJE
+   * STVARAN RIZIK, IZMJEREN: `.site-chrome__doc` je flex stavka, a flex stavka se po zadanome NE SMIJE
    * stisnuti ispod sirine svog sadrzaja (`min-width:auto`). Bez `min-width:0` dugo ime gurne
    * lampu i prijavu izvan zaslona umjesto da se skrati.
    *

@@ -325,7 +325,7 @@ header.site-chrome--scrolled {
 }
 
 @media (max-width: 819px) {
-  .site-chrome__bar { grid-template-columns: 1fr auto; }
+  .site-chrome__bar { grid-template-columns: 1fr auto; row-gap: 8px; }
   .site-chrome__hairline,
   .site-chrome__dests,
   .site-chrome__mid,
@@ -333,6 +333,20 @@ header.site-chrome--scrolled {
   .site-chrome__plate,
   .site-chrome__stamp,
   .site-chrome #displayBtn { display: none; }
+  /* SREDINA NA `/rad/` OSTAJE I NA MOBITELU, i to nije odstupanje od Z15 nego Z16.
+     Pravilo "logo, lampa, hamburger" opisuje MARKETINSKU traku; mobilni prolaz (Z16) za `/rad/`
+     izricito kaze da "stepper prelama u dva reda", dakle da sredina ostaje. Identitet dokumenta je
+     uz to jedino sto korisniku radne povrsine na uskom ekranu treba u zaglavlju, a dva postojeca
+     Playwright garda (`workspace-entry`, `workspace-viewports`) ga na 390 px mjere kao vidljivog.
+     Sredina zato pada u VLASTITI RED ispod loga, umjesto da se stisne uz hamburger. */
+  .site-chrome[data-site-chrome="workspace"] .site-chrome__mid {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .site-chrome[data-site-chrome="workspace"] .site-chrome__doc { max-width: 100%; }
+  .site-chrome__steps { flex-wrap: wrap; }
   .site-chrome__burger { display: grid; }
   .site-chrome__sheet.open {
     display: grid;
@@ -354,6 +368,15 @@ header.site-chrome--scrolled {
   }
   body:has(.site-chrome__sheet.open) { overflow: hidden; }
 }
+/* ZNACKA "Lokalno" I OCJENA ODLAZE NA 720px. Ista tvrdnja ("analiza je lokalna") stoji napisana u
+   tijelu stranice, a u zaglavlju je na 390 px bila jedan od redaka kojima je traka dokumenta
+   prerasla navigaciju. Do Z15 je to pravilo zivjelo u `page-app.css` na `.nav-rad .local-badge`;
+   gard koji ga mjeri computed `display`-em je `tests/ux/workspace-viewports.spec.ts`. */
+@media (max-width: 720px) {
+  .site-chrome__doc .local-badge,
+  .site-chrome__score { display: none; }
+}
+
 @keyframes siteChromeDrop {
   from { opacity: 0; transform: translateY(-26px) rotate(-3deg); }
   to { opacity: 1; transform: rotate(-.8deg); }

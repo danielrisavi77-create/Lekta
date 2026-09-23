@@ -413,6 +413,16 @@ describe('Z15 stanje nakon skrola', () => {
     expect(chrome.classList.contains('site-chrome--scrolled')).toBe(false);
   });
 
+  it('sredina `/rad/` NE odlazi pod 820px, jer Z16 trazi stepper u dva reda', () => {
+    // Bez ove tvrdnje bi pravilo "logo, lampa, hamburger" (Z15, marketinska traka) tiho odnijelo i
+    // identitet dokumenta na radnoj povrsini, sto dva Playwright garda na 390 px mjere kao kvar.
+    const css = read('src/shared/site-chrome.css');
+    expect(css).toContain('.site-chrome[data-site-chrome="workspace"] .site-chrome__mid');
+    expect(css).toMatch(/grid-column: 1 \/ -1/);
+    // Znacka "Lokalno" i ocjena i dalje odlaze na 720px, kako je odluceno prije Z15.
+    expect(css).toMatch(/@media \(max-width: 720px\) \{\s*\.site-chrome__doc \.local-badge/);
+  });
+
   it('list nosi ucinke tankog stanja: padding, blur, crvena nit i manji logo', () => {
     const css = read('src/shared/site-chrome.css');
     expect(css).toContain('padding-block: 8px');

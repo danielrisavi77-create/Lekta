@@ -135,7 +135,7 @@ for (const { w, h, ime } of SIRINE) {
     // kojima je traka dokumenta na 390 px prerasla navigaciju (111 px u 66 px). Mjeri se computed
     // `display`, ne prisutnost pravila.
     if (w === 390) {
-      const znacka = await page.locator('.nav-rad .local-badge').evaluate((el) => getComputedStyle(el).display);
+      const znacka = await page.locator('.site-chrome__doc .local-badge').evaluate((el) => getComputedStyle(el).display);
       expect(znacka, 'znacka u zaglavlju mora otici na 390 px').toBe('none');
 
       // TRAKA DOKUMENTA NE PRELAZI SVOJU NAVIGACIJU. Izmjereno u koraku D: `#radDocBar` je bio
@@ -144,7 +144,7 @@ for (const { w, h, ime } of SIRINE) {
       // ne smije dosegnuti `.analyzer-wrap`.
       const okviri = await page.evaluate(() => {
         const bar = document.getElementById('radDocBar')?.getBoundingClientRect() ?? null;
-        const nav = document.querySelector('.nav-rad')?.getBoundingClientRect() ?? null;
+        const nav = document.querySelector('.site-chrome__bar')?.getBoundingClientRect() ?? null;
         const wrap = document.querySelector('.analyzer-wrap')?.getBoundingClientRect() ?? null;
         return {
           bar: bar ? { top: bar.top, bottom: bar.bottom, height: bar.height } : null,
@@ -154,7 +154,7 @@ for (const { w, h, ime } of SIRINE) {
       });
       // SENTINELI: bez visine oba okvira bi prazan/neiscrtan element lazno prosao usporedbu rubova.
       expect(okviri.bar?.height ?? 0, 'sentinel: #radDocBar nema visinu').toBeGreaterThan(0);
-      expect(okviri.nav?.height ?? 0, 'sentinel: .nav-rad nema visinu').toBeGreaterThan(0);
+      expect(okviri.nav?.height ?? 0, 'sentinel: .site-chrome__bar nema visinu').toBeGreaterThan(0);
       expect(
         okviri.bar!.top,
         `traka dokumenta pocinje (top=${okviri.bar!.top}) iznad svoje navigacije (top=${okviri.nav!.top})`,
