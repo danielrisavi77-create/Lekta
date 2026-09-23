@@ -14,6 +14,10 @@
 // vraca 200 { ignored: true, reason } i biljezi se u inbox s ishodom 'ignored'. Placena narudzba bez
 // meta.custom_data.user_id vise ne vraca 400 nego ishod 'needs_manual_link' (novac je naplacen, pa
 // dogadjaj ne smije nestati); 400 ostaje samo za neispravan JSON i nedostajuci order_id.
+// Povrat se prepoznaje SIRE od imena dogadjaja: po ev.refunded, dakle i iz attributes.status
+// 'refunded' i iz attributes.refunded true, kao i prije klasifikacije. Ishodi 'ignored' i
+// 'needs_manual_link' NISU u djelomicnom indeksu webhook_events_unresolved (0092), pa se nalaze
+// upitom po stupcu outcome; upiti i postupak su u docs/GO_LIVE_NAPLATA.md.
 // Odluke (potpis, parsiranje, klasifikacija, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //
 // deno-lint-ignore-file no-explicit-any
@@ -29,6 +33,7 @@ import {
   buildEntitlementInsert,
   acceptEvent,
   classifyLemonEvent,
+  isNotableIgnore,
   isFullRefund,
   type LemonEvent,
   type LemonWebhookPayload,
@@ -369,6 +374,23 @@ Deno.serve(async (req: Request) => {
   if (decision.kind === 'ignored') {
     // Nije nas dogadjaj ili narudzba jos nije placena (`pending`, `failed`, `subscription_*`,
     // `license_*`, nepoznat event_name). 200 jer retry ne bi promijenio ishod; trag ostaje u inboxu.
+    //
+    // OVA GRANA SE LOGIRA UVIJEK (nalaz pregleda 2026-09-23). Odluka pociva na usporedbi statusa s
+    // `paid`, i to je pretpostavka o tudjem sustavu. Kad bi grana bila tiha, promjena vrijednosti
+    // statusa kod providera pretvorila bi SVAKU kupnju u `ignored` + 200 bez retryja, bez ijednog
+    // retka koji to pokazuje. Neplacena narudzba (`order_status:*`) tice se stvarnog novca pa ide
+    // na ERROR razinu; tudji dogadjaj je konfiguracijski sum pa ide na WARN. Redovit upit nad
+    // inboxom po ishodu je u docs/GO_LIVE_NAPLATA.md (djelomicni indeks `webhook_events_unresolved`
+    // NE pokriva ovaj ishod, pa se filtrira po `outcome`).
+    const detalji = {
+      reason: decision.reason,
+      eventName: ev.eventName,
+      status: ev.status,
+      orderId: ev.orderId,
+      testMode: ev.testMode,
+    };
+    if (isNotableIgnore(decision)) console.error('webhook-mor ignored_unpaid_order', detalji);
+    else console.warn('webhook-mor ignored_foreign_event', detalji);
     await settle('ignored', decision.reason);
     return json({ ignored: true, reason: decision.reason ?? 'nepodrzan_dogadjaj' }, 200);
   }
@@ -376,12 +398,19 @@ Deno.serve(async (req: Request) => {
   if (decision.kind === 'needs_manual_link') {
     // PLACENA narudzba bez user_id. Novac je naplacen, pa 400 ne dolazi u obzir: dogadjaj ostaje u
     // inboxu s ovim ishodom i veze se rucno na racun. ERROR razina jer to netko mora vidjeti.
+    // Postupak razrjesenja i upit kojim se ti redci nalaze su u docs/GO_LIVE_NAPLATA.md, sekcija
+    // "Ishodi u webhook_events". Djelomicni indeks `webhook_events_unresolved` ovaj ishod NE
+    // pokriva, pa upit ide po stupcu `outcome`.
     console.error('webhook-mor needs_manual_link', { orderId: ev.orderId, variantId: ev.variantId });
     await settle('needs_manual_link', decision.reason);
     return json({ ok: true, action: 'needs_manual_link' }, 200);
   }
 
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
+  //
+  // U ovu granu se ulazi po `ev.refunded` (ime `order_refunded`, ili `attributes.status = refunded`,
+  // ili `attributes.refunded = true`), tocno kao prije klasifikacije. userId ovdje nije potreban:
+  // sve ide po `order_id`.
   if (decision.kind === 'refund') {
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.

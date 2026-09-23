@@ -8,6 +8,7 @@ import { webhookHandlerProblems } from './helpers/webhook-handler-source';
 
 import {
   classifyLemonEvent,
+  isNotableIgnore,
   parseLemonEvent,
   verifyLemonSignature,
   isoAfterDays,
@@ -273,6 +274,60 @@ describe('classifyLemonEvent', () => {
     expect(classifyLemonEvent({ ...base, status: 'refunded', refunded: true })).toEqual({ kind: 'refund' });
   });
 
+  /**
+   * NALAZ PREGLEDA 2026-09-23. Prva verzija klasifikatora gledala je `ev.refunded` samo unutar
+   * `order_created`, pa je povrat prepoznavala iskljucivo po imenu `order_refunded`. Stari handler
+   * je u refund granu ulazio na `ev.refunded`, koju parser racuna i iz `attributes.status` i iz
+   * `attributes.refunded`. Bez ovoga bi dogadjaj s vracenim novcem pod drugim imenom zavrsio kao
+   * `ignored` + 200: entitlement ostaje aktivan, referral nagrada se ne povlaci, retryja nema.
+   */
+  it.each(['order_updated', 'order_payment_refunded', 'nesto_novo_od_providera'])(
+    'zastavica refunded gasi pravo i pod imenom %s (ne samo order_refunded)',
+    (eventName) => {
+      expect(classifyLemonEvent({ eventName, status: 'refunded', userId: '', refunded: true }))
+        .toEqual({ kind: 'refund' });
+    },
+  );
+
+  it('parser racuna refunded iz attributes.refunded pa klasifikacija daje refund', () => {
+    const ev = parseLemonEvent({
+      meta: { event_name: 'order_updated' },
+      data: { id: 77, attributes: { refunded: true, total: 1699, refunded_amount: 1699 } },
+    });
+    expect(ev.refunded).toBe(true);
+    expect(classifyLemonEvent(ev)).toEqual({ kind: 'refund' });
+  });
+
+  /**
+   * Usporedba statusa je bila doslovna i osjetljiva na velika slova, dok isti parser `currency`
+   * normalizira. Velikim slovom napisan `Paid` bi tako postao `ignored`, dakle placena kupnja bez
+   * prava pristupa i bez retryja.
+   */
+  it.each(['PAID', 'Paid', ' paid '])('status %s je i dalje placeno', (status) => {
+    expect(classifyLemonEvent({ ...base, status })).toEqual({ kind: 'paid' });
+  });
+
+  it('status Refunded velikim slovom je povrat, ne ignored', () => {
+    const ev = parseLemonEvent({
+      meta: { event_name: 'order_created' },
+      data: { id: 78, attributes: { status: 'Refunded' } },
+    });
+    expect(ev.refunded).toBe(true);
+    expect(classifyLemonEvent(ev)).toEqual({ kind: 'refund' });
+  });
+
+  it('razlog za ignored ostaje u malim slovima (stabilan strojni kljuc)', () => {
+    expect(classifyLemonEvent({ ...base, status: 'PENDING' }).reason).toBe('order_status:pending');
+  });
+
+  /** Klase se razlikuju: neplacena narudzba tice se novca, tudji dogadjaj je konfiguracijski sum. */
+  it('isNotableIgnore razlikuje neplacenu narudzbu od tudjeg dogadjaja', () => {
+    expect(isNotableIgnore(classifyLemonEvent({ ...base, status: 'pending' }))).toBe(true);
+    expect(isNotableIgnore(classifyLemonEvent({ ...base, status: '' }))).toBe(true);
+    expect(isNotableIgnore(classifyLemonEvent({ ...base, eventName: 'subscription_created' }))).toBe(false);
+    expect(isNotableIgnore({ reason: undefined })).toBe(false);
+  });
+
   it('parseLemonEvent i classifyLemonEvent se slazu na stvarnom payloadu', () => {
     // Bez ovoga bi klasifikacija mogla biti tocna nad rucno slozenim objektom, a kriva nad onim
     // sto parser stvarno proizvede (npr. da `status` ostane prazan).
@@ -361,5 +416,25 @@ describe('webhook-mor izvor: odluka je u coreu, ne u handleru', () => {
   it('paid bez user_id biljezi se kao needs_manual_link i vraca 200', () => {
     expect(SRC).toContain("settle('needs_manual_link'");
     expect(SRC).toMatch(/return json\(\{ ok: true, action: 'needs_manual_link' \}, 200\)/);
+  });
+
+  /**
+   * NALAZ PREGLEDA 2026-09-23: grana `ignored` bila je jedina zavrsna grana bez ijednog log retka,
+   * a odluka joj pociva na usporedbi statusa s `paid`. Promjena vrijednosti kod providera bi tako
+   * pretvorila svaku kupnju u 200 bez retryja, bez ijednog traga u logu.
+   */
+  it("grana 'ignored' logira, i to razlicito za neplacenu narudzbu i tudji dogadjaj", () => {
+    expect(SRC).toContain("console.error('webhook-mor ignored_unpaid_order'");
+    expect(SRC).toContain("console.warn('webhook-mor ignored_foreign_event'");
+    expect(SRC).toContain('isNotableIgnore(decision)');
+  });
+
+  it("gard grize: utisana grana 'ignored' se prijavi", () => {
+    // MUTACIJA u memoriji: makni oba log retka iz te grane, tocno stanje prve verzije ove promjene.
+    const mutated = SRC
+      .replace("if (isNotableIgnore(decision)) console.error('webhook-mor ignored_unpaid_order', detalji);", '')
+      .replace("else console.warn('webhook-mor ignored_foreign_event', detalji);", '');
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain("grana 'ignored' nema log retka");
   });
 });

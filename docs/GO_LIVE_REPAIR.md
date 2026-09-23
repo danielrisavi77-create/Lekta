@@ -184,6 +184,10 @@ Za prodaju (korak D), potvrdi LS tajne:
 - [ ] `LEMONSQUEEZY_STORE_ID` citaju OBJE funkcije naplate (`create-checkout` i `webhook-mor`).
   Prazna vrijednost je fail-closed: webhook odbija svaku kupnju s `store_unverifiable`. Provjeri
   preflightom u okolini deploya: `npm run verify-naplata-secrets` (izlazni kod 1 imenuje varijablu).
+  Preflight cita Supabase Edge secrets projekta, ne tvoju ljusku, i pada i kad se popis ne moze
+  procitati (nepoznato nije zeleno).
+- [ ] U Lemon Squeezyju su pretplaceni `order_created` I `order_refunded`. Bez drugoga povrati se
+  nikad ne obrade: entitlement ostaje `paid`, referral nagrada se ne povuce, i to bez greske.
 
 ---
 

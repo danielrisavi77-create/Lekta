@@ -39,10 +39,22 @@ import { findScoredValueFindings, sameRuleValue } from '../src/verification/scor
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
-import { storeIdSecretProblems } from './helpers/naplata-env';
+import {
+  storeIdSecretProblems,
+  preflightSourceProblems,
+  refundClassificationProblems,
+  handlerOutcomes,
+  naplataRunbookProblems,
+} from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
 import { webhookHandlerProblems } from './helpers/webhook-handler-source';
-import { naplataSecretsVerdict } from '../scripts/verify-naplata-secrets.mjs';
+import {
+  naplataSecretsVerdict,
+  supabaseSecretsVerdict,
+  parseSupabaseSecretsList,
+  EMPTY_VALUE_DIGEST,
+} from '../scripts/verify-naplata-secrets.mjs';
+import { classifyLemonEvent } from '../src/report/webhook';
 import { auditReleaseLaunchers as auditReleaseLaunchersRaw } from './helpers/release-launcher-audit';
 import { metaWithinBudget } from '../supabase/functions/_shared/read-body';
 import { compareToRatchet } from '../scripts/npm-audit-ratchet-core.mjs';
@@ -2202,6 +2214,108 @@ const MUTATIONS: Mutation[] = [
       return webhookHandlerProblems(mutated).some((p) => p.includes('classifyLemonEvent'));
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  {
+    id: 'naplata/preflight-mjeri-ljusku',
+    imitates: 'prva verzija preflighta (2026-09-22): citao je process.env, dakle ljusku operatera, a tajne koje webhook-mor koristi zive u Supabase Edge Functions Secretsima. Izvezena varijabla u terminalu davala je zeleno iako je tajna u projektu prazna, pa bi acceptEvent svaku kupnju odbio s store_unverifiable i vratio 200',
+    caught: () => {
+      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      // MUTACIJA u memoriji: vrati zadani put na citanje ljuske. Disk se ne dira.
+      const mutated = src.replace('const read = readSupabaseSecrets(projectRef);', 'const read = { ok: true, rows: process.env };');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return preflightSourceProblems(mutated).some((p) => p.includes('process.env'));
+    },
+    cleanBefore: () => {
+      const src = readFileSync(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'), 'utf8');
+      return src.length > 2000 && preflightSourceProblems(src).length === 0;
+    },
+  },
+  {
+    id: 'naplata/supabase-secret-postavljen-na-prazno',
+    imitates: 'tajna postavljena na PRAZNO u Supabase sucelju: u popisu postoji, izgleda konfigurirano, a acceptEvent je vidi isto kao da je nema i odbija svaku kupnju s 200 bez retryja',
+    caught: () => {
+      const popis = parseSupabaseSecretsList(
+        [
+          '  MOR_WEBHOOK_SECRET | 11aa',
+          '  LEMONSQUEEZY_API_KEY | 22bb',
+          `  LEMONSQUEEZY_STORE_ID | ${EMPTY_VALUE_DIGEST}`,
+        ].join('\n'),
+      );
+      if (popis.length !== 3) return false; // parser nije procitao popis: baseline bi bio vakuum
+      return supabaseSecretsVerdict(popis).missing.some(
+        (m: { name: string; reason: string }) => m.name === 'LEMONSQUEEZY_STORE_ID' && m.reason === 'prazna',
+      );
+    },
+    cleanBefore: () =>
+      supabaseSecretsVerdict(
+        parseSupabaseSecretsList(
+          ['  MOR_WEBHOOK_SECRET | 11aa', '  LEMONSQUEEZY_API_KEY | 22bb', '  LEMONSQUEEZY_STORE_ID | 33cc'].join('\n'),
+        ),
+      ).ok,
+  },
+  {
+    id: 'naplata/povrat-samo-po-imenu-dogadjaja',
+    imitates: 'suzenje povrata na event_name === order_refunded: stari handler je u refund granu ulazio na ev.refunded (i iz attributes.status refunded i iz attributes.refunded true), pa bi dogadjaj s vracenim novcem pod drugim imenom postao ignored + 200, entitlement ostao aktivan, a referral nagrada nepovucena',
+    caught: () => {
+      // MUTACIJA: zamijeni ODLUKU uzom verzijom (ne tekstom izvora nego funkcijom).
+      const usko = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
+        if (ev.eventName === 'order_refunded') return { kind: 'refund' };
+        if (ev.eventName === 'order_created') {
+          if (ev.status !== 'paid') return { kind: 'ignored', reason: `order_status:${ev.status}` };
+          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
+        }
+        return { kind: 'ignored' };
+      };
+      return refundClassificationProblems(usko).some((p) => p.includes('order_updated'));
+    },
+    cleanBefore: () => refundClassificationProblems(classifyLemonEvent).length === 0,
+  },
+  {
+    id: 'naplata/ignored-grana-bez-loga',
+    imitates: 'grana ignored bez ijednog log retka: odluka pociva na usporedbi statusa s paid, pa bi promjena vrijednosti kod providera pretvorila SVAKU kupnju u 200 bez retryja, a jedini trag bio bi redak u webhook_events koji ne pokriva ni djelomicni indeks webhook_events_unresolved',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src
+        .replace("if (isNotableIgnore(decision)) console.error('webhook-mor ignored_unpaid_order', detalji);", '')
+        .replace("else console.warn('webhook-mor ignored_foreign_event', detalji);", '');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes("grana 'ignored' nema log retka"));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  {
+    id: 'naplata/runbook-ne-imenuje-order-refunded',
+    imitates: 'stanje runbooka do 2026-09-23: korak 3 je rekao samo "u LS postavi webhook", bez popisa dogadjaja. Handler od tada prepoznaje povrat samo iz dogadjaja koji stigne, pa operater koji pretplati minimalan skup (order_created) dobije naplatu koja radi i povrate koji se nikad ne obrade: entitlement ostaje paid, referral nagrada se ne povuce, i to bez ijedne greske',
+    caught: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      // MUTACIJA u memoriji: makni ime dogadjaja iz runbooka. Disk se ne dira.
+      const mutated = runbook.split('`order_refunded`').join('povrat');
+      if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return naplataRunbookProblems(mutated, handlerOutcomes(webhookMorSource()))
+        .some((p) => p.includes('order_refunded'));
+    },
+    cleanBefore: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      const outcomes = handlerOutcomes(webhookMorSource());
+      // outcomes stiti od vakuuma: prazan izvod bi dao "cist" runbook bez ijedne provjere ishoda.
+      return outcomes.length >= 4 && naplataRunbookProblems(runbook, outcomes).length === 0;
+    },
+  },
+  {
+    id: 'naplata/ishod-bez-retka-u-runbooku',
+    imitates: 'nov ishod u webhook_events koji trazi ljudsku radnju, a nigdje nije opisan: tocno stanje ishoda needs_manual_link do 2026-09-23, koji uz to ne ulazi ni u djelomicni indeks webhook_events_unresolved pa ga ni standardni upit nad neobradjenima ne vraca',
+    caught: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      // MUTACIJA: handler pocne pisati ishod koji runbook ne poznaje.
+      return naplataRunbookProblems(runbook, [...handlerOutcomes(webhookMorSource()), 'nov_ishod'])
+        .some((p) => p.includes('nov_ishod'));
+    },
+    cleanBefore: () => {
+      const runbook = readFileSync(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'), 'utf8');
+      return naplataRunbookProblems(runbook, handlerOutcomes(webhookMorSource())).length === 0;
+    },
   },
 
   // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------

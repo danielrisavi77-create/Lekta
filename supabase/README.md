@@ -94,7 +94,12 @@ Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`,
 `CHECKOUT_REDIRECT_URL`. `LEMONSQUEEZY_STORE_ID` citaju OBJE funkcije naplate: `create-checkout`
 (na koju trgovinu ide kupnja) i `webhook-mor` (iz koje trgovine dogadjaj smije doci, PAY-04; prazno
 znaci da webhook odbija SVE dogadjaje s `store_unverifiable`). Do 2026-09-22 je webhook citao
-zasebno ime `LS_STORE_ID`. Preflight prije deploya: `npm run verify-naplata-secrets`.
+zasebno ime `LS_STORE_ID`. Preflight prije deploya: `npm run verify-naplata-secrets`; on cita
+Supabase Edge secrets projekta (`supabase secrets list`), ne lokalnu ljusku, i pada i kad se popis
+ne moze procitati. U Lemon Squeezyju pretplati TOCNO `order_created` i `order_refunded`: handler
+obradjuje samo ta dva, a bez drugoga se povrati nikad ne obrade. Ishodi `needs_manual_link` i
+`ignored` nisu u indeksu `webhook_events_unresolved`, pa se traze upitom po `outcome`; upiti i
+postupak rucnog vezivanja su u `docs/GO_LIVE_NAPLATA.md` sekcija 5.1.
 Webhook HMAC provjera potpisa je već implementirana
 (`verifyLemonSignature`, timing-safe); dovoljno je postaviti `MOR_WEBHOOK_SECRET`. Nakon
 `db push` popuni `products.mor_product_id` stvarnim Lemon
