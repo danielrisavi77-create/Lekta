@@ -206,19 +206,34 @@ def verify_candidate(candidate: dict, policy: dict, *, runner: Callable[[list[st
     kontakt s vanjskim svijetom pa se cijeli tok testira bez npm-a. Kandidatov kod se NE izvrsava ovdje
     osim kroz taj runner (koji u produkciji radi u odvojenom sandboxu).
 
-    `settle` se zove TOCNO jednom, odmah nakon sto je dokaz procitan: pozivatelj tada vraca svaku stazu
-    iz `VERIFY_ARTIFACT_PATHS` na zateceno stanje i vraca popis staza koje je provjera usput ostavila
-    prljavima. Redoslijed nije kozmetika: prije `read_proof` bi vracanje datoteke pojelo bas onaj
-    svjez dokaz zbog kojeg se provjera i pokrece. Bez `settle` ponasanje je staro (nista se ne vraca, popis
-    je prazan), pa pozivatelji koji stablo ne diraju ostaju netaknuti."""
+    `settle` se zove TOCNO jednom na svakom izlazu iz ove funkcije nakon sto je runner pokrenut: na
+    normalnom putu tek NAKON sto je dokaz procitan (pozivatelj tada vraca svaku stazu iz
+    `VERIFY_ARTIFACT_PATHS` na zateceno stanje i vraca popis staza koje je provjera usput ostavila
+    prljavima). Redoslijed nije kozmetika: prije `read_proof` bi vracanje datoteke pojelo bas onaj
+    svjez dokaz zbog kojeg se provjera i pokrece. Ako runner ili `read_proof` baci (npr.
+    `subprocess.TimeoutExpired` iz `DefaultAdapters.verify`), `settle` se zove na tom iznimnom putu prije
+    nego iznimka nastavi van, kako radnikovo stablo ne bi ostalo prljavo; sama iznimka se ne guta. Ako i
+    `settle` sam baci na tom putu, izvorna iznimka ostaje dostupna kroz standardno Python 3 ulancavanje
+    (`__context__`), samo vise nije ta koja se siri. Bez `settle` ponasanje je staro (nista se ne vraca,
+    popis je prazan), pa pozivatelji koji stablo ne diraju ostaju netaknuti."""
     required = list(policy.get("requiredReleaseTiers") or [])
     candidate_sha = str(candidate.get("candidateSha") or "")
     base_sha = str(candidate.get("baseSha") or "")
     if not _SHA_RE.match(candidate_sha) or not _SHA_RE.match(base_sha):
         raise ValueError("candidateSha i baseSha moraju biti puni 40-hex SHA")
-    exit_code, _ = runner(["npm", "run", "release:check"])
-    proof = read_proof()
-    residue = list(settle()) if settle is not None else []
+    settled = False
+    try:
+        exit_code, _ = runner(["npm", "run", "release:check"])
+        proof = read_proof()
+        if settle is not None:
+            residue = list(settle())
+            settled = True
+        else:
+            residue = []
+    except BaseException:
+        if settle is not None and not settled:
+            settle()
+        raise
     ls_code, ls_out = runner(["git", "ls-tree", "-r", candidate_sha])
     head_digest = tree_digest_from_ls_tree(ls_out) if ls_code == 0 else None
     staleness = proof_staleness(proof, head_digest)

@@ -936,7 +936,10 @@ class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
         self.extra_writes = [self.TRACKED_OTHER]
         first, adapters, _ = self.run_tick("prvi posao", NOW)
         self.assertEqual(adapters.last_evidence["treeResidue"], [self.TRACKED_OTHER], adapters.last_evidence)
-        self.assertFalse(adapters.last_evidence["complete"], "dokaz nad stablom koje je provjera promijenila nije potpun")
+        # `complete` se ovdje namjerno ne tvrdi: fixture (`COMMITTED_PROOF["commit"] == "1" * 40`,
+        # `results: []`) vec sama cini `complete` False neovisno o `treeResidue`, pa bi tvrdnja bila
+        # konfundirana. Klauzulu "residue obara complete" pokriva
+        # `gate.SettleTest.test_residue_blocks_the_manifest_and_the_promotion`.
         self.assertIn("vec-postoji.ts", self.dirty())
         self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se svejedno vraca; kvar je uzak")
         self.assertNotIn("repair-real-corpus.json", self.dirty(), "ratchet korpusa se svejedno vraca")

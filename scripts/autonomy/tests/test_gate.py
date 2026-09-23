@@ -259,6 +259,58 @@ class SettleTest(unittest.TestCase):
         self.assertTrue(evidence["signature_verified"], evidence)
         self.assertFalse(promotion_allowed(evidence, CAND, REQUIRED))
 
+    def test_settle_runs_when_runner_times_out(self):
+        """Runner koji baci (npr. `subprocess.TimeoutExpired`, kao `DefaultAdapters.verify` na isteku
+        `gateTimeoutMinutes`) mora i dalje pokrenuti `settle` tocno jednom, a iznimka se mora siriti van,
+        ne progutati."""
+        order = []
+
+        def runner(argv):
+            order.append("release")
+            raise subprocess.TimeoutExpired(cmd=argv, timeout=1)
+
+        def read_proof():
+            order.append("read_proof")
+            return proof()
+
+        def settle():
+            order.append("settle")
+            return []
+
+        with self.assertRaises(subprocess.TimeoutExpired):
+            verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner, read_proof=read_proof, signing_key=KEY, created_at="t",
+                             settle=settle)
+        self.assertEqual(order, ["release", "settle"])
+        self.assertEqual(order.count("settle"), 1)
+
+    def test_settle_runs_when_read_proof_throws(self):
+        """`read_proof` koji baci mora i dalje pokrenuti `settle` tocno jednom, a iznimka se siri van."""
+        order = []
+
+        def runner(argv):
+            order.append("release")
+            return 0, ""
+
+        def read_proof():
+            order.append("read_proof")
+            raise RuntimeError("dokaz nedostupan")
+
+        def settle():
+            order.append("settle")
+            return []
+
+        with self.assertRaises(RuntimeError):
+            verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner, read_proof=read_proof, signing_key=KEY, created_at="t",
+                             settle=settle)
+        self.assertEqual(order, ["release", "read_proof", "settle"])
+        self.assertEqual(order.count("settle"), 1)
+
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
