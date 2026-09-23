@@ -29,8 +29,9 @@ adversarijalni pregled prema AGENTS.md.
 ## Pocetak
 
 1. Instaliraj aktualne native Codex, Claude Code i (po potrebi) Grok Build CLI alate i prijavi ih
-   na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login` (ili
-   `XAI_API_KEY` za headless). Grok: https://docs.x.ai/build/overview
+   na svojem racunalu. Provjeri `codex login status`, `claude auth status` i `grok login`.
+   `XAI_API_KEY` je samo za svjesni rucni/API nacin; subscription/autonomy profil ga namjerno odbija.
+   Grok: https://docs.x.ai/build/overview
    (`curl -fsSL https://x.ai/cli/install.sh | bash` ili `npm install -g @xai-official/grok`).
    Runner je verificiran s Grok CLI 1.0.34 i odbija oslanjanje na stariji JSON ugovor;
    `doctor` oznacava instalaciju kao `supported` ili `unsupported; minimum 1.0.34`.
