@@ -405,11 +405,21 @@ Ne kreni u Z7 dok autor ne odabere (a) ili (b).
 
 ## Z24. Jedna istina o cijenama
 
-**Problem.** Tri popisa: `data/packages.json` (Instant 9 / Formatiranje 39 / Predaja bez panike 69 / Premium 99), tablica `products` u Supabaseu (izvor za paywall, `products-catalog.ts`), i dizajn (`design/templates/pricing/Pricing.dc.html`: besplatna provjera + Popravak 9,99 € po dokumentu + Institucija na upit). Autor je potvrdio da vrijedi **dizajn**.
+**Odluka autora (23. 9. 2026).** Cijena je jedna po dokumentu i ovisi o vrsti rada. Uključuje popravak forme, puni izvještaj i ponovne provjere (7 dana za seminarski i završni, 14 za ostale):
+- seminarski 4,99 €
+- završni 9,99 €
+- diplomski 14,99 €
+- specijalistički 19,99 €
+- doktorski 24,99 €
+Provjera je besplatna. Institucije na upit.
 
-**Rješenje.** (1) Migracija `products`: deaktiviraj retke koji ne odgovaraju (ostaje `repair` 9,99 € retail, po dokumentu, `slots_total 1`, `slot_window_days 7`; institucionalni kao `partner` bez cijene). (2) `packages.json` obriši ili svedi na isti sadržaj; `tests/products-catalog.test.ts` i sve što čita `packages.json` prilagodi. (3) `formatPriceEur` vraća `9,99 €` (znak, ne "EUR"), kao u dizajnu. (4) Cjenik (Z11) i kartica popravka (Z8 plan) čitaju cijenu iz kataloga, s fallbackom na `9,99 €` dok mreža ne odgovori.
+**Problem.** Trenutno postoje četiri popisa koji se ne slažu: `data/packages.json` (9 / 39 / 69 / 99), tablica `products` u Supabaseu, `citati-i-literatura.html` (3,99 / 5,99 / 9,99 / 24,99, bez specijalističkog) i stari dizajn (4,99 izvještaj + 9,99 popravak).
 
-**Provjera.** Nijedan `.html`/`.ts` ne nosi 39, 69, 99 kao cijenu; `grep -n "39 €\|69 €\|99 €"` prazan.
+**Rješenje.** (1) Migracija `products`: pet retail redaka po vrsti rada s gornjim cijenama, `slots_total 1`, `slot_window_days` 7 ili 14; institucionalni kao `partner` bez cijene; ostali se deaktiviraju. (2) `src/report/pricing.ts` je jedini izvor u kodu; `packages.json` obriši ili generiraj iz njega. (3) `formatPriceEur` vraća `14,99 €` (znak, ne "EUR"). (4) Cjenik (Z11), kartica popravka i plaćanje (Z8), račun na saznaj-više (Z12), e-mail (Z23) i stanje neuspjele naplate (Z22) čitaju cijenu za vrstu rada iz profila. (5) `citati-i-literatura.html` i ostale SEO stranice: tablica cijena zamijeni se s pet redaka gore.
+
+**Reference ažurirane:** `Pricing.dc.html` (tweak `workType`), `LearnMore.dc.html` (račun po vrsti rada, dodan specijalistički), `Results.dc.html`, `EmailReceipt.dc.html`, `States.dc.html` (primjer je diplomski, 14,99 €).
+
+**Provjera.** `grep -rn "3,99\|5,99\|39 €\|69 €\|EUR"` u `*.html`/`src` prazan (osim testova); `tests/products-catalog.test.ts` provjerava svih pet cijena.
 
 ---
 
@@ -430,6 +440,60 @@ Ne kreni u Z7 dok autor ne odabere (a) ili (b).
 **Rješenje.** Zamijeni `public/favicon.svg` (pečat: rotirani crveni okvir + kurzivno L; za 16 px varijanta bez rotacije), izvezi `favicon.ico` (16+32), `apple-touch-icon.png` 180 (papir + pečat), `icon-512-maskable.png` (crveni), dodaj `site.webmanifest` s `theme_color #191512`, `background_color #F7F3E8`. OG: renderiraj `state-og-image.html` u `public/og.png` 1200×630 i postavi `og:title`, `og:description`, `og:image`, `twitter:card` na svim rutama kroz postojeće generatore. `tests/favicon.test.ts` proširi na manifest i og.
 
 ---
+
+## Z27. SEO stranica `citati-i-literatura.html`
+
+**Referenca.** `design/templates/seo-citati/Citati.dc.html` (odabrana varijanta A, konac). Ostale SEO stranice slijede isti obrazac sekcija, ali svaka dobiva svoj oblik (odluka autora).
+
+**Sekcije redom:** hero s faksimilom koji se sam provjerava (skenirajuća linija, citatnice se boje, pečat "2 citata bez izvora"); 01 crvene niti između citatnica i popisa literature (SVG putanje računaju se iz `getBoundingClientRect` citatnice i zapisa, preračun na `resize`; nepovezana citatnica ima nit koja visi); 02 traka nalaza (8 primjera iz `tests/fixtures`, bez imena autora; vrti se sama, staje na hover, stoji pod `prefers-reduced-motion`); 03 što provjerava (§ 1 do § 3); 04 kako radi; 05 usporedba pristupa (red po pitanju, klik otvara odgovor za sva četiri pristupa); 06 cjenik kao račun po vrsti rada (Z24 cijene); 07 FAQ (5 pitanja + `FAQPage` schema.org); završni CTA; odricanje od odgovornosti.
+
+**Copy** doslovno iz predloška. Citati korisnika se ne prikazuju dok nema pravih (primjeri nalaza ih zamjenjuju). Benchmark nije uključen dok nema izmjerenih brojki.
+
+**Provjera.** Niti se ne sijeku s tekstom na 360, 768 i 1280px; Lighthouse SEO 100; nema mrežnih zahtjeva osim fontova.
+
+---
+
+## Z28. SEO stranica `landing_usporedba.html`
+
+**Referenca.** `design/templates/seo-usporedba/Usporedba.dc.html`, varijanta B (fokus). Tweak `variant` A i C ostaju samo kao referenca.
+
+**Registar.** Jedna tablica: prvi stupac su pitanja, pa četiri pristupa (AI chat i savjet, Upload-alati, Ljudsko lektoriranje, Lekta). U ćelijama je samo znak (✓ zeleno #1E7F4F, ~ jantar #8A570E, ✗ crveno #C4372E); legenda stoji u zaglavlju prvog stupca, a iznad tablice oznaka "Klikni znak za objašnjenje". Lekta stupac nosi pečat. Deset redaka, zadnja dva ispod crte "Gdje je drugi bolji" (sadržaj i argumentacija, jezik i stil), a tamo Lekta dobiva ✗. Tekst ćelija i fusnote 1 do 4 doslovno iz predloška.
+**Fokus (B).** Klizač od 0 do 3 iznad tablice i nazivi pristupa ispod njega; stupci izvan fokusa idu na opacity .28, a ispod tablice je mreža s odgovorima za sve retke tog pristupa. Klik na znak postavlja fokus na taj stupac.
+**Pokret.** Znakovi se iscrtavaju (stroke-dashoffset) red po red kad tablica uđe u pogled (IntersectionObserver, razmak 130 ms). Redak pod mišem je svijetao, ostali idu na .45. Pod `prefers-reduced-motion` sve je odmah vidljivo.
+**Mobitel (<760px).** Tablica se pretvara u četiri kartice (jedna po pristupu) s horizontalnim scroll-snapom, tekst je vidljiv uz znak.
+**Ostale sekcije:** cijena kao dvije trake (lektor 70 do 110 € s iscrtkanim rasponom, Lekta 14,99 €); § 1 i § 2 dokaz; četiri poveznice na `/usporedba/*`; FAQ (5 pitanja + `FAQPage` schema.org); završni CTA; odricanje. Beta se ne spominje, prikazuju se samo cijene (Z24).
+
+**Provjera.** Nijedan tekst preko drugoga na 360, 768 i 1280px; tablica ne izlazi van lista.
+
+---
+
+---
+
+## Z29. Javni benchmark (`landing_benchmark.html`)
+
+**Referenca.** `design/templates/seo-benchmark/Benchmark.dc.html` (varijanta A) + `BenchSheet.dc.html`.
+
+**Sekcije redom:** hero (copy postojeće stranice doslovno); 01 prekidač "Klizač" (zadano) / "Dva lista". Klizač (`BenchFix.dc.html`): jedna A4 stranica s istim tekstom u dva sloja. Donji sloj je rad kako je ostao nakon AI chata (Calibri, 11 pt, prored 1,0, lijevo, bez broja stranice, crvene oznake 1 do 7 u gornjoj i donjoj margini). Gornji sloj je isti tekst po pravilniku (Times New Roman, 12 pt, prored 1,5, obostrano s rastavljanjem, uvlaka odlomka, broj stranice, zelene oznake; 7 opseg jantarno "ručno"), otkriva se `clip-path: inset(0 X% 0 0)` slijeva. Stranica kreće potpuno "kriva"; kad uđe u pogled, ručka sama klizne do 55 % (1,6 s, ease-out) pa je preuzima korisnik; pod `prefers-reduced-motion` stoji na 50 %. Oznake na istim mjestima u oba sloja (fiksni grid 3 + 4 ćelije), veličine u `cqw` (`container-type: inline-size`) da se nigdje ne preklapaju. Ispod: legenda od 7 redaka (naziv · ~~krivo~~ → točno), dodir retka istakne oznaku na listu. Dva lista: Lekta lijevo, AI chat desno, svaki blago nakošen (−1° / +1,2°, desni spušten 18px), na hover se ispravi i podigne; oznake 1 do 7 padaju redom kad sekcija uđe u pogled (`IntersectionObserver`, 520ms razmak), gumb "↻ Ponovi provjeru"; iznad listova red čipova "Pokaži isto mjesto na oba lista" (1 Font … 7 Opseg): klik fokusira grešku, ostale oznake blijede na 18 %, na oba lista isto mjesto dobiva isprekidani krug (Lekta "Nº N · označeno", AI "Nº N · bez oznake"), redak u popisu ispod lista se osvijetli; kad animacija završi, ispod listova padne pečat "7 OZNAKA FORME 0"; 02 katalog grešaka; 03 drugi pristupi (netestirani otvoreno označeni); 04 AI test detaljno; 05 metodologija + preuzimanje; CTA.
+
+**Pravila.** Brojke i copy doslovno iz postojeće stranice i `scripts/generate-benchmark-fixture.mts`; ništa se ne procjenjuje. Čipovi su `button` s `aria-pressed`, min. visina 36px. Pod `prefers-reduced-motion` sve oznake odmah vidljive, bez nagiba i pečata u animaciji.
+
+**Provjera.** 360px: listovi jedan ispod drugog, čipovi se prelamaju, oznaka ni krug ne izlaze iz lista; tipkovnica dolazi do svih čipova.
+
+---
+
+## Z30. Interne stranice (`verification.html`, `admin.html`)
+
+**Stanje.** Obje su `noindex`, samo za autora. `verification.html` već ima sloj "korektorski stol" (tamni stol, papirnati paneli, radius 2px, pečat za potvrdu), ali s hardkodiranim tokenima i starim `Newsreader`/`Inter Tight` deklaracijama koje odmah prepisuje.
+
+**Rješenje (bez redizajna).** Ukloni prvi `:root` blok i dupli light-tema kod; učitaj `design-system.css` + `page-chrome.css` (Z15 traka u minimalnom obliku: logo + "Interno"); klase `vc-*` preslikaj na postojeće tokene (`--desk`, `--paper`, `--paper-line`, `--red`, `--radius-btn`). Isto za `admin.html`. Bez animacija, bez premium elemenata.
+
+**Provjera.** Vizualno isto kao sada u obje teme; nijedan hex literal u `<style>` osim sjena.
+
+## Redoslijed i rizik (dopuna 9)
+Z28 ovisi o Z24 i Z15. Z29 ovisi o Z15.
+
+## Redoslijed i rizik (dopuna 8)
+Z27 ovisi o Z24 (cijene) i Z15 (traka). Ostale SEO stranice idu kao zasebni zadaci kad dobiju predložak.
 
 ## Redoslijed i rizik (dopuna 7)
 Z15 ide odmah nakon Z3 (prije Z7), jer svi kasniji ekrani nasljeđuju traku.
