@@ -1,12 +1,14 @@
 import copy
 import json
 import os
+import subprocess
 import tempfile
 import unittest
 
 from scripts.autonomy.gate import (
-    build_manifest, directory_digest, load_evidence, promotion_allowed, proof_staleness, release_proof_checks,
-    sign_manifest, tree_digest_from_ls_tree, verify_candidate,
+    CORPUS_REPORT_PATH, PROOF_PATH, VERIFY_ARTIFACT_PATHS, build_manifest, directory_digest, load_evidence,
+    promotion_allowed, proof_staleness, release_proof_checks, sign_manifest, tree_digest_from_ls_tree,
+    verify_candidate,
 )
 
 REQUIRED = ["check", "conformance", "slow", "ux", "strict-open", "word", "word-worst"]
@@ -191,6 +193,190 @@ class TrustedLoaderTest(unittest.TestCase):
         self.assertEqual(sign_manifest(m, KEY), sign_manifest(dict(m, signature_verified=True), KEY))
         self.assertNotEqual(sign_manifest(m, KEY), sign_manifest(dict(m, complete=False), KEY))
         json.dumps(m)  # serijalizabilan bez custom tipova
+
+
+class SettleTest(unittest.TestCase):
+    """`settle` je jedina tocka u kojoj verifikacija smije vratiti radnikovo stablo u zateceno stanje.
+
+    Dvije stvari se ovdje mjere i nijedna nije nizvodna: REDOSLIJED (mora ici poslije `read_proof`, inace
+    bi vracanje datoteke pojelo bas onaj svjez dokaz zbog kojeg se provjera pokrece) i UCINAK neprazna
+    popisa (`treeResidue` obara `complete` i `promotion_allowed`).
+    """
+
+    def test_settle_runs_exactly_once_and_after_the_proof_is_read(self):
+        order = []
+
+        def runner(argv):
+            if argv[:3] == ["npm", "run", "release:check"]:
+                order.append("release")
+                return 0, ""
+            order.append("ls-tree")
+            return 0, LS_TREE
+
+        def read_proof():
+            order.append("read_proof")
+            return proof()
+
+        def settle():
+            order.append("settle")
+            return []
+
+        m = verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner, read_proof=read_proof, signing_key=KEY, created_at="t",
+                             settle=settle)
+        self.assertEqual(order, ["release", "read_proof", "settle", "ls-tree"])
+        self.assertEqual(order.count("settle"), 1)
+        self.assertEqual(m["treeResidue"], [])
+        self.assertTrue(m["complete"], m)
+
+    def test_without_settle_the_behaviour_is_the_old_one(self):
+        """BASELINE: pozivatelj koji stablo ne dira dobiva prazan popis i isti ishod kao prije."""
+        m = good_manifest()
+        self.assertEqual(m["treeResidue"], [])
+        self.assertTrue(m["complete"], m)
+
+    def test_residue_blocks_the_manifest_and_the_promotion(self):
+        """MUTACIJA: verifikacija je ostavila trag u stablu; dokaz nad takvim stablom nije potpun."""
+        m = verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner_factory(), read_proof=lambda: proof(), signing_key=KEY,
+                             created_at="t", settle=lambda: ["src/ui/app.ts", "docs/generated/DRUGI.json"])
+        self.assertEqual(m["treeResidue"], ["docs/generated/DRUGI.json", "src/ui/app.ts"])
+        self.assertFalse(m["complete"], m)
+        self.assertFalse(promotion_allowed(load(m), CAND, REQUIRED))
+        # Kontrola: isti ulaz bez traga i dalje prolazi, pa gard ne gasi ono sto stiti.
+        self.assertTrue(promotion_allowed(load(good_manifest()), CAND, REQUIRED))
+
+    def test_residue_is_refused_even_when_a_signed_manifest_claims_completeness(self):
+        """Potpisan manifest s tragom i rucno postavljenim `complete` i dalje ne prolazi promociju."""
+        m = good_manifest()
+        forged = dict(m, treeResidue=["src/ui/app.ts"])
+        forged["signature"] = sign_manifest(forged, KEY)
+        evidence = load(forged)
+        self.assertTrue(evidence["signature_verified"], evidence)
+        self.assertFalse(promotion_allowed(evidence, CAND, REQUIRED))
+
+    def test_settle_runs_when_runner_times_out(self):
+        """Runner koji baci (npr. `subprocess.TimeoutExpired`, kao `DefaultAdapters.verify` na isteku
+        `gateTimeoutMinutes`) mora i dalje pokrenuti `settle` tocno jednom, a iznimka se mora siriti van,
+        ne progutati."""
+        order = []
+
+        def runner(argv):
+            order.append("release")
+            raise subprocess.TimeoutExpired(cmd=argv, timeout=1)
+
+        def read_proof():
+            order.append("read_proof")
+            return proof()
+
+        def settle():
+            order.append("settle")
+            return []
+
+        with self.assertRaises(subprocess.TimeoutExpired):
+            verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner, read_proof=read_proof, signing_key=KEY, created_at="t",
+                             settle=settle)
+        self.assertEqual(order, ["release", "settle"])
+        self.assertEqual(order.count("settle"), 1)
+
+    def test_settle_runs_when_read_proof_throws(self):
+        """`read_proof` koji baci mora i dalje pokrenuti `settle` tocno jednom, a iznimka se siri van."""
+        order = []
+
+        def runner(argv):
+            order.append("release")
+            return 0, ""
+
+        def read_proof():
+            order.append("read_proof")
+            raise RuntimeError("dokaz nedostupan")
+
+        def settle():
+            order.append("settle")
+            return []
+
+        with self.assertRaises(RuntimeError):
+            verify_candidate({"candidateSha": CAND, "baseSha": BASE, "artifactHash": "art",
+                              "dependencyLockHash": "lock", "changedPaths": ["docs/x.md"]},
+                             {"requiredReleaseTiers": REQUIRED, "policyVersion": "p1"},
+                             runner=runner, read_proof=read_proof, signing_key=KEY, created_at="t",
+                             settle=settle)
+        self.assertEqual(order, ["release", "read_proof", "settle"])
+        self.assertEqual(order.count("settle"), 1)
+
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+
+
+def repo_text(rel):
+    with open(os.path.join(REPO_ROOT, rel.replace("/", os.sep)), encoding="utf-8") as fh:
+        return fh.read()
+
+
+def js_object_containing(text, needle):
+    """Izdvoji `{...}` blok koji sadrzi `needle`, brojanjem viticastih zagrada.
+
+    Trazi se CIJELI objekt razine, ne redak: tvrdnja "razina strict-open je obavezna" mora vrijediti nad
+    istim objektom u kojem stoji i njezina naredba, inace bi dva susjedna retka iz razlicitih razina prosla
+    kao da su jedna.
+    """
+    hit = text.index(needle)
+    start = text.rindex("{", 0, hit)
+    depth, i = 0, start
+    while i < len(text):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start:i + 1]
+        i += 1
+    raise AssertionError("neuravnotezene zagrade oko " + needle)
+
+
+class VerifyArtifactDeclarationTest(unittest.TestCase):
+    """Popis `VERIFY_ARTIFACT_PATHS` je POIMENICAN, pa mu treba sidro u stvarnom repozitoriju.
+
+    Bez ovoga bi popis tiho istrunuo: preimenovana staza, ugasena razina ili pisac koji vise ne pise dali bi
+    popravak koji vraca datoteku koju nitko ne prlja, a prava bi ostala prljava. Test zato ne provjerava
+    popis prema samom sebi nego prema `package.json`, `scripts/release-tiers.mjs` i stvarnim skriptama.
+
+    Tvrdi se i da je svaka staza TRACKANA: netrackanu datoteku `git status` prijavljuje kao `??` samo dok je
+    nije progutao `.gitignore`, a trackana je jedini oblik koji kontrolerovo stablo stvarno zaprlja.
+    """
+
+    def test_every_declared_artifact_is_tracked_in_this_repository(self):
+        for rel in VERIFY_ARTIFACT_PATHS:
+            out = subprocess.run(["git", "ls-files", "--error-unmatch", "--", rel], cwd=REPO_ROOT,
+                                 capture_output=True, text=True, check=False, shell=False)
+            self.assertEqual(out.returncode, 0, rel + " nije trackana: " + out.stderr.strip())
+            self.assertEqual(out.stdout.strip(), rel, rel)
+
+    def test_the_proof_writer_is_still_the_release_check_script(self):
+        scripts = json.loads(repo_text("package.json"))["scripts"]
+        self.assertIn("scripts/release-check.mjs", scripts["release:check"], scripts["release:check"])
+        self.assertIn("RELEASE_PROOF.json", repo_text("scripts/release-check.mjs"))
+        self.assertIn(PROOF_PATH, VERIFY_ARTIFACT_PATHS)
+
+    def test_a_required_tier_still_regenerates_the_corpus_ratchet(self):
+        """Lanac koji je prvi popravak propustio: strict-open -> repaired -> review -> ratchet korpusa."""
+        tier = js_object_containing(repo_text("scripts/release-tiers.mjs"), "id: 'strict-open'")
+        self.assertIn("required: true", tier, tier)
+        self.assertIn("cmd: 'npm run verify:strict-open:repaired'", tier, tier)
+        scripts = json.loads(repo_text("package.json"))["scripts"]
+        self.assertIn("repair-real-corpus:review", scripts["verify:strict-open:repaired"])
+        self.assertIn("scripts/repair-real-corpus.mts", scripts["repair-real-corpus:review"])
+        writer = repo_text("scripts/repair-real-corpus.mts")
+        self.assertIn("'repair-real-corpus.json'", writer)
+        self.assertIn("writeFileSync(join(root, 'docs', 'generated', reportPath)", writer)
+        self.assertIn(CORPUS_REPORT_PATH, VERIFY_ARTIFACT_PATHS)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ import tempfile
 import unittest
 
 from scripts.autonomy.policy import (
-    PolicyError, billing_allowed, canonical_path, classify_change, explain_change,
+    PolicyError, billing_allowed, provider_billing_allowed, canonical_path, classify_change, explain_change,
     load_config, validate_config,
 )
 
@@ -24,6 +24,29 @@ class BillingPolicyTest(unittest.TestCase):
         self.assertTrue(billing_allowed(profile))
         profile["effective_auth"] = "api_key"
         self.assertFalse(billing_allowed(profile))
+
+    def test_provider_profiles_are_independent_and_model_scoped(self):
+        profile = {
+            "configuration_unchanged": True,
+            "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        self.assertTrue(billing_allowed(profile))
+        self.assertTrue(provider_billing_allowed(profile, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(profile, "codex", "gpt-5.6-sol"))
+        self.assertFalse(provider_billing_allowed(profile, "claude", "sonnet"))
+        self.assertTrue(provider_billing_allowed(profile, "grok", "grok-4.6"))
+
+    def test_legacy_profile_does_not_authorize_a_real_provider(self):
+        profile = good_profile()
+        self.assertTrue(billing_allowed(profile))
+        self.assertFalse(provider_billing_allowed(profile, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(profile, "claude", "sonnet"))
+        self.assertFalse(provider_billing_allowed(profile, "grok", "grok-4.6"))
 
     def test_every_required_field_is_load_bearing(self):
         for key in ("subscription_verified", "extra_credits_disabled", "model_included",
@@ -45,6 +68,19 @@ class PathPolicyTest(unittest.TestCase):
     def test_example_config_is_valid(self):
         self.assertEqual(validate_config(self.policy), [])
 
+    def test_example_config_has_no_duplicate_json_keys(self):
+        def reject_duplicates(pairs):
+            out = {}
+            for key, value in pairs:
+                if key in out:
+                    raise ValueError(f"duplicate JSON key: {key}")
+                out[key] = value
+            return out
+
+        with open(EXAMPLE, encoding="utf-8") as fh:
+            parsed = json.load(fh, object_pairs_hook=reject_duplicates)
+        self.assertEqual(validate_config(parsed), [])
+
     def test_small_documentation_change_is_low_risk(self):
         self.assertEqual(classify_change(["docs/agents/autonomy-runbook.md"], 20, self.policy), "auto_low_risk")
 
@@ -63,6 +99,7 @@ class PathPolicyTest(unittest.TestCase):
         for control in ("tests/gate-mutations.test.ts", "scripts/autonomy/policy.py", ".github/workflows/check.yml",
                         "package.json", "data/security/npm-audit-ratchet.json", "docs/generated/RELEASE_PROOF.json",
                         "config/autonomy.example.json", "supabase/functions/repair-docx/index.ts", "CLAUDE.md",
+                        "docs/agents/ORCHESTRATION.md", "docs/agents/PROJECT_RULES.md",
                         "tests/docx-golden.test.ts"):
             verdict, reasons = explain_change([control], 1, self.policy)
             self.assertEqual(verdict, "needs_human", control)
@@ -88,6 +125,15 @@ class PathPolicyTest(unittest.TestCase):
         with self.assertRaises(PolicyError):
             classify_change(["docs/out/x.md"], 1, self.policy, root=root)
         self.assertEqual(classify_change(["docs/in.md"], 1, self.policy, root=root), "auto_low_risk")
+
+    def test_provider_routing_config_is_explicit_and_closed(self):
+        self.assertEqual(validate_config(self.policy), [])
+        self.assertTrue(validate_config(dict(self.policy, providerFallback="anything")))
+        self.assertEqual(validate_config(dict(self.policy, providerFallback="authorized")), [])
+        self.assertTrue(validate_config(dict(self.policy, plannerAgent="unknown")))
+        self.assertTrue(validate_config(dict(self.policy, implementerAgent="astra")))
+        self.assertTrue(validate_config(dict(self.policy, grokEnabled=False, plannerAgent="grok")))
+        self.assertEqual(validate_config(dict(self.policy, grokEnabled=True, plannerAgent="grok")), [])
 
     def test_config_validation_refuses_billing_or_isolation_relaxation(self):
         for key, value in (("allowApiBilling", True), ("maxPaidActionsUsd", 5), ("fableEnabled", True),

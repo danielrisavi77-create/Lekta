@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, appendFileSync, openSync, closeSync, unlinkSync, realpathSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AGENTS, GROK_MIN_VERSION, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
+import { AGENTS, GROK_MIN_VERSION, modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
 
 export function diagnoseProviderFailure(command, stderr) {
   if (command === 'grok' && /bwrap:.*Creating new namespace failed: Operation not permitted/i.test(stderr ?? '')) {
@@ -92,10 +92,13 @@ function main() {
   const agent = options.get('--agent');
   const budget = options.has('--budget-usd') ? Number(options.get('--budget-usd')) : undefined;
   const billingMode = options.has('--subscription') ? 'subscription' : 'budget';
-  // Pretplatnicki nacin: postavljen API kljuc bi Claude `-p` poziv prebacio na API naplatu (dokumentirano
-  // ponasanje CLI-ja), pa je to greska prije pripreme, ne upozorenje poslije poziva.
+  // Subscription je provider-scoped: credential jednog providera ne smije blokirati drugi.
   if (billingMode === 'subscription') {
-    const leaked = ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_API_KEY'].filter(name => process.env[name]);
+    const provider = AGENTS[agent]?.command;
+    const names = provider === 'codex'
+      ? ['OPENAI_API_KEY']
+      : (provider === 'claude' ? ['ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_API_KEY'] : []);
+    const leaked = names.filter(name => process.env[name]);
     if (leaked.length) throw new Error(`subscription mode refuses API credentials in the environment: ${leaked.join(', ')}`);
   }
   // Autonomni kontroler tvrdi fazu pregleda iz VLASTITE evidencije, jer tasks.json pise koordinator. Obje
@@ -111,6 +114,14 @@ function main() {
   if (!options.has('--execute')) {
     console.log(JSON.stringify({ dryRun: true, ...job }, null, 2));
     return;
+  }
+  if (job.command === 'grok') {
+    const versionRun = spawnSync('grok', ['version'], { encoding: 'utf8', timeout: 10_000, shell: false });
+    const versionLine = (versionRun.stdout || versionRun.stderr || '').trim().split('\n')[0];
+    const version = parseGrokVersion(versionLine);
+    if (versionRun.status !== 0 || !version.supported) {
+      throw new Error(`Unsupported Grok CLI version: ${version.version ?? 'unknown'}; minimum ${GROK_MIN_VERSION}`);
+    }
   }
   if (resolve(git('rev-parse', '--show-toplevel')) !== resolve(root)) throw new Error('Run from the repository root');
   const gitDir = resolve(root, git('rev-parse', '--git-dir'));
@@ -147,14 +158,21 @@ function main() {
     writeFileSync(join(out, 'stderr.log'), result.stderr ?? '');
     const parsed = parseResult(job.command, result.stdout ?? '', result.status);
     const diagnosis = diagnoseProviderFailure(job.command, result.stderr ?? '');
+    const modelOk = modelMatches(AGENTS[agent].model, parsed.reportedModels);
     const report = { task: id, phase, agent, baseHead, requestedModel: AGENTS[agent].model,
-      reportedModels: parsed.reportedModels, exitCode: result.status, signal: result.signal,
+      reportedModels: parsed.reportedModels, usage: parsed.usage, exitCode: result.status, signal: result.signal,
       error: result.error?.message ?? null,
+      modelMismatch: parsed.ok && !modelOk ? { requested: AGENTS[agent].model, reported: parsed.reportedModels } : null,
       ...diagnosis,
       retainedLock: releaseLock ? null : lock,
-      status: parsed.ok && !result.error ? 'needs_verification' : 'failed',
-      note: 'Queue unchanged. Coordinator must verify actual model, patch, required checks and independent review.' };
+      status: parsed.ok && modelOk && !result.error ? 'needs_verification' : 'failed',
+      note: 'Queue unchanged. Coordinator must verify patch, required checks and independent review.' };
     writeFileSync(join(out, 'result.json'), JSON.stringify(report, null, 2) + '\n');
+    appendFileSync(join(root, '.artifacts/agents/usage.jsonl'), JSON.stringify({
+      observedAt: new Date().toISOString(), task: id, phase, agent, provider: job.command,
+      requestedModel: AGENTS[agent].model, reportedModels: parsed.reportedModels,
+      usage: parsed.usage, exitCode: result.status, status: report.status,
+    }) + '\n');
     console.log(JSON.stringify({ ...report, artifacts: out }, null, 2));
     if (report.status === 'failed') process.exitCode = 1;
   } finally {
