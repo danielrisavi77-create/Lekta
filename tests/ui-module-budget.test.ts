@@ -117,7 +117,16 @@ function bajtova(rel: string): number {
 // Z11, KRUG Z11 (2026-09-20): 359005 -> 357396. Uklonjen cetvrti cjenik (`PACKAGES`, 39/69/99 EUR) i
 // pojednostavljena narudzba rucne obrade (bez odabira paketa/payment linka po paketu): -1609 B.
 // Datoteka je smrsavila, pa se budzet SPUSTA (CLAUDE.md: "ovo SMANJUJE app.ts... NE dizi budzet").
-const BUDZET_APP = 357396;
+// F18, NAPLATA PREKO STRIPEA (2026-09-23): 357396 -> 357815, dakle +419 B. Izmjereno, ne
+// procijenjeno. Paywall je dobio placanje u stranici, a to je po prirodi UI posao koji slijece u
+// app.ts. Gard je i ovdje odradio svoje: prva verzija je bila +2457 B, pa je cijela logika modala
+// (ucitavanje Stripe.js, montiranje Payment Elementa, potvrda, stanje gumba, Escape, otvaranje i
+// zatvaranje, oko 2 KB) otisla u src/ui/stripe-payment-modal.ts. U app.ts je ostao lijeni uvoz i
+// jedan poziv na mjestu gdje je prije stajao `location.href` na vanjski checkout. Tih +419 B je
+// cijena novog placenog ulaza; manje od toga ne ide bez selidbe cijelog checkout toka, koja je
+// zaseban zahvat i ne radi se usput uz promjenu pruzatelja naplate.
+// Broj dodira `hidden` ostaje 81: modal svoje prikazivanje radi u vlastitom modulu.
+const BUDZET_APP = 357815;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //
