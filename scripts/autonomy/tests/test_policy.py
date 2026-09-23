@@ -4,7 +4,7 @@ import tempfile
 import unittest
 
 from scripts.autonomy.policy import (
-    PolicyError, billing_allowed, canonical_path, classify_change, explain_change,
+    PolicyError, billing_allowed, provider_billing_allowed, canonical_path, classify_change, explain_change,
     load_config, validate_config,
 )
 
@@ -24,6 +24,29 @@ class BillingPolicyTest(unittest.TestCase):
         self.assertTrue(billing_allowed(profile))
         profile["effective_auth"] = "api_key"
         self.assertFalse(billing_allowed(profile))
+
+    def test_provider_profiles_are_independent_and_model_scoped(self):
+        profile = {
+            "configuration_unchanged": True,
+            "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        self.assertTrue(billing_allowed(profile))
+        self.assertTrue(provider_billing_allowed(profile, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(profile, "codex", "gpt-5.6-sol"))
+        self.assertFalse(provider_billing_allowed(profile, "claude", "sonnet"))
+        self.assertTrue(provider_billing_allowed(profile, "grok", "grok-4.6"))
+
+    def test_legacy_profile_does_not_authorize_a_real_provider(self):
+        profile = good_profile()
+        self.assertTrue(billing_allowed(profile))
+        self.assertFalse(provider_billing_allowed(profile, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(profile, "claude", "sonnet"))
+        self.assertFalse(provider_billing_allowed(profile, "grok", "grok-4.6"))
 
     def test_every_required_field_is_load_bearing(self):
         for key in ("subscription_verified", "extra_credits_disabled", "model_included",
@@ -88,6 +111,15 @@ class PathPolicyTest(unittest.TestCase):
         with self.assertRaises(PolicyError):
             classify_change(["docs/out/x.md"], 1, self.policy, root=root)
         self.assertEqual(classify_change(["docs/in.md"], 1, self.policy, root=root), "auto_low_risk")
+
+    def test_provider_routing_config_is_explicit_and_closed(self):
+        self.assertEqual(validate_config(self.policy), [])
+        self.assertTrue(validate_config(dict(self.policy, providerFallback="anything")))
+        self.assertEqual(validate_config(dict(self.policy, providerFallback="authorized")), [])
+        self.assertTrue(validate_config(dict(self.policy, plannerAgent="unknown")))
+        self.assertTrue(validate_config(dict(self.policy, implementerAgent="astra")))
+        self.assertTrue(validate_config(dict(self.policy, grokEnabled=False, plannerAgent="grok")))
+        self.assertEqual(validate_config(dict(self.policy, grokEnabled=True, plannerAgent="grok")), [])
 
     def test_config_validation_refuses_billing_or_isolation_relaxation(self):
         for key, value in (("allowApiBilling", True), ("maxPaidActionsUsd", 5), ("fableEnabled", True),
