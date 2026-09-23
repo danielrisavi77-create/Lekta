@@ -705,12 +705,19 @@ describe('Z6 ugovor s pre-paint skriptom i CSS-om', () => {
     expect(strogoVeca(specificnost(selektorBloka(CSS, '--paper-muted: #4A4438')), sustav)).toBe(true);
   });
 
-  it('modul NE ulazi u route-shell: panel je oprema `/` i `/rad/`, ne dijeljene ljuske', () => {
-    const shell = read('src/routes/shared/route-shell.ts');
-    expect(shell).not.toContain('display-settings');
-    // Panel ondje ne zivi, ali `system` mora vrijediti i na rutama koje ga nemaju: inace izbor
-    // napravljen na `/` izgleda pokvaren cim korisnik ode na `/saznaj-vise/`.
-    expect(shell).toContain("storedTheme() !== 'system'");
+  it('modul NE ulazi u dijeljenu traku: panel je oprema `/` i `/rad/`', () => {
+    // `src/routes/shared/route-shell.ts` je uklonjen u Z15 (mrtva ljuska koju nijedan ulaz nije
+    // montirao); dijeljeni chrome je sada `src/shared/site-chrome.ts`, i on je STVARNO ozicen na
+    // svakoj ruti preko `ui-boot.ts`. Tvrdnja je time postala jaca, ne slabija: mjeri modul koji
+    // korisnik doista skine.
+    const chrome = read('src/shared/site-chrome.ts');
+    // MJERI SE UVOZ, NE POMEN. Modul panel SPOMINJE (objasnjava kome ustupa lampu), a to je
+    // upravo ono sto ovdje treba stajati; kvar bi bio da ga UVOZI i montira po svakoj ruti.
+    expect(chrome).not.toMatch(/from '[^']*display-settings'/);
+    expect(chrome).not.toContain('mountDisplaySettings');
+    // Traka lampu preuzima SAMO ako je slobodna, i unutar rukovatelja provjerava vlasnika, pa
+    // panel na `/` i `/rad/` ostaje jedini koji mijenja temu (inace bi se preklopila dvaput).
+    expect(chrome).toContain('btn.dataset.themeOwner');
     for (const ulaz of ['src/routes/intake/main.ts', 'src/routes/workspace/main.ts']) {
       expect(read(ulaz), ulaz).toContain('mountDisplaySettings(document)');
     }
@@ -817,7 +824,7 @@ describe('Z6 citanje STANJA, ne atributa', () => {
   it('NIJEDAN preklopnik teme vise ne racuna tamu iz `data-theme`', () => {
     // Gard nad ODSUTNOSCU obrasca: kvar se vraca kao "ocito dovoljno" citanje atributa, jedno po
     // jedno mjesto, i svako izgleda bezazleno. Popis je imenovan, ne prebrojan.
-    for (const put of ['src/shared/ui-boot.ts', 'src/routes/shared/route-shell.ts', 'src/shared/display-settings.ts']) {
+    for (const put of ['src/shared/ui-boot.ts', 'src/shared/site-chrome.ts', 'src/shared/display-settings.ts']) {
       const izvor = read(put);
       expect(izvor, `${put} mora citati stanje kroz display-prefs`).toMatch(/from '[^']*display-prefs'/);
       const sirovo = izvor.match(/dataset\.theme\s*(===|!==)\s*'(dark|light)'/g) ?? [];

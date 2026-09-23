@@ -128,7 +128,13 @@ function listoviSrc(): Array<{ ime: string; css: string }> {
   const poredak = [IZVOR_ISTINE, ...staze.filter((x) => x !== IZVOR_ISTINE)];
   return poredak.map((staza) => ({ ime: staza, css: read(staza) }));
 }
-const PILOT = ['src/routes/intake/intake.css', 'src/routes/shared/route-shell.css'];
+/**
+ * PILOT DATOTEKE. `route-shell.css` je uklonjen zajedno sa svojim modulom (Z15: mrtva ljuska ruta
+ * koju nijedan ulaz nije montirao, zamijenjena `src/shared/site-chrome.css`), pa tvrdnja o njemu
+ * nema predmet. Novi list trake je UKLJUCEN u popis, jer je pilot tokenizirane tipografije upravo
+ * ono sto on jest: chrome koji vrijedi na svakoj ruti.
+ */
+const PILOT = ['src/routes/intake/intake.css', 'src/shared/site-chrome.css'];
 
 describe('Z5 tipografska ljestvica', () => {
   it('design-system.css definira svih 8 --fs-* koraka s propisanim vrijednostima', () => {

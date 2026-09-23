@@ -18,6 +18,19 @@ const FORBIDDEN_SHELL_GRAPH_RULES = [
   { vocabulary: '@supabase', pattern: /(?:^|\/)node_modules\/@supabase(?:\/|$)/u },
 ] as const;
 
+/**
+ * IMENOVANE IZNIMKE, NE OMEKSAN OBRAZAC.
+ *
+ * Zabranjeni rjecnik je heuristika nad PUTANJOM, pa pogadja i ono sto feature graf nije. Traka
+ * (`src/shared/site-chrome.ts`, Z15) mora znati najnizu cijenu, a jedini izvor cijene je
+ * `src/report/pricing.ts`: cista konfiguracija tierova, bez DOM-a, mreze i analizatora (izmjereno
+ * 2026-09-23: cijeli graf trake je 5,0 KB gzip JS). Alternativa bi bila prepisan iznos u traci,
+ * dakle drugi izvor cijene, tocno ono sto Z11 uklanja.
+ *
+ * Iznimka je STAZA, ne uzorak: `src/report/repair-history.ts` i dalje pada.
+ */
+const SHELL_GRAPH_ALLOWLIST: readonly string[] = ['src/report/pricing.ts'];
+
 export interface RouteShellBudgetMeasurement {
   readonly jsGzipBytes: number;
   readonly cssGzipBytes: number;
@@ -42,6 +55,7 @@ function normalizeInputPath(inputPath: string): string {
 
 function forbiddenVocabulary(inputPath: string): string | null {
   const normalized = normalizeInputPath(inputPath).toLowerCase();
+  if (SHELL_GRAPH_ALLOWLIST.some((allowed) => normalized === allowed.toLowerCase())) return null;
   return FORBIDDEN_SHELL_GRAPH_RULES.find(({ pattern }) => pattern.test(normalized))?.vocabulary ?? null;
 }
 
