@@ -1,16 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 /** Provider-neutral task handoff. No process execution or queue writes here. */
 export const PROMPT_FILE_PLACEHOLDER = '__LEKTA_PROMPT_FILE__';
 
 function providerRegistryPath() {
-  if (String(import.meta.url).startsWith('file:')) {
-    return fileURLToPath(new URL('../../config/agent-providers.json', import.meta.url));
-  }
-  // Mutation harness ucitava ovaj modul kao data: URL. U tom slucaju nema hijerarhije
-  // URL-ova iz koje bi se mogla izvesti repo staza; gate se izvodi iz repo root CWD-a.
+  // Runner i testovi imaju repo/worktree root kao CWD. Namjerno ne izvodimo ovu stazu iz
+  // import.meta.url: mutation harness ucitava core.mjs kao data: URL, gdje URL hijerarhija ne postoji.
   return resolve(process.cwd(), 'config/agent-providers.json');
 }
 
