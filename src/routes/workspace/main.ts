@@ -17,7 +17,7 @@ import { emptyLedger, type WorkspaceLedger } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import { mountDisplaySettings } from '../../shared/display-settings';
-import { setSiteChromeStage } from '../../shared/site-chrome';
+import { setSiteChromeScore, setSiteChromeStage } from '../../shared/site-chrome';
 import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
@@ -197,6 +197,10 @@ async function start(): Promise<void> {
     // dokument (prvi ili nova verzija) znaci da citanje POCINJE, pa traka gubi korake dok
     // `renderResultsCockpit` (results-cockpit.ts) ne javi da su nalazi stvarno nacrtani.
     setSiteChromeStage(document, 'scanning');
+    // Ocjena starog dokumenta se prazni OVDJE, ne cim kokpit nacrta novu: bez ovoga traka
+    // pokazuje tudju ocjenu (proslog dokumenta) dok Lekta cita novi, sto je tvrdnja koja u tom
+    // trenutku nije istinita.
+    setSiteChromeScore(document, null);
     upisi(afterDocumentAccepted(context));
     if (restoredFile !== null && event.file === restoredFile) {
       upisi(afterPersist(context, true));

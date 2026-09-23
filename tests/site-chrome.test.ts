@@ -482,11 +482,19 @@ describe('Z15 stanje nakon skrola', () => {
     // IZVOROM, kao `ui-boot.ts vise ne ozicuje izbornik` gore - ista disciplina, ista slabost
     // (ne vidi da je poziv na krivom mjestu), ista snaga (vidi da je poziv uklonjen).
     const main = read('src/routes/workspace/main.ts');
-    expect(main).toContain("import { setSiteChromeStage }");
+    expect(main).toContain('setSiteChromeStage');
     expect(main).toContain("setSiteChromeStage(document, 'scanning')");
     const kokpit = read('src/ui/results/results-cockpit.ts');
     expect(kokpit).toContain('setSiteChromeStage');
     expect(kokpit).toContain("setSiteChromeStage(mount.ownerDocument, 'findings')");
+  });
+
+  it('ocjena u traci se prazni pri novom dokumentu, ne cim novi kokpit nacrta svoju', () => {
+    // Bez ovoga bi traka do prvog nacrtanog kokpita pokazivala ocjenu PROSLOG dokumenta dok
+    // Lekta cita novi - ista lazna tvrdnja kao stepper prije Z15 popravka gore, samo na broju.
+    const main = read('src/routes/workspace/main.ts');
+    expect(main).toContain('setSiteChromeScore');
+    expect(main).toContain('setSiteChromeScore(document, null)');
   });
 
   it('sredina `/rad/` NE odlazi pod 820px, jer Z16 trazi stepper u dva reda', () => {
