@@ -34,6 +34,7 @@ import {
   type StripeWebhookPayload,
 } from '../../../src/report/webhook.ts';
 import { mapProductRow, type Product } from '../../../src/catalog/products-catalog.ts';
+import { stripeAmountCents } from '../../../src/report/checkout.ts';
 import {
   validateReferral,
   referralRewardEntitlement,
@@ -379,7 +380,19 @@ Deno.serve(async (req: Request) => {
       await settle('processed', 'partial_refund_noted');
       return json({ ok: true, action: 'partial_refund_noted' }, 200);
     }
-    await admin.from('entitlements').update({ status: 'refunded' }).eq('provider', PROVIDER).eq('order_id', ev.orderId);
+    // Pad ovog upisa se dotad progutao, a dogadjaj se javljao kao obradjen: korisnik bi dobio
+    // novac natrag i ZADRZAO pravo pristupa, bez traga da je gasenje palo (nalaz adversarijalnog
+    // pregleda, 2026-09-23). 500 je ovdje ispravan odgovor: Stripe ponovi dostavu.
+    const { error: refundErr } = await admin
+      .from('entitlements')
+      .update({ status: 'refunded' })
+      .eq('provider', PROVIDER)
+      .eq('order_id', ev.orderId);
+    if (refundErr) {
+      console.error('webhook-mor refund_update_failed', { orderId: ev.orderId, error: refundErr.message });
+      await settle('failed', `refund_update: ${refundErr.message}`);
+      return json({ error: 'refund_failed' }, 500);
+    }
     await pullReferralReward(admin, ev.orderId); // povuci nepotrosenu referral nagradu (0005, 6.7)
     await pullReferralSignupReward(admin, ev.orderId); // isto za pozovi-prijatelja nagradu (0013)
     await settle('processed', 'refunded');
@@ -429,6 +442,26 @@ Deno.serve(async (req: Request) => {
     console.error('webhook-mor product_without_work_type', { productId: product.id });
     await settle('failed', `product_without_work_type: ${product.id}`);
     return json({ error: 'product_misconfigured' }, 500);
+  }
+
+  // NAPLACENI IZNOS NASPRAM KATALOGA (nalaz adversarijalnog pregleda, 2026-09-23). Iznos je pri
+  // stvaranju PaymentIntenta bio serverski, pa ga klijent nije mogao podvaliti; ali izmedju
+  // stvaranja i naplate cjenik se moze promijeniti, a dotad se to nigdje nije ni vidjelo.
+  //
+  // Pravo se IPAK knjizi: novac je stvarno naplacen i kupcu se ne smije uskratiti ono za sto je
+  // platio zbog nase promjene cjenika. Razlika se glasno zapisuje i ostaje u inboxu, pa postoji
+  // trag za rucnu ispravku umjesto tihog razilazenja.
+  const ocekivanoCenti = stripeAmountCents(Number(product.priceEur));
+  const naplacenoOdstupa = ev.totalCents !== null && ev.totalCents !== ocekivanoCenti;
+  const valutaOdstupa = !!ev.currency && ev.currency !== 'EUR';
+  if (naplacenoOdstupa || valutaOdstupa) {
+    console.error('webhook-mor amount_mismatch', {
+      orderId: ev.orderId,
+      productId: product.id,
+      ocekivanoCenti,
+      naplacenoCenti: ev.totalCents,
+      currency: ev.currency,
+    });
   }
 
   // entitlement (6.4); idempotentno preko unique (provider, order_id)
@@ -496,7 +529,12 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  await settle('processed', 'entitlement_created');
+  await settle(
+    'processed',
+    naplacenoOdstupa || valutaOdstupa
+      ? `entitlement_created; amount_mismatch ocekivano=${ocekivanoCenti} naplaceno=${ev.totalCents} valuta=${ev.currency}`
+      : 'entitlement_created',
+  );
   return json({ ok: true, action: 'entitlement_created' });
  } catch (e) {
   // Pred-entitlement greska (potpis, parsiranje, entitlement insert): vrati 500 pa provider
