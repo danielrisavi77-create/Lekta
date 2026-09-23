@@ -91,10 +91,9 @@ function cspAllowlist() {
   };
   const supabase =
     origin(process.env.VITE_LEKTA_SUPABASE_URL ?? '') || 'https://zrrjttizjyfcxmcpgzml.supabase.co';
-  // Lemon Squeezy checkout zivi na poddomeni trgovine, koja se razlikuje po racunu, pa se uzima iz
-  // okoline. Dok naplata nije ziva, zadana vrijednost je zajednicki app host: uzi je od wildcarda,
-  // a ne lomi nista jer nijedan proizvod jos nije mapiran.
-  const lemon = origin(process.env.LEKTA_LS_CHECKOUT_ORIGIN ?? '') || 'https://app.lemonsqueezy.com';
+  // Stripe hostovi su fiksni i stoje doslovno u public/_headers, pa ovdje nema sto zamjenjivati:
+  // Payment Element se montira u stranici i ne trazi poddomenu po racunu, za razliku od hosted
+  // checkouta naslijedjenog providera koji je do 2026-09-23 trazio token __CSP_LS__.
 
   return {
     name: 'lekta-csp-allowlist',
@@ -103,7 +102,7 @@ function cspAllowlist() {
       const file = resolve(__dirname, 'dist', '_headers');
       if (!existsSync(file)) return;
       const source = readFileSync(file, 'utf8');
-      const replaced = source.replaceAll('__CSP_SUPABASE__', supabase).replaceAll('__CSP_LS__', lemon);
+      const replaced = source.replaceAll('__CSP_SUPABASE__', supabase);
       if (replaced !== source) writeFileSync(file, replaced, 'utf8');
     },
   };

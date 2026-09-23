@@ -24,7 +24,7 @@ const REPAIR_ON =
 const CHECKOUT_ON =
   'repairEndpoint:he.functionEndpoint(`repair-docx`),checkoutEndpoint:`https://pay.example/x`,';
 const LINKS_OFF = 'paymentLinks:{format:``,panic:``,premium:``},businessName:`Lekta`,';
-const LINKS_ON = 'paymentLinks:{format:`https://lemon.example/a`,panic:``,premium:``},';
+const LINKS_ON = 'paymentLinks:{format:`https://pay.example/a`,panic:``,premium:``},';
 const LINKS_SPREAD = 'paymentLinks:{...Jd.paymentLinks,...e?.paymentLinks||{}}}';
 
 describe('sposobnosti se citaju iz isporucenog paketa', () => {

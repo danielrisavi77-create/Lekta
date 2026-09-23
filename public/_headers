@@ -21,8 +21,7 @@
 #   (svi drugi generirani alati/skripte moraju biti VANJSKI <script src>, ne inline).
 # style-src zadrzava 'unsafe-inline' jer app postavlja inline stilove dinamicki iz JS-a
 # (npr. element.style.width, setProperty) sto hash ne moze pokriti; CSS injection je nizak rizik
-# (ne izvrsava JS, a img/font/connect su ograniceni). connect-src dopusta self + https
-# (korisnicki konfiguriran Supabase + Lemon Squeezy su https).
+# (ne izvrsava JS, a img/font/connect su ograniceni).
 #
 # Strict-Transport-Security (audit security-03): prisili HTTPS i sprijeci downgrade/SSL-strip.
 # Bez `preload` i s ovime na *.netlify.app subdomeni (netlify.app je vec HSTS-preloadan na razini
@@ -43,12 +42,24 @@
 #                               komentar ispod je tvrdio da je odljev tehnicki onemogucen (SEC-01).
 #   https://api.crossref.org  - "Popuni iz DOI-ja" na alatu Citati + provjera postojanja reference
 #   https://doi.org           - DOI resolver (provjera postojanja reference)
-#   __CSP_LS__                - povratni checkout (form-action; POST/redirect na LS placanje)
+#   https://api.stripe.com    - Stripe API koji Payment Element zove iz stranice (connect-src)
+#   https://js.stripe.com     - Stripe.js (script-src) i njegov iframe s poljima kartice (frame-src)
+#   https://hooks.stripe.com  - iframe za dodatnu autentikaciju (3D Secure) tijekom placanja
+#
+# form-action vise NE nosi token naplate. Do 2026-09-23 je ondje stajao __CSP_LS__, jer je
+# hosted checkout naslijedjenog providera radio kroz POST i povratni redirect. Stripe Payment
+# Element ne salje obrazac nikamo: polja su u njegovom iframeu, a potvrda ide XHR-om na
+# api.stripe.com, sto pokriva connect-src. Host u form-action bio bi zato sira dozvola bez
+# ijednog stvarnog korisnika, pa je uklonjen umjesto zamijenjen.
+#
+# frame-src je NOVA direktiva i mora postojati izricito: `default-src 'self'` bi inace zatvorio
+# Stripe iframe i polje za karticu ne bi se nacrtalo. `frame-ancestors 'none'` ostaje, to je
+# obrnuti smjer (tko smije ugraditi NAS) i s ovim nema veze.
 # VAZNO: ako se doda NOVI vanjski endpoint (npr. druga analitika), dodaj mu host OVDJE, inace ga
 # preglednik blokira. To je namjerno: nepredvidjeni odljev podataka pada zatvoreno. `npm run dev`
 # ne koristi _headers pa HMR websocket ostaje raditi.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-2WXZ91HPQjlJfl48ll0ykv+2MIDKaJHDuqTFXI1BEm4=' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__ __CSP_LS__
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://js.stripe.com 'sha256-2WXZ91HPQjlJfl48ll0ykv+2MIDKaJHDuqTFXI1BEm4=' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org https://api.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

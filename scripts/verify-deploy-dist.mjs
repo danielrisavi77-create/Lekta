@@ -461,6 +461,8 @@ if (fs.existsSync(naslovnicaDir)) {
   for (const token of ['__CSP_SUPABASE__', '__CSP_LS__']) {
     if (headers.includes(token)) fail(`dist/_headers sadrzi nesupstituiran token ${token} (cspAllowlist plugin nije odradio)`);
   }
+  // __CSP_LS__ je uklonjen 2026-09-23 zajedno s hosted checkoutom; provjera ostaje da se token
+  // ne vrati nezamijenjen ako netko vrati stari redak.
 
   const csp = (headers.match(/^\s*Content-Security-Policy:\s*(.+)$/m) || [])[1] ?? '';
   if (!csp) fail('dist/_headers nema Content-Security-Policy');
@@ -473,6 +475,25 @@ if (fs.existsSync(naslovnicaDir)) {
     if (!/https:\/\/[a-z0-9-]+\.supabase\.co/.test(value)) {
       fail(`CSP ${name} nema konkretan Supabase origin: "${value.trim()}"`);
     }
+  }
+
+  // NAPLATA (F18, 2026-09-23). Provjera da su tokeni zamijenjeni NIJE dokaz da je zamjena
+  // ispravna: dist bi prosao i s praznom dozvolom za Stripe, a placanje bi tiho crklo u
+  // pregledniku. Zato se trazi svaki host izricito, na tocnoj direktivi.
+  const stripeExpectations = [
+    ['script-src', 'https://js.stripe.com'],
+    ['connect-src', 'https://api.stripe.com'],
+    ['frame-src', 'https://js.stripe.com'],
+    ['frame-src', 'https://hooks.stripe.com'],
+  ];
+  for (const [name, host] of stripeExpectations) {
+    const value = directive(name);
+    if (!value) fail(`CSP nema direktivu ${name} (Stripe Payment Element se ne bi ucitao)`);
+    if (!value.includes(host)) fail(`CSP ${name} ne dopusta ${host}: "${value.trim()}"`);
+  }
+  // form-action vise ne smije nositi host naplate: Payment Element ne salje obrazac nikamo.
+  if (/stripe\.com/.test(directive('form-action'))) {
+    fail(`CSP form-action nosi Stripe host, a Payment Element ga ne koristi: "${directive('form-action').trim()}"`);
   }
 }
 
