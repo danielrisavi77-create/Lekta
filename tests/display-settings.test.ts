@@ -19,6 +19,7 @@ import {
   type DisplaySettingsController,
 } from '../src/shared/display-settings';
 import { STORAGE_KEYS } from '../src/shared/browser-storage';
+import { disposeSiteChrome, mountSiteChrome } from '../src/shared/site-chrome';
 import { pokretPrigusen, suprotnaTema, tamnoNaEkranu } from '../src/shared/display-prefs';
 import { playIntakeEntry } from '../src/routes/intake/intake-motion';
 import { initAnalyzerApp } from '../src/ui/app';
@@ -361,9 +362,11 @@ describe('Z6 postavke prikaza: panel', () => {
     expect(list.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('Esc vraca fokus na otvarac KOJI JE PANEL OTVORIO, ne uvijek na gumb u traci', () => {
-    // Na mobitelu je `#displayBtn` skriven (`display: none` pod 820px u site-chrome.css), pa bi
-    // fiksno vracanje fokusa ondje korisnika ostavilo na nefokusabilnom elementu.
+  it('Esc vraca fokus na otvarac KOJI JE PANEL OTVORIO, dok je otvarac iscrtan', () => {
+    // UGOVOR FUNKCIJE, NE PRIZOR SA STRANICE: ovdje otvarac stoji izvan mobilnog lista, pa je
+    // nakon zatvaranja panela i dalje na ekranu. Stvarni prizor s 13 stranica (otvarac UNUTAR
+    // lista koji se u istom kliku zatvori) mjeri zaseban opis nize; bez njega bi ova tvrdnja bila
+    // jedina, a mjerila bi ulaz koji se u proizvodu ne pojavljuje.
     api = postavi(navigacija() + '<button type="button" data-display-open>Aa</button>');
     const list = document.querySelector<HTMLElement>('[data-display-open]')!;
     list.click();
@@ -410,6 +413,128 @@ describe('Z6 postavke prikaza: panel', () => {
     expect(document.getElementById(PANEL_ID)).toBeNull();
     expect(lampa.dataset.themeOwner).toBeUndefined();
     expect(document.getElementById('displayBtn')!.hasAttribute('aria-controls')).toBe(false);
+  });
+});
+
+/**
+ * MOBILNI PRIZOR SA STVARNIH STRANICA (krug popravka 2026-09-23, nalaz nad F10).
+ *
+ * ZASTO OVAJ OPIS POSTOJI. Prva izvedba F10 je tvrdila da Esc vraca fokus na otvarac koji je panel
+ * otvorio, a mjerila je to na fixturi koja se na stranicama NE POJAVLJUJE: gol `[data-display-open]`
+ * izvan mobilnog lista, bez ozicene trake. U proizvodu je jedini `[data-display-open]` na svih 13
+ * stranica UNUTAR `<nav id="mobileNav" class="site-chrome__sheet">`, a `wireSiteMenu` taj list
+ * zatvara u ISTOM kliku kojim se panel otvara (rukovatelj na listu, faza mjehurica). Zatvoren list
+ * je `display: none`, pa je stari kod fokus vracao na NEISCRTAN element: `focus()` je bio no-op,
+ * `activeElement` je padao na `<body>`, i sljedeci Tab je bio pocetak stranice, dakle tocno kvar
+ * koji je komentar tvrdio da uklanja.
+ *
+ * KAKO SE 390 px SIMULIRA POSTENO. happy-dom NE primjenjuje `@media (max-width: 819px)` (izmjereno:
+ * na `innerWidth` 390 `#displayBtn` i dalje prijavljuje `inline-block`, hamburger `none`), pa se
+ * mobilna kaskada slaze iz ISTOG lista: puni `site-chrome.css` plus tijelo njegovog mobilnog bloka
+ * raspakirano bez upita. Pravila su time stvarna, ne izmisljena; ako netko iz mobilnog bloka makne
+ * `#displayBtn { display: none }`, ovaj prizor to vidi. Ono sto se ovako NE moze dokazati je da
+ * preglednik doista racuna tako; to mjeri `tests/ux/workspace-viewports.spec.ts` na 390 px.
+ */
+describe('F10 mobilni prizor: fokus poslije Esc-a', () => {
+  const CHROME_CSS = read('src/shared/site-chrome.css');
+  const INDEX_HTML = read('index.html');
+
+  /** Tijelo `@media (max-width: 819px)` bloka, izvadjeno brojanjem viticastih zagrada. */
+  function mobilniBlok(css: string): string {
+    const pocetak = css.indexOf('@media (max-width: 819px) {');
+    expect(pocetak, 'site-chrome.css vise ne nosi mobilni blok').toBeGreaterThan(-1);
+    let i = css.indexOf('{', pocetak);
+    const od = i + 1;
+    let dubina = 0;
+    for (; i < css.length; i += 1) {
+      if (css[i] === '{') dubina += 1;
+      else if (css[i] === '}') {
+        dubina -= 1;
+        if (dubina === 0) return css.slice(od, i);
+      }
+    }
+    throw new Error('mobilni blok nije zatvoren');
+  }
+
+  function zaglavljeIzIndexa(): string {
+    const od = INDEX_HTML.indexOf('<header class="topbar site-chrome"');
+    const doIdx = INDEX_HTML.indexOf('</header>', od);
+    expect(od, 'index.html ne nosi traku Z15').toBeGreaterThan(-1);
+    return INDEX_HTML.slice(od, doIdx + '</header>'.length);
+  }
+
+  const prikaz = (el: Element): string => window.getComputedStyle(el as HTMLElement).display;
+
+  /** Ima li element kutiju, gledano kroz lanac predaka (dijete u `display: none` pretku nema). */
+  function iscrtan(el: HTMLElement): boolean {
+    for (let cvor: HTMLElement | null = el; cvor; cvor = cvor.parentElement) {
+      if (prikaz(cvor) === 'none') return false;
+    }
+    return true;
+  }
+
+  function postaviMobilniPrizor(): { burger: HTMLElement; aa: HTMLElement } {
+    document.head.innerHTML = `<style>${CHROME_CSS}\n${mobilniBlok(CHROME_CSS)}</style>`;
+    document.body.innerHTML = zaglavljeIzIndexa();
+    mountSiteChrome(document);
+    const kontroler = mountDisplaySettings(document);
+    expect(kontroler, 'panel se mora montirati nad stvarnim zaglavljem').not.toBeNull();
+    api = kontroler!;
+    const burger = document.getElementById('mobileMenuBtn')!;
+    const aa = document.querySelector<HTMLElement>('[data-display-open]')!;
+    // SENTINEL NAD KASKADOM: bez ovoga bi cijeli opis mjerio siroki zaslon i prolazio vakuumski.
+    expect(prikaz(document.getElementById('displayBtn')!), '#displayBtn mora biti skriven na mobitelu').toBe('none');
+    expect(prikaz(burger), 'hamburger mora biti vidljiv na mobitelu').not.toBe('none');
+    expect(prikaz(document.getElementById('mobileNav')!), 'zatvoren list je display:none').toBe('none');
+    return { burger, aa };
+  }
+
+  afterEach(() => { disposeSiteChrome(document); document.head.innerHTML = ''; });
+
+  it('otvarac u listu je u trenutku Esc-a NEISCRTAN: prizor stvarno proizvodi ciljani ulaz', () => {
+    const { burger, aa } = postaviMobilniPrizor();
+    burger.click();
+    // BASELINE: dok je list otvoren, otvarac JEST iscrtan; inace bi tvrdnja ispod bila o nicemu.
+    expect(prikaz(document.getElementById('mobileNav')!), 'otvoren list mora dobiti kutiju').toBe('grid');
+    expect(iscrtan(aa)).toBe(true);
+    aa.click();
+    expect(document.getElementById(PANEL_ID)!.hidden, 'klik u listu mora otvoriti panel').toBe(false);
+    expect(document.getElementById('mobileNav')!.classList.contains('open'), 'list se zatvara istim klikom').toBe(false);
+    expect(iscrtan(aa), 'ciljani ulaz: otvarac vise nije iscrtan').toBe(false);
+  });
+
+  it('Esc vraca fokus na hamburger, ne u zatvoren list i ne na <body>', () => {
+    const { burger, aa } = postaviMobilniPrizor();
+    burger.click();
+    aa.click();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(document.getElementById(PANEL_ID)!.hidden).toBe(true);
+    expect(document.activeElement, 'fokus je ostao u zatvorenom listu').not.toBe(aa);
+    expect(document.activeElement, 'fokus je pao na body: sljedeci Tab je pocetak stranice')
+      .not.toBe(document.body);
+    expect(document.activeElement, 'sidro je hamburger, kontrola koja otvara list').toBe(burger);
+    // Odrediste mora biti ISCRTANO, jer `focus()` nad skrivenim elementom nista ne radi.
+    expect(iscrtan(document.activeElement as HTMLElement)).toBe(true);
+  });
+
+  it('gumb za zatvaranje panela ima isto sidro kao Esc', () => {
+    const { burger, aa } = postaviMobilniPrizor();
+    burger.click();
+    aa.click();
+    document.querySelector<HTMLButtonElement>('.ps__close')!.click();
+    expect(document.activeElement).toBe(burger);
+  });
+
+  it('MUTACIJA: bez `aria-controls` na hamburgeru sidro pada na sljedeceg iscrtanog kandidata', () => {
+    // Veza otvarac -> kontrola spremnika ide kroz ARIA atribut. Kad ga nema, panel nema kako naci
+    // hamburger, pa fokus NE SMIJE zavrsiti u zatvorenom listu.
+    const { burger, aa } = postaviMobilniPrizor();
+    burger.click();
+    burger.removeAttribute('aria-controls');
+    aa.click();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(document.activeElement).not.toBe(aa);
+    expect(document.activeElement).not.toBe(burger);
   });
 });
 

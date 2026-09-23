@@ -232,6 +232,55 @@ function otvaraciPanela(doc: Document): HTMLElement[] {
 }
 
 /**
+ * JE LI ELEMENT ISCRTAN, dakle moze li uopce primiti fokus.
+ *
+ * `focus()` nad elementom bez kutije je po specifikaciji NO-OP: fokus ostaje gdje je bio ili padne
+ * na `<body>`, pa je sljedeci Tab pocetak stranice. To je tocno kvar zbog kojeg se fokus i vraca
+ * na otvarac, pa se odrediste mora PROVJERITI prije nego ga se gadja.
+ *
+ * Racuna se iz kaskade, a ne iz `offsetParent` ni `checkVisibility`: happy-dom nijedno ne nudi
+ * (izmjereno u ovom stablu 2026-09-23), pa bi gard nad njima bio zelen bez ijedne izvrsene grane.
+ * Lanac predaka se hoda jer se `display: none` s PRETKA u izracunatom stilu djeteta NE VIDI:
+ * izmjereno, dijete zatvorenog `.site-chrome__sheet`-a i dalje prijavljuje `inline-block`.
+ */
+function iscrtan(el: HTMLElement): boolean {
+  if (!el.isConnected || typeof el.focus !== 'function') return false;
+  const prozor = el.ownerDocument.defaultView;
+  if (!prozor || typeof prozor.getComputedStyle !== 'function') return true;
+  for (let cvor: HTMLElement | null = el; cvor; cvor = cvor.parentElement) {
+    if (cvor.hidden) return false;
+    const stil = prozor.getComputedStyle(cvor);
+    if (stil.display === 'none' || stil.visibility === 'hidden') return false;
+  }
+  return true;
+}
+
+/**
+ * SIDRA FOKUSA ZA ZATVARANJE, redom kojim se pokusavaju.
+ *
+ * MJERENI SLUCAJ, NE HIPOTEZA: na svih 13 stranica jedini `[data-display-open]` stoji UNUTAR
+ * mobilnog lista (`<nav id="mobileNav" class="site-chrome__sheet">`), a taj list `wireSiteMenu` u
+ * `site-chrome.ts` zatvara na isti klik kojim se panel otvara (rukovatelj na listu, faza mjehurica,
+ * poslije rukovatelja na gumbu). Zatvoren list je `display: none` (`site-chrome.css`), pa je otvarac
+ * u trenutku Esc-a NEISCRTAN: vracanje fokusa na njega je vracanje u nista.
+ *
+ * Zato se poslije otvaraca pokusava kontrola koja otvara njegov SPREMNIK, nadjena kroz
+ * `aria-controls` (u praksi hamburger `#mobileMenuBtn`, koji na toj sirini jest iscrtan). Veza ide
+ * kroz ARIA atribut, a ne kroz `id` iz drugog modula, pa panel i dalje ne zna nista o traci.
+ * Na kraju su ostali otvaraci panela (na sirokom zaslonu `#displayBtn` u traci).
+ */
+function sidraFokusa(otvarac: HTMLElement, gumbi: HTMLElement[]): HTMLElement[] {
+  const doc = otvarac.ownerDocument;
+  const spremnici: HTMLElement[] = [];
+  for (let cvor = otvarac.parentElement; cvor; cvor = cvor.parentElement) {
+    // Samo obicni identifikatori: umetanje u selektor iz tudjeg markupa nije nicija potreba.
+    if (!/^[A-Za-z][\w-]*$/.test(cvor.id)) continue;
+    spremnici.push(...doc.querySelectorAll<HTMLElement>(`[aria-controls="${cvor.id}"]`));
+  }
+  return [otvarac, ...spremnici, ...gumbi];
+}
+
+/**
  * Montira panel i njegove otvarace. Vraca `null` kad na stranici nema NIJEDNOG otvaraca, jer tiho
  * stvaranje `<aside>`-a bez nacina da ga se otvori ne bi bilo degradacija nego smece.
  *
@@ -373,9 +422,13 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
 
   const otvoren = (): boolean => !panel.hidden;
   /**
-   * FOKUS SE VRACA ONAMO ODAKLE JE DOSAO, NE UVIJEK U TRAKU. Panel od F10 ima dva otvaraca, pa bi
-   * fiksno vracanje na `#displayBtn` mobilnog korisnika nakon Esc-a ostavilo na gumbu koji je na
-   * njegovoj sirini `display: none`, dakle nefokusabilan: sljedeci Tab bio bi pocetak stranice.
+   * FOKUS SE VRACA NA PRVO ISCRTANO SIDRO OTVARACA, NE SLIJEPO NA OTVARAC.
+   *
+   * Panel od F10 ima dva otvaraca, pa fiksno vracanje na `#displayBtn` mobilnog korisnika ostavlja
+   * na gumbu koji je na njegovoj sirini `display: none`. ISPRAVAK (krug popravka 2026-09-23):
+   * vracanje na sam otvarac ima isti kvar u istom prizoru, jer se mobilni list zatvara u istom
+   * kliku kojim se panel otvara, pa je otvarac u listu nakon Esc-a jednako neiscrtan. Redoslijed
+   * sidara i mjerenje stoje uz `sidraFokusa` iznad.
    */
   let zadnjiOtvarac: HTMLElement = gumb;
   const open = (izvor: HTMLElement = gumb): void => {
@@ -401,7 +454,14 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
     panel.classList.remove('ps--otvoren');
     panel.hidden = true;
     for (const el of gumbi) el.setAttribute('aria-expanded', 'false');
-    if (typeof zadnjiOtvarac.focus === 'function') zadnjiOtvarac.focus();
+    const cilj = sidraFokusa(zadnjiOtvarac, gumbi).find(iscrtan);
+    if (cilj) cilj.focus();
+    else {
+      // Nijedno sidro nije iscrtano (npr. traka jos nije montirana): fokus se barem MAKNE iz
+      // skrivenog panela, jer citac ekrana inace ostaje u podstablu koje vise nije na ekranu.
+      const aktivan = doc.activeElement as HTMLElement | null;
+      if (aktivan && panel.contains(aktivan) && typeof aktivan.blur === 'function') aktivan.blur();
+    }
   };
 
   for (const el of gumbi) {
