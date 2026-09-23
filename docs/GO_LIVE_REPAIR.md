@@ -133,7 +133,8 @@ Deploy nije atomaran, pa oba smjera moraju biti sigurna:
 Kad svi klijenti budu novi, korpusna grana u `repair-docx` moze nestati.
 
 > Napomena: `create-checkout` je već deployan ali STAR (prije WS-5 tier_mismatch enforcementa).
-> Prije prodaje ga redeployaj isto komandom `npx supabase functions deploy create-checkout ...`.
+> Prije prodaje ga redeployaj s `npm run deploy:naplata` (ta naredba nosi preflight tajni naplate
+> i deploya `create-checkout` i `webhook-mor`; vidi `docs/GO_LIVE_NAPLATA.md`).
 
 ---
 
@@ -181,6 +182,13 @@ Potvrdi da postoje (koriste ih repair-docx / delete-repair-job):
 Za prodaju (korak D), potvrdi LS tajne:
 
 - [ ] `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`, `MOR_WEBHOOK_SECRET`, `CHECKOUT_REDIRECT_URL`.
+- [ ] `LEMONSQUEEZY_STORE_ID` citaju OBJE funkcije naplate (`create-checkout` i `webhook-mor`).
+  Prazna vrijednost je fail-closed: webhook odbija svaku kupnju s `store_unverifiable`. Provjeri
+  preflightom u okolini deploya: `npm run verify-naplata-secrets` (izlazni kod 1 imenuje varijablu).
+  Preflight cita Supabase Edge secrets projekta, ne tvoju ljusku, i pada i kad se popis ne moze
+  procitati (nepoznato nije zeleno).
+- [ ] U Lemon Squeezyju su pretplaceni `order_created` I `order_refunded`. Bez drugoga povrati se
+  nikad ne obrade: entitlement ostaje `paid`, referral nagrada se ne povuce, i to bez greske.
 
 ---
 
