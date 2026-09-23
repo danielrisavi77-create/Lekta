@@ -122,6 +122,43 @@ export function siteChromeProfileNote(): string {
   return `${n.toLocaleString('hr-HR')} ${hrPlural(n, 'profil', 'profila', 'profila')}`;
 }
 
+/** Natpis na plocici bez odabranog profila; copy predlozak nema, pa je ovo doslovna odluka F8. */
+export const SITE_CHROME_PLATE_EMPTY = 'Odaberi profil';
+
+/**
+ * NATPIS MJEDENE PLOCICE (F8, odluka 2026-09-23): "FPZG · Dipl.".
+ *
+ * IZVOR JE PECEN INDEKS, NE REGISTAR PROFILA. Registar je 194 KB lazy chunk, a traka stoji na
+ * svakoj stranici; zato `data/coverage/site-stats.json` (ISTI uvoz kojim
+ * `src/routes/shared/site-stats-strip.ts` cita brojke) nosi `units[unitId].kratica` i
+ * `workTypes[workType]`, a `npm run gen-site-stats` ih pece iz kataloga. Kratica je pritom
+ * DETERMINISTICKI IZVEDENA iz `unitId`-a, ne verificirana tvrdnja s izvorom; pravilo izvodjenja i
+ * razlog stoje u `src/coverage/site-stats.ts`.
+ *
+ * NEPOZNATO NE BACA I NE IZMISLJA. Jedinica koje u indeksu nema (stara pohrana, korisnik je uredio
+ * `localStorage`, jedinica uklonjena iz kataloga) daje zamjenski natpis, ne prazan gumb i ne
+ * pogodjenu kraticu. Razina bez kratice (`article`, `project`: nisu razine studija) daje samo
+ * kraticu ustanove, jer poluprazno "FPZG · " tvrdi da nesto fali.
+ *
+ * Cista funkcija nad zapisom pohrane, pa je test smije pozvati bez DOM-a i bez pohrane.
+ */
+export function siteChromePlateLabel(zapis: unknown): string {
+  const prefs = (typeof zapis === 'object' && zapis !== null ? zapis : {}) as Record<string, unknown>;
+  const unitId = typeof prefs.unit === 'string' ? prefs.unit : '';
+  const units = SITE_STATS.units as Record<string, { kratica?: string } | undefined>;
+  const kratica = unitId !== '' ? units[unitId]?.kratica : undefined;
+  if (typeof kratica !== 'string' || kratica === '') return SITE_CHROME_PLATE_EMPTY;
+  const workType = typeof prefs.workType === 'string' ? prefs.workType : '';
+  const razine = SITE_STATS.workTypes as Record<string, string | undefined>;
+  const razina = workType !== '' ? razine[workType] : undefined;
+  return typeof razina === 'string' && razina !== '' ? `${kratica} · ${razina}` : kratica;
+}
+
+/** Natpis plocice iz pohrane ovog preglednika; odbijena pohrana daje zamjenski natpis. */
+export function siteChromePlateFromStorage(): string {
+  return siteChromePlateLabel(safeStorageGet(STORAGE_KEYS.preferences, null));
+}
+
 /**
  * Koliko ZAVRSENIH provjera ovaj preglednik pamti. `null` kad pohrana zakaze ili zapis nije
  * polje: napomena tada ne stoji, jer izmisljena brojka je gora od nijedne.
@@ -147,6 +184,17 @@ export function siteChromeNote(kind: string): string | null {
   if (kind === 'tools') return `${siteChromeToolCount()} alata`;
   if (kind === 'work') return siteChromeWorkNote();
   return null;
+}
+
+/**
+ * Upise natpis plocice nad POSTOJECIM markupom. Staticki natpis je "Odaberi profil", pa stranica
+ * bez JavaScripta ne tvrdi profil koji ne moze procitati; s JS-om se natpis zamijeni kraticom.
+ * `aria-disabled` i `title="Uskoro"` ostaju NETAKNUTI (odluka F8: ladica Z13 ne postoji).
+ */
+function fillPlate(root: ParentNode): void {
+  const slot = root.querySelector<HTMLElement>('[data-site-chrome-profile-label]');
+  if (!slot) return;
+  slot.textContent = siteChromePlateFromStorage();
 }
 
 function fillNotes(root: ParentNode): void {
@@ -384,6 +432,7 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
   const active = chrome.dataset.siteChromeActive ?? null;
   markActiveDestination(chrome, active === '' ? null : active);
   fillNotes(chrome);
+  fillPlate(chrome);
   const footer = doc.querySelector<HTMLElement>('[data-site-footer]');
   if (footer) fillNotes(footer);
 

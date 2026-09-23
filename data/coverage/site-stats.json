@@ -1,5 +1,416 @@
 {
   "profiles": 407,
   "institutions": 41,
-  "works": 526370
+  "works": 526370,
+  "units": {
+    "adu": {
+      "kratica": "ADU"
+    },
+    "agr": {
+      "kratica": "AGR"
+    },
+    "algebra": {
+      "kratica": "Algebra"
+    },
+    "alu": {
+      "kratica": "ALU"
+    },
+    "apuri": {
+      "kratica": "APURI"
+    },
+    "arca": {
+      "kratica": "ARCA"
+    },
+    "arh": {
+      "kratica": "ARH"
+    },
+    "aspira": {
+      "kratica": "ASPIRA"
+    },
+    "bak": {
+      "kratica": "BAK"
+    },
+    "biolos": {
+      "kratica": "BIOLOS"
+    },
+    "biotech": {
+      "kratica": "Biotech"
+    },
+    "btho": {
+      "kratica": "BTHO"
+    },
+    "effectus": {
+      "kratica": "Effectus"
+    },
+    "efos": {
+      "kratica": "EFOS"
+    },
+    "efri": {
+      "kratica": "EFRI"
+    },
+    "efst": {
+      "kratica": "EFST"
+    },
+    "efzg": {
+      "kratica": "EFZG"
+    },
+    "erf": {
+      "kratica": "ERF"
+    },
+    "evtos": {
+      "kratica": "EVTOS"
+    },
+    "fazos": {
+      "kratica": "FAZOS"
+    },
+    "fbf": {
+      "kratica": "FBF"
+    },
+    "fdmri": {
+      "kratica": "FDMRI"
+    },
+    "fdmz": {
+      "kratica": "FDMZ"
+    },
+    "fer": {
+      "kratica": "FER"
+    },
+    "ferit": {
+      "kratica": "FERIT"
+    },
+    "fesb": {
+      "kratica": "FESB"
+    },
+    "fetpu": {
+      "kratica": "FETPU"
+    },
+    "ffos": {
+      "kratica": "FFOS"
+    },
+    "ffpu": {
+      "kratica": "FFPU"
+    },
+    "ffri": {
+      "kratica": "FFRI"
+    },
+    "ffrz": {
+      "kratica": "FFRZ"
+    },
+    "ffst": {
+      "kratica": "FFST"
+    },
+    "ffzg": {
+      "kratica": "FFZG"
+    },
+    "fgag": {
+      "kratica": "FGAG"
+    },
+    "fhs": {
+      "kratica": "FHS"
+    },
+    "fipu": {
+      "kratica": "FIPU"
+    },
+    "fizos": {
+      "kratica": "FIZOS"
+    },
+    "fizri": {
+      "kratica": "FIZRI"
+    },
+    "fkit": {
+      "kratica": "FKIT"
+    },
+    "fmtu": {
+      "kratica": "FMTU"
+    },
+    "foi": {
+      "kratica": "FOI"
+    },
+    "foozos": {
+      "kratica": "FOOZOS"
+    },
+    "foozpu": {
+      "kratica": "FOOZPU"
+    },
+    "forenzika": {
+      "kratica": "Forenzika"
+    },
+    "fpz": {
+      "kratica": "FPZ"
+    },
+    "fpzg": {
+      "kratica": "FPZG"
+    },
+    "fpzpu": {
+      "kratica": "FPZPU"
+    },
+    "fsb": {
+      "kratica": "FSB"
+    },
+    "ftrr": {
+      "kratica": "FTRR"
+    },
+    "fzsri": {
+      "kratica": "FZSRI"
+    },
+    "geof": {
+      "kratica": "GEOF"
+    },
+    "grad": {
+      "kratica": "GRAD"
+    },
+    "gradri": {
+      "kratica": "GRADRI"
+    },
+    "grafos": {
+      "kratica": "GRAFOS"
+    },
+    "grf": {
+      "kratica": "GRF"
+    },
+    "hks": {
+      "kratica": "HKS"
+    },
+    "inf": {
+      "kratica": "INF"
+    },
+    "iv": {
+      "kratica": "IV"
+    },
+    "kbf": {
+      "kratica": "KBF"
+    },
+    "kbfdj": {
+      "kratica": "KBFDJ"
+    },
+    "kbfst": {
+      "kratica": "KBFST"
+    },
+    "kemos": {
+      "kratica": "KEMOS"
+    },
+    "kif": {
+      "kratica": "KIF"
+    },
+    "kifos": {
+      "kratica": "KIFOS"
+    },
+    "kifst": {
+      "kratica": "KIFST"
+    },
+    "ktfst": {
+      "kratica": "KTFST"
+    },
+    "libertas": {
+      "kratica": "Libertas"
+    },
+    "logri": {
+      "kratica": "LOGRI"
+    },
+    "mapu": {
+      "kratica": "MAPU"
+    },
+    "matematika": {
+      "kratica": "Matematika"
+    },
+    "mathos": {
+      "kratica": "MATHOS"
+    },
+    "medri": {
+      "kratica": "MEDRI"
+    },
+    "mef": {
+      "kratica": "MEF"
+    },
+    "mefos": {
+      "kratica": "MEFOS"
+    },
+    "mefst": {
+      "kratica": "MEFST"
+    },
+    "mev": {
+      "kratica": "MEV"
+    },
+    "mfpu": {
+      "kratica": "MFPU"
+    },
+    "more": {
+      "kratica": "MORE"
+    },
+    "muza": {
+      "kratica": "MUZA"
+    },
+    "odhz": {
+      "kratica": "ODHZ"
+    },
+    "oss": {
+      "kratica": "OSS"
+    },
+    "ozs": {
+      "kratica": "OZS"
+    },
+    "par": {
+      "kratica": "PAR"
+    },
+    "pbf": {
+      "kratica": "PBF"
+    },
+    "pfri": {
+      "kratica": "PFRI"
+    },
+    "pfst": {
+      "kratica": "PFST"
+    },
+    "pmf": {
+      "kratica": "PMF"
+    },
+    "pmfst": {
+      "kratica": "PMFST"
+    },
+    "pravo": {
+      "kratica": "PRAVO"
+    },
+    "pravos": {
+      "kratica": "PRAVOS"
+    },
+    "pravri": {
+      "kratica": "PRAVRI"
+    },
+    "pravst": {
+      "kratica": "PRAVST"
+    },
+    "ptfos": {
+      "kratica": "PTFOS"
+    },
+    "pvzg": {
+      "kratica": "PVZG"
+    },
+    "rgnf": {
+      "kratica": "RGNF"
+    },
+    "rit": {
+      "kratica": "RIT"
+    },
+    "riteh": {
+      "kratica": "RITEH"
+    },
+    "rrif": {
+      "kratica": "RRIF"
+    },
+    "securus": {
+      "kratica": "Securus"
+    },
+    "sfsb": {
+      "kratica": "SFSB"
+    },
+    "sfzg": {
+      "kratica": "SFZG"
+    },
+    "simet": {
+      "kratica": "SIMET"
+    },
+    "sois-ft": {
+      "kratica": "SOIS-FT"
+    },
+    "sumfak": {
+      "kratica": "SUMFAK"
+    },
+    "teho": {
+      "kratica": "TEHO"
+    },
+    "tfpu": {
+      "kratica": "TFPU"
+    },
+    "ttf": {
+      "kratica": "TTF"
+    },
+    "tvz": {
+      "kratica": "TVZ"
+    },
+    "uaos": {
+      "kratica": "UAOS"
+    },
+    "ufri": {
+      "kratica": "UFRI"
+    },
+    "ufzg": {
+      "kratica": "UFZG"
+    },
+    "umas": {
+      "kratica": "UMAS"
+    },
+    "unidu": {
+      "kratica": "UNIDU"
+    },
+    "unin": {
+      "kratica": "UNIN"
+    },
+    "unizd": {
+      "kratica": "UNIZD"
+    },
+    "vef": {
+      "kratica": "VEF"
+    },
+    "veleknin": {
+      "kratica": "Veleknin"
+    },
+    "veleri": {
+      "kratica": "VELERI"
+    },
+    "vern": {
+      "kratica": "VERN"
+    },
+    "vevu": {
+      "kratica": "VEVU"
+    },
+    "vguk": {
+      "kratica": "VGUK"
+    },
+    "vhzk": {
+      "kratica": "VHZK"
+    },
+    "vkjs": {
+      "kratica": "VKJS"
+    },
+    "vnt": {
+      "kratica": "VNT"
+    },
+    "vsig": {
+      "kratica": "VSIG"
+    },
+    "vsite": {
+      "kratica": "VSITE"
+    },
+    "vss": {
+      "kratica": "VSS"
+    },
+    "vub": {
+      "kratica": "VUB"
+    },
+    "vuka": {
+      "kratica": "VUKA"
+    },
+    "vus": {
+      "kratica": "VUS"
+    },
+    "vuv": {
+      "kratica": "VUV"
+    },
+    "vvg": {
+      "kratica": "VVG"
+    },
+    "zsem": {
+      "kratica": "ZSEM"
+    },
+    "zvu": {
+      "kratica": "ZVU"
+    }
+  },
+  "workTypes": {
+    "seminar": "Sem.",
+    "final": "Zavr.",
+    "graduate": "Dipl.",
+    "specialist": "Spec.",
+    "doctoral": "Dokt."
+  }
 }

@@ -29,9 +29,12 @@ import {
   siteChromeLowestPrice,
   siteChromeSteps,
   siteChromeToolCount,
+  siteChromePlateLabel,
   setSiteChromeScore,
   setSiteChromeStage,
+  SITE_CHROME_PLATE_EMPTY,
 } from '../src/shared/site-chrome';
+import { unitKratica } from '../src/coverage/site-stats';
 import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, formatEurAmount } from '../src/report/pricing';
 import { legalDocuments } from '../src/legal/legal-content';
 
@@ -622,6 +625,131 @@ describe('Z15 ocjena u traki', () => {
   it('bez trake je no-op, pa kokpit ne mora znati na kojoj je ruti', () => {
     dom('<main></main>');
     expect(() => setSiteChromeScore(document, 71)).not.toThrow();
+  });
+});
+
+/**
+ * F8: MJEDENA PLOCICA NOSI "FPZG · Dipl.", IZ PECENOG INDEKSA.
+ *
+ * Tri stvari se mjere odvojeno, jer padaju iz razlicitih razloga:
+ *   1. INDEKS je pecen, i pecena vrijednost odgovara svjezem izracunu (to cuva `tests/site-stats.test.ts`);
+ *      ovdje se tvrdi samo da indeks NOSI kljuceve koje plocica cita.
+ *   2. NATPIS je cista funkcija nad zapisom pohrane, pa se pokriva bez DOM-a i bez pohrane.
+ *   3. MARKUP nosi zamjenski natpis staticki, jer stranica bez JavaScripta pohranu ne cita.
+ */
+describe('F8 plocica profila: kratica iz pecenog indeksa', () => {
+  afterEach(() => { localStorage.clear(); disposeSiteChrome(document); });
+
+  const STATS = JSON.parse(read('data/coverage/site-stats.json')) as {
+    units: Record<string, { kratica: string }>;
+    workTypes: Record<string, string>;
+  };
+
+  it('peceni indeks nosi jedinice i razine koje plocica cita', () => {
+    // SENTINEL: bez ovoga bi svaka tvrdnja nize prolazila nad praznim indeksom.
+    expect(Object.keys(STATS.units).length).toBeGreaterThan(100);
+    expect(STATS.units.fpzg?.kratica).toBe('FPZG');
+    // Kratice razina su doslovno one iz naloga F8; kljuc je POHRANJENI identifikator (F15).
+    expect(STATS.workTypes).toEqual({
+      seminar: 'Sem.', final: 'Zavr.', graduate: 'Dipl.', specialist: 'Spec.', doctoral: 'Dokt.',
+    });
+  });
+
+  it('pravilo izvodjenja kratice je deterministicko i zapisano, ne pogodjeno', () => {
+    // Akronim (najvise sest slova) ide u verzal; ime ide u veliko pocetno slovo.
+    expect(unitKratica('fpzg')).toBe('FPZG');
+    expect(unitKratica('pmf')).toBe('PMF');
+    expect(unitKratica('sois-ft')).toBe('SOIS-FT');
+    expect(unitKratica('algebra')).toBe('Algebra');
+    expect(unitKratica('matematika')).toBe('Matematika');
+    // Pravilo mora stajati U KODU, jer izvedena vrijednost nije tvrdnja s izvorom (CLAUDE.md).
+    const izvor = read('src/coverage/site-stats.ts');
+    expect(izvor).toContain('DETERMINISTICKI IZVEDENA, NE VERIFICIRANA TVRDNJA');
+    // Svaka pecena kratica se mora dati REPRODUCIRATI istim pravilom; inace je negdje prepisana.
+    for (const [unitId, unit] of Object.entries(STATS.units)) {
+      expect(unit.kratica, unitId).toBe(unitKratica(unitId));
+    }
+  });
+
+  it('poznat unit + workType daje "FPZG · Dipl."', () => {
+    expect(siteChromePlateLabel({ unit: 'fpzg', workType: 'graduate' })).toBe('FPZG · Dipl.');
+    expect(siteChromePlateLabel({ unit: 'pmf', workType: 'doctoral' })).toBe('PMF · Dokt.');
+  });
+
+  it('bez preferenci, s nepoznatim unitom i s pokvarenim zapisom daje zamjenski natpis', () => {
+    expect(siteChromePlateLabel(null)).toBe(SITE_CHROME_PLATE_EMPTY);
+    expect(siteChromePlateLabel({})).toBe(SITE_CHROME_PLATE_EMPTY);
+    // NEPOZNAT UNIT NE BACA I NE POGADJA: stara pohrana ili rucno uredjen `localStorage`.
+    expect(() => siteChromePlateLabel({ unit: 'ne-postoji', workType: 'graduate' })).not.toThrow();
+    expect(siteChromePlateLabel({ unit: 'ne-postoji', workType: 'graduate' })).toBe(SITE_CHROME_PLATE_EMPTY);
+    // Zapis koji nije objekt, i polja koja nisu tekst (JSON iz tudje ruke).
+    expect(siteChromePlateLabel('fpzg')).toBe(SITE_CHROME_PLATE_EMPTY);
+    expect(siteChromePlateLabel({ unit: 7, workType: 'graduate' })).toBe(SITE_CHROME_PLATE_EMPTY);
+  });
+
+  it('razina bez kratice daje SAMO kraticu ustanove, ne poluprazno "FPZG · "', () => {
+    // `article` i `project` nisu razine studija, pa kratice nemaju (site-stats.ts).
+    expect(siteChromePlateLabel({ unit: 'fpzg', workType: 'article' })).toBe('FPZG');
+    expect(siteChromePlateLabel({ unit: 'fpzg' })).toBe('FPZG');
+    expect(siteChromePlateLabel({ unit: 'fpzg', workType: 'nepoznato' })).toBe('FPZG');
+  });
+
+  it('montaza upise natpis iz pohrane, a aria-disabled i "Uskoro" ostaju do Z13', () => {
+    localStorage.setItem('lekta.preferences.v2', JSON.stringify({ unit: 'fpzg', workType: 'graduate' }));
+    const doc = dom(zaglavlje(read('alati.html')));
+    mountSiteChrome(doc);
+    const plate = doc.querySelector<HTMLElement>('[data-site-chrome-profile]')!;
+    expect(plate.textContent).toContain('FPZG · Dipl.');
+    // Klik ostaje bez ucinka do ladice Z13; odluka F8 to izricito cuva.
+    expect(plate.getAttribute('aria-disabled')).toBe('true');
+    expect(plate.getAttribute('title')).toBe('Uskoro');
+  });
+
+  it('bez pohrane montaza ostavlja zamjenski natpis, ne prazan gumb', () => {
+    localStorage.clear();
+    const doc = dom(zaglavlje(read('alati.html')));
+    mountSiteChrome(doc);
+    const slot = doc.querySelector<HTMLElement>('[data-site-chrome-profile-label]')!;
+    expect(slot.textContent).toBe(SITE_CHROME_PLATE_EMPTY);
+  });
+
+  it.each(STRANICE)('%s: plocica nosi mjesto za natpis i staticki "Odaberi profil"', (rel) => {
+    const header = zaglavlje(read(rel));
+    expect(header).toContain('<span data-site-chrome-profile-label>Odaberi profil</span>');
+    // Stari prepisan natpis "Profil" ne smije ostati uz novi (Z15 pravilo: uklonjeno, ne oboje).
+    expect(header).not.toContain('aria-hidden="true"></span>Profil</button>');
+  });
+
+  it('MUTACIJA: prepisan natpis u markupu i prazan indeks oba padaju', () => {
+    const header = zaglavlje(read('alati.html'));
+    // BASELINE.
+    expect(header).toContain('<span data-site-chrome-profile-label>Odaberi profil</span>');
+    expect(siteChromePlateLabel({ unit: 'fpzg', workType: 'graduate' })).toBe('FPZG · Dipl.');
+
+    // Prepisan natpis: montaza ga ne bi imala gdje upisati, pa bi plocica lagala o profilu.
+    const prepisan = header.replace('<span data-site-chrome-profile-label>Odaberi profil</span>', 'FPZG · Dipl.');
+    expect(prepisan, 'podmetanje se nije primilo; provjeri oznaku plocice').not.toBe(header);
+    const doc = dom(prepisan);
+    localStorage.setItem('lekta.preferences.v2', JSON.stringify({ unit: 'pmf', workType: 'doctoral' }));
+    mountSiteChrome(doc);
+    expect(doc.querySelector('[data-site-chrome-profile-label]'), 'mutacija nije uklonila mjesto').toBeNull();
+    expect(doc.querySelector<HTMLElement>('[data-site-chrome-profile]')!.textContent)
+      .not.toContain('PMF · Dokt.');
+    disposeSiteChrome(doc);
+
+    // Prazan indeks: natpis pada na zamjenski, ne na pogodjenu kraticu iz `unitId`-a.
+    expect(siteChromePlateLabel({ unit: 'nema-ga-u-indeksu' })).toBe(SITE_CHROME_PLATE_EMPTY);
+    expect(siteChromePlateLabel({ unit: 'nema-ga-u-indeksu' })).not.toBe('Nema-Ga-U-Indeksu');
+  });
+
+  it('plocica cita ISTI put ucitavanja JSON-a kao traka s brojkama', () => {
+    // Bez ove tvrdnje bi plocica mogla dobiti drugi (zivi) izvor kratica, dakle drugi izvor istine.
+    const chrome = read('src/shared/site-chrome.ts');
+    const strip = read('src/routes/shared/site-stats-strip.ts');
+    expect(chrome).toContain("data/coverage/site-stats.json'");
+    expect(strip).toContain("data/coverage/site-stats.json'");
+    expect(chrome, 'traka ne smije vuci registar profila').not.toContain('profile-registry');
+    expect(chrome, 'traka ne smije vuci katalog').not.toContain('catalog-loader');
   });
 });
 
