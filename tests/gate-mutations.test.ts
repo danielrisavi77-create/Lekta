@@ -1293,6 +1293,72 @@ const MUTATIONS: Mutation[] = [
       localRepairOfferProblems(readFileSync(resolve(process.cwd(), 'src/ui/app.ts'), 'utf8')).length === 0,
   },
   /**
+   * Pregled 2026-09-23 je nasao dvije rupe u prvoj verziji garda i obje su ovdje zatvorene vlastitom
+   * mutacijom. Prva: gard je gledao ARGUMENT `localLaunch`, a ne POLJE odgovora, pa se launch mogao
+   * pustiti klijentu iz drugog izvora uz zelen gate.
+   */
+  {
+    id: 'edge/lokalni-popravak-launch-u-odgovoru',
+    imitates:
+      'polje localRepair u odgovoru repair-docx popunjeno mimo handoffa, pa klijent dobije valjan ' +
+      'launch i kad je zastavica REPAIR_LOCAL_ENABLED ugasena',
+    caught: () => localRepairFlagProblems([
+      "import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';",
+      'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),",
+      "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),",
+      '});',
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED) { issuedLocalRepair = await provisionLocalRepairJob(args); }',
+      'const handoff = await settleRepairStorageHandoff({ localLaunch: issuedLocalRepair?.launch ?? null });',
+      'return json({ localRepair: rogueLaunch });',
+    ].join('\n')).includes('polje localRepair u odgovoru dolazi iz izvora koji nije handoff.localRepair'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Adversarijalni pregled drugog alata (2026-09-23) pokazao je da gard koji samo trazi tekst
+   * `if (LOCAL_REPAIR_ENABLED` ne vidi ostatak uvjeta, pa `|| true` bezuvjetno izdaje posao.
+   */
+  {
+    id: 'edge/lokalni-popravak-uvjet-grane',
+    imitates:
+      'zastavica prestane biti nuzan uvjet grane (`if (LOCAL_REPAIR_ENABLED || true)`), pa se lokalni ' +
+      'popravak izdaje i kad je ugasena',
+    caught: () => localRepairFlagProblems([
+      "import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';",
+      'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({',
+      "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),",
+      "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),",
+      '});',
+      'let issuedLocalRepair = null;',
+      'if (LOCAL_REPAIR_ENABLED || true) { issuedLocalRepair = await provisionLocalRepairJob(args); }',
+      'const handoff = await settleRepairStorageHandoff({ localLaunch: issuedLocalRepair?.launch ?? null });',
+      'return json({ localRepair: handoff.localRepair });',
+    ].join('\n')).includes('uvjet grane nije oblika `LOCAL_REPAIR_ENABLED && ...`, pa zastavica vise nije nuzan uvjet'),
+    cleanBefore: () =>
+      localRepairFlagProblems(readFileSync(resolve(process.cwd(), 'supabase/functions/repair-docx/index.ts'), 'utf8')).length === 0,
+  },
+  /**
+   * Druga rupa: ponuda preseljena u omotac pod drugim imenom, koji se ucitava BEZUVJETNO, a grana
+   * samo odlucuje hoce li se pozvati. Gard sada prijavljuje svaki dinamicki import cija staza
+   * spominje i "local" i "repair", osim izricito popisanih modula koji nisu ponuda.
+   */
+  {
+    id: 'ui/ponuda-lokalnog-runnera-u-omotacu',
+    imitates:
+      'ponuda lokalnog popravka preseljena u omotac pod neutralnim imenom koji se ucitava bezuvjetno, ' +
+      'pa se modul dohvaca na svakom serverskom popravku iako launcha nema',
+    caught: () => localRepairOfferProblems([
+      "const offer = await import('../report/local-repair-offer');",
+      'if(out.localRepair){',
+      ' offer.show(summary,out.localRepair);',
+      '}',
+    ].join('\n')).includes('modul ponude lokalnog popravka se dohvaca izvan grane if(out.localRepair)'),
+    cleanBefore: () =>
+      localRepairOfferProblems(readFileSync(resolve(process.cwd(), 'src/ui/app.ts'), 'utf8')).length === 0,
+  },
+  /**
    * Isti nalaz, drugi dio: `meta` JSON se prije nije mjerio nikad. Granica se mjeri u bajtovima,
    * inace bi dijakritici propustili osjetno vece tijelo od deklariranog.
    */

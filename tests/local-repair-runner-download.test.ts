@@ -1,7 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
-  localRepairRunnerConfig,
   renderLocalRepairRunnerOffer,
   type LocalRepairRunnerArtifactConfig,
 } from '../src/report/local-repair-runner-download.ts';
@@ -27,6 +26,11 @@ async function config(): Promise<LocalRepairRunnerArtifactConfig> {
     sha256: await sha256Hex(runnerBytes),
   };
 }
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.resetModules();
+});
 
 describe('local WordReplica runner download', () => {
   it('istinito opisuje Pure-DOCX runtime, sigurnost izvornika i ograničeno čišćenje', async () => {
@@ -93,17 +97,47 @@ describe('local WordReplica runner download', () => {
    * Lansiranje ide BEZ lokalnog popravka: u buildu nema `.env`, pa su
    * VITE_LEKTA_LOCAL_REPAIR_RUNNER_URL i _SHA256 prazni. Gornji slucajevi to vjezbaju nad RUCNO
    * sastavljenim configom, sto ne dokazuje da isti put daje i stvarna `localRepairRunnerConfig()`.
-   * Ovaj test ide kroz nju, dakle kroz DEPLOYMENT_CONFIG, i tvrdi da ponuda tada uopce ne postoji.
+   * Ovaj test ide kroz nju, dakle kroz DEPLOYMENT_CONFIG.
+   *
+   * Varijable se POSTAVLJAJU na prazno (`vi.stubEnv`), ne cita se zatecena okolina. Prva verzija je
+   * tvrdila da okolina nije konfigurirana, pa bi gate puknuo cim vlasnik po docs/LOCAL_REPAIR_RELEASE.md
+   * postavi te dvije varijable, dakle bas na putu "spremna za ukljucivanje" i bez ijednog kvara.
+   * `DEPLOYMENT_CONFIG` se racuna pri ucitavanju modula, zato `vi.resetModules()` prije uvoza.
    */
-  it('bez postavljenih VITE_LEKTA_LOCAL_REPAIR_RUNNER_* varijabli ponude nema', () => {
-    const live = localRepairRunnerConfig();
+  it('uz prazne VITE_LEKTA_LOCAL_REPAIR_RUNNER_* varijable config je prazan i ponude nema', async () => {
+    vi.stubEnv('VITE_LEKTA_LOCAL_REPAIR_RUNNER_URL', '');
+    vi.stubEnv('VITE_LEKTA_LOCAL_REPAIR_RUNNER_SHA256', '');
+    vi.resetModules();
+    const fresh = await import('../src/report/local-repair-runner-download.ts');
 
+    const live = fresh.localRepairRunnerConfig();
     expect(live).toEqual({ url: '', sha256: '' });
 
     const mount = document.createElement('div');
-    expect(renderLocalRepairRunnerOffer(mount, launch, live)).toBeNull();
+    expect(fresh.renderLocalRepairRunnerOffer(mount, launch, live)).toBeNull();
     expect(mount.childElementCount).toBe(0);
     expect(mount.textContent).toBe('');
+  });
+
+  /**
+   * Druga strana iste tvrdnje: kad se runner jednom objavi i varijable se postave, ista funkcija
+   * ih PROSLIJEDI i ponuda nastane. Bez ovoga bi gornji test bio zadovoljen i funkcijom koja uvijek
+   * vraca prazno, a zadatak trazi nula promjena ponasanja kad se tok ukljuci.
+   */
+  it('uz postavljene VITE_LEKTA_LOCAL_REPAIR_RUNNER_* varijable config ih prenosi i ponuda nastane', async () => {
+    const pinned = await sha256Hex(runnerBytes);
+    vi.stubEnv('VITE_LEKTA_LOCAL_REPAIR_RUNNER_URL', 'https://lektahr.netlify.app/downloads/LektaRepair.exe');
+    vi.stubEnv('VITE_LEKTA_LOCAL_REPAIR_RUNNER_SHA256', pinned.toUpperCase());
+    vi.resetModules();
+    const fresh = await import('../src/report/local-repair-runner-download.ts');
+
+    const live = fresh.localRepairRunnerConfig();
+    // Hash se normalizira na mala slova, URL ostaje kakav jest.
+    expect(live).toEqual({ url: 'https://lektahr.netlify.app/downloads/LektaRepair.exe', sha256: pinned });
+
+    const mount = document.createElement('div');
+    expect(fresh.renderLocalRepairRunnerOffer(mount, launch, live)).not.toBeNull();
+    expect(mount.querySelector('[data-local-repair-runner-download]')).not.toBeNull();
   });
 
   it('ne prikazuje gumb bez HTTPS artefakta i prikovanog SHA-256 hasha', async () => {
