@@ -9,7 +9,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 const CONSENT_KEY = 'lekta.analytics-consent.v1';
 const PRODUCTION_KEY = 'lekta.production.v2.1';
-const DEFAULT_ENDPOINT = 'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/analytics-event';
+const TEST_ENDPOINT = 'http://127.0.0.1:54321/functions/v1/analytics-event';
 const BANNER_ID = 'lekta-tool-consent-banner';
 let addListenerSpy: ReturnType<typeof vi.spyOn>;
 
@@ -59,7 +59,7 @@ describe('trackToolEvent', () => {
     expect(ok).toBe(true);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, opts] = fetchMock.mock.calls[0];
-    expect(url).toBe(DEFAULT_ENDPOINT);
+    expect(url).toBe(TEST_ENDPOINT);
     expect(opts.method).toBe('POST');
     expect(opts.keepalive).toBe(true);
     const body = JSON.parse(opts.body);
