@@ -10,6 +10,22 @@ Za pilot build postaviti `VITE_LEKTA_STUDENT_PILOT=true`. Samo doslovna vrijedno
 
 Prije stvarnog staging testa treba zaseban Supabase projekt i konfigurirane endpointove, proizvode za četiri vrste rada, testni način plaćanja, webhook potvrdu te testne račune s potvrđenim pravom. Migracije se primjenjuju samo kroz `supabase db push`. Lokalni mock, prikaz cijene ili uspješan klik nisu dokaz staging kupnje. Povratak na flag-off zahtijeva novi build bez zastavice i provjeru dotadašnjeg zaključavanja nalaza.
 
+## Staging preduvjeti za plaćeni popravak
+
+Provjereno 2026-09-24: Supabase projekt `Lekta staging` je `ACTIVE_HEALTHY`; migracije su evidentirane do `0203`, a svih 28 Edge funkcija je aktivno. To potvrđuje da staging backend radi, ali ne i da je tok kupnje spreman. U `public.products` svih 23 aktivnih proizvoda imaju prazan `mor_product_id`; jedina dva mapirana proizvoda su neaktivna. Zato trenutačno ne pokretati checkout i ne tumačiti prikaz cijene kao kupovinu koja se može dovršiti.
+
+Netlify CLI je povezan s projektom `lekta-staging`. Kontekst `deploy-preview` trenutačno nema spremljene staging `VITE_*` varijable. Staging build mora eksplicitno postaviti `VITE_LEKTA_ENV=staging`, `VITE_LEKTA_SUPABASE_URL` na staging API, `VITE_LEKTA_SUPABASE_ANON_KEY` na staging publishable/anon ključ i `VITE_LEKTA_STUDENT_PILOT=true`. Ne graditi staging pregled bez tih vrijednosti jer zadani build može usmjeriti aplikaciju na produkciju. Ključeve ne zapisivati u repozitorij ni logove.
+
+Prije plaćenog testa potvrditi sve sljedeće na ciljanom stagingu, neposredno prije testa:
+
+1. Iz `netlify status` potvrditi site `lekta-staging`, a iz konfiguracije builda staging URL i staging publishable ključ. Provjeriti da javni URL nije produkcijska domena i da se dokument obrađuje samo na očekivanom backendu.
+2. Za svaki testirani SKU odabrati aktivan zapis `products` za točan `kind`, `audience`, `work_type` i `slots_total`, te postaviti njegov stvarni Lemon Squeezy variant ID u `mor_product_id`. Potvrditi da je provider u testnom načinu i da checkout za taj variant vraća testnu, a ne naplativu sesiju.
+3. Potvrditi webhook potpis s staging tajnom, idempotentnost ponovljenog događaja i serversko izdavanje prava tek nakon potvrđenog testnog plaćanja. Provjeriti da je besplatni repair bypass isključen (`REPAIR_FREE_MODE` nije `true`) kako besplatni prolaz ne bi lažno dokazao plaćeni pristup.
+4. Koristiti sintetički DOCX i testni račun A s testnim pravom. Račun B bez prava ne smije moći pokrenuti ni preuzeti popravak A. Provjeriti privatno preuzimanje, ponovnu analizu, zapis promjena i otvaranje popravljenog dokumenta u Wordu uz očuvan vidljivi tekst.
+5. Usporediti checkout variant, cijenu, vrstu rada i izdano pravo. Testni webhook mora dovršiti kupnju; klik, klijentski događaj ili lokalni mock nisu dokaz. Zabilježiti referencu testnog događaja bez spremanja dokumenta ili osobnih podataka u analitiku.
+
+Trenutačni status znači da je besplatni studentski pregled moguće demonstrirati nakon staging builda, ali siguran plaćeni popravak još nije provjerljiv. Plaćeni test ostaje blokiran dok testni proizvodi nisu mapirani i webhook, testno plaćanje te izolacija računa A/B nisu potvrđeni.
+
 ## Prvih deset sesija
 
 Pozvati dobrovoljne studente pred predajom završnog ili diplomskog rada, iz barem dva verificirana profila i s različitim iskustvom u Wordu. Tehničku probu najprije raditi na sintetičkim dokumentima; stvarni rad samo uz studentov pristanak. Bez objašnjavanja gumba zadati: odaberi fakultet i vrstu rada, provjeri dokument, vlastitim riječima objasni prvi važni nalaz, pronađi izvor, zatim izaberi ručni postupak ili popravak. U zasebnom zadatku student iz citatnog, naslovničkog ili literaturnog alata dolazi na stvarni intake i provjerava da su fakultet, studij i vrsta rada ostali ispravni.
