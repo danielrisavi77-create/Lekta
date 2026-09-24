@@ -74,9 +74,14 @@ describe('naslovnica-page: kaskada ustanova/fakultet/studij ne ostavlja zastarje
     expect($('#tp-study').value).toBe('Gluma');
   });
 
-  it('B4: success-cta se pokaze uz gotovu naslovnicu i nosi ?unit= odabranog fakulteta', () => {
+  it('B4: success-cta se pokaze uz gotovu naslovnicu i nosi cijeli kataloski kontekst na intake', () => {
     expect($('#tp-success-cta').classList.contains('is-visible')).toBe(true);
-    expect($('#tp-success-cta-link').getAttribute('href')).toBe('/?unit=adu');
+    const href = $('#tp-success-cta-link').getAttribute('href');
+    const url = new URL(href, 'https://lekta.test');
+    expect(url.pathname).toBe('/');
+    expect(url.searchParams.get('unit')).toBe('adu');
+    expect(url.searchParams.get('program')).toBe('Gluma');
+    expect(url.searchParams.get('work')).toBe('zavrsni');
   });
 
   it('BUG: promjena fakulteta na drugi (bez odabira studija) vise NE ostavlja studij s prethodnog fakulteta', () => {
@@ -85,6 +90,7 @@ describe('naslovnica-page: kaskada ustanova/fakultet/studij ne ostavlja zastarje
     fireChange('#tp-unit', 'agr');
     expect($('#tp-faculty').value).toBe('Agronomski fakultet');
     expect($('#tp-study').value).toBe('');
+    expect(new URL($('#tp-success-cta-link').getAttribute('href'), 'https://lekta.test').searchParams.get('program')).not.toBe('Gluma');
   });
 
   it('BUG: povratak fakulteta na placeholder isprazni fakultet I studij (ne samo select)', () => {

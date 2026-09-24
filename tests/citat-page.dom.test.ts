@@ -1,5 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { ensureFacultySpecsLoaded } from '../src/citations/faculty-styles';
 
 // ui-boot uvlaci fontove/ikone/motion (nebitno za logiku) - mockaj da test ostane cist.
@@ -23,8 +25,9 @@ function buildDom(): void {
       <div id="out" class="empty"></div>
       <div id="out-hint"></div>
       <button id="copyBtn"></button>
+      <a id="cta-analyzer" href="/" data-tool-analyzer-cta>Provjeri rad</a>
       <p id="c-success-cta"></p>
-      <a id="c-success-cta-link" href="/"></a>
+      <a id="c-success-cta-link" href="/" data-tool-analyzer-cta></a>
       <div id="out-intext" hidden><span id="intextValue"></span></div>
       <button id="copyIntextBtn"></button>
       <button id="c-add-to-bulk" disabled></button>
@@ -86,6 +89,7 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     expect($('#c-success-cta').classList.contains('is-visible')).toBe(true);
     // Fakultet je 'efos' iz prethodnog testa ("odabir fakulteta ucita njegov stil").
     expect($('#c-success-cta-link').getAttribute('href')).toBe('/?unit=efos');
+    expect($('#cta-analyzer').getAttribute('href')).toBe('/?unit=efos');
   });
 
   it('B4: prazan unos sakrije success-cta', () => {
@@ -113,6 +117,8 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
 
   it('povratak na "Bez fakulteta" vrati genericki izbor stila', () => {
     fireChange('#f-faculty', '');
+    expect($('#cta-analyzer').getAttribute('href')).toBe('/');
+    expect($('#c-success-cta-link').getAttribute('href')).toBe('/');
     expect($('#f-style').querySelector('option[value="autor-godina"]')).toBeTruthy();
     // #f-style-info OSTAJE vidljiv i u generickom modu: to je jedini indikator koji stil
     // se stvarno koristi, i vrijedi za oba taba (#f-style zivi samo unutar panel-single,
@@ -254,6 +260,14 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     $('#bulk-parse').click();
     expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(0);
   });
+});
+
+it('stvarna stranica oznacava oba analyzer CTA za delegiranu analitiku', () => {
+  const html = readFileSync(resolve(__dirname, '..', 'citat.html'), 'utf8');
+  const page = new DOMParser().parseFromString(html, 'text/html');
+  for (const id of ['cta-analyzer', 'c-success-cta-link']) {
+    expect(page.getElementById(id)?.hasAttribute('data-tool-analyzer-cta'), id).toBe(true);
+  }
 });
 
 describe('citat-page: migracija lekta.citat-faculty -> lekta.faculty-context (B2)', () => {

@@ -113,6 +113,20 @@ describe('intake controller', () => {
     expect(deps.persistentStore.put).toHaveBeenCalledOnce();
   });
 
+  it('prenosi samo kataloški kontekst na /rad/ nakon stvarnog uploada', async () => {
+    const deps = dependencies({ handoffSearch: '?unit=fpzg&program=Novinarstvo%20%26%20TV&work=diplomski&studentText=privatno&unit=pravo' });
+    const controller = mountIntakeController(document, deps);
+    await controller.selectFile(makeFile());
+    const target = vi.mocked(deps.navigate).mock.calls[0][0];
+    const url = new URL(target, 'https://lekta.test');
+    expect(url.pathname).toBe('/rad/');
+    expect(url.hash).toBe(`#session=${SESSION_ID}`);
+    expect(url.searchParams.get('unit')).toBe('fpzg');
+    expect(url.searchParams.get('program')).toBe('Novinarstvo & TV');
+    expect(url.searchParams.get('work')).toBe('diplomski');
+    expect(url.searchParams.has('studentText')).toBe(false);
+  });
+
   it('odbija krivu ekstenziju i preveliku datoteku prije intake inspekcije', async () => {
     const deps = dependencies();
     const controller = mountIntakeController(document, deps);

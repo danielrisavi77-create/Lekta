@@ -10,8 +10,8 @@ import { facultyContextSelection, urlSelection, type UnitLike } from '../src/ui/
  */
 
 const UNITS: UnitLike[] = [
-  { id: 'fpzg', institutionId: 'unizg' },
-  { id: 'pravo', institutionId: 'unizg' },
+  { id: 'fpzg', institutionId: 'unizg', programs: ['Novinarstvo'] },
+  { id: 'pravo', institutionId: 'unizg', programs: ['Pravo'] },
 ];
 
 const slug = (s: string): string | null => (s === 'diplomski' ? 'graduate' : null);
@@ -50,6 +50,17 @@ describe('izricit link (?unit=)', () => {
     const out = urlSelection(new URLSearchParams('unit=fpzg&work=diplomski'), UNITS, slug);
     expect(out.selection).toEqual({ institution: 'unizg', unit: 'fpzg', workType: 'graduate' });
     expect(out.projectId).toBeNull();
+  });
+
+  it('odbija zastarjeli program drugog fakulteta iz spremljenog konteksta', () => {
+    const sel = facultyContextSelection(null, { unitId: 'pravo', program: 'Novinarstvo', level: 'graduate' }, UNITS);
+    expect(sel).toEqual({ institution: 'unizg', unit: 'pravo', workType: 'graduate' });
+  });
+
+  it('prenosi samo program koji pripada izričitoj jedinici', () => {
+    expect(urlSelection(new URLSearchParams('unit=fpzg&program=Novinarstvo'), UNITS, slug).selection.program).toBe('Novinarstvo');
+    expect(urlSelection(new URLSearchParams('unit=pravo&program=Novinarstvo'), UNITS, slug).selection.program).toBeUndefined();
+    expect(urlSelection(new URLSearchParams('program=Novinarstvo'), UNITS, slug).selection.program).toBeUndefined();
   });
 
   /**

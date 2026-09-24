@@ -96,6 +96,7 @@ function start(): void {
   const store = openStore();
 
   mountIntakeController(document, {
+    handoffSearch: window.location.search,
     maxUploadBytes,
     async inspectFile(file) {
       const { inspectDocxIntake } = await import('../../docx/intake-gate');

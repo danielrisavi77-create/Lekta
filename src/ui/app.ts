@@ -58,6 +58,7 @@ import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } fr
 import { buildDocumentDnaModel } from '../results/document-dna-model';
 import { profileStatusForEvent } from './profile-status-event';
 import { buildExactEvidence } from './results/exact-evidence';
+import { pilotAccessForResult, pilotRepairAllowed, pilotRepairEntryHtml, pilotRepairLockHtml, STUDENT_PILOT } from './student-pilot-access';
 import { buildRepairOutlook } from './results/repair-outlook';
 import { buildDefaultRepairRequests } from '../repair/default-selection';
 import { detectPassRegressions, dropStaleFieldRegressions, tocFieldWillRefresh } from '../analysis/repair-regression';
@@ -1242,9 +1243,11 @@ function renderResultsCockpitForResult(r: any){
     typeof r?.score==='number'?r.score:null,
     buildDefaultRepairRequests([...repairPanelItems,...repairPanelTextItems]).length,
   );
+  const access=STUDENT_PILOT?pilotAccess():null;
+  const repairAvailable=!r?.demo&&pilotRepairAllowed(STUDENT_PILOT,access);
   const model=buildVisualResultModel({
     ...r,
-    capabilities:{preview:true,repair:!r?.demo,exactEvidence:Object.keys(_evidence).length>0},
+    capabilities:{preview:true,repair:repairAvailable,exactEvidence:Object.keys(_evidence).length>0},
   },{
     exactEvidence:_evidence,
     states:findingStates,
@@ -1263,7 +1266,7 @@ function renderResultsCockpitForResult(r: any){
   const _desk=_deskItems.length?{items:_deskItems,planItems:[...repairPanelItems,...repairPanelTextItems],mountDocument:(host: HTMLElement)=>mountFacsimileInto(host,r.preview,_deskFlags)}:undefined;
   renderResultsCockpit(mount,model,{
     desk:_desk,
-    repairAvailable:!r?.demo,
+    repairAvailable,
     documentDna:_dna,
     repairOutlook:_outlook,
     advancedOpen,
@@ -1390,15 +1393,7 @@ function renderPhaseThreeRepairEntry(r: any){
   // korisnik dobiva, a bez njega preporuke prolaze nezapazeno.
   const recommendedCount=repairPanelItems.filter((i: any)=>i&&i.violated===false&&i.recommended===true).length;
   const serverSide=repairServerConfigured();
-  const heading=serverSide?'Automatski popravak':'Automatski popravci na ovom uređaju';
-  const action=auto
-    ?`${serverSide?'Možeš poslati na popravak':'Možeš lokalno primijeniti'} ${auto} ${auto===1?'podržanu stavku':'podržane stavke'} i preuzeti novi Word dokument.`
-    :`Pregledaj podržane ${serverSide?'':'lokalne '}popravke i preuzmi novi Word dokument.`;
-  const disclosure=serverSide?' Dokument se pritom šalje na server radi popravka i pohranjuje dok ga ne obrišeš.':' Dokument se pri tome ne šalje na poslužitelj.';
-  const recommendedNote=recommendedCount
-    ?`<p class="repair-entry-recommended">Uz to, tvoj fakultet <strong>preporučuje</strong> još ${recommendedCount} ${recommendedCount===1?'uskladbu':'uskladbi'}. Ne ulaze u ocjenu, ali ih možemo popraviti u istom prolazu.</p>`
-    :'';
-  entry.innerHTML=`<h3>${escapeHtml(heading)}</h3><p>${action}${disclosure}</p>${recommendedNote}<button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>${serverSide?'Pošalji na popravak':'Odaberi lokalne popravke'} <span aria-hidden="true">→</span></button>`;
+  entry.innerHTML=pilotRepairEntryHtml({pilotEnabled:STUDENT_PILOT,auto,recommendedCount,serverSide});
   (entry.querySelector('[data-repair-entry]') as any).onclick=()=>scrollToRepairPanel(r);
 }
 // Most iz besplatne dijagnoze u placeni popravak: prebaci na karticu "Spremnost za predaju" gdje
@@ -1600,13 +1595,17 @@ const TEASER_SAMPLE=2;
 // Demo (r.demo) je javni uzorak, ne stvarna analiza: NIKAD nije iza paywalla (prikazuje se
 // puni primjer izvjestaja), pa ni njegovi teaser [data-unlock-cta] gumbi ne mogu poslati
 // fabricirane demo podatke na generate-report/checkout.
-function paywallGateActive(){return reportEndpointConfigured()&&!!currentResult&&!currentResult.fullReport&&!currentResult.demo}
+function pilotAccess(){return pilotAccessForResult(currentResult,STUDENT_PILOT,{
+ reportConfigured:reportEndpointConfigured(),repairConfigured:repairServerConfigured(),
+ checkoutConfigured:checkoutConfigured(),paidOffersLive:paidOffersLive(),
+})}
+function paywallGateActive(){return pilotAccess().diagnosticsLocked}
 // Recept vs dijagnoza: besplatno se vidi STO i GDJE je greska (naslov, vrsta, "odlomak N",
 // brojaci), ali NE doslovni isjecak iz rada ni tocna uputa za popravak (to je "recept" koji
 // bi drugi AI iskoristio). Recept-polja (isjecak/uputa/doslovni citat u detalju) prikazuju se
 // SAMO kad je rezultat otkljucan (placeni puni izvjestaj) ili je demo javni uzorak. Neovisno o
 // naplati: i u soft-launchu (bez reportEndpointa) dijagnoza je bez recepta.
-function recipeUnlocked(){return!!currentResult&&(!!currentResult.fullReport||!!currentResult.demo)}
+function recipeUnlocked(){return!!currentResult&&(STUDENT_PILOT||!!currentResult.fullReport||!!currentResult.demo)}
 // Redaktiraj doslovni citat rada ugradjen u opis nalaza ("odlomak N: <tekst>" -> "odlomak N")
 // osim kad je recept otkljucan. Za nizove/brojace/naslove je no-op.
 function diagText(s: any){return recipeUnlocked()?s:(redactParagraphQuotes(s)||s)}
@@ -1619,6 +1618,12 @@ let _paywallViewedFor: any=null;
 // repair panel, submission gate...); paywall_viewed se broji jednom po rezultatu (referenca
 // na currentResult), ne jednom po pozivu, inace bi jedan prikaz rezultata umjetno napuhao broj.
 function paywallLockHtml(what: any){if(currentResult&&_paywallViewedFor!==currentResult){_paywallViewedFor=currentResult;void trackEvent('paywall_viewed')}const wt=toReportWorkType(currentResult?.settings?.workType||'final'),tier=tierFor(wt),price=tier?(livePriceEur(tier.workType)??tier.priceEur):null,ob=checkoutConfigured()?doObraneProduct(wt):null;return`<div class="lock-panel"><i data-lucide="lock" aria-hidden="true"></i><div><strong>${escapeHtml(what)}</strong><p>Dio punog izvještaja: serverski potvrđen, bez vodenog žiga${tier?`, ${escapeHtml(tier.label.toLowerCase())} ${eurLabel(price)}`:''}${tier?`, uz ${tier.windowDays} dana besplatnih ponovnih provjera istog rada nakon ispravka`:', uz besplatne ponovne provjere istog rada unutar prozora'}. Pri otključavanju se poslužitelju šalju parsirana struktura i rezultat analize; sam dokument ostaje na uređaju.</p><button class="btn btn-primary btn-sm" type="button" data-unlock-cta>Otključaj puni izvještaj</button>${ob?` <button class="btn btn-secondary btn-sm" type="button" data-buy-obrana="${escapeHtml(wt)}">Do obrane: ${ob.slotWindowDays} dana ponovnih provjera · ${eurLabel(ob.priceEur)}</button>`:''}</div></div>`}
+function repairLockHtml(){
+ if(!STUDENT_PILOT)return paywallLockHtml('Automatski popravak dokumenta i preuzimanje popravljene datoteke');
+ const access=pilotAccess(),tier=tierFor(toReportWorkType(currentResult?.settings?.workType||'final'));
+ const price=tier?livePriceEur(tier.workType)??tier.priceEur:null;
+ return pilotRepairLockHtml({purchaseAvailable:access.purchaseAvailable,workTypeLabel:tier?.label,price});
+}
 function wireLockCtas(){$$('[data-unlock-cta]').forEach(b=>{b.onclick=handleUnlockReport});$$('[data-buy-obrana]').forEach(b=>{b.onclick=()=>startReportCheckout(b.dataset.buyObrana,'do_obrane')});window.__lektaIcons?.()}
 const SESSION_KEY=STORAGE_KEYS.session;
 const authStore={load:()=>safeStorageGet(SESSION_KEY,null),save:(s: any)=>safeStorageSet(SESSION_KEY,s)};
@@ -1857,20 +1862,26 @@ async function renderRepairSection(r: any){
  analyzedProfile.ruleEntries=entries;
  if(!r.details?.crossFileSubmissionConsistency) r.details.crossFileSubmissionConsistency=buildCrossFileSubmissionConsistency(r,analyzedProfile,r.details?.docxCore,r.details?.pdfPreflight,currentResult?.file,selectedPdf);
  const templateSelection=selectTemplate(r.settings?.selectionIds?.unit||r.selection?.unit, r.settings?.workType||r.selection?.workType||'final');
- const teaser=paywallGateActive();
+ const teaser=pilotAccess().repairLocked;
  // Zahvati u TEKST rada (heading-case) se drze odvojeno od "Popravi sve": zasebna privola i opcija
  // "samo prijedlog". Teaser ih ne nabraja (kao ni prije E2): nudi samo ono sto ide bez privole.
  const {items,textItems}=splitSeparateConsentItems(buildAllRepairableItems({result:r,profile:analyzedProfile,entries,titleTemplate:templateSelection.template,includeNonViolated:!teaser}));
  if(teaser){
   // Teaser: samo prekrseno (Opcija A); "uskladi sve" + dubinsko ciscenje je placeni dio (Feature B).
   if(!items.length) return;
-  mount.innerHTML=`<div class="lekta-repair-panel"><p><strong>Ovo možemo popraviti umjesto tebe:</strong> ${items.map((i: any)=>escapeHtml(i.label)).join(', ')}.</p></div>`+paywallLockHtml('Automatski popravak s dubinskim usklađivanjem cijelog dokumenta i preuzimanje ispravljene datoteke');
+  if(STUDENT_PILOT&&!pilotAccess().purchaseAvailable){mount.innerHTML=repairLockHtml();wireLockCtas();return}
+  mount.innerHTML=`<div class="lekta-repair-panel"><p><strong>Ovo možemo popraviti umjesto tebe:</strong> ${items.map((i: any)=>escapeHtml(i.label)).join(', ')}.</p></div>`+repairLockHtml();
   wireLockCtas(); return; // teaser je bez stanja: re-render na svakom toggleu je bezopasan
  }
  // Placeno (fullReport) ili soft-launch: Feature B, nudi i neprekrsene dimenzije
  // ("uskladi cijeli dokument") uz v2 dubinsko ciscenje izravnog formatiranja.
  repairPanelItems=items; // RESULT-03: dostupno wireFindingCards-u i prije eventualnog ranog izlaska
  if(!items.length) return;
+ if(STUDENT_PILOT&&!repairServerConfigured()){
+  mount.innerHTML=repairLockHtml();
+  repairPanelForResult=r;
+  return;
+ }
  if(!selectedDocx){mount.innerHTML=`<div class="lekta-repair-panel"><p>Za automatski popravak ponovno učitaj .docx datoteku (dokument više nije u memoriji).</p></div>`;return}
  const file=selectedDocx;
  // WS-3: kad je repair server konfiguriran, placeni popravak ide na SERVER (upload -> gotov docx),

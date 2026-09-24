@@ -4,6 +4,7 @@ import type { Fixability, TriageFinding, TriageModel } from '../analysis/triage'
 import { collectFootnoteAnchors, collectIssueAnchors } from '../preview/preview-anchors';
 import { safeHref } from '../utils/helpers';
 import { suggestTool, type ToolSuggestion } from './tool-suggestions';
+import { manualWordInstruction } from './manual-word-instructions';
 
 export type FindingSeverity = 'error' | 'warning' | 'info';
 export type FindingStatus = 'open' | 'confirmed' | 'ignored';
@@ -31,6 +32,8 @@ export interface FindingSessionState {
 
 export interface FindingViewModel {
   id: string;
+  /** Stvarni check.id; uputa se nikad ne zaključuje iz naslova nalaza. */
+  checkId?: string;
   originalIndex: number;
   category: string;
   severity: FindingSeverity;
@@ -193,6 +196,7 @@ export function buildFindingViewModels(
     const tool = suggestTool(issue, sctx);
     return {
       id,
+      ...(check?.id ? { checkId: check.id } : {}),
       originalIndex,
       category: issue.category,
       severity: severity(issue.severity),
@@ -249,6 +253,9 @@ export function findingCardHtml(finding: FindingViewModel, repairAvailable: bool
     ? `<div class="finding-source"><span>Izvor pravila:</span> <a href="${esc(safeHref(finding.source.url))}" target="_blank" rel="noopener">${esc(finding.source.title)}</a>${finding.source.date ? ` <small>(${esc(finding.source.date)})</small>` : ''}</div>`
     : '';
   const measured = finding.measured ? `<div class="finding-evidence"><span>Izmjereno</span><p>${esc(finding.measured)}</p></div>` : '';
+  const expected = finding.expected ? `<div class="finding-evidence"><span>Očekivano</span><p>${esc(finding.expected)}</p></div>` : '';
+  const manual = finding.checkId ? manualWordInstruction(finding.checkId) : null;
+  const manualHtml = manual ? `<div class="finding-evidence"><span>Ručno u Wordu</span><p>${esc(manual)}${finding.expected ? '' : ' Očekivana vrijednost nije prikazana; provjeri službenu uputu svojeg studija.'}</p></div>` : '';
   const auto = repairAvailable && finding.autoRepairable
     ? '<button type="button" class="btn btn-primary btn-sm" data-finding-repair>Otvori mogućnost popravka</button>'
     : '';
@@ -283,5 +290,5 @@ export function findingCardHtml(finding: FindingViewModel, repairAvailable: bool
   const tool = finding.tool
     ? `<a class="action-tool" href="${esc(safeHref(finding.tool.href))}" target="_blank" rel="noopener"><i data-lucide="wrench"></i> ${esc(finding.tool.label)} →</a>`
     : '';
-  return `<article class="finding-card finding-card--${finding.severity} finding-card--${finding.status}" data-finding-id="${esc(finding.id)}"><header><span class="finding-priority">${finding.severity === 'error' ? 'Kritično' : finding.severity === 'warning' ? 'Važno' : 'Provjeri'}</span><span class="finding-status">${statusLabel}</span></header><h4>${esc(finding.title)}</h4><p>${esc(finding.explanation)}</p>${measured}<div class="finding-location">${scopeHtml(finding.scope)}</div>${source}${reason}${confirmation}<div class="finding-actions">${auto}${decision}${tool}</div><div class="finding-ignore-form hidden"><label>Zašto zanemaruješ ovaj nalaz?<input type="text" maxlength="240" data-finding-ignore-reason><small>Zanemareni nalaz možeš kasnije vratiti u otvorene nalaze.</small></label><div class="finding-ignore-buttons"><button type="button" class="btn btn-secondary btn-sm" data-finding-ignore-save>Spremi razlog</button><button type="button" class="btn btn-ghost btn-sm" data-finding-ignore-cancel>Odustani</button></div></div></article>`;
+  return `<article class="finding-card finding-card--${finding.severity} finding-card--${finding.status}" data-finding-id="${esc(finding.id)}"><header><span class="finding-priority">${finding.severity === 'error' ? 'Kritično' : finding.severity === 'warning' ? 'Važno' : 'Provjeri'}</span><span class="finding-status">${statusLabel}</span></header><h4>${esc(finding.title)}</h4><p>${esc(finding.explanation)}</p>${measured}${expected}${manualHtml}<div class="finding-location">${scopeHtml(finding.scope)}</div>${source}${reason}${confirmation}<div class="finding-actions">${auto}${decision}${tool}</div><div class="finding-ignore-form hidden"><label>Zašto zanemaruješ ovaj nalaz?<input type="text" maxlength="240" data-finding-ignore-reason><small>Zanemareni nalaz možeš kasnije vratiti u otvorene nalaze.</small></label><div class="finding-ignore-buttons"><button type="button" class="btn btn-secondary btn-sm" data-finding-ignore-save>Spremi razlog</button><button type="button" class="btn btn-ghost btn-sm" data-finding-ignore-cancel>Odustani</button></div></div></article>`;
 }

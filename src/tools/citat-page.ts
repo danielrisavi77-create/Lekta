@@ -4,7 +4,7 @@
 import '../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../shared/ui-boot';
 import './tool-analytics';
-import { readFacultyContext, saveFacultyContext } from './faculty-context';
+import { analyzerIntakeHref, readFacultyContext, saveFacultyContext } from './faculty-context';
 import { formatCitation, parseAuthors } from './citation';
 import { bindCopyButton } from './tool-ui';
 import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type FacultyStyle } from '../citations/faculty-styles';
@@ -160,7 +160,8 @@ function populateFaculties() {
 // unaprijed postavi isti fakultet, umjesto da korisnik ponovno trazi ustanovu od nule.
 function syncCtaAnalyzerLink() {
   const unitId = ($('#f-faculty')?.value || '').trim();
-  const href = unitId ? `/?unit=${encodeURIComponent(unitId)}` : '/';
+  const context = readFacultyContext();
+  const href = analyzerIntakeHref(unitId ? { ...context, unitId } : {});
   $('#cta-analyzer')?.setAttribute('href', href);
   $('#c-success-cta-link')?.setAttribute('href', href);
 }

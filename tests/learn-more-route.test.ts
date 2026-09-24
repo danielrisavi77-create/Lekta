@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+// @vitest-environment happy-dom
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -81,8 +82,22 @@ describe('ruta /saznaj-vise/', () => {
   });
 
   it('sidra koja vode na alat idu na `/`, jer alat ovdje ne zivi', () => {
-    expect(STRANICA).toContain('href="/#analyzer"');
+    expect(STRANICA).toContain('href="/"');
+    expect(STRANICA).not.toContain('href="/#analyzer"');
     expect(STRANICA).not.toMatch(/href="#analyzer"/);
+  });
+
+  it('poveznice na postojeće HTML alate i usporedbe rješavaju se iz korijena', () => {
+    const page = document.createElement('template');
+    page.innerHTML = STRANICA;
+    const targets = new Set(['alati.html', 'citat.html', 'kartice.html', 'naslovnica.html', 'literatura.html', 'izjava.html', 'landing_usporedba.html', 'landing_benchmark.html']);
+    const links = Array.from(page.content.querySelectorAll<HTMLAnchorElement>('a[href]'))
+      .filter((link) => targets.has(link.getAttribute('href')?.split('/').at(-1) ?? ''));
+    expect(links).toHaveLength(13);
+    for (const link of links) {
+      const target = link.getAttribute('href')?.split('/').at(-1);
+      expect(new URL(link.getAttribute('href')!, 'https://lekta.example/saznaj-vise/').pathname, link.textContent ?? '').toBe(`/${target}`);
+    }
   });
 
   it('nosi i ZAVRSNI poziv na akciju, koji popis imena ne moze vidjeti', () => {
@@ -104,5 +119,65 @@ describe('ruta /saznaj-vise/', () => {
     }
     expect(APP, 'analizator vise ne crta cjenik').not.toContain("ctl('#pricingGrid')");
     expect(APP, 'analizator vise ne crta popis provjera').not.toContain("ctl('#checkGrid')");
+  });
+});
+
+describe('iscrtani cjenik na /saznaj-vise/', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.body.innerHTML = '<div id="pricingGrid"></div>';
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    document.body.innerHTML = '';
+    localStorage.clear();
+  });
+
+  it('pilot govori o besplatnoj dijagnozi i ne aktivira kupnju bez checkouta', async () => {
+    vi.stubEnv('VITE_LEKTA_STUDENT_PILOT', 'true');
+    localStorage.setItem('lekta.production.v2.1', JSON.stringify({ reportEndpoint: '/report', checkoutEndpoint: '' }));
+    document.body.innerHTML = '<section id="pricing"><p class="ks-sec-side"></p><p id="guaranteeNote"></p><div id="pricingGrid"></div></section>';
+    await import('../src/routes/learn-more/main');
+    expect(document.querySelector('#pricing .ks-sec-side')?.textContent).toMatch(/besplatn.*dijagnoz/i);
+    const paid = document.querySelectorAll('#pricingGrid .price-card')[1];
+    expect(paid?.querySelector('a')).toBeNull();
+    expect(paid?.querySelector('button')?.disabled).toBe(true);
+    expect(document.querySelector('#guaranteeNote')?.textContent).toMatch(/kupnj.*trenutačno nije dostupna/i);
+    expect(document.querySelector('#guaranteeNote')?.textContent).not.toMatch(/endpoint|konfiguriran|naplatni put/i);
+  });
+
+  it('pilot jasno govori kada kupnja postane dostupna', async () => {
+    vi.stubEnv('VITE_LEKTA_STUDENT_PILOT', 'true');
+    localStorage.setItem('lekta.production.v2.1', JSON.stringify({ reportEndpoint: '/report', checkoutEndpoint: '/checkout', repairEndpoint: '/repair' }));
+    document.body.innerHTML = '<section id="pricing"><p class="ks-sec-side"></p><p id="guaranteeNote"></p><div id="pricingGrid"></div></section>';
+    await import('../src/routes/learn-more/main');
+    expect(document.querySelectorAll('#pricingGrid .price-card')[1]?.querySelector('a')).not.toBeNull();
+    expect(document.querySelector('#guaranteeNote')?.textContent).toMatch(/kupnj.*dostupna/i);
+    expect(document.querySelector('#guaranteeNote')?.textContent).not.toMatch(/trenutačno nije dostupna|endpoint|konfiguriran|naplatni put/i);
+  });
+
+  it('kad je placena ponuda ziva, ulazni CTA vodi na /, a narudzba zadrzava paket', async () => {
+    localStorage.setItem('lekta.production.v2.1', JSON.stringify({ enabled: true, orderEndpoint: '/' }));
+    await import('../src/routes/learn-more/main');
+
+    const cards = Array.from(document.querySelectorAll('#pricingGrid .price-card'));
+    expect(cards).toHaveLength(3);
+    expect(cards[0].querySelector('a')?.getAttribute('href')).toBe('/');
+    expect(cards[1].querySelector('a')?.getAttribute('href')).toBe('/');
+    expect(cards[2].querySelector('a')?.getAttribute('href')).toBe('/?paket=format');
+  });
+
+  it('kad placena ponuda nije ziva, besplatni CTA radi, a placeni nemaju aktivnu kupnju', async () => {
+    await import('../src/routes/learn-more/main');
+
+    const cards = Array.from(document.querySelectorAll('#pricingGrid .price-card'));
+    expect(cards).toHaveLength(3);
+    expect(cards[0].querySelector('a')?.getAttribute('href')).toBe('/');
+    for (const card of cards.slice(1)) {
+      expect(card.querySelector('a')).toBeNull();
+      expect((card.querySelector('button') as HTMLButtonElement)?.disabled).toBe(true);
+    }
   });
 });

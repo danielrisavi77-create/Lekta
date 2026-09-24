@@ -55,6 +55,16 @@ function result(overrides: Record<string, unknown> = {}) {
 }
 
 describe('Results Cockpit V1', () => {
+  it('default correction desk shows Word steps from check.id with local limits', () => {
+    const mount = document.createElement('section');
+    const issue = { severity: 'warning', category: 'formatting', title: 'Margine dokumenta', detail: 'Izmjereno 2 cm.', where: 'Postavke stranice' };
+    const model = buildVisualResultModel(result({ issues: [issue], checks: [{ id: 'page.margins', title: 'Margine dokumenta', detail: 'Izmjereno 2 cm.', issue, status: 'fail', max: 10, earned: 0 }] }));
+    renderResultsCockpit(mount, model, { repairAvailable: false, onAction: vi.fn() });
+    expect(mount.dataset.cockpitExperience).toBe('correction-desk');
+    expect(mount.textContent).toContain('Prilagođene margine');
+    expect(mount.textContent).toContain('Očekivana vrijednost nije prikazana');
+    expect(mount.querySelector('.cockpit-finding__evidence')).toBeNull();
+  });
   it('renders one clear status, one technical score and at most three priority findings', () => {
     const mount = document.createElement('section');
     const model = buildVisualResultModel(result());

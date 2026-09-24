@@ -31,6 +31,8 @@ import {
  */
 
 export interface IntakeControllerDependencies {
+  /** Samo kataloški query s ulazne rute, bez datoteke ili osobnog teksta. */
+  handoffSearch?: string;
   maxUploadBytes: number;
   inspectFile(file: File): Promise<IntakeVerdict>;
   createSession(file: File, intake: IntakeOk): Promise<LocalDocumentSessionV1>;
@@ -47,6 +49,18 @@ export interface IntakeController {
 
 /** Odrediste kad pohrana ne radi: radna povrsina bez sesije, dokument se ubacuje ondje. */
 export const WORKSPACE_WITHOUT_SESSION = '/rad/';
+
+function workspaceHref(path: string, search?: string): string {
+  const input = new URLSearchParams(search || '');
+  const allowed = new URLSearchParams();
+  for (const key of ['unit', 'program', 'work'] as const) {
+    const value = input.get(key)?.trim();
+    if (value && value.length <= 200) allowed.set(key, value);
+  }
+  const query = allowed.toString();
+  if (!query) return path;
+  return path.includes('#') ? path.replace('#', `?${query}#`) : `${path}?${query}`;
+}
 
 interface IntakeElements {
   stage: HTMLElement;
@@ -207,7 +221,7 @@ export function mountIntakeController(
       }
       return;
     }
-    dependencies.navigate(`/rad/${sessionFragment(session.id)}`);
+    dependencies.navigate(workspaceHref(`/rad/${sessionFragment(session.id)}`, dependencies.handoffSearch));
   };
 
   const openPicker = (): void => {
@@ -249,7 +263,7 @@ export function mountIntakeController(
     if (!storageRefused) return;
     elements.memoryAction.disabled = true;
     setState('memory-only', 'Otvaram korektorski stol bez spremanja. Ubaci dokument ondje; radi u ovoj kartici.');
-    dependencies.navigate(WORKSPACE_WITHOUT_SESSION);
+    dependencies.navigate(workspaceHref(WORKSPACE_WITHOUT_SESSION, dependencies.handoffSearch));
   };
 
   elements.dropzone.addEventListener('click', openPicker);

@@ -61,6 +61,17 @@ describe('privola', () => {
     const { trackEvent } = createTelemetry({ config: () => ({ analyticsEndpoint: 'https://x.invalid/e' }), consent: () => 'granted' });
     await expect(trackEvent('repair_completed', { count: 1 })).resolves.toBe(false);
   });
+
+  it.each([
+    { status: 204, expected: true },
+    { status: 400, expected: false },
+    { status: 500, expected: false },
+  ])('HTTP $status vraca $expected za trackEvent', async ({ status, expected }) => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status }));
+    const { trackEvent } = createTelemetry({ config: () => ({ analyticsEndpoint: 'https://x.invalid/e' }), consent: () => 'granted' });
+
+    expect(await trackEvent('analysis_completed')).toBe(expected);
+  });
 });
 
 describe('dogadjaji toka su stvarno emitirani', () => {

@@ -14,7 +14,7 @@ import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { selectTemplate, TITLE_PAGE_TEMPLATES, ensureTemplatesHeavy, templatesHeavyLoaded, type TemplateSelection } from '../title-pages/template-loader';
 import { workTypeLabel } from '../config/config-loader';
 import { parseTitlePageParams, serializeTitlePageParams } from '../title-pages/title-page-params';
-import { readFacultyContext, saveFacultyContext } from './faculty-context';
+import { analyzerIntakeHref, readFacultyContext, saveFacultyContext } from './faculty-context';
 import { defaultWorkTypeForProgram } from '../ui/work-selection';
 import type { WorkType } from '../profiles/profile-schema';
 import { renderTemplateSheet } from '../title-pages/render-sheet';
@@ -198,7 +198,7 @@ async function render(): Promise<void> {
   if (docx) docx.disabled = !hasContent;
   $('#tp-success-cta')?.classList.toggle('is-visible', hasContent);
   const ctaUnitId = $('#tp-unit')?.value || '';
-  $('#tp-success-cta-link')?.setAttribute('href', ctaUnitId ? `/?unit=${encodeURIComponent(ctaUnitId)}` : '/');
+  $('#tp-success-cta-link')?.setAttribute('href', analyzerIntakeHref(ctaUnitId ? { unitId: ctaUnitId, program: $('#tp-program')?.value || undefined, level: currentLevel() as WorkType } : {}));
   // Poveznica ima smisla samo kad kaskada nosi konkretan fakultet (syncUrl vec upisao ?fakultet=
   // u adresnu traku); prazan/rucni unos bez odabira daje golu pocetnu adresu, nista za dijeliti.
   const share = $('#tp-share');

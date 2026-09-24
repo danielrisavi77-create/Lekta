@@ -4,6 +4,7 @@
 // naslovnica-page.ts i TitlePageTemplate.unitId) i namjerno prezivljava zatvaranje taba
 // (semestar traje mjesecima), pa je localStorage, ne sessionStorage.
 import type { WorkType } from '../profiles/profile-schema';
+import { LEVEL_SLUGS } from '../title-pages/level-slugs';
 
 export interface ToolFacultyContext {
   unitId?: string;
@@ -65,11 +66,25 @@ export function saveFacultyContext(patch: Partial<ToolFacultyContext>): void {
   try {
     if (patch.unitId === '') {
       localStorage.removeItem(KEY);
+      localStorage.removeItem(LEGACY_FACULTY_KEY);
       return;
     }
-    const merged = sanitize({ ...readFacultyContext(), ...patch });
+    const previous = readFacultyContext();
+    const changedUnit = patch.unitId !== undefined && patch.unitId !== previous.unitId;
+    const merged = sanitize({ ...(changedUnit ? {} : previous), ...patch });
     localStorage.setItem(KEY, JSON.stringify(merged));
   } catch {
     /* bez storage-a: izbor se ne pamti unutar ove posjete */
   }
+}
+
+/** Samo kataloški odabir prolazi kroz javni intake `/`; tekst rada ovdje ne postoji. */
+export function analyzerIntakeHref(context: ToolFacultyContext): string {
+  const params = new URLSearchParams();
+  if (!context.unitId) return '/';
+  params.set('unit', context.unitId);
+  if (context.program) params.set('program', context.program);
+  const work = context.level && Object.hasOwn(LEVEL_SLUGS, context.level) ? LEVEL_SLUGS[context.level] : null;
+  if (work) params.set('work', work);
+  return `/?${params.toString()}`;
 }

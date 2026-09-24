@@ -6,7 +6,7 @@
  * smece u storageu ne rusi citanje.
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { readFacultyContext, saveFacultyContext } from '../src/tools/faculty-context';
+import { analyzerIntakeHref, readFacultyContext, saveFacultyContext } from '../src/tools/faculty-context';
 
 const KEY = 'lekta.faculty-context';
 const LEGACY_KEY = 'lekta.citat-faculty';
@@ -42,6 +42,29 @@ describe('readFacultyContext / saveFacultyContext', () => {
     saveFacultyContext({ unitId: '' });
     expect(readFacultyContext()).toEqual({});
     expect(localStorage.getItem(KEY)).toBeNull();
+  });
+
+  it('promjena fakulteta bez novog programa ne prenosi stari program ni razinu', () => {
+    saveFacultyContext({ unitId: 'efos', program: 'Psihologija', level: 'graduate' });
+    saveFacultyContext({ unitId: 'fpzg' });
+    expect(readFacultyContext()).toEqual({ unitId: 'fpzg' });
+  });
+
+  it('eksplicitni reset uklanja i stari migracijski ključ', () => {
+    localStorage.setItem(LEGACY_KEY, 'efos');
+    saveFacultyContext({ unitId: '' });
+    expect(readFacultyContext()).toEqual({});
+  });
+
+  it('gradi sigurnu poveznicu na stvarni intake s jedinicom, programom i vrstom rada', () => {
+    const href = analyzerIntakeHref({ unitId: 'fpzg', program: 'Novinarstvo & TV', level: 'graduate' });
+    expect(href.startsWith('/?')).toBe(true);
+    const url = new URL(href, 'https://lekta.test');
+    expect(url.pathname).toBe('/');
+    expect(url.searchParams.get('unit')).toBe('fpzg');
+    expect(url.searchParams.get('program')).toBe('Novinarstvo & TV');
+    expect(url.searchParams.get('work')).toBe('diplomski');
+    expect(url.searchParams.has('text')).toBe(false);
   });
 
   it('smece pod lekta.faculty-context se tiho ignorira (pada na migraciju/prazno)', () => {

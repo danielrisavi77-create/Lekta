@@ -18,6 +18,7 @@
 export interface UnitLike {
   id: string;
   institutionId: string;
+  programs?: readonly string[];
 }
 
 /** Polja koja ovi ulazi smiju postaviti. Uzi skup od punog odabira, i to je namjerno. */
@@ -42,7 +43,7 @@ export function facultyContextSelection(
   if (!u) return null;
 
   const sel: UlazniOdabir = { institution: u.institutionId, unit: u.id };
-  if (ctx.program) sel.program = ctx.program;
+  if (ctx.program && (!u.programs || u.programs.includes(ctx.program))) sel.program = ctx.program;
   if (ctx.level) sel.workType = ctx.level;
   return sel;
 }
@@ -68,13 +69,18 @@ export function urlSelection(
   workTypeFromSlug: (slug: string) => string | null,
 ): { selection: UlazniOdabir; projectId: string | null } {
   const uid = (params.get('unit') || '').trim();
+  const program = (params.get('program') || '').trim();
   const workType = workTypeFromSlug((params.get('work') || '').trim());
   const project = (params.get('project') || '').trim();
 
   const selection: UlazniOdabir = {};
   if (uid) {
     const u = units.find((x) => x.id === uid);
-    if (u) { selection.institution = u.institutionId; selection.unit = u.id; }
+    if (u) {
+      selection.institution = u.institutionId;
+      selection.unit = u.id;
+      if (program && u.programs?.includes(program)) selection.program = program;
+    }
   }
   if (workType) selection.workType = workType;
 

@@ -73,7 +73,7 @@ export function createTelemetry(deps: TelemetryDeps) {
     const config = deps.config();
     if (!config?.analyticsEndpoint || deps.consent() !== 'granted') return false;
     try {
-      await fetch(config.analyticsEndpoint, {
+      const response = await fetch(config.analyticsEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -85,7 +85,7 @@ export function createTelemetry(deps: TelemetryDeps) {
         }),
         keepalive: true,
       });
-      return true;
+      return response.ok;
     } catch {
       return false;
     }

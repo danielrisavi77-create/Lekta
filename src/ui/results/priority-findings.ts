@@ -1,6 +1,7 @@
 import type { FindingScope } from '../finding-view-model';
 import type { VisualFindingModel } from './visual-result-model';
-import { escapeHtml } from '../../utils/helpers';
+import { escapeHtml, safeHref } from '../../utils/helpers';
+import { manualWordInstruction } from '../manual-word-instructions';
 
 function categoryLabel(category: string): string {
   return ({ formatting: 'Oblikovanje', structure: 'Struktura', citations: 'Citiranje', elements: 'Elementi', submission: 'Predaja', scope: 'Opseg' } as Record<string, string>)[category] ?? 'Provjera';
@@ -19,6 +20,8 @@ function scopeLabel(scope: FindingScope): string {
   return scope.reason;
 }
 function recommendation(finding: VisualFindingModel, repairAvailable: boolean): string {
+  const manual = finding.checkId ? manualWordInstruction(finding.checkId) : null;
+  if (manual) return `${manual}${finding.expected ? '' : ' Očekivana vrijednost nije prikazana; provjeri službenu uputu svojeg studija.'}`;
   if (repairAvailable && finding.capabilities.repair) return 'Pokrenite automatski popravak, zatim ponovno provjerite dokument.';
   if (finding.capabilities.preview) return 'Otvorite ozna\u010Deno mjesto i provjerite ga prema uputama.';
   return 'Provjerite ovaj dio rada prema uputama svojeg studija ili mentora.';
@@ -50,14 +53,14 @@ export function priorityFindingHtml(finding: VisualFindingModel, repairAvailable
   const action = findingAction(finding, repairAvailable);
   const measured = finding.measured ? '<div class="cockpit-finding__answer"><strong>Izmjereno</strong><p>' + escapeHtml(finding.measured) + '</p></div>' : '';
   const expected = finding.expected ? '<div class="cockpit-finding__answer"><strong>O\u010Dekivano</strong><p>' + escapeHtml(finding.expected) + '</p></div>' : '';
-  const evidence = finding.exactEvidence ? '<details class="cockpit-finding__evidence"><summary>Dokaz iz izvora</summary><p>' + escapeHtml(finding.exactEvidence.quote) + '</p><small>' + escapeHtml(finding.exactEvidence.title) + (finding.exactEvidence.pageLabel ? ', ' + finding.exactEvidence.pageLabel : finding.exactEvidence.page != null ? ', str. ' + finding.exactEvidence.page : '') + '</small></details>' : '';
-  const source = finding.source?.exact && finding.exactEvidence ? '<a class="cockpit-finding__source" href="' + escapeHtml(finding.exactEvidence.url) + '" target="_blank" rel="noopener">Otvori izvor</a>' : '';
+  const evidence = finding.exactEvidence ? '<details class="cockpit-finding__evidence"><summary>Dokaz iz izvora</summary><p>' + escapeHtml(finding.exactEvidence.quote) + '</p><small>' + escapeHtml(finding.exactEvidence.title) + (finding.exactEvidence.pageLabel ? ', ' + escapeHtml(finding.exactEvidence.pageLabel) : finding.exactEvidence.page != null ? ', str. ' + finding.exactEvidence.page : '') + '</small></details>' : '';
+  const source = finding.source?.exact && finding.exactEvidence ? '<a class="cockpit-finding__source" href="' + escapeHtml(safeHref(finding.exactEvidence.url)) + '" target="_blank" rel="noopener">Otvori izvor</a>' : '';
   return [
     '<article class="cockpit-finding cockpit-finding--', escapeHtml(finding.severity), ' cockpit-finding--', escapeHtml(finding.status), '" data-cockpit-finding data-cockpit-priority-card data-finding-id="', escapeHtml(finding.id), '">',
     '<div class="cockpit-finding__index">', String(ordinal).padStart(2, '0'), '</div><div class="cockpit-finding__body">',
     '<div class="cockpit-finding__meta"><span>', severityLabel(finding.severity), '</span><span>', categoryLabel(finding.category), '</span></div><h3>', escapeHtml(finding.title), '</h3>',
     '<div class="cockpit-finding__answer"><strong>Za\u0161to</strong><p>', escapeHtml(finding.explanation), '</p></div>',
-    '<div class="cockpit-finding__answer"><strong>\u0160to napraviti</strong><p>', recommendation(finding, repairAvailable), '</p></div>',
+    '<div class="cockpit-finding__answer"><strong>\u0160to napraviti</strong><p>', escapeHtml(recommendation(finding, repairAvailable)), '</p></div>',
     measured, expected, locationHtml(finding), evidence, source,
     '<div class="cockpit-finding__actions"><button type="button" class="button button-secondary" data-finding-action="', action.kind, '" data-finding-id="', escapeHtml(finding.id), '">', action.label, '</button>',
     decisionHtml(finding), '</div></div></article>',

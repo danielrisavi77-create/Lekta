@@ -8,10 +8,11 @@
 //
 // Dogadjaji su namjerno malobrojni i bez payloada (path iz location.pathname vec razlikuje
 // alat): tool_view (ucitavanje stranice), tool_copy/tool_download (bindCopyButton/
-// bindDownloadButton iz tool-ui.ts, uspjeh), tool_to_analyzer_click (klik na bilo koju
-// #analyzer poveznicu, delegirano).
+// bindDownloadButton iz tool-ui.ts, uspjeh), tool_to_analyzer_click (klik na oznaceni CTA
+// ili zatecenu #analyzer poveznicu, delegirano).
 
 import { DEPLOYMENT_CONFIG } from '../config/deployment';
+import { analyzerIntakeHref, readFacultyContext } from './faculty-context';
 
 const CONSENT_KEY = 'lekta.analytics-consent.v1';
 const PRODUCTION_KEY = 'lekta.production.v2.1';
@@ -55,13 +56,13 @@ export async function trackToolEvent(event: string): Promise<boolean> {
   const endpoint = analyticsEndpoint();
   if (!endpoint || !consentGranted()) return false;
   try {
-    await fetch(endpoint, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ event, path: location.pathname || '/', timestamp: new Date().toISOString() }),
       keepalive: true,
     });
-    return true;
+    return response.ok;
   } catch {
     return false;
   }
@@ -98,12 +99,24 @@ function renderBanner(): void {
   ensureBanner()?.classList.add('is-visible');
 }
 
-// Delegirano na document: hvata sve #analyzer poveznice (nav, mobilni nav, dnevni CTA)
+// Delegirano na document: hvata oznacene CTA i zatecene #analyzer poveznice
 // jednim listenerom, bez obzira koliko ih stranica ima ili kako se ucitava DOM.
 function bindAnalyzerCtaTracking(): void {
   document.addEventListener('click', (e: any) => {
-    const a = e.target?.closest?.('a[href*="#analyzer"]');
-    if (a) void trackToolEvent('tool_to_analyzer_click');
+    const a = e.target?.closest?.('a[href]') as HTMLAnchorElement | null;
+    if (!a) return;
+    const original = a.getAttribute('href') || '';
+    const marked = a.hasAttribute('data-tool-analyzer-cta');
+    const legacy = original.includes('#analyzer');
+    if (!marked && !legacy && original !== '/') return;
+    const target = new URL(analyzerIntakeHref(readFacultyContext()), location.origin);
+    const previous = new URL(original, location.href);
+    for (const key of ['utm_source', 'utm_medium', 'utm_campaign']) {
+      const value = previous.searchParams.get(key);
+      if (value && value.length <= 100) target.searchParams.set(key, value);
+    }
+    a.setAttribute('href', `${target.pathname}${target.search}`);
+    if (marked || legacy) void trackToolEvent('tool_to_analyzer_click');
   });
 }
 

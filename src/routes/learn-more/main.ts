@@ -34,8 +34,23 @@ function renderChecks(root: HTMLElement): void {
  * (`tests/learn-more-route.test.ts`), a ne pamcenjem.
  */
 function renderPricing(root: HTMLElement, live: boolean): void {
+  const pilot = import.meta.env.VITE_LEKTA_STUDENT_PILOT === 'true';
+  const config = loadProductionConfig();
+  const pilotPurchaseReady = live && !!String(config.reportEndpoint).trim()
+    && !!String(config.checkoutEndpoint).trim() && !!String(config.repairEndpoint).trim();
+  if (pilot) {
+    const note = document.getElementById('guaranteeNote');
+    if (note) note.textContent = pilotPurchaseReady
+      ? 'Dijagnoza ostaje na tvom uređaju. Kupnja je dostupna, a stvarni ishod popravka potvrđuje ponovna provjera dokumenta.'
+      : 'Dijagnoza ostaje na tvom uređaju. Kupnja trenutačno nije dostupna. Nakon popravka stvarni ishod potvrđuje ponovna provjera dokumenta.';
+  }
   root.innerHTML = PRICING_TIERS.map((p) => {
-    const soon = p.id !== 'free' && !live;
+    const soon = p.id !== 'free' && (p.id === 'perwork' && pilot ? !pilotPurchaseReady : !live);
+    const description = !pilot && p.id === 'free' ? 'Automatski audit dokumenta, lokalno u pregledniku.'
+      : !pilot && p.id === 'perwork' ? 'Puni izvještaj i automatski popravak, cijena prema vrsti rada.' : p.desc;
+    const features = !pilot && p.id === 'free'
+      ? ['Ocjena i pregled po kategorijama', 'Popis mogućih problema i napomena', 'Bez registracije, dokument ostaje na uređaju']
+      : p.features;
     const badge = soon ? '<span class="popular soon">USKORO</span>' : (p.featured ? '<span class="popular">PREPORUČENO</span>' : '');
     // NAPOMENA O GRANICI: kad placena ponuda ozivi, `order` staza treba odrediste. Modal narudzbe
     // zivi u zatecenoj stranici i ova ruta ga NE nosi, pa se takav paket vodi na pocetak umjesto
@@ -45,7 +60,7 @@ function renderPricing(root: HTMLElement, live: boolean): void {
       : (p.cta.order
         ? `<a class="btn btn-secondary" href="/?paket=${p.cta.order}">${p.cta.label}</a>`
         : `<a class="btn ${p.featured ? 'btn-primary' : 'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);
-    return `<article class="price-card ${p.featured ? 'featured' : ''}${soon ? ' soon' : ''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map((x) => `<li>${x}</li>`).join('')}</ul>${cta}</article>`;
+    return `<article class="price-card ${p.featured ? 'featured' : ''}${soon ? ' soon' : ''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${description}</p><ul class="features">${features.map((x) => `<li>${x}</li>`).join('')}</ul>${cta}</article>`;
   }).join('');
 }
 
@@ -59,6 +74,10 @@ function start(): void {
   if (checks) renderChecks(checks);
 
   const pricing = document.getElementById('pricingGrid');
+  if (import.meta.env.VITE_LEKTA_STUDENT_PILOT === 'true') {
+    const side = document.querySelector<HTMLElement>('#pricing .ks-sec-side');
+    if (side) side.textContent = 'Besplatna lokalna dijagnoza uključuje nalaze, dokaze i Word upute. Plaća se popravljen DOCX nakon ponovne provjere, po fiksnoj cijeni vrste rada.';
+  }
   // Konfiguracija se cita JEDNOM i prosljedjuje: funkcije je primaju kao argument bas zato da
   // dvije strane ne mogu vidjeti razlicito stanje.
   if (pricing) renderPricing(pricing, paidOffersLive(loadProductionConfig()));

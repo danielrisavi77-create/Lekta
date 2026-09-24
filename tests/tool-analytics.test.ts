@@ -5,12 +5,13 @@
  * kljuc/zadani endpoint. Modul se sam-boota na import (boot() na DOMContentLoaded/odmah), pa
  * svaki scenarij treba svjez import (vi.resetModules) nakon sto je localStorage/DOM pripremljen.
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 const CONSENT_KEY = 'lekta.analytics-consent.v1';
 const PRODUCTION_KEY = 'lekta.production.v2.1';
 const DEFAULT_ENDPOINT = 'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/analytics-event';
 const BANNER_ID = 'lekta-tool-consent-banner';
+let addListenerSpy: ReturnType<typeof vi.spyOn>;
 
 async function loadFresh() {
   return import('../src/tools/tool-analytics');
@@ -20,6 +21,17 @@ beforeEach(() => {
   localStorage.clear();
   document.body.innerHTML = '';
   vi.resetModules();
+  addListenerSpy = vi.spyOn(document, 'addEventListener');
+});
+
+afterEach(() => {
+  for (const [type, listener, options] of addListenerSpy.mock.calls) {
+    if (type === 'click' || type === 'DOMContentLoaded') {
+      document.removeEventListener(type, listener, options);
+    }
+  }
+  addListenerSpy.mockRestore();
+  vi.unstubAllGlobals();
 });
 
 describe('trackToolEvent', () => {
@@ -37,7 +49,7 @@ describe('trackToolEvent', () => {
 
   it('uz privolu salje POST na zadani endpoint s event/path/timestamp', async () => {
     localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
-    const fetchMock = vi.fn().mockResolvedValue({});
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal('fetch', fetchMock);
     const { trackToolEvent } = await loadFresh();
     fetchMock.mockClear(); // boot() vec poslao tool_view (privola je vec 'granted' prije importa)
@@ -60,7 +72,7 @@ describe('trackToolEvent', () => {
   it('respektira preklopljen analyticsEndpoint iz lekta.production.v2.1', async () => {
     localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
     localStorage.setItem(PRODUCTION_KEY, JSON.stringify({ analyticsEndpoint: 'https://example.test/custom' }));
-    const fetchMock = vi.fn().mockResolvedValue({});
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal('fetch', fetchMock);
     const { trackToolEvent } = await loadFresh();
 
@@ -93,6 +105,14 @@ describe('trackToolEvent', () => {
 
     expect(ok).toBe(false);
     vi.unstubAllGlobals();
+  });
+
+  it.each([400, 500])('HTTP %i vraca false iako fetch ne baca', async (status) => {
+    localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status })));
+    const { trackToolEvent } = await loadFresh();
+
+    expect(await trackToolEvent('tool_copy')).toBe(false);
   });
 });
 
@@ -141,9 +161,23 @@ describe('consent banner (self-boot na import)', () => {
 });
 
 describe('bindAnalyzerCtaTracking (delegirano na document)', () => {
+  it('označeni CTA otvara stvarni intake i prenosi samo kataloški kontekst', async () => {
+    localStorage.setItem('lekta.faculty-context', JSON.stringify({ unitId: 'fpzg', program: 'Novinarstvo', level: 'graduate' }));
+    await loadFresh();
+    document.body.insertAdjacentHTML('beforeend', '<a data-tool-analyzer-cta href="index.html?utm_source=alat_citat#analyzer">Provjeri rad</a>');
+    const cta = document.querySelector<HTMLAnchorElement>('[data-tool-analyzer-cta]')!;
+    cta.click();
+    const url = new URL(cta.href);
+    expect(url.pathname).toBe('/');
+    expect(url.searchParams.get('unit')).toBe('fpzg');
+    expect(url.searchParams.get('program')).toBe('Novinarstvo');
+    expect(url.searchParams.get('work')).toBe('diplomski');
+    expect(url.searchParams.get('utm_source')).toBe('alat_citat');
+    expect(url.hash).toBe('');
+  });
   it('klik na poveznicu prema #analyzer salje tool_to_analyzer_click kad je privola dana', async () => {
     localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
-    const fetchMock = vi.fn().mockResolvedValue({});
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal('fetch', fetchMock);
     await loadFresh();
     document.body.insertAdjacentHTML('beforeend', '<a href="index.html?utm_source=alat_kartice#analyzer">Provjeri rad</a>');
@@ -158,7 +192,7 @@ describe('bindAnalyzerCtaTracking (delegirano na document)', () => {
 
   it('klik na poveznicu koja ne vodi prema #analyzer ne salje nista', async () => {
     localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
-    const fetchMock = vi.fn().mockResolvedValue({});
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal('fetch', fetchMock);
     await loadFresh();
     fetchMock.mockClear(); // boot() vec poslao tool_view (privola je vec 'granted' prije importa)
@@ -169,5 +203,46 @@ describe('bindAnalyzerCtaTracking (delegirano na document)', () => {
 
     expect(fetchMock).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
+  });
+
+  it.each(['/', '/?unit=fer'])('oznaceni CTA %s salje tocno jedan dogadjaj i na klik djeteta', async (href) => {
+    localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal('fetch', fetchMock);
+    await loadFresh();
+    fetchMock.mockClear();
+    document.body.insertAdjacentHTML('beforeend', `<a data-tool-analyzer-cta href="${href}"><span>Provjeri rad</span></a>`);
+
+    (document.querySelector('a span') as HTMLElement).click();
+    await Promise.resolve();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).event).toBe('tool_to_analyzer_click');
+  });
+
+  it('obicna poveznica na / nije analyzer CTA', async () => {
+    localStorage.setItem(CONSENT_KEY, JSON.stringify('granted'));
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal('fetch', fetchMock);
+    await loadFresh();
+    fetchMock.mockClear();
+    document.body.insertAdjacentHTML('beforeend', '<a href="/">Pocetna</a>');
+
+    (document.querySelector('a') as HTMLElement).click();
+    await Promise.resolve();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('bez privole oznaceni CTA ne salje dogadjaj', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    await loadFresh();
+    document.body.insertAdjacentHTML('beforeend', '<a data-tool-analyzer-cta href="/">Provjeri rad</a>');
+
+    (document.querySelector('a') as HTMLElement).click();
+    await Promise.resolve();
+
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
