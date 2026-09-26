@@ -92,6 +92,8 @@ function baseResolver(over: (c: FakeCall) => FakeResult | undefined = () => unde
     const o = over(c);
     if (o) return o;
     if (c.table === 'webhook_events' && writeOp(c) === 'insert') return { data: { id: 'inbox-1' } };
+    // settle potvrdjuje da je update pogodio redak inboxa; prazan odgovor znaci da nije.
+    if (c.table === 'webhook_events' && writeOp(c) === 'update') return { data: [{ id: 'inbox-1' }] };
     if (c.table === 'products') return { data: PRODUCT_ROW };
     return undefined;
   };
@@ -181,6 +183,63 @@ describe('webhook-mor handler: uplata', () => {
     expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'missing_user_metadata' });
   });
 
+  it('prolazna greska citanja kataloga je 500 (Stripe ponovi), ne unknown_product s 200', async () => {
+    const boom = baseResolver((c) => (c.table === 'products' ? { error: { message: 'db down' } } : undefined));
+    const { res, body, calls } = await run(signedRequest(succeeded()), boom);
+    expect(res.status).toBe(500);
+    expect(body).toEqual({ error: 'product_lookup_failed' });
+    expect(entitlementWrites(calls)).toHaveLength(0);
+  });
+
+  it('uplata nakon vec zabiljezenog punog povrata istog PaymentIntenta gasi pravo i ne daje bonuse', async () => {
+    const refundedFirst = baseResolver((c) =>
+      c.table === 'webhook_events' && writeOp(c) === 'select' ? { data: [{ id: 'inbox-refund' }] } : undefined,
+    );
+    const { res, body, calls, granted } = await run(signedRequest(succeeded()), refundedFirst);
+    expect(res.status).toBe(200);
+    expect(body).toEqual({ ok: true, action: 'refunded_before_payment' });
+    // Pravo se prvo upise (pa povrat koji stize istodobno ima sto ugasiti), zatim se ugasi.
+    const writes = entitlementWrites(calls);
+    expect(writes.map(writeOp)).toEqual(['insert', 'update']);
+    expect(argOf(writes[1], 'update')).toEqual({ status: 'refunded' });
+    expect(eqs(writes[1])).toEqual({ provider: 'stripe', order_id: 'pi_1', product_id: 'slot_diplomski' });
+    expect(calls.some((c) => c.table === 'bonus_outbox' || c.table === 'coupon_grants')).toBe(false);
+    expect(granted).toHaveLength(0);
+    const lookup = calls.find((c) => c.table === 'webhook_events' && writeOp(c) === 'select')!;
+    expect(eqs(lookup)).toEqual({ provider: 'stripe', order_id: 'pi_1' });
+    expect(lookup.ops.find((o) => o.op === 'in')?.args).toEqual([
+      'outcome_detail',
+      ['refund_pending', 'refund_without_entitlement', 'refunded'],
+    ]);
+    // Oznaka se cita TEK nakon upisa prava (zrcalno povratu: oznaka pa citanje prava).
+    const iInsert = calls.findIndex((c) => c.table === 'entitlements' && writeOp(c) === 'insert');
+    const iMarker = calls.findIndex((c) => c.table === 'webhook_events' && writeOp(c) === 'select');
+    expect(iInsert).toBeGreaterThanOrEqual(0);
+    expect(iMarker).toBeGreaterThan(iInsert);
+  });
+
+  it('ponovljena uplata (23505) uz zabiljezen povrat ne upisuje obveze bonusa', async () => {
+    const dupRefunded = baseResolver((c) => {
+      if (c.table === 'entitlements' && writeOp(c) === 'insert') return { error: { message: 'dup', code: '23505' } };
+      if (c.table === 'webhook_events' && writeOp(c) === 'select') return { data: [{ id: 'inbox-refund' }] };
+      return undefined;
+    });
+    const { body, calls, granted } = await run(signedRequest(succeeded()), dupRefunded);
+    expect(body).toEqual({ ok: true, action: 'refunded_before_payment' });
+    expect(calls.some((c) => c.table === 'bonus_outbox')).toBe(false);
+    expect(granted).toHaveLength(0);
+  });
+
+  it('greska citanja oznake povrata je 500 i nijedan bonus se ne izdaje naslijepo', async () => {
+    const boom = baseResolver((c) =>
+      c.table === 'webhook_events' && writeOp(c) === 'select' ? { error: { message: 'db down' } } : undefined,
+    );
+    const { res, calls, granted } = await run(signedRequest(succeeded()), boom);
+    expect(res.status).toBe(500);
+    expect(calls.some((c) => c.table === 'bonus_outbox' || c.table === 'coupon_grants')).toBe(false);
+    expect(granted).toHaveLength(0);
+  });
+
   it('nepoznat katalozni id je 200 bez prava, uz trajan zapis u inboxu', async () => {
     const none = baseResolver((c) => (c.table === 'products' ? { data: null } : undefined));
     const { res, body, calls } = await run(signedRequest(succeeded()), none);
@@ -190,10 +249,68 @@ describe('webhook-mor handler: uplata', () => {
   });
 });
 
+describe('webhook-mor handler: tudji proizvod na istom racunu (Katedra)', () => {
+  const KATEDRA_ROW = {
+    ...PRODUCT_ROW,
+    id: 'katedra_pass_diplomski',
+    kind: 'pass',
+    purchase_window_days: 365,
+    price_eur: 129.9,
+  };
+
+  it('uplata za Katedra pass se NE knjizi: 200 ignored, bez prava, kupona i nagrade', async () => {
+    const katedra = baseResolver((c) => (c.table === 'products' ? { data: KATEDRA_ROW } : undefined));
+    const { res, body, calls, granted } = await run(
+      signedRequest(succeeded({ amount: 12990, amount_received: 12990 }, { user_id: 'user-1', product_id: 'katedra_pass_diplomski' })),
+      katedra,
+    );
+    expect(res.status).toBe(200);
+    expect(body).toEqual({ ok: true, action: 'ignored', reason: 'foreign_product' });
+    // unique(provider, order_id) ostaje slobodan za Katedrin vlastiti upis.
+    expect(entitlementWrites(calls)).toHaveLength(0);
+    expect(calls.some((c) => c.table === 'coupon_grants' || c.table === 'bonus_outbox')).toBe(false);
+    expect(granted).toHaveLength(0);
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'foreign_product: katedra_pass_diplomski' });
+  });
+
+  it('puni povrat Katedrinog PaymentIntenta ne dira Katedrino pravo', async () => {
+    const katedraRefund = baseResolver((c) =>
+      c.table === 'entitlements' && writeOp(c) === 'select'
+        ? { data: [{ id: 'ent-k', product_id: 'katedra_pass_zavrsni' }] }
+        : c.table === 'entitlements' && writeOp(c) === 'update'
+          ? { data: [{ id: 'ent-k' }] }
+          : undefined,
+    );
+    const { res, body, calls } = await run(signedRequest(refunded(999)), katedraRefund);
+    expect(res.status).toBe(200);
+    expect(body).toEqual({ ok: true, action: 'ignored', reason: 'foreign_product' });
+    expect(entitlementWrites(calls)).toHaveLength(0);
+    const lookup = calls.find((c) => c.table === 'entitlements' && writeOp(c) === 'select')!;
+    expect(eqs(lookup)).toEqual({ provider: 'stripe', order_id: 'pi_1' });
+  });
+
+  it('puni povrat Lektinog PaymentIntenta i dalje gasi pravo nakon provjere vlasnistva', async () => {
+    const lektaRefund = baseResolver((c) =>
+      c.table === 'entitlements' && writeOp(c) === 'select'
+        ? { data: [{ id: 'ent-1', product_id: 'slot_diplomski' }] }
+        : c.table === 'entitlements' && writeOp(c) === 'update'
+          ? { data: [{ id: 'ent-1' }] }
+          : undefined,
+    );
+    const { body, calls } = await run(signedRequest(refunded(999)), lektaRefund);
+    expect(body).toEqual({ ok: true, action: 'refunded' });
+    expect(argOf(entitlementWrites(calls)[0], 'update')).toEqual({ status: 'refunded' });
+  });
+});
+
 describe('webhook-mor handler: povrat', () => {
   it('puni povrat gasi entitlement TOG PaymentIntenta (status refunded, provider stripe)', async () => {
     const hit = baseResolver((c) =>
-      c.table === 'entitlements' && writeOp(c) === 'update' ? { data: [{ id: 'ent-1' }] } : undefined,
+      c.table === 'entitlements' && writeOp(c) === 'select'
+        ? { data: [{ id: 'ent-1', product_id: 'slot_diplomski' }] }
+        : c.table === 'entitlements' && writeOp(c) === 'update'
+          ? { data: [{ id: 'ent-1' }] }
+          : undefined,
     );
     const { res, body, calls } = await run(signedRequest(refunded(999)), hit);
     expect(res.status).toBe(200);
@@ -202,7 +319,19 @@ describe('webhook-mor handler: povrat', () => {
     expect(writes).toHaveLength(1);
     expect(argOf(writes[0], 'update')).toEqual({ status: 'refunded' });
     expect(eqs(writes[0])).toEqual({ provider: 'stripe', order_id: 'pi_1' });
+    // Upis je vezan uz id-ove Lektinih redaka procitanih prije, ne samo uz PaymentIntent.
+    expect(writes[0].ops.find((o) => o.op === 'in')?.args).toEqual(['id', ['ent-1']]);
     expect(settled(calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'refunded' });
+  });
+
+  it('pad citanja prije povrata je 500 (retry), ne "nema entitlementa"', async () => {
+    const boom = baseResolver((c) =>
+      c.table === 'entitlements' && writeOp(c) === 'select' ? { error: { message: 'db down' } } : undefined,
+    );
+    const { res, calls } = await run(signedRequest(refunded(999)), boom);
+    expect(res.status).toBe(500);
+    expect(entitlementWrites(calls)).toHaveLength(0);
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'failed', outcome_detail: 'refund_pending' });
   });
 
   it('djelomicni povrat NE dira pravo pristupa: partial_refund_noted', async () => {
@@ -223,9 +352,63 @@ describe('webhook-mor handler: povrat', () => {
     expect(settled(calls).at(-1)).toMatchObject({ outcome_detail: 'refund_without_entitlement' });
   });
 
+  it('puni povrat PRVO upise oznaku refund_pending, a tek onda cita prava (zrcalno uplati)', async () => {
+    const hit = baseResolver((c) =>
+      c.table === 'entitlements' && writeOp(c) === 'select'
+        ? { data: [{ id: 'ent-1', product_id: 'slot_diplomski' }] }
+        : c.table === 'entitlements' && writeOp(c) === 'update'
+          ? { data: [{ id: 'ent-1' }] }
+          : undefined,
+    );
+    const { calls } = await run(signedRequest(refunded(999)), hit);
+    const iMarker = calls.findIndex(
+      (c) => c.table === 'webhook_events' && writeOp(c) === 'update'
+        && (argOf(c, 'update') as Record<string, unknown>).outcome_detail === 'refund_pending',
+    );
+    const iRead = calls.findIndex((c) => c.table === 'entitlements' && writeOp(c) === 'select');
+    expect(iMarker).toBeGreaterThanOrEqual(0);
+    expect(iRead).toBeGreaterThan(iMarker);
+    // Dok povrat traje, ishod je NULL: zapeo povrat je u indeksu neobradjenih (0092).
+    expect(argOf(calls[iMarker], 'update')).toMatchObject({ outcome: null, outcome_detail: 'refund_pending' });
+  });
+
+  it('bez upisane oznake (inbox pao ili update nije pogodio redak) povrat je 500, ne 200', async () => {
+    const noInbox = baseResolver((c) =>
+      c.table === 'webhook_events' && writeOp(c) === 'insert' ? { error: { message: 'inbox down' } } : undefined,
+    );
+    const a = await run(signedRequest(refunded(999)), noInbox);
+    expect(a.res.status).toBe(500);
+    expect(a.body).toEqual({ error: 'refund_marker_failed' });
+    expect(entitlementWrites(a.calls)).toHaveLength(0);
+
+    const rowGone = baseResolver((c) =>
+      c.table === 'webhook_events' && writeOp(c) === 'update' ? { data: [] } : undefined,
+    );
+    const b = await run(signedRequest(refunded(999)), rowGone);
+    expect(b.res.status).toBe(500);
+    expect(b.body).toEqual({ error: 'refund_marker_failed' });
+  });
+
+  it('pad gasenja NE brise oznaku: ostaje refund_pending dok Stripe ne ponovi', async () => {
+    const boom = baseResolver((c) =>
+      c.table === 'entitlements' && writeOp(c) === 'select'
+        ? { data: [{ id: 'ent-1', product_id: 'slot_diplomski' }] }
+        : c.table === 'entitlements' && writeOp(c) === 'update'
+          ? { error: { message: 'db down' } }
+          : undefined,
+    );
+    const { res, calls } = await run(signedRequest(refunded(999)), boom);
+    expect(res.status).toBe(500);
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'failed', outcome_detail: 'refund_pending' });
+  });
+
   it('pad upisa povrata je 500 da Stripe ponovi, ne tihi uspjeh', async () => {
     const boom = baseResolver((c) =>
-      c.table === 'entitlements' && writeOp(c) === 'update' ? { error: { message: 'db down' } } : undefined,
+      c.table === 'entitlements' && writeOp(c) === 'select'
+        ? { data: [{ id: 'ent-1', product_id: 'slot_diplomski' }] }
+        : c.table === 'entitlements' && writeOp(c) === 'update'
+          ? { error: { message: 'db down' } }
+          : undefined,
     );
     const { res } = await run(signedRequest(refunded(999)), boom);
     expect(res.status).toBe(500);

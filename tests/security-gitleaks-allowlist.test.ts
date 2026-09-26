@@ -8,6 +8,7 @@ const PUBLIC_OR_SYNTHETIC_FINDINGS = [
   '5cd252fb0ce8932436faf8ccd1040981b89ee4ad6b9fe9e2a2b7e71aacb27cd3',
   'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaxfR8uEsQkf4vOblY6RA8ncDfYEt6zOg9KE5RdiYwpZP40Li_hp_m47n60p8D54WK84zV2sxXs7LtkBoN79R9Q',
   '__79_Pv6-fj39vX08_Lx8O_u7ezr6uno5-bl5OPi4eA',
+  'pi_123_secret_abc',
 ] as const;
 
 describe('gitleaks allowlist za repair release fixturu', () => {

@@ -75,5 +75,9 @@ ad1bb23ea886eb16e476bbe4a81503fe8b52eb86:tests/repair-local-release-gate.test.ts
 # heuristika ne hvata u buducim commitima, ali stari commit 7e0425bd ostaje u povijesti i gitleaks
 # svejedno skenira punu povijest (fetch-depth 0), pa se ne moze rijesiti bez prepisivanja povijesti.
 # Iskljucuje se po FINGERPRINTU, ne po datoteci: nova tajna u toj istoj datoteci i dalje obara gard.
+# DOPUNA (F18 krug 3): fingerprint nosi sha commita, pa squash ili rebase grane daje novi sha i ovi
+# redci vise nista ne pokrivaju. Zato je isti literal dopusten i u allowlisti gitleaks joba
+# (.github/workflows/security-audit.yml, tocan literal, provjerava tests/security-gitleaks-allowlist.test.ts).
+# Redci ispod ostaju kao dokaz izvornog nalaza; bez allowliste oni sami ne bi bili dovoljni.
 7e0425bda3ddb566aca2926f62ee655290fd8ce8:tests/checkout.test.ts:generic-api-key:184
 7e0425bda3ddb566aca2926f62ee655290fd8ce8:tests/checkout.test.ts:generic-api-key:202

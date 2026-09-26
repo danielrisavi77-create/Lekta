@@ -180,6 +180,31 @@ describe('create-checkout handler', () => {
     expect(stripeCalls).toHaveLength(0);
   });
 
+  it('Katedra pass (retail, aktivan, s cijenom, bez mor_product_id) je 404: nema PaymentIntenta ni privole', async () => {
+    // Redak doslovno iz migracije 0071. Prije F18 ga je blokirao samo prazan mor_product_id.
+    const katedra = {
+      id: 'katedra_pass_diplomski',
+      kind: 'pass',
+      audience: 'retail',
+      work_type: 'diplomski',
+      slots_total: 1,
+      slot_window_days: 14,
+      purchase_window_days: 365,
+      price_eur: 129.9,
+      mor_product_id: null,
+      manual_fulfillment: false,
+      active: true,
+    };
+    const { res, out, stripeCalls, calls } = await run(
+      { productId: 'katedra_pass_diplomski', consent: CONSENT },
+      { resolve: (c) => (c.table === 'products' ? { data: katedra } : undefined) },
+    );
+    expect(res.status).toBe(404);
+    expect(out).toEqual({ error: 'unknown_product' });
+    expect(stripeCalls).toHaveLength(0);
+    expect(calls.some((c) => c.table === 'checkout_consents' && writeOp(c) === 'insert')).toBe(false);
+  });
+
   it('dnevni cap je 429 prije pristanka i Stripe poziva', async () => {
     const { res, stripeCalls, calls } = await run(
       { productId: 'slot_diplomski', consent: CONSENT },

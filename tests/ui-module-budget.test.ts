@@ -131,7 +131,10 @@ function bajtova(rel: string): number {
 // ne prima trackEvent ni productId jer purchase_completed salje samo handleUnlockReport (-27), a
 // prima config i token za cekanje na knjizenje prava prije otkljucavanja (+34). Neto prema stanju
 // prije F18 je +236 B.
-const BUDZET_APP = 357632;
+// F18 KRUG 3 (2026-09-26): 357632 -> 357420, dakle -212 B. buildPaymentUrl vise nema granu za
+// ukinutog MoR pruzatelja (tri searchParams poziva i uvjet); spremljena stara vrijednost se
+// normalizira u src/config/production-config.ts (normalizePaymentProvider), ne u app.ts.
+const BUDZET_APP = 357420;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

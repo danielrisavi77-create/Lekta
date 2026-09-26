@@ -20,7 +20,21 @@ export const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-fo
 
 export type ProductionConfig = typeof DEFAULT_PRODUCTION_CONFIG;
 
-export function loadProductionConfig(){const saved=safeStorageGet(STORAGE_KEYS.production,{});return{...structuredClone(DEFAULT_PRODUCTION_CONFIG),...(saved||{}),paymentLinks:{...DEFAULT_PRODUCTION_CONFIG.paymentLinks,...(saved?.paymentLinks||{})}}}
+/**
+ * Pruzatelji za rucni Payment Link tok (buildPaymentUrl u app.ts). Od F18 (2026-09-23) postoje
+ * samo Stripe Payment Links i genericki "drugi provider". Spremljena testna konfiguracija s
+ * vrijednoscu ukinutog pruzatelja pada na genericki oblik (`order_id`, `email`), da rucni tok ne
+ * gradi parametre za pruzatelja kojeg vise nema.
+ */
+export const PAYMENT_LINK_PROVIDERS = ['stripe', 'custom'] as const;
+export type PaymentLinkProvider = (typeof PAYMENT_LINK_PROVIDERS)[number];
+
+export function normalizePaymentProvider(value: unknown): PaymentLinkProvider {
+  if (value == null || value === '') return 'stripe';
+  return (PAYMENT_LINK_PROVIDERS as readonly unknown[]).includes(value) ? (value as PaymentLinkProvider) : 'custom';
+}
+
+export function loadProductionConfig(){const saved=safeStorageGet(STORAGE_KEYS.production,{});return{...structuredClone(DEFAULT_PRODUCTION_CONFIG),...(saved||{}),paymentProvider:normalizePaymentProvider(saved?.paymentProvider),paymentLinks:{...DEFAULT_PRODUCTION_CONFIG.paymentLinks,...(saved?.paymentLinks||{})}}}
 
 export function productionStatus(productionConfig: any){const links=Object.values(productionConfig?.paymentLinks||{}).filter(Boolean).length,endpoint=String(productionConfig?.orderEndpoint||'').trim();return{active:!!productionConfig?.enabled&&!!endpoint,links,endpoint,provider:productionConfig?.paymentProvider||'stripe'}}
 

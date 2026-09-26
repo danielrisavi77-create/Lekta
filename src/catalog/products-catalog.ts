@@ -61,6 +61,23 @@ export function mapProductRow(row: Record<string, unknown>): Product {
   };
 }
 
+/**
+ * Prefiksi id-a proizvoda koji su u istoj tablici `products`, ali ih Lektin checkout NE prodaje.
+ *
+ * `katedra_pass_*` (migracija 0071) su retail, aktivni i imaju cijenu, pa ih nijedan drugi uvjet
+ * ne razlikuje od Lektinih proizvoda. Dok je naplata isla preko MoR-a, prodaju je slucajno
+ * blokirao nepopunjen `mor_product_id` (409 product_not_mapped); taj uvjet je uklonjen prelaskom
+ * na Stripe (F18), pa granica mora biti izricita. Katedra pass mora biti vezan uz
+ * `academic_project_id` (gardovi 0072, 0073, 0085), a Lektin tok to polje nikad ne postavlja:
+ * pravo kupljeno ovdje bilo bi naplaceno, a Katedra ga ne bi prepoznala.
+ */
+export const FOREIGN_PRODUCT_ID_PREFIXES: readonly string[] = ['katedra_'];
+
+/** Smije li Lektin checkout (create-checkout, webhook-mor, paywall) prodavati ovaj proizvod. */
+export function isSoldByLektaCheckout(productId: string): boolean {
+  return !FOREIGN_PRODUCT_ID_PREFIXES.some((prefix) => productId.startsWith(prefix));
+}
+
 export interface CatalogConfig {
   /** Supabase projekt URL; prazno znaci katalog nije konfiguriran. */
   supabaseUrl: string;
@@ -89,7 +106,10 @@ export async function fetchRetailCatalog(
   // pa je pogresna konfiguracija ili PostgREST greska izgledala identicno kao "nema proizvoda u
   // ponudi": paywall bi prikazao prazno stanje umjesto da padne na fallback prikaz.
   if (!Array.isArray(rows)) throw new Error('catalog fetch: odgovor nije niz proizvoda');
-  return rows.map((r) => mapProductRow(r as Record<string, unknown>));
+  // Proizvodi drugog proizvoda (Katedra) dijele tablicu, ali se u Lektinom paywallu ne nude.
+  return rows
+    .map((r) => mapProductRow(r as Record<string, unknown>))
+    .filter((p) => isSoldByLektaCheckout(p.id));
 }
 
 /** Prikaz cijene u EUR, hrvatski zapis (zarez, dvije decimale). */

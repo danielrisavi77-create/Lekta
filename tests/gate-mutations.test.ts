@@ -59,6 +59,9 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
+import { resolveCheckout } from '../src/report/checkout';
+import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
+import { seededProducts } from './helpers/product-seeds';
 import {
   REQUIRED_CONTEXT_FILES,
   REQUIRED_SCOPED_GUIDES,
@@ -2608,6 +2611,36 @@ const MUTATIONS: Mutation[] = [
       return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('form-action nosi Stripe host'));
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  // GRANICA PRODAJE (F18 krug 3, 2026-09-26). Uklanjanjem uvjeta na `mor_product_id` Katedra
+  // passovi (0071: retail, aktivni, s cijenom) postali su kupivi kroz Lektin checkout. Mutacija je
+  // STVARNI redak iz migracije 0071 kakav bi create-checkout dobio iz baze; baseline je cijeli
+  // Lektin sijani katalog, da granica ne blokira i vlastite proizvode.
+  {
+    id: 'naplata/katedra-pass-kroz-lektin-checkout',
+    imitates:
+      'Krug 2 F18: create-checkout je bez 409 product_not_mapped izdao PaymentIntent za ' +
+      'katedra_pass_diplomski (129,90 EUR), a webhook bi upisao pravo bez academic_project_id ' +
+      'koje Katedrini gardovi ne priznaju i zauzeo unique(provider, order_id) prije Katedre.',
+    caught: () => {
+      const katedra = seededProducts()
+        .filter((s) => s.file === '0071_katedra_pass_products.sql')
+        .map((s) => mapProductRow(s.row));
+      return (
+        katedra.length === 3 &&
+        katedra.every((p) => p.active && p.audience === 'retail' && p.morProductId === null) &&
+        katedra.every((p) => {
+          const r = resolveCheckout(p, { isPartnerActive: true });
+          return !r.ok && r.status === 404;
+        })
+      );
+    },
+    cleanBefore: () => {
+      const own = seededProducts()
+        .map((s) => mapProductRow(s.row))
+        .filter((p) => isSoldByLektaCheckout(p.id));
+      return own.length >= 20 && own.every((p) => resolveCheckout(p, { isPartnerActive: true }).ok);
+    },
   },
 ];
 

@@ -12,7 +12,7 @@
  * Stripe NIJE Merchant of Record, pa obracun i prijava PDV-a ostaju na vlasniku.
  */
 
-import type { Product } from '../catalog/products-catalog.ts';
+import { isSoldByLektaCheckout, type Product } from '../catalog/products-catalog.ts';
 import { isReportWorkType, type ReportWorkType } from './pricing.ts';
 import { estimateWorkType, unambiguousMismatch, type WorkTypeSignals } from './work-type-estimate.ts';
 
@@ -25,12 +25,18 @@ export type CheckoutResolution =
 /**
  * Serverska odluka (sekcija 5, koraci 2-3): nepoznat/neaktivan proizvod -> 404;
  * partner proizvod bez aktivnog partner racuna -> 403; inace ok.
+ *
+ * Proizvod drugog proizvoda iz iste tablice (Katedra pass, v. `isSoldByLektaCheckout`) je za
+ * Lektin checkout nepoznat: 404, isto kao da ne postoji. Bez toga bi izravan poziv s
+ * `productId: 'katedra_pass_diplomski'` dobio PaymentIntent na 129,90 EUR za pravo koje Katedra
+ * ne priznaje (nalaz pregleda F18 krug 2).
  */
 export function resolveCheckout(
   product: Product | null | undefined,
   ctx: { isPartnerActive: boolean },
 ): CheckoutResolution {
   if (!product || !product.active) return { ok: false, status: 404, error: 'unknown_product' };
+  if (!isSoldByLektaCheckout(product.id)) return { ok: false, status: 404, error: 'unknown_product' };
   if (product.audience === 'partner' && !ctx.isPartnerActive) {
     return { ok: false, status: 403, error: 'partner_not_active' };
   }

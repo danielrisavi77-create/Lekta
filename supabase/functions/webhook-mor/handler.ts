@@ -19,7 +19,7 @@ import {
   type StripeEvent,
   type StripeWebhookPayload,
 } from '../../../src/report/webhook.ts';
-import { mapProductRow, type Product } from '../../../src/catalog/products-catalog.ts';
+import { isSoldByLektaCheckout, mapProductRow, type Product } from '../../../src/catalog/products-catalog.ts';
 import { stripeAmountCents } from '../../../src/report/checkout.ts';
 import {
   validateReferral,
@@ -31,6 +31,13 @@ import {
 import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
 
 const PROVIDER = 'stripe';
+
+/**
+ * `outcome_detail` inbox zapisa koji znace da je za PaymentIntent zabiljezen PUNI povrat. Uplata
+ * koja stigne nakon (ili istodobno s) takvim zapisom ne smije ostaviti aktivno pravo.
+ * `refund_pending` se upisuje PRIJE citanja prava i ostaje i kad obrada povrata padne.
+ */
+const REFUND_MARKERS = ['refund_pending', 'refund_without_entitlement', 'refunded'];
 
 /**
  * Sve sto handler dobiva izvana. Okolina (`Deno.env`) i Supabase klijent se citaju SAMO u
@@ -321,16 +328,25 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     }
   })();
 
-  /** Zabiljezi ishod obrade uz zapis u inboxu. Nikad ne baca. */
-  const settle = async (outcome: string, detail?: string): Promise<void> => {
-    if (!eventRowId) return;
+  /**
+   * Zabiljezi ishod obrade uz zapis u inboxu. Nikad ne baca. Vraca je li zapis stvarno upisan:
+   * vecini puteva je to samo trag, ali oznaka punog povrata (REFUND_MARKERS) je ulaz u odluku
+   * uplate, pa ga taj put mora znati (Codex pregled kruga 3).
+   */
+  const settle = async (outcome: string | null, detail?: string): Promise<boolean> => {
+    if (!eventRowId) return false;
     try {
-      await admin
+      const { data, error } = await admin
         .from('webhook_events')
         .update({ outcome, outcome_detail: detail ?? null, processed_at: new Date().toISOString() })
-        .eq('id', eventRowId);
+        .eq('id', eventRowId)
+        .select('id');
+      if (error) throw error;
+      // Update bez greske koji nije pogodio redak nije upis (Codex pregled kruga 3).
+      return Array.isArray(data) && data.length > 0;
     } catch (e) {
       console.error('webhook-mor inbox_settle_failed', { eventRowId, detail: String(e) });
+      return false;
     }
   };
 
@@ -384,6 +400,60 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       await settle('processed', 'partial_refund_noted');
       return json({ ok: true, action: 'partial_refund_noted' }, 200);
     }
+    // OZNAKA PUNOG POVRATA PRIJE ICEGA DRUGOG (Codex pregled kruga 3). Stripe ne jamci redoslijed:
+    // puni povrat moze stici dok je `payment_intent.succeeded` jos u retryju ili se obradjuje
+    // ISTODOBNO. Povrat zato PRVO trajno upise oznaku u inbox (REFUND_MARKERS), pa tek onda cita
+    // entitlements. Uplata radi zrcalno: prvo upise pravo, pa procita oznaku. Kako obje strane
+    // pisu prije nego citaju, barem jedna vidi upis druge i pravo se ugasi. Oznaka se na putu
+    // greske NE brise (ostaje `refund_pending`), pa je sigurnost ocuvana i do Stripeova retryja.
+    // Bez upisane oznake taj dogovor ne vrijedi, pa je 500 i Stripe povrat ponovi.
+    // Ishod ostaje NULL ("jos traje") dok povrat ne zavrsi, pa zapeo povrat ulazi u djelomicni
+    // indeks neobradjenih dogadjaja (0092, webhook_events_unresolved) i vidi se u nadzoru.
+    if (!(await settle(null, 'refund_pending'))) {
+      console.error('webhook-mor refund_marker_failed', { orderId: ev.orderId });
+      return json({ error: 'refund_marker_failed' }, 500);
+    }
+
+    // TUDJI PRODUKT NA ISTOM RACUNU (nalaz pregleda F18 krug 2). Katedra knjizi svoje passove u
+    // istu tablicu entitlements, s istim provider 'stripe'. Ovaj webhook njihov povrat ne smije
+    // obraditi kao svoj: to je Katedrino pravo i Katedrin tok povrata.
+    //
+    // Pad citanja je 500 (Stripe ponovi), ne "nema retka": inace bi prolazna greska baze povrat
+    // proglasila tudjim ili nepostojecim i nikad ga ne bi ponovila (Codex pregled kruga 3).
+    const { data: refundTargets, error: lookupErr } = await admin
+      .from('entitlements')
+      .select('id, product_id')
+      .eq('provider', PROVIDER)
+      .eq('order_id', ev.orderId);
+    if (lookupErr) {
+      console.error('webhook-mor refund_lookup_failed', { orderId: ev.orderId, error: lookupErr.message });
+      await settle('failed', 'refund_pending');
+      return json({ error: 'refund_failed' }, 500);
+    }
+    const targets: any[] = Array.isArray(refundTargets) ? refundTargets : [];
+    const foreignTarget = targets.find((r: any) => !isSoldByLektaCheckout(String(r?.product_id ?? '')));
+    if (foreignTarget) {
+      console.warn('webhook-mor foreign_event_ignored', {
+        orderId: ev.orderId,
+        reason: 'foreign_product',
+        productId: foreignTarget.product_id,
+      });
+      await settle('ignored', `foreign_product: ${String(foreignTarget.product_id)}`);
+      return json({ ok: true, action: 'ignored', reason: 'foreign_product' }, 200);
+    }
+    // Update ide SAMO po id-ovima Lektinih redaka procitanih gore. Redak koji bi se izmedju
+    // citanja i upisa pojavio pod istim PaymentIntentom (npr. Katedrin) tako ostaje netaknut.
+    const ownIds: string[] = targets.map((r: any) => String(r.id));
+
+    // Povrat za PaymentIntent bez naseg entitlementa: ili tudja naplata (Payment Link, fakture),
+    // ili povrat koji je stigao PRIJE uplate. 200 jer retry tudju naplatu ne popravlja; oznaka
+    // ostaje u REFUND_MARKERS, pa uplata koja stigne kasnije pravo odmah gasi.
+    if (ownIds.length === 0) {
+      console.error('webhook-mor refund_without_entitlement', { orderId: ev.orderId });
+      await settle('processed', 'refund_without_entitlement');
+      return json({ ok: true, action: 'refund_without_entitlement' }, 200);
+    }
+
     // Pad ovog upisa se dotad progutao, a dogadjaj se javljao kao obradjen: korisnik bi dobio
     // novac natrag i ZADRZAO pravo pristupa, bez traga da je gasenje palo (nalaz adversarijalnog
     // pregleda, 2026-09-23). 500 je ovdje ispravan odgovor: Stripe ponovi dostavu.
@@ -392,16 +462,13 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       .update({ status: 'refunded' })
       .eq('provider', PROVIDER)
       .eq('order_id', ev.orderId)
+      .in('id', ownIds)
       .select('id');
     if (refundErr) {
       console.error('webhook-mor refund_update_failed', { orderId: ev.orderId, error: refundErr.message });
-      await settle('failed', `refund_update: ${refundErr.message}`);
+      await settle('failed', 'refund_pending');
       return json({ error: 'refund_failed' }, 500);
     }
-    // Povrat za PaymentIntent bez naseg entitlementa: ili tudja naplata (Payment Link, fakture),
-    // ili povrat koji je stigao PRIJE uplate (Stripe ne jamci redoslijed). 200 jer retry tudju
-    // naplatu ne popravlja, ali GLASNO i s tragom u inboxu, da se drugi slucaj moze rucno
-    // provjeriti umjesto da se prikaze kao uspjesno ugasen entitlement.
     if (!Array.isArray(refundedRows) || refundedRows.length === 0) {
       console.error('webhook-mor refund_without_entitlement', { orderId: ev.orderId });
       await settle('processed', 'refund_without_entitlement');
@@ -426,7 +493,14 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   // proizvod iz kataloga po KATALOSKOM id-u iz metadata (sekcija 6.2). Prije 2026-09-23 se
   // trazio po `mor_product_id`; taj put je uklonjen zajedno s MoR providerom, jer bi inace
   // svaka Stripe uplata tiho zavrsila kao `unknown_product`.
-  const { data: prow } = await admin.from('products').select('*').eq('id', ev.productId).maybeSingle();
+  const { data: prow, error: productErr } = await admin.from('products').select('*').eq('id', ev.productId).maybeSingle();
+  // Prolazna greska baze NIJE nepoznat proizvod (Codex pregled kruga 3). Da se tretira kao
+  // nepoznat, placena kupnja bi dobila 200 i Stripe je nikad ne bi ponovio. 500 = retry.
+  if (productErr) {
+    console.error('webhook-mor product_lookup_failed', { orderId: ev.orderId, error: productErr.message });
+    await settle('failed', `product_lookup: ${productErr.message}`);
+    return json({ error: 'product_lookup_failed' }, 500);
+  }
   const product = prow ? mapProductRow(prow as Record<string, unknown>) : null;
   if (!product) {
     // Nepoznat id -> log ERROR + alert; 200 bez entitlementa da provider ne retry-a (6.2).
@@ -437,6 +511,22 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     await settle('unknown_product', `productId=${ev.productId}`);
     return json({ ok: true, action: 'unknown_product_logged' }, 200);
   }
+
+  // PROIZVOD KOJI LEKTA NE PRODAJE (nalaz pregleda F18 krug 2). Katedra pass je u istoj tablici
+  // products, ali ga Lektin checkout odbija (resolveCheckout), a Katedra ga knjizi sama i uz
+  // `academic_project_id`. Da ga ovaj webhook knjizi, zauzeo bi unique(provider, order_id) prije
+  // Katedre i upisao pravo bez projekta koje Katedrini gardovi ne priznaju. 200 bez upisa, jer je
+  // za nas trajno neobradiv; dogadjaj ostaje u inboxu.
+  if (!isSoldByLektaCheckout(product.id)) {
+    console.warn('webhook-mor foreign_event_ignored', {
+      orderId: ev.orderId,
+      reason: 'foreign_product',
+      productId: product.id,
+    });
+    await settle('ignored', `foreign_product: ${product.id}`);
+    return json({ ok: true, action: 'ignored', reason: 'foreign_product' }, 200);
+  }
+
 
   // rucni fulfillment (premium_human): otvori manual_orders, bez entitlementa (6.3)
   if (product.manualFulfillment) {
@@ -485,6 +575,46 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   const { error } = await admin
     .from('entitlements')
     .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
+  if (error && (error as any).code !== '23505') {
+    await settle('failed', `entitlement_insert: ${error.message}`);
+    return json({ error: 'insert_failed', detail: error.message }, 500);
+  }
+
+  // POVRAT STIGAO PRIJE ILI ISTODOBNO S UPLATOM (Codex pregled kruga 3). Pravo je upisano (ili je
+  // vec postojalo), pa se TEK SADA cita oznaka punog povrata istog PaymentIntenta. Povrat radi
+  // zrcalno (oznaka pa citanje prava), pa barem jedna strana vidi drugu. Ako je oznaka tu, pravo
+  // se gasi i ne izdaje se nijedan bonus. Greska citanja je 500: retry prolazi kroz 23505 i
+  // ponovno dolazi ovamo, a bonusi se ne izdaju naslijepo za mozda vraceni novac.
+  {
+    const { data: marker, error: markerErr } = await admin
+      .from('webhook_events')
+      .select('id')
+      .eq('provider', PROVIDER)
+      .eq('order_id', ev.orderId)
+      .in('outcome_detail', REFUND_MARKERS)
+      .limit(1);
+    if (markerErr) {
+      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: markerErr.message });
+      await settle('failed', `refund_marker_lookup: ${markerErr.message}`);
+      return json({ error: 'refund_marker_lookup_failed' }, 500);
+    }
+    if (Array.isArray(marker) && marker.length > 0) {
+      const { error: voidErr } = await admin
+        .from('entitlements')
+        .update({ status: 'refunded' })
+        .eq('provider', PROVIDER)
+        .eq('order_id', ev.orderId)
+        .eq('product_id', product.id);
+      if (voidErr) {
+        await settle('failed', `refunded_before_payment: ${voidErr.message}`);
+        return json({ error: 'refund_failed' }, 500);
+      }
+      console.error('webhook-mor refunded_before_payment', { orderId: ev.orderId, productId: product.id });
+      await settle('processed', 'refunded_before_payment');
+      return json({ ok: true, action: 'refunded_before_payment' }, 200);
+    }
+  }
+
   if (error && (error as any).code === '23505') {
     // TOCKA OPORAVKA (audit P1-07). Dosad je ovaj put izlazio PRIJE bonusa, pa je obveza koja je
     // pri prvom pokusaju pala ostajala izgubljena zauvijek. Sada retry jos jednom osigura da
@@ -492,10 +622,6 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     await enqueueBonuses(admin, ev, product);
     await settle('processed', 'entitlement_duplicate');
     return json({ ok: true, action: 'duplicate_ignored' });
-  }
-  if (error) {
-    await settle('failed', `entitlement_insert: ${error.message}`);
-    return json({ error: 'insert_failed', detail: error.message }, 500);
   }
 
   // AUD-28: entitlement je JEZGRA i vec je kreiran (idempotentan preko unique(provider,order_id)).

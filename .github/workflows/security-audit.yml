@@ -155,6 +155,12 @@ jobs:
           # nikad nije izdan od produkcijskog sustava. Izuzetak vrijedi samo za taj mrtvi literal;
           # bilo koji stvarni ili novi token ostaje nalaz.
           '''__79_Pv6-fj39vX08_Lx8O_u7ezr6uno5-bl5OPi4eA''',
+          # Sinteticki Stripe PaymentIntent client secret iz tests/checkout.test.ts u commitu
+          # 7e0425bd (F18). Oblik je iz Stripe dokumentacije, nikad nije izdan ni od jednog racuna.
+          # Na LITERALU, ne na fingerprintu: fingerprint u .gitleaksignore nosi sha commita, pa bi
+          # squash ili rebase grane design/pack3 dao novi sha i srusio ovaj job (nalaz pregleda
+          # F18 krug 2). Svaki drugi client secret i dalje je nalaz.
+          '''pi_123_secret_abc''',
           ]
           # Harvestirani sluzbeni izvori (HTML snapshoti) mogu nositi benigne eyJ/base64 blobove.
           # Lockfile nosi integritetske hasheve, ne aplikacijske tajne.
