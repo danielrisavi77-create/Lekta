@@ -37,9 +37,15 @@ Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) oče
 
 ## B. Naplata (Faza 2, kad beta pokaže da radi)
 
-- [ ] Lemon Squeezy variante po vrsti rada (cijene: `src/report/pricing.ts` `WORK_TYPE_TIERS`).
-- [ ] `products.mor_product_id` mapirati (bez toga `create-checkout` vraća `409 product_not_mapped`).
-- [ ] LS webhook na `.../functions/v1/webhook-mor`, tajna `MOR_WEBHOOK_SECRET`.
+> **Naplata je iskljucena tijekom bete** (odluka vlasnika 2026-09-26). Stripe tok se ukljucuje tek
+> kad beta prestane. Puni koraci: `docs/GO_LIVE_NAPLATA.md`.
+
+- [ ] Stripe racun (pruzatelj od 2026-09-23, F18; nije Merchant of Record, PDV je obveza vlasnika).
+      Stripe proizvode ne kreirati: cijene su samo u `products` (`src/report/pricing.ts`
+      `WORK_TYPE_TIERS`); `products.mor_product_id` je naslijedjen i ne mapira se.
+- [ ] Edge tajne `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`
+      (`STRIPE_ALLOW_TEST_MODE` samo za smoke test, `STRIPE_ACCOUNT_ID` samo uz Stripe Connect).
+- [ ] Stripe webhook na `.../functions/v1/webhook-mor` (`payment_intent.succeeded`, `charge.refunded`).
 - [ ] Redeploy `create-checkout` (deployana verzija je starija od WS-5 `tier_mismatch` enforcementa).
 - [ ] Maknuti Edge tajnu `REPAIR_FREE_MODE` i postaviti `checkoutEndpoint` u `DEFAULT_PRODUCTION_CONFIG`.
 - [ ] Uskladiti pravni tekst: rečenice "Tijekom besplatne bete popravak se ne naplaćuje" moraju otpasti.
@@ -48,7 +54,7 @@ Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) oče
 
 - [ ] Registrirati subjekt i upisati `oib` i `address` u `data/legal/provider.json`. Dok su prazni,
       pravne stranice nose napomenu da registracijski podaci slijede (`registrationNote`).
-- [ ] Merchant of Record / porezni tretman prije prve naplate.
+- [ ] Porezni tretman prije prve naplate: Stripe nije Merchant of Record, pa PDV (HR i OSS) obracunava i prijavljuje vlasnik.
 
 ## D. Operativno
 

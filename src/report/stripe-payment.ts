@@ -139,7 +139,10 @@ export function paymentAppearance(el: Element | null, view: { getComputedStyle(e
     take('--panel', 'colorBackground');
     take('--brand', 'colorPrimary');
     take('--danger', 'colorDanger');
-    take('--line', 'colorTextPlaceholder');
+    // Placeholder je sekundarni TEKST, pa nosi token sekundarnog teksta (--muted), a ne boju
+    // crte (--line): na bijelom polju papira --line ima kontrast oko 1,5:1 i nije citljiv.
+    // tests/stripe-payment.test.ts racuna kontrast iz stvarnih tokena (>= 4,5:1, WCAG AA).
+    take('--muted', 'colorTextPlaceholder');
     const family = cs.fontFamily?.trim();
     if (family) variables.fontFamily = family;
   }
@@ -167,15 +170,25 @@ export function mountPaymentElement(args: MountPaymentArgs): { elements: StripeE
 export type ConfirmPaymentOutcome =
   | { kind: 'ok'; paymentIntentId: string }
   | { kind: 'processing'; paymentIntentId: string }
-  | { kind: 'redirected' }
   | { kind: 'error'; message: string };
 
 /**
- * Potvrdi placanje BEZ napustanja stranice kad god je moguce (`redirect: 'if_required'`).
+ * Poruka kad Stripe vrati odgovor bez greske i bez statusa PaymentIntenta. Uz
+ * `allow_redirects=never` to se ne smije dogoditi, pa se ne prikazuje kao uspjeh ni kao
+ * "dovrsava se kod banke", nego kao greska koja kaze sto je poznato: potvrda nije stigla.
+ */
+export const UNEXPECTED_REDIRECT_MESSAGE =
+  'Neočekivano preusmjeravanje: plaćanje nije potvrđeno. Ne plaćaj ponovno dok ne provjeriš potvrdu na e-pošti.';
+
+/**
+ * Potvrdi placanje BEZ napustanja stranice (`redirect: 'if_required'`).
  *
- * Nacini placanja koji obavezno traze bankovnu stranicu (npr. 3D Secure preusmjerenje) i dalje
- * odvedu korisnika na `returnUrl`; tada ovaj poziv ne vrati nista korisno, pa je ishod
- * `redirected`, a ne lazni uspjeh.
+ * PaymentIntent nosi `automatic_payment_methods[allow_redirects]=never` (vidi
+ * buildStripePaymentIntentParams u src/report/checkout.ts), pa Stripe ne nudi nijedan nacin
+ * placanja koji vodi na bankovnu ili vanjsku stranicu. 3D Secure kartice Stripe.js uz
+ * `if_required` rjesava u vlastitom okviru na stranici, ne preusmjeravanjem. `return_url` se i
+ * dalje salje jer ga Stripe.js ocekuje u `confirmParams`, ali se uz tu postavku ne koristi.
+ * Odgovor bez statusa zato nije "odlazak kod banke" nego greska.
  */
 export async function confirmPayment(args: {
   stripe: StripeLike;
@@ -191,11 +204,11 @@ export async function confirmPayment(args: {
   const status = out?.paymentIntent?.status ?? '';
   const paymentIntentId = String(out?.paymentIntent?.id ?? '');
   if (status === 'succeeded') return { kind: 'ok', paymentIntentId };
-  // `processing` NIJE uspjeh: novac jos nije naplacen (npr. odgodjeni bankovni nacini koje
-  // ukljucuje automatic_payment_methods), webhook-mor na njega ne knjizi nista, a
+  // `processing` NIJE uspjeh: novac jos nije naplacen (npr. odgodjeni bankovni nacini bez
+  // preusmjeravanja, ako su ukljuceni u Stripe nadzornoj ploci), webhook-mor na njega ne knjizi nista, a
   // payment_intent.succeeded moze stici tek za nekoliko dana. Zato poseban ishod.
   if (status === 'processing') return { kind: 'processing', paymentIntentId };
-  if (!status) return { kind: 'redirected' };
+  if (!status) return { kind: 'error', message: UNEXPECTED_REDIRECT_MESSAGE };
   return { kind: 'error', message: `Plaćanje nije dovršeno (${status}).` };
 }
 

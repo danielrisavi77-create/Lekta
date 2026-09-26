@@ -28,10 +28,39 @@ export function substituteCspTokens(source, { supabase }) {
  */
 export const STRIPE_CSP_EXPECTATIONS = Object.freeze([
   ['script-src', 'https://js.stripe.com'],
+  // Stripeove smjernice za CSP (docs.stripe.com/security/guide, odjeljak Stripe.js): Stripe.js po
+  // mogucnosti pokrece okvire na poddomenama js.stripe.com, pa i one moraju biti dopustene.
+  ['script-src', 'https://*.js.stripe.com'],
   ['connect-src', 'https://api.stripe.com'],
   ['frame-src', 'https://js.stripe.com'],
+  ['frame-src', 'https://*.js.stripe.com'],
   ['frame-src', 'https://hooks.stripe.com'],
 ]);
+
+/**
+ * Porijekla koja `payment` u Permissions-Policy MORA dopustiti (F18 krug 4). Apple Pay i Google
+ * Pay (Z36) rade kroz Payment Request API u Stripeovu okviru; `payment=()` ga zabranjuje i tom
+ * okviru, pa gumbi novcanika tiho nestanu, a placanje karticom i dalje radi, pa kvar nitko ne vidi.
+ * Clanovi su u obliku strukturiranog polja: `self` bez navodnika, porijekla u navodnicima.
+ */
+export const STRIPE_PAYMENT_PERMISSION_ORIGINS = Object.freeze(['self', '"https://js.stripe.com"', '"https://*.js.stripe.com"']);
+
+/** Vrijednost prvog Permissions-Policy retka u _headers datoteci, ili '' kad je nema. */
+export function permissionsPolicyLine(headers) {
+  return (headers.match(/^\s*Permissions-Policy:\s*(.+)$/m) || [])[1] ?? '';
+}
+
+/**
+ * Allowlista jedne znacajke kao niz clanova, `['*']` za zamjenski znak, ili `null` kad znacajke
+ * nema. Ime se trazi na granici clana (pocetak ili iza zareza), ne kao podniz.
+ */
+export function permissionsPolicyAllowlist(policy, feature) {
+  // String.raw: u obicnom template literalu `\s` bi postao samo `s`.
+  const m = policy.match(new RegExp(String.raw`(?:^|,)\s*${feature}=(\*|\(([^)]*)\))`));
+  if (!m) return null;
+  if (m[1] === '*') return ['*'];
+  return m[2].trim().split(/\s+/).filter(Boolean);
+}
 
 /** Vrijednost prve CSP linije u _headers datoteci, ili '' kad je nema. */
 export function cspLine(headers) {
@@ -80,6 +109,25 @@ export function cspHeaderProblems(headers) {
     const value = cspDirective(csp, name);
     if (!value) problems.push(`CSP nema direktivu ${name} (Stripe Payment Element se ne bi ucitao)`);
     else if (!value.split(/\s+/).includes(host)) problems.push(`CSP ${name} ne dopusta ${host}: "${value.trim()}"`);
+  }
+
+  // Permissions-Policy `payment`: otvoren tocno za vlastito porijeklo i Stripe.js okvire.
+  const policy = permissionsPolicyLine(headers);
+  if (!policy) {
+    problems.push('nema Permissions-Policy (audit security-05)');
+  } else {
+    const payment = permissionsPolicyAllowlist(policy, 'payment');
+    if (payment === null) {
+      problems.push(`Permissions-Policy nema znacajku payment: "${policy.trim()}"`);
+    } else if (payment.includes('*')) {
+      problems.push(`Permissions-Policy payment dopusta svako porijeklo: "${policy.trim()}"`);
+    } else if (payment.length === 0) {
+      problems.push('Permissions-Policy payment=() blokira Apple Pay i Google Pay u Stripe okviru');
+    } else {
+      for (const origin of STRIPE_PAYMENT_PERMISSION_ORIGINS) {
+        if (!payment.includes(origin)) problems.push(`Permissions-Policy payment ne dopusta ${origin}: "${policy.trim()}"`);
+      }
+    }
   }
 
   // form-action ne smije nositi host naplate: Payment Element ne salje obrazac nikamo.

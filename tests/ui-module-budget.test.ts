@@ -134,7 +134,13 @@ function bajtova(rel: string): number {
 // F18 KRUG 3 (2026-09-26): 357632 -> 357420, dakle -212 B. buildPaymentUrl vise nema granu za
 // ukinutog MoR pruzatelja (tri searchParams poziva i uvjet); spremljena stara vrijednost se
 // normalizira u src/config/production-config.ts (normalizePaymentProvider), ne u app.ts.
-const BUDZET_APP = 357420;
+// F18 KRUG 4 (2026-09-26): 357420 -> 357411, dakle -9 B, izmjereno. Racunica:
+//   `_stripeModalPromise: any` tipiziran kao susjedni `_checkoutClientPromise` (nalaz pregleda)   +50
+//   `catch(e: any)` u proceedReportCheckout bez neiskoristenog vezanja                             -8
+//   jednokratni `loadStripeModal()` uklonjen, `??=` uvoz stoji na jedinom mjestu poziva           -51
+//   neto                                                                                           -9
+// Tip je placen uklanjanjem funkcije koja je postojala za jedan poziv, ne dizanjem brojke.
+const BUDZET_APP = 357411;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

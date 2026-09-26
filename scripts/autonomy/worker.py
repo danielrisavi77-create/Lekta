@@ -24,7 +24,12 @@ from .policy import PolicyError, billing_allowed, canonical_path
 
 VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blocked")
 
-SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_", "STRIPE_", "AWS_", "AZURE_")
+# `LEMONSQUEEZY_` OSTAJE iako je pruzatelj ukinut (Stripe od 2026-09-23, F18): stari API kljuc moze jos
+# zivjeti u okolini vlasnika (profil ljuske, spremljeni .env), a filtar tajni brani OKOLINU, ne kod koji
+# je jos koristi. Uklanjanje prefiksa bi tu tajnu tiho proslijedilo svakom podagentu. Ovo je jedina
+# svjesna iznimka od kriterija da `scripts/` vise ne spominje ukinutog pruzatelja.
+SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_", "STRIPE_", "LEMONSQUEEZY_",
+                       "AWS_", "AZURE_")
 SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_API_KEY")
 

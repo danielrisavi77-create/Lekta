@@ -2566,12 +2566,12 @@ const MUTATIONS: Mutation[] = [
   {
     id: 'csp/stripe-frame-src-uklonjen',
     imitates:
-      'Bez `frame-src https://js.stripe.com https://hooks.stripe.com` vrijedi `default-src self`, ' +
+      'Bez `frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com` vrijedi `default-src self`, ' +
       'pa preglednik blokira Stripe iframe: Payment Element ostaje prazan okvir, a Vitest, tsc i ' +
       'csp-hash su u krugu 1 ostali zeleni jer nijedan nije gledao Stripe hostove.',
     caught: () => {
       // Tocan niz iz CSP retka, ne regex: rijec frame-src se javlja i u komentaru iznad njega.
-      const mut = builtHeaders().replace(' frame-src https://js.stripe.com https://hooks.stripe.com;', '');
+      const mut = builtHeaders().replace(' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com;', '');
       return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('frame-src'));
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
@@ -2609,6 +2609,48 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       const mut = builtHeaders().replace(/(form-action 'self' [^\r\n]*)/, '$1 https://js.stripe.com');
       return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('form-action nosi Stripe host'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  // F18 KRUG 4 (2026-09-26): Stripeove smjernice traze poddomene js.stripe.com u script-src i
+  // frame-src, a Apple Pay i Google Pay trebaju `payment` otvoren za Stripe okvir.
+  {
+    id: 'csp/stripe-js-poddomene-izbacene-iz-frame-src',
+    imitates:
+      'Stripe.js okvire po mogucnosti pokrece na poddomenama js.stripe.com (docs.stripe.com/security/guide). ' +
+      'Bez `https://*.js.stripe.com` u frame-src preglednik ih blokira, a polje za karticu ostaje prazno ' +
+      'samo u pregledniku; Vitest, tsc i build to ne vide.',
+    caught: () => {
+      const mut = builtHeaders().replace(
+        ' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com;',
+        ' frame-src https://js.stripe.com https://hooks.stripe.com;',
+      );
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('frame-src ne dopusta https://*.js.stripe.com'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'permissions-policy/payment-zatvoren',
+    imitates:
+      'Krug 1 do 3 F18: public/_headers je nosio `payment=()` iz audita security-05, pa je Payment ' +
+      'Request API bio zabranjen i Stripeovu okviru. Apple Pay i Google Pay (Z36) tiho nestanu, ' +
+      'kartica i dalje radi, pa kvar nitko ne primijeti.',
+    caught: () => {
+      const live = 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com")';
+      const mut = builtHeaders().replace(live, 'payment=()');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('payment=() blokira Apple Pay'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'permissions-policy/payment-otvoren-svima',
+    imitates:
+      'Mehanicko "otvaranje" znacajke zamjenskim znakom: `payment=*` bi Payment Request API dao ' +
+      'svakom ugradjenom okviru, a ne samo Stripeovu, sto je upravo ono sto security-05 zatvara.',
+    caught: () => {
+      const live = 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com")';
+      const mut = builtHeaders().replace(live, 'payment=*');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('payment dopusta svako porijeklo'));
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },

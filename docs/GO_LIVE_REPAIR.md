@@ -19,7 +19,7 @@ besplatno, uz dnevni cap), pa kasnije upali naplatu. Prijelaz je jedna Edge tajn
 klijentske izmjene.
 
 - **Faza 1 (besplatna beta):** koraci A, B (s `REPAIR_FREE_MODE=true`), C, E (samo `repairEndpoint`),
-  F, G. Korak D (Lemon Squeezy) se PRESKACE. Server preskace naplatu ali sve ostalo (auth, consent,
+  F, G. Korak D (naplata preko Stripea) se PRESKACE. Server preskace naplatu ali sve ostalo (auth, consent,
   upload, pohrana, "Moji popravci", brisanje, rate-limit) radi normalno. **Provjera izvora u
   korpusu ide u istu fazu** (odluka vlasnika): u beti vozi besplatno zajedno s popravkom.
 - **Faza 2 (naplata):** odradi korak D, pa u Edge tajnama makni `REPAIR_FREE_MODE` (ili `false`) i
@@ -178,9 +178,13 @@ Potvrdi da postoje (koriste ih repair-docx / delete-repair-job):
 - [ ] `IP_HASH_SALT`, `ALLOWED_ORIGIN` (npr. `https://lektahr.netlify.app`).
 - [ ] `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (Supabase postavlja automatski).
 
-Za prodaju (korak D), potvrdi LS tajne:
+Za prodaju (korak D), potvrdi Stripe tajne (postavljanje: `docs/GO_LIVE_NAPLATA.md`, odjeljci 4 i 5).
+Naplata je iskljucena tijekom bete (odluka vlasnika 2026-09-26), pa ih dok beta traje NE postavljaj:
 
-- [ ] `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`, `MOR_WEBHOOK_SECRET`, `CHECKOUT_REDIRECT_URL`.
+- [ ] `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY` (create-checkout).
+- [ ] `STRIPE_WEBHOOK_SECRET` (webhook-mor, provjera `Stripe-Signature`).
+- [ ] `STRIPE_ALLOW_TEST_MODE` samo privremeno za smoke test, u produkciji prazno.
+- [ ] `STRIPE_ACCOUNT_ID` samo uz Stripe Connect, inace prazno.
 
 ---
 
@@ -212,18 +216,22 @@ select cron.schedule(
 
 ---
 
-## D. Naplata (Lemon Squeezy) - VELIKI odgođeni dio (PRESKOCI u Fazi 1 / besplatnoj beti)
+## D. Naplata (Stripe) - VELIKI odgođeni dio (PRESKOCI u Fazi 1 / besplatnoj beti)
 
-Trenutno **nijedan** proizvod u `products` nema `mor_product_id` (LS variant). Bez toga
-`create-checkout` vraća `409 product_not_mapped`.
+**Naplata je iskljucena tijekom bete** (odluka vlasnika 2026-09-26). Stripe tok se ukljucuje tek
+kad beta prestane; do tada se nista iz ovog koraka ne postavlja u produkciji. Puni koraci su u
+`docs/GO_LIVE_NAPLATA.md` (odjeljci 3 do 7); ovdje je samo sazetak za popravak.
 
-1. [ ] U Lemon Squeezyju kreiraj variante po vrsti rada (cijene iz `src/report/pricing.ts`
-   `WORK_TYPE_TIERS`: seminarski 3,99 / završni 5,99 / diplomski 9,99 / doktorski 24,99 EUR).
-2. [ ] Mapiraj `products.mor_product_id` na LS variant id (za SKU-ove koje prodaješ). Popis
-   SKU-ova: `select id, work_type, audience from products where audience='retail';`
-   Primjer: `update products set mor_product_id='<LS_VARIANT_ID>' where id='slot_diplomski';`
-3. [ ] LS webhook -> `.../functions/v1/webhook-mor` (potpis `MOR_WEBHOOK_SECRET`).
-4. [ ] Redeploy `create-checkout` (WS-5 tier_mismatch enforcement).
+Pruzatelj je Stripe od 2026-09-23 (F18). Stripe NIJE Merchant of Record, pa je PDV obveza vlasnika.
+`products.mor_product_id` je NASLIJEDJEN i ne popunjava se: iznos dolazi iz `products.price_eur`, a
+webhook proizvod trazi po `products.id` iz Stripe `metadata[product_id]`, pa mapiranje ne postoji.
+
+1. [ ] Stripe racun aktiviran; Stripe proizvode NE kreiraj (cijene su iskljucivo u `products`,
+   `src/report/pricing.ts` `WORK_TYPE_TIERS`).
+2. [ ] Edge tajne `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` (vidi korak B).
+3. [ ] Stripe webhook -> `.../functions/v1/webhook-mor`, dogadjaji `payment_intent.succeeded` i
+   `charge.refunded` (potpis `STRIPE_WEBHOOK_SECRET`).
+4. [ ] Redeploy `create-checkout` i `webhook-mor`.
 
 > Repair CTA po vrsti rada je već ožičen (WS-5); treba samo mapirani proizvod + tajne.
 
@@ -242,7 +250,7 @@ checkoutEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/create-c
 **Faza 1 (besplatna beta):** postavi SAMO `repairEndpoint` (ostavi `checkoutEndpoint:''`). Uz
 `REPAIR_FREE_MODE=true` (korak B) server ne traži naplatu pa nema 402. **Faza 2 (naplata):** dodaj
 `checkoutEndpoint` i makni `REPAIR_FREE_MODE` (+ korak D). Bez `REPAIR_FREE_MODE`, a bez entitlementa,
-server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
+server vraća 402 (paywall) pa repair ne radi dok checkout i Stripe nisu živi.
 
 - [ ] Config postavljen.
 - [ ] **`LEKTA_REPAIR_LIVE=1` u Netlify build okolini** (uz `DEPLOY=1`). Od tog trena
@@ -269,7 +277,7 @@ server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
 - [ ] Pravne stranice žive: `/privatnost.html` i `/obrada-dokumenata.html` sadrže
   "automatski popravak" + "Moji popravci" + "dok ih ne obrišeš".
 - [ ] Landing FAQ "Šalje li se moj rad" spominje plaćeni popravak s pohranom.
-- [ ] E2E (LS test mode): kupi -> upload -> preuzmi popravljeni docx -> pojavi se u
+- [ ] E2E (Stripe test mode, uz privremeni `STRIPE_ALLOW_TEST_MODE=1`): kupi -> upload -> preuzmi popravljeni docx -> pojavi se u
   "Moji popravci" -> obriši -> nestane iz liste I iz Storagea.
 - [ ] Provjera izvora: popravi rad s hrvatskom literaturom pa potvrdi da se sekcija
   "Provjera izvora u hrvatskom korpusu" pojavi, da značka prikazuje **oba broja** (`x od y`) i da

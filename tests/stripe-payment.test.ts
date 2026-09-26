@@ -6,6 +6,8 @@
  * jedan pokusaj), a ne cinjenica da Stripe postoji.
  */
 import { describe, it, expect, beforeEach } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import {
   STRIPE_JS_URL,
@@ -15,6 +17,7 @@ import {
   confirmPayment,
   paymentAppearance,
   waitForEntitlement,
+  UNEXPECTED_REDIRECT_MESSAGE,
   type StripeFactory,
   type StripeLike,
   type StripeElements,
@@ -222,6 +225,77 @@ describe('mountPaymentElement', () => {
   });
 });
 
+/**
+ * Placeholder u polju placanja (nalaz pregleda F18 krug 4): bio je mapiran na `--line`, boju
+ * CRTE, koja na bijelom polju papira ima kontrast oko 1,5:1. Kontrast se ovdje racuna iz STVARNIH
+ * tokena u CSS-u koji /rad/ ucitava, a ne iz prepisanih vrijednosti, da gard ne istrune kad se
+ * paleta promijeni.
+ */
+describe('paymentAppearance: placeholder je citljiv', () => {
+  const css = (rel: string): string => readFileSync(join(process.cwd(), ...rel.split('/')), 'utf8');
+
+  /** Tijelo papirnog scopea iz page-app.css, u kojem zivi `.modal` (i #stripePaymentElement). */
+  function paperScope(): string {
+    const src = css('src/shared/page-app.css');
+    const m = src.match(/^\.analyzer-wrap,\.modal,[^{]*\{([^}]*)\}/m);
+    if (!m) throw new Error('papirni scope s .modal nije pronadjen u page-app.css');
+    return m[1];
+  }
+
+  function tokenIn(block: string, name: string): string {
+    // String.raw: `\s` u obicnom template literalu postaje samo `s`.
+    const m = block.match(new RegExp(name + String.raw`\s*:\s*([^;]+);`));
+    if (!m) throw new Error(`${name} nije definiran`);
+    return m[1].trim();
+  }
+
+  /** Razrijesi `var(--x)` kroz :root iz design-system.css; hex vraca kakav jest. */
+  function resolve(value: string): string {
+    const v = value.match(/^var\((--[a-z0-9-]+)\)$/);
+    if (!v) return value;
+    const root = css('src/shared/design-system.css').match(/:root\s*\{([^}]*)\}/);
+    if (!root) throw new Error(':root nije pronadjen u design-system.css');
+    return resolve(tokenIn(root[1], v[1]));
+  }
+
+  function luminance(hex: string): number {
+    const h = hex.replace('#', '');
+    const full = h.length === 3 ? [...h].map((c) => c + c).join('') : h;
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16) / 255).map((c) =>
+      c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4,
+    );
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  function contrast(a: string, b: string): number {
+    const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p);
+    return (x + 0.05) / (y + 0.05);
+  }
+
+  it('colorTextPlaceholder dolazi iz --muted (sekundarni tekst), ne iz --line (crta)', () => {
+    const el = document.createElement('div');
+    const tokens: Record<string, string> = { '--muted': '#6E6656', '--line': '#DCD4BF', '--panel': '#fff' };
+    const view = {
+      getComputedStyle: () =>
+        ({ getPropertyValue: (name: string) => tokens[name] ?? '', fontFamily: '' }) as unknown as CSSStyleDeclaration,
+    };
+    const vars = paymentAppearance(el, view).variables as Record<string, string>;
+    expect(vars.colorTextPlaceholder).toBe('#6E6656');
+    expect(vars.colorBackground).toBe('#fff');
+  });
+
+  it('--muted na pozadini polja (--panel) u papirnom scopeu ima kontrast >= 4,5:1', () => {
+    const scope = paperScope();
+    const muted = resolve(tokenIn(scope, '--muted'));
+    const panel = resolve(tokenIn(scope, '--panel'));
+    const line = resolve(tokenIn(scope, '--line'));
+    for (const hex of [muted, panel, line]) expect(hex).toMatch(/^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/);
+    expect(contrast(muted, panel)).toBeGreaterThanOrEqual(4.5);
+    // Kontrola da mjera razlikuje: stara mapa (--line) na istoj pozadini pada.
+    expect(contrast(line, panel)).toBeLessThan(4.5);
+  });
+});
+
 describe('confirmPayment (redirect: if_required)', () => {
   const elements = {} as StripeElements;
 
@@ -263,9 +337,15 @@ describe('confirmPayment (redirect: if_required)', () => {
     });
   });
 
-  it('prazan odgovor znaci odlazak na bankovnu stranicu, ne uspjeh', async () => {
+  it('prazan odgovor je greska (neocekivano preusmjeravanje), ne uspjeh ni cekanje banke', async () => {
+    // PaymentIntent nosi allow_redirects=never, pa odgovor bez greske i bez statusa nije
+    // legitiman ishod. Ne smije proci ni kao uspjeh ni kao tiho "dovrsava se kod banke".
     const { stripe } = stripeReturning({});
-    expect(await confirmPayment({ stripe, elements, returnUrl: 'x' })).toEqual({ kind: 'redirected' });
+    expect(await confirmPayment({ stripe, elements, returnUrl: 'x' })).toEqual({
+      kind: 'error',
+      message: UNEXPECTED_REDIRECT_MESSAGE,
+    });
+    expect(UNEXPECTED_REDIRECT_MESSAGE).toMatch(/Neočekivano preusmjeravanje/);
   });
 
   it('nedovrseno placanje nije uspjeh', async () => {

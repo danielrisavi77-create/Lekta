@@ -96,6 +96,11 @@ elif mode == "replay":
     sys.stdout.buffer.write(open(os.environ["FAKE_STDOUT"], "rb").read())
     sys.stderr.buffer.write(open(os.environ["FAKE_STDERR"], "rb").read())
     sys.exit(int(os.environ.get("FAKE_EXIT", "0")))
+elif mode == "dump_env":
+    # imena varijabli koje dijete STVARNO vidi (vrijednosti se ne zapisuju)
+    with open(os.environ["DUMP_ENV_FILE"], "w", encoding="utf-8") as fh:
+        json.dump(sorted(os.environ), fh)
+    print(json.dumps({"type": "turn.completed", "model": "gpt-5.6-sol"}))
 elif mode == "echo_prompt":
     assert "LEKTA task" in prompt
     print(json.dumps({"type": "item.completed", "item": {"id": "item_t", "type": "command_execution",
@@ -253,6 +258,28 @@ class WorkerTest(unittest.TestCase):
         env = scrubbed_env({"PATH": "x", "ANTHROPIC_API_KEY": "a", "GITHUB_TOKEN": "b", "gh_token": "c",
                             "SUPABASE_SERVICE_ROLE_KEY": "d", "NETLIFY_AUTH_TOKEN": "e", "HOME": "h", "NPM_TOKEN": "n"})
         self.assertEqual(sorted(env), ["HOME", "PATH"])
+
+    def test_child_env_has_no_payment_secrets(self):
+        # Tajne OBA pruzatelja naplate: Stripe (aktualni) i Lemon Squeezy (ukinut 2026-09-23, ali kljuc moze
+        # jos zivjeti u okolini vlasnika). Mjeri se okolina koju STVARNO dijete vidi kroz run_phase, ne samo
+        # povratna vrijednost pomocne funkcije.
+        secrets = {"STRIPE_SECRET_KEY": "sk_test_x", "STRIPE_WEBHOOK_SECRET": "whsec_x",
+                   "LEMONSQUEEZY_API_KEY": "ls_x", "lemonsqueezy_store_id": "1"}
+        self.assertEqual(sorted(scrubbed_env({"PATH": "x", **secrets})), ["PATH"])
+        dump = os.path.join(self.dir, "child_env.json")
+        job, env = self.job("dump_env")
+        env.update(secrets, DUMP_ENV_FILE=dump)
+        # Baseline: tajne SU u okolini roditelja, pa odsutnost u djetetu nije slucajnost ulaza.
+        for key in secrets:
+            self.assertIn(key, env)
+        run_phase(job, "plan", profile(), cwd=self.dir, timeout_seconds=60, env=env,
+                  artifact_dir=os.path.join(self.dir, "art-env"))
+        self.assertTrue(os.path.exists(dump), "dijete se nije pokrenulo, pa nema sto mjeriti")
+        with open(dump, encoding="utf-8") as fh:
+            child_keys = {k.upper() for k in json.load(fh)}
+        self.assertIn("DUMP_ENV_FILE", child_keys)
+        for key in ("STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "LEMONSQUEEZY_API_KEY", "LEMONSQUEEZY_STORE_ID"):
+            self.assertNotIn(key, child_keys)
 
     def test_parsers_and_stream_classification(self):
         self.assertFalse(parse_provider_output("codex", "", 0)["ok"])

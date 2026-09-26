@@ -128,6 +128,8 @@ describe('create-checkout handler', () => {
     expect(call.body.get('metadata[user_id]')).toBe('user-1');
     expect(call.body.get('metadata[product_id]'), 'webhook trazi proizvod po OVOM id-u').toBe('slot_diplomski');
     expect(call.body.get('receipt_email')).toBe('kupac@example.com');
+    // Placanje ne smije napustiti stranicu: Stripe ne nudi nacine s preusmjeravanjem (Z36).
+    expect(call.body.get('automatic_payment_methods[allow_redirects]')).toBe('never');
 
     // Pristanak je zapisan PRIJE Stripe poziva, sa serverskim vremenom.
     const consent = calls.find((c) => c.table === 'checkout_consents' && writeOp(c) === 'insert')!;

@@ -5,7 +5,8 @@
  * Zasto zaseban modul, a ne jos jedan blok u `app.ts`: ratchet `tests/ui-module-budget.test.ts`
  * trazi da monolit `app.ts` ne raste, a i broj rucnih dodira `hidden` ondje ima strop. Cijela
  * logika (ucitavanje Stripe.js, montiranje, potvrda, stanje gumba, otvaranje i zatvaranje) zato
- * zivi ovdje; `app.ts` zadrzava samo lijeni most od tri retka.
+ * zivi ovdje; `app.ts` zadrzava samo tipiziran lijeni uvoz (`_stripeModalPromise`) i jedan poziv
+ * u `proceedReportCheckout` (ozicenje cuva tests/stripe-payment-wiring.test.ts).
  *
  * Ovisnosti o `app.ts` se PRIMAJU kao argumenti (toast, trapModal, releaseModal, config,
  * token, onPaid), a ne uvoze, da modul ne zatvori kruzni uvoz s monolitom koji ga lijeno ucitava.
@@ -37,8 +38,9 @@ import {
 export interface StripePaymentArgs {
   out: { clientSecret: string; publishableKey: string; paymentIntentId?: string };
   toast: (message: string) => void;
-  trapModal: (el: Element) => void;
-  releaseModal: (el: Element) => void;
+  /** Isti potpis kao trapModal/releaseModal iz modal-utils.ts; modal je uvijek HTMLElement. */
+  trapModal: (el: HTMLElement) => void;
+  releaseModal: (el: HTMLElement) => void;
   /** Supabase URL i anon kljuc (productionConfig) za provjeru je li pravo knjizeno. */
   config: EntitlementPollConfig;
   token: string | null;
@@ -62,7 +64,7 @@ function el<T extends HTMLElement>(doc: Document, id: string): T | null {
 
 interface ActiveModal {
   modal: HTMLElement;
-  release: (el: Element) => void;
+  release: (el: HTMLElement) => void;
   doc: Document;
   onKey: (e: KeyboardEvent) => void;
 }
@@ -149,9 +151,9 @@ export async function openStripePaymentModal(args: StripePaymentArgs): Promise<v
         args.toast(PAYMENT_PROCESSING_MESSAGE);
         return;
       }
-      // Nacini placanja koji obavezno traze bankovnu stranicu odu na returnUrl; to nije uspjeh
-      // i ne smije se tako prikazati.
-      if (status) status.textContent = res.kind === 'redirected' ? 'Plaćanje se dovršava kod banke.' : res.message;
+      // Greska, ukljucujuci odgovor bez statusa (neocekivano preusmjeravanje, jer PaymentIntent
+      // nosi allow_redirects=never): modal ostaje otvoren s porukom, nista se ne otkljucava.
+      if (status) status.textContent = res.message;
     } catch {
       if (status) status.textContent = 'Greška pri potvrdi plaćanja.';
     } finally {

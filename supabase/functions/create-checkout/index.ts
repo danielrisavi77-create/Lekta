@@ -9,7 +9,10 @@
 // Tanki omotac: odluka i tijelo Stripe poziva su u testiranom coreu src/report/checkout.ts.
 //
 // Odgovor 200 nosi `clientSecret` PaymentIntenta i `publishableKey`; Payment Element se montira
-// u stranici, pa nema odlaska na hosted checkout ni povratnog redirecta.
+// u stranici, pa nema odlaska na hosted checkout. Povratnog redirecta nema zato sto PaymentIntent
+// nosi `automatic_payment_methods[allow_redirects]=never` (buildStripePaymentIntentParams): Stripe
+// tada ne nudi nijedan nacin placanja koji vodi na bankovnu ili vanjsku stranicu, a kartica s
+// 3D Secureom, Apple Pay i Google Pay (Z36) dovrsavaju se u okviru na stranici.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { createCheckoutHandler } from './handler.ts';
 

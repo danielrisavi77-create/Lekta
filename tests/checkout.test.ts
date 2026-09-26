@@ -126,6 +126,12 @@ describe('buildStripePaymentIntentParams', () => {
     });
   });
 
+  it('iskljucuje nacine placanja s preusmjeravanjem (Z36: kartica, Apple Pay, Google Pay)', () => {
+    // Bez ovoga bi Stripe smio ponuditi nacin placanja koji kupca odvodi na bankovnu stranicu,
+    // a klijent nakon povratka na return_url nema tok koji bi placanje dovrsio.
+    expect(fields(buildStripePaymentIntentParams(base))['automatic_payment_methods[allow_redirects]']).toBe('never');
+  });
+
   it('metadata nosi user_id i KATALOSKI product_id (ne naslijedjeni variant id)', () => {
     const f = fields(buildStripePaymentIntentParams(base));
     expect(f['metadata[user_id]']).toBe('u1');

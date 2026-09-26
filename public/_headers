@@ -27,7 +27,14 @@
 # Bez `preload` i s ovime na *.netlify.app subdomeni (netlify.app je vec HSTS-preloadan na razini
 # registra); `preload` dodati TEK uz vlastitu domenu (npr. lekta.hr) koju trajno zakljucavas na HTTPS.
 # Permissions-Policy (audit security-05): zakljucaj senzore koje app NE koristi (camera/microphone/
-# geolocation/payment) da eventualni injection ne moze zatraziti pristup. Cisto aditivno, nizak rizik.
+# geolocation) da eventualni injection ne moze zatraziti pristup. Cisto aditivno, nizak rizik.
+# `payment` NIJE zatvoren (F18 krug 4, 2026-09-26): Apple Pay i Google Pay (Z36) rade kroz Payment
+# Request API unutar Stripeova okvira, a `payment=()` bi ga zabranio i tom okviru, pa bi gumbi
+# novcanika tiho nestali. Dopusteni su samo vlastito porijeklo i Stripe.js okviri (js.stripe.com i
+# njegove poddomene, na kojima Stripe.js pokrece okvire, vidi CSP ispod). Sintaksa je strukturirano
+# polje: `self` bez navodnika, porijekla u dvostrukim navodnicima; Netlify vrijednost salje doslovno.
+# Zamjenski znak u porijeklu (`https://*.js.stripe.com`) Chrome podrzava od verzije 108; preglednik
+# koji ga ne poznaje preskace samo taj clan, ne cijelo zaglavlje. Gard: scripts/lib/csp-headers.mjs.
 # connect-src / form-action su SUZENI s `https:` na konkretnu allowlistu (Faza 4, dokaziva
 # privatnost): time slanje podataka izvan ovih hostova postaje tehnicki nemoguce, pa tvrdnja
 # "dokument ne napusta uredaj" (za besplatnu analizu) nije samo copy nego politika preglednika.
@@ -44,6 +51,11 @@
 #   https://doi.org           - DOI resolver (provjera postojanja reference)
 #   https://api.stripe.com    - Stripe API koji Payment Element zove iz stranice (connect-src)
 #   https://js.stripe.com     - Stripe.js (script-src) i njegov iframe s poljima kartice (frame-src)
+#   https://*.js.stripe.com   - Stripeove smjernice za CSP (docs.stripe.com/security/guide, Stripe.js)
+#                               traze i poddomene u script-src i frame-src: Stripe.js okvire po
+#                               mogucnosti pokrece na zasebnim porijeklima pod js.stripe.com. Bez
+#                               njih bi preglednik te okvire blokirao. Zamjenski znak je ogranicen
+#                               na Stripeovu domenu i NIJE u connect-src ni form-action (SEC-01/02).
 #   https://hooks.stripe.com  - iframe za dodatnu autentikaciju (3D Secure) tijekom placanja
 #
 # form-action vise NE nosi token naplate. Do 2026-09-23 je ondje stajao token trgovine
@@ -61,12 +73,12 @@
 # preglednik blokira. To je namjerno: nepredvidjeni odljev podataka pada zatvoreno. `npm run dev`
 # ne koristi _headers pa HMR websocket ostaje raditi.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://js.stripe.com 'sha256-2WXZ91HPQjlJfl48ll0ykv+2MIDKaJHDuqTFXI1BEm4=' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org https://api.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://js.stripe.com https://*.js.stripe.com 'sha256-2WXZ91HPQjlJfl48ll0ykv+2MIDKaJHDuqTFXI1BEm4=' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org https://api.stripe.com; frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://js.stripe.com" "https://*.js.stripe.com")
 
 # performance-06 (docs/AUDIT_MASTER.md, poglavlje 7): content-hashirani asseti (Vite fingerprint u imenu,
 # npr. index-CzOlIHYC.js, *.woff2) su nepromjenjivi po imenu, pa se smiju kesirati godinu dana bez

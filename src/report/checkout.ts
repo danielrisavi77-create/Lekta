@@ -104,12 +104,19 @@ export function stripeAmountCents(priceEur: number): number {
  * `metadata[product_id]` nosi KATALOZNI id proizvoda, pa webhook proizvod trazi po
  * `products.id`. Naslijedjeni stupac `products.mor_product_id` time vise nije ni u jednom
  * zivom putu naplate.
+ *
+ * `automatic_payment_methods[allow_redirects]=never`: Z36 trazi samo karticu, Apple Pay i Google
+ * Pay, a nijedan od njih ne odvodi kupca sa stranice (3D Secure kartice Stripe.js rjesava u
+ * vlastitom okviru, uz `redirect: 'if_required'`). Nacini placanja koji trebaju bankovnu ili
+ * vanjsku stranicu time se na PaymentIntentu uopce ne nude, pa placanje nikad ne napusta
+ * stranicu i nema povratnog redirecta koji bi klijent morao obraditi.
  */
 export function buildStripePaymentIntentParams(ctx: StripePaymentIntentContext): string {
   const params = new URLSearchParams();
   params.set('amount', String(ctx.amountCents));
   params.set('currency', ctx.currency.toLowerCase());
   params.set('automatic_payment_methods[enabled]', 'true');
+  params.set('automatic_payment_methods[allow_redirects]', 'never');
   params.set('metadata[user_id]', ctx.userId);
   params.set('metadata[product_id]', ctx.productId);
   if (ctx.referralCode) params.set('metadata[referral_code]', ctx.referralCode);

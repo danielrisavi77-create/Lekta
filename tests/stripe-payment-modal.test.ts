@@ -16,7 +16,7 @@ import {
   PAYMENT_PROCESSING_MESSAGE,
 } from '../src/ui/stripe-payment-modal';
 import type { EntitlementWait } from '../src/report/stripe-payment';
-import { resetStripeJsLoader } from '../src/report/stripe-payment';
+import { resetStripeJsLoader, UNEXPECTED_REDIRECT_MESSAGE } from '../src/report/stripe-payment';
 
 const MARKUP = `
 <div class="modal-backdrop hidden" id="stripePaymentModal">
@@ -134,12 +134,15 @@ describe('openStripePaymentModal', () => {
     expect(btn('confirmStripePayment').disabled).toBe(false);
   });
 
-  it('odlazak na bankovnu stranicu se NE prikazuje kao uspjeh', async () => {
+  it('odgovor bez statusa je greska neocekivanog preusmjeravanja: nema otkljucavanja, modal ostaje otvoren', async () => {
     const { args, rec } = harness({});
     await openStripePaymentModal(args);
     await btn('confirmStripePayment').onclick!(new MouseEvent('click'));
     expect(rec.paid).toBe(0);
-    expect(document.getElementById('stripePaymentStatus')!.textContent).toBe('Plaćanje se dovršava kod banke.');
+    expect(rec.waitedFor).toEqual([]);
+    expect(document.getElementById('stripePaymentStatus')!.textContent).toBe(UNEXPECTED_REDIRECT_MESSAGE);
+    expect(document.getElementById('stripePaymentModal')!.classList.contains('hidden')).toBe(false);
+    expect(btn('confirmStripePayment').disabled).toBe(false);
   });
 
   it('Escape zatvara modal (rukovatelj je u modulu, ne u app.ts)', async () => {
