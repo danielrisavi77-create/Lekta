@@ -19,6 +19,20 @@ prazna sekcija je odgovor, izbrisana sekcija je propust koji se ne vidi.
 
 <!-- Zalijepi relevantan ispis, ne samo "prolazi". -->
 
+## Nije dokazano
+
+<!-- Sto ova promjena NE dokazuje (npr. nije otvoreno u Wordu, puni gate nije lokalno pokrenut,
+     ponasanje na produkciji nije izmjereno). "Nista" je valjan odgovor samo ako je istinit. -->
+
+## Opseg
+
+<!-- Oba retka su obvezna; CI job `pr-opis` pada ako nedostaju ili ako pise "nema" a package.json
+     dodaje paket u dependencies/devDependencies. Izracunaj ih s
+     `node scripts/agents/pr-lines.mjs --izracunaj` i zamijeni retke ispod. -->
+
+Neto redaka: +<dodano>/-<uklonjeno>
+Nove ovisnosti: nema | <popis paketa>
+
 ## Baza
 
 - [ ] Ne dira bazu
