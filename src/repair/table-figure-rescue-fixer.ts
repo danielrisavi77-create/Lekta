@@ -1,4 +1,5 @@
 import { anchorFingerprintForXml } from '../analysis/element-structure.ts';
+import { hasMergedCellsXml } from '../analysis/merged-cells.ts';
 import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface TableFigureRescueTable {
@@ -101,13 +102,16 @@ function upsertChild(parentXml: string, parentTag: string, childXml: string, mat
  * celija preko vise stupaca dobila sirinu jednog stupca i grid bi se raspao. Na takvoj tablici
  * equalColumns se zato ne primjenjuje: ni grid ni tcW se ne diraju. Ostale akcije rade kao prije.
  *
- * Kao analiza (DOM, localName), i ovdje se gleda lokalno ime uz BILO KOJI prefiks, pa drugi
- * prefiks za isti imenski prostor ne zaobilazi gard. XML komentari se prije toga uklanjaju, da
- * zakomentirani element ne ugasi equalColumns na tablici koja spojenih celija nema.
+ * Krug 2: detekcija je ISTA funkcija koju koristi analiza (`hasMergedCellsXml`), s XML NCName
+ * prefiksom (i ne-ASCII) i s gridSpan val=1 koji nije spajanje. Ime ostaje izvezeno radi
+ * postojecih poziva i testova.
  */
 export function hasMergedCells(tableXml: string): boolean {
-  return /<(?:[A-Za-z_][\w.-]*:)?(?:gridSpan|hMerge|vMerge)\b/.test(tableXml.replace(/<!--[\s\S]*?-->/g, ''));
+  return hasMergedCellsXml(tableXml);
 }
+
+/** T65 krug 2 (M3): trag u izlazu kad equalColumns nije proveden; izvjestaj prikazuje afterLabel. */
+export const EQUAL_COLUMNS_SKIPPED_NOTE = 'ujednačavanje stupaca preskočeno (spojene ćelije)';
 
 function patchTable(xml: string, table: TableFigureRescueTable): string {
   let result = xml;
@@ -286,12 +290,19 @@ export function tableFigureRescueFixer(parts: DocxXmlParts, params: TableFigureR
   const insertAfter = new Map<number, string>();
   let changed = false;
   let skippedEqualColumns = false;
+  // Tablica kojoj je equalColumns bio JEDINA trazena akcija, a preskocen je: za nju Lekta nista
+  // ne moze napraviti, pa bez druge izmjene to nije 'already-ok' nego 'unsupported-structure'.
+  let skippedWithoutOtherActions = false;
   for (const table of params.tables) {
     const child = layout.children[table.bodyChildIndex];
     if (!child || child.tag !== 'tbl') return noOp(parts, 'no-target');
     if (hasUnsupported(child.xml)) return noOp(parts, 'unsupported-structure');
     if (anchorFingerprintForXml('table', child.xml) !== table.anchorFingerprint && !tableAlreadyPatched(child.xml, table)) return noOp(parts, 'unsupported-structure');
-    if (table.actions.equalColumns && hasMergedCells(child.xml)) skippedEqualColumns = true;
+    if (table.actions.equalColumns && hasMergedCells(child.xml)) {
+      skippedEqualColumns = true;
+      const otherActions = Object.entries(table.actions).some(([key, value]) => key !== 'equalColumns' && value === true);
+      if (!otherActions && !table.landscape?.enabled) skippedWithoutOtherActions = true;
+    }
     const next = patchTable(child.xml, table);
     if (next !== child.xml) changed = true;
     replacements.set(table.bodyChildIndex, next);
@@ -332,10 +343,17 @@ export function tableFigureRescueFixer(parts: DocxXmlParts, params: TableFigureR
     if (next !== located.xml) changed = true;
     replacements.set(index, next);
   }
-  // T65: 'already-ok' bi korisniku rekao da je tablica vec uredna; kad je equalColumns preskocen
-  // zbog spojenih celija, istina je da tu akciju Lekta ne moze sigurno izvesti.
-  if (!changed) return noOp(parts, skippedEqualColumns ? 'unsupported-structure' : 'already-ok');
+  // T65: kad je equalColumns bio jedina akcija tablice i preskocen je zbog spojenih celija, istina
+  // je da tu akciju Lekta ne moze sigurno izvesti ('unsupported-structure', izvjestaj: "nije bilo
+  // moguce"). Krug 2: ako je ista tablica trazila i druge akcije, a nista se nije promijenilo, te
+  // su akcije vec na cilju (drugi prolaz nad vec popravljenom tablicom), pa je odgovor 'already-ok';
+  // preskok equalColumns vec je prijavljen u izlazu prvog prolaza (afterLabel dolje).
+  if (!changed) return noOp(parts, skippedWithoutOtherActions ? 'unsupported-structure' : 'already-ok');
   let inner = layout.children.map((child, index) => `${insertBefore.get(index) ?? ''}${replacements.get(index) ?? child.xml}${insertAfter.get(index) ?? ''}`).join('');
   const nextDocument = parts.documentXml.slice(0, layout.innerStart) + inner + parts.documentXml.slice(layout.innerEnd);
-  return { parts: { ...parts, documentXml: nextDocument }, applied: true, beforeLabel: 'tablice i slike', afterLabel: 'spašene tablice i slike' };
+  // T65 krug 2 (M3): mijesani zahtjev s preskocenim equalColumns ne smije izgledati kao potpuno
+  // primijenjen. afterLabel ide u changelog, a renderSummary u repair-panelu ga prikazuje po stavci
+  // (isti obrazac kao napomena o ponovljenom tekstu u apply-fixers.ts). FixerOutput se ne siri.
+  const afterLabel = skippedEqualColumns ? `spašene tablice i slike; ${EQUAL_COLUMNS_SKIPPED_NOTE}` : 'spašene tablice i slike';
+  return { parts: { ...parts, documentXml: nextDocument }, applied: true, beforeLabel: 'tablice i slike', afterLabel };
 }

@@ -1,5 +1,6 @@
 import { els, attr } from '../utils/helpers';
 import { anchorFingerprintForXml, type ElementCandidate, type ElementStructure } from './element-structure';
+import { hasMergedCellsXml, isMergeMarker } from './merged-cells';
 
 export interface RescueMediaInfo {
   widthPx?: number;
@@ -21,7 +22,8 @@ export interface TableRescueCandidate {
   nested: boolean;
   unsupported: boolean;
   /**
-   * T65: tablica ima spojene celije (w:gridSpan, w:hMerge ili w:vMerge). Popravak tada NE
+   * T65: tablica ima spojene celije (w:gridSpan s val razlicitim od 1, w:hMerge ili w:vMerge),
+   * procijenjene funkcijom `hasMergedCellsXml` koju koristi i fixer. Popravak tada NE
    * ujednacuje stupce (table-figure-rescue-fixer preskace equalColumns). Polje ne ulazi u
    * `unsupported` ni `confidence`, pa ne mijenja bodovanje ni predodabir tablice.
    */
@@ -130,6 +132,37 @@ function elementXml(node: Element): string {
   return typeof XMLSerializer !== 'undefined' ? new XMLSerializer().serializeToString(node) : node.toString();
 }
 
+/**
+ * T65 krug 2: tekst tablice za `hasMergedCellsXml`. Analiza radi u tri DOM okoline: worker i
+ * golden korpus (@xmldom/xmldom, bez XMLSerializera, `toString()` daje XML), inline fallback
+ * (nativni preglednik) i testovi (xmldom cvorovi uz happy-dom XMLSerializer, koji za tudji cvor
+ * vraca prazan niz). Zato se uzima prvi rezultat koji je stvarno XML.
+ */
+function tableXmlText(node: Element): string | null {
+  try {
+    const serialized = typeof XMLSerializer !== 'undefined' ? new XMLSerializer().serializeToString(node) : '';
+    if (serialized.trimStart().startsWith('<')) return serialized;
+  } catch {
+    // Serijalizator ne podrzava ovaj cvor; probaj toString() nize.
+  }
+  const text = String(node);
+  return text.trimStart().startsWith('<') ? text : null;
+}
+
+/**
+ * Spojene celije: ista funkcija kao u fixeru (`hasMergedCellsXml`) nad tekstom tablice. Kad
+ * nijedna okolina ne da XML tekst, ista odluka (`isMergeMarker`) se primjenjuje na DOM, da se
+ * analiza ne vrati tiho na "nema spajanja".
+ */
+function tableHasMergedCells(table: Element): boolean {
+  const xml = tableXmlText(table);
+  if (xml !== null) return hasMergedCellsXml(xml);
+  return els(table, '*').some((node) => {
+    const attributes = Array.from(node.attributes ?? []).map((item) => ` ${item.name}="${item.value}"`).join('');
+    return isMergeMarker(localName(node), attributes);
+  });
+}
+
 function tableMetrics(table: Element, candidate: ElementCandidate, availableWidthEmu: number | null, warnings: RescueWarning[]): TableRescueCandidate {
   const rows = directChildren(table, 'tr');
   const grid = directChildren(directChildren(table, 'tblGrid')[0] || table, 'gridCol');
@@ -149,7 +182,10 @@ function tableMetrics(table: Element, candidate: ElementCandidate, availableWidt
   }
   const nested = hasDescendant(table, ['tbl']) && rows.some((row) => hasDescendant(row, ['tbl']));
   const unsupported = nested || hasDescendant(table, ['ins', 'del', 'fldSimple', 'txbxContent', 'sdtContent']);
-  const mergedCells = hasDescendant(table, ['gridSpan', 'hMerge', 'vMerge']);
+  // T65 krug 2: ista funkcija kao u fixeru, nad istim tekstom tablice. DOM localName bi ovdje
+  // rekao "spojeno" i za gridSpan val=1 i za prefikse koje fixer nije prepoznavao, pa bi se
+  // analiza i popravak razisli bas na tablici koju popravak dira.
+  const mergedCells = tableHasMergedCells(table);
   const wide = tableWidthEmu != null && availableWidthEmu != null && tableWidthEmu > availableWidthEmu;
   const evidence = [`${rows.length} redaka`, `${columnCount} stupaca`];
   if (tableWidthEmu != null) evidence.push('pronađena širina tablice');

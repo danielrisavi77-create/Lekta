@@ -101,7 +101,7 @@ import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItems
 import { buildRepairPanelHandle } from '../src/ui/repair-panel';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
-import { tableFigureRescueFixer } from '../src/repair/table-figure-rescue-fixer';
+import { hasMergedCells, tableFigureRescueFixer } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -320,6 +320,21 @@ function t65WidthsAfterEqualColumns(tbl: string): { before: string; after: strin
 }
 const t65Preserved = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.before === r.after; };
 const t65Equalized = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.after.includes('<w:gridCol w:w="4500"/><w:gridCol w:w="4500"/>') && !r.after.includes('w:w="2000"'); };
+/**
+ * T65 krug 2 (M1). Ista tablica, ali spajanje nosi NE-ASCII prefiks vezan uz Wordov namespace.
+ * Analiza (DOM) takvu celiju vidi kao spojenu; fixer ju je vidio kao obicnu jer je prefiks
+ * prihvacao samo iz ASCII klase. Gard hvata kvar kad fixer i ovdje sacuva grid i tcW, a dijeljena
+ * detekcija (ista za analizu i fixer) kaze da je tablica spojena.
+ */
+const t65NonAsciiPrefix = (tbl: string) => tbl
+  .replace(`<w:tbl ${T65_W}>`, `<w:tbl ${T65_W} xmlns:ž="http://schemas.openxmlformats.org/wordprocessingml/2006/main">`)
+  .replace('<w:gridSpan w:val="2"/>', '<ž:gridSpan ž:val="2"/>');
+/** T65 krug 2 (M3): izlaz fixera za mijesani zahtjev (equalColumns + center + repeatHeader). */
+function t65MixedRequest(tbl: string): { applied: boolean; afterLabel: string } {
+  const documentXml = `<w:document ${T65_W}><w:body>${tbl}</w:body></w:document>`;
+  return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true, repeatHeader: true } }], figures: [] });
+}
+const T65_SKIP_NOTE = 'ujednačavanje stupaca preskočeno';
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1850,6 +1865,30 @@ const MUTATIONS: Mutation[] = [
       + 'spojenog stupca nisu provjerene',
     caught: () => t65Preserved(t65Table('<w:vMerge w:val="restart"/>', '<w:vMerge/>')),
     cleanBefore: () => t65Equalized(t65Table('', '')),
+  },
+  {
+    id: 'tablica/equal-columns-ne-ascii-prefiks',
+    imitates:
+      'analiza vidi <ž:gridSpan> kao spojenu celiju, a fixer prefiks prihvaca samo iz ASCII klase, '
+      + 'pa istu tablicu tretira kao obicnu i prepise tcW spojene celije sirinom jednog stupca',
+    caught: () => t65Preserved(t65NonAsciiPrefix(t65Table('<w:gridSpan w:val="2"/>', '')))
+      && hasMergedCells(t65NonAsciiPrefix(t65Table('<w:gridSpan w:val="2"/>', ''))),
+    // gridSpan w:val="1" nije spajanje: bez toga bi gard mogao "hvatati" tako da svaki gridSpan gasi equalColumns.
+    cleanBefore: () => t65Equalized(t65Table('', '')) && t65Equalized(t65Table('<w:gridSpan w:val="1"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-tihi-preskok',
+    imitates:
+      'mijesani zahtjev (equalColumns + druge akcije) na tablici sa spojenim celijama vrati applied:true '
+      + 'bez traga da equalColumns nije proveden, pa izvjestaj tvrdi da je sve primijenjeno',
+    caught: () => {
+      const out = t65MixedRequest(t65Table('<w:gridSpan w:val="2"/>', ''));
+      return out.applied && out.afterLabel.includes(T65_SKIP_NOTE);
+    },
+    cleanBefore: () => {
+      const out = t65MixedRequest(t65Table('', ''));
+      return out.applied && !out.afterLabel.includes(T65_SKIP_NOTE);
+    },
   },
   // ---------------------------------------------------------------------------
   // GATE IZDANJA (plan T19): pet stanja u kojima objavljeni artefakt ne odgovara onome sto je dokazano.

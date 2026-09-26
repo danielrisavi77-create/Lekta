@@ -121,10 +121,13 @@ export interface FinalDocumentInspectorFormDefinition {
 }
 
 export interface TableFigureRescueFormDefinition {
-  tables: Array<{ id: string; bodyChildIndex: number; anchorFingerprint: string; summary: string; wide: boolean; selected: boolean; actions: Record<string, boolean>; typography?: Record<string, unknown>; source?: { paragraphIndex: number; anchorFingerprint: string; text: string; selected: boolean }; landscape?: { beforeFingerprint: string; afterFingerprint: string; selected: boolean }; evidence: string[]; }>
+  /** `disabledActions`: akcija -> vidljivo objasnjenje zasto je kucica onemogucena (T65: spojene celije). */
+  tables: Array<{ id: string; bodyChildIndex: number; anchorFingerprint: string; summary: string; wide: boolean; selected: boolean; actions: Record<string, boolean>; disabledActions?: Record<string, string>; typography?: Record<string, unknown>; source?: { paragraphIndex: number; anchorFingerprint: string; text: string; selected: boolean }; landscape?: { beforeFingerprint: string; afterFingerprint: string; selected: boolean }; evidence: string[]; }>
   figures: Array<{ id: string; paragraphIndex: number; drawingIndex: number; anchorFingerprint: string; maxWidthEmu?: number; summary: string; lowResolution: boolean; selected: boolean; actions: Record<string, boolean>; altText: string; evidence: string[]; }>;
   summary: string;
   buildParams: (form: TableFigureRescueFormDefinition) => Record<string, unknown>;
+  /** T65 krug 2: potvrdni tekst iz STVARNO odabranih akcija; obrazac ga osvjezava pri svakoj promjeni. */
+  describe?: (form: TableFigureRescueFormDefinition) => string;
 }
 
 export interface SectionSurgeryFormDefinition {
@@ -733,13 +736,11 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
 
       // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
       // identicno kad se ne razdvoje, pa uredan rad u "uskladi sve" toku djeluje kao kvar.
-      const reasons = result.skippedReasons ?? {};
-      const alreadyOk: string[] = [];
-      const cannotFix: string[] = [];
-      for (const ruleId of result.skipped) {
-        const label = ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId;
-        (reasons[ruleId] === 'already-ok' ? alreadyOk : cannotFix).push(label);
-      }
+      const { alreadyOk, cannotFix } = splitSkippedByReason(
+        result.skipped,
+        result.skippedReasons ?? {},
+        (ruleId) => ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId,
+      );
       // Vrata integriteta su odbila isporuku: popravak bi proizveo neispravan paket. NIJE isto
       // sto i "nema se sto popraviti" (dolje), pa mora imati vlastitu, iskrenu poruku.
       if (result.integrityFailure) {
@@ -1209,7 +1210,11 @@ export function renderTableFigureRescueControls(li: HTMLElement, item: Repairabl
   const summary = document.createElement('p');
   summary.textContent = definition.summary;
   section.appendChild(summary);
-  const sync = () => { item.params = definition.buildParams(definition); };
+  // T65 krug 2 (M2): potvrdni tekst prati odabir, inace bi tvrdio zahvate koji su odznaceni.
+  const sync = () => {
+    item.params = definition.buildParams(definition);
+    if (definition.describe) item.confirmationText = definition.describe(definition);
+  };
   const addGroup = (title: string) => { const h = document.createElement('h4'); h.textContent = title; section.appendChild(h); };
   addGroup('Tablice');
   for (const table of definition.tables) {
@@ -1223,7 +1228,11 @@ export function renderTableFigureRescueControls(li: HTMLElement, item: Repairabl
     const actionLabels: Record<string, string> = { fitToTextWidth: 'Prilagodi širini teksta', equalColumns: 'Ujednači stupce', repeatHeader: 'Ponavljaj zaglavlje', preventRowSplit: 'Ne cijepaj retke', center: 'Centriraj tablicu', applyProfileTypography: 'Primijeni profilnu tipografiju', separateSource: 'Odvoji izvor tablice' };
     for (const [key, value] of Object.entries(table.actions)) {
       const actionLabel = document.createElement('label'); const actionCheck = document.createElement('input'); actionCheck.type = 'checkbox'; actionCheck.checked = value === true;
-      actionCheck.addEventListener('change', () => { table.actions[key] = actionCheck.checked; sync(); }); actionLabel.append(actionCheck, document.createTextNode(' ' + (actionLabels[key] || key))); actions.appendChild(actionLabel);
+      // T65 krug 2 (M3): akcija koju fixer na ovoj tablici ne izvodi je vidljiva, ali onemogucena
+      // s objasnjenjem, umjesto da je samo tiho odznacena.
+      const disabledReason = table.disabledActions?.[key];
+      if (disabledReason) { actionCheck.checked = false; actionCheck.disabled = true; }
+      actionCheck.addEventListener('change', () => { table.actions[key] = actionCheck.checked; sync(); }); actionLabel.append(actionCheck, document.createTextNode(' ' + (actionLabels[key] || key) + (disabledReason ? ` (${disabledReason})` : ''))); actions.appendChild(actionLabel);
     }
     section.appendChild(actions);
     if (table.source) {
@@ -1679,6 +1688,22 @@ export function renderConfirmation(box: HTMLElement, items: RepairableItem[], on
 
   box.appendChild(confirmBtn);
   box.appendChild(cancelBtn);
+}
+
+/**
+ * RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju identicno kad
+ * se ne razdvoje. Izdvojeno kao cista funkcija (T65 krug 2) da test moze dokazati u koju granu
+ * ide razlog koji fixer vrati, a ne samo tvrditi sam razlog.
+ */
+export function splitSkippedByReason(
+  skipped: readonly string[],
+  reasons: ApplyFixersResult['skippedReasons'],
+  labelOf: (ruleId: string) => string,
+): { alreadyOk: string[]; cannotFix: string[] } {
+  const alreadyOk: string[] = [];
+  const cannotFix: string[] = [];
+  for (const ruleId of skipped) (reasons[ruleId] === 'already-ok' ? alreadyOk : cannotFix).push(labelOf(ruleId));
+  return { alreadyOk, cannotFix };
 }
 
 // Hrvatska sklonidba uz broj: 1 popravak, 2-4 popravka, 5+ popravaka
