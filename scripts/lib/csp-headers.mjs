@@ -127,6 +127,14 @@ export function cspHeaderProblems(headers) {
       for (const origin of STRIPE_PAYMENT_PERMISSION_ORIGINS) {
         if (!payment.includes(origin)) problems.push(`Permissions-Policy payment ne dopusta ${origin}: "${policy.trim()}"`);
       }
+      // Ne samo da obvezni clanovi moraju biti prisutni, popis mora biti TOCAN skup: visak
+      // porijekla (npr. tudji host ubacen pored Stripeovih) prosiruje payment iznad namjere i
+      // gard bi to tiho progledao da provjerava samo "sadrzi", ne i "sadrzi samo".
+      for (const origin of payment) {
+        if (!STRIPE_PAYMENT_PERMISSION_ORIGINS.includes(origin)) {
+          problems.push(`Permissions-Policy payment dopusta neocekivano porijeklo ${origin}: "${policy.trim()}"`);
+        }
+      }
     }
   }
 

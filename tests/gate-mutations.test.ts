@@ -2654,6 +2654,19 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },
+  {
+    id: 'permissions-policy/payment-visak-porijekla',
+    imitates:
+      'Krug 5 F18: netko doda tudje porijeklo pored Stripeovih (npr. kroz kopiraj-zalijepi iz ' +
+      'druge konfiguracije) bez uklanjanja `*`. Gard koji samo trazi obvezne clanove to progleda: ' +
+      'payment je i dalje siri od namjere, samo skriveno iza validne liste.',
+    caught: () => {
+      const live = 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com")';
+      const mut = builtHeaders().replace(live, 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com" "https://evil.example")');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('payment dopusta neocekivano porijeklo') && p.includes('evil.example'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
   // GRANICA PRODAJE (F18 krug 3, 2026-09-26). Uklanjanjem uvjeta na `mor_product_id` Katedra
   // passovi (0071: retail, aktivni, s cijenom) postali su kupivi kroz Lektin checkout. Mutacija je
   // STVARNI redak iz migracije 0071 kakav bi create-checkout dobio iz baze; baseline je cijeli

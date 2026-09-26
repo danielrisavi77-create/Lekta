@@ -187,8 +187,9 @@ export const UNEXPECTED_REDIRECT_MESSAGE =
  * buildStripePaymentIntentParams u src/report/checkout.ts), pa Stripe ne nudi nijedan nacin
  * placanja koji vodi na bankovnu ili vanjsku stranicu. 3D Secure kartice Stripe.js uz
  * `if_required` rjesava u vlastitom okviru na stranici, ne preusmjeravanjem. `return_url` se i
- * dalje salje jer ga Stripe.js ocekuje u `confirmParams`, ali se uz tu postavku ne koristi.
- * Odgovor bez statusa zato nije "odlazak kod banke" nego greska.
+ * dalje salje obrambeno, jer `confirmParams` to polje trazi; uz `allow_redirects=never` do
+ * preusmjeravanja ne bi smjelo doci. Stvarno ponasanje Stripe.js u pregledniku nije provjereno
+ * ovim testovima. Odgovor bez statusa zato nije "odlazak kod banke" nego greska.
  */
 export async function confirmPayment(args: {
   stripe: StripeLike;
