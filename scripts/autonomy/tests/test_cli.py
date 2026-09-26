@@ -1,15 +1,22 @@
+import contextlib
 import json
 import os
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 from scripts.autonomy import cli
+from scripts.autonomy.policy import is_control_path
 from scripts.autonomy.store import Store
+from scripts.autonomy.tests.test_worker import git_repo as worker_git_repo
+from scripts.autonomy.worker import branch_changed_paths
 
 NOW = 1_800_000_000
 SHA = "48c1fc9e85f50213e5b313bc67cfbc0a45a28607"
+PROOF_REL = "docs/generated/RELEASE_PROOF.json"
+CORPUS_REL = "docs/generated/repair-real-corpus.json"
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 EXAMPLE = os.path.join(ROOT, "config", "autonomy.example.json")
 
@@ -32,16 +39,28 @@ def ci_source(conclusion="failure"):
 
 
 class RecordingAdapters:
-    def __init__(self, verdicts=("needs_verification",) * 3, complete=True, publish_status="proposed", change_class="auto_low_risk"):
+    def __init__(self, verdicts=("needs_verification",) * 3, complete=True, publish_status="proposed", change_class="auto_low_risk",
+                 extra=None, commit_result=None):
         self.calls = []
         self.verdicts = list(verdicts)
         self.complete = complete
         self.publish_status = publish_status
         self.change_class = change_class
+        # Polja koja adapter tvrdi uz verdict (`attempt_spent`, `provider_called`); zadano ih nema, pa je
+        # zateceno ponasanje nepromijenjeno.
+        self.extra = dict(extra or {})
+        # Radnikov commit: zadano uspjeh, jer git ovdje nitko ne dira.
+        self.commit_result = dict(commit_result or {"status": "committed", "sha": SHA})
 
     def run_phase(self, task, phase, profile):
         self.calls.append(("run", phase))
-        return {"verdict": self.verdicts.pop(0), "reason": "fake", "provider": "fake", "requested_model": "x", "reported_models": ["x"]}
+        result = {"verdict": self.verdicts.pop(0), "reason": "fake", "provider": "fake", "requested_model": "x", "reported_models": ["x"]}
+        result.update(self.extra)
+        return result
+
+    def commit(self, task):
+        self.calls.append(("commit",))
+        return dict(self.commit_result)
 
     def classify(self, task):
         self.calls.append(("classify",))
@@ -96,7 +115,9 @@ class TickTest(unittest.TestCase):
         adapters = RecordingAdapters(publish_status="proposed")
         out = cli.tick(config(mode="propose", publisherEnabled=True), NOW, False, store=self.store, home=self.home, sources=ci_source(), adapters=adapters, profile=profile())
         self.assertEqual(out["outcome"], "proposed")
-        self.assertEqual([c[0] for c in adapters.calls], ["run", "run", "run", "classify", "verify", "publish"])
+        self.assertEqual([c[0] for c in adapters.calls],
+                         ["run", "run", "run", "commit", "classify", "verify", "publish"],
+                         "commit ide POSLIJE pregleda a PRIJE klasifikacije: snimka promjena se uzima u njemu")
         task = self.store.get_task(out["claimed"])
         self.assertEqual(task["status"], "needs_human")
         self.assertIsNone(self.store.lease())
@@ -132,6 +153,29 @@ class TickTest(unittest.TestCase):
         finally:
             store2.close()
 
+    def test_blocked_without_a_started_call_refunds_only_the_attempt(self):
+        """Spoj koji je nedostajao: `attempt_spent` iz radnika mora stici do baze i kroz granu `blocked`.
+
+        BASELINE: blocked bez te tvrdnje i dalje trosi pokusaj (staro ponasanje).
+        MUTACIJA: uz tvrdnju se pokusaj vraca, ali dnevni slot NE, jer je poziv providera vec krenuo.
+        """
+        base = RecordingAdapters(verdicts=("blocked",))
+        out = cli.tick(config(mode="propose"), NOW, False, store=self.store, home=self.home, sources=ci_source(),
+                       adapters=base, profile=profile())
+        self.assertEqual(out["outcome"], "blocked")
+        self.assertEqual(self.store.get_task(out["claimed"])["attempts"], 1, "bez tvrdnje pokusaj ostaje potrosen")
+        self.store.transition(out["claimed"], "blocked", "queued", {}, NOW + 1)
+
+        adapters = RecordingAdapters(verdicts=("blocked",), extra={"attempt_spent": False,
+                                                                   "reason": "provider_unusable: codex sandbox"})
+        out = cli.tick(config(mode="propose"), NOW + 2, False, store=self.store, home=self.home, sources=ci_source(),
+                       adapters=adapters, profile=profile())
+        self.assertEqual(out["outcome"], "blocked")
+        task = self.store.get_task(out["claimed"])
+        self.assertEqual(task["attempts"], 1, "drugi claim je vracen; ostaje samo pokusaj iz prvog ticka")
+        self.assertEqual(self.store.daily_counter("jobs", NOW + 2), 2,
+                         "provider JE pokrenut u oba ticka, pa dnevni slot ostaje potrosen")
+
     def test_paused_store_does_nothing(self):
         self.store.set_paused(True)
         adapters = RecordingAdapters()
@@ -152,6 +196,1097 @@ class TickTest(unittest.TestCase):
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}), "astra")
 
+    def test_auto_provider_fallback_is_opt_in_and_zero_probe(self):
+        grok_only = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": False, "approved_models": ["gpt-6-astra", "gpt-5.6-sol"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet", "opus"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        wait = config(grokEnabled=True, implementerAgent="auto", providerFallback="wait")
+        self.assertIsNone(cli._agent_for(wait, "planning", {}, grok_only))
+        self.assertIsNone(cli._agent_for(wait, "implementing", {}, grok_only))
+        fallback = config(grokEnabled=True, implementerAgent="auto", providerFallback="authorized")
+        self.assertEqual(cli._agent_for(fallback, "planning", {}, grok_only), "grok")
+        self.assertEqual(cli._agent_for(fallback, "implementing", {}, grok_only), "build")
+
+    def test_review_router_never_uses_the_implementers_provider(self):
+        profile = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+                "claude": {"allowed": True, "approved_models": ["opus"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        cfg = config(grokEnabled=True, providerFallback="authorized")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}, profile), "astra")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}, profile), "grok")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "build"}, profile), "astra")
+
+
+
+QUEUE_FIXTURE = [
+    {"id": "T00", "title": "gotov zadatak", "status": "done", "dependsOn": []},
+    {"id": "T01", "title": "spreman bez ovisnosti", "status": "ready", "dependsOn": []},
+    {"id": "T02", "title": "spreman uz nedovrsenu ovisnost", "status": "ready", "dependsOn": ["T01"]},
+    {"id": "T03", "title": "spreman uz dovrsenu ovisnost", "status": "ready", "dependsOn": ["T00"]},
+    {"id": "T04", "title": "blokiran", "status": "blocked", "dependsOn": []},
+]
+
+
+def make_repo(tasks=None):
+    """Minimalan radnikov repo: samo koordinatorov red. Kontroler ga cita, nikad ne pise."""
+    repo = tempfile.mkdtemp()
+    agents = os.path.join(repo, "docs", "agents")
+    os.makedirs(agents)
+    with open(os.path.join(agents, "tasks.json"), "w", encoding="utf-8") as fh:
+        json.dump({"tasks": tasks if tasks is not None else QUEUE_FIXTURE}, fh)
+    return repo
+
+
+def make_git_repo(tasks=None):
+    """Radnikov repo kakav `workerRepoPath` mora biti: stvaran git, feature grana, cisto stablo."""
+    repo = make_repo(tasks)
+
+    def run(*args):
+        out = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, check=False, shell=False)
+        assert out.returncode == 0, (args, out.stderr)
+
+    run("init", "-q")
+    # Ime zadane grane NIJE konstanta nego `init.defaultBranch` stroja, a ovi testovi tvrdo trebaju
+    # `master` (osnovica posla, `rev-parse master`, objava). Bez ovoga cetiri testa mjere konfiguraciju
+    # stroja umjesto koda i padaju na svakom stroju s `main`. Isto vrijedi za `core.autocrlf`.
+    run("symbolic-ref", "HEAD", "refs/heads/master")
+    run("config", "core.autocrlf", "false")
+    run("config", "user.email", "radnik@lokalno")
+    run("config", "user.name", "Radnik")
+    run("config", "commit.gpgsign", "false")
+    run("add", "-A")
+    run("commit", "-qm", "red zadataka")
+    run("checkout", "-qb", "wf/radnik")
+    return repo
+
+
+def inbox_source(plan_task="T01", symptom="ux-gate pada"):
+    scope = {"area": "ci"}
+    if plan_task is not None:
+        scope["planTask"] = plan_task
+    return [{"id": "inbox", "kind": "inbox", "items": [dict(kind="ci_failure", location="check/ux-gate@master",
+                                                            symptom=symptom, source_revision=SHA, observed_at=NOW - 60,
+                                                            scope=scope)]}]
+
+
+def fake_job(command="codex"):
+    return {"command": command, "args": ["exec"], "prompt": "LEKTA task", "requestedModel": "m", "dryRun": True}
+
+
+class PlanTaskGateTest(unittest.TestCase):
+    """Tocka 1 nalaza 2026-09-13: ciljni zadatak se razrjesava PRIJE ijednog poziva modela.
+
+    BASELINE dokazuje da ispravan `ready` zadatak i dalje prolazi (gard koji sve gasi nije gard).
+    MUTACIJE su tri oblika promasaja iz zivog ticka 26ba9cf7.
+    """
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.adapters = cli.DefaultAdapters(config(workerRepoPath=self.repo), self.home)
+
+    def task(self, plan_task, task_id="task-1"):
+        scope = {} if plan_task is None else {"planTask": plan_task}
+        return {"id": task_id, "signal": {"scope": scope}}
+
+    def drive(self, task, phase="planning"):
+        # Git okolina radnikova stabla se mjeri zasebno (WorktreeGateTest, ImplementWorktreeGuardTest);
+        # fixture repo je obican direktorij, pa bi njezin izostanak ovdje prekrio ono sto se mjeri.
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()) as prep, \
+             mock.patch.object(cli, "implementation_worktree_blocked", return_value=None), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}) as call:
+            result = self.adapters.run_phase(task, phase, profile())
+        return result, prep, call
+
+    def test_baseline_ready_task_still_reaches_the_provider(self):
+        result, prep, call = self.drive(self.task("T01"))
+        self.assertEqual(result["verdict"], "needs_verification", result)
+        self.assertEqual(result["plan_task"], "T01")
+        self.assertEqual(result["agent"], "astra")
+        self.assertEqual(prep.call_count, 1)
+        self.assertEqual(prep.call_args.args[1], "T01", "prepare mora dobiti razrijesen zadatak, ne T00")
+        self.assertEqual(call.call_count, 1)
+
+    def test_baseline_ready_task_with_finished_dependency_passes(self):
+        result, prep, _ = self.drive(self.task("T03"))
+        self.assertEqual(result["verdict"], "needs_verification", result)
+        self.assertEqual(prep.call_args.args[1], "T03")
+
+    def test_signal_without_plan_task_never_calls_a_provider(self):
+        result, prep, call = self.drive(self.task(None))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertTrue(result["reason"].startswith("no_ready_plan_task"), result["reason"])
+        self.assertFalse(result["attempt_spent"])
+        self.assertEqual(prep.call_count, 0)
+        self.assertEqual(call.call_count, 0)
+
+    def test_done_task_never_calls_a_provider(self):
+        # Tocno zivi tick 26ba9cf7: fallback na T00, koji je u redu `done`.
+        result, prep, call = self.drive(self.task("T00"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("T00 je done", result["reason"])
+        self.assertEqual((prep.call_count, call.call_count), (0, 0))
+
+    def test_unfinished_dependency_never_calls_a_provider(self):
+        result, prep, call = self.drive(self.task("T02"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("ovisnost T01 nije done", result["reason"])
+        self.assertEqual((prep.call_count, call.call_count), (0, 0))
+
+    def test_unknown_task_and_unreadable_queue_never_call_a_provider(self):
+        result, prep, _ = self.drive(self.task("T99"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("T99 nije u redu", result["reason"])
+        self.assertEqual(prep.call_count, 0)
+        os.remove(os.path.join(self.repo, "docs", "agents", "tasks.json"))
+        result, prep, _ = self.drive(self.task("T01"))
+        self.assertEqual(result["verdict"], "needs_human")
+        self.assertIn("nije citljiv", result["reason"])
+        self.assertEqual(prep.call_count, 0)
+
+    def test_gate_holds_on_every_phase_and_on_a_repeated_tick(self):
+        # Jednoprolazni gard je slijep: drugi identican prolaz mora dati isti ishod, i dalje bez poziva.
+        for phase in ("planning", "implementing", "reviewing"):
+            for attempt in (1, 2):
+                result, prep, call = self.drive(self.task("T00"), phase=phase)
+                self.assertEqual(result["verdict"], "needs_human", (phase, attempt))
+                self.assertTrue(result["reason"].startswith("no_ready_plan_task"), (phase, attempt, result["reason"]))
+                self.assertEqual((prep.call_count, call.call_count), (0, 0), (phase, attempt))
+
+
+class ReviewWithoutQueueWriteTest(unittest.TestCase):
+    """Tocka 2 nalaza: pregled prolazi bez ijedne izmjene `docs/agents/tasks.json`."""
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.queue_path = os.path.join(self.repo, "docs", "agents", "tasks.json")
+        with open(self.queue_path, "rb") as fh:
+            self.queue_before = fh.read()
+        self.adapters = cli.DefaultAdapters(config(workerRepoPath=self.repo), self.home)
+        self.task = {"id": "task-1", "signal": {"scope": {"planTask": "T01"}}}
+
+    def run_phase(self, phase, prep):
+        # Git okolina se mjeri zasebno (ImplementWorktreeGuardTest i TickPlanTaskTest); ovdje bi njezin izostanak
+        # samo maskirao ono sto se mjeri, jer je fixture repo obican direktorij, ne worktree.
+        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "implementation_worktree_blocked", return_value=None), \
+             mock.patch.object(cli, "resolve_base_ref", return_value="master"), \
+             mock.patch.object(cli, "start_job_branch", return_value={"status": "ok", "base_sha": SHA}), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            return self.adapters.run_phase(self.task, phase, profile())
+
+    def test_review_uses_the_implementer_recorded_in_this_tick(self):
+        prep = mock.Mock(return_value=fake_job())
+        self.assertEqual(self.run_phase("implementing", prep)["agent"], "sonnet")
+        result = self.run_phase("reviewing", prep)
+        self.assertEqual(result["verdict"], "needs_verification", result)
+        self.assertEqual(result["agent"], "astra", "recenzent mora biti drugi provider od implementatora")
+        kwargs = prep.call_args.kwargs
+        self.assertEqual(kwargs["override_status"], "in_review")
+        self.assertEqual(kwargs["override_implementer"], "sonnet")
+        with open(self.queue_path, "rb") as fh:
+            self.assertEqual(fh.read(), self.queue_before, "kontroler ne smije dirati koordinatorov red")
+
+    def test_review_without_a_recorded_implementer_is_blocked_not_guessed(self):
+        # MUTACIJA: pregled bez prethodne implementacije u ovom ticku. Pogadjanje bi moglo dati istog
+        # providera kao recenzent, cime bi pravilo o drugom provideru tiho otislo.
+        prep = mock.Mock(return_value=fake_job())
+        result = self.run_phase("reviewing", prep)
+        self.assertEqual(result["verdict"], "blocked")
+        self.assertIn("implementer_unknown", result["reason"])
+        self.assertFalse(result["attempt_spent"])
+        self.assertEqual(prep.call_count, 0)
+
+    def test_implement_phase_never_sends_an_override(self):
+        # Override ne smije postati rupa kroz koju se zaobilazi provjera spremnosti iz tocke 1.
+        prep = mock.Mock(return_value=fake_job())
+        self.run_phase("implementing", prep)
+        self.assertIsNone(prep.call_args.kwargs["override_status"])
+        self.assertIsNone(prep.call_args.kwargs["override_implementer"])
+
+    def test_plan_phase_never_sends_an_override(self):
+        prep = mock.Mock(return_value=fake_job())
+        self.run_phase("planning", prep)
+        self.assertIsNone(prep.call_args.kwargs["override_status"])
+        self.assertIsNone(prep.call_args.kwargs["override_implementer"])
+
+
+class GatedAdapters(cli.DefaultAdapters):
+    """Pravi `run_phase` (ono sto se mjeri), lazna verifikacija i objava (ne diramo git ni mrezu)."""
+
+    def _start_job_branch(self, task):
+        # Fixture repo je obican direktorij; granu posla mjeri `JobBranchTest` i `PerJobEvidenceTest`.
+        return None
+
+    def commit(self, task):
+        return {"status": "clean", "reason": "fixture repo nije git"}
+
+    def classify(self, task):
+        return "auto_low_risk", []
+
+    def verify(self, task):
+        return {"complete": True, "staleness": {"verdict": "fresh"}, "controlFilesChanged": [], "candidateSha": SHA}
+
+    def publish(self, task, evidence, store, now, change_class):
+        return {"status": "proposed", "reason": "fake", "pr": 7}
+
+
+class TickPlanTaskTest(unittest.TestCase):
+    """Isti kvar na razini cijelog ticka, s pravim redom i pravim `_drive_task`-om."""
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+
+    def tearDown(self):
+        self.store.close()
+
+    def run_tick(self, sources, now=NOW, cfg=None, worktree_ok=True):
+        cfg = cfg or config(mode="propose", workerRepoPath=self.repo)
+        adapters = GatedAdapters(cfg, self.home)
+        prep = mock.Mock(return_value=fake_job())
+        guard = mock.patch.object(cli, "implementation_worktree_blocked", return_value=None) if worktree_ok \
+            else mock.patch.object(cli, "implementation_worktree_blocked", wraps=cli.implementation_worktree_blocked)
+        with mock.patch.object(cli, "prepare_job_via_node", prep), guard, \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            out = cli.tick(cfg, now, False, store=self.store,
+                           home=self.home, sources=sources, adapters=adapters, profile=profile())
+        return out, prep
+
+    def test_signal_without_plan_task_costs_no_call_and_no_attempt(self):
+        out, prep = self.run_tick(ci_source())
+        self.assertEqual(out["outcome"], "needs_human")
+        self.assertEqual(prep.call_count, 0, "nijedan poziv providera ne smije krenuti")
+        task = self.store.get_task(out["claimed"])
+        self.assertEqual(task["attempts"], 0, "pokusaj se ne trosi kad poziv nije ni poceo")
+        self.assertTrue(task["status"] == "needs_human")
+        payload = json.loads(self.store.events(task["id"])[-1]["sanitized_payload"])
+        self.assertTrue(str(payload.get("reason", "")).startswith("no_ready_plan_task"), payload)
+
+    def test_repeated_tick_repeats_the_verdict_without_spending_attempts(self):
+        first, prep = self.run_tick(ci_source())
+        self.assertEqual(first["outcome"], "needs_human")
+        self.store.transition(first["claimed"], "needs_human", "queued", {}, NOW + 1)
+        second, prep2 = self.run_tick(ci_source(), now=NOW + 2)
+        self.assertEqual(second["outcome"], "needs_human")
+        self.assertEqual(second["claimed"], first["claimed"])
+        self.assertEqual(prep2.call_count, 0)
+        self.assertEqual(self.store.get_task(first["claimed"])["attempts"], 0)
+
+    def test_ready_plan_task_drives_all_three_phases(self):
+        # BASELINE nad cijelim tickom: ispravan signal i dalje prolazi plan -> implement -> review.
+        out, prep = self.run_tick(inbox_source("T01"))
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual([p["phase"] for p in out["phases"]][:3], ["planning", "implementing", "reviewing"])
+        self.assertEqual([p.get("agent") for p in out["phases"]][:3], ["astra", "sonnet", "astra"])
+        self.assertEqual(prep.call_count, 3)
+        self.assertEqual([c.args[1] for c in prep.call_args_list], ["T01", "T01", "T01"])
+
+    def test_a_shared_checkout_blocks_before_the_plan_call_not_after_it(self):
+        """Preduvjet radnikova stabla se mjeri PRIJE plana, ne tek u implementaciji (nalaz 2026-09-13).
+
+        Posao koji ne moze proci kroz implementaciju ne smije prije toga platiti puni poziv modela i dnevni slot:
+        uz `maxNewJobsPerDay=3` to je do tri uzaludna poziva dnevno dok covjek ne postavi `workerRepoPath`.
+        Fixture repo nije git worktree, dakle tocno stanje instalacijskog checkouta na masteru.
+        """
+        out, prep = self.run_tick(inbox_source("T01"), worktree_ok=False)
+        self.assertEqual(out["outcome"], "blocked", out)
+        last = out["phases"][-1]
+        self.assertEqual(last["phase"], "planning", "blokada mora doci prije ijedne pripreme")
+        self.assertTrue(str(last["reason"]).startswith("implement_unsafe"), out["phases"])
+        self.assertEqual(prep.call_count, 0, "nijedan poziv modela ne smije krenuti")
+        task = self.store.get_task(out["claimed"])
+        self.assertEqual(task["attempts"], 0, "blokada prije poziva ne trosi pokusaj")
+        self.assertEqual(self.store.daily_counter("jobs", NOW), 0,
+                         "poziv nije ni krenuo, pa se dnevni slot vraca")
+
+
+class DailyJobSlotTest(unittest.TestCase):
+    """Signali bez ciljnog zadatka ne smiju pojesti dan (nalaz 2026-09-13 nad cli.py).
+
+    Izmjereno prije popravka: izvor `ci` prati tri workflowa; kad su sva tri crvena, tri ticka zavrse kao
+    `needs_human` bez ijednog poziva modela, ali svaki potrosi jedan od tri dnevna slota, pa cetvrti tick javi
+    `idle: ... limit dosegnut` i signal s ispravnim `planTask` toga dana nikad ne dodje na red.
+    """
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo, maxNewJobsPerDay=3)
+
+    def tearDown(self):
+        self.store.close()
+
+    def sources(self):
+        # Tri crvena workflowa (prioritet 40, bez planTask) i jedan rucni signal s ispravnim ciljem (prioritet
+        # 25), dakle POSLJEDNJI u redu. Tocno raspored iz izmjerenog slucaja.
+        red = [dict(kind="ci_failure", location=f"check/w{n}@master", symptom=f"w{n} conclusion=failure",
+                    source_revision=SHA, observed_at=NOW - 60, scope={"area": "ci"}) for n in range(3)]
+        ready = dict(kind="manual", location="inbox/t01", symptom="pokreni T01", source_revision=SHA,
+                     observed_at=NOW - 60, scope={"area": "repo", "planTask": "T01"})
+        return [{"id": "inbox", "kind": "inbox", "items": red + [ready]}]
+
+    def run_tick(self, now):
+        adapters = GatedAdapters(self.cfg, self.home)
+        prep = mock.Mock(return_value=fake_job())
+        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "implementation_worktree_blocked", return_value=None), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            return cli.tick(self.cfg, now, False, store=self.store, home=self.home, sources=self.sources(),
+                            adapters=adapters, profile=profile()), prep
+
+    def test_three_signals_without_a_plan_task_do_not_starve_the_one_that_would_pass(self):
+        for n in range(3):
+            out, prep = self.run_tick(NOW + n)
+            self.assertEqual(out["outcome"], "needs_human", out)
+            self.assertEqual(prep.call_count, 0, "nijedan poziv modela nije krenuo")
+            self.assertEqual(self.store.daily_counter("jobs", NOW + n), 0,
+                             "slot koji nije potrosio model mora se vratiti")
+        out, prep = self.run_tick(NOW + 3)
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual(prep.call_count, 3, "sve tri faze ispravnog zadatka su izvedene")
+        self.assertEqual(self.store.daily_counter("jobs", NOW + 3), 1, "tek ovaj posao je potrosio slot")
+
+    def test_without_the_slot_refund_the_fourth_tick_is_idle(self):
+        """MUTACIJA nad mehanizmom: kad `refund_daily_job` nestane, cetvrti tick vise ne dobije posao.
+
+        Time je dokazano da zelenilo iznad dolazi bas od povrata slota, a ne od necega uzvodno.
+        """
+        real = Store.transition
+
+        def without_refund(store, task_id, expected, target, payload=None, now=None):
+            payload = dict(payload or {})
+            payload.pop("refund_daily_job", None)
+            return real(store, task_id, expected, target, payload, now)
+
+        with mock.patch.object(Store, "transition", without_refund):
+            for n in range(3):
+                self.assertEqual(self.run_tick(NOW + n)[0]["outcome"], "needs_human")
+            self.assertEqual(self.store.daily_counter("jobs", NOW + 2), 3)
+            out, prep = self.run_tick(NOW + 3)
+        self.assertIn("idle", out["outcome"])
+        self.assertEqual(prep.call_count, 0)
+
+
+class AmendedSignalTest(unittest.TestCase):
+    """Operaterov ispravak inbox datoteke mora stici do zadatka (nalaz 2026-09-13 nad signals.py/store.py)."""
+
+    def setUp(self):
+        self.repo = make_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo)
+
+    def tearDown(self):
+        self.store.close()
+
+    def run_tick(self, sources, now):
+        adapters = GatedAdapters(self.cfg, self.home)
+        prep = mock.Mock(return_value=fake_job())
+        with mock.patch.object(cli, "prepare_job_via_node", prep), \
+             mock.patch.object(cli, "implementation_worktree_blocked", return_value=None), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "needs_verification", "reason": "fake"}):
+            return cli.tick(self.cfg, now, False, store=self.store, home=self.home, sources=sources,
+                            adapters=adapters, profile=profile()), prep
+
+    def test_a_corrected_plan_task_reaches_the_task_on_the_next_tick(self):
+        """BASELINE: krivo napisan `planTask` je needs_human uz razlog koji IMENUJE oblik.
+
+        MUTACIJA (operaterov ispravak): ista datoteka s ispravnim `T01`, isti fingerprint, i zadatak se vraca
+        u red pa prolazi. Prije popravka je `signal_json` bio zamrznut na prvom upisu, zadatak je zauvijek
+        ostajao `needs_human`, a jedini izlaz je bio rucni zahvat u SQLite.
+        """
+        out, prep = self.run_tick(inbox_source("T7"), NOW)
+        self.assertEqual(out["outcome"], "needs_human")
+        self.assertEqual(prep.call_count, 0)
+        task_id = out["claimed"]
+        payload = json.loads(self.store.events(task_id)[-1]["sanitized_payload"])
+        self.assertIn("nije u obliku Tnn", payload["reason"], payload)
+        self.assertIn("T7", payload["reason"], "poruka mora reci STO je operater napisao")
+
+        out, prep = self.run_tick(inbox_source("T01"), NOW + 1)
+        self.assertEqual(out["claimed"], task_id, "ispravak ne stvara novi zadatak")
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual(prep.call_count, 3)
+        self.assertEqual([c.args[1] for c in prep.call_args_list], ["T01"] * 3)
+
+    def test_a_missing_plan_task_says_so_and_a_repeated_identical_signal_stays_put(self):
+        out, _ = self.run_tick(inbox_source(None), NOW)
+        payload = json.loads(self.store.events(out["claimed"])[-1]["sanitized_payload"])
+        self.assertIn("signal nema planTask", payload["reason"])
+        # NEGATIVNA KONTROLA: isti signal jos jednom, bez ijedne promjene, ne smije vratiti zadatak u red.
+        again, prep = self.run_tick(inbox_source(None), NOW + 1)
+        self.assertIn("idle", again["outcome"], again)
+        self.assertEqual(prep.call_count, 0)
+        self.assertEqual(self.store.get_task(out["claimed"])["status"], "needs_human")
+
+
+class CommittingAdapters(GatedAdapters):
+    """Kao GatedAdapters, ali sa STVARNIM commitom radnikova stabla: to je ono sto se ovdje mjeri."""
+
+    commit = cli.DefaultAdapters.commit
+
+
+class TwoJobsInARowTest(unittest.TestCase):
+    """Kontroler se ne smije zakljucati poslije TOCNO jednog posla (nalaz 2026-09-13).
+
+    Gard prije implementacije trazi cisto stablo, a klasifikacija, verifikacija i objava mjere upravo
+    NECOMMITANE promjene; dok ih nitko nije spremio, drugi posao je zauvijek `implement_unsafe: radno stablo
+    nije cisto`. Zato ovaj test vodi DVA uzastopna posla u ISTOM stvarnom git stablu, s pravim gardom (bez
+    mocka) i pravim commitom, po pravilu "jednoprolazni gard je slijep".
+    """
+
+    def setUp(self):
+        self.repo = make_git_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo)
+
+    def tearDown(self):
+        self.store.close()
+
+    def run_tick(self, symptom, now, adapters_cls=CommittingAdapters):
+        """Jedan tick s implementacijom koja STVARNO pise u radnikovo stablo, kao sto to radi model."""
+        adapters = adapters_cls(self.cfg, self.home)
+        written = "src/autonomija/" + symptom.replace(" ", "-") + ".ts"
+
+        def writing_run_phase(job, agent_phase, prof, **kwargs):
+            if agent_phase == "implement":
+                target = os.path.join(self.repo, written.replace("/", os.sep))
+                os.makedirs(os.path.dirname(target), exist_ok=True)
+                with open(target, "w", encoding="utf-8") as fh:
+                    fh.write("export const x = 1;" + chr(10))
+            return {"verdict": "needs_verification", "reason": "fake"}
+
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", side_effect=writing_run_phase):
+            out = cli.tick(self.cfg, now, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom=symptom), adapters=adapters, profile=profile())
+        return out, adapters, written
+
+    def dirty(self):
+        return subprocess.run(["git", "status", "--porcelain"], cwd=self.repo, capture_output=True, text=True,
+                              check=False).stdout.strip()
+
+    def test_the_second_job_starts_because_the_first_one_was_committed(self):
+        first, adapters, written = self.run_tick("prvi posao", NOW)
+        self.assertEqual(first["outcome"], "proposed", first)
+        self.assertEqual(self.dirty(), "", "posao mora zavrsiti s cistim stablom")
+        head = subprocess.run(["git", "show", "--name-only", "--format=%s", "HEAD"], cwd=self.repo,
+                              capture_output=True, text=True, check=False).stdout
+        self.assertIn(written, head, "ono sto je implementacija napisala mora biti u commitu")
+        self.assertIn("autonomija:", head.splitlines()[0])
+        # Snimka je uzeta PRIJE commita, pa klasifikacija i verifikacija i dalje vide sto je promijenjeno.
+        self.assertEqual(adapters._snapshot()["paths"], [written])
+
+        second, _, written2 = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "proposed", second)
+        self.assertEqual([p["phase"] for p in second["phases"]][:3], ["planning", "implementing", "reviewing"])
+        self.assertEqual(self.dirty(), "")
+        self.assertNotEqual(written, written2)
+
+    def test_without_that_commit_the_second_job_is_blocked_before_it_starts(self):
+        """MUTACIJA nad mehanizmom: isti tok, samo bez commita. Tocno stanje prije ovog popravka."""
+        first, _, _ = self.run_tick("prvi posao", NOW, adapters_cls=GatedAdapters)
+        self.assertEqual(first["outcome"], "proposed", first)
+        self.assertNotEqual(self.dirty(), "", "bez commita stablo ostaje prljavo")
+        second, _, _ = self.run_tick("drugi posao", NOW + 1, adapters_cls=GatedAdapters)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_a_job_that_dies_after_the_implementation_does_not_lock_the_next_one(self):
+        """Isti razred kvara, druga vrata: posao koji padne POSLIJE implementacije.
+
+        Bez spremanja nedovrsenog posla ostaje prljavo stablo, pa sljedeci posao gard odbija jednako kao u
+        testu iznad. Objava se pritom ne smije dogoditi: commit je lokalan, `git push` radi samo izdavac.
+        """
+        adapters = CommittingAdapters(self.cfg, self.home)
+        verdicts = {"plan": "needs_verification", "implement": "needs_verification", "review": "failed"}
+
+        def writing_run_phase(job, agent_phase, prof, **kwargs):
+            if agent_phase == "implement":
+                target = os.path.join(self.repo, "src", "autonomija", "pao.ts")
+                os.makedirs(os.path.dirname(target), exist_ok=True)
+                with open(target, "w", encoding="utf-8") as fh:
+                    fh.write("export const x = 1;" + chr(10))
+            return {"verdict": verdicts[agent_phase], "reason": "recenzent odbio"}
+
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", side_effect=writing_run_phase):
+            out = cli.tick(self.cfg, NOW, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom="posao koji pada"), adapters=adapters,
+                           profile=profile())
+        self.assertEqual(out["outcome"], "failed", out)
+        self.assertEqual(self.dirty(), "", "nedovrsen posao se sprema, inace zakljucava sljedeci")
+        events = [e["event_type"] for e in self.store.events(out["claimed"])]
+        self.assertEqual(events[-1], "status:failed", "razlog zaustavljanja mora ostati zadnji dogadaj")
+        parked = json.loads([e for e in self.store.events(out["claimed"])
+                             if e["event_type"] == "worker_commit"][-1]["sanitized_payload"])
+        self.assertEqual(parked["status"], "committed")
+        self.assertTrue(parked["unfinished"], parked)
+
+        second, _, _ = self.run_tick("posao poslije pada", NOW + 1)
+        self.assertEqual(second["outcome"], "proposed", second)
+
+    def test_a_job_that_never_wrote_anything_parks_nothing(self):
+        # KONTROLA: posao koji padne na PLANU nije ni pokrenuo implementaciju, pa kontroler nema sto spremiti
+        # i ne smije ni pokusati. Ishod je `skipped`, dakle odbijanje, a ne `clean` (koji bi znacio da je
+        # pogledao stablo i nasao ga praznim).
+        adapters = CommittingAdapters(self.cfg, self.home)
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.repo, capture_output=True, text=True,
+                              check=False).stdout.strip()
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", return_value={"verdict": "failed", "reason": "plan pao"}):
+            out = cli.tick(self.cfg, NOW, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom="plan koji pada"), adapters=adapters,
+                           profile=profile())
+        self.assertEqual(out["outcome"], "failed", out)
+        after = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.repo, capture_output=True, text=True,
+                               check=False).stdout.strip()
+        self.assertEqual(head, after, "prazan commit se ne stvara")
+        parked = json.loads([e for e in self.store.events(out["claimed"])
+                             if e["event_type"] == "worker_commit"][-1]["sanitized_payload"])
+        self.assertEqual(parked["status"], "skipped")
+        self.assertIn("implementacija nije pokrenuta", parked["reason"])
+
+    def test_a_failed_commit_stops_the_job_instead_of_publishing_uncommitted_work(self):
+        adapters = RecordingAdapters(commit_result={"status": "failed", "reason": "git commit nije uspio: hook"})
+        out = cli.tick(config(mode="propose", publisherEnabled=True, workerRepoPath=self.repo), NOW, False,
+                       store=self.store, home=self.home, sources=ci_source(), adapters=adapters, profile=profile())
+        self.assertEqual(out["outcome"], "needs_human", out)
+        self.assertNotIn("publish", [c[0] for c in adapters.calls], "neuspio commit ne smije zavrsiti objavom")
+        payload = json.loads(self.store.events(out["claimed"])[-1]["sanitized_payload"])
+        self.assertTrue(str(payload.get("reason", "")).startswith("commit_failed"), payload)
+
+
+COMMITTED_PROOF = {"commit": "0" * 40, "complete": True, "dirtyWorkingTree": False, "treeDigest": "stari",
+                   "createdAt": "2020-01-01T00:00:00.000Z", "missingRequired": [], "results": []}
+# Ratchet korpusa onakav kakav stoji u stablu prije provjere. Oblik je skracen, ali staza i uloga su prave:
+# `docs/generated/repair-real-corpus.json` je TRACKANA i regenerira je obavezna razina `strict-open`.
+COMMITTED_CORPUS = {"summary": {"documentCount": 3, "changedDocumentCount": 0, "noOpCount": 3,
+                                "reviewCount": 0, "failCount": 0}, "results": []}
+
+
+class ReleaseCheckAdapters(CommittingAdapters):
+    """Stvaran `commit` I STVARAN `verify`, ukljucivo vracanje stabla. Lazan je samo poziv `npm`.
+
+    Bez ovoga se ovaj razred kvara ne moze ni vidjeti: `GatedAdapters.verify` vraca gotov rjecnik i ne
+    pokrece nijednu naredbu, pa `docs/generated/RELEASE_PROOF.json` nikad ne bude prepisan.
+    """
+
+    def __init__(self, config, home):
+        super().__init__(config, home)
+        self.last_evidence = None
+
+    def verify(self, task):
+        # Zove se IZRAVNO `DefaultAdapters.verify` (a ne `super()`), jer `GatedAdapters` u lancu nosi laznu
+        # verifikaciju; ovdje se mjeri bas ona prava.
+        self.last_evidence = cli.DefaultAdapters.verify(self, task)
+        return self.last_evidence
+
+
+class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
+    """Kontroler se ne smije zakljucati poslije PRVOG posla koji dodje do VERIFIKACIJE.
+
+    Lanac: `_drive_task` prvo zove `adapters.commit` (stablo ostane cisto), pa odmah `adapters.verify`, a
+    `gate.verify_candidate` bezuvjetno pokrece `npm run release:check`, a taj lanac ima VISE imenovanih
+    pisaca TRACKANIH staza: `scripts/release-check.mjs` prepise `docs/generated/RELEASE_PROOF.json` (nosi
+    `createdAt`, pa se razlikuje na svakom pokretanju), a obavezna razina `strict-open` kroz
+    `npm run repair-real-corpus:review` prepise `docs/generated/repair-real-corpus.json` (razlikuje se cim
+    se popravak promijeni). Bez popravka u stablu ostane ` M docs/generated/...`,
+    sljedeci posao padne na `implement_unsafe: radno stablo nije cisto`, `_clean_at_start` ostane False i
+    `_park_worker_tree` vrati `skipped: nije nase`, dakle stablo se nikad ne ocisti samo.
+
+    Test NIJE vakuumski: `npm run release:check` je jedini presretnut poziv, i to tako da vjerno napise
+    OBA artefakta iz `gate.VERIFY_ARTIFACT_PATHS`, svaki s promjenjivim sadrzajem; sve ostalo (git, gard, commit, snimka, vracanje stabla) je stvarno, a
+    broj presretnutih poziva je zasebna tvrdnja, pa test ne moze proci tako da se verifikacija ne dogodi.
+    """
+
+    TRACKED_OTHER = "src/autonomija/vec-postoji.ts"
+
+    def setUp(self):
+        self.repo = make_git_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo)
+        self.npm_calls = []
+        self.extra_writes = []
+        self.proof_writes = 0
+        self._seed_tracked_files()
+
+    def tearDown(self):
+        self.store.close()
+
+    def _git(self, *args):
+        out = subprocess.run(["git", *args], cwd=self.repo, capture_output=True, text=True, check=False,
+                             shell=False)
+        assert out.returncode == 0, (args, out.stderr)
+        return out.stdout
+
+    def _seed_tracked_files(self):
+        """Datoteka dokaza mora biti TRACKANA, jer je takva i u produkcijskom stablu.
+
+        To nije kozmetika fixturea: `git status` netrackanu datoteku prijavljuje kao `??`, a trackanu kao
+        ` M`, i tek drugi oblik odgovara stanju koje kontroler stvarno zatekne. Uz nju se sije i jedna druga
+        trackana datoteka, koju koristi negativna kontrola.
+        """
+        for rel, payload in ((PROOF_REL, json.dumps(COMMITTED_PROOF, indent=2) + chr(10)),
+                             (CORPUS_REL, json.dumps(COMMITTED_CORPUS, indent=2) + chr(10)),
+                             (self.TRACKED_OTHER, "export const vec = 1;" + chr(10))):
+            target = os.path.join(self.repo, rel.replace("/", os.sep))
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            with open(target, "w", encoding="utf-8") as fh:
+                fh.write(payload)
+        self._git("add", "--", PROOF_REL, CORPUS_REL, self.TRACKED_OTHER)
+        self._git("commit", "-qm", "zateceno stanje")
+        assert self.dirty() == "", "fixture mora krenuti iz cistog stabla"
+
+    def dirty(self):
+        return subprocess.run(["git", "status", "--porcelain"], cwd=self.repo, capture_output=True, text=True,
+                              check=False, shell=False).stdout.strip()
+
+    def on_disk(self, rel):
+        with open(os.path.join(self.repo, rel.replace("/", os.sep)), encoding="utf-8") as fh:
+            return fh.read()
+
+    def in_head(self, rel):
+        return self._git("show", "HEAD:" + rel)
+
+    def write_verification_artifacts(self):
+        """Vjerna simulacija OBA imenovana pisca iz `gate.VERIFY_ARTIFACT_PATHS`.
+
+        `scripts/release-check.mjs` bezuvjetno prepise dokaz, a obavezna razina `strict-open` kroz
+        `npm run verify:strict-open:repaired` -> `npm run repair-real-corpus:review` vrti
+        `scripts/repair-real-corpus.mts`, koji bezuvjetno prepise ratchet korpusa. Oba izlaza se ovdje
+        mijenjaju na svakom pozivu, jer se tako ponasaju i u produkciji: dokaz nosi `createdAt`, a ratchet
+        nove brojke cim se popravak promijeni.
+        """
+        self.proof_writes += 1
+        payload = dict(COMMITTED_PROOF, commit="1" * 40,
+                       createdAt="2026-09-22T00:00:%02d.000Z" % self.proof_writes)
+        corpus = dict(COMMITTED_CORPUS, summary=dict(COMMITTED_CORPUS["summary"],
+                                                     changedDocumentCount=self.proof_writes))
+        for rel, body in ((PROOF_REL, payload), (CORPUS_REL, corpus)):
+            with open(os.path.join(self.repo, rel.replace("/", os.sep)), "w", encoding="utf-8") as fh:
+                fh.write(json.dumps(body, indent=2) + chr(10))
+
+    @contextlib.contextmanager
+    def npm_intercepted(self):
+        real_run = subprocess.run
+
+        def dispatch(argv, **kwargs):
+            if list(argv)[:3] == ["npm", "run", "release:check"]:
+                self.npm_calls.append(list(argv))
+                self.write_verification_artifacts()
+                for rel in self.extra_writes:
+                    with open(os.path.join(self.repo, rel.replace("/", os.sep)), "a", encoding="utf-8") as fh:
+                        fh.write("// trag verifikacije " + str(len(self.npm_calls)) + chr(10))
+                return subprocess.CompletedProcess(list(argv), 0, "", "")
+            return real_run(argv, **kwargs)
+
+        with mock.patch.object(subprocess, "run", side_effect=dispatch):
+            yield
+
+    def run_tick(self, symptom, now, adapters_cls=ReleaseCheckAdapters):
+        adapters = adapters_cls(self.cfg, self.home)
+        written = "src/autonomija/" + symptom.replace(" ", "-") + ".ts"
+
+        def writing_run_phase(job, agent_phase, prof, **kwargs):
+            if agent_phase == "implement":
+                target = os.path.join(self.repo, written.replace("/", os.sep))
+                os.makedirs(os.path.dirname(target), exist_ok=True)
+                with open(target, "w", encoding="utf-8") as fh:
+                    fh.write("export const x = 1;" + chr(10))
+            return {"verdict": "needs_verification", "reason": "fake"}
+
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", side_effect=writing_run_phase), \
+             self.npm_intercepted():
+            out = cli.tick(self.cfg, now, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom=symptom), adapters=adapters, profile=profile())
+        return out, adapters, written
+
+    @staticmethod
+    def phase_reasons(summary):
+        return " | ".join(str(p.get("reason")) for p in summary["phases"])
+
+    def test_the_second_job_starts_because_verification_left_no_trace(self):
+        first, adapters, written = self.run_tick("prvi posao", NOW)
+        # (0) IZRAVAN SIGNAL da test nije vakuumski: verifikacija je STVARNO pokrenula release:check.
+        self.assertEqual(len(self.npm_calls), 1, "verifikacija mora pokrenuti release:check, inace se kvar ne vidi")
+        self.assertEqual(self.proof_writes, 1)
+        self.assertIsNotNone(adapters.last_evidence, "stvarni verify mora biti pozvan")
+        # (1) Stablo je poslije posla CISTO, i to se mjeri sadrzajno, ne izlaznim kodom.
+        self.assertEqual(self.dirty(), "", "verifikacija ne smije ostaviti trag u radnikovu stablu")
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel + " je vracen na HEAD stanje")
+        self.assertEqual(adapters.last_evidence["treeResidue"], [], adapters.last_evidence)
+        self.assertIn(written, self._git("show", "--name-only", "--format=", "HEAD"))
+        # (2) Drugi posao KRECE i ne pada na gardu cistog stabla.
+        second, _, written2 = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual([p["phase"] for p in second["phases"]][:3], ["planning", "implementing", "reviewing"])
+        self.assertNotIn("radno stablo nije cisto", self.phase_reasons(second), second)
+        self.assertNotIn("implement_unsafe", self.phase_reasons(second), second)
+        self.assertNotEqual(written, written2)
+        # Idempotencija: drugi prolaz je nad stablom isti no-op kao prvi.
+        self.assertEqual(len(self.npm_calls), 2)
+        self.assertEqual(self.dirty(), "")
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel)
+
+    def test_mutation_without_the_restore_the_next_job_is_locked(self):
+        """MUTACIJA nad mehanizmom: isti tok, samo bez vracanja stabla. Tocno stanje prije ovog popravka."""
+        with mock.patch.object(cli, "_verify_settle", return_value=lambda: []):
+            first, _, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(len(self.npm_calls), 1, first)
+        self.assertIn("RELEASE_PROOF.json", self.dirty(), "bez vracanja dokaz ostaje promijenjen")
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_a_verification_that_touches_another_file_is_still_seen_as_dirty(self):
+        """NEGATIVNA KONTROLA: popravak je uzak. Bilo koja DRUGA trackana datoteka i dalje prlja stablo.
+
+        Da se vracanje prosirilo preko datoteke dokaza, ovaj test bi pao, a kontroler bi tiho gazio promjene
+        koje nisu njegove.
+        """
+        self.extra_writes = [self.TRACKED_OTHER]
+        first, adapters, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(adapters.last_evidence["treeResidue"], [self.TRACKED_OTHER], adapters.last_evidence)
+        # `complete` se ovdje namjerno ne tvrdi: fixture (`COMMITTED_PROOF["commit"] == "1" * 40`,
+        # `results: []`) vec sama cini `complete` False neovisno o `treeResidue`, pa bi tvrdnja bila
+        # konfundirana. Klauzulu "residue obara complete" pokriva
+        # `gate.SettleTest.test_residue_blocks_the_manifest_and_the_promotion`.
+        self.assertIn("vec-postoji.ts", self.dirty())
+        self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se svejedno vraca; kvar je uzak")
+        self.assertNotIn("repair-real-corpus.json", self.dirty(), "ratchet korpusa se svejedno vraca")
+        self.assertEqual(first["outcome"], "needs_human", first)
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_restoring_only_the_proof_still_locks_the_controller(self):
+        """MUTACIJA nad DEKLARACIJOM: popis suzen na samu datoteku dokaza, tocno kako je glasio prvi popravak.
+
+        `npm run release:check` ima jos jednog imenovanog pisca trackane staze: obavezna razina `strict-open`
+        vrti `npm run repair-real-corpus:review`, a `scripts/repair-real-corpus.mts` bezuvjetno prepise
+        `docs/generated/repair-real-corpus.json`. Popravak koji vraca samo dokaz zato ne rjesava kvar nego ga
+        premjesta na drugu stazu; ovaj test to mjeri, umjesto da se uzme na rijec.
+        """
+        with mock.patch.object(cli, "VERIFY_ARTIFACT_PATHS", (PROOF_REL,)):
+            first, adapters, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(len(self.npm_calls), 1, first)
+        self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se i u mutaciji vraca")
+        self.assertIn("repair-real-corpus.json", self.dirty(), "suzen popis ostavlja ratchet korpusa prljavim")
+        self.assertEqual(adapters.last_evidence["treeResidue"], [CORPUS_REL], adapters.last_evidence)
+        self.assertEqual(first["outcome"], "needs_human", first)
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_the_older_two_job_test_can_never_fail_on_this_input(self):
+        """VAKUUM-KONTROLA nad postojecim `TwoJobsInARowTest`.
+
+        Taj test nasljedjuje `GatedAdapters.verify`, koji vraca gotov rjecnik i ne pokrece NIJEDNU naredbu.
+        Ovdje se to mjeri, a ne pretpostavlja: isti tick s istim adapterima ne izvede nijedan `npm` poziv,
+        pa datoteka dokaza nikad ne bude prepisana i stablo ostane cisto bez obzira na popravak.
+        """
+        first, adapters, _ = self.run_tick("prvi posao", NOW, adapters_cls=CommittingAdapters)
+        self.assertEqual(first["outcome"], "proposed", first)
+        self.assertEqual(self.npm_calls, [], "lazna verifikacija ne pokrece nijednu naredbu")
+        self.assertEqual(self.proof_writes, 0)
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel + " nije ni dirnut")
+        self.assertIsNot(CommittingAdapters.verify, cli.DefaultAdapters.verify)
+
+
+class RealTreeAdapters(cli.DefaultAdapters):
+    """Sve sto dira radnikovo stablo je STVARNO: gard, grana posla, snimka, klasifikacija i commit.
+
+    Lazni su samo potpisnik dokaza i izdavac, jer bi inace test vrtio `npm run release:check` i mrezu. Dokaz
+    zato nosi bas one staze koje bi objava gurnula, a to je ono sto se ovdje mjeri.
+    """
+
+    def __init__(self, config, home):
+        super().__init__(config, home)
+        self.seen_evidence = None
+        self.seen_class = None
+        self.pushed_paths = None
+
+    def verify(self, task):
+        snap = self._snapshot()
+        return {"complete": True, "staleness": {"verdict": "fresh"}, "candidateSha": SHA,
+                "changedPaths": snap["paths"],
+                "controlFilesChanged": sorted(q for q in snap["paths"] if is_control_path(q))}
+
+    def publish(self, task, evidence, store, now, change_class):
+        self.seen_evidence = evidence
+        self.seen_class = change_class
+        # Ono sto bi `git push` s ove grane STVARNO gurnuo, mjereno nad pravim gitom.
+        self.pushed_paths = sorted(branch_changed_paths(self.repo, self._base_ref or "master"))
+        return {"status": "proposed", "reason": "fake", "pr": 7}
+
+
+class RealTreeCase(unittest.TestCase):
+    """Zajednicka oprema za testove nad STVARNIM radnikovim stablom (pravi git, pravi gard, pravi commit)."""
+
+    def setUp(self):
+        self.repo = make_git_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo)
+
+    def tearDown(self):
+        self.store.close()
+
+    def git(self, *args):
+        return subprocess.run(["git", *args], cwd=self.repo, capture_output=True, text=True,
+                              check=False).stdout.strip()
+
+    def tree_state(self):
+        return {"head": self.git("rev-parse", "HEAD"), "branch": self.git("branch", "--show-current"),
+                "status": self.git("status", "--porcelain"), "branches": self.git("branch", "--format=%(refname)")}
+
+    def run_tick(self, sources, now, writes=None, verdicts=None, adapters=None, extra_patches=()):
+        """Jedan tick u kojem implementacija STVARNO pise u radnikovo stablo, kao sto to radi model."""
+        adapters = adapters if adapters is not None else RealTreeAdapters(self.cfg, self.home)
+        verdicts = verdicts or {}
+
+        def writing_run_phase(job, agent_phase, prof, **kwargs):
+            if agent_phase == "implement":
+                for rel in (writes or []):
+                    target = os.path.join(self.repo, rel.replace("/", os.sep))
+                    os.makedirs(os.path.dirname(target), exist_ok=True)
+                    with open(target, "w", encoding="utf-8") as fh:
+                        fh.write("sadrzaj" + chr(10))
+            return {"verdict": verdicts.get(agent_phase, "needs_verification"), "reason": "fake"}
+
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()))
+            stack.enter_context(mock.patch.object(cli, "run_phase", side_effect=writing_run_phase))
+            for patch in extra_patches:
+                stack.enter_context(patch)
+            out = cli.tick(self.cfg, now, False, store=self.store, home=self.home, sources=sources,
+                           adapters=adapters, profile=profile())
+        return out, adapters
+
+    def worker_commit_events(self, task_id):
+        return [json.loads(e["sanitized_payload"]) for e in self.store.events(task_id)
+                if e["event_type"] == "worker_commit"]
+
+
+class RejectedJobLeavesTheTreeAloneTest(RealTreeCase):
+    """Zahtjev (d): radno stablo koje je gard odbio ostaje NETAKNUTO.
+
+    Izmjereno 2026-09-19 na izvedbi koja je zbog toga odbacena: posao odbijen PRIJE ijedne faze prolazio je
+    kroz `_park_worker_tree`, a `git add -A` je commitao covjekov necommitani rad pod kontrolerovom porukom.
+    Gard bi se time sam izlijecio: sljedeci tick zatekne cisto stablo i prodje dalje.
+    """
+
+    def dirty_the_tree(self, name="tudje-biljeske.txt"):
+        with open(os.path.join(self.repo, name), "w", encoding="utf-8") as fh:
+            fh.write("covjekov necommitani rad" + chr(10))
+        return name
+
+    def test_a_signal_without_a_plan_task_touches_nothing(self):
+        foreign = self.dirty_the_tree()
+        before = self.tree_state()
+        out, _ = self.run_tick(inbox_source(plan_task=None), NOW)
+        self.assertEqual(out["outcome"], "needs_human", out)
+        self.assertIn("no_ready_plan_task", str(out["phases"][-1]["reason"]))
+        self.assertEqual(self.tree_state(), before, "odbijen posao ne smije dirati radnikovo stablo")
+        self.assertIn(foreign, before["status"])
+        parked = self.worker_commit_events(out["claimed"])
+        self.assertEqual([q["status"] for q in parked], ["skipped"], parked)
+        self.assertIn("nije bilo cisto", parked[0]["reason"])
+
+    def test_a_second_identical_tick_still_touches_nothing(self):
+        """Pravilo 'jednoprolazni gard je slijep': mjeri se i DRUGI prolaz.
+
+        Stara steta se na drugom prolazu vise ne bi ni vidjela, jer je prvi vec ocistio stablo i gard nije
+        imao na sto okinuti.
+        """
+        self.dirty_the_tree()
+        before = self.tree_state()
+        first, _ = self.run_tick(inbox_source(plan_task=None), NOW)
+        second, _ = self.run_tick(inbox_source(plan_task=None, symptom="drugi prolaz"), NOW + 1)
+        self.assertEqual(first["outcome"], "needs_human", first)
+        self.assertEqual(second["outcome"], "needs_human", second)
+        self.assertEqual(self.tree_state(), before, "ni drugi prolaz ne smije dirati stablo")
+
+    def test_a_dirty_tree_blocks_and_stays_dirty(self):
+        foreign = self.dirty_the_tree()
+        before = self.tree_state()
+        out, _ = self.run_tick(inbox_source("T01"), NOW, writes=["src/ui/nase.ts"])
+        self.assertEqual(out["outcome"], "blocked", out)
+        self.assertIn("radno stablo nije cisto", str(out["phases"][-1]["reason"]))
+        self.assertEqual(self.tree_state(), before, "gard koji odbije stablo ne smije ga zatim commitati")
+        self.assertIn(foreign, self.git("status", "--porcelain"))
+
+    def test_mutation_without_the_fence_the_foreign_work_is_committed(self):
+        """MUTACIJA: ista situacija, samo bez ograde. Tocno steta zbog koje je prethodni krug odbacen.
+
+        Ograda su dvije zastavice (`_clean_at_start`, `_implemented`). Podmetnute kao ispunjene, commit
+        prolazi i tudja datoteka zavrsi u povijesti, iako je kontroler nije napisao. Time je dokazano da
+        stablo cuva ograda, a ne sreca da je popis staza kratak.
+        """
+        foreign = self.dirty_the_tree()
+        adapters = RealTreeAdapters(self.cfg, self.home)
+        before_head = self.git("rev-parse", "HEAD")
+        self.assertEqual(adapters.commit({"id": "t", "signal": {}, "signal_key": "k"})["status"], "skipped")
+        self.assertEqual(before_head, self.git("rev-parse", "HEAD"), "baseline: s ogradom se nista ne commita")
+        adapters._changes = None
+        adapters._clean_at_start = True
+        adapters._implemented = True
+        parked = adapters.commit({"id": "t", "signal": {"kind": "ci_failure"}, "signal_key": "k"})
+        self.assertEqual(parked["status"], "committed", parked)
+        self.assertNotEqual(before_head, self.git("rev-parse", "HEAD"))
+        self.assertIn(foreign, self.git("show", "--name-only", "--format=", "HEAD"))
+
+    def test_mutation_the_implement_flag_alone_is_not_enough(self):
+        # Druga polovica ograde zasebno: implementacija je pokrenuta, ali stablo na pocetku nije bilo nase.
+        self.dirty_the_tree()
+        adapters = RealTreeAdapters(self.cfg, self.home)
+        adapters._implemented = True
+        out = adapters.commit({"id": "t", "signal": {}, "signal_key": "k"})
+        self.assertEqual(out["status"], "skipped", out)
+        self.assertIn("nije bilo cisto", out["reason"])
+
+    def test_baseline_a_clean_tree_and_a_ready_task_still_goes_all_the_way(self):
+        """KONTROLA protiv garda koji tiho ugasi ono sto stiti: normalan posao i dalje prolazi do kraja."""
+        out, adapters = self.run_tick(inbox_source("T01"), NOW, writes=["src/ui/nase.ts"])
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual([q["phase"] for q in out["phases"]][:3], ["planning", "implementing", "reviewing"])
+        self.assertEqual(self.git("status", "--porcelain"), "", "posao mora zavrsiti s cistim stablom")
+        self.assertIn("src/ui/nase.ts", self.git("show", "--name-only", "--format=", "HEAD"))
+        self.assertEqual([q["status"] for q in self.worker_commit_events(out["claimed"])], ["committed"])
+
+
+class PerJobEvidenceTest(RealTreeCase):
+    """Zahtjev (c): klasifikacija i dokaz pokrivaju sve sto bi objava gurnula, ne samo tekuci posao.
+
+    Izmjereno 2026-09-19: posao 1 napise `.github/workflows/odbijen.yml`, pregled ga ODBIJE, a commit
+    svejedno ostane na dijeljenoj grani. Posao 2 napise samo `src/ui/dobar.ts`; njegova snimka je bila
+    `['src/ui/dobar.ts']`, `controlFilesChanged` prazan, a `git push` bi gurnuo oba commita, pa bi u nacinu
+    `auto_low_risk` na master otisla kontrolna datoteka koju nijedan pregled nije prihvatio.
+    """
+
+    def first_job_is_rejected_after_writing_a_control_file(self):
+        out, adapters = self.run_tick(inbox_source("T01", symptom="odbijen posao"), NOW,
+                                      writes=[".github/workflows/odbijen.yml"], verdicts={"review": "failed"})
+        self.assertEqual(out["outcome"], "failed", out)
+        self.assertIn(".github/workflows/odbijen.yml", self.git("show", "--name-only", "--format=", "HEAD"))
+        return out, adapters
+
+    def test_the_next_job_publishes_only_its_own_work(self):
+        self.first_job_is_rejected_after_writing_a_control_file()
+        out, adapters = self.run_tick(inbox_source("T01", symptom="dobar posao"), NOW + 1,
+                                      writes=["src/ui/dobar.ts"])
+        self.assertEqual(out["outcome"], "proposed", out)
+        self.assertEqual(adapters.pushed_paths, ["src/ui/dobar.ts"],
+                         "grana koju objava gura smije nositi samo rad OVOG posla")
+        self.assertEqual(sorted(adapters.seen_evidence["changedPaths"]), ["src/ui/dobar.ts"])
+        self.assertEqual(adapters.seen_evidence["controlFilesChanged"], [])
+        self.assertEqual(adapters.seen_class, "auto_low_risk", "cist nizak rizik mora ostati nizak rizik")
+        self.assertNotEqual(adapters._job_branch, "wf/radnik", "posao mora dobiti vlastitu granu")
+
+    def test_mutation_on_a_shared_branch_the_evidence_still_sees_the_control_file(self):
+        """MUTACIJA: grana po poslu se ugasi, pa se vrati stara akumulacija.
+
+        Druga crta obrane mora izdrzati: snimka se racuna prema OSNOVICI, ne samo iz radnog stabla, pa
+        `.github/...` iz odbijenog posla ulazi u `controlFilesChanged` i klasa vise nije nizak rizik. Bez te
+        druge crte je `promotion_allowed` (gate.py) vidio praznu listu.
+        """
+        self.first_job_is_rejected_after_writing_a_control_file()
+        shared = self.git("branch", "--show-current")
+        base_sha = self.git("rev-parse", "master")
+        no_branch = mock.patch.object(cli, "start_job_branch",
+                                      return_value={"status": "ok", "base_sha": base_sha, "created": False})
+        out, adapters = self.run_tick(inbox_source("T01", symptom="dobar posao"), NOW + 1,
+                                      writes=["src/ui/dobar.ts"], extra_patches=(no_branch,))
+        self.assertEqual(self.git("branch", "--show-current"), shared, "mutacija: grana ostaje dijeljena")
+        self.assertIn(".github/workflows/odbijen.yml", adapters.seen_evidence["controlFilesChanged"],
+                      "dokaz mora vidjeti i ono sto grana vec nosi")
+        self.assertIn(".github/workflows/odbijen.yml", adapters.pushed_paths)
+        self.assertNotEqual(adapters.seen_class, "auto_low_risk",
+                            "s kontrolnom datotekom na grani klasa ne smije biti nizak rizik")
+
+    def test_mutation_an_unresolvable_base_is_never_low_risk(self):
+        """MUTACIJA: osnovica se ne moze razrijesiti, pa se ne zna ni sto grana nosi.
+
+        Fail-closed: klasifikacija tada vraca `needs_human`, nikad `auto_low_risk`. Tiha nula bi bila
+        najgori ishod, jer bi izgledala kao prazna promjena bez kontrolnih datoteka.
+        """
+        adapters = RealTreeAdapters(self.cfg, self.home)
+        self.assertIsNone(cli.resolve_base_ref(self.repo, "ne-postoji"))
+        adapters._base_error = "base_unresolved: nema lokalne reference za ne-postoji"
+        change_class, reasons = adapters.classify({"id": "t"})
+        self.assertEqual(change_class, "needs_human")
+        self.assertIn("base_unresolved", reasons[0])
+        # BASELINE: bez te greske isto stablo (prazna promjena je i dalje needs_human, ali iz DRUGOG razloga).
+        adapters._base_error = None
+        adapters._changes = {"paths": ["src/ui/x.ts"], "worktree_paths": ["src/ui/x.ts"], "lines": 3}
+        self.assertEqual(adapters.classify({"id": "t"})[0], "auto_low_risk")
+
+    def test_a_retry_of_the_same_task_keeps_its_branch_and_its_evidence(self):
+        """Isti zadatak, drugi pokusaj: grana se preuzima, a dokaz pokriva i raniji commit.
+
+        `checkout -B` bi tiho odbacio ono sto je raniji pokusaj spremio, pa bi dokaz bio tocan a rad izgubljen.
+        """
+        out, adapters = self.run_tick(inbox_source("T01", symptom="prvi pokusaj"), NOW,
+                                      writes=["src/ui/prvi.ts"], verdicts={"review": "failed"})
+        self.assertEqual(out["outcome"], "failed", out)
+        branch = self.git("branch", "--show-current")
+        again = RealTreeAdapters(self.cfg, self.home)
+        started = again._start_job_branch({"id": out["claimed"]})
+        self.assertIsNone(started, "grana istog zadatka se preuzima, ne odbija")
+        self.assertEqual(self.git("branch", "--show-current"), branch)
+        self.assertEqual(again._snapshot()["paths"], ["src/ui/prvi.ts"],
+                         "dokaz drugog pokusaja mora nositi i ono sto je prvi commitao")
+
+
+class WorkerRepoStateTest(unittest.TestCase):
+    """`doctor` mora reci da implementacija ne moze proci PRIJE nego prvi posao propadne (nalaz 2026-09-13).
+
+    Isporucena instalacija nema `workerRepoPath` (`install-windows.ps1` pokrece zadatak s cwd = instalacijski
+    checkout), pa je jedini nacin da operater to sazna bio `blocked` tick.
+    """
+
+    def test_a_declared_clean_feature_repo_is_reported_as_usable(self):
+        repo = make_git_repo()
+        state = cli._worker_repo_state(config(workerRepoPath=repo))
+        self.assertEqual(state["path"], repo)
+        self.assertTrue(state["declared"])
+        self.assertTrue(state["dedicated"])
+        self.assertIsNone(state["blocked"])
+
+    def test_a_declared_non_repository_is_reported_as_blocked(self):
+        state = cli._worker_repo_state(config(workerRepoPath=tempfile.mkdtemp()))
+        self.assertTrue(state["declared"])
+        self.assertIsNotNone(state["blocked"])
+        self.assertTrue(str(state["blocked"]).startswith("implement_unsafe"), state)
+
+    def test_an_undeclared_path_falls_back_to_the_installation_checkout(self):
+        # Zadano `workerRepoPath: null` (tocno isporucena konfiguracija): stablo je cwd i NIJE deklarirano, pa
+        # gard trazi povezan worktree. Ishod `blocked` ovisi o stroju, zato se ovdje mjeri samo deklaracija.
+        state = cli._worker_repo_state(config())
+        self.assertEqual(os.path.realpath(state["path"]), os.path.realpath(os.getcwd()))
+        self.assertFalse(state["declared"])
+        self.assertFalse(state["dedicated"])
+        self.assertIn("blocked", state)
 
 class BillingProfileTest(unittest.TestCase):
     def test_profile_is_conservative_without_attestation(self):
@@ -170,20 +1305,70 @@ class BillingProfileTest(unittest.TestCase):
         self.assertFalse(changed["configuration_unchanged"])
         self.assertFalse(billing_allowed(changed))
 
-    def test_api_key_env_forces_api_auth(self):
-        doc = {"logins": {"codex": {"logged_in": True, "method": "chatgpt"}, "claude": {}}, "configFingerprint": "f", "observedAt": "t"}
-        old = os.environ.get("ANTHROPIC_API_KEY")
+    def test_api_credentials_block_only_their_provider(self):
+        doc = {
+            "logins": {
+                "codex": {"logged_in": True, "method": "chatgpt"},
+                "claude": {"logged_in": True, "method": "subscription"},
+            },
+            "tools": {},
+            "configFingerprint": "f", "observedAt": "t",
+        }
+        attest = {"extra_credits_disabled": True, "model_included": True,
+                  "models": ["gpt-6-astra", "sonnet"]}
+        from scripts.autonomy.policy import billing_allowed, provider_billing_allowed
+
+        before = os.environ.get("ANTHROPIC_API_KEY")
         os.environ["ANTHROPIC_API_KEY"] = "sk-ant-test"
         try:
-            prof = cli.build_billing_profile(doctor=doc, config=config(), attest={"extra_credits_disabled": True, "model_included": True}, previous={})
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
         finally:
-            if old is None:
+            if before is None:
                 del os.environ["ANTHROPIC_API_KEY"]
             else:
-                os.environ["ANTHROPIC_API_KEY"] = old
-        self.assertEqual(prof["effective_auth"], "api_key")
-        from scripts.autonomy.policy import billing_allowed
-        self.assertFalse(billing_allowed(prof))
+                os.environ["ANTHROPIC_API_KEY"] = before
+        self.assertTrue(billing_allowed(prof), "Codex account ostaje dopusten")
+        self.assertTrue(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(prof, "claude", "sonnet"))
+
+        before = os.environ.get("OPENAI_API_KEY")
+        os.environ["OPENAI_API_KEY"] = "sk-openai-test"
+        try:
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
+        finally:
+            if before is None:
+                del os.environ["OPENAI_API_KEY"]
+            else:
+                os.environ["OPENAI_API_KEY"] = before
+        self.assertFalse(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertTrue(provider_billing_allowed(prof, "claude", "sonnet"))
+
+    def test_grok_profile_requires_supported_cli_attestation_and_no_api_key(self):
+        doc = {
+            "logins": {"codex": {}, "claude": {}},
+            "tools": {"grok": {"available": True, "version": "grok 1.0.34"}},
+            "configFingerprint": "fg", "observedAt": "t",
+        }
+        attest = {"extra_credits_disabled": False, "model_included": False, "models": [],
+                  "grok_included": True, "grok_models": ["grok-4.6"]}
+        from scripts.autonomy.policy import provider_billing_allowed
+        prof = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        self.assertTrue(provider_billing_allowed(prof, "grok", "grok-4.6"))
+        old_doc = {**doc, "tools": {"grok": {"available": True, "version": "grok 1.0.33"}}}
+        self.assertFalse(provider_billing_allowed(
+            cli.build_billing_profile(doctor=old_doc, config=config(grokEnabled=True), attest=attest, previous={}),
+            "grok", "grok-4.6"))
+
+        before = os.environ.get("XAI_API_KEY")
+        os.environ["XAI_API_KEY"] = "xai-test"
+        try:
+            blocked = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        finally:
+            if before is None:
+                del os.environ["XAI_API_KEY"]
+            else:
+                os.environ["XAI_API_KEY"] = before
+        self.assertFalse(provider_billing_allowed(blocked, "grok", "grok-4.6"))
 
 
 class CliProcessTest(unittest.TestCase):
@@ -218,6 +1403,81 @@ class CliProcessTest(unittest.TestCase):
         self.assertTrue(os.path.isfile(os.path.join(home, "status.json")))
         with open(os.path.join(home, "status.md"), encoding="utf-8") as fh:
             self.assertNotIn("USD", fh.read())
+
+
+class TestRepoBranchIsNotTheMachinesTest(unittest.TestCase):
+    """Minor 3 iz PR #93, drugi krug: prvi popravak je zakrpao samo `test_worker.git_repo`, dok je
+    `make_git_repo` iz ISTE grane ostao na `init.defaultBranch` stroja, pa su cetiri nova testa padala
+    na svakom stroju s `main` (izmjereno: `Ran 200 tests ... FAILED (failures=4)`). Gard zato mjeri SVE
+    pomocnike koji rade `git init`, i to IMENOVANO, da sljedeci pomocnik ne moze proci nepokriven."""
+
+    HELPERS = {"test_cli.py": staticmethod(make_git_repo), "test_worker.py": staticmethod(worker_git_repo)}
+
+    @staticmethod
+    @contextlib.contextmanager
+    def machine_prefers_main():
+        """Stroj koji zadanu granu zove `main`. GIT_CONFIG_GLOBAL + NOSYSTEM, dakle bez dodirivanja
+        korisnikove konfiguracije."""
+        path = os.path.join(tempfile.mkdtemp(), "gitconfig")
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write("[init]" + chr(10) + "	defaultBranch = main" + chr(10))
+        prev = {k: os.environ.get(k) for k in ("GIT_CONFIG_GLOBAL", "GIT_CONFIG_NOSYSTEM")}
+        os.environ["GIT_CONFIG_GLOBAL"] = path
+        os.environ["GIT_CONFIG_NOSYSTEM"] = "1"
+        try:
+            yield
+        finally:
+            for key, value in prev.items():
+                if value is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = value
+
+    @staticmethod
+    def branches(repo):
+        out = subprocess.run(["git", "for-each-ref", "--format=%(refname:short)", "refs/heads"],
+                             cwd=repo, capture_output=True, text=True, check=False, shell=False)
+        return sorted(line.strip() for line in out.stdout.splitlines() if line.strip())
+
+    def test_every_helper_pins_master_even_when_the_machine_prefers_main(self):
+        with self.machine_prefers_main():
+            for name, helper in sorted(self.HELPERS.items()):
+                repo = helper.__func__()
+                with self.subTest(helper=name):
+                    self.assertIn("master", self.branches(repo), (name, self.branches(repo)))
+                    self.assertNotIn("main", self.branches(repo), (name, self.branches(repo)))
+
+    def test_mutation_without_the_pin_the_machine_wins(self):
+        """Negativna kontrola: bez `symbolic-ref` isti stroj daje `main`. Bez nje bi gard bio vakuumski
+        (prosao bi i na stroju na kojem podmetnuta konfiguracija uopce ne djeluje)."""
+        with self.machine_prefers_main():
+            repo = tempfile.mkdtemp()
+            def run(*args):
+                out = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True,
+                                     check=False, shell=False)
+                self.assertEqual(out.returncode, 0, (args, out.stderr))
+            run("init", "-q")
+            run("config", "user.email", "radnik@lokalno")
+            run("config", "user.name", "Radnik")
+            run("config", "commit.gpgsign", "false")
+            with open(os.path.join(repo, "a.txt"), "w", encoding="utf-8") as fh:
+                fh.write("x" + chr(10))
+            run("add", "a.txt")
+            run("commit", "-qm", "pocetak")
+            self.assertEqual(self.branches(repo), ["main"], self.branches(repo))
+
+    def test_no_helper_escapes_the_guard(self):
+        """Pokrivenost je IMENOVANA, ne prebrojana: svaka testna datoteka koja radi `git init` mora biti
+        u HELPERS. Tocno taj razmak je i propustio prvi popravak."""
+        here = os.path.dirname(os.path.abspath(__file__))
+        initializers = set()
+        for name in sorted(os.listdir(here)):
+            if not name.startswith("test_") or not name.endswith(".py"):
+                continue
+            with open(os.path.join(here, name), encoding="utf-8") as fh:
+                if 'run("init"' in fh.read():
+                    initializers.add(name)
+        self.assertEqual(initializers, set(self.HELPERS), (initializers, set(self.HELPERS)))
 
 
 if __name__ == "__main__":

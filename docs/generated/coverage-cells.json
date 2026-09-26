@@ -8,14 +8,14 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4758,
-    "uncoveredCount": 7859,
-    "resolvedCount": 1877,
+    "coveredCount": 4770,
+    "uncoveredCount": 7847,
+    "resolvedCount": 1889,
     "byReason": {
       "profil-ne-propisuje-os": 6032,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 199,
+      "nema-dokaza": 187,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -7265,8 +7265,15 @@
     {
       "profileId": "agr-doktorski",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:agr-doktorski",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "agr-doktorski",
@@ -7516,7 +7523,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efzg-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -7782,7 +7790,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efzg-specijalisticki",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -8041,7 +8050,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efzg-strucni-racunovodstvo",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -8295,7 +8305,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efzg-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -9813,7 +9824,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:vef-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -10065,7 +10077,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kif-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -10844,7 +10857,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ttf-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -11103,7 +11117,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ttf-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -11362,7 +11377,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:grad-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -11614,7 +11630,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:grad-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -12104,7 +12121,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-filozofija-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -12370,7 +12388,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pmf-geografija-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -12871,7 +12890,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:sfzg-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -14103,7 +14123,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:grf-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -14355,7 +14376,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:erf-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -14614,7 +14636,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ufzg-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -14880,7 +14903,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ufzg-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -15364,8 +15388,15 @@
     {
       "profileId": "fkit-diplomski",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fkit-diplomski",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "fkit-diplomski",
@@ -15604,8 +15635,15 @@
     {
       "profileId": "fkit-zavrsni",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fkit-zavrsni",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "fkit-zavrsni",
@@ -15850,7 +15888,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pbf-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -16109,7 +16148,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffrz-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -16368,7 +16408,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffrz-bakalaureatski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -16620,7 +16661,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fhs-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -16879,7 +16921,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fhs-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -17138,7 +17181,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kbf-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -17397,7 +17441,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kbf-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -18115,7 +18160,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-psihologija-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -18374,7 +18420,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-sociologija-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -18633,7 +18680,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-kroatistika-graduate",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -19146,7 +19194,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pmf-fizika-graduate",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -19401,8 +19450,15 @@
     {
       "profileId": "pmf-matematika-graduate",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:pmf-matematika-graduate",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -19652,7 +19708,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-pedagogija-graduate",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -19911,7 +19968,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -20172,7 +20230,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -20436,7 +20495,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-arheologija-graduate",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -20693,7 +20753,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffzg-etnologija-graduate",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -20940,7 +21001,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pmf-geologija-graduate",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -21199,7 +21261,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fer-doktorski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -21458,7 +21521,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kif-doktorski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -22186,7 +22250,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:grf-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -26773,7 +26838,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:rgnf-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -27025,7 +27091,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:rgnf-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -27277,7 +27344,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:zsem-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -27524,7 +27592,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:zsem-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -27778,7 +27847,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:libertas-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -28032,7 +28102,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:libertas-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -28286,7 +28357,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:effectus-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -28547,7 +28619,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:effectus-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -28808,7 +28881,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:rrif-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -29069,7 +29143,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pvzg-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -29330,7 +29405,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pvzg-specijalisticki",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -29585,8 +29661,15 @@
     {
       "profileId": "zvu-zavrsni",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:zvu-zavrsni",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "zvu-zavrsni",
@@ -29832,8 +29915,15 @@
     {
       "profileId": "zvu-specijalisticki",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:zvu-specijalisticki",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "zvu-specijalisticki",
@@ -30547,7 +30637,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:vkjs-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -30808,7 +30899,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:vkjs-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -31069,7 +31161,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:hks-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -31330,7 +31423,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efri-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -31591,7 +31685,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efri-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -31852,7 +31947,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pravri-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -32106,7 +32202,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pravri-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -32360,7 +32457,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffri-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -32621,7 +32719,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffri-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -32875,7 +32974,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pfri-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -33129,7 +33229,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pfri-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -33384,8 +33485,15 @@
     {
       "profileId": "medri-farmacija-diplomski",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:medri-farmacija-diplomski",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -33637,7 +33745,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fmtu-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -33898,7 +34007,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fmtu-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -34625,7 +34735,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pmfst-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -34879,7 +34990,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pmfst-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -35119,7 +35231,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fgag-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -35366,7 +35479,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fgag-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -35620,7 +35734,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efst-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -35874,7 +35989,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efst-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -36135,7 +36251,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ktfst-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -36396,7 +36513,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ktfst-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -36643,7 +36761,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pfst-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -36890,7 +37009,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pfst-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -37151,7 +37271,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:mefst-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -37412,7 +37533,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ferit-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -37666,7 +37788,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ferit-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -37920,7 +38043,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:grafos-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -38181,7 +38305,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:grafos-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -38704,7 +38829,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efos-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -38958,7 +39084,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efos-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -39212,7 +39339,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pravos-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -39466,7 +39594,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pravos-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -39720,7 +39849,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffos-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -39974,7 +40104,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffos-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -40228,7 +40359,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fazos-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -40489,7 +40621,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fazos-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -40750,7 +40883,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:mefos-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -41011,7 +41145,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:mefos-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -41272,7 +41407,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kemos-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -41526,7 +41662,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kemos-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -41780,7 +41917,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unizd-turizam-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -42051,7 +42189,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unizd-turizam-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -42317,7 +42456,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unizd-psihologija-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -42569,7 +42709,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unizd-pedagogija-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -42840,7 +42981,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unizd-povijest-umj-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -43106,7 +43248,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fetpu-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -43360,7 +43503,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fetpu-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -43614,7 +43758,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:tfpu-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -43868,7 +44013,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:tfpu-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -44122,7 +44268,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:foozpu-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -44376,7 +44523,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:foozpu-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -44623,7 +44771,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unidu-povijest-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -44884,7 +45033,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unidu-komunikologija-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -45145,7 +45295,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unidu-ekonomija-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -45399,7 +45550,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unidu-ekonomija-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -45653,7 +45805,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unidu-umjetnost-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -45908,8 +46061,15 @@
     {
       "profileId": "medri-medicina-diplomski",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:medri-medicina-diplomski",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "medri-medicina-diplomski",
@@ -46161,7 +46321,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fzsri-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -46422,7 +46583,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:fzsri-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -46669,7 +46831,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:biotech-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -46909,7 +47072,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:biotech-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -47150,8 +47314,15 @@
     {
       "profileId": "fizri-zavrsni",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fizri-zavrsni",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "fizri-zavrsni",
@@ -47390,8 +47561,15 @@
     {
       "profileId": "fizri-diplomski",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:fizri-diplomski",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "fizri-diplomski",
@@ -47636,7 +47814,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ufri-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -48400,7 +48579,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kifst-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -48895,7 +49075,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unin-tehnicki-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -49149,7 +49330,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unin-tehnicki-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -49403,7 +49585,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unin-biomedicina-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -49657,7 +49840,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unin-biomedicina-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -49911,7 +50095,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unin-drustveni-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -50165,7 +50350,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:unin-drustveni-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -50426,7 +50612,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:veleri-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -50687,7 +50874,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:veleri-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -50948,7 +51136,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:vub-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -51203,8 +51392,15 @@
     {
       "profileId": "mev-zavrsni",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:mev-zavrsni",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "mev-zavrsni",
@@ -51943,7 +52139,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:vevu-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -52204,7 +52401,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:vuv-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -52465,7 +52663,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:vuv-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -52726,7 +52925,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:veleknin-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -52974,8 +53174,15 @@
     {
       "profileId": "vhzk-zavrsni",
       "fixerId": "font-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:vhzk-zavrsni",
+        "checkIds": [
+          "font-size"
+        ]
+      }
     },
     {
       "profileId": "vhzk-zavrsni",
@@ -57465,7 +57672,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffos-povijest-zavrsni",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -57719,7 +57927,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:ffos-povijest-diplomski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -98156,7 +98365,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:zsem-zavrsni-en",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -98920,7 +99130,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:libertas-zavrsni-en",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -99174,7 +99385,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:libertas-diplomski-en",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -101000,7 +101212,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efos-doktorski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -101254,7 +101467,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:efos-specijalisticki",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -101741,7 +101955,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:kif-specijalisticki",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -102002,7 +102217,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:pravri-specijalisticki",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },
@@ -102256,7 +102472,8 @@
         "strength": "resolved",
         "artifactId": "closed-loop:effectus-seminarski",
         "checkIds": [
-          "font"
+          "font",
+          "font-size"
         ]
       }
     },

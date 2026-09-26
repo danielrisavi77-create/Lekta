@@ -71,7 +71,7 @@
           "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
           "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
           "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
-          "ranAt": "2026-09-26T17:29:02.158Z"
+          "ranAt": "2026-09-26T20:56:48.281Z"
         }
       },
       "autoFixable": true,
@@ -143,7 +143,7 @@
           "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
           "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
           "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
-          "ranAt": "2026-09-26T17:29:02.158Z"
+          "ranAt": "2026-09-26T20:56:48.281Z"
         }
       },
       "autoFixable": true,

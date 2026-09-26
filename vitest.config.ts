@@ -1,4 +1,18 @@
 import { defineConfig } from 'vitest/config';
+import { resolveMaxWorkers } from './scripts/agents/resolve-max-workers.mjs';
+
+// Zadani broj radnika (Vitest 2.1.9, `minWorkers`/`maxWorkers` su generalizirani preko `threads`
+// i `forks` poola; ovaj repo ne postavlja `pool` pa vrijedi Vitestov zadani `forks`).
+// VLASNIK 2026-09-26: default podignut s 1 na 2 (optimizacijski popis, stavka 9), s eksplicitnom
+// mogucnoscu nadjacavanja kroz env varijablu kad je stroj uzak. `VITEST_MAX_THREADS` nadjacava
+// SAMO kad je postavljena i parsira se kao pozitivan cijeli broj; inace vrijedi zadano 2.
+// POVIJEST: prijasnja vrijednost 1 je bila izmjerena mjera protiv OOM-a i sporih testova na
+// 4-thread/8 GB hostu (vidi git povijest ovog retka). Ako se 2 radnika pokazu preteskim na
+// istom stroju, pokreni gate s `VITEST_MAX_THREADS=1 npm run check` umjesto trajne izmjene ovog
+// fajla. Racunanje je izdvojeno u `resolveMaxWorkers` da bi test mogao provjeriti logiku bez
+// oslanjanja na ponovni import ovog config modula (Vite ne uvijek ponovno izvrsi vec ucitan
+// config modul za istu putanju u istom procesu).
+export const resolvedMaxWorkers = resolveMaxWorkers(process.env.VITEST_MAX_THREADS);
 
 export default defineConfig({
   // Vitest NE nasljeduje vite.config.ts pa build-flag mora i ovdje; u testovima su
@@ -10,12 +24,11 @@ export default defineConfig({
     // toolchain regresija koja tiho kolektira 0): inace `npm run check` laže zeleno. Vidi AUD-46.
     passWithNoTests: false,
     setupFiles: ['./tests/setup/xml-dom.ts'],
-    // Ovaj paket istodobno drži stvarne DOCX ZIP-ove, happy-dom i esbuild procese. Na
-    // podržanom 4-thread/8-GB Windows hostu Vitestov zadani worker count zasićuje CPU i
-    // memoriju te zdrave testove uspori 3-10x. Jedan worker ostavlja prostor internim
-    // esbuild i ZIP poslovima te uklanja lažne timeoute iz punog `npm run check` prolaza.
+    // Ovaj paket istodobno drži stvarne DOCX ZIP-ove, happy-dom i esbuild procese. Broj radnika
+    // je zadano 2 (vidi `resolvedMaxWorkers` iznad), s nadjacavanjem kroz `VITEST_MAX_THREADS`
+    // kad je stroj uzak (npr. `VITEST_MAX_THREADS=1`).
     minWorkers: 1,
-    maxWorkers: 1,
+    maxWorkers: resolvedMaxWorkers,
     // Paralelne sesije drze git worktreeove pod .claude/worktrees/; default exclude ih ne
     // pokriva pa bi parent `npm run check` testirao TUDJU kopiju repoa (duplo testova +
     // tudi crveni padovi). Worktree sesija svoje testove vrti iz vlastitog cwd-a.

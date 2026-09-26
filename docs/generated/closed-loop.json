@@ -37,7 +37,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "adu-ftv-rezija-diplomski",
@@ -70,7 +71,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "adu-gluma-diplomski",
@@ -103,7 +105,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "adu-kazalisna-rezija-diplomski",
@@ -136,7 +139,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "adu-montaza-diplomski",
@@ -185,7 +189,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "adu-opci-diplomski",
@@ -218,7 +223,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "adu-produkcija-diplomski",
@@ -251,7 +257,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "adu-snimanje-diplomski",
@@ -284,7 +291,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "agr-diplomski",
@@ -333,13 +341,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "agr-doktorski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -353,9 +363,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -376,13 +387,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "agr-zavrsni",
@@ -434,7 +447,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "algebra-diplomski",
@@ -483,7 +497,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
@@ -532,7 +547,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "algebra-specijalisticki",
@@ -581,7 +597,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "algebra-zavrsni",
@@ -630,7 +647,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-diplomski",
@@ -670,7 +688,8 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-doktorski",
@@ -703,7 +722,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-grafika-diplomski",
@@ -736,7 +756,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-kiparstvo-diplomski",
@@ -776,7 +797,8 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-konzerviranje-diplomski",
@@ -828,7 +850,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-nastavnicki-diplomski",
@@ -861,7 +884,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-novi-mediji-diplomski",
@@ -894,7 +918,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "alu-slikarstvo-diplomski",
@@ -931,7 +956,8 @@
       ],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "apuri-diplomski",
@@ -980,7 +1006,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "apuri-zavrsni",
@@ -1032,7 +1059,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "arca-zavrsni",
@@ -1073,7 +1101,8 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "arh-diplomski",
@@ -1108,7 +1137,8 @@
       "profileAxesViolated": [],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "arh-doktorski",
@@ -1157,7 +1187,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "aspira-diplomski",
@@ -1206,7 +1237,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "aspira-diplomski-en",
@@ -1255,7 +1287,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "aspira-zavrsni",
@@ -1304,7 +1337,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "aspira-zavrsni-en",
@@ -1353,7 +1387,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "bak-diplomski",
@@ -1405,7 +1440,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "bak-zavrsni",
@@ -1457,7 +1493,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "biolos-diplomski",
@@ -1509,7 +1546,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "biolos-zavrsni",
@@ -1561,13 +1599,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "biotech-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -1577,9 +1617,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style"
       ],
@@ -1597,17 +1638,20 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing"
       ],
-      "resolved": 3,
+      "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "biotech-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -1617,9 +1661,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style"
       ],
@@ -1637,11 +1682,13 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing"
       ],
-      "resolved": 3,
+      "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "dizajn-diplomski",
@@ -1674,13 +1721,15 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "effectus-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -1694,9 +1743,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -1717,20 +1767,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "effectus-seminarski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -1743,9 +1796,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -1766,20 +1820,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "effectus-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -1793,9 +1850,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -1816,20 +1874,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efos-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -1841,9 +1902,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -1863,19 +1925,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efos-doktorski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -1887,9 +1952,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -1909,13 +1975,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -1964,13 +2032,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efos-specijalisticki",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -1982,9 +2052,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -2004,19 +2075,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -2028,9 +2102,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -2050,19 +2125,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efri-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -2075,9 +2153,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -2098,20 +2177,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efri-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -2124,9 +2206,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -2147,20 +2230,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efst-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -2172,9 +2258,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -2194,13 +2281,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -2249,13 +2338,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efst-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -2267,9 +2358,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -2289,19 +2381,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efzg-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -2315,9 +2410,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -2338,13 +2434,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efzg-doktorski",
@@ -2393,12 +2491,14 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efzg-seminarski",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -2411,6 +2511,7 @@
       ],
       "requested": 6,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins"
@@ -2428,18 +2529,21 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "margins"
       ],
-      "resolved": 3,
+      "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efzg-specijalisticki",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -2454,9 +2558,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 12,
+      "requested": 13,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -2478,20 +2583,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -2503,9 +2611,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -2525,68 +2634,75 @@
       ],
       "profileAxesViolated": [
         "font",
-        "line-spacing",
-        "justify",
-        "margins"
-      ],
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "efzg-zavrsni",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "line-spacing",
-        "justify",
-        "toc-field",
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "required-section",
-        "element-caption",
-        "field-integrity",
-        "heading-style",
-        "margins"
-      ],
-      "requested": 10,
-      "axesResolved": [
-        "font",
-        "line-spacing",
-        "justify",
-        "toc-field",
-        "heading-style",
-        "margins"
-      ],
-      "axesRemaining": [],
-      "axesApplied": [
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "field-integrity"
-      ],
-      "recommendationsApplied": [
-        "element-caption-fixer",
-        "table-figure-rescue-fixer"
-      ],
-      "profileAxesViolated": [
-        "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "toc-field",
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "required-section",
+        "element-caption",
+        "field-integrity",
+        "heading-style",
+        "margins"
+      ],
+      "requested": 11,
+      "axesResolved": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "toc-field",
+        "heading-style",
+        "margins"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "resolved": 7,
+      "regressions": 0,
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "erf-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -2598,9 +2714,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style"
@@ -2619,11 +2736,13 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "erf-doktorski",
@@ -2672,7 +2791,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "evtos-diplomski",
@@ -2722,7 +2842,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "evtos-zavrsni",
@@ -2772,13 +2893,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fazos-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -2791,9 +2914,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -2814,20 +2938,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fazos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -2840,9 +2967,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -2863,14 +2991,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fbf-doktorski",
@@ -2919,7 +3049,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fbf-specijalisticki",
@@ -2965,7 +3096,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fdmri-diplomski",
@@ -3014,7 +3146,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fdmri-zavrsni",
@@ -3063,7 +3196,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fdmz-diplomski",
@@ -3115,7 +3249,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fer-diplomski",
@@ -3162,13 +3297,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fer-doktorski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -3181,9 +3318,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -3204,13 +3342,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fer-zavrsni",
@@ -3257,13 +3397,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ferit-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3275,9 +3417,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -3297,19 +3440,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ferit-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3321,9 +3467,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -3343,13 +3490,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fesb-diplomski",
@@ -3398,7 +3547,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fesb-zavrsni",
@@ -3447,13 +3597,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fetpu-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3465,9 +3617,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -3487,19 +3640,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fetpu-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3511,9 +3667,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -3533,19 +3690,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3557,9 +3717,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -3579,13 +3740,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-germanistika-diplomski",
@@ -3631,7 +3794,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
@@ -3677,7 +3841,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-informatologija-diplomski",
@@ -3726,7 +3891,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-informatologija-zavrsni",
@@ -3775,13 +3941,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-povijest-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3793,9 +3961,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -3815,19 +3984,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-povijest-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3839,9 +4011,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -3861,13 +4034,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-psihologija-diplomski",
@@ -3919,7 +4094,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-psihologija-zavrsni",
@@ -3968,13 +4144,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -3986,9 +4164,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -4008,13 +4187,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffpu-diplomski",
@@ -4066,7 +4247,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffpu-zavrsni",
@@ -4118,13 +4300,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -4137,9 +4321,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -4160,14 +4345,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-germanistika-diplomski",
@@ -4219,7 +4406,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -4271,7 +4459,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-kroatistika-zavrsni",
@@ -4323,7 +4512,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -4377,7 +4567,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-povum-diplomski",
@@ -4429,7 +4620,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -4481,7 +4673,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-psihologija-diplomski",
@@ -4535,13 +4728,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffri-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -4554,9 +4749,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -4577,20 +4773,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffrz-bakalaureatski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -4604,9 +4803,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -4627,19 +4827,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffrz-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -4653,9 +4856,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -4676,13 +4880,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffrz-doktorski",
@@ -4731,7 +4937,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffst-diplomski",
@@ -4783,7 +4990,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffst-zavrsni",
@@ -4835,13 +5043,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-arheologija-graduate",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -4854,9 +5064,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -4877,67 +5088,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-etnologija-graduate",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "element-caption",
-        "field-integrity",
-        "heading-style",
-        "margins"
-      ],
-      "requested": 10,
-      "axesResolved": [
-        "font",
-        "line-spacing",
-        "justify",
-        "heading-style",
-        "margins"
-      ],
-      "axesRemaining": [],
-      "axesApplied": [
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "field-integrity"
-      ],
-      "recommendationsApplied": [
-        "element-caption-fixer",
-        "table-figure-rescue-fixer"
-      ],
-      "profileAxesViolated": [
-        "font",
-        "line-spacing",
-        "justify",
-        "margins"
-      ],
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "ffzg-filozofija-diplomski",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "line-spacing",
-        "justify",
-        "toc-field",
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
@@ -4950,6 +5117,58 @@
       "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "heading-style",
+        "margins"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "toc-field",
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style",
+        "margins"
+      ],
+      "requested": 12,
+      "axesResolved": [
+        "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -4970,13 +5189,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -5016,13 +5237,15 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-kroatistika-graduate",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5036,9 +5259,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5059,68 +5283,24 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-lingvistika-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "element-caption",
-        "field-integrity",
-        "heading-style",
-        "margins"
-      ],
-      "requested": 10,
-      "axesResolved": [
-        "font",
-        "line-spacing",
-        "justify",
-        "heading-style",
-        "margins"
-      ],
-      "axesRemaining": [],
-      "axesApplied": [
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "field-integrity"
-      ],
-      "recommendationsApplied": [
-        "element-caption-fixer",
-        "table-figure-rescue-fixer"
-      ],
-      "profileAxesViolated": [
-        "font",
-        "line-spacing",
-        "justify",
-        "margins"
-      ],
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "ffzg-pedagogija-graduate",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "line-spacing",
-        "justify",
-        "toc-field",
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
@@ -5133,6 +5313,58 @@
       "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "heading-style",
+        "margins"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "toc-field",
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style",
+        "margins"
+      ],
+      "requested": 12,
+      "axesResolved": [
+        "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5153,19 +5385,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -5179,9 +5414,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -5204,20 +5440,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5230,9 +5469,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5253,19 +5493,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -5278,9 +5521,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -5301,19 +5545,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fgag-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -5324,9 +5571,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style"
@@ -5345,18 +5593,21 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fgag-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -5367,9 +5618,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style"
@@ -5388,18 +5640,21 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fhs-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5413,9 +5668,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5436,13 +5692,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fhs-doktorski",
@@ -5491,13 +5749,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fhs-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5511,9 +5771,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -5534,13 +5795,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fipu-diplomski",
@@ -5592,7 +5855,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fipu-zavrsni",
@@ -5644,7 +5908,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fizos-diplomski",
@@ -5693,12 +5958,14 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fizri-diplomski",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -5709,8 +5976,9 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "paper-size"
@@ -5728,17 +5996,20 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "resolved": 3,
+      "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fizri-zavrsni",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -5749,8 +6020,9 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "paper-size"
@@ -5768,17 +6040,20 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "resolved": 3,
+      "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fkit-diplomski",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -5789,8 +6064,9 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "paper-size"
@@ -5808,12 +6084,14 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "resolved": 3,
+      "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fkit-doktorski",
@@ -5862,12 +6140,14 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fkit-zavrsni",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -5878,8 +6158,9 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "paper-size"
@@ -5897,18 +6178,21 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "resolved": 3,
+      "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fmtu-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -5921,9 +6205,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -5944,20 +6229,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fmtu-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -5970,9 +6258,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -5993,14 +6282,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "foi-diplomski",
@@ -6047,7 +6338,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "foi-zavrsni",
@@ -6094,7 +6386,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "foozos-diplomski",
@@ -6140,13 +6433,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "foozpu-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -6158,9 +6453,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -6180,19 +6476,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "foozpu-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -6204,9 +6503,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -6226,13 +6526,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "forenzika-diplomski",
@@ -6281,7 +6583,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpz-diplomski",
@@ -6327,7 +6630,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpz-zavrsni",
@@ -6373,7 +6677,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-doktorski-politologija",
@@ -6426,7 +6731,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -6482,7 +6788,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -6538,7 +6845,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -6594,7 +6902,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -6643,7 +6952,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -6699,7 +7009,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -6748,7 +7059,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-politologija-diplomski",
@@ -6804,7 +7116,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
@@ -6860,7 +7173,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -6916,7 +7230,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
@@ -6972,7 +7287,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -7028,7 +7344,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
@@ -7084,7 +7401,8 @@
       ],
       "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -7133,7 +7451,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fpzpu-zavrsni",
@@ -7182,7 +7501,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fsb-diplomski",
@@ -7229,7 +7549,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fsb-doktorski",
@@ -7278,7 +7599,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -7327,7 +7649,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fsb-zavrsni",
@@ -7374,7 +7697,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ftrr-diplomski",
@@ -7423,7 +7747,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ftrr-zavrsni",
@@ -7472,13 +7797,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fzsri-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -7491,9 +7818,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -7514,20 +7842,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "fzsri-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -7540,9 +7871,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -7563,14 +7895,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "geof-diplomski",
@@ -7606,7 +7940,8 @@
       "profileAxesViolated": [],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "geof-doktorski",
@@ -7642,7 +7977,8 @@
       "profileAxesViolated": [],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -7675,13 +8011,15 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grad-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -7694,9 +8032,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -7716,12 +8055,14 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grad-doktorski",
@@ -7770,13 +8111,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grad-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -7789,9 +8132,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -7811,12 +8155,14 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "gradri-diplomski",
@@ -7862,7 +8208,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "gradri-zavrsni",
@@ -7908,13 +8255,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grafos-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -7927,9 +8276,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -7950,20 +8300,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grafos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -7976,9 +8329,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -7999,20 +8353,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grf-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -8026,9 +8383,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -8049,13 +8407,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grf-doktorski",
@@ -8104,13 +8464,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "grf-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -8125,9 +8487,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 12,
+      "requested": 13,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -8149,20 +8512,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "hks-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -8175,9 +8541,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -8198,14 +8565,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "inf-diplomski",
@@ -8242,7 +8611,8 @@
       ],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "inf-zavrsni",
@@ -8279,7 +8649,8 @@
       ],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "iv-diplomski",
@@ -8326,7 +8697,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "iv-zavrsni",
@@ -8373,13 +8745,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kbf-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -8393,9 +8767,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -8416,13 +8791,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kbf-doktorski",
@@ -8471,13 +8848,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kbf-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -8491,9 +8870,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -8514,13 +8894,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kbfdj-diplomski",
@@ -8569,7 +8951,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kbfst-diplomski",
@@ -8612,13 +8995,15 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kemos-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -8630,9 +9015,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -8652,19 +9038,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kemos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -8676,9 +9065,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -8698,22 +9088,129 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kif-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "required-section",
+        "element-caption",
+        "field-integrity",
+        "heading-style",
+        "margins"
+      ],
+      "requested": 12,
+      "axesResolved": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "toc-field",
+        "heading-style",
+        "margins"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "resolved": 7,
+      "regressions": 0,
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
+    },
+    {
+      "profileId": "kif-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "toc-field",
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "element-caption",
+        "field-integrity",
+        "heading-style",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 11,
+      "axesResolved": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "toc-field",
+        "heading-style",
+        "margins",
+        "paper-size"
+      ],
+      "axesRemaining": [],
+      "axesApplied": [
+        "empty-paragraphs",
+        "croatian-typography",
+        "link-doi",
+        "revision-metadata",
+        "field-integrity"
+      ],
+      "recommendationsApplied": [
+        "element-caption-fixer",
+        "table-figure-rescue-fixer"
+      ],
+      "profileAxesViolated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "resolved": 7,
+      "regressions": 0,
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
+    },
+    {
+      "profileId": "kif-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
@@ -8727,9 +9224,9 @@
       "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
-        "toc-field",
         "heading-style",
         "margins"
       ],
@@ -8747,108 +9244,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "kif-doktorski",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "line-spacing",
-        "toc-field",
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "element-caption",
-        "field-integrity",
-        "heading-style",
-        "margins",
-        "paper-size"
-      ],
-      "requested": 10,
-      "axesResolved": [
-        "font",
-        "line-spacing",
-        "toc-field",
-        "heading-style",
-        "margins",
-        "paper-size"
-      ],
-      "axesRemaining": [],
-      "axesApplied": [
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "field-integrity"
-      ],
-      "recommendationsApplied": [
-        "element-caption-fixer",
-        "table-figure-rescue-fixer"
-      ],
-      "profileAxesViolated": [
-        "font",
-        "line-spacing",
-        "margins",
-        "paper-size"
-      ],
-      "resolved": 6,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "kif-specijalisticki",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "line-spacing",
-        "justify",
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "required-section",
-        "element-caption",
-        "field-integrity",
-        "heading-style",
-        "margins"
-      ],
-      "requested": 10,
-      "axesResolved": [
-        "font",
-        "line-spacing",
-        "justify",
-        "heading-style",
-        "margins"
-      ],
-      "axesRemaining": [],
-      "axesApplied": [
-        "empty-paragraphs",
-        "croatian-typography",
-        "link-doi",
-        "revision-metadata",
-        "field-integrity"
-      ],
-      "recommendationsApplied": [
-        "element-caption-fixer",
-        "table-figure-rescue-fixer"
-      ],
-      "profileAxesViolated": [
-        "font",
-        "line-spacing",
-        "justify",
-        "margins"
-      ],
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kifos-diplomski",
@@ -8898,7 +9302,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kifos-zavrsni",
@@ -8948,13 +9353,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "kifst-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -8966,9 +9373,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -8988,19 +9396,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ktfst-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -9013,9 +9424,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -9036,20 +9448,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ktfst-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -9062,9 +9477,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -9085,20 +9501,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "libertas-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -9110,9 +9529,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -9132,19 +9552,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "libertas-diplomski-en",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -9156,9 +9579,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -9178,19 +9602,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "libertas-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -9201,9 +9628,10 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "paper-size"
@@ -9222,18 +9650,21 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "libertas-zavrsni-en",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -9244,9 +9675,10 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "paper-size"
@@ -9265,12 +9697,14 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "logri-diplomski",
@@ -9319,7 +9753,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
@@ -9371,7 +9806,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
@@ -9423,7 +9859,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "math-uniri-diplomski",
@@ -9463,7 +9900,8 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "math-uniri-diplomski-en",
@@ -9502,7 +9940,8 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "math-uniri-zavrsni",
@@ -9542,7 +9981,8 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mathos-diplomski",
@@ -9588,7 +10028,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mathos-zavrsni",
@@ -9634,12 +10075,14 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "medri-farmacija-diplomski",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -9651,8 +10094,9 @@
         "margins",
         "paper-size"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -9671,18 +10115,21 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "medri-medicina-diplomski",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -9694,8 +10141,9 @@
         "margins",
         "paper-size"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -9714,13 +10162,15 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mef-diplomski",
@@ -9772,7 +10222,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mef-doktorski",
@@ -9812,13 +10263,15 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mefos-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -9831,9 +10284,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -9854,20 +10308,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mefos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -9880,9 +10337,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -9903,20 +10361,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mefst-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -9929,9 +10390,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -9952,14 +10414,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mev-diplomski",
@@ -10011,13 +10475,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mev-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -10030,9 +10496,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -10053,14 +10520,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mev-zavrsni-drustveni",
@@ -10112,7 +10581,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "mfpu-diplomski",
@@ -10164,7 +10634,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "more-diplomski",
@@ -10213,7 +10684,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "more-zavrsni",
@@ -10262,7 +10734,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "muza-diplomski",
@@ -10295,7 +10768,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "muza-doktorski",
@@ -10344,7 +10818,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "oss-diplomski",
@@ -10394,7 +10869,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "oss-zavrsni",
@@ -10444,7 +10920,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ozs-diplomski",
@@ -10491,7 +10968,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ozs-zavrsni",
@@ -10538,7 +11016,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "par-diplomski",
@@ -10587,7 +11066,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "par-zavrsni",
@@ -10636,13 +11116,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pbf-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -10654,9 +11136,10 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -10676,12 +11159,14 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pbf-doktorski",
@@ -10730,13 +11215,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pfri-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -10748,9 +11235,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -10770,19 +11258,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pfri-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -10794,9 +11285,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -10816,19 +11308,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pfst-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -10839,9 +11334,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style"
@@ -10860,18 +11356,21 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pfst-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -10882,9 +11381,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style"
@@ -10903,12 +11403,14 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmf-biologija-graduate",
@@ -10954,13 +11456,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmf-fizika-graduate",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -10973,9 +11477,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -10995,13 +11500,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -11050,13 +11557,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmf-geografija-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -11068,9 +11577,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -11090,19 +11600,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmf-geologija-graduate",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -11113,9 +11626,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style"
@@ -11134,16 +11648,19 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmf-matematika-graduate",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -11157,8 +11674,9 @@
         "margins",
         "paper-size"
       ],
-      "requested": 8,
+      "requested": 9,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -11178,19 +11696,22 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmfst-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -11202,9 +11723,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -11224,19 +11746,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pmfst-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -11248,9 +11773,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -11270,13 +11796,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
@@ -11325,7 +11853,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -11376,7 +11905,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -11427,7 +11957,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -11478,7 +12009,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -11527,7 +12059,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -11578,7 +12111,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -11629,7 +12163,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -11680,7 +12215,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
@@ -11731,7 +12267,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -11781,7 +12318,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -11832,7 +12370,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -11883,7 +12422,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -11932,13 +12472,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravos-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -11950,9 +12492,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -11972,19 +12515,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -11996,9 +12542,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -12018,19 +12565,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravri-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -12042,9 +12592,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -12064,13 +12615,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -12119,13 +12672,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravri-specijalisticki",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -12137,9 +12692,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -12159,19 +12715,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravri-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -12183,9 +12742,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -12205,13 +12765,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravst-diplomski",
@@ -12244,7 +12806,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pravst-zavrsni",
@@ -12277,7 +12840,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ptfos-diplomski",
@@ -12329,13 +12893,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pvzg-specijalisticki",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -12348,9 +12914,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -12371,20 +12938,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "pvzg-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -12397,9 +12967,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -12420,20 +12991,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "rgnf-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -12446,9 +13020,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -12468,18 +13043,21 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "rgnf-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -12492,9 +13070,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -12514,12 +13093,14 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "riteh-diplomski",
@@ -12568,7 +13149,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "riteh-zavrsni",
@@ -12617,13 +13199,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "rrif-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -12636,9 +13220,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -12659,14 +13244,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "securus-zavrsni",
@@ -12713,13 +13300,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sfzg-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -12732,9 +13321,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -12755,13 +13345,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sfzg-doktorski",
@@ -12810,7 +13402,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "simet-zavrsni",
@@ -12856,7 +13449,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
@@ -12908,7 +13502,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
@@ -12960,7 +13555,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
@@ -13012,7 +13608,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
@@ -13064,7 +13661,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
@@ -13116,7 +13714,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sumfak-diplomski",
@@ -13168,7 +13767,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "sumfak-zavrsni",
@@ -13220,13 +13820,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "tfpu-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -13238,9 +13840,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -13260,19 +13863,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "tfpu-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -13284,9 +13890,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -13306,19 +13913,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ttf-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13331,9 +13941,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13354,13 +13965,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ttf-dizajn-diplomski",
@@ -13411,7 +14024,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ttf-dizajn-zavrsni",
@@ -13462,7 +14076,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ttf-doktorski",
@@ -13511,13 +14126,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ttf-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13530,9 +14147,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13553,13 +14171,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "uaos-diplomski",
@@ -13608,7 +14228,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "uaos-zavrsni",
@@ -13657,13 +14278,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ufri-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -13675,9 +14298,10 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -13697,19 +14321,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ufzg-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13724,9 +14351,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 12,
+      "requested": 13,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13748,14 +14376,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ufzg-doktorski",
@@ -13804,13 +14434,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "ufzg-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13825,9 +14457,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 12,
+      "requested": 13,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "toc-field",
@@ -13849,14 +14482,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 7,
+      "resolved": 8,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "umas-diplomski",
@@ -13890,7 +14525,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "umas-zavrsni",
@@ -13924,13 +14560,15 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-ekonomija-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "justify",
         "empty-paragraphs",
         "croatian-typography",
@@ -13942,9 +14580,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "justify",
         "heading-style",
         "margins",
@@ -13964,19 +14603,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-ekonomija-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "justify",
         "empty-paragraphs",
         "croatian-typography",
@@ -13988,9 +14630,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "justify",
         "heading-style",
         "margins",
@@ -14010,13 +14653,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-elektro-diplomski",
@@ -14049,7 +14694,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-elektro-zavrsni",
@@ -14082,13 +14728,15 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14101,9 +14749,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14124,14 +14773,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-komunikologija-zavrsni",
@@ -14183,7 +14834,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-marikultura-diplomski",
@@ -14229,13 +14881,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-povijest-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14247,9 +14901,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14269,13 +14924,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-sestrinstvo-zavrsni",
@@ -14324,13 +14981,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-umjetnost-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14343,9 +15002,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14366,14 +15026,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unidu-umjetnost-zavrsni",
@@ -14425,13 +15087,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unin-biomedicina-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14443,9 +15107,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14465,19 +15130,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14489,9 +15157,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14511,19 +15180,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unin-drustveni-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14535,9 +15207,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14557,19 +15230,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unin-drustveni-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14581,9 +15257,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14603,19 +15280,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unin-tehnicki-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14627,9 +15307,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14649,19 +15330,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -14673,9 +15357,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -14695,13 +15380,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-btho-diplomski",
@@ -14747,7 +15434,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-btho-zavrsni",
@@ -14793,7 +15481,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-odhz-diplomski",
@@ -14839,7 +15528,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-odhz-zavrsni",
@@ -14885,7 +15575,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-sfsb-diplomski",
@@ -14931,7 +15622,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-sfsb-zavrsni",
@@ -14977,7 +15669,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-teho-diplomski",
@@ -15023,7 +15716,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unisb-teho-zavrsni",
@@ -15069,7 +15763,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-anglistika-diplomski",
@@ -15102,7 +15797,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-anglistika-zavrsni",
@@ -15135,7 +15831,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-arheologija-diplomski",
@@ -15187,7 +15884,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-arheologija-zavrsni",
@@ -15239,7 +15937,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-ekologija-diplomski",
@@ -15288,7 +15987,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-ekologija-zavrsni",
@@ -15342,7 +16042,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-ekonomija-diplomski",
@@ -15375,7 +16076,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-ekonomija-zavrsni",
@@ -15408,7 +16110,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-etnologija-diplomski",
@@ -15460,7 +16163,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-filozofija-diplomski",
@@ -15503,7 +16207,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-filozofija-zavrsni",
@@ -15546,7 +16251,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-francuski-diplomski",
@@ -15589,7 +16295,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-geografija-diplomski",
@@ -15635,7 +16342,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-germanistika-diplomski",
@@ -15684,7 +16392,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
@@ -15736,7 +16445,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-hispanistika-diplomski",
@@ -15785,7 +16495,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-informacijske-diplomski",
@@ -15831,7 +16542,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-informacijske-zavrsni",
@@ -15877,7 +16589,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
@@ -15926,7 +16639,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
@@ -15975,7 +16689,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-kroatistika-diplomski",
@@ -16008,7 +16723,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-kroatistika-zavrsni",
@@ -16041,7 +16757,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-lingvistika-diplomski",
@@ -16074,7 +16791,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-lingvistika-zavrsni",
@@ -16107,13 +16825,15 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -16125,9 +16845,10 @@
         "heading-style",
         "margins"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -16149,13 +16870,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-pomorski-diplomski",
@@ -16207,7 +16930,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-pomorski-zavrsni",
@@ -16259,7 +16983,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -16305,7 +17030,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-povijest-umj-diplomski",
@@ -16358,13 +17084,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -16377,9 +17105,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -16401,14 +17130,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-povijest-zavrsni",
@@ -16460,7 +17191,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-psihologija-diplomski",
@@ -16509,13 +17241,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -16527,9 +17261,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -16550,13 +17285,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-rusistika-diplomski",
@@ -16589,7 +17326,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-sociologija-diplomski",
@@ -16641,7 +17379,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-sociologija-zavrsni",
@@ -16674,7 +17413,8 @@
       "profileAxesViolated": [],
       "resolved": 1,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-talijanistika-diplomski",
@@ -16717,7 +17457,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-tko-diplomski",
@@ -16769,13 +17510,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-turizam-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -16788,9 +17531,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -16812,20 +17556,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-turizam-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -16838,9 +17585,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -16863,14 +17611,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-ucitelji-diplomski",
@@ -16922,7 +17672,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-zdravstvo-diplomski",
@@ -16965,7 +17716,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "unizd-zdravstvo-zavrsni",
@@ -17009,13 +17761,15 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vef-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "empty-paragraphs",
@@ -17029,9 +17783,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "toc-field",
         "heading-style",
@@ -17052,13 +17807,15 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vef-doktorski",
@@ -17107,7 +17864,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "veleknin-diplomski",
@@ -17156,13 +17914,15 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "veleknin-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -17175,9 +17935,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -17198,20 +17959,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "veleri-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -17224,9 +17988,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -17247,20 +18012,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "veleri-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -17273,9 +18041,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -17296,14 +18065,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vevu-diplomski",
@@ -17355,13 +18126,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vevu-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -17374,9 +18147,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -17397,14 +18171,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vguk-diplomski",
@@ -17453,7 +18229,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vguk-zavrsni",
@@ -17502,12 +18279,14 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vhzk-zavrsni",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -17519,8 +18298,9 @@
         "heading-style",
         "margins"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -17539,19 +18319,22 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vkjs-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -17564,9 +18347,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -17587,20 +18371,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vkjs-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -17613,9 +18400,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -17636,14 +18424,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vnt-diplomski",
@@ -17693,7 +18483,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vnt-zavrsni",
@@ -17743,7 +18534,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vsig-diplomski",
@@ -17790,7 +18582,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vsig-zavrsni",
@@ -17837,7 +18630,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vsite-diplomski",
@@ -17872,7 +18666,8 @@
       "profileAxesViolated": [],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vsite-zavrsni",
@@ -17907,7 +18702,8 @@
       "profileAxesViolated": [],
       "resolved": 2,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vss-diplomski",
@@ -17959,7 +18755,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vss-zavrsni",
@@ -18011,13 +18808,15 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vub-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -18030,9 +18829,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -18053,14 +18853,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vub-zavrsni-sestrinstvo",
@@ -18112,7 +18914,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vub-zavrsni-tehnicki",
@@ -18164,7 +18967,8 @@
       ],
       "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-lovstvo-zavrsni",
@@ -18207,7 +19011,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -18253,7 +19058,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -18299,7 +19105,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -18345,7 +19152,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -18388,7 +19196,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-sigurnost-diplomski",
@@ -18431,7 +19240,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-sigurnost-zavrsni",
@@ -18474,7 +19284,8 @@
       ],
       "resolved": 4,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-strojarski-diplomski",
@@ -18523,7 +19334,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
@@ -18572,7 +19384,8 @@
       ],
       "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vus-diplomski",
@@ -18618,7 +19431,8 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vus-zavrsni",
@@ -18664,13 +19478,15 @@
       ],
       "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuv-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -18683,9 +19499,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -18706,20 +19523,23 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vuv-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -18732,9 +19552,10 @@
         "margins",
         "paper-size"
       ],
-      "requested": 11,
+      "requested": 12,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -18755,14 +19576,16 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "resolved": 6,
+      "resolved": 7,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vvg-diplomski",
@@ -18802,7 +19625,8 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "vvg-zavrsni",
@@ -18842,13 +19666,15 @@
       ],
       "resolved": 3,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "zsem-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -18859,9 +19685,10 @@
         "field-integrity",
         "heading-style"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style"
@@ -18880,18 +19707,21 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "zsem-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -18903,9 +19733,10 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -18925,19 +19756,22 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "zsem-zavrsni-en",
       "outcome": "pass",
       "violated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "empty-paragraphs",
@@ -18949,9 +19783,10 @@
         "heading-style",
         "paper-size"
       ],
-      "requested": 10,
+      "requested": 11,
       "axesResolved": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "heading-style",
@@ -18971,18 +19806,21 @@
       ],
       "profileAxesViolated": [
         "font",
+        "font-size",
         "line-spacing",
         "justify",
         "paper-size"
       ],
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "zvu-specijalisticki",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -18994,8 +19832,9 @@
         "margins",
         "paper-size"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -19014,18 +19853,21 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     },
     {
       "profileId": "zvu-zavrsni",
       "outcome": "pass",
       "violated": [
+        "font-size",
         "line-spacing",
         "empty-paragraphs",
         "croatian-typography",
@@ -19037,8 +19879,9 @@
         "margins",
         "paper-size"
       ],
-      "requested": 9,
+      "requested": 10,
       "axesResolved": [
+        "font-size",
         "line-spacing",
         "heading-style",
         "margins",
@@ -19057,13 +19900,15 @@
         "table-figure-rescue-fixer"
       ],
       "profileAxesViolated": [
+        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "resolved": 4,
+      "resolved": 5,
       "regressions": 0,
-      "textPreserved": true
+      "textPreserved": true,
+      "note": "allowed-visible-text-change"
     }
   ]
 }

@@ -114,14 +114,15 @@ Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
 
 ## Koordinacija i drugo misljenje
 
-Astra ili Fable vodi zadatak i audit; Opus, Sonnet ili Sol implementira kod. Po
-zadatku su aktivni jedan koordinator i jedan pisac. Ugovor i lokalne naredbe su u
-`docs/agents/README.md`, a zajednicki red zadataka u `docs/agents/tasks.json`.
+Kanonski multi-provider ugovor je `docs/agents/ORCHESTRATION.md`; ovaj dokument ga ne
+duplicira. Po zadatku su aktivni jedan koordinator i jedan pisac. Codex, Claude Code
+i Grok mogu biti provider prema ulozi i billing profilu, ali drugi provider se ne
+poziva na svaki prompt.
 
-Pregled dolazi od drugog providera: Astra pregledava Claude implementacije, Fable
-pregledava Sol. Modelski rezultat nije dokaz prolaza. Sva pravila izolacije,
-verifikacije i commitanja ostaju obvezna. Ako je instaliran Codex plugin, njegovi
-nalazi su advisory i svaki se mora neovisno potvrditi prije primjene.
+Pregled mora doci od drugog CLI providera od implementatora. Modelski rezultat nije
+dokaz prolaza: izolacija, deterministicni gateovi, Word oracle i commit pravila ostaju
+obvezni. Operativne naredbe su u `docs/agents/README.md`, a red zadataka u
+`docs/agents/tasks.json`.
 
 ## Routing
 

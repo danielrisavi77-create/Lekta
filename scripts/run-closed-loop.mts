@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { installXmlDomParser } from '../src/docx/xml-dom-install';
 import { documentText } from '../src/repair/docx-visible-text';
+import { textContractPreserved } from './closed-loop-text-contract';
 import { createClosedLoopExecutionManifest } from './closed-loop-execution-manifest';
 import { hashRepairSourceTree } from './lib/repair-source-hash.mjs';
 import type { AiEvidenceExecutionManifest } from '../src/verification/ai-evidence-audit';
@@ -310,7 +311,7 @@ async function runProfile(profileId: string): Promise<Row> {
       { profileId, profile },
     );
     const afterText = await documentText(applied.docxBytes);
-    const textPreserved = afterText === beforeText;
+    const textPreserved = await textContractPreserved(bytes, beforeText, afterText, requests);
 
     const beforeChecks = (before.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
     const afterChecks = (after.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
@@ -416,6 +417,7 @@ async function runProfile(profileId: string): Promise<Row> {
       resolved: axesResolved.length,
       regressions,
       textPreserved,
+      ...(beforeText !== afterText && textPreserved ? { note: 'allowed-visible-text-change' } : {}),
     };
     if (regressions > 0) return { ...row, outcome: 'regression' };
     if (!textPreserved) {

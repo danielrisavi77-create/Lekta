@@ -103,6 +103,9 @@ function start(): void {
     },
     createSession: createLocalDocumentSession,
     persistentStore: store ?? refusingStore,
+    // Kontekst sa SEO stranice fakulteta (`/?unit=...&utm_source=...`) putuje dalje na `/rad/`,
+    // gdje ga `urlSelection` vec zna procitati. Bijelu listu i granice drzi `handoff-query.ts`.
+    handoffSearch: window.location.search,
     navigate(path) { window.location.assign(path); },
   });
 

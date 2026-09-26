@@ -91,6 +91,27 @@ class NormalizeTest(unittest.TestCase):
         self.assertEqual(agg, {"event": "repair_completed", "count": 12, "profileId": "fpzg-politologija-diplomski"})
         self.assertIsNone(normalize_aggregate({"documentText": "privatno"}))
 
+    def test_plan_task_form_is_repaired_where_it_is_not_a_guess_and_named_where_it_is(self):
+        """Nalaz 2026-09-13: krivo napisan `planTask` je nestajao bez ijedne rijeci dijagnostike.
+
+        BASELINE: ispravan oblik prolazi, a razlike koje su cisto oblik (razmaci, mala slova) se ispravljaju.
+        MUTACIJA: oblik koji bi trazio pogadjanje se ODBIJA, ali se IMENUJE, pa operater vidi sto je napisao.
+        """
+        def scope_of(value):
+            raw = dict(kind="ci_failure", location="check/x@master", symptom="pada", source_revision=SHA,
+                       observed_at=NOW, scope={"area": "ci"} if value is None else {"area": "ci", "planTask": value})
+            return normalize_signal(raw)["scope"]
+
+        for good in ("T01", "t17 ", " T17", "T99"):
+            self.assertEqual(scope_of(good), {"paths": [], "area": "ci", "planTask": good.strip().upper(),
+                                              "planTaskRejected": ""}, good)
+        for bad in ("T7", "T017", "zadatak", "T1a"):
+            scope = scope_of(bad)
+            self.assertIsNone(scope["planTask"], bad)
+            self.assertEqual(scope["planTaskRejected"], bad, "odbijena vrijednost se pamti da razlog moze reci koja")
+        self.assertEqual(scope_of(None)["planTaskRejected"], "", "nenapisan kljuc nije isto sto i krivi oblik")
+        self.assertIsNone(scope_of(17)["planTask"])
+
 
 class CollectorTest(unittest.TestCase):
     def test_no_configured_sources_produce_no_work(self):

@@ -73,7 +73,7 @@
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T17:21:52.846Z"
+          "ranAt": "2026-09-26T20:53:47.478Z"
         }
       }
     },
@@ -149,7 +149,7 @@
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T17:21:52.846Z"
+          "ranAt": "2026-09-26T20:53:47.478Z"
         }
       }
     },
@@ -221,7 +221,7 @@
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T17:21:52.846Z"
+          "ranAt": "2026-09-26T20:53:47.478Z"
         }
       }
     },
@@ -303,7 +303,7 @@
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T17:21:52.846Z"
+          "ranAt": "2026-09-26T20:53:47.478Z"
         }
       }
     },
@@ -375,7 +375,7 @@
           "command": "npm run closed-loop -- --profile efos-opci-akademski-rad --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T17:21:52.846Z"
+          "ranAt": "2026-09-26T20:53:47.478Z"
         }
       }
     },

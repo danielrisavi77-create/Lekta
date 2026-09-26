@@ -17,7 +17,7 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 const LS_API_KEY = Deno.env.get('LEMONSQUEEZY_API_KEY') ?? '';
-const LS_STORE_ID = Deno.env.get('LEMONSQUEEZY_STORE_ID') ?? '';
+const LEMONSQUEEZY_STORE_ID = Deno.env.get('LEMONSQUEEZY_STORE_ID') ?? '';
 const REDIRECT_URL = Deno.env.get('CHECKOUT_REDIRECT_URL') ?? '';
 // Dnevni limit kreiranja checkouta po korisniku (SEC-06, AUD-23/35): bez njega prijavljeni korisnik
 // moze u petlji okidati LS checkout pozive i puniti checkout_consents. Isti obrazac kao DAILY_CAP u
@@ -160,7 +160,7 @@ Deno.serve(async (req: Request) => {
 
   // Lemon Squeezy checkout create (mor_product_id = LS variant id)
   const lsBody = buildLemonSqueezyCheckout({
-    storeId: LS_STORE_ID,
+    storeId: LEMONSQUEEZY_STORE_ID,
     variantId: product!.morProductId,
     userId: user.id,
     productId,

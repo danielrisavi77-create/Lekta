@@ -95,8 +95,10 @@ export function legalDocuments(cfg?: Partial<LegalProviderConfig>): Record<Legal
   const c = resolveConfig(cfg);
   const org = c.org, contact = c.contact, days = c.days, logDays = c.logDays;
   const meta = (extra = '') => `<div class="legal-meta"><strong>Verzija:</strong> ${TERMS_VERSION}${extra ? ' · ' + extra : ''}</div>`;
+  const localRepairProcessing = '<h4>Lokalni WordReplica popravak</h4><p>Ako je ponuđen lokalni popravak, korisnik preuzima prijenosni program za Windows vezan uz taj posao. Program s Lekte preuzima izvorni i serverski popravljeni dokument u vlastiti privremeni radni prostor. Interni WordReplica motor lokalno izrađuje novi DOCX; izvornik ostaje nepromijenjen i Microsoft Word nije potreban. Novi DOCX ne šalje se Lekti: program šalje samo potpisani status te kriptografske sažetke izlaza i izvještaja. Nakon uspjeha program uklanja osjetljive datoteke koje je sam stvorio, ali Windows ili preglednik mogu zadržati vlastite tragove.</p>';
+  const localRepairContract = '<h4>Prijenosni program za lokalni popravak</h4><p>Za isti plaćeni popravak može se ponuditi jedan prijenosni portable program za Windows, vezan uz jednokratnu i vremenski ograničenu autorizaciju. Ako se postupak prekine zbog kvara koji dopušta nastavak, korisnik može ponovno pokrenuti isti EXE; takav nastavak ne troši novi plaćeni popravak ni drugi slot. Dovršetak se priznaje tek nakon valjane potpisane potvrde.</p>';
 
-  return {
+  const documents: Record<LegalDocKind, LegalDoc> = {
     privacy: {
       slug: 'privatnost',
       title: 'Obavijest o privatnosti',
@@ -140,4 +142,19 @@ export function legalDocuments(cfg?: Partial<LegalProviderConfig>): Record<Legal
       html: `${meta(`<strong>Pružatelj:</strong> ${esc(org)} · <strong>Kontakt:</strong> ${esc(contact)}`)}<h4>1. Što garancija pokriva</h4><p>Garancija pokriva točnost <strong>verificiranih, bodovanih pravila</strong> na profilima razine pokrivenosti T2 ili T3 (u aplikaciji označeni kao verificirani prema službenom izvoru). Vrijedi kada je referada ili fakultet vratio rad zbog pravila koje je plaćeni puni izvještaj označio prolaznim.</p><h4>2. Mjerodavna verzija pravila</h4><p>Mjerodavna su pravila i status profila <strong>kakvi su bili na dan vezivanja punog izvještaja uz rad</strong> (razina pokrivenosti se u tom trenutku trajno bilježi uz izvještaj). Kasnije izmjene pravila, profila ili službenih uputa ne mijenjaju uvjete već vezanog izvještaja, ni na korist ni na štetu korisnika.</p><h4>3. Rok podnošenja zahtjeva</h4><p>Garancijski zahtjev podnosi se unutar <strong>30 dana</strong> od dana vezivanja punog izvještaja uz rad, kroz za to predviđen obrazac u aplikaciji.</p><h4>4. Dokaz</h4><p>Zahtjev mora sadržavati sporno pravilo i dokaz povrata: opis te poveznicu na dopis ili e-mail referade odnosno njihovu presliku. Ako je dokaz nepotpun, dopuna se traži e-mailom; rok za odgovor teče od zaprimanja potpunog zahtjeva.</p><h4>5. Tko odlučuje</h4><p>O zahtjevu odlučuje čovjek nakon pregleda dokumentacije; odluka nije automatska. Status zahtjeva je najprije zaprimljen, a zatim odobren ili odbijen, s obrazloženjem.</p><h4>6. Rok odgovora</h4><p>Odgovor na potpun zahtjev stiže e-mailom najkasnije u roku od <strong>5 radnih dana</strong> od zaprimanja.</p><h4>7. Što se dobiva ako je zahtjev odobren</h4><p>Prema procjeni pri odobrenju: povrat plaćenog iznosa za taj izvještaj, besplatan ručni popravak spornog oblikovanja, ili oboje.</p><h4>8. Što je isključeno</h4><p>Garancija se ne odnosi na: prihvaćanje ili ocjenu rada, akademsku kvalitetu sadržaja; plagijat, izvornost i sličnost teksta (Lekta uopće ne provodi provjeru plagijata ni sličnosti, pa to nije ni predmet ni garancija usluge); rokove predaje i obrane; subjektivne ili usmene zahtjeve mentora i kolegija (takva pravila su u aplikaciji savjetodavna i ne boduju se); profile koji nisu verificirani (razine T0 i T1); pravila koja je izvještaj označio kao problem (garancija pokriva samo pravila označena prolaznima).</p><h4>9. Pokriveni fakulteti</h4><p>Garanciju nose profili koji su u aplikaciji, u trenutku vezivanja izvještaja, označeni kao verificirani prema službenom izvoru (razina T2 ili T3). Razina pokrivenosti odabranog profila jasno je prikazana prije kupnje.</p>`,
     },
   };
+  documents.privacy.html = documents.privacy.html.replace(
+    '<p>Uz popravak se provodi i <strong>provjera postojanja navedenih izvora</strong>.',
+    `${localRepairProcessing}<p>Uz popravak se provodi i <strong>provjera postojanja navedenih izvora</strong>.`,
+  );
+  documents.processing.html = documents.processing.html.replace(
+    '<p>Uz popravak provjeravamo i postoje li navedeni izvori.',
+    `${localRepairProcessing}<p>Uz popravak provjeravamo i postoje li navedeni izvori.`,
+  );
+  documents.terms.html = documents.terms.html.replace(
+    '<h4>4. Rok i suradnja</h4>', `${localRepairContract}<h4>4. Rok i suradnja</h4>`,
+  );
+  documents.purchase.html = documents.purchase.html.replace(
+    '<h4>3. Pravo na odustanak</h4>', `${localRepairContract}<h4>3. Pravo na odustanak</h4>`,
+  );
+  return documents;
 }

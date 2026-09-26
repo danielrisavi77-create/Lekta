@@ -14,7 +14,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, appendFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
-import { countHighCritical, compareToRatchet, formatVerdict } from './npm-audit-ratchet-core.mjs';
+import { compareAuditToRatchet, formatVerdict, parseAuditResponse, validateRatchet } from './npm-audit-ratchet-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RATCHET_PATH = path.join(ROOT, 'data', 'security', 'npm-audit-ratchet.json');
@@ -24,14 +24,14 @@ function readRatchet() {
 }
 
 function runAudit() {
-  // `npm audit` vraca exit 1 kad ima nalaza; to nije greska nego odgovor. Greska je prazan ili
-  // neparsabilan izlaz (nema mreze, npm pao), i ona se NE smije citati kao "nula nalaza".
-  // Jedan niz kroz shell, bez polja argumenata: Node 24 uz `shell: true` + args javlja DEP0190, a
-  // bez shella na Windowsu `npm.cmd` odbija EINVAL. Niz je konstanta, nema korisnickog unosa.
+  // `npm audit` vraca exit 1 kad ima nalaza; to nije greska nego odgovor. Greska je prazan,
+  // neparsabilan ili nevaljan JSON (npr. {error:...} bez vulnerabilities) — NE smije se citati
+  // kao "nula nalaza". Jedan niz kroz shell, bez polja argumenata: Node 24 uz `shell: true` + args
+  // javlja DEP0190, a bez shella na Windowsu `npm.cmd` odbija EINVAL. Niz je konstanta.
   const r = spawnSync('npm audit --json', { cwd: ROOT, encoding: 'utf8', shell: true, maxBuffer: 64 * 1024 * 1024 });
   const out = String(r.stdout ?? '').trim();
   if (!out) throw new Error(`npm audit nije dao izlaz (status ${r.status}); ${String(r.stderr ?? '').slice(0, 300)}`);
-  return JSON.parse(out);
+  return parseAuditResponse(out);
 }
 
 function summary(line) {
@@ -40,30 +40,48 @@ function summary(line) {
 
 function selftest() {
   const ratchet = readRatchet();
+  const metadataProblems = validateRatchet(ratchet);
+  if (metadataProblems.length) {
+    console.error(`[audit-ratchet] FAIL selftest: nevaljan zapis iznimki: ${metadataProblems.join('; ')}`);
+    return 1;
+  }
   const ceiling = Number(ratchet.fullGraphHighCritical);
   if (!Number.isFinite(ceiling)) {
     console.error('[audit-ratchet] FAIL selftest: strop nije broj, mutacija nema sto prekoraciti.');
     return 1;
   }
-  const fake = (n) => ({ vulnerabilities: Object.fromEntries(Array.from({ length: n }, (_, i) => [`p${i}`, { severity: i % 2 ? 'high' : 'critical' }])) });
-  const above = compareToRatchet(countHighCritical(fake(ceiling + 1)), ratchet);
+  const fake = (names) => ({ vulnerabilities: Object.fromEntries(names.map((name, i) => [name, { severity: i % 2 ? 'high' : 'critical' }])) });
+  const accepted = ratchet.fullGraphHighCriticalPackages;
+  const above = compareAuditToRatchet(fake([...accepted.slice(0, -1), '__novi-ranjivi-paket__']), ratchet);
   if (above.verdict !== 'above') {
-    console.error('[audit-ratchet] FAIL selftest: podmetnut porast NIJE prijavljen. Gard ne grize.');
+    console.error('[audit-ratchet] FAIL selftest: podmetnut novi identitet NIJE prijavljen. Gard ne grize.');
     return 1;
   }
-  const equal = compareToRatchet(countHighCritical(fake(ceiling)), ratchet);
+  const equal = compareAuditToRatchet(fake(accepted), ratchet);
   if (equal.verdict !== 'equal') {
     console.error('[audit-ratchet] FAIL selftest: jednak broj nije prosao kao jednak.');
     return 1;
   }
-  console.log(`[audit-ratchet] SELF-TEST OK: strop ${ceiling}, porast se hvata, jednakost prolazi.`);
+  let rejected = false;
+  try {
+    parseAuditResponse({ error: { code: 'ENOTFOUND' } });
+  } catch {
+    rejected = true;
+  }
+  if (!rejected) {
+    console.error('[audit-ratchet] FAIL selftest: nevaljan audit odgovor NIJE odbijen.');
+    return 1;
+  }
+  console.log(`[audit-ratchet] SELF-TEST OK: strop ${ceiling}, novi identitet se hvata, jednakost prolazi, nevaljan odgovor pada.`);
   return 0;
 }
 
 function main() {
   if (process.argv.includes('--selftest')) return selftest();
   const ratchet = readRatchet();
-  const status = compareToRatchet(countHighCritical(runAudit()), ratchet);
+  const metadataProblems = validateRatchet(ratchet);
+  if (metadataProblems.length) throw new Error(`nevaljan zapis iznimki: ${metadataProblems.join('; ')}`);
+  const status = compareAuditToRatchet(runAudit(), ratchet);
   const msg = formatVerdict(status);
   console.log(`[audit-ratchet] ${msg}`);
   summary(`### Supply chain: ${status.count} high/critical u punom grafu (strop ${status.ceiling}, ${status.verdict})`);

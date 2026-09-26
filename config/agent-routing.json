@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "pricingSnapshot": {
+    "source": "Anthropic API cjenik, kes 2026-06-24",
+    "unit": "USD po 1M tokena"
+  },
+  "quotaNotDollars": true,
+  "quotaNotDollarsNote": "Svi navedeni provideri (claude, codex, grok) rade na pretplati, ne po tokenu; stvarni trosak pokretanja je potrosena kvota, ne dolari. Cjenik ispod je TEZINA za usporedbu modela medusobno, ne stvarni racun.",
+  "models": {
+    "claude-fable-5-1": {
+      "input": 10,
+      "output": 50,
+      "roles": ["coordinator"],
+      "neverImplements": true,
+      "status": "verified"
+    },
+    "claude-opus-5-5": {
+      "input": 4,
+      "output": 20,
+      "status": "unverified",
+      "defaultEffort": "medium",
+      "note": "ulazi tek nakon doctor + fixture"
+    },
+    "claude-opus-5": {
+      "input": 5,
+      "output": 25,
+      "status": "verified"
+    },
+    "claude-sonnet-5": {
+      "input": 2,
+      "output": 10,
+      "status": "verified"
+    },
+    "claude-haiku-4-5": {
+      "input": 1,
+      "output": 5,
+      "status": "verified"
+    }
+  },
+  "costWeight": {
+    "claude-sonnet-5": 1,
+    "claude-opus-5": 2.5,
+    "claude-fable-5-1": 5,
+    "claude-haiku-4-5": 0.5,
+    "claude-opus-5-5": 2
+  },
+  "costWeightFormula": "(input + output) / (claude-sonnet-5 input + output); claude-sonnet-5 = 1",
+  "providers": {
+    "claude": {
+      "billing": "subscription"
+    },
+    "codex": {
+      "billing": "subscription",
+      "models": [],
+      "note": "Popunjava se tek nakon doctor probe koji potvrdi dostupan model. Na Windowsu je Codex sandbox ogranicen na pregled/read-only lokalno; implementacija ide u cloudu."
+    },
+    "grok": {
+      "billing": "subscription",
+      "model": "grok-4.6-build",
+      "status": "verified",
+      "verifiedAt": "2026-09-21"
+    }
+  },
+  "effortPolicy": {
+    "brief": "low",
+    "scout": "low",
+    "gate": "low",
+    "review": "medium",
+    "implement": "high",
+    "implementProtected": "xhigh",
+    "max": "samo na rijec vlasnika"
+  },
+  "routing": {
+    "S": {
+      "false": {
+        "mode": "light",
+        "roles": {
+          "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
+          "implement": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" },
+          "review": {
+            "provider": "codex",
+            "model": null,
+            "effort": "medium",
+            "reviewFallback": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "medium" }
+          },
+          "gate": { "provider": "none" }
+        }
+      },
+      "true": {
+        "mode": "full",
+        "roles": {
+          "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
+          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "review": {
+            "provider": "codex",
+            "model": null,
+            "effort": "high",
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" }
+          },
+          "gate": { "provider": "none" }
+        }
+      }
+    },
+    "M": {
+      "false": {
+        "mode": "standard",
+        "roles": {
+          "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
+          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "high" },
+          "review": {
+            "provider": "codex",
+            "model": null,
+            "effort": "medium",
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" }
+          },
+          "gate": { "provider": "none" }
+        }
+      },
+      "true": {
+        "mode": "full",
+        "roles": {
+          "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
+          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "review": {
+            "provider": "codex",
+            "model": null,
+            "effort": "high",
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" }
+          },
+          "gate": { "provider": "none" }
+        }
+      }
+    },
+    "L": {
+      "false": {
+        "mode": "standard",
+        "note": "standard s designom: L nezasticeno dobiva dodatni design prolaz",
+        "roles": {
+          "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
+          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "review": {
+            "provider": "codex",
+            "model": null,
+            "effort": "medium",
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" }
+          },
+          "gate": { "provider": "none" },
+          "design": { "provider": "claude", "model": "claude-sonnet-5", "effort": "medium" }
+        }
+      },
+      "true": {
+        "mode": "full",
+        "roles": {
+          "brief": { "provider": "claude", "model": "claude-haiku-4-5", "effort": "low" },
+          "implement": { "provider": "claude", "model": "claude-opus-5", "effort": "xhigh" },
+          "review": {
+            "provider": "codex",
+            "model": null,
+            "effort": "high",
+            "reviewFallback": { "provider": "claude", "model": "claude-sonnet-5", "effort": "high" }
+          },
+          "gate": { "provider": "none" }
+        }
+      }
+    }
+  },
+  "protectedPaths": [
+    "src/repair",
+    "src/citations",
+    "src/docx",
+    "supabase",
+    "security"
+  ]
+}

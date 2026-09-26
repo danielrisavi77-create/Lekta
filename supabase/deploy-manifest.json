@@ -357,6 +357,7 @@
       "declaredInConfig": true,
       "requiredSecrets": [
         "REPAIR_LOCAL_DISABLED",
+        "REPAIR_LOCAL_ENABLED",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
@@ -371,6 +372,7 @@
       "declaredInConfig": true,
       "requiredSecrets": [
         "REPAIR_LOCAL_DISABLED",
+        "REPAIR_LOCAL_ENABLED",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
@@ -434,8 +436,8 @@
       "verifyJwt": false,
       "declaredInConfig": true,
       "requiredSecrets": [
+        "LEMONSQUEEZY_STORE_ID",
         "LS_ALLOW_TEST_MODE",
-        "LS_STORE_ID",
         "MOR_WEBHOOK_SECRET",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
@@ -460,7 +462,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-10T21:51:32.117Z",
-  "generatedFromCommit": "8cf328cf03da8adee658373c24b7d71cab85bce4",
+  "generatedAt": "2026-09-23T12:44:54.467Z",
+  "generatedFromCommit": "2fffe3e31ad6b2c26fbca657084e79d0c09eb53d",
   "generator": "npm run deploy-manifest"
 }

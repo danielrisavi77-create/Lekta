@@ -84,12 +84,19 @@
     {
       "fixerId": "field-integrity-fixer",
       "requested": 21,
-      "changed": 20,
+      "changed": 14,
       "reasons": {
+        "already-ok": 6,
         "stale-anchor": 1
       },
       "deadOn": [
-        "effectus--seminar--diplomski--uskladjen.docx"
+        "algebra--specialist--poslijediplomski--neuredan.docx",
+        "effectus--seminar--diplomski--neuredan.docx",
+        "effectus--seminar--diplomski--uskladjen.docx",
+        "effectus--seminar--diplomski--word.docx",
+        "fsb--article--diplomski--neuredan.docx",
+        "fzsri--final--prijediplomski--neuredan.docx",
+        "fzsri--final--prijediplomski--word.docx"
       ]
     },
     {
@@ -266,7 +273,6 @@
       ],
       "promijenili": [
         "croatian-typography-fixer",
-        "field-integrity-fixer",
         "final-document-inspector-fixer",
         "link-doi-fixer"
       ],
@@ -274,6 +280,10 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
+        },
+        {
+          "fixerId": "field-integrity-fixer",
+          "reason": "already-ok"
         }
       ],
       "rijeseno": [],
@@ -483,7 +493,6 @@
       "promijenili": [
         "croatian-typography-fixer",
         "empty-paragraph-fixer",
-        "field-integrity-fixer",
         "final-document-inspector-fixer",
         "heading-style-fixer",
         "link-doi-fixer",
@@ -493,6 +502,10 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
+        },
+        {
+          "fixerId": "field-integrity-fixer",
+          "reason": "already-ok"
         }
       ],
       "rijeseno": [
@@ -566,7 +579,6 @@
         "link-doi-fixer"
       ],
       "promijenili": [
-        "field-integrity-fixer",
         "final-document-inspector-fixer",
         "heading-style-fixer",
         "line-spacing-fixer"
@@ -575,6 +587,10 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
+        },
+        {
+          "fixerId": "field-integrity-fixer",
+          "reason": "already-ok"
         },
         {
           "fixerId": "link-doi-fixer",
@@ -961,7 +977,6 @@
       "promijenili": [
         "croatian-typography-fixer",
         "empty-paragraph-fixer",
-        "field-integrity-fixer",
         "final-document-inspector-fixer",
         "link-doi-fixer"
       ],
@@ -969,6 +984,10 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
+        },
+        {
+          "fixerId": "field-integrity-fixer",
+          "reason": "already-ok"
         }
       ],
       "rijeseno": [],
@@ -1026,7 +1045,6 @@
       "promijenili": [
         "croatian-typography-fixer",
         "empty-paragraph-fixer",
-        "field-integrity-fixer",
         "final-document-inspector-fixer",
         "link-doi-fixer",
         "margins-fixer"
@@ -1035,6 +1053,10 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
+        },
+        {
+          "fixerId": "field-integrity-fixer",
+          "reason": "already-ok"
         }
       ],
       "rijeseno": [
@@ -1097,7 +1119,6 @@
       ],
       "promijenili": [
         "croatian-typography-fixer",
-        "field-integrity-fixer",
         "final-document-inspector-fixer",
         "link-doi-fixer"
       ],
@@ -1105,6 +1126,10 @@
         {
           "fixerId": "consistency-fixer",
           "reason": "no-target"
+        },
+        {
+          "fixerId": "field-integrity-fixer",
+          "reason": "already-ok"
         }
       ],
       "rijeseno": [],
@@ -1115,7 +1140,7 @@
       "integrityFailure": null
     }
   ],
-  "generatedAt": "2026-09-08T17:39:51.365Z",
-  "generatedFromCommit": "7a540f9fec4dab78661426f17393dbd141dd29d5",
+  "generatedAt": "2026-09-26T21:55:03.541Z",
+  "generatedFromCommit": "4de3cfd6ee84bbac4d83d7a5e31442b516c9bd30",
   "generator": "npm run repair-net -- --write"
 }

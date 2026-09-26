@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-26T17:25:37.119Z",
+  "generatedAt": "2026-09-26T20:55:10.644Z",
   "command": "npm run closed-loop -- --profile ffos-diplomski --no-structural",
   "profileId": "ffos-diplomski",
   "row": {
@@ -45,9 +45,9 @@
       "outcome": "pass",
       "inputHash": "1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2",
       "outputHash": "0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
-      "repairSourceHash": "ac10efa47e15525fbb50c9057f46b372386ea05f44d848accb9e14139364c948",
+      "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "423d96365c8728a45d62cb4625e0819b3d2dd3815327d30b1ed75a401b3ae443",
-      "ranAt": "2026-09-26T17:25:37.119Z"
+      "ranAt": "2026-09-26T20:55:10.644Z"
     },
     {
       "manifestId": "closed-loop:ffos-diplomski:ffos-diplomski--margins:1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2:0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
@@ -58,9 +58,9 @@
       "outcome": "pass",
       "inputHash": "1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2",
       "outputHash": "0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
-      "repairSourceHash": "ac10efa47e15525fbb50c9057f46b372386ea05f44d848accb9e14139364c948",
+      "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "d11c48831a402b980fc032f3f97d0104d66468b1cf56c75c44816f431c9e3adb",
-      "ranAt": "2026-09-26T17:25:37.119Z"
+      "ranAt": "2026-09-26T20:55:10.644Z"
     },
     {
       "manifestId": "closed-loop:ffos-diplomski:ffos-diplomski--font:1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2:0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
@@ -71,9 +71,9 @@
       "outcome": "pass",
       "inputHash": "1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2",
       "outputHash": "0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
-      "repairSourceHash": "ac10efa47e15525fbb50c9057f46b372386ea05f44d848accb9e14139364c948",
+      "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "1f5f650491f7cda46e799cf6c45fcbb392b501f59a163a1c1df3625fd43979de",
-      "ranAt": "2026-09-26T17:25:37.119Z"
+      "ranAt": "2026-09-26T20:55:10.644Z"
     },
     {
       "manifestId": "closed-loop:ffos-diplomski:ffos-diplomski--font-size:1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2:0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
@@ -84,9 +84,9 @@
       "outcome": "pass",
       "inputHash": "1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2",
       "outputHash": "0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
-      "repairSourceHash": "ac10efa47e15525fbb50c9057f46b372386ea05f44d848accb9e14139364c948",
+      "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918",
-      "ranAt": "2026-09-26T17:25:37.119Z"
+      "ranAt": "2026-09-26T20:55:10.644Z"
     },
     {
       "manifestId": "closed-loop:ffos-diplomski:ffos-diplomski--line-spacing:1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2:0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
@@ -97,9 +97,9 @@
       "outcome": "pass",
       "inputHash": "1eb4b9f2d928105f75e6c1401610562d4b8b177832a2302a1a24fb25d02772a2",
       "outputHash": "0dc77c1a7e8ba73b4a5ef5da92ca7994ac796b3e92483526933bc445defce03a",
-      "repairSourceHash": "ac10efa47e15525fbb50c9057f46b372386ea05f44d848accb9e14139364c948",
+      "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "9f29a130438b81170b92a42650f9a94291ecad60bd47af2a3886e75f7f728725",
-      "ranAt": "2026-09-26T17:25:37.119Z"
+      "ranAt": "2026-09-26T20:55:10.644Z"
     }
   ]
 }
