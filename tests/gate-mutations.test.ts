@@ -3964,4 +3964,165 @@ describe('mutacije: gate preflight i omotac locka', () => {
     expect(mutated).not.toContain("process.on('exit', release)");
     expect(releasesOnFailure(mutated)).toBe(false);
   }, 120_000);
+
+  /** Izvrsava `readLock(path)` iz izvora u zasebnom node procesu; vraca je li bacio i sto je vratio. */
+  async function ocijeniReadLock(source: string, path: string): Promise<{ threw: boolean; value: unknown }> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-readlock-'));
+    try {
+      const file = join(dir, 'gate-preflight.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `let out; try { out = { threw: false, value: m.readLock(${JSON.stringify(path)}) }; }`
+        + `catch (e) { out = { threw: true, value: String(e && e.code || e) }; }`
+        + `process.stdout.write(JSON.stringify(out));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 30_000 });
+      return JSON.parse(res.stdout) as { threw: boolean; value: unknown };
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(c) readLock koji baca na EPERM/EBUSY/EACCES rusi gate umjesto fail-open obara tvrdnju', async () => {
+    const { mkdtempSync, mkdirSync, rmSync: rm } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const source = readLf('scripts/gate-preflight.mjs');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-readlock-dir-'));
+    // Staza postoji ali NIJE datoteka: `readFileSync` na njoj baca gresku koja NIJE ENOENT (npr.
+    // EISDIR), imitirajuci istu klasu kvara kao EPERM/EBUSY/EACCES.
+    const nijeDatoteka = join(dir, 'lekta-gate.lock');
+    mkdirSync(nijeDatoteka);
+    try {
+      // BASELINE: stvaran readLock ne baca, vraca unmeasurable.
+      const baseline = await ocijeniReadLock(source, nijeDatoteka);
+      expect(baseline.threw).toBe(false);
+      expect(baseline.value).toMatchObject({ unmeasurable: true });
+
+      // MUTACIJA: povratak na stari kvar, svaka greska osim ENOENT se baca i rusi gate.
+      const mutated = source.replace(
+        "    if (error && error.code === 'ENOENT') return null;\n    return { unmeasurable: true, error: error && error.code ? error.code : 'UNKNOWN' };",
+        "    if (error && error.code === 'ENOENT') return null;\n    throw error;",
+      );
+      expect(mutated).not.toBe(source);
+      const posljeMutacije = await ocijeniReadLock(mutated, nijeDatoteka);
+      expect(posljeMutacije.threw).toBe(true);
+    } finally {
+      rm(dir, { recursive: true, force: true });
+    }
+  }, 60_000);
+
+  /** Izvrsava `canTakeOverLock(status, age)` iz izvora u zasebnom node procesu. */
+  async function ocijeniCanTakeOverLock(source: string, status: string, age: number): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-takeover-'));
+    try {
+      const file = join(dir, 'gate-preflight.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.canTakeOverLock(${JSON.stringify(status)}, ${age})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 30_000 });
+      return JSON.parse(res.stdout) as boolean;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(d) preuzimanje mrtvog locka bez donje granice starosti obara tvrdnju (uska utrka dvije sesije)', async () => {
+    const source = readLf('scripts/gate-preflight.mjs');
+    const mladi = 10; // ms, daleko ispod THRESHOLDS.minTakeoverAgeMs
+
+    // BASELINE: lock mrtav/zastario ali mladji od praga se NE preuzima.
+    expect(await ocijeniCanTakeOverLock(source, 'dead', mladi)).toBe(false);
+    expect(await ocijeniCanTakeOverLock(source, 'stale', mladi)).toBe(false);
+
+    // MUTACIJA: donja granica starosti nestaje, preuzima se cim je status dead/stale, bez obzira
+    // koliko je lock svjez, sto je upravo uska utrka koju vlasnik prijavljuje.
+    const mutated = source.replace(
+      "  if (status !== 'dead' && status !== 'stale') return false;\n  return age === null || age >= thresholds.minTakeoverAgeMs;",
+      "  return status === 'dead' || status === 'stale';",
+    );
+    expect(mutated).not.toBe(source);
+    expect(await ocijeniCanTakeOverLock(mutated, 'dead', mladi)).toBe(true);
+  }, 60_000);
+});
+
+describe('mutacije: granica statickog grafa ulaza (helpers/entry-graph-boundary.ts)', () => {
+  const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+
+  /**
+   * Predikat se izvrsava kao ODVOJEN Node proces (ne kroz vitestov/viteov ucitavac), jer dinamicki
+   * `import()` unutar vitesta odbija ucitati datoteku izvan korijena projekta ("Failed to load
+   * url ... Does the file exist?"), pa se svaka varijanta izvora ispisuje u privremenu datoteku i
+   * pokrece odvojenim `node` procesom, isto kao gore za `gate-preflight.mjs`.
+   */
+  async function ocijeni(source: string, path: string, root: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    // Minimalno skidanje TypeScript tipova: jedini oblici u ovoj datoteci su `: string` i
+    // `: boolean` iza parametra ili liste parametara, sto native ESM ne razumije.
+    const plainJs = source.replace(/:\s*(?:string|boolean)\b/g, '');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-graf-'));
+    try {
+      const file = join(dir, 'entry-graph-boundary.mjs');
+      write(file, plainJs);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.zabranjenUGrafuUlaza(${JSON.stringify(path)}, ${JSON.stringify(root)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 30_000 });
+      return JSON.parse(res.stdout) as boolean;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(c) usporedba nad apsolutnom stazom (bez svodenja na korijen) obara tvrdnju', async () => {
+    const source = readLf('tests/helpers/entry-graph-boundary.ts');
+    const dopusteni = 'src/shared/ui-boot.ts';
+    const zabranjeni = 'src/analysis/run.ts';
+    const root = 'C:/wt/wf-gate-preflight-lock';
+
+    // BASELINE: stvaran predikat mjeri relativno, pa ime checkouta ne utjece na dopusten modul, a
+    // stvaran zabranjen modul u istom checkoutu i dalje pada.
+    expect(await ocijeni(source, `${root}/${dopusteni}`, root)).toBe(false);
+    expect(await ocijeni(source, `${root}/${zabranjeni}`, root)).toBe(true);
+
+    // MUTACIJA: povratak na stari kvar, regex gleda apsolutnu stazu bez svodenja na korijen, pa ime
+    // checkouta koje sadrzi zabranjenu rijec (`preflight`) lazno oznaci i dopusten modul, dok bi
+    // ANALIZATOR morao ostati uhvacen.
+    const mutated = source.replace(
+      /const relativno = podudaraSeSPrefiksom \? posixPath\.slice\(rootPrefix\.length - 1\) : posixPath;/,
+      'const relativno = posixPath;',
+    );
+    expect(mutated).not.toBe(source);
+    expect(await ocijeni(mutated, `${root}/${dopusteni}`, root)).toBe(true);
+    expect(await ocijeni(mutated, `${root}/${zabranjeni}`, root)).toBe(true);
+  }, 60_000);
+
+  it('(d) preskocena normalizacija velicine slova diska na win32 obara tvrdnju', async () => {
+    const source = readLf('tests/helpers/entry-graph-boundary.ts');
+    const dopusteni = 'src/shared/ui-boot.ts';
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    const stazaDrugimSlovomDiska = `c:/wt/wf-gate-preflight-lock/${dopusteni}`;
+
+    // BASELINE: slovo diska u drugoj velicini i dalje pogadja prefiks, pa dopusten modul ostaje
+    // dopusten.
+    expect(await ocijeni(source, stazaDrugimSlovomDiska, root)).toBe(false);
+
+    // MUTACIJA: usporedba prefiksa vise ne normalizira na mala slova, pa se staza s drugim slovom
+    // diska vise ne prepoznaje kao unutar korijena i pada natrag na strozi apsolutni uvjet, koji
+    // dopusteni modul lazno proglasava zabranjenim.
+    const mutated = source.replace(
+      "const podudaraSeSPrefiksom = process.platform === 'win32'\n    ? posixPath.toLowerCase().startsWith(rootPrefix.toLowerCase())\n    : posixPath.startsWith(rootPrefix);",
+      'const podudaraSeSPrefiksom = posixPath.startsWith(rootPrefix);',
+    );
+    expect(mutated).not.toBe(source);
+    expect(await ocijeni(mutated, stazaDrugimSlovomDiska, root)).toBe(true);
+  }, 60_000);
 });

@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { collectStaticGraph, staticRuntimeImports } from './helpers/module-graph';
 import { intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
+import { zabranjenUGrafuUlaza } from './helpers/entry-graph-boundary';
 
 /**
  * GRANICA CISTOG ULAZA `/` (rez naslovnice, 2026-09-05).
@@ -24,6 +25,9 @@ const CONTROLLER = resolve(ROOT, 'src/routes/intake/intake-controller.ts');
 const INTAKE_CSS = resolve(ROOT, 'src/routes/intake/intake.css');
 
 const source = (path: string): string => readFileSync(path, 'utf8');
+
+// Predikat `zabranjenUGrafuUlaza` zivi u `helpers/entry-graph-boundary.ts`, jer ga kao izvorni
+// tekst ucitava i mutacijski test u `tests/gate-mutations.test.ts`.
 
 // Obilazak grafa zivi u `helpers/module-graph.ts`, jer ga dijeli i `entry-fonts`. Ondje stoji i
 // biljeska o greedy `from` skupini koja je do 2026-09-05 gutala bare uvoze (5 nadjenih umjesto 19).
@@ -139,21 +143,36 @@ describe('cisti ulaz /', () => {
 
   it('pocetni staticki graf NEMA analizator, profile ni repair motor', () => {
     const graph = [...collectStaticGraph(INTAKE_MAIN)].map((path) => path.replace(/\\/g, '/'));
-    const forbidden = graph.filter((path) => (
-      path.includes('/src/analysis/')
-      || path.includes('/src/profiles/')
-      || path.includes('/src/ui/app.ts')
-      || path.includes('/src/routes/workspace/')
-      || path.includes('/src/audits/')
-      || path.includes('/src/citations/')
-      || (path.includes('/src/repair/') && !path.endsWith('/src/repair/docx-budget.ts'))
-      || /(?:preflight|preview|history|landing)/i.test(path)
-    ));
+    const forbidden = graph.filter((path) => zabranjenUGrafuUlaza(path, ROOT));
     expect(forbidden).toEqual([]);
     expect(graph.some((path) => path.endsWith('/src/repair/docx-budget.ts'))).toBe(true);
     // Sto SMIJE: dijeljena ljuska (tema, navigacija) i prazan stol pod lampom.
     expect(graph.some((path) => path.endsWith('/src/shared/ui-boot.ts'))).toBe(true);
     expect(graph.some((path) => path.endsWith('/src/ui/hero-depth.ts'))).toBe(true);
+  });
+
+  it('predikat grafa ne gleda ime checkouta, ali i dalje hvata zabranjen modul', () => {
+    // Baseline i mutacija za relativno mjerenje iznad: dopusteni modul u checkoutu cije ime nosi
+    // zabranjenu rijec mora proci, a stvaran zabranjen modul u istom checkoutu mora pasti.
+    for (const root of ['C:\\wt\\wf-gate-preflight-lock', '/tmp/landing-preview-history']) {
+      const r = root.replace(/\\/g, '/');
+      expect(zabranjenUGrafuUlaza(`${r}/src/shared/ui-boot.ts`, root), `lazni pogodak za ${root}`).toBe(false);
+      expect(zabranjenUGrafuUlaza(`${r}/src/repair/docx-budget.ts`, root)).toBe(false);
+      for (const modul of ['src/ui/preview-modal.ts', 'src/preflight/index.ts', 'src/ui/history.ts', 'src/landing/hero.ts', 'src/analysis/run.ts', 'src/repair/engine.ts', 'src/ui/app.ts']) {
+        expect(zabranjenUGrafuUlaza(`${r}/${modul}`, root), `${modul} mora biti zabranjen u ${root}`).toBe(true);
+      }
+    }
+    // Staza izvan korijena se mjeri apsolutno, dakle strozim starim uvjetom.
+    expect(zabranjenUGrafuUlaza('D:/drugo/preview/x.ts', 'C:/wt/lekta')).toBe(true);
+  });
+
+  it('slovo diska u drugoj velicini slova ne baca mjerenje natrag na apsolutnu stazu', () => {
+    // `resolve()` u testu i stvaran checkout mogu vratiti isto slovo diska razlicite velicine.
+    // Bez normalizacije na malo slovo prefiks se ne bi poklopio, staza bi ostala apsolutna, i
+    // dopusteni modul (koji sadrzi ime checkouta `wf-gate-preflight-lock`) bio bi lazno zabranjen.
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/shared/ui-boot.ts', root)).toBe(false);
+    expect(zabranjenUGrafuUlaza('c:/wt/wf-gate-preflight-lock/src/analysis/run.ts', root)).toBe(true);
   });
 
   it('intake gate ostaje dinamicki iza korisnicke akcije', () => {
