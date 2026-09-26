@@ -20,14 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Node 24
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
         with:
           node-version: 24
-          cache: npm
-
-      - name: Install
-        run: npm ci
 
       - name: WordReplica-Lekta contract and production build gate
         run: npm run check:repair-integration

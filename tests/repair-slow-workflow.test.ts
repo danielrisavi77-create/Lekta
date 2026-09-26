@@ -13,7 +13,10 @@ describe('repair slow workflow contract', () => {
     expect(yaml).toMatch(/workflow_dispatch:/);
     expect(yaml).toMatch(/permissions:\s*\n\s+contents:\s*read/);
     expect(yaml).toMatch(/node-version:\s*24/);
-    expect(yaml).toMatch(/run:\s*npm ci/);
+    // Od CI kesiranja ovisnosti (BL-P3-XX) instalacija ide kroz composite akciju, ne kroz
+    // izravan `run: npm ci` korak; ta akcija (tests/ci-workflow-cache.test.ts) sama dokazuje
+    // da INTERNO stvarno pokrece `npm ci` na promasaj kesa.
+    expect(yaml).toMatch(/uses:\s*\.\/\.github\/actions\/setup-deps/);
     expect(yaml).toMatch(/run:\s*npm run test:slow/);
   });
 });
