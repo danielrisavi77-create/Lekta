@@ -20,6 +20,12 @@ export interface TableRescueCandidate {
   rowsWithCantSplit: number;
   nested: boolean;
   unsupported: boolean;
+  /**
+   * T65: tablica ima spojene celije (w:gridSpan, w:hMerge ili w:vMerge). Popravak tada NE
+   * ujednacuje stupce (table-figure-rescue-fixer preskace equalColumns). Polje ne ulazi u
+   * `unsupported` ni `confidence`, pa ne mijenja bodovanje ni predodabir tablice.
+   */
+  mergedCells: boolean;
   source?: { paragraphIndex: number; text: string };
   sourceAnchorFingerprint?: string;
   landscapeAnchors?: { beforeFingerprint: string; afterFingerprint: string };
@@ -143,11 +149,13 @@ function tableMetrics(table: Element, candidate: ElementCandidate, availableWidt
   }
   const nested = hasDescendant(table, ['tbl']) && rows.some((row) => hasDescendant(row, ['tbl']));
   const unsupported = nested || hasDescendant(table, ['ins', 'del', 'fldSimple', 'txbxContent', 'sdtContent']);
+  const mergedCells = hasDescendant(table, ['gridSpan', 'hMerge', 'vMerge']);
   const wide = tableWidthEmu != null && availableWidthEmu != null && tableWidthEmu > availableWidthEmu;
   const evidence = [`${rows.length} redaka`, `${columnCount} stupaca`];
   if (tableWidthEmu != null) evidence.push('pronađena širina tablice');
   if (hasHeader) evidence.push('pronađeno zaglavlje');
   if (nested) evidence.push('ugniježđena tablica');
+  if (mergedCells) evidence.push('spojene ćelije: stupci se neće ujednačiti');
   if (unsupported) warnings.push({ id: `${candidate.id}-unsupported`, kind: 'table', candidateId: candidate.id, severity: 'warning', message: 'Tablica ima složenu strukturu i neće biti automatski popravljena.' });
   if (wide) warnings.push({ id: `${candidate.id}-wide`, kind: 'table', candidateId: candidate.id, severity: 'warning', message: 'Tablica je šira od raspoloživog tekstnog prostora; predloži landscape samo uz potvrdu.' });
   return {
@@ -163,6 +171,7 @@ function tableMetrics(table: Element, candidate: ElementCandidate, availableWidt
     rowsWithCantSplit,
     nested,
     unsupported,
+    mergedCells,
     ...(candidate.source ? { source: candidate.source } : {}),
     confidence: unsupported ? 'low' : wide || !hasHeader || rowsWithCantSplit < rows.length ? 'medium' : 'high',
     evidence,

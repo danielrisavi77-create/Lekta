@@ -1090,7 +1090,7 @@ export function tableFigureRescueRepairableItem(result: any, profile: any): Repa
     id: String(table.id), bodyChildIndex: Number(table.bodyChildIndex), anchorFingerprint: String(table.anchorFingerprint),
     summary: `${table.rowCount || 0} redaka × ${table.columnCount || 0} stupaca${table.wide ? ', široka tablica' : ''}`,
     wide: table.wide === true, selected: table.unsupported !== true && table.confidence !== 'low',
-    actions: { fitToTextWidth: true, equalColumns: true, repeatHeader: !table.hasHeader, preventRowSplit: table.rowsWithCantSplit < table.rowCount, center: true, applyProfileTypography: !!rules.table, separateSource: !!table.source },
+    actions: { fitToTextWidth: true, equalColumns: table.mergedCells !== true, repeatHeader: !table.hasHeader, preventRowSplit: table.rowsWithCantSplit < table.rowCount, center: true, applyProfileTypography: !!rules.table, separateSource: !!table.source },
     ...(table.source && table.sourceAnchorFingerprint ? { source: { paragraphIndex: Number(table.source.paragraphIndex), anchorFingerprint: String(table.sourceAnchorFingerprint), text: String(table.source.text || ''), selected: true } } : {}),
     ...(table.landscapeAnchors ? { landscape: { beforeFingerprint: String(table.landscapeAnchors.beforeFingerprint), afterFingerprint: String(table.landscapeAnchors.afterFingerprint), selected: false } } : {}),
     ...(rules.table ? { typography: { ...(rules.table.font ? { font: rules.table.font } : {}), ...(Number.isFinite(rules.table.sizePt) ? { sizePt: Number(rules.table.sizePt) } : {}), ...(Number.isFinite(rules.table.beforePt) ? { beforePt: Number(rules.table.beforePt) } : {}), ...(Number.isFinite(rules.table.afterPt) ? { afterPt: Number(rules.table.afterPt) } : {}) } } : {}),

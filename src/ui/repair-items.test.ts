@@ -547,6 +547,16 @@ describe('tableFigureRescueRepairableItem: preporuka bez profilnog pravila (RE-6
     expect(params.figures?.every((figure) => figure.altText === undefined), 'alt tekst se ne smije slati').toBe(true);
   });
 
+  it('T65: tablica sa spojenim celijama nema predodabran equalColumns, ostale akcije iste', () => {
+    const merged = { ...structure, tables: [{ ...structure.tables[0], mergedCells: true }] };
+    const plainTable = tableFigureRescueRepairableItem({ details: { tableFigureRescue: structure } }, { ruleEntries: [] })[0].tableFigureRescueForm!.tables[0];
+    const mergedTable = tableFigureRescueRepairableItem({ details: { tableFigureRescue: merged } }, { ruleEntries: [] })[0].tableFigureRescueForm!.tables[0];
+    expect(plainTable.actions.equalColumns).toBe(true);
+    expect(mergedTable.actions.equalColumns).toBe(false);
+    expect({ ...mergedTable.actions, equalColumns: true }).toEqual(plainTable.actions);
+    expect(mergedTable.selected).toBe(plainTable.selected);
+  });
+
   it('s verificiranim pravilom ostaje prekrsaj', () => {
     const ruleEntries = [{
       checkId: 'table-figure-rescue-rules', status: 'verified', sourceId: 'izvor', sourcePage: 'str. 7', quote: 'citat',

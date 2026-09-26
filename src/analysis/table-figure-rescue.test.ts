@@ -18,3 +18,37 @@ describe('table-figure-rescue analiza', () => {
     expect(result.figures[0].dpiX).toBeGreaterThan(200);
   });
 });
+
+/**
+ * T65: popravak preskace equalColumns na tablici sa spojenim celijama. Analiza to mora reci
+ * (mergedCells + evidence), a da pritom ne mijenja unsupported ni confidence: to je izravan
+ * signal da se bodovanje i predodabir tablice nisu promijenili.
+ */
+describe('table-figure-rescue analiza: spojene celije (T65)', () => {
+  const W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+  const tc = (extra: string, text: string) => `<w:tc><w:tcPr><w:tcW w:w="3000" w:type="dxa"/>${extra}</w:tcPr><w:p><w:r><w:t>${text}</w:t></w:r></w:p></w:tc>`;
+  const table = (first: string, second: string) => `<w:tbl><w:tblPr><w:tblW w:w="6000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="3000"/><w:gridCol w:w="3000"/></w:tblGrid><w:tr>${tc(first, 'A')}${tc('', 'B')}</w:tr><w:tr>${tc(second, 'C')}${tc('', 'D')}</w:tr></w:tbl>`;
+  const analyse = (tbl: string) => {
+    const document = parseXml(`<w:document ${W}><w:body><w:p><w:r><w:t>Prije</w:t></w:r></w:p>${tbl}<w:p><w:r><w:t>Poslije</w:t></w:r></w:p></w:body></w:document>`, 'T65');
+    const structure = analyzeElementStructure(document, [{ index: 0, text: 'Prije' }, { index: 1, text: 'Poslije' }]);
+    const result = analyzeTableFigureRescue({ document, elementStructure: structure, availableWidthEmu: 6_000_000 });
+    expect(result.tables).toHaveLength(1);
+    return result.tables[0];
+  };
+  const plain = analyse(table('', ''));
+
+  it('tablica bez spojenih celija nema mergedCells ni napomenu', () => {
+    expect(plain.mergedCells).toBe(false);
+    expect(plain.evidence.join(' ')).not.toContain('spojene ćelije');
+  });
+
+  for (const [name, first, second] of [['gridSpan', '<w:gridSpan w:val="2"/>', ''], ['vMerge', '<w:vMerge w:val="restart"/>', '<w:vMerge/>'], ['hMerge', '<w:hMerge w:val="restart"/>', '']] as const) {
+    it(`${name}: mergedCells i napomena, a unsupported i confidence isti kao bez spajanja`, () => {
+      const merged = analyse(table(first, second));
+      expect(merged.mergedCells).toBe(true);
+      expect(merged.evidence).toContain('spojene ćelije: stupci se neće ujednačiti');
+      expect(merged.unsupported).toBe(plain.unsupported);
+      expect(merged.confidence).toBe(plain.confidence);
+    });
+  }
+});
