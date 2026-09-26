@@ -13,6 +13,18 @@ import { brotliDecompressSync } from 'node:zlib';
 export const GLASOVI = ['Geist Mono', 'Instrument Serif'] as const;
 
 /**
+ * Svi ulazi proizvoda koji crtaju sucelje: rute, alati, admin i demo. Staze su relativne prema
+ * korijenu repozitorija. Dijele ga `tests/entry-fonts.test.ts` i mutacije u
+ * `tests/gate-mutations.test.ts`, da popis ruta u gardu i u mutaciji ne moze razici.
+ */
+export const SVI_ULAZI = [
+  'src/routes/intake/main.ts', 'src/routes/workspace/main.ts', 'src/routes/my-work/main.ts',
+  'src/routes/learn-more/main.ts', 'src/tools/citat-page.ts', 'src/tools/izjava-page.ts',
+  'src/tools/kartice-page.ts', 'src/tools/literatura-page.ts', 'src/tools/naslovnica-page.ts',
+  'src/shared/page-boot.ts', 'src/admin/admin-dashboard-boot.ts', 'src/demo/main.ts',
+] as const;
+
+/**
  * Obitelji koje je Z7 uklonio (i Caveat, koji je otisao ranije). Trazi se i ime obitelji i ime
  * paketa, jer se vracaju razlicitim putevima: obitelj kroz CSS ili inline stil, paket kroz
  * `import`. Zabrana jednog oblika ostavlja drugi otvorenim.
@@ -258,4 +270,115 @@ export function problemiTokena(css: string): string[] {
   if (mono !== 'Geist Mono') problemi.push(`--mono pocinje s "${mono}", a mora s Geist Mono`);
   if (ui !== 'var(--mono)' && ui !== 'Geist Mono') problemi.push(`--ui je "${ui}", a glas sucelja je mono`);
   return problemi;
+}
+
+// --- gardovi nad grafom ruta i nad stablom (nalaz pregleda Z7(a)) --------------------------------
+//
+// Svaka funkcija ispod je cisti dio jednog garda iz `tests/entry-fonts.test.ts`. Citac obitelji
+// (`webfontObitelji`) se predaje kao parametar, jer je upravo citac bio slijepa tocka: citac koji
+// vrati prazan skup pretvara "nijedan list ne ucitava X" u vakuumski zelen gard. Zato funkcije
+// nose SENTINEL nad citacem, a `tests/gate-mutations.test.ts` podmece i pokvaren citac.
+
+export type CitacObitelji = (cssTekstovi: readonly string[]) => Set<string>;
+
+const popis = (s: Iterable<string>): string => [...s].sort().join(', ');
+const jednako = (a: Iterable<string>, b: Iterable<string>): boolean => popis(a) === popis(b);
+
+/**
+ * Gard "ulaz ucitava TOCNO dva glasa". Skup webfontova ulaza jednak je skupu koji deklarira list
+ * fontova, i taj skup su tocno `GLASOVI`. Imena se izvode iz lista, ne prepisuju.
+ */
+export function problemiGlasovaUlaza(
+  listFontova: string, cssUlaza: readonly string[], citac: CitacObitelji = webfontObitelji,
+): string[] {
+  const izLista = citac([listFontova]);
+  if (izLista.size === 0) return ['citanje fonts.css ne daje nijednu obitelj, dakle gard mjeri krivo'];
+  const naUlazu = citac(cssUlaza);
+  const problemi: string[] = [];
+  if (!jednako(naUlazu, izLista)) problemi.push(`ulaz ucitava [${popis(naUlazu)}], a fonts.css deklarira [${popis(izLista)}]`);
+  if (!jednako(naUlazu, GLASOVI)) problemi.push(`ulaz ucitava [${popis(naUlazu)}], a glasovi su tocno [${popis(GLASOVI)}]`);
+  return problemi;
+}
+
+/**
+ * Gard "SVE rute nose ISTE dvije obitelji". `rute` je ulaz -> CSS listovi njegova grafa. Prazna
+ * mapa je nalaz, ne cisto stanje: gard bez ijedne rute nije nista izmjerio.
+ */
+export function problemiRuta(
+  rute: ReadonlyMap<string, readonly string[]>, citac: CitacObitelji = webfontObitelji,
+): string[] {
+  if (rute.size === 0) return ['nijedna ruta nije procitana'];
+  const problemi: string[] = [];
+  for (const [ulaz, css] of rute) {
+    const obitelji = citac(css);
+    if (!jednako(obitelji, GLASOVI)) problemi.push(`${ulaz}: ucitava [${popis(obitelji)}], a mora tocno [${popis(GLASOVI)}]`);
+  }
+  return problemi;
+}
+
+/**
+ * Gard "nijedna ruta ne ucitava fontove mimo `fonts-core.ts`, i nijedna ne uvozi font kao paket".
+ * `graf` su apsolutne staze grafa ulaza (bilo kojim separatorom), `paketi` paketni specifikatori
+ * iz istog grafa (`packageImports`).
+ */
+export function problemiGrafaFontova(ulaz: string, graf: readonly string[], paketi: readonly string[]): string[] {
+  const staze = graf.map((p) => p.split(/[\\/]/).join('/'));
+  const problemi: string[] = [];
+  for (const p of staze.filter((x) => /\/src\/shared\/fonts-(document|data)\.ts$/.test(x))) {
+    problemi.push(`${ulaz}: ucitava ${p.slice(p.lastIndexOf('/src/') + 1)}, a zaseban modul glasova je ukinut (Z7)`);
+  }
+  if (!staze.some((p) => p.endsWith('/src/shared/fonts-core.ts'))) problemi.push(`${ulaz}: graf ne sadrzi src/shared/fonts-core.ts`);
+  if (!staze.some((p) => p.endsWith('/src/assets/fonts/fonts.css'))) problemi.push(`${ulaz}: graf ne sadrzi src/assets/fonts/fonts.css`);
+  for (const s of paketi.filter((x) => x.startsWith('@fontsource'))) {
+    problemi.push(`${ulaz}: uvozi font kao paket (${s}), a fontovi su vendorirani (F19)`);
+  }
+  return problemi;
+}
+
+/**
+ * Gard "nijedan drugi list u src/ ne ucitava webfont". SENTINEL nad citacem: u listu fontova
+ * citac mora naci tocno dva glasa, inace bi pokvaren citac (prazan skup za svaki list) ostavio
+ * gard zelenim bez ijednog mjerenja.
+ */
+export function listoviSWebfontom(
+  listovi: ReadonlyArray<{ ime: string; css: string }>, imeListaFontova: string, citac: CitacObitelji = webfontObitelji,
+): string[] {
+  const fontovi = listovi.find((l) => l.ime === imeListaFontova);
+  if (!fontovi) return [`${imeListaFontova} nije medju listovima, dakle obilazak mjeri krivo`];
+  const problemi: string[] = [];
+  const uListu = citac([fontovi.css]);
+  if (!jednako(uListu, GLASOVI)) {
+    problemi.push(`citac u ${imeListaFontova} vidi [${popis(uListu)}], a ondje su tocno [${popis(GLASOVI)}]; gard bi prosao vakuumski`);
+  }
+  for (const { ime, css } of listovi) {
+    if (ime === imeListaFontova) continue;
+    const obitelji = citac([css]);
+    if (obitelji.size > 0) problemi.push(`${ime}: ucitava webfont [${popis(obitelji)}] mimo ${imeListaFontova}`);
+  }
+  return problemi;
+}
+
+/**
+ * Gard "package.json nema instrument-serif ni geist-mono". SENTINEL: bez procitanih ovisnosti
+ * (krivo polje, prazan objekt) gard nije nista izmjerio.
+ */
+export function problemiOvisnosti(pkg: unknown): string[] {
+  const polje = (k: string): Record<string, unknown> => {
+    const v = typeof pkg === 'object' && pkg !== null ? (pkg as Record<string, unknown>)[k] : undefined;
+    return typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {};
+  };
+  const imena = ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']
+    .flatMap((k) => Object.keys(polje(k)));
+  if (imena.length <= 5) return [`procitano ${imena.length} ovisnosti, dakle citanje package.json ne radi`];
+  return imena.filter((k) => /instrument-serif|geist-mono/.test(k))
+    .map((k) => `${k} je ovisnost, a fontovi su vendorirani u src/assets/fonts/ (F19)`);
+}
+
+/** Datoteke licence koje moraju putovati uz vendorirane rezove, po jedna za svaki glas. */
+export const LICENCE = ['OFL-geist-mono.txt', 'OFL-instrument-serif.txt'] as const;
+
+/** Gard "OFL licenca putuje uz svaku obitelj". `mapa` je ime datoteke -> tekst. */
+export function problemiLicenci(mapa: ReadonlyMap<string, string>): string[] {
+  return LICENCE.filter((ime) => !(mapa.get(ime) ?? '').includes('SIL Open Font License, Version 1.1'))
+    .map((ime) => `${ime} nedostaje ili nije OFL 1.1`);
 }

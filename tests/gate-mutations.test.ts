@@ -73,8 +73,11 @@ import { buildRepairPanelHandle } from '../src/ui/repair-panel';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
-  preloadObrasci, problemiFontova, problemiPreloada, problemiTokena, zabranjenaImena,
+  LICENCE, SVI_ULAZI, listoviSWebfontom, preloadObrasci, problemiFontova, problemiGlasovaUlaza,
+  problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada, problemiRuta,
+  problemiTokena, zabranjenaImena,
 } from './helpers/font-voices';
+import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './helpers/module-graph';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -2732,7 +2735,212 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => problemiFontova(z7aList('src/assets/fonts/fonts.css'), z7aDatoteke().map).length === 0,
   },
+  // --- Z7(a) krug popravka: gardovi nad RUTAMA i nad stablom iz tests/entry-fonts.test.ts ------
+  // Pregled je nasao da gornjih devet mutacija pokriva samo tokene, list fontova, preload i
+  // zabranjena imena. Ovdje su mutacije za ostale obrnute gardove. Mutacije nad grafom ruta NE
+  // zovu cistu funkciju s rucno slozenim popisom: idu kroz ISTI citac grafa (`collectStaticGraph`,
+  // `packageImports`) nad stvarnim diskom s jednom datotekom izmijenjenom u memoriji (overlay), pa
+  // citac koji npr. preskace `.css` specifikatore rusi mutaciju umjesto da gard tiho oslijepi.
+  {
+    id: 'z7a/treci-glas-na-ulazu',
+    imitates:
+      'List ulaza `/` dobije vlastiti @font-face (npr. Newsreader vracen u intake.css "samo za ' +
+      'naslov"): ulaz tada skida tri webfonta, a gard nad listom fontova i tokenima ostaje zelen.',
+    caught: () => {
+      const css = z7aCssGrafa('src/routes/intake/main.ts');
+      const mut = [...css, '@font-face{font-family:"Newsreader Variable";src:url(./n.woff2) format("woff2")}'];
+      return problemiGlasovaUlaza(z7aList('src/assets/fonts/fonts.css'), mut).some((p) => p.includes('Newsreader Variable'));
+    },
+    cleanBefore: () => problemiGlasovaUlaza(z7aList('src/assets/fonts/fonts.css'), z7aCssGrafa('src/routes/intake/main.ts')).length === 0,
+  },
+  {
+    id: 'z7a/citac-glasova-ulaza-slijep',
+    imitates:
+      'Citac webfont obitelji pokvaren tako da vraca prazan skup (npr. regex @font-face vise ne ' +
+      'pogadja razmak prije zagrade): "ulaz i list deklariraju isto" bi tada vrijedilo vakuumski.',
+    caught: () => problemiGlasovaUlaza(
+      z7aList('src/assets/fonts/fonts.css'), z7aCssGrafa('src/routes/intake/main.ts'), () => new Set<string>(),
+    ).length > 0,
+    cleanBefore: () => problemiGlasovaUlaza(z7aList('src/assets/fonts/fonts.css'), z7aCssGrafa('src/routes/intake/main.ts')).length === 0,
+  },
+  {
+    id: 'z7a/fontsource-css-u-grafu-rute',
+    imitates:
+      '`import \'@fontsource/instrument-serif/400.css\'` vracen u fonts-core.ts: paket postoji u ' +
+      'dijeljenom node_modules, build prolazi, a zabranjena imena ga ne vide jer instrument-serif ' +
+      'nije uklonjena obitelj. Hvata ga samo gard nad paketnim uvozima, i samo ako citac grafa vidi .css.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/shared/fonts-core.ts': (t) => `${t}\nimport '@fontsource/instrument-serif/400.css';\n` });
+      const problemi = z7aProblemiGrafa(izvor);
+      const svaki = SVI_ULAZI.every((u) => problemi.some((p) => p.startsWith(`${u}:`) && p.includes('@fontsource/instrument-serif/400.css')));
+      const imenaSlijepa = zabranjenaImena([{ ime: 'fonts-core.ts', tekst: izvor.procitaj(z7aPut('src/shared/fonts-core.ts')) }]).length === 0;
+      return svaki && imenaSlijepa;
+    },
+    cleanBefore: () => z7aProblemiGrafa(DISK).length === 0,
+  },
+  {
+    id: 'z7a/ukinut-modul-glasova-vracen',
+    imitates:
+      'Zaseban modul podatkovnih glasova (src/shared/fonts-document.ts, ukinut u Z7) vracen i uvezen ' +
+      'u /rad/: ruta opet nosi vlastiti skup fontova mimo fonts-core.ts.',
+    caught: () => {
+      const izvor = z7aOverlay({
+        'src/shared/fonts-document.ts': () => "import '../assets/fonts/fonts.css';\n",
+        'src/routes/workspace/main.ts': (t) => `import '../../shared/fonts-document';\n${t}`,
+      });
+      return z7aProblemiGrafa(izvor).some((p) => p.startsWith('src/routes/workspace/main.ts:') && p.includes('fonts-document.ts'));
+    },
+    cleanBefore: () => z7aProblemiGrafa(DISK).length === 0,
+  },
+  {
+    id: 'z7a/ruta-bez-fonts-core',
+    imitates:
+      'Demo ulaz izgubi `import \'../shared/fonts-core\'` pri refaktoru (demo ne ide kroz ui-boot): ' +
+      'stranica crta metricke zamjenske glasove umjesto Instrument Serifa i Geist Mona.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/demo/main.ts': (t) => t.replace(/^import '\.\.\/shared\/fonts-core';[^\n]*\n/m, '') });
+      const mutiran = izvor.procitaj(z7aPut('src/demo/main.ts')) !== DISK.procitaj(z7aPut('src/demo/main.ts'));
+      return mutiran && z7aProblemiGrafa(izvor).some((p) => p === 'src/demo/main.ts: graf ne sadrzi src/shared/fonts-core.ts');
+    },
+    cleanBefore: () => z7aProblemiGrafa(DISK).length === 0,
+  },
+  {
+    id: 'z7a/ruta-bez-glasova',
+    imitates:
+      'Isti kvar kao gore, mjeren gardom "SVE rute nose ISTE dvije obitelji": demo bez fonts-core ' +
+      'ucitava nula webfontova, a ostale rute dva. Gard mora imenovati bas tu rutu.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/demo/main.ts': (t) => t.replace(/^import '\.\.\/shared\/fonts-core';[^\n]*\n/m, '') });
+      const problemi = problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u, izvor)] as const)));
+      return problemi.length === 1 && problemi[0].startsWith('src/demo/main.ts:');
+    },
+    cleanBefore: () => problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u)] as const))).length === 0,
+  },
+  {
+    id: 'z7a/treci-glas-na-ruti',
+    imitates:
+      'Admin list dobije vlastiti webfont (npr. "Inter Variable" za tablice): jedna ruta tada nosi ' +
+      'tri obitelji, a gard samo nad ulazom `/` to ne vidi.',
+    caught: () => {
+      const izvor = z7aOverlay({
+        'src/admin/admin-dashboard.css': (t) => `${t}\n@font-face{font-family:"Inter Variable";src:url(./i.woff2) format("woff2")}\n`,
+      });
+      const problemi = problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u, izvor)] as const)));
+      return problemi.some((p) => p.startsWith('src/admin/admin-dashboard-boot.ts:') && p.includes('Inter Variable'));
+    },
+    cleanBefore: () => problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u)] as const))).length === 0,
+  },
+  {
+    id: 'z7a/webfont-u-drugom-listu',
+    imitates:
+      'site-chrome.css dobije @font-face s url(): drugi izvor webfontova mimo fonts.css, koji Z31 ' +
+      'proracun (<= 120 KB po ruti) i preload ne vide.',
+    caught: () => {
+      const listovi = z7aSviListovi().map((l) => (l.ime === 'src/shared/site-chrome.css'
+        ? { ...l, css: `${l.css}\n@font-face{font-family:"Geist Mono";src:url(./g.woff2) format("woff2")}` }
+        : l));
+      return listoviSWebfontom(listovi, 'src/assets/fonts/fonts.css').some((p) => p.startsWith('src/shared/site-chrome.css:'));
+    },
+    cleanBefore: () => listoviSWebfontom(z7aSviListovi(), 'src/assets/fonts/fonts.css').length === 0,
+  },
+  {
+    id: 'z7a/citac-webfontova-slijep',
+    imitates:
+      'Citac webfontova vraca prazan skup za svaki list: "nijedan drugi list ne ucitava webfont" bi ' +
+      'prosao vakuumski, jer je stari sentinel provjeravao samo da je fonts.css medju listovima.',
+    caught: () => listoviSWebfontom(z7aSviListovi(), 'src/assets/fonts/fonts.css', () => new Set<string>())
+      .some((p) => p.includes('vakuumski')),
+    cleanBefore: () => listoviSWebfontom(z7aSviListovi(), 'src/assets/fonts/fonts.css').length === 0,
+  },
+  {
+    id: 'z7a/font-paket-u-package-json',
+    imitates:
+      '`npm install @fontsource/instrument-serif` u dijeljenom stablu: paket ulazi u package.json i ' +
+      'dijeljeni node_modules, iako su fontovi vendorirani (F19).',
+    caught: () => {
+      const pkg = z7aPaket();
+      const dependencies = { ...(pkg.dependencies as Record<string, string>), '@fontsource/instrument-serif': '^5.3.0' };
+      return problemiOvisnosti({ ...pkg, dependencies }).some((p) => p.startsWith('@fontsource/instrument-serif'));
+    },
+    cleanBefore: () => problemiOvisnosti(z7aPaket()).length === 0,
+  },
+  {
+    id: 'z7a/package-json-procitan-prazan',
+    imitates:
+      'Gard cita krivo polje (npr. `pkg.dependencies` umjesto cijelog package.json): nula procitanih ' +
+      'ovisnosti bi "potvrdila" da font paketa nema.',
+    caught: () => problemiOvisnosti(z7aPaket().dependencies).length > 0 && problemiOvisnosti({}).length > 0,
+    cleanBefore: () => problemiOvisnosti(z7aPaket()).length === 0,
+  },
+  {
+    id: 'z7a/licenca-izostavljena',
+    imitates:
+      'Vendoriran rez kopiran bez OFL datoteke (OFL 1.1 trazi da licenca putuje uz font): repo ' +
+      'tada distribuira Geist Mono bez licence.',
+    caught: () => {
+      const mapa = new Map(z7aLicence());
+      mapa.delete('OFL-geist-mono.txt');
+      return problemiLicenci(mapa).some((p) => p.startsWith('OFL-geist-mono.txt'));
+    },
+    cleanBefore: () => problemiLicenci(z7aLicence()).length === 0,
+  },
 ];
+
+/** Apsolutna staza iz relativne, istim `resolve` kojim graf gradi svoje staze. */
+function z7aPut(rel: string): string {
+  return resolve(process.cwd(), rel);
+}
+
+/**
+ * Stvarni disk s nekoliko datoteka izmijenjenih U MEMORIJI (pravilo 1: disk se ne dira). Kljuc je
+ * relativna staza, vrijednost funkcija nad stvarnim tekstom (prazan tekst za datoteku koje nema).
+ */
+function z7aOverlay(izmjene: Record<string, (tekst: string) => string>): IzvorDatoteka {
+  const mapa = new Map(Object.entries(izmjene).map(([rel, f]) => [z7aPut(rel), f] as const));
+  return {
+    procitaj: (p) => {
+      const f = mapa.get(p);
+      if (!f) return DISK.procitaj(p);
+      return f(DISK.postoji(p) ? DISK.procitaj(p) : '');
+    },
+    postoji: (p) => mapa.has(p) || DISK.postoji(p),
+  };
+}
+
+/** Tekst svakog CSS lista u grafu ulaza, procitan kroz zadani izvor. */
+function z7aCssGrafa(ulaz: string, izvor: IzvorDatoteka = DISK): string[] {
+  return [...collectStaticGraph(z7aPut(ulaz), izvor)].filter((p) => p.endsWith('.css')).map((p) => izvor.procitaj(p));
+}
+
+/** Gard "nijedna ruta ne ucitava fontove mimo fonts-core.ts" nad svim ulazima, kroz zadani izvor. */
+function z7aProblemiGrafa(izvor: IzvorDatoteka): string[] {
+  return SVI_ULAZI.flatMap((u) => problemiGrafaFontova(
+    u, [...collectStaticGraph(z7aPut(u), izvor)], packageImports(z7aPut(u), izvor),
+  ));
+}
+
+/** Svaki CSS list u src/, s relativnim imenom, kako ga cita gard u entry-fonts. */
+function z7aSviListovi(): Array<{ ime: string; css: string }> {
+  const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    return e.isDirectory() ? hodaj(p) : [p];
+  });
+  const korijen = z7aPut('src');
+  return hodaj(korijen).filter((p) => p.endsWith('.css'))
+    .map((p) => ({ ime: `src/${p.slice(korijen.length + 1).split(/[\\/]/).join('/')}`, css: readFileSync(p, 'utf8') }));
+}
+
+/** package.json kao objekt. */
+function z7aPaket(): Record<string, unknown> {
+  return JSON.parse(z7aList('package.json')) as Record<string, unknown>;
+}
+
+/** Licence vendoriranih fontova koje postoje na disku. */
+function z7aLicence(): Map<string, string> {
+  const dir = z7aPut('src/assets/fonts');
+  const imena = new Set(readdirSync(dir));
+  return new Map(LICENCE.filter((ime) => imena.has(ime)).map((ime) => [ime, readFileSync(join(dir, ime), 'utf8')] as const));
+}
 
 /** Tekst lista s diska, CR normaliziran (Windows worktree zna imati CRLF). */
 function z7aList(rel: string): string {
