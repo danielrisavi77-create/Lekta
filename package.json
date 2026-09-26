@@ -126,6 +126,8 @@
     "audit:ratchet": "node scripts/npm-audit-ratchet.mjs",
     "status": "node scripts/generate-status.mjs",
     "deploy-manifest": "node scripts/generate-deploy-manifest.mjs",
+    "verify-naplata-secrets": "node scripts/verify-naplata-secrets.mjs",
+    "deploy:naplata": "node scripts/verify-naplata-secrets.mjs --deploy",
     "attest-corpus": "node scripts/attest-real-corpus.mjs",
     "branch-ci": "node scripts/master-ci-status.mjs --current",
     "agents": "node scripts/agents/cli.mjs",
