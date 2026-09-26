@@ -56,6 +56,42 @@ export function settleResultRender(doc: Document, zeton: number): boolean {
   return true;
 }
 
+/**
+ * Objavljuje spremnost na KRAJU crtanja koje je aktualno U TRENUTKU POZIVA. Jedini pozivatelj je
+ * kraj `renderSubmissionChecklist` u `app.ts`; logika i obrazlozenje zive ovdje da `app.ts` ne
+ * raste (ratchet u `tests/ui-module-budget.test.ts`).
+ *
+ * OBA IZLAZA. `renderSubmissionChecklist` panel za isti rezultat ne gradi dvaput (ponovna gradnja
+ * bi obrisala korisnikov odabir). I taj preskok je zavrsetak crtanja, pa se tada (`lanac === null`)
+ * spremnost objavljuje odmah; objava samo na jednoj grani ostavila bi ekran trajno na "0".
+ *
+ * `.finally` NA OBECANJU CIJELOG LANCA, ne unutar `renderRepairSection`: tijelo te funkcije u svom
+ * `finally` ponovno crta `#repairEntry` i cijeli `#resultCockpit`, pa bi signal postavljen iznutra
+ * jos uvijek pao PRIJE zadnje izmjene DOM-a. Ovdje se ceka da cijeli lanac zavrsi.
+ *
+ * ZETON se uzima PRIJE pokretanja lanca, pa zastarjeli lanac (nova analiza je u medjuvremenu
+ * pozvala `beginResultRender`) ne objavljuje spremnost novog crtanja.
+ *
+ * `dokument` je GETTER, ne dokument: cita se u trenutku objave, jednako kao `runtimeDocument()` koji
+ * se prije izdvajanja zvao unutar `.finally`.
+ *
+ * Lanac mora sam obraditi svoju gresku (`app.ts` mu dodaje `.catch` s logom); `.finally` ne guta
+ * odbijanje.
+ */
+export function settleResultRenderAfter(
+  dokument: () => Document,
+  lanac: (() => Promise<unknown>) | null,
+): void {
+  const zeton = _zadnjiZeton;
+  if (!lanac) {
+    settleResultRender(dokument(), zeton);
+    return;
+  }
+  void lanac().finally(() => {
+    settleResultRender(dokument(), zeton);
+  });
+}
+
 /** Je li ekran rezultata trenutno objavljen kao spreman. */
 export function resultRenderSettled(doc: Document): boolean {
   return doc.getElementById(RESULT_VIEW_ID)?.getAttribute(RESULT_READY_ATTR) === '1';
