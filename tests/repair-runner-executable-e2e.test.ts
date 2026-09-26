@@ -88,7 +88,7 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
     };
 
     expect(pkg.scripts?.['repair:runner:e2e']).toBe(
-      'vite-node scripts/run-repair-runner-e2e.mts',
+      'tsx scripts/run-repair-runner-e2e.mts',
     );
     expect(existsSync(join(root, 'scripts', 'run-repair-runner-e2e.mts'))).toBe(true);
   });
@@ -235,7 +235,7 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
     const completed = spawnSync(
       process.execPath,
       [
-        join(root, 'node_modules', 'vite-node', 'vite-node.mjs'),
+        tsxEntrypoint,
         'scripts/run-repair-runner-e2e.mts',
         '--repository-evidence-only',
       ],
@@ -247,6 +247,7 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
       },
     );
     expect(completed.status, `${completed.stdout}${completed.stderr}`).toBe(0);
+    expect(completed.stdout).not.toContain('[generate-citation-tools]');
 
     const evidenceLine = completed.stdout.trim().split(/\r?\n/).at(-1) ?? '';
     const evidence = JSON.parse(evidenceLine) as {
