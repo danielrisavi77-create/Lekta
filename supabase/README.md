@@ -68,11 +68,19 @@ integracija (DB, RLS, webhook potpis) provjerava se u Supabase okruzenju.
 
 ```
 supabase db push                              # migracije
+npm run deploy:naplata                        # create-checkout + webhook-mor, uz preflight tajni
 supabase functions deploy generate-report
-supabase functions deploy webhook-mor
 supabase functions deploy faculty-request --no-verify-jwt   # anoniman waitlist upis
 supabase functions deploy field-render
 ```
+
+Funkcije naplate (`create-checkout`, `webhook-mor`) idu kroz `npm run deploy:naplata`, a ne kroz
+goli `supabase functions deploy`: ta naredba prvo procita Supabase Edge secrets projekta i odbije
+deploy ako `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY` ili `STRIPE_WEBHOOK_SECRET` nedostaje ili je
+postavljen na prazno, i ako je `STRIPE_ALLOW_TEST_MODE` ukljucen bez izricitog
+`--dopusti-testni-nacin`. Prazna vrijednost nije neutralna: `verifyStripeSignature` je fail-closed pa
+webhook bez `STRIPE_WEBHOOK_SECRET` odbija svaki dogadjaj s `missing_secret`. Tijekom bete je
+naplata iskljucena, pa se ova naredba ne pokrece. Detalji su u `docs/GO_LIVE_NAPLATA.md`.
 
 Završno osvježavanje Word polja (`field-render`) je samo autentificirani Edge
 proxy. LibreOffice se ne pokreće u Edge runtimeu, nego u zasebnom privatnom
@@ -98,7 +106,15 @@ Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`,
 (`verifyStripeSignature`, timing-safe, tolerancija 300 s); dovoljno je postaviti
 `STRIPE_WEBHOOK_SECRET`. `products.mor_product_id` je NASLIJEDJEN stupac i vise se ne popunjava:
 iznos dolazi iz `products.price_eur`, a webhook proizvod trazi po `products.id` iz Stripe
-`metadata[product_id]`.
+`metadata[product_id]`. Deploy naplate ide kroz `npm run deploy:naplata`: preflight
+(`npm run verify-naplata-secrets`) cita Supabase Edge secrets projekta (`supabase secrets list`), ne
+lokalnu ljusku, pada kad obavezna Stripe tajna nedostaje ili je prazna i kad se popis ne moze
+procitati, i tek onda deploya `create-checkout` i `webhook-mor`. U Stripeu pretplati TOCNO
+`payment_intent.succeeded` i `charge.refunded`: handler knjizi samo uplatu sa statusom `succeeded` i
+pozitivnim `amount_received`, a povrat samo iz `charge.refunded`. Ishodi `ignored` i `refused` nisu u
+indeksu `webhook_events_unresolved`, pa se traze upitom po `outcome`; upiti i postupak rucnog
+vezivanja su u `docs/GO_LIVE_NAPLATA.md` sekcija 5.1. Naplata je iskljucena tijekom bete (odluka
+vlasnika 2026-09-26).
 
 Klijentski paywall cita katalog iz `products` preko PostgREST-a (`src/catalog/products-catalog.ts`,
 `fetchRetailCatalog`) pa promjena `price_eur` u bazi mijenja prikaz bez deploya. Za to klijentu

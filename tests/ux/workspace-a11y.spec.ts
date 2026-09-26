@@ -183,12 +183,30 @@ async function bezKretanja(page: Page, gdje: string): Promise<void> {
   expect(pokretne, `${gdje}: uz prefers-reduced-motion nesto se jos krece: ${pokretne.join(', ')}`).toEqual([]);
 }
 
+/**
+ * DO NALAZA, I DO KRAJA NJEGOVA CRTANJA.
+ *
+ * `#resultView` postane vidljiv PRIJE nego je gotov: iz `renderResult` se pokrece asinkroni
+ * `renderRepairSection`, koji tek u svom `finally` ponovno crta `#repairEntry` i CIJELI
+ * `#resultCockpit`. Tko u tom prozoru krene Tabom, ostane bez fokusa cim zamjena odnese element
+ * na kojem fokus stoji (`document.activeElement` padne na `<body>`), pa obilazak stane na pola.
+ *
+ * IZMJERENO 2026-09-23 (chromium, dev posluzitelj, MutationObserver nad `#resultCockpit`): prozor
+ * je bio 343 ms. Reproducirano istim danom uz ciljano kasnjenje `templates-heavy.json` od 3 s:
+ * obilazak je stao na 12 odnosno 5 od 22 kontrole. Na CI-ju (`ux-gate`, run 35867005928, master
+ * 45208425) isti se pad vidio kao `posjeceni = [0, 1]` uz 22 kandidata; `browser-matrix` (PR #115,
+ * run 35862903200) ga je dao u Firefoxu.
+ *
+ * ZATO SE CEKA `data-result-ready="1"`, deterministican signal koji `src/ui/result-ready-signal.ts`
+ * postavlja TEK kad se taj lanac slegne. Nije cekanje na sat: dok se ekran crta, atribut je "0".
+ */
 async function dodjiDoNalaza(page: Page): Promise<void> {
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await cekajKorak(page, '2');
   await expect(page.locator('#analyzeProfile .ap-kartica')).toBeVisible({ timeout: 20_000 });
   await potvrdiProfil(page);
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 120_000 });
+  await expect(page.locator('#resultView')).toHaveAttribute('data-result-ready', '1', { timeout: 120_000 });
 }
 
 test.describe('pristupacnost radnog prostora', () => {

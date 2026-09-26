@@ -2,7 +2,7 @@
 
 Precizni koraci da naplata proradi. Klijentska strana (auth sesija, paywall poziv, checkout
 redirect) je gotova i testirana; ovdje su koraci koje moraš odraditi TI, jer traže tvoju
-Supabase bazu, Lemon Squeezy račun i deploy. Ništa od ovoga ne mogu odraditi ni testirati
+Supabase bazu, Stripe račun i deploy. Ništa od ovoga ne mogu odraditi ni testirati
 protiv prave baze umjesto tebe.
 
 Kontekst: `docs/MONETIZATION_AND_ANTI_ABUSE.md`, `supabase/README.md`, `supabase/ACCEPTANCE.md`.
@@ -75,16 +75,36 @@ na prodaju potrošačima u EU (HR 25 %, izvan HR po OSS-u) obračunava i prijavl
 provider. Stripe Tax može izračunati iznos, ali ga ne prijavljuje. Cijene 4,99 do 24,99 tretiraju
 se kao bruto (s PDV-om) dok vlasnik ne odluči drukčije.
 
+**Tijekom bete je naplata isključena (odluka vlasnika 26.9.2026.).** Dok beta traje, Stripe tajne
+ostaju prazne i koraci iz ovog odjeljka i odjeljka 5 se NE izvode; `npm run deploy:naplata` tada
+namjerno odbija deploy jer obavezne tajne nedostaju.
+
 1. Otvori Stripe račun i dovrši aktivaciju (poslovni podaci, bankovni račun).
 2. Iz **Developers → API keys** uzmi **Secret key** (`sk_…`) i **Publishable key** (`pk_…`).
    Publishable ključ nije tajna, ali se ipak drži kao Edge secret: klijent ga dobiva u odgovoru
    `create-checkout`, pa se zamjena test/live vidi odmah, bez novog builda.
 3. **Ne kreiraj Stripe proizvode.** Iznos dolazi iz `products.price_eur` pri svakom pozivu, pa
-   dvostruki cjenik (naš i Stripeov) ne postoji i ne može se razići.
+   dvostruki cjenik (naš i Stripeov) ne postoji i ne može se razići. Proizvod se u webhooku traži
+   po `metadata[product_id]` (`products.id`), ne po naslijeđenom stupcu `mor_product_id`.
 4. **Webhook**: u **Developers → Webhooks** dodaj endpoint `…/functions/v1/webhook-mor` (ime
-   funkcije je naslijeđeno, URL se namjerno ne mijenja) i pretplati ga na TOČNO dva događaja:
-   `payment_intent.succeeded` i `charge.refunded`. Sve ostalo webhook prima, upiše u inbox i
-   ignorira uz 200. Isto vrijedi za naplate koje nisu nastale kroz `create-checkout` (ručni
+   funkcije je naslijeđeno, URL se namjerno ne mijenja) i **pretplati TOČNO ova dva događaja**:
+
+   | Događaj | Zašto je obavezan |
+   |---|---|
+   | `payment_intent.succeeded` | jedini ulaz za kupnju; bez njega nijedan `entitlement` ne nastaje |
+   | `charge.refunded` | **jedini ulaz za povrat**; bez njega kupac kojem je novac vraćen zadržava plaćeni pristup i referral nagradu |
+
+   Skup pretplaćenih događaja je **nosiv za ispravnost naplate**, jer handler obrađuje točno ta
+   dva (`STRIPE_HANDLED_EVENTS` i `classifyStripeEvent` u `src/report/webhook.ts`), a sve ostalo
+   namjerno ignorira. Tko pretplati samo `payment_intent.succeeded` (najmanji skup koji je dovoljan
+   za prodaju) dobije naplatu koja radi i povrate koji se **nikad ne obrade**: `entitlements.status`
+   ostaje `paid`, `pullReferralReward` se ne izvede, i to bez ijedne greške.
+
+   Uplata se knjiži tek kad objekt sam potvrdi naplatu: `status` je `succeeded` i `amount_received`
+   je veći od nule. Povrat se prepoznaje **isključivo po imenu** `charge.refunded`, ne po polju
+   `refunded` u objektu. Ostale događaje **nemoj** pretplaćivati: handler ih odbija s `ignored`,
+   i samo zatrpavaju inbox i log. Ako ipak stignu, vidjet ćeš ih kao `webhook-mor event_ignored`
+   u logu (vidi 5.1). Isto vrijedi za naplate koje nisu nastale kroz `create-checkout` (ručni
    Payment Link, naplata iz dashboarda): PaymentIntent bez `metadata[user_id]` ili povrat bez
    PaymentIntenta dobiva 200 `ignored`, a ne 4xx, da Stripe ne ponavlja dostavu danima i ne
    isključi endpoint zbog trajnih neuspjeha.
@@ -97,10 +117,20 @@ se kao bruto (s PDV-om) dok vlasnik ne odluči drukčije.
 
 ## 5. Deploy Edge Functiona
 
+Obje funkcije naplate deployaj JEDNOM naredbom, koja preflight tajni nosi u sebi:
+
 ```
-supabase functions deploy create-checkout
+npm run deploy:naplata
+npm run deploy:naplata -- --project-ref <ref>   # kad projekt nije povezan preko `supabase link`
+```
+
+`deploy:naplata` prvo pročita Supabase Edge secrets projekta i odbije deploy ako ijedna obavezna
+tajna naplate nedostaje ili je postavljena na prazno, pa tek onda deploya `create-checkout` i
+`webhook-mor`, tim redom. Zastavice za preskakanje preflighta NEMA: to je i razlog zašto deploy
+naplate više nije goli CLI poziv za te dvije funkcije. Ostale funkcije nisu dio naplate i idu zasebno:
+
+```
 supabase functions deploy generate-report
-supabase functions deploy webhook-mor
 supabase functions deploy file-guarantee-claim
 ```
 
@@ -121,10 +151,118 @@ Env varijable (Supabase → Edge Functions → Secrets):
 
 - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`
 - `DAILY_CAP` (npr. 30 retail; partner cap se diže po računu)
-- `STRIPE_WEBHOOK_SECRET` (Stripe signing secret, `whsec_…`)
-- `STRIPE_SECRET_KEY` (`sk_…`), `STRIPE_PUBLISHABLE_KEY` (`pk_…`)
-- opcionalno `STRIPE_ALLOW_TEST_MODE=1` (samo za smoke test) i `STRIPE_ACCOUNT_ID` (samo uz
-  Connect račun)
+- `STRIPE_WEBHOOK_SECRET` (Stripe signing secret, `whsec_…`), OBAVEZNO: bez njega `webhook-mor`
+  odbija SVAKI događaj s razlogom `missing_secret` (401)
+- `STRIPE_SECRET_KEY` (`sk_…`) i `STRIPE_PUBLISHABLE_KEY` (`pk_…`), OBAVEZNO: bez ijednog od njih
+  `create-checkout` vraća `stripe_not_configured`
+- opcionalno `STRIPE_ACCOUNT_ID` (samo uz Connect račun; prazno znači običan račun)
+- `STRIPE_ALLOW_TEST_MODE` = `1` SAMO dok traje testna kupnja (korak 7). U produkciji ostaje PRAZNO.
+  Prazna vrijednost znači da događaj iz testnog načina rada ne daje pravo pristupa (audit PAY-05).
+  Preflight deploy s tom zastavicom uključenom ODBIJA, osim uz izričit `-- --dopusti-testni-nacin`
+  (staging). Kad završi provjera integracije, obriši vrijednost i ponovi `npm run deploy:naplata`.
+
+Preflight čita **Supabase Edge secrets projekta** (`supabase secrets list`), dakle okolinu u kojoj
+funkcija stvarno radi, a ne tvoju ljusku. `npm run deploy:naplata` ga pokreće sam; zasebno se
+pokreće samo kad hoćeš provjeriti stanje bez deploya:
+
+```
+npm run verify-naplata-secrets
+npm run verify-naplata-secrets -- --project-ref <ref>   # kad projekt nije povezan preko `supabase link`
+```
+
+Izlazni kod 1 i imenovana varijabla kad tajna nedostaje ili je postavljena na prazno. Ako se popis
+uopće ne može pročitati (CLI nije instaliran, projekt nije povezan), preflight **također pada** i to
+kaže: nepoznato se ne tumači kao zeleno.
+
+Prazna vrijednost nije neutralna: `verifyStripeSignature` je fail-closed, pa prazan
+`STRIPE_WEBHOOK_SECRET` odbija SVAKI događaj, a Stripe nakon ponavljanja odustaje i kupnja ostaje
+bez prava pristupa.
+
+`-- --env` mjeri **lokalnu ljusku** umjesto projekta. To je druga os i slabija tvrdnja (zeleno ondje
+ne dokazuje ništa o projektu iz kojeg `webhook-mor` radi), pa se koristi samo u CI koraku koji tajne
+sam prosljeđuje; skripta to i ispiše kao upozorenje.
+
+Preflight **nije** dio `npm run check`: `check` se vrti bez živog Supabase CLI-ja i bez povezanog
+projekta, pa produkcijske tajne uopće ne vidi. Zato ga ne čuva zeleni `check` nego **put kojim se
+deploy naplate ide**: `npm run deploy:naplata` je jedina dokumentirana naredba za te dvije funkcije
+i preflight joj je prvi korak, bez zastavice koja ga preskače. Tko naplatu deploya golom CLI
+naredbom zaobilazi provjeru; taj put runbook više ne nudi.
+
+Skripta zove Supabase CLI iz `node_modules/.bin` (repo ga isporučuje kao devDependency), pa ne ovisi
+o globalnoj instalaciji. Ako se popis ipak ne može pročitati, ispiše se **i putanja CLI-ja koji je
+pokušan i doslovna poruka providera**, da se "nisam prijavljen" ne pomiješa s "tajna je prazna".
+
+### 5.1 Ishodi u `webhook_events` (tko ih gleda i kako)
+
+Svaki potpisan događaj upisuje se u `webhook_events` PRIJE obrade, a ishod se upiše u `outcome`.
+Djelomični indeks `webhook_events_unresolved` (migracija 0092) pokriva samo
+`outcome is null or outcome in ('failed','unknown_product')`, pa **ishodi `ignored` i `refused` u
+njega ne ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao service role):
+
+| `outcome` | Što znači | Što napraviti |
+|---|---|---|
+| `ignored` uz `outcome_detail` koji počinje s `payment_status:` | stigao je `payment_intent.succeeded`, ali objekt nema `status` `succeeded` (ili ga uopće nema) | provjeri PaymentIntent u Stripe sučelju; ako je naplaćen, Stripe je promijenio oblik događaja i to je kvar koda, ne podatka. Nakon ispravka koda replayaj događaj |
+| `ignored` uz `outcome_detail` koji počinje s `amount_received:` | `payment_intent.succeeded` bez pozitivnog `amount_received` (nula ili nedostaje), dakle nije potvrđen naplaćen iznos | provjeri PaymentIntent u Stripe sučelju; pravo pristupa se ne dodjeljuje dok naplata nije potvrđena |
+| `ignored` uz `outcome_detail` koji počinje s `povrat_bez_charge_refunded:` | stigao je događaj koji **nosi vraćen novac**, a ne zove se `charge.refunded` | provjeri u Stripe sučelju o kojoj se uplati radi i povrat obradi ručno; handler namjerno **ne** piše po tom događaju. Ako ovo stiže redovito, provjeri pretplatu (korak 4.4) |
+| `ignored` uz `outcome_detail` koji počinje s `nepodrzan_dogadjaj:` | klasifikator je dobio vrstu koju ne obrađuje; u normalnom radu takav događaj zaustavi već provjera vrste (`event_ignored`) | ako se pojavi, popis `STRIPE_HANDLED_EVENTS` je proširen bez klasifikacije: to je kvar koda |
+| `ignored` uz `outcome_detail` `event_ignored` | pretplaćen je događaj koji nam ne treba | makni ga iz pretplate (korak 4.4) |
+| `ignored` uz `outcome_detail` `missing_user_metadata` ili `missing_payment_intent` | naplata koja nije nastala kroz `create-checkout` (ručni Payment Link, naplata iz dashboarda) | ako je to ipak kupnja Lektinog proizvoda, veži je ručno (postupak niže); inače ništa |
+| `ignored` uz `outcome_detail` koji počinje s `foreign_product:` | proizvod koji Lekta ne prodaje (npr. Katedra pass na istom računu) | ništa; Katedra ga knjiži sama |
+| `refused` | testni način rada ili tuđi račun (`test_mode_refused`, `livemode_unverifiable`, `account_mismatch`) | provjeri `STRIPE_ALLOW_TEST_MODE` i `STRIPE_ACCOUNT_ID` |
+| `unknown_product` | `metadata[product_id]` nije u `products` | popravi katalog pa replayaj |
+| `failed` | upis u bazu je pao (`manual_order_insert`, `product_without_work_type`, `entitlement_insert`, `refund_pending`); događaj je potpisan i platio je, ali entitlement, manualna narudžba ili povrat nisu provedeni | provjeri `outcome_detail` za razlog i bazu, popravi pa replayaj |
+| `processed` | događaj je obrađen do kraja (kupnja, povrat, djelomični povrat ili ručno vezan redak) | ništa |
+
+```sql
+-- Neriješeni događaji koje indeks NE pokriva (pokreni barem jednom dnevno u tjednu lansiranja).
+select id, received_at, event_name, order_id, outcome, outcome_detail
+from webhook_events
+where outcome in ('ignored', 'refused')
+order by received_at desc
+limit 100;
+
+-- Samo uplate koje nisu potvrdile naplatu ili nisu nastale kroz create-checkout.
+select id, received_at, order_id, outcome_detail, raw_payload -> 'data' -> 'object' ->> 'receipt_email' as email
+from webhook_events
+where outcome = 'ignored'
+  and event_name = 'payment_intent.succeeded'
+order by received_at asc;
+```
+
+**Ručno vezivanje** (uplata koja je stvarno naplaćena Lektin proizvod, a nije dobila pravo pristupa,
+npr. `missing_user_metadata`), kao service role:
+
+1. Iz `raw_payload` pročitaj PaymentIntent id (`data.object.id`, to je `order_id`), e-mail kupca
+   (`data.object.receipt_email`) i, ako postoji, `data.object.metadata.product_id`.
+2. Nađi ili otvori Supabase korisnika za taj e-mail i zabilježi njegov `user_id`.
+3. Nađi proizvod: `select id as product_id, work_type, slots_total, purchase_window_days from products
+   where id = '<product_id>'`. Taj `id` je `products.id`, isti `product_id` koji čita
+   `generate-report` (spaja se na `products(slot_window_days)` preko view-a iz migracije 0008), pa
+   mora ući u entitlement, ne ostati samo u ovom koraku.
+4. Upiši redak s `product_id` iz koraka 3 i rokom izračunatim iz `purchase_window_days` istog retka:
+
+   ```sql
+   insert into entitlements (user_id, work_type, slots_total, product_id, order_id, provider, purchase_expires_at)
+   select '<user_id>', p.work_type, p.slots_total, p.id, '<order_id>', 'stripe',
+          now() + (p.purchase_window_days * interval '1 day')
+   from products p
+   where p.id = '<product_id>'
+   on conflict (provider, order_id) do nothing;
+   ```
+
+   `unique (provider, order_id)` u migraciji 0001 je pravi unique constraint (ne samo indeks), pa
+   `on conflict` cilja izravno na njega i drugi pokušaj za isti `order_id` ne udvostručuje redak.
+   Stupci ovdje su isti koje pri kupnji piše `buildEntitlementInsert` u `src/report/webhook.ts`.
+5. Zatvori trag: `update webhook_events set outcome = 'processed', outcome_detail = 'rucno_vezano'
+   where id = '<id>'`, pa taj redak više ne ispada u upitu iznad.
+
+U logu Edge funkcije isti slučajevi imaju imenovane retke: `webhook-mor ignored_needs_attention`
+(ERROR, tiče se novca: uplata bez potvrđene naplate ili povrat pod imenom koje nije
+`charge.refunded`), `webhook-mor ignored_foreign_event` (WARN, klasifikator je dobio vrstu koju ne
+obrađuje), `webhook-mor event_ignored` (WARN, nepretplaćen ili nepotreban događaj),
+`webhook-mor event_refused` (ERROR, testni način ili tuđi račun) i
+`webhook-mor foreign_event_ignored` (WARN, naplata izvan `create-checkout` ili tuđi proizvod).
+Log ističe, baza ne, pa je upit iznad mjerodavan.
 
 ## 6. Klijentska konfiguracija (bez rebuilda)
 
@@ -156,6 +294,11 @@ prije checkouta i punog izvještaja te šalje pravi JWT. Bez njih se ponaša kao
    Status `processing` (odgođeni bankovni načini) ne otključava ništa i javlja da se plaćanje
    obrađuje. U smoke testu provjeri oba puta: brz webhook (otključano) i zaustavljen webhook
    (poruka, bez paywalla).
+4b. **Isprobaj i povrat**: u Stripe sučelju napravi puni refund te testne uplate → `entitlements.status`
+   mora postati `refunded`, a redak u `webhook_events` dobiti `outcome = 'processed'` uz
+   `outcome_detail = 'refunded'`. Ako se ništa ne dogodi, `charge.refunded` nije pretplaćen (korak 4.4);
+   to je jedini ulaz za povrat i propust se inače vidi tek kad kupac zadrži plaćeni pristup.
+   Nakon smoke testa obriši `STRIPE_ALLOW_TEST_MODE` i ponovi `npm run deploy:naplata`.
 5. Provjeri KPI upite (`supabase/kpi-weekly.sql`) i analytics viewove kao service role.
 
 ## 8. Što je već pokriveno (ne treba dirati)

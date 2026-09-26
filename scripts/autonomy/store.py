@@ -406,7 +406,14 @@ class Store:
                  ",".join(result.get("reported_models") or []) or result.get("reported_model"),
                  int(started_at), int(ended_at), result.get("verdict"), result.get("evidence_hash")),
             )
-            self._event(task_id, f"run:{phase}", {"verdict": result.get("verdict"), "reason": result.get("reason")}, ended_at)
+            self._event(task_id, f"run:{phase}", {
+                "verdict": result.get("verdict"),
+                "reason": result.get("reason"),
+                "provider": result.get("provider"),
+                "requested_model": result.get("requested_model"),
+                "reported_models": result.get("reported_models") or [],
+                "usage": result.get("usage") or {},
+            }, ended_at)
         return run_id
 
     def runs(self, task_id: str) -> list[dict]:

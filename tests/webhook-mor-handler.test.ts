@@ -11,7 +11,7 @@
  * Potpis se racuna ISTIM postupkom kao Stripe (HMAC-SHA256 nad `${t}.${raw}`), s injektiranim
  * satom, pa se ne testira lazan put pokraj provjere potpisa nego onaj koji produkcija prolazi.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { createHmac } from 'node:crypto';
 
 import { createWebhookHandler } from '../supabase/functions/webhook-mor/handler';
@@ -45,6 +45,9 @@ function succeeded(over: Record<string, unknown> = {}, meta: Record<string, stri
       object: {
         id: 'pi_1',
         object: 'payment_intent',
+        // Stripe `payment_intent.succeeded` uvijek nosi status `succeeded`; handler bez njega ne
+        // knjizi (classifyStripeEvent, spajanje mastera 2026-09-26).
+        status: 'succeeded',
         amount: 999,
         amount_received: 999,
         currency: 'eur',
@@ -458,5 +461,95 @@ describe('webhook-mor handler: porijeklo', () => {
     expect(body).toMatchObject({ action: 'ignored' });
     expect(calls.some((c) => c.table === 'webhook_events' && writeOp(c) === 'insert')).toBe(true);
     expect(entitlementWrites(calls)).toHaveLength(0);
+  });
+});
+
+/**
+ * KNJIZI SE SAMO STVARNO NAPLACENO (Stripe ekvivalent masterovih 31b802ad, 81a89f2f, daf5f53a).
+ *
+ * Mjeri se IZVRSEN handler: dogadjaj koji se zove `payment_intent.succeeded`, a objekt naplatu ne
+ * potvrdjuje, ne smije dodijeliti pravo; ishod je 200 `ignored` s razlogom u inboxu i ERROR redak u
+ * logu. Povrat se otvara samo iz `charge.refunded`.
+ */
+describe('webhook-mor handler: samo potvrdjena naplata knjizi pravo', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const logLines = (spy: { mock: { calls: unknown[][] } }): string[] => spy.mock.calls.map((c) => String(c[0]));
+
+  it.each([
+    ['processing', 'payment_status:processing'],
+    ['requires_payment_method', 'payment_status:requires_payment_method'],
+  ])('status %s: 200 ignored, bez prava, inbox i ERROR log imenuju razlog', async (status, reason) => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const { res, body, calls, granted } = await run(signedRequest(succeeded({ status })));
+    expect(res.status).toBe(200);
+    expect(body).toEqual({ ok: true, action: 'ignored', reason });
+    expect(entitlementWrites(calls)).toHaveLength(0);
+    expect(calls.some((c) => c.table === 'products')).toBe(false);
+    expect(granted).toHaveLength(0);
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: reason });
+    expect(logLines(err)).toContain('webhook-mor ignored_needs_attention');
+    const detalji = err.mock.calls.find((c) => c[0] === 'webhook-mor ignored_needs_attention')?.[1];
+    expect(detalji).toMatchObject({ reason, eventName: 'payment_intent.succeeded', status });
+  });
+
+  it('bez statusa u objektu se ne knjizi (prazno nije placeno)', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const bezStatusa = succeeded();
+    const obj = (bezStatusa.data as { object: Record<string, unknown> }).object;
+    delete obj.status;
+    const { body, calls } = await run(signedRequest(bezStatusa));
+    expect(body).toEqual({ ok: true, action: 'ignored', reason: 'payment_status:nepoznat' });
+    expect(entitlementWrites(calls)).toHaveLength(0);
+  });
+
+  it.each([
+    [{ amount_received: 0 }, 'amount_received:0'],
+    [{ amount_received: undefined }, 'amount_received:nepoznat'],
+  ])('amount_received %j: 200 ignored, bez prava', async (over, reason) => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const { res, body, calls } = await run(signedRequest(succeeded(over)));
+    expect(res.status).toBe(200);
+    expect(body).toEqual({ ok: true, action: 'ignored', reason });
+    expect(entitlementWrites(calls)).toHaveLength(0);
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: reason });
+    expect(logLines(err)).toContain('webhook-mor ignored_needs_attention');
+  });
+
+  it('BASELINE: status succeeded (i velikim slovima) uz pozitivan amount_received knjizi pravo', async () => {
+    const { body, calls } = await run(signedRequest(succeeded({ status: 'SUCCEEDED' })));
+    expect(body).toEqual({ ok: true, action: 'entitlement_created' });
+    expect(entitlementWrites(calls).map(writeOp)).toEqual(['insert']);
+  });
+
+  it('payment_intent.succeeded sa zastavicom refunded NE otvara refund granu (povrat samo iz charge.refunded)', async () => {
+    const { body, calls } = await run(signedRequest(succeeded({ refunded: true })));
+    expect(body).toEqual({ ok: true, action: 'entitlement_created' });
+    expect(entitlementWrites(calls).map(writeOp)).toEqual(['insert']);
+    // Refund grana bi prvo upisala oznaku refund_pending u inbox; toga ne smije biti.
+    expect(settled(calls).some((u) => u.outcome_detail === 'refund_pending')).toBe(false);
+  });
+
+  it('charge.refunded ostaje jedini ulaz za povrat', async () => {
+    const hit = baseResolver((c) =>
+      c.table === 'entitlements' && writeOp(c) === 'select'
+        ? { data: [{ id: 'ent-1', product_id: 'slot_diplomski' }] }
+        : c.table === 'entitlements' && writeOp(c) === 'update'
+          ? { data: [{ id: 'ent-1' }] }
+          : undefined,
+    );
+    const { body } = await run(signedRequest(refunded(999)), hit);
+    expect(body).toEqual({ ok: true, action: 'refunded' });
+  });
+
+  it('vrsta koju ne obradjujemo ostavlja WARN redak s imenom dogadjaja (nije tiha)', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { body, calls } = await run(signedRequest({ ...succeeded(), type: 'charge.updated' }));
+    expect(body).toMatchObject({ ok: true, action: 'ignored', reason: 'event_ignored' });
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'event_ignored' });
+    const redak = warn.mock.calls.find((c) => c[0] === 'webhook-mor event_ignored');
+    expect(redak?.[1]).toMatchObject({ eventName: 'charge.updated' });
   });
 });

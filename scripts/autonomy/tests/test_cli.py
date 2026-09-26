@@ -15,6 +15,8 @@ from scripts.autonomy.worker import branch_changed_paths
 
 NOW = 1_800_000_000
 SHA = "48c1fc9e85f50213e5b313bc67cfbc0a45a28607"
+PROOF_REL = "docs/generated/RELEASE_PROOF.json"
+CORPUS_REL = "docs/generated/repair-real-corpus.json"
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 EXAMPLE = os.path.join(ROOT, "config", "autonomy.example.json")
 
@@ -193,6 +195,36 @@ class TickTest(unittest.TestCase):
             self.assertNotEqual(cli._agent_for(cfg, phase, {}), "fable")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}), "opus")
         self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}), "astra")
+
+    def test_auto_provider_fallback_is_opt_in_and_zero_probe(self):
+        grok_only = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": False, "approved_models": ["gpt-6-astra", "gpt-5.6-sol"]},
+                "claude": {"allowed": False, "approved_models": ["sonnet", "opus"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        wait = config(grokEnabled=True, implementerAgent="auto", providerFallback="wait")
+        self.assertIsNone(cli._agent_for(wait, "planning", {}, grok_only))
+        self.assertIsNone(cli._agent_for(wait, "implementing", {}, grok_only))
+        fallback = config(grokEnabled=True, implementerAgent="auto", providerFallback="authorized")
+        self.assertEqual(cli._agent_for(fallback, "planning", {}, grok_only), "grok")
+        self.assertEqual(cli._agent_for(fallback, "implementing", {}, grok_only), "build")
+
+    def test_review_router_never_uses_the_implementers_provider(self):
+        profile = {
+            "configuration_unchanged": True, "trusted_observation": True,
+            "providers": {
+                "codex": {"allowed": True, "approved_models": ["gpt-6-astra"]},
+                "claude": {"allowed": True, "approved_models": ["opus"]},
+                "grok": {"allowed": True, "approved_models": ["grok-4.6"]},
+            },
+        }
+        cfg = config(grokEnabled=True, providerFallback="authorized")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sonnet"}, profile), "astra")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "sol"}, profile), "grok")
+        self.assertEqual(cli._agent_for(cfg, "reviewing", {"implementationAgent": "build"}, profile), "astra")
 
 
 
@@ -740,6 +772,247 @@ class TwoJobsInARowTest(unittest.TestCase):
         self.assertTrue(str(payload.get("reason", "")).startswith("commit_failed"), payload)
 
 
+COMMITTED_PROOF = {"commit": "0" * 40, "complete": True, "dirtyWorkingTree": False, "treeDigest": "stari",
+                   "createdAt": "2020-01-01T00:00:00.000Z", "missingRequired": [], "results": []}
+# Ratchet korpusa onakav kakav stoji u stablu prije provjere. Oblik je skracen, ali staza i uloga su prave:
+# `docs/generated/repair-real-corpus.json` je TRACKANA i regenerira je obavezna razina `strict-open`.
+COMMITTED_CORPUS = {"summary": {"documentCount": 3, "changedDocumentCount": 0, "noOpCount": 3,
+                                "reviewCount": 0, "failCount": 0}, "results": []}
+
+
+class ReleaseCheckAdapters(CommittingAdapters):
+    """Stvaran `commit` I STVARAN `verify`, ukljucivo vracanje stabla. Lazan je samo poziv `npm`.
+
+    Bez ovoga se ovaj razred kvara ne moze ni vidjeti: `GatedAdapters.verify` vraca gotov rjecnik i ne
+    pokrece nijednu naredbu, pa `docs/generated/RELEASE_PROOF.json` nikad ne bude prepisan.
+    """
+
+    def __init__(self, config, home):
+        super().__init__(config, home)
+        self.last_evidence = None
+
+    def verify(self, task):
+        # Zove se IZRAVNO `DefaultAdapters.verify` (a ne `super()`), jer `GatedAdapters` u lancu nosi laznu
+        # verifikaciju; ovdje se mjeri bas ona prava.
+        self.last_evidence = cli.DefaultAdapters.verify(self, task)
+        return self.last_evidence
+
+
+class VerifyLeavesTheTreeCleanTest(unittest.TestCase):
+    """Kontroler se ne smije zakljucati poslije PRVOG posla koji dodje do VERIFIKACIJE.
+
+    Lanac: `_drive_task` prvo zove `adapters.commit` (stablo ostane cisto), pa odmah `adapters.verify`, a
+    `gate.verify_candidate` bezuvjetno pokrece `npm run release:check`, a taj lanac ima VISE imenovanih
+    pisaca TRACKANIH staza: `scripts/release-check.mjs` prepise `docs/generated/RELEASE_PROOF.json` (nosi
+    `createdAt`, pa se razlikuje na svakom pokretanju), a obavezna razina `strict-open` kroz
+    `npm run repair-real-corpus:review` prepise `docs/generated/repair-real-corpus.json` (razlikuje se cim
+    se popravak promijeni). Bez popravka u stablu ostane ` M docs/generated/...`,
+    sljedeci posao padne na `implement_unsafe: radno stablo nije cisto`, `_clean_at_start` ostane False i
+    `_park_worker_tree` vrati `skipped: nije nase`, dakle stablo se nikad ne ocisti samo.
+
+    Test NIJE vakuumski: `npm run release:check` je jedini presretnut poziv, i to tako da vjerno napise
+    OBA artefakta iz `gate.VERIFY_ARTIFACT_PATHS`, svaki s promjenjivim sadrzajem; sve ostalo (git, gard, commit, snimka, vracanje stabla) je stvarno, a
+    broj presretnutih poziva je zasebna tvrdnja, pa test ne moze proci tako da se verifikacija ne dogodi.
+    """
+
+    TRACKED_OTHER = "src/autonomija/vec-postoji.ts"
+
+    def setUp(self):
+        self.repo = make_git_repo()
+        self.home = tempfile.mkdtemp()
+        self.store = Store(os.path.join(self.home, "a.sqlite"))
+        self.cfg = config(mode="propose", workerRepoPath=self.repo)
+        self.npm_calls = []
+        self.extra_writes = []
+        self.proof_writes = 0
+        self._seed_tracked_files()
+
+    def tearDown(self):
+        self.store.close()
+
+    def _git(self, *args):
+        out = subprocess.run(["git", *args], cwd=self.repo, capture_output=True, text=True, check=False,
+                             shell=False)
+        assert out.returncode == 0, (args, out.stderr)
+        return out.stdout
+
+    def _seed_tracked_files(self):
+        """Datoteka dokaza mora biti TRACKANA, jer je takva i u produkcijskom stablu.
+
+        To nije kozmetika fixturea: `git status` netrackanu datoteku prijavljuje kao `??`, a trackanu kao
+        ` M`, i tek drugi oblik odgovara stanju koje kontroler stvarno zatekne. Uz nju se sije i jedna druga
+        trackana datoteka, koju koristi negativna kontrola.
+        """
+        for rel, payload in ((PROOF_REL, json.dumps(COMMITTED_PROOF, indent=2) + chr(10)),
+                             (CORPUS_REL, json.dumps(COMMITTED_CORPUS, indent=2) + chr(10)),
+                             (self.TRACKED_OTHER, "export const vec = 1;" + chr(10))):
+            target = os.path.join(self.repo, rel.replace("/", os.sep))
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            with open(target, "w", encoding="utf-8") as fh:
+                fh.write(payload)
+        self._git("add", "--", PROOF_REL, CORPUS_REL, self.TRACKED_OTHER)
+        self._git("commit", "-qm", "zateceno stanje")
+        assert self.dirty() == "", "fixture mora krenuti iz cistog stabla"
+
+    def dirty(self):
+        return subprocess.run(["git", "status", "--porcelain"], cwd=self.repo, capture_output=True, text=True,
+                              check=False, shell=False).stdout.strip()
+
+    def on_disk(self, rel):
+        with open(os.path.join(self.repo, rel.replace("/", os.sep)), encoding="utf-8") as fh:
+            return fh.read()
+
+    def in_head(self, rel):
+        return self._git("show", "HEAD:" + rel)
+
+    def write_verification_artifacts(self):
+        """Vjerna simulacija OBA imenovana pisca iz `gate.VERIFY_ARTIFACT_PATHS`.
+
+        `scripts/release-check.mjs` bezuvjetno prepise dokaz, a obavezna razina `strict-open` kroz
+        `npm run verify:strict-open:repaired` -> `npm run repair-real-corpus:review` vrti
+        `scripts/repair-real-corpus.mts`, koji bezuvjetno prepise ratchet korpusa. Oba izlaza se ovdje
+        mijenjaju na svakom pozivu, jer se tako ponasaju i u produkciji: dokaz nosi `createdAt`, a ratchet
+        nove brojke cim se popravak promijeni.
+        """
+        self.proof_writes += 1
+        payload = dict(COMMITTED_PROOF, commit="1" * 40,
+                       createdAt="2026-09-22T00:00:%02d.000Z" % self.proof_writes)
+        corpus = dict(COMMITTED_CORPUS, summary=dict(COMMITTED_CORPUS["summary"],
+                                                     changedDocumentCount=self.proof_writes))
+        for rel, body in ((PROOF_REL, payload), (CORPUS_REL, corpus)):
+            with open(os.path.join(self.repo, rel.replace("/", os.sep)), "w", encoding="utf-8") as fh:
+                fh.write(json.dumps(body, indent=2) + chr(10))
+
+    @contextlib.contextmanager
+    def npm_intercepted(self):
+        real_run = subprocess.run
+
+        def dispatch(argv, **kwargs):
+            if list(argv)[:3] == ["npm", "run", "release:check"]:
+                self.npm_calls.append(list(argv))
+                self.write_verification_artifacts()
+                for rel in self.extra_writes:
+                    with open(os.path.join(self.repo, rel.replace("/", os.sep)), "a", encoding="utf-8") as fh:
+                        fh.write("// trag verifikacije " + str(len(self.npm_calls)) + chr(10))
+                return subprocess.CompletedProcess(list(argv), 0, "", "")
+            return real_run(argv, **kwargs)
+
+        with mock.patch.object(subprocess, "run", side_effect=dispatch):
+            yield
+
+    def run_tick(self, symptom, now, adapters_cls=ReleaseCheckAdapters):
+        adapters = adapters_cls(self.cfg, self.home)
+        written = "src/autonomija/" + symptom.replace(" ", "-") + ".ts"
+
+        def writing_run_phase(job, agent_phase, prof, **kwargs):
+            if agent_phase == "implement":
+                target = os.path.join(self.repo, written.replace("/", os.sep))
+                os.makedirs(os.path.dirname(target), exist_ok=True)
+                with open(target, "w", encoding="utf-8") as fh:
+                    fh.write("export const x = 1;" + chr(10))
+            return {"verdict": "needs_verification", "reason": "fake"}
+
+        with mock.patch.object(cli, "prepare_job_via_node", return_value=fake_job()), \
+             mock.patch.object(cli, "run_phase", side_effect=writing_run_phase), \
+             self.npm_intercepted():
+            out = cli.tick(self.cfg, now, False, store=self.store, home=self.home,
+                           sources=inbox_source("T01", symptom=symptom), adapters=adapters, profile=profile())
+        return out, adapters, written
+
+    @staticmethod
+    def phase_reasons(summary):
+        return " | ".join(str(p.get("reason")) for p in summary["phases"])
+
+    def test_the_second_job_starts_because_verification_left_no_trace(self):
+        first, adapters, written = self.run_tick("prvi posao", NOW)
+        # (0) IZRAVAN SIGNAL da test nije vakuumski: verifikacija je STVARNO pokrenula release:check.
+        self.assertEqual(len(self.npm_calls), 1, "verifikacija mora pokrenuti release:check, inace se kvar ne vidi")
+        self.assertEqual(self.proof_writes, 1)
+        self.assertIsNotNone(adapters.last_evidence, "stvarni verify mora biti pozvan")
+        # (1) Stablo je poslije posla CISTO, i to se mjeri sadrzajno, ne izlaznim kodom.
+        self.assertEqual(self.dirty(), "", "verifikacija ne smije ostaviti trag u radnikovu stablu")
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel + " je vracen na HEAD stanje")
+        self.assertEqual(adapters.last_evidence["treeResidue"], [], adapters.last_evidence)
+        self.assertIn(written, self._git("show", "--name-only", "--format=", "HEAD"))
+        # (2) Drugi posao KRECE i ne pada na gardu cistog stabla.
+        second, _, written2 = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual([p["phase"] for p in second["phases"]][:3], ["planning", "implementing", "reviewing"])
+        self.assertNotIn("radno stablo nije cisto", self.phase_reasons(second), second)
+        self.assertNotIn("implement_unsafe", self.phase_reasons(second), second)
+        self.assertNotEqual(written, written2)
+        # Idempotencija: drugi prolaz je nad stablom isti no-op kao prvi.
+        self.assertEqual(len(self.npm_calls), 2)
+        self.assertEqual(self.dirty(), "")
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel)
+
+    def test_mutation_without_the_restore_the_next_job_is_locked(self):
+        """MUTACIJA nad mehanizmom: isti tok, samo bez vracanja stabla. Tocno stanje prije ovog popravka."""
+        with mock.patch.object(cli, "_verify_settle", return_value=lambda: []):
+            first, _, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(len(self.npm_calls), 1, first)
+        self.assertIn("RELEASE_PROOF.json", self.dirty(), "bez vracanja dokaz ostaje promijenjen")
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_a_verification_that_touches_another_file_is_still_seen_as_dirty(self):
+        """NEGATIVNA KONTROLA: popravak je uzak. Bilo koja DRUGA trackana datoteka i dalje prlja stablo.
+
+        Da se vracanje prosirilo preko datoteke dokaza, ovaj test bi pao, a kontroler bi tiho gazio promjene
+        koje nisu njegove.
+        """
+        self.extra_writes = [self.TRACKED_OTHER]
+        first, adapters, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(adapters.last_evidence["treeResidue"], [self.TRACKED_OTHER], adapters.last_evidence)
+        # `complete` se ovdje namjerno ne tvrdi: fixture (`COMMITTED_PROOF["commit"] == "1" * 40`,
+        # `results: []`) vec sama cini `complete` False neovisno o `treeResidue`, pa bi tvrdnja bila
+        # konfundirana. Klauzulu "residue obara complete" pokriva
+        # `gate.SettleTest.test_residue_blocks_the_manifest_and_the_promotion`.
+        self.assertIn("vec-postoji.ts", self.dirty())
+        self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se svejedno vraca; kvar je uzak")
+        self.assertNotIn("repair-real-corpus.json", self.dirty(), "ratchet korpusa se svejedno vraca")
+        self.assertEqual(first["outcome"], "needs_human", first)
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_restoring_only_the_proof_still_locks_the_controller(self):
+        """MUTACIJA nad DEKLARACIJOM: popis suzen na samu datoteku dokaza, tocno kako je glasio prvi popravak.
+
+        `npm run release:check` ima jos jednog imenovanog pisca trackane staze: obavezna razina `strict-open`
+        vrti `npm run repair-real-corpus:review`, a `scripts/repair-real-corpus.mts` bezuvjetno prepise
+        `docs/generated/repair-real-corpus.json`. Popravak koji vraca samo dokaz zato ne rjesava kvar nego ga
+        premjesta na drugu stazu; ovaj test to mjeri, umjesto da se uzme na rijec.
+        """
+        with mock.patch.object(cli, "VERIFY_ARTIFACT_PATHS", (PROOF_REL,)):
+            first, adapters, _ = self.run_tick("prvi posao", NOW)
+        self.assertEqual(len(self.npm_calls), 1, first)
+        self.assertNotIn("RELEASE_PROOF.json", self.dirty(), "dokaz se i u mutaciji vraca")
+        self.assertIn("repair-real-corpus.json", self.dirty(), "suzen popis ostavlja ratchet korpusa prljavim")
+        self.assertEqual(adapters.last_evidence["treeResidue"], [CORPUS_REL], adapters.last_evidence)
+        self.assertEqual(first["outcome"], "needs_human", first)
+        second, _, _ = self.run_tick("drugi posao", NOW + 1)
+        self.assertEqual(second["outcome"], "blocked", second)
+        self.assertIn("radno stablo nije cisto", str(second["phases"][-1]["reason"]))
+
+    def test_the_older_two_job_test_can_never_fail_on_this_input(self):
+        """VAKUUM-KONTROLA nad postojecim `TwoJobsInARowTest`.
+
+        Taj test nasljedjuje `GatedAdapters.verify`, koji vraca gotov rjecnik i ne pokrece NIJEDNU naredbu.
+        Ovdje se to mjeri, a ne pretpostavlja: isti tick s istim adapterima ne izvede nijedan `npm` poziv,
+        pa datoteka dokaza nikad ne bude prepisana i stablo ostane cisto bez obzira na popravak.
+        """
+        first, adapters, _ = self.run_tick("prvi posao", NOW, adapters_cls=CommittingAdapters)
+        self.assertEqual(first["outcome"], "proposed", first)
+        self.assertEqual(self.npm_calls, [], "lazna verifikacija ne pokrece nijednu naredbu")
+        self.assertEqual(self.proof_writes, 0)
+        for rel in (PROOF_REL, CORPUS_REL):
+            self.assertEqual(self.on_disk(rel), self.in_head(rel), rel + " nije ni dirnut")
+        self.assertIsNot(CommittingAdapters.verify, cli.DefaultAdapters.verify)
+
+
 class RealTreeAdapters(cli.DefaultAdapters):
     """Sve sto dira radnikovo stablo je STVARNO: gard, grana posla, snimka, klasifikacija i commit.
 
@@ -1032,20 +1305,70 @@ class BillingProfileTest(unittest.TestCase):
         self.assertFalse(changed["configuration_unchanged"])
         self.assertFalse(billing_allowed(changed))
 
-    def test_api_key_env_forces_api_auth(self):
-        doc = {"logins": {"codex": {"logged_in": True, "method": "chatgpt"}, "claude": {}}, "configFingerprint": "f", "observedAt": "t"}
-        old = os.environ.get("ANTHROPIC_API_KEY")
+    def test_api_credentials_block_only_their_provider(self):
+        doc = {
+            "logins": {
+                "codex": {"logged_in": True, "method": "chatgpt"},
+                "claude": {"logged_in": True, "method": "subscription"},
+            },
+            "tools": {},
+            "configFingerprint": "f", "observedAt": "t",
+        }
+        attest = {"extra_credits_disabled": True, "model_included": True,
+                  "models": ["gpt-6-astra", "sonnet"]}
+        from scripts.autonomy.policy import billing_allowed, provider_billing_allowed
+
+        before = os.environ.get("ANTHROPIC_API_KEY")
         os.environ["ANTHROPIC_API_KEY"] = "sk-ant-test"
         try:
-            prof = cli.build_billing_profile(doctor=doc, config=config(), attest={"extra_credits_disabled": True, "model_included": True}, previous={})
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
         finally:
-            if old is None:
+            if before is None:
                 del os.environ["ANTHROPIC_API_KEY"]
             else:
-                os.environ["ANTHROPIC_API_KEY"] = old
-        self.assertEqual(prof["effective_auth"], "api_key")
-        from scripts.autonomy.policy import billing_allowed
-        self.assertFalse(billing_allowed(prof))
+                os.environ["ANTHROPIC_API_KEY"] = before
+        self.assertTrue(billing_allowed(prof), "Codex account ostaje dopusten")
+        self.assertTrue(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertFalse(provider_billing_allowed(prof, "claude", "sonnet"))
+
+        before = os.environ.get("OPENAI_API_KEY")
+        os.environ["OPENAI_API_KEY"] = "sk-openai-test"
+        try:
+            prof = cli.build_billing_profile(doctor=doc, config=config(), attest=attest, previous={})
+        finally:
+            if before is None:
+                del os.environ["OPENAI_API_KEY"]
+            else:
+                os.environ["OPENAI_API_KEY"] = before
+        self.assertFalse(provider_billing_allowed(prof, "codex", "gpt-6-astra"))
+        self.assertTrue(provider_billing_allowed(prof, "claude", "sonnet"))
+
+    def test_grok_profile_requires_supported_cli_attestation_and_no_api_key(self):
+        doc = {
+            "logins": {"codex": {}, "claude": {}},
+            "tools": {"grok": {"available": True, "version": "grok 1.0.34"}},
+            "configFingerprint": "fg", "observedAt": "t",
+        }
+        attest = {"extra_credits_disabled": False, "model_included": False, "models": [],
+                  "grok_included": True, "grok_models": ["grok-4.6"]}
+        from scripts.autonomy.policy import provider_billing_allowed
+        prof = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        self.assertTrue(provider_billing_allowed(prof, "grok", "grok-4.6"))
+        old_doc = {**doc, "tools": {"grok": {"available": True, "version": "grok 1.0.33"}}}
+        self.assertFalse(provider_billing_allowed(
+            cli.build_billing_profile(doctor=old_doc, config=config(grokEnabled=True), attest=attest, previous={}),
+            "grok", "grok-4.6"))
+
+        before = os.environ.get("XAI_API_KEY")
+        os.environ["XAI_API_KEY"] = "xai-test"
+        try:
+            blocked = cli.build_billing_profile(doctor=doc, config=config(grokEnabled=True), attest=attest, previous={})
+        finally:
+            if before is None:
+                del os.environ["XAI_API_KEY"]
+            else:
+                os.environ["XAI_API_KEY"] = before
+        self.assertFalse(provider_billing_allowed(blocked, "grok", "grok-4.6"))
 
 
 class CliProcessTest(unittest.TestCase):

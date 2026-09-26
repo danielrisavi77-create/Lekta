@@ -6,10 +6,19 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { handleLocalRepairStatusHttp } from '../../../src/repair/local-runner/status-http.ts';
 import { recordLocalRepairStatus } from '../../../src/repair/local-runner/status-service.ts';
 import { createLocalRepairStatusSupabaseDependencies } from '../../../src/repair/local-runner/status-supabase-adapter.ts';
+import { localRepairFlagEnabled } from '../../../src/repair/local-runner/feature-flag.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
-const LOCAL_REPAIR_DISABLED = Deno.env.get('REPAIR_LOCAL_DISABLED') === 'true';
+// Ista zastavica kao u repair-docx (src/repair/local-runner/feature-flag.ts). Prije je ovaj javni,
+// neautenticirani endpoint gasio SAMO kill switch REPAIR_LOCAL_DISABLED, pa je bio fail-open: na
+// lansiranju se ta varijabla uopce ne postavlja, a funkcija je bila ziva iako je lokalni popravak
+// iskljucen. Ishod kad je znacajka ukljucena je nepromijenjen (release postavlja ENABLED=true pa
+// DISABLED=false); promijenjen je samo ishod prije aktivacije: 503 umjesto zive povrsine.
+const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({
+  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),
+  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),
+});
 
 const NO_STORE_JSON = {
   'cache-control': 'no-store',
@@ -17,7 +26,7 @@ const NO_STORE_JSON = {
 } as const;
 
 Deno.serve(async (request: Request): Promise<Response> => {
-  if (LOCAL_REPAIR_DISABLED) {
+  if (!LOCAL_REPAIR_ENABLED) {
     return new Response(JSON.stringify({ error: 'disabled' }), {
       status: 503,
       headers: NO_STORE_JSON,

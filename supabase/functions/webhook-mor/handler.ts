@@ -15,6 +15,8 @@ import {
   PASS_COUPON_VALID_DAYS,
   buildEntitlementInsert,
   acceptEvent,
+  classifyStripeEvent,
+  isNotableIgnore,
   isFullRefund,
   type StripeEvent,
   type StripeWebhookPayload,
@@ -368,12 +370,47 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       accountId: ev.accountId,
       orderId: ev.orderId,
     };
-    // Ignorirana vrsta je ocekivan promet (Stripe salje mnogo toga), pa ne ide u ERROR kanal;
-    // odbijeno porijeklo ide, jer znaci ili krivu konfiguraciju ili pokusaj.
-    if (gate.reason === 'event_ignored') console.info('webhook-mor event_ignored', detail);
-    else console.error('webhook-mor event_refused', detail);
-    await settle(gate.reason === 'event_ignored' ? 'ignored' : 'refused', gate.reason);
+    // Ignorirana vrsta je konfiguracijski sum (endpoint pretplacen na vise od dva dogadjaja), pa ne
+    // ide u ERROR kanal nego u WARN; odbijeno porijeklo ide u ERROR, jer znaci ili krivu
+    // konfiguraciju ili pokusaj. Nijedna od ovih grana nije tiha (nalaz pregleda na masteru
+    // 2026-09-23: 200 bez retryja i bez retka u logu skriva potpuni prekid prihoda).
+    // Dva odvojena poziva `settle` (a ne jedan s uvjetnim izrazom) da se svaki ishod vidi kao
+    // doslovan niz: tests/naplata-runbook.test.ts ishode izvodi iz izvora i trazi redak u runbooku.
+    if (gate.reason === 'event_ignored') {
+      console.warn('webhook-mor event_ignored', detail);
+      await settle('ignored', gate.reason);
+    } else {
+      console.error('webhook-mor event_refused', detail);
+      await settle('refused', gate.reason);
+    }
     return json({ ok: true, action: gate.reason === 'event_ignored' ? 'ignored' : 'event_refused', reason: gate.reason }, 200);
+  }
+
+  // KLASIFIKACIJA (cista odluka, classifyStripeEvent u src/report/webhook.ts). Ide TEK nakon
+  // inboxa i nakon gatea porijekla: dogadjaj koji nije nas ne smije se ni klasificirati.
+  // Knjizi se samo `payment_intent.succeeded` sa statusom `succeeded` i pozitivnim
+  // `amount_received`; povrat samo iz `charge.refunded`. Stripe ekvivalent zastita s mastera
+  // (31b802ad, 81a89f2f, daf5f53a), prenesen pri spajanju u design/pack3.
+  const decision = classifyStripeEvent(ev);
+
+  if (decision.kind === 'ignored') {
+    // Dogadjaj se zove kao uplata, a objekt naplatu ne potvrdjuje (ili je vracen novac pod
+    // drugim imenom). 200 jer retry ne bi promijenio ishod; trag ostaje u inboxu I u logu.
+    // OVA GRANA SE LOGIRA UVIJEK: odluka pociva na obliku tudjeg objekta, pa bi njegova promjena
+    // bez retka u logu pretvorila SVAKU kupnju u tihi 200. Razlozi koji se ticu novca idu na
+    // ERROR (NOTABLE_IGNORE_PREFIXES), ostalo na WARN. Upit nad inboxom je u docs/GO_LIVE_NAPLATA.md.
+    const detalji = {
+      reason: decision.reason,
+      eventName: ev.eventName,
+      status: ev.status,
+      amountReceivedCents: ev.amountReceivedCents,
+      orderId: ev.orderId,
+      testMode: ev.testMode,
+    };
+    if (isNotableIgnore(decision)) console.error('webhook-mor ignored_needs_attention', detalji);
+    else console.warn('webhook-mor ignored_foreign_event', detalji);
+    await settle('ignored', decision.reason);
+    return json({ ok: true, action: 'ignored', reason: decision.reason ?? 'nepodrzan_dogadjaj' }, 200);
   }
 
   // Od ovdje se dogadjaj stvarno knjizi, pa je PaymentIntent id (kljuc) obavezan. Bez njega je
@@ -388,7 +425,11 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   }
 
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
-  if (ev.refunded) {
+  //
+  // U ovu granu se ulazi SAMO iz dogadjaja `charge.refunded` (odluka: classifyStripeEvent), ne po
+  // zastavici `ev.refunded`: parser tu zastavicu racuna i iz `data.object.refunded`, bez obzira na
+  // ime dogadjaja, a grana nize pise po `ev.orderId` (gasi entitlement, povlaci referral nagrade).
+  if (decision.kind === 'refund') {
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.
     if (!isFullRefund(ev)) {

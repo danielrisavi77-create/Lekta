@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { createHmac } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
+import { webhookHandlerProblems } from './helpers/webhook-handler-source';
 
 import {
   parseStripeEvent,
@@ -14,6 +19,10 @@ import {
   buildEntitlementInsert,
   acceptEvent,
   isFullRefund,
+  classifyStripeEvent,
+  isNotableIgnore,
+  IGNORE_REASON_PREFIXES,
+  NOTABLE_IGNORE_PREFIXES,
   type StripeWebhookPayload,
 } from '../src/report/webhook';
 
@@ -25,6 +34,7 @@ describe('parseStripeEvent', () => {
       data: {
         object: {
           id: 'pi_123',
+          status: 'succeeded',
           amount: 999,
           amount_received: 999,
           currency: 'eur',
@@ -34,6 +44,10 @@ describe('parseStripeEvent', () => {
     };
     expect(parseStripeEvent(payload)).toEqual({
       eventName: 'payment_intent.succeeded',
+      // `status` i `amountReceivedCents` su dodani pri spajanju mastera (2026-09-26): bez njih se
+      // `payment_intent.succeeded` koji naplatu ne potvrdjuje nije mogao razlikovati od placenog.
+      status: 'succeeded',
+      amountReceivedCents: 999,
       orderId: 'pi_123',
       userId: 'u1',
       productId: 'slot_diplomski',
@@ -326,5 +340,233 @@ describe('isFullRefund', () => {
   it('bez poznatih iznosa tretira povrat kao potpun (sigurnije za korisnika)', () => {
     expect(isFullRefund({ refunded: true, totalCents: null, refundedCents: null })).toBe(true);
     expect(isFullRefund({ refunded: true, totalCents: 1699, refundedCents: null })).toBe(true);
+  });
+});
+
+/**
+ * KLASIFIKACIJA DOGADJAJA (Stripe ekvivalent masterovih 31b802ad, 81a89f2f i daf5f53a).
+ *
+ * Master je 2026-09-22 za prijasnjeg pruzatelja uveo pravilo "knjizi se samo placena narudzba,
+ * povrat samo iz jednog imenovanog dogadjaja, sve ostalo 200 s tragom". Na Stripeu je ime
+ * dogadjaja `payment_intent.succeeded`, ali ime samo po sebi nije potvrda naplate: `paid` je tek
+ * uz `status` `succeeded` i pozitivan `amount_received`. Povrat je vezan uz IME `charge.refunded`,
+ * ne uz zastavicu `refunded` iz objekta.
+ */
+describe('classifyStripeEvent', () => {
+  const base = { eventName: 'payment_intent.succeeded', status: 'succeeded', amountReceivedCents: 999, refunded: false };
+
+  it('payment_intent.succeeded + status succeeded + amount_received > 0 -> paid', () => {
+    expect(classifyStripeEvent(base)).toEqual({ kind: 'paid' });
+  });
+
+  it.each(['processing', 'requires_payment_method', 'requires_action', 'canceled'])(
+    'payment_intent.succeeded sa statusom %s -> ignored (ime nije potvrda naplate)',
+    (status) => {
+      const out = classifyStripeEvent({ ...base, status });
+      expect(out).toEqual({ kind: 'ignored', reason: `payment_status:${status}` });
+      expect(isNotableIgnore(out)).toBe(true);
+    },
+  );
+
+  it('payment_intent.succeeded bez statusa -> ignored (prazno nije "placeno")', () => {
+    expect(classifyStripeEvent({ ...base, status: '' })).toEqual({ kind: 'ignored', reason: 'payment_status:nepoznat' });
+  });
+
+  it.each([
+    [0, 'amount_received:0'],
+    [-5, 'amount_received:-5'],
+    [null, 'amount_received:nepoznat'],
+  ])('amount_received %s -> ignored (%s)', (amount, reason) => {
+    const out = classifyStripeEvent({ ...base, amountReceivedCents: amount });
+    expect(out).toEqual({ kind: 'ignored', reason });
+    expect(isNotableIgnore(out)).toBe(true);
+  });
+
+  it.each(['SUCCEEDED', 'Succeeded', ' succeeded '])('status %s je i dalje placeno', (status) => {
+    expect(classifyStripeEvent({ ...base, status })).toEqual({ kind: 'paid' });
+  });
+
+  it('razlog za ignored ostaje u malim slovima (stabilan strojni kljuc)', () => {
+    expect(classifyStripeEvent({ ...base, status: 'PROCESSING' }).reason).toBe('payment_status:processing');
+  });
+
+  it('charge.refunded -> refund, bez obzira na status, iznos i zastavicu', () => {
+    for (const status of ['succeeded', '', 'failed']) {
+      expect(classifyStripeEvent({ eventName: 'charge.refunded', status, amountReceivedCents: null, refunded: true }))
+        .toEqual({ kind: 'refund' });
+    }
+    // Zastavica nije uvjet: djelomican povrat je i dalje charge.refunded (isFullRefund odlucuje dalje).
+    expect(classifyStripeEvent({ eventName: 'charge.refunded', status: '', amountReceivedCents: null, refunded: false }))
+      .toEqual({ kind: 'refund' });
+  });
+
+  /**
+   * Zastavica `refunded` pod DRUGIM imenom ne smije u refund granu: grana pise po `ev.orderId` i
+   * povlaci referral nagrade, a samo kod `charge.refunded` je `orderId` sigurno PaymentIntent
+   * povrata. Vracen novac pod drugim imenom nije tiho odbacen nego glasan `ignored`.
+   */
+  it.each(['charge.updated', 'charge.refund.updated', 'nesto.novo.od.providera'])(
+    'zastavica refunded pod imenom %s NE ulazi u refund granu, nego glasno u ignored',
+    (eventName) => {
+      const out = classifyStripeEvent({ eventName, status: 'succeeded', amountReceivedCents: null, refunded: true });
+      expect(out).toEqual({ kind: 'ignored', reason: `povrat_bez_charge_refunded:${eventName}` });
+      expect(isNotableIgnore(out)).toBe(true);
+    },
+  );
+
+  it('payment_intent.succeeded sa zastavicom refunded je uplata po imenu, ne povrat', () => {
+    // Parser zastavicu racuna i iz data.object.refunded; ime dogadjaja odlucuje granu.
+    const ev = parseStripeEvent({
+      type: 'payment_intent.succeeded',
+      livemode: true,
+      data: { object: { id: 'pi_7', status: 'succeeded', amount_received: 999, refunded: true } },
+    });
+    expect(ev.refunded).toBe(true);
+    expect(classifyStripeEvent(ev)).toEqual({ kind: 'paid' });
+  });
+
+  it('nepodrzana vrsta -> ignored, razlog je imenuje, i to je konfiguracijski sum (WARN)', () => {
+    const out = classifyStripeEvent({ ...base, eventName: 'customer.created' });
+    expect(out).toEqual({ kind: 'ignored', reason: 'nepodrzan_dogadjaj:customer.created' });
+    expect(isNotableIgnore(out)).toBe(false);
+  });
+
+  it('isNotableIgnore razlikuje razloge koji se ticu novca od tudjeg dogadjaja', () => {
+    expect(isNotableIgnore({ reason: undefined })).toBe(false);
+    expect(isNotableIgnore({ reason: '' })).toBe(false);
+    expect(isNotableIgnore({ reason: 'nepodrzan_dogadjaj:x' })).toBe(false);
+  });
+
+  /**
+   * Popisi prefiksa nisu ukras: `tests/naplata-runbook.test.ts` iz njih izvodi sto runbook mora
+   * opisati, a handler iz njih bira ERROR ili WARN razinu.
+   */
+  it('svaki razlog koji klasifikator proizvede ima prefiks iz popisa', () => {
+    const slucajevi = [
+      { ...base, status: 'processing' },
+      { ...base, amountReceivedCents: 0 },
+      { ...base, eventName: 'customer.created' },
+      { eventName: 'charge.updated', status: '', amountReceivedCents: null, refunded: true },
+    ];
+    for (const ev of slucajevi) {
+      const reason = String(classifyStripeEvent(ev).reason ?? '');
+      expect(IGNORE_REASON_PREFIXES.some((p) => reason.startsWith(p)), reason).toBe(true);
+    }
+    for (const prefix of NOTABLE_IGNORE_PREFIXES) expect(IGNORE_REASON_PREFIXES).toContain(prefix);
+  });
+
+  it('parseStripeEvent i classifyStripeEvent se slazu na stvarnom payloadu', () => {
+    const paid = parseStripeEvent({
+      type: 'payment_intent.succeeded',
+      livemode: true,
+      data: { object: { id: 'pi_1', status: 'succeeded', amount: 999, amount_received: 999 } },
+    });
+    expect(classifyStripeEvent(paid)).toEqual({ kind: 'paid' });
+
+    // Bez amount_received parser NE posuduje `amount`: potvrda naplate mora doci iz objekta.
+    const bezPrimljenog = parseStripeEvent({
+      type: 'payment_intent.succeeded',
+      livemode: true,
+      data: { object: { id: 'pi_2', status: 'succeeded', amount: 999 } },
+    });
+    expect(bezPrimljenog.amountReceivedCents).toBeNull();
+    expect(classifyStripeEvent(bezPrimljenog)).toEqual({ kind: 'ignored', reason: 'amount_received:nepoznat' });
+
+    const povrat = parseStripeEvent({
+      type: 'charge.refunded',
+      livemode: true,
+      data: { object: { id: 'ch_1', payment_intent: 'pi_1', status: 'succeeded', amount: 999, amount_refunded: 999 } },
+    });
+    expect(povrat.amountReceivedCents).toBeNull();
+    expect(classifyStripeEvent(povrat)).toEqual({ kind: 'refund' });
+  });
+});
+
+/**
+ * Tvrdnja o EDGE FUNKCIJI, citanjem izvora (Stripe ekvivalent masterova bloka nad izvorom
+ * handlera). Handler se izvrsava i u tests/webhook-mor-handler.test.ts; ovdje se mjeri da odluku
+ * ne donosi sam i da nijedna grana `ignored` nije tiha.
+ */
+describe('webhook-mor izvor: odluka je u coreu, ne u handleru', () => {
+  const SRC = readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), '..', 'supabase/functions/webhook-mor/handler.ts'),
+    'utf8',
+  );
+
+  it('izvor je procitan (prazna datoteka ne smije "proci")', () => {
+    expect(SRC.length).toBeGreaterThan(2000);
+  });
+
+  it('BASELINE: izvor nema nijedan od poznatih kvarova', () => {
+    const problems = webhookHandlerProblems(SRC);
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('jedini 400 je neispravan JSON; nedostajuci orderId ili userId je 200 ignored u inboxu', () => {
+    expect(SRC).not.toMatch(/!ev\.orderId\s*\|\|\s*!ev\.userId/);
+    const cetiristo = SRC.match(/\}, 400\)/g) ?? [];
+    expect(cetiristo).toHaveLength(1);
+    expect(SRC).toContain("catch { return json({ error: 'bad_request' }, 400); }");
+  });
+
+  it('gard grize: vraceni orderId+userId uvjet s 400 se prijavi', () => {
+    const mutated = SRC.replace(
+      'const admin = deps.admin();',
+      "if (!ev.orderId || !ev.userId) return json({ error: 'bad_request' }, 400);\n  const admin = deps.admin();",
+    );
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('user_id');
+  });
+
+  it('gard grize: uklonjen poziv klasifikatora se prijavi', () => {
+    const mutated = SRC.split('classifyStripeEvent(ev)').join("({ kind: 'paid' } as const)");
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('classifyStripeEvent');
+  });
+
+  it('gard grize: refund grana vracena na zastavicu ev.refunded se prijavi', () => {
+    const mutated = SRC.replace("if (decision.kind === 'refund') {", 'if (ev.refunded) {');
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('ev.refunded');
+  });
+
+  it('redoslijed ostaje: potpis -> parse -> inbox -> acceptEvent -> klasifikacija -> knjizenje', () => {
+    const at = (needle: string): number => {
+      const idx = SRC.indexOf(needle);
+      expect(idx, `nema uzorka u izvoru: ${needle}`).toBeGreaterThan(-1);
+      return idx;
+    };
+    const signature = at('verifyStripeSignature(raw');
+    const parse = at('parseStripeEvent(parsed)');
+    const inbox = at(".from('webhook_events')");
+    const gate = at('acceptEvent(ev, {');
+    const classify = at('classifyStripeEvent(ev)');
+    const insert = at('buildEntitlementInsert(');
+    expect(signature).toBeLessThan(parse);
+    expect(parse).toBeLessThan(inbox);
+    expect(inbox).toBeLessThan(gate);
+    expect(gate).toBeLessThan(classify);
+    expect(classify).toBeLessThan(insert);
+  });
+
+  it("grana 'ignored' logira, i to razlicito za novac i za tudji dogadjaj", () => {
+    expect(SRC).toContain("console.error('webhook-mor ignored_needs_attention'");
+    expect(SRC).toContain("console.warn('webhook-mor ignored_foreign_event'");
+    expect(SRC).toContain('isNotableIgnore(decision)');
+    expect(SRC).toContain("console.warn('webhook-mor event_ignored'");
+  });
+
+  it("gard grize: utisana grana 'ignored' se prijavi", () => {
+    const mutated = SRC
+      .replace("if (isNotableIgnore(decision)) console.error('webhook-mor ignored_needs_attention', detalji);", '')
+      .replace("else console.warn('webhook-mor ignored_foreign_event', detalji);", '');
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain("grana 'ignored' nema log retka");
+  });
+
+  it('gard grize: event_ignored vracen na console.info se prijavi', () => {
+    const mutated = SRC.replace("console.warn('webhook-mor event_ignored'", "console.info('webhook-mor event_ignored'");
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('event_ignored');
   });
 });

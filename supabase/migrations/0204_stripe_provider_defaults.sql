@@ -1,4 +1,8 @@
--- 0203_stripe_provider_defaults.sql
+-- 0204_stripe_provider_defaults.sql
+--
+-- Na grani design/pack3 nastala kao 0203; pri spajanju mastera (2026-09-26) preimenovana u 0204,
+-- jer je master zauzeo 0203 (0203_corpus_contributions_drop_update_policy.sql). Je li ijedna od
+-- njih vec primijenjena na zivi projekt, pri preimenovanju NIJE provjereno.
 --
 -- Naplata je 2026-09-23 presla s Merchant of Record providera na Stripe (odluka vlasnika,
 -- F18 u docs/agents/orchestrator-backlog.md). Stripe NIJE Merchant of Record, pa obracun i

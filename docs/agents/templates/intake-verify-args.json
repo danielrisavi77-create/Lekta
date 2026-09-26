@@ -1,0 +1,12 @@
+{
+  "mode": "light",
+  "branch": "wf/intake-verify-<datum>",
+  "task": "Izvidjac (read-only): za svaki nalaz iz zalijepljene vanjske analize vrati redak tablice (id, tvrdnja, status potvrdjen|neistinit|nepoznat, dokaz putanja:redak ili naredba, velicina S|M|L, zasticeno da|ne, prijedlog T-zadatka). NE mijenjaj kod, ne pisi datoteke, samo citaj i provjeri.",
+  "files": [],
+  "acceptance": [
+    "Svaki nalaz ima status potvrdjen, neistinit ili nepoznat, s konkretnim dokazom (putanja:redak ili naredba), ne pretpostavkom.",
+    "Zasticeno polje odgovara protectedPaths iz config/agent-routing.json (src/repair, src/citations, src/docx, supabase, security).",
+    "Nijedan nalaz nije oznacen potvrdjenim bez citiranog dokaza u repozitoriju.",
+    "Izvidjac ne mijenja nijednu datoteku."
+  ]
+}

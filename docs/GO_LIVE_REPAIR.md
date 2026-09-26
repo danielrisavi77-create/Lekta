@@ -133,7 +133,8 @@ Deploy nije atomaran, pa oba smjera moraju biti sigurna:
 Kad svi klijenti budu novi, korpusna grana u `repair-docx` moze nestati.
 
 > Napomena: `create-checkout` je već deployan ali STAR (prije WS-5 tier_mismatch enforcementa).
-> Prije prodaje ga redeployaj isto komandom `npx supabase functions deploy create-checkout ...`.
+> Prije prodaje ga redeployaj s `npm run deploy:naplata` (ta naredba nosi preflight tajni naplate
+> i deploya `create-checkout` i `webhook-mor`; vidi `docs/GO_LIVE_NAPLATA.md`).
 
 ---
 
@@ -185,6 +186,13 @@ Naplata je iskljucena tijekom bete (odluka vlasnika 2026-09-26), pa ih dok beta 
 - [ ] `STRIPE_WEBHOOK_SECRET` (webhook-mor, provjera `Stripe-Signature`).
 - [ ] `STRIPE_ALLOW_TEST_MODE` samo privremeno za smoke test, u produkciji prazno.
 - [ ] `STRIPE_ACCOUNT_ID` samo uz Stripe Connect, inace prazno.
+- [ ] Prazna obavezna tajna je fail-closed: webhook bez `STRIPE_WEBHOOK_SECRET` odbija svaki
+  dogadjaj s `missing_secret`, a checkout bez kljuceva vraca `stripe_not_configured`. Deploy
+  naplate ide ISKLJUCIVO kroz `npm run deploy:naplata`, koji preflightom (`npm run
+  verify-naplata-secrets`, izlazni kod 1 imenuje varijablu) cita Supabase Edge secrets projekta, ne
+  tvoju ljusku, i pada i kad se popis ne moze procitati (nepoznato nije zeleno).
+- [ ] U Stripeu su pretplaceni `payment_intent.succeeded` I `charge.refunded`. Bez drugoga povrati
+  se nikad ne obrade: entitlement ostaje `paid`, referral nagrada se ne povuce, i to bez greske.
 
 ---
 

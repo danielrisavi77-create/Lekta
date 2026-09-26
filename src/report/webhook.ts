@@ -28,6 +28,8 @@ export interface StripeWebhookPayload {
       /** PaymentIntent id (`pi_...`) kod payment_intent.*; kod charge.* je to `charge.payment_intent`. */
       id?: string;
       payment_intent?: string;
+      /** PaymentIntent: `succeeded`, `processing`, `requires_payment_method`... Charge: `succeeded`, `failed`... */
+      status?: string;
       /** PaymentIntent: naplaceno. Charge: ukupan iznos naplate. Oboje u centima. */
       amount?: number;
       amount_received?: number;
@@ -42,6 +44,15 @@ export interface StripeWebhookPayload {
 export interface StripeEvent {
   /** Stripe `type`, npr. `payment_intent.succeeded`. */
   eventName: string;
+  /**
+   * `data.object.status` doslovno (npr. `succeeded`, `processing`); prazno ako ga nema.
+   *
+   * Ime dogadjaja samo po sebi ne dokazuje da je novac naplacen: to tvrdi Stripe, a mi ga ovdje
+   * provjeravamo drugi put, iz samog objekta (vidi classifyStripeEvent).
+   */
+  status: string;
+  /** `amount_received` PaymentIntenta u centima (stvarno naplaceno), ili null kad ga payload ne nosi. */
+  amountReceivedCents: number | null;
   /** Kljuc knjizenja: PaymentIntent id. Isti za uplatu i za njezin povrat. */
   orderId: string;
   userId: string;
@@ -128,6 +139,9 @@ export function parseStripeEvent(payload: StripeWebhookPayload): StripeEvent {
   const livemode = typeof payload.livemode === 'boolean' ? payload.livemode : null;
   return {
     eventName,
+    status: String(obj.status ?? ''),
+    // Charge nema `amount_received`; kod povrata ga zato namjerno ne izmisljamo iz `amount`.
+    amountReceivedCents: isCharge ? null : num(obj.amount_received),
     orderId,
     userId: String(meta.user_id ?? ''),
     productId: String(meta.product_id ?? ''),
@@ -140,6 +154,86 @@ export function parseStripeEvent(payload: StripeWebhookPayload): StripeEvent {
     refundedCents: num(obj.amount_refunded),
     currency: String(obj.currency ?? '').toUpperCase(),
   };
+}
+
+/** Sto webhook smije napraviti s dogadjajem koji je prosao potpis i porijeklo. */
+export type StripeEventKind = 'paid' | 'refund' | 'ignored';
+
+export interface StripeClassification {
+  kind: StripeEventKind;
+  /** Kratak strojni razlog; upisuje se u `webhook_events.outcome_detail` i vraca pozivatelju. */
+  reason?: string;
+}
+
+/**
+ * ODLUKA STO S DOGADJAJEM. Cista funkcija; handler (supabase/functions/webhook-mor/handler.ts)
+ * je samo zove. Stripe ekvivalent zastita koje je master 2026-09-22/23 uveo za prijasnjeg
+ * pruzatelja (31b802ad, 81a89f2f, daf5f53a), prenesen pri spajanju mastera u design/pack3.
+ *
+ * KNJIZI SE SAMO STVARNO NAPLACENO. `payment_intent.succeeded` je `paid` tek kad objekt sam
+ * potvrdjuje naplatu: `status` je `succeeded` (usporedba bez razmaka i u malim slovima) i
+ * `amount_received` je pozitivan broj. Ime dogadjaja samo po sebi nije dovoljno: dogadjaj s
+ * drugim statusom ili bez naplacenog iznosa nije kupnja, i ne smije dodijeliti pravo pristupa.
+ * Takav dogadjaj je `ignored` s imenovanim razlogom (`payment_status:*`, `amount_received:*`),
+ * 200 jer retry ne bi promijenio ishod, i ERROR u logu jer se tice stvarnog novca.
+ *
+ * POVRAT SAMO IZ `charge.refunded`, PO IMENU, NE PO ZASTAVICI. `parseStripeEvent` racuna
+ * `refunded` i iz `data.object.refunded === true`, dakle bez obzira na ime dogadjaja. Refund
+ * grana handlera pise `update entitlements ... where order_id = ev.orderId` i povlaci referral
+ * nagrade po istom id-u, pa u nju smije uci samo dogadjaj kojemu je `orderId` sigurno
+ * PaymentIntent povrata (`charge.payment_intent`). Vracen novac pod drugim imenom nije tiho
+ * odbacen nego `ignored` s razlogom `povrat_bez_charge_refunded:*` (ERROR u logu).
+ *
+ * Vrste izvan STRIPE_HANDLED_EVENTS handler odbija vec u `acceptEvent` (`event_ignored`), prije
+ * ove funkcije; grana `nepodrzan_dogadjaj:*` ovdje postoji da funkcija bude potpuna i sama po
+ * sebi, pa sirenje popisa obradjenih dogadjaja ne otvara tihi put.
+ */
+export function classifyStripeEvent(
+  ev: Pick<StripeEvent, 'eventName' | 'status' | 'amountReceivedCents' | 'refunded'>,
+): StripeClassification {
+  if (ev.eventName === 'charge.refunded') return { kind: 'refund' };
+  if (ev.eventName === 'payment_intent.succeeded') {
+    const status = ev.status.trim().toLowerCase();
+    if (status !== 'succeeded') return { kind: 'ignored', reason: `payment_status:${status || 'nepoznat'}` };
+    const received = ev.amountReceivedCents;
+    if (received === null || !(received > 0)) {
+      return { kind: 'ignored', reason: `amount_received:${received === null ? 'nepoznat' : String(received)}` };
+    }
+    return { kind: 'paid' };
+  }
+  if (ev.refunded) return { kind: 'ignored', reason: `povrat_bez_charge_refunded:${ev.eventName || 'nepoznat'}` };
+  return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName || 'nepoznat'}` };
+}
+
+/**
+ * Svi prefiksi koje `classifyStripeEvent` moze staviti u `webhook_events.outcome_detail` uz ishod
+ * `ignored`. Runbook mora opisati svaki (gard: `tests/naplata-runbook.test.ts`).
+ */
+export const IGNORE_REASON_PREFIXES = Object.freeze([
+  'payment_status:',
+  'amount_received:',
+  'povrat_bez_charge_refunded:',
+  'nepodrzan_dogadjaj:',
+]);
+
+/**
+ * Prefiksi razloga koje netko MORA pogledati. Handler ih pise na ERROR razini, ostale na WARN.
+ *
+ * `payment_status:` i `amount_received:` ticu se dogadjaja koji se zove kao uplata, a nije
+ * potvrdio naplatu: ako se pretpostavka o Stripeovu obliku ikad pokaze krivom, SVAKA kupnja bi
+ * postala `ignored` + 200 bez retryja, i ovo je jedino mjesto na kojem se to vidi.
+ * `povrat_bez_charge_refunded:` je vracen novac koji namjerno nismo obradili.
+ */
+export const NOTABLE_IGNORE_PREFIXES = Object.freeze([
+  'payment_status:',
+  'amount_received:',
+  'povrat_bez_charge_refunded:',
+]);
+
+/** Je li `ignored` dogadjaj takav da ga netko MORA pogledati. */
+export function isNotableIgnore(c: Pick<StripeClassification, 'reason'>): boolean {
+  const reason = String(c.reason ?? '');
+  return reason !== '' && NOTABLE_IGNORE_PREFIXES.some((p) => reason.startsWith(p));
 }
 
 const enc = new TextEncoder();
