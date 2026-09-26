@@ -6,6 +6,9 @@ billing, context i provider-result ugovor je `docs/agents/ORCHESTRATION.md`; ova
 operativni runbook. Lokalna skripta priprema ili pokrece jedan zadatak, a koordinator provjerava
 rezultat i azurira red zadataka. Nema pozadinske petlje koja samostalno trosi pozive.
 
+Kad vlasnik zalijepi vanjsku analizu ili audit bez daljnjih uputa, vrijedi fiksni protokol iz
+`docs/agents/INTAKE.md` i skilla `.claude/skills/intake-analiza/SKILL.md`.
+
 ## Uloge
 
 | Uloga | Model | CLI oznaka | Odgovornost |
