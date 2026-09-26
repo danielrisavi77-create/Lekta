@@ -60,3 +60,7 @@ puni release dokaz. Ne koristiti studentski korpus kao trening dataset.
 
 Spec: `../superpowers/specs/2026-09-21-lekta-laya-design.md`.
 Plan: `../superpowers/plans/2026-09-21-lekta-laya.md`.
+
+## Binding ulaza nakon neovisnog pregleda
+
+`DecisionCase.inputDigest` i `DecisionResult.inputDigest` obvezni su SHA-256 otisci odluci relevantnog ulaza. `informational` nije model-ready status; metapodaci se provjeravaju i kod praznog batcha, a policy-abstain se izvodi bez modela.

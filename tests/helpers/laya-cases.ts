@@ -1,6 +1,6 @@
 /** Vlastiti sinteticki slucajevi. Nisu studentski radovi niti ML evaluacija. */
 import assert from 'node:assert/strict';
-import { validateDecisionCase, validateDecisionResult } from '../../scripts/laya/contracts.ts';
+import { decisionInputDigest, validateDecisionCase, validateDecisionResult } from '../../scripts/laya/contracts.ts';
 import { buildDecisionCases } from '../../scripts/laya/adapter.mts';
 
 export interface TestCase { name: string; run: () => void }
@@ -10,25 +10,24 @@ const PROFILE_REV = 'a'.repeat(64);
 const CASE_ID = `laya:v1|reference.completeness|${DOC}|synthetic-profile|${PROFILE_REV}|12|0`;
 
 export function makeCase() {
-  return {
-    schemaVersion: 1 as const, caseId: CASE_ID,
-    identity: { checkId: 'reference.completeness' as const, documentRevisionId: DOC,
-      profileId: 'synthetic-profile', profileRevision: PROFILE_REV, paragraphIndex: 12, recordIndex: 0 },
-    provenance: { origin: 'owned_synthetic' as const, permissionRef: 'owned-fixture-v1',
+  const identity = { checkId: 'reference.completeness' as const, documentRevisionId: DOC,
+    profileId: 'synthetic-profile', profileRevision: PROFILE_REV, paragraphIndex: 12, recordIndex: 0 };
+  const audit = { engineRevision: '9'.repeat(40), engineCheckStatus: 'fail' as const, linkage: 'explicit' as const };
+  const modelInput = { referenceText: 'Institut Primjer. (2024). Testni izvjestaj. Zagreb: Vlastiti primjer.',
+    language: 'hr' as const, extraction: 'complete' as const,
+    rule: { ruleId: 'owned-rule-v1', sourceId: 'owned-source-v1', sourceLocator: 'synthetic-rule:1',
+      sourcePage: null, snapshotHash: 'b'.repeat(64), verified: true as const,
+      excerpt: 'U ovom sintetickom profilu zapis sadrzi autora, godinu i naslov.' } };
+  return { schemaVersion: 1 as const, caseId: CASE_ID, inputDigest: decisionInputDigest(identity, audit, modelInput),
+    identity, provenance: { origin: 'owned_synthetic' as const, permissionRef: 'owned-fixture-v1',
       localReviewAllowed: true, trainingAllowed: false, externalTeacherAllowed: false,
       sourceGroupId: GROUP, documentGroupId: DOC, templateFamilyId: GROUP },
-    audit: { engineRevision: '9'.repeat(40), engineCheckStatus: 'fail' as const, linkage: 'explicit' as const },
-    modelInput: { referenceText: 'Institut Primjer. (2024). Testni izvjestaj. Zagreb: Vlastiti primjer.',
-      language: 'hr' as const, extraction: 'complete' as const,
-      rule: { ruleId: 'owned-rule-v1', sourceId: 'owned-source-v1', sourceLocator: 'synthetic-rule:1',
-        sourcePage: null, snapshotHash: 'b'.repeat(64), verified: true as const,
-        excerpt: 'U ovom sintetickom profilu zapis sadrzi autora, godinu i naslov.' } },
-    readiness: { status: 'ready' as const, reason: null },
-  };
+    audit, modelInput, readiness: { status: 'ready' as const, reason: null } };
 }
+function rebindCaseDigest(value: any): void { value.inputDigest = decisionInputDigest(value.identity, value.audit, value.modelInput); }
 
 export function makeResult() {
-  return { schemaVersion: 1 as const, caseId: CASE_ID, checkId: 'reference.completeness' as const,
+  return { schemaVersion: 1 as const, caseId: CASE_ID, inputDigest: makeCase().inputDigest, checkId: 'reference.completeness' as const,
     status: 'predicted' as const, label: 'finding_supported' as const,
     probabilities: { finding_supported: 0.7, possible_false_positive: 0.1, extraction_uncertain: 0.1, insufficient_evidence: 0.1 },
     entropyConfidence: 0.32161, calibrationRevision: null,
@@ -86,12 +85,15 @@ export const contractCases: TestCase[] = [
     rejects(() => validateDecisionCase({ ...makeCase(), modelInput: { ...makeCase().modelInput, rule: { ...makeCase().modelInput.rule, score: 100 } } }), 'UNKNOWN_FIELD');
   } },
   { name: 'nedostajuci ili nepotvrdjeni dokaz ne smije biti ready', run: () => {
-    rejects(() => validateDecisionCase({ ...makeCase(), modelInput: { ...makeCase().modelInput, rule: null } }), 'READINESS_MISMATCH');
+    const missingRule: any = { ...makeCase(), modelInput: { ...makeCase().modelInput, rule: null } }; rebindCaseDigest(missingRule);
+    rejects(() => validateDecisionCase(missingRule), 'READINESS_MISMATCH');
     rejects(() => validateDecisionCase({ ...makeCase(), modelInput: { ...makeCase().modelInput, rule: { ...makeCase().modelInput.rule, verified: false } } }));
   } },
   { name: 'reference bez teksta i unsupported jezik ne smiju biti ready', run: () => {
-    rejects(() => validateDecisionCase({ ...makeCase(), modelInput: { ...makeCase().modelInput, referenceText: '  ' } }), 'READINESS_MISMATCH');
-    rejects(() => validateDecisionCase({ ...makeCase(), modelInput: { ...makeCase().modelInput, language: 'unsupported' } }), 'READINESS_MISMATCH');
+    const blank: any = { ...makeCase(), modelInput: { ...makeCase().modelInput, referenceText: '  ' } }; rebindCaseDigest(blank);
+    rejects(() => validateDecisionCase(blank), 'READINESS_MISMATCH');
+    const unsupported: any = { ...makeCase(), modelInput: { ...makeCase().modelInput, language: 'unsupported' } }; rebindCaseDigest(unsupported);
+    rejects(() => validateDecisionCase(unsupported), 'READINESS_MISMATCH');
   } },
   { name: 'predug kontekst se odbija, ne reze', run: () => rejects(() => validateDecisionCase({ ...makeCase(), modelInput: { ...makeCase().modelInput, referenceText: 'x'.repeat(8001) } })) },
   { name: 'getter se ne izvrsava tijekom provjere ugovora', run: () => {
@@ -134,8 +136,8 @@ export const contractCases: TestCase[] = [
     rejects(() => validateDecisionResult({ ...abstained, label: 'finding_supported' }, makeCase()), 'INVALID_STATUS');
   } },
   { name: 'model ne moze nadglasati nedostatak dokaza', run: () => {
-    const c = { ...makeCase(), modelInput: { ...makeCase().modelInput, rule: null }, readiness: { status: 'abstain', reason: 'insufficient_evidence' } };
-    rejects(() => validateDecisionResult(makeResult(), c), 'INVALID_STATUS');
+    const c: any = { ...makeCase(), modelInput: { ...makeCase().modelInput, rule: null }, readiness: { status: 'abstain', reason: 'insufficient_evidence' } };
+    rebindCaseDigest(c); rejects(() => validateDecisionResult(makeResult(), c), 'IDENTITY_MISMATCH');
   } },
   { name: 'predikcija mora imati modelsku provenijenciju i cijele tokene', run: () => {
     rejects(() => validateDecisionResult({ ...makeResult(), model: null }, makeCase()), 'INVALID_STATUS');

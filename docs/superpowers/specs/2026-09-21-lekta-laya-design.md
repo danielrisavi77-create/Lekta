@@ -111,3 +111,10 @@ Novi schemas direktorij ulazi u postojece provjere klasifikacijske pokrivenosti.
 
 Lokalni uski test nije puni repo gate niti ML dokaz. Za zavrsetak PR-a potrebni su
 puni exact-head CI i pregled. Za merge je potrebna zasebna odluka; deploy nije dio paketa.
+
+## Dopuna nakon neovisnog pregleda 2026-09-26
+
+- `ready` je moguc samo za eksplicitno vezan `warn` ili `fail`; `informational` se suzdrzava.
+- Case i result nose obvezni `inputDigest` (SHA-256 identiteta, audita i modelInputa) i result mora odgovarati tocno poslanom caseu.
+- Identitet i engineRevision validiraju se i za `records=[]`.
+- Policy-abstain mora vratiti isti razlog, `model=null` i `inputTokens=0`.

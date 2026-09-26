@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
     "types": [],
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -13,7 +16,18 @@
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "baseUrl": ".",
+    "paths": {
+      "node:assert/strict": [
+        "./node-assert-shim.d.ts"
+      ]
+    }
   },
-  "include": ["./**/*.ts", "./**/*.mts", "../../schemas/laya/*.json"]
+  "include": [
+    "./**/*.ts",
+    "./**/*.mts",
+    "../../schemas/laya/*.json",
+    "../../tests/helpers/laya-*.ts"
+  ]
 }

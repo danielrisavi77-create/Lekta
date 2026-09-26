@@ -55,3 +55,7 @@ node --experimental-strip-types --test tests/laya-standalone.mts
 Za odluku o spajanju vrijede CI dokazi NOVOG commita i zaseban pregled. Zeleni CI
 starog heada ne dokazuje popravak. Povremeni WebKit nalaz #103 nije dio ove izmjene
 niti ga uspjesno ponavljanje testa automatski zatvara.
+
+## Dopuna nakon neovisnog pregleda 2026-09-26
+
+`informational` se sada uvijek suzdrzava. Case i result nose obvezni `inputDigest` (SHA-256 identiteta, audita i modelInputa), pa se stari odgovor odbija nakon promjene teksta, pravila ili revizije motora. Metapodaci se validiraju i za prazan batch; policy-abstain mora zadrzati isti razlog, `model=null` i `inputTokens=0`. Ocito predug UTF-16 tekst odbija se prije Unicode iteriranja. Dodatne regresije pokrivaju mutante iz Claude pregleda, a `check:laya` typechecka i `tests/helpers/laya-*.ts`.

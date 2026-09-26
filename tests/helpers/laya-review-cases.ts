@@ -1,0 +1,27 @@
+/** Regresije nalaza neovisnog Claude pregleda 2026-09-26. */
+import assert from 'node:assert/strict';
+import { buildDecisionCases } from '../../scripts/laya/adapter.mts';
+import { decisionInputDigest, DecisionContractError, validateDecisionCase, validateDecisionResult, validateModelInput } from '../../scripts/laya/contracts.ts';
+import { sha256HexUtf8 } from '../../scripts/laya/sha256.ts';
+import { makeCase, makeResult, makeSnapshot, type TestCase } from './laya-cases.ts';
+function rejects(run:()=>unknown,code?:string):void{assert.throws(run,(e:unknown)=>e instanceof DecisionContractError&&(!code||e.code===code))}
+function rebind(v:any):any{v.inputDigest=decisionInputDigest(v.identity,v.audit,v.modelInput);return v}
+function policyCase(){const c:any=makeCase();c.modelInput={...c.modelInput,language:'unsupported'};c.readiness={status:'abstain',reason:'unsupported_language'};return rebind(c)}
+function policyResult(c:any){return {...makeResult(),inputDigest:c.inputDigest,status:'abstained' as const,label:null,probabilities:null,entropyConfidence:null,calibrationRevision:null,model:null,language:c.modelInput.language,inputTokens:0,durationMs:0,abstentionReason:c.readiness.reason}}
+export const reviewCases:TestCase[]=[
+{name:'review: informational se suzdrzava',run:()=>{const s=makeSnapshot();s.result.checks[0].status='informational';assert.equal(buildDecisionCases(s)[0].readiness.status,'abstain')}},
+{name:'review: stari rezultat ne vrijedi za promijenjeni ulaz',run:()=>{const e:any=makeCase();e.modelInput={...e.modelInput,referenceText:'Drugi zapis'};rebind(e);assert.deepEqual(validateDecisionCase(e),e);rejects(()=>validateDecisionResult(makeResult(),e),'IDENTITY_MISMATCH')}},
+{name:'review: digest prati pravilo reviziju i tekst',run:()=>{for(const m of [(c:any)=>{c.modelInput.rule={...c.modelInput.rule,snapshotHash:'f'.repeat(64)}},(c:any)=>{c.audit={...c.audit,engineRevision:'8'.repeat(40)}},(c:any)=>{c.modelInput={...c.modelInput,referenceText:'Promjena'}}]){const c:any=makeCase(),before=c.inputDigest;m(c);rebind(c);assert.notEqual(c.inputDigest,before);validateDecisionCase(c)}}},
+{name:'review: prazan batch validira metadata',run:()=>{for(const p of [{documentRevisionId:42},{engineRevision:null},{profile:{id:{},revision:5}}]){const s:any=makeSnapshot();s.records=[];Object.assign(s,p);rejects(()=>buildDecisionCases(s))}}},
+{name:'review: policy abstain prihvaca samo uskladjen odgovor bez modela',run:()=>{const c=policyCase(),r=policyResult(c);assert.deepEqual(validateDecisionResult(r,c),r)}},
+{name:'review: policy abstain odbija drugi razlog',run:()=>{const c=policyCase();rejects(()=>validateDecisionResult({...policyResult(c),abstentionReason:'timeout'},c),'INVALID_STATUS')}},
+{name:'review: policy abstain odbija model ili tokene',run:()=>{const c=policyCase();rejects(()=>validateDecisionResult({...policyResult(c),model:makeResult().model},c),'INVALID_STATUS');rejects(()=>validateDecisionResult({...policyResult(c),inputTokens:1},c),'INVALID_STATUS')}},
+{name:'review: ocito predug string pada prije iteratora',run:()=>{const original=String.prototype[Symbol.iterator];let calls=0;Object.defineProperty(String.prototype,Symbol.iterator,{configurable:true,value:function(){calls++;throw new Error('ITERATOR_CALLED')}});try{rejects(()=>validateModelInput({...makeCase().modelInput,referenceText:'x'.repeat(16001)}));assert.equal(calls,0)}finally{Object.defineProperty(String.prototype,Symbol.iterator,{configurable:true,value:original})}}},
+{name:'review: whitespace dokaz nije ready',run:()=>{for(const key of ['excerpt','sourceLocator'] as const){const s:any=makeSnapshot();s.records[0].rule={...s.records[0].rule,[key]:'   '};assert.equal(buildDecisionCases(s)[0].readiness.status,'abstain')}}},
+{name:'review: abstained ne skriva predikcijske podatke',run:()=>{const c=makeCase(),b:any={...makeResult(),status:'abstained',label:null,probabilities:null,entropyConfidence:null,calibrationRevision:null,model:null,inputTokens:0,abstentionReason:'timeout'};for(const p of [{probabilities:makeResult().probabilities},{entropyConfidence:.2},{calibrationRevision:'f'.repeat(64)},{abstentionReason:null}])rejects(()=>validateDecisionResult({...b,...p},c),'INVALID_STATUS')}},
+{name:'review: rub zbroja vjerojatnosti je pokriven',run:()=>{const r:any=structuredClone(makeResult());r.probabilities.finding_supported=.7003;rejects(()=>validateDecisionResult(r,makeCase()),'INVALID_DISTRIBUTION')}},
+{name:'review: rub entropy tolerancije je pokriven',run:()=>{const r:any=structuredClone(makeResult());r.entropyConfidence+=.0021;rejects(()=>validateDecisionResult(r,makeCase()),'INVALID_CONFIDENCE')}},
+{name:'review: dvostruki check nema explicit linkage',run:()=>{const s=makeSnapshot();s.result.checks.push(structuredClone(s.result.checks[0]));assert.equal(buildDecisionCases(s)[0].audit.linkage,'uncertain')}},
+{name:'review: custom prototype podatka se odbija',run:()=>{const s=makeSnapshot();Object.setPrototypeOf(s.records[0],{inherited:true});rejects(()=>buildDecisionCases(s))}},
+{name:'review: SHA-256 poznati vektori',run:()=>{assert.equal(sha256HexUtf8(''),'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');assert.equal(sha256HexUtf8('abc'),'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');assert.equal(sha256HexUtf8('Institut čćžšđ 😀'),'fb2e4ec55e68419ecbbafa7224b473f0e167eed61c021c69352bbd54e536f3ae')}},
+];

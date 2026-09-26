@@ -1,4 +1,5 @@
 /** Interni savjetodavni ugovor. Bez mreze, modela, zapisa datoteka i repair ovlasti. */
+import { sha256HexUtf8 } from './sha256.ts';
 import schemaDocument from '../../schemas/laya/finding-v1.schema.json' with { type: 'json' };
 
 export const CHECK_ID = 'reference.completeness' as const;
@@ -27,11 +28,11 @@ export type EngineStatus = 'pass' | 'warn' | 'fail' | 'informational' | 'unmeasu
 export interface DecisionAudit { engineRevision: string; engineCheckStatus: EngineStatus; linkage: 'explicit' | 'uncertain' }
 export interface Readiness { status: 'ready' | 'abstain'; reason: 'insufficient_evidence' | 'unsupported_language' | null }
 export interface DecisionCase {
-  schemaVersion: 1; caseId: string; identity: DecisionIdentity; provenance: DataPolicy;
+  schemaVersion: 1; caseId: string; inputDigest: string; identity: DecisionIdentity; provenance: DataPolicy;
   audit: DecisionAudit; modelInput: ModelInput; readiness: Readiness;
 }
 export interface DecisionResult {
-  schemaVersion: 1; caseId: string; checkId: typeof CHECK_ID; status: 'predicted' | 'abstained';
+  schemaVersion: 1; caseId: string; inputDigest: string; checkId: typeof CHECK_ID; status: 'predicted' | 'abstained';
   label: DecisionLabel | null; probabilities: Record<DecisionLabel, number> | null;
   entropyConfidence: number | null; calibrationRevision: string | null;
   model: { backend: 'fixture' | 'laya'; id: string; revision: string; weightsSha256: string; tokenizerSha256: string } | null;
@@ -94,8 +95,12 @@ function validateShape(value: unknown, schema: Schema, path: string, depth = 0):
     for (const key of Object.keys(descriptors)) validateShape(descriptors[key].value, properties[key], `${path}.${key}`, depth + 1);
   } else if (types.includes('string')) {
     if (typeof value !== 'string') throw new DecisionContractError('INVALID_VALUE', path);
+    const maxLength = schema.maxLength ?? Infinity;
+    // UTF-16 ima najvise dvije kodne jedinice po Unicode code pointu. Ovaj jeftini gard
+    // odbija ocito predug tekst prije alokacije iteratora nad cijelim ulazom.
+    if (Number.isFinite(maxLength) && value.length > maxLength * 2) throw new DecisionContractError('INVALID_VALUE', path);
     const length = [...value].length; // JSON Schema minLength/maxLength broje Unicode code pointe.
-    if (length < (schema.minLength ?? 0) || length > (schema.maxLength ?? Infinity)
+    if (length < (schema.minLength ?? 0) || length > maxLength
       || (schema.pattern && !new RegExp(schema.pattern, 'u').test(value))) throw new DecisionContractError('INVALID_VALUE', path);
   } else if (types.includes('number') || types.includes('integer')) {
     if (typeof value !== 'number' || !Number.isFinite(value) || (types.includes('integer') && !Number.isInteger(value))
@@ -108,6 +113,16 @@ export function validateModelInput(value: unknown): ModelInput {
   return JSON.parse(JSON.stringify(value)) as ModelInput;
 }
 
+export function validateDecisionIdentity(value: unknown): DecisionIdentity {
+  validateShape(value, DEFINITIONS.identity, '$.identity');
+  return JSON.parse(JSON.stringify(value)) as DecisionIdentity;
+}
+
+export function validateDecisionAudit(value: unknown): DecisionAudit {
+  validateShape(value, DEFINITIONS.audit, '$.audit');
+  return JSON.parse(JSON.stringify(value)) as DecisionAudit;
+}
+
 export function assertLocalReviewAllowed(value: unknown): asserts value is DataPolicy {
   validateShape(value, DEFINITIONS.provenance, '$.provenance');
   if (!(value as DataPolicy).localReviewAllowed) throw new DecisionContractError('DATA_NOT_PERMITTED');
@@ -115,13 +130,27 @@ export function assertLocalReviewAllowed(value: unknown): asserts value is DataP
 
 /** Identitet koristi samo neosobne ID-jeve i lokator, nikad naslov, tekst ili gold oznaku. */
 export function decisionCaseId(identity: DecisionIdentity): string {
-  validateShape(identity, DEFINITIONS.identity, '$.identity');
-  return ['laya:v1', identity.checkId, identity.documentRevisionId, identity.profileId,
-    identity.profileRevision, identity.paragraphIndex, identity.recordIndex].join('|');
+  const valid = validateDecisionIdentity(identity);
+  return ['laya:v1', valid.checkId, valid.documentRevisionId, valid.profileId,
+    valid.profileRevision, valid.paragraphIndex, valid.recordIndex].join('|');
+}
+
+/** SHA-256 veze izmedju casea i tocno onog decision ulaza koji je klasificiran. */
+export function decisionInputDigest(identity: DecisionIdentity, audit: DecisionAudit, input: ModelInput): string {
+  const validIdentity = validateDecisionIdentity(identity);
+  const validAudit = validateDecisionAudit(audit);
+  const validInput = validateModelInput(input);
+  const rule = validInput.rule ? [validInput.rule.ruleId, validInput.rule.sourceId, validInput.rule.sourceLocator,
+    validInput.rule.sourcePage, validInput.rule.snapshotHash, validInput.rule.verified, validInput.rule.excerpt] : null;
+  const payload = [validIdentity.checkId, validIdentity.documentRevisionId, validIdentity.profileId,
+    validIdentity.profileRevision, validIdentity.paragraphIndex, validIdentity.recordIndex,
+    validAudit.engineRevision, validAudit.engineCheckStatus, validAudit.linkage,
+    validInput.referenceText, validInput.language, validInput.extraction, rule];
+  return sha256HexUtf8(JSON.stringify(payload));
 }
 
 export function deriveReadiness(audit: DecisionAudit, input: ModelInput): Readiness {
-  if (audit.linkage !== 'explicit' || !['warn', 'fail', 'informational'].includes(audit.engineCheckStatus)
+  if (audit.linkage !== 'explicit' || !['warn', 'fail'].includes(audit.engineCheckStatus)
     || !input.rule || !input.referenceText.trim() || !input.rule.excerpt.trim() || !input.rule.sourceLocator.trim()) {
     return { status: 'abstain', reason: 'insufficient_evidence' };
   }
@@ -134,6 +163,9 @@ export function validateDecisionCase(value: unknown): DecisionCase {
   const result = value as DecisionCase;
   assertLocalReviewAllowed(result.provenance);
   if (result.caseId !== decisionCaseId(result.identity)) throw new DecisionContractError('IDENTITY_MISMATCH');
+  if (result.inputDigest !== decisionInputDigest(result.identity, result.audit, result.modelInput)) {
+    throw new DecisionContractError('INPUT_DIGEST_MISMATCH');
+  }
   const readiness = deriveReadiness(result.audit, result.modelInput);
   if (result.readiness.status !== readiness.status || result.readiness.reason !== readiness.reason) {
     throw new DecisionContractError('READINESS_MISMATCH');
@@ -147,11 +179,17 @@ export function validateDecisionResult(value: unknown, expected: unknown): Decis
   const expectedCase = validateDecisionCase(expected);
   validateShape(value, DEFINITIONS.decisionResult, '$');
   const result = value as DecisionResult;
-  if (result.caseId !== expectedCase.caseId || result.checkId !== expectedCase.identity.checkId
-    || result.language !== expectedCase.modelInput.language) throw new DecisionContractError('IDENTITY_MISMATCH');
+  if (result.caseId !== expectedCase.caseId || result.inputDigest !== expectedCase.inputDigest
+    || result.checkId !== expectedCase.identity.checkId || result.language !== expectedCase.modelInput.language) {
+    throw new DecisionContractError('IDENTITY_MISMATCH');
+  }
   if (result.status === 'abstained') {
     if (result.label !== null || result.probabilities !== null || result.entropyConfidence !== null
       || result.calibrationRevision !== null || result.abstentionReason === null) throw new DecisionContractError('INVALID_STATUS');
+    if (expectedCase.readiness.status === 'abstain'
+      && (result.abstentionReason !== expectedCase.readiness.reason || result.model !== null || result.inputTokens !== 0)) {
+      throw new DecisionContractError('INVALID_STATUS');
+    }
   } else {
     if (expectedCase.readiness.status !== 'ready' || result.label === null || !result.probabilities
       || result.entropyConfidence === null || result.model === null || result.abstentionReason !== null) {

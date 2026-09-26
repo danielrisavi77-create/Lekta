@@ -1,6 +1,6 @@
 /** Read-only projekcija eksplicitnog snapshot konteksta, bez povezivanja na javnu aplikaciju. */
-import { CHECK_ID, DecisionContractError, assertLocalReviewAllowed, decisionCaseId,
-  deriveReadiness, validateDecisionCase, validateModelInput } from './contracts.ts';
+import { CHECK_ID, DecisionContractError, assertLocalReviewAllowed, decisionCaseId, decisionInputDigest,
+  deriveReadiness, validateDecisionAudit, validateDecisionCase, validateDecisionIdentity, validateModelInput } from './contracts.ts';
 import type { DataPolicy, DecisionCase, EngineStatus, ModelInput, DecisionAudit } from './contracts.ts';
 
 export interface DecisionRecord extends ModelInput {
@@ -68,6 +68,7 @@ export function buildDecisionCases(input: DecisionSnapshot): DecisionCase[] {
   const profile = ownValue(input, 'profile');
   const profileId = ownValue(profile, 'id');
   const profileRevision = ownValue(profile, 'revision');
+  validateDecisionIdentity({ checkId: CHECK_ID, documentRevisionId, profileId, profileRevision, paragraphIndex: 1, recordIndex: 0 });
   const result = ownValue(input, 'result');
   const records = denseValues(ownValue(input, 'records'), 1000);
   const checks = denseValues(ownValue(result, 'checks')).map(check => ({
@@ -76,6 +77,7 @@ export function buildDecisionCases(input: DecisionSnapshot): DecisionCase[] {
   const rawStatus = checks.length === 1 ? checks[0].status : null;
   const engineCheckStatus: EngineStatus = checks.length === 0 ? 'missing' : checks.length > 1 ? 'ambiguous'
     : STATUSES.has(rawStatus as EngineStatus) ? rawStatus as EngineStatus : 'unknown';
+  validateDecisionAudit({ engineRevision, engineCheckStatus, linkage: 'uncertain' });
   const seen = new Set<string>();
   return records.map(source => {
     const record: DecisionRecord = {
@@ -86,17 +88,18 @@ export function buildDecisionCases(input: DecisionSnapshot): DecisionCase[] {
     };
     if (![null, CHECK_ID].includes(record.checkId)
       || !['explicit', 'uncertain'].includes(record.linkage)) throw new DecisionContractError('INVALID_SNAPSHOT');
-    const identity = { checkId: CHECK_ID, documentRevisionId, profileId, profileRevision,
-      paragraphIndex: record.paragraphIndex, recordIndex: record.recordIndex };
+    const identity = validateDecisionIdentity({ checkId: CHECK_ID, documentRevisionId, profileId, profileRevision,
+      paragraphIndex: record.paragraphIndex, recordIndex: record.recordIndex });
     const caseId = decisionCaseId(identity);
     if (seen.has(caseId)) throw new DecisionContractError('DUPLICATE_IDENTITY');
     seen.add(caseId);
-    const audit: DecisionAudit = { engineRevision, engineCheckStatus,
-      linkage: record.checkId === CHECK_ID && checks.length === 1 ? record.linkage : 'uncertain' };
+    const audit: DecisionAudit = validateDecisionAudit({ engineRevision, engineCheckStatus,
+      linkage: record.checkId === CHECK_ID && checks.length === 1 ? record.linkage : 'uncertain' });
     const modelInput = validateModelInput({ referenceText: record.referenceText, language: record.language,
       extraction: record.extraction, rule: record.rule });
+    const inputDigest = decisionInputDigest(identity, audit, modelInput);
     // Kandidat je zaseban objekt. validateDecisionCase nakon provjere odvaja i ugnijezdene objekte.
-    const candidate: DecisionCase = { schemaVersion: 1, caseId, identity, provenance,
+    const candidate: DecisionCase = { schemaVersion: 1, caseId, inputDigest, identity, provenance,
       audit, modelInput, readiness: deriveReadiness(audit, modelInput) };
     return validateDecisionCase(candidate);
   });
