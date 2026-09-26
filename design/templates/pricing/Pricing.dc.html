@@ -34,12 +34,12 @@
 
 <div style="justify-self:center;width:min(400px,100%);position:relative">
 <div aria-hidden="true" style="position:absolute;z-index:-1;inset:10px -6px -8px 6px;background:#EFE9D9;border:1px solid #DCD4BF;border-radius:2px;transform:rotate(1.2deg)"></div>
-<div style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);transform:rotate(-.6deg);padding:28px 30px 30px;display:grid;gap:18px;font-size:13px">
+<div style="position:relative;background:#F7F3E8;color:#26221B;border:1px solid #DCD4BF;border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);transform:rotate(-.6deg);padding:28px 30px 30px;display:grid;gap:16px;font-size:13px">
 <div aria-hidden="true" style="position:absolute;left:0;right:0;top:-1px;height:8px;background:radial-gradient(circle at 6px 0,transparent 5px,#F7F3E8 5.5px) 0 0/12px 8px"></div>
 <div style="display:grid;justify-items:center;gap:6px;text-align:center;padding-bottom:14px;border-bottom:1px dashed #DCD4BF"><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:26px">Lekta</span><span style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6E6656">Račun prije kupnje</span><sc-if value="{{ personal }}" hint-placeholder-val="{{ true }}"><span style="font-size:11px;color:#6E6656">diplomski-rad-final-v3.docx · 19. 9. 2026</span></sc-if><sc-if value="{{ generic }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#6E6656">bilo koji .docx · 19. 9. 2026</span></sc-if></div>
 <div style="display:grid;gap:14px">
 <div style="display:grid;grid-template-columns:20px 1fr auto;gap:12px;align-items:start"><span aria-hidden="true" style="width:18px;height:18px;border:1.5px solid #6E6656;background:#6E6656;color:#F7F3E8;display:grid;place-items:center;font-size:11px;margin-top:1px">✓</span><span><span style="display:block;font-family:'Instrument Serif',Georgia,serif;font-size:18px;line-height:1.1">Lokalna provjera forme</span><span style="display:block;margin-top:4px;font-size:11px;color:#6E6656;line-height:1.45">24 pravila · ocjena · popis nalaza. Uvijek uključeno, bez prijave.</span></span><span style="font-variant-numeric:tabular-nums">0,00</span></div>
-<div onClick="{{ toggleRepair }}" style="display:grid;grid-template-columns:20px 1fr auto;gap:12px;align-items:start;cursor:pointer"><sc-if value="{{ repair }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="width:18px;height:18px;border:1.5px solid #26221B;background:#26221B;color:#F7F3E8;display:grid;place-items:center;font-size:11px;margin-top:1px">✓</span></sc-if><sc-if value="{{ noRepair }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width:18px;height:18px;border:1.5px solid #26221B;margin-top:1px"></span></sc-if><span style="min-width:0"><span style="display:block;font-family:'Instrument Serif',Georgia,serif;font-size:18px;line-height:1.1">Popravak forme i puni izvještaj</span><sc-if value="{{ personal }}" hint-placeholder-val="{{ true }}"><span style="display:block;margin-top:4px;font-size:11px;color:#6E6656;line-height:1.45">Diplomski rad · jedna cijena, koliko god zahvata odabereš.</span></sc-if><sc-if value="{{ generic }}" hint-placeholder-val="{{ false }}"><span style="display:block;margin-top:4px;font-size:11px;color:#6E6656;line-height:1.45">Cijena po vrsti rada: diplomski 9,99 €, doktorski 24,99 €. Jedna cijena, koliko god zahvata odabereš.</span></sc-if></span><span style="font-variant-numeric:tabular-nums">9,99</span></div>
+<div onClick="{{ toggleRepair }}" style="display:grid;grid-template-columns:20px 1fr auto;gap:12px;align-items:start;cursor:pointer"><sc-if value="{{ repair }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="width:18px;height:18px;border:1.5px solid #26221B;background:#26221B;color:#F7F3E8;display:grid;place-items:center;font-size:11px;margin-top:1px">✓</span></sc-if><sc-if value="{{ noRepair }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width:18px;height:18px;border:1.5px solid #26221B;margin-top:1px"></span></sc-if><span style="min-width:0"><span style="display:block;font-family:'Instrument Serif',Georgia,serif;font-size:18px;line-height:1.1">Popravak forme i puni izvještaj</span><sc-if value="{{ personal }}" hint-placeholder-val="{{ true }}"><span style="display:block;margin-top:4px;font-size:11px;color:#6E6656;line-height:1.45">{{ workLabel }} · jedna cijena, koliko god zahvata odabereš.</span></sc-if><sc-if value="{{ generic }}" hint-placeholder-val="{{ false }}"><span style="display:block;margin-top:4px;font-size:11px;color:#6E6656;line-height:1.45">Cijena po vrsti rada: seminarski 4,99 € · završni 9,99 € · diplomski 14,99 € · specijalistički 19,99 € · doktorski 24,99 €. Jedna cijena, koliko god zahvata odabereš.</span></sc-if></span><span style="font-variant-numeric:tabular-nums">{{ price }}</span></div>
 <sc-if value="{{ repair }}" hint-placeholder-val="{{ true }}">
 <div style="display:grid;gap:7px;padding:10px 0 4px 32px">
 <span style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#6E6656">Opseg · uključeno u cijenu</span>
@@ -76,22 +76,24 @@
 </section>
 </main>
 <footer style="position:relative;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:0 0 28px;display:grid;gap:10px;justify-items:center;font-size:12px;color:rgba(237,231,220,.6)">
-<nav aria-label="Pravno" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center"><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Privatnost</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Uvjeti</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Obrada dokumenata</a></nav>
+<nav aria-label="Pravno" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center"><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Privatnost</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Uvjeti</a><a href="#" style="color:rgba(237,231,220,.72);text-decoration:none">Obrada dokumenata</a></nav>
 <p style="margin:0;text-align:center;line-height:1.5">© 2026 Lekta · Automatska provjera je lokalna · Nije provjera plagijata ni službena potvrda fakulteta</p>
 </footer>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;personal&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Kontekst&quot;},&quot;live&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stanje&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;personal&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Kontekst&quot;},&quot;live&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stanje&quot;},&quot;workType&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;seminarski&quot;,&quot;zavrsni&quot;,&quot;diplomski&quot;,&quot;specijalisticki&quot;,&quot;doktorski&quot;],&quot;default&quot;:&quot;diplomski&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Kontekst&quot;}}">
 class Component extends DCLogic {
   state = { repair: true };
   renderVals() {
     const personal = this.props.personal ?? true, live = this.props.live ?? false;
     const { repair } = this.state;
     // Cijena je fiksna PO VRSTI RADA (src/report/pricing.ts): odabir zahvata ne mijenja iznos.
-    const total = repair ? '9,99' : '0,00';
+    const P = { seminarski:['Seminarski rad','4,99'], zavrsni:['Završni rad','9,99'], diplomski:['Diplomski rad','14,99'], specijalisticki:['Specijalistički rad','19,99'], doktorski:['Doktorski rad','24,99'] };
+    const [workLabel, price] = P[this.props.workType ?? 'diplomski'] || P.diplomski;
+    const total = repair ? price : '0,00';
     return {
-      personal, generic: !personal, live, soon: !live, repair, noRepair: !repair, total,
-      ctaLabel: repair ? 'Popravi za 9,99 €' : 'Provjeri rad besplatno',
+      personal, generic: !personal, live, soon: !live, repair, noRepair: !repair, total, price, workLabel,
+      ctaLabel: repair ? 'Popravi za ' + price + ' €' : 'Provjeri rad besplatno',
       toggleRepair: () => this.setState({ repair: !repair })
     };
   }
