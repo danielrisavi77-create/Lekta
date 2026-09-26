@@ -6,7 +6,7 @@
  * na okolinu u kojoj se vrti.
  */
 import { describe, expect, it } from 'vitest';
-import { countTestProcesses, formatBootstrap, formatGateLockLine } from '../scripts/agents/session-bootstrap.mjs';
+import { formatBootstrap, formatGateLockLine } from '../scripts/agents/session-bootstrap.mjs';
 
 function baseInputs() {
   return {
@@ -123,31 +123,6 @@ describe('formatBootstrap: cista funkcija, bez modela', () => {
     });
     const resLine = lines.find((line) => line.startsWith('resursi'));
     expect(resLine).toMatch(/0\.0 GB disk slobodno/);
-  });
-});
-
-describe('countTestProcesses: parser za PowerShell/wmic CommandLine izlaz', () => {
-  it('null/undefined ulaz (mjerenje nije uspjelo) vraca null, ne 0', () => {
-    expect(countTestProcesses(null)).toBeNull();
-    expect(countTestProcesses(undefined)).toBeNull();
-  });
-
-  it('prazan tekst (izmjereno, nula procesa) vraca 0', () => {
-    expect(countTestProcesses('')).toBe(0);
-  });
-
-  it('broji retke koji spominju vitest ili playwright, ignorira nevezane node procese', () => {
-    const output = [
-      'C:\\Program Files\\nodejs\\node.exe C:\\Users\\PC\\Desktop\\Lekta\\node_modules\\.bin\\vitest run',
-      'node.exe /path/to/vitest/dist/cli.js run tests/foo.test.ts',
-      'node.exe node_modules/.bin/playwright test',
-      'node.exe scripts/agents/session-bootstrap.mjs',
-    ].join('\n');
-    expect(countTestProcesses(output)).toBe(3);
-  });
-
-  it('CommandLine podudaranje je case-insensitive', () => {
-    expect(countTestProcesses('node VITEST run')).toBe(1);
   });
 });
 

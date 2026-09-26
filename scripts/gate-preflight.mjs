@@ -40,6 +40,9 @@ export const THRESHOLDS = Object.freeze({
   unverifiableLockMaxAgeMs: 3 * 60 * 60 * 1000,
   // Vise interaktivnih sesija od ovoga je upozorenje (RAM), ne blokada.
   maxClaudeSessions: 3,
+  // Lock mladji od ovoga se nikad ne brise pri preuzimanju, cak ni kad je proglasen mrtvim ili
+  // zastarjelim: sprjecava rusenje tudjeg locka koji je upravo napisan (uska utrka dvije sesije).
+  minTakeoverAgeMs: 5_000,
 });
 
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -65,6 +68,10 @@ export function lockFilePath(env = process.env) {
 /**
  * Cita lock. Vraca null kad datoteke nema. Nerazumljiv sadrzaj NIJE "nema locka": vraca se kao
  * lock bez PID-a, star koliko i datoteka, pa ga vrijedi pravilo od 3 h.
+ *
+ * Greska pri citanju koja NIJE "nema datoteke" (EPERM, EBUSY, EACCES i slicno, npr. antivirus ili
+ * drugi proces drzi datoteku otvorenu) ne smije srusiti gate: vraca se `{ unmeasurable: true }`, a
+ * `judgeGate` to tretira kao UPOZORENJE (fail-open), ne kao blokadu ni kao "nema locka".
  */
 export function readLock(path) {
   let raw;
@@ -72,7 +79,7 @@ export function readLock(path) {
     raw = readFileSync(path, 'utf8');
   } catch (error) {
     if (error && error.code === 'ENOENT') return null;
-    throw error;
+    return { unmeasurable: true, error: error && error.code ? error.code : 'UNKNOWN' };
   }
   try {
     const parsed = JSON.parse(raw);
@@ -361,7 +368,9 @@ function measureFreeMem() {
  */
 export function measureState({ env = process.env, root = REPO_ROOT, selfPid = process.pid, now = Date.now() } = {}) {
   const path = lockFilePath(env);
-  const lock = readLock(path);
+  const lockRaw = readLock(path);
+  const lockUnmeasurable = Boolean(lockRaw && lockRaw.unmeasurable);
+  const lock = lockUnmeasurable ? null : lockRaw;
   const lockAlive = lock ? isPidAlive(lock.pid) : null;
 
   let processes;
@@ -385,6 +394,7 @@ export function measureState({ env = process.env, root = REPO_ROOT, selfPid = pr
     lockPath: path,
     lock,
     lockAlive,
+    lockUnmeasurable,
     foreignTestProcesses: foreignTestProcesses(processes, selfPid),
     claudeProcessCount: countClaudeProcesses(processes),
     freeMemBytes,
@@ -448,6 +458,10 @@ export function judgeGate(state, options = {}) {
   const nested = Boolean(
     options.heldToken && state.lock && state.lock.token === options.heldToken && status !== 'dead',
   );
+
+  if (state.lockUnmeasurable) {
+    warnings.push('lock datoteka se ne moze procitati (nije "nema datoteke"); tretira se kao slobodna, ne blokira.');
+  }
 
   if (!nested) {
     if (status === 'alive') {
@@ -590,10 +604,27 @@ export function releaseLock(path, { token = null, pid = null } = {}) {
 }
 
 /**
+ * Smije li se lock proglasen `dead`/`stale` fizicki obrisati prije novog upisa. Cista funkcija radi
+ * izravnog testiranja: NIKAD ne dopusta uklanjanje locka mladjeg od `thresholds.minTakeoverAgeMs`,
+ * cak ni kad je status vec `dead` ili `stale` (druga sesija ga je mozda upravo napisala u uskoj
+ * utrci izmedju mjerenja i upisa). `age === null` (nepoznata starost) ne blokira uklanjanje, jer
+ * inace zastario lock bez citljivog vremena nikad ne bi mogao biti preuzet.
+ * @param {'free'|'alive'|'dead'|'stale'} status
+ * @param {number|null} age
+ * @param {typeof THRESHOLDS} thresholds
+ * @returns {boolean}
+ */
+export function canTakeOverLock(status, age, thresholds = THRESHOLDS) {
+  if (status !== 'dead' && status !== 'stale') return false;
+  return age === null || age >= thresholds.minTakeoverAgeMs;
+}
+
+/**
  * Mjeri, presudi i (ako smije) upise lock. Zajednicko za CLI i omotac.
  * @returns {{ allow: boolean, verdict: ReturnType<typeof judgeGate>, state: object, token: string|null, nested: boolean }}
  */
 export function acquireGate({ label, ownerPid, env = process.env, root = REPO_ROOT, log = console.error }) {
+  const thresholds = THRESHOLDS;
   const options = {
     force: env.LEKTA_GATE_FORCE === '1',
     ci: isCiEnv(env),
@@ -632,9 +663,18 @@ export function acquireGate({ label, ownerPid, env = process.env, root = REPO_RO
       token,
     };
     const status = lockStatus(state);
+    const lockAge = state.lock ? lockAgeMs(state.lock, state.nowMs) : null;
+    // Nikad ne brisi lock mladji od `minTakeoverAgeMs`, cak ni proglasen mrtvim/zastarjelim: to
+    // je upravo prozor u kojem je druga sesija tek napisala lock (uska utrka izmedju mjerenja i
+    // upisa u DRUGOJ sesiji). `wx` upis ispod ce tada sam pasti s EEXIST, sto ovaj poziv salje na
+    // ponovno mjerenje umjesto na tihu obrisi-pa-upisi zamjenu.
+    const smijeUkloniti = canTakeOverLock(status, lockAge, thresholds);
+    if ((status === 'dead' || status === 'stale') && !smijeUkloniti) {
+      log(`${prefix}: zatecen lock mladji od ${thresholds.minTakeoverAgeMs} ms unatoc statusu "${status}"; ne uklanja se, mjeri se ponovno.`);
+    }
     const written = writeLock(state.lockPath, record, {
       overwrite: verdict.mode === 'forced',
-      removeExisting: status === 'dead' || status === 'stale',
+      removeExisting: smijeUkloniti,
     });
     if (written) {
       log(`${prefix}: lock zauzet (PID ${ownerPid}, ${state.lockPath}).`);

@@ -146,23 +146,6 @@ export function formatBootstrap(inputs) {
   return lines.slice(0, 12);
 }
 
-/**
- * Broji retke naredbenog retka (PowerShell `Get-CimInstance ... CommandLine` ili `wmic process
- * ... get CommandLine` izlaz, jedan proces po retku) koji spominju vitest ili playwright.
- *
- * Cista funkcija radi testiranja bez OS poziva. `null`/`undefined` ulaz (mjerenje nije uspjelo)
- * vraca `null`, nikad `0`; `0` znaci "izmjereno, nula procesa".
- *
- * @param {string|null|undefined} commandLineOutput
- * @returns {number|null}
- */
-export function countTestProcesses(commandLineOutput) {
-  if (commandLineOutput === null || commandLineOutput === undefined) return null;
-  return commandLineOutput
-    .split('\n')
-    .filter((line) => /vitest|playwright/i.test(line)).length;
-}
-
 async function collectInputsAndPrint() {
   const { execFileSync } = await import('node:child_process');
   const { readFileSync, statfsSync } = await import('node:fs');
@@ -223,7 +206,10 @@ async function collectInputsAndPrint() {
 
   let gateLock = null;
   try {
-    const lock = readLock(lockFilePath(process.env));
+    const lockRaw = readLock(lockFilePath(process.env));
+    // Lock datoteka koja se ne moze procitati (EPERM/EBUSY/EACCES) NIJE "nema locka" ni stvaran
+    // lock: bootstrap fail-open, isto kao gate-preflight, ne izmislja status iz prazne strukture.
+    const lock = lockRaw && lockRaw.unmeasurable ? null : lockRaw;
     const now = Date.now();
     const status = lockStatus({ lock, lockAlive: lock ? isPidAlive(lock.pid) : null, nowMs: now });
     gateLock = lock

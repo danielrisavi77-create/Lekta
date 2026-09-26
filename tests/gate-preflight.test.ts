@@ -8,12 +8,15 @@
  * istog pravila: jedan gate na i3 stroju s 2 jezgre ne smije trostruko trositi preglednike.
  */
 import { afterEach, describe, expect, it } from 'vitest';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import {
   GB,
   THRESHOLDS,
+  acquireGate,
+  canTakeOverLock,
   foreignTestProcesses,
   isCiEnv,
   isTestRunnerCommand,
@@ -280,6 +283,203 @@ describe('lock datoteka (privremena staza, nikad pravi %TEMP% lock)', () => {
     expect(lock?.corrupt).toBe(true);
     expect(lock?.startedAt).toBeTruthy();
     expect(readFileSync(path, 'utf8')).toBe('{ pola json');
+  });
+
+  it('greska pri citanju koja nije ENOENT (npr. staza je direktorij, EISDIR/EPERM) vraca unmeasurable, ne baca', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-test-'));
+    // Staza postoji ali NIJE datoteka: `readFileSync` na direktoriju baca EISDIR na svim
+    // platformama, sto imitira istu klasu kvara kao EPERM/EBUSY/EACCES (datoteka postoji, citanje
+    // ne uspijeva iz razloga koji nije "nema je").
+    const path = join(dir, 'lekta-gate.lock');
+    mkdirSync(path);
+    expect(() => readLock(path)).not.toThrow();
+    const lock = readLock(path);
+    expect(lock).toEqual({ unmeasurable: true, error: expect.any(String) });
+  });
+
+  it('judgeGate: lock koji se ne moze procitati je UPOZORENJE (fail-open), ne blokada i ne "nema locka" preuzimanje', () => {
+    const v = judgeGate(freeState({ lock: null, lockAlive: null, lockUnmeasurable: true } as State));
+    expect(v.allow).toBe(true);
+    expect(v.warnings.some((w) => /lock datoteka se ne moze procitati/.test(w))).toBe(true);
+    // Ne smije se prijaviti kao "preuzet mrtav lock", jer nikad nije procitan stvaran lock.
+    expect(v.warnings.some((w) => /preuzima se/.test(w))).toBe(false);
+  });
+});
+
+describe('canTakeOverLock: nikad ne brisi lock mladji od praga', () => {
+  it('lock proglasen dead/stale se smije ukloniti tek nakon minTakeoverAgeMs', () => {
+    expect(canTakeOverLock('dead', THRESHOLDS.minTakeoverAgeMs)).toBe(true);
+    expect(canTakeOverLock('dead', THRESHOLDS.minTakeoverAgeMs - 1)).toBe(false);
+    expect(canTakeOverLock('stale', THRESHOLDS.minTakeoverAgeMs)).toBe(true);
+    expect(canTakeOverLock('stale', 0)).toBe(false);
+  });
+
+  it('status alive/free se nikad ne uklanja bez obzira na starost', () => {
+    expect(canTakeOverLock('alive', 10 * THRESHOLDS.minTakeoverAgeMs)).toBe(false);
+    expect(canTakeOverLock('free', 10 * THRESHOLDS.minTakeoverAgeMs)).toBe(false);
+  });
+
+  it('nepoznata starost (age null) ne blokira preuzimanje zastarjelog locka', () => {
+    expect(canTakeOverLock('dead', null)).toBe(true);
+    expect(canTakeOverLock('stale', null)).toBe(true);
+  });
+});
+
+describe('acquireGate: atomarno preuzimanje locka izmedju dvije sesije', () => {
+  let dir: string | null = null;
+  afterEach(() => {
+    if (dir) rmSync(dir, { recursive: true, force: true });
+    dir = null;
+  });
+
+  function measurementFile(dirPath: string, overrides: Record<string, unknown> = {}) {
+    const file = join(dirPath, 'mjerenje.json');
+    writeFileSync(file, JSON.stringify({ processes: [], freeMemBytes: 8 * GB, freeDiskBytes: 80 * GB, ...overrides }));
+    return file;
+  }
+
+  it('sesija B odmah nakon sesije A vidi svjez, ziv lock i odbija (exit 2), lock ostaje sesije A', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-acquire-'));
+    const lockPath = join(dir, 'lekta-gate.lock');
+    const measurement = measurementFile(dir);
+    const envZa = (label: string) => ({
+      LEKTA_GATE_LOCK_PATH: lockPath,
+      LEKTA_GATE_MEASUREMENT_FILE: measurement,
+      LEKTA_GATE_FORCE: undefined,
+    } as unknown as NodeJS.ProcessEnv);
+    const tisina = () => {};
+
+    // Sesija A: lock je prazan, zauzima ga stvarnim (zivim) PID-om ovog test procesa.
+    const a = acquireGate({ label: 'A', ownerPid: process.pid, env: envZa('A'), root: 'w', log: tisina });
+    expect(a.allow).toBe(true);
+    expect(readLock(lockPath)?.token).toBe(a.token);
+
+    // Sesija B odmah zatim: prvo mjerenje vec vidi lock A kao ziv (stvaran PID), pa odbija u JEDNOM
+    // pokusaju, bez ijednog brisanja tudje datoteke.
+    const b = acquireGate({ label: 'B', ownerPid: process.pid + 1, env: envZa('B'), root: 'w', log: tisina });
+    expect(b.allow).toBe(false);
+    expect(b.verdict?.reasons.some((r) => /gate vec drzi/.test(r))).toBe(true);
+    expect(readLock(lockPath)?.token).toBe(a.token);
+  });
+
+  it('lock mrtvog PID-a mladji od minTakeoverAgeMs se NE brise; sesija ceka umjesto da ga preuzme', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-acquire-'));
+    const lockPath = join(dir, 'lekta-gate.lock');
+    const measurement = measurementFile(dir);
+    const mrtavPid = 999_999; // nepostojeci PID: isPidAlive vraca false (dead), ne null.
+    const record = { pid: mrtavPid, startedAt: new Date().toISOString(), worktree: 'w', label: 'stari', token: 'STARI' };
+    writeFileSync(lockPath, `${JSON.stringify(record, null, 2)}\n`, { flag: 'wx' });
+
+    const env = {
+      LEKTA_GATE_LOCK_PATH: lockPath,
+      LEKTA_GATE_MEASUREMENT_FILE: measurement,
+    } as unknown as NodeJS.ProcessEnv;
+    const tisina = () => {};
+
+    const b = acquireGate({ label: 'B', ownerPid: process.pid, env, root: 'w', log: tisina });
+    // Lock je "dead" (PID ne postoji) ali star manje od 5 s: ne smije se ukloniti, pa oba pokusaja
+    // u petlji nailaze na `wx` EEXIST i sesija zavrsava odbijena, NIKAD tihom zamjenom tudjeg locka.
+    expect(b.allow).toBe(false);
+    expect(readLock(lockPath)?.token).toBe('STARI');
+  });
+
+  it('isti mrtav lock stariji od minTakeoverAgeMs SE preuzima', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-acquire-'));
+    const lockPath = join(dir, 'lekta-gate.lock');
+    const measurement = measurementFile(dir);
+    const mrtavPid = 999_999;
+    const staro = new Date(Date.now() - THRESHOLDS.minTakeoverAgeMs - 1_000).toISOString();
+    const record = { pid: mrtavPid, startedAt: staro, worktree: 'w', label: 'stari', token: 'STARI' };
+    writeFileSync(lockPath, `${JSON.stringify(record, null, 2)}\n`, { flag: 'wx' });
+
+    const env = {
+      LEKTA_GATE_LOCK_PATH: lockPath,
+      LEKTA_GATE_MEASUREMENT_FILE: measurement,
+    } as unknown as NodeJS.ProcessEnv;
+    const tisina = () => {};
+
+    const b = acquireGate({ label: 'B', ownerPid: process.pid, env, root: 'w', log: tisina });
+    expect(b.allow).toBe(true);
+    expect(readLock(lockPath)?.token).toBe(b.token);
+    expect(readLock(lockPath)?.token).not.toBe('STARI');
+  });
+});
+
+describe('CLI: node scripts/gate-preflight.mjs (--check-only, --label, --release)', () => {
+  let dir: string | null = null;
+  afterEach(() => {
+    if (dir) rmSync(dir, { recursive: true, force: true });
+    dir = null;
+  });
+
+  const SCRIPT = resolve(process.cwd(), 'scripts/gate-preflight.mjs');
+
+  function run(args: string[], env: Record<string, string | undefined>) {
+    return spawnSync(process.execPath, [SCRIPT, ...args], {
+      encoding: 'utf8',
+      env: { ...process.env, CI: undefined, LEKTA_GATE_FORCE: undefined, LEKTA_GATE_LOCK_TOKEN: undefined, ...env },
+      timeout: 30_000,
+    });
+  }
+
+  function measurementFile(dirPath: string, overrides: Record<string, unknown> = {}) {
+    const file = join(dirPath, 'mjerenje.json');
+    writeFileSync(file, JSON.stringify({ processes: [], freeMemBytes: 8 * GB, freeDiskBytes: 80 * GB, ...overrides }));
+    return file;
+  }
+
+  it('--check-only: exit 0 kad je stroj slobodan (mjerenje podmetnuto)', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-cli-'));
+    const lockPath = join(dir, 'lekta-gate.lock');
+    const measurement = measurementFile(dir);
+    const res = run(['--check-only'], { LEKTA_GATE_LOCK_PATH: lockPath, LEKTA_GATE_MEASUREMENT_FILE: measurement });
+    expect(res.status).toBe(0);
+    expect(res.stdout).toMatch(/presuda: SLOBODNO \(exit 0\)/);
+  });
+
+  it('--check-only: exit 2 kad lock vec drzi ziv PID', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-cli-'));
+    const lockPath = join(dir, 'lekta-gate.lock');
+    const measurement = measurementFile(dir);
+    const record = { pid: process.pid, startedAt: new Date().toISOString(), worktree: 'w', label: 'tudji', token: 'T' };
+    writeFileSync(lockPath, `${JSON.stringify(record, null, 2)}\n`, { flag: 'wx' });
+    const res = run(['--check-only'], { LEKTA_GATE_LOCK_PATH: lockPath, LEKTA_GATE_MEASUREMENT_FILE: measurement });
+    expect(res.status).toBe(2);
+    expect(res.stdout).toMatch(/presuda: ZAUZETO \(exit 2\)/);
+  });
+
+  it('--label pa --release u istoj ljusci (isti roditeljski proces): lock je vlastiti, brise se', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-cli-'));
+    const lockPath = join(dir, 'lekta-gate.lock');
+    const measurement = measurementFile(dir);
+    const env = { LEKTA_GATE_LOCK_PATH: lockPath, LEKTA_GATE_MEASUREMENT_FILE: measurement };
+
+    // Oba spawna dijele ISTI roditeljski proces (ovaj test proces), pa CLI ("PID roditelja = npm
+    // ljuska") kod oba poziva zapisuje/trazi isti `process.ppid`, tocno "ista ljuska" iz naslova.
+    const acquire = run(['--label', 'moj-gate'], env);
+    expect(acquire.status).toBe(0);
+    expect(readLock(lockPath)).not.toBeNull();
+
+    const release = run(['--release'], env);
+    expect(release.status).toBe(0);
+    expect(release.stderr).toMatch(/lock otpusten/);
+    expect(readLock(lockPath)).toBeNull();
+  });
+
+  it('--release iz drugog roditelja (tudji lock): ostaje, ne brise se tiho', () => {
+    dir = mkdtempSync(join(tmpdir(), 'lekta-gate-cli-'));
+    const lockPath = join(dir, 'lekta-gate.lock');
+    const measurement = measurementFile(dir);
+    // Lock upisan izravno, s PID-om i tokenom koji ne pripadaju OVOM procesu ni njegovom
+    // roditelju: simulira sesiju pokrenutu iz DRUGE ljuske/roditelja.
+    const record = { pid: 424_242, startedAt: new Date().toISOString(), worktree: 'w', label: 'tudja-sesija', token: 'TUDJI-TOKEN' };
+    writeFileSync(lockPath, `${JSON.stringify(record, null, 2)}\n`, { flag: 'wx' });
+
+    const release = run(['--release'], { LEKTA_GATE_LOCK_PATH: lockPath, LEKTA_GATE_MEASUREMENT_FILE: measurement });
+    // `--release` uvijek vraca 0 (nikad ne rusi npm skriptu), ali NE smije obrisati tudji lock.
+    expect(release.status).toBe(0);
+    expect(release.stderr).toMatch(/lock drzi drugi proces; NE brise se/);
+    expect(readLock(lockPath)?.token).toBe('TUDJI-TOKEN');
   });
 });
 
