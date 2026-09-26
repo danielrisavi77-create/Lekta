@@ -1225,7 +1225,10 @@ export function renderTableFigureRescueControls(li: HTMLElement, item: Repairabl
     const details = document.createElement('small'); details.textContent = table.evidence.join(' · '); row.appendChild(details);
     section.appendChild(row);
     const actions = document.createElement('div'); actions.className = 'lekta-repair-panel__rescue-actions';
-    const actionLabels: Record<string, string> = { fitToTextWidth: 'Prilagodi širini teksta', equalColumns: 'Ujednači stupce', repeatHeader: 'Ponavljaj zaglavlje', preventRowSplit: 'Ne cijepaj retke', center: 'Centriraj tablicu', applyProfileTypography: 'Primijeni profilnu tipografiju', separateSource: 'Odvoji izvor tablice' };
+    // T65 krug 2 (M2): obrazac ne salje textWidthEmu (vidi buildParams u repair-items.ts), pa fixer
+    // za fitToTextWidth pise samo <w:tblLayout w:type="fixed"/>, a tblW, tblGrid i tcW ostaju isti.
+    // Oznaka zato ne smije obecavati prilagodbu sirini teksta.
+    const actionLabels: Record<string, string> = { fitToTextWidth: 'Fiksni raspored stupaca (širina tablice se ne mijenja)', equalColumns: 'Ujednači stupce', repeatHeader: 'Ponavljaj zaglavlje', preventRowSplit: 'Ne cijepaj retke', center: 'Centriraj tablicu', applyProfileTypography: 'Primijeni profilnu tipografiju', separateSource: 'Odvoji izvor tablice' };
     for (const [key, value] of Object.entries(table.actions)) {
       const actionLabel = document.createElement('label'); const actionCheck = document.createElement('input'); actionCheck.type = 'checkbox'; actionCheck.checked = value === true;
       // T65 krug 2 (M3): akcija koju fixer na ovoj tablici ne izvodi je vidljiva, ali onemogucena

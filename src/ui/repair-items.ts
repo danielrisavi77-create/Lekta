@@ -1085,6 +1085,8 @@ function tableFigureRescueText(form: TableFigureRescueFormDefinition, universal:
   if (tableOn('fitToTextWidth')) effects.push('tablica dobiva fiksni raspored stupaca, pa ih Word ne širi prema sadržaju');
   if (tableOn('equalColumns')) effects.push('stupci dobivaju jednaku širinu unutar postojeće ukupne širine stupaca');
   if (tables.some((table) => table.disabledActions?.equalColumns)) effects.push('tablica sa spojenim ćelijama zadržava postojeće širine stupaca');
+  // Bez textWidthEmu nijedna akcija ne sužava tablicu: siroka tablica bez polozene stranice ostaje siroka.
+  if (tables.some((table) => table.wide && !table.landscape?.selected)) effects.push('široka tablica zadržava svoju širinu');
   if (tableOn('repeatHeader')) effects.push('zaglavlje se ponavlja kroz stranice');
   if (tableOn('preventRowSplit')) effects.push('redak se ne lomi preko dviju stranica');
   if (tableOn('center')) effects.push('tablica se centrira');

@@ -18,6 +18,7 @@ import {
 import { renderTableFigureRescueControls, splitSkippedByReason } from './repair-panel';
 import { tableFigureRescueFixer, type TableFigureRescueParams } from '../repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../analysis/element-structure';
+import { detectIntegrityFailure } from '../repair/apply-fixers';
 import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 
@@ -749,5 +750,33 @@ describe('tableFigureRescueRepairableItem: istinit tekst i onemogucen equalColum
     expect(second.applied).toBe(false);
     const split = splitSkippedByReason(['table-figure-rescue-assisted'], { 'table-figure-rescue-assisted': second.reason! }, () => 'Prelamanje tablica i slika');
     expect(split).toEqual({ alreadyOk: ['Prelamanje tablica i slika'], cannotFix: [] });
+  });
+
+  /**
+   * T65 krug 2, pregled: potvrdni tekst je bio istinit, ali predoznacena kucica za fitToTextWidth
+   * i dalje je glasila "Prilagodi širini teksta". Bez textWidthEmu fixer pise samo tblLayout fixed,
+   * pa tblW, tblGrid i tcW ostaju isti i siroka tablica ostaje sira od teksta. Test usporeduje
+   * ISCRTANE oznake kucica sa stvarnim izlazom fixera nad istim parametrima.
+   */
+  it('M2: oznaka kucice tvrdi samo ono sto fixer stvarno pise (fiksni raspored, sirina ista)', () => {
+    for (const mergedCells of [true, false]) {
+      const item = itemFor(mergedCells);
+      const li = document.createElement('li');
+      renderTableFigureRescueControls(li, item);
+      const actionTexts = [...li.querySelectorAll('.lekta-repair-panel__rescue-actions label')].map((node) => node.textContent ?? '');
+      const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, item.params as unknown as TableFigureRescueParams);
+      expect(out.applied).toBe(true);
+      expect(detectIntegrityFailure([{ name: 'word/document.xml', xml: out.parts.documentXml }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': documentXml })).toBeNull();
+      // Ono sto fixer stvarno napise: fiksni raspored stupaca, a tblW ostaje 12000 (sira od teksta).
+      expect(out.parts.documentXml).toContain('<w:tblLayout w:type="fixed"/>');
+      expect(out.parts.documentXml.match(/<w:tblW\b[^>]*>/)?.[0]).toBe('<w:tblW w:w="12000" w:type="dxa"/>');
+      // Zato nijedna oznaka tablicne akcije ne smije obecavati prilagodbu sirini teksta.
+      expect(actionTexts.filter((text) => /širin\w* teksta/i.test(text)), `mergedCells=${mergedCells}`).toEqual([]);
+      const layoutLabel = actionTexts.find((text) => text.includes('Fiksni raspored stupaca'));
+      expect(layoutLabel, 'kucica fitToTextWidth ima istinitu oznaku').toBeTruthy();
+      expect(layoutLabel).toContain('širina tablice se ne mijenja');
+      // Siroka tablica bez landscapea: tekst izricito kaze da ostaje siroka.
+      expect(String(item.confirmationText)).toContain('široka tablica zadržava svoju širinu');
+    }
   });
 });

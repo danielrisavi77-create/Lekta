@@ -98,10 +98,11 @@ import { buildHandoffQuery } from '../src/routes/intake/handoff-query';
 import { handoffQueryProblems, intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
 import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItemsDigest } from '../src/ui/repair-selection';
-import { buildRepairPanelHandle } from '../src/ui/repair-panel';
+import { buildRepairPanelHandle, renderTableFigureRescueControls } from '../src/ui/repair-panel';
+import { tableFigureRescueRepairableItem } from '../src/ui/repair-items';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
-import { hasMergedCells, tableFigureRescueFixer } from '../src/repair/table-figure-rescue-fixer';
+import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -335,6 +336,29 @@ function t65MixedRequest(tbl: string): { applied: boolean; afterLabel: string } 
   return tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true, repeatHeader: true } }], figures: [] });
 }
 const T65_SKIP_NOTE = 'ujednačavanje stupaca preskočeno';
+/**
+ * T65 krug 2, pregled (M2): oznaka kucice smije tvrditi prilagodbu sirini teksta samo ako fixer nad
+ * ISTIM parametrima stvarno promijeni tblW. Gard usporeduje iscrtane oznake tablicnih akcija s
+ * izlazom fixera. Siroka tablica: tblW 12000 twipa, tekst 9000 twipa (9000 * 635 EMU).
+ */
+const T65_WIDE = `<w:tbl ${T65_W}><w:tblPr><w:tblW w:w="12000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="6000"/><w:gridCol w:w="6000"/></w:tblGrid>`
+  + `<w:tr>${t65Cell('', 'A', 6000)}${t65Cell('', 'B', 6000)}</w:tr></w:tbl>`;
+const T65_TEXT_WIDTH_EMU = 9000 * 635;
+/** Iscrtane oznake tablicnih akcija i parametri koje UI stvarno salje za siroku tablicu. */
+function t65RenderedWideTable(): { labels: string[]; params: TableFigureRescueParams } {
+  const structure = { tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', T65_WIDE), rowCount: 1, columnCount: 2, wide: true, mergedCells: false, confidence: 'medium', rowsWithCantSplit: 0, hasHeader: false, evidence: [] }], figures: [] };
+  const item = tableFigureRescueRepairableItem({ details: { tableFigureRescue: structure } }, { ruleEntries: [] })[0];
+  const li = document.createElement('li');
+  renderTableFigureRescueControls(li, item);
+  return { labels: [...li.querySelectorAll('.lekta-repair-panel__rescue-actions label')].map((node) => node.textContent ?? ''), params: item.params as unknown as TableFigureRescueParams };
+}
+/** Gard: true kad neka oznaka obecava prilagodbu sirini teksta, a fixer tblW ne postavi na sirinu teksta. */
+function t65LabelOverclaims(labels: string[], params: TableFigureRescueParams): boolean {
+  const documentXml = `<w:document ${T65_W}><w:body>${T65_WIDE}</w:body></w:document>`;
+  const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, params);
+  const fitted = out.applied && out.parts.documentXml.includes('<w:tblW w:w="9000" w:type="dxa"/>');
+  return labels.some((label) => /širin\w* teksta/i.test(label)) && !fitted;
+}
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1866,6 +1890,31 @@ const MUTATIONS: Mutation[] = [
     caught: () => t65Preserved(t65Table('<w:vMerge w:val="restart"/>', '<w:vMerge/>')),
     cleanBefore: () => t65Equalized(t65Table('', '')),
   },
+  // Pregled drugog alata (Codex), re-verificirano crvenim testovima u src/analysis/merged-cells.test.ts.
+  {
+    id: 'tablica/equal-columns-val-drugog-prefiksa',
+    imitates:
+      'detekcija uzme PRVI val atribut bilo kojeg prefiksa, pa <w:gridSpan x:val="1" w:val="2"/> proglasi '
+      + 'obicnom celijom i equalColumns prepise tcW celije preko dva stupca',
+    caught: () => t65Preserved(t65Table('<w:gridSpan x:val="1" w:val="2"/>', '')),
+    cleanBefore: () => t65Equalized(t65Table('<w:gridSpan w:val="1"/>', '')),
+  },
+  {
+    id: 'tablica/equal-columns-val-u-vrijednosti',
+    imitates:
+      'detekcija procita val= iz VRIJEDNOSTI drugog atributa (x:note=\' val="1" \'), pa gridSpan bez '
+      + 'pravog val proglasi obicnom celijom i equalColumns prepise njezin tcW',
+    caught: () => t65Preserved(t65Table(`<w:gridSpan x:note=' val="1" '/>`, '')),
+    cleanBefore: () => t65Equalized(t65Table(`<w:gridSpan x:note='val="3"' w:val="1"/>`, '')),
+  },
+  {
+    id: 'tablica/equal-columns-cdata',
+    imitates:
+      'oznaka <w:gridSpan> doslovno u CDATA tekstu odlomka broji se kao spajanje, pa obicna tablica '
+      + 'bez razloga ostane bez ujednacenih stupaca',
+    caught: () => t65Equalized(t65Table('', '').replace('<w:t>A</w:t>', '<w:t><![CDATA[<w:gridSpan w:val="2"/>]]></w:t>')),
+    cleanBefore: () => t65Preserved(t65Table('<w:gridSpan w:val="2"/>', '')),
+  },
   {
     id: 'tablica/equal-columns-ne-ascii-prefiks',
     imitates:
@@ -1888,6 +1937,23 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => {
       const out = t65MixedRequest(t65Table('', ''));
       return out.applied && !out.afterLabel.includes(T65_SKIP_NOTE);
+    },
+  },
+  {
+    id: 'tablica/oznaka-sirine-teksta',
+    imitates:
+      'predoznacena kucica fitToTextWidth glasi "Prilagodi širini teksta", a UI ne salje textWidthEmu, '
+      + 'pa fixer pise samo tblLayout fixed i siroka tablica ostaje sira od teksta',
+    caught: () => {
+      const { params } = t65RenderedWideTable();
+      return t65LabelOverclaims([' Prilagodi širini teksta'], params);
+    },
+    // Istu tvrdnju gard pusti kad fixer tblW stvarno postavi na sirinu teksta, a iscrtane oznake
+    // produkcijskog UI-ja za iste parametre ne obecavaju vise nego sto fixer napise.
+    cleanBefore: () => {
+      const { labels, params } = t65RenderedWideTable();
+      const withWidth: TableFigureRescueParams = { ...params, tables: params.tables.map((table) => ({ ...table, textWidthEmu: T65_TEXT_WIDTH_EMU })) };
+      return labels.length > 0 && !t65LabelOverclaims(labels, params) && !t65LabelOverclaims([' Prilagodi širini teksta'], withWidth);
     },
   },
   // ---------------------------------------------------------------------------
