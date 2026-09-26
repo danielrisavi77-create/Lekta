@@ -12,7 +12,8 @@
 import { isReportWorkType, type ReportWorkType } from './pricing';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import { TERMS_VERSION } from '../legal/terms-version';
-import type { FixerRequest } from '../repair/fixer-registry.ts';
+import { FIXER_IDS, type FixerId, type FixerRequest } from '../repair/fixer-registry.ts';
+import { requestRequiresException } from '../repair/contract/request-policy.ts';
 import { parseSourceCheck, type RepairSourceCheck } from './source-check-parse';
 export { REPAIR_MAX_REFERENCES } from './repair-contract';
 import { REPAIR_MAX_REFERENCES } from './repair-contract';
@@ -79,14 +80,57 @@ export interface RepairMeta {
    * budu novi, grana na serveru moze nestati.
    */
   sourceCheckSeparate?: boolean;
+  /** Izricite korisnicke potvrde koje ulaze u potpisani lokalni Repair Contract. */
+  confirmations?: RepairConfirmationReceipt[];
+}
+
+export interface RepairConfirmationReceipt {
+  requestIndex: number;
+  confirmationText: string;
+  confirmedAt: string;
+}
+
+export function localRepairRequestRequiresConfirmation(fixerId: string): boolean {
+  if (!(FIXER_IDS as readonly string[]).includes(fixerId)) return false;
+  return requestRequiresException(fixerId as FixerId);
 }
 
 export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel: string }
 
+export interface LocalRepairLaunchV1 {
+  version: 1;
+  jobId: string;
+  claimToken: string;
+  expiresAt: string;
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const CLAIM_TOKEN = /^[A-Za-z0-9_-]{43}$/;
+
+function parseLocalRepairLaunch(value: unknown, expectedJobId: unknown): LocalRepairLaunchV1 | null {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return null;
+  const candidate = value as Record<string, unknown>;
+  if (Object.keys(candidate).sort().join(',') !== 'claimToken,expiresAt,jobId,version') return null;
+  if (candidate.version !== 1
+    || typeof candidate.jobId !== 'string'
+    || !UUID.test(candidate.jobId)
+    || candidate.jobId !== expectedJobId
+    || typeof candidate.claimToken !== 'string'
+    || !CLAIM_TOKEN.test(candidate.claimToken)
+    || typeof candidate.expiresAt !== 'string'
+    || !Number.isFinite(Date.parse(candidate.expiresAt))) return null;
+  return {
+    version: 1,
+    jobId: candidate.jobId,
+    claimToken: candidate.claimToken,
+    expiresAt: candidate.expiresAt,
+  };
+}
+
 export type RepairOutcome =
   // storagePending: pohrana ("Moji popravci") se dovrsava u pozadini nakon odgovora, pa jobId JEST
   // dodijeljen, ali posao jos ne mora biti vidljiv. Sucelje tada ne smije tvrditi da je spremljeno.
-  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null }
+  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null; localRepair: LocalRepairLaunchV1 | null }
   | { kind: 'tier_mismatch'; suggestedWorkType: string }
   | { kind: 'paywall'; workType: ReportWorkType }
   // RE-33: reason razlikuje placeni dnevni strop od besplatne kvote (po korisniku ili po IP-u),
@@ -128,6 +172,7 @@ export function buildRepairMeta(input: {
   references?: RepairReference[] | null;
   /** Pozivatelj sam zove source-check usporedno; server tada preskace provjeru izvora. */
   sourceCheckSeparate?: boolean;
+  confirmations?: RepairConfirmationReceipt[];
 }): RepairMeta {
   const workType: ReportWorkType = isReportWorkType(input.workType) ? input.workType : 'zavrsni';
   const meta: RepairMeta = {
@@ -148,6 +193,9 @@ export function buildRepairMeta(input: {
   if (input.fileName != null) meta.fileName = input.fileName;
   if (input.confirmedMismatch) meta.confirmedMismatch = true;
   if (input.sourceCheckSeparate) meta.sourceCheckSeparate = true;
+  if (input.confirmations?.length) {
+    meta.confirmations = input.confirmations.map((confirmation) => ({ ...confirmation }));
+  }
   // Reference bez naslova nemaju sto traziti u korpusu (kljuc je naslov), pa ispadaju ovdje umjesto
   // da putuju na server i tamo se tiho odbace. Prazan popis se izostavlja: nema polja, nema provjere.
   // Kad provjeru vodi zaseban poziv, popis literature se uz dokument NE salje uopce: server ga tada
@@ -202,6 +250,7 @@ export async function uploadRepair(
     const data = (await res.json().catch(() => ({}))) as {
       docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; slotId?: string; jobId?: string | null;
       storagePending?: boolean; sourceCheck?: unknown;
+      localRepair?: unknown;
       error?: string; integrityFailure?: { part?: unknown; problem?: unknown; preexisting?: unknown };
     };
     if (data.error === 'integrity_failed') {
@@ -221,6 +270,7 @@ export async function uploadRepair(
       // "ishod je vec poznat", sto je za taj server tocno.
       storagePending: data.storagePending === true,
       sourceCheck: parseSourceCheck(data.sourceCheck),
+      localRepair: parseLocalRepairLaunch(data.localRepair, data.jobId),
     };
   }
   if (res.status === 409) {

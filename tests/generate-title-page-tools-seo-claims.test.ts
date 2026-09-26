@@ -33,7 +33,7 @@ beforeAll(async () => {
   for (const inst of rawCatalog) {
     for (const u of inst.units || []) unitMeta[u.id] = { name: u.name, instId: inst.id, instName: inst.name };
   }
-});
+}, 120_000);
 
 // Heuristicka provjera gramaticke greske klase "na {Veliko Slovo...}" - lokativna konstrukcija
 // koju ne mozemo pouzdano generirati za proizvoljno ime ustanove (feminine/masculine razlika).

@@ -5,11 +5,12 @@ import {
   validateRepairContractContext,
   type RepairContractV1,
 } from '../src/repair/contract';
-import { TEST_SOURCE_BYTES, validContract } from './helpers/repair-contract';
+import { TEST_SOURCE_BYTES, TEST_TARGET_BYTES, validContract } from './helpers/repair-contract';
 
 const validContext = {
   now: new Date('2026-08-16T10:30:00.000Z'),
   sourceBytes: TEST_SOURCE_BYTES,
+  targetBytes: TEST_TARGET_BYTES,
   engineVersion: '1.0.0',
 };
 
@@ -55,6 +56,27 @@ describe('Repair Contract v1 parser', () => {
       .toMatchObject({ ok: false, issues: [{ code: 'invalid-id' }] });
   });
 
+  it.each(['targetSha256', 'targetSize', 'targetFileName'])(
+    'odbija ugovor bez obveznog potpisanog polja %s',
+    (field) => {
+      const contract = { ...validContract() } as Record<string, unknown>;
+      delete contract[field];
+
+      expect(parseRepairContractV1(contract))
+        .toMatchObject({ ok: false, issues: [{ code: 'invalid-shape', path: 'contract' }] });
+    },
+  );
+
+  it.each([
+    ['targetSha256', 'A'.repeat(64), 'invalid-hash'],
+    ['targetSize', 0, 'invalid-shape'],
+    ['targetSize', 20 * 1024 * 1024 + 1, 'invalid-shape'],
+    ['targetSize', Number.MAX_SAFE_INTEGER + 1, 'invalid-shape'],
+  ])('odbija neispravan target podatak %s', (field, value, code) => {
+    expect(parseRepairContractV1(validContract({ [field]: value } as Partial<RepairContractV1>)))
+      .toMatchObject({ ok: false, issues: [{ code }] });
+  });
+
   it('odbija skriveni podatkovni kljuc umjesto da ga parser previdi', () => {
     const contract = validContract() as RepairContractV1 & { command?: string };
     Object.defineProperty(contract, 'command', { value: 'Start-Process', enumerable: false });
@@ -66,6 +88,14 @@ describe('Repair Contract v1 parser', () => {
     (sourceFileName) => {
       expect(parseRepairContractV1(validContract({ sourceFileName })))
         .toMatchObject({ ok: false, issues: [{ code: 'invalid-shape' }] });
+    },
+  );
+
+  it.each(['../Cilj.docx', 'C:\\Temp\\Cilj.docx', 'CON.docx', 'Cilj.pdf', 'cilj..docx'])(
+    'odbija opasno ili neispravno ime target datoteke: %s',
+    (targetFileName) => {
+      expect(parseRepairContractV1(validContract({ targetFileName })))
+        .toMatchObject({ ok: false, issues: [{ code: 'invalid-shape', path: 'targetFileName' }] });
     },
   );
 
@@ -154,6 +184,26 @@ describe('Repair Contract v1 kontekst', () => {
       .toMatchObject({ ok: false, issues: [{ code: 'source-size-mismatch' }] });
     expect(await validateRepairContractContext(validContract(), { ...validContext, sourceBytes: new TextEncoder().encode('abd') }))
       .toMatchObject({ ok: false, issues: [{ code: 'source-hash-mismatch' }] });
+  });
+
+  it('odbija target bajtove krive velicine ili hasha', async () => {
+    expect(await validateRepairContractContext(validContract({ targetSize: TEST_TARGET_BYTES.length + 1 }), validContext))
+      .toMatchObject({ ok: false, issues: [{ code: 'target-size-mismatch', path: 'targetSize' }] });
+    expect(await validateRepairContractContext(validContract(), {
+      ...validContext,
+      targetBytes: new TextEncoder().encode('corrected-targeu'),
+    })).toMatchObject({ ok: false, issues: [{ code: 'target-hash-mismatch', path: 'targetSha256' }] });
+  });
+
+  it('prihvaca svaki ugovorno valjan fixer koji portable WordReplica 0.1.0 podrzava', async () => {
+    const contract = validContract({
+      engineMinVersion: '0.1.0',
+      engineMaxVersion: '0.1.0',
+      requests: [{ requestId: 'req-0001', fixerId: 'alignment-fixer', ruleId: 'alignment', params: { val: 'both' } }],
+    });
+
+    expect(await validateRepairContractContext(contract, { ...validContext, engineVersion: '0.1.0' }))
+      .toEqual({ ok: true });
   });
 
   it.each(['0.9.9', '1.0.1'])('odbija engine izvan ukljucivog raspona: %s', async (engineVersion) => {

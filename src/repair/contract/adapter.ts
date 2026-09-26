@@ -18,6 +18,8 @@ export interface BuildRepairContractInput {
   userId: string;
   sourceBytes: Uint8Array;
   sourceFileName: string;
+  targetBytes: Uint8Array;
+  targetFileName: string;
   createdAt: Date;
   expiresAt: Date;
   engineMinVersion: string;
@@ -99,6 +101,9 @@ export async function buildUnsignedRepairContractV1(
     sourceSha256: await sha256Hex(input.sourceBytes),
     sourceSize: input.sourceBytes.length,
     sourceFileName: input.sourceFileName,
+    targetSha256: await sha256Hex(input.targetBytes),
+    targetSize: input.targetBytes.length,
+    targetFileName: input.targetFileName,
     createdAt: input.createdAt.toISOString(),
     expiresAt: input.expiresAt.toISOString(),
     engineMinVersion: input.engineMinVersion,

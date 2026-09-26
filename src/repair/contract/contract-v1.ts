@@ -1,8 +1,10 @@
 import { fromBase64Url, sha256Hex, toBase64Url } from './hash.ts';
 import { parseContractRequests, requiredExceptionScope } from './request-policy.ts';
+import { wordReplicaSupportsFixer, WORDREPLICA_0_1_0_ENGINE_VERSION } from './wordreplica-policy.ts';
 import {
   GOLDEN_GATES,
   REPAIR_CONTRACT_KEY_ID_PATTERN,
+  REPAIR_CONTRACT_MAX_DOCX_BYTES,
   REPAIR_CONTRACT_SIGNATURE_BYTES,
   type AllowedExceptionV1,
   type GoldenGate,
@@ -16,6 +18,7 @@ import {
 export interface RepairContractContext {
   now: Date;
   sourceBytes: Uint8Array;
+  targetBytes: Uint8Array;
   engineVersion: string;
   expectedJobId?: string;
   expectedUserId?: string;
@@ -29,10 +32,13 @@ export type ContractValidationCode =
   | 'invalid-hash'
   | 'source-size-mismatch'
   | 'source-hash-mismatch'
+  | 'target-size-mismatch'
+  | 'target-hash-mismatch'
   | 'invalid-time'
   | 'expired'
   | 'lifetime-too-long'
   | 'engine-out-of-range'
+  | 'unsupported-engine-fixer'
   | 'request-policy'
   | 'missing-exception'
   | 'orphan-exception'
@@ -72,6 +78,9 @@ const TOP_LEVEL_KEYS = [
   'sourceFileName',
   'sourceSha256',
   'sourceSize',
+  'targetFileName',
+  'targetSha256',
+  'targetSize',
   'userId',
   'verificationPolicy',
 ] as const;
@@ -217,6 +226,11 @@ export function parseRepairContractV1(value: unknown): ContractParseResult {
   if (typeof value.sourceSha256 !== 'string' || !SHA256.test(value.sourceSha256)) return issue('invalid-hash', 'sourceSha256');
   if (!Number.isInteger(value.sourceSize) || (value.sourceSize as number) < 0) return issue('invalid-shape', 'sourceSize');
   if (!safeDocxFileName(value.sourceFileName)) return issue('invalid-shape', 'sourceFileName');
+  if (typeof value.targetSha256 !== 'string' || !SHA256.test(value.targetSha256)) return issue('invalid-hash', 'targetSha256');
+  if (!Number.isSafeInteger(value.targetSize)
+    || (value.targetSize as number) <= 0
+    || (value.targetSize as number) > REPAIR_CONTRACT_MAX_DOCX_BYTES) return issue('invalid-shape', 'targetSize');
+  if (!safeDocxFileName(value.targetFileName)) return issue('invalid-shape', 'targetFileName');
 
   const createdAt = parseIso(value.createdAt);
   const expiresAt = parseIso(value.expiresAt);
@@ -261,6 +275,9 @@ export function parseRepairContractV1(value: unknown): ContractParseResult {
     sourceSha256: value.sourceSha256,
     sourceSize: value.sourceSize as number,
     sourceFileName: value.sourceFileName,
+    targetSha256: value.targetSha256,
+    targetSize: value.targetSize as number,
+    targetFileName: value.targetFileName,
     createdAt: value.createdAt as string,
     expiresAt: value.expiresAt as string,
     engineMinVersion: value.engineMinVersion as string,
@@ -316,7 +333,15 @@ export async function validateRepairContractContext(
   if (!engine || !minimum || !maximum || compareSemver(engine, minimum) < 0 || compareSemver(engine, maximum) > 0) {
     return contextIssue('engine-out-of-range', 'engineVersion');
   }
+  if (context.engineVersion === WORDREPLICA_0_1_0_ENGINE_VERSION) {
+    const unsupportedIndex = contract.requests.findIndex(
+      (request) => !wordReplicaSupportsFixer(context.engineVersion, request.fixerId),
+    );
+    if (unsupportedIndex >= 0) return contextIssue('unsupported-engine-fixer', `requests.${unsupportedIndex}.fixerId`);
+  }
   if (context.sourceBytes.length !== contract.sourceSize) return contextIssue('source-size-mismatch', 'sourceSize');
   if (await sha256Hex(context.sourceBytes) !== contract.sourceSha256) return contextIssue('source-hash-mismatch', 'sourceSha256');
+  if (context.targetBytes.length !== contract.targetSize) return contextIssue('target-size-mismatch', 'targetSize');
+  if (await sha256Hex(context.targetBytes) !== contract.targetSha256) return contextIssue('target-hash-mismatch', 'targetSha256');
   return { ok: true };
 }

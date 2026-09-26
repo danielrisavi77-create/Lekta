@@ -2,6 +2,7 @@ import type { FixerId } from '../fixer-registry.ts';
 
 export const REPAIR_CONTRACT_VERSION = 1 as const;
 export const REPAIR_CONTRACT_MAX_REQUESTS = 64 as const;
+export const REPAIR_CONTRACT_MAX_DOCX_BYTES = 20 * 1024 * 1024;
 export const REPAIR_CONTRACT_SIGNATURE_ALGORITHM = 'ES256-P1363' as const;
 export const REPAIR_CONTRACT_KEY_ID_PATTERN = /^[A-Za-z0-9._-]{1,80}$/;
 export const REPAIR_CONTRACT_SIGNATURE_BYTES = 64 as const;
@@ -48,6 +49,9 @@ export interface UnsignedRepairContractV1 {
   sourceSha256: string;
   sourceSize: number;
   sourceFileName: string;
+  targetSha256: string;
+  targetSize: number;
+  targetFileName: string;
   createdAt: string;
   expiresAt: string;
   engineMinVersion: string;

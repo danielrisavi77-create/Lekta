@@ -9,6 +9,7 @@ import {
 } from '../src/repair/contract';
 
 const SOURCE_BYTES = new TextEncoder().encode('PK-test-docx');
+const TARGET_BYTES = new TextEncoder().encode('PK-corrected-docx');
 
 function input(overrides: Partial<BuildRepairContractInput> = {}): BuildRepairContractInput {
   return {
@@ -16,6 +17,8 @@ function input(overrides: Partial<BuildRepairContractInput> = {}): BuildRepairCo
     userId: '22222222-2222-4222-8222-222222222222',
     sourceBytes: SOURCE_BYTES,
     sourceFileName: 'Seminar.docx',
+    targetBytes: TARGET_BYTES,
+    targetFileName: 'Seminar-popravljeno.docx',
     createdAt: new Date('2026-08-16T10:00:00.000Z'),
     expiresAt: new Date('2026-08-16T11:00:00.000Z'),
     engineMinVersion: '1.0.0',
@@ -33,6 +36,9 @@ describe('Repair Contract adapter', () => {
     expect(contract.requests[0].requestId).toBe('req-0001');
     expect(contract.sourceSize).toBe(SOURCE_BYTES.length);
     expect(contract.sourceSha256).toBe(await sha256Hex(SOURCE_BYTES));
+    expect(contract.targetSize).toBe(TARGET_BYTES.length);
+    expect(contract.targetSha256).toBe(await sha256Hex(TARGET_BYTES));
+    expect(contract.targetFileName).toBe('Seminar-popravljeno.docx');
     expect(contract.outputPolicy).toEqual({ mode: 'new-file', overwriteSource: false, suggestedFileName: 'Seminar-popravljeno.docx' });
     expect(contract.verificationPolicy.requiredGates).toEqual(['G0', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9']);
   });
@@ -104,6 +110,8 @@ describe('Repair Contract adapter', () => {
     ['userId', { userId: 'nije-uuid' }],
     ['izvorno ime', { sourceFileName: '../Seminar.docx' }],
     ['izlazno ime', { suggestedFileName: 'C:\\Temp\\Seminar.docx' }],
+    ['target ime', { targetFileName: '..\\Seminar.docx' }],
+    ['prazan target', { targetBytes: new Uint8Array() }],
     ['obrnuto vrijeme', {
       createdAt: new Date('2026-08-16T11:00:00.000Z'),
       expiresAt: new Date('2026-08-16T10:00:00.000Z'),

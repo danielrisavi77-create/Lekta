@@ -11,6 +11,7 @@ import {
 } from '../src/repair/contract';
 
 const FIXTURE_SOURCE_BYTES = new TextEncoder().encode('PK-public-repair-contract-v1');
+const FIXTURE_TARGET_BYTES = new TextEncoder().encode('PK-public-repair-contract-v1-target');
 const FIXTURE_CONFIRMATION_TEXT = 'Dopuštam promjenu velikih i malih slova u naslovima.';
 const fixtureDir = resolve(process.cwd(), 'tests', 'fixtures', 'repair-contract-v1');
 const contractPath = resolve(fixtureDir, 'valid-contract.json');
@@ -30,12 +31,15 @@ describe('javni Repair Contract v1 fixture', () => {
       jobId: '11111111-1111-4111-8111-111111111111',
       userId: '22222222-2222-4222-8222-222222222222',
       sourceFileName: 'Kalogjera - seminar Havel.docx',
-      engineMinVersion: '1.0.0',
-      engineMaxVersion: '1.0.0',
+      targetFileName: 'Kalogjera - seminar Havel-popravljeno.docx',
+      engineMinVersion: '0.1.0',
+      engineMaxVersion: '0.1.0',
       contractSignature: { algorithm: 'ES256-P1363', keyId: 'fixture-2026-08-16' },
     });
     expect(contract.sourceSize).toBe(FIXTURE_SOURCE_BYTES.length);
     expect(contract.sourceSha256).toBe(await sha256Hex(FIXTURE_SOURCE_BYTES));
+    expect(contract.targetSize).toBe(FIXTURE_TARGET_BYTES.length);
+    expect(contract.targetSha256).toBe(await sha256Hex(FIXTURE_TARGET_BYTES));
     expect(contract.requests).toEqual([
       { requestId: 'req-0001', fixerId: 'font-fixer', ruleId: 'body-font', params: { fontName: 'Times New Roman', fontSizePt: 12 } },
       { requestId: 'req-0002', fixerId: 'heading-case-fixer', ruleId: 'heading-case', params: { levels: [1, 2] } },

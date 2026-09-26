@@ -1,9 +1,10 @@
 # Repair Contract v1
 
 Repair Contract v1 je strogi, potpisani JSON wire protokol kojim Lekta opisuje unaprijed odobrene
-operacije nad jednim točno određenim DOCX dokumentom. Ugovor nije skripta, prompt ni skup
-fakultetskih pravila. Lokalni ili serverski executor smije izvršiti samo navedene i potpisane
-operacije.
+operacije nad jednim točno određenim DOCX dokumentom i kriptografski veže unaprijed generirani
+ispravljeni DOCX rezultat. Ugovor nije skripta, prompt ni skup fakultetskih pravila. Lekta mora
+izraditi target bajtove prije ugovora i potpisa; lokalni WordReplica runner zatim smije
+rekonstruirati samo taj potpisani target za taj potpisani source.
 
 Ovaj dokument opisuje protokol i javni interoperabilni fixture. Ne implementira produkcijsko
 izdavanje ugovora, entitlement, naplatu, jednokratni runner ni distribuciju aplikacije.
@@ -20,12 +21,14 @@ Runner mora za svaki posao napraviti sljedeće, ovim redoslijedom:
 4. Provjeriti `createdAt <= now < expiresAt` i da životni vijek nije dulji od lokalno dopuštenog
    maksimuma (zadano 24 sata).
 5. Provjeriti da je verzija runner enginea unutar uključivog raspona
-   `engineMinVersion..engineMaxVersion`.
-6. Prije otvaranja Worda provjeriti stvarnu veličinu source bajtova i SHA-256 cijele izvorne
-   datoteke.
-7. Izvršiti samo potpisani `requests` niz, istim redoslijedom, bez lokalnog izvođenja fakultetskih
-   pravila i bez dodavanja fixera.
-8. Pisati isključivo novu datoteku, provesti sve G0-G9 i Word-oracle provjere te source dokument
+   `engineMinVersion..engineMaxVersion` i da svaki request pripada verzioniranoj lokalnoj
+   WordReplica allow-listi.
+6. Učitati odabrani source i isporučeni target prije otvaranja Worda. Provjeriti stvarnu veličinu i
+   SHA-256 obiju cijelih datoteka prema potpisanim poljima.
+7. Tretirati potpisani `requests` niz kao audit trag odobrenih izmjena; WordReplica 0.1.0 ne izvodi
+   Lektina fakultetska pravila niti sam računa novi target.
+8. Rekonstruirati isključivo potpisani target, pisati samo novu datoteku, provesti sve G0-G9 i
+   Word-oracle provjere te source dokument
    ostaviti netaknutim.
 
 Neuspjeh bilo kojeg koraka znači fail-closed: Word se ne pokreće ili se rezultat ne isporučuje.
@@ -71,6 +74,9 @@ Svi navedeni ključevi su obvezni i dodatni ključevi nisu dopušteni.
 | `sourceSha256` | 64 lowercase heksadekadska znaka, SHA-256 cijelih source bajtova |
 | `sourceSize` | integer `>= 0`, broj source bajtova |
 | `sourceFileName` | basename 1-180 znakova, završava `.docx`; bez putanje, NUL-a, `..`, Windows rezerviranih imena i znakova `<>:"/\\|?*` |
+| `targetSha256` | 64 lowercase heksadekadska znaka, SHA-256 cijelih unaprijed generiranih target bajtova |
+| `targetSize` | positive safe integer, najviše 20 MiB, broj target bajtova |
+| `targetFileName` | siguran `.docx` basename prema istim pravilima kao `sourceFileName` |
 | `createdAt` | canonical UTC ISO-8601 zapis jednak `Date.toISOString()` rezultatu |
 | `expiresAt` | canonical UTC ISO-8601; strogo nakon `createdAt` |
 | `engineMinVersion` | SemVer `major.minor.patch`; svaki dio 0-9999, bez leading zeroa |
@@ -108,6 +114,8 @@ ili `https` URL-ove unutar propisane granice.
 Lektin issuer mora cijeli nepotpisani payload prvo provesti kroz
 `parseUnsignedRepairContractV1`. `buildUnsignedRepairContractV1` i `signRepairContractV1`
 primjenjuju istu shemu i ne smiju vratiti niti potpisati payload koji bi javni parser odbio.
+Target mora postojati prije poziva buildera; builder iz njegovih stvarnih bajtova računa
+`targetSize` i `targetSha256`, a signer ponovno potvrđuje da predani target odgovara payloadu.
 
 ### Fixer allow-lista i dopušteni top-level params ključevi
 
@@ -149,6 +157,14 @@ Za zahvate koji nose konkretne operacije ili mapiranja, request policy dodatno z
 `src/repair/contract/request-policy.ts`; executor ga ne smije proširiti lokalnom logikom.
 
 `footer-page-fixer` nije na ovoj allow-listi i vraća `standalone-fixer-denied`.
+WordReplica 0.1.0 portable allow-lista izvodi se iz ovog istog ugovornog registra. Fixture s dva
+requesta je interoperabilni primjer, a ne ograničenje sposobnosti enginea. Registar za 0.1.0 ima
+fiksirani fingerprint; dodavanje novog fixera zahtijeva novu engine-policy verziju i ne smije
+retroaktivno promijeniti značenje 0.1.0.
+
+Dodavanje obveznih target polja namjerni je atomski cutover stroge v1 sheme: stariji source-only v1
+ugovori nisu valjani prema ovoj reviziji. Lekta issuer i WordReplica receiver moraju se objaviti
+koordinirano; parser ne uvodi tihi legacy fallback.
 
 ## Potvrde i dopuštene iznimke
 
@@ -202,9 +218,9 @@ Redoslijed niza je potpisan; Lektin builder emitira `G0` do `G9` tim redom.
 ### Schema i runtime context
 
 `invalid-shape`, `unsupported-version`, `invalid-id`, `invalid-hash`, `source-size-mismatch`,
-`source-hash-mismatch`, `invalid-time`, `expired`, `lifetime-too-long`, `engine-out-of-range`,
-`request-policy`, `missing-exception`, `orphan-exception`, `unsafe-output-policy` i
-`insufficient-verification-policy`.
+`source-hash-mismatch`, `target-size-mismatch`, `target-hash-mismatch`, `invalid-time`, `expired`,
+`lifetime-too-long`, `engine-out-of-range`, `unsupported-engine-fixer`, `request-policy`,
+`missing-exception`, `orphan-exception`, `unsafe-output-policy` i `insufficient-verification-policy`.
 
 Svaki schema/context problem uz kod nosi i `path` do neispravnog polja. `request-policy` znači da
 detaljni uzrok treba uzeti iz request validatora.
@@ -242,11 +258,16 @@ source_bytes = read_exact_selected_docx()
 assert len(source_bytes) == contract.sourceSize
 assert lowercase_hex(sha256(source_bytes)) == contract.sourceSha256
 
+target_bytes = read_exact_delivered_target_docx()
+assert len(target_bytes) == contract.targetSize
+assert lowercase_hex(sha256(target_bytes)) == contract.targetSha256
+assert safe_docx_basename(contract.targetFileName)
+
 for request in contract.requests_in_original_order:
     assert request.fixerId in local_allow_list
-    execute_known_fixer(request.fixerId, request.params)
 
-save_new_file_only(contract.outputPolicy.suggestedFileName)
+reconstruct_signed_target_in_word(target_bytes)
+save_new_file_only(contract.targetFileName)
 run_required_G0_to_G9_and_word_oracle_checks()
 deliver_only_if_every_gate_passes()
 ```
@@ -258,10 +279,11 @@ izričito odabrati P-256 i SHA-256.
 
 ## Puni javni fixture
 
-Ovaj fixture koristi mali javni byte vektor `UTF8("PK-public-repair-contract-v1")`, a ne korisnički
-DOCX. Nije entitlement, nije potvrda plaćanja i ne daje pravo izvršavanja stvarnog popravka. Javni
-ključ je u `tests/fixtures/repair-contract-v1/public-key.spki.b64url`; privatni ključ nije dio
-fixturea.
+Ovaj fixture koristi male javne source i target byte vektore
+`UTF8("PK-public-repair-contract-v1")` i `UTF8("PK-public-repair-contract-v1-target")`, a ne
+korisnički DOCX. Nije entitlement, nije potvrda plaćanja i ne daje pravo izvršavanja stvarnog
+popravka. Javni ključ je u `tests/fixtures/repair-contract-v1/public-key.spki.b64url`; privatni
+ključ nije dio fixturea.
 
 ```json
 {
@@ -271,10 +293,13 @@ fixturea.
   "sourceSha256": "f2d108400a0174d8737b8529bf3956fb6108e75c303158e93ef8de799fdafcbe",
   "sourceSize": 28,
   "sourceFileName": "Kalogjera - seminar Havel.docx",
+  "targetSha256": "561a4ba09db7f3bc9a109ac02496321f8d866ececc338fc11a6fe30436977cb7",
+  "targetSize": 35,
+  "targetFileName": "Kalogjera - seminar Havel-popravljeno.docx",
   "createdAt": "2026-08-16T10:00:00.000Z",
   "expiresAt": "2026-08-16T11:00:00.000Z",
-  "engineMinVersion": "1.0.0",
-  "engineMaxVersion": "1.0.0",
+  "engineMinVersion": "0.1.0",
+  "engineMaxVersion": "0.1.0",
   "requests": [
     {
       "requestId": "req-0001",
@@ -332,7 +357,7 @@ fixturea.
   "contractSignature": {
     "algorithm": "ES256-P1363",
     "keyId": "fixture-2026-08-16",
-    "value": "kUHG4o0z2IdsccN50beFhHFId10E06jWoBmMlW-i6ODbN7IolFKU77T-HZplH_RWQPSzW3usOcJUBxyxUsxsnQ"
+    "value": "73dEJ6j4FTKMyjpe91SI_k5KOAS9Yb4PFe9TBNmebH8BtxnbkN1z2Zv9m71WRD980oCPFYclDIBbYuyqz44NTQ"
   }
 }
 ```

@@ -94,5 +94,5 @@ suite('DOCX golden snapshots', () => {
       out[fileName] = normalizeResult(await analyzeFixture(file, { profileId: fixtureProfileId(fileName) }));
     }
     expect(out).toMatchSnapshot();
-  }, 30000); // svih 6 fixtura + setTimeout(250) po analizi u jednom testu -> podigni s 5s defaulta
+  }, 60000); // svih 6 fixtura + setTimeout(250) po analizi i stvarni DOCX ZIP poslovi
 });

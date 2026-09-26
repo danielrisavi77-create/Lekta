@@ -9,7 +9,7 @@ import {
   verifyRepairContractV1,
   type RepairContractV1,
 } from '../src/repair/contract';
-import { validUnsignedContract } from './helpers/repair-contract';
+import { TEST_TARGET_BYTES, validUnsignedContract } from './helpers/repair-contract';
 
 async function ephemeralKeyPair(): Promise<CryptoKeyPair> {
   return crypto.subtle.generateKey(
@@ -21,7 +21,7 @@ async function ephemeralKeyPair(): Promise<CryptoKeyPair> {
 
 async function signedContract() {
   const pair = await ephemeralKeyPair();
-  const signed = await signRepairContractV1(validUnsignedContract(), pair.privateKey, 'test-key-2026-01');
+  const signed = await signRepairContractV1(validUnsignedContract(), TEST_TARGET_BYTES, pair.privateKey, 'test-key-2026-01');
   return { pair, signed };
 }
 
@@ -36,6 +36,9 @@ describe('Repair Contract ES256-P1363 signature', () => {
 
   it.each([
     ['sourceSize', (contract: RepairContractV1) => { contract.sourceSize += 1; }],
+    ['targetSha256', (contract: RepairContractV1) => { contract.targetSha256 = 'a'.repeat(64); }],
+    ['targetSize', (contract: RepairContractV1) => { contract.targetSize += 1; }],
+    ['targetFileName', (contract: RepairContractV1) => { contract.targetFileName = 'Drugi.docx'; }],
     ['request params', (contract: RepairContractV1) => { contract.requests[0].params.fontSizePt = 11; }],
     ['expiresAt', (contract: RepairContractV1) => { contract.expiresAt = '2026-08-16T10:30:00.000Z'; }],
     ['allowedExceptions', (contract: RepairContractV1) => {
@@ -72,7 +75,7 @@ describe('Repair Contract ES256-P1363 signature', () => {
         { requestId: 'req-0002', fixerId: 'font-fixer', ruleId: 'heading-font', params: { fontName: 'Arial', fontSizePt: 11 } },
       ],
     });
-    const signed = await signRepairContractV1(payload, pair.privateKey, 'test-key-2026-01');
+    const signed = await signRepairContractV1(payload, TEST_TARGET_BYTES, pair.privateKey, 'test-key-2026-01');
     signed.requests.reverse();
 
     expect(await verifyRepairContractV1(signed, pair.publicKey)).toEqual({ ok: false, code: 'signature-mismatch' });
@@ -114,7 +117,7 @@ describe('Repair Contract ES256-P1363 signature', () => {
   it('odbija neispravan keyId pri potpisivanju', async () => {
     const pair = await ephemeralKeyPair();
 
-    await expect(signRepairContractV1(validUnsignedContract(), pair.privateKey, 'bad key')).rejects.toThrow(/keyId/i);
+    await expect(signRepairContractV1(validUnsignedContract(), TEST_TARGET_BYTES, pair.privateKey, 'bad key')).rejects.toThrow(/keyId/i);
   });
 
   it('odbija potpisati unsigned payload koji ne prolazi javnu shemu', async () => {
@@ -122,6 +125,7 @@ describe('Repair Contract ES256-P1363 signature', () => {
 
     await expect(signRepairContractV1(
       validUnsignedContract({ jobId: 'nije-uuid' }),
+      TEST_TARGET_BYTES,
       pair.privateKey,
       'test-key-2026-01',
     )).rejects.toThrow(/contract|ugovor|neisprav/i);
@@ -133,8 +137,25 @@ describe('Repair Contract ES256-P1363 signature', () => {
     const spki = toBase64Url(new Uint8Array(await crypto.subtle.exportKey('spki', pair.publicKey)));
     const privateKey = await importRepairContractPrivateKey(pkcs8);
     const publicKey = await importRepairContractPublicKey(spki);
-    const signed = await signRepairContractV1(validUnsignedContract(), privateKey, 'imported-key');
+    const signed = await signRepairContractV1(validUnsignedContract(), TEST_TARGET_BYTES, privateKey, 'imported-key');
 
     expect(await verifyRepairContractV1(signed, publicKey)).toEqual({ ok: true });
+  });
+
+  it('odbija potpisati target bajtove koji ne odgovaraju potpisanom hashu ili velicini', async () => {
+    const pair = await ephemeralKeyPair();
+
+    await expect(signRepairContractV1(
+      validUnsignedContract(),
+      new TextEncoder().encode('corrected-targeu'),
+      pair.privateKey,
+      'test-key-2026-01',
+    )).rejects.toThrow(/target|hash/i);
+    await expect(signRepairContractV1(
+      validUnsignedContract({ targetSize: TEST_TARGET_BYTES.length + 1 }),
+      TEST_TARGET_BYTES,
+      pair.privateKey,
+      'test-key-2026-01',
+    )).rejects.toThrow(/target|velicin|size/i);
   });
 });

@@ -1,6 +1,7 @@
 import type { RepairContractV1, UnsignedRepairContractV1 } from '../../src/repair/contract';
 
 export const TEST_SOURCE_BYTES = new TextEncoder().encode('abc');
+export const TEST_TARGET_BYTES = new TextEncoder().encode('corrected-target');
 
 export function validUnsignedContract(overrides: Partial<UnsignedRepairContractV1> = {}): UnsignedRepairContractV1 {
   return {
@@ -10,6 +11,9 @@ export function validUnsignedContract(overrides: Partial<UnsignedRepairContractV
     sourceSha256: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
     sourceSize: 3,
     sourceFileName: 'Seminar.docx',
+    targetSha256: '5ee68c655a0acc4a82db8d919e8f6105d25141ef6ed826789ae58ce83b644e66',
+    targetSize: 16,
+    targetFileName: 'Seminar-popravljeno.docx',
     createdAt: '2026-08-16T10:00:00.000Z',
     expiresAt: '2026-08-16T11:00:00.000Z',
     engineMinVersion: '1.0.0',

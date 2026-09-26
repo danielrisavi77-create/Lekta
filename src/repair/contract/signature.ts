@@ -1,6 +1,6 @@
 import { canonicalUtf8 } from './canonical-json.ts';
 import { parseUnsignedRepairContractV1 } from './contract-v1.ts';
-import { fromBase64Url, toBase64Url } from './hash.ts';
+import { fromBase64Url, sha256Hex, toBase64Url } from './hash.ts';
 import {
   REPAIR_CONTRACT_KEY_ID_PATTERN,
   REPAIR_CONTRACT_SIGNATURE_ALGORITHM,
@@ -70,6 +70,7 @@ function contractBytes(payload: JsonValue): Uint8Array<ArrayBuffer> {
 
 export async function signRepairContractV1(
   payload: UnsignedRepairContractV1,
+  targetBytes: Uint8Array,
   privateKey: CryptoKey,
   keyId: string,
 ): Promise<RepairContractV1> {
@@ -78,6 +79,13 @@ export async function signRepairContractV1(
   if (!validated.ok) {
     const first = validated.issues[0];
     throw new TypeError(`Neispravan Repair Contract ${first.path}: ${first.code}`);
+  }
+  if (!(targetBytes instanceof Uint8Array)) throw new TypeError('Target bajtovi nisu zadani.');
+  if (targetBytes.length !== validated.contract.targetSize) {
+    throw new TypeError('Velicina target bajtova ne odgovara Repair Contractu.');
+  }
+  if (await sha256Hex(targetBytes) !== validated.contract.targetSha256) {
+    throw new TypeError('Hash target bajtova ne odgovara Repair Contractu.');
   }
   const signature = new Uint8Array(await crypto.subtle.sign(
     ECDSA_SHA_256,

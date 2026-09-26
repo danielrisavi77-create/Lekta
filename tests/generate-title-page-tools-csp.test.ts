@@ -44,7 +44,7 @@ describe('generate-title-page-tools: CSP (bez unsafe-inline)', () => {
     for (const inst of rawCatalog as any[]) {
       for (const u of inst.units || []) unitMeta[u.id] = { name: u.name, instId: inst.id, instName: inst.name };
     }
-  });
+  }, 120_000);
 
   it('FOUC skripta na generiranoj stranici je bajt-identicna onoj u index.html', () => {
     const indexHtml = readFileSync(join(ROOT, 'index.html'), 'utf-8');

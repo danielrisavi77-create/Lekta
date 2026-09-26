@@ -19,6 +19,7 @@ import {
 const FIXTURE_PRIVATE_KEY_PKCS8 = 'MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgeuHCl2jPCcGOUtcZBKAI53bp0yOInplM4h11YQKQck-hRANCAAQPIRYkQlJcCornZZeV3WjQJAGQh8vFidOk-p2Cgn19R2ZsRtMJLqkS4FhIr7qfIazLKA1jAMC1I4Oz4xJLNAIc';
 const FIXTURE_PUBLIC_KEY_SPKI = 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDyEWJEJSXAqK52WXld1o0CQBkIfLxYnTpPqdgoJ9fUdmbEbTCS6pEuBYSK-6nyGsyygNYwDAtSODs-MSSzQCHA';
 const SOURCE_BYTES = new TextEncoder().encode('PK-public-repair-contract-v1');
+const TARGET_BYTES = new TextEncoder().encode('PK-public-repair-contract-v1-target');
 const CONFIRMATION_TEXT = 'Dopuštam promjenu velikih i malih slova u naslovima.';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -31,10 +32,12 @@ const payload = await buildUnsignedRepairContractV1({
   userId: '22222222-2222-4222-8222-222222222222',
   sourceBytes: SOURCE_BYTES,
   sourceFileName: 'Kalogjera - seminar Havel.docx',
+  targetBytes: TARGET_BYTES,
+  targetFileName: 'Kalogjera - seminar Havel-popravljeno.docx',
   createdAt: new Date('2026-08-16T10:00:00.000Z'),
   expiresAt: new Date('2026-08-16T11:00:00.000Z'),
-  engineMinVersion: '1.0.0',
-  engineMaxVersion: '1.0.0',
+  engineMinVersion: '0.1.0',
+  engineMaxVersion: '0.1.0',
   requests: [
     { fixerId: 'font-fixer', ruleId: 'body-font', params: { fontName: 'Times New Roman', fontSizePt: 12 } },
     { fixerId: 'heading-case-fixer', ruleId: 'heading-case', params: { levels: [1, 2] } },
@@ -68,7 +71,7 @@ if (existsSync(contractPath)) {
 
 if (!contract) {
   const privateKey = await importRepairContractPrivateKey(FIXTURE_PRIVATE_KEY_PKCS8);
-  contract = await signRepairContractV1(payload, privateKey, 'fixture-2026-08-16');
+  contract = await signRepairContractV1(payload, TARGET_BYTES, privateKey, 'fixture-2026-08-16');
 }
 
 mkdirSync(fixtureDir, { recursive: true });

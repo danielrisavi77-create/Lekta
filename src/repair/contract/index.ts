@@ -5,3 +5,4 @@ export * from './hash.ts';
 export * from './request-policy.ts';
 export * from './signature.ts';
 export * from './types.ts';
+export * from './wordreplica-policy.ts';
