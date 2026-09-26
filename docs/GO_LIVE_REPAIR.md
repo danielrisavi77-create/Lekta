@@ -185,7 +185,8 @@ Naplata je iskljucena tijekom bete (odluka vlasnika 2026-09-26), pa ih dok beta 
 - [ ] `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY` (create-checkout).
 - [ ] `STRIPE_WEBHOOK_SECRET` (webhook-mor, provjera `Stripe-Signature`).
 - [ ] `STRIPE_ALLOW_TEST_MODE` samo privremeno za smoke test, u produkciji prazno.
-- [ ] `STRIPE_ACCOUNT_ID` samo uz Stripe Connect, inace prazno.
+- [ ] `STRIPE_ACCOUNT_ID` NE postavljati: Connect se ne koristi, nijedna funkcija je ne cita, a
+  preflight deploy odbija kad je postavljena.
 - [ ] Prazna obavezna tajna je fail-closed: webhook bez `STRIPE_WEBHOOK_SECRET` odbija svaki
   dogadjaj s `missing_secret`, a checkout bez kljuceva vraca `stripe_not_configured`. Deploy
   naplate ide ISKLJUCIVO kroz `npm run deploy:naplata`, koji preflightom (`npm run

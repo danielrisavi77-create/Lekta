@@ -71,7 +71,7 @@ export interface StripeEvent {
   livemode: boolean | null;
   /** Testni nacin rada. Testni dogadjaj NE SMIJE proizvesti pravo pravo pristupa. */
   testMode: boolean;
-  /** Connect racun iz payloada; prazno ako ga nema. */
+  /** Povezani (Connect) racun iz payloada; prazno ako ga nema, sto je jedino prihvatljivo (acceptEvent). */
   accountId: string;
   /** Ukupno naplaceno u centima, ili null ako ga payload ne nosi. */
   totalCents: number | null;
@@ -107,22 +107,30 @@ export function isFullRefund(ev: Pick<StripeEvent, 'refunded' | 'totalCents' | '
  * 2026-09-26).
  *
  * FAIL-CLOSED, isti duh kao prijasnji prazan `LS_STORE_ID` koji je odbijao sve: `livemode`
- * koji payload ne nosi je NEPROVJERLJIVO porijeklo, ne "vjerojatno produkcija". Provjera
- * ocekivanog Connect racuna radi se samo kad je `expectedAccountId` postavljen; prazno znaci
- * obican (ne Connect) racun, pa se preskace uz eksplicitan razlog u tipu ishoda.
+ * koji payload ne nosi je NEPROVJERLJIVO porijeklo, ne "vjerojatno produkcija".
+ *
+ * ISTI RACUN U OBJE FUNKCIJE NAPLATE (Stripe ekvivalent drugog dijela masterova 4addb5db, nalaz
+ * pregleda kruga 3, 2026-09-27). Na masteru su checkout i webhook citali istu tajnu trgovine, pa se
+ * nisu mogli razici oko toga cija je narudzba. Na Stripeu je identitet racuna odredjen kljucem:
+ * `create-checkout` stvara PaymentIntent s `STRIPE_SECRET_KEY`, bez zaglavlja `Stripe-Account`,
+ * dakle UVIJEK na vlastitom racunu, a Stripe Connect Lekta ne koristi. Dogadjaj takvog
+ * PaymentIntenta NIKAD ne nosi polje `account` (Stripe ga salje samo za dogadjaj povezanog
+ * racuna). Zato je svaki dogadjaj S poljem `account` dogadjaj koji nas checkout nije mogao
+ * stvoriti, i odbija se kao `account_mismatch`. Do kruga 3 ovdje je stajala tajna
+ * `STRIPE_ACCOUNT_ID` koju je citao samo webhook: postavljena, odbila bi SVAKU nasu kupnju
+ * (checkout je na racunu platforme, dogadjaj bez `account`), uz 200 bez retryja. Tajna je uklonjena
+ * iz obje funkcije, a preflight je odbija kad je postavljena (scripts/verify-naplata-secrets.mjs).
  */
 export function acceptEvent(
   ev: Pick<StripeEvent, 'livemode' | 'accountId'>,
-  opts: { allowTestMode: boolean; expectedAccountId?: string },
+  opts: { allowTestMode: boolean },
 ):
   | { ok: true }
   | { ok: false; reason: 'livemode_unverifiable' | 'test_mode_refused' | 'account_mismatch' } {
   if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
   if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
-  // Kad je ocekivani racun POSTAVLJEN, dogadjaj koji ga ne nosi je jednako neprihvatljiv kao
-  // dogadjaj s krivim racunom: odsutnost polja nije dokaz da je nas.
-  const expected = String(opts.expectedAccountId ?? '').trim();
-  if (expected && ev.accountId !== expected) return { ok: false, reason: 'account_mismatch' };
+  // Bilo koji povezani racun, i prazan razmak, znaci dogadjaj koji nije s naseg racuna.
+  if (String(ev.accountId ?? '') !== '') return { ok: false, reason: 'account_mismatch' };
   return { ok: true };
 }
 

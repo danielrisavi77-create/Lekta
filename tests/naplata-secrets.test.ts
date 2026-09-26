@@ -11,8 +11,10 @@
  *  1. Svaka funkcija naplate cita tocno ona Stripe imena koja runbook i preflight imenuju, i
  *     nijedna vise ne cita ime ukinutog pruzatelja.
  *  2. Preflight (`scripts/verify-naplata-secrets.mjs`) tvrdo pada na praznu ili nepostojecu
- *     obaveznu tajnu, a NE pada na izostanak neobavezne (`STRIPE_ACCOUNT_ID`). Dokazuje se nad
- *     CISTOM funkcijom, ne nad procesom.
+ *     obaveznu tajnu, a NE pada na izostanak neobavezne (`STRIPE_ALLOW_TEST_MODE`). Pada i na
+ *     POSTAVLJENU zabranjenu tajnu (`STRIPE_ACCOUNT_ID`, nalaz pregleda kruga 3): nijedna funkcija
+ *     je ne cita, a operater bi vjerovao da je Connect racun konfiguriran. Dokazuje se nad CISTOM
+ *     funkcijom, ne nad procesom.
  *  3. Preflight mjeri OKOLINU U KOJOJ EDGE FUNKCIJA RADI (Supabase Edge secrets), ne lokalnu
  *     ljusku, i nepoznatu okolinu ne tumaci kao zelenu.
  *  4. Ukljucen testni nacin (`STRIPE_ALLOW_TEST_MODE=1`) obara deploy bez izricite zastavice.
@@ -28,6 +30,10 @@ import { dirname, join, resolve } from 'node:path';
 import {
   NAPLATA_SECRETS,
   NAPLATA_OPTIONAL_SECRETS,
+  NAPLATA_FORBIDDEN_SECRETS,
+  forbiddenSecretsVerdict,
+  forbiddenEnvVerdict,
+  testModeEnvVerdict,
   TEST_MODE_SECRET,
   TEST_MODE_ON_DIGEST,
   naplataSecretsVerdict,
@@ -90,8 +96,25 @@ describe('naplata: funkcije citaju imena tajni koja runbook i preflight imenuju'
 
   it('obavezne su tocno tajna kljuca, publishable kljuc i tajna potpisa', () => {
     expect([...NAPLATA_SECRETS]).toEqual(['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY', 'STRIPE_WEBHOOK_SECRET']);
-    expect(NAPLATA_OPTIONAL_SECRETS).toContain('STRIPE_ACCOUNT_ID');
-    expect(NAPLATA_OPTIONAL_SECRETS).toContain(TEST_MODE_SECRET);
+    expect([...NAPLATA_OPTIONAL_SECRETS]).toEqual([TEST_MODE_SECRET]);
+    expect([...NAPLATA_FORBIDDEN_SECRETS]).toEqual(['STRIPE_ACCOUNT_ID']);
+  });
+
+  /** Obrat gornjeg: zabranjenu tajnu ne smije citati NIJEDNA funkcija, inace zabrana laze. */
+  it('zabranjenu tajnu ne cita nijedna funkcija naplate', () => {
+    const read = new Set([...envNames(WEBHOOK_SRC), ...envNames(CHECKOUT_SRC)]);
+    expect(NAPLATA_FORBIDDEN_SECRETS.filter((name: string) => read.has(name))).toEqual([]);
+  });
+
+  it('gard grize: webhook-mor koji opet cita STRIPE_ACCOUNT_ID se prijavi', () => {
+    // MUTACIJA u memoriji: vrati redak kakav je stajao do kruga 3.
+    const mutated = WEBHOOK_SRC.replace(
+      "const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';",
+      "const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';\nconst STRIPE_ACCOUNT_ID = Deno.env.get('STRIPE_ACCOUNT_ID') ?? '';",
+    );
+    expect(mutated).not.toBe(WEBHOOK_SRC);
+    expect(stripeSecretNameProblems({ 'webhook-mor': mutated, 'create-checkout': CHECKOUT_SRC }).join('; '))
+      .toContain('cita STRIPE_ACCOUNT_ID');
   });
 });
 
@@ -114,9 +137,19 @@ describe('preflight naplate: prazna tajna tvrdo pada', () => {
     expect(naplataSecretsVerdict(bezKljuca).missing).toEqual(['STRIPE_SECRET_KEY']);
   });
 
-  it('neobavezni STRIPE_ACCOUNT_ID koji nedostaje NE obara preflight', () => {
+  it('neobavezni STRIPE_ALLOW_TEST_MODE koji nedostaje NE obara preflight', () => {
     expect(naplataSecretsVerdict(FULL).ok).toBe(true);
-    expect(naplataSecretsVerdict({ ...FULL, STRIPE_ACCOUNT_ID: '' }).ok).toBe(true);
+    expect(naplataSecretsVerdict({ ...FULL, STRIPE_ALLOW_TEST_MODE: '' }).ok).toBe(true);
+  });
+
+  it('--env: postavljen STRIPE_ACCOUNT_ID obara preflight, prazan ili nepostojeci ne', () => {
+    expect(forbiddenEnvVerdict(FULL)).toEqual({ ok: true, present: [] });
+    expect(forbiddenEnvVerdict({ ...FULL, STRIPE_ACCOUNT_ID: '  ' }).ok).toBe(true);
+    expect(forbiddenEnvVerdict({ ...FULL, STRIPE_ACCOUNT_ID: 'acct_1Nas' })).toEqual({
+      ok: false,
+      present: ['STRIPE_ACCOUNT_ID'],
+    });
+    expect(forbiddenEnvVerdict(undefined).ok).toBe(true);
   });
 
   it('poruka imenuje SVE tajne koje nedostaju, ne samo prvu', () => {
@@ -181,6 +214,35 @@ describe('preflight naplate: mjeri Supabase Edge secrets, ne lokalnu ljusku', ()
     ]);
   });
 
+  /**
+   * Codex pregled kruga 3: redak bez digesta je nepoznata vrijednost. Prije je prolazio kao
+   * postavljen, iako se iz njega ne vidi je li tajna prazna.
+   */
+  it('obavezna tajna bez digesta je "nepoznata", ne postavljena', () => {
+    expect(supabaseSecretsVerdict([
+      { name: 'STRIPE_SECRET_KEY', digest: '11aa' },
+      { name: 'STRIPE_PUBLISHABLE_KEY', digest: '22bb' },
+      { name: 'STRIPE_WEBHOOK_SECRET', digest: '' },
+    ]).missing).toEqual([{ name: 'STRIPE_WEBHOOK_SECRET', reason: 'nepoznata' }]);
+    expect(supabaseSecretsVerdict([
+      { name: 'STRIPE_SECRET_KEY', digest: '11aa' },
+      { name: 'STRIPE_PUBLISHABLE_KEY', digest: '22bb' },
+      { name: 'STRIPE_WEBHOOK_SECRET' },
+    ]).ok).toBe(false);
+    // Tekst koji nije heksadecimalan (npr. status nakon promjene CLI izlaza) nije digest.
+    expect(supabaseSecretsVerdict([
+      { name: 'STRIPE_SECRET_KEY', digest: '11aa' },
+      { name: 'STRIPE_PUBLISHABLE_KEY', digest: '22bb' },
+      { name: 'STRIPE_WEBHOOK_SECRET', digest: 'set' },
+    ]).missing).toEqual([{ name: 'STRIPE_WEBHOOK_SECRET', reason: 'nepoznata' }]);
+    // Tablicni redak s praznim stupcem digesta daje isti ishod.
+    const bezDigesta = TABLICA.replace('99887766554433', '');
+    expect(bezDigesta).not.toBe(TABLICA);
+    expect(supabaseSecretsVerdict(parseSupabaseSecretsList(bezDigesta)).missing).toEqual([
+      { name: 'STRIPE_WEBHOOK_SECRET', reason: 'nepoznata' },
+    ]);
+  });
+
   /** Stanje tijekom bete (naplata iskljucena, tajne prazne): deploy naplate mora pasti. */
   it('beta: sve obavezne tajne prazne daju tri imenovana razloga, nikad zeleno', () => {
     const beta = NAPLATA_SECRETS.map((name: string) => `  ${name} | ${EMPTY_VALUE_DIGEST}`).join('\n');
@@ -189,10 +251,40 @@ describe('preflight naplate: mjeri Supabase Edge secrets, ne lokalnu ljusku', ()
     expect(verdict.missing).toEqual(NAPLATA_SECRETS.map((name: string) => ({ name, reason: 'prazna' })));
   });
 
-  it('neobavezni STRIPE_ACCOUNT_ID koji u projektu ne postoji ne obara presudu', () => {
+  it('BASELINE: STRIPE_ACCOUNT_ID koji u projektu ne postoji ne obara presudu', () => {
     const rows = parseSupabaseSecretsList(TABLICA);
     expect(rows.some((r: { name: string }) => r.name === 'STRIPE_ACCOUNT_ID')).toBe(false);
     expect(supabaseSecretsVerdict(rows).ok).toBe(true);
+    expect(forbiddenSecretsVerdict(rows)).toEqual({ ok: true, present: [] });
+  });
+
+  /**
+   * Nalaz pregleda kruga 3: operater slijedi stari runbook ("opcionalno STRIPE_ACCOUNT_ID") i
+   * postavi acct_... . Nijedna funkcija ga vise ne cita, pa preflight mora reci da je tajna
+   * zabranjena, a ne sutke proci.
+   */
+  it('postavljen STRIPE_ACCOUNT_ID u projektu obara presudu, postavljen na prazno ne', () => {
+    const sRacunom = `${TABLICA}\n  STRIPE_ACCOUNT_ID       | 5f5e5d5c5b5a`;
+    expect(forbiddenSecretsVerdict(parseSupabaseSecretsList(sRacunom))).toEqual({
+      ok: false,
+      present: ['STRIPE_ACCOUNT_ID'],
+    });
+    const prazan = `${TABLICA}\n  STRIPE_ACCOUNT_ID       | ${EMPTY_VALUE_DIGEST}`;
+    expect(forbiddenSecretsVerdict(parseSupabaseSecretsList(prazan)).ok).toBe(true);
+    // Redak bez digesta je nepoznata vrijednost, dakle postavljen: nepoznato nije zeleno.
+    expect(forbiddenSecretsVerdict([{ name: 'STRIPE_ACCOUNT_ID' }]).ok).toBe(false);
+    expect(forbiddenSecretsVerdict(undefined as unknown as []).ok).toBe(true);
+  });
+
+  it('CLI odbija deploy s postavljenom zabranjenom tajnom PRIJE deploya', () => {
+    const src = source('scripts/verify-naplata-secrets.mjs');
+    const provjera = src.indexOf('forbiddenSecretsVerdict(read.rows)');
+    const deploy = src.indexOf("'functions', 'deploy'");
+    expect(provjera).toBeGreaterThan(-1);
+    expect(deploy).toBeGreaterThan(provjera);
+    const mutated = src.replace('const zabranjene = forbiddenSecretsVerdict(read.rows);', 'const zabranjene = { ok: true, present: [] };');
+    expect(mutated).not.toBe(src);
+    expect(preflightSourceProblems(mutated).join('; ')).toContain('STRIPE_ACCOUNT_ID');
   });
 
   /**
@@ -244,7 +336,30 @@ describe('preflight naplate: ukljucen testni nacin obara deploy', () => {
     expect(testModeVerdict([])).toBe(false);
     expect(testModeVerdict([{ name: TEST_MODE_SECRET, digest: EMPTY_VALUE_DIGEST }])).toBe(false);
     expect(testModeVerdict([{ name: TEST_MODE_SECRET, digest: 'abcd' }])).toBe(false);
+  });
+
+  /** Codex pregled kruga 3: vrijednost koja se ne vidi mogla bi biti `1`; nepoznato nije zeleno. */
+  it('STRIPE_ALLOW_TEST_MODE bez prepoznatljivog digesta broji se kao ukljucen', () => {
+    expect(testModeVerdict([{ name: TEST_MODE_SECRET }])).toBe(true);
+    expect(testModeVerdict([{ name: TEST_MODE_SECRET, digest: '' }])).toBe(true);
+    expect(testModeVerdict([{ name: TEST_MODE_SECRET, digest: 'nije postavljeno' }])).toBe(true);
     expect(testModeVerdict(undefined as unknown as [])).toBe(false);
+  });
+
+  it('--env: ukljucen testni nacin u ljusci je prepoznat, prazan ili drugi nije', () => {
+    expect(testModeEnvVerdict({ [TEST_MODE_SECRET]: '1' })).toBe(true);
+    expect(testModeEnvVerdict({ [TEST_MODE_SECRET]: ' 1 ' })).toBe(true);
+    expect(testModeEnvVerdict({ [TEST_MODE_SECRET]: '' })).toBe(false);
+    expect(testModeEnvVerdict({ [TEST_MODE_SECRET]: '0' })).toBe(false);
+    expect(testModeEnvVerdict({})).toBe(false);
+    expect(testModeEnvVerdict(undefined)).toBe(false);
+  });
+
+  it('gard grize: --env grana bez provjere testnog nacina se prijavi', () => {
+    const src = source('scripts/verify-naplata-secrets.mjs');
+    const mutated = src.replace('if (testModeEnvVerdict(process.env)', 'if (false');
+    expect(mutated).not.toBe(src);
+    expect(preflightSourceProblems(mutated).join('; ')).toContain('--env grana preflighta ne odbija ukljucen testni nacin');
   });
 
   it('CLI odbija deploy s ukljucenim testnim nacinom PRIJE deploya, osim uz izricitu zastavicu', () => {

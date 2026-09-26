@@ -180,6 +180,11 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
 
   // Stripe PaymentIntent. Iznos je serverski (products.price_eur), metadata nosi katalozni
   // products.id po kojem webhook nalazi proizvod.
+  // RACUN: namjerno BEZ zaglavlja `Stripe-Account` (i bez `on_behalf_of`/`transfer_data`), dakle
+  // na vlastitom racunu kljuca. webhook-mor odbija svaki dogadjaj s povezanim racunom
+  // (acceptEvent, `account_mismatch`), pa bi PaymentIntent na povezanom racunu bio naplacen, a
+  // pravo pristupa nikad upisano. Stripe ekvivalent masterova 4addb5db ("isti identitet trgovine
+  // u obje funkcije"); mjeri tests/naplata-racun.test.ts.
   const stripeRes = await (deps.fetchImpl ?? fetch)('https://api.stripe.com/v1/payment_intents', {
     method: 'POST',
     headers: {

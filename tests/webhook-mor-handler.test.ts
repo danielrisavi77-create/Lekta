@@ -112,7 +112,6 @@ async function run(req: Request, resolve = baseResolver(), extra: { allowTestMod
       return db.admin;
     },
     webhookSecret: SECRET,
-    accountId: '',
     allowTestMode: extra.allowTestMode ?? false,
     now: () => NOW_MS,
     grantReferrerReward: (async (_a: unknown, _u: string, _w: string, orderId: string) => {

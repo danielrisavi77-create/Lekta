@@ -101,8 +101,9 @@ jednokratnu obavijest redovima s e-mailom kad fakultet dobije profil (dry-run po
 
 Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `DAILY_CAP`,
 `IP_HASH_SALT` (opcionalno, waitlist ip_hash salt), `STRIPE_WEBHOOK_SECRET` (+ opcionalno
-`STRIPE_ALLOW_TEST_MODE=1` i `STRIPE_ACCOUNT_ID`), te za create-checkout `STRIPE_SECRET_KEY` i
-`STRIPE_PUBLISHABLE_KEY`. Provjera `Stripe-Signature` potpisa je već implementirana
+`STRIPE_ALLOW_TEST_MODE=1`), te za create-checkout `STRIPE_SECRET_KEY` i
+`STRIPE_PUBLISHABLE_KEY`. `STRIPE_ACCOUNT_ID` se ne postavlja (Connect se ne koristi; webhook
+odbija dogadjaj povezanog racuna, a preflight naplate odbija deploy uz postavljenu tajnu). Provjera `Stripe-Signature` potpisa je već implementirana
 (`verifyStripeSignature`, timing-safe, tolerancija 300 s); dovoljno je postaviti
 `STRIPE_WEBHOOK_SECRET`. `products.mor_product_id` je NASLIJEDJEN stupac i vise se ne popunjava:
 iznos dolazi iz `products.price_eur`, a webhook proizvod trazi po `products.id` iz Stripe

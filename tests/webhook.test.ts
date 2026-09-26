@@ -296,16 +296,22 @@ describe('acceptEvent (porijeklo i vrsta dogadjaja)', () => {
     });
   });
 
-  it('odbija tudji Connect racun kad je ocekivani postavljen', () => {
-    expect(acceptEvent({ ...ok, accountId: 'acct_tudji' }, { ...OPTS, expectedAccountId: 'acct_nas' })).toEqual({
-      ok: false,
-      reason: 'account_mismatch',
-    });
-    expect(acceptEvent({ ...ok, accountId: 'acct_nas' }, { ...OPTS, expectedAccountId: 'acct_nas' })).toEqual({
-      ok: true,
-    });
-    // Odsutan racun uz postavljeno ocekivanje NIJE dokaz da je dogadjaj nas.
-    expect(acceptEvent({ ...ok, accountId: '' }, { ...OPTS, expectedAccountId: 'acct_nas' })).toEqual({
+  /**
+   * Isti racun u checkoutu i webhooku (Stripe ekvivalent drugog dijela masterova 4addb5db, nalaz
+   * pregleda kruga 3): checkout PaymentIntent stvara na vlastitom racunu, pa njegov dogadjaj NE
+   * nosi `account`. Svaki povezani racun, i onaj koji bi netko nazvao "nasim", je tudji.
+   */
+  it('odbija svaki povezani (Connect) racun, prihvaca samo dogadjaj vlastitog racuna', () => {
+    for (const accountId of ['acct_tudji', 'acct_nas', ' ']) {
+      expect(acceptEvent({ ...ok, accountId }, OPTS)).toEqual({ ok: false, reason: 'account_mismatch' });
+      expect(acceptEvent({ ...ok, accountId, eventName: 'charge.refunded' }, OPTS)).toEqual({
+        ok: false,
+        reason: 'account_mismatch',
+      });
+    }
+    expect(acceptEvent({ ...ok, accountId: '' }, OPTS)).toEqual({ ok: true });
+    // Testni nacin ne otvara povezani racun.
+    expect(acceptEvent({ ...ok, livemode: false, accountId: 'acct_x' }, { allowTestMode: true })).toEqual({
       ok: false,
       reason: 'account_mismatch',
     });
@@ -624,7 +630,7 @@ describe('povrat pod drugim imenom je dohvatljiv iz lanca odluka handlera', () =
     // MUTACIJA: tocno ponasanje acceptEventa prije ovog popravka.
     const stariGate = (
       ev: { livemode: boolean | null; accountId: string; eventName: string },
-      opts: { allowTestMode: boolean; expectedAccountId?: string },
+      opts: { allowTestMode: boolean },
     ) => {
       const origin = acceptEvent(ev, opts);
       if (!origin.ok) return origin;

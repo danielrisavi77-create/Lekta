@@ -44,7 +44,7 @@ Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) oče
       Stripe proizvode ne kreirati: cijene su samo u `products` (`src/report/pricing.ts`
       `WORK_TYPE_TIERS`); `products.mor_product_id` je naslijedjen i ne mapira se.
 - [ ] Edge tajne `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`
-      (`STRIPE_ALLOW_TEST_MODE` samo za smoke test, `STRIPE_ACCOUNT_ID` samo uz Stripe Connect).
+      (`STRIPE_ALLOW_TEST_MODE` samo za smoke test; `STRIPE_ACCOUNT_ID` se ne postavlja, Connect se ne koristi).
 - [ ] Stripe webhook na `.../functions/v1/webhook-mor` (`payment_intent.succeeded`, `charge.refunded`).
 - [ ] Redeploy `create-checkout` (deployana verzija je starija od WS-5 `tier_mismatch` enforcementa).
 - [ ] Maknuti Edge tajnu `REPAIR_FREE_MODE` i postaviti `checkoutEndpoint` u `DEFAULT_PRODUCTION_CONFIG`.

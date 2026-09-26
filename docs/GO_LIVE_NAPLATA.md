@@ -87,7 +87,9 @@ namjerno odbija deploy jer obavezne tajne nedostaju.
    dvostruki cjenik (naš i Stripeov) ne postoji i ne može se razići. Proizvod se u webhooku traži
    po `metadata[product_id]` (`products.id`), ne po naslijeđenom stupcu `mor_product_id`.
 4. **Webhook**: u **Developers → Webhooks** dodaj endpoint `…/functions/v1/webhook-mor` (ime
-   funkcije je naslijeđeno, URL se namjerno ne mijenja) i **pretplati TOČNO ova dva događaja**:
+   funkcije je naslijeđeno, URL se namjerno ne mijenja) i **pretplati TOČNO ova dva događaja**.
+   Endpoint sluša događaje **vlastitog računa** („Your account”), ne povezanih računa: događaj
+   povezanog računa nosi polje `account` i webhook ga odbija (`account_mismatch`).
 
    | Događaj | Zašto je obavezan |
    |---|---|
@@ -159,7 +161,12 @@ Env varijable (Supabase → Edge Functions → Secrets):
   odbija SVAKI događaj s razlogom `missing_secret` (401)
 - `STRIPE_SECRET_KEY` (`sk_…`) i `STRIPE_PUBLISHABLE_KEY` (`pk_…`), OBAVEZNO: bez ijednog od njih
   `create-checkout` vraća `stripe_not_configured`
-- opcionalno `STRIPE_ACCOUNT_ID` (samo uz Connect račun; prazno znači običan račun)
+- `STRIPE_ACCOUNT_ID` se **NE postavlja**. Lekta ne koristi Stripe Connect: `create-checkout`
+  PaymentIntent stvara na računu ključa `STRIPE_SECRET_KEY`, a `webhook-mor` odbija svaki događaj
+  povezanog računa (polje `account`) s razlogom `account_mismatch`. Nijedna funkcija tu tajnu ne
+  čita; ako u projektu ima vrijednost (i kad joj se vrijednost ne vidi), preflight deploy ODBIJA
+  i imenuje je (ukloni je s `supabase secrets unset STRIPE_ACCOUNT_ID`). Postavljena na prazno ne
+  smeta jer je nitko ne čita.
 - `STRIPE_ALLOW_TEST_MODE` = `1` SAMO dok traje testna kupnja (korak 7). U produkciji ostaje PRAZNO.
   Prazna vrijednost znači da događaj iz testnog načina rada ne daje pravo pristupa (audit PAY-05).
   Preflight deploy s tom zastavicom uključenom ODBIJA, osim uz izričit `-- --dopusti-testni-nacin`
@@ -174,9 +181,12 @@ npm run verify-naplata-secrets
 npm run verify-naplata-secrets -- --project-ref <ref>   # kad projekt nije povezan preko `supabase link`
 ```
 
-Izlazni kod 1 i imenovana varijabla kad tajna nedostaje ili je postavljena na prazno. Ako se popis
-uopće ne može pročitati (CLI nije instaliran, projekt nije povezan), preflight **također pada** i to
-kaže: nepoznato se ne tumači kao zeleno.
+Izlazni kod 1 i imenovana varijabla kad tajna nedostaje (`nema`), je postavljena na prazno
+(`prazna`) ili u popisu nema prepoznatljiv digest pa se ne vidi je li prazna (`nepoznata`). Isto
+vrijedi za `STRIPE_ACCOUNT_ID` s vrijednošću (zabranjena tajna) i za `STRIPE_ALLOW_TEST_MODE` koji je
+`1` ili mu se vrijednost ne vidi. Ako se popis uopće ne može pročitati (CLI nije
+instaliran, projekt nije povezan), preflight **također pada** i to kaže: nepoznato se ne tumači kao
+zeleno.
 
 Prazna vrijednost nije neutralna: `verifyStripeSignature` je fail-closed, pa prazan
 `STRIPE_WEBHOOK_SECRET` odbija SVAKI događaj, a Stripe nakon ponavljanja odustaje i kupnja ostaje
@@ -184,7 +194,13 @@ bez prava pristupa.
 
 `-- --env` mjeri **lokalnu ljusku** umjesto projekta. To je druga os i slabija tvrdnja (zeleno ondje
 ne dokazuje ništa o projektu iz kojeg `webhook-mor` radi), pa se koristi samo u CI koraku koji tajne
-sam prosljeđuje; skripta to i ispiše kao upozorenje.
+sam prosljeđuje; skripta to i ispiše kao upozorenje. I ta grana pada na postavljen `STRIPE_ACCOUNT_ID`
+i na `STRIPE_ALLOW_TEST_MODE=1` (osim uz `--dopusti-testni-nacin`).
+
+Granica preflighta: iz popisa tajni vidi se samo digest, pa preflight **ne može** provjeriti da
+`STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY` i `STRIPE_WEBHOOK_SECRET` pripadaju istom Stripe računu
+i istom načinu rada (live ili test). To se provjerava ručno pri postavljanju (korak 4) i testnom
+kupnjom (korak 7).
 
 Preflight **nije** dio `npm run check`: `check` se vrti bez živog Supabase CLI-ja i bez povezanog
 projekta, pa produkcijske tajne uopće ne vidi. Zato ga ne čuva zeleni `check` nego **put kojim se
@@ -213,7 +229,7 @@ service role):
 | `needs_manual_link` uz `outcome_detail` `missing_user_metadata` | `payment_intent.succeeded` s **potvrđenom naplatom** (`status` `succeeded`, `amount_received` > 0), ali bez `metadata[user_id]`: novac je naplaćen, a pravo nema kome pripasti (ručni Payment Link za Lektin proizvod ili izgubljena metadata) | veži ručno (postupak niže), isti dan; ERROR redak `webhook-mor needs_manual_link` je signal |
 | `ignored` uz `outcome_detail` `missing_payment_intent` | naplata ili povrat bez PaymentIntenta (naslijeđena izravna naplata iz dashboarda) | provjeri u Stripe sučelju; ako je to ipak kupnja Lektinog proizvoda, veži je ručno |
 | `ignored` uz `outcome_detail` koji počinje s `foreign_product:` | proizvod koji Lekta ne prodaje (npr. Katedra pass na istom računu) | ništa; Katedra ga knjiži sama |
-| `refused` | testni način rada ili tuđi račun (`test_mode_refused`, `livemode_unverifiable`, `account_mismatch`) | provjeri `STRIPE_ALLOW_TEST_MODE` i `STRIPE_ACCOUNT_ID` |
+| `refused` | testni način rada ili događaj povezanog računa (`test_mode_refused`, `livemode_unverifiable`, `account_mismatch`) | provjeri `STRIPE_ALLOW_TEST_MODE`; kod `account_mismatch` provjeri da endpoint sluša vlastiti račun, ne povezane račune (korak 4.4) |
 | `unknown_product` | `metadata[product_id]` nije u `products` | popravi katalog pa replayaj |
 | `failed` | upis u bazu je pao (`manual_order_insert`, `product_without_work_type`, `entitlement_insert`, `refund_pending`); događaj je potpisan i platio je, ali entitlement, manualna narudžba ili povrat nisu provedeni | provjeri `outcome_detail` za razlog i bazu, popravi pa replayaj |
 | `processed` | događaj je obrađen do kraja (kupnja, povrat, djelomični povrat ili ručno vezan redak) | ništa |

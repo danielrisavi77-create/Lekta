@@ -52,6 +52,8 @@ import {
   runbookLogNameProblems,
   webhookMorLogNames,
   naplataDeployPathProblems,
+  accountIdentityProblems,
+  checkoutAccountScopeProblems,
   readTextLf,
 } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
@@ -61,6 +63,8 @@ import { requiredTiersDrift } from './helpers/autonomy-release-tiers';
 import {
   naplataSecretsVerdict,
   supabaseSecretsVerdict,
+  forbiddenSecretsVerdict,
+  testModeEnvVerdict,
   parseSupabaseSecretsList,
   testModeVerdict,
   EMPTY_VALUE_DIGEST,
@@ -101,7 +105,7 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
-import { resolveCheckout } from '../src/report/checkout';
+import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
 import { seededProducts } from './helpers/product-seeds';
 import {
@@ -3805,7 +3809,7 @@ const MUTATIONS: Mutation[] = [
   // odbijenog porijekla nosi stavka ispod.
   {
     id: 'naplata/odbijeno-porijeklo-na-warn-razini',
-    imitates: 'testni dogadjaj ili tudji Connect racun (event_refused) spusten s ERROR na WARN: kriva konfiguracija u produkciji (STRIPE_ALLOW_TEST_MODE, STRIPE_ACCOUNT_ID) ili pokusaj s ukradenom tajnom utone u isti kanal kao pretplaceni visak',
+    imitates: 'testni dogadjaj ili tudji Connect racun (event_refused) spusten s ERROR na WARN: kriva konfiguracija u produkciji (STRIPE_ALLOW_TEST_MODE, webhook endpoint za povezane racune) ili pokusaj s ukradenom tajnom utone u isti kanal kao pretplaceni visak',
     caught: () => {
       const src = webhookMorSource();
       const mutated = src.replace("console.error('webhook-mor event_refused'", "console.warn('webhook-mor event_refused'");
@@ -3821,7 +3825,7 @@ const MUTATIONS: Mutation[] = [
       // MUTACIJA: gate koji uz porijeklo opet filtrira i vrstu (funkcija, ne tekst izvora).
       const stariGate = (
         ev: { livemode: boolean | null; accountId: string; eventName: string },
-        opts: { allowTestMode: boolean; expectedAccountId?: string },
+        opts: { allowTestMode: boolean },
       ) => {
         const origin = acceptEvent(ev, opts);
         if (!origin.ok) return origin;
@@ -3979,6 +3983,147 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => {
       const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       return src.length > 2000 && preflightSourceProblems(src).length === 0;
+    },
+  },
+
+  // --- naplata: isti Stripe racun u checkoutu i webhooku (krug 3 spajanja, 2026-09-27) ----------
+  // Stripe ekvivalent drugog dijela masterova 4addb5db ("isti identitet trgovine u obje funkcije").
+  // Izvrseni dokaz preko obje funkcije je u tests/naplata-racun.test.ts; ovdje su ciste mutacije.
+  {
+    id: 'naplata/webhook-ocekuje-racun-koji-checkout-ne-koristi',
+    imitates: 'stanje pack3 do kruga 3: webhook-mor je citao STRIPE_ACCOUNT_ID i uz postavljenu vrijednost odbijao svaki dogadjaj bez istog polja account, a create-checkout PaymentIntent stvara na vlastitom racunu, pa njegovi dogadjaji account nikad ne nose. Operater koji slijedi runbook ("opcionalno STRIPE_ACCOUNT_ID") ugasi sav prihod: 200 event_refused bez retryja',
+    caught: () => {
+      const stariGate = (ev: { livemode: boolean | null; accountId: string }, opts: { allowTestMode: boolean }) => {
+        if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
+        if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
+        const expected = 'acct_1Nas'; // postavljen STRIPE_ACCOUNT_ID
+        if (expected && ev.accountId !== expected) return { ok: false, reason: 'account_mismatch' };
+        return { ok: true };
+      };
+      return accountIdentityProblems(stariGate).some((p) => p.includes('odbija dogadjaj bez polja account'));
+    },
+    cleanBefore: () => accountIdentityProblems(acceptEvent).length === 0,
+  },
+  {
+    id: 'naplata/webhook-pusta-tudji-povezani-racun',
+    imitates: 'isti gate do kruga 3 s PRAZNIM STRIPE_ACCOUNT_ID: provjera racuna se preskakala, pa bi Connect dogadjaj povezanog racuna (endpoint pretplacen na povezane racune) s valjanim potpisom dodijelio pravo pristupa za PaymentIntent koji nas checkout nikad nije stvorio',
+    caught: () => {
+      const stariGate = (ev: { livemode: boolean | null; accountId: string }, opts: { allowTestMode: boolean }) => {
+        if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
+        if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
+        return { ok: true };
+      };
+      return accountIdentityProblems(stariGate).some((p) => p.includes('prihvaca payment_intent.succeeded s povezanim racunom'));
+    },
+    cleanBefore: () => accountIdentityProblems(acceptEvent).length === 0,
+  },
+  {
+    id: 'naplata/checkout-na-povezanom-racunu',
+    imitates: 'drugi smjer istog razilazenja: create-checkout PaymentIntent stvara sa zaglavljem Stripe-Account (ili on_behalf_of), a webhook odbija svaki dogadjaj s povezanim racunom. Kupac plati, dogadjaj stigne s account, pravo pristupa nikad ne nastane',
+    caught: () => {
+      const body = buildStripePaymentIntentParams({
+        amountCents: 999, currency: 'eur', userId: 'user-1', productId: 'slot_diplomski', referralCode: null, receiptEmail: null,
+      });
+      const headers = { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: 'Bearer x', 'Stripe-Account': 'acct_1Povezani' };
+      return checkoutAccountScopeProblems({ headers, body }).some((p) => p.includes('Stripe-Account'));
+    },
+    cleanBefore: () => {
+      const body = buildStripePaymentIntentParams({
+        amountCents: 999, currency: 'eur', userId: 'user-1', productId: 'slot_diplomski', referralCode: 'R1', receiptEmail: 'a@b.hr',
+      });
+      const headers = { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: 'Bearer x', 'Idempotency-Key': 'k' };
+      // Netrivijalnost: tijelo mora biti stvaran PaymentIntent zahtjev, ne prazan niz.
+      return body.includes('amount=999') && checkoutAccountScopeProblems({ headers, body }).length === 0;
+    },
+  },
+  {
+    id: 'naplata/funkcija-opet-cita-racun',
+    imitates: 'webhook-mor ponovno cita STRIPE_ACCOUNT_ID (redak kakav je stajao do kruga 3), a create-checkout ne: dvije funkcije iste naplate opet imaju razlicit pojam racuna, isti uzorak kao masterov kvar dvaju imena iste tajne',
+    caught: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      const webhook = readTextLf(join(dir, 'webhook-mor', 'index.ts'));
+      const checkout = readTextLf(join(dir, 'create-checkout', 'index.ts'));
+      const mutated = webhook.replace(
+        "const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';",
+        "const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';\nconst STRIPE_ACCOUNT_ID = Deno.env.get('STRIPE_ACCOUNT_ID') ?? '';",
+      );
+      if (mutated === webhook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return stripeSecretNameProblems({ 'webhook-mor': mutated, 'create-checkout': checkout })
+        .some((p) => p.includes('cita STRIPE_ACCOUNT_ID'));
+    },
+    cleanBefore: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      return stripeSecretNameProblems({
+        'webhook-mor': readTextLf(join(dir, 'webhook-mor', 'index.ts')),
+        'create-checkout': readTextLf(join(dir, 'create-checkout', 'index.ts')),
+      }).length === 0;
+    },
+  },
+  {
+    id: 'naplata/preflight-propusta-postavljen-racun',
+    imitates: 'preflight do kruga 3: STRIPE_ACCOUNT_ID vodjen kao neobavezan i nikad odbijen. Operater ga postavi po starom runbooku, deploy:naplata je zelen, a tajna ili rusi svaku kupnju (stari webhook) ili je mrtva i lazno tvrdi da je Connect racun konfiguriran',
+    caught: () => {
+      const rows = parseSupabaseSecretsList([
+        '  STRIPE_SECRET_KEY      | 1f2e',
+        '  STRIPE_PUBLISHABLE_KEY | aabb',
+        '  STRIPE_WEBHOOK_SECRET  | 9988',
+        '  STRIPE_ACCOUNT_ID      | 5f5e',
+      ].join('\n'));
+      // Stari preflight je gledao samo obavezne tajne: zelen. Novi imenuje zabranjenu.
+      return supabaseSecretsVerdict(rows).ok && forbiddenSecretsVerdict(rows).present.includes('STRIPE_ACCOUNT_ID');
+    },
+    cleanBefore: () => {
+      const rows = parseSupabaseSecretsList([
+        '  STRIPE_SECRET_KEY      | 1f2e',
+        '  STRIPE_PUBLISHABLE_KEY | aabb',
+        '  STRIPE_WEBHOOK_SECRET  | 9988',
+      ].join('\n'));
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return rows.length === 3 && forbiddenSecretsVerdict(rows).ok && preflightSourceProblems(src).length === 0;
+    },
+  },
+
+  // --- naplata: Codex pregled kruga 3 spajanja (2026-09-27), preflight ---------------------------
+  {
+    id: 'naplata/obavezna-tajna-bez-digesta-prolazi',
+    imitates: 'preflight do kruga 3: redak popisa tajni bez digesta (prazan ili neprepoznat stupac) brojao se kao postavljena tajna, pa bi preflight bio zelen iako se ne vidi je li STRIPE_WEBHOOK_SECRET prazan, a prazan znaci da webhook odbija svaki dogadjaj',
+    caught: () => {
+      const rows = [
+        { name: 'STRIPE_SECRET_KEY', digest: '11aa' },
+        { name: 'STRIPE_PUBLISHABLE_KEY', digest: '22bb' },
+        { name: 'STRIPE_WEBHOOK_SECRET', digest: '' },
+      ];
+      return supabaseSecretsVerdict(rows).missing.some(
+        (m: { name: string; reason: string }) => m.name === 'STRIPE_WEBHOOK_SECRET' && m.reason === 'nepoznata',
+      );
+    },
+    cleanBefore: () =>
+      supabaseSecretsVerdict([
+        { name: 'STRIPE_SECRET_KEY', digest: '11aa' },
+        { name: 'STRIPE_PUBLISHABLE_KEY', digest: '22bb' },
+        { name: 'STRIPE_WEBHOOK_SECRET', digest: '33cc' },
+      ]).ok,
+  },
+  {
+    id: 'naplata/testni-nacin-bez-digesta-prolazi',
+    imitates: 'preflight do kruga 3: redak STRIPE_ALLOW_TEST_MODE bez digesta nije se brojao kao ukljucen, pa bi deploy prosao iako vrijednost moze biti 1, a uz nju testni Stripe dogadjaj daje pravo pravo pristupa (PAY-05)',
+    caught: () => testModeVerdict([{ name: TEST_MODE_SECRET, digest: '' }]),
+    cleanBefore: () =>
+      !testModeVerdict([{ name: TEST_MODE_SECRET, digest: EMPTY_VALUE_DIGEST }]) && !testModeVerdict([]),
+  },
+  {
+    id: 'naplata/env-grana-bez-testnog-nacina',
+    imitates: 'preflight do kruga 3: --env grana provjeravala je samo obavezne i zabranjene tajne, pa je ljuska s STRIPE_ALLOW_TEST_MODE=1 dobila zeleno, iako uz tu zastavicu testni Stripe dogadjaj daje pravo pravo pristupa (PAY-05)',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      const mutated = src.replace('if (testModeEnvVerdict(process.env)', 'if (false');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return testModeEnvVerdict({ STRIPE_ALLOW_TEST_MODE: '1' })
+        && preflightSourceProblems(mutated).some((p) => p.includes('--env grana preflighta ne odbija ukljucen testni nacin'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return !testModeEnvVerdict({ STRIPE_ALLOW_TEST_MODE: '' }) && preflightSourceProblems(src).length === 0;
     },
   },
 

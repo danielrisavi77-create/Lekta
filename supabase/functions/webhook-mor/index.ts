@@ -19,8 +19,10 @@
 // manual_fulfillment (premium_human) -> manual_orders. Pass -> izdaje -20% kupon (coupon_grants).
 // Nepoznat proizvod -> log + 200 (bez entitlementa) da provider ne retry-a beskonacno (6.2);
 // od 2026-08-17 takav dogadjaj TRAJNO ostaje u webhook_events pa se moze replayati (PAY-06).
-// Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (livemode, Connect racun)
+// Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (livemode, povezani racun)
 // provjerava se prije ijednog upisa: potpis dokazuje samo znanje tajne (PAY-04/05).
+// Racun se NE konfigurira (nema `STRIPE_ACCOUNT_ID`): create-checkout PaymentIntent uvijek stvara
+// na vlastitom racunu kljuca, pa je svaki dogadjaj s poljem `account` tudji (acceptEvent).
 // Odluke (potpis, parsiranje, klasifikacija, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { createWebhookHandler } from './handler.ts';
@@ -36,14 +38,11 @@ const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
  * dogadjaje bilo koga, a da nitko ne zna da gate nije konfiguriran.
  */
 const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';
-/** Ocekivani Stripe Connect racun; prazno = obican racun, provjera se preskace. */
-const STRIPE_ACCOUNT_ID = Deno.env.get('STRIPE_ACCOUNT_ID') ?? '';
 
 Deno.serve(
   createWebhookHandler({
     admin: () => createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } }),
     webhookSecret: WEBHOOK_SECRET,
-    accountId: STRIPE_ACCOUNT_ID,
     allowTestMode: Deno.env.get('STRIPE_ALLOW_TEST_MODE') === '1',
   }),
 );

@@ -56,8 +56,6 @@ export interface WebhookDeps {
    * Namjerno fail-closed.
    */
   webhookSecret: string;
-  /** Ocekivani Stripe Connect racun; prazno = obican racun, provjera se preskace. */
-  accountId: string;
   /** Testni (livemode=false) dogadjaji se prihvacaju samo uz izricitu zastavicu. */
   allowTestMode: boolean;
   /** Sat u milisekundama; samo testovi ga zamjenjuju. */
@@ -314,7 +312,8 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
           provider: PROVIDER,
           event_name: ev.eventName,
           order_id: ev.orderId,
-          // Stripe nema pojam trgovine; kad dogadjaj nosi Connect racun, on ide u isti stupac.
+          // Stripe nema pojam trgovine. Dogadjaj koji nosi povezani (Connect) racun gate nize
+          // odbija, ali ga inbox cuva u istom stupcu da se vidi s kojeg je racuna dosao.
           store_id: ev.accountId || null,
           test_mode: ev.testMode,
           raw_payload: JSON.parse(raw),
@@ -358,10 +357,9 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
   // ukljucujuci refund granu. VRSTU dogadjaja ovdje NE gledamo: o njoj odlucuje klasifikator nize,
   // inace vracen novac pod imenom koje nije `charge.refunded` nikad ne bi stigao do grane koja ga
   // glasno prijavljuje (nalaz pregleda kruga 2 pri spajanju mastera, 2026-09-26).
-  const gate = acceptEvent(ev, {
-    allowTestMode: deps.allowTestMode,
-    expectedAccountId: deps.accountId,
-  });
+  // Racun se ne konfigurira: dogadjaj s bilo kojim povezanim racunom (`account`) nije nastao iz
+  // naseg checkouta, koji PaymentIntent uvijek stvara na vlastitom racunu (acceptEvent).
+  const gate = acceptEvent(ev, { allowTestMode: deps.allowTestMode });
   if (!gate.ok) {
     // 200: dogadjaj je testni ili tudji, dakle za nas trajno neobradiv. Retry ga ne bi popravio,
     // a 5xx bi providera natjerao da ga ponavlja do isteka prozora. Odbijeno porijeklo ide u ERROR,

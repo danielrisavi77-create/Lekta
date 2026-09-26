@@ -38,8 +38,15 @@ export function envNames(src: string): Set<string> {
 /** Koje Stripe tajne koja funkcija naplate MORA citati (imena iz `.env.example` i runbooka). */
 export const STRIPE_SECRETS_BY_FUNCTION: Readonly<Record<string, readonly string[]>> = Object.freeze({
   'create-checkout': Object.freeze(['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY']),
-  'webhook-mor': Object.freeze(['STRIPE_WEBHOOK_SECRET', 'STRIPE_ALLOW_TEST_MODE', 'STRIPE_ACCOUNT_ID']),
+  'webhook-mor': Object.freeze(['STRIPE_WEBHOOK_SECRET', 'STRIPE_ALLOW_TEST_MODE']),
 });
+
+/**
+ * Imena koja NIJEDNA funkcija naplate ne smije citati. `STRIPE_ACCOUNT_ID` je do kruga 3 spajanja
+ * citao samo webhook-mor, pa su se checkout (vlastiti racun) i webhook (ocekivani povezani racun)
+ * mogli razici oko identiteta racuna (Stripe ekvivalent masterova 4addb5db, drugi dio).
+ */
+export const FORBIDDEN_PAYMENT_ENV_NAMES: readonly string[] = Object.freeze(['STRIPE_ACCOUNT_ID']);
 
 /**
  * Prefiksi imena tajni ukinutog pruzatelja naplate. Namjerna iznimka od pravila da testovi vise
@@ -68,6 +75,9 @@ export function stripeSecretNameProblems(sources: Readonly<Record<string, string
     for (const name of names) {
       if (LEGACY_PAYMENT_ENV_PREFIXES.some((p) => name.startsWith(p))) {
         problems.push(`${fn}: jos cita ime ukinutog pruzatelja ${name}`);
+      }
+      if (FORBIDDEN_PAYMENT_ENV_NAMES.includes(name)) {
+        problems.push(`${fn}: cita ${name}, a racun se ne konfigurira (checkout i webhook bi se razisli)`);
       }
     }
   }
@@ -106,6 +116,19 @@ export function preflightSourceProblems(src: string): string[] {
   const deployPoziv = src.indexOf("'functions', 'deploy'");
   if (testni < 0 || (deployPoziv >= 0 && deployPoziv < testni)) {
     problems.push('preflight ne odbija ukljucen testni nacin prije deploya');
+  }
+  // Postavljen STRIPE_ACCOUNT_ID mora oboriti deploy PRIJE deploya (nalaz pregleda kruga 3):
+  // nitko ga ne cita, a operater vjeruje da je Connect racun konfiguriran.
+  const zabranjene = src.indexOf('forbiddenSecretsVerdict(read.rows)');
+  if (zabranjene < 0 || (deployPoziv >= 0 && deployPoziv < zabranjene)) {
+    problems.push('preflight ne odbija postavljenu zabranjenu tajnu (STRIPE_ACCOUNT_ID) prije deploya');
+  }
+  if (!src.includes('forbiddenEnvVerdict(process.env)')) {
+    problems.push('--env grana preflighta ne odbija postavljenu zabranjenu tajnu');
+  }
+  // I --env grana mora odbiti ukljucen testni nacin (Codex pregled kruga 3).
+  if (!src.includes('if (testModeEnvVerdict(process.env)')) {
+    problems.push('--env grana preflighta ne odbija ukljucen testni nacin');
   }
   const envGate = src.indexOf("argv.includes('--env')");
   if (envGate < 0) {
@@ -254,7 +277,7 @@ export function refundReachabilityProblems(
   parse: (payload: PovratPayload) => KlasifikatorUlaz & { livemode: boolean | null; accountId: string },
   accept: (
     ev: { livemode: boolean | null; accountId: string; eventName: string },
-    opts: { allowTestMode: boolean; expectedAccountId?: string },
+    opts: { allowTestMode: boolean },
   ) => { ok: boolean },
   classify: Klasifikator,
   notablePrefixes: readonly string[],
@@ -518,6 +541,64 @@ export function naplataDeployPathProblems(
   }
   if (/--(skip|no)-preflight/.test(preflightSrc)) {
     problems.push('preflight ima zastavicu za preskakanje, pa put deploya moze zaobici provjeru');
+  }
+  return problems;
+}
+
+/** Gate porijekla kakav `acceptEvent` jest; uzi potpis, da se mutacija radi zamjenom funkcije. */
+type GatePorijekla = (
+  ev: { livemode: boolean | null; accountId: string; eventName: string },
+  opts: { allowTestMode: boolean },
+) => { ok: boolean; reason?: string };
+
+/**
+ * ISTI RACUN U OBJE FUNKCIJE NAPLATE (Stripe ekvivalent drugog dijela masterova 4addb5db; nalaz
+ * pregleda kruga 3 spajanja, 2026-09-27).
+ *
+ * `create-checkout` PaymentIntent stvara na vlastitom racunu kljuca (bez `Stripe-Account`), pa
+ * njegovi dogadjaji NE nose polje `account`. Gate mora (1) takav dogadjaj prihvatiti, jer inace nijedna
+ * kupnja ne dobije pravo, i (2) odbiti svaki dogadjaj s povezanim racunom, jer ga nas checkout nije
+ * mogao stvoriti. Kvar koji ovo gasi: gate koji uz postavljen `STRIPE_ACCOUNT_ID` odbija nase
+ * dogadjaje (1), ili bez njega pusti tudji povezani racun (2).
+ */
+export function accountIdentityProblems(accept: GatePorijekla): string[] {
+  const problems: string[] = [];
+  const nas = { livemode: true, accountId: '', eventName: 'payment_intent.succeeded' };
+  if (!accept(nas, { allowTestMode: false }).ok) {
+    problems.push('gate odbija dogadjaj bez polja account, a upravo takve salje PaymentIntent iz naseg checkouta');
+  }
+  for (const accountId of ['acct_tudji', 'acct_1Nas', ' ']) {
+    for (const eventName of ['payment_intent.succeeded', 'charge.refunded']) {
+      const out = accept({ ...nas, accountId, eventName }, { allowTestMode: false });
+      if (out.ok) problems.push(`gate prihvaca ${eventName} s povezanim racunom "${accountId}"`);
+      else if (out.reason !== 'account_mismatch') {
+        problems.push(`gate odbija povezani racun "${accountId}" s razlogom ${String(out.reason)}, ne account_mismatch`);
+      }
+    }
+  }
+  return problems;
+}
+
+/** Zaglavlja i parametri kojima bi checkout PaymentIntent stvorio na POVEZANOM racunu. */
+export const CONNECT_MARKERS: readonly string[] = Object.freeze([
+  'stripe-account',
+  'on_behalf_of',
+  'transfer_data',
+  'application_fee_amount',
+]);
+
+/**
+ * Nalazi o STVARNO POSLANOM Stripe pozivu checkouta: nosi li ijedan trag povezanog racuna.
+ * Prima zaglavlja i tijelo iz izvrsenog handlera (tests/naplata-racun.test.ts), ne izvor.
+ */
+export function checkoutAccountScopeProblems(call: { headers: Record<string, string>; body: string }): string[] {
+  const problems: string[] = [];
+  for (const header of Object.keys(call.headers ?? {})) {
+    if (CONNECT_MARKERS.includes(header.toLowerCase())) problems.push(`checkout salje zaglavlje ${header}`);
+  }
+  const keys = [...new URLSearchParams(call.body ?? '').keys()];
+  for (const marker of CONNECT_MARKERS) {
+    if (keys.some((k) => k === marker || k.startsWith(`${marker}[`))) problems.push(`checkout salje parametar ${marker}`);
   }
   return problems;
 }

@@ -52,8 +52,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
  * popis ne moze cuvati ime koje vise nitko ne cita, `tests/naplata-secrets.test.ts` trazi da se
  * svako ime ovdje stvarno pojavi u izvoru Edge funkcije.
  *
- * NISU obavezne: `STRIPE_ACCOUNT_ID` (prazno = obican, ne Connect racun; provjera se preskace) i
- * `STRIPE_ALLOW_TEST_MODE` (u produkciji MORA biti prazno; vidi {@link testModeVerdict}).
+ * NIJE obavezna: `STRIPE_ALLOW_TEST_MODE` (u produkciji MORA biti prazno; vidi {@link testModeVerdict}).
+ * ZABRANJENA je `STRIPE_ACCOUNT_ID`; vidi {@link NAPLATA_FORBIDDEN_SECRETS}.
  */
 export const NAPLATA_SECRETS = Object.freeze([
   'STRIPE_SECRET_KEY',
@@ -62,7 +62,21 @@ export const NAPLATA_SECRETS = Object.freeze([
 ]);
 
 /** Neobavezne tajne naplate koje funkcije citaju; njihov izostanak NE obara preflight. */
-export const NAPLATA_OPTIONAL_SECRETS = Object.freeze(['STRIPE_ACCOUNT_ID', 'STRIPE_ALLOW_TEST_MODE']);
+export const NAPLATA_OPTIONAL_SECRETS = Object.freeze(['STRIPE_ALLOW_TEST_MODE']);
+
+/**
+ * Tajne koje u okolini deploya NE SMIJU imati vrijednost.
+ *
+ * `STRIPE_ACCOUNT_ID` (nalaz pregleda kruga 3 spajanja, 2026-09-27; Stripe ekvivalent drugog
+ * dijela masterova 4addb5db, "isti identitet trgovine u obje funkcije"). Do kruga 3 ju je citao
+ * SAMO `webhook-mor`: postavljena, odbijala je svaki dogadjaj bez istog polja `account`, a
+ * `create-checkout` PaymentIntent stvara na vlastitom racunu, pa njegovi dogadjaji to polje nikad
+ * ne nose. Svaka kupnja bi zavrsila kao 200 `event_refused` bez retryja, a preflight je tu tajnu
+ * vodio kao neobaveznu i bio zelen. Lekta ne koristi Stripe Connect, pa je tajna uklonjena iz obje
+ * funkcije. Ostane li postavljena u projektu, operater vjeruje da nesto konfigurira, a nitko je ne
+ * cita; zato je preflight imenuje i odbija deploy, umjesto da je sutke preskoci.
+ */
+export const NAPLATA_FORBIDDEN_SECRETS = Object.freeze(['STRIPE_ACCOUNT_ID']);
 
 /** Ime tajne koja u `webhook-mor` otvara testni nacin rada (`=== '1'`). */
 export const TEST_MODE_SECRET = 'STRIPE_ALLOW_TEST_MODE';
@@ -87,18 +101,48 @@ export const EMPTY_VALUE_DIGEST = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b9
 export const TEST_MODE_ON_DIGEST = '6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b';
 
 /**
- * Je li u okolini deploya UKLJUCEN testni nacin rada.
+ * Je li digest iz popisa tajni PREPOZNATLJIV: neprazan heksadecimalni niz. Sve drugo (prazan
+ * stupac, status ili tekst na mjestu digesta nakon promjene CLI izlaza) je nepoznata vrijednost.
+ * Namjerno ne trazi tocno 64 znaka: duljina digesta nad zivim projektom u ovoj grani NIJE
+ * izmjerena, a gard koji je uvijek crven zbog formata ne mjeri tajne (Codex pregled kruga 3).
+ *
+ * @param {unknown} digest
+ * @returns {boolean}
+ */
+export function isKnownDigest(digest) {
+  return /^[0-9a-f]+$/i.test(String(digest ?? '').trim());
+}
+
+/**
+ * Je li u okolini deploya UKLJUCEN testni nacin rada, ILI mu se vrijednost ne vidi.
  *
  * Testni Stripe dogadjaj s ispravnim potpisom bi uz tu zastavicu dodijelio PRAVO pravo pristupa
  * (audit PAY-05). Na stagingu je to namjerno, u produkciji nikad; zato ga preflight odbija, osim
  * uz izricit `--dopusti-testni-nacin`, koji je tvrdnja operatera da deploya na staging.
+ *
+ * Redak `STRIPE_ALLOW_TEST_MODE` s neprepoznatim digestom broji se kao ukljucen: vrijednost bi
+ * mogla biti `1`, a nepoznato nije zeleno (Codex pregled kruga 3 spajanja, 2026-09-27).
  *
  * @param {{ name: string; digest?: string }[]} rows
  * @returns {boolean}
  */
 export function testModeVerdict(rows) {
   const row = (Array.isArray(rows) ? rows : []).find((r) => String(r?.name ?? '') === TEST_MODE_SECRET);
-  return !!row && String(row.digest ?? '').toLowerCase() === TEST_MODE_ON_DIGEST;
+  if (!row) return false;
+  if (!isKnownDigest(row.digest)) return true;
+  return String(row.digest ?? '').trim().toLowerCase() === TEST_MODE_ON_DIGEST;
+}
+
+/**
+ * Je li u LOKALNOJ ljusci (`--env`) ukljucen testni nacin rada. Strozi od `webhook-mor`
+ * (`=== '1'`): i `1` s razmakom se broji kao ukljuceno. Bez ove provjere `--env` je bio zelen uz
+ * `STRIPE_ALLOW_TEST_MODE=1` (Codex pregled kruga 3 spajanja, 2026-09-27).
+ *
+ * @param {Record<string, string | undefined>} env
+ * @returns {boolean}
+ */
+export function testModeEnvVerdict(env) {
+  return String((env ?? {})[TEST_MODE_SECRET] ?? '').trim() === '1';
 }
 
 /**
@@ -148,21 +192,59 @@ export function parseSupabaseSecretsList(text) {
  * Supabase secret postavljen na prazno u sucelju izgleda kao da postoji, a `verifyStripeSignature`
  * ga vidi isto kao da ga nema i odbija svaki dogadjaj s `missing_secret`.
  *
+ * Redak BEZ prepoznatljivog digesta (prazan stupac ili tekst koji nije heksadecimalan, vidi
+ * {@link isKnownDigest}) je `nepoznata`, ne postavljena: bez digesta se postavljena vrijednost ne
+ * moze razlikovati od prazne, a nepoznato nije zeleno (Codex pregled kruga 3 spajanja, 2026-09-27).
+ *
  * @param {{ name: string; digest?: string }[]} rows
  * @param {readonly string[]} [required]
- * @returns {{ ok: boolean; missing: { name: string; reason: 'nema' | 'prazna' }[] }}
+ * @returns {{ ok: boolean; missing: { name: string; reason: 'nema' | 'prazna' | 'nepoznata' }[] }}
  */
 export function supabaseSecretsVerdict(rows, required = NAPLATA_SECRETS) {
   const byName = new Map(
     (Array.isArray(rows) ? rows : []).map((r) => [String(r?.name ?? ''), String(r?.digest ?? '').toLowerCase()]),
   );
-  /** @type {{ name: string; reason: 'nema' | 'prazna' }[]} */
+  /** @type {{ name: string; reason: 'nema' | 'prazna' | 'nepoznata' }[]} */
   const missing = [];
   for (const name of required) {
     if (!byName.has(name)) missing.push({ name, reason: 'nema' });
     else if (byName.get(name) === EMPTY_VALUE_DIGEST) missing.push({ name, reason: 'prazna' });
+    else if (!isKnownDigest(byName.get(name))) missing.push({ name, reason: 'nepoznata' });
   }
   return { ok: missing.length === 0, missing };
+}
+
+/**
+ * Presuda o ZABRANJENIM tajnama nad Supabase Edge secretima ({@link NAPLATA_FORBIDDEN_SECRETS}).
+ *
+ * Zabranjena tajna je postavljena kad je ima u popisu s digestom koji NIJE digest praznog stringa.
+ * Redak bez digesta (neprepoznat stupac) broji se kao postavljen: nepoznato nije zeleno.
+ *
+ * @param {{ name: string; digest?: string }[]} rows
+ * @param {readonly string[]} [forbidden]
+ * @returns {{ ok: boolean; present: string[] }}
+ */
+export function forbiddenSecretsVerdict(rows, forbidden = NAPLATA_FORBIDDEN_SECRETS) {
+  const list = Array.isArray(rows) ? rows : [];
+  const present = forbidden.filter((name) =>
+    list.some(
+      (r) => String(r?.name ?? '') === name && String(r?.digest ?? '').toLowerCase() !== EMPTY_VALUE_DIGEST,
+    ),
+  );
+  return { ok: present.length === 0, present };
+}
+
+/**
+ * Presuda o zabranjenim tajnama nad LOKALNOM ljuskom (`--env`). Prazno i sam razmak su nepostavljeno.
+ *
+ * @param {Record<string, string | undefined>} env
+ * @param {readonly string[]} [forbidden]
+ * @returns {{ ok: boolean; present: string[] }}
+ */
+export function forbiddenEnvVerdict(env, forbidden = NAPLATA_FORBIDDEN_SECRETS) {
+  const source = env ?? {};
+  const present = forbidden.filter((name) => String(source[name] ?? '').trim() !== '');
+  return { ok: present.length === 0, present };
 }
 
 /**
@@ -285,6 +367,17 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToP
       for (const name of verdict.missing) console.error(`  - ${name}`);
       process.exit(1);
     }
+    const zabranjene = forbiddenEnvVerdict(process.env);
+    if (!zabranjene.ok) {
+      console.error('[verify-naplata-secrets] LOKALNA OKOLINA (--env): postavljene su zabranjene tajne naplate:');
+      for (const name of zabranjene.present) console.error(`  - ${name} (Stripe Connect nije podrzan)`);
+      process.exit(1);
+    }
+    if (testModeEnvVerdict(process.env) && !argv.includes('--dopusti-testni-nacin')) {
+      console.error(`[verify-naplata-secrets] LOKALNA OKOLINA (--env): ${TEST_MODE_SECRET} je postavljen na 1 (testni nacin).`);
+      console.error('  U produkciji mora biti prazan. Za staging ponovi s: -- --env --dopusti-testni-nacin');
+      process.exit(1);
+    }
     console.error('[verify-naplata-secrets] UPOZORENJE: mjerena je LOKALNA ljuska (--env), ne Supabase Edge secrets.');
     console.error('  Zeleno ovdje NE dokazuje da je tajna postavljena u projektu iz kojeg webhook-mor radi.');
     console.log(`[verify-naplata-secrets] lokalna okolina: sve tajne naplate su postavljene (${NAPLATA_SECRETS.length}).`);
@@ -310,9 +403,18 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToP
       console.error(`  Postavi ih kao Supabase Edge secrets (${upute}) pa ponovi.`);
       process.exit(1);
     }
+    const zabranjene = forbiddenSecretsVerdict(read.rows);
+    if (!zabranjene.ok) {
+      // Nitko je ne cita: ostavljena, lazno tvrdi da je Connect racun konfiguriran.
+      console.error('[verify-naplata-secrets] deploy naplate ODBIJEN: postavljene su zabranjene tajne naplate:');
+      for (const name of zabranjene.present) console.error(`  - ${name}`);
+      console.error('  Lekta ne koristi Stripe Connect: create-checkout i webhook-mor rade na racunu kljuca STRIPE_SECRET_KEY.');
+      console.error('  Ukloni tajnu (supabase secrets unset <IME>) pa ponovi.');
+      process.exit(1);
+    }
     if (testModeVerdict(read.rows) && !argv.includes('--dopusti-testni-nacin')) {
       // Testni dogadjaj bi uz ovu zastavicu dodijelio pravo pravo pristupa (PAY-05).
-      console.error(`[verify-naplata-secrets] deploy naplate ODBIJEN: ${TEST_MODE_SECRET} je postavljen na 1 (testni nacin).`);
+      console.error(`[verify-naplata-secrets] deploy naplate ODBIJEN: ${TEST_MODE_SECRET} je postavljen na 1 (testni nacin) ili mu se vrijednost ne vidi.`);
       console.error('  U produkciji mora biti prazan. Za staging ponovi s: -- --dopusti-testni-nacin');
       process.exit(1);
     }
