@@ -29,16 +29,16 @@
 <style>
 @media print{.topbar,.cta,.kt-actions,.out-bar,.hero-back,.sibling,footer{display:none!important}.out-panel{position:static}}
 
-.hero h1{font-family:var(--ink-serif);font-size:clamp(28px,4.2vw,44px);line-height:1.08;letter-spacing:-.015em;margin:14px auto 12px;max-width:660px;font-weight:800}
+.hero h1{font-family:var(--display-serif);font-size:clamp(28px,4.2vw,44px);line-height:1.08;letter-spacing:-.015em;margin:14px auto 12px;max-width:660px;font-weight:400;--emph-weight:400;--emph-style:italic}
 .hero p.lead{font-size:17px;color:var(--muted);max-width:600px;margin:0 auto}
 .hero .privacy-line{display:flex;align-items:center;justify-content:center;gap:7px;margin:12px auto 0;font-size:14px;font-weight:750;color:var(--desk-ink)}
 .hero .privacy-line svg,.hero .privacy-line i{width:15px;height:15px;flex:none;color:var(--desk-muted)}
-.hero .sibling a{color:var(--brand);font-weight:750}
+.hero .sibling a{color:var(--brand);font-weight:400;font-style:italic}
 
 .section{padding:26px 0}
 .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:start}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:24px}
-.card h2{font-family:var(--ink-serif);margin:0 0 4px;font-size:19px;font-weight:800}
+.card h2{font-family:var(--display-serif);margin:0 0 4px;font-size:19px;font-weight:400;--emph-weight:400;--emph-style:italic}
 .field{margin-bottom:12px}
 .field textarea,.field select,.field input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--line-strong);border-radius:12px;background:var(--panel-2);color:var(--text);font:inherit;resize:vertical}
 .field textarea:focus,.field select:focus,.field input[type=text]:focus{outline:none;box-shadow:var(--focus);background:var(--panel);border-color:var(--brand)}
@@ -54,7 +54,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 
 .out-panel{position:sticky;top:88px}
 .kpi{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;padding:4px 0 20px;border-bottom:1px solid var(--line)}
-.kpi-num{font-family:var(--ink-serif);font-size:clamp(44px,12vw,62px);font-weight:800;color:var(--brand);line-height:.95;letter-spacing:-.025em;font-variant-numeric:tabular-nums;margin-bottom:3px}
+.kpi-num{font-family:var(--display-serif);font-size:clamp(44px,12vw,62px);font-weight:400;color:var(--brand);line-height:.95;letter-spacing:-.025em;font-variant-numeric:tabular-nums;margin-bottom:3px;--emph-weight:400;--emph-style:italic}
 .kpi-unit{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.16em}
 .kpi-hint{font-size:11px;font-weight:600;color:var(--muted)}
 .stat-list{margin:2px 0 0;padding:0}
@@ -62,21 +62,21 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 .stat-row:first-child{padding-top:14px}
 .stat-row:last-child{border-bottom:0;padding-bottom:2px}
 .stat-row dt{margin:0;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
-.stat-row dd{margin:0;font-family:var(--ink-serif);font-size:21px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
+.stat-row dd{margin:0;font-family:var(--mono);font-size:21px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
 .out-bar{display:flex;gap:10px;align-items:center;margin-top:14px}
 .note b{color:var(--text)}
 
-.sec-h{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
+.sec-h{font-family:var(--display-serif);font-size:clamp(21px,3vw,27px);font-weight:400;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px;--emph-weight:400;--emph-style:italic}
 .sec-sub{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:640px;margin:0}
 .fact-list>div{display:grid;grid-template-columns:minmax(92px,132px) 1fr;gap:18px;align-items:baseline;padding:13px 2px;border-bottom:1px solid var(--line)}
-.fact-list dt{margin:0;font-family:var(--ink-serif);font-size:16px;font-weight:800;color:var(--brand)}
+.fact-list dt{margin:0;font-family:var(--mono);font-size:16px;font-weight:800;color:var(--brand)}
 .fact-list dd{margin:0;font-size:14px;color:var(--text);line-height:1.5}
-.faq summary{list-style:none;cursor:pointer;padding:15px 2px;font-family:var(--ink-serif);font-size:16px;font-weight:700;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq summary{list-style:none;cursor:pointer;padding:15px 2px;font-family:var(--display-serif);font-size:16px;font-weight:400;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:16px;--emph-weight:400;--emph-style:italic}
 .faq details[open] summary{color:var(--brand)}
 .faq details[open] summary::after{content:"\2212";color:var(--brand)}
 .faq details p{margin:0 2px 16px;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:640px}
 
-.cta h2{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);letter-spacing:-.02em;margin:0 0 10px;font-weight:800;color:var(--text)}
+.cta h2{font-family:var(--display-serif);font-size:clamp(21px,3vw,27px);letter-spacing:-.02em;margin:0 0 10px;font-weight:400;color:var(--text);--emph-weight:400;--emph-style:italic}
 .cta{border:1px solid var(--line-strong);border-radius:18px;background:var(--panel);padding:clamp(26px,5vw,40px);text-align:center;margin:8px 0 30px}
 .cta-upsell a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:18px auto 0;max-width:760px}
@@ -85,9 +85,9 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 @media(max-width:820px){.grid{grid-template-columns:1fr}.out-panel{position:static}.hero{padding:32px 0 2px}}
 
 /* Fraunces samo na chrome naslovima (marketing i sekcije), tijelo ostaje Inter */
-.hero h1,.card h2,.sec-h,.cta h2,.faq summary{font-family:var(--display-serif)}
+.hero h1,.card h2,.sec-h,.cta h2,.faq summary{font-family:var(--display-serif);--emph-weight:400;--emph-style:italic}
 /* Potpis: proof-crveni podvlak na nazivu alata u heroju (jedan restrained akcent) */
-/* Brojevi kao podatkovna povrsina: Source Serif + tabularne znamenke */
+/* Brojevi kao podatkovna povrsina: mono (Geist Mono) + tabularne znamenke */
 .kpi-num,.stat-row dd{font-family:var(--mono);font-variant-numeric:tabular-nums}
 /* Svih 8 brojki (hero + 7 stat-row) isti lagani "flash" na promjenu vrijednosti (v. setStat
    u kartice-page.ts): dosljedan tretman, bez rucnog rAF/easing engine-a. */
@@ -101,14 +101,14 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 .card,.cta{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--info-soft:rgba(74,108,240,.08);--pass:#1E7F4F;--ok:#1E7F4F;--ok-soft:rgba(30,127,79,.12);--warn:#8A570E;--warn-strong:#8A570E;background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
 
 /* KS: tipografija i forme unutar papira */
-.card h2,.card h3,.cta h2,.cta h3{font-family:var(--display-serif);font-weight:500}
+.card h2,.card h3,.cta h2,.cta h3{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
 .card input,.card select,.card textarea,.cta input,.cta select,.cta textarea{background:#fff;border:1px solid var(--paper-line);border-radius:0;color:var(--paper-ink)}
 .card .btn-primary:disabled,.cta .btn-primary:disabled{opacity:.45;transform:none;box-shadow:2px 2px 0 var(--paper-line)}
 .card .note{border-left-color:var(--red)}
 
 /* KS: polish */
-.kpi-num{font-family:var(--display-serif);font-weight:500;letter-spacing:-.02em}
-.sec-h{font-weight:500;color:var(--desk-ink)}
+.kpi-num{font-family:var(--display-serif);font-weight:400;letter-spacing:-.02em;--emph-weight:400;--emph-style:italic}
+.sec-h{font-weight:400;color:var(--desk-ink)}
 .sec-sub{color:var(--desk-muted)}
 .faq summary{font-weight:400;color:var(--desk-ink)}
 .faq details[open] summary{color:var(--red)}

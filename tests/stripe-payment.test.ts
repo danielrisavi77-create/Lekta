@@ -215,12 +215,12 @@ describe('mountPaymentElement', () => {
       getComputedStyle: () =>
         ({
           getPropertyValue: (name: string) => (name === '--text' ? ' #123456 ' : ''),
-          fontFamily: 'Inter Tight',
+          fontFamily: '"Geist Mono", ui-monospace, monospace',
         }) as unknown as CSSStyleDeclaration,
     };
     expect(paymentAppearance(el, view)).toEqual({
       theme: 'stripe',
-      variables: { colorText: '#123456', fontFamily: 'Inter Tight' },
+      variables: { colorText: '#123456', fontFamily: '"Geist Mono", ui-monospace, monospace' },
     });
   });
 });

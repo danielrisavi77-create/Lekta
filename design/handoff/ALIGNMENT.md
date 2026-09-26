@@ -512,3 +512,189 @@ Z11 je neovisan o fontovima i može ići odmah nakon Z3.
 Z9 ovisi o Z8 (nova kartica nalaza) i Z3 (oblik eyebrowa). Z10 je neovisan i mali. Redoslijed: Z1 → Z2 → Z3 → Z7 → Z8 → Z9 → Z10, pa Z4 → Z5 → Z6.
 
 Nakon svakog zadatka snimi `/` i `/rad/` u obje teme i usporedi s `design/*.html`. Ako se neka razlika ne može riješiti bez promjene primitiva, zaustavi se i javi.
+
+
+---
+
+## Z30. Jedan skup sjena, pokreta i razmaka
+
+**Stanje.** Predlošci su imali 40 različitih sjena, 20 trajanja i 5 krivulja; ujednačeno je na skup ispod (`design/styles.css`, kartica "Tokeni · Sjene i pokret"). Repo već ima `--dur-1/2/3` i `--ease-spring` u `src/shared/motion.css`; skup ih zadržava (`--dur-2` ostaje .32s).
+
+**Rješenje.** U `src/shared/design-system.css` dodaj:
+- Sjene po razini, ne po komponenti: `--shadow-paper` (element na papiru), `--shadow-sm` (pločica, gumb na stolu), `--shadow-object` (pečat, kartica, pribor), `--shadow-sheet` (list na stolu), `--shadow-lift` (podignut list, otvorena ladica). Svaka `box-shadow` u `src/**/*.css` mapira se na jednu od pet.
+- Pokret: `--dur-1` .18s (hover, boja), `--dur-2` .32s (stanje, prozirnost), `--dur-3` .5s (ladica, list, raspored), `--dur-reveal` 1.6s (samo klizač krivo → točno i otkrivanje nalaza). Krivulje: `--ease-spring` za sve, `--ease-stamp` (blagi prebačaj) samo za pečate.
+- Razmaci: `--gap-1..7` = 4, 8, 12, 16, 24, 32, 48. Međuvrijednosti 6, 10, 14 samo za retke popisa i ikone uz tekst.
+
+**Provjera.** `tests/design-tokens.test.ts`: u `src/**/*.css` nema `box-shadow` literala ni `cubic-bezier` izvan tokena (iznimka `admin/`, `demo/`).
+
+---
+
+## Z31. Brzina i mobitel na stvarnom kodu
+
+Repo je već pažljiv (statičan hero, bez beskonačne trake, `.motion-offscreen` pauzira animacije izvan pogleda, cross-document prijelazi ugašeni zbog kvara). Efekti iz Z8 do Z29 moraju ostati u tim granicama.
+
+**Proračun (Lighthouse mobile, 4× CPU, sporo 4G):** LCP ≤ 2,5 s na `/`, `/rad/`, `/saznaj-vise/`, `/usporedba/`; INP ≤ 200 ms za klizač, ladicu i pribor; CLS ≤ 0,05; JS po ruti ≤ 170 KB gzip; fontovi ≤ 120 KB.
+
+**Pravila za efekte:**
+- Animira se samo `transform`, `opacity` i `clip-path`. Nikad `box-shadow`, `filter`, `width` ili `left` u petlji; gdje predložak animira `left` (kvačica navigacije, klizač), u kodu je `transform: translateX`.
+- Klizač krivo → točno: oba sloja su statična, pomiču se samo `clip-path` i ručka, bez reflowa teksta. Samostalni pomak pokreće `IntersectionObserver` jednom.
+- Sve što se vrti (traka nalaza, demo koji se sam popravlja, lampa) dobiva `.motion-offscreen` i staje na hover, izvan pogleda i pod `prefers-reduced-motion`.
+- Nema `backdrop-filter` na javnim stranicama.
+- Fontovi: Instrument Serif 400 + italic i Geist Mono 400/500 kao samostalno posluženi `woff2`, podskup latin + latin-ext, `font-display: swap`, `preload` samo serif 400 i mono 400; metrički fallback (`size-adjust`) da zamjena ne pomakne raspored.
+- Slike: AVIF/WebP, eksplicitni `width/height`.
+
+**Provjera.** `tests/ux-dist/perf-budget.spec.ts`: Playwright s 4× CPU usporavanjem mjeri INP za povlačenje klizača i otvaranje ladice; Lighthouse CI na četiri rute s gornjim pragovima. Ručno: jedan jeftini Android, snimka uz rezultat u PR-u.
+
+---
+
+## Z32. Ulaz kao živi list (varijanta B)
+
+**Referenca.** `design/templates/intake-live/IntakeLive.dc.html`, tweak `variant=B` (zadano). Autor je odabrao B: fakultet i rok su pribor na stolu uz list, a ne polja na listu. Zamjenjuje raspored iz Z7; copy lista (naslov, podnaslov, podnožje) ostaje iz Z7.
+
+**Redoslijed trenutaka na jednom ekranu:**
+1. **Učitavanje:** na listu se jednom pokaže 7 tragova olovke (elipsa + kurzivni natpis: margine, prored, font, broj stranice, naslovi, literatura, opseg), 2,8 s, zatim izblijede. Na mobitelu isto; nema hover ponavljanja. Na desktopu se tragovi vrate na hover lista.
+2. **Pribor uz list (desno, ispod 900px ispod lista):** kartica fakulteta s predodabranim profilom (prepoznat iz profila/ranijeg odabira) i gumbom "Potvrdi"; polje roka (datum) s kvačicom "Još ne znam rok". Kad se odabere fakultet, list promijeni unutarnju marginu i prored po tom pravilniku (`padding` i `line-height`, 0,5 s). Kad se upiše rok, na list padne mali pečat "Rok 15. 10. · 22 dana" ili "Rok nije zadan".
+3. **Obavezno prije ubacivanja:** fakultet potvrđen i (rok ili "Još ne znam rok"). Dok nije, CTA je onemogućen s natpisom što nedostaje.
+4. **Povlačenje datoteke (desktop):** `dragenter` na cijelom ekranu podiže list (`translateY(-10px) rotate(-.6deg)`, jača sjena); na `drop` se ime datoteke upisuje u zaglavlje lista slovo po slovo (`Nº 0007 · rad.docx`). Mobitel: dodir lista otvara odabir datoteke.
+5. **Provjera:** isti pečat mijenja tekst "Čeka provjeru" → "Čitam" → "Pregledano · 71", bez promjene ekrana; tanka crvena linija skeniranja ispod podnaslova.
+6. **Kraj:** ispod pečata "Klikni list za nalaz →"; klik na list otvara `/rad/`. Poveznica "Ubaci drugi rad" vraća u početno stanje.
+
+**Pokret:** samo `transform`/`opacity` (Z31); `padding` i `line-height` mijenjaju se jednom po odabiru, ne u petlji. Pod `prefers-reduced-motion` svi prijelazi su trenutni, tragovi se ne prikazuju.
+
+**Provjera.** Playwright: CTA onemogućen bez fakulteta i roka; "Još ne znam rok" ga omogućuje; drop postavlja ime datoteke; pečat prolazi tri stanja; 360px bez preklapanja.
+
+## Redoslijed i rizik (dopuna 10)
+Z32 zamjenjuje raspored Z7 i ovisi o Z13 (profil) za predodabir fakulteta.
+
+---
+
+## Z34. Rezultat: sve u jednom
+
+**Referenca.** `design/templates/result-live/ResultLive.dc.html`. Zamjenjuje stanje `blocked` iz Z8 (plan, plaćanje i gotovo ostaju iz Z8).
+
+1. **Presuda.** Traka s dokumentom, profilom i rokom iz Z32 ("Rok 14. 10. · još 21 dan · popravak oko 2 min"). Ocjena raste od 0 do 71 (1,2 s), zatim ispod legende prstena padne pečat "Nije spremno" (u toku stranice, ne preko teksta).
+2. **Prsten s dvije ocjene.** Crveni luk je ocjena sada (71), zeleni ocjena nakon plana (71 + bodovi zahvata u planu); mijenja se odmah kad se zahvat uključi ili isključi.
+3. **Kategorije kao jezičci** (Sve · Format · Struktura · Citati · Predaja) filtriraju hrpu kartica; kategorija bez nalaza pokazuje ✓ i nije klikabilna.
+4. **Stol.** Lijevo stranica rada (sticky), desno hrpa kartica. Odabir nalaza zumira stranicu na njegovo mjesto (`transform-origin` + `scale`, 0,7 s) i istakne ga. Kartice se listaju strelicama: gornja odleti ustranu, sljedeća uđe s druge strane.
+5. **Sada / Nakon plana.** Isti tekst s primijenjenim zahvatima iz plana (font, margina, prored, broj stranice); ispod stranice cedulja "Ovo dodaješ sam" za ručne nalaze.
+6. **Uključi u plan.** 4 sigurna zahvata su zadano u planu; uključivanje šalje cedulju "+ Font" lukom do prstena ili ladice. Ručni nalazi imaju plavu napomenu umjesto gumba.
+7. **Traka stranica.** 41 ćelija; crvena crta iznad = nalazi za cijeli rad, jantarna ćelija = stranica s nalazom na jednom mjestu; klik otvara taj nalaz.
+8. **Ladica plana.** Kad presuda izađe iz pogleda, pri dnu se pojavi fiksna traka "Plan popravka · N zahvata · 71 → X · 14,99 € · Napravi plan →".
+
+**Podaci.** Bodovi iz postojećeg izračuna ocjene; plafon = `repairOutlook.ceilingScore`; cijena po vrsti rada (diplomski 14,99 €).
+**Mobitel (< 900 px):** bez stranice rada; kartice, traka stranica i ladica ostaju. `prefers-reduced-motion`: bez brojanja, zumiranja i letenja.
+**Provjera.** Uključivanje zahvata mijenja zeleni luk i ladicu; filtar Citati pokazuje 1 od 1; 360 px bez preklapanja.
+
+Z34 ide nakon Z33.
+
+---
+
+## Z35. Faksimil: sve u jednom
+
+**Referenca.** `design/templates/facsimile-live/FacsimileLive.dc.html`. Zamjenjuje `Facsimile.dc.html` (Z9) na ruti faksimila.
+
+**Raspored (≥ 1180 px):** stranica rada · stupac bilješki 230 px (izvan stranice) · kartica nalaza 360 px (sticky). 760–1180 px: kartica ide ispod. < 760 px: bilješke su popis ispod stranice; nema lampe, povećala ni konca.
+
+1. **Slojevi** (Bilješke, Točke, Mjerne linije, Duh pravilnika) + zaseban prekidač **Prije / poslije**.
+   - Kad držiš miš iznad gumba ili ga fokusiraš s tipkovnicom, ispod trake izađe kartica s objašnjenjem i strelicom prema gumbu. Kartica ima svoj red (`min-height`), pa nikad ne prekriva stranicu. Tekstovi su u `FX_TIP` u predlošku; prepiši ih doslovno.
+   - Dok je miš iznad isključenog sloja, sloj se privremeno pokaže na stranici, a klik ga trajno uključuje.
+   - Na dodirnim ekranima kartica se pokaže na dodir i nestane nakon 3,5 s.
+2. **Duh pravilnika:** iscrtkani okvir tekstnog područja po pravilniku, obojeni pojas razlike u margini, linije proreda 1,5 (`repeating-linear-gradient`) i oval broja stranice. Bez teksta.
+3. **Klizač prije/poslije:** gornji sloj je popravljena stranica (sve automatske izmjene), otkriva se s `clip-path: inset(0 X% 0 0)`. Ručni nalazi su na njoj jantarno obojeni. Ručka se vuče (pointer events na ručki, ne preko cijele stranice) ili pomiče strelicama.
+4. **Lampa:** krug svjetla prati miš po stranici (`radial-gradient`, `pointer-events:none`) i tekst ostaje čitljiv. Bilješke daleko od miša blijede na 0,38, a odabrana nikad ne blijedi.
+5. **Povećalo:** kad miš 500 ms miruje nad tekstom (`[data-fx-par]`, nikad nad marginama), iznad stranice se ispiše "Ispod miša: Calibri 11 pt · prored 1,0 · lijevo", a na mjestu miša je samo prsten bez teksta. Lijevo od ručke klizača prikazuju se popravljene vrijednosti. Vrijednosti dolaze iz stvarnih stilova odlomka u dokumentu.
+6. **Konac:** SVG krivulja od svake bilješke do točke uz redak u razmaku između stranice i stupca; nit odabranog nalaza je crvena.
+7. **Kartica nalaza:** izmjereno → pravilnik; **isječak pravilnika** (članak, stranica, rečenica s valovitim crvenim podcrtom); primarni gumb "Uključi u plan · +N" (automatski) ili "Napravit ću sam" (ručni); poveznica "Pokaži popravak na stranici" samo mijenja prikaz tog mjesta i ne dira dokument.
+8. **Listanje:** strelice iznad stranice, klik na traku stranica ili povlačenje prstom. List se okrene preko stranice (WAAPI `rotateY`, 560 ms).
+9. **Red čekanja** iznad trake stranica: 6 stavki koje se prekriže kad je nalaz u planu ili označen "Napravit ću sam". Kad su svih 6 riješeni, u toku stranice padne pečat "Plan spreman", a pojave se gumb "Nastavi na plan popravka →" i redak "N zahvata u planu · 71 → X · 14,99 €".
+
+Svi pokreti koriste samo `transform`/`opacity`. Pod `prefers-reduced-motion` nema okretanja, brisanja ni pečata s animacijom.
+
+**Provjera.** Kartica objašnjenja ne prekriva stranicu ni na 1180 ni na 1440 px; povećalo se ne pojavljuje nad marginama; kad se prekriži svih 6, pojavi se pečat; na 360 px ništa se ne preklapa.
+
+Z35 ide nakon Z34 i dijeli s njim stanje plana.
+
+---
+
+## Z36. Popravak: sve u jednom
+
+**Referenca.** `design/templates/repair-live/RepairLive.dc.html`. Zamjenjuje stanja `plan`, `payment` i `done` iz Z8.
+
+**Tok.** Četiri koraka, **jedan korak po ekranu** (nema dugog skrolanja). Naprijed stranica klizne zdesna, natrag slijeva (`transform`, 0,45 s). Iznad svakog koraka je "← Natrag na …", a koraci u zaglavlju su klikabilni do najdaljeg dosegnutog. Nakon plaćanja plan je zaključan, ali se može otvoriti; gumb tada glasi "Plan je plaćen · dalje →". U zaglavlju je "Verzije · N".
+
+### 01 Plan
+- Redak "Lekta zna popraviti 18 stvari · u tvom radu treba N". Klik izvuče **ladicu** zdesna (`role="dialog"`, zatvara se klikom izvan ili tipkom Esc) s tri skupine iz `check-fixer-map.ts`:
+  - **Automatski (10):** margine, format papira, font, veličina slova, prored, poravnanje, razmak odlomaka, razmak fusnota, položaj broja stranice, prazni odlomci (`AUTO_CHECK_FIXER` + empty-paragraphs).
+  - **Uz potvrdu (8):** numeracija od uvoda, shema numeriranja, abecedni red literature, citat bez zapisa ili zapis bez citata, oznake a/b uz godinu, obavezna poglavlja, oblikovanje naslova, oblikovanje fusnota (`STRUCTURAL_CHECK_RULES` s `fixId`).
+  - **Ručno:** stilovi naslova u Wordu, natpisi tablica i slika, popisi prikaza (sve bez fixera).
+  - Kod svakog retka stoji "u tvom radu: treba" ili "u redu ✓", izvedeno iz stvarnih nalaza. Broj "18" i brojevi skupina računaju se iz mape, a ne upisuju se ručno.
+- **Automatski zahvati** su zadano uključeni (checkbox, izmjereno → pravilnik, +bodovi).
+- **Zahvati uz potvrdu** su zadano isključeni. Kad ih uključiš, ispod se otvori pregled PRIJE / POSLIJE s napomenom i gumbima "Potvrđujem · +N" i "Odustani". Tek potvrđeni zahvat ulazi u plan i na račun ("· potvrđeno"). Tekst pregleda dolazi iz stvarnog prijedloga fixera.
+- **Mala stranica** uz popis (str. 7) odmah pokazuje uključene zahvate: font, veličinu, marginu, prored, poravnanje i broj stranice.
+- **Račun** (papir s perforacijom gore): redak po zahvatu s 0,00 €, jedna cijena "Diplomski rad · N zahvata · 14,99 €" (cijena po vrsti rada iz Z24), a ocjena 71 → X se broji. Ispod su:
+  - **Opseg:** "41 → X stranica" (prored +14, margina +1, veličina +2, razmak odlomaka −2; zamijeni stvarnom procjenom iz layouta ako postoji).
+  - **Ušteda · procjena** s načinom računanja: 3 min/str. za prored i marginu, 1 min/str. za font i veličinu, 20 min za poravnanje i razmake, 10 min za numeraciju, 5 min za zapis u literaturi. Uvijek s napomenom da stvarno vrijeme ovisi o korisniku.
+  - **Jamstvo:** "ako ponovna provjera nađe grešku u formi koju smo popravili, vraćamo 14,99 €" i "ponovna provjera istog rada je besplatna do [rok ili 30 dana]".
+- Okvir "Ovo radiš sam" nabraja ručne nalaze, a ispod su "Što radimo / Što ne radimo".
+
+### 02 Plaćanje
+- Stripe Payment Element na listu: Apple Pay, Google Pay, kartica.
+- **Kartica koja se crta** iznad polja: vrsta i boja kartice (iz Stripeova `change` eventa, `brand`), ime i datum dok se tipkaju. **Broj je uvijek •••• •••• •••• ••••**; stranica ga ne vidi i ne smije ga prikazati.
+- Kad plaćanje prođe: list se kratko strese (`rpShake`, 0,42 s), poziva se `navigator.vibrate(40)` na mobitelu i udari žig "Plaćeno · datum". Lijevo se od lista otkine **potvrda** (isprekidani gornji rub) s brojem, iznosom, vrstom kartice •••• i QR kodom koji vodi na PDF računa. QR u predlošku je samo placeholder; generiraj pravi.
+- Nakon 1,7 s ekran sam prelazi na korak 03.
+
+### 03 Popravak
+- Stranica rada se popravlja pred očima, redom po zahvatima u planu (oko 2 s po zahvatu); popis zahvata se kvači.
+- **Stroj:** traka od 41 minijature klizi kroz crveni okvir u sredini. Lijevo su stare (gusti redci, uska margina), a desno popravljene. Iznad trake: "STROJ · STR. N / 41".
+- **Dnevnik izmjena** (žuta cedulja) ispisuje se slovo po slovo s crvenim kursorom i prikazuje zadnjih 6 redaka. Redci dolaze iz stvarnog izvještaja fixera.
+- Brojač "N odlomaka popravljeno od 1.284" (stvarni broj odlomaka).
+- Traka napretka prati stvarni tok popravka. Animacija je samo prikaz i ne smije lagati o tome gdje je popravak.
+
+### 04 Gotovo
+- **Prsten ocjene** se napuni od 71 do X (1,3 s), a tek tada padne pečat "Forma popravljena · još N tebi" ili, nakon ponovne provjere, "Spremno za predaju". Ispod naslova je rok iz Z32: "Rok 14. 10. · još 21 dan", odnosno "spremno 21 dan prije roka".
+- **Usporedba** s prekidačem **Klizač / Svjetlosni stol**:
+  - **Klizač:** kao Z35.
+  - **Svjetlosni stol:** donji list je stari (v3), gornji popravljeni, na osvijetljenoj podlozi. Gornji se vuče ustranu (pointer events, rotacija proporcionalna pomaku) i otpušten se vrati.
+  - Ispod je traka od 41 stranice.
+- Tablica prije/poslije za zahvate iz plana; "0 novih problema".
+- "↓ Preuzmi popravljeni .docx": kartica s imenom datoteke odleti prema traci preuzimanja. Uz to je "Izvještaj o izmjenama (PDF)".
+- **Pismo mentoru:** sažetak izmjena složen iz plana i gumb "Kopiraj za e-mail" (`navigator.clipboard`, pa "Kopirano ✓").
+- **"Još ti ostaje":** cedulje ručnih nalaza s praznim kvadratićem. **Kvačicu stavlja samo ponovna provjera nove verzije**, korisnik je ne može sam označiti.
+- **Ponovna provjera (besplatna do roka ili 30 dana):** "Ubaci novu verziju (v4)" → "Čitam …" → cedulje se prekriže jedna po jedna → pečat "Spremno za predaju" → stari list odleti u "Verzije" (WAAPI na klonu) i brojač verzija naraste.
+
+**Za provjeru u kodu (ne pretpostavljaj):**
+1. Radi li `citation-bibliography-sync-fixer` za citat bez zapisa tako da doda zapis s praznim poljima (predložak prikazuje "Novak, [ime]. (2022). [Naslov djela]. [Mjesto: Izdavač]." i napomenu "izvor ne izmišljamo")? Ako radi drugačije, prepiši PRIJE / POSLIJE i napomenu prema stvarnom ponašanju. Nikad ne prikazuj izmišljen naslov ili izdavača.
+2. Je li jamstvo povrata novca upisano u uvjetima korištenja (Z20)? Ako nije, dodaj ga ondje prije nego što se pojavi na računu.
+3. Bodovi po zahvatu (predložak: 4, 2, 4, 4, 2, 2 · 3, 2) moraju dolaziti iz stvarnog izračuna ocjene. Plafon mora biti isti kao na Rezultatu (Z34).
+
+**Mobitel (< 900 px):** jedan stupac, račun ispod popisa, mala stranica iznad popisa; ladica je preko cijele širine. `prefers-reduced-motion`: bez klizanja, tresenja, stroja, brojanja i letenja; svako stanje se prikaže odmah.
+
+**Provjera.**
+- Zahvat uz potvrdu nije na računu dok nije potvrđen.
+- Natrag s plaćanja vraća na plan bez gubitka odabira; nakon plaćanja plan je samo za čitanje.
+- Broj kartice se nigdje ne ispisuje.
+- Ručna cedulja se ne može označiti bez ponovne provjere.
+- Na 360 px ništa se ne preklapa, uključujući ladicu i potvrdu.
+
+Z36 ide nakon Z35. Za plaćanje ovisi o Z24 (cijene), a za jamstvo o Z20 (uvjeti).
+
+---
+
+## Z33. Analiza: rezultat se gradi uživo
+
+**Referenca.** `design/templates/analysis/Analysis.dc.html` (zadano `variant: A`; B i C su samo izolirani efekti za usporedbu).
+
+**Raspored.** Gore stol: stranica rada (58 %) + stupac cedulja (180 px) lijevo, desno sitno profil i pravilnik, ocjena koja pada od 100, popis 8 provjera (○ → ● pulsira → ✓/✗), stranice · riječi · izvori koji rastu, preostale sekunde i "Javi mi kad bude gotovo" (Notification API, pita dopuštenje na klik). Ispod: ekran rezultata je otvoren od početka (presuda, kategorije, 6 mjesta za nalaze).
+
+**Tijek (sve troje zajedno):**
+1. Svjetlo lampe prolazi preko lista kao skener; stranice se listaju u hrpi iza.
+2. Kad se provjera završi, na listu se olovkom nacrta mjerna linija s brojkom (margina 2,0 cm · treba 2,5, prored 1,0, font, broj stranice).
+3. Svaki nalaz: crveni trag na desnom rubu lista + žuta cedulja u stupcu uz list. Njegovo mjesto u rezultatu čeka iscrtkano ("Nalaz 3 · čeka provjeru").
+4. Nakon ~0,9 s cedulja **odleti** lukom s lista na svoje mjesto (Web Animations API na klonu, `transform`/`opacity` only), a tamo se naslov nalaza **ispiše slovo po slovo**; izmjereno → pravilnik se pojavi kad je naslov gotov.
+5. Na kraju se tragovi s ruba skupe u pečat "6 nalaza · 71", presuda se otipka s crvenim kursorom, pa stranica sama skrola do presude.
+Pod `prefers-reduced-motion` sve je odmah u završnom stanju. Na < 980 px nema stupca cedulja; nalazi se samo ispisuju na mjestu.
+
+**Provjera.** Snimke u 0 s, 6 s, 12 s i na kraju; 360 px bez preklapanja; reduced-motion prikazuje završno stanje.
+
+## Redoslijed i rizik (dopuna 11)
+Z33 zamjenjuje stanje `scanning` iz Z8 i ide nakon Z32.

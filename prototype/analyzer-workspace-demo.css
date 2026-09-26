@@ -28,7 +28,7 @@ body {
     radial-gradient(circle at 9% 78%, rgba(255, 214, 150, .06), transparent 25%),
     var(--desk, #191512);
   color: var(--workspace-ink);
-  font-family: var(--sans, "Inter Tight", Arial, sans-serif);
+  font-family: var(--sans, "Geist Mono", ui-monospace, monospace);
 }
 
 button, select { font: inherit }

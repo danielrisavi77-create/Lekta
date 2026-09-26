@@ -151,8 +151,10 @@
   max-width: 18ch;
   font-family: var(--display-serif, Georgia, serif);
   font-size: clamp(2rem, 5.2vw, 3.6rem);
-  font-weight: 500;
+  font-weight: 400;
   line-height: .98;
+  --emph-weight: 400;
+  --emph-style: italic;
   letter-spacing: -.02em;
   text-wrap: balance;
 }
@@ -207,8 +209,10 @@
   background: var(--paper, #F7F3E8);
   font-family: var(--display-serif, Georgia, serif);
   font-size: 3.1rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .cockpit-ring[data-verdict-tone='blocked'] { --ring-tone: var(--ck-red); }
 .cockpit-ring[data-verdict-tone='needs-work'] { --ring-tone: var(--ck-amber); }
@@ -454,8 +458,10 @@
   margin: 0;
   font-family: var(--display-serif, Georgia, serif);
   font-size: 1.15rem;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -.01em;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 
 /* ---- Nalazi ----------------------------------------------------------------- */
@@ -525,8 +531,10 @@
   margin: 0;
   font-family: var(--display-serif, Georgia, serif);
   font-size: 1.08rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.25;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .cockpit-finding__answer {
   display: grid;
@@ -870,15 +878,19 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 }
 .fsum-naslov {
   margin: 0 0 12px; font-family: var(--display-serif, Georgia, serif);
-  font-weight: 500; font-size: clamp(1.45rem, 2.8vw, 2.15rem); line-height: 1.15;
+  font-weight: 400; font-size: clamp(1.45rem, 2.8vw, 2.15rem); line-height: 1.15;
   letter-spacing: -.01em; color: var(--paper-ink, #23201B);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .fsum-razine { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px }
 .fsum-razina {
   display: grid; grid-template-columns: 1.6rem 1fr; align-items: baseline; gap: .5rem;
-  font: 400 15px/1.45 var(--ui, system-ui); color: var(--paper-ink, #23201B);
+  font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
-.fsum-razina b { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right }
+.fsum-razina b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; text-align: right;--emph-weight:600;--emph-style:normal }
 .fsum-razina[data-ton='blok'] b { color: var(--red-deep, #8E2A22) }
 .fsum-razina[data-ton='dorada'] b { color: var(--warn, #A9741B) }
 .fsum-razina[data-ton='provjera'] b { color: var(--paper-muted, #6E6558) }
@@ -888,10 +900,12 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
  * kad se ne zbroji, izgleda kao kvar. */
 .fsum-auto {
   margin: 12px 0 0; padding-top: 11px; border-top: 1px solid var(--paper-line, #E0D8C8);
-  font: 400 15px/1.45 var(--ui, system-ui); color: var(--paper-ink, #23201B);
+  font: 400 15px/1.45 var(--display-serif, system-ui); color: var(--paper-ink, #23201B);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .fsum-auto span { color: var(--paper-muted, #6E6558); font-size: 13px }
-.fsum-auto b { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F) }
+.fsum-auto b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; color: var(--pass, #2E8B5F);--emph-weight:600;--emph-style:normal }
 
 /* `.fsum-ocjena*` je UKLONJEN (popravak drugog kruga): jedini pozivatelj `findingSummaryHtml` u
  * kokpitu uvijek prosljeduje `{ ocjena: false }`, jer ocjenu od Z8 crta prsten presude, ne
@@ -1126,3 +1140,43 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 .mt-status { font-size: .85rem; margin: .3rem 0; }
 .mt-zadatak[data-verification="formal-check-passed"] .mt-strojno { color: var(--ck-green-text, #1a7f5a); }
 .mt-prijedlog { font-size: .85rem; }
+
+/* ==========================================================================
+   Z7 SERIF GOVORI (opcija a)
+
+   Zadani glas stranice je mono (`body` u `page-chrome.css`). Serif se zato DODJELJUJE, i to
+   samo onome sto govori: naslovi, presuda, dugi opisi i odlomci, pravni tekst, brojka presude
+   i cijena. Oznake, cipovi, statusi, gumbi, navigacija, mjere i brojevi u tablicama ostaju mono.
+
+   Sve sto je ovdje nabrojano dobiva rez 400, jer Instrument Serif drugi rez nema. Gdje je
+   tezina bila jedini nositelj hijerarhije, zamjenjuje ju kurziv (vidi blok o naglasku).
+   Gard: `tests/design-tokens.test.ts`.
+   ========================================================================== */
+
+.cockpit-header p,
+.cockpit-hero__copy p,
+.cockpit-authority p,
+.cockpit-finding__answer p,
+.result-renderer-v1 .result-cockpit-advanced-head p,
+.rs--pitanje p,
+.outlook__manual li { font-family: var(--display-serif, Georgia, serif); font-weight: 400;--emph-weight:400;--emph-style:italic }
+
+/* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
+   Globalno mono pravilo (`strong,b{font-weight:600}`) sada stoji u `design-system.css`
+   (blok "NAGLASAK PUTUJE S GLASOM"), page-app.css ga vise nema. Ne vracaj ga u page-app.css: taj list se
+   ucitava POSLIJE design-system.css s istom specificnoscu, pa bi njegovo pravilo pobijedilo
+   var-mehanizam i vratilo tezinu 600 u serif, tocno kvar koji je popravljen u ovom krugu. */
+.cockpit-header p strong,
+.cockpit-header p b,
+.cockpit-hero__copy p strong,
+.cockpit-hero__copy p b,
+.cockpit-authority p strong,
+.cockpit-authority p b,
+.cockpit-finding__answer p strong,
+.cockpit-finding__answer p b,
+.result-renderer-v1 .result-cockpit-advanced-head p strong,
+.result-renderer-v1 .result-cockpit-advanced-head p b,
+.rs--pitanje p strong,
+.rs--pitanje p b,
+.outlook__manual li strong,
+.outlook__manual li b{font-weight:400;font-style:italic}

@@ -5,11 +5,12 @@
  * koji boota svaka ruta. Ponasanje je u `src/shared/site-chrome.ts`, markup je statican i jednak
  * po stranicama (jednakost mjeri `tests/site-chrome.test.ts`).
  *
- * PISMA: opcija (b), BEZ novih webfontova. Predlozak crta Instrument Serif + Geist Mono; ovdje
- * su preslikani na `var(--display-serif)` (Newsreader) i `var(--ui)` (Inter Tight) uz mjeru
- * 11 do 11.5px i razmak slova, koji je uloga mono glasa u ovom sustavu. `var(--mono)` se NE
- * koristi: jedan list vrijedi za sve rute, a ulaz `/` mono namjerno ne ucitava
- * (`tests/entry-fonts.test.ts`), pa bi obitelj ovdje tiho padala na sustavni monospace.
+ * PISMA: Z7 opcija (a), odluka vlasnika 2026-09-26. Predlozak crta Instrument Serif + Geist Mono
+ * i list ih sada crta DOSLOVNO: `var(--display-serif)` je Instrument Serif, a `var(--ui)` je alias
+ * za `var(--mono)`, dakle Geist Mono, na svakoj ruti ukljucivo ulaz `/` (oba glasa ucitava
+ * `fonts-core.ts` preko `ui-boot`). Oznake i dalje nose mjeru 11 do 11.5px i razmak slova.
+ * Poziv ostaje `var(--ui)` a ne `var(--mono)`: ime kaze ULOGU (glas sucelja), a token odlucuje
+ * pismo, pa buduca promjena glasa sucelja ne trazi prepisivanje ovog lista.
  *
  * RADIUSI: 2px (gumb je pecat, dijeli rub s papirom), pill samo za korake i znacke.
  */
@@ -156,7 +157,7 @@ header.site-chrome--scrolled {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.site-chrome__score { font-family: var(--display-serif); font-size: 16px; color: var(--desk-ink); flex: none; }
+.site-chrome__score { font-family: var(--display-serif); font-size: 16px; color: var(--desk-ink); flex: none; --emph-weight: 400; --emph-style: italic; }
 
 /* `host.hidden` (site-chrome.ts, faza `scanning` bez koraka) postavlja atribut `[hidden]`, ali
    autorski `display: flex` NIZE u ovom listu je jednake specificnosti (0,1,0) kao `[hidden]` i
@@ -345,6 +346,8 @@ header.site-chrome--scrolled {
   font-family: var(--display-serif);
   font-size: 22px;
   line-height: 1.1;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .site-chrome__sheet-note {
   font-family: var(--ui);

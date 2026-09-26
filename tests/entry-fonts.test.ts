@@ -1,8 +1,14 @@
-import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { collectStaticGraph, packageImports } from './helpers/module-graph';
+import {
+  LICENCE, SVI_ULAZI, deklariraneObitelji, listoviSWebfontom, preloadObrasci, problemiFontova,
+  problemiGlasovaUlaza, problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada,
+  problemiRuta, problemiTokena, woff2Metrike, zabranjenaImena, GLASOVI, fontFaceBlokovi, prvaObiteljTokena,
+  webfontObitelji, problemiDvaProlaza404,
+} from './helpers/font-voices';
+import { KRAJ_404, OZNAKA_404, fallbackFaces, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfonts.mjs';
 
 /**
  * KOJE SE OBITELJI CRTAJU NA ULAZU `/`.
@@ -44,7 +50,7 @@ const SUSTAVNE = new Set([
  * Gard inace tvrdi tocno suprotno ("ime bez ijednog @font-face je uvijek kvar"), i to s razlogom:
  * preglednik tiho uzme sljedecu obitelj. Ovdje je to POSLJEDICA KOJU SE ZELI, a ne promasaj:
  * OpenDyslexic i Atkinson Hyperlegible se ne smiju skidati svima koji ih ne trebaju, a lanac
- * zavrsava na `var(--ui)`, koji JEST ucitan. Iznimka je zato imenovana i uska, ne prosirenje
+ * od Z7 zavrsava na sistemskom sansu (`--ui` je sada mono, a mono za citanje nije olaksanje). Iznimka je zato imenovana i uska, ne prosirenje
  * `SUSTAVNE`: bilo koje trece ime i dalje pada. Gard nad krajem lanca:
  * `tests/display-settings.test.ts`.
  */
@@ -214,32 +220,25 @@ export function provjeriGlasove(ulaz: Ulaz): { nalazi: Nalaz[]; obitelji: Set<st
   return { nalazi, obitelji };
 }
 
-/** Ime obitelji iz stvarnog `@fontsource` paketa, ne iz pogodjenog imena specifikatora. */
-function obiteljIzPaketa(specifier: string): string | null {
-  const kandidati = [
-    resolve(ROOT, 'node_modules', specifier),
-    resolve(ROOT, 'node_modules', specifier, 'index.css'),
-  ];
-  const put = kandidati.find((p) => existsSync(p) && p.endsWith('.css'));
-  if (!put) return null;
-  const m = readFileSync(put, 'utf8').match(/font-family:\s*['"]([^'"]+)['"]/);
-  return m ? m[1] : null;
+/** Sadrzaj svakog CSS lista u statickom grafu ulaza. */
+function cssGrafa(ulaz: string): string[] {
+  return [...collectStaticGraph(resolve(ROOT, ulaz))].filter((p) => p.endsWith('.css')).map((p) => readFileSync(p, 'utf8'));
 }
 
 function ulazSaDiska(): Ulaz {
-  const graf = [...collectStaticGraph(ULAZ)];
-  const ucitane = new Set<string>();
-  for (const specifier of packageImports(ULAZ)) {
-    if (!specifier.startsWith('@fontsource')) continue;
-    const obitelj = obiteljIzPaketa(specifier);
-    if (obitelj) ucitane.add(obitelj);
-  }
+  const cssTekstovi = cssGrafa('src/routes/intake/main.ts');
   return {
-    cssTekstovi: graf.filter((p) => p.endsWith('.css')).map((p) => readFileSync(p, 'utf8')),
+    cssTekstovi,
     html: readFileSync(resolve(ROOT, 'index.html'), 'utf8'),
-    ucitane,
+    // Obitelj je "ucitana" kad za nju u grafu postoji @font-face: webfont (`url()`) ili metricki
+    // zamjenski glas (`local()`). Oba su deklaracije koje preglednik zna razrijesiti.
+    ucitane: deklariraneObitelji(cssTekstovi),
   };
 }
+
+const FONTOVI_CSS = resolve(ROOT, 'src/assets/fonts/fonts.css');
+
+/** Svi ulazi proizvoda koji crtaju sucelje zive u `helpers/font-voices.ts` (`SVI_ULAZI`). */
 
 describe('glasovi ulaza /', () => {
   it('svaki font token dohvatljiv s ulaza je definiran i ima ucitanu obitelj', () => {
@@ -247,39 +246,31 @@ describe('glasovi ulaza /', () => {
     expect(nalazi, nalazi.map((n) => `${n.vrsta}: ${n.selektor} -- ${n.detalj}`).join('\n')).toEqual([]);
   });
 
-  it('ulaz ucitava TOCNO dva glasa: Newsreader govori, Inter Tight oznacava', () => {
-    // BROJ JE OSTAO DVA I KROZ Z7, iako je papir ulaza preslozen u obrazac i time dobio mete koje
-    // `design/README.md` drzi podatkovnim glasom (broj lista, oznake zaglavlja, pecat, brojevi
-    // koraka). Prvi prolaz Z7 je zbog njih uveo treci glas i ovu tvrdnju prosirio na tri imena;
-    // pregled je to odbio, jer nalog Z7 izricito kaze "NE dodaj nikakav webfont", pa je gard bio
-    // prilagodjen promjeni umjesto obrnuto. Mete se zato crtaju `var(--ui)`-jem uz mjeru (11px),
-    // razmak slova i rez; ako vlasnik ikad odluci drukcije, mijenja se OVA tvrdnja, svjesno.
-    const { ucitane } = ulazSaDiska();
-    expect([...ucitane].sort()).toEqual(['Inter Tight Variable', 'Newsreader Variable']);
+  it('ulaz ucitava TOCNO dva glasa: serif govori, mono oznacava', () => {
+    // IMENA SE IZVODE IZ `src/assets/fonts/fonts.css`, NE PREPISUJU: skup webfontova koji ulaz
+    // ucitava JEDNAK je skupu koji list fontova deklarira, i ima tocno dva clana (Z7 opcija a).
+    // Cisti dio i sentinel nad citacem: `problemiGlasovaUlaza`; mutacije `z7a/treci-glas-na-ulazu`
+    // i `z7a/citac-glasova-ulaza-slijep` u `tests/gate-mutations.test.ts`.
+    expect(problemiGlasovaUlaza(readFileSync(FONTOVI_CSS, 'utf8'), ulazSaDiska().cssTekstovi)).toEqual([]);
   });
 
-  it('podatkovni glasovi NE ulaze u graf ulaza', () => {
-    // Source Serif 4 i IBM Plex Mono imaju posao na `/rad/` i alat-stranicama, ne ovdje. Bez ove
-    // tvrdnje bi ih jedan uvoz vratio, i traka s brojkama bi opet dobila treci glas.
-    const graf = [...collectStaticGraph(ULAZ)].map((p) => p.split(/[\\/]/).join('/'));
-    expect(graf.filter((p) => p.endsWith('/src/shared/fonts-document.ts'))).toEqual([]);
-    expect(graf.some((p) => p.endsWith('/src/shared/fonts-core.ts'))).toBe(true);
-    // IMENOVANA ZABRANA ZA MODUL KOJI JE POSTOJAO. Prvi prolaz Z7 je mono doveo kroz zaseban
-    // `src/shared/fonts-data.ts`, dakle mimo glasa dokumenta, pa ga tvrdnja iznad ne bi vidjela.
-    // Modul je uklonjen; ova tvrdnja cuva da se ne vrati sporednim vratima.
-    expect(graf.filter((p) => p.endsWith('/src/shared/fonts-data.ts'))).toEqual([]);
-    const { ucitane } = ulazSaDiska();
-    expect([...ucitane]).not.toContain('Source Serif 4 Variable');
-    expect([...ucitane]).not.toContain('IBM Plex Mono');
+  it('nijedna ruta ne ucitava fontove mimo `fonts-core.ts`, i nijedna ne uvozi font kao paket', () => {
+    // ZASEBAN MODUL ZA "PODATKOVNE GLASOVE" VISE NE POSTOJI (Z7): dvije obitelji nosi svaka ruta.
+    // Ime se i dalje imenuje: ovo je jedini nacin da se ne vrati tiho, s vlastitim uvozima.
+    // Uz to fontovi od Z7(a) NISU paketi nego vendorirane datoteke, pa `@fontsource` uvoz u grafu
+    // znaci da je netko vratio ovisnost koju dijeljeni node_modules ne smije nositi (F19).
+    // Mutacije (`z7a/fontsource-css-u-grafu-rute`, `z7a/ukinut-modul-glasova-vracen`,
+    // `z7a/ruta-bez-fonts-core`) idu kroz ISTI citac grafa nad diskom s jednom datotekom
+    // izmijenjenom u memoriji, pa citac koji preskace `.css` specifikatore ne moze ostati slijep.
+    const problemi = SVI_ULAZI.flatMap((ulaz) => problemiGrafaFontova(
+      ulaz, [...collectStaticGraph(resolve(ROOT, ulaz))], packageImports(resolve(ROOT, ulaz)),
+    ));
+    expect(problemi).toEqual([]);
   });
 
-  it('rute s dokumentima I DALJE nose podatkovne glasove', () => {
-    // Suzavanje ulaza ne smije osiromasiti `/rad/`: ondje mono nosi ocjene i sifre pravila, a
-    // Source Serif zrcali Wordov izlaz u pregledima.
-    for (const ulaz of ['src/routes/workspace/main.ts', 'src/tools/citat-page.ts']) {
-      const graf = [...collectStaticGraph(resolve(ROOT, ulaz))].map((p) => p.split(/[\\/]/).join('/'));
-      expect(graf.some((p) => p.endsWith('/src/shared/fonts-document.ts')), ulaz).toBe(true);
-    }
+  it('SVE rute nose ISTE dvije obitelji', () => {
+    // Mutacije: `z7a/ruta-bez-glasova` i `z7a/treci-glas-na-ruti`.
+    expect(problemiRuta(new Map(SVI_ULAZI.map((ulaz) => [ulaz, cssGrafa(ulaz)] as const)))).toEqual([]);
   });
 
   it('nijedan token ni u jednom listu vise ne imenuje Caveat', () => {
@@ -295,21 +286,14 @@ describe('glasovi ulaza /', () => {
 
   // --- CIJELI PROIZVOD, NE SAMO ULAZ ---------------------------------------------------------
 
-  /** Svaka obitelj za koju IJEDAN modul u `src/` uvozi `@fontsource` paket. */
+  const hodajSrc = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = resolve(dir, e.name);
+    return e.isDirectory() ? hodajSrc(p) : [p];
+  });
+
+  /** Svaka obitelj za koju IJEDAN list u `src/` ima @font-face (webfont ili zamjenski). */
   function sveUcitaneObitelji(): Set<string> {
-    const ucitane = new Set<string>();
-    const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-      const p = resolve(dir, e.name);
-      return e.isDirectory() ? hodaj(p) : [p];
-    });
-    for (const p of hodaj(resolve(ROOT, 'src'))) {
-      if (!/\.(ts|tsx|mts)$/.test(p)) continue;
-      for (const m of readFileSync(p, 'utf8').matchAll(/from\s+['"](@fontsource[^'"]+)['"]|import\s+['"](@fontsource[^'"]+)['"]/g)) {
-        const obitelj = obiteljIzPaketa(m[1] || m[2]);
-        if (obitelj) ucitane.add(obitelj);
-      }
-    }
-    return ucitane;
+    return deklariraneObitelji(hodajSrc(resolve(ROOT, 'src')).filter((p) => p.endsWith('.css')).map((p) => readFileSync(p, 'utf8')));
   }
 
   /**
@@ -374,7 +358,14 @@ describe('glasovi ulaza /', () => {
     //   goli `monospace`  na citat.html (`<code>` bez ijednog pravila -> UA Courier New)
     // Nijedan od njih nije bio na ulazu, pa ih guard nad `/` po konstrukciji nije mogao vidjeti.
     const ucitane = sveUcitaneObitelji();
-    expect(ucitane.size, 'nula ucitanih obitelji znaci da citanje paketa ne radi, ne da ih nema').toBeGreaterThan(2);
+    // SENTINEL, NE OPIS STANJA: nula obitelji znaci da citanje @font-face pravila ne radi, pa bi
+    // cijeli gard prosao vakuumski. Uz njega stoji IMENOVANA tvrdnja o tome KOJE su: dva glasa i
+    // po jedan metricki zamjenski glas za svaki lokalni font (Z7 opcija a, `fonts.css`).
+    expect(ucitane.size, 'nula ucitanih obitelji znaci da citanje @font-face ne radi, ne da ih nema').toBeGreaterThan(0);
+    expect([...ucitane].sort()).toEqual([
+      'Geist Mono', 'Geist Mono Fallback', 'Geist Mono Fallback Courier',
+      'Instrument Serif', 'Instrument Serif Fallback', 'Instrument Serif Fallback Times',
+    ]);
 
     const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
       const p = resolve(dir, e.name);
@@ -386,6 +377,75 @@ describe('glasovi ulaza /', () => {
 
     const nalazi = imenaBezFonta(listovi, ucitane);
     expect(nalazi, 'ime bez ijednog @font-face je uvijek kvar: preglednik tiho uzme sljedecu obitelj').toEqual([]);
+  });
+
+  // --- UKLONJENE OBITELJI: ime se ne smije vratiti nijednim putem --------------------------
+  //
+  // Popis imena i cisti dio garda zive u `tests/helpers/font-voices.ts`, jer istu funkciju
+  // mutira i `tests/gate-mutations.test.ts`.
+
+  /** Sve datoteke proizvoda u kojima se ime obitelji uopce moze pojaviti. */
+  function datotekeProizvoda(): Array<{ ime: string; tekst: string }> {
+    const hodaj = (dir: string): string[] => {
+      if (!existsSync(dir)) return [];
+      return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+        const put = resolve(dir, e.name);
+        if (e.isDirectory()) return e.name === 'node_modules' ? [] : hodaj(put);
+        return [put];
+      });
+    };
+    const korijeni = ['src', 'rad', 'saznaj-vise', 'moji-radovi', 'public', 'scripts', 'prototype'];
+    const putevi = korijeni.flatMap((k) => hodaj(resolve(ROOT, k)));
+    putevi.push(resolve(ROOT, 'vite.config.ts'));
+    // Sve HTML stranice u korijenu (ulaz, alati, SEO stranice), osim interne konzole: `verification.html`
+    // ne ide u javni build (DEPLOY=1 je izostavlja), ne ucitava nijedan webfont i njezine tokene seli Z30.
+    for (const e of readdirSync(ROOT, { withFileTypes: true })) {
+      if (e.isFile() && e.name.endsWith('.html') && e.name !== 'verification.html') putevi.push(resolve(ROOT, e.name));
+    }
+    return putevi
+      .map((p) => ({ p, ime: p.slice(ROOT.length + 1).split(/[\\/]/).join('/') }))
+      // IZUZECA SU IMENOVANA, NE PRESUCENA:
+      //   scripts/demo-video/  scena za snimanje promo videa, s vlastitim samostalnim rezovima. Nije
+      //                        ruta proizvoda i ne ide u bundle; prelazak scene na nove glasove je
+      //                        zaseban posao (vidi izvjestaj Z7(a)).
+      //   package.json         stari font paketi OSTAJU kao ovisnosti dok se ne uklone
+      //                        koordinirano, jer je node_modules dijeljen (F19). Zato se ni ne cita.
+      .filter(({ ime }) => !ime.startsWith('scripts/demo-video/'))
+      .filter(({ p }) => /\.(css|ts|tsx|mts|mjs|js|html|json)$/.test(p) && existsSync(p))
+      .map(({ p, ime }) => ({ ime, tekst: readFileSync(p, 'utf8') }));
+  }
+
+  it('Z7: nijedna uklonjena obitelj se ne imenuje nigdje u proizvodu', () => {
+    const datoteke = datotekeProizvoda();
+    // SENTINEL: prazan obilazak bi "prosao" bez ijedne procitane datoteke.
+    expect(datoteke.length, 'nula datoteka znaci da obilazak ne radi, ne da su ciste')
+      .toBeGreaterThan(50);
+    for (const nuzna of ['src/shared/design-system.css', 'scripts/generate-legal-pages.mjs', 'public/404.html', 'vite.config.ts', 'index.html', 'kartice.html']) {
+      expect(datoteke.some((d) => d.ime === nuzna), `${nuzna} nije procitan`).toBe(true);
+    }
+    expect(zabranjenaImena(datoteke), 'uklonjena obitelj se vratila u proizvod').toEqual([]);
+  });
+
+  it('kontrola i mutacija: gard vidi svaki od pet oblika povratka', () => {
+    // BASELINE: tekst bez ijednog zabranjenog imena mora biti cist, inace bi "prolazio" i gard
+    // koji vristi na sve.
+    expect(zabranjenaImena([{ ime: 'a.css', tekst: ':root{--mono:"Geist Mono",monospace}' }]))
+      .toEqual([]);
+    // MUTACIJE: po jedna za svaki put kojim se ime vraca.
+    expect(zabranjenaImena([{ ime: 'a.css', tekst: '.x{font-family:"Newsreader Variable",serif}' }]))
+      .toEqual(['a.css: Newsreader']);
+    expect(zabranjenaImena([{ ime: 'b.ts', tekst: "import '@fontsource-variable/inter-tight';" }]))
+      .toEqual(['b.ts: inter-tight']);
+    expect(zabranjenaImena([{ ime: 'c.json', tekst: '"@fontsource/ibm-plex-mono": "^5.2.7"' }]))
+      .toEqual(['c.json: ibm-plex']);
+    expect(zabranjenaImena([{ ime: 'd.html', tekst: '<p style="font-family:Source Serif 4">x</p>' }]))
+      .toEqual(['d.html: Source Serif']);
+    expect(zabranjenaImena([{ ime: 'e.css', tekst: '.hand{font:500 24px Caveat,cursive}' }]))
+      .toEqual(['e.css: Caveat']);
+    // KONTROLA: gard trazi DOSLOVNO ime, pa ne pada na tudju rijec koja ga sadrzi u drugom smislu
+    // (`currency-caveat` je razred autoriteta izvora, ne pismo).
+    expect(zabranjenaImena([{ ime: 'f.ts', tekst: "'official-source-with-currency-caveat'" }]))
+      .toEqual([]);
   });
 
   // --- NEGATIVNE KONTROLE: gard bez dokaza da grize ne racuna se -----------------------------
@@ -597,57 +657,209 @@ describe('glasovi ulaza /', () => {
 });
 
 /**
- * FONTOVI SU OPCIJA (b): Newsreader / Inter Tight / IBM Plex Mono, bez novih webfontova.
- * `Instrument Serif` i `Geist Mono` se NIKAD ne smiju pojaviti kao DEKLARIRANA obitelj.
+ * Z7 OPCIJA (a): Instrument Serif i Geist Mono SU glasovi proizvoda.
  *
- * STARI KRITERIJ je bio `grep -rn 'Instrument|Geist' = 0` nad cijelim stablom, i bio je krivo
- * formuliran: nasao je 13 LEGITIMNIH pogodaka koji nisu font-family/font deklaracije -- dva stara
- * komentara "Editorial Instrument" u `page-app.css` (naziv CSS sloja, ne fonta) i namjerne
- * mutacije u `tests/intake-layout.test.ts` koje UPRAVO OVAJ razred kvara podmecu da dokazu da
- * drugi gard (`entry-fonts` sam) pada na njima. Obican `grep -rn` je i nedeterministican izvan
- * ovog repozitorija (ovisi o cwd-u, lokalnim iskljucenjima); `git grep` nad TRACKANIM stablom je
- * deterministican i gadja samo `src/**.css`.
+ * OBRNUT GARD. Pod opcijom (b) (commit 45e88fd1) ovdje je stajala zabrana: nijedna font
+ * deklaracija u `src/` CSS-u ne smije imenovati te dvije obitelji. Odluka vlasnika 2026-09-26
+ * ("z7:a") tu je odluku ukinula, pa je kvar sada OBRNUT: token koji ih NE imenuje, list fontova
+ * koji krsi Z31, ili preload koji nosi vise od dva reza.
  *
- * ISPRAVAN KRITERIJ: nijedna `font-family`/`font` DEKLARACIJA u `src/**.css` ne imenuje te dvije
- * obitelji, i `package.json` nema `@fontsource/instrument-serif` ni `geist-mono` kao ovisnost.
+ * Paket i dalje NE SMIJE biti ovisnost: fontovi su vendorirani u `src/assets/fonts/`, jer je
+ * node_modules dijeljen izmedju sesija i `npm install` bi drugima srusio build (F19).
+ *
+ * Svaka tvrdnja ovdje ima cist baseline i mutaciju u `tests/gate-mutations.test.ts` (id `z7a/...`),
+ * ukljucivo tri gornja garda nad rutama (dva glasa, graf bez font paketa, iste obitelji). Sentinel
+ * citaca metrika (`woff2Metrike`) grize kroz `z7a/size-adjust-bez-preracuna`, koja pada samo ako
+ * citac vrati stvarne metrike.
  */
-describe('Instrument Serif / Geist Mono nikad kao deklarirana obitelj (v2 kriterij)', () => {
-  function gitGrepFontDeklaracije(): string[] {
-    try {
-      const izlaz = execFileSync('git', [
-        'grep', '-nIE',
-        '(^|[;{])\\s*font(-family)?\\s*:[^;{}]*(Instrument Serif|Geist Mono)',
-        '--', 'src/**/*.css', 'src/*.css',
-      ], { cwd: ROOT, encoding: 'utf8' });
-      return izlaz.split('\n').filter(Boolean);
-    } catch (e: any) {
-      // `git grep` vraca exit 1 kad NEMA pogodaka (to je ocekivano, zeljeno stanje), a bilo koji
-      // drugi izlazni kod je stvarna greska alata (npr. van git stabla) koju gard mora prijaviti.
-      if (typeof e?.status === 'number' && e.status === 1) return [];
-      throw e;
+describe('Z7(a): Instrument Serif i Geist Mono su glasovi proizvoda (obrnut gard opcije b)', () => {
+  const MAPA = resolve(ROOT, 'src/assets/fonts');
+  const datoteke = (): Map<string, Uint8Array> =>
+    new Map(readdirSync(MAPA).map((ime) => [ime, new Uint8Array(readFileSync(resolve(MAPA, ime)))]));
+
+  it('tokeni glasa u izvoru i u svakom svijetu s vlastitim tokenima pocinju s dva glasa', () => {
+    // Izvor istine mora definirati sva tri tokena.
+    expect(problemiTokena(readFileSync(resolve(ROOT, 'src/shared/design-system.css'), 'utf8'))).toEqual([]);
+    // Zrcalo i svjetovi s vlastitim tokenima (admin, demo) definiraju samo dio; provjerava se ono
+    // sto definiraju, a nedefiniran token ("null") nije nalaz jer ga ondje nasljedjuje izvor.
+    let definiranih = 0;
+    for (const list of ['src/shared/page-chrome.css', 'src/admin/admin-dashboard.css', 'src/demo/demo.css']) {
+      const problemi = problemiTokena(readFileSync(resolve(ROOT, list), 'utf8'));
+      definiranih += 3 - problemi.filter((p) => p.includes('"null"')).length;
+      expect(problemi.filter((p) => !p.includes('"null"')), list).toEqual([]);
     }
-  }
-
-  it('nijedna font-family/font deklaracija u src/**.css ne imenuje Instrument Serif ni Geist Mono', () => {
-    expect(gitGrepFontDeklaracije()).toEqual([]);
+    expect(definiranih, 'nijedan svijet ne definira token glasa, dakle citanje mjeri krivo').toBeGreaterThan(3);
   });
 
-  it('MUTACIJA: gard STVARNO gadja deklaracije, ne bilo koji tekst', () => {
-    // Kontrola smjera: obrazac koji gard koristi mora pogoditi pravu deklaraciju kad ona postoji
-    // (dokaz da git grep poziv radi), a poznati legitimni pogoci (komentar, mutacija drugog testa)
-    // ostaju izvan te 13-clane liste jer NISU font-family/font deklaracije.
-    const obrazac = /(^|[;{])\s*font(-family)?\s*:[^;{}]*(Instrument Serif|Geist Mono)/;
-    expect(obrazac.test('.x{font-family:"Instrument Serif",serif}')).toBe(true);
-    expect(obrazac.test('.x{font: italic 400 1rem "Geist Mono",monospace}')).toBe(true);
-    expect(obrazac.test('/* Editorial Instrument sloj */')).toBe(false);
+  it('list fontova postuje Z31: dva glasa, latin + latin-ext, swap, metricki zamjenski glasovi', () => {
+    const d = datoteke();
+    expect([...d.keys()].filter((k) => k.endsWith('.woff2')), 'mapa bez woff2 znaci da citanje ne radi').toHaveLength(6);
+    expect(problemiFontova(readFileSync(FONTOVI_CSS, 'utf8'), d)).toEqual([]);
   });
 
-  it('package.json nema @fontsource/instrument-serif ni geist-mono kao ovisnost', () => {
-    const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8'));
-    const sveOvisnosti = {
-      ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}), ...(pkg.optionalDependencies || {}),
-    };
-    expect(Object.keys(sveOvisnosti)).not.toContain('@fontsource/instrument-serif');
-    expect(Object.keys(sveOvisnosti)).not.toContain('geist-mono');
+  it('metrike se citaju iz stvarnog woff2, ne prepisuju', () => {
+    // SENTINEL citaca: vrijednosti koje su tablice head i hhea dale pri vendoriranju (isti rez,
+    // procitan iz .woff inacice istog paketa). Bez ove tvrdnje bi pokvaren citac mogao vratiti bilo
+    // sto, a gard nad override vrijednostima bi mjerio samo sam sebe.
+    const d = datoteke();
+    expect(woff2Metrike(d.get('instrument-serif-latin-400-normal.woff2')!)).toEqual({ upm: 1000, ascender: 990, descender: -310, lineGap: 0 });
+    expect(woff2Metrike(d.get('geist-mono-latin-wght-normal.woff2')!)).toEqual({ upm: 1000, ascender: 1005, descender: -295, lineGap: 0 });
+  });
+
+  it('preload nose samo uspravni serif 400 i mono 400, oba latin', () => {
+    const obrasci = preloadObrasci(readFileSync(resolve(ROOT, 'vite.config.ts'), 'utf8'));
+    expect(obrasci.length, 'WANTED nije procitan').toBeGreaterThan(0);
+    expect(problemiPreloada(obrasci, [...datoteke().keys()])).toEqual([]);
+  });
+
+  it('nijedan drugi list u src/ ne ucitava webfont', () => {
+    const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const p = resolve(dir, e.name);
+      return e.isDirectory() ? hodaj(p) : [p];
+    });
+    // Sentinel nad citacem je u `listoviSWebfontom`: u fonts.css citac mora vidjeti oba glasa, inace
+    // bi gard prosao vakuumski. Mutacije: `z7a/webfont-u-drugom-listu`, `z7a/citac-webfontova-slijep`.
+    const listovi = hodaj(resolve(ROOT, 'src')).filter((p) => p.endsWith('.css'))
+      .map((p) => ({ ime: p.slice(ROOT.length + 1).split(/[\\/]/).join('/'), css: readFileSync(p, 'utf8') }));
+    expect(listoviSWebfontom(listovi, 'src/assets/fonts/fonts.css')).toEqual([]);
+  });
+
+  it('OFL licenca putuje uz svaku obitelj', () => {
+    // Mutacija: `z7a/licenca-izostavljena`.
+    const mapa = new Map(LICENCE.filter((ime) => existsSync(resolve(MAPA, ime)))
+      .map((ime) => [ime, readFileSync(resolve(MAPA, ime), 'utf8')] as const));
+    expect(problemiLicenci(mapa)).toEqual([]);
+  });
+
+  it('package.json nema instrument-serif ni geist-mono kao ovisnost (vendorirano)', () => {
+    // Mutacije: `z7a/font-paket-u-package-json` i `z7a/package-json-procitan-prazan`.
+    expect(problemiOvisnosti(JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')))).toEqual([]);
+  });
+});
+
+/**
+ * Z7(a) POPRAVAK: SAMOSTALNE STRANICE (pravne i 404) NOSE OBA GLASA IZ ISTIH WOFF2.
+ *
+ * Obje stranice Vite ne obradjuje kao ulaze (pravne pise generator poslije builda, 404 se kopira
+ * iz `public/`), pa hashirana imena rezova doznaju tek iz `dist/assets/`. Obrasci iz
+ * `scripts/lib/legal-webfonts.mjs` se zato mjere nad imenima KAKVA IH VITE PROIZVODI: zadani obrazac
+ * `assets/[name]-[hash][extname]` primijenjen na stvarne vendorirane datoteke. Da `vite.config.ts`
+ * taj obrazac promijeni, prva tvrdnja pada i trazi da se model ovdje uskladi, umjesto da obrasci
+ * tiho prestanu pogadjati (tada generator pada, jer je prazan pogodak problem).
+ */
+describe('Z7(a) popravak: pravne stranice i 404 dobivaju oba glasa', () => {
+  const MAPA = resolve(ROOT, 'src/assets/fonts');
+  const VENDORIRANI = (): string[] => readdirSync(MAPA).filter((x) => x.endsWith('.woff2'));
+  /** Ime koje Vite daje assetu uz zadani `assetFileNames` (`[name]-[hash][extname]`). */
+  const viteIme = (ime: string, hash: string): string => ime.replace(/\.woff2$/, `-${hash}.woff2`);
+  /** Sadrzaj `dist/assets/` kakav stvarno izgleda: svi rezovi (i kurzivi) i ostali asseti. */
+  const distAssets = (hash: string): string[] => [
+    ...VENDORIRANI().map((x) => viteIme(x, hash)), 'index-Bq3x_9Zk.js', 'index-Bq3x_9Zk.css', 'hunspell-D4-a8Qe1.js',
+  ];
+  const stil = (html: string): string => Array.from(html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g), (m) => m[1]).join('\n');
+
+  it('vite.config.ts ne mijenja zadani obrazac imena asseta, pa je model gore tocan', () => {
+    const cfg = readFileSync(resolve(ROOT, 'vite.config.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+    expect(cfg, 'nula znakova znaci da citanje ne radi').toMatch(/rollupOptions/);
+    expect(cfg).not.toMatch(/assetFileNames|assetsDir/);
+  });
+
+  it('svaki obrazac pogadja TOCNO jedan rez u Viteovu izlazu, i daje oba glasa', () => {
+    // SENTINEL: vendorirano je sest rezova, ukljucivo kurzive koje obrasci NE smiju pogoditi.
+    expect(VENDORIRANI()).toHaveLength(6);
+    // Hash je base64url: slova, brojke, `_` i `-`, pa se mjeri i hash koji sam sadrzi crticu.
+    for (const hash of ['DxQ3_k-9', 'a1B2c3D4', '-_-_-_-_']) {
+      const r = webfontFaces(distAssets(hash));
+      expect(r.problemi, hash).toEqual([]);
+      expect([...r.obitelji].sort()).toEqual([...GLASOVI]);
+      expect(fontFaceBlokovi(r.css).map((b) => b.src)).toHaveLength(4);
+      expect(r.css).not.toMatch(/italic-/);
+    }
+  });
+
+  it('MUTACIJA: prazan ili dvostruk pogodak je problem, ne tihi zamjenski glas', () => {
+    // Drukciji `assetFileNames` (hash ispred imena): nijedan obrazac ne pogadja nista.
+    expect(webfontFaces(VENDORIRANI().map((x) => `Ab12Cd34-${x}`)).problemi).toHaveLength(4);
+    // Izgubljen latin-ext rez serifa: tocno jedan problem, i imenuje bas taj obrazac.
+    const bezExt = distAssets('a1B2c3D4').filter((x) => !x.startsWith('instrument-serif-latin-ext-400-normal'));
+    expect(webfontFaces(bezExt).problemi).toEqual([expect.stringContaining('instrument-serif-latin-ext-400-normal')]);
+    // Zaostao rez iz starog builda uz novi: dva pogotka, generator ne smije birati nasumice.
+    expect(webfontFaces([...distAssets('a1B2c3D4'), viteIme('geist-mono-latin-wght-normal.woff2', 'OLD0hash')]).problemi)
+      .toEqual([expect.stringContaining('pogadja 2')]);
+    // Zamjenski glasovi: list bez njih je problem, stvarni list nije.
+    expect(fallbackFaces('').problemi).toHaveLength(1);
+    expect(fallbackFaces(readFileSync(FONTOVI_CSS, 'utf8')).problemi).toEqual([]);
+  });
+
+  it('404 nakon generatora ucitava oba glasa, a tokeni i sinteza su glasovi proizvoda', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    // Prije generatora: tokeni vec imenuju oba glasa, a webfonta jos nema (oznaka je komentar).
+    expect(prvaObiteljTokena(stil(izvor), '--display-serif')).toBe('Instrument Serif');
+    expect(prvaObiteljTokena(stil(izvor), '--mono')).toBe('Geist Mono');
+    expect(stil(izvor)).toMatch(/:root\s*\{[^}]*font-synthesis:\s*none/);
+    expect(webfontObitelji([stil(izvor)]).size).toBe(0);
+    // Poslije generatora: ISTE funkcije kojima generator puni pravne stranice.
+    const faces = [webfontFaces(distAssets('a1B2c3D4')).css, fallbackFaces(readFileSync(FONTOVI_CSS, 'utf8')).css].join(' ');
+    const { html, problemi } = ubaciU404(izvor, faces);
+    expect(problemi).toEqual([]);
+    expect([...webfontObitelji([stil(html)])].sort()).toEqual([...GLASOVI]);
+    // Zamjenski glasovi koje tokeni imenuju postoje kao @font-face, pa zamjena ne pomice raspored.
+    for (const ime of ['Instrument Serif Fallback', 'Geist Mono Fallback']) {
+      expect(deklariraneObitelji([stil(html)]).has(ime), ime).toBe(true);
+    }
+  });
+
+  it('MUTACIJA: 404 bez oznake ili s dvije oznake je problem, ne tiho preskocen umetak', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    expect(ubaciU404(izvor, '@font-face{}').problemi, 'baseline').toEqual([]);
+    expect(ubaciU404(izvor.replace(OZNAKA_404, ''), '@font-face{}').problemi).toHaveLength(1);
+    expect(ubaciU404(izvor.replace(OZNAKA_404, OZNAKA_404 + OZNAKA_404), '@font-face{}').problemi).toHaveLength(1);
+  });
+
+  it('404: drugi prolaz generatora nad istim dist/ je no-op, a novi hash zamijeni stari', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    const zamjenski = fallbackFaces(readFileSync(FONTOVI_CSS, 'utf8')).css;
+    const faces = [webfontFaces(distAssets('a1B2c3D4')).css, zamjenski].join(' ');
+    const facesNovi = [webfontFaces(distAssets('Zz9_novi')).css, zamjenski].join(' ');
+    // SENTINEL: izvor nosi pocetnu oznaku, a zavrsnu ne (nju pise tek generator).
+    expect(izvor.split(OZNAKA_404)).toHaveLength(2);
+    expect(izvor).not.toContain(KRAJ_404);
+    expect(problemiDvaProlaza404(ubaciU404, izvor, faces, facesNovi)).toEqual([]);
+    // Izravni signal: drugi prolaz daje bajt identican 404 s tocno cetiri webfont bloka, ne osam.
+    const prvi = ubaciU404(izvor, faces).html;
+    const drugi = ubaciU404(prvi, faces);
+    expect(drugi).toEqual({ html: prvi, problemi: [] });
+    expect(fontFaceBlokovi(stil(drugi.html)).filter((b) => (b.src ?? '').includes('.woff2'))).toHaveLength(4);
+    expect([...webfontObitelji([stil(drugi.html)])].sort()).toEqual([...GLASOVI]);
+  });
+
+  it('MUTACIJA: umetak koji trosi oznaku ili pokvarena zavrsna oznaka obara dva prolaza', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    const faces = webfontFaces(distAssets('a1B2c3D4')).css;
+    const facesNovi = webfontFaces(distAssets('Zz9_novi')).css;
+    // Stanje prije popravka: oznaka se zamijeni blokovima i nestane, pa drugi prolaz pada.
+    const trosiOznaku = (html: string, ff: string): { html: string; problemi: string[] } =>
+      html.split(OZNAKA_404).length === 2 ? { html: html.replace(OZNAKA_404, () => ff), problemi: [] } : { html, problemi: ['bez oznake'] };
+    expect(problemiDvaProlaza404(trosiOznaku, izvor, faces, facesNovi)).not.toEqual([]);
+    // Umetak koji zadrzi oznaku, ali blokove samo dopise iza nje: drugi prolaz nagomila blokove.
+    const dopisuje = (html: string, ff: string): { html: string; problemi: string[] } =>
+      ({ html: html.replace(OZNAKA_404, () => `${OZNAKA_404}
+  ${ff}`), problemi: [] });
+    expect(problemiDvaProlaza404(dopisuje, izvor, faces, facesNovi)).not.toEqual([]);
+    // Zavrsna oznaka dvaput, ili ispred pocetne: problem, ne tiha zamjena krivog podrucja.
+    const obradjen = ubaciU404(izvor, faces).html;
+    expect(ubaciU404(obradjen.replace(KRAJ_404, KRAJ_404 + KRAJ_404), faces).problemi).toHaveLength(1);
+    expect(ubaciU404(KRAJ_404 + izvor, faces).problemi).toHaveLength(1);
+  });
+
+  it('generator uvozi ISTE funkcije i s njima pada, umjesto da ih prepisuje', () => {
+    const gen = readFileSync(resolve(ROOT, 'scripts/generate-legal-pages.mjs'), 'utf8');
+    const uvoz = gen.match(/^import\s*\{([^}]+)\}\s*from\s*'\.\/lib\/legal-webfonts\.mjs';/m);
+    expect(uvoz, 'generator ne uvozi scripts/lib/legal-webfonts.mjs').not.toBeNull();
+    expect((uvoz ? uvoz[1] : '').split(',').map((x) => x.trim()).sort()).toEqual(['fallbackFaces', 'ubaciU404', 'webfontFaces']);
+    // Prepisan obrazac u generatoru bi opet mogao tiho promasiti: generator ga ne smije drzati.
+    expect(gen).not.toMatch(/WEBFONT_SUBSETS\s*=|pattern:\s*\//);
+    // Svaki problem vodi u izlaz 1.
+    for (const poziv of ['padni(WEBFONTS.problemi', 'padni(FALLBACK.problemi', 'padni(s404.problemi']) expect(gen).toContain(poziv);
   });
 });

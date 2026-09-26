@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Analiza · rezultat se gradi uživo" description="Stranica rada na stolu pod lampom: mjerne linije, cedulje nalaza, tragovi na rubu koji se skupe u pečat, a rezultat ispod se popunjava dok provjera traje. Zadano (A): mjesta nalaza čekaju iscrtkana, cedulje s lista odlete na svoje mjesto i tamo se ispišu slovo po slovo, presuda se na kraju otipka." -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}a{color:inherit}a:hover{color:#E4573D}@keyframes anScan{from{transform:translateY(-100%)}to{transform:translateY(600%)}}@keyframes anFlip{0%{transform:none;opacity:.9}100%{transform:translate(-46px,-8px) rotate(-7deg);opacity:0}}@keyframes anPulse{0%,100%{opacity:1}50%{opacity:.25}}@keyframes anStamp{from{transform:rotate(-9deg) scale(1.6);opacity:0}to{transform:rotate(-9deg) scale(1);opacity:1}}@keyframes anNote{from{transform:translateX(-14px) rotate(0);opacity:0}to{opacity:1}}@keyframes anIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}@keyframes anCaret{50%{opacity:0}}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style></helmet>
+<div ref="{{ rootRef }}" style="position:relative;min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace;overflow-x:hidden">
+<div aria-hidden="true" style="position:absolute;top:-380px;left:-120px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.15),transparent 60%);pointer-events:none"></div>
+<header style="position:relative;display:flex;align-items:center;gap:24px;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:22px 0"><a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:12px;height:12px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:28px">Lekta</span></a><span style="margin-left:auto;font-size:12px;color:rgba(237,231,220,.6)">Nº 0007 · diplomski-rad-final-v3.docx</span></header>
+<main style="position:relative;width:min(1180px,calc(100% - 48px));margin:0 auto;padding:8px 0 96px;display:grid;gap:56px">
+<section data-screen-label="Analiza" style="display:grid;grid-template-columns:{{ deskCols }};gap:40px;align-items:start">
+<div style="display:grid;gap:12px;min-width:0">
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)"><span>{{ statusLine }}</span><span>str. {{ pages }} / 41</span></div>
+<div style="display:grid;grid-template-columns:{{ sheetCols }};gap:18px">
+<div style="position:relative;min-width:0">
+<div aria-hidden="true" style="position:absolute;inset:0;transform:translate(10px,10px) rotate(1.2deg);background:#E6DFCC;box-shadow:0 18px 40px rgba(0,0,0,.4)"></div>
+<div aria-hidden="true" style="position:absolute;inset:0;transform:translate(5px,5px) rotate(.5deg);background:#EFE9D9"></div>
+<sc-if value="{{ scanning }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="position:absolute;inset:0;background:#F2EDDF;animation:anFlip 1.4s cubic-bezier(.4,0,.2,1) infinite"></div></sc-if>
+<div style="position:relative;container-type:inline-size;aspect-ratio:210/297;background:#F7F3E8;color:#26221B;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.3),0 24px 60px rgba(0,0,0,.5)">
+<div lang="hr" style="position:absolute;inset:0;padding:8cqw 9cqw 8cqw 7cqw;font-family:Calibri,Carlito,'Segoe UI',sans-serif;font-size:2.85cqw;line-height:1.08;overflow:hidden">
+<p style="margin:0 0 3cqw;font-size:1.4em;font-weight:700">2. Teorijski okvir</p>
+<p style="margin:0 0 2.4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p>
+<p style="margin:0 0 2.4cqw">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti. Ta definicija dugo je isključivala simboličke oblike, poput javnog izražavanja stava, koji danas čine velik dio angažmana mladih (Novak, 2022).</p>
+<p style="margin:0 0 3cqw;font-size:1.15em;font-weight:700">2.3. Digitalna participacija</p>
+<p style="margin:0 0 2.4cqw">Theocharis i van Deth (2018) predlažu širu tipologiju u kojoj se digitalni oblici promatraju kao zaseban modus sudjelovanja. Prema njima, niži prag ulaska ne znači nužno i manju političku važnost.</p>
+<p style="margin:0 0 2.4cqw">Ovaj rad ispituje odnose li se ti oblici na tradicionalne kanale ili ih zamjenjuju. Polazi se od pretpostavke da digitalna participacija snižava prag ulaska, ali i trajnost angažmana.</p>
+<p style="margin:0">Istraživanje se oslanja na anketu provedenu među studentima zagrebačkih fakulteta tijekom ljetnog semestra, a rezultati se uspoređuju s nalazima Europskog društvenog istraživanja.</p>
+</div>
+<div aria-hidden="true" style="position:absolute;left:7cqw;top:3cqw;bottom:3cqw;width:0;border-left:1.5px dashed #A62B23;transform-origin:top;transform:scaleY({{ mMarg }});transition:transform .9s cubic-bezier(.22,1,.36,1)"></div>
+<span aria-hidden="true" style="position:absolute;left:1.2cqw;top:2.2cqw;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:2.6cqw;color:#A62B23;opacity:{{ mMarg }};transition:opacity .4s .5s">2,0 cm · treba 2,5</span>
+<span aria-hidden="true" style="position:absolute;right:9cqw;top:2.2cqw;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:2.6cqw;color:#A62B23;opacity:{{ mFont }};transition:opacity .4s">Calibri 11 · treba TNR 12</span>
+<div aria-hidden="true" style="position:absolute;left:3.6cqw;top:21cqw;width:1.6cqw;height:3.1cqw;border:1.5px solid #A62B23;border-right:0;transform-origin:top;transform:scaleY({{ mPror }});transition:transform .6s"></div>
+<span aria-hidden="true" style="position:absolute;left:.8cqw;top:25.5cqw;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:2.4cqw;color:#A62B23;opacity:{{ mPror }};transition:opacity .4s .3s">1,0</span>
+<span aria-hidden="true" style="position:absolute;left:2cqw;top:78cqw;font-family:'Instrument Serif',Georgia,serif;font-size:3.2cqw;color:#1E7F4F;opacity:{{ mUvl }};transition:opacity .4s">✓</span>
+<div aria-hidden="true" style="position:absolute;left:50%;bottom:2.4cqw;width:9cqw;height:4.4cqw;margin-left:-4.5cqw;border:1.5px dashed #A62B23;border-radius:50%;opacity:{{ mStr }};transform:scale({{ mStr }});transition:transform .5s,opacity .4s"></div>
+<span aria-hidden="true" style="position:absolute;left:57%;bottom:3.4cqw;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:2.6cqw;color:#A62B23;opacity:{{ mStr }};transition:opacity .4s .3s">bez broja</span>
+<sc-if value="{{ scanning }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:18%;background:linear-gradient(180deg,rgba(255,206,130,0),rgba(255,206,130,.34) 50%,rgba(255,206,130,0));animation:anScan 2.6s ease-in-out infinite alternate;pointer-events:none"></div></sc-if>
+<sc-for list="{{ marks }}" as="m" hint-placeholder-count="0"><span aria-hidden="true" style="position:absolute;right:1.4cqw;top:{{ m.top }};width:1.1cqw;height:4cqw;background:#C4372E;opacity:{{ m.op }};transform:{{ m.tr }};transition:transform .7s cubic-bezier(.5,0,.2,1),opacity .5s .3s"></span></sc-for>
+<sc-if value="{{ stamped }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;right:7cqw;bottom:14cqw;padding:1.6cqw 2.6cqw;border:2.5px solid #C4372E;border-radius:2px;background:rgba(247,243,232,.82);color:#C4372E;font-size:3cqw;font-weight:500;letter-spacing:.12em;text-transform:uppercase;transform:rotate(-9deg);animation:anStamp .34s cubic-bezier(.2,.9,.3,1.2) both">6 nalaza · 71</div></sc-if>
+</div>
+</div>
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><div aria-hidden="true" style="position:relative;min-height:100%">
+<sc-for list="{{ notes }}" as="n" hint-placeholder-count="0"><div data-an-note="{{ n.i }}" style="position:absolute;left:0;right:0;top:{{ n.top }};display:grid;gap:4px;padding:10px 12px;background:#F1E6B8;color:#3E382C;box-shadow:0 8px 18px rgba(0,0,0,.35);transform:rotate({{ n.rot }});opacity:{{ n.op }};transition:opacity .4s;animation:anNote .45s cubic-bezier(.22,1,.36,1) both"><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:16px;line-height:1.15">{{ n.t }}</span><span style="font-size:10px;letter-spacing:.04em;color:#6E6656">{{ n.m }} → {{ n.r }}</span></div></sc-for>
+</div></sc-if>
+</div>
+</div>
+<aside style="display:grid;gap:28px;min-width:0">
+<div style="display:grid;gap:6px"><span style="font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">MJERI PREMA</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:22px;line-height:1.2">FPZG · Politologija · Diplomski</span><span style="font-size:12px;color:rgba(237,231,220,.6)">Pravilnik o diplomskom radu, 2024.</span></div>
+<div style="display:flex;align-items:baseline;gap:14px;padding:18px 0;border-top:1px solid rgba(237,231,220,.14);border-bottom:1px solid rgba(237,231,220,.14)"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:72px;line-height:.85;letter-spacing:-.02em">{{ score }}</span><span style="display:grid;gap:4px;font-size:12px;color:rgba(237,231,220,.65)"><span>ocjena forme</span><span>{{ scoreNote }}</span></span></div>
+<ol style="margin:0;padding:0;list-style:none;display:grid">
+<sc-for list="{{ checks }}" as="c" hint-placeholder-count="8"><li style="display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(237,231,220,.08);font-size:13px;color:{{ c.col }}"><span style="color:{{ c.iconCol }};animation:{{ c.anim }}">{{ c.icon }}</span><span>{{ c.t }}</span><span style="font-size:11px;color:#E4573D">{{ c.count }}</span></li></sc-for>
+</ol>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;font-size:11px;color:rgba(237,231,220,.6)"><span style="display:grid;gap:2px"><b style="font-weight:400;font-size:18px;color:#EDE7DC">{{ pages }}</b>stranica</span><span style="display:grid;gap:2px"><b style="font-weight:400;font-size:18px;color:#EDE7DC">{{ words }}</b>riječi</span><span style="display:grid;gap:2px"><b style="font-weight:400;font-size:18px;color:#EDE7DC">{{ sources }}</b>izvora</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:rgba(237,231,220,.65)"><span>{{ remaining }}</span><button type="button" onClick="{{ onNotify }}" style="all:unset;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;color:{{ notifyCol }};text-decoration:underline;text-underline-offset:3px">{{ notifyText }}</button></div>
+<sc-if value="{{ finished }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ onReplay }}" style="all:unset;cursor:pointer;justify-self:start;font-size:12px;color:rgba(237,231,220,.6);text-decoration:underline;text-underline-offset:3px">Pokreni ponovno</button></sc-if>
+</aside>
+</section>
+<section data-screen-label="Rezultat se gradi" style="display:grid;gap:24px">
+<div style="display:grid;grid-template-columns:{{ resCols }};gap:24px;align-items:stretch">
+<div ref="{{ verdictRef }}" style="position:relative;min-width:0">
+<sc-if value="{{ verdictPending }}" hint-placeholder-val="{{ true }}"><div style="height:100%;min-height:220px;box-sizing:border-box;display:grid;place-items:center;padding:32px;border:1.5px dashed rgba(237,231,220,.22);font-size:12px;letter-spacing:.08em;color:rgba(237,231,220,.5);text-align:center">PRESUDA · PIŠE SE NAKON ZADNJE PROVJERE</div></sc-if>
+<sc-if value="{{ verdictShown }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;padding:36px 40px;background:#F7F3E8;color:#26221B;box-shadow:0 20px 50px rgba(0,0,0,.45);animation:anIn .5s cubic-bezier(.22,1,.36,1) both">
+<div style="display:grid;gap:14px;min-width:0"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">DIPLOMSKI-RAD-FINAL-V3.DOCX · FPZG · SLUŽBENI PRAVILNIK</span><h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(34px,4.4vw,56px);line-height:.98;letter-spacing:-.015em;text-wrap:balance">{{ verdictTitle }}<span style="opacity:{{ caretOp }};animation:anCaret .8s steps(1) infinite;color:#C4372E">|</span></h1><p style="margin:0;font-size:13px;line-height:1.55;color:#4A4438;opacity:{{ verdictMetaOp }};transition:opacity .4s">6 stvari traže tvoju pažnju. Od toga 4 mogu popraviti automatski; automatika može doseći najviše 94.</p><div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;opacity:{{ verdictMetaOp }};transition:opacity .4s"><button type="button" style="font:inherit;font-size:14px;letter-spacing:.02em;min-height:48px;padding:14px 22px;border:0;border-radius:10px;background:#C4372E;color:#F7F3E8;cursor:pointer">Napravi plan popravka</button><a href="#" style="font-size:13px;color:#4A4438">Pregledaj nalaze</a></div></div>
+<div aria-hidden="true" style="width:132px;height:132px;border-radius:50%;background:conic-gradient(#C4372E 0 71%,#DCD4BF 71% 100%);display:grid;place-items:center"><span style="width:108px;height:108px;border-radius:50%;background:#F7F3E8;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:48px">71</span></div>
+</div></sc-if>
+</div>
+<div style="display:grid;align-content:start;padding:24px 26px;background:#EFE9D9;color:#26221B;min-width:0"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656;padding-bottom:10px;border-bottom:1px solid #DCD4BF">KATEGORIJE</span>
+<sc-for list="{{ cats }}" as="k" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:12px 0;border-bottom:1px solid #DCD4BF;font-size:13px;opacity:{{ k.op }};transition:opacity .4s"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:19px">{{ k.t }}</span><span style="font-size:11px;color:{{ k.col }}">{{ k.s }}</span></div></sc-for>
+</div>
+</div>
+<div style="display:grid;background:#F7F3E8;color:#26221B;padding:8px 28px 18px;min-width:0">
+<div style="display:flex;justify-content:space-between;gap:12px;padding:16px 0 12px;border-bottom:1px solid #DCD4BF;font-size:11px;letter-spacing:.08em;color:#6E6656"><span>NALAZI</span><span>{{ foundLine }}</span></div>
+<sc-for list="{{ slots }}" as="s" hint-placeholder-count="6"><div data-an-slot="{{ s.i }}" style="min-height:64px;border-bottom:1px solid #DCD4BF;display:grid;align-items:center">
+<sc-if value="{{ s.ph }}" hint-placeholder-val="{{ false }}"><div style="margin:10px 0;min-height:44px;display:flex;align-items:center;padding:0 14px;border:1.5px dashed #CFC6AE;font-size:11px;letter-spacing:.06em;color:#8A816D">{{ s.phText }}</div></sc-if>
+<sc-if value="{{ s.on }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:28px 10px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:14px 0;animation:{{ s.anim }}"><span style="font-size:11px;color:#8A816D">{{ s.n }}</span><span style="width:8px;height:8px;border-radius:50%;background:{{ s.dot }};align-self:center"></span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1.2;min-width:0">{{ s.title }}</span><span style="font-size:11px;color:#4A4438;opacity:{{ s.metaOp }};transition:opacity .3s;text-align:right"><s style="color:#A62B23">{{ s.m }}</s> → {{ s.r }}</span></div></sc-if>
+</div></sc-for>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Gradnja rezultata (A sve troje · B samo cedulje · C samo pisaći stroj)&quot;}}">
+const AN_CHECKS = [['Font i veličina',0,0],['Margine',0,1],['Prored',0,2],['Uvlaka i poravnanje',0,-1],['Brojevi stranica',3,3],['Naslovi i sadržaj',1,4],['Citati i literatura',2,5],['Opseg',3,-1]];
+const AN_F = [
+  { t:'Font nije po pravilniku', m:'Calibri 11 pt', r:'Times New Roman 12 pt', y:8, sev:'#C4372E', p:6 },
+  { t:'Lijeva margina je preuska', m:'2,0 cm', r:'2,5 cm', y:20, sev:'#C4372E', p:5 },
+  { t:'Prored je jednostruk', m:'1,0', r:'1,5', y:32, sev:'#C4372E', p:5 },
+  { t:'Stranice nisu numerirane', m:'bez broja', r:'od uvoda', y:84, sev:'#C98A2E', p:4 },
+  { t:'Naslov 2.3 nije u sadržaju', m:'nedostaje', r:'u sadržaju', y:46, sev:'#C98A2E', p:4 },
+  { t:'(Novak, 2022) nema zapis u literaturi', m:'citat bez izvora', r:'zapis u popisu', y:60, sev:'#C4372E', p:5 }
+];
+const AN_CATS = ['Format','Struktura','Citati','Predaja'];
+const AN_DONE = i => 2000 + i * 1400, AN_END = AN_DONE(7), AN_STAMP = AN_END + 600, AN_SCROLL = AN_END + 1700;
+const AN_VERDICT = 'Rad nije spreman za predaju.';
+class Component extends DCLogic {
+  state = { t: 0, score: 100, placed: {}, flying: {}, typed: {}, notify: false, width: 1200 };
+  rootRef = React.createRef();
+  verdictRef = React.createRef();
+  componentDidMount() {
+    this.rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = this.rootRef.current;
+    if (el && 'ResizeObserver' in window) { this.ro = new ResizeObserver(e => this.setState({ width: e[0].contentRect.width })); this.ro.observe(el); }
+    this.start();
+  }
+  componentWillUnmount() { clearInterval(this.iv); this.ro && this.ro.disconnect(); (this.clones || []).forEach(c => c.remove()); }
+  v() { return this.props.variant ?? 'A'; }
+  fx() { const v = this.v(); return { ph: v === 'A', fly: v !== 'C', type: v !== 'B' }; }
+  start() {
+    clearInterval(this.iv); this.scrolled = false; this.notified = false;
+    if (this.rm) { const placed = {}, typed = { v: 99 }; AN_F.forEach((f, i) => { placed[i] = 1; typed[i] = 99; }); this.setState({ t: AN_SCROLL + 1, score: 71, placed, typed, flying: {} }); return; }
+    this.setState({ t: 0, score: 100, placed: {}, flying: {}, typed: {} });
+    this.t0 = performance.now();
+    this.iv = setInterval(() => this.tick(), 50);
+  }
+  foundAt(i) { const c = AN_CHECKS.findIndex(c => c[2] === i); return AN_DONE(c); }
+  tick() {
+    const t = performance.now() - this.t0, s = this.state, fx = this.fx();
+    const target = 100 - AN_F.reduce((a, f, i) => a + (t >= this.foundAt(i) ? f.p : 0), 0);
+    const score = s.score > target ? s.score - 1 : s.score;
+    const typed = { ...s.typed };
+    if (fx.type) {
+      const q = AN_F.map((f, i) => i).filter(i => (fx.fly ? s.placed[i] : t >= this.foundAt(i)) && (typed[i] || 0) < AN_F[i].t.length);
+      if (q.length) typed[q[0]] = (typed[q[0]] || 0) + 2;
+      else if (t >= AN_STAMP + 300 && (typed.v || 0) < AN_VERDICT.length) typed.v = (typed.v || 0) + 1;
+    }
+    if (fx.fly) AN_F.forEach((f, i) => { if (t - this.foundAt(i) > 900 && !s.placed[i] && !s.flying[i]) this.fly(i); });
+    if (t >= AN_SCROLL && !this.scrolled) { this.scrolled = true; this.scrollToVerdict(); this.ping(); }
+    const doneTyping = !fx.type || (typed.v || 0) >= AN_VERDICT.length;
+    this.setState({ t, score, typed });
+    if (t > AN_SCROLL + 400 && doneTyping) clearInterval(this.iv);
+  }
+  fly(i) {
+    const root = this.rootRef.current; if (!root) return;
+    const src = root.querySelector('[data-an-note="' + i + '"]'), tgt = root.querySelector('[data-an-slot="' + i + '"]');
+    if (!src || !tgt || !src.animate) { this.setState(s => ({ placed: { ...s.placed, [i]: 1 } })); return; }
+    const a = src.getBoundingClientRect(), b = tgt.getBoundingClientRect();
+    const c = src.cloneNode(true);
+    Object.assign(c.style, { position: 'fixed', left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', right: 'auto', margin: 0, zIndex: 60, pointerEvents: 'none', animation: 'none', opacity: 1 });
+    document.body.appendChild(c); (this.clones = this.clones || []).push(c);
+    this.setState(s => ({ flying: { ...s.flying, [i]: 1 } }));
+    const dx = b.left + 40 - a.left, dy = b.top + 8 - a.top;
+    c.animate([{ transform: 'rotate(2deg)', opacity: 1 }, { transform: 'translate(' + dx * .5 + 'px,' + (dy * .5 - 60) + 'px) rotate(-6deg)', opacity: 1, offset: .5 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) rotate(0) scale(.9)', opacity: 0 }], { duration: 1000, easing: 'cubic-bezier(.5,0,.2,1)' }).onfinish = () => { c.remove(); this.setState(s => ({ placed: { ...s.placed, [i]: 1 } })); };
+  }
+  scrollToVerdict() {
+    const el = this.verdictRef.current; if (!el) return;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 24, behavior: 'smooth' });
+  }
+  ping() {
+    try { if (this.state.notify && window.Notification && Notification.permission === 'granted') new Notification('Lekta', { body: 'Provjera je gotova: ocjena 71, 6 nalaza.' }); } catch (e) {}
+  }
+  renderVals() {
+    const s = this.state, t = s.t, fx = this.fx(), wide = s.width >= 980;
+    const done = i => t >= AN_DONE(i), found = i => t >= this.foundAt(i), stamped = t >= AN_STAMP, finished = t >= AN_SCROLL;
+    const doneN = AN_CHECKS.filter((c, i) => done(i)).length, foundN = AN_F.filter((f, i) => found(i)).length;
+    const chk = k => (AN_CHECKS.findIndex(c => c[0] === k));
+    const checks = AN_CHECKS.map((c, i) => {
+      const d = done(i), act = !d && t >= AN_DONE(i) - 1400, n = c[2] >= 0 && d ? 1 : 0;
+      return { t: c[0], icon: d ? (n ? '✗' : '✓') : act ? '●' : '○', iconCol: d ? (n ? '#E4573D' : '#5FBF8A') : act ? '#EDE7DC' : 'rgba(237,231,220,.3)', anim: act ? 'anPulse 1s ease-in-out infinite' : 'none', col: d || act ? '#EDE7DC' : 'rgba(237,231,220,.45)', count: n ? '1 nalaz' : '' };
+    });
+    const k = Math.min(1, t / AN_END), fmt = n => n.toLocaleString('hr-HR');
+    const noteVisible = i => found(i) && !stamped && (!fx.fly || (!s.flying[i] && !s.placed[i]));
+    const notes = AN_F.map((f, i) => ({ i: String(i), t: f.t, m: f.m, r: f.r, top: f.y + '%', rot: (i % 2 ? -2 : 2) + 'deg', op: noteVisible(i) ? '1' : '0', show: found(i) })).filter(n => n.show);
+    const marks = AN_F.map((f, i) => ({ top: (f.y + 1) + '%', op: found(i) ? (stamped ? '0' : '1') : '0', tr: stamped ? 'translate(-' + (8 + i) + 'cqw,' + (80 - f.y) * 1.2 + 'cqw) scale(.4)' : 'none' }));
+    const slots = AN_F.map((f, i) => {
+      const fd = found(i), on = fx.fly ? !!s.placed[i] : fd, ty = fx.type ? (s.typed[i] || 0) : 99;
+      return { i: String(i), n: String(i + 1).padStart(2, '0'), ph: fx.ph && !on, phText: 'NALAZ ' + (i + 1) + ' · ČEKA PROVJERU', on, anim: fx.type ? 'none' : 'anIn .45s cubic-bezier(.22,1,.36,1) both', dot: f.sev, title: fx.type ? f.t.slice(0, ty) : f.t, metaOp: ty >= f.t.length ? '1' : '0', m: f.m, r: f.r };
+    });
+    const cats = AN_CATS.map((c, ci) => {
+      const idx = AN_CHECKS.map((x, i) => x[1] === ci ? i : -1).filter(i => i >= 0), all = idx.every(done), any = idx.some(done);
+      const n = idx.filter(i => done(i) && AN_CHECKS[i][2] >= 0).length;
+      return { t: c, s: all ? (n ? n + (n === 1 ? ' nalaz' : ' nalaza') : 'u redu') : any ? 'provjeravam…' : 'čeka', col: all ? (n ? '#A62B23' : '#1E7F4F') : '#8A816D', op: all || any || !fx.ph ? '1' : '.55' };
+    });
+    const vt = fx.type ? AN_VERDICT.slice(0, s.typed.v || 0) : AN_VERDICT, vDone = !fx.type || (s.typed.v || 0) >= AN_VERDICT.length;
+    const verdictShown = fx.type ? t >= AN_STAMP + 300 : stamped;
+    const left = Math.max(0, Math.ceil((AN_END - t) / 1000));
+    return {
+      rootRef: this.rootRef, verdictRef: this.verdictRef,
+      wide, deskCols: wide ? 'minmax(0,1.5fr) minmax(0,1fr)' : 'minmax(0,1fr)', sheetCols: wide ? 'minmax(0,1fr) 180px' : 'minmax(0,1fr)', resCols: wide ? 'minmax(0,1.6fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      scanning: t < AN_END, stamped, finished,
+      statusLine: t < AN_END ? 'PROVJERA ' + doneN + ' / 8' : 'PROVJERA GOTOVA',
+      pages: String(t >= AN_END ? 41 : Math.floor(41 * k)), words: fmt(t >= AN_END ? 11240 : Math.round(11240 * k / 10) * 10), sources: String(t >= AN_END ? 38 : Math.floor(38 * k)),
+      score: String(s.score), scoreNote: t < AN_END ? 'mijenja se dok mjerim' : '6 nalaza',
+      checks, notes, marks, slots, cats,
+      mFont: done(chk('Font i veličina')) ? '1' : '0', mMarg: done(chk('Margine')) ? '1' : '0', mPror: done(chk('Prored')) ? '1' : '0', mUvl: done(chk('Uvlaka i poravnanje')) ? '1' : '0', mStr: done(chk('Brojevi stranica')) ? '1' : '0',
+      remaining: t < AN_END ? 'još oko ' + left + ' s' : 'Gotovo',
+      notifyText: s.notify ? 'Javit ću ti kad bude gotovo ✓' : 'Javi mi kad bude gotovo', notifyCol: s.notify ? '#5FBF8A' : 'rgba(237,231,220,.65)',
+      onNotify: () => { try { window.Notification && Notification.requestPermission && Notification.requestPermission().catch(() => {}); } catch (e) {} this.setState(p => ({ notify: !p.notify })); },
+      onReplay: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); this.start(); },
+      foundLine: foundN ? foundN + ' od 6 pronađeno' : 'još ništa',
+      verdictPending: !verdictShown, verdictShown, verdictTitle: vt, caretOp: fx.type && !vDone ? '1' : '0', verdictMetaOp: vDone ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>
