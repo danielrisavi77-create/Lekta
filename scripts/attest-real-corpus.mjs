@@ -14,6 +14,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hashRepairSourceTree } from './lib/repair-source-hash.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ULAZ = path.join(ROOT, 'docs', 'generated', 'repair-real-corpus.local.json');
@@ -54,6 +55,15 @@ const rezultati = mjerenje.results ?? [];
 // Artefakt bez provenijencije se odbija: ovjera koja ne zna kad je mjereno nije ovjera.
 if (typeof mjerenje.generatedAt !== 'string' || typeof mjerenje.generatedFromCommit !== 'string') {
   console.error('[ovjera] FAIL: artefakt mjerenja nema `generatedAt`/`generatedFromCommit`; ponovi mjerenje (LEKTA_LOCAL_CORPUS=1 vite-node scripts/repair-real-corpus.mts).');
+  process.exit(1);
+}
+if (typeof mjerenje.repairSourceHash !== 'string' || !mjerenje.repairSourceHash) {
+  console.error('[ovjera] FAIL: mjerenje nema fingerprint koda popravka; ponovi mjerenje s aktualnom skriptom.');
+  process.exit(1);
+}
+const aktualniKodPopravka = hashRepairSourceTree(path.join(ROOT, 'src', 'repair'));
+if (mjerenje.repairSourceHash !== aktualniKodPopravka) {
+  console.error('[ovjera] FAIL: src/repair se promijenio nakon mjerenja; ponovi mjerenje prije ovjere.');
   process.exit(1);
 }
 if (rezultati.length === 0) {
@@ -113,6 +123,7 @@ const postojeca = fs.existsSync(IZLAZ) ? JSON.parse(fs.readFileSync(IZLAZ, 'utf8
 const ovjera = {
   schemaVersion: 1,
   corpusFingerprint: otisak,
+  repairSourceHash: mjerenje.repairSourceHash,
   measuredAt: mjerenje.generatedAt,
   measuredFromCommit: mjerenje.generatedFromCommit,
   oracles: ['scripts/repair-real-corpus.mts (harness + detectPassRegressions)'],

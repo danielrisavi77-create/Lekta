@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-26T17:28:05.360Z",
+  "command": "npm run closed-loop -- --profile vuka-lovstvo-zavrsni --no-structural",
+  "profileId": "vuka-lovstvo-zavrsni",
+  "row": {
+    "profileId": "vuka-lovstvo-zavrsni",
+    "outcome": "pass",
+    "violated": [
+      "font",
+      "font-size",
+      "paper-size"
+    ],
+    "requested": 2,
+    "axesResolved": [
+      "font",
+      "font-size",
+      "paper-size"
+    ],
+    "axesRemaining": [],
+    "axesApplied": [],
+    "recommendationsApplied": [],
+    "profileAxesViolated": [
+      "font",
+      "font-size",
+      "paper-size"
+    ],
+    "resolved": 3,
+    "regressions": 0,
+    "textPreserved": true
+  },
+  "manifests": [
+    {
+      "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--font-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--font-size",
+      "testId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--font-size",
+      "command": "npm run closed-loop -- --profile vuka-lovstvo-zavrsni --no-structural",
+      "outcome": "pass",
+      "inputHash": "03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa",
+      "outputHash": "b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+      "repairSourceHash": "ac10efa47e15525fbb50c9057f46b372386ea05f44d848accb9e14139364c948",
+      "ruleValueHash": "568f15e9fe7bcf0adbe2836f7b2c521ab414bcb65c1224ee0feda777965886f7",
+      "ranAt": "2026-09-26T17:28:05.360Z"
+    },
+    {
+      "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--paper-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+      "testId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--paper-size",
+      "command": "npm run closed-loop -- --profile vuka-lovstvo-zavrsni --no-structural",
+      "outcome": "pass",
+      "inputHash": "03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa",
+      "outputHash": "b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+      "repairSourceHash": "ac10efa47e15525fbb50c9057f46b372386ea05f44d848accb9e14139364c948",
+      "ruleValueHash": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+      "ranAt": "2026-09-26T17:28:05.360Z"
+    }
+  ]
+}

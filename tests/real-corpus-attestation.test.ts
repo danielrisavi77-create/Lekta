@@ -16,6 +16,7 @@ import { attestationProblems, provenUnitWorkTypes, type CorpusAttestation } from
 const OSNOVA: CorpusAttestation = {
   schemaVersion: 1,
   corpusFingerprint: 'abc123',
+  repairSourceHash: 'repair-source-at-measurement',
   measuredAt: '2026-09-03T00:00:00.000Z',
   measuredFromCommit: 'a'.repeat(40),
   oracles: ['harness'],
@@ -30,24 +31,32 @@ const OSNOVA: CorpusAttestation = {
 
 describe('ovjera: sto se priznaje kao dokaz', () => {
   it('potpisana ovjera dokazuje samo profile bez regresije i s barem jednim cistim radom', () => {
-    const d = provenUnitWorkTypes(OSNOVA);
+    const d = provenUnitWorkTypes(OSNOVA, OSNOVA.repairSourceHash);
     expect([...d]).toEqual(['u-cist::graduate']);
   });
 
   it('regresija ponistava dokaz, jer mjerenje koje nadje regresiju NIJE dokaz da popravak radi', () => {
-    expect(provenUnitWorkTypes(OSNOVA).has('u-regresija::graduate')).toBe(false);
+    expect(provenUnitWorkTypes(OSNOVA, OSNOVA.repairSourceHash).has('u-regresija::graduate')).toBe(false);
   });
 
   it('mjerenje nad nula dokumenata nije dokaz', () => {
-    expect(provenUnitWorkTypes(OSNOVA).has('u-prazan::graduate')).toBe(false);
+    expect(provenUnitWorkTypes(OSNOVA, OSNOVA.repairSourceHash).has('u-prazan::graduate')).toBe(false);
   });
 });
 
 describe('ovjera: kad NE vrijedi', () => {
+  it('promijenjeni kod popravka nakon mjerenja poništava dokaz za A', () => {
+    const zastarjela = { ...OSNOVA, repairSourceHash: 'repair-source-at-measurement' };
+    const currentRepairSourceHash = 'repair-source-current';
+
+    expect(attestationProblems(zastarjela, currentRepairSourceHash)).toContain('kod popravka promijenjen nakon mjerenja');
+    expect(provenUnitWorkTypes(zastarjela, currentRepairSourceHash).size).toBe(0);
+  });
+
   it('bez potpisa ne vrijedi nista, ma koliko cistih mjerenja imala', () => {
     const bez = { ...OSNOVA, signedBy: null, signedAt: null };
-    expect(attestationProblems(bez)).toContain('nije potpisana');
-    expect(provenUnitWorkTypes(bez).size, 'nepotpisana ovjera ne smije dokazati nijedan profil').toBe(0);
+    expect(attestationProblems(bez, OSNOVA.repairSourceHash)).toContain('nije potpisana');
+    expect(provenUnitWorkTypes(bez, OSNOVA.repairSourceHash).size, 'nepotpisana ovjera ne smije dokazati nijedan profil').toBe(0);
   });
 
   it('POTPIS STARIJI OD MJERENJA ne vrijedi, jer ovjerava brojke koje jos nisu postojale', () => {
@@ -55,8 +64,8 @@ describe('ovjera: kad NE vrijedi', () => {
     // je covjek ovjerio brojke koje u trenutku potpisa nisu postojale. Nijedna dotadasnja provjera
     // to nije vidjela, jer su sve gledale POSTOJI li potpis, nikad sto pokriva.
     const unatrag = { ...OSNOVA, signedAt: '2026-09-03T21:50:42.798Z', measuredAt: '2026-09-03T23:04:26.992Z' };
-    expect(attestationProblems(unatrag)).toContain('potpis je stariji od mjerenja koje pokriva');
-    expect(provenUnitWorkTypes(unatrag).size, 'ovjera s potpisom unatrag ne smije dokazati nijedan profil').toBe(0);
+    expect(attestationProblems(unatrag, OSNOVA.repairSourceHash)).toContain('potpis je stariji od mjerenja koje pokriva');
+    expect(provenUnitWorkTypes(unatrag, OSNOVA.repairSourceHash).size, 'ovjera s potpisom unatrag ne smije dokazati nijedan profil').toBe(0);
   });
 
   it('ovjera BEZ VREMENA MJERENJA ne vrijedi, jer potpis onda ne pokriva nista odredjeno', () => {
@@ -64,31 +73,31 @@ describe('ovjera: kad NE vrijedi', () => {
     // odsutnost sama po sebi problem. Neparsabilan niz je isti slucaj u drugom ruhu.
     for (const measuredAt of ['', 'jucer'] as const) {
       const bez = { ...OSNOVA, measuredAt };
-      expect(attestationProblems(bez)).toContain('nema vremena mjerenja');
-      expect(provenUnitWorkTypes(bez).size, `measuredAt=${JSON.stringify(measuredAt)}`).toBe(0);
+      expect(attestationProblems(bez, OSNOVA.repairSourceHash)).toContain('nema vremena mjerenja');
+      expect(provenUnitWorkTypes(bez, OSNOVA.repairSourceHash).size, `measuredAt=${JSON.stringify(measuredAt)}`).toBe(0);
     }
-    expect(attestationProblems(OSNOVA)).not.toContain('nema vremena mjerenja');
+    expect(attestationProblems(OSNOVA, OSNOVA.repairSourceHash)).not.toContain('nema vremena mjerenja');
   });
 
   it('potpis ISTOVREMEN s mjerenjem vrijedi, jer granica ne smije biti stroza nego sto tvrdi', () => {
     // Bez ove tvrdnje bi se `<` i `<=` mogli zamijeniti a da to nitko ne primijeti; ovjera potpisana
     // u istoj milisekundi je uredna.
     const isti = { ...OSNOVA, signedAt: '2026-09-03T23:04:26.992Z', measuredAt: '2026-09-03T23:04:26.992Z' };
-    expect(attestationProblems(isti)).not.toContain('potpis je stariji od mjerenja koje pokriva');
+    expect(attestationProblems(isti, OSNOVA.repairSourceHash)).not.toContain('potpis je stariji od mjerenja koje pokriva');
   });
 
   it('bez navedenih alata mjerenja ne vrijedi', () => {
-    expect(provenUnitWorkTypes({ ...OSNOVA, oracles: [] }).size).toBe(0);
+    expect(provenUnitWorkTypes({ ...OSNOVA, oracles: [] }, OSNOVA.repairSourceHash).size).toBe(0);
   });
 
   it('bez otiska korpusa ili commita ne vrijedi', () => {
-    expect(provenUnitWorkTypes({ ...OSNOVA, corpusFingerprint: '' }).size).toBe(0);
-    expect(provenUnitWorkTypes({ ...OSNOVA, measuredFromCommit: null }).size).toBe(0);
+    expect(provenUnitWorkTypes({ ...OSNOVA, corpusFingerprint: '' }, OSNOVA.repairSourceHash).size).toBe(0);
+    expect(provenUnitWorkTypes({ ...OSNOVA, measuredFromCommit: null }, OSNOVA.repairSourceHash).size).toBe(0);
   });
 
   it('ovjere koje nema nije isto sto i prazna ovjera', () => {
-    expect(attestationProblems(null)).toEqual(['ovjere nema']);
-    expect(provenUnitWorkTypes(null).size).toBe(0);
+    expect(attestationProblems(null, OSNOVA.repairSourceHash)).toEqual(['ovjere nema']);
+    expect(provenUnitWorkTypes(null, OSNOVA.repairSourceHash).size).toBe(0);
   });
 });
 
@@ -108,12 +117,12 @@ describe('ovjera u repozitoriju', () => {
    * potpisana tvrdnja koja bi dokazala profil unatoc nadjenoj regresiji.
    */
   it('gard stvarno grize', () => {
-    const cisto = provenUnitWorkTypes(OSNOVA);
+    const cisto = provenUnitWorkTypes(OSNOVA, OSNOVA.repairSourceHash);
     expect(cisto.size, 'baseline je izmjeren, ne pretpostavljen').toBe(1);
     const mutiran: CorpusAttestation = {
       ...OSNOVA,
       entries: OSNOVA.entries.map((e) => (e.unitId === 'u-regresija' ? { ...e, regressedChecks: [] } : e)),
     };
-    expect(provenUnitWorkTypes(mutiran).size, 'uklonjena regresija mora promijeniti ishod').toBe(2);
+    expect(provenUnitWorkTypes(mutiran, OSNOVA.repairSourceHash).size, 'uklonjena regresija mora promijeniti ishod').toBe(2);
   });
 });

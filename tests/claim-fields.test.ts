@@ -189,7 +189,7 @@ describe('tvrdnja nosi modalitet i opseg', () => {
 
   it('vokabular izvora upisa je zatvoren', () => {
     const sources = new Set(scored.map((r) => r.entry.modalitySource).filter(Boolean));
-    expect([...sources].sort()).toEqual(['agent-read', 'human', 'mechanical']);
+    expect([...sources].sort()).toEqual(['agent-read', 'ai-evidence-audit', 'human', 'mechanical']);
   });
 
   it('ratchet: broj bodovanih pravila bez modaliteta smije samo padati', () => {

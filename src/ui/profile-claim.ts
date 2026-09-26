@@ -55,7 +55,13 @@ const ARTIFACT = claims as unknown as {
   inheritedFrom?: Record<string, string[]>;
 };
 
-const INHERITED_A = new Set(ARTIFACT.inheritedA ?? []);
+export interface ProfileClaimArtifact {
+  ladder: Record<string, string>;
+  byProfile: Record<string, ClaimLetter>;
+  proofNotes?: Record<string, string>;
+  inheritedA?: string[];
+  inheritedFrom?: Record<string, string[]>;
+}
 
 /**
  * Razina dokaza za profil, ili `null` kad profila nema (opca provjera, nepoznat id).
@@ -63,21 +69,29 @@ const INHERITED_A = new Set(ARTIFACT.inheritedA ?? []);
  * gora od nikakve.
  */
 export function profileClaimFor(profileId: string | null | undefined): ProfileClaim | null {
+  return projectProfileClaim(profileId, ARTIFACT);
+}
+
+/** Pure projection so direct and inherited A behavior stays testable when current evidence has no A rows. */
+export function projectProfileClaim(
+  profileId: string | null | undefined,
+  artifact: ProfileClaimArtifact,
+): ProfileClaim | null {
   if (!profileId) return null;
-  const claim = ARTIFACT.byProfile[profileId];
+  const claim = artifact.byProfile[profileId];
   if (!claim) return null;
-  const label = ARTIFACT.ladder[claim];
+  const label = artifact.ladder[claim];
   if (!label) return null;
   if (claim !== 'A') {
     return { claim, label, proof: null, note: '', evidenceBasis: claim === 'B' ? 'synthetic' : 'not-demonstrated', testedProfileIds: [] };
   }
-  const inherited = INHERITED_A.has(profileId);
-  const tested = inherited ? (ARTIFACT.inheritedFrom?.[profileId] ?? []).filter((id) => id !== profileId) : [profileId];
+  const inherited = new Set(artifact.inheritedA ?? []).has(profileId);
+  const tested = inherited ? (artifact.inheritedFrom?.[profileId] ?? []).filter((id) => id !== profileId) : [profileId];
   return {
     claim,
     label,
     proof: inherited ? 'inherited' : 'direct',
-    note: inherited ? (ARTIFACT.proofNotes?.['unit-work-type'] ?? '') : '',
+    note: inherited ? (artifact.proofNotes?.['unit-work-type'] ?? '') : '',
     evidenceBasis: inherited ? 'inherited' : 'direct',
     testedProfileIds: tested,
   };

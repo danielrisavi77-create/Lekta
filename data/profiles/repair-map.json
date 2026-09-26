@@ -1568,8 +1568,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-doktorski--margins",
@@ -1578,8 +1578,8 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-doktorski--font",
@@ -1588,8 +1588,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-doktorski--font-size",
@@ -1598,8 +1598,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-doktorski--line-spacing",
@@ -1608,8 +1608,8 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     }
   ],
   "efos-opci-akademski-rad": [
@@ -1620,8 +1620,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Upute, travanj 2023",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-opci-akademski-rad--font-size",
@@ -1630,8 +1630,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Upute, travanj 2023",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-opci-akademski-rad--line-spacing",
@@ -1640,8 +1640,8 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "Upute, travanj 2023",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-opci-akademski-rad--margins",
@@ -1650,8 +1650,8 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true,
-      "sourcePage": "Upute, travanj 2023",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-opci-akademski-rad--paper-size",
@@ -1660,8 +1660,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Upute, travanj 2023",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "lastVerified": "2026-09-25"
     }
   ],
   "efos-specijalisticki": [
@@ -1672,8 +1672,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-specijalisticki--margins",
@@ -1682,8 +1682,8 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-specijalisticki--font",
@@ -1692,8 +1692,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-specijalisticki--font-size",
@@ -1702,8 +1702,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efos-specijalisticki--line-spacing",
@@ -1712,8 +1712,8 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "lastVerified": "2026-08-01"
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "lastVerified": "2026-09-25"
     }
   ],
   "efos-zavrsni": [
@@ -1952,8 +1952,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efst-opci-akademski-rad--font-size",
@@ -1962,8 +1962,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efst-opci-akademski-rad--line-spacing",
@@ -1972,8 +1972,8 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efst-opci-akademski-rad--justify",
@@ -1982,8 +1982,8 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true,
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "efst-opci-akademski-rad--margins",
@@ -1992,8 +1992,8 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true,
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "lastVerified": "2026-09-25"
     }
   ],
   "efst-zavrsni": [
@@ -19521,8 +19521,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "\"Nacin pisanja zavrsnog rada\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "vuka-lovstvo-zavrsni--paper-size",
@@ -19531,8 +19531,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "\"Nacin pisanja zavrsnog rada\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "vuka-lovstvo-zavrsni--font",
@@ -19623,8 +19623,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "vuka-prehrambena-zavrsni--line-spacing",
@@ -19633,8 +19633,8 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
+      "lastVerified": "2026-09-25"
     },
     {
       "ruleId": "vuka-prehrambena-zavrsni--font",

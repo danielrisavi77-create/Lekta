@@ -5,7 +5,7 @@
       "ruleId": "efst-opci-akademski-rad--font",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -15,15 +15,65 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "efst-upute-studentski-radovi-2013",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efst-opci-akademski-rad",
+        "ruleId": "efst-opci-akademski-rad--font",
+        "sourceId": "efst-upute-studentski-radovi-2013",
+        "sourceUrl": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+        "sourcePage": "Odjeljak 4, tiskana str. 7",
+        "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+        "claim": {
+          "value": [
+            "Times New Roman"
+          ],
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Odjeljak 4 propisuje Times New Roman za oblikovanje teksta; vrijednost profila podudara se."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je doslovan u službenom PDF snapshotu, odjeljak 4, tiskana stranica 7."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Uputa vrijedi za oblikovanje teksta studentskog rada; nema užeg opsega koji bi isključio tijelo rada."
+          }
+        ],
+        "agree": true,
+        "summary": "Službena uputa potvrđuje Times New Roman za tijelo rada; vrijednost, opseg i izvršni profilni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font",
+          "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
+          "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
+          "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "ranAt": "2026-09-26T17:24:35.002Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "font-fixer"
     },
@@ -31,7 +81,7 @@
       "ruleId": "efst-opci-akademski-rad--font-size",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "font-size",
       "value": [
         12
@@ -41,15 +91,65 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "efst-upute-studentski-radovi-2013",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efst-opci-akademski-rad",
+        "ruleId": "efst-opci-akademski-rad--font-size",
+        "sourceId": "efst-upute-studentski-radovi-2013",
+        "sourceUrl": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+        "sourcePage": "Odjeljak 4, tiskana str. 7",
+        "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+        "claim": {
+          "value": [
+            12
+          ],
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Odjeljak 4 izričito navodi veličinu 12 za oblikovanje teksta; vrijednost profila sadrži 12."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je doslovan u službenom PDF snapshotu, odjeljak 4, tiskana stranica 7."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Opseg je opći tekst studentskog rada, bez uočene iznimke za tijelo rada."
+          }
+        ],
+        "agree": true,
+        "summary": "Službena uputa podupire veličinu 12 za tekst rada; vrijednost, opseg i izvršni profilni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font-size:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--font-size",
+          "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
+          "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
+          "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "ranAt": "2026-09-26T17:24:35.002Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "font-fixer"
     },
@@ -57,7 +157,7 @@
       "ruleId": "efst-opci-akademski-rad--line-spacing",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -65,15 +165,63 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "efst-upute-studentski-radovi-2013",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efst-opci-akademski-rad",
+        "ruleId": "efst-opci-akademski-rad--line-spacing",
+        "sourceId": "efst-upute-studentski-radovi-2013",
+        "sourceUrl": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+        "sourcePage": "Odjeljak 4, tiskana str. 7",
+        "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+        "claim": {
+          "value": 1.5,
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Odjeljak 4 propisuje prored 1,5 za oblikovanje teksta; profilna vrijednost je 1,5."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je doslovan u službenom PDF snapshotu, odjeljak 4, tiskana stranica 7."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Uputa obuhvaća tekst studentskog rada; nije utvrđen uži opseg koji bi isključio glavni tekst."
+          }
+        ],
+        "agree": true,
+        "summary": "Službena uputa potvrđuje prored 1,5 za tekst rada; vrijednost, opseg i izvršni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--line-spacing:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--line-spacing",
+          "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
+          "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
+          "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "ranAt": "2026-09-26T17:24:35.002Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "line-spacing-fixer"
     },
@@ -81,7 +229,7 @@
       "ruleId": "efst-opci-akademski-rad--justify",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -89,15 +237,63 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "efst-upute-studentski-radovi-2013",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efst-opci-akademski-rad",
+        "ruleId": "efst-opci-akademski-rad--justify",
+        "sourceId": "efst-upute-studentski-radovi-2013",
+        "sourceUrl": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+        "sourcePage": "Odjeljak 4, tiskana str. 7",
+        "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+        "claim": {
+          "value": true,
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Uputa traži poravnanje teksta uz lijevi i desni rub stranice; profil provjerava obostrano poravnanje."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je doslovan u službenom PDF snapshotu, odjeljak 4, tiskana stranica 7."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Nije pronađena iznimka koja bi obostrano poravnanje ograničila na uži dio glavnog teksta."
+          }
+        ],
+        "agree": true,
+        "summary": "Službena uputa zahtijeva poravnanje uz oba ruba; profilna vrijednost i izvršni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--justify:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--justify",
+          "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
+          "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
+          "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "ranAt": "2026-09-26T17:24:35.002Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "alignment-fixer"
     },
@@ -105,7 +301,7 @@
       "ruleId": "efst-opci-akademski-rad--margins",
       "modality": "directive",
       "scope": "whole",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -118,15 +314,68 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "efst-upute-studentski-radovi-2013",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "sourcePage": "Odjeljak 4, tiskana str. 7",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efst-opci-akademski-rad",
+        "ruleId": "efst-opci-akademski-rad--margins",
+        "sourceId": "efst-upute-studentski-radovi-2013",
+        "sourceUrl": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+        "sourcePage": "Odjeljak 4, tiskana str. 7",
+        "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+        "claim": {
+          "value": {
+            "top": 2.5,
+            "right": 2.5,
+            "bottom": 2.5,
+            "left": 2.5
+          },
+          "modality": "directive",
+          "scope": "whole"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Uputa propisuje 2,5 cm za gornji, donji, lijevi i desni rub; sva četiri profila odgovaraju."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je doslovan u službenom PDF snapshotu, odjeljak 4, tiskana stranica 7."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Sve četiri margine izrijekom su navedene, bez iznimke za stranice studentskog rada."
+          }
+        ],
+        "agree": true,
+        "summary": "Službena uputa izričito propisuje 2,5 cm na sve četiri strane; profilna vrijednost i izvršni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--margins:c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba:f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "testId": "closed-loop:efst-opci-akademski-rad:efst-opci-akademski-rad--margins",
+          "command": "npm run closed-loop -- --profile efst-opci-akademski-rad --no-structural",
+          "inputHash": "c0762c334e7f6b91f719cd6fe591084495163a7b8d1c2688f8eb369e9af169ba",
+          "outputHash": "f8741d9d65ec1d14787aea825d21a4bd51e9947ab96427530c1cf6fed5009b87",
+          "ranAt": "2026-09-26T17:24:35.002Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "margins-fixer"
     },

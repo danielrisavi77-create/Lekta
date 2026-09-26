@@ -49,6 +49,8 @@ export interface CorpusAttestation {
   schemaVersion: 1;
   /** Otisak SKUPA mjerenih radova (imena i velicine), nikad sadrzaja. Mijenja se kad se korpus mijenja. */
   corpusFingerprint: string;
+  /** Otisak svih datoteka src/repair u trenutku mjerenja; dokazuje koji je kod proizveo rezultat. */
+  repairSourceHash: string;
   measuredAt: string;
   /** Commit nad kojim je mjereno; bez njega se ne zna sto je tocno dokazano. */
   measuredFromCommit: string | null;
@@ -76,7 +78,10 @@ export interface CorpusAttestation {
 }
 
 /** Razlozi zbog kojih ovjera ne vrijedi. Prazan niz znaci da vrijedi. */
-export function attestationProblems(a: CorpusAttestation | null | undefined): string[] {
+export function attestationProblems(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash: string | null,
+): string[] {
   if (!a) return ['ovjere nema'];
   const p: string[] = [];
   if (a.schemaVersion !== 1) p.push('nepoznata verzija sheme');
@@ -84,6 +89,11 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   if (!a.signedAt) p.push('nema datuma potpisa');
   if (!Array.isArray(a.oracles) || a.oracles.length === 0) p.push('nema navedenih alata mjerenja');
   if (!a.corpusFingerprint) p.push('nema otiska korpusa');
+  if (!a.repairSourceHash) p.push('nema otiska koda popravka pri mjerenju');
+  if (!currentRepairSourceHash) p.push('nema otiska aktualnog koda popravka');
+  else if (a.repairSourceHash && a.repairSourceHash !== currentRepairSourceHash) {
+    p.push('kod popravka promijenjen nakon mjerenja');
+  }
   if (!a.measuredFromCommit) p.push('nema commita nad kojim je mjereno');
   // Vrijeme mjerenja je ono sto potpis pokriva; bez njega gard "potpis stariji od mjerenja" nema sto
   // usporediti i tiho prolazi. Do 2026-09-05 ga je skripta izmisljala (`new Date()` pri pisanju ovjere).
@@ -116,8 +126,11 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
  * Par ulazi SAMO ako je barem jedan rad zavrsio cisto I nijedna provjera nije regresirala. Mjerenje
  * koje je naslo regresiju nije dokaz da popravak radi; ono je dokaz da ne radi.
  */
-export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
-  if (attestationProblems(a).length > 0) return new Set();
+export function provenUnitWorkTypes(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash: string | null,
+): Set<string> {
+  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
   const out = new Set<string>();
   for (const e of a!.entries) {
     if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
@@ -135,8 +148,11 @@ export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Se
  * 2026-09-08, nalaz 4: sucelje je 12 izmjerenih i 19 izvedenih profila pokrivalo istom recenicom).
  * Isti uvjet cistoce kao za par: unos s regresijom nista ne dokazuje.
  */
-export function attestedProfileWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
-  if (attestationProblems(a).length > 0) return new Set();
+export function attestedProfileWorkTypes(
+  a: CorpusAttestation | null | undefined,
+  currentRepairSourceHash: string | null,
+): Set<string> {
+  if (attestationProblems(a, currentRepairSourceHash).length > 0) return new Set();
   const out = new Set<string>();
   for (const e of a!.entries) {
     if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {

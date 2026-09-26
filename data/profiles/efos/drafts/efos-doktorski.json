@@ -5,7 +5,7 @@
       "ruleId": "efos-doktorski--paper-size",
       "modality": "directive",
       "scope": "whole",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -13,71 +13,229 @@
       "machineCheckable": true,
       "authority": "program-page",
       "sourceId": "efos-upute-studentski-2023",
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "quote": "veličina je stranice A4 (210x297 mm)",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
       "fixerId": "paper-size-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-08-01",
-      "verifiedBy": "owner-bulk-approval",
+      "lastVerified": "2026-09-25",
+      "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
-      "confirmedVia": "owner-bulk-approval"
+      "confirmedVia": "ai-evidence-audit",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efos-doktorski",
+        "ruleId": "efos-doktorski--paper-size",
+        "sourceId": "efos-upute-studentski-2023",
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
+        "sourcePage": "Odjeljak 2, tiskana str. 3",
+        "quote": "veličina je stranice A4 (210x297 mm)",
+        "claim": {
+          "value": "A4",
+          "modality": "directive",
+          "scope": "whole"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Odlomak izričito određuje A4, 210x297 mm."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "U kontekstu odjeljka nema alternativne veličine ni iznimke za ovu os."
+          }
+        ],
+        "agree": true,
+        "summary": "Službena uputa podupire A4; vrijednost, lokator i opseg cijelog rada odgovaraju pravilu.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efos-doktorski:efos-doktorski--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "testId": "closed-loop:efos-doktorski:efos-doktorski--paper-size",
+          "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
+          "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
+          "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "ranAt": "2026-09-26T17:20:53.129Z"
+        }
+      }
     },
     {
       "ruleId": "efos-doktorski--margins",
       "modality": "directive",
       "scope": "whole",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "margins",
-      "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
       "category": "format",
       "label": "Margine",
       "machineCheckable": true,
       "authority": "program-page",
       "sourceId": "efos-upute-studentski-2023",
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "quote": "a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
       "fixerId": "margins-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-08-01",
-      "verifiedBy": "owner-bulk-approval",
+      "lastVerified": "2026-09-25",
+      "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
-      "confirmedVia": "owner-bulk-approval"
+      "confirmedVia": "ai-evidence-audit",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efos-doktorski",
+        "ruleId": "efos-doktorski--margins",
+        "sourceId": "efos-upute-studentski-2023",
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
+        "sourcePage": "Odjeljak 2, tiskana str. 3",
+        "quote": "a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
+        "claim": {
+          "value": {
+            "top": 2.5,
+            "right": 2.5,
+            "bottom": 2.5,
+            "left": 2.5
+          },
+          "modality": "directive",
+          "scope": "whole"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Uputa određuje po 25 mm za lijevu, desnu, gornju i donju marginu."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "U kontekstu odjeljka nema drukčije vrijednosti ni iznimke za ovu os."
+          }
+        ],
+        "agree": true,
+        "summary": "Četiri navedene margine odgovaraju vrijednosti 2,5 cm za cijeli rad.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efos-doktorski:efos-doktorski--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "testId": "closed-loop:efos-doktorski:efos-doktorski--margins",
+          "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
+          "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
+          "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "ranAt": "2026-09-26T17:20:53.129Z"
+        }
+      }
     },
     {
       "ruleId": "efos-doktorski--font",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "font",
-      "value": ["Times New Roman"],
+      "value": [
+        "Times New Roman"
+      ],
       "category": "format",
       "label": "Vrsta slova",
       "machineCheckable": true,
       "authority": "program-page",
       "sourceId": "efos-upute-studentski-2023",
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
       "fixerId": "font-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-08-01",
-      "verifiedBy": "owner-bulk-approval",
+      "lastVerified": "2026-09-25",
+      "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
-      "confirmedVia": "owner-bulk-approval"
+      "confirmedVia": "ai-evidence-audit",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efos-doktorski",
+        "ruleId": "efos-doktorski--font",
+        "sourceId": "efos-upute-studentski-2023",
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
+        "sourcePage": "Odjeljak 2, tiskana str. 3",
+        "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+        "claim": {
+          "value": [
+            "Times New Roman"
+          ],
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Tekst upute za rad navodi font Times New Roman."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "U kontekstu odjeljka nema alternativnog fonta ni iznimke za tijelo rada."
+          }
+        ],
+        "agree": true,
+        "summary": "Uputa podupire Times New Roman za tekst rada; vrijednost, opseg tijela i modalitet su usklađeni.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "testId": "closed-loop:efos-doktorski:efos-doktorski--font",
+          "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
+          "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
+          "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "ranAt": "2026-09-26T17:20:53.129Z"
+        }
+      }
     },
     {
       "ruleId": "efos-doktorski--font-size",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -85,23 +243,71 @@
       "machineCheckable": true,
       "authority": "program-page",
       "sourceId": "efos-upute-studentski-2023",
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
       "fixerId": "font-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-08-01",
-      "verifiedBy": "owner-bulk-approval",
+      "lastVerified": "2026-09-25",
+      "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
-      "confirmedVia": "owner-bulk-approval"
+      "confirmedVia": "ai-evidence-audit",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efos-doktorski",
+        "ruleId": "efos-doktorski--font-size",
+        "sourceId": "efos-upute-studentski-2023",
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
+        "sourcePage": "Odjeljak 2, tiskana str. 3",
+        "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+        "claim": {
+          "value": 12,
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Uputa navodi veličinu slova 12 točaka."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "U kontekstu odjeljka nema druge veličine ni iznimke za ovu os."
+          }
+        ],
+        "agree": true,
+        "summary": "Veličina 12 pt za tijelo rada izravno odgovara navodu službene upute.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "testId": "closed-loop:efos-doktorski:efos-doktorski--font-size",
+          "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
+          "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
+          "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "ranAt": "2026-09-26T17:20:53.129Z"
+        }
+      }
     },
     {
       "ruleId": "efos-doktorski--line-spacing",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -109,17 +315,65 @@
       "machineCheckable": true,
       "authority": "program-page",
       "sourceId": "efos-upute-studentski-2023",
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
       "fixerId": "line-spacing-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-08-01",
-      "verifiedBy": "owner-bulk-approval",
+      "lastVerified": "2026-09-25",
+      "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
-      "confirmedVia": "owner-bulk-approval"
+      "confirmedVia": "ai-evidence-audit",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "efos-doktorski",
+        "ruleId": "efos-doktorski--line-spacing",
+        "sourceId": "efos-upute-studentski-2023",
+        "sourceUrl": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx",
+        "fetchedAt": "2026-07-02",
+        "snapshotHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
+        "sourcePage": "Odjeljak 2, tiskana str. 3",
+        "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+        "claim": {
+          "value": 1.5,
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Uputa izričito navodi prored 1,5."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "U kontekstu odjeljka nema druge vrijednosti ni iznimke za prored tijela."
+          }
+        ],
+        "agree": true,
+        "summary": "Prored 1,5 za tijelo rada odgovara citiranoj službenoj uputi.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:efos-doktorski:efos-doktorski--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "testId": "closed-loop:efos-doktorski:efos-doktorski--line-spacing",
+          "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
+          "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
+          "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
+          "ranAt": "2026-09-26T17:20:53.129Z"
+        }
+      }
     }
   ],
   "generatedAt": "2026-08-01"

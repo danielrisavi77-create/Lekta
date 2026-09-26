@@ -17,9 +17,12 @@ import {
   DRAFT_PROFILE_IDS,
 } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
-import { computeWorklist, BULK_APPROVAL } from '../src/verification/worklist';
+import { computeWorklist, BULK_APPROVAL, ruleEvidenceKey } from '../src/verification/worklist';
+import { auditAiEvidence } from '../src/verification/ai-evidence-audit';
+import { loadRepositoryAiEvidenceContext } from '../scripts/ai-evidence-context-loader';
 import storedCoverage from '../data/coverage/scored-coverage.json';
-import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
+import type { RuleEntry, ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
+import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 
 const profiles = [
   ...VERIFIED_PROFILES_WITH_DRAFTS,
@@ -28,7 +31,14 @@ const profiles = [
 const registered = new Set(profiles.map((p) => p.id));
 const orphans = DRAFT_PROFILE_IDS.filter((id) => !registered.has(id));
 
-const fresh = computeWorklist(profiles, SOURCE_REGISTRY as SourceEntry[], orphans);
+const evidenceContext = await loadRepositoryAiEvidenceContext(
+  process.cwd(),
+  profiles,
+  SOURCE_REGISTRY as SourceEntry[],
+);
+const fresh = computeWorklist(profiles, SOURCE_REGISTRY as SourceEntry[], orphans, {
+  aiEvidenceResults: evidenceContext.resultsByRule,
+});
 const DOSSIER_DIR = 'data/verification/dossiers';
 
 /**
@@ -49,23 +59,132 @@ describe('verifikacijski worklist je u koraku s pravilima', () => {
 
   it('u dosjeima nema datoteke koju generator vise ne pise (uklonjen audit ostavlja trag)', () => {
     const expected = new Set(
-      Object.keys(fresh.files).map((rel) => rel.slice(rel.lastIndexOf('/') + 1)),
+      Object.keys(fresh.files)
+        .filter((rel) => rel.startsWith(`${DOSSIER_DIR}/`))
+        .map((rel) => rel.slice(rel.lastIndexOf('/') + 1)),
     );
     const actual = readdirSync(resolve(process.cwd(), DOSSIER_DIR)).filter((f) => f.endsWith('.md'));
     expect([...actual].sort()).toEqual([...expected].sort());
   });
 
-  it('dosje se pise tocno za profile koji imaju bulk ili recheck', () => {
-    const withWork = fresh.rows.filter((r) => r.bulk || r.recheck).map((r) => r.profileId).sort();
+  it('dosje se pise tocno za profile s pravilom koje trazi AI-evidence rad', () => {
+    const withWork = [...new Set(fresh.ruleItems.filter((item) => item.action !== 'none').map((item) => item.profileId))].sort();
     const dossiers = Object.keys(fresh.files)
-      .filter((rel) => !rel.endsWith('INDEX.md'))
+      .filter((rel) => rel.startsWith(`${DOSSIER_DIR}/`) && rel.endsWith('.md') && !rel.endsWith('/INDEX.md'))
       .map((rel) => rel.slice(rel.lastIndexOf('/') + 1, -'.md'.length))
       .sort();
     expect(dossiers).toEqual(withWork);
   });
 
+  it('privatni JSON worklist je projekcija tocno istih ruleItems', () => {
+    const serialized = JSON.parse(fresh.files['data/verification/ai-evidence-worklist.json']);
+    expect(serialized.ruleCount).toBe(fresh.ruleItems.length);
+    expect(serialized.rules).toEqual(fresh.ruleItems);
+    expect(serialized.statusCounts).toEqual(
+      fresh.ruleItems.reduce<Record<string, number>>((counts, item) => {
+        counts[item.status] = (counts[item.status] ?? 0) + 1;
+        return counts;
+      }, {}),
+    );
+  });
+
   it('nijedan draft ne zivi mimo registra profila', () => {
     expect(fresh.orphanDraftProfileIds).toEqual([]);
+  });
+
+  it('svako pravilo iz svakog registra ima tocno jedan status worklista ili dokazano stanje', () => {
+    const allRules = profiles.flatMap((profile) => (profile.ruleEntries ?? []).map((entry) => `${profile.id}::${entry.ruleId}`));
+    const worklistKeys = fresh.ruleItems.map((item) => `${item.profileId}::${item.ruleId}`);
+
+    expect(worklistKeys).toHaveLength(allRules.length);
+    expect(new Set(allRules).size).toBe(allRules.length);
+    expect([...worklistKeys].sort()).toEqual([...allRules].sort());
+    expect(fresh.ruleItems.every((item) => item.status && item.reasonCodes && item.action)).toBe(true);
+  });
+
+  it('po profilu izlaže točan broj bodovanih pravila koja još čekaju dokaz', () => {
+    for (const row of fresh.rows) {
+      const expected = fresh.ruleItems.filter((item) =>
+        item.profileId === row.profileId
+        && item.action !== 'none',
+      ).length;
+      expect(row.pendingEvidence, row.profileId).toBe(expected);
+    }
+  });
+
+  it.each([
+    ['owner-bulk-approval', { verifiedBy: BULK_APPROVAL }, 'legacy-bulk-untrusted'],
+    ['ai-1pass-batch', { confirmedVia: 'ai-1pass-batch' }, 'legacy-ai-batch-untrusted'],
+    ['ai-3pass-batch', { confirmedVia: 'ai-3pass-batch' }, 'legacy-ai-batch-untrusted'],
+  ] as const)('%s nije dokazni AI audit bez novog paketa', (_label, status, reasonCode) => {
+    const profile: ThesisProfile = {
+      id: 'legacy-batch-profile',
+      rules: {},
+      ruleEntries: [{
+        ruleId: `legacy-${_label}`,
+        checkId: 'font',
+        value: ['Times New Roman'],
+        authority: 'general',
+        sourceId: 'pravo-upute-oblikovanje-2024',
+        sourcePage: 'section 4',
+        quote: 'font: Times New Roman',
+        status: 'verified',
+        ...status,
+      }],
+    };
+    const result = computeWorklist([profile], SOURCE_REGISTRY as SourceEntry[]);
+    const row = result.ruleItems.find((item) => item.ruleId === `legacy-${_label}`);
+    expect(row?.status).toBe('needs-ai-evidence');
+    expect(row?.reasonCodes).toContain(reasonCode);
+  });
+
+  it('pojedinačna ljudska potvrda ne zatvara AI-evidence worklist', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const profile: ThesisProfile = {
+      id: fixture.profileId,
+      rules: {},
+      ruleEntries: [{
+        ...fixture.rule,
+        status: 'verified',
+        verifiedBy: 'reviewer',
+        confirmedVia: 'human',
+      }],
+    };
+
+    const row = computeWorklist([profile], [fixture.source]).ruleItems[0];
+
+    expect(row.status).toBe('needs-ai-evidence');
+    expect(row.reasonCodes).toContain('human-verification-not-ai-audited');
+    expect(row.action).toBe('run-ai-evidence-audit');
+  });
+
+  it('AI-evidence pravilo izlazi iz worklista samo uz rezultat valjanog deterministickog validatora', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const entry: RuleEntry = {
+      ...fixture.rule,
+      status: 'verified',
+      verifiedBy: 'ai-evidence-audit',
+      confirmedVia: 'ai-evidence-audit',
+      aiEvidence: fixture.evidence,
+    };
+    const profile: ThesisProfile = { id: fixture.profileId, rules: {}, ruleEntries: [entry] };
+    const key = ruleEvidenceKey(fixture.profileId, entry.ruleId);
+    const withoutValidation = computeWorklist([profile], [fixture.source]).ruleItems[0];
+    expect(withoutValidation.status).toBe('needs-ai-evidence');
+    expect(withoutValidation.reasonCodes).toContain('ai-evidence-not-revalidated');
+
+    const valid = auditAiEvidence(fixture);
+    const withValidation = computeWorklist([profile], [fixture.source], [], { aiEvidenceResults: { [key]: valid } }).ruleItems[0];
+    expect(withValidation.status).toBe('ai-evidence-verified');
+    expect(withValidation.action).toBe('none');
+
+    const invalid = auditAiEvidence({
+      ...fixture,
+      evidence: { ...fixture.evidence, claim: { ...fixture.evidence.claim, value: ['Arial'] } },
+    });
+    const withInvalidValidation = computeWorklist([profile], [fixture.source], [], { aiEvidenceResults: { [key]: invalid } }).ruleItems[0];
+    expect(withInvalidValidation.status).toBe('needs-ai-evidence');
+    expect(withInvalidValidation.reasonCodes).toContain('value-mismatch');
   });
 
   /**

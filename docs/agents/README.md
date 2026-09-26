@@ -25,6 +25,51 @@ Grok za Codex/Claude implementacije, a Codex/Claude za Build. Isti provider (npr
 Build) runner odbija. Za netrivijalne promjene parsera, citata i DOCX-a ostaje obavezan
 adversarijalni pregled prema AGENTS.md.
 
+## Brzi paralelni audit fakultetskih profila
+
+Za cilj podizanja profila na A koristi se lagani read-only fan-out, a ne vise pisaca u istom
+stablu:
+
+1. Koordinator jednom regenerira worklist (`npm run worklist`), pa deterministicki izdvoji jednu
+   ustanovu ili zajednicki sluzbeni izvor. Agentima se salje samo njihov disjunktni popis profila i
+   pravila, potrebne putanje i jedno konkretno pitanje; nikad cijela povijest razgovora ni cijeli
+   korpus. Jedan shard ima najvise 20 profila; ako ima vise, dijeli se prije slanja. Generator
+   zapisuje JSON/dosjee i brise zastarjele generirane dosjee, zato ga pokreci samo u izoliranom
+   worktreeu i pregledaj ciljani diff prije nastavka.
+   Prije fan-outa koordinator provjerava hash lokalnog snapshot-a prema registru i priprema kratki
+   dokazni paket: tocne relevantne odlomke/lokatore i, za PDF ili skenirani izvor, renderirane
+   stranice potrebne za tumacenje. Ne salji samo putanju uz ocekivanje da svaki auditor sam otkrije
+   kako procitati dokument. Paketi ne sadrze vise nepovezanih pravila ni cijeli izvor ako je dovoljan
+   odlomak; koordinator naknadno provjerava sve prihvacene cinjenice prema snapshotu.
+2. Istodobno rade najvise dva read-only auditora. Ne otvaraju studentske radove niti upisuju
+   draftove, ledger ili projekcije. Ako runner podrzava neovisni kontekst, ne nasljedjuju razgovor;
+   koordinator im daje kratak brief i tocne datoteke.
+3. Svaki auditor vraca samo strukturirane nalaze po bodovanom pravilu: `profileId`, `ruleId`,
+   `sourceId`, putanju i hash snapshota, lokator, doslovni citat, izvorno dokazanu vrijednost,
+   `scope`, `modality`, status `supported` / `contradicted` / `blocked` i jednu sljedecu radnju.
+   Bez slobodnog eseja i ponavljanja zajednickih cinjenica. Nepotpun citat ili polje znaci `blocked`,
+   ne pretpostavljenu potvrdu. Ne traziti skriveno rezoniranje modela.
+4. Koordinator spoji samo disjunktne rezultate, ukloni duplikate i provjeri svaku cinjenicu prema
+   lokalnom snapshotu. Agentov odgovor je nalaz, nikad dokaz: postojeći AI-evidence validator,
+   rule-specific manifest i odgovarajuci testovi i dalje su obvezni. Drugi, neovisni provider
+   ukljucuje se samo za stvarno sporne ili visokorizicne nalaze i propisani adversarijalni review.
+5. Jedan pisac provodi prihvaceni batch test-first u odobrenom worktreeu. Ciljani testovi i
+   `orphan-scan` izvode se po batchu; RAM-intenzivne provjere ne pokrecu se paralelno ispod
+   projektnog praga. Status A dodjeljuje se tek nakon svjezih gateova i valjanog, dopustenog
+   stvarnog DOCX dokaza; sinteticki testovi i slaganje modela to ne mogu zamijeniti.
+
+### Mjera ucinka
+
+Za prvi pilot zabiljezi po shardu broj profila i bodovanih pravila, prihvacene i blokirane nalaze,
+ponovljeni rad te proteklo vrijeme. Stvarne tokene usporedi samo ako ih runner izlozi; inace oznaci
+potrosnju tokena kao **nemjerenu** i koristi broj znakova kratkog briefa/odgovora samo kao proxy,
+nikad kao token-broj. Paralelizam cilja krace proteklo vrijeme; nizu ukupnu potrosnju postizu
+prethodno filtriranje, mali konteksti i izostanak redundantnog drugog audita. Zadrzi postavke samo
+ako dokazna pokrivenost i prolaz validatora nisu losiji od serijskog baselinea; u suprotnom smanji
+batch ili vrati jedan auditor. Ako agentni alat ne vrati dovrseni rezultat u dogovorenom prozoru,
+zabiljezi timeout odvojeno od stvarnog trajanja agenta; ne prikazuj istek cekanja kao dokaz da je
+agent zavrsio ili da je audit bio neuspjesan.
+
 ## Pocetak
 
 1. Instaliraj aktualne native Codex, Claude Code i (po potrebi) Grok Build CLI alate i prijavi ih

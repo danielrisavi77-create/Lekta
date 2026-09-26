@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import generatedReport from '../docs/generated/faculty-matrix.json';
-import { buildFacultyMatrixReport } from './helpers/faculty-matrix';
+import { buildFacultyMatrixReport, projectRuleEvidence } from './helpers/faculty-matrix';
+import type { RuleEntry, SourceEntry } from '../src/profiles/profile-schema';
 
 describe('fakultetska matrica Repair Enginea', () => {
   it('pokriva sve profile i ostaje sinkronizirana s generiranim izvještajem', () => {
@@ -50,5 +51,76 @@ describe('fakultetska matrica Repair Enginea', () => {
     const perProfile = report.cellSummary.cellCount / report.summary.profileCount;
     expect(perProfile).toBeGreaterThan(20);
     expect(Number.isInteger(perProfile)).toBe(true);
+  });
+
+  it('jedinstvena matrica veže profil uz izvor, citat, audit status i A-E dokaz po vrsti rada', () => {
+    const report = buildFacultyMatrixReport();
+    const efosDoctoral = report.faculties
+      .flatMap((faculty) => faculty.profiles)
+      .find((profile) => profile.profileId === 'efos-doktorski');
+
+    expect(report.summary.profileCount).toBe(407);
+    expect(report.legalProfiles).toHaveLength(3);
+    expect(efosDoctoral?.ruleEvidence).toContainEqual(expect.objectContaining({
+      ruleId: 'efos-doktorski--paper-size',
+      sourceId: 'efos-upute-studentski-2023',
+      sourcePage: 'Odjeljak 2, tiskana str. 3',
+      quote: 'veličina je stranice A4 (210x297 mm)',
+      recordedStatus: 'verified',
+      verificationMethod: 'ai-evidence-audit',
+      aiEvidenceValidation: 'not-revalidated',
+      aiClaim: { value: 'A4', scope: 'whole', modality: 'directive' },
+      aiPasses: expect.arrayContaining([
+        expect.objectContaining({ pass: 'extract', verdict: 'confirm' }),
+        expect.objectContaining({ pass: 'quote-check', verdict: 'confirm' }),
+        expect.objectContaining({ pass: 'refute', verdict: 'confirm' }),
+      ]),
+      auditExecution: expect.objectContaining({
+        manifestId: expect.stringContaining('closed-loop:efos-doktorski:'),
+        testId: 'closed-loop:efos-doktorski:efos-doktorski--paper-size',
+        command: 'npm run closed-loop -- --profile efos-doktorski --no-structural',
+        inputHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+        outputHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+      }),
+      scored: true,
+      fixerId: 'paper-size-fixer',
+    }));
+    expect(efosDoctoral?.completionByWorkType).toEqual([
+      expect.objectContaining({
+        workType: 'doctoral',
+        level: expect.stringMatching(/^[A-E]$/),
+        blockedReasons: expect.any(Array),
+        claimSource: 'docs/generated/completion-ledger.json',
+      }),
+    ]);
+    expect(efosDoctoral?.automaticTests).toMatchObject({
+      realCorpus: 'not-run',
+      syntheticClosedLoop: 'pass',
+    });
+  });
+
+  it('ne skriva nedostajući izvor ili citat i dopušta profil bez staging pravila', () => {
+    const entries = [{
+      ruleId: 'profile--missing-source',
+      sourceId: 'unregistered-source',
+      status: 'verified',
+      scored: true,
+      value: 'A4',
+    }] as RuleEntry[];
+
+    expect(projectRuleEvidence(entries, new Map<string, SourceEntry>())).toEqual([
+      expect.objectContaining({
+        ruleId: 'profile--missing-source',
+        sourceId: 'unregistered-source',
+        sourceTitle: null,
+        sourceUrl: null,
+        sourcePage: null,
+        quote: null,
+        recordedStatus: 'verified',
+        aiEvidenceValidation: 'missing',
+        scored: true,
+      }),
+    ]);
+    expect(projectRuleEvidence([], new Map<string, SourceEntry>())).toEqual([]);
   });
 });

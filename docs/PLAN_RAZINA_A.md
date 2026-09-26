@@ -1,8 +1,73 @@
-# Plan: svi profili na razini dokaza A
+# Plan: svi fakultetski profili na razini dokaza A
 
-> Izmjereno 2026-09-05 nad `docs/generated/completion-ledger.json` (436 redaka, 407 profila, 131
-> jedinica) i `data/verification/real-corpus-attestation.json` (45 stvarnih radova, 8 profila).
-> Stanje: **A 9, B 329, C 8, D 42, E 48.**
+## Povijesni presjek, 2026-09-24
+
+Cilj je **A za svih 407 fakultetskih profila**. Razina B je međukorak, ne završni kriterij. A se
+dodjeljuje samo profilu s valjanim, svježim i dopuštenim dokazom na stvarnom studentskom DOCX-u; bez
+takvog dokaza profil ne može prijeći iznad B, a ako ne zadovolji kriterije za B ostaje ispod B.
+Kriteriji razina se ne snižavaju i pravila, popravci ni dokazi se ne izmišljaju. Tri profila pravnih odjela
+izvan fakultetskog registra ostaju vidljiva u completion ledgeru i izvještavaju se zasebno, ali ne
+ulaze u nazivnik cilja 407 fakultetskih profila.
+
+Completion ledger trenutačno ima `globalA` nad svim registriranim profilima i `facultyMinimumB` nad
+407 fakultetskih profila. Potrebno je dodati ciljni `facultyAllA` ratchet koji zahtijeva A za svaki
+fakultetski profil i sve njegove retke, blokira nedostajuće, dvostruke i neregistrirane ID-jeve te
+provjerava svjež AI-evidence, repair i dopušteni stvarni DOCX dokaz. Minimum-B ostaje međumjera.
+Svježi broj trenutačno na A nije naveden jer izvedeni artefakti u ovom worktreeu nisu sigurno
+regenerirani.
+
+| Povijesna mjera | Snapshot 2026-09-24, nije svježi rezultat |
+|---|---:|
+| Registrirani profili u completion ledgeru | **410** |
+| Profili čiji su svi redci A | **23** |
+| Globalni A pokazatelj, informativan, nije cilj | **23 / 410, povijesni baseline** |
+| Fakultetski ciljni ratchet A | **407 profila, svježi rezultat treba regenerirati** |
+| Profili na B / C / D / E | **182 / 127 / 37 / 41** |
+| Completion-ledger redci po razini A / B / C / D / E | **25 / 182 / 139 / 42 / 48** |
+| Redci s verificiranim / dokazno neriješenim / samo savjetodavnim / bez bodovanih pravila | **228 / 160 / 19 / 29** |
+| Redci s fakultetskim popravkom / samo općom higijenom / bez automatskog popravka | **346 / 37 / 53** |
+| Redci s dokazom stvarnog DOCX-a / sintetičkim prolazom / bez prolaza | **42 / 346 / 48** |
+| Stvarni DOCX redci mjereni po profilu / izvedeni iz jedinice × vrste rada | **19 / 23** |
+| Profili u fakultetskoj matrici bez uzorka / s uzorkom | **402 / 5 od 407** |
+| Dodatni registrirani profili koji nisu u fakultetskoj matrici | **3** |
+| Pravila u AI-evidence worklistu: prihvaćena / čekaju paket / legacy ljudski potvrđena / nebodovana / recheck | **0 / 832 / 1.393 / 388 / 12** |
+
+Nazivnici se razlikuju jer ledger uključuje i tri pravna profila izvan fakultetske matrice
+(`radno-socijalno-pravo`, `sociologija`, `trgovacko-pravo`), a ledger redak predstavlja profil × vrstu
+rada. Zato se **profili i redci ne smiju zbrajati kao ista populacija**. Dokaz po jedinici × vrsti rada
+izričito je izveden dokaz, ne tvrdnja da je baš svaki profil zasebno mjeren.
+
+| Trenutačni blokator | Profili | Što je potrebno za A |
+|---|---:|---|
+| B: pravila, fakultetski popravak i sintetički closed-loop postoje; stvarni DOCX dokaz nedostaje | **182** | Svjež, dopušten stvarni DOCX attestation za odgovarajući profil i vrstu rada |
+| C: nedostaje valjan AI-evidence paket za barem jedno pravilo | **127** | Službeni snapshot, citat/vrijednost/opseg/modalitet i revalidirani izvršni manifest |
+| D: službena pravila nisu uparena sa sigurnim fakultetskim popravkom i/ili dokazanim closed-loopom | **37** | Profilno razriješiti mapu popravaka i dokazati stvarni zatvoreni ciklus |
+| E: trenutačno nema bodovanog profilnog pravila | **41** | Pronaći i dokazati primjenjiv službeni izvor; bez njega profil ostaje ispod A |
+
+Svježi real-corpus backlog zasebno navodi **402/407** profila matrice bez uzorka. Postojeća potpisana
+ovjera potječe iz mjerenja 10. rujna; u njoj Word verzija nije navedena, pa 25 A-redaka iz trenutačnog
+ledgera još nisu dokaz da su novi kriteriji `Fields.Update()` i nepromijenjenog vidljivog teksta
+ispunjeni. Broj nije zamjena
+za attestation: ledger može nositi dokaz izveden iz istog para jedinica × vrsta rada. Za A se provjerava
+svježina, dopuštenost, profil, vrsta rada, hashovi i oracle rezultat, a ne sama prisutnost u backlogu.
+
+### Kriteriji razina i sigurnosne granice
+
+- **A:** potpuna dokazna pravila, deterministički fakultetski popravak i svjež dopušten stvarni DOCX
+  dokaz s nula regresija te nepromijenjenim vidljivim tekstom nakon Word `Fields.Update()`.
+- **B:** isti dokaz pravila i popravka te prolaz sintetičkog closed-loopa; bez stvarnog dokaza ne prelazi na A.
+- **C/D/E:** nisu uspješna pokrivenost; ostaju niže dok se njihovi konkretni blokatori ne zatvore.
+- Bodovana pravila dolaze samo iz službenih izvora. AI priprema strukturirani dokaz, a deterministički
+  validator provjerava izvor, snapshot, doslovni citat, vrijednost, scope, modality i izvršni manifest.
+- Nema ljudskog reda odobravanja kao skrivenog gatea, ali nepotpun ili proturječan dokaz ostaje
+  odbijen. Ne sprema se skriveno rezoniranje modela.
+- Sintetički radovi dokazuju najviše B. Studentski radovi koriste se samo uz postojeću privolu i
+  pravnu osnovu; tekst i privatni dokazni paketi ne izlaze u javni bundle.
+- `training-pipeline` workflow ostaje sačuvan po izričitom odabiru vlasnika; brisanje workflowa nije
+  dio ovog plana.
+
+> Povijesna analiza i dnevnik provedbe niže ostaju radi porijekla ranijih odluka; brojke nisu
+> trenutačna baseline vrijednost. Mjerodavan je svježi ledger i backlog kada se sigurno regeneriraju.
 
 ## 1. Gdje je zid, brojkama
 

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "rows": [
     {
       "profileId": "adu-dramaturgija-diplomski",
@@ -131,13 +131,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -152,7 +152,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -192,7 +192,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -524,7 +524,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -554,13 +554,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -575,7 +575,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -584,13 +584,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -605,7 +605,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -676,13 +676,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -697,7 +697,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -856,13 +856,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -877,7 +877,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -886,13 +886,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -907,7 +907,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -916,13 +916,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -937,7 +937,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -946,13 +946,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -967,7 +967,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -976,13 +976,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -997,7 +997,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -1006,13 +1006,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -1027,7 +1027,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -1036,13 +1036,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -1057,7 +1057,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -1066,13 +1066,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -1087,7 +1087,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -1156,7 +1156,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -1207,8 +1207,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -1238,8 +1237,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -1269,8 +1267,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -1309,13 +1306,13 @@
       "workType": "doctoral",
       "programIds": [],
       "program": "missing",
-      "rules": "bulk-pending",
+      "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "C",
-      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -1324,14 +1321,13 @@
       "evidence": {
         "scoredMachineCheckable": 5,
         "scoredTotal": 5,
-        "bulkPending": 5,
+        "bulkPending": 0,
         "offeredRepairOptions": 5,
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -1430,13 +1426,13 @@
       "workType": "specialist",
       "programIds": [],
       "program": "missing",
-      "rules": "bulk-pending",
+      "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "C",
-      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -1445,14 +1441,13 @@
       "evidence": {
         "scoredMachineCheckable": 5,
         "scoredTotal": 5,
-        "bulkPending": 5,
+        "bulkPending": 0,
         "offeredRepairOptions": 5,
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -1763,8 +1758,8 @@
       "program": "missing",
       "rules": "advisory-only",
       "repair": "universal-hygiene",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
       "claim": "E",
       "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
@@ -1854,11 +1849,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -1872,7 +1867,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "erf-diplomski",
@@ -2180,13 +2177,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -2201,7 +2198,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2362,7 +2359,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "universal-hygiene",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -2392,7 +2389,7 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "universal-hygiene",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -2512,13 +2509,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -2533,7 +2530,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2542,13 +2539,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -2563,7 +2560,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2694,13 +2691,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -2715,7 +2712,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2724,13 +2721,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -2745,7 +2742,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2874,13 +2871,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -2895,7 +2892,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2904,13 +2901,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -2925,7 +2922,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2934,13 +2931,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -2955,7 +2952,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2964,13 +2961,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -2985,7 +2982,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -2994,13 +2991,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -3015,7 +3012,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -3024,13 +3021,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -3045,7 +3042,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -3054,13 +3051,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -3075,7 +3072,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -3084,13 +3081,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -3105,7 +3102,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -3204,13 +3201,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -3225,7 +3222,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -3234,13 +3231,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -3255,7 +3252,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -3266,11 +3263,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3284,7 +3281,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ffzg-etnologija-graduate",
@@ -3294,11 +3293,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3312,7 +3311,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
@@ -3320,13 +3321,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3340,7 +3341,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 1
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -3380,11 +3383,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3398,7 +3401,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ffzg-lingvistika-diplomski",
@@ -3408,11 +3413,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3426,7 +3431,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ffzg-pedagogija-graduate",
@@ -3436,11 +3443,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3454,7 +3461,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -3464,11 +3473,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3482,7 +3491,9 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
@@ -3492,11 +3503,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3510,7 +3521,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
@@ -3520,11 +3533,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3538,7 +3551,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "fgag-diplomski",
@@ -3756,13 +3771,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -3777,7 +3792,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4239,13 +4254,13 @@
         "fpzg-phd-politologija"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "exact-derived",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -4260,7 +4275,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4271,13 +4286,13 @@
         "fpzg-ma-mes"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "exact-official",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4291,7 +4306,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -4301,13 +4318,13 @@
         "fpzg-ma-nacionalna"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "exact-official",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4321,7 +4338,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -4331,13 +4350,13 @@
         "fpzg-ma-novinarstvo"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "exact-official",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4351,7 +4370,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -4361,10 +4382,10 @@
         "fpzg-ba-novinarstvo"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "exact-derived",
       "claim": "D",
       "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
@@ -4393,13 +4414,13 @@
         "fpzg-ba-novinarstvo"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "exact-derived",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -4413,7 +4434,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4421,13 +4444,13 @@
       "workType": "article",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "reused",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -4441,7 +4464,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4449,13 +4474,13 @@
       "workType": "project",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "reused",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -4469,7 +4494,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4477,13 +4504,13 @@
       "workType": "seminar",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "reused",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -4497,7 +4524,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "fpzg-politologija-diplomski",
@@ -4507,73 +4536,13 @@
         "fpzg-ma-politologija"
       ],
       "program": "derived",
-      "rules": "verified",
-      "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
-      "assets": "exact-official",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
-      "assetDetail": {
-        "titlePage": "exact-official",
-        "citation": "exact-official",
-        "declaration": "exact-official"
-      },
-      "evidence": {
-        "scoredMachineCheckable": 14,
-        "scoredTotal": 14,
-        "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 5,
-        "realDocxSamples": 0
-      },
-      "blockedReasons": []
-    },
-    {
-      "profileId": "fpzg-politologija-zavrsni",
-      "unitId": "fpzg",
-      "workType": "final",
-      "programIds": [
-        "fpzg-ba-politologija"
-      ],
-      "program": "derived",
-      "rules": "verified",
-      "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
-      "assets": "exact-derived",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
-      "assetDetail": {
-        "titlePage": "exact-derived",
-        "citation": "exact-official",
-        "declaration": "exact-official"
-      },
-      "evidence": {
-        "scoredMachineCheckable": 14,
-        "scoredTotal": 14,
-        "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 5,
-        "realDocxSamples": 0
-      },
-      "blockedReasons": []
-    },
-    {
-      "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
-      "unitId": "fpzg",
-      "workType": "specialist",
-      "programIds": [
-        "fpzg-spec-pr"
-      ],
-      "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "exact-official",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4588,7 +4557,71 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "unitId": "fpzg",
+      "workType": "final",
+      "programIds": [
+        "fpzg-ba-politologija"
+      ],
+      "program": "derived",
+      "rules": "bulk-pending",
+      "repair": "faculty-specific",
+      "proof": "synthetic-pass",
+      "proofSource": null,
+      "assets": "exact-derived",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "assetDetail": {
+        "titlePage": "exact-derived",
+        "citation": "exact-official",
+        "declaration": "exact-official"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 14,
+        "scoredTotal": 14,
+        "bulkPending": 0,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
+    },
+    {
+      "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "unitId": "fpzg",
+      "workType": "specialist",
+      "programIds": [
+        "fpzg-spec-pr"
+      ],
+      "program": "derived",
+      "rules": "bulk-pending",
+      "repair": "faculty-specific",
+      "proof": "synthetic-pass",
+      "proofSource": null,
+      "assets": "exact-official",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "assetDetail": {
+        "titlePage": "exact-official",
+        "citation": "exact-official",
+        "declaration": "exact-official"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 14,
+        "scoredTotal": 14,
+        "bulkPending": 0,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4599,13 +4632,13 @@
         "fpzg-spec-eu"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "exact-official",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4620,7 +4653,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4631,13 +4664,13 @@
         "fpzg-spec-sigurnost"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "exact-official",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4652,7 +4685,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4663,13 +4696,13 @@
         "fpzg-spec-diplomacija"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "exact-official",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4684,7 +4717,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4693,13 +4726,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -4714,7 +4747,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4723,13 +4756,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -4744,7 +4777,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4938,13 +4971,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -4959,7 +4992,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -4968,13 +5001,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -4989,7 +5022,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -5000,11 +5033,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -5018,7 +5051,9 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -5299,7 +5334,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -5329,7 +5364,7 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -5509,13 +5544,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -5529,7 +5564,9 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "inf-diplomski",
@@ -5747,13 +5784,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -5768,7 +5805,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -5888,8 +5925,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -5949,8 +5985,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -6111,11 +6146,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "exact-official",
@@ -6129,7 +6164,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "libertas-diplomski-en",
@@ -6139,11 +6176,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "exact-official",
@@ -6157,7 +6194,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "libertas-zavrsni",
@@ -6405,13 +6444,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -6426,7 +6465,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -6435,13 +6474,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -6456,7 +6495,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -6555,13 +6594,13 @@
       "workType": "doctoral",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -6575,7 +6614,9 @@
         "facultySpecificRepairOptions": 1,
         "realDocxSamples": 1
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "mefos-diplomski",
@@ -6673,13 +6714,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -6694,7 +6735,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -6733,13 +6774,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -6754,7 +6795,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -7130,7 +7171,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -7160,7 +7201,7 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -7372,11 +7413,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7390,7 +7431,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pmf-fizika-graduate",
@@ -7400,11 +7443,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7418,7 +7461,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -7428,8 +7473,8 @@
       "program": "missing",
       "rules": "advisory-only",
       "repair": "universal-hygiene",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
       "claim": "E",
       "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
@@ -7459,11 +7504,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7477,7 +7522,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pmf-geologija-graduate",
@@ -7487,11 +7534,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7505,7 +7552,9 @@
         "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -7515,11 +7564,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7533,7 +7582,9 @@
         "facultySpecificRepairOptions": 2,
         "realDocxSamples": 2
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pmfst-diplomski",
@@ -7603,13 +7654,13 @@
         "pravo-phd-pravne"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -7624,7 +7675,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -7635,13 +7686,13 @@
         "pravo-integrirani"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7656,7 +7707,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -7667,13 +7718,13 @@
         "pravo-ma-uprava"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7688,7 +7739,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -7699,13 +7750,13 @@
         "pravo-ba-uprava"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7720,7 +7771,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -7729,13 +7780,13 @@
       "workType": "article",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7749,7 +7800,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -7757,13 +7810,13 @@
       "workType": "project",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7777,7 +7830,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -7785,13 +7840,13 @@
       "workType": "seminar",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7805,7 +7860,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -7815,13 +7872,13 @@
         "pravo-ba-porezni"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7836,7 +7893,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -7847,13 +7904,13 @@
         "pravo-ma-politika"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7868,7 +7925,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -7939,11 +7996,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7957,7 +8014,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -7967,11 +8026,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7985,7 +8044,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -7995,11 +8056,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -8013,7 +8074,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -8023,13 +8086,13 @@
         "pravo-ma-socijalni"
       ],
       "program": "derived",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -8044,7 +8107,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -8085,13 +8148,13 @@
       "workType": "specialist",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -8106,7 +8169,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -8205,13 +8268,13 @@
       "workType": "article",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -8226,7 +8289,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -8235,13 +8298,13 @@
       "workType": "project",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -8256,7 +8319,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -8265,13 +8328,13 @@
       "workType": "seminar",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -8286,7 +8349,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -8316,8 +8379,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "dio bodovanih pravila jos ceka pojedinacni ljudski audit",
-        "dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -8508,7 +8570,7 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -8540,7 +8602,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -8572,7 +8634,7 @@
       "workType": "seminar",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -8874,7 +8936,7 @@
       "workType": "article",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -8906,7 +8968,7 @@
       "workType": "project",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -8938,7 +9000,7 @@
       "workType": "seminar",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -8970,13 +9032,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
@@ -8991,7 +9053,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9000,13 +9062,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
@@ -9021,7 +9083,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9030,13 +9092,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
@@ -9051,7 +9113,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9060,13 +9122,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
@@ -9081,7 +9143,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9090,13 +9152,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
@@ -9111,7 +9173,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9240,7 +9302,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -9272,7 +9334,7 @@
       "workType": "seminar",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -9306,11 +9368,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -9324,7 +9386,9 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 1
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "ttf-dizajn-diplomski",
@@ -9332,41 +9396,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
-      "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "unit-work-type",
-      "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
-      "assetDetail": {
-        "titlePage": "exact-derived",
-        "citation": "exact-official",
-        "declaration": "generic"
-      },
-      "evidence": {
-        "scoredMachineCheckable": 7,
-        "scoredTotal": 7,
-        "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 5,
-        "realDocxSamples": 0
-      },
-      "blockedReasons": []
-    },
-    {
-      "profileId": "ttf-dizajn-zavrsni",
-      "unitId": "ttf",
-      "workType": "final",
-      "programIds": [],
-      "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -9381,7 +9417,37 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+      ]
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "unitId": "ttf",
+      "workType": "final",
+      "programIds": [],
+      "program": "missing",
+      "rules": "bulk-pending",
+      "repair": "faculty-specific",
+      "proof": "synthetic-pass",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "assetDetail": {
+        "titlePage": "exact-derived",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 7,
+        "scoredTotal": 7,
+        "bulkPending": 0,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9450,13 +9516,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -9471,7 +9537,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9480,13 +9546,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -9501,7 +9567,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9750,7 +9816,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "manual-only",
       "proof": "not-run",
       "proofSource": null,
@@ -9841,13 +9907,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -9862,7 +9928,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9871,13 +9937,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -9892,7 +9958,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -9992,13 +10058,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10013,7 +10079,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10202,13 +10268,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
@@ -10223,7 +10289,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10232,13 +10298,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
@@ -10253,7 +10319,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10262,13 +10328,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -10283,7 +10349,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10292,13 +10358,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -10313,7 +10379,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10322,13 +10388,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -10343,7 +10409,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10352,13 +10418,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -10373,7 +10439,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10382,13 +10448,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -10403,7 +10469,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10412,13 +10478,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -10433,7 +10499,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10504,13 +10570,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10525,7 +10591,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10534,13 +10600,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10555,7 +10621,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10564,13 +10630,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10585,7 +10651,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10594,13 +10660,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10615,7 +10681,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10686,13 +10752,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10707,7 +10773,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10809,13 +10875,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10830,7 +10896,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10839,13 +10905,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10860,7 +10926,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10869,13 +10935,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10890,7 +10956,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10899,13 +10965,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10920,7 +10986,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10929,13 +10995,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10950,7 +11016,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10959,13 +11025,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -10980,7 +11046,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -10989,13 +11055,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11010,7 +11076,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11019,13 +11085,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11040,7 +11106,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11203,13 +11269,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11224,7 +11290,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11233,13 +11299,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11254,7 +11320,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11263,13 +11329,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11284,7 +11350,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11293,13 +11359,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11314,7 +11380,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11353,13 +11419,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11374,7 +11440,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11383,13 +11449,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11404,7 +11470,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11474,13 +11540,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11495,7 +11561,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11656,13 +11722,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11677,7 +11743,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11686,13 +11752,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11707,7 +11773,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11716,13 +11782,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -11737,7 +11803,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11806,13 +11872,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "reused",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -11827,7 +11893,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11926,13 +11992,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -11947,7 +12013,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -11986,13 +12052,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -12007,7 +12073,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12016,13 +12082,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -12037,7 +12103,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12316,13 +12382,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -12337,7 +12403,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12346,13 +12412,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -12367,7 +12433,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12406,13 +12472,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -12427,7 +12493,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12436,13 +12502,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -12457,7 +12523,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12496,13 +12562,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -12517,7 +12583,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12526,13 +12592,13 @@
       "workType": "article",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -12547,7 +12613,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12556,13 +12622,13 @@
       "workType": "project",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -12577,7 +12643,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12586,13 +12652,13 @@
       "workType": "seminar",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -12607,7 +12673,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12616,13 +12682,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -12637,7 +12703,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12676,7 +12742,7 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "universal-hygiene",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -12706,7 +12772,7 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "universal-hygiene",
       "proof": "synthetic-pass",
       "proofSource": null,
@@ -12798,13 +12864,13 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
@@ -12819,7 +12885,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -12828,13 +12894,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "verified",
+      "rules": "bulk-pending",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "C",
+      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -12849,7 +12915,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
+        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
       ]
     },
     {
@@ -13100,11 +13166,11 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
-      "proofSource": "profile",
+      "proof": "synthetic-pass",
+      "proofSource": null,
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -13118,7 +13184,9 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     }
   ],
   "summary": {
@@ -13131,8 +13199,8 @@
       "unsupported": 3
     },
     "byRules": {
-      "verified": 380,
-      "bulk-pending": 8,
+      "verified": 235,
+      "bulk-pending": 153,
       "advisory-only": 19,
       "none": 29
     },
@@ -13142,15 +13210,15 @@
       "manual-only": 53
     },
     "byProof": {
-      "real-docx-pass": 42,
-      "synthetic-pass": 346,
+      "real-docx-pass": 1,
+      "synthetic-pass": 387,
       "review": 0,
       "not-run": 48
     },
     "byProofSource": {
-      "profile": 19,
-      "unit-work-type": 23,
-      "none": 394
+      "profile": 1,
+      "unit-work-type": 0,
+      "none": 435
     },
     "byAssets": {
       "exact-official": 13,
@@ -13181,9 +13249,9 @@
       "unknown": 3
     },
     "byClaim": {
-      "A": 38,
-      "B": 300,
-      "C": 8,
+      "A": 0,
+      "B": 214,
+      "C": 132,
       "D": 42,
       "E": 48
     },
@@ -13196,7 +13264,1270 @@
     "nationalClaimBlockers": [
       "413 redaka nema evidentiran studijski program (sluzbeni Upisnik jos nije sinkroniziran)",
       "3 evidentiranih programa nema nijedan profil: fpzg: Sveučilišni prijediplomski studij Vojno vođenje i upravljanje; fpzg: Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi; pravo: Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
-      "98 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
+      "222 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
     ]
+  },
+  "globalA": {
+    "registeredProfileCount": 410,
+    "profilesAtA": 0,
+    "profilesBelowA": [
+      "adu-dramaturgija-diplomski",
+      "adu-ftv-rezija-diplomski",
+      "adu-gluma-diplomski",
+      "adu-kazalisna-rezija-diplomski",
+      "adu-montaza-diplomski",
+      "adu-opci-diplomski",
+      "adu-produkcija-diplomski",
+      "adu-snimanje-diplomski",
+      "agr-diplomski",
+      "agr-doktorski",
+      "agr-zavrsni",
+      "algebra-diplomski",
+      "algebra-diplomski-odnosi-s-javnoscu",
+      "algebra-specijalisticki",
+      "algebra-zavrsni",
+      "alu-diplomski",
+      "alu-doktorski",
+      "alu-grafika-diplomski",
+      "alu-kiparstvo-diplomski",
+      "alu-konzerviranje-diplomski",
+      "alu-nastavnicki-diplomski",
+      "alu-novi-mediji-diplomski",
+      "alu-slikarstvo-diplomski",
+      "apuri-diplomski",
+      "apuri-zavrsni",
+      "arca-zavrsni",
+      "arh-diplomski",
+      "arh-doktorski",
+      "aspira-diplomski",
+      "aspira-diplomski-en",
+      "aspira-zavrsni",
+      "aspira-zavrsni-en",
+      "bak-diplomski",
+      "bak-zavrsni",
+      "biolos-diplomski",
+      "biolos-zavrsni",
+      "biotech-diplomski",
+      "biotech-zavrsni",
+      "dizajn-diplomski",
+      "effectus-diplomski",
+      "effectus-seminarski",
+      "effectus-zavrsni",
+      "efos-diplomski",
+      "efos-doktorski",
+      "efos-opci-akademski-rad",
+      "efos-specijalisticki",
+      "efos-zavrsni",
+      "efri-diplomski",
+      "efri-zavrsni",
+      "efst-diplomski",
+      "efst-opci-akademski-rad",
+      "efst-zavrsni",
+      "efzg-diplomski",
+      "efzg-doktorski",
+      "efzg-seminarski",
+      "efzg-specijalisticki",
+      "efzg-strucni-racunovodstvo",
+      "efzg-zavrsni",
+      "erf-diplomski",
+      "erf-doktorski",
+      "evtos-diplomski",
+      "evtos-zavrsni",
+      "fazos-diplomski",
+      "fazos-zavrsni",
+      "fbf-doktorski",
+      "fbf-specijalisticki",
+      "fdmri-diplomski",
+      "fdmri-zavrsni",
+      "fdmz-diplomski",
+      "fer-diplomski",
+      "fer-doktorski",
+      "fer-zavrsni",
+      "ferit-diplomski",
+      "ferit-zavrsni",
+      "fesb-diplomski",
+      "fesb-zavrsni",
+      "fetpu-diplomski",
+      "fetpu-zavrsni",
+      "ffos-diplomski",
+      "ffos-germanistika-diplomski",
+      "ffos-germanistika-zavrsni",
+      "ffos-informatologija-diplomski",
+      "ffos-informatologija-zavrsni",
+      "ffos-povijest-diplomski",
+      "ffos-povijest-zavrsni",
+      "ffos-psihologija-diplomski",
+      "ffos-psihologija-zavrsni",
+      "ffos-zavrsni",
+      "ffpu-diplomski",
+      "ffpu-zavrsni",
+      "ffri-diplomski",
+      "ffri-germanistika-diplomski",
+      "ffri-germanistika-zavrsni",
+      "ffri-kroatistika-zavrsni",
+      "ffri-kulturalni-diplomski",
+      "ffri-povum-diplomski",
+      "ffri-povum-zavrsni",
+      "ffri-psihologija-diplomski",
+      "ffri-zavrsni",
+      "ffrz-bakalaureatski",
+      "ffrz-diplomski",
+      "ffrz-doktorski",
+      "ffst-diplomski",
+      "ffst-zavrsni",
+      "ffzg-arheologija-graduate",
+      "ffzg-etnologija-graduate",
+      "ffzg-filozofija-diplomski",
+      "ffzg-informacijske-zavrsni",
+      "ffzg-kroatistika-graduate",
+      "ffzg-lingvistika-diplomski",
+      "ffzg-pedagogija-graduate",
+      "ffzg-povijest-umjetnosti-diplomski",
+      "ffzg-psihologija-diplomski",
+      "ffzg-sociologija-diplomski",
+      "fgag-diplomski",
+      "fgag-zavrsni",
+      "fhs-diplomski",
+      "fhs-doktorski",
+      "fhs-zavrsni",
+      "fipu-diplomski",
+      "fipu-zavrsni",
+      "fizos-diplomski",
+      "fizri-diplomski",
+      "fizri-zavrsni",
+      "fkit-diplomski",
+      "fkit-doktorski",
+      "fkit-zavrsni",
+      "fmtu-diplomski",
+      "fmtu-zavrsni",
+      "foi-diplomski",
+      "foi-zavrsni",
+      "foozos-diplomski",
+      "foozpu-diplomski",
+      "foozpu-zavrsni",
+      "forenzika-diplomski",
+      "fpz-diplomski",
+      "fpz-zavrsni",
+      "fpzg-doktorski-politologija",
+      "fpzg-mes-master-thesis",
+      "fpzg-nacionalna-sigurnost-diplomski",
+      "fpzg-novinarstvo-diplomski",
+      "fpzg-novinarstvo-zavrsni-av",
+      "fpzg-novinarstvo-zavrsni-tekst",
+      "fpzg-opci-akademski-rad",
+      "fpzg-politologija-diplomski",
+      "fpzg-politologija-zavrsni",
+      "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "fpzg-specijalisticki-prilagodba-eu",
+      "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "fpzpu-diplomski",
+      "fpzpu-zavrsni",
+      "fsb-diplomski",
+      "fsb-doktorski",
+      "fsb-opci-akademski-rad",
+      "fsb-zavrsni",
+      "ftrr-diplomski",
+      "ftrr-zavrsni",
+      "fzsri-diplomski",
+      "fzsri-zavrsni",
+      "geof-diplomski",
+      "geof-doktorski",
+      "geof-opci-akademski-rad",
+      "grad-diplomski",
+      "grad-doktorski",
+      "grad-zavrsni",
+      "gradri-diplomski",
+      "gradri-zavrsni",
+      "grafos-diplomski",
+      "grafos-zavrsni",
+      "grf-diplomski",
+      "grf-doktorski",
+      "grf-zavrsni",
+      "hks-diplomski",
+      "inf-diplomski",
+      "inf-zavrsni",
+      "iv-diplomski",
+      "iv-zavrsni",
+      "kbf-diplomski",
+      "kbf-doktorski",
+      "kbf-zavrsni",
+      "kbfdj-diplomski",
+      "kbfst-diplomski",
+      "kemos-diplomski",
+      "kemos-zavrsni",
+      "kif-diplomski",
+      "kif-doktorski",
+      "kif-specijalisticki",
+      "kifos-diplomski",
+      "kifos-zavrsni",
+      "kifst-diplomski",
+      "ktfst-diplomski",
+      "ktfst-zavrsni",
+      "libertas-diplomski",
+      "libertas-diplomski-en",
+      "libertas-zavrsni",
+      "libertas-zavrsni-en",
+      "logri-diplomski",
+      "mapu-glazbena-pedagogija-diplomski",
+      "mapu-glazbena-pedagogija-zavrsni",
+      "math-uniri-diplomski",
+      "math-uniri-diplomski-en",
+      "math-uniri-zavrsni",
+      "mathos-diplomski",
+      "mathos-zavrsni",
+      "medri-farmacija-diplomski",
+      "medri-medicina-diplomski",
+      "mef-diplomski",
+      "mef-doktorski",
+      "mefos-diplomski",
+      "mefos-zavrsni",
+      "mefst-diplomski",
+      "mev-diplomski",
+      "mev-zavrsni",
+      "mev-zavrsni-drustveni",
+      "mfpu-diplomski",
+      "more-diplomski",
+      "more-zavrsni",
+      "muza-diplomski",
+      "muza-doktorski",
+      "oss-diplomski",
+      "oss-zavrsni",
+      "ozs-diplomski",
+      "ozs-zavrsni",
+      "par-diplomski",
+      "par-zavrsni",
+      "pbf-diplomski",
+      "pbf-doktorski",
+      "pfri-diplomski",
+      "pfri-zavrsni",
+      "pfst-diplomski",
+      "pfst-zavrsni",
+      "pmf-biologija-graduate",
+      "pmf-fizika-graduate",
+      "pmf-geofizika-graduate",
+      "pmf-geografija-diplomski",
+      "pmf-geologija-graduate",
+      "pmf-matematika-graduate",
+      "pmfst-diplomski",
+      "pmfst-zavrsni",
+      "pravo-doktorski-pravne-znanosti",
+      "pravo-integrirani-diplomski",
+      "pravo-javna-uprava-diplomski",
+      "pravo-javna-uprava-prijediplomski",
+      "pravo-opci-pravni-akademski-rad",
+      "pravo-porezni-prijediplomski",
+      "pravo-socijalna-politika-diplomski",
+      "pravo-socijalne-djelatnosti-doktorski",
+      "pravo-socijalne-djelatnosti-specijalisticki",
+      "pravo-socijalni-opci-akademski-rad",
+      "pravo-socijalni-rad-diplomski",
+      "pravo-socijalni-rad-zavrsni",
+      "pravo-specijalisticki-pravni-opci",
+      "pravos-diplomski",
+      "pravos-zavrsni",
+      "pravri-diplomski",
+      "pravri-opci-akademski-rad",
+      "pravri-specijalisticki",
+      "pravri-zavrsni",
+      "pravst-diplomski",
+      "pravst-zavrsni",
+      "ptfos-diplomski",
+      "pvzg-specijalisticki",
+      "pvzg-zavrsni",
+      "radno-socijalno-pravo",
+      "rgnf-diplomski",
+      "rgnf-zavrsni",
+      "riteh-diplomski",
+      "riteh-zavrsni",
+      "rrif-zavrsni",
+      "securus-zavrsni",
+      "sfzg-diplomski",
+      "sfzg-doktorski",
+      "simet-zavrsni",
+      "sociologija",
+      "sois-ft-vojno-inzenjerstvo-diplomski",
+      "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "sois-ft-vojno-pomorstvo-diplomski",
+      "sois-ft-vojno-vodjenje-diplomski",
+      "sois-ft-vojno-vodjenje-zavrsni",
+      "sumfak-diplomski",
+      "sumfak-zavrsni",
+      "tfpu-diplomski",
+      "tfpu-zavrsni",
+      "trgovacko-pravo",
+      "ttf-diplomski",
+      "ttf-dizajn-diplomski",
+      "ttf-dizajn-zavrsni",
+      "ttf-doktorski",
+      "ttf-zavrsni",
+      "uaos-diplomski",
+      "uaos-zavrsni",
+      "ufri-diplomski",
+      "ufzg-diplomski",
+      "ufzg-doktorski",
+      "ufzg-zavrsni",
+      "umas-diplomski",
+      "umas-zavrsni",
+      "unidu-ekonomija-diplomski",
+      "unidu-ekonomija-zavrsni",
+      "unidu-elektro-diplomski",
+      "unidu-elektro-zavrsni",
+      "unidu-komunikologija-diplomski",
+      "unidu-komunikologija-zavrsni",
+      "unidu-marikultura-diplomski",
+      "unidu-povijest-zavrsni",
+      "unidu-sestrinstvo-zavrsni",
+      "unidu-umjetnost-diplomski",
+      "unidu-umjetnost-zavrsni",
+      "unin-biomedicina-diplomski",
+      "unin-biomedicina-zavrsni",
+      "unin-drustveni-diplomski",
+      "unin-drustveni-zavrsni",
+      "unin-tehnicki-diplomski",
+      "unin-tehnicki-zavrsni",
+      "unisb-btho-diplomski",
+      "unisb-btho-zavrsni",
+      "unisb-odhz-diplomski",
+      "unisb-odhz-zavrsni",
+      "unisb-sfsb-diplomski",
+      "unisb-sfsb-zavrsni",
+      "unisb-teho-diplomski",
+      "unisb-teho-zavrsni",
+      "unizd-anglistika-diplomski",
+      "unizd-anglistika-zavrsni",
+      "unizd-arheologija-diplomski",
+      "unizd-arheologija-zavrsni",
+      "unizd-ekologija-diplomski",
+      "unizd-ekologija-zavrsni",
+      "unizd-ekonomija-diplomski",
+      "unizd-ekonomija-zavrsni",
+      "unizd-etnologija-diplomski",
+      "unizd-filozofija-diplomski",
+      "unizd-filozofija-zavrsni",
+      "unizd-francuski-diplomski",
+      "unizd-geografija-diplomski",
+      "unizd-germanistika-diplomski",
+      "unizd-germanistika-zavrsni",
+      "unizd-hispanistika-diplomski",
+      "unizd-informacijske-diplomski",
+      "unizd-informacijske-zavrsni",
+      "unizd-klasicna-filologija-diplomski",
+      "unizd-klasicna-filologija-zavrsni",
+      "unizd-kroatistika-diplomski",
+      "unizd-kroatistika-zavrsni",
+      "unizd-lingvistika-diplomski",
+      "unizd-lingvistika-zavrsni",
+      "unizd-pedagogija-diplomski",
+      "unizd-pomorski-diplomski",
+      "unizd-pomorski-zavrsni",
+      "unizd-povijest-diplomski",
+      "unizd-povijest-umj-diplomski",
+      "unizd-povijest-umj-zavrsni",
+      "unizd-povijest-zavrsni",
+      "unizd-psihologija-diplomski",
+      "unizd-psihologija-zavrsni",
+      "unizd-rusistika-diplomski",
+      "unizd-sociologija-diplomski",
+      "unizd-sociologija-zavrsni",
+      "unizd-talijanistika-diplomski",
+      "unizd-tko-diplomski",
+      "unizd-turizam-diplomski",
+      "unizd-turizam-zavrsni",
+      "unizd-ucitelji-diplomski",
+      "unizd-zdravstvo-diplomski",
+      "unizd-zdravstvo-zavrsni",
+      "vef-diplomski",
+      "vef-doktorski",
+      "veleknin-diplomski",
+      "veleknin-zavrsni",
+      "veleri-diplomski",
+      "veleri-zavrsni",
+      "vevu-diplomski",
+      "vevu-zavrsni",
+      "vguk-diplomski",
+      "vguk-zavrsni",
+      "vhzk-zavrsni",
+      "vkjs-diplomski",
+      "vkjs-zavrsni",
+      "vnt-diplomski",
+      "vnt-zavrsni",
+      "vsig-diplomski",
+      "vsig-zavrsni",
+      "vsite-diplomski",
+      "vsite-zavrsni",
+      "vss-diplomski",
+      "vss-zavrsni",
+      "vub-diplomski",
+      "vub-zavrsni-sestrinstvo",
+      "vub-zavrsni-tehnicki",
+      "vuka-lovstvo-zavrsni",
+      "vuka-poslovni-diplomski",
+      "vuka-poslovni-opci-akademski-rad",
+      "vuka-poslovni-zavrsni",
+      "vuka-prehrambena-zavrsni",
+      "vuka-sigurnost-diplomski",
+      "vuka-sigurnost-zavrsni",
+      "vuka-strojarski-diplomski",
+      "vuka-strojarski-zavrsni",
+      "vus-diplomski",
+      "vus-zavrsni",
+      "vuv-diplomski",
+      "vuv-zavrsni",
+      "vvg-diplomski",
+      "vvg-zavrsni",
+      "zsem-diplomski",
+      "zsem-zavrsni",
+      "zsem-zavrsni-en",
+      "zvu-specijalisticki",
+      "zvu-zavrsni"
+    ],
+    "missingProfileIds": [],
+    "unregisteredProfileIds": [],
+    "duplicateRegistryIds": [],
+    "allProfilesA": false
+  },
+  "facultyMinimumB": {
+    "registeredFacultyCount": 407,
+    "facultyAtLeastB": 208,
+    "facultyBelowB": [
+      "adu-dramaturgija-diplomski",
+      "adu-ftv-rezija-diplomski",
+      "adu-gluma-diplomski",
+      "adu-kazalisna-rezija-diplomski",
+      "adu-montaza-diplomski",
+      "adu-opci-diplomski",
+      "adu-produkcija-diplomski",
+      "adu-snimanje-diplomski",
+      "agr-diplomski",
+      "agr-zavrsni",
+      "algebra-diplomski",
+      "algebra-diplomski-odnosi-s-javnoscu",
+      "algebra-specijalisticki",
+      "algebra-zavrsni",
+      "alu-diplomski",
+      "alu-doktorski",
+      "alu-grafika-diplomski",
+      "alu-kiparstvo-diplomski",
+      "alu-konzerviranje-diplomski",
+      "alu-nastavnicki-diplomski",
+      "alu-novi-mediji-diplomski",
+      "alu-slikarstvo-diplomski",
+      "arh-diplomski",
+      "aspira-diplomski",
+      "aspira-diplomski-en",
+      "aspira-zavrsni",
+      "aspira-zavrsni-en",
+      "bak-diplomski",
+      "bak-zavrsni",
+      "biolos-diplomski",
+      "biolos-zavrsni",
+      "dizajn-diplomski",
+      "effectus-diplomski",
+      "effectus-seminarski",
+      "effectus-zavrsni",
+      "efzg-seminarski",
+      "fdmz-diplomski",
+      "fer-diplomski",
+      "fer-zavrsni",
+      "fesb-diplomski",
+      "fesb-zavrsni",
+      "ffos-germanistika-diplomski",
+      "ffos-germanistika-zavrsni",
+      "ffos-informatologija-diplomski",
+      "ffos-informatologija-zavrsni",
+      "ffos-psihologija-diplomski",
+      "ffos-psihologija-zavrsni",
+      "ffri-germanistika-diplomski",
+      "ffri-germanistika-zavrsni",
+      "ffri-kroatistika-zavrsni",
+      "ffri-kulturalni-diplomski",
+      "ffri-povum-diplomski",
+      "ffri-povum-zavrsni",
+      "ffri-psihologija-diplomski",
+      "ffri-zavrsni",
+      "ffst-diplomski",
+      "ffst-zavrsni",
+      "ffzg-filozofija-diplomski",
+      "ffzg-informacijske-zavrsni",
+      "fizos-diplomski",
+      "foozos-diplomski",
+      "fpz-diplomski",
+      "fpz-zavrsni",
+      "fpzg-doktorski-politologija",
+      "fpzg-mes-master-thesis",
+      "fpzg-nacionalna-sigurnost-diplomski",
+      "fpzg-novinarstvo-diplomski",
+      "fpzg-novinarstvo-zavrsni-av",
+      "fpzg-novinarstvo-zavrsni-tekst",
+      "fpzg-opci-akademski-rad",
+      "fpzg-politologija-diplomski",
+      "fpzg-politologija-zavrsni",
+      "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "fpzg-specijalisticki-prilagodba-eu",
+      "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "fpzpu-diplomski",
+      "fpzpu-zavrsni",
+      "fsb-diplomski",
+      "fsb-opci-akademski-rad",
+      "fsb-zavrsni",
+      "ftrr-diplomski",
+      "ftrr-zavrsni",
+      "geof-diplomski",
+      "geof-doktorski",
+      "geof-opci-akademski-rad",
+      "gradri-diplomski",
+      "gradri-zavrsni",
+      "hks-diplomski",
+      "kbfdj-diplomski",
+      "kif-diplomski",
+      "kif-specijalisticki",
+      "mathos-diplomski",
+      "mathos-zavrsni",
+      "mef-doktorski",
+      "mev-diplomski",
+      "mev-zavrsni-drustveni",
+      "muza-diplomski",
+      "par-diplomski",
+      "par-zavrsni",
+      "pmf-geofizika-graduate",
+      "pravo-doktorski-pravne-znanosti",
+      "pravo-integrirani-diplomski",
+      "pravo-javna-uprava-diplomski",
+      "pravo-javna-uprava-prijediplomski",
+      "pravo-opci-pravni-akademski-rad",
+      "pravo-porezni-prijediplomski",
+      "pravo-socijalna-politika-diplomski",
+      "pravo-socijalni-rad-diplomski",
+      "pravo-specijalisticki-pravni-opci",
+      "pravri-opci-akademski-rad",
+      "pravri-specijalisticki",
+      "pravst-diplomski",
+      "pravst-zavrsni",
+      "riteh-diplomski",
+      "riteh-zavrsni",
+      "sois-ft-vojno-inzenjerstvo-diplomski",
+      "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "sois-ft-vojno-pomorstvo-diplomski",
+      "sois-ft-vojno-vodjenje-diplomski",
+      "sois-ft-vojno-vodjenje-zavrsni",
+      "sumfak-diplomski",
+      "sumfak-zavrsni",
+      "ttf-dizajn-diplomski",
+      "ttf-dizajn-zavrsni",
+      "uaos-diplomski",
+      "uaos-zavrsni",
+      "umas-diplomski",
+      "umas-zavrsni",
+      "unidu-elektro-diplomski",
+      "unidu-elektro-zavrsni",
+      "unidu-komunikologija-zavrsni",
+      "unidu-marikultura-diplomski",
+      "unidu-sestrinstvo-zavrsni",
+      "unidu-umjetnost-zavrsni",
+      "unisb-btho-diplomski",
+      "unisb-btho-zavrsni",
+      "unisb-odhz-diplomski",
+      "unisb-odhz-zavrsni",
+      "unisb-sfsb-diplomski",
+      "unisb-sfsb-zavrsni",
+      "unisb-teho-diplomski",
+      "unisb-teho-zavrsni",
+      "unizd-anglistika-diplomski",
+      "unizd-anglistika-zavrsni",
+      "unizd-arheologija-diplomski",
+      "unizd-arheologija-zavrsni",
+      "unizd-ekologija-diplomski",
+      "unizd-ekologija-zavrsni",
+      "unizd-ekonomija-diplomski",
+      "unizd-ekonomija-zavrsni",
+      "unizd-etnologija-diplomski",
+      "unizd-filozofija-diplomski",
+      "unizd-filozofija-zavrsni",
+      "unizd-francuski-diplomski",
+      "unizd-geografija-diplomski",
+      "unizd-germanistika-diplomski",
+      "unizd-germanistika-zavrsni",
+      "unizd-hispanistika-diplomski",
+      "unizd-informacijske-diplomski",
+      "unizd-informacijske-zavrsni",
+      "unizd-klasicna-filologija-diplomski",
+      "unizd-klasicna-filologija-zavrsni",
+      "unizd-kroatistika-diplomski",
+      "unizd-kroatistika-zavrsni",
+      "unizd-lingvistika-diplomski",
+      "unizd-lingvistika-zavrsni",
+      "unizd-pomorski-diplomski",
+      "unizd-pomorski-zavrsni",
+      "unizd-povijest-diplomski",
+      "unizd-povijest-umj-diplomski",
+      "unizd-povijest-zavrsni",
+      "unizd-psihologija-diplomski",
+      "unizd-rusistika-diplomski",
+      "unizd-sociologija-diplomski",
+      "unizd-sociologija-zavrsni",
+      "unizd-talijanistika-diplomski",
+      "unizd-ucitelji-diplomski",
+      "unizd-zdravstvo-diplomski",
+      "unizd-zdravstvo-zavrsni",
+      "veleknin-diplomski",
+      "vevu-diplomski",
+      "vguk-diplomski",
+      "vguk-zavrsni",
+      "vsite-diplomski",
+      "vsite-zavrsni",
+      "vss-diplomski",
+      "vss-zavrsni",
+      "vub-zavrsni-sestrinstvo",
+      "vub-zavrsni-tehnicki",
+      "vuka-poslovni-diplomski",
+      "vuka-poslovni-opci-akademski-rad",
+      "vuka-poslovni-zavrsni",
+      "vuka-sigurnost-diplomski",
+      "vuka-sigurnost-zavrsni",
+      "vuka-strojarski-diplomski",
+      "vuka-strojarski-zavrsni",
+      "vus-diplomski",
+      "vus-zavrsni"
+    ],
+    "missingFacultyIds": [],
+    "unregisteredFacultyIds": [],
+    "duplicateFacultyRegistryIds": [],
+    "meetsFacultyMinimumB": false,
+    "legalProfileCount": 3,
+    "legalProfilesAtA": 0,
+    "legalProfilesBelowA": [
+      "radno-socijalno-pravo",
+      "sociologija",
+      "trgovacko-pravo"
+    ]
+  },
+  "facultyAllA": {
+    "registeredFacultyCount": 407,
+    "facultyAtLeastB": 208,
+    "facultyBelowB": [
+      "adu-dramaturgija-diplomski",
+      "adu-ftv-rezija-diplomski",
+      "adu-gluma-diplomski",
+      "adu-kazalisna-rezija-diplomski",
+      "adu-montaza-diplomski",
+      "adu-opci-diplomski",
+      "adu-produkcija-diplomski",
+      "adu-snimanje-diplomski",
+      "agr-diplomski",
+      "agr-zavrsni",
+      "algebra-diplomski",
+      "algebra-diplomski-odnosi-s-javnoscu",
+      "algebra-specijalisticki",
+      "algebra-zavrsni",
+      "alu-diplomski",
+      "alu-doktorski",
+      "alu-grafika-diplomski",
+      "alu-kiparstvo-diplomski",
+      "alu-konzerviranje-diplomski",
+      "alu-nastavnicki-diplomski",
+      "alu-novi-mediji-diplomski",
+      "alu-slikarstvo-diplomski",
+      "arh-diplomski",
+      "aspira-diplomski",
+      "aspira-diplomski-en",
+      "aspira-zavrsni",
+      "aspira-zavrsni-en",
+      "bak-diplomski",
+      "bak-zavrsni",
+      "biolos-diplomski",
+      "biolos-zavrsni",
+      "dizajn-diplomski",
+      "effectus-diplomski",
+      "effectus-seminarski",
+      "effectus-zavrsni",
+      "efzg-seminarski",
+      "fdmz-diplomski",
+      "fer-diplomski",
+      "fer-zavrsni",
+      "fesb-diplomski",
+      "fesb-zavrsni",
+      "ffos-germanistika-diplomski",
+      "ffos-germanistika-zavrsni",
+      "ffos-informatologija-diplomski",
+      "ffos-informatologija-zavrsni",
+      "ffos-psihologija-diplomski",
+      "ffos-psihologija-zavrsni",
+      "ffri-germanistika-diplomski",
+      "ffri-germanistika-zavrsni",
+      "ffri-kroatistika-zavrsni",
+      "ffri-kulturalni-diplomski",
+      "ffri-povum-diplomski",
+      "ffri-povum-zavrsni",
+      "ffri-psihologija-diplomski",
+      "ffri-zavrsni",
+      "ffst-diplomski",
+      "ffst-zavrsni",
+      "ffzg-filozofija-diplomski",
+      "ffzg-informacijske-zavrsni",
+      "fizos-diplomski",
+      "foozos-diplomski",
+      "fpz-diplomski",
+      "fpz-zavrsni",
+      "fpzg-doktorski-politologija",
+      "fpzg-mes-master-thesis",
+      "fpzg-nacionalna-sigurnost-diplomski",
+      "fpzg-novinarstvo-diplomski",
+      "fpzg-novinarstvo-zavrsni-av",
+      "fpzg-novinarstvo-zavrsni-tekst",
+      "fpzg-opci-akademski-rad",
+      "fpzg-politologija-diplomski",
+      "fpzg-politologija-zavrsni",
+      "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "fpzg-specijalisticki-prilagodba-eu",
+      "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "fpzpu-diplomski",
+      "fpzpu-zavrsni",
+      "fsb-diplomski",
+      "fsb-opci-akademski-rad",
+      "fsb-zavrsni",
+      "ftrr-diplomski",
+      "ftrr-zavrsni",
+      "geof-diplomski",
+      "geof-doktorski",
+      "geof-opci-akademski-rad",
+      "gradri-diplomski",
+      "gradri-zavrsni",
+      "hks-diplomski",
+      "kbfdj-diplomski",
+      "kif-diplomski",
+      "kif-specijalisticki",
+      "mathos-diplomski",
+      "mathos-zavrsni",
+      "mef-doktorski",
+      "mev-diplomski",
+      "mev-zavrsni-drustveni",
+      "muza-diplomski",
+      "par-diplomski",
+      "par-zavrsni",
+      "pmf-geofizika-graduate",
+      "pravo-doktorski-pravne-znanosti",
+      "pravo-integrirani-diplomski",
+      "pravo-javna-uprava-diplomski",
+      "pravo-javna-uprava-prijediplomski",
+      "pravo-opci-pravni-akademski-rad",
+      "pravo-porezni-prijediplomski",
+      "pravo-socijalna-politika-diplomski",
+      "pravo-socijalni-rad-diplomski",
+      "pravo-specijalisticki-pravni-opci",
+      "pravri-opci-akademski-rad",
+      "pravri-specijalisticki",
+      "pravst-diplomski",
+      "pravst-zavrsni",
+      "riteh-diplomski",
+      "riteh-zavrsni",
+      "sois-ft-vojno-inzenjerstvo-diplomski",
+      "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "sois-ft-vojno-pomorstvo-diplomski",
+      "sois-ft-vojno-vodjenje-diplomski",
+      "sois-ft-vojno-vodjenje-zavrsni",
+      "sumfak-diplomski",
+      "sumfak-zavrsni",
+      "ttf-dizajn-diplomski",
+      "ttf-dizajn-zavrsni",
+      "uaos-diplomski",
+      "uaos-zavrsni",
+      "umas-diplomski",
+      "umas-zavrsni",
+      "unidu-elektro-diplomski",
+      "unidu-elektro-zavrsni",
+      "unidu-komunikologija-zavrsni",
+      "unidu-marikultura-diplomski",
+      "unidu-sestrinstvo-zavrsni",
+      "unidu-umjetnost-zavrsni",
+      "unisb-btho-diplomski",
+      "unisb-btho-zavrsni",
+      "unisb-odhz-diplomski",
+      "unisb-odhz-zavrsni",
+      "unisb-sfsb-diplomski",
+      "unisb-sfsb-zavrsni",
+      "unisb-teho-diplomski",
+      "unisb-teho-zavrsni",
+      "unizd-anglistika-diplomski",
+      "unizd-anglistika-zavrsni",
+      "unizd-arheologija-diplomski",
+      "unizd-arheologija-zavrsni",
+      "unizd-ekologija-diplomski",
+      "unizd-ekologija-zavrsni",
+      "unizd-ekonomija-diplomski",
+      "unizd-ekonomija-zavrsni",
+      "unizd-etnologija-diplomski",
+      "unizd-filozofija-diplomski",
+      "unizd-filozofija-zavrsni",
+      "unizd-francuski-diplomski",
+      "unizd-geografija-diplomski",
+      "unizd-germanistika-diplomski",
+      "unizd-germanistika-zavrsni",
+      "unizd-hispanistika-diplomski",
+      "unizd-informacijske-diplomski",
+      "unizd-informacijske-zavrsni",
+      "unizd-klasicna-filologija-diplomski",
+      "unizd-klasicna-filologija-zavrsni",
+      "unizd-kroatistika-diplomski",
+      "unizd-kroatistika-zavrsni",
+      "unizd-lingvistika-diplomski",
+      "unizd-lingvistika-zavrsni",
+      "unizd-pomorski-diplomski",
+      "unizd-pomorski-zavrsni",
+      "unizd-povijest-diplomski",
+      "unizd-povijest-umj-diplomski",
+      "unizd-povijest-zavrsni",
+      "unizd-psihologija-diplomski",
+      "unizd-rusistika-diplomski",
+      "unizd-sociologija-diplomski",
+      "unizd-sociologija-zavrsni",
+      "unizd-talijanistika-diplomski",
+      "unizd-ucitelji-diplomski",
+      "unizd-zdravstvo-diplomski",
+      "unizd-zdravstvo-zavrsni",
+      "veleknin-diplomski",
+      "vevu-diplomski",
+      "vguk-diplomski",
+      "vguk-zavrsni",
+      "vsite-diplomski",
+      "vsite-zavrsni",
+      "vss-diplomski",
+      "vss-zavrsni",
+      "vub-zavrsni-sestrinstvo",
+      "vub-zavrsni-tehnicki",
+      "vuka-poslovni-diplomski",
+      "vuka-poslovni-opci-akademski-rad",
+      "vuka-poslovni-zavrsni",
+      "vuka-sigurnost-diplomski",
+      "vuka-sigurnost-zavrsni",
+      "vuka-strojarski-diplomski",
+      "vuka-strojarski-zavrsni",
+      "vus-diplomski",
+      "vus-zavrsni"
+    ],
+    "missingFacultyIds": [],
+    "unregisteredFacultyIds": [],
+    "duplicateFacultyRegistryIds": [],
+    "meetsFacultyMinimumB": false,
+    "legalProfileCount": 3,
+    "legalProfilesAtA": 0,
+    "legalProfilesBelowA": [
+      "radno-socijalno-pravo",
+      "sociologija",
+      "trgovacko-pravo"
+    ],
+    "facultyAtA": 0,
+    "facultyBelowA": [
+      "adu-dramaturgija-diplomski",
+      "adu-ftv-rezija-diplomski",
+      "adu-gluma-diplomski",
+      "adu-kazalisna-rezija-diplomski",
+      "adu-montaza-diplomski",
+      "adu-opci-diplomski",
+      "adu-produkcija-diplomski",
+      "adu-snimanje-diplomski",
+      "agr-diplomski",
+      "agr-doktorski",
+      "agr-zavrsni",
+      "algebra-diplomski",
+      "algebra-diplomski-odnosi-s-javnoscu",
+      "algebra-specijalisticki",
+      "algebra-zavrsni",
+      "alu-diplomski",
+      "alu-doktorski",
+      "alu-grafika-diplomski",
+      "alu-kiparstvo-diplomski",
+      "alu-konzerviranje-diplomski",
+      "alu-nastavnicki-diplomski",
+      "alu-novi-mediji-diplomski",
+      "alu-slikarstvo-diplomski",
+      "apuri-diplomski",
+      "apuri-zavrsni",
+      "arca-zavrsni",
+      "arh-diplomski",
+      "arh-doktorski",
+      "aspira-diplomski",
+      "aspira-diplomski-en",
+      "aspira-zavrsni",
+      "aspira-zavrsni-en",
+      "bak-diplomski",
+      "bak-zavrsni",
+      "biolos-diplomski",
+      "biolos-zavrsni",
+      "biotech-diplomski",
+      "biotech-zavrsni",
+      "dizajn-diplomski",
+      "effectus-diplomski",
+      "effectus-seminarski",
+      "effectus-zavrsni",
+      "efos-diplomski",
+      "efos-doktorski",
+      "efos-opci-akademski-rad",
+      "efos-specijalisticki",
+      "efos-zavrsni",
+      "efri-diplomski",
+      "efri-zavrsni",
+      "efst-diplomski",
+      "efst-opci-akademski-rad",
+      "efst-zavrsni",
+      "efzg-diplomski",
+      "efzg-doktorski",
+      "efzg-seminarski",
+      "efzg-specijalisticki",
+      "efzg-strucni-racunovodstvo",
+      "efzg-zavrsni",
+      "erf-diplomski",
+      "erf-doktorski",
+      "evtos-diplomski",
+      "evtos-zavrsni",
+      "fazos-diplomski",
+      "fazos-zavrsni",
+      "fbf-doktorski",
+      "fbf-specijalisticki",
+      "fdmri-diplomski",
+      "fdmri-zavrsni",
+      "fdmz-diplomski",
+      "fer-diplomski",
+      "fer-doktorski",
+      "fer-zavrsni",
+      "ferit-diplomski",
+      "ferit-zavrsni",
+      "fesb-diplomski",
+      "fesb-zavrsni",
+      "fetpu-diplomski",
+      "fetpu-zavrsni",
+      "ffos-diplomski",
+      "ffos-germanistika-diplomski",
+      "ffos-germanistika-zavrsni",
+      "ffos-informatologija-diplomski",
+      "ffos-informatologija-zavrsni",
+      "ffos-povijest-diplomski",
+      "ffos-povijest-zavrsni",
+      "ffos-psihologija-diplomski",
+      "ffos-psihologija-zavrsni",
+      "ffos-zavrsni",
+      "ffpu-diplomski",
+      "ffpu-zavrsni",
+      "ffri-diplomski",
+      "ffri-germanistika-diplomski",
+      "ffri-germanistika-zavrsni",
+      "ffri-kroatistika-zavrsni",
+      "ffri-kulturalni-diplomski",
+      "ffri-povum-diplomski",
+      "ffri-povum-zavrsni",
+      "ffri-psihologija-diplomski",
+      "ffri-zavrsni",
+      "ffrz-bakalaureatski",
+      "ffrz-diplomski",
+      "ffrz-doktorski",
+      "ffst-diplomski",
+      "ffst-zavrsni",
+      "ffzg-arheologija-graduate",
+      "ffzg-etnologija-graduate",
+      "ffzg-filozofija-diplomski",
+      "ffzg-informacijske-zavrsni",
+      "ffzg-kroatistika-graduate",
+      "ffzg-lingvistika-diplomski",
+      "ffzg-pedagogija-graduate",
+      "ffzg-povijest-umjetnosti-diplomski",
+      "ffzg-psihologija-diplomski",
+      "ffzg-sociologija-diplomski",
+      "fgag-diplomski",
+      "fgag-zavrsni",
+      "fhs-diplomski",
+      "fhs-doktorski",
+      "fhs-zavrsni",
+      "fipu-diplomski",
+      "fipu-zavrsni",
+      "fizos-diplomski",
+      "fizri-diplomski",
+      "fizri-zavrsni",
+      "fkit-diplomski",
+      "fkit-doktorski",
+      "fkit-zavrsni",
+      "fmtu-diplomski",
+      "fmtu-zavrsni",
+      "foi-diplomski",
+      "foi-zavrsni",
+      "foozos-diplomski",
+      "foozpu-diplomski",
+      "foozpu-zavrsni",
+      "forenzika-diplomski",
+      "fpz-diplomski",
+      "fpz-zavrsni",
+      "fpzg-doktorski-politologija",
+      "fpzg-mes-master-thesis",
+      "fpzg-nacionalna-sigurnost-diplomski",
+      "fpzg-novinarstvo-diplomski",
+      "fpzg-novinarstvo-zavrsni-av",
+      "fpzg-novinarstvo-zavrsni-tekst",
+      "fpzg-opci-akademski-rad",
+      "fpzg-politologija-diplomski",
+      "fpzg-politologija-zavrsni",
+      "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "fpzg-specijalisticki-prilagodba-eu",
+      "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "fpzpu-diplomski",
+      "fpzpu-zavrsni",
+      "fsb-diplomski",
+      "fsb-doktorski",
+      "fsb-opci-akademski-rad",
+      "fsb-zavrsni",
+      "ftrr-diplomski",
+      "ftrr-zavrsni",
+      "fzsri-diplomski",
+      "fzsri-zavrsni",
+      "geof-diplomski",
+      "geof-doktorski",
+      "geof-opci-akademski-rad",
+      "grad-diplomski",
+      "grad-doktorski",
+      "grad-zavrsni",
+      "gradri-diplomski",
+      "gradri-zavrsni",
+      "grafos-diplomski",
+      "grafos-zavrsni",
+      "grf-diplomski",
+      "grf-doktorski",
+      "grf-zavrsni",
+      "hks-diplomski",
+      "inf-diplomski",
+      "inf-zavrsni",
+      "iv-diplomski",
+      "iv-zavrsni",
+      "kbf-diplomski",
+      "kbf-doktorski",
+      "kbf-zavrsni",
+      "kbfdj-diplomski",
+      "kbfst-diplomski",
+      "kemos-diplomski",
+      "kemos-zavrsni",
+      "kif-diplomski",
+      "kif-doktorski",
+      "kif-specijalisticki",
+      "kifos-diplomski",
+      "kifos-zavrsni",
+      "kifst-diplomski",
+      "ktfst-diplomski",
+      "ktfst-zavrsni",
+      "libertas-diplomski",
+      "libertas-diplomski-en",
+      "libertas-zavrsni",
+      "libertas-zavrsni-en",
+      "logri-diplomski",
+      "mapu-glazbena-pedagogija-diplomski",
+      "mapu-glazbena-pedagogija-zavrsni",
+      "math-uniri-diplomski",
+      "math-uniri-diplomski-en",
+      "math-uniri-zavrsni",
+      "mathos-diplomski",
+      "mathos-zavrsni",
+      "medri-farmacija-diplomski",
+      "medri-medicina-diplomski",
+      "mef-diplomski",
+      "mef-doktorski",
+      "mefos-diplomski",
+      "mefos-zavrsni",
+      "mefst-diplomski",
+      "mev-diplomski",
+      "mev-zavrsni",
+      "mev-zavrsni-drustveni",
+      "mfpu-diplomski",
+      "more-diplomski",
+      "more-zavrsni",
+      "muza-diplomski",
+      "muza-doktorski",
+      "oss-diplomski",
+      "oss-zavrsni",
+      "ozs-diplomski",
+      "ozs-zavrsni",
+      "par-diplomski",
+      "par-zavrsni",
+      "pbf-diplomski",
+      "pbf-doktorski",
+      "pfri-diplomski",
+      "pfri-zavrsni",
+      "pfst-diplomski",
+      "pfst-zavrsni",
+      "pmf-biologija-graduate",
+      "pmf-fizika-graduate",
+      "pmf-geofizika-graduate",
+      "pmf-geografija-diplomski",
+      "pmf-geologija-graduate",
+      "pmf-matematika-graduate",
+      "pmfst-diplomski",
+      "pmfst-zavrsni",
+      "pravo-doktorski-pravne-znanosti",
+      "pravo-integrirani-diplomski",
+      "pravo-javna-uprava-diplomski",
+      "pravo-javna-uprava-prijediplomski",
+      "pravo-opci-pravni-akademski-rad",
+      "pravo-porezni-prijediplomski",
+      "pravo-socijalna-politika-diplomski",
+      "pravo-socijalne-djelatnosti-doktorski",
+      "pravo-socijalne-djelatnosti-specijalisticki",
+      "pravo-socijalni-opci-akademski-rad",
+      "pravo-socijalni-rad-diplomski",
+      "pravo-socijalni-rad-zavrsni",
+      "pravo-specijalisticki-pravni-opci",
+      "pravos-diplomski",
+      "pravos-zavrsni",
+      "pravri-diplomski",
+      "pravri-opci-akademski-rad",
+      "pravri-specijalisticki",
+      "pravri-zavrsni",
+      "pravst-diplomski",
+      "pravst-zavrsni",
+      "ptfos-diplomski",
+      "pvzg-specijalisticki",
+      "pvzg-zavrsni",
+      "rgnf-diplomski",
+      "rgnf-zavrsni",
+      "riteh-diplomski",
+      "riteh-zavrsni",
+      "rrif-zavrsni",
+      "securus-zavrsni",
+      "sfzg-diplomski",
+      "sfzg-doktorski",
+      "simet-zavrsni",
+      "sois-ft-vojno-inzenjerstvo-diplomski",
+      "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "sois-ft-vojno-pomorstvo-diplomski",
+      "sois-ft-vojno-vodjenje-diplomski",
+      "sois-ft-vojno-vodjenje-zavrsni",
+      "sumfak-diplomski",
+      "sumfak-zavrsni",
+      "tfpu-diplomski",
+      "tfpu-zavrsni",
+      "ttf-diplomski",
+      "ttf-dizajn-diplomski",
+      "ttf-dizajn-zavrsni",
+      "ttf-doktorski",
+      "ttf-zavrsni",
+      "uaos-diplomski",
+      "uaos-zavrsni",
+      "ufri-diplomski",
+      "ufzg-diplomski",
+      "ufzg-doktorski",
+      "ufzg-zavrsni",
+      "umas-diplomski",
+      "umas-zavrsni",
+      "unidu-ekonomija-diplomski",
+      "unidu-ekonomija-zavrsni",
+      "unidu-elektro-diplomski",
+      "unidu-elektro-zavrsni",
+      "unidu-komunikologija-diplomski",
+      "unidu-komunikologija-zavrsni",
+      "unidu-marikultura-diplomski",
+      "unidu-povijest-zavrsni",
+      "unidu-sestrinstvo-zavrsni",
+      "unidu-umjetnost-diplomski",
+      "unidu-umjetnost-zavrsni",
+      "unin-biomedicina-diplomski",
+      "unin-biomedicina-zavrsni",
+      "unin-drustveni-diplomski",
+      "unin-drustveni-zavrsni",
+      "unin-tehnicki-diplomski",
+      "unin-tehnicki-zavrsni",
+      "unisb-btho-diplomski",
+      "unisb-btho-zavrsni",
+      "unisb-odhz-diplomski",
+      "unisb-odhz-zavrsni",
+      "unisb-sfsb-diplomski",
+      "unisb-sfsb-zavrsni",
+      "unisb-teho-diplomski",
+      "unisb-teho-zavrsni",
+      "unizd-anglistika-diplomski",
+      "unizd-anglistika-zavrsni",
+      "unizd-arheologija-diplomski",
+      "unizd-arheologija-zavrsni",
+      "unizd-ekologija-diplomski",
+      "unizd-ekologija-zavrsni",
+      "unizd-ekonomija-diplomski",
+      "unizd-ekonomija-zavrsni",
+      "unizd-etnologija-diplomski",
+      "unizd-filozofija-diplomski",
+      "unizd-filozofija-zavrsni",
+      "unizd-francuski-diplomski",
+      "unizd-geografija-diplomski",
+      "unizd-germanistika-diplomski",
+      "unizd-germanistika-zavrsni",
+      "unizd-hispanistika-diplomski",
+      "unizd-informacijske-diplomski",
+      "unizd-informacijske-zavrsni",
+      "unizd-klasicna-filologija-diplomski",
+      "unizd-klasicna-filologija-zavrsni",
+      "unizd-kroatistika-diplomski",
+      "unizd-kroatistika-zavrsni",
+      "unizd-lingvistika-diplomski",
+      "unizd-lingvistika-zavrsni",
+      "unizd-pedagogija-diplomski",
+      "unizd-pomorski-diplomski",
+      "unizd-pomorski-zavrsni",
+      "unizd-povijest-diplomski",
+      "unizd-povijest-umj-diplomski",
+      "unizd-povijest-umj-zavrsni",
+      "unizd-povijest-zavrsni",
+      "unizd-psihologija-diplomski",
+      "unizd-psihologija-zavrsni",
+      "unizd-rusistika-diplomski",
+      "unizd-sociologija-diplomski",
+      "unizd-sociologija-zavrsni",
+      "unizd-talijanistika-diplomski",
+      "unizd-tko-diplomski",
+      "unizd-turizam-diplomski",
+      "unizd-turizam-zavrsni",
+      "unizd-ucitelji-diplomski",
+      "unizd-zdravstvo-diplomski",
+      "unizd-zdravstvo-zavrsni",
+      "vef-diplomski",
+      "vef-doktorski",
+      "veleknin-diplomski",
+      "veleknin-zavrsni",
+      "veleri-diplomski",
+      "veleri-zavrsni",
+      "vevu-diplomski",
+      "vevu-zavrsni",
+      "vguk-diplomski",
+      "vguk-zavrsni",
+      "vhzk-zavrsni",
+      "vkjs-diplomski",
+      "vkjs-zavrsni",
+      "vnt-diplomski",
+      "vnt-zavrsni",
+      "vsig-diplomski",
+      "vsig-zavrsni",
+      "vsite-diplomski",
+      "vsite-zavrsni",
+      "vss-diplomski",
+      "vss-zavrsni",
+      "vub-diplomski",
+      "vub-zavrsni-sestrinstvo",
+      "vub-zavrsni-tehnicki",
+      "vuka-lovstvo-zavrsni",
+      "vuka-poslovni-diplomski",
+      "vuka-poslovni-opci-akademski-rad",
+      "vuka-poslovni-zavrsni",
+      "vuka-prehrambena-zavrsni",
+      "vuka-sigurnost-diplomski",
+      "vuka-sigurnost-zavrsni",
+      "vuka-strojarski-diplomski",
+      "vuka-strojarski-zavrsni",
+      "vus-diplomski",
+      "vus-zavrsni",
+      "vuv-diplomski",
+      "vuv-zavrsni",
+      "vvg-diplomski",
+      "vvg-zavrsni",
+      "zsem-diplomski",
+      "zsem-zavrsni",
+      "zsem-zavrsni-en",
+      "zvu-specijalisticki",
+      "zvu-zavrsni"
+    ],
+    "meetsFacultyAllA": false
   }
 }

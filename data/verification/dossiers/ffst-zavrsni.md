@@ -1,10 +1,90 @@
-# Verifikacijski dosje: ffst-zavrsni
+# AI-evidence worklist: ffst-zavrsni
 
-Covjek potvrdjuje, AI ne proglasava verified. Otvori PDF snapshot na lokatoru (sourcePage), provjeri VRIJEDNOST protiv DOSLOVNOG citata, pa postavi verifiedBy=svoje ime (i po zelji reviewedBy).
+Nema ljudskog reda odobravanja. Pravilo izlazi iz worklista tek uz valjan deterministicki dokazni paket.
 
-Scored ukupno: 6. Vec ljudski potvrdjeno: 6. Za audit (bulk): 0. Needs-recheck: 1.
+Pravila za rad: 7.
 
-## Needs-recheck (1)
+## Font
+- Pravilo: `ffst-zavrsni--font`
+- Status: `needs-ai-evidence`
+- Razlozi: `legacy-ai-batch-untrusted`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: ffst-predlozak-zavrsnoga-diplomskoga
+- Autoritet: binding
+- Lokator: Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)
+- Snapshot: `data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx`
+- Vrijednost: `["Times New Roman"]`
+- Citat: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
 
-- `margins` - Margine: izvor ffst-predlozak-zavrsnoga-diplomskoga, citat "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
+## Velicina slova
+- Pravilo: `ffst-zavrsni--font-size`
+- Status: `needs-ai-evidence`
+- Razlozi: `legacy-ai-batch-untrusted`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: ffst-predlozak-zavrsnoga-diplomskoga
+- Autoritet: binding
+- Lokator: Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)
+- Snapshot: `data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx`
+- Vrijednost: `[12]`
+- Citat: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
+
+## Poravnanje
+- Pravilo: `ffst-zavrsni--justify`
+- Status: `needs-ai-evidence`
+- Razlozi: `legacy-ai-batch-untrusted`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: ffst-predlozak-zavrsnoga-diplomskoga
+- Autoritet: binding
+- Lokator: Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)
+- Snapshot: `data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx`
+- Vrijednost: `true`
+- Citat: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
+
+## Prored
+- Pravilo: `ffst-zavrsni--line-spacing`
+- Status: `needs-ai-evidence`
+- Razlozi: `legacy-ai-batch-untrusted`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: ffst-predlozak-zavrsnoga-diplomskoga
+- Autoritet: binding
+- Lokator: Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)
+- Snapshot: `data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx`
+- Vrijednost: `1.5`
+- Citat: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
+
+## Margine
+- Pravilo: `ffst-zavrsni--margins`
+- Status: `needs-recheck`
+- Razlozi: `source-or-evidence-recheck`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: ffst-predlozak-zavrsnoga-diplomskoga
+- Autoritet: binding
+- Lokator: Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)
+- Snapshot: `data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx`
+- Vrijednost: `{"top":2.54,"right":2.54,"bottom":2.54,"left":2.54}`
+- Citat: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
+
+## Numeracija stranica (desno dno)
+- Pravilo: `ffst-zavrsni--page-numbers`
+- Status: `needs-ai-evidence`
+- Razlozi: `legacy-ai-batch-untrusted`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: ffst-predlozak-zavrsnoga-diplomskoga
+- Autoritet: binding
+- Lokator: Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)
+- Snapshot: `data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx`
+- Vrijednost: `true`
+- Citat: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
+
+## Format papira A4
+- Pravilo: `ffst-zavrsni--paper-size`
+- Status: `needs-ai-evidence`
+- Razlozi: `legacy-ai-batch-untrusted`
+- Radnja: `run-ai-evidence-audit`
+- Izvor: ffst-predlozak-zavrsnoga-diplomskoga
+- Autoritet: binding
+- Lokator: Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)
+- Snapshot: `data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx`
+- Vrijednost: `true`
+- Citat: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice."
 

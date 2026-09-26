@@ -32,6 +32,9 @@ data/generated/** text eol=lf
 # provjereno po datoteci, pa pravilo nista ne prekonvertira.
 data/verification/** text eol=lf
 
+# Tekstualni izvaci sluzbenih izvora imaju registriran hash sirovih bajtova.
+data/sources/**/*-extract.txt -text
+
 # Vendorani program do javnog lansiranja. `docs/quality/lekta-plan-status.md` tvrdi da je ta datoteka
 # bajt jednaka izvoru (sha256 `1b2af479...`), a uz `core.autocrlf=true` bi je svjez checkout
 # materijalizirao s CRLF, pa bi tvrdnja pala svugdje osim na stroju na kojem je mjerena.

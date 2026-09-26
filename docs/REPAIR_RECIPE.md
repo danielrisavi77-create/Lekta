@@ -527,11 +527,11 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 
 | Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
 |---|---|---|---|---|
-| Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Vrsta slova | `font-fixer` | Times New Roman | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
+| Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Vrsta slova | `font-fixer` | Times New Roman | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -541,11 +541,11 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 
 | Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
 |---|---|---|---|---|
-| Font | `font-fixer` | Times New Roman | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Upute, travanj 2023 |
-| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Upute, travanj 2023 |
-| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Upute, travanj 2023 |
-| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Upute, travanj 2023 |
-| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Upute, travanj 2023 |
+| Font | `font-fixer` | Times New Roman | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 2 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 2 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 2 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 2 |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 2 |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -555,11 +555,11 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 
 | Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
 |---|---|---|---|---|
-| Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Vrsta slova | `font-fixer` | Times New Roman | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
-| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Opce upute za oblikovanje rada |
+| Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Vrsta slova | `font-fixer` | Times New Roman | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje studentskih radova (EFOS, 2023)](https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx) | Odjeljak 2, tiskana str. 3 |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -631,11 +631,11 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 
 | Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
 |---|---|---|---|---|
-| Font | `font-fixer` | Times New Roman | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, "Oblikovanje teksta" |
-| Velicina slova | `font-fixer` | 12 pt | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, "Oblikovanje teksta" |
-| Prored | `line-spacing-fixer` | prored 1,5 | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, "Oblikovanje teksta" |
-| Poravnanje | `alignment-fixer` | obostrano | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, "Oblikovanje teksta" |
-| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, "Oblikovanje teksta" |
+| Font | `font-fixer` | Times New Roman | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, tiskana str. 7 |
+| Velicina slova | `font-fixer` | 12 pt | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, tiskana str. 7 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, tiskana str. 7 |
+| Poravnanje | `alignment-fixer` | obostrano | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, tiskana str. 7 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Uputa za izradu studentskih radova (EFST, 2013)](http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf) | Odjeljak 4, tiskana str. 7 |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -5329,8 +5329,8 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 
 | Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
 |---|---|---|---|---|
-| Velicina slova | `font-fixer` | 12 pt | [Upute za seminarski/zavrsni rad (Lovstvo i zastita prirode)](https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx) | "Nacin pisanja zavrsnog rada" |
-| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za seminarski/zavrsni rad (Lovstvo i zastita prirode)](https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx) | "Nacin pisanja zavrsnog rada" |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za seminarski/zavrsni rad (Lovstvo i zastita prirode)](https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx) | Poglavlje "Način pisanja završnog rada" |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za seminarski/zavrsni rad (Lovstvo i zastita prirode)](https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx) | Poglavlje "Način pisanja završnog rada" |
 | Font (preporuka) | `font-fixer` | Arial | [Upute za seminarski/zavrsni rad (Lovstvo i zastita prirode)](https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx) | "Nacin pisanja zavrsnog rada" |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
@@ -5383,8 +5383,8 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 
 | Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
 |---|---|---|---|---|
-| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje zavrsnog rada (Prehrambena tehnologija)](https://www.vuka.hr/_download/repository/2025_Upute_za_pisanje_zavrs%CC%8Cnog_rada.docx) | "Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima" |
-| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnog rada (Prehrambena tehnologija)](https://www.vuka.hr/_download/repository/2025_Upute_za_pisanje_zavrs%CC%8Cnog_rada.docx) | "Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima" |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje zavrsnog rada (Prehrambena tehnologija)](https://www.vuka.hr/_download/repository/2025_Upute_za_pisanje_zavrs%CC%8Cnog_rada.docx) | Odjeljak 4, naslov "Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima" |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnog rada (Prehrambena tehnologija)](https://www.vuka.hr/_download/repository/2025_Upute_za_pisanje_zavrs%CC%8Cnog_rada.docx) | Odjeljak 4, naslov "Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima" |
 | Font (preporuka) | `font-fixer` | Arial | [Upute za pisanje zavrsnog rada (Prehrambena tehnologija)](https://www.vuka.hr/_download/repository/2025_Upute_za_pisanje_zavrs%CC%8Cnog_rada.docx) | "Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima" |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |

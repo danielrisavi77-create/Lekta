@@ -438,7 +438,7 @@
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-01"
+      "lastVerified": "2026-09-25"
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -448,7 +448,7 @@
       "advisory": 1,
       "ratio": 0.8333333333333334,
       "state": "scored",
-      "lastVerified": "2026-07-28"
+      "lastVerified": "2026-09-25"
     },
     {
       "profileId": "efos-specijalisticki",
@@ -458,7 +458,7 @@
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-01"
+      "lastVerified": "2026-09-25"
     },
     {
       "profileId": "efos-zavrsni",
@@ -508,7 +508,7 @@
       "advisory": 1,
       "ratio": 0.8333333333333334,
       "state": "scored",
-      "lastVerified": "2026-07-28"
+      "lastVerified": "2026-09-25"
     },
     {
       "profileId": "efst-zavrsni",
@@ -3908,7 +3908,7 @@
       "advisory": 1,
       "ratio": 0.6666666666666666,
       "state": "scored",
-      "lastVerified": "2026-07-28"
+      "lastVerified": "2026-09-25"
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -3948,7 +3948,7 @@
       "advisory": 1,
       "ratio": 0.6666666666666666,
       "state": "scored",
-      "lastVerified": "2026-07-28"
+      "lastVerified": "2026-09-25"
     },
     {
       "profileId": "vuka-sigurnost-diplomski",

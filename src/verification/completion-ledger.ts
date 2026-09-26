@@ -160,6 +160,182 @@ export interface CompletionLedger {
   schemaVersion: number;
   rows: LedgerRow[];
   summary: LedgerSummary;
+  /** Informativna A metrike, više nije ciljnik ni uvjet dovršetka. */
+  globalA: GlobalARatchet;
+  /** Međumjera: svaki fakultetski profil najmanje B; pravni profili su izvještajni, odvojeno. */
+  facultyMinimumB: FacultyMinimumBRatchet;
+  /** Završni cilj projekta: svaki fakultetski profil A; pravni profili su izvještajni, odvojeno. */
+  facultyAllA: FacultyAllARatchet;
+}
+
+export interface GlobalARatchet {
+  registeredProfileCount: number;
+  profilesAtA: number;
+  profilesBelowA: string[];
+  missingProfileIds: string[];
+  unregisteredProfileIds: string[];
+  duplicateRegistryIds: string[];
+  allProfilesA: boolean;
+}
+
+export interface FacultyMinimumBRatchet {
+  registeredFacultyCount: number;
+  facultyAtLeastB: number;
+  facultyBelowB: string[];
+  missingFacultyIds: string[];
+  unregisteredFacultyIds: string[];
+  duplicateFacultyRegistryIds: string[];
+  meetsFacultyMinimumB: boolean;
+  legalProfileCount: number;
+  legalProfilesAtA: number;
+  legalProfilesBelowA: string[];
+}
+
+export interface FacultyAllARatchet extends FacultyMinimumBRatchet {
+  facultyAtA: number;
+  facultyBelowA: string[];
+  meetsFacultyAllA: boolean;
+}
+
+export interface ScopedRegistryProfile {
+  id: string;
+  scope: 'faculty' | 'legal';
+}
+
+/** Fakultetski prag i pravni profili prikazuju se zasebno, bez miješanja nazivnika. */
+export function assessFacultyMinimumBRatchet(
+  registryProfiles: readonly ScopedRegistryProfile[],
+  rows: readonly Pick<LedgerRow, 'profileId' | 'claim'>[],
+): FacultyMinimumBRatchet {
+  const facultyCounts = new Map<string, number>();
+  const legalCounts = new Map<string, number>();
+  for (const profile of registryProfiles) {
+    const counts = profile.scope === 'faculty' ? facultyCounts : legalCounts;
+    counts.set(profile.id, (counts.get(profile.id) ?? 0) + 1);
+  }
+  const duplicateFacultyRegistryIds = [...facultyCounts]
+    .filter(([, count]) => count !== 1)
+    .map(([id]) => id)
+    .sort();
+  const facultyIds = new Set(facultyCounts.keys());
+  const legalIds = new Set(legalCounts.keys());
+  const claimsByProfile = new Map<string, LedgerRow['claim'][]>();
+  for (const row of rows) {
+    if (row.profileId == null) continue;
+    const claims = claimsByProfile.get(row.profileId) ?? [];
+    claims.push(row.claim);
+    claimsByProfile.set(row.profileId, claims);
+  }
+
+  const missingFacultyIds = [...facultyIds].filter((id) => !claimsByProfile.has(id)).sort();
+  const unregisteredFacultyIds = [...claimsByProfile.keys()]
+    .filter((id) => !facultyIds.has(id) && !legalIds.has(id))
+    .sort();
+  const facultyBelowB = [...facultyIds].filter((id) => {
+    const claims = claimsByProfile.get(id) ?? [];
+    return claims.length === 0 || claims.some((claim) => claim !== 'A' && claim !== 'B');
+  }).sort();
+  const facultyAtLeastB = [...facultyIds].filter((id) => {
+    const claims = claimsByProfile.get(id) ?? [];
+    return claims.length > 0 && claims.every((claim) => claim === 'A' || claim === 'B');
+  }).length;
+  const legalProfilesBelowA = [...legalIds].filter((id) => {
+    const claims = claimsByProfile.get(id) ?? [];
+    return claims.length === 0 || claims.some((claim) => claim !== 'A');
+  }).sort();
+  const legalProfilesAtA = [...legalIds].filter((id) => {
+    const claims = claimsByProfile.get(id) ?? [];
+    return claims.length > 0 && claims.every((claim) => claim === 'A');
+  }).length;
+  const meetsFacultyMinimumB = facultyBelowB.length === 0
+    && missingFacultyIds.length === 0
+    && unregisteredFacultyIds.length === 0
+    && duplicateFacultyRegistryIds.length === 0;
+
+  return {
+    registeredFacultyCount: facultyIds.size,
+    facultyAtLeastB,
+    facultyBelowB,
+    missingFacultyIds,
+    unregisteredFacultyIds,
+    duplicateFacultyRegistryIds,
+    meetsFacultyMinimumB,
+    legalProfileCount: legalIds.size,
+    legalProfilesAtA,
+    legalProfilesBelowA,
+  };
+}
+
+/** Završni cilj A provjerava samo fakultetski registar; pravni profili ostaju zasebna metrika. */
+export function assessFacultyAllARatchet(
+  registryProfiles: readonly ScopedRegistryProfile[],
+  rows: readonly Pick<LedgerRow, 'profileId' | 'claim'>[],
+): FacultyAllARatchet {
+  const minimumB = assessFacultyMinimumBRatchet(registryProfiles, rows);
+  const facultyIds = new Set(
+    registryProfiles.filter((profile) => profile.scope === 'faculty').map((profile) => profile.id),
+  );
+  const claimsByProfile = new Map<string, LedgerRow['claim'][]>();
+  for (const row of rows) {
+    if (row.profileId == null) continue;
+    const claims = claimsByProfile.get(row.profileId) ?? [];
+    claims.push(row.claim);
+    claimsByProfile.set(row.profileId, claims);
+  }
+  const facultyBelowA = [...facultyIds].filter((id) => {
+    const claims = claimsByProfile.get(id) ?? [];
+    return claims.length === 0 || claims.some((claim) => claim !== 'A');
+  }).sort();
+  const facultyAtA = facultyIds.size - facultyBelowA.length;
+  const meetsFacultyAllA = facultyBelowA.length === 0
+    && minimumB.missingFacultyIds.length === 0
+    && minimumB.unregisteredFacultyIds.length === 0
+    && minimumB.duplicateFacultyRegistryIds.length === 0;
+
+  return { ...minimumB, facultyAtA, facultyBelowA, meetsFacultyAllA };
+}
+
+/** Informativno mjeri A za cijeli registar, uključujući odvojene pravne profile. */
+export function assessGlobalARatchet(
+  registryProfileIds: readonly string[],
+  rows: readonly Pick<LedgerRow, 'profileId' | 'claim'>[],
+): GlobalARatchet {
+  const counts = new Map<string, number>();
+  for (const id of registryProfileIds) counts.set(id, (counts.get(id) ?? 0) + 1);
+  const duplicateRegistryIds = [...counts].filter(([, count]) => count !== 1).map(([id]) => id).sort();
+  const registered = new Set(counts.keys());
+  const byProfile = new Map<string, LedgerRow['claim'][]>();
+  for (const row of rows) {
+    if (row.profileId == null) continue;
+    const claims = byProfile.get(row.profileId) ?? [];
+    claims.push(row.claim);
+    byProfile.set(row.profileId, claims);
+  }
+  const missingProfileIds = [...registered].filter((id) => !byProfile.has(id)).sort();
+  const unregisteredProfileIds = [...byProfile.keys()].filter((id) => !registered.has(id)).sort();
+  const profilesBelowA = [...registered]
+    .filter((id) => {
+      const claims = byProfile.get(id) ?? [];
+      return claims.length === 0 || claims.some((claim) => claim !== 'A');
+    })
+    .sort();
+  const profilesAtA = [...registered].filter((id) => {
+    const claims = byProfile.get(id) ?? [];
+    return claims.length > 0 && claims.every((claim) => claim === 'A');
+  }).length;
+  const allProfilesA = profilesBelowA.length === 0
+    && missingProfileIds.length === 0
+    && unregisteredProfileIds.length === 0
+    && duplicateRegistryIds.length === 0;
+  return {
+    registeredProfileCount: registered.size,
+    profilesAtA,
+    profilesBelowA,
+    missingProfileIds,
+    unregisteredProfileIds,
+    duplicateRegistryIds,
+    allProfilesA,
+  };
 }
 
 // --- oblici ulaznih artefakata (samo polja koja ledger stvarno cita) ---
@@ -185,6 +361,8 @@ export interface CoverageCellInput {
 export interface WorklistRowInput {
   profileId: string;
   bulk: number;
+  /** Pravila koja worklist još ne smatra dokazno riješenima. */
+  pendingEvidence: number;
 }
 export interface RepairRowInput {
   profileId: string;
@@ -223,6 +401,7 @@ export interface DeclarationInput {
 /** Profil iz REGISTRA (autoritativan popis); ledger se vodi po njemu, ne po izvjestajima. */
 export interface RegistryProfileInput {
   id: string;
+  scope: 'faculty' | 'legal';
   unitId?: string | null;
   workTypes?: string[];
 }
@@ -236,6 +415,8 @@ export interface ClosedLoopInput {
 export interface LedgerInputs {
   /** Potpisana ovjera mjerenja nad stvarnim radovima; bez potpisa se ne priznaje. */
   corpusAttestation?: CorpusAttestation | null;
+  /** Trenutni fingerprint src/repair izračunat iz sadržaja datoteka u generatoru. */
+  currentRepairSourceHash: string | null;
   /**
    * Autoritativan popis profila. Ledger se NE smije voditi po `faculties` (fakultetskoj matrici):
    * ona pokriva 407 verificiranih profila, ali NE i 3 katedarska profila iz
@@ -319,18 +500,17 @@ function deriveClaim(
     return { claim: 'D', blockedReasons: reasons };
   }
 
-  if (rules === 'bulk-pending') reasons.push('dio bodovanih pravila jos ceka pojedinacni ljudski audit');
+  if (rules === 'bulk-pending') reasons.push('jedno ili više pravila još nema valjan revalidirani dokazni paket');
 
   if (proof === 'real-docx-pass' && !reasons.length) return { claim: 'A', blockedReasons: [] };
   if (proof === 'synthetic-pass' && !reasons.length) {
     return { claim: 'B', blockedReasons: ['nema dokaza na stvarnom studentskom radu'] };
   }
 
-  if (proof === 'review') reasons.push('stvarni dokument je popravljen, ali ishod jos trazi rucni pregled');
+  if (proof === 'review') reasons.push('stvarni dokument nije prošao automatizirani oracle ili rezultat nije potpun');
   else if (proof === 'not-run') reasons.push('popravak nije izveden ni na jednom dokumentu (ni sintetickom)');
-  else if (proof === 'real-docx-pass' || proof === 'synthetic-pass') {
-    reasons.push('dokaz postoji, ali pravila jos nisu potpuno ljudski potvrdjena');
-  }
+  // Kod sintetičkog/stvarnog prolaza već postoji precizan blocker za `bulk-pending` iznad:
+  // nedostaje valjan AI dokazni paket. Ne dodaj drugi, zastarjeli uvjet ljudske potvrde.
   return { claim: 'C', blockedReasons: reasons };
 }
 
@@ -351,12 +531,13 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
    * dokazuje popravak za sve profile iste jedinice i iste vrste rada, jer se pravila mijenjaju po vrsti
    * rada a ne po katedri. Isti ustupak vec postoji za citatne specove.
    */
-  const dokazani = provenUnitWorkTypes(inputs.corpusAttestation);
+  const dokazani = provenUnitWorkTypes(inputs.corpusAttestation, inputs.currentRepairSourceHash);
   // Parovi profil::vrsta na cijim je radovima dokaz STVARNO izmjeren; razlika prema `dokazani` je
   // razlika izmedju izmjerenog i izvedenog (`proofSource`).
-  const izmjereni = attestedProfileWorkTypes(inputs.corpusAttestation);
+  const izmjereni = attestedProfileWorkTypes(inputs.corpusAttestation, inputs.currentRepairSourceHash);
   const coverageByProfile = new Map(inputs.coverageCells.map((c) => [c.profileId, c]));
   const bulkByProfile = new Map(inputs.worklistRows.map((r) => [r.profileId, r.bulk]));
+  const pendingEvidenceByProfile = new Map(inputs.worklistRows.map((r) => [r.profileId, r.pendingEvidence]));
 
   const repairByProfile = new Map<string, { total: number; facultySpecific: number }>();
   for (const row of inputs.repairRows) {
@@ -413,6 +594,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
       };
       const cover = coverageByProfile.get(profile.profileId);
       const bulk = bulkByProfile.get(profile.profileId) ?? 0;
+      const pendingEvidence = pendingEvidenceByProfile.get(profile.profileId) ?? Number.POSITIVE_INFINITY;
       const repairCounts = repairByProfile.get(profile.profileId) ?? { total: 0, facultySpecific: 0 };
       const programs = programsByProfile.get(profile.profileId) ?? [];
 
@@ -424,7 +606,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
           ? cover != null && cover.state === 'advisory-only'
             ? 'advisory-only'
             : 'none'
-          : bulk > 0
+          : pendingEvidence > 0
             ? 'bulk-pending'
             : 'verified';
 
@@ -439,7 +621,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
        * Redoslijed je po JACINI dokaza, ne po izvoru: stvarni studentski rad nadjacava generirani.
        *
        * `partial` iz closed-loopa NIJE dokaz (dio prekrsenih osi ostaje nerijesen), pa ide u
-       * `review` - popravak je nesto napravio, ali ishod trazi ljudski pogled.
+       * `review` - popravak je nesto napravio, ali automatizirani oracle nije dao potpun prolaz.
        */
       const loop = closedLoopByProfile.get(profile.profileId);
       // Dokaz ovisi o VRSTI RADA, jer ovjera dokazuje par jedinica x vrsta: isti profil moze imati
@@ -627,5 +809,14 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
     );
   }
 
-  return { schemaVersion: 1, rows, summary };
+  const globalA = assessGlobalARatchet(inputs.registryProfiles.map((profile) => profile.id), rows);
+  const facultyMinimumB = assessFacultyMinimumBRatchet(
+    inputs.registryProfiles.map(({ id, scope }) => ({ id, scope })),
+    rows,
+  );
+  const facultyAllA = assessFacultyAllARatchet(
+    inputs.registryProfiles.map(({ id, scope }) => ({ id, scope })),
+    rows,
+  );
+  return { schemaVersion: 3, rows, summary, globalA, facultyMinimumB, facultyAllA };
 }

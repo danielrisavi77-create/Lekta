@@ -3,6 +3,7 @@ import type { ConsistencyRules } from '../analysis/consistency-structure.ts';
 import type { RequiredSectionRules, RequiredSectionProfileEntry } from '../analysis/required-sections-structure.ts';
 import type { LinkRules } from '../analysis/link-doi-structure.ts';
 import type { CrossFileSubmissionRules } from '../analysis/cross-file-submission-consistency.ts';
+import type { AiEvidenceAudit } from '../verification/ai-evidence-audit.ts';
 
 /**
  * Tipovi profila i pravila (Option A).
@@ -67,12 +68,13 @@ export interface RuleEntry {
    */
   academicYear?: string | null;
   /**
-   * Kako je pravilo potvrdjeno: 'human' (covjek citao izvor), 'human-audit' (covjek u
-   * rucnom audit prolazu; postojeci podaci ga koriste) ili 'ai-3pass-batch' (AI
-   * 3-prolazna provjera, covjek batch odobrio). Honesty trag: nikad ne tvrdimo cisto
-   * ljudsku verifikaciju ako je AI radio citanje. Ne utjece na bodovanje (boduje status verified).
+   * Kako je pravilo potvrdjeno: pojedinacnim ljudskim pregledom, legacy batch pregledom
+   * ili strukturiranim AI-evidence auditom. Bulk approval ostaje u `verifiedBy`, nije
+   * modalitet potvrde. Samo po sebi ne utjece na bodovanje; za to treba proci dokazni gate.
    */
-  confirmedVia?: 'human' | 'human-audit' | 'ai-3pass-batch' | 'ai-1pass-batch' | null;
+  confirmedVia?: 'human' | 'human-audit' | 'ai-3pass-batch' | 'ai-1pass-batch' | 'ai-evidence-audit' | null;
+  /** Strukturirani AI dokazni paket vezan uz izvor i pravilo. */
+  aiEvidence?: AiEvidenceAudit | null;
   /**
    * MODALITET izvora: koliko jako izvor obvezuje. Sest razina, jedna vise nego sto se obicno trazi,
    * i to iz izmjerenog razloga: FER dokument ima TRI razine (`mora`/`ne smije` : `treba` :
@@ -92,7 +94,7 @@ export interface RuleEntry {
    * (`scripts/propose_claim_modality.py`), koji NIKAD ne upisuje ublazen modalitet: svaka pojava
    * ublazavanja ide covjeku, jer je pripisivanje ublazavanja pravoj osi citanje, ne uzorak.
    */
-  modalitySource?: 'mechanical' | 'human';
+  modalitySource?: 'mechanical' | 'human' | 'agent-read' | 'ai-evidence-audit';
   /**
    * Slobodna biljeska uz pravilo. Koristi se kad se pravilo OZNACI za reverifikaciju: bez zapisa
    * zasto, sljedeca sesija vidi samo `needs-recheck` i mora ponoviti cijelo mjerenje.
@@ -183,6 +185,9 @@ export interface SourceEntry {
   fetchedAt: string | null;
   snapshotPath: string | null;
   snapshotHash: string | null;
+  textSnapshotPath?: string;
+  textSnapshotHash?: string;
+  textSnapshotOf?: string;
   validityClass: SourceValidityClass;
   lastChecked: string | null;
 }

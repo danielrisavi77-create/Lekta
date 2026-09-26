@@ -7,7 +7,6 @@ import {
   retireRule,
   willScore,
   approveFromAi,
-  type AiEvidence,
 } from '../src/verification/verification-actions';
 import { runVerificationGate } from '../src/verification/verification-gate';
 import { SOURCE_REGISTRY, findSource } from '../src/verification/verification-registry';
@@ -16,6 +15,7 @@ import {
   LEGAL_DEPARTMENTS_WITH_DRAFTS,
 } from '../src/profiles/drafts-runtime';
 import type { ThesisProfile, RuleEntry, SourceEntry } from '../src/profiles/profile-schema';
+import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 
 const NOW = '2026-06-30';
 const UPUTE = 'pravo-upute-oblikovanje-2024';
@@ -172,46 +172,177 @@ describe('confirmVerification: covjek proglasava verified', () => {
   });
 });
 
-describe('approveFromAi: batch odobrenje 3-prolazne AI provjere (opcija C)', () => {
-  const source = findSource(UPUTE);
-  const agreeEvidence: AiEvidence = {
-    ruleId: 'r-font',
-    agree: true,
-    summary: 'extract confirm, quote-check confirm, refute nije nasao protudokaz',
-    passes: [
-      { pass: 'extract', verdict: 'confirm', note: 'neovisno izvuceno Times New Roman' },
-      { pass: 'quote-check', verdict: 'confirm', note: 'citat postoji doslovno' },
-      { pass: 'refute', verdict: 'confirm', note: 'nema protudokaza' },
-    ],
-  };
-  const ready = draftEntry({ sourcePage: 'odjeljak 4', quote: 'font: Times New Roman' });
-
-  it('slozni AI prolazi + ljudski odobravatelj -> verified, confirmedVia ai-3pass-batch, scored', () => {
-    const res = approveFromAi('p1', ready, source, { approver: 'daniel', now: NOW }, agreeEvidence);
+describe('approveFromAi: dokazni audit bez ljudskog odobrenja', () => {
+  it('valjan paket potvrduje pravilo bez approver polja', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const res = approveFromAi(
+      fixture.profileId,
+      fixture.rule,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotSha256: fixture.snapshotSha256,
+        currentRepairSourceHash: fixture.currentRepairSourceHash, ruleValueSha256: fixture.ruleValueSha256,
+        snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      fixture.evidence,
+    );
     expect(res.ok).toBe(true);
     expect(res.entry?.status).toBe('verified');
-    expect(res.entry?.confirmedVia).toBe('ai-3pass-batch');
-    expect(res.entry?.verifiedBy).toBe('daniel');
+    expect(res.entry?.confirmedVia).toBe('ai-evidence-audit');
+    expect(res.entry?.verifiedBy).toBe('ai-evidence-audit');
+    expect(res.entry?.reviewedBy).toBeNull();
+    expect(res.entry?.aiEvidence).toEqual(fixture.evidence);
     expect(willScore(res.entry!)).toBe(true);
   });
 
-  it('dva ledger zapisa: ai-confirmed (actor ai-3pass) i verified (actor covjek)', () => {
-    const res = approveFromAi('p1', ready, source, { approver: 'daniel', now: NOW }, agreeEvidence);
-    const actions = (res.ledger ?? []).map((l) => `${l.action}:${l.actor}`);
-    expect(actions).toContain('ai-confirmed:ai-3pass');
-    expect(actions).toContain('verified:daniel');
+  it('valjan AI audit može zamijeniti verified legacy bulk potvrdu', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const legacyBulk: RuleEntry = {
+      ...fixture.rule,
+      status: 'verified',
+      verifiedBy: 'owner-bulk-approval',
+      confirmedVia: null,
+    };
+    const res = approveFromAi(
+      fixture.profileId,
+      legacyBulk,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotSha256: fixture.snapshotSha256,
+        currentRepairSourceHash: fixture.currentRepairSourceHash, ruleValueSha256: fixture.ruleValueSha256,
+        snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      fixture.evidence,
+    );
+    expect(res.ok).toBe(true);
+    expect(res.entry?.confirmedVia).toBe('ai-evidence-audit');
+    expect(res.entry?.verifiedBy).toBe('ai-evidence-audit');
+    expect(res.entry?.modalitySource).toBe('ai-evidence-audit');
+    expect(res.ledger).toHaveLength(1);
+    expect(res.ledger?.[0]).toMatchObject({ action: 'ai-confirmed', actor: 'ai-evidence-audit' });
   });
 
-  it('odobreno pravilo prolazi CI vrata', () => {
-    const res = approveFromAi('p1', ready, source, { approver: 'daniel', now: NOW }, agreeEvidence);
-    const profiles: ThesisProfile[] = [{ id: 'p1', rules: {}, ruleEntries: [res.entry!] }];
-    expect(runVerificationGate(profiles, SOURCE_REGISTRY as SourceEntry[], { now: NOW })).toEqual([]);
+  it('valjan AI audit može zamijeniti pojedinačnu ljudsku potvrdu bez ljudskog potpisa', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const individuallyVerified: RuleEntry = {
+      ...fixture.rule,
+      status: 'verified',
+      verifiedBy: 'reviewer',
+      confirmedVia: 'human',
+    };
+    const res = approveFromAi(
+      fixture.profileId,
+      individuallyVerified,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotSha256: fixture.snapshotSha256,
+        currentRepairSourceHash: fixture.currentRepairSourceHash, ruleValueSha256: fixture.ruleValueSha256,
+        snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      fixture.evidence,
+    );
+    expect(res.ok).toBe(true);
+    expect(res.entry).toMatchObject({
+      status: 'verified',
+      confirmedVia: 'ai-evidence-audit',
+      verifiedBy: 'ai-evidence-audit',
+      reviewedBy: null,
+      aiEvidence: fixture.evidence,
+    });
+    expect(res.ledger).toHaveLength(1);
+    expect(res.ledger?.[0]).toMatchObject({ action: 'ai-confirmed', actor: 'ai-evidence-audit' });
   });
 
-  it('neslozni AI prolazi -> odbijeno (ide na rucnu provjeru, ne batch)', () => {
-    const res = approveFromAi('p1', ready, source, { approver: 'daniel', now: NOW }, { ...agreeEvidence, agree: false });
+  it('ne mijenja ljudsku potvrdu ni ledger kad AI dokaz za nju nije valjan', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const individuallyVerified: RuleEntry = {
+      ...fixture.rule,
+      status: 'verified',
+      verifiedBy: 'reviewer',
+      confirmedVia: 'human',
+    };
+    const invalidEvidence = {
+      ...fixture.evidence,
+      claim: { ...fixture.evidence.claim, value: ['Arial'] },
+    };
+    const res = approveFromAi(
+      fixture.profileId,
+      individuallyVerified,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      invalidEvidence,
+    );
     expect(res.ok).toBe(false);
-    expect(res.errors?.some((e) => e.includes('rucnu provjeru'))).toBe(true);
+    expect(res.errors?.join(' ')).toContain('value-mismatch');
+    expect(res.entry).toBeUndefined();
+    expect(res.ledger).toBeUndefined();
+  });
+
+  it('zapisuje samo AI-evidence potvrdu u append-only ledger', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const res = approveFromAi(
+      fixture.profileId,
+      fixture.rule,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotSha256: fixture.snapshotSha256,
+        currentRepairSourceHash: fixture.currentRepairSourceHash, ruleValueSha256: fixture.ruleValueSha256,
+        snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      fixture.evidence,
+    );
+    expect(res.ledger).toHaveLength(1);
+    expect(res.ledger?.[0]).toMatchObject({ action: 'ai-confirmed', actor: 'ai-evidence-audit' });
+  });
+
+  it('odbija nevaljanu vrijednost i ne nudi ljudski red kao fallback', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const invalid = { ...fixture.evidence, claim: { ...fixture.evidence.claim, value: ['Arial'] } };
+    const res = approveFromAi(
+      fixture.profileId,
+      fixture.rule,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      invalid,
+    );
+    expect(res.ok).toBe(false);
+    expect(res.errors?.join(' ')).toContain('value-mismatch');
+    expect(res.errors?.join(' ')).not.toMatch(/rucnu provjeru|human review/i);
+  });
+
+  it('odbija valjan paket za profil u kojem pravilo ne postoji', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const res = approveFromAi(
+      'different-profile',
+      fixture.rule,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      fixture.evidence,
+    );
+    expect(res.ok).toBe(false);
+    expect(res.errors?.join(' ')).toContain('profile-id-mismatch');
+  });
+
+  it('agree bez dokaznog paketa ne mijenja pravilo niti stvara ledger zapis', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const res = approveFromAi(
+      fixture.profileId,
+      fixture.rule,
+      fixture.source,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      undefined,
+    );
+    expect(res.ok).toBe(false);
+    expect(res.errors?.join(' ')).toContain('evidence-missing');
+    expect(res.entry).toBeUndefined();
+    expect(res.ledger).toBeUndefined();
+  });
+
+  it('izvor bez snapshot-a ne moze potvrditi AI-evidence pravilo', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const sourceWithoutSnapshot = { ...fixture.source, snapshotPath: null, snapshotHash: null, fetchedAt: null };
+    const res = approveFromAi(
+      fixture.profileId,
+      fixture.rule,
+      sourceWithoutSnapshot,
+      { now: NOW, snapshotBytes: fixture.snapshotBytes, snapshotText: fixture.snapshotText, manifest: fixture.manifest },
+      fixture.evidence,
+    );
+    expect(res.ok).toBe(false);
+    expect(res.errors?.join(' ')).toContain('source-snapshot-missing');
+    expect(res.ledger).toBeUndefined();
   });
 });
 

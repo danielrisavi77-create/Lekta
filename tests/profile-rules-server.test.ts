@@ -14,6 +14,10 @@ import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { draftFilePaths } from '../scripts/draft-files';
+import { loadRepositoryAiEvidenceContext } from '../scripts/ai-evidence-context-loader';
+import { VERIFIED_PROFILES_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
+import { filterRepairEntriesToAiAuditedRules, publishAiAuditedRules } from '../src/profiles/publish-ai-rules';
+import type { SourceEntry, ThesisProfile } from '../src/profiles/profile-schema';
 import { resolve } from 'node:path';
 import { buildEvidenceIndex } from '../src/profiles/evidence-projection';
 import {
@@ -43,7 +47,7 @@ const repairMap = JSON.parse(
 // Bez njega ponovni izracun ne bi imao `source` na unosima, pa bi drift test lazno pao.
 const registry = JSON.parse(
   readFileSync(resolve(ROOT, 'data', 'sources', 'source-registry.json'), 'utf8'),
-) as Array<{ id?: unknown; title?: unknown; url?: unknown }>;
+) as SourceEntry[];
 const sourceIndex: SourceIndex = {};
 for (const row of registry) {
   if (typeof row?.id !== 'string' || typeof row.title !== 'string' || typeof row.url !== 'string') continue;
@@ -57,9 +61,32 @@ const evidenceIndex = buildEvidenceIndex(draftFiles, sourceIndex);
 
 
 describe('profile-rules serverski artefakt', () => {
-  it('commitani artefakt === ponovni izracun iz izvora (drift)', () => {
-    const rebuilt = buildProfileRulesArtifact(verified, repairMap, sha256Hex, sourceIndex, evidenceIndex);
+  it('commitani artefakt === ponovni izracun iz izvora i valjanih AI dokaza (drift)', async () => {
+    const aiEvidenceContext = await loadRepositoryAiEvidenceContext(
+      ROOT,
+      VERIFIED_PROFILES_WITH_DRAFTS as ThesisProfile[],
+      registry,
+    );
+    const publishableProfiles = publishAiAuditedRules(
+      verified,
+      VERIFIED_PROFILES_WITH_DRAFTS as ThesisProfile[],
+      aiEvidenceContext.resultsByRule,
+    );
+    const publishableRepairMap = filterRepairEntriesToAiAuditedRules(
+      repairMap,
+      VERIFIED_PROFILES_WITH_DRAFTS as ThesisProfile[],
+      aiEvidenceContext.resultsByRule,
+    );
+    const rebuilt = buildProfileRulesArtifact(publishableProfiles, publishableRepairMap, sha256Hex, sourceIndex, evidenceIndex);
     expect(artifactText.trimEnd()).toBe(JSON.stringify(rebuilt));
+  });
+
+  it('zadrzava legacy pravila i repair opcije profilu bez AI-audita', () => {
+    const id = 'alu-slikarstvo-diplomski';
+    const profile = artifact.profiles[id];
+    const baseline = verified.find((entry) => entry.id === id);
+    expect(profile.profile.rules).toEqual(baseline?.rules);
+    expect(profile.repairEntries.length).toBe(repairMap[id]?.length ?? 0);
   });
 
   /**
@@ -71,7 +98,7 @@ describe('profile-rules serverski artefakt', () => {
     const quoted: string[] = [];
     const unresolved: string[] = [];
     for (const [id, entry] of Object.entries(artifact.profiles)) {
-      for (const raw of entry.repairEntries) {
+      for (const raw of [...(entry.evidenceEntries ?? []), ...entry.repairEntries]) {
         const e = raw as { quote?: unknown; sourceId?: unknown; source?: { title?: unknown; url?: unknown } };
         if (typeof e.quote !== 'string' || !e.quote.trim()) continue;
         quoted.push(`${id}:${String(e.sourceId)}`);
@@ -90,7 +117,7 @@ describe('profile-rules serverski artefakt', () => {
    */
   it('razrijeseni izvor ne iznosi provenijenciju iz registra', () => {
     for (const [id, entry] of Object.entries(artifact.profiles)) {
-      for (const raw of entry.repairEntries) {
+      for (const raw of [...(entry.evidenceEntries ?? []), ...entry.repairEntries]) {
         const src = (raw as { source?: Record<string, unknown> }).source;
         if (!src) continue;
         expect(Object.keys(src).sort(), `${id}: izvor nosi visak polja`).toEqual(['id', 'title', 'url']);
@@ -114,14 +141,21 @@ describe('profile-rules serverski artefakt', () => {
     }
   });
 
-  it('repairEntries prate repair-map (svaki profil s mapom nosi svoje unose)', () => {
-    // Isporuka od 2026-08-31 dodaje razrijesen `source` (naslov i URL iz registra izvora).
-    // Invarijanta se time NE popusta: nakon skidanja tog jednog polja unos mora biti
-    // BAJT-JEDNAK zapisu iz repair-mape, pa nikakva druga izmjena ne moze proci nezapazeno.
+  it('repairEntries sadrze samo unose vezane uz valjana AI-auditirana pravila', async () => {
+    const aiEvidenceContext = await loadRepositoryAiEvidenceContext(
+      ROOT,
+      VERIFIED_PROFILES_WITH_DRAFTS as ThesisProfile[],
+      registry,
+    );
+    const publishableRepairMap = filterRepairEntriesToAiAuditedRules(
+      repairMap,
+      VERIFIED_PROFILES_WITH_DRAFTS as ThesisProfile[],
+      aiEvidenceContext.resultsByRule,
+    );
     let withEntries = 0;
     let attached = 0;
     for (const [id, entry] of Object.entries(artifact.profiles)) {
-      const expected = Array.isArray(repairMap[id]) ? repairMap[id] : [];
+      const expected = Array.isArray(publishableRepairMap[id]) ? publishableRepairMap[id] : [];
       const stripped = entry.repairEntries.map((raw) => {
         if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw;
         const { source, ...rest } = raw as Record<string, unknown>;
@@ -131,8 +165,10 @@ describe('profile-rules serverski artefakt', () => {
       expect(stripped, `${id}: serirani unosi odlutali od repair-mape`).toEqual(expected);
       if (entry.repairEntries.length > 0) withEntries += 1;
     }
-    expect(withEntries).toBeGreaterThan(300);
+    expect(withEntries, 'legacy repair opcije su nestale').toBeGreaterThan(300);
     expect(attached, 'nijedan izvor nije prikacen, veza je mrtva').toBeGreaterThan(50);
+    expect(Object.values(artifact.profiles).filter((entry) => Object.keys(entry.profile.rules).length > 0).length)
+      .toBeGreaterThanOrEqual(398);
   });
 
   it('artefakt ne sadrzi never-marker kljuceve ni kanarince iz manifesta', () => {

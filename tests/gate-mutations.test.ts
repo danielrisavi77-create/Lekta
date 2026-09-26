@@ -20,7 +20,7 @@
  *     "prolazi" moze prolaziti zato sto gard vristi na sve, a ne zato sto je pogodio.
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
   type WizardEvent, type WizardState,
@@ -32,7 +32,8 @@ import { classifyOutcome, comparisonIsVacuous, divergentRows, type ComparisonRow
 import { isSupported, renderDefectFragment, type DefectClass } from '../src/corpus/tool-feedback';
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, mkdtempSync, writeFileSync, unlinkSync, rmdirSync, existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
@@ -48,7 +49,12 @@ import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-c
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
-import { proofSourceProblems } from '../src/verification/completion-ledger';
+import {
+  assessFacultyMinimumBRatchet,
+  assessFacultyAllARatchet,
+  assessGlobalARatchet,
+  proofSourceProblems,
+} from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -58,6 +64,12 @@ import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-r
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
+import { auditAiEvidence } from '../src/verification/ai-evidence-audit';
+import { publishAiAuditedRules } from '../src/profiles/publish-ai-rules';
+import { textSnapshotMatchesSource } from '../scripts/ai-evidence-context-loader';
+import { hashRepairSourceTree } from '../scripts/lib/repair-source-hash.mjs';
+import { attestationProblems, provenUnitWorkTypes, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { createAiEvidenceAuditFixture } from './helpers/ai-evidence-audit-fixture';
 import {
   REQUIRED_CONTEXT_FILES,
   REQUIRED_SCOPED_GUIDES,
@@ -2630,5 +2642,219 @@ describe('agent workflow guards', () => {
     queue.tasks[1].status = 'in_review';
     expect(() => prepareJob(queue, 'T01', 'review', 'astra')).not.toThrow();
     expect(() => prepareJob(queue, 'T01', 'review', 'fable', 2)).toThrow(/different provider/);
+  });
+});
+
+describe('AI evidence audit: baseline i poznate mutacije', () => {
+  it('nemutirani dokazni paket prolazi (baseline)', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    expect(auditAiEvidence(fixture)).toEqual({ valid: true, reasons: [] });
+  });
+
+  it('hvata izmijenjenu ciljnu vrijednost', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({
+      ...fixture,
+      evidence: { ...fixture.evidence, claim: { ...fixture.evidence.claim, value: ['Arial'] } },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('value-mismatch');
+  });
+
+  it('hvata citat koji dolazi iz drugog ili nepovezanog izvora', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({
+      ...fixture,
+      evidence: { ...fixture.evidence, quote: 'The font may be Arial.' },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('quote-not-found');
+  });
+
+  it('hvata drift SHA-256 hasha snapshota', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({
+      ...fixture,
+      source: { ...fixture.source, snapshotHash: '0'.repeat(64) },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('snapshot-hash-mismatch');
+  });
+
+  it('hvata samoprijavljeni prolaz bez razrijesenog manifesta', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const result = auditAiEvidence({ ...fixture, manifest: null });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('manifest-missing');
+  });
+
+  it('hvata manifest ciji ID ne veže stvarne profilne i hash podatke', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const forgedId = `${fixture.manifest.manifestId}:forged`;
+    const result = auditAiEvidence({
+      ...fixture,
+      evidence: { ...fixture.evidence, execution: { ...fixture.evidence.execution, manifestId: forgedId } },
+      manifest: { ...fixture.manifest, manifestId: forgedId },
+    });
+    expect(result.valid).toBe(false);
+    expect(result.reasons.map((reason) => reason.code)).toContain('manifest-id-mismatch');
+  });
+
+  it('hvata neuspjeli ili zastarjeli manifest i promjenu vrijednosti pravila', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    expect(auditAiEvidence(fixture)).toEqual({ valid: true, reasons: [] });
+    for (const [input, code] of [
+      [{ ...fixture, manifest: { ...fixture.manifest, outcome: 'fail' as const } }, 'test-failed'],
+      [{ ...fixture, currentRepairSourceHash: '0'.repeat(64) }, 'manifest-stale-repair'],
+      [{ ...fixture, ruleValueSha256: '0'.repeat(64) }, 'manifest-rule-value-mismatch'],
+    ] as const) {
+      const result = auditAiEvidence(input);
+      expect(result.valid).toBe(false);
+      if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain(code);
+    }
+  });
+});
+
+describe('objava i hashiranje: baseline i mutacije', () => {
+  it('zadrzava legacy pravilo pri AI objavi, brisanje u kompajleru rusi gard', async () => {
+    const baseline = { id: 'p', rules: { requireA4: true, headingRules: { levels: { '1': { size: 12 } } } } };
+    const evidence = {
+      ...baseline,
+      ruleEntries: [{
+        ruleId: 'p--heading-rules', checkId: 'heading-rules',
+        value: { levels: { '1': { size: 14 } } },
+        authority: 'general', sourceId: 'official-source', sourcePage: '7',
+        quote: 'Heading is 14 pt.', status: 'verified', scored: true,
+        modality: 'obligation', scope: 'heading', confirmedVia: 'ai-evidence-audit',
+      }],
+    } as unknown as ThesisProfile;
+    const results = { '["p","p--heading-rules"]': { valid: true as const, reasons: [] } };
+    const guard = (candidate: { rules?: Record<string, unknown> }) => {
+      expect(candidate.rules).toEqual({
+        requireA4: true,
+        headingRules: { levels: { '1': { size: 14 } } },
+      });
+    };
+    guard(publishAiAuditedRules([baseline], [evidence], results)[0]);
+    vi.resetModules();
+    vi.doMock('../src/profiles/rule-compiler', async (importOriginal) => {
+      const original = await importOriginal<typeof import('../src/profiles/rule-compiler')>();
+      return { ...original, compileEffectiveRules: (profile: ThesisProfile) =>
+        original.compileEffectiveRules({ ...profile, rules: {} }) };
+    });
+    try {
+      const { publishAiAuditedRules: mutatedPublisher } = await import('../src/profiles/publish-ai-rules');
+      const mutated = mutatedPublisher([baseline], [evidence], results)[0];
+      expect(mutated.rules).not.toHaveProperty('requireA4');
+      expect(() => guard(mutated)).toThrow();
+    } finally {
+      vi.doUnmock('../src/profiles/rule-compiler');
+      vi.resetModules();
+    }
+  });
+
+  it('ovjera odbija popravak mjeren starim repairSourceHashom', () => {
+    const attestation: CorpusAttestation = {
+      schemaVersion: 1, corpusFingerprint: 'corpus', repairSourceHash: 'a'.repeat(64),
+      measuredAt: '2026-09-25T12:00:00.000Z', measuredFromCommit: 'b'.repeat(40),
+      oracles: ['harness'], signedBy: 'owner', signedAt: '2026-09-25T12:00:00.000Z',
+      entries: [{ unitId: 'unit', workType: 'graduate', profileIds: ['p'],
+        documentCount: 1, cleanCount: 1, regressedChecks: [] }],
+    };
+    expect(attestationProblems(attestation, attestation.repairSourceHash)).toEqual([]);
+    expect(provenUnitWorkTypes(attestation, attestation.repairSourceHash).size).toBe(1);
+    expect(attestationProblems(attestation, 'c'.repeat(64)))
+      .toContain('kod popravka promijenjen nakon mjerenja');
+    expect(provenUnitWorkTypes(attestation, 'c'.repeat(64)).size).toBe(0);
+  });
+
+  it('prihvaca vezani tekstualni izvadak, odbija krivi hash i krivi PDF', () => {
+    const source = { snapshotHash: 'a'.repeat(64), textSnapshotOf: 'a'.repeat(64),
+      textSnapshotHash: 'b'.repeat(64) } as SourceEntry;
+    expect(textSnapshotMatchesSource(source, 'b'.repeat(64))).toBe(true);
+    expect(textSnapshotMatchesSource(source, 'c'.repeat(64))).toBe(false);
+    expect(textSnapshotMatchesSource({ ...source, textSnapshotOf: 'c'.repeat(64) }, 'b'.repeat(64))).toBe(false);
+  });
+
+  it('normalizira CRLF u kodu popravka, ali stvarnu promjenu teksta otkriva', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lekta-hash-mutation-'));
+    const file = join(root, 'fixer.ts');
+    try {
+      writeFileSync(file, 'const x = 1;\n');
+      const baseline = hashRepairSourceTree(root);
+      writeFileSync(file, 'const x = 1;\r\n');
+      expect(hashRepairSourceTree(root)).toBe(baseline);
+      writeFileSync(file, 'const x = 2;\r\n');
+      expect(hashRepairSourceTree(root)).not.toBe(baseline);
+    } finally {
+      if (existsSync(file)) unlinkSync(file);
+      rmdirSync(root);
+    }
+  });
+});
+
+describe('globalni A ciljnik: baseline i mutacija registra', () => {
+  it('potvrđuje čisti puni A skup i hvata profil izostavljen iz ledgera', () => {
+    const registry = ['profil-a', 'profil-b'];
+    const clean = [
+      { profileId: 'profil-a', claim: 'A' as const },
+      { profileId: 'profil-b', claim: 'A' as const },
+    ];
+    expect(assessGlobalARatchet(registry, clean).allProfilesA).toBe(true);
+
+    const omitted = assessGlobalARatchet(registry, clean.slice(0, 1));
+    expect(omitted.allProfilesA).toBe(false);
+    expect(omitted.missingProfileIds).toEqual(['profil-b']);
+  });
+});
+
+describe('fakultetski minimum B: baseline i mutacije', () => {
+  it('čist skup prolazi, a profil ispod B ili izostavljen iz ledgera ruši cilj', () => {
+    const registry = [
+      { id: 'fakultet-a', scope: 'faculty' as const },
+      { id: 'fakultet-b', scope: 'faculty' as const },
+      { id: 'pravni-a', scope: 'legal' as const },
+    ];
+    const clean = [
+      { profileId: 'fakultet-a', claim: 'A' as const },
+      { profileId: 'fakultet-b', claim: 'B' as const },
+      { profileId: 'pravni-a', claim: 'E' as const },
+    ];
+    expect(assessFacultyMinimumBRatchet(registry, clean).meetsFacultyMinimumB).toBe(true);
+
+    const belowB = assessFacultyMinimumBRatchet(registry, [
+      ...clean,
+      { profileId: 'fakultet-b', claim: 'C' as const },
+    ]);
+    expect(belowB.meetsFacultyMinimumB).toBe(false);
+    expect(belowB.facultyBelowB).toEqual(['fakultet-b']);
+    expect(belowB.legalProfilesBelowA).toEqual(['pravni-a']);
+
+    const omitted = assessFacultyMinimumBRatchet(registry, clean.slice(0, 1));
+    expect(omitted.meetsFacultyMinimumB).toBe(false);
+    expect(omitted.missingFacultyIds).toEqual(['fakultet-b']);
+  });
+});
+
+describe('fakultetski all-A cilj: baseline i mutacija razine', () => {
+  it('čisti A skup prolazi, ali mutacija jednog profila na B ruši cilj', () => {
+    const registry = [
+      { id: 'fakultet-a', scope: 'faculty' as const },
+      { id: 'fakultet-b', scope: 'faculty' as const },
+      { id: 'pravni-a', scope: 'legal' as const },
+    ];
+    const clean = [
+      { profileId: 'fakultet-a', claim: 'A' as const },
+      { profileId: 'fakultet-b', claim: 'A' as const },
+      { profileId: 'pravni-a', claim: 'E' as const },
+    ];
+    expect(assessFacultyAllARatchet(registry, clean).meetsFacultyAllA).toBe(true);
+
+    const mutated = assessFacultyAllARatchet(registry, [
+      ...clean,
+      { profileId: 'fakultet-b', claim: 'B' as const },
+    ]);
+    expect(mutated.meetsFacultyAllA).toBe(false);
+    expect(mutated.facultyBelowA).toEqual(['fakultet-b']);
   });
 });

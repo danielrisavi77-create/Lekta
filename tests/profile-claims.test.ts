@@ -45,6 +45,10 @@ function expectedByProfile(): Record<string, ClaimLevel> {
 }
 
 describe('profile-claims.json: drift prema ledgeru', () => {
+  it('ne objavljuje A bez svjeze ovjere na trenutnom kodu popravka', () => {
+    expect(art.counts.A ?? 0).toBe(0);
+    expect(rows.filter((row) => row.claim === 'A')).toEqual([]);
+  });
   it('pecena mapa je identicna izracunu iz ledgera', () => {
     // Hint u obliku `inace: npm run ...` je ono sto detektor registra projekcija cita
     // (tests/projection-registry-coverage.test.ts); bez njega je ova projekcija bila nevidljiva.
@@ -121,7 +125,6 @@ describe('profile-claims.json: nazivnici su imenovani', () => {
       if (claim === 'A' && s.has('unit-work-type') && !s.has('profile')) izvedeno.add(id);
     }
     expect([...izvedeno].sort()).toEqual(art.inheritedA);
-    expect(art.inheritedA.length).toBeGreaterThan(0);
     expect(art.proofNotes).toEqual(PROOF_SOURCE_NOTE);
   });
 

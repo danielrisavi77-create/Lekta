@@ -5,7 +5,7 @@
       "ruleId": "vuka-prehrambena-zavrsni--font-size",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "agent-read",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "font-size",
       "value": [
         12
@@ -15,15 +15,65 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "vuka-prehrambena-upute-2025",
-      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
-      "quote": "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font \"Arial CE\" ili \"Times New Roman CE\".",
+      "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
+      "quote": "u radu se koristi visina slova 12 točaka, a naslova 14 podebljano te prored 1,5.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "e34ef7c2c471f8ad43c0d3ce25d249fe8c3a28e5491dc2ca452c002ffadd4310",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "vuka-prehrambena-zavrsni",
+        "ruleId": "vuka-prehrambena-zavrsni--font-size",
+        "sourceId": "vuka-prehrambena-upute-2025",
+        "sourceUrl": "https://www.vuka.hr/_download/repository/2025_Upute_za_pisanje_zavrs%CC%8Cnog_rada.docx",
+        "fetchedAt": "2026-07-28",
+        "snapshotHash": "e34ef7c2c471f8ad43c0d3ce25d249fe8c3a28e5491dc2ca452c002ffadd4310",
+        "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
+        "quote": "u radu se koristi visina slova 12 točaka, a naslova 14 podebljano te prored 1,5.",
+        "claim": {
+          "value": [
+            12
+          ],
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Obvezni odjeljak propisuje 12 točaka za tekst rada; profilna vrijednost je 12."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Doslovni citat pronađen je u registriranom službenom DOCX snapshotu."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Izvor zasebno preporučuje font, ali veličinu 12 stavlja pod obvezne zahtjeve; tijelo rada je pravi opseg."
+          }
+        ],
+        "agree": true,
+        "summary": "Službene upute obvezno traže 12 točaka za tekst završnog rada; vrijednost i profilni zatvoreni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--font-size:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
+          "testId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--font-size",
+          "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
+          "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
+          "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
+          "ranAt": "2026-09-26T17:29:02.158Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "font-fixer"
     },
@@ -31,7 +81,7 @@
       "ruleId": "vuka-prehrambena-zavrsni--line-spacing",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "agent-read",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -39,15 +89,63 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "vuka-prehrambena-upute-2025",
-      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
-      "quote": "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font \"Arial CE\" ili \"Times New Roman CE\".",
+      "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
+      "quote": "u radu se koristi visina slova 12 točaka, a naslova 14 podebljano te prored 1,5.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "e34ef7c2c471f8ad43c0d3ce25d249fe8c3a28e5491dc2ca452c002ffadd4310",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "vuka-prehrambena-zavrsni",
+        "ruleId": "vuka-prehrambena-zavrsni--line-spacing",
+        "sourceId": "vuka-prehrambena-upute-2025",
+        "sourceUrl": "https://www.vuka.hr/_download/repository/2025_Upute_za_pisanje_zavrs%CC%8Cnog_rada.docx",
+        "fetchedAt": "2026-07-28",
+        "snapshotHash": "e34ef7c2c471f8ad43c0d3ce25d249fe8c3a28e5491dc2ca452c002ffadd4310",
+        "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
+        "quote": "u radu se koristi visina slova 12 točaka, a naslova 14 podebljano te prored 1,5.",
+        "claim": {
+          "value": 1.5,
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Isti obvezni odlomak izričito propisuje prored 1,5; profilna vrijednost odgovara."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Doslovni citat pronađen je u registriranom službenom DOCX snapshotu."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Modalitet dolazi iz naslova obveznih zahtjeva; preporuka fonta je zasebna i ne mijenja prored."
+          }
+        ],
+        "agree": true,
+        "summary": "Službene upute pod obvezne zahtjeve stavljaju prored 1,5; vrijednost, opseg i zatvoreni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--line-spacing:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
+          "testId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--line-spacing",
+          "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
+          "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
+          "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
+          "ranAt": "2026-09-26T17:29:02.158Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "line-spacing-fixer"
     },

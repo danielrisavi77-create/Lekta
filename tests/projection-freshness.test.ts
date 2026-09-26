@@ -69,6 +69,8 @@ describe('svjezina pecenih projekcija', () => {
       'completion-ledger',
       'faculty-matrix',
       'profile-claims',
+      // Ovaj popis prikiva registrirane projekcije, ne trenutačni rezultat provjere svježine.
+      'profile-rules-server',
       'real-corpus',
       'real-corpus-backlog',
       'reconcile-programs',

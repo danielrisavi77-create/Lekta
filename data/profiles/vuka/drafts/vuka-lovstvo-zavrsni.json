@@ -5,7 +5,7 @@
       "ruleId": "vuka-lovstvo-zavrsni--font-size",
       "modality": "directive",
       "scope": "body",
-      "modalitySource": "mechanical",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "font-size",
       "value": [
         12
@@ -15,15 +15,65 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "vuka-lovstvo-upute-2022",
-      "sourcePage": "\"Nacin pisanja zavrsnog rada\"",
-      "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+      "quote": "rad ne može biti pisan ili tiskan znakovima manjim od 3 (tri) niti većim od 4 (četiri) milimetra (visina slova 12 točaka, a naslova 14 podebljano).",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "4d73f33fdd210a54a5bcb6ca0a729250c2d979c0ae2cec220c4c52ab6ac8e618",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "vuka-lovstvo-zavrsni",
+        "ruleId": "vuka-lovstvo-zavrsni--font-size",
+        "sourceId": "vuka-lovstvo-upute-2022",
+        "sourceUrl": "https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx",
+        "fetchedAt": "2026-07-28",
+        "snapshotHash": "4d73f33fdd210a54a5bcb6ca0a729250c2d979c0ae2cec220c4c52ab6ac8e618",
+        "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+        "quote": "rad ne može biti pisan ili tiskan znakovima manjim od 3 (tri) niti većim od 4 (četiri) milimetra (visina slova 12 točaka, a naslova 14 podebljano).",
+        "claim": {
+          "value": [
+            12
+          ],
+          "modality": "directive",
+          "scope": "body"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Obvezni odjeljak zabranjuje znakove manje od 3 mm, uz izričitu ekvivalenciju visine slova 12 točaka."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat odgovara doslovnom tekstu službenog DOCX snapshota."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Font je zasebno preporučen, ali najmanja visina slova je obvezna; tijelo rada je opseg pravila."
+          }
+        ],
+        "agree": true,
+        "summary": "Obvezni zahtjev daje donju granicu visine slova od 12 točaka; vrijednost i zatvoreni test odgovaraju.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--font-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+          "testId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--font-size",
+          "command": "npm run closed-loop -- --profile vuka-lovstvo-zavrsni --no-structural",
+          "inputHash": "03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa",
+          "outputHash": "b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+          "ranAt": "2026-09-26T17:28:05.360Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "font-fixer"
     },
@@ -31,7 +81,7 @@
       "ruleId": "vuka-lovstvo-zavrsni--paper-size",
       "modality": "directive",
       "scope": "whole",
-      "modalitySource": "human",
+      "modalitySource": "ai-evidence-audit",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -39,15 +89,63 @@
       "machineCheckable": true,
       "authority": "binding",
       "sourceId": "vuka-lovstvo-upute-2022",
-      "sourcePage": "\"Nacin pisanja zavrsnog rada\"",
-      "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+      "quote": "rad se piše ili tiska samo na licu čistog bijelog papira formata A4, težine 80 g/m2.",
       "status": "verified",
       "scored": true,
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "verifiedBy": "ai-evidence-audit",
+      "reviewedBy": null,
+      "lastVerified": "2026-09-25",
+      "confirmedVia": "ai-evidence-audit",
       "verifiedHash": "4d73f33fdd210a54a5bcb6ca0a729250c2d979c0ae2cec220c4c52ab6ac8e618",
+      "aiEvidence": {
+        "schemaVersion": 1,
+        "profileId": "vuka-lovstvo-zavrsni",
+        "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+        "sourceId": "vuka-lovstvo-upute-2022",
+        "sourceUrl": "https://www.vuka.hr/_download/repository/UPUTE_seminarski_zavrsni_rad%282%29.docx",
+        "fetchedAt": "2026-07-28",
+        "snapshotHash": "4d73f33fdd210a54a5bcb6ca0a729250c2d979c0ae2cec220c4c52ab6ac8e618",
+        "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
+        "quote": "rad se piše ili tiska samo na licu čistog bijelog papira formata A4, težine 80 g/m2.",
+        "claim": {
+          "value": true,
+          "modality": "directive",
+          "scope": "whole"
+        },
+        "passes": [
+          {
+            "pass": "extract",
+            "verdict": "confirm",
+            "note": "Odjeljak izrijekom ograničava cijeli završni rad na papir formata A4."
+          },
+          {
+            "pass": "quote-check",
+            "verdict": "confirm",
+            "note": "Citat je doslovan u službenom DOCX snapshotu."
+          },
+          {
+            "pass": "refute",
+            "verdict": "confirm",
+            "note": "Prilog ili iznimka za drugi format nije navedena; cijeli rad mora biti na A4."
+          }
+        ],
+        "agree": true,
+        "summary": "Službene upute obvezuju A4 za završni rad; profilna vrijednost i zatvoreni test podudaraju se.",
+        "model": {
+          "provider": "OpenAI",
+          "model": "GPT-5",
+          "version": "runtime-version-not-exposed"
+        },
+        "execution": {
+          "manifestId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--paper-size:03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa:b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+          "testId": "closed-loop:vuka-lovstvo-zavrsni:vuka-lovstvo-zavrsni--paper-size",
+          "command": "npm run closed-loop -- --profile vuka-lovstvo-zavrsni --no-structural",
+          "inputHash": "03f7665013da49645345bf7c34cb0c1a49c1f7daa69d7c45e17e53c462d2c1fa",
+          "outputHash": "b44293153da4480b4e9e311052b3eb6b1871bfc630072da71af13b70c34187a1",
+          "ranAt": "2026-09-26T17:28:05.360Z"
+        }
+      },
       "autoFixable": true,
       "fixerId": "paper-size-fixer"
     },

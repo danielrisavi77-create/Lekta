@@ -1,0 +1,335 @@
+SVEUČILIŠTE U SPLITU 
+EKONOMSKI FAKULTET 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+UPUTA ZA IZRADU STUDENTSKIH RADOVA 
+NA EKONOMSKOM FAKULTETU U SPLITU 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Split, veljača 2013. 
+\n\f\nSADRŽAJ: 
+ 
+1. UVOD……………………………………………………………… 
+3
+2. NASLOVNICA RADA…………………………………………… 
+4
+3. OKVIRNI SADRŽAJ RADA……………………………………. 
+5
+4. OBLIKOVANJE TEKSTA……………………………………… 
+7
+5. ETIČKE NORME I PRAVILA NAVOĐENJA KORIŠTENE 
+LITERATURE……………………………………………………. 
+10
+ 
+LITERATURA……………………………………………………. 
+14
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+2
+\n\f\n1. 
+UVOD 
+ 
+Uputa za izradu studentskih radova na Ekonomskom fakultetu u Splitu ima za cilj 
+standardizirati formu i olakšati izradu radova studentima, kao i ocjenjivanje "formalnih" 
+aspekata radova od strane nastavnika. Cilj je da se kroz dosljednu primjenu upute ujednači 
+okvirna struktura radova, način oblikovanje teksta, način označavanja tablica i grafičkih 
+prikaza, pisanje formula kao i ostali formalni aspekti izrade jednog rada.  
+ 
+Uputa se odnose na sve kategorije studentskih radova, a posebice na: 
+ 
+• Završni rad, 
+• Seminarski rad, 
+• Stručni rad, 
+• Istraživački rad I., 
+• Istraživački rad II., 
+• Diplomski rad. 
+ 
+Posebna pozornost u uputi je posvećena etičkim normama i definiranju pravila za ispravno 
+navođenje korištene literature pri pisanju radova. Studenti su dužni pri pisanju radova navesti 
+sve korištene izvore i izbjegavati bilo kakav oblik plagiranja tuđih djela, a posebice plagiranje 
+radova kolega studenata. Prema internim pravnim aktima Fakulteta plagiranje je strogo 
+zabranjeno, te predstavlja tešku povredu studentskih dužnosti za što su predviđene 
+sankcije kao što su opomena pred isključenje i isključenje s Fakulteta. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+3
+\n\f\n2. 
+NASLOVNICA RADA 
+ 
+Svaki studentski rad mora imati naslovnicu koja se ne numerira, a koja ima sljedeće obvezne 
+elemente: 
+ 
+ 
+Slika 1: Izgled naslovnice rada 
+ 
+4
+\n\f\n3. 
+OKVIRNI SADRŽAJ RADA 
+ 
+Nakon naslovnice navodi se sadržaj rada koji ima sljedeći okvirni izgled i strukturu: 
+ 
+ 
+Slika 2: Okvirni sadržaj rada 
+ 
+5
+\n\f\nU uvodu rada definira se problem istraživanja, ciljevi istraživanja, te se navode metode 
+korištene u istraživanju. Autor treba navesti korištene znanstvene metode, pri čemu treba 
+objasniti u kojem je dijelu rada pojedina metoda korištena i zbog čega je primjena te metode 
+bila prikladna za predmetno istraživanje. Nadalje, u uvodnom dijelu potrebno je ukratko 
+opisati strukturu rada.   
+ 
+U teorijskom dijelu rada razmatraju se postojeće spoznaje o problemu koji se istražuje, kroz 
+obradu relevantne literature. Tekst mora biti smisleno i logički podijeljen na više cjelina, koje 
+mogu imati podcjeline. Teorijski dio rada ne bi smio biti samo tehnička kompilacija tuđih 
+radova, već autor mora jasno profilirati i svoje stavove o ključnim pitanjima na bazi kritičkog 
+promišljanja i obrađene literature. Po potrebi se kod pojedinih vrsta radova (npr. diplomski 
+rad) temeljem obrađene literature i vlastitih stavova definiraju hipoteze. 
+ 
+Empirijski dio rada se izrađuje po potrebi i u dogovoru s mentorom. Pojedini studentski 
+radovi (npr. seminarski rad ili istraživački rad I.) ne moraju imati empirijski dio istraživanja. 
+Empirijski dio rada može biti realiziran kao istraživanje na bazi uzorka ili kao istraživanje na 
+bazi jednog objekta istraživanja (trgovačkog društva, obrta, grada, županije, države…). U 
+empirijskom dijelu istraživanja student uporabom prikladnih znanstvenih metoda testira 
+hipoteze koje su oblikovane na temelju teorijske razrade problema. Empirijski dio istraživanja 
+ne mora biti baziran isključivo na "pozitivističkom pristupu" (teorija-hipoteza-varijable-
+testiranje hipoteza-zaključak). Kod pojedinih problema istraživanja struktura rada može biti 
+fleksibilnija, a student na temelju proučene literature i (najčešće kvalitativnih) podatka može 
+ponuditi, a ne testirati, teorijsko objašnjenje promatranog fenomena.  
+ 
+U zaključku se sažeto iznose glavni rezultati i spoznaje do kojih se došlo temeljem 
+istraživanja, te se ukazuje se na (ne)podudaranje teorijskih spoznaja i empirijskih dokaza. 
+Nadalje, potrebno je navesti eventualna ograničenja istraživanja, kao i moguće smjerove 
+budućih istraživanja. U zaključku se ne citiraju drugi autori, dok je preporučeni opseg 
+zaključka maksimalno do 1/10 cjelokupnog teksta. Literatura predstavlja numerirani popis 
+svih korištenih izvora pri izradi rada. Prilozi označavaju sve dokumente koji nisu sastavni dio 
+osnovnog teksta ali su bitni za razumijevanje rada. Priloge je potrebno numerirati. Kod izrade 
+završnih i diplomskih radova potrebno je izraditi i sažetak rada na hrvatskom jeziku i jednom 
+stranom jeziku (kojeg je student pohađao na Fakultetu). U sažetku se jasno definira problem i 
+ 
+6
+\n\f\ncilj istraživanja, kao i glavni rezultati istraživanja. Sažetak se izrađuje na maksimalno jednoj 
+stranici (1.800 znakova) uz obvezno navođenje tri ključne riječi. 
+ 
+4. 
+OBLIKOVANJE TEKSTA 
+ 
+Akademski stil pisanja koji se koristi pri pisanju studentskih radova je formalan, precizan, 
+jasan, jednostavan, te je formalniji od esejskog stila pisanja. Tekst rada uvijek se piše u 
+neutralnom obliku (npr. "istražit će se", a ne "istražit ću/ćemo") vodeći računa o pravopisnim 
+standardima. Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored 
+od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 
+cm od gornjeg, donjeg, lijevog i desnog ruba stranice. Stranice rada (osim naslovnice) moraju 
+biti numerirane arapskim brojevima u donjem desnom uglu stranice. Konkretno, u programu 
+za obradu teksta Word za ubacivanje broja stranice potrebno je na alatnoj traci izabrati 
+naredbu "Insert", nakon toga "Page numbers", "Position" Bottom of the page, "Alignment" 
+Right, uz neoznačenu opciju "Show number on first page" (ako je naslovnica sastavni dio 
+dokumenta). 
+ 
+U cilju bolje preglednosti teksta poželjno je na jednoj stranici napraviti više odjeljaka (četiri 
+do pet), međusobno odvojenih retkom razmaka. U cilju naglašavanja ključne riječi u tekstu 
+se mogu i podebljati. Kod nabrajanja potrebno je koristiti automatsko numeriranje. Ukupan 
+opseg rada ovisi o vrsti rada: 
+• Završni rad ima opseg između 30 i 40 stranica, 
+• Seminarski rad ima opseg između 10 i 20 stranica, 
+• Stručni rad ima opseg između 20 i 30 stranica, 
+• Istraživački rad I. ima opseg između 20 i 30 stranica, 
+• Istraživački rad II. ima opseg između 5 i 10 stranica, 
+• Diplomski rad ima opseg između 50 i 80 stranica. 
+ 
+Ako se u radu prezentiraju tablice, slike, grafikoni i slični grafički prikazi oni moraju biti 
+numerirani uz prikladan naziv. Tablice se numeriraju iznad, uz navođenje izvora ispod. Slike, 
+grafikoni i slični grafički prikazi se numeriraju ispod, uz navođenje izvora također ispod. Ako 
+su tablice, slike, grafikoni i slični grafički prikazi originalni rezultat rada autora onda se kao 
+ 
+7
+\n\f\nizvor navodi: "Izračun autora", "Prikaz autora" ili slična formulacija. Brojevi u tablicama 
+moraju biti poravnati uz desni rub tablice, tekst uz lijevi rub tablice, dok zaglavlje tablice treba 
+biti centrirano. 
+ 
+ 
+Slika 3: Izgled i označavanje tablice 
+ 
+Font u autorski izrađenim tablicama, slikama, grafikoni i sličnim grafičkim prikazima je 
+Times New Roman, veličina 10, uz prored od 1,0. Kod velikih tablica i grafičkih prikaza po 
+potrebi se može koristiti i manji font, te "Landscape"- horizontalni izgled stranice. Ako se 
+slike preuzimaju s Interneta ili se skenirane stavljaju u tekst onda se preuzima originalni izgled 
+slike. Sve tablice, slike, grafikoni i slični grafički prikazi moraju biti poravnati uz lijevi rub 
+stranice, uz navođenje naziva i izvora uz lijevi rub stranice. 
+ 
+ 
+Slika 4: Izgled i označavanje slike 
+ 
+8
+\n\f\n 
+Ako se pri izradi rada koriste formule one se izrađuju uz primjenu odgovarajućeg programa, 
+primjerice uz uporabu programa Microsoft Equation.  
+ 
+ 
+Slika 5: Izgled i numeriranje formule 
+ 
+Font kod osnovnih varijabli u formulama je Times New Roman, veličine 11, dok drugi 
+elementi formula (potencije, korijeni, indeksi  i sl.) mogu imati i manji font. Formule se pišu 
+poravnato ulijevo iz numeriranje rednog broja formule u zagradama. Po potrebi se ispod 
+formula daje i legenda uz objašnjenje korištenih oznaka. Font kod legendi je Times New 
+Roman, veličine 10. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+9
+\n\f\n5. 
+ETIČKE NORME I PRAVILA NAVOĐENJA KORIŠTENE 
+LITERATURE  
+ 
+Tijekom izrade radova student se koristi relevantnim knjigama, člancima, zakonima, 
+pravilnicima i ostalim izvorima koje treba navesti u radu. U suprotnom, ako se preuzima tekst 
+drugog autora bez navođenja izvora riječ je o plagiranju. Plagiranje označava preuzimanje 
+tuđih ideja, mišljenja stavova, rezultata i sl. bez navođenja originalnog izvora, čime se 
+tuđi rad prikazuje kao vlastito djelo. Plagiranje je strogo zabranjeno, te predstavlja 
+tešku povredu studentskih dužnosti za što su predviđene sankcije kao što su opomena 
+pred isključenje i isključenje s Fakulteta1. 
+ 
+Uz konzistentno navođenje korištenih radova drugih autora, od studenta se očekuje da poštuje 
+etičke norme u svim fazama pisanja rada, posebice u fazi prikupljanja primarnih podataka 
+(najčešće putem ankete i/ili intervjua). Preciznije, od studenta se očekuje da osigura 
+dobrovoljni i informirani pristanak ispitanika, poštuje pravo na privatnost ispitanika, osigura 
+anonimnost ispitanika i mogućnost odustajanja ispitanika od istraživanja, te ponudi 
+ispitanicima mogućnost upoznavanja sa krajnjim rezultatima istraživanja. Student mora  
+zadržati objektivnost, te bilježiti i prikazivati točne i potpune podatke.  
+ 
+Zadatak studenata je da pročita adekvatnu literaturu vezanu uz temu istraživanja, po potrebi 
+svojim riječima "prepriča" tj. parafrazira pojedine cjeline, konzultirajući stavove više autora, 
+te da u konačnici profilira i svoje mišljenje o svim bitnim pitanjima. Ako se tuđi tekst 
+preuzima u cijelosti onda se taj tekst mora navesti unutar navodnih znakova, uz citiranje 
+izvora u fusnoti2 ili uporabom tzv. Harvardskog stila citiranja.  Pravilo o obveznom 
+citiranju izvora vrijedi i kod parafraziranja tuđeg teksta. Student u dogovoru s mentorom bira 
+stil citiranja korištene literature, te se kroz cijeli tekst konzistentno koristi samo jedan stil. 
+Dakle, u jednom radu nije dopušteno kombinirano korištenje više različitih stilova citiranja. 
+ 
+                                                 
+1 Ekonomski fakultet (2011): Pravilnik o stegovnoj odgovornosti studenata Ekonomskog fakulteta u Splitu, čl. 7, 
+st. 5 i čl. 12, st. 1. 
+2 Zelenika, R. (2000): Metodologija i tehnologija izrade znanstvenog i stručnog djela, Sveučilište u Rijeci, 
+Rijeka, str. 453. 
+ 
+ 
+10
+\n\f\nAko se koriste fusnote potrebno je navesti podatke o autoru citiranog djela (prezime i 
+inicijal/e imena autora), godini djela, naslovu djela, nazivu časopisa/zbornika/zbirne 
+znanstvene/stručne knjige, izdavaču, mjestu izdanja i brojevima stranica. U fusnotama se 
+koristi font Times New Roman, veličina 10, uz prored od 1,0. Konkretno, u programu za 
+obradu teksta Word za ubacivanje fusnote u tekst potrebno je na alatnoj traci izabrati naredbu 
+"Insert", nakon toga "References" i na kraju "Footnot" uz opciju Bottom of the page. Kod 
+Harvardskog stila citiranja korištene literature u tekstu se navodi prezime autora uz godinu u 
+kojoj je djelo objavljeno. Ako se primjenjuje Harvardski stil citiranja primjenjuje se isti font 
+kao i kod osnovnog teksta rada tj. Times New Roman, veličina 12, uz prored od 1,5. Primjere 
+primjene Harvardskog stila citiranja prikazuje sljedeća slika: 
+ 
+ 
+Slika 6: Harvardski stil citiranja u tekstu 
+ 
+11
+\n\f\nU popisu literature, koji u radu slijedi nakon zaključka treba navesti sve korištene izvore 
+literature, vodeći se pravilima po pojedinim tipu izvora. 
+ 
+ 
+Slika 7: Pravila navođenja izvora u popisu literature  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+12
+\n\f\nSvi izvori literature koji su korišteni u izradi rada moraju se numerirati arapskim brojevima i 
+to prema abecednom redu. U popisu literature koristi se font Times New Roman, veličina 12, 
+uz prored od 1,5. 
+ 
+ 
+Slika 8: Numeriranje korištene literature prema abecednom redu 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+13
+\n\f\n 
+14
+LITERATURA: 
+ 
+1. Ekonomski fakultet (2011): Pravilnik o stegovnoj odgovornosti studenata Ekonomskog 
+fakulteta u Splitu. 
+2. Tkalac Verčić, A. et al. (2011): Priručnik za metodologiju istraživačkog rada u 
+društvenim istraživanjima: kako osmisliti, provesti i opisati znanstveno i stručno 
+istraživanje, M.E.P., Zagreb. 
+3. Vujević, M. (2006): Uvođenje u znanstveni rad u području društvenih znanosti, 
+Školska knjiga, Zagreb. 
+4. Zelenika, R. (2000): Metodologija i tehnologija izrade znanstvenog i stručnog djela, 
+Sveučilište u Rijeci, Rijeka. 
+ 

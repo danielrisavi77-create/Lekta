@@ -105,6 +105,7 @@ export const PROJECTIONS = [
     sources: [
       'docs/generated/closed-loop.json',
       'docs/generated/repair-real-corpus.json',
+      'data/verification/ledger.json',
       'tests/helpers/coverage-cells.ts',
       'scripts/generate-faculty-matrix.mts',
     ],
@@ -133,10 +134,28 @@ export const PROJECTIONS = [
       'data/declarations/declarations.json',
       // Od 2026-09-05 ledger cita i ovjeru dokaza na stvarnim radovima (generate-completion-ledger.mts).
       'data/verification/real-corpus-attestation.json',
+      'data/verification/closed-loop-manifests',
+      'data/sources',
+      'src/repair',
       'src/verification',
       'scripts/generate-completion-ledger.mts',
     ],
     regenerate: 'npm run completion-ledger',
+  },
+  {
+    id: 'profile-rules-server',
+    artifacts: ['data/generated/profile-rules-server.json'],
+    sources: [
+      'data/profiles',
+      'data/sources',
+      'data/verification/closed-loop-manifests',
+      'src/repair',
+      'src/profiles/publish-ai-rules.ts',
+      'src/profiles/profile-rules-contract.ts',
+      'src/verification/ai-evidence-audit.ts',
+      'scripts/gen-profile-rules-server.mts',
+    ],
+    regenerate: 'npm run gen-profile-rules-server',
   },
   {
     // Registriran 2026-09-05, nakon sto je puni gate na cistom worktreeu pao tocno na njegova dva drift
