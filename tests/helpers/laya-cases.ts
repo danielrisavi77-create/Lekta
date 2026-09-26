@@ -108,7 +108,10 @@ export const contractCases: TestCase[] = [
   } },
   { name: 'greska ne ispisuje nepoznati kljuc ili tekst dokumenta', run: () => {
     try { validateDecisionCase({ ...makeCase(), PRIVATE_TEXT_CANARY: 'PRIVATE_VALUE_CANARY' }); assert.fail('expected rejection'); }
-    catch (e) { assert.ok(e instanceof Error); assert.ok(!e.message.includes('PRIVATE_')); }
+    catch (e) {
+      if (!(e instanceof Error)) throw e;
+      assert.ok(!e.message.includes('PRIVATE_'));
+    }
   } },
   { name: 'rezultat je vezan uz ocekivani slucaj, jezik i checkId', run: () => {
     assert.deepEqual(validateDecisionResult(makeResult(), makeCase()), makeResult());
@@ -210,7 +213,9 @@ export const adapterCases: TestCase[] = [
     rejects(() => buildDecisionCases({ ...s, records: [] }), 'DATA_NOT_PERMITTED');
   } },
   { name: 'pogresan checkId zapisa je greska ugovora', run: () => {
-    const s = makeSnapshot(); rejects(() => buildDecisionCases({ ...s, records: [{ ...s.records[0], checkId: 'page.margins' }] }));
+    const s = makeSnapshot();
+    const checkId = 'page.margins' as unknown as typeof s.records[0]['checkId'];
+    rejects(() => buildDecisionCases({ ...s, records: [{ ...s.records[0], checkId }] }));
   } },
   { name: 'prazan odobreni batch daje nula slucajeva', run: () => assert.deepEqual(buildDecisionCases({ ...makeSnapshot(), records: [] }), []) },
 ];
