@@ -129,6 +129,7 @@
     "attest-corpus": "node scripts/attest-real-corpus.mjs",
     "branch-ci": "node scripts/master-ci-status.mjs --current",
     "agents": "node scripts/agents/cli.mjs",
+    "agents:usage-report": "node scripts/agents/usage-report.mjs",
     "check:repair-integration": "tsc --noEmit && vitest run --config vitest.repair-integration.config.ts && vite build",
     "repair:runner:e2e": "vite-node scripts/run-repair-runner-e2e.mts",
     "release:repair:preflight": "tsx scripts/run-local-repair-release.mts",
