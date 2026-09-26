@@ -33,7 +33,7 @@ import { isSupported, renderDefectFragment, type DefectClass } from '../src/corp
 import { renderEvalCases, type EvalClass } from '../src/corpus/tool-evals';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readdirSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
@@ -98,6 +98,7 @@ import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItems
 import { buildRepairPanelHandle } from '../src/ui/repair-panel';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
+import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -3282,7 +3283,123 @@ const MUTATIONS: Mutation[] = [
       readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
   },
+
+  // --- clean-vitest-tmp: gard procesa i starost po najnovijoj datoteci ------------------------
+  // Sve nad datotecnim sustavom U MEMORIJI (pravilo 1 ovog testa); brisanje je ubrizgan `rm` koji
+  // samo biljezi putanju. Baseline je stvarni planCleanup/executePlan iz skripte.
+  {
+    id: 'clean-tmp/gard-procesa-uklonjen',
+    imitates: 'scripts/clean-vitest-tmp.mjs bez garda procesa: dok zivi vitest pise u <nanoid>/web, '
+      + 'ciscenje prije gatea brise njegovu mapu i rusi tudji run (ENOENT ...\\Temp\\<nanoid>\\web\\<sha1>, 26. 9.)',
+    caught: () => {
+      const bezGarda = cleanTmpRun(cleanTmpOldFs(), CT_LIVE_VITEST, { guard: () => ({ ok: true }) });
+      return bezGarda.rmCalls.includes(CT_NANO);
+    },
+    cleanBefore: () => {
+      // Stvarni gard uz ziv vitest: nista se ne brise, mapa je zadrzana.
+      const zivi = cleanTmpRun(cleanTmpOldFs(), CT_LIVE_VITEST);
+      // Ista fixtura bez vitesta SE brise, pa je gard (a ne fixtura) ono sto je cuva.
+      const mirno = cleanTmpRun(cleanTmpOldFs(), CT_QUIET);
+      return zivi.rmCalls.length === 0
+        && zivi.plan.held.some((h) => h.path === CT_NANO)
+        && mirno.rmCalls.length === 1 && mirno.rmCalls[0] === CT_NANO;
+    },
+  },
+  {
+    id: 'clean-tmp/starost-po-mtime-mape',
+    imitates: 'zamka 26. 9.: starost <nanoid> mape racunata po mtime korijena mape, koji se ne osvjezava '
+      + 'dok Vitest pise u postojece podmape, pa je ciscenje obrisalo mapu zivog gatea (466 umjesto 613 test datoteka)',
+    caught: () => {
+      const poMapi = (dir: string, maxEntries: number, fs: CleanTmpFs) => {
+        const m = measureDir(dir, maxEntries, fs);
+        return m.status === 'ok' ? { ...m, newestMs: fs.lstat(dir).mtimeMs } : m;
+      };
+      return cleanTmpRun(cleanTmpTrapFs(), CT_QUIET, { measure: poMapi }).rmCalls.includes(CT_NANO);
+    },
+    cleanBefore: () => {
+      const fs = cleanTmpTrapFs();
+      // Generator dokazuje klasu ulaza: korijen mape i web/ stari, datoteka unutra svjeza.
+      const staro = (p: string) => CT_NOW - fs.lstat(p).mtimeMs >= CT_THRESHOLD;
+      if (!staro(CT_NANO) || !staro(join(CT_NANO, 'web')) || staro(CT_FRESH_FILE)) return false;
+      const stvarni = cleanTmpRun(fs, CT_QUIET);
+      return stvarni.rmCalls.length === 0 && stvarni.plan.young.some((i) => i.path === CT_NANO);
+    },
+  },
 ];
+
+/** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
+type CleanTmpFs = ReturnType<typeof cleanTmpVirtualFs>;
+const CT_ROOT = resolve('/lekta-virtualni-tmp');
+const CT_NOW = Date.UTC(2026, 8, 26, 12, 0, 0);
+const CT_HOUR = 3_600_000;
+const CT_THRESHOLD = 2 * CT_HOUR;
+const CT_NANO = join(CT_ROOT, 'abcdefghijABCDEFGHIJ_');
+const CT_FRESH_FILE = join(CT_NANO, 'web', 'ffffffffffffffffffffffffffffffffffffffff');
+const CT_QUIET = [{ pid: 7, ppid: 1, name: 'node.exe', command: 'node npm-cli.js run check' }];
+const CT_LIVE_VITEST = [
+  ...CT_QUIET,
+  { pid: 900, ppid: 1, name: 'node.exe', command: '"node" C:/x/node_modules/vitest/vitest.mjs run' },
+];
+
+/** Sustav u memoriji: kljuc je apsolutna putanja, djeca su unosi ciji je dirname roditelj. */
+function cleanTmpVirtualFs(nodes: Record<string, { dir: boolean; mtimeMs: number; size?: number }>) {
+  const map = new Map(Object.entries(nodes));
+  const lstat = (p: string) => {
+    const n = map.get(p);
+    if (!n) throw Object.assign(new Error(`ENOENT ${p}`), { code: 'ENOENT' });
+    return { mtimeMs: n.mtimeMs, size: n.size ?? 0, isDirectory: () => n.dir, isSymbolicLink: () => false };
+  };
+  const readdir = (p: string) => {
+    lstat(p);
+    return [...map.entries()]
+      .filter(([k]) => k !== p && dirname(k) === p)
+      .map(([k, n]) => ({ name: basename(k), isDirectory: () => n.dir, isSymbolicLink: () => false }));
+  };
+  return { lstat, readdir };
+}
+
+/** Stara Vitest mapa: sve (korijen, web/, datoteka) 9 h staro. */
+function cleanTmpOldFs(): CleanTmpFs {
+  const t = CT_NOW - 9 * CT_HOUR;
+  return cleanTmpVirtualFs({
+    [CT_ROOT]: { dir: true, mtimeMs: t },
+    [CT_NANO]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web')]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')]: { dir: false, mtimeMs: t, size: 18 },
+  });
+}
+
+/** Zamka 26. 9.: korijen mape i web/ 10 h stari, a jedna datoteka unutra prepisana prije minute. */
+function cleanTmpTrapFs(): CleanTmpFs {
+  const t = CT_NOW - 10 * CT_HOUR;
+  return cleanTmpVirtualFs({
+    [CT_ROOT]: { dir: true, mtimeMs: t },
+    [CT_NANO]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web')]: { dir: true, mtimeMs: t },
+    [join(CT_NANO, 'web', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')]: { dir: false, mtimeMs: t, size: 18 },
+    [CT_FRESH_FILE]: { dir: false, mtimeMs: CT_NOW - 60_000, size: 6 },
+  });
+}
+
+/** Stvarni planCleanup + executePlan s `rm` koji samo biljezi; `overrides` nosi mutaciju. */
+function cleanTmpRun(
+  fs: CleanTmpFs,
+  processes: Array<{ pid: number; ppid: number; name: string; command: string }>,
+  overrides: Partial<Parameters<typeof planCleanup>[0]> = {},
+) {
+  const plan = planCleanup({
+    root: CT_ROOT,
+    nowMs: CT_NOW,
+    thresholdMs: CT_THRESHOLD,
+    listProcesses: () => processes,
+    selfPid: 4242,
+    fs,
+    ...overrides,
+  });
+  const rmCalls: string[] = [];
+  executePlan(plan, { rm: (p: string) => { rmCalls.push(p); } });
+  return { plan, rmCalls };
+}
 
 /** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
 function webhookMorSource(): string {

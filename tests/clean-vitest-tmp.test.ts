@@ -31,6 +31,7 @@ import {
   parsePsOutput,
   parseWindowsProcesses,
   planCleanup,
+  runCli,
   runnerGuard,
 } from '../scripts/clean-vitest-tmp.mjs';
 
@@ -46,6 +47,10 @@ const NANO_B = 'Zy9-8x7w6v5u4t3s2r1q0';
 const NANO_C = 'QQQQQQQQQQQQQQQQQQQQQ';
 /** Mirno stanje stroja: samo npm ljuska ovog runa, nijedan runner. */
 const QUIET: Proc[] = [{ pid: 7, ppid: 1, name: 'node.exe', command: 'node npm-cli.js run check' }];
+/** Stvarni oblik naredbenih redaka izmjeren na vlasnikovom stroju 2026-09-26 (CIM upit). */
+const VITEST_CMD = '"node" "C:\\Users\\PC\\Desktop\\Lekta\\node_modules\\.bin\\\\..\\vitest\\vitest.mjs" run tests/x.test.ts';
+const PLAYWRIGHT_TEST_SERVER =
+  '"C:\\Program Files\\nodejs\\node.EXE" node_modules\\@playwright\\test\\cli.js test-server -c playwright.config.ts --host 127.0.0.1';
 
 let root = '';
 
@@ -264,18 +269,77 @@ describe('clean-vitest-tmp: zivi procesi (nepoznato = ne brisi)', () => {
     expect(plan().remove).toHaveLength(1);
   });
 
-  it.each([
-    ['vitest', 'node C:\\x\\node_modules\\vitest\\vitest.mjs run'],
-    ['playwright', 'node node_modules\\@playwright\\test\\cli.js test-server'],
-  ])('ne brise NISTA kad radi %s proces', (_label, command) => {
+  it('ziv vitest proces zadrzava nanoid mapu (u held, ne u remove) i nista ne brise', () => {
     const dir = makeVitestDir(NANO_A, 9 * HOUR);
-    const procs: Proc[] = [...QUIET, { pid: 900, ppid: 1, name: 'node.exe', command }];
+    const procs: Proc[] = [...QUIET, { pid: 900, ppid: 1, name: 'node.exe', command: VITEST_CMD }];
     const p = plan(() => procs);
-    expect(p.blocked).toMatch(/vitest\/playwright/);
+    expect(p.blocked).toBeNull();
+    expect(p.guards.vitest).toMatchObject({ ok: false, reason: expect.stringMatching(/radi 1 vitest proces/) });
     expect(p.remove).toEqual([]);
+    expect(p.held.map((h) => h.path)).toEqual([dir]);
     const res = executePlan(p);
     expect(res.removed).toBe(0);
     expect(existsSync(dir)).toBe(true);
+  });
+
+  it('nalaz 26. 9.: trajni Playwright test-server (roditelj Code.exe) NE blokira staru nanoid mapu', () => {
+    const dir = makeVitestDir(NANO_A, 9 * HOUR);
+    const pw: Proc[] = [
+      ...QUIET,
+      { pid: 11496, ppid: 1, name: 'Code.exe', command: '"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"' },
+      { pid: 3176, ppid: 11496, name: 'node.exe', command: PLAYWRIGHT_TEST_SERVER },
+    ];
+    const p = plan(() => pw);
+    expect(p.blocked).toBeNull();
+    expect(p.guards.vitest).toEqual({ ok: true });
+    expect(p.held).toEqual([]);
+    expect(p.remove.map((i) => i.path)).toEqual([dir]);
+    executePlan(p);
+    expect(existsSync(dir)).toBe(false);
+
+    // Isti popis uz ziv vitest blokira: razlika je SAMO vitest proces, ne Playwright.
+    const dir2 = makeVitestDir(NANO_B, 9 * HOUR);
+    const sVitestom: Proc[] = [...pw, { pid: 16524, ppid: 1, name: 'node.exe', command: VITEST_CMD }];
+    const p2 = plan(() => sVitestom);
+    expect(p2.remove).toEqual([]);
+    expect(p2.held.map((h) => h.path)).toEqual([dir2]);
+    executePlan(p2);
+    expect(existsSync(dir2)).toBe(true);
+  });
+
+  it('gard je po vrsti: pytest cuva word-replica mapu, ne i nanoid; vitest obrnuto', () => {
+    const nano = makeVitestDir(NANO_A, 9 * HOUR);
+    const word = join(root, 'word-replica-tests-_2uj9491');
+    mkdirSync(word);
+    setTime(word, NOW - 9 * HOUR);
+
+    const sPytestom: Proc[] = [
+      ...QUIET,
+      { pid: 800, ppid: 1, name: 'python.exe', command: 'python -m pytest tests/e2e -k word_replica' },
+    ];
+    const p = plan(() => sPytestom);
+    expect(p.guards['word-replica']).toMatchObject({ ok: false });
+    expect(p.guards.vitest).toEqual({ ok: true });
+    expect(p.remove.map((i) => i.path)).toEqual([nano]);
+    expect(p.held.map((h) => h.path)).toEqual([word]);
+
+    const sVitestom: Proc[] = [...QUIET, { pid: 900, ppid: 1, name: 'node.exe', command: VITEST_CMD }];
+    const q = plan(() => sVitestom);
+    expect(q.remove.map((i) => i.path)).toEqual([word]);
+    expect(q.held.map((h) => h.path)).toEqual([nano]);
+  });
+
+  it('word_replica runner bez pytesta takodjer cuva word-replica mapu; Python bez njih ne', () => {
+    const wr: Proc[] = [
+      ...QUIET,
+      { pid: 801, ppid: 1, name: 'python.exe', command: 'python -m word_replica.runner verify x.docx' },
+    ];
+    expect(runnerGuard(wr, SELF, 'word-replica').ok).toBe(false);
+    const drugi: Proc[] = [...QUIET, { pid: 802, ppid: 1, name: 'python.exe', command: 'python scripts/corpus-oracle.py' }];
+    expect(runnerGuard(drugi, SELF, 'word-replica').ok).toBe(true);
+    // Code.exe s pytest u retku nije Python proces, pa ne blokira kad popis nosi ime.
+    const code: Proc[] = [...QUIET, { pid: 803, ppid: 1, name: 'Code.exe', command: 'code --folder pytest' }];
+    expect(runnerGuard(code, SELF, 'word-replica').ok).toBe(true);
   });
 
   it('ne brise nista kad je popis procesa null', () => {
@@ -295,17 +359,26 @@ describe('clean-vitest-tmp: zivi procesi (nepoznato = ne brisi)', () => {
   });
 
   it('ne brise nista kad naredbeni redak Node procesa nije citljiv', () => {
-    const g = runnerGuard([...QUIET, { pid: 901, ppid: 1, name: 'node.exe', command: null }], SELF);
-    expect(g.ok).toBe(false);
+    const procs: Proc[] = [...QUIET, { pid: 901, ppid: 1, name: 'node.exe', command: null }];
+    expect(runnerGuard(procs, SELF, 'vitest').ok).toBe(false);
+    const dir = makeVitestDir(NANO_A, 9 * HOUR);
+    const p = plan(() => procs);
+    expect(p.remove).toEqual([]);
+    expect(p.held.map((h) => h.path)).toEqual([dir]);
+    // Necitljiv Python proces cini nepoznatom word-replica vrstu.
+    const py: Proc[] = [...QUIET, { pid: 904, ppid: 1, name: 'python.exe', command: null }];
+    expect(runnerGuard(py, SELF, 'word-replica').ok).toBe(false);
+    expect(runnerGuard(py, SELF, 'vitest').ok).toBe(true);
   });
 
   it('gleda samo Node procese kad popis nosi ime procesa', () => {
     const g = runnerGuard(
       [...QUIET, { pid: 902, ppid: 1, name: 'Code.exe', command: 'code tests/vitest.config.ts' }],
       SELF,
+      'vitest',
     );
     expect(g.ok).toBe(true);
-    const bez = runnerGuard([...QUIET, { pid: 902, ppid: 1, command: 'sh -c vitest run' }], SELF);
+    const bez = runnerGuard([...QUIET, { pid: 902, ppid: 1, command: 'sh -c vitest run' }], SELF, 'vitest');
     expect(bez.ok).toBe(false);
   });
 
@@ -316,16 +389,16 @@ describe('clean-vitest-tmp: zivi procesi (nepoznato = ne brisi)', () => {
       { pid: 60, ppid: 50, command: shell },
       { pid: SELF, ppid: 60, command: 'node scripts/clean-vitest-tmp.mjs' },
     ];
-    expect(runnerGuard(procs, SELF).ok).toBe(true);
+    expect(runnerGuard(procs, SELF, 'vitest').ok).toBe(true);
     // Mutacija: ista ljuska koja NIJE nas predak (druga sesija) blokira.
     const tudja: Proc[] = [...procs, { pid: 70, ppid: 1, command: shell }];
-    expect(runnerGuard(tudja, SELF).ok).toBe(false);
+    expect(runnerGuard(tudja, SELF, 'vitest').ok).toBe(false);
     // Mutacija: predak koji je sam vitest ne iskljucuje se.
     const vitestPredak: Proc[] = [
       { pid: 60, ppid: 1, command: 'node node_modules/vitest/vitest.mjs run' },
       { pid: SELF, ppid: 60, command: 'node scripts/clean-vitest-tmp.mjs' },
     ];
-    expect(runnerGuard(vitestPredak, SELF).ok).toBe(false);
+    expect(runnerGuard(vitestPredak, SELF, 'vitest').ok).toBe(false);
   });
 });
 
@@ -388,17 +461,64 @@ describe('clean-vitest-tmp: dry-run, greske i izlazni kod', () => {
     expect(parsePsOutput('')).toBeNull();
   });
 
-  it('CLI izlazi s 0 u dry-runu i uz neispravan argument, i nista ne brise', () => {
+  /**
+   * Dry-run grana CLI toka, deterministicki: popis procesa je ubrizgan (mirno stanje), pa ishod ne
+   * ovisi o tome radi li na stroju Vitest. Ranija inacica je spawnala skriptu i zbog Vitest fork
+   * workera kao pretka uvijek prolazila kroz granu blokiranja, a tvrdila je dry-run.
+   */
+  it('CLI tok (runCli) u dry-runu ispisuje sto BI obrisao i nista ne brise', () => {
+    const dir = makeVitestDir(NANO_A, 9 * HOUR);
+    const lines: string[] = [];
+    const rmCalls: string[] = [];
+    runCli({
+      argv: ['--dry-run'],
+      root,
+      nowMs: NOW,
+      listProcesses: () => QUIET,
+      selfPid: SELF,
+      log: (l: string) => lines.push(l),
+      rm: (p: string) => { rmCalls.push(p); },
+    });
+    const out = lines.join('\n');
+    expect(out).not.toMatch(/nista nije obrisano, razlog/);
+    expect(out).toContain('bi se obrisalo (dry-run): 1 mapa');
+    expect(out).toContain('zadrzano zbog zivih procesa: 0 mapa');
+    expect(rmCalls).toEqual([]);
+    expect(existsSync(dir)).toBe(true);
+
+    // Baseline iste grane bez dry-runa: ista mapa se stvarno brise, pa gornja tvrdnja nije vakuumska.
+    const lines2: string[] = [];
+    runCli({ argv: [], root, nowMs: NOW, listProcesses: () => QUIET, selfPid: SELF, log: (l: string) => lines2.push(l) });
+    expect(lines2.join('\n')).toContain('obrisano: 1 mapa');
+    expect(existsSync(dir)).toBe(false);
+  });
+
+  it('CLI tok uz ziv vitest ispisuje razlog po vrsti i zadrzanu mapu', () => {
+    const dir = makeVitestDir(NANO_A, 9 * HOUR);
+    const lines: string[] = [];
+    runCli({
+      argv: ['--dry-run'],
+      root,
+      nowMs: NOW,
+      listProcesses: () => [...QUIET, { pid: 900, ppid: 1, name: 'node.exe', command: VITEST_CMD }],
+      selfPid: SELF,
+      log: (l: string) => lines.push(l),
+    });
+    const out = lines.join('\n');
+    expect(out).toMatch(/vitest: ne brisem, radi 1 vitest proces/);
+    expect(out).toContain('bi se obrisalo (dry-run): 0 mapa');
+    expect(out).toContain('zadrzano zbog zivih procesa: 1 mapa');
+    expect(existsSync(dir)).toBe(true);
+  });
+
+  it('ulazna tocka izlazi s 0 uz neispravan argument i nista ne brise', () => {
+    // Ova grana izlazi PRIJE mjerenja procesa, pa ne ovisi o stanju stroja.
     const dir = makeVitestDir(NANO_A, 9 * HOUR);
     const script = join(import.meta.dirname, '..', 'scripts', 'clean-vitest-tmp.mjs');
     const env = { ...process.env, TEMP: root, TMP: root, TMPDIR: root };
-    const dry = spawnSync(process.execPath, [script, '--dry-run'], { env, encoding: 'utf8', timeout: 90_000 });
-    expect(dry.status).toBe(0);
-    expect(dry.stdout).toContain('[clean-vitest-tmp]');
-    expect(existsSync(dir)).toBe(true);
     const bad = spawnSync(process.execPath, [script, '--older-than-hours=-1'], { env, encoding: 'utf8', timeout: 90_000 });
     expect(bad.status).toBe(0);
-    expect(bad.stdout).toMatch(/nista nije obrisano/);
+    expect(bad.stdout).toMatch(/neispravan --older-than-hours: --older-than-hours=-1; nista nije obrisano/);
     expect(existsSync(dir)).toBe(true);
   }, 120_000);
 });

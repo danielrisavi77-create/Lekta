@@ -8,8 +8,13 @@
  *
  * ZAMKA (2026-09-26): brisanje po mtime MAPE ubilo je zivi gate usred runa, jer se mtime mape ne
  * osvjezava dok Vitest pise u postojece podmape. Zato:
- *   1. nista se ne brise dok na stroju radi ijedan vitest ili playwright proces, ni kad se procesi
- *      ne mogu izmjeriti (nepoznato = ne brisi);
+ *   1. gard procesa je PO VRSTI mape. `<nanoid>/web|ssr` stvara iskljucivo Vitest
+ *      (WorkspaceProject.tmpDir, cacheFs u forks poolu), pa te mape cuva samo zivi proces s
+ *      `vitest` u naredbenom retku. `word-replica-tests-*` cuvaju zivi `pytest` i `word_replica`
+ *      procesi. Playwright se NE broji: VS Code ekstenzija drzi trajni `@playwright/test/cli.js
+ *      test-server` (roditelj Code.exe), pa bi gard koji ga broji na vlasnikovom stroju vjecno
+ *      blokirao, a Playwright te mape ionako ne stvara. Kad se procesi ne mogu izmjeriti, ne brise
+ *      se nista (nepoznato = ne brisi);
  *   2. starost mape je NAJNOVIJI mtime bilo koje datoteke ili podmape unutar nje (rekurzivno, s
  *      gornjom granicom broja unosa), nikad samo mtime korijena mape;
  *   3. brise se iskljucivo `fs.rmSync` nad tocnom putanjom koja je izravno dijete korijena.
@@ -29,10 +34,37 @@ export const WORD_REPLICA_PREFIX = 'word-replica-tests-';
 export const VITEST_SUBDIRS = new Set(['web', 'ssr']);
 export const DEFAULT_THRESHOLD_HOURS = 2;
 export const DEFAULT_MAX_ENTRIES = 20_000;
-/** Naredbeni redak koji odaje zivi test runner. */
-export const RUNNER_PATTERN = /vitest|playwright/i;
+/**
+ * Vrsta mape -> procesi koji je smiju drzati zivom. `name` filtrira po imenu procesa kad ga popis
+ * nosi (Windows CIM upit vraca SVE procese radi lanca predaka); bez imena (ps) gledaju se svi.
+ * `command` je obrazac naredbenog retka koji odaje zivog pisca te vrste mape.
+ * @type {Record<'vitest' | 'word-replica', { label: string, name: RegExp, command: RegExp }>}
+ */
+export const RUNNER_RULES = {
+  vitest: { label: 'vitest', name: /^node(\.exe)?$/i, command: /vitest/i },
+  'word-replica': {
+    label: 'pytest/word_replica',
+    name: /^(python|pythonw|py|pytest)[0-9.]*(\.exe)?$/i,
+    command: /pytest|word_replica/i,
+  },
+};
+/** @type {Array<'vitest' | 'word-replica'>} */
+export const GUARD_KINDS = ['vitest', 'word-replica'];
 /** Ime ove skripte: pozivatelj (ljuska `npm run check`) ga nosi u naredbenom retku. */
 const SELF_SCRIPT = 'clean-vitest-tmp.mjs';
+
+/**
+ * Minimalno sucelje datotecnog sustava koje skripta koristi. Stvarno je `node:fs`; mutacijski test
+ * ubrizgava sustav u memoriji da nista na disku ne dira.
+ * @typedef {{ name: string, isDirectory(): boolean, isSymbolicLink(): boolean }} EntryLike
+ * @typedef {{ mtimeMs: number, size: number, isDirectory(): boolean, isSymbolicLink(): boolean }} StatLike
+ * @typedef {{ readdir(path: string): EntryLike[], lstat(path: string): StatLike }} FsLike
+ */
+/** @type {FsLike} */
+export const REAL_FS = {
+  readdir: (p) => readdirSync(p, { withFileTypes: true }),
+  lstat: (p) => lstatSync(p),
+};
 
 /**
  * Je li `candidate` IZRAVNO dijete korijena `root` (nakon resolve)? Stiti od putanje izvan
@@ -67,46 +99,50 @@ export function ancestorsOf(processes, selfPid) {
 }
 
 /**
- * Odredjuje smije li se brisati s obzirom na zive procese.
+ * Odredjuje smije li se brisati mapa vrste `kind` s obzirom na zive procese.
  *
  * `processes === null` znaci da popis nije izmjeren i ciscenje se odbija. Ako proces nosi `name`,
- * gledaju se samo `node`/`node.exe` procesi (Vitest i Playwright runner su Node procesi; Windows
- * upit vraca sve procese radi lanca predaka). Iskljucuje se vlastiti proces i predak cija naredba
- * pokrece upravo ovu skriptu (ljuska `npm run check` ovog runa, koja u retku nosi cijeli lanac
- * ukljucujuci `vitest run`). Predak koji je sam vitest NIJE iskljucen.
+ * gledaju se samo procesi cije ime odgovara pravilu vrste (Node za Vitest, Python za WordReplicu).
+ * Iskljucuje se vlastiti proces i predak cija naredba pokrece upravo ovu skriptu (ljuska
+ * `npm run check` ovog runa, koja u retku nosi cijeli lanac ukljucujuci `vitest run`). Predak koji
+ * je sam vitest NIJE iskljucen. Proces odgovarajuceg imena bez citljivog naredbenog retka znaci
+ * nepoznato, dakle ne brisi.
  *
  * @param {Array<{pid: number, ppid: number | null, name?: string | null, command: string | null}> | null} processes
  * @param {number} selfPid
+ * @param {'vitest' | 'word-replica'} kind
  * @returns {{ ok: true } | { ok: false, reason: string }}
  */
-export function runnerGuard(processes, selfPid) {
+export function runnerGuard(processes, selfPid, kind) {
   if (processes === null) {
     return { ok: false, reason: 'popis procesa nije izmjeren (nepoznato = ne brisi)' };
   }
+  const rule = RUNNER_RULES[kind];
+  if (!rule) return { ok: false, reason: `nepoznata vrsta mape '${String(kind)}'` };
   const ancestors = ancestorsOf(processes, selfPid);
   const blockers = [];
   const unreadable = [];
   for (const p of processes) {
     if (p.pid === selfPid) continue;
-    if (p.name != null && !/^node(\.exe)?$/i.test(p.name)) continue;
+    if (p.name != null && !rule.name.test(p.name)) continue;
     if (ancestors.has(p.pid) && p.command != null && p.command.includes(SELF_SCRIPT)) continue;
     if (p.command == null) {
       unreadable.push(p.pid);
       continue;
     }
-    if (RUNNER_PATTERN.test(p.command)) blockers.push(p);
+    if (rule.command.test(p.command)) blockers.push(p);
   }
   if (blockers.length > 0) {
     const opis = blockers
       .slice(0, 5)
       .map((p) => `PID ${p.pid}: ${String(p.command).slice(0, 160)}`)
       .join('; ');
-    return { ok: false, reason: `radi ${blockers.length} vitest/playwright proces(a): ${opis}` };
+    return { ok: false, reason: `radi ${blockers.length} ${rule.label} proces(a): ${opis}` };
   }
   if (unreadable.length > 0) {
     return {
       ok: false,
-      reason: `naredbeni redak Node procesa nije citljiv (PID ${unreadable.slice(0, 5).join(', ')}), nepoznato = ne brisi`,
+      reason: `naredbeni redak procesa nije citljiv (PID ${unreadable.slice(0, 5).join(', ')}), nepoznato = ne brisi`,
     };
   }
   return { ok: true };
@@ -117,20 +153,24 @@ export function runnerGuard(processes, selfPid) {
  * unosa. Simbolicke veze i junctioni se ne slijede nego mapu cine neprihvatljivom.
  * @param {string} dir
  * @param {number} maxEntries
+ * @param {FsLike} fs
+ * @returns {{ status: 'ok', newestMs: number, bytes: number, entries: number }
+ *   | { status: 'too-many', entries: number } | { status: 'symlink', path: string }}
  */
-export function measureDir(dir, maxEntries = DEFAULT_MAX_ENTRIES) {
-  const rootStat = lstatSync(dir);
+export function measureDir(dir, maxEntries = DEFAULT_MAX_ENTRIES, fs = REAL_FS) {
+  const rootStat = fs.lstat(dir);
   let newestMs = rootStat.mtimeMs;
   let bytes = 0;
   let entries = 0;
+  /** @type {string[]} */
   const stack = [dir];
   while (stack.length > 0) {
-    const cur = stack.pop();
-    for (const ent of readdirSync(cur, { withFileTypes: true })) {
+    const cur = /** @type {string} */ (stack.pop());
+    for (const ent of fs.readdir(cur)) {
       entries += 1;
       if (entries > maxEntries) return { status: 'too-many', entries };
       const full = join(cur, ent.name);
-      const st = lstatSync(full);
+      const st = fs.lstat(full);
       if (st.isSymbolicLink()) return { status: 'symlink', path: full };
       if (st.mtimeMs > newestMs) newestMs = st.mtimeMs;
       if (st.isDirectory()) stack.push(full);
@@ -144,16 +184,17 @@ export function measureDir(dir, maxEntries = DEFAULT_MAX_ENTRIES) {
  * Klasificira izravno dijete korijena. Vraca `null` za unose koji uopce nisu kandidati (tudje
  * tmp datoteke i mape), inace vrstu ili razlog odbijanja.
  * @param {string} full
- * @param {import('node:fs').Dirent} ent
+ * @param {EntryLike} ent
+ * @param {FsLike} fs
  * @returns {null | { kind: 'vitest' | 'word-replica' } | { refused: string }}
  */
-export function classifyEntry(full, ent) {
+export function classifyEntry(full, ent, fs = REAL_FS) {
   const isWord = ent.name.startsWith(WORD_REPLICA_PREFIX);
   const isNanoid = NANOID_NAME.test(ent.name);
   if (!isWord && !isNanoid) return null;
   if (ent.isSymbolicLink() || !ent.isDirectory()) return null;
   if (isWord) return { kind: 'word-replica' };
-  const inner = readdirSync(full, { withFileTypes: true });
+  const inner = fs.readdir(full);
   if (inner.length === 0) return { refused: 'prazna mapa (nije Vitest oblik)' };
   for (const e of inner) {
     if (!VITEST_SUBDIRS.has(e.name) || e.isSymbolicLink() || !e.isDirectory()) {
@@ -164,7 +205,11 @@ export function classifyEntry(full, ent) {
 }
 
 /**
- * Cisti plan: sto bi se obrisalo, sto je mlado, sto je odbijeno. Nista ne brise.
+ * Cisti plan: sto bi se obrisalo, sto je mlado, sto zadrzavaju zivi procesi, sto je odbijeno.
+ * Nista ne brise.
+ *
+ * `fs`, `guard` i `measure` su tocke ubrizgavanja za testove i mutacije (sustav u memoriji, gard
+ * procesa, mjerenje starosti); produkcija ih ne predaje i koristi stvarne izvedbe.
  * @param {{
  *   root: string,
  *   nowMs: number,
@@ -172,13 +217,31 @@ export function classifyEntry(full, ent) {
  *   listProcesses: () => (Array<{pid: number, ppid: number | null, name?: string | null, command: string | null}> | null),
  *   selfPid?: number,
  *   maxEntries?: number,
+ *   fs?: FsLike,
+ *   guard?: typeof runnerGuard,
+ *   measure?: typeof measureDir,
  * }} opts
  */
 export function planCleanup(opts) {
   const root = resolve(opts.root);
   const selfPid = opts.selfPid ?? process.pid;
   const maxEntries = opts.maxEntries ?? DEFAULT_MAX_ENTRIES;
-  const plan = { root, blocked: null, remove: [], young: [], refused: [], errors: [] };
+  const fs = opts.fs ?? REAL_FS;
+  const guardFn = opts.guard ?? runnerGuard;
+  const measure = opts.measure ?? measureDir;
+  /**
+   * @type {{
+   *   root: string,
+   *   blocked: string | null,
+   *   guards: Record<string, { ok: true } | { ok: false, reason: string }>,
+   *   remove: Array<{ path: string, kind: 'vitest' | 'word-replica', newestMs: number, bytes: number }>,
+   *   young: Array<{ path: string, kind: 'vitest' | 'word-replica', newestMs: number, bytes: number }>,
+   *   held: Array<{ path: string, kind: 'vitest' | 'word-replica' }>,
+   *   refused: Array<{ path: string, reason: string }>,
+   *   errors: Array<{ path: string, code: string }>,
+   * }}
+   */
+  const plan = { root, blocked: null, guards: {}, remove: [], young: [], held: [], refused: [], errors: [] };
 
   if (!Number.isFinite(opts.thresholdMs) || opts.thresholdMs <= 0) {
     plan.blocked = `neispravan prag starosti (${opts.thresholdMs} ms)`;
@@ -190,15 +253,15 @@ export function planCleanup(opts) {
   } catch {
     processes = null;
   }
-  const guard = runnerGuard(processes ?? null, selfPid);
-  if (!guard.ok) {
-    plan.blocked = guard.reason;
+  if (processes == null) {
+    plan.blocked = 'popis procesa nije izmjeren (nepoznato = ne brisi)';
     return plan;
   }
+  for (const kind of GUARD_KINDS) plan.guards[kind] = guardFn(processes, selfPid, kind);
 
   let entries;
   try {
-    entries = readdirSync(root, { withFileTypes: true });
+    entries = fs.readdir(root);
   } catch (err) {
     plan.blocked = `korijen nije citljiv: ${errCode(err)}`;
     return plan;
@@ -207,7 +270,7 @@ export function planCleanup(opts) {
     const full = join(root, ent.name);
     let cls;
     try {
-      cls = classifyEntry(full, ent);
+      cls = classifyEntry(full, ent, fs);
     } catch (err) {
       plan.errors.push({ path: full, code: errCode(err) });
       continue;
@@ -221,9 +284,15 @@ export function planCleanup(opts) {
       plan.refused.push({ path: full, reason: 'putanja izvan korijena' });
       continue;
     }
+    // Gard procesa PRIJE mjerenja: mapu koju zivi pisac njezine vrste moze drzati ne diramo ni
+    // citanjem, i ne ovisi o tome koliko je stara.
+    if (!plan.guards[cls.kind].ok) {
+      plan.held.push({ path: full, kind: cls.kind });
+      continue;
+    }
     let m;
     try {
-      m = measureDir(full, maxEntries);
+      m = measure(full, maxEntries, fs);
     } catch (err) {
       plan.errors.push({ path: full, code: errCode(err) });
       continue;
@@ -288,7 +357,7 @@ function errCode(err) {
 
 /**
  * Stvarni popis procesa. `null` kad se ne moze izmjeriti.
- * Windows: CIM upit nad SVIM procesima (za lanac predaka), runnerGuard gleda samo node.exe.
+ * Windows: CIM upit nad SVIM procesima (za lanac predaka), runnerGuard filtrira po imenu vrste.
  * Linux/mac: `ps -eo pid=,ppid=,args=` bez imena, pa se gledaju svi procesi.
  */
 export function listSystemProcesses() {
@@ -365,34 +434,56 @@ export function parseArgs(argv) {
 
 const mb = (bytes) => (bytes / (1024 * 1024)).toFixed(1);
 
-function main() {
-  const args = parseArgs(process.argv.slice(2));
+/**
+ * Cijeli CLI tok (argumenti, plan, izvrsenje, ispis) nad ubrizganim ovisnostima. Ulazna tocka ga
+ * zove sa stvarnim `tmpdir()`, satom i popisom procesa; test ga zove s kontroliranim popisom
+ * procesa, pa mjeri tocno onu granu koju tvrdi (npr. dry-run), a ne onu koju slucajno odabere
+ * stanje stroja na kojem se test vrti.
+ * @param {{
+ *   argv: string[],
+ *   root: string,
+ *   nowMs: number,
+ *   listProcesses: () => (Array<{pid: number, ppid: number | null, name?: string | null, command: string | null}> | null),
+ *   selfPid?: number,
+ *   log?: (line: string) => void,
+ *   rm?: (p: string, o: { recursive: true, force: true }) => void,
+ * }} deps
+ */
+export function runCli(deps) {
+  const log = deps.log ?? ((line) => console.log(line));
+  const args = parseArgs(deps.argv);
   const tag = '[clean-vitest-tmp]';
   if (args.error) {
-    console.log(`${tag} ${args.error}; nista nije obrisano.`);
+    log(`${tag} ${args.error}; nista nije obrisano.`);
     return;
   }
-  const root = resolve(tmpdir());
+  const root = resolve(deps.root);
   const plan = planCleanup({
     root,
-    nowMs: Date.now(),
+    nowMs: deps.nowMs,
     thresholdMs: args.olderThanHours * 3_600_000,
-    listProcesses: listSystemProcesses,
+    listProcesses: deps.listProcesses,
+    selfPid: deps.selfPid,
   });
   if (plan.blocked) {
-    console.log(`${tag} ${root}: nista nije obrisano, razlog: ${plan.blocked}`);
+    log(`${tag} ${root}: nista nije obrisano, razlog: ${plan.blocked}`);
     return;
   }
-  const res = executePlan(plan, { dryRun: args.dryRun });
+  const res = executePlan(plan, { dryRun: args.dryRun, rm: deps.rm });
   const youngBytes = plan.young.reduce((s, i) => s + i.bytes, 0);
   const errs = Object.entries(res.errorCounts).map(([k, v]) => `${k}=${v}`).join(', ') || 'nema';
   const verb = args.dryRun ? 'bi se obrisalo (dry-run)' : 'obrisano';
-  console.log(`${tag} ${root}, prag ${args.olderThanHours} h`);
-  console.log(`${tag} ${verb}: ${res.removed} mapa, ${mb(res.removedBytes)} MB`);
-  console.log(`${tag} preskoceno kao mlade: ${plan.young.length} mapa, ${mb(youngBytes)} MB`);
-  console.log(`${tag} odbijeno: ${res.refused.length}`);
-  for (const r of res.refused.slice(0, 10)) console.log(`${tag}   ${basename(r.path)}: ${r.reason}`);
-  console.log(`${tag} greske: ${errs}`);
+  log(`${tag} ${root}, prag ${args.olderThanHours} h`);
+  for (const kind of GUARD_KINDS) {
+    const g = plan.guards[kind];
+    if (g && !g.ok) log(`${tag} ${kind}: ne brisem, ${g.reason}`);
+  }
+  log(`${tag} ${verb}: ${res.removed} mapa, ${mb(res.removedBytes)} MB`);
+  log(`${tag} preskoceno kao mlade: ${plan.young.length} mapa, ${mb(youngBytes)} MB`);
+  log(`${tag} zadrzano zbog zivih procesa: ${plan.held.length} mapa`);
+  log(`${tag} odbijeno: ${res.refused.length}`);
+  for (const r of res.refused.slice(0, 10)) log(`${tag}   ${basename(r.path)}: ${r.reason}`);
+  log(`${tag} greske: ${errs}`);
 }
 
 export function isEntryModule(moduleUrl, argv1) {
@@ -404,7 +495,12 @@ export function isEntryModule(moduleUrl, argv1) {
 
 if (isEntryModule(import.meta.url, process.argv[1])) {
   try {
-    main();
+    runCli({
+      argv: process.argv.slice(2),
+      root: tmpdir(),
+      nowMs: Date.now(),
+      listProcesses: listSystemProcesses,
+    });
   } catch (err) {
     console.log(`[clean-vitest-tmp] neocekivana greska, nista dalje ne brisem: ${err && err.message ? err.message : String(err)}`);
   }
