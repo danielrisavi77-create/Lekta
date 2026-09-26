@@ -25,6 +25,10 @@ __pycache__/
 debug.log
 # Cache harvest citata (doi.org/CSL) - transient, ne commitati
 .harvest-cache/
+# Firecrawl cache (scraping alat): sirovi sadrzaj web stranica fakulteta i rezultati pretrage.
+# Moze nositi osobne podatke i tokene sa scrapeanih stranica, nikad u javni repo.
+# Mjerodavni izvori za pravila zive u data/sources/ i ostaju pracene.
+.firecrawl/
 .playwright-mcp/
 # Superpowers SDD: RADNO stanje izvodjenja (task briefovi, reporti, progress ledger).
 # Podjela je namjerna i vec postoji: ono sto NESTO OPISUJE ide u `docs/superpowers/plans`
