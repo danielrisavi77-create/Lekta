@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 import { webhookHandlerProblems } from './helpers/webhook-handler-source';
+import { paidClassificationProblems, refundReachabilityProblems } from './helpers/naplata-env';
 
 import {
   parseStripeEvent,
@@ -273,8 +274,9 @@ describe('acceptEvent (porijeklo i vrsta dogadjaja)', () => {
   const ok = { livemode: true, eventName: 'payment_intent.succeeded', accountId: '' };
 
   it('prihvaca produkcijski dogadjaj vrste koju obradjujemo', () => {
+    const povrat = { ...ok, eventName: 'charge.refunded' };
     expect(acceptEvent(ok, OPTS)).toEqual({ ok: true });
-    expect(acceptEvent({ ...ok, eventName: 'charge.refunded' }, OPTS)).toEqual({ ok: true });
+    expect(acceptEvent(povrat, OPTS)).toEqual({ ok: true });
   });
 
   it('odbija testni nacin rada dok nije izricito dopusten', () => {
@@ -309,9 +311,16 @@ describe('acceptEvent (porijeklo i vrsta dogadjaja)', () => {
     });
   });
 
-  it('vrstu koju ne obradjujemo tiho ignorira, ne knjizi', () => {
-    expect(acceptEvent({ ...ok, eventName: 'customer.created' }, OPTS)).toEqual({ ok: false, reason: 'event_ignored' });
-    expect(acceptEvent({ ...ok, eventName: '' }, OPTS)).toEqual({ ok: false, reason: 'event_ignored' });
+  /**
+   * Gate gleda SAMO porijeklo. Do kruga 2 spajanja je odbijao i vrstu (`event_ignored`), pa
+   * povrat pod imenom `refund.created` nikad nije stigao do klasifikatora koji ga prijavljuje na
+   * ERROR razini (nalaz pregleda 2026-09-26). O vrsti sada odlucuje classifyStripeEvent.
+   */
+  it('vrstu NE odbija: o njoj odlucuje klasifikator', () => {
+    for (const eventName of ['customer.created', 'refund.created', 'charge.refund.updated', '']) {
+      const ev = { ...ok, eventName };
+      expect(acceptEvent(ev, OPTS), eventName).toEqual({ ok: true });
+    }
   });
 
   it('obradjuju se tocno dvije vrste dogadjaja', () => {
@@ -353,7 +362,13 @@ describe('isFullRefund', () => {
  * ne uz zastavicu `refunded` iz objekta.
  */
 describe('classifyStripeEvent', () => {
-  const base = { eventName: 'payment_intent.succeeded', status: 'succeeded', amountReceivedCents: 999, refunded: false };
+  const base = {
+    eventName: 'payment_intent.succeeded',
+    status: 'succeeded',
+    amountReceivedCents: 999,
+    refunded: false,
+    userId: 'user-1',
+  };
 
   it('payment_intent.succeeded + status succeeded + amount_received > 0 -> paid', () => {
     expect(classifyStripeEvent(base)).toEqual({ kind: 'paid' });
@@ -390,14 +405,40 @@ describe('classifyStripeEvent', () => {
     expect(classifyStripeEvent({ ...base, status: 'PROCESSING' }).reason).toBe('payment_status:processing');
   });
 
-  it('charge.refunded -> refund, bez obzira na status, iznos i zastavicu', () => {
+  it('charge.refunded -> refund, bez obzira na status, iznos, zastavicu i user_id', () => {
     for (const status of ['succeeded', '', 'failed']) {
-      expect(classifyStripeEvent({ eventName: 'charge.refunded', status, amountReceivedCents: null, refunded: true }))
+      expect(classifyStripeEvent({ eventName: 'charge.refunded', status, amountReceivedCents: null, refunded: true, userId: '' }))
         .toEqual({ kind: 'refund' });
     }
     // Zastavica nije uvjet: djelomican povrat je i dalje charge.refunded (isFullRefund odlucuje dalje).
-    expect(classifyStripeEvent({ eventName: 'charge.refunded', status: '', amountReceivedCents: null, refunded: false }))
+    expect(classifyStripeEvent({ eventName: 'charge.refunded', status: '', amountReceivedCents: null, refunded: false, userId: '' }))
       .toEqual({ kind: 'refund' });
+  });
+
+  /**
+   * Masterov `needs_manual_link` (31b802ad, 81a89f2f), Stripe ekvivalent: potvrdjena naplata bez
+   * `metadata[user_id]` je vlastita vrsta, ne `ignored`. Novac je naplacen, pa ne smije utonuti u
+   * WARN sum s konfiguracijskim otpadom.
+   */
+  it.each(['', '   '])('potvrdjena naplata bez user_id (%j) -> needs_manual_link', (userId) => {
+    expect(classifyStripeEvent({ ...base, userId })).toEqual({ kind: 'needs_manual_link', reason: 'missing_user_metadata' });
+  });
+
+  it('NEPOTVRDJENA naplata bez user_id ostaje ignored (needs_manual_link je samo za stvaran novac)', () => {
+    expect(classifyStripeEvent({ ...base, userId: '', status: 'processing' }))
+      .toEqual({ kind: 'ignored', reason: 'payment_status:processing' });
+    expect(classifyStripeEvent({ ...base, userId: '', amountReceivedCents: 0 }))
+      .toEqual({ kind: 'ignored', reason: 'amount_received:0' });
+  });
+
+  it('BASELINE i MUTACIJA: gard paidClassificationProblems hvata placenu uplatu bez korisnika kao ignored', () => {
+    expect(paidClassificationProblems(classifyStripeEvent)).toEqual([]);
+    // MUTACIJA: tocno stanje pack3 prije kruga 2 (bez korisnika = tudji dogadjaj, WARN).
+    const utopljeno = (ev: Parameters<typeof classifyStripeEvent>[0]) =>
+      ev.eventName === 'payment_intent.succeeded' && !ev.userId.trim()
+        ? { kind: 'ignored', reason: 'missing_user_metadata' }
+        : classifyStripeEvent(ev);
+    expect(paidClassificationProblems(utopljeno).join('; ')).toContain('needs_manual_link');
   });
 
   /**
@@ -405,23 +446,23 @@ describe('classifyStripeEvent', () => {
    * povlaci referral nagrade, a samo kod `charge.refunded` je `orderId` sigurno PaymentIntent
    * povrata. Vracen novac pod drugim imenom nije tiho odbacen nego glasan `ignored`.
    */
-  it.each(['charge.updated', 'charge.refund.updated', 'nesto.novo.od.providera'])(
+  it.each(['charge.updated', 'charge.refund.updated', 'refund.created', 'nesto.novo.od.providera'])(
     'zastavica refunded pod imenom %s NE ulazi u refund granu, nego glasno u ignored',
     (eventName) => {
-      const out = classifyStripeEvent({ eventName, status: 'succeeded', amountReceivedCents: null, refunded: true });
+      const out = classifyStripeEvent({ eventName, status: 'succeeded', amountReceivedCents: null, refunded: true, userId: 'user-1' });
       expect(out).toEqual({ kind: 'ignored', reason: `povrat_bez_charge_refunded:${eventName}` });
       expect(isNotableIgnore(out)).toBe(true);
     },
   );
 
   it('payment_intent.succeeded sa zastavicom refunded je uplata po imenu, ne povrat', () => {
-    // Parser zastavicu racuna i iz data.object.refunded; ime dogadjaja odlucuje granu.
+    // Zastavica iz objekta nije signal povrata (Codex pregled kruga 2); ime dogadjaja odlucuje granu.
     const ev = parseStripeEvent({
       type: 'payment_intent.succeeded',
       livemode: true,
-      data: { object: { id: 'pi_7', status: 'succeeded', amount_received: 999, refunded: true } },
+      data: { object: { id: 'pi_7', status: 'succeeded', amount_received: 999, refunded: true, metadata: { user_id: 'user-1' } } },
     });
-    expect(ev.refunded).toBe(true);
+    expect(ev.refunded).toBe(false);
     expect(classifyStripeEvent(ev)).toEqual({ kind: 'paid' });
   });
 
@@ -446,7 +487,7 @@ describe('classifyStripeEvent', () => {
       { ...base, status: 'processing' },
       { ...base, amountReceivedCents: 0 },
       { ...base, eventName: 'customer.created' },
-      { eventName: 'charge.updated', status: '', amountReceivedCents: null, refunded: true },
+      { eventName: 'charge.updated', status: '', amountReceivedCents: null, refunded: true, userId: '' },
     ];
     for (const ev of slucajevi) {
       const reason = String(classifyStripeEvent(ev).reason ?? '');
@@ -459,9 +500,17 @@ describe('classifyStripeEvent', () => {
     const paid = parseStripeEvent({
       type: 'payment_intent.succeeded',
       livemode: true,
-      data: { object: { id: 'pi_1', status: 'succeeded', amount: 999, amount_received: 999 } },
+      data: { object: { id: 'pi_1', status: 'succeeded', amount: 999, amount_received: 999, metadata: { user_id: 'user-1' } } },
     });
     expect(classifyStripeEvent(paid)).toEqual({ kind: 'paid' });
+
+    // Isti payload bez metadata[user_id]: naplata potvrdjena, korisnik nepoznat.
+    const bezKorisnika = parseStripeEvent({
+      type: 'payment_intent.succeeded',
+      livemode: true,
+      data: { object: { id: 'pi_1', status: 'succeeded', amount: 999, amount_received: 999 } },
+    });
+    expect(classifyStripeEvent(bezKorisnika)).toEqual({ kind: 'needs_manual_link', reason: 'missing_user_metadata' });
 
     // Bez amount_received parser NE posuduje `amount`: potvrda naplate mora doci iz objekta.
     const bezPrimljenog = parseStripeEvent({
@@ -479,6 +528,121 @@ describe('classifyStripeEvent', () => {
     });
     expect(povrat.amountReceivedCents).toBeNull();
     expect(classifyStripeEvent(povrat)).toEqual({ kind: 'refund' });
+  });
+
+  /**
+   * Stripe Refund objekt (`refund.created`, `refund.updated`, `charge.refund.updated`) nema polje
+   * `refunded`; parser vracen novac prepoznaje po imenu i po `object: 'refund'`, a kljuc je
+   * `payment_intent` (ne `re_...`), da ga operater u inboxu moze povezati s uplatom.
+   */
+  it.each(['refund.created', 'refund.updated', 'charge.refund.updated'])(
+    'Refund objekt pod imenom %s: parser vidi povrat, kljuc je PaymentIntent, klasifikator je glasan',
+    (type) => {
+      const ev = parseStripeEvent({
+        type,
+        livemode: true,
+        data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999, status: 'succeeded' } },
+      });
+      expect(ev.refunded).toBe(true);
+      expect(ev.orderId).toBe('pi_1');
+      const out = classifyStripeEvent(ev);
+      expect(out).toEqual({ kind: 'ignored', reason: `povrat_bez_charge_refunded:${type}` });
+      expect(isNotableIgnore(out)).toBe(true);
+    },
+  );
+
+  /**
+   * Codex pregled kruga 2 (advisory, potvrdjen ovim testom): `refunded` i `amount_refunded` ostaju
+   * na Chargeu zauvijek nakon povrata, a Stripe povrat ne javlja kroz `charge.updated`. Da su
+   * signal, svaka kasnija izmjena metapodataka bi dizala ERROR za vec obradjen povrat.
+   */
+  it.each([
+    [{ amount_refunded: 500, refunded: false }],
+    [{ amount_refunded: 999, refunded: true }],
+  ])('Charge s trajnim tragom povrata %j pod imenom charge.updated je sum, ne ERROR', (trag) => {
+    const ev = parseStripeEvent({
+      type: 'charge.updated',
+      livemode: true,
+      data: { object: { id: 'ch_1', object: 'charge', payment_intent: 'pi_1', amount: 999, ...trag } },
+    });
+    expect(ev.refunded).toBe(false);
+    const out = classifyStripeEvent(ev);
+    expect(out).toEqual({ kind: 'ignored', reason: 'nepodrzan_dogadjaj:charge.updated' });
+    expect(isNotableIgnore(out)).toBe(false);
+  });
+
+  /** Codex pregled kruga 2 (advisory, potvrdjen): propao ili otkazan povrat nije vracen novac. */
+  it.each([
+    ['refund.failed', 'failed'],
+    ['refund.updated', 'failed'],
+    ['refund.updated', 'canceled'],
+    ['charge.refund.updated', 'FAILED'],
+  ])('%s sa statusom %s nije vracen novac: sum, ne ERROR', (type, status) => {
+    const ev = parseStripeEvent({
+      type,
+      livemode: true,
+      data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999, status } },
+    });
+    expect(ev.refunded).toBe(false);
+    const out = classifyStripeEvent(ev);
+    expect(out).toEqual({ kind: 'ignored', reason: `nepodrzan_dogadjaj:${type}` });
+    expect(isNotableIgnore(out)).toBe(false);
+  });
+
+  it.each(['pending', 'requires_action', ''])('Refund sa statusom %j (novac na putu ili nepoznato) ostaje glasan', (status) => {
+    const ev = parseStripeEvent({
+      type: 'refund.updated',
+      livemode: true,
+      data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999, status } },
+    });
+    expect(ev.refunded).toBe(true);
+    expect(isNotableIgnore(classifyStripeEvent(ev))).toBe(true);
+  });
+
+  it('vrsta bez novca ostaje konfiguracijski sum (WARN), ne ERROR', () => {
+    const ev = parseStripeEvent({ type: 'customer.created', livemode: true, data: { object: { id: 'cus_1', object: 'customer' } } });
+    expect(ev.refunded).toBe(false);
+    const out = classifyStripeEvent(ev);
+    expect(out).toEqual({ kind: 'ignored', reason: 'nepodrzan_dogadjaj:customer.created' });
+    expect(isNotableIgnore(out)).toBe(false);
+  });
+});
+
+/**
+ * DOHVATLJIVOST grane povrata pod drugim imenom kroz lanac parser, gate, klasifikator (nalaz
+ * pregleda kruga 2, 2026-09-26). Izolirani klasifikator je i prije bio zelen, a gate je te vrste
+ * odbijao prije njega; zato se ovdje mjeri lanac, a u tests/webhook-mor-handler.test.ts i
+ * izvrseni handler.
+ */
+describe('povrat pod drugim imenom je dohvatljiv iz lanca odluka handlera', () => {
+  it('BASELINE: parser, gate i klasifikator zajedno daju glasan ignored', () => {
+    const problems = refundReachabilityProblems(parseStripeEvent, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES);
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('gard grize: gate koji opet filtrira vrstu (stanje prije kruga 2) se prijavi', () => {
+    // MUTACIJA: tocno ponasanje acceptEventa prije ovog popravka.
+    const stariGate = (
+      ev: { livemode: boolean | null; accountId: string; eventName: string },
+      opts: { allowTestMode: boolean; expectedAccountId?: string },
+    ) => {
+      const origin = acceptEvent(ev, opts);
+      if (!origin.ok) return origin;
+      return (STRIPE_HANDLED_EVENTS as readonly string[]).includes(ev.eventName)
+        ? { ok: true }
+        : { ok: false, reason: 'event_ignored' };
+    };
+    const problems = refundReachabilityProblems(parseStripeEvent, stariGate, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES);
+    expect(problems.join('; ')).toContain('gate odbija refund.created');
+  });
+
+  it('gard grize: parser koji Refund objekt ne vidi kao povrat se prijavi', () => {
+    const slijepiParser = (p: Parameters<typeof parseStripeEvent>[0]) => ({
+      ...parseStripeEvent(p),
+      refunded: p.data?.object?.refunded === true,
+    });
+    const problems = refundReachabilityProblems(slijepiParser, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES);
+    expect(problems.join('; ')).toContain('parser ne vidi vracen novac u refund.created');
   });
 });
 
@@ -553,7 +717,8 @@ describe('webhook-mor izvor: odluka je u coreu, ne u handleru', () => {
     expect(SRC).toContain("console.error('webhook-mor ignored_needs_attention'");
     expect(SRC).toContain("console.warn('webhook-mor ignored_foreign_event'");
     expect(SRC).toContain('isNotableIgnore(decision)');
-    expect(SRC).toContain("console.warn('webhook-mor event_ignored'");
+    expect(SRC).toContain("console.error('webhook-mor event_refused'");
+    expect(SRC).toContain("console.error('webhook-mor needs_manual_link'");
   });
 
   it("gard grize: utisana grana 'ignored' se prijavi", () => {
@@ -564,8 +729,20 @@ describe('webhook-mor izvor: odluka je u coreu, ne u handleru', () => {
     expect(webhookHandlerProblems(mutated).join('; ')).toContain("grana 'ignored' nema log retka");
   });
 
-  it('gard grize: event_ignored vracen na console.info se prijavi', () => {
-    const mutated = SRC.replace("console.warn('webhook-mor event_ignored'", "console.info('webhook-mor event_ignored'");
+  it('gard grize: odbijeno porijeklo spusteno na console.warn se prijavi', () => {
+    const mutated = SRC.replace("console.error('webhook-mor event_refused'", "console.warn('webhook-mor event_refused'");
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain('event_refused');
+  });
+
+  it('gard grize: placena uplata bez korisnika spustena na WARN se prijavi', () => {
+    const mutated = SRC.replace("console.error('webhook-mor needs_manual_link'", "console.warn('webhook-mor needs_manual_link'");
+    expect(mutated).not.toBe(SRC);
+    expect(webhookHandlerProblems(mutated).join('; ')).toContain("grana 'needs_manual_link' nema ERROR redak");
+  });
+
+  it('gard grize: vracen filtar vrste u gateu (event_ignored) se prijavi', () => {
+    const mutated = SRC.replace("await settle('refused', gate.reason);", "await settle('ignored', 'event_ignored');");
     expect(mutated).not.toBe(SRC);
     expect(webhookHandlerProblems(mutated).join('; ')).toContain('event_ignored');
   });

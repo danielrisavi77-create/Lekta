@@ -9,14 +9,17 @@
 // `charge.refunded` (povrat). Kljuc knjizenja je PaymentIntent id, isti za uplatu i povrat.
 // Uplata se knjizi SAMO kad objekt potvrdjuje naplatu (`status` `succeeded` i pozitivan
 // `amount_received`); inace je ishod `ignored` s razlogom u inboxu i ERROR retkom u logu. Povrat
-// se prepoznaje ISKLJUCIVO po imenu `charge.refunded` (classifyStripeEvent), ne po zastavici.
+// se prepoznaje ISKLJUCIVO po imenu `charge.refunded` (classifyStripeEvent), ne po zastavici;
+// vracen novac pod drugim imenom (`refund.*`, `charge.refund.updated`) je `ignored` uz ERROR.
+// Potvrdjena naplata bez `metadata[user_id]` je ishod `needs_manual_link` uz ERROR (rucno
+// vezivanje). acceptEvent provjerava samo porijeklo; vrstu odlucuje klasifikator.
 // Idempotentno preko unique (provider, order_id) (migracija 0001). Proizvod se trazi u bazi
 // `products` po KATALOSKOM id-u iz `metadata[product_id]`, ne po naslijedjenom mapiranju.
 // Rok potrosnje je po proizvodu (purchase_window_days).
 // manual_fulfillment (premium_human) -> manual_orders. Pass -> izdaje -20% kupon (coupon_grants).
 // Nepoznat proizvod -> log + 200 (bez entitlementa) da provider ne retry-a beskonacno (6.2);
 // od 2026-08-17 takav dogadjaj TRAJNO ostaje u webhook_events pa se moze replayati (PAY-06).
-// Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (livemode, vrsta dogadjaja)
+// Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (livemode, Connect racun)
 // provjerava se prije ijednog upisa: potpis dokazuje samo znanje tajne (PAY-04/05).
 // Odluke (potpis, parsiranje, klasifikacija, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';

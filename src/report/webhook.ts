@@ -11,7 +11,11 @@
  * obracunava i prijavljuje vlasnik.
  */
 
-/** Dogadjaji koje ovaj webhook stvarno obradjuje. Sve ostalo se prima i ignorira uz 200. */
+/**
+ * Dogadjaji koje ovaj webhook stvarno KNJIZI. Sve ostalo se prima, klasificira i ignorira uz 200
+ * (classifyStripeEvent). Vrstu NE filtrira acceptEvent, da vracen novac pod drugim imenom stigne do
+ * klasifikatora i bude glasan (nalaz pregleda kruga 2 pri spajanju mastera, 2026-09-26).
+ */
 export const STRIPE_HANDLED_EVENTS = ['payment_intent.succeeded', 'charge.refunded'] as const;
 export type StripeHandledEvent = (typeof STRIPE_HANDLED_EVENTS)[number];
 
@@ -25,8 +29,10 @@ export interface StripeWebhookPayload {
   account?: string;
   data?: {
     object?: {
-      /** PaymentIntent id (`pi_...`) kod payment_intent.*; kod charge.* je to `charge.payment_intent`. */
+      /** PaymentIntent id (`pi_...`) kod payment_intent.*; kod charge.* i refund.* je to `payment_intent`. */
       id?: string;
+      /** Stripe vrsta objekta: `payment_intent`, `charge`, `refund`... */
+      object?: string;
       payment_intent?: string;
       /** PaymentIntent: `succeeded`, `processing`, `requires_payment_method`... Charge: `succeeded`, `failed`... */
       status?: string;
@@ -88,11 +94,17 @@ export function isFullRefund(ev: Pick<StripeEvent, 'refunded' | 'totalCents' | '
 }
 
 /**
- * Smije li se dogadjaj UOPCE obraditi, prije ikakvog dodjeljivanja prava (PAY-04, PAY-05).
+ * Dolazi li dogadjaj iz NASEG okruzenja, prije ikakvog dodjeljivanja prava (PAY-04, PAY-05).
  *
- * Potpis dokazuje samo da posiljatelj zna tajnu, ne i da dogadjaj dolazi iz NASEG okruzenja i
- * da je vrsta koju uopce znamo knjiziti. Testni dogadjaj s ispravnim potpisom inace bi
- * proizveo pravo pravo pristupa.
+ * Potpis dokazuje samo da posiljatelj zna tajnu, ne i da dogadjaj dolazi iz NASEG okruzenja.
+ * Testni dogadjaj s ispravnim potpisom inace bi proizveo pravo pravo pristupa.
+ *
+ * Ovdje se provjerava SAMO PORIJEKLO, kao na masteru (ondje je acceptEvent gledao trgovinu i test
+ * mode). VRSTU dogadjaja odlucuje classifyStripeEvent. Do kruga 2 spajanja je ova funkcija i vrstu
+ * odbijala (`event_ignored`) PRIJE klasifikatora, pa grana `povrat_bez_charge_refunded:` nije bila
+ * dohvatljiva ni za jedan dogadjaj koji handler primi: `refund.created` ili `charge.refund.updated`
+ * zavrsili bi kao WARN konfiguracijski sum, a entitlement bi ostao `paid` (nalaz pregleda,
+ * 2026-09-26).
  *
  * FAIL-CLOSED, isti duh kao prijasnji prazan `LS_STORE_ID` koji je odbijao sve: `livemode`
  * koji payload ne nosi je NEPROVJERLJIVO porijeklo, ne "vjerojatno produkcija". Provjera
@@ -100,39 +112,63 @@ export function isFullRefund(ev: Pick<StripeEvent, 'refunded' | 'totalCents' | '
  * obican (ne Connect) racun, pa se preskace uz eksplicitan razlog u tipu ishoda.
  */
 export function acceptEvent(
-  ev: Pick<StripeEvent, 'livemode' | 'eventName' | 'accountId'>,
+  ev: Pick<StripeEvent, 'livemode' | 'accountId'>,
   opts: { allowTestMode: boolean; expectedAccountId?: string },
 ):
   | { ok: true }
-  | { ok: false; reason: 'livemode_unverifiable' | 'test_mode_refused' | 'account_mismatch' | 'event_ignored' } {
+  | { ok: false; reason: 'livemode_unverifiable' | 'test_mode_refused' | 'account_mismatch' } {
   if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
   if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
   // Kad je ocekivani racun POSTAVLJEN, dogadjaj koji ga ne nosi je jednako neprihvatljiv kao
   // dogadjaj s krivim racunom: odsutnost polja nije dokaz da je nas.
   const expected = String(opts.expectedAccountId ?? '').trim();
   if (expected && ev.accountId !== expected) return { ok: false, reason: 'account_mismatch' };
-  if (!(STRIPE_HANDLED_EVENTS as readonly string[]).includes(ev.eventName)) {
-    return { ok: false, reason: 'event_ignored' };
-  }
   return { ok: true };
+}
+
+/** Statusi Stripe Refund objekta kod kojih novac NIJE vracen (povrat je propao ili je otkazan). */
+const REFUND_NOT_RETURNED_STATUSES = new Set(['failed', 'canceled']);
+
+/**
+ * Nosi li dogadjaj VRACEN NOVAC, bez obzira na ime. Stripe povrat javlja kao `charge.refunded`
+ * (Charge) i kao `refund.created`, `refund.updated` i `charge.refund.updated` (objekt je Refund,
+ * bez polja `refunded`). Samo `charge.refunded` se KNJIZI kao povrat; Refund objekt pod drugim
+ * imenom je `povrat_bez_charge_refunded:*` (classifyStripeEvent, ERROR u logu).
+ *
+ * Tri namjerne granice (Codex pregled kruga 2, 2026-09-26, svaka potvrdjena testom):
+ *  - Refund sa statusom `failed` ili `canceled` NIJE vracen novac (npr. `refund.failed`), pa nije
+ *    ni ERROR; inace bi propao povrat dizao lazan alarm "povrat nije proveden".
+ *  - `amount_refunded` i `refunded` na Chargeu NISU signal izvan `charge.refunded`: ostaju na
+ *    objektu zauvijek, a Stripe povrat ne javlja kroz `charge.updated` (taj dogadjaj nosi izmjenu
+ *    opisa, metapodataka ili naknadno hvatanje). Kao signal bi svaki kasniji `charge.updated`
+ *    ponovno dizao ERROR za vec obradjen povrat.
+ *  - Isto vrijedi za `payment_intent.*`: ime odlucuje granu, zastavica iz objekta ne.
+ */
+export function isRefundBearing(eventName: string, obj: { object?: string; status?: string }): boolean {
+  if (eventName === 'charge.refunded') return true;
+  const refundObject = obj.object === 'refund' || eventName.startsWith('refund.') || eventName.startsWith('charge.refund.');
+  if (!refundObject) return false;
+  return !REFUND_NOT_RETURNED_STATUSES.has(String(obj.status ?? '').trim().toLowerCase());
 }
 
 /**
  * Normaliziraj Stripe payload u ravni event.
  *
  * `orderId` je UVIJEK PaymentIntent id: kod `payment_intent.succeeded` je to `data.object.id`,
- * kod `charge.refunded` je to `data.object.payment_intent`. Time uplata i njezin povrat dijele
- * isti kljuc, pa refund pogodi tocno onaj entitlement koji je uplata stvorila.
+ * kod `charge.refunded` (i kod Refund objekta, `refund.*`) je to `data.object.payment_intent`.
+ * Time uplata i njezin povrat dijele isti kljuc, pa refund pogodi tocno onaj entitlement koji je
+ * uplata stvorila, a povrat pod drugim imenom u inboxu nosi PaymentIntent za rucnu obradu.
  */
 export function parseStripeEvent(payload: StripeWebhookPayload): StripeEvent {
   const eventName = String(payload.type ?? '');
   const obj = payload.data?.object ?? {};
   const meta = obj.metadata ?? {};
-  const isCharge = eventName.startsWith('charge.');
+  // Charge i Refund nose PaymentIntent u polju `payment_intent`; `id` im je `ch_...` ili `re_...`.
+  const isCharge = eventName.startsWith('charge.') || eventName.startsWith('refund.') || obj.object === 'refund';
   // Kod naplate bez PaymentIntenta (naslijedjena izravna naplata) orderId ostaje PRAZAN, a ne
   // charge id: kljuc koji ne moze pogoditi nijedan entitlement lagao bi da je povrat proveden.
   const orderId = String((isCharge ? obj.payment_intent : (obj.id ?? obj.payment_intent)) ?? '');
-  const refunded = eventName === 'charge.refunded' || obj.refunded === true;
+  const refunded = isRefundBearing(eventName, obj);
   const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
   // PaymentIntent nosi stvarno naplaceno u `amount_received`; Charge ukupan iznos u `amount`.
   const totalCents = isCharge ? num(obj.amount) : (num(obj.amount_received) ?? num(obj.amount));
@@ -156,8 +192,15 @@ export function parseStripeEvent(payload: StripeWebhookPayload): StripeEvent {
   };
 }
 
-/** Sto webhook smije napraviti s dogadjajem koji je prosao potpis i porijeklo. */
-export type StripeEventKind = 'paid' | 'refund' | 'ignored';
+/**
+ * Sto webhook smije napraviti s dogadjajem koji je prosao potpis i porijeklo.
+ *
+ * `needs_manual_link`: naplata je POTVRDJENA (kao kod `paid`), ali dogadjaj nema
+ * `metadata[user_id]`, pa se pravo ne moze upisati nikome. Stripe ekvivalent masterova ishoda iz
+ * 31b802ad i 81a89f2f: novac je naplacen, pa dogadjaj ne smije nestati ni utonuti u WARN sum;
+ * handler ga pise na ERROR razini i s vlastitim ishodom u inboxu.
+ */
+export type StripeEventKind = 'paid' | 'refund' | 'needs_manual_link' | 'ignored';
 
 export interface StripeClassification {
   kind: StripeEventKind;
@@ -177,19 +220,25 @@ export interface StripeClassification {
  * Takav dogadjaj je `ignored` s imenovanim razlogom (`payment_status:*`, `amount_received:*`),
  * 200 jer retry ne bi promijenio ishod, i ERROR u logu jer se tice stvarnog novca.
  *
- * POVRAT SAMO IZ `charge.refunded`, PO IMENU, NE PO ZASTAVICI. `parseStripeEvent` racuna
- * `refunded` i iz `data.object.refunded === true`, dakle bez obzira na ime dogadjaja. Refund
+ * POTVRDJENA NAPLATA BEZ KORISNIKA je `needs_manual_link` (razlog `missing_user_metadata`), ne
+ * `ignored`: novac je naplacen, a pravo nema komu pripasti. Povrat userId ne treba (ide po
+ * PaymentIntentu), pa `charge.refunded` ostaje `refund` i bez njega.
+ *
+ * POVRAT SAMO IZ `charge.refunded`, PO IMENU, NE PO ZASTAVICI. `ev.refunded` je istinit i za
+ * Refund objekt pod drugim imenom (`refund.created`, `charge.refund.updated`; isRefundBearing). Refund
  * grana handlera pise `update entitlements ... where order_id = ev.orderId` i povlaci referral
  * nagrade po istom id-u, pa u nju smije uci samo dogadjaj kojemu je `orderId` sigurno
  * PaymentIntent povrata (`charge.payment_intent`). Vracen novac pod drugim imenom nije tiho
  * odbacen nego `ignored` s razlogom `povrat_bez_charge_refunded:*` (ERROR u logu).
  *
- * Vrste izvan STRIPE_HANDLED_EVENTS handler odbija vec u `acceptEvent` (`event_ignored`), prije
- * ove funkcije; grana `nepodrzan_dogadjaj:*` ovdje postoji da funkcija bude potpuna i sama po
- * sebi, pa sirenje popisa obradjenih dogadjaja ne otvara tihi put.
+ * Ova funkcija je JEDINO mjesto odluke o vrsti: `acceptEvent` provjerava samo porijeklo, pa svaki
+ * potpisan dogadjaj iz naseg okruzenja stize ovamo. Vrsta koja ne nosi novac je
+ * `nepodrzan_dogadjaj:*` (WARN, konfiguracijski sum); vrsta koja nosi vracen novac je
+ * `povrat_bez_charge_refunded:*` (ERROR). Obje su dohvatljive iz izvrsenog handlera
+ * (tests/webhook-mor-handler.test.ts), ne samo iz izolirane funkcije.
  */
 export function classifyStripeEvent(
-  ev: Pick<StripeEvent, 'eventName' | 'status' | 'amountReceivedCents' | 'refunded'>,
+  ev: Pick<StripeEvent, 'eventName' | 'status' | 'amountReceivedCents' | 'refunded' | 'userId'>,
 ): StripeClassification {
   if (ev.eventName === 'charge.refunded') return { kind: 'refund' };
   if (ev.eventName === 'payment_intent.succeeded') {
@@ -199,6 +248,7 @@ export function classifyStripeEvent(
     if (received === null || !(received > 0)) {
       return { kind: 'ignored', reason: `amount_received:${received === null ? 'nepoznat' : String(received)}` };
     }
+    if (!ev.userId.trim()) return { kind: 'needs_manual_link', reason: 'missing_user_metadata' };
     return { kind: 'paid' };
   }
   if (ev.refunded) return { kind: 'ignored', reason: `povrat_bez_charge_refunded:${ev.eventName || 'nepoznat'}` };

@@ -27,8 +27,10 @@ VERDICTS = ("needs_verification", "failed", "waiting_quota", "needs_login", "blo
 
 # `LEMONSQUEEZY_` OSTAJE iako je pruzatelj ukinut (Stripe od 2026-09-23, F18): stari API kljuc moze jos
 # zivjeti u okolini vlasnika (profil ljuske, spremljeni .env), a filtar tajni brani OKOLINU, ne kod koji
-# je jos koristi. Uklanjanje prefiksa bi tu tajnu tiho proslijedilo svakom podagentu. Ovo je jedina
-# svjesna iznimka od kriterija da `scripts/` vise ne spominje ukinutog pruzatelja.
+# je jos koristi. Uklanjanje prefiksa bi tu tajnu tiho proslijedilo svakom podagentu. Svjesne iznimke od
+# kriterija da `scripts/` vise ne spominje ukinutog pruzatelja su dvije: ovaj prefiks i njegov test
+# (`scripts/autonomy/tests/test_worker.py`, test_child_env_has_no_payment_secrets), koji dokazuje da
+# dijete stvarno ne vidi `LEMONSQUEEZY_*` tajne.
 SECRET_ENV_PREFIXES = ("ANTHROPIC_", "OPENAI_", "GITHUB_", "GH_", "NETLIFY_", "SUPABASE_", "STRIPE_", "LEMONSQUEEZY_",
                        "AWS_", "AZURE_", "XAI_")
 SECRET_ENV_EXACT = ("CLAUDE_CODE_OAUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN")

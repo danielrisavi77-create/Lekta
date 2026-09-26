@@ -45,6 +45,7 @@ import {
   preflightSourceProblems,
   paidClassificationProblems,
   refundClassificationProblems,
+  refundReachabilityProblems,
   handlerOutcomes,
   naplataRunbookProblems,
   runbookSqlColumnProblems,
@@ -66,7 +67,14 @@ import {
   TEST_MODE_ON_DIGEST,
   TEST_MODE_SECRET,
 } from '../scripts/verify-naplata-secrets.mjs';
-import { classifyStripeEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
+import {
+  acceptEvent,
+  classifyStripeEvent,
+  parseStripeEvent,
+  IGNORE_REASON_PREFIXES,
+  NOTABLE_IGNORE_PREFIXES,
+  STRIPE_HANDLED_EVENTS,
+} from '../src/report/webhook';
 import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
 import {
   localRepairFlagProblems,
@@ -3791,14 +3799,74 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
   },
+  // Krug 2 spajanja (2026-09-26): gate vise ne odbija vrstu (`event_ignored` je uklonjen), pa
+  // stavka `naplata/event-ignored-na-info-razini` nema sto mjeriti. Njezinu zastitu (pretplacen
+  // visak nije tih) sada nose `naplata/ignored-grana-bez-loga` i izvrseni handler; zastitu
+  // odbijenog porijekla nosi stavka ispod.
   {
-    id: 'naplata/event-ignored-na-info-razini',
-    imitates: 'stanje pack3 prije spajanja mastera: vrsta koju gate odbija (event_ignored) logirala se kroz console.info, dakle izvan WARN/ERROR kanala koji se nadzire',
+    id: 'naplata/odbijeno-porijeklo-na-warn-razini',
+    imitates: 'testni dogadjaj ili tudji Connect racun (event_refused) spusten s ERROR na WARN: kriva konfiguracija u produkciji (STRIPE_ALLOW_TEST_MODE, STRIPE_ACCOUNT_ID) ili pokusaj s ukradenom tajnom utone u isti kanal kao pretplaceni visak',
     caught: () => {
       const src = webhookMorSource();
-      const mutated = src.replace("console.warn('webhook-mor event_ignored'", "console.info('webhook-mor event_ignored'");
+      const mutated = src.replace("console.error('webhook-mor event_refused'", "console.warn('webhook-mor event_refused'");
       if (mutated === src) return false;
-      return webhookHandlerProblems(mutated).some((p) => p.includes('event_ignored'));
+      return webhookHandlerProblems(mutated).some((p) => p.includes('event_refused'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/gate-filtrira-vrstu-prije-klasifikatora',
+    imitates: 'stanje pack3 nakon kruga 1 spajanja: acceptEvent je vrste izvan STRIPE_HANDLED_EVENTS odbijao kao event_ignored PRIJE klasifikatora, pa povrat pod imenom refund.created ili charge.refund.updated nikad nije postao povrat_bez_charge_refunded (ERROR), nego WARN sum, a entitlement je ostao paid. Test klasifikatora bio je zelen vakuumski',
+    caught: () => {
+      // MUTACIJA: gate koji uz porijeklo opet filtrira i vrstu (funkcija, ne tekst izvora).
+      const stariGate = (
+        ev: { livemode: boolean | null; accountId: string; eventName: string },
+        opts: { allowTestMode: boolean; expectedAccountId?: string },
+      ) => {
+        const origin = acceptEvent(ev, opts);
+        if (!origin.ok) return origin;
+        return { ok: (STRIPE_HANDLED_EVENTS as readonly string[]).includes(ev.eventName) };
+      };
+      return refundReachabilityProblems(parseStripeEvent, stariGate, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES)
+        .some((p) => p.includes('gate odbija refund.created'));
+    },
+    cleanBefore: () =>
+      refundReachabilityProblems(parseStripeEvent, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+  {
+    id: 'naplata/refund-objekt-nevidljiv-parseru',
+    imitates: 'parser koji vracen novac prepoznaje samo po data.object.refunded: Stripe Refund objekt (refund.created, charge.refund.updated) to polje nema, pa bi povrat pod drugim imenom bio nepodrzan_dogadjaj (WARN), ne povrat_bez_charge_refunded (ERROR)',
+    caught: () => {
+      const slijepiParser = (p: Parameters<typeof parseStripeEvent>[0]) => ({
+        ...parseStripeEvent(p),
+        refunded: p.type === 'charge.refunded' || p.data?.object?.refunded === true,
+      });
+      return refundReachabilityProblems(slijepiParser, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES)
+        .some((p) => p.includes('parser ne vidi vracen novac u refund.created'));
+    },
+    cleanBefore: () =>
+      refundReachabilityProblems(parseStripeEvent, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+  {
+    id: 'naplata/placena-uplata-bez-korisnika-utopljena',
+    imitates: 'Stripe ekvivalent masterova needs_manual_link (31b802ad, 81a89f2f), stanje pack3 nakon kruga 1: potvrdjena naplata (status succeeded, amount_received > 0) bez metadata[user_id] klasificirana kao ignored/missing_user_metadata, dakle WARN uz konfiguracijski sum. Novac je naplacen, 200 bez retryja, a ERROR kanal ostaje prazan',
+    caught: () => {
+      const utopljeno = (ev: Parameters<typeof classifyStripeEvent>[0]) =>
+        ev.eventName === 'payment_intent.succeeded' && !ev.userId.trim()
+          ? { kind: 'ignored', reason: 'missing_user_metadata' }
+          : classifyStripeEvent(ev);
+      return paidClassificationProblems(utopljeno).some((p) => p.includes('needs_manual_link'));
+    },
+    cleanBefore: () => paidClassificationProblems(classifyStripeEvent).length === 0,
+  },
+  {
+    id: 'naplata/needs-manual-link-na-warn-razini',
+    imitates: 'isti kvar u IZVORU handlera: klasifikator vraca needs_manual_link, ali handler granu logira na WARN, pa potvrdjena uplata bez korisnika opet nema ERROR redak koji bi netko vidio',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("console.error('webhook-mor needs_manual_link'", "console.warn('webhook-mor needs_manual_link'");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes("grana 'needs_manual_link' nema ERROR redak"));
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
   },

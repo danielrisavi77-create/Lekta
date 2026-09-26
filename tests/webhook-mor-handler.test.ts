@@ -178,12 +178,51 @@ describe('webhook-mor handler: uplata', () => {
     expect(settled(calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'entitlement_duplicate' });
   });
 
-  it('tudji PaymentIntent bez metadata[user_id] (npr. rucni Payment Link) je 200 ignored, ne 400', async () => {
-    const { res, body, calls } = await run(signedRequest(succeeded({}, {})));
-    expect(res.status).toBe(200);
-    expect(body).toMatchObject({ ok: true, action: 'ignored', reason: 'missing_user_metadata' });
-    expect(entitlementWrites(calls)).toHaveLength(0);
-    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'missing_user_metadata' });
+  /**
+   * Masterov `needs_manual_link` (31b802ad, 81a89f2f), Stripe ekvivalent (nalaz pregleda kruga 2).
+   * Naplata je potvrdjena, a korisnika nema: 200 (ne 400, dogadjaj ne smije nestati), vlastiti
+   * ishod u inboxu i ERROR redak, a ne WARN uz `ignored` pomijesan s konfiguracijskim sumom.
+   */
+  it('placen PaymentIntent bez metadata[user_id]: 200 needs_manual_link, ERROR redak, bez prava', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      const { res, body, calls, granted } = await run(signedRequest(succeeded({}, { product_id: 'slot_diplomski' })));
+      expect(res.status).toBe(200);
+      expect(body).toEqual({ ok: true, action: 'needs_manual_link', reason: 'missing_user_metadata' });
+      expect(entitlementWrites(calls)).toHaveLength(0);
+      expect(granted).toHaveLength(0);
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'needs_manual_link', outcome_detail: 'missing_user_metadata' });
+      const redak = err.mock.calls.find((c) => c[0] === 'webhook-mor needs_manual_link');
+      expect(redak?.[1]).toMatchObject({ orderId: 'pi_1', productId: 'slot_diplomski', amountReceivedCents: 999 });
+      // Ne smije se pojaviti i kao WARN sum: jedna uplata, jedan glasan redak.
+      expect(warn.mock.calls.map((c) => String(c[0]))).not.toContain('webhook-mor foreign_event_ignored');
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('placen PaymentIntent bez ikakve metadate je i dalje needs_manual_link (rucni Payment Link)', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { body, calls } = await run(signedRequest(succeeded({}, {})));
+      expect(body).toEqual({ ok: true, action: 'needs_manual_link', reason: 'missing_user_metadata' });
+      expect(entitlementWrites(calls)).toHaveLength(0);
+      expect(err.mock.calls.map((c) => String(c[0]))).toContain('webhook-mor needs_manual_link');
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('NEPOTVRDJENA naplata bez user_id ostaje ignored (needs_manual_link je samo za stvaran novac)', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { body, calls } = await run(signedRequest(succeeded({ status: 'processing' }, {})));
+      expect(body).toEqual({ ok: true, action: 'ignored', reason: 'payment_status:processing' });
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'payment_status:processing' });
+    } finally {
+      vi.restoreAllMocks();
+    }
   });
 
   it('prolazna greska citanja kataloga je 500 (Stripe ponovi), ne unknown_product s 200', async () => {
@@ -260,6 +299,21 @@ describe('webhook-mor handler: tudji proizvod na istom racunu (Katedra)', () => 
     purchase_window_days: 365,
     price_eur: 129.9,
   };
+
+  it('placen Katedrin PaymentIntent bez user_id nije needs_manual_link nego tudji proizvod (WARN)', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      const { body, calls } = await run(signedRequest(succeeded({}, { product_id: 'katedra_pass_semestar' })));
+      expect(body).toEqual({ ok: true, action: 'ignored', reason: 'foreign_product' });
+      expect(entitlementWrites(calls)).toHaveLength(0);
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'foreign_product: katedra_pass_semestar' });
+      expect(warn.mock.calls.map((c) => String(c[0]))).toContain('webhook-mor foreign_event_ignored');
+      expect(err.mock.calls.map((c) => String(c[0]))).not.toContain('webhook-mor needs_manual_link');
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
 
   it('uplata za Katedra pass se NE knjizi: 200 ignored, bez prava, kupona i nagrade', async () => {
     const katedra = baseResolver((c) => (c.table === 'products' ? { data: KATEDRA_ROW } : undefined));
@@ -546,10 +600,84 @@ describe('webhook-mor handler: samo potvrdjena naplata knjizi pravo', () => {
 
   it('vrsta koju ne obradjujemo ostavlja WARN redak s imenom dogadjaja (nije tiha)', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const { body, calls } = await run(signedRequest({ ...succeeded(), type: 'charge.updated' }));
-    expect(body).toMatchObject({ ok: true, action: 'ignored', reason: 'event_ignored' });
-    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'event_ignored' });
-    const redak = warn.mock.calls.find((c) => c[0] === 'webhook-mor event_ignored');
+    expect(body).toMatchObject({ ok: true, action: 'ignored', reason: 'nepodrzan_dogadjaj:charge.updated' });
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: 'nepodrzan_dogadjaj:charge.updated' });
+    const redak = warn.mock.calls.find((c) => c[0] === 'webhook-mor ignored_foreign_event');
     expect(redak?.[1]).toMatchObject({ eventName: 'charge.updated' });
+    // Konfiguracijski sum ne ide u ERROR kanal, inace bi taj kanal oglusio.
+    expect(err.mock.calls).toHaveLength(0);
+  });
+});
+
+/**
+ * POVRAT POD DRUGIM IMENOM, kroz IZVRSEN handler (nalaz pregleda kruga 2, 2026-09-26).
+ *
+ * Do ovog kruga je acceptEvent vrste izvan `STRIPE_HANDLED_EVENTS` odbijao kao `event_ignored`
+ * PRIJE klasifikatora, pa razlog `povrat_bez_charge_refunded:` nije mogao nastati ni za jedan
+ * primljen dogadjaj: operater koji pretplati `refund.created` umjesto `charge.refunded` dobio bi
+ * WARN sum, entitlement bi ostao `paid`, a redak koji runbook trazi nikad se ne bi pojavio. Ovdje
+ * se mjeri stvaran put: 200, `ignored` s tim razlogom, ERROR redak s PaymentIntentom, bez ijednog
+ * upisa u entitlements i bez oznake refund_pending (refund grana se ne otvara).
+ */
+describe('webhook-mor handler: povrat pod drugim imenom je glasan, ne tih', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const refundObject = (type: string): Record<string, unknown> => ({
+    id: 'evt_r',
+    type,
+    livemode: true,
+    data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999, currency: 'eur', status: 'succeeded' } },
+  });
+
+  it.each(['refund.created', 'refund.updated', 'charge.refund.updated'])(
+    '%s: 200 ignored povrat_bez_charge_refunded, ERROR redak, bez upisa',
+    async (type) => {
+      const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      const { res, body, calls } = await run(signedRequest(refundObject(type)));
+      expect(res.status).toBe(200);
+      expect(body).toEqual({ ok: true, action: 'ignored', reason: `povrat_bez_charge_refunded:${type}` });
+      expect(entitlementWrites(calls)).toHaveLength(0);
+      expect(calls.some((c) => c.table === 'entitlements')).toBe(false);
+      expect(settled(calls).some((u) => u.outcome_detail === 'refund_pending')).toBe(false);
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'ignored', outcome_detail: `povrat_bez_charge_refunded:${type}` });
+      const inbox = calls.find((c) => c.table === 'webhook_events' && writeOp(c) === 'insert')!;
+      expect(argOf(inbox, 'insert')).toMatchObject({ event_name: type, order_id: 'pi_1' });
+      const redak = err.mock.calls.find((c) => c[0] === 'webhook-mor ignored_needs_attention');
+      expect(redak?.[1]).toMatchObject({ reason: `povrat_bez_charge_refunded:${type}`, eventName: type, orderId: 'pi_1' });
+    },
+  );
+
+  it('charge.updated s trajnim tragom povrata (refunded, amount_refunded) je WARN sum, ne ERROR (Codex pregled kruga 2)', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const payload = refunded(999);
+    const { body, calls } = await run(signedRequest({ ...payload, type: 'charge.updated' }));
+    expect(body).toEqual({ ok: true, action: 'ignored', reason: 'nepodrzan_dogadjaj:charge.updated' });
+    expect(entitlementWrites(calls)).toHaveLength(0);
+    expect(err.mock.calls).toHaveLength(0);
+    expect(warn.mock.calls.map((c) => String(c[0]))).toContain('webhook-mor ignored_foreign_event');
+  });
+
+  it('propao povrat (refund.failed) nije ERROR: WARN sum, bez upisa (Codex pregled kruga 2)', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const payload = refundObject('refund.failed');
+    ((payload.data as { object: Record<string, unknown> }).object).status = 'failed';
+    const { body, calls } = await run(signedRequest(payload));
+    expect(body).toEqual({ ok: true, action: 'ignored', reason: 'nepodrzan_dogadjaj:refund.failed' });
+    expect(entitlementWrites(calls)).toHaveLength(0);
+    expect(err.mock.calls).toHaveLength(0);
+    expect(warn.mock.calls.map((c) => String(c[0]))).toContain('webhook-mor ignored_foreign_event');
+  });
+
+  it('testni povrat pod drugim imenom i dalje zaustavlja gate porijekla (refused, ne ignored)', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const { body, calls } = await run(signedRequest({ ...refundObject('refund.created'), livemode: false }));
+    expect(body).toEqual({ ok: true, action: 'event_refused', reason: 'test_mode_refused' });
+    expect(settled(calls).at(-1)).toMatchObject({ outcome: 'refused', outcome_detail: 'test_mode_refused' });
   });
 });

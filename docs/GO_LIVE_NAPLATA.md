@@ -94,7 +94,7 @@ namjerno odbija deploy jer obavezne tajne nedostaju.
    | `payment_intent.succeeded` | jedini ulaz za kupnju; bez njega nijedan `entitlement` ne nastaje |
    | `charge.refunded` | **jedini ulaz za povrat**; bez njega kupac kojem je novac vraćen zadržava plaćeni pristup i referral nagradu |
 
-   Skup pretplaćenih događaja je **nosiv za ispravnost naplate**, jer handler obrađuje točno ta
+   Skup pretplaćenih događaja je **nosiv za ispravnost naplate**, jer handler knjiži točno ta
    dva (`STRIPE_HANDLED_EVENTS` i `classifyStripeEvent` u `src/report/webhook.ts`), a sve ostalo
    namjerno ignorira. Tko pretplati samo `payment_intent.succeeded` (najmanji skup koji je dovoljan
    za prodaju) dobije naplatu koja radi i povrate koji se **nikad ne obrade**: `entitlements.status`
@@ -102,12 +102,16 @@ namjerno odbija deploy jer obavezne tajne nedostaju.
 
    Uplata se knjiži tek kad objekt sam potvrdi naplatu: `status` je `succeeded` i `amount_received`
    je veći od nule. Povrat se prepoznaje **isključivo po imenu** `charge.refunded`, ne po polju
-   `refunded` u objektu. Ostale događaje **nemoj** pretplaćivati: handler ih odbija s `ignored`,
-   i samo zatrpavaju inbox i log. Ako ipak stignu, vidjet ćeš ih kao `webhook-mor event_ignored`
-   u logu (vidi 5.1). Isto vrijedi za naplate koje nisu nastale kroz `create-checkout` (ručni
-   Payment Link, naplata iz dashboarda): PaymentIntent bez `metadata[user_id]` ili povrat bez
-   PaymentIntenta dobiva 200 `ignored`, a ne 4xx, da Stripe ne ponavlja dostavu danima i ne
-   isključi endpoint zbog trajnih neuspjeha.
+   `refunded` u objektu. Ostale događaje **nemoj** pretplaćivati: handler ih ignorira s `ignored`,
+   i samo zatrpavaju inbox i log. Ako ipak stignu, vidjet ćeš ih kao `webhook-mor ignored_foreign_event`
+   (WARN) u logu (vidi 5.1). Iznimka su događaji koji **nose vraćen novac** pod drugim imenom
+   (`refund.created`, `refund.updated`, `charge.refund.updated`): njih handler ne knjiži, ali ih
+   piše kao `webhook-mor ignored_needs_attention` (ERROR), jer znače povrat koji nitko nije proveo.
+   Povrat sa statusom `failed` ili `canceled` nije vraćen novac, a `charge.updated` povrat ne javlja
+   (trag starog povrata ostaje na Chargeu zauvijek), pa oba ostaju običan WARN. Naplate koje nisu nastale kroz `create-checkout` (ručni
+   Payment Link, naplata iz dashboarda) dobivaju 200, a ne 4xx, da Stripe ne ponavlja dostavu
+   danima i ne isključi endpoint zbog trajnih neuspjeha: potvrđena naplata bez `metadata[user_id]`
+   dobiva ishod `needs_manual_link` (ERROR, veže se ručno), a povrat bez PaymentIntenta `ignored`.
 5. Zabilježi **Signing secret** (`whsec_…`) i postavi ga kao `STRIPE_WEBHOOK_SECRET`. Provjera
    `Stripe-Signature` je već implementirana (`verifyStripeSignature` u `src/report/webhook.ts`,
    timing-safe, tolerancija 300 s protiv replaya); ne treba mijenjati kod.
@@ -196,17 +200,18 @@ pokušan i doslovna poruka providera**, da se "nisam prijavljen" ne pomiješa s 
 
 Svaki potpisan događaj upisuje se u `webhook_events` PRIJE obrade, a ishod se upiše u `outcome`.
 Djelomični indeks `webhook_events_unresolved` (migracija 0092) pokriva samo
-`outcome is null or outcome in ('failed','unknown_product')`, pa **ishodi `ignored` i `refused` u
-njega ne ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao service role):
+`outcome is null or outcome in ('failed','unknown_product')`, pa **ishodi `ignored`, `refused` i
+`needs_manual_link` u njega ne ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao
+service role):
 
 | `outcome` | Što znači | Što napraviti |
 |---|---|---|
 | `ignored` uz `outcome_detail` koji počinje s `payment_status:` | stigao je `payment_intent.succeeded`, ali objekt nema `status` `succeeded` (ili ga uopće nema) | provjeri PaymentIntent u Stripe sučelju; ako je naplaćen, Stripe je promijenio oblik događaja i to je kvar koda, ne podatka. Nakon ispravka koda replayaj događaj |
 | `ignored` uz `outcome_detail` koji počinje s `amount_received:` | `payment_intent.succeeded` bez pozitivnog `amount_received` (nula ili nedostaje), dakle nije potvrđen naplaćen iznos | provjeri PaymentIntent u Stripe sučelju; pravo pristupa se ne dodjeljuje dok naplata nije potvrđena |
 | `ignored` uz `outcome_detail` koji počinje s `povrat_bez_charge_refunded:` | stigao je događaj koji **nosi vraćen novac**, a ne zove se `charge.refunded` | provjeri u Stripe sučelju o kojoj se uplati radi i povrat obradi ručno; handler namjerno **ne** piše po tom događaju. Ako ovo stiže redovito, provjeri pretplatu (korak 4.4) |
-| `ignored` uz `outcome_detail` koji počinje s `nepodrzan_dogadjaj:` | klasifikator je dobio vrstu koju ne obrađuje; u normalnom radu takav događaj zaustavi već provjera vrste (`event_ignored`) | ako se pojavi, popis `STRIPE_HANDLED_EVENTS` je proširen bez klasifikacije: to je kvar koda |
-| `ignored` uz `outcome_detail` `event_ignored` | pretplaćen je događaj koji nam ne treba | makni ga iz pretplate (korak 4.4) |
-| `ignored` uz `outcome_detail` `missing_user_metadata` ili `missing_payment_intent` | naplata koja nije nastala kroz `create-checkout` (ručni Payment Link, naplata iz dashboarda) | ako je to ipak kupnja Lektinog proizvoda, veži je ručno (postupak niže); inače ništa |
+| `ignored` uz `outcome_detail` koji počinje s `nepodrzan_dogadjaj:` | pretplaćen je događaj koji nam ne treba i ne nosi novac (ime događaja je iza dvotočke) | makni ga iz pretplate (korak 4.4) |
+| `needs_manual_link` uz `outcome_detail` `missing_user_metadata` | `payment_intent.succeeded` s **potvrđenom naplatom** (`status` `succeeded`, `amount_received` > 0), ali bez `metadata[user_id]`: novac je naplaćen, a pravo nema kome pripasti (ručni Payment Link za Lektin proizvod ili izgubljena metadata) | veži ručno (postupak niže), isti dan; ERROR redak `webhook-mor needs_manual_link` je signal |
+| `ignored` uz `outcome_detail` `missing_payment_intent` | naplata ili povrat bez PaymentIntenta (naslijeđena izravna naplata iz dashboarda) | provjeri u Stripe sučelju; ako je to ipak kupnja Lektinog proizvoda, veži je ručno |
 | `ignored` uz `outcome_detail` koji počinje s `foreign_product:` | proizvod koji Lekta ne prodaje (npr. Katedra pass na istom računu) | ništa; Katedra ga knjiži sama |
 | `refused` | testni način rada ili tuđi račun (`test_mode_refused`, `livemode_unverifiable`, `account_mismatch`) | provjeri `STRIPE_ALLOW_TEST_MODE` i `STRIPE_ACCOUNT_ID` |
 | `unknown_product` | `metadata[product_id]` nije u `products` | popravi katalog pa replayaj |
@@ -217,20 +222,20 @@ njega ne ulaze**. Njih se traži izravnim upitom po stupcu `outcome` (kao servic
 -- Neriješeni događaji koje indeks NE pokriva (pokreni barem jednom dnevno u tjednu lansiranja).
 select id, received_at, event_name, order_id, outcome, outcome_detail
 from webhook_events
-where outcome in ('ignored', 'refused')
+where outcome in ('ignored', 'refused', 'needs_manual_link')
 order by received_at desc
 limit 100;
 
--- Samo uplate koje nisu potvrdile naplatu ili nisu nastale kroz create-checkout.
-select id, received_at, order_id, outcome_detail, raw_payload -> 'data' -> 'object' ->> 'receipt_email' as email
+-- Uplate koje čekaju ručno vezivanje ili nisu potvrdile naplatu.
+select id, received_at, order_id, outcome, outcome_detail, raw_payload -> 'data' -> 'object' ->> 'receipt_email' as email
 from webhook_events
-where outcome = 'ignored'
+where outcome in ('needs_manual_link', 'ignored')
   and event_name = 'payment_intent.succeeded'
 order by received_at asc;
 ```
 
 **Ručno vezivanje** (uplata koja je stvarno naplaćena Lektin proizvod, a nije dobila pravo pristupa,
-npr. `missing_user_metadata`), kao service role:
+prije svega ishod `needs_manual_link`), kao service role:
 
 1. Iz `raw_payload` pročitaj PaymentIntent id (`data.object.id`, to je `order_id`), e-mail kupca
    (`data.object.receipt_email`) i, ako postoji, `data.object.metadata.product_id`.
@@ -258,10 +263,10 @@ npr. `missing_user_metadata`), kao service role:
 
 U logu Edge funkcije isti slučajevi imaju imenovane retke: `webhook-mor ignored_needs_attention`
 (ERROR, tiče se novca: uplata bez potvrđene naplate ili povrat pod imenom koje nije
-`charge.refunded`), `webhook-mor ignored_foreign_event` (WARN, klasifikator je dobio vrstu koju ne
-obrađuje), `webhook-mor event_ignored` (WARN, nepretplaćen ili nepotreban događaj),
+`charge.refunded`), `webhook-mor needs_manual_link` (ERROR, potvrđena naplata bez korisnika),
+`webhook-mor ignored_foreign_event` (WARN, pretplaćen događaj koji ne nosi novac),
 `webhook-mor event_refused` (ERROR, testni način ili tuđi račun) i
-`webhook-mor foreign_event_ignored` (WARN, naplata izvan `create-checkout` ili tuđi proizvod).
+`webhook-mor foreign_event_ignored` (WARN, povrat bez PaymentIntenta ili tuđi proizvod).
 Log ističe, baza ne, pa je upit iznad mjerodavan.
 
 ## 6. Klijentska konfiguracija (bez rebuilda)

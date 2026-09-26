@@ -352,50 +352,44 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     }
   };
 
-  // PORIJEKLO I VRSTA DOGADJAJA (audit PAY-04/PAY-05). Ispravan potpis dokazuje samo da
-  // posiljatelj zna tajnu, NE i da dogadjaj dolazi iz naseg produkcijskog okruzenja ni da je
-  // vrsta koju znamo knjiziti. Bez ove provjere bi valjano potpisan testni dogadjaj dodijelio
-  // pravo pravo pristupa. Provjera ide PRIJE svakog upisa, ukljucujuci refund granu.
+  // PORIJEKLO DOGADJAJA (audit PAY-04/PAY-05). Ispravan potpis dokazuje samo da posiljatelj zna
+  // tajnu, NE i da dogadjaj dolazi iz naseg produkcijskog okruzenja. Bez ove provjere bi valjano
+  // potpisan testni dogadjaj dodijelio pravo pravo pristupa. Provjera ide PRIJE svakog upisa,
+  // ukljucujuci refund granu. VRSTU dogadjaja ovdje NE gledamo: o njoj odlucuje klasifikator nize,
+  // inace vracen novac pod imenom koje nije `charge.refunded` nikad ne bi stigao do grane koja ga
+  // glasno prijavljuje (nalaz pregleda kruga 2 pri spajanju mastera, 2026-09-26).
   const gate = acceptEvent(ev, {
     allowTestMode: deps.allowTestMode,
     expectedAccountId: deps.accountId,
   });
   if (!gate.ok) {
-    // 200: dogadjaj je testni, tudji ili nas se ne tice, dakle za nas trajno neobradiv. Retry ga
-    // ne bi popravio, a 5xx bi providera natjerao da ga ponavlja do isteka prozora.
-    const detail = {
+    // 200: dogadjaj je testni ili tudji, dakle za nas trajno neobradiv. Retry ga ne bi popravio,
+    // a 5xx bi providera natjerao da ga ponavlja do isteka prozora. Odbijeno porijeklo ide u ERROR,
+    // jer znaci ili krivu konfiguraciju ili pokusaj; grana nije tiha (nalaz pregleda na masteru
+    // 2026-09-23: 200 bez retryja i bez retka u logu skriva potpuni prekid prihoda).
+    console.error('webhook-mor event_refused', {
       reason: gate.reason,
       eventName: ev.eventName,
       livemode: ev.livemode,
       accountId: ev.accountId,
       orderId: ev.orderId,
-    };
-    // Ignorirana vrsta je konfiguracijski sum (endpoint pretplacen na vise od dva dogadjaja), pa ne
-    // ide u ERROR kanal nego u WARN; odbijeno porijeklo ide u ERROR, jer znaci ili krivu
-    // konfiguraciju ili pokusaj. Nijedna od ovih grana nije tiha (nalaz pregleda na masteru
-    // 2026-09-23: 200 bez retryja i bez retka u logu skriva potpuni prekid prihoda).
-    // Dva odvojena poziva `settle` (a ne jedan s uvjetnim izrazom) da se svaki ishod vidi kao
-    // doslovan niz: tests/naplata-runbook.test.ts ishode izvodi iz izvora i trazi redak u runbooku.
-    if (gate.reason === 'event_ignored') {
-      console.warn('webhook-mor event_ignored', detail);
-      await settle('ignored', gate.reason);
-    } else {
-      console.error('webhook-mor event_refused', detail);
-      await settle('refused', gate.reason);
-    }
-    return json({ ok: true, action: gate.reason === 'event_ignored' ? 'ignored' : 'event_refused', reason: gate.reason }, 200);
+    });
+    await settle('refused', gate.reason);
+    return json({ ok: true, action: 'event_refused', reason: gate.reason }, 200);
   }
 
   // KLASIFIKACIJA (cista odluka, classifyStripeEvent u src/report/webhook.ts). Ide TEK nakon
   // inboxa i nakon gatea porijekla: dogadjaj koji nije nas ne smije se ni klasificirati.
   // Knjizi se samo `payment_intent.succeeded` sa statusom `succeeded` i pozitivnim
-  // `amount_received`; povrat samo iz `charge.refunded`. Stripe ekvivalent zastita s mastera
-  // (31b802ad, 81a89f2f, daf5f53a), prenesen pri spajanju u design/pack3.
+  // `amount_received`; povrat samo iz `charge.refunded`; potvrdjena naplata bez `user_id` je
+  // `needs_manual_link`. Stripe ekvivalent zastita s mastera (31b802ad, 81a89f2f, daf5f53a),
+  // prenesen pri spajanju u design/pack3.
   const decision = classifyStripeEvent(ev);
 
   if (decision.kind === 'ignored') {
-    // Dogadjaj se zove kao uplata, a objekt naplatu ne potvrdjuje (ili je vracen novac pod
-    // drugim imenom). 200 jer retry ne bi promijenio ishod; trag ostaje u inboxu I u logu.
+    // Dogadjaj se zove kao uplata, a objekt naplatu ne potvrdjuje, ili je vracen novac pod
+    // drugim imenom, ili je vrsta koju ne obradjujemo (pretplacen visak). 200 jer retry ne bi
+    // promijenio ishod; trag ostaje u inboxu I u logu.
     // OVA GRANA SE LOGIRA UVIJEK: odluka pociva na obliku tudjeg objekta, pa bi njegova promjena
     // bez retka u logu pretvorila SVAKU kupnju u tihi 200. Razlozi koji se ticu novca idu na
     // ERROR (NOTABLE_IGNORE_PREFIXES), ostalo na WARN. Upit nad inboxom je u docs/GO_LIVE_NAPLATA.md.
@@ -404,6 +398,7 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       eventName: ev.eventName,
       status: ev.status,
       amountReceivedCents: ev.amountReceivedCents,
+      refundedCents: ev.refundedCents,
       orderId: ev.orderId,
       testMode: ev.testMode,
     };
@@ -424,11 +419,42 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     return json({ ok: true, action: 'ignored', reason: 'missing_payment_intent' }, 200);
   }
 
+  // POTVRDJENA NAPLATA BEZ KORISNIKA (Stripe ekvivalent masterova `needs_manual_link` iz 31b802ad
+  // i 81a89f2f). Klasifikator je potvrdio naplatu (status `succeeded`, `amount_received` > 0), a
+  // `metadata[user_id]` nema: novac je naplacen i pravo nema komu pripasti. 400 ne dolazi u obzir
+  // (dogadjaj bi nestao), a WARN uz `ignored` bi ga utopio u konfiguracijskom sumu. Zato vlastiti
+  // ishod i ERROR, jer to netko MORA vidjeti; rucno vezivanje je u docs/GO_LIVE_NAPLATA.md, 5.1.
+  // Djelomicni indeks `webhook_events_unresolved` ovaj ishod NE pokriva, pa upit ide po `outcome`.
+  //
+  // Iznimka je samo PaymentIntent koji u metadati izricito nosi TUDJI proizvod (Katedra pass na
+  // istom racunu): to nije Lektina naplata, pa ide istim putem kao tudji proizvod nize (WARN).
+  if (decision.kind === 'needs_manual_link') {
+    if (ev.productId && !isSoldByLektaCheckout(ev.productId)) {
+      console.warn('webhook-mor foreign_event_ignored', {
+        orderId: ev.orderId,
+        reason: 'foreign_product',
+        productId: ev.productId,
+      });
+      await settle('ignored', `foreign_product: ${ev.productId}`);
+      return json({ ok: true, action: 'ignored', reason: 'foreign_product' }, 200);
+    }
+    console.error('webhook-mor needs_manual_link', {
+      reason: decision.reason,
+      orderId: ev.orderId,
+      productId: ev.productId,
+      amountReceivedCents: ev.amountReceivedCents,
+      currency: ev.currency,
+      testMode: ev.testMode,
+    });
+    await settle('needs_manual_link', decision.reason);
+    return json({ ok: true, action: 'needs_manual_link', reason: decision.reason }, 200);
+  }
+
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
   //
   // U ovu granu se ulazi SAMO iz dogadjaja `charge.refunded` (odluka: classifyStripeEvent), ne po
-  // zastavici `ev.refunded`: parser tu zastavicu racuna i iz `data.object.refunded`, bez obzira na
-  // ime dogadjaja, a grana nize pise po `ev.orderId` (gasi entitlement, povlaci referral nagrade).
+  // zastavici `ev.refunded`: ona je istinita i za Refund objekt pod drugim imenom (isRefundBearing),
+  // a grana nize pise po `ev.orderId` (gasi entitlement, povlaci referral nagrade).
   if (decision.kind === 'refund') {
     // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
     // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.
@@ -521,15 +547,8 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     return json({ ok: true, action: 'refunded' });
   }
 
-  // Od ovdje nadalje se knjizi pravo pristupa, pa je vlasnik dogadjaja obavezan. PaymentIntent
-  // bez `metadata[user_id]` NIJE nastao kroz create-checkout (koji ga uvijek postavlja): to je
-  // tudja naplata na istom Stripe racunu, npr. rucni Payment Link iz buildPaymentUrl. Isti razred
-  // kao nepoznat proizvod: trajno neobradiv, pa 200 da ga Stripe ne ponavlja danima, uz zapis.
-  if (!ev.userId) {
-    console.warn('webhook-mor foreign_event_ignored', { orderId: ev.orderId, reason: 'missing_user_metadata' });
-    await settle('ignored', 'missing_user_metadata');
-    return json({ ok: true, action: 'ignored', reason: 'missing_user_metadata' }, 200);
-  }
+  // Od ovdje nadalje se knjizi pravo pristupa. Vlasnik dogadjaja je sigurno poznat: potvrdjena
+  // naplata bez `metadata[user_id]` je vec izasla gore kao `needs_manual_link` (klasifikator).
 
   // proizvod iz kataloga po KATALOSKOM id-u iz metadata (sekcija 6.2). Prije 2026-09-23 se
   // trazio po `mor_product_id`; taj put je uklonjen zajedno s MoR providerom, jer bi inace

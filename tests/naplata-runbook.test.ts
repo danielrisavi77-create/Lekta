@@ -48,6 +48,7 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
     expect(outcomes).toContain('ignored');
     expect(outcomes).toContain('refused');
     expect(outcomes).toContain('processed');
+    expect(outcomes).toContain('needs_manual_link');
   });
 
   it('BASELINE: runbook nema nijedan od poznatih propusta', () => {
@@ -117,7 +118,10 @@ describe('runbook imenuje samo log retke koji stvarno postoje u izvoru webhook-m
   it('mjerenje je netrivijalno (izvod imena iz izvora nije prazan)', () => {
     const imena = webhookMorLogNames(HANDLER);
     expect(imena.size).toBeGreaterThanOrEqual(5);
-    expect(imena.has('event_ignored')).toBe(true);
+    // `event_ignored` vise ne postoji: gate gleda samo porijeklo, vrstu odlucuje klasifikator
+    // (krug 2 spajanja, 2026-09-26). Placena uplata bez korisnika ima vlastiti ERROR redak.
+    expect(imena.has('event_ignored')).toBe(false);
+    expect(imena.has('needs_manual_link')).toBe(true);
     expect(imena.has('event_refused')).toBe(true);
     expect(imena.has('ignored_needs_attention')).toBe(true);
     expect(imena.has('ignored_foreign_event')).toBe(true);

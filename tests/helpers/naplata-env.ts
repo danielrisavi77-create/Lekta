@@ -123,7 +123,13 @@ export function preflightSourceProblems(src: string): string[] {
 }
 
 /** Odluka koju `classifyStripeEvent` donosi; uzi potpis od pravog tipa, da se moze mutirati. */
-type KlasifikatorUlaz = { eventName: string; status: string; amountReceivedCents: number | null; refunded: boolean };
+type KlasifikatorUlaz = {
+  eventName: string;
+  status: string;
+  amountReceivedCents: number | null;
+  refunded: boolean;
+  userId: string;
+};
 type Klasifikator = (ev: KlasifikatorUlaz) => { kind: string; reason?: string };
 
 /**
@@ -133,10 +139,20 @@ type Klasifikator = (ev: KlasifikatorUlaz) => { kind: string; reason?: string };
  * Kvar koji se ovim gasi: `payment_intent.succeeded` tretiran kao placen samo po IMENU, bez
  * gledanja na `status` i `amount_received` objekta. Dogadjaj koji se zove kao uplata, a naplatu ne
  * potvrdjuje, dobio bi puno pravo pristupa.
+ *
+ * Drugi kvar (masterov `needs_manual_link`, 31b802ad i 81a89f2f): potvrdjena naplata bez
+ * `user_id` utopljena u `ignored`, dakle u isti WARN kanal kao konfiguracijski sum. Mora biti
+ * vlastita vrsta `needs_manual_link`.
  */
 export function paidClassificationProblems(classify: Klasifikator): string[] {
   const problems: string[] = [];
-  const base = { eventName: 'payment_intent.succeeded', status: 'succeeded', amountReceivedCents: 999, refunded: false };
+  const base = {
+    eventName: 'payment_intent.succeeded',
+    status: 'succeeded',
+    amountReceivedCents: 999,
+    refunded: false,
+    userId: 'user-1',
+  };
   if (classify(base).kind !== 'paid') problems.push('placen payment_intent.succeeded nije prepoznat kao paid');
   if (classify({ ...base, status: 'SUCCEEDED' }).kind !== 'paid') {
     problems.push('status SUCCEEDED velikim slovom nije prepoznat kao placeno');
@@ -151,6 +167,16 @@ export function paidClassificationProblems(classify: Klasifikator): string[] {
       problems.push(`payment_intent.succeeded s amount_received ${String(amountReceivedCents)} knjizi pravo`);
     }
   }
+  for (const userId of ['', '   ']) {
+    const kind = classify({ ...base, userId }).kind;
+    if (kind !== 'needs_manual_link') {
+      problems.push(`potvrdjena naplata bez user_id ("${userId}") je ${kind}, a ne needs_manual_link`);
+    }
+  }
+  // Nepotvrdjena naplata bez korisnika ostaje ignored: needs_manual_link je samo za stvaran novac.
+  if (classify({ ...base, userId: '', status: 'processing' }).kind !== 'ignored') {
+    problems.push('nepotvrdjena naplata bez user_id nije ignored');
+  }
   return problems;
 }
 
@@ -159,8 +185,8 @@ export function paidClassificationProblems(classify: Klasifikator): string[] {
  * zamjenom teksta izvora.
  *
  * Kvar koji se ovim gasi (nalaz pregleda na masteru 2026-09-23, daf5f53a): povrat prepoznat po
- * ZASTAVICI `ev.refunded` umjesto po imenu dogadjaja. `parseStripeEvent` tu zastavicu racuna i iz
- * `data.object.refunded`, dakle bez obzira na `type`, a refund grana handlera pise
+ * ZASTAVICI `ev.refunded` umjesto po imenu dogadjaja. `parseStripeEvent` tu zastavicu postavlja i
+ * za Refund objekt pod drugim imenom (`refund.created`, isRefundBearing), a refund grana handlera pise
  * `update entitlements ... where order_id = ev.orderId` i povlaci referral nagrade po istom id-u.
  * Samo kod `charge.refunded` je `orderId` sigurno PaymentIntent povrata (`charge.payment_intent`).
  *
@@ -170,14 +196,14 @@ export function paidClassificationProblems(classify: Klasifikator): string[] {
  */
 export function refundClassificationProblems(classify: Klasifikator, notablePrefixes: readonly string[] = []): string[] {
   const problems: string[] = [];
-  // Povrat po imenu, bez obzira na status i na zastavicu.
+  // Povrat po imenu, bez obzira na status i na zastavicu, i bez user_id (povrat ide po PaymentIntentu).
   for (const status of ['succeeded', '', 'failed']) {
-    const out = classify({ eventName: 'charge.refunded', status, amountReceivedCents: null, refunded: true });
+    const out = classify({ eventName: 'charge.refunded', status, amountReceivedCents: null, refunded: true, userId: '' });
     if (out.kind !== 'refund') problems.push(`charge.refunded sa statusom "${status}" nije prepoznat kao povrat`);
   }
   // Tudje ime sa zastavicom povrata NE SMIJE upasti u refund granu.
-  for (const eventName of ['payment_intent.succeeded', 'charge.updated', 'nesto.novo.od.providera']) {
-    const out = classify({ eventName, status: 'succeeded', amountReceivedCents: 999, refunded: true });
+  for (const eventName of ['payment_intent.succeeded', 'charge.updated', 'refund.created', 'nesto.novo.od.providera']) {
+    const out = classify({ eventName, status: 'succeeded', amountReceivedCents: 999, refunded: true, userId: 'user-1' });
     if (out.kind === 'refund') {
       problems.push(`dogadjaj ${eventName} je usao u refund granu iako nije charge.refunded`);
       continue;
@@ -192,6 +218,82 @@ export function refundClassificationProblems(classify: Klasifikator, notablePref
     const reason = String(out.reason ?? '');
     if (notablePrefixes.length > 0 && !notablePrefixes.some((prefix) => reason.startsWith(prefix))) {
       problems.push(`povrat pod imenom ${eventName} je ignoriran TIHO (razlog "${reason}" nije notable)`);
+    }
+  }
+  return problems;
+}
+
+/** Minimalni oblik Stripe payloada koji ovaj gard salje kroz parser. */
+type PovratPayload = {
+  type: string;
+  livemode: boolean;
+  data: {
+    object: {
+      id?: string;
+      object?: string;
+      payment_intent?: string;
+      amount?: number;
+      amount_refunded?: number;
+      refunded?: boolean;
+      status?: string;
+    };
+  };
+};
+
+/**
+ * DOHVATLJIVOST grane povrata pod drugim imenom, mjerena kroz STVARNI lanac odluka handlera:
+ * parser, pa gate porijekla, pa klasifikator (nalaz pregleda kruga 2 pri spajanju, 2026-09-26).
+ *
+ * Kvar koji se ovim gasi: `refundClassificationProblems` je zelen nad izoliranim klasifikatorom,
+ * a gate (`acceptEvent`) je vrste izvan `STRIPE_HANDLED_EVENTS` odbijao PRIJE njega. Grana
+ * `povrat_bez_charge_refunded:` tako nije mogla nastati ni za jedan dogadjaj koji handler primi, pa
+ * je test bio zelen vakuumski. Ovdje se svaka od tri funkcije predaje, pa se mutacija radi zamjenom
+ * funkcije (npr. gate koji opet filtrira vrstu), ne teksta izvora.
+ */
+export function refundReachabilityProblems(
+  parse: (payload: PovratPayload) => KlasifikatorUlaz & { livemode: boolean | null; accountId: string },
+  accept: (
+    ev: { livemode: boolean | null; accountId: string; eventName: string },
+    opts: { allowTestMode: boolean; expectedAccountId?: string },
+  ) => { ok: boolean },
+  classify: Klasifikator,
+  notablePrefixes: readonly string[],
+): string[] {
+  const problems: string[] = [];
+  const slucajevi: PovratPayload[] = [
+    { type: 'refund.created', livemode: true, data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999, status: 'succeeded' } } },
+    { type: 'refund.updated', livemode: true, data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999, status: 'succeeded' } } },
+    { type: 'charge.refund.updated', livemode: true, data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999 } } },
+  ];
+  for (const payload of slucajevi) {
+    const ev = parse(payload);
+    if (!ev.refunded) {
+      problems.push(`parser ne vidi vracen novac u ${payload.type}`);
+      continue;
+    }
+    if (!accept(ev, { allowTestMode: false }).ok) {
+      problems.push(`gate odbija ${payload.type} prije klasifikatora, pa povrat pod drugim imenom nikad nije glasan`);
+      continue;
+    }
+    const out = classify(ev);
+    const reason = String(out.reason ?? '');
+    if (out.kind === 'refund') {
+      problems.push(`${payload.type} je usao u refund granu iako nije charge.refunded`);
+    } else if (out.kind !== 'ignored' || !notablePrefixes.some((prefix) => reason.startsWith(prefix))) {
+      problems.push(`${payload.type} nije glasan ignored (kind ${out.kind}, razlog "${reason}")`);
+    }
+  }
+  // Vrsta bez vracenog novca je konfiguracijski sum, ne ERROR: inace bi ERROR kanal oglusio.
+  // Ukljucuje propao povrat i Charge s trajnim tragom starog povrata (Codex pregled kruga 2).
+  const sumovi: PovratPayload[] = [
+    { type: 'customer.created', livemode: true, data: { object: { id: 'cus_1', object: 'customer' } } },
+    { type: 'refund.failed', livemode: true, data: { object: { id: 're_1', object: 'refund', payment_intent: 'pi_1', amount: 999, status: 'failed' } } },
+    { type: 'charge.updated', livemode: true, data: { object: { id: 'ch_1', object: 'charge', payment_intent: 'pi_1', amount: 999, amount_refunded: 999, refunded: true } } },
+  ];
+  for (const payload of sumovi) {
+    const out = classify(parse(payload));
+    if (out.kind !== 'ignored' || notablePrefixes.some((prefix) => String(out.reason ?? '').startsWith(prefix))) {
+      problems.push(`${payload.type} bez vracenog novca je glasan kao povrat ili nije ignored`);
     }
   }
   return problems;
