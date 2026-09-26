@@ -95,6 +95,20 @@ function upsertChild(parentXml: string, parentTag: string, childXml: string, mat
   return close < 0 ? parentXml : `${parentXml.slice(0, close)}${childXml}${parentXml.slice(close)}`;
 }
 
+/**
+ * T65: spojene celije (vodoravno w:gridSpan i zastarjeli w:hMerge, okomito w:vMerge).
+ * equalColumns racuna JEDNU sirinu stupca i upisuje je u svaki w:gridCol i svaki w:tcW, pa bi
+ * celija preko vise stupaca dobila sirinu jednog stupca i grid bi se raspao. Na takvoj tablici
+ * equalColumns se zato ne primjenjuje: ni grid ni tcW se ne diraju. Ostale akcije rade kao prije.
+ *
+ * Kao analiza (DOM, localName), i ovdje se gleda lokalno ime uz BILO KOJI prefiks, pa drugi
+ * prefiks za isti imenski prostor ne zaobilazi gard. XML komentari se prije toga uklanjaju, da
+ * zakomentirani element ne ugasi equalColumns na tablici koja spojenih celija nema.
+ */
+export function hasMergedCells(tableXml: string): boolean {
+  return /<(?:[A-Za-z_][\w.-]*:)?(?:gridSpan|hMerge|vMerge)\b/.test(tableXml.replace(/<!--[\s\S]*?-->/g, ''));
+}
+
 function patchTable(xml: string, table: TableFigureRescueTable): string {
   let result = xml;
   const actions = table.actions;
@@ -122,9 +136,14 @@ function patchTable(xml: string, table: TableFigureRescueTable): string {
     if (actions.repeatHeader && rowIndex === 0 && !/<w:tblHeader\b/i.test(next)) next = next.replace('</w:trPr>', '<w:tblHeader w:val="true"/></w:trPr>');
     if (actions.preventRowSplit && !/<w:cantSplit\b/i.test(next)) next = next.replace('</w:trPr>', '<w:cantSplit/></w:trPr>');
     rowIndex += 1;
+    // T65: bez stvarne izmjene red ostaje bajt-identican. Prije se svakom redu bez w:trPr umetao
+    // prazan <w:trPr> i kad nijedna akcija reda nije bila trazena, pa je zahtjev samo s
+    // preskocenim equalColumns lazno javljao applied:true.
+    if (next === trPr) return rowXml;
     return originalTrPr ? rowXml.replace(originalTrPr, next) : rowXml.replace(/(<w:tr\b[^>]*>)/i, `$1${next}`);
   });
-  if (actions.equalColumns) {
+  // Uvjet se racuna nad ULAZNIM XML-om tablice (`xml`), ne nad medjurezultatom.
+  if (actions.equalColumns && !hasMergedCells(xml)) {
     const grid = result.match(/<w:tblGrid\b[^>]*>[\s\S]*?<\/w:tblGrid>/i)?.[0];
     const cols = grid ? [...grid.matchAll(/<w:gridCol\b[^>]*>/gi)] : [];
     if (cols.length) {
@@ -266,11 +285,13 @@ export function tableFigureRescueFixer(parts: DocxXmlParts, params: TableFigureR
   const insertBefore = new Map<number, string>();
   const insertAfter = new Map<number, string>();
   let changed = false;
+  let skippedEqualColumns = false;
   for (const table of params.tables) {
     const child = layout.children[table.bodyChildIndex];
     if (!child || child.tag !== 'tbl') return noOp(parts, 'no-target');
     if (hasUnsupported(child.xml)) return noOp(parts, 'unsupported-structure');
     if (anchorFingerprintForXml('table', child.xml) !== table.anchorFingerprint && !tableAlreadyPatched(child.xml, table)) return noOp(parts, 'unsupported-structure');
+    if (table.actions.equalColumns && hasMergedCells(child.xml)) skippedEqualColumns = true;
     const next = patchTable(child.xml, table);
     if (next !== child.xml) changed = true;
     replacements.set(table.bodyChildIndex, next);
@@ -311,7 +332,9 @@ export function tableFigureRescueFixer(parts: DocxXmlParts, params: TableFigureR
     if (next !== located.xml) changed = true;
     replacements.set(index, next);
   }
-  if (!changed) return noOp(parts, 'already-ok');
+  // T65: 'already-ok' bi korisniku rekao da je tablica vec uredna; kad je equalColumns preskocen
+  // zbog spojenih celija, istina je da tu akciju Lekta ne moze sigurno izvesti.
+  if (!changed) return noOp(parts, skippedEqualColumns ? 'unsupported-structure' : 'already-ok');
   let inner = layout.children.map((child, index) => `${insertBefore.get(index) ?? ''}${replacements.get(index) ?? child.xml}${insertAfter.get(index) ?? ''}`).join('');
   const nextDocument = parts.documentXml.slice(0, layout.innerStart) + inner + parts.documentXml.slice(layout.innerEnd);
   return { parts: { ...parts, documentXml: nextDocument }, applied: true, beforeLabel: 'tablice i slike', afterLabel: 'spašene tablice i slike' };
