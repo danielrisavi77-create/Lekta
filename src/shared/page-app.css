@@ -1497,7 +1497,10 @@ a.mw-item-name:hover{text-decoration:underline}
    Gard: `tests/design-tokens.test.ts`.
    ========================================================================== */
 
-/* Odlomci i duga objasnjenja */
+/* Odlomci i duga objasnjenja S KLASOM ILI U KONTEJNERU. Goli `p`, `dd` i `blockquote` serif dobivaju
+   pravilom u `design-system.css`, pa ovaj popis nije mjera potpunosti; mjera je gard nad DOM-om
+   stranica u `tests/design-tokens.test.ts`. `.ks-doc-paper p` NIJE ovdje: to je faksimil tudjeg
+   rada i crta se Georgijom (`--font-doc`, pravilo iznad), ne glasom proizvoda. */
 .hero-copy>p,
 .section-head p,
 .step-card p,
@@ -1530,7 +1533,8 @@ a.mw-item-name:hover{text-decoration:underline}
 .scoring-change-note,.setup-note,.department-note,.legal-engine-note,
 .preflight-note,.methodology-missing,
 .action-empty,.empty,
-.a4-page p,.ks-doc-paper p,
+.a4-page p,
+.history-privacy,.ks-sec-sub,
 .ks-cta p,.ks-tvrdnja p,.ks-koment p{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
 
 /* Pravni tekst (GDPR modali): cijeli blok je proza, ne samo naslovi */

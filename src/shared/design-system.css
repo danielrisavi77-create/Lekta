@@ -180,6 +180,33 @@ b {
   font-style: var(--emph-style, normal);
 }
 
+/* ==========================================================================
+   PROZA GOVORI SERIFOM, PRAVILOM A NE POPISOM (Z7 opcija a, popravak nalaza pregleda)
+
+   Zadani glas stranice ostaje mono (`body` u `tool-page.css` i `page-chrome.css`), jer mono
+   nosi oznake, gumbe, navigaciju, eyebrow, brojeve i meta retke, a toga je na stranici vise.
+   Ali tekstni blok koji nista ne dodjeljuje tada NASLIJEDI mono, i odlomak od tri recenice
+   (odgovor u FAQ-u alata, opis u listi cinjenica) zavrsi u pismu koje je `design/README.md`
+   zabranio za recenicu duzu od jednog retka.
+
+   Zato svaki `p`, `dd` i `blockquote` BEZ KLASE govori serifom. Uvjet "bez klase" je namjeran:
+   element s klasom ima vlastito pravilo i u njemu odlucuje o glasu (oznaka poput `.rd__oznaka`
+   ili `.pf-timer` ostaje mono, proza poput `.sec-sub` dobiva serif ondje). Gornji uvjet stoji
+   u `:where()`, pa pravilo ima specificnost golog elementa: svako pravilo s klasom ili s
+   pretkom (`.ks-doc-paper p` za faksimil, `.stat-row dd` za brojke) ga nadjacava.
+   `li` NIJE ovdje: stavka popisa je u sucelju cesce korak ili cip nego recenica.
+
+   Serifni kontejner nosi i par naglaska (vidi blok iznad). Gard: `tests/design-tokens.test.ts`
+   razlaze kaskadu nad DOM-om svake stranice i trazi serif na svakom visereceniom odlomku.
+   ========================================================================== */
+p:where(:not([class])),
+dd:where(:not([class])),
+blockquote:where(:not([class])) {
+  font-family: var(--display-serif);
+  --emph-weight: 400;
+  --emph-style: italic;
+}
+
 [data-theme="light"] {
   /* Danje svjetlo: isti stol na dnevnom svjetlu */
   --desk: #DFD8C6;

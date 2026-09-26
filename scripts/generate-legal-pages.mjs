@@ -18,6 +18,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import esbuild from 'esbuild';
 import { SITE_ORIGIN } from './site-origin.mjs';
+import { fallbackFaces, ubaciU404, webfontFaces } from './lib/legal-webfonts.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -50,49 +51,24 @@ async function loadLegal() {
 // vrhu). Ponovno koristi VEC izgradjene woff2 iz glavnog Vite bundlea preko @font-face + apsolutne
 // /assets/ putanje (isti vendorirani izvor kao `src/assets/fonts/fonts.css`, ista datoteka, pa je
 // cache pogodak ako je posjetitelj vec bio na ulazu); latin + latin-ext (hrvatska dijakritika je u
-// latin-ext rasponu). Kozmeticko poboljsanje pa NE smije srusiti build ako datoteka nije nadjena
-// (buduca promjena build konfiguracije): tada pada na metricki zamjenski glas i sistemski font.
-const LATIN = 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
-const LATIN_EXT = 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF';
-const WEBFONT_SUBSETS = [
-  { family: 'Instrument Serif', weight: '400', pattern: /^instrument-serif-latin-400-normal.*\.woff2$/i, unicodeRange: LATIN },
-  { family: 'Instrument Serif', weight: '400', pattern: /^instrument-serif-latin-ext-400-normal.*\.woff2$/i, unicodeRange: LATIN_EXT },
-  { family: 'Geist Mono', weight: '100 900', pattern: /^geist-mono-latin-wght-normal.*\.woff2$/i, unicodeRange: LATIN },
-  { family: 'Geist Mono', weight: '100 900', pattern: /^geist-mono-latin-ext-wght-normal.*\.woff2$/i, unicodeRange: LATIN_EXT },
-];
-
-function webfontFaces() {
-  const assetsDir = path.join(DIST, 'assets');
-  if (!fs.existsSync(assetsDir)) return { css: '', families: new Set() };
-  const files = fs.readdirSync(assetsDir);
-  const families = new Set();
-  const css = WEBFONT_SUBSETS
-    .map((s) => {
-      const file = files.find((f) => s.pattern.test(f));
-      if (!file) return '';
-      families.add(s.family);
-      return `@font-face { font-family: "${s.family}"; font-style: normal; font-weight: ${s.weight}; font-display: swap; src: url("/assets/${file}") format("woff2"); unicode-range: ${s.unicodeRange}; }`;
-    })
-    .filter(Boolean)
-    .join('\n  ');
-  return { css, families };
+// latin-ext rasponu). Obrasci i razrjesavanje zive u `scripts/lib/legal-webfonts.mjs`, gdje ih test
+// mjeri nad imenima koja Vite stvarno proizvodi.
+//
+// PRAZAN POGODAK OBARA GENERATOR (popravak Z7(a)). Do sada je nepronadjen rez tiho ispadao i stranica
+// je padala na zamjenski glas uz zelen build; sad je to izlaz 1 s imenom obrasca koji nije pogodio.
+function padni(problemi, sto) {
+  if (problemi.length === 0) return;
+  console.error(`[generate-legal-pages] ${sto}:`);
+  for (const p of problemi) console.error(`  - ${p}`);
+  process.exit(1);
 }
 
-// Metricki zamjenski glasovi (lokalni font sa size-adjust i override metrikama) citaju se DOSLOVNO iz
-// `src/assets/fonts/fonts.css`, da vrijednosti imaju jedan izvor. Uzima se samo uspravni rez: pravne
-// stranice kurziv serifa ne crtaju.
-function fallbackFaces() {
-  const list = fs.readFileSync(path.join(ROOT, 'src/assets/fonts/fonts.css'), 'utf8');
-  return Array.from(list.matchAll(/@font-face\s*\{[^}]*\}/g), (m) => m[0])
-    .filter((b) => /font-family:\s*"[^"]* Fallback[^"]*"/.test(b) && !/font-style:\s*italic/.test(b))
-    .map((b) => b.replace(/\s+/g, ' '))
-    .join('\n  ');
-}
-
-const WEBFONTS = webfontFaces();
-const FONT_FACES = [WEBFONTS.css, fallbackFaces()].filter(Boolean).join('\n  ');
-const SERIF_HEAD = WEBFONTS.families.has('Instrument Serif') ? '"Instrument Serif", ' : '';
-const MONO_HEAD = WEBFONTS.families.has('Geist Mono') ? '"Geist Mono", ' : '';
+const assetsDir = path.join(DIST, 'assets');
+const WEBFONTS = webfontFaces(fs.existsSync(assetsDir) ? fs.readdirSync(assetsDir) : []);
+padni(WEBFONTS.problemi, 'webfont iz Vite bundlea nije pronadjen u dist/assets');
+const FALLBACK = fallbackFaces(fs.readFileSync(path.join(ROOT, 'src/assets/fonts/fonts.css'), 'utf8'));
+padni(FALLBACK.problemi, 'metricki zamjenski glasovi nisu procitani');
+const FONT_FACES = [WEBFONTS.css, FALLBACK.css].join(' ');
 
 const PAGE_STYLE = `
   ${FONT_FACES}
@@ -105,8 +81,8 @@ const PAGE_STYLE = `
     --paper:#F7F3E8; --paper-2:#F0EAD9; --paper-ink:#26221B; --paper-muted:#6E6656; --paper-line:#DCD4BF;
     --red:#E4573D; --red-deep:#C4372E;
     --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-    --font-serif:${SERIF_HEAD}"Instrument Serif Fallback","Instrument Serif Fallback Times",Georgia,"Times New Roman",serif;
-    --font-mono:${MONO_HEAD}"Geist Mono Fallback","Geist Mono Fallback Courier",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --font-serif:"Instrument Serif","Instrument Serif Fallback","Instrument Serif Fallback Times",Georgia,"Times New Roman",serif;
+    --font-mono:"Geist Mono","Geist Mono Fallback","Geist Mono Fallback Courier",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     /* Instrument Serif ima samo rez 400: bez ovoga bi preglednik h1/h4 lazno podebljao. */
     font-synthesis: none;
   }
@@ -208,4 +184,12 @@ for (const doc of list) {
   written++;
 }
 
-console.log(`[generate-legal-pages] gotovo: ${written} stranica (verzija ${legal.TERMS_VERSION}) u dist/.`);
+// 404 je samostalna stranica iz public/ (Vite je kopira bez obrade), pa webfontove dobiva ovdje, iz
+// ISTIH razrijesenih rezova kao pravne stranice. Razlog izbora je u komentaru uz oznaku u public/404.html.
+const put404 = path.join(DIST, '404.html');
+if (!fs.existsSync(put404)) padni(['dist/404.html ne postoji (public/404.html nije kopiran)'], '404');
+const s404 = ubaciU404(fs.readFileSync(put404, 'utf8'), FONT_FACES);
+padni(s404.problemi, '404.html nije dobio webfontove');
+fs.writeFileSync(put404, s404.html, 'utf-8');
+
+console.log(`[generate-legal-pages] gotovo: ${written} stranica (verzija ${legal.TERMS_VERSION}) i 404.html s webfontovima u dist/.`);

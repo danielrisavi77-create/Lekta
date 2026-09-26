@@ -76,7 +76,10 @@ import {
   LICENCE, SVI_ULAZI, listoviSWebfontom, preloadObrasci, problemiFontova, problemiGlasovaUlaza,
   problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada, problemiRuta,
   problemiTokena, zabranjenaImena,
+  DOPUSTENA_GEORGIA, STRANICE_PROZE, georgiaUSucelju, listoviStranice, monoUSerifnomNaglasku, naglasakUSerifu,
+  problemiProzeStranice, svjetoviBezSinteze, tezineIznad400, uiNaSerifu,
 } from './helpers/font-voices';
+import { OZNAKA_404, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfonts.mjs';
 import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './helpers/module-graph';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
@@ -2884,6 +2887,114 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => problemiLicenci(z7aLicence()).length === 0,
   },
+  // --- Z7(a) popravak: gardovi kaskade iz `tests/design-tokens.test.ts` i samostalnih stranica ---
+  // Model kaskade je preseljen u `tests/helpers/font-voices.ts` upravo zato da ove mutacije zovu
+  // ISTU funkciju kao gard. Baseline je stvarni skup listova (i stvarne stranice), mutacija isti
+  // tekst izmijenjen u memoriji.
+  {
+    id: 'z7a/tezina-iznad-400-na-serifu',
+    imitates:
+      'Opisna kartica dobije `font-weight:600` na odlomku koji govori serifom (`.check-card p`): ' +
+      'Instrument Serif rez 600 nema, a uz font-synthesis: none zahtjev se tiho ignorira.',
+    caught: () => tezineIznad400(z7aListoviSrc({ 'src/shared/page-app.css': (t) => `${t}\n.check-card p{font-weight:600}\n` }))
+      .some((p) => p.includes('.check-card p -> 600')),
+    cleanBefore: () => tezineIznad400(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/serifni-kontejner-bez-naglaska',
+    imitates:
+      'Tocan oblik s `.pcard-path` (2026-09-20): nov serifni kontejner bez para --emph-weight/--emph-style, ' +
+      'pa `<strong>` u njemu dobiva globalnih 600 u pismu koje taj rez nema.',
+    caught: () => naglasakUSerifu(z7aListoviSrc({ 'src/shared/page-app.css': (t) => `${t}\n.z7-mut-put{font-family:var(--display-serif)}\n` }))
+      .some((p) => p.includes('.z7-mut-put strong')),
+    cleanBefore: () => naglasakUSerifu(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/mono-u-serifu-bez-para',
+    imitates:
+      'Mono cip unutar serifnog odlomka (`.ks-tvrdnja p .cip`) ne vraca par naglaska, pa njegov ' +
+      '`<strong>` nasljedjuje kurziv u Geist Monu, koji se ucitava samo uspravno.',
+    caught: () => monoUSerifnomNaglasku(z7aListoviSrc({ 'src/shared/page-app.css': (t) => `${t}\n.ks-tvrdnja p .z7-cip{font-family:var(--mono)}\n` }))
+      .some((p) => p.includes('.z7-cip')),
+    cleanBefore: () => monoUSerifnomNaglasku(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/svijet-bez-font-synthesis',
+    imitates:
+      'Admin list izgubi `font-synthesis:none` na body-ju (admin ne uvozi design-system.css): ' +
+      'preglednik tada razvuce rez 400 u lazni bold na serifnom tijelu nadzorne ploce.',
+    caught: () => {
+      const mut = z7aListoviSrc({ 'src/admin/admin-dashboard.css': (t) => t.replace(/font-synthesis:\s*none;?/g, '') });
+      const izmijenjen = mut.find((l) => l.ime === 'src/admin/admin-dashboard.css')?.css !== z7aList('src/admin/admin-dashboard.css');
+      return izmijenjen && svjetoviBezSinteze(mut).includes('admin');
+    },
+    cleanBefore: () => svjetoviBezSinteze(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/body-ljuske-na-serifu',
+    imitates:
+      'Ljuska aplikacije vrati serif na `body` (kvar od 2026-09-20): svaki cip, status i oznaka bez ' +
+      'vlastite obitelji tiho prelazi na Instrument Serif.',
+    caught: () => uiNaSerifu(z7aListoviSrc({ 'src/shared/page-chrome.css': (t) => t.replace('font:16px/1.6 var(--ui)', 'font:16px/1.6 var(--display-serif)') }))
+      .length > 5,
+    cleanBefore: () => uiNaSerifu(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/proza-bez-pravila',
+    imitates:
+      'Nalaz pregleda Z7(a): bez pravila za gole `p`/`dd` u design-system.css odgovor u listi cinjenica ' +
+      'alata (i ogledni odlomci na citat.html) nasljedjuju mono s body-ja.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/shared/design-system.css': (t) => t.replace(/p:where\(:not\(\[class\]\)\),\s*dd:where\(:not\(\[class\]\)\),\s*blockquote:where\(:not\(\[class\]\)\)/, '.z7-ugaseno') });
+      return z7aProblemiProze('kartice.html', izvor).some((p) => p.startsWith('dd '));
+    },
+    cleanBefore: () => z7aProblemiProze('kartice.html').length === 0,
+  },
+  {
+    id: 'z7a/opis-cinjenice-u-monu',
+    imitates:
+      'Inline stil alata vrati mono na opis u listi cinjenica (`.fact-list dd`), pravilom s klasom koje ' +
+      'nadjacava golo serifno pravilo po specificnosti, pa visereceni opis opet govori monom.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'kartice.html': (t) => t.replace('</style>', '.fact-list dd{font-family:var(--mono)}</style>') });
+      return z7aProblemiProze('kartice.html', izvor).some((p) => p.startsWith('dd ') && p.includes('.fact-list dd'));
+    },
+    cleanBefore: () => z7aProblemiProze('kartice.html').length === 0,
+  },
+  {
+    id: 'z7a/georgia-u-pitanju-faq',
+    imitates:
+      'Nalaz pregleda Z7(a): `.faq summary{font-family:var(--ink-serif);font-weight:700}` u literatura.html, ' +
+      'dakle Georgia bold u sucelju umjesto serifa proizvoda.',
+    caught: () => georgiaUSucelju(z7aListoviGeorgije({ 'literatura.html': (t) => t.replace('</style>', '.faq summary{font-family:var(--ink-serif);font-weight:700}</style>') }), DOPUSTENA_GEORGIA)
+      .some((p) => p.startsWith('literatura.html: .faq summary')),
+    cleanBefore: () => georgiaUSucelju(z7aListoviGeorgije(), DOPUSTENA_GEORGIA).length === 0,
+  },
+  {
+    id: 'z7a/georgia-dopusteni-nestao',
+    imitates:
+      'Faksimil naslovnice prijede na glas proizvoda (ili se `#tp-sheet` preimenuje): popis dopustenih ' +
+      'tada imenuje selektor koji Georgiju vise ne nosi i gard ne smije ostati tiho zelen.',
+    caught: () => georgiaUSucelju(z7aListoviGeorgije({ 'naslovnica.html': (t) => t.replace(/(#tp-sheet\{[^}]*?)font-family:var\(--ink-serif\)/, '$1font-family:var(--display-serif)') }), DOPUSTENA_GEORGIA)
+      .some((p) => p.includes('#tp-sheet je dopusten')),
+    cleanBefore: () => georgiaUSucelju(z7aListoviGeorgije(), DOPUSTENA_GEORGIA).length === 0,
+  },
+  {
+    id: 'z7a/pravne-stranice-prazan-pogodak',
+    imitates:
+      'Vite promijeni obrazac imena asseta (hash ispred imena): obrasci generatora ne pogadjaju nista, ' +
+      'a stari generator je tada tiho pisao pravne stranice bez ijednog glasa proizvoda.',
+    caught: () => webfontFaces(z7aDatoteke().names.filter((n) => n.endsWith('.woff2')).map((n) => `Ab12Cd34-${n}`)).problemi.length === 4,
+    cleanBefore: () => webfontFaces(z7aDatoteke().names.filter((n) => n.endsWith('.woff2')).map((n) => n.replace(/\.woff2$/, '-Ab12Cd34.woff2'))).problemi.length === 0,
+  },
+  {
+    id: 'z7a/404-bez-oznake-webfontova',
+    imitates:
+      'Netko prepise public/404.html i izgubi oznaku za webfontove: generator bi bez provjere tiho ' +
+      'ostavio 404 na sistemskim glasovima.',
+    caught: () => ubaciU404(z7aList('public/404.html').replace(OZNAKA_404, ''), '@font-face{}').problemi.length === 1,
+    cleanBefore: () => ubaciU404(z7aList('public/404.html'), '@font-face{}').problemi.length === 0,
+  },
 ];
 
 /** Apsolutna staza iz relativne, istim `resolve` kojim graf gradi svoje staze. */
@@ -2940,6 +3051,34 @@ function z7aLicence(): Map<string, string> {
   const dir = z7aPut('src/assets/fonts');
   const imena = new Set(readdirSync(dir));
   return new Map(LICENCE.filter((ime) => imena.has(ime)).map((ime) => [ime, readFileSync(join(dir, ime), 'utf8')] as const));
+}
+
+/**
+ * Svaki CSS list u src/ istim redom kao `listoviSrc` u `tests/design-tokens.test.ts` (izvor istine
+ * prvi, ostali abecedno), CR normaliziran, s izmjenama U MEMORIJI po relativnoj stazi.
+ */
+function z7aListoviSrc(izmjene: Record<string, (tekst: string) => string> = {}): Array<{ ime: string; css: string }> {
+  const IZVOR = 'src/shared/design-system.css';
+  const listovi = z7aSviListovi().map((l) => ({ ime: l.ime, css: l.css.replace(/\r\n/g, '\n') }))
+    .sort((a, b) => (a.ime < b.ime ? -1 : a.ime > b.ime ? 1 : 0));
+  const poredak = [...listovi.filter((l) => l.ime === IZVOR), ...listovi.filter((l) => l.ime !== IZVOR)];
+  return poredak.map((l) => (izmjene[l.ime] ? { ime: l.ime, css: izmjene[l.ime](l.css) } : l));
+}
+
+/** Visereceni odlomci stranice bez serifa, kroz isti citac listova kao gard (izvor je parametar). */
+function z7aProblemiProze(rel: string, izvor: IzvorDatoteka = DISK): string[] {
+  const { html, listovi } = listoviStranice(process.cwd(), rel, izvor);
+  return problemiProzeStranice(html, listovi).problemi;
+}
+
+/** Listovi nad kojima gard trazi Georgiju: src/ i inline stil svake stranice, s izmjenama u memoriji. */
+function z7aListoviGeorgije(izmjene: Record<string, (tekst: string) => string> = {}): Array<{ ime: string; css: string }> {
+  const listovi = z7aListoviSrc(izmjene);
+  for (const rel of STRANICE_PROZE) {
+    const html = izmjene[rel] ? izmjene[rel](z7aList(rel)) : z7aList(rel);
+    for (const m of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) listovi.push({ ime: rel, css: m[1] });
+  }
+  return listovi;
 }
 
 /** Tekst lista s diska, CR normaliziran (Windows worktree zna imati CRLF). */

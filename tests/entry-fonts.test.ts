@@ -5,8 +5,10 @@ import { collectStaticGraph, packageImports } from './helpers/module-graph';
 import {
   LICENCE, SVI_ULAZI, deklariraneObitelji, listoviSWebfontom, preloadObrasci, problemiFontova,
   problemiGlasovaUlaza, problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada,
-  problemiRuta, problemiTokena, woff2Metrike, zabranjenaImena,
+  problemiRuta, problemiTokena, woff2Metrike, zabranjenaImena, GLASOVI, fontFaceBlokovi, prvaObiteljTokena,
+  webfontObitelji,
 } from './helpers/font-voices';
+import { OZNAKA_404, fallbackFaces, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfonts.mjs';
 
 /**
  * KOJE SE OBITELJI CRTAJU NA ULAZU `/`.
@@ -732,5 +734,96 @@ describe('Z7(a): Instrument Serif i Geist Mono su glasovi proizvoda (obrnut gard
   it('package.json nema instrument-serif ni geist-mono kao ovisnost (vendorirano)', () => {
     // Mutacije: `z7a/font-paket-u-package-json` i `z7a/package-json-procitan-prazan`.
     expect(problemiOvisnosti(JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')))).toEqual([]);
+  });
+});
+
+/**
+ * Z7(a) POPRAVAK: SAMOSTALNE STRANICE (pravne i 404) NOSE OBA GLASA IZ ISTIH WOFF2.
+ *
+ * Obje stranice Vite ne obradjuje kao ulaze (pravne pise generator poslije builda, 404 se kopira
+ * iz `public/`), pa hashirana imena rezova doznaju tek iz `dist/assets/`. Obrasci iz
+ * `scripts/lib/legal-webfonts.mjs` se zato mjere nad imenima KAKVA IH VITE PROIZVODI: zadani obrazac
+ * `assets/[name]-[hash][extname]` primijenjen na stvarne vendorirane datoteke. Da `vite.config.ts`
+ * taj obrazac promijeni, prva tvrdnja pada i trazi da se model ovdje uskladi, umjesto da obrasci
+ * tiho prestanu pogadjati (tada generator pada, jer je prazan pogodak problem).
+ */
+describe('Z7(a) popravak: pravne stranice i 404 dobivaju oba glasa', () => {
+  const MAPA = resolve(ROOT, 'src/assets/fonts');
+  const VENDORIRANI = (): string[] => readdirSync(MAPA).filter((x) => x.endsWith('.woff2'));
+  /** Ime koje Vite daje assetu uz zadani `assetFileNames` (`[name]-[hash][extname]`). */
+  const viteIme = (ime: string, hash: string): string => ime.replace(/\.woff2$/, `-${hash}.woff2`);
+  /** Sadrzaj `dist/assets/` kakav stvarno izgleda: svi rezovi (i kurzivi) i ostali asseti. */
+  const distAssets = (hash: string): string[] => [
+    ...VENDORIRANI().map((x) => viteIme(x, hash)), 'index-Bq3x_9Zk.js', 'index-Bq3x_9Zk.css', 'hunspell-D4-a8Qe1.js',
+  ];
+  const stil = (html: string): string => Array.from(html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g), (m) => m[1]).join('\n');
+
+  it('vite.config.ts ne mijenja zadani obrazac imena asseta, pa je model gore tocan', () => {
+    const cfg = readFileSync(resolve(ROOT, 'vite.config.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+    expect(cfg, 'nula znakova znaci da citanje ne radi').toMatch(/rollupOptions/);
+    expect(cfg).not.toMatch(/assetFileNames|assetsDir/);
+  });
+
+  it('svaki obrazac pogadja TOCNO jedan rez u Viteovu izlazu, i daje oba glasa', () => {
+    // SENTINEL: vendorirano je sest rezova, ukljucivo kurzive koje obrasci NE smiju pogoditi.
+    expect(VENDORIRANI()).toHaveLength(6);
+    // Hash je base64url: slova, brojke, `_` i `-`, pa se mjeri i hash koji sam sadrzi crticu.
+    for (const hash of ['DxQ3_k-9', 'a1B2c3D4', '-_-_-_-_']) {
+      const r = webfontFaces(distAssets(hash));
+      expect(r.problemi, hash).toEqual([]);
+      expect([...r.obitelji].sort()).toEqual([...GLASOVI]);
+      expect(fontFaceBlokovi(r.css).map((b) => b.src)).toHaveLength(4);
+      expect(r.css).not.toMatch(/italic-/);
+    }
+  });
+
+  it('MUTACIJA: prazan ili dvostruk pogodak je problem, ne tihi zamjenski glas', () => {
+    // Drukciji `assetFileNames` (hash ispred imena): nijedan obrazac ne pogadja nista.
+    expect(webfontFaces(VENDORIRANI().map((x) => `Ab12Cd34-${x}`)).problemi).toHaveLength(4);
+    // Izgubljen latin-ext rez serifa: tocno jedan problem, i imenuje bas taj obrazac.
+    const bezExt = distAssets('a1B2c3D4').filter((x) => !x.startsWith('instrument-serif-latin-ext-400-normal'));
+    expect(webfontFaces(bezExt).problemi).toEqual([expect.stringContaining('instrument-serif-latin-ext-400-normal')]);
+    // Zaostao rez iz starog builda uz novi: dva pogotka, generator ne smije birati nasumice.
+    expect(webfontFaces([...distAssets('a1B2c3D4'), viteIme('geist-mono-latin-wght-normal.woff2', 'OLD0hash')]).problemi)
+      .toEqual([expect.stringContaining('pogadja 2')]);
+    // Zamjenski glasovi: list bez njih je problem, stvarni list nije.
+    expect(fallbackFaces('').problemi).toHaveLength(1);
+    expect(fallbackFaces(readFileSync(FONTOVI_CSS, 'utf8')).problemi).toEqual([]);
+  });
+
+  it('404 nakon generatora ucitava oba glasa, a tokeni i sinteza su glasovi proizvoda', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    // Prije generatora: tokeni vec imenuju oba glasa, a webfonta jos nema (oznaka je komentar).
+    expect(prvaObiteljTokena(stil(izvor), '--display-serif')).toBe('Instrument Serif');
+    expect(prvaObiteljTokena(stil(izvor), '--mono')).toBe('Geist Mono');
+    expect(stil(izvor)).toMatch(/:root\s*\{[^}]*font-synthesis:\s*none/);
+    expect(webfontObitelji([stil(izvor)]).size).toBe(0);
+    // Poslije generatora: ISTE funkcije kojima generator puni pravne stranice.
+    const faces = [webfontFaces(distAssets('a1B2c3D4')).css, fallbackFaces(readFileSync(FONTOVI_CSS, 'utf8')).css].join(' ');
+    const { html, problemi } = ubaciU404(izvor, faces);
+    expect(problemi).toEqual([]);
+    expect([...webfontObitelji([stil(html)])].sort()).toEqual([...GLASOVI]);
+    // Zamjenski glasovi koje tokeni imenuju postoje kao @font-face, pa zamjena ne pomice raspored.
+    for (const ime of ['Instrument Serif Fallback', 'Geist Mono Fallback']) {
+      expect(deklariraneObitelji([stil(html)]).has(ime), ime).toBe(true);
+    }
+  });
+
+  it('MUTACIJA: 404 bez oznake ili s dvije oznake je problem, ne tiho preskocen umetak', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    expect(ubaciU404(izvor, '@font-face{}').problemi, 'baseline').toEqual([]);
+    expect(ubaciU404(izvor.replace(OZNAKA_404, ''), '@font-face{}').problemi).toHaveLength(1);
+    expect(ubaciU404(izvor.replace(OZNAKA_404, OZNAKA_404 + OZNAKA_404), '@font-face{}').problemi).toHaveLength(1);
+  });
+
+  it('generator uvozi ISTE funkcije i s njima pada, umjesto da ih prepisuje', () => {
+    const gen = readFileSync(resolve(ROOT, 'scripts/generate-legal-pages.mjs'), 'utf8');
+    const uvoz = gen.match(/^import\s*\{([^}]+)\}\s*from\s*'\.\/lib\/legal-webfonts\.mjs';/m);
+    expect(uvoz, 'generator ne uvozi scripts/lib/legal-webfonts.mjs').not.toBeNull();
+    expect((uvoz ? uvoz[1] : '').split(',').map((x) => x.trim()).sort()).toEqual(['fallbackFaces', 'ubaciU404', 'webfontFaces']);
+    // Prepisan obrazac u generatoru bi opet mogao tiho promasiti: generator ga ne smije drzati.
+    expect(gen).not.toMatch(/WEBFONT_SUBSETS\s*=|pattern:\s*\//);
+    // Svaki problem vodi u izlaz 1.
+    for (const poziv of ['padni(WEBFONTS.problemi', 'padni(FALLBACK.problemi', 'padni(s404.problemi']) expect(gen).toContain(poziv);
   });
 });

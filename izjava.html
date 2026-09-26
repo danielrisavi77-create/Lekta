@@ -27,14 +27,14 @@
 <title>Besplatni generator izjave o izvornosti - Lekta</title>
 <script>try{var _e=document.documentElement,_t=localStorage.getItem('lekta.theme')||'dark';if(_t!=='system')_e.dataset.theme=_t;var _d=JSON.parse(localStorage.getItem('lekta.display')||'{}')||{};if(_d.readingFont&&_d.readingFont!=='default')_e.dataset.readingFont=_d.readingFont;if(_d.contrast==='high')_e.dataset.contrast='high';if(_d.motion==='reduce')_e.dataset.motion='reduce';}catch(e){}</script>
 <style>
-.hero h1{font-family:var(--ink-serif);font-size:clamp(28px,4.2vw,44px);line-height:1.08;letter-spacing:-.015em;margin:14px auto 12px;max-width:680px;font-weight:800}
+.hero h1{font-family:var(--display-serif);font-size:clamp(28px,4.2vw,44px);line-height:1.08;letter-spacing:-.015em;margin:14px auto 12px;max-width:680px;font-weight:400;--emph-weight:400;--emph-style:italic}
 .hero p.lead{font-size:17px;color:var(--muted);max-width:620px;margin:0 auto}
-.hero .sibling a{color:var(--brand);font-weight:750}
+.hero .sibling a{color:var(--brand);font-weight:400;font-style:italic}
 
 .section{padding:26px 0}
 .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:start}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:24px}
-.card h2{font-family:var(--ink-serif);margin:0 0 4px;font-size:19px;font-weight:800}
+.card h2{font-family:var(--display-serif);margin:0 0 4px;font-size:19px;font-weight:400;--emph-weight:400;--emph-style:italic}
 .field{margin-bottom:12px}
 .field input,.field select{width:100%;padding:11px 13px;border:1px solid var(--line-strong);border-radius:10px;background:var(--panel-2);color:var(--text);font:inherit}
 .field input:focus,.field select:focus{outline:none;box-shadow:var(--focus);background:var(--panel);border-color:var(--brand)}
@@ -67,16 +67,16 @@
 .tp-badge.generic{background:var(--panel-2);color:var(--muted)}
 .tp-badge-note{font-size:12.5px;color:var(--muted);margin:-4px 0 10px;line-height:1.5;max-width:52ch}
 
-.sec-h{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
+.sec-h{font-family:var(--display-serif);font-size:clamp(21px,3vw,27px);font-weight:400;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px;--emph-weight:400;--emph-style:italic}
 .sec-sub{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:640px;margin:0}
 .fact-list>div{display:grid;grid-template-columns:minmax(104px,150px) 1fr;gap:18px;align-items:baseline;padding:13px 2px;border-bottom:1px solid var(--line)}
-.fact-list dt{margin:0;font-family:var(--ink-serif);font-size:16px;font-weight:800;color:var(--brand)}
+.fact-list dt{margin:0;font-family:var(--mono);font-size:16px;font-weight:800;color:var(--brand)}
 .fact-list dd{margin:0;font-size:14px;color:var(--text);line-height:1.5}
-.faq summary{list-style:none;cursor:pointer;padding:15px 2px;font-family:var(--ink-serif);font-size:16px;font-weight:700;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq summary{list-style:none;cursor:pointer;padding:15px 2px;font-family:var(--display-serif);font-size:16px;font-weight:400;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:16px;--emph-weight:400;--emph-style:italic}
 .faq details[open] summary{color:var(--brand)}
 .faq details[open] summary::after{content:"\2212";color:var(--brand)}
 .faq details p{margin:0 2px 16px;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:640px}
-.cta h2{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);letter-spacing:-.02em;margin:0 0 10px;font-weight:800;color:var(--text)}
+.cta h2{font-family:var(--display-serif);font-size:clamp(21px,3vw,27px);letter-spacing:-.02em;margin:0 0 10px;font-weight:400;color:var(--text);--emph-weight:400;--emph-style:italic}
 .cta{border:1px solid var(--line-strong);border-radius:18px;background:var(--panel);padding:clamp(26px,5vw,40px);text-align:center;margin:8px 0 30px}
 .cta-upsell a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:18px auto 0;max-width:760px}
@@ -98,7 +98,7 @@
 
 /* Naslovi stranice (chrome) na Fraunces. NAMJERNO se NE dira pregled izjave
    (#st-sheet i .st-* ostaju u vlastitoj tipografiji jer zrcale predani dokument). */
-.hero h1,.sec-h,.cta h2,.card>h2{font-family:var(--display-serif)}
+.hero h1,.sec-h,.cta h2,.card>h2{font-family:var(--display-serif);--emph-weight:400;--emph-style:italic}
 /* Jedan suzdrzan proof akcent: crveni podvlak na naglasenoj rijeci u hero naslovu. */
 
 .lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
@@ -109,7 +109,7 @@
 .card,.cta{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--info-soft:rgba(74,108,240,.08);--pass:#1E7F4F;--ok:#1E7F4F;--ok-soft:rgba(30,127,79,.12);--warn:#8A570E;--warn-strong:#8A570E;background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
 
 /* KS unutar papira: tipografija, polja, gumbi */
-.card h2,.cta h2{font-family:var(--display-serif);font-weight:500}
+.card h2,.cta h2{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
 .card .field input,.card .field select{background:#fff;border:1px solid var(--paper-line);border-radius:0;color:var(--paper-ink)}
 .card .btn-primary:disabled{transform:none;box-shadow:3px 3px 0 var(--paper-line)}
 

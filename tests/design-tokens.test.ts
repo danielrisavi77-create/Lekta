@@ -21,6 +21,13 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import {
+  DOPUSTENA_GEORGIA, KORIJENSKI, STRANICE_PROZE, UI_SELEKTORI, dokumentStranice, georgiaUSucelju, glasZa,
+  jeDokument, jeSerif, listoviStranice, monoUSerifnomNaglasku, naglasakUSerifu, obiteljElementa, podijeliNaVrhu,
+  pravilaIz, problemiProzeStranice, specificnost, subjekt, svijet, svjetoviBezSinteze, tezinaBroj, tezineIznad400,
+  uiNaSerifu, visereceniOdlomci, type DopustenaGeorgia,
+} from './helpers/font-voices';
+import { DISK } from './helpers/module-graph';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f: string): string => readFileSync(join(root, f), 'utf8').replace(/\r/g, '');
@@ -388,379 +395,36 @@ describe('Z7: tokeni glasa i tezina na serifu', () => {
    * (`h1`, `strong`, `b`, `summary` su podebljani bez ijedne nase deklaracije) nisu modelirani.
    * Sve tri granice cine gard STROZIM ili jednako strogim, nikad blazim.
    */
-  type Pravilo = {
-    ime: string;
-    sel: string;
-    red: number;
-    spec: number;
-    obitelj: string | null;
-    tezina: string | null;
-    sinteza: boolean;
-    naglasakTezina: string | null;
-    naglasakNagib: string | null;
-  };
-
-  const SERIF_OBITELJ = /var\(\s*--(?:display-serif|font-hand)\s*[,)]|Instrument Serif/i;
-  const MONO_OBITELJ = /var\(\s*--(?:mono|ui|sans)\s*[,)]|Geist Mono/i;
-  const KORIJENSKI = ['body', 'html', ':root'];
-
-  /** Svijet kojem list pripada: `admin/` i `demo/` imaju vlastiti korijen i vlastite tokene. */
-  const svijet = (ime: string): string =>
-    ime.includes('/admin/') ? 'admin' : ime.includes('/demo/') ? 'demo' : 'proizvod';
-
-  const dijeloviSelektora = (sel: string): string[] =>
-    sel.split(/\s+|>|\+|~/).map((x) => x.trim()).filter(Boolean);
-  const bezPseudo = (x: string): string => x.replace(/:{1,2}[a-z-]+(\([^)]*\))?/g, '');
-  const jePseudoElement = (sel: string): boolean =>
-    (dijeloviSelektora(sel).slice(-1)[0] ?? '').includes('::');
-  const subjekt = (sel: string): string => bezPseudo(dijeloviSelektora(sel).slice(-1)[0] ?? '');
-  const preciSelektora = (sel: string): string[] =>
-    dijeloviSelektora(sel).slice(0, -1).map(bezPseudo).filter(Boolean);
-
-  const jePodniz = (a: string[], b: string[]): boolean => {
-    let i = 0;
-    for (const x of b) if (i < a.length && a[i] === x) i += 1;
-    return i === a.length;
-  };
-
-  /**
-   * Mogu li dva selektora pogoditi ISTI element: jednak subjekt (zadnji slozeni dio), jednaka
-   * vrsta kutije (pseudoelement je vlastita), i preci kraceg su podniz predaka duljeg.
-   */
-  const istiElement = (x: string, y: string): boolean =>
-    subjekt(x) === subjekt(y)
-    && jePseudoElement(x) === jePseudoElement(y)
-    && (jePodniz(preciSelektora(x), preciSelektora(y))
-      || jePodniz(preciSelektora(y), preciSelektora(x)));
-
-  /** Specificnost (a,b,c) spljostena u jedan broj; sluzi usporedbi, nije CSS ugovor. */
-  const specificnost = (sel: string): number =>
-    (sel.match(/#[\w-]+/g) ?? []).length * 10000
-    + (sel.match(/\.[\w-]+|\[[^\]]*\]|:(?!:)[a-z-]+/g) ?? []).length * 100
-    + (sel.match(/(^|[\s>+~])[a-z][\w-]*|::[a-z-]+/g) ?? []).length;
-
-  /**
-   * Tezina kao broj; `normal`, `inherit` i slicno daju NaN, pa ne ulaze u usporedbu s 400.
+  /*
+   * MODEL KASKADE ZIVI U `tests/helpers/font-voices.ts` (od popravka Z7(a), da mutacije u
+   * `tests/gate-mutations.test.ts` zovu istu funkciju). Povijest odluka ostaje ovdje, uz tvrdnje:
    *
-   * `var(--x, 600)` daje REZERVU (600): to je vrijednost koju element dobiva kad mu nijedan predak
-   * varijablu nije postavio. Bez ovoga bi `font-weight: var(--emph-weight, 600)` citao `var` kao
-   * rijec, davao NaN i tiho ispao iz usporedbe, pa bi globalno pravilo naglaska bilo nevidljivo
-   * bas gardu koji ga mjeri.
-   */
-  const tezinaBroj = (v: string): number => {
-    const rezerva = v.match(/^var\(\s*--[\w-]+\s*,\s*([^)]+)\)$/);
-    const x = rezerva ? rezerva[1].trim() : v;
-    return (x === 'bold' || x === 'bolder') ? 700 : (/^\d+$/.test(x) ? Number(x) : NaN);
-  };
-
-  const jaci = (a: Pravilo, b: Pravilo | null): Pravilo =>
-    !b || a.spec > b.spec || (a.spec === b.spec && a.red > b.red) ? a : b;
-
-  /** Sva pravila listova, s deklaracijom obitelji i tezine koja unutar TOG bloka pobjeduje. */
-  function pravilaIz(listovi: ReadonlyArray<{ ime: string; css: string }>): Pravilo[] {
-    const sva: Pravilo[] = [];
-    listovi.forEach(({ ime, css }, indeks) => {
-      for (const blok of bezKomentara(css).matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-        const sel = blok[1].trim().replace(/\s+/g, ' ');
-        if (sel.startsWith('@') || /^[\d.]+%?$/.test(sel) || sel === 'from' || sel === 'to') continue;
-        const tijelo = blok[2];
-        let obitelj: string | null = null;
-        let tezina: string | null = null;
-        for (const m of tijelo.matchAll(/(?:^|[;{\s])font-family\s*:\s*([^;}]+)/g)) obitelj = m[1].trim();
-        for (const m of tijelo.matchAll(/(?:^|[;{\s])font\s*:\s*([^;}]+)/g)) {
-          if (/^inherit\b/.test(m[1].trim())) continue;
-          obitelj = m[1].trim();
-          // Kratica `font:` RESETIRA tezinu: bez broja ispred velicine to je 400, ne nasljedjivanje.
-          const w = m[1].split(/var\(|['"]/)[0].match(/(?<![\w.])([1-9]\d{2}|bold|bolder)(?![\w.%])/);
-          tezina = w ? w[1] : '400';
-        }
-        // `([^;}]+)`, ne `(\w+)`: `font-weight: var(--emph-weight, 600)` inace stane na `var`.
-        for (const m of tijelo.matchAll(/(?:^|[;{\s])font-weight\s*:\s*([^;}]+)/g)) tezina = m[1].trim();
-        let naglasakTezina: string | null = null;
-        let naglasakNagib: string | null = null;
-        for (const m of tijelo.matchAll(/(?:^|[;{\s])--emph-weight\s*:\s*([^;}]+)/g)) naglasakTezina = m[1].trim();
-        for (const m of tijelo.matchAll(/(?:^|[;{\s])--emph-style\s*:\s*([^;}]+)/g)) naglasakNagib = m[1].trim();
-        const sinteza = /font-synthesis\s*:\s*none/.test(tijelo);
-        if (obitelj === null && tezina === null && !sinteza
-          && naglasakTezina === null && naglasakNagib === null) continue;
-        for (const jedan of sel.split(',').map((x) => x.trim()).filter(Boolean)) {
-          sva.push({
-            ime,
-            sel: jedan,
-            red: indeks * 1e7 + (blok.index ?? 0),
-            spec: specificnost(jedan),
-            obitelj,
-            tezina,
-            sinteza,
-            naglasakTezina,
-            naglasakNagib,
-          });
-        }
-      }
-    });
-    return sva;
-  }
-
-  /**
-   * Blizina naslijedjenog glasa: `body` je BLIZI predak svemu na stranici nego `html` i `:root`,
-   * koji su uz to isti element. Vrijednost sluzi samo usporedbi, nije CSS ugovor.
-   */
-  const BLIZINA = (sel: string): number => (sel === 'body' ? 2 : 1);
-
-  /** Je li razrijeseni glas display serif (mono u istom popisu ga pretekne). */
-  const jeSerif = (glas: string | null): boolean =>
-    glas !== null && SERIF_OBITELJ.test(glas) && !MONO_OBITELJ.test(glas);
-
-  /**
-   * PRIMJENJUJE LI SE pravilo `r` na SVAKI element koji pogadja `sel`. Smjer je ovdje bitan i
-   * razlikuje ovu funkciju od `istiElement`: `.outlook__ceiling strong` i goli `strong` pogadjaju
-   * isti element (onaj unutar tog kontejnera), ali NE pogadjaju istu populaciju. Kad se pita
-   * "koje pismo ima `strong`", odgovor smije doci samo od pravila koje vrijedi za svaki `strong`.
-   */
-  const vrijediZaSve = (r: string, sel: string): boolean =>
-    subjekt(r) === subjekt(sel)
-    && jePseudoElement(r) === jePseudoElement(sel)
-    && jePodniz(preciSelektora(r), preciSelektora(sel));
-
-  /** Vrijednost jedne naslijedjene osi (obitelj, `--emph-*`) kako je kaskada daje elementu. */
-  function naslijedjeno(
-    sva: Pravilo[],
-    sel: string,
-    ime: string,
-    uzmi: (p: Pravilo) => string | null,
-    /** Kad vise ljusaka istog svijeta nudi korijen, koja se vrijednost uzima kao mjerodavna. */
-    prednost: ((v: string) => boolean) | null,
-    /** `true`: gledaju se samo pravila koja vrijede za SVAKI element sel-a (genericki slucaj). */
-    strogo: boolean,
-  ): { v: string | null; odakle: string } {
-    // SVIJET JE GRANICA I OVDJE, ne samo na korijenu: `admin/` i `demo/` imaju vlastite listove
-    // koji se s proizvodom nikad ne ucitavaju zajedno, pa `.finding-card-body strong` iz `demo.css`
-    // ne smije odlucivati o pismu `strong`-a na `/rad/`.
-    const istiSvijet = sva.filter((q) => svijet(q.ime) === svijet(ime));
-    let pobjednik: Pravilo | null = null;
-    for (const q of istiSvijet) {
-      if (uzmi(q) === null) continue;
-      if (strogo ? !vrijediZaSve(q.sel, sel) : !istiElement(q.sel, sel)) continue;
-      pobjednik = jaci(q, pobjednik);
-    }
-    if (pobjednik) return { v: uzmi(pobjednik), odakle: pobjednik.sel };
-    const preci = preciSelektora(sel);
-    let najblizi: Pravilo | null = null;
-    for (const q of istiSvijet) {
-      if (uzmi(q) === null || !preci.includes(subjekt(q.sel))) continue;
-      najblizi = jaci(q, najblizi);
-    }
-    if (najblizi) return { v: uzmi(najblizi), odakle: 'predak ' + najblizi.sel };
-    const korijeni = sva.filter(
-      (q) => uzmi(q) !== null && KORIJENSKI.includes(q.sel) && svijet(q.ime) === svijet(ime),
-    );
-    if (korijeni.length === 0) return { v: null, odakle: '' };
-    const najblize = Math.max(...korijeni.map((q) => BLIZINA(q.sel)));
-    const skupina = korijeni.filter((q) => BLIZINA(q.sel) === najblize);
-    // UNUTAR NAJBLIZE SKUPINE GARD JE STROG, i to je namjerno. Vise listova istog svijeta ima
-    // vlastiti `body` (`page-chrome.css` je ljuska aplikacije, `tool-page.css` ljuska alata), a
-    // one se na stranici NIKAD ne ucitavaju zajedno. Poredati ih u jednu kaskadu i uzeti zadnju
-    // znaci da abecedno zadnji list moze presutjeti serif u prvom: izmjereno 2026-09-20, serif
-    // vracen u `page-chrome.css` nije dao nijedan nalaz jer `tool-page.css` dolazi poslije njega
-    // i nosi mono. Zato: ako IJEDNA ljuska tog svijeta nudi vrijednost koja je nalaz, ona vrijedi.
-    const istaknuti = prednost ? skupina.filter((q) => prednost(uzmi(q) as string)) : [];
-    let korijen: Pravilo | null = null;
-    for (const q of istaknuti.length > 0 ? istaknuti : skupina) korijen = jaci(q, korijen);
-    return korijen
-      ? { v: uzmi(korijen), odakle: 'korijen ' + korijen.sel }
-      : { v: null, odakle: '' };
-  }
-
-  /**
-   * Glas koji kaskada daje elementu, istim redom kojim ga nalazi preglednik: vlastita
-   * deklaracija, pa najjaci PREDAK koji obitelj deklarira, pa korijen tog svijeta.
+   * KORIJEN SE BIRA PO BLIZINI, NE PO SPECIFICNOSTI. Naslijedjena vrijednost dolazi od NAJBLIZEG
+   * pretka koji ju ima, a specificnost usporedjuje samo pravila koja pogadjaju ISTI element.
+   * `:root` i `body` su razliciti elementi, pa medju njima odlucuje blizina. Dok je
+   * `route-shell.css` na `:root` nosio mrtvo `font-family: var(--sans)`, gard je po specificnosti
+   * (`:root` = 100, `body` = 1) citao mono, a preglednik je crtao serif s `body`. Jedna deklaracija
+   * koja na stranici nije mijenjala nista drzala je gard slijepim za 131 stvaran nalaz (izmjereno
+   * 2026-09-20 na `187e327f`, prije popravka).
    *
-   * KORIJEN SE BIRA PO BLIZINI, NE PO SPECIFICNOSTI. Razlika nije teorijska: naslijedjena
-   * vrijednost dolazi od NAJBLIZEG pretka koji ju ima, a specificnost usporedjuje samo pravila
-   * koja pogadjaju ISTI element. `:root` i `body` su razliciti elementi, pa medju njima odlucuje
-   * blizina. Dok je `route-shell.css` na `:root` nosio mrtvo `font-family: var(--sans)`, ovaj je
-   * gard po specificnosti (`:root` = 100, `body` = 1) citao mono, a preglednik je crtao serif s
-   * `body`. Jedna deklaracija koja na stranici nije mijenjala nista drzala je gard slijepim za
-   * 131 stvaran nalaz (izmjereno 2026-09-20 na `187e327f`, prije popravka; vidi tvrdnju nize).
+   * DVIJE POPULACIJE (nalaz drugog kruga 2026-09-20). Selektor `strong` ne opisuje jedan element
+   * nego SVE takve. Presjek (`istiElement`) je za goli `strong` vracao mono iz
+   * `.outlook__ceiling strong` i time presutio svaki `strong` izvan tog kontejnera. Strogi prolaz
+   * gleda samo pravila koja vrijede za SVAKI takav element. Nalaz je serif ako je serif u bilo kojem.
    *
-   * RACUNAJU SE DVIJE POPULACIJE, i to je popravak nalaza iz drugog kruga (2026-09-20). Selektor
-   * `strong` ne opisuje jedan element nego SVE takve elemente. Presjek (`istiElement`) odgovara na
-   * pitanje "koje pismo ima `strong` UNUTAR najspecificnijeg pravila koje ga takodjer pogadja", pa
-   * je za goli `strong` vracao mono iz `.outlook__ceiling strong` i time presutio svaki `strong`
-   * izvan tog kontejnera. Strogi prolaz gleda samo pravila koja vrijede za SVAKI takav element i
-   * inace pada na nasljedjivanje. Nalaz je serif ako je serif U BILO KOJEM od dva prolaza.
+   * NAGLASAK U SERIFU mjeri ono sto `tezineIznad400` po konstrukciji ne moze: element koji tezinu
+   * dobiva od golog `strong` (a vlastito pravilo nema). Tocno taj oblik je 2026-09-20 prosao kroz
+   * prvi krug: `.pcard-path` je serif, `src/ui/app.ts` u njega renderira `<strong>`, pa je vrijedilo
+   * globalnih 600 na pismu koje rez 600 nema. Obitelj potomka se RAZRJESAVA, ne pretpostavlja:
+   * `.result-readiness strong` ima vlastito mono pravilo, pa njegovih 800 nije nalaz (prvi prolaz
+   * je to pretpostavljao i dao cetiri lazna nalaza).
+   *
+   * MONO U SERIFNOM NAGLASKU mjeri razrijesenu obitelj elementa, ne obitelj pravila: isti element
+   * zna imati mono pravilo u jednom listu i serifno u drugom (`.trust-row span`, `.local-badge`).
+   *
+   * UI_SELEKTORI su FIXTURE, ne izvod (selektori koje je krug 2026-09-20 nasao na serifu), pa uz
+   * tvrdnju o glasu ide i tvrdnja da svaki od njih POSTOJI u listovima.
    */
-  function glasZa(sva: Pravilo[], sel: string, ime: string): { glas: string | null; odakle: string } {
-    const uzmi = (p: Pravilo): string | null => p.obitelj;
-    const presjek = naslijedjeno(sva, sel, ime, uzmi, jeSerif, false);
-    const strogo = naslijedjeno(sva, sel, ime, uzmi, jeSerif, true);
-    const izabran = jeSerif(strogo.v) ? strogo : presjek;
-    return { glas: izabran.v, odakle: izabran.odakle };
-  }
-
-  /** Elementi kojima kaskada daje display serif I tezinu iznad 400. */
-  function tezineIznad400(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
-    const sva = pravilaIz(listovi);
-    const nalazi: string[] = [];
-    const vidjeno = new Set<string>();
-    for (const p of sva) {
-      if (p.tezina === null || !(tezinaBroj(p.tezina) > 400)) continue;
-      const kljuc = p.ime + '::' + p.sel;
-      if (vidjeno.has(kljuc)) continue;
-      vidjeno.add(kljuc);
-      let pobTezina: Pravilo | null = null;
-      for (const q of sva) {
-        if (svijet(q.ime) !== svijet(p.ime) || !istiElement(q.sel, p.sel)) continue;
-        if (q.tezina !== null) pobTezina = jaci(q, pobTezina);
-      }
-      // Kasnije ili specificnije pravilo koje tezinu vraca na 400 gasi nalaz.
-      if (!pobTezina || !(tezinaBroj(pobTezina.tezina ?? '') > 400)) continue;
-      const { glas, odakle } = glasZa(sva, p.sel, p.ime);
-      if (!jeSerif(glas)) continue;
-      nalazi.push(`${p.ime}: ${p.sel} -> ${pobTezina.tezina} (serif iz ${odakle})`);
-    }
-    return nalazi;
-  }
-
-  /** Par naglaska (`--emph-weight`, `--emph-style`) kako ga kaskada daje elementu. */
-  function naglasakZa(sva: Pravilo[], sel: string, ime: string): { tezina: string; nagib: string } {
-    const w = naslijedjeno(sva, sel, ime, (p) => p.naglasakTezina, null, false).v;
-    const st = naslijedjeno(sva, sel, ime, (p) => p.naglasakNagib, null, false).v;
-    // Rezerva je ono sto globalno pravilo upisuje kad par nitko nije postavio: mono naglasak.
-    return { tezina: w ?? '600', nagib: st ?? 'normal' };
-  }
-
-  /**
-   * NAGLASAK UNUTAR SERIFNOG KONTEJNERA, ZA POTOMKA KOJI VLASTITO PRAVILO NEMA.
-   *
-   * Ovo mjeri ono sto `tezineIznad400` po konstrukciji ne moze: ta funkcija obilazi POSTOJECA
-   * pravila, pa element koji tezinu dobiva od golog `strong` ili `b` (a vlastito pravilo nema) u
-   * nju nikad ne udje. Tocno taj oblik je 2026-09-20 prosao kroz prvi krug Z7 popravka:
-   * `.pcard-path` je serif, `src/ui/app.ts` u njega renderira `<strong>`, pravila
-   * `.pcard-path strong` nema, pa je vrijedilo globalnih 600 na pismu koje rez 600 nema.
-   *
-   * Zato se za SVAKO pravilo sa serifnom obitelji SINTETIZIRA potomak (`X strong`, `X b`) i kroz
-   * istu kaskadu razrjesavaju i njegova OBITELJ i njegov naglasak. Obitelj se mora razrijesiti, ne
-   * pretpostaviti: `.result-readiness` je serif, ali `.result-readiness strong` ima vlastito mono
-   * pravilo, pa njegovih 800 nije nalaz nego ispravan mono rez. Prvi prolaz ovog garda je to
-   * pretpostavljao i dao cetiri lazna nalaza.
-   *
-   * GRANICA JE IMENOVANA: kad tezinu NE deklarira nijedno pravilo, vrijedi tvornickih 700, sto
-   * ovaj model ne racuna (kao ni ostatak garda). Zato uz njega ide tvrdnja da globalno pravilo
-   * `strong, b` postoji i da cita oba dijela para; bez njega bi ova funkcija vratila prazno jer
-   * mjerila ne bi imala sto mjeriti.
-   */
-  function naglasakUSerifu(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
-    const sva = pravilaIz(listovi);
-    const nalazi: string[] = [];
-    for (const p of sva) {
-      if (!jeSerif(p.obitelj)) continue;
-      for (const potomak of ['strong', 'b']) {
-        const sel = p.sel + ' ' + potomak;
-        let pobTezina: Pravilo | null = null;
-        for (const q of sva) {
-          if (svijet(q.ime) !== svijet(p.ime) || !istiElement(q.sel, sel)) continue;
-          if (q.tezina !== null) pobTezina = jaci(q, pobTezina);
-        }
-        if (pobTezina === null) continue; // tvornicka tezina: imenovana granica, ne mjeri se
-        if (!jeSerif(glasZa(sva, sel, p.ime).glas)) continue;
-        const par = naglasakZa(sva, sel, p.ime);
-        const cita = /^var\(\s*--emph-weight\s*[,)]/.test(pobTezina.tezina ?? '');
-        const tezina = cita ? par.tezina : (pobTezina.tezina ?? '');
-        if (tezinaBroj(tezina) > 400) {
-          nalazi.push(`${p.ime}: ${sel} -> ${tezina} (serif iz ${p.sel})`);
-          continue;
-        }
-        // Rez 400 bez kurziva u serifu znaci da naglasak NE POSTOJI: ni deblje ni nagnuto.
-        if (cita && par.nagib !== 'italic') {
-          nalazi.push(`${p.ime}: ${sel} -> bez kurziva (serif iz ${p.sel})`);
-        }
-      }
-    }
-    return [...new Set(nalazi)];
-  }
-
-  /**
-   * OBRNUT SMJER: mono kontejner UNUTAR serifnog naslijedio bi serifni par, pa bi njegov `strong`
-   * dobio kurziv u pismu koje kurziv nema (Geist Mono se ucitava samo uspravno). Par se
-   * nasljedjuje, dakle mora se i vracati ondje gdje se glas vraca na mono.
-   *
-   * MJERI SE RAZRIJESENA OBITELJ ELEMENTA, ne obitelj pojedinog pravila. Isti element zna imati
-   * mono pravilo u jednom listu i serifno u drugom (`.trust-row span`, `.local-badge`): ondje
-   * pobjedjuje serif i par je ISPRAVNO kurzivan, pa to nije nalaz nego uredno stanje.
-   */
-  function monoUSerifnomNaglasku(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
-    const sva = pravilaIz(listovi);
-    const nalazi: string[] = [];
-    for (const p of sva) {
-      if (p.obitelj === null || jeSerif(p.obitelj) || !MONO_OBITELJ.test(p.obitelj)) continue;
-      if (jeSerif(glasZa(sva, p.sel, p.ime).glas)) continue;
-      const par = naglasakZa(sva, p.sel, p.ime);
-      if (par.nagib === 'italic' || tezinaBroj(par.tezina) < 500) {
-        nalazi.push(`${p.ime}: ${p.sel} -> naglasak ${par.tezina}/${par.nagib} (mono u serifu)`);
-      }
-    }
-    return [...new Set(nalazi)];
-  }
-
-  /**
-   * GLAS SUCELJA NIJE STVAR PROZE. Ovaj gard mjeri drugo od gornjeg: gornji pita nosi li serif
-   * rez koji nema, ovaj pita je li serif uopce zavrsio ondje gdje mu nije mjesto. Razlika je
-   * stvarna: element bez ijedne deklaracije tezine (cip, gumb, oznaka) gornjem je gardu nevidljiv,
-   * a svejedno moze biti u krivom pismu.
-   *
-   * Popis je FIXTURE, ne izvod: imenovani su selektori koje je krug 2026-09-20 nasao na serifu
-   * (navigacija, gumbi, cipovi, statusi). Uz tvrdnju o glasu ide i tvrdnja da svaki od njih
-   * POSTOJI u listovima, pa se popis ne moze tiho isprazniti i ostati vakuumski zelen.
-   */
-  const UI_SELEKTORI: ReadonlyArray<readonly [string, string]> = [
-    // Traka i podnozje su od Z15 jedan sustav (`site-chrome.css`); `route-shell.css` i stara
-    // navigacija iz `page-chrome.css` su uklonjeni, pa su njihovi selektori zamijenjeni zivima.
-    ['src/shared/site-chrome.css', '.site-chrome__dest'],
-    ['src/shared/site-chrome.css', '.site-chrome__steps'],
-    ['src/shared/site-chrome.css', '.site-chrome__stamp'],
-    ['src/shared/site-chrome.css', '.site-chrome .lampa-btn'],
-    ['src/shared/site-chrome.css', '.site-chrome__sheet-eyebrow'],
-    ['src/shared/site-chrome.css', '.site-footer__pravno a'],
-    ['src/shared/page-app.css', '.status'],
-    ['src/shared/page-app.css', '.catalog-chip'],
-    ['src/shared/page-app.css', '.phase-tag'],
-    ['src/shared/page-app.css', '.detect-badge'],
-    ['src/shared/page-app.css', '.provider-pill'],
-    ['src/shared/page-app.css', '.legal-engine-badge'],
-    ['src/shared/page-app.css', '.profile-status'],
-    ['src/shared/page-app.css', '.authority-status'],
-    ['src/shared/page-app.css', '.issue-icon'],
-    ['src/shared/page-app.css', '.field label'],
-    ['src/shared/page-app.css', '.privacy-pill'],
-    ['src/shared/page-app.css', 'details.more>summary'],
-  ];
-
-  /** Selektori sucelja kojima kaskada daje display serif. `popis` prosljedjuju samo testovi. */
-  function uiNaSerifu(
-    listovi: ReadonlyArray<{ ime: string; css: string }>,
-    popis: ReadonlyArray<readonly [string, string]> = UI_SELEKTORI,
-  ): string[] {
-    const sva = pravilaIz(listovi);
-    const nalazi: string[] = [];
-    for (const [ime, sel] of popis) {
-      const { glas, odakle } = glasZa(sva, sel, ime);
-      if (jeSerif(glas)) nalazi.push(`${ime}: ${sel} (serif iz ${odakle})`);
-    }
-    return nalazi;
-  }
-
-  /** Svjetovi koji korijenu daju obitelj, a nigdje ne gase sintezu reza. */
-  function svjetoviBezSinteze(listovi: ReadonlyArray<{ ime: string; css: string }>): string[] {
-    const sObitelji = new Set<string>();
-    const sGasilom = new Set<string>();
-    for (const p of pravilaIz(listovi)) {
-      if (!KORIJENSKI.includes(p.sel)) continue;
-      if (p.obitelj !== null) sObitelji.add(svijet(p.ime));
-      if (p.sinteza) sGasilom.add(svijet(p.ime));
-    }
-    return [...sObitelji].filter((s) => !sGasilom.has(s)).sort();
-  }
 
   it('nijedan element u src/ ne dobiva tezinu iznad 400 na display serifu', () => {
     // POVIJESNA BILJESKA (nije tvrdnja ovog testa, mjeri se dolje nad zivim stablom):
@@ -1010,5 +674,137 @@ describe('Z7: tokeni glasa i tezina na serifu', () => {
     const korijen = bezKomentara(DIZAJN).match(/:root\s*\{([\s\S]*?)\n\}/);
     expect(korijen, 'blok :root nije pronadjen, dakle citanje mjeri krivo').not.toBeNull();
     expect(bezRazmaka(korijen ? korijen[1] : '')).toContain('font-synthesis:none');
+  });
+});
+
+/**
+ * Z7(a) POPRAVAK NALAZA PREGLEDA: proza govori serifom, Georgia samo za tudji rad.
+ *
+ * Tri tvrdnje nad STVARNIM stranicama, svaka s mutacijom ovdje i u `tests/gate-mutations.test.ts`:
+ *   1. Svaki visereceni `p`, `dd` i `blockquote` na javnim stranicama dobiva serif. Mjeri se
+ *      kaskada razlozena nad DOM-om stranice (`obiteljElementa`), ne selektor: odgovor u FAQ-u
+ *      alata nije imao nijedno pravilo s obitelji i naslijedio je mono s `body`.
+ *   2. Nijedno pravilo izvan tudjeg rada ne crta Georgiju (`DOPUSTENA_GEORGIA`).
+ *   3. Nijedan element stranice ne trazi tezinu iznad 400 na display serifu. Gard nad `src/`
+ *      (gore) ne vidi inline `<style>` stranica, a upravo ondje je stajalo `.faq summary` s 700.
+ */
+describe('Z7(a) popravak: proza i glas tudjeg rada', () => {
+  const stranica = (rel: string): { html: string; listovi: Array<{ ime: string; css: string }> } =>
+    listoviStranice(root, rel, DISK);
+
+  it('citac selektora: zarez na vrhu, uravnotezene zagrade, specificnost :where i :not', () => {
+    expect(podijeliNaVrhu('p:where(:not([class])),dd:where(:not([class]))')).toEqual(['p:where(:not([class]))', 'dd:where(:not([class]))']);
+    expect(podijeliNaVrhu(':where(p, dd) .x, .y')).toEqual([':where(p, dd) .x', '.y']);
+    expect(subjekt('p:where(:not([class]))')).toBe('p');
+    expect(subjekt('.faq details[open] p:not(.x)')).toBe('p');
+    // `:where()` ne nosi nista, `:not(x)` nosi x; element ostaje element.
+    expect(specificnost('p:where(:not([class]))')).toBe(specificnost('p'));
+    expect(specificnost('.a:not([hidden])')).toBe(specificnost('.a.b'));
+    expect(specificnost('p:not(div)')).toBe(specificnost('p div'));
+    expect(specificnost('#faq .faq p')).toBeGreaterThan(specificnost('.faq details p'));
+  });
+
+  it('popis stranica pokriva svaku javnu korijensku stranicu', () => {
+    const izuzete = ['admin.html', 'demo.html', 'verification.html'];
+    const korijenske = readdirSync(root).filter((x) => x.endsWith('.html') && !izuzete.includes(x)).sort();
+    expect(korijenske.length, 'nula stranica znaci da obilazak ne radi').toBeGreaterThan(8);
+    expect(korijenske.filter((x) => !(STRANICE_PROZE as readonly string[]).includes(x))).toEqual([]);
+  });
+
+  it('svaki visereceni odlomak na svakoj stranici govori serifom', () => {
+    let ukupno = 0;
+    for (const rel of STRANICE_PROZE) {
+      const { html, listovi } = stranica(rel);
+      const { odlomaka, uFaqu, problemi } = problemiProzeStranice(html, listovi);
+      ukupno += odlomaka;
+      // SENTINELI po stranici: /saznaj-vise/ je mjesto nalaza, a FAQ alata je druga polovica naloga.
+      if (rel === 'saznaj-vise/index.html') expect(odlomaka, rel).toBeGreaterThan(10);
+      if (['citat.html', 'izjava.html', 'kartice.html', 'literatura.html', 'naslovnica.html'].includes(rel)) {
+        expect(uFaqu, `${rel}: nula odlomaka u FAQ-u znaci da citac ne vidi odgovore`).toBeGreaterThan(2);
+      }
+      expect(problemi, `${rel}: mono nikad za recenicu duzu od jednog retka (design/README.md)`).toEqual([]);
+    }
+    // SENTINEL populacije: prazan skup odlomaka ne bi bio cist nalaz nego slijep citac.
+    expect(ukupno).toBeGreaterThan(80);
+  });
+
+  it('IZRAVAN SIGNAL: golo pravilo u design-system.css stvarno odlucuje o odgovoru u listi cinjenica', () => {
+    // Nizvodno poboljsanje nije dokaz uzroka (CLAUDE.md): tvrdi se da je pobjednik kaskade za
+    // `dd` na kartice.html BAS novo pravilo, a ne neko slucajno pravilo koje je vec postojalo.
+    const { html, listovi } = stranica('kartice.html');
+    const doc = dokumentStranice(html);
+    const dd = visereceniOdlomci(doc).find((el) => el.tagName === 'DD');
+    expect(dd, 'kartice.html nema visereceni dd').toBeTruthy();
+    const { obitelj, odakle } = obiteljElementa(dd as NonNullable<typeof dd>, pravilaIz(listovi));
+    expect(odakle).toBe('src/shared/design-system.css: dd:where(:not([class]))');
+    expect(jeSerif(obitelj)).toBe(true);
+  });
+
+  it('MUTACIJA: odlomak bez pravila nasljedjuje mono i pada; pravilo s klasom nadjacava golo', () => {
+    const TIJELO = 'body{font:15px var(--ui)}';
+    const PRAVILO = 'p:where(:not([class])),dd:where(:not([class])){font-family:var(--display-serif)}';
+    const html = '<body><div class="faq"><details><summary>P</summary><p>Prva recenica. Druga recenica.</p></details></div>'
+      + '<p class="meta">Oznaka. Druga oznaka.</p></body>';
+    const mjeri = (css: string): string[] => problemiProzeStranice(html, [{ ime: 'x.css', css }]).problemi;
+    // BASELINE: golo pravilo daje serif odgovoru, a klasa `.meta` sama dodjeljuje serif.
+    expect(mjeri(TIJELO + PRAVILO + '.meta{font-family:var(--display-serif)}'), 'baseline').toEqual([]);
+    // MUTACIJA 1: bez golog pravila odgovor u FAQ-u nasljedjuje mono s body (tocan nalaz pregleda).
+    expect(mjeri(TIJELO + '.meta{font-family:var(--display-serif)}')).toHaveLength(1);
+    // MUTACIJA 2: pravilo s pretkom vraca mono i nadjacava golo pravilo (specificnost, ne redoslijed).
+    expect(mjeri(PRAVILO + TIJELO + '.meta{font-family:var(--display-serif)}.faq details p{font-family:var(--mono)}'))
+      .toHaveLength(1);
+    // KONTROLA: golo pravilo NE dira element s klasom, pa `.meta` bez vlastitog pravila ostaje mono.
+    expect(mjeri(TIJELO + PRAVILO)).toEqual([expect.stringContaining('p.meta')]);
+    // KONTROLA: jednorecenicni odlomak nije proza u smislu naloga i ne mjeri se.
+    expect(problemiProzeStranice('<body><p>Kopirano.</p></body>', [{ ime: 'x.css', css: TIJELO }]).odlomaka).toBe(0);
+  });
+
+  it('nijedno pravilo izvan tudjeg rada ne crta Georgiju', () => {
+    const listovi = [...listoviSrc()];
+    for (const rel of STRANICE_PROZE) {
+      for (const m of read(rel).matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) listovi.push({ ime: rel, css: m[1] });
+    }
+    // SENTINEL: citac mora vidjeti Georgiju, inace je "nijedno pravilo" vakuumski zeleno.
+    expect(pravilaIz(listovi).filter((p) => jeDokument(p.obitelj)).length).toBeGreaterThanOrEqual(DOPUSTENA_GEORGIA.length);
+    expect(georgiaUSucelju(listovi, DOPUSTENA_GEORGIA), 'Georgia glumi tudji rad; u sucelju govori Instrument Serif')
+      .toEqual([]);
+  });
+
+  it('MUTACIJA: Georgia u pitanju FAQ-a pada, a nestao dopusteni selektor takodjer', () => {
+    const DOP: ReadonlyArray<DopustenaGeorgia> = [['x.css', '#tp-sheet', 'faksimil']];
+    const FAKS = '#tp-sheet{font-family:var(--ink-serif)}';
+    // BASELINE: faksimil smije, FAQ je na serifu proizvoda.
+    expect(georgiaUSucelju([{ ime: 'x.css', css: FAKS + '.faq summary{font-family:var(--display-serif)}' }], DOP), 'baseline')
+      .toEqual([]);
+    // MUTACIJA 1: tocan nalaz pregleda, `.faq summary` na --ink-serif.
+    expect(georgiaUSucelju([{ ime: 'x.css', css: FAKS + '.faq summary{font-family:var(--ink-serif);font-weight:700}' }], DOP))
+      .toEqual(['x.css: .faq summary -> var(--ink-serif)']);
+    // MUTACIJA 2: kroz drugi token i kroz doslovno ime u kratici.
+    expect(georgiaUSucelju([{ ime: 'x.css', css: FAKS + '.a{font-family:var(--font-doc)}.b{font:15px/1.7 Georgia,serif}' }], DOP))
+      .toHaveLength(2);
+    // MUTACIJA 3: dopusteni selektor je nestao (preimenovan), pa popis vise nista ne mjeri.
+    expect(georgiaUSucelju([{ ime: 'x.css', css: '.tp-sheet{font-family:var(--ink-serif)}' }], DOP))
+      .toEqual(['x.css: .tp-sheet -> var(--ink-serif)', 'x.css: #tp-sheet je dopusten, a ne postoji ili ne nosi Georgiju']);
+    // KONTROLA: Georgia kao REZERVA u repu serifnog tokena nije Georgia u sucelju.
+    expect(georgiaUSucelju([{ ime: 'x.css', css: FAKS + '.c{font-family:"Instrument Serif",Georgia,serif}' }], DOP)).toEqual([]);
+  });
+
+  it('nijedan element nijedne stranice ne trazi tezinu iznad 400 na display serifu', () => {
+    let inline = 0;
+    for (const rel of STRANICE_PROZE) {
+      const { listovi } = stranica(rel);
+      inline += listovi.filter((l) => l.ime === rel).length;
+      expect(tezineIznad400(listovi), rel).toEqual([]);
+    }
+    // SENTINEL: bez inline blokova ovaj gard mjeri isto sto i gard nad src/ i nista vise.
+    expect(inline).toBeGreaterThan(8);
+  });
+
+  it('MUTACIJA: inline pravilo stranice s tezinom 700 na serifu pada', () => {
+    const baza = [{ ime: 'src/shared/tool-page.css', css: 'body{font:15px var(--ui)}' }];
+    expect(tezineIznad400([{ ime: 'x.html', css: '.faq summary{font-family:var(--display-serif);font-weight:400}' }, ...baza]), 'baseline')
+      .toEqual([]);
+    expect(tezineIznad400([{ ime: 'x.html', css: '.faq summary{font-family:var(--display-serif);font-weight:700}' }, ...baza]))
+      .toHaveLength(1);
   });
 });

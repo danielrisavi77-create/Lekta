@@ -60,7 +60,6 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--ui);min
 a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px;box-shadow:var(--focus);border-radius:6px}
 @media (forced-colors:active){:focus-visible{outline:2px solid CanvasText}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.serif{font-family:var(--ink-serif)}
 /* TRAKA I PODNOZJE SU OD Z15 JEDAN SUSTAV: `src/shared/site-chrome.css` + `site-chrome.ts`.
    Ovdje su UKLONJENA pravila koja vise nijedna stranica ne nosi: `.topbar`, `.nav`,
    `.nav-links*`, `.nav-tools*`, `.mobile-menu`, `.mobile-nav*`, `.footer-inner*` i njihov
@@ -85,6 +84,12 @@ a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px
 .eyebrow::before,.eyebrow::after{content:"";width:24px;height:1px;background:var(--line-strong)}
 .hero .sibling{margin:14px 0 0;font-size:13px;color:var(--muted)}
 .card .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+/* PROZA S KLASOM GOVORI SERIFOM (Z7(a) popravak). Goli `p`, `dd` i `blockquote` dobivaju serif
+   pravilom u `design-system.css`; ovi odlomci imaju klasu, pa glas nose u vlastitom pravilu. Sva tri
+   su recenice (uputa ispod naslova kartice, podnaslov sekcije, poveznica na srodni alat), ne oznake.
+   `.sec-sub` stoji ovdje jer ga svih pet alata definira jednako, a ovaj list dolazi POSLIJE
+   inline bloka stranice. Gard: `tests/design-tokens.test.ts` (proza na stranicama). */
+.hero .sibling,.card .sub,.sec-sub{font-family:var(--display-serif);--emph-weight:400;--emph-style:italic}
 .cta p{color:var(--muted);margin:0 auto 18px;max-width:560px}
 .cta-upsell{margin:16px auto 0;font-size:13px;color:var(--muted)}
 .field label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
