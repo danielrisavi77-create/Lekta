@@ -18,6 +18,26 @@ import { defineConfig, devices } from '@playwright/test';
 const UX_PORT = process.env.LEKTA_UX_PORT ?? '4173';
 const UX_ORIGIN = `http://127.0.0.1:${UX_PORT}`;
 
+/**
+ * VLASNIK 2026-09-26 (optimizacijski popis, stavka 4): posluzitelj koji Playwright sam podigne
+ * treba se ugasiti kad run zavrsi. Prijasnje zadano ponasanje, `reuseExistingServer: !CI`, znaci
+ * da lokalni run UVIJEK prvo pokusa nastaviti na vec pokrenutom posluzitelju na tom portu; ako ga
+ * nema, Playwright ga sam podigne, ali s `reuseExistingServer: true` ga NE gasi na kraju (namjerno
+ * Playwright ponasanje, jer ne moze znati je li server tudji ili vlastiti). Rezultat je test-server
+ * koji preživi run i ostane zauzimati port/RAM za sljedecu sesiju.
+ *
+ * `LEKTA_UX_PORT` (iznad) vec daje svakoj sesiji vlastiti port, pa razlog za reuse (izbjeci sudar
+ * dvije sesije na fiksnom portu 4173) vise ne vrijedi kao razlog za zadano ponasanje. Zadano je
+ * sada `false`: svaki lokalni run podize vlastiti posluzitelj i Playwright ga gasi na kraju (to je
+ * njegovo ugradjeno ponasanje kad `reuseExistingServer` nije `true`). Tko svejedno zeli nastaviti
+ * na rucno pokrenutom `npm run dev` radi bržeg ponavljanja testova, postavlja
+ * `LEKTA_UX_REUSE_SERVER=1` eksplicitno.
+ *
+ * CI OSTAJE NEPROMIJENJEN: `!process.env.CI` je na CI-ju uvijek bio `false` (CI nikad nije reusao),
+ * pa CI ponasanje ova izmjena ne dira.
+ */
+const UX_REUSE_SERVER = process.env.CI ? false : process.env.LEKTA_UX_REUSE_SERVER === '1';
+
 export default defineConfig({
   testDir: './tests/ux',
   timeout: 120_000,
@@ -150,7 +170,7 @@ export default defineConfig({
   webServer: {
     command: `npm run dev -- --host 127.0.0.1 --port ${UX_PORT}`,
     url: UX_ORIGIN,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: UX_REUSE_SERVER,
     timeout: 300_000,
   },
 });
