@@ -11,7 +11,8 @@ from scripts.autonomy.gate import (
     verify_candidate,
 )
 
-REQUIRED = ["check", "conformance", "slow", "ux", "strict-open", "word", "word-worst"]
+# Isti popis kao `requiredTierIds()` iz scripts/release-tiers.mjs (T62: word-corpus i word-toc obavezni).
+REQUIRED = ["check", "conformance", "slow", "ux", "strict-open", "word", "word-worst", "word-corpus", "word-toc"]
 BASE = "a" * 40
 CAND = "b" * 40
 KEY = b"trusted-verifier-key"

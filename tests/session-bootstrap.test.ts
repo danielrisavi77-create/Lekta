@@ -6,7 +6,7 @@
  * na okolinu u kojoj se vrti.
  */
 import { describe, expect, it } from 'vitest';
-import { formatBootstrap } from '../scripts/agents/session-bootstrap.mjs';
+import { countTestProcesses, formatBootstrap } from '../scripts/agents/session-bootstrap.mjs';
 
 function baseInputs() {
   return {
@@ -75,5 +75,78 @@ describe('formatBootstrap: cista funkcija, bez modela', () => {
   it('bez ready zadataka bez ownera javlja "nema", ne prazan redak', () => {
     const lines = formatBootstrap(baseInputs());
     expect(lines.some((line) => /zadaci ready bez ownera: nema/.test(line))).toBe(true);
+  });
+
+  it('testProcessCount null: "nije izmjereno", ne lazna nula', () => {
+    const lines = formatBootstrap({ ...baseInputs(), testProcessCount: null });
+    expect(lines.some((line) => /testni procesi: nije izmjereno/.test(line))).toBe(true);
+    expect(lines.some((line) => /testni procesi.*: 0/.test(line))).toBe(false);
+  });
+
+  it('testProcessCount 0: doslovna nula, razlicito od "nije izmjereno"', () => {
+    const lines = formatBootstrap({ ...baseInputs(), testProcessCount: 0 });
+    expect(lines.some((line) => /testni procesi \(vitest\/playwright\): 0/.test(line))).toBe(true);
+    expect(lines.some((line) => /nije izmjereno/.test(line))).toBe(false);
+  });
+
+  it('testProcessCount broj: ispisuje tocan broj', () => {
+    const lines = formatBootstrap({ ...baseInputs(), testProcessCount: 3 });
+    expect(lines.some((line) => /testni procesi \(vitest\/playwright\): 3/.test(line))).toBe(true);
+  });
+
+  it('freeDiskGb null uz poznat freeMemGb: izostavlja samo disk polovicu, ne pada na "nepoznato"', () => {
+    const lines = formatBootstrap({
+      ...baseInputs(),
+      resources: { freeMemGb: 8, freeDiskGb: null },
+    });
+    const resLine = lines.find((line) => line.startsWith('resursi'));
+    expect(resLine).toBeTruthy();
+    expect(resLine).toMatch(/8\.0 GB RAM/);
+    expect(resLine).not.toMatch(/disk/);
+  });
+
+  it('freeMemGb null uz poznat freeDiskGb: izostavlja samo RAM polovicu', () => {
+    const lines = formatBootstrap({
+      ...baseInputs(),
+      resources: { freeMemGb: null, freeDiskGb: 42 },
+    });
+    const resLine = lines.find((line) => line.startsWith('resursi'));
+    expect(resLine).toBeTruthy();
+    expect(resLine).toMatch(/42\.0 GB disk slobodno/);
+    expect(resLine).not.toMatch(/RAM/);
+  });
+
+  it('freeDiskGb 0: doslovna nula, ne "nepoznato"', () => {
+    const lines = formatBootstrap({
+      ...baseInputs(),
+      resources: { freeMemGb: 8, freeDiskGb: 0 },
+    });
+    const resLine = lines.find((line) => line.startsWith('resursi'));
+    expect(resLine).toMatch(/0\.0 GB disk slobodno/);
+  });
+});
+
+describe('countTestProcesses: parser za PowerShell/wmic CommandLine izlaz', () => {
+  it('null/undefined ulaz (mjerenje nije uspjelo) vraca null, ne 0', () => {
+    expect(countTestProcesses(null)).toBeNull();
+    expect(countTestProcesses(undefined)).toBeNull();
+  });
+
+  it('prazan tekst (izmjereno, nula procesa) vraca 0', () => {
+    expect(countTestProcesses('')).toBe(0);
+  });
+
+  it('broji retke koji spominju vitest ili playwright, ignorira nevezane node procese', () => {
+    const output = [
+      'C:\\Program Files\\nodejs\\node.exe C:\\Users\\PC\\Desktop\\Lekta\\node_modules\\.bin\\vitest run',
+      'node.exe /path/to/vitest/dist/cli.js run tests/foo.test.ts',
+      'node.exe node_modules/.bin/playwright test',
+      'node.exe scripts/agents/session-bootstrap.mjs',
+    ].join('\n');
+    expect(countTestProcesses(output)).toBe(3);
+  });
+
+  it('CommandLine podudaranje je case-insensitive', () => {
+    expect(countTestProcesses('node VITEST run')).toBe(1);
   });
 });

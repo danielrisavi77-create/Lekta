@@ -122,9 +122,27 @@ prije merga; lokalni ciljani testovi su most do tog dokaza, ne zamjena za njega.
 
 ## Mjerenje
 
-Potrosnja se mjeri po SPOJENOM PR-u, tjedno, iz `.artifacts/agents/usage.jsonl` (tokeni po
-modelu i ulozi). To je stvarni signal trosenja kvote, ne broj poziva niti procjena iz prompta.
-Koordinator tjedno pregleda taj log i, po potrebi, predlaze promjenu `routing` unosa u
+```
+npm run agents:usage-report -- --since 7d
+```
+
+Izvjestaj cita `.artifacts/agents/usage.jsonl` (svaki redak upisuje `scripts/agents/cli.mjs` nakon
+zavrsenog poziva) i zbraja tokene po provideru, po modelu (`reportedModels` ako postoji, inace
+`requestedModel`), po fazi/ulozi i po zadatku, uz broj poziva i broj `failed`. `--since` prima
+relativan oblik (`7d`, `24h`, zadano `7d`) ili apsolutan datum (`2026-09-19`); `--all` uzima
+cijeli log. `--json` daje strojno citljiv izlaz. Skripta datoteku samo cita, nikad je ne mijenja.
+
+**Tezina kvote** je `costWeight` iz `config/agent-routing.json` (Sonnet 5 = 1) primijenjen na
+zbroj ulaznih i izlaznih tokena po modelu. Svi provideri rade na pretplati, ne po tokenu, pa
+tezina nije racun u dolarima nego usporediva mjera "koliko je ovaj poziv kostao u odnosu na
+Sonnet 5 poziv iste duljine". Model bez upisane tezine dobiva `null` i upozorenje u izvjestaju,
+nikad izmisljenu vrijednost. Izvjestaj takoder racuna udio kesiranih ulaznih tokena
+(`cache_read / (input + cache_read)`) kao signal koliko se prompt cache stvarno koristi.
+
+Potrosnja se trenutno mjeri po vremenskom razdoblju, ne po spojenom PR-u; **sljedeci korak** je
+povezati zapise s granom/PR-om (kad zapisi dobiju to polje) da bi se moglo pitati "koliko je
+kostao ovaj PR", ne samo "koliko je potroseno ovaj tjedan". Do tada koordinator tjedno pregleda
+`npm run agents:usage-report -- --since 7d` i, po potrebi, predlaze promjenu `routing` unosa u
 `config/agent-routing.json` (npr. spustanje efforta ako se pokazalo da nizi dovoljno pokriva
 klasu zadatka).
 

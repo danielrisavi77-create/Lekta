@@ -52,6 +52,8 @@ import {
 } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
 import { webhookHandlerProblems } from './helpers/webhook-handler-source';
+import { wordOracleIntegrityProblems } from './helpers/word-oracle-integrity';
+import { requiredTiersDrift } from './helpers/autonomy-release-tiers';
 import {
   naplataSecretsVerdict,
   supabaseSecretsVerdict,
@@ -72,6 +74,7 @@ import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
+import { tier2Freshness } from '../scripts/tier2-freshness-core.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
 import { proofSourceProblems } from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
@@ -277,6 +280,22 @@ const RE60_MIXED_GATE = (output: string) =>
 const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t></w:r></w:p></w:body></w:document>';
 const RE60_SYNTHETIC_GATE = (output: string) =>
   detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
+
+/**
+ * Staticka provjera `scripts/agents/session-bootstrap.mjs`: mjerenje koje ne uspije mora vratiti
+ * `null`, nikad doslovnu `0`. Doslovna nula u `catch` grani izgleda identicno stvarno izmjerenoj
+ * nuli, pa je `formatBootstrap` ne moze razlikovati (CLAUDE.md: nepotvrdjeno se ne pogada).
+ */
+function sessionBootstrapFalseZeroProblems(source: string): string[] {
+  const problems: string[] = [];
+  if (/catch\s*\{\s*freeDiskGb\s*=\s*0\s*;?\s*\}/.test(source)) {
+    problems.push('freeDiskGb u catch grani vraca doslovnu 0 umjesto null');
+  }
+  if (/catch\s*\{\s*testProcessCount\s*=\s*0\s*;?\s*\}/.test(source)) {
+    problems.push('testProcessCount u catch grani vraca doslovnu 0 umjesto null');
+  }
+  return problems;
+}
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1854,6 +1873,105 @@ const MUTATIONS: Mutation[] = [
         nowMs: DOKAZ_SADA,
       }).conditional.length === 0,
   },
+  // T62 (2026-09-26): Word korpus i Word TOC su obavezne Tier 2 razine. Izravni signal je popis
+  // obaveznih razina iz `release-tiers.mjs`: kad bi razina ispala iz njega (`required: false` ili
+  // obrisan redak), dokaz bez nje bio bi jednak punom, gate bi ga pustio i mutacija bi pala.
+  ...(['word-corpus', 'word-toc'] as const).map(
+    (razina): Mutation => ({
+      id: `objava/dokaz-bez-obavezne-razine-${razina}`,
+      imitates:
+        `dokaz izdanja tvrdi \`complete: true\`, a Word razina \`${razina}\` nema zapisan prolaz. Do T62 `
+        + 'popis obaveznih razina trazio je samo `word` i `word-worst`, pa commitani korpus i TOC slucaj '
+        + 'nikad nisu morali proci kroz pravi Word da bi dokaz bio potpun',
+      caught: () => {
+        if (!requiredTierIds().includes(razina)) return false;
+        const bezRazine = requiredTierIds()
+          .filter((id: string) => id !== razina)
+          .map((id: string) => ({ id, label: id, status: 'pass' }));
+        const presuda = releaseProofVerdict({
+          exists: true,
+          proof: { ...DOKAZ_BAZA, complete: true, missingRequired: [], results: bezRazine },
+          headDigest: DOKAZ_BAZA.treeDigest,
+          head: 'a'.repeat(40),
+          nowMs: DOKAZ_SADA,
+        }).conditional.join(' ');
+        return presuda.includes('obavezne razine bez zapisanog prolaza') && presuda.includes(razina);
+      },
+      cleanBefore: () =>
+        releaseProofVerdict({
+          exists: true,
+          proof: DOKAZ_BAZA,
+          headDigest: DOKAZ_BAZA.treeDigest,
+          head: 'a'.repeat(40),
+          nowMs: DOKAZ_SADA,
+        }).conditional.length === 0,
+    }),
+  ),
+  {
+    id: 'tier2/svjezina-po-starom-popisu-word-razina',
+    imitates:
+      'Tier 2 dokaz pecen popisom prije T62 (prolaz samo na `word` i `word-worst`) proglasava se SVJEZIM, '
+      + 'iako commitani korpus (`verify:word:corpus`) i TOC slucaj (`verify:word:toc`) nisu prosli kroz Word. '
+      + 'Upravo takav je zapisani RELEASE_PROOF.json na dan uvodjenja T62',
+    caught: () => {
+      const stari = {
+        commit: 'a'.repeat(40),
+        dirtyWorkingTree: false,
+        results: ['word', 'word-worst'].map((id) => ({ id, status: 'pass' })),
+      };
+      const s = tier2Freshness(stari, []);
+      return s.fresh === false
+        && s.reason === 'tier2-nije-prosao'
+        && s.missingTiers.includes('word-corpus')
+        && s.missingTiers.includes('word-toc');
+    },
+    cleanBefore: () =>
+      tier2Freshness(
+        { commit: 'a'.repeat(40), dirtyWorkingTree: false, results: requiredTierIds().map((id: string) => ({ id, status: 'pass' })) },
+        [],
+      ).fresh === true,
+  },
+  // T62 nastavak (2026-09-26): Word korpus oracle mora tvrditi `integrityFailure === null`. Kad vrata
+  // integriteta odbiju popravak, `applyFixers` vraca ULAZNE bajtove, pa bi `check-corpus.ps1` bez ove
+  // provjere Wordom otvorio original i razina `word-corpus` bi lazno prosla.
+  {
+    id: 'word-oracle/check-corpus-bez-provjere-integrityFailure',
+    imitates:
+      '`check-corpus.ps1` otvara Wordom izlaz `repair.mts` bez provjere `integrityFailure`. Do T62 nastavka '
+      + '`repair.mts` polje nije ni pisao, a odbijen popravak je izlaz bit-identican ulazu, pa je Word '
+      + 'mjerio ORIGINAL i razina je prolazila',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), 'scripts/word-verify/check-corpus.ps1'));
+      const bezProvjere = izvorno.replace(
+        /\n {2}if \(\$null -ne \$res\.integrityFailure\) \{\n[\s\S]*?\n {2}\}/,
+        '',
+      );
+      return bezProvjere !== izvorno
+        && wordOracleIntegrityProblems(bezProvjere).includes('skripta ne broji integrityFailure != null kao PAD');
+    },
+    cleanBefore: () =>
+      wordOracleIntegrityProblems(readTextLf(resolve(process.cwd(), 'scripts/word-verify/check-corpus.ps1'))).length === 0,
+  },
+  {
+    id: 'autonomija/predlozak-bez-word-korpusa-i-toc-a',
+    imitates:
+      '`config/autonomy.example.json` trazi obvezne razine po popisu prije T62 (`word`, `word-worst`), pa '
+      + '`gate.promotion_allowed` pusta kandidata kojemu `word-corpus` i `word-toc` nikad nisu prosli',
+    caught: () => {
+      const izvorno = JSON.parse(readTextLf(resolve(process.cwd(), 'config/autonomy.example.json'))) as {
+        requiredReleaseTiers: string[];
+      };
+      const stari = {
+        ...izvorno,
+        requiredReleaseTiers: izvorno.requiredReleaseTiers.filter((id) => id !== 'word-corpus' && id !== 'word-toc'),
+      };
+      const problemi = requiredTiersDrift(JSON.stringify(stari), requiredTierIds());
+      return problemi.includes('nedostaje obavezna razina word-corpus')
+        && problemi.includes('nedostaje obavezna razina word-toc');
+    },
+    cleanBefore: () =>
+      requiredTiersDrift(readTextLf(resolve(process.cwd(), 'config/autonomy.example.json')), requiredTierIds()).length === 0,
+  },
   {
     id: 'objava/izvor-promijenjen-poslije-ovjere',
     imitates:
@@ -3237,6 +3355,33 @@ const MUTATIONS: Mutation[] = [
     // Baseline nad STVARNIM izvorom: mutacija vrijedi samo ako cisto stanje daje prazan popis.
     cleanBefore: () => intakeHandoffWiringProblems(
       readFileSync(resolve(process.cwd(), 'src/routes/intake/main.ts'), 'utf8'),
+    ).length === 0,
+  },
+
+  // --- session-bootstrap: brojac koji ne moze mjeriti mora priznati to, ne lagati nulom ---------
+  {
+    id: 'bootstrap/lazna-nula-umjesto-null',
+    imitates: 'nalaz lekta-d3 2026-09-26: kad mjerenje testnih procesa ili slobodnog diska ne uspije, '
+      + 'catch grana vrati 0 umjesto null, sto izgleda identicno stvarnoj nuli (tasklist /FO CSV /NH bez '
+      + 'naredbenog retka i statfsSync bez fallbacka)',
+    caught: () => {
+      const stvarni = readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8');
+      // MUTACIJA 1: catch grana za slobodan disk vrati doslovnu nulu umjesto null.
+      const diskLaznaNula = stvarni.replace(
+        '} catch {\n    freeDiskGb = null;\n  }',
+        '} catch {\n    freeDiskGb = 0;\n  }',
+      );
+      // MUTACIJA 2: catch grana za broj testnih procesa vrati doslovnu nulu umjesto null.
+      const procesiLaznaNula = stvarni.replace(
+        '} catch {\n    testProcessCount = null;\n  }',
+        '} catch {\n    testProcessCount = 0;\n  }',
+      );
+      if (diskLaznaNula === stvarni || procesiLaznaNula === stvarni) return false; // nema sto mutirati
+      return sessionBootstrapFalseZeroProblems(diskLaznaNula).length > 0
+        && sessionBootstrapFalseZeroProblems(procesiLaznaNula).length > 0;
+    },
+    cleanBefore: () => sessionBootstrapFalseZeroProblems(
+      readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
   },
 ];
