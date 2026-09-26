@@ -9,7 +9,13 @@
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
-import { openStripePaymentModal, closeStripePaymentModal } from '../src/ui/stripe-payment-modal';
+import {
+  openStripePaymentModal,
+  closeStripePaymentModal,
+  PAID_PENDING_MESSAGE,
+  PAYMENT_PROCESSING_MESSAGE,
+} from '../src/ui/stripe-payment-modal';
+import type { EntitlementWait } from '../src/report/stripe-payment';
 import { resetStripeJsLoader } from '../src/report/stripe-payment';
 
 const MARKUP = `
@@ -25,14 +31,17 @@ const MARKUP = `
 
 interface Recorded {
   toasts: string[];
-  events: string[];
+  waitedFor: string[];
   paid: number;
   trapped: number;
   released: number;
 }
 
-function harness(confirmResult: unknown): { args: Parameters<typeof openStripePaymentModal>[0]; rec: Recorded } {
-  const rec: Recorded = { toasts: [], events: [], paid: 0, trapped: 0, released: 0 };
+function harness(
+  confirmResult: unknown,
+  booking: EntitlementWait = 'booked',
+): { args: Parameters<typeof openStripePaymentModal>[0]; rec: Recorded } {
+  const rec: Recorded = { toasts: [], waitedFor: [], paid: 0, trapped: 0, released: 0 };
   const elements = { create: () => ({ mount: () => {} }) };
   (globalThis as { Stripe?: unknown }).Stripe = () => ({
     elements: () => elements,
@@ -41,12 +50,16 @@ function harness(confirmResult: unknown): { args: Parameters<typeof openStripePa
   return {
     rec,
     args: {
-      out: { clientSecret: 'pi_1_secret', publishableKey: 'pk_test' },
-      productId: 'slot_diplomski',
+      out: { clientSecret: 'pi_1_secret', publishableKey: 'pk_test', paymentIntentId: 'pi_1' },
       toast: (m: string) => rec.toasts.push(m),
       trapModal: () => { rec.trapped += 1; },
       releaseModal: () => { rec.released += 1; },
-      trackEvent: (n: string) => rec.events.push(n),
+      config: { supabaseUrl: 'https://x.supabase.co', supabaseAnonKey: 'anon' },
+      token: 'jwt',
+      waitForBooking: async (id: string) => {
+        rec.waitedFor.push(id);
+        return booking;
+      },
       onPaid: () => { rec.paid += 1; },
     },
   };
@@ -75,14 +88,40 @@ describe('openStripePaymentModal', () => {
     expect(btn('confirmStripePayment').disabled).toBe(false);
   });
 
-  it('uspjesna potvrda zatvara modal i pokrece isti nastavak kao povratak s placanja', async () => {
+  it('uspjesna potvrda ceka knjizenje prava za TAJ PaymentIntent, pa tek onda otkljucava', async () => {
     const { args, rec } = harness({ paymentIntent: { id: 'pi_1', status: 'succeeded' } });
     await openStripePaymentModal(args);
     await btn('confirmStripePayment').onclick!(new MouseEvent('click'));
+    expect(rec.waitedFor).toEqual(['pi_1']);
     expect(rec.paid).toBe(1);
-    expect(rec.events).toContain('purchase_completed');
     expect(document.getElementById('stripePaymentModal')!.classList.contains('hidden')).toBe(true);
     expect(document.getElementById('stripePaymentElement')!.innerHTML).toBe('');
+  });
+
+  it('pravo jos nije knjizeno: NEMA otkljucavanja (ni paywalla), nego poruka da se ne placa ponovno', async () => {
+    const { args, rec } = harness({ paymentIntent: { id: 'pi_1', status: 'succeeded' } }, 'pending');
+    await openStripePaymentModal(args);
+    await btn('confirmStripePayment').onclick!(new MouseEvent('click'));
+    expect(rec.paid).toBe(0);
+    expect(rec.toasts).toContain(PAID_PENDING_MESSAGE);
+    expect(PAID_PENDING_MESSAGE).toMatch(/Ne plaćaj ponovno/);
+  });
+
+  it('okruzenje bez Supabase konfiguracije (unknown) zadrzava stari nastavak', async () => {
+    const { args, rec } = harness({ paymentIntent: { id: 'pi_1', status: 'succeeded' } }, 'unknown');
+    await openStripePaymentModal(args);
+    await btn('confirmStripePayment').onclick!(new MouseEvent('click'));
+    expect(rec.paid).toBe(1);
+  });
+
+  it('processing nije uspjeh: ne ceka webhook, ne otkljucava, javlja da se placanje obradjuje', async () => {
+    const { args, rec } = harness({ paymentIntent: { id: 'pi_1', status: 'processing' } });
+    await openStripePaymentModal(args);
+    await btn('confirmStripePayment').onclick!(new MouseEvent('click'));
+    expect(rec.paid).toBe(0);
+    expect(rec.waitedFor).toEqual([]);
+    expect(rec.toasts).toContain(PAYMENT_PROCESSING_MESSAGE);
+    expect(document.getElementById('stripePaymentModal')!.classList.contains('hidden')).toBe(true);
   });
 
   it('odbijena kartica ostavlja modal otvoren s porukom i vraca gumb u rad', async () => {

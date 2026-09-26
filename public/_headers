@@ -46,8 +46,10 @@
 #   https://js.stripe.com     - Stripe.js (script-src) i njegov iframe s poljima kartice (frame-src)
 #   https://hooks.stripe.com  - iframe za dodatnu autentikaciju (3D Secure) tijekom placanja
 #
-# form-action vise NE nosi token naplate. Do 2026-09-23 je ondje stajao __CSP_LS__, jer je
-# hosted checkout naslijedjenog providera radio kroz POST i povratni redirect. Stripe Payment
+# form-action vise NE nosi token naplate. Do 2026-09-23 je ondje stajao token trgovine
+# naslijedjenog providera, jer je njegov hosted checkout radio kroz POST i povratni redirect.
+# (Ime tog tokena se ovdje namjerno ne pise: build pada na SVAKI nezamijenjeni CSP token u ovoj
+# datoteci, i u komentaru, vidi scripts/lib/csp-headers.mjs.) Stripe Payment
 # Element ne salje obrazac nikamo: polja su u njegovom iframeu, a potvrda ide XHR-om na
 # api.stripe.com, sto pokriva connect-src. Host u form-action bio bi zato sira dozvola bez
 # ijednog stvarnog korisnika, pa je uklonjen umjesto zamijenjen.

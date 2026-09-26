@@ -84,7 +84,10 @@ se kao bruto (s PDV-om) dok vlasnik ne odluči drukčije.
 4. **Webhook**: u **Developers → Webhooks** dodaj endpoint `…/functions/v1/webhook-mor` (ime
    funkcije je naslijeđeno, URL se namjerno ne mijenja) i pretplati ga na TOČNO dva događaja:
    `payment_intent.succeeded` i `charge.refunded`. Sve ostalo webhook prima, upiše u inbox i
-   ignorira uz 200.
+   ignorira uz 200. Isto vrijedi za naplate koje nisu nastale kroz `create-checkout` (ručni
+   Payment Link, naplata iz dashboarda): PaymentIntent bez `metadata[user_id]` ili povrat bez
+   PaymentIntenta dobiva 200 `ignored`, a ne 4xx, da Stripe ne ponavlja dostavu danima i ne
+   isključi endpoint zbog trajnih neuspjeha.
 5. Zabilježi **Signing secret** (`whsec_…`) i postavi ga kao `STRIPE_WEBHOOK_SECRET`. Provjera
    `Stripe-Signature` je već implementirana (`verifyStripeSignature` u `src/report/webhook.ts`,
    timing-safe, tolerancija 300 s protiv replaya); ne treba mijenjati kod.
@@ -146,7 +149,13 @@ prije checkouta i punog izvještaja te šalje pravi JWT. Bez njih se ponaša kao
 3. Ako server vrati 402 → prikaže se „Kupi paket" → potvrda kupnje → Stripe Payment Element se
    otvara U STRANICI (nema odlaska na vanjski checkout).
 4. Plati testnom karticom (uz privremeni `STRIPE_ALLOW_TEST_MODE=1`) → webhook kreira
-   `entitlement` → izvještaj se otključava odmah, bez povratka s vanjske stranice.
+   `entitlement` → izvještaj se otključava bez povratka s vanjske stranice, ali TEK kad webhook
+   upiše pravo: klijent do 30 s pita tablicu `entitlements` za taj PaymentIntent
+   (`waitForEntitlement`), pa tek onda zove generate-report. Ako pravo u tom roku nije vidljivo,
+   korisnik dobiva poruku da ne plaća ponovno i da otključa za minutu; paywall se NE prikazuje.
+   Status `processing` (odgođeni bankovni načini) ne otključava ništa i javlja da se plaćanje
+   obrađuje. U smoke testu provjeri oba puta: brz webhook (otključano) i zaustavljen webhook
+   (poruka, bez paywalla).
 5. Provjeri KPI upite (`supabase/kpi-weekly.sql`) i analytics viewove kao service role.
 
 ## 8. Što je već pokriveno (ne treba dirati)

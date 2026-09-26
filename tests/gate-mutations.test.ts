@@ -58,6 +58,7 @@ import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-r
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
+import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import {
   REQUIRED_CONTEXT_FILES,
   REQUIRED_SCOPED_GUIDES,
@@ -2555,7 +2556,69 @@ const MUTATIONS: Mutation[] = [
       return files.length > 50 && migrationHygieneProblems(files).length === 0;
     },
   },
+  // CSP NAPLATE (F18 krug 2, 2026-09-26). Gard `cspHeaderProblems` se u produkciji vrti nad
+  // dist/_headers u verify-deploy-dist.mjs; ovdje se vrti nad STVARNIM public/_headers kroz ISTU
+  // zamjenu tokena koju radi vite.config.ts, pa je baseline tocno ono sto build isporucuje.
+  // Namjerno BEZ `axis`: ovo nije bodovana os profila.
+  {
+    id: 'csp/stripe-frame-src-uklonjen',
+    imitates:
+      'Bez `frame-src https://js.stripe.com https://hooks.stripe.com` vrijedi `default-src self`, ' +
+      'pa preglednik blokira Stripe iframe: Payment Element ostaje prazan okvir, a Vitest, tsc i ' +
+      'csp-hash su u krugu 1 ostali zeleni jer nijedan nije gledao Stripe hostove.',
+    caught: () => {
+      // Tocan niz iz CSP retka, ne regex: rijec frame-src se javlja i u komentaru iznad njega.
+      const mut = builtHeaders().replace(' frame-src https://js.stripe.com https://hooks.stripe.com;', '');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('frame-src'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'csp/stripe-api-izbacen-iz-connect-src',
+    imitates:
+      'Payment Element potvrdjuje placanje XHR-om na api.stripe.com; bez tog hosta u connect-src ' +
+      'potvrda pada u pregledniku uz CSP gresku u konzoli, a build bi bez ovog garda prosao jer ' +
+      'je provjera tokena gledala samo jesu li zamijenjeni.',
+    caught: () => {
+      const mut = builtHeaders().replace(' https://api.stripe.com;', ';');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('connect-src ne dopusta https://api.stripe.com'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'csp/nezamijenjen-token-u-komentaru',
+    imitates:
+      'Krug 1 F18: komentar u public/_headers je doslovno citirao token naslijedjenog providera, ' +
+      'a vite.config.ts ga vise nije zamjenjivao, pa bi verify-deploy-dist srusio svaki ' +
+      'produkcijski build i CI dist-gate, bez ijednog crvenog Vitest testa.',
+    caught: () => {
+      const tok = ['__CSP', 'LS__'].join('_');
+      const mut = `# Do 2026-09-23 je ovdje stajao ${tok}.\n${builtHeaders()}`;
+      return cspHeaderProblems(mut).some((p) => p.includes(`nesupstituiran token ${tok}`));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'csp/stripe-host-u-form-action',
+    imitates:
+      'Mehanicka zamjena starog tokena Stripe hostom u form-action: Payment Element ne salje ' +
+      'obrazac nikamo, pa bi to bila sira dozvola bez ijednog korisnika (odluka iz kruga 1).',
+    caught: () => {
+      const mut = builtHeaders().replace(/(form-action 'self' [^\r\n]*)/, '$1 https://js.stripe.com');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('form-action nosi Stripe host'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
 ];
+
+/**
+ * public/_headers nakon ISTE zamjene tokena koju build radi (vite.config.ts, cspAllowlist).
+ * CR se normalizira: worktree na Windowsu zna imati CRLF, a gard mora vrijediti za oba.
+ */
+function builtHeaders(): string {
+  const raw = readFileSync(resolve(process.cwd(), 'public', '_headers'), 'utf8').replace(/\r\n/g, '\n');
+  return substituteCspTokens(raw, { supabase: 'https://abcdefghijklmnop.supabase.co' });
+}
 
 /** Tri stavke za C6 mutacije; `violated` uvijek boolean, kako to graditelji i vracaju. */
 function C6_ITEMS() {

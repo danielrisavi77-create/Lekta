@@ -5,6 +5,7 @@ import { existsSync, statSync, createReadStream, readFileSync, writeFileSync } f
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 import { resolveDevTools } from './scripts/dev-console.mjs';
 import { classificationGuard } from './scripts/security/classification-guard.mjs';
+import { substituteCspTokens } from './scripts/lib/csp-headers.mjs';
 import { checkEntryBudgets, type BundleLike } from './src/build/bundle-entry-graph';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
@@ -93,7 +94,8 @@ function cspAllowlist() {
     origin(process.env.VITE_LEKTA_SUPABASE_URL ?? '') || 'https://zrrjttizjyfcxmcpgzml.supabase.co';
   // Stripe hostovi su fiksni i stoje doslovno u public/_headers, pa ovdje nema sto zamjenjivati:
   // Payment Element se montira u stranici i ne trazi poddomenu po racunu, za razliku od hosted
-  // checkouta naslijedjenog providera koji je do 2026-09-23 trazio token __CSP_LS__.
+  // checkouta naslijedjenog providera koji je do 2026-09-23 trazio vlastiti token. Zamjena zivi u
+  // scripts/lib/csp-headers.mjs, isti modul koji verify-deploy-dist i gate-mutations koriste.
 
   return {
     name: 'lekta-csp-allowlist',
@@ -102,7 +104,7 @@ function cspAllowlist() {
       const file = resolve(__dirname, 'dist', '_headers');
       if (!existsSync(file)) return;
       const source = readFileSync(file, 'utf8');
-      const replaced = source.replaceAll('__CSP_SUPABASE__', supabase);
+      const replaced = substituteCspTokens(source, { supabase });
       if (replaced !== source) writeFileSync(file, replaced, 'utf8');
     },
   };

@@ -39,7 +39,18 @@ export type StripeFactory = (publishableKey: string) => StripeLike;
 export interface StripeLoaderHost {
   document: Document;
   getStripe(): StripeFactory | undefined;
+  /** Koliko se najdulje ceka `load` ili `error`; zadano {@link STRIPE_JS_TIMEOUT_MS}. */
+  timeoutMs?: number;
+  setTimeout?: (fn: () => void, ms: number) => unknown;
+  clearTimeout?: (handle: unknown) => void;
 }
+
+/**
+ * Gornja granica cekanja na Stripe.js. Bez nje bi obecanje koje ceka dogadjaj koji se vise nikad
+ * nece dogoditi (npr. tudji tag koji je vec pao ili se vec ucitao) visjelo zauvijek, a s njim i
+ * gumb za placanje koji ostaje iskljucen do ponovnog ucitavanja stranice.
+ */
+export const STRIPE_JS_TIMEOUT_MS = 20_000;
 
 function defaultHost(): StripeLoaderHost {
   return {
@@ -59,32 +70,52 @@ export function resetStripeJsLoader(): void {
 /**
  * Ucitaj `js.stripe.com/v3/` tocno jednom i vrati tvornicu `Stripe(publishableKey)`.
  *
- * Skripta se ne ubacuje ako je vec prisutna (npr. drugi ekran ju je ucitao): tada se ceka njezin
- * `load`. Neuspjeh se ne kesira kao uspjeh; sljedeci poziv smije pokusati ponovno.
+ * Neuspjeh se ne kesira kao uspjeh i NE ostavlja trag u DOM-u: pali `<script>` se uklanja, pa
+ * sljedeci poziv umece svjez tag umjesto da ceka `load` ili `error` koji su vec prosli. Isto
+ * vrijedi kad se skripta ucita, a globalni `Stripe` ne postoji, i kad istekne
+ * {@link STRIPE_JS_TIMEOUT_MS}. Ako je tag vec prisutan (npr. umetnuo ga je drugi ekran), ceka se
+ * njegov ishod, ali najdulje do isteka; tada se i taj tag uklanja kao pali.
  */
 export function loadStripeJs(host: StripeLoaderHost = defaultHost()): Promise<StripeFactory> {
   const ready = host.getStripe();
   if (ready) return Promise.resolve(ready);
   if (loading) return loading;
+  const arm = host.setTimeout ?? ((fn: () => void, ms: number): unknown => setTimeout(fn, ms));
+  const disarm = host.clearTimeout ?? ((h: unknown): void => clearTimeout(h as ReturnType<typeof setTimeout>));
   loading = new Promise<StripeFactory>((resolve, reject) => {
-    const done = (): void => {
-      const factory = host.getStripe();
-      if (factory) resolve(factory);
-      else reject(new Error('Stripe.js ucitan, ali globalni Stripe ne postoji'));
-    };
     const existing = host.document.querySelector(`script[src="${STRIPE_JS_URL}"]`);
+    let el: HTMLScriptElement;
     if (existing) {
-      existing.addEventListener('load', done, { once: true });
-      existing.addEventListener('error', () => reject(new Error('Stripe.js se nije ucitao')), { once: true });
-      return;
+      el = existing as HTMLScriptElement;
+    } else {
+      el = host.document.createElement('script');
+      el.src = STRIPE_JS_URL;
+      el.async = true;
     }
-    const el = host.document.createElement('script');
-    el.src = STRIPE_JS_URL;
-    el.async = true;
+    let settled = false;
+    const fail = (message: string): void => {
+      if (settled) return;
+      settled = true;
+      disarm(timer);
+      el.remove();
+      reject(new Error(message));
+    };
+    const done = (): void => {
+      if (settled) return;
+      const factory = host.getStripe();
+      if (!factory) {
+        fail('Stripe.js ucitan, ali globalni Stripe ne postoji');
+        return;
+      }
+      settled = true;
+      disarm(timer);
+      resolve(factory);
+    };
+    const timer = arm(() => fail('Stripe.js se nije ucitao na vrijeme'), host.timeoutMs ?? STRIPE_JS_TIMEOUT_MS);
     el.addEventListener('load', done, { once: true });
-    el.addEventListener('error', () => reject(new Error('Stripe.js se nije ucitao')), { once: true });
-    host.document.head.appendChild(el);
-  }).catch((e) => {
+    el.addEventListener('error', () => fail('Stripe.js se nije ucitao'), { once: true });
+    if (!existing) host.document.head.appendChild(el);
+  }).catch((e: unknown) => {
     loading = null;
     throw e;
   });
@@ -135,6 +166,7 @@ export function mountPaymentElement(args: MountPaymentArgs): { elements: StripeE
 
 export type ConfirmPaymentOutcome =
   | { kind: 'ok'; paymentIntentId: string }
+  | { kind: 'processing'; paymentIntentId: string }
   | { kind: 'redirected' }
   | { kind: 'error'; message: string };
 
@@ -157,9 +189,79 @@ export async function confirmPayment(args: {
   });
   if (out?.error) return { kind: 'error', message: String(out.error.message ?? 'Plaćanje nije uspjelo.') };
   const status = out?.paymentIntent?.status ?? '';
-  if (status === 'succeeded' || status === 'processing') {
-    return { kind: 'ok', paymentIntentId: String(out?.paymentIntent?.id ?? '') };
-  }
+  const paymentIntentId = String(out?.paymentIntent?.id ?? '');
+  if (status === 'succeeded') return { kind: 'ok', paymentIntentId };
+  // `processing` NIJE uspjeh: novac jos nije naplacen (npr. odgodjeni bankovni nacini koje
+  // ukljucuje automatic_payment_methods), webhook-mor na njega ne knjizi nista, a
+  // payment_intent.succeeded moze stici tek za nekoliko dana. Zato poseban ishod.
+  if (status === 'processing') return { kind: 'processing', paymentIntentId };
   if (!status) return { kind: 'redirected' };
   return { kind: 'error', message: `Plaćanje nije dovršeno (${status}).` };
+}
+
+/** Gdje i kojim kljucem pitati bazu je li webhook vec knjizio pravo za ovaj PaymentIntent. */
+export interface EntitlementPollConfig {
+  supabaseUrl?: string;
+  supabaseAnonKey?: string;
+}
+
+/**
+ * `booked`: webhook je upisao pravo, otkljucavanje smije krenuti.
+ * `pending`: placanje je potvrdjeno, ali pravo jos nije vidljivo nakon cijelog cekanja.
+ * `unknown`: okruzenje nema Supabase konfiguraciju ili prijavu, pa se provjera ne moze napraviti.
+ */
+export type EntitlementWait = 'booked' | 'pending' | 'unknown';
+
+/**
+ * Razmaci izmedju upita, ukupno oko 30 s. Stripe webhook obicno stize u sekundi ili dvije, ali
+ * pri ponovnom pokusaju zna kasniti; dulje od ovoga se ne drzi korisnika u neizvjesnosti.
+ */
+export const ENTITLEMENT_POLL_DELAYS_MS: readonly number[] = [800, 1200, 2000, 3000, 4000, 5000, 6000, 8000];
+
+/**
+ * Cekaj da webhook `payment_intent.succeeded` knjizi pravo za dani PaymentIntent.
+ *
+ * Zasto: `confirmPayment` na klijentu zavrsi PRIJE nego Stripe isporuci webhook, a pravo stvara
+ * tek webhook. Da se odmah zove generate-report, dobio bi `payment_required` i placeni korisnik bi
+ * opet vidio gumb za kupnju (uz rizik druge naplate, jer novi klik stvara novi PaymentIntent).
+ *
+ * Pita se izravno tablica `entitlements` kroz PostgREST (RLS `entitlements_select_own`), a ne
+ * generate-report: svaki odbijeni poziv generate-reporta se biljezi u `report_generations` i
+ * trosi dnevni cap korisnika, pa bi cekanje kroz njega kaznjavalo upravo onoga tko je platio.
+ * Greska mreze ili odgovor koji nije 2xx ne prekida cekanje; broji se samo nadjen redak.
+ */
+export async function waitForEntitlement(
+  config: EntitlementPollConfig,
+  accessToken: string | null | undefined,
+  paymentIntentId: string,
+  deps: {
+    fetchImpl?: typeof fetch;
+    sleep?: (ms: number) => Promise<void>;
+    delaysMs?: readonly number[];
+  } = {},
+): Promise<EntitlementWait> {
+  const base = String(config.supabaseUrl ?? '').trim().replace(/\/+$/, '');
+  const anonKey = String(config.supabaseAnonKey ?? '').trim();
+  if (!base || !anonKey || !accessToken || !/^pi_[A-Za-z0-9_]+$/.test(paymentIntentId)) return 'unknown';
+  const fetchImpl = deps.fetchImpl ?? fetch;
+  const sleep = deps.sleep ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
+  const url =
+    `${base}/rest/v1/entitlements?select=id&provider=eq.stripe` +
+    `&order_id=eq.${encodeURIComponent(paymentIntentId)}&limit=1`;
+  const probe = async (): Promise<boolean> => {
+    try {
+      const res = await fetchImpl(url, { headers: { apikey: anonKey, Authorization: `Bearer ${accessToken}` } });
+      if (!res.ok) return false;
+      const rows = (await res.json()) as unknown;
+      return Array.isArray(rows) && rows.length > 0;
+    } catch {
+      return false;
+    }
+  };
+  if (await probe()) return 'booked';
+  for (const ms of deps.delaysMs ?? ENTITLEMENT_POLL_DELAYS_MS) {
+    await sleep(ms);
+    if (await probe()) return 'booked';
+  }
+  return 'pending';
 }

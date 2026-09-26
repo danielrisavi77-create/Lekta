@@ -126,7 +126,12 @@ function bajtova(rel: string): number {
 // cijena novog placenog ulaza; manje od toga ne ide bez selidbe cijelog checkout toka, koja je
 // zaseban zahvat i ne radi se usput uz promjenu pruzatelja naplate.
 // Broj dodira `hidden` ostaje 81: modal svoje prikazivanje radi u vlastitom modulu.
-const BUDZET_APP = 357815;
+// F18 KRUG 2 (2026-09-26): 357815 -> 357632, dakle -183 B. Racunica: dvoredni komentar iznad
+// proceedReportCheckout preselio je u zaglavlje src/ui/stripe-payment-modal.ts (-190), modal vise
+// ne prima trackEvent ni productId jer purchase_completed salje samo handleUnlockReport (-27), a
+// prima config i token za cekanje na knjizenje prava prije otkljucavanja (+34). Neto prema stanju
+// prije F18 je +236 B.
+const BUDZET_APP = 357632;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //
