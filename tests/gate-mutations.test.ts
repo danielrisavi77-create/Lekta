@@ -72,6 +72,7 @@ import auditRatchet from '../data/security/npm-audit-ratchet.json';
 import { proofStaleness, treeDigestFromLsTree } from '../scripts/release-proof-core.mjs';
 import { buildInfoVerdict, gateSummaryLine, releaseProofVerdict, workingTreeVerdict } from '../scripts/release-gate-core.mjs';
 import { requiredTierIds } from '../scripts/release-tiers.mjs';
+import { tier2Freshness } from '../scripts/tier2-freshness-core.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
 import { proofSourceProblems } from '../src/verification/completion-ledger';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
@@ -1853,6 +1854,64 @@ const MUTATIONS: Mutation[] = [
         head: 'a'.repeat(40),
         nowMs: DOKAZ_SADA,
       }).conditional.length === 0,
+  },
+  // T62 (2026-09-26): Word korpus i Word TOC su obavezne Tier 2 razine. Izravni signal je popis
+  // obaveznih razina iz `release-tiers.mjs`: kad bi razina ispala iz njega (`required: false` ili
+  // obrisan redak), dokaz bez nje bio bi jednak punom, gate bi ga pustio i mutacija bi pala.
+  ...(['word-corpus', 'word-toc'] as const).map(
+    (razina): Mutation => ({
+      id: `objava/dokaz-bez-obavezne-razine-${razina}`,
+      imitates:
+        `dokaz izdanja tvrdi \`complete: true\`, a Word razina \`${razina}\` nema zapisan prolaz. Do T62 `
+        + 'popis obaveznih razina trazio je samo `word` i `word-worst`, pa commitani korpus i TOC slucaj '
+        + 'nikad nisu morali proci kroz pravi Word da bi dokaz bio potpun',
+      caught: () => {
+        if (!requiredTierIds().includes(razina)) return false;
+        const bezRazine = requiredTierIds()
+          .filter((id: string) => id !== razina)
+          .map((id: string) => ({ id, label: id, status: 'pass' }));
+        const presuda = releaseProofVerdict({
+          exists: true,
+          proof: { ...DOKAZ_BAZA, complete: true, missingRequired: [], results: bezRazine },
+          headDigest: DOKAZ_BAZA.treeDigest,
+          head: 'a'.repeat(40),
+          nowMs: DOKAZ_SADA,
+        }).conditional.join(' ');
+        return presuda.includes('obavezne razine bez zapisanog prolaza') && presuda.includes(razina);
+      },
+      cleanBefore: () =>
+        releaseProofVerdict({
+          exists: true,
+          proof: DOKAZ_BAZA,
+          headDigest: DOKAZ_BAZA.treeDigest,
+          head: 'a'.repeat(40),
+          nowMs: DOKAZ_SADA,
+        }).conditional.length === 0,
+    }),
+  ),
+  {
+    id: 'tier2/svjezina-po-starom-popisu-word-razina',
+    imitates:
+      'Tier 2 dokaz pecen popisom prije T62 (prolaz samo na `word` i `word-worst`) proglasava se SVJEZIM, '
+      + 'iako commitani korpus (`verify:word:corpus`) i TOC slucaj (`verify:word:toc`) nisu prosli kroz Word. '
+      + 'Upravo takav je zapisani RELEASE_PROOF.json na dan uvodjenja T62',
+    caught: () => {
+      const stari = {
+        commit: 'a'.repeat(40),
+        dirtyWorkingTree: false,
+        results: ['word', 'word-worst'].map((id) => ({ id, status: 'pass' })),
+      };
+      const s = tier2Freshness(stari, []);
+      return s.fresh === false
+        && s.reason === 'tier2-nije-prosao'
+        && s.missingTiers.includes('word-corpus')
+        && s.missingTiers.includes('word-toc');
+    },
+    cleanBefore: () =>
+      tier2Freshness(
+        { commit: 'a'.repeat(40), dirtyWorkingTree: false, results: requiredTierIds().map((id: string) => ({ id, status: 'pass' })) },
+        [],
+      ).fresh === true,
   },
   {
     id: 'objava/izvor-promijenjen-poslije-ovjere',

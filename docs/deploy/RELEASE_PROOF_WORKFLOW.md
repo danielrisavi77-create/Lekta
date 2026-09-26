@@ -68,7 +68,7 @@ Mekoca je odluka o strogosti, ne potvrda dokaza; uz nalaz zavrsni redak glasi `N
 2. **Commitaj taj sadrzaj.** Provjeri cist worktree (`git status --porcelain` prazan) i zabiljezi
    kandidat SHA. Necist worktree se upisuje u dokaz kao `dirtyWorkingTree: true` i gate ga odbija.
 3. **U Windows/Word okruzenju izvrti puni `npm run release:check`.** Word razine (`word`,
-   `word-worst`) su obavezne i drugdje se biljeze kao `unavailable`, sto NIJE prolaz. Spremi stvarne
+   `word-worst`, `word-corpus`, `word-toc`) su obavezne i drugdje se biljeze kao `unavailable`, sto NIJE prolaz. Spremi stvarne
    izlazne kodove i verzije alata.
 4. **Pregledaj `git diff`.** Ocekivana promjena pracene datoteke smije biti SAMO
    `docs/generated/RELEASE_PROOF.json`. Ako se promijenilo jos nesto (generirani artefakt,
