@@ -20,7 +20,7 @@ import { loadManifest, classifyPath, compilePattern } from '../scripts/security/
 
 // __dirname preko vitest CJS shima; happy-dom okolina kvari new URL(import.meta.url)
 const ROOT = resolve(__dirname, '..');
-const COVERED_TOP_DIRS = ['data', 'src', 'scripts', 'supabase', 'docs', 'tests', 'public', 'prototype', 'reference', 'config'];
+const COVERED_TOP_DIRS = ['data', 'src', 'scripts', 'supabase', 'docs', 'tests', 'public', 'prototype', 'reference', 'config', 'schemas'];
 // korijenski *.html su Rollup entryji pa i oni moraju imati razred
 const EXTRA_SCOPES = ['*.html'];
 
@@ -75,6 +75,15 @@ describe('klasifikacijski manifest', () => {
       const rule = classifyPath(path, manifest.rules);
       return rule ? `${rule.class}/${rule.bundle}` : null;
     };
+    // Laya ne smije u browser; izricita pravila ne smiju nestati iza catch-all pravila.
+    for (const [pattern, path] of [
+      ['schemas/**', 'schemas/laya/finding-v1.schema.json'],
+      ['scripts/laya/**', 'scripts/laya/adapter.mts'],
+      ['docs/laya/**', 'docs/laya/baseline.v1.json'],
+    ]) {
+      expect(verdict(path)).toBe('PRIVATE-IP/forbidden');
+      expect(manifest.rules.some(r => r.pattern === pattern)).toBe(true);
+    }
     // privatni sloj nikad u bundle
     expect(verdict('data/profiles/fpzg/drafts/fpzg-drafts.json')).toBe('PROPRIETARY-DATA/forbidden');
     expect(verdict('data/verification/ledger.json')).toBe('PROPRIETARY-DATA/forbidden');

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "repository": "danielrisavi77-create/Lekta",
+  "baseBranch": "master",
+  "baseCommit": "98e905c0f4cba9065143144a0e8f970652515fbc",
+  "baseTree": "3d6e158cc22ac3c48130d27f90a19d9d67945000",
+  "scope": "Paket 1 only: advisory contracts and explicit snapshot adapter",
+  "sourceGitBlobs": {
+    "CLAUDE.md": "81499597bb647650098020f6e40f9b9ee1140ea0",
+    "src/analysis/triage.ts": "07e53464d2f7aa3dc0625cd644c5dfe8ff66f554",
+    "src/analysis/check-fixer-map.ts": "7b6a9d86086ccd209b9bab293e47841e63a7f935",
+    "package.json": "a4fef56616cf85c74961edafa107a100f8796e87",
+    "data/classification.json": "a9d0658d10bc3f0836c50d7fda34824bc4925679",
+    "tests/classification.test.ts": "a9b3b01e980910837444ab0906c76cc67dcf2bfb"
+  },
+  "regressionInput": {
+    "origin": "owned_synthetic",
+    "path": "tests/helpers/laya-cases.ts",
+    "realStudentCorpusUsed": false,
+    "realFacultyRuleCopied": false
+  },
+  "preserved": [
+    "src/**",
+    "supabase/**",
+    "score",
+    "checks",
+    "issues",
+    "details.triage",
+    "fixability",
+    "repair recipe",
+    "source bytes"
+  ],
+  "modelInvocations": 0,
+  "trainingRuns": 0,
+  "productionIntegration": false,
+  "baselineFullSuiteStatus": "not_measured_locally",
+  "note": "Connected reads pinned the base. Sandbox DNS blocked a full checkout. Do not interpret local focused checks as full-repository or ML evidence."
+}
