@@ -60,3 +60,29 @@ export function renderProfileCard(data: ProfileCardData, escapeHtml: Escape): st
     + `<button class="btn ${promijeni} btn-sm" type="button" data-change-profile>Promijeni</button>`
     + '</div></div>';
 }
+
+/** Terenski uzorak validacije profila (`fieldValidation.sample`, `departmentValidation.sample`). */
+export interface ValidationSample {
+  readonly docxAudits?: number;
+  readonly syntheticDocxAudits?: number;
+  readonly publicPdfAudits?: number;
+  readonly publicTextSnippetAudits?: number;
+  readonly metadataSpotChecks?: number;
+  readonly fullTextAudits?: number;
+}
+
+/**
+ * Jednoredni opis terenskog uzorka za karticu profila i sazetak validacije. Izdvojeno iz `app.ts`
+ * bez promjene ponasanja (ratchet u `tests/ui-module-budget.test.ts`); tekst se ne escapea ovdje,
+ * pozivatelj ga escapea kao i prije.
+ */
+export function sampleSummary(sample: ValidationSample = {}): string {
+  const parts: string[] = [];
+  if (sample.docxAudits) parts.push(`${sample.docxAudits} stvarnih DOCX`);
+  if (sample.syntheticDocxAudits) parts.push(`${sample.syntheticDocxAudits} sintetičkih DOCX testova`);
+  if (sample.publicPdfAudits) parts.push(`${sample.publicPdfAudits} javnih PDF audita`);
+  if (sample.publicTextSnippetAudits) parts.push(`${sample.publicTextSnippetAudits} javna tekstualna isječka`);
+  if (sample.metadataSpotChecks) parts.push(`${sample.metadataSpotChecks} metapodatkovnih provjera`);
+  if (sample.fullTextAudits && !sample.publicPdfAudits) parts.push(`${sample.fullTextAudits} punih tekstualnih audita`);
+  return parts.join(' + ') || 'bez terenskog uzorka';
+}

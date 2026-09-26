@@ -17,8 +17,12 @@
 // NE UVODI NOV DNEVNIK: dokaz vec postoji u `RELEASE_PROOF.json` i ondje mu je mjesto. Drugi
 // mehanizam koji mjeri isto je greska koju smo isti dan dvaput uhvatili kod drugih alata.
 
-/** Razine koje cine Tier 2 dokaz. Preskocena razina NIJE prolaz (vidi TIERS u release-check.mjs). */
-export const TIER2_IDS = ['word', 'word-worst'];
+/**
+ * Razine koje cine Tier 2 dokaz. Preskocena razina NIJE prolaz (vidi TIERS u release-tiers.mjs).
+ * Od 2026-09-26 (T62) i commitani korpus i TOC slucaj: bez njih bi dokaz bio "svjez" iako korpus i
+ * izuzece `toc-field-fixera` nikad nisu prosli kroz pravi Word.
+ */
+export const TIER2_IDS = ['word', 'word-worst', 'word-corpus', 'word-toc'];
 
 /**
  * Presuda o svjezini.
@@ -53,7 +57,7 @@ export function tier2Freshness(proof, repairCommitsSince) {
   return { fresh: true, reason: 'svjez', provenCommit: proof.commit, staleCommits: [], missingTiers: [] };
 }
 
-const UPUTA = 'Pokreni `npm run verify:word` i `npm run verify:word:worst` (Windows), pa `npm run release:check` da se dokaz zapise.';
+const UPUTA = 'Pokreni `npm run verify:word`, `npm run verify:word:worst`, `npm run verify:word:corpus` i `npm run verify:word:toc` (Windows), pa `npm run release:check` da se dokaz zapise.';
 
 /** Izvjestaj za terminal. Svjez ishod se mora citati kao dokaz, a ne kao sutnja. */
 export function formatFreshness(status) {

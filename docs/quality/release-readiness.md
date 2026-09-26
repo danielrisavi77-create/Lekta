@@ -22,7 +22,7 @@ ponovno proizvodi. Bez artefakta redak nije zelen.
 | Tier 0 UX | `npm run test:ux` (chromium + mobile-chromium) | Playwright izvjestaj, 0 failed, 0 flaky | ijedan test crven; flaky se broji kao pad (`failOnFlakyTests`) |
 | Tier 0 dist | `npx playwright test -c playwright.dist.config.ts` | isti, nad `dist/` | isto; tok od `/` do plana popravka mora proci |
 | Tier 1 | `npm run verify:strict-open:repaired` | lxml nad POPRAVLJENIM paketima; prazan skup je crveno | ijedan paket ne prolazi |
-| Tier 2 | `npm run verify:word`, `verify:word:worst` (Windows, Word COM) | ispis skripte, verzija Worda | ijedan paket Word odbija; preskocena razina NIJE prolaz |
+| Tier 2 | `npm run verify:word`, `verify:word:worst`, `verify:word:corpus`, `verify:word:toc` (Windows, Word COM) | ispis skripte, verzija Worda | ijedan paket Word odbija; preskocena razina NIJE prolaz |
 | dokaz izdanja | `npm run release:check` | `RELEASE_PROOF.json`, `complete: true`, `dirtyWorkingTree: false` | `complete: false` ili dokaz stariji od izvora (`treeDigest` razlicit) |
 | stvarni korpus | `LEKTA_LOCAL_CORPUS=1 ... repair-real-corpus.mts` | `repair-real-corpus.local.json` (izvan repozitorija) | `integrityFailureCount > 0` ili neobjasnjena `passRegressionCount > 0` u release skupu |
 | ovisnosti | `node scripts/npm-audit-ratchet.mjs` | ratchet `data/security/npm-audit-ratchet.json` | broj high/critical iznad stropa |
