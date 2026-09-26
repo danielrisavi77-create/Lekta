@@ -59,6 +59,7 @@ import {
   EMPTY_VALUE_DIGEST,
 } from '../scripts/verify-naplata-secrets.mjs';
 import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
+import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
 import {
   localRepairFlagProblems,
   localRepairOfferProblems,
@@ -3712,5 +3713,48 @@ describe('mutacije: razrjesavanje providera po mapi paketnih ulaznih tocaka', ()
     // Tvrdnja koja bi bila vakuumska: gard iznad mjeri PODMETNUTU stazu, pa ga fail-open ne spasava.
     expect(resolverProblems(resolveProviderInvocation as ResolveFn, { grok: real.grok }))
       .toContain('codex se ne razrjesava na paketnu ulaznu tocku');
+  });
+});
+
+describe('mutacije: config/agent-routing.json (korak 1 routinga)', () => {
+  it('unverified model uveden u ulogu obara tvrdnju', async () => {
+    const routingConfigModule = await import('../config/agent-routing.json');
+    const real = routingConfigModule.default as unknown as import('./helpers/agent-routing-checks').RoutingConfig;
+
+    // BASELINE: stvarni config je cist.
+    expect(findUnverifiedModelUsages(real)).toEqual([]);
+
+    // MUTACIJA: implement uloga za M/nezasticeno prebacena na neverificiran model.
+    const mutiran = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    mutiran.routing.M.false.roles.implement.model = 'claude-opus-5-5';
+    const problems = findUnverifiedModelUsages(mutiran);
+    expect(problems.length).toBeGreaterThan(0);
+    expect(problems.some((problem) => problem.includes('claude-opus-5-5'))).toBe(true);
+    expect(problems.some((problem) => problem.startsWith('M/false/implement'))).toBe(true);
+  });
+
+  it('isti provider za implement i review bez fallbacka obara tvrdnju', async () => {
+    const routingConfigModule = await import('../config/agent-routing.json');
+    const real = routingConfigModule.default as unknown as import('./helpers/agent-routing-checks').RoutingConfig;
+
+    // BASELINE: stvarni config postuje pravilo drugog providera (ili ima valjan reviewFallback).
+    expect(findSameProviderWithoutFallback(real)).toEqual([]);
+
+    // MUTACIJA: review uloga za S/nezasticeno prebacena na isti provider kao implement, uz gubitak fallbacka.
+    const mutiran = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    mutiran.routing.S.false.roles.review.provider = mutiran.routing.S.false.roles.implement.provider;
+    delete mutiran.routing.S.false.roles.review.reviewFallback;
+    const problems = findSameProviderWithoutFallback(mutiran);
+    expect(problems).toEqual(['S/false: review i implement isti provider (claude) bez valjanog reviewFallbacka']);
+
+    // KONTRAMUTACIJA: isti provider ALI s valjanim reviewFallbackom (drugi model) i dalje prolazi.
+    const saFallbackom = JSON.parse(JSON.stringify(real)) as import('./helpers/agent-routing-checks').RoutingConfig;
+    saFallbackom.routing.S.false.roles.review.provider = saFallbackom.routing.S.false.roles.implement.provider;
+    saFallbackom.routing.S.false.roles.review.reviewFallback = {
+      provider: 'claude',
+      model: 'claude-haiku-4-5',
+      effort: 'medium',
+    };
+    expect(findSameProviderWithoutFallback(saFallbackom)).toEqual([]);
   });
 });
