@@ -43,7 +43,9 @@
     "ux",
     "strict-open",
     "word",
-    "word-worst"
+    "word-worst",
+    "word-corpus",
+    "word-toc"
   ],
   "signalSources": [
     {

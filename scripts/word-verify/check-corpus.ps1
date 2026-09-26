@@ -15,6 +15,8 @@
 # STO SE TVRDI I STO SE SAMO MJERI, namjerno razdvojeno:
 #   TVRDNJA  dokument se otvara bez Wordovog tihog oporavka
 #   TVRDNJA  nijedan dio paketa nije IZGUBLJEN
+#   TVRDNJA  vrata integriteta NISU odbila popravak (`integrityFailure` je null); inace je izlaz
+#            bit-identican ulazu i Word bi mjerio original
 #   MJERI    koliko je dijelova promijenjeno, sto je primijenjeno, sto preskoceno, odlomci prije/poslije
 # Vidljivi tekst se NE tvrdi kao nepromijenjen, i to je namjerno: `repair.mts` ukljucuje
 # `heading-case-fixer`, koji po CLAUDE.md SMIJE mijenjati vidljivi tekst. Tvrdnja koja bi tu lazno
@@ -50,6 +52,17 @@ foreach ($d in $docs) {
     continue
   }
   $res = ($json.Substring($start) | ConvertFrom-Json)
+  # VRATA INTEGRITETA: kad odbiju popravak, applyFixers vraca ULAZNE bajtove bit-identicno, pa bi
+  # Word ispod otvorio ORIGINAL i razina bi lazno prosla. src/repair/CLAUDE.md trazi izricito
+  # `integrityFailure === null`; polje koje nedostaje je isto PAD (stari repair.mts ga nije pisao).
+  if (-not ($res.PSObject.Properties.Name -contains 'integrityFailure')) {
+    $rows += [pscustomobject]@{ Dokument = $d.BaseName; Izlaz = $null; Greska = 'repair.mts nije javio integrityFailure' }
+    continue
+  }
+  if ($null -ne $res.integrityFailure) {
+    $rows += [pscustomobject]@{ Dokument = $d.BaseName; Izlaz = $null; Greska = "VRATA INTEGRITETA ODBILA: $($res.integrityFailure.part): $($res.integrityFailure.problem)" }
+    continue
+  }
   $rows += [pscustomobject]@{
     Dokument      = $d.BaseName
     Izlaz         = $out

@@ -52,6 +52,8 @@ import {
 } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
 import { webhookHandlerProblems } from './helpers/webhook-handler-source';
+import { wordOracleIntegrityProblems } from './helpers/word-oracle-integrity';
+import { requiredTiersDrift } from './helpers/autonomy-release-tiers';
 import {
   naplataSecretsVerdict,
   supabaseSecretsVerdict,
@@ -1912,6 +1914,47 @@ const MUTATIONS: Mutation[] = [
         { commit: 'a'.repeat(40), dirtyWorkingTree: false, results: requiredTierIds().map((id: string) => ({ id, status: 'pass' })) },
         [],
       ).fresh === true,
+  },
+  // T62 nastavak (2026-09-26): Word korpus oracle mora tvrditi `integrityFailure === null`. Kad vrata
+  // integriteta odbiju popravak, `applyFixers` vraca ULAZNE bajtove, pa bi `check-corpus.ps1` bez ove
+  // provjere Wordom otvorio original i razina `word-corpus` bi lazno prosla.
+  {
+    id: 'word-oracle/check-corpus-bez-provjere-integrityFailure',
+    imitates:
+      '`check-corpus.ps1` otvara Wordom izlaz `repair.mts` bez provjere `integrityFailure`. Do T62 nastavka '
+      + '`repair.mts` polje nije ni pisao, a odbijen popravak je izlaz bit-identican ulazu, pa je Word '
+      + 'mjerio ORIGINAL i razina je prolazila',
+    caught: () => {
+      const izvorno = readTextLf(resolve(process.cwd(), 'scripts/word-verify/check-corpus.ps1'));
+      const bezProvjere = izvorno.replace(
+        /\n {2}if \(\$null -ne \$res\.integrityFailure\) \{\n[\s\S]*?\n {2}\}/,
+        '',
+      );
+      return bezProvjere !== izvorno
+        && wordOracleIntegrityProblems(bezProvjere).includes('skripta ne broji integrityFailure != null kao PAD');
+    },
+    cleanBefore: () =>
+      wordOracleIntegrityProblems(readTextLf(resolve(process.cwd(), 'scripts/word-verify/check-corpus.ps1'))).length === 0,
+  },
+  {
+    id: 'autonomija/predlozak-bez-word-korpusa-i-toc-a',
+    imitates:
+      '`config/autonomy.example.json` trazi obvezne razine po popisu prije T62 (`word`, `word-worst`), pa '
+      + '`gate.promotion_allowed` pusta kandidata kojemu `word-corpus` i `word-toc` nikad nisu prosli',
+    caught: () => {
+      const izvorno = JSON.parse(readTextLf(resolve(process.cwd(), 'config/autonomy.example.json'))) as {
+        requiredReleaseTiers: string[];
+      };
+      const stari = {
+        ...izvorno,
+        requiredReleaseTiers: izvorno.requiredReleaseTiers.filter((id) => id !== 'word-corpus' && id !== 'word-toc'),
+      };
+      const problemi = requiredTiersDrift(JSON.stringify(stari), requiredTierIds());
+      return problemi.includes('nedostaje obavezna razina word-corpus')
+        && problemi.includes('nedostaje obavezna razina word-toc');
+    },
+    cleanBefore: () =>
+      requiredTiersDrift(readTextLf(resolve(process.cwd(), 'config/autonomy.example.json')), requiredTierIds()).length === 0,
   },
   {
     id: 'objava/izvor-promijenjen-poslije-ovjere',
