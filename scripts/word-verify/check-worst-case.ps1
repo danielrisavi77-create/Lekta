@@ -95,6 +95,17 @@ function Measure-Doc {
 Push-Location $root
 try { $json = & npx vite-node 'scripts/word-verify/repair.mts' -- $src $dst 2>&1 | Out-String } finally { Pop-Location }
 $res = ($json.Substring($json.IndexOf('{')) | ConvertFrom-Json)
+# VRATA INTEGRITETA: kad odbiju popravak, $dst je bit-identican $src, pa bi se "poslije" mjerilo na
+# ORIGINALU. src/repair/CLAUDE.md trazi izricito `integrityFailure === null`; polje koje nedostaje
+# je isto PAD. Word se tada ni ne pokrece.
+if (-not ($res.PSObject.Properties.Name -contains 'integrityFailure')) {
+  Write-Output 'NEUSPJEH: repair.mts nije javio integrityFailure.'
+  exit 1
+}
+if ($null -ne $res.integrityFailure) {
+  Write-Output "NEUSPJEH: VRATA INTEGRITETA ODBILA: $($res.integrityFailure.part): $($res.integrityFailure.problem)"
+  exit 1
+}
 
 $word = New-Object -ComObject Word.Application
 $word.Visible = $false; $word.DisplayAlerts = 0

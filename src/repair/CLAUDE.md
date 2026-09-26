@@ -72,9 +72,11 @@ npm run verify:strict-open:repaired
 npm run tier2-freshness
 npm run verify:word
 npm run verify:word:worst
+npm run verify:word:corpus
+npm run verify:word:toc
 ```
 
-Za izmjenu `toc-field-fixer` obvezan je i `npm run verify:word:toc`.
+Sve cetiri Word razine su obvezne u dokazu izdanja; `verify:word:toc` je i izravni dokaz za `toc-field-fixer`.
 `verify:strict-open` bez `:repaired` provjerava ulazne fixture i nije dokaz motora.
 Preskocena Windows razina nije prolaz.
 

@@ -2,6 +2,7 @@ import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp, cekajKorak } from './app-ready';
+import { klikniBezSkrolUtrke } from './stabilan-skrol';
 
 const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -93,7 +94,8 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
   // Kontrole nisu na ekranu: od 2026-09-07 uopce nisu u `#wizardView`, nego u listu izvan
   // `<main>`. Tvrdnja gleda VIDLJIVOST, ne postojanje, pa vrijedi i za jedno i za drugo.
   await expect(page.locator('.wizard-col-profile .form-grid:visible')).toHaveCount(0);
-  await page.locator('[data-change-profile]').click();
+  // Klik ide kroz `klikniBezSkrolUtrke`; vidi tu datoteku za mjerenje.
+  await klikniBezSkrolUtrke(page, page.locator('[data-change-profile]'));
   await expect(page.locator('#profileSheet')).toBeVisible();
   const vidljivi = await page.locator('#profileSheet .form-grid:visible').count();
   expect(vidljivi, 'list mora otvoriti SVE obrasce profila').toBeGreaterThan(1);
@@ -223,7 +225,11 @@ test('/rad/ list profila: zamka fokusa, izlaz tipkovnicom i povratak fokusa', as
   const izvanMaina = await page.locator('#profileSheet').evaluate((el) => !el.closest('main'));
   expect(izvanMaina, 'list unutar <main> bio bi inertan zajedno s pozadinom').toBe(true);
 
-  await page.locator('[data-change-profile]').click();
+  // Klik ide kroz `klikniBezSkrolUtrke`, jer ga u WebKitu inace pregazi glatki skrol koji
+  // Playwright pokrene dovodeci metu u vidno polje: `mousedown` padne na gumb, `mouseup` na
+  // element 217 px nize, `click` nastane nad njihovim zajednickim pretkom i rukovatelj se ne
+  // pozove, pa `#profileSheet` ostane `hidden` (`browser-matrix`, PR #110, run 35814568813).
+  await klikniBezSkrolUtrke(page, page.locator('[data-change-profile]'));
   await expect(page.locator('#profileSheet')).toBeVisible();
 
   // Fokus je USAO u list. Ne tvrdi se KOJI je element, jer `trapModal` bira gumb zatvaranja, a to
