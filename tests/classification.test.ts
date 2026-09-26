@@ -100,6 +100,14 @@ describe('klasifikacijski manifest', () => {
       manifest.rules.some((r) => r.pattern === 'src/routes/shared/public-route-directory.json'),
       'izricito pravilo za javni direktorij ruta je nestalo iz manifesta',
     ).toBe(true);
+    // Vendorirani webfontovi (Z7 opcija a): isti razlog kao gore. `src/**` bi ih i bez pravila
+    // pustio u bundle, pa se uz presudu tvrdi i da je izricito pravilo tu.
+    expect(verdict('src/assets/fonts/instrument-serif-latin-400-normal.woff2')).toBe('PUBLIC/allowed');
+    expect(verdict('src/assets/fonts/fonts.css')).toBe('PUBLIC/allowed');
+    expect(
+      manifest.rules.some((r) => r.pattern === 'src/assets/fonts/**' && r.class === 'PUBLIC' && r.bundle === 'allowed'),
+      'izricito pravilo za vendorirane fontove je nestalo iz manifesta',
+    ).toBe(true);
   });
 
   it('matcher semantika: ** preko segmenata, * unutar segmenta, zadnje pravilo vrijedi', () => {

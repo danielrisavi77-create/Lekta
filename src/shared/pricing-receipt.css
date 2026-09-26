@@ -71,6 +71,8 @@
   font-style: italic;
   font-size: 26px;
   line-height: 1;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .pr-eyebrow {
   font-size: var(--fs-mono-label);
@@ -129,6 +131,8 @@
   font-family: var(--display-serif);
   font-size: 18px;
   line-height: 1.1;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .pr-line-note {
   display: block;
@@ -238,6 +242,8 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 
 .pr-cta {
@@ -324,6 +330,8 @@
   line-height: 1;
   letter-spacing: -.02em;
   text-wrap: balance;
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .pl-lead {
   margin: 20px 0 0;
@@ -332,6 +340,8 @@
   font-size: var(--fs-lead);
   line-height: 1.4;
   color: var(--desk-muted);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 
 .pl-letter {
@@ -362,6 +372,8 @@
   font-style: italic;
   font-size: 22px;
   color: var(--red-deep);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .pl-letterhead-tag {
   font-family: var(--mono);
@@ -380,6 +392,8 @@
   font-style: italic;
   font-size: 20px;
   color: var(--red-deep);
+  --emph-weight: 400;
+  --emph-style: italic;
 }
 .pl-actions {
   display: flex;

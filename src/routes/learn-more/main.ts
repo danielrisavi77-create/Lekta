@@ -3,7 +3,6 @@ import { renderSiteStats } from '../shared/site-stats-strip';
 import { renderPricingReceipt } from '../../shared/pricing-receipt';
 import { renderPricingLetter } from '../../shared/pricing-letter';
 import { loadProductionConfig, paidOffersLive } from '../../config/production-config';
-import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
 import '../../shared/page-app.css';
