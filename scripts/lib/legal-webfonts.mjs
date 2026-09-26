@@ -60,9 +60,28 @@ export function fallbackFaces(fontsCss) {
 /** Oznaka u `public/404.html` na koju generator poslije `vite build` umece `@font-face` blokove. */
 export const OZNAKA_404 = '/* LEKTA-WEBFONTOVI: generate-legal-pages.mjs ovdje umece @font-face */';
 
-/** 404 s umetnutim blokovima. Oznaka mora postojati TOCNO jednom, inace je to problem, ne tiha preskocena zamjena. */
+/** Kraj umetnutog podrucja. Pise ga generator; u `public/404.html` ga NEMA. */
+export const KRAJ_404 = '/* LEKTA-WEBFONTOVI-KRAJ */';
+
+/**
+ * 404 s umetnutim blokovima, IDEMPOTENTNO. Pocetna oznaka ostaje u izlazu, a iza blokova ide
+ * `KRAJ_404`, pa drugi prolaz generatora nad istim `dist/` (npr. poslije izmjene pravnog teksta, bez
+ * novog builda) zamijeni SAMO podrucje izmedju oznaka: isti blokovi daju bajt identican izlaz, drukciji
+ * (novi hash) zamijene stare umjesto da se nagomilaju. Do ovog popravka umetak je trosio oznaku, pa je
+ * drugi prolaz padao s izlazom 1 iako je 404 vec bio ispravan.
+ *
+ * Pocetna oznaka mora postojati TOCNO jednom, a zavrsna nijednom (prvi prolaz) ili tocno jednom IZA
+ * pocetne (svaki sljedeci). Sve ostalo je problem, ne tiho preskocena ili udvostrucena zamjena.
+ */
 export function ubaciU404(html, fontFaces) {
-  const pojava = html.split(OZNAKA_404).length - 1;
-  if (pojava !== 1) return { html, problemi: [`404.html nosi oznaku webfontova ${pojava} puta, a mora tocno jednom`] };
-  return { html: html.replace(OZNAKA_404, () => fontFaces), problemi: [] };
+  const pocetak = html.split(OZNAKA_404).length - 1;
+  if (pocetak !== 1) return { html, problemi: [`404.html nosi oznaku webfontova ${pocetak} puta, a mora tocno jednom`] };
+  const kraj = html.split(KRAJ_404).length - 1;
+  const iza = html.indexOf(OZNAKA_404) + OZNAKA_404.length;
+  if (kraj > 1 || (kraj === 1 && html.indexOf(KRAJ_404) < iza)) {
+    return { html, problemi: [`404.html nosi zavrsnu oznaku webfontova ${kraj} puta ili ispred pocetne, a smije nijednom ili jednom iza nje`] };
+  }
+  const podrucje = `${OZNAKA_404}\n  ${fontFaces}\n  ${KRAJ_404}`;
+  const doKraja = kraj === 1 ? html.indexOf(KRAJ_404) + KRAJ_404.length : iza;
+  return { html: html.slice(0, html.indexOf(OZNAKA_404)) + podrucje + html.slice(doKraja), problemi: [] };
 }

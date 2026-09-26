@@ -6,9 +6,9 @@ import {
   LICENCE, SVI_ULAZI, deklariraneObitelji, listoviSWebfontom, preloadObrasci, problemiFontova,
   problemiGlasovaUlaza, problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada,
   problemiRuta, problemiTokena, woff2Metrike, zabranjenaImena, GLASOVI, fontFaceBlokovi, prvaObiteljTokena,
-  webfontObitelji,
+  webfontObitelji, problemiDvaProlaza404,
 } from './helpers/font-voices';
-import { OZNAKA_404, fallbackFaces, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfonts.mjs';
+import { KRAJ_404, OZNAKA_404, fallbackFaces, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfonts.mjs';
 
 /**
  * KOJE SE OBITELJI CRTAJU NA ULAZU `/`.
@@ -814,6 +814,42 @@ describe('Z7(a) popravak: pravne stranice i 404 dobivaju oba glasa', () => {
     expect(ubaciU404(izvor, '@font-face{}').problemi, 'baseline').toEqual([]);
     expect(ubaciU404(izvor.replace(OZNAKA_404, ''), '@font-face{}').problemi).toHaveLength(1);
     expect(ubaciU404(izvor.replace(OZNAKA_404, OZNAKA_404 + OZNAKA_404), '@font-face{}').problemi).toHaveLength(1);
+  });
+
+  it('404: drugi prolaz generatora nad istim dist/ je no-op, a novi hash zamijeni stari', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    const zamjenski = fallbackFaces(readFileSync(FONTOVI_CSS, 'utf8')).css;
+    const faces = [webfontFaces(distAssets('a1B2c3D4')).css, zamjenski].join(' ');
+    const facesNovi = [webfontFaces(distAssets('Zz9_novi')).css, zamjenski].join(' ');
+    // SENTINEL: izvor nosi pocetnu oznaku, a zavrsnu ne (nju pise tek generator).
+    expect(izvor.split(OZNAKA_404)).toHaveLength(2);
+    expect(izvor).not.toContain(KRAJ_404);
+    expect(problemiDvaProlaza404(ubaciU404, izvor, faces, facesNovi)).toEqual([]);
+    // Izravni signal: drugi prolaz daje bajt identican 404 s tocno cetiri webfont bloka, ne osam.
+    const prvi = ubaciU404(izvor, faces).html;
+    const drugi = ubaciU404(prvi, faces);
+    expect(drugi).toEqual({ html: prvi, problemi: [] });
+    expect(fontFaceBlokovi(stil(drugi.html)).filter((b) => (b.src ?? '').includes('.woff2'))).toHaveLength(4);
+    expect([...webfontObitelji([stil(drugi.html)])].sort()).toEqual([...GLASOVI]);
+  });
+
+  it('MUTACIJA: umetak koji trosi oznaku ili pokvarena zavrsna oznaka obara dva prolaza', () => {
+    const izvor = readFileSync(resolve(ROOT, 'public/404.html'), 'utf8');
+    const faces = webfontFaces(distAssets('a1B2c3D4')).css;
+    const facesNovi = webfontFaces(distAssets('Zz9_novi')).css;
+    // Stanje prije popravka: oznaka se zamijeni blokovima i nestane, pa drugi prolaz pada.
+    const trosiOznaku = (html: string, ff: string): { html: string; problemi: string[] } =>
+      html.split(OZNAKA_404).length === 2 ? { html: html.replace(OZNAKA_404, () => ff), problemi: [] } : { html, problemi: ['bez oznake'] };
+    expect(problemiDvaProlaza404(trosiOznaku, izvor, faces, facesNovi)).not.toEqual([]);
+    // Umetak koji zadrzi oznaku, ali blokove samo dopise iza nje: drugi prolaz nagomila blokove.
+    const dopisuje = (html: string, ff: string): { html: string; problemi: string[] } =>
+      ({ html: html.replace(OZNAKA_404, () => `${OZNAKA_404}
+  ${ff}`), problemi: [] });
+    expect(problemiDvaProlaza404(dopisuje, izvor, faces, facesNovi)).not.toEqual([]);
+    // Zavrsna oznaka dvaput, ili ispred pocetne: problem, ne tiha zamjena krivog podrucja.
+    const obradjen = ubaciU404(izvor, faces).html;
+    expect(ubaciU404(obradjen.replace(KRAJ_404, KRAJ_404 + KRAJ_404), faces).problemi).toHaveLength(1);
+    expect(ubaciU404(KRAJ_404 + izvor, faces).problemi).toHaveLength(1);
   });
 
   it('generator uvozi ISTE funkcije i s njima pada, umjesto da ih prepisuje', () => {

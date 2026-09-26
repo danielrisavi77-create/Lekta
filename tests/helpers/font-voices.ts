@@ -1054,3 +1054,30 @@ export const DOPUSTENA_GEORGIA: ReadonlyArray<DopustenaGeorgia> = [
   ['izjava.html', '#st-sheet', 'faksimil izjave o izvornosti'],
   ['naslovnica.html', '#tp-sheet', 'faksimil naslovnice'],
 ];
+
+/** Umetac webfontova u 404 (`ubaciU404` iz `scripts/lib/legal-webfonts.mjs`, ili njegova mutacija). */
+export type Umetac404 = (html: string, fontFaces: string) => { html: string; problemi: string[] };
+
+/**
+ * IDEMPOTENCIJA UMETKA U 404 (CLAUDE.md: dokazuje se dvama prolazima, drugi mora biti no-op).
+ * Generator se smije ponovno pokrenuti nad istim `dist/` bez novog builda (npr. poslije izmjene
+ * pravnog teksta), pa umetak koji potrosi oznaku rusi drugi prolaz s izlazom 1. Mjeri tri stvari:
+ * (1) drugi prolaz s istim blokovima nema problema i daje BAJT identican izlaz; (2) prolaz s drukcijim
+ * blokovima (novi hash) nad vec obradjenim izlazom daje isto sto i prvi prolaz s njima nad izvorom,
+ * dakle zamjena, ne nagomilavanje; (3) stari blokovi iz (2) vise ne postoje. Prazan popis je zeleno.
+ */
+export function problemiDvaProlaza404(ubaci: Umetac404, izvor: string, faces: string, facesNovi: string): string[] {
+  const problemi: string[] = [];
+  if (faces === facesNovi) return ['faces i facesNovi moraju se razlikovati, inace (2) ne mjeri zamjenu'];
+  const prvi = ubaci(izvor, faces);
+  if (prvi.problemi.length > 0) return [`prvi prolaz: ${prvi.problemi.join('; ')}`];
+  const drugi = ubaci(prvi.html, faces);
+  if (drugi.problemi.length > 0) problemi.push(`drugi prolaz s istim blokovima: ${drugi.problemi.join('; ')}`);
+  else if (drugi.html !== prvi.html) problemi.push('drugi prolaz s istim blokovima nije no-op (izlaz se promijenio)');
+  const noviNadObradjenim = ubaci(prvi.html, facesNovi);
+  const noviNadIzvorom = ubaci(izvor, facesNovi);
+  if (noviNadObradjenim.problemi.length > 0) problemi.push(`prolaz s novim blokovima: ${noviNadObradjenim.problemi.join('; ')}`);
+  else if (noviNadObradjenim.html !== noviNadIzvorom.html) problemi.push('prolaz s novim blokovima nad obradjenim 404 ne daje isto sto nad izvorom (nagomilavanje)');
+  if (noviNadObradjenim.html.includes(faces)) problemi.push('stari blokovi ostali su u 404 uz nove');
+  return problemi;
+}

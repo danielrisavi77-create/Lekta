@@ -77,7 +77,7 @@ import {
   problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada, problemiRuta,
   problemiTokena, zabranjenaImena,
   DOPUSTENA_GEORGIA, STRANICE_PROZE, georgiaUSucelju, listoviStranice, monoUSerifnomNaglasku, naglasakUSerifu,
-  problemiProzeStranice, svjetoviBezSinteze, tezineIznad400, uiNaSerifu,
+  problemiProzeStranice, svjetoviBezSinteze, tezineIznad400, uiNaSerifu, problemiDvaProlaza404,
 } from './helpers/font-voices';
 import { OZNAKA_404, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfonts.mjs';
 import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './helpers/module-graph';
@@ -2994,6 +2994,19 @@ const MUTATIONS: Mutation[] = [
       'ostavio 404 na sistemskim glasovima.',
     caught: () => ubaciU404(z7aList('public/404.html').replace(OZNAKA_404, ''), '@font-face{}').problemi.length === 1,
     cleanBefore: () => ubaciU404(z7aList('public/404.html'), '@font-face{}').problemi.length === 0,
+  },
+  {
+    id: 'z7a/404-drugi-prolaz-nije-no-op',
+    imitates:
+      'Umetak webfontova u 404 potrosi oznaku (stanje prije ovog popravka): drugi prolaz generatora nad ' +
+      'istim dist/ (izmjena pravnog teksta bez novog builda) pada s izlazom 1 iako je 404 vec ispravan.',
+    caught: () => problemiDvaProlaza404(
+      (html, ff) => (html.split(OZNAKA_404).length === 2 ? { html: html.replace(OZNAKA_404, () => ff), problemi: [] } : { html, problemi: ['bez oznake'] }),
+      z7aList('public/404.html'), '@font-face{src:url("/assets/a-1.woff2")}', '@font-face{src:url("/assets/a-2.woff2")}',
+    ).some((p) => p.startsWith('drugi prolaz s istim blokovima')),
+    cleanBefore: () => problemiDvaProlaza404(
+      ubaciU404, z7aList('public/404.html'), '@font-face{src:url("/assets/a-1.woff2")}', '@font-face{src:url("/assets/a-2.woff2")}',
+    ).length === 0,
   },
 ];
 

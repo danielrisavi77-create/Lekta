@@ -186,6 +186,7 @@ for (const doc of list) {
 
 // 404 je samostalna stranica iz public/ (Vite je kopira bez obrade), pa webfontove dobiva ovdje, iz
 // ISTIH razrijesenih rezova kao pravne stranice. Razlog izbora je u komentaru uz oznaku u public/404.html.
+// Umetak je idempotentan (`ubaciU404`): ponovni prolaz nad istim dist/ bez novog builda je no-op.
 const put404 = path.join(DIST, '404.html');
 if (!fs.existsSync(put404)) padni(['dist/404.html ne postoji (public/404.html nije kopiran)'], '404');
 const s404 = ubaciU404(fs.readFileSync(put404, 'utf8'), FONT_FACES);
