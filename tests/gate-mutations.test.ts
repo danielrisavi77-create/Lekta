@@ -101,6 +101,7 @@ import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItems
 import { buildRepairPanelHandle } from '../src/ui/repair-panel';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
+import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -3966,5 +3967,75 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
     expect(
       (judgeCommand as (t: string, c?: string) => { allow: boolean }) ('Bash', 'git add -A .').allow
     ).toBe(false);
+  });
+});
+
+describe('mutacije: .github/workflows/ npm ci mimo setup-deps (CI kesiranje ovisnosti)', () => {
+  it('job koji zove "npm ci" izravno, bez composite akcije, obara gard', () => {
+    // BASELINE: stvaran repo nema nijedan job koji zove "npm ci" mimo `setup-deps` (dokazano
+    // i uzivo u tests/ci-workflow-cache.test.ts, ali gard ovdje mutira SAMO u memoriji).
+    const cistWorkflow = `
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+      - run: npm run check
+`;
+    expect(jobsWithBareNpmCi(cistWorkflow)).toEqual([]);
+
+    // MUTACIJA: isti job, ali netko je "za brzinu" vratio izravan `npm ci` mimo composite akcije.
+    // Ovo je STVARAN kvar koji je gard smisljen hvatati: kesiranje postoji u action.yml, ali ga
+    // nitko ne poziva, pa je node_modules kes mrtav teret koji nikad ne pogodi.
+    const mutiraniWorkflow = `
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Node 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run check
+`;
+    expect(jobsWithBareNpmCi(mutiraniWorkflow)).toEqual(['build']);
+  });
+
+  it('vanjska akcija pinana na pokretan tag (bez SHA-a) obara gard', () => {
+    // BASELINE: stvaran repo pina sve vanjske akcije na 40-heks SHA uz komentar verzije
+    // (dokazano uzivo u tests/ci-workflow-cache.test.ts nad svih 16 workflowa).
+    const cistWorkflow = `
+jobs:
+  build:
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+`;
+    expect(unpinnedExternalUses(cistWorkflow)).toEqual([]);
+
+    // MUTACIJA: pomican tag umjesto SHA-a. Ovo je STVARAN nacin na koji je `repair-net.yml`
+    // prije ovog garda referencirao `actions/checkout@v4` i `actions/setup-node@v7`: pomican
+    // tag moze tiho pokazati na drugaciji, i po sadrzaju izmijenjen, kod bez ikakvog diffa u
+    // ovom repozitoriju.
+    const mutiraniWorkflow = `
+jobs:
+  build:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+`;
+    const problemi = unpinnedExternalUses(mutiraniWorkflow);
+    expect(problemi.length).toBeGreaterThan(0);
+    expect(problemi[0].text).toContain('actions/checkout@v4');
   });
 });

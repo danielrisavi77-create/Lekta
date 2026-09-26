@@ -31,26 +31,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Node 24
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
         with:
           node-version: 24
-          cache: npm
 
       - name: Python 3.12
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
 
-      - name: Instaliraj ovisnosti
-        run: |
-          npm ci
-          # `olefile` NIJE opcionalan. `doc97_text` cita naslijedjeni .doc preko njega, a bez njega
-          # vraca PRAZAN string, pa 21 izvor (193 bodovana pravila) tiho ispadne iz revizije. Gore
-          # od toga: ispadnu i CETIRI stvarna nalaza (148 -> 144), a razlog se prijavi kao
-          # "skeniran izvor bez tekstualnog sloja (treba OCR)", sto salje u posve krivu dijagnozu.
-          # Bez ovoga drift gard ispod NE MOZE proci ni na ispravnom artefaktu.
-          pip install pymupdf olefile
+      - name: Instaliraj Python ovisnosti
+        # `olefile` NIJE opcionalan. `doc97_text` cita naslijedjeni .doc preko njega, a bez njega
+        # vraca PRAZAN string, pa 21 izvor (193 bodovana pravila) tiho ispadne iz revizije. Gore
+        # od toga: ispadnu i CETIRI stvarna nalaza (148 -> 144), a razlog se prijavi kao
+        # "skeniran izvor bez tekstualnog sloja (treba OCR)", sto salje u posve krivu dijagnozu.
+        # Bez ovoga drift gard ispod NE MOZE proci ni na ispravnom artefaktu.
+        run: pip install pymupdf olefile
 
       # Prvo se dokazuje da provjera GRIZE, pa tek onda da podaci prolaze. Obrnut redoslijed daje
       # zeleno i kad je izvod prazan: tada svaka tvrdnja "prolazi" jer se nista ne trazi.
