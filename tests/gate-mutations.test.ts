@@ -3866,3 +3866,102 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
     ).toBe(false);
   });
 });
+
+/**
+ * GATE PREFLIGHT I OMOTAC (T62, pravila za stroj). Dva kvara koja bi lock ucinila ukrasom:
+ *  (a) preflight koji propusta iako radi tudji vitest (dvije sesije opet mlate isti stroj);
+ *  (b) omotac koji otpusta lock samo na uspjeh (lanac `a && b && release`), pa pad gatea ostavi
+ *      lock koji blokira sve ostale dok PID ne nestane.
+ * Mutira se kopija izvora u privremenom direktoriju, nikad datoteka u repozitoriju.
+ */
+describe('mutacije: gate preflight i omotac locka', () => {
+  const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+
+  /**
+   * Tvrdnja iz tests/gate-preflight.test.ts ("tudji vitest proces: odbija"), izvrsena nad KOPIJOM
+   * izvora u zasebnom node procesu. Vitestov loader ne ucitava module izvan korijena projekta, a
+   * mutirana kopija ne smije u repozitorij, pa presudu racuna cisti node.
+   * @returns true kad presuda ODBIJA uz tudji vitest.
+   */
+  async function refusesForeignVitest(source: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-'));
+    try {
+      const file = join(dir, 'gate-preflight.mjs');
+      write(file, source);
+      const state = {
+        nowMs: Date.now(), lockPath: 'x', lock: null, lockAlive: null,
+        foreignTestProcesses: [{ pid: 8524, commandLine: 'node node_modules/vitest/vitest.mjs run' }],
+        claudeProcessCount: 1, freeMemBytes: 8 * 1024 ** 3, freeDiskBytes: 80 * 1024 ** 3, worktree: 'w', injected: false,
+      };
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeGate(${JSON.stringify(state)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      const verdict = JSON.parse(res.stdout) as { allow: boolean };
+      return verdict.allow === false;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(a) preflight koji propusta uz tudji vitest obara tvrdnju', async () => {
+    const source = readLf('scripts/gate-preflight.mjs');
+    // BASELINE: stvarni preflight odbija.
+    expect(await refusesForeignVitest(source)).toBe(true);
+
+    // MUTACIJA: tudji pokretac se samo biljezi kao upozorenje, nikad ne blokira.
+    const mutated = source.replace('    if (nested) warnings.push(msg);\n    else blockers.push(msg);', '    warnings.push(msg);');
+    expect(mutated).not.toBe(source);
+    expect(await refusesForeignVitest(mutated)).toBe(false);
+  }, 120_000);
+
+  it('(b) omotac koji ne otpusta lock pri padu naredbe obara tvrdnju', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync: write, existsSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { spawnSync } = await import('node:child_process');
+
+    const wrapper = readLf('scripts/with-gate-lock.mjs');
+    const preflight = readLf('scripts/gate-preflight.mjs');
+
+    /** Tvrdnja iz tests/with-gate-lock.test.ts: naredba padne s 3, kod se cuva, lock je otpusten. */
+    function releasesOnFailure(wrapperSource: string): boolean {
+      const root = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-omotac-'));
+      try {
+        mkdirSync(join(root, 'scripts'));
+        write(join(root, 'scripts', 'with-gate-lock.mjs'), wrapperSource);
+        write(join(root, 'scripts', 'gate-preflight.mjs'), preflight);
+        const lockPath = join(root, 'lekta-gate.lock');
+        const measurement = join(root, 'mjerenje.json');
+        write(measurement, JSON.stringify({ processes: [], freeMemBytes: 8 * 1024 ** 3, freeDiskBytes: 80 * 1024 ** 3 }));
+        const env: NodeJS.ProcessEnv = { ...process.env, LEKTA_GATE_LOCK_PATH: lockPath, LEKTA_GATE_MEASUREMENT_FILE: measurement };
+        delete env.CI;
+        delete env.LEKTA_GATE_FORCE;
+        delete env.LEKTA_GATE_LOCK_TOKEN;
+        const res = spawnSync(process.execPath, [join(root, 'scripts', 'with-gate-lock.mjs'), 'mutacija', '--', 'node', '-e', 'process.exit(3)'], {
+          cwd: root, env, encoding: 'utf8', timeout: 90_000,
+        });
+        return res.status === 3 && !existsSync(lockPath);
+      } finally {
+        rmSync(root, { recursive: true, force: true });
+      }
+    }
+
+    // BASELINE: stvarni omotac otpusta lock i kad naredba padne.
+    expect(releasesOnFailure(wrapper)).toBe(true);
+
+    // MUTACIJA: otpustanje samo na uspjeh (oblik `preflight && naredba && release`), bez zadnje
+    // linije obrane na izlazu procesa.
+    const mutated = wrapper
+      .replace("  process.on('exit', release);\n", '')
+      .replace(
+        '    return code;\n  } finally {\n    release();\n  }',
+        '    if (code === 0) release();\n    return code;\n  } finally {\n    // otpustanje premjesteno na uspjeh\n  }',
+      );
+    expect(mutated).not.toBe(wrapper);
+    expect(mutated).not.toContain("process.on('exit', release)");
+    expect(releasesOnFailure(mutated)).toBe(false);
+  }, 120_000);
+});

@@ -120,6 +120,43 @@ Ovo ne mijenja CLAUDE.md tvrdi gate (`npm run check` + `npm run orphan-scan` pri
 mijenja SAMO gdje se taj puni gate izvrsava kad je stroj zauzet. CI i dalje mjeri stanje mastera
 prije merga; lokalni ciljani testovi su most do tog dokaza, ne zamjena za njega.
 
+## Pravila za stroj
+
+Razvojni stroj je i3 s 2 jezgre i 8 GB RAM-a, a na njemu istodobno radi vise sesija (Claude,
+Codex, Grok). Dva gatea u isto vrijeme ne padnu cisto nego mlate memoriju, pa padaju testovi
+koji izolirano prolaze. Pravila nize nisu dogovor medju sesijama nego deterministicka provjera
+(`scripts/gate-preflight.mjs`, vlasnik 2026-09-26, T62).
+
+- **Jedan gate u isto vrijeme (lock).** `npm run check`, `test:ux`, `test:ux:dist`,
+  `test:ux:browsers` i `release:check` idu kroz omotac `scripts/with-gate-lock.mjs`, koji prije
+  naredbe zauzme `%LOCALAPPDATA%\Temp\lekta-gate.lock` (JSON `{pid, startedAt, worktree, label}`)
+  i otpusti ga na kraju, i kad naredba padne. Lock je ziv dok postoji proces s tim PID-om; kad se
+  PID ne moze provjeriti, ziv je samo dok je mladji od 3 h. Tko drzi gate i koliko dugo, ispisuju
+  `node scripts/gate-preflight.mjs --check-only` i session bootstrap.
+- **Tudji vitest ili playwright = stop.** Ako na stroju radi ijedan vitest ili playwright proces
+  izvan vlastitog stabla procesa, preflight odbija (izlazni kod 2) i imenuje PID. Mirujuci
+  `playwright test-server` VS Code prosirenja se ne broji; njegovi radnici, kad stvarno vrte
+  testove, broje se.
+- **Pragovi resursa.** Slobodni RAM ispod 1,5 GB ili slobodni disk ispod 3 GB: odbija. Kad se
+  nesto ne moze izmjeriti, to je upozorenje, nikad blokada (fail-open).
+- **Cekanje umjesto sile.** Kad preflight odbije, cekaj u petlji
+  (`until node scripts/gate-preflight.mjs --check-only; do sleep 60; done`, najvise 60 min).
+  `LEKTA_GATE_FORCE=1` nadjacava sve (ispisuje NADJACANO i svejedno upisuje lock) i koristi se
+  samo uz vlasnikovu odluku. Na CI-ju (`CI` postavljen) preflight samo mjeri i propusta.
+- **Lokalno samo Chromium.** `playwright.config.ts` lokalno ima samo `chromium` i
+  `mobile-chromium`; `firefox`, `webkit` i `mobile-webkit` su ukljuceni na CI-ju ili uz
+  `LEKTA_UX_ALL_BROWSERS=1` (`npm run test:ux:browsers` ga postavlja sam).
+- **Najvise 3 interaktivne sesije.** Vise od 3 `claude.exe` procesa je upozorenje u bootstrapu i
+  preflightu ("vise od 3 interaktivne sesije: RAM"). Ne blokira, ali nova sesija se tada ne otvara.
+- **Ciscenje `%TEMP%` nikad dok vitest radi.** Vitest (forks pool) pise `%TEMP%\<nanoid>\web` i
+  brise ga tek na kraju runa. Mapa se smije brisati samo kad `--check-only` ne vidi nijedan
+  vitest proces i kad je NAJNOVIJA datoteka u toj mapi starija od praga (npr. 2 h); starost same
+  mape nije dovoljna, jer ziv run pise u staru mapu.
+- **Codex runovi kroz iste npm skripte.** Codex, Grok i svaki drugi alat pokrecu gate kroz
+  `npm run check` i ostale skripte iznad, nikad izravno `vitest run` ili `playwright test`, jer
+  jedino tako prolaze kroz lock. Izravan `npx vitest` na ciljane datoteke je dopusten, ali ga
+  tudji preflight vidi kao tudji vitest i ceka.
+
 ## Mjerenje
 
 ```

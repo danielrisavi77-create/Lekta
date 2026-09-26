@@ -6,7 +6,7 @@
  * na okolinu u kojoj se vrti.
  */
 import { describe, expect, it } from 'vitest';
-import { countTestProcesses, formatBootstrap } from '../scripts/agents/session-bootstrap.mjs';
+import { countTestProcesses, formatBootstrap, formatGateLockLine } from '../scripts/agents/session-bootstrap.mjs';
 
 function baseInputs() {
   return {
@@ -148,5 +148,51 @@ describe('countTestProcesses: parser za PowerShell/wmic CommandLine izlaz', () =
 
   it('CommandLine podudaranje je case-insensitive', () => {
     expect(countTestProcesses('node VITEST run')).toBe(1);
+  });
+});
+
+describe('formatBootstrap: gate lock i broj sesija (T62, pravila za stroj)', () => {
+  it('BASELINE: bez izmjerenog locka pise "nepoznato", bez upozorenja o sesijama', () => {
+    const lines = formatBootstrap(baseInputs());
+    expect(lines).toContain('gate lock: nepoznato (lock se nije mogao procitati)');
+    expect(lines.some((line) => /UPOZORENJE/.test(line))).toBe(false);
+  });
+
+  it('slobodan lock', () => {
+    const lines = formatBootstrap({ ...baseInputs(), gateLock: { status: 'free' } });
+    expect(lines).toContain('gate lock: slobodan');
+  });
+
+  it('ziv lock: tko drzi gate, iz kojeg stabla i koliko dugo', () => {
+    const lines = formatBootstrap({
+      ...baseInputs(),
+      gateLock: { status: 'alive', label: 'check', pid: 4242, worktree: 'C:/wt/tudji', ageMs: 12 * 60_000 },
+    });
+    expect(lines).toContain('gate lock: drzi "check" (PID 4242, stablo C:/wt/tudji) vec 12 min');
+  });
+
+  it('mrtav i zastario lock se razlikuju od zivog', () => {
+    expect(formatGateLockLine({ status: 'dead', label: 'check', pid: 1, worktree: null, ageMs: 0 })).toMatch(/mrtav .*PID nestao/);
+    expect(formatGateLockLine({ status: 'stale', label: null, pid: null, worktree: null, ageMs: null })).toMatch(/zastario .*stariji od 3 h/);
+    expect(formatGateLockLine(null)).toBe('gate lock: nepoznato (lock se nije mogao procitati)');
+  });
+
+  it('vise od 3 claude.exe procesa: upozorenje; tocno 3 ili nemjerljivo: bez upozorenja', () => {
+    const warn = (claudeProcessCount: number | null) =>
+      formatBootstrap({ ...baseInputs(), claudeProcessCount }).filter((line) => line.startsWith('UPOZORENJE'));
+    expect(warn(6)).toEqual(['UPOZORENJE: vise od 3 interaktivne sesije: RAM (claude.exe: 6)']);
+    expect(warn(4)).toHaveLength(1);
+    expect(warn(3)).toEqual([]);
+    expect(warn(null)).toEqual([]);
+  });
+
+  it('i s lockom i upozorenjem ispis ostaje unutar 12 redaka', () => {
+    const lines = formatBootstrap({
+      ...baseInputs(),
+      gateLock: { status: 'alive', label: 'check', pid: 1, worktree: 'w', ageMs: 1000 },
+      claudeProcessCount: 9,
+    });
+    expect(lines.length).toBeLessThanOrEqual(12);
+    expect(lines.some((line) => line.startsWith('zadaci ready bez ownera'))).toBe(true);
   });
 });
