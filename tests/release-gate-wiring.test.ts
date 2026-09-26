@@ -105,8 +105,11 @@ describe('popis razina ima jedan izvor istine', () => {
     expect(releaseCheck).not.toMatch(/const TIERS = \[/);
   });
 
+  // `word-corpus` i `word-toc` su obavezni od T62 (2026-09-26); vidi komentar u release-tiers.mjs.
   it('obavezne razine su tocno one koje su i bile (ux-dist i extraction ostaju neobavezne)', () => {
-    expect(requiredTierIds()).toEqual(['check', 'conformance', 'slow', 'ux', 'strict-open', 'word', 'word-worst']);
+    expect(requiredTierIds()).toEqual([
+      'check', 'conformance', 'slow', 'ux', 'strict-open', 'word', 'word-worst', 'word-corpus', 'word-toc',
+    ]);
     const neobavezne = TIERS.filter((t: { required?: boolean }) => !t.required).map((t: { id: string }) => t.id);
     expect(neobavezne).toEqual(['projections', 'ux-dist', 'extraction']);
   });
