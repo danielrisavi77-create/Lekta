@@ -6,7 +6,9 @@ name: check
 
 on:
   push:
+    branches: [master]
   pull_request:
+    branches: [master]
   workflow_dispatch:
 
 # Least-privilege token (AUD-48): gate nista ne pise, samo cita kod.

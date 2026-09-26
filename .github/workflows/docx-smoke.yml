@@ -6,7 +6,9 @@ name: docx-smoke
 
 on:
   push:
+    branches: [master]
   pull_request:
+    branches: [master]
   workflow_dispatch:
 
 # Least-privilege token (AUD-48): upload-artifact ne treba contents: write.
