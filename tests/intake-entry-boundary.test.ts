@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { collectStaticGraph, staticRuntimeImports } from './helpers/module-graph';
+import { intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
 
 /**
  * GRANICA CISTOG ULAZA `/` (rez naslovnice, 2026-09-05).
@@ -126,6 +127,14 @@ describe('cisti ulaz /', () => {
     expect(main).toMatch(/deviceMemory/);
     expect(main).toMatch(/pointer:\s*coarse/);
     expect(main).toMatch(/data-upload-limit/);
+  });
+
+  it('ulaz stvarno predaje `location.search` kontroleru, ne samo u testovima', () => {
+    // Nalaz pregleda (23. 9. 2026): cijeli prijenos konteksta visi o jednom retku u `main.ts`, a
+    // nijedan test ga nije dodirivao: svi `handoffSearch` ubrizgavaju rucno kroz ovisnosti. Brisanje
+    // tog retka prolazilo je kroz osam testnih datoteka i 263 tvrdnje bez ijednog crvenog signala.
+    // Tvrdnja je nad izvorom jer je to jedini sloj na kojem se produkcijska veza vidi.
+    expect(intakeHandoffWiringProblems(source(INTAKE_MAIN))).toEqual([]);
   });
 
   it('pocetni staticki graf NEMA analizator, profile ni repair motor', () => {

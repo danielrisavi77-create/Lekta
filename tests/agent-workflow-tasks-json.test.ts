@@ -34,6 +34,22 @@ function clone(queue: QueueLike): QueueLike {
   return JSON.parse(JSON.stringify(queue)) as QueueLike;
 }
 
+/**
+ * `validateQueue` iz core.mjs NE odbija nepoznata polja (samo provjerava id/title/status/
+ * dependsOn), pa je taj gard ovdje, uz stvarnu shemu zadatka. `owner` je NOVO neobvezno polje
+ * (korak 1 routinga: koja sesija je zauzela zadatak); sve ostalo van popisa je odbijeno.
+ */
+const KNOWN_TASK_FIELDS = new Set(['id', 'title', 'status', 'dependsOn', 'note', 'owner', 'implementationAgent']);
+
+function findUnknownTaskFields(queue: QueueLike): string[] {
+  const offenders: string[] = [];
+  for (const task of queue.tasks as Array<Record<string, unknown>>) {
+    const unknown = Object.keys(task).filter((key) => !KNOWN_TASK_FIELDS.has(key));
+    if (unknown.length > 0) offenders.push(`${String(task.id)}: ${unknown.join(', ')}`);
+  }
+  return offenders;
+}
+
 describe('docs/agents/tasks.json: stvarni red zadataka', () => {
   it('prolazi strukturnu validaciju iz scripts/agents/core.mjs', () => {
     const queue = readQueue();
@@ -52,6 +68,40 @@ describe('docs/agents/tasks.json: stvarni red zadataka', () => {
     const withDependencies = queue.tasks.filter((task) => task.dependsOn.length > 0);
     expect(withDependencies.length).toBeGreaterThan(1);
     expect(queue.tasks.every((task) => typeof task.status === 'string')).toBe(true);
+  });
+
+  it('baseline: svaki zadatak koristi samo poznata polja (owner je dopusten, ostalo nije)', () => {
+    const offenders = findUnknownTaskFields(readQueue());
+    expect(offenders, offenders.join('; ')).toHaveLength(0);
+  });
+});
+
+describe('shema zadatka: neobvezno polje owner (korak 1 routinga)', () => {
+  it('smjer 1: zadatak s owner poljem prolazi i strukturnu validaciju i gard nepoznatih polja', () => {
+    const queue = clone(readQueue()) as QueueLike & { tasks: QueueTaskLike[] };
+    const task = queue.tasks.find((candidate) => candidate.id === 'T17');
+    expect(task).toBeTruthy();
+    if (!task) return;
+    (task as unknown as Record<string, unknown>).owner = 'lekta-32';
+
+    expect(() => validateQueue(queue)).not.toThrow();
+    expect(findUnknownTaskFields(queue)).toHaveLength(0);
+  });
+
+  it('smjer 2: zadatak s nepoznatim poljem i dalje pada na gardu (ostaje strukturno "valjan")', () => {
+    const queue = clone(readQueue()) as QueueLike & { tasks: QueueTaskLike[] };
+    const task = queue.tasks.find((candidate) => candidate.id === 'T17');
+    expect(task).toBeTruthy();
+    if (!task) return;
+    (task as unknown as Record<string, unknown>).assignee = 'lekta-32'; // nepoznato polje, ne 'owner'
+
+    // core.mjs ne gleda nepoznata polja pa strukturna validacija i dalje prolazi...
+    expect(() => validateQueue(queue)).not.toThrow();
+    // ...ali gard sheme iz ovog testa mora imenovati zadatak i polje.
+    const offenders = findUnknownTaskFields(queue);
+    expect(offenders).toHaveLength(1);
+    expect(offenders[0]).toMatch(/T17/);
+    expect(offenders[0]).toMatch(/assignee/);
   });
 });
 
