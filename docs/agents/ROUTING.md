@@ -96,6 +96,30 @@ stanjem; nova sesija pocinje cist worktree od trenutnog `origin/master` i ponovn
 izmjenu. Ne oslanjaj se na djelomicno stanje starog worktreea kao dokaz da je nesto vec
 gotovo.
 
+## Gate na CI-ju
+
+Puni `npm run check` je skup (lint, TypeScript, Edge provjera, Vitest, Vite build) i na 8 GB
+RAM stroju dva puna gatea istovremeno pouzdano izazivaju OOM (vidi CLAUDE.md, "Stroj"). Zato
+vrijedi jedno pravilo za lokalni rad:
+
+- Lokalno se puni `npm run check` pokrece SAMO kad je stroj slobodan: 0 tudjih vitest/playwright
+  procesa, najmanje 1,5 GB slobodnog RAM-a i najmanje 3 GB slobodnog diska. Bootstrap skripta
+  (`scripts/agents/session-bootstrap.mjs`, SessionStart ispis) vec ispisuje broj aktivnih
+  vitest/playwright procesa te slobodni RAM i disk; ta tri broja su izvor istine za ovu
+  provjeru, ne procjena "izgleda prazno".
+- Kad uvjet iznad nije ispunjen, lokalno se pokrecu SAMO CILJANI testovi koji odgovaraju
+  izmjeni (npr. `npx vitest run tests/<datoteka>.test.ts`) i `npm run orphan-scan`, nikad puni
+  `npm run check`.
+- U svakom trenutku smije biti u tijeku NAJVISE jedan puni gate (lokalno ili na CI-ju) po
+  stroju; drugi puni gate ceka da prvi zavrsi.
+- Mjerodavan dokaz da promjena prolazi je CI na PR-u, ne lokalni izlazni kod. Ovo je vec
+  uobicajena praksa iz nuzde; ovaj odjeljak je tu praksu pretvara u pisano pravilo koje vrijedi
+  za svaku sesiju, ne samo kad je stroj vidljivo pretrpan.
+
+Ovo ne mijenja CLAUDE.md tvrdi gate (`npm run check` + `npm run orphan-scan` prije commita);
+mijenja SAMO gdje se taj puni gate izvrsava kad je stroj zauzet. CI i dalje mjeri stanje mastera
+prije merga; lokalni ciljani testovi su most do tog dokaza, ne zamjena za njega.
+
 ## Mjerenje
 
 Potrosnja se mjeri po SPOJENOM PR-u, tjedno, iz `.artifacts/agents/usage.jsonl` (tokeni po

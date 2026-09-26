@@ -579,6 +579,35 @@
       "note": "VLASNIK: Azure Artifact Signing za fizicke osobe radi samo u SAD-u i Kanadi pa je preduvjet obrt (T48); bez certifikata REPAIR_LOCAL_ENABLED ostaje iskljucen; vidi docs/LOCAL_REPAIR_RELEASE.md odjeljak Stanje."
     },
     {
+      "id": "T53",
+      "title": "Web analitika bez kolacica (Cloudflare Web Analytics ili Umami)",
+      "status": "blocked",
+      "dependsOn": [
+        "T44"
+      ],
+      "note": "Besplatno, bez kolacica, samo posjete/stranice/refereri; ne salje sadrzaj radova; odluka vlasnika izmedju Cloudflare WA i Umami (self-host ili cloud besplatni sloj); CSP mora dopustiti skriptu; dokument privatnosti azurirati."
+    },
+    {
+      "id": "T54",
+      "title": "Operativni alarmi kroz Supabase (webhook naplate, needs_manual_link, greske Edge funkcija, smoke objave)",
+      "status": "blocked",
+      "dependsOn": [
+        "T44",
+        "T24"
+      ],
+      "note": "Supabase database webhooks ili pg_cron + jedna Edge funkcija -> mail ili Telegram; bez n8n; bez AI akcija; prag i odrediste odredjuje vlasnik."
+    },
+    {
+      "id": "T55",
+      "title": "Tjedni produktni izvjestaj iz vlastite baze (trackEvent uz privolu)",
+      "status": "blocked",
+      "dependsOn": [
+        "T44",
+        "T53"
+      ],
+      "note": "Lijevak upload -> analiza -> profil (unit) -> popravak -> kupnja iz postojeceg trackEvent toka (src/ui/telemetry.ts, inertan bez privole, samo DOPUSTENI_KLJUCEVI); skript po uzoru na usage-report (tekstualni izvjestaj) ili Metabase self-host; zaseban mali zadatak: utm_source uz privolu u isti tok jer PR #117 nosi utm_* do /rad/ ali ih nitko ne cita."
+    },
+    {
       "id": "T56",
       "title": "Mrtvi i dupli kod: knip + jscpd kao savjetodavni CI korak s ratchetom",
       "status": "ready",
@@ -617,7 +646,15 @@
         "T56"
       ],
       "note": "cilj isti testovi zeleni, manje redaka, bez novih ovisnosti; pregledatelj ocjenjuje sto je uklonjeno; jedan modul po PR-u; kvartalno."
+    },
+    {
+      "id": "T61",
+      "title": "Skill intake-analiza: zalijepljena vanjska analiza okida fiksni protokol provjere i uklapanja",
+      "status": "in_progress",
+      "dependsOn": [],
+      "note": "Vlasnik 2026-09-26. PR #124 (.claude/skills/intake-analiza, docs/agents/INTAKE.md, predlozak intake-verify-args.json). Preostalo: zivi run izvidjaca kroz skill nad prvom stvarnom analizom; nakon toga done.",
+      "owner": "lekta-32"
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja)."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja)."
 }
