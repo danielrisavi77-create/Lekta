@@ -26,6 +26,8 @@ const PROOF_OK = {
     { id: 'strict-open', status: 'pass' },
     { id: 'word', status: 'pass' },
     { id: 'word-worst', status: 'pass' },
+    { id: 'word-corpus', status: 'pass' },
+    { id: 'word-toc', status: 'pass' },
   ],
 };
 
@@ -90,5 +92,31 @@ describe('tier2-freshness: izvjestaj', () => {
       tier2Freshness(PROOF_OK, [{ sha: 'abc1234', subject: 'x' }]),
     ];
     for (const s of razlozi) expect(formatFreshness(s)).toContain('npm run verify:word');
+  });
+
+  /** T62: uputa nabraja sve cetiri Word razine, ne samo dvije koje su bile obavezne prije. */
+  it('uputa imenuje svaku Word razinu', () => {
+    const tekst = formatFreshness(tier2Freshness(null as never, []));
+    for (const naredba of ['verify:word`', 'verify:word:worst', 'verify:word:corpus', 'verify:word:toc']) {
+      expect(tekst).toContain(naredba);
+    }
+  });
+});
+
+describe('tier2-freshness: T62, sve cetiri Word razine', () => {
+  it('Tier 2 razine su word, word-worst, word-corpus i word-toc', () => {
+    expect(TIER2_IDS).toEqual(['word', 'word-worst', 'word-corpus', 'word-toc']);
+  });
+
+  /** Dokaz pecen popisom prije T62 (samo word i word-worst) vise nije svjez. */
+  it('dokaz bez korpusa i TOC slucaja nije svjez', () => {
+    const stari = {
+      ...PROOF_OK,
+      results: PROOF_OK.results.filter((r) => r.id !== 'word-corpus' && r.id !== 'word-toc'),
+    };
+    const s = tier2Freshness(stari, []);
+    expect(s.fresh).toBe(false);
+    expect(s.reason).toBe('tier2-nije-prosao');
+    expect(s.missingTiers).toEqual(['word-corpus', 'word-toc']);
   });
 });

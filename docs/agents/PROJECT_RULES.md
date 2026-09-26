@@ -150,8 +150,8 @@ klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts).
 - Popravljeni paket ima CETIRI razine dokaza (docs/REAL_CORPUS_TESTING.md, Tier model).
   npm run check je samo Tier 0 (src/repair/package-integrity.ts) i NE otvara dokument
   nijednim stvarnim uredivacem. Prije deploya motora rucno: npm run verify:strict-open:repaired
-  (Tier 1) i npm run verify:word / verify:word:worst / verify:word:toc (Word COM,
-  OpenAndRepair=false).
+  (Tier 1) i npm run verify:word / verify:word:worst / verify:word:corpus / verify:word:toc
+  (Word COM, OpenAndRepair=false; sve cetiri su obavezne razine dokaza izdanja od T62).
   PAZI: `npm run verify:strict-open` (bez `:repaired`) otvara ULAZNE fixture i o popravku ne govori
   nista, jer popravak u njoj nikad nije pozvan. Dokaz motora je `:repaired`, koji korpus prvo
   POPRAVI pa lxml-om otvori IZLAZE. CI radi oboje; zamka je samo u rucnom receptu.
