@@ -39,7 +39,33 @@
  * Isti pregled je pokazao i da su `repair-local-claim` i `repair-local-status` bili fail-open (gasio
  * ih je samo `REPAIR_LOCAL_DISABLED`), dakle javna neautenticirana povrsina iste, navodno iskljucene
  * znacajke. Za njih postoji `localRepairPublicEndpointProblems` na dnu ove datoteke.
+ *
+ * TRECI ADVERSARIJALNI PREGLED (2026-09-23, krug 4) srusio je jos dvije tvrdnje i obje su zatvorene
+ * promjenom metode, ne novim obrascem:
+ *  5. Deklaracija zastavice se provjeravala samo po POCETKU izraza (`localRepairFlagEnabled({`) i po
+ *     tome SPOMINJU li se obje varijable okoline igdje unutar poziva. Prolazilo je cetiri oblika s
+ *     drugacijim ishodom: `Deno.env.get('REPAIR_LOCAL_ENABLED') ?? 'true'` (zadano ukljuceno bez
+ *     ijedne tajne), `Deno.env.get('REPAIR_LOCAL_DISABLED') === 'true' ? 'off' : 'off'` (vrijednost
+ *     koja uopce ne ovisi o okolini), `localRepairFlagEnabled({...}) || Deno.env.get('X') !== '1'`
+ *     (alternativa IZA poziva) i `Deno.env.get('REPAIR_LOCAL_ENABLED')?.toLowerCase()` (preoblikovana
+ *     procitana vrijednost, koja mijenja tablicu istine cistoj funkciji). Sada se usporeduje CIJELI
+ *     izraz deklaracije s doslovnim kanonskim nizom, uz toleranciju samo na bjelinu i zavrsni zarez.
+ *  6. Straza javnog endpointa se mjerila po GLAVI (`if (!LOCAL_REPAIR_ENABLED) {`) i po polozaju, ali
+ *     ne i po tome PREKIDA li blok obradu: uklonjen `return` ispred `new Response(...)` prolazio je s
+ *     praznim popisom, a funkcija bi nastavila raditi. Sada se vadi tijelo bloka i trazi da mu je
+ *     jedini iskaz `return new Response(...)` sa `status: 503`.
+ *
+ * CETVRTI ADVERSARIJALNI PREGLED (2026-09-23, krug 5) srusio je i tvrdnju iz tocke 6: tijelo straze
+ * se mjerilo, ali njezina DOSEZLJIVOST nije. Straza uvucena u `if (request.method === 'POST')` i
+ * straza preseljena u pomocnu strelicu koja se nikad ne zove obje su vracale prazan popis, a javni
+ * neautenticirani endpoint je ostajao ziv. Sada se trazi da `if` straze stoji na prvoj razini tijela
+ * `Deno.serve(...)` handlera, dakle da se izvrsi na svakom zahtjevu.
+ *
+ * Ulaz se normalizira na LF (CLAUDE.md: "tekstualne usporedbe normaliziraju CR"), pa gard daje isti
+ * popis nad CRLF i LF radnom kopijom. Bez toga bi doslovna usporedba s kanonskim nizom ovisila o
+ * `core.autocrlf` stroja na kojem se gate vrti.
  */
+import { normalizeLf } from './naplata-env.ts';
 
 interface Blanked {
   /** Komentari zamijenjeni razmacima, nizovi ostaju (za imena varijabli okoline i staze modula). */
@@ -219,6 +245,16 @@ function within(ranges: Array<[number, number]>, at: number): boolean {
 
 const FLAG_MODULE_IMPORT = /import\s*\{[^}]*\blocalRepairFlagEnabled\b[^}]*\}\s*from\s*['"][^'"]*local-runner\/feature-flag\.ts['"]/;
 const FLAG_FROM_FUNCTION = /const\s+LOCAL_REPAIR_ENABLED\s*=\s*localRepairFlagEnabled\s*\(/;
+/**
+ * Jedini dopusteni izraz deklaracije zastavice, doslovno. Tablica istine je dokazana nad
+ * `localRepairFlagEnabled` (`tests/repair-local-feature-flag.test.ts`), pa vrijedi samo ako u nju
+ * ulaze bas SIROVE vrijednosti obiju varijabli okoline: svaki `??`, ternar, `?.toLowerCase()` ili
+ * alternativa iza poziva mijenja ishod, a stari gard ih nije vidio (pregled 2026-09-23, krug 4).
+ */
+const CANONICAL_FLAG_DECLARATION = 'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({\n'
+  + "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),\n"
+  + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),\n"
+  + '});';
 /** Lokalna definicija istog imena bi presjekla uvoz i uvijek vracala sto autor hoce. */
 const FLAG_LOCAL_DEFINITION = /\b(?:function|const|let|var|class)\s+localRepairFlagEnabled\b/;
 /**
@@ -329,6 +365,95 @@ function nextMeaningful(code: string, from: number): number {
 }
 
 /**
+ * Normalizacija za usporedbu s kanonskim nizom. Tolerira se TOCNO ono sto je bezopasno: bjelina,
+ * prijelom retka, razmak uz interpunkciju i zavrsni zarez prije `}` ili `)`. Svaki drugi token
+ * (operator, poziv metode, dodatni izraz) preostaje i razlikuje niz od kanonskog.
+ *
+ * Obje strane usporedbe prolaze kroz istu funkciju, pa prijelaz na jednoredni zapis ili drugaciju
+ * uvlaku nije lazna uzbuna, a promjena znacenja jest.
+ */
+function normalizeDeclaration(text: string): string {
+  return text
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([(){}:;,])\s*/g, '$1')
+    .replace(/,(?=[)}])/g, '')
+    .trim();
+}
+
+interface FlagDeclarationView {
+  problems: string[];
+  /** Sve deklaracije imena zastavice; dijele ih i dalje provjere polozaja tokena. */
+  declarations: Array<[number, number]>;
+}
+
+/**
+ * Zajednicka provjera IZVORA ZASTAVICE, ista za `repair-docx` i za javne runner endpointe. Prije je
+ * bila prepisana u obje funkcije, pa bi poostravanje na jednom mjestu tiho ostavilo drugo slabijim.
+ *
+ * `noComments` nosi sadrzaj nizova (za doslovnu usporedbu i imena varijabli okoline), `codeOnly` je
+ * bez njega (za zagrade i polozaje).
+ */
+function flagDeclarationView(noComments: string, codeOnly: string): FlagDeclarationView {
+  const problems: string[] = [];
+
+  if (!FLAG_MODULE_IMPORT.test(noComments)) {
+    problems.push('nedostaje import localRepairFlagEnabled iz src/repair/local-runner/feature-flag.ts');
+  }
+  if (FLAG_LOCAL_DEFINITION.test(codeOnly)) {
+    problems.push('localRepairFlagEnabled je definiran lokalno umjesto da se uvozi');
+  }
+
+  const declarations = spans(codeOnly, FLAG_DECLARATION_ANY);
+  if (declarations.length > 1) {
+    problems.push('LOCAL_REPAIR_ENABLED se deklarira vise od jednom; lokalno zasjenjenje ponistava modul-konstantu');
+  }
+
+  const flagCall = FLAG_FROM_FUNCTION.exec(codeOnly);
+  if (!flagCall) {
+    problems.push('LOCAL_REPAIR_ENABLED se ne racuna pozivom localRepairFlagEnabled(...)');
+  } else if (flagCall.index > 0 && codeOnly[flagCall.index - 1] !== '\n') {
+    problems.push('deklaracija LOCAL_REPAIR_ENABLED nije na razini modula (uvucena je, dakle unutar bloka)');
+  }
+  const callOpen = flagCall ? codeOnly.indexOf('(', flagCall.index) : -1;
+  const callClose = callOpen >= 0 ? matchingClose(codeOnly, callOpen, '(') : -1;
+
+  if (flagCall && callClose >= 0) {
+    /**
+     * Izmedju zatvorene zagrade poziva i `;` ne smije stajati nista: `... }) || Deno.env.get('X')`
+     * je i dalje "poziv localRepairFlagEnabled" i stari gard ga je propustao, a zastavica vise ne
+     * ovisi samo o toj funkciji.
+     */
+    if (codeOnly[nextMeaningful(codeOnly, callClose + 1)] !== ';') {
+      problems.push('izraz deklaracije LOCAL_REPAIR_ENABLED se nastavlja iza poziva localRepairFlagEnabled(...)');
+    }
+    const end = codeOnly.indexOf(';', callClose + 1);
+    const declaration = end >= 0
+      ? noComments.slice(flagCall.index, end + 1)
+      : noComments.slice(flagCall.index);
+    if (normalizeDeclaration(declaration) !== normalizeDeclaration(CANONICAL_FLAG_DECLARATION)) {
+      problems.push('deklaracija LOCAL_REPAIR_ENABLED nije doslovno kanonskog oblika; dopustene su samo razlike u bjelini i zavrsnom zarezu');
+    }
+  }
+
+  const envRead = new Set<string>();
+  for (const hit of noComments.matchAll(ENV_READ)) {
+    const at = hit.index ?? 0;
+    if (callOpen < 0 || callClose < 0 || at < callOpen || at > callClose) {
+      problems.push(`varijabla okoline REPAIR_LOCAL_${hit[1]} se cita izvan poziva localRepairFlagEnabled(...)`);
+    } else {
+      envRead.add(hit[1]);
+    }
+  }
+  for (const name of ['ENABLED', 'DISABLED']) {
+    if (!envRead.has(name)) {
+      problems.push(`poziv localRepairFlagEnabled(...) ne cita Deno.env.get('REPAIR_LOCAL_${name}')`);
+    }
+  }
+
+  return { problems, declarations };
+}
+
+/**
  * Popis problema u izvoru Edge funkcije `repair-docx`. Prazan popis znaci da lanac drzi na sve
  * cetiri karike:
  *  1. zastavica dolazi iz `localRepairFlagEnabled`, deklarirana je TOCNO JEDNOM na razini modula,
@@ -351,44 +476,13 @@ function nextMeaningful(code: string, from: number): number {
  * u drugi modul pod neutralnim imenom on ne vidi; to pokrivaju testovi tih modula.
  */
 export function localRepairFlagProblems(source: string): string[] {
-  const problems: string[] = [];
-  const { noComments, codeOnly } = blank(source);
+  const { noComments, codeOnly } = blank(normalizeLf(source));
+  const flag = flagDeclarationView(noComments, codeOnly);
+  const problems: string[] = [...flag.problems];
+  const flagDeclarations = flag.declarations;
 
-  if (!FLAG_MODULE_IMPORT.test(noComments)) {
-    problems.push('nedostaje import localRepairFlagEnabled iz src/repair/local-runner/feature-flag.ts');
-  }
-  if (FLAG_LOCAL_DEFINITION.test(codeOnly)) {
-    problems.push('localRepairFlagEnabled je definiran lokalno umjesto da se uvozi');
-  }
   for (const _hit of codeOnly.matchAll(EDGE_DYNAMIC_IMPORT)) {
     problems.push('dinamicki import u repair-docx; gard ne moze znati koji se modul ucitava');
-  }
-
-  const flagDeclarations = spans(codeOnly, FLAG_DECLARATION_ANY);
-  if (flagDeclarations.length > 1) {
-    problems.push('LOCAL_REPAIR_ENABLED se deklarira vise od jednom; lokalno zasjenjenje ponistava modul-konstantu');
-  }
-  const flagCall = FLAG_FROM_FUNCTION.exec(codeOnly);
-  if (!flagCall) {
-    problems.push('LOCAL_REPAIR_ENABLED se ne racuna pozivom localRepairFlagEnabled(...)');
-  } else if (flagCall.index > 0 && codeOnly[flagCall.index - 1] !== '\n') {
-    problems.push('deklaracija LOCAL_REPAIR_ENABLED nije na razini modula (uvucena je, dakle unutar bloka)');
-  }
-  const callOpen = flagCall ? codeOnly.indexOf('(', flagCall.index) : -1;
-  const callClose = callOpen >= 0 ? matchingClose(codeOnly, callOpen, '(') : -1;
-  const envRead = new Set<string>();
-  for (const hit of noComments.matchAll(ENV_READ)) {
-    const at = hit.index ?? 0;
-    if (callOpen < 0 || callClose < 0 || at < callOpen || at > callClose) {
-      problems.push(`varijabla okoline REPAIR_LOCAL_${hit[1]} se cita izvan poziva localRepairFlagEnabled(...)`);
-    } else {
-      envRead.add(hit[1]);
-    }
-  }
-  for (const name of ['ENABLED', 'DISABLED']) {
-    if (!envRead.has(name)) {
-      problems.push(`poziv localRepairFlagEnabled(...) ne cita Deno.env.get('REPAIR_LOCAL_${name}')`);
-    }
   }
 
   for (const _hit of codeOnly.matchAll(COMPUTED_KEY)) {
@@ -529,6 +623,65 @@ export function localRepairFlagProblems(source: string): string[] {
 
 const PUBLIC_GUARD = /if\s*\(\s*!\s*LOCAL_REPAIR_ENABLED\s*\)\s*\{/g;
 const SUPABASE_CLIENT = /\bcreateClient\s*\(/;
+/** Jedini dopusteni pocetak tijela straze: povratak iz handlera, ne puki izraz. */
+const GUARD_RETURN = /^\s*return\s+new\s+Response\s*\(/;
+const GUARD_STATUS_503 = /\bstatus\s*:\s*503\b/;
+/**
+ * Glava `Deno.serve(...)`. Straza smije stajati SAMO u tijelu tog handlera i to na njegovoj prvoj
+ * razini. Pregled 2026-09-23 (krug 5) je nad stvarnim izvorom reproducirao dva oblika koje je gard
+ * propustao s praznim popisom, a oba ostavljaju javnu povrsinu zivom: strazu uvucenu u drugi uvjet
+ * (`if (request.method === 'POST') { if (!LOCAL_REPAIR_ENABLED) { ... } }`, pa svaki GET prodje) i
+ * strazu preseljenu u pomocnu strelicu koja se nikad ne zove, cime cijela zastita postane mrtav kod.
+ * Provjere prije ove mjere samo BROJ straza i njihov polozaj prema `createClient(`, a provjera
+ * tijela samo sadrzaj bloka; nijedna ne pita izvrsava li se blok na svakom zahtjevu.
+ */
+const DENO_SERVE_HEAD = /\bDeno\.serve\s*\(/g;
+
+interface ServeBody {
+  /** Indeks `{` koji otvara tijelo handlera. */
+  open: number;
+  /** Indeks parne `}`. */
+  close: number;
+}
+
+/**
+ * Tijelo handlera koji `Deno.serve(...)` stvarno izvrsava. Trazi se prvi `{` unutar argumenta koji
+ * nije ugnijezden u oblu ili uglatu zagradu; time se preskoci lista parametara
+ * (`(request: Request)`) i anotacija tipa, a stane se bas na tijelu strelice.
+ */
+function serveHandlerBody(code: string): ServeBody | null {
+  const heads = [...code.matchAll(DENO_SERVE_HEAD)];
+  if (heads.length !== 1) return null;
+  const serveOpen = code.indexOf('(', heads[0].index ?? 0);
+  if (serveOpen < 0) return null;
+  const serveClose = matchingClose(code, serveOpen, '(');
+  if (serveClose < 0) return null;
+  let nested = 0;
+  for (let i = serveOpen + 1; i < serveClose; i += 1) {
+    const c = code[i];
+    if (c === '(' || c === '[') nested += 1;
+    else if (c === ')' || c === ']') nested -= 1;
+    else if (c === '{' && nested === 0) {
+      const close = matchingClose(code, i, '{');
+      return close < 0 ? null : { open: i, close };
+    }
+  }
+  return null;
+}
+
+/**
+ * Dubina viticastih zagrada na mjestu `at`, brojana od `from`. Kad je `from` bas `{` tijela
+ * handlera, iskaz na prvoj razini tijela ima dubinu 1, a sve ugnijezdeno (drugi `if`, `try`,
+ * pomocna funkcija) dubinu vecu od 1.
+ */
+function braceDepthFrom(code: string, from: number, at: number): number {
+  let depth = 0;
+  for (let i = from; i < at; i += 1) {
+    if (code[i] === '{') depth += 1;
+    else if (code[i] === '}') depth -= 1;
+  }
+  return depth;
+}
 
 /**
  * Popis problema u javnim runner endpointima `repair-local-claim` i `repair-local-status`.
@@ -547,42 +700,10 @@ const SUPABASE_CLIENT = /\bcreateClient\s*\(/;
  * javne povrsine.
  */
 export function localRepairPublicEndpointProblems(source: string): string[] {
-  const problems: string[] = [];
-  const { noComments, codeOnly } = blank(source);
-
-  if (!FLAG_MODULE_IMPORT.test(noComments)) {
-    problems.push('nedostaje import localRepairFlagEnabled iz src/repair/local-runner/feature-flag.ts');
-  }
-  if (FLAG_LOCAL_DEFINITION.test(codeOnly)) {
-    problems.push('localRepairFlagEnabled je definiran lokalno umjesto da se uvozi');
-  }
-
-  const flagDeclarations = spans(codeOnly, FLAG_DECLARATION_ANY);
-  if (flagDeclarations.length > 1) {
-    problems.push('LOCAL_REPAIR_ENABLED se deklarira vise od jednom; lokalno zasjenjenje ponistava modul-konstantu');
-  }
-  const flagCall = FLAG_FROM_FUNCTION.exec(codeOnly);
-  if (!flagCall) {
-    problems.push('LOCAL_REPAIR_ENABLED se ne racuna pozivom localRepairFlagEnabled(...)');
-  } else if (flagCall.index > 0 && codeOnly[flagCall.index - 1] !== '\n') {
-    problems.push('deklaracija LOCAL_REPAIR_ENABLED nije na razini modula (uvucena je, dakle unutar bloka)');
-  }
-  const callOpen = flagCall ? codeOnly.indexOf('(', flagCall.index) : -1;
-  const callClose = callOpen >= 0 ? matchingClose(codeOnly, callOpen, '(') : -1;
-  const envRead = new Set<string>();
-  for (const hit of noComments.matchAll(ENV_READ)) {
-    const at = hit.index ?? 0;
-    if (callOpen < 0 || callClose < 0 || at < callOpen || at > callClose) {
-      problems.push(`varijabla okoline REPAIR_LOCAL_${hit[1]} se cita izvan poziva localRepairFlagEnabled(...)`);
-    } else {
-      envRead.add(hit[1]);
-    }
-  }
-  for (const name of ['ENABLED', 'DISABLED']) {
-    if (!envRead.has(name)) {
-      problems.push(`poziv localRepairFlagEnabled(...) ne cita Deno.env.get('REPAIR_LOCAL_${name}')`);
-    }
-  }
+  const { noComments, codeOnly } = blank(normalizeLf(source));
+  const flag = flagDeclarationView(noComments, codeOnly);
+  const problems: string[] = [...flag.problems];
+  const flagDeclarations = flag.declarations;
 
   /**
    * Straza mora biti fail-closed I prva: Supabase klijent se ne smije stvoriti, dakle ni jedan RPC
@@ -595,6 +716,61 @@ export function localRepairPublicEndpointProblems(source: string): string[] {
   const client = SUPABASE_CLIENT.exec(codeOnly);
   if (guards.length === 1 && client && guards[0][0] > client.index) {
     problems.push('straza zastavice dolazi nakon stvaranja Supabase klijenta, dakle posao je vec krenuo');
+  }
+
+  /**
+   * Postojanje, polozaj i tijelo straze ne dokazuju da se straza IZVRSAVA. Pregled 2026-09-23
+   * (krug 5) je nad stvarnim izvorom `repair-local-claim` reproducirao dva oblika s praznim
+   * popisom: strazu uvucenu u `if (request.method === 'POST') { ... }` (svaki GET ili PUT prodje u
+   * createClient i RPC) i strazu preseljenu u strelicu koja se nikad ne zove, dakle mrtav kod.
+   * Zato se trazi da `if` straze stoji na PRVOJ razini tijela `Deno.serve(...)` handlera, dakle da
+   * se izvrsi na svakom zahtjevu.
+   */
+  const handler = serveHandlerBody(codeOnly);
+  if (!handler) {
+    problems.push('ne moze se odrediti tijelo Deno.serve(...) handlera, pa se izvrsavanje straze ne moze dokazati');
+  } else if (guards.length === 1) {
+    const guardAt = guards[0][0];
+    if (guardAt < handler.open || guardAt > handler.close) {
+      problems.push('straza zastavice je izvan tijela Deno.serve(...) handlera, pa se ne izvrsava na zahtjev');
+    } else if (braceDepthFrom(codeOnly, handler.open, guardAt) !== 1) {
+      problems.push('straza zastavice je ugnijezdena u drugi blok umjesto na prvoj razini Deno.serve(...) handlera, pa se ne izvrsava na svakom zahtjevu');
+    }
+  }
+
+  /**
+   * Postojanje i polozaj straze nisu dovoljni: blok mora PREKINUTI obradu. Pregled 2026-09-23
+   * (krug 4) je uklonio samo `return` ispred `new Response(...)` i gard je vratio prazan popis, a
+   * funkcija bi nastavila u `createClient` i RPC. Zato se tijelo bloka vadi do parne viticaste
+   * zagrade i trazi se da mu je JEDINI iskaz `return new Response(...)` sa `status: 503`.
+   */
+  if (guards.length === 1) {
+    const braceOpen = codeOnly.indexOf('{', guards[0][0]);
+    const braceClose = braceOpen >= 0 ? matchingClose(codeOnly, braceOpen, '{') : -1;
+    if (braceClose < 0) {
+      problems.push('blok straze javnog endpointa nema parnu zatvorenu viticastu zagradu');
+    } else {
+      const body = codeOnly.slice(braceOpen + 1, braceClose);
+      const returnHead = GUARD_RETURN.exec(body);
+      if (!returnHead) {
+        problems.push('blok straze javnog endpointa ne pocinje s `return new Response(`, pa ne prekida obradu');
+      } else {
+        // Obrazac je usidren na pocetak i zavrsava bas na `(` poziva, pa je njegov indeks poznat.
+        const responseOpen = returnHead[0].length - 1;
+        const responseClose = matchingClose(body, responseOpen, '(');
+        if (responseClose < 0) {
+          problems.push('poziv new Response(...) u strazi javnog endpointa nema parnu zatvorenu zagradu');
+        } else {
+          if (!GUARD_STATUS_503.test(body.slice(responseOpen, responseClose + 1))) {
+            problems.push('odgovor straze javnog endpointa nema status: 503');
+          }
+          const semicolon = nextMeaningful(body, responseClose + 1);
+          if (body[semicolon] !== ';' || nextMeaningful(body, semicolon + 1) < body.length) {
+            problems.push('blok straze javnog endpointa nosi jos koda uz return; jedini iskaz mora biti povratak s 503');
+          }
+        }
+      }
+    }
   }
 
   const flagAllowed: Array<[number, number]> = [...flagDeclarations, ...guards];
@@ -640,7 +816,7 @@ const OFFER_UNRELATED_MODULES = new Set(['./local-repair-confirmation-flow']);
  */
 export function localRepairOfferProblems(source: string): string[] {
   const problems: string[] = [];
-  const { noComments, codeOnly } = blank(source);
+  const { noComments, codeOnly } = blank(normalizeLf(source));
 
   const branches = [...codeOnly.matchAll(OFFER_BRANCH)];
   if (branches.length === 0) {

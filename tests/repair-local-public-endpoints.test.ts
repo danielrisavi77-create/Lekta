@@ -125,4 +125,178 @@ describe('javni runner endpointi: zadano iskljuceni', () => {
       );
     });
   });
+
+  /**
+   * TRECI ADVERSARIJALNI PREGLED (2026-09-23, krug 4): gard je mjerio POSTOJANJE i POLOZAJ glave
+   * `if (!LOCAL_REPAIR_ENABLED) {`, ali ne i da blok PREKIDA obradu. Sva tri oblika nize su
+   * reproducirana nad kopijom stvarnog izvora i sva su tada vracala PRAZAN popis, iako prvi i treci
+   * puste izvrsavanje dalje u `createClient` i RPC, a drugi javno vrati 200.
+   */
+  describe('tijelo straze mora prekinuti obradu', () => {
+    const NOT_INTERRUPTING = 'blok straze javnog endpointa ne pocinje s `return new Response(`, pa ne prekida obradu';
+
+    /** Granice bloka iz STVARNOG izvora, da mutacija ne moze tiho promasiti oblik. */
+    function guardSpan(source: string): { from: number; to: number; body: string } {
+      const from = source.indexOf('  if (!LOCAL_REPAIR_ENABLED) {');
+      const to = source.indexOf('\n  }\n', from) + '\n  }\n'.length;
+      expect(from).toBeGreaterThan(-1);
+      expect(to).toBeGreaterThan(from);
+      const body = source.slice(from, to);
+      expect(body).toContain('return new Response(');
+      expect(body).toContain('status: 503');
+      return { from, to, body };
+    }
+
+    it.each(ENDPOINTS)('%s: uklonjen `return` ispred new Response je problem', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const mutated = source.slice(0, from) + body.replace('return new Response(', 'new Response(') + source.slice(to);
+      expect(mutated).not.toEqual(source);
+      expect(mutated).toContain('    new Response(');
+      expect(localRepairPublicEndpointProblems(mutated)).toContain(NOT_INTERRUPTING);
+    });
+
+    it.each(ENDPOINTS)('%s: status 200 umjesto 503 u strazi je problem', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const mutated = source.slice(0, from) + body.replace('status: 503', 'status: 200') + source.slice(to);
+      expect(mutated).not.toEqual(source);
+      expect(localRepairPublicEndpointProblems(mutated)).toContain('odgovor straze javnog endpointa nema status: 503');
+    });
+
+    it.each(ENDPOINTS)('%s: prazan blok straze je problem', (name) => {
+      const source = endpointSource(name);
+      const { from, to } = guardSpan(source);
+      const mutated = `${source.slice(0, from)}  if (!LOCAL_REPAIR_ENABLED) {\n  }\n${source.slice(to)}`;
+      expect(mutated).not.toEqual(source);
+      expect(localRepairPublicEndpointProblems(mutated)).toContain(NOT_INTERRUPTING);
+    });
+
+    /**
+     * Kontrola same mjere: log ispred returna je i dalje koda prije prekida, pa je problem; ali
+     * ispravan blok s dodatnim zaglavljima u ISTOM `new Response(...)` mora ostati cist.
+     */
+    it.each(ENDPOINTS)('%s: iskaz prije returna u strazi je problem', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const mutated = source.slice(0, from)
+        + body.replace('    return new Response(', "    await audit(request);\n    return new Response(")
+        + source.slice(to);
+      expect(mutated).not.toEqual(source);
+      expect(localRepairPublicEndpointProblems(mutated)).toContain(NOT_INTERRUPTING);
+    });
+
+    it.each(ENDPOINTS)('%s: dodatno zaglavlje u istom odgovoru NE rusi gard', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const mutated = source.slice(0, from)
+        + body.replace('      headers: NO_STORE_JSON,', "      headers: { ...NO_STORE_JSON, 'retry-after': '3600' },")
+        + source.slice(to);
+      expect(mutated).not.toEqual(source);
+      expect(localRepairPublicEndpointProblems(mutated)).toEqual([]);
+    });
+
+    /** Zavrsetak retka ne smije mijenjati ishod: radna kopija je CRLF, CI je LF. */
+    it.each(ENDPOINTS)('%s: gard daje isti popis nad CRLF i LF ulazom', (name) => {
+      const lf = endpointSource(name);
+      const crlf = lf.replace(/\n/g, '\r\n');
+      expect(crlf).not.toEqual(lf);
+      expect(localRepairPublicEndpointProblems(lf)).toEqual([]);
+      expect(localRepairPublicEndpointProblems(crlf)).toEqual([]);
+
+      const { from, to, body } = guardSpan(lf);
+      const mutatedLf = lf.slice(0, from) + body.replace('return new Response(', 'new Response(') + lf.slice(to);
+      expect(localRepairPublicEndpointProblems(mutatedLf)).toContain(NOT_INTERRUPTING);
+      expect(localRepairPublicEndpointProblems(mutatedLf.replace(/\n/g, '\r\n')))
+        .toEqual(localRepairPublicEndpointProblems(mutatedLf));
+    });
+  });
+
+  /**
+   * CETVRTI ADVERSARIJALNI PREGLED (2026-09-23, krug 5): gard je dokazivao da blok straze vraca 503,
+   * ali ne i da se straza uopce IZVRSAVA. Oba oblika nize su reproducirana nad kopijom stvarnog
+   * izvora i oba su tada vracala PRAZAN popis, a javni neautenticirani endpoint (verifyJwt: false)
+   * je ostajao ziv: prvi za svaku metodu osim one u vanjskom uvjetu, drugi za svaki zahtjev jer je
+   * cijela zastita mrtav kod.
+   */
+  describe('straza se mora izvrsiti na svakom zahtjevu', () => {
+    const NESTED = 'straza zastavice je ugnijezdena u drugi blok umjesto na prvoj razini Deno.serve(...) handlera, pa se ne izvrsava na svakom zahtjevu';
+    const OUTSIDE = 'straza zastavice je izvan tijela Deno.serve(...) handlera, pa se ne izvrsava na zahtjev';
+
+    /** Granice bloka iz STVARNOG izvora, isto kao gore, da mutacija ne moze tiho promasiti oblik. */
+    function guardSpan(source: string): { from: number; to: number; body: string } {
+      const from = source.indexOf('  if (!LOCAL_REPAIR_ENABLED) {');
+      const to = source.indexOf('\n  }\n', from) + '\n  }\n'.length;
+      expect(from).toBeGreaterThan(-1);
+      expect(to).toBeGreaterThan(from);
+      const body = source.slice(from, to);
+      expect(body).toContain('return new Response(');
+      expect(body).toContain('status: 503');
+      return { from, to, body };
+    }
+
+    it.each(ENDPOINTS)('%s: straza uvucena u drugi uvjet je problem', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const mutated = `${source.slice(0, from)}  if (request.method === 'POST') {\n${body}  }\n${source.slice(to)}`;
+      expect(mutated).not.toEqual(source);
+      // Generator stvarno proizvodi ciljanu klasu: straza je i dalje doslovno ista, samo ugnijezdena.
+      expect(mutated).toContain("if (request.method === 'POST') {\n  if (!LOCAL_REPAIR_ENABLED) {");
+      expect(mutated).toContain('status: 503');
+      expect(localRepairPublicEndpointProblems(mutated)).toContain(NESTED);
+    });
+
+    it.each(ENDPOINTS)('%s: straza preseljena u pomocnu strelicu koja se ne zove je problem', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const withoutGuard = source.slice(0, from) + source.slice(to);
+      const serveAt = withoutGuard.indexOf('Deno.serve(');
+      expect(serveAt).toBeGreaterThan(-1);
+      const helper = `const disabledResponse = (): Response | null => {\n${body}  return null;\n};\n\n`;
+      const mutated = withoutGuard.slice(0, serveAt) + helper + withoutGuard.slice(serveAt);
+      expect(mutated).not.toEqual(source);
+      // Generator dokazuje klasu ulaza: straza je cijela sacuvana, ali izvan tijela handlera.
+      expect(mutated).toContain('const disabledResponse = (): Response | null => {');
+      expect(mutated).toContain('  if (!LOCAL_REPAIR_ENABLED) {');
+      expect(mutated).toContain('status: 503');
+      expect(localRepairPublicEndpointProblems(mutated)).toContain(OUTSIDE);
+    });
+
+    it.each(ENDPOINTS)('%s: straza u pomocnoj strelici UNUTAR handlera je problem', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const helper = `  const disabledResponse = (): Response | null => {\n${body}    return null;\n  };\n`;
+      const mutated = source.slice(0, from) + helper + source.slice(to);
+      expect(mutated).not.toEqual(source);
+      expect(mutated).toContain('  const disabledResponse = (): Response | null => {');
+      expect(localRepairPublicEndpointProblems(mutated)).toContain(NESTED);
+    });
+
+    /**
+     * Kontrola same mjere: straza pomaknuta NIZE unutar istog tijela handlera (jos uvijek prva
+     * razina, jos uvijek prije Supabase klijenta) mora ostati cista. Bez ove kontrole nova provjera
+     * bi mogla biti zelena samo zato sto odbija svaki pomak.
+     */
+    it.each(ENDPOINTS)('%s: straza nize u istom tijelu handlera NE rusi gard', (name) => {
+      const source = endpointSource(name);
+      const { from, to, body } = guardSpan(source);
+      const withoutGuard = source.slice(0, from) + source.slice(to);
+      const clientAt = withoutGuard.indexOf('  const admin = createClient(SUPABASE_URL');
+      expect(clientAt).toBeGreaterThan(-1);
+      const mutated = withoutGuard.slice(0, clientAt) + body + withoutGuard.slice(clientAt);
+      expect(mutated).not.toEqual(source);
+      expect(localRepairPublicEndpointProblems(mutated)).toEqual([]);
+    });
+
+    it.each(ENDPOINTS)('%s: dosezljivost se mjeri isto nad CRLF i LF ulazom', (name) => {
+      const lf = endpointSource(name);
+      const { from, to, body } = guardSpan(lf);
+      const mutatedLf = `${lf.slice(0, from)}  if (request.method === 'POST') {\n${body}  }\n${lf.slice(to)}`;
+      const mutatedCrlf = mutatedLf.replace(/\n/g, '\r\n');
+      expect(mutatedCrlf).not.toEqual(mutatedLf);
+      expect(localRepairPublicEndpointProblems(mutatedLf)).toContain(NESTED);
+      expect(localRepairPublicEndpointProblems(mutatedCrlf))
+        .toEqual(localRepairPublicEndpointProblems(mutatedLf));
+    });
+  });
 });

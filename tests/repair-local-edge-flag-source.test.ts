@@ -366,4 +366,104 @@ describe('repair-docx: lokalni popravak iza zastavice', () => {
       );
     });
   });
+
+  /**
+   * TRECI ADVERSARIJALNI PREGLED (2026-09-23, krug 4). Gard je do tada trazio samo da izraz POCINJE
+   * s `localRepairFlagEnabled({` i da se imena obiju varijabli okoline SPOMINJU negdje unutar
+   * poziva. Sva cetiri oblika nize su reproducirana nad kopijom stvarnog izvora i sva su tada
+   * vracala PRAZAN popis, iako svaki mijenja ishod zastavice. Lijek nije jos jedan obrazac nego
+   * doslovna usporedba cijelog izraza deklaracije s kanonskim nizom.
+   */
+  describe('oblik deklaracije zastavice', () => {
+    const CANONICAL_DECLARATION = /const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled\(\{[\s\S]*?\}\);/;
+    const NOT_CANONICAL = 'deklaracija LOCAL_REPAIR_ENABLED nije doslovno kanonskog oblika; dopustene su samo razlike u bjelini i zavrsnom zarezu';
+
+    /** Generator ulaza: dokazuje da mutacija stvarno pogadja deklaraciju, a ne neko drugo mjesto. */
+    function withDeclaration(body: string): string {
+      const mutated = edgeSource().replace(CANONICAL_DECLARATION, body);
+      expect(mutated).not.toEqual(edgeSource());
+      expect(mutated).toContain(body);
+      return mutated;
+    }
+
+    /** (a) Zadano UKLJUCENO bez ijedne postavljene tajne: tocno suprotno od stanja na lansiranju. */
+    it('gard grize kad procitana vrijednost dobije zadano `?? true`', () => {
+      const mutated = withDeclaration(
+        'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({\n'
+        + "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED') ?? 'true',\n"
+        + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),\n"
+        + '});',
+      );
+      expect(localRepairFlagProblems(mutated)).toContain(NOT_CANONICAL);
+    });
+
+    /** (b) Vrijednost koja uopce ne ovisi o okolini, a ime varijable je i dalje u pozivu. */
+    it('gard grize kad procitana vrijednost prodje kroz ternar s istim ishodom', () => {
+      const mutated = withDeclaration(
+        'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({\n'
+        + "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),\n"
+        + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED') === 'true' ? 'off' : 'off',\n"
+        + '});',
+      );
+      expect(localRepairFlagProblems(mutated)).toContain(NOT_CANONICAL);
+    });
+
+    /** (c) Alternativa IZA poziva: zastavica vise ne ovisi samo o dokazanoj cistoj funkciji. */
+    it('gard grize kad iza poziva stoji alternativa nad drugom varijablom', () => {
+      const mutated = withDeclaration(
+        'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({\n'
+        + "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),\n"
+        + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),\n"
+        + "}) || Deno.env.get('REPAIR_LOCAL_FORCE') !== '1';",
+      );
+      const problems = localRepairFlagProblems(mutated);
+      expect(problems).toContain('izraz deklaracije LOCAL_REPAIR_ENABLED se nastavlja iza poziva localRepairFlagEnabled(...)');
+      expect(problems).toContain(NOT_CANONICAL);
+    });
+
+    /** (d) Preoblikovana vrijednost: tablica istine dokazana nad SIROVIM ulazom vise ne vrijedi. */
+    it('gard grize kad se procitana vrijednost preoblikuje prije predaje funkciji', () => {
+      const mutated = withDeclaration(
+        'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({\n'
+        + "  REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED')?.toLowerCase(),\n"
+        + "  REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED'),\n"
+        + '});',
+      );
+      expect(localRepairFlagProblems(mutated)).toContain(NOT_CANONICAL);
+    });
+
+    /**
+     * Kontrola same mjere: doslovna usporedba ne smije biti tako kruta da pukne na preoblikovanju
+     * bez promjene znacenja. Inace bi prvi `npm run lint -- --fix` proizveo lazno crveno.
+     */
+    it('isti izraz u jednom retku i bez zavrsnog zareza NE rusi gard', () => {
+      const mutated = withDeclaration(
+        'const LOCAL_REPAIR_ENABLED = localRepairFlagEnabled({ '
+        + "REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'), "
+        + "REPAIR_LOCAL_DISABLED: Deno.env.get('REPAIR_LOCAL_DISABLED') });",
+      );
+      expect(localRepairFlagProblems(mutated)).toEqual([]);
+    });
+
+    /**
+     * Zavrsetak retka ne smije mijenjati ishod: radna kopija na Windowsu je CRLF, CI je LF. Bez
+     * normalizacije bi doslovna usporedba s kanonskim nizom ovisila o `core.autocrlf` stroja.
+     */
+    it('gard daje isti popis nad CRLF i LF ulazom', () => {
+      const lf = edgeSource().replace(/\r\n?/g, '\n');
+      const crlf = lf.replace(/\n/g, '\r\n');
+      expect(crlf).not.toEqual(lf);
+      expect(localRepairFlagProblems(lf)).toEqual([]);
+      expect(localRepairFlagProblems(crlf)).toEqual([]);
+
+      const mutatedLf = lf.replace(
+        "REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED'),",
+        "REPAIR_LOCAL_ENABLED: Deno.env.get('REPAIR_LOCAL_ENABLED') ?? 'true',",
+      );
+      expect(mutatedLf).not.toEqual(lf);
+      expect(localRepairFlagProblems(mutatedLf)).toContain(NOT_CANONICAL);
+      expect(localRepairFlagProblems(mutatedLf.replace(/\n/g, '\r\n')))
+        .toEqual(localRepairFlagProblems(mutatedLf));
+    });
+  });
 });
