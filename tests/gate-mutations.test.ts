@@ -281,6 +281,22 @@ const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t
 const RE60_SYNTHETIC_GATE = (output: string) =>
   detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
 
+/**
+ * Staticka provjera `scripts/agents/session-bootstrap.mjs`: mjerenje koje ne uspije mora vratiti
+ * `null`, nikad doslovnu `0`. Doslovna nula u `catch` grani izgleda identicno stvarno izmjerenoj
+ * nuli, pa je `formatBootstrap` ne moze razlikovati (CLAUDE.md: nepotvrdjeno se ne pogada).
+ */
+function sessionBootstrapFalseZeroProblems(source: string): string[] {
+  const problems: string[] = [];
+  if (/catch\s*\{\s*freeDiskGb\s*=\s*0\s*;?\s*\}/.test(source)) {
+    problems.push('freeDiskGb u catch grani vraca doslovnu 0 umjesto null');
+  }
+  if (/catch\s*\{\s*testProcessCount\s*=\s*0\s*;?\s*\}/.test(source)) {
+    problems.push('testProcessCount u catch grani vraca doslovnu 0 umjesto null');
+  }
+  return problems;
+}
+
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
   {
@@ -3339,6 +3355,33 @@ const MUTATIONS: Mutation[] = [
     // Baseline nad STVARNIM izvorom: mutacija vrijedi samo ako cisto stanje daje prazan popis.
     cleanBefore: () => intakeHandoffWiringProblems(
       readFileSync(resolve(process.cwd(), 'src/routes/intake/main.ts'), 'utf8'),
+    ).length === 0,
+  },
+
+  // --- session-bootstrap: brojac koji ne moze mjeriti mora priznati to, ne lagati nulom ---------
+  {
+    id: 'bootstrap/lazna-nula-umjesto-null',
+    imitates: 'nalaz lekta-d3 2026-09-26: kad mjerenje testnih procesa ili slobodnog diska ne uspije, '
+      + 'catch grana vrati 0 umjesto null, sto izgleda identicno stvarnoj nuli (tasklist /FO CSV /NH bez '
+      + 'naredbenog retka i statfsSync bez fallbacka)',
+    caught: () => {
+      const stvarni = readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8');
+      // MUTACIJA 1: catch grana za slobodan disk vrati doslovnu nulu umjesto null.
+      const diskLaznaNula = stvarni.replace(
+        '} catch {\n    freeDiskGb = null;\n  }',
+        '} catch {\n    freeDiskGb = 0;\n  }',
+      );
+      // MUTACIJA 2: catch grana za broj testnih procesa vrati doslovnu nulu umjesto null.
+      const procesiLaznaNula = stvarni.replace(
+        '} catch {\n    testProcessCount = null;\n  }',
+        '} catch {\n    testProcessCount = 0;\n  }',
+      );
+      if (diskLaznaNula === stvarni || procesiLaznaNula === stvarni) return false; // nema sto mutirati
+      return sessionBootstrapFalseZeroProblems(diskLaznaNula).length > 0
+        && sessionBootstrapFalseZeroProblems(procesiLaznaNula).length > 0;
+    },
+    cleanBefore: () => sessionBootstrapFalseZeroProblems(
+      readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
   },
 ];
