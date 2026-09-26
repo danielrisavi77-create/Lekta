@@ -98,6 +98,8 @@ import { applyRepairSelectionSnapshot, buildRepairSelectionSnapshot, repairItems
 import { buildRepairPanelHandle } from '../src/ui/repair-panel';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
+import { tableFigureRescueFixer } from '../src/repair/table-figure-rescue-fixer';
+import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -293,6 +295,28 @@ function sessionBootstrapFalseZeroProblems(source: string): string[] {
   }
   return problems;
 }
+
+/**
+ * T65. Gard u table-figure-rescue-fixeru: equalColumns se NE primjenjuje na tablicu sa spojenim
+ * celijama. Nemutirana tablica (bez spajanja) mora dobiti jednake stupce, inace bi "uhvaceno" moglo
+ * znaciti samo da equalColumns vise nikad nista ne radi. Mutacija ubaci gridSpan ili vMerge u istu
+ * tablicu; gard je uhvatio kvar kad su tblGrid i svi tcW ostali bajt-identicni ulazu.
+ */
+const T65_W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+const t65Cell = (extra: string, text: string, width: number) => `<w:tc><w:tcPr><w:tcW w:w="${width}" w:type="dxa"/>${extra}</w:tcPr><w:p><w:r><w:t>${text}</w:t></w:r></w:p></w:tc>`;
+const t65Table = (first: string, second: string) =>
+  `<w:tbl ${T65_W}><w:tblPr><w:tblW w:w="9000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="2000"/><w:gridCol w:w="7000"/></w:tblGrid>`
+  + `<w:tr>${t65Cell(first, 'A', 2000)}${t65Cell('', 'B', 7000)}</w:tr><w:tr>${t65Cell(second, 'C', 2000)}${t65Cell('', 'D', 7000)}</w:tr></w:tbl>`;
+/** Sirine (tblGrid + svi tcW) nakon equalColumns; `null` kad fixer odbije cijeli zahtjev. */
+function t65WidthsAfterEqualColumns(tbl: string): { before: string; after: string } | null {
+  const documentXml = `<w:document ${T65_W}><w:body>${tbl}</w:body></w:document>`;
+  const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, { version: 1, tables: [{ id: 't', bodyChildIndex: 0, anchorFingerprint: anchorFingerprintForXml('table', tbl), actions: { equalColumns: true, center: true } }], figures: [] });
+  if (!out.applied) return null;
+  const widths = (xml: string) => [xml.match(/<w:tblGrid\b[^>]*>[\s\S]*?<\/w:tblGrid>/i)?.[0] ?? '', ...[...xml.matchAll(/<w:tcW\b[^>]*>/gi)].map((m) => m[0])].join('|');
+  return { before: widths(documentXml), after: widths(out.parts.documentXml) };
+}
+const t65Preserved = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.before === r.after; };
+const t65Equalized = (tbl: string) => { const r = t65WidthsAfterEqualColumns(tbl); return r !== null && r.after.includes('<w:gridCol w:w="4500"/><w:gridCol w:w="4500"/>') && !r.after.includes('w:w="2000"'); };
 
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
@@ -1806,6 +1830,23 @@ const MUTATIONS: Mutation[] = [
       + 'vrata integriteta isporuce dokument koji nijedan parser ne otvara',
     caught: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('<w:r>', '<w:fldChar w:fldCharType="begin"/ w:dirty="true"><w:r>'))?.problem.includes('iza kose crte') === true,
     cleanBefore: () => RE60_SYNTHETIC_GATE(RE60_SYNTHETIC_INPUT.replace('doi:10.1/a', 'https://doi.org/10.1/a')) === null,
+  },
+  // --- T65: equalColumns i spojene celije --------------------------------------------------------
+  {
+    id: 'tablica/equal-columns-gridspan',
+    imitates:
+      'equalColumns upise sirinu jednog stupca u tcW celije s w:gridSpan, pa se celija preko dva '
+      + 'stupca skupi na jedan i grid vise ne odgovara celijama',
+    caught: () => t65Preserved(t65Table('<w:gridSpan w:val="2"/>', '')),
+    cleanBefore: () => t65Equalized(t65Table('', '')),
+  },
+  {
+    id: 'tablica/equal-columns-vmerge',
+    imitates:
+      'equalColumns prepise grid i tcW tablice s okomito spojenim celijama (w:vMerge) iako sirine '
+      + 'spojenog stupca nisu provjerene',
+    caught: () => t65Preserved(t65Table('<w:vMerge w:val="restart"/>', '<w:vMerge/>')),
+    cleanBefore: () => t65Equalized(t65Table('', '')),
   },
   // ---------------------------------------------------------------------------
   // GATE IZDANJA (plan T19): pet stanja u kojima objavljeni artefakt ne odgovara onome sto je dokazano.
