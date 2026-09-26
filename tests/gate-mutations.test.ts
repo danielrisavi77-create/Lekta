@@ -3842,3 +3842,27 @@ describe('mutacije: config/agent-routing.json (korak 1 routinga)', () => {
     expect(findSameProviderWithoutFallback(saFallbackom)).toEqual([]);
   });
 });
+
+describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
+  it('gard koji propusta git add -A (izgubljen uvjet) obara test', async () => {
+    const { judgeCommand } = await import('../scripts/agents/tool-guard.mjs');
+
+    // BASELINE: stvarni gard blokira git add -A.
+    expect((judgeCommand as (t: string, c?: string) => { allow: boolean }) ('Bash', 'git add -A').allow).toBe(false);
+
+    // MUTACIJA: simulira gard koji je izgubio provjeru za -A/--all/"." (npr. regex koji trazi
+    // samo tocan niz "git add -A" bez varijanti razmaka/redoslijeda argumenata), pa git add -A
+    // s dodatnim argumentom prolazi neopazeno.
+    const mutiraniGard = (toolName: string, command?: string) => {
+      if (typeof command === 'string' && command.trim() === 'git add -A') {
+        return { allow: false, reason: 'blokirano' };
+      }
+      return { allow: true, reason: 'propusteno' };
+    };
+    // Varijanta koju bi izvorni test trebao uhvatiti: isti obrazac, drugaciji poredak/dodatak.
+    expect(mutiraniGard('Bash', 'git add -A .')).toEqual({ allow: true, reason: 'propusteno' });
+    expect(
+      (judgeCommand as (t: string, c?: string) => { allow: boolean }) ('Bash', 'git add -A .').allow
+    ).toBe(false);
+  });
+});
