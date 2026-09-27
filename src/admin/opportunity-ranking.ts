@@ -54,8 +54,10 @@ export function opportunityMeasurementHealth(
   const analysisDelta = bucket.opportunityEvents - bucket.analysisCompletedEvents;
   const structureDelta = bucket.structureBreakdownItems - bucket.structureGapItems;
   const repairNoOpDelta = bucket.repairNoOpItems - bucket.repairNoOpSummaryItems;
-  const hasAnalysis = bucket.analysisCompletedEvents > 0 || bucket.opportunityEvents > 0;
-  const hasRepairNoOp = bucket.repairNoOpSummaryEvents > 0 || bucket.repairNoOpItems > 0;
+  const hasAnalysis = bucket.analysisCompletedEvents > 0 || bucket.opportunityEvents > 0
+    || bucket.structureGapItems > 0 || bucket.structureBreakdownItems > 0;
+  const hasRepairNoOp = bucket.repairNoOpSummaryEvents > 0
+    || bucket.repairNoOpSummaryItems > 0 || bucket.repairNoOpItems > 0;
   if (!hasAnalysis && !hasRepairNoOp) {
     return { kind: 'no-data', analysisDelta, structureDelta, repairNoOpDelta };
   }
