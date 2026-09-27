@@ -38,6 +38,9 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
+import { runMetrics } from '../src/audits/metrics';
+import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
@@ -89,7 +92,8 @@ import {
   NOTABLE_IGNORE_PREFIXES,
   STRIPE_HANDLED_EVENTS,
 } from '../src/report/webhook';
-import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
+import { findBotsImplementingProtected, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
+import { botPathViolations } from '../scripts/agents/grok-bots.mjs';
 import {
   localRepairFlagProblems,
   localRepairOfferProblems,
@@ -122,6 +126,7 @@ import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-r
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
+import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -144,6 +149,7 @@ import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
   findBarePushWorkflows,
+  findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
   findSelfHostedProblems,
   type NamedWorkflow,
@@ -257,6 +263,26 @@ interface Mutation {
   cleanBefore: () => boolean;
 }
 
+/**
+ * Tvrdnja garda T74: otisak koda popravka ne mijenja se kad se promijeni samo dokumentacija ili test
+ * u src/repair, a mijenja se kad se promijeni produkcijski .ts. Obje polovice, inace bi konstantni
+ * otisak prolazio.
+ */
+function otisakPratiSamoProdukciju(hash: (files: { path: string; content: string }[]) => string): boolean {
+  const base = [
+    { path: 'src/repair/apply-fixers.ts', content: 'export const a = 1;\n' },
+    { path: 'src/repair/apply-fixers.test.ts', content: 'it("x", () => {});\n' },
+    { path: 'src/repair/CLAUDE.md', content: '# Popravak\n' },
+  ];
+  const s = (p: string, content: string) => base.map((f) => (f.path === p ? { ...f, content } : f));
+  const h = hash(base);
+  return (
+    hash(s('src/repair/CLAUDE.md', '# Popravak\n<!-- T73 mutacija: samo dokumentacija -->\n')) === h &&
+    hash(s('src/repair/apply-fixers.test.ts', 'it("y", () => {});\n')) === h &&
+    hash(s('src/repair/apply-fixers.ts', 'export const a = 2;\n')) !== h
+  );
+}
+
 /** Potpisana metoda: dva neovisna orakula. Bez nje nijedan dokument nije dokaz, i to je namjerno. */
 const PROOF_METHOD: ProofMethod = {
   signedBy: 'Daniel',
@@ -342,7 +368,7 @@ const RE60_SYNTHETIC_GATE = (output: string) =>
   detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
 
 const buildUpisnikProfileCandidates: typeof buildRawUpisnikProfileCandidates = (...args) =>
-  buildRawUpisnikProfileCandidates(args[0], args[1], args[2], args[3], args[4], args[5], args[6], sourceRegistry);
+  buildRawUpisnikProfileCandidates(args[0], args[1], args[2], args[3], args[4], args[5], args[6], sourceRegistry, args[8]);
 
 function upisnikEvidenceFixture(over: Partial<{ sourceUrl: string; sourceLocator: string; quote: string }> = {}) {
   return buildUpisnikProfileCandidates(
@@ -369,7 +395,34 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
   );
 }
 
-function upisnikInventory(decisions = upisnikProfileDecisions.decisions) {
+function upisnikRitehRootFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '3', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '3', executors: [{ componentIds: ['riteh'] }] }],
+    [{ id: 'p', unitId: 'riteh', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://uniri.hr/studij' }] }],
+    [{ programCode: '3', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikFerFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: 'FER', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['fer'] }] }],
+    [{ id: 'p', unitId: 'fer', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://fer.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikKbfFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Teologija', izvoditelj: 'KBF', vrsta: 'Sveucilisni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['kbf'] }] }],
+    [{ id: 'p', unitId: 'kbf', programs: ['Teologija'], workTypes: ['final'], sources: [{ url: 'https://kbf.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote: 'Teologija' } }],
+  );
+}
+
+function upisnikInventory(decisions = upisnikProfileDecisions.decisions, integratedGraduateCoverage: typeof upisnikProfileDecisions.integratedGraduateCoverage = upisnikProfileDecisions.integratedGraduateCoverage) {
   return buildUpisnikProfileCandidates(
     upisnikRows.rows,
     upisnikComponents.decisions,
@@ -378,6 +431,7 @@ function upisnikInventory(decisions = upisnikProfileDecisions.decisions) {
     upisnikProfileDecisions.exclusions as Parameters<typeof buildUpisnikProfileCandidates>[4],
     upisnikProfileDecisions.blockers as Parameters<typeof buildUpisnikProfileCandidates>[5],
     upisnikProfileDecisions.holds,
+    sourceRegistry, integratedGraduateCoverage,
   );
 }
 
@@ -511,6 +565,94 @@ function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string
 
 const MUTATIONS: Mutation[] = [
   {
+    id: 'upisnik/b13-korijen-rijeci',
+    imitates: 'Stara podnizna ili priblizna osnova ponovno prihvaca Mikrobiologija i Fizikalna terapija',
+    cleanBefore: () => upisnikGuardFixture('203', 'Studij fizike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      const attacks = [
+        () => upisnikGuardFixture('203', 'Fizikalna terapija'),
+        () => buildUpisnikProfileCandidates(
+          [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+          [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+          [{ id: 'p', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: 'https://pmf.unizg.hr' }] }],
+          [{ programCode: '1', profileId: 'p', evidence: { sourceUrl: 'https://pmf.unizg.hr', sourceLocator: 'studij', quote: 'Mikrobiologija' } }],
+        ),
+      ];
+      return attacks.every((attack) => { try { attack(); return false; } catch (error) { return /program name/u.test(String(error)); } });
+    },
+  },
+  {
+    id: 'upisnik/b13-razina-svih-studija',
+    imitates: 'Stara iznimka svi studiji prihvaca doktorski citat za prijediplomski program',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi doktorski studiji imaju disertaciju'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-vrsta-uz-studij',
+    imitates: 'Staro ponistavanje obiju osnova propusta strucni studij uz sveucilisnu knjiznicu',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prijediplomski studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prijediplomski studij. Sveucilisna knjiznica.'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-svi-studiji-bez-razine',
+    imitates: 'Iznimka bez razine prihvaca opcenit citat Svi studiji',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi studiji imaju zavrsni rad'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-vrsta-bez-studija',
+    imitates: 'Vrsta studija izvan izraza studij nije procitana',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prvostupnik inzenjer elektrotehnike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prvostupnik inzenjer elektrotehnike'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-domena-v3',
+    imitates: 'unitId kao kljuc bilo gdje propusta KBF na splitskom sveucilistu',
+    cleanBefore: () => upisnikKbfFixture('https://kbf.unizg.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikKbfFixture('https://kbf.unist.hr/studij'); return false; }
+      catch (error) { return /source domain/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-normalizirani-hold',
+    imitates: 'Stara doslovna jednakost i bez minimalne duljine propustaju razmak i kratak dokaz',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      return validateUpisnikProfileCoverageHolds(report).length === 0;
+    },
+    caught: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      const hold = report.programs[0]!.remainingHold!;
+      hold.missingEvidence = ['Sluzbeni aktualni izvor za identitet programa i sastavnicu, uz dokaz obvezne vrste rada i veze s odgovarajucim profilom. '];
+      const generic = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('generic evidence request'));
+      hold.missingEvidence = ['Potreban je sluzbeni dokaz.'];
+      const short = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('too short'));
+      return generic && short;
+    },
+  },
+
+  {
     id: 'upisnik/prazan-worktypes-prihvaca-sve',
     imitates: 'Prazan workTypes ponovno nudi profil za svaku razinu',
     cleanBefore: () => {
@@ -539,19 +681,19 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'upisnik/109-domena-druge-ustanove',
-    imitates: 'Veza FHS 109 koristi službeni izvor Hrvatskog katoličkog sveučilišta',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    imitates: 'Goli korijen uniri.hr u profilu propusta dokaz s medri.uniri.hr za RITEH',
+    cleanBefore: () => upisnikRitehRootFixture('https://riteh.uniri.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://www.unicath.hr/povijest' }); return false; }
+      try { upisnikRitehRootFixture('https://medri.uniri.hr/studij'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
   {
-    id: 'upisnik/susjedna-sastavnica-iste-domene',
-    imitates: 'FHS veza koristi izvor FFZG-a na istoj sveučilišnoj domeni',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    id: 'upisnik/unitid-izvan-sveucilista',
+    imitates: 'unitId kao kljuc izvan sveucilisnih korijena propusta fer.com',
+    cleanBefore: () => upisnikFerFixture('https://fer.unizg.hr/x').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://ffzg.unizg.hr/povijest' }); return false; }
+      try { upisnikFerFixture('https://fer.com/x'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
@@ -602,6 +744,35 @@ const MUTATIONS: Mutation[] = [
     caught: () => {
       try { upisnikGuardFixture('3', 'Prijediplomski program stručnog studija elektrotehnike'); return false; }
       catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/izbrisana-integrirana-odluka',
+    imitates: 'Brisanje iznimke za integrirani studij uklanja kandidata 917',
+    cleanBefore: () => upisnikInventory(undefined, upisnikProfileDecisions.integratedGraduateCoverage).programs.find((row) => row.programCode === '917')?.exactCandidateProfileIds.includes('vef-diplomski') === true,
+    caught: () => upisnikInventory(undefined, []).programs.find((row) => row.programCode === '917')?.exactCandidateProfileIds.includes('vef-diplomski') === false,
+  },
+  {
+    id: 'upisnik/globalna-kompatibilnost-integriranog',
+    imitates: 'Globalno dopustenje diplomskih profila dodaje kandidata kontrolnom integriranom programu',
+    cleanBefore: () => ['900', '915', '919', '2018', '2229', '2236', '2237', '2585'].every((code) => upisnikInventory().programs.find((row) => row.programCode === code)?.componentWorkTypeProfileIds.length === 0),
+    caught: () => {
+      const controls = new Set(['900', '915', '919', '2018', '2229', '2236', '2237', '2585']);
+      const report = upisnikInventory();
+      const atRisk = report.programs.filter((row) => controls.has(row.programCode) &&
+        Object.values(upisnikProfiles).some((profile) => row.componentIds.includes(profile.unitId) && profile.workTypes?.includes('graduate')));
+      return atRisk.length > 0 && atRisk.every((row) =>
+        row.exactCandidateProfileIds.length === 0 && row.componentWorkTypeProfileIds.length === 0);
+    },
+  },
+  {
+    id: 'upisnik/bez-registrirane-url-veze',
+    imitates: 'Neregistrirani URL na ispravnoj domeni prolazi bez provjere prema registru',
+    cleanBefore: () => upisnikInventory(undefined, upisnikProfileDecisions.integratedGraduateCoverage).programs.find((row) => row.programCode === '917')?.exactCandidateProfileIds.includes('vef-diplomski') === true,
+    caught: () => {
+      const coverage = upisnikProfileDecisions.integratedGraduateCoverage[0]!;
+      try { upisnikInventory(undefined, [{ ...coverage, evidence: { ...coverage.evidence, sourceUrl: 'https://www.vef.unizg.hr/nepostojeci.pdf' } }]); return false; }
+      catch (error) { return /source registry/u.test(String(error)); }
     },
   },
   {
@@ -964,6 +1135,15 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () =>
       computeCoverageCell(profileWith(goodEntry({ status: 'advisory', scored: false })), SOURCES, {}).state ===
       'advisory-only',
+  },
+
+  // --- otisak koda popravka (T74) ----------------------------------------------------------------
+  {
+    id: 'repair-hash/claude-md-zastarijeva-manifeste',
+    imitates:
+      'otisak src/repair ukljucuje CLAUDE.md i testove (wf/ai-evidence-audit), pa jedna linija komentara zastarijeva sve manifeste (T73, 3b)',
+    caught: () => !otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files, () => true).hash),
+    cleanBefore: () => otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files).hash),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
@@ -5288,6 +5468,37 @@ const MUTATIONS: Mutation[] = [
       && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
     cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
   },
+  // --- T26, audit 22. 9. nalazi #14, #16, #17 (+ Codex pregled #168): tocnost lokalne DOCX analize ---
+  // Doseg je UZI od punog ulaznog puta: kontrole zovu parseXml, ZipReader i effectiveHidden/runMetrics
+  // (harness je sinkron, a inspectDocxIntake i analyzeDocx su async). Pune putove pokrivaju
+  // tests/docx-malformed-xml, docx-intake-cfb i docx-hidden-text-scoring; mutacije izvornog koda
+  // izvedene su rucno i zapisane na PR-u #168.
+  {
+    id: 'docx/xml-greska-tiho-boduje',
+    imitates: 'xmldom gresku razine error (goli & u tekstu) samo ispise i vrati djelomican DOM, pa se osteceni document.xml boduje umjesto da analiza javi gresku (nalaz #14)',
+    caught: () => { try { parseXml('<t>R&D</t>', 'Glavni Word dokument'); return false; } catch (e) { return String((e as Error).message) === 'Glavni Word dokument nije moguće pročitati.'; } },
+    // Cisti baseline ukljucuje valjan XML na koji xmldom salje warning (U+FFFD, Codex #14a).
+    cleanBefore: () => { try { return parseXml('<t>R&amp;D \uFFFD</t>').documentElement?.textContent === 'R&D \uFFFD'; } catch { return false; } },
+  },
+  {
+    id: 'docx/zasticen-docx-kao-not-zip',
+    imitates: 'docx zasticen lozinkom (CFB s EncryptionInfo i EncryptedPackage) dobiva poruku o neispravnoj ZIP arhivi umjesto upute za uklanjanje lozinke (nalaz #16)',
+    caught: () => {
+      const encrypted = new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/intake/encrypted-synthetic.docx')));
+      try { new ZipReader(encrypted.buffer.slice(0) as ArrayBuffer); return false; } catch (e) { return /zaštićena lozinkom/.test(String((e as Error).message)); }
+    },
+    cleanBefore: () => { try { new ZipReader(buildDocx({ paragraphs: [{ text: 'Obican dokument.' }] }).buffer as ArrayBuffer); return true; } catch { return false; } },
+  },
+  {
+    id: 'docx/skriveni-run-bira-font',
+    imitates: 'skriveni tekst odlucuje o fontu, ili se vanish iz stila odlomka i znakovnog stila spaja kao zadnja razina umjesto toggle preokreta, pa je vidljiv tekst proglasen skrivenim (nalaz #17, Codex #17a)',
+    caught: () => effectiveHidden({ paragraphStyle: { hidden: true } }) === true
+      && effectiveHidden({ paragraphStyle: { hidden: true }, runStyle: { hidden: true } }) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20, hidden: true }]).font === 'Times New Roman',
+    cleanBefore: () => effectiveHidden({}) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20 }]).font === 'Arial',
+  },
+
 ];
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
@@ -6066,6 +6277,291 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
   });
 });
 
+/**
+ * GATE PREFLIGHT I OMOTAC (T62, pravila za stroj). Dva kvara koja bi lock ucinila ukrasom:
+ *  (a) preflight koji propusta iako radi tudji vitest (dvije sesije opet mlate isti stroj);
+ *  (b) omotac koji otpusta lock samo na uspjeh (lanac `a && b && release`), pa pad gatea ostavi
+ *      lock koji blokira sve ostale dok PID ne nestane.
+ * Mutira se kopija izvora u privremenom direktoriju, nikad datoteka u repozitoriju.
+ */
+describe('mutacije: gate preflight i omotac locka', () => {
+  const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+
+  /**
+   * Tvrdnja iz tests/gate-preflight.test.ts ("tudji vitest proces: odbija"), izvrsena nad KOPIJOM
+   * izvora u zasebnom node procesu. Vitestov loader ne ucitava module izvan korijena projekta, a
+   * mutirana kopija ne smije u repozitorij, pa presudu racuna cisti node.
+   * @returns true kad presuda ODBIJA uz tudji vitest.
+   */
+  async function refusesForeignVitest(source: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-'));
+    try {
+      const file = join(dir, 'gate-preflight.mjs');
+      write(file, source);
+      const state = {
+        nowMs: Date.now(), lockPath: 'x', lock: null, lockAlive: null,
+        foreignTestProcesses: [{ pid: 8524, commandLine: 'node node_modules/vitest/vitest.mjs run' }],
+        claudeProcessCount: 1, freeMemBytes: 8 * 1024 ** 3, freeDiskBytes: 80 * 1024 ** 3, worktree: 'w', injected: false,
+      };
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.judgeGate(${JSON.stringify(state)})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 60_000 });
+      const verdict = JSON.parse(res.stdout) as { allow: boolean };
+      return verdict.allow === false;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(a) preflight koji propusta uz tudji vitest obara tvrdnju', async () => {
+    const source = readLf('scripts/gate-preflight.mjs');
+    // BASELINE: stvarni preflight odbija.
+    expect(await refusesForeignVitest(source)).toBe(true);
+
+    // MUTACIJA: tudji pokretac se samo biljezi kao upozorenje, nikad ne blokira.
+    const mutated = source.replace('    if (nested) warnings.push(msg);\n    else blockers.push(msg);', '    warnings.push(msg);');
+    expect(mutated).not.toBe(source);
+    expect(await refusesForeignVitest(mutated)).toBe(false);
+  }, 120_000);
+
+  it('(b) omotac koji ne otpusta lock pri padu naredbe obara tvrdnju', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync: write, existsSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { spawnSync } = await import('node:child_process');
+
+    const wrapper = readLf('scripts/with-gate-lock.mjs');
+    const preflight = readLf('scripts/gate-preflight.mjs');
+
+    /** Tvrdnja iz tests/with-gate-lock.test.ts: naredba padne s 3, kod se cuva, lock je otpusten. */
+    function releasesOnFailure(wrapperSource: string): boolean {
+      const root = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-omotac-'));
+      try {
+        mkdirSync(join(root, 'scripts'));
+        write(join(root, 'scripts', 'with-gate-lock.mjs'), wrapperSource);
+        write(join(root, 'scripts', 'gate-preflight.mjs'), preflight);
+        const lockPath = join(root, 'lekta-gate.lock');
+        const measurement = join(root, 'mjerenje.json');
+        write(measurement, JSON.stringify({ processes: [], freeMemBytes: 8 * 1024 ** 3, freeDiskBytes: 80 * 1024 ** 3 }));
+        const env: NodeJS.ProcessEnv = { ...process.env, LEKTA_GATE_LOCK_PATH: lockPath, LEKTA_GATE_MEASUREMENT_FILE: measurement };
+        delete env.CI;
+        delete env.LEKTA_GATE_FORCE;
+        delete env.LEKTA_GATE_LOCK_TOKEN;
+        const res = spawnSync(process.execPath, [join(root, 'scripts', 'with-gate-lock.mjs'), 'mutacija', '--', 'node', '-e', 'process.exit(3)'], {
+          cwd: root, env, encoding: 'utf8', timeout: 90_000,
+        });
+        return res.status === 3 && !existsSync(lockPath);
+      } finally {
+        rmSync(root, { recursive: true, force: true });
+      }
+    }
+
+    // BASELINE: stvarni omotac otpusta lock i kad naredba padne.
+    expect(releasesOnFailure(wrapper)).toBe(true);
+
+    // MUTACIJA: otpustanje samo na uspjeh (oblik `preflight && naredba && release`), bez zadnje
+    // linije obrane na izlazu procesa.
+    const mutated = wrapper
+      .replace("  process.on('exit', release);\n", '')
+      .replace(
+        '    return code;\n  } finally {\n    release();\n  }',
+        '    if (code === 0) release();\n    return code;\n  } finally {\n    // otpustanje premjesteno na uspjeh\n  }',
+      );
+    expect(mutated).not.toBe(wrapper);
+    expect(mutated).not.toContain("process.on('exit', release)");
+    expect(releasesOnFailure(mutated)).toBe(false);
+  }, 120_000);
+
+  /** Izvrsava `readLock(path)` iz izvora u zasebnom node procesu; vraca je li bacio i sto je vratio. */
+  async function ocijeniReadLock(source: string, path: string): Promise<{ threw: boolean; value: unknown }> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-readlock-'));
+    try {
+      const file = join(dir, 'gate-preflight.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `let out; try { out = { threw: false, value: m.readLock(${JSON.stringify(path)}) }; }`
+        + `catch (e) { out = { threw: true, value: String(e && e.code || e) }; }`
+        + `process.stdout.write(JSON.stringify(out));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 30_000 });
+      return JSON.parse(res.stdout) as { threw: boolean; value: unknown };
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(c) readLock koji baca na EPERM/EBUSY/EACCES rusi gate umjesto fail-open obara tvrdnju', async () => {
+    const { mkdtempSync, mkdirSync, rmSync: rm } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const source = readLf('scripts/gate-preflight.mjs');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-readlock-dir-'));
+    // Staza postoji ali NIJE datoteka: `readFileSync` na njoj baca gresku koja NIJE ENOENT (npr.
+    // EISDIR), imitirajuci istu klasu kvara kao EPERM/EBUSY/EACCES.
+    const nijeDatoteka = join(dir, 'lekta-gate.lock');
+    mkdirSync(nijeDatoteka);
+    try {
+      // BASELINE: stvaran readLock ne baca, vraca unmeasurable.
+      const baseline = await ocijeniReadLock(source, nijeDatoteka);
+      expect(baseline.threw).toBe(false);
+      expect(baseline.value).toMatchObject({ unmeasurable: true });
+
+      // MUTACIJA: povratak na stari kvar, svaka greska osim ENOENT se baca i rusi gate.
+      const mutated = source.replace(
+        "    if (error && error.code === 'ENOENT') return null;\n    return { unmeasurable: true, error: error && error.code ? error.code : 'UNKNOWN' };",
+        "    if (error && error.code === 'ENOENT') return null;\n    throw error;",
+      );
+      expect(mutated).not.toBe(source);
+      const posljeMutacije = await ocijeniReadLock(mutated, nijeDatoteka);
+      expect(posljeMutacije.threw).toBe(true);
+    } finally {
+      rm(dir, { recursive: true, force: true });
+    }
+  }, 60_000);
+
+  /** Izvrsava `canTakeOverLock(status, age)` iz izvora u zasebnom node procesu. */
+  async function ocijeniCanTakeOverLock(source: string, status: string, age: number): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-takeover-'));
+    try {
+      const file = join(dir, 'gate-preflight.mjs');
+      write(file, source);
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.canTakeOverLock(${JSON.stringify(status)}, ${age})));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 30_000 });
+      return JSON.parse(res.stdout) as boolean;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(d) preuzimanje mrtvog locka bez donje granice starosti obara tvrdnju (uska utrka dvije sesije)', async () => {
+    const source = readLf('scripts/gate-preflight.mjs');
+    const mladi = 10; // ms, daleko ispod THRESHOLDS.minTakeoverAgeMs
+
+    // BASELINE: lock mrtav/zastario ali mladji od praga se NE preuzima.
+    expect(await ocijeniCanTakeOverLock(source, 'dead', mladi)).toBe(false);
+    expect(await ocijeniCanTakeOverLock(source, 'stale', mladi)).toBe(false);
+
+    // MUTACIJA: donja granica starosti nestaje, preuzima se cim je status dead/stale, bez obzira
+    // koliko je lock svjez, sto je upravo uska utrka koju vlasnik prijavljuje.
+    const mutated = source.replace(
+      "  if (status !== 'dead' && status !== 'stale') return false;\n  return age === null || age >= thresholds.minTakeoverAgeMs;",
+      "  return status === 'dead' || status === 'stale';",
+    );
+    expect(mutated).not.toBe(source);
+    expect(await ocijeniCanTakeOverLock(mutated, 'dead', mladi)).toBe(true);
+  }, 60_000);
+});
+
+describe('mutacije: granica statickog grafa ulaza (helpers/entry-graph-boundary.ts)', () => {
+  const readLf = (rel: string) => readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+
+  /**
+   * Predikat se izvrsava kao ODVOJEN Node proces (ne kroz vitestov/viteov ucitavac), jer dinamicki
+   * `import()` unutar vitesta odbija ucitati datoteku izvan korijena projekta ("Failed to load
+   * url ... Does the file exist?"), pa se svaka varijanta izvora ispisuje u privremenu datoteku i
+   * pokrece odvojenim `node` procesom, isto kao gore za `gate-preflight.mjs`.
+   */
+  async function ocijeni(source: string, path: string, root: string, platform: string): Promise<boolean> {
+    const { mkdtempSync, writeFileSync: write, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { pathToFileURL } = await import('node:url');
+    const { spawnSync } = await import('node:child_process');
+    // Minimalno skidanje TypeScript tipova: jedini oblici u ovoj datoteci su `: string` i
+    // `: boolean` iza parametra ili liste parametara, sto native ESM ne razumije.
+    const plainJs = source
+      .replace(/:\s*(?:string|boolean)\b/g, '')
+      .replace(/opts:\s*\{\s*platform\?\s*\}\s*=\s*\{\}/, 'opts = {}');
+    const dir = mkdtempSync(join(tmpdir(), 'lekta-gate-mut-graf-'));
+    try {
+      const file = join(dir, 'entry-graph-boundary.mjs');
+      write(file, plainJs);
+      // Platforma se predaje IZRICITO (nikad iz stvarnog `process.platform` procesa koji izvrsava
+      // ovaj test), jer CI Linux runner i lokalni Windows razvoj moraju mjeriti ISTU logiku.
+      const script = `const m = await import(${JSON.stringify(pathToFileURL(file).href)});`
+        + `process.stdout.write(JSON.stringify(m.zabranjenUGrafuUlaza(${JSON.stringify(path)}, ${JSON.stringify(root)}, { platform: ${JSON.stringify(platform)} })));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 30_000 });
+      return JSON.parse(res.stdout) as boolean;
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  it('(c) usporedba nad apsolutnom stazom (bez svodenja na korijen) obara tvrdnju', async () => {
+    const source = readLf('tests/helpers/entry-graph-boundary.ts');
+    const dopusteni = 'src/shared/ui-boot.ts';
+    const zabranjeni = 'src/analysis/run.ts';
+    const root = 'C:/wt/wf-gate-preflight-lock';
+
+    // BASELINE: stvaran predikat mjeri relativno, pa ime checkouta ne utjece na dopusten modul, a
+    // stvaran zabranjen modul u istom checkoutu i dalje pada. Platforma je izricito 'win32' da
+    // ishod ne ovisi o stvarnom OS-u na kojem se ovaj test izvrsava.
+    expect(await ocijeni(source, `${root}/${dopusteni}`, root, 'win32')).toBe(false);
+    expect(await ocijeni(source, `${root}/${zabranjeni}`, root, 'win32')).toBe(true);
+
+    // MUTACIJA: povratak na stari kvar, regex gleda apsolutnu stazu bez svodenja na korijen, pa ime
+    // checkouta koje sadrzi zabranjenu rijec (`preflight`) lazno oznaci i dopusten modul, dok bi
+    // ANALIZATOR morao ostati uhvacen.
+    const mutated = source.replace(
+      /const relativno = podudaraSeSPrefiksom \? posixPath\.slice\(rootPrefix\.length - 1\) : posixPath;/,
+      'const relativno = posixPath;',
+    );
+    expect(mutated).not.toBe(source);
+    expect(await ocijeni(mutated, `${root}/${dopusteni}`, root, 'win32')).toBe(true);
+    expect(await ocijeni(mutated, `${root}/${zabranjeni}`, root, 'win32')).toBe(true);
+  }, 60_000);
+
+  it('(d) preskocena normalizacija velicine slova diska na win32 obara tvrdnju', async () => {
+    const source = readLf('tests/helpers/entry-graph-boundary.ts');
+    const dopusteni = 'src/shared/ui-boot.ts';
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    const stazaDrugimSlovomDiska = `c:/wt/wf-gate-preflight-lock/${dopusteni}`;
+
+    // BASELINE: platforma je izricito 'win32', pa slovo diska u drugoj velicini i dalje pogadja
+    // prefiks i dopusten modul ostaje dopusten. Test predaje platformu kao parametar (ne cita
+    // stvaran `process.platform` runnera) da CI Linux i lokalni Windows mjere istu logiku.
+    expect(await ocijeni(source, stazaDrugimSlovomDiska, root, 'win32')).toBe(false);
+
+    // MUTACIJA: usporedba prefiksa vise ne normalizira na mala slova, pa se staza s drugim slovom
+    // diska vise ne prepoznaje kao unutar korijena i pada natrag na strozi apsolutni uvjet, koji
+    // dopusteni modul lazno proglasava zabranjenim. Mutant i dalje pada uz izricit 'win32', dakle
+    // neovisno o platformi runnera koji izvrsava sam vitest.
+    const mutated = source.replace(
+      "const podudaraSeSPrefiksom = platform === 'win32'\n    ? posixPath.toLowerCase().startsWith(rootPrefix.toLowerCase())\n    : posixPath.startsWith(rootPrefix);",
+      'const podudaraSeSPrefiksom = posixPath.startsWith(rootPrefix);',
+    );
+    expect(mutated).not.toBe(source);
+    expect(await ocijeni(mutated, stazaDrugimSlovomDiska, root, 'win32')).toBe(true);
+  }, 60_000);
+
+  it('(e) na linuxu se velicina slova diska NE normalizira, gard i dalje hvata zabranjen modul', async () => {
+    const source = readLf('tests/helpers/entry-graph-boundary.ts');
+    const dopusteni = 'src/shared/ui-boot.ts';
+    const zabranjeni = 'src/analysis/run.ts';
+    const root = 'C:/wt/wf-gate-preflight-lock';
+    const stazaDrugimSlovomDiska = `c:/wt/wf-gate-preflight-lock/${dopusteni}`;
+
+    // BASELINE (linux): isto slovo diska i dalje pogadja prefiks, dopusten modul ostaje dopusten, a
+    // stvaran zabranjen modul u istom korijenu i dalje pada.
+    expect(await ocijeni(source, `${root}/${dopusteni}`, root, 'linux')).toBe(false);
+    expect(await ocijeni(source, `${root}/${zabranjeni}`, root, 'linux')).toBe(true);
+    // Na linuxu se velicina slova NE normalizira: drugo slovo diska vise ne pogadja prefiks, staza
+    // pada natrag na strozi apsolutni uvjet, isti onaj kojeg opisuje test (c) - a ime checkouta
+    // `wf-gate-preflight-lock` samo po sebi sadrzi zabranjenu rijec `preflight`, pa je ovdje lazno
+    // zabranjen. Ovo je poznato, nepromijenjeno ogranicenje apsolutne grane, ne novi kvar.
+    expect(await ocijeni(source, stazaDrugimSlovomDiska, root, 'linux')).toBe(true);
+  }, 60_000);
+});
+
 describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u)', () => {
   it('workflow s golim push: (bez branches: [master]) obara gard', () => {
     const cist: NamedWorkflow[] = [
@@ -6380,5 +6876,93 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     const mutant = blok.replace("if (!spec || spec.status !== 'verified') {", 'if (false) {');
     expect(mutant).not.toBe(blok);
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);
+  });
+});
+
+describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', () => {
+  const cist: NamedWorkflow[] = [
+    {
+      file: 'pr-opis.yml',
+      doc: { on: { pull_request: { types: ['opened', 'synchronize', 'reopened', 'edited', 'ready_for_review'] } }, jobs: { 'pr-opis': {} } },
+    },
+    { file: 'foundation-check.yml', doc: { on: { pull_request: { branches: ['master'] } }, jobs: { check: {} } } },
+  ];
+
+  it('baseline: samo pr-opis', () => {
+    expect(findJobsRunningOnEdited(cist)).toEqual(['pr-opis.yml#pr-opis']);
+  });
+
+  it('mutant: edited dodan workflowu s punim checkom (stvaran kvar: pr-opis je prije bio job u foundation-check.yml) se hvata', () => {
+    const mutiran: NamedWorkflow[] = [
+      cist[0],
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { branches: ['master'], types: ['opened', 'synchronize', 'edited'] } }, jobs: { check: {}, 'pr-opis': {} } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(mutiran)).toEqual([
+      'foundation-check.yml#check',
+      'foundation-check.yml#pr-opis',
+      'pr-opis.yml#pr-opis',
+    ]);
+  });
+
+  it('job s if koji iskljucuje edited se ne broji', () => {
+    const sIf: NamedWorkflow[] = [
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { types: ['opened', 'edited'] } }, jobs: { check: { if: "github.event.action != 'edited'" } } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(sIf)).toEqual([]);
+  });
+});
+
+describe('mutacije: lean ratchet (T56)', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/lean-report.mjs'), 'utf8').replace(/\r/g, '');
+  const metrikeBlok = src.slice(src.indexOf('export const RATCHET_METRIKE'), src.indexOf('];', src.indexOf('export const RATCHET_METRIKE')) + 2);
+  const fnStart = src.indexOf('export function ratchetProblems');
+  const fnBlok = src.slice(fnStart, src.indexOf('\n}\n', fnStart) + 3);
+  type Ratchet = (b: { metrike: Record<string, number> }, c: Record<string, number>) => string[];
+  const izvedi = (fn: string): Ratchet =>
+    new Function(`${metrikeBlok.replace('export ', '')}\n${fn.replace('export ', '')}\nreturn ratchetProblems;`)() as Ratchet;
+  const baseline = JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/lean-baseline.json'), 'utf8'));
+  /** Tvrdnja garda: rast bilo koje metrike za 1 je nalaz. */
+  const hvataRast = (r: Ratchet): boolean =>
+    Object.keys(baseline.metrike).every((k) => r(baseline, { ...baseline.metrike, [k]: baseline.metrike[k] + 1 }).length === 1);
+
+  it('baseline: stvarni ratchetProblems hvata rast za 1', () => {
+    expect(hvataRast(izvedi(fnBlok))).toBe(true);
+  });
+
+  it('mutant koji povisi prag (tolerira rast za 1) obara tvrdnju', () => {
+    const mutant = fnBlok.replace('if (c > b)', 'if (c > b + 1)');
+    expect(mutant).not.toBe(fnBlok);
+    expect(hvataRast(izvedi(mutant))).toBe(false);
+  });
+});
+
+describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => {
+  const config = JSON.parse(readFileSync(resolve(process.cwd(), 'config/agent-routing.json'), 'utf8')) as {
+    bots: Record<string, BotSpec>; protectedPaths: string[];
+  };
+
+  it('baseline: stvarni config nema bota koji implementira nad zasticenom stazom', () => {
+    expect(findBotsImplementingProtected(config.bots, config.protectedPaths, botPathViolations)).toEqual([]);
+  });
+
+  it('mutant: grok-docs dobije src/repair/** u allowlist i izgubi zabranu src/** (se hvata)', () => {
+    const mutiran = JSON.parse(JSON.stringify(config.bots)) as Record<string, BotSpec>;
+    mutiran['grok-docs'].allowedPaths = [...(mutiran['grok-docs'].allowedPaths ?? []), 'src/repair/**'];
+    mutiran['grok-docs'].forbiddenPaths = (mutiran['grok-docs'].forbiddenPaths ?? []).filter((p) => p !== 'src/**');
+    const problems = findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations);
+    expect(problems).toContain('grok-docs smije implementirati src/repair/x.ts');
+  });
+
+  it('mutant: read-only bot premjesten u implement bez allowliste ne prolazi ni gard ni resolver', () => {
+    const mutiran = JSON.parse(JSON.stringify(config.bots)) as Record<string, BotSpec>;
+    mutiran['grok-review'].phases = ['review', 'implement'];
+    // Bez allowedPaths svaka datoteka je povreda, pa gard ostaje cist; obranu drzi resolver (implement bez allowliste baca).
+    expect(findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations)).toEqual([]);
   });
 });
