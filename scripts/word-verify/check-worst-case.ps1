@@ -10,6 +10,11 @@
 param([string]$OutDir = '.tmp-word-verify', [switch]$SkipMake)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+# Stavka G (odluka vlasnika 2026-09-26): izlazni direktorij se brise SAMO na uspjehu (exit 0), i
+# samo unutar repozitorija, izvan tests/fixtures i kad ga git ignorira (vidi outdir-cleanup.ps1).
+# Na padu ostaje, a putanja se ispise, jer je to jedini dokaz za dijagnozu.
+. (Join-Path $PSScriptRoot 'outdir-cleanup.ps1')
+trap { Write-Output "PAD (iznimka): izlazni direktorij ostavljen za dijagnozu: $OutDir"; break }
 
 if (-not $SkipMake) { & (Join-Path $PSScriptRoot 'make-worst-case.ps1') -OutDir $OutDir | Out-Null }
 $OutDir = (Resolve-Path $OutDir).Path
@@ -100,10 +105,12 @@ $res = ($json.Substring($json.IndexOf('{')) | ConvertFrom-Json)
 # je isto PAD. Word se tada ni ne pokrece.
 if (-not ($res.PSObject.Properties.Name -contains 'integrityFailure')) {
   Write-Output 'NEUSPJEH: repair.mts nije javio integrityFailure.'
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
   exit 1
 }
 if ($null -ne $res.integrityFailure) {
   Write-Output "NEUSPJEH: VRATA INTEGRITETA ODBILA: $($res.integrityFailure.part): $($res.integrityFailure.problem)"
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
   exit 1
 }
 
@@ -183,5 +190,13 @@ Check 'docProps naslov'   $res.docPropsPrije.naslov $res.docPropsPoslije.naslov 
 
 Write-Output ''
 Write-Output "Odlomaka: $($prije.Odlomaka) -> $($poslije.Odlomaka) (visak praznih u TIJELU se smije saziti)"
-if ($script:fail -gt 0) { Write-Output "NEUSPJEH: $script:fail provjera nije proslo."; exit 1 }
+if ($script:fail -gt 0) {
+  Write-Output "NEUSPJEH: $script:fail provjera nije proslo."
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
+  exit 1
+}
 Write-Output 'SVE PROSLO.'
+
+# Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.
+Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root
+exit 0

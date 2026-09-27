@@ -17,8 +17,17 @@ param(
   [string]$Repaired  = '.tmp-word-verify/toc-slucaj-popravljen.docx'
 )
 $ErrorActionPreference = 'Stop'
+$root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+$OutDir = Split-Path $Repaired -Parent
+# Stavka G (odluka vlasnika 2026-09-26): izlazni direktorij se brise SAMO na uspjehu (exit 0), i
+# samo unutar repozitorija, izvan tests/fixtures i kad ga git ignorira (vidi outdir-cleanup.ps1).
+# Na padu ostaje, a putanja se ispise, jer je to jedini dokaz za dijagnozu.
+. (Join-Path $PSScriptRoot 'outdir-cleanup.ps1')
+trap { Write-Output "PAD (iznimka): izlazni direktorij ostavljen za dijagnozu: $OutDir"; break }
 $Original = (Resolve-Path $Original).Path
 $Repaired = (Resolve-Path $Repaired).Path
+# Izlazni direktorij je mapa popravljenog dokumenta (zadano .tmp-word-verify).
+$OutDir = Split-Path $Repaired -Parent
 
 function Get-Paragraphs($doc) {
   $out = New-Object System.Collections.Generic.List[string]
@@ -123,9 +132,14 @@ try {
     Write-Host 'SVE PROSLO: toc-field-fixer mijenja SAMO tekst koji Word generira iz polja.'
   } else {
     Write-Host "PALO: $fail provjera(e)."
+    Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
     exit 1
   }
 } finally {
   $word.Quit()
   [System.Runtime.InteropServices.Marshal]::ReleaseComObject($word) | Out-Null
 }
+
+# Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.
+Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root
+exit 0
