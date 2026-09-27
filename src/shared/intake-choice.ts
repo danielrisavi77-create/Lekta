@@ -13,13 +13,23 @@
  *
  *   rokSesije  Rok vezan za id sesije ubacenog rada (`veziRokZaSesiju`). Z34 (rezultat) i Z36
  *            (popravak) na `/rad/` citaju OVAJ zapis (`rokZaSesiju`), a ne `rok`, koji se pri
- *            sljedecem posjetu ulaza vec moze odnositi na drugi rad.
+ *            sljedecem posjetu ulaza vec moze odnositi na drugi rad. NALAZ PREGLEDA Z32: ranije je
+ *            ovo bio JEDAN slot (zadnja vezana sesija), pa je drugi upload pregazio rok prvog; sada
+ *            je mapa po id-u sesije, kao `potvrdaSesije` ispod, pa `/rad/#session=S1` cita rok S1
+ *            i nakon sto je S2 vezan.
  *
- *   potvrda  Tko je sto potvrdio na ulazu, i ZA KOJU SESIJU. Vezanje za id sesije je cijela
- *            zastita: potvrda iz proslog posjeta ne smije se primijeniti na drugi dokument.
- *            Ulaz je pri ucitavanju NE vraca kao potvrdjenu; kartica fakulteta uvijek trazi novi
- *            klik na "Potvrdi" (Z32 tocka 3). Potvrda NIJE uvjet za ubacivanje (odluka vlasnika
- *            2026-09-27): bez nje `/rad/` fakultet prepoznaje iz dokumenta, kao i prije Z32.
+ *   potvrda  Tko je sto potvrdio na ulazu, JOS NEVEZANO za sesiju (dokument nije nuzno ni odabran).
+ *            Kartica fakulteta uvijek trazi novi klik na "Potvrdi" (Z32 tocka 3); ovaj slot je zato
+ *            uvijek "trenutni, jos nepotvrdjeni upload", NIKAD trajan zapis. Potvrda NIJE uvjet za
+ *            ubacivanje (odluka vlasnika 2026-09-27): bez nje `/rad/` fakultet prepoznaje iz
+ *            dokumenta, kao i prije Z32.
+ *
+ *   potvrdaSesije  Potvrda VEZANA za id sesije (`veziPotvrduZaSesiju`), mapa po id-u sesije, isto
+ *            kao `rokSesije`. Vezanje je cijela zastita: potvrda iz proslog posjeta ne smije se
+ *            primijeniti na drugi dokument. NALAZ PREGLEDA Z32: `potvrda` je ranije NOSILA i
+ *            vezanje (polje `sesija` na istom jedinom slotu), pa je novi klik "Potvrdi" za
+ *            SLJEDECI rad pregazio vezanje prethodnog; `potvrdaZaSesiju` cita iz mape i ne gubi
+ *            raniju sesiju.
  *
  * NEPOZNATI KLJUCEVI ZAPISA SE CUVAJU: pisac spaja, ne prepisuje, pa kasniji zadatak (Z34, Z36)
  * moze dodati svoje polje bez da ga ulaz pri sljedecem upisu izbrise.
@@ -91,12 +101,18 @@ export function procitajIzborUlaza(): IzborUlaza {
  * Upis jednog polja zapisa uz cuvanje ostalih. Vraca `false` kad je vrijednost vec ista, pa drugi
  * upis iste vrijednosti NE dira pohranu (idempotencija se mjeri, ne pretpostavlja).
  */
-function upisiPolje(kljuc: 'rok' | 'potvrda' | 'rokSesije', vrijednost: unknown): boolean {
+function upisiPolje(kljuc: 'rok' | 'potvrda' | 'rokSesije' | 'potvrdaSesije', vrijednost: unknown): boolean {
   const z = zapis();
   if (JSON.stringify(z[kljuc] ?? null) === JSON.stringify(vrijednost ?? null)) return false;
   z[kljuc] = vrijednost;
   safeStorageSet(STORAGE_KEYS.intake, z);
   return true;
+}
+
+/** Mapa po id-u sesije iz zapisa; pokvaren ili stari (predz32) oblik daje praznu mapu. */
+function mapaSesija(kljuc: 'rokSesije' | 'potvrdaSesije'): Record<string, unknown> {
+  const v = zapis()[kljuc];
+  return typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
 
 export function zapisiRok(rok: RokStanje): boolean {
@@ -120,27 +136,48 @@ export function rokZaPovratak(rok: RokStanje, danas: Date): RokStanje {
 
 /**
  * Vezuje rok s kojim je rad ubacen za upravo spremljenu sesiju, pa Z34 i Z36 na `/rad/` citaju
- * rok TOG rada. Drugi upis iste vrijednosti je no-op.
+ * rok TOG rada. Zapis je MAPA po id-u sesije (nalaz pregleda Z32: prva izvedba je ovo drzala u
+ * jednom slotu, pa je sljedeci upload pregazio rok prvog rada), pa `veziRokZaSesiju('s-2', ...)`
+ * ne dira rok vec vezan za `'s-1'`. Drugi upis iste vrijednosti za istu sesiju je no-op.
  */
 export function veziRokZaSesiju(sesija: string, rok: RokStanje): boolean {
   const r = normalizirajRok(rok);
-  return upisiPolje('rokSesije', { sesija, datum: r.datum, neznam: r.neznam });
+  const mapa = mapaSesija('rokSesije');
+  return upisiPolje('rokSesije', { ...mapa, [sesija]: { datum: r.datum, neznam: r.neznam } });
 }
 
 /** Rok rada iz sesije `sesija`; `null` kad rok nije vezan za tu sesiju. */
 export function rokZaSesiju(sesija: string): RokStanje | null {
-  const v = zapis().rokSesije;
+  const v = mapaSesija('rokSesije')[sesija];
   if (typeof v !== 'object' || v === null) return null;
   const z = v as Record<string, unknown>;
-  if (z.sesija !== sesija) return null;
   return normalizirajRok({ datum: z.datum, neznam: z.neznam });
 }
 
-/** Vezuje zivu potvrdu za upravo spremljenu sesiju. Bez potvrde nema sto vezati. */
+/**
+ * Vezuje zivu potvrdu za upravo spremljenu sesiju. Bez potvrde nema sto vezati. Upisuje na DVA
+ * mjesta: u jedini "tekuci" slot `potvrda` (postojeci ugovor koji `/rad/` cita preko
+ * `procitajIzborUlaza`, CLAUDE.md izmjena samo ovog modula) I u mapu `potvrdaSesije` po id-u
+ * sesije (`potvrdaZaSesiju`), koja NE gubi ranije vezanu sesiju kad sljedeci klik "Potvrdi" na
+ * ulazu prepiše tekuci slot za drugi rad.
+ */
 export function veziPotvrduZaSesiju(sesija: string): boolean {
   const { potvrda } = procitajIzborUlaza();
   if (!potvrda) return false;
-  return zapisiPotvrdu({ ...potvrda, sesija });
+  const vezano = { ...potvrda, sesija };
+  const mapa = mapaSesija('potvrdaSesije');
+  const upisanoUMapu = upisiPolje('potvrdaSesije', { ...mapa, [sesija]: vezano });
+  const upisanoUSlot = zapisiPotvrdu(vezano);
+  return upisanoUMapu || upisanoUSlot;
+}
+
+/**
+ * Potvrda vezana za sesiju `sesija`, iz mape `potvrdaSesije`; NE ovisi o tome je li poslije
+ * potvrdjen jos jedan rad (za razliku od tekuceg slota `procitajIzborUlaza().potvrda`, koji
+ * pregazi sljedeci klik "Potvrdi"). `null` kad potvrda nije vezana za tu sesiju.
+ */
+export function potvrdaZaSesiju(sesija: string): PotvrdaUlaza | null {
+  return normalizirajPotvrdu(mapaSesija('potvrdaSesije')[sesija]);
 }
 
 /**

@@ -48,9 +48,11 @@ export interface IntakeControllerDependencies {
   transitionDelayMs?: number;
   /**
    * PRIBOR UZ LIST (Z32): smije li se korisnicka radnja (klik, tipka, ispustanje) pretvoriti u
-   * odabir. Dok fakultet nije potvrdjen i rok odlucen, odgovor je `false` i kontroler ne otvara
-   * odabir datoteke ni ne prima ispusteni dokument, nego zove `onBlocked`. Izostavljeno znaci
-   * "uvijek smije", pa kontroler bez pribora (testovi, stari DOM) radi tocno kao prije.
+   * odabir. Vrata otvara SAMO rok (odluka vlasnika 2026-09-27: fakultet nije uvjet, aplikacija ga
+   * prepoznaje iz rada, a korisnik moze odabrati sam, `src/shared/intake-choice.ts`). Dok rok nije
+   * odlucen, odgovor je `false` i kontroler ne otvara odabir datoteke ni ne prima ispusteni
+   * dokument, nego zove `onBlocked`. Izostavljeno znaci "uvijek smije", pa kontroler bez pribora
+   * (testovi, stari DOM) radi tocno kao prije.
    * Programski `selectFile` se NE gata: vrata su korisnicka radnja, ne tok provjere.
    */
   canAccept?(): boolean;

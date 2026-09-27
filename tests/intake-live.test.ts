@@ -21,14 +21,15 @@ import {
   danaDoRoka, daniRijecju, normalizirajRok, pecatRoka, razloziDatum, rokOdlucen,
 } from '../src/routes/intake/deadline-stamp';
 import {
-  potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, predodabirFakulteta, procitajIzborUlaza, rokZaPovratak,
-  rokZaSesiju, spremnostUlaza, veziPotvrduZaSesiju, veziRokZaSesiju, zapisiPotvrdu, zapisiRok, type PotvrdaUlaza,
+  potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, potvrdaZaSesiju, predodabirFakulteta, procitajIzborUlaza,
+  rokZaPovratak, rokZaSesiju, spremnostUlaza, veziPotvrduZaSesiju, veziRokZaSesiju, zapisiPotvrdu, zapisiRok,
+  type PotvrdaUlaza,
 } from '../src/shared/intake-choice';
 import { safeStorageSet, STORAGE_KEYS } from '../src/shared/browser-storage';
 import { izvorFakulteta, mountIntakeLive, PORUKA_ODBIJENO, tekstPecataProvjere } from '../src/routes/intake/intake-live';
 import { mountIntakeController } from '../src/routes/intake/intake-controller';
 import { odabirFakulteta, primijeniPotvrduUlaza } from '../src/routes/workspace/intake-confirmation';
-import { detekcijaSmije, NAPOMENA_POTVRDJEN_FAKULTET, potvrdjenFakultet, zakljucajFakultet } from '../src/ui/confirmed-faculty';
+import { detekcijaSmije, napomenaDrugiFakultet, potvrdjenFakultet, zakljucajFakultet } from '../src/ui/confirmed-faculty';
 import { emitAnalyzerDocumentSettled } from '../src/ui/analyzer-document-events';
 import type { SelectionIds } from '../src/ui/profile-selection-ids';
 import {
@@ -179,6 +180,26 @@ describe('Z32 pohrana izbora na ulazu', () => {
     expect(veziPotvrduZaSesiju('s-1'), 'drugi prolaz nije no-op').toBe(false);
     expect(procitajIzborUlaza().potvrda?.sesija).toBe('s-1');
   });
+
+  it('nalaz pregleda Z32: DVIJE SESIJE - S1 zadrzava svoj rok i potvrdu i nakon sto je S2 vezan', () => {
+    // Rad 1 (S1): fakultet FER, rok 15. 10.
+    zapisiRok({ datum: '2026-10-15', neznam: false });
+    zapisiPotvrdu({ unit: 'fer', program: null, workType: null, sesija: null, at: 1 });
+    veziRokZaSesiju('s-1', { datum: '2026-10-15', neznam: false });
+    veziPotvrduZaSesiju('s-1');
+    expect(rokZaSesiju('s-1')).toEqual({ datum: '2026-10-15', neznam: false });
+    expect(potvrdaZaSesiju('s-1')).toMatchObject({ unit: 'fer', sesija: 's-1' });
+    // Rad 2 (S2), na istom ulazu: drugi fakultet i drugi rok, pa novi klik "Potvrdi".
+    zapisiRok({ datum: '2026-11-01', neznam: false });
+    zapisiPotvrdu({ unit: 'fpzg', program: 'Politologija', workType: 'graduate', sesija: null, at: 2 });
+    veziRokZaSesiju('s-2', { datum: '2026-11-01', neznam: false });
+    veziPotvrduZaSesiju('s-2');
+    // /rad/#session=S1 nakon rada S2 i dalje cita FER i rok od S1, ne od S2.
+    expect(rokZaSesiju('s-1'), 'rok S1 nije pregazen radom S2').toEqual({ datum: '2026-10-15', neznam: false });
+    expect(potvrdaZaSesiju('s-1'), 'potvrda S1 nije pregazena radom S2').toMatchObject({ unit: 'fer', sesija: 's-1' });
+    expect(rokZaSesiju('s-2')).toEqual({ datum: '2026-11-01', neznam: false });
+    expect(potvrdaZaSesiju('s-2')).toMatchObject({ unit: 'fpzg', sesija: 's-2' });
+  });
 });
 
 describe('Z32 potvrda na /rad/', () => {
@@ -281,7 +302,37 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     expect(detekcijaSmije('fpzg'), 'drugi fakultet').toBe(false);
     const znacka = document.getElementById('detectBadge')!;
     expect(znacka.classList.contains('hidden')).toBe(false);
-    expect(znacka.textContent?.trim()).toBe(NAPOMENA_POTVRDJEN_FAKULTET);
+    expect(znacka.textContent).toContain(napomenaDrugiFakultet('fpzg', 'fer'));
+  });
+
+  it('nalaz pregleda Z32: znacka imenuje PREPOZNATI fakultet (FPZG) uz potvrdjen FER, i nudi prebacivanje jednim klikom', () => {
+    document.body.innerHTML = '<select id="institutionSelect"><option value="unizg" selected>Sveučilište u Zagrebu</option></select><select id="unitSelect"><option value="fer" selected>FER</option><option value="fpzg">FPZG</option></select><div id="detectBadge" class="hidden"></div>';
+    expect(zakljucajFakultet('fer', 'fer'), 'FER potvrdjen na ulazu').toBe(true);
+    // Dokument (npr. lo-fpzg-zavrsni-uskladjen.docx) detekcija prepoznaje kao FPZG, drugi fakultet.
+    expect(detekcijaSmije('fpzg')).toBe(false);
+    const znacka = document.getElementById('detectBadge')!;
+    expect(znacka.classList.contains('hidden'), 'znacka se pokazuje').toBe(false);
+    const tekst = znacka.textContent ?? '';
+    expect(tekst, 'imenuje prepoznati fakultet, ne "nisam prepoznao"').toContain('Fakultet političkih znanosti');
+    expect(tekst).not.toContain('nisam prepoznao');
+    const prebaciBtn = Array.from(znacka.querySelectorAll('button')).find((b) => b.textContent?.startsWith('Prebaci'));
+    expect(prebaciBtn, 'gumb za prebacivanje postoji').toBeTruthy();
+    prebaciBtn!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(potvrdjenFakultet(), 'jednim klikom prebaceno na prepoznati fakultet').toBe('fpzg');
+    expect((document.getElementById('unitSelect') as HTMLSelectElement).value).toBe('fpzg');
+    expect(znacka.classList.contains('hidden'), 'znacka se skriva nakon prebacivanja').toBe(true);
+  });
+
+  it('gumb "Zadrži" samo skriva znacku, potvrdjeni fakultet ostaje', () => {
+    document.body.innerHTML = '<select id="institutionSelect"><option value="unizg" selected></option></select><select id="unitSelect"><option value="fer" selected></option><option value="fpzg"></option></select><div id="detectBadge" class="hidden"></div>';
+    zakljucajFakultet('fer', 'fer');
+    detekcijaSmije('fpzg');
+    const znacka = document.getElementById('detectBadge')!;
+    const zadrziBtn = Array.from(znacka.querySelectorAll('button')).find((b) => b.textContent?.startsWith('Zadrži'));
+    expect(zadrziBtn).toBeTruthy();
+    zadrziBtn!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(potvrdjenFakultet(), 'potvrdjen fakultet nepromijenjen').toBe('fer');
+    expect(znacka.classList.contains('hidden')).toBe(true);
   });
 
   it('vrijedi za PRVI prihvaceni dokument; drugi dokument ili odbijen prvi skida bravu', () => {
