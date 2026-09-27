@@ -16,6 +16,12 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+# Stavka G (odluka vlasnika 2026-09-26): izlazni direktorij se brise SAMO na uspjehu (exit 0), i
+# samo kad je Word stvarno provjerio barem jedan dokument ($provjereno), ime je .tmp-word-verify ili
+# .tmp-word-corpus u korijenu repozitorija, nije junction i git ga ignorira (vidi outdir-cleanup.ps1).
+# Na padu ostaje, a putanja se ispise, jer je to jedini dokaz za dijagnozu.
+. (Join-Path $PSScriptRoot 'outdir-cleanup.ps1')
+trap { Write-Output "PAD (iznimka): izlazni direktorij ostavljen za dijagnozu: $OutDir"; break }
 
 if (-not $SkipMake) {
   & (Join-Path $PSScriptRoot 'make-fixtures.ps1') -OutDir $OutDir | Out-Null
@@ -74,6 +80,7 @@ $word = New-Object -ComObject Word.Application
 $word.Visible = $false
 $word.DisplayAlerts = 0
 $fail = 0
+$provjereno = 0
 $report = @()
 try {
   foreach ($r in $rows) {
@@ -100,6 +107,7 @@ try {
       $mL = [math]::Round($doc.PageSetup.LeftMargin / 28.3465, 2)
       $mT = [math]::Round($doc.PageSetup.TopMargin / 28.3465, 2)
       $doc.Close([int]0)
+      $provjereno++
 
       # Efektivni font: ako je izravno oblikovanje uklonjeno, Content.Font.Name je '' ili stilski
       $fontOk = ($eFont -eq $ciljFont) -or (($eFont -eq '') -and ($eFontStyle -eq $ciljFont))
@@ -139,6 +147,16 @@ try {
 $report | Format-Table -AutoSize | Out-String -Width 240 | Write-Output
 if ($fail -gt 0) {
   Write-Output "NEUSPJEH: $fail dokumenata nije zadovoljilo ocekivanje."
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
+  exit 1
+}
+if ($provjereno -eq 0) {
+  Write-Output "PAD: nijedan dokument nije provjeren (prazan skup je crveno, ne zeleno)"
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
   exit 1
 }
 Write-Output 'SVE PROSLO: svaki dokument se otvara i svako pravilo je primijenjeno.'
+
+# Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.
+Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root -CheckedCount $provjereno
+exit 0

@@ -27,6 +27,12 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $fixtures = Join-Path $root 'tests\fixtures\docx'
+# Stavka G (odluka vlasnika 2026-09-26): izlazni direktorij se brise SAMO na uspjehu (exit 0), i
+# samo kad je Word stvarno provjerio barem jedan dokument ($provjereno), ime je .tmp-word-verify ili
+# .tmp-word-corpus u korijenu repozitorija, nije junction i git ga ignorira (vidi outdir-cleanup.ps1).
+# Na padu ostaje, a putanja se ispise, jer je to jedini dokaz za dijagnozu.
+. (Join-Path $PSScriptRoot 'outdir-cleanup.ps1')
+trap { Write-Output "PAD (iznimka): izlazni direktorij ostavljen za dijagnozu: $OutDir"; break }
 
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Path $OutDir | Out-Null }
 $OutDir = (Resolve-Path $OutDir).Path
@@ -34,6 +40,7 @@ $OutDir = (Resolve-Path $OutDir).Path
 $docs = Get-ChildItem $fixtures -Filter '*.docx' | Sort-Object Name
 if ($docs.Count -eq 0) {
   Write-Output 'NIJEDAN fixture nije pronaden (prazan skup je crveno, ne tiho zeleno).'
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
   exit 1
 }
 Write-Output "Korpus: $($docs.Count) commitanih fixtura iz tests/fixtures/docx"
@@ -86,6 +93,7 @@ function Open-Strict {
 }
 
 $fail = 0
+$provjereno = 0
 $report = @()
 try {
   foreach ($r in $rows) {
@@ -109,6 +117,7 @@ try {
       $doc = Open-Strict $r.Izlaz
       $odlomciPoslije = [int]$doc.Paragraphs.Count
       $doc.Close($false)
+      $provjereno++
 
       $izgubljeno = $r.Izgubljeno
       if ($izgubljeno) { $fail++ }
@@ -138,7 +147,11 @@ $report | Format-Table -AutoSize | Out-String -Width 400 | Write-Output
 
 if ($fail -gt 0) {
   Write-Output "PAD: $fail od $($rows.Count) dokumenata se ne otvara ili je izgubio dio paketa."
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
   exit 1
 }
 Write-Output "SVE PROSLO: svih $($rows.Count) popravljenih paketa otvara pravi Word, nijedan dio nije izgubljen."
+
+# Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.
+Remove-WordVerifyOutDir -Dir $OutDir -RepoRoot $root -CheckedCount $provjereno
 exit 0
