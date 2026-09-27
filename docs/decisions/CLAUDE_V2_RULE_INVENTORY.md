@@ -25,6 +25,7 @@ dokaz i ne smije se tumaciti kao drugi aktivni skup uputa.
 | Git commit disciplina i orphan scan | `CLAUDE.md`, Izolacija i Git |
 | Konvencije koda i jezika | `CLAUDE.md`, Konvencije |
 | Modeli za koordinaciju i drugo misljenje | `CLAUDE.md`, Koordinacija i drugo misljenje |
+| Popravni krug razmjeran dosegu (2026-09-27) | `CLAUDE.md`, Verifikacijska disciplina; `AGENTS.md`, Tvrdi gate; puni tekst u `docs/agents/no-fable-workflow.md` |
 | Backlog | `docs/roadmap/PRODUCTION_BACKLOG.md` i issue tracker |
 | Povijesni incidenti, commitovi i mjerenja | `docs/incidents/CLAUDE_V1_FULL_CONTEXT_2026-09-18.md` |
 

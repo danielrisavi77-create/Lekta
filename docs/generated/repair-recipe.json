@@ -709,6 +709,38 @@
     ]
   },
   {
+    "id": "agromed-zavrsni",
+    "label": "Agromediteranski fakultet, završni rad",
+    "unitId": "agromed",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "algebra-diplomski",
     "label": "Sveuciliste Algebra Bernays, diplomski rad (engleski)",
     "unitId": "algebra",
@@ -4783,6 +4815,38 @@
         "authority": "program-page",
         "lastVerified": "2026-07-02"
       },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "efri-specijalisticki",
+    "label": "EFRI · sveučilišni specijalistički rad",
+    "unitId": "efri",
+    "status": "partial",
+    "workTypes": [
+      "specialist"
+    ],
+    "items": [
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -13376,6 +13440,38 @@
     ]
   },
   {
+    "id": "ffzg-svedski-zavrsni",
+    "label": "FFZG, švedski jezik i kultura, prijediplomski završni rad",
+    "unitId": "ffzg",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "fgag-diplomski",
     "label": "FGAG, diplomski rad",
     "unitId": "fgag",
@@ -19055,6 +19151,102 @@
     ]
   },
   {
+    "id": "geoteh-diplomski",
+    "label": "Geotehnički fakultet, diplomski rad",
+    "unitId": "geoteh",
+    "status": "partial",
+    "workTypes": [
+      "graduate"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "geoteh-doktorski",
+    "label": "Geotehnički fakultet, doktorski rad",
+    "unitId": "geoteh",
+    "status": "partial",
+    "workTypes": [
+      "doctoral"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "geoteh-zavrsni",
+    "label": "Geotehnički fakultet, završni rad",
+    "unitId": "geoteh",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "grad-diplomski",
     "label": "Građevinski fakultet, diplomski rad",
     "unitId": "grad",
@@ -20282,6 +20474,38 @@
         "target": "Word sam azurira sadrzaj",
         "params": {},
         "condition": "Dokument ima naslov Sadrzaj, a jos nema zivo TOC polje. Nedestruktivno: rucne stavke se ne brisu."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "hig-zavrsni",
+    "label": "Hotelijerstvo i gastronomija, završni rad",
+    "unitId": "hig",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
       },
       {
         "ruleId": "empty-paragraphs-universal",
@@ -23998,6 +24222,38 @@
     ]
   },
   {
+    "id": "medri-doktorski",
+    "label": "MEDRI · Doktorska škola · doktorski rad",
+    "unitId": "medri",
+    "status": "partial",
+    "workTypes": [
+      "doctoral"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "medri-farmacija-diplomski",
     "label": "MEDRI Farmacija, diplomski rad",
     "unitId": "medri",
@@ -24190,6 +24446,38 @@
         "authority": "program-page",
         "lastVerified": "2026-07-02"
       },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "medri-sanitarno-diplomski",
+    "label": "MEDRI, Sanitarno inženjerstvo, diplomski rad",
+    "unitId": "medri",
+    "status": "partial",
+    "workTypes": [
+      "graduate"
+    ],
+    "items": [
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -24828,6 +25116,70 @@
         "authority": "program-page",
         "lastVerified": "2026-07-02"
       },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "mefst-doktorski",
+    "label": "MEFST, doktorski rad",
+    "unitId": "mefst",
+    "status": "partial",
+    "workTypes": [
+      "doctoral"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "mefst-tribe-doktorski",
+    "label": "MEFST, TRIBE, doktorska disertacija",
+    "unitId": "mefst",
+    "status": "partial",
+    "workTypes": [
+      "doctoral"
+    ],
+    "items": [
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -25852,6 +26204,70 @@
         "authority": "general",
         "lastVerified": "2026-07-02"
       },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "mvi-diplomski",
+    "label": "TFMVI, diplomski rad",
+    "unitId": "mvi",
+    "status": "partial",
+    "workTypes": [
+      "graduate"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "mvi-prijediplomski",
+    "label": "TFMVI, prijediplomski bakalaurski rad",
+    "unitId": "mvi",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -27218,6 +27634,38 @@
     ]
   },
   {
+    "id": "pmf-biologija-zavrsni",
+    "label": "Prirodoslovno-matematički fakultet (Biološki odsjek), prijediplomski završni rad",
+    "unitId": "pmf",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "pmf-fizika-graduate",
     "label": "Prirodoslovno-matematicki fakultet (Fizicki odsjek), diplomski rad",
     "unitId": "pmf",
@@ -27701,6 +28149,45 @@
         "target": "Word sam azurira sadrzaj",
         "params": {},
         "condition": "Dokument ima naslov Sadrzaj, a jos nema zivo TOC polje. Nedestruktivno: rucne stavke se ne brisu."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "pmf-geologija-zavrsni",
+    "label": "Prirodoslovno-matematički fakultet (Geološki odsjek), prijediplomski Seminar III",
+    "unitId": "pmf",
+    "status": "partial",
+    "workTypes": [],
+    "items": [
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "page-numbering-universal / section-insert-intro",
+        "fixerId": "page-numbering-fixer / section-insert-fixer",
+        "label": "Numeriranje stranica od Uvoda",
+        "scope": "profil",
+        "target": "prednji listovi rimski, glavni tekst arapski od 1, broj right",
+        "params": {},
+        "condition": "Uvod je prepoznat. Kad prijelom sekcije vec pada tocno na Uvod, postavlja se numeriranje nad postojecim sekcijama; kad prijeloma nema (jednosekcijski rad), umece se prijelom, uz izricitu potvrdu mjesta."
       },
       {
         "ruleId": "empty-paragraphs-universal",
@@ -42970,6 +43457,38 @@
         "authority": "general",
         "lastVerified": "2026-07-02"
       },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "vef-specijalisticki",
+    "label": "VEF, završni specijalistički rad",
+    "unitId": "vef",
+    "status": "partial",
+    "workTypes": [
+      "specialist"
+    ],
+    "items": [
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",

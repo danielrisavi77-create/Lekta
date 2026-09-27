@@ -105,11 +105,19 @@ import { requiredTierIds } from '../scripts/release-tiers.mjs';
 import { tier2Freshness } from '../scripts/tier2-freshness-core.mjs';
 import { commitIdentityVerdict } from '../scripts/post-deploy-smoke.mjs';
 import { proofSourceProblems } from '../src/verification/completion-ledger';
+import { buildUpisnikProfileCandidates as buildRawUpisnikProfileCandidates, validateUpisnikProfileCoverageHolds } from '../src/programs/upisnik-profile-candidates';
+import sourceRegistry from '../data/sources/source-registry.json';
+import { validateDecisions } from '../src/programs/unit-match-decisions';
+import upisnikRows from '../data/programs/drafts/upisnik.json';
+import upisnikComponents from '../docs/generated/upisnik-program-components.json';
+import upisnikProfiles from '../data/profiles/verified-profiles-heavy.json';
+import upisnikProfileDecisions from '../data/programs/upisnik-profile-decisions.json';
+import generatedUpisnikProfiles from '../docs/generated/upisnik-profile-candidates.json';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
 import { computeBaseDemotedAdvisory, computeDemotedAdvisory } from '../src/profiles/advisory-demotion';
-import { demotionProtectedBy } from '../src/profiles/advisory-levers';
+import { applyDemotion, demotionProtectedBy } from '../src/profiles/advisory-levers';
 import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
@@ -137,6 +145,7 @@ import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
   findBarePushWorkflows,
   findPullRequestWithoutConcurrency,
+  findSelfHostedProblems,
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
 import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
@@ -332,6 +341,50 @@ const RE60_SYNTHETIC_INPUT = '<w:document><w:body><w:p><w:r><w:t>doi:10.1/a</w:t
 const RE60_SYNTHETIC_GATE = (output: string) =>
   detectIntegrityFailure([{ name: 'word/document.xml', xml: output }], ['word/document.xml'], ['word/document.xml'], [], { 'word/document.xml': RE60_SYNTHETIC_INPUT });
 
+const buildUpisnikProfileCandidates: typeof buildRawUpisnikProfileCandidates = (...args) =>
+  buildRawUpisnikProfileCandidates(args[0], args[1], args[2], args[3], args[4], args[5], args[6], sourceRegistry);
+
+function upisnikEvidenceFixture(over: Partial<{ sourceUrl: string; sourceLocator: string; quote: string }> = {}) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '109', naziv: 'Povijest (jednopredmetni)', izvoditelj: 'FHS', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '109', executors: [{ componentIds: ['fhs'] }] }],
+    [{ id: 'fhs-zavrsni', unitId: 'fhs', programs: ['Povijest'], workTypes: ['final'], sources: [{ url: 'https://www.unizg.hr/studiji' }] }],
+    [{ programCode: '109', profileId: 'fhs-zavrsni', evidence: {
+      sourceUrl: 'https://fhs.unizg.hr/povijest', sourceLocator: 'službena stranica Povijest', quote: 'Povijest', ...over,
+    } }],
+  );
+}
+
+function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
+  const fizika = programCode === '203';
+  const name = fizika ? 'Fizika' : 'Elektrotehnika';
+  const unitId = fizika ? 'pmf' : 'riteh';
+  const sourceUrl = fizika ? 'https://www.pmf.unizg.hr/studiji' : 'https://riteh.uniri.hr/studij';
+  const profileId = `${unitId}-test`;
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: programCode, naziv: name, izvoditelj: unitId, vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode, executors: [{ componentIds: [unitId] }] }],
+    [{ id: profileId, unitId, programs: [name], workTypes: ['final'], sources: [{ url: sourceUrl }] }],
+    [{ programCode, profileId, evidence: { sourceUrl, sourceLocator: 'službena stranica', quote } }],
+  );
+}
+
+function upisnikInventory(decisions = upisnikProfileDecisions.decisions) {
+  return buildUpisnikProfileCandidates(
+    upisnikRows.rows,
+    upisnikComponents.decisions,
+    Object.values(upisnikProfiles),
+    decisions,
+    upisnikProfileDecisions.exclusions as Parameters<typeof buildUpisnikProfileCandidates>[4],
+    upisnikProfileDecisions.blockers as Parameters<typeof buildUpisnikProfileCandidates>[5],
+    upisnikProfileDecisions.holds,
+  );
+}
+
+function verifiedCodes(programs: Array<{ programCode: string; profileDecisionEvidence: unknown[] }>): string[] {
+  return programs.filter((program) => program.profileDecisionEvidence.length > 0).map((program) => program.programCode).sort();
+}
+
 /**
  * Staticka provjera `scripts/agents/session-bootstrap.mjs`: mjerenje koje ne uspije mora vratiti
  * `null`, nikad doslovnu `0`. Doslovna nula u `catch` grani izgleda identicno stvarno izmjerenoj
@@ -457,6 +510,201 @@ function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string
 }
 
 const MUTATIONS: Mutation[] = [
+  {
+    id: 'upisnik/prazan-worktypes-prihvaca-sve',
+    imitates: 'Prazan workTypes ponovno nudi profil za svaku razinu',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Geologija', izvoditelj: 'PMF', vrsta: 'Doktorski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+        [{ id: 'omitted', unitId: 'pmf', programs: ['Geologija'] }],
+      );
+      return report.programs[0]?.candidateProfileIds.includes('omitted') === true;
+    },
+    caught: () => {
+      const rows = [
+        { sifraUpisnik: '1', naziv: 'Geologija', izvoditelj: 'PMF', vrsta: 'Doktorski studij' },
+        { sifraUpisnik: '2', naziv: 'Geologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' },
+      ];
+      const report = buildUpisnikProfileCandidates(
+        rows,
+        rows.map((row) => ({ programCode: row.sifraUpisnik, executors: [{ componentIds: ['pmf'] }] })),
+        [{ id: 'empty', unitId: 'pmf', programs: ['Geologija'], workTypes: [] }],
+      );
+      return report.programs.every((program) =>
+        !program.candidateProfileIds.includes('empty')
+        && !program.exactCandidateProfileIds.includes('empty')
+        && !program.componentWorkTypeProfileIds.includes('empty'));
+    },
+  },
+  {
+    id: 'upisnik/109-domena-druge-ustanove',
+    imitates: 'Veza FHS 109 koristi službeni izvor Hrvatskog katoličkog sveučilišta',
+    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikEvidenceFixture({ sourceUrl: 'https://www.unicath.hr/povijest' }); return false; }
+      catch (error) { return /source domain/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/susjedna-sastavnica-iste-domene',
+    imitates: 'FHS veza koristi izvor FFZG-a na istoj sveučilišnoj domeni',
+    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikEvidenceFixture({ sourceUrl: 'https://ffzg.unizg.hr/povijest' }); return false; }
+      catch (error) { return /source domain/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/hold-gubi-odbijeni-izvor',
+    imitates: 'Hold 109 zadržava razlog o HKS-u, ali gubi citirani izvor',
+    cleanBefore: () => upisnikInventory().programs.find((row) => row.programCode === '109')?.remainingHold?.sources.length === 1,
+    caught: () => {
+      const holds = upisnikProfileDecisions.holds.map((hold) => hold.programCode === '109' ? { ...hold, sources: [] } : hold);
+      try {
+        buildUpisnikProfileCandidates(upisnikRows.rows, upisnikComponents.decisions, Object.values(upisnikProfiles),
+          upisnikProfileDecisions.decisions, upisnikProfileDecisions.exclusions, upisnikProfileDecisions.blockers, holds);
+        return false;
+      } catch (error) { return /needs source evidence/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/citat-bez-naziva',
+    imitates: 'Citat i lokator postaju općeniti i više ne imenuju Upisnik program Povijest',
+    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikEvidenceFixture({ quote: 'Sveučilišni prijediplomski studij', sourceLocator: 'službena stranica studija' }); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/suprotna-vrsta-bez-oznake-profila',
+    imitates: 'Citat tvrdi stručni studij iako Upisnik 109 navodi sveučilišni studij',
+    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikEvidenceFixture({ quote: 'Povijest, stručni prijediplomski studij' }); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/prekratka-osnova-naziva',
+    imitates: 'Vraća osnovu Math.max(3, word.length - 3) bez ograničenja duljine: Fizioterapija se zamijeni za Fiziku 203',
+    cleanBefore: () => upisnikGuardFixture('203', 'Studij fizike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Fizioterapija'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/samo-puna-rijec-strucni',
+    imitates: 'Vraća prepoznavanje samo pune riječi strucni: stručnog studija za sveučilišni program 3 prolazi',
+    cleanBefore: () => upisnikGuardFixture('3', 'Prijediplomski studij elektrotehnike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Prijediplomski program stručnog studija elektrotehnike'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/izbrisana-jedna-veza',
+    imitates: 'Jedna programska šifra nestaje iz imenovanog skupa potvrđenih veza',
+    cleanBefore: () => JSON.stringify(verifiedCodes(upisnikInventory().programs)) === JSON.stringify(verifiedCodes(generatedUpisnikProfiles.programs)),
+    caught: () => JSON.stringify(verifiedCodes(upisnikInventory(upisnikProfileDecisions.decisions.slice(1)).programs)) !== JSON.stringify(verifiedCodes(generatedUpisnikProfiles.programs)),
+  },
+  {
+    id: 'upisnik/zastarjeli-generirani-artefakt',
+    imitates: 'Odluka se izmijeni bez regeneracije Upisnik profilnog artefakta',
+    cleanBefore: () => JSON.stringify(upisnikInventory().programs) === JSON.stringify(generatedUpisnikProfiles.programs),
+    caught: () => JSON.stringify(upisnikInventory(upisnikProfileDecisions.decisions.slice(1)).programs) !== JSON.stringify(generatedUpisnikProfiles.programs),
+  },
+  {
+    id: 'unit-match/bez-dokaza-za-rucnu-promjenu',
+    imitates: 'Ručno promijenjeni exact prijedlog uparivanja jedinice nema službeni dokaz',
+    cleanBefore: () => validateDecisions({ schemaVersion: 1, decisions: [{ executor: 'X', unitId: 'a', noUnitReason: null, decidedBy: 'Test', decidedAt: '2026-09-26', bulk: false, proposed: { unitId: 'a', confidence: 'exact' } }] }, { knownExecutors: new Set(['X']), knownUnitIds: new Set(['a', 'b']) }).length === 0,
+    caught: () => validateDecisions({ schemaVersion: 1, decisions: [{ executor: 'X', unitId: 'b', noUnitReason: null, decidedBy: 'Test', decidedAt: '2026-09-26', bulk: false, proposed: { unitId: 'a', confidence: 'exact' } }] }, { knownExecutors: new Set(['X']), knownUnitIds: new Set(['a', 'b']) }).some((error) => error.includes('službeni dokaz')),
+  },
+  {
+    id: 'upisnik/genericki-hold-za-jedinog-kandidata',
+    imitates: 'Program s jednim profilom iste razine dobiva generički zahtjev za dokaz bez imena kandidata',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveučilišni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'fhs-zavrsni', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      return validateUpisnikProfileCoverageHolds(report).length === 0;
+    },
+    caught: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveučilišni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'fhs-zavrsni', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      report.programs[0]!.remainingHold!.missingEvidence = ['Službeni aktualni izvor za identitet programa i sastavnicu, uz dokaz obvezne vrste rada i veze s odgovarajućim profilom.'];
+      return validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('generic evidence request'));
+    },
+  },
+  {
+    id: 'upisnik/nerijesena-profilna-rupa-bez-holda',
+    imitates: 'Upisnik redak ostaje neriješen, ali izvještaj ukloni razlog blokade i konkretan traženi dokaz',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '2', naziv: 'Logopedija', izvoditelj: 'Sveučilište' }],
+        [],
+        [],
+      );
+      return validateUpisnikProfileCoverageHolds(report).length === 0;
+    },
+    caught: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '2', naziv: 'Logopedija', izvoditelj: 'Sveučilište' }],
+        [],
+        [],
+      );
+      report.programs[0]!.remainingHold = null;
+      return validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('no hold'));
+    },
+  },
+  {
+    id: 'upisnik/sukob-bez-oba-izvora-u-holdu',
+    imitates: 'Upisnik sukob zadržava status blokade, ali hold izgubi jedan od svojih službenih izvora',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Test', izvoditelj: 'Sveučilište', vrsta: 'Sveučilišni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [],
+        [],
+        [],
+        [{
+          programCode: '1',
+          reasonCode: 'conflicting-completion-evidence',
+          sources: [
+            { sourceUrl: 'https://fhs.hr/a', sourceLocator: 'službena stranica studija', quote: 'Završni rad' },
+            { sourceUrl: 'https://fhs.hr/b', sourceLocator: 'službena stranica sastavnice', quote: 'Završni ispit' },
+          ],
+        }],
+      );
+      return validateUpisnikProfileCoverageHolds(report).length === 0;
+    },
+    caught: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Test', izvoditelj: 'Sveučilište', vrsta: 'Sveučilišni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [],
+        [],
+        [],
+        [{
+          programCode: '1',
+          reasonCode: 'conflicting-completion-evidence',
+          sources: [
+            { sourceUrl: 'https://fhs.hr/a', sourceLocator: 'službena stranica studija', quote: 'Završni rad' },
+            { sourceUrl: 'https://fhs.hr/b', sourceLocator: 'službena stranica sastavnice', quote: 'Završni ispit' },
+          ],
+        }],
+      );
+      report.programs[0]!.remainingHold!.sources.pop();
+      return validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('both cited sources'));
+    },
+  },
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
   {
     id: 'gate/bez-sourcePage',
@@ -808,6 +1056,37 @@ const MUTATIONS: Mutation[] = [
       'o roditelju, nezasticena os bi joj tiho ugasila bas taj zahtjev (3 boda) uz nula poruka',
     caught: () => demotionProtectedBy({ pageNumberAlignment: 'right' }).has('page-numbers'),
     cleanBefore: () => !demotionProtectedBy({}).has('page-numbers'),
+  },
+  {
+    id: 'demotija/gasi-podprovjere-brojeva-stranica',
+    imitates:
+      'demotirana os brojeva stranica ostavlja aktivno poravnanje ili podprovjeru naslovnice/Uvoda, pa se pravilo i dalje primjenjuje nizvodno',
+    caught: () => {
+      const profile: Record<string, unknown> = {
+        requirePageNumbers: true,
+        pageNumberAlignment: 'right',
+        checkTitlePageNumberSuppression: true,
+        checkPageNumberStartAtIntro: true,
+      };
+      applyDemotion(profile, ['page-numbers']);
+      return profile.requirePageNumbers === false &&
+        profile.pageNumberAlignment === null &&
+        profile.checkTitlePageNumberSuppression === false &&
+        profile.checkPageNumberStartAtIntro === false;
+    },
+    cleanBefore: () => {
+      const profile: Record<string, unknown> = {
+        requirePageNumbers: true,
+        pageNumberAlignment: 'right',
+        checkTitlePageNumberSuppression: true,
+        checkPageNumberStartAtIntro: true,
+      };
+      applyDemotion(profile, []);
+      return profile.requirePageNumbers === true &&
+        profile.pageNumberAlignment === 'right' &&
+        profile.checkTitlePageNumberSuppression === true &&
+        profile.checkPageNumberStartAtIntro === true;
+    },
   },
   {
     id: 'poluge/podprovjera-stiti-roditelja-sadrzaj',
@@ -5846,6 +6125,95 @@ describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u
       },
     ];
     expect(findPullRequestWithoutConcurrency(golaKonstanta)).toEqual(['primjer-gola-konstanta.yml']);
+  });
+});
+
+describe('mutacije: self-hosted Word runner na javnom repou (T80, Codex F1, F3, F5 na #162)', () => {
+  const IF = "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'";
+  const RAW = 'name: word-proof\npermissions:\n  contents: read\n';
+  const wordProof = (): NamedWorkflow => ({
+    file: 'word-proof.yml',
+    raw: RAW,
+    doc: {
+      on: { workflow_dispatch: null, push: { branches: ['master', 'release/**'] } },
+      permissions: { contents: 'read' },
+      jobs: {
+        'word-proof': {
+          'runs-on': ['self-hosted', 'windows', 'word'],
+          if: IF,
+          steps: [
+            { name: 'Checkout', uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' },
+            { name: 'Porijeklo commita (samo tocan vrh)', run: 'git for-each-ref --format=x refs/remotes/origin/master' },
+            { name: 'release:check', run: 'npm run release:check' },
+          ],
+        },
+      },
+    },
+  });
+  const drugi = (runsOn: unknown): NamedWorkflow => ({
+    file: 'drugi.yml',
+    raw: 'name: drugi\n',
+    doc: { on: { push: { branches: ['master'] } }, jobs: { posao: { 'runs-on': runsOn } } },
+  });
+  const nalazi = (...w: NamedWorkflow[]) => findSelfHostedProblems(w);
+
+  it('BASELINE: tocan word-proof i drugi workflow na ubuntu-latest su cisti', () => {
+    expect(nalazi(wordProof(), drugi('ubuntu-latest'))).toEqual([]);
+  });
+
+  it('F1: drugi workflow s golom oznakom word, windows, self-hosted, izrazom ili grupom se hvata', () => {
+    for (const runsOn of ['word', 'windows', 'self-hosted', ['self-hosted'], '${{ matrix.os }}', { group: 'default' }]) {
+      expect(nalazi(drugi(runsOn)), JSON.stringify(runsOn)).toHaveLength(1);
+    }
+  });
+
+  it('F5: slabiji if (|| umjesto &&) se hvata', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof'].if = IF.replace('&&', '||');
+    expect(nalazi(m)).toEqual([`word-proof.yml: job word-proof if mora biti tocno: ${IF}`]);
+  });
+
+  it('F5: push.tags uz dopustene grane se hvata', () => {
+    const m = wordProof();
+    (m.doc.on as Record<string, unknown>).push = { branches: ['master', 'release/**'], tags: ['v*'] };
+    expect(nalazi(m)).toEqual(['word-proof.yml: push smije imati samo branches (ima: branches, tags)']);
+  });
+
+  it('F5: workflow_call i pull_request trigeri se hvataju', () => {
+    for (const trigger of ['workflow_call', 'pull_request']) {
+      const m = wordProof();
+      (m.doc.on as Record<string, unknown>)[trigger] = {};
+      expect(nalazi(m)[0], trigger).toMatch(/^word-proof\.yml: trigeri moraju biti tocno push, workflow_dispatch/);
+    }
+  });
+
+  it('F5: secrets: inherit, secrets[ i secrets. se hvataju', () => {
+    for (const dodatak of ['    secrets: inherit\n', "    env:\n      K: ${{ secrets['K'] }}\n", '      K: ${{ secrets.K }}\n']) {
+      const m = wordProof();
+      m.raw = RAW + dodatak;
+      expect(nalazi(m), dodatak).toEqual(['word-proof.yml: spominje secrets (secrets., secrets[ ili secrets: inherit)']);
+    }
+  });
+
+  it('F5: prosireni runs-on i pravo pisanja se hvataju', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof']['runs-on'] = ['self-hosted', 'windows', 'word', 'x64'];
+    m.doc.permissions = { contents: 'write' };
+    expect(nalazi(m)).toEqual([
+      'word-proof.yml: job word-proof runs-on mora biti tocno [self-hosted, windows, word]',
+      'word-proof.yml: job word-proof nema permissions samo contents: read',
+    ]);
+  });
+
+  it('F3: provjera porijekla s --contains ili korak koji izvrsava kod prije nje se hvata', () => {
+    const contains = wordProof();
+    contains.doc.jobs!['word-proof'].steps![1].run = 'git branch -r --contains HEAD';
+    expect(nalazi(contains)).toEqual([
+      'word-proof.yml: job word-proof Porijeklo commita mora usporedjivati tocne vrhove grana, ne --contains',
+    ]);
+    const prije = wordProof();
+    prije.doc.jobs!['word-proof'].steps!.splice(1, 0, { name: 'npm ci', run: 'npm ci' });
+    expect(nalazi(prije)).toEqual(['word-proof.yml: job word-proof izvrsava nesto prije koraka Porijeklo commita']);
   });
 });
 

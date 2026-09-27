@@ -6,7 +6,7 @@
  * vidljivost skupnog odobrenja.
  */
 import { describe, it, expect } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { ZAGREB_CATALOG } from '../src/catalog/catalog-loader';
 import {
@@ -29,7 +29,7 @@ const decision = (over: Partial<UnitMatchDecision> = {}): UnitMatchDecision => (
   decidedBy: 'Ime Prezime',
   decidedAt: '2026-08-19',
   bulk: false,
-  proposed: { unitId: null, confidence: null },
+  proposed: { unitId: [...knownUnitIds][0], confidence: 'exact' },
   ...over,
 });
 
@@ -39,6 +39,18 @@ describe('odluke o uparivanju: sto se ne smije provuci', () => {
   it('ispravna odluka prolazi', () => {
     const file = upsertDecision(base, decision());
     expect(validateDecisions(file, { knownUnitIds, knownExecutors })).toEqual([]);
+  });
+
+  it('traži službeni dokaz za ne-exact prijedlog i ručnu promjenu exact prijedloga', () => {
+    const chosen = [...knownUnitIds][0]!;
+    const other = [...knownUnitIds].find((id) => id !== chosen)!;
+    const evidence = [{ sourceUrl: 'https://example.edu/study', sourceLocator: 'program', quote: 'službena odluka' }];
+    for (const proposed of [{ unitId: chosen, confidence: 'fuzzy' as const }, { unitId: other, confidence: 'exact' as const }]) {
+      const without = upsertDecision(base, decision({ unitId: chosen, proposed, evidence: [] }));
+      expect(validateDecisions(without, { knownUnitIds, knownExecutors })).toContainEqual(expect.stringMatching(/službeni dokaz/));
+      const withEvidence = upsertDecision(base, decision({ unitId: chosen, proposed, evidence }));
+      expect(validateDecisions(withEvidence, { knownUnitIds, knownExecutors })).toEqual([]);
+    }
   });
 
   it('odluka bez jedinice mora imati razlog iz zatvorenog skupa', () => {
@@ -108,7 +120,6 @@ describe('pokrivenost odluka', () => {
 describe('commitane odluke (ako postoje)', () => {
   it('prolaze validaciju', () => {
     const path = resolve(process.cwd(), 'data/programs/unit-match-decisions.json');
-    if (!existsSync(path)) return; // jos nijedna odluka nije donesena; suite se sam preskace
     const file = JSON.parse(readFileSync(path, 'utf8')) as DecisionFile;
     expect(validateDecisions(file, { knownUnitIds, knownExecutors })).toEqual([]);
     for (const d of file.decisions) {

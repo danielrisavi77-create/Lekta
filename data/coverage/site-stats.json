@@ -1,5 +1,5 @@
 {
-  "profiles": 407,
+  "profiles": 423,
   "institutions": 41,
   "works": 526370,
   "units": {
@@ -10,6 +10,10 @@
     "agr": {
       "kratica": "AGR",
       "naziv": "Agronomski fakultet"
+    },
+    "agromed": {
+      "kratica": "Agromed",
+      "naziv": "Agromediteranski fakultet"
     },
     "algebra": {
       "kratica": "Algebra",
@@ -50,6 +54,10 @@
     "btho": {
       "kratica": "BTHO",
       "naziv": "Biotehnicki odjel (UNISB)"
+    },
+    "cps": {
+      "kratica": "CPS",
+      "naziv": "Centar za poslijediplomske studije"
     },
     "effectus": {
       "kratica": "Effectus",
@@ -207,6 +215,10 @@
       "kratica": "GEOF",
       "naziv": "Geodetski fakultet"
     },
+    "geoteh": {
+      "kratica": "GEOTEH",
+      "naziv": "Geotehnički fakultet"
+    },
     "grad": {
       "kratica": "GRAD",
       "naziv": "Građevinski fakultet"
@@ -222,6 +234,10 @@
     "grf": {
       "kratica": "GRF",
       "naziv": "Grafički fakultet"
+    },
+    "hig": {
+      "kratica": "HIG",
+      "naziv": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija"
     },
     "hks": {
       "kratica": "HKS",
@@ -318,6 +334,10 @@
     "muza": {
       "kratica": "MUZA",
       "naziv": "Muzička akademija"
+    },
+    "mvi": {
+      "kratica": "MVI",
+      "naziv": "Teološki fakultet Matija Vlačić Ilirik"
     },
     "odhz": {
       "kratica": "ODHZ",

@@ -46,18 +46,18 @@ interface Manifest {
 const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8')) as Manifest;
 
 /**
- * Izmjereno 2026-09-06, i svaka je brojka razlog za odluku, ne ukras.
+ * Izmjereno 2026-09-25 nakon prosirenja kataloga i dodavanja osam izvorom potvrdenih parcijalnih profila.
  *
- * `BEZ_PROFILA` je najvazniji: 443 od 720 redaka nema fakultetski profil, pa se pisu po obiteljskom
- * baselineu. Medju njima postoje samo TRI razlicita skupa pravila, dakle ta 443 dokumenta razlikuju
- * se naslovnicom i prozom, ne oblikovanjem. Ratchet smije samo PADATI: svaki novi fakultetski profil
- * ga spusta, a porast znaci da je profil nestao ili da je rutiranje puklo.
+ * `BEZ_PROFILA` je najvazniji: 463 od 750 redaka nema fakultetski profil; vracen je krovni VEF program i njegov profil, pa se pisu po obiteljskom
+ * baselineu. Rast od 25 redaka prati pet novih sastavnica u katalogu, ne pad rutiranja. Ta promjena
+ * opsega ostaje vidljiva u apsolutnom ratchetu; novi fakultetski profili trebaju brojku smanjivati.
  *
+ * Ukupni broj redaka pao je s 751 na 750 jer je uklonjen mef-specijalisticki bez izvora i drafta.
  * Bilo je 444 dok se varijanta nije birala: `fpzg--final--prijediplomski` ima dva kandidata i oba
  * nose varijantu, pa je `resolveDefinition` vracao nista i redak je ispadao kao "bez pravila".
  */
-const BEZ_PROFILA_RATCHET = 443;
-const OCEKIVANO_REDAKA = 720;
+const BEZ_PROFILA_RATCHET = 463;
+const OCEKIVANO_REDAKA = 750;
 
 describe('manifest sintetickog korpusa', () => {
   it('commitani artefakt je jednak svjezem izracunu (nije ustajao)', () => {
@@ -110,7 +110,7 @@ describe('manifest sintetickog korpusa', () => {
 
   it('ciljani opseg gotovo nigdje ne dolazi iz pravila, i to artefakt priznaje', () => {
     const izPravila = manifest.rows.filter((r) => r.wordTargetSource === 'rule');
-    // Izmjereno: 3 od 720. Pretpostavka se ne smije citati kao fakultetsko pravilo, pa je odvojeno
+    // Izmjereno: 4 od 745. Pretpostavka se ne smije citati kao fakultetsko pravilo, pa je odvojeno
     // imenovana; kad ovaj broj poraste, profili su dobili opseg i to je dobra vijest koja se vidi.
     expect(izPravila.length).toBeLessThan(20);
     expect(manifest.summary.defaultWordTarget).toBe(manifest.rows.length - izPravila.length);
