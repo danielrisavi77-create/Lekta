@@ -1,15 +1,15 @@
 {
   "metrike": {
     "knipDatoteke": 183,
-    "knipExporti": 178,
-    "knipTipovi": 325,
+    "knipExporti": 179,
+    "knipTipovi": 328,
     "knipOvisnosti": 8,
     "knipNenavedene": 0,
     "knipNerazrijesene": 0,
-    "jscpdDupliciraniRetci": 3523,
+    "jscpdDupliciraniRetci": 3526,
     "jscpdKlonovi": 343
   },
-  "generatedAt": "2026-09-27T09:44:21.422Z",
-  "generatedFromCommit": "29d909e3c478262856a2bc82bb9c63d5f0c23556",
+  "generatedAt": "2026-09-27T10:01:01.026Z",
+  "generatedFromCommit": "5f0239c2795b5860a34652daf25b8ee6c729af9c",
   "generator": "npm run lean:report"
 }

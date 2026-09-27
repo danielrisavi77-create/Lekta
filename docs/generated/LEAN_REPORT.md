@@ -7,19 +7,19 @@ Ratchet: `docs/generated/lean-baseline.json`, gard `tests/lean-ratchet.test.ts` 
 | Metrika | Izmjereno | Baseline |
 |---|---:|---:|
 | knip: neiskoristene datoteke | 183 | 183 |
-| knip: neiskoristeni exporti | 178 | 178 |
-| knip: neiskoristeni tipovi i clanovi | 325 | 325 |
+| knip: neiskoristeni exporti | 179 | 179 |
+| knip: neiskoristeni tipovi i clanovi | 328 | 328 |
 | knip: neiskoristene ovisnosti (dependencies + devDependencies) | 8 | 8 |
 | knip: koristene a nenavedene ovisnosti | 0 | 0 |
 | knip: nerazrijeseni importi | 0 | 0 |
-| jscpd: duplicirani retci | 3523 | 3523 |
+| jscpd: duplicirani retci | 3526 | 3526 |
 | jscpd: klonovi | 343 | 343 |
 
-Duplicirano: 2.83 % od 124324 redaka (informativno, nije u ratchetu).
+Duplicirano: 2.83 % od 124812 redaka (informativno, nije u ratchetu).
 
 ## Top 10 datoteka po knip nalazima (exporti, tipovi, ovisnosti)
 
-1. `src/admin/admin-types.ts` (23)
+1. `src/admin/admin-types.ts` (25)
 2. `src/ui/repair-panel.ts` (22)
 3. `src/integration/academic-suite-contracts.ts` (20)
 4. `src/verification/completion-ledger.ts` (17)
