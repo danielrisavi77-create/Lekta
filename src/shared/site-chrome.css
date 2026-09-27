@@ -753,6 +753,22 @@ header.site-chrome--scrolled {
   .site-chrome__reveal { animation: none; }
   /* Potpis je ODMAH popunjen, bez animacije i bez cekanja na skrol ili JavaScript. */
   .site-footer__potpis-slovo { animation: none !important; background-position: 0 0; }
+  /* TRAKA POD SUSTAVNIM "MANJE POKRETA" MIJENJA STANJE ODJEDNOM, U SVAKOM PREGLEDNIKU (Z15 drugi
+     krug). `motion.css` ovdje svakom elementu namece `transition-duration: .001ms !important`, a
+     `transition-property` ostaje zadani `all`, pa svaka interpolabilna promjena (padding, gap,
+     min-height, sirina logotipa, margina natpisa koraka) postaje prijelaz od jedne mikrosekunde.
+     Chromium takav prijelaz razrijesi odmah; WebKit do sljedeceg okvira vraca POCETNU vrijednost,
+     dok diskretna svojstva (`flex-direction`, `position`) vec skoce na novu. Izmjereno u WebKitu na
+     1180x900 odmah nakon povratka na vrh (klasa `--scrolled` vec skinuta): sredina je vec stupac,
+     ali s razmakom 14px, `padding-block` 8px, `min-height` 46px i koracima bez razmaka broj/natpis,
+     pa je debelo zaglavlje 102,2px; 100ms kasnije 78,2px, isto kao Chromium odmah. Staro pravilo
+     `.site-chrome { transition: none }` gore gubi od `header.site-chrome` (0,1,1) i nije pomagalo.
+     `transition: none !important` je isti ucinak koji rucni izbor vec ima
+     (`html:root[data-motion="reduce"] *` u `display-settings.css`). */
+  header.site-chrome,
+  header.site-chrome *,
+  header.site-chrome *::before,
+  header.site-chrome *::after { transition: none !important; }
 }
 :root[data-motion="reduce"] .site-chrome,
 :root[data-motion="reduce"] .site-chrome__marker,
