@@ -56,7 +56,7 @@ Stroj:
    $w = New-Object -ComObject Word.Application; try { $w.Version } finally { $w.Quit() }
    ```
 
-   Ocekivano: broj verzije, npr. `16.0`. Otvori Word jednom rucno i zatvori sve dijaloge prvog
+   Ocekivano: `14.0` (Word 2010, referentni oracle na kojem su nastali svi Tier 2 dokazi). Otvori Word jednom rucno i zatvori sve dijaloge prvog
    pokretanja (licenca, privatnost), inace ih COM automatizacija ceka zauvijek.
 4. Iskljuci spavanje i hibernaciju: Postavke > Sustav > Napajanje > Zaslon i spavanje > Nikad.
 5. Za razine `sve` workflow sam instalira Deno, Python 3.12, `lxml` i Playwright chromium.
