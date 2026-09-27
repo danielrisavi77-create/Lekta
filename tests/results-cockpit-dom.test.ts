@@ -1,10 +1,18 @@
 import { describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { buildVisualResultModel } from '../src/ui/results/visual-result-model';
 import {
+  isGeneralRepairEntry,
   renderResultsCockpit,
   resultRendererFor,
   type ResultsCockpitAction,
+  type ResultsCockpitOptions,
 } from '../src/ui/results/results-cockpit';
+import type { RepairOutlookModel } from '../src/ui/results/repair-outlook';
+
+const cssRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 function result(overrides: Record<string, unknown> = {}) {
   return {
@@ -89,7 +97,7 @@ describe('Results Cockpit V1', () => {
     expect(mount.querySelector('[data-cockpit-action="advanced"]')).toBeTruthy();
   });
 
-  it('routes primary action to the first actionable finding', () => {
+  it('routes the primary action to the general repair entry', () => {
     const mount = document.createElement('section');
     const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
     const model = buildVisualResultModel(result());
@@ -101,10 +109,12 @@ describe('Results Cockpit V1', () => {
 
     mount.querySelector<HTMLButtonElement>('[data-cockpit-primary]')?.click();
 
-    expect(onAction).toHaveBeenCalledWith({
-      kind: 'repair',
-      findingId: model.findings.top[0]?.id,
-    });
+    // OPCI ULAZ, ne ulaz u prvi popravljiv nalaz iz `findings.top`: vrsta radnje je `repair-safe`
+    // bez obzira na nalaz. Uz nju putuje meta popravka (`findingId` popravljivog nalaza iz cijelog
+    // `findings.document`), jer panel bez mete ne moze predodabrati redak; vidi `primaryAction`.
+    const meta = model.findings.document.find((finding) => finding.capabilities.repair);
+    expect(meta?.id).toBeTruthy();
+    expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id });
   });
 
   it('lets the user open a finding location and the advanced layer', () => {
@@ -242,30 +252,41 @@ describe('Results Cockpit V1', () => {
     expect(mount.textContent).not.toContain('92');
   });
 
-  it('prikazuje dokument, profil i autoritet izvora u zaglavlju', () => {
+  it('prikazuje dokument, profil i autoritet izvora u eyebrowu lista presude', () => {
+    /**
+     * Z8: zaglavlje (`cockpit-header`) i zaseban blok autoriteta (`cockpit-authority`) su ukinuti;
+     * sve troje stoji u JEDNOM retku iznad presude. Namjera tvrdnje je ista kao prije: tri podatka
+     * o tome STO je mjereno i PO CEMU moraju biti na ekranu prije presude.
+     */
     const mount = document.createElement('section');
     const model = buildVisualResultModel(result({ file: { name: 'DIPLOMSKI_RAD.docx' } }));
 
     renderResultsCockpit(mount, model, { repairAvailable: true });
 
-    expect(mount.querySelector('[data-cockpit-header]')?.textContent).toContain('DIPLOMSKI_RAD.docx');
+    expect(mount.querySelector('[data-cockpit-eyebrow]')?.textContent).toContain('DIPLOMSKI_RAD.docx');
     expect(mount.textContent).toContain('FPZG / Politologija / Diplomski rad');
-    expect(mount.textContent).toContain('Pravila provjerena prema službenim izvorima');
+    expect(mount.textContent).toContain('Provjereni fakultetski izvor');
   });
 
-  it('usmjerava glavne akcije na postojeće callbacke', () => {
+  it('usmjerava preostale akcije lista presude na postojeće callbacke', () => {
+    /**
+     * Z8 gasi redak s TRI gumba: "Pregledaj nalaze", "Simuliraj popravak" i "Popravi sigurne
+     * stavke" vodili su u isti panel, pa je izbor medu njima bio lazan. Ostaje jedan primarni
+     * gumb i jedna tekstualna poveznica. RADNJE ostaju iste: primarni gumb i dalje emitira
+     * `repair-safe`, samo ih je sada jedan umjesto tri.
+     */
     const mount = document.createElement('section');
     const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
     const model = buildVisualResultModel(result());
 
     renderResultsCockpit(mount, model, { repairAvailable: true, onAction });
     mount.querySelector<HTMLButtonElement>('[data-cockpit-action="open-findings"]')?.click();
-    mount.querySelector<HTMLButtonElement>('[data-cockpit-action="simulate-repair"]')?.click();
-    mount.querySelector<HTMLButtonElement>('[data-cockpit-action="repair-safe"]')?.click();
 
     expect(onAction).toHaveBeenNthCalledWith(1, { kind: 'open-findings' });
-    expect(onAction).toHaveBeenNthCalledWith(2, { kind: 'simulate-repair' });
-    expect(onAction).toHaveBeenNthCalledWith(3, { kind: 'repair-safe' });
+    // Tri gumba su pala na jedan: `simulate-repair` i `repair-safe` se ne crtaju istovremeno.
+    expect(mount.querySelectorAll('[data-cockpit-action="simulate-repair"]')).toHaveLength(0);
+    expect(mount.querySelectorAll('[data-cockpit-action="repair-safe"]')).toHaveLength(1);
+    expect(mount.querySelectorAll('[data-cockpit-primary]')).toHaveLength(1);
   });
 
   it('uses cockpit by default and allows an explicit legacy opt-out', () => {
@@ -285,7 +306,636 @@ describe('Results Cockpit V1', () => {
     renderResultsCockpit(mount, buildVisualResultModel(result()), { repairAvailable: true });
 
     expect(mount.dataset.cockpitExperience).toBe('correction-desk');
-    expect(mount.querySelector('[data-cockpit-hero]')).toBeTruthy();
+    expect(mount.querySelector('[data-cockpit-verdict-sheet]')).toBeTruthy();
     expect(mount.querySelectorAll('[data-cockpit-priority-card]')).toHaveLength(3);
+  });
+});
+
+/**
+ * Z8, PRVI KRUG: ekran `/rad/` kao vodic u cetiri koraka.
+ *
+ * Svaka tvrdnja ovdje ima MUTACIJU uz sebe: gard koji nije vidio vlastiti kvar ne dokazuje nista,
+ * a upravo ovaj sloj (prikaz) najlakse tiho odluta od modela.
+ */
+describe('Z8: stepper, list presude, pager i sekundarni listovi', () => {
+  const OUTLOOK: RepairOutlookModel = {
+    kind: 'available',
+    currentScore: 87,
+    ceilingScore: 94,
+    headroom: 7,
+    counts: { auto: 1, assisted: 0, manual: 2 },
+    manualItems: [],
+    preselected: 1,
+    atCeiling: false,
+  };
+
+  function renderaj(over: Record<string, unknown> = {}, options: Partial<ResultsCockpitOptions> = {}) {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result(over));
+    renderResultsCockpit(mount, model, { repairAvailable: true, ...options });
+    return { mount, model };
+  }
+
+  /** Stol s pravim nalazima; dokument se ne crta, jer faksimil nije predmet ove tvrdnje. */
+  function saStolom(over: Record<string, unknown> = {}) {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result(over));
+    renderResultsCockpit(mount, model, {
+      repairAvailable: true,
+      desk: {
+        items: model.findings.document.map((finding) => ({ finding, flagIndex: null })),
+        mountDocument: async () => null,
+      },
+    });
+    return { mount, model };
+  }
+
+  const klik = (el: Element | null) => (el as HTMLElement | null)?.click();
+
+  /**
+   * STEPPER JE OD Z15 U TRAKI, NE U KOKPITU.
+   *
+   * Do Z15 ga je crtao ovaj modul, pa je na `/rad/` stajao ispod ljepljive trake i bio
+   * djelomicno skriven (vidljivo na snimci). Model i crtanje su preseljeni u
+   * `src/shared/site-chrome.ts`, a tvrdnje o cetiri koraka, jednom aktivnom i `aria-disabled`
+   * nad neaktivnima zive u `tests/site-chrome.test.ts`, nad markupom `rad/index.html`.
+   *
+   * Ovdje ostaje tvrdnja koja pripada KOKPITU: da koraka u njemu vise NEMA. Bez nje bi selidba
+   * mogla ostaviti drugi, mrtvi stepper, dakle drugi izvor istine o istom vodicu.
+   */
+  it('kokpit vise NE crta stepper: on je u traki (Z15)', () => {
+    const { mount } = renderaj();
+    expect(mount.querySelectorAll('[data-cockpit-steps]')).toHaveLength(0);
+    expect(mount.querySelectorAll('.cockpit-step')).toHaveLength(0);
+    // BASELINE: kokpit se doista iscrtao, pa tvrdnja iznad nije vakuumska nad praznim mountom.
+    expect(mount.querySelector('[data-cockpit-verdict-sheet]')).not.toBeNull();
+  });
+
+  it('MUTACIJA: vraceni stepper u kokpitu bi pao na istoj tvrdnji', () => {
+    const { mount } = renderaj();
+    const podmetnut = mount.ownerDocument.createElement('ol');
+    podmetnut.dataset.cockpitSteps = '';
+    podmetnut.innerHTML = '<li class="cockpit-step">01 Nalazi</li>';
+    mount.prepend(podmetnut);
+    expect(mount.querySelectorAll('[data-cockpit-steps]')).toHaveLength(1);
+    expect(mount.querySelectorAll('.cockpit-step')).toHaveLength(1);
+  });
+
+  it('list presude nosi TOCNO JEDAN primarni gumb', () => {
+    const { mount } = renderaj();
+    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]');
+
+    expect(list).toBeTruthy();
+    expect(list!.querySelectorAll('button.button-primary')).toHaveLength(1);
+    expect(list!.querySelector('[data-cockpit-primary]')?.textContent).toContain('Napravi plan popravka');
+    expect(list!.querySelector('[data-cockpit-action="open-findings"]')?.textContent).toContain('Pregledaj nalaze');
+  });
+
+  it('MUTACIJA: broj primarnih gumba ostaje JEDAN i kad ULAZ promijeni koju radnju gumb nosi', () => {
+    // Prava mutacija mijenja ULAZ i ponovno renderira, umjesto da doda gumb izravno u vec
+    // iscrtan DOM: ono drugo bi prosao i predikat bez obzira crta li `renderResultsCockpit`
+    // ijedan gumb ili deset, jer bi test sam dodao onaj koji broji.
+    //
+    // `repairAvailable: false` mijenja `primaryAction` u DRUGU granu (nema opceg ulaza u popravak,
+    // natpis postaje "Otvori prvi nalaz"), a ugovor "tocno jedan primarni gumb" mora vrijediti i
+    // ovdje, ne samo na baseline granu s popravkom.
+    const bezPopravka = renderaj({}, { repairAvailable: false });
+    const listBez = bezPopravka.mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!;
+    expect(listBez.querySelectorAll('button.button-primary')).toHaveLength(1);
+    expect(listBez.querySelector('[data-cockpit-primary]')?.textContent).toContain('Otvori prvi nalaz');
+
+    const sPopravkom = renderaj();
+    const listS = sPopravkom.mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]')!;
+    expect(listS.querySelectorAll('button.button-primary')).toHaveLength(1);
+    expect(listS.querySelector('[data-cockpit-primary]')?.textContent).not.toContain('Otvori prvi nalaz');
+  });
+
+  it('eyebrow spaja ime datoteke, profil i autoritet izvora u jedan redak', () => {
+    const { mount, model } = renderaj({ file: { name: 'DIPLOMSKI_RAD.docx' } });
+    const eyebrow = mount.querySelector('[data-cockpit-eyebrow]')?.textContent ?? '';
+
+    expect(eyebrow).toContain('DIPLOMSKI_RAD.docx');
+    expect(eyebrow).toContain('FPZG / Politologija / Diplomski rad');
+    // AUTORITET IZVORA je `model.authority.label`, a ne `header.authorityLabel` (opseg provjere):
+    // to su dvije razlicite tvrdnje i eyebrow nosi onu o IZVORU.
+    expect(model.authority.label).toBe('Provjereni fakultetski izvor');
+    expect(eyebrow).toContain(model.authority.label);
+    // Zaseban blok autoriteta je ukinut; tvrdnja pada ako se vrati.
+    expect(mount.querySelector('[data-cockpit-authority]')).toBeNull();
+  });
+
+  it('redoslijed lista presude je eyebrow -> H1 -> sazetak -> ograda -> gumb + poveznica', () => {
+    /**
+     * ALIGNMENT Z8 (popravak drugog kruga): ograda izvora ide ISPOD sazetka, ne izmedju eyebrowa
+     * i H1, jer ogranicava upravo procitanu tvrdnju. `cockpit-marks` uopce nije dijete
+     * `cockpit-sheet__lead`; stoji uz prsten presude.
+     */
+    const { mount } = renderaj();
+    const lead = mount.querySelector<HTMLElement>('[data-cockpit-sheet-lead]')!;
+    const djeca = [...lead.children];
+    const indeks = (selector: string) => djeca.findIndex((el) => el.matches(selector));
+
+    const iEyebrow = indeks('[data-cockpit-eyebrow]');
+    const iNaslov = indeks('[data-cockpit-verdict-title]');
+    const iSazetak = indeks('[data-finding-summary]');
+    const iOgrada = indeks('[data-cockpit-caveat]');
+    const iRadnje = indeks('.cockpit-sheet__actions');
+
+    expect([iEyebrow, iNaslov, iSazetak, iOgrada, iRadnje]).toEqual([0, 1, 2, 3, 4]);
+    // `cockpit-marks` NIJE dijete lista presude: stoji uz prsten (`verdictRingHtml`).
+    expect(lead.querySelector('.cockpit-marks')).toBeNull();
+    expect(mount.querySelector('.cockpit-ring-wrap .cockpit-marks')).not.toBeNull();
+  });
+
+  it('MUTACIJA: ograda prije H1 (stari raspored) pada na tvrdnji o redoslijedu', () => {
+    // Prava mutacija mijenja ULAZ tako da renderer proizvede DRUGACIJI, ali i dalje STVARAN DOM
+    // (ovdje: rucno sastavljen ekvivalent stare, pogresne izvedbe Z8), i tvrdi da gard koji cuva
+    // redoslijed pada na njemu. Ne mijenja se vec iscrtan ispravan DOM.
+    const stariRaspored = document.createElement('div');
+    stariRaspored.dataset.cockpitSheetLead = '';
+    stariRaspored.innerHTML = '<p data-cockpit-eyebrow>eyebrow</p>'
+      + '<p class="cockpit-marks">marks</p>'
+      + '<p data-cockpit-caveat="verified">ograda</p>'
+      + '<h1 data-cockpit-verdict-title>Presuda</h1>'
+      + '<div data-finding-summary>sazetak</div>'
+      + '<div class="cockpit-sheet__actions">radnje</div>';
+
+    const djeca = [...stariRaspored.children];
+    const indeks = (selector: string) => djeca.findIndex((el) => el.matches(selector));
+    const poredak = [
+      indeks('[data-cockpit-eyebrow]'),
+      indeks('[data-cockpit-verdict-title]'),
+      indeks('[data-finding-summary]'),
+      indeks('[data-cockpit-caveat]'),
+      indeks('.cockpit-sheet__actions'),
+    ];
+    expect(poredak).not.toEqual([0, 1, 2, 3, 4]);
+  });
+
+  it('ograda ogradjenog profila ostaje na listu presude, ne nestaje s ekrana', () => {
+    /**
+     * Prva izvedba Z8 je autoritet uzela iz `header.authorityLabel`, pa `model.authority` vise
+     * nijedan prikaz nije citao: recenica "nalazi su moguca odstupanja, ne potvrdjeni zahtjevi"
+     * nestala je s ekrana umjesto da se premjesti. Ograda je tvrdnja o tome koliko izvor obvezuje
+     * i mora stajati uz presudu.
+     */
+    const { mount, model } = renderaj({ profileStatus: 'draft', details: { ruleAuthority: 'institution' } });
+
+    expect(model.authority.kind).toBe('limited');
+    expect(mount.querySelector('[data-cockpit-eyebrow]')?.textContent).toContain('Djelomično provjeren izvor');
+    expect(mount.querySelector('[data-cockpit-caveat]')?.textContent).toBe(model.authority.description);
+    expect(mount.textContent).toContain('moguća odstupanja');
+  });
+
+  it('MUTACIJA: ograda koja se cita iz krivog polja modela ne prati autoritet izvora', () => {
+    // Kontrola: ogradjen profil ima DRUGU ogradu od provjerenog. Da prikaz cita `header`, oba bi
+    // ekrana nosila isti tekst i ova bi tvrdnja pala.
+    const ogradjen = renderaj({ profileStatus: 'draft', details: { ruleAuthority: 'institution' } });
+    const provjeren = renderaj();
+    const a = ogradjen.mount.querySelector('[data-cockpit-caveat]')?.textContent ?? '';
+    const b = provjeren.mount.querySelector('[data-cockpit-caveat]')?.textContent ?? '';
+
+    expect(a).not.toBe('');
+    expect(b).not.toBe('');
+    expect(a === b).toBe(false);
+  });
+
+  it('opci ulaz u popravak stoji na primarnom gumbu i kad vodeca tri nalaza nisu popravljiva', () => {
+    /**
+     * UGOVOR `repair-entry`: kad je popravak dostupan, ulaz postoji UVIJEK i tocno jednom. Prva
+     * izvedba Z8 ga je vezala uz prvi popravljiv nalaz iz `findings.top`, pa je dokument kojem su
+     * sva tri vodeca nalaza nepopravljiva ostajao bez ijednog ulaza. Sest Playwright specova
+     * (`repair-panel`, `repair-cta-opens-panel`, `repair-selection-restore`, `workspace-a11y`,
+     * `workspace-viewports`, `ux-dist/critical-path`) trazi bas taj atribut unutar `#resultCockpit`.
+     */
+    const bezPopravka = {
+      capabilities: { repair: false, preview: true },
+      details: {
+        ruleAuthority: 'official-source',
+        triage: { counts: { auto: 2, assisted: 0, manual: 0, total: 2 }, findings: [] },
+      },
+    };
+    const { mount } = renderaj(bezPopravka);
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(mount.querySelectorAll('[data-testid="repair-entry"]')).toHaveLength(1);
+    expect(gumb?.dataset.testid).toBe('repair-entry');
+    expect(gumb?.dataset.cockpitAction).toBe('repair-safe');
+    expect(gumb?.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('bez ijedne automatske stavke ulaz je simulacija, jer plan popravka nad praznim skupom laze', () => {
+    const { mount } = renderaj({
+      details: {
+        ruleAuthority: 'official-source',
+        triage: { counts: { auto: 0, assisted: 1, manual: 2, total: 3 }, findings: [] },
+      },
+    });
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(gumb?.dataset.cockpitAction).toBe('simulate-repair');
+    expect(gumb?.textContent).toContain('Simuliraj popravak');
+    expect(gumb?.dataset.testid).toBe('repair-entry');
+  });
+
+  it('bez dostupnog popravka nema oznake ulaza, jer bi tvrdila ponudu koje nema', () => {
+    const { mount } = renderaj({}, { repairAvailable: false });
+
+    expect(mount.querySelectorAll('[data-testid="repair-entry"]')).toHaveLength(0);
+    expect(mount.querySelector('[data-cockpit-primary]')?.textContent).toContain('Otvori prvi nalaz');
+  });
+
+  it('primarni gumb nosi data-finding-id kad akcija ima findingId (bez popravka, s pregledljivim nalazom)', () => {
+    // `primaryAction` vraca `{kind:'preview', findingId}` kad popravak nije dostupan, ali prvi
+    // nalaz u `findings.top` ima moguc pregled. Panel popravka time zna koji nalaz predodabrati.
+    const { mount, model } = renderaj({}, { repairAvailable: false });
+    const action = { kind: 'preview' as const, findingId: model.findings.top.find((f) => f.capabilities.preview)!.id };
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(action.findingId).toBeTruthy();
+    expect(gumb?.dataset.findingId).toBe(action.findingId);
+  });
+
+  it('primarni gumb NEMA data-finding-id kad akcija nema findingId (nema pregledljivog nalaza)', () => {
+    const { mount } = renderaj({ capabilities: { repair: false, preview: false } }, { repairAvailable: false });
+    const gumb = mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    expect(gumb?.dataset.findingId).toBeUndefined();
+    expect(gumb?.textContent).toContain('Prikaži što treba provjeriti');
+  });
+
+  it('MUTACIJA: ulaz vezan uz prva tri nalaza pada na dokumentu bez popravljivog vodeceg nalaza', () => {
+    // Stara izvedba: `findings.top.find((f) => f.capabilities.repair)`. Nad istim modelom vraca
+    // `undefined`, dakle nijedan ulaz; nova izvedba ga ipak daje.
+    const { mount, model } = renderaj({
+      capabilities: { repair: false, preview: true },
+      details: {
+        ruleAuthority: 'official-source',
+        triage: { counts: { auto: 2, assisted: 0, manual: 0, total: 2 }, findings: [] },
+      },
+    });
+
+    expect(model.findings.top.some((nalaz) => nalaz.capabilities.repair)).toBe(false);
+    expect(mount.querySelectorAll('[data-testid="repair-entry"]').length === 0).toBe(false);
+  });
+
+  /**
+   * META POPRAVKA NA PRIMARNOM GUMBU (popravak drugog kruga pregleda). Kriterij prihvacanja trazi
+   * `data-finding-id` na primarnom gumbu KAD POSTOJI POPRAVLJIV NALAZ, a prva izvedba Z8 ga je u
+   * grani s dostupnim popravkom nikad nije emitirala: `app.ts` je panel otvarao bez mete, dok je
+   * osnovica (e6ca53a1) predodabirala i osvjetljavala bas onaj redak zbog kojeg je korisnik kliknuo.
+   *
+   * ULAZ JE NAMJERNO TEZAK SLUCAJ: jedini popravljiv nalaz je info nalaz (`priorityRank` 4), dakle
+   * IZVAN prva tri. Time se uz metu dokazuje i da se cita `findings.document`, ne `findings.top`.
+   */
+  describe('meta popravka na primarnom gumbu', () => {
+    const NASLOV_INFO = 'Naslov možda koristi ručno oblikovanje';
+
+    function saMetom(repairItems: readonly { fixerId: string; matchKeys: readonly string[] }[]) {
+      const mount = document.createElement('section');
+      const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
+      const model = buildVisualResultModel(
+        result({
+          details: {
+            ruleAuthority: 'official-source',
+            // Bez triage nalaza nijedan nalaz nije `autoRepairable`, pa popravljivost dolazi
+            // ISKLJUCIVO iz `repairItems` i test kontrolira koji je nalaz popravljiv.
+            triage: { counts: { auto: 2, assisted: 0, manual: 1, total: 3 }, findings: [] },
+          },
+        }),
+        { repairItems },
+      );
+      renderResultsCockpit(mount, model, { repairAvailable: true, onAction });
+      return { mount, model, onAction };
+    }
+
+    const gumbIz = (mount: HTMLElement) => mount.querySelector<HTMLElement>('[data-cockpit-primary]');
+
+    it('gumb nosi data-finding-id popravljivog nalaza i kad je nalaz izvan prva tri', () => {
+      const { mount, model, onAction } = saMetom([{ fixerId: 'heading-fixer', matchKeys: [NASLOV_INFO] }]);
+      const meta = model.findings.document.find((nalaz) => nalaz.capabilities.repair);
+
+      // Ciljana klasa ulaza: popravljiv nalaz POSTOJI, ali NIJE medju prva tri.
+      expect(meta?.title).toBe(NASLOV_INFO);
+      expect(model.findings.top.some((nalaz) => nalaz.capabilities.repair)).toBe(false);
+
+      const gumb = gumbIz(mount);
+      expect(gumb?.dataset.cockpitAction).toBe('repair-safe');
+      expect(gumb?.dataset.testid).toBe('repair-entry');
+      expect(gumb?.dataset.findingId).toBe(meta?.id);
+
+      gumb?.click();
+      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe', findingId: meta?.id });
+    });
+
+    it('MUTACIJA: bez ijednog popravljivog nalaza opci ulaz ostaje, ali mete nema', () => {
+      const { mount, model, onAction } = saMetom([]);
+
+      // Mutacija mijenja ULAZ (nijedan signal popravka) i vrti ISTE tvrdnje: da je atribut
+      // konstanta, ostao bi na gumbu i ovdje.
+      expect(model.findings.document.some((nalaz) => nalaz.capabilities.repair)).toBe(false);
+      expect(mount.querySelectorAll('[data-testid="repair-entry"]')).toHaveLength(1);
+      expect(gumbIz(mount)?.dataset.findingId).toBeUndefined();
+
+      gumbIz(mount)?.click();
+      expect(onAction).toHaveBeenCalledWith({ kind: 'repair-safe' });
+    });
+  });
+
+  it('spojena rečenica nosi OBA broja kad je strop poznat', () => {
+    const { mount } = renderaj({}, { repairOutlook: OUTLOOK });
+    const redak = mount.querySelector('.fsum-auto')?.textContent ?? '';
+
+    expect(redak).toContain('od toga');
+    expect(redak).toContain('mogu popraviti automatski');
+    expect(redak).toContain('automatika može doseći najviše');
+    expect(redak).toContain('94');
+  });
+
+  it('bez poznatog stropa druga polovica rečenice izostaje umjesto da se izmisli broj', () => {
+    const { mount } = renderaj({}, {
+      repairOutlook: { kind: 'unavailable', reason: 'Ovaj profil nema bodovanih provjera.' },
+    });
+    const redak = mount.querySelector('.fsum-auto')?.textContent ?? '';
+
+    expect(redak).toContain('mogu popraviti automatski');
+    expect(redak).not.toContain('automatika može doseći');
+    expect(redak).not.toContain('94');
+  });
+
+  it('MUTACIJA: strop koji se cita mimo modela ne bi pratio model', () => {
+    // Prava brojka dolazi iz `repairOutlook.ceilingScore`. Fiksni 88 iz predloska bi prosao na
+    // jednom profilu i lagao na svakom drugom.
+    const sStropom = renderaj({}, { repairOutlook: { ...OUTLOOK, ceilingScore: 71 } });
+    const redak = sStropom.mount.querySelector('.fsum-auto')?.textContent ?? '';
+    expect(redak).toContain('71');
+    expect(redak.includes('88')).toBe(false);
+  });
+
+  it('prsten nosi ton presude, a ne ton ocjene', () => {
+    const { mount } = renderaj();
+    const prsten = mount.querySelector<HTMLElement>('[data-cockpit-score]');
+    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]');
+
+    expect(prsten?.dataset.verdictTone).toBe('blocked');
+    expect(prsten?.dataset.verdictTone).toBe(list?.dataset.cockpitStatus);
+  });
+
+  it('MUTACIJA: prsten prati ton presude i kad ULAZ promijeni presudu u "clear"', () => {
+    // Prava mutacija mijenja ULAZ, ne vec iscrtan DOM: bez blokatora, dorada i rucnih provjera
+    // `resultReadiness` vraca `clear`, sto je DRUGI ton od baseline `blocked` testa iznad. Da je
+    // `verdictRingHtml` pozvan s prepisanim ili fiksnim tonom (npr. uvijek 'blocked'), ova tvrdnja
+    // bi pala na ovom, drugom modelu, dok bi baseline i dalje bio zelen.
+    const { mount } = renderaj({ issues: [] });
+    const prsten = mount.querySelector<HTMLElement>('[data-cockpit-score]');
+    const list = mount.querySelector<HTMLElement>('[data-cockpit-verdict-sheet]');
+
+    expect(list?.dataset.cockpitStatus).toBe('clear');
+    expect(prsten?.dataset.verdictTone).toBe('clear');
+    expect(prsten?.dataset.verdictTone).toBe(list?.dataset.cockpitStatus);
+    expect(prsten?.dataset.verdictTone).not.toBe('blocked');
+  });
+
+  it('pečat stoji IZVAN elementa s tekstom presude', () => {
+    const { mount } = renderaj();
+    const pecat = mount.querySelector<HTMLElement>('[data-cockpit-stamp]');
+    const presuda = mount.querySelector<HTMLElement>('[data-cockpit-verdict-title]');
+
+    expect(pecat).toBeTruthy();
+    expect(presuda?.textContent).toContain('Nije spremno za predaju');
+    // Struktura, ne pikseli: pecat nije potomak ni presude ni lijevog stupca s tekstom.
+    expect(presuda!.contains(pecat!)).toBe(false);
+    expect(mount.querySelector<HTMLElement>('[data-cockpit-sheet-lead]')!.contains(pecat!)).toBe(false);
+  });
+
+  it('copy pecata je DOSLOVNO iz predloska; needs-work i manual-review nemaju izmisljen pecat', () => {
+    /**
+     * Results.dc.html ima doslovan natpis pecata SAMO za `blocked` ("Nije spremno") i `clear`
+     * ("Forma provjerena"). Popravak drugog kruga: prije je ovdje stajao izmisljen natpis
+     * ("Treba doradu", "Za ručnu provjeru") koji predlozak ne sadrzi. Sada ta dva stanja nemaju
+     * pecat; presuda je i dalje puno izrecena u H1.
+     */
+    const blokiran = renderaj();
+    expect(blokiran.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('blocked');
+    expect(blokiran.mount.querySelector('[data-cockpit-stamp]')?.textContent).toBe('Nije spremno');
+
+    const cist = renderaj({ issues: [] });
+    expect(cist.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('clear');
+    expect(cist.mount.querySelector('[data-cockpit-stamp]')?.textContent).toBe('Forma provjerena');
+
+    const doradaSamo = renderaj({ issues: [{ severity: 'warning', category: 'formatting', title: 'X', detail: 'X', where: 'X' }] });
+    expect(doradaSamo.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('needs-work');
+    expect(doradaSamo.mount.querySelector('[data-cockpit-stamp]')).toBeNull();
+
+    const rucnaSamo = renderaj({ issues: [{ severity: 'info', category: 'structure', title: 'X', detail: 'X', where: 'X' }] });
+    expect(rucnaSamo.mount.querySelector('[data-cockpit-verdict-sheet]')?.dataset.cockpitStatus).toBe('manual-review');
+    expect(rucnaSamo.mount.querySelector('[data-cockpit-stamp]')).toBeNull();
+  });
+
+  /**
+   * PUNI NATPIS PAGERA. `deskNav` vraca samo brojku ("1 od 6"), a rijec "Nalaz" stoji IZVAN
+   * `[data-desk-count]`, u `.desk-pager__count`. Dosad ju nije trazio nijedan gard: brojku su
+   * pokrivali `desk-view.test.ts` i Playwright, pa je "1 od 6" bez rijeci prolazilo neopazeno,
+   * iako sam broj ne kaze cega je to prvo od sest.
+   */
+  it('pager pise punim tekstom "Nalaz N od M", ne samo brojku', () => {
+    const { mount, model } = saStolom();
+    const natpis = () => mount.querySelector('[data-desk-pane] .desk-pager__count')?.textContent?.replace(/\s+/g, ' ').trim();
+    const ukupno = model.findings.document.length;
+
+    expect(natpis()).toBe(`Nalaz 1 od ${ukupno}`);
+
+    // MUTACIJA ULAZA: strelica mijenja prikazani nalaz, pa natpis MORA pratiti polozaj; fiksan
+    // natpis bi ovdje ostao na "Nalaz 1 od N".
+    klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--next'));
+    expect(natpis()).toBe(`Nalaz 2 od ${ukupno}`);
+  });
+
+  it('desni pano stola prikazuje JEDNU karticu, a strelice mijenjaju prikazanu', () => {
+    const { mount, model } = saStolom();
+    const naslov = () => mount.querySelector('[data-desk-pane] .cockpit-finding h3')?.textContent;
+
+    expect(model.findings.document.length).toBeGreaterThan(1);
+    expect(mount.querySelectorAll('[data-desk-pane] article.cockpit-finding')).toHaveLength(1);
+    expect(mount.querySelector('[data-desk-pane] [data-desk-count]')?.textContent)
+      .toBe(`1 od ${model.findings.document.length}`);
+    const prvi = naslov();
+
+    klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--next'));
+    expect(mount.querySelector('[data-desk-pane] [data-desk-count]')?.textContent)
+      .toBe(`2 od ${model.findings.document.length}`);
+    expect(naslov()).not.toBe(prvi);
+
+    klik(mount.querySelector('[data-desk-pane] .desk-nav__btn--prev'));
+    expect(naslov()).toBe(prvi);
+  });
+
+  it('red čekanja stoji ISPOD kartice i nabraja sve nalaze', () => {
+    /**
+     * Z8 vadi karticu iz reda cekanja i daje joj pager; red cekanja se time NE ukida (Z9 ga
+     * izricito trazi ispod kartice, a `tests/ux/korektorski-stol.spec.ts` ga mjeri kao ugovor).
+     * Detalj vise NE zivi u retku, inace bi isti nalaz bio nacrtan dvaput.
+     */
+    const { mount, model } = saStolom();
+    const redci = [...mount.querySelectorAll('[data-desk-queue] .dq-item')];
+    const kartica = mount.querySelector<HTMLElement>('[data-desk-pane] article.cockpit-finding');
+    const popis = mount.querySelector<HTMLElement>('[data-desk-queue]');
+
+    expect(redci).toHaveLength(model.findings.document.length);
+    expect(mount.querySelectorAll('[data-desk-queue] .cockpit-finding')).toHaveLength(0);
+    expect(mount.querySelectorAll('[data-desk-queue] .dq-item--open')).toHaveLength(1);
+    // Struktura, ne pikseli: popis slijedi karticu unutar istog panoa.
+    const djeca = [...(kartica!.parentElement?.children ?? [])];
+    expect(djeca.indexOf(popis!)).toBeGreaterThan(djeca.indexOf(kartica!));
+  });
+
+  it('MUTACIJA: red čekanja prati BROJ nalaza kojih stol dobije, ne fiksnu brojku', () => {
+    // Prava mutacija mijenja ULAZ (koliko nalaza stol dobije) i ponovno renderira, umjesto da
+    // rucno makne redke iz vec iscrtanog DOM-a: to drugo bi bilo istinito bez obzira crta li
+    // `queueRedci` uopce iz `svi`, pa gard ne bi hvatao regresiju u pravom kodu.
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result());
+    expect(model.findings.document.length).toBeGreaterThan(1);
+    // ULAZ je namjerno OSAKACEN na jedan nalaz, kao da bi pozivatelj (buduci bug) proslijedio
+    // samo prikazani umjesto SVIH: ako `queueRedci` prestane citati `desk.items` i pocne crtati
+    // fiksan broj redaka, ova tvrdnja pada.
+    renderResultsCockpit(mount, model, {
+      repairAvailable: true,
+      desk: {
+        items: model.findings.document.slice(0, 1).map((finding) => ({ finding, flagIndex: null })),
+        mountDocument: async () => null,
+      },
+    });
+    const popis = mount.querySelector<HTMLElement>('[data-desk-queue]')!;
+    expect(popis.querySelectorAll('.dq-item')).toHaveLength(1);
+    expect(popis.querySelectorAll('.dq-item').length === model.findings.document.length).toBe(false);
+  });
+
+  it('`#resultCockpit article.cockpit-finding` i dalje pogađa barem jednu karticu', () => {
+    // Ugovor koji `tests/ux/desktop-flow.spec.ts` broji. Pager prikazuje jednu po jednu, pa je
+    // broj tocno 1; spec trazi samo "vise od nule", pa ostaje zelen bez izmjene.
+    const { mount } = saStolom();
+    expect(mount.querySelectorAll('article.cockpit-finding').length).toBeGreaterThan(0);
+  });
+
+  it('DNA i kategorije stoje u jednom redu ISPOD stola', () => {
+    const { mount } = saStolom();
+    const sekundarni = mount.querySelector<HTMLElement>('[data-cockpit-secondary]');
+    const stol = mount.querySelector<HTMLElement>('.cockpit-priority');
+
+    expect(sekundarni).toBeTruthy();
+    expect(sekundarni!.querySelector('[data-cockpit-category]')).toBeTruthy();
+    const djeca = [...mount.children];
+    expect(djeca.indexOf(sekundarni!)).toBeGreaterThan(djeca.indexOf(stol!));
+  });
+
+  it('poveznica "Sve provjere (N)" nosi STVARAN broj provjera i vodi na napredni panel', () => {
+    const provjere = [
+      { category: 'formatting', title: 'A', status: 'pass', earned: 2, max: 2, detail: '', issue: null, scored: true },
+      { category: 'formatting', title: 'B', status: 'fail', earned: 0, max: 2, detail: '', issue: null, scored: true },
+      { category: 'structure', title: 'C', status: 'informational', earned: 0, max: 0, detail: '', issue: null, scored: false },
+    ];
+    const onAdvancedToggle = vi.fn();
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({ checks: provjere }));
+    renderResultsCockpit(mount, model, { repairAvailable: true, onAdvancedToggle });
+
+    const veza = mount.querySelector<HTMLElement>('[data-cockpit-advanced]');
+    expect(model.signals.totalChecks).toBe(3);
+    expect(veza?.textContent).toBe('Sve provjere (3)');
+    expect(mount.querySelector('.cockpit-advanced-toggle')).toBeNull();
+    veza?.click();
+    expect(onAdvancedToggle).toHaveBeenCalledWith(true);
+  });
+
+  it('MUTACIJA: fiksan broj provjera iz predloška ne prati model', () => {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({
+      checks: [{ category: 'formatting', title: 'A', status: 'pass', earned: 2, max: 2, detail: '', issue: null, scored: true }],
+    }));
+    renderResultsCockpit(mount, model, { repairAvailable: true });
+
+    const tekst = mount.querySelector('[data-cockpit-advanced]')?.textContent;
+    expect(tekst).toBe(`Sve provjere (${model.signals.totalChecks})`);
+    // Predlozak pise "(24)"; da je brojka prepisana, tvrdnja iznad bi pala na svakom drugom radu.
+    expect(tekst === 'Sve provjere (24)').toBe(false);
+  });
+
+  it('zasebna sekcija "Sto automatika moze" je uklonjena iz DOM-a', () => {
+    const { mount } = renderaj({}, { repairOutlook: OUTLOOK });
+    expect(mount.querySelector('[data-cockpit-outlook]')).toBeNull();
+    // Model se i dalje koristi: strop je u sazetku.
+    expect(mount.querySelector('.fsum-auto')?.textContent).toContain('94');
+  });
+
+  /**
+   * PAGER GUMB KOREKTORSKOG STOLA (popravak drugog kruga): omogucen `.desk-nav__btn` mora nositi
+   * PUNU TINTU (`--ck-ink`), ne prigusen ton (`--ck-muted`). Prigusen `<button>` je uvijek kvar
+   * (vidi komentar uz `:disabled` u `result-visuals.css`); prije popravka je bazno pravilo davalo
+   * `--ck-muted` i omogucenom i onemogucenom gumbu, pa se strelica nije razlikovala od kraja
+   * popisa. CSS se cita iz izvora, ne prepisuje: gard s prepisanom vrijednoscu ostaje zelen
+   * dokazujuci nesto o nizu koji vise nije u CSS-u.
+   */
+  describe('pager gumb: omogucen != prigusen', () => {
+    const CSS = readFileSync(join(cssRoot, 'src/ui/results/result-visuals.css'), 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const blokZa = (selektor: string): string => {
+      const od = CSS.indexOf(selektor);
+      expect(od, `selektor ${selektor} nije nadjen`).toBeGreaterThan(-1);
+      return CSS.slice(CSS.indexOf('{', od), CSS.indexOf('}', od));
+    };
+
+    /**
+     * JEDAN predikat za oba prolaza. Prvi krug popravka je mutaciju pisao kao
+     * `expect('color: var(--ck-muted);').toContain('color: var(--ck-muted);')`, sto je niz koji
+     * sadrzi sam sebe: tvrdnja bi prosla i da je `result-visuals.css` prazan. Mutacija zato mora
+     * mijenjati ULAZ i ponovno vrtjeti ISTI predikat.
+     */
+    const punaTinta = (blok: string): boolean => !blok.includes('--ck-muted') && blok.includes('var(--ck-ink)');
+
+    it('bazno pravilo .desk-nav__btn { } nema --ck-muted i nosi --ck-ink', () => {
+      expect(punaTinta(blokZa('.desk-nav__btn {'))).toBe(true);
+    });
+
+    it('MUTACIJA: vraceno staro pravilo (--ck-muted) obara isti predikat', () => {
+      const bazno = blokZa('.desk-nav__btn {');
+      const mutirano = bazno.replace('color: var(--ck-ink);', 'color: var(--ck-muted);');
+
+      // Generator mutacije dokazuje da je proizveo ciljanu klasu ulaza: zamjena se DOGODILA i
+      // mutirani blok stvarno nosi staru vrijednost. Bez ovih dvije tvrdnje bi zelena mutacija
+      // mogla znaciti samo da `replace` nije nasao sto zamijeniti.
+      expect(mutirano).not.toBe(bazno);
+      expect(mutirano).toContain('color: var(--ck-muted);');
+      expect(punaTinta(mutirano)).toBe(false);
+    });
+
+    it('onemogucen gumb i dalje ostaje citljiv (opacity, ne --ck-muted)', () => {
+      const onemogucen = blokZa('.desk-nav__btn:disabled {');
+      expect(onemogucen).toContain('opacity');
+      expect(onemogucen).not.toContain('--ck-muted');
+    });
+  });
+});
+
+describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)', () => {
+  // `handleResultsCockpitAction` u `app.ts` nije izvezen (tesko ga je izolirano montirati bez
+  // cijele aplikacije), pa se ovdje testira CISTA odluka koju on koristi: `isGeneralRepairEntry`
+  // (izvezena iz `results-cockpit.ts`, gdje i zivi `primaryAction` koji tu metu lijepi).
+  //
+  // BUG KOJI OVO CUVA: `primaryAction` uvijek prilijepi `findingId` PRVOG popravljivog nalaza uz
+  // `repair-safe`/`simulate-repair`, kao METU popravka, ne kao korisnikov odabir. Prije popravka
+  // je `app.ts` tu metu tumacio kao odabir i otvarao ledger modal s fokus-trapom, prisilno
+  // ukljucivao jedno pravilo i javljao toast s imenom pravila, iako je korisnik kliknuo OPCI gumb
+  // "Napravi plan popravka" bez ijednog konkretnog nalaza u ruci.
+  it('opci gumb (repair-safe / simulate-repair) je OPCI ulaz i s findingId metom i bez nje', () => {
+    expect(isGeneralRepairEntry({ kind: 'repair-safe', findingId: 'nalaz-1' })).toBe(true);
+    expect(isGeneralRepairEntry({ kind: 'repair-safe' })).toBe(true);
+    expect(isGeneralRepairEntry({ kind: 'simulate-repair', findingId: 'nalaz-1' })).toBe(true);
+    expect(isGeneralRepairEntry({ kind: 'repair-safe', ruleIds: ['r1'] })).toBe(true);
+  });
+
+  it('po-nalazni ulaz (kartica nalaza, radnja repair) NIJE opci ulaz', () => {
+    expect(isGeneralRepairEntry({ kind: 'repair', findingId: 'nalaz-1' })).toBe(false);
+    expect(isGeneralRepairEntry({ kind: 'preview', findingId: 'nalaz-1' })).toBe(false);
   });
 });

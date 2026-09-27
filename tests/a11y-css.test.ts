@@ -35,6 +35,20 @@ describe('velicina male mete 24px (BL-P3-04)', () => {
     const re = new RegExp(`\\.${cls}\\{[^}]*min-width:24px;min-height:24px;display:inline-grid;place-items:center[^}]*\\}`);
     expect(css).toMatch(re);
   });
+
+  // `.cockpit-link` i `.cockpit-allchecks` su tekstualne poveznice s `padding:0` u kokpitu
+  // rezultata (result-visuals.css): sirina je dovoljna (tekst), visina od ~20px nije bila. Ovdje
+  // je meta samo VISINA (min-height 24px), ne kvadratna 24x24 kao gore, jer poveznica ostaje
+  // sirok tekstualni redak, ne ikona.
+  const cockpitCss = read('src/ui/results/result-visuals.css');
+  it.each(['cockpit-link', 'cockpit-allchecks'])('.%s ima min-height 24px bez mijenjanja izgleda teksta', (cls) => {
+    // `^` na pocetku retka: obje klase se pojavljuju i kao dio KOMBINIRANIH selektora drugdje u
+    // datoteci (npr. `.result-cockpit .cockpit-allchecks {` za ulazni pokret), a to NIJE deklaracija
+    // koju ovaj gard cuva. Vlastiti blok pocinje tocno s `.<klasa> {` na pocetku retka.
+    const blok = new RegExp(`^\\.${cls} \\{[^}]*\\}`, 'm').exec(cockpitCss);
+    expect(blok, `blok .${cls} nije nadjen`).toBeTruthy();
+    expect(blok![0]).toMatch(/min-height:\s*24px/);
+  });
 });
 
 /**
@@ -133,5 +147,238 @@ describe('pojacan kontrast u danjem svjetlu (Z6)', () => {
     const zadani = hex(tokenUBloku(SUSTAV, ':root {', 'paper-muted'));
     const paper = hex(tokenUBloku(SUSTAV, '[data-theme="light"] {', 'paper'));
     expect(ratio(pojacan, paper)).toBeGreaterThan(ratio(zadani, paper));
+  });
+});
+
+/**
+ * RACUN (Z11): PECAT I ONEMOGUCEN "USKORO" GUMB PROLAZE AA NA OBJE PAPIRNATE PODLOGE, U OBJE TEME.
+ *
+ * `pricing-receipt.css` nije u popisu `PAGES` iznad (nije stranica, nego dijeljeni CSS uvezen u
+ * vise ruta), pa dobiva vlastiti kontrastni test, istim racunom kao ostatak ove datoteke.
+ * `--ok-on-soft` i `--paper-ink` su definirani JEDNOM u `:root` (ne mijenjaju se po temi), a
+ * `--paper`/`--paper-2` se mijenjaju po temi, pa se provjeravaju OBJE varijante.
+ */
+describe('racun: pecat i onemoguceni gumb "Uskoro" kontrast (Z11)', () => {
+  const AA = 4.5;
+  type Rgb = readonly [number, number, number];
+  const hex = (value: string): Rgb => {
+    const h = value.replace('#', '').trim();
+    return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)) as unknown as Rgb;
+  };
+  const channel = (v: number): number => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = ([r, g, b]: Rgb): number => 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  const ratio = (a: Rgb, b: Rgb): number => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const OBRAZAC_VRIJEDNOSTI = /\s*:\s*([^;}]+)/.source;
+  const tokenUBloku = (sirovo: string, selektor: string, token: string): string => {
+    const css = sirovo.replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const od = css.indexOf(selektor);
+    expect(od, `selektor ${selektor} nije nadjen`).toBeGreaterThan(-1);
+    const blok = css.slice(css.indexOf('{', od), css.indexOf('}', od));
+    const m = new RegExp('--' + token + OBRAZAC_VRIJEDNOSTI).exec(blok);
+    expect(m, `token --${token} nije nadjen u bloku ${selektor}`).toBeTruthy();
+    return m![1].trim();
+  };
+
+  const SUSTAV = read('src/shared/design-system.css');
+  const RACUN = read('src/shared/pricing-receipt.css');
+
+  const okOnSoft = hex(tokenUBloku(SUSTAV, ':root {', 'ok-on-soft'));
+  const paperInk = hex(tokenUBloku(SUSTAV, ':root {', 'paper-ink'));
+  const paperTamno = hex(tokenUBloku(SUSTAV, ':root {', 'paper'));
+  const paper2Tamno = hex(tokenUBloku(SUSTAV, ':root {', 'paper-2'));
+  const paperSvijetlo = hex(tokenUBloku(SUSTAV, '[data-theme="light"] {', 'paper'));
+  const paper2Svijetlo = hex(tokenUBloku(SUSTAV, '[data-theme="light"] {', 'paper-2'));
+
+  it('CSS stvarno koristi --ok-on-soft na pecatu i --paper-ink/--paper-2 na gumbu "Uskoro"', () => {
+    const pecatBlok = RACUN.slice(RACUN.indexOf('.pr-stamp {'), RACUN.indexOf('}', RACUN.indexOf('.pr-stamp {')));
+    expect(pecatBlok).toContain('color: var(--ok-on-soft)');
+    const gumbBlok = RACUN.slice(RACUN.indexOf('.pr-btn--soon {'), RACUN.indexOf('}', RACUN.indexOf('.pr-btn--soon {')));
+    expect(gumbBlok).toContain('color: var(--paper-ink)');
+    expect(gumbBlok).toContain('background: var(--paper-2)');
+    expect(gumbBlok).not.toMatch(/opacity\s*:/);
+  });
+
+  it('pecat (--ok-on-soft na papiru) prolazi AA u OBJE teme', () => {
+    expect(ratio(okOnSoft, paperTamno), 'tamna tema, --paper').toBeGreaterThanOrEqual(AA);
+    expect(ratio(okOnSoft, paper2Tamno), 'tamna tema, --paper-2').toBeGreaterThanOrEqual(AA);
+    expect(ratio(okOnSoft, paperSvijetlo), 'svijetla tema, --paper').toBeGreaterThanOrEqual(AA);
+    expect(ratio(okOnSoft, paper2Svijetlo), 'svijetla tema, --paper-2').toBeGreaterThanOrEqual(AA);
+  });
+
+  it('gumb "Uskoro" (--paper-ink na --paper-2) prolazi AA u OBJE teme', () => {
+    expect(ratio(paperInk, paper2Tamno), 'tamna tema').toBeGreaterThanOrEqual(AA);
+    expect(ratio(paperInk, paper2Svijetlo), 'svijetla tema').toBeGreaterThanOrEqual(AA);
+  });
+
+  it('MUTACIJA: staro stanje gumba (--paper-muted na --paper-line) pada AA', () => {
+    const paperMuted = hex(tokenUBloku(SUSTAV, ':root {', 'paper-muted'));
+    const paperLine = hex(tokenUBloku(SUSTAV, ':root {', 'paper-line'));
+    expect(ratio(paperMuted, paperLine)).toBeLessThan(AA);
+  });
+});
+
+/**
+ * TRAKA I PODNOZJE Z15: KONTRAST TEKSTA U OBJE TEME I VELICINA MALE METE.
+ *
+ * Traka je JEDNA za cijeli proizvod, pa je i jedan pad kontrasta pad na svakoj stranici. Zato se
+ * ovdje mjeri lanac kao i u ostatku ovog lista: koji TOKEN `site-chrome.css` stvarno koristi ->
+ * vrijednost tog tokena iz `design-system.css` -> odnos prema podlozi koju traka stvarno ima.
+ *
+ * MJERODAVNE SU OBJE PODLOGE STOLA (`--desk` i `--desk-2`), i to je izmjereno: `--desk-muted` na
+ * svijetlom `--desk-2` daje 4,61:1, dakle prolazi tek za deseti dio, a na `--desk` 5,09:1. Uzorak
+ * od jedne podloge bi taj rub sakrio.
+ *
+ * VRIJEDNOSTI SE CITAJU IZ IZVORA. Prepisana boja ostaje zelena dokazujuci nesto o nizu koji vise
+ * nije u CSS-u; to je imenovan razred kvara u ovom repozitoriju.
+ */
+describe('Z15 traka: kontrast teksta u obje teme, meta >= 24px', () => {
+  const AA = 4.5;
+  const META = 24;
+  type Rgb = readonly [number, number, number];
+  const hex = (value: string): Rgb => {
+    const h = value.replace('#', '').trim();
+    return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)) as unknown as Rgb;
+  };
+  /** `rgba(...)` se MORA stopiti s podlogom prije mjerenja; prozirnost nije boja. */
+  const stopi = (value: string, bg: Rgb): Rgb => {
+    const m = value.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?\s*\)/);
+    if (!m) return hex(value);
+    const a = m[4] === undefined ? 1 : Number(m[4]);
+    return [1, 2, 3].map((i) => Math.round(a * Number(m[i]) + (1 - a) * bg[i - 1])) as unknown as Rgb;
+  };
+  const channel = (v: number): number => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = ([r, g, b]: Rgb): number => 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  const ratio = (a: Rgb, b: Rgb): number => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const OBRAZAC = /\s*:\s*([^;}]+)/.source;
+  const tokenUBloku = (sirovo: string, selektor: string, token: string): string => {
+    const css = sirovo.replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const od = css.indexOf(selektor);
+    expect(od, `selektor ${selektor} nije nadjen`).toBeGreaterThan(-1);
+    const blok = css.slice(css.indexOf('{', od), css.indexOf('}', od));
+    const m = new RegExp('--' + token + OBRAZAC).exec(blok);
+    expect(m, `token --${token} nije nadjen u bloku ${selektor}`).toBeTruthy();
+    return m![1].trim();
+  };
+
+  const SUSTAV = read('src/shared/design-system.css');
+  const TRAKA = read('src/shared/site-chrome.css');
+  const TEME: ReadonlyArray<readonly ['dark' | 'light', string]> = [
+    ['dark', ':root {'],
+    ['light', '[data-theme="light"] {'],
+  ];
+
+  it('traka STVARNO koristi mjerene tokene, pa mjerenje nije o tudjim vrijednostima', () => {
+    // Sentinel: bez ovoga bi preimenovanje tokena u listu ucinilo sve tvrdnje ispod vakuumskima.
+    expect(TRAKA).toContain('color: var(--desk-muted)');
+    expect(TRAKA).toContain('color: var(--desk-faint)');
+    expect(TRAKA).toContain('color: var(--on-red)');
+    expect(TRAKA).toContain('background: var(--red)');
+  });
+
+  it.each(TEME)('%s: prigusen i blijed tekst trake prolaze AA na OBJE podloge stola', (_tema, selektor) => {
+    const desk = hex(tokenUBloku(SUSTAV, selektor, 'desk'));
+    const desk2 = hex(tokenUBloku(SUSTAV, selektor, 'desk-2'));
+    for (const ime of ['desk-muted', 'desk-faint'] as const) {
+      const sirovo = tokenUBloku(SUSTAV, selektor, ime);
+      expect(ratio(stopi(sirovo, desk), desk), `--${ime} na --desk`).toBeGreaterThanOrEqual(AA);
+      expect(ratio(stopi(sirovo, desk2), desk2), `--${ime} na --desk-2`).toBeGreaterThanOrEqual(AA);
+    }
+  });
+
+  it.each(TEME)('%s: pecat "Provjeri rad" (--on-red na --red) prolazi AA', (_tema, selektor) => {
+    const red = hex(tokenUBloku(SUSTAV, selektor, 'red'));
+    const onRed = hex(tokenUBloku(SUSTAV, selektor, 'on-red'));
+    expect(ratio(onRed, red)).toBeGreaterThanOrEqual(AA);
+  });
+
+  it('mjedena plocica profila prolazi AA na TAMNIJEM kraju svog gradijenta', () => {
+    // Gradijent ide #C9A96A -> #A98649; mjerodavan je tamniji kraj, jer ondje je odnos najlosiji.
+    expect(ratio(hex('#26221B'), hex('#A98649'))).toBeGreaterThanOrEqual(AA);
+    // KONTROLA SMJERA: mjeri se stvarno TAMNIJI kraj, ne slucajno svjetliji.
+    expect(ratio(hex('#26221B'), hex('#A98649'))).toBeLessThan(ratio(hex('#26221B'), hex('#C9A96A')));
+  });
+
+  it('MUTACIJA: prozirnost se NE smije preskociti pri mjerenju', () => {
+    // `rgba(237,231,220,.72)` citan kao neproziran dao bi 13,5:1 umjesto 8,1:1 na tamnom stolu, pa
+    // bi gard prolazio i za ton koji je na ekranu gotovo neciljiv. Mjeri se stopljena vrijednost.
+    const desk = hex('#191512');
+    const stopljen = stopi('rgba(237, 231, 220, .40)', desk);
+    const kaoNeproziran = hex('#EDE7DC');
+    expect(ratio(stopljen, desk)).toBeLessThan(ratio(kaoNeproziran, desk));
+    // BASELINE: stvarni ton (.72) i dalje prolazi, dakle tvrdnja nije "sve pada".
+    expect(ratio(stopi('rgba(237, 231, 220, .72)', desk), desk)).toBeGreaterThanOrEqual(AA);
+  });
+
+  /** Interaktivne mete trake; ime je ugovor, pa se popis NE broji nego imenuje. */
+  const METE = [
+    '.site-chrome__dest',
+    '.site-chrome__work',
+    '.site-chrome__plate',
+    '.site-chrome__stamp',
+    '.site-chrome .lampa-btn',
+    '.site-chrome__burger',
+    '.site-chrome__sheet-item',
+    '.site-chrome__sheet-aa',
+    '.site-footer__pravno a',
+  ] as const;
+
+  /** Cista funkcija nad tekstom lista, pa se smije mutirati. */
+  const visinaMete = (css: string, selektor: string): number => {
+    const escapiran = selektor.replace(/[.*+?^${}()|[\]\\]/g, (znak) => '\\' + znak);
+    const re = new RegExp('(?:^|\\})\\s*' + escapiran + '\\s*\\{([^}]*)\\}', 'm');
+    const blok = re.exec(css.replace(/\/\*[\s\S]*?\*\//g, ' '));
+    if (!blok) return 0;
+    const m = /min-height:\s*(\d+(?:\.\d+)?)px/.exec(blok[1]);
+    return m ? Number(m[1]) : 0;
+  };
+
+  it.each(METE)('%s ima min-height >= 24px (WCAG 2.5.8)', (selektor) => {
+    expect(visinaMete(TRAKA, selektor)).toBeGreaterThanOrEqual(META);
+  });
+
+  it('MUTACIJA: izbrisan `min-height` se vidi, i mjeri se TOCAN selektor', () => {
+    const bez = TRAKA.replace(/(\.site-chrome__dest \{[^}]*)min-height: 24px;\s*/, '$1');
+    expect(bez, 'podmetanje se nije primilo; provjeri oznaku mete').not.toBe(TRAKA);
+    expect(visinaMete(bez, '.site-chrome__dest')).toBeLessThan(META);
+    // BASELINE i kontrola smjera: nepostojeci selektor daje 0, pa nula NIJE dokaz o postojanju.
+    expect(visinaMete(TRAKA, '.site-chrome__dest')).toBeGreaterThanOrEqual(META);
+    expect(visinaMete(TRAKA, '.site-chrome__nepostojece')).toBe(0);
+  });
+});
+
+describe('lampa: overlay boje CILJNE teme cita token, ne duplicira ga (Z15 popravak F5)', () => {
+  const chrome = read('src/shared/site-chrome.css');
+  const sustav = read('src/shared/design-system.css');
+
+  it('.site-chrome__reveal cita `var(--desk)`, ne literal', () => {
+    expect(chrome).toContain('.site-chrome__reveal {');
+    const blok = /\.site-chrome__reveal \{([^}]*)\}/.exec(chrome)?.[1] ?? '';
+    expect(blok).toContain('background: var(--desk)');
+    expect(chrome).not.toContain('background: #191512');
+    expect(chrome).not.toContain('background: #DFD8C6');
+  });
+
+  it('`[data-theme="dark"]` u design-system.css postavlja `--desk` za NEROOT elemente', () => {
+    // `:root` sam po sebi ne pokriva overlay (drugi element s istim atributom); bez ovog retka bi
+    // overlay ciljne tamne teme naslijedio boju TRENUTNOG <html>-a, ne cilja.
+    expect(sustav).toMatch(/\[data-theme="dark"\]\s*\{\s*--desk:\s*#191512;?\s*\}/);
+  });
+
+  it('MUTACIJA: brisanje `[data-theme="dark"]` retka pada', () => {
+    const bez = sustav.replace(/\[data-theme="dark"\]\s*\{\s*--desk:\s*#191512;?\s*\}\s*/, '');
+    expect(bez, 'podmetanje se nije primilo').not.toBe(sustav);
+    expect(bez).not.toMatch(/\[data-theme="dark"\]\s*\{\s*--desk:/);
   });
 });

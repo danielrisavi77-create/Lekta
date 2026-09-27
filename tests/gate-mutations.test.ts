@@ -41,26 +41,49 @@ import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import {
-  storeIdSecretProblems,
+  stripeSecretNameProblems,
   preflightSourceProblems,
+  preflightExecutionProblems,
+  runbookRefundCheckProblems,
+  runbookManualLinkProblems,
+  handlerRefundMarkers,
+  paidClassificationProblems,
   refundClassificationProblems,
+  refundReachabilityProblems,
   handlerOutcomes,
   naplataRunbookProblems,
   runbookSqlColumnProblems,
+  runbookLogNameProblems,
+  webhookMorLogNames,
   naplataDeployPathProblems,
+  accountIdentityProblems,
+  checkoutAccountScopeProblems,
   readTextLf,
 } from './helpers/naplata-env';
 import { parseCorpusPolicyHistory, type MigrationFile } from './helpers/corpus-contributions-rls';
-import { webhookHandlerProblems } from './helpers/webhook-handler-source';
+import { webhookHandlerProblems, chargedAmountProblems, responseLeakProblems } from './helpers/webhook-handler-source';
 import { wordOracleIntegrityProblems } from './helpers/word-oracle-integrity';
 import { requiredTiersDrift } from './helpers/autonomy-release-tiers';
 import {
   naplataSecretsVerdict,
   supabaseSecretsVerdict,
+  forbiddenSecretsVerdict,
+  testModeEnvVerdict,
   parseSupabaseSecretsList,
+  testModeVerdict,
   EMPTY_VALUE_DIGEST,
+  TEST_MODE_ON_DIGEST,
+  TEST_MODE_SECRET,
 } from '../scripts/verify-naplata-secrets.mjs';
-import { classifyLemonEvent, IGNORE_REASON_PREFIXES, NOTABLE_IGNORE_PREFIXES } from '../src/report/webhook';
+import {
+  acceptEvent,
+  classifyStripeEvent,
+  chargedAmountVerdict,
+  parseStripeEvent,
+  IGNORE_REASON_PREFIXES,
+  NOTABLE_IGNORE_PREFIXES,
+  STRIPE_HANDLED_EVENTS,
+} from '../src/report/webhook';
 import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
 import {
   localRepairFlagProblems,
@@ -86,6 +109,10 @@ import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-r
 import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
+import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
+import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
+import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
+import { seededProducts } from './helpers/product-seeds';
 import {
   REQUIRED_CONTEXT_FILES,
   REQUIRED_SCOPED_GUIDES,
@@ -108,6 +135,15 @@ import {
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
 import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
+import {
+  LICENCE, SVI_ULAZI, listoviSWebfontom, preloadObrasci, problemiFontova, problemiGlasovaUlaza,
+  problemiGrafaFontova, problemiLicenci, problemiOvisnosti, problemiPreloada, problemiRuta,
+  problemiTokena, zabranjenaImena,
+  DOPUSTENA_GEORGIA, STRANICE_PROZE, georgiaUSucelju, listoviStranice, monoUSerifnomNaglasku, naglasakUSerifu,
+  problemiProzeStranice, svjetoviBezSinteze, tezineIznad400, uiNaSerifu, problemiDvaProlaza404,
+} from './helpers/font-voices';
+import { OZNAKA_404, ubaciU404, webfontFaces } from '../scripts/lib/legal-webfonts.mjs';
+import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './helpers/module-graph';
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
@@ -374,6 +410,45 @@ function t65LabelOverclaims(labels: string[], params: TableFigureRescueParams): 
   const out = tableFigureRescueFixer({ documentXml, stylesXml: '' }, params);
   const fitted = out.applied && out.parts.documentXml.includes('<w:tblW w:w="9000" w:type="dxa"/>');
   return labels.some((label) => /širin\w* teksta/i.test(label)) && !fitted;
+}
+
+/** Izvor preflighta naplate s diska (LF). Mutacije ga mijenjaju samo u memoriji. */
+function preflightIzvor(): string {
+  return readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+}
+
+/** Indeks `redni`-te pojave (od 1) niza `trazi`, ili -1. */
+function indeksPojave(src: string, trazi: string, redni: number): number {
+  let i = -1;
+  for (let n = 0; n < redni; n += 1) {
+    i = src.indexOf(trazi, i + 1);
+    if (i < 0) return -1;
+  }
+  return i;
+}
+
+/** Zamijeni `redni`-tu pojavu (od 1) niza `trazi`; bez te pojave vraca izvor nepromijenjen. */
+function zamijeniPojavu(src: string, trazi: string, zamjena: string, redni: number): string {
+  const i = indeksPojave(src, trazi, redni);
+  return i < 0 ? src : src.slice(0, i) + zamjena + src.slice(i + trazi.length);
+}
+
+/**
+ * Mutirani izvor preflighta, IZVRSEN u podprocesu nad laznim CLI-jem: svaki ciljani slucaj mora
+ * pasti, a cisti slucajevi istog puta moraju i dalje proci. Drugo je dokaz da mutacija gasi
+ * GRANU, a ne rusi skriptu (sintaksna greska bi pala svugdje i "uhvatila" se vakuumski).
+ */
+function izvrsenaMutacijaUhvacena(mutated: string, ciljevi: readonly string[], cisti: readonly string[]): boolean {
+  if (mutated === preflightIzvor()) return false; // nema sto mutirati: gard bi prolazio vakuumski
+  const problems = preflightExecutionProblems(mutated, [...ciljevi, ...cisti]);
+  return ciljevi.every((c) => problems.some((p) => p.startsWith(`[${c}]`)))
+    && !problems.some((p) => cisti.some((c) => p.startsWith(`[${c}]`)));
+}
+
+/** Baseline izvrsenog preflighta: nemutiran izvor prolazi iste slucajeve bez ijednog nalaza. */
+function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string[]): boolean {
+  return preflightExecutionProblems(preflightIzvor(), [...ciljevi, ...cisti]).length === 0
+    && preflightSourceProblems(preflightIzvor()).length === 0;
 }
 
 const MUTATIONS: Mutation[] = [
@@ -3249,33 +3324,561 @@ const MUTATIONS: Mutation[] = [
       return files.length > 50 && migrationHygieneProblems(files).length === 0;
     },
   },
-
-  // --- naplata: tajne trgovine (blokeri lansiranja 2026-09-22) ---------------------------------
+  // CSP NAPLATE (F18 krug 2, 2026-09-26). Gard `cspHeaderProblems` se u produkciji vrti nad
+  // dist/_headers u verify-deploy-dist.mjs; ovdje se vrti nad STVARNIM public/_headers kroz ISTU
+  // zamjenu tokena koju radi vite.config.ts, pa je baseline tocno ono sto build isporucuje.
+  // Namjerno BEZ `axis`: ovo nije bodovana os profila.
   {
-    id: 'naplata/prazan-store-id',
-    imitates: 'Supabase secret LEMONSQUEEZY_STORE_ID postavljen na prazno: sucelje ga prikazuje kao postojeci, a acceptEvent svaku kupnju odbija s store_unverifiable i vraca 200, pa ni provider ne retryja',
-    caught: () =>
-      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '  ' })
-        .missing.includes('LEMONSQUEEZY_STORE_ID'),
-    cleanBefore: () =>
-      naplataSecretsVerdict({ MOR_WEBHOOK_SECRET: 'w', LEMONSQUEEZY_API_KEY: 'k', LEMONSQUEEZY_STORE_ID: '42' }).ok,
+    id: 'csp/stripe-frame-src-uklonjen',
+    imitates:
+      'Bez `frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com` vrijedi `default-src self`, ' +
+      'pa preglednik blokira Stripe iframe: Payment Element ostaje prazan okvir, a Vitest, tsc i ' +
+      'csp-hash su u krugu 1 ostali zeleni jer nijedan nije gledao Stripe hostove.',
+    caught: () => {
+      // Tocan niz iz CSP retka, ne regex: rijec frame-src se javlja i u komentaru iznad njega.
+      const mut = builtHeaders().replace(' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com;', '');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('frame-src'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
   },
   {
-    id: 'naplata/dva-imena-iste-tajne',
-    imitates: 'webhook-mor cita LS_STORE_ID a create-checkout LEMONSQUEEZY_STORE_ID: operater postavi jednu tajnu, checkout radi a webhook tiho odbija svaku placenu kupnju (stvarno stanje repozitorija do 2026-09-22)',
+    id: 'csp/stripe-api-izbacen-iz-connect-src',
+    imitates:
+      'Payment Element potvrdjuje placanje XHR-om na api.stripe.com; bez tog hosta u connect-src ' +
+      'potvrda pada u pregledniku uz CSP gresku u konzoli, a build bi bez ovog garda prosao jer ' +
+      'je provjera tokena gledala samo jesu li zamijenjeni.',
+    caught: () => {
+      const mut = builtHeaders().replace(' https://api.stripe.com;', ';');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('connect-src ne dopusta https://api.stripe.com'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'csp/nezamijenjen-token-u-komentaru',
+    imitates:
+      'Krug 1 F18: komentar u public/_headers je doslovno citirao token naslijedjenog providera, ' +
+      'a vite.config.ts ga vise nije zamjenjivao, pa bi verify-deploy-dist srusio svaki ' +
+      'produkcijski build i CI dist-gate, bez ijednog crvenog Vitest testa.',
+    caught: () => {
+      const tok = ['__CSP', 'LS__'].join('_');
+      const mut = `# Do 2026-09-23 je ovdje stajao ${tok}.\n${builtHeaders()}`;
+      return cspHeaderProblems(mut).some((p) => p.includes(`nesupstituiran token ${tok}`));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'csp/stripe-host-u-form-action',
+    imitates:
+      'Mehanicka zamjena starog tokena Stripe hostom u form-action: Payment Element ne salje ' +
+      'obrazac nikamo, pa bi to bila sira dozvola bez ijednog korisnika (odluka iz kruga 1).',
+    caught: () => {
+      const mut = builtHeaders().replace(/(form-action 'self' [^\r\n]*)/, '$1 https://js.stripe.com');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('form-action nosi Stripe host'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  // F18 KRUG 4 (2026-09-26): Stripeove smjernice traze poddomene js.stripe.com u script-src i
+  // frame-src, a Apple Pay i Google Pay trebaju `payment` otvoren za Stripe okvir.
+  {
+    id: 'csp/stripe-js-poddomene-izbacene-iz-frame-src',
+    imitates:
+      'Stripe.js okvire po mogucnosti pokrece na poddomenama js.stripe.com (docs.stripe.com/security/guide). ' +
+      'Bez `https://*.js.stripe.com` u frame-src preglednik ih blokira, a polje za karticu ostaje prazno ' +
+      'samo u pregledniku; Vitest, tsc i build to ne vide.',
+    caught: () => {
+      const mut = builtHeaders().replace(
+        ' frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com;',
+        ' frame-src https://js.stripe.com https://hooks.stripe.com;',
+      );
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('frame-src ne dopusta https://*.js.stripe.com'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'permissions-policy/payment-zatvoren',
+    imitates:
+      'Krug 1 do 3 F18: public/_headers je nosio `payment=()` iz audita security-05, pa je Payment ' +
+      'Request API bio zabranjen i Stripeovu okviru. Apple Pay i Google Pay (Z36) tiho nestanu, ' +
+      'kartica i dalje radi, pa kvar nitko ne primijeti.',
+    caught: () => {
+      const live = 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com")';
+      const mut = builtHeaders().replace(live, 'payment=()');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('payment=() blokira Apple Pay'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'permissions-policy/payment-otvoren-svima',
+    imitates:
+      'Mehanicko "otvaranje" znacajke zamjenskim znakom: `payment=*` bi Payment Request API dao ' +
+      'svakom ugradjenom okviru, a ne samo Stripeovu, sto je upravo ono sto security-05 zatvara.',
+    caught: () => {
+      const live = 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com")';
+      const mut = builtHeaders().replace(live, 'payment=*');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('payment dopusta svako porijeklo'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  {
+    id: 'permissions-policy/payment-visak-porijekla',
+    imitates:
+      'Krug 5 F18: netko doda tudje porijeklo pored Stripeovih (npr. kroz kopiraj-zalijepi iz ' +
+      'druge konfiguracije) bez uklanjanja `*`. Gard koji samo trazi obvezne clanove to progleda: ' +
+      'payment je i dalje siri od namjere, samo skriveno iza validne liste.',
+    caught: () => {
+      const live = 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com")';
+      const mut = builtHeaders().replace(live, 'payment=(self "https://js.stripe.com" "https://*.js.stripe.com" "https://evil.example")');
+      return mut !== builtHeaders() && cspHeaderProblems(mut).some((p) => p.includes('payment dopusta neocekivano porijeklo') && p.includes('evil.example'));
+    },
+    cleanBefore: () => cspHeaderProblems(builtHeaders()).length === 0,
+  },
+  // GRANICA PRODAJE (F18 krug 3, 2026-09-26). Uklanjanjem uvjeta na `mor_product_id` Katedra
+  // passovi (0071: retail, aktivni, s cijenom) postali su kupivi kroz Lektin checkout. Mutacija je
+  // STVARNI redak iz migracije 0071 kakav bi create-checkout dobio iz baze; baseline je cijeli
+  // Lektin sijani katalog, da granica ne blokira i vlastite proizvode.
+  {
+    id: 'naplata/katedra-pass-kroz-lektin-checkout',
+    imitates:
+      'Krug 2 F18: create-checkout je bez 409 product_not_mapped izdao PaymentIntent za ' +
+      'katedra_pass_diplomski (129,90 EUR), a webhook bi upisao pravo bez academic_project_id ' +
+      'koje Katedrini gardovi ne priznaju i zauzeo unique(provider, order_id) prije Katedre.',
+    caught: () => {
+      const katedra = seededProducts()
+        .filter((s) => s.file === '0071_katedra_pass_products.sql')
+        .map((s) => mapProductRow(s.row));
+      return (
+        katedra.length === 3 &&
+        katedra.every((p) => p.active && p.audience === 'retail' && p.morProductId === null) &&
+        katedra.every((p) => {
+          const r = resolveCheckout(p, { isPartnerActive: true });
+          return !r.ok && r.status === 404;
+        })
+      );
+    },
+    cleanBefore: () => {
+      const own = seededProducts()
+        .map((s) => mapProductRow(s.row))
+        .filter((p) => isSoldByLektaCheckout(p.id));
+      return own.length >= 20 && own.every((p) => resolveCheckout(p, { isPartnerActive: true }).ok);
+    },
+  },
+
+  // --- Z7 opcija (a): gardovi nad glasovima su OBRNUTI (odluka vlasnika 2026-09-26) ----------
+  // Pod opcijom (b) je kvar bila pojava Instrument Serifa i Geist Mona; sada je kvar povratak
+  // uklonjenih obitelji, token koji dva glasa ne imenuje, list fontova koji krsi Z31 i preload koji
+  // nosi vise od dva reza. Baseline je STVARNI list s diska, mutacija isti tekst izmijenjen u
+  // memoriji, a gard je ista cista funkcija koju zove `tests/entry-fonts.test.ts`.
+  {
+    id: 'z7a/newsreader-vracen-u-token',
+    imitates:
+      'Opcija (b) vracena kroz jedan token: `--display-serif` opet pocinje Newsreaderom. Bez garda ' +
+      'bi to na svakoj ruti promijenilo pismo naslova, a entry-fonts bi i dalje bio zelen dok god ' +
+      'neki paket to ime ucitava.',
+    caught: () => {
+      const css = z7aList('src/shared/design-system.css');
+      const mut = css.replace(/--display-serif:\s*"Instrument Serif"/, '--display-serif: "Newsreader Variable"');
+      return mut !== css && problemiTokena(mut).length > 0
+        && zabranjenaImena([{ ime: 'design-system.css', tekst: mut }]).length > 0;
+    },
+    cleanBefore: () => {
+      const css = z7aList('src/shared/design-system.css');
+      return problemiTokena(css).length === 0 && zabranjenaImena([{ ime: 'design-system.css', tekst: css }]).length === 0;
+    },
+  },
+  {
+    id: 'z7a/glas-sucelja-vracen-na-sans',
+    imitates:
+      'Glas sucelja vracen na Inter Tight (stanje prije Z7): gumbi, navigacija i oznake bi opet ' +
+      'bili sans, iako README trazi da ih nosi Geist Mono.',
+    caught: () => {
+      const css = z7aList('src/shared/design-system.css');
+      const mut = css.replace(/--ui:\s*var\(--mono\);/, '--ui: "Inter Tight Variable", system-ui, sans-serif;');
+      return mut !== css && problemiTokena(mut).some((p) => p.startsWith('--ui'));
+    },
+    cleanBefore: () => problemiTokena(z7aList('src/shared/design-system.css')).length === 0,
+  },
+  {
+    id: 'z7a/font-paket-uvezen-natrag',
+    imitates:
+      'Stari uvoz `@fontsource-variable/newsreader` vracen u fonts-core.ts: paket jos postoji u ' +
+      'dijeljenom node_modules (F19), pa bi build prosao i tiho vratio treci glas.',
+    caught: () => {
+      const ts = z7aList('src/shared/fonts-core.ts');
+      const mut = `${ts}\nimport '@fontsource-variable/newsreader/opsz.css';\n`;
+      return zabranjenaImena([{ ime: 'fonts-core.ts', tekst: mut }]).length > 0;
+    },
+    cleanBefore: () => zabranjenaImena([{ ime: 'fonts-core.ts', tekst: z7aList('src/shared/fonts-core.ts') }]).length === 0,
+  },
+  {
+    id: 'z7a/preload-kurziva',
+    imitates:
+      'Kurziv serifa dodan u preload (tako je bilo na grani design/pack2): Z31 dopusta samo serif ' +
+      '400 i mono 400, a svaki visak se natjece s LCP-om i na stranici koja kurziv ne crta.',
+    caught: () => {
+      const cfg = z7aList('vite.config.ts');
+      const mut = cfg.replace('/instrument-serif-latin-400-normal/,', '/instrument-serif-latin-400-normal/, /instrument-serif-latin-400-italic/,');
+      return mut !== cfg && problemiPreloada(preloadObrasci(mut), z7aDatoteke().names).length > 0;
+    },
+    cleanBefore: () => problemiPreloada(preloadObrasci(z7aList('vite.config.ts')), z7aDatoteke().names).length === 0,
+  },
+  {
+    id: 'z7a/mrtav-preload-obrazac',
+    imitates:
+      'Preload obrazac ostao na starom imenu datoteke (newsreader-latin-opsz-normal): ne pogadja ' +
+      'nista, pa naslovi opet bljesnu zamjenskim glasom, a build prolazi jer sentinel trazi samo jedan pogodak.',
+    caught: () => {
+      const cfg = z7aList('vite.config.ts');
+      const mut = cfg.replace('/instrument-serif-latin-400-normal/,', '/newsreader-latin-opsz-normal/,');
+      return mut !== cfg && problemiPreloada(preloadObrasci(mut), z7aDatoteke().names).some((p) => p.includes('pogadja 0'));
+    },
+    cleanBefore: () => problemiPreloada(preloadObrasci(z7aList('vite.config.ts')), z7aDatoteke().names).length === 0,
+  },
+  {
+    id: 'z7a/font-display-block',
+    imitates:
+      '`font-display: block` umjesto swap: tekst je nevidljiv do 3 s na sporoj mrezi, sto Z31 ' +
+      'izricito iskljucuje.',
+    caught: () => {
+      const css = z7aList('src/assets/fonts/fonts.css');
+      const mut = css.replace('font-display: swap;', 'font-display: block;');
+      return mut !== css && problemiFontova(mut, z7aDatoteke().map).some((p) => p.includes('font-display'));
+    },
+    cleanBefore: () => problemiFontova(z7aList('src/assets/fonts/fonts.css'), z7aDatoteke().map).length === 0,
+  },
+  {
+    id: 'z7a/size-adjust-bez-preracuna',
+    imitates:
+      'size-adjust zamjenskog glasa promijenjen bez preracuna override metrika: visina retka ' +
+      'zamjene i webfonta se razidje, pa zamjena nakon ucitavanja pomakne raspored (CLS).',
+    caught: () => {
+      const css = z7aList('src/assets/fonts/fonts.css');
+      const mut = css.replace('size-adjust: 77.02%;', 'size-adjust: 90%;');
+      return mut !== css && problemiFontova(mut, z7aDatoteke().map).some((p) => p.includes('ascent-override'));
+    },
+    cleanBefore: () => problemiFontova(z7aList('src/assets/fonts/fonts.css'), z7aDatoteke().map).length === 0,
+  },
+  {
+    id: 'z7a/podskup-izvan-latin',
+    imitates:
+      'unicode-range prosiren izvan latin + latin-ext (npr. na cirilicu): Z31 trazi samo ta dva ' +
+      'podskupa, a pogresan raspon tiho skida krivu datoteku ili ne skida pravu.',
+    caught: () => {
+      const css = z7aList('src/assets/fonts/fonts.css');
+      const mut = css.replace(/unicode-range: U\+0100-02BA[^;]*;/, 'unicode-range: U+0400-045F;');
+      return mut !== css && problemiFontova(mut, z7aDatoteke().map).some((p) => p.includes('unicode-range'));
+    },
+    cleanBefore: () => problemiFontova(z7aList('src/assets/fonts/fonts.css'), z7aDatoteke().map).length === 0,
+  },
+  {
+    id: 'z7a/woff2-bez-font-face',
+    imitates:
+      'Vendoriran rez bez @font-face (npr. kurziv Geist Mona prekopiran "za svaki slucaj"): ' +
+      'datoteka ide u repo i u reviziju, a nijedna stranica je ne crta.',
+    caught: () => {
+      const { map } = z7aDatoteke();
+      const mut = new Map(map);
+      mut.set('geist-mono-latin-wght-italic.woff2', map.get('geist-mono-latin-wght-normal.woff2')!);
+      return problemiFontova(z7aList('src/assets/fonts/fonts.css'), mut).some((p) => p.includes('bez @font-face'));
+    },
+    cleanBefore: () => problemiFontova(z7aList('src/assets/fonts/fonts.css'), z7aDatoteke().map).length === 0,
+  },
+  // --- Z7(a) krug popravka: gardovi nad RUTAMA i nad stablom iz tests/entry-fonts.test.ts ------
+  // Pregled je nasao da gornjih devet mutacija pokriva samo tokene, list fontova, preload i
+  // zabranjena imena. Ovdje su mutacije za ostale obrnute gardove. Mutacije nad grafom ruta NE
+  // zovu cistu funkciju s rucno slozenim popisom: idu kroz ISTI citac grafa (`collectStaticGraph`,
+  // `packageImports`) nad stvarnim diskom s jednom datotekom izmijenjenom u memoriji (overlay), pa
+  // citac koji npr. preskace `.css` specifikatore rusi mutaciju umjesto da gard tiho oslijepi.
+  {
+    id: 'z7a/treci-glas-na-ulazu',
+    imitates:
+      'List ulaza `/` dobije vlastiti @font-face (npr. Newsreader vracen u intake.css "samo za ' +
+      'naslov"): ulaz tada skida tri webfonta, a gard nad listom fontova i tokenima ostaje zelen.',
+    caught: () => {
+      const css = z7aCssGrafa('src/routes/intake/main.ts');
+      const mut = [...css, '@font-face{font-family:"Newsreader Variable";src:url(./n.woff2) format("woff2")}'];
+      return problemiGlasovaUlaza(z7aList('src/assets/fonts/fonts.css'), mut).some((p) => p.includes('Newsreader Variable'));
+    },
+    cleanBefore: () => problemiGlasovaUlaza(z7aList('src/assets/fonts/fonts.css'), z7aCssGrafa('src/routes/intake/main.ts')).length === 0,
+  },
+  {
+    id: 'z7a/citac-glasova-ulaza-slijep',
+    imitates:
+      'Citac webfont obitelji pokvaren tako da vraca prazan skup (npr. regex @font-face vise ne ' +
+      'pogadja razmak prije zagrade): "ulaz i list deklariraju isto" bi tada vrijedilo vakuumski.',
+    caught: () => problemiGlasovaUlaza(
+      z7aList('src/assets/fonts/fonts.css'), z7aCssGrafa('src/routes/intake/main.ts'), () => new Set<string>(),
+    ).length > 0,
+    cleanBefore: () => problemiGlasovaUlaza(z7aList('src/assets/fonts/fonts.css'), z7aCssGrafa('src/routes/intake/main.ts')).length === 0,
+  },
+  {
+    id: 'z7a/fontsource-css-u-grafu-rute',
+    imitates:
+      '`import \'@fontsource/instrument-serif/400.css\'` vracen u fonts-core.ts: paket postoji u ' +
+      'dijeljenom node_modules, build prolazi, a zabranjena imena ga ne vide jer instrument-serif ' +
+      'nije uklonjena obitelj. Hvata ga samo gard nad paketnim uvozima, i samo ako citac grafa vidi .css.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/shared/fonts-core.ts': (t) => `${t}\nimport '@fontsource/instrument-serif/400.css';\n` });
+      const problemi = z7aProblemiGrafa(izvor);
+      const svaki = SVI_ULAZI.every((u) => problemi.some((p) => p.startsWith(`${u}:`) && p.includes('@fontsource/instrument-serif/400.css')));
+      const imenaSlijepa = zabranjenaImena([{ ime: 'fonts-core.ts', tekst: izvor.procitaj(z7aPut('src/shared/fonts-core.ts')) }]).length === 0;
+      return svaki && imenaSlijepa;
+    },
+    cleanBefore: () => z7aProblemiGrafa(DISK).length === 0,
+  },
+  {
+    id: 'z7a/ukinut-modul-glasova-vracen',
+    imitates:
+      'Zaseban modul podatkovnih glasova (src/shared/fonts-document.ts, ukinut u Z7) vracen i uvezen ' +
+      'u /rad/: ruta opet nosi vlastiti skup fontova mimo fonts-core.ts.',
+    caught: () => {
+      const izvor = z7aOverlay({
+        'src/shared/fonts-document.ts': () => "import '../assets/fonts/fonts.css';\n",
+        'src/routes/workspace/main.ts': (t) => `import '../../shared/fonts-document';\n${t}`,
+      });
+      return z7aProblemiGrafa(izvor).some((p) => p.startsWith('src/routes/workspace/main.ts:') && p.includes('fonts-document.ts'));
+    },
+    cleanBefore: () => z7aProblemiGrafa(DISK).length === 0,
+  },
+  {
+    id: 'z7a/ruta-bez-fonts-core',
+    imitates:
+      'Demo ulaz izgubi `import \'../shared/fonts-core\'` pri refaktoru (demo ne ide kroz ui-boot): ' +
+      'stranica crta metricke zamjenske glasove umjesto Instrument Serifa i Geist Mona.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/demo/main.ts': (t) => t.replace(/^import '\.\.\/shared\/fonts-core';[^\n]*\n/m, '') });
+      const mutiran = izvor.procitaj(z7aPut('src/demo/main.ts')) !== DISK.procitaj(z7aPut('src/demo/main.ts'));
+      return mutiran && z7aProblemiGrafa(izvor).some((p) => p === 'src/demo/main.ts: graf ne sadrzi src/shared/fonts-core.ts');
+    },
+    cleanBefore: () => z7aProblemiGrafa(DISK).length === 0,
+  },
+  {
+    id: 'z7a/ruta-bez-glasova',
+    imitates:
+      'Isti kvar kao gore, mjeren gardom "SVE rute nose ISTE dvije obitelji": demo bez fonts-core ' +
+      'ucitava nula webfontova, a ostale rute dva. Gard mora imenovati bas tu rutu.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/demo/main.ts': (t) => t.replace(/^import '\.\.\/shared\/fonts-core';[^\n]*\n/m, '') });
+      const problemi = problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u, izvor)] as const)));
+      return problemi.length === 1 && problemi[0].startsWith('src/demo/main.ts:');
+    },
+    cleanBefore: () => problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u)] as const))).length === 0,
+  },
+  {
+    id: 'z7a/treci-glas-na-ruti',
+    imitates:
+      'Admin list dobije vlastiti webfont (npr. "Inter Variable" za tablice): jedna ruta tada nosi ' +
+      'tri obitelji, a gard samo nad ulazom `/` to ne vidi.',
+    caught: () => {
+      const izvor = z7aOverlay({
+        'src/admin/admin-dashboard.css': (t) => `${t}\n@font-face{font-family:"Inter Variable";src:url(./i.woff2) format("woff2")}\n`,
+      });
+      const problemi = problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u, izvor)] as const)));
+      return problemi.some((p) => p.startsWith('src/admin/admin-dashboard-boot.ts:') && p.includes('Inter Variable'));
+    },
+    cleanBefore: () => problemiRuta(new Map(SVI_ULAZI.map((u) => [u, z7aCssGrafa(u)] as const))).length === 0,
+  },
+  {
+    id: 'z7a/webfont-u-drugom-listu',
+    imitates:
+      'site-chrome.css dobije @font-face s url(): drugi izvor webfontova mimo fonts.css, koji Z31 ' +
+      'proracun (<= 120 KB po ruti) i preload ne vide.',
+    caught: () => {
+      const listovi = z7aSviListovi().map((l) => (l.ime === 'src/shared/site-chrome.css'
+        ? { ...l, css: `${l.css}\n@font-face{font-family:"Geist Mono";src:url(./g.woff2) format("woff2")}` }
+        : l));
+      return listoviSWebfontom(listovi, 'src/assets/fonts/fonts.css').some((p) => p.startsWith('src/shared/site-chrome.css:'));
+    },
+    cleanBefore: () => listoviSWebfontom(z7aSviListovi(), 'src/assets/fonts/fonts.css').length === 0,
+  },
+  {
+    id: 'z7a/citac-webfontova-slijep',
+    imitates:
+      'Citac webfontova vraca prazan skup za svaki list: "nijedan drugi list ne ucitava webfont" bi ' +
+      'prosao vakuumski, jer je stari sentinel provjeravao samo da je fonts.css medju listovima.',
+    caught: () => listoviSWebfontom(z7aSviListovi(), 'src/assets/fonts/fonts.css', () => new Set<string>())
+      .some((p) => p.includes('vakuumski')),
+    cleanBefore: () => listoviSWebfontom(z7aSviListovi(), 'src/assets/fonts/fonts.css').length === 0,
+  },
+  {
+    id: 'z7a/font-paket-u-package-json',
+    imitates:
+      '`npm install @fontsource/instrument-serif` u dijeljenom stablu: paket ulazi u package.json i ' +
+      'dijeljeni node_modules, iako su fontovi vendorirani (F19).',
+    caught: () => {
+      const pkg = z7aPaket();
+      const dependencies = { ...(pkg.dependencies as Record<string, string>), '@fontsource/instrument-serif': '^5.3.0' };
+      return problemiOvisnosti({ ...pkg, dependencies }).some((p) => p.startsWith('@fontsource/instrument-serif'));
+    },
+    cleanBefore: () => problemiOvisnosti(z7aPaket()).length === 0,
+  },
+  {
+    id: 'z7a/package-json-procitan-prazan',
+    imitates:
+      'Gard cita krivo polje (npr. `pkg.dependencies` umjesto cijelog package.json): nula procitanih ' +
+      'ovisnosti bi "potvrdila" da font paketa nema.',
+    caught: () => problemiOvisnosti(z7aPaket().dependencies).length > 0 && problemiOvisnosti({}).length > 0,
+    cleanBefore: () => problemiOvisnosti(z7aPaket()).length === 0,
+  },
+  {
+    id: 'z7a/licenca-izostavljena',
+    imitates:
+      'Vendoriran rez kopiran bez OFL datoteke (OFL 1.1 trazi da licenca putuje uz font): repo ' +
+      'tada distribuira Geist Mono bez licence.',
+    caught: () => {
+      const mapa = new Map(z7aLicence());
+      mapa.delete('OFL-geist-mono.txt');
+      return problemiLicenci(mapa).some((p) => p.startsWith('OFL-geist-mono.txt'));
+    },
+    cleanBefore: () => problemiLicenci(z7aLicence()).length === 0,
+  },
+  // --- Z7(a) popravak: gardovi kaskade iz `tests/design-tokens.test.ts` i samostalnih stranica ---
+  // Model kaskade je preseljen u `tests/helpers/font-voices.ts` upravo zato da ove mutacije zovu
+  // ISTU funkciju kao gard. Baseline je stvarni skup listova (i stvarne stranice), mutacija isti
+  // tekst izmijenjen u memoriji.
+  {
+    id: 'z7a/tezina-iznad-400-na-serifu',
+    imitates:
+      'Opisna kartica dobije `font-weight:600` na odlomku koji govori serifom (`.check-card p`): ' +
+      'Instrument Serif rez 600 nema, a uz font-synthesis: none zahtjev se tiho ignorira.',
+    caught: () => tezineIznad400(z7aListoviSrc({ 'src/shared/page-app.css': (t) => `${t}\n.check-card p{font-weight:600}\n` }))
+      .some((p) => p.includes('.check-card p -> 600')),
+    cleanBefore: () => tezineIznad400(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/serifni-kontejner-bez-naglaska',
+    imitates:
+      'Tocan oblik s `.pcard-path` (2026-09-20): nov serifni kontejner bez para --emph-weight/--emph-style, ' +
+      'pa `<strong>` u njemu dobiva globalnih 600 u pismu koje taj rez nema.',
+    caught: () => naglasakUSerifu(z7aListoviSrc({ 'src/shared/page-app.css': (t) => `${t}\n.z7-mut-put{font-family:var(--display-serif)}\n` }))
+      .some((p) => p.includes('.z7-mut-put strong')),
+    cleanBefore: () => naglasakUSerifu(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/mono-u-serifu-bez-para',
+    imitates:
+      'Mono cip unutar serifnog odlomka (`.ks-tvrdnja p .cip`) ne vraca par naglaska, pa njegov ' +
+      '`<strong>` nasljedjuje kurziv u Geist Monu, koji se ucitava samo uspravno.',
+    caught: () => monoUSerifnomNaglasku(z7aListoviSrc({ 'src/shared/page-app.css': (t) => `${t}\n.ks-tvrdnja p .z7-cip{font-family:var(--mono)}\n` }))
+      .some((p) => p.includes('.z7-cip')),
+    cleanBefore: () => monoUSerifnomNaglasku(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/svijet-bez-font-synthesis',
+    imitates:
+      'Admin list izgubi `font-synthesis:none` na body-ju (admin ne uvozi design-system.css): ' +
+      'preglednik tada razvuce rez 400 u lazni bold na serifnom tijelu nadzorne ploce.',
+    caught: () => {
+      const mut = z7aListoviSrc({ 'src/admin/admin-dashboard.css': (t) => t.replace(/font-synthesis:\s*none;?/g, '') });
+      const izmijenjen = mut.find((l) => l.ime === 'src/admin/admin-dashboard.css')?.css !== z7aList('src/admin/admin-dashboard.css');
+      return izmijenjen && svjetoviBezSinteze(mut).includes('admin');
+    },
+    cleanBefore: () => svjetoviBezSinteze(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/body-ljuske-na-serifu',
+    imitates:
+      'Ljuska aplikacije vrati serif na `body` (kvar od 2026-09-20): svaki cip, status i oznaka bez ' +
+      'vlastite obitelji tiho prelazi na Instrument Serif.',
+    caught: () => uiNaSerifu(z7aListoviSrc({ 'src/shared/page-chrome.css': (t) => t.replace('font:16px/1.6 var(--ui)', 'font:16px/1.6 var(--display-serif)') }))
+      .length > 5,
+    cleanBefore: () => uiNaSerifu(z7aListoviSrc()).length === 0,
+  },
+  {
+    id: 'z7a/proza-bez-pravila',
+    imitates:
+      'Nalaz pregleda Z7(a): bez pravila za gole `p`/`dd` u design-system.css odgovor u listi cinjenica ' +
+      'alata (i ogledni odlomci na citat.html) nasljedjuju mono s body-ja.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'src/shared/design-system.css': (t) => t.replace(/p:where\(:not\(\[class\]\)\),\s*dd:where\(:not\(\[class\]\)\),\s*blockquote:where\(:not\(\[class\]\)\)/, '.z7-ugaseno') });
+      return z7aProblemiProze('kartice.html', izvor).some((p) => p.startsWith('dd '));
+    },
+    cleanBefore: () => z7aProblemiProze('kartice.html').length === 0,
+  },
+  {
+    id: 'z7a/opis-cinjenice-u-monu',
+    imitates:
+      'Inline stil alata vrati mono na opis u listi cinjenica (`.fact-list dd`), pravilom s klasom koje ' +
+      'nadjacava golo serifno pravilo po specificnosti, pa visereceni opis opet govori monom.',
+    caught: () => {
+      const izvor = z7aOverlay({ 'kartice.html': (t) => t.replace('</style>', '.fact-list dd{font-family:var(--mono)}</style>') });
+      return z7aProblemiProze('kartice.html', izvor).some((p) => p.startsWith('dd ') && p.includes('.fact-list dd'));
+    },
+    cleanBefore: () => z7aProblemiProze('kartice.html').length === 0,
+  },
+  {
+    id: 'z7a/georgia-u-pitanju-faq',
+    imitates:
+      'Nalaz pregleda Z7(a): `.faq summary{font-family:var(--ink-serif);font-weight:700}` u literatura.html, ' +
+      'dakle Georgia bold u sucelju umjesto serifa proizvoda.',
+    caught: () => georgiaUSucelju(z7aListoviGeorgije({ 'literatura.html': (t) => t.replace('</style>', '.faq summary{font-family:var(--ink-serif);font-weight:700}</style>') }), DOPUSTENA_GEORGIA)
+      .some((p) => p.startsWith('literatura.html: .faq summary')),
+    cleanBefore: () => georgiaUSucelju(z7aListoviGeorgije(), DOPUSTENA_GEORGIA).length === 0,
+  },
+  {
+    id: 'z7a/georgia-dopusteni-nestao',
+    imitates:
+      'Faksimil naslovnice prijede na glas proizvoda (ili se `#tp-sheet` preimenuje): popis dopustenih ' +
+      'tada imenuje selektor koji Georgiju vise ne nosi i gard ne smije ostati tiho zelen.',
+    caught: () => georgiaUSucelju(z7aListoviGeorgije({ 'naslovnica.html': (t) => t.replace(/(#tp-sheet\{[^}]*?)font-family:var\(--ink-serif\)/, '$1font-family:var(--display-serif)') }), DOPUSTENA_GEORGIA)
+      .some((p) => p.includes('#tp-sheet je dopusten')),
+    cleanBefore: () => georgiaUSucelju(z7aListoviGeorgije(), DOPUSTENA_GEORGIA).length === 0,
+  },
+  {
+    id: 'z7a/pravne-stranice-prazan-pogodak',
+    imitates:
+      'Vite promijeni obrazac imena asseta (hash ispred imena): obrasci generatora ne pogadjaju nista, ' +
+      'a stari generator je tada tiho pisao pravne stranice bez ijednog glasa proizvoda.',
+    caught: () => webfontFaces(z7aDatoteke().names.filter((n) => n.endsWith('.woff2')).map((n) => `Ab12Cd34-${n}`)).problemi.length === 4,
+    cleanBefore: () => webfontFaces(z7aDatoteke().names.filter((n) => n.endsWith('.woff2')).map((n) => n.replace(/\.woff2$/, '-Ab12Cd34.woff2'))).problemi.length === 0,
+  },
+  {
+    id: 'z7a/404-bez-oznake-webfontova',
+    imitates:
+      'Netko prepise public/404.html i izgubi oznaku za webfontove: generator bi bez provjere tiho ' +
+      'ostavio 404 na sistemskim glasovima.',
+    caught: () => ubaciU404(z7aList('public/404.html').replace(OZNAKA_404, ''), '@font-face{}').problemi.length === 1,
+    cleanBefore: () => ubaciU404(z7aList('public/404.html'), '@font-face{}').problemi.length === 0,
+  },
+  {
+    id: 'z7a/404-drugi-prolaz-nije-no-op',
+    imitates:
+      'Umetak webfontova u 404 potrosi oznaku (stanje prije ovog popravka): drugi prolaz generatora nad ' +
+      'istim dist/ (izmjena pravnog teksta bez novog builda) pada s izlazom 1 iako je 404 vec ispravan.',
+    caught: () => problemiDvaProlaza404(
+      (html, ff) => (html.split(OZNAKA_404).length === 2 ? { html: html.replace(OZNAKA_404, () => ff), problemi: [] } : { html, problemi: ['bez oznake'] }),
+      z7aList('public/404.html'), '@font-face{src:url("/assets/a-1.woff2")}', '@font-face{src:url("/assets/a-2.woff2")}',
+    ).some((p) => p.startsWith('drugi prolaz s istim blokovima')),
+    cleanBefore: () => problemiDvaProlaza404(
+      ubaciU404, z7aList('public/404.html'), '@font-face{src:url("/assets/a-1.woff2")}', '@font-face{src:url("/assets/a-2.woff2")}',
+    ).length === 0,
+  },
+
+  // --- naplata: tajne (blokeri lansiranja 2026-09-22 na masteru, preneseno na Stripe 2026-09-26) ---
+  {
+    id: 'naplata/prazna-tajna-potpisa',
+    imitates: 'Stripe ekvivalent masterova naplata/prazan-store-id: Supabase secret STRIPE_WEBHOOK_SECRET postavljen na prazno (sam razmak). Sucelje ga prikazuje kao postojeci, a verifyStripeSignature svaki dogadjaj odbija s missing_secret, pa nijedna kupnja ne dobije pravo pristupa',
+    caught: () =>
+      naplataSecretsVerdict({ STRIPE_SECRET_KEY: 'sk', STRIPE_PUBLISHABLE_KEY: 'pk', STRIPE_WEBHOOK_SECRET: '  ' })
+        .missing.includes('STRIPE_WEBHOOK_SECRET'),
+    cleanBefore: () =>
+      naplataSecretsVerdict({ STRIPE_SECRET_KEY: 'sk', STRIPE_PUBLISHABLE_KEY: 'pk', STRIPE_WEBHOOK_SECRET: 'whsec' }).ok,
+  },
+  {
+    id: 'naplata/ime-tajne-koje-nitko-ne-postavlja',
+    imitates: 'Stripe ekvivalent masterova naplata/dva-imena-iste-tajne: webhook-mor cita ime tajne potpisa koje runbook i preflight ne imenuju (staro MOR_WEBHOOK_SECRET). Operater postavi STRIPE_WEBHOOK_SECRET, preflight je zelen, a webhook cita praznu tajnu i odbija svaki dogadjaj',
     caught: () => {
       const dir = resolve(process.cwd(), 'supabase', 'functions');
       const webhook = readTextLf(join(dir, 'webhook-mor', 'index.ts'));
       const checkout = readTextLf(join(dir, 'create-checkout', 'index.ts'));
       // MUTACIJA u memoriji: vrati staro ime u webhook-mor, disk se ne dira.
-      const mutated = webhook.replace("Deno.env.get('LEMONSQUEEZY_STORE_ID')", "Deno.env.get('LS_STORE_ID')");
+      const mutated = webhook.replace("Deno.env.get('STRIPE_WEBHOOK_SECRET')", "Deno.env.get('MOR_WEBHOOK_SECRET')");
       if (mutated === webhook) return false; // nema sto mutirati: gard bi prolazio vakuumski
-      return storeIdSecretProblems({ 'webhook-mor': mutated, 'create-checkout': checkout })
-        .some((p) => p.includes('LS_STORE_ID'));
+      return stripeSecretNameProblems({ 'webhook-mor': mutated, 'create-checkout': checkout })
+        .some((p) => p.includes('MOR_WEBHOOK_SECRET'));
     },
     cleanBefore: () => {
       const dir = resolve(process.cwd(), 'supabase', 'functions');
-      return storeIdSecretProblems({
+      return stripeSecretNameProblems({
         'webhook-mor': readTextLf(join(dir, 'webhook-mor', 'index.ts')),
         'create-checkout': readTextLf(join(dir, 'create-checkout', 'index.ts')),
       }).length === 0;
@@ -3285,11 +3888,14 @@ const MUTATIONS: Mutation[] = [
   // --- naplata: webhook ne smije sam odlucivati sto je placeno ---------------------------------
   {
     id: 'naplata/webhook-400-bez-user-id',
-    imitates: 'stvarno stanje handlera do 2026-09-22: `if (!ev.orderId || !ev.userId) return 400` PRIJE upisa u inbox, pa bi placena narudzba bez meta.custom_data.user_id nestala bez traga iako je novac naplacen',
+    imitates: 'stanje handlera na masteru do 2026-09-22: `if (!ev.orderId || !ev.userId) return 400` PRIJE upisa u inbox, pa bi placena kupnja bez user_id u metadati nestala bez traga iako je novac naplacen',
     caught: () => {
       const src = webhookMorSource();
-      // MUTACIJA u memoriji: vrati tocan uvjet koji je stajao u izvoru. Disk se ne dira.
-      const mutated = src.replace('if (!ev.orderId) return json', 'if (!ev.orderId || !ev.userId) return json');
+      // MUTACIJA u memoriji: umetni tocan uvjet koji je stajao u izvoru, ispred otvaranja baze.
+      const mutated = src.replace(
+        'const admin = deps.admin();',
+        "if (!ev.orderId || !ev.userId) return json({ error: 'bad_request' }, 400);\n  const admin = deps.admin();",
+      );
       if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
       return webhookHandlerProblems(mutated).some((p) => p.includes('user_id'));
     },
@@ -3300,19 +3906,34 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'naplata/webhook-bez-klasifikatora',
-    imitates: 'odluka sto je placeno vracena u Edge funkciju: handler prestane zvati classifyLemonEvent, pa neplaceni order_created (status pending/failed) i subscription_* opet padnu u kupovnu granu',
+    imitates: 'odluka sto je placeno vracena u Edge funkciju: handler prestane zvati classifyStripeEvent, pa payment_intent.succeeded bez potvrdjene naplate (status processing, amount_received 0) opet padne u kupovnu granu',
     caught: () => {
       const src = webhookMorSource();
-      const mutated = src.split('classifyLemonEvent(ev)').join("({ kind: 'paid' } as const)");
+      const mutated = src.split('classifyStripeEvent(ev)').join("({ kind: 'paid' } as const)");
       if (mutated === src) return false;
-      return webhookHandlerProblems(mutated).some((p) => p.includes('classifyLemonEvent'));
+      return webhookHandlerProblems(mutated).some((p) => p.includes('classifyStripeEvent'));
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/placeno-po-imenu-dogadjaja',
+    imitates: 'Stripe ekvivalent masterova 31b802ad (obradi samo placenu narudzbu): klasifikator koji payment_intent.succeeded proglasi placenim po IMENU, bez gledanja na status i amount_received, pa dogadjaj sa statusom processing ili s nula naplacenih centi dobije puno pravo pristupa',
+    caught: () => {
+      // MUTACIJA: zamijeni ODLUKU verzijom koja gleda samo ime (funkcija, ne tekst izvora).
+      const poImenu = (ev: { eventName: string; status: string; amountReceivedCents: number | null; refunded: boolean }) => {
+        if (ev.eventName === 'charge.refunded') return { kind: 'refund' };
+        if (ev.eventName === 'payment_intent.succeeded') return { kind: 'paid' };
+        return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName}` };
+      };
+      return paidClassificationProblems(poImenu).some((p) => p.includes('processing'))
+        && paidClassificationProblems(poImenu).some((p) => p.includes('amount_received 0'));
+    },
+    cleanBefore: () => paidClassificationProblems(classifyStripeEvent).length === 0,
   },
 
   {
     id: 'naplata/preflight-mjeri-ljusku',
-    imitates: 'prva verzija preflighta (2026-09-22): citao je process.env, dakle ljusku operatera, a tajne koje webhook-mor koristi zive u Supabase Edge Functions Secretsima. Izvezena varijabla u terminalu davala je zeleno iako je tajna u projektu prazna, pa bi acceptEvent svaku kupnju odbio s store_unverifiable i vratio 200',
+    imitates: 'prva verzija preflighta na masteru (2026-09-22): citao je process.env, dakle ljusku operatera, a tajne koje webhook-mor koristi zive u Supabase Edge Functions Secretsima. Izvezena varijabla u terminalu davala je zeleno iako je tajna u projektu prazna',
     caught: () => {
       const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       // MUTACIJA u memoriji: vrati zadani put na citanje ljuske. Disk se ne dira.
@@ -3327,65 +3948,89 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'naplata/supabase-secret-postavljen-na-prazno',
-    imitates: 'tajna postavljena na PRAZNO u Supabase sucelju: u popisu postoji, izgleda konfigurirano, a acceptEvent je vidi isto kao da je nema i odbija svaku kupnju s 200 bez retryja',
+    imitates: 'tajna postavljena na PRAZNO u Supabase sucelju: u popisu postoji, izgleda konfigurirano, a verifyStripeSignature je vidi isto kao da je nema i odbija svaki dogadjaj s missing_secret',
     caught: () => {
       const popis = parseSupabaseSecretsList(
         [
-          '  MOR_WEBHOOK_SECRET | 11aa',
-          '  LEMONSQUEEZY_API_KEY | 22bb',
-          `  LEMONSQUEEZY_STORE_ID | ${EMPTY_VALUE_DIGEST}`,
+          '  STRIPE_SECRET_KEY | 11aa',
+          '  STRIPE_PUBLISHABLE_KEY | 22bb',
+          `  STRIPE_WEBHOOK_SECRET | ${EMPTY_VALUE_DIGEST}`,
         ].join('\n'),
       );
       if (popis.length !== 3) return false; // parser nije procitao popis: baseline bi bio vakuum
       return supabaseSecretsVerdict(popis).missing.some(
-        (m: { name: string; reason: string }) => m.name === 'LEMONSQUEEZY_STORE_ID' && m.reason === 'prazna',
+        (m: { name: string; reason: string }) => m.name === 'STRIPE_WEBHOOK_SECRET' && m.reason === 'prazna',
       );
     },
     cleanBefore: () =>
       supabaseSecretsVerdict(
         parseSupabaseSecretsList(
-          ['  MOR_WEBHOOK_SECRET | 11aa', '  LEMONSQUEEZY_API_KEY | 22bb', '  LEMONSQUEEZY_STORE_ID | 33cc'].join('\n'),
+          ['  STRIPE_SECRET_KEY | 11aa', '  STRIPE_PUBLISHABLE_KEY | 22bb', '  STRIPE_WEBHOOK_SECRET | 33cc'].join('\n'),
         ),
       ).ok,
   },
   {
+    id: 'naplata/testni-nacin-u-okolini-deploya',
+    imitates: 'deploy naplate sa STRIPE_ALLOW_TEST_MODE=1 u projektu: testni Stripe dogadjaj s ispravnim potpisom dobije PRAVO pravo pristupa (audit PAY-05), a preflight koji gleda samo obavezne tajne to pusti kao zeleno',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      // MUTACIJA u memoriji: ugasi provjeru testnog nacina u CLI bloku. Disk se ne dira.
+      const mutated = src.replace('if (testModeVerdict(read.rows) &&', 'if (false &&');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      // Presuda sama mora vidjeti zastavicu, inace bi CLI provjera bila kozmeticka.
+      return preflightSourceProblems(mutated).some((p) => p.includes('testni nacin'))
+        && testModeVerdict([{ name: TEST_MODE_SECRET, digest: TEST_MODE_ON_DIGEST }]);
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return preflightSourceProblems(src).length === 0
+        && !testModeVerdict([{ name: TEST_MODE_SECRET, digest: EMPTY_VALUE_DIGEST }])
+        && !testModeVerdict([]);
+    },
+  },
+  {
     id: 'naplata/povrat-po-zastavici-umjesto-po-imenu',
-    imitates: 'sirenje refund grane na zastavicu ev.refunded (medjuverzija 2026-09-22): parseLemonEvent ju racuna i iz attributes.status i iz attributes.refunded, pa bi subscription_payment_refunded, kojemu je data.id id pretplatnickog RACUNA a ne narudzbe, izvrsio update entitlements ... where order_id = <tudji id> i povukao referral nagrade po njemu; ishod bi bio processed, dakle nevidljiv svakom upitu iz runbooka',
+    imitates: 'Stripe ekvivalent masterova daf5f53a: refund grana otvorena po zastavici ev.refunded, koju parseStripeEvent racuna i iz data.object.refunded bez obzira na ime dogadjaja. Grana pise update entitlements ... where order_id = ev.orderId i povlaci referral nagrade, pa bi dogadjaj koji nije charge.refunded ugasio pravo po kljucu koji nije PaymentIntent povrata',
     caught: () => {
       // MUTACIJA: zamijeni ODLUKU sirom verzijom (funkcija, ne tekst izvora).
-      const siroko = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
-        if (ev.refunded || ev.eventName === 'order_refunded') return { kind: 'refund' };
-        if (ev.eventName === 'order_created') {
-          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
-          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
-        }
+      const siroko = (ev: { eventName: string; status: string; amountReceivedCents: number | null; refunded: boolean }) => {
+        if (ev.refunded || ev.eventName === 'charge.refunded') return { kind: 'refund' };
+        if (ev.eventName === 'payment_intent.succeeded') return { kind: 'paid' };
         return { kind: 'ignored', reason: 'nepodrzan_dogadjaj:x' };
       };
       return refundClassificationProblems(siroko, NOTABLE_IGNORE_PREFIXES)
-        .some((p) => p.includes('subscription_payment_refunded'));
+        .some((p) => p.includes('charge.updated'));
     },
-    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+    cleanBefore: () => refundClassificationProblems(classifyStripeEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
   },
   {
     id: 'naplata/povrat-pod-drugim-imenom-tiho-odbacen',
-    imitates: 'druga krajnost istog izbora: vracen novac pod imenom koje nije order_refunded zavrsi kao obican nepodrzan_dogadjaj, dakle WARN u logu i redak koji nitko ne gleda, pa nitko ne sazna da je povrat stigao i nije obradjen',
+    imitates: 'druga krajnost istog izbora: vracen novac pod imenom koje nije charge.refunded zavrsi kao obican nepodrzan_dogadjaj, dakle WARN u logu i redak koji nitko ne gleda, pa nitko ne sazna da je povrat stigao i nije obradjen',
     caught: () => {
-      const tiho = (ev: { eventName: string; status: string; userId: string; refunded: boolean }) => {
-        if (ev.eventName === 'order_refunded') return { kind: 'refund' };
-        if (ev.eventName === 'order_created') {
-          if (ev.status.trim().toLowerCase() !== 'paid') return { kind: 'ignored', reason: 'order_status:x' };
-          return ev.userId ? { kind: 'paid' } : { kind: 'needs_manual_link' };
-        }
+      const tiho = (ev: { eventName: string; status: string; amountReceivedCents: number | null; refunded: boolean }) => {
+        if (ev.eventName === 'charge.refunded') return { kind: 'refund' };
+        if (ev.eventName === 'payment_intent.succeeded') return { kind: 'paid' };
         return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName}` };
       };
       return refundClassificationProblems(tiho, NOTABLE_IGNORE_PREFIXES).some((p) => p.includes('TIHO'));
     },
-    cleanBefore: () => refundClassificationProblems(classifyLemonEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+    cleanBefore: () => refundClassificationProblems(classifyStripeEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+  {
+    id: 'naplata/refund-grana-po-zastavici-u-handleru',
+    imitates: 'isti kvar u IZVORU handlera: klasifikator je ispravan, ali handler refund granu opet otvara s if (ev.refunded) umjesto po odluci decision.kind === refund',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("if (decision.kind === 'refund') {", 'if (ev.refunded) {');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ev.refunded'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
   },
 
   {
     id: 'naplata/ignored-grana-bez-loga',
-    imitates: 'grana ignored bez ijednog log retka: odluka pociva na usporedbi statusa s paid, pa bi promjena vrijednosti kod providera pretvorila SVAKU kupnju u 200 bez retryja, a jedini trag bio bi redak u webhook_events koji ne pokriva ni djelomicni indeks webhook_events_unresolved',
+    imitates: 'grana ignored bez ijednog log retka: odluka pociva na obliku Stripe objekta (status, amount_received), pa bi njegova promjena pretvorila SVAKU kupnju u 200 bez retryja, a jedini trag bio bi redak u webhook_events koji ne pokriva ni djelomicni indeks webhook_events_unresolved',
     caught: () => {
       const src = webhookMorSource();
       const mutated = src
@@ -3396,29 +4041,218 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
   },
+  // Krug 2 spajanja (2026-09-26): gate vise ne odbija vrstu (`event_ignored` je uklonjen), pa
+  // stavka `naplata/event-ignored-na-info-razini` nema sto mjeriti. Njezinu zastitu (pretplacen
+  // visak nije tih) sada nose `naplata/ignored-grana-bez-loga` i izvrseni handler; zastitu
+  // odbijenog porijekla nosi stavka ispod.
+  {
+    id: 'naplata/odbijeno-porijeklo-na-warn-razini',
+    imitates: 'testni dogadjaj ili tudji Connect racun (event_refused) spusten s ERROR na WARN: kriva konfiguracija u produkciji (STRIPE_ALLOW_TEST_MODE, webhook endpoint za povezane racune) ili pokusaj s ukradenom tajnom utone u isti kanal kao pretplaceni visak',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("console.error('webhook-mor event_refused'", "console.warn('webhook-mor event_refused'");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('event_refused'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/gate-filtrira-vrstu-prije-klasifikatora',
+    imitates: 'stanje pack3 nakon kruga 1 spajanja: acceptEvent je vrste izvan STRIPE_HANDLED_EVENTS odbijao kao event_ignored PRIJE klasifikatora, pa povrat pod imenom refund.created ili charge.refund.updated nikad nije postao povrat_bez_charge_refunded (ERROR), nego WARN sum, a entitlement je ostao paid. Test klasifikatora bio je zelen vakuumski',
+    caught: () => {
+      // MUTACIJA: gate koji uz porijeklo opet filtrira i vrstu (funkcija, ne tekst izvora).
+      const stariGate = (
+        ev: { livemode: boolean | null; accountId: string; eventName: string },
+        opts: { allowTestMode: boolean },
+      ) => {
+        const origin = acceptEvent(ev, opts);
+        if (!origin.ok) return origin;
+        return { ok: (STRIPE_HANDLED_EVENTS as readonly string[]).includes(ev.eventName) };
+      };
+      return refundReachabilityProblems(parseStripeEvent, stariGate, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES)
+        .some((p) => p.includes('gate odbija refund.created'));
+    },
+    cleanBefore: () =>
+      refundReachabilityProblems(parseStripeEvent, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+  {
+    id: 'naplata/refund-objekt-nevidljiv-parseru',
+    imitates: 'parser koji vracen novac prepoznaje samo po data.object.refunded: Stripe Refund objekt (refund.created, charge.refund.updated) to polje nema, pa bi povrat pod drugim imenom bio nepodrzan_dogadjaj (WARN), ne povrat_bez_charge_refunded (ERROR)',
+    caught: () => {
+      const slijepiParser = (p: Parameters<typeof parseStripeEvent>[0]) => ({
+        ...parseStripeEvent(p),
+        refunded: p.type === 'charge.refunded' || p.data?.object?.refunded === true,
+      });
+      return refundReachabilityProblems(slijepiParser, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES)
+        .some((p) => p.includes('parser ne vidi vracen novac u refund.created'));
+    },
+    cleanBefore: () =>
+      refundReachabilityProblems(parseStripeEvent, acceptEvent, classifyStripeEvent, NOTABLE_IGNORE_PREFIXES).length === 0,
+  },
+  {
+    id: 'naplata/placena-uplata-bez-korisnika-utopljena',
+    imitates: 'Stripe ekvivalent masterova needs_manual_link (31b802ad, 81a89f2f), stanje pack3 nakon kruga 1: potvrdjena naplata (status succeeded, amount_received > 0) bez metadata[user_id] klasificirana kao ignored/missing_user_metadata, dakle WARN uz konfiguracijski sum. Novac je naplacen, 200 bez retryja, a ERROR kanal ostaje prazan',
+    caught: () => {
+      const utopljeno = (ev: Parameters<typeof classifyStripeEvent>[0]) =>
+        ev.eventName === 'payment_intent.succeeded' && !ev.userId.trim()
+          ? { kind: 'ignored', reason: 'missing_user_metadata' }
+          : classifyStripeEvent(ev);
+      return paidClassificationProblems(utopljeno).some((p) => p.includes('needs_manual_link'));
+    },
+    cleanBefore: () => paidClassificationProblems(classifyStripeEvent).length === 0,
+  },
+  {
+    id: 'naplata/needs-manual-link-na-warn-razini',
+    imitates: 'isti kvar u IZVORU handlera: klasifikator vraca needs_manual_link, ali handler granu logira na WARN, pa potvrdjena uplata bez korisnika opet nema ERROR redak koji bi netko vidio',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("console.error('webhook-mor needs_manual_link'", "console.warn('webhook-mor needs_manual_link'");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes("grana 'needs_manual_link' nema ERROR redak"));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+
+  // --- naplata: cetiri popravka koje je vlasnik odobrio 2026-09-27 ("Može") -------------------
+  {
+    id: 'naplata/uplata-ispod-kataloga-daje-pravo',
+    imitates: 'stanje handlera do 2026-09-27: payment_intent.succeeded s amount_received manjim od round(price_eur*100), ili u valuti koja nije EUR, samo je logirao amount_mismatch i svejedno upisao entitlement. Odluka vlasnika: takva uplata ne daje pravo nego ide na rucni pregled',
+    caught: () => {
+      // MUTACIJA: vrati staru ODLUKU (svako odstupanje je samo trag, pravo uvijek).
+      const stara = (ev: { totalCents: number | null; currency: string }, exp: number) =>
+        ev.totalCents !== exp || ev.currency !== 'EUR' ? { kind: 'above_catalog' } : { kind: 'ok' };
+      const problemi = chargedAmountProblems(stara);
+      return problemi.some((p) => p.includes('ispod kataloga daje pravo'))
+        && problemi.some((p) => p.includes('valuta koja nije EUR daje pravo'));
+    },
+    cleanBefore: () => chargedAmountProblems(chargedAmountVerdict).length === 0,
+  },
+  {
+    id: 'naplata/needs-manual-review-logira-pa-nastavi',
+    imitates: 'isti kvar u IZVORU handlera: odluka vrati needs_manual_review, handler zapise ishod u inbox, ali ne izade, pa uplata ispod kataloga ipak nastavi do rucne narudzbe ili entitlementa (inbox kaze rucni pregled, baza kaze placeno)',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(/return json\(\{ ok: true, action: 'needs_manual_review'[^\n]*\n/, '\n');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('needs_manual_review ne izlazi'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/puni-povrat-ne-zatvara-narudzbu-ni-kupon',
+    imitates: 'stanje handlera do 2026-09-27: puni povrat (isFullRefund) gasi samo entitlement i referral nagrade. Rucna narudzba premium_human istog PaymentIntenta ostaje pending (covjek odradi placen posao za vracen novac), a pass kupon iz te kupnje ostaje upotrebljiv',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(/const posljedice = await closeRefundConsequences\(admin, ev\.orderId[^\n]*\n/, '\n');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne zove closeRefundConsequences'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/djelomicni-povrat-otkazuje-narudzbu',
+    imitates: 'druga krajnost istog popravka: zatvaranje posljedica premjesteno na ulaz refund grane, PRIJE izlaza za djelomicni povrat (PAY-09), pa bi korisnik koji je dobio natrag dio iznosa izgubio rucnu narudzbu i kupon za koje je i dalje platio',
+    caught: () => {
+      const src = webhookMorSource();
+      const poziv = src.match(/ {4}const posljedice = await closeRefundConsequences\(admin, ev\.orderId[^\n]*\n/)?.[0];
+      if (!poziv) return false;
+      const ulaz = "if (decision.kind === 'refund') {\n";
+      const mutated = src.replace(poziv, '').replace(ulaz, ulaz + poziv);
+      if (mutated === src || !mutated.includes(ulaz + poziv)) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('prije izlaza za djelomicni povrat'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/rucna-narudzba-ne-cita-oznaku-povrata',
+    imitates: 'stanje handlera do kruga 2 popravka 2026-09-27: grana premium_human upise manual_orders i odmah javi manual_order_created, bez citanja oznake punog povrata. Povrat obradjen prije retryja uplate (Stripe ne jamci redoslijed, prvi pokusaj uplate mogao je pasti) nalazi praznu manual_orders, a retry potom otvara pending narudzbu za vec vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const od = src.indexOf('    // POVRAT STIGAO PRIJE ILI ISTODOBNO S UPLATOM, ZA RUCNU NARUDZBU');
+      const _do = src.indexOf('    if (narudzbaVecPostoji) {', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('rucna narudzba ne cita oznaku punog povrata'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/rucna-narudzba-duplikat-prije-oznake-povrata',
+    imitates: 'pola popravka: grana premium_human cita oznaku povrata, ali duplikat (23505) izlazi kao duplicate_ignored PRIJE citanja. Retry uplate nakon povrata tada javi obradjeno, a narudzba koju je prvi pokusaj otvorio ostaje pending za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const dup = "    if (narudzbaVecPostoji) {\n      await settle('processed', 'manual_order_duplicate');\n      return json({ ok: true, action: 'duplicate_ignored' });\n    }\n";
+      const oznaka = '    // POVRAT STIGAO PRIJE ILI ISTODOBNO S UPLATOM, ZA RUCNU NARUDZBU';
+      if (!src.includes(dup) || !src.includes(oznaka)) return false;
+      const mutated = src.replace(dup, '').replace(oznaka, dup + oznaka);
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('utrka s povratom'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/23505-bez-provjere-vlasnika',
+    imitates: 'stanje handlera do 2026-09-27: insert entitlementa koji padne na unique(provider, order_id) (23505) tumacio se kao vec obradjeno i nastavljao na duplicate_ignored i obveze bonusa, bez provjere da postojeci redak pripada istom korisniku kao dogadjaj',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("String(postojece.user_id ?? '') !== ev.userId", 'false');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('bez usporedbe vlasnika'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/tekst-greske-baze-u-odgovoru-webhooka',
+    imitates: 'stanje handlera do 2026-09-27: 500 za pad upisa rucne narudzbe i entitlementa vracao je { error, detail: error.message }, dakle tekst greske baze (imena relacija i ogranicenja) svakome tko posalje potpisan dogadjaj',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.split("json({ error: 'insert_failed' }, 500)").join("json({ error: 'insert_failed', detail: error.message }, 500)");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('odgovor nosi tekst greske'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/tekst-greske-baze-u-odgovoru-checkouta',
+    imitates: 'isti kvar u create-checkout: pad upisa privole vrati klijentu poruku greske baze (consentErr.message) umjesto generickog consent_not_recorded',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+      const mutated = src.replace(
+        "return json({ error: 'consent_not_recorded' }, 500);",
+        "return json({ error: 'consent_not_recorded', detail: consentErr.message }, 500);",
+      );
+      if (mutated === src) return false;
+      return responseLeakProblems(mutated, 'create-checkout').some((p) => p.includes('consent_not_recorded'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'create-checkout', 'handler.ts'));
+      return src.length > 2000 && responseLeakProblems(src, 'create-checkout').length === 0;
+    },
+  },
 
   {
-    id: 'naplata/runbook-ne-imenuje-order-refunded',
-    imitates: 'stanje runbooka do 2026-09-23: korak 3 je rekao samo "u LS postavi webhook", bez popisa dogadjaja. Handler od tada prepoznaje povrat samo iz dogadjaja koji stigne, pa operater koji pretplati minimalan skup (order_created) dobije naplatu koja radi i povrate koji se nikad ne obrade: entitlement ostaje paid, referral nagrada se ne povuce, i to bez ijedne greske',
+    id: 'naplata/runbook-ne-imenuje-charge-refunded',
+    imitates: 'Stripe ekvivalent masterova naplata/runbook-ne-imenuje-order-refunded: runbook koji ne kaze da se mora pretplatiti charge.refunded. Operater koji pretplati minimalan skup (payment_intent.succeeded) dobije naplatu koja radi i povrate koji se nikad ne obrade: entitlement ostaje paid, referral nagrada se ne povuce, i to bez ijedne greske',
     caught: () => {
       const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       // MUTACIJA u memoriji: makni ime dogadjaja iz runbooka. Disk se ne dira.
-      const mutated = runbook.split('`order_refunded`').join('povrat');
+      const mutated = runbook.split('`charge.refunded`').join('povrat');
       if (mutated === runbook) return false; // nema sto mutirati: gard bi prolazio vakuumski
       return naplataRunbookProblems(mutated, handlerOutcomes(webhookMorSource()), IGNORE_REASON_PREFIXES)
-        .some((p) => p.includes('order_refunded'));
+        .some((p) => p.includes('charge.refunded'));
     },
     cleanBefore: () => {
       const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       const outcomes = handlerOutcomes(webhookMorSource());
       // outcomes stiti od vakuuma: prazan izvod bi dao "cist" runbook bez ijedne provjere ishoda.
-      return outcomes.length >= 4
+      return outcomes.length >= 5
         && naplataRunbookProblems(runbook, outcomes, IGNORE_REASON_PREFIXES).length === 0;
     },
   },
   {
     id: 'naplata/ishod-bez-retka-u-runbooku',
-    imitates: 'nov ishod u webhook_events koji trazi ljudsku radnju, a nigdje nije opisan: tocno stanje ishoda needs_manual_link do 2026-09-23, koji uz to ne ulazi ni u djelomicni indeks webhook_events_unresolved pa ga ni standardni upit nad neobradjenima ne vraca',
+    imitates: 'nov ishod u webhook_events koji trazi ljudsku radnju, a nigdje nije opisan: tocno stanje ishoda needs_manual_link na masteru do 2026-09-23, koji uz to ne ulazi ni u djelomicni indeks webhook_events_unresolved pa ga ni standardni upit nad neobradjenima ne vraca',
     caught: () => {
       const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       // MUTACIJA: handler pocne pisati ishod koji runbook ne poznaje.
@@ -3437,7 +4271,7 @@ const MUTATIONS: Mutation[] = [
 
   {
     id: 'naplata/runbook-upit-po-nepostojecem-stupcu',
-    imitates: 'stvarno stanje runbooka do 2026-09-23: oba upita u sekciji 5.1 citala su i sortirala po created_at, stupcu kojeg webhook_events nema (0092 ima received_at). Operater bi umjesto popisa placenih narudzbi bez prava pristupa dobio ERROR 42703, a bas ti upiti su jedina zamjena za djelomicni indeks koji ishod needs_manual_link ne pokriva',
+    imitates: 'stanje runbooka na masteru do 2026-09-23: oba upita u sekciji 5.1 citala su i sortirala po created_at, stupcu kojeg webhook_events nema (0092 ima received_at). Operater bi umjesto popisa neobradjenih dogadjaja dobio ERROR 42703, a bas ti upiti su jedina zamjena za djelomicni indeks koji ishode ignored i refused ne pokriva',
     caught: () => {
       const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       const migracija = readTextLf(
@@ -3457,16 +4291,30 @@ const MUTATIONS: Mutation[] = [
     },
   },
   {
+    id: 'naplata/runbook-log-redak-koji-izvor-ne-ispisuje',
+    imitates: 'Stripe ekvivalent masterova 2f1621bf: runbook imenuje log redak webhook-mor koji handler nikad ne ispisuje (na masteru ignored_unpaid_order umjesto ignored_needs_attention). Tko ga trazi grepom ne nadje nista i zakljuci da se ignorirane uplate ne dogadjaju',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const mutated = runbook.split('`webhook-mor ignored_needs_attention`').join('`webhook-mor ignored_unpaid_order`');
+      if (mutated === runbook) return false;
+      return runbookLogNameProblems(mutated, webhookMorLogNames(webhookMorSource()))
+        .some((p) => p.includes('ignored_unpaid_order'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const imena = webhookMorLogNames(webhookMorSource());
+      return imena.size >= 5 && runbookLogNameProblems(runbook, imena).length === 0;
+    },
+  },
+  {
     id: 'naplata/deploy-zaobilazi-preflight',
-    imitates: 'stvarno stanje do 2026-09-23: runbook je deploy naplate slao na goli `supabase functions deploy webhook-mor`, a preflight je bio zaseban redak koji se moglo preskociti. Preskocen korak znaci deploy s praznim LEMONSQUEEZY_STORE_ID, a acceptEvent je fail-closed: svaka kupnja dobije refused i 200 bez retryja',
+    imitates: 'stanje na masteru do 2026-09-23 i na pack3 prije spajanja: runbook je deploy naplate slao na goli `supabase functions deploy webhook-mor`, bez preflighta. Preskocen korak znaci deploy s praznim STRIPE_WEBHOOK_SECRET, a verifyStripeSignature je fail-closed: svaki dogadjaj dobije missing_secret',
     caught: () => {
       const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
       const pkg = JSON.parse(readTextLf(resolve(process.cwd(), 'package.json')));
       const preflight = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       // MUTACIJA u memoriji: vrati goli CLI poziv u runbook. `runbook` je vec normaliziran na LF
-      // (readTextLf), pa doslovni `\n` u uzorku pogadja redak i u checkoutu s core.autocrlf=true
-      // (izmjereno 2026-09-23: bez normalizacije ovaj `.replace` s CRLF izvorom ne pogodi nista, pa
-      // `mutated === runbook` i test padne na `not.toBe`, prije nego se uopce stigne do garda).
+      // (readTextLf), pa doslovni `\n` u uzorku pogadja redak i u checkoutu s core.autocrlf=true.
       const mutated = runbook.replace('npm run deploy:naplata\n', 'supabase functions deploy webhook-mor\n');
       if (mutated === runbook) return false;
       return naplataDeployPathProblems(mutated, pkg, preflight).some((p) => p.includes('zaobilazi preflight'));
@@ -3480,7 +4328,7 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'naplata/preflight-zove-goli-supabase',
-    imitates: 'stvarno stanje preflighta do 2026-09-23: spawnSync s golim imenom iz PATH-a, dok repo CLI isporucuje kao devDependency. Izmjereno: exit 1 uz "supabase is not recognized" JEDNAKO i kad su tajne ispravne i kad su prazne, pa gard ne razlikuje dva stanja koja mjeri i nauci operatera da ga preskoci',
+    imitates: 'stanje preflighta na masteru do 2026-09-23: spawnSync s golim imenom iz PATH-a, dok repo CLI isporucuje kao devDependency. Izmjereno: exit 1 uz "supabase is not recognized" JEDNAKO i kad su tajne ispravne i kad su prazne, pa gard ne razlikuje dva stanja koja mjeri i nauci operatera da ga preskoci',
     caught: () => {
       const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       // MUTACIJA u memoriji: vrati goli poziv iz PATH-a.
@@ -3492,6 +4340,494 @@ const MUTATIONS: Mutation[] = [
       const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
       return src.length > 2000 && preflightSourceProblems(src).length === 0;
     },
+  },
+
+  // --- naplata: isti Stripe racun u checkoutu i webhooku (krug 3 spajanja, 2026-09-27) ----------
+  // Stripe ekvivalent drugog dijela masterova 4addb5db ("isti identitet trgovine u obje funkcije").
+  // Izvrseni dokaz preko obje funkcije je u tests/naplata-racun.test.ts; ovdje su ciste mutacije.
+  {
+    id: 'naplata/webhook-ocekuje-racun-koji-checkout-ne-koristi',
+    imitates: 'stanje pack3 do kruga 3: webhook-mor je citao STRIPE_ACCOUNT_ID i uz postavljenu vrijednost odbijao svaki dogadjaj bez istog polja account, a create-checkout PaymentIntent stvara na vlastitom racunu, pa njegovi dogadjaji account nikad ne nose. Operater koji slijedi runbook ("opcionalno STRIPE_ACCOUNT_ID") ugasi sav prihod: 200 event_refused bez retryja',
+    caught: () => {
+      const stariGate = (ev: { livemode: boolean | null; accountId: string }, opts: { allowTestMode: boolean }) => {
+        if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
+        if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
+        const expected = 'acct_1Nas'; // postavljen STRIPE_ACCOUNT_ID
+        if (expected && ev.accountId !== expected) return { ok: false, reason: 'account_mismatch' };
+        return { ok: true };
+      };
+      return accountIdentityProblems(stariGate).some((p) => p.includes('odbija dogadjaj bez polja account'));
+    },
+    cleanBefore: () => accountIdentityProblems(acceptEvent).length === 0,
+  },
+  {
+    id: 'naplata/webhook-pusta-tudji-povezani-racun',
+    imitates: 'isti gate do kruga 3 s PRAZNIM STRIPE_ACCOUNT_ID: provjera racuna se preskakala, pa bi Connect dogadjaj povezanog racuna (endpoint pretplacen na povezane racune) s valjanim potpisom dodijelio pravo pristupa za PaymentIntent koji nas checkout nikad nije stvorio',
+    caught: () => {
+      const stariGate = (ev: { livemode: boolean | null; accountId: string }, opts: { allowTestMode: boolean }) => {
+        if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
+        if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
+        return { ok: true };
+      };
+      return accountIdentityProblems(stariGate).some((p) => p.includes('prihvaca payment_intent.succeeded s povezanim racunom'));
+    },
+    cleanBefore: () => accountIdentityProblems(acceptEvent).length === 0,
+  },
+  {
+    id: 'naplata/checkout-na-povezanom-racunu',
+    imitates: 'drugi smjer istog razilazenja: create-checkout PaymentIntent stvara sa zaglavljem Stripe-Account (ili on_behalf_of), a webhook odbija svaki dogadjaj s povezanim racunom. Kupac plati, dogadjaj stigne s account, pravo pristupa nikad ne nastane',
+    caught: () => {
+      const body = buildStripePaymentIntentParams({
+        amountCents: 999, currency: 'eur', userId: 'user-1', productId: 'slot_diplomski', referralCode: null, receiptEmail: null,
+      });
+      const headers = { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: 'Bearer x', 'Stripe-Account': 'acct_1Povezani' };
+      return checkoutAccountScopeProblems({ headers, body }).some((p) => p.includes('Stripe-Account'));
+    },
+    cleanBefore: () => {
+      const body = buildStripePaymentIntentParams({
+        amountCents: 999, currency: 'eur', userId: 'user-1', productId: 'slot_diplomski', referralCode: 'R1', receiptEmail: 'a@b.hr',
+      });
+      const headers = { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: 'Bearer x', 'Idempotency-Key': 'k' };
+      // Netrivijalnost: tijelo mora biti stvaran PaymentIntent zahtjev, ne prazan niz.
+      return body.includes('amount=999') && checkoutAccountScopeProblems({ headers, body }).length === 0;
+    },
+  },
+  {
+    id: 'naplata/funkcija-opet-cita-racun',
+    imitates: 'webhook-mor ponovno cita STRIPE_ACCOUNT_ID (redak kakav je stajao do kruga 3), a create-checkout ne: dvije funkcije iste naplate opet imaju razlicit pojam racuna, isti uzorak kao masterov kvar dvaju imena iste tajne',
+    caught: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      const webhook = readTextLf(join(dir, 'webhook-mor', 'index.ts'));
+      const checkout = readTextLf(join(dir, 'create-checkout', 'index.ts'));
+      const mutated = webhook.replace(
+        "const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';",
+        "const WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';\nconst STRIPE_ACCOUNT_ID = Deno.env.get('STRIPE_ACCOUNT_ID') ?? '';",
+      );
+      if (mutated === webhook) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return stripeSecretNameProblems({ 'webhook-mor': mutated, 'create-checkout': checkout })
+        .some((p) => p.includes('cita STRIPE_ACCOUNT_ID'));
+    },
+    cleanBefore: () => {
+      const dir = resolve(process.cwd(), 'supabase', 'functions');
+      return stripeSecretNameProblems({
+        'webhook-mor': readTextLf(join(dir, 'webhook-mor', 'index.ts')),
+        'create-checkout': readTextLf(join(dir, 'create-checkout', 'index.ts')),
+      }).length === 0;
+    },
+  },
+  {
+    id: 'naplata/preflight-propusta-postavljen-racun',
+    imitates: 'preflight do kruga 3: STRIPE_ACCOUNT_ID vodjen kao neobavezan i nikad odbijen. Operater ga postavi po starom runbooku, deploy:naplata je zelen, a tajna ili rusi svaku kupnju (stari webhook) ili je mrtva i lazno tvrdi da je Connect racun konfiguriran',
+    caught: () => {
+      const rows = parseSupabaseSecretsList([
+        '  STRIPE_SECRET_KEY      | 1f2e',
+        '  STRIPE_PUBLISHABLE_KEY | aabb',
+        '  STRIPE_WEBHOOK_SECRET  | 9988',
+        '  STRIPE_ACCOUNT_ID      | 5f5e',
+      ].join('\n'));
+      // Stari preflight je gledao samo obavezne tajne: zelen. Novi imenuje zabranjenu.
+      return supabaseSecretsVerdict(rows).ok && forbiddenSecretsVerdict(rows).present.includes('STRIPE_ACCOUNT_ID');
+    },
+    cleanBefore: () => {
+      const rows = parseSupabaseSecretsList([
+        '  STRIPE_SECRET_KEY      | 1f2e',
+        '  STRIPE_PUBLISHABLE_KEY | aabb',
+        '  STRIPE_WEBHOOK_SECRET  | 9988',
+      ].join('\n'));
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return rows.length === 3 && forbiddenSecretsVerdict(rows).ok && preflightSourceProblems(src).length === 0;
+    },
+  },
+
+  // --- naplata: Codex pregled kruga 3 spajanja (2026-09-27), preflight ---------------------------
+  {
+    id: 'naplata/obavezna-tajna-bez-digesta-prolazi',
+    imitates: 'preflight do kruga 3: redak popisa tajni bez digesta (prazan ili neprepoznat stupac) brojao se kao postavljena tajna, pa bi preflight bio zelen iako se ne vidi je li STRIPE_WEBHOOK_SECRET prazan, a prazan znaci da webhook odbija svaki dogadjaj',
+    caught: () => {
+      const rows = [
+        { name: 'STRIPE_SECRET_KEY', digest: '11aa' },
+        { name: 'STRIPE_PUBLISHABLE_KEY', digest: '22bb' },
+        { name: 'STRIPE_WEBHOOK_SECRET', digest: '' },
+      ];
+      return supabaseSecretsVerdict(rows).missing.some(
+        (m: { name: string; reason: string }) => m.name === 'STRIPE_WEBHOOK_SECRET' && m.reason === 'nepoznata',
+      );
+    },
+    cleanBefore: () =>
+      supabaseSecretsVerdict([
+        { name: 'STRIPE_SECRET_KEY', digest: '11aa' },
+        { name: 'STRIPE_PUBLISHABLE_KEY', digest: '22bb' },
+        { name: 'STRIPE_WEBHOOK_SECRET', digest: '33cc' },
+      ]).ok,
+  },
+  {
+    id: 'naplata/testni-nacin-bez-digesta-prolazi',
+    imitates: 'preflight do kruga 3: redak STRIPE_ALLOW_TEST_MODE bez digesta nije se brojao kao ukljucen, pa bi deploy prosao iako vrijednost moze biti 1, a uz nju testni Stripe dogadjaj daje pravo pravo pristupa (PAY-05)',
+    caught: () => testModeVerdict([{ name: TEST_MODE_SECRET, digest: '' }]),
+    cleanBefore: () =>
+      !testModeVerdict([{ name: TEST_MODE_SECRET, digest: EMPTY_VALUE_DIGEST }]) && !testModeVerdict([]),
+  },
+  {
+    id: 'naplata/env-grana-bez-testnog-nacina',
+    imitates: 'preflight do kruga 3: --env grana provjeravala je samo obavezne i zabranjene tajne, pa je ljuska s STRIPE_ALLOW_TEST_MODE=1 dobila zeleno, iako uz tu zastavicu testni Stripe dogadjaj daje pravo pravo pristupa (PAY-05)',
+    caught: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      const mutated = src.replace('if (testModeEnvVerdict(process.env)', 'if (false');
+      if (mutated === src) return false; // nema sto mutirati: gard bi prolazio vakuumski
+      return testModeEnvVerdict({ STRIPE_ALLOW_TEST_MODE: '1' })
+        && preflightSourceProblems(mutated).some((p) => p.includes('--env grana preflighta ne odbija ukljucen testni nacin'));
+    },
+    cleanBefore: () => {
+      const src = readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+      return !testModeEnvVerdict({ STRIPE_ALLOW_TEST_MODE: '' }) && preflightSourceProblems(src).length === 0;
+    },
+  },
+
+  // --- naplata: preflight mjeren IZVRSAVANJEM (nalaz pregleda nakon spajanja mastera, 2026-09-27) --
+  // Izmjereno prije ovog popravka: `if (!zabranjene.ok) {` -> `if (false) {` (obje grane) i
+  // `testModeEnvVerdict(process.env) && false` ostavljali su preflightSourceProblems PRAZNIM, jer je
+  // gard trazio samo tekst poziva presude. Mutacije nize mijenjaju IZVOR skripte u memoriji, izvode
+  // ga u podprocesu nad laznim Supabase CLI-jem (privremeni direktorij, ne disk repozitorija) i
+  // traze da ciljani slucaj padne, a cisti slucaj istog puta i dalje prode.
+  {
+    id: 'naplata/izvor-zadana-grana-zabranjene-tajne-ugasena',
+    imitates: 'nalaz pregleda nakon spajanja mastera (2026-09-27): u zadanom putu `if (!zabranjene.ok) {` zamijenjen s `if (false) {`. Poziv forbiddenSecretsVerdict(read.rows) ostaje u tekstu, stari gard je bio prazan, a deploy:naplata s postavljenim STRIPE_ACCOUNT_ID prolazi i deploya obje funkcije',
+    caught: () => {
+      const mutated = zamijeniPojavu(preflightIzvor(), 'if (!zabranjene.ok) {', 'if (false) {', 2);
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-zabranjena-tajna'], ['zadano-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('STRIPE_ACCOUNT_ID'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-zabranjena-tajna'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-env-grana-zabranjene-tajne-ugasena',
+    imitates: 'nalaz pregleda nakon spajanja mastera (2026-09-27): u --env grani `if (!zabranjene.ok) {` zamijenjen s `if (false) {`. Poziv forbiddenEnvVerdict(process.env) ostaje u tekstu, stari gard je bio prazan, a ljuska s postavljenim STRIPE_ACCOUNT_ID dobije zeleno',
+    caught: () => {
+      const mutated = zamijeniPojavu(preflightIzvor(), 'if (!zabranjene.ok) {', 'if (false) {', 1);
+      return izvrsenaMutacijaUhvacena(mutated, ['env-zabranjena-tajna'], ['env-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('--env grana preflighta ne odbija postavljenu zabranjenu tajnu'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['env-zabranjena-tajna'], ['env-cisto']),
+  },
+  {
+    id: 'naplata/izvor-env-grana-testnog-nacina-ugasena',
+    imitates: 'nalaz pregleda nakon spajanja mastera (2026-09-27): `testModeEnvVerdict(process.env) && false` u --env grani. Tekst `if (testModeEnvVerdict(process.env)` ostaje, stari gard je bio prazan, a ljuska sa STRIPE_ALLOW_TEST_MODE=1 dobije zeleno iako testni dogadjaj tada daje pravo pravo pristupa (PAY-05)',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        'testModeEnvVerdict(process.env) && !argv',
+        'testModeEnvVerdict(process.env) && false && !argv',
+      );
+      return izvrsenaMutacijaUhvacena(mutated, ['env-testni-ukljucen'], ['env-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('--env grana preflighta ne odbija ukljucen testni nacin'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['env-testni-ukljucen'], ['env-cisto']),
+  },
+  {
+    id: 'naplata/izvor-zadana-grana-testnog-nacina-ugasena',
+    imitates: 'isti oblik kao nalaz pregleda 2026-09-27, u zadanom putu: `testModeVerdict(read.rows) && false`. Tekst poziva presude ostaje, a deploy:naplata sa STRIPE_ALLOW_TEST_MODE=1 u projektu prolazi i deploya (PAY-05)',
+    caught: () => {
+      const mutated = preflightIzvor().replace('testModeVerdict(read.rows) && !argv', 'testModeVerdict(read.rows) && false && !argv');
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-testni-ukljucen'], ['zadano-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('ukljucen testni nacin prije deploya'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-testni-ukljucen'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-grana-zabranjene-tajne-bez-izlaza',
+    imitates: 'grana zabranjene tajne u zadanom putu koja ispise ODBIJEN, ali izgubi process.exit(1): uvjet je upravo presuda pa je tekstualni gard zelen, a skripta nastavi do deploya obje funkcije s postavljenim STRIPE_ACCOUNT_ID',
+    caught: () => {
+      const src = preflightIzvor();
+      const grana = indeksPojave(src, 'if (!zabranjene.ok) {', 2);
+      if (grana < 0) return false;
+      const izlaz = src.indexOf('process.exit(1);', grana);
+      if (izlaz < 0) return false;
+      const mutated = src.slice(0, izlaz) + src.slice(izlaz + 'process.exit(1);'.length);
+      // Tekstualni gard to NE vidi (uvjet je netaknut); zato postoji izvrseni.
+      return preflightSourceProblems(mutated).length === 0
+        && izvrsenaMutacijaUhvacena(mutated, ['zadano-zabranjena-tajna'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-zabranjena-tajna'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-grana-zabranjene-tajne-samo-uz-deploy',
+    imitates: 'grana zabranjene tajne uvjetovana zastavicom deploya (`if (!zabranjene.ok && deploy) {`): deploy:naplata i dalje pada, ali samostalna provjera (npm run verify-naplata-secrets, korak kojim operater provjerava tajne) je zelena uz postavljen STRIPE_ACCOUNT_ID',
+    caught: () => {
+      const mutated = zamijeniPojavu(preflightIzvor(), 'if (!zabranjene.ok) {', 'if (!zabranjene.ok && deploy) {', 2);
+      return izvrsenaMutacijaUhvacena(mutated, ['provjera-zabranjena-tajna'], ['zadano-cisto'])
+        // Slucaj s --deploy tu mutaciju NE vidi; zato postoji slucaj bez njega.
+        && preflightExecutionProblems(mutated, ['zadano-zabranjena-tajna']).length === 0;
+    },
+    cleanBefore: () => izvrseniBaselineCist(['provjera-zabranjena-tajna', 'zadano-zabranjena-tajna'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-obavezna-tajna-bez-digesta-prolazi',
+    imitates: 'izvorni oblik mutacije naplata/obavezna-tajna-bez-digesta-prolazi: supabaseSecretsVerdict bez razloga `nepoznata`, pa redak STRIPE_WEBHOOK_SECRET bez digesta prolazi kao postavljen i deploy:naplata deploya webhook koji mozda odbija svaki dogadjaj',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        "    else if (!isKnownDigest(byName.get(name))) missing.push({ name, reason: 'nepoznata' });\n",
+        '',
+      );
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-obavezna-bez-digesta'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-obavezna-bez-digesta'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-testni-nacin-bez-digesta-prolazi',
+    imitates: 'izvorni oblik mutacije naplata/testni-nacin-bez-digesta-prolazi: testModeVerdict bez retka koji neprepoznat digest broji kao ukljucen, pa STRIPE_ALLOW_TEST_MODE cija se vrijednost ne vidi (a moze biti 1) ne obara deploy (PAY-05)',
+    caught: () => {
+      const mutated = preflightIzvor().replace('  if (!isKnownDigest(row.digest)) return true;\n', '');
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-testni-bez-digesta'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-testni-bez-digesta'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-preflight-propusta-postavljen-racun',
+    imitates: 'izvorni oblik mutacije naplata/preflight-propusta-postavljen-racun: NAPLATA_FORBIDDEN_SECRETS prazan, dakle stanje do kruga 3. Obje grane i obje presude stoje u tekstu, a STRIPE_ACCOUNT_ID ni u projektu ni u ljusci vise ne obara preflight',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        "export const NAPLATA_FORBIDDEN_SECRETS = Object.freeze(['STRIPE_ACCOUNT_ID']);",
+        'export const NAPLATA_FORBIDDEN_SECRETS = Object.freeze([]);',
+      );
+      return preflightSourceProblems(mutated).length === 0
+        && izvrsenaMutacijaUhvacena(
+          mutated,
+          ['zadano-zabranjena-tajna', 'env-zabranjena-tajna'],
+          ['zadano-cisto', 'env-cisto'],
+        );
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-zabranjena-tajna', 'env-zabranjena-tajna'], ['zadano-cisto', 'env-cisto']),
+  },
+
+  // --- naplata: rucno vezivanje ne smije upisati pravo za vracen novac (2026-09-27) -------------
+  {
+    id: 'naplata/rucno-vezivanje-bez-provjere-povrata',
+    imitates: 'runbook 5.1 do 2026-09-27: postupak rucnog vezivanja vodio je ravno na insert into entitlements. Uplata bez user_id nema pravo, pa njezin puni povrat zavrsi kao refund_without_entitlement; pravo upisano rucno nakon toga ostaje aktivno za vracen novac',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      // MUTACIJA u memoriji: makni ogradjeni blok provjere povrata ispred upisa prava.
+      const pocetak = runbook.indexOf('```sql', runbook.indexOf('**Obavezno prije upisa'));
+      const kraj = runbook.indexOf('```', pocetak + 6);
+      if (pocetak < 0 || kraj < 0) return false;
+      const mutated = runbook.slice(0, pocetak) + runbook.slice(kraj + 3);
+      return runbookRefundCheckProblems(mutated, webhookMorSource())
+        .some((p) => p.includes('bez prethodne provjere povrata'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      // Cetiri oznake: refund_consequences_failed dodana 2026-09-27 (pad sporednih posljedica povrata).
+      return handlerRefundMarkers(webhookMorSource()).length === 4
+        && runbookRefundCheckProblems(runbook, webhookMorSource()).length === 0;
+    },
+  },
+  {
+    id: 'naplata/cekaju-vezivanje-ukljucuje-vracene',
+    imitates: 'upit "uplate koje cekaju rucno vezivanje" iz runbooka 5.1 do 2026-09-27: vracao je i uplatu ciji je PaymentIntent vec vracen, pa je operater dobivao na popis za vezivanje upravo onu uplatu koju ne smije vezati',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pocetak = runbook.indexOf('  and not exists (');
+      const kraj = runbook.indexOf('\n  )\n', pocetak);
+      if (pocetak < 0 || kraj < 0) return false;
+      const mutated = runbook.slice(0, pocetak) + runbook.slice(kraj + '\n  )\n'.length);
+      return runbookRefundCheckProblems(mutated, webhookMorSource())
+        .some((p) => p.includes('ne iskljucuje uplate ciji je PaymentIntent vracen'));
+    },
+    cleanBefore: () =>
+      runbookRefundCheckProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md')), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/runbook-oznake-povrata-zastarjele',
+    imitates: 'handler doda novu oznaku punog povrata u REFUND_MARKERS (kao sto je refund_pending dodan u krugu 3), a runbook i dalje filtrira stari popis: provjera prije rucnog vezivanja ne vidi povrat koji se upravo obradjuje',
+    caught: () => {
+      const handler = webhookMorSource();
+      const mutated = handler.replace("'refund_without_entitlement', 'refunded'];", "'refund_without_entitlement', 'refunded', 'refund_nova_oznaka'];");
+      if (mutated === handler) return false;
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      return handlerRefundMarkers(mutated).includes('refund_nova_oznaka')
+        && runbookRefundCheckProblems(runbook, mutated).some((p) => p.includes('nije REFUND_MARKERS'));
+    },
+    cleanBefore: () =>
+      runbookRefundCheckProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md')), webhookMorSource()).length === 0,
+  },
+
+  // --- naplata: nalazi pregleda nakon spajanja design/naplata-4 u design/pack3 (2026-09-27) -------
+  {
+    id: 'naplata/kataloska-cijena-nula-daje-pravo',
+    imitates: 'stanje handlera do 2026-09-27: mapProductRow cijenu null ili neispravnu pretvara u 0, a cijena 0 ostaje aktivna. Ocekivani iznos je 0 centi, pa svaka pozitivna uplata prolazi kao above_catalog i dobiva pravo za proizvod koji create-checkout ne bi prodao',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        'const cijenaUpotrebljiva = product.active && Number.isFinite(ocekivanoCenti) && ocekivanoCenti > 0;',
+        'const cijenaUpotrebljiva = true;',
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('neupotrebljiva kataloska cijena'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/neaktivan-proizvod-daje-pravo',
+    imitates: 'pola popravka catalog_price_unusable: provjerava se samo pozitivan iznos, ne i je li proizvod aktivan. Uplata za povucen proizvod (active=false uz staru cijenu) i dalje dobiva pravo',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('const cijenaUpotrebljiva = product.active && ', 'const cijenaUpotrebljiva = ');
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('neupotrebljiva kataloska cijena'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/ponovljena-dostava-na-rucni-pregled',
+    imitates: 'stanje handlera iz design/naplata-4: Stripe retry vec proknjizene uplate nakon promjene cijene zavrsi kao needs_manual_review, pa duplicate_ignored (tocka oporavka obveza bonusa, audit P1-07) nikad ne dodje na red',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        "if (iznos.kind === 'needs_manual_review' && !vecProknjizeno) {",
+        "if (iznos.kind === 'needs_manual_review') {",
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ponovljena dostava vec proknjizene uplate'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/ponovljena-dostava-tudjeg-korisnika',
+    imitates: 'preiroka provjera ponovljene dostave: svaki postojeci zapis za PaymentIntent (i tudji) preskoci rucni pregled, pa uplata ispod kataloga uz sukob vlasnika zavrsi kao duplikat umjesto kod covjeka',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace(
+        "vecProknjizeno = redak !== null && String(redak.user_id ?? '') === ev.userId;",
+        'vecProknjizeno = redak !== null;',
+      );
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne usporedjuje korisnika postojeceg zapisa'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/bonusi-bez-drugog-citanja-oznake',
+    imitates: 'stanje handlera iz design/naplata-4: oznaka povrata cita se samo PRIJE bonusa. Puni povrat u prozoru izmedju tog citanja i upisa kupona procita praznu coupon_grants, pa pass kupon i nagrada preporucitelju ostanu aktivni za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const od = src.indexOf('  // PROZOR ISTODOBNOG POVRATA ZA BONUSE');
+      const _do = src.indexOf("  await settle(\n    'processed',\n    iznos.kind === 'above_catalog'", od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('oznaka povrata se ne cita ponovno'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/opoziv-bez-nagrade-preporucitelju',
+    imitates: 'pola popravka prozora povrata: uplata ponovno procita oznaku i povuce kupon, ali ne i nagradu preporucitelju (referral_signups, 0013) koju je izdala u istom prozoru',
+    caught: () => {
+      const src = webhookMorSource();
+      const pomocnik = src.indexOf('async function closePaymentAfterRefund(');
+      const poziv = src.indexOf('  await pullReferralSignupReward(admin, ev.orderId);\n', pomocnik);
+      if (pomocnik < 0 || poziv < 0) return false;
+      const mutated = src.slice(0, poziv) + src.slice(poziv + '  await pullReferralSignupReward(admin, ev.orderId);\n'.length);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne opoziva nagradu preporucitelju'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/posljedice-povrata-prije-prava',
+    imitates: 'stanje handlera iz design/naplata-4: closeRefundConsequences se izvodi prije gasenja entitlementa, pa pad upisa u manual_orders ili coupon_grants vrati 500 dok je pravo jos aktivno (kupac ima novac natrag i pristup)',
+    caught: () => {
+      const src = webhookMorSource();
+      const blokOd = src.indexOf('    // SPOREDNE POSLJEDICE (odluka vlasnika 2026-09-27)');
+      const blokDo = src.indexOf('    // Rucna narudzba nema entitlement, a povrat ju je upravo zatvorio', blokOd);
+      const pravo = src.indexOf('    // PRAVO SE GASI PRIJE SPOREDNIH POSLJEDICA');
+      if (blokOd < 0 || blokDo < 0 || pravo < 0 || !(pravo < blokOd)) return false;
+      const blok = src.slice(blokOd, blokDo);
+      const mutated = src.slice(0, pravo) + blok + src.slice(pravo, blokOd) + src.slice(blokDo);
+      return webhookHandlerProblems(mutated).some((p) => p.includes('prije gasenja prava'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/pad-posljedica-brise-oznaku-povrata',
+    imitates: 'pad sporednih posljedica zapisan u inbox kao detalj koji nije oznaka punog povrata: uplata koja stigne prije Stripeova retryja povrata ne vidi povrat i otvori ili ostavi rucnu narudzbu za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("await settle('failed', 'refund_consequences_failed');", "await settle('failed', 'posljedice_povrata_pale');");
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('ne ostavlja oznaku punog povrata'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/any-u-posljedicama-povrata',
+    imitates: 'stanje handlera iz design/naplata-4: closeRefundConsequences(admin: any, ...) uz retke any[] i (error as any).code, pa krivo ime stupca ili metode prolazi tsc i deno check',
+    caught: () => {
+      const src = webhookMorSource();
+      const a = src.replace('  admin: RefundConsequencesDb,\n', '  admin: any,\n');
+      const b = src.replace('dbErrorCode(error) === UNIQUE_VIOLATION;', "(error as any).code === '23505';");
+      if (a === src || b === src) return false;
+      return webhookHandlerProblems(a).some((p) => p.includes('closeRefundConsequences koristi any'))
+        && webhookHandlerProblems(b).some((p) => p.includes('(x as any).code'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/rucno-vezivanje-bez-provjere-postojeceg-zapisa',
+    imitates: 'runbook 5.1 iz design/naplata-4: postupak ne provjerava postoji li vec pravo ili rucna narudzba za isti order_id, pa operater upisuje drugi zapis ili vezuje uplatu koja je vec proknjizena drugom korisniku',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pocetak = runbook.indexOf('```sql', runbook.indexOf('**Obavezno prvo: postoji li'));
+      const kraj = runbook.indexOf('```', pocetak + 6);
+      if (pocetak < 0 || kraj < 0) return false;
+      const mutated = runbook.slice(0, pocetak) + runbook.slice(kraj + 3);
+      return runbookManualLinkProblems(mutated).some((p) => p.includes('postoji li vec pravo ili rucna narudzba'));
+    },
+    cleanBefore: () => runbookManualLinkProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'))).length === 0,
+  },
+  {
+    id: 'naplata/rucni-pregled-premium-kao-entitlement',
+    imitates: 'runbook 5.1 iz design/naplata-4: jedini upis u postupku je insert into entitlements, pa premium_human (work_type null) nakon rucnog pregleda dobije pravo bez work_type umjesto rucne narudzbe',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const upis = runbook.indexOf('insert into manual_orders');
+      const pocetak = runbook.lastIndexOf('```sql', upis);
+      const kraj = runbook.indexOf('```', upis);
+      if (upis < 0 || pocetak < 0 || kraj < 0) return false;
+      const bezNarudzbe = runbook.slice(0, pocetak) + runbook.slice(kraj + 3);
+      const bezIskljucenja = runbook.replace(" and not p.manual_fulfillment\n", '\n');
+      if (bezIskljucenja === runbook) return false;
+      return runbookManualLinkProblems(bezNarudzbe).some((p) => p.includes('ne otvara rucnu narudzbu'))
+        && runbookManualLinkProblems(bezIskljucenja).some((p) => p.includes('ne iskljucuje proizvod s rucnom obradom'));
+    },
+    cleanBefore: () => runbookManualLinkProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'))).length === 0,
+  },
+  {
+    id: 'naplata/izvor-project-ref-se-ne-prosljedjuje',
+    imitates: 'preflight koji --project-ref <ref> (oblik iz runbooka, projekt nije povezan) ne prosljedi Supabase CLI-ju: mjeri tajne povezanog ili nijednog projekta, a deploya u krivi projekt',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        "return i >= 0 && argv[i + 1] ? ['--project-ref', argv[i + 1]] : [];",
+        'return [];',
+      );
+      return izvrsenaMutacijaUhvacena(mutated, ['ref-cisto'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['ref-cisto'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-zabrane-preskocene-uz-project-ref',
+    imitates: 'grane zabranjene tajne i testnog nacina uvjetovane izostankom --project-ref: deploy bez povezanog projekta (oblik iz runbooka) prolazi s postavljenim STRIPE_ACCOUNT_ID ili STRIPE_ALLOW_TEST_MODE=1, a zadani slucajevi to ne vide',
+    caught: () => {
+      const src = preflightIzvor();
+      const mutated = zamijeniPojavu(src, 'if (!zabranjene.ok) {', 'if (!zabranjene.ok && projectRef.length === 0) {', 2).replace(
+        "testModeVerdict(read.rows) && !argv.includes('--dopusti-testni-nacin')",
+        "testModeVerdict(read.rows) && projectRef.length === 0 && !argv.includes('--dopusti-testni-nacin')",
+      );
+      if (!mutated.includes('projectRef.length === 0 && !argv')) return false;
+      return izvrsenaMutacijaUhvacena(mutated, ['ref-zabranjena-tajna', 'ref-testni-ukljucen'], ['ref-cisto'])
+        // Zadani slucajevi bez zastavice tu mutaciju NE vide; zato postoje slucajevi s refom.
+        && preflightExecutionProblems(mutated, ['zadano-zabranjena-tajna', 'zadano-testni-ukljucen']).length === 0;
+    },
+    cleanBefore: () => izvrseniBaselineCist(
+      ['ref-zabranjena-tajna', 'ref-testni-ukljucen', 'zadano-zabranjena-tajna', 'zadano-testni-ukljucen'],
+      ['ref-cisto'],
+    ),
   },
 
   // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------
@@ -3696,9 +5032,117 @@ function cleanTmpRun(
   return { plan, rmCalls };
 }
 
-/** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
+/** Apsolutna staza iz relativne, istim `resolve` kojim graf gradi svoje staze. */
+function z7aPut(rel: string): string {
+  return resolve(process.cwd(), rel);
+}
+
+/**
+ * Stvarni disk s nekoliko datoteka izmijenjenih U MEMORIJI (pravilo 1: disk se ne dira). Kljuc je
+ * relativna staza, vrijednost funkcija nad stvarnim tekstom (prazan tekst za datoteku koje nema).
+ */
+function z7aOverlay(izmjene: Record<string, (tekst: string) => string>): IzvorDatoteka {
+  const mapa = new Map(Object.entries(izmjene).map(([rel, f]) => [z7aPut(rel), f] as const));
+  return {
+    procitaj: (p) => {
+      const f = mapa.get(p);
+      if (!f) return DISK.procitaj(p);
+      return f(DISK.postoji(p) ? DISK.procitaj(p) : '');
+    },
+    postoji: (p) => mapa.has(p) || DISK.postoji(p),
+  };
+}
+
+/** Tekst svakog CSS lista u grafu ulaza, procitan kroz zadani izvor. */
+function z7aCssGrafa(ulaz: string, izvor: IzvorDatoteka = DISK): string[] {
+  return [...collectStaticGraph(z7aPut(ulaz), izvor)].filter((p) => p.endsWith('.css')).map((p) => izvor.procitaj(p));
+}
+
+/** Gard "nijedna ruta ne ucitava fontove mimo fonts-core.ts" nad svim ulazima, kroz zadani izvor. */
+function z7aProblemiGrafa(izvor: IzvorDatoteka): string[] {
+  return SVI_ULAZI.flatMap((u) => problemiGrafaFontova(
+    u, [...collectStaticGraph(z7aPut(u), izvor)], packageImports(z7aPut(u), izvor),
+  ));
+}
+
+/** Svaki CSS list u src/, s relativnim imenom, kako ga cita gard u entry-fonts. */
+function z7aSviListovi(): Array<{ ime: string; css: string }> {
+  const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    return e.isDirectory() ? hodaj(p) : [p];
+  });
+  const korijen = z7aPut('src');
+  return hodaj(korijen).filter((p) => p.endsWith('.css'))
+    .map((p) => ({ ime: `src/${p.slice(korijen.length + 1).split(/[\\/]/).join('/')}`, css: readFileSync(p, 'utf8') }));
+}
+
+/** package.json kao objekt. */
+function z7aPaket(): Record<string, unknown> {
+  return JSON.parse(z7aList('package.json')) as Record<string, unknown>;
+}
+
+/** Licence vendoriranih fontova koje postoje na disku. */
+function z7aLicence(): Map<string, string> {
+  const dir = z7aPut('src/assets/fonts');
+  const imena = new Set(readdirSync(dir));
+  return new Map(LICENCE.filter((ime) => imena.has(ime)).map((ime) => [ime, readFileSync(join(dir, ime), 'utf8')] as const));
+}
+
+/**
+ * Svaki CSS list u src/ istim redom kao `listoviSrc` u `tests/design-tokens.test.ts` (izvor istine
+ * prvi, ostali abecedno), CR normaliziran, s izmjenama U MEMORIJI po relativnoj stazi.
+ */
+function z7aListoviSrc(izmjene: Record<string, (tekst: string) => string> = {}): Array<{ ime: string; css: string }> {
+  const IZVOR = 'src/shared/design-system.css';
+  const listovi = z7aSviListovi().map((l) => ({ ime: l.ime, css: l.css.replace(/\r\n/g, '\n') }))
+    .sort((a, b) => (a.ime < b.ime ? -1 : a.ime > b.ime ? 1 : 0));
+  const poredak = [...listovi.filter((l) => l.ime === IZVOR), ...listovi.filter((l) => l.ime !== IZVOR)];
+  return poredak.map((l) => (izmjene[l.ime] ? { ime: l.ime, css: izmjene[l.ime](l.css) } : l));
+}
+
+/** Visereceni odlomci stranice bez serifa, kroz isti citac listova kao gard (izvor je parametar). */
+function z7aProblemiProze(rel: string, izvor: IzvorDatoteka = DISK): string[] {
+  const { html, listovi } = listoviStranice(process.cwd(), rel, izvor);
+  return problemiProzeStranice(html, listovi).problemi;
+}
+
+/** Listovi nad kojima gard trazi Georgiju: src/ i inline stil svake stranice, s izmjenama u memoriji. */
+function z7aListoviGeorgije(izmjene: Record<string, (tekst: string) => string> = {}): Array<{ ime: string; css: string }> {
+  const listovi = z7aListoviSrc(izmjene);
+  for (const rel of STRANICE_PROZE) {
+    const html = izmjene[rel] ? izmjene[rel](z7aList(rel)) : z7aList(rel);
+    for (const m of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) listovi.push({ ime: rel, css: m[1] });
+  }
+  return listovi;
+}
+
+/** Tekst lista s diska, CR normaliziran (Windows worktree zna imati CRLF). */
+function z7aList(rel: string): string {
+  return readFileSync(resolve(process.cwd(), rel), 'utf8').replace(/\r\n/g, '\n');
+}
+
+/** Sadrzaj mape vendoriranih fontova: imena i bajtovi, jer gard cita metrike iz samog woff2. */
+function z7aDatoteke(): { names: string[]; map: Map<string, Uint8Array> } {
+  const dir = resolve(process.cwd(), 'src', 'assets', 'fonts');
+  const names = readdirSync(dir);
+  return { names, map: new Map(names.map((n) => [n, new Uint8Array(readFileSync(join(dir, n)))])) };
+}
+
+/**
+ * public/_headers nakon ISTE zamjene tokena koju build radi (vite.config.ts, cspAllowlist).
+ * CR se normalizira: worktree na Windowsu zna imati CRLF, a gard mora vrijediti za oba.
+ */
+function builtHeaders(): string {
+  const raw = readFileSync(resolve(process.cwd(), 'public', '_headers'), 'utf8').replace(/\r\n/g, '\n');
+  return substituteCspTokens(raw, { supabase: 'https://abcdefghijklmnop.supabase.co' });
+}
+
+/**
+ * Izvor obrade dogadjaja webhook-mor s diska; mutira se samo kopija u memoriji. Na design/pack3
+ * obrada zivi u handler.ts (index.ts cita samo okolinu), pa gardovi gledaju handler.
+ */
 function webhookMorSource(): string {
-  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'index.ts'));
+  return readTextLf(resolve(process.cwd(), 'supabase', 'functions', 'webhook-mor', 'handler.ts'));
 }
 
 /** Migracije s diska, redom primjene (Supabase sortira po verziji = imenu datoteke). */
@@ -3732,10 +5176,21 @@ function c6Panel() {
   return { handle, applyThroughOldBinding: (ids: string[]) => binding.applySelection(ids) };
 }
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
+  // TIMEOUT OVDJE NISTA NE PREKIDA. Tijelo testa je SINKRONO (mutation.cleanBefore/caught), a
+  // vitest rok mjeri timerom koji ne moze okinuti dok sinkroni kod drzi petlju dogadjaja; kad tijelo
+  // zavrsi, rezultat stigne prije timera i test PROLAZI iako je trajao dulje od roka (izmjereno
+  // 2026-09-27: sinkroni test od 1,5 s uz rok od 200 ms prolazi). Zaglavljena mutacija zato NE pada
+  // "samo kasnije" nego visi. Stvarna granica je `timeout` spawnSync-a u izvrsenom gardu
+  // (ROK_SLUCAJA_MS, 30 s po slucaju, tests/helpers/naplata-env.ts): zaglavljena skripta se ubija i
+  // postaje nalaz, a pokretac slucajeva ima rok ROK_SLUCAJA_MS + 15 s. 60 s ostaje samo za slucaj da
+  // tijelo jednom postane asinkrono. Slucajevi jednog poziva izvrsenog garda idu ISTODOBNO kroz jedan
+  // pokretac, svaki i dalje kao zaseban proces stvarne skripte (izmjereno 2026-09-27 na 4 jezgre,
+  // naizmjenicno: baseline svih 13 slucajeva 4,1 do 4,9 s serijski, 1,7 do 2,4 s istodobno;
+  // 11 mutacija `naplata/izvor-*` zajedno 14,9 do 16,4 s serijski, 13,2 do 14,6 s istodobno).
   it.each(MUTATIONS.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
     expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);
     expect(mutation.caught(), `mutacija NIJE uhvacena: ${mutation.imitates}`).toBe(true);
-  });
+  }, 60_000);
 
   it('svaka mutacija imenuje stvaran kvar koji imitira', () => {
     for (const mutation of MUTATIONS) {

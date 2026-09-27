@@ -5,6 +5,7 @@ import { existsSync, statSync, createReadStream, readFileSync, writeFileSync } f
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 import { resolveDevTools } from './scripts/dev-console.mjs';
 import { classificationGuard } from './scripts/security/classification-guard.mjs';
+import { substituteCspTokens } from './scripts/lib/csp-headers.mjs';
 import { checkEntryBudgets, type BundleLike } from './src/build/bundle-entry-graph';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
@@ -91,10 +92,10 @@ function cspAllowlist() {
   };
   const supabase =
     origin(process.env.VITE_LEKTA_SUPABASE_URL ?? '') || 'https://zrrjttizjyfcxmcpgzml.supabase.co';
-  // Lemon Squeezy checkout zivi na poddomeni trgovine, koja se razlikuje po racunu, pa se uzima iz
-  // okoline. Dok naplata nije ziva, zadana vrijednost je zajednicki app host: uzi je od wildcarda,
-  // a ne lomi nista jer nijedan proizvod jos nije mapiran.
-  const lemon = origin(process.env.LEKTA_LS_CHECKOUT_ORIGIN ?? '') || 'https://app.lemonsqueezy.com';
+  // Stripe hostovi su fiksni i stoje doslovno u public/_headers, pa ovdje nema sto zamjenjivati:
+  // Payment Element se montira u stranici i ne trazi poddomenu po racunu, za razliku od hosted
+  // checkouta naslijedjenog providera koji je do 2026-09-23 trazio vlastiti token. Zamjena zivi u
+  // scripts/lib/csp-headers.mjs, isti modul koji verify-deploy-dist i gate-mutations koriste.
 
   return {
     name: 'lekta-csp-allowlist',
@@ -103,7 +104,7 @@ function cspAllowlist() {
       const file = resolve(__dirname, 'dist', '_headers');
       if (!existsSync(file)) return;
       const source = readFileSync(file, 'utf8');
-      const replaced = source.replaceAll('__CSP_SUPABASE__', supabase).replaceAll('__CSP_LS__', lemon);
+      const replaced = substituteCspTokens(source, { supabase });
       if (replaced !== source) writeFileSync(file, replaced, 'utf8');
     },
   };
@@ -333,14 +334,22 @@ function bundleSizeGuard(devTools: boolean) {
 // crossorigin je OBAVEZAN i za same-origin (font fetch je uvijek CORS anonymous; bez atributa
 // preglednik preload ne bi uparivao s @font-face zahtjevom pa bi datoteku skinuo DVAPUT).
 // POPIS JE PO STRANICI, NE PO BUNDLEU. Do 2026-09-05 je plugin skenirao CIJELI bundle i ubacivao
-// isti popis u svaku stranicu, pa je cisti ulaz `/` preloadao IBM Plex Mono (15 kB) koji na njemu
-// nema nijednu metu, i to PRIJE fontova koje stvarno crta. Razdvajanje fontova po ruti
-// (`fonts-core` / `fonts-document`) samo po sebi to ne bi popravilo, jer datoteka i dalje postoji
-// u bundleu zbog `/rad/`. Zato se sada cita koje `.woff2` referenciraju CSS listovi TE stranice.
+// isti popis u svaku stranicu, pa je cisti ulaz `/` preloadao podatkovni mono koji na njemu nema
+// nijednu metu, i to PRIJE fontova koje stvarno crta. Zato se cita koje `.woff2` referenciraju
+// CSS listovi TE stranice.
+//
+// Z7 opcija a (odluka vlasnika 2026-09-26) je obitelji sveo na dvije i sve rute nose iste, pa je
+// podjela po stranici sada bez ucinka. Ostaje svejedno: kad se popis mijenja, mijenja se ovdje i
+// na jednom mjestu, a sentinel ispod i dalje pada ako se imena razidju s datotekama koje
+// `src/assets/fonts/fonts.css` deklarira.
+// PRELOAD NOSE SAMO DVA REZA (Z31): uspravni Instrument Serif 400 i Geist Mono (varijabilni rez je
+// ujedno i rez 400), oba iz podskupa LATIN. Kurziv i latin-ext se skidaju tek kad ih tekst trazi:
+// preload bi ih povukao i na stranicu koja ih ne crta, a svaki preload se natjece s LCP-om.
+// Gard: tests/entry-fonts.test.ts.
 function fontPreload() {
   const WANTED = [
-    /newsreader-latin-opsz-normal/, /newsreader-latin-opsz-italic/,
-    /inter-tight-latin-wght/, /ibm-plex-mono-latin-600/,
+    /instrument-serif-latin-400-normal/,
+    /geist-mono-latin-wght-normal/,
   ];
   type Asset = { source?: string | Uint8Array };
   return {
