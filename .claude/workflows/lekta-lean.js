@@ -481,7 +481,7 @@ async function runCritic(planText, planFiles) {
     criticKriteriji(PROTECTED_PATHS_FOR_CRITIC) +
     `\n\nVrati ok i popis problema (prazan kad je ok=true).`
   const verdict = await runAgent('kriticar', prompt, {
-    phase: 'Kriticar', label: 'kriticar', ...routeFor('critic', planFiles), schema: CRITIC_SCHEMA,
+    phase: 'Kriticar', label: 'kriticar', ...routeFor('critic', planFiles), schema: CRITIC_SCHEMA, agentType: 'lean-citac',
   })
   agentCounts.critic += 1
   const problemi = [...deterministic, ...(Array.isArray(verdict.problemi) ? verdict.problemi : [])]
@@ -581,7 +581,7 @@ async function runStandard() {
     `nedostaju, bez sireg istrazivanja), (4) notProven: sto ovaj zadatak NECE moci dokazati (npr. Word, produkcija, ` +
     `puni gate), prazno samo ako je sve provjerljivo testom. SAMO CITAJ, nista ne mijenjaj.`
   const brief = await runAgent('brief', briefPrompt, {
-    phase: 'Brief', label: 'brief', ...routeFor('brief'), schema: BRIEF_SCHEMA,
+    phase: 'Brief', label: 'brief', ...routeFor('brief'), schema: BRIEF_SCHEMA, agentType: 'lean-citac',
   })
   agentCounts.brief += 1
   const briefText = JSON.stringify(brief, null, 1)
@@ -598,7 +598,7 @@ async function runStandard() {
       `ZADATAK:\n${task}\n\nBRIEF:\n${briefText}\n\nPredlozi NAJMANJI diff koji ispunjava kriterije, bez nove ` +
       `apstrakcije. SAMO CITAJ i predlozi, ne pisi kod. Vrati pristup, korake i datoteke koje ce se dirati.`
     design = await runAgent('dizajner', designPrompt, {
-      phase: 'Brief', label: 'dizajner', model: 'sonnet', effort: 'medium', schema: DESIGN_SCHEMA,
+      phase: 'Brief', label: 'dizajner', model: 'sonnet', effort: 'medium', schema: DESIGN_SCHEMA, agentType: 'lean-citac',
     })
     agentCounts.design += 1
     log(`Dizajn: ${design.approach.slice(0, 140)}`)
