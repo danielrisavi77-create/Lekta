@@ -85,8 +85,8 @@ describe('buildUpisnikProfileCandidates', () => {
 
   it('does not treat a faculty name in a locator as the programme name', () => {
     const rows = [{ sifraUpisnik: '212', naziv: 'Matematika', izvoditelj: 'UNIRI', vrsta: 'Sveučilišni prijediplomski studij' }];
-    const components = [{ programCode: '212', executors: [{ componentIds: ['math-uniri'] }] }];
-    const profiles = [{ id: 'math-uniri-zavrsni', unitId: 'math-uniri', programs: ['Matematika'], workTypes: ['final'], sources: [{ url: 'https://math.uniri.hr/studiji' }] }];
+    const components = [{ programCode: '212', executors: [{ componentIds: ['matematika'] }] }];
+    const profiles = [{ id: 'math-uniri-zavrsni', unitId: 'matematika', programs: ['Matematika'], workTypes: ['final'], sources: [{ url: 'https://math.uniri.hr/studiji' }] }];
     const evidence = { sourceUrl: 'https://math.uniri.hr/studiji', sourceLocator: 'stranica Fakulteta za matematiku UNIRI, popis studija', quote: 'Sveučilišni prijediplomski studij' };
     expect(() => buildUpisnikProfileCandidates(rows, components, profiles, [{ programCode: '212', profileId: 'math-uniri-zavrsni', evidence }])).toThrow(/program name/i);
   });
@@ -2290,5 +2290,151 @@ describe('integrated graduate coverage decision', () => {
   it('rejects an unregistered URL on the correct domain and a profile without graduate work type', () => {
     expect(() => build([{ ...coverage[0]!, evidence: { ...coverage[0]!.evidence, sourceUrl: 'https://www.vef.unizg.hr/nepostojeci.pdf' } }])).toThrow(/source registry/i);
     expect(() => build([{ ...coverage[0]!, profileId: 'vef-doktorski' }])).toThrow(/graduate work type/i);
+  });
+});
+
+
+describe('Upisnik heuristic guard redesign', () => {
+  const decision = (programCode: string, profileId: string, sourceUrl: string, quote: string) => ({
+    programCode, profileId, evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote },
+  });
+  const fixture = (name: string, unitId: string, sourceUrl: string, quote: string, vrsta = 'Sveucilisni prijediplomski studij') =>
+    buildUpisnikProfileCandidates(
+      [{ sifraUpisnik: '1', naziv: name, izvoditelj: unitId, vrsta }],
+      [{ programCode: '1', executors: [{ componentIds: [unitId] }] }],
+      [{ id: 'profile', unitId, programs: [name], workTypes: ['final'], sources: [{ url: sourceUrl }] }],
+      [decision('1', 'profile', sourceUrl, quote)],
+    );
+
+  it('matches inflected whole word roots and rejects embedded or merely similar names', () => {
+    const url = 'https://pmf.unizg.hr/studij';
+    expect(fixture('Biologija', 'pmf', url, 'Studij biologije').programs[0]?.coverageStatus).toBe('verified');
+    expect(() => fixture('Biologija', 'pmf', url, 'Mikrobiologija')).toThrow(/program name/u);
+    expect(() => fixture('Fizika', 'pmf', url, 'Fizikalna terapija')).toThrow(/program name/u);
+  });
+
+  it('limits all-studies wording to the Upisnik cycle', () => {
+    const url = 'https://pmf.unizg.hr/studij';
+    expect(fixture('Biologija', 'pmf', url, 'Svi prijediplomski studiji imaju zavrsni rad').programs[0]?.coverageStatus).toBe('verified');
+    expect(() => fixture('Biologija', 'pmf', url, 'Svi doktorski studiji imaju disertaciju')).toThrow(/program name/u);
+    expect(() => fixture('Biologija', 'pmf', url, 'Svi studiji imaju zavrsni rad')).toThrow(/program name/u);
+  });
+
+  it('takes the study kind next to studij even when another kind occurs elsewhere', () => {
+    const url = 'https://riteh.uniri.hr/studij';
+    expect(fixture('Elektrotehnika', 'riteh', url, 'Elektrotehnika; sveucilisni prijediplomski studij. Strucna knjiznica.').programs[0]?.coverageStatus).toBe('verified');
+    expect(() => fixture('Elektrotehnika', 'riteh', url, 'Elektrotehnika; strucni prijediplomski studij. Sveucilisna knjiznica.')).toThrow(/study type/u);
+    expect(() => fixture('Elektrotehnika', 'riteh', url, 'Elektrotehnika; strucni studij i sveucilisni studij.')).toThrow(/study type/u);
+    expect(() => fixture('Elektrotehnika', 'riteh', url, 'Elektrotehnika; strucni prvostupnik inzenjer elektrotehnike')).toThrow(/study type/u);
+  });
+
+  it('uses component host keys under university roots and allows a university itself', () => {
+    expect(fixture('Elektrotehnika', 'fesb', 'https://data.fesb.unist.hr/studij', 'Elektrotehnika').programs[0]?.coverageStatus).toBe('verified');
+    expect(fixture('Ekonomija', 'unidu', 'https://unidu.hr/studij', 'Ekonomija').programs[0]?.coverageStatus).toBe('verified');
+    const rows = [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveucilisni prijediplomski studij' }];
+    const components = [{ programCode: '1', executors: [{ componentIds: ['riteh'] }] }];
+    const profiles = [{ id: 'profile', unitId: 'riteh', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://uniri.hr/studij' }] }];
+    expect(() => buildUpisnikProfileCandidates(rows, components, profiles, [decision('1', 'profile', 'https://medri.uniri.hr/studij', 'Elektrotehnika')])).toThrow(/source domain/u);
+    for (const url of ['https://ffzg.unizg.hr/studij', 'https://unicath.hr/studij']) {
+      const fhsRows = [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }];
+      const fhsComponents = [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }];
+      const fhsProfiles = [{ id: 'profile', unitId: 'fhs', programs: ['Povijest'], workTypes: ['final'], sources: [{ url: 'https://fhs.unizg.hr/studij' }] }];
+      expect(() => buildUpisnikProfileCandidates(fhsRows, fhsComponents, fhsProfiles, [decision('1', 'profile', url, 'Povijest')])).toThrow(/source domain/u);
+    }
+  });
+
+  it('rejects cross-unit university hosts and unrelated public suffix domains', () => {
+    const cases = [
+      ['riteh', 'https://uniri.hr/studij', 'https://medri.uniri.hr/studij'],
+      ['fhs', 'https://fhs.unizg.hr/studij', 'https://ffzg.unizg.hr/studij'],
+      ['fhs', 'https://fhs.unizg.hr/studij', 'https://unicath.hr/studij'],
+      ['kbf', 'https://kbf.unizg.hr/studij', 'https://kbf.unist.hr/studij'],
+      ['kbfst', 'https://kbf.unist.hr/studij', 'https://kbf.unizg.hr/studij'],
+      ['effectus', 'https://effectus.com.hr/studij', 'https://drugi.com.hr/studij'],
+      ['vkjs', 'https://vkjs.gov.hr/studij', 'https://mup.gov.hr/studij'],
+      ['sfsb', 'https://sfsb.sharepoint.com/studij', 'https://drugi.sharepoint.com/studij'],
+      ['unizd', 'https://unizd.hr/studij', 'https://www.povijest.hr/studij'],
+      ['fer', 'https://fer.unizg.hr/studij', 'https://fer.unist.hr/studij'],
+      ['fer', 'https://fer.unizg.hr/studij', 'https://fer.com/studij'],
+    ] as const;
+    for (const [unitId, profileUrl, evidenceUrl] of cases) {
+      const rows = [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: unitId, vrsta: 'Sveucilisni prijediplomski studij' }];
+      const components = [{ programCode: '1', executors: [{ componentIds: [unitId] }] }];
+      const profiles = [{ id: 'profile', unitId, programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: profileUrl }] }];
+      expect(() => buildUpisnikProfileCandidates(rows, components, profiles, [decision('1', 'profile', evidenceUrl, 'Elektrotehnika')]), unitId + ' -> ' + evidenceUrl).toThrow(/source domain/u);
+    }
+  });
+
+  it('rejects hostile hosts with committed profiles and the source registry', () => {
+    const attacks = [
+      ['kbf', 'https://kbf.unist.hr/studij'],
+      ['kbfst', 'https://kbf.unizg.hr/studij'],
+      ['effectus', 'https://drugi.com.hr/studij'],
+      ['vkjs', 'https://mup.gov.hr/studij'],
+      ['sfsb', 'https://drugi.sharepoint.com/studij'],
+      ['unizd', 'https://www.povijest.hr/studij'],
+      ['fer', 'https://fer.unist.hr/studij'],
+    ] as const;
+    for (const [unitId, hostileUrl] of attacks) {
+      const profile = (Object.values(verifiedProfiles) as ProfileCandidateInput[]).find((item) => item.unitId === unitId)!;
+      const name = profile.programs[0]!;
+      const vrsta = unitId === 'vkjs' ? 'Strucni prijediplomski studij'
+        : profile.workTypes?.includes('graduate') ? 'Sveucilisni diplomski studij' : 'Sveucilisni prijediplomski studij';
+      const rows = [{ sifraUpisnik: '1', naziv: name, izvoditelj: unitId, vrsta }];
+      const components = [{ programCode: '1', executors: [{ componentIds: [unitId] }] }];
+      const legitimate = decision('1', profile.id, profile.sources![0]!.url, name);
+      expect(buildUpisnikProfileCandidates(rows, components, [profile], [legitimate]).summary.evidenceBackedCandidatePrograms).toBe(1);
+      expect(() => buildUpisnikProfileCandidates(rows, components, [profile], [{ ...legitimate, evidence: { ...legitimate.evidence, sourceUrl: hostileUrl } }]), unitId).toThrow(/source domain/u);
+    }
+  });
+
+  it('accepts university component hosts and the documented Arhitekt alias', () => {
+    const cases = [
+      ['fesb', 'https://fesb.unist.hr/studij', 'https://fesb.unist.hr/studij'],
+      ['fesb', 'https://fesb.unist.hr/studij', 'https://data.fesb.unist.hr/studij'],
+      ['foi', 'https://foi.unizg.hr/studij', 'https://foi.unizg.hr/studij'],
+      ['ttf', 'https://ttf.unizg.hr/studij', 'https://ttf.unizg.hr/studij'],
+      ['ffpu', 'https://ffpu.unipu.hr/studij', 'https://ffpu.unipu.hr/studij'],
+      ['unidu', 'https://unidu.hr/studij', 'https://unidu.hr/studij'],
+      ['arh', 'https://unizg.hr/studij', 'https://arhitekt.unizg.hr/studij'],
+    ] as const;
+    for (const [unitId, profileUrl, evidenceUrl] of cases) {
+      const rows = [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: unitId, vrsta: 'Sveucilisni prijediplomski studij' }];
+      const components = [{ programCode: '1', executors: [{ componentIds: [unitId] }] }];
+      const profiles = [{ id: 'profile', unitId, programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: profileUrl }] }];
+      expect(buildUpisnikProfileCandidates(rows, components, profiles, [decision('1', 'profile', evidenceUrl, 'Elektrotehnika')]).summary.evidenceBackedCandidatePrograms, unitId + ' -> ' + evidenceUrl).toBe(1);
+    }
+  });
+
+  it('normalizes generic sole-candidate holds and rejects short requests', () => {
+    const report = buildUpisnikProfileCandidates(
+      [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+      [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+      [{ id: 'profile', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+    );
+    const hold = report.programs[0]!.remainingHold!;
+    expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
+    const original = [...hold.missingEvidence];
+    hold.missingEvidence = ['Sluzbeni aktualni izvor za identitet programa i sastavnicu, uz dokaz obvezne vrste rada i veze s odgovarajucim profilom. '];
+    expect(validateUpisnikProfileCoverageHolds(report)).toEqual(expect.arrayContaining([expect.stringContaining('generic evidence request')]));
+    hold.missingEvidence = ['Potreban je sluzbeni dokaz.'];
+    expect(validateUpisnikProfileCoverageHolds(report)).toEqual(expect.arrayContaining([expect.stringContaining('too short')]));
+    hold.missingEvidence = original;
+    expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
+  });
+
+  it('preserves all 341 evidence links and every coverage status in the committed inventory', () => {
+    const report = buildUpisnikProfileCandidates(
+      upisnik.rows, programComponents.decisions, Object.values(verifiedProfiles) as ProfileCandidateInput[],
+      profileDecisions.decisions, profileDecisions.exclusions, profileDecisions.blockers,
+      profileDecisions.holds, sourceRegistry, profileDecisions.integratedGraduateCoverage,
+    );
+    const links = (programs: typeof report.programs) => programs.flatMap((row) =>
+      row.profileDecisionEvidence.map((evidence) => [row.programCode, evidence.profileId]));
+    expect(links(report.programs)).toHaveLength(341);
+    expect(links(report.programs)).toEqual(links(generatedProfileCandidates.programs));
+    expect(report.programs.map((row) => [row.programCode, row.coverageStatus]))
+      .toEqual(generatedProfileCandidates.programs.map((row) => [row.programCode, row.coverageStatus]));
+    expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
   });
 });
