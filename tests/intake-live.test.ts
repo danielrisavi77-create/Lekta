@@ -386,6 +386,107 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     emitAnalyzerDocumentSettled({ kind: 'rejected', file: prvi, message: 'x' });
     expect(potvrdjenFakultet(), 'prvi dokument odbijen').toBeNull();
   });
+
+  /**
+   * NAPOMENA SE POKAZUJE SAMA (odluka vlasnika 2026-09-27, "Da, sama"). Mjeri se nad STVARNIM
+   * `rad/index.html`: vidljivi red mora postojati izvan lista `#profileSheet` (koji tok s ulaza ne
+   * otvara) i izvan svakog modala, i nositi zivo podrucje. Znacka u listu ostaje uz njega.
+   */
+  const radDokument = (): void => {
+    const izvor = document.implementation.createHTMLDocument('rad');
+    izvor.documentElement.innerHTML = read('rad/index.html');
+    izvor.querySelectorAll('script').forEach((s) => s.remove());
+    document.body.innerHTML = izvor.body.innerHTML;
+  };
+  const vidljiviRed = (): HTMLElement => document.getElementById('facultyConflict')!;
+  const gumbReda = (pocetak: string): HTMLButtonElement | undefined =>
+    Array.from(vidljiviRed().querySelectorAll('button')).find((b) => b.textContent?.startsWith(pocetak));
+
+  it('napomena o drugom fakultetu crta se u vidljivom redu izvan #profileSheet i izvan modala', () => {
+    radDokument();
+    const red = vidljiviRed();
+    expect(red, 'rad/index.html ima vidljivi red napomene').toBeTruthy();
+    expect(red.closest('#profileSheet'), 'red nije u listu profila').toBeNull();
+    expect(red.closest('.modal-backdrop'), 'red nije ni u jednom modalu').toBeNull();
+    expect(red.closest('.analyze-row'), 'red stoji uz karticu profila').not.toBeNull();
+    expect(red.getAttribute('role')).toBe('status');
+    expect(red.getAttribute('aria-live')).toBe('polite');
+    expect(red.classList.contains('hidden'), 'red se ne skriva klasom').toBe(false);
+    expect(red.childElementCount, 'bez sukoba red je prazan').toBe(0);
+    zakljucajFakultet('fer', 'fer');
+    const aktivni = document.activeElement;
+    expect(detekcijaSmije('fpzg')).toBe(false);
+    expect(red.querySelector('.fc-tekst')?.textContent).toBe(napomenaDrugiFakultet('fpzg', 'fer'));
+    expect(Array.from(red.querySelectorAll('button')).map((b) => b.textContent)).toEqual([
+      'Prebaci na Fakultet političkih znanosti',
+      'Zadrži Fakultet elektrotehnike i računarstva',
+    ]);
+    expect(document.activeElement, 'fokus se ne otima').toBe(aktivni);
+    // Znacka u listu profila i dalje nosi isti tekst (za studenta koji list otvori).
+    expect(document.getElementById('detectBadge')!.textContent).toContain(napomenaDrugiFakultet('fpzg', 'fer'));
+  });
+
+  it('bez sukoba (nema potvrde ili isti fakultet) vidljivi red ostaje prazan', () => {
+    radDokument();
+    expect(detekcijaSmije('fpzg'), 'nema potvrde').toBe(true);
+    expect(vidljiviRed().childElementCount).toBe(0);
+    zakljucajFakultet('fer', 'fer');
+    expect(detekcijaSmije('fer'), 'isti fakultet').toBe(true);
+    expect(vidljiviRed().childElementCount).toBe(0);
+  });
+
+  it('"Prebaci" iz vidljivog reda mijenja profil kao gumb u listu i prazni red', () => {
+    radDokument();
+    const unit = document.getElementById('unitSelect') as HTMLSelectElement;
+    unit.innerHTML = '<option value="fer" selected>FER</option><option value="fpzg">FPZG</option>';
+    zakljucajFakultet('fer', 'fer');
+    detekcijaSmije('fpzg');
+    let promjena = 0;
+    unit.addEventListener('change', () => { promjena += 1; });
+    gumbReda('Prebaci')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(potvrdjenFakultet()).toBe('fpzg');
+    expect(unit.value).toBe('fpzg');
+    expect(promjena, 'obrazac dobiva change, kao i iz lista').toBe(1);
+    expect(vidljiviRed().childElementCount).toBe(0);
+    expect(document.getElementById('detectBadge')!.classList.contains('hidden')).toBe(true);
+  });
+
+  it('"Zadrži" zatvara napomenu i pamti izbor za sesiju: ista detekcija je ne vraca, nova brava je zaboravlja', () => {
+    radDokument();
+    zakljucajFakultet('fer', 'fer');
+    expect(detekcijaSmije('fpzg')).toBe(false);
+    gumbReda('Zadrži')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(potvrdjenFakultet(), 'potvrdjeni fakultet ostaje').toBe('fer');
+    expect(vidljiviRed().childElementCount, 'napomena zatvorena').toBe(0);
+    expect(document.getElementById('detectBadge')!.classList.contains('hidden')).toBe(true);
+    // DRUGI PROLAZ iste detekcije (ponovna detekcija istog rada): brava drzi, napomena se ne vraca.
+    expect(detekcijaSmije('fpzg'), 'brava i dalje drzi').toBe(false);
+    expect(vidljiviRed().childElementCount, 'izbor zapamcen').toBe(0);
+    expect(document.getElementById('detectBadge')!.classList.contains('hidden')).toBe(true);
+    // Izbor vrijedi samo za taj prepoznati fakultet.
+    expect(detekcijaSmije('efzg')).toBe(false);
+    expect(vidljiviRed().childElementCount, 'drugi prepoznati fakultet opet se javlja').toBeGreaterThan(0);
+    // KONTROLA: nova brava (nova sesija s ulaza) izbor zaboravlja, pa se napomena opet pokazuje.
+    zakljucajFakultet('fer', 'fer');
+    expect(vidljiviRed().childElementCount, 'nova brava prazni red').toBe(0);
+    expect(detekcijaSmije('fpzg')).toBe(false);
+    expect(vidljiviRed().childElementCount).toBeGreaterThan(0);
+    // Pamti se u memoriji modula, ne u pohrani preglednika.
+    const pohrana = JSON.stringify(Object.entries(localStorage)) + JSON.stringify(Object.entries(sessionStorage));
+    expect(pohrana).not.toContain('fpzg');
+  });
+
+  it('pad brave (drugi rad) gasi napomenu u vidljivom redu', () => {
+    radDokument();
+    const prvi = new File(['a'], 'a.docx');
+    zakljucajFakultet('fer', 'fer');
+    emitAnalyzerDocumentSettled({ kind: 'accepted', file: prvi, verdict: { kind: 'ok' } as never });
+    detekcijaSmije('fpzg');
+    expect(vidljiviRed().childElementCount).toBeGreaterThan(0);
+    emitAnalyzerDocumentSettled({ kind: 'accepted', file: new File(['b'], 'b.docx'), verdict: { kind: 'ok' } as never });
+    expect(potvrdjenFakultet()).toBeNull();
+    expect(vidljiviRed().childElementCount, 'napomena o starom radu ne ostaje').toBe(0);
+  });
 });
 
 /**
