@@ -964,7 +964,7 @@ describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)'
     expect(row?.textContent).toContain('Nije provjereno u cijelosti');
     expect(row?.textContent).toContain('tekstualni okviri');
     expect(row?.textContent).toContain('ugniježđene tablice');
-    expect(row?.textContent).toContain('2 strukturiranih preskoka');
+    expect(row?.textContent).toContain('2 strukturirana preskoka');
 
     const completeMount = document.createElement('section');
     const complete = buildVisualResultModel(result({
