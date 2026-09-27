@@ -119,7 +119,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   ];
   const table = dataTable(
     'Rangirane prilike',
-    'Redoslijed nije subjektivni score: prvo dovoljni uzorci (n≥20), zatim udio zahvaćenih pa volumen.',
+    'Redoslijed nije subjektivni score: izravna mjerenja prije proxyja, zatim dovoljni uzorci (n≥20), udio zahvaćenih i volumen.',
     ranked,
     columns,
   );
