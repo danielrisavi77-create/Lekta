@@ -6,6 +6,7 @@
  * `tests/product-journey-telemetry.test.ts` i `tests/opportunity-migration-v3.test.ts`.
  */
 import type { OpportunityBucket } from '../../src/admin/admin-types';
+import { normalizeLf } from './naplata-env';
 import type { OpportunityMeasurementHealth } from '../../src/admin/opportunity-ranking';
 
 export interface OpportunityWiringSources {
@@ -31,8 +32,12 @@ function calls(source: string, name: string): string[][] {
 /**
  * Dvostruka emisija, izgubljen kontekst, neovisnost brojaca i redoslijed prema integrity gateu.
  */
-export function opportunityWiringProblems({ app, panel, emitter, result }: OpportunityWiringSources): string[] {
+export function opportunityWiringProblems(sources: OpportunityWiringSources): string[] {
   const out: string[] = [];
+  const app = normalizeLf(sources.app);
+  const panel = normalizeLf(sources.panel);
+  const emitter = normalizeLf(sources.emitter);
+  const result = normalizeLf(sources.result);
 
   const summaryInEmitter = occurrences(emitter, "track('repair_noop_summary'");
   if (summaryInEmitter !== 1) out.push(`emitter: repair_noop_summary se emitira ${summaryInEmitter} puta (mora tocno 1)`);
@@ -85,8 +90,9 @@ const V3_REPAIR_EVENTS = new Set(['repair_noop_summary', 'repair_noop_reason', '
  * SQL obuhvat: V3 repair dogadjaji od `repair_v3_from`, ostali od pocetka prozora; epoha je
  * globalna (bez filtra prozora) i pokriva oba V3 izvora; parity po obuhvatu postoji za sve tri povrsine.
  */
-export function opportunitySqlScopeProblems(sql: string): string[] {
+export function opportunitySqlScopeProblems(source: string): string[] {
   const out: string[] = [];
+  const sql = normalizeLf(source);
   const bounds = [...sql.matchAll(/e\.event = '([a-z_]+)'\s+and e\.created_at >= ([\w.]+)/g)];
   if (bounds.length === 0) out.push('SQL: nema nijednog ogranicenja dogadjaja po vremenu');
   for (const [, event, bound] of bounds) {

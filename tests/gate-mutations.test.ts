@@ -7083,8 +7083,8 @@ describe('mutacije: kapacitet redaka po stranici', () => {
 });
 
 describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
-  const root = resolve(dirname(new URL(import.meta.url).pathname), '..');
-  const read = (p: string) => readFileSync(join(root, p), 'utf8');
+  // Isti obrazac kao ostatak datoteke: process.cwd() i LF normalizacija (Windows checkout, V3-04/V3-05 na #163).
+  const read = (p: string) => readTextLf(resolve(process.cwd(), p));
   const izvori = () => ({
     app: read('src/ui/app.ts'),
     panel: read('src/ui/repair-panel.ts'),
@@ -7167,6 +7167,27 @@ describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
     const gate = 'if (result.integrityFailure)';
     const prije = src.panel.replace(LOCAL, '').replace(gate, `${LOCAL}\n      ${gate}`);
     expect(opportunityWiringProblems({ ...src, panel: prije }))
+      .toEqual(['repair-panel.ts: repair rezultat prije integrity gatea']);
+  });
+
+  it('CRLF checkout: gardovi su cisti nad CRLF izvorom, a mutacija i dalje grize', () => {
+    const crlf = (t: string) => t.replace(/\n/g, '\r\n');
+    const src = izvori();
+    expect(crlf(sql)).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(crlf(sql))).toEqual([]);
+    expect(opportunityWiringProblems({
+      app: crlf(src.app), panel: crlf(src.panel), emitter: crlf(src.emitter), result: crlf(src.result),
+    })).toEqual([]);
+
+    const mutant = sql.replace(
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.repair_v3_from",
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.f",
+    );
+    expect(mutant).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(crlf(mutant))).toEqual(['SQL: repair_result_ok mora poceti od repair_v3_from (ima w.f)']);
+
+    const prije = src.panel.replace(LOCAL, '').replace('if (result.integrityFailure)', `${LOCAL}\n      if (result.integrityFailure)`);
+    expect(opportunityWiringProblems({ ...src, panel: crlf(prije) }))
       .toEqual(['repair-panel.ts: repair rezultat prije integrity gatea']);
   });
 
