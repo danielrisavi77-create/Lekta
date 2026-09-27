@@ -56,6 +56,11 @@ do 4 iz odjeljka 6. Administratorska prava racuna nisu provjerena. Iznimka vrije
 2. Instaliraj **Git for Windows** (https://git-scm.com) tako da je `git` u PATH-u korisnika
    runnera. **WSL / bash nisu potrebni**: `setup-deps` na Windowsu koristi `powershell`
    (WindowsApps `bash.exe` bez WSL-a pada s `WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED`).
+   Dodaj i `C:\Program Files\Git\usr\bin` u PATH korisnika runnera: `actions/cache` na Windowsu
+   pakira kroz Gitov `tar.exe -z`, koji trazi `gzip` iz te mape. Bez nje kes se nikad ne sprema
+   (`gzip: command not found`, `Failed to save`), pa svaki run iznova vrti `npm ci`. S njom je run
+   36346047897 spremio `node_modules` kes, a run 36348083630 ga je pogodio i preskocio `npm ci`.
+   Nakon promjene PATH-a runner treba ponovno pokrenuti.
 3. Provjeri Word iz PowerShella (prijavljen kao korisnik runnera). Primjer sam gasi Word, da ne
    ostavi proces:
 
@@ -124,6 +129,7 @@ do 4 iz odjeljka 6. Administratorska prava racuna nisu provjerena. Iznimka vrije
 | "Word proces iz ovog runa nije zavrsio" | automatizacija je zapela; zatvori `WINWORD.EXE` u Task Manageru prije sljedeceg runa |
 | Preflight pada na `New-Object -ComObject Word.Application` | Word nije instaliran ili aktiviran za tog korisnika, ili ceka dijalog prvog pokretanja |
 | Preflight pada na `git --version` | Git for Windows nije u PATH-u korisnika runnera |
+| "Ovisnosti" svaki put vrti `npm ci`; u Post koraku `gzip: command not found` | `C:\Program Files\Git\usr\bin` nije u PATH-u korisnika runnera (odjeljak 2, korak 2); dodaj i ponovno pokreni runner |
 | `Ovisnosti` pada s `WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED` | Stari `setup-deps` zvao je `bash`; na masteru mora biti verzija s `shell: powershell` na Windowsu |
 | "nije tocan vrh origin/master ni origin/release/*" | `ref` pokazuje na stari commit, tag ili commit izvan ovog repozitorija; namjerno odbijeno |
 | Job skipped | pokrenut je u forku ili drugom repozitoriju; namjerno |
