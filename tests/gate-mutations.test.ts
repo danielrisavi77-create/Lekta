@@ -132,6 +132,8 @@ import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
 import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
+import { signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -305,6 +307,22 @@ function istiSadrzajPodDvaImenaPada(
   } catch {
     return true;
   }
+}
+
+/**
+ * Tvrdnja garda NOVO-01: potpisana v2 ovjera bez izmjene nema problem potpisa, a ista ovjera s brojkom
+ * promijenjenom nakon potpisa ga ima. Otisak se racuna citacevom funkcijom, ne skriptom.
+ */
+function izmjenaNakonPotpisaPada(check: (a: CorpusAttestation) => string | null): boolean {
+  const bez = {
+    schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: 'f'.repeat(32), measuredAt: '2026-09-20T09:00:00.000Z',
+    measuredFromCommit: 'c'.repeat(40), oracles: ['scripts/repair-real-corpus.mts'], environment: { wordVersion: null },
+    protocol: { holdoutExcluded: true, holdoutDocumentCount: 0, uniqueDocumentCount: 2, rawDocumentCount: 2, countedDocumentCount: 2, duplicateDocumentCount: 0 },
+    entries: [{ unitId: 'fpzg', workType: 'final', profileIds: ['p'], documentCount: 2, cleanCount: 1, regressedChecks: [] }],
+  };
+  const potpisana = { ...bez, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigestSync(bez) } as unknown as CorpusAttestation;
+  const izmijenjena = { ...potpisana, entries: [{ ...potpisana.entries[0], cleanCount: 2 }] } as CorpusAttestation;
+  return check(potpisana) === null && check(izmijenjena) !== null;
 }
 
 /** Tvrdnja garda T83-03: mjerenje s ijednim palim ili pogresnim dokumentom se ne ovjerava. */
@@ -1312,6 +1330,13 @@ const MUTATIONS: Mutation[] = [
       'attestationRefusals je gledao samo ishod, pa je rezultat { outcome: "review", error: "analysis crashed" } prolazio (Codex #185, runda 2, T83-03)',
     caught: () => !paloMjerenjeSeNeOvjerava(gardIzIzvora("r.error !== null && r.error !== undefined && String(r.error).trim() !== ''", 'false')),
     cleanBefore: () => paloMjerenjeSeNeOvjerava(attestationRefusals),
+  },
+  {
+    id: 'korpus/brojka-promijenjena-nakon-potpisa-ostaje-priznata',
+    imitates:
+      'citac je provjeravao samo oblik signedContentDigest, pa je cleanCount 1 -> 2 nakon potpisa ostajao priznat (Codex #185, runda 3, NOVO-01)',
+    caught: () => !izmjenaNakonPotpisaPada((a) => signedContentProblem(a, (x) => String(x.signedContentDigest))),
+    cleanBefore: () => izmjenaNakonPotpisaPada((a) => signedContentProblem(a)),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------

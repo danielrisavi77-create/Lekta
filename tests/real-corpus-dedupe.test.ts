@@ -12,7 +12,8 @@ import { join, resolve } from 'node:path';
 import {
   dedupeManifest, discoverRealCorpus, REAL_CORPUS_ROOT, runRealCorpus, type RealCorpusManifestEntry,
 } from './real-corpus/harness';
-import { attestationProblems, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationProblems, signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationContentDigestSync, sha256HexSync } from '../src/verification/attestation-content-digest';
 import {
   FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature,
 } from '../scripts/lib/corpus-attestation-core.mjs';
@@ -311,8 +312,11 @@ describe('attestationProblems: dvostruko brojanje, verzija otiska i dosljednost 
     entries: [{ unitId: 'fer', workType: 'graduate', profileIds: ['fer-diplomski'], documentCount: 2, cleanCount: 2, regressedChecks: [] }],
     ...extra,
   } as unknown as CorpusAttestation);
-  const v2 = (protocol: Record<string, unknown> = cista, extra: Record<string, unknown> = {}) =>
-    ovjera({ fingerprintVersion: 2, signedContentDigest: 'd'.repeat(64), ...extra }, protocol);
+  /** Potpisana v2 ovjera s ISPRAVNIM otiskom sadrzaja; `extra` moze ga prepisati. */
+  const v2 = (protocol: Record<string, unknown> = cista, extra: Record<string, unknown> = {}) => {
+    const bez = ovjera({ fingerprintVersion: 2 }, protocol);
+    return { ...bez, signedContentDigest: attestationContentDigestSync(bez), ...extra } as CorpusAttestation;
+  };
 
   it('v1 ovjera (bez verzije) ostaje citljiva; dvostruko brojanje je problem', () => {
     expect(attestationProblems(ovjera())).toEqual([]);
@@ -340,5 +344,38 @@ describe('attestationProblems: dvostruko brojanje, verzija otiska i dosljednost 
 
   it('T83-05: potpisana v2 ovjera mora navesti otisak sadrzaja koji potpis pokriva', () => {
     expect(attestationProblems(v2(cista, { signedContentDigest: null }))).toContain('potpis v2 ovjere ne navodi otisak sadrzaja koji pokriva');
+  });
+
+  it('NOVO-01: brojka promijenjena nakon potpisa je problem, nepromijenjena ovjera prolazi', () => {
+    const potpisana = v2(cista, { entries: [{ unitId: 'fer', workType: 'graduate', profileIds: ['fer-diplomski'], documentCount: 2, cleanCount: 1, regressedChecks: [] }] });
+    // extra je prepisao entries NAKON racunanja otiska, pa ovo vec JEST izmijenjena ovjera; ispravna se gradi ovako:
+    const bez = { ...potpisana, signedContentDigest: undefined };
+    const cistaPotpisana = { ...potpisana, signedContentDigest: attestationContentDigestSync(bez) } as CorpusAttestation;
+    expect(attestationProblems(cistaPotpisana)).toEqual([]);
+    // Codexov primjer: cleanCount 1 -> 2 nakon potpisa.
+    const izmijenjena = { ...cistaPotpisana, entries: [{ ...cistaPotpisana.entries[0], cleanCount: 2 }] } as CorpusAttestation;
+    expect(attestationProblems(izmijenjena)).toContain('sadrzaj ovjere je promijenjen nakon potpisa');
+    expect(signedContentProblem(izmijenjena)).toBe('sadrzaj ovjere je promijenjen nakon potpisa');
+    // v1 ovjera bez otiska ostaje citljiva.
+    expect(signedContentProblem(ovjera())).toBeNull();
+  });
+});
+
+describe('NOVO-01: isti otisak sadrzaja u pregledniku i u skripti', () => {
+  it('sinkroni SHA-256 u src/ daje iste bajtove kao node:crypto, i na granicama bloka', () => {
+    for (const s of ['', 'abc', 'x'.repeat(55), 'x'.repeat(56), 'x'.repeat(63), 'x'.repeat(64), 'x'.repeat(1000), 'čćžšđ ČĆŽŠĐ'.repeat(40)]) {
+      expect(sha256HexSync(s), `duljina ${s.length}`).toBe(createHash('sha256').update(s, 'utf8').digest('hex'));
+    }
+  });
+
+  it('kanonizacija u src/ i u scripts/lib daje isti otisak nad istom ovjerom', () => {
+    const o = {
+      schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: 'f'.repeat(32), measuredAt: '2026-09-27T15:00:00.000Z',
+      measuredFromCommit: 'a'.repeat(40), oracles: ['scripts/repair-real-corpus.mts'], environment: { wordVersion: null },
+      protocol: { holdoutExcluded: true, holdoutDocumentCount: 41, uniqueDocumentCount: 219, rawDocumentCount: 321, countedDocumentCount: 178, duplicateDocumentCount: 0 },
+      entries: [{ unitId: 'fpzg', workType: 'final', profileIds: ['fpzg-politologija-zavrsni'], documentCount: 22, cleanCount: 22, regressedChecks: [] }],
+      signedBy: 'Vlasnik', signedAt: '2026-09-27T16:00:00.000Z', signatureNote: 'po uputi, čžš', signedContentDigest: 'x',
+    };
+    expect(attestationContentDigestSync(o)).toBe(attestationContentDigest(o));
   });
 });

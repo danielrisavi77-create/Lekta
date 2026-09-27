@@ -20,6 +20,8 @@
  * je netko pokrenuo skriptu.
  */
 
+import { attestationContentDigestSync } from './attestation-content-digest';
+
 /**
  * Jedna mjerena skupina, bez ijednog podatka o dokumentima.
  *
@@ -94,6 +96,21 @@ export interface CorpusAttestation {
 }
 
 /** Razlozi zbog kojih ovjera ne vrijedi. Prazan niz znaci da vrijedi. */
+/**
+ * Pokriva li potpis v2 ovjere njen STVARNI sadrzaj (Codex #185, runda 3, NOVO-01). Citac sam racuna
+ * kanonski otisak sadrzaja i usporeduje ga sa `signedContentDigest`; brojka promijenjena nakon potpisa
+ * (npr. `cleanCount` 1 -> 2) je problem. `digest` postoji samo za mutacijski test.
+ */
+export function signedContentProblem(
+  a: CorpusAttestation,
+  digest: (attestation: CorpusAttestation) => string = attestationContentDigestSync,
+): string | null {
+  if (a.fingerprintVersion !== 2 || !a.signedBy) return null;
+  if (!/^[0-9a-f]{64}$/.test(String(a.signedContentDigest ?? ''))) return 'potpis v2 ovjere ne navodi otisak sadrzaja koji pokriva';
+  if (a.signedContentDigest !== digest(a)) return 'sadrzaj ovjere je promijenjen nakon potpisa';
+  return null;
+}
+
 export function attestationProblems(a: CorpusAttestation | null | undefined): string[] {
   if (!a) return ['ovjere nema'];
   const p: string[] = [];
@@ -140,9 +157,8 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
       );
       if (neskladne || (dokazne.length > 0 && counted === 0)) p.push('ovjera v2: brojke po skupini ne odgovaraju broju dokumenata');
     }
-    if (a.signedBy && !/^[0-9a-f]{64}$/.test(String(a.signedContentDigest ?? ''))) {
-      p.push('potpis v2 ovjere ne navodi otisak sadrzaja koji pokriva');
-    }
+    const potpis = signedContentProblem(a);
+    if (potpis) p.push(potpis);
   }
 
   // POTPIS NE SMIJE BITI STARIJI OD MJERENJA KOJE POKRIVA.
