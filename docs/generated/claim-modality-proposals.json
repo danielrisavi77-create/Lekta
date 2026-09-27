@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "rules": 2218,
-  "units": 1401,
+  "units": 1398,
   "proposals": [
     {
       "sourceId": "adu-montaza-diplomski",
@@ -3397,17 +3397,19 @@
     {
       "sourceId": "efos-upute-studentski-2023",
       "checkId": "font",
-      "sourcePage": "Upute, travanj 2023",
+      "sourcePage": "Opce upute za oblikovanje rada",
       "value": [
         "Times New Roman"
       ],
-      "quote": "Velicina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedece velicine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.",
-      "ruleCount": 1,
+      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "ruleCount": 2,
       "profileIds": [
-        "efos-opci-akademski-rad"
+        "efos-diplomski",
+        "efos-zavrsni"
       ],
       "ruleIds": [
-        "efos-opci-akademski-rad--font"
+        "efos-diplomski--font",
+        "efos-zavrsni--font"
       ],
       "proposedModality": "directive",
       "proposedScope": "body",
@@ -3416,7 +3418,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -3428,23 +3430,21 @@
     {
       "sourceId": "efos-upute-studentski-2023",
       "checkId": "font",
-      "sourcePage": "Opce upute za oblikovanje rada",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
       "value": [
         "Times New Roman"
       ],
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 4,
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "ruleCount": 3,
       "profileIds": [
-        "efos-diplomski",
         "efos-doktorski",
-        "efos-specijalisticki",
-        "efos-zavrsni"
+        "efos-opci-akademski-rad",
+        "efos-specijalisticki"
       ],
       "ruleIds": [
-        "efos-diplomski--font",
         "efos-doktorski--font",
-        "efos-specijalisticki--font",
-        "efos-zavrsni--font"
+        "efos-opci-akademski-rad--font",
+        "efos-specijalisticki--font"
       ],
       "proposedModality": "directive",
       "proposedScope": "body",
@@ -3453,40 +3453,9 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 4,
+        "count": 3,
         "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efos-upute-studentski-2023",
-      "checkId": "font-size",
-      "sourcePage": "Upute, travanj 2023",
-      "value": [
-        12
-      ],
-      "quote": "Velicina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedece velicine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.",
-      "ruleCount": 1,
-      "profileIds": [
-        "efos-opci-akademski-rad"
-      ],
-      "ruleIds": [
-        "efos-opci-akademski-rad--font-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "body",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
-          "mechanical"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
@@ -3499,17 +3468,13 @@
       "sourcePage": "Opce upute za oblikovanje rada",
       "value": 12,
       "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 4,
+      "ruleCount": 2,
       "profileIds": [
         "efos-diplomski",
-        "efos-doktorski",
-        "efos-specijalisticki",
         "efos-zavrsni"
       ],
       "ruleIds": [
         "efos-diplomski--font-size",
-        "efos-doktorski--font-size",
-        "efos-specijalisticki--font-size",
         "efos-zavrsni--font-size"
       ],
       "proposedModality": "directive",
@@ -3519,7 +3484,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 4,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -3530,16 +3495,20 @@
     },
     {
       "sourceId": "efos-upute-studentski-2023",
-      "checkId": "line-spacing",
-      "sourcePage": "Upute, travanj 2023",
-      "value": 1.5,
-      "quote": "Velicina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedece velicine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.",
-      "ruleCount": 1,
+      "checkId": "font-size",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "value": 12,
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "ruleCount": 3,
       "profileIds": [
-        "efos-opci-akademski-rad"
+        "efos-doktorski",
+        "efos-opci-akademski-rad",
+        "efos-specijalisticki"
       ],
       "ruleIds": [
-        "efos-opci-akademski-rad--line-spacing"
+        "efos-doktorski--font-size",
+        "efos-opci-akademski-rad--font-size",
+        "efos-specijalisticki--font-size"
       ],
       "proposedModality": "directive",
       "proposedScope": "body",
@@ -3548,9 +3517,9 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 3,
         "sources": [
-          "mechanical"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
@@ -3563,17 +3532,13 @@
       "sourcePage": "Opce upute za oblikovanje rada",
       "value": 1.5,
       "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 4,
+      "ruleCount": 2,
       "profileIds": [
         "efos-diplomski",
-        "efos-doktorski",
-        "efos-specijalisticki",
         "efos-zavrsni"
       ],
       "ruleIds": [
         "efos-diplomski--line-spacing",
-        "efos-doktorski--line-spacing",
-        "efos-specijalisticki--line-spacing",
         "efos-zavrsni--line-spacing"
       ],
       "proposedModality": "directive",
@@ -3583,7 +3548,76 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 4,
+        "count": 2,
+        "sources": [
+          "mechanical"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "efos-upute-studentski-2023",
+      "checkId": "line-spacing",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "value": 1.5,
+      "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5",
+      "ruleCount": 3,
+      "profileIds": [
+        "efos-doktorski",
+        "efos-opci-akademski-rad",
+        "efos-specijalisticki"
+      ],
+      "ruleIds": [
+        "efos-doktorski--line-spacing",
+        "efos-opci-akademski-rad--line-spacing",
+        "efos-specijalisticki--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 3,
+        "sources": [
+          "ai-evidence-audit"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "efos-upute-studentski-2023",
+      "checkId": "margins",
+      "sourcePage": "Opce upute za oblikovanje rada",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "ruleCount": 2,
+      "profileIds": [
+        "efos-diplomski",
+        "efos-zavrsni"
+      ],
+      "ruleIds": [
+        "efos-diplomski--margins",
+        "efos-zavrsni--margins"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -3595,14 +3629,50 @@
     {
       "sourceId": "efos-upute-studentski-2023",
       "checkId": "margins",
-      "sourcePage": "Upute, travanj 2023",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
       "value": {
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
       },
-      "quote": "Velicina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedece velicine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.",
+      "quote": "a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
+      "ruleCount": 2,
+      "profileIds": [
+        "efos-doktorski",
+        "efos-specijalisticki"
+      ],
+      "ruleIds": [
+        "efos-doktorski--margins",
+        "efos-specijalisticki--margins"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 2,
+        "sources": [
+          "ai-evidence-audit"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "efos-upute-studentski-2023",
+      "checkId": "margins",
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
       "ruleCount": 1,
       "profileIds": [
         "efos-opci-akademski-rad"
@@ -3619,47 +3689,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efos-upute-studentski-2023",
-      "checkId": "margins",
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "value": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      },
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 4,
-      "profileIds": [
-        "efos-diplomski",
-        "efos-doktorski",
-        "efos-specijalisticki",
-        "efos-zavrsni"
-      ],
-      "ruleIds": [
-        "efos-diplomski--margins",
-        "efos-doktorski--margins",
-        "efos-specijalisticki--margins",
-        "efos-zavrsni--margins"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 4,
-        "sources": [
-          "mechanical"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
@@ -3705,9 +3735,71 @@
     {
       "sourceId": "efos-upute-studentski-2023",
       "checkId": "paper-size",
-      "sourcePage": "Upute, travanj 2023",
+      "sourcePage": "Opce upute za oblikovanje rada",
+      "value": "A4",
+      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "ruleCount": 2,
+      "profileIds": [
+        "efos-diplomski",
+        "efos-zavrsni"
+      ],
+      "ruleIds": [
+        "efos-diplomski--paper-size",
+        "efos-zavrsni--paper-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 2,
+        "sources": [
+          "mechanical"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "efos-upute-studentski-2023",
+      "checkId": "paper-size",
+      "sourcePage": "Odjeljak 2, tiskana str. 3",
+      "value": "A4",
+      "quote": "veličina je stranice A4 (210x297 mm)",
+      "ruleCount": 2,
+      "profileIds": [
+        "efos-doktorski",
+        "efos-specijalisticki"
+      ],
+      "ruleIds": [
+        "efos-doktorski--paper-size",
+        "efos-specijalisticki--paper-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 2,
+        "sources": [
+          "ai-evidence-audit"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "efos-upute-studentski-2023",
+      "checkId": "paper-size",
+      "sourcePage": "Odjeljak 2, tiskana str. 2",
       "value": true,
-      "quote": "Velicina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedece velicine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.",
+      "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
       "ruleCount": 1,
       "profileIds": [
         "efos-opci-akademski-rad"
@@ -3724,42 +3816,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efos-upute-studentski-2023",
-      "checkId": "paper-size",
-      "sourcePage": "Opce upute za oblikovanje rada",
-      "value": "A4",
-      "quote": "Veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 4,
-      "profileIds": [
-        "efos-diplomski",
-        "efos-doktorski",
-        "efos-specijalisticki",
-        "efos-zavrsni"
-      ],
-      "ruleIds": [
-        "efos-diplomski--paper-size",
-        "efos-doktorski--paper-size",
-        "efos-specijalisticki--paper-size",
-        "efos-zavrsni--paper-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 4,
-        "sources": [
-          "mechanical"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
@@ -4335,49 +4392,20 @@
     {
       "sourceId": "efst-upute-studentski-radovi-2013",
       "checkId": "font",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "value": [
-        "Times New Roman"
-      ],
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 1,
-      "profileIds": [
-        "efst-opci-akademski-rad"
-      ],
-      "ruleIds": [
-        "efst-opci-akademski-rad--font"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "body",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efst-upute-studentski-radovi-2013",
-      "checkId": "font",
       "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
       "value": [
         "Times New Roman"
       ],
       "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 2,
+      "ruleCount": 3,
       "profileIds": [
         "efst-diplomski",
+        "efst-opci-akademski-rad",
         "efst-zavrsni"
       ],
       "ruleIds": [
         "efst-diplomski--font",
+        "efst-opci-akademski-rad--font",
         "efst-zavrsni--font"
       ],
       "proposedModality": "directive",
@@ -4387,39 +4415,9 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 2,
+        "count": 3,
         "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efst-upute-studentski-radovi-2013",
-      "checkId": "font-size",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "value": [
-        12
-      ],
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 1,
-      "profileIds": [
-        "efst-opci-akademski-rad"
-      ],
-      "ruleIds": [
-        "efst-opci-akademski-rad--font-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "body",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
+          "ai-evidence-audit",
           "mechanical"
         ]
       },
@@ -4433,13 +4431,15 @@
       "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
       "value": 12,
       "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 2,
+      "ruleCount": 3,
       "profileIds": [
         "efst-diplomski",
+        "efst-opci-akademski-rad",
         "efst-zavrsni"
       ],
       "ruleIds": [
         "efst-diplomski--font-size",
+        "efst-opci-akademski-rad--font-size",
         "efst-zavrsni--font-size"
       ],
       "proposedModality": "directive",
@@ -4449,37 +4449,9 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 2,
+        "count": 3,
         "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efst-upute-studentski-radovi-2013",
-      "checkId": "justify",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "value": true,
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 1,
-      "profileIds": [
-        "efst-opci-akademski-rad"
-      ],
-      "ruleIds": [
-        "efst-opci-akademski-rad--justify"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "body",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
+          "ai-evidence-audit",
           "mechanical"
         ]
       },
@@ -4493,13 +4465,15 @@
       "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
       "value": true,
       "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 2,
+      "ruleCount": 3,
       "profileIds": [
         "efst-diplomski",
+        "efst-opci-akademski-rad",
         "efst-zavrsni"
       ],
       "ruleIds": [
         "efst-diplomski--justify",
+        "efst-opci-akademski-rad--justify",
         "efst-zavrsni--justify"
       ],
       "proposedModality": "directive",
@@ -4509,37 +4483,9 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 2,
+        "count": 3,
         "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efst-upute-studentski-radovi-2013",
-      "checkId": "line-spacing",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "value": 1.5,
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 1,
-      "profileIds": [
-        "efst-opci-akademski-rad"
-      ],
-      "ruleIds": [
-        "efst-opci-akademski-rad--line-spacing"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "body",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
+          "ai-evidence-audit",
           "mechanical"
         ]
       },
@@ -4553,13 +4499,15 @@
       "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
       "value": 1.5,
       "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 2,
+      "ruleCount": 3,
       "profileIds": [
         "efst-diplomski",
+        "efst-opci-akademski-rad",
         "efst-zavrsni"
       ],
       "ruleIds": [
         "efst-diplomski--line-spacing",
+        "efst-opci-akademski-rad--line-spacing",
         "efst-zavrsni--line-spacing"
       ],
       "proposedModality": "directive",
@@ -4569,42 +4517,9 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 2,
+        "count": 3,
         "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "efst-upute-studentski-radovi-2013",
-      "checkId": "margins",
-      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
-      "value": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      },
-      "quote": "Koristi se font Times New Roman, velicina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 1,
-      "profileIds": [
-        "efst-opci-akademski-rad"
-      ],
-      "ruleIds": [
-        "efst-opci-akademski-rad--margins"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
+          "ai-evidence-audit",
           "mechanical"
         ]
       },
@@ -4623,13 +4538,15 @@
         "left": 2.5
       },
       "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
-      "ruleCount": 2,
+      "ruleCount": 3,
       "profileIds": [
         "efst-diplomski",
+        "efst-opci-akademski-rad",
         "efst-zavrsni"
       ],
       "ruleIds": [
         "efst-diplomski--margins",
+        "efst-opci-akademski-rad--margins",
         "efst-zavrsni--margins"
       ],
       "proposedModality": "directive",
@@ -4639,8 +4556,9 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 2,
+        "count": 3,
         "sources": [
+          "ai-evidence-audit",
           "mechanical"
         ]
       },
@@ -46843,11 +46761,11 @@
     {
       "sourceId": "vuka-lovstvo-upute-2022",
       "checkId": "font-size",
-      "sourcePage": "\"Nacin pisanja zavrsnog rada\"",
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
       "value": [
         12
       ],
-      "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
+      "quote": "rad ne može biti pisan ili tiskan znakovima manjim od 3 (tri) niti većim od 4 (četiri) milimetra (visina slova 12 točaka, a naslova 14 podebljano).",
       "ruleCount": 1,
       "profileIds": [
         "vuka-lovstvo-zavrsni"
@@ -46855,28 +46773,32 @@
       "ruleIds": [
         "vuka-lovstvo-zavrsni--font-size"
       ],
-      "proposedModality": "directive",
-      "proposedScope": "body",
+      "proposedModality": "prohibition",
+      "proposedScope": "heading",
       "modalityMarks": [
-        "bare-indicative"
+        "prohibition"
       ],
-      "namedScopes": [],
+      "namedScopes": [
+        "heading"
+      ],
       "writtenModality": {
         "count": 1,
         "sources": [
-          "mechanical"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
-      "needsHuman": false,
-      "reasons": []
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'heading', a os po naravi mjeri 'body'"
+      ]
     },
     {
       "sourceId": "vuka-lovstvo-upute-2022",
       "checkId": "paper-size",
-      "sourcePage": "\"Nacin pisanja zavrsnog rada\"",
+      "sourcePage": "Poglavlje \"Način pisanja završnog rada\"",
       "value": true,
-      "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
+      "quote": "rad se piše ili tiska samo na licu čistog bijelog papira formata A4, težine 80 g/m2.",
       "ruleCount": 1,
       "profileIds": [
         "vuka-lovstvo-zavrsni"
@@ -46884,25 +46806,21 @@
       "ruleIds": [
         "vuka-lovstvo-zavrsni--paper-size"
       ],
-      "proposedModality": "recommendation",
+      "proposedModality": "directive",
       "proposedScope": "whole",
       "modalityMarks": [
-        "prohibition",
-        "recommendation"
+        "bare-indicative"
       ],
       "namedScopes": [],
       "writtenModality": {
         "count": 1,
         "sources": [
-          "human"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: prohibition, recommendation"
-      ]
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "vuka-poslovni-upute",
@@ -47065,11 +46983,11 @@
     {
       "sourceId": "vuka-prehrambena-upute-2025",
       "checkId": "font-size",
-      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
+      "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
       "value": [
         12
       ],
-      "quote": "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font \"Arial CE\" ili \"Times New Roman CE\".",
+      "quote": "u radu se koristi visina slova 12 točaka, a naslova 14 podebljano te prored 1,5.",
       "ruleCount": 1,
       "profileIds": [
         "vuka-prehrambena-zavrsni"
@@ -47088,7 +47006,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "agent-read"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
@@ -47100,9 +47018,9 @@
     {
       "sourceId": "vuka-prehrambena-upute-2025",
       "checkId": "line-spacing",
-      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
+      "sourcePage": "Odjeljak 4, naslov \"Kod pisanja završnog rada mora se udovoljiti sljedećim zahtjevima\"",
       "value": 1.5,
-      "quote": "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font \"Arial CE\" ili \"Times New Roman CE\".",
+      "quote": "u radu se koristi visina slova 12 točaka, a naslova 14 podebljano te prored 1,5.",
       "ruleCount": 1,
       "profileIds": [
         "vuka-prehrambena-zavrsni"
@@ -47121,7 +47039,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "agent-read"
+          "ai-evidence-audit"
         ]
       },
       "resolved": true,
