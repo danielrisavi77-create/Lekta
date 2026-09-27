@@ -11,6 +11,7 @@ import {
 } from '../finding-view-model';
 import { resultReadiness, type ReadinessAuthority, type ResultReadiness } from '../result-readiness';
 import { profileClaimFor, type ProfileClaim } from '../profile-claim';
+import type { InspectionCoverage, InspectionStructureKind } from '../../analysis/inspection-coverage';
 
 export type VisualAuthorityKind = 'verified' | 'limited' | 'generic';
 
@@ -102,6 +103,13 @@ export interface VisualRepairSignal {
   findingIds?: readonly string[];
 }
 
+export interface VisualInspectionCoverageModel {
+  status: InspectionCoverage['status'];
+  limitedOccurrences: number;
+  analyzerSkips: number;
+  labels: string[];
+}
+
 export interface VisualResultInput extends FindingResultInput {
   file?: { name?: string; size?: number };
   profile?: string | null;
@@ -114,6 +122,7 @@ export interface VisualResultInput extends FindingResultInput {
   details?: FindingResultInput['details'] & {
     profileDefinitionId?: string | null;
     ruleAuthority?: string | null;
+    inspectionCoverage?: InspectionCoverage;
   };
 }
 
@@ -149,7 +158,30 @@ export interface VisualResultModel {
   };
   categories: VisualCategoryModel[];
   capabilities: VisualResultCapabilities;
+  inspectionCoverage: VisualInspectionCoverageModel | null;
   contentFreeMetadata: VisualResultContentFreeMetadata;
+}
+
+const INSPECTION_LABELS: Record<InspectionStructureKind, string> = {
+  'content-control': 'strukturirane kontrole',
+  'text-box': 'tekstualni okviri',
+  math: 'matematičke formule',
+  'tracked-change': 'praćene izmjene',
+  'embedded-object': 'ugrađeni objekti',
+  'nested-table': 'ugniježđene tablice',
+};
+
+function inspectionCoverageModel(value: InspectionCoverage | undefined): VisualInspectionCoverageModel | null {
+  if (!value || value.version !== 1) return null;
+  const items = Array.isArray(value.items) ? value.items : [];
+  return {
+    status: value.status,
+    limitedOccurrences: Number.isFinite(value.summary?.limitedOccurrences) ? Math.max(0, Math.floor(value.summary.limitedOccurrences)) : 0,
+    analyzerSkips: Number.isFinite(value.summary?.analyzerSkips) ? Math.max(0, Math.floor(value.summary.analyzerSkips)) : 0,
+    labels: items
+      .filter((item) => item && item.count > 0 && item.kind in INSPECTION_LABELS)
+      .map((item) => INSPECTION_LABELS[item.kind]),
+  };
 }
 
 function trimString(value: unknown): string | null {
@@ -363,6 +395,7 @@ export function buildVisualResultModel(result: VisualResultInput, options: Visua
     },
     categories,
     capabilities,
+    inspectionCoverage: inspectionCoverageModel(result.details?.inspectionCoverage),
     contentFreeMetadata: {
       score: contentFreeScore(score),
       readinessKind: readiness.kind,
