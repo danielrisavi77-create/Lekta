@@ -14,7 +14,7 @@
 
 .intake-main{position:relative}
 .intake-stage{padding:clamp(20px,5vh,52px) 0 clamp(24px,5vh,48px)}
-.intake-shell{width:min(680px,calc(100% - 32px));margin:0 auto;text-align:center}
+.intake-shell{width:min(1064px,calc(100% - 32px));margin:0 auto;text-align:center}
 
 /* --- stol i papir ------------------------------------------------------------------------- */
 .intake-desk{position:relative;padding:clamp(8px,2vw,16px)}
@@ -25,7 +25,7 @@
   background:var(--paper);color:var(--paper-ink);
   border:1px solid var(--paper-line);border-radius:6px;box-shadow:var(--paper-sh);
   cursor:pointer;outline:none;transform:rotate(-.35deg);
-  transition:transform .22s var(--ease-out,cubic-bezier(.22,1,.36,1)),box-shadow .22s ease,border-color .22s ease;
+  transition:transform .22s var(--ease-out,cubic-bezier(.22,1,.36,1));
 }
 /* Dva lista ispod: debljina snopa, ne ukras. Cisto CSS, bez ijednog dodatnog cvora. */
 .intake-paper::before,.intake-paper::after{
@@ -107,7 +107,7 @@
      na raspolaganju; sada jest, jer ga ulaz ucitava kao i svaka druga ruta. */
   font-family:var(--mono);font-weight:650;font-size:14px;letter-spacing:.02em;
   box-shadow:0 10px 24px color-mix(in srgb,var(--brand) 26%,transparent);
-  transition:transform .2s ease,box-shadow .2s ease;
+  transition:transform .2s ease;
 }
 /* Oznaka formata se unutar mono natpisa izdvaja REZOM. */
 .intake-cta b{font-weight:700}
@@ -116,10 +116,6 @@
   transform:translateY(-2px);box-shadow:0 14px 30px color-mix(in srgb,var(--brand) 34%,transparent);
 }
 .intake-hint{color:var(--paper-muted);font-family:var(--ui);font-size:var(--fs-ui-sm)}
-.intake-file-name{
-  min-height:0;max-width:100%;margin-top:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  color:var(--paper-ink);font-family:var(--ui);font-weight:650;font-size:.88rem;
-}
 .intake-file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 /* --- ispod papira ------------------------------------------------------------------------- */
@@ -156,13 +152,11 @@
    `.intake-nav` i `.intake-nav-help` su UKLONJENI: ulaz nosi istu traku kao ostale rute,
    s cetiri odredista i kontrolama bez natpisa, pa vlastita kratka navigacija nema mete. */
 
-/* --- papir: drugo lice ------------------------------------------------------------------------ */
-/* Isti list, dva sadrzaja. Poziv nestaje cim dokument lezi na papiru, pa se stanje vidi NA
-   predmetu umjesto kao poruka negdje ispod njega. `display` se prebacuje, ne `opacity`: skriveni
-   poziv ne smije ostati u redoslijedu citaca ekrana ni hvatati fokus. */
-/* `position:relative` NIJE vise sidro pecata (pecat je od pregleda Z7 u toku, vidi `.intake-pecat`)
-   nego sluzi stanjima papira: sadrzaj se prebacuje unutar ovog okvira. `justify-items:center`
-   centrira sve osim pecata, koji se sam vraca na desni rub s `justify-self:end`. */
+/* --- papir: jedno lice, stanje na njemu (Z32) ------------------------------------------------ */
+/* Do Z32 je papir imao DVA lica (poziv i kartica dokumenta) koja je CSS prebacivao po stanju.
+   Z32 trazi "bez promjene ekrana": isti list ostaje, a stanje nose pecat, ime datoteke u
+   zaglavlju i linija skeniranja (blok "ZIVI LIST" nize). `justify-items:center` centrira sve osim
+   pecata, koji se sam vraca na desni rub s `justify-self:end`. */
 .intake-poziv{position:relative;display:grid;justify-items:center}
 /* GUMB JE UNUTAR PAPIRA, NE SAM PAPIR (pregled Z7, 2026-09-20). Uloga `button` cini SVE potomke
    prezentacijskima, pa su zaglavlje, pecat, kicker, naslov, uvod, tri koraka i podnozje bili
@@ -171,59 +165,10 @@
    (`display:grid`, `justify-items:center`) koji je gumb ranije preuzimao, pa razmaci i
    `justify-self:end` pecata ostaju isti. */
 .intake-paper__gumb{display:grid;justify-items:center;width:100%}
-.intake-karta{display:none;justify-items:center;gap:0;text-align:center}
-.intake-stage[data-intake-state="checking"] .intake-poziv,
-.intake-stage[data-intake-state="saving"] .intake-poziv,
-.intake-stage[data-intake-state="ready"] .intake-poziv{display:none}
-.intake-stage[data-intake-state="checking"] .intake-karta,
-.intake-stage[data-intake-state="saving"] .intake-karta,
-.intake-stage[data-intake-state="ready"] .intake-karta{display:grid}
 
-.intake-karta-znak{
-  display:inline-grid;place-items:center;width:44px;height:52px;margin-bottom:14px;
-  border:1px solid var(--paper-line);border-radius:3px;
-  background:color-mix(in srgb,var(--brand) 10%,transparent);
-  color:var(--brand);font:700 19px/1 var(--ui);letter-spacing:.02em;
-}
-.intake-karta .intake-file-name{
-  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  color:var(--paper-ink);font-family:var(--display-serif);
-  font-weight:400;font-size:clamp(1.05rem,2.4vw,1.35rem);letter-spacing:-.01em;
-  --emph-weight: 400;
-  --emph-style: italic;
-}
-.intake-karta-velicina{margin-top:4px;color:var(--paper-muted);font-family:var(--ui);font-size:.84rem}
-
-.intake-karta-potvrde{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:7px;justify-items:start}
-.intake-karta-potvrde li{
-  display:grid;grid-template-columns:18px auto;align-items:center;gap:9px;
-  color:var(--paper-muted);font-family:var(--ui);font-size:var(--fs-ui);
-}
-/* Kvacica se pali TEK kad je taj korak stvarno gotov. Prazan krug znaci "jos traje", pa napredak
-   nosi sam popis umjesto zasebnog vrtuljka. */
-.intake-karta-potvrde li::before{
-  content:"";display:inline-grid;place-items:center;
-  width:16px;height:16px;border:1.5px solid var(--paper-line);border-radius:999px;
-  color:var(--on-brand,#fff);font:700 10px/1 var(--ui);
-}
-.intake-stage[data-intake-state="saving"] li[data-korak="format"]::before,
-.intake-stage[data-intake-state="ready"] li[data-korak="format"]::before,
-.intake-stage[data-intake-state="ready"] li[data-korak="lokalno"]::before{
-  content:"\2713";border-color:var(--pass);background:var(--pass);
-}
-.intake-stage[data-intake-state="saving"] li[data-korak="format"],
-.intake-stage[data-intake-state="ready"] li[data-korak="format"],
-.intake-stage[data-intake-state="ready"] li[data-korak="lokalno"]{color:var(--paper-ink)}
-
-.intake-karta-odlazak{
-  margin-top:20px;color:var(--brand);font-family:var(--ui);font-weight:650;font-size:.92rem;
-  opacity:0;transition:opacity .18s ease;
-}
-.intake-stage[data-intake-state="ready"] .intake-karta-odlazak{opacity:1}
-
-/* --- zaglavlje, pecat, koraci i podnozje papira (Z7) ------------------------------------------ */
+/* --- zaglavlje, pecat i podnozje papira (Z7) --------------------------------------------------- */
 /* Papir je OBRAZAC. Zaglavlje gore (cija knjiga, koji list, koje stanje), pecat kao stanje koje se
-   vidi bez citanja, tri koraka kao postupak, sitni otisak dolje.
+   vidi bez citanja, sitni otisak dolje.
 
    GLAS JE MONO, kako `design/README.md` te mete (brojevi, oznake, statusi) i propisuje. Do Z7 su
    ovdje stajala dva bloka koja su tvrdila suprotno, oba iz istog razloga: ulaz tada nije ucitavao
@@ -235,17 +180,16 @@
    @font-face i dalje cuva `tests/entry-fonts.test.ts`.
 
    MJERA OSTAJE (`--fs-mono-label`, 11px) i uz mono: oznaka se gradi mjerom I pismom, ne samo
-   jednim od toga. TEKST KORAKA NIJE OZNAKA nego recenica, pa on ostaje na serifu: README mono
-   izricito zabranjuje za recenice duze od jednog retka, a te se na uskom ekranu lome.
+   jednim od toga.
 
-   SVI OVI ELEMENTI ZIVE UNUTAR `.intake-poziv`, pa nestaju cim dokument legne na papir. Zaglavlje
-   koje i dalje tvrdi "Nepregledano" nad dokumentom koji se upravo provjerava bilo bi netocno, a
-   pecat bi se natjecao s karticom dokumenta na istom listu. */
+   OD Z32 ZAGLAVLJE MIJENJA STANJE NA SEBI: "Nepregledano" ustupa mjesto imenu datoteke cim ulaz
+   pocne citati dokument, pa zaglavlje nikad ne tvrdi "Nepregledano" nad dokumentom koji se upravo
+   provjerava. Omata se (`flex-wrap`), jer dugo ime na 360 px ne smije gurnuti knjigu s lista. */
 .intake-zaglavlje{
   display:flex;justify-content:space-between;align-items:baseline;gap:16px;
   width:100%;padding-bottom:14px;border-bottom:1px solid var(--paper-line);
   color:var(--paper-muted);font-family:var(--mono);font-weight:600;font-size:var(--fs-mono-label);
-  letter-spacing:.08em;text-align:left;
+  letter-spacing:.08em;text-align:left;flex-wrap:wrap;row-gap:6px;
 }
 /* Sirina broja je REZERVIRANA: `list-number.ts` ga zamijeni nakon ucitavanja, a bez tabularnih
    znamenki bi "0001" i "0013" bili razlicite sirine pa bi se desna strana zaglavlja trznula. */
@@ -271,17 +215,6 @@
   transform:rotate(-9deg);transform-origin:100% 50%;pointer-events:none;
 }
 
-.intake-koraci{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;width:100%;
-  margin:38px 0 0;padding:22px 0 0;border-top:1px solid var(--paper-line);
-  list-style:none;text-align:left;
-}
-.intake-koraci li{display:grid;gap:6px}
-.intake-korak-br{
-  color:var(--red-on-soft);font-family:var(--mono);font-weight:700;
-  font-size:var(--fs-mono-label);letter-spacing:.08em;
-}
-.intake-korak-t{color:var(--paper-ink);font-family:var(--display-serif);font-size:13px;line-height:1.45;--emph-weight:400;--emph-style:italic}
 
 /* Podnozje papira zamjenjuje raniju `.intake-brava`: ista obveza, ali izrecena tocnije i uz drugu
    polovicu granice proizvoda (provjeravamo FORMU, ne sadrzaj). */
@@ -295,6 +228,152 @@
    `.intake-footer`, `.intake-footer-pravno` i `.intake-footer-nota` su UKLONJENI: ulaz nosi
    isti pravni minimum kao ostale rute, a dva lista za isto podnozje su dva izvora istine. */
 
+/* ==========================================================================
+   ZIVI LIST (ALIGNMENT Z32, varijanta B)
+
+   Pokret po Z31: animira se samo `transform` / `opacity` / `clip-path`. `padding` lista i
+   `line-height` uvoda mijenjaju se JEDNOM po potvrdi fakulteta, BEZ prijelaza (layout, ne pokret).
+   Sve sto se vrti (linija skeniranja) ima konacan broj ponavljanja, nosi `data-motion-offscreen`
+   (ui-boot ga pauzira izvan pogleda) i staje pod prigusenim pokretom. Nema `backdrop-filter`.
+   ========================================================================== */
+
+/* STOL: list lijevo, pribor desno; ispod 900 px pribor pada ispod lista (media upit nize). */
+.intake-stol{
+  display:grid;grid-template-columns:minmax(0,700px) minmax(0,300px);gap:32px;
+  justify-content:center;align-items:start;
+}
+
+/* ZAGLAVLJE: ime datoteke zamjenjuje "Nepregledano" dok ulaz cita dokument. */
+.intake-zaglavlje-desno{min-width:0;text-align:right}
+.intake-zaglavlje-ime{
+  display:none;max-width:min(28ch,52vw);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  vertical-align:bottom;color:var(--paper-ink);
+}
+.intake-zaglavlje-ime.is-tipka::after{content:"\258D"}
+.intake-stage[data-intake-state="checking"] [data-intake-nepregledano],
+.intake-stage[data-intake-state="saving"] [data-intake-nepregledano],
+.intake-stage[data-intake-state="ready"] [data-intake-nepregledano]{display:none}
+.intake-stage[data-intake-state="checking"] .intake-zaglavlje-ime,
+.intake-stage[data-intake-state="saving"] .intake-zaglavlje-ime,
+.intake-stage[data-intake-state="ready"] .intake-zaglavlje-ime{display:inline-block}
+
+/* Drugi redak zaglavlja: kratica potvrdjenog fakulteta. Visina je rezervirana, pa potvrda ne
+   pomice list. Mjere pravilnika se NE ispisuju: ulaz ih ne zna (vidi `intake-live.ts`). */
+.intake-list-red{
+  justify-self:stretch;min-height:14px;margin-top:8px;text-align:right;
+  color:var(--paper-muted);font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+}
+
+/* POTVRDA FAKULTETA MIJENJA LIST: neutralna unutarnja margina i prored, jednom. */
+.intake-paper[data-fakultet-potvrden]{padding-left:clamp(26px,6.5vw,72px);padding-right:clamp(26px,6.5vw,72px)}
+.intake-paper[data-fakultet-potvrden] .intake-lead{line-height:1.65}
+
+/* PODIZANJE PRI POVLACENJU (cijeli ekran): jaca sjena je zbroj DVA postojeca tokena, ne literal. */
+.intake-paper.is-podignut{
+  transform:translateY(-10px) rotate(-.6deg);
+  box-shadow:var(--paper-sh),var(--paper-sh-sm);
+}
+
+/* VRATA: dok pribor nije spreman, gumb je utisan i kaze sto nedostaje (`#intakeHint`). */
+.intake-paper__gumb[aria-disabled="true"]{cursor:not-allowed}
+.intake-paper__gumb[aria-disabled="true"] .intake-cta{background:var(--paper-muted);box-shadow:none}
+.intake-stage[data-intake-state="checking"] .intake-paper__gumb,
+.intake-stage[data-intake-state="saving"] .intake-paper__gumb,
+.intake-stage[data-intake-state="ready"] .intake-paper__gumb{display:none}
+
+/* LINIJA SKENIRANJA ispod podnaslova, samo dok ulaz cita. Konacno ponavljanje (`14` x 1,2 s):
+   provjera traje sekundu-dvije, a beskonacna petlja na ulazu je zabranjena
+   (`tests/intake-entry-boundary.test.ts`). Bez animacije linija ostaje puna i mirna. */
+.intake-sken{display:none;position:relative;width:100%;height:2px;margin-top:24px;background:var(--paper-line);overflow:hidden}
+.intake-sken i{position:absolute;inset:0;background:var(--red);animation:intake-sken 1.2s linear 14}
+.intake-stage[data-intake-state="checking"] .intake-sken,
+.intake-stage[data-intake-state="saving"] .intake-sken,
+.intake-stage[data-intake-state="ready"] .intake-sken{display:block}
+@keyframes intake-sken{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+/* MALI PECAT ROKA: u toku, desno, iznad podnozja. Pad je WAAPI u `intake-live.ts`
+   (`opacity` + `transform: rotate(4deg) scale(1.5→1)`, Z31). Margina je 36 px, ne 20:
+   ulazni scale(1.5) siri AABB pecata ~12 px prema gore, a na 360 px hint ("ili ispusti…")
+   stoji odmah iznad njega; 20 px nije dovoljno pa bi se okviri sijekli dok traje pad
+   (`tests/ux/intake-entry.spec.ts` Z32 360 px). 36 px drzi razmak i u najvecem trenutku. */
+.intake-rok-pecat:not([hidden]){
+  display:inline-block;justify-self:end;margin-top:36px;padding:6px 10px;
+  border:1.5px solid var(--paper-ink);border-radius:2px;color:var(--paper-ink);
+  font-family:var(--mono);font-weight:600;font-size:var(--fs-mono-label);letter-spacing:.08em;
+  text-transform:uppercase;line-height:1;transform:rotate(4deg);pointer-events:none;
+}
+
+/* TRAGOVI OLOVKE: jednom pri ucitavanju (0,3 s dolazak, do 2,8 s stoje, pa izblijede), samo
+   `opacity`. Na racunalu se vrate na hover lista; na dodirnom ekranu nema hovera, pa ni povratka. */
+.intake-tragovi{
+  position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;border-radius:inherit;
+  opacity:0;transition:opacity var(--dur-3,.5s) ease;
+}
+.intake-stage[data-intake-state="idle"] .intake-tragovi{animation:intake-tragovi 3.3s linear 1}
+.intake-stage:not([data-intake-state="idle"]) .intake-tragovi{display:none}
+@keyframes intake-tragovi{0%{opacity:0}9%{opacity:1}85%{opacity:1}100%{opacity:0}}
+@media (hover:hover) and (pointer:fine){
+  .intake-stage[data-intake-state="idle"] .intake-paper:hover .intake-tragovi{opacity:1}
+}
+.intake-trag{
+  position:absolute;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  color:var(--paper-muted);font:italic 400 15px/1 var(--display-serif);
+  --emph-weight:400;--emph-style:italic;
+}
+.intake-trag i{display:block;width:40px;height:18px;border:1.5px solid currentColor;border-radius:50%;transform:rotate(-4deg)}
+.intake-trag:nth-child(1){left:6px;top:46%}
+.intake-trag:nth-child(2){left:60%;top:60%}
+.intake-trag:nth-child(3){left:58%;top:30%}
+.intake-trag:nth-child(3) i{width:46px}
+.intake-trag:nth-child(4){left:38%;bottom:10px}
+.intake-trag:nth-child(4) i{width:28px}
+.intake-trag:nth-child(5){left:6%;top:24%}
+.intake-trag:nth-child(5) i{width:70px}
+.intake-trag:nth-child(6){left:6%;top:74%}
+.intake-trag:nth-child(6) i{width:60px}
+.intake-trag:nth-child(7){left:64%;top:80%}
+.intake-trag:nth-child(7) i{width:44px}
+:root[data-motion="reduce"] .intake-tragovi{display:none}
+
+/* PRIBOR UZ LIST: predmet na STOLU, ne na papiru, pa ide na tokene stola. Tekstovi su oznake i
+   mjere, dakle mono (predlozak: Geist Mono). */
+.intake-pribor{
+  display:grid;gap:16px;padding:20px;text-align:left;
+  background:var(--desk-2);color:var(--desk-ink);border-radius:2px;box-shadow:var(--paper-sh-sm);
+  transform:rotate(.6deg);font-family:var(--mono);font-size:13px;
+}
+.intake-pribor-oznaka,.intake-polje-oznaka{
+  font-size:var(--fs-mono-label);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-muted);
+}
+.intake-polje{display:grid;gap:6px}
+.intake-polje-red{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.intake-fakultet{flex:1 1 160px;min-width:0;padding:12px 0;border-bottom:1px solid var(--desk-line);overflow-wrap:anywhere}
+/* Bez predodabira kartica ne tvrdi fakultet nego kaze da ce biti prepoznat iz rada: isti redak,
+   prigusen ton oznake, pa se ne cita kao odabrana vrijednost. */
+.intake-napomena{color:var(--desk-muted)}
+.intake-potvrdi{
+  min-height:44px;padding:0 14px;border:1.5px solid var(--red);border-radius:2px;
+  background:var(--red);color:var(--on-red,#fff);font:inherit;font-size:12px;cursor:pointer;
+}
+.intake-potvrdi[aria-pressed="true"]{background:transparent;border-color:var(--pass);color:var(--desk-ink)}
+.intake-potvrdi:disabled{opacity:.5;cursor:not-allowed}
+.intake-promijeni{justify-self:start;font-size:12px;color:var(--desk-muted);text-underline-offset:3px}
+.intake-promijeni:hover,.intake-promijeni:focus-visible{color:var(--brand)}
+.intake-rok{
+  flex:1 1 150px;min-width:0;min-height:44px;padding:0 4px;
+  border:0;border-bottom:1px solid var(--desk-line);border-radius:0;background:transparent;
+  color:inherit;font:inherit;
+}
+.intake-rok:disabled{opacity:.5}
+.intake-kvacica{display:flex;align-items:center;gap:8px;min-height:44px;font-size:12px;cursor:pointer}
+.intake-kvacica input{width:16px;height:16px;accent-color:var(--red)}
+
+@media (max-width:900px){
+  /* Ispod 900 px pribor pada ISPOD lista (Z32 tocka 2), iste sirine kao list. */
+  .intake-stol{grid-template-columns:minmax(0,700px)}
+  .intake-pribor{transform:none;margin-top:8px}
+}
+
 /* --- stanja ------------------------------------------------------------------------------- */
 .intake-stage[data-intake-state="checking"] .intake-paper,
 .intake-stage[data-intake-state="saving"] .intake-paper{cursor:progress}
@@ -305,7 +384,7 @@
    Animiraju se ISKLJUCIVO `transform` i `opacity`; sve ostalo bi izazvalo preracun rasporeda. */
 .intake-stage.intake-leaving .intake-paper{
   transform:translateY(-64px) scale(.955) rotate(0);opacity:0;
-  transition:transform .34s cubic-bezier(.4,0,.2,1),opacity .34s ease,box-shadow .34s ease;
+  transition:transform .34s cubic-bezier(.4,0,.2,1),opacity .34s ease;
   box-shadow:0 40px 60px rgba(0,0,0,.18);
 }
 .intake-stage.intake-leaving .intake-paper::before,
@@ -318,8 +397,6 @@
   .intake-title{max-width:14ch}
   .intake-paper{border-radius:5px}
   .intake-paper::before,.intake-paper::after{display:none}
-  /* Tri stupca na 375 px daju stupac od stotinjak piksela i jednu rijec po retku. */
-  .intake-koraci{grid-template-columns:1fr;gap:14px}
   /* PECAT OSTAJE I NA USKOM EKRANU. Dok je bio apsolutan, ovdje je morao nestati jer je papir uzi
      od pecata plus teksta ispod njega, pa bi prekrio necije slovo. U toku mu raspored rezervira
      vlastiti redak: na 375px sadrzaj papira mjeri ~291px, a pecat ~136px, dakle stane bez sudara.
@@ -332,29 +409,11 @@
   .intake-stage.intake-leaving .intake-paper{transform:rotate(-.35deg)}
   .intake-paper:hover .intake-cta,
   .intake-paper:has(.intake-paper__gumb:focus-visible) .intake-cta{transform:none}
+  /* Z32: nema tragova, list se ne podize, linija skeniranja stoji, margina se mijenja odmah. */
+  .intake-tragovi{display:none}
+  .intake-paper.is-podignut{transform:rotate(-.35deg)}
+  .intake-sken i,.intake-lead{animation:none;transition:none}
 }
 
 /* Atribut mora pobijediti klasu: vidi ugovor 2 na vrhu datoteke. */
 [hidden]{display:none!important}
-
-/* ==========================================================================
-   Z7 SERIF GOVORI (opcija a)
-
-   Zadani glas stranice je mono (`body` u `page-chrome.css`). Serif se zato DODJELJUJE, i to
-   samo onome sto govori: naslovi, presuda, dugi opisi i odlomci, pravni tekst, brojka presude
-   i cijena. Oznake, cipovi, statusi, gumbi, navigacija, mjere i brojevi u tablicama ostaju mono.
-
-   Sve sto je ovdje nabrojano dobiva rez 400, jer Instrument Serif drugi rez nema. Gdje je
-   tezina bila jedini nositelj hijerarhije, zamjenjuje ju kurziv (vidi blok o naglasku).
-   Gard: `tests/design-tokens.test.ts`.
-   ========================================================================== */
-
-.intake-koraci li{font-family:var(--display-serif);font-weight:400;--emph-weight:400;--emph-style:italic}
-
-/* Naglasak u serifnim blokovima je KURZIV, ne tezina: Instrument Serif rez iznad 400 nema.
-   Globalno mono pravilo (`strong,b{font-weight:600}`) sada stoji u `design-system.css`
-   (blok "NAGLASAK PUTUJE S GLASOM"), page-app.css ga vise nema. Ne vracaj ga u page-app.css: taj list se
-   ucitava POSLIJE design-system.css s istom specificnoscu, pa bi njegovo pravilo pobijedilo
-   var-mehanizam i vratilo tezinu 600 u serif, tocno kvar koji je popravljen u ovom krugu. */
-.intake-koraci li strong,
-.intake-koraci li b{font-weight:400;font-style:italic}
