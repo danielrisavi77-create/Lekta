@@ -291,9 +291,13 @@
 .intake-stage[data-intake-state="ready"] .intake-sken{display:block}
 @keyframes intake-sken{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 
-/* MALI PECAT ROKA: u toku, desno, iznad podnozja. Pad je WAAPI u `intake-live.ts`. */
+/* MALI PECAT ROKA: u toku, desno, iznad podnozja. Pad je WAAPI u `intake-live.ts`
+   (`opacity` + `transform: rotate(4deg) scale(1.5→1)`, Z31). Margina je 36 px, ne 20:
+   ulazni scale(1.5) siri AABB pecata ~12 px prema gore, a na 360 px hint ("ili ispusti…")
+   stoji odmah iznad njega; 20 px nije dovoljno pa bi se okviri sijekli dok traje pad
+   (`tests/ux/intake-entry.spec.ts` Z32 360 px). 36 px drzi razmak i u najvecem trenutku. */
 .intake-rok-pecat:not([hidden]){
-  display:inline-block;justify-self:end;margin-top:20px;padding:6px 10px;
+  display:inline-block;justify-self:end;margin-top:36px;padding:6px 10px;
   border:1.5px solid var(--paper-ink);border-radius:2px;color:var(--paper-ink);
   font-family:var(--mono);font-weight:600;font-size:var(--fs-mono-label);letter-spacing:.08em;
   text-transform:uppercase;line-height:1;transform:rotate(4deg);pointer-events:none;
