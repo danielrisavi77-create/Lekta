@@ -21,6 +21,7 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
   type WizardEvent, type WizardState,
@@ -38,7 +39,12 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
+import { runMetrics } from '../src/audits/metrics';
+import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
+import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -133,6 +139,10 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
+import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
+import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
+import { signedContentProblem, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationContentDigestSync } from '../src/verification/attestation-content-digest';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -155,6 +165,7 @@ import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import {
   findBarePushWorkflows,
+  findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
   findSelfHostedProblems,
   type NamedWorkflow,
@@ -172,6 +183,40 @@ import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import {
+  falseGreenParityProblems, opportunitySqlScopeProblems, opportunityWiringProblems,
+} from './helpers/opportunity-wiring';
+import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
+import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import {
+  backdropFilterProblems,
+  chromeGraph,
+  deskStateSourceProblems,
+  footerCopyFromTemplate,
+  footerLinkProblems,
+  fullFooterBlock,
+  fullFooterProblems,
+  funkcijaIzIzvora,
+  inkObserverProblems,
+  inkSignatureCssProblems,
+  lazyFooterBudgetProblems,
+  lazyFooterProblems,
+  markerMotionProblems,
+  markerTravelProblems,
+  MAX_LAZY_FOOTER_JS_GZIP,
+  scrolledBarProblems,
+  shortStepperProblems,
+  type ChromeMetafile,
+  type FooterCopy,
+  type PlaceMarker,
+  type WireInk,
+} from './helpers/site-footer-guards';
+import { releasedPublicRouteGroups } from '../src/routes/shared/public-route-directory';
+import { SITE_CHROME_DESTINATIONS, placeSiteChromeMarker } from '../src/shared/site-chrome';
+import { INK_CLASS, wireInkSignature } from '../src/shared/site-footer-full';
+import { pokretPrigusen } from '../src/shared/display-prefs';
+import { legalDocuments } from '../src/legal/legal-content';
+import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -266,6 +311,117 @@ interface Mutation {
   imitates: string;
   caught: () => boolean;
   cleanBefore: () => boolean;
+}
+
+/**
+ * Tvrdnja garda T83: spoj korijena korpusa u kojem se isti rad pojavljuje dvaput daje manifest s
+ * jednim unosom po `documentId`, a izbacena kopija je zabiljezena.
+ */
+function jedanDokumentJedanGlas(
+  dedupe: (entries: RealCorpusManifestEntry[]) => { entries: RealCorpusManifestEntry[]; duplicates: unknown[] },
+): boolean {
+  const e = (documentId: string, root: string): RealCorpusManifestEntry => ({
+    documentId, fileName: `${documentId}.docx`, profileId: 'fer-diplomski', root, holdout: false, expectationProvenance: 'derived',
+  });
+  const { entries, duplicates } = dedupe([e('corpus-a', 'docx-local'), e('corpus-b', 'docx-local'), e('corpus-a', '03-ingest')]);
+  const ids = entries.map((x) => x.documentId);
+  return ids.length === 2 && new Set(ids).size === 2 && duplicates.length === 1;
+}
+
+/** Razliciti radovi imaju razlicite bajtove, kao u stvarnom korpusu (inace T83-01 s pravom baca). */
+const bajtoviPoIdu = (e: RealCorpusManifestEntry) => new TextEncoder().encode(`sadrzaj-${e.documentId}`);
+
+/** Stara izvedba dedupea (prije T83-01): kljuc je samo documentId, sadrzaj se ne usporeduje medu id-ovima. */
+function dedupeManifestSamoPoIdu(entries: RealCorpusManifestEntry[]) {
+  const seen = new Set<string>();
+  const out = entries.filter((e) => (seen.has(e.documentId) ? false : (seen.add(e.documentId), true)));
+  return { entries: out, duplicates: [] as unknown[] };
+}
+
+/** Tvrdnja garda T83-01: isti bajtovi pod dva razlicita id-a ne prolaze kao dva rada. */
+function istiSadrzajPodDvaImenaPada(
+  dedupe: (entries: RealCorpusManifestEntry[]) => { entries: RealCorpusManifestEntry[] },
+): boolean {
+  const e = (documentId: string): RealCorpusManifestEntry => ({
+    documentId, fileName: `${documentId}.docx`, profileId: 'fer-diplomski', root: 'r', holdout: false, expectationProvenance: 'derived',
+  });
+  try {
+    return dedupe([e('corpus-a'), e('corpus-kopija-a')]).entries.length < 2;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Tvrdnja garda NOVO-01: potpisana v2 ovjera bez izmjene nema problem potpisa, a ista ovjera s brojkom
+ * promijenjenom nakon potpisa ga ima. Otisak se racuna citacevom funkcijom, ne skriptom.
+ */
+function izmjenaNakonPotpisaPada(check: (a: CorpusAttestation) => string | null): boolean {
+  const bez = {
+    schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: 'f'.repeat(32), measuredAt: '2026-09-20T09:00:00.000Z',
+    measuredFromCommit: 'c'.repeat(40), oracles: ['scripts/repair-real-corpus.mts'], environment: { wordVersion: null },
+    protocol: { holdoutExcluded: true, holdoutDocumentCount: 0, uniqueDocumentCount: 2, rawDocumentCount: 2, countedDocumentCount: 2, duplicateDocumentCount: 0 },
+    entries: [{ unitId: 'fpzg', workType: 'final', profileIds: ['p'], documentCount: 2, cleanCount: 1, regressedChecks: [] }],
+  };
+  const potpisana = { ...bez, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigestSync(bez) } as unknown as CorpusAttestation;
+  const izmijenjena = { ...potpisana, entries: [{ ...potpisana.entries[0], cleanCount: 2 }] } as CorpusAttestation;
+  return check(potpisana) === null && check(izmijenjena) !== null;
+}
+
+/** Tvrdnja garda T83-03: mjerenje s ijednim palim ili pogresnim dokumentom se ne ovjerava. */
+function paloMjerenjeSeNeOvjerava(refuse: (results: Array<Record<string, unknown>>) => string[]): boolean {
+  const r = (documentId: string, extra: Record<string, unknown> = {}) => ({ documentId, outcome: 'review', error: null, integrityFailure: null, ...extra });
+  return (
+    refuse([r('a'), r('b', { outcome: 'pass' })]).length === 0 &&
+    refuse([r('a'), r('b', { outcome: 'fail' })]).length > 0 &&
+    refuse([r('a', { error: 'analysis crashed' })]).length > 0
+  );
+}
+
+/**
+ * Mutant garda `attestationRefusals` izveden iz STVARNOG izvora (blok GARD u
+ * scripts/lib/corpus-attestation-core.mjs) zamjenom jednog izraza; mutacija ne filtrira izlaz nego
+ * mijenja sam gard (Codex #185, T83-06).
+ */
+function gardIzIzvora(staro: string, novo: string): (results: Array<Record<string, unknown>>) => string[] {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/lib/corpus-attestation-core.mjs'), 'utf8').replace(/\r/g, '');
+  const a = src.indexOf('// >>> GARD:attestationRefusals');
+  const b = src.indexOf('// <<< GARD:attestationRefusals');
+  if (a < 0 || b < a) throw new Error('blok GARD:attestationRefusals nije pronadjen');
+  const blok = src.slice(a, b).replace('export function', 'function');
+  if (!blok.includes(staro)) throw new Error(`mutacija ne pogadja izvor: ${staro}`);
+  return new Function(`${blok.replace(staro, novo)}\nreturn attestationRefusals;`)() as (results: Array<Record<string, unknown>>) => string[];
+}
+
+type PotpisFn = (
+  existing: Record<string, unknown> | null,
+  next: Record<string, unknown>,
+) => { signedBy: string; signedAt: string } | null;
+
+/**
+ * Tvrdnja garda T83-05: potpis ostaje uz ovjeru samo kad je SADRZAJ ovjere isti kao potpisani; v1
+ * ovjera s istim otiskom, novo mjerenje istog skupa i isto mjerenje s --holdout-confirmed gube potpis.
+ */
+function potpisOstajeSamoUzIstiSadrzaj(inherit: PotpisFn): boolean {
+  const otisak = '8e5bd529d4f2b596ccf8fa0ef58c029d';
+  const sadrzaj = (over: Record<string, unknown> = {}) => ({
+    schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: otisak,
+    measuredAt: '2026-09-20T09:00:00.000Z', measuredFromCommit: 'c'.repeat(40),
+    protocol: { holdoutExcluded: true, countedDocumentCount: 2 },
+    entries: [{ unitId: 'fpzg', workType: 'final', documentCount: 2, cleanCount: 2 }],
+    ...over,
+  });
+  const s = sadrzaj();
+  const potpisana = { ...s, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigest(s) };
+  const v1 = { corpusFingerprint: otisak, measuredAt: s.measuredAt, measuredFromCommit: s.measuredFromCommit, signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
+  const isto = inherit(potpisana, s);
+  const prekoVerzije = inherit(v1, s);
+  const novoIzmedju = inherit(potpisana, sadrzaj({ measuredAt: '2026-09-20T09:30:00.000Z' }));
+  const holdoutPotvrdjen = inherit(potpisana, sadrzaj({
+    protocol: { holdoutExcluded: false, countedDocumentCount: 3 },
+    entries: [{ unitId: 'fpzg', workType: 'final', documentCount: 3, cleanCount: 3 }],
+  }));
+  return isto?.signedBy === 'Vlasnik' && prekoVerzije === null && novoIzmedju === null && holdoutPotvrdjen === null;
 }
 
 /**
@@ -397,6 +553,33 @@ function upisnikGuardFixture(programCode: '203' | '3', quote: string) {
     [{ programCode, executors: [{ componentIds: [unitId] }] }],
     [{ id: profileId, unitId, programs: [name], workTypes: ['final'], sources: [{ url: sourceUrl }] }],
     [{ programCode, profileId, evidence: { sourceUrl, sourceLocator: 'službena stranica', quote } }],
+  );
+}
+
+function upisnikRitehRootFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '3', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '3', executors: [{ componentIds: ['riteh'] }] }],
+    [{ id: 'p', unitId: 'riteh', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://uniri.hr/studij' }] }],
+    [{ programCode: '3', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikFerFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: 'FER', vrsta: 'Sveučilišni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['fer'] }] }],
+    [{ id: 'p', unitId: 'fer', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://fer.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'službena stranica', quote: 'Elektrotehnika' } }],
+  );
+}
+
+function upisnikKbfFixture(sourceUrl: string) {
+  return buildUpisnikProfileCandidates(
+    [{ sifraUpisnik: '1', naziv: 'Teologija', izvoditelj: 'KBF', vrsta: 'Sveucilisni prijediplomski studij' }],
+    [{ programCode: '1', executors: [{ componentIds: ['kbf'] }] }],
+    [{ id: 'p', unitId: 'kbf', programs: ['Teologija'], workTypes: ['final'], sources: [{ url: 'https://kbf.unizg.hr/studij' }] }],
+    [{ programCode: '1', profileId: 'p', evidence: { sourceUrl, sourceLocator: 'sluzbena stranica', quote: 'Teologija' } }],
   );
 }
 
@@ -541,7 +724,211 @@ function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string
     && preflightSourceProblems(preflightIzvor()).length === 0;
 }
 
+/** Z15 drugi krug: puno podnozje sa stvarne stranice, LF, za mutacije u memoriji. */
+function z15bPodnozje(): string {
+  return fullFooterBlock(readTextLf(resolve(process.cwd(), 'alati.html'))) ?? '';
+}
+
+/** Copy punog podnozja iz predloska (prizor 05). */
+function z15bPredlozak(): FooterCopy | null {
+  return footerCopyFromTemplate(readTextLf(resolve(process.cwd(), 'design/templates/chrome/Chrome.dc.html')));
+}
+
+/** Poznata odredista: javni direktorij, odredista trake, pravne stranice koje generator pece. */
+function z15bPoznate(): Set<string> {
+  return new Set<string>([
+    ...releasedPublicRouteGroups.flatMap((g) => g.destinations.map((d) => d.href)),
+    ...SITE_CHROME_DESTINATIONS.map((d) => d.href),
+    ...Object.values(legalDocuments()).map((d) => `/${d.slug}.html`),
+  ]);
+}
+
+/** Pecene vrijednosti "Stanja stola" iz `site-stats.json`. */
+function z15bPeceno(): { profiles: number; rulesVersion: string | null; sourcesCheckedAt: string | null } {
+  return JSON.parse(readTextLf(resolve(process.cwd(), 'data/coverage/site-stats.json'))) as {
+    profiles: number; rulesVersion: string | null; sourcesCheckedAt: string | null;
+  };
+}
+
+/** Zatecena zamucenja u javnim listovima (F22); traka mora imati nula. */
+const Z15B_BACKDROP_DOPUSTENO: Readonly<Record<string, number>> = { 'src/shared/page-app.css': 3 };
+
+/** Svi CSS listovi pod `src/` osim admina (nije javna stranica). */
+function z15bJavniListovi(): Array<{ ime: string; css: string }> {
+  const out: Array<{ ime: string; css: string }> = [];
+  const hodaj = (dir: string): void => {
+    for (const e of readdirSync(resolve(process.cwd(), dir), { withFileTypes: true })) {
+      const rel = `${dir}/${e.name}`;
+      if (e.isDirectory()) { if (rel !== 'src/admin') hodaj(rel); continue; }
+      if (e.name.endsWith('.css')) out.push({ ime: rel, css: readTextLf(resolve(process.cwd(), rel)) });
+    }
+  };
+  hodaj('src');
+  return out;
+}
+
+/**
+ * Metafile u OBLIKU koji esbuild sa `splitting` stvarno vraca za traku (izmjereno 2026-09-27:
+ * ulaz, zajednicki komad, lijeni komad podnozja). `staticki` imitira kvar: podnozje uvezeno
+ * staticki zavrsi u ulaznom izlazu. Stvarni metafile mjeri `tests/route-shell-budget.test.ts`.
+ */
+function z15bMetafile(staticki: boolean): ChromeMetafile {
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const komad = 'site-chrome-budget/chunk-A.js';
+  const lijeni = 'site-chrome-budget/site-footer-full-B.js';
+  const podnozje = { 'src/shared/site-footer-full.ts': {} };
+  if (staticki) {
+    return {
+      outputs: {
+        [ulaz]: { entryPoint: 'src/shared/site-chrome.ts', inputs: { 'src/shared/site-chrome.ts': {}, ...podnozje }, imports: [{ path: komad, kind: 'import-statement' }] },
+        [komad]: { inputs: { 'data/coverage/site-stats.json': {} }, imports: [] },
+      },
+    };
+  }
+  return {
+    outputs: {
+      [ulaz]: { entryPoint: 'src/shared/site-chrome.ts', inputs: { 'src/shared/site-chrome.ts': {} }, imports: [{ path: komad, kind: 'import-statement' }, { path: lijeni, kind: 'dynamic-import' }] },
+      [lijeni]: { entryPoint: 'src/shared/site-footer-full.ts', inputs: podnozje, imports: [{ path: komad, kind: 'import-statement' }] },
+      [komad]: { inputs: { 'data/coverage/site-stats.json': {} }, imports: [] },
+    },
+  };
+}
+
+/**
+ * Isti metafile s DRUGIM dinamickim uvozom u traci (`import('../ui/app')`): esbuild ga emitira
+ * kao jos jedan lijeni izlaz s vlastitim `entryPoint`, izvan proracuna od 8 KB.
+ */
+function z15bMetafileDrugiLijeni(): ChromeMetafile {
+  const cist = z15bMetafile(false);
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const app = 'site-chrome-budget/app-C.js';
+  const ulazni = cist.outputs[ulaz]!;
+  return {
+    outputs: {
+      ...cist.outputs,
+      [ulaz]: { ...ulazni, imports: [...ulazni.imports, { path: app, kind: 'dynamic-import' }] },
+      [app]: { entryPoint: 'src/ui/app.ts', inputs: { 'src/ui/app.ts': {} }, imports: [] },
+    },
+  };
+}
+
+/** Gzip velicine lijenih izlaza, s podesivom velicinom komada podnozja (izmjereno 1174 B). */
+function z15bLijeneVelicine(meta: ChromeMetafile, podnozje: number): Record<string, number> {
+  const graf = chromeGraph(meta, 'src/shared/site-chrome.ts');
+  return Object.fromEntries(graf.lazyOutputs.map((p) => [p, p.includes('site-footer-full') ? podnozje : 900]));
+}
+
+/** Lijeni gard nad metafileom i velicinama. */
+function z15bLijeniProblemi(meta: ChromeMetafile, podnozje: number): string[] {
+  return lazyFooterBudgetProblems(meta, chromeGraph(meta, 'src/shared/site-chrome.ts'), z15bLijeneVelicine(meta, podnozje), MAX_LAZY_FOOTER_JS_GZIP);
+}
+
+/** Stvarni izvor trake i podnozja, LF. */
+const z15bChromeTs = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'));
+const z15bFooterTs = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts'));
+const z15bChromeCss = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+
+/** Gard putovanja nad `placeSiteChromeMarker` IZVRSENIM iz (mutiranog) izvora. */
+function z15bKvacicaProblemi(ts: string): string[] {
+  const place = funkcijaIzIzvora<PlaceMarker>(ts, 'placeSiteChromeMarker');
+  return place ? markerTravelProblems(place) : ['placeSiteChromeMarker nije nadjen u izvoru'];
+}
+
+/** Gard tinte nad `wireInkSignature` IZVRSENIM iz (mutiranog) izvora, sa stvarnim ovisnostima. */
+function z15bTintaProblemi(ts: string): string[] {
+  const wire = funkcijaIzIzvora<WireInk>(ts, 'wireInkSignature', { pokretPrigusen, INK_CLASS });
+  return wire ? inkObserverProblems(wire, document, INK_CLASS) : ['wireInkSignature nije nadjen u izvoru'];
+}
+
 const MUTATIONS: Mutation[] = [
+  {
+    id: 'upisnik/b13-korijen-rijeci',
+    imitates: 'Stara podnizna ili priblizna osnova ponovno prihvaca Mikrobiologija i Fizikalna terapija',
+    cleanBefore: () => upisnikGuardFixture('203', 'Studij fizike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      const attacks = [
+        () => upisnikGuardFixture('203', 'Fizikalna terapija'),
+        () => buildUpisnikProfileCandidates(
+          [{ sifraUpisnik: '1', naziv: 'Biologija', izvoditelj: 'PMF', vrsta: 'Sveucilisni prijediplomski studij' }],
+          [{ programCode: '1', executors: [{ componentIds: ['pmf'] }] }],
+          [{ id: 'p', unitId: 'pmf', programs: ['Biologija'], workTypes: ['final'], sources: [{ url: 'https://pmf.unizg.hr' }] }],
+          [{ programCode: '1', profileId: 'p', evidence: { sourceUrl: 'https://pmf.unizg.hr', sourceLocator: 'studij', quote: 'Mikrobiologija' } }],
+        ),
+      ];
+      return attacks.every((attack) => { try { attack(); return false; } catch (error) { return /program name/u.test(String(error)); } });
+    },
+  },
+  {
+    id: 'upisnik/b13-razina-svih-studija',
+    imitates: 'Stara iznimka svi studiji prihvaca doktorski citat za prijediplomski program',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi doktorski studiji imaju disertaciju'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-vrsta-uz-studij',
+    imitates: 'Staro ponistavanje obiju osnova propusta strucni studij uz sveucilisnu knjiznicu',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prijediplomski studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prijediplomski studij. Sveucilisna knjiznica.'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-svi-studiji-bez-razine',
+    imitates: 'Iznimka bez razine prihvaca opcenit citat Svi studiji',
+    cleanBefore: () => upisnikGuardFixture('203', 'Svi prijediplomski studiji imaju zavrsni rad').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('203', 'Svi studiji imaju zavrsni rad'); return false; }
+      catch (error) { return /program name/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-vrsta-bez-studija',
+    imitates: 'Vrsta studija izvan izraza studij nije procitana',
+    cleanBefore: () => upisnikGuardFixture('3', 'Elektrotehnika; sveucilisni prvostupnik inzenjer elektrotehnike').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikGuardFixture('3', 'Elektrotehnika; strucni prvostupnik inzenjer elektrotehnike'); return false; }
+      catch (error) { return /study type/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13b-domena-v3',
+    imitates: 'unitId kao kljuc bilo gdje propusta KBF na splitskom sveucilistu',
+    cleanBefore: () => upisnikKbfFixture('https://kbf.unizg.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
+    caught: () => {
+      try { upisnikKbfFixture('https://kbf.unist.hr/studij'); return false; }
+      catch (error) { return /source domain/u.test(String(error)); }
+    },
+  },
+  {
+    id: 'upisnik/b13-normalizirani-hold',
+    imitates: 'Stara doslovna jednakost i bez minimalne duljine propustaju razmak i kratak dokaz',
+    cleanBefore: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      return validateUpisnikProfileCoverageHolds(report).length === 0;
+    },
+    caught: () => {
+      const report = buildUpisnikProfileCandidates(
+        [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }],
+        [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }],
+        [{ id: 'p', unitId: 'fhs', programs: ['Drugi studij'], workTypes: ['final'] }],
+      );
+      const hold = report.programs[0]!.remainingHold!;
+      hold.missingEvidence = ['Sluzbeni aktualni izvor za identitet programa i sastavnicu, uz dokaz obvezne vrste rada i veze s odgovarajucim profilom. '];
+      const generic = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('generic evidence request'));
+      hold.missingEvidence = ['Potreban je sluzbeni dokaz.'];
+      const short = validateUpisnikProfileCoverageHolds(report).some((problem) => problem.includes('too short'));
+      return generic && short;
+    },
+  },
+
   {
     id: 'upisnik/prazan-worktypes-prihvaca-sve',
     imitates: 'Prazan workTypes ponovno nudi profil za svaku razinu',
@@ -571,19 +958,19 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'upisnik/109-domena-druge-ustanove',
-    imitates: 'Veza FHS 109 koristi službeni izvor Hrvatskog katoličkog sveučilišta',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    imitates: 'Goli korijen uniri.hr u profilu propusta dokaz s medri.uniri.hr za RITEH',
+    cleanBefore: () => upisnikRitehRootFixture('https://riteh.uniri.hr/studij').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://www.unicath.hr/povijest' }); return false; }
+      try { upisnikRitehRootFixture('https://medri.uniri.hr/studij'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
   {
-    id: 'upisnik/susjedna-sastavnica-iste-domene',
-    imitates: 'FHS veza koristi izvor FFZG-a na istoj sveučilišnoj domeni',
-    cleanBefore: () => upisnikEvidenceFixture().summary.evidenceBackedCandidatePrograms === 1,
+    id: 'upisnik/unitid-izvan-sveucilista',
+    imitates: 'unitId kao kljuc izvan sveucilisnih korijena propusta fer.com',
+    cleanBefore: () => upisnikFerFixture('https://fer.unizg.hr/x').summary.evidenceBackedCandidatePrograms === 1,
     caught: () => {
-      try { upisnikEvidenceFixture({ sourceUrl: 'https://ffzg.unizg.hr/povijest' }); return false; }
+      try { upisnikFerFixture('https://fer.com/x'); return false; }
       catch (error) { return /source domain/u.test(String(error)); }
     },
   },
@@ -1034,6 +1421,81 @@ const MUTATIONS: Mutation[] = [
       'otisak src/repair ukljucuje CLAUDE.md i testove (wf/ai-evidence-audit), pa jedna linija komentara zastarijeva sve manifeste (T73, 3b)',
     caught: () => !otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files, () => true).hash),
     cleanBefore: () => otisakPratiSamoProdukciju((files) => repairSourceHashFromFiles(files).hash),
+  },
+
+  // --- jedan dokument, jedan glas (T83) ----------------------------------------------------------
+  {
+    id: 'korpus/isti-rad-iz-dva-korijena-broji-se-dvaput',
+    imitates:
+      'manifest je obican spoj docx-local i LEKTA_CORPUS_SOURCE, pa 102 bajt-identicna rada ulaze dvaput (321 umjesto 219, 2026-09-27)',
+    caught: () => !jedanDokumentJedanGlas((entries) => ({ entries, duplicates: [] })),
+    cleanBefore: () => jedanDokumentJedanGlas((entries) => dedupeManifest(entries, bajtoviPoIdu)),
+  },
+  {
+    id: 'korpus/isti-sadrzaj-pod-dva-imena-prolazi',
+    imitates:
+      'dedupe po documentId cita bajtove tek kad se id ponovi, pa isti rad pod drugim imenom ulazi dvaput (Codex #185, T83-01)',
+    caught: () => !istiSadrzajPodDvaImenaPada((entries) => dedupeManifestSamoPoIdu(entries)),
+    cleanBefore: () => istiSadrzajPodDvaImenaPada((entries) => dedupeManifest(entries, () => new Uint8Array([7]))),
+  },
+  {
+    id: 'korpus/potpis-v1-ovjere-prelazi-na-v2-mjerenje',
+    imitates:
+      'attest-real-corpus.mjs je potpis prenosio cim je otisak isti; ponovljeno mjerenje 27. 9. dalo je isti v1 otisak kao ovjera potpisana 12. 9.',
+    caught: () =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
+        e && e.signedBy && e.signedAt && e.corpusFingerprint === n.corpusFingerprint
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
+  },
+  {
+    id: 'korpus/potpis-noviji-od-drugog-mjerenja-istog-skupa',
+    imitates:
+      'uvjet "potpis nije stariji od mjerenja" bez identiteta mjerenja: mjerenje 09:00, potpis 10:00, novo mjerenje 09:30 nasljeduje (Codex #185, T83-05)',
+    caught: () =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
+        e && e.signedBy && e.signedAt && e.fingerprintVersion === 2 && e.corpusFingerprint === n.corpusFingerprint &&
+        Date.parse(String(e.signedAt)) >= Date.parse(String(n.measuredAt))
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
+  },
+  {
+    id: 'korpus/potpis-prelazi-na-holdout-confirmed-ovjeru',
+    imitates:
+      'potpis vezan uz otisak, vrijeme i commit mjerenja prelazi na istu ovjeru s --holdout-confirmed, iako se opseg dokaza i brojke mijenjaju (Codex #185, runda 2, T83-05)',
+    caught: () =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
+        e && e.signedBy && e.signedAt && e.fingerprintVersion === 2 && e.corpusFingerprint === n.corpusFingerprint &&
+        e.measuredAt === n.measuredAt && e.measuredFromCommit === n.measuredFromCommit
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
+  },
+  {
+    id: 'korpus/skupina-s-palim-radom-ostaje-dokaziva',
+    imitates:
+      'pali dokument samo nije ulazio u cleanCount, pa je skupina s jednim cistim i jednim palim radom ostajala dokaziva (Codex #185, T83-03)',
+    caught: () => !paloMjerenjeSeNeOvjerava(gardIzIzvora('!DOPUSTENI_ISHODI.has(r.outcome)', 'false')),
+    cleanBefore: () => paloMjerenjeSeNeOvjerava(gardIzIzvora('!DOPUSTENI_ISHODI.has(r.outcome)', '!DOPUSTENI_ISHODI.has(r.outcome)')),
+  },
+  {
+    id: 'korpus/rezultat-s-greskom-i-ishodom-review-prolazi',
+    imitates:
+      'attestationRefusals je gledao samo ishod, pa je rezultat { outcome: "review", error: "analysis crashed" } prolazio (Codex #185, runda 2, T83-03)',
+    caught: () => !paloMjerenjeSeNeOvjerava(gardIzIzvora("r.error !== null && r.error !== undefined && String(r.error).trim() !== ''", 'false')),
+    cleanBefore: () => paloMjerenjeSeNeOvjerava(attestationRefusals),
+  },
+  {
+    id: 'korpus/brojka-promijenjena-nakon-potpisa-ostaje-priznata',
+    imitates:
+      'citac je provjeravao samo oblik signedContentDigest, pa je cleanCount 1 -> 2 nakon potpisa ostajao priznat (Codex #185, runda 3, NOVO-01)',
+    caught: () => !izmjenaNakonPotpisaPada((a) => signedContentProblem(a, (x) => String(x.signedContentDigest))),
+    cleanBefore: () => izmjenaNakonPotpisaPada((a) => signedContentProblem(a)),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
@@ -5268,6 +5730,289 @@ const MUTATIONS: Mutation[] = [
       readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
   },
+  // ---------------------------------------------------------------------------------------------
+  // Z15, DRUGI KRUG: puno podnozje, traka nakon skrola, putujuca kvacica, kratki stepper, lijeno
+  // podnozje. Gardovi su u `tests/helpers/site-footer-guards.ts`; baseline je STVARNA datoteka.
+  // ---------------------------------------------------------------------------------------------
+  {
+    id: 'z15b/podnozje-stupac-izgubljen',
+    imitates:
+      'Pribor stupac ispadne iz punog podnozja pri preslagivanju markupa: kolofon ima tri stupca, ' +
+      'a numeracija preskace 06 do 11, pa stranica tvrdi manje pribora nego sto postoji.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const bez = foot.replace(/<nav class="site-footer__stupac" aria-label="Pribor">[\s\S]*?<\/nav>\n\s*/, '');
+      return bez !== foot && fullFooterProblems(bez, z15bPredlozak()).some((p) => p.startsWith('kolofon ima 3 stupaca'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-copy-nije-doslovan',
+    imitates:
+      'Moto se "popravi" bez dijakritika ("Mjeri, ne pise.") ili se broj stavke pomakne: copy vise ' +
+      'nije doslovan iz predloska, a nijedan vizualni test to ne vidi.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const moto = foot.replace('Mjeri, ne piše.', 'Mjeri, ne pise.');
+      const broj = foot.replace('<small>12</small>', '<small>21</small>');
+      return moto !== foot && broj !== foot
+        && fullFooterProblems(moto, z15bPredlozak()).some((p) => p.startsWith('moto'))
+        && fullFooterProblems(broj, z15bPredlozak()).some((p) => p.startsWith('numeracija'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/stanje-stola-vidljivo-bez-js',
+    imitates:
+      '`hidden` se izgubi sa "Stanja stola": bez JavaScripta stranica ispisuje prazne retke ' +
+      '"Zadnji rad", "Pravila", "Izvori", dakle tvrdnje koje nije mogla procitati.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const vidljivo = foot.replace('data-site-footer-stanje hidden>', 'data-site-footer-stanje>');
+      return vidljivo !== foot && fullFooterProblems(vidljivo, z15bPredlozak()).some((p) => p.includes('nije skriveno'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-mrtva-poveznica',
+    imitates:
+      'Garancija se preimenuje u /jamstvo.html koju generator ne pece, ili kontakt dobije adresu ' +
+      'mimo produkcijske konfiguracije: podnozje vodi u 404 ili na krivi sanducic.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const mrtva = foot.replace('href="/garancija.html"', 'href="/jamstvo.html"');
+      const mail = foot.replace(`mailto:${DEFAULT_PRODUCTION_CONFIG.contactEmail}`, 'mailto:info@lekta.hr');
+      return mrtva !== foot && mail !== foot
+        && footerLinkProblems(mrtva, z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).some((p) => p.includes('/jamstvo.html'))
+        && footerLinkProblems(mail, z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).some((p) => p.includes('info@lekta.hr'));
+    },
+    cleanBefore: () => footerLinkProblems(z15bPodnozje(), z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).length === 0,
+  },
+  {
+    id: 'z15b/stanje-stola-prepisane-brojke',
+    imitates:
+      'Stanje stola dobije rucno upisanu brojku profila umjesto uvoza iz site-stats.json, ili ' +
+      'povijest cita izravno iz localStorage mimo sigurnog omotaca (novi localStorage hack).',
+    caught: () => {
+      const izvor = readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts'));
+      const baked = z15bPeceno();
+      const rucno = izvor.replace('profiles: PROFILA,', `profiles: ${baked.profiles},`);
+      const golo = izvor.replace('safeStorageGet(STORAGE_KEYS.history, null)', "JSON.parse(localStorage.getItem('lekta.history.v2') ?? 'null')");
+      return rucno !== izvor && golo !== izvor
+        && deskStateSourceProblems(rucno, baked).some((p) => p.includes(`${baked.profiles} je prepisana`))
+        && deskStateSourceProblems(golo, baked).some((p) => p.includes('localStorage'));
+    },
+    cleanBefore: () => deskStateSourceProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts')), z15bPeceno()).length === 0,
+  },
+  {
+    id: 'z15b/zamucenje-na-javnoj-stranici',
+    imitates:
+      'Tanko stanje trake vrati `backdrop-filter: blur(14px)` iz naloga (Z31 ga zabranjuje), ili ' +
+      'novi javni list dobije zamucenje: svaki okvir skrola se tada racuna iznova.',
+    caught: () => {
+      const listovi = z15bJavniListovi();
+      const traka = listovi.map((l) => (l.ime === 'src/shared/site-chrome.css'
+        ? { ...l, css: l.css.replace('background: var(--desk);\n}', 'background: var(--desk);\n  backdrop-filter: blur(14px);\n}') }
+        : l));
+      const mutiranaTraka = traka.find((l) => l.ime === 'src/shared/site-chrome.css')!.css
+        !== listovi.find((l) => l.ime === 'src/shared/site-chrome.css')!.css;
+      const novi = [...listovi, { ime: 'src/shared/novi-list.css', css: '.x{-webkit-backdrop-filter:blur(4px)}' }];
+      return mutiranaTraka
+        && backdropFilterProblems(traka, Z15B_BACKDROP_DOPUSTENO).some((p) => p.startsWith('src/shared/site-chrome.css:'))
+        && backdropFilterProblems(novi, Z15B_BACKDROP_DOPUSTENO).some((p) => p.startsWith('src/shared/novi-list.css:'));
+    },
+    cleanBefore: () => backdropFilterProblems(z15bJavniListovi(), Z15B_BACKDROP_DOPUSTENO).length === 0,
+  },
+  {
+    id: 'z15b/tanko-stanje-prozirno',
+    imitates:
+      'Tanko stanje dobije prozirnu mjesavinu (color-mix 82%) kao u prvom krugu, ali bez zamucenja: ' +
+      'sadrzaj prosijava kroz traku, a gard zamucenja to ne vidi.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const prozirno = css.replace(/(header\.site-chrome--scrolled \{[^}]*)background: var\(--desk\);/, '$1background: color-mix(in srgb, var(--desk) 82%, transparent);');
+      return prozirno !== css && scrolledBarProblems(prozirno).includes('tanko stanje nema punu pozadinu var(--desk)');
+    },
+    cleanBefore: () => scrolledBarProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'))).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-animira-left',
+    imitates:
+      'Kvacica se vrati na `left` iz predloska (Z31 trazi transform): u listu `transition: left`, ' +
+      'u kodu `marker.style.left`, pa svaki pomak radi reflow trake.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const ts = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'));
+      const leftCss = css.replace('transition: transform .45s var(--ease-spring);', 'transition: left .45s var(--ease-spring);');
+      const leftTs = ts.replace('marker.style.transform = `translateX(${x}px)`;', 'marker.style.left = `${x}px`;');
+      return leftCss !== css && leftTs !== ts
+        && markerMotionProblems(leftCss, ts).includes('kvacica animira left')
+        && markerMotionProblems(css, leftTs).includes('kod pomice kvacicu kroz style.left');
+    },
+    cleanBefore: () => markerMotionProblems(
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css')),
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts')),
+    ).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-view-transition',
+    imitates:
+      '`view-transition-name: nav-marker` se vrati na kvacicu (F23): cross-document prijelazi su ' +
+      'ugaseni zbog zamrznutog rAF-a, a imenovan element ulijece u prijelaze unutar dokumenta.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const vt = css.replace('transition: transform .45s var(--ease-spring);\n}', 'transition: transform .45s var(--ease-spring);\n  view-transition-name: nav-marker;\n}');
+      return vt !== css && markerMotionProblems(vt, readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'))).some((p) => p.includes('view-transition-name'));
+    },
+    cleanBefore: () => markerMotionProblems(
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css')),
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts')),
+    ).length === 0,
+  },
+  {
+    id: 'z15b/stepper-bez-kratkog-oblika',
+    imitates:
+      'Kratki oblik steppera za tanko stanje se izbrise ili natpis sakrije `display: none`: na ' +
+      '1180px pilula opet pokazuje 6 znakova imena, ili natpis nestane i citacu ekrana.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const bez = css.replace('@container site-chrome-mid (max-width: 599px) {', '@container site-chrome-mid (max-width: 1px) {');
+      const skriven = css.replace(/(@container site-chrome-mid \(max-width: 599px\) \{[\s\S]*?)clip-path: inset\(50%\);/, '$1display: none;');
+      return bez !== css && skriven !== css
+        && shortStepperProblems(bez).includes('nema kratkog steppera za tanko stanje (599px)')
+        && shortStepperProblems(skriven).includes('natpis koraka (599px) se ne skriva clip-pathom');
+    },
+    cleanBefore: () => shortStepperProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'))).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-u-statickom-grafu',
+    imitates:
+      'Traka puno podnozje uveze staticki (`import { mountFullFooter }` umjesto `import()`): svih ' +
+      'trinaest stranica skida njegov kod i pecene brojke, a proracun od 8 KB to ne razdvaja.',
+    caught: () => lazyFooterProblems(chromeGraph(z15bMetafile(true), 'src/shared/site-chrome.ts'))
+      .includes('src/shared/site-footer-full.ts je u statickom grafu trake'),
+    cleanBefore: () => lazyFooterProblems(chromeGraph(z15bMetafile(false), 'src/shared/site-chrome.ts')).length === 0,
+  },
+  // Z15 popravak: kvacica PUTUJE, tinta potpisa, lijeni komad. Mutanti kvacice i tinte su TEKST
+  // stvarne funkcije, izvrsen kroz `funkcijaIzIzvora`; baseline je ista staza nad nemutiranim
+  // izvorom I stvarni uvezeni modul.
+  {
+    id: 'z15b/kvacica-ne-putuje',
+    imitates:
+      'Pamcenje prvog postavljanja se izgubi (`const prvi = true;`, ili se `dataset.siteChromeMarkerX` ' +
+      'vise ne upisuje, ili `transition: none` ostane nakon skoka): klik s "Kako radi" na "Cjenik" ' +
+      'na /saznaj-vise/ skace umjesto da putuje .45s, a list i translateX ostaju isti.',
+    caught: () => {
+      const ts = z15bChromeTs();
+      const uvijekPrvi = ts.replace('const prvi = marker.dataset.siteChromeMarkerX === undefined;', 'const prvi = true;');
+      const bezPamcenja = ts.replace('  marker.dataset.siteChromeMarkerX = String(x);\n', '');
+      const ostajeNone = ts.replace("    marker.style.removeProperty('transition');\n", '');
+      return uvijekPrvi !== ts && bezPamcenja !== ts && ostajeNone !== ts
+        && z15bKvacicaProblemi(uvijekPrvi).some((p) => p.startsWith('2. pomak skace'))
+        && z15bKvacicaProblemi(bezPamcenja).some((p) => p.startsWith('2. pomak skace'))
+        && z15bKvacicaProblemi(ostajeNone).some((p) => p.startsWith('nakon prvog postavljanja inline prijelaz ostaje "none"'));
+    },
+    cleanBefore: () => z15bKvacicaProblemi(z15bChromeTs()).length === 0 && markerTravelProblems(placeSiteChromeMarker).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-klizi-pri-ucitavanju',
+    imitates:
+      'Prvo postavljanje izgubi `transition: none` (`const prvi = false;`): na svakom ucitavanju ' +
+      'kvacica klizi s lijevog ruba trake do aktivnog odredista, sto je sum, ne putovanje.',
+    caught: () => {
+      const ts = z15bChromeTs();
+      const nikadPrvi = ts.replace('const prvi = marker.dataset.siteChromeMarkerX === undefined;', 'const prvi = false;');
+      return nikadPrvi !== ts
+        && z15bKvacicaProblemi(nikadPrvi).includes('prvo postavljanje nema transition: none prije pomaka; kvacica klizi pri ucitavanju');
+    },
+    cleanBefore: () => z15bKvacicaProblemi(z15bChromeTs()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-ne-ceka-pogled',
+    imitates:
+      'Tinta potpisa krene na prvom pikselu (`intersectionRatio >= 0`), promatrac izgubi prag .5 ' +
+      '(`threshold: [0]`), ili potpis izvan pogleda ne dobiva `.motion-offscreen` (Z31): animacija ' +
+      'se odvrti dok je potpis jos ispod ruba ili tece izvan pogleda.',
+    caught: () => {
+      const ts = z15bFooterTs();
+      const odmah = ts.replace('unos.intersectionRatio >= 0.5', 'unos.intersectionRatio >= 0');
+      const bezPraga = ts.replace('{ threshold: [0, 0.5] }', '{ threshold: [0] }');
+      const bezOffscreen = ts.replace("      potpis.classList.toggle('motion-offscreen', !unos.isIntersecting);\n", '');
+      return odmah !== ts && bezPraga !== ts && bezOffscreen !== ts
+        && z15bTintaProblemi(odmah).includes('tinta na 49% vidljivosti (prag je .5)')
+        && z15bTintaProblemi(bezPraga).some((p) => p.startsWith('pragovi promatraca su [0]'))
+        && z15bTintaProblemi(bezOffscreen).includes('izvan pogleda potpis nema .motion-offscreen');
+    },
+    cleanBefore: () => z15bTintaProblemi(z15bFooterTs()).length === 0
+      && inkObserverProblems(wireInkSignature, document, INK_CLASS).length === 0,
+  },
+  {
+    id: 'z15b/tinta-ignorira-prigusen-pokret',
+    imitates:
+      'Provjera `pokretPrigusen` ispadne iz `wireInkSignature`: uz rucno prigusen pokret potpis ' +
+      'ceka skrol i animira se, umjesto da je odmah popunjen.',
+    caught: () => {
+      const ts = z15bFooterTs();
+      const bezProvjere = ts.replace('if (pokretPrigusen(doc) || !view', 'if (!view');
+      return bezProvjere !== ts
+        && z15bTintaProblemi(bezProvjere).includes('pod prigusenim pokretom potpis nije odmah popunjen');
+    },
+    cleanBefore: () => z15bTintaProblemi(z15bFooterTs()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-reduced-motion-prazan-obris',
+    imitates:
+      'Pod `prefers-reduced-motion` (ili `data-motion="reduce"`) ostane samo `animation: none` bez ' +
+      '`background-position: 0 0`: animacija je ugasena, ali potpis ostaje prazan obris zauvijek.',
+    caught: () => {
+      const css = z15bChromeCss();
+      const pun = '.site-footer__potpis-slovo { animation: none !important; background-position: 0 0; }';
+      const prazan = '.site-footer__potpis-slovo { animation: none !important; }';
+      const medij = css.replace(`  ${pun}`, `  ${prazan}`);
+      const atribut = css.replace(`:root[data-motion="reduce"] ${pun}`, `:root[data-motion="reduce"] ${prazan}`);
+      return medij !== css && atribut !== css
+        && inkSignatureCssProblems(medij).some((p) => p.startsWith('pod prefers-reduced-motion potpis nije odmah pun'))
+        && !inkSignatureCssProblems(medij).some((p) => p.startsWith('pod data-motion'))
+        && inkSignatureCssProblems(atribut).some((p) => p.startsWith('pod data-motion="reduce" potpis nije odmah pun'));
+    },
+    cleanBefore: () => inkSignatureCssProblems(z15bChromeCss()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-kroz-background-size',
+    imitates:
+      'Tinta se prepise kako radi predlozak (`background-size` 0% do 100%, Z31 to zabranjuje jer ' +
+      'svaki okvir racuna raspored slike), ili trajanje odluta s 1.4s.',
+    caught: () => {
+      const css = z15bChromeCss();
+      const size = css.replace(
+        'from { background-position: 100% 0; }\n  to { background-position: 0 0; }',
+        'from { background-size: 0% 100%; }\n  to { background-size: 100% 100%; }',
+      );
+      const brzo = css.replace('animation: siteFooterTinta 1.4s var(--ease-spring) both;', 'animation: siteFooterTinta .6s var(--ease-spring) both;');
+      return size !== css && brzo !== css
+        && inkSignatureCssProblems(size).some((p) => p.startsWith('keyframes tinte animiraju background-size'))
+        && inkSignatureCssProblems(brzo).some((p) => p.startsWith('tinta je "siteFooterTinta .6s'));
+    },
+    cleanBefore: () => inkSignatureCssProblems(z15bChromeCss()).length === 0,
+  },
+  {
+    id: 'z15b/lijeni-komad-prerastao',
+    imitates:
+      'Lijeno podnozje naraste preko 3 KB gzip (npr. uvoz cijelog site-stats.json s nazivima jedinica): ' +
+      'proracun trake zbraja samo staticki graf, pa bi rast prosao bez signala.',
+    caught: () => z15bLijeniProblemi(z15bMetafile(false), MAX_LAZY_FOOTER_JS_GZIP + 1)
+      .includes(`lijeni komad je ${MAX_LAZY_FOOTER_JS_GZIP + 1} B gzip, granica ${MAX_LAZY_FOOTER_JS_GZIP} B`),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafile(false), 1174).length === 0,
+  },
+  {
+    id: 'z15b/drugi-lijeni-uvoz',
+    imitates:
+      'Traka dobije drugi dinamicki uvoz (`import(\'../ui/app\')`): njegov komad je lijen, pa ga ne ' +
+      'vidi ni proracun od 8 KB ni `lazyFooterProblems`, a stranica ga svejedno skida.',
+    caught: () => z15bLijeniProblemi(z15bMetafileDrugiLijeni(), 1174)
+      .some((p) => p.startsWith('lijeni ulazi trake su ["src/shared/site-footer-full.ts","src/ui/app.ts"]')),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafile(false), 1174).length === 0,
+  },
 
   // --- clean-vitest-tmp: gard procesa i starost po najnovijoj datoteci ------------------------
   // Sve nad datotecnim sustavom U MEMORIJI (pravilo 1 ovog testa); brisanje je ubrizgan `rm` koji
@@ -5526,6 +6271,60 @@ const MUTATIONS: Mutation[] = [
       && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
     cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
   },
+  // --- T26, audit 22. 9. nalazi #14, #16, #17 (+ Codex pregled #168): tocnost lokalne DOCX analize ---
+  // Doseg je UZI od punog ulaznog puta: kontrole zovu parseXml, ZipReader i effectiveHidden/runMetrics
+  // (harness je sinkron, a inspectDocxIntake i analyzeDocx su async). Pune putove pokrivaju
+  // tests/docx-malformed-xml, docx-intake-cfb i docx-hidden-text-scoring; mutacije izvornog koda
+  // izvedene su rucno i zapisane na PR-u #168.
+  {
+    id: 'docx/xml-greska-tiho-boduje',
+    imitates: 'xmldom gresku razine error (goli & u tekstu) samo ispise i vrati djelomican DOM, pa se osteceni document.xml boduje umjesto da analiza javi gresku (nalaz #14)',
+    caught: () => { try { parseXml('<t>R&D</t>', 'Glavni Word dokument'); return false; } catch (e) { return String((e as Error).message) === 'Glavni Word dokument nije moguće pročitati.'; } },
+    // Cisti baseline ukljucuje valjan XML na koji xmldom salje warning (U+FFFD, Codex #14a).
+    cleanBefore: () => { try { return parseXml('<t>R&amp;D \uFFFD</t>').documentElement?.textContent === 'R&D \uFFFD'; } catch { return false; } },
+  },
+  {
+    id: 'docx/zasticen-docx-kao-not-zip',
+    imitates: 'docx zasticen lozinkom (CFB s EncryptionInfo i EncryptedPackage) dobiva poruku o neispravnoj ZIP arhivi umjesto upute za uklanjanje lozinke (nalaz #16)',
+    caught: () => {
+      const encrypted = new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/intake/encrypted-synthetic.docx')));
+      try { new ZipReader(encrypted.buffer.slice(0) as ArrayBuffer); return false; } catch (e) { return /zaštićena lozinkom/.test(String((e as Error).message)); }
+    },
+    cleanBefore: () => { try { new ZipReader(buildDocx({ paragraphs: [{ text: 'Obican dokument.' }] }).buffer as ArrayBuffer); return true; } catch { return false; } },
+  },
+  {
+    id: 'docx/skriveni-run-bira-font',
+    imitates: 'skriveni tekst odlucuje o fontu, ili se vanish iz stila odlomka i znakovnog stila spaja kao zadnja razina umjesto toggle preokreta, pa je vidljiv tekst proglasen skrivenim (nalaz #17, Codex #17a)',
+    caught: () => effectiveHidden({ paragraphStyle: { hidden: true } }) === true
+      && effectiveHidden({ paragraphStyle: { hidden: true }, runStyle: { hidden: true } }) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20, hidden: true }]).font === 'Times New Roman',
+    cleanBefore: () => effectiveHidden({}) === false
+      && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20 }]).font === 'Arial',
+  },
+  {
+    id: 'docx/lazni-nalaz-na-uskladjenom',
+    imitates: 'analiza pocne javljati nalaz na poznato ispravnom fixtureu (kao structure.heading.word-styles nad stavkama literature na 12 od 14), ili dopusteni nalaz nestane a popis se ne stegne (T26)',
+    // Doseg: ratchet nad popisom; punu analizu fixtura vrti tests/analysis-false-findings (async).
+    caught: () => {
+      const allowed = new Set<FindingKey>(ALLOWED_FINDINGS.map((a) => `${a.doc}|${a.checkId}` as FindingKey));
+      const extra = falseFindingProblems(new Set([...allowed, 'fpzg--final--prijediplomski--uskladjen|structure.heading.word-styles']));
+      const stale = falseFindingProblems(new Set([...allowed].slice(1)));
+      return extra.length === 1 && extra[0].startsWith('lazni nalaz:') && stale.length === 1 && stale[0].startsWith('zastarjeli unos:');
+    },
+    cleanBefore: () => falseFindingProblems(new Set(ALLOWED_FINDINGS.map((a) => `${a.doc}|${a.checkId}` as FindingKey))).length === 0,
+  },
+  {
+    id: 'docx/stavka-literature-kao-naslov',
+    imitates: 'granica izuzeca stavki literature pogresna: numerirana stavka "1. Aston ... (1991). ..." postane kandidat za rucni naslov (12 od 14 uskladjenih fixtura), ili samo clanstvo u zapisima izuzme pravi naslov "1. Knjige" ili naslov iza zalutalog odlomka "Literatura" (Codex #184 F1, F2)',
+    // Doseg: stvarni ulaz analize (odlomci) kroz istu funkciju koju zove analyze-docx.
+    caught: () => {
+      const texts = (ps: { text: string; headingLevel?: number }[]) => manualHeadingCandidates(ps, 'hr').candidates.map((p) => p.text).join('|');
+      return texts([{ text: 'Uvod', headingLevel: 1 }, { text: 'Literatura', headingLevel: 1 }, { text: '1. Knjige' }, { text: '2. Aston, E. i Savona, G. (1991). Theatre as Sign System. London: Routledge.' }]) === '1. Knjige'
+        && texts([{ text: 'Uvod', headingLevel: 1 }, { text: 'Literatura' }, { text: '2. Metodologija istraživanja' }]) === '2. Metodologija istraživanja';
+    },
+    cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
+  },
+
 ];
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
@@ -6940,6 +7739,200 @@ describe('mutacije: routing korak 2 (select-route)', () => {
   });
 });
 
+describe('mutacije: zivi list na ulazu (Z32)', () => {
+  const procitaj = (f: string): string => readFileSync(resolve(__dirname, '..', f), 'utf8').replace(/\r/g, '');
+  type Rok = { datum: string | null; neznam: boolean };
+  type Vrata = { rok: Rok; fakultetPotvrden?: boolean };
+
+  it('baseline: stvarni kod prolazi sve gardove zivog lista', async () => {
+    const g = await import('./helpers/intake-live-guards');
+    const { spremnostUlaza, potvrdaVrijediZaSesiju, potvrdaNosiCijeliProfil, rokZaPovratak } = await import('../src/shared/intake-choice');
+    const { pecatRoka } = await import('../src/routes/intake/deadline-stamp');
+    expect(g.vrataProblemi(spremnostUlaza)).toEqual([]);
+    expect(g.povratakRokaProblemi(rokZaPovratak)).toEqual([]);
+    expect(g.pecatRokaProblemi(pecatRoka)).toEqual([]);
+    expect(g.potvrdaSesijeProblemi(potvrdaVrijediZaSesiju)).toEqual([]);
+    expect(g.cijeliProfilProblemi(potvrdaNosiCijeliProfil)).toEqual([]);
+    expect(g.ozicenjeUlazaProblemi(procitaj('src/routes/intake/main.ts'))).toEqual([]);
+    expect(g.pokretProblemi(procitaj('src/routes/intake/intake.css'), procitaj('index.html'), procitaj('src/shared/ui-boot.ts'))).toEqual([]);
+    expect(g.redoslijedPotvrdeProblemi(procitaj('src/routes/workspace/main.ts'))).toEqual([]);
+    expect(g.ispustanjeProblemi(procitaj('src/routes/intake/intake-controller.ts'), procitaj('src/routes/intake/intake-live.ts'))).toEqual([]);
+    expect(g.detekcijaFakultetaProblemi(procitaj('src/ui/app.ts'))).toEqual([]);
+  });
+
+  it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili opet traze fakultet, obaraju gard', async () => {
+    const { vrataProblemi } = await import('./helpers/intake-live-guards');
+    const { rokOdlucen } = await import('../src/routes/intake/deadline-stamp');
+    const otvoreno = { spremno: true, natpis: 'ili ispusti dokument ovdje' };
+    const zatvoreno = { spremno: false, natpis: 'Prvo potvrdi rok' };
+    // Kvar: samo upisan datum otvara vrata, kvacica "Još ne znam rok" se ne broji.
+    const samoDatum = (s: Vrata) => (!s.rok.neznam && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(samoDatum).length).toBeGreaterThan(0);
+    // Kvar (izvedba prije odluke vlasnika 2026-09-27): vrata traze i potvrdjen fakultet.
+    const traziFakultet = (s: Vrata) => (s.fakultetPotvrden && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(traziFakultet)).toContain('fakultet nepotvrdjen, "Još ne znam rok": spremno=false, ocekivano true');
+    // Kvar: natpis zatvorenih vrata i dalje trazi fakultet.
+    const stariNatpis = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' });
+    expect(vrataProblemi(stariNatpis).length).toBeGreaterThan(0);
+  });
+
+  it('(a2) istekao rok koji se vraca na ulaz obara gard', async () => {
+    const { povratakRokaProblemi } = await import('./helpers/intake-live-guards');
+    const { rokZaPovratak } = await import('../src/shared/intake-choice');
+    // Kvar: zapamcen rok se vraca kakav jest, pa rok proslog rada sam otvara vrata.
+    const vratiSve = (rok: Rok) => rok;
+    expect(povratakRokaProblemi(vratiSve)).toContain('rok jucer: {"datum":"2026-09-26","neznam":false}, ocekivano {"datum":null,"neznam":false}');
+    // Kvar: brise i rok danas (usporedba po satima, ne po kalendaru).
+    const strogo = (rok: Rok, danas: Date) => (rok.datum && new Date(`${rok.datum}T00:00`).getTime() < danas.getTime() ? { datum: null, neznam: false } : rokZaPovratak(rok, danas));
+    expect(povratakRokaProblemi(strogo).length).toBeGreaterThan(0);
+  });
+
+  it('(b) pecat roka po SATIMA (ljetno vrijeme, ponoc) i sklonidba "21 dana" obaraju gard', async () => {
+    const { pecatRokaProblemi } = await import('./helpers/intake-live-guards');
+    const { pecatRoka, razloziDatum, daniRijecju } = await import('../src/routes/intake/deadline-stamp');
+    const poSatima = (s: Rok, danas: Date): string | null => {
+      if (s.neznam) return 'Rok nije zadan';
+      const r = s.datum ? razloziDatum(s.datum) : null;
+      if (!r || !s.datum) return null;
+      const dana = Math.floor((new Date(`${s.datum}T00:00`).getTime() - danas.getTime()) / 864e5);
+      return `Rok ${r.dan}. ${r.mjesec}. · ${dana < 0 ? 'prošao' : dana === 0 ? 'danas' : daniRijecju(dana)}`;
+    };
+    expect(pecatRokaProblemi(poSatima).length).toBeGreaterThan(0);
+    const uvijekDana = (s: Rok, danas: Date) => pecatRoka(s, danas)?.replace(/ dan$/, ' dana') ?? null;
+    expect(pecatRokaProblemi(uvijekDana).length).toBeGreaterThan(0);
+  });
+
+  it('(c) potvrda koja ne gleda id sesije, odbija fakultet bez studija ili bez studija nosi profil obara gard', async () => {
+    const { potvrdaSesijeProblemi, cijeliProfilProblemi } = await import('./helpers/intake-live-guards');
+    type P = { unit: string; program: string | null; workType: string | null; sesija: string | null };
+    type O = { unit: string; program: string; workType: string };
+    const bezSesije = (p: P | null, s: { imaProfil: boolean }) => Boolean(p && !s.imaProfil);
+    expect(potvrdaSesijeProblemi(bezSesije)).toContain('potvrda vrijedi za TUDJU sesiju');
+    // Nalaz pregleda Z32: prva izvedba odbijala potvrdu s `program=null` (fakultet iz `?unit=`).
+    const trazStudij = (p: P | null, s: { id: string; imaProfil: boolean }) => Boolean(p && !s.imaProfil && p.sesija === s.id && p.program);
+    expect(potvrdaSesijeProblemi(trazStudij)).toContain('potvrda fakulteta bez studija (?unit=) ne vrijedi');
+    const bezStudija = (p: P, o: O) => p.unit === o.unit;
+    expect(cijeliProfilProblemi(bezStudija)).toContain('potvrda bez studija zakljucava fallback');
+  });
+
+  it('(g) ispustanje bez provjere vrata (kontroler ili zivi list) obara gard', async () => {
+    const { ispustanjeProblemi } = await import('./helpers/intake-live-guards');
+    const kontroler = procitaj('src/routes/intake/intake-controller.ts');
+    const live = procitaj('src/routes/intake/intake-live.ts');
+    // Kvar: kontroler prima ispusteni dokument bez `accepts()`.
+    const kontrolerBez = kontroler.replace('if (file && accepts()) void selectFile(file);', 'if (file) void selectFile(file);');
+    expect(kontrolerBez).not.toBe(kontroler);
+    expect(ispustanjeProblemi(kontrolerBez, live)).toContain('kontroler prima ispusten dokument bez provjere vrata');
+    // Kvar: zivi list predaje ispustanje izvan lista bez provjere spremnosti.
+    const liveBez = live.replace('    if (!spremnost().spremno) { onBlocked(); return; }\n', '');
+    expect(liveBez).not.toBe(live);
+    expect(ispustanjeProblemi(kontroler, liveBez)).toContain('ispustanje izvan lista prolazi kroz zatvorena vrata');
+    // Kvar: provjera ostane, ali tek POSLIJE predaje.
+    const kasno = live.replace('    if (!spremnost().spremno) { onBlocked(); return; }\n    odabir?.(file);', '    odabir?.(file);\n    if (!spremnost().spremno) { onBlocked(); return; }');
+    expect(kasno).not.toBe(live);
+    expect(ispustanjeProblemi(kontroler, kasno)).toContain('ispustanje izvan lista prolazi kroz zatvorena vrata');
+  });
+
+  it('(h) detekcija na /rad/ koja gazi fakultet potvrdjen na ulazu obara gard', async () => {
+    const { detekcijaFakultetaProblemi } = await import('./helpers/intake-live-guards');
+    const app = procitaj('src/ui/app.ts');
+    // Kvar: detekcija ne pita bravu.
+    const bez = app.replace('||!detekcijaSmije(ctx.unitId))return;', ')return;');
+    expect(bez).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(bez)).toContain('detekcija ne postuje fakultet potvrdjen na ulazu');
+    // Kvar: primjena fakulteta ne postavlja bravu.
+    const bezBrave = app.replace('return zakljucajFakultet(ids.unit,$(\'#unitSelect\')?.value)', 'return true');
+    expect(bezBrave).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(bezBrave)).toContain('primjena fakulteta ne postavlja bravu');
+    // Kvar: fakultet bez studija ostavi `_profileConfirmed` iz postavki, pa nepotvrdjen studij prolazi kao potvrdjen.
+    const potvrden = app.replace('applySelectionIds(ids);_profileConfirmed=false;', 'applySelectionIds(ids);');
+    expect(potvrden).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(potvrden)).toContain('fakultet bez studija oznacen kao potvrdjen profil');
+  });
+
+  it('(d) main.ts bez kuke canAccept, ili bez veze ispustanja izvan lista, obara gard', async () => {
+    const { ozicenjeUlazaProblemi } = await import('./helpers/intake-live-guards');
+    const main = procitaj('src/routes/intake/main.ts');
+    const bezKuke = main.replace('    canAccept: live.canAccept,\n', '');
+    expect(bezKuke).not.toBe(main);
+    expect(ozicenjeUlazaProblemi(bezKuke)).toContain('kontroler ne dobiva kuku canAccept');
+    const bezVeze = main.replace('live.poveziOdabir((file) => { void controller.selectFile(file); });', '');
+    expect(bezVeze).not.toBe(main);
+    expect(ozicenjeUlazaProblemi(bezVeze).length).toBeGreaterThan(0);
+  });
+
+  it('(e) tragovi bez gasenja pod prigusenim pokretom, beskonacno skeniranje ili linija bez opt-ina obaraju gard', async () => {
+    const { pokretProblemi } = await import('./helpers/intake-live-guards');
+    const css = procitaj('src/routes/intake/intake.css');
+    const html = procitaj('index.html');
+    const boot = procitaj('src/shared/ui-boot.ts');
+    const bezUpita = css.replace('  .intake-tragovi{display:none}\n', '');
+    expect(bezUpita).not.toBe(css);
+    expect(pokretProblemi(bezUpita, html, boot)).toContain('tragovi olovke se prikazuju pod prefers-reduced-motion');
+    const bezRucnog = css.replace(':root[data-motion="reduce"] .intake-tragovi{display:none}', '');
+    expect(bezRucnog).not.toBe(css);
+    expect(pokretProblemi(bezRucnog, html, boot).length).toBeGreaterThan(0);
+    const beskonacno = css.replace('animation:intake-sken 1.2s linear 14', 'animation:intake-sken 1.2s linear infinite');
+    expect(beskonacno).not.toBe(css);
+    expect(pokretProblemi(beskonacno, html, boot)).toContain('beskonacna animacija na ulazu');
+    const bezOptIna = html.replace('class="intake-sken" aria-hidden="true" data-motion-offscreen', 'class="intake-sken" aria-hidden="true"');
+    expect(bezOptIna).not.toBe(html);
+    expect(pokretProblemi(css, bezOptIna, boot).length).toBeGreaterThan(0);
+    const bootBez = boot.replace("'.ks-priv-scena, [data-motion-offscreen]'", "'.ks-priv-scena'");
+    expect(bootBez).not.toBe(boot);
+    expect(pokretProblemi(css, html, bootBez)).toContain('ui-boot ne promatra [data-motion-offscreen]');
+  });
+
+  it('(f) potvrda s ulaza primijenjena POSLIJE restoreDocument obara gard', async () => {
+    const { redoslijedPotvrdeProblemi } = await import('./helpers/intake-live-guards');
+    const src = procitaj('src/routes/workspace/main.ts');
+    const mutant = src.replace('primijeniPotvrduUlaza({', '__A__({')
+      .replace('const restored = await restoreDocument(', 'const restored = await primijeniPotvrduUlaza(')
+      .replace('__A__({', 'restoreDocument({');
+    expect(mutant).not.toBe(src);
+    expect(redoslijedPotvrdeProblemi(mutant).length).toBeGreaterThan(0);
+  });
+});
+
+describe('mutacije: samo pr-opis reagira na uredjivanje opisa PR-a (edited)', () => {
+  const cist: NamedWorkflow[] = [
+    {
+      file: 'pr-opis.yml',
+      doc: { on: { pull_request: { types: ['opened', 'synchronize', 'reopened', 'edited', 'ready_for_review'] } }, jobs: { 'pr-opis': {} } },
+    },
+    { file: 'foundation-check.yml', doc: { on: { pull_request: { branches: ['master'] } }, jobs: { check: {} } } },
+  ];
+
+  it('baseline: samo pr-opis', () => {
+    expect(findJobsRunningOnEdited(cist)).toEqual(['pr-opis.yml#pr-opis']);
+  });
+
+  it('mutant: edited dodan workflowu s punim checkom (stvaran kvar: pr-opis je prije bio job u foundation-check.yml) se hvata', () => {
+    const mutiran: NamedWorkflow[] = [
+      cist[0],
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { branches: ['master'], types: ['opened', 'synchronize', 'edited'] } }, jobs: { check: {}, 'pr-opis': {} } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(mutiran)).toEqual([
+      'foundation-check.yml#check',
+      'foundation-check.yml#pr-opis',
+      'pr-opis.yml#pr-opis',
+    ]);
+  });
+
+  it('job s if koji iskljucuje edited se ne broji', () => {
+    const sIf: NamedWorkflow[] = [
+      {
+        file: 'foundation-check.yml',
+        doc: { on: { pull_request: { types: ['opened', 'edited'] } }, jobs: { check: { if: "github.event.action != 'edited'" } } },
+      },
+    ];
+    expect(findJobsRunningOnEdited(sIf)).toEqual([]);
+  });
+});
+
 describe('mutacije: lean ratchet (T56)', () => {
   const src = readFileSync(resolve(process.cwd(), 'scripts/lean-report.mjs'), 'utf8').replace(/\r/g, '');
   const metrikeBlok = src.slice(src.indexOf('export const RATCHET_METRIKE'), src.indexOf('];', src.indexOf('export const RATCHET_METRIKE')) + 2);
@@ -6961,6 +7954,30 @@ describe('mutacije: lean ratchet (T56)', () => {
     const mutant = fnBlok.replace('if (c > b)', 'if (c > b + 1)');
     expect(mutant).not.toBe(fnBlok);
     expect(hvataRast(izvedi(mutant))).toBe(false);
+  });
+
+  // Windows: Node odbija execFile nad `.cmd` bez shella (EINVAL), pa win32 put nikad ne smije vratiti .cmd.
+  const invStart = src.indexOf('export function toolInvocation');
+  const invBlok = src.slice(invStart, src.indexOf('\n}\n', invStart) + 3);
+  type Invocation = (name: string, o: object) => { command: string; argsPrefix: string[] };
+  const izvediInv = (fn: string): Invocation =>
+    new Function('path', 'existsSync', 'readFileSync', 'ROOT', `${fn.replace('export ', '')}\nreturn toolInvocation;`)(
+      { join }, () => true, () => '', 'X:/repo',
+    ) as Invocation;
+  const win32Opts = { platform: 'win32', exists: () => true, readText: () => JSON.stringify({ bin: { knip: 'bin/knip.js' } }) };
+  const bezCmd = (inv: Invocation): boolean => !inv('knip', win32Opts).command.toLowerCase().endsWith('.cmd');
+
+  it('baseline: stvarni toolInvocation na win32 ne vraca .cmd', () => {
+    expect(bezCmd(izvediInv(invBlok))).toBe(true);
+  });
+
+  it('mutant koji na win32 vrati .bin/<ime>.cmd (stari EINVAL put) obara tvrdnju', () => {
+    const mutant = invBlok.replace(
+      'return { command: process.execPath, argsPrefix: [entry] };',
+      "return { command: path.join(root, 'node_modules', '.bin', `${name}.cmd`), argsPrefix: [] };",
+    );
+    expect(mutant).not.toBe(invBlok);
+    expect(bezCmd(izvediInv(mutant))).toBe(false);
   });
 });
 
@@ -6986,5 +8003,223 @@ describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => 
     mutiran['grok-review'].phases = ['review', 'implement'];
     // Bez allowedPaths svaka datoteka je povreda, pa gard ostaje cist; obranu drzi resolver (implement bez allowliste baca).
     expect(findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations)).toEqual([]);
+  });
+});
+
+describe('mutacije: read-only faze lean workflowa idu kroz lean-citac (run wf_c810022a-a05)', () => {
+  // CR normaliziran pri citanju: na Windows checkoutu (CRLF) regex mutacije nad recima inace tiho promasi.
+  const workflow = readFileSync(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'), 'utf8').replace(/\r/g, '');
+  const agentMd = readFileSync(resolve(process.cwd(), '.claude/agents/lean-citac.md'), 'utf8').replace(/\r/g, '');
+  const samoCitanje = (md: string): boolean => {
+    try {
+      return JSON.stringify(agentTools(md)) === JSON.stringify([...LEAN_READER_TOOLS]);
+    } catch {
+      return false;
+    }
+  };
+
+  it('baseline: stvarni workflow i definicija agenta prolaze', () => {
+    expect(leanReadOnlyViolations(workflow)).toEqual([]);
+    expect(samoCitanje(agentMd)).toBe(true);
+  });
+
+  it('mutant: brief poziv bez agentType (stvarni kvar) se hvata', () => {
+    const mutant = workflow.replace("schema: BRIEF_SCHEMA, agentType: 'lean-citac',", 'schema: BRIEF_SCHEMA,');
+    expect(mutant).not.toBe(workflow);
+    expect(leanReadOnlyViolations(mutant)).toEqual(["brief ide bez agentType 'lean-citac' (nema)"]);
+  });
+
+  it('mutant: preimenovan brief poziv ne prolazi tiho', () => {
+    const mutant = workflow.replace("runAgent('brief',", "runAgent('izvidjac',");
+    expect(mutant).not.toBe(workflow);
+    expect(leanReadOnlyViolations(mutant)).toContain('nema runAgent poziva s labelom brief');
+  });
+
+  it('mutant: Bash dodan u tools lean-citac se hvata', () => {
+    const mutant = agentMd.replace('tools: Read, Glob, Grep', 'tools: Read, Glob, Grep, Bash');
+    expect(mutant).not.toBe(agentMd);
+    expect(samoCitanje(mutant)).toBe(false);
+  });
+
+  it('mutant: uklonjen tools (agent bi naslijedio sve alate) se hvata', () => {
+    const mutant = agentMd.replace(/^tools:.*\n/m, '');
+    expect(mutant).not.toBe(agentMd);
+    expect(samoCitanje(mutant)).toBe(false);
+  });
+});
+
+describe('mutacije: kapacitet redaka po stranici', () => {
+  const page = { page: { w: 21, h: 29.7 }, margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } };
+  const input = (font: string) => ({ size: 12, spacing: 1.5, font, sections: [page] });
+  it('faktor 1,0 mijenja izmjereni kapacitet', () => {
+    expect(linesPerPageCapacity(input('Times New Roman'))).toBe(33);
+    expect(linesPerPageCapacity(input('Times New Roman'), {
+      lineHeightFactor: 1.0,
+      supportsFont: (font) => typeof font === 'string' && font.trim().toLowerCase() === 'times new roman',
+    })).not.toBe(33);
+  });
+  it('uklonjena provjera fonta lazno mjeri Arial', () => {
+    expect(linesPerPageCapacity(input('Arial'))).toBeNull();
+    expect(linesPerPageCapacity(input('Arial'), {
+      lineHeightFactor: 1.15,
+      supportsFont: () => true,
+    })).not.toBeNull();
+  });
+});
+
+describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
+  // Isti obrazac kao ostatak datoteke: process.cwd() i LF normalizacija (Windows checkout, V3-04/V3-05 na #163).
+  const read = (p: string) => readTextLf(resolve(process.cwd(), p));
+  const izvori = () => ({
+    app: read('src/ui/app.ts'),
+    panel: read('src/ui/repair-panel.ts'),
+    emitter: read('src/analytics/opportunity-emit.ts'),
+    result: read('src/analytics/repair-result.ts'),
+  });
+  const sql = read('supabase/migrations/0208_opportunity_report_v3.sql');
+  const LOCAL = 'if (ctx.trackEvent) trackRepairResultOk(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);';
+  const EMIT = 'emitRepairNoOpSignals(track, skippedReasons, context);';
+
+  it('BASELINE: stvarni izvori, SQL i health su cisti', () => {
+    expect(opportunityWiringProblems(izvori())).toEqual([]);
+    expect(opportunitySqlScopeProblems(sql)).toEqual([]);
+    expect(falseGreenParityProblems(opportunityMeasurementHealth)).toEqual([]);
+  });
+
+  it('dvostruka emisija: drugi summary, drugi poziv emittera ili drugi repair put se hvata', () => {
+    const src = izvori();
+    const dvaSummaryja = src.emitter.replace(
+      "void track('repair_noop_summary',",
+      "void track('repair_noop_summary', {}); void track('repair_noop_summary',",
+    );
+    expect(dvaSummaryja).not.toBe(src.emitter);
+    expect(opportunityWiringProblems({ ...src, emitter: dvaSummaryja }))
+      .toEqual(['emitter: repair_noop_summary se emitira 2 puta (mora tocno 1)']);
+
+    const dvaEmittera = src.result.replace(EMIT, `${EMIT}\n  ${EMIT}`);
+    expect(dvaEmittera).not.toBe(src.result);
+    expect(opportunityWiringProblems({ ...src, result: dvaEmittera }))
+      .toEqual(['repair-result.ts: emitRepairNoOpSignals se poziva 2 puta (mora tocno 1)']);
+
+    const dvaPuta = src.panel.replace(LOCAL, `${LOCAL}\n      ${LOCAL}`);
+    expect(dvaPuta).not.toBe(src.panel);
+    expect(opportunityWiringProblems({ ...src, panel: dvaPuta }))
+      .toEqual(['repair-panel.ts: trackRepairResultOk se poziva 2 puta (mora tocno 1)']);
+  });
+
+  it('neovisnost: brojac u emitteru ili izravan poziv emittera iz puta se hvata', () => {
+    const src = izvori();
+    const uEmitteru = src.emitter.replace(
+      "void track('repair_noop_summary',",
+      "void track('repair_result_ok', context); void track('repair_noop_summary',",
+    );
+    expect(opportunityWiringProblems({ ...src, emitter: uEmitteru }))
+      .toEqual(['emitter: repair_result_ok ne smije biti u emitteru, inace nije neovisan brojac']);
+
+    const mimo = src.panel.replace(
+      LOCAL,
+      'if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);',
+    );
+    const nalazi = opportunityWiringProblems({ ...src, panel: mimo });
+    expect(nalazi).toContain('repair-panel.ts: emitter se zove izravno, mimo neovisnog brojaca');
+    expect(nalazi).toContain('repair-panel.ts: trackRepairResultOk se poziva 0 puta (mora tocno 1)');
+  });
+
+  it('izgubljen kontekst: put bez konteksta ili emitter bez istog konteksta se hvata', () => {
+    const src = izvori();
+    const bezKonteksta = src.panel.replace(LOCAL, 'if (ctx.trackEvent) trackRepairResultOk(ctx.trackEvent, result.skippedReasons);');
+    expect(opportunityWiringProblems({ ...src, panel: bezKonteksta })).toEqual([
+      'repair-panel.ts: trackRepairResultOk bez Opportunity konteksta',
+      'repair-panel.ts: pozivatelj bez ctx.opportunityContext',
+    ]);
+
+    const server = src.app.replace('trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r))', 'trackRepairResultOk(trackEvent,out.skippedReasons,{})');
+    expect(server).not.toBe(src.app);
+    expect(opportunityWiringProblems({ ...src, app: server }))
+      .toEqual(['app.ts: serverski repair ne salje profileId/workType rezultata']);
+
+    const emitterBez = src.result.replace(EMIT, 'emitRepairNoOpSignals(track, skippedReasons, {});');
+    expect(opportunityWiringProblems({ ...src, result: emitterBez }))
+      .toEqual(['repair-result.ts: emitter ne dobiva isti Opportunity kontekst']);
+
+    const brojacBez = src.result.replace("track('repair_result_ok', { ...context })", "track('repair_result_ok', {})");
+    expect(opportunityWiringProblems({ ...src, result: brojacBez }))
+      .toEqual(['repair-result.ts: repair_result_ok s kontekstom se emitira 0 puta (mora tocno 1)']);
+  });
+
+  it('redoslijed: repair rezultat prije integrity gatea se hvata', () => {
+    const src = izvori();
+    const gate = 'if (result.integrityFailure)';
+    const prije = src.panel.replace(LOCAL, '').replace(gate, `${LOCAL}\n      ${gate}`);
+    expect(opportunityWiringProblems({ ...src, panel: prije }))
+      .toEqual(['repair-panel.ts: repair rezultat prije integrity gatea']);
+  });
+
+  it('CRLF checkout: gardovi su cisti nad CRLF izvorom, a mutacija i dalje grize', () => {
+    const crlf = (t: string) => t.replace(/\n/g, '\r\n');
+    const src = izvori();
+    expect(crlf(sql)).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(crlf(sql))).toEqual([]);
+    expect(opportunityWiringProblems({
+      app: crlf(src.app), panel: crlf(src.panel), emitter: crlf(src.emitter), result: crlf(src.result),
+    })).toEqual([]);
+
+    const mutant = sql.replace(
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.repair_v3_from",
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.f",
+    );
+    expect(mutant).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(crlf(mutant))).toEqual(['SQL: repair_result_ok mora poceti od repair_v3_from (ima w.f)']);
+
+    const prije = src.panel.replace(LOCAL, '').replace('if (result.integrityFailure)', `${LOCAL}\n      if (result.integrityFailure)`);
+    expect(opportunityWiringProblems({ ...src, panel: crlf(prije) }))
+      .toEqual(['repair-panel.ts: repair rezultat prije integrity gatea']);
+  });
+
+  it('krivi SQL obuhvat: V3 dogadjaj od pocetka prozora, epoha po prozoru ili samoreferencija se hvata', () => {
+    const odPocetka = sql.replace(
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.repair_v3_from",
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.f",
+    );
+    expect(odPocetka).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(odPocetka)).toEqual(['SQL: repair_result_ok mora poceti od repair_v3_from (ima w.f)']);
+
+    const epohaPoProzoru = sql.replace(
+      "where e.event in ('repair_result_ok', 'repair_noop_summary')",
+      "where e.event in ('repair_result_ok', 'repair_noop_summary') and e.created_at >= p_from",
+    );
+    expect(opportunitySqlScopeProblems(epohaPoProzoru)).toEqual(['SQL: V3 epoha ne smije biti ogranicena prozorom']);
+
+    const samoSummary = sql.replace("e.event in ('repair_result_ok', 'repair_noop_summary')", "e.event = 'repair_noop_summary'");
+    expect(opportunitySqlScopeProblems(samoSummary)).toContain('SQL: V3 epoha mora obuhvatiti repair_result_ok i repair_noop_summary');
+
+    const samoref = sql.replace('    from win w\n    cross join v3 v', '    from win_v3 w\n    cross join v3 v');
+    expect(samoref).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(samoref)).toEqual(['SQL: win_v3 mora citati win, ne sebe']);
+
+    const bezScopea = sql.replace("'repair_attempts'::text", "'repair_attempt'::text");
+    expect(opportunitySqlScopeProblems(bezScopea)).toEqual(['SQL: nema parity po obuhvatu za repair_attempts']);
+  });
+
+  it('lazno zelen paritet: health koji ignorira scope, brojac pokusaja ili razdvajanje povrsina se hvata', () => {
+    const bezScopea: typeof opportunityMeasurementHealth = (b) =>
+      opportunityMeasurementHealth({ ...b, scopeParityMismatches: [] });
+    expect(falseGreenParityProblems(bezScopea)).toEqual([
+      'V3-01 structure: isti zbroj, krivi profil: healthy, mora biti partial',
+      'V3-01 repair: isti zbroj, kriva vrsta rada: healthy, mora biti partial',
+    ]);
+
+    const bezBrojaca: typeof opportunityMeasurementHealth = (b) =>
+      opportunityMeasurementHealth({ ...b, repairAttemptEvents: b.repairNoOpSummaryEvents });
+    expect(falseGreenParityProblems(bezBrojaca)).toEqual([
+      'V3-02: uspjesan repair bez summaryja: healthy, mora biti partial',
+      'V3-02: summary bez uspjesnog repaira: healthy, mora biti partial',
+    ]);
+
+    const jedinstveno: typeof opportunityMeasurementHealth = (b) => {
+      const h = opportunityMeasurementHealth(b);
+      return { ...h, analysis: h.kind };
+    };
+    expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
   });
 });

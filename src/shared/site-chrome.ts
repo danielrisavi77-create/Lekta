@@ -24,9 +24,11 @@
  * Bez te posljednje tvrdnje bi "jedan izvor" bio obecanje; s njom je mjera koja pada kad se
  * stranice raziduju.
  *
- * STO OVAJ KRUG NE RADI (drugi krug Z15): puno podnozje (kolofon, "Stanje stola", potpis koji se
- * puni tintom) i ozicenje View Transitions API-ja. `view-transition-name: nav-marker` je u CSS-u
- * pripremljen, ali nista ne pokrece prijelaz izmedu dokumenata.
+ * DRUGI KRUG Z15 (2026-09-27): puno podnozje (kolofon, "Stanje stola", potpis koji se puni
+ * tintom) zivi u `site-footer-full.ts` i ucitava se LIJENO, samo na stranicama koje ga nose
+ * (`[data-site-footer="full"]`), pa traka na ostalim stranicama ne nosi ni bajt njegova koda ni
+ * `site-stats.json`. Kvacica putuje kroz `transform`, ne `left` (Z31). View Transitions izmedju
+ * dokumenata NISU ukljuceni (F23): cross-document prijelazi su ugaseni zbog kvara zamrznutog rAF-a.
  */
 import PLATE_INDEX from '../../data/coverage/unit-kratice.json';
 import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, formatEurAmount } from '../report/pricing';
@@ -226,9 +228,27 @@ function putanjaOdredista(href: string): string {
 }
 
 /**
+ * POMAK KVACICE, KROZ `transform: translateX` (Z31: nikad `left`).
+ *
+ * Prvo postavljanje (i prvo nakon sto je kvacica bila skrivena) ide BEZ prijelaza: inace bi pri
+ * svakom ucitavanju stranice klizila s lijevog ruba do aktivnog odredista, sto nije putovanje nego
+ * sum. Tek sljedeci pomak (promjena aktivnog odredista na istoj stranici) putuje .45s.
+ */
+export function placeSiteChromeMarker(marker: HTMLElement, x: number): void {
+  const prvi = marker.dataset.siteChromeMarkerX === undefined;
+  marker.dataset.siteChromeMarkerX = String(x);
+  if (prvi) marker.style.transition = 'none';
+  marker.style.transform = `translateX(${x}px)`;
+  if (prvi) {
+    void marker.offsetWidth; // prisili raspored, pa ukidanje `transition: none` ne animira skok
+    marker.style.removeProperty('transition');
+  }
+}
+
+/**
  * AKTIVNO ODREDISTE I KVACICA KOJA PUTUJE.
  *
- * `left` se racuna iz izmjerenih pravokutnika, pa je u pregledniku tocan, a u happy-domu nula.
+ * Pomak se racuna iz izmjerenih pravokutnika, pa je u pregledniku tocan, a u happy-domu nula.
  * Zato se uz stil upisuje i `data-site-chrome-marker-for`: identitet mete je ono sto se DA
  * provjeriti bez rasporeda, i tvrdnja "kvacica prati aktivno odrediste" ne ovisi o layout motoru.
  *
@@ -257,6 +277,7 @@ export function markActiveDestination(chrome: HTMLElement, active: string | null
   if (!target) {
     marker.hidden = true;
     delete marker.dataset.siteChromeMarkerFor;
+    delete marker.dataset.siteChromeMarkerX;
     return;
   }
   marker.hidden = false;
@@ -265,7 +286,27 @@ export function markActiveDestination(chrome: HTMLElement, active: string | null
   if (!parent || typeof target.getBoundingClientRect !== 'function') return;
   const okvir = parent.getBoundingClientRect();
   const meta = target.getBoundingClientRect();
-  marker.style.left = `${Math.round(meta.left - okvir.left + 8)}px`;
+  placeSiteChromeMarker(marker, Math.round(meta.left - okvir.left + 8));
+}
+
+/**
+ * ODREDISTE IZ SIDRA, NA ISTOJ STRANICI. "Kako radi" i "Cjenik" vode na ISTU stranicu
+ * (`/saznaj-vise/#how`, `/saznaj-vise/#cjenik`), pa je klik s jednog na drugo prijelaz UNUTAR
+ * dokumenta, i tu kvacica stvarno putuje. Sidro se prihvaca SAMO kad putanja odredista odgovara
+ * kanonskoj putanji ove stranice: `#cjenik` na `/alati.html` ne znaci nista.
+ */
+function destinationFromHash(chrome: HTMLElement, hash: string): string | null {
+  if (!hash || hash === '#') return null;
+  const putanja = trenutnaPutanja(chrome.ownerDocument);
+  if (putanja === null) return null;
+  for (const link of chrome.querySelectorAll<HTMLElement>('[data-site-chrome-dests] [data-site-chrome-dest]')) {
+    const href = link.getAttribute('href') ?? '';
+    const i = href.indexOf('#');
+    if (i < 0 || href.slice(i) !== hash) continue;
+    if (putanjaOdredista(href) !== putanja) continue;
+    return link.dataset.siteChromeDest ?? null;
+  }
+  return null;
 }
 
 /** Boja overlaya lampe je boja CILJNE teme, pa se stol otkriva u onome u sto ide, ne iz cega. */
@@ -430,12 +471,23 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
   montirani.set(doc, kontroler);
   const signal = kontroler.signal;
 
-  const active = chrome.dataset.siteChromeActive ?? null;
-  markActiveDestination(chrome, active === '' ? null : active);
+  const zadano = chrome.dataset.siteChromeActive ?? null;
+  const pocetno = zadano === '' ? null : zadano;
+  const view = doc.defaultView;
+  let aktivno = destinationFromHash(chrome, view?.location.hash ?? '') ?? pocetno;
+  markActiveDestination(chrome, aktivno);
   fillNotes(chrome);
   fillPlate(chrome);
   const footer = doc.querySelector<HTMLElement>('[data-site-footer]');
   if (footer) fillNotes(footer);
+  // PUNO PODNOZJE JE LIJENO (Z15 drugi krug): samo stranica koja ga nosi skida njegov kod i
+  // `site-stats.json`. Pad ucitavanja ostavlja "Stanje stola" skriveno i potpis u obrisu, dakle
+  // stranicu bez tvrdnji koje nije mogla procitati, ne pokvarenu.
+  if (footer?.dataset.siteFooter === 'full') {
+    void import('./site-footer-full')
+      .then((modul) => { if (!signal.aborted) modul.mountFullFooter(footer, signal); })
+      .catch(() => { /* bez podnozja se stranica i dalje cita; nista se ne izmislja */ });
+  }
 
   const steps = chrome.querySelector<HTMLElement>('[data-site-chrome-steps]');
   const stage = chrome.dataset.siteChromeStage;
@@ -445,9 +497,12 @@ export function mountSiteChrome(doc: Document): SiteChromeHandle | null {
   // postavi na `scanning`.
   if (steps) applySiteChromeStage(steps, isSiteChromeStage(stage) ? stage : 'scanning');
 
-  const refresh = (): void => markActiveDestination(chrome, active === '' ? null : active);
-  const view = doc.defaultView;
+  const refresh = (): void => markActiveDestination(chrome, aktivno);
   if (view) {
+    view.addEventListener('hashchange', () => {
+      aktivno = destinationFromHash(chrome, view.location.hash) ?? pocetno;
+      markActiveDestination(chrome, aktivno);
+    }, { signal });
     const onScroll = (): void => {
       chrome.classList.toggle('site-chrome--scrolled', view.scrollY > SITE_CHROME_SCROLL_THRESHOLD);
     };

@@ -566,5 +566,7 @@
     "graduate": "Dipl.",
     "specialist": "Spec.",
     "doctoral": "Dokt."
-  }
+  },
+  "rulesVersion": "de7e4ee",
+  "sourcesCheckedAt": "2026-08-24"
 }

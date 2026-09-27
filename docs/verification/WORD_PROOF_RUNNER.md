@@ -43,6 +43,13 @@ Stroj:
   koje ne smiju procuriti.
 - Runner ne dobiva nikakve tajne; ne dodaji ih ni kao varijable okoline na stroju.
 
+Odstupanje, prihvaceno 2026-09-27: runner `DESKTOP-LJMIVR9` radi pod vlasnikovim osobnim racunom
+`Daniel`, na kojem su aktivne Claude prijave (u runu 36336507818 preflight je zabiljezio 14
+`claude.exe` procesa). Kod koji se izvrsi na runneru vidi te prijave i datoteke racuna. Vlasnik je
+2026-09-27 izravno odlucio da runner ostaje na tom racunu i prihvatio rizik; granica ostaju mjere 1
+do 4 iz odjeljka 6. Administratorska prava racuna nisu provjerena. Iznimka vrijedi do lansiranja
+(go/no-go 19. 10. 2026.), nakon toga ponovna odluka (T81); vlasnik je to izravno potvrdio 27. 9. 2026.
+
 ## 2. Priprema stroja
 
 1. Instaliraj **Node.js 24** (https://nodejs.org, LTS instalacijski paket).
@@ -56,7 +63,7 @@ Stroj:
    $w = New-Object -ComObject Word.Application; try { $w.Version } finally { $w.Quit() }
    ```
 
-   Ocekivano: broj verzije, npr. `16.0`. Otvori Word jednom rucno i zatvori sve dijaloge prvog
+   Ocekivano: `14.0` (Word 2010, referentni oracle na kojem su nastali svi Tier 2 dokazi). Otvori Word jednom rucno i zatvori sve dijaloge prvog
    pokretanja (licenca, privatnost), inace ih COM automatizacija ceka zauvijek.
 4. Iskljuci spavanje i hibernaciju: Postavke > Sustav > Napajanje > Zaslon i spavanje > Nikad.
 5. Za razine `sve` workflow sam instalira Deno, Python 3.12, `lxml` i Playwright chromium.
@@ -91,7 +98,8 @@ Stroj:
 ## 4. Pokretanje
 
 - **Automatski:** svaki push na `master` ili `release/**` vrti cetiri Word razine
-  (`npm run release:check -- --only=word,word-worst,word-corpus,word-toc`, oko 10 minuta; uz
+  (`release:check --only=word,word-worst,word-corpus,word-toc`, pozvan izravno kroz `node` jer
+  npm.ps1 na Windowsu proguta `--`; oko 10 minuta; uz
   checkout i `npm ci` bez kesa prvi run traje oko 30 minuta, a timeout joba je 60 minuta).
 - **Rucno:** Actions > word-proof > Run workflow, s workflowom s grane `master`:
   - `ref`: `master` ili `release/<ime>`; mora biti tocan trenutni vrh te grane;
@@ -152,3 +160,7 @@ branch protection (PR obvezan, enforce admins, 6 obveznih provjera); odobrenje f
 sve vanjske suradnike je ukljuceno; `release/**` dobiva ruleset (PR obvezan, bez force pusha i
 brisanja). Vlasnik je 2026-09-27 odlucio da se #162 spaja uz mjere 1 do 4, a mjera 5 ostaje
 biljeska u T80.
+
+Word na runneru je 14.0 (Word 2010), isti kao na stroju lokalnog `RELEASE_PROOF` (T72); Word 2013 i
+noviji nisu pokriveni ni na jednom stroju (vidi `docs/superpowers/specs/2026-08-23-real-docx-corpus-f1-f2.md`).
+Prvi zeleni run: 36336507818 (commit 7e15d9ac), samo cetiri Word razine, sve PROLAZ.
