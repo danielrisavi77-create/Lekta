@@ -5,7 +5,7 @@ import {
   type OpportunityAnalysisLike,
 } from './opportunity-signal';
 
-type TrackOpportunityEvent = (event: string, data?: object) => unknown;
+type TrackOpportunityEvent = (event: string, data?: Record<string, unknown>) => unknown;
 
 /** Opportunity dijagnostika nakon uspjesne analize; product-journey event ostaje u app.ts. */
 export function emitAnalysisOpportunitySignals(
