@@ -10,7 +10,8 @@ import { describe, expect, it } from 'vitest';
 import { buildLayaCandidates } from '../../scripts/laya/candidate-builder.ts';
 import { adjudicate } from '../../scripts/laya/contracts-v2.ts';
 import {
-  LAYA_ELIGIBLE_CHECKS, LAYA_FORBIDDEN_CHECK_PREFIXES, LAYA_FUTURE_CANDIDATES, isLayaEligibleCheck, isLayaForbiddenCheck,
+  LAYA_ELIGIBLE_CHECKS, LAYA_FORBIDDEN_CHECK_PREFIXES, LAYA_FUTURE_CANDIDATES, formalRegistryEntries, isLayaEligibleCheck,
+  isLayaForbiddenCheck,
 } from '../../scripts/laya/eligibility.ts';
 import { allCheckIds } from '../../src/scoring/check-id-registry';
 import { srcLayaImportProblems, type SourceFile } from '../helpers/laya-src-boundary.ts';
@@ -59,5 +60,6 @@ describe('Laya v2 invarijante', () => {
     expect(formal.length).toBeGreaterThan(0);
     expect(formal.filter(isLayaEligibleCheck)).toEqual([]);
     expect(LAYA_FORBIDDEN_CHECK_PREFIXES).toContain('page.');
+    expect(formalRegistryEntries()).toEqual([]);
   });
 });

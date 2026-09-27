@@ -58,6 +58,11 @@ describe('Laya v2 fail-closed adjudikacija', () => {
     expect(adjudicate({ ...makeResult(), probabilities: reordered }, makeCase(), makeRuntime(), makePolicy())).toEqual(ok());
   });
 
+  it('Proxy koji baca iz trapa daje no_adjudication, ne iznimku', () => {
+    const hostile = new Proxy({}, { getOwnPropertyDescriptor() { throw new Error('proxy trap'); } });
+    expect(adjudicate(hostile, makeCase(), makeRuntime(), makePolicy())).toMatchObject({ status: 'no_adjudication', reason: 'invalid_result' });
+  });
+
   it('adjudicate nikad ne baca, ni na smecu', () => {
     for (const junk of [0, '', [], 'finding_supported', { schemaVersion: 2 }, Object.create(null)]) {
       expect(() => adjudicate(junk, makeCase(), makeRuntime(), makePolicy())).not.toThrow();

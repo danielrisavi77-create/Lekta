@@ -29,3 +29,8 @@ export function isLayaEligibleCheck(checkId: unknown): checkId is LayaEligibleCh
   return typeof checkId === 'string' && !isLayaForbiddenCheck(checkId)
     && (LAYA_ELIGIBLE_CHECKS as readonly string[]).includes(checkId);
 }
+
+/** Clanovi registryja koji su formalna os. Prazan popis je jedini valjan ishod. */
+export function formalRegistryEntries(registry: readonly string[] = LAYA_ELIGIBLE_CHECKS): string[] {
+  return registry.filter(isLayaForbiddenCheck);
+}

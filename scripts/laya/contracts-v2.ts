@@ -214,8 +214,22 @@ function resultShapeReason(error: unknown): NoAdjudicationReason {
  * Fail-closed validacija odgovora runtimea. Ne baca: svaki kvar je `no_adjudication` s razlogom.
  * `manifest` je pinani runtime (tezine, tokenizer, preciznost, kalibracija), `policy` je izmjereni
  * prag za tocno taj modelDigest. Bez policyja nema presude, bez obzira na answerConfidence.
+ *
+ * Ugovor dokazuje VEZU deklariranih vrijednosti, ne njihovo podrijetlo: ako pozivatelj preda
+ * manifest i prag koje je sam runtime vratio, provjera prolazi. Runner (V2.1) zato manifest i
+ * politiku ucitava iz pouzdanog registra odvojeno od odgovora runtimea (LAYA_V2_SPEC.md, odj. 10).
  */
 export function adjudicate(result: unknown, expectedCase: unknown, manifest: unknown, policy: unknown): SemanticAdjudication {
+  // Neocekivana iznimka (npr. Proxy trap na odgovoru) je takoder no_adjudication, nikad bacanje
+  // prema pozivatelju. Neispravna shema ruši vec import modula: runner tada nema Layu (runtime_unavailable).
+  try {
+    return adjudicateChecked(result, expectedCase, manifest, policy);
+  } catch {
+    return noAdjudication('invalid_result', null);
+  }
+}
+
+function adjudicateChecked(result: unknown, expectedCase: unknown, manifest: unknown, policy: unknown): SemanticAdjudication {
   let c: LayaDecisionCaseV2;
   try { c = validateDecisionCase(expectedCase); } catch { return noAdjudication('case_invalid', null); }
   if (result === null || result === undefined) return noAdjudication('runtime_unavailable', c);

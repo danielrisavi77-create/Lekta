@@ -41,7 +41,7 @@ import { hasNaiveEntryGuard } from './helpers/entry-guard';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
-import { isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
+import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
 import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
@@ -4967,7 +4967,15 @@ const MUTATIONS: Mutation[] = [
     imitates: 'src modul koji prije shadow GO odluke uveze Laya ugovor (static ili dynamic import), pa Laya tiho postane dio javnog bundlea i kriticnog puta analize',
     caught: () => srcLayaImportProblems([{ path: 'src/analysis/x.ts', source: "import { adjudicate } from '../../scripts/laya/contracts-v2.ts';" }]).length === 1
       && srcLayaImportProblems([{ path: 'src/analysis/y.ts', source: "const m = await import('../adjudication/laya-view-model');" }]).length === 1,
-    cleanBefore: () => srcLayaImportProblems([{ path: 'src/analysis/x.ts', source: "import { buildTriage } from './triage';\n// layout nije laya" }]).length === 0,
+    cleanBefore: () => srcLayaImportProblems([{ path: 'src/analysis/x.ts', source: "import { buildTriage } from './triage';\n// layout nije laya, await import(nesto) u komentaru\nconst m = await import('./lazy');" }]).length === 0,
+  },
+  {
+    id: 'laya/src-zaobilazi-gard',
+    imitates: 'src ucita Layu kroz require ili sastavljeni dinamicki specifikator (Codex A2 na #149), pa tekstualni gard ne vidi putanju',
+    caught: () => srcLayaImportProblems([{ path: 'src/a.ts', source: "const c = require('../../scripts/laya/contracts-v2.ts');" }]).length === 1
+      && srcLayaImportProblems([{ path: 'src/b.ts', source: "const m = await import('scripts/' + 'laya/contracts-v2.ts');" }]).length === 1
+      && srcLayaImportProblems([{ path: 'src/c.ts', source: 'const m = await import(`../${dir}/contracts-v2.ts`);' }]).length === 1,
+    cleanBefore: () => srcLayaImportProblems([{ path: 'src/a.ts', source: "const m = await import('./report');\nimport x from '../scoring/checks';" }]).length === 0,
   },
   {
     id: 'laya/presuda-bez-kalibracije',
@@ -4996,8 +5004,10 @@ const MUTATIONS: Mutation[] = [
   {
     id: 'laya/formalni-check-eligibilan',
     imitates: 'registry prosiren na formalnu os (margine, font, stranica) iako je parser tu deterministicki autoritet',
-    caught: () => !isLayaEligibleCheck('page.margins') && !isLayaEligibleCheck('font.family') && !isLayaEligibleCheck('toc.present'),
-    cleanBefore: () => isLayaEligibleCheck('reference.completeness'),
+    // Mutira se sam registry (ne samo upit), jer bi isLayaEligibleCheck formalni id odbio i kad je upisan.
+    caught: () => formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'page.margins']).length === 1
+      && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
+    cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
   },
 ];
 

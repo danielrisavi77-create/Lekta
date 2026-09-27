@@ -122,11 +122,16 @@ Kljucna invarijanta: `checks[]`, `issues[]` i `score` ostaju isti bez obzira na 
 - `TriageFinding.id` je slug kategorije i naslova (`chk:<kategorija>:<naslov>`), ne `check.id`,
   i nema `recordIndex`. Triage zato nije dovoljan izvor eksplicitne veze. Veza se gradi iz
   `result.checks[].id` (stabilni id) i zapisa iz `details.incompleteReferences[]`.
-- `TriageLocation.excerpt` i preview flag su skraceni na 8 do 12 rijeci (`trimExcerpt`). Laya ne
-  smije dobiti skraceni excerpt kao "tekst zapisa". V2.1 runner mora citati puni `r.text` iz
-  `details.incompleteReferences[]` (`p` je 1-based indeks odlomka).
-- #102 je koristio `sourcePage`/`verified` u dokazu pravila i `readiness` unutar casea. V2 case
-  postoji samo kad je model-ready; odluka o podobnosti je u builderu i vraca `skipped`.
+- Preview flag za `reference-incomplete` nosi `trimExcerpt(r.text)`, skraceno na
+  `EXCERPT_MAX = 80` znakova (`src/preview/preview-anchors.ts`). Laya ne smije dobiti taj isjecak
+  kao "tekst zapisa". V2.1 runner mora citati puni `r.text` iz `details.incompleteReferences[]`
+  (`p` je 1-based indeks odlomka).
+- Builder u V2.0 prima vec pripremljene `records` s oznakom `linkage`; sam ih ne izvodi iz
+  `details`. Stvarno izdvajanje zapisa i njihova eksplicitna veza s checkom dokazuju se u V2.1.
+
+Usporedba s v1 (grana PR-a #102, commit `3189609`), ne drift mastera: v1 je nosio
+`sourcePage`/`verified` u dokazu pravila i `readiness` unutar casea. V2 case postoji samo kad je
+model-ready; odluka o podobnosti je u builderu i vraca `skipped`.
 
 ## 7. DecisionCase v2
 
@@ -201,7 +206,15 @@ verziju runtimea, preciznost i kalibracijsku reviziju. Cache kljuc je `inputDige
 | pouzdanost ispod izmjerenog praga | `below_threshold` |
 
 Eksplicitna veza s nalazom osigurava se prije: bez nje case ne nastaje (odjeljak 6).
-Lekta u svakom slucaju nastavlja bez promjene.
+Neocekivana iznimka unutar provjere (npr. Proxy trap) takoder je `no_adjudication`
+(`invalid_result`). Ostecena ili nepodrzana shema rusi vec import modula; runner tada nema Layu,
+sto je `runtime_unavailable`. Lekta u svakom slucaju nastavlja bez promjene.
+
+Granica ugovora (Codex A1 na #149): `adjudicate()` dokazuje vezu deklariranih vrijednosti, ne
+njihovo podrijetlo. Ako pozivatelj preda manifest i prag koje je vratio sam runtime, provjera
+prolazi. Zato V2.1 runner ucitava pinani manifest i izmjerenu politiku iz pouzdanog registra
+(commitani hashovi i kalibracijska revizija, bez tezina), odvojeno od odgovora runtimea, i ima
+negativnu kontrolu u kojoj runtime sam predaje manifest i prag. To je uvjet GO kriterija.
 
 ## 11. UI (tek V2.5 i V2.6)
 
@@ -297,14 +310,16 @@ tests/laya/adjudication.test.ts
 tests/laya/candidate-builder.test.ts
 tests/laya/invariants.test.ts
 tests/helpers/laya-v2-fixtures.ts   D0
-tests/helpers/laya-src-boundary.ts  gard: src/** ne uvozi Layu
-tests/gate-mutations.test.ts        6 mutacija laya/*
+tests/helpers/laya-src-boundary.ts  gard: src/** ne uvozi Layu (literal, require, nedoslovni import)
+tests/gate-mutations.test.ts        7 mutacija laya/*
 ```
 
 Planirano: `scripts/laya/eval-runner.ts`, `parity-runner.ts`, `calibration.ts`,
 `tests/laya/parity.test.ts`, `calibration.test.ts`, `docs/laya/DATASET_PROTOCOL.md`,
 `EVALUATION_PROTOCOL.md`, `MODEL_CARD.md`. Tek nakon shadow GO: `src/adjudication/`.
-Do tada nema Laya importa u `src/**` (gard + mutacija `laya/src-uvozi-layu`).
+Do tada nema Laya importa u `src/**` (gard + mutacije `laya/src-uvozi-layu` i
+`laya/src-zaobilazi-gard`). Tekstualni gard ne razrjesava alias, `dist` ni symlink; za javni
+bundle je mjerodavan classification build gard nad razrijesenim Rollup grafom.
 
 ## 22. Faze
 
@@ -324,7 +339,8 @@ Do tada nema Laya importa u `src/**` (gard + mutacija `laya/src-uvozi-layu`).
 
 ## 23. GO / NO-GO
 
-GO zahtijeva sve: contract gate zelen; privacy gate zelen; model reproducibility zelen; parity
+GO zahtijeva sve: contract gate zelen; manifest i politika ucitani iz pouzdanog registra, ne iz
+odgovora runtimea; privacy gate zelen; model reproducibility zelen; parity
 poznat; zamrznut eval dataset; nema train/test leakagea; Laya nadmasuje deterministicki
 baseline; kalibracija izmjerena na zasebnom skupu; prag iz stvarnih podataka; low-confidence
 pada u abstain; kvar modela nema utjecaja na Lektu; score, repair plan i DOCX output identicni
