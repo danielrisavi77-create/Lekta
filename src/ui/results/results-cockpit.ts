@@ -209,7 +209,8 @@ function inspectionLimitHtml(model: VisualResultModel): string {
   const parts: string[] = [];
   if (inspection.labels.length) parts.push(inspection.labels.map(escapeHtml).join(', '));
   if (inspection.analyzerSkips > 0) {
-    parts.push(`${inspection.analyzerSkips} strukturiranih preskoka u automatiziranim provjerama`);
+    const preskok = pluralHr(inspection.analyzerSkips, ['strukturirani preskok', 'strukturirana preskoka', 'strukturiranih preskoka']);
+    parts.push(`${inspection.analyzerSkips} ${preskok} u automatiziranim provjerama`);
   }
   const detail = parts.length ? parts.join(' · ') : 'postoje složene Word strukture s ograničenom automatskom provjerom';
   return '<p class="cockpit-caveat cockpit-inspection-limit" data-cockpit-inspection-limit>'
