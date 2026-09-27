@@ -14,15 +14,15 @@ export interface Period {
 }
 
 /**
- * Sest sekcija u v1. Growth (cohorts/retention) i Academic Suite su NAMJERNO izostavljene -
+ * Sedam sekcija u v1. Growth (cohorts/retention) i Academic Suite su NAMJERNO izostavljene -
  * vidi plan implementacije, odjeljak "Odgođeno s uvjetom povratka": prvo nema dovoljno
  * korisnika da retention grafovi nose signal, drugo cross-product event vokabular
  * (AcademicSuiteEventName) je deklariran ali ga nijedan producer jos ne emitira. Dodavanje
  * sekcije kasnije je novi unos ovdje + 4 nova fajla, ne refaktor postojecih.
  */
-export type SectionId = 'overview' | 'funnel' | 'revenue' | 'operations' | 'usage' | 'coverage';
+export type SectionId = 'overview' | 'funnel' | 'revenue' | 'operations' | 'usage' | 'coverage' | 'opportunities';
 
-export const SECTION_IDS: SectionId[] = ['overview', 'funnel', 'revenue', 'operations', 'usage', 'coverage'];
+export const SECTION_IDS: SectionId[] = ['overview', 'funnel', 'revenue', 'operations', 'usage', 'coverage', 'opportunities'];
 
 export const SECTION_LABELS: Record<SectionId, string> = {
   overview: 'Overview',
@@ -31,6 +31,7 @@ export const SECTION_LABELS: Record<SectionId, string> = {
   operations: 'Operations',
   usage: 'Usage',
   coverage: 'Coverage & Demand',
+  opportunities: 'Opportunities',
 };
 
 export interface RangeInfo {
@@ -207,6 +208,57 @@ export interface CoverageStats {
   retention: RetentionNote[];
 }
 
+export type OpportunityBasis = 'analysis_event' | 'profile_event' | 'repair_event' | 'event_count_proxy';
+
+export interface OpportunityRow {
+  id: string;
+  affected: number;
+  denominator: number;
+  ratePct: number | null;
+  basis: OpportunityBasis;
+}
+
+export interface OpportunityGapBreakdown {
+  category?: string;
+  kind: string;
+  count: number;
+}
+
+export interface OpportunityBucket {
+  /** Neovisni brojac baznog dogadjaja; služi kao parity dokaz da opportunity_summary nije utihnuo. */
+  analysisCompletedEvents: number;
+  opportunityEvents: number;
+  manualAnalyses: number;
+  unmeasurableAnalyses: number;
+  structureGapAnalyses: number;
+  /** Broj iz opportunity_summary.structureGaps. */
+  structureGapItems: number;
+  /** Neovisni zbroj detaljnih analysis_structure_gap događaja; mora pratiti structureGapItems. */
+  structureBreakdownItems: number;
+  profileEvents: number;
+  nonVerifiedProfileEvents: number;
+  repairRuns: number;
+  repairGapRuns: number;
+  repairUnresolvedChecks: number;
+  repairNoOpItems: number;
+  paywallEvents: number;
+  checkoutEvents: number;
+  purchaseEvents: number;
+  opportunities: OpportunityRow[];
+  structureGaps: OpportunityGapBreakdown[];
+  repairNoOpReasons: OpportunityGapBreakdown[];
+}
+
+export interface OpportunityStats {
+  generatedAt: string;
+  basis: 'mixed_anonymous_event_count';
+  range: RangeInfo;
+  current: OpportunityBucket;
+  previous: OpportunityBucket;
+  missingSignals: string[];
+  retention: RetentionNote[];
+}
+
 export interface SectionStatsMap {
   overview: OverviewStats;
   funnel: FunnelStats;
@@ -214,4 +266,5 @@ export interface SectionStatsMap {
   operations: OperationsStats;
   usage: UsageStats;
   coverage: CoverageStats;
+  opportunities: OpportunityStats;
 }
