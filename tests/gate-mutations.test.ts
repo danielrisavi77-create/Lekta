@@ -5013,8 +5013,10 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
   },
   // --- T26, audit 22. 9. nalazi #14, #16, #17 (+ Codex pregled #168): tocnost lokalne DOCX analize ---
-  // Kontrole idu kroz stvarni ulazni put (parseXml, ZipReader, effectiveHidden), ne kroz pomocnu
-  // funkciju s unaprijed zadanim ishodom. Mutacije izvornog koda izvedene su rucno i zapisane u #168.
+  // Doseg je UZI od punog ulaznog puta: kontrole zovu parseXml, ZipReader i effectiveHidden/runMetrics
+  // (harness je sinkron, a inspectDocxIntake i analyzeDocx su async). Pune putove pokrivaju
+  // tests/docx-malformed-xml, docx-intake-cfb i docx-hidden-text-scoring; mutacije izvornog koda
+  // izvedene su rucno i zapisane na PR-u #168.
   {
     id: 'docx/xml-greska-tiho-boduje',
     imitates: 'xmldom gresku razine error (goli & u tekstu) samo ispise i vrati djelomican DOM, pa se osteceni document.xml boduje umjesto da analiza javi gresku (nalaz #14)',

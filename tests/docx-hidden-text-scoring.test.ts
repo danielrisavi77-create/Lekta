@@ -87,13 +87,15 @@ const W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main
 async function stylesWithVanish(): Promise<string> {
   const base = await new ZipReader(buildDocx({ paragraphs: [{ text: 'x' }] }).buffer as ArrayBuffer).text('word/styles.xml');
   const extra = '<w:style w:type="paragraph" w:styleId="SkriveniOdlomak"><w:name w:val="Skriveni odlomak"/><w:rPr><w:vanish/></w:rPr></w:style>'
-    + '<w:style w:type="character" w:styleId="SkriveniZnak"><w:name w:val="Skriveni znak"/><w:rPr><w:vanish/></w:rPr></w:style>';
+    + '<w:style w:type="character" w:styleId="SkriveniZnak"><w:name w:val="Skriveni znak"/><w:rPr><w:vanish/></w:rPr></w:style>'
+    + '<w:style w:type="paragraph" w:styleId="IzvedeniBezVanish"><w:name w:val="Izvedeni bez vanish"/><w:basedOn w:val="SkriveniOdlomak"/></w:style>'
+    + '<w:style w:type="paragraph" w:styleId="IzvedeniSVanish"><w:name w:val="Izvedeni s vanish"/><w:basedOn w:val="SkriveniOdlomak"/><w:rPr><w:vanish/></w:rPr></w:style>';
   expect(base).toContain('</w:styles>');
   return base.replace('</w:styles>', `${extra}</w:styles>`);
 }
 
-async function dominantWithStyles(runProps: string, paragraphStyle = true) {
-  const pPr = paragraphStyle ? '<w:pPr><w:pStyle w:val="SkriveniOdlomak"/></w:pPr>' : '';
+async function dominantWithStyles(runProps: string, paragraphStyle = true, styleId = 'SkriveniOdlomak') {
+  const pPr = paragraphStyle ? `<w:pPr><w:pStyle w:val="${styleId}"/></w:pPr>` : '';
   const raw = `<w:p>${pPr}<w:r><w:rPr>${runProps}<w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="40"/></w:rPr><w:t xml:space="preserve">${HIDDEN_TEXT}</w:t></w:r></w:p>`;
   const paras: ParaSpec[] = [paragraphs('')[0], paragraphs('')[1], { text: '', raw }, paragraphs('')[3]];
   const profile = resolveProfile(VERIFIED_PROFILE_REGISTRY[0].id);
@@ -119,6 +121,12 @@ describe('toggle pravilo za w:vanish kroz stilove (Codex #17a)', () => {
   it('bez ikakvog vanish: vidljivo (kontrola)', async () => {
     expect(await dominantWithStyles('', false)).toBe('Arial');
   });
+  it('basedOn lanac: jedan vanish u roditelju je naslijeden, skriveno (runda 2)', async () => {
+    expect(await dominantWithStyles('', true, 'IzvedeniBezVanish')).toBe(TNR);
+  });
+  it('basedOn lanac: vanish u roditelju i u izvedenom stilu, dva preokreta, VIDLJIVO (runda 2)', async () => {
+    expect(await dominantWithStyles('', true, 'IzvedeniSVanish')).toBe('Arial');
+  });
   it('effectiveHidden tablica', () => {
     const on = { hidden: true }, off = { hidden: false }, none = {};
     expect(effectiveHidden({ paragraphStyle: on })).toBe(true);
@@ -138,8 +146,19 @@ describe('odlomak bez vidljivog teksta (Codex #17b)', () => {
   it('kontrola: vidljiv naslov koji krsi pravilo pada na oblikovanju', () => {
     expect(auditHeadingRules([heading(false)], rules)[0].status).toBe('warn');
   });
-  it('potpuno skriven naslov se ne ocjenjuje ni na jednoj osi oblikovanja', () => {
-    expect(auditHeadingRules([heading(true)], rules)[0].status).toBe('pass');
+  it('potpuno skriven naslov NIJE prolaz: provjera je nebodovana (0/0), ne 6/6 (runda 2)', () => {
+    const check = auditHeadingRules([heading(true)], rules)[0];
+    expect(check).toMatchObject({ status: 'informational', earned: 0, max: 0 });
+    expect(check.issue?.title).toMatch(/Naslovi sadrže samo skriveni tekst/);
+  });
+  it('skriveni naslov uz vidljive: ocjenjuju se samo vidljivi, a skriveni se navodi', () => {
+    const good = { headingLevel: 1, text: '2. Metode', pProps: {}, runs: [{ text: '2. Metode', font: 'Arial', size: 14, bold: true, italic: false }] };
+    const passing = auditHeadingRules([good, heading(true)], rules)[0];
+    expect(passing).toMatchObject({ status: 'pass', earned: 6, max: 6 });
+    expect(passing.detail).toMatch(/1 naslova odgovara.*1 naslova nema vidljiv tekst/);
+    const failing = auditHeadingRules([heading(false), heading(true)], rules)[0];
+    expect(failing.status).toBe('warn');
+    expect(failing.detail).toMatch(/1 od 1 naslova odstupa/);
   });
 });
 

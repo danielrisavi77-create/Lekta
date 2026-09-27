@@ -20,7 +20,7 @@ import { buildDocxFile, documentXml, type DocSpec, type ParaSpec } from './helpe
 import { analyzeDocx } from '../src/analysis/analyze-docx';
 import { resolveProfile } from '../src/analysis/golden-entry';
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
-import { parseXml, xmlDiagnosticRejects } from '../src/docx/parser';
+import { parseXml, xmlDiagnosticRejects, hasBareAmpersand } from '../src/docx/parser';
 
 const TNR = 'Times New Roman';
 const PARAGRAPHS: ParaSpec[] = [
@@ -91,6 +91,23 @@ describe('neispravan XML (nalaz #14)', () => {
     expect(parseXml('<a><![CDATA[x & y]]><!-- R & D --></a>').documentElement?.textContent).toBe('x & y');
   });
 
+  it('& unutar processing instructiona je valjan i prolazi (runda 2)', () => {
+    expect(() => parseXml('<a><?pi x&y?></a>')).not.toThrow();
+    expect(hasBareAmpersand('<?xml version="1.0"?><a><?pi x&y?></a>')).toBe(false);
+  });
+
+  it('nezatvoren komentar, CDATA ili PI se odbija', () => {
+    for (const bad of ['<a><!-- x', '<a><![CDATA[x', '<a><?pi x']) expect(hasBareAmpersand(bad)).toBe(true);
+  });
+
+  it('provjera golog & je linearna: tisuce nezatvorenih komentara i tagova brzo (runda 2)', () => {
+    const t0 = performance.now();
+    expect(hasBareAmpersand('<!--'.repeat(64000))).toBe(true);
+    expect(hasBareAmpersand('<p>'.repeat(200000) + '&amp;')).toBe(false);
+    // Regex s lijenim [\s\S]*? trebao je 1,3 s vec za 16 000 otvaraca; linearni prolaz je ispod 100 ms.
+    expect(performance.now() - t0).toBeLessThan(1000);
+  });
+
   it('teske greske i dalje padaju s istom porukom', () => {
     for (const bad of ['<a><b></a>', 'nije xml', '<a x="1" x="2"/>']) {
       expect(() => parseXml(bad, 'Oznaka')).toThrow('Oznaka nije moguće pročitati.');
@@ -115,6 +132,15 @@ describe('U+FFFD je valjan XML (Codex #14a)', () => {
     expect(xmlDiagnosticRejects('warning', 'attribute "1" missed quot(")!')).toBe(true);
     expect(xmlDiagnosticRejects('warning', 'attribute space is required"x"!!')).toBe(true);
     expect(xmlDiagnosticRejects('warning', 'Unicode replacement character detected, source encoding issues?')).toBe(false);
+    // Samo TOCNA poruka xmldoma prolazi, ne svaki warning koji sadrzi isti podniz (runda 2).
+    expect(xmlDiagnosticRejects('warning', 'attribute unicode replacement character missed quot')).toBe(true);
+    expect(xmlDiagnosticRejects('warning', 'Unicode replacement character detected, source encoding issues? extra')).toBe(true);
+  });
+
+  it('dokument s U+FFFD u atributu se analizira i boduje', async () => {
+    const file = fileWithDocumentXml((xml) => xml.replace(/w:val="(\d+)"/, 'w:val="$1" w:rsidR="\uFFFD"'));
+    const result = await analyze(file);
+    expect(typeof result.score).toBe('number');
   });
 });
 

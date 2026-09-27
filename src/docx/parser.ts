@@ -258,8 +258,34 @@ export class ZipReader {
   }
 }
 
-const BARE_AMPERSAND = /&(?!(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);)/;
-const CDATA_OR_COMMENT = /<!\[CDATA\[[\s\S]*?\]\]>|<!--[\s\S]*?-->/g;
+/** Tocna poruka xmldoma 0.9.12 (lib/sax.js) za znak U+FFFD; usporeduje se cijela, ne podniz. */
+const XMLDOM_REPLACEMENT_CHAR_WARNING = 'Unicode replacement character detected, source encoding issues?';
+const REFERENCE_AFTER_AMPERSAND = /^(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);/;
+
+/**
+ * Ima li XML goli `&` izvan CDATA, komentara i processing instructiona (u njima je `&` dopusten),
+ * ili nezatvoren takav blok. Jedan prolaz s `indexOf` od trenutne pozicije: vrijeme je linearno
+ * i za ulaz od tisuca nezatvorenih `<!--` (Codex runda 2; regex s lijenim `[\s\S]*?` bio je
+ * kvadratan). Bez DTD-a (odbijen ranije) `&` smije zapoceti samo predefiniranu ili numericku
+ * referencu.
+ */
+export function hasBareAmpersand(s: string): boolean {
+  const blocks: [string, string][] = [['<!--', '-->'], ['<![CDATA[', ']]>'], ['<?', '?>']];
+  const marks = /[<&]/g;
+  for (let m = marks.exec(s); m; m = marks.exec(s)) {
+    const at = m.index;
+    if (s[at] === '&') {
+      if (!REFERENCE_AFTER_AMPERSAND.test(s.slice(at + 1, at + 16))) return true;
+      continue;
+    }
+    const block = blocks.find(([open]) => s.startsWith(open, at));
+    if (!block) continue;
+    const end = s.indexOf(block[1], at + block[0].length);
+    if (end === -1) return true; // nezatvoren blok nije well-formed XML
+    marks.lastIndex = end + block[1].length;
+  }
+  return false;
+}
 
 /**
  * Odbacuje li xmldom dijagnostika dokument (audit 22. 9., nalaz #14; Codex pregled #168, #14a).
@@ -270,7 +296,7 @@ const CDATA_OR_COMMENT = /<!\[CDATA\[[\s\S]*?\]\]>|<!--[\s\S]*?-->/g;
  */
 export function xmlDiagnosticRejects(level: string, message: unknown): boolean {
   if (level === 'error' || level === 'fatalError') return true;
-  if (level === 'warning') return !/unicode replacement character/i.test(String(message ?? ''));
+  if (level === 'warning') return String(message ?? '') !== XMLDOM_REPLACEMENT_CHAR_WARNING;
   return false;
 }
 
@@ -282,9 +308,8 @@ export function parseXml(s: string, label = 'XML'): Document {
   if (/<!DOCTYPE/i.test(s)) throw new Error(`${label} sadrži DTD deklaraciju i odbijen je iz sigurnosnih razloga.`);
   const unreadable = () => new Error(`${label} nije moguće pročitati.`);
   // xmldom goli `&` iza kojeg slijedi razmak ili kraj teksta (`x & y`, `a&`) prihvaca BEZ ikakve
-  // dijagnostike, pa ga `onError` ne vidi (koordinator lekta-32 na #168). Bez DTD-a (odbijen gore)
-  // `&` smije zapoceti samo predefiniranu ili numericku referencu; CDATA i komentari se preskacu.
-  if (BARE_AMPERSAND.test(s.replace(CDATA_OR_COMMENT, ''))) throw unreadable();
+  // dijagnostike, pa ga `onError` ne vidi (koordinator lekta-32 na #168).
+  if (hasBareAmpersand(s)) throw unreadable();
   // @xmldom/xmldom (worker i testovi) greske razine `error` i `warning` (goli `&` ili `<` u tekstu,
   // nepoznati entitet, atribut bez navodnika) samo ispise i vrati djelomican DOM, pa se osteceni
   // dokument tiho bodovao (audit 22. 9., nalaz #14). `onError` svaku dijagnostiku pretvara u
@@ -310,8 +335,8 @@ export function parseXml(s: string, label = 'XML'): Document {
  *  - inace svaka razina stila koja ukljucuje `vanish` PREOKRECE stanje: stil odlomka i znakovni
  *    stil s `vanish` zajedno daju VIDLJIV tekst, jedan od njih skriven;
  *  - `docDefaults` daje polaziste. `vanish w:val="0"` u stilu ne preokrece nista.
- * Ogranicenje: lanac `basedOn` unutar jednog stila razrjesava se kao i dosad (zadnja definicija),
- * ne preokretanjem po svakoj razini lanca.
+ * Unutar jednog stila `parseStyles` vec preokrece po svakoj razini `basedOn` lanca, pa ovdje
+ * `paragraphStyle.hidden` i `runStyle.hidden` nose rezultat cijelog lanca.
  */
 export function effectiveHidden(levels: { defaults?: any; paragraphStyle?: any; runStyle?: any; direct?: any }): boolean {
   if (levels.direct && typeof levels.direct.hidden === 'boolean') return levels.direct.hidden;
@@ -437,6 +462,9 @@ export function parseStyles(xml: any): any {
     if (seen.has(id)) return { r: {}, p: {}, name: id };
     seen.add(id);
     const s = styles.get(id), b = resolve(s.basedOn, seen), o = { r: merge(b.r, s.r), p: merge(b.p, s.p), name: s.name, id };
+    // `w:vanish` je toggle: svaka razina `basedOn` lanca koja ga ukljucuje preokrece stanje, pa dva
+    // ukljucena vanish-a u lancu daju vidljiv tekst (Codex runda 2, #17a). `merge` bi uzeo zadnji.
+    o.r.hidden = (b.r.hidden === true) !== (s.r.hidden === true);
     cache.set(id, o);
     return o;
   }
