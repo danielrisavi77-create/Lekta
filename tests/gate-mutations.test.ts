@@ -167,6 +167,7 @@ import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -6988,5 +6989,46 @@ describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => 
     mutiran['grok-review'].phases = ['review', 'implement'];
     // Bez allowedPaths svaka datoteka je povreda, pa gard ostaje cist; obranu drzi resolver (implement bez allowliste baca).
     expect(findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations)).toEqual([]);
+  });
+});
+
+describe('mutacije: read-only faze lean workflowa idu kroz lean-citac (run wf_c810022a-a05)', () => {
+  const workflow = readFileSync(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'), 'utf8');
+  const agentMd = readFileSync(resolve(process.cwd(), '.claude/agents/lean-citac.md'), 'utf8');
+  const samoCitanje = (md: string): boolean => {
+    try {
+      return JSON.stringify(agentTools(md)) === JSON.stringify([...LEAN_READER_TOOLS]);
+    } catch {
+      return false;
+    }
+  };
+
+  it('baseline: stvarni workflow i definicija agenta prolaze', () => {
+    expect(leanReadOnlyViolations(workflow)).toEqual([]);
+    expect(samoCitanje(agentMd)).toBe(true);
+  });
+
+  it('mutant: brief poziv bez agentType (stvarni kvar) se hvata', () => {
+    const mutant = workflow.replace("schema: BRIEF_SCHEMA, agentType: 'lean-citac',", 'schema: BRIEF_SCHEMA,');
+    expect(mutant).not.toBe(workflow);
+    expect(leanReadOnlyViolations(mutant)).toEqual(["brief ide bez agentType 'lean-citac' (nema)"]);
+  });
+
+  it('mutant: preimenovan brief poziv ne prolazi tiho', () => {
+    const mutant = workflow.replace("runAgent('brief',", "runAgent('izvidjac',");
+    expect(mutant).not.toBe(workflow);
+    expect(leanReadOnlyViolations(mutant)).toContain('nema runAgent poziva s labelom brief');
+  });
+
+  it('mutant: Bash dodan u tools lean-citac se hvata', () => {
+    const mutant = agentMd.replace('tools: Read, Glob, Grep', 'tools: Read, Glob, Grep, Bash');
+    expect(mutant).not.toBe(agentMd);
+    expect(samoCitanje(mutant)).toBe(false);
+  });
+
+  it('mutant: uklonjen tools (agent bi naslijedio sve alate) se hvata', () => {
+    const mutant = agentMd.replace(/^tools:.*\n/m, '');
+    expect(mutant).not.toBe(agentMd);
+    expect(samoCitanje(mutant)).toBe(false);
   });
 });
