@@ -498,6 +498,70 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     expect(pohrana).not.toContain('fpzg');
   });
 
+  /**
+   * FOKUS PRI ZATVARANJU (nalaz pregleda, WCAG 2.4.3). Gumb koji zatvara napomenu nestaje s njom,
+   * pa bez povrata fokus pada na `<body>`. Mjeri se nad stvarnim `rad/index.html`: iz vidljivog
+   * reda fokus ide na "Analiziraj dokument" (rad je ucitan, gumb omogucen), iz znacke u listu na
+   * izbornik fakulteta. Tipkovnicki tok u pregledniku mjeri `tests/ux/intake-entry.spec.ts`.
+   */
+  const pripremiSukob = (): void => {
+    radDokument();
+    const unit = document.getElementById('unitSelect') as HTMLSelectElement;
+    unit.innerHTML = '<option value="fer" selected>FER</option><option value="fpzg">FPZG</option>';
+    (document.getElementById('analyzeBtn') as HTMLButtonElement).disabled = false;
+    zakljucajFakultet('fer', 'fer');
+    expect(detekcijaSmije('fpzg')).toBe(false);
+  };
+
+  it('fokus: "Zadrži" i "Prebaci" iz vidljivog reda vracaju fokus na "Analiziraj dokument", ne na body', () => {
+    for (const pocetak of ['Zadrži', 'Prebaci']) {
+      pripremiSukob();
+      const gumb = gumbReda(pocetak)!;
+      gumb.focus();
+      expect(document.activeElement, 'baseline: fokus je na gumbu napomene').toBe(gumb);
+      gumb.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(vidljiviRed().childElementCount, `${pocetak}: napomena zatvorena`).toBe(0);
+      expect(document.activeElement, `${pocetak}: fokus nije pao na body`).not.toBe(document.body);
+      expect(document.activeElement?.id, `${pocetak}: fokus na sljedecem koraku`).toBe('analyzeBtn');
+      zakljucajFakultet(undefined, undefined);
+    }
+  });
+
+  it('fokus: bez omogucenog "Analiziraj dokument" ide na prvi gumb kartice profila', () => {
+    pripremiSukob();
+    (document.getElementById('analyzeBtn') as HTMLButtonElement).disabled = true;
+    document.getElementById('analyzeProfile')!.innerHTML = '<button type="button" data-change-profile>Promijeni</button>';
+    const gumb = gumbReda('Zadrži')!;
+    gumb.focus();
+    gumb.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect((document.activeElement as HTMLElement | null)?.hasAttribute('data-change-profile')).toBe(true);
+  });
+
+  it('fokus: gumbi znacke u listu profila vracaju fokus na izbornik fakulteta (ostaje u modalu)', () => {
+    for (const pocetak of ['Zadrži', 'Prebaci']) {
+      pripremiSukob();
+      const znacka = document.getElementById('detectBadge')!;
+      const gumb = Array.from(znacka.querySelectorAll('button')).find((b) => b.textContent?.startsWith(pocetak))!;
+      gumb.focus();
+      expect(document.activeElement, 'baseline: fokus je na gumbu znacke').toBe(gumb);
+      gumb.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(znacka.classList.contains('hidden'), `${pocetak}: znacka skrivena`).toBe(true);
+      expect(document.activeElement?.id, `${pocetak}: fokus na izborniku fakulteta`).toBe('unitSelect');
+      expect(document.activeElement?.closest('#profileSheet'), `${pocetak}: fokus u listu profila`).not.toBeNull();
+      zakljucajFakultet(undefined, undefined);
+    }
+  });
+
+  it('fokus: klik dok je fokus drugdje ga ne otima', () => {
+    pripremiSukob();
+    const drugi = document.getElementById('mentorNotes') as HTMLTextAreaElement;
+    drugi.focus();
+    expect(document.activeElement).toBe(drugi);
+    gumbReda('Zadrži')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(vidljiviRed().childElementCount).toBe(0);
+    expect(document.activeElement, 'fokus ostaje gdje je bio').toBe(drugi);
+  });
+
   it('pad brave (drugi rad) gasi napomenu u vidljivom redu', () => {
     radDokument();
     const prvi = new File(['a'], 'a.docx');

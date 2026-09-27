@@ -17,8 +17,15 @@
  * unutar lista `#profileSheet`, koji se u toku s ulaza ne otvara, pa student napomenu nije vidio.
  * Isti tekst i ista dva gumba zato se crtaju i u `#facultyConflict`, vidljivi red uz karticu
  * profila na `/rad/` (`.analyze-row`), izvan svakog modala. Red je `role="status"`: citac ga
- * procita uljudno, a fokus se ne dira. "Zadrzi" zatvara napomenu i PAMTI izbor dok vrijedi
- * brava: ista detekcija za isti rad je vise ne vraca. Pamti se u memoriji modula, ne u pohrani.
+ * procita uljudno, a fokus se pri POJAVI ne dira. "Zadrzi" zatvara napomenu i PAMTI izbor dok
+ * vrijedi brava: ista detekcija za isti rad je vise ne vraca. Pamti se u memoriji modula, ne u
+ * pohrani.
+ *
+ * FOKUS PRI ZATVARANJU (nalaz pregleda, WCAG 2.4.3): gumb koji zatvara napomenu nestaje s njom
+ * (red se prazni, znacka skriva), pa bi fokus pao na `<body>` i sljedeci Tab krenuo s vrha
+ * stranice. Zato ga `vratiFokus` vraca na smislen element: iz vidljivog reda na gumb
+ * "Analiziraj dokument" (sljedeci korak, stalan cvor koji se ne crta ponovo kao kartica profila),
+ * a iz znacke u listu profila na izbornik fakulteta, da fokus ostane u modalu.
  *
  * ZASTO ZASEBAN MODUL: `app.ts` ima ratchet velicine (`tests/ui-module-budget.test.ts`), pa u
  * njemu ostaju samo dvije kuke: straza `detekcijaSmije` u `applyDetectedContext` i
@@ -132,25 +139,54 @@ function zadrziPotvrdjeno(prepoznato: string, doc: Document): void {
   skrijNapomenu(doc);
 }
 
+/** Mjesto napomene: znacka u listu profila (`#detectBadge`) ili vidljivi red (`#facultyConflict`). */
+type MjestoNapomene = 'list' | 'red';
+
+/**
+ * Kamo ide fokus kad se napomena zatvori. Iz lista: izbornik fakulteta (fokus ostaje u modalu).
+ * Iz vidljivog reda: "Analiziraj dokument" dok je omogucen (uz sukob je rad vec ucitan), inace
+ * prvi omoguceni gumb kartice profila. `null` samo kad na stranici nema nicega od toga.
+ */
+function ciljFokusa(mjesto: MjestoNapomene, doc: Document): HTMLElement | null {
+  if (mjesto === 'list') {
+    const izbornik = doc.getElementById('unitSelect');
+    if (izbornik) return izbornik;
+  }
+  const analiziraj = doc.getElementById('analyzeBtn') as HTMLButtonElement | null;
+  if (analiziraj && !analiziraj.disabled) return analiziraj;
+  return doc.getElementById('analyzeProfile')?.querySelector<HTMLElement>('button:not([disabled])') ?? null;
+}
+
+/**
+ * Nakon zatvaranja napomene: ako je fokus bio na zatvorenom gumbu (ili je vec pao na `<body>`, ili
+ * stoji na odspojenom cvoru), premjesta ga na `ciljFokusa`. Fokus koji je u medjuvremenu otisao
+ * drugamo se ne otima.
+ */
+function vratiFokus(gumb: HTMLElement, mjesto: MjestoNapomene, doc: Document): void {
+  const aktivan = doc.activeElement;
+  const izgubljen = !aktivan || aktivan === doc.body || aktivan === gumb || !aktivan.isConnected;
+  if (izgubljen) ciljFokusa(mjesto, doc)?.focus();
+}
+
 /** Oba gumba napomene; svako mjesto dobiva vlastiti par (cvor ne moze stajati na dva mjesta). */
-function gumbiNapomene(prepoznato: string, potvrdjeno: string, doc: Document): HTMLButtonElement[] {
+function gumbiNapomene(prepoznato: string, potvrdjeno: string, mjesto: MjestoNapomene, doc: Document): HTMLButtonElement[] {
   const prebaci = doc.createElement('button');
   prebaci.type = 'button';
   prebaci.className = 'btn btn-ghost btn-sm';
   prebaci.textContent = `Prebaci na ${nazivJedinice(prepoznato)}`;
-  prebaci.addEventListener('click', () => prebaciNaPrepoznato(prepoznato, doc));
+  prebaci.addEventListener('click', () => { prebaciNaPrepoznato(prepoznato, doc); vratiFokus(prebaci, mjesto, doc); });
   const zadrzi = doc.createElement('button');
   zadrzi.type = 'button';
   zadrzi.className = 'btn btn-ghost btn-sm';
   zadrzi.textContent = `Zadrži ${nazivJedinice(potvrdjeno)}`;
-  zadrzi.addEventListener('click', () => zadrziPotvrdjeno(prepoznato, doc));
+  zadrzi.addEventListener('click', () => { zadrziPotvrdjeno(prepoznato, doc); vratiFokus(zadrzi, mjesto, doc); });
   return [prebaci, zadrzi];
 }
 
 /**
  * Vidljivi red napomene (`#facultyConflict`): oznaka s tockom (Z3), recenica i oba gumba.
- * Sadrzaj se mijenja UNUTAR reda koji je vec `role="status"`, pa ga citac procita; fokus ostaje
- * gdje jest (nema `focus()` ni `scrollIntoView`).
+ * Sadrzaj se mijenja UNUTAR reda koji je vec `role="status"`, pa ga citac procita; fokus pri
+ * pojavi ostaje gdje jest (nema `focus()` ni `scrollIntoView`), a pri zatvaranju ga vraca `vratiFokus`.
  */
 function nacrtajVidljivuNapomenu(red: HTMLElement, prepoznato: string, potvrdjeno: string, doc: Document): void {
   const oznaka = doc.createElement('span');
@@ -161,7 +197,7 @@ function nacrtajVidljivuNapomenu(red: HTMLElement, prepoznato: string, potvrdjen
   tekst.textContent = napomenaDrugiFakultet(prepoznato, potvrdjeno);
   const akcije = doc.createElement('div');
   akcije.className = 'fc-akcije';
-  akcije.append(...gumbiNapomene(prepoznato, potvrdjeno, doc));
+  akcije.append(...gumbiNapomene(prepoznato, potvrdjeno, 'red', doc));
   red.replaceChildren(oznaka, tekst, akcije);
 }
 
@@ -182,7 +218,7 @@ export function detekcijaSmije(prepoznato: string, doc: Document = document): bo
     ikona.setAttribute('data-lucide', 'info');
     const tekst = doc.createElement('span');
     tekst.textContent = ` ${napomenaDrugiFakultet(prepoznato, potvrdjeno)} `;
-    znacka.replaceChildren(ikona, tekst, ...gumbiNapomene(prepoznato, potvrdjeno, doc));
+    znacka.replaceChildren(ikona, tekst, ...gumbiNapomene(prepoznato, potvrdjeno, 'list', doc));
     znacka.classList.remove('hidden');
     doc.defaultView?.__lektaIcons?.();
   }

@@ -268,6 +268,63 @@ test('Z32: napomena o drugom prepoznatom fakultetu vidljiva je sama; "Zadrži" j
   await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet političkih znanosti');
 });
 
+/**
+ * FOKUS PRI ZATVARANJU NAPOMENE (nalaz pregleda, WCAG 2.4.3). Gumb koji zatvara napomenu nestaje
+ * s njom; bez povrata fokus pada na `<body>` i sljedeci Tab krece s vrha stranice. Mjeri se
+ * TIPKOVNICOM: Tab do "Zadrži", Enter, pa fokus mora stajati na "Analiziraj dokument", a sljedeci
+ * Tab ici dalje od njega. Drugi prolaz isto mjeri za znacku u listu profila (`#detectBadge`):
+ * fokus ostaje u listu, na izborniku fakulteta.
+ */
+test('Z32: tipkovnicom "Zadrži" zatvara napomenu, a fokus se vraca na smislen element', async ({ page }) => {
+  await doRadaSPotvrdjenimFer(page);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  const zadrzi = napomena.getByRole('button', { name: GUMBI_FPZG_FER[1] });
+  let stigao = false;
+  for (let i = 0; i < 150 && !stigao; i += 1) {
+    await page.keyboard.press('Tab');
+    stigao = await zadrzi.evaluate((el) => el === document.activeElement);
+  }
+  expect(stigao, 'Tab stize do "Zadrži"').toBe(true);
+  await page.keyboard.press('Enter');
+  await expect(napomena).toBeHidden();
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
+  const nakon = await page.evaluate(() => ({
+    body: document.activeElement === document.body,
+    id: document.activeElement?.id ?? '',
+  }));
+  expect(nakon.body, 'fokus nije pao na body').toBe(false);
+  expect(nakon.id, 'fokus je na "Analiziraj dokument"').toBe('analyzeBtn');
+  await page.keyboard.press('Tab');
+  const sljedeci = await page.evaluate(() => {
+    const aktivan = document.activeElement;
+    const analiziraj = document.getElementById('analyzeBtn')!;
+    return {
+      body: aktivan === document.body,
+      iza: !!aktivan && aktivan !== analiziraj
+        && Boolean(analiziraj.compareDocumentPosition(aktivan) & Node.DOCUMENT_POSITION_FOLLOWING),
+    };
+  });
+  expect(sljedeci.body, 'sljedeci Tab ne pada na body').toBe(false);
+  expect(sljedeci.iza, 'sljedeci Tab ide dalje od "Analiziraj dokument", ne s vrha').toBe(true);
+
+  // Znacka u listu profila: list se otvara s kartice ("Promijeni"), gumb se aktivira Enterom.
+  await doRadaSPotvrdjenimFer(page);
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await page.locator('#analyzeProfile [data-change-profile]').click();
+  await expect(page.locator('#profileSheet')).toBeVisible();
+  const zadrziUListu = page.locator('#detectBadge').getByRole('button', { name: GUMBI_FPZG_FER[1] });
+  await zadrziUListu.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#detectBadge')).toBeHidden();
+  const uListu = await page.evaluate(() => ({
+    id: document.activeElement?.id ?? '',
+    uListu: Boolean(document.activeElement?.closest('#profileSheet')),
+  }));
+  expect(uListu.id, 'fokus je na izborniku fakulteta').toBe('unitSelect');
+  expect(uListu.uListu, 'fokus ostaje u listu profila').toBe(true);
+});
+
 test('Z32: povlacenje podize list, a napustanje ekrana ga spusta', async ({ page }) => {
   await page.goto('/');
   const podignut = () => page.evaluate(() => document.getElementById('intakeDropzone')!.classList.contains('is-podignut'));
