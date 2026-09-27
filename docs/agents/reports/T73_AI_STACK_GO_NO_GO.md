@@ -1,5 +1,10 @@
 # T73: AI evidence stack (#132, #146, #147), GO / NO-GO
 
+> **Odluka vlasnika 2026-09-27: NO-GO, opcija 2** (potvrdio vlasnik osobno u sesiji izvrsitelja lekta-00).
+> Stack #132, #146 i #147 se ne spaja: PR-ovi se zatvaraju, grane ostaju kao referenca. Otvaraju se samo
+> prijedlozi (a), (b) i (d) iz odjeljka 6, kao zadaci T74, T75 i T76 u `docs/agents/tasks.json`.
+> Prijedlozi (c), (e) i (f) cekaju identifikatore od autora stacka i nisu otvoreni kao zadaci.
+
 Datum audita: 2026-09-27. Način: samo čitanje. Glavno stablo `/home/user/Lekta` nije mijenjano. Generatori i testovi
 pokretani su u privremenim worktreeovima `/home/user/wt/t73-{master,audit,apply,pilot-apply}` (izvan repozitorija, detached HEAD),
 koji su na kraju uklonjeni. Ništa nije commitano, pushano ni komentirano na GitHubu.
