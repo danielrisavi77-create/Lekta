@@ -610,6 +610,8 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   font-size: .82rem;
 }
 .cockpit-authority__mark { color: var(--ck-green); }
+/* T64: jedan redak "Nije provjereno"; ton kao izvor ovlasti, bez nove kartice. */
+.cockpit-inspection-coverage { margin: .75rem 0 0; color: var(--ck-muted); font-size: .82rem; }
 .cockpit-authority p { margin: .1rem 0 0; }
 
 /* ---- Detalji provjere (zatecen ekran, sklopljen) ---------------------------- */

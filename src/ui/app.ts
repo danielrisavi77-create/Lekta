@@ -1269,6 +1269,7 @@ function renderResultsCockpitForResult(r: any){
     advancedOpen,
     onAction:(action)=>handleResultsCockpitAction(r,action),
     onAdvancedToggle:(open)=>setResultsCockpitAdvanced(open),
+    inspectionCoverage:r?.details?.inspectionCoverage,
   });
   setResultsCockpitAdvanced(advancedOpen);
   window.__lektaIcons?.();

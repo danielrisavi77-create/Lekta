@@ -13,6 +13,8 @@ import type { DeskItem } from './desk-model';
 import { mountDesk, type DeskDocument, type DeskHandle } from './desk-mount';
 import { buildRepairPlan, type PlanItemInput } from './repair-plan';
 import { repairPlanHtml } from './repair-plan-view';
+import { inspectionCoverageLineHtml } from './inspection-coverage-line';
+import type { InspectionCoverage } from '../../analysis/inspection-coverage';
 
 export type ResultsRenderer = 'legacy' | 'cockpit';
 export type ResultsCockpitAction =
@@ -53,6 +55,8 @@ export interface ResultsCockpitOptions {
   onAdvancedToggle?: (open: boolean) => void;
   /** Kad je prisutan i ima nalaza, stol zamjenjuje popis tri kartice. */
   desk?: ResultsCockpitDesk;
+  /** T64: sto analiza nije provjerila. Redak se crta samo kad status nije `fullyChecked`. */
+  inspectionCoverage?: InspectionCoverage | null;
 }
 
 type ResultsCockpitFindingAction = Extract<ResultsCockpitAction, { findingId: string }>;
@@ -141,6 +145,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
     action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '', '>', primaryButtonLabel(action), '</button>',
     '</div></div>',
+    inspectionCoverageLineHtml(options.inspectionCoverage, escapeHtml),
     // STOL ZAMJENJUJE POPIS, ne stoji uz njega. Tri kartice i stol odgovaraju na isto pitanje
     // ("sto prvo"), pa bi jedno ispod drugoga bilo dvostruko citanje istih nalaza.
     '<section class="cockpit-priority', stol ? ' cockpit-priority--stol' : '', '" aria-labelledby="cockpitPriorityTitle">',
