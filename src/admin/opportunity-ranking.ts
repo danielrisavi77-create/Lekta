@@ -13,6 +13,12 @@ export function rankOpportunityRows(rows: readonly OpportunityRow[]): RankedOppo
   return rows
     .map((row) => ({ ...row, sample: row.denominator >= 20 ? 'enough' as const : 'low' as const }))
     .sort((a, b) => {
+      // Event-count proxy nije jednako jak dokaz kao signal vezan uz jednu analizu/profil/repair run.
+      // Bez ove granice bi npr. 80% paywall event-gapa mogao postati "najjaci signal" ispred
+      // stvarnog 30% manual gapa, iako prvi nije cohort mjera.
+      const aProxy = a.basis === 'event_count_proxy';
+      const bProxy = b.basis === 'event_count_proxy';
+      if (aProxy !== bProxy) return aProxy ? 1 : -1;
       if (a.sample !== b.sample) return a.sample === 'enough' ? -1 : 1;
       const ar = a.ratePct ?? -1;
       const br = b.ratePct ?? -1;
