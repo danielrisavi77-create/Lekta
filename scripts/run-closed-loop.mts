@@ -6,7 +6,7 @@
  *
  * Zasto izvan `npm run check`: svaki profil su DVIJE stvarne analize plus popravak. Uzorak od 8
  * profila zivi u `tests/closed-loop-profiles.test.ts` i cuva ponasanje na svakoj promjeni; ovaj
- * pogon prolazi svih 410 i pise izvjestaj koji hrani `proof` os completion ledgera.
+ * pogon prolazi cijeli katalog profila i pise izvjestaj koji hrani `proof` os completion ledgera.
  *
  * Isti korisnicki tok kao test: dokument nastaje iz profilovih pravila, popravak se bira kao u
  * sucelju (`buildDefaultRepairRequests` + deep, koji je u panelu ukljucen po zadanom).

@@ -9,6 +9,10 @@
 # setup-nodea, a `package.json` zakljucava npm 11.11.0 (razlicite npm verzije razlicito
 # tumace opcionalne peer zapise u lockfileu). Taj korak MORA ici izmedju setup-nodea i
 # `npm ci`, pa je dio ovog akcije, ne odvojen korak u pozivajucem jobu.
+#
+# Shell: na Windowsu `powershell` (self-hosted word-proof runner nema WSL; WindowsApps
+# `bash.exe` je stub koji pada s WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED). Na Linux/macOS
+# ostaje `bash` (GitHub-hosted jobovi).
 name: 'Setup deps (kesiran node_modules)'
 description: 'actions/setup-node + kes node_modules po lockfile hashu; npm ci samo na promasaj'
 
@@ -30,8 +34,13 @@ runs:
         node-version: ${{ inputs.node-version }}
 
     - name: npm iz packageManager polja
-      if: inputs.npm-version != ''
+      if: inputs.npm-version != '' && runner.os != 'Windows'
       shell: bash
+      run: npm install --global npm@${{ inputs.npm-version }}
+
+    - name: npm iz packageManager polja (Windows)
+      if: inputs.npm-version != '' && runner.os == 'Windows'
+      shell: powershell
       run: npm install --global npm@${{ inputs.npm-version }}
 
     - name: 'Kes node_modules (kljuc: OS + Node + package-lock.json hash)'
@@ -48,6 +57,11 @@ runs:
           node-modules-${{ runner.os }}-
 
     - name: Instaliraj ovisnosti (npm ci, samo na promasaj kesa)
-      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      if: steps.cache-node-modules.outputs.cache-hit != 'true' && runner.os != 'Windows'
       shell: bash
+      run: npm ci
+
+    - name: Instaliraj ovisnosti (npm ci, Windows)
+      if: steps.cache-node-modules.outputs.cache-hit != 'true' && runner.os == 'Windows'
+      shell: powershell
       run: npm ci

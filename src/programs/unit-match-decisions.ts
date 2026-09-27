@@ -41,7 +41,15 @@ export interface UnitMatchDecision {
   bulk: boolean;
   /** Sto je stroj predlagao u trenutku odluke; cuva se da se kasnije vidi je li covjek mijenjao. */
   proposed: { unitId: string | null; confidence: string | null };
+  /** Službeni dokaz obavezan je kad odluka prihvati slabiji prijedlog ili promijeni njegov cilj. */
+  evidence?: UnitMatchEvidence[];
   note?: string;
+}
+
+export interface UnitMatchEvidence {
+  sourceUrl: string;
+  sourceLocator: string;
+  quote: string;
 }
 
 export interface DecisionFile {
@@ -80,6 +88,16 @@ export function validateDecisions(file: DecisionFile, input: DecisionValidationI
       errors.push(`${at}: nepoznat razlog "${decision.noUnitReason}"`);
     }
     if (!decision.decidedBy?.trim()) errors.push(`${at}: nema potpis (decidedBy)`);
+    const requiresEvidence = decision.unitId != null &&
+      (decision.proposed.confidence !== 'exact' || decision.proposed.unitId !== decision.unitId);
+    if (requiresEvidence && !decision.evidence?.length) {
+      errors.push(`${at}: slabiji od exact ili promijenjeni prijedlog traži službeni dokaz`);
+    }
+    for (const evidence of decision.evidence ?? []) {
+      if (!/^https:\/\//i.test(evidence.sourceUrl)) errors.push(`${at}: dokaz mora koristiti HTTPS`);
+      if (!evidence.sourceLocator.trim()) errors.push(`${at}: dokaz nema lokator`);
+      if (!evidence.quote.trim()) errors.push(`${at}: dokaz nema citat`);
+    }
   }
 
   return errors;

@@ -45,14 +45,25 @@ function allTriples(): Array<{ unitId: string; program: string; workType: string
 }
 
 /**
- * Nijedan profil ne smije biti nedostizan. Popis je prazan i takav mora ostati: do 2026-08-22 je
- * ovdje stajao adu-opci-diplomski, kojemu je krovni program bio sakriven jer svih 7 ADU smjerova
- * ima vlastiti profil, pa se profil brojao u pokrivenosti a nijedan ga student nije mogao dobiti.
- * Popravljeno u visibleProgramsForUnit: krovni se unos skriva samo kad je stvarno redundantan.
+ * Nijedan profil ne smije biti nedostizan. Do 2026-08-22 ovdje je stajao adu-opci-diplomski:
+ * krovni program bio je skriven jer svih 7 ADU smjerova ima vlastiti profil, pa se profil brojao
+ * u pokrivenosti, ali ga student nije mogao dobiti. visibleProgramsForUnit sada skriva krovni unos
+ * samo kad je stvarno redundantan.
+ *
+ * Dokumentirana iznimka: pmf-geologija-zavrsni je namjerno nedostizan: Seminar III nije dokazano završni rad (S12),
+ * pa je program 226 u holdu dok se ne potvrdi vrsta rada.
  */
-const UNREACHABLE_KNOWN: Record<string, string> = {};
+const UNREACHABLE_KNOWN: Record<string, string> = {
+  'pmf-geologija-zavrsni': 'Seminar III nije dokazano završni rad (S12); program 226 je u holdu',
+};
 
 describe('rutiranje: kataloska trojka -> profil', () => {
+  it('VEF krovni diplomski program rutira na vef-diplomski', () => {
+    const program = 'Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu';
+    const defs = eligibleDefinitionsFor(REGISTRY, 'vef', program, 'graduate');
+    expect(resolveDefinition(defs, 'default')?.id).toBe('vef-diplomski');
+  });
+
   it('svaka trojka ima determiniran ishod (nikad dva profila bez varijante)', () => {
     const ambiguous: string[] = [];
     for (const { unitId, program, workType } of allTriples()) {

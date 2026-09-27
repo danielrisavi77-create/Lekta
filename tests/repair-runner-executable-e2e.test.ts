@@ -243,7 +243,8 @@ describe.skipIf(process.platform !== 'win32')('LektaRepair executable E2E comman
         cwd: root,
         encoding: 'utf8',
         windowsHide: true,
-        timeout: 30_000,
+        // Citation tool projections now cover 135 faculties and take about 45s on Windows.
+        timeout: 90_000,
       },
     );
     expect(completed.status, `${completed.stdout}${completed.stderr}`).toBe(0);
