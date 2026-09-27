@@ -1,3 +1,5 @@
+import universityCatalog from '../../data/catalog/zagreb-catalog.json';
+
 export interface UpisnikProfileCandidateRow {
   sifraUpisnik: string;
   naziv: string;
@@ -192,8 +194,11 @@ export function validateUpisnikProfileCoverageHolds(report: UpisnikProfileCandid
         problems.push(`${program.programCode}: missing evidence request is empty`);
       }
       if (program.componentWorkTypeProfileIds.length === 1 && program.coverageStatus === 'identity-evidence-needed'
-        && hold.missingEvidence.includes(GENERIC_IDENTITY_EVIDENCE_REQUEST)) {
+        && hold.missingEvidence.some((item) => normalizedEvidenceRequest(item) === normalizedEvidenceRequest(GENERIC_IDENTITY_EVIDENCE_REQUEST))) {
         problems.push(`${program.programCode}: sole candidate has a generic evidence request`);
+      }
+      if (program.componentWorkTypeProfileIds.length === 1 && hold.missingEvidence.some((item) => normalizedEvidenceRequest(item).length < 40)) {
+        problems.push(program.programCode + ': sole candidate evidence request is too short');
       }
       if (!Array.isArray(hold.sources) || hold.sources.some(({ sourceUrl, sourceLocator, quote }) =>
         !/^https:\/\//u.test(sourceUrl.trim()) || !sourceLocator.trim() || !quote.trim())) {
@@ -218,6 +223,10 @@ export function validateUpisnikProfileCoverageHolds(report: UpisnikProfileCandid
   return problems;
 }
 
+function normalizedEvidenceRequest(value: string): string {
+  return normalized(value).replace(/[^\p{L}\p{N}]+/gu, ' ').replace(/\s+/gu, ' ').trim();
+}
+
 function normalized(value: string): string {
   return value.normalize('NFD').replace(/\p{M}/gu, '').trim().toLocaleLowerCase('hr');
 }
@@ -227,61 +236,83 @@ function sourceHost(url: string): string | null {
   catch { return null; }
 }
 
-function allowedSourceHosts(unitId: string, profiles: ProfileCandidateInput[], sourceRegistry: Array<{ url: string; snapshotPath?: string }>): string[] {
-  const registryHosts = sourceRegistry
-    .filter((source) => source.snapshotPath?.startsWith(`data/sources/${unitId}/`))
-    .map((source) => sourceHost(source.url));
-  const profileHosts = profiles.filter((profile) => profile.unitId === unitId)
-    .flatMap((profile) => profile.sources?.map((source) => sourceHost(source.url)) ?? []);
-  // Some snapshots live on a faculty service host rather than its main site.
-  const facultyHosts: Record<string, string[]> = {
-    fesb: ['fesb.unist.hr'], foi: ['foi.unizg.hr', 'foi.hr'],
-    efri: ['efri.uniri.hr'], mefst: ['mefst.unist.hr', 'mefst.hr'],
-    fhs: ['fhs.unizg.hr', 'fhs.hr'], ttf: ['ttf.unizg.hr'],
-    ffpu: ['ffpu.unipu.hr'], arh: ['arhitekt.unizg.hr'],
-  };
-  return [...new Set([...registryHosts, ...profileHosts, ...(facultyHosts[unitId] ?? [])].filter((host): host is string => host != null))];
+const UNIVERSITY_ROOTS = new Set(['unizg.hr', 'uniri.hr', 'unist.hr', 'unios.hr', 'unipu.hr', 'unidu.hr', 'unizd.hr']);
+
+// Službena domena Arhitektonskog fakulteta koristi dulji naziv sastavnice od kataloškog id-a.
+const UNIVERSITY_LABEL_ALIASES: Record<string, string[]> = { arh: ['arhitekt'] };
+
+function sourceHosts(unitId: string, profiles: ProfileCandidateInput[], sourceRegistry: Array<{ url: string; snapshotPath?: string }>): Set<string> {
+  const registryUrls = sourceRegistry
+    .filter((source) => source.snapshotPath?.startsWith('data/sources/' + unitId + '/'))
+    .map((source) => source.url);
+  const profileUrls = profiles.filter((profile) => profile.unitId === unitId)
+    .flatMap((profile) => profile.sources?.map((source) => source.url) ?? []);
+  return new Set([...registryUrls, ...profileUrls]
+    .map((url) => sourceHost(url))
+    .filter((host): host is string => host != null));
 }
 
 function sourceBelongsToUnit(url: string, unitId: string, profiles: ProfileCandidateInput[], sourceRegistry: Array<{ url: string; snapshotPath?: string }>): boolean {
   const host = sourceHost(url);
-  if (host == null || host.startsWith('repozitorij.') || host === 'dabar.srce.hr' || host === 'urn.nsk.hr') return false;
-  const allowed = allowedSourceHosts(unitId, profiles, sourceRegistry);
-  // A university root cited by a faculty profile must not authorize sibling faculties.
-  const universityRoots: Record<string, string> = { 'unizg.hr': 'unizg', 'unidu.hr': 'unidu', 'unipu.hr': 'unipu' };
-  return allowed.some((domain) => {
-    if (universityRoots[domain] && universityRoots[domain] !== unitId) return false;
-    return host === domain || host.endsWith(`.${domain}`);
-  });
+  if (host == null || /(?:^|\.)repozitorij\./u.test(host) || host === 'dabar.srce.hr' || host === 'urn.nsk.hr') return false;
+  const hosts = sourceHosts(unitId, profiles, sourceRegistry);
+  for (const root of UNIVERSITY_ROOTS) {
+    if (host !== root && !host.endsWith('.' + root)) continue;
+    const institutionId = root.split('.')[0];
+    const institution = universityCatalog.find((item) => item.id === institutionId);
+    if (host === root) return unitId === institutionId;
+    if (institution == null || !institution.units.some((unit) => unit.id === unitId)) return false;
+    const label = host.slice(0, -root.length - 1).split('.').at(-1);
+    const labels = new Set([unitId, ...(UNIVERSITY_LABEL_ALIASES[unitId] ?? []),
+      ...[...hosts].filter((knownHost) => knownHost.endsWith('.' + root))
+        .map((knownHost) => knownHost.slice(0, -root.length - 1).split('.').at(-1))]);
+    return label != null && labels.has(label);
+  }
+  return [...hosts].some((knownHost) => !UNIVERSITY_ROOTS.has(knownHost)
+    && (host === knownHost || host.endsWith('.' + knownHost)));
 }
 
-function evidenceNamesProgram(name: string, evidence: ProgramProfileDecisionEvidence): boolean {
+const WORD_ENDINGS = ['ijama', 'ama', 'ima', 'ega', 'emu', 'ih', 'im', 'om', 'em', 'og', 'oj', 'a', 'e', 'i', 'o', 'u'];
+
+function wordRoot(word: string): string {
+  const ending = WORD_ENDINGS.find((suffix) => word.endsWith(suffix) && word.length - suffix.length >= 4);
+  return ending == null ? word : word.slice(0, -ending.length);
+}
+
+function evidenceNamesProgram(name: string, evidence: ProgramProfileDecisionEvidence, cycle: StudyCycle | null): boolean {
   const title = normalizedProgramTitle(name).replace(/\s*\((?:jednopredmetni|dvopredmetni)\)/gu, '').trim();
-  const text = normalized(`${evidence.quote} ${evidence.sourceLocator}`)
+  const text = normalized(evidence.quote + ' ' + evidence.sourceLocator)
     .replace(/fakultet\p{L}*\s+za\s+\p{L}+(?:\s+\p{L}+)?/gu, '');
   const aliases = [title, ...[...title.matchAll(/\(([^)]+)\)/gu)].map((match) => match[1])]
     .map((part) => part.replace(/\([^)]*\)/gu, '').trim()).filter(Boolean);
+  const textWords = text.match(/[\p{L}\p{N}]+/gu) ?? [];
   if (aliases.some((alias) => {
-    if (text.includes(alias)) return true;
-    const words = alias.split(/\s+/u).filter((word) => word.length > 2 && !['studij', 'studija'].includes(word));
-    const textWords = text.match(/[\p{L}\p{N}]+/gu) ?? [];
+    const words = (alias.match(/[\p{L}\p{N}]+/gu) ?? [])
+      .filter((word) => word.length > 2 && !['studij', 'studija'].includes(word));
     let at = 0;
     return words.length > 0 && words.every((word) => {
-      const stem = word.slice(0, Math.max(Math.min(word.length, 5), word.length - 3));
-      const found = textWords.findIndex((candidate, index) => index >= at && candidate.startsWith(stem) && Math.abs(candidate.length - word.length) <= 3);
+      const root = wordRoot(word);
+      const found = textWords.findIndex((candidate, index) => index >= at && wordRoot(candidate) === root);
       if (found < 0) return false;
       at = found + 1;
       return true;
     });
   })) return true;
-  return /\b(?:na\s+)?svim?\s+(?:prijediplomskim|diplomskim|specijalistickim|doktorskim)?\s*studijima\b/u.test(text)
-    || /\bna studijima (?:fakulteta|sveucilista|odjela)\b/u.test(text)
-    || /\bsvi\s+(?:prijediplomski|diplomski|specijalisticki|doktorski)\s+studiji\b/u.test(text);
+  if (/\bna studijima (?:fakulteta|sveucilista|odjela)\b/u.test(text)) return true;
+  const levels: Record<string, StudyCycle> = {
+    prijediplomsk: 'undergraduate', diplomsk: 'graduate',
+    specijalistick: 'specialist', doktorsk: 'doctoral',
+  };
+  for (const match of text.matchAll(/\b(?:na\s+)?svim?\s+((?:prijediplomsk|diplomsk|specijalistick|doktorsk)\w*)?\s*studij(?:ima|i)\b/gu)) {
+    const level = match[1] == null ? null : levels[Object.keys(levels).find((root) => match[1].startsWith(root)) ?? ''];
+    if (level != null && level === cycle) return true;
+  }
+  return false;
 }
 
 function evidenceContradictsStudyKind(kind: StudyKind | null, quote: string): boolean {
   const quotedKind = studyKindForEvidenceQuote(quote);
-  return kind != null && quotedKind != null && kind !== quotedKind;
+  return quotedKind === 'both' || (kind != null && quotedKind != null && kind !== quotedKind);
 }
 
 type CandidateWorkType = NonNullable<ProfileCandidateInput['workTypes']>[number];
@@ -299,12 +330,15 @@ function workTypeForStudyLevel(value: string): CandidateWorkType | null {
 type StudyKind = 'university' | 'vocational';
 type StudyCycle = 'integrated' | 'undergraduate' | 'graduate' | 'specialist' | 'doctoral';
 
-function studyKindForEvidenceQuote(quote: string): StudyKind | null {
+function studyKindForEvidenceQuote(quote: string): StudyKind | 'both' | null {
   const text = normalized(quote);
-  const university = text.includes('sveucilisn');
-  const vocational = text.includes('strucn');
-  if (university === vocational) return null;
-  return university ? 'university' : 'vocational';
+  const kind = (root: string): StudyKind => root === 'sveucilisn' ? 'university' : 'vocational';
+  const nextToStudy = new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\s+(?:\w+\s+){0,3}studij\w*\b/gu)]
+    .map((match) => kind(match[1])));
+  const found = nextToStudy.size > 0 ? nextToStudy
+    : new Set([...text.matchAll(/\b(sveucilisn|strucn)\w*\b/gu)].map((match) => kind(match[1])));
+  if (found.size === 2) return 'both';
+  return found.values().next().value ?? null;
 }
 
 function studyKindForStudyType(value: string): StudyKind | null {
@@ -395,7 +429,7 @@ export function buildUpisnikProfileCandidates(
     if (!/^https:\/\//u.test(sourceUrl.trim()) || !sourceLocator.trim() || !quote.trim()) throw new Error('integrated graduate coverage ' + pair + ' has incomplete evidence');
     if (!sourceRegistry.some((source) => source.id === coverage.sourceId && source.url === sourceUrl)) throw new Error('integrated graduate coverage ' + pair + ' has source registry mismatch');
     if (!sourceBelongsToUnit(sourceUrl, profile.unitId, profiles, sourceRegistry)) throw new Error('integrated graduate coverage ' + pair + ' has source domain mismatch');
-    if (!evidenceNamesProgram(row.naziv, coverage.evidence)) throw new Error('integrated graduate coverage ' + pair + ' lacks program name');
+    if (!evidenceNamesProgram(row.naziv, coverage.evidence, studyCycleForStudyType(row.vrsta ?? ''))) throw new Error('integrated graduate coverage ' + pair + ' lacks program name');
     if (!profileSupportsStudyType(profile, studyKindForStudyType(row.vrsta ?? ''), 'graduate', quote)) throw new Error('integrated graduate coverage ' + pair + ' has study type mismatch');
   }
   const explicitByCode = new Map<string, ProgramProfileDecision[]>();
@@ -437,7 +471,7 @@ export function buildUpisnikProfileCandidates(
     if (!sourceBelongsToUnit(sourceUrl, profile.unitId, profiles, sourceRegistry)) {
       throw new Error(`program profile decision ${explicit.programCode}/${explicit.profileId} has source domain mismatch`);
     }
-    if (!evidenceNamesProgram(row.naziv, explicit.evidence)) {
+    if (!evidenceNamesProgram(row.naziv, explicit.evidence, studyCycleForStudyType(row.vrsta ?? ''))) {
       throw new Error(`program profile decision ${explicit.programCode}/${explicit.profileId} lacks program name`);
     }
     const forCode = explicitByCode.get(explicit.programCode) ?? [];
