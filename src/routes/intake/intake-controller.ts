@@ -4,6 +4,7 @@ import {
   type LocalDocumentSessionStore,
   type LocalDocumentSessionV1,
 } from '../../session/local-document-session';
+import { buildHandoffQuery } from './handoff-query';
 
 /**
  * KONTROLER ULAZA na `/`: jedan dokument, lokalna provjera, zapis u IndexedDB, pa navigacija na
@@ -36,6 +37,13 @@ export interface IntakeControllerDependencies {
   createSession(file: File, intake: IntakeOk): Promise<LocalDocumentSessionV1>;
   persistentStore: Pick<LocalDocumentSessionStore, 'put' | 'delete'>;
   navigate(path: string): void;
+  /**
+   * Sirovi `location.search` ulazne stranice. Kroz `buildHandoffQuery` se iz njega prenosi samo
+   * bijela lista (`unit`, `work`, `project`, `utm_*`) na `/rad/`, jer SEO stranice fakulteta vode
+   * na `/?unit=...` a odrediste te kljuceve vec cita (`src/ui/selection-entry.ts`). Izostavljeno
+   * ili prazno znaci: nema sto prenijeti, odrediste ostaje tocno kakvo je i prije bilo.
+   */
+  handoffSearch?: string;
   /** Koliko se ceka izmedju "spremno" i navigacije, da prijelaz bude vidljiv; testovi daju 0. */
   transitionDelayMs?: number;
 }
@@ -97,6 +105,10 @@ export function mountIntakeController(
   const elements = intakeElements(doc);
   let selectionToken = 0;
   let storageRefused = false;
+  // Racuna se JEDNOM, pri montazi: `location.search` se na ulazu ne mijenja, a fiksna vrijednost
+  // znaci da oba odredista (sesija i rad bez pohrane) nose ISTI kontekst. Prazan query ostavlja
+  // putanje bajt u bajt onakvima kakve su bile prije prijenosa.
+  const handoffQuery = buildHandoffQuery(dependencies.handoffSearch);
 
   const setState = (state: string, statusText: string): void => {
     elements.stage.dataset.intakeState = state;
@@ -207,7 +219,7 @@ export function mountIntakeController(
       }
       return;
     }
-    dependencies.navigate(`/rad/${sessionFragment(session.id)}`);
+    dependencies.navigate(`${WORKSPACE_WITHOUT_SESSION}${handoffQuery}${sessionFragment(session.id)}`);
   };
 
   const openPicker = (): void => {
@@ -249,7 +261,7 @@ export function mountIntakeController(
     if (!storageRefused) return;
     elements.memoryAction.disabled = true;
     setState('memory-only', 'Otvaram korektorski stol bez spremanja. Ubaci dokument ondje; radi u ovoj kartici.');
-    dependencies.navigate(WORKSPACE_WITHOUT_SESSION);
+    dependencies.navigate(`${WORKSPACE_WITHOUT_SESSION}${handoffQuery}`);
   };
 
   elements.dropzone.addEventListener('click', openPicker);

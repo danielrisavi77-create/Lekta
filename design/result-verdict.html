@@ -1,4 +1,4 @@
-<!-- @dsCard group="Rezultat" name="Presuda" subtitle="pill Nije spremno za predaju / Nema automatskih tehnickih blokatora" width="900" height="440" -->
+<!-- @dsCard group="Rezultat" name="Presuda" subtitle="jedna recenica u serifu koja odgovara na 'smijem li predati'; cetiri tona + ogradjena; sazetak s dvije osi (ozbiljnost / popravljivost) ispod; pecat i prsten kao sekundarni znakovi" width="960" height="980" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,75 +7,98 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-.verdict{display:inline-flex;align-items:center;gap:6px;border:1px solid currentColor;border-radius:999px;padding:5px 12px 5px 10px;font-family:var(--ui);font-weight:650;font-size:.78rem}
-.verdict::before{content:"●";font-size:8px}
-.verdict.blocked{color:#E4573D}
-.verdict.warn{color:#C98A2E}
-.verdict.ok{color:#34996A}
-.hero-line h2{font-family:var(--display-serif);font-weight:500;font-size:1.8rem;margin:10px 0 0;color:var(--desk-ink)}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red-deep:#C4372E;--red-on-soft:#A62B23;--warn:#C98A2E;--warn-ink:#8A570E;--scan:#4A6CF0;--scan-ink:#1D3FBF;--pass:#34996A;--pass-ink:#176243;--sh-lg:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:28px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+/* ===== Presuda ===== */
+.v{--tone:var(--red-deep);--tone-ink:var(--red-on-soft);position:relative;background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-lg);padding:26px 32px 30px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:start;transform:rotate(-.3deg)}
+.v.tone-warn{--tone:var(--warn);--tone-ink:var(--warn-ink)}.v.tone-scan{--tone:var(--scan);--tone-ink:var(--scan-ink)}.v.tone-pass{--tone:var(--pass);--tone-ink:var(--pass-ink)}
+.v .meta{margin:0;font-size:10px;letter-spacing:.08em;color:var(--paper-muted)}
+.v h2{margin:16px 0 0;font:400 clamp(34px,4.4vw,52px)/.98 var(--display);letter-spacing:-.02em;text-wrap:balance}
+.v h2 em{font-style:italic;color:var(--tone-ink)}
+.v .sum{margin:16px 0 0;font:400 20px/1.3 var(--display)}
+.v ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:7px;font-size:13px}
+.v li{display:flex;align-items:center;gap:10px}
+.v li i{width:8px;height:8px;border-radius:50%;flex:none}
+.v li b{font-weight:600}
+.v .auto{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--paper-line);font-size:12px;color:var(--paper-muted);max-width:44ch;line-height:1.5}
+.v .auto b{font-weight:600;color:var(--paper-ink)}
+.v .acts{display:flex;align-items:center;gap:18px;margin-top:22px;flex-wrap:wrap}
+.b{border:0;border-radius:2px;padding:13px 22px;font:500 13px/1 var(--mono);letter-spacing:.02em;cursor:pointer;white-space:nowrap;background:var(--red-deep);color:var(--paper)}
+.b.ink{background:var(--paper-ink)}
+.link{font:italic 17px/1 var(--display);color:var(--paper-muted);background:none;border:0;padding:0;cursor:pointer}
+/* Desni stupac: prsten + pecat, sekundarni. */
+.side{display:grid;justify-items:center;gap:14px;padding-top:4px}
+.ring{--v:71;--size:120px;--w:10px;position:relative;width:var(--size);height:var(--size);border-radius:50%;background:conic-gradient(var(--tone) calc(var(--v)*1%),var(--paper-line) 0);display:grid;place-items:center}
+.ring::before{content:"";position:absolute;inset:var(--w);border-radius:50%;background:var(--paper)}
+.ring b{position:relative;font:400 48px/1 var(--display);letter-spacing:-.02em}
+.ring small{position:absolute;bottom:18px;font-size:9px;letter-spacing:.1em;color:var(--paper-muted)}
+.stamp{padding:7px 12px;border:2.5px solid var(--tone-ink);border-radius:2px;color:var(--tone-ink);font-size:10px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-7deg);opacity:.85;white-space:nowrap}
+/* Ogradjena presuda: crtkani pecat, bez rijeci blokira. */
+.v.limited .stamp{border-style:dashed}
+.v.limited .ring{background:conic-gradient(var(--paper-muted) calc(var(--v)*1%),var(--paper-line) 0)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.note{font-size:11px;line-height:1.55;color:var(--desk-muted);max-width:60ch}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Presuda</h1>
-<p class="dsc-sub">Jedna rečenica, jedna boja. Presuda se nikad ne udvostručuje s drugom bojanom oznakom na istom ekranu.</p>
+<div><h1 class="dsc-h">Presuda</h1><p class="dsc-sub">Jedna rečenica u serifu odgovara na jedino pitanje s kojim korisnik dolazi: <b style="color:var(--desk-ink)">smijem li ovo predati</b>. Ton nosi jedna kurzivna riječ u rečenici, pečat i prsten; ostatak lista je tinta. Ispod nje sažetak s dvije osi koje se ne zbrajaju: po ozbiljnosti (tri točke) i "od toga N mogu popraviti automatski". Riječ "blokira" postoji samo uz provjereni fakultetski izvor.</p></div>
 
-<div class="dsc-row">
-<div class="dsc-item hero-line">
-  <span class="verdict blocked">Blokira</span>
-  <h2>Nije spremno za predaju</h2>
+<section><span class="cap">01 · Nije spremno · blokira, s automatikom</span>
+<article class="v">
+  <div><p class="meta">diplomski-rad-final-v3.docx · FPZG, diplomski rad · pravila provjerena prema službenim izvorima</p>
+  <h2><em>Nije spremno</em> za predaju.</h2>
+  <p class="sum">6 stvari traže tvoju pažnju.</p>
+  <ul><li><i style="background:var(--red-deep)"></i><b>1</b> blokira predaju</li><li><i style="background:var(--warn)"></i><b>3</b> treba doraditi</li><li><i style="background:var(--scan)"></i><b>2</b> trebaš provjeriti sam</li></ul>
+  <p class="auto">od toga <b>3</b> mogu popraviti automatski. Automatika može doseći najviše <b>88</b>; ostatak ostaje tebi.</p>
+  <div class="acts"><button class="b">Napravi plan popravka →</button><button class="link">Pregledaj nalaze ↓</button></div></div>
+  <div class="side"><div class="ring" style="--v:71"><b>71</b><small>/ 100</small></div><span class="stamp">Nije spremno</span></div>
+</article></section>
+
+<div class="two">
+<section><span class="cap">02 · Treba doraditi · bez blokatora</span>
+<article class="v tone-warn" style="grid-template-columns:1fr;transform:rotate(.4deg)">
+  <div><p class="meta">seminarski-eu.docx · Pravni fakultet</p>
+  <h2><em>Doradi</em> prije predaje.</h2>
+  <p class="sum">3 stvari traže tvoju pažnju.</p>
+  <ul><li><i style="background:var(--warn)"></i><b>2</b> treba doraditi</li><li><i style="background:var(--scan)"></i><b>1</b> trebaš provjeriti sam</li></ul>
+  <p class="auto">od toga <b>2</b> mogu popraviti automatski.</p>
+  <div class="acts"><button class="b">Napravi plan popravka →</button><span class="stamp" style="margin-left:auto">Dorada</span></div></div>
+</article></section>
+
+<section><span class="cap">03 · Ručna provjera · automatika nema što</span>
+<article class="v tone-scan" style="grid-template-columns:1fr;transform:rotate(-.5deg)">
+  <div><p class="meta">zavrsni-rad.docx · FPZG, završni rad</p>
+  <h2>Forma je u redu, <em>dvije stvari provjeri sam.</em></h2>
+  <ul style="margin-top:14px"><li><i style="background:var(--scan)"></i>Izjava o izvornosti: je li potpisana</li><li><i style="background:var(--scan)"></i>Literatura: 2 jedinice bez godine</li></ul>
+  <p class="auto">Ništa od ovoga automatika ne smije dirati.</p>
+  <div class="acts"><button class="b ink">Otvori prvu provjeru</button><span class="stamp" style="margin-left:auto">Ručna provjera</span></div></div>
+</article></section>
 </div>
-<div class="dsc-item hero-line">
-  <span class="verdict warn">Dorada</span>
-  <h2>Treba doradu prije predaje</h2>
+
+<div class="two">
+<section><span class="cap">04 · Čisto · nema automatskih blokatora</span>
+<article class="v tone-pass" style="grid-template-columns:1fr;transform:rotate(.3deg)">
+  <div><p class="meta">diplomski-rad-final-v4.docx · FPZG · nakon popravka</p>
+  <h2>Nema automatskih <em>tehničkih blokatora.</em></h2>
+  <p class="auto" style="border:0;padding:0;margin-top:14px">Forma je usklađena s pravilnikom. Ovo nije provjera plagijata ni potvrda fakulteta; sadržaj nisam čitao.</p>
+  <div class="acts"><button class="b ink">Preuzmi izvještaj (PDF)</button><span class="stamp" style="margin-left:auto">Forma provjerena</span></div></div>
+</article></section>
+
+<section><span class="cap">05 · Ograđena · profil nije potvrđen, ista činjenica bez "blokira"</span>
+<article class="v tone-scan limited" style="grid-template-columns:1fr;transform:rotate(-.3deg)">
+  <div><p class="meta">rad.docx · Opća provjera · izvor pravila za ovaj studij nije potvrđen</p>
+  <h2>Moguća odstupanja, <em>provjeri prije predaje.</em></h2>
+  <p class="sum">4 stvari traže tvoju provjeru.</p>
+  <p class="auto">Bez potvrđenog pravilnika ne tvrdim da nešto blokira. Profil za tvoj studij možeš zatražiti.</p>
+  <div class="acts"><button class="b ink">Pregledaj odstupanja</button><button class="link">Zatraži profil fakulteta</button><span class="stamp" style="margin-left:auto">Nepotvrđeno</span></div></div>
+</article></section>
 </div>
-<div class="dsc-item hero-line">
-  <span class="verdict ok">Čisto</span>
-  <h2>Nema automatskih tehničkih blokatora</h2>
-</div>
-</div>
+<p class="note">Pečat uvijek stoji dolje desno ili na kraju retka radnji, nikad preko teksta. Prsten se crta samo kad profil boduje.</p>
 </body>
 </html>

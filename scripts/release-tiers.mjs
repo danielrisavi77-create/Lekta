@@ -48,6 +48,22 @@ export const TIERS = Object.freeze([
   { id: 'strict-open', label: 'Tier 1: lxml nad POPRAVLJENIM paketima', cmd: 'npm run verify:strict-open:repaired', required: true },
   { id: 'word', label: 'Tier 2: pravi Microsoft Word', cmd: 'npm run verify:word', required: true, windowsOnly: true },
   { id: 'word-worst', label: 'Tier 2: Word, najgori slucaj', cmd: 'npm run verify:word:worst', required: true, windowsOnly: true },
+  // Word korpus i Word TOC su obavezni OD 2026-09-26 (T62, Word truth gate, korak 1).
+  //
+  // ZASTO: `word` mjeri tri dokumenta koja Word sam napravi, `word-worst` jedan sastavljen najgori
+  // slucaj. Commitani korpus (`tests/fixtures/docx`: LibreOffice izlaz, pravi Word radovi, pravni
+  // fixturi s fusnotama, doktorska disertacija) i izuzece `toc-field-fixera` (vidljivi tekst isti
+  // PRIJE i POSLIJE `Fields.Update()`) imali su vlastite Word provjere, ali ih nijedna razina nije
+  // trazila. Dokaz je zato mogao biti `complete: true` a da korpus ni TOC slucaj nikad nisu prosli
+  // kroz pravi Word.
+  //
+  // STO SE GUBI BEZ NJIH: tvrdnja "popravljeni paket stvarnog rada otvara se bez Wordovog tihog
+  // oporavka i ne gubi dio" i tvrdnja "osvjezavanje sadrzaja ne dira autorski tekst". Tier 0 i
+  // Tier 1 na to ne odgovaraju (dobro oblikovan paket nije paket koji Word prihvaca).
+  //
+  // Isti obrazac kao ostale Word razine: izvan Windowsa `unavailable`, sto NIJE prolaz.
+  { id: 'word-corpus', label: 'Tier 2: Word nad commitanim korpusom', cmd: 'npm run verify:word:corpus', required: true, windowsOnly: true },
+  { id: 'word-toc', label: 'Tier 2: Word, TOC slucaj (vidljivi tekst oko Fields.Update)', cmd: 'npm run verify:word:toc', required: true, windowsOnly: true },
   // Faza C zastite baze pravila: mrezna enumeracija profile-rules endpointa. Trazi
   // LEKTA_STAGING_ORIGIN (samo staging, nikad produkcija); bez varijable je unavailable,
   // ne prolaz (isti obrazac kao Word razine: nedostupno != prolazno).

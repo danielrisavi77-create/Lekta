@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:grid;gap:14px;font-family:'Geist Mono',ui-monospace,monospace;color:inherit">
+<div style="display:grid;gap:6px">
+<span style="font-size:11px;letter-spacing:.08em;color:inherit;opacity:.72">FAKULTET · {{ facSrc }}</span>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<select value="{{ fac }}" onChange="{{ onSel }}" aria-label="Fakultet" style="flex:1 1 180px;min-width:0;min-height:44px;padding:0 10px;font:inherit;font-size:13px;color:inherit;background:transparent;border:0;border-bottom:1px solid color-mix(in srgb,currentColor 38%,transparent);border-radius:0"><option value="fpzg">FPZG · Politologija · Diplomski</option><option value="efzg">EFZG · Poslovna ekonomija · Završni</option><option value="fer">FER · Računarstvo · Diplomski</option></select>
+<button type="button" onClick="{{ onOk }}" aria-pressed="{{ okPressed }}" style="font:inherit;font-size:12px;min-height:44px;padding:0 14px;border-radius:2px;cursor:pointer;border:1.5px solid {{ okC }};background:{{ okBg }};color:{{ okInk }}">{{ okText }}</button>
+</div>
+</div>
+<div style="display:grid;gap:6px">
+<span style="font-size:11px;letter-spacing:.08em;color:inherit;opacity:.72">ROK PREDAJE</span>
+<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+<input type="date" value="{{ rok }}" onChange="{{ onDate }}" disabled="{{ rokUnknown }}" aria-label="Rok predaje" style="flex:1 1 150px;min-width:0;min-height:44px;padding:0 10px;font:inherit;font-size:13px;color:inherit;background:transparent;border:0;border-bottom:1px solid color-mix(in srgb,currentColor 38%,transparent);border-radius:0">
+<label style="display:flex;gap:8px;align-items:center;min-height:44px;font-size:12px;cursor:pointer"><input type="checkbox" checked="{{ rokUnknown }}" onChange="{{ onUnk }}" style="width:16px;height:16px;accent-color:#C4372E">Još ne znam rok</label>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props, desk = p.tone === 'desk', ok = !!p.facOk;
+    return {
+      fac: p.fac || 'fpzg', facSrc: ok ? 'POTVRĐENO' : 'PREPOZNATO IZ PROFILA', rok: p.rok || '', rokUnknown: !!p.rokUnknown,
+      okText: ok ? '✓ Potvrđeno' : 'Potvrdi', okPressed: ok ? 'true' : 'false',
+      okC: ok ? '#17693F' : '#C4372E', okBg: ok ? 'transparent' : '#C4372E', okInk: ok ? (desk ? '#5FBF8A' : '#17693F') : '#F7F3E8',
+      onSel: e => p.onFac && p.onFac(e.target.value), onOk: () => p.onFacOk && p.onFacOk(),
+      onDate: e => p.onRok && p.onRok(e.target.value), onUnk: e => p.onRokUnknown && p.onRokUnknown(e.target.checked)
+    };
+  }
+}
+</script>
+</body>
+</html>

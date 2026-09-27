@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { collectStaticGraph, staticRuntimeImports } from './helpers/module-graph';
+import { intakeHandoffWiringProblems } from './helpers/handoff-query-contract';
 
 /**
  * GRANICA CISTOG ULAZA `/` (rez naslovnice, 2026-09-05).
@@ -55,14 +56,27 @@ describe('cisti ulaz /', () => {
     //
     // Guard je nad ODSUTNOSCU, jer se takve stvari vracaju jedna po jedna, svaka s dobrim
     // pojedinacnim razlogom, i nitko ne vidi zbroj.
+    //
+    // ALIGNMENT Z15 (2026-09-23) MIJENJA ONO STO JE OVDJE MJERILO, i to je novija odluka vlasnika
+    // iz `design/handoff/ALIGNMENT.md`: ulaz od tada nosi ISTU sistemsku traku kao sve stranice
+    // (cetiri odredista, Moji radovi, mobilni list), pa "najvise dva odredista" i `.intake-nav`
+    // vise ne postoje. Ono sto NIJE ukinuto je granica: traka na ulazu smije biti samo sistemska,
+    // bez ijednog odredista koje je stranica sama izmislila i bez drugog poziva na radnju. Zato se
+    // mjeri SKUP odredista i odsutnost pecata, a ne broj poveznica.
     const html = source(ROOT_HTML);
-    for (const oznaka of ['nav-links', 'nav-tools', 'mobileNav', 'mobileMenuBtn', 'ks-marquee', 'ks-tape', 'footer-grid', 'intakeStats']) {
+    for (const oznaka of ['nav-links', 'nav-tools', 'ks-marquee', 'ks-tape', 'footer-grid', 'intakeStats']) {
       expect(html, `${oznaka} je vraceno na ulaz; sadrzaj pripada /saznaj-vise/`).not.toContain(oznaka);
     }
-    // Navigacija smije imati najvise dva odredista (Moji radovi, pomoc) plus logo.
-    const nav = html.match(/<div class="intake-nav">[\s\S]*?<\/div>/)?.[0] ?? '';
-    expect(nav, 'nedostaje kratka navigacija ulaza').not.toBe('');
-    expect([...nav.matchAll(/<a\b/g)]).toHaveLength(2);
+    const header = html.match(/<header[\s\S]*?<\/header>/)?.[0] ?? '';
+    expect(header, 'nedostaje traka ulaza').not.toBe('');
+    expect(header, 'ulaz mora nositi sistemsku traku Z15').toContain('data-site-chrome="intake"');
+    // Skup odredista je TOCNO sistemski (cetiri iz Z15 + Moji radovi); ni jedno manje ni jedno vise.
+    const odredista = [...new Set([...header.matchAll(/data-site-chrome-dest="([^"]+)"/g)].map((m) => m[1]))].sort();
+    expect(odredista).toEqual(['faculties', 'how', 'my-work', 'pricing', 'tools']);
+    // DRUGI CTA: pecat "Provjeri rad" na ulazu vodi na sam sebe, pa ga traka ovdje NE nosi
+    // (odluka 2026-09-07, isti komentar stoji u `index.html` i u `rad/index.html`).
+    expect(header, 'pecat "Provjeri rad" na ulazu vodi na sam sebe').not.toContain('site-chrome__stamp');
+    expect(html, 'primarni gumb izvan papira konkurira jedinoj radnji').not.toContain('btn-primary');
   });
 
   it('PRAVNE poveznice ostaju, i nisu predmet pojednostavljenja', () => {
@@ -126,6 +140,14 @@ describe('cisti ulaz /', () => {
     expect(main).toMatch(/deviceMemory/);
     expect(main).toMatch(/pointer:\s*coarse/);
     expect(main).toMatch(/data-upload-limit/);
+  });
+
+  it('ulaz stvarno predaje `location.search` kontroleru, ne samo u testovima', () => {
+    // Nalaz pregleda (23. 9. 2026): cijeli prijenos konteksta visi o jednom retku u `main.ts`, a
+    // nijedan test ga nije dodirivao: svi `handoffSearch` ubrizgavaju rucno kroz ovisnosti. Brisanje
+    // tog retka prolazilo je kroz osam testnih datoteka i 263 tvrdnje bez ijednog crvenog signala.
+    // Tvrdnja je nad izvorom jer je to jedini sloj na kojem se produkcijska veza vidi.
+    expect(intakeHandoffWiringProblems(source(INTAKE_MAIN))).toEqual([]);
   });
 
   it('pocetni staticki graf NEMA analizator, profile ni repair motor', () => {

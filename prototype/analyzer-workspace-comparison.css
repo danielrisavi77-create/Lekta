@@ -18,7 +18,7 @@ body {
     radial-gradient(circle at 50% -12%, rgba(228, 87, 61, .12), transparent 38%),
     var(--desk, #191512);
   color: var(--comparison-ink);
-  font-family: var(--sans, "Inter Tight", Arial, sans-serif);
+  font-family: var(--sans, "Geist Mono", ui-monospace, monospace);
 }
 
 a:focus-visible { outline: 2px solid var(--comparison-red); outline-offset: 4px }

@@ -15,6 +15,7 @@
  * PRIVOLA SE CITA JEDNAKO LIJENO, jer je korisnik moze promijeniti u bilo kojem trenutku.
  */
 import { APP_VERSION } from '../config/app-version';
+import { sanitizeAnalyticsEventData } from '../analytics/event-sanitizer';
 
 export interface TelemetryDeps {
   /** Ziva konfiguracija; NIKAD uhvacena vrijednost. */
@@ -23,16 +24,7 @@ export interface TelemetryDeps {
   consent: () => unknown;
 }
 
-/**
- * Dopusteni kljucevi dogadaja. Popis je BIJELA lista, ne crna: sve neimenovano ispada, pa se
- * sadrzaj dokumenta ne moze omaskom naci u telemetriji ni kad ga netko doda u poziv.
- */
-const DOPUSTENI_KLJUCEVI = [
-  'event', 'package', 'profileId', 'workType', 'scoreBand', 'provider', 'source', 'total', 'found',
-  'missing', 'flagged', 'checked', 'profileStatus', 'pick', 'sizeBucket', 'category', 'issueCount',
-  'kind', 'manual', 'count', 'score', 'demo', 'method', 'product', 'ruleId', 'changes', 'stored', 'ms',
-];
-
+/** Dodatni podaci prolaze kroz zajednicki browser+Edge allowlist u event-sanitizer.ts. */
 /**
  * TOK PROIZVODA (plan T14): dogadjaji koji nastaju na STVARNIM promjenama stanja, ne na klikovima. Postojeca imena su
  * zadrzana gdje vec pokrivaju korak (dva duplikata bi mjerila isto dvaput); popunjene su samo praznine.
@@ -46,7 +38,7 @@ const DOPUSTENI_KLJUCEVI = [
  *                                                 preglednik ne potvrdjuje spremanje na disk)
  *   revision_compared                             usporedjene dvije verzije istog rada (novo, T12)
  *
- * Atributi ostaju unutar `DOPUSTENI_KLJUCEVI` (profil, vrsta rada, kategorija, brojevi, trajanje); nikad naslov,
+ * Atributi ostaju unutar zajednickog `ANALYTICS_DATA_KEYS` allowlista (profil, vrsta rada, kategorija, brojevi, trajanje); nikad naslov,
  * autor, naziv datoteke, komentar ni isjecak rada. `tests/product-journey-telemetry.test.ts` tvrdi da se svaki
  * dogadjaj iz ovog popisa stvarno emitira u `src/` i da sanitizacija odbacuje sve izvan bijele liste.
  */
@@ -61,13 +53,7 @@ export const PRODUCT_JOURNEY_EVENTS = {
 } as const;
 
 export function createTelemetry(deps: TelemetryDeps) {
-  function sanitizeEventData(data: any): Record<string, unknown> {
-    const allowed: any = {};
-    for (const [k, v] of Object.entries(data || {})) {
-      if (DOPUSTENI_KLJUCEVI.includes(k) && ['string', 'number', 'boolean'].includes(typeof v)) allowed[k] = v;
-    }
-    return allowed;
-  }
+  const sanitizeEventData = sanitizeAnalyticsEventData;
 
   async function trackEvent(event: any, data: any = {}): Promise<boolean> {
     const config = deps.config();

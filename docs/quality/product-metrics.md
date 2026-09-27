@@ -26,12 +26,43 @@ korisnike, ni po ponasanju ni po udjelu; stopa privole se ne mjeri (nema dogadja
 | preuzimanje poceto | `repair_download_started` | korisnik kliknuo preuzimanje popravljene kopije | `kind` |
 | verzije usporedjene | `revision_compared` | usporedba dviju verzija istog rada prikazana | `count` rijeseno, `total` uvedeno, `kind` comparable/not-comparable |
 
+### Opportunity signal
+
+`opportunity_summary` nije dodatni korak lijevka nego dijagnosticki dogadjaj nakon uspjesne analize.
+Nosi samo interne dimenzije i brojace: `profileId`, `profileStatus`, `workType`, `auto`,
+`assisted`, `manual`, `unknown`, `structureGaps`, `total` i `kind`. `unknown` je broj provjera sa statusom
+`unmeasurable`. Ne nosi naslov, autora, naziv datoteke, tekst nalaza ni isjecak rada.
+
+Control Center sekcija **Prilike** kombinira taj signal s postojecim `profile_completed`,
+`repair_completed`, `paywall_viewed`, `checkout_started` i `purchase_completed` dogadjajima.
+Rangiranje nije kompozitni score: **izravna mjerenja** (analysis/profile/repair) uvijek idu prije
+event-count proxyja; unutar iste dokazne razine prvo idu signali s najmanje 20 opažanja, zatim veci
+udio zahvacenih i veci volumen. Paywall/checkout razlika je samo **event-count proxy** jer tablica
+nema session/user identifikator; ne smije se zvati cohort abandonmentom niti postati "najjači signal"
+samo zato što joj je sirovi postotak veći.
+
+V2 dodatno salje `analysis_structure_gap` samo za postojeci `skipped[]` iz poznatih strukturiranih
+analizatora. Izvorni `reason` nikad se ne salje: svodi se na `unsupported-structure`, `stale-anchor`,
+`no-target` ili `other`, uz `category` i `count`. To NIJE potpuni OOXML inspection coverage.
+
+`repair_noop_reason` grupira postojeci `skippedReasons` iz repair enginea po sigurnom enumu
+(`already-ok`, `no-target`, `invalid-params`, `unsupported-structure`, `stale-anchor`, `unclassified`)
+i salje samo `kind` + `count`, bez `ruleId`-a. `inspection_coverage_global` ostaje u `missingSignals`
+dok T64 ne uvede zasebni dokaz sto cijeli analizator nije pregledao; odsutnost mjerenja nikad se
+ne prikazuje kao nula.
+
+Sekcija ima i **zdravlje mjerenja**: broj `analysis_completed` mora imati exact parity s brojem
+`opportunity_summary`, a zbroj `opportunity_summary.structureGaps` s neovisnim zbrojem detaljnih
+`analysis_structure_gap.count`. Mismatch je `partial`, ne zeleno stanje. Kratak vremenski prozor
+može prolazno presjeći dva uzastopna događaja preko granice raspona, ali to se namjerno prikazuje kao
+nepotpuno mjerenje umjesto da se pretpostavi da je sve u redu.
+
 Postojeci dogadjaji (`file_selected`, `profile_completed`, `analysis_completed`) su zadrzani pod svojim imenima:
 drugo ime za isti korak mjerilo bi ga dvaput.
 
 ## Sto se NE salje
 
-Sve izvan bijele liste `DOPUSTENI_KLJUCEVI` ispada u `sanitizeEventData`: naslov, autor, naziv datoteke, komentar,
+Sve izvan zajednicke bijele liste `ANALYTICS_DATA_KEYS` (`src/analytics/event-sanitizer.ts`) ispada u `sanitizeEventData`: naslov, autor, naziv datoteke, komentar,
 isjecak rada, tekst nalaza. Vrijednosti smiju biti samo skalari (string, broj, boolean). Gard:
 `tests/product-journey-telemetry.test.ts` (sanitizacija, privola, emitiranje).
 

@@ -136,6 +136,13 @@ export interface FixerOutput {
   afterLabel: string;
   /** Prisutno SAMO kad applied===false; odsutno = razlog nije (jos) klasificiran. */
   reason?: FixerNoOpReason;
+  /**
+   * T65 krug 3: trazene akcije koje fixer NAMJERNO nije proveo (citljiv hrvatski opis), neovisno o
+   * `applied`. Postoji jer afterLabel postoji samo uz applied:true, pa bi zahtjev ciji je ostatak
+   * vec na cilju vratio 'already-ok' bez traga o preskocenoj akciji. Odsutno = nista preskoceno.
+   * Cisto ADITIVNO polje; danas ga postavlja samo table-figure-rescue-fixer.
+   */
+  skippedActions?: string[];
 }
 
 const NO_OP = (parts: DocxXmlParts, reason?: FixerNoOpReason): FixerOutput => ({ parts, applied: false, beforeLabel: '', afterLabel: '', reason });

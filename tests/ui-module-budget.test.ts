@@ -114,7 +114,33 @@ function bajtova(rel: string): number {
 // renderConfirmation iz repair-panel.ts), pa je uvoz u app.ts ostao mrtav. Uklonjen je iz uvoza
 // (DEEP_CAPABLE i trackProfileUpdate ostaju, oba se i dalje koriste). Ostatak mastera je automatski
 // spojen bez sukoba.
-const BUDZET_APP = 359005;
+// Z11, KRUG Z11 (2026-09-20): 359005 -> 357396. Uklonjen cetvrti cjenik (`PACKAGES`, 39/69/99 EUR) i
+// pojednostavljena narudzba rucne obrade (bez odabira paketa/payment linka po paketu): -1609 B.
+// Datoteka je smrsavila, pa se budzet SPUSTA (CLAUDE.md: "ovo SMANJUJE app.ts... NE dizi budzet").
+// F18, NAPLATA PREKO STRIPEA (2026-09-23): 357396 -> 357815, dakle +419 B. Izmjereno, ne
+// procijenjeno. Paywall je dobio placanje u stranici, a to je po prirodi UI posao koji slijece u
+// app.ts. Gard je i ovdje odradio svoje: prva verzija je bila +2457 B, pa je cijela logika modala
+// (ucitavanje Stripe.js, montiranje Payment Elementa, potvrda, stanje gumba, Escape, otvaranje i
+// zatvaranje, oko 2 KB) otisla u src/ui/stripe-payment-modal.ts. U app.ts je ostao lijeni uvoz i
+// jedan poziv na mjestu gdje je prije stajao `location.href` na vanjski checkout. Tih +419 B je
+// cijena novog placenog ulaza; manje od toga ne ide bez selidbe cijelog checkout toka, koja je
+// zaseban zahvat i ne radi se usput uz promjenu pruzatelja naplate.
+// Broj dodira `hidden` ostaje 81: modal svoje prikazivanje radi u vlastitom modulu.
+// F18 KRUG 2 (2026-09-26): 357815 -> 357632, dakle -183 B. Racunica: dvoredni komentar iznad
+// proceedReportCheckout preselio je u zaglavlje src/ui/stripe-payment-modal.ts (-190), modal vise
+// ne prima trackEvent ni productId jer purchase_completed salje samo handleUnlockReport (-27), a
+// prima config i token za cekanje na knjizenje prava prije otkljucavanja (+34). Neto prema stanju
+// prije F18 je +236 B.
+// F18 KRUG 3 (2026-09-26): 357632 -> 357420, dakle -212 B. buildPaymentUrl vise nema granu za
+// ukinutog MoR pruzatelja (tri searchParams poziva i uvjet); spremljena stara vrijednost se
+// normalizira u src/config/production-config.ts (normalizePaymentProvider), ne u app.ts.
+// F18 KRUG 4 (2026-09-26): 357420 -> 357411, dakle -9 B, izmjereno. Racunica:
+//   `_stripeModalPromise: any` tipiziran kao susjedni `_checkoutClientPromise` (nalaz pregleda)   +50
+//   `catch(e: any)` u proceedReportCheckout bez neiskoristenog vezanja                             -8
+//   jednokratni `loadStripeModal()` uklonjen, `??=` uvoz stoji na jedinom mjestu poziva           -51
+//   neto                                                                                           -9
+// Tip je placen uklanjanjem funkcije koja je postojala za jedan poziv, ne dizanjem brojke.
+const BUDZET_APP = 357411;
 // UKUPNI BUDZET `src/ui` JE UKINUT 2026-09-09, odlukom vlasnika. Ovo je zapis zasto, jer bi bez
 // njega sljedeca sesija guard vratila.
 //

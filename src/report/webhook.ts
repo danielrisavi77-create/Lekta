@@ -1,59 +1,78 @@
 /**
- * Webhook core (MONETIZATION_PLAN.md sekcija 6). Merchant of Record: Lemon Squeezy.
+ * Webhook core (MONETIZATION_PLAN.md sekcija 6). Pruzatelj naplate: Stripe.
  *
- * Ciste, testabilne funkcije koje Deno Edge Function (webhook-mor) zove: provjera HMAC
- * potpisa, normalizacija LS eventa, izracun rokova i parametri pass kupona. Mapiranje
- * proizvoda i DB upisi su u Edge Functionu (I/O), odluke su ovdje (pokriva ih npr. check).
+ * Ciste, testabilne funkcije koje Deno Edge Function (webhook-mor) zove: provjera
+ * `Stripe-Signature` potpisa s vremenskom tolerancijom, normalizacija Stripe dogadjaja, izracun
+ * rokova i parametri pass kupona. Mapiranje proizvoda i DB upisi su u Edge Functionu (I/O),
+ * odluke su ovdje (pokriva ih npr. check).
+ *
+ * Prelazak s ranijeg Merchant of Record providera na Stripe je odluka vlasnika 2026-09-23
+ * (F18 u docs/agents/orchestrator-backlog.md). Stripe NIJE Merchant of Record, pa PDV
+ * obracunava i prijavljuje vlasnik.
  */
 
-/** Lemon Squeezy webhook payload (labava granica; citamo samo sto trebamo). */
-export interface LemonWebhookPayload {
-  meta?: {
-    event_name?: string;
-    /** LS salje test_mode u meta; true = dogadjaj iz testnog nacina rada. */
-    test_mode?: boolean;
-    custom_data?: { user_id?: string; product_id?: string; referral_code?: string };
-  };
+/**
+ * Dogadjaji koje ovaj webhook stvarno KNJIZI. Sve ostalo se prima, klasificira i ignorira uz 200
+ * (classifyStripeEvent). Vrstu NE filtrira acceptEvent, da vracen novac pod drugim imenom stigne do
+ * klasifikatora i bude glasan (nalaz pregleda kruga 2 pri spajanju mastera, 2026-09-26).
+ */
+export const STRIPE_HANDLED_EVENTS = ['payment_intent.succeeded', 'charge.refunded'] as const;
+export type StripeHandledEvent = (typeof STRIPE_HANDLED_EVENTS)[number];
+
+/** Stripe webhook payload (labava granica; citamo samo sto trebamo). */
+export interface StripeWebhookPayload {
+  id?: string;
+  type?: string;
+  /** true = produkcijski dogadjaj. false = testni nacin rada. Nedostaje = neprovjerljivo. */
+  livemode?: boolean;
+  /** Connect racun s kojeg dogadjaj dolazi; kod obicnog racuna ga Stripe ne salje. */
+  account?: string;
   data?: {
-    id?: string | number;
-    attributes?: {
-      order_id?: string | number;
+    object?: {
+      /** PaymentIntent id (`pi_...`) kod payment_intent.*; kod charge.* i refund.* je to `payment_intent`. */
+      id?: string;
+      /** Stripe vrsta objekta: `payment_intent`, `charge`, `refund`... */
+      object?: string;
+      payment_intent?: string;
+      /** PaymentIntent: `succeeded`, `processing`, `requires_payment_method`... Charge: `succeeded`, `failed`... */
       status?: string;
-      refunded?: boolean;
-      variant_id?: string | number;
-      first_order_item?: { variant_id?: string | number };
-      /** Trgovina iz koje dogadjaj dolazi. Bez provjere bi tudja trgovina prosla kao nasa. */
-      store_id?: string | number;
-      /** Ukupno naplaceno, u NAJMANJOJ jedinici valute (centi). */
-      total?: number;
-      /** Koliko je vraceno, u centima. Manje od total = djelomicni povrat. */
-      refunded_amount?: number;
+      /** PaymentIntent: naplaceno. Charge: ukupan iznos naplate. Oboje u centima. */
+      amount?: number;
+      amount_received?: number;
+      amount_refunded?: number;
       currency?: string;
-      test_mode?: boolean;
+      refunded?: boolean;
+      metadata?: { user_id?: string; product_id?: string; referral_code?: string };
     };
   };
 }
 
-export interface LemonEvent {
+export interface StripeEvent {
+  /** Stripe `type`, npr. `payment_intent.succeeded`. */
   eventName: string;
   /**
-   * `data.attributes.status` doslovno (npr. `paid`, `pending`, `refunded`); prazno ako ga nema.
+   * `data.object.status` doslovno (npr. `succeeded`, `processing`); prazno ako ga nema.
    *
-   * Bez njega se `order_created` nije moglo razlikovati od PLACENOG `order_created`: Lemon Squeezy
-   * salje isti event_name i za narudzbu koja jos nije placena.
+   * Ime dogadjaja samo po sebi ne dokazuje da je novac naplacen: to tvrdi Stripe, a mi ga ovdje
+   * provjeravamo drugi put, iz samog objekta (vidi classifyStripeEvent).
    */
   status: string;
+  /** `amount_received` PaymentIntenta u centima (stvarno naplaceno), ili null kad ga payload ne nosi. */
+  amountReceivedCents: number | null;
+  /** Kljuc knjizenja: PaymentIntent id. Isti za uplatu i za njezin povrat. */
   orderId: string;
   userId: string;
-  /** LS variant id = products.mor_product_id (mapiranje proizvoda, sekcija 6.2). */
-  variantId: string;
-  /** Referral kod iz checkout custom_data (atribucija, sekcija 8); prazno ako ga nema. */
+  /** `products.id` iz `metadata[product_id]`; webhook po njemu trazi proizvod u katalogu. */
+  productId: string;
+  /** Referral kod iz metadata (atribucija, sekcija 8); prazno ako ga nema. */
   referralCode: string;
   refunded: boolean;
-  /** Trgovina iz koje dogadjaj dolazi; prazno ako ga LS nije poslao (vidi acceptEvent). */
-  storeId: string;
+  /** `livemode` iz payloada; null kad ga payload ne nosi (vidi acceptEvent, fail-closed). */
+  livemode: boolean | null;
   /** Testni nacin rada. Testni dogadjaj NE SMIJE proizvesti pravo pravo pristupa. */
   testMode: boolean;
+  /** Povezani (Connect) racun iz payloada; prazno ako ga nema, sto je jedino prihvatljivo (acceptEvent). */
+  accountId: string;
   /** Ukupno naplaceno u centima, ili null ako ga payload ne nosi. */
   totalCents: number | null;
   /** Vraceni iznos u centima, ili null. Manje od totalCents = djelomicni povrat. */
@@ -68,152 +87,252 @@ export interface LemonEvent {
  * Kad iznosi nisu poznati (stariji ili krnji payload), vraca se true, jer je za korisnika
  * sigurnije previse oduzeti nego naplatiti nesto sto je vraceno; ta se odluka vidi u logu.
  */
-export function isFullRefund(ev: Pick<LemonEvent, 'refunded' | 'totalCents' | 'refundedCents'>): boolean {
+export function isFullRefund(ev: Pick<StripeEvent, 'refunded' | 'totalCents' | 'refundedCents'>): boolean {
   if (!ev.refunded) return false;
   if (ev.totalCents === null || ev.refundedCents === null) return true;
   return ev.refundedCents >= ev.totalCents;
 }
 
 /**
- * Smije li se dogadjaj UOPCE obraditi, prije ikakvog dodjeljivanja prava (PAY-04, PAY-05).
+ * Razlozi uz ishod `needs_manual_review`: naplacen iznos ne dokazuje da je kataloska cijena
+ * placena. Runbook (docs/GO_LIVE_NAPLATA.md, 5.1) mora opisati svaki.
+ */
+export const MANUAL_REVIEW_REASONS = Object.freeze(['amount_below_catalog', 'currency_not_eur'] as const);
+export type ManualReviewReason = (typeof MANUAL_REVIEW_REASONS)[number];
+
+export type ChargedAmountVerdict =
+  | { kind: 'ok' }
+  /** Naplaceno VISE od kataloga (npr. cjenik snizen izmedju checkouta i naplate): pravo se daje, uz trag. */
+  | { kind: 'above_catalog'; detail: string }
+  /** Naplaceno MANJE od kataloga ili u drugoj valuti: pravo se NE daje, ceka se covjek. */
+  | { kind: 'needs_manual_review'; reason: ManualReviewReason; detail: string };
+
+/**
+ * Pokriva li naplaceni iznos katalosku cijenu (odluka vlasnika 2026-09-27).
  *
- * Potpis dokazuje samo da posiljatelj zna tajnu, ne i da dogadjaj pripada NASOJ trgovini i
- * NASEM okruzenju. Testni kljuc s ispravnim potpisom, ili valjano potpisan dogadjaj druge
- * trgovine, inace bi proizveo pravo pravo pristupa.
+ * Do tada je handler svako odstupanje samo logirao i pravo svejedno upisivao. Uplata MANJA od
+ * kataloske cijene (ili u valuti koja nije EUR, pa se centi ne mogu ni usporediti) sada NE daje
+ * pravo: ishod je `needs_manual_review`, a operater odlucuje o povratu ili rucnom vezivanju.
+ * Uplata VECA od kataloske cijene i dalje daje pravo, jer je kupac platio barem ono sto se trazi;
+ * razlika ostaje zapisana kao `amount_mismatch`.
  *
- * `expectedStoreId` prazan = provjera trgovine se preskace (uz eksplicitan razlog u odgovoru),
- * jer je bolje jasno reci da gate nije konfiguriran nego se pretvarati da je provjeren.
+ * Nepoznat naplaceni iznos se ne tumaci kao dovoljan: bez broja nema dokaza da je cijena placena.
+ * Obje vrijednosti i valuta idu u `detail`, da operater iz inboxa vidi razliku bez Stripe sucelja.
+ */
+export function chargedAmountVerdict(
+  ev: Pick<StripeEvent, 'totalCents' | 'currency'>,
+  expectedCents: number,
+): ChargedAmountVerdict {
+  const detail =
+    `ocekivano=${expectedCents} naplaceno=${ev.totalCents === null ? 'nepoznato' : ev.totalCents} ` +
+    `valuta=${ev.currency || 'nepoznata'}`;
+  if (ev.currency !== 'EUR') {
+    return { kind: 'needs_manual_review', reason: 'currency_not_eur', detail: `currency_not_eur ${detail}` };
+  }
+  if (ev.totalCents === null || ev.totalCents < expectedCents) {
+    return { kind: 'needs_manual_review', reason: 'amount_below_catalog', detail: `amount_below_catalog ${detail}` };
+  }
+  if (ev.totalCents > expectedCents) return { kind: 'above_catalog', detail: `amount_mismatch ${detail}` };
+  return { kind: 'ok' };
+}
+
+/**
+ * Dolazi li dogadjaj iz NASEG okruzenja, prije ikakvog dodjeljivanja prava (PAY-04, PAY-05).
+ *
+ * Potpis dokazuje samo da posiljatelj zna tajnu, ne i da dogadjaj dolazi iz NASEG okruzenja.
+ * Testni dogadjaj s ispravnim potpisom inace bi proizveo pravo pravo pristupa.
+ *
+ * Ovdje se provjerava SAMO PORIJEKLO, kao na masteru (ondje je acceptEvent gledao trgovinu i test
+ * mode). VRSTU dogadjaja odlucuje classifyStripeEvent. Do kruga 2 spajanja je ova funkcija i vrstu
+ * odbijala (`event_ignored`) PRIJE klasifikatora, pa grana `povrat_bez_charge_refunded:` nije bila
+ * dohvatljiva ni za jedan dogadjaj koji handler primi: `refund.created` ili `charge.refund.updated`
+ * zavrsili bi kao WARN konfiguracijski sum, a entitlement bi ostao `paid` (nalaz pregleda,
+ * 2026-09-26).
+ *
+ * FAIL-CLOSED, isti duh kao prijasnji prazan `LS_STORE_ID` koji je odbijao sve: `livemode`
+ * koji payload ne nosi je NEPROVJERLJIVO porijeklo, ne "vjerojatno produkcija".
+ *
+ * ISTI RACUN U OBJE FUNKCIJE NAPLATE (Stripe ekvivalent drugog dijela masterova 4addb5db, nalaz
+ * pregleda kruga 3, 2026-09-27). Na masteru su checkout i webhook citali istu tajnu trgovine, pa se
+ * nisu mogli razici oko toga cija je narudzba. Na Stripeu je identitet racuna odredjen kljucem:
+ * `create-checkout` stvara PaymentIntent s `STRIPE_SECRET_KEY`, bez zaglavlja `Stripe-Account`,
+ * dakle UVIJEK na vlastitom racunu, a Stripe Connect Lekta ne koristi. Dogadjaj takvog
+ * PaymentIntenta NIKAD ne nosi polje `account` (Stripe ga salje samo za dogadjaj povezanog
+ * racuna). Zato je svaki dogadjaj S poljem `account` dogadjaj koji nas checkout nije mogao
+ * stvoriti, i odbija se kao `account_mismatch`. Do kruga 3 ovdje je stajala tajna
+ * `STRIPE_ACCOUNT_ID` koju je citao samo webhook: postavljena, odbila bi SVAKU nasu kupnju
+ * (checkout je na racunu platforme, dogadjaj bez `account`), uz 200 bez retryja. Tajna je uklonjena
+ * iz obje funkcije, a preflight je odbija kad je postavljena (scripts/verify-naplata-secrets.mjs).
  */
 export function acceptEvent(
-  ev: Pick<LemonEvent, 'storeId' | 'testMode'>,
-  opts: { expectedStoreId: string; allowTestMode: boolean },
-): { ok: true } | { ok: false; reason: 'store_mismatch' | 'test_mode_refused' | 'store_unverifiable' } {
-  if (ev.testMode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
-  const expected = String(opts.expectedStoreId ?? '').trim();
-  if (!expected) return { ok: false, reason: 'store_unverifiable' };
-  if (!ev.storeId) return { ok: false, reason: 'store_unverifiable' };
-  if (ev.storeId !== expected) return { ok: false, reason: 'store_mismatch' };
+  ev: Pick<StripeEvent, 'livemode' | 'accountId'>,
+  opts: { allowTestMode: boolean },
+):
+  | { ok: true }
+  | { ok: false; reason: 'livemode_unverifiable' | 'test_mode_refused' | 'account_mismatch' } {
+  if (ev.livemode === null) return { ok: false, reason: 'livemode_unverifiable' };
+  if (!ev.livemode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
+  // Bilo koji povezani racun, i prazan razmak, znaci dogadjaj koji nije s naseg racuna.
+  if (String(ev.accountId ?? '') !== '') return { ok: false, reason: 'account_mismatch' };
   return { ok: true };
 }
 
-/** Normaliziraj LS payload u ravni event. Defenzivno prema oblicima order/subscription. */
-export function parseLemonEvent(payload: LemonWebhookPayload): LemonEvent {
-  const meta = payload.meta ?? {};
-  const data = payload.data ?? {};
-  const attr = data.attributes ?? {};
-  const eventName = String(meta.event_name ?? '');
-  const status = String(attr.status ?? '');
-  const orderId = String(data.id ?? attr.order_id ?? '');
-  const userId = String(meta.custom_data?.user_id ?? '');
-  const variantId = String(attr.first_order_item?.variant_id ?? attr.variant_id ?? '');
-  const referralCode = String(meta.custom_data?.referral_code ?? '');
-  // Status se za ODLUKE normalizira (trim + mala slova), a `status` polje ostaje doslovno, da se u
-  // inboxu vidi tocno ono sto je provider poslao. Bez normalizacije bi `Refunded` ili ` paid ` bili
-  // druga vrijednost od `refunded` odnosno `paid`, a razlika je izmedju ugasenog i zivog prava.
-  const statusKey = status.trim().toLowerCase();
-  const refunded = eventName === 'order_refunded' || statusKey === 'refunded' || attr.refunded === true;
-  const storeId = attr.store_id != null ? String(attr.store_id) : '';
-  const testMode = meta.test_mode === true || attr.test_mode === true;
+/** Statusi Stripe Refund objekta kod kojih novac NIJE vracen (povrat je propao ili je otkazan). */
+const REFUND_NOT_RETURNED_STATUSES = new Set(['failed', 'canceled']);
+
+/**
+ * Nosi li dogadjaj VRACEN NOVAC, bez obzira na ime. Stripe povrat javlja kao `charge.refunded`
+ * (Charge) i kao `refund.created`, `refund.updated` i `charge.refund.updated` (objekt je Refund,
+ * bez polja `refunded`). Samo `charge.refunded` se KNJIZI kao povrat; Refund objekt pod drugim
+ * imenom je `povrat_bez_charge_refunded:*` (classifyStripeEvent, ERROR u logu).
+ *
+ * Tri namjerne granice (Codex pregled kruga 2, 2026-09-26, svaka potvrdjena testom):
+ *  - Refund sa statusom `failed` ili `canceled` NIJE vracen novac (npr. `refund.failed`), pa nije
+ *    ni ERROR; inace bi propao povrat dizao lazan alarm "povrat nije proveden".
+ *  - `amount_refunded` i `refunded` na Chargeu NISU signal izvan `charge.refunded`: ostaju na
+ *    objektu zauvijek, a Stripe povrat ne javlja kroz `charge.updated` (taj dogadjaj nosi izmjenu
+ *    opisa, metapodataka ili naknadno hvatanje). Kao signal bi svaki kasniji `charge.updated`
+ *    ponovno dizao ERROR za vec obradjen povrat.
+ *  - Isto vrijedi za `payment_intent.*`: ime odlucuje granu, zastavica iz objekta ne.
+ */
+export function isRefundBearing(eventName: string, obj: { object?: string; status?: string }): boolean {
+  if (eventName === 'charge.refunded') return true;
+  const refundObject = obj.object === 'refund' || eventName.startsWith('refund.') || eventName.startsWith('charge.refund.');
+  if (!refundObject) return false;
+  return !REFUND_NOT_RETURNED_STATUSES.has(String(obj.status ?? '').trim().toLowerCase());
+}
+
+/**
+ * Normaliziraj Stripe payload u ravni event.
+ *
+ * `orderId` je UVIJEK PaymentIntent id: kod `payment_intent.succeeded` je to `data.object.id`,
+ * kod `charge.refunded` (i kod Refund objekta, `refund.*`) je to `data.object.payment_intent`.
+ * Time uplata i njezin povrat dijele isti kljuc, pa refund pogodi tocno onaj entitlement koji je
+ * uplata stvorila, a povrat pod drugim imenom u inboxu nosi PaymentIntent za rucnu obradu.
+ */
+export function parseStripeEvent(payload: StripeWebhookPayload): StripeEvent {
+  const eventName = String(payload.type ?? '');
+  const obj = payload.data?.object ?? {};
+  const meta = obj.metadata ?? {};
+  // Charge i Refund nose PaymentIntent u polju `payment_intent`; `id` im je `ch_...` ili `re_...`.
+  const isCharge = eventName.startsWith('charge.') || eventName.startsWith('refund.') || obj.object === 'refund';
+  // Kod naplate bez PaymentIntenta (naslijedjena izravna naplata) orderId ostaje PRAZAN, a ne
+  // charge id: kljuc koji ne moze pogoditi nijedan entitlement lagao bi da je povrat proveden.
+  const orderId = String((isCharge ? obj.payment_intent : (obj.id ?? obj.payment_intent)) ?? '');
+  const refunded = isRefundBearing(eventName, obj);
   const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+  // PaymentIntent nosi stvarno naplaceno u `amount_received`; Charge ukupan iznos u `amount`.
+  const totalCents = isCharge ? num(obj.amount) : (num(obj.amount_received) ?? num(obj.amount));
+  const livemode = typeof payload.livemode === 'boolean' ? payload.livemode : null;
   return {
     eventName,
-    status,
+    status: String(obj.status ?? ''),
+    // Charge nema `amount_received`; kod povrata ga zato namjerno ne izmisljamo iz `amount`.
+    amountReceivedCents: isCharge ? null : num(obj.amount_received),
     orderId,
-    userId,
-    variantId,
-    referralCode,
+    userId: String(meta.user_id ?? ''),
+    productId: String(meta.product_id ?? ''),
+    referralCode: String(meta.referral_code ?? ''),
     refunded,
-    storeId,
-    testMode,
-    totalCents: num(attr.total),
-    refundedCents: num(attr.refunded_amount),
-    currency: String(attr.currency ?? '').toUpperCase(),
+    livemode,
+    testMode: livemode === false,
+    accountId: String(payload.account ?? ''),
+    totalCents,
+    refundedCents: num(obj.amount_refunded),
+    currency: String(obj.currency ?? '').toUpperCase(),
   };
 }
 
-/** Sto webhook smije napraviti s dogadjajem. */
-export type LemonEventKind = 'paid' | 'refund' | 'ignored' | 'needs_manual_link';
+/**
+ * Sto webhook smije napraviti s dogadjajem koji je prosao potpis i porijeklo.
+ *
+ * `needs_manual_link`: naplata je POTVRDJENA (kao kod `paid`), ali dogadjaj nema
+ * `metadata[user_id]`, pa se pravo ne moze upisati nikome. Stripe ekvivalent masterova ishoda iz
+ * 31b802ad i 81a89f2f: novac je naplacen, pa dogadjaj ne smije nestati ni utonuti u WARN sum;
+ * handler ga pise na ERROR razini i s vlastitim ishodom u inboxu.
+ */
+export type StripeEventKind = 'paid' | 'refund' | 'needs_manual_link' | 'ignored';
 
-export interface LemonClassification {
-  kind: LemonEventKind;
+export interface StripeClassification {
+  kind: StripeEventKind;
   /** Kratak strojni razlog; upisuje se u `webhook_events.outcome_detail` i vraca pozivatelju. */
   reason?: string;
 }
 
 /**
- * ODLUKA STO S DOGADJAJEM (blokeri lansiranja, 2026-09-22; suzena 2026-09-23).
+ * ODLUKA STO S DOGADJAJEM. Cista funkcija; handler (supabase/functions/webhook-mor/handler.ts)
+ * je samo zove. Stripe ekvivalent zastita koje je master 2026-09-22/23 uveo za prijasnjeg
+ * pruzatelja (31b802ad, 81a89f2f, daf5f53a), prenesen pri spajanju mastera u design/pack3.
  *
- * Cista funkcija; Edge funkcija ju samo zove.
+ * KNJIZI SE SAMO STVARNO NAPLACENO. `payment_intent.succeeded` je `paid` tek kad objekt sam
+ * potvrdjuje naplatu: `status` je `succeeded` (usporedba bez razmaka i u malim slovima) i
+ * `amount_received` je pozitivan broj. Ime dogadjaja samo po sebi nije dovoljno: dogadjaj s
+ * drugim statusom ili bez naplacenog iznosa nije kupnja, i ne smije dodijeliti pravo pristupa.
+ * Takav dogadjaj je `ignored` s imenovanim razlogom (`payment_status:*`, `amount_received:*`),
+ * 200 jer retry ne bi promijenio ishod, i ERROR u logu jer se tice stvarnog novca.
  *
- * Do 2026-09-22 je handler obradjivao SVE sto je proslo potpis i porijeklo: `order_created` se
- * tretirao kao placen bez gledanja na `attributes.status`, pa bi narudzba u statusu `pending` ili
- * `failed` dobila puno pravo pristupa. Dogadjaji pretplata i licenci (`subscription_*`,
- * `license_*`) nisu nasi, ali bi pali u istu granu i zavrsili kao `unknown_product`.
+ * POTVRDJENA NAPLATA BEZ KORISNIKA je `needs_manual_link` (razlog `missing_user_metadata`), ne
+ * `ignored`: novac je naplacen, a pravo nema komu pripasti. Povrat userId ne treba (ide po
+ * PaymentIntentu), pa `charge.refunded` ostaje `refund` i bez njega.
  *
- * ULAZ JE IME DOGADJAJA, NE ZASTAVICA (nalaz pregleda 2026-09-23). Medjuverzija je u refund granu
- * ulazila na `ev.refunded`, koju `parseLemonEvent` racuna i iz `attributes.status === 'refunded'` i
- * iz `attributes.refunded === true`, dakle BEZ obzira na `event_name`. To je otvorilo put koji na
- * masteru nije postojao: `subscription_payment_refunded` iz NASE trgovine nosi oba ta polja, a
- * `orderId` mu je `data.id` PRETPLATNICKOG RACUNA, ne narudzbe. Refund grana pise
- * `update entitlements set status = 'refunded' where provider = ... and order_id = <taj id>` i
- * povlaci referral nagrade po istom id-u. Id racuna i id narudzbe su dvije odvojene brojcane
- * sekvence kod providera, pa numericki pogodak tiho gasi pravo pristupa kupcu koji je uredno
- * platio, uz ishod `processed` koji nijedan upit iz runbooka ne vraca.
+ * POVRAT SAMO IZ `charge.refunded`, PO IMENU, NE PO ZASTAVICI. `ev.refunded` je istinit i za
+ * Refund objekt pod drugim imenom (`refund.created`, `charge.refund.updated`; isRefundBearing). Refund
+ * grana handlera pise `update entitlements ... where order_id = ev.orderId` i povlaci referral
+ * nagrade po istom id-u, pa u nju smije uci samo dogadjaj kojemu je `orderId` sigurno
+ * PaymentIntent povrata (`charge.payment_intent`). Vracen novac pod drugim imenom nije tiho
+ * odbacen nego `ignored` s razlogom `povrat_bez_charge_refunded:*` (ERROR u logu).
  *
- * Zato je povrat vezan ISKLJUCIVO uz `order_refunded`, jedini dogadjaj kojemu je `data.id` id
- * narudzbe. Dogadjaj koji nosi vracen novac pod drugim imenom NIJE tiho odbacen: dobiva
- * `ignored` s razlogom `povrat_bez_order_refunded:<ime>`, koji je `isNotableIgnore` (ERROR u logu)
- * i ima svoj redak u `docs/GO_LIVE_NAPLATA.md`. Dakle: vidi se, ali ne pise po tudjem id-u.
- *
- * Prihvaca se tocno jedna kupnja: `order_created` sa statusom `paid` (usporedba ide nad statusom
- * bez razmaka i u malim slovima). Sve ostalo je `ignored` s imenovanim razlogom, i to je 200, jer
- * retry ne bi promijenio ishod.
- *
- * Povrat NE trazi `userId`: obrada ide po `order_id` (gasenje entitlementa, povlacenje referral
- * nagrade), pa korisnik uz dogadjaj nije ni potreban. Placena narudzba BEZ
- * `meta.custom_data.user_id` je pak stvaran slucaj (kupnja izvan naseg checkouta, izgubljen custom
- * data): nju se ne smije odbaciti s 400, jer je novac naplacen. Zato `needs_manual_link`: dogadjaj
- * ostaje u inboxu s tim ishodom i veze se rucno.
+ * Ova funkcija je JEDINO mjesto odluke o vrsti: `acceptEvent` provjerava samo porijeklo, pa svaki
+ * potpisan dogadjaj iz naseg okruzenja stize ovamo. Vrsta koja ne nosi novac je
+ * `nepodrzan_dogadjaj:*` (WARN, konfiguracijski sum); vrsta koja nosi vracen novac je
+ * `povrat_bez_charge_refunded:*` (ERROR). Obje su dohvatljive iz izvrsenog handlera
+ * (tests/webhook-mor-handler.test.ts), ne samo iz izolirane funkcije.
  */
-export function classifyLemonEvent(
-  ev: Pick<LemonEvent, 'eventName' | 'status' | 'userId' | 'refunded'>,
-): LemonClassification {
-  if (ev.eventName === 'order_refunded') return { kind: 'refund' };
-  if (ev.eventName === 'order_created') {
+export function classifyStripeEvent(
+  ev: Pick<StripeEvent, 'eventName' | 'status' | 'amountReceivedCents' | 'refunded' | 'userId'>,
+): StripeClassification {
+  if (ev.eventName === 'charge.refunded') return { kind: 'refund' };
+  if (ev.eventName === 'payment_intent.succeeded') {
     const status = ev.status.trim().toLowerCase();
-    if (status !== 'paid') return { kind: 'ignored', reason: `order_status:${status || 'nepoznat'}` };
-    if (!ev.userId) return { kind: 'needs_manual_link', reason: 'bez_user_id' };
+    if (status !== 'succeeded') return { kind: 'ignored', reason: `payment_status:${status || 'nepoznat'}` };
+    const received = ev.amountReceivedCents;
+    if (received === null || !(received > 0)) {
+      return { kind: 'ignored', reason: `amount_received:${received === null ? 'nepoznat' : String(received)}` };
+    }
+    if (!ev.userId.trim()) return { kind: 'needs_manual_link', reason: 'missing_user_metadata' };
     return { kind: 'paid' };
   }
-  // Vracen novac pod imenom koje nije `order_refunded`. Ne obradjuje se, ali se VICE: vidi gore.
-  if (ev.refunded) return { kind: 'ignored', reason: `povrat_bez_order_refunded:${ev.eventName || 'nepoznat'}` };
+  if (ev.refunded) return { kind: 'ignored', reason: `povrat_bez_charge_refunded:${ev.eventName || 'nepoznat'}` };
   return { kind: 'ignored', reason: `nepodrzan_dogadjaj:${ev.eventName || 'nepoznat'}` };
 }
 
 /**
- * Svi prefiksi koje `classifyLemonEvent` moze staviti u `webhook_events.outcome_detail` uz ishod
+ * Svi prefiksi koje `classifyStripeEvent` moze staviti u `webhook_events.outcome_detail` uz ishod
  * `ignored`. Runbook mora opisati svaki (gard: `tests/naplata-runbook.test.ts`).
  */
 export const IGNORE_REASON_PREFIXES = Object.freeze([
-  'order_status:',
-  'povrat_bez_order_refunded:',
+  'payment_status:',
+  'amount_received:',
+  'povrat_bez_charge_refunded:',
   'nepodrzan_dogadjaj:',
 ]);
 
 /**
- * Prefiksi razloga koje netko MORA pogledati. Log ih pise na ERROR razini, ostale na WARN.
+ * Prefiksi razloga koje netko MORA pogledati. Handler ih pise na ERROR razini, ostale na WARN.
  *
- * `order_created` koji nije placen tice se stvarne narudzbe i stvarnog novca: Lemon Squeezy nema
- * `order_updated`, pa narudzba koja je ovdje odbijena kao neplacena nikad nece dobiti drugi
- * dogadjaj. Ako se pretpostavka o vrijednosti `paid` ikad pokaze krivom, ovo je jedino mjesto na
- * kojem se to vidi. `povrat_bez_order_refunded:` je druga strana iste medalje: novac je vracen, a
- * mi ga namjerno nismo obradili jer id uz taj dogadjaj nije id narudzbe. `nepodrzan_dogadjaj:` je
- * konfiguracijski sum (pretplacen dogadjaj koji nam ne treba) i ide na WARN.
+ * `payment_status:` i `amount_received:` ticu se dogadjaja koji se zove kao uplata, a nije
+ * potvrdio naplatu: ako se pretpostavka o Stripeovu obliku ikad pokaze krivom, SVAKA kupnja bi
+ * postala `ignored` + 200 bez retryja, i ovo je jedino mjesto na kojem se to vidi.
+ * `povrat_bez_charge_refunded:` je vracen novac koji namjerno nismo obradili.
  */
-export const NOTABLE_IGNORE_PREFIXES = Object.freeze(['order_status:', 'povrat_bez_order_refunded:']);
+export const NOTABLE_IGNORE_PREFIXES = Object.freeze([
+  'payment_status:',
+  'amount_received:',
+  'povrat_bez_charge_refunded:',
+]);
 
 /** Je li `ignored` dogadjaj takav da ga netko MORA pogledati. */
-export function isNotableIgnore(c: Pick<LemonClassification, 'reason'>): boolean {
+export function isNotableIgnore(c: Pick<StripeClassification, 'reason'>): boolean {
   const reason = String(c.reason ?? '');
   return reason !== '' && NOTABLE_IGNORE_PREFIXES.some((p) => reason.startsWith(p));
 }
@@ -235,15 +354,61 @@ function timingSafeEqual(a: string, b: string): boolean {
 }
 
 /**
- * Provjeri Lemon Squeezy HMAC-SHA256 potpis (`X-Signature`, hex) nad sirovim tijelom.
- * Web Crypto (radi u Deno i Node). Prazan secret ili potpis -> false.
+ * Najveca dopustena razlika izmedju `t` iz potpisa i naseg sata, u sekundama.
+ *
+ * Bez nje bi jednom presretnut valjan zahtjev bio upotrebljiv zauvijek (replay): potpis ostaje
+ * matematicki ispravan koliko god da je star, jer tajna se ne mijenja.
  */
-export async function verifyLemonSignature(
+export const STRIPE_SIGNATURE_TOLERANCE_SECONDS = 300;
+
+/** Razlozen ishod provjere potpisa; razlog ide u log, nikad u odgovor klijentu. */
+export type StripeSignatureResult =
+  | { ok: true }
+  | {
+      ok: false;
+      reason: 'missing_secret' | 'missing_signature' | 'malformed_header' | 'timestamp_out_of_tolerance' | 'signature_mismatch';
+    };
+
+/** Rastavi `Stripe-Signature` zaglavlje oblika `t=1699999999,v1=abc,v1=def`. */
+export function parseStripeSignatureHeader(header: string): { timestamp: number | null; signatures: string[] } {
+  let timestamp: number | null = null;
+  const signatures: string[] = [];
+  for (const part of header.split(',')) {
+    const idx = part.indexOf('=');
+    if (idx <= 0) continue;
+    const key = part.slice(0, idx).trim();
+    const value = part.slice(idx + 1).trim();
+    if (key === 't') {
+      const n = Number(value);
+      if (Number.isFinite(n)) timestamp = n;
+    } else if (key === 'v1' && value) {
+      signatures.push(value.toLowerCase());
+    }
+  }
+  return { timestamp, signatures };
+}
+
+/**
+ * Provjeri Stripe potpis: HMAC-SHA256 tajnim kljucem nad `${t}.${raw}`, hex, timing-safe.
+ *
+ * Prihvaca se ako se IJEDAN `v1` podudara (Stripe ih salje vise za vrijeme rotacije tajne).
+ * `nowMs` je injektabilan da se istekao potpis moze dokazati bez cekanja od pet minuta.
+ * Prazan tajni kljuc odbija SVE: nekonfiguriran gate ne smije znaciti "propusti sve".
+ */
+export async function verifyStripeSignature(
   raw: string,
-  signature: string | null | undefined,
+  header: string | null | undefined,
   secret: string,
-): Promise<boolean> {
-  if (!secret || !signature) return false;
+  nowMs: number = Date.now(),
+  toleranceSeconds: number = STRIPE_SIGNATURE_TOLERANCE_SECONDS,
+): Promise<StripeSignatureResult> {
+  if (!secret) return { ok: false, reason: 'missing_secret' };
+  if (!header) return { ok: false, reason: 'missing_signature' };
+  const { timestamp, signatures } = parseStripeSignatureHeader(header);
+  if (timestamp === null || signatures.length === 0) return { ok: false, reason: 'malformed_header' };
+  if (Math.abs(Math.floor(nowMs / 1000) - timestamp) > toleranceSeconds) {
+    return { ok: false, reason: 'timestamp_out_of_tolerance' };
+  }
   const key = await crypto.subtle.importKey(
     'raw',
     enc.encode(secret),
@@ -251,8 +416,13 @@ export async function verifyLemonSignature(
     false,
     ['sign'],
   );
-  const mac = await crypto.subtle.sign('HMAC', key, enc.encode(raw));
-  return timingSafeEqual(toHex(mac), signature.trim().toLowerCase());
+  const mac = toHex(await crypto.subtle.sign('HMAC', key, enc.encode(`${timestamp}.${raw}`)));
+  // Sve kandidate provjeravamo do kraja: ranim izlazom bi trajanje odavalo koji je kandidat blizi.
+  let matched = false;
+  for (const candidate of signatures) {
+    if (timingSafeEqual(mac, candidate)) matched = true;
+  }
+  return matched ? { ok: true } : { ok: false, reason: 'signature_mismatch' };
 }
 
 /** ISO vrijeme za `now + days` (rok potrosnje entitlementa ili trajanje kupona). */

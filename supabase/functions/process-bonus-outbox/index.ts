@@ -80,7 +80,7 @@ Deno.serve(async (req: Request) => {
           // bi to bila DRUGA implementacija istog pravila i te dvije bi se s vremenom razisle.
           //
           // Umjesto toga obveza ostaje `pending` uz jasan razlog, pa je vidljiva u nadzoru i moze
-          // se rijesiti ponovnim slanjem webhooka (Lemon Squeezy "resend"), sto prolazi kroz
+          // se rijesiti ponovnim slanjem webhooka (Stripe "Resend"), sto prolazi kroz
           // `duplicate_ignored` put i ondje je opet pokusava. To je posteno djelomicno rjesenje,
           // ne tiho preskakanje: broj se vraca u odgovoru i vidi se u logu.
           throw new Error(`vrsta '${row.kind}' se ponavlja slanjem webhooka, ne iz radnika`);

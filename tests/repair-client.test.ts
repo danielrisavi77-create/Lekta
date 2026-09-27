@@ -343,6 +343,7 @@ describe('uploadRepair prihvaca binarni I JSON oblik', () => {
     fileName: 'rad-popravljeno.docx',
     changelog: [{ before: 'Times', after: 'Times New Roman' }],
     skipped: ['neka-stavka'],
+    skippedReasons: { 'neka-stavka': 'unsupported-structure' },
     unknownFixers: ['nepoznat-fixer'],
     slotId: 'slot-1',
     jobId: 'job-1',
@@ -370,6 +371,7 @@ describe('uploadRepair prihvaca binarni I JSON oblik', () => {
     expect(Array.from(out.docxBytes)).toEqual(Array.from(docx));
     expect(out.fileName).toBe('rad-popravljeno.docx');
     expect(out.unknownFixers).toEqual(['nepoznat-fixer']);
+    expect(out.skippedReasons).toEqual({ 'neka-stavka': 'unsupported-structure' });
     expect(out.storagePending).toBe(true);
   });
 
@@ -386,6 +388,7 @@ describe('uploadRepair prihvaca binarni I JSON oblik', () => {
     if (out.kind !== 'ok') return;
     expect(Array.from(out.docxBytes)).toEqual(Array.from(docx));
     expect(out.unknownFixers).toEqual(['nepoznat-fixer']);
+    expect(out.skippedReasons).toEqual({ 'neka-stavka': 'unsupported-structure' });
   });
 
   it('oba oblika daju ISTI ishod (razlika je samo u prijenosu)', async () => {

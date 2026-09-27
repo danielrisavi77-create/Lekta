@@ -2,6 +2,7 @@ import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { potvrdiProfil } from './confirm-profile';
 import { cekajApp, cekajKorak } from './app-ready';
+import { klikniBezSkrolUtrke } from './stabilan-skrol';
 
 const FIXTURE = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
@@ -93,7 +94,8 @@ test('/rad/ korak Pravila: potvrda je ekran, kontrole cekaju iza Promijeni', asy
   // Kontrole nisu na ekranu: od 2026-09-07 uopce nisu u `#wizardView`, nego u listu izvan
   // `<main>`. Tvrdnja gleda VIDLJIVOST, ne postojanje, pa vrijedi i za jedno i za drugo.
   await expect(page.locator('.wizard-col-profile .form-grid:visible')).toHaveCount(0);
-  await page.locator('[data-change-profile]').click();
+  // Klik ide kroz `klikniBezSkrolUtrke`; vidi tu datoteku za mjerenje.
+  await klikniBezSkrolUtrke(page, page.locator('[data-change-profile]'));
   await expect(page.locator('#profileSheet')).toBeVisible();
   const vidljivi = await page.locator('#profileSheet .form-grid:visible').count();
   expect(vidljivi, 'list mora otvoriti SVE obrasce profila').toBeGreaterThan(1);
@@ -123,12 +125,12 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
   await page.locator('#fileInput').setInputFiles(FIXTURE);
   await expect(page.locator('#radDocBar')).toBeVisible();
   await expect(page.locator('#radDocName')).toHaveText(path.basename(FIXTURE));
-  // ZNACKA "Lokalno" u zaglavlju je NAMJERNO skrivena na uskom zaslonu (`page-app.css`,
-  // `max-width:720px`), jer ista tvrdnja stoji napisana u tijelu (`workspace-viewports.spec.ts` to
-  // vec mjeri na 390 px). Ovaj spec prvi put ulazi u `mobile-webkit` (iPhone 13, 390 px) korakom D
-  // 2026-09-13, bez lokalnog prolaza; dodan je ovdje, ne u CSS-u, koji ostaje netaknut.
-  const sirok = (page.viewportSize()?.width ?? 0) > 720;
-  await expect(page.locator('.nav-rad .local-badge')).toBeVisible({ visible: sirok });
+  // ZNACKA "Lokalno" je od Z15 KRUGA POPRAVKA preselila iz pilule trake (`.site-chrome__doc`) u
+  // `#radDocMeta`, redak u tijelu ispod trake (izmjereno: pilula se na 1180px lomila u cetiri
+  // retka dok je znacku, spremanje i gumb nove verzije nosila zajedno s tockom i imenom). Znacka
+  // vise ne dijeli visinu zaglavlja sa stepperom, pa vise nema razloga da je siri zaslon skriva;
+  // ostaje vidljiva na svakoj sirini, dok postoji dokument.
+  await expect(page.locator('#radDocMeta .local-badge')).toBeVisible();
 
   // Traka ostaje kroz KORAKE, jer je zaglavlje, a ne dio jednog prikaza. Postojeci
   // `#stepFileName` i `#resultFileName` zive svaki u svom pogledu; da traka bila cetvrti takav
@@ -139,7 +141,7 @@ test('/rad/ zaglavlje: identitet, ucitani dokument i gdje se obraduje, bez marke
 
 test('/rad/ zaglavlje: dugo ime datoteke se skracuje, a ne gura kontrole s ekrana', async ({ page }) => {
   /**
-   * STVARAN RIZIK, IZMJEREN: `.rad-doc` je flex stavka, a flex stavka se po zadanome NE SMIJE
+   * STVARAN RIZIK, IZMJEREN: `.site-chrome__doc` je flex stavka, a flex stavka se po zadanome NE SMIJE
    * stisnuti ispod sirine svog sadrzaja (`min-width:auto`). Bez `min-width:0` dugo ime gurne
    * lampu i prijavu izvan zaslona umjesto da se skrati.
    *
@@ -223,7 +225,11 @@ test('/rad/ list profila: zamka fokusa, izlaz tipkovnicom i povratak fokusa', as
   const izvanMaina = await page.locator('#profileSheet').evaluate((el) => !el.closest('main'));
   expect(izvanMaina, 'list unutar <main> bio bi inertan zajedno s pozadinom').toBe(true);
 
-  await page.locator('[data-change-profile]').click();
+  // Klik ide kroz `klikniBezSkrolUtrke`, jer ga u WebKitu inace pregazi glatki skrol koji
+  // Playwright pokrene dovodeci metu u vidno polje: `mousedown` padne na gumb, `mouseup` na
+  // element 217 px nize, `click` nastane nad njihovim zajednickim pretkom i rukovatelj se ne
+  // pozove, pa `#profileSheet` ostane `hidden` (`browser-matrix`, PR #110, run 35814568813).
+  await klikniBezSkrolUtrke(page, page.locator('[data-change-profile]'));
   await expect(page.locator('#profileSheet')).toBeVisible();
 
   // Fokus je USAO u list. Ne tvrdi se KOJI je element, jer `trapModal` bira gumb zatvaranja, a to
@@ -440,16 +446,46 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
   const sazetak = page.locator('[data-finding-summary]');
   await expect(sazetak).toBeVisible();
 
+  /**
+   * Z8 JE PREMJESTIO OCJENU, pa je i mjera morala za njom.
+   *
+   * Do Z8 je ocjena stajala u samom sazetku (`.fsum-ocjena b`) i mjerio se omjer velicine fonta
+   * prema naslovu sazetka. Od Z8 sazetak ocjenu ne crta (`findingSummaryHtml(..., {ocjena:false})`),
+   * nego je crta prsten presude desno na listu. Stara izvedba te mjere je zato mjerila NEPOSTOJEC
+   * element: pomocna funkcija je za promasen selektor vracala `0`, pa je `naslovPx > 0` bilo
+   * trivijalno istinito, a `naslovPx / 0` je `Infinity`, sto je zadovoljavalo svaki prag. Gard je
+   * javljao zeleno a nije mjerio nista (isti razred kvara kao `docs/incidents`, gard koji tiho
+   * ugasi ono sto stiti).
+   *
+   * `px()` zato vise NE progutava promasaj: nepostojec element ruši tvrdnju umjesto da je ucini
+   * vakuumskom. Sama tvrdnja o hijerarhiji se seli s velicine fonta na ono sto Z8 jamci i sto se
+   * da provjeriti bez piksela: ocjena postoji TOCNO JEDNOM na ekranu, u prstenu, a sazetak i
+   * presuda stoje PRIJE nje u toku citanja. Omjer velicina se namjerno vise ne tvrdi: prsten je
+   * po predlosku fiksnih 132 px sa `3.1rem` brojkom, dakle na uskim sirinama veci od naslova
+   * sazetka, pa bi stari prag ovdje bio tvrdnja protiv same odluke Z8.
+   */
   const m = await page.evaluate(() => {
     const px = (s: string) => {
       const e = document.querySelector(s);
-      return e ? parseFloat(getComputedStyle(e).fontSize) : 0;
+      if (!e) throw new Error(`nema elementa za mjerenje: ${s}`);
+      return parseFloat(getComputedStyle(e).fontSize);
     };
     const razine = [...document.querySelectorAll('.fsum-razina b')].map((b) => Number(b.textContent));
     const naslov = document.querySelector('.fsum-naslov')?.textContent ?? '';
+    const redoslijed = (a: string, b: string) => {
+      const prvi = document.querySelector(a);
+      const drugi = document.querySelector(b);
+      if (!prvi || !drugi) return false;
+      return (prvi.compareDocumentPosition(drugi) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+    };
     return {
       naslovPx: px('.fsum-naslov'),
-      ocjenaPx: px('.fsum-ocjena b'),
+      // Ocjena zivi u prstenu presude; tvrdnja pada ako se vrati i u sazetak, jer bi ekran tada
+      // nosio DVA mjeraca iste stvari.
+      ocjenaUSazetku: document.querySelectorAll('.fsum-ocjena').length,
+      ocjenaMjesta: document.querySelectorAll('#resultView [data-cockpit-score]').length,
+      sazetakPrijeOcjene: redoslijed('[data-finding-summary]', '.cockpit-ring__core'),
+      presudaPrijeOcjene: redoslijed('[data-cockpit-verdict-title]', '.cockpit-ring__core'),
       zbrojRazina: razine.reduce((a, b) => a + b, 0),
       naslovBroj: Number(naslov.match(/^\d+/)?.[0] ?? NaN),
       // Tamni uredaj s halom je ono sto je zamijenjeno; njegov povratak je regresija.
@@ -457,24 +493,26 @@ test('/rad/ nalaz: sazetak nadjacava ocjenu, i to se mjeri omjerom a ne dojmom',
     };
   });
 
-  expect(m.naslovPx, 'sazetak mora biti VECI od ocjene').toBeGreaterThan(m.ocjenaPx);
-  expect(m.naslovPx / m.ocjenaPx, 'ocjena je opet preuzela autoritet').toBeGreaterThanOrEqual(1.25);
+  expect(m.naslovPx, 'naslov sazetka mora biti stvarno iscrtan').toBeGreaterThan(0);
+  expect(m.ocjenaUSazetku, 'ocjena se vratila u sazetak, pa ekran ima dva mjeraca iste stvari').toBe(0);
+  expect(m.ocjenaMjesta, 'ocjena mora postojati tocno jednom na ekranu').toBe(1);
+  expect(m.presudaPrijeOcjene, 'presuda mora doci PRIJE ocjene u toku citanja').toBe(true);
+  expect(m.sazetakPrijeOcjene, 'sazetak mora doci PRIJE ocjene u toku citanja').toBe(true);
 
-  // OMJER SE MJERI NA VISE SIRINA, i to je nauceno kad je CI (mobile-chromium) oborio prvu
-  // izvedbu ovog testa: naslov je bio `clamp`, ocjena FIKSNA, pa je ispod 828 px ocjena opet
-  // bila veca (izmjereno 390 px: 23,2 naspram 27,2). Test koji mjeri samo zatecenu sirinu
-  // projekta ne vidi raspon u kojem se odnos obrce, a bas ondje je zivio kvar.
-  for (const w of [390, 700, 1024]) {
+  // REDOSLIJED SE MJERI NA VISE SIRINA, i to je nauceno kad je CI (mobile-chromium) oborio prvu
+  // izvedbu ovog testa: prag je vrijedio samo na zatecenoj sirini projekta. Ispod 780 px se list
+  // presude slaze u JEDAN stupac (`result-visuals.css`), pa je bas ondje najlakse da prsten
+  // zavrsi iznad sazetka. Iznad tog praga je prsten SUSJEDNI STUPAC, pa okomiti odnos ondje nista
+  // ne znaci i namjerno se ne tvrdi.
+  for (const w of [390, 700]) {
     await page.setViewportSize({ width: w, height: 900 });
-    const omjer = await page.evaluate(() => {
-      const px = (s: string) => {
-        const e = document.querySelector(s);
-        return e ? parseFloat(getComputedStyle(e).fontSize) : 0;
-      };
-      return px('.fsum-naslov') / px('.fsum-ocjena b');
+    const redom = await page.evaluate(() => {
+      const sazetak = document.querySelector('[data-finding-summary]');
+      const prsten = document.querySelector('.cockpit-ring__core');
+      if (!sazetak || !prsten) throw new Error('nema sazetka ili prstena na ekranu');
+      return sazetak.getBoundingClientRect().top <= prsten.getBoundingClientRect().top;
     });
-    expect(omjer, `na ${w} px ocjena nadjacava sazetak (omjer ${omjer.toFixed(2)})`)
-      .toBeGreaterThanOrEqual(1.25);
+    expect(redom, `na ${w} px ocjena stoji iznad sazetka`).toBe(true);
   }
   expect(m.halo, 'tamni mjerac s halom se vratio').toBe(0);
   // Razine su particija po ozbiljnosti: moraju se zbrojiti u broj iz naslova. Ako se ikad u taj

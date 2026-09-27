@@ -60,11 +60,6 @@
     "entries": 5
   },
   {
-    "name": "PACKAGES",
-    "file": "data/packages.json",
-    "entries": 4
-  },
-  {
     "name": "CHECK_ITEMS",
     "file": "data/checks/check-items.json",
     "entries": 8

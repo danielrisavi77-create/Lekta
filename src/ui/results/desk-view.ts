@@ -4,12 +4,12 @@
  * NAVIGACIJA NE OMATA: stol na kojem se vrtis u krug ne moze odgovoriti na "jesam li gotov".
  *
  * KARTICU CRTA `priority-findings.ts`: druga izvedba iste kartice bi se s prvom razisla. Stol
- * dodaje samo svoje - traku o opsegu, popis i navigaciju.
+ * dodaje samo svoje - traku o opsegu, pager, red cekanja i vezu prema planu.
  */
 import type { DeskItem } from './desk-model';
 import { trakaZaOpseg } from './desk-model';
-import { priorityFindingHtml } from './priority-findings';
 import { queueHtml, queueRedci } from './desk-queue';
+import { priorityFindingHtml } from './priority-findings';
 import type { VisualFindingModel } from './visual-result-model';
 
 export interface DeskNav {
@@ -25,14 +25,14 @@ export interface DeskNav {
 /** Polozaj se STISCE u raspon, jer izvor indeksa je klik i moze zaostati za novim rezultatom. */
 export function deskNav(ukupno: number, index: number): DeskNav {
   const n = Math.max(0, Math.trunc(ukupno));
-  if (n === 0) return { index: 0, ukupno: 0, prethodni: null, sljedeci: null, oznaka: '0 / 0' };
+  if (n === 0) return { index: 0, ukupno: 0, prethodni: null, sljedeci: null, oznaka: '0 od 0' };
   const i = Math.min(Math.max(0, Math.trunc(index)), n - 1);
   return {
     index: i,
     ukupno: n,
     prethodni: i > 0 ? i - 1 : null,
     sljedeci: i < n - 1 ? i + 1 : null,
-    oznaka: `${i + 1} / ${n}`,
+    oznaka: `${i + 1} od ${n}`,
   };
 }
 
@@ -54,38 +54,54 @@ export function deskTraka(item: DeskItem): string | null {
   return null;
 }
 
+/**
+ * PAGER (Z8). Desna strana stola nosi JEDNU karticu, pa navigacija vise nije podnozje popisa nego
+ * zaglavlje kartice: polozaj "Nalaz 3 od 6" i dvije okrugle strelice.
+ *
+ * RIJEC "Nalaz" STOJI IZVAN `[data-desk-count]`, a brojka ostaje `nav.oznaka` ("3 od 6"). Taj
+ * element je ugovor: `tests/desk-mount.test.ts` cita tocno njegov tekst kao polozaj stola, pa bi
+ * upisivanje cijele recenice u njega pretvorilo mjeru polozaja u mjeru copyja. Predlozak pise
+ * "Nalaz 1 od 6", pa je Z8 pager uskladen s njim (MAJOR odluka orkestratora): stariji separator
+ * kosa crta zamijenjen je rijecju "od" u JEDNOM cvoru teksta, bez skrivenih duplikata za testove.
+ *
+ * Razredi gumba se NE mijenjaju: `desk-nav__btn--prev/next` i prazan `data-desk-go` uz `disabled`
+ * su ugovor s delegacijom u `mountDesk` i s gardom da navigacija NE OMATA.
+ */
 export function deskNavHtml(nav: DeskNav, esc: (v: string) => string): string {
-  const gumb = (kamo: number | null, smjer: 'prev' | 'next', natpis: string): string =>
+  const gumb = (kamo: number | null, smjer: 'prev' | 'next', natpis: string, opis: string): string =>
     `<button type="button" class="desk-nav__btn desk-nav__btn--${smjer}" data-desk-go="${kamo ?? ''}"`
-    + `${kamo === null ? ' disabled' : ''}>${natpis}</button>`;
-  return '<nav class="desk-nav" data-desk-nav aria-label="Kretanje po nalazima">'
-    + gumb(nav.prethodni, 'prev', '<span aria-hidden="true">&#8592;</span> Prethodni')
-    + `<span class="desk-nav__count" data-desk-count>${esc(nav.oznaka)}</span>`
-    + gumb(nav.sljedeci, 'next', 'Sljedeći problem <span aria-hidden="true">&#8594;</span>')
-    + '</nav>';
+    + `${kamo === null ? ' disabled' : ''} aria-label="${esc(opis)}">`
+    + `<span aria-hidden="true">${natpis}</span></button>`;
+  return '<nav class="desk-pager" data-desk-nav aria-label="Kretanje po nalazima">'
+    + `<span class="desk-pager__count">Nalaz <span data-desk-count>${esc(nav.oznaka)}</span></span>`
+    + '<span class="desk-pager__btns">'
+    + gumb(nav.prethodni, 'prev', '&#8592;', 'Prethodni nalaz')
+    + gumb(nav.sljedeci, 'next', '&#8594;', 'Sljedeći nalaz')
+    + '</span></nav>';
 }
 
 /**
- * Desna strana stola: RED CEKANJA s otvorenim detaljem odabranog, pa navigacija.
+ * Desna strana stola: PAGER, pa JEDNA kartica, pa RED CEKANJA (Z8).
  *
- * Popis odgovara na "sto sve me ceka", navigacija na "vodi me redom". Oba su jeftina jer dijele
- * isti `data-desk-go`, a samo jedan od njih ne bi bio dovoljan: jedna kartica ne kaze je li
- * ostatak tezak ni sitan, a sam popis ne vodi kroz posao.
+ * Do Z8 je kartica zivjela UNUTAR reda cekanja, kao detalj otvorenog retka, pa je s devet redaka
+ * iznad sebe pocinjala ispod pregiba. Z8 vadi karticu iz popisa i daje joj pager; popis se time NE
+ * ukida nego se spusta ISPOD kartice. Z9 ga ondje izricito i trazi ("ispod red cekanja"), i to je
+ * jedino mjesto na ekranu koje odgovara na "sto me jos ceka" imenom, a ne brojkom: pager kaze
+ * koliko ih je, DNA traka kakve su vrste, ali nijedno ne kaze STO.
  */
 export function deskPaneHtml(
   item: DeskItem<VisualFindingModel> | null,
   nav: DeskNav,
   repairAvailable: boolean,
   esc: (v: string) => string,
-  // OBAVEZAN, bez zadane vrijednosti. Zadano `[item]` je izmisljalo jednoclani popis, pa kad se ne
-  // bi poklopio s polozajem, NIJEDAN redak ne bi bio odabran i detalj bi tiho nestao s ekrana.
+  // OBAVEZAN, bez zadane vrijednosti: red cekanja nabraja SVE nalaze, a ne samo prikazani.
   svi: readonly DeskItem<VisualFindingModel>[],
   planDostupan = false,
 ): string {
   if (!item) return '<div class="desk-pane" data-desk-pane><p class="desk-prazno">Nema otvorenih nalaza.</p></div>';
   const traka = deskTraka(item);
   const detalj = (traka ? `<p class="desk-traka" data-desk-traka>${esc(traka)}</p>` : '')
-    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u "3 / 9" i u retku popisa.
+    // `nav.index + 1` je REDOSLIJED NA STOLU, isti broj koji stoji u pageru ("3 od 9").
     // Kad se dvije brojke na istom ekranu ne slazu, korisnik to cita kao kvar.
     + priorityFindingHtml(item.finding, repairAvailable, nav.index + 1);
   // ULAZ U PLAN STOJI UZ NALAZE, jer se ondje i donosi odluka da se nesto popravi. Do 2026-09-08
@@ -95,10 +111,16 @@ export function deskPaneHtml(
     ? '<button type="button" class="desk-plan-open" data-desk-plan-open>Otvori plan ispravaka'
       + ' <span aria-hidden="true">&#8594;</span></button>'
     : '';
+  // PAGER JE ZAGLAVLJE KARTICE, ne podnozje popisa: kad je kartica jedna, polozaj i strelice
+  // moraju stajati iznad nje, inace korisnik do njih dode tek nakon cijelog nalaza.
+  //
+  // RED CEKANJA VISE NE NOSI DETALJ (cetvrti argument izostaje): kartica stoji iznad njega, pa bi
+  // isti nalaz bio nacrtan dvaput. Redci ostaju klikabilni kroz isti `data-desk-go`.
   return '<div class="desk-pane" data-desk-pane>'
-    + queueHtml(queueRedci(svi, repairAvailable), nav.index, esc, detalj)
-    + uPlan
     + deskNavHtml(nav, esc)
+    + detalj
+    + uPlan
+    + queueHtml(queueRedci(svi, repairAvailable), nav.index, esc)
     + '</div>';
 }
 

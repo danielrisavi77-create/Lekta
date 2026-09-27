@@ -61,15 +61,23 @@ export function formatBootstrap(inputs) {
 
   lines.push(
     inputs.testProcessCount === null || inputs.testProcessCount === undefined
-      ? 'testni procesi: nepoznato'
+      ? 'testni procesi: nije izmjereno'
       : `testni procesi (vitest/playwright): ${inputs.testProcessCount}`,
   );
 
-  if (inputs.resources) {
-    lines.push(
-      `resursi: ${inputs.resources.freeMemGb.toFixed(1)} GB RAM, `
-        + `${inputs.resources.freeDiskGb.toFixed(1)} GB disk slobodno`,
-    );
+  // freeMemGb i freeDiskGb se mjere odvojeno i svaki moze zasebno biti `null` (nemjerljivo) ili
+  // `0` (izmjereno, doslovno nula). Kad je jedna polovica nepoznata, izostavi samo tu polovicu
+  // retka umjesto da cijeli redak padne na "nepoznato".
+  const mem = inputs.resources?.freeMemGb;
+  const disk = inputs.resources?.freeDiskGb;
+  const memKnown = typeof mem === 'number' && Number.isFinite(mem);
+  const diskKnown = typeof disk === 'number' && Number.isFinite(disk);
+  if (memKnown && diskKnown) {
+    lines.push(`resursi: ${mem.toFixed(1)} GB RAM, ${disk.toFixed(1)} GB disk slobodno`);
+  } else if (memKnown) {
+    lines.push(`resursi: ${mem.toFixed(1)} GB RAM`);
+  } else if (diskKnown) {
+    lines.push(`resursi: ${disk.toFixed(1)} GB disk slobodno`);
   } else {
     lines.push('resursi: nepoznato');
   }
@@ -94,9 +102,26 @@ export function formatBootstrap(inputs) {
   return lines.slice(0, 12);
 }
 
+/**
+ * Broji retke naredbenog retka (PowerShell `Get-CimInstance ... CommandLine` ili `wmic process
+ * ... get CommandLine` izlaz, jedan proces po retku) koji spominju vitest ili playwright.
+ *
+ * Cista funkcija radi testiranja bez OS poziva. `null`/`undefined` ulaz (mjerenje nije uspjelo)
+ * vraca `null`, nikad `0`; `0` znaci "izmjereno, nula procesa".
+ *
+ * @param {string|null|undefined} commandLineOutput
+ * @returns {number|null}
+ */
+export function countTestProcesses(commandLineOutput) {
+  if (commandLineOutput === null || commandLineOutput === undefined) return null;
+  return commandLineOutput
+    .split('\n')
+    .filter((line) => /vitest|playwright/i.test(line)).length;
+}
+
 async function collectInputsAndPrint() {
   const { execFileSync } = await import('node:child_process');
-  const { readFileSync } = await import('node:fs');
+  const { readFileSync, statfsSync } = await import('node:fs');
   const { fileURLToPath } = await import('node:url');
   const os = await import('node:os');
 
@@ -129,35 +154,47 @@ async function collectInputsAndPrint() {
   let testProcessCount = null;
   try {
     if (process.platform === 'win32') {
-      const out = tryExec('tasklist', ['/FO', 'CSV', '/NH']);
-      if (out !== null) {
-        testProcessCount = out
-          .split('\n')
-          .filter((line) => /vitest|playwright/i.test(line)).length;
+      // `tasklist /FO CSV /NH` ne daje naredbeni redak (samo ime procesa), pa je brojac
+      // vitest/playwright procesa uvijek bio 0 na Windowsu, bez obzira je li ista uistinu radilo.
+      // TO JE BILA LAZNA NULA. Get-CimInstance daje CommandLine; wmic je fallback za starije
+      // sustave. Kad ni jedno ne uspije, mjerenje ostaje `null` (nikad izmisljena nula).
+      let out = tryExec('powershell', [
+        '-NoProfile', '-NonInteractive', '-Command',
+        "Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Select-Object -ExpandProperty CommandLine",
+      ]);
+      if (out === null) {
+        out = tryExec('wmic', ['process', 'where', "name='node.exe'", 'get', 'CommandLine']);
       }
+      testProcessCount = countTestProcesses(out);
     } else {
       const out = tryExec('ps', ['-eo', 'command']);
-      if (out !== null) {
-        testProcessCount = out
-          .split('\n')
-          .filter((line) => /vitest|playwright/i.test(line)).length;
-      }
+      testProcessCount = countTestProcesses(out);
     }
   } catch {
     testProcessCount = null;
   }
 
-  let resources = null;
+  let freeMemGb = null;
   try {
-    const freeMemGb = os.freemem() / 1024 ** 3;
-    resources = { freeMemGb, freeDiskGb: NaN };
+    freeMemGb = os.freemem() / 1024 ** 3;
   } catch {
-    resources = null;
+    freeMemGb = null;
   }
-  if (resources && Number.isNaN(resources.freeDiskGb)) {
-    // Node nema prijenosan API za slobodan disk; ne pogadaj, izostavi tu polovicu polja.
-    resources = { freeMemGb: resources.freeMemGb, freeDiskGb: 0 };
+
+  let freeDiskGb = null;
+  try {
+    // `fs.statfsSync` (Node >= 18.15) daje slobodne blokove na particiji korijena repoa.
+    // Prijasnja verzija nije imala prijenosan nacin mjeriti disk pa je uvijek ispisivala 0.0 GB,
+    // sto izgleda identicno stvarno praznom disku. `null` kad mjerenje ne uspije, nikad 0.
+    if (typeof statfsSync === 'function') {
+      const stats = statfsSync(root);
+      freeDiskGb = (Number(stats.bavail) * Number(stats.bsize)) / 1024 ** 3;
+    }
+  } catch {
+    freeDiskGb = null;
   }
+
+  const resources = (freeMemGb !== null || freeDiskGb !== null) ? { freeMemGb, freeDiskGb } : null;
 
   let coordinator = null;
   try {

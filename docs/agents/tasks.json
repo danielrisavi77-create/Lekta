@@ -235,7 +235,7 @@
       "dependsOn": [
         "T16"
       ],
-      "note": "P0. Dokaz: svaki ponudjeni SKU ima jednoznacno objasnjenje i MoR mapiranje, test potvrdjuje stvarnu cijenu i pravo, a stara kupnja ostaje ispravno prepoznata nakon promjene kataloga."
+      "note": "P0. Dokaz: svaki ponudjeni SKU ima jednoznacno objasnjenje i MoR mapiranje, test potvrdjuje stvarnu cijenu i pravo, a stara kupnja ostaje ispravno prepoznata nakon promjene kataloga. AUDIT 27.9.: MONETIZACIJA_V1 odj. 3, 5, 6, 10, 11, 13, 14, 24, 25; cijene fiksne odlukom vlasnika 2026-09-27 (docs/decisions/MONETIZACIJA_V1_ODLUKA.md): Repair 3,99/5,99/9,99/16,99/24,99 EUR uz 7/7/14/21/30 dana, Final Pass 12,99/19,99/29,99/39,99 EUR, Semester Pass 14,99 EUR; zamjenjuje raniju odluku iz reda F2 u orchestrator-backlog.md (4,99/9,99/14,99/19,99/24,99 EUR, specijalisticki 14 dana)."
     },
     {
       "id": "T24",
@@ -247,7 +247,7 @@
         "T23",
         "T48"
       ],
-      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag. AUDIT 22.9.: #3 webhook prihvaca samo order_created/paid i order_refunded, inbox prije provjere korisnika, needs_manual_link; #4 jedno ime varijable za store ID (webhook-mor cita LS_STORE_ID, create-checkout LEMONSQUEEZY_STORE_ID) + preflight; #7 PDV ukljucen; #26 tekst garancije."
+      "note": "P0. Dokaz: namjenska testna kupnja zavrsava tocno jednim pravom, ponovljeni ili krivo potpisan webhook ne daje dodatno pravo, a greske imaju oporavak i operativni trag. AUDIT 22.9.: #3 webhook prihvaca samo payment_intent.succeeded i charge.refunded (Stripe; ranije LS order_created/paid i order_refunded), inbox prije provjere korisnika, needs_manual_link; #4 dosljedna imena Stripe tajni (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PUBLISHABLE_KEY) u webhook-mor i create-checkout + preflight (ranije LS store ID pod dva imena); #7 PDV ukljucen; #26 tekst garancije. AUDIT 27.9.: #6 Lemon Squeezy formulacije zamijenjene Stripeom (odluka vlasnika 2026-09-23). M2: offer_code, snapshot prava, upgrade, deaktivacija do_obrane, refund otkazuje referral (F21)."
     },
     {
       "id": "T25",
@@ -287,7 +287,7 @@
         "T16",
         "T26"
       ],
-      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja."
+      "note": "P1. Dokaz: nijedan od 407 registriranih profila nije bez razrijesenog statusa ni s prikrivenim nasljedjivanjem, a tvrdnja u izboru profila, rezultatu i na javnoj stranici je ista i dokaziva. AUDIT 22.9.: #39 odluka o 32 tokena stila citiranja. M4: specijalisticki kao vrsta rada u profilima, limited coverage bez fallbacka."
     },
     {
       "id": "T29",
@@ -516,9 +516,10 @@
       "dependsOn": [
         "T17",
         "T44",
-        "T45"
+        "T45",
+        "T72"
       ],
-      "note": "P0. Dokaz: sve release kontrolne tocke iz odjeljka 8 plana imaju svjez dokaz (Word, produkcijski UX, stvarni E2E, holdout) i postoji konkretan testni kandidat dostupan pilotu."
+      "note": "P0. Dokaz: sve release kontrolne tocke iz odjeljka 8 plana imaju svjez dokaz (Word, produkcijski UX, stvarni E2E, holdout) i postoji konkretan testni kandidat dostupan pilotu. AUDIT 27.9.: #4 dodana ovisnost T72 (svjez RELEASE_PROOF nad masterom)."
     },
     {
       "id": "T47",
@@ -533,12 +534,12 @@
     },
     {
       "id": "T48",
-      "title": "Pravni subjekt i naplata: obrt, OIB, isplatni racun kod Lemon Squeezyja, DPA sa Supabaseom",
+      "title": "Pravni subjekt i naplata: obrt, OIB, Stripe racun za isplatu, DPA sa Supabaseom",
       "status": "ready",
       "dependsOn": [
         "T16"
       ],
-      "note": "VLASNIK: audit bloker 2, bez toga nema naplate; provider.json ima prazan OIB."
+      "note": "VLASNIK: audit bloker 2, bez toga nema naplate; provider.json ima prazan OIB. AUDIT 27.9.: #6 \"isplatni racun\" je Stripe racun, ne Lemon Squeezy (odluka vlasnika 2026-09-23)."
     },
     {
       "id": "T49",
@@ -577,7 +578,229 @@
         "T48"
       ],
       "note": "VLASNIK: Azure Artifact Signing za fizicke osobe radi samo u SAD-u i Kanadi pa je preduvjet obrt (T48); bez certifikata REPAIR_LOCAL_ENABLED ostaje iskljucen; vidi docs/LOCAL_REPAIR_RELEASE.md odjeljak Stanje."
+    },
+    {
+      "id": "T53",
+      "title": "Web analitika bez kolacica (Cloudflare Web Analytics ili Umami)",
+      "status": "blocked",
+      "dependsOn": [
+        "T44"
+      ],
+      "note": "Besplatno, bez kolacica, samo posjete/stranice/refereri; ne salje sadrzaj radova; odluka vlasnika izmedju Cloudflare WA i Umami (self-host ili cloud besplatni sloj); CSP mora dopustiti skriptu; dokument privatnosti azurirati."
+    },
+    {
+      "id": "T54",
+      "title": "Operativni alarmi kroz Supabase (webhook naplate, needs_manual_link, greske Edge funkcija, smoke objave)",
+      "status": "blocked",
+      "dependsOn": [
+        "T44",
+        "T24"
+      ],
+      "note": "Supabase database webhooks ili pg_cron + jedna Edge funkcija -> mail ili Telegram; bez n8n; bez AI akcija; prag i odrediste odredjuje vlasnik."
+    },
+    {
+      "id": "T55",
+      "title": "Tjedni produktni izvjestaj iz vlastite baze (trackEvent uz privolu)",
+      "status": "blocked",
+      "dependsOn": [
+        "T44",
+        "T53"
+      ],
+      "note": "Lijevak upload -> analiza -> profil (unit) -> popravak -> kupnja iz postojeceg trackEvent toka (src/ui/telemetry.ts, inertan bez privole, samo DOPUSTENI_KLJUCEVI); skript po uzoru na usage-report (tekstualni izvjestaj) ili Metabase self-host; zaseban mali zadatak: utm_source uz privolu u isti tok jer PR #117 nosi utm_* do /rad/ ali ih nitko ne cita."
+    },
+    {
+      "id": "T56",
+      "title": "Mrtvi i dupli kod: knip + jscpd kao savjetodavni CI korak s ratchetom",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "knip (neiskoristene datoteke, exporti, ovisnosti) i jscpd (duplikati) u zasebnom CI jobu koji ne obara PR, ali ratchet (brojevi u docs/generated ili tests) ne smije rasti; uklanjanje u malim PR-ovima po modulu; light/standard, nezasticeno; bez novih runtime ovisnosti."
+    },
+    {
+      "id": "T57",
+      "title": "Mjera brzine analize: p95 vremena po dokumentu nad fiksnim fixturama s ratchetom",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "benchmark test nad postojecim korpusnim fixturama (tests/fixtures, real-corpus harness), vrijeme po dokumentu, p95 i medijan, ratchet kao kod budzeta bajtova; tolerancija za CI varijancu; ne mijenja analizator; standard mode."
+    },
+    {
+      "id": "T58",
+      "title": "PR opis: neto redaka i nove ovisnosti kao obvezan redak",
+      "status": "done",
+      "dependsOn": [],
+      "note": "PR predlozak i gard (test ili CI korak) koji trazi retke 'Neto redaka: +x/-y' i 'Nove ovisnosti: nema|popis' u opisu; workflow skripte (lekta-lean, lekta-no-fable-coding) dodaju ih automatski iz git diff --shortstat i package.json diff-a; light. AUDIT 27.9.: #5 PR #133 spojen u master (ecddae96); status sinkroniziran."
+    },
+    {
+      "id": "T59",
+      "title": "Lighthouse CI s budzetima za /, /rad/ i jednu stranicu fakulteta",
+      "status": "blocked",
+      "dependsOn": [
+        "T44"
+      ],
+      "note": "besplatno (lhci), performanse i SEO budzeti, savjetodavno pa obvezno nakon dva zelena tjedna."
+    },
+    {
+      "id": "T60",
+      "title": "Periodicni prolaz manje koda nad pet najvecih modula",
+      "status": "blocked",
+      "dependsOn": [
+        "T44",
+        "T56"
+      ],
+      "note": "cilj isti testovi zeleni, manje redaka, bez novih ovisnosti; pregledatelj ocjenjuje sto je uklonjeno; jedan modul po PR-u; kvartalno."
+    },
+    {
+      "id": "T61",
+      "title": "Skill intake-analiza: zalijepljena vanjska analiza okida fiksni protokol provjere i uklapanja",
+      "status": "in_progress",
+      "dependsOn": [],
+      "note": "Vlasnik 2026-09-26. PR #124 (.claude/skills/intake-analiza, docs/agents/INTAKE.md, predlozak intake-verify-args.json). Preostalo: zivi run izvidjaca kroz skill nad prvom stvarnom analizom; nakon toga done.",
+      "owner": "lekta-32"
+    },
+    {
+      "id": "T62",
+      "title": "Word korpus i Word TOC kao obvezne Tier 2 razine; Word oracle ne prolazi na odbijenom popravku",
+      "status": "done",
+      "dependsOn": [],
+      "note": "PR #125, master 0cf89607. Codex pregled 2 kruga (0 blockera). Mutacije u tests/gate-mutations.test.ts."
+    },
+    {
+      "id": "T63",
+      "title": "Razdvajanje podataka od koda: data/profiles, data/sources, data/verification i dossieri u zaseban privatni repozitorij",
+      "status": "blocked",
+      "dependsOn": [
+        "T56"
+      ],
+      "note": "Vlasnik 2026-09-26: repo ostaje javan (privatni repo na free planu = 2.000 CI min/mj, Lekta trosi ~25.000). Audit 22.9. bloker #1 (tajna baza pravila javna) rjesava se razdvajanjem: privatni repo lekta-data (bez CI-ja), javni CI i Netlify build dohvacaju podatke jednim korakom kroz deploy token (secret), bundle vec dohvaca pravila s mreze pa korisnici ne vide promjenu; nakon prijenosa jednokratno ciscenje javne povijesti od data/ (vlasnikov OK + GitHub purge). Koraci: (1) popis staza po data/classification.json koje idu u privatni repo, (2) skripta dohvata + gard da build pada bez podataka umjesto tiho, (3) CI/Netlify tajna, (4) migracija povijesti, (5) provjera da nijedan test ne ovisi o javnoj kopiji. Puni workflow (podaci + CI = zasticeno). Preduvjet: PR #127 (CI cache) i wf/ci-single-run-per-pr. AUDIT 27.9.: #12 ne pokretati dok T73 ne odluci o stacku #132, #146, #147 (iste putanje data/profiles, data/sources, data/verification)."
+    },
+    {
+      "id": "T64",
+      "title": "details.inspectionCoverage: sto analiza NIJE provjerila (sdt, txbx, oMath, ins/del, object, ugnijezdene tablice)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Plan: spaja postojece skipped[] iz details.*Structure u analyzeDocx omotacu; ime NE smije biti coverage (vec profilna pokrivenost); golden prvo; UI jedan redak Nije provjereno. Zasticeno (analysis+golden): lekta-no-fable-coding + Codex pregled.",
+      "owner": "word-truth-gate"
+    },
+    {
+      "id": "T65",
+      "title": "equalColumns ne kvari tablice sa spojenim celijama; istinit UI i trag preskoka",
+      "status": "done",
+      "dependsOn": [],
+      "note": "PR #142 squash, master f754537c. Otvoreno: serverski put (supabase/functions/repair-docx, src/report/repair-client.ts, src/ui/app.ts) ne nosi skippedActions; charref razilazenje analize i fixera (&#49;)."
+    },
+    {
+      "id": "T66",
+      "title": "Drift dokumentacije: REAL_CORPUS_TESTING.md toc.coverage rijesen (a6be4f47), AUDIT_MASTER upucuje na generirani status",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "",
+      "owner": "word-truth-gate"
+    },
+    {
+      "id": "T67",
+      "title": "Svjez RELEASE_PROOF nad f754537c sa sve cetiri Word razine",
+      "status": "done",
+      "dependsOn": [],
+      "note": "PR #143. complete:true, word-corpus 21/21 i word-toc pass, release:proof-gate uz LEKTA_REQUIRE_RELEASE_PROOF=1 OK. AUDIT 27.9.: #5 PR #143 spojen (56d25c8); dokaz vrijedi samo za f754537c, svjez dokaz nad aktualnim masterom je T72."
+    },
+    {
+      "id": "T68",
+      "title": "Word-autorski svjedoci s namjernim prekrsajima i ratchet realnog korpusa (targetedCheckCount > 0)",
+      "status": "ready",
+      "dependsOn": [
+        "T62"
+      ],
+      "note": "Realni skup danas ima targetedCheckCount 0, a tests/real-corpus-vacuity.test.ts CILJANIH_RATCHET = 0 propusta nulu. Generator po uzoru na scripts/corpus-gen/word/make-prose-fixture.ps1, bez studentskog sadrzaja (odluka vlasnika 2026-09-26). Bio je planiran kao T63, preimenovan jer je T63 zauzet.",
+      "owner": "word-truth-gate"
+    },
+    {
+      "id": "T69",
+      "title": "Serverski put popravka prenosi skippedActions (repair-docx Edge, repair-client, app.ts izvjestaj)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Follow-up T65. Trazi dokaz deploya Edge funkcije po supabase/CLAUDE.md."
+    },
+    {
+      "id": "T70",
+      "title": "Flaky mobile-webkit test tests/ux/workspace-entry.spec.ts (profileSheet / wizardView vidljivost)",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Pao na masteru f7d1eb8f (browser-matrix, :227) i na PR #143 push runu (:350); prolazi na retry. Vjerojatna utrka registracije handlera u /rad/."
+    },
+    {
+      "id": "T71",
+      "title": "Deterministicki gate preflight i lock na i3 stroju",
+      "status": "in_review",
+      "dependsOn": [],
+      "note": "PR #141, grana wf/gate-preflight-lock. scripts/gate-preflight.mjs, scripts/with-gate-lock.mjs, omotac za check, test:ux i release:check, Playwright lokalno na chromiumu. PR je ranije nosio oznaku T62, koja pripada zavrsenom zadatku Word korpus/TOC. AUDIT 27.9.: #5 (kolizija ID-ja) i #9 (PR nije mergeable, treba razrijesiti).",
+      "owner": "lekta-32"
+    },
+    {
+      "id": "T72",
+      "title": "Svjez RELEASE_PROOF nad aktualnim masterom",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Blokira T46. RELEASE_PROOF.json iz T67 (PR #143) vezan je uz f754537c; origin/master cc9df523 je 37 commita i 315 datoteka dalje (git rev-list --count, git diff --shortstat), ukljucujuci #145 (Stripe i dizajn). Dokaz: sve cetiri Word razine (word, word worst-case, word-corpus, word-toc) i release:proof-gate uz LEKTA_REQUIRE_RELEASE_PROOF=1 nad commitom koji je tada HEAD mastera. AUDIT 27.9.: #4"
+    },
+    {
+      "id": "T73",
+      "title": "GO/NO-GO audit dokaznog AI stacka #132/#146/#147",
+      "status": "done",
+      "dependsOn": [],
+      "note": "Read-only izvjestaj docs/agents/reports/T73_AI_STACK_GO_NO_GO.md: rule-claims pad na sva tri PR-a, dva HIGH nalaza iz pregleda #132 (repairSourceHash u real-corpus-attestation, opseg repair-source-hash.mjs), zastarjelost claim-modality-proposals.json i podatkovni nalazi iz #147 (15 modaliteta, 10 proturjecnih izvora, 2 PRAVO pravila). Ishod GO ili NO-GO; T63 ceka ovu odluku. AUDIT 27.9.: #1, #2, #3 NO-GO 2026-09-27, opcija 2 (potvrdio vlasnik): PR-ovi #132, #146 i #147 se zatvaraju, grane ostaju; izvjestaj docs/agents/reports/T73_AI_STACK_GO_NO_GO.md. Otvoreni su T74 (a), T75 (b) i T76 (d). Prijedlozi (c) validator AI dokaza sheme 2, (e) popis 15 pravila modaliteta i (f) popis 10 proturjecnih izvora cekaju identifikatore od autora stacka i nisu otvoreni kao zadaci."
+    },
+    {
+      "id": "T74",
+      "title": "Otisak koda popravka samo nad produkcijskim .ts u src/repair uz degradaciju umjesto bacanja, s mutacijom u gate-mutations",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Zasticeno: src/repair. Razred: standard. scripts/lib/repair-source-hash.mjs hashira samo produkcijske .ts datoteke (bez .test.ts, CLAUDE.md i ostalog); kod manifest-stale-repair publish-ai-rules degradira na legacy pravila umjesto bacanja; mutacija u tests/gate-mutations.test.ts dokazuje da izmjena ne-produkcijske datoteke ne zastarijeva manifest, a izmjena produkcijskog .ts zastarijeva. AUDIT 27.9.: T73 (a)"
+    },
+    {
+      "id": "T75",
+      "title": "Svjeza ovjera realnog korpusa s repairSourceHash i vlasnikovim potpisom",
+      "status": "blocked",
+      "dependsOn": [
+        "T74"
+      ],
+      "note": "Razred: full. Treba Word lokalno. Novo mjerenje stvarnog korpusa nad stablom nakon T74, ovjera s repairSourceHash i vlasnikovim potpisom; tek u istom commitu uvesti obvezu hasha u attestationProblems. Hash se ne smije upisati unatrag (src/repair promijenjen u 33 datoteke od starog mjerenja). AUDIT 27.9.: T73 (b)"
+    },
+    {
+      "id": "T76",
+      "title": "PRAVO opseg: 20 bodovanih pravila na pravo-specijalisticki-pravni-opci i pravo-doktorski-pravne-znanosti oslanja se na izvor za diplomske i zavrsne radove; ispraviti ili degradirati uz izvor",
+      "status": "ready",
+      "dependsOn": [],
+      "note": "Zasticeno: data/profiles i ruleEntries. Razred: standard. Izvor pravo-upute-oblikovanje-2024 u registru nosi naslov o diplomskim i zavrsnim radovima; procitati PDF i za svako pravilo naci izvor s lokatorom i citatom za specijalisticki ili doktorski rad, ili pravilo degradirati. Nepotvrden sourcePage ostaje null. AUDIT 27.9.: T73 (d)"
+    },
+    {
+      "id": "T77",
+      "title": "Monetizacija V1: naplatna infrastruktura M2+M3",
+      "status": "blocked",
+      "dependsOn": [
+        "T23"
+      ],
+      "note": "Blocked dok T23 (katalog, cijene i prava) nije done; koordinator je trazio ready, ali gard statusa ne dopusta ready uz nezavrsenu ovisnost. Razred: full. Zasticeno: supabase. M2: migracija od 0205 kroz supabase db push (specijalisticki u products.work_type CHECK; slot_specijalisticki, pass_specijalisticki, pass_semestralni, pass_doktorski ako ne postoji; deaktivacija slot_zavrsni_do_obrane i slot_diplomski_do_obrane; offer_code i snapshot prava uz entitlement), serverski upgrade Repair u Final Pass po cijeni ciljna minus placeno, Stripe proizvodi. M3: ReportWorkType i WORK_TYPE_ORDER sa specijalisticki, picker, checkout i analitika segment, BEZ cijena u klijentskom kodu (priceEur iz odj. 12 se ne prenosi; cijena samo iz products.price_eur). Cijene i prozori iz docs/decisions/MONETIZACIJA_V1_ODLUKA.md. Dosje, prihvatni kriteriji iz odj. 29: (1) Free analiza radi bez naplate; (2) specijalisticki prolazi kroz cijeli pricing, catalog, checkout i entitlement tok; (3) svaki Repair SKU daje tocno jedan slot odgovarajuce vrste rada; (4) Final Pass se ne moze primijeniti na drugi rad; (5) Final Pass prihvaca novu verziju istog rada; (6) upgrade ne naplacuje ponovno vec placeni Repair iznos; (7) offer_code se snapshotira pri kupnji; (8) promjena buduceg kataloga ne oduzima staro pravo; (9) deaktivirani *_do_obrane proizvodi vise se ne nude; (10) Stripe iznos dolazi samo iz serverskog products.price_eur; (11) povrat zatvara entitlement i sve vezane referral i bonus posljedice; (12) specijalisticki ima zaseban analytics segment; (13) nijedan proizvod ne tvrdi da je fakultet sluzbeno odobrio rad; (14) Expert pregled ne obecava akademsko pisanje ni izmjenu sadrzaja. AUDIT 27.9.: MONETIZACIJA_V1 M2, M3",
+      "owner": "c4"
+    },
+    {
+      "id": "T78",
+      "title": "Specijalisticki kao vrsta rada u profilima (M4)",
+      "status": "blocked",
+      "dependsOn": [
+        "T77",
+        "T76"
+      ],
+      "note": "Razred: full. Zasticeno: data/profiles. specijalisticki kao vrsta rada u profilima i validatorima; profil bez potvrdenih pravila za specijalisticki rad dobiva limited coverage, bez fallbacka na diplomski ili doktorski; postupak po receptu T76 (izvor s lokatorom i citatom ili degradacija). AUDIT 27.9.: MONETIZACIJA_V1 M4",
+      "owner": "Upisnik"
+    },
+    {
+      "id": "T79",
+      "title": "Laya V2.1 runtime: registar pinanih manifesta i kalibracijskih pragova odvojen od runtimea (Codex nalaz A1 na #149), runner koji cita puni tekst zapisa, benchmark protiv heuristike",
+      "status": "blocked",
+      "dependsOn": [
+        "T47"
+      ],
+      "note": "Prioritet nizak, nakon lansiranja. Razred: full. Zasticeno: ne. AUDIT 27.9.: Codex pregled #149; #149 V2.0 spojen, #102 zatvoren kao superseded"
     }
   ],
-  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn."
+  "statusNote": "Statusi azurirani 2026-09-12: program T16-T47 do javnog lansiranja unesen iz docs/agents/plan-do-live-2026-09-12.md (odjeljak 11), baselineCommit postavljen na potvrdjeni origin/master afccbdd78af4d09f7ff9097adc45e05e3fc41287 (7e52bc66 + PR #74 i #75, workflow bez Fablea). T00-T14 ostaju netaknuti; \"done\" = ugovor zadatka pokriven kodom i testom koji prolazi lokalno, a sto ostaje vlasniku (potpis ovjere, pilot, objava) pise u note. T15 je vracen u blocked jer ovisi o T46. Karte: docs/quality/lekta-plan-status.md, opisi zadataka: docs/agents/development-plan.md (Podplan F). Azurirano 2026-09-13: T16 done (PR #78 spojen u master 528fbae7); T17, T18, T19, T23, T26, T41 postavljeni na ready jer su im sve ovisnosti done, T15 ostaje blocked (T46 nije done). Azurirano 2026-09-13: T17 done (PR #82). Azurirano 2026-09-22: uklopljen vlasnikov audit od 22. 9. (40 nalaza, 4 blokera provjerena na masteru); bloker 1 (repo public) i bloker 2 (pravni subjekt, T48) su vlasnicki, a blokeri 3, 4 i 10 idu prvi u kod (T24, T21). Azurirano 2026-09-23: dodan T52 (VLASNIK, blocked, dependsOn T48) za Authenticode OV certifikat WordReplica runnera; T51 i T35 dobili T52 u dependsOn. Azurirano 2026-09-26: dodani T53-T55 (analitika, operativni alarmi, tjedni izvjestaj), svi blocked jer ovise o T44; odluka vlasnika: bez novih autonomnih alata prije lansiranja, analitika i alarmi idu nakon T44. Azurirano 2026-09-26: vlasnik odobrio program vitkosti; T56, T57 i T58 idu odmah (ready), T59 i T60 blocked iza lansiranja (dependsOn T44). Napomena: T53-T55 rezervirani za PR #120 (nisu dodani u ovom redu jer PR #120 nije bio spojen u trenutku pisanja). Azurirano 2026-09-26: odluka javan repo + razdvajanje podataka, secret scanning ukljucen (T63). Azurirano 2026-09-27: intake vanjske analize (koordinator lekta-32); T58 i T67 done, dodani T71 (PR #141, ranije pogresno oznacen T62), T72 (svjez release dokaz, blokira T46) i T73 (GO/NO-GO AI stacka, T63 ceka), T24 i T48 prevedeni s Lemon Squeezyja na Stripe. Azurirano 2026-09-27: T73 done (NO-GO, opcija 2, potvrdio vlasnik); dodani T74 (otisak koda popravka), T75 (svjeza ovjera korpusa, blocked iza T74) i T76 (PRAVO opseg); T73 (c), (e) i (f) cekaju identifikatore. Azurirano 2026-09-27: monetizacija V1 prihvacena (docs/decisions/MONETIZACIJA_V1_ODLUKA.md); biljeske uz T23, T24 i T28, dodani T77 (M2 i M3), T78 (M4, blocked iza T77 i T76) i T79 (Laya V2.1, blocked iza T47); M5 i M6 bez zadataka, uz P-A."
 }

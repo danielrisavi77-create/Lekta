@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import { PRICING_COPY } from '../src/report/pricing';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 /**
  * RUTA `/saznaj-vise/`: landing sadrzaj bez analizatora.
  *
- * Stranicu cini devet sekcija, a samo DVIJE trebaju JS (`#checkGrid`, `#pricingGrid`). Cijela je
+ * Stranicu cini devet sekcija, a samo DVIJE trebaju JS (`#checkGrid`, cjenik). Cijela je
  * poanta rute da za te dvije ne uvozi `src/ui/app.ts`: izmjereno pri uvodjenju, da bi ozicenje
  * analizatora radilo na stranici bez radne povrsine, trebalo bi ograditi 154 pristupa DOM-u kroz
  * 39 funkcija. Namjenski ulaz ne treba nijedan.
@@ -44,8 +45,8 @@ describe('ruta /saznaj-vise/', () => {
     // Ruta koja se ucita a mreze ostavi prazne izgleda kao pokvarena stranica, a nijedan test
     // koji gleda samo HTML to ne vidi: `#checkGrid` je u HTML-u prazan i tako i treba biti.
     expect(ULAZ).toContain('CHECK_ITEMS');
-    expect(ULAZ).toContain('PRICING_TIERS');
-    for (const id of ['checkGrid', 'pricingGrid']) {
+    expect(ULAZ).toContain('renderPricingReceipt');
+    for (const id of ['checkGrid', 'pricingReceipt', 'pricingLetter']) {
       expect(STRANICA, `${id} mora postojati da ga ulaz ima gdje puniti`).toContain(`id="${id}"`);
     }
   });
@@ -56,8 +57,11 @@ describe('ruta /saznaj-vise/', () => {
     // Prva izvedba je tvrdila samo `ULAZ.toContain('paidOffersLive')`, sto je mjerilo UVOZ a ne
     // UPOTREBU: mutacija koja poziv zamijeni s `true` ostavlja ime u uvoznom retku i prolazi.
     // Prikiva se poziv, i to onaj koji rezultat prosljedjuje prikazu.
-    expect(ULAZ).toMatch(/renderPricing\([^,]+,\s*paidOffersLive\(/);
-    expect(ULAZ).toContain('Uskoro');
+    // Mjeri se POZIV koji rezultat prosljedjuje prikazu, ne uvoz: mutacija koja poziv zamijeni
+    // s `true` ostavlja ime u uvoznom retku i prolazi.
+    expect(ULAZ).toMatch(/renderCjenik\([\s\S]*?paidOffersLive\(productionConfig\)/);
+    // Natpis "Uskoro" vise ne zivi u ruti nego u `PRICING_COPY`, jer je tekst o cijeni.
+    expect(PRICING_COPY.ctaUskoro).toBe('Uskoro');
   });
 
   it('inline skripta teme je BAJT-IDENTICNA, pa joj CSP hash vrijedi', () => {
@@ -91,6 +95,13 @@ describe('ruta /saznaj-vise/', () => {
     expect(STRANICA).toContain('ks-final');
   });
 
+  it('cjenik ima i sidro `#cjenik`, jer ga handoff tako imenuje', () => {
+    // Sekcija povijesno nosi `#pricing` i nav na njega vodi, a ALIGNMENT govori o
+    // `/saznaj-vise/#cjenik`. Oba moraju postojati, inace je jedno od dvoje mrtva poveznica.
+    expect(STRANICA).toContain('id="pricing"');
+    expect(STRANICA).toContain('id="cjenik"');
+  });
+
   it('canonical ide kroz produkcijski origin', () => {
     expect(STRANICA).toContain('<link rel="canonical" href="https://lektahr.netlify.app/saznaj-vise/">');
   });
@@ -99,8 +110,14 @@ describe('ruta /saznaj-vise/', () => {
     // Prva izvedba je trazila da oba prikaza budu ista, jer su postojale dvije kopije. Kopije vise
     // nema: `/` je ostalo bez tih sekcija, pa je crtanje u `app.ts` postalo mrtav kod i uklonjeno.
     // Jedan vlasnik je jaca tvrdnja od dvije uskladjene kopije, jer se razilazenje ne moze dogoditi.
-    for (const marker of ['price-card', 'popular soon', 'features']) {
+    for (const marker of ['renderPricingReceipt', 'renderPricingLetter', 'pricingReceipt']) {
       expect(ULAZ, marker).toContain(marker);
+    }
+    // Z11: cjenik vise nije popis kartica nego racun iz jedinog izvora cijene, pa stari markup
+    // ne smije prezivjeti nigdje; kopija koja prezivi je upravo ono sto se razilazi.
+    for (const stari of ['price-card', 'PRICING_TIERS', 'pricingGrid']) {
+      expect(ULAZ, stari).not.toContain(stari);
+      expect(STRANICA, stari).not.toContain(stari);
     }
     expect(APP, 'analizator vise ne crta cjenik').not.toContain("ctl('#pricingGrid')");
     expect(APP, 'analizator vise ne crta popis provjera').not.toContain("ctl('#checkGrid')");

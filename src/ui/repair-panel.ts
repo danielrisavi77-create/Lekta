@@ -19,6 +19,7 @@ import { repairCeiling } from './result-readiness';
 import { detectPassRegressions, dropStaleFieldRegressions } from '../analysis/repair-regression';
 import { DEEP_CAPABLE } from '../repair/default-selection';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
+import { emitRepairNoOpSignals } from '../analytics/opportunity-emit';
 
 export interface TitlePageFormField {
   key: string;
@@ -121,10 +122,13 @@ export interface FinalDocumentInspectorFormDefinition {
 }
 
 export interface TableFigureRescueFormDefinition {
-  tables: Array<{ id: string; bodyChildIndex: number; anchorFingerprint: string; summary: string; wide: boolean; selected: boolean; actions: Record<string, boolean>; typography?: Record<string, unknown>; source?: { paragraphIndex: number; anchorFingerprint: string; text: string; selected: boolean }; landscape?: { beforeFingerprint: string; afterFingerprint: string; selected: boolean }; evidence: string[]; }>
+  /** `disabledActions`: akcija -> vidljivo objasnjenje zasto je kucica onemogucena (T65: spojene celije). */
+  tables: Array<{ id: string; bodyChildIndex: number; anchorFingerprint: string; summary: string; wide: boolean; selected: boolean; actions: Record<string, boolean>; disabledActions?: Record<string, string>; typography?: Record<string, unknown>; source?: { paragraphIndex: number; anchorFingerprint: string; text: string; selected: boolean }; landscape?: { beforeFingerprint: string; afterFingerprint: string; selected: boolean }; evidence: string[]; }>
   figures: Array<{ id: string; paragraphIndex: number; drawingIndex: number; anchorFingerprint: string; maxWidthEmu?: number; summary: string; lowResolution: boolean; selected: boolean; actions: Record<string, boolean>; altText: string; evidence: string[]; }>;
   summary: string;
   buildParams: (form: TableFigureRescueFormDefinition) => Record<string, unknown>;
+  /** T65 krug 2: potvrdni tekst iz STVARNO odabranih akcija; obrazac ga osvjezava pri svakoj promjeni. */
+  describe?: (form: TableFigureRescueFormDefinition) => string;
 }
 
 export interface SectionSurgeryFormDefinition {
@@ -729,30 +733,27 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
         if (state.phase === 'running' || state.phase === 'verifying') return; // vec traje: nista ne prikazuj dvaput
         throw new Error(state.lastError ?? 'popravak nije pokrenut');
       }
+      if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons);
       execution = { skippedRuleIds: result.skipped, appliedChangeCount: result.changelog.length, integrity: result.integrityFailure ? 'failed' : 'passed' };
 
       // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
       // identicno kad se ne razdvoje, pa uredan rad u "uskladi sve" toku djeluje kao kvar.
-      const reasons = result.skippedReasons ?? {};
-      const alreadyOk: string[] = [];
-      const cannotFix: string[] = [];
-      for (const ruleId of result.skipped) {
-        const label = ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId;
-        (reasons[ruleId] === 'already-ok' ? alreadyOk : cannotFix).push(label);
-      }
+      // T65 krug 3: namjerno preskocene akcije (npr. ujednacavanje stupaca na spojenim celijama)
+      // moraju biti vidljive i kad fixer vrati 'already-ok', ne samo kroz afterLabel changeloga.
+      const { alreadyOk, cannotFix, skippedNotes } = classifyRepairReport(
+        result,
+        (ruleId) => ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId,
+      );
       // Vrata integriteta su odbila isporuku: popravak bi proizveo neispravan paket. NIJE isto
       // sto i "nema se sto popraviti" (dolje), pa mora imati vlastitu, iskrenu poruku.
       if (result.integrityFailure) {
         renderIntegrityFailure(summary, result.integrityFailure);
         return;
       }
-      if (result.changelog.length === 0) {
-        // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
-        // reci iskreno sto se dogodilo (fail-safe skip, npr. atribut ne postoji).
-        renderNothingApplied(summary, alreadyOk, cannotFix);
-        return;
-      }
-      renderSummary(summary, result.changelog, alreadyOk, cannotFix);
+      // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
+      // reci iskreno sto se dogodilo (fail-safe skip, npr. atribut ne postoji).
+      renderRepairOutcomeSummary(summary, result.changelog, alreadyOk, cannotFix, skippedNotes);
+      if (result.changelog.length === 0) return;
       repairedBytes = result.docxBytes;
       latestRepairedBytes = result.docxBytes;
     } catch (err) {
@@ -1209,7 +1210,11 @@ export function renderTableFigureRescueControls(li: HTMLElement, item: Repairabl
   const summary = document.createElement('p');
   summary.textContent = definition.summary;
   section.appendChild(summary);
-  const sync = () => { item.params = definition.buildParams(definition); };
+  // T65 krug 2 (M2): potvrdni tekst prati odabir, inace bi tvrdio zahvate koji su odznaceni.
+  const sync = () => {
+    item.params = definition.buildParams(definition);
+    if (definition.describe) item.confirmationText = definition.describe(definition);
+  };
   const addGroup = (title: string) => { const h = document.createElement('h4'); h.textContent = title; section.appendChild(h); };
   addGroup('Tablice');
   for (const table of definition.tables) {
@@ -1220,10 +1225,17 @@ export function renderTableFigureRescueControls(li: HTMLElement, item: Repairabl
     const details = document.createElement('small'); details.textContent = table.evidence.join(' · '); row.appendChild(details);
     section.appendChild(row);
     const actions = document.createElement('div'); actions.className = 'lekta-repair-panel__rescue-actions';
-    const actionLabels: Record<string, string> = { fitToTextWidth: 'Prilagodi širini teksta', equalColumns: 'Ujednači stupce', repeatHeader: 'Ponavljaj zaglavlje', preventRowSplit: 'Ne cijepaj retke', center: 'Centriraj tablicu', applyProfileTypography: 'Primijeni profilnu tipografiju', separateSource: 'Odvoji izvor tablice' };
+    // T65 krug 2 (M2): obrazac ne salje textWidthEmu (vidi buildParams u repair-items.ts), pa fixer
+    // za fitToTextWidth pise samo <w:tblLayout w:type="fixed"/>, a tblW, tblGrid i tcW ostaju isti.
+    // Oznaka zato ne smije obecavati prilagodbu sirini teksta.
+    const actionLabels: Record<string, string> = { fitToTextWidth: 'Fiksni raspored stupaca (širina tablice se ne mijenja)', equalColumns: 'Ujednači stupce', repeatHeader: 'Ponavljaj zaglavlje', preventRowSplit: 'Ne cijepaj retke', center: 'Centriraj tablicu', applyProfileTypography: 'Primijeni profilnu tipografiju', separateSource: 'Odvoji izvor tablice' };
     for (const [key, value] of Object.entries(table.actions)) {
       const actionLabel = document.createElement('label'); const actionCheck = document.createElement('input'); actionCheck.type = 'checkbox'; actionCheck.checked = value === true;
-      actionCheck.addEventListener('change', () => { table.actions[key] = actionCheck.checked; sync(); }); actionLabel.append(actionCheck, document.createTextNode(' ' + (actionLabels[key] || key))); actions.appendChild(actionLabel);
+      // T65 krug 2 (M3): akcija koju fixer na ovoj tablici ne izvodi je vidljiva, ali onemogucena
+      // s objasnjenjem, umjesto da je samo tiho odznacena.
+      const disabledReason = table.disabledActions?.[key];
+      if (disabledReason) { actionCheck.checked = false; actionCheck.disabled = true; }
+      actionCheck.addEventListener('change', () => { table.actions[key] = actionCheck.checked; sync(); }); actionLabel.append(actionCheck, document.createTextNode(' ' + (actionLabels[key] || key) + (disabledReason ? ` (${disabledReason})` : ''))); actions.appendChild(actionLabel);
     }
     section.appendChild(actions);
     if (table.source) {
@@ -1681,6 +1693,72 @@ export function renderConfirmation(box: HTMLElement, items: RepairableItem[], on
   box.appendChild(cancelBtn);
 }
 
+/**
+ * RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju identicno kad
+ * se ne razdvoje. Izdvojeno kao cista funkcija (T65 krug 2) da test moze dokazati u koju granu
+ * ide razlog koji fixer vrati, a ne samo tvrditi sam razlog.
+ */
+export function splitSkippedByReason(
+  skipped: readonly string[],
+  reasons: ApplyFixersResult['skippedReasons'],
+  labelOf: (ruleId: string) => string,
+): { alreadyOk: string[]; cannotFix: string[] } {
+  const alreadyOk: string[] = [];
+  const cannotFix: string[] = [];
+  for (const ruleId of skipped) (reasons[ruleId] === 'already-ok' ? alreadyOk : cannotFix).push(labelOf(ruleId));
+  return { alreadyOk, cannotFix };
+}
+
+/**
+ * T65 krug 3: ruleId -> namjerno preskocene akcije (ApplyFixersResult.skippedActions) u retke
+ * "oznaka: napomena". Napomena koja je vec u afterLabelu changeloga iste stavke se ne ponavlja, jer
+ * je renderSummary vec ispisuje po stavci.
+ */
+export function skippedActionNotes(
+  skippedActions: ApplyFixersResult['skippedActions'],
+  changelog: readonly { ruleId: string; afterLabel: string }[],
+  labelOf: (ruleId: string) => string,
+): string[] {
+  const lines: string[] = [];
+  for (const [ruleId, notes] of Object.entries(skippedActions ?? {})) {
+    const shown = changelog.filter((entry) => entry.ruleId === ruleId).map((entry) => entry.afterLabel);
+    for (const note of notes) if (!shown.some((label) => label.includes(note))) lines.push(`${labelOf(ruleId)}: ${note}`);
+  }
+  return [...new Set(lines)];
+}
+
+/**
+ * T65 krug 3: razvrstavanje ishoda za izvjestaj. Stavka s namjerno preskocenom akcijom NE ide u
+ * "vec uskladjeno" ni kad fixer vrati 'already-ok' (ostale akcije jesu na cilju, ali preskocena
+ * nije); prikazuje se samo kroz napomenu "Nije provedeno". Isti put koristi performRepair.
+ */
+export function classifyRepairReport(
+  result: Pick<ApplyFixersResult, 'skipped' | 'skippedReasons' | 'skippedActions' | 'changelog'>,
+  labelOf: (ruleId: string) => string,
+): { alreadyOk: string[]; cannotFix: string[]; skippedNotes: string[] } {
+  const partial = new Set(Object.keys(result.skippedActions ?? {}));
+  const reasons = result.skippedReasons ?? {};
+  const skipped = result.skipped.filter((ruleId) => !(partial.has(ruleId) && reasons[ruleId] === 'already-ok'));
+  const { alreadyOk, cannotFix } = splitSkippedByReason(skipped, reasons, labelOf);
+  return { alreadyOk, cannotFix, skippedNotes: skippedActionNotes(result.skippedActions, result.changelog, labelOf) };
+}
+
+/** Izvjestaj lokalnog popravka: primijenjeno, vec uskladjeno, nije moguce i namjerno preskoceno. */
+export function renderRepairOutcomeSummary(
+  el: HTMLElement,
+  changelog: { ruleId: string; beforeLabel: string; afterLabel: string }[],
+  alreadyOk: string[],
+  cannotFix: string[],
+  skippedNotes: string[],
+): void {
+  if (changelog.length === 0) renderNothingApplied(el, alreadyOk, cannotFix, skippedNotes);
+  else renderSummary(el, changelog, alreadyOk, cannotFix, skippedNotes);
+}
+
+function skippedNotesHtml(notes: string[]): string {
+  return notes.length ? `<p>Nije provedeno: ${notes.map(escapeHtml).join('; ')}.</p>` : '';
+}
+
 // Hrvatska sklonidba uz broj: 1 popravak, 2-4 popravka, 5+ popravaka
 // (iznimka 11-14 -> popravaka). Isti obrazac kao renderIssues drugdje u appu.
 function pluralRepairs(n: number): string {
@@ -1696,6 +1774,7 @@ function renderSummary(
   changelog: { ruleId: string; beforeLabel: string; afterLabel: string }[],
   alreadyOk: string[],
   cannotFix: string[],
+  skippedNotes: string[],
 ): void {
   el.hidden = false;
   el.innerHTML = `
@@ -1707,6 +1786,7 @@ function renderSummary(
     </ul>
     ${alreadyOk.length ? `<p>Već usklađeno, nije trebalo mijenjati: ${alreadyOk.map(escapeHtml).join(', ')}.</p>` : ''}
     ${cannotFix.length ? `<p>Nije bilo moguće automatski primijeniti: ${cannotFix.map(escapeHtml).join(', ')}. Za to i dalje vrijede ručne upute iznad.</p>` : ''}
+    ${skippedNotesHtml(skippedNotes)}
   `;
 }
 
@@ -2028,15 +2108,22 @@ function renderIntegrityFailure(
   `;
 }
 
-function renderNothingApplied(el: HTMLElement, alreadyOk: string[], cannotFix: string[]): void {
+function renderNothingApplied(el: HTMLElement, alreadyOk: string[], cannotFix: string[], skippedNotes: string[]): void {
   el.hidden = false;
   // RE-36: kad je SVE odabrano vec uskladjeno, "nista nije primijenjeno" izgleda kao kvar iako je
-  // rad uredan; naslov se preokrene u pozitivnu poruku samo u tom slucaju.
-  const allAlreadyOk = alreadyOk.length > 0 && cannotFix.length === 0;
+  // rad uredan; naslov se preokrene u pozitivnu poruku samo u tom slucaju. T65 krug 3: ako je neka
+  // odabrana akcija namjerno preskocena, ni "sve je vec uskladjeno" ni "nista nije trebalo
+  // mijenjati" nije istina.
+  const headline = cannotFix.length === 0 && skippedNotes.length > 0
+    ? 'Nijedna izmjena nije primijenjena, a dio odabranog nije proveden.'
+    : alreadyOk.length > 0 && cannotFix.length === 0
+      ? 'Odabrano je već usklađeno, nije bilo potrebno ništa mijenjati.'
+      : 'Nijedan odabrani popravak nije bilo moguće automatski primijeniti.';
   el.innerHTML = `
-    <strong>${allAlreadyOk ? 'Odabrano je već usklađeno, nije bilo potrebno ništa mijenjati.' : 'Nijedan odabrani popravak nije bilo moguće automatski primijeniti.'}</strong>
+    <strong>${headline}</strong>
     ${alreadyOk.length ? `<p>Već usklađeno: ${alreadyOk.map(escapeHtml).join(', ')}.</p>` : ''}
     ${cannotFix.length ? `<p>Nije bilo moguće automatski primijeniti: ${cannotFix.map(escapeHtml).join(', ')}.</p>` : ''}
+    ${skippedNotesHtml(skippedNotes)}
     <p>Dokument nije mijenjan. Ručne upute iznad i dalje vrijede.</p>
   `;
 }

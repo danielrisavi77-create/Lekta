@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Popravak · sve u jednom" description="Plan, plaćanje, popravak uživo i gotov rad, jedan korak po stranici s povratkom: račun s procjenom i opsegom, mala stranica koja se mijenja uživo, kartica koja se crta, potvrda koja se otkine, stroj kroz koji prolazi 41 stranica s dnevnikom izmjena, prsten ocjene, klizač i svjetlosni stol, pismo mentoru i ponovna provjera do pečata 'Spremno za predaju'." -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}a{color:inherit}a:hover{color:#E4573D}input::placeholder{color:#9A917C}@keyframes rpFwd{from{transform:translateX(48px);opacity:0}to{transform:none;opacity:1}}@keyframes rpBk{from{transform:translateX(-48px);opacity:0}to{transform:none;opacity:1}}@keyframes rpIn{from{transform:translateY(-6px);opacity:0}to{transform:none;opacity:1}}@keyframes rpStamp{from{transform:rotate(-7deg) scale(1.8);opacity:0}to{transform:rotate(-7deg) scale(1);opacity:1}}@keyframes rpStrike{from{transform:rotate(-2deg) scaleX(0)}to{transform:rotate(-2deg) scaleX(1)}}@keyframes rpPulse{0%,100%{opacity:1}50%{opacity:.3}}@keyframes rpScan{from{transform:translateY(-100%)}to{transform:translateY(560%)}}@keyframes rpShake{0%,100%{transform:none}20%{transform:translate(-4px,1px) rotate(-.5deg)}40%{transform:translate(4px,-1px) rotate(.5deg)}60%{transform:translate(-2px,0)}80%{transform:translate(2px,0)}}@keyframes rpTear{0%{transform:none}60%{transform:translate(10px,16px) rotate(3deg)}100%{transform:translate(8px,14px) rotate(2.5deg)}}@keyframes rpDrawer{from{transform:translateX(100%)}to{transform:none}}@keyframes rpCaret{50%{opacity:0}}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style></helmet>
+<div ref="{{ rootRef }}" style="position:relative;min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace;overflow-x:clip">
+<div aria-hidden="true" style="position:absolute;top:-420px;right:-200px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.13),transparent 60%);pointer-events:none"></div>
+<header style="position:sticky;top:0;z-index:30;background:rgba(25,21,18,.92);backdrop-filter:blur(6px)"><div style="display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:16px 0">
+<a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:12px;height:12px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:28px">Lekta</span></a>
+<ol aria-label="Koraci" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:0 auto;padding:0;list-style:none;font-size:11px;letter-spacing:.06em"><sc-for list="{{ steps }}" as="st" hint-placeholder-count="4"><li><button type="button" onClick="{{ st.on }}" disabled="{{ st.dis }}" aria-current="{{ st.cur }}" style="all:unset;cursor:{{ st.cursor }};display:inline-flex;align-items:center;min-height:32px;padding:0 12px;box-sizing:border-box;border-radius:999px;border:1px solid {{ st.bd }};background:{{ st.bg }};color:{{ st.col }};transition:background .3s,color .3s">{{ st.t }}</button></li></sc-for></ol>
+<span ref="{{ drawerRef }}" style="display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 12px;border:1px solid rgba(237,231,220,.16);border-radius:8px;font-size:12px;color:rgba(237,231,220,.75)"><span aria-hidden="true" style="width:14px;height:10px;border:1.5px solid currentColor;border-top-width:4px;box-sizing:border-box"></span>Verzije · {{ versions }}</span>
+</div></header>
+<main style="position:relative;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:12px 0 120px;display:grid;gap:20px">
+<div style="min-height:44px;display:flex;align-items:center"><sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ onBack }}" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-size:13px;color:rgba(237,231,220,.75)" style-hover="color:#E4573D">← {{ backLabel }}</button></sc-if></div>
+
+<sc-if value="{{ v1 }}" hint-placeholder-val="{{ true }}"><section data-screen-label="01 Plan" style="animation:{{ secAnim }};display:grid;grid-template-columns:{{ cols }};gap:28px;align-items:start">
+<div style="display:grid;gap:18px;min-width:0">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">01 · PLAN POPRAVKA · DIPLOMSKI-RAD-FINAL-V3.DOCX</p>
+<h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(38px,5vw,64px);line-height:.95;letter-spacing:-.02em;text-wrap:balance">Odaberi što popravljam.</h1>
+<div style="display:grid;grid-template-columns:{{ planCols }};gap:20px;align-items:start">
+<div style="display:grid;gap:18px;min-width:0">
+<button type="button" onClick="{{ openDrawer }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;min-height:48px;padding:10px 16px;box-sizing:border-box;border:1px solid rgba(237,231,220,.2);font-size:12px;letter-spacing:.03em;line-height:1.4" style-hover="border-color:#EDE7DC"><span>Lekta zna popraviti <b style="font-weight:600">18 stvari</b> · u tvom radu treba <b style="font-weight:600;color:#E4573D">8</b></span><span aria-hidden="true" style="color:rgba(237,231,220,.7)">Cijeli popis →</span></button>
+<div style="display:grid;gap:6px"><p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">AUTOMATSKI · 6 · SAMO OBLIKOVANJE, TEKST SE NE DIRA</p>
+<ul style="margin:0;padding:0;list-style:none;display:grid;border-top:1px solid rgba(237,231,220,.14)">
+<sc-for list="{{ autoItems }}" as="it" hint-placeholder-count="6"><li style="border-bottom:1px solid rgba(237,231,220,.1)"><label style="display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:14px;align-items:center;min-height:52px;padding:8px 4px;cursor:pointer"><input type="checkbox" checked="{{ it.on }}" onChange="{{ it.toggle }}" disabled="{{ locked }}" style="width:20px;height:20px;margin:0;accent-color:#C4372E"><span style="display:grid;gap:3px;min-width:0"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1.15">{{ it.t }}</span><span style="font-size:11px;color:rgba(237,231,220,.6)"><s style="color:#E4573D">{{ it.m }}</s> → {{ it.r }}</span></span><span style="font-size:12px;color:#5FBF8A">+{{ it.p }}</span></label></li></sc-for>
+</ul></div>
+<div style="display:grid;gap:6px"><p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">UZ POTVRDU · 2 · MIJENJA STRUKTURU, VIDIŠ PRIJE NEGO POTVRDIŠ</p>
+<ul style="margin:0;padding:0;list-style:none;display:grid;border-top:1px solid rgba(237,231,220,.14)">
+<sc-for list="{{ asItems }}" as="it" hint-placeholder-count="2"><li style="border-bottom:1px solid rgba(237,231,220,.1)"><label style="display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:14px;align-items:center;min-height:52px;padding:8px 4px;cursor:pointer"><input type="checkbox" checked="{{ it.box }}" onChange="{{ it.toggle }}" disabled="{{ locked }}" style="width:20px;height:20px;margin:0;accent-color:#C4372E"><span style="display:grid;gap:3px;min-width:0"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1.15">{{ it.t }}</span><span style="font-size:11px;color:rgba(237,231,220,.6)"><s style="color:#E4573D">{{ it.m }}</s> → {{ it.r }}</span></span><span style="font-size:12px;color:{{ it.stCol }}">{{ it.status }}</span></label>
+<sc-if value="{{ it.open }}" hint-placeholder-val="{{ false }}"><div style="display:grid;gap:12px;margin:0 0 12px 38px;padding:14px 16px;background:#F7F3E8;color:#26221B;animation:rpIn .3s both"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px"><div style="display:grid;gap:4px;min-width:0"><span style="font-size:10px;letter-spacing:.08em;color:#A62B23">PRIJE</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:16px;line-height:1.35">{{ it.before }}</span></div><div style="display:grid;gap:4px;min-width:0"><span style="font-size:10px;letter-spacing:.08em;color:#1E7F4F">POSLIJE</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:16px;line-height:1.35">{{ it.after }}</span></div></div><span style="font-size:11px;line-height:1.5;color:#6E6656">{{ it.note }}</span><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><button type="button" onClick="{{ it.confirm }}" style="font:inherit;font-size:13px;min-height:44px;padding:0 16px;border:0;border-radius:10px;background:#26221B;color:#F7F3E8;cursor:pointer" style-hover="background:#C4372E">Potvrđujem · +{{ it.p }}</button><button type="button" onClick="{{ it.cancel }}" style="all:unset;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;font-size:12px;color:#6E6656;text-decoration:underline;text-underline-offset:3px">Odustani</button></div></div></sc-if></li></sc-for>
+</ul></div>
+</div>
+<figure style="margin:0;display:grid;gap:8px;justify-items:center">
+<div style="position:relative;width:100%;max-width:170px;container-type:inline-size;aspect-ratio:210/297;background:#F7F3E8;color:#26221B;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,.35),0 16px 40px rgba(0,0,0,.5);transform:rotate(1.2deg)">
+<div lang="hr" aria-hidden="true" style="position:absolute;inset:0;padding:8cqw 9cqw 10cqw {{ ml }};font-family:{{ mf }};font-size:{{ mfs }};line-height:{{ mlh }};text-align:{{ mta }};hyphens:auto;overflow:hidden;transition:padding .6s cubic-bezier(.22,1,.36,1),line-height .6s cubic-bezier(.22,1,.36,1)"><p style="margin:0 0 3cqw;font-size:1.35em;font-weight:700;line-height:1.2">2. Teorijski okvir</p><p style="margin:0 0 2.4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p><p style="margin:0">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti.</p></div>
+<span aria-hidden="true" style="position:absolute;left:0;right:0;bottom:3.4cqw;text-align:center;font-family:'Times New Roman',serif;font-size:3.4cqw;opacity:{{ mpn }};transition:opacity .4s">7</span>
+</div>
+<figcaption style="font-size:10px;letter-spacing:.08em;color:rgba(237,231,220,.55);text-align:center">STR. 7 · MIJENJA SE DOK BIRAŠ</figcaption>
+</figure>
+</div>
+<div style="display:grid;gap:8px;padding:14px 16px;border:1px dashed rgba(237,231,220,.22)"><span style="font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">OVO RADIŠ SAM · LEKTA NE MIJENJA SADRŽAJ</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:18px;line-height:1.35">Naslov 2.3 u sadržaj: primijeni stil Naslov 2 u Wordu</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;font-size:12px;line-height:1.55;color:rgba(237,231,220,.75)"><p style="margin:0"><b style="display:block;font-weight:500;color:#EDE7DC;margin-bottom:4px">Što radimo</b>Mijenjamo stilove, margine, prored i numeraciju. Tekst, citati i slike ostaju isti.</p><p style="margin:0"><b style="display:block;font-weight:500;color:#EDE7DC;margin-bottom:4px">Što ne radimo</b>Ne pišemo, ne dodajemo izvore i ne mijenjamo sadržaj rada.</p></div>
+</div>
+<div style="display:grid;background:#F7F3E8;color:#26221B;padding:24px 26px 22px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);background-image:radial-gradient(circle at 8px -2px,#191512 6px,transparent 6.5px);background-size:16px 10px;background-repeat:repeat-x;min-width:0">
+<div style="display:flex;justify-content:space-between;gap:12px;padding:6px 0 12px;border-bottom:1px dashed #B8AE96;font-size:11px;letter-spacing:.08em;color:#6E6656"><span>RAČUN · LEKTA</span><span>Nº 0007</span></div>
+<sc-for list="{{ receipt }}" as="rc" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px dotted #CFC6AE;font-size:13px;animation:rpIn .3s cubic-bezier(.22,1,.36,1) both"><span style="min-width:0">{{ rc.t }}</span><span style="color:#6E6656">0,00 €</span></div></sc-for>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:14px 0 6px;font-size:14px"><span>Diplomski rad · {{ planN }} zahvata</span><b style="font-weight:600;font-size:18px">14,99 €</b></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-top:1px dashed #B8AE96"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">OCJENA FORME</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:40px;line-height:1">71 → <span style="color:#1E7F4F">{{ shown }}</span></span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-top:1px dotted #CFC6AE;font-size:13px"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">OPSEG</span><span>41 → <b style="font-weight:600">{{ pagesAfter }}</b> stranica</span></div>
+<div style="display:grid;gap:4px;padding:10px 0 12px;border-top:1px dotted #CFC6AE;border-bottom:1px dashed #B8AE96"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:13px"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">UŠTEDA · PROCJENA</span><b style="font-weight:600">≈ {{ est }}</b></div><span style="font-size:11px;line-height:1.5;color:#6E6656">{{ estHow }}</span></div>
+<p style="margin:12px 0 16px;font-size:11px;line-height:1.55;color:#4A4438">Jamstvo: ako ponovna provjera nađe grešku u formi koju smo popravili, vraćamo 14,99 €. Ponovna provjera istog rada je besplatna do 14. 10.</p>
+<button type="button" onClick="{{ toPay }}" disabled="{{ planEmpty }}" style="font:inherit;font-size:14px;font-weight:500;min-height:48px;padding:0 20px;border:0;border-radius:10px;background:{{ toPayBg }};color:#F7F3E8;cursor:pointer">{{ toPayText }}</button>
+</div>
+</section></sc-if>
+
+<sc-if value="{{ v2 }}" hint-placeholder-val="{{ false }}"><section data-screen-label="02 Plaćanje" style="display:grid;grid-template-columns:{{ cols }};gap:28px;align-items:start;animation:{{ secAnim }}">
+<div style="display:grid;gap:14px;min-width:0;align-content:start"><p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">02 · PLAĆANJE</p><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(34px,4.4vw,52px);line-height:.98;letter-spacing:-.02em">Plati jednom, za ovaj rad.</h2>
+<ol style="margin:6px 0 0;padding:0;list-style:none;display:grid;gap:10px;font-size:13px;line-height:1.5;color:rgba(237,231,220,.8)"><li style="display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px"><span style="color:#E4573D">01</span>Nakon plaćanja popravak kreće odmah i traje oko 15 sekundi.</li><li style="display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px"><span style="color:#E4573D">02</span>Dobiješ popravljeni .docx i izvještaj o svakoj izmjeni.</li><li style="display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px"><span style="color:#E4573D">03</span>Kad dopišeš ručne stvari, ponovna provjera je besplatna.</li></ol>
+<div style="min-height:150px;padding-top:10px">
+<sc-if value="{{ paid }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:minmax(0,1fr) 72px;gap:14px;align-items:center;max-width:360px;padding:16px 18px;background:#FBF8F0;color:#26221B;border-top:2px dashed #B8AE96;box-shadow:0 12px 28px rgba(0,0,0,.45);animation:rpTear .8s .35s cubic-bezier(.22,1,.36,1) both"><div style="display:grid;gap:4px;min-width:0"><span style="font-size:10px;letter-spacing:.08em;color:#6E6656">POTVRDA · Nº 0007</span><span style="font-family:'Instrument Serif',Georgia,serif;font-size:22px;line-height:1.1">14,99 € · plaćeno</span><span style="font-size:11px;color:#6E6656">23. 9. 2026. · {{ brand }} •••• · skeniraj za PDF računa</span></div><div aria-label="QR kod za PDF računa" role="img" style="width:72px;height:72px;background:#FBF8F0;background-image:linear-gradient(90deg,#26221B 50%,transparent 50%),linear-gradient(#26221B 50%,transparent 50%);background-size:12px 12px,12px 12px;background-blend-mode:difference;outline:4px solid #FBF8F0;box-shadow:inset 0 0 0 6px #26221B"></div></div></sc-if>
+</div>
+</div>
+<form onSubmit="{{ onPay }}" style="display:grid;gap:14px;background:#F7F3E8;color:#26221B;padding:24px 26px;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);min-width:0;animation:{{ formAnim }}">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">14,99 € · STRIPE</span><sc-if value="{{ paid }}" hint-placeholder-val="{{ false }}"><span style="padding:6px 12px;border:2.5px solid #1E7F4F;border-radius:2px;color:#1E7F4F;font-size:12px;letter-spacing:.12em;text-transform:uppercase;mix-blend-mode:multiply;animation:rpStamp .34s cubic-bezier(.2,.9,.3,1.2) both">Plaćeno · 23. 9. 2026.</span></sc-if></div>
+<div aria-hidden="true" style="justify-self:center;width:100%;max-width:340px;aspect-ratio:1.586;box-sizing:border-box;padding:18px 20px;border-radius:14px;background:{{ cardBg }};color:#F7F3E8;display:grid;grid-template-rows:auto 1fr auto auto;gap:6px;box-shadow:0 14px 30px rgba(0,0,0,.35);transition:background .4s"><div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.08em"><span style="width:36px;height:26px;border-radius:5px;background:#D9B870"></span><span style="font-weight:600">{{ brand }}</span></div><span></span><span style="font-size:18px;letter-spacing:.14em">•••• •••• •••• ••••</span><div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cardName }}</span><span>{{ cardExp }}</span></div></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"><button type="button" onClick="{{ onPay }}" disabled="{{ payLocked }}" style="font:inherit;font-size:14px;min-height:48px;border:0;border-radius:10px;background:#111;color:#fff;cursor:pointer"> Pay</button><button type="button" onClick="{{ onPay }}" disabled="{{ payLocked }}" style="font:inherit;font-size:14px;min-height:48px;border:1px solid #CFC6AE;border-radius:10px;background:#fff;color:#111;cursor:pointer">G Pay</button></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;font-size:11px;color:#8A816D"><span style="height:1px;background:#DCD4BF"></span>ili karticom<span style="height:1px;background:#DCD4BF"></span></div>
+<label style="display:grid;gap:6px;font-size:11px;letter-spacing:.06em;color:#6E6656">BROJ KARTICE<input value="{{ cn }}" onInput="{{ setCn }}" inputmode="numeric" autocomplete="cc-number" placeholder="1234 1234 1234 1234" style="font:inherit;font-size:15px;min-height:48px;padding:0 14px;box-sizing:border-box;width:100%;border:1px solid #CFC6AE;border-radius:8px;background:#FBF8F0;color:#26221B"></label>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"><label style="display:grid;gap:6px;font-size:11px;letter-spacing:.06em;color:#6E6656">MM / GG<input value="{{ ce }}" onInput="{{ setCe }}" inputmode="numeric" autocomplete="cc-exp" placeholder="09 / 28" style="font:inherit;font-size:15px;min-height:48px;padding:0 14px;box-sizing:border-box;width:100%;border:1px solid #CFC6AE;border-radius:8px;background:#FBF8F0;color:#26221B"></label><label style="display:grid;gap:6px;font-size:11px;letter-spacing:.06em;color:#6E6656">CVC<input inputmode="numeric" autocomplete="cc-csc" placeholder="123" style="font:inherit;font-size:15px;min-height:48px;padding:0 14px;box-sizing:border-box;width:100%;border:1px solid #CFC6AE;border-radius:8px;background:#FBF8F0;color:#26221B"></label></div>
+<label style="display:grid;gap:6px;font-size:11px;letter-spacing:.06em;color:#6E6656">IME NA KARTICI<input value="{{ cname }}" onInput="{{ setName }}" autocomplete="cc-name" placeholder="Ana Horvat" style="font:inherit;font-size:15px;min-height:48px;padding:0 14px;box-sizing:border-box;width:100%;border:1px solid #CFC6AE;border-radius:8px;background:#FBF8F0;color:#26221B"></label>
+<button type="submit" disabled="{{ payLocked }}" style="font:inherit;font-size:14px;font-weight:500;min-height:50px;border:0;border-radius:10px;background:{{ payBg }};color:#F7F3E8;cursor:pointer">{{ payText }}</button>
+<p style="margin:0;font-size:11px;line-height:1.5;color:#6E6656">Podaci kartice idu izravno Stripeu. Lekta ih ne vidi i ne sprema, pa ni broj kartice nikad ne prikazujemo.</p>
+</form>
+</section></sc-if>
+
+<sc-if value="{{ v3 }}" hint-placeholder-val="{{ false }}"><section data-screen-label="03 Popravak" style="display:grid;grid-template-columns:{{ colsFix }};gap:24px 28px;align-items:start;animation:{{ secAnim }}">
+<div style="display:grid;gap:16px;min-width:0"><p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">03 · POPRAVAK · {{ fixLine }}</p><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(34px,4.4vw,52px);line-height:.98;letter-spacing:-.02em">{{ fixTitle }}</h2>
+<p style="margin:0;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:48px;line-height:1;font-variant-numeric:tabular-nums">{{ paras }}</span><span style="font-size:12px;color:rgba(237,231,220,.65)">odlomaka popravljeno od 1.284</span></p>
+<ol style="margin:0;padding:0;list-style:none;display:grid;border-top:1px solid rgba(237,231,220,.14)"><sc-for list="{{ fixList }}" as="fx" hint-placeholder-count="4"><li style="display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(237,231,220,.1);font-size:13px;color:{{ fx.col }}"><span style="color:{{ fx.ic }};animation:{{ fx.anim }}">{{ fx.icon }}</span><span>{{ fx.t }}</span><span style="font-size:11px;color:rgba(237,231,220,.55)">{{ fx.s }}</span></li></sc-for></ol>
+<div aria-live="polite" style="display:grid;gap:6px;min-height:156px;padding:14px 16px;box-sizing:border-box;background:#F1E6B8;color:#3E382C;font-size:12px;line-height:1.5;box-shadow:0 8px 18px rgba(0,0,0,.3)"><span style="font-size:10px;letter-spacing:.08em;color:#6E6656">DNEVNIK IZMJENA</span><sc-for list="{{ log }}" as="lg" hint-placeholder-count="0"><span style="min-width:0">{{ lg.t }}<span style="opacity:{{ lg.caret }};animation:rpCaret .8s steps(1) infinite;color:#C4372E">▍</span></span></sc-for></div>
+</div>
+<div style="position:relative;justify-self:center;width:min(420px,100%);container-type:inline-size;aspect-ratio:210/297;background:#F7F3E8;color:#26221B;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55)">
+<div lang="hr" style="position:absolute;inset:0;padding:8cqw 9cqw 10cqw {{ pl }};font-family:{{ pf }};font-size:{{ pfs }};line-height:{{ plh }};text-align:{{ pta }};hyphens:auto;overflow:hidden;transition:padding 1s cubic-bezier(.22,1,.36,1),line-height 1s cubic-bezier(.22,1,.36,1),font-size .6s">
+<p style="margin:0 0 3cqw;font-size:1.35em;font-weight:700;line-height:1.2">2. Teorijski okvir</p>
+<p style="margin:0 0 2.4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p>
+<p style="margin:0 0 2.4cqw">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti. Ta definicija dugo je isključivala simboličke oblike, poput javnog izražavanja stava.</p>
+<p style="margin:0">Theocharis i van Deth (2018) predlažu širu tipologiju u kojoj se digitalni oblici promatraju kao zaseban modus sudjelovanja.</p>
+</div>
+<span aria-hidden="true" style="position:absolute;left:0;right:0;bottom:3.4cqw;text-align:center;font-family:'Times New Roman',serif;font-size:2.8cqw;opacity:{{ ppn }};transition:opacity .6s">7</span>
+<sc-if value="{{ fixing }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:18%;background:linear-gradient(180deg,rgba(255,206,130,0),rgba(255,206,130,.3) 50%,rgba(255,206,130,0));animation:rpScan 2.4s ease-in-out infinite alternate;pointer-events:none"></div></sc-if>
+</div>
+<div style="grid-column:1 / -1;display:grid;gap:10px">
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)"><span>STARO ←</span><span>STROJ · STR. {{ machinePage }} / 41</span><span>→ POPRAVLJENO</span></div>
+<div aria-hidden="true" style="position:relative;height:84px;overflow:hidden;border-top:1px solid rgba(237,231,220,.12);border-bottom:1px solid rgba(237,231,220,.12)">
+<div style="position:absolute;top:10px;left:{{ stripX }};display:flex;gap:6px">
+<sc-for list="{{ thumbs }}" as="th" hint-placeholder-count="41"><span style="flex:none;width:28px;height:40px;box-sizing:border-box;background-color:{{ th.bg }};background-image:repeating-linear-gradient(to bottom,#B8AE96 0 1px,transparent 1px {{ th.gap }});background-clip:content-box;background-origin:content-box;padding:{{ th.pad }};box-shadow:0 2px 6px rgba(0,0,0,.4);transform:translateY({{ th.y }});transition:transform .3s,background-color .3s"></span></sc-for>
+</div>
+<div style="position:absolute;top:4px;bottom:4px;left:50%;width:44px;margin-left:-22px;border:2px solid #C4372E;box-shadow:0 0 0 999px rgba(25,21,18,.35),0 0 24px rgba(196,55,46,.35);pointer-events:none"></div>
+</div>
+</div>
+</section></sc-if>
+
+<sc-if value="{{ v4 }}" hint-placeholder-val="{{ false }}"><section data-screen-label="04 Gotovo" style="display:grid;gap:26px;animation:{{ secAnim }}">
+<div style="display:flex;justify-content:space-between;align-items:end;gap:16px 24px;flex-wrap:wrap"><div style="display:grid;gap:10px;min-width:0"><p style="margin:0;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">04 · GOTOVO · {{ planN }} OD {{ planN }} ZAHVATA · 0 NOVIH PROBLEMA</p><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(38px,5vw,64px);line-height:.95;letter-spacing:-.02em;text-wrap:balance">{{ doneTitle }}</h2><span style="display:inline-flex;align-items:center;gap:10px;font-size:12px;color:{{ dlCol }}"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:currentColor"></span>{{ deadline }}</span></div>
+<div style="min-height:56px;display:flex;align-items:center"><sc-if value="{{ ringDone }}" hint-placeholder-val="{{ false }}"><span style="padding:9px 16px;border:3px solid {{ stampCol }};border-radius:2px;color:{{ stampCol }};font-size:13px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-7deg);animation:rpStamp .34s cubic-bezier(.2,.9,.3,1.2) both">{{ stampText }}</span></sc-if></div></div>
+<div style="display:grid;grid-template-columns:{{ cols }};gap:28px;align-items:start">
+<div style="display:grid;gap:12px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div role="group" aria-label="Način usporedbe" style="display:inline-flex;padding:3px;border:1px solid rgba(237,231,220,.16);border-radius:999px"><button type="button" onClick="{{ setSlider }}" aria-pressed="{{ slP }}" style="all:unset;cursor:pointer;min-height:34px;padding:0 14px;border-radius:999px;font-size:11px;letter-spacing:.06em;background:{{ slBg }};color:{{ slCol }}">KLIZAČ</button><button type="button" onClick="{{ setLt }}" aria-pressed="{{ ltP }}" style="all:unset;cursor:pointer;min-height:34px;padding:0 14px;border-radius:999px;font-size:11px;letter-spacing:.06em;background:{{ ltBg }};color:{{ ltCol }}">SVJETLOSNI STOL</button></div><span style="font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">STR. {{ page }} OD 41 · {{ cmpHint }}</span></div>
+<sc-if value="{{ isSlider }}" hint-placeholder-val="{{ true }}"><div ref="{{ sheetRef }}" style="position:relative;container-type:inline-size;aspect-ratio:210/297;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);overflow:hidden;user-select:none;touch-action:pan-y">
+<div lang="hr" style="position:absolute;inset:0;background:#F7F3E8;color:#26221B;padding:8cqw 9cqw 10cqw 7cqw;font-family:Calibri,Carlito,'Segoe UI',sans-serif;font-size:2.85cqw;line-height:1.08;overflow:hidden"><p style="margin:0 0 3cqw;font-size:1.35em;font-weight:700">2. Teorijski okvir</p><p style="margin:0 0 2.4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p><p style="margin:0 0 2.4cqw">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti. Ta definicija dugo je isključivala simboličke oblike, poput javnog izražavanja stava.</p><p style="margin:0">Theocharis i van Deth (2018) predlažu širu tipologiju u kojoj se digitalni oblici promatraju kao zaseban modus sudjelovanja.</p></div>
+<div lang="hr" aria-hidden="true" style="position:absolute;inset:0;background:#FBF8F0;color:#1F1C17;padding:8cqw 9cqw 10cqw {{ al }};font-family:{{ af }};font-size:{{ afs }};line-height:{{ alh }};text-align:{{ ata }};hyphens:auto;overflow:hidden;clip-path:inset(0 {{ clipR }} 0 0)"><p style="margin:0 0 3cqw;font-size:1.3em;font-weight:700;line-height:1.2">2. Teorijski okvir</p><p style="margin:0;text-indent:4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p><p style="margin:0;text-indent:4cqw">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti. Ta definicija dugo je isključivala simboličke oblike, poput javnog izražavanja stava.</p><p style="margin:0;text-indent:4cqw">Theocharis i van Deth (2018) predlažu širu tipologiju u kojoj se digitalni oblici promatraju kao zaseban modus sudjelovanja.</p><span style="position:absolute;left:0;right:0;bottom:3.4cqw;text-align:center;font-family:'Times New Roman',serif;font-size:2.8cqw;opacity:{{ apn }}">{{ page }}</span></div>
+<div aria-hidden="true" style="position:absolute;top:0;bottom:0;left:{{ splitPct }};width:2px;margin-left:-1px;background:#C4372E;pointer-events:none"></div>
+<button type="button" onPointerDown="{{ onGrab }}" onKeyDown="{{ onKey }}" aria-label="Povuci: lijevo popravljeno, desno sada" style="all:unset;cursor:ew-resize;position:absolute;top:50%;left:{{ splitPct }};width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:#C4372E;color:#F7F3E8;display:grid;place-items:center;font-size:16px;box-shadow:0 6px 16px rgba(0,0,0,.4);touch-action:none">⇆</button>
+</div></sc-if>
+<sc-if value="{{ isLt }}" hint-placeholder-val="{{ false }}"><div ref="{{ ltRef }}" style="position:relative;container-type:inline-size;aspect-ratio:210/297;overflow:hidden;user-select:none;touch-action:pan-y;background:radial-gradient(ellipse at 50% 45%,#FFF4D6 0%,#E9D8AE 55%,#6B5C40 100%);box-shadow:inset 0 0 40px rgba(0,0,0,.35)">
+<div lang="hr" aria-hidden="true" style="position:absolute;inset:6%;background:rgba(247,243,232,.94);color:#26221B;padding:7cqw 8cqw 9cqw 6cqw;font-family:Calibri,Carlito,'Segoe UI',sans-serif;font-size:2.6cqw;line-height:1.08;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.25)"><span style="display:block;margin-bottom:2cqw;font-family:'Geist Mono',monospace;font-size:2cqw;letter-spacing:.08em;color:#A62B23">V3 · STARO</span><p style="margin:0 0 3cqw;font-size:1.35em;font-weight:700">2. Teorijski okvir</p><p style="margin:0 0 2.4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p><p style="margin:0">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti.</p></div>
+<div lang="hr" onPointerDown="{{ onLtGrab }}" style="position:absolute;inset:6%;background:#FBF8F0;color:#1F1C17;padding:7cqw 8cqw 9cqw {{ ltPad }};font-family:{{ af }};font-size:{{ ltFs }};line-height:{{ alh }};text-align:{{ ata }};hyphens:auto;overflow:hidden;cursor:grab;touch-action:none;box-shadow:0 18px 40px rgba(0,0,0,.4);transform:translateX({{ ltX }}) rotate({{ ltRot }});transition:{{ ltTrans }}"><span style="display:block;margin-bottom:2cqw;font-family:'Geist Mono',monospace;font-size:2cqw;letter-spacing:.08em;color:#1E7F4F">V3 · POPRAVLJENO · POVUCI USTRANU</span><p style="margin:0 0 3cqw;font-size:1.3em;font-weight:700;line-height:1.2">2. Teorijski okvir</p><p style="margin:0;text-indent:4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p><p style="margin:0;text-indent:4cqw">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti.</p></div>
+</div></sc-if>
+<div style="display:grid;grid-template-columns:repeat(41,minmax(0,1fr));gap:2px"><sc-for list="{{ tiles }}" as="p" hint-placeholder-count="41"><button type="button" onClick="{{ p.on }}" aria-label="Stranica {{ p.n }}" style="all:unset;cursor:pointer;height:32px;background:{{ p.bg }};box-shadow:inset 0 0 0 1.5px {{ p.ring }}" style-hover="background:#F7F3E8"></button></sc-for></div>
+</div>
+<div style="display:grid;gap:18px;min-width:0">
+<div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;background:#F7F3E8;color:#26221B;padding:20px 22px;box-shadow:0 2px 6px rgba(0,0,0,.3),0 14px 36px rgba(0,0,0,.4)">
+<div role="img" aria-label="Ocjena {{ ringVal }} od 100" style="width:112px;height:112px;border-radius:50%;background:conic-gradient(#1E7F4F 0 {{ ringPct }},#DCD4BF {{ ringPct }} 100%);display:grid;place-items:center"><span style="width:92px;height:92px;border-radius:50%;background:#F7F3E8;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:44px;line-height:1;font-variant-numeric:tabular-nums">{{ ringVal }}</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr);gap:6px 10px;font-size:12px;min-width:0"><span style="font-size:10px;letter-spacing:.08em;color:#6E6656">ZAHVAT</span><span style="font-size:10px;letter-spacing:.08em;color:#6E6656">PRIJE</span><span style="font-size:10px;letter-spacing:.08em;color:#6E6656">POSLIJE</span><sc-for list="{{ table }}" as="tr" hint-placeholder-count="4"><span style="padding-top:6px;border-top:1px solid #DCD4BF">{{ tr.t }}</span><s style="padding-top:6px;border-top:1px solid #DCD4BF;color:#A62B23">{{ tr.m }}</s><span style="padding-top:6px;border-top:1px solid #DCD4BF;color:#1E7F4F">{{ tr.r }}</span></sc-for></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap"><button type="button" onClick="{{ onDownload }}" style="font:inherit;font-size:14px;font-weight:500;min-height:48px;padding:0 20px;border:0;border-radius:10px;background:#C4372E;color:#F7F3E8;cursor:pointer" style-hover="background:#A62B23">↓ Preuzmi popravljeni .docx</button><a href="#" style="font-size:13px;color:rgba(237,231,220,.75);text-underline-offset:4px">Izvještaj o izmjenama (PDF)</a></div>
+<figure style="margin:0;display:grid;gap:10px;padding:16px 18px;background:#FBF8F0;color:#26221B;box-shadow:0 8px 20px rgba(0,0,0,.35);transform:rotate(-.5deg)"><figcaption style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:10px;letter-spacing:.08em;color:#6E6656"><span>PISMO MENTORU · SAŽETAK IZMJENA</span><button type="button" onClick="{{ onCopy }}" style="all:unset;cursor:pointer;min-height:36px;display:inline-flex;align-items:center;padding:0 12px;border:1px solid #CFC6AE;border-radius:8px;font-size:11px;letter-spacing:.04em;color:{{ copyCol }}">{{ copyText }}</button></figcaption><p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:17px;line-height:1.4;text-wrap:pretty">{{ letter }}</p></figure>
+<div style="display:grid;gap:12px"><span style="font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">JOŠ TI OSTAJE · U WORDU</span>
+<sc-for list="{{ manual }}" as="mn" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;align-items:start;padding:12px 14px;background:#F1E6B8;color:#3E382C;box-shadow:0 8px 18px rgba(0,0,0,.3);transform:rotate({{ mn.rot }})"><span aria-hidden="true" style="width:20px;height:20px;border:1.5px solid #3E382C;display:grid;place-items:center;font-size:14px;color:#1E7F4F;margin-top:2px">{{ mn.box }}</span><span style="position:relative;display:grid;gap:3px"><span style="position:relative;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:18px;line-height:1.2">{{ mn.t }}<sc-if value="{{ mn.done }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="position:absolute;left:-2px;right:-2px;top:55%;height:2px;background:#C4372E;transform-origin:left;animation:rpStrike .4s cubic-bezier(.22,1,.36,1) both"></span></sc-if></span><span style="font-size:11px;color:#6E6656">{{ mn.s }}</span></span></div></sc-for>
+<p style="margin:0;font-size:11px;line-height:1.5;color:rgba(237,231,220,.6)">Kvačicu stavlja ponovna provjera, ne ti. Tako znaš da je stvarno riješeno.</p>
+</div>
+<div style="display:grid;gap:10px;padding:16px 18px;border:1.5px dashed {{ reBd }}"><span style="font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">PONOVNA PROVJERA · BESPLATNO DO 14. 10.</span><span style="font-size:13px;line-height:1.5">{{ reText }}</span><sc-if value="{{ reIdle }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ onRecheck }}" style="justify-self:start;font:inherit;font-size:13px;min-height:44px;padding:0 18px;border:1.5px solid #EDE7DC;border-radius:10px;background:transparent;color:#EDE7DC;cursor:pointer" style-hover="background:rgba(237,231,220,.08)">Ubaci novu verziju (v4)</button></sc-if><sc-if value="{{ reRun }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:10px;font-size:12px;color:#EDE7DC"><span style="color:#E4573D;animation:rpPulse 1s infinite">●</span>Čitam diplomski-rad-final-v4.docx</span></sc-if></div>
+<p style="margin:0;font-size:11px;line-height:1.55;color:rgba(237,231,220,.55)">Jamstvo: ako ponovna provjera nađe grešku u formi koju smo popravili, vraćamo 14,99 €.</p>
+</div>
+</div>
+</section></sc-if>
+</main>
+<sc-if value="{{ drawerOn }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;inset:0;z-index:70">
+<button type="button" onClick="{{ closeDrawer }}" aria-label="Zatvori popis" style="all:unset;position:absolute;inset:0;background:rgba(10,8,6,.55);cursor:pointer"></button>
+<aside role="dialog" aria-modal="true" aria-label="Što Lekta popravlja" style="position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);overflow:auto;background:#F7F3E8;color:#26221B;box-shadow:-20px 0 60px rgba(0,0,0,.5);padding:24px 26px 40px;box-sizing:border-box;display:grid;align-content:start;gap:22px;animation:rpDrawer .35s cubic-bezier(.22,1,.36,1) both">
+<div style="display:flex;justify-content:space-between;align-items:start;gap:12px"><div style="display:grid;gap:8px"><span style="font-size:11px;letter-spacing:.08em;color:#6E6656">CIJELI POPIS · FPZG · DIPLOMSKI</span><h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:34px;line-height:1">Što Lekta popravlja</h2><p style="margin:0;font-size:12px;line-height:1.55;color:#4A4438">18 popravaka u dvije razine. Ručno su stvari koje alat ne smije dirati jer mijenjaju sadržaj.</p></div><button type="button" onClick="{{ closeDrawer }}" aria-label="Zatvori" style="all:unset;cursor:pointer;flex:none;width:44px;height:44px;display:grid;place-items:center;border:1px solid #CFC6AE;border-radius:999px;font-size:16px">✕</button></div>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="3"><section style="display:grid;gap:4px"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:1.5px solid #26221B"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:22px">{{ g.t }}</span><span style="font-size:11px;color:#6E6656">{{ g.n }}</span></div><span style="font-size:11px;line-height:1.5;color:#6E6656;padding:4px 0 6px">{{ g.d }}</span>
+<sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid #DCD4BF;font-size:13px"><span style="font-weight:{{ r.w }}">{{ r.t }}</span><span style="font-size:11px;color:{{ r.c }}">{{ r.s }}</span></div></sc-for>
+</section></sc-for>
+</aside></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const RP_A = [
+  { k: 'auto', t: 'Font', m: 'Calibri', r: 'Times New Roman', p: 4, log: ['stil Normal · Calibri → Times New Roman', 'stilovi Naslov 1–3 · Times New Roman'] },
+  { k: 'auto', t: 'Veličina slova', m: '11 pt', r: '12 pt', p: 2, log: ['stil Normal · 11 → 12 pt', 'fusnote · 10 pt zadržano'] },
+  { k: 'auto', t: 'Lijeva margina', m: '2,0 cm', r: '2,5 cm', p: 4, log: ['postavke stranice · lijeva margina 2,0 → 2,5 cm', 'str. 1–41 · prijelomi pomaknuti'] },
+  { k: 'auto', t: 'Prored', m: '1,0', r: '1,5', p: 4, log: ['stil Normal · prored 1,0 → 1,5', 'fusnote · prored 1,0 zadržan'] },
+  { k: 'auto', t: 'Poravnanje', m: 'lijevo', r: 'obostrano', p: 2, log: ['1.284 odlomka · obostrano poravnanje'] },
+  { k: 'auto', t: 'Razmak odlomaka', m: '12 pt poslije', r: '0 pt, uvlaka 1,25 cm', p: 2, log: ['stil Normal · razmak 12 → 0 pt', 'prvi redak · uvlaka 1,25 cm'] },
+  { k: 'assist', t: 'Numeracija od uvoda', m: 'bez broja', r: 'od uvoda, dolje u sredini', p: 3, before: 'Naslovnica, sadržaj i uvod bez broja stranice.', after: 'Naslovnica i sadržaj bez broja. Uvod počinje brojem 1, dolje u sredini.', note: 'Lekta dodaje prijelom odjeljka ispred uvoda. Sadržaj se tada sam osvježi.', log: ['odjeljak 2 · numeracija od uvoda', 'sadržaj · brojevi osvježeni'] },
+  { k: 'assist', t: 'Citat bez zapisa u literaturi', m: '(Novak, 2022)', r: 'zapis u popisu', p: 2, before: '(Novak, 2022) u tekstu, bez zapisa u popisu literature.', after: 'Novak, [ime]. (2022). [Naslov djela]. [Mjesto: Izdavač].', note: 'Lekta dodaje zapis na pravo mjesto po abecedi. Polja u zagradama popunjavaš u Wordu; izvor ne izmišljamo.', log: ['literatura · zapis Novak (2022) dodan', 'popis · abecedni red provjeren'] }
+];
+const RP_M = [
+  { t: 'Naslov 2.3 u sadržaj', s: 'Primijeni stil Naslov 2 i osvježi sadržaj' }
+];
+const RP_G = [
+  { t: 'Automatski', d: 'Samo oblikovanje. Tekst, citati i slike ostaju isti.', rows: [['Margine', 1], ['Format papira', 0], ['Font', 1], ['Veličina slova', 1], ['Prored', 1], ['Poravnanje', 1], ['Razmak odlomaka', 1], ['Razmak fusnota', 0], ['Položaj broja stranice', 0], ['Prazni odlomci', 0]] },
+  { t: 'Uz potvrdu', d: 'Mijenja strukturu rada. Vidiš prije i poslije, pa potvrdiš.', rows: [['Numeracija od uvoda', 1], ['Shema numeriranja', 0], ['Abecedni red literature', 0], ['Citat bez zapisa ili zapis bez citata', 1], ['Oznake a/b uz godinu', 0], ['Obavezna poglavlja', 0], ['Oblikovanje naslova', 0], ['Oblikovanje fusnota', 0]] },
+  { t: 'Ručno', d: 'Sadržajna odluka. Lekta pokaže gdje, a mijenjaš ti.', rows: [['Stilovi naslova u Wordu', 1], ['Natpisi tablica i slika', 0], ['Popisi prikaza', 0]] }
+];
+const RP_STEP = 2000, RP_TNR = "'Times New Roman',Times,'Liberation Serif',serif", RP_CAL = "Calibri,Carlito,'Segoe UI',sans-serif";
+class Component extends DCLogic {
+  state = { open: {}, drawer: false, view: 1, dir: 1, plan: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }, shown: 89, step: 1, paying: false, paid: false, ft: -1, split: 50, page: 7, re: 'idle', reN: 0, versions: 1, w: 1200, cmp: 'slider', ltX: 0, ltDrag: false, ring: 71, ringDone: false, copied: false, cn: '', ce: '', cname: '' };
+  rootRef = React.createRef(); drawerRef = React.createRef(); sheetRef = React.createRef(); ltRef = React.createRef();
+  componentDidMount() {
+    this.rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = this.rootRef.current;
+    if (el && 'ResizeObserver' in window) { this.ro = new ResizeObserver(e => this.setState({ w: e[0].contentRect.width })); this.ro.observe(el); }
+    this.mv = e => {
+      if (this.drag === 'split' && this.sheetRef.current) { const r = this.sheetRef.current.getBoundingClientRect(); this.setState({ split: Math.max(0, Math.min(100, Math.round((e.clientX - r.left) / r.width * 100))) }); }
+      if (this.drag === 'lt' && this.ltRef.current) { const r = this.ltRef.current.getBoundingClientRect(), m = r.width * .82; this.setState({ ltX: Math.max(-m, Math.min(m, this.lx0 + e.clientX - this.sx)) }); }
+    };
+    this.up = () => { if (this.drag === 'lt') this.setState({ ltDrag: false }); this.drag = null; };
+    window.addEventListener('pointermove', this.mv); window.addEventListener('pointerup', this.up);
+    this.kd = e => { if (e.key === 'Escape' && this.state.drawer) this.setState({ drawer: false }); };
+    window.addEventListener('keydown', this.kd);
+  }
+  componentWillUnmount() { this.ro && this.ro.disconnect(); clearInterval(this.iv); clearTimeout(this.st); cancelAnimationFrame(this.raf); window.removeEventListener('pointermove', this.mv); window.removeEventListener('pointerup', this.up); window.removeEventListener('keydown', this.kd); (this.tt || []).forEach(clearTimeout); }
+  target() { return 71 + RP_A.reduce((a, x, i) => a + (this.state.plan[i] ? x.p : 0), 0); }
+  componentDidUpdate() {
+    const t = this.target();
+    if (this.state.shown !== t && !this.st) this.st = setTimeout(() => { this.st = null; this.setState(s => ({ shown: s.shown + (t > s.shown ? 1 : -1) })); }, this.rm ? 0 : 35);
+  }
+  later(ms, fn) { (this.tt = this.tt || []).push(setTimeout(fn, this.rm ? 0 : ms)); }
+  goView(n) {
+    this.setState(s => ({ view: n, dir: n > s.view ? 1 : -1 }));
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (n === 4 && !this.ringStarted) { this.ringStarted = true; this.later(450, () => this.fillRing()); }
+  }
+  fillRing() {
+    const to = this.target();
+    if (this.rm) { this.setState({ ring: to, ringDone: true }); return; }
+    const t0 = performance.now();
+    const f = t => { const p = Math.min(1, (t - t0) / 1300), e = 1 - Math.pow(1 - p, 3); this.setState({ ring: Math.round(71 + (to - 71) * e) }); if (p < 1) this.raf = requestAnimationFrame(f); else this.later(180, () => this.setState({ ringDone: true })); };
+    this.raf = requestAnimationFrame(f);
+  }
+  pay(e) {
+    e && e.preventDefault && e.preventDefault();
+    if (this.state.paying || this.state.paid) return;
+    this.setState({ paying: true });
+    this.later(900, () => { this.setState({ paying: false, paid: true, step: 3 }); try { navigator.vibrate && navigator.vibrate(40); } catch (x) {} });
+    this.later(2600, () => { this.goView(3); this.fix(); });
+  }
+  order() { return RP_A.map((x, i) => i).filter(i => this.state.plan[i]); }
+  fix() {
+    const end = this.order().length * RP_STEP + 800;
+    if (this.rm) { this.setState({ ft: end, step: 4 }, () => this.goView(4)); return; }
+    const t0 = performance.now();
+    clearInterval(this.iv);
+    this.iv = setInterval(() => { const t = performance.now() - t0; this.setState({ ft: t }); if (t >= end) { clearInterval(this.iv); this.setState({ step: 4 }); this.later(900, () => this.goView(4)); } }, 60);
+  }
+  applied(i) { const k = this.order().indexOf(i); return k >= 0 && this.state.ft >= (k + 1) * RP_STEP; }
+  recheck() {
+    this.setState({ re: 'run', reN: 0 });
+    this.later(1600, () => this.setState({ reN: 1 }));
+    this.later(2600, () => { this.setState({ re: 'done' }); this.toDrawer(); });
+  }
+  toDrawer() {
+    const a = this.sheetRef.current || this.ltRef.current, b = this.drawerRef.current;
+    if (this.rm || !a || !b || !a.animate) { this.setState(s => ({ versions: s.versions + 1 })); return; }
+    const r = a.getBoundingClientRect(), d = b.getBoundingClientRect(), c = a.cloneNode(true);
+    Object.assign(c.style, { position: 'fixed', left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px', zIndex: 90, pointerEvents: 'none', margin: 0, transformOrigin: 'left top' });
+    document.body.appendChild(c);
+    const sc = 40 / r.width;
+    c.animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(' + (d.left - r.left) * .5 + 'px,' + ((d.top - r.top) * .5 - 80) + 'px) rotate(-8deg) scale(.5)', opacity: 1, offset: .5 }, { transform: 'translate(' + (d.left + 10 - r.left) + 'px,' + (d.top - r.top) + 'px) scale(' + sc + ')', opacity: 0 }], { duration: 1100, easing: 'cubic-bezier(.5,0,.2,1)', fill: 'forwards' }).onfinish = () => { c.remove(); this.setState(s => ({ versions: s.versions + 1 })); };
+  }
+  download(e) {
+    const b = e.currentTarget.getBoundingClientRect();
+    if (this.rm || !document.body.animate) return;
+    const c = document.createElement('div');
+    c.textContent = 'diplomski-rad-final-v3-lekta.docx';
+    Object.assign(c.style, { position: 'fixed', left: b.left + 'px', top: b.top + 'px', zIndex: 90, padding: '10px 14px', background: '#F7F3E8', color: '#26221B', font: "500 12px 'Geist Mono', monospace", boxShadow: '0 10px 24px rgba(0,0,0,.45)', pointerEvents: 'none' });
+    document.body.appendChild(c);
+    const dx = window.innerWidth - 300 - b.left, dy = window.innerHeight - 60 - b.top;
+    c.animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(' + dx * .4 + 'px,' + (dy * .4 - 120) + 'px) rotate(-6deg)', opacity: 1, offset: .45 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.7)', opacity: 0 }], { duration: 1000, easing: 'cubic-bezier(.5,0,.2,1)', fill: 'forwards' }).onfinish = () => c.remove();
+  }
+  renderVals() {
+    const s = this.state, wide = s.w >= 900, P = s.plan, locked = s.paid, ord = this.order(), planN = ord.length;
+    const A = i => this.applied(i), fixing = s.step === 3 && s.ft >= 0, fixDone = s.step >= 4, ready = s.re === 'done';
+    const labels = ['01 Plan', '02 Plaćanje', '03 Popravak', '04 Gotovo'];
+    const steps = labels.map((t, i) => { const n = i + 1, cur = n === s.view, reached = n <= s.step, past = n < s.step; return { t: past ? t + ' ✓' : t, cur: cur ? 'step' : 'false', dis: !reached, cursor: reached && !cur ? 'pointer' : 'default', on: () => { if (reached && !cur) this.goView(n); }, bd: cur ? '#EDE7DC' : 'rgba(237,231,220,.16)', bg: cur ? '#EDE7DC' : 'transparent', col: cur ? '#191512' : past ? '#5FBF8A' : 'rgba(237,231,220,.6)' }; });
+    const autoItems = RP_A.map((x, i) => x.k === 'auto' ? { t: x.t, m: x.m, r: x.r, p: String(x.p), on: !!P[i], toggle: () => this.setState(p => ({ plan: { ...p.plan, [i]: p.plan[i] ? 0 : 1 } })) } : null).filter(Boolean);
+    const asItems = RP_A.map((x, i) => x.k === 'assist' ? { t: x.t, m: x.m, r: x.r, p: String(x.p), before: x.before, after: x.after, note: x.note, box: !!P[i] || !!s.open[i], open: !!s.open[i] && !P[i], status: P[i] ? '+' + x.p + ' ✓' : s.open[i] ? 'čeka potvrdu' : '+' + x.p + ' · uz potvrdu', stCol: P[i] ? '#5FBF8A' : s.open[i] ? '#D9A04A' : 'rgba(237,231,220,.6)',
+      toggle: () => this.setState(p => p.plan[i] || p.open[i] ? { plan: { ...p.plan, [i]: 0 }, open: { ...p.open, [i]: 0 } } : { open: { ...p.open, [i]: 1 } }),
+      confirm: () => this.setState(p => ({ plan: { ...p.plan, [i]: 1 }, open: { ...p.open, [i]: 0 } })), cancel: () => this.setState(p => ({ open: { ...p.open, [i]: 0 } })) } : null).filter(Boolean);
+    const groups = RP_G.map(g => ({ t: g.t, n: String(g.rows.length) + (g.t === 'Ručno' ? '' : ' popravaka'), d: g.d, rows: g.rows.map(([t, need]) => ({ t, s: need ? 'u tvom radu: treba' : 'u redu ✓', c: need ? '#A62B23' : '#1E7F4F', w: need ? '600' : '400' })) }));
+    const receipt = RP_A.map((x, i) => P[i] ? { t: x.t + ' · ' + x.r + (x.k === 'assist' ? ' · potvrđeno' : '') } : null).filter(Boolean);
+    const mins = (P[2] || P[3] ? 3 * 41 : 0) + (P[0] || P[1] ? 41 : 0) + (P[4] || P[5] ? 20 : 0) + (P[6] ? 10 : 0) + (P[7] ? 5 : 0), hh = Math.floor(mins / 60), mm = mins % 60;
+    const how = [P[2] || P[3] ? '3 min/str. za prored i marginu' : '', P[0] || P[1] ? '1 min/str. za font i veličinu' : '', P[4] || P[5] ? '20 min za poravnanje i razmake' : '', P[6] ? '10 min za numeraciju' : '', P[7] ? '5 min za zapis u literaturi' : ''].filter(Boolean);
+    const brandOf = n => n[0] === '4' ? ['VISA', '#1A1F71'] : (n[0] === '5' || n[0] === '2') ? ['MASTERCARD', '#26221B'] : n[0] === '3' ? ['AMEX', '#2E6FA8'] : ['KARTICA', '#4A4438'];
+    const br = brandOf(s.cn.replace(/\D/g, ''));
+    const k = Math.floor(s.ft / RP_STEP), prog = planN ? Math.max(0, Math.min(1, s.ft / (planN * RP_STEP))) : 0;
+    const fixList = RP_A.map((x, i) => { const j = ord.indexOf(i), inP = j >= 0, done = inP && A(i), act = inP && !done && k === j && fixing; return { t: x.t, s: !inP ? 'preskočeno' : done ? x.m + ' → ' + x.r : act ? 'mijenjam…' : 'čeka', icon: !inP ? '–' : done ? '✓' : act ? '●' : '○', ic: done ? '#5FBF8A' : act ? '#E4573D' : 'rgba(237,231,220,.35)', anim: act ? 'rpPulse 1s infinite' : 'none', col: inP ? '#EDE7DC' : 'rgba(237,231,220,.4)' }; });
+    const lines = []; ord.forEach((i, j) => RP_A[i].log.forEach((t, q) => lines.push({ t, at: j * RP_STEP + 250 + q * 800 })));
+    const vis = lines.filter(l => s.ft >= l.at).slice(-6);
+    const log = vis.map((l, q) => { const last = q === vis.length - 1, n = last ? Math.floor((s.ft - l.at) / 18) : 999; return { t: l.t.slice(0, n), caret: last && n < l.t.length && !fixDone ? '1' : '0' }; });
+    const thumbs = Array.from({ length: 41 }, (_, i) => { const f = i < prog * 41, cur = Math.floor(prog * 41) === i && fixing && !fixDone; return { bg: f ? '#FBF8F0' : '#EFE9D9', gap: f ? '5px' : '3px', pad: f ? '6px 5px 8px 7px' : '4px 3px 4px 3px', y: cur ? '-4px' : '0px' }; });
+    const table = RP_A.map((x, i) => P[i] ? { t: x.t, m: x.m, r: x.r } : null).filter(Boolean);
+    const manual = RP_M.map((x, i) => { const d = ready || (s.re === 'run' && s.reN > i); return { t: x.t, s: d ? 'Potvrđeno u verziji v4' : x.s, box: d ? '✓' : '', done: d, rot: (i % 2 ? 1 : -1) + 'deg' }; });
+    const tiles = Array.from({ length: 41 }, (_, i) => ({ n: String(i + 1), bg: 'rgba(237,231,220,.14)', ring: s.page === i + 1 ? '#EDE7DC' : 'transparent', on: () => this.setState({ page: i + 1, split: 50, ltX: 0 }) }));
+    const fixes = RP_A.filter((x, i) => P[i]).map(x => x.t.toLowerCase() + ' ' + x.r).join(', ');
+    const letter = 'Poštovani, u radu sam uskladio formu s Pravilnikom FPZG-a (' + (fixes || 'bez izmjena') + '). ' + (ready ? 'Naslov 2.3 dodan je u sadržaj.' : 'Naslov 2.3 u sadržaju dodajem ručno.') + ' Šaljem novu verziju.';
+    const sl = s.cmp === 'slider';
+    return {
+      rootRef: this.rootRef, drawerRef: this.drawerRef, sheetRef: this.sheetRef, ltRef: this.ltRef,
+      cols: wide ? 'minmax(0,1.25fr) minmax(0,1fr)' : 'minmax(0,1fr)', colsFix: wide ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(0,1fr)', planCols: s.w >= 620 ? 'minmax(0,1fr) 150px' : 'minmax(0,1fr)',
+      steps, autoItems, asItems, groups, drawerOn: s.drawer, openDrawer: () => this.setState({ drawer: true }), closeDrawer: () => this.setState({ drawer: false }), receipt, planN: String(planN), shown: String(s.shown), locked, planEmpty: !planN,
+      ml: P[2] ? '10cqw' : '7cqw', mf: P[0] ? RP_TNR : RP_CAL, mfs: P[1] ? '3.05cqw' : '2.85cqw', mlh: P[3] ? '1.5' : '1.08', mta: P[4] ? 'justify' : 'left', mpn: P[6] ? '1' : '0',
+      pagesAfter: String(41 + (P[3] ? 14 : 0) + (P[2] ? 1 : 0) - (P[5] ? 2 : 0) + (P[1] ? 2 : 0)), est: mins ? (hh ? hh + ' h ' : '') + (mm ? mm + ' min' : '') + ' ručnog rada' : '0 min', estHow: how.length ? 'Računamo ' + how.join(', ') + '. Stvarno vrijeme ovisi o tome koliko dobro znaš Word.' : 'Uključi barem jedan zahvat.',
+      toPay: () => { if (!planN) return; if (s.paid) { this.goView(Math.max(2, s.step)); return; } this.setState(p => ({ step: Math.max(p.step, 2) })); this.goView(2); },
+      toPayText: locked ? 'Plan je plaćen · dalje →' : planN ? 'Nastavi na plaćanje →' : 'Odaberi barem jedan zahvat', toPayBg: locked ? '#26221B' : planN ? '#C4372E' : '#8A816D',
+      v1: s.view === 1, v2: s.view === 2, v3: s.view === 3, v4: s.view === 4, secAnim: (s.dir > 0 ? 'rpFwd' : 'rpBk') + ' .45s cubic-bezier(.22,1,.36,1) both',
+      canBack: s.view > 1, backLabel: ['', '', 'Natrag na plan', 'Natrag na plaćanje', 'Natrag na popravak'][s.view] || '', onBack: () => this.goView(Math.max(1, s.view - 1)),
+      paid: s.paid, payLocked: s.paying || s.paid, onPay: e => this.pay(e), payText: s.paid ? 'Plaćeno ✓' : s.paying ? 'Plaćam…' : 'Plati 14,99 €', payBg: s.paid ? '#1E7F4F' : '#C4372E', formAnim: s.paid ? 'rpShake .42s .05s both' : 'none',
+      brand: br[0], cardBg: br[1], cardName: s.cname || 'IME NA KARTICI', cardExp: s.ce || 'MM / GG', cn: s.cn, ce: s.ce, cname: s.cname,
+      setCn: e => { const d = e.target.value.replace(/\D/g, '').slice(0, 19); this.setState({ cn: d.replace(/(.{4})/g, '$1 ').trim() }); },
+      setCe: e => { const d = e.target.value.replace(/\D/g, '').slice(0, 4); this.setState({ ce: d.length > 2 ? d.slice(0, 2) + ' / ' + d.slice(2) : d }); },
+      setName: e => this.setState({ cname: e.target.value.slice(0, 26) }),
+      fixing: fixing && !fixDone, fixList, log, thumbs, fixLine: fixDone ? 'GOTOVO' : ord.filter(A).length + ' / ' + planN, fixTitle: fixDone ? 'Forma je popravljena.' : 'Popravljam formu rada.',
+      paras: Math.round(1284 * (fixDone ? 1 : prog)).toLocaleString('hr-HR'), machinePage: String(Math.min(41, Math.max(1, Math.ceil(prog * 41)))), stripX: 'calc(50% - ' + (Math.round(prog * 41 * 34) + 14) + 'px)',
+      pl: A(2) ? '10cqw' : '7cqw', pf: A(0) ? RP_TNR : RP_CAL, pfs: A(1) ? '3.05cqw' : '2.85cqw', plh: A(3) ? '1.5' : '1.08', pta: A(4) ? 'justify' : 'left', ppn: A(6) ? '1' : '0',
+      al: P[2] ? '10cqw' : '7cqw', af: P[0] ? RP_TNR : RP_CAL, afs: P[1] ? '3.05cqw' : '2.85cqw', alh: P[3] ? '1.5' : '1.08', ata: P[4] ? 'justify' : 'left', apn: P[6] ? '1' : '0',
+      ltPad: P[2] ? '9cqw' : '6cqw', ltFs: P[1] ? '2.8cqw' : '2.6cqw', ltX: s.ltX + 'px', ltRot: (s.ltX / 60).toFixed(2) + 'deg', ltTrans: s.ltDrag ? 'none' : 'transform .45s cubic-bezier(.22,1,.36,1)',
+      onLtGrab: e => { e.preventDefault(); this.drag = 'lt'; this.sx = e.clientX; this.lx0 = s.ltX; this.setState({ ltDrag: true }); },
+      isSlider: sl, isLt: !sl, cmpHint: sl ? 'LIJEVO POPRAVLJENO, DESNO SADA' : 'POVUCI GORNJI LIST USTRANU',
+      setSlider: () => this.setState({ cmp: 'slider', split: 50 }), setLt: () => this.setState({ cmp: 'lt', ltX: 0 }),
+      slP: sl ? 'true' : 'false', ltP: sl ? 'false' : 'true', slBg: sl ? '#EDE7DC' : 'transparent', slCol: sl ? '#191512' : 'rgba(237,231,220,.7)', ltBg: sl ? 'transparent' : '#EDE7DC', ltCol: sl ? 'rgba(237,231,220,.7)' : '#191512',
+      splitPct: s.split + '%', clipR: (100 - s.split) + '%', page: String(s.page), tiles, table, manual,
+      onGrab: e => { e.preventDefault(); this.drag = 'split'; }, onKey: e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); this.setState(p => ({ split: Math.max(0, Math.min(100, p.split + (e.key === 'ArrowRight' ? 5 : -5))) })); } },
+      onDownload: e => this.download(e), ringVal: String(s.ring), ringPct: s.ring + '%', ringDone: s.ringDone,
+      letter, copyText: s.copied ? 'Kopirano ✓' : 'Kopiraj za e-mail', copyCol: s.copied ? '#1E7F4F' : '#26221B',
+      onCopy: () => { try { navigator.clipboard && navigator.clipboard.writeText(letter).catch(() => {}); } catch (x) {} this.setState({ copied: true }); this.later(2200, () => this.setState({ copied: false })); },
+      doneTitle: ready ? 'Rad je spreman za predaju.' : 'Forma je popravljena.', deadline: ready ? 'Rok 14. 10. · spremno 21 dan prije roka' : 'Rok 14. 10. · još 21 dan', dlCol: ready ? '#5FBF8A' : '#D9A04A',
+      stampText: ready ? 'Spremno za predaju' : 'Forma popravljena · još 1 tebi', stampCol: ready ? '#5FBF8A' : '#E4573D',
+      reIdle: s.re === 'idle', reRun: s.re === 'run', reBd: ready ? '#5FBF8A' : 'rgba(237,231,220,.24)',
+      reText: ready ? 'Verzija v4 nema nalaza. Stara verzija je spremljena u Verzije.' : s.re === 'run' ? 'Provjeravam samo ono što je ostalo tebi.' : 'Kad u Wordu naslovu 2.3 primijeniš stil Naslov 2 i dopuniš zapis za Novaka, ubaci novu verziju. Cedulja će se prekrižiti sama.',
+      onRecheck: () => this.recheck(), versions: String(s.versions)
+    };
+  }
+}
+</script>
+</body>
+</html>

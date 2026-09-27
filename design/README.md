@@ -22,17 +22,18 @@ pregledava. Tamna radna ploha ("radna lampa") je zadano stanje; svjetla tema ("d
 svjetlo") je alternativa koju korisnik uključi ručno. Sadržaj uvijek živi na "papiru"
 (svijetla ploha u OBJE teme), stol je okvir oko njega.
 
-Četiri glasa tipografije, strogo po funkciji, nikad zamjenjivi:
+Dva glasa i jedan gost, strogo po funkciji (odluka 2026-09-19, zamjenjuje prijašnja četiri:
+Newsreader, Inter Tight, IBM Plex Mono, Source Serif; vidi handoff Z7, opcija a):
 
-- **Newsreader** (display serif) — GOVORI: naslovi, dugi opisi, presuda, brojke u traci.
-- **Inter Tight** (UI sans) — OZNAČAVA: gumbi, meta podaci, greške, sitan tekst, navigacija.
-- **IBM Plex Mono** — JEDINI podatkovni glas: brojevi, ocjena, kodovi pravila (npr.
-  `page.margins`), statusi, eyebrow natpisi. Nikad se ne koristi kao opći UI font.
-- **Source Serif 4** (fallback Georgia) — isključivo glas PREGLEDA DOKUMENTA (naslovnica,
-  izjava, citat, popis literature prikazan kao zrcalo Worda). Ne učitava se kao webfont u
-  ovom paketu (samo tri fonta gore idu preko Google Fonts); u karticama koje ga trebaju
-  koristi se sistemski Georgia fallback, što je namjerno — Source Serif tamo glumi
-  "tuđi rad", ne identitet sučelja.
+- **Instrument Serif** (display serif, samo 400 + kurziv) GOVORI: naslovi, presuda, dugi
+  opisi, brojka u prstenu, cijena, tekstualne veze u kurzivu, korektorska bilješka na
+  faksimilu. Nikad za gumbe, oznake ni brojeve u tablici.
+- **Geist Mono** OZNAČAVA I MJERI: gumbi, navigacija, eyebrow, kodovi pravila (npr.
+  `page.margins`), brojevi, izmjereno → pravilnik, koraci, meta redovi, podnožje. Nikad za
+  rečenice duže od jednog retka.
+- **Georgia** (sistemski, ne učitava se) glumi TUĐI RAD: tekst korisnikova dokumenta u
+  faksimilu i isječak pravilnika. Sloj "poslije" koristi Times New Roman jer ga pravilnik
+  traži. Nikad u sučelju.
 
 ## Tvrda pravila boje (ne kršiti u novim komponentama)
 
@@ -51,12 +52,11 @@ svjetlo") je alternativa koju korisnik uključi ručno. Sadržaj uvijek živi na
 
 ## Radiusi
 
-- **2px na papiru** (kartice nalaza, listovi, obrasci) — namjerno oštar rub, dio identiteta
-  "papirnati list", potvrđeno komentarom u izvornom CSS-u ("Radius: namjerno ostro").
-- **8–10px na gumbima** — ovo je normalizirano pravilo ovog dizajn-sustava. Napomena:
-  trenutni produkcijski kod ima nekonzistentne vrijednosti (2px do 13px ovisno o datoteci);
-  8–10px je ciljano stanje, ne opis postojećeg koda.
-- **999px (pill)** za značke, statusne oznake i CTA marke u navigaciji.
+- **2px svugdje**: papir, kartice, gumbi, polja, pečat. Gumb je pečat, pa dijeli rub s papirom
+  (odluka 2026-09-19; zamjenjuje prijašnje "8–10px na gumbima"). Produkcijski kod ima 2px do
+  14px ovisno o datoteci; 2px je ciljano stanje.
+- **999px (pill)** samo za značke, korake (01 Nalazi …) i čipove "gdje u dokumentu".
+- **50 %** samo za prsten ocjene, točke presude i gumbe ← →.
 
 ## Tvrdo pravilo proizvoda: Lekta nikad ne generira niti ne prepravlja sadržaj rada
 
@@ -88,6 +88,15 @@ Rezultat analize je JEDNA ocjena (prsten s brojem od 0 do 100) i JEDNA presuda u
 jeziku (npr. "Nije spremno za predaju"). Sažetak kategorija je uvijek SEKUNDARAN prikaz
 ispod glavne presude, nikad zamjena za nju, i nikad se ne prikazuje bez nje. Kartica nalaza
 i grupa nalaza postoje da objasne ZAŠTO je ocjena takva, ne da je udvostruče drugom bojom.
+
+## Jezik pečata (interakcija)
+
+Primarna radnja je PEČAT: crvena, jedna po ekranu; hover je podigne, pritisak utisne, učitavanje
+je tinta koja putuje donjim rubom, uspjeh ostaje kao nagnuti otisak. Sekundarna je POTPIS
+(tanka tinta), tekstualna veza je BILJEŠKA (kurziv serifa s crtom koja se iscrta), sporedno je
+TIHI. Riješeni nalaz se prekriži rukom, ne oboji zeleno. Presuda nosi pečat dolje desno, nikad
+preko teksta. Bilješke na faksimilu stoje u žlijebu izvan stranice i pokazuju točno mjesto
+(zagrada, oval, krug), nikad proizvoljnu strelicu.
 
 ## Copy pravila
 

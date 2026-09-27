@@ -9,10 +9,12 @@ serverska odluka; klijent nikad nije izvor istine.
   `report_generations`, RLS politike (korisnik cita samo svoje, pisanje samo server) i
   `consume_slot_and_bind` (atomsko trosenje slota, zastita od racea).
 - `functions/generate-report/` - Edge Function za placeni izvjestaj (tijek iz sekcije 5).
-- `functions/webhook-mor/` - webhook Merchant of Record providera (idempotentno kreira
-  entitlement; refund postavlja status).
-- `functions/create-checkout/` - kreira Lemon Squeezy checkout iz `productId` (MONETIZATION_PLAN.md
-  sekcija 5); cijena je serverska (cita `products`), auth JWT obavezan. Core: `src/report/checkout.ts`.
+- `functions/webhook-mor/` - Stripe webhook (`payment_intent.succeeded` i `charge.refunded`;
+  idempotentno kreira entitlement, refund postavlja status). Ime je naslijedjeno iz vremena
+  Merchant of Record providera i namjerno se ne mijenja: vec je u produkcijskom URL-u.
+- `functions/create-checkout/` - kreira Stripe PaymentIntent iz `productId` (MONETIZATION_PLAN.md
+  sekcija 5) i vraca `clientSecret` za Payment Element; cijena je serverska (`products.price_eur`),
+  auth JWT obavezan. Core: `src/report/checkout.ts`.
 - `migrations/0002_products_catalog.sql` - katalog `products` (jedina istina o cijenama),
   `pricing_changelog`, delte na `entitlements`/`document_slots`, RLS (MONETIZATION_PLAN.md).
 - `migrations/0003_coupons_manual_orders.sql` - `coupon_grants` (pass bonus) + `manual_orders`
@@ -32,7 +34,7 @@ serverska odluka; klijent nikad nije izvor istine.
 - `migrations/0008_analytics_views.sql` - viewovi `v_weekly_revenue`, `v_weekly_slot_activity`,
   `v_tier_share` (samo service role; interne nagrade iskljucene iz prihoda).
 - `kpi-weekly.sql` - tjedni KPI upiti (pokreni kao service role). Checkout->purchase konverzija
-  dolazi iz Lemon Squeezy dashboarda, ostalo je DB-izvedivo.
+  dolazi iz Stripe dashboarda, ostalo je DB-izvedivo.
 - `migrations/0020_set_product_price.sql` - `set_product_price` (atomski products + pricing_changelog,
   kriterij 14.12). Rucni UPDATE cijene bez changeloga je prekrsaj procesa.
 - `migrations/0011_faculty_requests.sql` - `faculty_requests` (waitlist nepokrivenih fakulteta) +
@@ -74,10 +76,11 @@ supabase functions deploy field-render
 
 Funkcije naplate (`create-checkout`, `webhook-mor`) idu kroz `npm run deploy:naplata`, a ne kroz
 goli `supabase functions deploy`: ta naredba prvo procita Supabase Edge secrets projekta i odbije
-deploy ako `LEMONSQUEEZY_STORE_ID`, `LEMONSQUEEZY_API_KEY` ili `MOR_WEBHOOK_SECRET` nedostaje ili je
-postavljen na prazno. Prazna vrijednost nije neutralna: `acceptEvent` je fail-closed pa webhook
-svaku kupnju odbija s `store_unverifiable` i vraca 200, dakle ni provider je ne ponavlja. Detalji su
-u `docs/GO_LIVE_NAPLATA.md`.
+deploy ako `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY` ili `STRIPE_WEBHOOK_SECRET` nedostaje ili je
+postavljen na prazno, i ako je `STRIPE_ALLOW_TEST_MODE` ukljucen bez izricitog
+`--dopusti-testni-nacin`. Prazna vrijednost nije neutralna: `verifyStripeSignature` je fail-closed pa
+webhook bez `STRIPE_WEBHOOK_SECRET` odbija svaki dogadjaj s `missing_secret`. Tijekom bete je
+naplata iskljucena, pa se ova naredba ne pokrece. Detalji su u `docs/GO_LIVE_NAPLATA.md`.
 
 Završno osvježavanje Word polja (`field-render`) je samo autentificirani Edge
 proxy. LibreOffice se ne pokreće u Edge runtimeu, nego u zasebnom privatnom
@@ -97,20 +100,22 @@ jednokratnu obavijest redovima s e-mailom kad fakultet dobije profil (dry-run po
 + `RESEND_API_KEY`/`NOTIFY_FROM` za stvarno slanje). Obje imaju `--from-file` za offline test.
 
 Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `DAILY_CAP`,
-`IP_HASH_SALT` (opcionalno, waitlist ip_hash salt), `MOR_WEBHOOK_SECRET`, te za naplatu `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
-`CHECKOUT_REDIRECT_URL`. `LEMONSQUEEZY_STORE_ID` citaju OBJE funkcije naplate: `create-checkout`
-(na koju trgovinu ide kupnja) i `webhook-mor` (iz koje trgovine dogadjaj smije doci, PAY-04; prazno
-znaci da webhook odbija SVE dogadjaje s `store_unverifiable`). Do 2026-09-22 je webhook citao
-zasebno ime `LS_STORE_ID`. Preflight prije deploya: `npm run verify-naplata-secrets`; on cita
-Supabase Edge secrets projekta (`supabase secrets list`), ne lokalnu ljusku, i pada i kad se popis
-ne moze procitati. U Lemon Squeezyju pretplati TOCNO `order_created` i `order_refunded`: handler
-obradjuje samo ta dva, a bez drugoga se povrati nikad ne obrade. Ishodi `needs_manual_link` i
-`ignored` nisu u indeksu `webhook_events_unresolved`, pa se traze upitom po `outcome`; upiti i
-postupak rucnog vezivanja su u `docs/GO_LIVE_NAPLATA.md` sekcija 5.1.
-Webhook HMAC provjera potpisa je već implementirana
-(`verifyLemonSignature`, timing-safe); dovoljno je postaviti `MOR_WEBHOOK_SECRET`. Nakon
-`db push` popuni `products.mor_product_id` stvarnim Lemon
-Squeezy variant id-jevima (checkout vraca 409 `product_not_mapped` dok je `null`).
+`IP_HASH_SALT` (opcionalno, waitlist ip_hash salt), `STRIPE_WEBHOOK_SECRET` (+ opcionalno
+`STRIPE_ALLOW_TEST_MODE=1`), te za create-checkout `STRIPE_SECRET_KEY` i
+`STRIPE_PUBLISHABLE_KEY`. `STRIPE_ACCOUNT_ID` se ne postavlja (Connect se ne koristi; webhook
+odbija dogadjaj povezanog racuna, a preflight naplate odbija deploy uz postavljenu tajnu). Provjera `Stripe-Signature` potpisa je već implementirana
+(`verifyStripeSignature`, timing-safe, tolerancija 300 s); dovoljno je postaviti
+`STRIPE_WEBHOOK_SECRET`. `products.mor_product_id` je NASLIJEDJEN stupac i vise se ne popunjava:
+iznos dolazi iz `products.price_eur`, a webhook proizvod trazi po `products.id` iz Stripe
+`metadata[product_id]`. Deploy naplate ide kroz `npm run deploy:naplata`: preflight
+(`npm run verify-naplata-secrets`) cita Supabase Edge secrets projekta (`supabase secrets list`), ne
+lokalnu ljusku, pada kad obavezna Stripe tajna nedostaje ili je prazna i kad se popis ne moze
+procitati, i tek onda deploya `create-checkout` i `webhook-mor`. U Stripeu pretplati TOCNO
+`payment_intent.succeeded` i `charge.refunded`: handler knjizi samo uplatu sa statusom `succeeded` i
+pozitivnim `amount_received`, a povrat samo iz `charge.refunded`. Ishodi `ignored` i `refused` nisu u
+indeksu `webhook_events_unresolved`, pa se traze upitom po `outcome`; upiti i postupak rucnog
+vezivanja su u `docs/GO_LIVE_NAPLATA.md` sekcija 5.1. Naplata je iskljucena tijekom bete (odluka
+vlasnika 2026-09-26).
 
 Klijentski paywall cita katalog iz `products` preko PostgREST-a (`src/catalog/products-catalog.ts`,
 `fetchRetailCatalog`) pa promjena `price_eur` u bazi mijenja prikaz bez deploya. Za to klijentu
