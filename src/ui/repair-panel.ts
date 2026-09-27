@@ -361,6 +361,8 @@ export interface RepairPanelContext {
   getAccessToken?: () => Promise<string>;
   /** Telemetrija toka (T14): `repair_completed` nakon PROVJERENOG ishoda, `repair_download_started` na preuzimanje. */
   trackEvent?: (event: string, data?: Record<string, unknown>) => unknown;
+  /** Anonimni Opportunity kontekst; bez user/session identiteta. */
+  opportunityContext?: { profileId?: string; workType?: string };
   /**
    * Identitet sesije dokumenta za kontroler toka (T08). Novi dokument ili profil daje novi panel s novim tokenom,
    * pa zakasnjeli rezultat starog panela ne moze uci u novi. Bez njega se koristi ime datoteke.
@@ -733,7 +735,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
         if (state.phase === 'running' || state.phase === 'verifying') return; // vec traje: nista ne prikazuj dvaput
         throw new Error(state.lastError ?? 'popravak nije pokrenut');
       }
-      if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons);
+      if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);
       execution = { skippedRuleIds: result.skipped, appliedChangeCount: result.changelog.length, integrity: result.integrityFailure ? 'failed' : 'passed' };
 
       // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
