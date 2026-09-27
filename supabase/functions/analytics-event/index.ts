@@ -11,6 +11,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { hashClientIpSalted } from '../_shared/hash-ip.ts';
+import { sanitizeAnalyticsEventData } from '../../../src/analytics/event-sanitizer.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -25,28 +26,7 @@ const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netl
 const MAX_BODY = 4 * 1024;
 const EVENT_RE = /^[a-z][a-z0-9_]{0,59}$/;
 
-// ISTI allowlist kao sanitizeEventData (src/ui/app.ts): samo primitivne, unaprijed poznate
-// dimenzije prezive. Prosiruj OBA mjesta zajedno kad novi trackEvent poziv treba novo polje.
-const ALLOWED_DATA_KEYS = new Set([
-  'package', 'profileId', 'workType', 'scoreBand', 'provider', 'source',
-  'total', 'found', 'missing', 'flagged', 'checked',
-  'profileStatus', 'pick', 'sizeBucket', 'category', 'issueCount', 'kind',
-  'manual', 'count', 'score', 'demo', 'method', 'product', 'ruleId',
-  'changes', 'stored', 'ms', 'auto', 'assisted', 'unknown', 'structureGaps',
-]);
-
-function sanitizeData(input: any): Record<string, string | number | boolean> {
-  const out: Record<string, string | number | boolean> = {};
-  if (!input || typeof input !== 'object') return out;
-  for (const [k, v] of Object.entries(input)) {
-    if (!ALLOWED_DATA_KEYS.has(k)) continue;
-    if (typeof v !== 'string' && typeof v !== 'number' && typeof v !== 'boolean') continue;
-    if (typeof v === 'string' && v.length > 200) continue;
-    out[k] = v;
-  }
-  return out;
-}
-
+// Isti sanitizer koristi i browser: jedna allowlista, bez drifta klijent/server.
 Deno.serve(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
@@ -66,7 +46,7 @@ Deno.serve(async (req: Request) => {
     if (!EVENT_RE.test(event)) return json({ error: 'bad_request' }, 400);
     const path = typeof body?.path === 'string' ? body.path.slice(0, 200) : null;
     const appVersion = typeof body?.version === 'string' ? body.version.slice(0, 20) : null;
-    const data = sanitizeData(body);
+    const data = sanitizeAnalyticsEventData(body);
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
