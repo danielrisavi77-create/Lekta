@@ -36,6 +36,12 @@ Bez Dena gate pada. `npm run master-ci` zasebno mjeri master i nije zamjena za l
 Domenski golden, mutation, strict-open, Word, security i release gateovi ostaju obavezni kada ih
 scoped pravila traze. Modelova tvrdnja da je test prosao nije dokaz.
 
+Popravni krug nakon pregleda je razmjeran dosegu nalaza: mali lokalni nalaz mjeri doseg,
+regenerira samo pogodjene artefakte u dva prolaza (drugi no-op) i ide mehanicki uz ciljani
+pregled; dizajn (nov zapis, ozicenje, mutacija) nije mehanicki. Puni `npm run check`,
+`orphan-scan` i jedan pregled drugog providera ostaju obvezni prije commita. Sirenje izvan
+izvornih stavki staje i postaje zaseban zadatak. Detalji: `docs/agents/no-fable-workflow.md`.
+
 ## Git i izolacija
 
 - Jedan pisac po radnom stablu.
