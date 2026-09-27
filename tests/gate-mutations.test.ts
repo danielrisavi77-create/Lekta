@@ -129,6 +129,11 @@ import { buildRepairPanelHandle, classifyRepairReport, renderTableFigureRescueCo
 import { tableFigureRescueRepairableItem } from '../src/ui/repair-items';
 import { bindRepairWorkflow } from '../src/ui/repair-workflow-binding';
 import { detectIntegrityFailure } from '../src/repair/apply-fixers';
+import {
+  findBarePushWorkflows,
+  findPullRequestWithoutConcurrency,
+  type NamedWorkflow,
+} from './helpers/ci-workflow-triggers';
 import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
 import {
   LICENCE, SVI_ULAZI, listoviSWebfontom, preloadObrasci, problemiFontova, problemiGlasovaUlaza,
@@ -5726,6 +5731,68 @@ describe('mutacije: scripts/agents/tool-guard.mjs (PreToolUse gard)', () => {
     expect(
       (judgeCommand as (t: string, c?: string) => { allow: boolean }) ('Bash', 'git add -A .').allow
     ).toBe(false);
+  });
+});
+
+describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u)', () => {
+  it('workflow s golim push: (bez branches: [master]) obara gard', () => {
+    const cist: NamedWorkflow[] = [
+      {
+        file: 'primjer-cist.yml',
+        doc: { on: { push: { branches: ['master'] }, pull_request: {} } },
+      },
+    ];
+    // BASELINE: push ogranicen na master prolazi bez nalaza.
+    expect(findBarePushWorkflows(cist)).toEqual([]);
+
+    // MUTACIJA: netko doda goli 'push:' bez branches filtra (kao prije popravka u
+    // check.yml/conformance.yml/... 2026-09-26), sto vrti workflow i na push i na pull_request
+    // za isti commit na PR grani.
+    const mutiran: NamedWorkflow[] = [
+      {
+        file: 'primjer-mutiran.yml',
+        doc: { on: { push: null, pull_request: {} } },
+      },
+    ];
+    expect(findBarePushWorkflows(mutiran)).toEqual(['primjer-mutiran.yml']);
+
+    // Imenovana iznimka i dalje prolazi bez nalaza kad je eksplicitno navedena.
+    expect(findBarePushWorkflows(mutiran, new Set(['primjer-mutiran.yml']))).toEqual([]);
+  });
+
+  it('pull_request bez concurrency grupe ovisne o grani obara gard', () => {
+    const cist: NamedWorkflow[] = [
+      {
+        file: 'primjer-cist.yml',
+        doc: {
+          on: { pull_request: {} },
+          concurrency: {
+            group: '${{ github.workflow }}-${{ github.ref }}',
+            'cancel-in-progress': "${{ github.ref != 'refs/heads/master' }}",
+          },
+        },
+      },
+    ];
+    expect(findPullRequestWithoutConcurrency(cist)).toEqual([]);
+
+    // MUTACIJA: concurrency blok izostavljen posve.
+    const bezConcurrency: NamedWorkflow[] = [
+      { file: 'primjer-bez-concurrency.yml', doc: { on: { pull_request: {} } } },
+    ];
+    expect(findPullRequestWithoutConcurrency(bezConcurrency)).toEqual(['primjer-bez-concurrency.yml']);
+
+    // MUTACIJA: concurrency postoji ali cancel-in-progress je gola konstanta 'true', pa bi
+    // otkazivao i runove na masteru (kontraugovor "na masteru se ne otkazuje").
+    const golaKonstanta: NamedWorkflow[] = [
+      {
+        file: 'primjer-gola-konstanta.yml',
+        doc: {
+          on: { pull_request: {} },
+          concurrency: { group: '${{ github.workflow }}-${{ github.ref }}', 'cancel-in-progress': true },
+        },
+      },
+    ];
+    expect(findPullRequestWithoutConcurrency(golaKonstanta)).toEqual(['primjer-gola-konstanta.yml']);
   });
 });
 

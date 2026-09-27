@@ -13,7 +13,9 @@ name: autonomy-tests
 # standardnom runneru javnog repozitorija, pa je cijena svakog PR-a 0 USD i minuta.
 on:
   push:
+    branches: [master]
   pull_request:
+    branches: [master]
   workflow_dispatch:
 
 permissions:
