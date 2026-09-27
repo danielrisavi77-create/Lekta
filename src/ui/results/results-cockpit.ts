@@ -201,7 +201,7 @@ function caveatHtml(model: VisualResultModel): string {
  */
 function inspectionLimitHtml(model: VisualResultModel): string {
   const inspection = model.inspectionCoverage;
-  if (!inspection || inspection.status === 'complete') return '';
+  if (!inspection || inspection.status === 'no-known-limits') return '';
   if (inspection.status === 'unknown') {
     return '<p class="cockpit-caveat cockpit-inspection-limit" data-cockpit-inspection-limit>'
       + '<strong>Nije provjereno u cijelosti:</strong> nije bilo moguće utvrditi opseg složenih Word struktura.</p>';
