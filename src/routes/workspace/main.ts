@@ -1,5 +1,5 @@
 import {
-  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection, applyConfirmedFacultySelection,
+  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection, applyFacultyIds,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
 import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../ui/analyzer-document-events';
@@ -7,6 +7,7 @@ import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
 import { createConfirmedProfile } from './confirmed-profile';
 import { readSelectionIds } from '../../ui/profile-selection-ids';
+import { primijeniFakultetUlaza } from '../../ui/confirmed-faculty';
 import { createRepairSelectionMemory } from './repair-selection';
 import { createSaveIndicator } from './save-indicator';
 import { mountMentorTasks } from '../../ui/results/mentor-tasks';
@@ -266,7 +267,7 @@ async function start(): Promise<void> {
       sessionHasProfile: Boolean(outcome.session.profile),
       readForm: () => readSelectionIds(document),
       apply: applyConfirmedProfileSelection,
-      applyFaculty: applyConfirmedFacultySelection,
+      applyFaculty: (ids) => primijeniFakultetUlaza(ids, applyFacultyIds),
       confirm: (event) => profil.onConfirmed(event),
     });
     odabir.restore(outcome.session.workspace?.repairSelection);

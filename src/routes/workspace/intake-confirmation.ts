@@ -20,8 +20,8 @@
  *   cijeli profil  potvrda nosi studij i obrazac nakon obnove postavki pokazuje isti fakultet,
  *                  studij i razinu (`potvrdaNosiCijeliProfil`): put C4, kao gore.
  *   samo fakultet  svaka druga vazeca potvrda, npr. fakultet iz `?unit=` linka bez studija.
- *                  `applyConfirmedFacultySelection` postavi ustanovu i fakultet (i razinu iz
- *                  linka) i zabrani detekciji iz dokumenta da ga promijeni
+ *                  `primijeniFakultetUlaza` (preko `applyFacultyIds` iz `app.ts`) postavi
+ *                  ustanovu i fakultet (i razinu iz linka) i zabrani detekciji iz dokumenta da ga promijeni
  *                  (`src/ui/confirmed-faculty.ts`); STUDIJ ostaje na detekciji, jer ga student na
  *                  ulazu nije potvrdio. Snimka profila se ne pise: bez studija nema verificiranog
  *                  profila koji bi se potvrdio.
@@ -48,8 +48,9 @@ export interface IntakeConfirmationDeps {
   /** `applyConfirmedProfileSelection` iz `app.ts`: vraca razrijeseni id profila ili `null`. */
   apply: (ids: Record<string, string>) => string | null;
   /**
-   * `applyConfirmedFacultySelection` iz `app.ts`: postavlja potvrdjen fakultet (ustanovu,
-   * jedinicu i razinu, kad je poznata) bez studija; `false` kad obrazac tu jedinicu ne prihvati.
+   * `primijeniFakultetUlaza` (`src/ui/confirmed-faculty.ts`) nad `applyFacultyIds` iz `app.ts`:
+   * postavlja potvrdjen fakultet (ustanovu, jedinicu i razinu, kad je poznata) bez studija i
+   * zakljucava ga; `false` kad obrazac tu jedinicu ne prihvati.
    */
   applyFaculty: (ids: Record<string, string>) => boolean;
   /** `profil.onConfirmed`: snimka ide pisacu sesije. */

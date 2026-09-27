@@ -29,7 +29,9 @@ import { safeStorageSet, STORAGE_KEYS } from '../src/shared/browser-storage';
 import { izvorFakulteta, mountIntakeLive, PORUKA_ODBIJENO, tekstPecataProvjere } from '../src/routes/intake/intake-live';
 import { mountIntakeController } from '../src/routes/intake/intake-controller';
 import { odabirFakulteta, primijeniPotvrduUlaza } from '../src/routes/workspace/intake-confirmation';
-import { detekcijaSmije, napomenaDrugiFakultet, potvrdjenFakultet, zakljucajFakultet } from '../src/ui/confirmed-faculty';
+import {
+  detekcijaSmije, napomenaDrugiFakultet, potvrdjenFakultet, primijeniFakultetUlaza, zakljucajFakultet,
+} from '../src/ui/confirmed-faculty';
 import { emitAnalyzerDocumentSettled } from '../src/ui/analyzer-document-events';
 import type { SelectionIds } from '../src/ui/profile-selection-ids';
 import {
@@ -341,6 +343,26 @@ describe('Z32 fakultet potvrdjen na ulazu, na /rad/ (src/ui/confirmed-faculty.ts
     const znacka = document.getElementById('detectBadge')!;
     expect(znacka.classList.contains('hidden')).toBe(false);
     expect(znacka.textContent).toContain(napomenaDrugiFakultet('fpzg', 'fer'));
+  });
+
+  it('primijeniFakultetUlaza: prvo postavi obrazac, pa zakljuca prema onome sto je obrazac prihvatio', () => {
+    // Nalaz pregleda Z32: brava je izasla iz app.ts (ratchet velicine) u confirmed-faculty.ts, pa se
+    // ovdje mjeri ponasanje koje je prije nosio applyConfirmedFacultySelection.
+    document.body.innerHTML = '<select id="unitSelect"><option value="fpzg" selected>FPZG</option><option value="fer">FER</option></select>';
+    const unit = () => document.getElementById('unitSelect') as HTMLSelectElement;
+    const redoslijed: string[] = [];
+    const postavi = vi.fn((ids: Record<string, string>) => { redoslijed.push('obrazac'); unit().value = ids.unit; });
+    expect(primijeniFakultetUlaza({ institution: 'unizg', unit: 'fer' }, postavi), 'obrazac je prihvatio FER').toBe(true);
+    expect(postavi).toHaveBeenCalledWith({ institution: 'unizg', unit: 'fer' });
+    expect(redoslijed).toEqual(['obrazac']);
+    expect(potvrdjenFakultet()).toBe('fer');
+    expect(detekcijaSmije('fpzg'), 'drugi fakultet iz dokumenta ne gazi potvrdjeni').toBe(false);
+    // Obrazac koji jedinicu ne zna prikazati (ostaje stari izbor iz postavki) ne ostavlja bravu.
+    zakljucajFakultet(undefined, undefined);
+    unit().value = 'fpzg';
+    expect(primijeniFakultetUlaza({ institution: 'unizg', unit: 'nepostojeci' }, () => {}), 'obrazac nije prihvatio').toBe(false);
+    expect(potvrdjenFakultet()).toBeNull();
+    expect(detekcijaSmije('fpzg'), 'bez brave detekcija radi kao prije').toBe(true);
   });
 
   it('nalaz pregleda Z32: znacka imenuje PREPOZNATI fakultet (FPZG) uz potvrdjen FER, i nudi prebacivanje jednim klikom', () => {
@@ -797,7 +819,9 @@ describe('Z32 ozicenje, pokret i redoslijed (baseline gardova)', () => {
   });
 
   it('detekcija iz dokumenta na /rad/ ne gazi fakultet potvrdjen na ulazu', () => {
-    expect(detekcijaFakultetaProblemi(read('src/ui/app.ts'))).toEqual([]);
+    expect(detekcijaFakultetaProblemi(
+      read('src/ui/app.ts'), read('src/ui/confirmed-faculty.ts'), read('src/routes/workspace/main.ts'),
+    )).toEqual([]);
   });
 
   it('sedam tragova olovke nosi doslovno nabrojane oznake iz naloga Z32', () => {
