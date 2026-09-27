@@ -148,6 +148,23 @@
       "lastVerified": "2026-07-28",
       "confirmedVia": "ai-1pass-batch",
       "verifiedHash": "50c1ac2c1e8211bc91f6e7a29db4860031eb07c7bcab5775104d78294fbd0a3d"
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--page-numbers",
+      "sourceId": "ffri-povum-upute-diplomski",
+      "sourcePage": "str. 2, odjeljak o izgledu diplomskog rada",
+      "quote": "Numeracija stranica stavlja se u donji desni kut, stranice se numeriraju od uvoda do kraja rada;",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Brojevi stranica",
+      "machineCheckable": true,
+      "authority": "binding",
+      "status": "draft",
+      "scored": false
     }
   ]
 }

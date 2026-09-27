@@ -47,7 +47,7 @@ describe('buildAdminRpcCall: validacija view/range', () => {
   });
 });
 
-describe('buildAdminRpcCall: 6 pogleda -> ispravna RPC imena', () => {
+describe('buildAdminRpcCall: 7 pogleda -> ispravna RPC imena', () => {
   const cases: Array<[string, string]> = [
     ['overview', 'admin_overview_stats'],
     ['funnel', 'admin_funnel_stats'],
@@ -55,6 +55,7 @@ describe('buildAdminRpcCall: 6 pogleda -> ispravna RPC imena', () => {
     ['operations', 'admin_operations_stats'],
     ['usage', 'admin_usage_stats'],
     ['coverage', 'admin_coverage_stats'],
+    ['opportunities', 'admin_opportunity_stats'],
   ];
   for (const [view, rpcName] of cases) {
     it(`${view} -> ${rpcName}`, () => {

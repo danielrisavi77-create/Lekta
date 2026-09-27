@@ -153,7 +153,8 @@
           "Povijest umjetnosti",
           "Psihologija",
           "Sociologija",
-          "Jezici i književnosti"
+          "Jezici i književnosti",
+          "Švedski jezik i kultura (dvopredmetni)"
         ],
         "status": "partial"
       },
@@ -376,7 +377,8 @@
           "Kemija",
           "Matematika",
           "Diplomski studiji Prirodoslovno-matematičkog fakulteta",
-          "Opći profil fakulteta"
+          "Opći profil fakulteta",
+          "Molekularna biologija"
         ],
         "status": "partial"
       },
@@ -498,9 +500,66 @@
           "Veterinarska medicina",
           "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu",
           "Doktorski studij Veterinarskog fakulteta",
-          "Opći profil fakulteta"
+          "Opći profil fakulteta",
+          "Veterinary Medicine",
+          "Agri Food Chain Microbiology",
+          "Dobrobit životinja",
+          "Farm Animal Welfare",
+          "Farm Biosecurity",
+          "Forensic Veterinary Medicine",
+          "Health Protection in Breeding and Production of Small Ruminants",
+          "Higijena i tehnologija hrane životinjskog podrijetla",
+          "Honeybee Health Protection",
+          "Kirurgija, anesteziologija i oftalmologija s veterinarskom stomatologijom",
+          "Laboratory Animal Medicine",
+          "Menadžment reprodukcijskog zdravlja mliječnih krava",
+          "Mikrobiologija i epizootiologija",
+          "Patologija i uzgoj domaćih mesoždera",
+          "Pig Production and Health Management",
+          "Proizvodnja i zaštita zdravlja svinja",
+          "Provedba veterinarskih postupaka sigurnosti hrane u klaoničkom objektu",
+          "Reproduction in Farm Animals, Equines and Small Animals",
+          "Sanitacija",
+          "Sudsko veterinarstvo",
+          "Teriogenologija domaćih sisavaca",
+          "Uzgoj i patologija divljači",
+          "Uzgoj i patologija egzotičnih kućnih ljubimaca",
+          "Uzgoj i patologija laboratorijskih životinja",
+          "Veterinarska patologija",
+          "Veterinary Epidemiology",
+          "Veterinary Pathology",
+          "Veterinary Physical Therapy and Rehabilitation – CCRP",
+          "Wildlife Health and Managment"
         ],
         "status": "generic"
+      },
+      {
+        "id": "cps",
+        "programs": [
+          "Konferencijsko prevođenje",
+          "Upravljanje krizama"
+        ],
+        "name": "Centar za poslijediplomske studije",
+        "status": "partial",
+        "family": "mixed"
+      },
+      {
+        "id": "mvi",
+        "programs": [
+          "Protestantska teologija"
+        ],
+        "name": "Teološki fakultet Matija Vlačić Ilirik",
+        "status": "partial",
+        "family": "social"
+      },
+      {
+        "id": "geoteh",
+        "programs": [
+          "Inženjerstvo okoliša"
+        ],
+        "name": "Geotehnički fakultet",
+        "status": "partial",
+        "family": "stem"
       }
     ]
   },
@@ -826,7 +885,17 @@
           "Sveučilišni diplomski studij Poslovna ekonomija (smjer Menadžment)",
           "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financije)",
           "Sveučilišni diplomski studij Poslovna ekonomija (smjer Marketing)",
-          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Međunarodno poslovanje)"
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Međunarodno poslovanje)",
+          "Ekonomija energetskog sektora-MBA",
+          "Financije",
+          "Inteligentno elektroničko poslovanje",
+          "Kontroling",
+          "Marketing menadžment",
+          "Menadžment sigurnosti u EU",
+          "Menadžment u javnom sektoru",
+          "Poslovanje s Europskom unijom",
+          "Računovodstvo",
+          "Upravljanje poslovnim uspjehom"
         ]
       },
       {
@@ -978,7 +1047,13 @@
         "status": "partial",
         "programs": [
           "Sveučilišni integrirani prijediplomski i diplomski studij Medicina",
-          "Sveučilišni integrirani prijediplomski i diplomski studij Farmacija"
+          "Sveučilišni integrirani prijediplomski i diplomski studij Farmacija",
+          "Sanitarno inženjerstvo",
+          "Biomedicina",
+          "Dentalna medicina",
+          "Javno zdravstvo",
+          "Klinička medicina",
+          "Zdravstveno i ekološko inženjerstvo"
         ]
       },
       {
@@ -1143,7 +1218,10 @@
         "family": "biomed",
         "status": "partial",
         "programs": [
-          "Integrirani studij medicine (MEFST, diplomski rad)"
+          "Integrirani studij medicine (MEFST, diplomski rad)",
+          "Biologija novotvorina",
+          "Klinička medicina utemeljena na dokazima",
+          "Translacijska istraživanja u biomedicini"
         ]
       },
       {
@@ -1219,6 +1297,24 @@
           "Umjetnička akademija u Splitu, diplomski/magistarski rad (diplomski studij)",
           "Opći profil fakulteta"
         ]
+      },
+      {
+        "id": "agromed",
+        "programs": [
+          "Mediteranska poljoprivreda"
+        ],
+        "name": "Agromediteranski fakultet",
+        "status": "partial",
+        "family": "stem"
+      },
+      {
+        "id": "hig",
+        "programs": [
+          "Hotelijerstvo i gastronomija"
+        ],
+        "name": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+        "status": "partial",
+        "family": "social"
       }
     ]
   },

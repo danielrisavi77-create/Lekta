@@ -32,10 +32,13 @@ describe('PULL_REQUEST_TEMPLATE.md', () => {
   });
 
   it('CI job pr-opis postoji, vrti provjeru i nije vezan uz push', () => {
-    const wf = readFileSync(resolve('.github/workflows/foundation-check.yml'), 'utf8').replace(/\r/g, '');
+    const wf = readFileSync(resolve('.github/workflows/pr-opis.yml'), 'utf8').replace(/\r/g, '');
     const blok = wf.slice(wf.indexOf('\n  pr-opis:'));
     expect(blok.length).toBeGreaterThan(1);
-    expect(blok).toMatch(/if: github\.event_name == 'pull_request'/);
+    const on = wf.slice(wf.indexOf('\non:'), wf.indexOf('\njobs:'));
+    expect(on).toMatch(/^  pull_request:$/m);
+    expect(on).not.toMatch(/^  push:/m);
+    expect(on).toMatch(/types: \[[^\]]*\bedited\b[^\]]*\]/);
     expect(blok).toMatch(/PR_BODY: \$\{\{ github\.event\.pull_request\.body \}\}/);
     expect(blok).toMatch(/node scripts\/agents\/pr-lines\.mjs --provjeri/);
     // Tijelo PR-a ide kroz okolinu, nikad izravno u shell (injekcija kroz opis PR-a).

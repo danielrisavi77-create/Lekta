@@ -28,7 +28,12 @@ export const DEMOTION: Array<[string, (b: ScoreBase) => void]> = [
   ['justify', (b) => { b.checkJustify = false; }],
   ['paper-size', (b) => { b.requireA4 = false; if (Array.isArray(b.paperSizes)) b.paperSizes = []; }],
   ['toc', (b) => { b.requireToc = false; }],
-  ['page-numbers', (b) => { b.requirePageNumbers = false; }],
+  ['page-numbers', (b) => {
+    b.requirePageNumbers = false;
+    b.pageNumberAlignment = null;
+    b.checkTitlePageNumberSuppression = false;
+    b.checkPageNumberStartAtIntro = false;
+  }],
 ];
 
 /** checkId-jevi koje engine tvrdo boduje, a demotion moze prebaciti u informativne. */

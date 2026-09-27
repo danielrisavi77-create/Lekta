@@ -7,7 +7,7 @@
  * Profil s pravilima iz sluzbenog izvora, ali s popravkom dokazanim samo na generiranom dokumentu,
  * pripada u "pravila potvrdena" i "razina B". Do ovog zahvata sucelje je znalo samo prvu os i
  * pisalo "Potvrdeni profil", sto je citano kao da je dokazan i popravak. Razina A danas ima
- * nula profila od 410.
+ * 32 profila od 418.
  */
 import { describe, it, expect } from 'vitest';
 import { profileClaimFor, claimSentence, claimBadgeHtml } from '../src/ui/profile-claim';

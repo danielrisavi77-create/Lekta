@@ -1,11 +1,11 @@
 {
   "summary": {
     "totalChecks": 73,
-    "scoredChecks": 49,
+    "scoredChecks": 47,
     "scoredWithAtomic": 45,
-    "scoredAtomicPct": 92,
+    "scoredAtomicPct": 96,
     "scoredWithFailCase": 46,
-    "scoredFailCasePct": 94,
+    "scoredFailCasePct": 98,
     "checksWithValidControl": 20,
     "checksWithBoundary": 4,
     "atomicCases": 50,
@@ -27,7 +27,7 @@
       "title": "Automatizacija citatnog stila",
       "checkId": "citation.style-automation",
       "category": "citations",
-      "scored": true,
+      "scored": false,
       "hasAtomic": false,
       "hasValidControl": false,
       "hasBoundary": false
@@ -657,7 +657,7 @@
       "title": "Zahtjevi za ručnu završnu provjeru",
       "checkId": "manual.checks",
       "category": "structure",
-      "scored": true,
+      "scored": false,
       "hasAtomic": false,
       "hasValidControl": false,
       "hasBoundary": false
@@ -675,20 +675,6 @@
   "gaps": [
     {
       "priority": "P1",
-      "checkId": "citation.style-automation",
-      "title": "Automatizacija citatnog stila",
-      "reason": "Savjetodavna, uvijek-warn provjera (nema pass stanja).",
-      "desiredTest": "Nije atomski testabilna kao fail; eventualno valid-control da ostaje info."
-    },
-    {
-      "priority": "P1",
-      "checkId": "manual.checks",
-      "title": "Zahtjevi za ručnu završnu provjeru",
-      "reason": "Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).",
-      "desiredTest": "Nije atomski testabilna kao fail."
-    },
-    {
-      "priority": "P1",
       "checkId": "page.size.a4-list",
       "title": "Format stranice (A4)",
       "reason": "Bodovana provjera bez fail-slucaja (moze pasti, nije regresijski pokrivena).",
@@ -696,10 +682,24 @@
     },
     {
       "priority": "P3",
+      "checkId": "citation.style-automation",
+      "title": "Automatizacija citatnog stila",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.citation.style-automation: valjana varijanta dosize bodovani pass (max>0), ne informativni max-0."
+    },
+    {
+      "priority": "P3",
       "checkId": "format.typography.consistency",
       "title": "Tehničko-tipografska dosljednost",
       "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
       "desiredTest": "valid.format.typography.consistency: valjana varijanta dosize bodovani pass (max>0), ne informativni max-0."
+    },
+    {
+      "priority": "P3",
+      "checkId": "manual.checks",
+      "title": "Zahtjevi za ručnu završnu provjeru",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.manual.checks: valjana varijanta dosize bodovani pass (max>0), ne informativni max-0."
     },
     {
       "priority": "P3",

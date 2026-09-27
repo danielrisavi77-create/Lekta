@@ -1018,7 +1018,11 @@
     },
     {
       "executor": "Sveučilište u Zagrebu, Geotehnički fakultet",
-      "match": null,
+      "match": {
+        "unitId": "geoteh",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
       "alternatives": [
         "agr",
         "arh",
@@ -1479,21 +1483,25 @@
   ],
   "unitsWithoutExecutor": [
     "adu",
+    "agromed",
     "alu",
     "apuri",
     "btho",
+    "cps",
     "fetpu",
     "ffpu",
     "fipu",
     "foozpu",
     "forenzika",
     "fpzpu",
+    "hig",
     "inf",
     "kbfdj",
     "logri",
     "mapu",
     "mfpu",
     "more",
+    "mvi",
     "odhz",
     "ozs",
     "sfsb",
@@ -1507,15 +1515,15 @@
   ],
   "summary": {
     "executorCount": 131,
-    "unitCount": 134,
+    "unitCount": 139,
     "byConfidence": {
-      "exact": 72,
+      "exact": 73,
       "strong": 1,
       "weak": 37,
-      "none": 21
+      "none": 20
     },
-    "unitsMatched": 108,
-    "unitsWithoutExecutor": 26,
-    "programsWithoutUnit": 74
+    "unitsMatched": 109,
+    "unitsWithoutExecutor": 30,
+    "programsWithoutUnit": 71
   }
 }

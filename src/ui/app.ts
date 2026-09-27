@@ -59,6 +59,7 @@ import { buildVisualResultModel } from './results/visual-result-model';
 import { isGeneralRepairEntry, renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
 import { buildDocumentDnaModel } from '../results/document-dna-model';
 import { profileStatusForEvent } from './profile-status-event';
+import { emitAnalysisOpportunitySignals, emitRepairNoOpSignals } from '../analytics/opportunity-emit';
 import { buildExactEvidence } from './results/exact-evidence';
 import { buildRepairOutlook } from './results/repair-outlook';
 import { buildDefaultRepairRequests } from '../repair/default-selection';
@@ -1016,7 +1017,7 @@ async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnal
 // marginama, a upravo on govori da CIJELI izvjestaj nije reprezentativan (ako dokument nije
 // rad, odstupanje fonta je sum). Ne oduzima bodove (nije check). Uvjet je uzak (postRunSuspicion:
 // <1000 rijeci I nula naslova u Word stilovima) pa je lazna uzbuna na stvarnom radu neizgledna.
- if(_gw){result.issues=result.issues||[];result.issues.unshift(issue('error','structure','Dokument ne izgleda kao završni ili diplomski rad',`${_gw} Provjeri je li učitana prava datoteka; rezultat provjere za ovakav dokument nije reprezentativan.`,'Cijeli dokument'))}}if(token!==_analyzeToken||selectedDocx!==docxFile)return;currentResult=result;analyzedProfile=p;emitAnalyzerResultReady({file:docxFile,result});void trackEvent('analysis_completed',{profileStatus:p.statusKey||'generic',workType:settings.workType||'',issueCount:result.issues?.length||0});withViewTransition(()=>renderResult(currentResult));saveAnalysisHistory(currentResult)}catch(e: any){if(token!==_analyzeToken||isAnalysisCancelled(e))return;if(_specHit)clearSpec();console.error(e);currentResult=null;analyzedProfile=null;currentPdfAudit=null;currentMetadataAudit=null;toast(analysisErrorMessage(e));renderView('provjera')}finally{if(token===_analyzeToken&&analyzeBtn)analyzeBtn.disabled=false}}
+ if(_gw){result.issues=result.issues||[];result.issues.unshift(issue('error','structure','Dokument ne izgleda kao završni ili diplomski rad',`${_gw} Provjeri je li učitana prava datoteka; rezultat provjere za ovakav dokument nije reprezentativan.`,'Cijeli dokument'))}}if(token!==_analyzeToken||selectedDocx!==docxFile)return;currentResult=result;analyzedProfile=p;emitAnalyzerResultReady({file:docxFile,result});void trackEvent('analysis_completed',{profileStatus:p.statusKey||'generic',workType:settings.workType||'',issueCount:result.issues?.length||0});emitAnalysisOpportunitySignals(trackEvent,result,p.statusKey||'generic');withViewTransition(()=>renderResult(currentResult));saveAnalysisHistory(currentResult)}catch(e: any){if(token!==_analyzeToken||isAnalysisCancelled(e))return;if(_specHit)clearSpec();console.error(e);currentResult=null;analyzedProfile=null;currentPdfAudit=null;currentMetadataAudit=null;toast(analysisErrorMessage(e));renderView('provjera')}finally{if(token===_analyzeToken&&analyzeBtn)analyzeBtn.disabled=false}}
 function cancelAnalysis(){if($('#progressView').classList.contains('hidden'))return;_analyzeToken++;cancelActiveAnalysis();clearSpec();void trackEvent('analysis_cancelled',{});const b=$('#analyzeBtn');if(b)b.disabled=!selectedDocx;withViewTransition(()=>{renderView('provjera')});progress(0,'Pripremam analizu');toast('Analiza je prekinuta.');setTimeout(()=>{try{$('#analyzeBtn')?.focus()}catch(e: any){}},0)}
 // Izvrsi pomocnu analizu (aux datoteka); nikad ne baca - neuspjeh vrati null i zabiljezi u konzolu.
 async function safeAux(fn: any,label: any){try{return await fn()}catch(e: any){console.warn(`Pomoćna analiza (${label}) nije uspjela:`,e);return null}}
@@ -2075,6 +2076,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    pending={token:token||'',bytes,meta,signal:ac.signal};
    try{const st=await binding.controller.start();out=st.result;if(!out){if(st.phase==='running'||st.phase==='verifying')return;out={kind:'error',message:st.lastError||'mrezna greska'}}}finally{clearTimeout(timer);pending=null}
    const uploadMs=Math.round(performance.now()-tUpload);
+   if(out.kind==='ok')emitRepairNoOpSignals(trackEvent,out.skippedReasons);
    if(out.kind==='ok'&&out.changelog.length===0){
     // RE-32: server namjerno NIJE trosio slot/kvotu ni pohranio posao kad nema stvarnih izmjena
     // (vidi repair-docx/index.ts korak 7a); gumb NIJE zakljucan (lockButton ostaje false) jer

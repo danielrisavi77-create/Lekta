@@ -10,10 +10,11 @@
  * brojanje odlomaka (392 -> 71) pa su svi kasniji anchor-osjetljivi fixeri tiho vracali 'no-target'.
  *
  * Ovaj test dokazuje TRI stvari koje odreduju kako se gradi validator:
- *   1. `parseXml` (src/docx/parser.ts) NE baca na tom XML-u. Njegov guard trazi `parsererror` cvor,
- *      sto je PREGLEDNICKA semantika; @xmldom/xmldom taj cvor ne stvara. Kako je xmldom runtime
- *      SVIH testova (tests/setup/xml-dom.ts) i produkcijskog workera, recikliranje `parseXml` kao
- *      gatea dalo bi LAZNO ZELENO tocno na klasi greske zbog koje gate uopce gradimo.
+ *   1. `parseXml` (src/docx/parser.ts) do 2026-09-27 NIJE bacao na tom XML-u: guard je trazio samo
+ *      `parsererror` cvor (preglednicka semantika), a @xmldom/xmldom taj cvor ne stvara. Od T26
+ *      (audit 22. 9., nalaz #14) `parseXml` predaje xmldomu `onError` i baca na svakoj dijagnostici,
+ *      pa RE-47 klasu sada hvata i analiza. Vlastiti validator paketa i dalje ostaje: popravak XML
+ *      pise bez `parseXml`, a u Denu (Edge Function) DOMParsera uopce nema.
  *   2. Isti xmldom s `onError` kolektorom gresku UREDNO prijavljuje. To je jeftino "drugo misljenje"
  *      koje smije zivjeti u testovima (u Denu, gdje vrti Edge Function, DOMParsera nema).
  *   3. Svih 11 postojecih fixtura je strogo well-formed po svakom dijelu paketa, dakle nema
@@ -52,11 +53,12 @@ function xmldomErrors(xml: string): string[] {
   return errors;
 }
 
-describe('A0: parseXml je slijep na RE-47 klasu (zato validator mora biti vlastiti)', () => {
-  it('parseXml NE baca na neispravnom samozatvarajucem tagu', () => {
-    // Kad bi ovo bacalo, `parseXml` bi bio dovoljan gate i cijeli skener ne bi trebao.
-    // Ne baca, pa je ovaj expect namjerno "obrnut": dokumentira slijepu pjegu.
-    expect(() => parseXml(MALFORMED, 'RE-47 uzorak')).not.toThrow();
+describe('A0: RE-47 klasa i parseXml', () => {
+  it('parseXml od nalaza #14 baca na neispravnom samozatvarajucem tagu', () => {
+    // Do 2026-09-27 ovaj expect je bio namjerno "obrnut" i dokumentirao slijepu pjegu. Nakon T26
+    // `parseXml` tu gresku hvata; ispravan oblik i dalje prolazi.
+    expect(() => parseXml(MALFORMED, 'RE-47 uzorak')).toThrow('RE-47 uzorak nije moguće pročitati.');
+    expect(() => parseXml(WELL_FORMED, 'RE-47 uzorak')).not.toThrow();
   });
 
   it('xmldom s onError kolektorom TU gresku prijavljuje', () => {

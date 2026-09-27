@@ -1,0 +1,162 @@
+{
+  "profileId": "efri-specijalisticki",
+  "generatedAt": "2026-09-25",
+  "source": "Pravilnik o specijalističkom radu na Sveučilišnim specijalističkim studijima EFRI (22. 7. 2024.), ručno izdvojeno iz službenog PDF snapshota.",
+  "note": "Sva pravila su necenzurirani nacrti, status draft i scored=false. Opseg Art. 1 primijenjen samo na programe u Upisniku označene kao EFRI sveučilišni specijalistički studij. Citiranje nije aktivirano kao pravilo: nacrt čl. 6. st. 2. navodi Harvard sustav, ali tvrdnja čeka ljudsku provjeru.",
+  "entries": [
+    {
+      "ruleId": "efri-specijalisticki--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "checkId": "page-count",
+      "value": {
+        "min": 50,
+        "max": 100
+      },
+      "category": "scope",
+      "label": "Opseg rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 6., st. 1., str. 2.",
+      "quote": "Opseg rada je od 50 do 100 stranica A4 formata, a tekst je pisan u Times New Roman fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka pasusa), s marginama od 3 cm.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "efri-specijalisticki--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "checkId": "paper-size",
+      "value": "A4",
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 6., st. 1., str. 2.",
+      "quote": "Opseg rada je od 50 do 100 stranica A4 formata, a tekst je pisan u Times New Roman fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka pasusa), s marginama od 3 cm.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "efri-specijalisticki--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 6., st. 1., str. 2.",
+      "quote": "Opseg rada je od 50 do 100 stranica A4 formata, a tekst je pisan u Times New Roman fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka pasusa), s marginama od 3 cm.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "efri-specijalisticki--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Veličina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 6., st. 1., str. 2.",
+      "quote": "Opseg rada je od 50 do 100 stranica A4 formata, a tekst je pisan u Times New Roman fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka pasusa), s marginama od 3 cm.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "efri-specijalisticki--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 6., st. 1., str. 2.",
+      "quote": "Opseg rada je od 50 do 100 stranica A4 formata, a tekst je pisan u Times New Roman fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka pasusa), s marginama od 3 cm.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "efri-specijalisticki--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "checkId": "margins",
+      "value": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 6., st. 1., str. 2.",
+      "quote": "Opseg rada je od 50 do 100 stranica A4 formata, a tekst je pisan u Times New Roman fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka pasusa), s marginama od 3 cm.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "efri-specijalisticki--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Obostrano poravnanje",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 6., st. 1., str. 2.",
+      "quote": "Opseg rada je od 50 do 100 stranica A4 formata, a tekst je pisan u Times New Roman fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka pasusa), s marginama od 3 cm.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "efri-specijalisticki--required-sections",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "checkId": "required-sections",
+      "value": [
+        "sažetak na hrvatskom i engleskom jeziku",
+        "uvod",
+        "glavna poglavlja",
+        "zaključak",
+        "popis korištene literature"
+      ],
+      "category": "Dijelovi specijalističkog rada",
+      "label": "Obvezni dijelovi specijalističkog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efri-pravilnik-specijalisticki-2024",
+      "sourcePage": "čl. 3., st. 2., str. 1.",
+      "quote": "Tekst specijalističkog rada mora početi uvodom, a sadrži još kratak sažetak na hrvatskom i engleskom jeziku (koji u tekstu stoji prije uvoda), glavna poglavlja, fusnote, tablice, grafikone, slike, reference u tekstu, zaključak i popis korištene literature.",
+      "status": "draft",
+      "scored": false
+    }
+  ]
+}
