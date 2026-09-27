@@ -66,7 +66,7 @@ const VERZIJA_ZNAKOVA = 7;
  * Verzija pravila iz TEKSTA serverskog artefakta. Parsira se, ne greppa (CLAUDE.md), i vrijednost
  * mora biti sha256 heks; sve drugo daje `null`, ne pogodjenu verziju.
  */
-export function rulesVersionFromArtifact(tekst: string): string | null {
+function rulesVersionFromArtifact(tekst: string): string | null {
   let parsed: unknown;
   try { parsed = JSON.parse(tekst); } catch { return null; }
   const v = typeof parsed === 'object' && parsed !== null ? (parsed as { datasetVersion?: unknown }).datasetVersion : undefined;
@@ -74,7 +74,7 @@ export function rulesVersionFromArtifact(tekst: string): string | null {
 }
 
 /** Najsvjeziji ISO datum `lastVerified` medju celijama; `null` kad nijedna ne nosi datum. */
-export function latestSourceCheck(cells: ReadonlyArray<{ lastVerified?: string | null }>): string | null {
+function latestSourceCheck(cells: ReadonlyArray<{ lastVerified?: string | null }>): string | null {
   let best: string | null = null;
   for (const cell of cells) {
     const d = cell.lastVerified;

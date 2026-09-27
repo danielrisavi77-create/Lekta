@@ -295,7 +295,7 @@ export function markActiveDestination(chrome: HTMLElement, active: string | null
  * dokumenta, i tu kvacica stvarno putuje. Sidro se prihvaca SAMO kad putanja odredista odgovara
  * kanonskoj putanji ove stranice: `#cjenik` na `/alati.html` ne znaci nista.
  */
-export function destinationFromHash(chrome: HTMLElement, hash: string): string | null {
+function destinationFromHash(chrome: HTMLElement, hash: string): string | null {
   if (!hash || hash === '#') return null;
   const putanja = trenutnaPutanja(chrome.ownerDocument);
   if (putanja === null) return null;
