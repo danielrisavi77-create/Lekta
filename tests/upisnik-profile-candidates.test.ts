@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import upisnik from '../data/programs/drafts/upisnik.json';
 import programComponents from '../docs/generated/upisnik-program-components.json';
 import profileDecisions from '../data/programs/upisnik-profile-decisions.json';
@@ -10,10 +11,11 @@ import {
   buildUpisnikProfileCandidates as buildRawUpisnikProfileCandidates,
   validateUpisnikProfileCoverageHolds,
   type ProfileCandidateInput,
+  type IntegratedGraduateCoverageDecision,
 } from '../src/programs/upisnik-profile-candidates';
 
 const buildUpisnikProfileCandidates: typeof buildRawUpisnikProfileCandidates = (...args) =>
-  buildRawUpisnikProfileCandidates(args[0], args[1], args[2], args[3], args[4], args[5], args[6], sourceRegistry);
+  buildRawUpisnikProfileCandidates(args[0], args[1], args[2], args[3], args[4], args[5], args[6], sourceRegistry, args[8]);
 
 describe('buildUpisnikProfileCandidates', () => {
   it('does not offer an empty-workTypes profile at doctoral or undergraduate level, while an omitted workTypes stays eligible', () => {
@@ -254,6 +256,8 @@ describe('buildUpisnikProfileCandidates', () => {
       profileDecisions.exclusions,
       profileDecisions.blockers,
       profileDecisions.holds,
+      sourceRegistry,
+      profileDecisions.integratedGraduateCoverage,
     );
 
     expect(validateUpisnikProfileCoverageHolds(report)).toEqual([]);
@@ -273,6 +277,8 @@ describe('Upisnik profile decision inventory', () => {
       profileDecisions.exclusions,
       profileDecisions.blockers,
       profileDecisions.holds,
+      sourceRegistry,
+      profileDecisions.integratedGraduateCoverage,
     );
     const namedCodes = (programs: typeof report.programs) => programs
       .filter((program) => program.profileDecisionEvidence.length > 0)
@@ -2245,7 +2251,8 @@ describe('integrirani studij VEF-a', () => {
     const report = buildUpisnikProfileCandidates(
       upisnik.rows, programComponents.decisions,
       Object.values(verifiedProfiles) as ProfileCandidateInput[], profileDecisions.decisions,
-      profileDecisions.exclusions,
+      profileDecisions.exclusions, profileDecisions.blockers, profileDecisions.holds,
+      sourceRegistry, profileDecisions.integratedGraduateCoverage,
     );
     const program = report.programs.find((row) => row.programCode === '917');
     expect(program?.profileDecisionEvidence).toEqual([]);
@@ -2253,3 +2260,35 @@ describe('integrirani studij VEF-a', () => {
   });
 });
 
+
+describe('integrated graduate coverage decision', () => {
+  const coverage = profileDecisions.integratedGraduateCoverage as IntegratedGraduateCoverageDecision[];
+  const build = (entries: IntegratedGraduateCoverageDecision[] = coverage) => buildUpisnikProfileCandidates(
+    upisnik.rows, programComponents.decisions, Object.values(verifiedProfiles) as ProfileCandidateInput[],
+    profileDecisions.decisions, profileDecisions.exclusions, profileDecisions.blockers, profileDecisions.holds,
+    sourceRegistry, entries,
+  );
+  it('changes only 917 among exact candidates', () => {
+    const before = build([]);
+    const after = build();
+    const changed = after.programs.filter((row, index) => JSON.stringify(row) !== JSON.stringify(before.programs[index]));
+    expect(changed.map((row) => row.programCode)).toEqual(['917']);
+    expect(changed[0]?.exactCandidateProfileIds).toEqual(['vef-diplomski']);
+    expect(changed[0]?.componentWorkTypeProfileIds).toEqual(['vef-diplomski']);
+    expect(after.summary.exactCandidatePrograms).toBe(before.summary.exactCandidatePrograms + 1);
+    for (const code of ['900', '915', '919', '2018', '2229', '2236', '2237', '2585']) {
+      const row = after.programs.find((item) => item.programCode === code);
+      expect(row?.exactCandidateProfileIds, code).toEqual([]);
+      expect(row?.componentWorkTypeProfileIds, code).toEqual([]);
+    }
+  });
+  it('keeps its quoted evidence in the extracted source', () => {
+    const extract = readFileSync('data/sources/vef/vef-naputak-diplomski-2024-extract.txt', 'utf8');
+    const compact = (text: string) => text.replace(/\s+/gu, ' ').trim();
+    expect(compact(extract)).toContain(compact(coverage[0]!.evidence.quote));
+  });
+  it('rejects an unregistered URL on the correct domain and a profile without graduate work type', () => {
+    expect(() => build([{ ...coverage[0]!, evidence: { ...coverage[0]!.evidence, sourceUrl: 'https://www.vef.unizg.hr/nepostojeci.pdf' } }])).toThrow(/source registry/i);
+    expect(() => build([{ ...coverage[0]!, profileId: 'vef-doktorski' }])).toThrow(/graduate work type/i);
+  });
+});
