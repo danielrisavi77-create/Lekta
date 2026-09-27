@@ -21,6 +21,7 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
   type WizardEvent, type WizardState,
@@ -6775,5 +6776,25 @@ describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => 
     mutiran['grok-review'].phases = ['review', 'implement'];
     // Bez allowedPaths svaka datoteka je povreda, pa gard ostaje cist; obranu drzi resolver (implement bez allowliste baca).
     expect(findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations)).toEqual([]);
+  });
+});
+
+
+describe('mutacije: kapacitet redaka po stranici', () => {
+  const page = { page: { w: 21, h: 29.7 }, margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } };
+  const input = (font: string) => ({ size: 12, spacing: 1.5, font, sections: [page] });
+  it('faktor 1,0 mijenja izmjereni kapacitet', () => {
+    expect(linesPerPageCapacity(input('Times New Roman'))).toBe(33);
+    expect(linesPerPageCapacity(input('Times New Roman'), {
+      lineHeightFactor: 1.0,
+      supportsFont: (font) => typeof font === 'string' && font.trim().toLowerCase() === 'times new roman',
+    })).not.toBe(33);
+  });
+  it('uklonjena provjera fonta lazno mjeri Arial', () => {
+    expect(linesPerPageCapacity(input('Arial'))).toBeNull();
+    expect(linesPerPageCapacity(input('Arial'), {
+      lineHeightFactor: 1.15,
+      supportsFont: () => true,
+    })).not.toBeNull();
   });
 });
