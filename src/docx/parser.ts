@@ -260,7 +260,8 @@ export class ZipReader {
 
 /** Tocna poruka xmldoma 0.9.12 (lib/sax.js) za znak U+FFFD; usporeduje se cijela, ne podniz. */
 const XMLDOM_REPLACEMENT_CHAR_WARNING = 'Unicode replacement character detected, source encoding issues?';
-const REFERENCE_AFTER_AMPERSAND = /^(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);/;
+/** Sticky (`y`): provjerava se od pozicije iza `&` nad cijelim tekstom, bez rezanja (duge numericke reference). */
+const REFERENCE_AFTER_AMPERSAND = /(?:amp|lt|gt|quot|apos|#[0-9]+|#x[0-9a-fA-F]+);/y;
 
 /**
  * Ima li XML goli `&` izvan CDATA, komentara i processing instructiona (u njima je `&` dopusten),
@@ -275,7 +276,8 @@ export function hasBareAmpersand(s: string): boolean {
   for (let m = marks.exec(s); m; m = marks.exec(s)) {
     const at = m.index;
     if (s[at] === '&') {
-      if (!REFERENCE_AFTER_AMPERSAND.test(s.slice(at + 1, at + 16))) return true;
+      REFERENCE_AFTER_AMPERSAND.lastIndex = at + 1;
+      if (!REFERENCE_AFTER_AMPERSAND.test(s)) return true;
       continue;
     }
     const block = blocks.find(([open]) => s.startsWith(open, at));

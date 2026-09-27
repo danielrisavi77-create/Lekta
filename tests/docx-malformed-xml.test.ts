@@ -100,6 +100,18 @@ describe('neispravan XML (nalaz #14)', () => {
     for (const bad of ['<a><!-- x', '<a><![CDATA[x', '<a><?pi x']) expect(hasBareAmpersand(bad)).toBe(true);
   });
 
+  it('duga numericka referenca je valjana (runda 3)', () => {
+    expect(hasBareAmpersand('<a>&#00000000000000000065;&#x0000000000000041;</a>')).toBe(false);
+    expect(parseXml('<a>&#00000000000000000065;</a>').documentElement?.textContent).toBe('A');
+  });
+
+  it('16 000 nezatvorenih komentara: ispod 100 ms (runda 3)', () => {
+    const input = '<!--'.repeat(16000);
+    const t0 = performance.now();
+    expect(hasBareAmpersand(input)).toBe(true);
+    expect(performance.now() - t0).toBeLessThan(100);
+  });
+
   it('provjera golog & je linearna: tisuce nezatvorenih komentara i tagova brzo (runda 2)', () => {
     const t0 = performance.now();
     expect(hasBareAmpersand('<!--'.repeat(64000))).toBe(true);

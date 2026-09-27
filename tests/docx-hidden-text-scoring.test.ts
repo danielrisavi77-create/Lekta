@@ -151,6 +151,12 @@ describe('odlomak bez vidljivog teksta (Codex #17b)', () => {
     expect(check).toMatchObject({ status: 'informational', earned: 0, max: 0 });
     expect(check.issue?.title).toMatch(/Naslovi sadrže samo skriveni tekst/);
   });
+  it('prazan naslov bez runova nije skriveni tekst: ostaje dosadasnje ponasanje (runda 3)', () => {
+    const empty = { headingLevel: 1, text: '', pProps: {}, runs: [] };
+    const check = auditHeadingRules([empty], rules)[0];
+    expect(check.issue?.title ?? '').not.toMatch(/skriveni tekst/);
+    expect(check.max).toBe(6);
+  });
   it('skriveni naslov uz vidljive: ocjenjuju se samo vidljivi, a skriveni se navodi', () => {
     const good = { headingLevel: 1, text: '2. Metode', pProps: {}, runs: [{ text: '2. Metode', font: 'Arial', size: 14, bold: true, italic: false }] };
     const passing = auditHeadingRules([good, heading(true)], rules)[0];
