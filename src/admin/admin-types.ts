@@ -225,11 +225,16 @@ export interface OpportunityGapBreakdown {
 }
 
 export interface OpportunityBucket {
+  /** Neovisni brojac baznog dogadjaja; služi kao parity dokaz da opportunity_summary nije utihnuo. */
+  analysisCompletedEvents: number;
   opportunityEvents: number;
   manualAnalyses: number;
   unmeasurableAnalyses: number;
   structureGapAnalyses: number;
+  /** Broj iz opportunity_summary.structureGaps. */
   structureGapItems: number;
+  /** Neovisni zbroj detaljnih analysis_structure_gap događaja; mora pratiti structureGapItems. */
+  structureBreakdownItems: number;
   profileEvents: number;
   nonVerifiedProfileEvents: number;
   repairRuns: number;
