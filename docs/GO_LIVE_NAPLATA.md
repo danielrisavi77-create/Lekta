@@ -122,11 +122,16 @@ namjerno odbija deploy jer obavezne tajne nedostaju.
    node scripts/stripe-sync-products.mjs --from=db --apply
    ```
 
-   Skripta je idempotentna: drugi prolaz nad nepromijenjenim katalogom je sav `noop`. Promjena
-   cijene stvara novu Price s prenesenim `lookup_key` (`transfer_lookup_key`) i gasi staru, jer
-   Stripe iznos postojeće Price ne mijenja. Zrcale se samo aktivni retail proizvodi koje Lekta
-   prodaje (bez `katedra_*`, partnerskih i ugašenih `*_do_obrane`). Kvar zrcala ne mijenja nijednu
-   naplatu. **Tijekom bete se skripta ne pokreće s `--apply`.**
+   `--apply` bez eksplicitnog `--from` se odbija i traži `--from=db`: u Stripe se zrcali živi
+   katalog, ne sjeme cijena iz migracija. Ključ, `--live` i `--from` provjeravaju se PRIJE ikakvog
+   mrežnog poziva. Skripta je idempotentna: drugi prolaz nad nepromijenjenim katalogom je sav
+   `noop`. Promjena cijene stvara novu Price s prenesenim `lookup_key` (`transfer_lookup_key`) i
+   gasi staru, jer Stripe iznos postojeće Price ne mijenja. Zrcale se samo aktivni retail proizvodi
+   koje Lekta prodaje (bez `katedra_*` i partnerskih). Ugašeni Lektin SKU (`active = false`, npr.
+   `*_do_obrane`) se u Stripeu **arhivira**: plan navodi `archive_product` (Product `active=false`)
+   i `archive_price` (aktivna Price se gasi i ostaje bez `lookup_key`), a ako ga u Stripeu nema ili
+   je već arhiviran, `noop_archived`. Kvar zrcala ne mijenja nijednu naplatu. **Tijekom bete se
+   skripta ne pokreće s `--apply`.**
 4. **Webhook**: u **Developers → Webhooks** dodaj endpoint `…/functions/v1/webhook-mor` (ime
    funkcije je naslijeđeno, URL se namjerno ne mijenja) i **pretplati TOČNO ova dva događaja**.
    Endpoint sluša događaje **vlastitog računa** („Your account”), ne povezanih računa: događaj
@@ -427,11 +432,17 @@ Repair prava). Iznos računa server: `products.price_eur` Final Passa minus `pai
 istog prava (stvarno naplaćeno pri kupnji Repaira). Nadogradnja je dopuštena samo za plaćeno
 (`provider = 'stripe'`), aktivno Repair pravo s jednim slotom, iste vrste rada, unutar roka
 (`purchase_expires_at`), koje još nije nadograđeno i čija izvorna uplata nije djelomično vraćena.
-Ako je Repair već vezan uz rad (`slots_used > 0`), njegov slot mora biti još unutar prozora
-(`document_slots.slot_expires_at > now()`): istekao slot `purge_document_slots` (0016) 30 dana kasnije
-anonimizira, pa bi nadograđeni Final Pass produljio otisak koji ne prepoznaje nijednu verziju rada.
-Takav zahtjev je 409 `upgrade_slot_expired`, a `apply_entitlement_upgrade` istu provjeru ponavlja
-atomski i vraća `slot_expired`. Repair koji još nije vezan uz rad smije se nadograditi.
+Ako je Repair već vezan uz rad (`slots_used > 0`), otisak njegova slota mora biti još netaknut, tj.
+neanonimiziran. Istek prozora slota **nije** granica (odjeljak 14: korisnik koji je prvo kupio
+Repair ne smije biti kažnjen): nadogradnja tada isti slot oživi na prozor Final Passa. Granica je
+anonimizacija: `purge_document_slots` (0016) 30 dana nakon isteka briše naslov, autora i poglavlja
+iz otiska, pa bi nadograđeni Final Pass produljio otisak koji ne prepoznaje nijednu verziju rada.
+Takav zahtjev je 409 `upgrade_slot_anonymized`, a `apply_entitlement_upgrade` istu provjeru
+ponavlja atomski (uz zaključavanje slota protiv istodobnog purgea) i vraća `slot_anonymized`.
+Repair koji još nije vezan uz rad smije se nadograditi. Djelomičan povrat izvorne uplate
+(`partial_refund_noted`) i webhook čita istim upitom kao checkout, prije pretvorbe.
+`Idempotency-Key` PaymentIntenta nadogradnje nosi i iznos u centima, pa nova ciljna cijena daje
+novi PaymentIntent, a ne stari iznos pod istim ključem.
 Odbijanje je 409 (`upgrade_*`) ili 404 za tuđe ili nepostojeće pravo, bez PaymentIntenta.
 PaymentIntent nosi `metadata[upgrade_from_entitlement_id]`, a webhook tada **pretvara isto
 pravo** (`apply_entitlement_upgrade`, migracija 0207) umjesto da stvara drugo: isti vezani slot i
@@ -444,7 +455,7 @@ Ishodi nadogradnje u `webhook_events`:
 |---|---|---|
 | `processed` uz `entitlement_upgraded` | pravo je pretvoreno u Final Pass | ništa |
 | `processed` uz `upgrade_duplicate` | ponovljena dostava iste uplate nadogradnje | ništa |
-| `needs_manual_review` uz `outcome_detail` koji počinje s `upgrade:` | uplata nadogradnje je naplaćena, a pretvorba nije dopuštena: iznos ispod razlike (`upgrade:amount_below_catalog`), pravo tuđe ili nepostojeće, već nadograđeno drugom uplatom, vraćeno, isteklo, vezani slot istekao (`upgrade:upgrade_slot_expired`), ili ga je u međuvremenu promijenila druga uplata ili je slot istekao između checkouta i uplate (`upgrade:upgrade_source_unavailable ... ishod=unavailable` ili `ishod=slot_expired`). ERROR redak `webhook-mor upgrade_needs_manual_review` | isti dan: povrat uplate nadogradnje u Stripe sučelju, ili ručna pretvorba ako je opravdana |
+| `needs_manual_review` uz `outcome_detail` koji počinje s `upgrade:` | uplata nadogradnje je naplaćena, a pretvorba nije dopuštena: iznos ispod razlike (`upgrade:amount_below_catalog`), pravo tuđe ili nepostojeće, već nadograđeno drugom uplatom, vraćeno, isteklo, izvorna uplata djelomično vraćena (`upgrade:upgrade_source_partially_refunded`), vezani slot anonimiziran (`upgrade:upgrade_slot_anonymized`), ili ga je u međuvremenu promijenila druga uplata ili ga je purge anonimizirao između checkouta i uplate (`upgrade:upgrade_source_unavailable ... ishod=unavailable` ili `ishod=slot_anonymized`). ERROR redak `webhook-mor upgrade_needs_manual_review` | isti dan: povrat uplate nadogradnje u Stripe sučelju, ili ručna pretvorba ako je opravdana |
 | `needs_manual_review` uz `outcome_detail` `refunded` | puni povrat koji dira nadogradnju: pravo je ugašeno, a jedna uplata je ostala bez prava. `outcome_note` počinje s `refund_of_upgraded_entitlement:` (vraćena je izvorna Repair uplata; nosi `nadogradnja=<PaymentIntent>` i `naplaceno_nadogradnje=<centi>`) ili s `upgrade_refunded:` (vraćena je uplata nadogradnje; nosi `izvorna_uplata=<PaymentIntent>` i `naplaceno_repair=<centi>`). `outcome_detail` ostaje `refunded`, pa oznaka punog povrata (`REFUND_MARKERS`) vrijedi kao i dosad | isti dan: za `refund_of_upgraded_entitlement` povrat uplate nadogradnje u Stripe sučelju; za `upgrade_refunded` povrat Repair uplate ili ručno vraćanje Repair prava |
 | `failed` uz `upgrade_source_lookup` ili `upgrade_apply` | čitanje prava ili `apply_entitlement_upgrade` je pao; Stripe ponavlja | provjeri bazu i migraciju 0207 |
 
@@ -454,7 +465,11 @@ povrat koji stigne istodobno s pretvorbom gasi već pretvoreno pravo.
 
 Puni povrat **uplate nadogradnje** gasi cijelo nadograđeno pravo (traži se po `upgrade_order_id`),
 uz ERROR redak `webhook-mor upgrade_refunded`: plaćeni Repair dio tada ostaje bez prava, pa
-operater odlučuje o povratu Repaira ili ručnom vraćanju prava. Puni povrat **izvorne Repair
+operater odlučuje o povratu Repaira ili ručnom vraćanju prava. Ugašeno pravo gasi i besplatan
+re-check vezanog slota koji je nadogradnja produljila: `readAccessRows` slot uzima samo uz aktivno
+pravo, pa isti rad nakon povrata više nije besplatan ni unutar produljenog prozora. Radnik
+`process-bonus-outbox` povrat uplate nadogradnje ne tumači kao povrat izvorne Repair uplate
+(nagrada preporučitelju za Repair ostaje). Puni povrat **izvorne Repair
 uplate** prava koje je već nadograđeno gasi i Final Pass, uz ERROR redak
 `webhook-mor refund_of_upgraded_entitlement`: odluči o povratu uplate nadogradnje. Oba slučaja
 ostavljaju i trajan trag u bazi, ne samo u logu koji istječe: `outcome = 'needs_manual_review'`,
