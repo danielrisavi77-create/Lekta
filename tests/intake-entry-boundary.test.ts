@@ -39,7 +39,9 @@ describe('cisti ulaz /', () => {
     expect(statSync(ROOT_HTML).size).toBeLessThan(30_000);
     expect(html).toMatch(/src=["']\/src\/routes\/intake\/main\.ts["']/);
     expect(html).not.toContain('/src/main.ts');
-    for (const id of ['intakeStage', 'intakeDropzone', 'intakeFile', 'intakeFileName', 'intakeFileSize', 'intakeStatus', 'intakeError', 'intakeMemoryAction', 'intakeContinue', 'paperCover']) {
+    // Z32: `intakeFileSize` je otisao s karticom dokumenta (drugo lice papira); ime datoteke sada
+    // stoji u zaglavlju lista, a kontroler velicinu upisuje samo ako polje postoji.
+    for (const id of ['intakeStage', 'intakeDropzone', 'intakeFile', 'intakeFileName', 'intakeStatus', 'intakeError', 'intakeMemoryAction', 'intakeContinue', 'paperCover']) {
       expect(html, `ulaz treba #${id}`).toContain(`id="${id}"`);
     }
     expect(html).toContain('href="/moji-radovi/"');
@@ -93,20 +95,26 @@ describe('cisti ulaz /', () => {
     }
   });
 
-  it('papir mijenja stanje NA sebi: kartica dokumenta postoji uz poziv', () => {
+  it('papir mijenja stanje NA sebi, na ISTOM licu (Z32: bez promjene ekrana)', () => {
     // Do reza je status stajao kao poruka ISPOD papira, pa je dokument izgledao kao da je
-    // "negdje drugdje". Kartica je isti list s drugim sadrzajem, pa se vidi da predmet putuje.
+    // "negdje drugdje". Z7 je to rijesio drugim licem papira (kartica dokumenta); Z32 ide korak
+    // dalje i trazi "bez promjene ekrana": list ostaje, a stanje nose ime datoteke u zaglavlju,
+    // pecat i linija skeniranja. Ova tvrdnja je zato PROMIJENJENA, ne oslabljena: i dalje mjeri
+    // da se stanje vidi NA predmetu, samo na novom mjestu.
     const html = source(ROOT_HTML);
     expect(html).toContain('class="intake-poziv"');
-    expect(html).toContain('class="intake-karta"');
-    for (const korak of ['format', 'lokalno']) {
-      expect(html, `kartici nedostaje potvrda koraka ${korak}`).toContain(`data-korak="${korak}"`);
-    }
+    expect(html, 'drugo lice papira se vratilo; Z32 stanje nosi na istom listu').not.toContain('class="intake-karta"');
     const css = source(INTAKE_CSS);
-    // Prebacivanje ide preko `display`, ne `opacity`: skriveni poziv ne smije ostati u redoslijedu
-    // citaca ekrana ni hvatati fokus.
-    expect(css).toMatch(/data-intake-state="ready"\][^{]*\.intake-poziv\{display:none\}/);
-    expect(css).toMatch(/data-intake-state="ready"\][^{]*\.intake-karta\{display:grid\}/);
+    // Poziv se vise NE skriva: isti list ostaje u svakom stanju.
+    expect(css).not.toMatch(/data-intake-state="ready"\][^{]*\.intake-poziv\{display:none\}/);
+    // Dok ulaz cita, zaglavlje pokazuje ime datoteke umjesto "Nepregledano", a ispod podnaslova je
+    // linija skeniranja. Prebacivanje ide preko `display`, ne `opacity`: skriveno ne ostaje citacu.
+    for (const stanje of ['checking', 'saving', 'ready']) {
+      const uStanju = (ostatak: string): RegExp => new RegExp(String.raw`data-intake-state="${stanje}"\][^{]*` + ostatak);
+      expect(css).toMatch(uStanju(String.raw`\.intake-zaglavlje-ime[^{]*\{display:inline-block\}`));
+      expect(css).toMatch(uStanju(String.raw`\[data-intake-nepregledano\][^{]*\{display:none\}`));
+      expect(css).toMatch(uStanju(String.raw`\.intake-sken[^{]*\{display:block\}`));
+    }
   });
 
   it('nav i podnozje NE vode u mrtva sidra: odrediste svakog `#` sidra postoji na stranici', () => {
