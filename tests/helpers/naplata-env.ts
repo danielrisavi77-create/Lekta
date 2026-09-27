@@ -8,7 +8,11 @@
  * Deno ulaz (`index.ts`) se pod vitestom ne izvodi, pa je jedino sto se o njemu moze mjeriti ono
  * sto izvor DEKLARIRA: koja imena tajni cita. To je manje od "funkcija radi", i tako je i imenovano.
  */
-import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { delimiter, join } from 'node:path';
 
 /**
  * Normalizira CRLF i usamljeni CR u LF (CLAUDE.md: "tekstualne usporedbe normaliziraju CR").
@@ -110,24 +114,37 @@ export function preflightSourceProblems(src: string): string[] {
   if (!/res\.stderr, res\.stdout/.test(src)) {
     problems.push('preflight cita samo stderr pa razlog pada ostaje neimenovan');
   }
+  // UVJET svake grane koja rusi proces mora biti UPRAVO presuda, ne samo poziv presude negdje u
+  // tekstu. Kvar koji se ovim gasi (nalaz pregleda nakon spajanja mastera, 2026-09-27; izmjereno):
+  // `if (!zabranjene.ok) {` zamijenjen s `if (false) {`, ili `testModeEnvVerdict(process.env) && false`,
+  // ostavljao je ovaj gard PRAZNIM, jer je trazio samo tekst poziva. Ovdje se pribija OBLIK
+  // uvjeta; da grana stvarno obara proces (i da je presuda ispod nje ispravna) dokazuje tek
+  // izvrseni gard {@link preflightExecutionProblems}.
+  const deployPoziv = src.indexOf("'functions', 'deploy'");
+  const prijeDeploya = (i: number): boolean => i >= 0 && (deployPoziv < 0 || i < deployPoziv);
+  if (!prijeDeploya(src.search(/const verdict = supabaseSecretsVerdict\(read\.rows\);\s*if \(!verdict\.ok\) \{/))) {
+    problems.push('preflight ne odbija nepotpune obavezne tajne prije deploya');
+  }
+  if (!/const verdict = naplataSecretsVerdict\(process\.env\);\s*if \(!verdict\.ok\) \{/.test(src)) {
+    problems.push('--env grana preflighta ne odbija nepotpune obavezne tajne');
+  }
   // Ukljucen testni nacin (`STRIPE_ALLOW_TEST_MODE=1`) mora oboriti deploy PRIJE deploya: uz njega
   // testni Stripe dogadjaj daje pravo pravo pristupa (PAY-05). Dodano pri prijenosu na Stripe.
-  const testni = src.indexOf('if (testModeVerdict(read.rows)');
-  const deployPoziv = src.indexOf("'functions', 'deploy'");
-  if (testni < 0 || (deployPoziv >= 0 && deployPoziv < testni)) {
+  const testni = src.indexOf("if (testModeVerdict(read.rows) && !argv.includes('--dopusti-testni-nacin')) {");
+  if (!prijeDeploya(testni)) {
     problems.push('preflight ne odbija ukljucen testni nacin prije deploya');
   }
   // Postavljen STRIPE_ACCOUNT_ID mora oboriti deploy PRIJE deploya (nalaz pregleda kruga 3):
   // nitko ga ne cita, a operater vjeruje da je Connect racun konfiguriran.
-  const zabranjene = src.indexOf('forbiddenSecretsVerdict(read.rows)');
-  if (zabranjene < 0 || (deployPoziv >= 0 && deployPoziv < zabranjene)) {
+  const zabranjene = src.search(/const zabranjene = forbiddenSecretsVerdict\(read\.rows\);\s*if \(!zabranjene\.ok\) \{/);
+  if (!prijeDeploya(zabranjene)) {
     problems.push('preflight ne odbija postavljenu zabranjenu tajnu (STRIPE_ACCOUNT_ID) prije deploya');
   }
-  if (!src.includes('forbiddenEnvVerdict(process.env)')) {
+  if (!/const zabranjene = forbiddenEnvVerdict\(process\.env\);\s*if \(!zabranjene\.ok\) \{/.test(src)) {
     problems.push('--env grana preflighta ne odbija postavljenu zabranjenu tajnu');
   }
   // I --env grana mora odbiti ukljucen testni nacin (Codex pregled kruga 3).
-  if (!src.includes('if (testModeEnvVerdict(process.env)')) {
+  if (!src.includes("if (testModeEnvVerdict(process.env) && !argv.includes('--dopusti-testni-nacin')) {")) {
     problems.push('--env grana preflighta ne odbija ukljucen testni nacin');
   }
   const envGate = src.indexOf("argv.includes('--env')");
@@ -142,6 +159,241 @@ export function preflightSourceProblems(src: string): string[] {
   if (zadano.includes('process.env')) {
     problems.push('zadani put preflighta jos cita process.env (mjeri ljusku, ne okolinu deploya)');
   }
+  return problems;
+}
+
+/** Tri obavezne tajne s prepoznatljivim (heksadecimalnim, nepraznim) digestom. */
+const PUNI_POPIS: readonly string[] = Object.freeze([
+  'STRIPE_SECRET_KEY | 11aa',
+  'STRIPE_PUBLISHABLE_KEY | 22bb',
+  'STRIPE_WEBHOOK_SECRET | 33cc',
+]);
+
+/** Iste tri tajne u lokalnoj ljusci (`--env`). */
+const PUNA_LJUSKA: Readonly<Record<string, string>> = Object.freeze({
+  STRIPE_SECRET_KEY: 'sk_lazni',
+  STRIPE_PUBLISHABLE_KEY: 'pk_lazni',
+  STRIPE_WEBHOOK_SECRET: 'whsec_lazni',
+});
+
+/**
+ * Jedan izvrseni slucaj preflighta nad laznim Supabase CLI-jem.
+ *
+ * `popis` je doslovni izlaz `supabase secrets list` (tablica s okomitom crtom) koji lazni CLI
+ * vraca; `null` znaci da slucaj ide kroz `--env` i CLI se ne smije ni pozvati.
+ */
+export interface PreflightSlucaj {
+  id: string;
+  args: readonly string[];
+  popis: readonly string[] | null;
+  ljuska: Readonly<Record<string, string>>;
+  /** true: proces MORA izaci s kodom razlicitim od 0, bez ijednog deploya. */
+  pada: boolean;
+  /** Ime koje stderr mora imenovati kad proces pada (imenovan razlog, ne bilo koji pad). */
+  razlog?: string;
+}
+
+/**
+ * Slucajevi izvrsenog preflighta. Svaka grana koja rusi proces ima vlastiti slucaj, a dva cista
+ * slucaja (`*-cisto`) dokazuju da lazni ulaz nije vakuum: ista okolina bez kvara prolazi, a
+ * zadani put pritom stvarno deploya obje funkcije kroz lazni CLI.
+ *
+ * Digest `STRIPE_ALLOW_TEST_MODE=1` racuna se ovdje (SHA-256 niza `1`), ne uvozi iz skripte:
+ * mutacija konstante u skripti inace bi pomaknula i ocekivanje.
+ */
+export const PREFLIGHT_SLUCAJEVI: readonly PreflightSlucaj[] = Object.freeze([
+  { id: 'zadano-cisto', args: ['--deploy'], popis: PUNI_POPIS, ljuska: {}, pada: false },
+  {
+    id: 'zadano-zabranjena-tajna', args: ['--deploy'], popis: [...PUNI_POPIS, 'STRIPE_ACCOUNT_ID | 5f5e'],
+    ljuska: {}, pada: true, razlog: 'STRIPE_ACCOUNT_ID',
+  },
+  {
+    id: 'zadano-obavezna-bez-digesta', args: ['--deploy'],
+    popis: ['STRIPE_SECRET_KEY | 11aa', 'STRIPE_PUBLISHABLE_KEY | 22bb', 'STRIPE_WEBHOOK_SECRET | '],
+    ljuska: {}, pada: true, razlog: 'STRIPE_WEBHOOK_SECRET',
+  },
+  {
+    id: 'zadano-testni-bez-digesta', args: ['--deploy'], popis: [...PUNI_POPIS, 'STRIPE_ALLOW_TEST_MODE | '],
+    ljuska: {}, pada: true, razlog: 'STRIPE_ALLOW_TEST_MODE',
+  },
+  {
+    id: 'zadano-testni-ukljucen', args: ['--deploy'],
+    popis: [...PUNI_POPIS, `STRIPE_ALLOW_TEST_MODE | ${createHash('sha256').update('1').digest('hex')}`],
+    ljuska: {}, pada: true, razlog: 'STRIPE_ALLOW_TEST_MODE',
+  },
+  // Isto bez `--deploy` (samostalna provjera, `npm run verify-naplata-secrets`): grana uvjetovana
+  // zastavicom deploya (`&& deploy`) bila bi zelena bas u koraku kojim operater provjerava tajne.
+  {
+    id: 'provjera-zabranjena-tajna', args: [], popis: [...PUNI_POPIS, 'STRIPE_ACCOUNT_ID | 5f5e'],
+    ljuska: {}, pada: true, razlog: 'STRIPE_ACCOUNT_ID',
+  },
+  {
+    id: 'provjera-testni-ukljucen', args: [],
+    popis: [...PUNI_POPIS, `STRIPE_ALLOW_TEST_MODE | ${createHash('sha256').update('1').digest('hex')}`],
+    ljuska: {}, pada: true, razlog: 'STRIPE_ALLOW_TEST_MODE',
+  },
+  { id: 'env-cisto', args: ['--env'], popis: null, ljuska: PUNA_LJUSKA, pada: false },
+  {
+    id: 'env-zabranjena-tajna', args: ['--env'], popis: null,
+    ljuska: { ...PUNA_LJUSKA, STRIPE_ACCOUNT_ID: 'acct_lazni' }, pada: true, razlog: 'STRIPE_ACCOUNT_ID',
+  },
+  {
+    id: 'env-testni-ukljucen', args: ['--env'], popis: null,
+    ljuska: { ...PUNA_LJUSKA, STRIPE_ALLOW_TEST_MODE: '1' }, pada: true, razlog: 'STRIPE_ALLOW_TEST_MODE',
+  },
+]);
+
+/** Lazni Supabase CLI za Windows (`supabase.cmd`): biljezi poziv, na `secrets list` vraca popis. */
+const LAZNI_CLI_CMD = [
+  '@echo off',
+  '>>"%LEKTA_LAZNI_DNEVNIK%" echo %*',
+  'if /i "%~1"=="secrets" goto popis',
+  'if /i "%~1"=="functions" exit /b 0',
+  'exit /b 3',
+  ':popis',
+  'type "%LEKTA_LAZNI_POPIS%"',
+  'exit /b 0',
+  '',
+].join('\r\n');
+
+/** Isti lazni CLI za POSIX (`supabase`). */
+const LAZNI_CLI_SH = [
+  '#!/bin/sh',
+  'echo "$*" >> "$LEKTA_LAZNI_DNEVNIK"',
+  'case "$1" in',
+  '  secrets) cat "$LEKTA_LAZNI_POPIS"; exit 0 ;;',
+  '  functions) exit 0 ;;',
+  'esac',
+  'exit 3',
+  '',
+].join('\n');
+
+/**
+ * Okolina podprocesa: ljuska testa BEZ ijedne `STRIPE_*` varijable (inace bi operaterova ljuska
+ * mijenjala ishod) i bez `SUPABASE_*` (npr. pristupni token; Codex pregled 2026-09-27), bez
+ * `NODE_OPTIONS` (vitestovi hookovi nisu dio preflighta), uz direktorij laznog CLI-ja na pocetku
+ * PATH-a, pa i pad natrag na goli `supabase` pogadja lazni CLI. Granica: ovo nije sandbox.
+ * Mutirani izvor koji bi sam zvao pravi CLI apsolutnom putanjom mogao bi koristiti prijavu iz
+ * korisnickog profila; mutacije pise ovaj repozitorij i nijedna to ne radi.
+ */
+function okolinaPodprocesa(binDir: string, dodatak: Readonly<Record<string, string>>): NodeJS.ProcessEnv {
+  const env: NodeJS.ProcessEnv = {};
+  for (const [kljuc, vrijednost] of Object.entries(process.env)) {
+    if (/^(STRIPE_|SUPABASE_)/i.test(kljuc) || /^NODE_OPTIONS$/i.test(kljuc)) continue;
+    env[kljuc] = vrijednost;
+  }
+  const pathKljuc = Object.keys(env).find((k) => k.toUpperCase() === 'PATH') ?? 'PATH';
+  env[pathKljuc] = `${binDir}${delimiter}${env[pathKljuc] ?? ''}`;
+  return { ...env, ...dodatak };
+}
+
+/** Nalazi po (slucaj, izvor): isti slucaj nad istim izvorom izvodi se jednom po procesu testa. */
+const izvrseniPreflight = new Map<string, readonly string[]>();
+
+/** Izvedi jedan slucaj nad vec pripremljenim direktorijem i vrati njegove nalaze. */
+function izvrsiSlucaj(korijen: string, binDir: string, skripta: string, slucaj: PreflightSlucaj): string[] {
+  const problems: string[] = [];
+  const oznaka = `[${slucaj.id}]`;
+  const dnevnik = join(korijen, `dnevnik-${slucaj.id}.txt`);
+  const popis = join(korijen, `popis-${slucaj.id}.txt`);
+  writeFileSync(dnevnik, '', 'utf8');
+  if (slucaj.popis) {
+    const tablica = ['  NAME | DIGEST', '  -----|-------', ...slucaj.popis.map((r) => `  ${r}`)];
+    writeFileSync(popis, `${tablica.join('\n')}\n`, 'utf8');
+  }
+  const res = spawnSync(process.execPath, [skripta, ...slucaj.args], {
+    cwd: korijen,
+    encoding: 'utf8',
+    env: okolinaPodprocesa(binDir, {
+      ...slucaj.ljuska,
+      LEKTA_LAZNI_DNEVNIK: dnevnik,
+      LEKTA_LAZNI_POPIS: popis,
+    }),
+    timeout: 30_000,
+    windowsHide: true,
+  });
+  if (res.error) return [`${oznaka} podproces se nije pokrenuo: ${res.error.message}`];
+  const pozivi = readFileSync(dnevnik, 'utf8').split(/\r?\n/).map((l) => l.trim()).filter((l) => l !== '');
+  const deployi = pozivi.filter((l) => l.startsWith('functions deploy'));
+  const stderr = String(res.stderr ?? '');
+  if (slucaj.popis && !pozivi.includes('secrets list')) {
+    problems.push(`${oznaka} lazni CLI nije pitan za popis tajni (mjerena je druga okolina)`);
+  }
+  if (!slucaj.popis && pozivi.length > 0) {
+    problems.push(`${oznaka} --env grana je zvala Supabase CLI (${pozivi.join('; ')})`);
+  }
+  if (slucaj.pada) {
+    if (res.status === 0 || res.status === null) {
+      problems.push(`${oznaka} preflight NIJE srusio proces (izlazni kod ${String(res.status)})`);
+    } else if (slucaj.razlog && !stderr.includes(slucaj.razlog)) {
+      problems.push(`${oznaka} preflight je pao bez imenovanog razloga ${slucaj.razlog}: ${stderr.slice(0, 200)}`);
+    }
+    if (deployi.length > 0) problems.push(`${oznaka} preflight je deployao unatoc odbijanju (${deployi.join('; ')})`);
+    return problems;
+  }
+  if (res.status !== 0) {
+    problems.push(`${oznaka} cista okolina nije prosla (izlazni kod ${String(res.status)}): ${stderr.slice(0, 300)}`);
+  }
+  if (slucaj.args.includes('--deploy')) {
+    for (const fn of ['create-checkout', 'webhook-mor']) {
+      if (!deployi.some((l) => l.split(/\s+/)[2] === fn)) {
+        problems.push(`${oznaka} cista okolina nije deployala ${fn} kroz lazni CLI`);
+      }
+    }
+  }
+  return problems;
+}
+
+/**
+ * Nalazi o PREFLIGHTU naplate, mjereni IZVRSAVANJEM predanog izvora u podprocesu.
+ *
+ * Kvar koji se ovim gasi (nalaz pregleda nakon spajanja mastera, 2026-09-27): {@link
+ * preflightSourceProblems} gleda tekst, pa nije vidio ni ugasenu granu (`if (false) {`) ni
+ * pokvarenu presudu ispod nje (npr. `supabaseSecretsVerdict` bez razloga `nepoznata`). Ovdje se
+ * predani izvor zapise u privremeni direktorij kao `scripts/verify-naplata-secrets.mjs`, uz lazni
+ * Supabase CLI u `node_modules/.bin`, i za svaki {@link PREFLIGHT_SLUCAJEVI} pokrene pravim
+ * `node`-om. Tvrdi se ono sto operater vidi: izlazni kod, imenovan razlog u stderr-u, i to da se
+ * pri odbijanju nijedna funkcija nije deployala (lazni CLI biljezi svaki poziv).
+ *
+ * Mutacija se radi nad TEKSTOM u memoriji; disk repozitorija se ne dira. `slucajevi` suzava mjerenje
+ * na imenovane slucajeve (jedan podproces traje oko pola sekunde do sekunde, a mutacija gasi jednu
+ * granu); bez njega se izvode svi. Nalaz se pamti po slucaju i izvoru, pa isti slucaj nad istim
+ * izvorom u vise garda ne pokrece proces ponovno.
+ *
+ * Granica tvrdnje: pravi Supabase CLI i zivi projekt se ovdje ne pokrecu. Dokazuje se da skripta
+ * na zadani ulaz CLI-ja reagira ispravno, ne da pravi CLI daje taj ulaz.
+ */
+export function preflightExecutionProblems(
+  src: string,
+  slucajevi: readonly string[] = PREFLIGHT_SLUCAJEVI.map((s) => s.id),
+): string[] {
+  const problems: string[] = [];
+  const odabrani = PREFLIGHT_SLUCAJEVI.filter((s) => slucajevi.includes(s.id));
+  for (const id of slucajevi) {
+    if (!odabrani.some((s) => s.id === id)) problems.push(`[${id}] nepoznat slucaj preflighta`);
+  }
+  if (odabrani.length === 0) problems.push('nijedan slucaj preflighta nije izveden (nema sto mjeriti)');
+  const kljuc = (id: string): string => JSON.stringify([id, src]);
+  const neizvedeni = odabrani.filter((s) => !izvrseniPreflight.has(kljuc(s.id)));
+  if (neizvedeni.length > 0) {
+    const korijen = realpathSync(mkdtempSync(join(tmpdir(), 'lekta-preflight-')));
+    try {
+      const binDir = join(korijen, 'node_modules', '.bin');
+      mkdirSync(join(korijen, 'scripts'), { recursive: true });
+      mkdirSync(binDir, { recursive: true });
+      const skripta = join(korijen, 'scripts', 'verify-naplata-secrets.mjs');
+      writeFileSync(skripta, src, 'utf8');
+      writeFileSync(join(binDir, 'supabase.cmd'), LAZNI_CLI_CMD, 'utf8');
+      writeFileSync(join(binDir, 'supabase'), LAZNI_CLI_SH, 'utf8');
+      chmodSync(join(binDir, 'supabase'), 0o755);
+      for (const slucaj of neizvedeni) {
+        izvrseniPreflight.set(kljuc(slucaj.id), Object.freeze(izvrsiSlucaj(korijen, binDir, skripta, slucaj)));
+      }
+    } finally {
+      rmSync(korijen, { recursive: true, force: true });
+    }
+  }
+  for (const slucaj of odabrani) problems.push(...(izvrseniPreflight.get(kljuc(slucaj.id)) ?? []));
   return problems;
 }
 
@@ -483,6 +735,76 @@ export function runbookLogNameProblems(runbook: string, logNames: ReadonlySet<st
   if (spomenuta.size === 0) problems.push('runbook ne spominje nijedno ime log retka webhook-mor (nema sto mjeriti)');
   for (const ime of spomenuta) {
     if (!logNames.has(ime)) problems.push(`runbook spominje webhook-mor ${ime}, a izvor taj redak ne ispisuje`);
+  }
+  return problems;
+}
+
+/**
+ * Oznake punog povrata (`REFUND_MARKERS`) procitane iz izvora `webhook-mor/handler.ts`, ne
+ * prepisane: kad handler doda oznaku, runbook koji je ne navodi postane crven bez diranja testa.
+ */
+export function handlerRefundMarkers(handlerSrc: string): string[] {
+  const m = /const REFUND_MARKERS\s*=\s*\[([^\]]*)\]/.exec(handlerSrc);
+  if (!m) return [];
+  return [...m[1].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]);
+}
+
+/** Svi popisi `outcome_detail in (...)` u SQL tekstu, kao nizovi vrijednosti. */
+function outcomeDetailInPopisi(sql: string): string[][] {
+  return [...sql.matchAll(/outcome_detail\s+in\s*\(([^)]*)\)/gi)].map((m) => [...m[1].matchAll(/'([^']*)'/g)].map((x) => x[1]));
+}
+
+/**
+ * Nalazi o RUCNOM VEZIVANJU u runbooku (odjeljak 5.1): prije upisa prava mora se provjeriti je li
+ * isti PaymentIntent vec vracen.
+ *
+ * Kvar koji se ovim gasi (nalaz pregleda nakon spajanja mastera, 2026-09-27): uplata bez
+ * `user_id` (`needs_manual_link`) nema pravo, pa puni povrat za nju zavrsi kao
+ * `refund_without_entitlement`. Runbook je operatera vodio ravno na `insert into entitlements`,
+ * a upit "uplate koje cekaju rucno vezivanje" nije iskljucivao vracene uplate: pravo bi bilo
+ * upisano za vracen novac i nitko ga vise ne bi ugasio.
+ *
+ * Mjeri se: (1) ogradjeni SQL blok s `from webhook_events`, `order_id = '<order_id>'` i
+ * `outcome_detail in (...)` s TOCNO oznakama iz handlera stoji PRIJE bloka s `insert into
+ * entitlements`; (2) upit nad uplatama koje cekaju (`needs_manual_link` i
+ * `payment_intent.succeeded`) ima `not exists` s istim popisom; (3) nijedan popis u runbooku koji
+ * sadrzi neku oznaku ne odstupa od skupa oznaka iz handlera.
+ *
+ * Granica tvrdnje: nije SQL parser. Da upit vraca tocno ono sto treba nad zivom bazom nije
+ * provjereno; stupci se provjeravaju zasebno ({@link runbookSqlColumnProblems}).
+ */
+export function runbookRefundCheckProblems(runbook: string, handlerSrc: string): string[] {
+  const oznake = handlerRefundMarkers(handlerSrc);
+  if (oznake.length === 0) return ['REFUND_MARKERS se ne mogu procitati iz handlera (nema sto mjeriti)'];
+  const istiSkup = (popis: readonly string[]): boolean =>
+    new Set(popis).size === oznake.length && oznake.every((o) => popis.includes(o));
+  const blokovi = [...runbook.matchAll(/```[a-z]*\r?\n([\s\S]*?)```/g)].map((m) => ({ index: m.index ?? 0, sql: m[1] }));
+  const provjeravaPovrat = (sql: string): boolean =>
+    /\bfrom webhook_events\b/i.test(sql) && outcomeDetailInPopisi(sql).some(istiSkup);
+
+  const problems: string[] = [];
+  const upis = blokovi.find((b) => /insert into entitlements/i.test(b.sql));
+  if (!upis) {
+    problems.push('runbook nema upis prava za rucno vezivanje (nema sto mjeriti)');
+  } else if (
+    !blokovi.some((b) => b.index < upis.index && provjeravaPovrat(b.sql) && /order_id\s*=\s*'<order_id>'/.test(b.sql))
+  ) {
+    problems.push('rucno vezivanje upisuje pravo bez prethodne provjere povrata istog PaymentIntenta (REFUND_MARKERS)');
+  }
+  const cekaju = blokovi.filter(
+    (b) => /'needs_manual_link'/.test(b.sql) && /event_name\s*=\s*'payment_intent\.succeeded'/.test(b.sql),
+  );
+  if (cekaju.length === 0) {
+    problems.push('runbook nema upit uplata koje cekaju rucno vezivanje (nema sto mjeriti)');
+  } else if (!cekaju.every((b) => /\bnot exists\s*\(/i.test(b.sql) && provjeravaPovrat(b.sql))) {
+    problems.push('upit uplata koje cekaju rucno vezivanje ne iskljucuje uplate ciji je PaymentIntent vracen');
+  }
+  for (const b of blokovi) {
+    for (const popis of outcomeDetailInPopisi(b.sql)) {
+      if (popis.some((v) => oznake.includes(v)) && !istiSkup(popis)) {
+        problems.push(`popis oznaka povrata u runbooku (${popis.join(', ')}) nije REFUND_MARKERS iz handlera (${oznake.join(', ')})`);
+      }
+    }
   }
   return problems;
 }

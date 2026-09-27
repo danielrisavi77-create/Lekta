@@ -43,6 +43,9 @@ import { hasUnboundedFormData } from './helpers/edge-formdata';
 import {
   stripeSecretNameProblems,
   preflightSourceProblems,
+  preflightExecutionProblems,
+  runbookRefundCheckProblems,
+  handlerRefundMarkers,
   paidClassificationProblems,
   refundClassificationProblems,
   refundReachabilityProblems,
@@ -326,6 +329,45 @@ function sessionBootstrapFalseZeroProblems(source: string): string[] {
     problems.push('testProcessCount u catch grani vraca doslovnu 0 umjesto null');
   }
   return problems;
+}
+
+/** Izvor preflighta naplate s diska (LF). Mutacije ga mijenjaju samo u memoriji. */
+function preflightIzvor(): string {
+  return readTextLf(resolve(process.cwd(), 'scripts', 'verify-naplata-secrets.mjs'));
+}
+
+/** Indeks `redni`-te pojave (od 1) niza `trazi`, ili -1. */
+function indeksPojave(src: string, trazi: string, redni: number): number {
+  let i = -1;
+  for (let n = 0; n < redni; n += 1) {
+    i = src.indexOf(trazi, i + 1);
+    if (i < 0) return -1;
+  }
+  return i;
+}
+
+/** Zamijeni `redni`-tu pojavu (od 1) niza `trazi`; bez te pojave vraca izvor nepromijenjen. */
+function zamijeniPojavu(src: string, trazi: string, zamjena: string, redni: number): string {
+  const i = indeksPojave(src, trazi, redni);
+  return i < 0 ? src : src.slice(0, i) + zamjena + src.slice(i + trazi.length);
+}
+
+/**
+ * Mutirani izvor preflighta, IZVRSEN u podprocesu nad laznim CLI-jem: svaki ciljani slucaj mora
+ * pasti, a cisti slucajevi istog puta moraju i dalje proci. Drugo je dokaz da mutacija gasi
+ * GRANU, a ne rusi skriptu (sintaksna greska bi pala svugdje i "uhvatila" se vakuumski).
+ */
+function izvrsenaMutacijaUhvacena(mutated: string, ciljevi: readonly string[], cisti: readonly string[]): boolean {
+  if (mutated === preflightIzvor()) return false; // nema sto mutirati: gard bi prolazio vakuumski
+  const problems = preflightExecutionProblems(mutated, [...ciljevi, ...cisti]);
+  return ciljevi.every((c) => problems.some((p) => p.startsWith(`[${c}]`)))
+    && !problems.some((p) => cisti.some((c) => p.startsWith(`[${c}]`)));
+}
+
+/** Baseline izvrsenog preflighta: nemutiran izvor prolazi iste slucajeve bez ijednog nalaza. */
+function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string[]): boolean {
+  return preflightExecutionProblems(preflightIzvor(), [...ciljevi, ...cisti]).length === 0
+    && preflightSourceProblems(preflightIzvor()).length === 0;
 }
 
 const MUTATIONS: Mutation[] = [
@@ -4127,6 +4169,171 @@ const MUTATIONS: Mutation[] = [
     },
   },
 
+  // --- naplata: preflight mjeren IZVRSAVANJEM (nalaz pregleda nakon spajanja mastera, 2026-09-27) --
+  // Izmjereno prije ovog popravka: `if (!zabranjene.ok) {` -> `if (false) {` (obje grane) i
+  // `testModeEnvVerdict(process.env) && false` ostavljali su preflightSourceProblems PRAZNIM, jer je
+  // gard trazio samo tekst poziva presude. Mutacije nize mijenjaju IZVOR skripte u memoriji, izvode
+  // ga u podprocesu nad laznim Supabase CLI-jem (privremeni direktorij, ne disk repozitorija) i
+  // traze da ciljani slucaj padne, a cisti slucaj istog puta i dalje prode.
+  {
+    id: 'naplata/izvor-zadana-grana-zabranjene-tajne-ugasena',
+    imitates: 'nalaz pregleda nakon spajanja mastera (2026-09-27): u zadanom putu `if (!zabranjene.ok) {` zamijenjen s `if (false) {`. Poziv forbiddenSecretsVerdict(read.rows) ostaje u tekstu, stari gard je bio prazan, a deploy:naplata s postavljenim STRIPE_ACCOUNT_ID prolazi i deploya obje funkcije',
+    caught: () => {
+      const mutated = zamijeniPojavu(preflightIzvor(), 'if (!zabranjene.ok) {', 'if (false) {', 2);
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-zabranjena-tajna'], ['zadano-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('STRIPE_ACCOUNT_ID'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-zabranjena-tajna'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-env-grana-zabranjene-tajne-ugasena',
+    imitates: 'nalaz pregleda nakon spajanja mastera (2026-09-27): u --env grani `if (!zabranjene.ok) {` zamijenjen s `if (false) {`. Poziv forbiddenEnvVerdict(process.env) ostaje u tekstu, stari gard je bio prazan, a ljuska s postavljenim STRIPE_ACCOUNT_ID dobije zeleno',
+    caught: () => {
+      const mutated = zamijeniPojavu(preflightIzvor(), 'if (!zabranjene.ok) {', 'if (false) {', 1);
+      return izvrsenaMutacijaUhvacena(mutated, ['env-zabranjena-tajna'], ['env-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('--env grana preflighta ne odbija postavljenu zabranjenu tajnu'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['env-zabranjena-tajna'], ['env-cisto']),
+  },
+  {
+    id: 'naplata/izvor-env-grana-testnog-nacina-ugasena',
+    imitates: 'nalaz pregleda nakon spajanja mastera (2026-09-27): `testModeEnvVerdict(process.env) && false` u --env grani. Tekst `if (testModeEnvVerdict(process.env)` ostaje, stari gard je bio prazan, a ljuska sa STRIPE_ALLOW_TEST_MODE=1 dobije zeleno iako testni dogadjaj tada daje pravo pravo pristupa (PAY-05)',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        'testModeEnvVerdict(process.env) && !argv',
+        'testModeEnvVerdict(process.env) && false && !argv',
+      );
+      return izvrsenaMutacijaUhvacena(mutated, ['env-testni-ukljucen'], ['env-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('--env grana preflighta ne odbija ukljucen testni nacin'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['env-testni-ukljucen'], ['env-cisto']),
+  },
+  {
+    id: 'naplata/izvor-zadana-grana-testnog-nacina-ugasena',
+    imitates: 'isti oblik kao nalaz pregleda 2026-09-27, u zadanom putu: `testModeVerdict(read.rows) && false`. Tekst poziva presude ostaje, a deploy:naplata sa STRIPE_ALLOW_TEST_MODE=1 u projektu prolazi i deploya (PAY-05)',
+    caught: () => {
+      const mutated = preflightIzvor().replace('testModeVerdict(read.rows) && !argv', 'testModeVerdict(read.rows) && false && !argv');
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-testni-ukljucen'], ['zadano-cisto'])
+        && preflightSourceProblems(mutated).some((p) => p.includes('ukljucen testni nacin prije deploya'));
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-testni-ukljucen'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-grana-zabranjene-tajne-bez-izlaza',
+    imitates: 'grana zabranjene tajne u zadanom putu koja ispise ODBIJEN, ali izgubi process.exit(1): uvjet je upravo presuda pa je tekstualni gard zelen, a skripta nastavi do deploya obje funkcije s postavljenim STRIPE_ACCOUNT_ID',
+    caught: () => {
+      const src = preflightIzvor();
+      const grana = indeksPojave(src, 'if (!zabranjene.ok) {', 2);
+      if (grana < 0) return false;
+      const izlaz = src.indexOf('process.exit(1);', grana);
+      if (izlaz < 0) return false;
+      const mutated = src.slice(0, izlaz) + src.slice(izlaz + 'process.exit(1);'.length);
+      // Tekstualni gard to NE vidi (uvjet je netaknut); zato postoji izvrseni.
+      return preflightSourceProblems(mutated).length === 0
+        && izvrsenaMutacijaUhvacena(mutated, ['zadano-zabranjena-tajna'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-zabranjena-tajna'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-grana-zabranjene-tajne-samo-uz-deploy',
+    imitates: 'grana zabranjene tajne uvjetovana zastavicom deploya (`if (!zabranjene.ok && deploy) {`): deploy:naplata i dalje pada, ali samostalna provjera (npm run verify-naplata-secrets, korak kojim operater provjerava tajne) je zelena uz postavljen STRIPE_ACCOUNT_ID',
+    caught: () => {
+      const mutated = zamijeniPojavu(preflightIzvor(), 'if (!zabranjene.ok) {', 'if (!zabranjene.ok && deploy) {', 2);
+      return izvrsenaMutacijaUhvacena(mutated, ['provjera-zabranjena-tajna'], ['zadano-cisto'])
+        // Slucaj s --deploy tu mutaciju NE vidi; zato postoji slucaj bez njega.
+        && preflightExecutionProblems(mutated, ['zadano-zabranjena-tajna']).length === 0;
+    },
+    cleanBefore: () => izvrseniBaselineCist(['provjera-zabranjena-tajna', 'zadano-zabranjena-tajna'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-obavezna-tajna-bez-digesta-prolazi',
+    imitates: 'izvorni oblik mutacije naplata/obavezna-tajna-bez-digesta-prolazi: supabaseSecretsVerdict bez razloga `nepoznata`, pa redak STRIPE_WEBHOOK_SECRET bez digesta prolazi kao postavljen i deploy:naplata deploya webhook koji mozda odbija svaki dogadjaj',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        "    else if (!isKnownDigest(byName.get(name))) missing.push({ name, reason: 'nepoznata' });\n",
+        '',
+      );
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-obavezna-bez-digesta'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-obavezna-bez-digesta'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-testni-nacin-bez-digesta-prolazi',
+    imitates: 'izvorni oblik mutacije naplata/testni-nacin-bez-digesta-prolazi: testModeVerdict bez retka koji neprepoznat digest broji kao ukljucen, pa STRIPE_ALLOW_TEST_MODE cija se vrijednost ne vidi (a moze biti 1) ne obara deploy (PAY-05)',
+    caught: () => {
+      const mutated = preflightIzvor().replace('  if (!isKnownDigest(row.digest)) return true;\n', '');
+      return izvrsenaMutacijaUhvacena(mutated, ['zadano-testni-bez-digesta'], ['zadano-cisto']);
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-testni-bez-digesta'], ['zadano-cisto']),
+  },
+  {
+    id: 'naplata/izvor-preflight-propusta-postavljen-racun',
+    imitates: 'izvorni oblik mutacije naplata/preflight-propusta-postavljen-racun: NAPLATA_FORBIDDEN_SECRETS prazan, dakle stanje do kruga 3. Obje grane i obje presude stoje u tekstu, a STRIPE_ACCOUNT_ID ni u projektu ni u ljusci vise ne obara preflight',
+    caught: () => {
+      const mutated = preflightIzvor().replace(
+        "export const NAPLATA_FORBIDDEN_SECRETS = Object.freeze(['STRIPE_ACCOUNT_ID']);",
+        'export const NAPLATA_FORBIDDEN_SECRETS = Object.freeze([]);',
+      );
+      return preflightSourceProblems(mutated).length === 0
+        && izvrsenaMutacijaUhvacena(
+          mutated,
+          ['zadano-zabranjena-tajna', 'env-zabranjena-tajna'],
+          ['zadano-cisto', 'env-cisto'],
+        );
+    },
+    cleanBefore: () => izvrseniBaselineCist(['zadano-zabranjena-tajna', 'env-zabranjena-tajna'], ['zadano-cisto', 'env-cisto']),
+  },
+
+  // --- naplata: rucno vezivanje ne smije upisati pravo za vracen novac (2026-09-27) -------------
+  {
+    id: 'naplata/rucno-vezivanje-bez-provjere-povrata',
+    imitates: 'runbook 5.1 do 2026-09-27: postupak rucnog vezivanja vodio je ravno na insert into entitlements. Uplata bez user_id nema pravo, pa njezin puni povrat zavrsi kao refund_without_entitlement; pravo upisano rucno nakon toga ostaje aktivno za vracen novac',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      // MUTACIJA u memoriji: makni ogradjeni blok provjere povrata ispred upisa prava.
+      const pocetak = runbook.indexOf('```sql', runbook.indexOf('**Obavezno prije upisa'));
+      const kraj = runbook.indexOf('```', pocetak + 6);
+      if (pocetak < 0 || kraj < 0) return false;
+      const mutated = runbook.slice(0, pocetak) + runbook.slice(kraj + 3);
+      return runbookRefundCheckProblems(mutated, webhookMorSource())
+        .some((p) => p.includes('bez prethodne provjere povrata'));
+    },
+    cleanBefore: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      return handlerRefundMarkers(webhookMorSource()).length === 3
+        && runbookRefundCheckProblems(runbook, webhookMorSource()).length === 0;
+    },
+  },
+  {
+    id: 'naplata/cekaju-vezivanje-ukljucuje-vracene',
+    imitates: 'upit "uplate koje cekaju rucno vezivanje" iz runbooka 5.1 do 2026-09-27: vracao je i uplatu ciji je PaymentIntent vec vracen, pa je operater dobivao na popis za vezivanje upravo onu uplatu koju ne smije vezati',
+    caught: () => {
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      const pocetak = runbook.indexOf('  and not exists (');
+      const kraj = runbook.indexOf('\n  )\n', pocetak);
+      if (pocetak < 0 || kraj < 0) return false;
+      const mutated = runbook.slice(0, pocetak) + runbook.slice(kraj + '\n  )\n'.length);
+      return runbookRefundCheckProblems(mutated, webhookMorSource())
+        .some((p) => p.includes('ne iskljucuje uplate ciji je PaymentIntent vracen'));
+    },
+    cleanBefore: () =>
+      runbookRefundCheckProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md')), webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/runbook-oznake-povrata-zastarjele',
+    imitates: 'handler doda novu oznaku punog povrata u REFUND_MARKERS (kao sto je refund_pending dodan u krugu 3), a runbook i dalje filtrira stari popis: provjera prije rucnog vezivanja ne vidi povrat koji se upravo obradjuje',
+    caught: () => {
+      const handler = webhookMorSource();
+      const mutated = handler.replace("'refund_without_entitlement', 'refunded'];", "'refund_without_entitlement', 'refunded', 'refund_nova_oznaka'];");
+      if (mutated === handler) return false;
+      const runbook = readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md'));
+      return handlerRefundMarkers(mutated).includes('refund_nova_oznaka')
+        && runbookRefundCheckProblems(runbook, mutated).some((p) => p.includes('nije REFUND_MARKERS'));
+    },
+    cleanBefore: () =>
+      runbookRefundCheckProblems(readTextLf(resolve(process.cwd(), 'docs', 'GO_LIVE_NAPLATA.md')), webhookMorSource()).length === 0,
+  },
+
   // --- RLS: korisnik ne smije mijenjati vlastiti redak provenijencije ---------------------------
   {
     id: 'rls/corpus-contributions-update-own',
@@ -4357,10 +4564,13 @@ function c6Panel() {
   return { handle, applyThroughOldBinding: (ids: string[]) => binding.applySelection(ids) };
 }
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
+  // 60 s umjesto zadanih 15 s: mutacije `naplata/izvor-*` izvode skriptu preflighta u podprocesima
+  // (baseline i mutacija, 2 do 4 slucaja, izmjereno do 10 s na opterecenom stroju). Zaglavljena
+  // mutacija i dalje pada, samo kasnije.
   it.each(MUTATIONS.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
     expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);
     expect(mutation.caught(), `mutacija NIJE uhvacena: ${mutation.imitates}`).toBe(true);
-  });
+  }, 60_000);
 
   it('svaka mutacija imenuje stvaran kvar koji imitira', () => {
     for (const mutation of MUTATIONS) {

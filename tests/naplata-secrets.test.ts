@@ -18,6 +18,8 @@
  *  3. Preflight mjeri OKOLINU U KOJOJ EDGE FUNKCIJA RADI (Supabase Edge secrets), ne lokalnu
  *     ljusku, i nepoznatu okolinu ne tumaci kao zelenu.
  *  4. Ukljucen testni nacin (`STRIPE_ALLOW_TEST_MODE=1`) obara deploy bez izricite zastavice.
+ *  5. Svaka grana koja rusi proces STVARNO ga rusi: skripta se izvodi u podprocesu nad laznim
+ *     Supabase CLI-jem (nalaz pregleda 2026-09-27: tekstualni gard nije vidio `if (false) {`).
  *
  * Tvrdnja 1 se mjeri nad IZVOROM Deno ulaza (`index.ts`), jer se on pod vitestom ne izvodi. To je
  * staticka provjera i tako je i imenovana.
@@ -47,6 +49,8 @@ import {
   envNames,
   stripeSecretNameProblems,
   preflightSourceProblems,
+  preflightExecutionProblems,
+  PREFLIGHT_SLUCAJEVI,
   naplataDeployPathProblems,
   readTextLf,
   normalizeLf,
@@ -369,6 +373,60 @@ describe('preflight naplate: ukljucen testni nacin obara deploy', () => {
     expect(provjera).toBeGreaterThan(-1);
     expect(deploy).toBeGreaterThan(provjera);
     expect(src).toContain("argv.includes('--dopusti-testni-nacin')");
+  });
+});
+
+/**
+ * TOCKA 5: preflight mjeren IZVRSAVANJEM, ne samo tekstom (nalaz pregleda nakon spajanja mastera,
+ * 2026-09-27). Tekstualni gard je bio prazan nad `if (false) {` i `&& false`; izvrseni gard
+ * pokrece stvarnu skriptu u podprocesu nad laznim Supabase CLI-jem. Mutacije su u
+ * `tests/gate-mutations.test.ts` (`naplata/izvor-*`).
+ */
+describe('preflight naplate: izvrsena skripta rusi proces na svakoj grani', () => {
+  it('generator slucajeva proizvodi ciljanu klasu ulaza (popis se parsira kako slucaj tvrdi)', () => {
+    const byId = new Map(PREFLIGHT_SLUCAJEVI.map((s) => [s.id, s]));
+    const redci = (id: string) => parseSupabaseSecretsList((byId.get(id)?.popis ?? []).join('\n'));
+    // Cisti popis: tri obavezne tajne s prepoznatljivim digestom, presude zelene.
+    expect(redci('zadano-cisto')).toHaveLength(3);
+    expect(supabaseSecretsVerdict(redci('zadano-cisto')).ok).toBe(true);
+    // Svaki slucaj koji pada razlikuje se od cistog u TOCNO onome sto imenuje.
+    expect(forbiddenSecretsVerdict(redci('zadano-zabranjena-tajna')).present).toEqual(['STRIPE_ACCOUNT_ID']);
+    expect(supabaseSecretsVerdict(redci('zadano-zabranjena-tajna')).ok).toBe(true);
+    expect(supabaseSecretsVerdict(redci('zadano-obavezna-bez-digesta')).missing).toEqual([
+      { name: 'STRIPE_WEBHOOK_SECRET', reason: 'nepoznata' },
+    ]);
+    expect(testModeVerdict(redci('zadano-testni-bez-digesta'))).toBe(true);
+    expect(redci('zadano-testni-bez-digesta').find((r) => r.name === TEST_MODE_SECRET)?.digest).toBe('');
+    expect(redci('zadano-testni-ukljucen').find((r) => r.name === TEST_MODE_SECRET)?.digest).toBe(TEST_MODE_ON_DIGEST);
+    // --env slucajevi: ljuska je potpuna, a razlikuje se samo u imenovanoj varijabli.
+    expect(naplataSecretsVerdict(byId.get('env-cisto')?.ljuska ?? {}).ok).toBe(true);
+    expect(forbiddenEnvVerdict(byId.get('env-zabranjena-tajna')?.ljuska ?? {}).present).toEqual(['STRIPE_ACCOUNT_ID']);
+    expect(testModeEnvVerdict(byId.get('env-testni-ukljucen')?.ljuska ?? {})).toBe(true);
+    // Svaka grana koja rusi proces ima vlastiti slucaj; dva cista slucaja stite od vakuuma.
+    expect(forbiddenSecretsVerdict(redci('provjera-zabranjena-tajna')).present).toEqual(['STRIPE_ACCOUNT_ID']);
+    expect(testModeVerdict(redci('provjera-testni-ukljucen'))).toBe(true);
+    expect(PREFLIGHT_SLUCAJEVI.filter((s) => s.pada)).toHaveLength(8);
+    expect(PREFLIGHT_SLUCAJEVI.filter((s) => !s.pada).map((s) => s.id)).toEqual(['zadano-cisto', 'env-cisto']);
+  });
+
+  it('BASELINE: stvarna skripta prolazi sve slucajeve (cisto zeleno, svaka grana pada imenovano, bez deploya)', () => {
+    const problems = preflightExecutionProblems(source('scripts/verify-naplata-secrets.mjs'));
+    expect(problems, problems.join('; ')).toEqual([]);
+  }, 120_000);
+
+  it('gard grize: ugasena --env grana zabranjene tajne (`if (false) {`) se prijavi izvrsavanjem i tekstom', () => {
+    const src = source('scripts/verify-naplata-secrets.mjs');
+    const mutated = src.replace('if (!zabranjene.ok) {', 'if (false) {');
+    expect(mutated).not.toBe(src);
+    expect(preflightSourceProblems(mutated).join('; ')).toContain('--env grana preflighta ne odbija postavljenu zabranjenu tajnu');
+    const problems = preflightExecutionProblems(mutated, ['env-zabranjena-tajna', 'env-cisto']);
+    expect(problems.join('; ')).toContain('[env-zabranjena-tajna] preflight NIJE srusio proces');
+    expect(problems.some((p) => p.startsWith('[env-cisto]'))).toBe(false);
+  }, 60_000);
+
+  it('nepoznat slucaj ili prazan odabir nije zeleno', () => {
+    expect(preflightExecutionProblems('', ['nema-takvog'])).toContain('[nema-takvog] nepoznat slucaj preflighta');
+    expect(preflightExecutionProblems('', [])).toContain('nijedan slucaj preflighta nije izveden (nema sto mjeriti)');
   });
 });
 

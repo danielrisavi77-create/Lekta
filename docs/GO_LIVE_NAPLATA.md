@@ -242,12 +242,22 @@ where outcome in ('ignored', 'refused', 'needs_manual_link')
 order by received_at desc
 limit 100;
 
--- Uplate koje čekaju ručno vezivanje ili nisu potvrdile naplatu.
-select id, received_at, order_id, outcome, outcome_detail, raw_payload -> 'data' -> 'object' ->> 'receipt_email' as email
-from webhook_events
-where outcome in ('needs_manual_link', 'ignored')
-  and event_name = 'payment_intent.succeeded'
-order by received_at asc;
+-- Uplate koje čekaju ručno vezivanje ili nisu potvrdile naplatu. Uplata čiji je PaymentIntent
+-- već vraćen (isti order_id s oznakom punog povrata, REFUND_MARKERS u webhook-mor/handler.ts)
+-- ne čeka vezivanje nego je zatvorena povratom, pa je upit namjerno izostavlja.
+select w.id, w.received_at, w.order_id, w.outcome, w.outcome_detail,
+       w.raw_payload -> 'data' -> 'object' ->> 'receipt_email' as email
+from webhook_events as w
+where w.outcome in ('needs_manual_link', 'ignored')
+  and w.event_name = 'payment_intent.succeeded'
+  and not exists (
+    select 1
+    from webhook_events as r
+    where r.provider = w.provider
+      and r.order_id = w.order_id
+      and r.outcome_detail in ('refund_pending', 'refund_without_entitlement', 'refunded')
+  )
+order by w.received_at asc;
 ```
 
 **Ručno vezivanje** (uplata koja je stvarno naplaćena Lektin proizvod, a nije dobila pravo pristupa,
@@ -260,7 +270,30 @@ prije svega ishod `needs_manual_link`), kao service role:
    where id = '<product_id>'`. Taj `id` je `products.id`, isti `product_id` koji čita
    `generate-report` (spaja se na `products(slot_window_days)` preko view-a iz migracije 0008), pa
    mora ući u entitlement, ne ostati samo u ovom koraku.
-4. Upiši redak s `product_id` iz koraka 3 i rokom izračunatim iz `purchase_window_days` istog retka:
+4. **Obavezno prije upisa: provjeri je li isti PaymentIntent već vraćen.** Povrat (`charge.refunded`)
+   u `webhook_events` nosi isti `order_id` kao uplata (PaymentIntent), a handler oznaku punog
+   povrata piše u `outcome_detail` (`REFUND_MARKERS` u `supabase/functions/webhook-mor/handler.ts`).
+   Uplata bez korisnika nema pravo koje bi povrat ugasio, pa povrat završi kao
+   `refund_without_entitlement`; pravo upisano ručno nakon toga ostalo bi aktivno za vraćen novac.
+
+   ```sql
+   select id, received_at, event_name, outcome, outcome_detail
+   from webhook_events
+   where provider = 'stripe'
+     and order_id = '<order_id>'
+     and outcome_detail in ('refund_pending', 'refund_without_entitlement', 'refunded');
+   ```
+
+   Vrati li upit ijedan redak, novac je vraćen ili se povrat još obrađuje (`refund_pending`):
+   **ne upisuj pravo**, preskoči korak 5 i u koraku 6 zatvori trag s
+   `outcome_detail = 'vraceno_prije_vezivanja'`. Djelomični povrat (`partial_refund_noted`) nije
+   oznaka punog povrata i ne priječi vezivanje. Upit vidi samo povrate koje je webhook već zabilježio:
+   prije upisa zato i u Stripe sučelju otvori taj PaymentIntent i potvrdi da nema povrata (povrat
+   čiji `charge.refunded` kasni, ili redak `ignored` s `povrat_bez_charge_refunded:`, upit ne vidi).
+   Isti upit ponovi odmah nakon koraka 5: povrat koji stigne između provjere i upisa možda ne vidi
+   ručno upisano pravo; vrati li upit tada redak, ugasi pravo ručno
+   (`update entitlements set status = 'refunded' where provider = 'stripe' and order_id = '<order_id>'`).
+5. Upiši redak s `product_id` iz koraka 3 i rokom izračunatim iz `purchase_window_days` istog retka:
 
    ```sql
    insert into entitlements (user_id, work_type, slots_total, product_id, order_id, provider, purchase_expires_at)
@@ -274,7 +307,7 @@ prije svega ishod `needs_manual_link`), kao service role:
    `unique (provider, order_id)` u migraciji 0001 je pravi unique constraint (ne samo indeks), pa
    `on conflict` cilja izravno na njega i drugi pokušaj za isti `order_id` ne udvostručuje redak.
    Stupci ovdje su isti koje pri kupnji piše `buildEntitlementInsert` u `src/report/webhook.ts`.
-5. Zatvori trag: `update webhook_events set outcome = 'processed', outcome_detail = 'rucno_vezano'
+6. Zatvori trag: `update webhook_events set outcome = 'processed', outcome_detail = 'rucno_vezano'
    where id = '<id>'`, pa taj redak više ne ispada u upitu iznad.
 
 U logu Edge funkcije isti slučajevi imaju imenovane retke: `webhook-mor ignored_needs_attention`
