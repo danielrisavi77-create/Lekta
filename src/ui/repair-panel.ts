@@ -735,7 +735,6 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
         if (state.phase === 'running' || state.phase === 'verifying') return; // vec traje: nista ne prikazuj dvaput
         throw new Error(state.lastError ?? 'popravak nije pokrenut');
       }
-      if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);
       execution = { skippedRuleIds: result.skipped, appliedChangeCount: result.changelog.length, integrity: result.integrityFailure ? 'failed' : 'passed' };
 
       // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
@@ -752,6 +751,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
         renderIntegrityFailure(summary, result.integrityFailure);
         return;
       }
+      if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);
       // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
       // reci iskreno sto se dogodilo (fail-safe skip, npr. atribut ne postoji).
       renderRepairOutcomeSummary(summary, result.changelog, alreadyOk, cannotFix, skippedNotes);
