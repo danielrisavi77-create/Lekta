@@ -2,7 +2,7 @@
 
 > Profili bez ijednog stvarnog DOCX uzorka za real-corpus testiranje, rangirani silazno po broju ponudjenih repair opcija (offeredOptionCount) - gdje bi sljedeci stvarni uzorak najvise vrijedio. Izvor: docs/generated/faculty-matrix.json (`npm run repair-faculty-matrix`).
 
-Ukupno profila bez uzorka: **402/407**.
+Ukupno profila bez uzorka: **418/423**.
 
 ## Sveučilište Algebra Bernays (algebra)
 
@@ -42,6 +42,7 @@ Ukupno profila bez uzorka: **402/407**.
 
 - **efri-diplomski** — 6 ponudjenih opcija
 - **efri-zavrsni** — 6 ponudjenih opcija
+- **efri-specijalisticki** — 0 ponudjenih opcija
 
 ## Ekonomski fakultet (efzg)
 
@@ -97,6 +98,7 @@ Ukupno profila bez uzorka: **402/407**.
 - **ffzg-sociologija-diplomski** — 5 ponudjenih opcija
 - **ffzg-arheologija-graduate** — 4 ponudjenih opcija
 - **ffzg-informacijske-zavrsni** — 1 ponudjenih opcija
+- **ffzg-svedski-zavrsni** — 0 ponudjenih opcija
 
 ## Fakultet za menadžment u turizmu i ugostiteljstvu, Opatija (fmtu)
 
@@ -136,6 +138,8 @@ Ukupno profila bez uzorka: **402/407**.
 ## Medicinski fakultet u Splitu (mefst)
 
 - **mefst-diplomski** — 6 ponudjenih opcija
+- **mefst-doktorski** — 0 ponudjenih opcija
+- **mefst-tribe-doktorski** — 0 ponudjenih opcija
 
 ## Međimursko veleučilište u Čakovcu (mev)
 
@@ -150,6 +154,8 @@ Ukupno profila bez uzorka: **402/407**.
 - **pmf-geografija-diplomski** — 5 ponudjenih opcija
 - **pmf-biologija-graduate** — 4 ponudjenih opcija
 - **pmf-geologija-graduate** — 3 ponudjenih opcija
+- **pmf-biologija-zavrsni** — 0 ponudjenih opcija
+- **pmf-geologija-zavrsni** — 0 ponudjenih opcija
 
 ## Pravni fakultet (pravo)
 
@@ -608,6 +614,7 @@ Ukupno profila bez uzorka: **402/407**.
 
 - **vef-diplomski** — 5 ponudjenih opcija
 - **vef-doktorski** — 5 ponudjenih opcija
+- **vef-specijalisticki** — 0 ponudjenih opcija
 
 ## Veleučilište u Križevcima (vguk)
 
@@ -649,6 +656,8 @@ Ukupno profila bez uzorka: **402/407**.
 
 - **medri-farmacija-diplomski** — 4 ponudjenih opcija
 - **medri-medicina-diplomski** — 4 ponudjenih opcija
+- **medri-doktorski** — 0 ponudjenih opcija
+- **medri-sanitarno-diplomski** — 0 ponudjenih opcija
 
 ## Fakultet zdravstvenih znanosti (Split) (ozs)
 
@@ -768,16 +777,35 @@ Ukupno profila bez uzorka: **402/407**.
 - **math-uniri-diplomski-en** — 1 ponudjenih opcija
 - **math-uniri-zavrsni** — 1 ponudjenih opcija
 
+## Agromediteranski fakultet (agromed)
+
+- **agromed-zavrsni** — 0 ponudjenih opcija
+
 ## Geodetski fakultet (geof)
 
 - **geof-diplomski** — 0 ponudjenih opcija
 - **geof-doktorski** — 0 ponudjenih opcija
 - **geof-opci-akademski-rad** — 0 ponudjenih opcija
 
+## Geotehnički fakultet (geoteh)
+
+- **geoteh-diplomski** — 0 ponudjenih opcija
+- **geoteh-doktorski** — 0 ponudjenih opcija
+- **geoteh-zavrsni** — 0 ponudjenih opcija
+
 ## Građevinski fakultet u Rijeci (gradri)
 
 - **gradri-diplomski** — 0 ponudjenih opcija
 - **gradri-zavrsni** — 0 ponudjenih opcija
+
+## Samostalni sveučilišni studij Hotelijerstvo i gastronomija (hig)
+
+- **hig-zavrsni** — 0 ponudjenih opcija
+
+## Teološki fakultet Matija Vlačić Ilirik (mvi)
+
+- **mvi-diplomski** — 0 ponudjenih opcija
+- **mvi-prijediplomski** — 0 ponudjenih opcija
 
 ## Veleučilište PAR (par)
 

@@ -1,8 +1,8 @@
 /**
  * Gard nad izvjestajem closed-loop petlje kroz katalog (P4-3 u docs/PLAN_POTPUNA_POKRIVENOST.md).
  *
- * Petlja sama NE ide u `npm run check`: 407 profila je dvije stvarne analize plus popravak po
- * profilu. Ovdje se cuva njezin ISHOD - da se ne moze tiho pogorsati, i da regresija ili pad
+ * Petlja sama NE ide u `npm run check`: za svaki profil radi dvije stvarne analize plus popravak.
+ * Ovdje se cuva njezin ISHOD - da se ne moze tiho pogorsati, i da regresija ili pad
  * fixera nikad ne prodju kao "uredno stanje".
  *
  * Osvjezavanje: `npm run closed-loop`, pa upisi nove brojke u data/profiles/closed-loop-ratchet.json.
@@ -47,15 +47,14 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
    * osnovicu, inace petlja prijavi proturjecje kojeg u proizvodu nema).
    */
   /**
-   * `partial` znaci da je dio prekrsenih osi rijesen, a dio nije - i to je vlastiti ishod, ne
+ * `partial` znaci da je dio prekrsenih osi rijesen, a dio nije - i to je vlastiti ishod, ne
    * `pass`. Prvo mjerenje ih je spajalo (usporedjivalo je BROJ NASLOVA provjera s BROJEM OSI, dvije
    * razlicite jedinice) i time precijenilo pokrivenost za 47 profila.
    *
-   * Zatecenih sest su svi na osi `paper-size` i svi u dvije obitelji: profil trazi format papira,
-   * ali za tu os nema zapisa s fixerom, pa popravak nije ponudjen. To je podatkovni posao, ne kvar
-   * motora - imenovani su da ne utihnu.
+   * Trenutno nema djelomicnih profila. Ako se pojave, ovaj test trazi njihove tocne identitete i
+   * preostale osi kako se ne bi stopili s prolazom ili nestali iz ratcheta.
    */
-  it('zatecenih sest djelomicnih profila ostaje imenovano', () => {
+  it('djelomicni profili ostaju imenovani', () => {
     const partial = report.rows.filter((r) => r.outcome === 'partial').map((r) => r.profileId).sort();
     expect(partial).toEqual([...ratchet.partialProfiles].sort());
     for (const row of report.rows.filter((r) => r.outcome === 'partial')) {
