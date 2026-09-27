@@ -40,7 +40,7 @@ export interface InspectionAnalyzerSkip {
 
 export interface InspectionCoverage {
   version: 1;
-  status: 'complete' | 'partial' | 'unknown';
+  status: 'no-known-limits' | 'partial' | 'unknown';
   items: InspectionCoverageItem[];
   analyzerSkips: InspectionAnalyzerSkip[];
   summary: {
