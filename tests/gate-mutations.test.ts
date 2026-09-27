@@ -174,7 +174,40 @@ import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import {
+  falseGreenParityProblems, opportunitySqlScopeProblems, opportunityWiringProblems,
+} from './helpers/opportunity-wiring';
+import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 import { LEAN_READER_TOOLS, agentTools, leanReadOnlyViolations } from './helpers/lean-read-only';
+import {
+  backdropFilterProblems,
+  chromeGraph,
+  deskStateSourceProblems,
+  footerCopyFromTemplate,
+  footerLinkProblems,
+  fullFooterBlock,
+  fullFooterProblems,
+  funkcijaIzIzvora,
+  inkObserverProblems,
+  inkSignatureCssProblems,
+  lazyFooterBudgetProblems,
+  lazyFooterProblems,
+  markerMotionProblems,
+  markerTravelProblems,
+  MAX_LAZY_FOOTER_JS_GZIP,
+  scrolledBarProblems,
+  shortStepperProblems,
+  type ChromeMetafile,
+  type FooterCopy,
+  type PlaceMarker,
+  type WireInk,
+} from './helpers/site-footer-guards';
+import { releasedPublicRouteGroups } from '../src/routes/shared/public-route-directory';
+import { SITE_CHROME_DESTINATIONS, placeSiteChromeMarker } from '../src/shared/site-chrome';
+import { INK_CLASS, wireInkSignature } from '../src/shared/site-footer-full';
+import { pokretPrigusen } from '../src/shared/display-prefs';
+import { legalDocuments } from '../src/legal/legal-content';
+import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -690,6 +723,122 @@ function izvrsenaMutacijaUhvacena(mutated: string, ciljevi: readonly string[], c
 function izvrseniBaselineCist(ciljevi: readonly string[], cisti: readonly string[]): boolean {
   return preflightExecutionProblems(preflightIzvor(), [...ciljevi, ...cisti]).length === 0
     && preflightSourceProblems(preflightIzvor()).length === 0;
+}
+
+/** Z15 drugi krug: puno podnozje sa stvarne stranice, LF, za mutacije u memoriji. */
+function z15bPodnozje(): string {
+  return fullFooterBlock(readTextLf(resolve(process.cwd(), 'alati.html'))) ?? '';
+}
+
+/** Copy punog podnozja iz predloska (prizor 05). */
+function z15bPredlozak(): FooterCopy | null {
+  return footerCopyFromTemplate(readTextLf(resolve(process.cwd(), 'design/templates/chrome/Chrome.dc.html')));
+}
+
+/** Poznata odredista: javni direktorij, odredista trake, pravne stranice koje generator pece. */
+function z15bPoznate(): Set<string> {
+  return new Set<string>([
+    ...releasedPublicRouteGroups.flatMap((g) => g.destinations.map((d) => d.href)),
+    ...SITE_CHROME_DESTINATIONS.map((d) => d.href),
+    ...Object.values(legalDocuments()).map((d) => `/${d.slug}.html`),
+  ]);
+}
+
+/** Pecene vrijednosti "Stanja stola" iz `site-stats.json`. */
+function z15bPeceno(): { profiles: number; rulesVersion: string | null; sourcesCheckedAt: string | null } {
+  return JSON.parse(readTextLf(resolve(process.cwd(), 'data/coverage/site-stats.json'))) as {
+    profiles: number; rulesVersion: string | null; sourcesCheckedAt: string | null;
+  };
+}
+
+/** Zatecena zamucenja u javnim listovima (F22); traka mora imati nula. */
+const Z15B_BACKDROP_DOPUSTENO: Readonly<Record<string, number>> = { 'src/shared/page-app.css': 3 };
+
+/** Svi CSS listovi pod `src/` osim admina (nije javna stranica). */
+function z15bJavniListovi(): Array<{ ime: string; css: string }> {
+  const out: Array<{ ime: string; css: string }> = [];
+  const hodaj = (dir: string): void => {
+    for (const e of readdirSync(resolve(process.cwd(), dir), { withFileTypes: true })) {
+      const rel = `${dir}/${e.name}`;
+      if (e.isDirectory()) { if (rel !== 'src/admin') hodaj(rel); continue; }
+      if (e.name.endsWith('.css')) out.push({ ime: rel, css: readTextLf(resolve(process.cwd(), rel)) });
+    }
+  };
+  hodaj('src');
+  return out;
+}
+
+/**
+ * Metafile u OBLIKU koji esbuild sa `splitting` stvarno vraca za traku (izmjereno 2026-09-27:
+ * ulaz, zajednicki komad, lijeni komad podnozja). `staticki` imitira kvar: podnozje uvezeno
+ * staticki zavrsi u ulaznom izlazu. Stvarni metafile mjeri `tests/route-shell-budget.test.ts`.
+ */
+function z15bMetafile(staticki: boolean): ChromeMetafile {
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const komad = 'site-chrome-budget/chunk-A.js';
+  const lijeni = 'site-chrome-budget/site-footer-full-B.js';
+  const podnozje = { 'src/shared/site-footer-full.ts': {} };
+  if (staticki) {
+    return {
+      outputs: {
+        [ulaz]: { entryPoint: 'src/shared/site-chrome.ts', inputs: { 'src/shared/site-chrome.ts': {}, ...podnozje }, imports: [{ path: komad, kind: 'import-statement' }] },
+        [komad]: { inputs: { 'data/coverage/site-stats.json': {} }, imports: [] },
+      },
+    };
+  }
+  return {
+    outputs: {
+      [ulaz]: { entryPoint: 'src/shared/site-chrome.ts', inputs: { 'src/shared/site-chrome.ts': {} }, imports: [{ path: komad, kind: 'import-statement' }, { path: lijeni, kind: 'dynamic-import' }] },
+      [lijeni]: { entryPoint: 'src/shared/site-footer-full.ts', inputs: podnozje, imports: [{ path: komad, kind: 'import-statement' }] },
+      [komad]: { inputs: { 'data/coverage/site-stats.json': {} }, imports: [] },
+    },
+  };
+}
+
+/**
+ * Isti metafile s DRUGIM dinamickim uvozom u traci (`import('../ui/app')`): esbuild ga emitira
+ * kao jos jedan lijeni izlaz s vlastitim `entryPoint`, izvan proracuna od 8 KB.
+ */
+function z15bMetafileDrugiLijeni(): ChromeMetafile {
+  const cist = z15bMetafile(false);
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const app = 'site-chrome-budget/app-C.js';
+  const ulazni = cist.outputs[ulaz]!;
+  return {
+    outputs: {
+      ...cist.outputs,
+      [ulaz]: { ...ulazni, imports: [...ulazni.imports, { path: app, kind: 'dynamic-import' }] },
+      [app]: { entryPoint: 'src/ui/app.ts', inputs: { 'src/ui/app.ts': {} }, imports: [] },
+    },
+  };
+}
+
+/** Gzip velicine lijenih izlaza, s podesivom velicinom komada podnozja (izmjereno 1174 B). */
+function z15bLijeneVelicine(meta: ChromeMetafile, podnozje: number): Record<string, number> {
+  const graf = chromeGraph(meta, 'src/shared/site-chrome.ts');
+  return Object.fromEntries(graf.lazyOutputs.map((p) => [p, p.includes('site-footer-full') ? podnozje : 900]));
+}
+
+/** Lijeni gard nad metafileom i velicinama. */
+function z15bLijeniProblemi(meta: ChromeMetafile, podnozje: number): string[] {
+  return lazyFooterBudgetProblems(meta, chromeGraph(meta, 'src/shared/site-chrome.ts'), z15bLijeneVelicine(meta, podnozje), MAX_LAZY_FOOTER_JS_GZIP);
+}
+
+/** Stvarni izvor trake i podnozja, LF. */
+const z15bChromeTs = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'));
+const z15bFooterTs = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts'));
+const z15bChromeCss = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+
+/** Gard putovanja nad `placeSiteChromeMarker` IZVRSENIM iz (mutiranog) izvora. */
+function z15bKvacicaProblemi(ts: string): string[] {
+  const place = funkcijaIzIzvora<PlaceMarker>(ts, 'placeSiteChromeMarker');
+  return place ? markerTravelProblems(place) : ['placeSiteChromeMarker nije nadjen u izvoru'];
+}
+
+/** Gard tinte nad `wireInkSignature` IZVRSENIM iz (mutiranog) izvora, sa stvarnim ovisnostima. */
+function z15bTintaProblemi(ts: string): string[] {
+  const wire = funkcijaIzIzvora<WireInk>(ts, 'wireInkSignature', { pokretPrigusen, INK_CLASS });
+  return wire ? inkObserverProblems(wire, document, INK_CLASS) : ['wireInkSignature nije nadjen u izvoru'];
 }
 
 const MUTATIONS: Mutation[] = [
@@ -5589,6 +5738,289 @@ const MUTATIONS: Mutation[] = [
       readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
   },
+  // ---------------------------------------------------------------------------------------------
+  // Z15, DRUGI KRUG: puno podnozje, traka nakon skrola, putujuca kvacica, kratki stepper, lijeno
+  // podnozje. Gardovi su u `tests/helpers/site-footer-guards.ts`; baseline je STVARNA datoteka.
+  // ---------------------------------------------------------------------------------------------
+  {
+    id: 'z15b/podnozje-stupac-izgubljen',
+    imitates:
+      'Pribor stupac ispadne iz punog podnozja pri preslagivanju markupa: kolofon ima tri stupca, ' +
+      'a numeracija preskace 06 do 11, pa stranica tvrdi manje pribora nego sto postoji.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const bez = foot.replace(/<nav class="site-footer__stupac" aria-label="Pribor">[\s\S]*?<\/nav>\n\s*/, '');
+      return bez !== foot && fullFooterProblems(bez, z15bPredlozak()).some((p) => p.startsWith('kolofon ima 3 stupaca'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-copy-nije-doslovan',
+    imitates:
+      'Moto se "popravi" bez dijakritika ("Mjeri, ne pise.") ili se broj stavke pomakne: copy vise ' +
+      'nije doslovan iz predloska, a nijedan vizualni test to ne vidi.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const moto = foot.replace('Mjeri, ne piše.', 'Mjeri, ne pise.');
+      const broj = foot.replace('<small>12</small>', '<small>21</small>');
+      return moto !== foot && broj !== foot
+        && fullFooterProblems(moto, z15bPredlozak()).some((p) => p.startsWith('moto'))
+        && fullFooterProblems(broj, z15bPredlozak()).some((p) => p.startsWith('numeracija'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/stanje-stola-vidljivo-bez-js',
+    imitates:
+      '`hidden` se izgubi sa "Stanja stola": bez JavaScripta stranica ispisuje prazne retke ' +
+      '"Zadnji rad", "Pravila", "Izvori", dakle tvrdnje koje nije mogla procitati.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const vidljivo = foot.replace('data-site-footer-stanje hidden>', 'data-site-footer-stanje>');
+      return vidljivo !== foot && fullFooterProblems(vidljivo, z15bPredlozak()).some((p) => p.includes('nije skriveno'));
+    },
+    cleanBefore: () => fullFooterProblems(z15bPodnozje(), z15bPredlozak()).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-mrtva-poveznica',
+    imitates:
+      'Garancija se preimenuje u /jamstvo.html koju generator ne pece, ili kontakt dobije adresu ' +
+      'mimo produkcijske konfiguracije: podnozje vodi u 404 ili na krivi sanducic.',
+    caught: () => {
+      const foot = z15bPodnozje();
+      const mrtva = foot.replace('href="/garancija.html"', 'href="/jamstvo.html"');
+      const mail = foot.replace(`mailto:${DEFAULT_PRODUCTION_CONFIG.contactEmail}`, 'mailto:info@lekta.hr');
+      return mrtva !== foot && mail !== foot
+        && footerLinkProblems(mrtva, z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).some((p) => p.includes('/jamstvo.html'))
+        && footerLinkProblems(mail, z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).some((p) => p.includes('info@lekta.hr'));
+    },
+    cleanBefore: () => footerLinkProblems(z15bPodnozje(), z15bPoznate(), DEFAULT_PRODUCTION_CONFIG.contactEmail).length === 0,
+  },
+  {
+    id: 'z15b/stanje-stola-prepisane-brojke',
+    imitates:
+      'Stanje stola dobije rucno upisanu brojku profila umjesto uvoza iz site-stats.json, ili ' +
+      'povijest cita izravno iz localStorage mimo sigurnog omotaca (novi localStorage hack).',
+    caught: () => {
+      const izvor = readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts'));
+      const baked = z15bPeceno();
+      const rucno = izvor.replace('profiles: PROFILA,', `profiles: ${baked.profiles},`);
+      const golo = izvor.replace('safeStorageGet(STORAGE_KEYS.history, null)', "JSON.parse(localStorage.getItem('lekta.history.v2') ?? 'null')");
+      return rucno !== izvor && golo !== izvor
+        && deskStateSourceProblems(rucno, baked).some((p) => p.includes(`${baked.profiles} je prepisana`))
+        && deskStateSourceProblems(golo, baked).some((p) => p.includes('localStorage'));
+    },
+    cleanBefore: () => deskStateSourceProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts')), z15bPeceno()).length === 0,
+  },
+  {
+    id: 'z15b/zamucenje-na-javnoj-stranici',
+    imitates:
+      'Tanko stanje trake vrati `backdrop-filter: blur(14px)` iz naloga (Z31 ga zabranjuje), ili ' +
+      'novi javni list dobije zamucenje: svaki okvir skrola se tada racuna iznova.',
+    caught: () => {
+      const listovi = z15bJavniListovi();
+      const traka = listovi.map((l) => (l.ime === 'src/shared/site-chrome.css'
+        ? { ...l, css: l.css.replace('background: var(--desk);\n}', 'background: var(--desk);\n  backdrop-filter: blur(14px);\n}') }
+        : l));
+      const mutiranaTraka = traka.find((l) => l.ime === 'src/shared/site-chrome.css')!.css
+        !== listovi.find((l) => l.ime === 'src/shared/site-chrome.css')!.css;
+      const novi = [...listovi, { ime: 'src/shared/novi-list.css', css: '.x{-webkit-backdrop-filter:blur(4px)}' }];
+      return mutiranaTraka
+        && backdropFilterProblems(traka, Z15B_BACKDROP_DOPUSTENO).some((p) => p.startsWith('src/shared/site-chrome.css:'))
+        && backdropFilterProblems(novi, Z15B_BACKDROP_DOPUSTENO).some((p) => p.startsWith('src/shared/novi-list.css:'));
+    },
+    cleanBefore: () => backdropFilterProblems(z15bJavniListovi(), Z15B_BACKDROP_DOPUSTENO).length === 0,
+  },
+  {
+    id: 'z15b/tanko-stanje-prozirno',
+    imitates:
+      'Tanko stanje dobije prozirnu mjesavinu (color-mix 82%) kao u prvom krugu, ali bez zamucenja: ' +
+      'sadrzaj prosijava kroz traku, a gard zamucenja to ne vidi.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const prozirno = css.replace(/(header\.site-chrome--scrolled \{[^}]*)background: var\(--desk\);/, '$1background: color-mix(in srgb, var(--desk) 82%, transparent);');
+      return prozirno !== css && scrolledBarProblems(prozirno).includes('tanko stanje nema punu pozadinu var(--desk)');
+    },
+    cleanBefore: () => scrolledBarProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'))).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-animira-left',
+    imitates:
+      'Kvacica se vrati na `left` iz predloska (Z31 trazi transform): u listu `transition: left`, ' +
+      'u kodu `marker.style.left`, pa svaki pomak radi reflow trake.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const ts = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'));
+      const leftCss = css.replace('transition: transform .45s var(--ease-spring);', 'transition: left .45s var(--ease-spring);');
+      const leftTs = ts.replace('marker.style.transform = `translateX(${x}px)`;', 'marker.style.left = `${x}px`;');
+      return leftCss !== css && leftTs !== ts
+        && markerMotionProblems(leftCss, ts).includes('kvacica animira left')
+        && markerMotionProblems(css, leftTs).includes('kod pomice kvacicu kroz style.left');
+    },
+    cleanBefore: () => markerMotionProblems(
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css')),
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts')),
+    ).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-view-transition',
+    imitates:
+      '`view-transition-name: nav-marker` se vrati na kvacicu (F23): cross-document prijelazi su ' +
+      'ugaseni zbog zamrznutog rAF-a, a imenovan element ulijece u prijelaze unutar dokumenta.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const vt = css.replace('transition: transform .45s var(--ease-spring);\n}', 'transition: transform .45s var(--ease-spring);\n  view-transition-name: nav-marker;\n}');
+      return vt !== css && markerMotionProblems(vt, readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'))).some((p) => p.includes('view-transition-name'));
+    },
+    cleanBefore: () => markerMotionProblems(
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css')),
+      readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts')),
+    ).length === 0,
+  },
+  {
+    id: 'z15b/stepper-bez-kratkog-oblika',
+    imitates:
+      'Kratki oblik steppera za tanko stanje se izbrise ili natpis sakrije `display: none`: na ' +
+      '1180px pilula opet pokazuje 6 znakova imena, ili natpis nestane i citacu ekrana.',
+    caught: () => {
+      const css = readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+      const bez = css.replace('@container site-chrome-mid (max-width: 599px) {', '@container site-chrome-mid (max-width: 1px) {');
+      const skriven = css.replace(/(@container site-chrome-mid \(max-width: 599px\) \{[\s\S]*?)clip-path: inset\(50%\);/, '$1display: none;');
+      return bez !== css && skriven !== css
+        && shortStepperProblems(bez).includes('nema kratkog steppera za tanko stanje (599px)')
+        && shortStepperProblems(skriven).includes('natpis koraka (599px) se ne skriva clip-pathom');
+    },
+    cleanBefore: () => shortStepperProblems(readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'))).length === 0,
+  },
+  {
+    id: 'z15b/podnozje-u-statickom-grafu',
+    imitates:
+      'Traka puno podnozje uveze staticki (`import { mountFullFooter }` umjesto `import()`): svih ' +
+      'trinaest stranica skida njegov kod i pecene brojke, a proracun od 8 KB to ne razdvaja.',
+    caught: () => lazyFooterProblems(chromeGraph(z15bMetafile(true), 'src/shared/site-chrome.ts'))
+      .includes('src/shared/site-footer-full.ts je u statickom grafu trake'),
+    cleanBefore: () => lazyFooterProblems(chromeGraph(z15bMetafile(false), 'src/shared/site-chrome.ts')).length === 0,
+  },
+  // Z15 popravak: kvacica PUTUJE, tinta potpisa, lijeni komad. Mutanti kvacice i tinte su TEKST
+  // stvarne funkcije, izvrsen kroz `funkcijaIzIzvora`; baseline je ista staza nad nemutiranim
+  // izvorom I stvarni uvezeni modul.
+  {
+    id: 'z15b/kvacica-ne-putuje',
+    imitates:
+      'Pamcenje prvog postavljanja se izgubi (`const prvi = true;`, ili se `dataset.siteChromeMarkerX` ' +
+      'vise ne upisuje, ili `transition: none` ostane nakon skoka): klik s "Kako radi" na "Cjenik" ' +
+      'na /saznaj-vise/ skace umjesto da putuje .45s, a list i translateX ostaju isti.',
+    caught: () => {
+      const ts = z15bChromeTs();
+      const uvijekPrvi = ts.replace('const prvi = marker.dataset.siteChromeMarkerX === undefined;', 'const prvi = true;');
+      const bezPamcenja = ts.replace('  marker.dataset.siteChromeMarkerX = String(x);\n', '');
+      const ostajeNone = ts.replace("    marker.style.removeProperty('transition');\n", '');
+      return uvijekPrvi !== ts && bezPamcenja !== ts && ostajeNone !== ts
+        && z15bKvacicaProblemi(uvijekPrvi).some((p) => p.startsWith('2. pomak skace'))
+        && z15bKvacicaProblemi(bezPamcenja).some((p) => p.startsWith('2. pomak skace'))
+        && z15bKvacicaProblemi(ostajeNone).some((p) => p.startsWith('nakon prvog postavljanja inline prijelaz ostaje "none"'));
+    },
+    cleanBefore: () => z15bKvacicaProblemi(z15bChromeTs()).length === 0 && markerTravelProblems(placeSiteChromeMarker).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-klizi-pri-ucitavanju',
+    imitates:
+      'Prvo postavljanje izgubi `transition: none` (`const prvi = false;`): na svakom ucitavanju ' +
+      'kvacica klizi s lijevog ruba trake do aktivnog odredista, sto je sum, ne putovanje.',
+    caught: () => {
+      const ts = z15bChromeTs();
+      const nikadPrvi = ts.replace('const prvi = marker.dataset.siteChromeMarkerX === undefined;', 'const prvi = false;');
+      return nikadPrvi !== ts
+        && z15bKvacicaProblemi(nikadPrvi).includes('prvo postavljanje nema transition: none prije pomaka; kvacica klizi pri ucitavanju');
+    },
+    cleanBefore: () => z15bKvacicaProblemi(z15bChromeTs()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-ne-ceka-pogled',
+    imitates:
+      'Tinta potpisa krene na prvom pikselu (`intersectionRatio >= 0`), promatrac izgubi prag .5 ' +
+      '(`threshold: [0]`), ili potpis izvan pogleda ne dobiva `.motion-offscreen` (Z31): animacija ' +
+      'se odvrti dok je potpis jos ispod ruba ili tece izvan pogleda.',
+    caught: () => {
+      const ts = z15bFooterTs();
+      const odmah = ts.replace('unos.intersectionRatio >= 0.5', 'unos.intersectionRatio >= 0');
+      const bezPraga = ts.replace('{ threshold: [0, 0.5] }', '{ threshold: [0] }');
+      const bezOffscreen = ts.replace("      potpis.classList.toggle('motion-offscreen', !unos.isIntersecting);\n", '');
+      return odmah !== ts && bezPraga !== ts && bezOffscreen !== ts
+        && z15bTintaProblemi(odmah).includes('tinta na 49% vidljivosti (prag je .5)')
+        && z15bTintaProblemi(bezPraga).some((p) => p.startsWith('pragovi promatraca su [0]'))
+        && z15bTintaProblemi(bezOffscreen).includes('izvan pogleda potpis nema .motion-offscreen');
+    },
+    cleanBefore: () => z15bTintaProblemi(z15bFooterTs()).length === 0
+      && inkObserverProblems(wireInkSignature, document, INK_CLASS).length === 0,
+  },
+  {
+    id: 'z15b/tinta-ignorira-prigusen-pokret',
+    imitates:
+      'Provjera `pokretPrigusen` ispadne iz `wireInkSignature`: uz rucno prigusen pokret potpis ' +
+      'ceka skrol i animira se, umjesto da je odmah popunjen.',
+    caught: () => {
+      const ts = z15bFooterTs();
+      const bezProvjere = ts.replace('if (pokretPrigusen(doc) || !view', 'if (!view');
+      return bezProvjere !== ts
+        && z15bTintaProblemi(bezProvjere).includes('pod prigusenim pokretom potpis nije odmah popunjen');
+    },
+    cleanBefore: () => z15bTintaProblemi(z15bFooterTs()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-reduced-motion-prazan-obris',
+    imitates:
+      'Pod `prefers-reduced-motion` (ili `data-motion="reduce"`) ostane samo `animation: none` bez ' +
+      '`background-position: 0 0`: animacija je ugasena, ali potpis ostaje prazan obris zauvijek.',
+    caught: () => {
+      const css = z15bChromeCss();
+      const pun = '.site-footer__potpis-slovo { animation: none !important; background-position: 0 0; }';
+      const prazan = '.site-footer__potpis-slovo { animation: none !important; }';
+      const medij = css.replace(`  ${pun}`, `  ${prazan}`);
+      const atribut = css.replace(`:root[data-motion="reduce"] ${pun}`, `:root[data-motion="reduce"] ${prazan}`);
+      return medij !== css && atribut !== css
+        && inkSignatureCssProblems(medij).some((p) => p.startsWith('pod prefers-reduced-motion potpis nije odmah pun'))
+        && !inkSignatureCssProblems(medij).some((p) => p.startsWith('pod data-motion'))
+        && inkSignatureCssProblems(atribut).some((p) => p.startsWith('pod data-motion="reduce" potpis nije odmah pun'));
+    },
+    cleanBefore: () => inkSignatureCssProblems(z15bChromeCss()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-kroz-background-size',
+    imitates:
+      'Tinta se prepise kako radi predlozak (`background-size` 0% do 100%, Z31 to zabranjuje jer ' +
+      'svaki okvir racuna raspored slike), ili trajanje odluta s 1.4s.',
+    caught: () => {
+      const css = z15bChromeCss();
+      const size = css.replace(
+        'from { background-position: 100% 0; }\n  to { background-position: 0 0; }',
+        'from { background-size: 0% 100%; }\n  to { background-size: 100% 100%; }',
+      );
+      const brzo = css.replace('animation: siteFooterTinta 1.4s var(--ease-spring) both;', 'animation: siteFooterTinta .6s var(--ease-spring) both;');
+      return size !== css && brzo !== css
+        && inkSignatureCssProblems(size).some((p) => p.startsWith('keyframes tinte animiraju background-size'))
+        && inkSignatureCssProblems(brzo).some((p) => p.startsWith('tinta je "siteFooterTinta .6s'));
+    },
+    cleanBefore: () => inkSignatureCssProblems(z15bChromeCss()).length === 0,
+  },
+  {
+    id: 'z15b/lijeni-komad-prerastao',
+    imitates:
+      'Lijeno podnozje naraste preko 3 KB gzip (npr. uvoz cijelog site-stats.json s nazivima jedinica): ' +
+      'proracun trake zbraja samo staticki graf, pa bi rast prosao bez signala.',
+    caught: () => z15bLijeniProblemi(z15bMetafile(false), MAX_LAZY_FOOTER_JS_GZIP + 1)
+      .includes(`lijeni komad je ${MAX_LAZY_FOOTER_JS_GZIP + 1} B gzip, granica ${MAX_LAZY_FOOTER_JS_GZIP} B`),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafile(false), 1174).length === 0,
+  },
+  {
+    id: 'z15b/drugi-lijeni-uvoz',
+    imitates:
+      'Traka dobije drugi dinamicki uvoz (`import(\'../ui/app\')`): njegov komad je lijen, pa ga ne ' +
+      'vidi ni proracun od 8 KB ni `lazyFooterProblems`, a stranica ga svejedno skida.',
+    caught: () => z15bLijeniProblemi(z15bMetafileDrugiLijeni(), 1174)
+      .some((p) => p.startsWith('lijeni ulazi trake su ["src/shared/site-footer-full.ts","src/ui/app.ts"]')),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafile(false), 1174).length === 0,
+  },
 
   // --- clean-vitest-tmp: gard procesa i starost po najnovijoj datoteci ------------------------
   // Sve nad datotecnim sustavom U MEMORIJI (pravilo 1 ovog testa); brisanje je ubrizgan `rm` koji
@@ -7381,8 +7813,9 @@ describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => 
 });
 
 describe('mutacije: read-only faze lean workflowa idu kroz lean-citac (run wf_c810022a-a05)', () => {
-  const workflow = readFileSync(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'), 'utf8');
-  const agentMd = readFileSync(resolve(process.cwd(), '.claude/agents/lean-citac.md'), 'utf8');
+  // CR normaliziran pri citanju: na Windows checkoutu (CRLF) regex mutacije nad recima inace tiho promasi.
+  const workflow = readFileSync(resolve(process.cwd(), '.claude/workflows/lekta-lean.js'), 'utf8').replace(/\r/g, '');
+  const agentMd = readFileSync(resolve(process.cwd(), '.claude/agents/lean-citac.md'), 'utf8').replace(/\r/g, '');
   const samoCitanje = (md: string): boolean => {
     try {
       return JSON.stringify(agentTools(md)) === JSON.stringify([...LEAN_READER_TOOLS]);
@@ -7437,5 +7870,162 @@ describe('mutacije: kapacitet redaka po stranici', () => {
       lineHeightFactor: 1.15,
       supportsFont: () => true,
     })).not.toBeNull();
+  });
+});
+
+describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
+  // Isti obrazac kao ostatak datoteke: process.cwd() i LF normalizacija (Windows checkout, V3-04/V3-05 na #163).
+  const read = (p: string) => readTextLf(resolve(process.cwd(), p));
+  const izvori = () => ({
+    app: read('src/ui/app.ts'),
+    panel: read('src/ui/repair-panel.ts'),
+    emitter: read('src/analytics/opportunity-emit.ts'),
+    result: read('src/analytics/repair-result.ts'),
+  });
+  const sql = read('supabase/migrations/0208_opportunity_report_v3.sql');
+  const LOCAL = 'if (ctx.trackEvent) trackRepairResultOk(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);';
+  const EMIT = 'emitRepairNoOpSignals(track, skippedReasons, context);';
+
+  it('BASELINE: stvarni izvori, SQL i health su cisti', () => {
+    expect(opportunityWiringProblems(izvori())).toEqual([]);
+    expect(opportunitySqlScopeProblems(sql)).toEqual([]);
+    expect(falseGreenParityProblems(opportunityMeasurementHealth)).toEqual([]);
+  });
+
+  it('dvostruka emisija: drugi summary, drugi poziv emittera ili drugi repair put se hvata', () => {
+    const src = izvori();
+    const dvaSummaryja = src.emitter.replace(
+      "void track('repair_noop_summary',",
+      "void track('repair_noop_summary', {}); void track('repair_noop_summary',",
+    );
+    expect(dvaSummaryja).not.toBe(src.emitter);
+    expect(opportunityWiringProblems({ ...src, emitter: dvaSummaryja }))
+      .toEqual(['emitter: repair_noop_summary se emitira 2 puta (mora tocno 1)']);
+
+    const dvaEmittera = src.result.replace(EMIT, `${EMIT}\n  ${EMIT}`);
+    expect(dvaEmittera).not.toBe(src.result);
+    expect(opportunityWiringProblems({ ...src, result: dvaEmittera }))
+      .toEqual(['repair-result.ts: emitRepairNoOpSignals se poziva 2 puta (mora tocno 1)']);
+
+    const dvaPuta = src.panel.replace(LOCAL, `${LOCAL}\n      ${LOCAL}`);
+    expect(dvaPuta).not.toBe(src.panel);
+    expect(opportunityWiringProblems({ ...src, panel: dvaPuta }))
+      .toEqual(['repair-panel.ts: trackRepairResultOk se poziva 2 puta (mora tocno 1)']);
+  });
+
+  it('neovisnost: brojac u emitteru ili izravan poziv emittera iz puta se hvata', () => {
+    const src = izvori();
+    const uEmitteru = src.emitter.replace(
+      "void track('repair_noop_summary',",
+      "void track('repair_result_ok', context); void track('repair_noop_summary',",
+    );
+    expect(opportunityWiringProblems({ ...src, emitter: uEmitteru }))
+      .toEqual(['emitter: repair_result_ok ne smije biti u emitteru, inace nije neovisan brojac']);
+
+    const mimo = src.panel.replace(
+      LOCAL,
+      'if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);',
+    );
+    const nalazi = opportunityWiringProblems({ ...src, panel: mimo });
+    expect(nalazi).toContain('repair-panel.ts: emitter se zove izravno, mimo neovisnog brojaca');
+    expect(nalazi).toContain('repair-panel.ts: trackRepairResultOk se poziva 0 puta (mora tocno 1)');
+  });
+
+  it('izgubljen kontekst: put bez konteksta ili emitter bez istog konteksta se hvata', () => {
+    const src = izvori();
+    const bezKonteksta = src.panel.replace(LOCAL, 'if (ctx.trackEvent) trackRepairResultOk(ctx.trackEvent, result.skippedReasons);');
+    expect(opportunityWiringProblems({ ...src, panel: bezKonteksta })).toEqual([
+      'repair-panel.ts: trackRepairResultOk bez Opportunity konteksta',
+      'repair-panel.ts: pozivatelj bez ctx.opportunityContext',
+    ]);
+
+    const server = src.app.replace('trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r))', 'trackRepairResultOk(trackEvent,out.skippedReasons,{})');
+    expect(server).not.toBe(src.app);
+    expect(opportunityWiringProblems({ ...src, app: server }))
+      .toEqual(['app.ts: serverski repair ne salje profileId/workType rezultata']);
+
+    const emitterBez = src.result.replace(EMIT, 'emitRepairNoOpSignals(track, skippedReasons, {});');
+    expect(opportunityWiringProblems({ ...src, result: emitterBez }))
+      .toEqual(['repair-result.ts: emitter ne dobiva isti Opportunity kontekst']);
+
+    const brojacBez = src.result.replace("track('repair_result_ok', { ...context })", "track('repair_result_ok', {})");
+    expect(opportunityWiringProblems({ ...src, result: brojacBez }))
+      .toEqual(['repair-result.ts: repair_result_ok s kontekstom se emitira 0 puta (mora tocno 1)']);
+  });
+
+  it('redoslijed: repair rezultat prije integrity gatea se hvata', () => {
+    const src = izvori();
+    const gate = 'if (result.integrityFailure)';
+    const prije = src.panel.replace(LOCAL, '').replace(gate, `${LOCAL}\n      ${gate}`);
+    expect(opportunityWiringProblems({ ...src, panel: prije }))
+      .toEqual(['repair-panel.ts: repair rezultat prije integrity gatea']);
+  });
+
+  it('CRLF checkout: gardovi su cisti nad CRLF izvorom, a mutacija i dalje grize', () => {
+    const crlf = (t: string) => t.replace(/\n/g, '\r\n');
+    const src = izvori();
+    expect(crlf(sql)).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(crlf(sql))).toEqual([]);
+    expect(opportunityWiringProblems({
+      app: crlf(src.app), panel: crlf(src.panel), emitter: crlf(src.emitter), result: crlf(src.result),
+    })).toEqual([]);
+
+    const mutant = sql.replace(
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.repair_v3_from",
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.f",
+    );
+    expect(mutant).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(crlf(mutant))).toEqual(['SQL: repair_result_ok mora poceti od repair_v3_from (ima w.f)']);
+
+    const prije = src.panel.replace(LOCAL, '').replace('if (result.integrityFailure)', `${LOCAL}\n      if (result.integrityFailure)`);
+    expect(opportunityWiringProblems({ ...src, panel: crlf(prije) }))
+      .toEqual(['repair-panel.ts: repair rezultat prije integrity gatea']);
+  });
+
+  it('krivi SQL obuhvat: V3 dogadjaj od pocetka prozora, epoha po prozoru ili samoreferencija se hvata', () => {
+    const odPocetka = sql.replace(
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.repair_v3_from",
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.f",
+    );
+    expect(odPocetka).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(odPocetka)).toEqual(['SQL: repair_result_ok mora poceti od repair_v3_from (ima w.f)']);
+
+    const epohaPoProzoru = sql.replace(
+      "where e.event in ('repair_result_ok', 'repair_noop_summary')",
+      "where e.event in ('repair_result_ok', 'repair_noop_summary') and e.created_at >= p_from",
+    );
+    expect(opportunitySqlScopeProblems(epohaPoProzoru)).toEqual(['SQL: V3 epoha ne smije biti ogranicena prozorom']);
+
+    const samoSummary = sql.replace("e.event in ('repair_result_ok', 'repair_noop_summary')", "e.event = 'repair_noop_summary'");
+    expect(opportunitySqlScopeProblems(samoSummary)).toContain('SQL: V3 epoha mora obuhvatiti repair_result_ok i repair_noop_summary');
+
+    const samoref = sql.replace('    from win w\n    cross join v3 v', '    from win_v3 w\n    cross join v3 v');
+    expect(samoref).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(samoref)).toEqual(['SQL: win_v3 mora citati win, ne sebe']);
+
+    const bezScopea = sql.replace("'repair_attempts'::text", "'repair_attempt'::text");
+    expect(opportunitySqlScopeProblems(bezScopea)).toEqual(['SQL: nema parity po obuhvatu za repair_attempts']);
+  });
+
+  it('lazno zelen paritet: health koji ignorira scope, brojac pokusaja ili razdvajanje povrsina se hvata', () => {
+    const bezScopea: typeof opportunityMeasurementHealth = (b) =>
+      opportunityMeasurementHealth({ ...b, scopeParityMismatches: [] });
+    expect(falseGreenParityProblems(bezScopea)).toEqual([
+      'V3-01 structure: isti zbroj, krivi profil: healthy, mora biti partial',
+      'V3-01 repair: isti zbroj, kriva vrsta rada: healthy, mora biti partial',
+    ]);
+
+    const bezBrojaca: typeof opportunityMeasurementHealth = (b) =>
+      opportunityMeasurementHealth({ ...b, repairAttemptEvents: b.repairNoOpSummaryEvents });
+    expect(falseGreenParityProblems(bezBrojaca)).toEqual([
+      'V3-02: uspjesan repair bez summaryja: healthy, mora biti partial',
+      'V3-02: summary bez uspjesnog repaira: healthy, mora biti partial',
+    ]);
+
+    const jedinstveno: typeof opportunityMeasurementHealth = (b) => {
+      const h = opportunityMeasurementHealth(b);
+      return { ...h, analysis: h.kind };
+    };
+    expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
   });
 });

@@ -59,7 +59,8 @@ import { buildVisualResultModel } from './results/visual-result-model';
 import { isGeneralRepairEntry, renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
 import { buildDocumentDnaModel } from '../results/document-dna-model';
 import { profileStatusForEvent } from './profile-status-event';
-import { emitAnalysisOpportunitySignals, emitRepairNoOpSignals } from '../analytics/opportunity-emit';
+import { emitAnalysisOpportunitySignals } from '../analytics/opportunity-emit';
+import { opportunityContextFor, trackRepairResultOk } from '../analytics/repair-result';
 import { buildExactEvidence } from './results/exact-evidence';
 import { buildRepairOutlook } from './results/repair-outlook';
 import { buildDefaultRepairRequests } from '../repair/default-selection';
@@ -1873,7 +1874,7 @@ async function renderRepairSection(r: any){
  // readZip, dakle upravo ono lazno obecanje koje je zastita trebala ukloniti.
  if(!renderRepairCapabilityBlock(mount,r)){repairPanelForResult=r;return}
  if(repairServerConfigured()){repairPanelHandle=renderServerRepairPanel(mount,r,items,file,textItems);repairPanelForResult=r;emitRepairPanelReady({handle:repairPanelHandle,items});return}
- repairPanelHandle=renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,sessionToken:`${file?.name}:${file?.size}:${file?.lastModified}`,trackEvent:(e: string,d?: Record<string,unknown>)=>{void trackEvent(e,d||{})},beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks,tocFieldWillRefresh:tocFieldWillRefresh(res)}:null}});
+ repairPanelHandle=renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,sessionToken:`${file?.name}:${file?.size}:${file?.lastModified}`,trackEvent:(e: string,d?: Record<string,unknown>)=>{void trackEvent(e,d||{})},opportunityContext:opportunityContextFor(r),beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks,tocFieldWillRefresh:tocFieldWillRefresh(res)}:null}});
  // Panel za isti rezultat se ne gradi dvaput: ponovna gradnja bi obrisala korisnikov odabir.
  repairPanelForResult=r;
  if(repairPanelHandle)emitRepairPanelReady({handle:repairPanelHandle,items}); // C6: ruta vraca zapamceni odabir i pretplacuje pisca
@@ -2072,7 +2073,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    pending={token:token||'',bytes,meta,signal:ac.signal};
    try{const st=await binding.controller.start();out=st.result;if(!out){if(st.phase==='running'||st.phase==='verifying')return;out={kind:'error',message:st.lastError||'mrezna greska'}}}finally{clearTimeout(timer);pending=null}
    const uploadMs=Math.round(performance.now()-tUpload);
-   if(out.kind==='ok')emitRepairNoOpSignals(trackEvent,out.skippedReasons);
+   if(out.kind==='ok')trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r));
    if(out.kind==='ok'&&out.changelog.length===0){
     // RE-32: server namjerno NIJE trosio slot/kvotu ni pohranio posao kad nema stvarnih izmjena
     // (vidi repair-docx/index.ts korak 7a); gumb NIJE zakljucan (lockButton ostaje false) jer

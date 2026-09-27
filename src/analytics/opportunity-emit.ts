@@ -1,8 +1,10 @@
 import {
   opportunitySignalForEvent,
   repairNoOpSignals,
+  repairNoOpSummarySignal,
   structureGapSignalsForEvent,
   type OpportunityAnalysisLike,
+  type OpportunityGapContext,
 } from './opportunity-signal';
 
 type TrackOpportunityEvent = (event: string, data?: Record<string, unknown>) => unknown;
@@ -17,10 +19,12 @@ export function emitAnalysisOpportunitySignals(
   for (const gap of structureGapSignalsForEvent(result)) void track('analysis_structure_gap', gap);
 }
 
-/** Razloge repair no-opova šalje samo kao agregirane sigurne enum signale. */
+/** Jedan neovisni summary + detaljni sigurni enum breakdown za parity dokaz. */
 export function emitRepairNoOpSignals(
   track: TrackOpportunityEvent,
   skippedReasons: unknown,
+  context: OpportunityGapContext = {},
 ): void {
-  for (const signal of repairNoOpSignals(skippedReasons)) void track('repair_noop_reason', signal);
+  void track('repair_noop_summary', repairNoOpSummarySignal(skippedReasons, context));
+  for (const signal of repairNoOpSignals(skippedReasons, context)) void track('repair_noop_reason', signal);
 }

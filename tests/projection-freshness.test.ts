@@ -96,4 +96,31 @@ describe('svjezina pecenih projekcija', () => {
     expect(byId['profile-claims'].sources).toContain('docs/generated/completion-ledger.json');
     expect(byId['completion-ledger'].sources).toContain('data/verification/real-corpus-attestation.json');
   });
+
+  /**
+   * Z15 (2026-09-27): `rulesVersion` i `sourcesCheckedAt` u "Stanju stola" citaju
+   * `data/generated/profile-rules-server.json` (rulesVersionFromDisk) i `data/coverage/scored-coverage.json`
+   * (uvoz SCORED_COVERAGE), oba u `src/coverage/site-stats.ts`. Bez ovih dvaju izvora bi commit koji
+   * promijeni samo njih presudio "svjeze", a "Stanje stola" bi pokazivalo pecenu vrijednost koja vise
+   * ne odgovara stvarnom stanju izvora.
+   */
+  it('site-stats navodi profile-rules-server.json i scored-coverage.json kao izvore', () => {
+    const byId = Object.fromEntries((PROJECTIONS as Array<{ id: string; sources: string[] }>).map((p) => [p.id, p]));
+    expect(byId['site-stats'].sources).toContain('data/generated/profile-rules-server.json');
+    expect(byId['site-stats'].sources).toContain('data/coverage/scored-coverage.json');
+  });
+
+  /**
+   * DOKAZ da navodenje ovih izvora stvarno oznacava projekciju zastarjelom: isti `projectionFreshness`
+   * koji `npm run projection-freshness` zove, nad commitom koji dira SAMO jedan od ta dva izvora.
+   */
+  it('commit nad profile-rules-server.json ili scored-coverage.json cini site-stats ustajalim', () => {
+    const byId = Object.fromEntries((PROJECTIONS as Array<{ id: string; sources: string[] }>).map((p) => [p.id, p]));
+    const izvori = byId['site-stats'].sources;
+    for (const izvor of ['data/generated/profile-rules-server.json', 'data/coverage/scored-coverage.json']) {
+      expect(izvori).toContain(izvor);
+      const v = projectionFreshness('site-stats', 'abc123', [commit('def456', `fix: ${izvor}`)], byId['site-stats'].regenerate);
+      expect(v.status, izvor).toBe('ustajalo');
+    }
+  });
 });
