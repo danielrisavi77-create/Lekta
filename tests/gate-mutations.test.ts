@@ -21,6 +21,7 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import { linesPerPageCapacity } from '../src/scoring/lines-per-page';
 import {
   SVA_STANJA, SVI_DOGADAJI, transition,
   type WizardEvent, type WizardState,
@@ -42,6 +43,8 @@ import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
 import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
+import { manualHeadingCandidates } from '../src/analysis/manual-heading-candidates';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -5926,6 +5929,29 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => effectiveHidden({}) === false
       && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20 }]).font === 'Arial',
   },
+  {
+    id: 'docx/lazni-nalaz-na-uskladjenom',
+    imitates: 'analiza pocne javljati nalaz na poznato ispravnom fixtureu (kao structure.heading.word-styles nad stavkama literature na 12 od 14), ili dopusteni nalaz nestane a popis se ne stegne (T26)',
+    // Doseg: ratchet nad popisom; punu analizu fixtura vrti tests/analysis-false-findings (async).
+    caught: () => {
+      const allowed = new Set<FindingKey>(ALLOWED_FINDINGS.map((a) => `${a.doc}|${a.checkId}` as FindingKey));
+      const extra = falseFindingProblems(new Set([...allowed, 'fpzg--final--prijediplomski--uskladjen|structure.heading.word-styles']));
+      const stale = falseFindingProblems(new Set([...allowed].slice(1)));
+      return extra.length === 1 && extra[0].startsWith('lazni nalaz:') && stale.length === 1 && stale[0].startsWith('zastarjeli unos:');
+    },
+    cleanBefore: () => falseFindingProblems(new Set(ALLOWED_FINDINGS.map((a) => `${a.doc}|${a.checkId}` as FindingKey))).length === 0,
+  },
+  {
+    id: 'docx/stavka-literature-kao-naslov',
+    imitates: 'granica izuzeca stavki literature pogresna: numerirana stavka "1. Aston ... (1991). ..." postane kandidat za rucni naslov (12 od 14 uskladjenih fixtura), ili samo clanstvo u zapisima izuzme pravi naslov "1. Knjige" ili naslov iza zalutalog odlomka "Literatura" (Codex #184 F1, F2)',
+    // Doseg: stvarni ulaz analize (odlomci) kroz istu funkciju koju zove analyze-docx.
+    caught: () => {
+      const texts = (ps: { text: string; headingLevel?: number }[]) => manualHeadingCandidates(ps, 'hr').candidates.map((p) => p.text).join('|');
+      return texts([{ text: 'Uvod', headingLevel: 1 }, { text: 'Literatura', headingLevel: 1 }, { text: '1. Knjige' }, { text: '2. Aston, E. i Savona, G. (1991). Theatre as Sign System. London: Routledge.' }]) === '1. Knjige'
+        && texts([{ text: 'Uvod', headingLevel: 1 }, { text: 'Literatura' }, { text: '2. Metodologija istraživanja' }]) === '2. Metodologija istraživanja';
+    },
+    cleanBefore: () => manualHeadingCandidates([{ text: 'Uvod', headingLevel: 1 }, { text: 'Tekst rada bez numeriranih odlomaka.' }], 'hr').candidates.length === 0,
+  },
 
 ];
 
@@ -7368,6 +7394,30 @@ describe('mutacije: lean ratchet (T56)', () => {
     expect(mutant).not.toBe(fnBlok);
     expect(hvataRast(izvedi(mutant))).toBe(false);
   });
+
+  // Windows: Node odbija execFile nad `.cmd` bez shella (EINVAL), pa win32 put nikad ne smije vratiti .cmd.
+  const invStart = src.indexOf('export function toolInvocation');
+  const invBlok = src.slice(invStart, src.indexOf('\n}\n', invStart) + 3);
+  type Invocation = (name: string, o: object) => { command: string; argsPrefix: string[] };
+  const izvediInv = (fn: string): Invocation =>
+    new Function('path', 'existsSync', 'readFileSync', 'ROOT', `${fn.replace('export ', '')}\nreturn toolInvocation;`)(
+      { join }, () => true, () => '', 'X:/repo',
+    ) as Invocation;
+  const win32Opts = { platform: 'win32', exists: () => true, readText: () => JSON.stringify({ bin: { knip: 'bin/knip.js' } }) };
+  const bezCmd = (inv: Invocation): boolean => !inv('knip', win32Opts).command.toLowerCase().endsWith('.cmd');
+
+  it('baseline: stvarni toolInvocation na win32 ne vraca .cmd', () => {
+    expect(bezCmd(izvediInv(invBlok))).toBe(true);
+  });
+
+  it('mutant koji na win32 vrati .bin/<ime>.cmd (stari EINVAL put) obara tvrdnju', () => {
+    const mutant = invBlok.replace(
+      'return { command: process.execPath, argsPrefix: [entry] };',
+      "return { command: path.join(root, 'node_modules', '.bin', `${name}.cmd`), argsPrefix: [] };",
+    );
+    expect(mutant).not.toBe(invBlok);
+    expect(bezCmd(izvediInv(mutant))).toBe(false);
+  });
 });
 
 describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => {
@@ -7392,5 +7442,25 @@ describe('mutacije: Grok bot ne smije implementirati nad protectedPaths', () => 
     mutiran['grok-review'].phases = ['review', 'implement'];
     // Bez allowedPaths svaka datoteka je povreda, pa gard ostaje cist; obranu drzi resolver (implement bez allowliste baca).
     expect(findBotsImplementingProtected(mutiran, config.protectedPaths, botPathViolations)).toEqual([]);
+  });
+});
+
+
+describe('mutacije: kapacitet redaka po stranici', () => {
+  const page = { page: { w: 21, h: 29.7 }, margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } };
+  const input = (font: string) => ({ size: 12, spacing: 1.5, font, sections: [page] });
+  it('faktor 1,0 mijenja izmjereni kapacitet', () => {
+    expect(linesPerPageCapacity(input('Times New Roman'))).toBe(33);
+    expect(linesPerPageCapacity(input('Times New Roman'), {
+      lineHeightFactor: 1.0,
+      supportsFont: (font) => typeof font === 'string' && font.trim().toLowerCase() === 'times new roman',
+    })).not.toBe(33);
+  });
+  it('uklonjena provjera fonta lazno mjeri Arial', () => {
+    expect(linesPerPageCapacity(input('Arial'))).toBeNull();
+    expect(linesPerPageCapacity(input('Arial'), {
+      lineHeightFactor: 1.15,
+      supportsFont: () => true,
+    })).not.toBeNull();
   });
 });

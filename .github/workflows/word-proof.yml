@@ -152,10 +152,15 @@ jobs:
         run: |
           $ErrorActionPreference = 'Continue'
           $log = Join-Path $env:RUNNER_TEMP 'release-check.log'
+          # Isto sto i `npm run release:check` (package.json), ali izravno kroz node.exe: npm na
+          # Windowsu ide kroz PowerShell shim npm.ps1, koji proguta `--`, pa je u runu 36330000264
+          # `--only` ignoriran i pokrenut je PUNI release:check. `'--'` u navodnicima PowerShell
+          # uvijek prosljedjuje doslovno.
+          $gate = @('scripts/with-gate-lock.mjs', 'release:check', '--', 'node', 'scripts/release-check.mjs')
           if ($env:RAZINE -eq 'sve') {
-            npm run release:check 2>&1 | Tee-Object -FilePath $log
+            node @gate 2>&1 | Tee-Object -FilePath $log
           } elseif ($env:RAZINE -eq 'word') {
-            npm run release:check -- --only=word,word-worst,word-corpus,word-toc 2>&1 | Tee-Object -FilePath $log
+            node @gate '--only=word,word-worst,word-corpus,word-toc' 2>&1 | Tee-Object -FilePath $log
           } else {
             throw "Nepoznata vrijednost razine: $env:RAZINE"
           }
