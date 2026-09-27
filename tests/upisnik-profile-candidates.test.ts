@@ -2078,7 +2078,7 @@ describe('doktorski program VEF-a', () => {
 
 describe('zajednički profil specijalističkih radova VEF-a', () => {
   it('uključuje samo 13 aktualno raspisanih naziva u djelomični profil bez bodovanja nacrta pravila', () => {
-    expect(vefSpecialistDraft.entries).toHaveLength(7);
+    expect(vefSpecialistDraft.entries).toHaveLength(8);
     expect(vefSpecialistDraft.entries.every((entry) => entry.status === 'draft' && entry.scored === false)).toBe(true);
     const specialistProfile = Object.values(verifiedProfiles).find((profile) => profile.id === 'vef-specijalisticki');
     expect(specialistProfile).toEqual(expect.objectContaining({
