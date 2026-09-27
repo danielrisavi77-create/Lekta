@@ -238,3 +238,103 @@ for (const { w, h, ime } of SIRINE) {
     await postaja(page, w, 'Povratak na nalaz');
   });
 }
+
+/**
+ * PILULA DOKUMENTA NA 1180px (ALIGNMENT Z15 drugi krug, stavka 4).
+ *
+ * Kvar: u tankom stanju trake (nakon skrola) pilula i stepper stoje u JEDNOM redu, a Geist Mono je
+ * sirok, pa je stepper s natpisima (377px) pilulu na 1180px stisnuo na 118px: ime je pokazivalo 6
+ * znakova. Popravak (`site-chrome.css`, `@container site-chrome-mid`) stepperu ispod izmjerene
+ * sirine sredine skida natpise. Izmjereno u Chromiumu nad sintetickim stanjem prije ovog speca:
+ * 35 znakova na 1180px u tankom stanju, 39 u debelom; zaglavlje 63px tanko i 78px debelo, isto
+ * kao prije popravka.
+ *
+ * Mjeri se na STVARNOM toku (dokument s dugim imenom, analiza do nalaza, pa skrol), jer stepper
+ * postoji tek kad ima nalaza. Broj vidljivih znakova se broji `Range`-om nad tekstom imena: znak
+ * se racuna kao vidljiv ako mu desni rub stane u okvir imena, a zadnji pojede tritocka.
+ */
+test('radna stanica 1180x900: pilula nosi barem 18 znakova imena, bez preklapanja i bez rasta trake', async ({ page }) => {
+  test.setTimeout(300_000);
+  await page.setViewportSize({ width: 1180, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/rad/');
+  await page.locator('#analyticsDecline').click({ timeout: 3_000 }).catch(() => {});
+  await cekajApp(page);
+  await page.locator('#fileInput').setInputFiles({
+    name: DUGO_IME,
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    buffer: readFileSync(FIXTURE),
+  });
+  await cekajKorak(page, '2');
+  await expect(page.locator('#radDocBar')).toBeVisible({ timeout: 20_000 });
+  await pokreniAnalizu(page);
+  await expect(page.locator('[data-site-chrome-steps]')).toBeVisible();
+  await page.evaluate(async () => { await document.fonts.ready; });
+
+  const mjera = async (): Promise<{
+    znakova: number; duljina: number; zaglavlje: number;
+    okviri: Record<'lijevo' | 'sredina' | 'pilula' | 'koraci' | 'desno', { l: number; r: number; t: number; b: number }>;
+  }> => page.evaluate(() => {
+    const ime = document.getElementById('radDocName')!;
+    const tekst = ime.firstChild;
+    const okvirImena = ime.getBoundingClientRect();
+    let k = 0;
+    const duljina = ime.textContent?.length ?? 0;
+    if (tekst) {
+      const r = document.createRange();
+      for (let i = 1; i <= duljina; i++) {
+        r.setStart(tekst, 0);
+        r.setEnd(tekst, i);
+        if (r.getBoundingClientRect().right <= okvirImena.right + 0.5) k = i; else break;
+      }
+    }
+    const znakova = k < duljina ? Math.max(0, k - 1) : k;
+    const box = (sel: string): { l: number; r: number; t: number; b: number } => {
+      const b = document.querySelector(sel)!.getBoundingClientRect();
+      return { l: b.left, r: b.right, t: b.top, b: b.bottom };
+    };
+    return {
+      znakova,
+      duljina,
+      zaglavlje: document.querySelector('header.site-chrome')!.getBoundingClientRect().height,
+      okviri: {
+        lijevo: box('.site-chrome__left'),
+        sredina: box('.site-chrome__mid'),
+        pilula: box('#radDocBar'),
+        koraci: box('[data-site-chrome-steps]'),
+        desno: box('.site-chrome__right'),
+      },
+    };
+  });
+  const bezPreklapanja = (m: Awaited<ReturnType<typeof mjera>>, stanje: string): void => {
+    const { lijevo, sredina, pilula, koraci, desno } = m.okviri;
+    expect(pilula.l, `${stanje}: pilula ulazi u logo`).toBeGreaterThanOrEqual(lijevo.r - 0.5);
+    expect(pilula.r, `${stanje}: pilula ulazi u desnu skupinu`).toBeLessThanOrEqual(desno.l + 0.5);
+    expect(koraci.l, `${stanje}: koraci ulaze u logo`).toBeGreaterThanOrEqual(lijevo.r - 0.5);
+    expect(koraci.r, `${stanje}: koraci ulaze u desnu skupinu`).toBeLessThanOrEqual(desno.l + 0.5);
+    expect(pilula.l, `${stanje}: pilula izlazi iz sredine`).toBeGreaterThanOrEqual(sredina.l - 0.5);
+    expect(koraci.r, `${stanje}: koraci izlaze iz sredine`).toBeLessThanOrEqual(sredina.r + 0.5);
+    const istiRed = pilula.b > koraci.t && koraci.b > pilula.t;
+    if (istiRed) expect(pilula.r, `${stanje}: pilula i koraci se preklapaju`).toBeLessThanOrEqual(koraci.l + 0.5);
+  };
+
+  // DEBELO STANJE (vrh stranice): pilula iznad steppera, dva reda sredine.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page.locator('header.site-chrome.site-chrome--scrolled')).toHaveCount(0);
+  const vrh = await mjera();
+  expect(vrh.duljina, 'sentinel: ime nije dugo, pa rezanje nije izazvano').toBeGreaterThan(40);
+  expect(vrh.znakova, `debelo stanje pokazuje ${vrh.znakova} znakova imena`).toBeGreaterThanOrEqual(18);
+  expect(vrh.zaglavlje, `debelo zaglavlje je ${Math.round(vrh.zaglavlje)} px`).toBeLessThanOrEqual(80);
+  bezPreklapanja(vrh, 'debelo');
+
+  // TANKO STANJE (nakon skrola): pilula i stepper u JEDNOM redu; tu je bio kvar.
+  const skrolano = await page.evaluate(() => { window.scrollTo(0, 240); return Math.round(window.scrollY); });
+  expect(skrolano, 'sentinel: nalaz se ne da skrolati').toBeGreaterThan(40);
+  await expect(page.locator('header.site-chrome.site-chrome--scrolled')).toHaveCount(1);
+  const tanko = await mjera();
+  expect(tanko.znakova, `tanko stanje pokazuje ${tanko.znakova} znakova imena`).toBeGreaterThanOrEqual(18);
+  expect(tanko.zaglavlje, `tanko zaglavlje je ${Math.round(tanko.zaglavlje)} px`).toBeLessThanOrEqual(64);
+  const { pilula, koraci } = tanko.okviri;
+  expect(pilula.b > koraci.t && koraci.b > pilula.t, 'tanko stanje: pilula i stepper nisu u jednom redu').toBe(true);
+  bezPreklapanja(tanko, 'tanko');
+});

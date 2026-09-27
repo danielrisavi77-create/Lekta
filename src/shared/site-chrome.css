@@ -28,12 +28,14 @@ header.site-chrome {
   transition: padding .22s var(--ease-out-3, ease), background .22s var(--ease-out-3, ease);
 }
 
-/* STANJE NAKON SKROLA (>40px): tanja traka, blur, crvena nit po donjem rubu. */
+/* STANJE NAKON SKROLA (>40px): tanja traka, PUNA pozadina stola, crvena nit po donjem rubu.
+   BEZ ZAMUCENJA POZADINE, i to je odluka, ne propust (Z15 drugi krug, F22): nalog Z15 trazi
+   zamucenje od 14px, a Z31 ("Brzina i mobitel na stvarnom kodu") izricito kaze da ga na javnim
+   stranicama nema, jer se racuna u svakom okviru skrola. Traka zato dobiva neprozirni token
+   `--desk`, pa sadrzaj ispod nje ne prosijava; gard je u `tests/site-chrome.test.ts`. */
 header.site-chrome--scrolled {
   padding-block: 8px;
-  background: color-mix(in srgb, var(--desk) 82%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--desk);
 }
 .site-chrome--scrolled .site-chrome__bar { min-height: 46px; }
 .site-chrome--scrolled .ks-mark { width: 24px; height: 24px; font-size: 15px; }
@@ -76,10 +78,15 @@ header.site-chrome--scrolled {
   height: 7px;
   background: var(--red);
   pointer-events: none;
-  transition: left .45s var(--ease-out-3, ease);
-  /* Ime je pripremljeno za View Transitions (Z15, drugi krug). Nista ga jos ne pokrece: prijelaz
-     izmedu dokumenata nije ozicen, pa ovo za sada samo rezervira identitet elementa. */
-  view-transition-name: nav-marker;
+  /* KVACICA PUTUJE KROZ `transform`, NE KROZ `left` (Z31: animira se samo transform, opacity i
+     clip-path). `left` ostaje 0, a pomak upisuje `markActiveDestination` u `site-chrome.ts`.
+     Prvo postavljanje ide BEZ prijelaza, pa kvacica ne klizi s lijevog ruba pri svakom ucitavanju.
+     `view-transition-name` je UKLONJEN (F23): prijelazi izmedju dokumenata su ugaseni
+     (`@view-transition { navigation: none }` u `motion.css`, kvar zamrznutog rAF-a nakon
+     primopredaje s `/` na `/rad/`), a imenovan element bi uletio u svaki prijelaz UNUTAR
+     dokumenta koji `environment-signals.ts` pokrece. */
+  transform: translateX(0);
+  transition: transform .45s var(--ease-spring);
 }
 .site-chrome__dest {
   position: relative;
@@ -120,6 +127,9 @@ header.site-chrome--scrolled {
   align-items: center;
   flex-wrap: nowrap;
   gap: 6px;
+  /* SREDINA JE SPREMNIK (Z15 drugi krug): kratki oblik koraka nize ovisi o sirini SREDINE, ne
+     zaslona, jer desna skupina nije stalne sirine (natpis plocice, gumb prijave). */
+  container: site-chrome-mid / inline-size;
 }
 /* NAKON SKROLA SREDINA VRACA U JEDAN RED (prizor "03 NAKON SKROLA" u Chrome.dc.html): tanko stanje
    trake mora stati u budzet od 60px, sto dva stupca stack-a (pilula + stepper) ne bi. Pilula i
@@ -132,7 +142,8 @@ header.site-chrome--scrolled {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  max-width: 360px;
+  /* Pilula ne izlazi iz sredine: na 960px je stajala preko logotipa (sredina 270px, pilula 360px). */
+  max-width: min(360px, 100%);
   min-width: 0;
   min-height: 24px;
   padding: 6px 12px;
@@ -191,6 +202,7 @@ header.site-chrome--scrolled {
 }
 .site-chrome__step--active { background: var(--desk-ink); border-color: var(--desk-ink); color: var(--desk); font-weight: 500; }
 .site-chrome__step-num { font-variant-numeric: tabular-nums; opacity: .75; }
+
 
 .site-chrome__right { display: flex; align-items: center; gap: 6px; justify-self: end; }
 .site-chrome__work {
@@ -468,6 +480,47 @@ header.site-chrome--scrolled {
   }
   body:has(.site-chrome__sheet.open) { overflow: hidden; }
 }
+/* KRATKI OBLIK KORAKA (samo brojevi) NA `/rad/`, IZMJEREN, NE POGODJEN (Z15 drugi krug, stavka 4).
+   Stoji IZA mobilnog bloka namjerno: osnovni sloj (sve prije prvog `@media`) ne smije nositi
+   pravilo za natpis koraka, jer bi natpisi tada nestali na svakoj sirini.
+   Geist Mono je sirok: izmjereno u Chromiumu 2026-09-27 nad ovim listom, stepper s natpisima je
+   377px, a pilula s ocjenom treba 64px okvira plus 7,6px po znaku imena, dakle 208px za 18
+   vidljivih znakova (19 mjesta, jedno pojede tritocka). U tankom stanju su pilula i stepper u
+   JEDNOM redu uz razmak od 14px, pa natpisi stanu tek uz sredinu od 208 + 14 + 377 = 599px. Na
+   1180px je sredina u tankom stanju 509px: s natpisima je pilula pala na 118px i pokazivala 6
+   znakova. Ispod 600px sredine stepper zato gubi natpise (broj ostaje, natpis ostaje citacu
+   ekrana kroz `clip-path`, isto kao na mobitelu), pa pilula na 1180px dobiva 317px (33 znaka).
+   U debelom stanju su pilula i stepper u DVA reda, pa natpisi padaju tek kad sam stepper ne stane
+   (sredina ispod 377px, npr. 270px na 960px). */
+@container site-chrome-mid (max-width: 599px) {
+  .site-chrome--scrolled .site-chrome__step { gap: 0; }
+  .site-chrome--scrolled .site-chrome__step-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+@container site-chrome-mid (max-width: 376px) {
+  .site-chrome__step { gap: 0; }
+  .site-chrome__step-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
 /* OCJENA U TRACI ODLAZI NA 720px, isto stanje kao prije Z15 kruga popravka. Znacka "Lokalno" vise
    NE zivi u `.site-chrome__doc` (preselila je u `.rad-doc-meta` u tijelu, Z15 krug popravka), pa
    nije vise sadrzaj trake i ovo pravilo je vise ne spominje; gard nad njom je nize, uz `.rad-doc-meta`.
@@ -527,24 +580,206 @@ header.site-chrome--scrolled {
 }
 .site-footer__nota b { font-weight: 500; color: var(--desk-muted); }
 
+/* PODNOZJE, PUNO (Z15 drugi krug): saznaj vise (s cjenikom), pribor. Kolofon u auto-fit stupcima,
+   "Stanje stola" ispod, potpis odrezan rubom. Copy je doslovno iz `Chrome.dc.html` (prizor 05);
+   ponasanje (stanje stola, tinta, redak lampe) je u lijenom `site-footer-full.ts`. */
+.site-footer--full {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 0 0;
+  background: linear-gradient(180deg, var(--desk) 0%, var(--desk-2) 100%);
+}
+.site-footer__kolofon {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 32px;
+  align-items: start;
+}
+.site-footer__brend { display: grid; gap: 16px; }
+.site-footer__brend .logo { color: var(--desk-ink); text-decoration: none; }
+.site-footer__moto {
+  margin: 0;
+  max-width: 30ch;
+  font-family: var(--display-serif);
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--desk-ink);
+  text-wrap: pretty;
+  --emph-weight: 400;
+  --emph-style: italic;
+}
+.site-footer__moto em { color: var(--red); }
+.site-footer__granice {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--ui);
+  font-size: var(--fs-mono-label);
+  color: var(--desk-muted);
+}
+.site-footer__granica { display: grid; grid-template-columns: 14px 1fr; gap: 8px; }
+.site-footer__granica--da > span { color: var(--ok); }
+.site-footer__granica--ne > span { color: var(--desk-faint); }
+.site-footer__stupac { display: grid; gap: 2px; align-content: start; }
+.site-footer__naslov {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-family: var(--ui);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--desk-faint);
+}
+.site-footer__naslov::after { content: ""; flex: 1; height: 1px; background: var(--desk-line); }
+.site-footer__link {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-height: 24px;
+  padding: 6px 0;
+  color: var(--desk-muted);
+  text-decoration: none;
+  font-family: var(--ui);
+  font-size: 12.5px;
+  white-space: nowrap;
+  transition: color var(--dur-1, .18s), transform var(--dur-1, .18s) var(--ease-spring);
+}
+.site-footer__link:hover { color: var(--desk-ink); transform: translateX(4px); }
+.site-footer__link small { width: 18px; flex: none; font-size: 10px; letter-spacing: .06em; color: var(--desk-faint); }
+.site-footer__stanje { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--desk-line); }
+.site-footer__stanje dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 14px;
+  margin: 0;
+  font-family: var(--ui);
+  font-size: var(--fs-mono-label);
+  letter-spacing: .02em;
+  color: var(--desk-muted);
+}
+.site-footer__stanje-naslov {
+  margin: 0 0 8px;
+  font-family: var(--ui);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--desk-faint);
+}
+/* `dt`/`dd` dobivaju glas IZRICITO: dijeljeni list prozi daje serif, a redak stanja je mono, pa
+   `dd` vraca i par naglaska (Geist Mono nema kurziv; gard `monoUSerifnomNaglasku`). */
+.site-footer__stanje dt { font-family: var(--ui); color: var(--desk-faint); }
+.site-footer__stanje dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--ui);
+  color: var(--desk-ink);
+  --emph-weight: 500;
+  --emph-style: normal;
+}
+
+/* POTPIS: "Lekta" u obrisu, odrezan rubom. Tinta ulazi kroz `background-position` (Z31: nikad
+   `background-size` ni `width`): gradijent je dvostruke sirine, lijeva polovica crvena, desna
+   prozirna; pomak s 100% na 0 povlaci crvenu polovicu preko slova. */
+.site-footer__potpis {
+  position: relative;
+  height: 120px;
+  margin-top: 34px;
+  overflow: hidden;
+  border-top: 1px solid var(--desk-line);
+}
+.site-footer__potpis-slovo {
+  position: absolute;
+  left: 36px;
+  top: 6px;
+  font-family: var(--display-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 260px;
+  line-height: 1;
+  letter-spacing: -.03em;
+  white-space: nowrap;
+  user-select: none;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--desk-line);
+  background-image: linear-gradient(90deg, var(--red) 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  --emph-weight: 400;
+  --emph-style: italic;
+}
+.site-footer__potpis--tinta .site-footer__potpis-slovo { animation: siteFooterTinta 1.4s var(--ease-spring) both; }
+@keyframes siteFooterTinta {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+.site-footer__potpis-desno {
+  position: absolute;
+  right: 40px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  text-align: right;
+  font-family: var(--ui);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--desk-faint);
+}
+.site-footer__potpis-desno b { font-weight: 500; color: var(--desk-muted); }
+.site-footer__potpis-desno i { display: inline-block; width: 7px; height: 7px; margin-left: 8px; background: var(--red); vertical-align: middle; }
+
 @media (prefers-reduced-motion: reduce) {
   .site-chrome,
   .site-chrome__marker,
   .site-chrome__thread,
   .site-chrome__stamp,
   .site-chrome__dest,
-  .site-chrome__work { transition: none; }
+  .site-chrome__work,
+  .site-footer__link { transition: none; }
   .site-chrome__sheet.open,
   .site-chrome__reveal { animation: none; }
+  /* Potpis je ODMAH popunjen, bez animacije i bez cekanja na skrol ili JavaScript. */
+  .site-footer__potpis-slovo { animation: none !important; background-position: 0 0; }
+  /* TRAKA POD SUSTAVNIM "MANJE POKRETA" MIJENJA STANJE ODJEDNOM, U SVAKOM PREGLEDNIKU (Z15 drugi
+     krug). `motion.css` ovdje svakom elementu namece `transition-duration: .001ms !important`, a
+     `transition-property` ostaje zadani `all`, pa svaka interpolabilna promjena (padding, gap,
+     min-height, sirina logotipa, margina natpisa koraka) postaje prijelaz od jedne mikrosekunde.
+     Chromium takav prijelaz razrijesi odmah; WebKit do sljedeceg okvira vraca POCETNU vrijednost,
+     dok diskretna svojstva (`flex-direction`, `position`) vec skoce na novu. Izmjereno u WebKitu na
+     1180x900 odmah nakon povratka na vrh (klasa `--scrolled` vec skinuta): sredina je vec stupac,
+     ali s razmakom 14px, `padding-block` 8px, `min-height` 46px i koracima bez razmaka broj/natpis,
+     pa je debelo zaglavlje 102,2px; 100ms kasnije 78,2px, isto kao Chromium odmah. Staro pravilo
+     `.site-chrome { transition: none }` gore gubi od `header.site-chrome` (0,1,1) i nije pomagalo.
+     `transition: none !important` je isti ucinak koji rucni izbor vec ima
+     (`html:root[data-motion="reduce"] *` u `display-settings.css`). */
+  header.site-chrome,
+  header.site-chrome *,
+  header.site-chrome *::before,
+  header.site-chrome *::after { transition: none !important; }
 }
 :root[data-motion="reduce"] .site-chrome,
 :root[data-motion="reduce"] .site-chrome__marker,
 :root[data-motion="reduce"] .site-chrome__thread,
 :root[data-motion="reduce"] .site-chrome__stamp,
 :root[data-motion="reduce"] .site-chrome__dest,
-:root[data-motion="reduce"] .site-chrome__work { transition: none; }
+:root[data-motion="reduce"] .site-chrome__work,
+:root[data-motion="reduce"] .site-footer__link { transition: none; }
 :root[data-motion="reduce"] .site-chrome__sheet.open,
 :root[data-motion="reduce"] .site-chrome__reveal { animation: none; }
+:root[data-motion="reduce"] .site-footer__potpis-slovo { animation: none !important; background-position: 0 0; }
 
 @media print {
   .site-chrome, .site-footer { display: none !important; }
