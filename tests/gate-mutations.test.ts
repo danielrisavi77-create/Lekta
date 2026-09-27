@@ -72,7 +72,9 @@ import {
   WORD_VERIFY_ALLOWLIST_LINE,
   WORD_VERIFY_CLEANUP_HELPER,
   WORD_VERIFY_CLEANUP_SCRIPTS,
+  WORD_VERIFY_EMPTY_SET_SCRIPTS,
   wordVerifyCleanupProblems,
+  wordVerifyEmptySetGuardProblems,
   wordVerifyHelperProblems,
 } from './helpers/word-verify-cleanup';
 import { requiredTiersDrift } from './helpers/autonomy-release-tiers';
@@ -5459,6 +5461,22 @@ const MUTATIONS: Mutation[] = [
       return bezGita !== izvorno && wordVerifyHelperProblems(bezGita).length > 0;
     },
     cleanBefore: () => wordVerifyHelperProblems(readTextLf(resolve(process.cwd(), WORD_VERIFY_CLEANUP_HELPER))).length === 0,
+  },
+  {
+    id: 'word-verify/prazan-skup-nije-crveno',
+    imitates: 'Codex krug 3, M2: check skripta koja nije stvarno otvorila nijedan dokument ($provjereno '
+      + 'ostaje 0, npr. jer je $rows prazan ili je Word.Documents.Open pao prije brojanja) i dalje ispise '
+      + '"SVE PROSLO" i obrise izlazni direktorij kao da je uspjeh, umjesto da prazan skup tretira kao pad',
+    caught: () => WORD_VERIFY_EMPTY_SET_SCRIPTS.every((rel) => {
+      const izvorno = readTextLf(resolve(process.cwd(), rel));
+      const bezProvjere = izvorno.replace(
+        /[ \t]*if \(\$provjereno -eq 0\) \{\n(?:.*\n)*?[ \t]*exit 1\n[ \t]*\}\n/,
+        '',
+      );
+      return bezProvjere !== izvorno && wordVerifyEmptySetGuardProblems(bezProvjere).length > 0;
+    }),
+    cleanBefore: () => WORD_VERIFY_EMPTY_SET_SCRIPTS.every((rel) =>
+      wordVerifyEmptySetGuardProblems(readTextLf(resolve(process.cwd(), rel))).length === 0),
   },
   // --- Laya v2 (docs/laya/LAYA_V2_SPEC.md): savjetodavni procjenitelj nikad ne ulazi u istinu Lekte ---
   {

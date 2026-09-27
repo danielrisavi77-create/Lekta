@@ -651,4 +651,61 @@ describe('clean-vitest-tmp: junctioni i simbolicke veze (Codex krug 2, M1)', () 
     expect(res.refused.map((x) => x.path)).toEqual([dir]);
     expect(existsSync(f)).toBe(true);
   });
+
+  it('korijen zamijenjen vezom prema Temp/claude izmedju plana i izvrsenja sprjecava svaki rmSync (Codex krug 3, M3)', () => {
+    // planCleanup mjeri realpath korijena SAMO pri planiranju (plan.rootRealpath). Ovaj fs u
+    // memoriji vraca stvarni korijen na prvi upit (planiranje) i put pod Temp/claude na drugi
+    // (izvrsenje) - upravo TOCTOU koji executePlan mora ponovno provjeriti, ne pretpostaviti.
+    const r = resolve('/lekta-virtualni-m3');
+    const cand = join(r, 'lekta-runner-publish-0aZUKz');
+    const old = NOW - 90 * HOUR;
+    let rootRealpathCalls = 0;
+    const fs = {
+      readdir: (p: string) => (p === r
+        ? [{ name: 'lekta-runner-publish-0aZUKz', isDirectory: () => true, isSymbolicLink: () => false }]
+        : []),
+      lstat: (_p: string) => ({ mtimeMs: old, size: 0, isDirectory: () => true, isSymbolicLink: () => false }),
+      realpath: (p: string) => {
+        if (p !== r) return p;
+        rootRealpathCalls += 1;
+        return rootRealpathCalls === 1 ? p : resolve('/Temp/claude/sesija-tudja');
+      },
+    };
+    const p = planCleanup({ root: r, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF, fs });
+    expect(p.blocked).toBeNull();
+    expect(p.remove.map((x) => x.path)).toEqual([cand]);
+
+    const calls: string[] = [];
+    const res = executePlan(p, { rm: (path: string) => { calls.push(path); } });
+    expect(calls).toEqual([]);
+    expect(res.removed).toBe(0);
+    expect(res.refused.some((x) => x.path === r && /realpath korijena/.test(x.reason))).toBe(true);
+  });
+
+  it('kandidat ciji realpath pri izvrsenju vodi u Temp/claude sprjecava rmSync za taj kandidat (Codex krug 3, M3)', () => {
+    const r = resolve('/lekta-virtualni-m3b');
+    const cand = join(r, 'lekta-runner-publish-0aZUKz');
+    const old = NOW - 90 * HOUR;
+    let candRealpathCalls = 0;
+    const fs = {
+      readdir: (p: string) => (p === r
+        ? [{ name: 'lekta-runner-publish-0aZUKz', isDirectory: () => true, isSymbolicLink: () => false }]
+        : []),
+      lstat: (_p: string) => ({ mtimeMs: old, size: 0, isDirectory: () => true, isSymbolicLink: () => false }),
+      realpath: (p: string) => {
+        if (p !== cand) return p;
+        candRealpathCalls += 1;
+        return candRealpathCalls === 1 ? p : resolve('/Temp/claude/sesija-tudja');
+      },
+    };
+    const p = planCleanup({ root: r, nowMs: NOW, thresholdMs: THRESHOLD, listProcesses: () => QUIET, selfPid: SELF, fs });
+    expect(p.blocked).toBeNull();
+    expect(p.remove.map((x) => x.path)).toEqual([cand]);
+
+    const calls: string[] = [];
+    const res = executePlan(p, { rm: (path: string) => { calls.push(path); } });
+    expect(calls).toEqual([]);
+    expect(res.removed).toBe(0);
+    expect(res.refused.some((x) => x.path === cand && /Temp\/claude/.test(x.reason))).toBe(true);
+  });
 });

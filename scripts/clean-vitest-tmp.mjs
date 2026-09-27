@@ -343,6 +343,8 @@ export function planCleanup(opts) {
   /**
    * @type {{
    *   root: string,
+   *   rootRealpath: string | null,
+   *   protectedRoot: (p: string) => boolean,
    *   blocked: string | null,
    *   guards: Record<string, { ok: true } | { ok: false, reason: string }>,
    *   remove: Array<{ path: string, kind: Kind, newestMs: number, bytes: number, thresholdMs?: number }>,
@@ -353,8 +355,11 @@ export function planCleanup(opts) {
    *   fs: FsLike,
    * }}
    */
-  const plan = { root, blocked: null, guards: {}, remove: [], young: [], held: [], refused: [], errors: [], fs };
-  const isProtected = opts.protectedRoot ?? isInsideClaudeTemp;
+  const plan = {
+    root, rootRealpath: null, protectedRoot: opts.protectedRoot ?? isInsideClaudeTemp,
+    blocked: null, guards: {}, remove: [], young: [], held: [], refused: [], errors: [], fs,
+  };
+  const isProtected = plan.protectedRoot;
   const realpath = fs.realpath ?? ((p) => p);
 
   if (!Number.isFinite(opts.thresholdMs) || opts.thresholdMs <= 0) {
@@ -369,9 +374,13 @@ export function planCleanup(opts) {
     plan.blocked = 'korijen je pod Temp/claude (radni prostor sesija i worktreeovi runova), ne diram nista';
     return plan;
   }
-  // Isto i po realpathu: korijen moze biti junction ili simbolicka veza u Temp/claude/**.
+  // Isto i po realpathu: korijen moze biti junction ili simbolicka veza u Temp/claude/**. Rezultat
+  // se pamti (rootRealpath) da izvrsavanje moze ponovno izracunati i usporediti (TOCTOU izmedju
+  // planiranja i izvrsenja: korijen zamijenjen vezom prema Temp/claude).
   try {
-    if (isProtected(resolve(realpath(root)))) {
+    const rrp = resolve(realpath(root));
+    plan.rootRealpath = rrp;
+    if (isProtected(rrp)) {
       plan.blocked = 'korijen je po realpathu pod Temp/claude (junction ili veza), ne diram nista';
       return plan;
     }
@@ -476,12 +485,19 @@ function candidateLinkReason(full, fs, realpath, isProtected) {
  * lstatom istog sustava kojim je plan izmjeren (kandidat zamijenjen junctionom
  * izmedju plana i brisanja se ne dira); greske se zbrajaju po kodu (EBUSY, EPERM, ...) i nikad ne
  * bacaju.
+ *
+ * Realpath korijena i svakog kandidata te izuzece Temp/claude ponovno se izracunavaju ovdje, tik
+ * prije svakog rmSync (Codex krug 3, M3): planCleanup ih mjeri samo pri planiranju, a izmedju
+ * planiranja i izvrsenja korijen ili kandidat mogu biti zamijenjeni vezom/junctionom prema
+ * Temp/claude (radni prostor sesija). Nepoznato (realpath baci) znaci ne brisi.
  * @param {ReturnType<typeof planCleanup>} plan
  * @param {{ dryRun?: boolean, rm?: (p: string, o: { recursive: true, force: true }) => void }} [opts]
  */
 export function executePlan(plan, opts = {}) {
   const rm = opts.rm ?? rmSync;
   const fs = plan.fs ?? REAL_FS;
+  const realpath = fs.realpath ?? ((p) => p);
+  const isProtected = plan.protectedRoot ?? isInsideClaudeTemp;
   const result = {
     dryRun: Boolean(opts.dryRun),
     removed: 0,
@@ -491,15 +507,60 @@ export function executePlan(plan, opts = {}) {
   };
   for (const e of plan.errors) result.errorCounts[e.code] = (result.errorCounts[e.code] ?? 0) + 1;
   if (plan.blocked) return result;
+  if (plan.remove.length === 0) return result;
+
+  let rootRealpathNow;
+  try {
+    rootRealpathNow = resolve(realpath(plan.root));
+  } catch (err) {
+    result.refused.push({
+      path: plan.root,
+      reason: `realpath korijena nije izmjeren pri izvrsenju (${errCode(err)}), nepoznato = ne brisi`,
+    });
+    return result;
+  }
+  if (plan.rootRealpath != null && rootRealpathNow !== plan.rootRealpath) {
+    result.refused.push({
+      path: plan.root,
+      reason: 'realpath korijena se promijenio izmedju planiranja i izvrsenja, ne diram nista',
+    });
+    return result;
+  }
+  if (isProtected(rootRealpathNow)) {
+    result.refused.push({
+      path: plan.root,
+      reason: 'korijen je pri izvrsenju po realpathu pod Temp/claude, ne diram nista',
+    });
+    return result;
+  }
+
   for (const item of plan.remove) {
     if (!isDirectChildOf(plan.root, item.path)) {
       result.refused.push({ path: item.path, reason: 'putanja izvan korijena' });
       continue;
     }
-    // Realpath i Temp/claude su izmjereni u planu (istim injektiranim gardom); ovdje samo lstat.
+    // lstat kandidata: junction/veza podmetnuta izmedju plana i brisanja se ne dira ni ne slijedi.
     const linkReason = candidateLinkReason(item.path, fs, (p) => p, () => false);
     if (linkReason !== null) {
       result.refused.push({ path: item.path, reason: linkReason });
+      continue;
+    }
+    let candRealpathNow;
+    try {
+      candRealpathNow = resolve(realpath(item.path));
+    } catch (err) {
+      result.refused.push({
+        path: item.path,
+        reason: `realpath kandidata nije izmjeren pri izvrsenju (${errCode(err)}), nepoznato = ne brisi`,
+      });
+      continue;
+    }
+    if (isProtected(candRealpathNow)) {
+      result.refused.push({ path: item.path, reason: 'kandidat je pri izvrsenju po realpathu pod Temp/claude, ne diram ga' });
+      continue;
+    }
+    if (!isDirectChildOf(rootRealpathNow, candRealpathNow)) {
+      result.refused.push({ path: item.path, reason: 'kandidat pri izvrsenju po realpathu nije izravno dijete korijena' });
       continue;
     }
     if (result.dryRun) {

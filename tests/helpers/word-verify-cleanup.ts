@@ -16,6 +16,9 @@
  *      nije iz allowliste (.tmp-word-verify, .tmp-word-corpus), kad roditelj nije korijen
  *      repozitorija, kad je direktorij ili ista ispod njega reparse point i kad ga git ne ignorira
  *      ili u njemu prati datoteke (Codex nalaz, krug 2: bez allowliste `-OutDir node_modules`).
+ *   6. tri skripte (`WORD_VERIFY_EMPTY_SET_SCRIPTS`) same odustaju s `exit 1` kad `$provjereno`
+ *      ostane 0 PRIJE objave uspjeha i brisanja (Codex krug 3, M2): prazan skup je crveno, ne
+ *      zeleno, cak i kad pomocna funkcija tu istu provjeru ima na drugom mjestu.
  */
 
 /** Skripte koje stvaraju izlazni direktorij i nakon uspjeha ga brisu. */
@@ -28,6 +31,45 @@ export const WORD_VERIFY_CLEANUP_SCRIPTS = [
 
 /** Pomocna datoteka s jedinom funkcijom koja brise. */
 export const WORD_VERIFY_CLEANUP_HELPER = 'scripts/word-verify/outdir-cleanup.ps1';
+
+/**
+ * Skripte koje same, prije objave uspjeha, moraju odbiti prazan skup (Codex krug 3, M2):
+ * $provjereno = 0 znaci da Word nije stvarno otvorio nijedan dokument, pa je to crveno, ne zeleno.
+ * check-corpus.ps1 namjerno nije ovdje: taj popravak nije napravljen u ovoj stavci i izvan je opsega.
+ */
+export const WORD_VERIFY_EMPTY_SET_SCRIPTS = [
+  'scripts/word-verify/check.ps1',
+  'scripts/word-verify/check-worst-case.ps1',
+  'scripts/word-verify/check-toc-case.ps1',
+] as const;
+
+const EMPTY_SET_GUARD = /^\s*if \(\$provjereno -eq 0\) \{$/;
+
+/** Prazan popis znaci da skripta odustaje (exit 1) kad $provjereno ostane 0, prije brisanja i uspjeha. */
+export function wordVerifyEmptySetGuardProblems(ps1: string): string[] {
+  const lines = executableLines(ps1);
+  const problems: string[] = [];
+
+  const guardIdx = lines.findIndex((l) => EMPTY_SET_GUARD.test(l));
+  if (guardIdx === -1) {
+    problems.push('skripta ne provjerava $provjereno -eq 0 prije objave uspjeha');
+    return problems;
+  }
+  const closeOffset = lines.slice(guardIdx).findIndex((l) => l.trim() === '}');
+  const block = closeOffset === -1 ? lines.slice(guardIdx) : lines.slice(guardIdx, guardIdx + closeOffset + 1);
+  if (!block.some((l) => /\bexit 1\b/.test(l))) {
+    problems.push('provjera $provjereno -eq 0 ne odustaje s exit 1');
+  }
+  if (!block.some((l) => l.includes(KEPT))) {
+    problems.push('provjera $provjereno -eq 0 ne ispisuje putanju koja ostaje za dijagnozu');
+  }
+
+  const removeCallIdx = lines.findIndex((l) => /Remove-WordVerifyOutDir\b/.test(l) && !/^\s*function\b/i.test(l));
+  if (removeCallIdx !== -1 && removeCallIdx < guardIdx) {
+    problems.push('provjera $provjereno -eq 0 dolazi POSLIJE brisanja izlaznog direktorija');
+  }
+  return problems;
+}
 
 const CALL = /^Remove-WordVerifyOutDir\s+-Dir\s+\$OutDir\s+-RepoRoot\s+\$root\s+-CheckedCount\s+\$provjereno\s*$/;
 const INCLUDE = /^\. \(Join-Path \$PSScriptRoot 'outdir-cleanup\.ps1'\)\s*$/;
