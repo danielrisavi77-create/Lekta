@@ -1,0 +1,705 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`T64 izvori inspectionCoverage: zateceno ponasanje > skipped nizovi i zastavice tablica nad golden fixturama 1`] = `
+{
+  "fer-diplomski-prazni-odlomci.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "fer-diplomski-puna-struktura.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {
+        "odlomci unutar tablice nisu podržani u V1": 1,
+      },
+      "total": 1,
+      "withoutParagraph": 1,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 2,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "fer-diplomski-uskladjen.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "ffzg-filozofija-diplomski.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "fpzg-novinarstvo-bibliografija.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "grf-diplomski-neuskladjen.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "lo-fpzg-zavrsni-neuskladjen.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "lo-fpzg-zavrsni-uskladjen.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "mef-doktorski-disertacija.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "pmf-matematika-uskladjen.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "pmf-matematika-zasticeni-odlomci.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "pravo-integrirani-fusnote.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {
+        "Nije pronađena dovoljno pouzdana pravna struktura.": 1,
+      },
+      "total": 1,
+      "withoutParagraph": 1,
+    },
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "pravo-socijalni-rad-fusnote.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "synthetic-formula-omath.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 1,
+      "reasons": {
+        "složena Word struktura": 1,
+      },
+      "total": 1,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 1,
+      "reasons": {
+        "složena Word struktura ili polje": 1,
+      },
+      "total": 1,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 1,
+      "reasons": {
+        "složena Word struktura (polje, poveznica, tablica, SDT ili revizija)": 1,
+      },
+      "total": 1,
+      "withoutParagraph": 0,
+    },
+  },
+  "synthetic-fpzg-zavrsni-verzija-2.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "synthetic-hrvatski-naslov1-heading.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "synthetic-libreoffice-standard-default.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "synthetic-mentor-komentari.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "ttf-diplomski-arial.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "typografija-i-literatura.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 0,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+  },
+  "word-veliki-neuredan.docx": {
+    "consistencyStructure": {
+      "distinctParagraphs": 1,
+      "reasons": {
+        "odlomci unutar tablice nisu podržani u V1": 1,
+        "složena Word struktura": 1,
+      },
+      "total": 2,
+      "withoutParagraph": 1,
+    },
+    "legalFootnoteStructure": null,
+    "linkDoiStructure": {
+      "distinctParagraphs": 1,
+      "reasons": {
+        "složena Word struktura ili polje": 1,
+      },
+      "total": 1,
+      "withoutParagraph": 0,
+    },
+    "requiredSectionsStructure": {
+      "distinctParagraphs": 0,
+      "reasons": {},
+      "total": 0,
+      "withoutParagraph": 0,
+    },
+    "tableFigureRescue": {
+      "nested": 0,
+      "tables": 1,
+      "unsupported": 0,
+    },
+    "typographyStructure": {
+      "distinctParagraphs": 1,
+      "reasons": {
+        "složena Word struktura (polje, poveznica, tablica, SDT ili revizija)": 1,
+      },
+      "total": 1,
+      "withoutParagraph": 0,
+    },
+  },
+}
+`;
