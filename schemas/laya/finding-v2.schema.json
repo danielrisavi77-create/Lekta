@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lekta:laya:finding:v2",
+  "title": "LEKTA Laya v2 semantic finding adjudicator contract",
+  "description": "Strukturni ugovor. contracts-v2.ts dodatno provjerava vezanje identiteta, inputDigest, runtime manifest, distribuciju i kalibracijsku politiku. Bez ovlasti nad score, checks, issues ni repairom.",
+  "$ref": "#/$defs/decisionCase",
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "properties": {
+        "documentRevisionId": {
+          "type": "string",
+          "minLength": 36,
+          "maxLength": 36,
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "profileId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "profileRevision": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "checkId": {
+          "enum": [
+            "reference.completeness"
+          ]
+        },
+        "paragraphIndex": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "recordIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        }
+      },
+      "required": [
+        "documentRevisionId",
+        "profileId",
+        "profileRevision",
+        "checkId",
+        "paragraphIndex",
+        "recordIndex"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "enum": [
+            "owned_synthetic",
+            "explicitly_permitted"
+          ]
+        },
+        "permissionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "localInferenceAllowed": {
+          "type": "boolean"
+        },
+        "trainingAllowed": {
+          "type": "boolean"
+        },
+        "externalInferenceAllowed": {
+          "type": "boolean"
+        },
+        "documentGroupId": {
+          "type": "string",
+          "minLength": 36,
+          "maxLength": 36,
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "minLength": 36,
+          "maxLength": 36,
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "templateFamilyId": {
+          "type": "string",
+          "minLength": 36,
+          "maxLength": 36,
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "origin",
+        "permissionRef",
+        "localInferenceAllowed",
+        "trainingAllowed",
+        "externalInferenceAllowed",
+        "documentGroupId",
+        "sourceGroupId",
+        "templateFamilyId"
+      ],
+      "additionalProperties": false
+    },
+    "engine": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "string",
+          "minLength": 40,
+          "maxLength": 40,
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "checkStatus": {
+          "enum": [
+            "warn",
+            "fail"
+          ]
+        },
+        "linkage": {
+          "const": "explicit"
+        }
+      },
+      "required": [
+        "revision",
+        "checkStatus",
+        "linkage"
+      ],
+      "additionalProperties": false
+    },
+    "ruleEvidence": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "excerpt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000
+        },
+        "snapshotHash": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "ruleId",
+        "sourceId",
+        "locator",
+        "excerpt",
+        "snapshotHash"
+      ],
+      "additionalProperties": false
+    },
+    "modelInput": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "language": {
+          "enum": [
+            "hr",
+            "en",
+            "mixed"
+          ]
+        },
+        "ruleEvidence": {
+          "$ref": "#/$defs/ruleEvidence"
+        }
+      },
+      "required": [
+        "text",
+        "language",
+        "ruleEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "decisionCase": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "caseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^laya:v2\\|"
+        },
+        "inputDigest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "engine": {
+          "$ref": "#/$defs/engine"
+        },
+        "modelInput": {
+          "$ref": "#/$defs/modelInput"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "caseId",
+        "inputDigest",
+        "identity",
+        "provenance",
+        "engine",
+        "modelInput"
+      ],
+      "additionalProperties": false
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "backend": {
+          "enum": [
+            "laya-python",
+            "laya-onnx"
+          ]
+        },
+        "modelId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "modelRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "weightsSha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "tokenizerSha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "calibrationRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "runtimeVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "precision": {
+          "enum": [
+            "fp32",
+            "fp16",
+            "bf16",
+            "int8",
+            "int4"
+          ]
+        }
+      },
+      "required": [
+        "backend",
+        "modelId",
+        "modelRevision",
+        "weightsSha256",
+        "tokenizerSha256",
+        "calibrationRevision",
+        "runtimeVersion",
+        "precision"
+      ],
+      "additionalProperties": false
+    },
+    "probabilities": {
+      "type": "object",
+      "properties": {
+        "finding_supported": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "possible_false_positive": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "extraction_uncertain": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "insufficient_evidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "finding_supported",
+        "possible_false_positive",
+        "extraction_uncertain",
+        "insufficient_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "decisionResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "caseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "inputDigest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "verdict": {
+          "enum": [
+            "finding_supported",
+            "possible_false_positive",
+            "extraction_uncertain",
+            "insufficient_evidence"
+          ]
+        },
+        "probabilities": {
+          "$ref": "#/$defs/probabilities"
+        },
+        "answerConfidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "runtime": {
+          "$ref": "#/$defs/runtime"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "caseId",
+        "inputDigest",
+        "verdict",
+        "probabilities",
+        "answerConfidence",
+        "runtime"
+      ],
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "taskId": {
+          "const": "reference.completeness/finding-v2"
+        },
+        "modelDigest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "calibrationRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:+-]*$"
+        },
+        "minAnswerConfidence": {
+          "type": "number",
+          "minimum": 1e-06,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "taskId",
+        "modelDigest",
+        "calibrationRevision",
+        "minAnswerConfidence"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
