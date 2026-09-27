@@ -60,10 +60,23 @@ const STRUCTURE_SOURCES = [
 ] as const;
 
 function structureReasonBucket(value: unknown): OpportunityGapKind {
-  const reason = typeof value === 'string' ? value.toLowerCase() : '';
-  if (reason.includes('unsupported')) return 'unsupported-structure';
+  const reason = typeof value === 'string' ? value.toLocaleLowerCase('hr-HR') : '';
+  // Postojeci analizatori vec opisuju ovu klasu na hrvatskom i engleskom. Bucket se temelji
+  // samo na malom zatvorenom vokabularu; sirovi razlog se nikad ne salje u telemetriju.
+  if (
+    reason.includes('unsupported')
+    || reason.includes('nije podrž')
+    || reason.includes('nisu podrž')
+    || reason.includes('složena word struktura')
+    || reason.includes('tekstualne okvire')
+    || reason.includes('customxml')
+  ) return 'unsupported-structure';
   if (reason.includes('stale')) return 'stale-anchor';
-  if (reason.includes('no-target') || reason.includes('not-found') || reason.includes('missing-target')) return 'no-target';
+  if (
+    reason.includes('no-target')
+    || reason.includes('not-found')
+    || reason.includes('missing-target')
+  ) return 'no-target';
   return 'other';
 }
 
