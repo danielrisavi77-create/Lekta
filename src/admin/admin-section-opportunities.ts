@@ -8,6 +8,7 @@ import {
 const LABELS: Record<string, string> = {
   manual_gap: 'Analize s ručnim nalazima',
   unmeasurable_gap: 'Analize s nemjerljivim provjerama',
+  structure_gap: 'Analize s poznatim strukturnim preskokom',
   profile_not_verified: 'Potvrde profila bez verified statusa',
   repair_gap: 'Repair runovi s neriješenim ciljevima',
   paywall_checkout_gap_proxy: 'Paywall → checkout event-gap',
@@ -82,6 +83,33 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
     note: `${fmtCount(stats.current.repairUnresolvedChecks)} ciljnih provjera ostalo otvoreno`,
   }));
 
+  const structureColumns: Array<Column<(typeof stats.current.structureGaps)[number]>> = [
+    { header: 'Podsustav', render: (r) => r.category ?? '—' },
+    { header: 'Razlog', render: (r) => r.kind },
+    { header: 'Broj', numeric: true, render: (r) => fmtCount(r.count) },
+  ];
+  const structureTable = dataTable(
+    'Gdje analiza preskače strukturu',
+    `Ukupno ${fmtCount(stats.current.structureGapItems)} zabilježenih preskoka u poznatim strukturiranim analizatorima.`,
+    stats.current.structureGaps,
+    structureColumns,
+  );
+  structureTable.classList.add('c6');
+  bento.appendChild(structureTable);
+
+  const noOpColumns: Array<Column<(typeof stats.current.repairNoOpReasons)[number]>> = [
+    { header: 'Razlog fixera', render: (r) => r.kind },
+    { header: 'Broj', numeric: true, render: (r) => fmtCount(r.count) },
+  ];
+  const noOpTable = dataTable(
+    'Zašto fixer odustaje',
+    `Ukupno ${fmtCount(stats.current.repairNoOpItems)} klasificiranih no-op/preskočenih stavki.`,
+    stats.current.repairNoOpReasons,
+    noOpColumns,
+  );
+  noOpTable.classList.add('c6');
+  bento.appendChild(noOpTable);
+
   const columns: Array<Column<(typeof ranked)[number]>> = [
     { header: 'Prilika', render: (r) => opportunityLabel(r) },
     { header: 'Zahvaćeno', numeric: true, render: (r) => fmtCount(r.affected) },
@@ -109,7 +137,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
     caveat.appendChild(el(
       'p',
       'hint',
-      `Još nije instrumentirano: ${stats.missingSignals.join(', ')}. To se ne prikazuje kao nula.`,
+      `Još nije instrumentirano: ${stats.missingSignals.join(', ')}. To se ne prikazuje kao nula. Poznati structure skipovi iznad nisu isto što i potpuni inspectionCoverage cijelog OOXML paketa.`,
     ));
   }
   bento.appendChild(caveat);
