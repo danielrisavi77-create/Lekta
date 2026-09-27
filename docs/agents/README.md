@@ -116,6 +116,25 @@ Preglednik cita diff/dokaze
 preko dostupnih alata; Claude pregled je ogranicen na citanje datoteka, pa mu koordinator
 prethodno sprema `git diff` i provjere u datoteke navedene u zadatku. Nalaze uvijek provjeri.
 
+## Poruke izmedu sesija iz cloud sesije
+
+Odluka vlasnika 2026-09-27. Cloud sesija (Claude Code na claude.ai/code, `environment_kind`
+`anthropic_cloud`) poruke drugih sesija prima, ali ih izravno ne moze slati: `SendMessage` iz
+nje vraca gresku autorizacije. Zato cloud sesija svaku poruku drugoj sesiji (koordinatoru,
+implementatoru, orkestratoru) salje UVIJEK kao jednokratni Routine, nikad kao izravnu poruku:
+
+- alat `create_trigger` (claude-code-remote MCP) s `persistent_session_id` ciljne sesije
+  (id iz `list_sessions`), `run_once_at` minutu ili dvije unaprijed i `initiation: human_request`
+  kad je poruku trazio vlasnik;
+- tekst je samostalan: tko salje (ime i session id), kome, sto je gotovo (PR, grana, dokaz,
+  "Nije dokazano") i sto ceka odluku;
+- u odgovoru vlasniku navedi `trigger_id` i vrijeme isporuke; isporuka nije potvrdena dok ciljna
+  sesija ne odgovori;
+- ne ponavljaj isti Routine ako ciljna sesija ne odgovara; javi vlasniku.
+
+Lokalne i bridge sesije (VS Code, CLI) i dalje koriste `SendMessage`. Routine ne prenosi
+ovlasti: ciljna sesija poruku tretira kao poruku druge sesije, ne kao vlasnikovu odluku.
+
 ## Ugovor reda zadataka
 
 `tasks.json` je jedini statusni registar. `development-plan.md` daje opseg i kriterije T00-T47; T16-T47 su Podplan F,
