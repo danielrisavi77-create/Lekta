@@ -704,6 +704,24 @@
       }
     },
     {
+      "programCode": "313",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Proizvodnja i prerada mesa; Obvezna literatura",
+        "quote": "Diplomski studij /  Proizvodnja i prerada mesa  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "314",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Fitomedicina; Obvezna literatura",
+        "quote": "Diplomski studij /  Fitomedicina  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
       "programCode": "318",
       "profileId": "sumfak-diplomski",
       "evidence": {
@@ -1133,6 +1151,105 @@
         "sourceUrl": "https://www.fazos.unios.hr/diplomski-sveucilisni-studiji",
         "sourceLocator": "službeni popis diplomskih sveučilišnih studija",
         "quote": "Diplomski sveučilišni studij Ekološka poljoprivreda; U IV. semestru studenti izrađuju diplomski rad."
+      }
+    },
+    {
+      "programCode": "567",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Hortikultura; Obvezna literatura",
+        "quote": "Diplomski studij / Hortikultura /  Povrćarstvo  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "568",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Krajobrazna arhitektura; Obvezna literatura",
+        "quote": "Diplomski studij /  Krajobrazna arhitektura  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "569",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Poljoprivredna tehnika; Obvezna literatura",
+        "quote": "Diplomski studij / Poljoprivredna tehnika /  Mehanizacija  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "570",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Agroekologija; Obvezna literatura",
+        "quote": "Diplomski studij / Agroekologija /  Agroekologija  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "571",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Ribarstvo i lovstvo; Obvezna literatura",
+        "quote": "Diplomski studij /  Ribarstvo i lovstvo  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "572",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Biljne znanosti; Obvezna literatura",
+        "quote": "Diplomski studij /  Biljne znanosti  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "573",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Agrobiznis i ruralni razvitak; Obvezna literatura",
+        "quote": "Diplomski studij /  Agrobiznis i ruralni razvitak  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "574",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Ekološka poljoprivreda i agroturizam; Obvezna literatura",
+        "quote": "Diplomski studij /  Ekološka poljoprivreda i agroturizam  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "575",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Hranidba životinja i hrana; Obvezna literatura",
+        "quote": "Diplomski studij /  Hranidba životinja i hrana  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "576",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Genetika i oplemenjivanje životinja; Obvezna literatura",
+        "quote": "Diplomski studij /  Genetika i oplemenjivanje životinja  (Obvezni predmet, 2. semestar, 1. godina)"
+      }
+    },
+    {
+      "programCode": "577",
+      "profileId": "agr-diplomski",
+      "evidence": {
+        "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
+        "sourceLocator": "Diplomski rad - seminar, Vrsta predmeta: Proizvodnja i prerada mlijeka; Obvezna literatura",
+        "quote": "Diplomski studij /  Proizvodnja i prerada mlijeka  (Obvezni predmet, 2. semestar, 1. godina)"
       }
     },
     {
@@ -4015,44 +4132,6 @@
       ]
     },
     {
-      "programCode": "313",
-      "reason": "Diplomski kolegij 921 potvrđuje obvezan pisani rad i obranu, ali njegova dostupna evidencija ne izlaže popis obveznih uputa; seminar 758 navodi izdanje 2019.",
-      "missingEvidence": [
-        "Treba službena potvrda da se upute iz kolegija Diplomski rad – Seminar primjenjuju i na završni rad programa Proizvodnja i prerada mesa za važeću kohortu."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/921",
-          "sourceLocator": "kolegij Diplomski rad, Opis predmeta",
-          "quote": "Diplomski rad je individualni pisani rad u pravilu temeljen na vlastitim istraživanjima"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "314",
-      "reason": "Obvezna literatura u kolegiju diplomskog rada navodi izdanje 2017., a zajednički seminar izdanje 2019.; važeći skup pravila za Fitomedicinu nije usklađen.",
-      "missingEvidence": [
-        "Treba službena odluka koja određuje mjerodavno izdanje uputa i potvrđuje ga za aktualnu kohortu programa Fitomedicina."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/924",
-          "sourceLocator": "str. 3/3, Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
       "programCode": "316",
       "reason": "Identitet je samo iz Upisnika; citat i lokator ne imenuju program niti izričito pokrivaju sve studije.",
       "missingEvidence": [
@@ -4425,215 +4504,6 @@
           "sourceUrl": "https://www.pmfst.unist.hr/portfolio-posts/ddiplomski-sveucilisni-studij-biologija-i-kemija/",
           "sourceLocator": "službena stranica diplomskog studija, obvezni predmet IV. semestra",
           "quote": "PMBC30 Diplomski rad"
-        }
-      ]
-    },
-    {
-      "programCode": "567",
-      "reason": "Dio kolegija za smjerove Hortikulture navodi izdanje 2017., dok zajednički seminar navodi izdanje 2019.; nije provjeren svaki smjer koji obuhvaća Upisnik šifra 567.",
-      "missingEvidence": [
-        "Treba važeći popis smjerova programa i mjerodavne upute za svaki smjer, uz službeno razrješenje izdanja 2017. naspram 2019."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/914",
-          "sourceLocator": "kolegij Diplomski rad – Povrćarstvo, str. 3/3, Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "568",
-      "reason": "Kolegij za diplomski rad potvrđuje obvezan rad i obranu, ali dostupni zapis ne navodi njegove oblikovne upute; zajednički seminar navodi izdanje 2019.",
-      "missingEvidence": [
-        "Treba službeno potvrditi koje se oblikovne upute primjenjuju na diplomski rad Krajobrazne arhitekture."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/918",
-          "sourceLocator": "kolegij Diplomski rad, Opis predmeta",
-          "quote": "Diplomski rad je individualni pisani rad u pravilu temeljen na vlastitim istraživanjima"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "569",
-      "reason": "Kolegij diplomskog rada za Melioracije navodi izdanje 2017., a zajednički seminar izdanje 2019.; primjenjivo izdanje nije razriješeno.",
-      "missingEvidence": [
-        "Treba službeno odrediti važeće oblikovne upute za Poljoprivrednu tehniku/Melioracije i kohortu programa."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/920/Diplomski%2Brad%2B-%2BPoljoprivredna%2Btehnika%2FMelioracije",
-          "sourceLocator": "Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "570",
-      "reason": "Kolegij diplomskog rada potvrđuje obvezan rad i obranu, ali dostupni zapis ne izlaže primjenjive oblikovne upute; zajednički seminar navodi izdanje 2019.",
-      "missingEvidence": [
-        "Treba točan važeći vodič diplomskog rada za Agroekologiju ili službena potvrda primjene vodiča iz seminara."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/928",
-          "sourceLocator": "kolegij Diplomski rad, opis završnog rada",
-          "quote": "Diplomski rad je individualni pisani rad u pravilu temeljen na vlastitim istraživanjima"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "571",
-      "reason": "Kolegij diplomskog rada potvrđuje obvezan rad i obranu, ali ne izlaže oblikovne upute; zajednički seminar navodi izdanje 2019.",
-      "missingEvidence": [
-        "Treba točan vodič diplomskog rada za Ribarstvo i lovstvo ili službena potvrda primjene vodiča iz seminara."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/923",
-          "sourceLocator": "kolegij Diplomski rad, str. 1/3, Opis predmeta",
-          "quote": "Diplomski rad je individualni pisani rad u pravilu temeljen na vlastitim istraživanjima"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "572",
-      "reason": "Kolegij diplomskog rada za Biljne znanosti navodi izdanje 2017., a zajednički seminar izdanje 2019.; mjerodavno izdanje nije razriješeno.",
-      "missingEvidence": [
-        "Treba službena odluka koja određuje mjerodavne upute za Biljne znanosti i važeću kohortu."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/926",
-          "sourceLocator": "str. 3/3, Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "573",
-      "reason": "Obvezna literatura kolegija diplomskog rada navodi izdanje 2017., dok zajednički seminar navodi izdanje 2019.; mjerodavno izdanje nije razriješeno.",
-      "missingEvidence": [
-        "Treba službena odluka koja određuje mjerodavne upute za Agrobiznis i ruralni razvitak i važeću kohortu."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/929",
-          "sourceLocator": "str. 3/3, Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "574",
-      "reason": "Obvezna literatura kolegija diplomskog rada navodi izdanje 2017., dok zajednički seminar navodi izdanje 2019.; mjerodavno izdanje nije razriješeno.",
-      "missingEvidence": [
-        "Treba službena odluka koja određuje mjerodavne upute za Ekološku poljoprivredu i agroturizam i važeću kohortu."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/925/Diplomski%2Brad%2B-%2BEkolo%C5%A1ka%2Bpoljoprivreda%2Bi%2Bagroturizam",
-          "sourceLocator": "Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "575",
-      "reason": "Obvezna literatura kolegija diplomskog rada navodi izdanje 2017., dok zajednički seminar navodi izdanje 2019.; mjerodavno izdanje nije razriješeno.",
-      "missingEvidence": [
-        "Treba službena odluka koja određuje mjerodavne upute za Hranidbu životinja i hranu i važeću kohortu."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/917/Diplomski%2Brad%2BHranidba%2B%C5%BEivotinja%2Bi%2Bhrana",
-          "sourceLocator": "Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "576",
-      "reason": "Aktualni program navodi obvezan diplomski rad, a zajednički seminar izdanje 2019.; točan vodič na kolegiju diplomskog rada nije potvrđen.",
-      "missingEvidence": [
-        "Treba službena oblikovna uputa vezana uz točan kolegij diplomskog rada ili potvrda da vrijedi izdanje 2019."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/group/158/Genetika%2Bi%2Boplemenjivanje%2B%C5%BEivotinja",
-          "sourceLocator": "program Genetika i oplemenjivanje životinja, 4. semestar",
-          "quote": "28.00 | Diplomski rad - Genetika i oplemenjivanje životinja (169289)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
-        }
-      ]
-    },
-    {
-      "programCode": "577",
-      "reason": "Obvezna literatura kolegija diplomskog rada navodi izdanje 2017., dok zajednički seminar navodi izdanje 2019.; mjerodavno izdanje nije razriješeno.",
-      "missingEvidence": [
-        "Treba službena odluka koja određuje mjerodavne upute za Proizvodnju i preradu mlijeka i važeću kohortu."
-      ],
-      "sources": [
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/pdf/course/hr/922",
-          "sourceLocator": "kolegij Diplomski rad, str. 3/3, Obvezna literatura",
-          "quote": "Upute za oblikovanje diplomskog rada 2017 (doc)"
-        },
-        {
-          "sourceUrl": "https://www.agr.unizg.hr/hr/course/hr/758/Diplomski%2Brad%2B-%2Bseminar",
-          "sourceLocator": "kolegij Diplomski rad – Seminar, Obvezna literatura",
-          "quote": "Upute za izradu diplomskog rada 2019. (pdf)"
         }
       ]
     },
