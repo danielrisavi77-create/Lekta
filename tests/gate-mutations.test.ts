@@ -38,6 +38,11 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { adjudicate } from '../scripts/laya/contracts-v2.ts';
+import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
+import { isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
+import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import {
@@ -4955,6 +4960,44 @@ const MUTATIONS: Mutation[] = [
       const stvarni = cleanTmpRun(fs, CT_QUIET);
       return stvarni.rmCalls.length === 0 && stvarni.plan.young.some((i) => i.path === CT_NANO);
     },
+  },
+  // --- Laya v2 (docs/laya/LAYA_V2_SPEC.md): savjetodavni procjenitelj nikad ne ulazi u istinu Lekte ---
+  {
+    id: 'laya/src-uvozi-layu',
+    imitates: 'src modul koji prije shadow GO odluke uveze Laya ugovor (static ili dynamic import), pa Laya tiho postane dio javnog bundlea i kriticnog puta analize',
+    caught: () => srcLayaImportProblems([{ path: 'src/analysis/x.ts', source: "import { adjudicate } from '../../scripts/laya/contracts-v2.ts';" }]).length === 1
+      && srcLayaImportProblems([{ path: 'src/analysis/y.ts', source: "const m = await import('../adjudication/laya-view-model');" }]).length === 1,
+    cleanBefore: () => srcLayaImportProblems([{ path: 'src/analysis/x.ts', source: "import { buildTriage } from './triage';\n// layout nije laya" }]).length === 0,
+  },
+  {
+    id: 'laya/presuda-bez-kalibracije',
+    imitates: 'upstream confidence prihvacen kao istina: odgovor s answerConfidence 1.0 postaje presuda iako za taj modelDigest ne postoji izmjereni prag',
+    caught: () => adjudicate({ ...makeResult(), answerConfidence: 1 }, makeCase(), makeRuntime(), null).status === 'no_adjudication',
+    cleanBefore: () => adjudicate(makeResult(), makeCase(), makeRuntime(), makePolicy()).status === 'adjudicated',
+  },
+  {
+    id: 'laya/tezine-drift',
+    imitates: 'runtime ucita druge tezine pod istim modelId-jem (novi download ili kvantizacija), a presuda se i dalje veze uz stari kalibrirani prag',
+    caught: () => adjudicate({ ...makeResult(), runtime: { ...makeRuntime(), weightsSha256: '0'.repeat(64) } }, makeCase(), makeRuntime(), makePolicy()).status === 'no_adjudication',
+    cleanBefore: () => adjudicate(makeResult(), makeCase(), makeRuntime(), makePolicy()).status === 'adjudicated',
+  },
+  {
+    id: 'laya/odgovor-za-stari-ulaz',
+    imitates: 'cache vrati odgovor za prijasnju verziju zapisa (isti caseId, drugi tekst), pa se presuda pripise ulazu koji model nije vidio',
+    caught: () => adjudicate({ ...makeResult(), inputDigest: 'f'.repeat(64) }, makeCase(), makeRuntime(), makePolicy()).status === 'no_adjudication',
+    cleanBefore: () => adjudicate(makeResult(), makeCase(), makeRuntime(), makePolicy()).status === 'adjudicated',
+  },
+  {
+    id: 'laya/nesigurna-veza-postaje-case',
+    imitates: 'zapis cija veza s reference.completeness nije eksplicitna ipak ode modelu, pa Laya procjenjuje nalaz koji Lekta nije tvrdila',
+    caught: () => buildLayaCandidates({ ...makeSnapshot(), records: [{ ...makeSnapshot().records[0], linkage: 'uncertain' }] }).cases.length === 0,
+    cleanBefore: () => buildLayaCandidates(makeSnapshot()).cases.length === 1,
+  },
+  {
+    id: 'laya/formalni-check-eligibilan',
+    imitates: 'registry prosiren na formalnu os (margine, font, stranica) iako je parser tu deterministicki autoritet',
+    caught: () => !isLayaEligibleCheck('page.margins') && !isLayaEligibleCheck('font.family') && !isLayaEligibleCheck('toc.present'),
+    cleanBefore: () => isLayaEligibleCheck('reference.completeness'),
   },
 ];
 
