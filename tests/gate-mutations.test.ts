@@ -6150,6 +6150,22 @@ const MUTATIONS: Mutation[] = [
       readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8').replace("$TaskName = 'Lekta clean-tmp'", "$TaskName = 'Lekta clean:tmp'"),
     ).length > 0,
   },
+  // --- register-clean-task.ps1 stavka G: -TaskName kao PARAMETAR odbija nedopustene znakove ---
+  {
+    id: 'register-clean-task/taskname-parametar-nedopusteni-znak',
+    imitates: "prosirenje gard a474690e na -TaskName PARAMETAR: provjera nad $TaskName.Contains($znak) "
+      + 'ispise poruku ali ne izadje s exit 1, pa Register-ScheduledTask ipak dobije ime s nedopustenim '
+      + "znakom i padne tek u OS-u s 'The parameter is incorrect'",
+    cleanBefore: () => registerCleanTaskParamNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8'),
+    ).length === 0,
+    caught: () => registerCleanTaskParamNameProblems(
+      readFileSync(REGISTER_CLEAN_TASK_SCRIPT, 'utf8').replace(
+        /(\$TaskName\.Contains\(\$znak\)\)\s*\{\r?\n(?:.*\r?\n)*?)\s*exit 1\r?\n/,
+        '$1',
+      ),
+    ).length > 0,
+  },
   // --- Word check skripte: izlazni direktorij se brise SAMO na uspjehu (stavka G) ---
   {
     id: 'word-verify/outdir-brisan-i-na-padu',
@@ -6459,6 +6475,34 @@ function registerCleanTaskNameProblems(src: string): string[] {
   return REGISTER_CLEAN_TASK_FORBIDDEN_CHARS
     .filter((znak) => ime.includes(znak))
     .map((znak) => `ime taska '${ime}' sadrzi nedopusteni znak '${znak}'`);
+}
+
+/**
+ * Stavka G, tocka 2: gard nedopustenih znakova prosiren i na -TaskName kao PARAMETAR (ne samo na
+ * zadano ime u izvoru), provjeren PRIJE bilo kojeg poziva Register-ScheduledTask ili grane
+ * -Unregister. Test: tests/register-clean-task.test.ts.
+ */
+function registerCleanTaskParamNameProblems(src: string): string[] {
+  const c = src.replace(/\r/g, '');
+  const problems: string[] = [];
+  if (!/\[string\]\$TaskName\s*=\s*'Lekta clean-tmp'/.test(c)) {
+    problems.push('nema parametra -TaskName s defaultom Lekta clean-tmp');
+  }
+  const provjeraIdx = c.search(/\$TaskName\.Contains\(\$znak\)/);
+  if (provjeraIdx < 0) {
+    problems.push('nema provjere $TaskName.Contains($znak) nad zabranjenim znakovima');
+  } else if (!/exit 1/.test(c.slice(provjeraIdx, provjeraIdx + 400))) {
+    problems.push('provjera -TaskName ne zavrsava s exit 1 (upozorenje bez odbijanja)');
+  }
+  const prviUnregister = c.indexOf('if ($Unregister)');
+  const prviRegister = c.indexOf('Register-ScheduledTask -TaskName');
+  if (provjeraIdx < 0 || prviUnregister < 0 || provjeraIdx > prviUnregister) {
+    problems.push('provjera -TaskName ne prethodi grani -Unregister');
+  }
+  if (provjeraIdx < 0 || prviRegister < 0 || provjeraIdx > prviRegister) {
+    problems.push('provjera -TaskName ne prethodi Register-ScheduledTask');
+  }
+  return problems;
 }
 
 /** Stvarni planCleanup + executePlan s `rm` koji samo biljezi; `overrides` nosi mutaciju. */
