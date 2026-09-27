@@ -1,5 +1,5 @@
 import type { OpportunityStats, OpportunityRow } from './admin-types';
-import { rankOpportunityRows } from './opportunity-ranking';
+import { opportunityMeasurementHealth, rankOpportunityRows } from './opportunity-ranking';
 import {
   el, heroCard, statTile, dataTable, computeDelta, seriesColors,
   fmtCount, fmtPct, type Column,
@@ -33,6 +33,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
 
   const ranked = rankOpportunityRows(stats.current.opportunities);
   const strongest = ranked[0];
+  const health = opportunityMeasurementHealth(stats.current);
 
   bento.appendChild(heroCard({
     label: 'Najjači izmjereni signal',
@@ -42,6 +43,16 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
       ? `${opportunityLabel(strongest)} · ${fmtCount(strongest.affected)}/${fmtCount(strongest.denominator)} opažanja`
       : 'Nema dovoljno podataka u odabranom razdoblju.',
   }));
+
+  const healthCard = el('div', 'card c12 rise');
+  healthCard.appendChild(el('div', 'card-title', 'Zdravlje mjerenja'));
+  const healthText = health.kind === 'healthy'
+    ? `Exact parity: analysis_completed ${fmtCount(stats.current.analysisCompletedEvents)} = opportunity_summary ${fmtCount(stats.current.opportunityEvents)}; structure summary ${fmtCount(stats.current.structureGapItems)} = breakdown ${fmtCount(stats.current.structureBreakdownItems)}.`
+    : health.kind === 'no-data'
+      ? 'Nema baznih analiza u odabranom razdoblju; report nema što potvrditi.'
+      : `Mjerenje je nepotpuno: analysis parity Δ ${health.analysisDelta >= 0 ? '+' : ''}${health.analysisDelta}; structure parity Δ ${health.structureDelta >= 0 ? '+' : ''}${health.structureDelta}. Rangiranje koristi nepotpun uzorak dok se parity ne vrati na nulu.`;
+  healthCard.appendChild(el('p', 'hint', healthText));
+  bento.appendChild(healthCard);
 
   bento.appendChild(statTile({
     label: 'Opportunity eventi',
