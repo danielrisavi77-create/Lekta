@@ -44,15 +44,15 @@ describe('docs/agents/ANALITIKA_I_ALARMI.md', () => {
     }
   });
 
-  it('Privatnost opisuje trackEvent i DOPUSTENI_KLJUCEVI', () => {
+  it('Privatnost opisuje trackEvent i ANALYTICS_DATA_KEYS', () => {
     const p = odjeljak(/^## Privatnost$/);
     expect(p).toMatch(/trackEvent/);
-    expect(p).toMatch(/DOPUSTENI_KLJUCEVI/);
+    expect(p).toMatch(/ANALYTICS_DATA_KEYS/);
   });
 
-  it('svaki kljuc iz DOPUSTENI_KLJUCEVI je opisan u odjeljku Privatnost', () => {
-    const src = readFileSync(resolve('src/ui/telemetry.ts'), 'utf8');
-    const blok = /const DOPUSTENI_KLJUCEVI = \[([\s\S]*?)\];/.exec(src);
+  it('svaki kljuc iz ANALYTICS_DATA_KEYS je opisan u odjeljku Privatnost', () => {
+    const src = readFileSync(resolve('src/analytics/event-sanitizer.ts'), 'utf8');
+    const blok = /ANALYTICS_DATA_KEYS[^=]*= new Set\(\[([\s\S]*?)\]\s*as const\);/.exec(src);
     expect(blok).not.toBeNull();
     const kljucevi = [...blok![1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
     expect(kljucevi.length).toBeGreaterThan(10);

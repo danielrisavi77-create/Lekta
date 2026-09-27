@@ -5,6 +5,9 @@
     { "pattern": "src/**", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "docs/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
     { "pattern": "scripts/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
+    { "pattern": "schemas/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Verzionirani interni ugovori (Laya v2). Nisu dio javnog browser bundlea." },
+    { "pattern": "scripts/laya/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Laya v2: savjetodavni ugovor, candidate builder i buduci eval/parity alati. Bez modela u bundleu; tezine nikad u Git." },
+    { "pattern": "docs/laya/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Laya v2 specifikacija i protokoli. Studentski tekst, tezine i privatni eval izvjestaji ne smiju u Git." },
     { "pattern": "config/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Predlozak konfiguracije autonomnog kontrolera (bez tajni). Efektivna konfiguracija zivi IZVAN repozitorija (LEKTA_AUTONOMY_HOME); nista odavde ne ide u bundle." },
     { "pattern": "supabase/**", "class": "SECURITY-SENSITIVE", "bundle": "forbidden" },
     {

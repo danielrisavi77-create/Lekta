@@ -14,7 +14,7 @@
 
 import { resolveAdminRange, isAdminRangeError, type AdminRange } from './admin-range.ts';
 
-export type AdminView = 'overview' | 'funnel' | 'revenue' | 'operations' | 'usage' | 'coverage';
+export type AdminView = 'overview' | 'funnel' | 'revenue' | 'operations' | 'usage' | 'coverage' | 'opportunities';
 
 export interface AdminRpcCall {
   /** undefined = legacy prazno tijelo, stari admin_beta_stats() put (admin-panel.ts, nepromijenjeno). */
@@ -36,6 +36,7 @@ const VIEW_RPC: Record<AdminView, string> = {
   operations: 'admin_operations_stats',
   usage: 'admin_usage_stats',
   coverage: 'admin_coverage_stats',
+  opportunities: 'admin_opportunity_stats',
 };
 
 const VALID_VIEWS = new Set<string>(Object.keys(VIEW_RPC));

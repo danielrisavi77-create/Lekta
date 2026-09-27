@@ -27,6 +27,10 @@ export const CHECKOUT_CONSENT_TEXTS: Readonly<Record<string, string>> = Object.f
     'Pristajem da isporuka digitalnog sadržaja (puni izvještaj) počne odmah nakon plaćanja i izričito se odričem prava na jednostrani raskid ugovora u roku od 14 dana (čl. 86. Zakona o zaštiti potrošača). Bez ovog pristanka kupnja se ne može dovršiti.',
   '2026-09-18':
     'Pristajem da isporuka digitalnog sadržaja (puni izvještaj i/ili automatski popravak dokumenta) počne odmah nakon plaćanja i izričito se odričem prava na jednostrani raskid ugovora u roku od 14 dana (čl. 86. Zakona o zaštiti potrošača). Bez ovog pristanka kupnja se ne može dovršiti.',
+  // 2026-09-27: dodana tocka 10 garancijskih uvjeta (jamstvo za automatski popravak). Tekst
+  // privole se nije mijenjao, ali verzija uvjeta jest, pa novi kljuc nosi isti tekst.
+  '2026-09-27':
+    'Pristajem da isporuka digitalnog sadržaja (puni izvještaj i/ili automatski popravak dokumenta) počne odmah nakon plaćanja i izričito se odričem prava na jednostrani raskid ugovora u roku od 14 dana (čl. 86. Zakona o zaštiti potrošača). Bez ovog pristanka kupnja se ne može dovršiti.',
 });
 
 /** Kanonski tekst za zadanu verziju uvjeta, ili null ako verzija nije poznata. */

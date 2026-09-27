@@ -191,3 +191,27 @@ describe('config/agent-routing.json: zasticena podrucja postoje i pokrivaju CLAU
     expect(joined).toMatch(/security/);
   });
 });
+
+describe('config/agent-routing.json: korak 2, faza critic', () => {
+  it('svaka kombinacija ima critic ulogu: claude, effort low, verificiran i najjeftiniji model', () => {
+    const config = readConfig();
+    const verified = Object.entries(config.models)
+      .filter(([id, spec]) => spec.status === 'verified' && id.startsWith('claude-'))
+      .map(([id]) => id)
+      .sort((a, b) => (config.costWeight[a] ?? Infinity) - (config.costWeight[b] ?? Infinity));
+    expect(verified.length).toBeGreaterThan(0);
+    for (const size of SIZES) {
+      for (const flag of PROTECTED_KEYS) {
+        const critic = config.routing[size]?.[flag]?.roles.critic;
+        expect(critic, `routing.${size}.${flag}.roles.critic nedostaje`).toBeTruthy();
+        expect(critic.provider).toBe('claude');
+        expect(critic.effort).toBe('low');
+        expect(critic.model).toBe(verified[0]);
+      }
+    }
+  });
+
+  it('effortPolicy ima critic: low', () => {
+    expect(readConfig().effortPolicy.critic).toBe('low');
+  });
+});
