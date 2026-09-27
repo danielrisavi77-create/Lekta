@@ -241,6 +241,18 @@
       "decidedBy": "Daniel Risavi (odluka u sesiji 2026-08-30)",
       "decidedAt": "2026-08-30",
       "rationale": "Kanonizirana su 21 tvrdnja i pet registarskih vrijednosti. Dvije su CITANJE (vsig -> `custom` jer izvor stil ne spominje; unizd-tko -> `chicago-author` jer citat doslovno navodi autor-datum oblik). Ostale su TUMACENJE i tako su i zapisane: \"apa\" -> `apa7` jer motor nema token za APA bez izdanja, a `custom` bi odbacio autor-godina provjere koje izvor izricito trazi; \"autor-godina\" -> `harvard` jer izvor opisuje sustav a ne prirucnik, a `harvard` je u ovom repozitoriju token opceg autor-godina. Ostavljanje zatecenog stanja bilo je najgora opcija: profil je tvrdio jedno, a mjerio drugo."
+    },
+    {
+      "ruleIds": [
+        "ffzg-filozofija-diplomski--font-size"
+      ],
+      "finding": "citat odsjecen, recenica se nastavlja",
+      "evidence": "ffzg-filoz-diplomski-2019.pdf: nakon stavke \"pismo (font): Times New Roman, veličina 12;\" isti popis (bez recenicne tocke) nastavlja se do \"fusnote ... pismo (font) veličine 10, prored jednostruk.\" Izuzece je stvarno i na ISTOJ osi: tijelo 12, biljeske 10. SCOPE_CARVEOUT hvata \"fusnote\"/\"naslove\", AXIS_WORDS font-size hvata \"veličine\", a 10 nije u atomima pravila. Motor ima pojam `footnoteSize`, ali ga ovaj profil ne zapisuje.",
+      "alsoNoted": "Nalaz se pojavio TEK nakon sidrenja citata na doslovni tekst izvora u f8bcbff5 (velicina -> veličina). Dok citat nije doslovno postojao u izvoru, provjera nastavka se nije mogla izvesti. Doslovan citat je otkrio odredbu koju je ASCII parafraza skrivala. Roditeljsko pravilo o numeraciji stranica istog PDF-a vec je u known-findings; page-number-title-suppression je kasnije dodan kao zasebno pravilo.",
+      "decision": "left-scored",
+      "decidedBy": "Grok",
+      "decidedAt": "2026-09-27",
+      "rationale": "Ne cini pravilo prestrogim: motor mjeri DOMINANTNU velicinu, pa biljeske ne mogu oboriti provjeru tijela teksta. Citat font-size pravila tocno pokriva stavku o tijelu; sirenje citata do tocke zahvatilo bi cijeli popis (margine, prored, numeracija) i pomijesalo osi. Dodavanje bodovanog `footnoteSize` mijenja ono po cemu se studenti ocjenjuju i trazi ljudski prolaz (`verifiedBy`, `confirmedVia: human-audit`), pa se biljezi ovdje umjesto da se doda u ovom CI popravku."
     }
   ]
 }
