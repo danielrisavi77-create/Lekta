@@ -66,11 +66,8 @@ function message(error: unknown): string {
   return String(error);
 }
 
-/**
- * Je li kupceva uplata (PaymentIntent) PUNO vracena: oznaka punog povrata u inboxu (webhook-mor je
- * pise PRIJE ikakvog drugog koraka povrata) ili kupcevo pravo u stanju `refunded`. Baca na gresku.
- */
-export async function orderFullyRefunded(admin: ReferrerRewardDb, orderId: string): Promise<boolean> {
+/** Oznaka punog povrata zadanog PaymentIntenta u inboxu. Baca na gresku. */
+async function refundMarker(admin: ReferrerRewardDb, orderId: string): Promise<boolean> {
   const { data: oznaka, error: oznakaErr } = await admin
     .from('webhook_events')
     .select('id')
@@ -79,17 +76,38 @@ export async function orderFullyRefunded(admin: ReferrerRewardDb, orderId: strin
     .in('outcome_detail', REFUND_MARKERS)
     .limit(1);
   if (oznakaErr) throw new Error(`refund_marker_lookup: ${message(oznakaErr)}`);
-  if (rows(oznaka).length > 0) return true;
+  return rows(oznaka).length > 0;
+}
+
+/**
+ * Je li kupceva uplata (PaymentIntent) PUNO vracena: oznaka punog povrata u inboxu (webhook-mor je
+ * pise PRIJE ikakvog drugog koraka povrata) ili kupcevo pravo u stanju `refunded`. Baca na gresku.
+ *
+ * KOJA JE UPLATA VRACENA (krug 4). Nadogradnja Repair -> Final Pass ne stvara vlastiti redak nego
+ * pretvara isti (order_id = Repair uplata, upgrade_order_id = uplata nadogradnje), a puni povrat
+ * UPLATE NADOGRADNJE gasi taj redak u `refunded`. Status retka zato sam ne kaze je li vracena
+ * izvorna uplata. Redak `refunded` koji nosi `upgrade_order_id` se broji kao povrat izvorne uplate
+ * SAMO ako povrat uplate nadogradnje nije zabiljezen; inace je status posljedica povrata
+ * nadogradnje, a Repair uplata (i nagrada preporucitelju za nju) ostaje. Povrat same izvorne uplate
+ * ionako ima vlastitu oznaku (prvi korak).
+ */
+export async function orderFullyRefunded(admin: ReferrerRewardDb, orderId: string): Promise<boolean> {
+  if (await refundMarker(admin, orderId)) return true;
 
   const { data: pravo, error: pravoErr } = await admin
     .from('entitlements')
-    .select('id')
+    .select('id, upgrade_order_id')
     .eq('provider', PROVIDER)
     .eq('order_id', orderId)
-    .eq('status', 'refunded')
-    .limit(1);
+    .eq('status', 'refunded');
   if (pravoErr) throw new Error(`entitlement_lookup: ${message(pravoErr)}`);
-  return rows(pravo).length > 0;
+  for (const r of rows(pravo)) {
+    const upgradeOrderId = typeof r === 'object' && r !== null ? (r as Record<string, unknown>).upgrade_order_id : null;
+    if (typeof upgradeOrderId !== 'string' || upgradeOrderId === '') return true;
+    // Nadogradjen redak: status je objasnjen povratom nadogradnje samo ako je taj povrat zabiljezen.
+    if (!(await refundMarker(admin, upgradeOrderId))) return true;
+  }
+  return false;
 }
 
 /**

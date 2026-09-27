@@ -107,3 +107,42 @@ describe('process-bonus-outbox: referrer_reward i povrat', () => {
     expect(eqs(db.calls[1])).toEqual({ provider: 'stripe', order_id: 'pi_1', status: 'refunded' });
   });
 });
+
+/**
+ * KRUG 4 (6c): povrat UPLATE NADOGRADNJE gasi isti redak (order_id = Repair uplata) u `refunded`.
+ * To nije povrat izvorne Repair uplate, pa nagrada preporucitelju za Repair ostaje.
+ */
+describe('process-bonus-outbox: povrat nadogradnje nije povrat izvorne uplate', () => {
+  /** Oznake punog povrata po PaymentIntentu i retci prava kupca u stanju refunded. */
+  function world(markeri: string[], refundedRows: Array<{ id: string; upgrade_order_id: string | null }>) {
+    return fakeAdmin((c: FakeCall): FakeResult | undefined => {
+      if (c.table === 'webhook_events' && writeOp(c) === 'select') {
+        return { data: markeri.includes(String(eqs(c).order_id)) ? [{ id: `evt-${String(eqs(c).order_id)}` }] : [] };
+      }
+      if (c.table === 'entitlements' && writeOp(c) === 'select') return { data: eqs(c).status === 'refunded' ? refundedRows : [] };
+      return undefined;
+    });
+  }
+  const nadogradjen = { id: 'ent-1', upgrade_order_id: 'pi_up' };
+
+  it('vracena SAMO uplata nadogradnje (oznaka na pi_up): Repair uplata NIJE vracena, nagrada se dodjeljuje', async () => {
+    const db = world(['pi_up'], [nadogradjen]);
+    expect(await orderFullyRefunded(db.admin as unknown as ReferrerRewardDb, 'pi_1')).toBe(false);
+    const granted: string[] = [];
+    const ishod = await runReferrerRewardObligation(db.admin as unknown as ReferrerRewardDb, ROW, async (_a, _u, _w, o) => { granted.push(o); });
+    expect(ishod).toBe('granted');
+    expect(granted).toEqual(['pi_1']);
+  });
+
+  it('vracena izvorna Repair uplata nadogradjenog prava (oznaka na pi_1): vraceno', async () => {
+    expect(await orderFullyRefunded(world(['pi_1'], [nadogradjen]).admin as unknown as ReferrerRewardDb, 'pi_1')).toBe(true);
+  });
+
+  it('nadogradjen redak refunded bez ikakve oznake (npr. rucno ugasen): fail-safe, vraceno', async () => {
+    expect(await orderFullyRefunded(world([], [nadogradjen]).admin as unknown as ReferrerRewardDb, 'pi_1')).toBe(true);
+  });
+
+  it('nenadogradjen redak refunded: vraceno (kao i dosad)', async () => {
+    expect(await orderFullyRefunded(world([], [{ id: 'ent-1', upgrade_order_id: null }]).admin as unknown as ReferrerRewardDb, 'pi_1')).toBe(true);
+  });
+});
