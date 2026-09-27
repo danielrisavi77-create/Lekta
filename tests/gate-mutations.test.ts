@@ -38,6 +38,11 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { adjudicate } from '../scripts/laya/contracts-v2.ts';
+import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
+import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
+import { makeCase, makePolicy, makeResult, makeRuntime, makeSnapshot } from './helpers/laya-v2-fixtures';
 import { migrationHygieneProblems } from './helpers/migration-hygiene';
 import { hasUnboundedFormData } from './helpers/edge-formdata';
 import {
@@ -133,6 +138,7 @@ import {
   findBarePushWorkflows,
   findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
+  findSelfHostedProblems,
   type NamedWorkflow,
 } from './helpers/ci-workflow-triggers';
 import { executePlan, measureDir, planCleanup } from '../scripts/clean-vitest-tmp.mjs';
@@ -4957,6 +4963,54 @@ const MUTATIONS: Mutation[] = [
       return stvarni.rmCalls.length === 0 && stvarni.plan.young.some((i) => i.path === CT_NANO);
     },
   },
+  // --- Laya v2 (docs/laya/LAYA_V2_SPEC.md): savjetodavni procjenitelj nikad ne ulazi u istinu Lekte ---
+  {
+    id: 'laya/src-uvozi-layu',
+    imitates: 'src modul koji prije shadow GO odluke uveze Laya ugovor (static ili dynamic import), pa Laya tiho postane dio javnog bundlea i kriticnog puta analize',
+    caught: () => srcLayaImportProblems([{ path: 'src/analysis/x.ts', source: "import { adjudicate } from '../../scripts/laya/contracts-v2.ts';" }]).length === 1
+      && srcLayaImportProblems([{ path: 'src/analysis/y.ts', source: "const m = await import('../adjudication/laya-view-model');" }]).length === 1,
+    cleanBefore: () => srcLayaImportProblems([{ path: 'src/analysis/x.ts', source: "import { buildTriage } from './triage';\n// layout nije laya, await import(nesto) u komentaru\nconst m = await import('./lazy');" }]).length === 0,
+  },
+  {
+    id: 'laya/src-zaobilazi-gard',
+    imitates: 'src ucita Layu kroz require ili sastavljeni dinamicki specifikator (Codex A2 na #149), pa tekstualni gard ne vidi putanju',
+    caught: () => srcLayaImportProblems([{ path: 'src/a.ts', source: "const c = require('../../scripts/laya/contracts-v2.ts');" }]).length === 1
+      && srcLayaImportProblems([{ path: 'src/b.ts', source: "const m = await import('scripts/' + 'laya/contracts-v2.ts');" }]).length === 1
+      && srcLayaImportProblems([{ path: 'src/c.ts', source: 'const m = await import(`../${dir}/contracts-v2.ts`);' }]).length === 1,
+    cleanBefore: () => srcLayaImportProblems([{ path: 'src/a.ts', source: "const m = await import('./report');\nimport x from '../scoring/checks';" }]).length === 0,
+  },
+  {
+    id: 'laya/presuda-bez-kalibracije',
+    imitates: 'upstream confidence prihvacen kao istina: odgovor s answerConfidence 1.0 postaje presuda iako za taj modelDigest ne postoji izmjereni prag',
+    caught: () => adjudicate({ ...makeResult(), answerConfidence: 1 }, makeCase(), makeRuntime(), null).status === 'no_adjudication',
+    cleanBefore: () => adjudicate(makeResult(), makeCase(), makeRuntime(), makePolicy()).status === 'adjudicated',
+  },
+  {
+    id: 'laya/tezine-drift',
+    imitates: 'runtime ucita druge tezine pod istim modelId-jem (novi download ili kvantizacija), a presuda se i dalje veze uz stari kalibrirani prag',
+    caught: () => adjudicate({ ...makeResult(), runtime: { ...makeRuntime(), weightsSha256: '0'.repeat(64) } }, makeCase(), makeRuntime(), makePolicy()).status === 'no_adjudication',
+    cleanBefore: () => adjudicate(makeResult(), makeCase(), makeRuntime(), makePolicy()).status === 'adjudicated',
+  },
+  {
+    id: 'laya/odgovor-za-stari-ulaz',
+    imitates: 'cache vrati odgovor za prijasnju verziju zapisa (isti caseId, drugi tekst), pa se presuda pripise ulazu koji model nije vidio',
+    caught: () => adjudicate({ ...makeResult(), inputDigest: 'f'.repeat(64) }, makeCase(), makeRuntime(), makePolicy()).status === 'no_adjudication',
+    cleanBefore: () => adjudicate(makeResult(), makeCase(), makeRuntime(), makePolicy()).status === 'adjudicated',
+  },
+  {
+    id: 'laya/nesigurna-veza-postaje-case',
+    imitates: 'zapis cija veza s reference.completeness nije eksplicitna ipak ode modelu, pa Laya procjenjuje nalaz koji Lekta nije tvrdila',
+    caught: () => buildLayaCandidates({ ...makeSnapshot(), records: [{ ...makeSnapshot().records[0], linkage: 'uncertain' }] }).cases.length === 0,
+    cleanBefore: () => buildLayaCandidates(makeSnapshot()).cases.length === 1,
+  },
+  {
+    id: 'laya/formalni-check-eligibilan',
+    imitates: 'registry prosiren na formalnu os (margine, font, stranica) iako je parser tu deterministicki autoritet',
+    // Mutira se sam registry (ne samo upit), jer bi isLayaEligibleCheck formalni id odbio i kad je upisan.
+    caught: () => formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'page.margins']).length === 1
+      && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
+    cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
+  },
 ];
 
 /** Minimalni datotecni sustav koji scripts/clean-vitest-tmp.mjs prima (readdir + lstat). */
@@ -5794,6 +5848,95 @@ describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u
       },
     ];
     expect(findPullRequestWithoutConcurrency(golaKonstanta)).toEqual(['primjer-gola-konstanta.yml']);
+  });
+});
+
+describe('mutacije: self-hosted Word runner na javnom repou (T80, Codex F1, F3, F5 na #162)', () => {
+  const IF = "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'";
+  const RAW = 'name: word-proof\npermissions:\n  contents: read\n';
+  const wordProof = (): NamedWorkflow => ({
+    file: 'word-proof.yml',
+    raw: RAW,
+    doc: {
+      on: { workflow_dispatch: null, push: { branches: ['master', 'release/**'] } },
+      permissions: { contents: 'read' },
+      jobs: {
+        'word-proof': {
+          'runs-on': ['self-hosted', 'windows', 'word'],
+          if: IF,
+          steps: [
+            { name: 'Checkout', uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' },
+            { name: 'Porijeklo commita (samo tocan vrh)', run: 'git for-each-ref --format=x refs/remotes/origin/master' },
+            { name: 'release:check', run: 'npm run release:check' },
+          ],
+        },
+      },
+    },
+  });
+  const drugi = (runsOn: unknown): NamedWorkflow => ({
+    file: 'drugi.yml',
+    raw: 'name: drugi\n',
+    doc: { on: { push: { branches: ['master'] } }, jobs: { posao: { 'runs-on': runsOn } } },
+  });
+  const nalazi = (...w: NamedWorkflow[]) => findSelfHostedProblems(w);
+
+  it('BASELINE: tocan word-proof i drugi workflow na ubuntu-latest su cisti', () => {
+    expect(nalazi(wordProof(), drugi('ubuntu-latest'))).toEqual([]);
+  });
+
+  it('F1: drugi workflow s golom oznakom word, windows, self-hosted, izrazom ili grupom se hvata', () => {
+    for (const runsOn of ['word', 'windows', 'self-hosted', ['self-hosted'], '${{ matrix.os }}', { group: 'default' }]) {
+      expect(nalazi(drugi(runsOn)), JSON.stringify(runsOn)).toHaveLength(1);
+    }
+  });
+
+  it('F5: slabiji if (|| umjesto &&) se hvata', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof'].if = IF.replace('&&', '||');
+    expect(nalazi(m)).toEqual([`word-proof.yml: job word-proof if mora biti tocno: ${IF}`]);
+  });
+
+  it('F5: push.tags uz dopustene grane se hvata', () => {
+    const m = wordProof();
+    (m.doc.on as Record<string, unknown>).push = { branches: ['master', 'release/**'], tags: ['v*'] };
+    expect(nalazi(m)).toEqual(['word-proof.yml: push smije imati samo branches (ima: branches, tags)']);
+  });
+
+  it('F5: workflow_call i pull_request trigeri se hvataju', () => {
+    for (const trigger of ['workflow_call', 'pull_request']) {
+      const m = wordProof();
+      (m.doc.on as Record<string, unknown>)[trigger] = {};
+      expect(nalazi(m)[0], trigger).toMatch(/^word-proof\.yml: trigeri moraju biti tocno push, workflow_dispatch/);
+    }
+  });
+
+  it('F5: secrets: inherit, secrets[ i secrets. se hvataju', () => {
+    for (const dodatak of ['    secrets: inherit\n', "    env:\n      K: ${{ secrets['K'] }}\n", '      K: ${{ secrets.K }}\n']) {
+      const m = wordProof();
+      m.raw = RAW + dodatak;
+      expect(nalazi(m), dodatak).toEqual(['word-proof.yml: spominje secrets (secrets., secrets[ ili secrets: inherit)']);
+    }
+  });
+
+  it('F5: prosireni runs-on i pravo pisanja se hvataju', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof']['runs-on'] = ['self-hosted', 'windows', 'word', 'x64'];
+    m.doc.permissions = { contents: 'write' };
+    expect(nalazi(m)).toEqual([
+      'word-proof.yml: job word-proof runs-on mora biti tocno [self-hosted, windows, word]',
+      'word-proof.yml: job word-proof nema permissions samo contents: read',
+    ]);
+  });
+
+  it('F3: provjera porijekla s --contains ili korak koji izvrsava kod prije nje se hvata', () => {
+    const contains = wordProof();
+    contains.doc.jobs!['word-proof'].steps![1].run = 'git branch -r --contains HEAD';
+    expect(nalazi(contains)).toEqual([
+      'word-proof.yml: job word-proof Porijeklo commita mora usporedjivati tocne vrhove grana, ne --contains',
+    ]);
+    const prije = wordProof();
+    prije.doc.jobs!['word-proof'].steps!.splice(1, 0, { name: 'npm ci', run: 'npm ci' });
+    expect(nalazi(prije)).toEqual(['word-proof.yml: job word-proof izvrsava nesto prije koraka Porijeklo commita']);
   });
 });
 
