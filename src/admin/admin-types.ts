@@ -226,7 +226,7 @@ export interface OpportunityGapBreakdown {
   count: number;
 }
 
-export interface OpportunityScopeMismatch {
+interface OpportunityScopeMismatch {
   surface: 'structure' | 'repair_noop_items' | 'repair_attempts';
   profileId: string;
   workType: string;
