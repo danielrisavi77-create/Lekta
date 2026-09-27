@@ -92,15 +92,30 @@ import {
 } from '../src/report/webhook';
 import { quoteUpgrade } from '../src/report/upgrade';
 import {
+  accessRowsProblems,
   bonusOutboxWorkerProblems,
   entitlementAccessProblems,
   entitlementConsumerProblems,
   entitlementProductFkCount,
   entitlementSnapshotProblems,
+  specialistFallbackProblems,
   upgradeQuoteProblems,
+  upgradeRefundTraceProblems,
   upgradeWiringProblems,
 } from './helpers/monetizacija-v1-guards';
-import { ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb } from '../src/report/entitlement-access';
+import { ENTITLEMENT_ACCESS_SELECT, entitlementRowFromDb, readAccessRows } from '../src/report/entitlement-access';
+import { billableMismatch } from '../src/report/billable-work-type';
+import { checkoutMismatch } from '../src/report/checkout';
+import { estimateWorkType, unambiguousMismatch } from '../src/report/work-type-estimate';
+import { isReportWorkType } from '../src/report/pricing';
+import {
+  V1_MIGRATION,
+  idempotencyProblems,
+  readMigration,
+  runV1,
+  snapshotProblems,
+  upgradeSqlProblems,
+} from './helpers/monetizacija-v1-sql';
 import { findSameProviderWithoutFallback, findUnverifiedModelUsages } from './helpers/agent-routing-checks';
 import {
   localRepairFlagProblems,
@@ -4943,11 +4958,13 @@ const MUTATIONS: Mutation[] = [
   },
   {
     id: 'naplata/pristup-guta-gresku-upita',
-    imitates: 'krug 1: `{ data: entitlements }` bez provjere greske; PGRST201 ili pad baze postaju "nema prava" i placeni korisnik dobiva 402 s ponudom da plati ponovno',
+    imitates: 'krug 1: potrosac bez provjere greske citanja prava; PGRST201 ili pad baze postaju "nema prava" i placeni korisnik dobiva 402 s ponudom da plati ponovno',
     caught: () => {
       const src = generateReportSource();
-      const mutated = src.replace('{ data: entitlements, error: entitlementsError }', '{ data: entitlements }');
-      if (mutated === src) return false;
+      const od = src.indexOf('  if (!access.ok) {');
+      const _do = od < 0 ? -1 : src.indexOf('  }\n', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do + 4);
       return entitlementConsumerProblems({ 'generate-report': mutated }).some((p) => p.includes('greska upita prava se guta'));
     },
     cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
@@ -4962,6 +4979,81 @@ const MUTATIONS: Mutation[] = [
       return entitlementConsumerProblems({ 'repair-docx': mutated }).some((p) => p.includes('klijentskim popisom'));
     },
     cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  // --- naplata: Monetizacija V1 (M2) krug 3 -----------------------------------------------------------
+  {
+    id: 'naplata/pristup-mimo-zajednickog-citanja',
+    imitates: 'krug 2: repair-docx cita entitlements vlastitim inline upitom pokraj readAccessRows, pa izvrseni test zajednickog citanja ne dokazuje nista o stvarnom putu',
+    caught: () => {
+      const src = repairDocxSource();
+      const mutated = src.replace('readAccessRows(admin as unknown as AccessDb, user.id, workType, now),', "admin.from('entitlements').select(ENTITLEMENT_ACCESS_SELECT),");
+      if (mutated === src) return false;
+      return entitlementConsumerProblems({ 'repair-docx': mutated }).some((p) => p.includes('zajednickim citanjem readAccessRows'));
+    },
+    cleanBefore: () => entitlementConsumerProblems({ 'generate-report': generateReportSource(), 'repair-docx': repairDocxSource() }).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-istekao-slot',
+    imitates: 'krug 2: quoteUpgrade gleda samo purchase_expires_at, pa se Repair ciji je slot istekao (i cron ga anonimizirao) nadogradi u Final Pass koji ne prepoznaje nijednu verziju rada',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotLive: true } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('isteklim vezanim slotom'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/nadogradnja-slot-neprocitan-kao-ziv',
+    imitates: 'fail-open citanje slota: pozivatelj koji zaboravi procitati vezani slot (boundSlotLive undefined) dobiva nadogradnju kao da je slot ziv',
+    caught: () => {
+      const mutant: typeof quoteUpgrade = (t, s, u, n) => quoteUpgrade(t, s ? { ...s, boundSlotLive: s.boundSlotLive ?? true } : s, u, n);
+      return upgradeQuoteProblems(mutant).some((p) => p.includes('nije fail-closed'));
+    },
+    cleanBefore: () => upgradeQuoteProblems(quoteUpgrade).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-fallback-na-diplomski-popravak',
+    imitates: 'krug 2: billableMismatch za nize vrste zove samo dijeljenu unambiguousMismatch, koja specijalisticku naslovnicu mapira na diplomski, pa specijalisticki rad trosi diplomski slot (9,99 umjesto 16,99)',
+    caught: () => {
+      const mutant: typeof billableMismatch = (sel, sig, sug) =>
+        billableMismatch(sel, sig.titleMarker === 'specialist' ? { ...sig, titleMarker: 'graduate' } : sig, sug);
+      return specialistFallbackProblems(mutant, checkoutMismatch).some((p) => p.includes('repair-docx: specijalisticka naslovnica trosi'));
+    },
+    cleanBefore: () => specialistFallbackProblems(billableMismatch, checkoutMismatch).length === 0,
+  },
+  {
+    id: 'naplata/specijalisticki-fallback-na-diplomski-kupnja',
+    imitates: 'krug 2: checkoutMismatch provjerava samo klijentske vrste (isReportWorkType + unambiguousMismatch), pa se slot_diplomski prodaje za specijalisticki rad',
+    caught: () => {
+      const stari: typeof checkoutMismatch = (sel, sig, confirmed) => {
+        if (confirmed || !sig || !sel || !isReportWorkType(sel)) return { block: false };
+        const signals = { words: sig.words, titleMarker: (sig.titleMarker ?? null) as Parameters<typeof unambiguousMismatch>[1]['titleMarker'] };
+        return unambiguousMismatch(sel, signals) ? { block: true, suggestedWorkType: estimateWorkType(signals).workType } : { block: false };
+      };
+      return specialistFallbackProblems(billableMismatch, stari).some((p) => p.includes('create-checkout: specijalisticka naslovnica kupuje diplomski'));
+    },
+    cleanBefore: () => specialistFallbackProblems(billableMismatch, checkoutMismatch).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-samo-u-logu',
+    imitates: 'krug 2: puni povrat Repaira nadogradjenog prava gasi Final Pass, a uplata nadogradnje ostaje naplacena uz inbox processed/refunded; trag je samo redak u logu koji istekne',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace("await settle('needs_manual_review', 'refunded', rucniPregled);", "await settle('processed', 'refunded');");
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('bez trajnog traga'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/povrat-nadogradnje-bez-traga-izvorne-uplate',
+    imitates: 'pola popravka: trajan trag samo za povrat izvorne uplate, a povrat uplate nadogradnje (placeni Repair ostaje bez prava) i dalje samo u logu',
+    caught: () => {
+      const src = webhookMorSource();
+      const mutated = src.replace('        rucniPregled = `upgrade_refunded: ${upgradeSources.join(\'; \')}`;\n', '');
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('povrat uplate nadogradnje'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
   },
   // --- naplata: F21 (docs/agents/orchestrator-backlog.md), zatvoreno u Monetizaciji V1 (M2) ---------
   {
@@ -5591,6 +5683,99 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
     expect(raw.byteLength).toBeGreaterThan(1000);
     expect(checkSourceHashes({ sources: [REAL_SOURCE], only: [REAL_SOURCE_ID] }).problems).toEqual([]);
   });
+});
+
+/**
+ * Monetizacija V1 (M2) krug 3: asinkroni gardovi. Zajednicko citanje pristupa se IZVRSAVA, a 0206 se
+ * izvrsava u stvarnom Postgresu (PGlite, tests/helpers/monetizacija-v1-sql.ts). Isti ugovor kao
+ * MUTATIONS: cisti baseline, pa mutacija koja mora oboriti gard.
+ */
+describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
+  const ROK_SQL = 180_000;
+
+  it('readAccessRows: baseline cist; citanje koje guta gresku upita obara gard', async () => {
+    expect(await accessRowsProblems(readAccessRows)).toEqual([]);
+    const mutant: typeof readAccessRows = async (db, u, w, n) => {
+      const r = await readAccessRows(db, u, w, n);
+      return r.ok ? r : { ok: true, activeSlots: [], entitlements: [] };
+    };
+    expect((await accessRowsProblems(mutant)).some((p) => p.includes('"nema prava"'))).toBe(true);
+  });
+
+  it('0206 baseline: idempotencija, snapshot i nadogradnja u bazi su cisti', async () => {
+    const run = await runV1();
+    try {
+      // Nadogradnja prva: snapshotProblems mijenja katalog (namjerno, da dokaze da kupljeno ostaje).
+      expect(await upgradeSqlProblems(run.db)).toEqual([]);
+      expect(await snapshotProblems(run)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+    const drugi = await runV1();
+    try {
+      expect(await idempotencyProblems(drugi)).toEqual([]);
+    } finally {
+      await drugi.db.close();
+    }
+  }, ROK_SQL);
+
+  function mutiraj(od: string, u: string): string {
+    const sql = readMigration(V1_MIGRATION);
+    const mutated = sql.replace(od, u);
+    expect(mutated, `mutacija nije primijenjena: ${od.slice(0, 60)}`).not.toBe(sql);
+    return mutated;
+  }
+
+  it('apply_entitlement_upgrade bez provjere vezanog slota: nadogradnja isteklog rada obara gard', async () => {
+    const mutated = mutiraj('  if v_ent.slots_used > 0 and not exists (', '  if false and not exists (');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('istekao vezani slot'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('bezuvjetan set_product_price: drugi prolaz dopisuje pricing_changelog i obara gard idempotencije', async () => {
+    const mutated = mutiraj('    if p.price_eur is distinct from v.price_eur::numeric then', '    if true then');
+    const run = await runV1(mutated);
+    try {
+      expect((await idempotencyProblems(run, mutated)).some((p) => p.includes('dopisuje pricing_changelog'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('backfill prozora POSLIJE promjene kataloga: staro pravo dobiva novi prozor i obara gard snapshota', async () => {
+    const sql = readMigration(V1_MIGRATION);
+    const backfill = sql.slice(
+      sql.indexOf('update public.entitlements e\n   set slot_window_days = p.slot_window_days'),
+      sql.indexOf('-- Snapshot pri svakom upisu prava'),
+    );
+    expect(backfill.length).toBeGreaterThan(50);
+    const bez = sql.replace(backfill, '');
+    const mutated = bez.replace('-- 6. Kanibalizirajuci', `${backfill}\n-- 6. Kanibalizirajuci`);
+    expect(mutated).not.toBe(sql);
+    const run = await runV1(mutated);
+    try {
+      expect((await snapshotProblems(run)).some((p) => p.includes('umjesto kupljenih 14'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('bez triggera snapshota: pravo upisano mimo webhooka ostaje bez ponude i obara gard', async () => {
+    const mutated = mutiraj(
+      'create trigger entitlements_snapshot_offer\n  before insert on public.entitlements\n  for each row execute function public.entitlements_snapshot_offer();',
+      '',
+    );
+    const run = await runV1(mutated);
+    try {
+      expect((await snapshotProblems(run)).some((p) => p.includes('trigger ne snapshotira'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
 });
 
 // Agent result success cannot bypass dependency or independent-review gates.

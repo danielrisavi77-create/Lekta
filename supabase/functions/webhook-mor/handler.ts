@@ -34,7 +34,7 @@ import {
   REFERRAL_WELCOME_DISCOUNT,
 } from '../../../src/report/referral.ts';
 import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
-import { mapUpgradeSourceRow, quoteUpgrade, UPGRADE_SOURCE_COLUMNS } from '../../../src/report/upgrade.ts';
+import { mapUpgradeSourceRow, quoteUpgrade, readBoundSlotLive, UPGRADE_SOURCE_COLUMNS } from '../../../src/report/upgrade.ts';
 
 const PROVIDER = 'stripe';
 
@@ -716,7 +716,7 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // proglasila tudjim ili nepostojecim i nikad ga ne bi ponovila (Codex pregled kruga 3).
     const { data: refundTargets, error: lookupErr } = await admin
       .from('entitlements')
-      .select('id, product_id, upgrade_order_id')
+      .select('id, product_id, upgrade_order_id, upgrade_paid_cents')
       .eq('provider', PROVIDER)
       .eq('order_id', ev.orderId);
     if (lookupErr) {
@@ -728,16 +728,23 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       id: String(r.id),
       productId: String(r.product_id ?? ''),
       upgradeOrderId: typeof r.upgrade_order_id === 'string' ? r.upgrade_order_id : '',
+      upgradePaidCents: typeof r.upgrade_paid_cents === 'number' ? r.upgrade_paid_cents : null,
     }));
     // Povrat IZVORNE (Repair) uplate prava koje je vec nadogradjeno u Final Pass gasi i nadogradnju,
     // a uplata nadogradnje ostaje naplacena. Pravo se svejedno gasi (sigurnije), ali to netko mora
-    // vidjeti i odluciti o povratu nadogradnje.
+    // vidjeti i odluciti o povratu nadogradnje. Trag je TRAJAN (nalaz pregleda kruga 3): ishod
+    // `needs_manual_review` uz `outcome_note` s PaymentIntentom i iznosom nadogradnje, ne samo redak
+    // u logu koji istekne. `outcome_detail` ostaje `refunded` (REFUND_MARKERS).
     const nadogradjeni = targets.filter((r) => r.upgradeOrderId !== '');
+    let rucniPregled: string | null = null;
     if (nadogradjeni.length > 0) {
       console.error('webhook-mor refund_of_upgraded_entitlement', {
         orderId: ev.orderId,
         upgradeOrderIds: nadogradjeni.map((r) => r.upgradeOrderId),
       });
+      rucniPregled = `refund_of_upgraded_entitlement: ${nadogradjeni
+        .map((r) => `pravo=${r.id} nadogradnja=${r.upgradeOrderId} naplaceno_nadogradnje=${r.upgradePaidCents ?? 'nepoznato'}`)
+        .join('; ')}`;
     }
     const foreignTarget = targets.find((r) => !isSoldByLektaCheckout(r.productId));
     if (foreignTarget) {
@@ -758,10 +765,11 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // Bez ovog citanja bi povrat nadogradnje zavrsio kao `refund_without_entitlement`, a Final Pass
     // bi ostao aktivan za vracen novac. Pad citanja je 500 (Stripe ponovi), isto kao gore.
     let upgradeIds: string[] = [];
+    let upgradeSources: string[] = [];
     if (ownIds.length === 0) {
       const { data: upgradeRows, error: upgradeLookupErr } = await admin
         .from('entitlements')
-        .select('id')
+        .select('id, order_id, paid_amount_cents')
         .eq('upgrade_order_id', ev.orderId);
       if (upgradeLookupErr) {
         console.error('webhook-mor refund_lookup_failed', { orderId: ev.orderId, error: dbErrorMessage(upgradeLookupErr) });
@@ -769,6 +777,9 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
         return json({ error: 'refund_failed' }, 500);
       }
       upgradeIds = dbRows(upgradeRows).map((r) => String(r.id));
+      upgradeSources = dbRows(upgradeRows).map(
+        (r) => `pravo=${String(r.id)} izvorna_uplata=${String(r.order_id ?? '')} naplaceno_repair=${typeof r.paid_amount_cents === 'number' ? r.paid_amount_cents : 'nepoznato'}`,
+      );
     }
 
     // PRAVO SE GASI PRIJE SPOREDNIH POSLJEDICA (nalaz pregleda 2026-09-27). Dotad je
@@ -816,6 +827,8 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       if (dbRows(upgradeRefunded).length > 0) {
         pravoUgaseno = true;
         console.error('webhook-mor upgrade_refunded', { orderId: ev.orderId, entitlementIds: upgradeIds });
+        // Placeni Repair dio ostaje bez prava: trajan trag uz inbox, isto kao gore.
+        rucniPregled = `upgrade_refunded: ${upgradeSources.join('; ')}`;
       }
     }
 
@@ -842,6 +855,13 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // Rucna narudzba nema entitlement, a povrat ju je upravo zatvorio (ili je vec bila zatvorena),
     // pa je ishod `refunded`, isti kao za entitlement.
     if (pravoUgaseno || posljedice.manualOrderFound) {
+      // Povrat koji dira nadogradnju ostavlja jednu uplatu bez prava: ishod `needs_manual_review`
+      // ulazi u dnevni upit rucnog pregleda (docs/GO_LIVE_NAPLATA.md 5.1 i 5.2), a oznaka punog
+      // povrata ostaje `refunded` pa je uplata i radnik bonusa i dalje vide.
+      if (rucniPregled !== null) {
+        await settle('needs_manual_review', 'refunded', rucniPregled);
+        return json({ ok: true, action: 'refunded', review: rucniPregled.slice(0, rucniPregled.indexOf(':')) });
+      }
       await settle('processed', 'refunded');
       return json({ ok: true, action: 'refunded' });
     }
@@ -1271,6 +1291,7 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
 /** Upit supabase-js graditelja kakvog nadogradnja koristi (thenable koji se dalje suzava). */
 interface UpgradeQuery extends PromiseLike<DbResponse> {
   eq(column: string, value: string): UpgradeQuery;
+  gt(column: string, value: string): UpgradeQuery;
   in(column: string, values: readonly string[]): UpgradeQuery;
   limit(count: number): UpgradeQuery;
   select(columns: string): UpgradeQuery;
@@ -1279,7 +1300,7 @@ interface UpgradeQuery extends PromiseLike<DbResponse> {
 
 /** Najuzi oblik Supabase klijenta koji nadogradnja treba; bez `any`. */
 interface UpgradeDb {
-  from(table: 'entitlements' | 'webhook_events'): {
+  from(table: 'entitlements' | 'webhook_events' | 'document_slots'): {
     select(columns: string): UpgradeQuery;
     update(values: Record<string, string>): UpgradeQuery;
   };
@@ -1348,6 +1369,17 @@ async function bookUpgradePayment(
       return json({ ok: true, action: 'refunded_before_payment' }, 200);
     }
 
+    // Vezani rad mora biti jos ziv (isto pravilo kao create-checkout; apply_entitlement_upgrade ga
+    // ponavlja atomski). Slot je mogao isteci izmedju checkouta i uplate: tada rucni pregled.
+    if (source && source.slotsUsed > 0) {
+      const slot = await readBoundSlotLive(admin, source.id, new Date(nowMs).toISOString());
+      if (!slot.ok) {
+        console.error('webhook-mor upgrade_source_lookup_failed', { orderId: ev.orderId, error: slot.error });
+        await settle('failed', `upgrade_slot_lookup: ${slot.error}`);
+        return json({ error: 'internal' }, 500);
+      }
+      source.boundSlotLive = slot.live;
+    }
     const quote = quoteUpgrade(product, source, ev.userId, nowMs);
     const iznos = quote.ok ? chargedAmountVerdict(ev, quote.amountCents) : null;
     const razlog = !quote.ok
@@ -1395,7 +1427,7 @@ async function bookUpgradePayment(
         sourceEntitlementId: source.id,
         ishod: String(ishod ?? ''),
       });
-      await settle('needs_manual_review', `upgrade:upgrade_source_unavailable izvor=${source.id}`);
+      await settle('needs_manual_review', `upgrade:upgrade_source_unavailable izvor=${source.id} ishod=${String(ishod ?? '')}`);
       return json({ ok: true, action: 'needs_manual_review', reason: 'upgrade_source_unavailable' }, 200);
     }
   }

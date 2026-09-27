@@ -8,7 +8,9 @@
  */
 import type { buildEntitlementInsert } from '../../src/report/webhook';
 import type { quoteUpgrade, UpgradeSource, UpgradeTarget } from '../../src/report/upgrade';
-import type { entitlementRowFromDb } from '../../src/report/entitlement-access';
+import type { billableMismatch } from '../../src/report/billable-work-type';
+import type { checkoutMismatch } from '../../src/report/checkout';
+import type { entitlementRowFromDb, readAccessRows } from '../../src/report/entitlement-access';
 import { decideReportAccess } from '../../src/report/slot-logic';
 
 type BuildFn = typeof buildEntitlementInsert;
@@ -54,7 +56,8 @@ function target(over: Partial<UpgradeTarget> = {}): UpgradeTarget {
 function source(over: Partial<UpgradeSource> = {}): UpgradeSource {
   return {
     id: 'ent-1', userId: 'u1', workType: 'diplomski', status: 'active', provider: 'stripe', slotsTotal: 1,
-    offerCode: 'repair_v1', paidAmountCents: 999, purchaseExpiresAt: LATER, upgradeOrderId: null, ...over,
+    offerCode: 'repair_v1', paidAmountCents: 999, purchaseExpiresAt: LATER, upgradeOrderId: null,
+    slotsUsed: 1, boundSlotLive: true, ...over,
   };
 }
 
@@ -88,6 +91,18 @@ export function upgradeQuoteProblems(quote: QuoteFn): string[] {
   if (quote(target(), source(), 'u2', NOW).ok) problems.push('tudje pravo se moze nadograditi');
   if (quote(target(), source({ purchaseExpiresAt: new Date(NOW - 1).toISOString() }), 'u1', NOW).ok) {
     problems.push('isteklo pravo se moze nadograditi (rok)');
+  }
+  // Vezani rad mora biti ziv (nalaz pregleda kruga 3): istekao slot cron anonimizira, pa bi placen
+  // Final Pass produljio prazan otisak koji ne prepoznaje nijednu verziju rada.
+  if (quote(target(), source({ boundSlotLive: false }), 'u1', NOW).ok) {
+    problems.push('pravo s isteklim vezanim slotom se moze nadograditi (Final Pass bez upotrebljivog otiska)');
+  }
+  if (quote(target(), source({ boundSlotLive: undefined }), 'u1', NOW).ok) {
+    problems.push('neprocitano stanje vezanog slota se tumaci kao ziv slot (nije fail-closed)');
+  }
+  const nevezano = quote(target(), source({ slotsUsed: 0, boundSlotLive: undefined }), 'u1', NOW);
+  if (!nevezano.ok || nevezano.amountCents !== 1000) {
+    problems.push('nevezan Repair (slots_used 0) se ne moze nadograditi');
   }
   return problems;
 }
@@ -205,8 +220,9 @@ export function entitlementAccessProblems(fromDb: typeof entitlementRowFromDb, s
 
 /**
  * OZICENJE POTROSNJE PRAVA: generate-report i repair-docx prihvacaju svaku prodajnu vrstu rada
- * (specijalisticki iz 0206), citaju pravo zajednickim upitom i mapiranjem, i gresku upita NE
- * tumace kao "nema prava" (to bi placenom korisniku vratilo 402).
+ * (specijalisticki iz 0206), citaju slotove i pravo ZAJEDNICKIM citanjem (readAccessRows, izvrsno
+ * testirano u accessRowsProblems), i neuspjelo citanje NE tumace kao "nema prava" (to bi placenom
+ * korisniku vratilo 402).
  */
 export function entitlementConsumerProblems(sources: Record<string, string>): string[] {
   const problems: string[] = [];
@@ -215,19 +231,108 @@ export function entitlementConsumerProblems(sources: Record<string, string>): st
     if (/isReportWorkType\(/.test(src) || !/isBillableWorkType\((body|meta)\.workType\)/.test(src)) {
       problems.push(`${ime}: vrsta rada se provjerava klijentskim popisom (specijalisticki pravo nije moguce potrositi)`);
     }
-    if (!src.includes('.select(ENTITLEMENT_ACCESS_SELECT)') || !src.includes('entitlementRowsFromDb(entitlements')) {
-      problems.push(`${ime}: pravo se ne cita zajednickim upitom i mapiranjem (snapshot prozora)`);
+    const citanje = src.indexOf('readAccessRows(admin as unknown as AccessDb, user.id, workType, now)');
+    if (citanje < 0 || src.includes(".from('entitlements')") || src.includes('.select(ENTITLEMENT_ACCESS_SELECT)')) {
+      problems.push(`${ime}: pravo se ne cita zajednickim citanjem readAccessRows (snapshot prozora, provjera greske)`);
     }
     if (/products\(slot_window_days\)/.test(src)) {
       problems.push(`${ime}: ugradnja products(...) bez hinta veze`);
     }
-    const upit = src.indexOf('.select(ENTITLEMENT_ACCESS_SELECT)');
-    const err = src.indexOf('if (slotsError || entitlementsError)', upit);
-    const odluka = src.indexOf('decideReportAccess(', upit);
-    if (!/\{ data: entitlements, error: entitlementsError \}/.test(src) || upit < 0 || err < 0 || odluka < 0 || err > odluka) {
+    const err = citanje < 0 ? -1 : src.indexOf('if (!access.ok)', citanje);
+    const odluka = citanje < 0 ? -1 : src.indexOf('decideReportAccess(', citanje);
+    if (err < 0 || odluka < 0 || err > odluka) {
       problems.push(`${ime}: greska upita prava se guta prije odluke (PGRST201 postaje 402 za placenog korisnika)`);
     }
+    if (!src.includes('entitlements: access.entitlements') || !src.includes('activeSlots: access.activeSlots')) {
+      problems.push(`${ime}: odluka o pristupu ne dobiva slotove i prava iz zajednickog citanja`);
+    }
   }
+  return problems;
+}
+
+type ReadAccessFn = typeof readAccessRows;
+type Odgovor = { data: unknown; error: unknown };
+
+/** Lazan klijent za readAccessRows: svaka tablica vraca zadani odgovor, filtri se biljeze. */
+function accessDb(odgovori: Record<'document_slots' | 'entitlements', Odgovor>) {
+  const filtri: Record<string, Array<[string, string, string]>> = { document_slots: [], entitlements: [] };
+  const db = {
+    from(table: 'document_slots' | 'entitlements') {
+      return {
+        select(_columns: string) {
+          const q = {
+            eq(c: string, v: string) {
+              filtri[table].push(['eq', c, v]);
+              return q;
+            },
+            gt(c: string, v: string) {
+              filtri[table].push(['gt', c, v]);
+              return q;
+            },
+            // oxlint-disable-next-line unicorn/no-thenable
+            then<A = Odgovor, B = never>(
+              ok?: ((v: Odgovor) => A | PromiseLike<A>) | null,
+              fail?: ((e: unknown) => B | PromiseLike<B>) | null,
+            ): PromiseLike<A | B> {
+              return Promise.resolve(odgovori[table]).then(ok, fail);
+            },
+          };
+          return q;
+        },
+      };
+    },
+  };
+  return { db, filtri };
+}
+
+/**
+ * ZAJEDNICKO CITANJE PRISTUPA (readAccessRows), izvrseno: pad bilo kojeg upita je `ok: false`
+ * (nikad prazan popis prava), upiti su suzeni na korisnika, vrstu rada, aktivan status i zivi slot,
+ * a pravo nosi snapshot prozora.
+ */
+export async function accessRowsProblems(read: ReadAccessFn): Promise<string[]> {
+  const problems: string[] = [];
+  const now = '2026-09-27T12:00:00.000Z';
+  const pravo = {
+    id: 'ent-1', work_type: 'specijalisticki', status: 'active', slots_used: 0, slots_total: 1,
+    purchase_expires_at: '2027-01-01T00:00:00.000Z', slot_window_days: 21, products: { slot_window_days: 90 },
+  };
+  const slot = {
+    id: 'slot-1', work_type: 'specijalisticki', slot_expires_at: '2026-10-10T00:00:00.000Z',
+    fingerprint: { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 },
+  };
+
+  const dobro = accessDb({ document_slots: { data: [slot], error: null }, entitlements: { data: [pravo], error: null } });
+  const ok = await read(dobro.db, 'u1', 'specijalisticki', now);
+  if (!ok.ok) {
+    problems.push('ispravno citanje pristupa vraca gresku');
+  } else {
+    if (ok.entitlements.length !== 1 || ok.entitlements[0].slotWindowDays !== 21) {
+      problems.push('citanje pristupa gubi pravo ili njegov snapshot prozora');
+    }
+    if (ok.activeSlots.length !== 1 || ok.activeSlots[0].id !== 'slot-1') problems.push('citanje pristupa gubi aktivni slot');
+  }
+  const f = dobro.filtri;
+  const ima = (t: string, op: string, c: string, v: string) => f[t].some(([o, cc, vv]) => o === op && cc === c && vv === v);
+  if (!ima('entitlements', 'eq', 'user_id', 'u1') || !ima('document_slots', 'eq', 'user_id', 'u1')) {
+    problems.push('citanje pristupa nije suzeno na korisnika (tudje pravo)');
+  }
+  if (!ima('entitlements', 'eq', 'work_type', 'specijalisticki') || !ima('document_slots', 'eq', 'work_type', 'specijalisticki')) {
+    problems.push('citanje pristupa nije suzeno na vrstu rada');
+  }
+  if (!ima('entitlements', 'eq', 'status', 'active')) problems.push('citanje pristupa uzima i vraceno ili ponisteno pravo');
+  if (!ima('document_slots', 'gt', 'slot_expires_at', now)) problems.push('citanje pristupa uzima istekao slot');
+
+  const padPrava = await read(
+    accessDb({ document_slots: { data: [slot], error: null }, entitlements: { data: null, error: { message: 'PGRST201' } } }).db,
+    'u1', 'specijalisticki', now,
+  );
+  if (padPrava.ok) problems.push('pad upita prava se cita kao "nema prava" (placeni korisnik dobiva 402)');
+  const padSlota = await read(
+    accessDb({ document_slots: { data: null, error: { message: 'timeout' } }, entitlements: { data: [pravo], error: null } }).db,
+    'u1', 'specijalisticki', now,
+  );
+  if (padSlota.ok) problems.push('pad upita slotova se cita kao "nema slota" (recheck bi potrosio novo pravo)');
   return problems;
 }
 
@@ -248,4 +353,62 @@ export function entitlementProductFkCount(migrations: readonly { name: string; s
     }
   }
   return { count, where };
+}
+
+/**
+ * BEZ FALLBACKA specijalisticki -> diplomski (odjeljak 18), na serverskoj strani: naslovnica
+ * specijalistickog rada blokira kupnju (create-checkout) i potrosnju (repair-docx) svake nize vrste
+ * rada i predlaze specijalisticki. Bez toga slot_specijalisticki (16,99) zaobilazi diplomski slot (9,99).
+ */
+export function specialistFallbackProblems(billable: typeof billableMismatch, checkout: typeof checkoutMismatch): string[] {
+  const problems: string[] = [];
+  const suggest = () => 'diplomski' as const;
+  for (const nize of ['seminarski', 'zavrsni', 'diplomski'] as const) {
+    const d = billable(nize, { words: 20_000, titleMarker: 'specialist' }, suggest);
+    if (!d.block || d.suggestedWorkType !== 'specijalisticki') {
+      problems.push(`repair-docx: specijalisticka naslovnica trosi ${nize} slot (fallback specijalisticki -> nize)`);
+    }
+  }
+  if (billable('specijalisticki', { words: 20_000, titleMarker: 'specialist' }, suggest).block) {
+    problems.push('specijalisticki rad na specijalistickom pravu je blokiran');
+  }
+  if (billable('doktorski', { words: 20_000, titleMarker: 'specialist' }, suggest).block) {
+    problems.push('visa vrsta rada (doktorski) je blokirana za specijalisticku naslovnicu');
+  }
+  const kupnja = checkout('diplomski', { words: 20_000, titleMarker: 'specialist' }, false);
+  if (!kupnja.block || kupnja.suggestedWorkType !== 'specijalisticki') {
+    problems.push('create-checkout: specijalisticka naslovnica kupuje diplomski slot (fallback specijalisticki -> diplomski)');
+  }
+  if (checkout('diplomski', { words: 20_000, titleMarker: 'specialist' }, true).block) {
+    problems.push('create-checkout: svjesna potvrda nize vrste vise ne prolazi');
+  }
+  const specKupnja = checkout('specijalisticki', { words: 40_000, titleMarker: 'doctoral' }, false);
+  if (!specKupnja.block || specKupnja.suggestedWorkType !== 'doktorski') {
+    problems.push('create-checkout: doktorska naslovnica kupuje specijalisticki proizvod');
+  }
+  return problems;
+}
+
+/**
+ * POVRAT KOJI DIRA NADOGRADNJU OSTAVLJA TRAJAN TRAG (nalaz pregleda kruga 3, odjeljak 29 "refund
+ * zatvara entitlement i sve vezane posljedice"). Puni povrat izvorne Repair uplate nadogradjenog
+ * prava gasi Final Pass, a uplata nadogradnje ostaje naplacena; povrat uplate nadogradnje ostavlja
+ * placeni Repair bez prava. Oba slucaja moraju u inbox kao `needs_manual_review` uz biljesku, a ne
+ * samo kao redak u logu koji istekne. Izvrseno se mjeri u tests/webhook-mor-handler.test.ts.
+ */
+export function upgradeRefundTraceProblems(webhookSrc: string): string[] {
+  const w = webhookSrc.replace(/\r\n/g, '\n');
+  const problems: string[] = [];
+  if (!w.includes('rucniPregled = `refund_of_upgraded_entitlement: ')) {
+    problems.push('povrat izvorne uplate nadogradjenog prava ne sastavlja biljesku za rucni pregled');
+  }
+  if (!w.includes('rucniPregled = `upgrade_refunded: ')) {
+    problems.push('povrat uplate nadogradnje ne sastavlja biljesku za rucni pregled (placeni Repair bez prava samo u logu)');
+  }
+  const pregled = w.indexOf("await settle('needs_manual_review', 'refunded', rucniPregled);");
+  const obicno = w.indexOf("await settle('processed', 'refunded');");
+  if (pregled < 0 || obicno < 0 || pregled > obicno || !w.slice(Math.max(0, pregled - 200), pregled).includes('if (rucniPregled !== null) {')) {
+    problems.push('povrat koji dira nadogradnju zavrsava kao obican processed/refunded, bez trajnog traga u inboxu');
+  }
+  return problems;
 }

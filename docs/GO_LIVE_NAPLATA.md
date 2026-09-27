@@ -427,6 +427,11 @@ Repair prava). Iznos računa server: `products.price_eur` Final Passa minus `pai
 istog prava (stvarno naplaćeno pri kupnji Repaira). Nadogradnja je dopuštena samo za plaćeno
 (`provider = 'stripe'`), aktivno Repair pravo s jednim slotom, iste vrste rada, unutar roka
 (`purchase_expires_at`), koje još nije nadograđeno i čija izvorna uplata nije djelomično vraćena.
+Ako je Repair već vezan uz rad (`slots_used > 0`), njegov slot mora biti još unutar prozora
+(`document_slots.slot_expires_at > now()`): istekao slot `purge_document_slots` (0016) 30 dana kasnije
+anonimizira, pa bi nadograđeni Final Pass produljio otisak koji ne prepoznaje nijednu verziju rada.
+Takav zahtjev je 409 `upgrade_slot_expired`, a `apply_entitlement_upgrade` istu provjeru ponavlja
+atomski i vraća `slot_expired`. Repair koji još nije vezan uz rad smije se nadograditi.
 Odbijanje je 409 (`upgrade_*`) ili 404 za tuđe ili nepostojeće pravo, bez PaymentIntenta.
 PaymentIntent nosi `metadata[upgrade_from_entitlement_id]`, a webhook tada **pretvara isto
 pravo** (`apply_entitlement_upgrade`, migracija 0206) umjesto da stvara drugo: isti vezani slot i
@@ -439,7 +444,8 @@ Ishodi nadogradnje u `webhook_events`:
 |---|---|---|
 | `processed` uz `entitlement_upgraded` | pravo je pretvoreno u Final Pass | ništa |
 | `processed` uz `upgrade_duplicate` | ponovljena dostava iste uplate nadogradnje | ništa |
-| `needs_manual_review` uz `outcome_detail` koji počinje s `upgrade:` | uplata nadogradnje je naplaćena, a pretvorba nije dopuštena: iznos ispod razlike (`upgrade:amount_below_catalog`), pravo tuđe ili nepostojeće, već nadograđeno drugom uplatom, vraćeno, isteklo, ili ga je u međuvremenu promijenila druga uplata (`upgrade:upgrade_source_unavailable`). ERROR redak `webhook-mor upgrade_needs_manual_review` | isti dan: povrat uplate nadogradnje u Stripe sučelju, ili ručna pretvorba ako je opravdana |
+| `needs_manual_review` uz `outcome_detail` koji počinje s `upgrade:` | uplata nadogradnje je naplaćena, a pretvorba nije dopuštena: iznos ispod razlike (`upgrade:amount_below_catalog`), pravo tuđe ili nepostojeće, već nadograđeno drugom uplatom, vraćeno, isteklo, vezani slot istekao (`upgrade:upgrade_slot_expired`), ili ga je u međuvremenu promijenila druga uplata ili je slot istekao između checkouta i uplate (`upgrade:upgrade_source_unavailable ... ishod=unavailable` ili `ishod=slot_expired`). ERROR redak `webhook-mor upgrade_needs_manual_review` | isti dan: povrat uplate nadogradnje u Stripe sučelju, ili ručna pretvorba ako je opravdana |
+| `needs_manual_review` uz `outcome_detail` `refunded` | puni povrat koji dira nadogradnju: pravo je ugašeno, a jedna uplata je ostala bez prava. `outcome_note` počinje s `refund_of_upgraded_entitlement:` (vraćena je izvorna Repair uplata; nosi `nadogradnja=<PaymentIntent>` i `naplaceno_nadogradnje=<centi>`) ili s `upgrade_refunded:` (vraćena je uplata nadogradnje; nosi `izvorna_uplata=<PaymentIntent>` i `naplaceno_repair=<centi>`). `outcome_detail` ostaje `refunded`, pa oznaka punog povrata (`REFUND_MARKERS`) vrijedi kao i dosad | isti dan: za `refund_of_upgraded_entitlement` povrat uplate nadogradnje u Stripe sučelju; za `upgrade_refunded` povrat Repair uplate ili ručno vraćanje Repair prava |
 | `failed` uz `upgrade_source_lookup` ili `upgrade_apply` | čitanje prava ili `apply_entitlement_upgrade` je pao; Stripe ponavlja | provjeri bazu i migraciju 0206 |
 
 Ako je puni povrat uplate nadogradnje zabilježen PRIJE same uplate (Stripe ne jamči redoslijed),
@@ -450,7 +456,10 @@ Puni povrat **uplate nadogradnje** gasi cijelo nadograđeno pravo (traži se po 
 uz ERROR redak `webhook-mor upgrade_refunded`: plaćeni Repair dio tada ostaje bez prava, pa
 operater odlučuje o povratu Repaira ili ručnom vraćanju prava. Puni povrat **izvorne Repair
 uplate** prava koje je već nadograđeno gasi i Final Pass, uz ERROR redak
-`webhook-mor refund_of_upgraded_entitlement`: odluči o povratu uplate nadogradnje.
+`webhook-mor refund_of_upgraded_entitlement`: odluči o povratu uplate nadogradnje. Oba slučaja
+ostavljaju i trajan trag u bazi, ne samo u logu koji istječe: `outcome = 'needs_manual_review'`,
+`outcome_detail = 'refunded'` i `outcome_note` s PaymentIntentom i iznosom druge uplate (tablica
+iznad). Zato ih dnevni upit iz 5.1 (`outcome in (..., 'needs_manual_review', ...)`) vidi.
 
 **Snapshot prava.** Webhook proizvod čita zajedno s pravima ponude (`offer_codes(capabilities)`) i
 upisuje ih uz entitlement. Lektin proizvod bez `offer_code` ili bez prava ne knjiži se s praznim

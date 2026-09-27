@@ -13,8 +13,8 @@
  */
 
 import { isSoldByLektaCheckout, type Product } from '../catalog/products-catalog.ts';
-import { isReportWorkType, type ReportWorkType } from './pricing.ts';
-import { estimateWorkType, unambiguousMismatch, type WorkTypeSignals } from './work-type-estimate.ts';
+import { estimateWorkType, type WorkTypeSignals } from './work-type-estimate.ts';
+import { billableMismatch, isBillableWorkType, type BillableWorkType } from './billable-work-type.ts';
 
 /** Ishod serverske provjere prava na checkout za dani proizvod i kontekst korisnika. */
 export type CheckoutResolution =
@@ -54,7 +54,7 @@ export interface CheckoutMismatchSignals {
 
 export type CheckoutMismatchDecision =
   | { block: false }
-  | { block: true; suggestedWorkType: ReportWorkType };
+  | { block: true; suggestedWorkType: BillableWorkType };
 
 /**
  * WS-5 enforcement (serverski backstop pri KUPNJI): blokiraj kupnju jeftinijeg tiera SAMO kad je
@@ -70,13 +70,15 @@ export function checkoutMismatch(
   confirmed: boolean,
 ): CheckoutMismatchDecision {
   if (confirmed || !signals) return { block: false };
-  if (!selectedWorkType || !isReportWorkType(selectedWorkType)) return { block: false };
+  // Prodajne vrste rada ukljucuju specijalisticki (0206): odluka je ista kao u repair-docx
+  // (billableMismatch), pa specijalisticka naslovnica ne kupuje diplomski slot (odjeljak 18).
+  if (!selectedWorkType || !isBillableWorkType(selectedWorkType)) return { block: false };
   const sig: WorkTypeSignals = {
     words: signals.words,
     titleMarker: (signals.titleMarker ?? null) as WorkTypeSignals['titleMarker'],
   };
-  if (!unambiguousMismatch(selectedWorkType, sig)) return { block: false };
-  return { block: true, suggestedWorkType: estimateWorkType(sig).workType };
+  const mm = billableMismatch(selectedWorkType, sig, (s) => estimateWorkType(s).workType);
+  return mm.block && mm.suggestedWorkType ? { block: true, suggestedWorkType: mm.suggestedWorkType } : { block: false };
 }
 
 /** Kontekst iz kojeg se gradi Stripe PaymentIntent. Iznos je uvijek serverski izveden. */

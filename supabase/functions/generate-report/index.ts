@@ -13,7 +13,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { isBillableWorkType } from '../../../src/report/billable-work-type.ts';
-import { ENTITLEMENT_ACCESS_SELECT, entitlementRowsFromDb } from '../../../src/report/entitlement-access.ts';
+import { readAccessRows, type AccessDb } from '../../../src/report/entitlement-access.ts';
 import { buildFullReport } from '../../../src/report/report.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
@@ -99,20 +99,11 @@ Deno.serve(async (req: Request) => {
 
   // dohvat konteksta + odluka; re-runnable jer friend referral moze stvoriti entitlement pa se ponovi
   const decide = async () => {
-  const [{ data: slots, error: slotsError }, { data: entitlements, error: entitlementsError }, { count: recent }] = await Promise.all([
-    admin
-      .from('document_slots')
-      .select('id, work_type, fingerprint, slot_expires_at')
-      .eq('user_id', user.id)
-      .eq('work_type', workType)
-      .gt('slot_expires_at', now),
-    admin
-      .from('entitlements')
-      // Snapshot prozora s prava, a proizvod samo za stariji redak bez snapshota (entitlement-access.ts).
-      .select(ENTITLEMENT_ACCESS_SELECT)
-      .eq('user_id', user.id)
-      .eq('work_type', workType)
-      .eq('status', 'active'),
+  // Slotovi i prava zajednickim citanjem (entitlement-access.ts, snapshot prozora s prava).
+  const [access, { count: recent }] = await Promise.all([
+    // supabase-js klijent je strukturni nadskup AccessDb, ali je njegov tip predubok za izravnu
+    // usporedbu (TS2589), pa ide kroz unknown.
+    readAccessRows(admin as unknown as AccessDb, user.id, workType, now),
     admin
       .from('report_generations')
       .select('id', { count: 'exact', head: true })
@@ -122,8 +113,8 @@ Deno.serve(async (req: Request) => {
 
   // Greska upita NIJE "nema prava": bez ove provjere bi npr. dvosmislena ugradnja (PGRST201)
   // placenom korisniku vratila 402 i ponudila mu da plati ponovno.
-  if (slotsError || entitlementsError) {
-    throw new Error(`entitlement_lookup_failed: ${(slotsError ?? entitlementsError)?.message ?? 'nepoznato'}`);
+  if (!access.ok) {
+    throw new Error(`entitlement_lookup_failed: ${access.error}`);
   }
 
   return decideReportAccess(
@@ -131,13 +122,8 @@ Deno.serve(async (req: Request) => {
       now,
       workType,
       fingerprint,
-      activeSlots: (slots ?? []).map((s: any) => ({
-        id: s.id,
-        workType: s.work_type,
-        fingerprint: s.fingerprint,
-        slotExpiresAt: s.slot_expires_at,
-      })),
-      entitlements: entitlementRowsFromDb(entitlements as any),
+      activeSlots: access.activeSlots,
+      entitlements: access.entitlements,
       recentGenerationCount: recent ?? 0,
     },
     { dailyCap },

@@ -15,8 +15,9 @@
  *    PGRST201). Pozivatelj MORA provjeriti gresku upita: prazan rezultat zbog greske nije
  *    "nema prava" (to bi placenom korisniku vratilo 402).
  */
-import type { EntitlementRow } from './slot-logic.ts';
-import { isBillableWorkType } from './billable-work-type.ts';
+import type { EntitlementRow, SlotRow } from './slot-logic.ts';
+import type { DocumentFingerprint } from '../fingerprint/fingerprint.ts';
+import { isBillableWorkType, type BillableWorkType } from './billable-work-type.ts';
 
 /** Stupci prava za odluku o pristupu; ugradnja proizvoda s eksplicitnim hintom veze. */
 export const ENTITLEMENT_ACCESS_SELECT =
@@ -59,4 +60,76 @@ export function entitlementRowFromDb(e: EntitlementAccessDbRow): EntitlementRow 
 /** Svi retci -> EntitlementRow[], bez neprepoznatih. */
 export function entitlementRowsFromDb(rows: readonly EntitlementAccessDbRow[] | null | undefined): EntitlementRow[] {
   return (rows ?? []).map(entitlementRowFromDb).filter((r): r is EntitlementRow => r !== null);
+}
+
+/** Stupci aktivnih slotova za odluku o pristupu. */
+export const ACTIVE_SLOT_SELECT = 'id, work_type, fingerprint, slot_expires_at';
+
+/** Najuzi oblik supabase-js upita koji citanje pristupa treba (thenable koji se dalje suzava). */
+export interface AccessQuery extends PromiseLike<{ data: unknown; error: unknown }> {
+  eq(column: string, value: string): AccessQuery;
+  gt(column: string, value: string): AccessQuery;
+}
+
+/** Najuzi oblik Supabase klijenta za citanje pristupa; bez `any`. */
+export interface AccessDb {
+  from(table: 'document_slots' | 'entitlements'): { select(columns: string): AccessQuery };
+}
+
+export type AccessRows =
+  | { ok: true; activeSlots: SlotRow[]; entitlements: EntitlementRow[] }
+  | { ok: false; error: string };
+
+function errorMessage(error: unknown): string {
+  if (typeof error === 'object' && error !== null && 'message' in error) return String(error.message);
+  return String(error);
+}
+
+function slotRowFromDb(row: unknown): SlotRow | null {
+  if (typeof row !== 'object' || row === null) return null;
+  const r = row as Record<string, unknown>;
+  if (typeof r.id !== 'string' || !isBillableWorkType(r.work_type) || typeof r.slot_expires_at !== 'string') return null;
+  if (typeof r.fingerprint !== 'object' || r.fingerprint === null) return null;
+  return { id: r.id, workType: r.work_type, fingerprint: r.fingerprint as DocumentFingerprint, slotExpiresAt: r.slot_expires_at };
+}
+
+/**
+ * Citanje ulaza za decideReportAccess, ZAJEDNICKO za generate-report i repair-docx: aktivni slotovi
+ * korisnika za vrstu rada i njegova aktivna prava (ENTITLEMENT_ACCESS_SELECT, snapshot prozora).
+ *
+ * Greska BILO kojeg od dva upita vraca `ok: false`. Pozivatelj tada odgovara 500 i nista ne trosi:
+ * prazan rezultat zbog greske nije "nema prava" (placeni korisnik bi inace dobio 402 i ponudu da
+ * plati ponovno). Izvrsni test: tests/monetizacija-v1-potrosnja.test.ts.
+ */
+export async function readAccessRows(
+  admin: AccessDb,
+  userId: string,
+  workType: BillableWorkType,
+  nowIso: string,
+): Promise<AccessRows> {
+  const [slots, entitlements] = await Promise.all([
+    admin
+      .from('document_slots')
+      .select(ACTIVE_SLOT_SELECT)
+      .eq('user_id', userId)
+      .eq('work_type', workType)
+      .gt('slot_expires_at', nowIso),
+    admin
+      .from('entitlements')
+      // Snapshot prozora s prava, a proizvod samo za stariji redak bez snapshota.
+      .select(ENTITLEMENT_ACCESS_SELECT)
+      .eq('user_id', userId)
+      .eq('work_type', workType)
+      .eq('status', 'active'),
+  ]);
+  if (slots.error || entitlements.error) {
+    return { ok: false, error: errorMessage(slots.error ?? entitlements.error) };
+  }
+  const slotRows = Array.isArray(slots.data) ? slots.data : [];
+  const entitlementRows = Array.isArray(entitlements.data) ? (entitlements.data as EntitlementAccessDbRow[]) : [];
+  return {
+    ok: true,
+    activeSlots: slotRows.map(slotRowFromDb).filter((r): r is SlotRow => r !== null),
+    entitlements: entitlementRowsFromDb(entitlementRows),
+  };
 }

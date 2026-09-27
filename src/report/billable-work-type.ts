@@ -34,19 +34,35 @@ export interface BillableMismatch {
   suggestedWorkType?: BillableWorkType;
 }
 
+/** Rang vrste rada po razini (isti redoslijed kao BILLABLE_WORK_TYPES). */
+function billableRank(wt: BillableWorkType): number {
+  return BILLABLE_WORK_TYPES.indexOf(wt);
+}
+
 /**
  * Serverska blokada jeftinije vrste rada (WS-2) prosirena na specijalisticki.
  *
- * Za cetiri klijentske vrste odluka je DOSLOVNO postojeca `unambiguousMismatch`. Za specijalisticki
- * opseg teksta nema izvedenog raspona (data/work-type-scope.json ga ne pokriva), pa se, po nacelu
- * modula work-type-estimate (fail-open), blokira SAMO nedvosmislen signal: naslovnica doktorskog
- * rada. Naslovnica specijalistickog i nizih radova ne blokira.
+ * ODJELJAK 18 (bez fallbacka specijalisticki -> diplomski): naslovnica specijalistickog rada
+ * (`specialist`) nedvosmisleno kaze specijalisticki, pa se svaka NIZA vrsta (seminarski, zavrsni,
+ * diplomski) blokira i predlaze se `specijalisticki`. Dijeljeni `work-type-estimate.ts` tu oznaku i
+ * dalje mapira na diplomski, jer njime hrani klijentski izbornik bez specijalistickog (M3); zato se
+ * pravilo provodi OVDJE, prije nego dijeljena odluka uopce dodje na red. Bez toga je
+ * specijalisticki rad trosio jeftiniji diplomski slot i na kupnji i na popravku.
+ *
+ * Za cetiri klijentske vrste ostatak odluke je DOSLOVNO postojeca `unambiguousMismatch`. Za
+ * specijalisticki opseg teksta nema izvedenog raspona (data/work-type-scope.json ga ne pokriva), pa
+ * se, po nacelu modula work-type-estimate (fail-open), blokira SAMO nedvosmislen signal: naslovnica
+ * doktorskog rada. Kao i dosad, korisnik koji svjesno potvrdi nizu vrstu (`confirmedMismatch`)
+ * prolazi; tu odluku donosi pozivatelj.
  */
 export function billableMismatch(
   selected: BillableWorkType,
   signals: WorkTypeSignals,
   suggest: (signals: WorkTypeSignals) => ReportWorkType,
 ): BillableMismatch {
+  if (signals.titleMarker === 'specialist' && billableRank(selected) < billableRank('specijalisticki')) {
+    return { block: true, suggestedWorkType: 'specijalisticki' };
+  }
   if (isClientWorkType(selected)) {
     return unambiguousMismatch(selected, signals) ? { block: true, suggestedWorkType: suggest(signals) } : { block: false };
   }

@@ -18,6 +18,7 @@ import {
   mapUpgradeSourceRow,
   quoteUpgrade,
   upgradeIdempotencyKey,
+  readBoundSlotLive,
   UPGRADE_SOURCE_COLUMNS,
 } from '../../../src/report/upgrade.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
@@ -201,6 +202,17 @@ export function createCheckoutHandler(deps: CheckoutDeps): (req: Request) => Pro
         return json({ error: 'internal' }, 500);
       }
       source.partiallyRefunded = Array.isArray(partial) && partial.length > 0;
+      // Vezani rad mora biti jos ziv (istekao slot cron anonimizira, pa bi Final Pass bio prazan).
+      // Cita se samo za vezano pravo (nevezanom slot ne treba). Pad citanja je 500, ne "slot
+      // istekao" ni "slot ziv".
+      if (source.slotsUsed > 0) {
+        const slot = await readBoundSlotLive(admin, source.id, new Date(nowMs).toISOString());
+        if (!slot.ok) {
+          console.error('[create-checkout] upgrade_slot_lookup_failed', { error: slot.error });
+          return json({ error: 'internal' }, 500);
+        }
+        source.boundSlotLive = slot.live;
+      }
     }
     const quote = quoteUpgrade(product, source, user.id, nowMs);
     if (!quote.ok) {

@@ -16,6 +16,12 @@
  *  - JEDNOM: pravo koje je vec nadogradjeno ne moze se nadograditi ponovno.
  *  - ROK: pravo mora biti aktivno i unutar roka potrosnje (`purchase_expires_at`). Odjeljak 14 drugi
  *    rok ne propisuje, pa ga ovaj modul ne izmislja.
+ *  - VEZANI RAD JE JOS ZIV: ako je Repair vec vezan uz rad (`slots_used > 0`), njegov slot mora biti
+ *    unutar prozora (`document_slots.slot_expires_at > now`). Istekao slot cron 30 dana kasnije
+ *    anonimizira (purge_document_slots, 0016: brise naslov, autora i poglavlja iz otiska), a
+ *    nadogradnja bi tada produljila prazan otisak koji ne prepoznaje nijednu verziju rada: placen
+ *    Final Pass bez ijedne upotrebe (nalaz pregleda kruga 3). Nevezan Repair (`slots_used = 0`) se
+ *    smije nadograditi; slot tada nastaje tek pri prvoj upotrebi, s prozorom Final Passa.
  *  - PRIZNATO JE SAMO PLACENO: interna nagrada (provider `internal`) ili pravo bez zapisanog
  *    placenog iznosa ne umanjuje cijenu; takav zahtjev se odbija, ne pogadja iz danasnjeg cjenika.
  */
@@ -45,6 +51,8 @@ export interface UpgradeSource {
   status: string;
   provider: string;
   slotsTotal: number;
+  /** Koliko je slotova prava vec vezano uz rad (Repair: 0 ili 1). */
+  slotsUsed: number;
   offerCode: string | null;
   /** Stvarno naplaceno pri kupnji Repaira; null = nepoznato. */
   paidAmountCents: number | null;
@@ -56,6 +64,12 @@ export interface UpgradeSource {
    * vise `paidAmountCents`, a entitlement ne biljezi vraceni dio, pa se nadogradnja odbija.
    */
   partiallyRefunded?: boolean;
+  /**
+   * Postoji vezani slot ovog prava koji jos nije istekao (`document_slots.slot_expires_at > now`).
+   * Cita ga pozivatelj zasebnim upitom; `undefined` znaci "nije procitano" i za vezano pravo se
+   * tumaci kao istekao slot (fail-closed).
+   */
+  boundSlotLive?: boolean;
 }
 
 export const UPGRADE_REFUSALS = Object.freeze([
@@ -66,6 +80,7 @@ export const UPGRADE_REFUSALS = Object.freeze([
   'upgrade_work_type_mismatch',
   'upgrade_source_inactive',
   'upgrade_source_expired',
+  'upgrade_slot_expired',
   'upgrade_already_applied',
   'upgrade_paid_amount_unknown',
   'upgrade_source_partially_refunded',
@@ -109,6 +124,8 @@ export function quoteUpgrade(
   if (source.status !== 'active') return { ok: false, error: 'upgrade_source_inactive' };
   const expires = Date.parse(source.purchaseExpiresAt);
   if (!Number.isFinite(expires) || expires <= nowMs) return { ok: false, error: 'upgrade_source_expired' };
+  if (!Number.isInteger(source.slotsUsed) || source.slotsUsed < 0) return { ok: false, error: 'upgrade_source_not_repair' };
+  if (source.slotsUsed > 0 && source.boundSlotLive !== true) return { ok: false, error: 'upgrade_slot_expired' };
 
   const paid = source.paidAmountCents;
   if (typeof paid !== 'number' || !Number.isInteger(paid) || paid <= 0) {
@@ -136,6 +153,7 @@ export function mapUpgradeSourceRow(row: unknown): UpgradeSource | null {
     status: str(r.status),
     provider: str(r.provider),
     slotsTotal: typeof r.slots_total === 'number' ? r.slots_total : Number.NaN,
+    slotsUsed: typeof r.slots_used === 'number' ? r.slots_used : Number.NaN,
     offerCode: str(r.offer_code) || null,
     paidAmountCents: typeof paid === 'number' ? paid : null,
     purchaseExpiresAt: str(r.purchase_expires_at),
@@ -145,7 +163,38 @@ export function mapUpgradeSourceRow(row: unknown): UpgradeSource | null {
 
 /** Stupci koje obje strane citaju za odluku; jedan popis da se upiti ne razidju. */
 export const UPGRADE_SOURCE_COLUMNS =
-  'id, user_id, work_type, status, provider, slots_total, offer_code, paid_amount_cents, purchase_expires_at, upgrade_order_id, order_id';
+  'id, user_id, work_type, status, provider, slots_total, slots_used, offer_code, paid_amount_cents, purchase_expires_at, upgrade_order_id, order_id';
+
+/**
+ * Upit "ima li ovo pravo vezani slot koji jos nije istekao". Obje strane (create-checkout i
+ * webhook-mor) ga zovu istim oblikom; apply_entitlement_upgrade (0206) istu provjeru ponavlja
+ * atomski u bazi.
+ */
+export interface BoundSlotQuery extends PromiseLike<{ data: unknown; error: unknown }> {
+  eq(column: string, value: string): BoundSlotQuery;
+  gt(column: string, value: string): BoundSlotQuery;
+  limit(count: number): BoundSlotQuery;
+}
+export interface BoundSlotDb {
+  from(table: 'document_slots'): { select(columns: string): BoundSlotQuery };
+}
+export async function readBoundSlotLive(
+  admin: BoundSlotDb,
+  entitlementId: string,
+  nowIso: string,
+): Promise<{ ok: true; live: boolean } | { ok: false; error: string }> {
+  const { data, error } = await admin
+    .from('document_slots')
+    .select('id')
+    .eq('entitlement_id', entitlementId)
+    .gt('slot_expires_at', nowIso)
+    .limit(1);
+  if (error) {
+    const message = typeof error === 'object' && error !== null && 'message' in error ? String(error.message) : String(error);
+    return { ok: false, error: message };
+  }
+  return { ok: true, live: Array.isArray(data) && data.length > 0 };
+}
 
 /**
  * Deterministican `Idempotency-Key` za PaymentIntent nadogradnje. Za razliku od obicne kupnje ne

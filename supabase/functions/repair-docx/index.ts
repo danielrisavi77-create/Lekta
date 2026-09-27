@@ -43,7 +43,7 @@ import {
 } from '../../../src/report/repair-framing.ts';
 import { resolveParams, type ParamSource } from '../../../src/repair/param-authority.ts';
 import { isBillableWorkType, billableMismatch } from '../../../src/report/billable-work-type.ts';
-import { ENTITLEMENT_ACCESS_SELECT, entitlementRowsFromDb } from '../../../src/report/entitlement-access.ts';
+import { readAccessRows, type AccessDb } from '../../../src/report/entitlement-access.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
@@ -508,27 +508,26 @@ Deno.serve(async (req: Request) => {
       const dailyCap = resolveDailyCap(
         partner ? { status: (partner as any).status, dailyCap: (partner as any).daily_cap } : null, DAILY_CAP);
 
-      const [{ data: slots, error: slotsError }, { data: entitlements, error: entitlementsError }, { count: recent }] = await Promise.all([
-        admin.from('document_slots').select('id, work_type, fingerprint, slot_expires_at')
-          .eq('user_id', user.id).eq('work_type', workType).gt('slot_expires_at', now),
-        admin.from('entitlements')
-          .select(ENTITLEMENT_ACCESS_SELECT)
-          .eq('user_id', user.id).eq('work_type', workType).eq('status', 'active'),
+      // Slotovi i prava zajednickim citanjem (entitlement-access.ts, snapshot prozora s prava).
+      const [access, { count: recent }] = await Promise.all([
+        // supabase-js klijent je strukturni nadskup AccessDb, ali je njegov tip predubok za izravnu
+        // usporedbu (TS2589), pa ide kroz unknown.
+        readAccessRows(admin as unknown as AccessDb, user.id, workType, now),
         admin.from('report_generations').select('id', { count: 'exact', head: true })
           .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
       ]);
 
       // Greska upita NIJE "nema prava" (inace bi npr. PGRST201 placenom korisniku vratio 402).
       // Nista jos nije potroseno, pa se odgovara 500 bez biljezenja pokusaja.
-      if (slotsError || entitlementsError) {
-        console.error('[repair-docx] entitlement_lookup_failed', (slotsError ?? entitlementsError)?.message);
+      if (!access.ok) {
+        console.error('[repair-docx] entitlement_lookup_failed', access.error);
         return json({ error: 'internal' }, 500);
       }
 
       const decision = decideReportAccess({
         now, workType, fingerprint,
-        activeSlots: (slots ?? []).map((s: any) => ({ id: s.id, workType: s.work_type, fingerprint: s.fingerprint, slotExpiresAt: s.slot_expires_at })),
-        entitlements: entitlementRowsFromDb(entitlements as any),
+        activeSlots: access.activeSlots,
+        entitlements: access.entitlements,
         recentGenerationCount: recent ?? 0,
       }, { dailyCap });
 

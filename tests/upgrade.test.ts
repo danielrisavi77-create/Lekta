@@ -37,6 +37,9 @@ function source(workType: string, paidCents: number | null, over: Partial<Upgrad
     paidAmountCents: paidCents,
     purchaseExpiresAt: LATER,
     upgradeOrderId: null,
+    // Repair je vezan uz rad, a vezani slot je jos unutar prozora.
+    slotsUsed: 1,
+    boundSlotLive: true,
     ...over,
   };
 }
@@ -90,10 +93,23 @@ describe('quoteUpgrade: pravila (isti rad, jednom, rok, samo placeno)', () => {
     ['nepoznat placeni iznos', target('diplomski', 19.99), source('diplomski', null), 'upgrade_paid_amount_unknown'],
     ['djelomicno vracena izvorna uplata', target('diplomski', 19.99), source('diplomski', 999, { partiallyRefunded: true }), 'upgrade_source_partially_refunded'],
     ['placeno jednako cilju', target('diplomski', 19.99), source('diplomski', 1999), 'upgrade_amount_invalid'],
+    // Nalaz pregleda kruga 3: istekao vezani slot (cron ga 30 dana kasnije anonimizira).
+    ['vezani slot istekao', target('diplomski', 19.99), source('diplomski', 999, { boundSlotLive: false }), 'upgrade_slot_expired'],
+    ['vezani slot neprocitan (fail-closed)', target('diplomski', 19.99), source('diplomski', 999, { boundSlotLive: undefined }), 'upgrade_slot_expired'],
   ];
 
   it.each(cases)('%s -> odbijeno', (_ime, t, src, error) => {
     expect(quoteUpgrade(t, src, 'user-1', NOW)).toEqual({ ok: false, error });
+  });
+
+  it('nevezan Repair (slots_used 0) se nadogradjuje i bez slota: slot nastaje tek pri upotrebi', () => {
+    expect(quoteUpgrade(target('diplomski', 19.99), source('diplomski', 999, { slotsUsed: 0, boundSlotLive: undefined }), 'user-1', NOW))
+      .toEqual({ ok: true, amountCents: 1000, targetCents: 1999, creditCents: 999 });
+  });
+
+  it('nepoznat broj vezanih slotova je odbijen (ne pretpostavlja se nevezano)', () => {
+    expect(quoteUpgrade(target('diplomski', 19.99), source('diplomski', 999, { slotsUsed: Number.NaN }), 'user-1', NOW))
+      .toEqual({ ok: false, error: 'upgrade_source_not_repair' });
   });
 
   it('svaki razlog odbijanja ima svoj slucaj (generator pokriva cijeli popis)', () => {
@@ -104,10 +120,10 @@ describe('quoteUpgrade: pravila (isti rad, jednom, rok, samo placeno)', () => {
 describe('mapUpgradeSourceRow', () => {
   it('mapira redak entitlementa; nepotpun redak je null', () => {
     expect(mapUpgradeSourceRow({
-      id: 'ent-1', user_id: 'u1', work_type: 'diplomski', status: 'active', provider: 'stripe', slots_total: 1,
+      id: 'ent-1', user_id: 'u1', work_type: 'diplomski', status: 'active', provider: 'stripe', slots_total: 1, slots_used: 1,
       offer_code: 'repair_v1', paid_amount_cents: 999, purchase_expires_at: LATER, upgrade_order_id: null,
     })).toEqual({
-      id: 'ent-1', userId: 'u1', workType: 'diplomski', status: 'active', provider: 'stripe', slotsTotal: 1,
+      id: 'ent-1', userId: 'u1', workType: 'diplomski', status: 'active', provider: 'stripe', slotsTotal: 1, slotsUsed: 1,
       offerCode: 'repair_v1', paidAmountCents: 999, purchaseExpiresAt: LATER, upgradeOrderId: null,
     });
     expect(mapUpgradeSourceRow(null)).toBeNull();

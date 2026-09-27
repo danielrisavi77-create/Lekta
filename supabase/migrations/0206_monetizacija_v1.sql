@@ -355,6 +355,11 @@ comment on column public.bonus_outbox.status is
 --  * JEDNOM: pravo koje je vec nadogradjeno (upgrade_order_id) se ne pretvara ponovno; ista uplata
 --    (retry) vraca `duplicate`, a druga uplata `unavailable` (webhook je salje na rucni pregled).
 --  * ROK: pravo mora biti aktivno i unutar roka potrosnje (purchase_expires_at).
+--  * VEZANI RAD JE JOS ZIV: pravo koje je vec vezano uz rad (slots_used > 0) mora imati slot unutar
+--    prozora (slot_expires_at > now()). Istekao slot purge_document_slots (0016) 30 dana kasnije
+--    anonimizira (brise naslov, autora i poglavlja iz otiska), pa bi produljenje takvog slota dalo
+--    placen Final Pass koji ne prepoznaje nijednu verziju rada. Vraca `slot_expired`; webhook uplatu
+--    salje na rucni pregled. Nevezano pravo (slots_used = 0) se smije pretvoriti.
 -- Snapshot prava (offer_code, capabilities) se cita iz kataloga U ISTOJ transakciji.
 create or replace function public.apply_entitlement_upgrade(
   p_entitlement_id uuid,
@@ -391,6 +396,15 @@ begin
      or v_ent.offer_code is distinct from 'repair_v1'
      or v_ent.slots_total <> 1 then
     return 'unavailable';
+  end if;
+
+  if v_ent.slots_used > 0 and not exists (
+    select 1
+      from public.document_slots s
+     where s.entitlement_id = p_entitlement_id
+       and s.slot_expires_at > now()
+  ) then
+    return 'slot_expired';
   end if;
 
   select * into v_target from public.products where id = p_target_product_id;

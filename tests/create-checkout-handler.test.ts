@@ -300,6 +300,7 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
     status: 'active',
     provider: 'stripe',
     slots_total: 1,
+    slots_used: 1,
     offer_code: 'repair_v1',
     paid_amount_cents: 999,
     purchase_expires_at: new Date(NOW_MS + 30 * 86_400_000).toISOString(),
@@ -307,11 +308,13 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
     order_id: 'pi_repair',
   };
 
-  function upgradeResolve(over: { source?: unknown; product?: unknown; partial?: unknown[] } = {}) {
+  function upgradeResolve(over: { source?: unknown; product?: unknown; partial?: unknown[]; slot?: FakeResult } = {}) {
     return (c: FakeCall): FakeResult | undefined => {
       if (c.table === 'products') return { data: 'product' in over ? over.product : PASS_ROW };
       if (c.table === 'entitlements') return { data: 'source' in over ? over.source : SOURCE_ROW };
       if (c.table === 'webhook_events') return { data: over.partial ?? [] };
+      // Zadano: vezani slot je jos ziv (unutar prozora).
+      if (c.table === 'document_slots') return over.slot ?? { data: [{ id: 'slot-1' }] };
       return undefined;
     };
   }
@@ -336,6 +339,36 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
     // Provjera djelomicnog povrata ide po PaymentIntentu izvorne uplate.
     const partial = calls.find((c) => c.table === 'webhook_events')!;
     expect(eqs(partial)).toEqual({ provider: 'stripe', order_id: 'pi_repair', outcome_detail: 'partial_refund_noted' });
+    // Vezani rad se provjerava po ISTOM pravu i po isteku slota u trenutku zahtjeva.
+    const slot = calls.find((c) => c.table === 'document_slots')!;
+    expect(eqs(slot)).toEqual({ entitlement_id: SOURCE_ID });
+    expect(slot.ops.find((o) => o.op === 'gt')?.args).toEqual(['slot_expires_at', new Date(NOW_MS).toISOString()]);
+  });
+
+  it('nevezan Repair (slots_used 0, bez slota) se smije nadograditi: slot nastaje tek pri upotrebi, s prozorom Final Passa', async () => {
+    // Citanje slota bi palo; nevezanom pravu ono ne treba, pa se ni ne radi (Codex pregled kruga 3).
+    const { res, stripeCalls, calls } = await run(
+      { productId: 'pass_diplomski', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT },
+      { resolve: upgradeResolve({ source: { ...SOURCE_ROW, slots_used: 0 }, slot: { error: { message: 'ne bi smjelo biti citano' } } }), stripe: { status: 200, json: { id: 'pi_up', client_secret: FAKE_CLIENT_SECRET, amount: 1000, currency: 'eur' } } },
+    );
+    expect(res.status).toBe(200);
+    expect(stripeCalls[0].body.get('amount')).toBe('1000');
+    expect(calls.some((c) => c.table === 'document_slots')).toBe(false);
+  });
+
+  it('pad citanja vezanog slota je 500 bez teksta greske i bez PaymentIntenta', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { res, out, stripeCalls } = await run(
+        { productId: 'pass_diplomski', upgradeFromEntitlementId: SOURCE_ID, consent: CONSENT },
+        { resolve: upgradeResolve({ slot: { error: { message: 'tajni_detalj_baze' } } }) },
+      );
+      expect(res.status).toBe(500);
+      expect(out).toEqual({ error: 'internal' });
+      expect(stripeCalls).toHaveLength(0);
+    } finally {
+      vi.restoreAllMocks();
+    }
   });
 
   it('specijalisticki: 29,99 - 16,99 = 13,00', async () => {
@@ -359,6 +392,8 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
     ['druga vrsta rada', { source: { ...SOURCE_ROW, work_type: 'zavrsni' } }, 409, 'upgrade_work_type_mismatch'],
     ['staro pravo bez placenog iznosa', { source: { ...SOURCE_ROW, paid_amount_cents: null } }, 409, 'upgrade_paid_amount_unknown'],
     ['djelomicno vracena izvorna uplata', { partial: [{ id: 'evt' }] }, 409, 'upgrade_source_partially_refunded'],
+    // Nalaz pregleda kruga 3: istekao slot cron 30 dana kasnije anonimizira, pa bi Final Pass bio neupotrebljiv.
+    ['vezani slot istekao ili anonimiziran', { slot: { data: [] } }, 409, 'upgrade_slot_expired'],
     [
       'cilj je Semester Pass',
       { product: { ...PASS_ROW, id: 'pass_semestralni', work_type: 'seminarski', offer_code: 'semester_pass_v1' }, source: { ...SOURCE_ROW, work_type: 'seminarski' } },
@@ -403,6 +438,29 @@ describe('create-checkout handler: nadogradnja Repair -> Final Pass', () => {
 });
 
 describe('create-checkout handler: katalog V1', () => {
+  it('specijalisticka naslovnica ne kupuje diplomski slot (odjeljak 18): 409 s prijedlogom specijalisticki, bez PaymentIntenta', async () => {
+    const { res, out, stripeCalls, calls } = await run({
+      productId: 'slot_diplomski',
+      consent: CONSENT,
+      signals: { words: 25_000, titleMarker: 'specialist' },
+    });
+    expect(res.status).toBe(409);
+    expect(out).toEqual({ error: 'tier_mismatch', suggestedWorkType: 'specijalisticki' });
+    expect(stripeCalls).toHaveLength(0);
+    expect(calls.some((c) => c.table === 'checkout_consents' && writeOp(c) === 'insert')).toBe(false);
+  });
+
+  it('svjesna potvrda nize vrste (confirmedMismatch) i dalje prolazi, kao za ostale vrste', async () => {
+    const { res, stripeCalls } = await run({
+      productId: 'slot_diplomski',
+      consent: CONSENT,
+      signals: { words: 25_000, titleMarker: 'specialist' },
+      confirmedMismatch: true,
+    });
+    expect(res.status).toBe(200);
+    expect(stripeCalls[0].body.get('amount')).toBe('999');
+  });
+
   it('specijalisticki Repair prolazi checkout s iznosom iz products.price_eur (16,99)', async () => {
     const SPEC = {
       id: 'slot_specijalisticki', kind: 'slot', audience: 'retail', work_type: 'specijalisticki', slots_total: 1,
