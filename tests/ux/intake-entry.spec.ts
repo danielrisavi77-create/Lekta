@@ -217,17 +217,55 @@ test('Z32: potvrdjen fakultet s ulaza pobjeduje detekciju drugog fakulteta iz do
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
   // Znacka istinito imenuje prepoznati fakultet i nudi oba gumba (Z32: napomenaDrugiFakultet).
   // `#detectBadge` zivi unutar `#profileSheet` (list za promjenu profila), koji ovaj tok ne
-  // otvara, pa se provjerava sadrzaj (bez zahtjeva na vidljivost), a ne `toBeVisible`.
+  // otvara, pa se ondje provjerava sadrzaj; VIDLJIVOST mjeri napomena izvan lista (test ispod).
   const znacka = page.locator('#detectBadge');
-  await expect(znacka).toContainText(
-    'Dokument izgleda kao rad koji pripada fakultetu Fakultet političkih znanosti. Na ulazu je potvrđen Fakultet elektrotehnike i računarstva.',
-    { timeout: 30_000 },
-  );
-  await expect(znacka.locator('button')).toHaveText([
-    'Prebaci na Fakultet političkih znanosti',
-    'Zadrži Fakultet elektrotehnike i računarstva',
-  ]);
+  await expect(znacka).toContainText(NAPOMENA_FPZG_FER, { timeout: 30_000 });
+  await expect(znacka.locator('button')).toHaveText(GUMBI_FPZG_FER);
   await expect(page.locator('#unitSelect')).toHaveValue('fer');
+});
+
+/**
+ * NAPOMENA SE POKAZUJE SAMA (odluka vlasnika 2026-09-27, "Da, sama"). Isti tok kao iznad (FER
+ * potvrdjen na `/`, dokument FPZG-a), ali se mjeri VIDLJIVOST bez otvaranja lista profila:
+ * napomena stoji u `#facultyConflict` uz karticu profila, s oba gumba. Prvi prolaz: "Zadrži"
+ * zatvara napomenu, a FER ostaje. Drugi prolaz (nova sesija): "Prebaci" mijenja profil na FPZG.
+ */
+const NAPOMENA_FPZG_FER = 'Dokument izgleda kao rad koji pripada fakultetu Fakultet političkih znanosti. Na ulazu je potvrđen Fakultet elektrotehnike i računarstva.';
+const GUMBI_FPZG_FER = ['Prebaci na Fakultet političkih znanosti', 'Zadrži Fakultet elektrotehnike i računarstva'];
+
+async function doRadaSPotvrdjenimFer(page: Page): Promise<void> {
+  await page.goto('/?unit=fer');
+  await page.locator('[data-intake-potvrdi]').click();
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
+  await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
+}
+
+test('Z32: napomena o drugom prepoznatom fakultetu vidljiva je sama; "Zadrži" je zatvara, "Prebaci" mijenja profil', async ({ page }) => {
+  await doRadaSPotvrdjenimFer(page);
+  const napomena = page.getByTestId('faculty-conflict');
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await expect(napomena).toHaveAttribute('role', 'status');
+  await expect(napomena.locator('.fc-tekst')).toHaveText(NAPOMENA_FPZG_FER);
+  await expect(napomena.locator('button')).toHaveText(GUMBI_FPZG_FER);
+  await expect(napomena.locator('button').first()).toBeVisible();
+  await expect(napomena.locator('button').last()).toBeVisible();
+  // Bez otvaranja lista profila, i bez otimanja fokusa.
+  await expect(page.locator('#profileSheet')).toBeHidden();
+  expect(await napomena.evaluate((el) => el.contains(document.activeElement)), 'fokus se ne otima').toBe(false);
+
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[1] }).click();
+  await expect(napomena).toBeHidden();
+  await expect(napomena.locator('button')).toHaveCount(0);
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet elektrotehnike i računarstva');
+
+  await doRadaSPotvrdjenimFer(page);
+  await expect(napomena).toBeVisible({ timeout: 30_000 });
+  await napomena.getByRole('button', { name: GUMBI_FPZG_FER[0] }).click();
+  await expect(napomena).toBeHidden();
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg');
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet političkih znanosti');
 });
 
 test('Z32: povlacenje podize list, a napustanje ekrana ga spusta', async ({ page }) => {
