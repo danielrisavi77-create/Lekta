@@ -142,7 +142,7 @@ export function buildInspectionCoverage(
 
   return {
     version: 1,
-    status: limitedOccurrences > 0 || skipTotal > 0 ? 'partial' : 'complete',
+    status: limitedOccurrences > 0 || skipTotal > 0 ? 'partial' : 'no-known-limits',
     items,
     analyzerSkips,
     summary: {
