@@ -140,6 +140,37 @@ function canonicalProvider(value: unknown): 'openai' | 'anthropic' | null {
   return PROVIDER_ALIASES.get(value.trim().toLowerCase().replace(/[\s_-]/g, '')) ?? null;
 }
 
+/** Ista provjera provenijencije modela za audit i profilni validator. */
+export function schema2ProviderProblems(evidence: AiEvidenceAudit): Array<
+  'provider-unknown' | 'passes-model-missing' | 'passes-same-provider' | 'passes-model-mismatch'
+> {
+  const problems: Array<'provider-unknown' | 'passes-model-missing' | 'passes-same-provider' | 'passes-model-mismatch'> = [];
+  const passes = Array.isArray(evidence.passes) ? evidence.passes : [];
+  const extract = passes.find((pass) => pass?.pass === 'extract');
+  const refute = passes.find((pass) => pass?.pass === 'refute');
+  const topProvider = canonicalProvider(evidence.model?.provider);
+  const passProviders = passes.filter((pass) => pass?.model)
+    .map((pass) => canonicalProvider(pass.model!.provider));
+  if (!topProvider || passProviders.some((provider) => !provider)) problems.push('provider-unknown');
+  const validModel = (pass: AiEvidenceAuditPass | undefined) => pass?.model
+    && [pass.model.provider, pass.model.model, pass.model.version]
+      .every((part) => typeof part === 'string' && part.trim().length > 0);
+  if (!validModel(extract) || !validModel(refute)) {
+    problems.push('passes-model-missing');
+  } else {
+    const extractModel = extract!.model!;
+    const extractProvider = canonicalProvider(extractModel.provider);
+    const refuteProvider = canonicalProvider(refute!.model!.provider);
+    if (extractProvider && extractProvider === refuteProvider) problems.push('passes-same-provider');
+    if (extractProvider !== topProvider
+        || extractModel.model.trim() !== evidence.model?.model?.trim()
+        || extractModel.version.trim() !== evidence.model?.version?.trim()) {
+      problems.push('passes-model-mismatch');
+    }
+  }
+  return problems;
+}
+
 function normalizedQuote(value: string): string {
   return value.replace(/\s+/g, ' ').trim();
 }
@@ -266,31 +297,13 @@ export function auditAiEvidence(input: AiEvidenceAuditInput): AiEvidenceAuditRes
     add('passes-disagree', 'Prolazi nisu svi potvrdili isto pravilo.');
   }
   if (evidence.schemaVersion === 2) {
-    const extract = passes.find((pass) => pass.pass === 'extract');
-    const refute = passes.find((pass) => pass.pass === 'refute');
-    const topProvider = canonicalProvider(evidence.model.provider);
-    const passProviders = passes.filter((pass) => pass.model).map((pass) => canonicalProvider(pass.model!.provider));
-    if (!topProvider || passProviders.some((provider) => !provider)) {
-      add('provider-unknown', 'Nova shema dopušta samo poznate OpenAI i Anthropic providere.');
-    }
-    const validModel = (pass: AiEvidenceAuditPass | undefined) => pass?.model
-      && [pass.model.provider, pass.model.model, pass.model.version]
-        .every((part) => typeof part === 'string' && part.trim().length > 0);
-    if (!validModel(extract) || !validModel(refute)) {
-      add('passes-model-missing', 'Nova shema traži identitet modela za extract i refute prolaz.');
-    } else {
-      const extractModel = extract!.model!;
-      const extractProvider = canonicalProvider(extractModel.provider);
-      const refuteProvider = canonicalProvider(refute!.model!.provider);
-      if (extractProvider && extractProvider === refuteProvider) {
-        add('passes-same-provider', 'Extract i refute u novoj shemi moraju imati različite providere.');
-      }
-      if (extractProvider !== topProvider
-          || extractModel.model.trim() !== evidence.model.model.trim()
-          || extractModel.version.trim() !== evidence.model.version.trim()) {
-        add('passes-model-mismatch', 'Zbirni identitet modela ne odgovara extract prolazu.');
-      }
-    }
+    const messages = {
+      'provider-unknown': 'Nova shema dopušta samo poznate OpenAI i Anthropic providere.',
+      'passes-model-missing': 'Nova shema traži identitet modela za extract i refute prolaz.',
+      'passes-same-provider': 'Extract i refute u novoj shemi moraju imati različite providere.',
+      'passes-model-mismatch': 'Zbirni identitet modela ne odgovara extract prolazu.',
+    } as const;
+    for (const code of schema2ProviderProblems(evidence)) add(code, messages[code]);
   }
   if (![evidence.model.provider, evidence.model.model, evidence.model.version].every((part) => part.trim())) {
     add('model-metadata-missing', 'Nedostaje identitet providera, modela ili verzije.');

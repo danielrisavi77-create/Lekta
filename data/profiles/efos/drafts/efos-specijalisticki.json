@@ -20,12 +20,12 @@
       "autoFixable": true,
       "fixerId": "paper-size-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-09-25",
+      "lastVerified": "2026-09-27",
       "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
       "confirmedVia": "ai-evidence-audit",
       "aiEvidence": {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "profileId": "efos-specijalisticki",
         "ruleId": "efos-specijalisticki--paper-size",
         "sourceId": "efos-upute-studentski-2023",
@@ -43,25 +43,35 @@
           {
             "pass": "extract",
             "verdict": "confirm",
-            "note": "Odlomak izričito određuje A4, 210x297 mm."
+            "note": "Slijepo izvlacenje (gpt-6-luna): Izvor izričito navodi format A4; navedena rečenica ima direktivni modalitet i odnosi se na cijeli rad.",
+            "model": {
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "version": "codex-cli version unavailable"
+            }
           },
           {
             "pass": "quote-check",
             "verdict": "confirm",
-            "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+            "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
           },
           {
             "pass": "refute",
             "verdict": "confirm",
-            "note": "U kontekstu odjeljka nema alternativne veličine ni iznimke za ovu os."
+            "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+            "model": {
+              "provider": "anthropic",
+              "model": "claude-sonnet-5",
+              "version": "not-reported"
+            }
           }
         ],
         "agree": true,
-        "summary": "Službena uputa podupire A4, 210x297 mm za cijeli rad.",
+        "summary": "Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.",
         "model": {
-          "provider": "OpenAI",
-          "model": "GPT-5",
-          "version": "runtime-version-not-exposed"
+          "provider": "openai",
+          "model": "gpt-6-luna",
+          "version": "codex-cli version unavailable"
         },
         "execution": {
           "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -69,9 +79,10 @@
           "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:54:12.901Z"
+          "ranAt": "2026-09-27T04:22:25.255Z"
         }
-      }
+      },
+      "aiEvidenceApprovedCanonical": "{\"agree\":true,\"claim\":{\"modality\":\"directive\",\"scope\":\"whole\",\"value\":\"A4\"},\"execution\":{\"command\":\"npm run closed-loop -- --profile efos-specijalisticki --no-structural\",\"inputHash\":\"60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b\",\"manifestId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"outputHash\":\"d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"ranAt\":\"2026-09-27T04:22:25.255Z\",\"testId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--paper-size\"},\"fetchedAt\":\"2026-07-02\",\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"passes\":[{\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"note\":\"Slijepo izvlacenje (gpt-6-luna): Izvor izričito navodi format A4; navedena rečenica ima direktivni modalitet i odnosi se na cijeli rad.\",\"pass\":\"extract\",\"verdict\":\"confirm\"},{\"note\":\"Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru.\",\"pass\":\"quote-check\",\"verdict\":\"confirm\"},{\"model\":{\"model\":\"claude-sonnet-5\",\"provider\":\"anthropic\",\"version\":\"not-reported\"},\"note\":\"Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.\",\"pass\":\"refute\",\"verdict\":\"confirm\"}],\"profileId\":\"efos-specijalisticki\",\"quote\":\"veličina je stranice A4 (210x297 mm)\",\"ruleId\":\"efos-specijalisticki--paper-size\",\"schemaVersion\":2,\"snapshotHash\":\"1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493\",\"sourceId\":\"efos-upute-studentski-2023\",\"sourcePage\":\"Odjeljak 2, tiskana str. 3\",\"sourceUrl\":\"https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx\",\"summary\":\"Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.\"}"
     },
     {
       "ruleId": "efos-specijalisticki--margins",
@@ -97,12 +108,12 @@
       "autoFixable": true,
       "fixerId": "margins-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-09-25",
+      "lastVerified": "2026-09-27",
       "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
       "confirmedVia": "ai-evidence-audit",
       "aiEvidence": {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "profileId": "efos-specijalisticki",
         "ruleId": "efos-specijalisticki--margins",
         "sourceId": "efos-upute-studentski-2023",
@@ -113,10 +124,10 @@
         "quote": "a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm",
         "claim": {
           "value": {
-            "top": 2.5,
+            "left": 2.5,
             "right": 2.5,
             "bottom": 2.5,
-            "left": 2.5
+            "top": 2.5
           },
           "modality": "directive",
           "scope": "whole"
@@ -125,25 +136,35 @@
           {
             "pass": "extract",
             "verdict": "confirm",
-            "note": "Uputa određuje po 25 mm za lijevu, desnu, gornju i donju marginu."
+            "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi 25 mm za sve rubnice, odnosno 2,5 cm; „trebaju biti” daje direktivni modalitet, a margine se odnose na cijeli rad.",
+            "model": {
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "version": "codex-cli version unavailable"
+            }
           },
           {
             "pass": "quote-check",
             "verdict": "confirm",
-            "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+            "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
           },
           {
             "pass": "refute",
             "verdict": "confirm",
-            "note": "U kontekstu odjeljka nema drukčije vrijednosti ni iznimke za ovu os."
+            "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+            "model": {
+              "provider": "anthropic",
+              "model": "claude-sonnet-5",
+              "version": "not-reported"
+            }
           }
         ],
         "agree": true,
-        "summary": "Sve četiri margine odgovaraju vrijednosti 2,5 cm za cijeli rad.",
+        "summary": "Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.",
         "model": {
-          "provider": "OpenAI",
-          "model": "GPT-5",
-          "version": "runtime-version-not-exposed"
+          "provider": "openai",
+          "model": "gpt-6-luna",
+          "version": "codex-cli version unavailable"
         },
         "execution": {
           "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -151,9 +172,10 @@
           "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:54:12.901Z"
+          "ranAt": "2026-09-27T04:22:25.255Z"
         }
-      }
+      },
+      "aiEvidenceApprovedCanonical": "{\"agree\":true,\"claim\":{\"modality\":\"directive\",\"scope\":\"whole\",\"value\":{\"bottom\":2.5,\"left\":2.5,\"right\":2.5,\"top\":2.5}},\"execution\":{\"command\":\"npm run closed-loop -- --profile efos-specijalisticki --no-structural\",\"inputHash\":\"60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b\",\"manifestId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"outputHash\":\"d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"ranAt\":\"2026-09-27T04:22:25.255Z\",\"testId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--margins\"},\"fetchedAt\":\"2026-07-02\",\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"passes\":[{\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"note\":\"Slijepo izvlacenje (gpt-6-luna): Izvor navodi 25 mm za sve rubnice, odnosno 2,5 cm; „trebaju biti” daje direktivni modalitet, a margine se odnose na cijeli rad.\",\"pass\":\"extract\",\"verdict\":\"confirm\"},{\"note\":\"Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru.\",\"pass\":\"quote-check\",\"verdict\":\"confirm\"},{\"model\":{\"model\":\"claude-sonnet-5\",\"provider\":\"anthropic\",\"version\":\"not-reported\"},\"note\":\"Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.\",\"pass\":\"refute\",\"verdict\":\"confirm\"}],\"profileId\":\"efos-specijalisticki\",\"quote\":\"a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm\",\"ruleId\":\"efos-specijalisticki--margins\",\"schemaVersion\":2,\"snapshotHash\":\"1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493\",\"sourceId\":\"efos-upute-studentski-2023\",\"sourcePage\":\"Odjeljak 2, tiskana str. 3\",\"sourceUrl\":\"https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx\",\"summary\":\"Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.\"}"
     },
     {
       "ruleId": "efos-specijalisticki--font",
@@ -176,12 +198,12 @@
       "autoFixable": true,
       "fixerId": "font-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-09-25",
+      "lastVerified": "2026-09-27",
       "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
       "confirmedVia": "ai-evidence-audit",
       "aiEvidence": {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "profileId": "efos-specijalisticki",
         "ruleId": "efos-specijalisticki--font",
         "sourceId": "efos-upute-studentski-2023",
@@ -201,25 +223,35 @@
           {
             "pass": "extract",
             "verdict": "confirm",
-            "note": "Tekst upute za rad navodi font Times New Roman."
+            "note": "Slijepo izvlacenje (gpt-6-luna): Izvor propisuje Times New Roman; „treba pisati” daje direktivni modalitet, a font se odnosi na tijelo rada.",
+            "model": {
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "version": "codex-cli version unavailable"
+            }
           },
           {
             "pass": "quote-check",
             "verdict": "confirm",
-            "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+            "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
           },
           {
             "pass": "refute",
             "verdict": "confirm",
-            "note": "U kontekstu odjeljka nema alternativnog fonta ni iznimke za tijelo rada."
+            "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+            "model": {
+              "provider": "anthropic",
+              "model": "claude-sonnet-5",
+              "version": "not-reported"
+            }
           }
         ],
         "agree": true,
-        "summary": "Uputa podupire Times New Roman za tekst rada, uz opseg tijela rada.",
+        "summary": "Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.",
         "model": {
-          "provider": "OpenAI",
-          "model": "GPT-5",
-          "version": "runtime-version-not-exposed"
+          "provider": "openai",
+          "model": "gpt-6-luna",
+          "version": "codex-cli version unavailable"
         },
         "execution": {
           "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -227,9 +259,10 @@
           "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:54:12.901Z"
+          "ranAt": "2026-09-27T04:22:25.255Z"
         }
-      }
+      },
+      "aiEvidenceApprovedCanonical": "{\"agree\":true,\"claim\":{\"modality\":\"directive\",\"scope\":\"body\",\"value\":[\"Times New Roman\"]},\"execution\":{\"command\":\"npm run closed-loop -- --profile efos-specijalisticki --no-structural\",\"inputHash\":\"60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b\",\"manifestId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"outputHash\":\"d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"ranAt\":\"2026-09-27T04:22:25.255Z\",\"testId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--font\"},\"fetchedAt\":\"2026-07-02\",\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"passes\":[{\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"note\":\"Slijepo izvlacenje (gpt-6-luna): Izvor propisuje Times New Roman; „treba pisati” daje direktivni modalitet, a font se odnosi na tijelo rada.\",\"pass\":\"extract\",\"verdict\":\"confirm\"},{\"note\":\"Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru.\",\"pass\":\"quote-check\",\"verdict\":\"confirm\"},{\"model\":{\"model\":\"claude-sonnet-5\",\"provider\":\"anthropic\",\"version\":\"not-reported\"},\"note\":\"Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.\",\"pass\":\"refute\",\"verdict\":\"confirm\"}],\"profileId\":\"efos-specijalisticki\",\"quote\":\"rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5\",\"ruleId\":\"efos-specijalisticki--font\",\"schemaVersion\":2,\"snapshotHash\":\"1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493\",\"sourceId\":\"efos-upute-studentski-2023\",\"sourcePage\":\"Odjeljak 2, tiskana str. 3\",\"sourceUrl\":\"https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx\",\"summary\":\"Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.\"}"
     },
     {
       "ruleId": "efos-specijalisticki--font-size",
@@ -250,12 +283,12 @@
       "autoFixable": true,
       "fixerId": "font-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-09-25",
+      "lastVerified": "2026-09-27",
       "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
       "confirmedVia": "ai-evidence-audit",
       "aiEvidence": {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "profileId": "efos-specijalisticki",
         "ruleId": "efos-specijalisticki--font-size",
         "sourceId": "efos-upute-studentski-2023",
@@ -273,25 +306,35 @@
           {
             "pass": "extract",
             "verdict": "confirm",
-            "note": "Uputa navodi veličinu slova 12 točaka."
+            "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi veličinu 12 točaka; „treba pisati” daje direktivni modalitet, a veličina slova odnosi se na tijelo rada.",
+            "model": {
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "version": "codex-cli version unavailable"
+            }
           },
           {
             "pass": "quote-check",
             "verdict": "confirm",
-            "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+            "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
           },
           {
             "pass": "refute",
             "verdict": "confirm",
-            "note": "U kontekstu odjeljka nema druge veličine ni iznimke za ovu os."
+            "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+            "model": {
+              "provider": "anthropic",
+              "model": "claude-sonnet-5",
+              "version": "not-reported"
+            }
           }
         ],
         "agree": true,
-        "summary": "Veličina 12 pt za tijelo rada izravno odgovara navodu službene upute.",
+        "summary": "Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.",
         "model": {
-          "provider": "OpenAI",
-          "model": "GPT-5",
-          "version": "runtime-version-not-exposed"
+          "provider": "openai",
+          "model": "gpt-6-luna",
+          "version": "codex-cli version unavailable"
         },
         "execution": {
           "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -299,9 +342,10 @@
           "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:54:12.901Z"
+          "ranAt": "2026-09-27T04:22:25.255Z"
         }
-      }
+      },
+      "aiEvidenceApprovedCanonical": "{\"agree\":true,\"claim\":{\"modality\":\"directive\",\"scope\":\"body\",\"value\":12},\"execution\":{\"command\":\"npm run closed-loop -- --profile efos-specijalisticki --no-structural\",\"inputHash\":\"60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b\",\"manifestId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"outputHash\":\"d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"ranAt\":\"2026-09-27T04:22:25.255Z\",\"testId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--font-size\"},\"fetchedAt\":\"2026-07-02\",\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"passes\":[{\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"note\":\"Slijepo izvlacenje (gpt-6-luna): Izvor navodi veličinu 12 točaka; „treba pisati” daje direktivni modalitet, a veličina slova odnosi se na tijelo rada.\",\"pass\":\"extract\",\"verdict\":\"confirm\"},{\"note\":\"Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru.\",\"pass\":\"quote-check\",\"verdict\":\"confirm\"},{\"model\":{\"model\":\"claude-sonnet-5\",\"provider\":\"anthropic\",\"version\":\"not-reported\"},\"note\":\"Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.\",\"pass\":\"refute\",\"verdict\":\"confirm\"}],\"profileId\":\"efos-specijalisticki\",\"quote\":\"rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5\",\"ruleId\":\"efos-specijalisticki--font-size\",\"schemaVersion\":2,\"snapshotHash\":\"1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493\",\"sourceId\":\"efos-upute-studentski-2023\",\"sourcePage\":\"Odjeljak 2, tiskana str. 3\",\"sourceUrl\":\"https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx\",\"summary\":\"Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.\"}"
     },
     {
       "ruleId": "efos-specijalisticki--line-spacing",
@@ -322,12 +366,12 @@
       "autoFixable": true,
       "fixerId": "line-spacing-fixer",
       "verifiedHash": "1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493",
-      "lastVerified": "2026-09-25",
+      "lastVerified": "2026-09-27",
       "verifiedBy": "ai-evidence-audit",
       "reviewedBy": null,
       "confirmedVia": "ai-evidence-audit",
       "aiEvidence": {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "profileId": "efos-specijalisticki",
         "ruleId": "efos-specijalisticki--line-spacing",
         "sourceId": "efos-upute-studentski-2023",
@@ -345,25 +389,35 @@
           {
             "pass": "extract",
             "verdict": "confirm",
-            "note": "Uputa izričito navodi prored 1,5."
+            "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi prored 1,5; „treba pisati” daje direktivni modalitet, a prored se odnosi na tijelo rada.",
+            "model": {
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "version": "codex-cli version unavailable"
+            }
           },
           {
             "pass": "quote-check",
             "verdict": "confirm",
-            "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+            "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
           },
           {
             "pass": "refute",
             "verdict": "confirm",
-            "note": "U kontekstu odjeljka nema druge vrijednosti ni iznimke za prored tijela."
+            "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+            "model": {
+              "provider": "anthropic",
+              "model": "claude-sonnet-5",
+              "version": "not-reported"
+            }
           }
         ],
         "agree": true,
-        "summary": "Prored 1,5 za tijelo rada odgovara citiranoj službenoj uputi.",
+        "summary": "Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.",
         "model": {
-          "provider": "OpenAI",
-          "model": "GPT-5",
-          "version": "runtime-version-not-exposed"
+          "provider": "openai",
+          "model": "gpt-6-luna",
+          "version": "codex-cli version unavailable"
         },
         "execution": {
           "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -371,9 +425,10 @@
           "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
           "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
           "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-          "ranAt": "2026-09-26T20:54:12.901Z"
+          "ranAt": "2026-09-27T04:22:25.255Z"
         }
-      }
+      },
+      "aiEvidenceApprovedCanonical": "{\"agree\":true,\"claim\":{\"modality\":\"directive\",\"scope\":\"body\",\"value\":1.5},\"execution\":{\"command\":\"npm run closed-loop -- --profile efos-specijalisticki --no-structural\",\"inputHash\":\"60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b\",\"manifestId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"outputHash\":\"d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70\",\"ranAt\":\"2026-09-27T04:22:25.255Z\",\"testId\":\"closed-loop:efos-specijalisticki:efos-specijalisticki--line-spacing\"},\"fetchedAt\":\"2026-07-02\",\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"passes\":[{\"model\":{\"model\":\"gpt-6-luna\",\"provider\":\"openai\",\"version\":\"codex-cli version unavailable\"},\"note\":\"Slijepo izvlacenje (gpt-6-luna): Izvor navodi prored 1,5; „treba pisati” daje direktivni modalitet, a prored se odnosi na tijelo rada.\",\"pass\":\"extract\",\"verdict\":\"confirm\"},{\"note\":\"Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru.\",\"pass\":\"quote-check\",\"verdict\":\"confirm\"},{\"model\":{\"model\":\"claude-sonnet-5\",\"provider\":\"anthropic\",\"version\":\"not-reported\"},\"note\":\"Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.\",\"pass\":\"refute\",\"verdict\":\"confirm\"}],\"profileId\":\"efos-specijalisticki\",\"quote\":\"rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5\",\"ruleId\":\"efos-specijalisticki--line-spacing\",\"schemaVersion\":2,\"snapshotHash\":\"1f107aa41b7ada99964f2163c486a0e455d15c3059ce4fbeb6b8392a5b2f4493\",\"sourceId\":\"efos-upute-studentski-2023\",\"sourcePage\":\"Odjeljak 2, tiskana str. 3\",\"sourceUrl\":\"https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx\",\"summary\":\"Slijepo izvucena vrijednost, modalitet i opseg podudaraju se s pravilom; pobijanje drugog providera nije uspjelo.\"}"
     }
   ],
   "generatedAt": "2026-08-01"

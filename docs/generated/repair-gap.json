@@ -294,7 +294,7 @@
     "rule-shape-unusable": 5,
     "total": 40
   },
-  "generatedAt": "2026-09-26T22:00:14.827Z",
-  "generatedFromCommit": "4de3cfd6ee84bbac4d83d7a5e31442b516c9bd30",
+  "generatedAt": "2026-09-27T04:32:57.927Z",
+  "generatedFromCommit": "ade821dba1d3d29bbc85fc8dc46803b0a47d2d5a",
   "generator": "npm run repair-gap"
 }

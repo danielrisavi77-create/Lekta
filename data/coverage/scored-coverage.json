@@ -438,7 +438,7 @@
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-09-25"
+      "lastVerified": "2026-09-27"
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -458,7 +458,7 @@
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-09-25"
+      "lastVerified": "2026-09-27"
     },
     {
       "profileId": "efos-zavrsni",
@@ -3948,7 +3948,7 @@
       "advisory": 1,
       "ratio": 0.6666666666666666,
       "state": "scored",
-      "lastVerified": "2026-09-25"
+      "lastVerified": "2026-09-27"
     },
     {
       "profileId": "vuka-sigurnost-diplomski",

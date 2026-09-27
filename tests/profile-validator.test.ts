@@ -65,6 +65,18 @@ describe('validateProfiles AI-evidence potvrda', () => {
   const profileWith = (profileId: string, ruleId: string, entry: Partial<RuleEntry>) =>
     [{ id: profileId, ruleEntries: [{ ruleId, ...entry } as RuleEntry] }] as any;
 
+  it('prihvaca valjan schema 2 paket u staging nacrtu', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const passes = fixture.evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known', version: '1' },
+    }));
+    const aiEvidence = { ...fixture.evidence, schemaVersion: 2 as const,
+      model: { provider: 'OpenAI', model: 'known', version: '1' }, passes };
+    expect(validateProfiles(profileWith(fixture.profileId, fixture.rule.ruleId, {
+      ...fixture.rule, status: 'verified', confirmedVia: 'ai-evidence-audit', aiEvidence,
+    }))).toEqual([]);
+  });
+
   it('odbija ai-evidence status bez strukturiranog dokaznog paketa', () => {
     const errors = validateProfiles(profileWith('p1', 'r1', { status: 'verified', confirmedVia: 'ai-evidence-audit' }));
     expect(errors).toHaveLength(1);

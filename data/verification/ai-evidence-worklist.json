@@ -2,9 +2,10 @@
   "schemaVersion": 1,
   "ruleCount": 2625,
   "statusCounts": {
-    "needs-ai-evidence": 843,
+    "needs-ai-evidence": 831,
     "not-scored": 388,
     "human-verified": 1382,
+    "ai-evidence-verified": 12,
     "needs-recheck": 12
   },
   "rules": [
@@ -1824,51 +1825,41 @@
       "profileId": "efos-doktorski",
       "ruleId": "efos-doktorski--font",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-doktorski",
       "ruleId": "efos-doktorski--font-size",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-doktorski",
       "ruleId": "efos-doktorski--line-spacing",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-doktorski",
       "ruleId": "efos-doktorski--margins",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-doktorski",
       "ruleId": "efos-doktorski--paper-size",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -1932,51 +1923,41 @@
       "profileId": "efos-specijalisticki",
       "ruleId": "efos-specijalisticki--font",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-specijalisticki",
       "ruleId": "efos-specijalisticki--font-size",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-specijalisticki",
       "ruleId": "efos-specijalisticki--line-spacing",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-specijalisticki",
       "ruleId": "efos-specijalisticki--margins",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-specijalisticki",
       "ruleId": "efos-specijalisticki--paper-size",
       "sourceId": "efos-upute-studentski-2023",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "efos-zavrsni",
@@ -22142,21 +22123,17 @@
       "profileId": "vuka-prehrambena-zavrsni",
       "ruleId": "vuka-prehrambena-zavrsni--font-size",
       "sourceId": "vuka-prehrambena-upute-2025",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
       "ruleId": "vuka-prehrambena-zavrsni--line-spacing",
       "sourceId": "vuka-prehrambena-upute-2025",
-      "status": "needs-ai-evidence",
-      "reasonCodes": [
-        "provider-provenance-recheck"
-      ],
-      "action": "run-ai-evidence-audit"
+      "status": "ai-evidence-verified",
+      "reasonCodes": [],
+      "action": "none"
     },
     {
       "profileId": "vuka-sigurnost-diplomski",

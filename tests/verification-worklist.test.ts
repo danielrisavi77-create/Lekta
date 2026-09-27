@@ -200,9 +200,12 @@ describe('verifikacijski worklist je u koraku s pravilima', () => {
     expect(result.ruleItems[0].reasonCodes).toContain('provider-provenance-recheck');
   });
 
-  it('svih 24 postojećih paketa s netočnom provenijencijom su u redu za ponovni audit', () => {
+  it('12 ponovno auditiranih paketa je valjano, a preostalih 12 od izvorna 24 čeka ponovni audit', () => {
     const marked = fresh.ruleItems.filter((item) => item.reasonCodes.includes('provider-provenance-recheck'));
-    expect(marked).toHaveLength(24);
+    const applied = new Set(['efos-doktorski', 'efos-specijalisticki', 'vuka-prehrambena-zavrsni']);
+    const verified = fresh.ruleItems.filter((item) => applied.has(item.profileId) && item.status === 'ai-evidence-verified');
+    expect(verified).toHaveLength(12);
+    expect(marked).toHaveLength(12);
     expect(marked.every((item) => item.status === 'needs-ai-evidence' && item.action === 'run-ai-evidence-audit')).toBe(true);
   });
 

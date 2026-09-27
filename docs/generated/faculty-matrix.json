@@ -9813,23 +9813,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Tekst upute za rad navodi font Times New Roman."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor propisuje Times New Roman; „treba pisati” daje direktivni modalitet, a font se odnosi na tijelo rada.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema alternativnog fonta ni iznimke za tijelo rada."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -9837,7 +9847,7 @@
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:25.478Z"
+                "ranAt": "2026-09-27T04:21:59.065Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -9866,23 +9876,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Uputa navodi veličinu slova 12 točaka."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi veličinu 12 točaka; „treba pisati” daje direktivni modalitet, a veličina slova odnosi se na tijelo rada.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema druge veličine ni iznimke za ovu os."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -9890,7 +9910,7 @@
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:25.478Z"
+                "ranAt": "2026-09-27T04:21:59.065Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -9919,23 +9939,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Uputa izričito navodi prored 1,5."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi prored 1,5; „treba pisati” daje direktivni modalitet, a prored se odnosi na tijelo rada.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema druge vrijednosti ni iznimke za prored tijela."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-doktorski:efos-doktorski--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -9943,7 +9973,7 @@
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:25.478Z"
+                "ranAt": "2026-09-27T04:21:59.065Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -9970,10 +10000,10 @@
               "aiEvidenceValidation": "not-revalidated",
               "aiClaim": {
                 "value": {
-                  "top": 2.5,
+                  "left": 2.5,
                   "right": 2.5,
                   "bottom": 2.5,
-                  "left": 2.5
+                  "top": 2.5
                 },
                 "scope": "whole",
                 "modality": "directive"
@@ -9982,23 +10012,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Uputa određuje po 25 mm za lijevu, desnu, gornju i donju marginu."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi 25 mm za sve rubnice, odnosno 2,5 cm; „trebaju biti” daje direktivni modalitet, a margine se odnose na cijeli rad.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema drukčije vrijednosti ni iznimke za ovu os."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-doktorski:efos-doktorski--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -10006,7 +10046,7 @@
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:25.478Z"
+                "ranAt": "2026-09-27T04:21:59.065Z"
               },
               "scored": true,
               "fixerId": "margins-fixer"
@@ -10035,23 +10075,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Odlomak izričito određuje A4, 210x297 mm."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor izričito navodi format A4; navedena rečenica ima direktivni modalitet i odnosi se na cijeli rad.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u registriranom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema alternativne veličine ni iznimke za ovu os."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-doktorski:efos-doktorski--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -10059,7 +10109,7 @@
                 "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:53:25.478Z"
+                "ranAt": "2026-09-27T04:21:59.065Z"
               },
               "scored": true,
               "fixerId": "paper-size-fixer"
@@ -10068,11 +10118,11 @@
           "completionByWorkType": [
             {
               "workType": "doctoral",
-              "level": "C",
+              "level": "B",
               "blockedReasons": [
-                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+                "nema dokaza na stvarnom studentskom radu"
               ],
-              "rules": "bulk-pending",
+              "rules": "verified",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
@@ -10160,23 +10210,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Tekst upute za rad navodi font Times New Roman."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor propisuje Times New Roman; „treba pisati” daje direktivni modalitet, a font se odnosi na tijelo rada.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema alternativnog fonta ni iznimke za tijelo rada."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -10184,7 +10244,7 @@
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:54:12.901Z"
+                "ranAt": "2026-09-27T04:22:25.255Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -10213,23 +10273,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Uputa navodi veličinu slova 12 točaka."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi veličinu 12 točaka; „treba pisati” daje direktivni modalitet, a veličina slova odnosi se na tijelo rada.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema druge veličine ni iznimke za ovu os."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -10237,7 +10307,7 @@
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:54:12.901Z"
+                "ranAt": "2026-09-27T04:22:25.255Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -10266,23 +10336,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Uputa izričito navodi prored 1,5."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi prored 1,5; „treba pisati” daje direktivni modalitet, a prored se odnosi na tijelo rada.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema druge vrijednosti ni iznimke za prored tijela."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -10290,7 +10370,7 @@
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:54:12.901Z"
+                "ranAt": "2026-09-27T04:22:25.255Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -10317,10 +10397,10 @@
               "aiEvidenceValidation": "not-revalidated",
               "aiClaim": {
                 "value": {
-                  "top": 2.5,
+                  "left": 2.5,
                   "right": 2.5,
                   "bottom": 2.5,
-                  "left": 2.5
+                  "top": 2.5
                 },
                 "scope": "whole",
                 "modality": "directive"
@@ -10329,23 +10409,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Uputa određuje po 25 mm za lijevu, desnu, gornju i donju marginu."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor navodi 25 mm za sve rubnice, odnosno 2,5 cm; „trebaju biti” daje direktivni modalitet, a margine se odnose na cijeli rad.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema drukčije vrijednosti ni iznimke za ovu os."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -10353,7 +10443,7 @@
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:54:12.901Z"
+                "ranAt": "2026-09-27T04:22:25.255Z"
               },
               "scored": true,
               "fixerId": "margins-fixer"
@@ -10382,23 +10472,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Odlomak izričito određuje A4, 210x297 mm."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Izvor izričito navodi format A4; navedena rečenica ima direktivni modalitet i odnosi se na cijeli rad.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli version unavailable"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Citat je pronađen doslovno u službenom DOCX snapshotu, odjeljak 2."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "U kontekstu odjeljka nema alternativne veličine ni iznimke za ovu os."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli version unavailable"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:efos-specijalisticki:efos-specijalisticki--paper-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -10406,7 +10506,7 @@
                 "command": "npm run closed-loop -- --profile efos-specijalisticki --no-structural",
                 "inputHash": "60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b",
                 "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
-                "ranAt": "2026-09-26T20:54:12.901Z"
+                "ranAt": "2026-09-27T04:22:25.255Z"
               },
               "scored": true,
               "fixerId": "paper-size-fixer"
@@ -10415,11 +10515,11 @@
           "completionByWorkType": [
             {
               "workType": "specialist",
-              "level": "C",
+              "level": "B",
               "blockedReasons": [
-                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+                "nema dokaza na stvarnom studentskom radu"
               ],
-              "rules": "bulk-pending",
+              "rules": "verified",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
@@ -100214,23 +100314,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Obvezni odjeljak propisuje 12 točaka za tekst rada; profilna vrijednost je 12."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Za tekst rada navodi se 12 točaka u indikativnoj formulaciji, što daje direktivu i opseg body; 14 podebljano izričito se odnosi na naslove.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli unknown"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Doslovni citat pronađen je u registriranom službenom DOCX snapshotu."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "Izvor zasebno preporučuje font, ali veličinu 12 stavlja pod obvezne zahtjeve; tijelo rada je pravi opseg."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli unknown"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--font-size:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
@@ -100238,7 +100348,7 @@
                 "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
                 "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
                 "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
-                "ranAt": "2026-09-26T20:56:48.281Z"
+                "ranAt": "2026-09-27T04:22:52.103Z"
               },
               "scored": true,
               "fixerId": "font-fixer"
@@ -100267,23 +100377,33 @@
                 {
                   "pass": "extract",
                   "verdict": "confirm",
-                  "note": "Isti obvezni odlomak izričito propisuje prored 1,5; profilna vrijednost odgovara."
+                  "note": "Slijepo izvlacenje (gpt-6-luna): Prored 1,5 naveden je za rad u indikativnoj formulaciji, pa je direktiva za osnovni tekst rada.",
+                  "model": {
+                    "provider": "openai",
+                    "model": "gpt-6-luna",
+                    "version": "codex-cli unknown"
+                  }
                 },
                 {
                   "pass": "quote-check",
                   "verdict": "confirm",
-                  "note": "Doslovni citat pronađen je u registriranom službenom DOCX snapshotu."
+                  "note": "Deterministicki: citat pronadjen u registriranoj snimci uz normalizaciju razmaka; hash snimke odgovara registru."
                 },
                 {
                   "pass": "refute",
                   "verdict": "confirm",
-                  "note": "Modalitet dolazi iz naslova obveznih zahtjeva; preporuka fonta je zasebna i ne mijenja prored."
+                  "note": "Drugi provider (Anthropic Claude Sonnet 5): Protivnicki pregled drugog providera nije nasao proturjecje ni iznimku.",
+                  "model": {
+                    "provider": "anthropic",
+                    "model": "claude-sonnet-5",
+                    "version": "not-reported"
+                  }
                 }
               ],
               "aiModel": {
-                "provider": "OpenAI",
-                "model": "GPT-5",
-                "version": "runtime-version-not-exposed"
+                "provider": "openai",
+                "model": "gpt-6-luna",
+                "version": "codex-cli unknown"
               },
               "auditExecution": {
                 "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--line-spacing:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
@@ -100291,7 +100411,7 @@
                 "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
                 "inputHash": "7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7",
                 "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
-                "ranAt": "2026-09-26T20:56:48.281Z"
+                "ranAt": "2026-09-27T04:22:52.103Z"
               },
               "scored": true,
               "fixerId": "line-spacing-fixer"
@@ -100300,11 +100420,11 @@
           "completionByWorkType": [
             {
               "workType": "final",
-              "level": "C",
+              "level": "B",
               "blockedReasons": [
-                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+                "nema dokaza na stvarnom studentskom radu"
               ],
-              "rules": "bulk-pending",
+              "rules": "verified",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"

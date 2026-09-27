@@ -1,6 +1,7 @@
 import type { ThesisProfile } from './profile-schema';
 import { FIXER_IDS } from '../repair/apply-fixers';
 import { ACADEMIC_YEAR_RE } from './academic-year';
+import { schema2ProviderProblems } from '../verification/ai-evidence-audit';
 
 export interface ProfileValidationError {
   profileId: string;
@@ -42,11 +43,12 @@ export function validateProfiles(profiles: ThesisProfile[]): ProfileValidationEr
             message: `Pravilo ${entry.ruleId}: confirmedVia ai-evidence-audit bez strukturiranog aiEvidence paketa.`,
           });
         } else if (
-          entry.aiEvidence.schemaVersion !== 1
+          (entry.aiEvidence.schemaVersion !== 1 && entry.aiEvidence.schemaVersion !== 2)
           || entry.aiEvidence.profileId !== profile.id
           || entry.aiEvidence.ruleId !== entry.ruleId
           || entry.aiEvidence.sourceId !== entry.sourceId
           || !/^[a-f0-9]{64}$/.test(entry.aiEvidence.snapshotHash)
+          || (entry.aiEvidence.schemaVersion === 2 && schema2ProviderProblems(entry.aiEvidence).length > 0)
         ) {
           errors.push({
             profileId: profile.id,

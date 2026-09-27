@@ -96,6 +96,7 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { auditAiEvidence } from '../src/verification/ai-evidence-audit';
+import { validateProfiles } from '../src/profiles/profile-validator';
 import { anchorRuleQuotes, validateQuoteAnchorPlan } from '../src/verification/anchor-rule-quotes';
 import { publishAiAuditedRules } from '../src/profiles/publish-ai-rules';
 import { textSnapshotMatchesSource } from '../scripts/ai-evidence-context-loader';
@@ -4239,6 +4240,25 @@ describe('mutacija closed-loop ugovora teksta', () => {
     });
     expect(unknownProvider.valid).toBe(false);
     if (!unknownProvider.valid) expect(unknownProvider.reasons.map((reason) => reason.code)).toContain('provider-unknown');
+  });
+
+  it('profilni validator prihvaca valjanu shemu 2, a odbija mutirane providere, identitet i hash', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const passes = fixture.evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known', version: '1' },
+    }));
+    const baseline = { ...fixture.evidence, schemaVersion: 2 as const,
+      model: { provider: 'OpenAI', model: 'known', version: '1' }, passes };
+    const errorsFor = (aiEvidence: typeof baseline) => validateProfiles([{
+      id: fixture.profileId,
+      ruleEntries: [{ ...fixture.rule, status: 'verified', confirmedVia: 'ai-evidence-audit', aiEvidence }],
+    } as ThesisProfile]);
+    expect(errorsFor(baseline)).toEqual([]);
+    expect(errorsFor({ ...baseline, passes: passes.map((pass) => pass.pass === 'refute'
+      ? { ...pass, model: { ...pass.model, provider: 'OpenAI' } } : pass) })).not.toEqual([]);
+    expect(errorsFor({ ...baseline, model: { ...baseline.model, provider: 'fictional-provider' } })).not.toEqual([]);
+    expect(errorsFor({ ...baseline, profileId: 'wrong-profile' })).not.toEqual([]);
+    expect(errorsFor({ ...baseline, snapshotHash: 'invalid' })).not.toEqual([]);
   });
 });
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-26T20:56:48.281Z",
+  "generatedAt": "2026-09-27T04:22:52.103Z",
   "command": "npm run closed-loop -- --profile vuka-prehrambena-zavrsni --no-structural",
   "profileId": "vuka-prehrambena-zavrsni",
   "row": {
@@ -41,7 +41,7 @@
       "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "568f15e9fe7bcf0adbe2836f7b2c521ab414bcb65c1224ee0feda777965886f7",
-      "ranAt": "2026-09-26T20:56:48.281Z"
+      "ranAt": "2026-09-27T04:22:52.103Z"
     },
     {
       "manifestId": "closed-loop:vuka-prehrambena-zavrsni:vuka-prehrambena-zavrsni--line-spacing:7b936fba07431d2bff833b817697f3910acff0fcbd142a91e56d2bb05caf89d7:fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
@@ -54,7 +54,7 @@
       "outputHash": "fbed8f2cdbe7ac1901fbc3f91bddcdc0bdabea55218b732ea5fd378357f0b9b0",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "9f29a130438b81170b92a42650f9a94291ecad60bd47af2a3886e75f7f728725",
-      "ranAt": "2026-09-26T20:56:48.281Z"
+      "ranAt": "2026-09-27T04:22:52.103Z"
     }
   ]
 }

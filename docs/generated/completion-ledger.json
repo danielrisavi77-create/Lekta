@@ -1306,13 +1306,13 @@
       "workType": "doctoral",
       "programIds": [],
       "program": "missing",
-      "rules": "bulk-pending",
+      "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "C",
-      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -1327,7 +1327,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -1426,13 +1426,13 @@
       "workType": "specialist",
       "programIds": [],
       "program": "missing",
-      "rules": "bulk-pending",
+      "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "C",
-      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -1447,7 +1447,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -12712,13 +12712,13 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "bulk-pending",
+      "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
       "proofSource": null,
       "assets": "generic",
-      "claim": "C",
-      "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
@@ -12733,7 +12733,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "jedno ili više pravila još nema valjan revalidirani dokazni paket"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -13199,8 +13199,8 @@
       "unsupported": 3
     },
     "byRules": {
-      "verified": 225,
-      "bulk-pending": 163,
+      "verified": 228,
+      "bulk-pending": 160,
       "advisory-only": 19,
       "none": 29
     },
@@ -13250,8 +13250,8 @@
     },
     "byClaim": {
       "A": 0,
-      "B": 204,
-      "C": 142,
+      "B": 207,
+      "C": 139,
       "D": 42,
       "E": 48
     },
@@ -13264,7 +13264,7 @@
     "nationalClaimBlockers": [
       "413 redaka nema evidentiran studijski program (sluzbeni Upisnik jos nije sinkroniziran)",
       "3 evidentiranih programa nema nijedan profil: fpzg: Sveučilišni prijediplomski studij Vojno vođenje i upravljanje; fpzg: Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi; pravo: Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
-      "232 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
+      "229 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
     ]
   },
   "globalA": {
@@ -13689,7 +13689,7 @@
   },
   "facultyMinimumB": {
     "registeredFacultyCount": 407,
-    "facultyAtLeastB": 202,
+    "facultyAtLeastB": 205,
     "facultyBelowB": [
       "adu-dramaturgija-diplomski",
       "adu-ftv-rezija-diplomski",
@@ -13726,9 +13726,7 @@
       "effectus-diplomski",
       "effectus-seminarski",
       "effectus-zavrsni",
-      "efos-doktorski",
       "efos-opci-akademski-rad",
-      "efos-specijalisticki",
       "efst-opci-akademski-rad",
       "efzg-seminarski",
       "fdmz-diplomski",
@@ -13889,7 +13887,6 @@
       "vuka-poslovni-diplomski",
       "vuka-poslovni-opci-akademski-rad",
       "vuka-poslovni-zavrsni",
-      "vuka-prehrambena-zavrsni",
       "vuka-sigurnost-diplomski",
       "vuka-sigurnost-zavrsni",
       "vuka-strojarski-diplomski",
@@ -13911,7 +13908,7 @@
   },
   "facultyAllA": {
     "registeredFacultyCount": 407,
-    "facultyAtLeastB": 202,
+    "facultyAtLeastB": 205,
     "facultyBelowB": [
       "adu-dramaturgija-diplomski",
       "adu-ftv-rezija-diplomski",
@@ -13948,9 +13945,7 @@
       "effectus-diplomski",
       "effectus-seminarski",
       "effectus-zavrsni",
-      "efos-doktorski",
       "efos-opci-akademski-rad",
-      "efos-specijalisticki",
       "efst-opci-akademski-rad",
       "efzg-seminarski",
       "fdmz-diplomski",
@@ -14111,7 +14106,6 @@
       "vuka-poslovni-diplomski",
       "vuka-poslovni-opci-akademski-rad",
       "vuka-poslovni-zavrsni",
-      "vuka-prehrambena-zavrsni",
       "vuka-sigurnost-diplomski",
       "vuka-sigurnost-zavrsni",
       "vuka-strojarski-diplomski",

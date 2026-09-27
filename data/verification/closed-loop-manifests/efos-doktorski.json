@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-26T20:53:25.478Z",
+  "generatedAt": "2026-09-27T04:21:59.065Z",
   "command": "npm run closed-loop -- --profile efos-doktorski --no-structural",
   "profileId": "efos-doktorski",
   "row": {
@@ -47,7 +47,7 @@
       "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "423d96365c8728a45d62cb4625e0819b3d2dd3815327d30b1ed75a401b3ae443",
-      "ranAt": "2026-09-26T20:53:25.478Z"
+      "ranAt": "2026-09-27T04:21:59.065Z"
     },
     {
       "manifestId": "closed-loop:efos-doktorski:efos-doktorski--margins:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -60,7 +60,7 @@
       "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "554884c669f0a6103f784ba710e4d6be181b803dec5530359017a9676f27aa76",
-      "ranAt": "2026-09-26T20:53:25.478Z"
+      "ranAt": "2026-09-27T04:21:59.065Z"
     },
     {
       "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -73,7 +73,7 @@
       "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "1f5f650491f7cda46e799cf6c45fcbb392b501f59a163a1c1df3625fd43979de",
-      "ranAt": "2026-09-26T20:53:25.478Z"
+      "ranAt": "2026-09-27T04:21:59.065Z"
     },
     {
       "manifestId": "closed-loop:efos-doktorski:efos-doktorski--font-size:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -86,7 +86,7 @@
       "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918",
-      "ranAt": "2026-09-26T20:53:25.478Z"
+      "ranAt": "2026-09-27T04:21:59.065Z"
     },
     {
       "manifestId": "closed-loop:efos-doktorski:efos-doktorski--line-spacing:60fc525c6fd1008424c01256867f5596f13a46e5326b41eab6a9430e7426e54b:d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
@@ -99,7 +99,7 @@
       "outputHash": "d50e6cac251cf6aad4440ba42f76d0502987c6dd91a6c873584ac9fe03dddc70",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "9f29a130438b81170b92a42650f9a94291ecad60bd47af2a3886e75f7f728725",
-      "ranAt": "2026-09-26T20:53:25.478Z"
+      "ranAt": "2026-09-27T04:21:59.065Z"
     }
   ]
 }

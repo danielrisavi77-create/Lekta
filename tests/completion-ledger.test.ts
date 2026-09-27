@@ -135,24 +135,37 @@ describe('completion ledger: drift', () => {
     });
   });
 
-  it('postojeći EFOS paket sheme 1 s netočnim GPT-5 metapodacima ne daje B prije ponovnog audita', () => {
+  it('kontrolirani EFOS paket sheme 1 s netočnim GPT-5 metapodacima ne daje B prije ponovnog audita', () => {
     const original = profiles.find((profile) => profile.id === 'efos-doktorski')!;
     expect(original.ruleEntries).toHaveLength(5);
-    for (const entry of original.ruleEntries ?? []) {
+    const legacy: ThesisProfile = { ...original, ruleEntries: original.ruleEntries?.map((entry) => ({
+      ...entry,
+      aiEvidence: { ...entry.aiEvidence!, schemaVersion: 1,
+        model: { provider: 'OpenAI', model: 'GPT-5', version: 'runtime-version-not-exposed' },
+        passes: entry.aiEvidence!.passes.map(({ model: _model, ...pass }) => pass),
+      },
+    })) };
+    for (const entry of legacy.ruleEntries ?? []) {
       expect(entry.aiEvidence).toMatchObject({
         schemaVersion: 1,
         model: { provider: 'OpenAI', model: 'GPT-5', version: 'runtime-version-not-exposed' },
       });
     }
-    const worklist = computeWorklist([original], SOURCE_REGISTRY as SourceEntry[], [], {
+    const worklist = computeWorklist([legacy], SOURCE_REGISTRY as SourceEntry[], [], {
       aiEvidenceResults: aiEvidenceContext.resultsByRule,
     });
     expect(worklist.rows[0].pendingEvidence).toBe(5);
     expect(worklist.ruleItems.map((item) => item.reasonCodes)).toEqual(
       Array.from({ length: 5 }, () => ['provider-provenance-recheck']),
     );
-    expect(fresh.rows.find((item) => item.profileId === original.id)).toMatchObject({
+    const controlled = buildCompletionLedger({ ...inputs, corpusAttestation,
+      worklistRows: inputs.worklistRows.map((row) => row.profileId === legacy.id ? worklist.rows[0] : row),
+    });
+    expect(controlled.rows.find((item) => item.profileId === legacy.id)).toMatchObject({
       claim: 'C', rules: 'bulk-pending', repair: 'faculty-specific', proof: 'synthetic-pass',
+    });
+    expect(fresh.rows.find((item) => item.profileId === original.id)).toMatchObject({
+      claim: 'B', rules: 'verified', repair: 'faculty-specific', proof: 'synthetic-pass',
     });
   });
 
