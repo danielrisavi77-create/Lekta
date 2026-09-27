@@ -18,7 +18,7 @@ import {
   LEGAL_DEPARTMENTS_WITH_DRAFTS,
 } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
-import { computeWorklist } from '../src/verification/worklist';
+import { computeWorklist, ruleEvidenceKey } from '../src/verification/worklist';
 import { loadRepositoryAiEvidenceContext } from '../scripts/ai-evidence-context-loader';
 import { hashRepairSourceTree } from '../scripts/lib/repair-source-hash.mjs';
 import {
@@ -95,13 +95,64 @@ describe('completion ledger: drift', () => {
     expect(fresh.summary.rowCount).toBeGreaterThanOrEqual(fresh.summary.profileCount);
   });
 
-  it('valjan AI-dokaz uklanja bulk-pending i omogućuje dokazani B za EFOS doktorski profil', () => {
-    const row = fresh.rows.find((item) => item.profileId === 'efos-doktorski');
+  it('kontrolirani valjan dokaz sheme 2 uklanja bulk-pending i omogućuje dokazani B za EFOS doktorski profil', async () => {
+    const original = profiles.find((profile) => profile.id === 'efos-doktorski')!;
+    const fixture: ThesisProfile = {
+      ...original,
+      ruleEntries: original.ruleEntries?.map((entry) => {
+        const evidence = entry.aiEvidence!;
+        return { ...entry, aiEvidence: {
+          ...evidence,
+          schemaVersion: 2 as const,
+          model: { provider: 'openai', model: 'fixture-extract', version: 'test-only' },
+          passes: evidence.passes.map((pass) => ({ ...pass, model: pass.pass === 'refute'
+            ? { provider: 'anthropic', model: 'fixture-refute', version: 'test-only' }
+            : { provider: 'openai', model: 'fixture-extract', version: 'test-only' },
+          })),
+        } };
+      }),
+    };
+    const context = await loadRepositoryAiEvidenceContext(resolve(process.cwd()), [fixture], SOURCE_REGISTRY as SourceEntry[]);
+    for (const entry of fixture.ruleEntries ?? []) {
+      expect(context.resultsByRule[ruleEvidenceKey(fixture.id, entry.ruleId)], entry.ruleId)
+        .toEqual({ valid: true, reasons: [] });
+    }
+    const worklist = computeWorklist([fixture], SOURCE_REGISTRY as SourceEntry[], [], {
+      aiEvidenceResults: context.resultsByRule,
+    });
+    expect(worklist.rows[0].pendingEvidence).toBe(0);
+    const controlled = buildCompletionLedger({
+      ...inputs,
+      corpusAttestation,
+      worklistRows: inputs.worklistRows.map((row) => row.profileId === fixture.id ? worklist.rows[0] : row),
+    });
+    const row = controlled.rows.find((item) => item.profileId === fixture.id);
     expect(row).toMatchObject({
       claim: 'B',
       rules: 'verified',
       repair: 'faculty-specific',
       proof: 'synthetic-pass',
+    });
+  });
+
+  it('postojeći EFOS paket sheme 1 s netočnim GPT-5 metapodacima ne daje B prije ponovnog audita', () => {
+    const original = profiles.find((profile) => profile.id === 'efos-doktorski')!;
+    expect(original.ruleEntries).toHaveLength(5);
+    for (const entry of original.ruleEntries ?? []) {
+      expect(entry.aiEvidence).toMatchObject({
+        schemaVersion: 1,
+        model: { provider: 'OpenAI', model: 'GPT-5', version: 'runtime-version-not-exposed' },
+      });
+    }
+    const worklist = computeWorklist([original], SOURCE_REGISTRY as SourceEntry[], [], {
+      aiEvidenceResults: aiEvidenceContext.resultsByRule,
+    });
+    expect(worklist.rows[0].pendingEvidence).toBe(5);
+    expect(worklist.ruleItems.map((item) => item.reasonCodes)).toEqual(
+      Array.from({ length: 5 }, () => ['provider-provenance-recheck']),
+    );
+    expect(fresh.rows.find((item) => item.profileId === original.id)).toMatchObject({
+      claim: 'C', rules: 'bulk-pending', repair: 'faculty-specific', proof: 'synthetic-pass',
     });
   });
 

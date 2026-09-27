@@ -10,15 +10,15 @@
   },
   "counts": {
     "E": 41,
-    "C": 124,
+    "C": 130,
     "D": 37,
-    "B": 208
+    "B": 202
   },
   "countsByRegistry": {
     "E": 41,
-    "C": 124,
+    "C": 130,
     "D": 34,
-    "B": 208
+    "B": 202
   },
   "countsByLegalDepartment": {
     "D": 3
@@ -73,14 +73,14 @@
     "effectus-seminarski": "C",
     "effectus-zavrsni": "C",
     "efos-diplomski": "B",
-    "efos-doktorski": "B",
-    "efos-opci-akademski-rad": "B",
-    "efos-specijalisticki": "B",
+    "efos-doktorski": "C",
+    "efos-opci-akademski-rad": "C",
+    "efos-specijalisticki": "C",
     "efos-zavrsni": "B",
     "efri-diplomski": "B",
     "efri-zavrsni": "B",
     "efst-diplomski": "B",
-    "efst-opci-akademski-rad": "B",
+    "efst-opci-akademski-rad": "C",
     "efst-zavrsni": "B",
     "efzg-diplomski": "B",
     "efzg-doktorski": "B",
@@ -420,11 +420,11 @@
     "vub-diplomski": "B",
     "vub-zavrsni-sestrinstvo": "C",
     "vub-zavrsni-tehnicki": "C",
-    "vuka-lovstvo-zavrsni": "B",
+    "vuka-lovstvo-zavrsni": "C",
     "vuka-poslovni-diplomski": "C",
     "vuka-poslovni-opci-akademski-rad": "C",
     "vuka-poslovni-zavrsni": "C",
-    "vuka-prehrambena-zavrsni": "B",
+    "vuka-prehrambena-zavrsni": "C",
     "vuka-sigurnost-diplomski": "D",
     "vuka-sigurnost-zavrsni": "D",
     "vuka-strojarski-diplomski": "E",

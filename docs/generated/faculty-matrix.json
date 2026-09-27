@@ -9699,33 +9699,33 @@
           "completionByWorkType": [
             {
               "workType": "seminar",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
             },
             {
               "workType": "project",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
             },
             {
               "workType": "article",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
@@ -10068,11 +10068,11 @@
           "completionByWorkType": [
             {
               "workType": "doctoral",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
@@ -10415,11 +10415,11 @@
           "completionByWorkType": [
             {
               "workType": "specialist",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
@@ -11869,33 +11869,33 @@
           "completionByWorkType": [
             {
               "workType": "seminar",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
             },
             {
               "workType": "project",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
             },
             {
               "workType": "article",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
@@ -100300,11 +100300,11 @@
           "completionByWorkType": [
             {
               "workType": "final",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"
@@ -100499,11 +100499,11 @@
           "completionByWorkType": [
             {
               "workType": "final",
-              "level": "B",
+              "level": "C",
               "blockedReasons": [
-                "nema dokaza na stvarnom studentskom radu"
+                "jedno ili više pravila još nema valjan revalidirani dokazni paket"
               ],
-              "rules": "verified",
+              "rules": "bulk-pending",
               "repair": "faculty-specific",
               "proof": "synthetic-pass",
               "claimSource": "docs/generated/completion-ledger.json"

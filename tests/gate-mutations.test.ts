@@ -96,6 +96,7 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { auditAiEvidence } from '../src/verification/ai-evidence-audit';
+import { anchorRuleQuotes, validateQuoteAnchorPlan } from '../src/verification/anchor-rule-quotes';
 import { publishAiAuditedRules } from '../src/profiles/publish-ai-rules';
 import { textSnapshotMatchesSource } from '../scripts/ai-evidence-context-loader';
 import { hashRepairSourceTree } from '../scripts/lib/repair-source-hash.mjs';
@@ -4212,6 +4213,67 @@ describe('mutacija closed-loop ugovora teksta', () => {
     const original = await documentText(bytes);
     expect(await textContractPreserved(bytes, original, original, [])).toBe(true);
     expect(await textContractPreserved(bytes, original, `${original} Novi sadrzaj.`, [])).toBe(false);
+  });
+
+  it('nova shema prolazi s dva providera, isti provider u extract i refute pada', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const passes = fixture.evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known', version: '1' },
+    }));
+    const baseline = { ...fixture.evidence, schemaVersion: 2 as const,
+      model: { provider: 'OpenAI', model: 'known', version: '1' }, passes };
+    expect(auditAiEvidence({ ...fixture, evidence: baseline })).toEqual({ valid: true, reasons: [] });
+    const mutated = { ...baseline, passes: passes.map((pass) => pass.pass === 'refute'
+      ? { ...pass, model: { ...pass.model, provider: 'OpenAI' } } : pass) };
+    const result = auditAiEvidence({ ...fixture, evidence: mutated });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain('passes-same-provider');
+    const wrongSummaryModel = auditAiEvidence({ ...fixture,
+      evidence: { ...baseline, model: { ...baseline.model, provider: 'fictional-provider' } },
+    });
+    expect(wrongSummaryModel.valid).toBe(false);
+    if (!wrongSummaryModel.valid) expect(wrongSummaryModel.reasons.map((reason) => reason.code)).toContain('passes-model-mismatch');
+    const unknownProvider = auditAiEvidence({ ...fixture,
+      evidence: { ...baseline, passes: passes.map((pass) => pass.pass === 'refute'
+        ? { ...pass, model: { ...pass.model, provider: 'fictional-provider' } } : pass) },
+    });
+    expect(unknownProvider.valid).toBe(false);
+    if (!unknownProvider.valid) expect(unknownProvider.reasons.map((reason) => reason.code)).toContain('provider-unknown');
+  });
+});
+
+describe('sidrenje citata: baseline i mutacije', () => {
+  const makePlan = () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const source = fixture.source;
+    const before = { id: fixture.profileId, ruleEntries: [{ ...fixture.rule,
+      quote: 'Velicine je stranice A4', status: 'verified' as const, scored: true,
+    }] } as ThesisProfile;
+    const sources = { [source.id]: source };
+    const snapshots = { [source.id]: { text: 'Veličine je stranice A4.', sha256: source.snapshotHash! } };
+    const plan = anchorRuleQuotes(before, sources, snapshots, '2026-09-27T10:00:00.000Z');
+    return { before, sources, snapshots, plan };
+  };
+
+  it('doslovni citat i append-only ledger prolaze bez mutacije', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    expect(plan.ledger).toHaveLength(1);
+    expect(validateQuoteAnchorPlan(before, plan, sources, snapshots)).toEqual([]);
+  });
+
+  it('sidrenje bez ledger zapisa pada', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    expect(validateQuoteAnchorPlan(before, { ...plan, ledger: [] }, sources, snapshots))
+      .toContain(`${before.ruleEntries![0].ruleId}: anchor-ledger-missing-or-mismatched`);
+  });
+
+  it('promjena vrijednosti pri sidrenju pada', () => {
+    const { before, sources, snapshots, plan } = makePlan();
+    const mutated = { ...plan, profile: { ...plan.profile,
+      ruleEntries: [{ ...plan.profile.ruleEntries![0], value: 'A3' }],
+    } };
+    expect(validateQuoteAnchorPlan(before, mutated, sources, snapshots))
+      .toContain(`${before.ruleEntries![0].ruleId}: protected-claim-changed`);
   });
 });
 

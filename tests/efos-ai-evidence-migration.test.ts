@@ -51,16 +51,17 @@ describe('EFOS doktorski AI-evidence migracija', () => {
         evidence,
       );
       expect(approval.ok, entry.ruleId).toBe(true);
-      if (!approval.ok || !approval.entry || !approval.ledger?.[0]) {
-        throw new Error((approval.errors ?? []).join('; ') || `AI potvrda nije proizvela prijelaz za ${entry.ruleId}.`);
+      if (!approval.ok || !approval.entry) {
+        throw new Error((approval.errors ?? []).join('; ') || `AI dokaz nije valjan za ${entry.ruleId}.`);
       }
+      expect(approval.ledger, entry.ruleId).toEqual([]);
       expect(approval.entry).toMatchObject({
         confirmedVia: entry.confirmedVia,
         modalitySource: 'ai-evidence-audit',
         verifiedHash: evidence.snapshotHash,
       });
       expect(ledger).toContainEqual(expect.objectContaining({
-        id: approval.ledger[0].id,
+        id: `led-${entry.ruleId}-ai-confirmed-2026-09-25`,
         profileId: efos.id,
         ruleId: entry.ruleId,
         action: 'ai-confirmed',

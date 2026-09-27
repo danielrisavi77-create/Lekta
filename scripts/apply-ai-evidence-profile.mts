@@ -116,6 +116,13 @@ async function main(): Promise<void> {
     manifestsById: context.gateContext.manifestsById,
   });
   if (!application.ok) throw new Error(application.errors.join('\n'));
+  for (const skipped of application.skipped) {
+    console.log(`${profileId}/${skipped.ruleId}: nebodovano pravilo ostaje bez promjene (${skipped.reasons.join('; ')}).`);
+  }
+  if (!application.ledger.length) {
+    console.log(`${profileId}: nema valjanih pravila za primjenu; ništa nije zapisano.`);
+    return;
+  }
 
   const ledgerPath = join(root, 'data', 'verification', 'ledger.json');
   const originalLedgerText = readFileSync(ledgerPath, 'utf8');
@@ -134,7 +141,7 @@ async function main(): Promise<void> {
 
   const nextDraftText = `${JSON.stringify(plan.draftDocument, null, 2)}\n`;
   const nextLedgerText = `${JSON.stringify(plan.ledger, null, 2)}\n`;
-  console.log(`${write ? 'UPIS' : 'PROBNI IZRAČUN'} ${profileId}: ${plan.updatedRuleIds.length} bodovanih pravila; ${plan.addedLedgerIds.length} novi ledger događaji.`);
+  console.log(`${write ? 'UPIS' : 'PROBNI IZRAČUN'} ${profileId}: ${plan.updatedRuleIds.length} AI-auditiranih pravila; ${plan.addedLedgerIds.length} novi ledger događaji.`);
   console.log(`Draft: ${relative(root, draft.path)}`);
   if (!write) {
     console.log('Nije zapisano. Za potvrđeni upis ponovi s --write.');

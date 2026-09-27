@@ -196,7 +196,14 @@ export function computeWorklist(
       } else if (entry.status === 'needs-recheck') {
         item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'needs-recheck', reasonCodes: ['source-or-evidence-recheck'], action: 'run-ai-evidence-audit' };
       } else if (entry.confirmedVia === 'ai-evidence-audit') {
-        if (entry.status === 'verified' && entry.aiEvidence && audit?.valid) {
+        const provenanceRecheck = entry.aiEvidence?.schemaVersion === 1
+          && entry.aiEvidence.model?.provider === 'OpenAI'
+          && entry.aiEvidence.model.model === 'GPT-5'
+          && entry.aiEvidence.model.version === 'runtime-version-not-exposed';
+        if (provenanceRecheck) {
+          item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null,
+            status: 'needs-ai-evidence', reasonCodes: ['provider-provenance-recheck'], action: 'run-ai-evidence-audit' };
+        } else if (entry.status === 'verified' && entry.aiEvidence && audit?.valid) {
           item = { profileId: profile.id, ruleId: entry.ruleId, sourceId: entry.sourceId ?? null, status: 'ai-evidence-verified', reasonCodes: [], action: 'none' };
         } else {
           const reasonCodes = audit && !audit.valid

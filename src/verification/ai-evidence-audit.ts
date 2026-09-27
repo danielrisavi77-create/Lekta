@@ -26,6 +26,10 @@ export type AiEvidenceAuditReasonCode =
   | 'modality-mismatch'
   | 'passes-incomplete'
   | 'passes-disagree'
+  | 'passes-model-missing'
+  | 'passes-model-mismatch'
+  | 'passes-same-provider'
+  | 'provider-unknown'
   | 'model-metadata-missing'
   | 'summary-missing'
   | 'manifest-missing'
@@ -51,11 +55,12 @@ export interface AiEvidenceAuditPass {
   pass: 'extract' | 'quote-check' | 'refute';
   verdict: 'confirm' | 'mismatch' | 'refute';
   note: string;
+  model?: { provider: string; model: string; version: string };
 }
 
 /** Privatni, strukturirani audit trag uz jedno profilno pravilo. */
 export interface AiEvidenceAudit {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   profileId: string;
   ruleId: string;
   sourceId: string;
@@ -125,6 +130,15 @@ export type AiEvidenceAuditResult =
 const OFFICIAL_AUTHORITIES = new Set<RuleEntry['authority']>(['binding', 'program-page', 'general']);
 const SHA256 = /^[a-f0-9]{64}$/;
 const REQUIRED_PASSES = ['extract', 'quote-check', 'refute'] as const;
+const PROVIDER_ALIASES = new Map<string, 'openai' | 'anthropic'>([
+  ['openai', 'openai'], ['openaicodex', 'openai'],
+  ['anthropic', 'anthropic'], ['claude', 'anthropic'], ['anthropicclaude', 'anthropic'],
+]);
+
+function canonicalProvider(value: unknown): 'openai' | 'anthropic' | null {
+  if (typeof value !== 'string') return null;
+  return PROVIDER_ALIASES.get(value.trim().toLowerCase().replace(/[\s_-]/g, '')) ?? null;
+}
 
 function normalizedQuote(value: string): string {
   return value.replace(/\s+/g, ' ').trim();
@@ -191,7 +205,7 @@ export function auditAiEvidence(input: AiEvidenceAuditInput): AiEvidenceAuditRes
     return { valid: false, reasons };
   }
 
-  if (evidence.schemaVersion !== 1) add('schema-version-unsupported', 'Nepodržana verzija AI dokaznog paketa.');
+  if (evidence.schemaVersion !== 1 && evidence.schemaVersion !== 2) add('schema-version-unsupported', 'Nepodržana verzija AI dokaznog paketa.');
   if (evidence.profileId !== input.profileId) add('profile-id-mismatch', 'AI dokaz pripada drugom profilu.');
   if (evidence.ruleId !== rule.ruleId) add('rule-id-mismatch', 'AI dokaz pripada drugom pravilu.');
 
@@ -250,6 +264,33 @@ export function auditAiEvidence(input: AiEvidenceAuditInput): AiEvidenceAuditRes
   }
   if (!evidence.agree || passes.some((pass) => pass.verdict !== 'confirm')) {
     add('passes-disagree', 'Prolazi nisu svi potvrdili isto pravilo.');
+  }
+  if (evidence.schemaVersion === 2) {
+    const extract = passes.find((pass) => pass.pass === 'extract');
+    const refute = passes.find((pass) => pass.pass === 'refute');
+    const topProvider = canonicalProvider(evidence.model.provider);
+    const passProviders = passes.filter((pass) => pass.model).map((pass) => canonicalProvider(pass.model!.provider));
+    if (!topProvider || passProviders.some((provider) => !provider)) {
+      add('provider-unknown', 'Nova shema dopušta samo poznate OpenAI i Anthropic providere.');
+    }
+    const validModel = (pass: AiEvidenceAuditPass | undefined) => pass?.model
+      && [pass.model.provider, pass.model.model, pass.model.version]
+        .every((part) => typeof part === 'string' && part.trim().length > 0);
+    if (!validModel(extract) || !validModel(refute)) {
+      add('passes-model-missing', 'Nova shema traži identitet modela za extract i refute prolaz.');
+    } else {
+      const extractModel = extract!.model!;
+      const extractProvider = canonicalProvider(extractModel.provider);
+      const refuteProvider = canonicalProvider(refute!.model!.provider);
+      if (extractProvider && extractProvider === refuteProvider) {
+        add('passes-same-provider', 'Extract i refute u novoj shemi moraju imati različite providere.');
+      }
+      if (extractProvider !== topProvider
+          || extractModel.model.trim() !== evidence.model.model.trim()
+          || extractModel.version.trim() !== evidence.model.version.trim()) {
+        add('passes-model-mismatch', 'Zbirni identitet modela ne odgovara extract prolazu.');
+      }
+    }
   }
   if (![evidence.model.provider, evidence.model.model, evidence.model.version].every((part) => part.trim())) {
     add('model-metadata-missing', 'Nedostaje identitet providera, modela ili verzije.');

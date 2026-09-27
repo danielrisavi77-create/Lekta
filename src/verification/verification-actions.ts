@@ -5,8 +5,10 @@ import type {
   VerificationLedgerEntry,
 } from '../profiles/profile-schema';
 import { isRuleScored } from './verification-gate';
+import { hashString } from '../profiles/profile-fingerprint';
 import {
   auditAiEvidence,
+  stableJson,
   type AiEvidenceAudit,
   type AiEvidenceAuditPass,
   type AiEvidenceExecutionManifest,
@@ -158,7 +160,9 @@ export function approveFromAi(
       || entry.confirmedVia === 'ai-3pass-batch'
     );
   const individuallyHumanVerified = entry.status === 'verified' && entry.confirmedVia === 'human';
-  if (entry.status !== 'draft' && entry.status !== 'needs-recheck' && !legacyBatch && !individuallyHumanVerified) {
+  const alreadyAiVerified = entry.status === 'verified' && entry.confirmedVia === 'ai-evidence-audit';
+  if (entry.status !== 'draft' && entry.status !== 'needs-recheck' && entry.status !== 'ai-confirmed'
+      && !legacyBatch && !individuallyHumanVerified && !alreadyAiVerified) {
     errors.push('rule-not-pending: samo draft, needs-recheck, pojedinačno ljudski potvrđeno ili prepoznato legacy batch pravilo može proći novi AI audit.');
   }
   const audit = auditAiEvidence({
@@ -175,6 +179,11 @@ export function approveFromAi(
   });
   if (!audit.valid) errors.push(...audit.reasons.map((reason) => `${reason.code}: ${reason.message}`));
   if (errors.length || !evidence) return { ok: false, errors };
+  const canonicalEvidence = stableJson(evidence);
+  if (alreadyAiVerified && (entry.aiEvidenceApprovedCanonical === canonicalEvidence
+      || (entry.aiEvidenceApprovedCanonical == null && evidence.schemaVersion === 1))) {
+    return { ok: true, entry, ledger: [] };
+  }
 
   const updated: RuleEntry = {
     ...entry,
@@ -183,12 +192,16 @@ export function approveFromAi(
     reviewedBy: null,
     confirmedVia: 'ai-evidence-audit',
     aiEvidence: evidence,
+    aiEvidenceApprovedCanonical: canonicalEvidence,
     modalitySource: 'ai-evidence-audit',
     lastVerified: input.now,
     verifiedHash: source!.snapshotHash,
   };
+  updated.scored = isRuleScored(updated);
   const ledger: VerificationLedgerEntry = {
-    id: ledgerId(entry.ruleId, 'ai-confirmed', input.now),
+    id: alreadyAiVerified
+      ? `${ledgerId(entry.ruleId, 'ai-confirmed', input.now)}-${hashString(canonicalEvidence)}`
+      : ledgerId(entry.ruleId, 'ai-confirmed', input.now),
     ruleId: entry.ruleId,
     profileId,
     action: 'ai-confirmed',

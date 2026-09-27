@@ -68,4 +68,86 @@ describe('applyAiEvidenceProfile', () => {
     expect('profile' in result).toBe(false);
     expect('ledger' in result).toBe(false);
   });
+
+  it('promiče pending legacy pravilo s dokazom u verified i izvedeno bodovano', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const pending = { ...entry, status: 'needs-recheck' as const, scored: false };
+    const profile = { id: fixture.profileId, ruleEntries: [pending] } as unknown as ThesisProfile;
+    const result = applyAiEvidenceProfile(profile, context);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.profile.ruleEntries?.[0]).toMatchObject({ status: 'verified', scored: true, confirmedVia: 'ai-evidence-audit' });
+    expect(result.ledger).toHaveLength(1);
+  });
+
+  it('ostavlja pending pravilo bez dokaza netaknutim uz valjano bodovano pravilo', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const untouched = { ...entry, ruleId: 'pending-without-evidence', status: 'draft' as const, scored: false, aiEvidence: undefined };
+    const profile = { id: fixture.profileId, ruleEntries: [entry, untouched] } as unknown as ThesisProfile;
+    const result = applyAiEvidenceProfile(profile, context);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.profile.ruleEntries?.[1]).toEqual(untouched);
+    expect(result.ledger).toHaveLength(1);
+  });
+
+  it('nevaljan dokaz nebodovanog pending pravila ne blokira valjano bodovano pravilo', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const invalidPending = { ...entry, ruleId: 'pending-invalid-evidence', status: 'draft' as const, scored: false };
+    const profile = { id: fixture.profileId, ruleEntries: [entry, invalidPending] } as unknown as ThesisProfile;
+    const result = applyAiEvidenceProfile(profile, context);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.profile.ruleEntries?.[0]).toMatchObject({ confirmedVia: 'ai-evidence-audit', scored: true });
+    expect(result.profile.ruleEntries?.[1]).toEqual(invalidPending);
+    expect(result.ledger).toHaveLength(1);
+  });
+
+  it('drugi prolaz nad istim valjanim dokazom ne mijenja draft ni ledger', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const first = applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [entry] } as ThesisProfile, context);
+    expect(first.ok).toBe(true);
+    if (!first.ok) return;
+    const draftBytes = Buffer.from(JSON.stringify(first.profile), 'utf8');
+    const second = applyAiEvidenceProfile(first.profile, context);
+    expect(second.ok).toBe(true);
+    if (!second.ok) return;
+    expect(second.ledger).toEqual([]);
+    expect(Buffer.from(JSON.stringify(second.profile), 'utf8')).toEqual(draftBytes);
+  });
+
+  it('ponovni audit starog EFOS-tipa paketa prihvaća novi dokaz sheme 2 i novi ledger događaj', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const oldApproved = { ...entry, confirmedVia: 'ai-evidence-audit', verifiedBy: 'ai-evidence-audit' };
+    const newEvidence = { ...fixture.evidence, schemaVersion: 2 as const,
+      model: { provider: 'OpenAI', model: 'known-model', version: '1' },
+      passes: fixture.evidence.passes.map((pass) => ({ ...pass,
+        model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known-model', version: '1' },
+      })),
+    };
+    const reaudited = { ...oldApproved, aiEvidence: newEvidence };
+    const result = applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [reaudited] } as ThesisProfile, context);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.profile.ruleEntries?.[0].aiEvidence).toEqual(newEvidence);
+    expect(result.ledger).toHaveLength(1);
+    expect(result.ledger[0].id).not.toBe(`led-${entry.ruleId}-ai-confirmed-${context.now}`);
+    const second = applyAiEvidenceProfile(result.profile, context);
+    expect(second.ok).toBe(true);
+    if (second.ok) expect(second.ledger).toEqual([]);
+  });
+
+  it.each([
+    ['draft', { status: 'draft' as const, scored: false, confirmedVia: undefined }],
+    ['legacy verified', { status: 'verified' as const, scored: false, confirmedVia: 'ai-1pass-batch' as const }],
+    ['ai-confirmed', { status: 'ai-confirmed' as const, scored: false, confirmedVia: undefined }],
+  ])('promiče %s s valjanim dokazom umjesto da ga izgubi iz kandidata', (_label, state) => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const candidate = { ...entry, ...state };
+    const result = applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [candidate] } as ThesisProfile, context);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.profile.ruleEntries?.[0]).toMatchObject({ status: 'verified', scored: true, confirmedVia: 'ai-evidence-audit' });
+    expect(result.ledger).toHaveLength(1);
+  });
 });

@@ -14,28 +14,36 @@ export interface AiEvidenceProfileApplyContext {
 }
 
 export type AiEvidenceProfileApplyResult =
-  | { ok: true; profile: ThesisProfile; ledger: VerificationLedgerEntry[] }
+  | { ok: true; profile: ThesisProfile; ledger: VerificationLedgerEntry[]; skipped: Array<{ ruleId: string; reasons: string[] }> }
   | { ok: false; errors: string[] };
 
 /**
- * Primjenjuje AI-audit na bodovana pravila profila atomski: nijedna promjena ni ledger dodatak
+ * Primjenjuje AI-audit na bodovana i dokazom opremljena pending pravila profila atomski: nijedna promjena ni ledger dodatak
  * ne izlaze ako ijedno pravilo nema valjan paket, službeni snapshot ili stvarni manifest.
  */
 export function applyAiEvidenceProfile(
   profile: ThesisProfile,
   context: AiEvidenceProfileApplyContext,
 ): AiEvidenceProfileApplyResult {
-  const scoredEntries = (profile.ruleEntries ?? []).filter((entry) => entry.scored === true);
-  if (!scoredEntries.length) {
-    return { ok: false, errors: [`${profile.id}: profil nema bodovanih pravila za AI-audit.`] };
-  }
+  const candidates = (profile.ruleEntries ?? []).filter((entry) =>
+    entry.scored === true || (entry.aiEvidence != null && (
+      entry.status === 'draft' || entry.status === 'needs-recheck' || entry.status === 'ai-confirmed'
+      || (entry.status === 'verified' && (
+        entry.verifiedBy === 'owner-bulk-approval'
+        || entry.confirmedVia === 'ai-1pass-batch'
+        || entry.confirmedVia === 'ai-3pass-batch'
+      ))
+    )),
+  );
+  if (!candidates.length) return { ok: true, profile, ledger: [], skipped: [] };
 
   const seenRuleIds = new Set<string>();
   const updatedByRuleId = new Map<string, RuleEntry>();
   const ledger: VerificationLedgerEntry[] = [];
   const errors: string[] = [];
+  const skipped: Array<{ ruleId: string; reasons: string[] }> = [];
 
-  for (const entry of scoredEntries) {
+  for (const entry of candidates) {
     if (seenRuleIds.has(entry.ruleId)) {
       errors.push(`${profile.id}/${entry.ruleId}: dupliciran ruleId u bodovanim pravilima.`);
       continue;
@@ -63,7 +71,8 @@ export function applyAiEvidenceProfile(
 
     if (!result.ok || !result.entry || !result.ledger) {
       const reasons = result.errors ?? ['AI-audit prijelaz nije proizveo rezultat.'];
-      errors.push(...reasons.map((reason) => `${profile.id}/${entry.ruleId}: ${reason}`));
+      if (entry.scored === true) errors.push(...reasons.map((reason) => `${profile.id}/${entry.ruleId}: ${reason}`));
+      else skipped.push({ ruleId: entry.ruleId, reasons });
       continue;
     }
     updatedByRuleId.set(entry.ruleId, result.entry);
@@ -79,5 +88,6 @@ export function applyAiEvidenceProfile(
       ruleEntries: (profile.ruleEntries ?? []).map((entry) => updatedByRuleId.get(entry.ruleId) ?? entry),
     },
     ledger,
+    skipped,
   };
 }

@@ -153,7 +153,7 @@ describe('auditAiEvidence: deterministicki dokazni paket', () => {
 
   it.each([
     ['profile ID', { profileId: 'profile-b' }, 'profile-id-mismatch'],
-    ['unsupported schema version', { evidence: { ...evidence, schemaVersion: 2 } }, 'schema-version-unsupported'],
+    ['unsupported schema version', { evidence: { ...evidence, schemaVersion: 3 } }, 'schema-version-unsupported'],
     ['rule ID', { evidence: { ...evidence, ruleId: 'other-rule' } }, 'rule-id-mismatch'],
     ['source ID', { evidence: { ...evidence, sourceId: 'other-source' } }, 'source-id-mismatch'],
     ['source URL', { evidence: { ...evidence, sourceUrl: 'https://other.example/' } }, 'source-url-mismatch'],
@@ -183,6 +183,54 @@ describe('auditAiEvidence: deterministicki dokazni paket', () => {
     const result = audit({ evidence: { ...evidence, passes: evidence.passes.slice(0, 2), agree: true } });
     expect(result.valid).toBe(false);
     expect(result.reasons.map((reason) => reason.code)).toContain('passes-incomplete');
+  });
+
+  it('shema 2 prihvaca razlicite providere za extract i refute', () => {
+    const current = { ...evidence, schemaVersion: 2, model: { provider: 'OpenAI', model: 'known-model', version: '1' }, passes: evidence.passes.map((pass) => ({
+      ...pass, model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known-model', version: '1' },
+    })) } as AiEvidenceAudit;
+    expect(audit({ evidence: current })).toEqual({ valid: true, reasons: [] });
+  });
+
+  it('shema 2 odbija isti provider u extract i refute, dok legacy shema ostaje kompatibilna', () => {
+    const passes = evidence.passes.map((pass) => ({
+      ...pass, model: { provider: 'OpenAI', model: 'known-model', version: '1' },
+    }));
+    const result = audit({ evidence: { ...evidence, schemaVersion: 2, passes } as AiEvidenceAudit });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain('passes-same-provider');
+    expect(audit({ evidence: { ...evidence, passes } })).toEqual({ valid: true, reasons: [] });
+  });
+
+  it('shema 2 odbija zbirni identitet modela koji ne odgovara extract prolazu', () => {
+    const passes = evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Anthropic' : 'OpenAI', model: 'known-model', version: '1' },
+    }));
+    const result = audit({ evidence: { ...evidence, schemaVersion: 2, passes } as AiEvidenceAudit });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain('passes-model-mismatch');
+  });
+
+  it('shema 2 svodi poznate aliasne nazive na dva stvarna providera', () => {
+    const passes = evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'Claude' : 'Open AI', model: 'known-model', version: '1' },
+    }));
+    const packet = { ...evidence, schemaVersion: 2, model: { provider: 'openai-codex', model: 'known-model', version: '1' }, passes } as AiEvidenceAudit;
+    expect(audit({ evidence: packet })).toEqual({ valid: true, reasons: [] });
+    const same = audit({ evidence: { ...packet, passes: passes.map((pass) => pass.pass === 'refute'
+      ? { ...pass, model: { ...pass.model, provider: 'OpenAI' } } : pass) } });
+    expect(same.valid).toBe(false);
+    if (!same.valid) expect(same.reasons.map((reason) => reason.code)).toContain('passes-same-provider');
+  });
+
+  it('shema 2 odbija nepoznatog providera po prolazu', () => {
+    const passes = evidence.passes.map((pass) => ({ ...pass,
+      model: { provider: pass.pass === 'refute' ? 'unknown-provider' : 'OpenAI', model: 'known-model', version: '1' },
+    }));
+    const packet = { ...evidence, schemaVersion: 2, model: { provider: 'OpenAI', model: 'known-model', version: '1' }, passes } as AiEvidenceAudit;
+    const result = audit({ evidence: packet });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.reasons.map((reason) => reason.code)).toContain('provider-unknown');
   });
 
   it('odbija paket koji nedostaje umjesto da baca runtime gresku', () => {

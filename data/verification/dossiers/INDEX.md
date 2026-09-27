@@ -2,7 +2,7 @@
 
 Svako profilno pravilo ima jedan dokazni status. Nema ljudskog reda odobravanja; legacy batch oznake nisu dokaz.
 
-Pravila ukupno: 2625; AI dokaz prihvaćen: 24; čekaju dokaz: 819; legacy ljudski dokaz: 1382; nebodovana/advisory: 388.
+Pravila ukupno: 2625; AI dokaz prihvaćen: 0; čekaju dokaz: 843; legacy ljudski dokaz: 1382; nebodovana/advisory: 388.
 
 | Profil | Pravila koja traže dokaz | Dosje |
 |---|---:|---|
@@ -24,6 +24,10 @@ Pravila ukupno: 2625; AI dokaz prihvaćen: 24; čekaju dokaz: 819; legacy ljudsk
 | effectus-diplomski | 1 | [effectus-diplomski.md](effectus-diplomski.md) |
 | effectus-seminarski | 10 | [effectus-seminarski.md](effectus-seminarski.md) |
 | effectus-zavrsni | 1 | [effectus-zavrsni.md](effectus-zavrsni.md) |
+| efos-doktorski | 5 | [efos-doktorski.md](efos-doktorski.md) |
+| efos-opci-akademski-rad | 5 | [efos-opci-akademski-rad.md](efos-opci-akademski-rad.md) |
+| efos-specijalisticki | 5 | [efos-specijalisticki.md](efos-specijalisticki.md) |
+| efst-opci-akademski-rad | 5 | [efst-opci-akademski-rad.md](efst-opci-akademski-rad.md) |
 | fdmz-diplomski | 6 | [fdmz-diplomski.md](fdmz-diplomski.md) |
 | fesb-diplomski | 2 | [fesb-diplomski.md](fesb-diplomski.md) |
 | fesb-zavrsni | 2 | [fesb-zavrsni.md](fesb-zavrsni.md) |
@@ -139,9 +143,11 @@ Pravila ukupno: 2625; AI dokaz prihvaćen: 24; čekaju dokaz: 819; legacy ljudsk
 | vss-zavrsni | 8 | [vss-zavrsni.md](vss-zavrsni.md) |
 | vub-zavrsni-sestrinstvo | 8 | [vub-zavrsni-sestrinstvo.md](vub-zavrsni-sestrinstvo.md) |
 | vub-zavrsni-tehnicki | 7 | [vub-zavrsni-tehnicki.md](vub-zavrsni-tehnicki.md) |
+| vuka-lovstvo-zavrsni | 2 | [vuka-lovstvo-zavrsni.md](vuka-lovstvo-zavrsni.md) |
 | vuka-poslovni-diplomski | 4 | [vuka-poslovni-diplomski.md](vuka-poslovni-diplomski.md) |
 | vuka-poslovni-opci-akademski-rad | 4 | [vuka-poslovni-opci-akademski-rad.md](vuka-poslovni-opci-akademski-rad.md) |
 | vuka-poslovni-zavrsni | 4 | [vuka-poslovni-zavrsni.md](vuka-poslovni-zavrsni.md) |
+| vuka-prehrambena-zavrsni | 2 | [vuka-prehrambena-zavrsni.md](vuka-prehrambena-zavrsni.md) |
 | vuka-sigurnost-diplomski | 1 | [vuka-sigurnost-diplomski.md](vuka-sigurnost-diplomski.md) |
 | vuka-sigurnost-zavrsni | 1 | [vuka-sigurnost-zavrsni.md](vuka-sigurnost-zavrsni.md) |
 | vuka-strojarski-diplomski | 1 | [vuka-strojarski-diplomski.md](vuka-strojarski-diplomski.md) |

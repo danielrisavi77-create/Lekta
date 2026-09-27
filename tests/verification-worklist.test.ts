@@ -187,6 +187,25 @@ describe('verifikacijski worklist je u koraku s pravilima', () => {
     expect(withInvalidValidation.reasonCodes).toContain('value-mismatch');
   });
 
+  it('poznata netočna GPT-5 provenijencija ostaje označena za ponovni audit i uz valjan legacy paket', () => {
+    const fixture = createAiEvidenceAuditFixture();
+    const legacyEvidence = { ...fixture.evidence, model: { provider: 'OpenAI', model: 'GPT-5', version: 'runtime-version-not-exposed' } };
+    const entry: RuleEntry = { ...fixture.rule, status: 'verified', scored: true,
+      confirmedVia: 'ai-evidence-audit', aiEvidence: legacyEvidence };
+    const key = ruleEvidenceKey(fixture.profileId, entry.ruleId);
+    const result = computeWorklist([{ id: fixture.profileId, rules: {}, ruleEntries: [entry] }], [fixture.source], [], {
+      aiEvidenceResults: { [key]: auditAiEvidence({ ...fixture, rule: entry, evidence: legacyEvidence }) },
+    });
+    expect(result.ruleItems[0]).toMatchObject({ status: 'needs-ai-evidence', action: 'run-ai-evidence-audit' });
+    expect(result.ruleItems[0].reasonCodes).toContain('provider-provenance-recheck');
+  });
+
+  it('svih 24 postojećih paketa s netočnom provenijencijom su u redu za ponovni audit', () => {
+    const marked = fresh.ruleItems.filter((item) => item.reasonCodes.includes('provider-provenance-recheck'));
+    expect(marked).toHaveLength(24);
+    expect(marked.every((item) => item.status === 'needs-ai-evidence' && item.action === 'run-ai-evidence-audit')).toBe(true);
+  });
+
   /**
    * Ovo je poanta P0-2: dva broja koja su izgledala kao nepomirena razlika ("2135 vs 2150") mjere
    * dvije razlicite populacije. Worklist broji SVA bodovana pravila jer ih covjek sva mora proci;

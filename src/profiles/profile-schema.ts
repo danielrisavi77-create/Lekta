@@ -75,6 +75,8 @@ export interface RuleEntry {
   confirmedVia?: 'human' | 'human-audit' | 'ai-3pass-batch' | 'ai-1pass-batch' | 'ai-evidence-audit' | null;
   /** Strukturirani AI dokazni paket vezan uz izvor i pravilo. */
   aiEvidence?: AiEvidenceAudit | null;
+  /** Canonical evidence last accepted by the AI audit transition; private draft idempotency marker. */
+  aiEvidenceApprovedCanonical?: string;
   /**
    * MODALITET izvora: koliko jako izvor obvezuje. Sest razina, jedna vise nego sto se obicno trazi,
    * i to iz izmjerenog razloga: FER dokument ima TRI razine (`mora`/`ne smije` : `treba` :
@@ -198,6 +200,7 @@ export type LedgerAction =
   | 'ai-confirmed'
   | 'verified'
   | 'rechecked'
+  | 'quote-anchored'
   | 'degraded'
   | 'advisory'
   | 'retired';
@@ -216,6 +219,10 @@ export interface VerificationLedgerEntry {
   sourceId: string | null;
   sourcePage: string | null;
   quote: string | null;
+  /** Exact before/after text and source snapshot for quote anchoring events. */
+  oldQuote?: string;
+  newQuote?: string;
+  snapshotHash?: string;
   note?: string;
 }
 
