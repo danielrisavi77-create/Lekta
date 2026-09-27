@@ -26,7 +26,7 @@ export interface OpportunityAnalysisLike {
   settings?: { workType?: unknown } | null;
 }
 
-export interface OpportunitySignal {
+export interface OpportunitySignal extends Record<string, unknown> {
   profileId: string;
   profileStatus: string;
   workType: string;
