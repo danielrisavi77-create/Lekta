@@ -91,7 +91,8 @@ Stroj:
 ## 4. Pokretanje
 
 - **Automatski:** svaki push na `master` ili `release/**` vrti cetiri Word razine
-  (`npm run release:check -- --only=word,word-worst,word-corpus,word-toc`, oko 10 minuta).
+  (`npm run release:check -- --only=word,word-worst,word-corpus,word-toc`, oko 10 minuta; uz
+  checkout i `npm ci` bez kesa prvi run traje oko 30 minuta, a timeout joba je 60 minuta).
 - **Rucno:** Actions > word-proof > Run workflow, s workflowom s grane `master`:
   - `ref`: `master` ili `release/<ime>`; mora biti tocan trenutni vrh te grane;
   - `razine`: `word` (cetiri Word razine) ili `sve` (puni `npm run release:check`, oko 70 minuta).
@@ -111,6 +112,7 @@ Stroj:
 | --- | --- |
 | Job stoji na **Queued** | nijedan runner s oznakama `self-hosted, windows, word` nije Idle (stroj ugasen, runner nije pokrenut, korisnik odjavljen) |
 | "Word vec radi u sesiji runnera" | u sesiji je otvoren Word (zaostali proces ili tvoj dokument). Run nista ne gasi: spremi i zatvori Word, u Task Manageru provjeri da nema `WINWORD.EXE`, pa pokreni ponovno |
+| Job **cancelled** nakon isteka timeouta | koraci ciscenja i spremanja kesa se nisu izvrsili: u Task Manageru provjeri i zatvori `WINWORD.EXE`, inace sljedeci run staje u preflightu; sljedeci `npm ci` opet ide bez kesa |
 | "Word proces iz ovog runa nije zavrsio" | automatizacija je zapela; zatvori `WINWORD.EXE` u Task Manageru prije sljedeceg runa |
 | Preflight pada na `New-Object -ComObject Word.Application` | Word nije instaliran ili aktiviran za tog korisnika, ili ceka dijalog prvog pokretanja |
 | Preflight pada na `git --version` | Git for Windows nije u PATH-u korisnika runnera |
