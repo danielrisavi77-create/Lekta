@@ -61,11 +61,15 @@ export function deskRules(stats: DeskStats): string {
   return stats.rulesVersion ? `v${stats.rulesVersion} · ${profili}` : profili;
 }
 
-/** "provjereni 24. 8. 2026." iz ISO datuma; nepoznat datum to i kaze. */
+/**
+ * "24. 8. 2026." iz ISO datuma; nepoznat datum to i kaze. Odluka vlasnika 2026-09-27
+ * ("Zadnja provjera"): dt u markupu vec nosi "Zadnja provjera izvora:", pa ovaj redak
+ * daje SAMO datum, bez ponovljene riječi "provjereni".
+ */
 export function deskSources(stats: DeskStats): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(stats.sourcesCheckedAt ?? '');
   if (!m) return 'datum provjere nije zabilježen';
-  return `provjereni ${Number(m[3])}. ${Number(m[2])}. ${m[1]}.`;
+  return `${Number(m[3])}. ${Number(m[2])}. ${m[1]}.`;
 }
 
 /** Upise "Stanje stola" i otkrije blok; bez sva tri mjesta u markupu ne otkriva nista. */

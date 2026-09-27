@@ -1249,7 +1249,7 @@ describe('Z15 drugi krug: puno podnozje', () => {
     expect(deskLastWork([{ fileName: 'bez-ocjene.docx' }])).toBe('bez-ocjene.docx');
     expect(deskRules({ profiles: 407, rulesVersion: '8ce3bee', sourcesCheckedAt: null })).toBe('v8ce3bee · 407 profila');
     expect(deskRules({ profiles: 401, rulesVersion: null, sourcesCheckedAt: null })).toBe('401 profil');
-    expect(deskSources({ profiles: 1, rulesVersion: null, sourcesCheckedAt: '2026-08-24' })).toBe('provjereni 24. 8. 2026.');
+    expect(deskSources({ profiles: 1, rulesVersion: null, sourcesCheckedAt: '2026-08-24' })).toBe('24. 8. 2026.');
   });
 
   it('BEZ ZAPISA redak to kaze istinito, i pokvaren zapis ne izmislja rad', () => {
