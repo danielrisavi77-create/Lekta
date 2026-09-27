@@ -279,7 +279,7 @@ describe('VisualResultModel', () => {
         ...baseResult.details,
         inspectionCoverage: {
           version: 1,
-          status: 'complete',
+          status: 'no-known-limits',
           items: [],
           analyzerSkips: [],
           summary: { limitedKinds: 0, limitedOccurrences: 0, analyzerSkips: 0 },
@@ -287,7 +287,7 @@ describe('VisualResultModel', () => {
       },
     });
     expect(model.inspectionCoverage).toEqual({
-      status: 'complete',
+      status: 'no-known-limits',
       limitedOccurrences: 0,
       analyzerSkips: 0,
       labels: [],
