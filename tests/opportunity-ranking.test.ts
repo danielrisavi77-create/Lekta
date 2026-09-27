@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { rankOpportunityRows } from '../src/admin/opportunity-ranking';
+import { opportunityMeasurementHealth, rankOpportunityRows } from '../src/admin/opportunity-ranking';
 
 describe('rankOpportunityRows', () => {
   it('dovoljni uzorci idu ispred malih, zatim veci udio pa volumen', () => {
@@ -35,5 +35,35 @@ describe('rankOpportunityRows', () => {
       { id: 'nema', affected: 0, denominator: 0, ratePct: null, basis: 'analysis_event' },
     ]);
     expect(out[0]).toMatchObject({ ratePct: null, sample: 'low' });
+  });
+});
+
+
+describe('opportunityMeasurementHealth', () => {
+  it('zeleno je samo kad neovisni brojači imaju exact parity', () => {
+    expect(opportunityMeasurementHealth({
+      analysisCompletedEvents: 100,
+      opportunityEvents: 100,
+      structureGapItems: 12,
+      structureBreakdownItems: 12,
+    })).toEqual({ kind: 'healthy', analysisDelta: 0, structureDelta: 0 });
+  });
+
+  it('mismatch nije tiho zelen: označava nepotpuno mjerenje', () => {
+    expect(opportunityMeasurementHealth({
+      analysisCompletedEvents: 100,
+      opportunityEvents: 97,
+      structureGapItems: 12,
+      structureBreakdownItems: 10,
+    })).toEqual({ kind: 'partial', analysisDelta: -3, structureDelta: -2 });
+  });
+
+  it('bez baznih analiza govori no-data, ne healthy', () => {
+    expect(opportunityMeasurementHealth({
+      analysisCompletedEvents: 0,
+      opportunityEvents: 0,
+      structureGapItems: 0,
+      structureBreakdownItems: 0,
+    }).kind).toBe('no-data');
   });
 });
