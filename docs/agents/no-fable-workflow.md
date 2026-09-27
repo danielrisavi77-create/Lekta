@@ -87,6 +87,31 @@ Ako bilo koji agent tijekom rada javi poruku o limitu (spend limit, usage limit,
 staje i vraca `STATUS: PREKINUTO (limit)`, bez pokretanja daljnjih agenata; nastavak ide preko `resumeFromRunId`
 kao i kod ostalih workflowa.
 
+## Popravni krug razmjeran dosegu (odluka vlasnika 2026-09-27)
+
+Vrijedi globalno, za sve sesije i sve agente (Claude i Codex), ne samo za ovaj workflow. Kad
+pregled ostavi male, lokalne nalaze, prije svakog popravnog kruga:
+
+1. Izmjeri doseg: koje datoteke ispravak dira i koji generatori ili projekcije o njima ovise
+   (registar u `scripts/projection-freshness-core.mjs`, plus artefakti izvan registra).
+2. Regeneriraj samo pogodjene artefakte, dva prolaza (drugi mora biti no-op). Promjena konstante
+   u testu ne trazi regeneraciju.
+3. Mehanicke izmjene radi implementator nizim naporom; pregledavac srednjim naporom i samo nad
+   pogodjenim testovima. Dizajn (novi podatkovni zapis, ozicenje, mutacije) nije mehanicki i
+   trazi barem srednji napor.
+4. Puni gate (`npm run check`, `npm run orphan-scan`) i jedan pregled drugog providera ostaju
+   obvezni jednom prije commita i nikad se ne preskacu.
+5. Ako mali krug otvori nesto izvan svojih stavki, ne pokreci novi krug: stani i predlozi
+   zaseban zadatak nakon commita.
+6. Premise briefa (koji programi, vrijednosti, doslovni citati) mjere se parsiranjem ili iz
+   snimke prije slanja i navode kao izmjerene cinjenice; neizmjerena tvrdnja u briefu je
+   najcesci uzrok promasenog kruga.
+
+Puni ciklus (sve projekcije, puni pregled, puni Vitest u pregledu) ostaje samo za siroke
+promjene. Razlog: popravni krug koji trosi puni ciklus na sitan nalaz je najskuplji dio ovog
+workflowa (vidi "Izmjereno na `lekta-no-fable-coding`" gore); razmjeran krug drzi trosak
+razmjernim rizku bez gubljenja obveznog gatea i drugog misljenja.
+
 ## Prvi zadatak za probu
 
 Otvoren kvar iz memorije sesije: `link-doi-fixer` trazi `xmlns:r` bilo gdje u dokumentu umjesto na korijenu
