@@ -29,19 +29,32 @@ nije prepisan.
 
 Sondu je pokrenuo koordinator; izvrsitelj je nije ponovio.
 
-## 3. Zakljucak za T81 kriterij 5
+## 3. Staging dokaz (27. 9. 2026., sesija c4)
+
+Izvela sesija c4 uz izravno odobrenje vlasnika u toj sesiji, samo na stagingu
+`bnyemcnsphlitjradrst`; produkcija nije dirana. Alat: Supabase CLI 2.109.1. Sonda:
+`POST /functions/v1/repair-docx` s anon kljucem staginga, tijelo `{}`. Izvor: komentar na PR #201
+(issuecomment-5860795538); izvrsitelj lekta-00 ga nije ponovio.
+
+| Korak | Vrijeme (UTC) | Radnja | Ishod |
+| --- | --- | --- | --- |
+| 1 | 23:19:21 | `supabase secrets list` | 13 tajni; `REPAIR_DISABLED` ne postoji; `REPAIR_FREE_MODE` = `sha256("true")` |
+| 2 | 23:19:48 | sonda prije | HTTP 401 `{"error":"unauthorized"}` |
+| 3 | 23:20:09 | `supabase secrets set REPAIR_DISABLED=true` | postavljeno |
+| 4 | 23:20:33 | sonda (oko 24 s nakon postavljanja) | HTTP 503 `{"error":"disabled"}` |
+| 5 | 23:21:01 | `supabase secrets unset REPAIR_DISABLED` | uklonjeno |
+| 6 | 23:21:20 | sonda nakon vracanja | HTTP 401 `{"error":"unauthorized"}` |
+| 7 | odmah nakon | ponovni `secrets list` | 13 prije, 13 poslije, svi parovi ime i digest identicni |
+
+Popravak je na stagingu bio iskljucen oko 70 sekundi. Ucinak nastupa bez redeploya.
+
+Nije dokazano: ponasanje na produkciji (namjerno nije dirana) i eksplicitna vrijednost
+`REPAIR_DISABLED=false` (testirano je samo postavljanje na `true` i uklanjanje).
+
+## 4. Zakljucak za T81 kriterij 5
 
 - "Stvarna vrijednost `REPAIR_FREE_MODE` procitana": da, `true` (besplatna beta).
-- "`REPAIR_DISABLED` stvarno gasi popravak": NIJE dokazano na zivom okruzenju. Kod na masteru
-  vraca 503 kad je `REPAIR_DISABLED === 'true'`, ali to nije izvedeno na deployu.
+- "`REPAIR_DISABLED` stvarno gasi popravak": da, dokazano na stagingu (odjeljak 3): 503 `disabled`
+  prije provjere identiteta, a uklanjanje tajne vraca 401.
 
-## 4. Preostali dokaz (ceka rijec vlasnika)
-
-Na STAGINGU (`bnyemcnsphlitjradrst`), ne na produkciji:
-
-1. postaviti `REPAIR_DISABLED=true`;
-2. sonda na `repair-docx` mora vratiti 503 `{"error":"disabled"}`;
-3. ukloniti `REPAIR_DISABLED`;
-4. sonda mora vratiti 401 `{"error":"unauthorized"}` kao prije.
-
-Tek tada T85 ide u `done`.
+Kriterij 5 je ispunjen; T85 je `done`.
