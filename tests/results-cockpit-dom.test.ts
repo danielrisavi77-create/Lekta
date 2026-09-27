@@ -939,7 +939,7 @@ describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)'
     expect(isGeneralRepairEntry({ kind: 'preview', findingId: 'nalaz-1' })).toBe(false);
   });
 
-  it('prikazuje jedan redak Nije provjereno samo kad inspection coverage nije complete', () => {
+  it('prikazuje jedan redak Nije provjereno samo kad inspection coverage ninema poznatih limita', () => {
     const partialMount = document.createElement('section');
     const partial = buildVisualResultModel(result({
       details: {
@@ -972,7 +972,7 @@ describe('opci naspram po-nalaznog ulaza u popravak (popravak drugog kruga, Z8)'
         ruleAuthority: 'official-source',
         inspectionCoverage: {
           version: 1,
-          status: 'complete',
+          status: 'no-known-limits',
           items: [],
           analyzerSkips: [],
           summary: { limitedKinds: 0, limitedOccurrences: 0, analyzerSkips: 0 },
