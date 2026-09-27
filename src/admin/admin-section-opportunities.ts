@@ -22,6 +22,15 @@ const BASIS: Record<string, string> = {
   event_count_proxy: 'broj anonimnih događaja, nije cohort',
 };
 
+const NOOP_META: Record<string, { label: string; class: string }> = {
+  'invalid-params': { label: 'Neispravan zahtjev motora', class: 'bug' },
+  'stale-anchor': { label: 'Sidro se promijenilo', class: 'reliability' },
+  'unsupported-structure': { label: 'Nepodržana struktura', class: 'capability' },
+  'no-target': { label: 'Meta nije pronađena', class: 'inspect' },
+  'unclassified': { label: 'Neklasificirani razlog', class: 'instrumentation' },
+  'already-ok': { label: 'Već je usklađeno', class: 'benign' },
+};
+
 function opportunityLabel(row: OpportunityRow): string {
   return LABELS[row.id] ?? row.id;
 }
@@ -36,7 +45,11 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   const health = opportunityMeasurementHealth(stats.current);
 
   bento.appendChild(heroCard({
-    label: 'Najjači izmjereni signal',
+    label: health.kind === 'healthy'
+      ? 'Najjači izmjereni signal'
+      : health.kind === 'partial'
+        ? 'Privremeni signal · mjerenje nepotpuno'
+        : 'Nema potvrđenog signala',
     value: strongest?.ratePct ?? 0,
     render: (n) => fmtPct(n, 1),
     sub: strongest
@@ -109,12 +122,13 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   bento.appendChild(structureTable);
 
   const noOpColumns: Array<Column<(typeof stats.current.repairNoOpReasons)[number]>> = [
-    { header: 'Razlog fixera', render: (r) => r.kind },
+    { header: 'Razlog fixera', render: (r) => NOOP_META[r.kind]?.label ?? r.kind },
+    { header: 'Razred', render: (r) => NOOP_META[r.kind]?.class ?? 'unknown' },
     { header: 'Broj', numeric: true, render: (r) => fmtCount(r.count) },
   ];
   const noOpTable = dataTable(
-    'Zašto fixer odustaje',
-    `Ukupno ${fmtCount(stats.current.repairNoOpItems)} klasificiranih no-op/preskočenih stavki.`,
+    'Ishodi preskočenih fixera',
+    `Ukupno ${fmtCount(stats.current.repairNoOpItems)} klasificiranih preskoka; "već je usklađeno" je benign ishod, ne razvojni kvar.`,
     stats.current.repairNoOpReasons,
     noOpColumns,
   );
