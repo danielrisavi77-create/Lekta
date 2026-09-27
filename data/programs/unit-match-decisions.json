@@ -1,0 +1,1978 @@
+{
+  "schemaVersion": 1,
+  "decisions": [
+    {
+      "executor": "Agricultural University of Athens, Helenska Republika",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www2.aua.gr/en/news-events/nea/agricultural-university-athens-pioneer-institution-offers-courses-international",
+          "sourceLocator": "Marine Biotechnology, popis partnerskih sveučilišta",
+          "quote": "Agricultural University of Athens (Greece)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Breda University of Applied Sciences",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://fthm.uniri.hr/en/study-programs/study-programs-in-english/joint-graduate-study-master-of-sustainable-outdoor-hospitality-management/",
+          "sourceLocator": "Joint Graduate Study, partner universities",
+          "quote": "the University of Breda, BUas (Netherlands), the University of Girona, UdG (Spain) and the University of Rijeka (Croatia), Faculty of Management in Tourism and Hospitality"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "EFFECTUS veleučilište",
+      "unitId": "effectus",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "effectus",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište menadžmenta i sigurnosti SECURUS (u osnivanju)",
+      "unitId": "securus",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-25",
+      "bulk": false,
+      "proposed": { "unitId": "securus", "confidence": "weak" },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.vs-securus.hr/studijski-program/o-studiju/",
+          "sourceLocator": "službena stranica programa, naslov studija i naziv veleučilišta",
+          "quote": "Stručni prijediplomski studij Vatrogastva i zaštite od požara"
+        }
+      ],
+      "note": "Službeni opis studija potvrđuje program i vlasnika stranice; kataloška jedinica securus jedina je sastavnica istoimene ustanove."
+    },
+    {
+      "executor": "Evanđeosko teološko veleučilište",
+      "unitId": "evtos",
+      "noUnitReason": null,
+      "decidedBy": "Codex, pregled službenog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "evtos",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.etvos.hr/o-veleucilistu/",
+          "sourceLocator": "O Veleučilištu, popis studijskih programa",
+          "quote": "Prijediplomski studij Teologija; Diplomski studij Teologija"
+        }
+      ],
+      "note": "Slab prijedlog potvrđen službenom stranicom ustanove; dokaz podupire pripadnost zapisane jedinice."
+    },
+    {
+      "executor": "Fakulteta za upravo, Univerza v Ljubljani",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://efri.uniri.hr/obrazovanje/studijski-programi/zdruzeni-doktorski-studij/",
+          "sourceLocator": "Združeni doktorski studij, partnerska institucija",
+          "quote": "Fakultetom za javnu upravu Sveučilišta u Ljubljani (Slovenija)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Flensburg University of Applied Sciences",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://backend.deqar.eu/reports/ZEvA/248086_20240602_0130_zeva-accreditation-report-maritime-mgt-0590-final.pdf",
+          "sourceLocator": "Assessment Report, naslovna stranica i podaci o konzorciju",
+          "quote": "Submitted by: University of Zadar (Croatia), University of Ljubljana (Slovenia), Flensburg University of Applied Science (Germany)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Hrvatsko katoličko sveučilište",
+      "unitId": "hks",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "hks",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Hrvatsko katoličko sveučilište, Medicinski fakultet",
+      "unitId": "hks",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "hks",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Istarsko veleučilište, Pula",
+      "unitId": "iv",
+      "noUnitReason": null,
+      "decidedBy": "Codex, pregled službenog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "iv",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.iv.hr/studiji/",
+          "sourceLocator": "Studiji, uvodni odlomak",
+          "quote": "Studentske programe koje nudi Istarsko Veleučilište – Università Istriana pokrivaju dva stupnja obrazovanja"
+        }
+      ],
+      "note": "Slab prijedlog potvrđen službenom stranicom ustanove; dokaz podupire pripadnost zapisane jedinice."
+    },
+    {
+      "executor": "Klaipedos Universitetas, Republika Litva",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www2.aua.gr/en/news-events/nea/agricultural-university-athens-pioneer-institution-offers-courses-international",
+          "sourceLocator": "Marine Biotechnology, popis partnerskih sveučilišta",
+          "quote": "Klaipeda University (Lithuania)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "La Rochelle Universite, Francuska Republika",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www2.aua.gr/en/news-events/nea/agricultural-university-athens-pioneer-institution-offers-courses-international",
+          "sourceLocator": "Marine Biotechnology, popis partnerskih sveučilišta",
+          "quote": "La Rochelle Université (France)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Libertas Međunarodno sveučilište",
+      "unitId": "libertas",
+      "noUnitReason": null,
+      "decidedBy": "Codex, pregled službenog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "libertas",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.libertas.hr/upisi/",
+          "sourceLocator": "Upisi, zaglavlje i popis studija",
+          "quote": "Libertas međunarodno sveučilište"
+        }
+      ],
+      "note": "Slab prijedlog potvrđen službenom stranicom ustanove; dokaz podupire pripadnost zapisane jedinice."
+    },
+    {
+      "executor": "Lithuanian Sports University, Faculty of Sports Biomedicine",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://web.kifst.unist.hr/en/study/university-graduate-study-international-basketball-coaching-and-management/",
+          "sourceLocator": "International Basketball Coaching and Management, joint admissions",
+          "quote": "a Joint Admissions Committee composed of representatives of the partner institutions"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Masarykova univerzita (Brno, Češka)",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.uni-lj.si/en/programmes/digital-linguistics",
+          "sourceLocator": "Digital Linguistics, Partner Institutions",
+          "quote": "Masaryk University in Brno (Czech Republic)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Međimursko veleučilište u Čakovcu",
+      "unitId": "mev",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "mev",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Poslovno veleučilište Zagreb",
+      "unitId": "pvzg",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "pvzg",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "RIT Croatia",
+      "unitId": "rit",
+      "noUnitReason": null,
+      "decidedBy": "Codex, pregled službenog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "rit",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.rit.edu/croatia/hr/o-rit-croatia",
+          "sourceLocator": "O RIT Croatia, odjel Studijski programi",
+          "quote": "STRUČNI PRIJEDIPLOMSKI STUDIJI, izvodi hrvatski kampus i veleučilište RIT Croatia"
+        }
+      ],
+      "note": "Slab prijedlog potvrđen službenom stranicom ustanove; dokaz podupire pripadnost zapisane jedinice."
+    },
+    {
+      "executor": "Sveučilište Algebra",
+      "unitId": "algebra",
+      "noUnitReason": null,
+      "decidedBy": "Codex, pregled službenog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "algebra",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-studijima-i-studiranju.pdf",
+          "sourceLocator": "Pravilnik o studijima i studiranju, članak 4",
+          "quote": "Sveučilište Algebra provodi djelatnost visokog obrazovanja kroz izvedbu sveučilišnih i stručnih studija"
+        }
+      ],
+      "note": "Slab prijedlog potvrđen službenom stranicom ustanove; dokaz podupire pripadnost zapisane jedinice."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku - Odjel za biologiju",
+      "unitId": "biolos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "biolos",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Odjel za biologiju",
+          "quote": "Odjel za biologiju"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku - Odjel za fiziku",
+      "unitId": "fizos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "fizos",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Odjel za fiziku",
+          "quote": "Odjel za fiziku"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku - Odjel za kemiju",
+      "unitId": "kemos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "kemos",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Odjel za kemiju",
+          "quote": "Odjel za kemiju"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Akademija za umjetnost i kulturu u Osijeku",
+      "unitId": "uaos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "uaos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Ekonomski fakultet u Osijeku",
+      "unitId": "efos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "efos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet agrobiotehničkih znanosti Osijek",
+      "unitId": "fazos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fazos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet elektrotehnike, računarstva i informacijskih tehnologija",
+      "unitId": "ferit",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "ferit",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek",
+          "quote": "Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet primijenjene matematike i informatike",
+      "unitId": "mathos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "mathos",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Fakultet za primijenjenu matematiku i informatiku",
+          "quote": "Fakultet za primijenjenu matematiku i informatiku"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet turizma i ruralnog razvoja u Požegi",
+      "unitId": "ftrr",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "ftrr",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet za dentalnu medicinu i zdravstvo",
+      "unitId": "fdmz",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "fdmz",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Fakultet za dentalnu medicinu i zdravstvo Osijek",
+          "quote": "Fakultet za dentalnu medicinu i zdravstvo Osijek"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet za odgojne i obrazovne znanosti",
+      "unitId": "foozos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "foozos",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Fakultet za odgojne i obrazovne znanosti",
+          "quote": "Fakultet za odgojne i obrazovne znanosti"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Filozofski fakultet",
+      "unitId": "ffos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "ffos",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unios.hr/o-sveucilistu/sastavnice/",
+          "sourceLocator": "Filozofski fakultet",
+          "quote": "Filozofski fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Građevinski i arhitektonski fakultet Osijek",
+      "unitId": "grafos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "grafos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Katolički bogoslovni fakultet u Đakovu",
+      "unitId": "kbfdj",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "kbf",
+        "confidence": "strong"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.djkbf.unios.hr/povijest-fakulteta/",
+          "sourceLocator": "Povijest fakulteta, odjeljak Osnivanje Katoličkog bogoslovnog fakulteta",
+          "quote": "Dana 4. lipnja 2005. osniva se Katolički bogoslovni fakultet u Đakovu, kao punopravna sastavnica Sveučilišta Josipa Jurja Strossmayera u Osijeku."
+        }
+      ],
+      "note": "Ispravlja prijedlog confidence=strong koji je pogrešno odabrao zagrebački kbf; katalog čuva zaseban ID kbfdj za Đakovo. Upisnik snapshot data/programs/drafts/upisnik.json, SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f, zapis sifraUpisnik=1786 / sifraZapisa=3815 navodi Filozofsko-teološki studij i izvođača Katolički bogoslovni fakultet u Đakovu pod Sveučilištem Josipa Jurja Strossmayera u Osijeku. Službena povijest Fakulteta https://www.djkbf.unios.hr/povijest-fakulteta/ potvrđuje da je 4. 6. 2005. osnovan kao punopravna sastavnica Sveučilišta u Osijeku; službeni popis sastavnica https://www.unios.hr/o-sveucilistu/sastavnice/ navodi Katolički bogoslovni fakultet u Đakovu. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Kineziološki fakultet Osijek",
+      "unitId": "kifos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "kifos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Medicinski fakultet Osijek",
+      "unitId": "mefos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "mefos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Pravni fakultet Osijek",
+      "unitId": "pravos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "pravos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Prehrambeno-tehnološki fakultet Osijek",
+      "unitId": "ptfos",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "ptfos",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište Sjever",
+      "unitId": "unin",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "unin",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Dubrovniku",
+      "unitId": "unidu",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "unidu",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Ekonomski fakultet",
+      "unitId": "efri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "efri",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Ekonomski fakultet",
+          "quote": "Ekonomski fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet biotehnologije i razvoja lijekova",
+      "unitId": "biotech",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "biotech",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Fakultet biotehnologije i razvoja lijekova",
+          "quote": "Fakultet biotehnologije i razvoja lijekova"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet dentalne medicine",
+      "unitId": "fdmri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "fdmri",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Fakultet dentalne medicine",
+          "quote": "Fakultet dentalne medicine"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet za fiziku",
+      "unitId": "fizri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "fizri",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Fakultet za fiziku",
+          "quote": "Fakultet za fiziku"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet za matematiku",
+      "unitId": "matematika",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "matematika",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Fakultet za matematiku",
+          "quote": "Fakultet za matematiku"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet za menadžment u turizmu i ugostiteljstvu",
+      "unitId": "fmtu",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "fmtu",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Fakultet za menadžment u turizmu i ugostiteljstvu",
+          "quote": "Fakultet za menadžment u turizmu i ugostiteljstvu"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet zdravstvenih studija u Rijeci",
+      "unitId": "fzsri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fzsri",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Filozofski fakultet u Rijeci",
+      "unitId": "ffri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "ffri",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Građevinski fakultet u Rijeci",
+      "unitId": "gradri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "gradri",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Medicinski fakultet u Rijeci",
+      "unitId": "medri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "medri",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Pomorski fakultet",
+      "unitId": "pfri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "pfri",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Pomorski fakultet",
+          "quote": "Pomorski fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Pravni fakultet",
+      "unitId": "pravri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "pravri",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Pravni fakultet",
+          "quote": "Pravni fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Tehnički fakultet",
+      "unitId": "riteh",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "riteh",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://uniri.hr/o-sveucilistu/uniri/",
+          "sourceLocator": "Tehnički fakultet",
+          "quote": "Tehnički fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://uniri.hr/o-sveucilistu/uniri/; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu - Sveučilišni odjel za stručne studije",
+      "unitId": "oss",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "oss",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Sveučilišni odjel za stručne studije, redak 295",
+          "quote": "Sveučilišni odjel za stručne studije"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu - Sveučilišni odjel zdravstvenih studija",
+      "unitId": "ozs",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://ozs.unist.hr/hr/o-odjelu/djelatnici/38-unutarnji-odjeli/39-ured-za-znanost-nastavu-i-medunarodnu-suradnju",
+          "sourceLocator": "Obavijest o preimenovanju, odlomak 1",
+          "quote": "Na 103. sjednici Senata Sveučilišta u Splitu, održanoj 25. travnja 2025. godine, donesena je odluka o preimenovanju Sveučilišnog odjela zdravstvenih studija u Fakultet zdravstvenih znanosti."
+        }
+      ],
+      "note": "Službeni Upisnik snapshot data/programs/drafts/upisnik.json, SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4; zapisi 1884, 1885, 1886, 1888, 1901, 2051, 2052 navode izvođača Sveučilište u Splitu - Sveučilišni odjel zdravstvenih studija. Službena stranica Fakulteta zdravstvenih znanosti https://ozs.unist.hr/hr/o-odjelu/djelatnici/38-unutarnji-odjeli/39-ured-za-znanost-nastavu-i-medunarodnu-suradnju potvrđuje da je Sveučilišni odjel zdravstvenih studija preimenovan u Fakultet zdravstvenih znanosti odlukom Senata 25. 4. 2025.; isti službeni portal danas navodi Sveučilište u Splitu / Fakultet zdravstvenih znanosti. Provjera 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Ekonomski fakultet",
+      "unitId": "efst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "efst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Ekonomski fakultet, redak 141",
+          "quote": "Ekonomski fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Fakultet elektrotehnike, strojarstva i brodogradnje",
+      "unitId": "fesb",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "fesb",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Fakultet elektrotehnike, strojarstva i brodogradnje, redak 154",
+          "quote": "Fakultet elektrotehnike, strojarstva i brodogradnje"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Fakultet građevinarstva, arhitekture i geodezije",
+      "unitId": "fgag",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "fgag",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Fakultet građevinarstva, arhitekture i geodezije, redak 178",
+          "quote": "Fakultet građevinarstva, arhitekture i geodezije"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Filozofski fakultet",
+      "unitId": "ffst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "ffst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Filozofski fakultet, redak 166",
+          "quote": "Filozofski fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Katolički bogoslovni fakultet",
+      "unitId": "kbfst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "kbfst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Katolički bogoslovni fakultet, redak 190",
+          "quote": "Katolički bogoslovni fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Kemijsko-tehnološki fakultet",
+      "unitId": "ktfst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "ktfst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Kemijsko-tehnološki fakultet, redak 202",
+          "quote": "Kemijsko-tehnološki fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Kineziološki fakultet",
+      "unitId": "kifst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "kifst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Kineziološki fakultet, redak 207",
+          "quote": "Kineziološki fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Medicinski fakultet",
+      "unitId": "mefst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "mefst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Medicinski fakultet, redak 220",
+          "quote": "Medicinski fakultet u Splitu"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Pomorski fakultet",
+      "unitId": "pfst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "pfst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Pomorski fakultet, redak 233",
+          "quote": "Pomorski fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Pravni fakultet",
+      "unitId": "pravst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "pravst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Pravni fakultet, redak 245",
+          "quote": "Pravni fakultet"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Splitu, Prirodoslovno-matematički fakultet",
+      "unitId": "pmfst",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "pmfst",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.unist.hr/sastavnice-56/56",
+          "sourceLocator": "Prirodoslovno-matematički fakultet, redak 257",
+          "quote": "Prirodoslovno-matematički fakultet u Splitu"
+        }
+      ],
+      "note": "Ručna veza potvrđena usporedbom doslovnog izvođača iz Upisnika s popisom sastavnica https://www.unist.hr/sastavnice-56/56; naziv jedinice i matično sveučilište odgovaraju katalogu. Pojedinačna odluka, prijedlog stroja weak ostaje zabilježen."
+    },
+    {
+      "executor": "Sveučilište u Zadru",
+      "unitId": "unizd",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "unizd",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Agronomski fakultet",
+      "unitId": "agr",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "agr",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Arhitektonski fakultet",
+      "unitId": "arh",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "arh",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Edukacijsko-rehabilitacijski fakultet",
+      "unitId": "erf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "erf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Ekonomski fakultet",
+      "unitId": "efzg",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "efzg",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet elektrotehnike i računarstva",
+      "unitId": "fer",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fer",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet filozofije i religijskih znanosti",
+      "unitId": "ffrz",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "ffrz",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet hrvatskih studija",
+      "unitId": "fhs",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fhs",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet kemijskog inženjerstva i tehnologije",
+      "unitId": "fkit",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fkit",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet organizacije i informatike",
+      "unitId": "foi",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "foi",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet političkih znanosti",
+      "unitId": "fpzg",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fpzg",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet prometnih znanosti",
+      "unitId": "fpz",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fpz",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet strojarstva i brodogradnje",
+      "unitId": "fsb",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fsb",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet šumarstva i drvne tehnologije",
+      "unitId": "sumfak",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "sumfak",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Farmaceutsko-biokemijski fakultet",
+      "unitId": "fbf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "fbf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Filozofski fakultet",
+      "unitId": "ffzg",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "ffzg",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Geodetski fakultet",
+      "unitId": "geof",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "geof",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Građevinski fakultet",
+      "unitId": "grad",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "grad",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Grafički fakultet",
+      "unitId": "grf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "grf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Katolički bogoslovni fakultet",
+      "unitId": "kbf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "kbf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Kineziološki fakultet",
+      "unitId": "kif",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "kif",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Medicinski fakultet",
+      "unitId": "mef",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "mef",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Metalurški fakultet",
+      "unitId": "simet",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "simet",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Muzička akademija",
+      "unitId": "muza",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "muza",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Pravni fakultet",
+      "unitId": "pravo",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "pravo",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Prehrambeno-biotehnološki fakultet",
+      "unitId": "pbf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "pbf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Prirodoslovno-matematički fakultet",
+      "unitId": "pmf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "pmf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Rudarsko-geološko-naftni fakultet",
+      "unitId": "rgnf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "rgnf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Stomatološki fakultet",
+      "unitId": "sfzg",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "sfzg",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Tekstilno-tehnološki fakultet",
+      "unitId": "ttf",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "ttf",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Veterinarski fakultet",
+      "unitId": "vef",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vef",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Sveučilište VERN",
+      "unitId": "vern",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vern",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Tehničko veleučilište u Zagrebu",
+      "unitId": "tvz",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "tvz",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Universidad Catolica de Valencia Vicente Marir (koordinator) Kraljevina Španjolska",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www2.aua.gr/en/news-events/nea/agricultural-university-athens-pioneer-institution-offers-courses-international",
+          "sourceLocator": "Marine Biotechnology, popis partnerskih sveučilišta",
+          "quote": "Universidad Católica de Valencia San Vicente Mártir (Spain)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Universitat de Girona",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://fthm.uniri.hr/en/study-programs/study-programs-in-english/joint-graduate-study-master-of-sustainable-outdoor-hospitality-management/",
+          "sourceLocator": "Joint Graduate Study, partner universities",
+          "quote": "the University of Breda, BUas (Netherlands), the University of Girona, UdG (Spain) and the University of Rijeka (Croatia), Faculty of Management in Tourism and Hospitality"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Universitatea Tehnica de Constructii Bucuresti, Rumunjska",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www2.aua.gr/en/news-events/nea/agricultural-university-athens-pioneer-institution-offers-courses-international",
+          "sourceLocator": "Marine Biotechnology, popis partnerskih sveučilišta",
+          "quote": "Universitatea Tehnica de Constructii Bucuresti (Romania)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "University of Ljubljana, Faculty of Maritime Studies and Transport in Portorož",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://backend.deqar.eu/reports/ZEvA/248086_20240602_0130_zeva-accreditation-report-maritime-mgt-0590-final.pdf",
+          "sourceLocator": "Assessment Report, podaci o konzorciju",
+          "quote": "University of Zadar (Croatia), University of Ljubljana (Slovenia), Flensburg University of Applied Science (Germany)"
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Univerza v Ljubljani (Ljubljana, Slovenija)",
+      "unitId": null,
+      "noUnitReason": "foreign-institution",
+      "decidedBy": "Codex, pregled službenog programa i partnerskog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": null,
+        "confidence": null
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.uni-lj.si/en/programmes/digital-linguistics",
+          "sourceLocator": "Digital Linguistics, programme consortium",
+          "quote": "The programme is delivered by an international consortium consisting of the University of Ljubljana, Masaryk University in Brno (Czech Republic) and the University of Zagreb (Croatia)."
+        }
+      ],
+      "note": "Izvođač je strani partner združenog studija; zadržan je kao izvan hrvatskog kataloga sastavnica."
+    },
+    {
+      "executor": "Veleučilište \"Lavoslav Ružička\" u Vukovaru",
+      "unitId": "vevu",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vevu",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište \"Marko Marulić\" u Kninu",
+      "unitId": "veleknin",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "veleknin",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište \"Nikola Tesla\" u Gospiću",
+      "unitId": "vnt",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vnt",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište ARCA",
+      "unitId": "arca",
+      "noUnitReason": null,
+      "decidedBy": "Codex, pregled službenog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "arca",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://velarca.hr/",
+          "sourceLocator": "Naslovna stranica, opis Veleučilišta",
+          "quote": "Veleučilište Arca temeljem dopusnice Ministarstva znanosti i obrazovanja izvodi trogodišnji stručni prijediplomski studij inspekcijskog i kadrovskog menadžmenta u pomorstvu."
+        }
+      ],
+      "note": "Slab prijedlog potvrđen službenom stranicom ustanove; dokaz podupire pripadnost zapisane jedinice."
+    },
+    {
+      "executor": "Veleučilište Aspira",
+      "unitId": "aspira",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "aspira",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište Hrvatsko zagorje Krapina",
+      "unitId": "vhzk",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vhzk",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište Ivanić-Grad",
+      "unitId": "vsig",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vsig",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište PAR",
+      "unitId": "par",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "par",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište RRiF",
+      "unitId": "rrif",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "rrif",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište s pravom javnosti Baltazar Zaprešić",
+      "unitId": "bak",
+      "noUnitReason": null,
+      "decidedBy": "Codex, pregled službenog izvora uz ovlaštenje korisnika",
+      "decidedAt": "2026-09-24",
+      "bulk": false,
+      "proposed": {
+        "unitId": "bak",
+        "confidence": "weak"
+      },
+      "evidence": [
+        {
+          "sourceUrl": "https://www.bak.hr/?p=2211",
+          "sourceLocator": "Naslov i uvodni odlomak",
+          "quote": "Stručni diplomski studij Financije i investicije na našem Veleučilištu"
+        }
+      ],
+      "note": "Slab prijedlog potvrđen službenom stranicom ustanove; dokaz podupire pripadnost zapisane jedinice."
+    },
+    {
+      "executor": "Veleučilište studija sigurnosti",
+      "unitId": "vss",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vss",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište suvremenih informacijskih tehnologija",
+      "unitId": "vsite",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vsite",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište u Bjelovaru",
+      "unitId": "vub",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vub",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište u Karlovcu",
+      "unitId": "vuka",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vuka",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište u Križevcima",
+      "unitId": "vguk",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vguk",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište u Rijeci",
+      "unitId": "veleri",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "veleri",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište u Šibeniku",
+      "unitId": "vus",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vus",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište u Virovitici",
+      "unitId": "vuv",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vuv",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Veleučilište Velika Gorica",
+      "unitId": "vvg",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "vvg",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Zagrebačka škola ekonomije i managementa",
+      "unitId": "zsem",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "zsem",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    },
+    {
+      "executor": "Zdravstveno veleučilište",
+      "unitId": "zvu",
+      "noUnitReason": null,
+      "decidedBy": "Codex (user-authorized evidence review)",
+      "decidedAt": "2026-09-24",
+      "bulk": true,
+      "proposed": {
+        "unitId": "zvu",
+        "confidence": "exact"
+      },
+      "note": "Skupna potvrda samo prijedloga confidence=exact. Puna vrijednost executor u ovoj odluci doslovno je iz službenog Upisnika snapshot data/programs/drafts/upisnik.json (SHA-256 e06cecbcb1cac157c9713c8b00a020a1e5c41751dd1c9ed960dc64955bae83f4); predložena jedinica i razlog pohranjeni su u poljima proposed. Exact kriterij znači da se poklapaju i naziv ustanove i sastavnice ili da ustanova u katalogu ima točno jednu jedinicu istog naziva. Svaka je odluka označena bulk=true radi vidljivosti skupnog pregleda. Pregled 2026-09-24."
+    }
+  ]
+}

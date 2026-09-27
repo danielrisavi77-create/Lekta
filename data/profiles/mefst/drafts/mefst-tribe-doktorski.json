@@ -1,0 +1,42 @@
+{
+  "profileId": "mefst-tribe-doktorski",
+  "generatedAt": "2026-09-25",
+  "source": "Naputak za tehničku obradu doktorske disertacije (TRIBE, MEFST), izdvojeno iz službenog PDF snapshota.",
+  "note": "RuleEntries su nacrti bez ljudske potvrde i bodovanja. Uvez, korice, hrbat, CD i način predaje nisu uključeni kao aktivna formatna pravila. Citiranje nije aktivirano kao pravilo: nacrt točke 5(10) navodi Vancouver, ali tvrdnja čeka ljudsku provjeru.",
+  "entries": [
+    {
+      "ruleId": "mefst-tribe-doktorski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
+      "checkId": "paper-size",
+      "value": "A4",
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "mefst-tribe-tehnicka-obrada",
+      "sourcePage": "str. 1, točka 1.",
+      "quote": "Format radova je A4 (21 x 29.7 cm)",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "mefst-tribe-doktorski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Brojevi stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "mefst-tribe-tehnicka-obrada",
+      "sourcePage": "str. 1, točka 6.",
+      "quote": "Stranice označiti brojevima",
+      "status": "draft",
+      "scored": false
+    }
+  ]
+}

@@ -4,9 +4,9 @@
 
 ## Sazetak
 
-- Provjere ukupno: **73** (bodovane 49)
-- Bodovane s fail-slucajem (atomic ili boundary): **46/49 (94%)**
-- Bodovane s atomskim fail-slucajem: **45/49 (92%)**
+- Provjere ukupno: **73** (bodovane 47)
+- Bodovane s fail-slucajem (atomic ili boundary): **46/47 (98%)**
+- Bodovane s atomskim fail-slucajem: **45/47 (96%)**
 - Provjere s valid-controlom: **20**
 - Provjere s boundary testom: **4**
 - Korpusni slucajevi: atomic **50**, valid **21**, boundary **14**
@@ -17,7 +17,7 @@
 | checkId | Naslov | Kat. | Bod. | Atomic | Valid | Boundary |
 |---|---|---|---|:---:|:---:|:---:|
 | reference.alphabetical | Abecedni poredak literature | citations | da | ✓ | · | · |
-| citation.style-automation | Automatizacija citatnog stila | citations | da | · | · | · |
+| citation.style-automation | Automatizacija citatnog stila | citations | info | · | · | · |
 | citation.author-year.missing-reference | Citirano → literatura | citations | da | ✓ | ✓ | · |
 | reference.access-date | Datumi pristupa mrežnim izvorima | citations | da | ✓ | · | · |
 | citation.punctuation | Dosljednost interpunkcije citatnica | citations | da | ✓ | · | · |
@@ -87,5 +87,5 @@
 | method.structure | Struktura metodološkog profila | structure | din | · | · | · |
 | title.typography | Tipografija korica i naslovnice | structure | info | · | ✓ | · |
 | structure.heading.word-styles | Uporaba Word stilova naslova | structure | da | ✓ | · | · |
-| manual.checks | Zahtjevi za ručnu završnu provjeru | structure | da | · | · | · |
+| manual.checks | Zahtjevi za ručnu završnu provjeru | structure | info | · | · | · |
 | format.typography.consistency | Tehničko-tipografska dosljednost | typography | info | · | · | · |

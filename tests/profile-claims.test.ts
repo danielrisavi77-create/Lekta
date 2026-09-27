@@ -89,7 +89,7 @@ describe('profile-claims.json: nazivnici su imenovani', () => {
 
   /**
    * SKUPOVNA tvrdnja, ne usporedba velicina. Stara verzija je usporedjivala samo brojeve
-   * (407 + 3 = 410), pa bi prosla i kad bi tri profila viska bila bilo koja tri, a ne bas pravne
+   * (415 + 3 = 418), pa bi prosla i kad bi tri profila viska bila bilo koja tri, a ne bas pravne
    * katedre. Vanjski audit 2026-09-08 (nalaz 4) je uz to izbrojio D 34 nad registrom dok artefakt
    * kaze D 37: razlika su upravo te tri katedre, i mora biti IMENOVANA, ne izracunata iz razlike.
    */

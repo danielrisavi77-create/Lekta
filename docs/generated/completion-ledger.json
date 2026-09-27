@@ -338,6 +338,37 @@
       ]
     },
     {
+      "profileId": "agromed-zavrsni",
+      "unitId": "agromed",
+      "workType": "final",
+      "programIds": [],
+      "program": "missing",
+      "rules": "none",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "generic",
+        "citation": "generic",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "nema staging pravila za profil"
+      ]
+    },
+    {
       "profileId": "algebra-diplomski",
       "unitId": "algebra",
       "workType": "graduate",
@@ -1513,6 +1544,37 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
+      ]
+    },
+    {
+      "profileId": "efri-specijalisticki",
+      "unitId": "efri",
+      "workType": "specialist",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "reused",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
     {
@@ -3541,6 +3603,37 @@
       "blockedReasons": []
     },
     {
+      "profileId": "ffzg-svedski-zavrsni",
+      "unitId": "ffzg",
+      "workType": "final",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "exact-derived",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
+      ]
+    },
+    {
       "profileId": "fgag-diplomski",
       "unitId": "fgag",
       "workType": "graduate",
@@ -5204,6 +5297,99 @@
       ]
     },
     {
+      "profileId": "geoteh-diplomski",
+      "unitId": "geoteh",
+      "workType": "graduate",
+      "programIds": [],
+      "program": "missing",
+      "rules": "none",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "generic",
+        "citation": "generic",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "nema staging pravila za profil"
+      ]
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "unitId": "geoteh",
+      "workType": "doctoral",
+      "programIds": [],
+      "program": "missing",
+      "rules": "none",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "generic",
+        "citation": "generic",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "nema staging pravila za profil"
+      ]
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "unitId": "geoteh",
+      "workType": "final",
+      "programIds": [],
+      "program": "missing",
+      "rules": "none",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "generic",
+        "citation": "generic",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "nema staging pravila za profil"
+      ]
+    },
+    {
       "profileId": "grad-diplomski",
       "unitId": "grad",
       "workType": "graduate",
@@ -5501,6 +5687,37 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
+      ]
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "unitId": "hig",
+      "workType": "final",
+      "programIds": [],
+      "program": "missing",
+      "rules": "none",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "generic",
+        "citation": "generic",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "nema staging pravila za profil"
       ]
     },
     {
@@ -6460,6 +6677,37 @@
       ]
     },
     {
+      "profileId": "medri-doktorski",
+      "unitId": "medri",
+      "workType": "doctoral",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "reused",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
+      ]
+    },
+    {
       "profileId": "medri-farmacija-diplomski",
       "unitId": "medri",
       "workType": "graduate",
@@ -6517,6 +6765,37 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
+      ]
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "unitId": "medri",
+      "workType": "graduate",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "exact-derived",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
     {
@@ -6665,6 +6944,68 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
+      ]
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "unitId": "mefst",
+      "workType": "doctoral",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "reused",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
+      ]
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "unitId": "mefst",
+      "workType": "doctoral",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "reused",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
     {
@@ -6906,6 +7247,68 @@
       },
       "blockedReasons": [
         "nema dokaza na stvarnom studentskom radu"
+      ]
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "unitId": "mvi",
+      "workType": "graduate",
+      "programIds": [],
+      "program": "missing",
+      "rules": "none",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "generic",
+        "citation": "generic",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "nema staging pravila za profil"
+      ]
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "unitId": "mvi",
+      "workType": "final",
+      "programIds": [],
+      "program": "missing",
+      "rules": "none",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "generic",
+        "citation": "generic",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "nema staging pravila za profil"
       ]
     },
     {
@@ -7393,6 +7796,37 @@
       "blockedReasons": []
     },
     {
+      "profileId": "pmf-biologija-zavrsni",
+      "unitId": "pmf",
+      "workType": "final",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "synthetic-pass",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "reused",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
+      ]
+    },
+    {
       "profileId": "pmf-fizika-graduate",
       "unitId": "pmf",
       "workType": "graduate",
@@ -7506,6 +7940,37 @@
         "realDocxSamples": 0
       },
       "blockedReasons": []
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "unitId": "pmf",
+      "workType": null,
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "synthetic-pass",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "reused",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
+      ]
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -11801,6 +12266,37 @@
       ]
     },
     {
+      "profileId": "vef-specijalisticki",
+      "unitId": "vef",
+      "workType": "specialist",
+      "programIds": [],
+      "program": "missing",
+      "rules": "advisory-only",
+      "repair": "manual-only",
+      "proof": "not-run",
+      "proofSource": null,
+      "assets": "generic",
+      "claim": "E",
+      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "assetDetail": {
+        "titlePage": "reused",
+        "citation": "exact-official",
+        "declaration": "generic"
+      },
+      "evidence": {
+        "scoredMachineCheckable": 0,
+        "scoredTotal": 0,
+        "bulkPending": 0,
+        "offeredRepairOptions": 0,
+        "facultySpecificRepairOptions": 0,
+        "realDocxSamples": 0
+      },
+      "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
+        "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
+      ]
+    },
+    {
       "profileId": "veleknin-diplomski",
       "unitId": "veleknin",
       "workType": "graduate",
@@ -13122,62 +13618,62 @@
     }
   ],
   "summary": {
-    "rowCount": 436,
-    "profileCount": 410,
+    "rowCount": 452,
+    "profileCount": 426,
     "byProgram": {
       "official": 0,
       "derived": 20,
-      "missing": 413,
+      "missing": 429,
       "unsupported": 3
     },
     "byRules": {
       "verified": 380,
       "bulk-pending": 8,
-      "advisory-only": 19,
-      "none": 29
+      "advisory-only": 28,
+      "none": 36
     },
     "byRepair": {
       "faculty-specific": 346,
       "universal-hygiene": 37,
-      "manual-only": 53
+      "manual-only": 69
     },
     "byProof": {
       "real-docx-pass": 42,
-      "synthetic-pass": 346,
+      "synthetic-pass": 348,
       "review": 0,
-      "not-run": 48
+      "not-run": 62
     },
     "byProofSource": {
       "profile": 19,
       "unit-work-type": 23,
-      "none": 394
+      "none": 410
     },
     "byAssets": {
       "exact-official": 13,
       "exact-derived": 6,
       "reused": 4,
-      "generic": 410,
+      "generic": 426,
       "unknown": 3
     },
     "byTitlePage": {
       "exact-official": 209,
-      "exact-derived": 131,
-      "reused": 33,
-      "generic": 60,
+      "exact-derived": 133,
+      "reused": 40,
+      "generic": 67,
       "unknown": 3
     },
     "byCitation": {
-      "exact-official": 246,
+      "exact-official": 255,
       "exact-derived": 0,
       "reused": 0,
-      "generic": 187,
+      "generic": 194,
       "unknown": 3
     },
     "byDeclaration": {
       "exact-official": 48,
       "exact-derived": 0,
       "reused": 0,
-      "generic": 385,
+      "generic": 401,
       "unknown": 3
     },
     "byClaim": {
@@ -13185,18 +13681,18 @@
       "B": 300,
       "C": 8,
       "D": 42,
-      "E": 48
+      "E": 64
     },
-    "programGaps": 413,
+    "programGaps": 429,
     "programsWithoutProfile": [
       "fpzg: Sveučilišni prijediplomski studij Vojno vođenje i upravljanje",
       "fpzg: Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi",
       "pravo: Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)"
     ],
     "nationalClaimBlockers": [
-      "413 redaka nema evidentiran studijski program (sluzbeni Upisnik jos nije sinkroniziran)",
+      "429 redaka nema evidentiran studijski program (sluzbeni Upisnik jos nije sinkroniziran)",
       "3 evidentiranih programa nema nijedan profil: fpzg: Sveučilišni prijediplomski studij Vojno vođenje i upravljanje; fpzg: Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi; pravo: Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
-      "98 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
+      "114 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
     ]
   }
 }
