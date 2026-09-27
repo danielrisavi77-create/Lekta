@@ -76,6 +76,18 @@ describe('opportunityMeasurementHealth', () => {
     }).kind).toBe('no-data');
   });
 
+  it('structure breakdown bez summary/baznih eventa je partial, ne no-data', () => {
+    expect(opportunityMeasurementHealth({
+      analysisCompletedEvents: 0,
+      opportunityEvents: 0,
+      structureGapItems: 0,
+      structureBreakdownItems: 2,
+      repairNoOpSummaryEvents: 0,
+      repairNoOpSummaryItems: 0,
+      repairNoOpItems: 0,
+    })).toEqual({ kind: 'partial', analysisDelta: 0, structureDelta: 2, repairNoOpDelta: 0 });
+  });
+
   it('repair no-op parity moze samostalno uciniti mjerenje partial', () => {
     expect(opportunityMeasurementHealth({
       analysisCompletedEvents: 0,
