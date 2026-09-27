@@ -4,6 +4,7 @@ import { existsSync, readFileSync, mkdirSync, writeFileSync, appendFileSync, ope
 import { delimiter, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AGENTS, GROK_MIN_VERSION, modelMatches, prepareJob, parseGrokVersion, parseResult, validateQueue, PROMPT_FILE_PLACEHOLDER } from './core.mjs';
+import { botPathViolations, changedPaths, resolveBot } from './grok-bots.mjs';
 
 export function diagnoseProviderFailure(command, stderr) {
   if (command === 'grok' && /bwrap:.*Creating new namespace failed: Operation not permitted/i.test(stderr ?? '')) {
@@ -103,6 +104,39 @@ export function checkGrokVersion(options = {}) {
   }
 }
 
+/**
+ * Jedan redak `agents doctor` za zadani CLI. Ide kroz `resolveProviderInvocation`, isto kao `run` i
+ * `checkGrokVersion`: gola `spawnSync('grok', ...)` na Windowsu pogadja npm `.cmd` shim i vraca
+ * ENOENT, pa bi doctor lazno javio `grok: unavailable`. Izdvojeno iz `main` da test moze podmetnuti
+ * platformu, resolver i spawn i provjeriti Windows put na svakom OS-u.
+ */
+export function probeCli(cli, options = {}) {
+  const spawn = options.spawn ?? spawnSync;
+  const versionArgs = cli === 'grok' ? ['version'] : ['--version'];
+  const invocation = resolveProviderInvocation(cli, {
+    cwd: options.cwd ?? process.cwd(),
+    platform: options.platform,
+    exists: options.exists,
+    pathEnv: options.pathEnv,
+    entrypoints: options.entrypoints,
+  });
+  const result = spawn(invocation.command, [...invocation.argsPrefix, ...versionArgs], { encoding: 'utf8', timeout: 10_000, shell: false });
+  const line = (result.stdout || result.stderr || '').trim().split('\n')[0];
+  if (cli === 'grok' && result.status === 0) {
+    const version = parseGrokVersion(line);
+    const support = version.supported ? 'supported' : `unsupported; minimum ${GROK_MIN_VERSION}`;
+    return `${cli}: ${line} [${support}]`;
+  }
+  return `${cli}: ${result.status === 0 ? line : 'unavailable'}`;
+}
+
+/** Bot iz `config/agent-routing.json` za `--bot`; bez configa ili bota baca gresku. */
+export function loadBot(rootDir, botName, agentName, phase) {
+  const config = JSON.parse(readFileSync(join(rootDir, 'config/agent-routing.json'), 'utf8'));
+  const bot = resolveBot(config, botName, { agentName, agentCommand: AGENTS[agentName]?.command, runnerPhase: phase });
+  return { bot, protectedPaths: Array.isArray(config.protectedPaths) ? config.protectedPaths : [] };
+}
+
 export function isEntryModule(moduleUrl, argv1) {
   if (!argv1) return false;
   const real = (path) => { try { return realpathSync(path); } catch { return resolve(path); } };
@@ -118,27 +152,28 @@ const git = (...args) => {
   return result.stdout.trim();
 };
 
+// Snimka prljavih i nepracenih datoteka (staza -> blob hash) za provjeru putanja Grok bota.
+function worktreeSnapshot() {
+  const paths = [...new Set([
+    ...git('diff', '--name-only', 'HEAD').split('\n'),
+    ...git('ls-files', '--others', '--exclude-standard').split('\n'),
+  ].filter(Boolean))];
+  const present = paths.filter((p) => existsSync(join(root, p)));
+  const hashes = present.length ? git('hash-object', '--', ...present).split('\n') : [];
+  const snapshot = Object.fromEntries(paths.map((p) => [p, 'deleted']));
+  present.forEach((p, i) => { snapshot[p] = hashes[i]; });
+  return snapshot;
+}
+
 function main() {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help') {
-    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--execute]');
+    console.log('agents doctor | list | prepare|run T00 --phase plan|implement|review --agent astra|fable|opus|sonnet|sol|grok|build [--budget-usd N | --subscription] [--bot grok-review|grok-scout|grok-docs|grok-triage] [--execute]');
     return;
   }
   if (command === 'doctor') {
     if (rest.length) throw new Error('doctor takes no arguments');
-    for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) {
-      const versionArgs = cli === 'grok' ? ['version'] : ['--version'];
-      const invocation = resolveProviderInvocation(cli, { cwd: root });
-      const result = spawnSync(invocation.command, [...invocation.argsPrefix, ...versionArgs], { encoding: 'utf8', timeout: 10_000 });
-      const line = (result.stdout || result.stderr || '').trim().split('\n')[0];
-      if (cli === 'grok' && result.status === 0) {
-        const version = parseGrokVersion(line);
-        const support = version.supported ? 'supported' : `unsupported; minimum ${GROK_MIN_VERSION}`;
-        console.log(`${cli}: ${line} [${support}]`);
-      } else {
-        console.log(`${cli}: ${result.status === 0 ? line : 'unavailable'}`);
-      }
-    }
+    for (const cli of ['git', 'node', 'deno', 'codex', 'claude', 'grok']) console.log(probeCli(cli, { cwd: root }));
     console.log('Model access and login must be checked locally: codex login status; claude auth status; grok login (or XAI_API_KEY). No model was called.');
     return;
   }
@@ -154,7 +189,7 @@ function main() {
   const options = new Map();
   while (rest.length) {
     const key = rest.shift();
-    if (!['--agent', '--phase', '--budget-usd', '--execute', '--subscription', '--override-status', '--override-implementer'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
+    if (!['--agent', '--phase', '--budget-usd', '--execute', '--subscription', '--override-status', '--override-implementer', '--bot'].includes(key) || options.has(key)) throw new Error(`Invalid option: ${key}`);
     const value = (key === '--execute' || key === '--subscription') ? true : rest.shift();
     if (!value || (typeof value === 'string' && value.startsWith('--'))) throw new Error(`Missing value: ${key}`);
     options.set(key, value);
@@ -183,8 +218,15 @@ function main() {
   if (overrideStatus !== undefined && phase !== 'review') throw new Error('Override options apply to --phase review only');
   const overrideTask = overrideStatus === undefined ? undefined : { status: overrideStatus, implementationAgent: overrideImplementer };
   const job = prepareJob(queue, id, phase, agent, budget, overrideTask ? { billingMode, overrideTask } : { billingMode });
+  // Grok bot (odluka vlasnika 27. 9.): uloga iz config/agent-routing.json. Bot ide iskljucivo na
+  // pretplatu, a nakon pokretanja se provjerava da nije dirao nista izvan dopustenih putanja.
+  let botRun = null;
+  if (options.has('--bot')) {
+    if (billingMode !== 'subscription') throw new Error('--bot requires --subscription (Grok runs only on the subscription)');
+    botRun = loadBot(root, options.get('--bot'), agent, phase);
+  }
   if (!options.has('--execute')) {
-    console.log(JSON.stringify({ dryRun: true, ...job }, null, 2));
+    console.log(JSON.stringify({ dryRun: true, ...(botRun ? { bot: botRun.bot.name } : {}), ...job }, null, 2));
     return;
   }
   if (job.command === 'grok') {
@@ -213,6 +255,7 @@ function main() {
   try {
     writeFileSync(lockFd, JSON.stringify({ pid: process.pid, task: id, agent, phase, root }));
     const baseHead = git('rev-parse', 'HEAD');
+    const treeBefore = botRun ? worktreeSnapshot() : null;
     const out = join(root, '.artifacts/agents', `${id}-${Date.now()}-${process.pid}`);
     mkdirSync(out, { recursive: true });
     writeFileSync(join(out, 'prompt.md'), job.prompt);
@@ -230,13 +273,22 @@ function main() {
     const parsed = parseResult(job.command, result.stdout ?? '', result.status);
     const diagnosis = diagnoseProviderFailure(job.command, result.stderr ?? '');
     const modelOk = modelMatches(AGENTS[agent].model, parsed.reportedModels);
+    let violations = null;
+    if (botRun) {
+      const changed = [...new Set([
+        ...git('diff', '--name-only', baseHead, 'HEAD').split('\n').filter(Boolean),
+        ...changedPaths(treeBefore, worktreeSnapshot()),
+      ])];
+      violations = botPathViolations(botRun.bot, changed, botRun.protectedPaths);
+    }
     const report = { task: id, phase, agent, baseHead, requestedModel: AGENTS[agent].model,
       reportedModels: parsed.reportedModels, usage: parsed.usage, exitCode: result.status, signal: result.signal,
       error: result.error?.message ?? null,
       modelMismatch: parsed.ok && !modelOk ? { requested: AGENTS[agent].model, reported: parsed.reportedModels } : null,
       ...diagnosis,
       retainedLock: releaseLock ? null : lock,
-      status: parsed.ok && modelOk && !result.error ? 'needs_verification' : 'failed',
+      ...(botRun ? { bot: botRun.bot.name, botPathViolations: violations } : {}),
+      status: parsed.ok && modelOk && !result.error && !(violations && violations.length) ? 'needs_verification' : 'failed',
       note: 'Queue unchanged. Coordinator must verify patch, required checks and independent review.' };
     writeFileSync(join(out, 'result.json'), JSON.stringify(report, null, 2) + '\n');
     appendFileSync(join(root, '.artifacts/agents/usage.jsonl'), JSON.stringify({

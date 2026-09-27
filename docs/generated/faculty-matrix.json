@@ -636,6 +636,92 @@
       ]
     },
     {
+      "unitId": "agromed",
+      "facultyLabel": "Agromediteranski fakultet",
+      "catalogStatus": "partial",
+      "profileCount": 1,
+      "profileIds": [
+        "agromed-zavrsni"
+      ],
+      "offeredOptionCount": 0,
+      "mappedOptionCount": 0,
+      "ruleIds": [],
+      "fixerIds": [],
+      "realDocxSampleCount": 0,
+      "profilesWithoutRealDocx": [
+        "agromed-zavrsni"
+      ],
+      "automaticTestSummary": {
+        "profileCoveragePassCount": 1,
+        "profileCoverageFailCount": 0,
+        "realCorpusPassCount": 0,
+        "realCorpusReviewCount": 0,
+        "realCorpusNoOpCount": 0,
+        "realCorpusFailCount": 0,
+        "syntheticClosedLoopPassCount": 0,
+        "syntheticClosedLoopNotRunCount": 0
+      },
+      "cellSummary": {
+        "cellCount": 31,
+        "coveredCount": 8,
+        "uncoveredCount": 23,
+        "resolvedCount": 1,
+        "byReason": {
+          "profil-ne-propisuje-os": 19,
+          "univerzalna-higijena-bez-dokaza": 0,
+          "closed-loop-nije-rijesio": 0,
+          "nema-dokaza": 0,
+          "ceka-ljudski-odabir": 2,
+          "trazi-ulaz-izvan-dokumenta": 2
+        }
+      },
+      "manualReviewReasons": [
+        "nema-stvarnog-docx-uzorka"
+      ],
+      "profiles": [
+        {
+          "profileId": "agromed-zavrsni",
+          "programs": [
+            "Mediteranska poljoprivreda"
+          ],
+          "workTypes": [
+            "final"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        }
+      ]
+    },
+    {
       "unitId": "algebra",
       "facultyLabel": "Sveučilište Algebra Bernays",
       "catalogStatus": "research",
@@ -3435,10 +3521,11 @@
       "unitId": "efri",
       "facultyLabel": "Ekonomski fakultet u Rijeci",
       "catalogStatus": "partial",
-      "profileCount": 2,
+      "profileCount": 3,
       "profileIds": [
         "efri-zavrsni",
-        "efri-diplomski"
+        "efri-diplomski",
+        "efri-specijalisticki"
       ],
       "offeredOptionCount": 12,
       "mappedOptionCount": 12,
@@ -3466,10 +3553,11 @@
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
         "efri-zavrsni",
-        "efri-diplomski"
+        "efri-diplomski",
+        "efri-specijalisticki"
       ],
       "automaticTestSummary": {
-        "profileCoveragePassCount": 2,
+        "profileCoveragePassCount": 3,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
         "realCorpusReviewCount": 0,
@@ -3479,17 +3567,17 @@
         "syntheticClosedLoopNotRunCount": 0
       },
       "cellSummary": {
-        "cellCount": 62,
-        "coveredCount": 26,
-        "uncoveredCount": 36,
-        "resolvedCount": 12,
+        "cellCount": 93,
+        "coveredCount": 34,
+        "uncoveredCount": 59,
+        "resolvedCount": 13,
         "byReason": {
-          "profil-ne-propisuje-os": 28,
+          "profil-ne-propisuje-os": 47,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
           "nema-dokaza": 0,
-          "ceka-ljudski-odabir": 4,
-          "trazi-ulaz-izvan-dokumenta": 4
+          "ceka-ljudski-odabir": 6,
+          "trazi-ulaz-izvan-dokumenta": 6
         }
       },
       "manualReviewReasons": [
@@ -3604,6 +3692,55 @@
             "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "efri-specijalisticki",
+          "programs": [
+            "Ekonomija energetskog sektora-MBA",
+            "Financije",
+            "Inteligentno elektroničko poslovanje",
+            "Kontroling",
+            "Marketing menadžment",
+            "Menadžment sigurnosti u EU",
+            "Menadžment u javnom sektoru",
+            "Poslovanje s Europskom unijom",
+            "Računovodstvo",
+            "Upravljanje poslovnim uspjehom"
+          ],
+          "workTypes": [
+            "specialist"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 0,
@@ -7851,7 +7988,7 @@
       "unitId": "ffzg",
       "facultyLabel": "Filozofski fakultet",
       "catalogStatus": "partial",
-      "profileCount": 10,
+      "profileCount": 11,
       "profileIds": [
         "ffzg-informacijske-zavrsni",
         "ffzg-filozofija-diplomski",
@@ -7862,7 +7999,8 @@
         "ffzg-lingvistika-diplomski",
         "ffzg-povijest-umjetnosti-diplomski",
         "ffzg-arheologija-graduate",
-        "ffzg-etnologija-graduate"
+        "ffzg-etnologija-graduate",
+        "ffzg-svedski-zavrsni"
       ],
       "offeredOptionCount": 46,
       "mappedOptionCount": 46,
@@ -7931,10 +8069,11 @@
         "ffzg-lingvistika-diplomski",
         "ffzg-povijest-umjetnosti-diplomski",
         "ffzg-arheologija-graduate",
-        "ffzg-etnologija-graduate"
+        "ffzg-etnologija-graduate",
+        "ffzg-svedski-zavrsni"
       ],
       "automaticTestSummary": {
-        "profileCoveragePassCount": 10,
+        "profileCoveragePassCount": 11,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
         "realCorpusReviewCount": 1,
@@ -7944,17 +8083,17 @@
         "syntheticClosedLoopNotRunCount": 0
       },
       "cellSummary": {
-        "cellCount": 310,
-        "coveredCount": 127,
-        "uncoveredCount": 183,
-        "resolvedCount": 53,
+        "cellCount": 341,
+        "coveredCount": 135,
+        "uncoveredCount": 206,
+        "resolvedCount": 54,
         "byReason": {
-          "profil-ne-propisuje-os": 142,
+          "profil-ne-propisuje-os": 161,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
           "nema-dokaza": 1,
-          "ceka-ljudski-odabir": 20,
-          "trazi-ulaz-izvan-dokumenta": 20
+          "ceka-ljudski-odabir": 22,
+          "trazi-ulaz-izvan-dokumenta": 22
         }
       },
       "manualReviewReasons": [
@@ -8475,6 +8614,46 @@
             "resolvedCount": 5,
             "byReason": {
               "profil-ne-propisuje-os": 15,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "ffzg-svedski-zavrsni",
+          "programs": [
+            "Švedski jezik i kultura (dvopredmetni)"
+          ],
+          "workTypes": [
+            "final"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 0,
@@ -10473,14 +10652,14 @@
         "fpzg-novinarstvo-zavrsni-av",
         "fpzg-politologija-diplomski",
         "fpzg-nacionalna-sigurnost-diplomski",
-        "fpzg-novinarstvo-diplomski",
-        "fpzg-mes-master-thesis",
         "fpzg-specijalisticki-odnosi-s-javnoscu",
         "fpzg-specijalisticki-prilagodba-eu",
         "fpzg-specijalisticki-sigurnosna-politika-rh",
         "fpzg-specijalisticki-vanjska-politika-diplomacija",
         "fpzg-doktorski-politologija",
-        "fpzg-opci-akademski-rad"
+        "fpzg-opci-akademski-rad",
+        "fpzg-mes-master-thesis",
+        "fpzg-novinarstvo-diplomski"
       ],
       "offeredOptionCount": 59,
       "mappedOptionCount": 59,
@@ -10559,14 +10738,14 @@
         "fpzg-novinarstvo-zavrsni-av",
         "fpzg-politologija-diplomski",
         "fpzg-nacionalna-sigurnost-diplomski",
-        "fpzg-novinarstvo-diplomski",
-        "fpzg-mes-master-thesis",
         "fpzg-specijalisticki-odnosi-s-javnoscu",
         "fpzg-specijalisticki-prilagodba-eu",
         "fpzg-specijalisticki-sigurnosna-politika-rh",
         "fpzg-specijalisticki-vanjska-politika-diplomacija",
         "fpzg-doktorski-politologija",
-        "fpzg-opci-akademski-rad"
+        "fpzg-opci-akademski-rad",
+        "fpzg-mes-master-thesis",
+        "fpzg-novinarstvo-diplomski"
       ],
       "automaticTestSummary": {
         "profileCoveragePassCount": 13,
@@ -10812,112 +10991,6 @@
             "fpzg-nacionalna-sigurnost-diplomski--justify",
             "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
             "fpzg-nacionalna-sigurnost-diplomski--paper-size"
-          ],
-          "fixerIds": [
-            "alignment-fixer",
-            "font-fixer",
-            "line-spacing-fixer",
-            "paper-size-fixer"
-          ],
-          "templateIds": [
-            "basic-text-styles"
-          ],
-          "realDocxSampleCount": 0,
-          "automaticTests": {
-            "profileCoverage": "pass",
-            "realCorpus": "not-run",
-            "syntheticClosedLoop": "pass"
-          },
-          "closedLoopAxesRemaining": [],
-          "cellSummary": {
-            "cellCount": 31,
-            "coveredCount": 14,
-            "uncoveredCount": 17,
-            "resolvedCount": 6,
-            "byReason": {
-              "profil-ne-propisuje-os": 11,
-              "univerzalna-higijena-bez-dokaza": 0,
-              "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
-              "ceka-ljudski-odabir": 2,
-              "trazi-ulaz-izvan-dokumenta": 2
-            }
-          },
-          "realCorpusOutcomes": {},
-          "manualReviewReasons": [
-            "nema-stvarnog-docx-uzorka"
-          ]
-        },
-        {
-          "profileId": "fpzg-novinarstvo-diplomski",
-          "programs": [
-            "Diplomski studij Novinarstvo"
-          ],
-          "workTypes": [
-            "graduate"
-          ],
-          "profileStatus": "verified",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
-          "ruleIds": [
-            "fpzg-novinarstvo-diplomski--font",
-            "fpzg-novinarstvo-diplomski--font-size",
-            "fpzg-novinarstvo-diplomski--justify",
-            "fpzg-novinarstvo-diplomski--line-spacing",
-            "fpzg-novinarstvo-diplomski--paper-size"
-          ],
-          "fixerIds": [
-            "alignment-fixer",
-            "font-fixer",
-            "line-spacing-fixer",
-            "paper-size-fixer"
-          ],
-          "templateIds": [
-            "basic-text-styles"
-          ],
-          "realDocxSampleCount": 0,
-          "automaticTests": {
-            "profileCoverage": "pass",
-            "realCorpus": "not-run",
-            "syntheticClosedLoop": "pass"
-          },
-          "closedLoopAxesRemaining": [],
-          "cellSummary": {
-            "cellCount": 31,
-            "coveredCount": 14,
-            "uncoveredCount": 17,
-            "resolvedCount": 6,
-            "byReason": {
-              "profil-ne-propisuje-os": 11,
-              "univerzalna-higijena-bez-dokaza": 0,
-              "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 2,
-              "ceka-ljudski-odabir": 2,
-              "trazi-ulaz-izvan-dokumenta": 2
-            }
-          },
-          "realCorpusOutcomes": {},
-          "manualReviewReasons": [
-            "nema-stvarnog-docx-uzorka"
-          ]
-        },
-        {
-          "profileId": "fpzg-mes-master-thesis",
-          "programs": [
-            "Master of European Studies"
-          ],
-          "workTypes": [
-            "graduate"
-          ],
-          "profileStatus": "verified",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
-          "ruleIds": [
-            "fpzg-mes-master-thesis--font",
-            "fpzg-mes-master-thesis--font-size",
-            "fpzg-mes-master-thesis--justify",
-            "fpzg-mes-master-thesis--line-spacing",
-            "fpzg-mes-master-thesis--paper-size"
           ],
           "fixerIds": [
             "alignment-fixer",
@@ -11271,6 +11344,112 @@
             "resolvedCount": 4,
             "byReason": {
               "profil-ne-propisuje-os": 14,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 2,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "fpzg-mes-master-thesis",
+          "programs": [
+            "Master of European Studies"
+          ],
+          "workTypes": [
+            "graduate"
+          ],
+          "profileStatus": "verified",
+          "offeredOptionCount": 5,
+          "mappedOptionCount": 5,
+          "ruleIds": [
+            "fpzg-mes-master-thesis--font",
+            "fpzg-mes-master-thesis--font-size",
+            "fpzg-mes-master-thesis--justify",
+            "fpzg-mes-master-thesis--line-spacing",
+            "fpzg-mes-master-thesis--paper-size"
+          ],
+          "fixerIds": [
+            "alignment-fixer",
+            "font-fixer",
+            "line-spacing-fixer",
+            "paper-size-fixer"
+          ],
+          "templateIds": [
+            "basic-text-styles"
+          ],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "pass"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 6,
+            "byReason": {
+              "profil-ne-propisuje-os": 11,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 2,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "fpzg-novinarstvo-diplomski",
+          "programs": [
+            "Diplomski studij Novinarstvo"
+          ],
+          "workTypes": [
+            "graduate"
+          ],
+          "profileStatus": "verified",
+          "offeredOptionCount": 5,
+          "mappedOptionCount": 5,
+          "ruleIds": [
+            "fpzg-novinarstvo-diplomski--font",
+            "fpzg-novinarstvo-diplomski--font-size",
+            "fpzg-novinarstvo-diplomski--justify",
+            "fpzg-novinarstvo-diplomski--line-spacing",
+            "fpzg-novinarstvo-diplomski--paper-size"
+          ],
+          "fixerIds": [
+            "alignment-fixer",
+            "font-fixer",
+            "line-spacing-fixer",
+            "paper-size-fixer"
+          ],
+          "templateIds": [
+            "basic-text-styles"
+          ],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "pass"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
+            "resolvedCount": 6,
+            "byReason": {
+              "profil-ne-propisuje-os": 11,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 2,
@@ -12281,6 +12460,176 @@
       ]
     },
     {
+      "unitId": "geoteh",
+      "facultyLabel": "Geotehnički fakultet",
+      "catalogStatus": "partial",
+      "profileCount": 3,
+      "profileIds": [
+        "geoteh-diplomski",
+        "geoteh-doktorski",
+        "geoteh-zavrsni"
+      ],
+      "offeredOptionCount": 0,
+      "mappedOptionCount": 0,
+      "ruleIds": [],
+      "fixerIds": [],
+      "realDocxSampleCount": 0,
+      "profilesWithoutRealDocx": [
+        "geoteh-diplomski",
+        "geoteh-doktorski",
+        "geoteh-zavrsni"
+      ],
+      "automaticTestSummary": {
+        "profileCoveragePassCount": 3,
+        "profileCoverageFailCount": 0,
+        "realCorpusPassCount": 0,
+        "realCorpusReviewCount": 0,
+        "realCorpusNoOpCount": 0,
+        "realCorpusFailCount": 0,
+        "syntheticClosedLoopPassCount": 0,
+        "syntheticClosedLoopNotRunCount": 0
+      },
+      "cellSummary": {
+        "cellCount": 93,
+        "coveredCount": 24,
+        "uncoveredCount": 69,
+        "resolvedCount": 3,
+        "byReason": {
+          "profil-ne-propisuje-os": 57,
+          "univerzalna-higijena-bez-dokaza": 0,
+          "closed-loop-nije-rijesio": 0,
+          "nema-dokaza": 0,
+          "ceka-ljudski-odabir": 6,
+          "trazi-ulaz-izvan-dokumenta": 6
+        }
+      },
+      "manualReviewReasons": [
+        "nema-stvarnog-docx-uzorka"
+      ],
+      "profiles": [
+        {
+          "profileId": "geoteh-diplomski",
+          "programs": [
+            "Inženjerstvo okoliša"
+          ],
+          "workTypes": [
+            "graduate"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "geoteh-doktorski",
+          "programs": [
+            "Inženjerstvo okoliša"
+          ],
+          "workTypes": [
+            "doctoral"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "geoteh-zavrsni",
+          "programs": [
+            "Inženjerstvo okoliša"
+          ],
+          "workTypes": [
+            "final"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        }
+      ]
+    },
+    {
       "unitId": "grad",
       "facultyLabel": "Građevinski fakultet",
       "catalogStatus": "generic",
@@ -13047,6 +13396,92 @@
             "resolvedCount": 5,
             "byReason": {
               "profil-ne-propisuje-os": 15,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "hig",
+      "facultyLabel": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+      "catalogStatus": "partial",
+      "profileCount": 1,
+      "profileIds": [
+        "hig-zavrsni"
+      ],
+      "offeredOptionCount": 0,
+      "mappedOptionCount": 0,
+      "ruleIds": [],
+      "fixerIds": [],
+      "realDocxSampleCount": 0,
+      "profilesWithoutRealDocx": [
+        "hig-zavrsni"
+      ],
+      "automaticTestSummary": {
+        "profileCoveragePassCount": 1,
+        "profileCoverageFailCount": 0,
+        "realCorpusPassCount": 0,
+        "realCorpusReviewCount": 0,
+        "realCorpusNoOpCount": 0,
+        "realCorpusFailCount": 0,
+        "syntheticClosedLoopPassCount": 0,
+        "syntheticClosedLoopNotRunCount": 0
+      },
+      "cellSummary": {
+        "cellCount": 31,
+        "coveredCount": 8,
+        "uncoveredCount": 23,
+        "resolvedCount": 1,
+        "byReason": {
+          "profil-ne-propisuje-os": 19,
+          "univerzalna-higijena-bez-dokaza": 0,
+          "closed-loop-nije-rijesio": 0,
+          "nema-dokaza": 0,
+          "ceka-ljudski-odabir": 2,
+          "trazi-ulaz-izvan-dokumenta": 2
+        }
+      },
+      "manualReviewReasons": [
+        "nema-stvarnog-docx-uzorka"
+      ],
+      "profiles": [
+        {
+          "profileId": "hig-zavrsni",
+          "programs": [
+            "Hotelijerstvo i gastronomija"
+          ],
+          "workTypes": [
+            "final"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 0,
@@ -15742,10 +16177,12 @@
       "unitId": "medri",
       "facultyLabel": "Medicinski fakultet u Rijeci",
       "catalogStatus": "partial",
-      "profileCount": 2,
+      "profileCount": 4,
       "profileIds": [
         "medri-farmacija-diplomski",
-        "medri-medicina-diplomski"
+        "medri-medicina-diplomski",
+        "medri-sanitarno-diplomski",
+        "medri-doktorski"
       ],
       "offeredOptionCount": 8,
       "mappedOptionCount": 8,
@@ -15768,10 +16205,12 @@
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
         "medri-farmacija-diplomski",
-        "medri-medicina-diplomski"
+        "medri-medicina-diplomski",
+        "medri-sanitarno-diplomski",
+        "medri-doktorski"
       ],
       "automaticTestSummary": {
-        "profileCoveragePassCount": 2,
+        "profileCoveragePassCount": 4,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
         "realCorpusReviewCount": 0,
@@ -15781,17 +16220,17 @@
         "syntheticClosedLoopNotRunCount": 0
       },
       "cellSummary": {
-        "cellCount": 62,
-        "coveredCount": 22,
-        "uncoveredCount": 40,
-        "resolvedCount": 8,
+        "cellCount": 124,
+        "coveredCount": 38,
+        "uncoveredCount": 86,
+        "resolvedCount": 10,
         "byReason": {
-          "profil-ne-propisuje-os": 30,
+          "profil-ne-propisuje-os": 68,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
           "nema-dokaza": 2,
-          "ceka-ljudski-odabir": 4,
-          "trazi-ulaz-izvan-dokumenta": 4
+          "ceka-ljudski-odabir": 8,
+          "trazi-ulaz-izvan-dokumenta": 8
         }
       },
       "manualReviewReasons": [
@@ -15893,6 +16332,90 @@
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 1,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "medri-sanitarno-diplomski",
+          "programs": [
+            "Sanitarno inženjerstvo"
+          ],
+          "workTypes": [
+            "graduate"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "medri-doktorski",
+          "programs": [
+            "Biomedicina",
+            "Dentalna medicina",
+            "Javno zdravstvo",
+            "Klinička medicina",
+            "Zdravstveno i ekološko inženjerstvo"
+          ],
+          "workTypes": [
+            "doctoral"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -16248,9 +16771,11 @@
       "unitId": "mefst",
       "facultyLabel": "Medicinski fakultet u Splitu",
       "catalogStatus": "partial",
-      "profileCount": 1,
+      "profileCount": 3,
       "profileIds": [
-        "mefst-diplomski"
+        "mefst-diplomski",
+        "mefst-doktorski",
+        "mefst-tribe-doktorski"
       ],
       "offeredOptionCount": 6,
       "mappedOptionCount": 6,
@@ -16271,10 +16796,12 @@
       ],
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
-        "mefst-diplomski"
+        "mefst-diplomski",
+        "mefst-doktorski",
+        "mefst-tribe-doktorski"
       ],
       "automaticTestSummary": {
-        "profileCoveragePassCount": 1,
+        "profileCoveragePassCount": 3,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
         "realCorpusReviewCount": 0,
@@ -16284,17 +16811,17 @@
         "syntheticClosedLoopNotRunCount": 0
       },
       "cellSummary": {
-        "cellCount": 31,
-        "coveredCount": 13,
-        "uncoveredCount": 18,
-        "resolvedCount": 6,
+        "cellCount": 93,
+        "coveredCount": 29,
+        "uncoveredCount": 64,
+        "resolvedCount": 8,
         "byReason": {
-          "profil-ne-propisuje-os": 14,
+          "profil-ne-propisuje-os": 52,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
           "nema-dokaza": 0,
-          "ceka-ljudski-odabir": 2,
-          "trazi-ulaz-izvan-dokumenta": 2
+          "ceka-ljudski-odabir": 6,
+          "trazi-ulaz-izvan-dokumenta": 6
         }
       },
       "manualReviewReasons": [
@@ -16344,6 +16871,87 @@
             "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 14,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "mefst-doktorski",
+          "programs": [
+            "Biologija novotvorina",
+            "Klinička medicina utemeljena na dokazima"
+          ],
+          "workTypes": [
+            "doctoral"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "mefst-tribe-doktorski",
+          "programs": [
+            "Translacijska istraživanja u biomedicini"
+          ],
+          "workTypes": [
+            "doctoral"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 0,
@@ -17027,6 +17635,134 @@
             "resolvedCount": 5,
             "byReason": {
               "profil-ne-propisuje-os": 15,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "mvi",
+      "facultyLabel": "Teološki fakultet Matija Vlačić Ilirik",
+      "catalogStatus": "partial",
+      "profileCount": 2,
+      "profileIds": [
+        "mvi-diplomski",
+        "mvi-prijediplomski"
+      ],
+      "offeredOptionCount": 0,
+      "mappedOptionCount": 0,
+      "ruleIds": [],
+      "fixerIds": [],
+      "realDocxSampleCount": 0,
+      "profilesWithoutRealDocx": [
+        "mvi-diplomski",
+        "mvi-prijediplomski"
+      ],
+      "automaticTestSummary": {
+        "profileCoveragePassCount": 2,
+        "profileCoverageFailCount": 0,
+        "realCorpusPassCount": 0,
+        "realCorpusReviewCount": 0,
+        "realCorpusNoOpCount": 0,
+        "realCorpusFailCount": 0,
+        "syntheticClosedLoopPassCount": 0,
+        "syntheticClosedLoopNotRunCount": 0
+      },
+      "cellSummary": {
+        "cellCount": 62,
+        "coveredCount": 16,
+        "uncoveredCount": 46,
+        "resolvedCount": 2,
+        "byReason": {
+          "profil-ne-propisuje-os": 38,
+          "univerzalna-higijena-bez-dokaza": 0,
+          "closed-loop-nije-rijesio": 0,
+          "nema-dokaza": 0,
+          "ceka-ljudski-odabir": 4,
+          "trazi-ulaz-izvan-dokumenta": 4
+        }
+      },
+      "manualReviewReasons": [
+        "nema-stvarnog-docx-uzorka"
+      ],
+      "profiles": [
+        {
+          "profileId": "mvi-diplomski",
+          "programs": [
+            "Protestantska teologija"
+          ],
+          "workTypes": [
+            "graduate"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "mvi-prijediplomski",
+          "programs": [
+            "Protestantska teologija"
+          ],
+          "workTypes": [
+            "final"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 0,
@@ -18180,14 +18916,16 @@
       "unitId": "pmf",
       "facultyLabel": "Prirodoslovno-matematički fakultet",
       "catalogStatus": "partial",
-      "profileCount": 6,
+      "profileCount": 8,
       "profileIds": [
         "pmf-geografija-diplomski",
         "pmf-biologija-graduate",
         "pmf-fizika-graduate",
         "pmf-matematika-graduate",
         "pmf-geologija-graduate",
-        "pmf-geofizika-graduate"
+        "pmf-geofizika-graduate",
+        "pmf-biologija-zavrsni",
+        "pmf-geologija-zavrsni"
       ],
       "offeredOptionCount": 27,
       "mappedOptionCount": 27,
@@ -18233,30 +18971,32 @@
         "pmf-biologija-graduate",
         "pmf-fizika-graduate",
         "pmf-geologija-graduate",
-        "pmf-geofizika-graduate"
+        "pmf-geofizika-graduate",
+        "pmf-biologija-zavrsni",
+        "pmf-geologija-zavrsni"
       ],
       "automaticTestSummary": {
-        "profileCoveragePassCount": 6,
+        "profileCoveragePassCount": 8,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
         "realCorpusReviewCount": 2,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
-        "syntheticClosedLoopPassCount": 6,
+        "syntheticClosedLoopPassCount": 8,
         "syntheticClosedLoopNotRunCount": 0
       },
       "cellSummary": {
-        "cellCount": 186,
-        "coveredCount": 71,
-        "uncoveredCount": 115,
-        "resolvedCount": 29,
+        "cellCount": 248,
+        "coveredCount": 87,
+        "uncoveredCount": 161,
+        "resolvedCount": 31,
         "byReason": {
-          "profil-ne-propisuje-os": 89,
+          "profil-ne-propisuje-os": 124,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 2,
-          "ceka-ljudski-odabir": 12,
-          "trazi-ulaz-izvan-dokumenta": 12
+          "nema-dokaza": 5,
+          "ceka-ljudski-odabir": 16,
+          "trazi-ulaz-izvan-dokumenta": 16
         }
       },
       "manualReviewReasons": [
@@ -18571,6 +19311,85 @@
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 1,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "pmf-biologija-zavrsni",
+          "programs": [
+            "Biologija",
+            "Molekularna biologija"
+          ],
+          "workTypes": [
+            "final"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "pass"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "pmf-geologija-zavrsni",
+          "programs": [
+            "Geologija"
+          ],
+          "workTypes": [],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "pass"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 16,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 3,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
@@ -26924,10 +27743,11 @@
       "unitId": "vef",
       "facultyLabel": "Veterinarski fakultet",
       "catalogStatus": "generic",
-      "profileCount": 2,
+      "profileCount": 3,
       "profileIds": [
         "vef-diplomski",
-        "vef-doktorski"
+        "vef-doktorski",
+        "vef-specijalisticki"
       ],
       "offeredOptionCount": 10,
       "mappedOptionCount": 10,
@@ -26952,10 +27772,11 @@
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
         "vef-diplomski",
-        "vef-doktorski"
+        "vef-doktorski",
+        "vef-specijalisticki"
       ],
       "automaticTestSummary": {
-        "profileCoveragePassCount": 2,
+        "profileCoveragePassCount": 3,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
         "realCorpusReviewCount": 0,
@@ -26965,17 +27786,17 @@
         "syntheticClosedLoopNotRunCount": 0
       },
       "cellSummary": {
-        "cellCount": 62,
-        "coveredCount": 25,
-        "uncoveredCount": 37,
-        "resolvedCount": 11,
+        "cellCount": 93,
+        "coveredCount": 33,
+        "uncoveredCount": 60,
+        "resolvedCount": 12,
         "byReason": {
-          "profil-ne-propisuje-os": 29,
+          "profil-ne-propisuje-os": 48,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
           "nema-dokaza": 0,
-          "ceka-ljudski-odabir": 4,
-          "trazi-ulaz-izvan-dokumenta": 4
+          "ceka-ljudski-odabir": 6,
+          "trazi-ulaz-izvan-dokumenta": 6
         }
       },
       "manualReviewReasons": [
@@ -27077,6 +27898,58 @@
             "resolvedCount": 5,
             "byReason": {
               "profil-ne-propisuje-os": 15,
+              "univerzalna-higijena-bez-dokaza": 0,
+              "closed-loop-nije-rijesio": 0,
+              "nema-dokaza": 0,
+              "ceka-ljudski-odabir": 2,
+              "trazi-ulaz-izvan-dokumenta": 2
+            }
+          },
+          "realCorpusOutcomes": {},
+          "manualReviewReasons": [
+            "nema-stvarnog-docx-uzorka"
+          ]
+        },
+        {
+          "profileId": "vef-specijalisticki",
+          "programs": [
+            "Proizvodnja i zaštita zdravlja svinja",
+            "Higijena i tehnologija hrane životinjskog podrijetla",
+            "Kirurgija, anesteziologija i oftalmologija s veterinarskom stomatologijom",
+            "Uzgoj i patologija egzotičnih kućnih ljubimaca",
+            "Mikrobiologija i epizootiologija",
+            "Teriogenologija domaćih sisavaca",
+            "Uzgoj i patologija divljači",
+            "Sanitacija",
+            "Veterinarska patologija",
+            "Dobrobit životinja",
+            "Sudsko veterinarstvo",
+            "Provedba veterinarskih postupaka sigurnosti hrane u klaoničkom objektu",
+            "Menadžment reprodukcijskog zdravlja mliječnih krava"
+          ],
+          "workTypes": [
+            "specialist"
+          ],
+          "profileStatus": "partial",
+          "offeredOptionCount": 0,
+          "mappedOptionCount": 0,
+          "ruleIds": [],
+          "fixerIds": [],
+          "templateIds": [],
+          "realDocxSampleCount": 0,
+          "automaticTests": {
+            "profileCoverage": "pass",
+            "realCorpus": "not-run",
+            "syntheticClosedLoop": "no-rules"
+          },
+          "closedLoopAxesRemaining": [],
+          "cellSummary": {
+            "cellCount": 31,
+            "coveredCount": 8,
+            "uncoveredCount": 23,
+            "resolvedCount": 1,
+            "byReason": {
+              "profil-ne-propisuje-os": 19,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
               "nema-dokaza": 0,
@@ -30365,38 +31238,38 @@
     }
   ],
   "summary": {
-    "facultyCount": 131,
-    "profileCount": 407,
+    "facultyCount": 135,
+    "profileCount": 423,
     "offeredOptionCount": 1751,
     "mappedOptionCount": 1751,
     "realDocxSampleCount": 7,
     "facultiesWithRealDocx": 5,
-    "facultiesWithoutRealDocx": 126,
-    "profilesWithoutRealDocx": 402,
+    "facultiesWithoutRealDocx": 130,
+    "profilesWithoutRealDocx": 418,
     "profileCoverageFailCount": 0,
     "realCorpusPassCount": 0,
     "realCorpusReviewCount": 5,
     "realCorpusNoOpCount": 2,
     "realCorpusFailCount": 0,
-    "syntheticClosedLoopPassCount": 372,
+    "syntheticClosedLoopPassCount": 374,
     "syntheticClosedLoopNotRunCount": 0,
-    "cellCount": 12617,
-    "coveredCellCount": 4758,
-    "uncoveredCellCount": 7859,
-    "resolvedCellCount": 1877
+    "cellCount": 13113,
+    "coveredCellCount": 4886,
+    "uncoveredCellCount": 8227,
+    "resolvedCellCount": 1893
   },
   "cellSummary": {
-    "cellCount": 12617,
-    "coveredCount": 4758,
-    "uncoveredCount": 7859,
-    "resolvedCount": 1877,
+    "cellCount": 13113,
+    "coveredCount": 4886,
+    "uncoveredCount": 8227,
+    "resolvedCount": 1893,
     "byReason": {
-      "profil-ne-propisuje-os": 6107,
+      "profil-ne-propisuje-os": 6408,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 124,
-      "ceka-ljudski-odabir": 814,
-      "trazi-ulaz-izvan-dokumenta": 814
+      "nema-dokaza": 127,
+      "ceka-ljudski-odabir": 846,
+      "trazi-ulaz-izvan-dokumenta": 846
     }
   }
 }

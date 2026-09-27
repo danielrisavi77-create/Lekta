@@ -1,0 +1,94 @@
+{
+  "profileId": "mefst-doktorski",
+  "entries": [
+    {
+      "ruleId": "mefst-doktorski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
+      "checkId": "paper-size",
+      "value": "A4",
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "mefst-naputak-doktorski",
+      "sourcePage": "str. 1, prva natuknica pod naslovom Naputak za izradu doktorskog rada",
+      "quote": "Format radova je A4",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "mefst-doktorski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Brojevi stranica",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "mefst-naputak-doktorski",
+      "sourcePage": "str. 1, natuknica o stranicama",
+      "quote": "Stranice označiti brojevima",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "mefst-doktorski--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "modalitySource": "mechanical",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Preporučeni font",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "mefst-naputak-doktorski",
+      "sourcePage": "str. 1, završne natuknice",
+      "quote": "Preporuča se koristiti prored 1.5, Times New Roman font veličine 12.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "mefst-doktorski--font-size",
+      "modality": "recommendation",
+      "scope": "body",
+      "modalitySource": "mechanical",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Preporučena veličina slova",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "mefst-naputak-doktorski",
+      "sourcePage": "str. 1, završne natuknice",
+      "quote": "Preporuča se koristiti prored 1.5, Times New Roman font veličine 12.",
+      "status": "draft",
+      "scored": false
+    },
+    {
+      "ruleId": "mefst-doktorski--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "modalitySource": "mechanical",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Preporučeni prored",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "mefst-naputak-doktorski",
+      "sourcePage": "str. 1, završne natuknice",
+      "quote": "Preporuča se koristiti prored 1.5, Times New Roman font veličine 12.",
+      "status": "draft",
+      "scored": false
+    }
+  ]
+}

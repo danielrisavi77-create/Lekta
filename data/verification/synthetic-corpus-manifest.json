@@ -2,40 +2,40 @@
   "schemaVersion": 1,
   "note": "Popis redaka sintetickog korpusa. Proza i generirani dokumenti zive IZVAN repozitorija (LEKTA_SYNTHETIC_CORPUS); ovdje su samo redci i njihova slozena pravila. Nijedan redak nije izvor bodovanog pravila i nijedan ne moze potkrijepiti razinu dokaza A.",
   "summary": {
-    "rowCount": 720,
-    "unitCount": 134,
-    "withoutFacultyProfile": 443,
-    "defaultWordTarget": 716,
-    "substituteProgram": 191,
-    "totalWords": 4102550,
+    "rowCount": 750,
+    "unitCount": 139,
+    "withoutFacultyProfile": 463,
+    "defaultWordTarget": 746,
+    "substituteProgram": 220,
+    "totalWords": 4310050,
     "byWorkTypeLevel": {
       "final/prijediplomski": {
-        "ukupno": 134,
+        "ukupno": 139,
         "bezProfila": 42
       },
       "graduate/diplomski": {
-        "ukupno": 134,
-        "bezProfila": 14
+        "ukupno": 139,
+        "bezProfila": 18
       },
       "seminar/diplomski": {
-        "ukupno": 134,
-        "bezProfila": 125
+        "ukupno": 139,
+        "bezProfila": 130
       },
       "seminar/poslijediplomski": {
-        "ukupno": 134,
-        "bezProfila": 129
+        "ukupno": 139,
+        "bezProfila": 134
       },
       "seminar/prijediplomski": {
-        "ukupno": 134,
-        "bezProfila": 125
+        "ukupno": 139,
+        "bezProfila": 130
       },
       "doctoral/poslijediplomski": {
-        "ukupno": 26,
+        "ukupno": 29,
         "bezProfila": 0
       },
       "specialist/poslijediplomski": {
-        "ukupno": 8,
-        "bezProfila": 6
+        "ukupno": 10,
+        "bezProfila": 7
       },
       "article/diplomski": {
         "ukupno": 8,
@@ -407,6 +407,172 @@
       "level": "prijediplomski",
       "program": "Prijediplomski studiji Agronomskog fakulteta (zavrsni rad)",
       "programSource": "level-match",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "stem",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "agromed--final--prijediplomski",
+      "unitId": "agromed",
+      "unitName": "Agromediteranski fakultet",
+      "family": "stem",
+      "workType": "final",
+      "level": "prijediplomski",
+      "program": "Mediteranska poljoprivreda",
+      "programSource": "fallback",
+      "routedProfileId": "agromed-zavrsni",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 5500,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false
+      }
+    },
+    {
+      "id": "agromed--graduate--diplomski",
+      "unitId": "agromed",
+      "unitName": "Agromediteranski fakultet",
+      "family": "stem",
+      "workType": "graduate",
+      "level": "diplomski",
+      "program": "Mediteranska poljoprivreda",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "stem",
+      "wordTarget": 11000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": true,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "agromed--seminar--diplomski",
+      "unitId": "agromed",
+      "unitName": "Agromediteranski fakultet",
+      "family": "stem",
+      "workType": "seminar",
+      "level": "diplomski",
+      "program": "Mediteranska poljoprivreda",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "stem",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "agromed--seminar--poslijediplomski",
+      "unitId": "agromed",
+      "unitName": "Agromediteranski fakultet",
+      "family": "stem",
+      "workType": "seminar",
+      "level": "poslijediplomski",
+      "program": "Mediteranska poljoprivreda",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "stem",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "agromed--seminar--prijediplomski",
+      "unitId": "agromed",
+      "unitName": "Agromediteranski fakultet",
+      "family": "stem",
+      "workType": "seminar",
+      "level": "prijediplomski",
+      "program": "Mediteranska poljoprivreda",
+      "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
       "fallbackFamily": "stem",
@@ -2381,6 +2547,191 @@
       }
     },
     {
+      "id": "cps--final--prijediplomski",
+      "unitId": "cps",
+      "unitName": "Centar za poslijediplomske studije",
+      "family": "mixed",
+      "workType": "final",
+      "level": "prijediplomski",
+      "program": "Konferencijsko prevođenje",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "mixed",
+      "wordTarget": 5500,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": true,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "cps--graduate--diplomski",
+      "unitId": "cps",
+      "unitName": "Centar za poslijediplomske studije",
+      "family": "mixed",
+      "workType": "graduate",
+      "level": "diplomski",
+      "program": "Konferencijsko prevođenje",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "mixed",
+      "wordTarget": 11000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": true,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "cps--seminar--diplomski",
+      "unitId": "cps",
+      "unitName": "Centar za poslijediplomske studije",
+      "family": "mixed",
+      "workType": "seminar",
+      "level": "diplomski",
+      "program": "Konferencijsko prevođenje",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "mixed",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "cps--seminar--poslijediplomski",
+      "unitId": "cps",
+      "unitName": "Centar za poslijediplomske studije",
+      "family": "mixed",
+      "workType": "seminar",
+      "level": "poslijediplomski",
+      "program": "Konferencijsko prevođenje",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "mixed",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "cps--seminar--prijediplomski",
+      "unitId": "cps",
+      "unitName": "Centar za poslijediplomske studije",
+      "family": "mixed",
+      "workType": "seminar",
+      "level": "prijediplomski",
+      "program": "Konferencijsko prevođenje",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "mixed",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
       "id": "effectus--final--prijediplomski",
       "unitId": "effectus",
       "unitName": "EFFECTUS veleučilište",
@@ -3160,7 +3511,7 @@
       "family": "social",
       "workType": "seminar",
       "level": "poslijediplomski",
-      "program": "Sveučilišni diplomski studij Poslovna ekonomija",
+      "program": "Ekonomija energetskog sektora-MBA",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -3225,6 +3576,26 @@
         "justify": true,
         "requireToc": false,
         "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "efri--specialist--poslijediplomski",
+      "unitId": "efri",
+      "unitName": "Ekonomski fakultet u Rijeci",
+      "family": "social",
+      "workType": "specialist",
+      "level": "poslijediplomski",
+      "program": "Ekonomija energetskog sektora-MBA",
+      "programSource": "fallback",
+      "routedProfileId": "efri-specijalisticki",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 10000,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false,
+        "requireToc": false,
+        "requirePageNumbers": false
       }
     },
     {
@@ -11479,6 +11850,171 @@
       }
     },
     {
+      "id": "geoteh--doctoral--poslijediplomski",
+      "unitId": "geoteh",
+      "unitName": "Geotehnički fakultet",
+      "family": "stem",
+      "workType": "doctoral",
+      "level": "poslijediplomski",
+      "program": "Inženjerstvo okoliša",
+      "programSource": "fallback",
+      "routedProfileId": "geoteh-doktorski",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 20000,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false
+      }
+    },
+    {
+      "id": "geoteh--final--prijediplomski",
+      "unitId": "geoteh",
+      "unitName": "Geotehnički fakultet",
+      "family": "stem",
+      "workType": "final",
+      "level": "prijediplomski",
+      "program": "Inženjerstvo okoliša",
+      "programSource": "fallback",
+      "routedProfileId": "geoteh-zavrsni",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 5500,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false
+      }
+    },
+    {
+      "id": "geoteh--graduate--diplomski",
+      "unitId": "geoteh",
+      "unitName": "Geotehnički fakultet",
+      "family": "stem",
+      "workType": "graduate",
+      "level": "diplomski",
+      "program": "Inženjerstvo okoliša",
+      "programSource": "fallback",
+      "routedProfileId": "geoteh-diplomski",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 11000,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false
+      }
+    },
+    {
+      "id": "geoteh--seminar--diplomski",
+      "unitId": "geoteh",
+      "unitName": "Geotehnički fakultet",
+      "family": "stem",
+      "workType": "seminar",
+      "level": "diplomski",
+      "program": "Inženjerstvo okoliša",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "stem",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "geoteh--seminar--poslijediplomski",
+      "unitId": "geoteh",
+      "unitName": "Geotehnički fakultet",
+      "family": "stem",
+      "workType": "seminar",
+      "level": "poslijediplomski",
+      "program": "Inženjerstvo okoliša",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "stem",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "geoteh--seminar--prijediplomski",
+      "unitId": "geoteh",
+      "unitName": "Geotehnički fakultet",
+      "family": "stem",
+      "workType": "seminar",
+      "level": "prijediplomski",
+      "program": "Inženjerstvo okoliša",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "stem",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
       "id": "grad--doctoral--poslijediplomski",
       "unitId": "grad",
       "unitName": "Građevinski fakultet",
@@ -12351,6 +12887,172 @@
       "routedProfileId": null,
       "variant": null,
       "fallbackFamily": "stem",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "hig--final--prijediplomski",
+      "unitId": "hig",
+      "unitName": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+      "family": "social",
+      "workType": "final",
+      "level": "prijediplomski",
+      "program": "Hotelijerstvo i gastronomija",
+      "programSource": "fallback",
+      "routedProfileId": "hig-zavrsni",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 5500,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false
+      }
+    },
+    {
+      "id": "hig--graduate--diplomski",
+      "unitId": "hig",
+      "unitName": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+      "family": "social",
+      "workType": "graduate",
+      "level": "diplomski",
+      "program": "Hotelijerstvo i gastronomija",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "social",
+      "wordTarget": 11000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": true,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "hig--seminar--diplomski",
+      "unitId": "hig",
+      "unitName": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+      "family": "social",
+      "workType": "seminar",
+      "level": "diplomski",
+      "program": "Hotelijerstvo i gastronomija",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "social",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "hig--seminar--poslijediplomski",
+      "unitId": "hig",
+      "unitName": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+      "family": "social",
+      "workType": "seminar",
+      "level": "poslijediplomski",
+      "program": "Hotelijerstvo i gastronomija",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "social",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "hig--seminar--prijediplomski",
+      "unitId": "hig",
+      "unitName": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+      "family": "social",
+      "workType": "seminar",
+      "level": "prijediplomski",
+      "program": "Hotelijerstvo i gastronomija",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "social",
       "wordTarget": 3000,
       "wordTargetSource": "default",
       "rules": {
@@ -15887,6 +16589,26 @@
       }
     },
     {
+      "id": "medri--doctoral--poslijediplomski",
+      "unitId": "medri",
+      "unitName": "Medicinski fakultet u Rijeci",
+      "family": "biomed",
+      "workType": "doctoral",
+      "level": "poslijediplomski",
+      "program": "Biomedicina",
+      "programSource": "fallback",
+      "routedProfileId": "medri-doktorski",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 20000,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false,
+        "requireToc": false,
+        "requirePageNumbers": false
+      }
+    },
+    {
       "id": "medri--final--prijediplomski",
       "unitId": "medri",
       "unitName": "Medicinski fakultet u Rijeci",
@@ -15930,31 +16652,34 @@
       "family": "biomed",
       "workType": "graduate",
       "level": "diplomski",
-      "program": "Sveučilišni integrirani prijediplomski i diplomski studij Farmacija",
+      "program": "Biomedicina",
       "programSource": "fallback",
-      "routedProfileId": "medri-farmacija-diplomski",
+      "routedProfileId": null,
       "variant": null,
-      "fallbackFamily": null,
+      "fallbackFamily": "biomed",
       "wordTarget": 11000,
       "wordTargetSource": "default",
       "rules": {
-        "size": [
-          12
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
         ],
-        "spacing": 2,
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
         "margins": {
           "top": 2.5,
           "right": 2.5,
           "bottom": 2.5,
           "left": 2.5
         },
-        "paperSizes": [
-          "A4"
-        ],
-        "requireA4": true,
-        "requireToc": false,
-        "requirePageNumbers": false,
-        "recommendedCitation": "vancouver"
+        "requireA4": false,
+        "justify": true,
+        "requireToc": true,
+        "requirePageNumbers": true
       }
     },
     {
@@ -15964,7 +16689,7 @@
       "family": "biomed",
       "workType": "seminar",
       "level": "diplomski",
-      "program": "Sveučilišni integrirani prijediplomski i diplomski studij Farmacija",
+      "program": "Biomedicina",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -16001,7 +16726,7 @@
       "family": "biomed",
       "workType": "seminar",
       "level": "poslijediplomski",
-      "program": "Sveučilišni integrirani prijediplomski i diplomski studij Farmacija",
+      "program": "Biomedicina",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -16497,13 +17222,33 @@
       }
     },
     {
+      "id": "mefst--doctoral--poslijediplomski",
+      "unitId": "mefst",
+      "unitName": "Medicinski fakultet u Splitu",
+      "family": "biomed",
+      "workType": "doctoral",
+      "level": "poslijediplomski",
+      "program": "Biologija novotvorina",
+      "programSource": "fallback",
+      "routedProfileId": "mefst-doktorski",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 20000,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false,
+        "requireToc": false,
+        "requirePageNumbers": false
+      }
+    },
+    {
       "id": "mefst--final--prijediplomski",
       "unitId": "mefst",
       "unitName": "Medicinski fakultet u Splitu",
       "family": "biomed",
       "workType": "final",
       "level": "prijediplomski",
-      "program": "Integrirani studij medicine (MEFST, diplomski rad)",
+      "program": "Biologija novotvorina",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -16615,7 +17360,7 @@
       "family": "biomed",
       "workType": "seminar",
       "level": "poslijediplomski",
-      "program": "Integrirani studij medicine (MEFST, diplomski rad)",
+      "program": "Biologija novotvorina",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -16652,7 +17397,7 @@
       "family": "biomed",
       "workType": "seminar",
       "level": "prijediplomski",
-      "program": "Integrirani studij medicine (MEFST, diplomski rad)",
+      "program": "Biologija novotvorina",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -17529,6 +18274,153 @@
       "routedProfileId": null,
       "variant": null,
       "fallbackFamily": "arts",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "mvi--final--prijediplomski",
+      "unitId": "mvi",
+      "unitName": "Teološki fakultet Matija Vlačić Ilirik",
+      "family": "social",
+      "workType": "final",
+      "level": "prijediplomski",
+      "program": "Protestantska teologija",
+      "programSource": "fallback",
+      "routedProfileId": "mvi-prijediplomski",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 5500,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false
+      }
+    },
+    {
+      "id": "mvi--graduate--diplomski",
+      "unitId": "mvi",
+      "unitName": "Teološki fakultet Matija Vlačić Ilirik",
+      "family": "social",
+      "workType": "graduate",
+      "level": "diplomski",
+      "program": "Protestantska teologija",
+      "programSource": "fallback",
+      "routedProfileId": "mvi-diplomski",
+      "variant": null,
+      "fallbackFamily": null,
+      "wordTarget": 11000,
+      "wordTargetSource": "default",
+      "rules": {
+        "requireA4": false
+      }
+    },
+    {
+      "id": "mvi--seminar--diplomski",
+      "unitId": "mvi",
+      "unitName": "Teološki fakultet Matija Vlačić Ilirik",
+      "family": "social",
+      "workType": "seminar",
+      "level": "diplomski",
+      "program": "Protestantska teologija",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "social",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "mvi--seminar--poslijediplomski",
+      "unitId": "mvi",
+      "unitName": "Teološki fakultet Matija Vlačić Ilirik",
+      "family": "social",
+      "workType": "seminar",
+      "level": "poslijediplomski",
+      "program": "Protestantska teologija",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "social",
+      "wordTarget": 3000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "mvi--seminar--prijediplomski",
+      "unitId": "mvi",
+      "unitName": "Teološki fakultet Matija Vlačić Ilirik",
+      "family": "social",
+      "workType": "seminar",
+      "level": "prijediplomski",
+      "program": "Protestantska teologija",
+      "programSource": "fallback",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "social",
       "wordTarget": 3000,
       "wordTargetSource": "default",
       "rules": {
@@ -19087,20 +19979,15 @@
       "level": "prijediplomski",
       "program": "Biologija",
       "programSource": "fallback",
-      "routedProfileId": null,
+      "routedProfileId": "pmf-biologija-zavrsni",
       "variant": null,
-      "fallbackFamily": "stem",
+      "fallbackFamily": null,
       "wordTarget": 5500,
       "wordTargetSource": "default",
       "rules": {
-        "font": [
-          "Times New Roman",
-          "Arial",
-          "Calibri"
-        ],
         "size": [
-          12,
-          11
+          11,
+          12
         ],
         "spacing": 1.5,
         "margins": {
@@ -19109,10 +19996,10 @@
           "bottom": 2.5,
           "left": 2.5
         },
+        "paperSizes": [],
         "requireA4": false,
-        "justify": true,
-        "requireToc": true,
-        "requirePageNumbers": true
+        "requireToc": false,
+        "requirePageNumbers": false
       }
     },
     {
@@ -25315,7 +26202,7 @@
       "family": "biomed",
       "workType": "final",
       "level": "prijediplomski",
-      "program": "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu",
+      "program": "Agri Food Chain Microbiology",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -25457,7 +26344,7 @@
       "family": "biomed",
       "workType": "seminar",
       "level": "prijediplomski",
-      "program": "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu",
+      "program": "Agri Food Chain Microbiology",
       "programSource": "fallback",
       "routedProfileId": null,
       "variant": null,
@@ -25484,6 +26371,43 @@
         "requireA4": false,
         "justify": true,
         "requireToc": false,
+        "requirePageNumbers": true
+      }
+    },
+    {
+      "id": "vef--specialist--poslijediplomski",
+      "unitId": "vef",
+      "unitName": "Veterinarski fakultet",
+      "family": "biomed",
+      "workType": "specialist",
+      "level": "poslijediplomski",
+      "program": "Doktorski studij Veterinarskog fakulteta",
+      "programSource": "level-match",
+      "routedProfileId": null,
+      "variant": null,
+      "fallbackFamily": "biomed",
+      "wordTarget": 10000,
+      "wordTargetSource": "default",
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          12,
+          11
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": false,
+        "justify": true,
+        "requireToc": true,
         "requirePageNumbers": true
       }
     },
@@ -28871,7 +29795,7 @@
       }
     }
   ],
-  "generatedAt": "2026-09-06T18:20:11.345Z",
-  "generatedFromCommit": "5d112dd3ef522df554d8ba0b9300880948f942ce",
+  "generatedAt": "2026-09-26T22:19:15.339Z",
+  "generatedFromCommit": "59cc82e212d6015ac8ee14a6c782e6a355fea5ba",
   "generator": "npx vite-node scripts/corpus-gen/plan-rows.mts -- --write"
 }

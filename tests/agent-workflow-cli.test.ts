@@ -4,12 +4,14 @@ import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, existsSync
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
+import { PROVIDER_PACKAGE_ENTRYPOINTS, probeCli } from '../scripts/agents/cli.mjs';
 
 const cli = resolve('scripts/agents/cli.mjs');
+const routingConfig = resolve('config/agent-routing.json');
 const roots: string[] = [];
 afterEach(() => { for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true }); });
 
-function fixture(event = 'turn.completed', grokMode: 'success' | 'sandbox-failure' | 'old-version' = 'success') {
+function fixture(event = 'turn.completed', grokMode: 'success' | 'sandbox-failure' | 'old-version' | 'writes-file' = 'success') {
   const root = mkdtempSync(join(tmpdir(), 'lekta-agents-'));
   roots.push(root);
   mkdirSync(join(root, 'docs/agents'), { recursive: true });
@@ -36,6 +38,7 @@ if (promptIndex < 0 || !fs.existsSync(args[promptIndex + 1])) process.exit(3);
 const prompt = fs.readFileSync(args[promptIndex + 1], 'utf8');
 if (!prompt.includes('LEKTA task T00') || args.includes(prompt)) process.exit(4);
 if (sandboxIndex < 0 || args[sandboxIndex + 1] !== 'read-only') process.exit(5);
+if ('${grokMode}' === 'writes-file') fs.writeFileSync('docs/leak.md', 'bot je pisao\\n');
 if ('${grokMode}' === 'sandbox-failure') {
   console.error('bwrap: Creating new namespace failed: Operation not permitted');
   process.exit(1);
@@ -126,6 +129,24 @@ describe.skipIf(process.platform === 'win32')('actual agent CLI process boundary
     expect(unsupported.status, unsupported.stderr).toBe(0);
     expect(unsupported.stdout).toContain('grok: grok 1.0.33 (old) [unsupported; minimum 1.0.34]');
   });
+  it('checks bot paths after the run: untouched tree passes, a written file fails the run', () => {
+    // config/agent-routing.json je namjerno nepracen prije pokretanja: vec prljavo stablo nije prekrsaj bota.
+    const clean = fixture();
+    mkdirSync(join(clean.root, 'config'));
+    writeFileSync(join(clean.root, 'config/agent-routing.json'), readFileSync(routingConfig));
+    const ok = clean.run('run', 'T00', '--phase', 'review', '--agent', 'grok', '--subscription', '--execute',
+      '--override-status', 'in_review', '--override-implementer', 'sonnet', '--bot', 'grok-review');
+    expect(ok.status, ok.stderr).toBe(0);
+    expect(JSON.parse(ok.stdout)).toMatchObject({ status: 'needs_verification', bot: 'grok-review', botPathViolations: [] });
+
+    const dirty = fixture('turn.completed', 'writes-file');
+    mkdirSync(join(dirty.root, 'config'));
+    writeFileSync(join(dirty.root, 'config/agent-routing.json'), readFileSync(routingConfig));
+    const bad = dirty.run('run', 'T00', '--phase', 'review', '--agent', 'grok', '--subscription', '--execute',
+      '--override-status', 'in_review', '--override-implementer', 'sonnet', '--bot', 'grok-review');
+    expect(bad.status).toBe(1);
+    expect(JSON.parse(bad.stdout)).toMatchObject({ status: 'failed', bot: 'grok-review', botPathViolations: ['docs/leak.md'] });
+  });
   it('refuses an unsupported Grok version before creating model artifacts', () => {
     const { root, run } = fixture('turn.completed', 'old-version');
     const result = run('run', 'T00', '--phase', 'plan', '--agent', 'grok', '--execute');
@@ -196,10 +217,82 @@ describe('option contract of the actual CLI process', () => {
     expect(readFileSync(join(root, 'docs/agents/tasks.json'), 'utf8')).toBe(before);
   });
 
+  function withRouting() {
+    const b = bare();
+    mkdirSync(join(b.root, 'config'));
+    writeFileSync(join(b.root, 'config/agent-routing.json'), readFileSync(routingConfig));
+    return b;
+  }
+  const review = ['--override-status', 'in_review', '--override-implementer', 'sonnet'];
+
+  it('accepts a Grok bot only on the subscription, in its own phase and for its own agent', () => {
+    const { run } = withRouting();
+    const ok = run('prepare', 'T00', '--phase', 'review', '--agent', 'grok', '--subscription', ...review, '--bot', 'grok-review');
+    expect(ok.status, ok.stderr).toBe(0);
+    const job = JSON.parse(ok.stdout);
+    expect(job).toMatchObject({ dryRun: true, bot: 'grok-review', command: 'grok', billingMode: 'subscription' });
+    expect(job.args).toContain('read-only');
+
+    const paid = run('prepare', 'T00', '--phase', 'review', '--agent', 'grok', '--budget-usd', '1', ...review, '--bot', 'grok-review');
+    expect(paid.status).toBe(1);
+    expect(paid.stderr).toContain('--bot requires --subscription');
+
+    const phase = run('prepare', 'T00', '--phase', 'review', '--agent', 'build', '--subscription', ...review, '--bot', 'grok-docs');
+    expect(phase.status).toBe(1);
+    expect(phase.stderr).toContain('runs only in --phase implement');
+
+    const agent = run('prepare', 'T00', '--phase', 'review', '--agent', 'build', '--subscription', ...review, '--bot', 'grok-review');
+    expect(agent.status).toBe(1);
+    expect(agent.stderr).toContain('requires --agent grok');
+
+    const unknown = run('prepare', 'T00', '--phase', 'review', '--agent', 'grok', '--subscription', ...review, '--bot', 'grok-writer');
+    expect(unknown.status).toBe(1);
+    expect(unknown.stderr).toContain('Unknown bot: grok-writer');
+
+    const codex = run('prepare', 'T00', '--phase', 'review', '--agent', 'astra', '--subscription', ...review, '--bot', 'grok-review');
+    expect(codex.status).toBe(1);
+    expect(codex.stderr).toContain('runs on provider grok, not codex');
+  });
+
   it('leaves the manual flow byte for byte unchanged when no override is given', () => {
     const { run } = bare();
     const job = JSON.parse(run('prepare', 'T00', '--phase', 'plan', '--agent', 'astra', '--subscription').stdout);
     expect(job.args).toEqual(['exec', '--model', 'gpt-6-astra', '--sandbox', 'read-only', '--json', '-']);
     expect(job.billingMode).toBe('subscription');
+  });
+});
+
+// Doctor ide kroz resolver na svakoj platformi: Windows put se mjeri podmetnutom platformom, ne preskace.
+describe('doctor probe through the provider resolver', () => {
+
+  it('runs the npm package bootstrap with node on win32 instead of the bare .cmd name', () => {
+    const calls: { command: string; args: string[] }[] = [];
+    // Stvarna mapa paketa iz cli.mjs, ne podmetnuta: doctor mora naci isti bootstrap kao `run`.
+    const bootstrap = join('npm-global', 'node_modules', ...PROVIDER_PACKAGE_ENTRYPOINTS.grok);
+    const line = probeCli('grok', {
+      platform: 'win32', cwd: 'repo', pathEnv: 'npm-global',
+      exists: (p: string) => p === bootstrap,
+      spawn: (command: string, args: string[]) => {
+        calls.push({ command, args });
+        return { status: 0, stdout: 'grok 1.0.34 (win)\n', stderr: '' };
+      },
+    });
+    expect(calls).toEqual([{ command: process.execPath, args: [bootstrap, 'version'] }]);
+    expect(line).toBe('grok: grok 1.0.34 (win) [supported]');
+  });
+
+  it('reports unavailable only when the resolved invocation fails', () => {
+    const calls: string[] = [];
+    const line = probeCli('grok', {
+      platform: 'win32', cwd: 'repo', pathEnv: '', exists: () => false,
+      spawn: (command: string) => { calls.push(command); return { status: null, stdout: '', stderr: '', error: new Error('ENOENT') }; },
+    });
+    expect(calls).toEqual(['grok']);
+    expect(line).toBe('grok: unavailable');
+    const linux = probeCli('codex', {
+      platform: 'linux',
+      spawn: (command: string, args: string[]) => ({ status: 0, stdout: `${command} ${args.join(' ')} 0.1\n`, stderr: '' }),
+    });
+    expect(linux).toBe('codex: codex --version 0.1');
   });
 });

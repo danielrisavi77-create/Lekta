@@ -6,7 +6,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   findBarePushWorkflows,
+  findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
+  findSelfHostedProblems,
+  WORD_PROOF_FILE,
   type NamedWorkflow,
   type WorkflowFile,
 } from './helpers/ci-workflow-triggers';
@@ -24,7 +27,7 @@ function loadWorkflows(): NamedWorkflow[] {
     .map((file) => {
       const raw = readFileSync(join(workflowsDir, file), 'utf8');
       const doc = parse(raw) as WorkflowFile;
-      return { file, doc };
+      return { file, doc, raw };
     });
 }
 
@@ -33,7 +36,15 @@ const PUSH_EXCEPTIONS = new Set<string>([
   'foundation-check.yml',
   // push je vezan iskljucivo uz gransku spike-granu
   // (architecture/lekta-katedra-foundation-v0.1), ne uz master; pull_request grana pokriva master.
+  'word-proof.yml',
+  // push na master i release/** (T80): Word dokaz na self-hosted runneru nema pull_request
+  // trigera, pa nema ni dvostrukog runa; dopustene grane provjerava zaseban test ispod.
 ]);
+
+// Jedini workflow koji smije ciljati vlasnikov Word stroj (repo je javan; vidi
+// docs/verification/WORD_PROOF_RUNNER.md). Njegov tocan oblik i GitHub-hosted runs-on svih
+// ostalih jobova provjerava findSelfHostedProblems.
+const SELF_HOSTED_ALLOWED = new Set<string>([WORD_PROOF_FILE]);
 
 // Workflowi bez pull_request trigera uopce (samo schedule/workflow_dispatch/druga grana push),
 // pa im koncurencija po PR-u nije primjenjiva.
@@ -70,6 +81,18 @@ describe('CI workflowi ne vrte se dvaput po istom pushu na PR (CI minute)', () =
     });
   }
 
+  it('word-proof.yml ima tocan propisani oblik, a svi ostali jobovi GitHub-hosted runs-on', () => {
+    const problems = findSelfHostedProblems(workflows, SELF_HOSTED_ALLOWED);
+    expect(problems, problems.join('; ')).toEqual([]);
+  });
+
+  it('word-proof.yml stvarno trazi self-hosted runner (gard iznad nije vakuumski)', () => {
+    const wordProof = workflows.find((w) => w.file === 'word-proof.yml');
+    expect(wordProof).toBeDefined();
+    const runsOn = wordProof?.doc.jobs?.['word-proof']?.['runs-on'];
+    expect(runsOn).toEqual(['self-hosted', 'windows', 'word']);
+  });
+
   it('required job imena postoje: conformance-matrix, build-gate/ux-gate, unittest', () => {
     const check = readFileSync(join(workflowsDir, 'check.yml'), 'utf8');
     const conformance = readFileSync(join(workflowsDir, 'conformance.yml'), 'utf8');
@@ -81,5 +104,29 @@ describe('CI workflowi ne vrte se dvaput po istom pushu na PR (CI minute)', () =
     expect(conformance).toContain('conformance-matrix:');
     expect(autonomy).toContain('unittest:');
     expect(autonomy).toMatch(/python:\s*\['3\.12'\]/);
+  });
+});
+
+describe('uredjivanje opisa PR-a (edited) pokrece SAMO provjeru opisa', () => {
+  const workflows = loadWorkflows();
+
+  it('pr-opis je jedini job koji reagira na edited; puni CI se na uredjivanje ne vrti', () => {
+    expect(findJobsRunningOnEdited(workflows)).toEqual(['pr-opis.yml#pr-opis']);
+  });
+
+  it('pr-opis reagira na opened, synchronize, reopened, edited i ready_for_review', () => {
+    const wf = workflows.find((w) => w.file === 'pr-opis.yml');
+    expect(wf).toBeTruthy();
+    const on = wf!.doc.on as Record<string, { types?: string[]; branches?: string[] } | null>;
+    expect(on.push).toBeUndefined();
+    expect(on.pull_request?.types).toEqual(['opened', 'synchronize', 'reopened', 'edited', 'ready_for_review']);
+    expect(on.pull_request?.branches).toEqual(['master']);
+  });
+
+  it('foundation-check.yml vise nema pr-opis job ni edited', () => {
+    const wf = workflows.find((w) => w.file === 'foundation-check.yml');
+    expect(Object.keys(wf!.doc.jobs ?? {})).toEqual(['check']);
+    const on = wf!.doc.on as Record<string, { types?: string[] } | null>;
+    expect(on.pull_request?.types ?? []).not.toContain('edited');
   });
 });
