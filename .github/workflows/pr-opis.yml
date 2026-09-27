@@ -1,0 +1,44 @@
+# T58: opis PR-a mora imati `Neto redaka: +x/-y` i `Nove ovisnosti: nema | <popis>`, a "nema" ne
+# smije stajati kad package.json dodaje paket. Job samo izvjestava: nije u branch protection popisu
+# obveznih provjera i ne smije se tamo dodati.
+#
+# ZASEBAN WORKFLOW, ne job u foundation-check.yml: provjera cita tijelo PR-a, pa mora reagirati na
+# `edited` (uredjivanje opisa kroz `gh pr edit` ili web). Da je job u foundation-check.yml, `edited`
+# bi kroz zajednicku concurrency grupu otkazao ili ponovno pokrenuo puni `npm run check`. Ovdje ima
+# vlastitu grupu i vrti samo jednu skriptu bez `npm ci`. Gard: tests/ci-workflow-triggers.test.ts
+# tvrdi da je pr-opis JEDINI job koji reagira na `edited`.
+#
+# Tijelo PR-a ide kroz env, nikad izravno u `run:` (injekcija kroz opis PR-a).
+name: pr-opis
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+# Novije uredjivanje ili push na istom PR-u otkazuje stariju provjeru opisa; master nema PR runova.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  pr-opis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Provjeri obvezne retke opisa PR-a
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/agents/pr-lines.mjs --provjeri "$BASE_SHA" "$HEAD_SHA"

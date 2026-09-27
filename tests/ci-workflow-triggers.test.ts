@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   findBarePushWorkflows,
+  findJobsRunningOnEdited,
   findPullRequestWithoutConcurrency,
   findSelfHostedProblems,
   WORD_PROOF_FILE,
@@ -103,5 +104,29 @@ describe('CI workflowi ne vrte se dvaput po istom pushu na PR (CI minute)', () =
     expect(conformance).toContain('conformance-matrix:');
     expect(autonomy).toContain('unittest:');
     expect(autonomy).toMatch(/python:\s*\['3\.12'\]/);
+  });
+});
+
+describe('uredjivanje opisa PR-a (edited) pokrece SAMO provjeru opisa', () => {
+  const workflows = loadWorkflows();
+
+  it('pr-opis je jedini job koji reagira na edited; puni CI se na uredjivanje ne vrti', () => {
+    expect(findJobsRunningOnEdited(workflows)).toEqual(['pr-opis.yml#pr-opis']);
+  });
+
+  it('pr-opis reagira na opened, synchronize, reopened, edited i ready_for_review', () => {
+    const wf = workflows.find((w) => w.file === 'pr-opis.yml');
+    expect(wf).toBeTruthy();
+    const on = wf!.doc.on as Record<string, { types?: string[]; branches?: string[] } | null>;
+    expect(on.push).toBeUndefined();
+    expect(on.pull_request?.types).toEqual(['opened', 'synchronize', 'reopened', 'edited', 'ready_for_review']);
+    expect(on.pull_request?.branches).toEqual(['master']);
+  });
+
+  it('foundation-check.yml vise nema pr-opis job ni edited', () => {
+    const wf = workflows.find((w) => w.file === 'foundation-check.yml');
+    expect(Object.keys(wf!.doc.jobs ?? {})).toEqual(['check']);
+    const on = wf!.doc.on as Record<string, { types?: string[] } | null>;
+    expect(on.pull_request?.types ?? []).not.toContain('edited');
   });
 });
