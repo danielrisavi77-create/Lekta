@@ -10,7 +10,9 @@ name: docx-strict-open
 
 on:
   push:
+    branches: [master]
   pull_request:
+    branches: [master]
   workflow_dispatch:
 
 permissions:

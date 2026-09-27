@@ -7,7 +7,9 @@ name: conformance
 
 on:
   push:
+    branches: [master]
   pull_request:
+    branches: [master]
   workflow_dispatch:
 
 # Least-privilege token (kao check.yml): samo cita kod.
