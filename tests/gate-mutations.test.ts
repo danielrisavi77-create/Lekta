@@ -42,6 +42,7 @@ import { parseXml, ZipReader, effectiveHidden } from '../src/docx/parser';
 import { runMetrics } from '../src/audits/metrics';
 import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
+import { ALLOWED_FINDINGS, falseFindingProblems, type FindingKey } from './helpers/false-findings';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
 import { LAYA_ELIGIBLE_CHECKS, formalRegistryEntries, isLayaEligibleCheck } from '../scripts/laya/eligibility.ts';
@@ -5381,6 +5382,18 @@ const MUTATIONS: Mutation[] = [
       && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20, hidden: true }]).font === 'Times New Roman',
     cleanBefore: () => effectiveHidden({}) === false
       && runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20 }]).font === 'Arial',
+  },
+  {
+    id: 'docx/lazni-nalaz-na-uskladjenom',
+    imitates: 'analiza pocne javljati nalaz na poznato ispravnom fixtureu (kao structure.heading.word-styles nad stavkama literature na 12 od 14), ili dopusteni nalaz nestane a popis se ne stegne (T26)',
+    // Doseg: ratchet nad popisom; punu analizu fixtura vrti tests/analysis-false-findings (async).
+    caught: () => {
+      const allowed = new Set<FindingKey>(ALLOWED_FINDINGS.map((a) => `${a.doc}|${a.checkId}` as FindingKey));
+      const extra = falseFindingProblems(new Set([...allowed, 'fpzg--final--prijediplomski--uskladjen|structure.heading.word-styles']));
+      const stale = falseFindingProblems(new Set([...allowed].slice(1)));
+      return extra.length === 1 && extra[0].startsWith('lazni nalaz:') && stale.length === 1 && stale[0].startsWith('zastarjeli unos:');
+    },
+    cleanBefore: () => falseFindingProblems(new Set(ALLOWED_FINDINGS.map((a) => `${a.doc}|${a.checkId}` as FindingKey))).length === 0,
   },
 
 ];
