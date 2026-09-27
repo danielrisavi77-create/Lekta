@@ -11,7 +11,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { joinCommand, parseWrapperArgs } from '../scripts/with-gate-lock.mjs';
@@ -140,11 +140,30 @@ describe('with-gate-lock: lock oko naredbe', { timeout: 90_000 }, () => {
   });
 
   it('mrtav lock: preuzima se, naredba radi, lock otpusten', () => {
-    writeFileSync(lockPath, JSON.stringify({ pid: deadPid(), startedAt: new Date().toISOString(), worktree: 'C:/x', label: 'stari', token: 'stari' }));
+    // Preuzimanje mrtvog locka je namjerno zabranjeno dok je lock mladji od minTakeoverAgeMs (5 s,
+    // odluka iz pregleda T71), da se ne pregazi lock koji je druga sesija upravo napisala u uskoj
+    // utrci. Zato lock ovdje mora biti star barem 10 s, i po JSON `startedAt` polju (sto
+    // `lockAgeMs` stvarno cita) i po mtime/atime datoteke.
+    const past = new Date(Date.now() - 10_000);
+    writeFileSync(lockPath, JSON.stringify({ pid: deadPid(), startedAt: past.toISOString(), worktree: 'C:/x', label: 'stari', token: 'stari' }));
+    utimesSync(lockPath, past, past);
     const r = runWrapper(['test-omotac', '--', ...probeCommand(0)], cleanEnv());
     expect(r.status, r.output).toBe(0);
     expect(seen()?.lock?.label).toBe('test-omotac');
     expect(existsSync(lockPath)).toBe(false);
+  });
+
+  it('mrtav lock sa svjezim vremenom: NE preuzima se (mladji od praga preuzimanja)', () => {
+    // Suprotnost testu iznad: isti mrtav PID, ali lock je tek napisan (svjez `startedAt`/mtime).
+    // `canTakeOverLock` ga namjerno ne dira dok ne prodje minTakeoverAgeMs, pa naredba mora ostati
+    // ODBIJENA (exit 2) i tudji lock netaknut.
+    writeFileSync(lockPath, JSON.stringify({ pid: deadPid(), startedAt: new Date().toISOString(), worktree: 'C:/x', label: 'stari', token: 'stari' }));
+    const r = runWrapper(['test-omotac', '--', ...probeCommand(0)], cleanEnv());
+    expect(r.status, r.output).toBe(2);
+    expect(r.output).toMatch(/mladji od \d+ ms/);
+    expect(seen()).toBeNull();
+    expect(existsSync(lockPath)).toBe(true);
+    expect(JSON.parse(readFileSync(lockPath, 'utf8')).label).toBe('stari');
   });
 
   it('LEKTA_GATE_FORCE=1: NADJACANO, lock upisan preko tudjeg i otpusten', () => {
