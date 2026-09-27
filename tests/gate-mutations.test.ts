@@ -149,15 +149,25 @@ import {
   footerLinkProblems,
   fullFooterBlock,
   fullFooterProblems,
+  funkcijaIzIzvora,
+  inkObserverProblems,
+  inkSignatureCssProblems,
+  lazyFooterBudgetProblems,
   lazyFooterProblems,
   markerMotionProblems,
+  markerTravelProblems,
+  MAX_LAZY_FOOTER_JS_GZIP,
   scrolledBarProblems,
   shortStepperProblems,
   type ChromeMetafile,
   type FooterCopy,
+  type PlaceMarker,
+  type WireInk,
 } from './helpers/site-footer-guards';
 import { releasedPublicRouteGroups } from '../src/routes/shared/public-route-directory';
-import { SITE_CHROME_DESTINATIONS } from '../src/shared/site-chrome';
+import { SITE_CHROME_DESTINATIONS, placeSiteChromeMarker } from '../src/shared/site-chrome';
+import { INK_CLASS, wireInkSignature } from '../src/shared/site-footer-full';
+import { pokretPrigusen } from '../src/shared/display-prefs';
 import { legalDocuments } from '../src/legal/legal-content';
 import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 
@@ -532,6 +542,52 @@ function z15bMetafile(staticki: boolean): ChromeMetafile {
       [komad]: { inputs: { 'data/coverage/site-stats.json': {} }, imports: [] },
     },
   };
+}
+
+/**
+ * Isti metafile s DRUGIM dinamickim uvozom u traci (`import('../ui/app')`): esbuild ga emitira
+ * kao jos jedan lijeni izlaz s vlastitim `entryPoint`, izvan proracuna od 8 KB.
+ */
+function z15bMetafileDrugiLijeni(): ChromeMetafile {
+  const cist = z15bMetafile(false);
+  const ulaz = 'site-chrome-budget/site-chrome.js';
+  const app = 'site-chrome-budget/app-C.js';
+  const ulazni = cist.outputs[ulaz]!;
+  return {
+    outputs: {
+      ...cist.outputs,
+      [ulaz]: { ...ulazni, imports: [...ulazni.imports, { path: app, kind: 'dynamic-import' }] },
+      [app]: { entryPoint: 'src/ui/app.ts', inputs: { 'src/ui/app.ts': {} }, imports: [] },
+    },
+  };
+}
+
+/** Gzip velicine lijenih izlaza, s podesivom velicinom komada podnozja (izmjereno 1174 B). */
+function z15bLijeneVelicine(meta: ChromeMetafile, podnozje: number): Record<string, number> {
+  const graf = chromeGraph(meta, 'src/shared/site-chrome.ts');
+  return Object.fromEntries(graf.lazyOutputs.map((p) => [p, p.includes('site-footer-full') ? podnozje : 900]));
+}
+
+/** Lijeni gard nad metafileom i velicinama. */
+function z15bLijeniProblemi(meta: ChromeMetafile, podnozje: number): string[] {
+  return lazyFooterBudgetProblems(meta, chromeGraph(meta, 'src/shared/site-chrome.ts'), z15bLijeneVelicine(meta, podnozje), MAX_LAZY_FOOTER_JS_GZIP);
+}
+
+/** Stvarni izvor trake i podnozja, LF. */
+const z15bChromeTs = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.ts'));
+const z15bFooterTs = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-footer-full.ts'));
+const z15bChromeCss = (): string => readTextLf(resolve(process.cwd(), 'src/shared/site-chrome.css'));
+
+/** Gard putovanja nad `placeSiteChromeMarker` IZVRSENIM iz (mutiranog) izvora. */
+function z15bKvacicaProblemi(ts: string): string[] {
+  const place = funkcijaIzIzvora<PlaceMarker>(ts, 'placeSiteChromeMarker');
+  return place ? markerTravelProblems(place) : ['placeSiteChromeMarker nije nadjen u izvoru'];
+}
+
+/** Gard tinte nad `wireInkSignature` IZVRSENIM iz (mutiranog) izvora, sa stvarnim ovisnostima. */
+function z15bTintaProblemi(ts: string): string[] {
+  const wire = funkcijaIzIzvora<WireInk>(ts, 'wireInkSignature', { pokretPrigusen, INK_CLASS });
+  return wire ? inkObserverProblems(wire, document, INK_CLASS) : ['wireInkSignature nije nadjen u izvoru'];
 }
 
 const MUTATIONS: Mutation[] = [
@@ -5159,6 +5215,126 @@ const MUTATIONS: Mutation[] = [
     caught: () => lazyFooterProblems(chromeGraph(z15bMetafile(true), 'src/shared/site-chrome.ts'))
       .includes('src/shared/site-footer-full.ts je u statickom grafu trake'),
     cleanBefore: () => lazyFooterProblems(chromeGraph(z15bMetafile(false), 'src/shared/site-chrome.ts')).length === 0,
+  },
+  // Z15 popravak: kvacica PUTUJE, tinta potpisa, lijeni komad. Mutanti kvacice i tinte su TEKST
+  // stvarne funkcije, izvrsen kroz `funkcijaIzIzvora`; baseline je ista staza nad nemutiranim
+  // izvorom I stvarni uvezeni modul.
+  {
+    id: 'z15b/kvacica-ne-putuje',
+    imitates:
+      'Pamcenje prvog postavljanja se izgubi (`const prvi = true;`, ili se `dataset.siteChromeMarkerX` ' +
+      'vise ne upisuje, ili `transition: none` ostane nakon skoka): klik s "Kako radi" na "Cjenik" ' +
+      'na /saznaj-vise/ skace umjesto da putuje .45s, a list i translateX ostaju isti.',
+    caught: () => {
+      const ts = z15bChromeTs();
+      const uvijekPrvi = ts.replace('const prvi = marker.dataset.siteChromeMarkerX === undefined;', 'const prvi = true;');
+      const bezPamcenja = ts.replace('  marker.dataset.siteChromeMarkerX = String(x);\n', '');
+      const ostajeNone = ts.replace("    marker.style.removeProperty('transition');\n", '');
+      return uvijekPrvi !== ts && bezPamcenja !== ts && ostajeNone !== ts
+        && z15bKvacicaProblemi(uvijekPrvi).some((p) => p.startsWith('2. pomak skace'))
+        && z15bKvacicaProblemi(bezPamcenja).some((p) => p.startsWith('2. pomak skace'))
+        && z15bKvacicaProblemi(ostajeNone).some((p) => p.startsWith('nakon prvog postavljanja inline prijelaz ostaje "none"'));
+    },
+    cleanBefore: () => z15bKvacicaProblemi(z15bChromeTs()).length === 0 && markerTravelProblems(placeSiteChromeMarker).length === 0,
+  },
+  {
+    id: 'z15b/kvacica-klizi-pri-ucitavanju',
+    imitates:
+      'Prvo postavljanje izgubi `transition: none` (`const prvi = false;`): na svakom ucitavanju ' +
+      'kvacica klizi s lijevog ruba trake do aktivnog odredista, sto je sum, ne putovanje.',
+    caught: () => {
+      const ts = z15bChromeTs();
+      const nikadPrvi = ts.replace('const prvi = marker.dataset.siteChromeMarkerX === undefined;', 'const prvi = false;');
+      return nikadPrvi !== ts
+        && z15bKvacicaProblemi(nikadPrvi).includes('prvo postavljanje nema transition: none prije pomaka; kvacica klizi pri ucitavanju');
+    },
+    cleanBefore: () => z15bKvacicaProblemi(z15bChromeTs()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-ne-ceka-pogled',
+    imitates:
+      'Tinta potpisa krene na prvom pikselu (`intersectionRatio >= 0`), promatrac izgubi prag .5 ' +
+      '(`threshold: [0]`), ili potpis izvan pogleda ne dobiva `.motion-offscreen` (Z31): animacija ' +
+      'se odvrti dok je potpis jos ispod ruba ili tece izvan pogleda.',
+    caught: () => {
+      const ts = z15bFooterTs();
+      const odmah = ts.replace('unos.intersectionRatio >= 0.5', 'unos.intersectionRatio >= 0');
+      const bezPraga = ts.replace('{ threshold: [0, 0.5] }', '{ threshold: [0] }');
+      const bezOffscreen = ts.replace("      potpis.classList.toggle('motion-offscreen', !unos.isIntersecting);\n", '');
+      return odmah !== ts && bezPraga !== ts && bezOffscreen !== ts
+        && z15bTintaProblemi(odmah).includes('tinta na 49% vidljivosti (prag je .5)')
+        && z15bTintaProblemi(bezPraga).some((p) => p.startsWith('pragovi promatraca su [0]'))
+        && z15bTintaProblemi(bezOffscreen).includes('izvan pogleda potpis nema .motion-offscreen');
+    },
+    cleanBefore: () => z15bTintaProblemi(z15bFooterTs()).length === 0
+      && inkObserverProblems(wireInkSignature, document, INK_CLASS).length === 0,
+  },
+  {
+    id: 'z15b/tinta-ignorira-prigusen-pokret',
+    imitates:
+      'Provjera `pokretPrigusen` ispadne iz `wireInkSignature`: uz rucno prigusen pokret potpis ' +
+      'ceka skrol i animira se, umjesto da je odmah popunjen.',
+    caught: () => {
+      const ts = z15bFooterTs();
+      const bezProvjere = ts.replace('if (pokretPrigusen(doc) || !view', 'if (!view');
+      return bezProvjere !== ts
+        && z15bTintaProblemi(bezProvjere).includes('pod prigusenim pokretom potpis nije odmah popunjen');
+    },
+    cleanBefore: () => z15bTintaProblemi(z15bFooterTs()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-reduced-motion-prazan-obris',
+    imitates:
+      'Pod `prefers-reduced-motion` (ili `data-motion="reduce"`) ostane samo `animation: none` bez ' +
+      '`background-position: 0 0`: animacija je ugasena, ali potpis ostaje prazan obris zauvijek.',
+    caught: () => {
+      const css = z15bChromeCss();
+      const pun = '.site-footer__potpis-slovo { animation: none !important; background-position: 0 0; }';
+      const prazan = '.site-footer__potpis-slovo { animation: none !important; }';
+      const medij = css.replace(`  ${pun}`, `  ${prazan}`);
+      const atribut = css.replace(`:root[data-motion="reduce"] ${pun}`, `:root[data-motion="reduce"] ${prazan}`);
+      return medij !== css && atribut !== css
+        && inkSignatureCssProblems(medij).some((p) => p.startsWith('pod prefers-reduced-motion potpis nije odmah pun'))
+        && !inkSignatureCssProblems(medij).some((p) => p.startsWith('pod data-motion'))
+        && inkSignatureCssProblems(atribut).some((p) => p.startsWith('pod data-motion="reduce" potpis nije odmah pun'));
+    },
+    cleanBefore: () => inkSignatureCssProblems(z15bChromeCss()).length === 0,
+  },
+  {
+    id: 'z15b/tinta-kroz-background-size',
+    imitates:
+      'Tinta se prepise kako radi predlozak (`background-size` 0% do 100%, Z31 to zabranjuje jer ' +
+      'svaki okvir racuna raspored slike), ili trajanje odluta s 1.4s.',
+    caught: () => {
+      const css = z15bChromeCss();
+      const size = css.replace(
+        'from { background-position: 100% 0; }\n  to { background-position: 0 0; }',
+        'from { background-size: 0% 100%; }\n  to { background-size: 100% 100%; }',
+      );
+      const brzo = css.replace('animation: siteFooterTinta 1.4s var(--ease-spring) both;', 'animation: siteFooterTinta .6s var(--ease-spring) both;');
+      return size !== css && brzo !== css
+        && inkSignatureCssProblems(size).some((p) => p.startsWith('keyframes tinte animiraju background-size'))
+        && inkSignatureCssProblems(brzo).some((p) => p.startsWith('tinta je "siteFooterTinta .6s'));
+    },
+    cleanBefore: () => inkSignatureCssProblems(z15bChromeCss()).length === 0,
+  },
+  {
+    id: 'z15b/lijeni-komad-prerastao',
+    imitates:
+      'Lijeno podnozje naraste preko 3 KB gzip (npr. uvoz cijelog site-stats.json s nazivima jedinica): ' +
+      'proracun trake zbraja samo staticki graf, pa bi rast prosao bez signala.',
+    caught: () => z15bLijeniProblemi(z15bMetafile(false), MAX_LAZY_FOOTER_JS_GZIP + 1)
+      .includes(`lijeni komad je ${MAX_LAZY_FOOTER_JS_GZIP + 1} B gzip, granica ${MAX_LAZY_FOOTER_JS_GZIP} B`),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafile(false), 1174).length === 0,
+  },
+  {
+    id: 'z15b/drugi-lijeni-uvoz',
+    imitates:
+      'Traka dobije drugi dinamicki uvoz (`import(\'../ui/app\')`): njegov komad je lijen, pa ga ne ' +
+      'vidi ni proracun od 8 KB ni `lazyFooterProblems`, a stranica ga svejedno skida.',
+    caught: () => z15bLijeniProblemi(z15bMetafileDrugiLijeni(), 1174)
+      .some((p) => p.startsWith('lijeni ulazi trake su ["src/shared/site-footer-full.ts","src/ui/app.ts"]')),
+    cleanBefore: () => z15bLijeniProblemi(z15bMetafile(false), 1174).length === 0,
   },
 ];
 

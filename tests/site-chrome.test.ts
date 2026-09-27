@@ -26,6 +26,7 @@ import {
   lampOverlayTheme,
   markActiveDestination,
   mountSiteChrome,
+  placeSiteChromeMarker,
   siteChromeLowestPrice,
   siteChromeSteps,
   siteChromeToolCount,
@@ -55,7 +56,10 @@ import {
   footerLinkProblems,
   fullFooterBlock,
   fullFooterProblems,
+  inkObserverProblems,
+  inkSignatureCssProblems,
   markerMotionProblems,
+  markerTravelProblems,
   scrolledBarProblems,
   shortStepperProblems,
 } from './helpers/site-footer-guards';
@@ -1363,18 +1367,12 @@ describe('Z15 drugi krug: potpis se puni tintom', () => {
   });
 
   it('list: tinta ide kroz background-position (ne size/width), 1.4s, i pod reduced-motion je odmah puna', () => {
-    const css = bezKomentara(read('src/shared/site-chrome.css'));
-    const kljucni = css.match(/@keyframes siteFooterTinta \{[\s\S]*?\n\}/)?.[0] ?? '';
-    expect(kljucni, 'sentinel: nema keyframesa tinte').not.toBe('');
-    expect(kljucni).toMatch(/from \{ background-position: 100% 0; \}/);
-    expect(kljucni).toMatch(/to \{ background-position: 0 0; \}/);
-    expect(kljucni).not.toMatch(/background-size|width/);
-    expect(css).toMatch(/\.site-footer__potpis--tinta \.site-footer__potpis-slovo \{ animation: siteFooterTinta 1\.4s var\(--ease-spring\) both; \}/);
-    expect(css).toMatch(/-webkit-text-stroke: 1px var\(--desk-line\);/);
-    expect(css).toMatch(/background-clip: text;/);
-    const reduce = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce)'));
-    expect(reduce).toMatch(/\.site-footer__potpis-slovo \{ animation: none !important; background-position: 0 0; \}/);
-    expect(css).toMatch(/:root\[data-motion="reduce"\] \.site-footer__potpis-slovo \{ animation: none !important; background-position: 0 0; \}/);
+    // Gard je u `tests/helpers/site-footer-guards.ts`; mutacije `z15b/tinta-*` u gate-mutations.
+    expect(inkSignatureCssProblems(read('src/shared/site-chrome.css'))).toEqual([]);
+  });
+
+  it('ponasanje: prag .5, .motion-offscreen, pod data-motion="reduce" odmah puno (isti gard kao mutacija)', () => {
+    expect(inkObserverProblems(wireInkSignature, document, INK_CLASS)).toEqual([]);
   });
 });
 
@@ -1400,6 +1398,33 @@ describe('Z15 drugi krug: kvacica kroz transform i sidro', () => {
     expect(marker.dataset.siteChromeMarkerX).toBeDefined();
     markActiveDestination(chrome, null);
     expect(marker.dataset.siteChromeMarkerX, 'skrivena kvacica pri sljedecem prikazu opet skace').toBeUndefined();
+  });
+
+  it('dva prolaza: prvo postavljanje skace, drugi i treci pomak PUTUJU (bez transition: none i bez rasporeda)', () => {
+    // Izravan signal (dnevnik upisa u stil lazne kvacice); mutacija `z15b/kvacica-ne-putuje`.
+    expect(markerTravelProblems(placeSiteChromeMarker)).toEqual([]);
+  });
+
+  it('DOM: promjena sidra na /saznaj-vise/ ne gasi prijelaz; samo montiranje ga gasi', () => {
+    const html = read('saznaj-vise/index.html');
+    const doc = dom(zaglavlje(html), kanonskaOd('saznaj-vise/index.html'));
+    const view = doc.defaultView!;
+    view.location.hash = '#cjenik';
+    const marker = doc.querySelector<HTMLElement>('[data-site-chrome-marker]')!;
+    const mo = new view.MutationObserver(() => {});
+    mo.observe(marker, { attributes: true, attributeFilter: ['style'], attributeOldValue: true });
+    const stilovi = (): string[] => mo.takeRecords().map((r) => r.oldValue ?? '').concat(marker.getAttribute('style') ?? '');
+    mountSiteChrome(doc);
+    const montiranje = stilovi();
+    expect(montiranje.some((st) => /transition:\s*none/.test(st)), `montiranje: ${JSON.stringify(montiranje)}`).toBe(true);
+    view.location.hash = '#how';
+    view.dispatchEvent(new Event('hashchange'));
+    const pomak = stilovi();
+    expect(marker.dataset.siteChromeMarkerFor).toBe('how');
+    expect(pomak.some((st) => /transition/.test(st)), `pomak po sidru: ${JSON.stringify(pomak)}`).toBe(false);
+    expect(marker.style.transform).toMatch(/^translateX\(-?\d+px\)$/);
+    mo.disconnect();
+    view.location.hash = '';
   });
 
   it('`/saznaj-vise/#cjenik` aktivira Cjenik, a promjena sidra PUTUJE kvacicu na istoj stranici', () => {

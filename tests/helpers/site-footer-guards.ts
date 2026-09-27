@@ -8,6 +8,8 @@
  * PROBLEMA; prazan popis je cist ulaz, a sentinel (npr. "predlozak nema prizor 05") je problem, ne
  * tihi prolaz.
  */
+import { transformSync } from 'esbuild';
+import { runInThisContext } from 'node:vm';
 
 /** Tekst bez HTML komentara i CR-a; gard ne smije naci tvrdnju u komentaru. */
 function bezHtmlKomentara(html: string): string {
@@ -312,5 +314,273 @@ export function lazyFooterProblems(graf: ChromeGraph): string[] {
   const problemi: string[] = [];
   if (graf.staticInputs.includes(modul)) problemi.push(`${modul} je u statickom grafu trake`);
   if (!graf.lazyInputs.includes(modul)) problemi.push(`${modul} nije lijeni izlaz`);
+  return problemi;
+}
+
+/** Granica lijenog komada punog podnozja (gzip); isti broj cita proracun trake i mutacija. */
+export const MAX_LAZY_FOOTER_JS_GZIP = 3 * 1024;
+
+/**
+ * GARD: lijeni dio grafa trake je SAMO puno podnozje i stane u vlastitu granicu. Proracun od 8 KB
+ * zbraja samo staticki graf, pa bi drugi dinamicki uvoz u traci (npr. `import('../ui/app')`)
+ * izasao iz svake mjere bez ijednog signala. Zato gard trazi da je jedini lijeni ULAZ podnozje i
+ * da zbroj gzip velicina SVIH lijenih izlaza (ulaz i njegovi komadi) ne prelazi `max`.
+ * `velicine` su izmjerene gzip velicine po izlazu metafilea; izlaz bez mjere je problem, ne nula.
+ */
+export function lazyFooterBudgetProblems(
+  meta: ChromeMetafile,
+  graf: ChromeGraph,
+  velicine: Readonly<Record<string, number>>,
+  max: number,
+): string[] {
+  if (graf.lazyOutputs.length === 0) return ['graf trake nema lijeni izlaz; granica lijenog komada ne mjeri nista'];
+  const problemi: string[] = [];
+  const lijeniUlazi = graf.lazyOutputs
+    .map((p) => meta.outputs[p]?.entryPoint)
+    .filter((e): e is string => e !== undefined)
+    .map(norm)
+    .sort();
+  if (JSON.stringify(lijeniUlazi) !== JSON.stringify(['src/shared/site-footer-full.ts'])) {
+    problemi.push(`lijeni ulazi trake su ${JSON.stringify(lijeniUlazi)}; smije samo puno podnozje`);
+  }
+  let zbroj = 0;
+  for (const izlaz of graf.lazyOutputs) {
+    const v = velicine[izlaz];
+    if (typeof v !== 'number' || !Number.isFinite(v) || v <= 0) { problemi.push(`lijeni izlaz ${izlaz} nema izmjerenu gzip velicinu`); continue; }
+    zbroj += v;
+  }
+  if (zbroj > max) problemi.push(`lijeni komad je ${zbroj} B gzip, granica ${max} B`);
+  return problemi;
+}
+
+/**
+ * IZVRSIVA KOPIJA JEDNE FUNKCIJE IZ STVARNOG IZVORA. Izvuce top-level `export function ime`, prevede
+ * je esbuildom (samo skida tipove) i izvrsi s podmetnutim ovisnostima. Tako mutacijski test mijenja
+ * TEKST stvarne funkcije (npr. `const prvi = true;`) i mjeri PONASANJE mutanta, umjesto da gard
+ * vjezba na rucno prepisanoj imitaciji. `null` kad funkcije nema: sentinel, ne tihi prolaz.
+ */
+export function funkcijaIzIzvora<F>(ts: string, ime: string, ovisnosti: Readonly<Record<string, unknown>> = {}): F | null {
+  const s = ts.split('\r\n').join('\n');
+  const od = s.indexOf(`\nexport function ${ime}(`);
+  if (od < 0) return null;
+  const kraj = s.indexOf('\n}\n', od);
+  if (kraj < 0) return null;
+  const izvor = s.slice(od + '\nexport '.length, kraj + 2);
+  const js = transformSync(izvor, { loader: 'ts', format: 'esm' }).code.trim().replace(/;$/, '');
+  const imena = Object.keys(ovisnosti);
+  const tvornica = runInThisContext(`(function (${imena.join(', ')}) { return (${js}); })`) as (...a: unknown[]) => F;
+  return tvornica(...imena.map((k) => ovisnosti[k]));
+}
+
+/** Pomak kvacice kako ga zove traka. */
+export type PlaceMarker = (marker: HTMLElement, x: number) => void;
+
+/**
+ * Lazna kvacica koja BILJEZI svaki upis u `style.transition`/`style.transform`/`style.left` i svako
+ * citanje rasporeda (`offsetWidth`). To je izravan signal "je li ovaj pomak isao kroz prijelaz":
+ * happy-dom nema raspored ni prijelaze, pa se ne mjeri posljedica nego sam redoslijed upisa.
+ */
+function laznaKvacica(): { marker: HTMLElement; dnevnik: string[]; prijelaz: () => string } {
+  const dnevnik: string[] = [];
+  const vrijednosti: Record<string, string> = { transition: '', transform: '', left: '' };
+  const upisi = (svojstvo: string, v: string): void => { vrijednosti[svojstvo] = v; dnevnik.push(`${svojstvo}=${v}`); };
+  const style = {
+    get transition(): string { return vrijednosti.transition ?? ''; },
+    set transition(v: string) { upisi('transition', v); },
+    get transform(): string { return vrijednosti.transform ?? ''; },
+    set transform(v: string) { upisi('transform', v); },
+    get left(): string { return vrijednosti.left ?? ''; },
+    set left(v: string) { upisi('left', v); },
+    setProperty(svojstvo: string, v: string): void { upisi(svojstvo, v); },
+    removeProperty(svojstvo: string): string {
+      const staro = vrijednosti[svojstvo] ?? '';
+      vrijednosti[svojstvo] = '';
+      dnevnik.push(`${svojstvo}-`);
+      return staro;
+    },
+  };
+  const marker = {
+    dataset: {} as Record<string, string | undefined>,
+    style,
+    get offsetWidth(): number { dnevnik.push('raspored'); return 0; },
+  };
+  return { marker: marker as unknown as HTMLElement, dnevnik, prijelaz: () => vrijednosti.transition ?? '' };
+}
+
+/**
+ * GARD: KVACICA PUTUJE. Tri uzastopna pomaka iste kvacice:
+ *   1. prvo postavljanje skace (`transition: none` PRIJE pomaka, prisilni raspored, pa ukidanje
+ *      inline prijelaza), jer klizanje s lijevog ruba pri svakom ucitavanju nije putovanje;
+ *   2. i 3. pomak NE diraju prijelaz ni raspored, pa idu kroz `transition: transform .45s` iz lista.
+ * Drugi i treci prolaz su dokaz da putovanje nije slucajnost prvog: kvar koji gubi pamcenje
+ * (`dataset.siteChromeMarkerX`) ili uvijek skace pada na drugom.
+ */
+export function markerTravelProblems(place: PlaceMarker): string[] {
+  const k = laznaKvacica();
+  const prolaz = (x: number): string[] => {
+    const od = k.dnevnik.length;
+    place(k.marker, x);
+    return k.dnevnik.slice(od);
+  };
+  const problemi: string[] = [];
+  const prvi = prolaz(12);
+  const iPomak = prvi.indexOf('transform=translateX(12px)');
+  const iNone = prvi.indexOf('transition=none');
+  const iRaspored = prvi.indexOf('raspored');
+  const iUkinut = prvi.findIndex((z, i) => i > iRaspored && (z === 'transition-' || z === 'transition='));
+  if (iPomak < 0) problemi.push('prvo postavljanje ne pise translateX(12px)');
+  if (iNone < 0 || iNone > iPomak) problemi.push('prvo postavljanje nema transition: none prije pomaka; kvacica klizi pri ucitavanju');
+  if (iRaspored < 0 || iRaspored < iPomak) problemi.push('prvo postavljanje ne prisili raspored nakon pomaka; ukidanje prijelaza bi animiralo skok');
+  if (iRaspored < 0 || iUkinut < 0) problemi.push('prvo postavljanje ne ukida inline prijelaz nakon rasporeda');
+  if (k.prijelaz() !== '') problemi.push(`nakon prvog postavljanja inline prijelaz ostaje "${k.prijelaz()}"; nijedan sljedeci pomak ne putuje`);
+  for (const [redni, x] of [[2, 80], [3, 30]] as const) {
+    const zapis = prolaz(x);
+    if (!zapis.includes(`transform=translateX(${x}px)`)) problemi.push(`${redni}. pomak ne pise translateX(${x}px)`);
+    if (zapis.some((z) => z.startsWith('transition=') || z === 'transition-' || z === 'raspored')) {
+      problemi.push(`${redni}. pomak skace (${zapis.join(', ')}), ne putuje .45s`);
+    }
+    if (k.prijelaz() !== '') problemi.push(`${redni}. pomak ostavlja inline prijelaz "${k.prijelaz()}"`);
+  }
+  return problemi;
+}
+
+/** Potpis se puni tintom kako ga zove podnozje. */
+export type WireInk = (potpis: HTMLElement, signal: AbortSignal) => void;
+
+type LazniUnos = { readonly isIntersecting: boolean; readonly intersectionRatio: number };
+
+/**
+ * GARD: TINTA POTPISA PREMA POGLEDU. Uz podmetnut `IntersectionObserver` (happy-dom ga ne okida):
+ * promatrac trazi prag .5 i promatra potpis; izvan pogleda potpis nosi `.motion-offscreen` i nema
+ * tinte; na 49% vidljivosti jos nema tinte; na 50% je ima. Pod `data-motion="reduce"` tinta je
+ * ODMAH, a promatrac se ne stvara. Globalni promatrac i atribut pokreta se vracaju i kad gard padne.
+ */
+export function inkObserverProblems(wire: WireInk, doc: Document, inkClass: string): string[] {
+  const view = doc.defaultView as (Window & { IntersectionObserver: unknown }) | null;
+  if (!view) return ['dokument nema prozor; gard ne mjeri nista'];
+  const izvorni = view.IntersectionObserver;
+  const izvorniPokret = doc.documentElement.getAttribute('data-motion');
+  let okini: ((unosi: LazniUnos[]) => void) | null = null;
+  let pragovi: number[] = [];
+  const promatrani: Element[] = [];
+  class Lazni {
+    constructor(cb: (unosi: LazniUnos[]) => void, opcije?: { threshold?: number | number[] }) {
+      okini = cb;
+      pragovi = ([] as number[]).concat(opcije?.threshold ?? []);
+    }
+    observe(el: Element): void { promatrani.push(el); }
+    disconnect(): void {}
+  }
+  const problemi: string[] = [];
+  const kontroler = new AbortController();
+  try {
+    view.IntersectionObserver = Lazni;
+    doc.documentElement.removeAttribute('data-motion');
+    const potpis = doc.createElement('div');
+    doc.body.append(potpis);
+    wire(potpis, kontroler.signal);
+    const cb = okini as ((unosi: LazniUnos[]) => void) | null;
+    if (cb === null) {
+      problemi.push('bez prigusenog pokreta promatrac nije stvoren; tinta ne ceka pogled');
+    } else {
+      if (!pragovi.includes(0.5)) problemi.push(`pragovi promatraca su ${JSON.stringify(pragovi)}; nema .5`);
+      if (!promatrani.includes(potpis)) problemi.push('promatrac ne promatra potpis');
+      if (potpis.classList.contains(inkClass)) problemi.push('tinta je upisana prije ikakvog pogleda');
+      cb([{ isIntersecting: false, intersectionRatio: 0 }]);
+      if (!potpis.classList.contains('motion-offscreen')) problemi.push('izvan pogleda potpis nema .motion-offscreen');
+      if (potpis.classList.contains(inkClass)) problemi.push('tinta izvan pogleda');
+      cb([{ isIntersecting: true, intersectionRatio: 0.49 }]);
+      if (potpis.classList.contains(inkClass)) problemi.push('tinta na 49% vidljivosti (prag je .5)');
+      if (potpis.classList.contains('motion-offscreen')) problemi.push('u pogledu potpis i dalje nosi .motion-offscreen');
+      cb([{ isIntersecting: true, intersectionRatio: 0.5 }]);
+      if (!potpis.classList.contains(inkClass)) problemi.push('na 50% vidljivosti nema tinte');
+    }
+    potpis.remove();
+
+    okini = null;
+    doc.documentElement.setAttribute('data-motion', 'reduce');
+    const prigusen = doc.createElement('div');
+    doc.body.append(prigusen);
+    wire(prigusen, kontroler.signal);
+    if (!prigusen.classList.contains(inkClass)) problemi.push('pod prigusenim pokretom potpis nije odmah popunjen');
+    if (okini !== null) problemi.push('pod prigusenim pokretom se ipak stvara promatrac');
+    prigusen.remove();
+  } finally {
+    kontroler.abort();
+    view.IntersectionObserver = izvorni;
+    if (izvorniPokret === null) doc.documentElement.removeAttribute('data-motion');
+    else doc.documentElement.setAttribute('data-motion', izvorniPokret);
+  }
+  return problemi;
+}
+
+/** Tijelo prvog `@media UPIT { ... }` bloka, uz brojanje zagrada; `null` kad ga nema. */
+function medijBlok(css: string, upit: string): string | null {
+  const s = bezCssKomentara(css);
+  const od = s.indexOf(`@media ${upit} {`);
+  if (od < 0) return null;
+  const otvor = s.indexOf('{', od);
+  let dubina = 0;
+  for (let i = otvor; i < s.length; i++) {
+    if (s[i] === '{') dubina++;
+    else if (s[i] === '}') { dubina--; if (dubina === 0) return s.slice(otvor + 1, i); }
+  }
+  return null;
+}
+
+/** Deklaracije jednog tijela pravila kao mapa svojstvo -> vrijednost. */
+function deklaracije(tijelo: string): Map<string, string> {
+  const m = new Map<string, string>();
+  for (const d of tijelo.split(';')) {
+    const i = d.indexOf(':');
+    if (i < 0) continue;
+    m.set(d.slice(0, i).trim(), d.slice(i + 1).trim());
+  }
+  return m;
+}
+
+/** Svojstva koja keyframes tinte smiju animirati (Z31: samo kompozitor). */
+const TINTA_DOPUSTENA = new Set(['background-position', 'transform', 'opacity', 'clip-path']);
+
+/**
+ * GARD: TINTA POTPISA U LISTU. Obris (`-webkit-text-stroke`) i `background-clip: text` na slovu,
+ * koje pocinje prazno (`background-position: 100% 0`); keyframes `siteFooterTinta` animiraju SAMO
+ * kompozitorska svojstva i povlace `background-position` s `100% 0` na `0 0`; tinta traje 1.4s na
+ * `--ease-spring`; pod `prefers-reduced-motion` i pod `data-motion="reduce"` slovo nema animacije
+ * I stoji na `background-position: 0 0` (odmah puno). Samo `animation: none` bez pozicije ostavlja
+ * prazan obris, a to je kvar koji gard trazi.
+ */
+export function inkSignatureCssProblems(css: string): string[] {
+  const s = bezCssKomentara(css);
+  const problemi: string[] = [];
+  const slovo = deklaracije(pravilo(css, '.site-footer__potpis-slovo') ?? '');
+  if (slovo.size === 0) return ['list nema pravila .site-footer__potpis-slovo'];
+  if (slovo.get('-webkit-text-stroke') !== '1px var(--desk-line)') problemi.push('slovo potpisa nema obris -webkit-text-stroke: 1px var(--desk-line)');
+  if (slovo.get('background-clip') !== 'text') problemi.push('slovo potpisa nema background-clip: text');
+  if (slovo.get('background-position') !== '100% 0') problemi.push(`slovo potpisa pocinje na background-position "${slovo.get('background-position') ?? ''}", ocekivano 100% 0 (prazno)`);
+
+  const kljucni = /@keyframes siteFooterTinta \{([\s\S]*?)\n\}/.exec(s)?.[1] ?? null;
+  if (kljucni === null) problemi.push('nema @keyframes siteFooterTinta');
+  else {
+    const from = deklaracije(/from \{([^}]*)\}/.exec(kljucni)?.[1] ?? '');
+    const to = deklaracije(/to \{([^}]*)\}/.exec(kljucni)?.[1] ?? '');
+    for (const svojstvo of new Set([...from.keys(), ...to.keys()])) {
+      if (!TINTA_DOPUSTENA.has(svojstvo)) problemi.push(`keyframes tinte animiraju ${svojstvo} (Z31: samo transform, opacity, clip-path, background-position)`);
+    }
+    if (from.get('background-position') !== '100% 0' || to.get('background-position') !== '0 0') {
+      problemi.push('keyframes tinte ne povlace background-position s 100% 0 na 0 0');
+    }
+  }
+  const animacija = deklaracije(pravilo(css, '.site-footer__potpis--tinta .site-footer__potpis-slovo') ?? '').get('animation') ?? '';
+  if (animacija !== 'siteFooterTinta 1.4s var(--ease-spring) both') problemi.push(`tinta je "${animacija}", ocekivano "siteFooterTinta 1.4s var(--ease-spring) both"`);
+
+  const odmahPun = (tijelo: string | null): boolean => {
+    const d = deklaracije(tijelo ?? '');
+    return /^none\b/.test(d.get('animation') ?? '') && d.get('background-position') === '0 0';
+  };
+  const medij = medijBlok(css, '(prefers-reduced-motion: reduce)');
+  if (medij === null) problemi.push('nema @media (prefers-reduced-motion: reduce)');
+  else if (!odmahPun(pravilo(medij, '.site-footer__potpis-slovo'))) problemi.push('pod prefers-reduced-motion potpis nije odmah pun (animation: none i background-position: 0 0)');
+  if (!odmahPun(pravilo(css, ':root[data-motion="reduce"] .site-footer__potpis-slovo'))) problemi.push('pod data-motion="reduce" potpis nije odmah pun (animation: none i background-position: 0 0)');
   return problemi;
 }
