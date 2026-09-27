@@ -7527,5 +7527,17 @@
         }
       ]
     }
+  ],
+  "integratedGraduateCoverage": [
+    {
+      "programCode": "917",
+      "profileId": "vef-diplomski",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "evidence": {
+        "sourceUrl": "https://www.vef.unizg.hr/wp-content/uploads/2024/01/N-A-P-U-T-A-K-za-prijavu-pisanje-i-oblikovanje-diplomskig-rada-odobren-Fakultetsko-vijece-24.1.2024.pdf",
+        "sourceLocator": "Naputak 2024., pogl. 2, prva stavka",
+        "quote": "Sveučilišni integrirani prijediplomski i diplomski studij Veterinarska medicina završava pisanjem i obranom diplomskog rada."
+      }
+    }
   ]
 }
