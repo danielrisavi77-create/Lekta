@@ -67,12 +67,7 @@ povijest dok druga sesija radi. Autorstvo se ne izvodi iz zajednickog Git identi
 Generirane artefakte regeneriraj samo u cistom izoliranom stablu. Izvor, artefakt
 i njegov ratchet moraju biti u istom commitu.
 
-## Racunala
-
-Teski alati (Docker, LibreOffice, Word oracle, dugi korpusni prolazi) zive samo na
-radnoj stanici; laptop ostaje lagan. Teska ovisnost nikad ne ulazi u ono sto `npm ci`
-uvijek instalira. Uloge, pravila i lokalni `CLAUDE.local.md` opisani su u
-`docs/agents/RADNE_STANICE.md`.
+Teski alati zive samo na radnoj stanici, laptop ostaje lagan; vidi `docs/agents/RADNE_STANICE.md`.
 
 ## Tvrdi gate
 
