@@ -8,6 +8,8 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { dedupeManifest, discoverRealCorpus, REAL_CORPUS_ROOT, type RealCorpusManifestEntry } from './real-corpus/harness';
 import { attestationProblems, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { createHash } from 'node:crypto';
+import { FINGERPRINT_VERSION, corpusFingerprintV2, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
 
 const entry = (documentId: string, root: string, profileId = 'fer-diplomski'): RealCorpusManifestEntry => ({
   documentId,
@@ -81,6 +83,42 @@ describe('dedupeManifest', () => {
       rmSync(r1, { recursive: true, force: true });
       rmSync(r2, { recursive: true, force: true });
     }
+  });
+});
+
+describe('otisak v2 i nasljedjivanje potpisa', () => {
+  const ids = ['corpus-a', 'corpus-b', 'corpus-c'];
+  const v1 = (list: string[]) => createHash('sha256').update([...list].sort().join('\n')).digest('hex').slice(0, 32);
+
+  it('v2 ne ovisi o ponavljanju ni redoslijedu, a nikad nije jednak v1', () => {
+    expect(corpusFingerprintV2([...ids, 'corpus-a', 'corpus-b'])).toBe(corpusFingerprintV2(ids));
+    expect(corpusFingerprintV2([...ids].reverse())).toBe(corpusFingerprintV2(ids));
+    expect(corpusFingerprintV2(ids)).not.toBe(v1(ids));
+    // v1 je vidio ponavljanja: upravo zato je dvostruko brojani skup dao drugaciji broj, a isti otisak kao potpisani.
+    expect(v1([...ids, 'corpus-a'])).not.toBe(v1(ids));
+  });
+
+  const potpisana = {
+    fingerprintVersion: FINGERPRINT_VERSION,
+    corpusFingerprint: corpusFingerprintV2(ids),
+    signedBy: 'Vlasnik',
+    signedAt: '2026-09-28T10:00:00.000Z',
+    signatureNote: null,
+  };
+
+  it('isto potpisano mjerenje zadrzava potpis', () => {
+    expect(inheritedSignature(potpisana, { fingerprintVersion: 2, corpusFingerprint: potpisana.corpusFingerprint, measuredAt: '2026-09-28T09:00:00.000Z' }))
+      .toEqual({ signedBy: 'Vlasnik', signedAt: potpisana.signedAt, signatureNote: null });
+  });
+
+  it('novo mjerenje istog skupa, drugi skup ili v1 ovjera NE nasljedjuju potpis', () => {
+    const iste = { fingerprintVersion: 2, corpusFingerprint: potpisana.corpusFingerprint };
+    expect(inheritedSignature(potpisana, { ...iste, measuredAt: '2026-09-29T09:00:00.000Z' })).toBeNull();
+    expect(inheritedSignature(potpisana, { ...iste, corpusFingerprint: corpusFingerprintV2(['x']), measuredAt: '2026-09-28T09:00:00.000Z' })).toBeNull();
+    // Stvarni slucaj: potpisana v1 ovjera a74d93d5 (bez fingerprintVersion), isti v1 otisak.
+    const staraV1 = { corpusFingerprint: '8e5bd529d4f2b596ccf8fa0ef58c029d', signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
+    expect(inheritedSignature(staraV1, { fingerprintVersion: 2, corpusFingerprint: '8e5bd529d4f2b596ccf8fa0ef58c029d', measuredAt: '2026-09-10T08:28:07.311Z' })).toBeNull();
+    expect(inheritedSignature(null, { ...iste, measuredAt: '2026-09-28T09:00:00.000Z' })).toBeNull();
   });
 });
 

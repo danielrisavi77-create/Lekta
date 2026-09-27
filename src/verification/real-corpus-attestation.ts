@@ -47,6 +47,11 @@ export interface CorpusAttestationEntry {
 
 export interface CorpusAttestation {
   schemaVersion: 1;
+  /**
+   * T83: verzija otiska. 2 = nad jedinstvenim documentId-ovima s oznakom verzije u ulazu
+   * (scripts/lib/corpus-attestation-core.mjs). Bez polja je v1, koji je brojao ponavljanja.
+   */
+  fingerprintVersion?: number;
   /** Otisak SKUPA mjerenih radova (imena i velicine), nikad sadrzaja. Mijenja se kad se korpus mijenja. */
   corpusFingerprint: string;
   measuredAt: string;
@@ -77,6 +82,9 @@ export interface CorpusAttestation {
      * vise puta. Starije ovjere polje nemaju; obveza polja uvodi se zajedno sa svjezom ovjerom (T75).
      */
     duplicateDocumentCount?: number;
+    /** T83: rezultata u ovjeri (jedinstveni id-ovi) i koliko ih je bilo prije nego sto je harness izbacio kopije. */
+    uniqueDocumentCount?: number;
+    rawDocumentCount?: number;
   };
   entries: CorpusAttestationEntry[];
 }

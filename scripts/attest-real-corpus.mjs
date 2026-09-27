@@ -10,7 +10,7 @@
 // postoji ali ljestvica je ne priznaje. Time se ne moze dogoditi da razina dokaza poraste zato sto
 // je netko pokrenuo skriptu.
 import { execFileSync } from 'node:child_process';
-import crypto from 'node:crypto';
+import { FINGERPRINT_VERSION, corpusFingerprintV2, inheritedSignature } from './lib/corpus-attestation-core.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -70,11 +70,11 @@ if (dvostruki > 0) {
 }
 
 // Otisak SKUPA, ne sadrzaja: imena dokumenata i njihov broj. Mijenja se kad se korpus mijenja, pa
-// ovjera prestaje odgovarati stanju i to se vidi.
-const otisak = crypto.createHash('sha256')
-  .update(rezultati.map((r) => r.documentId).sort().join('\n'))
-  .digest('hex')
-  .slice(0, 32);
+// ovjera prestaje odgovarati stanju i to se vidi. Verzija 2 (T83): nad jedinstvenim id-ovima i s
+// oznakom verzije, vidi scripts/lib/corpus-attestation-core.mjs.
+const otisak = corpusFingerprintV2(rezultati.map((r) => r.documentId));
+// Koliko je kopija harness izbacio prije mjerenja; povijest ostaje citljiva uz ovjere prije T83.
+const izbaceno = Number.isInteger(mjerenje.scope?.duplicateDocumentCount) ? mjerenje.scope.duplicateDocumentCount : 0;
 
 // Registar daje jedinicu i vrste rada za svaki profil; sidecar dokumenta nosi samo `profileId`.
 const registar = new Map(
@@ -118,8 +118,14 @@ if (mjerenje.generatedFromCommit !== commit) {
 }
 
 const postojeca = fs.existsSync(IZLAZ) ? JSON.parse(fs.readFileSync(IZLAZ, 'utf8')) : null;
+// Potpis se prenosi samo na ISTO potpisano mjerenje (verzija i vrijednost otiska, potpis ne stariji od
+// mjerenja); novo mjerenje istog skupa trazi novi potpis.
+const naslijedjen = potpis ? null : inheritedSignature(postojeca, {
+  fingerprintVersion: FINGERPRINT_VERSION, corpusFingerprint: otisak, measuredAt: mjerenje.generatedAt,
+});
 const ovjera = {
   schemaVersion: 1,
+  fingerprintVersion: FINGERPRINT_VERSION,
   corpusFingerprint: otisak,
   measuredAt: mjerenje.generatedAt,
   measuredFromCommit: mjerenje.generatedFromCommit,
@@ -133,11 +139,12 @@ const ovjera = {
     derivedExpectationCount: rezultati.length - neovisnoPotvrdjeno,
     // T83: ovjera je provjerila da nijedan dokument nije brojan dvaput (gore se inace prekida).
     duplicateDocumentCount: dvostruki,
+    uniqueDocumentCount: rezultati.length,
+    rawDocumentCount: rezultati.length + izbaceno,
   },
-  // Potpis se NE nasljedjuje kad se korpus promijeni: tada je rijec o drugom mjerenju.
-  signedBy: potpis ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedBy : null),
-  signedAt: potpis ? new Date().toISOString() : (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedAt : null),
-  signatureNote: biljeska ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signatureNote ?? null : null),
+  signedBy: potpis ?? naslijedjen?.signedBy ?? null,
+  signedAt: potpis ? new Date().toISOString() : naslijedjen?.signedAt ?? null,
+  signatureNote: biljeska ?? naslijedjen?.signatureNote ?? null,
   entries: [...poSkupini.values()]
     .map((e) => ({ ...e, profileIds: [...e.profileIds].sort(), regressedChecks: [...e.regressedChecks].sort() }))
     .sort((a, b) => (a.unitId + a.workType).localeCompare(b.unitId + b.workType)),

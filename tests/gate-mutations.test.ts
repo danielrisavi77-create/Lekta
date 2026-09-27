@@ -128,6 +128,7 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
+import { inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -276,6 +277,25 @@ function jedanDokumentJedanGlas(
   const { entries, duplicates } = dedupe([e('corpus-a', 'docx-local'), e('corpus-b', 'docx-local'), e('corpus-a', '03-ingest')]);
   const ids = entries.map((x) => x.documentId);
   return ids.length === 2 && new Set(ids).size === 2 && duplicates.length === 1;
+}
+
+type PotpisFn = (
+  existing: { signedBy?: string | null; signedAt?: string | null; signatureNote?: string | null; corpusFingerprint?: string; fingerprintVersion?: number } | null,
+  next: { fingerprintVersion: number; corpusFingerprint: string; measuredAt: string },
+) => { signedBy: string; signedAt: string; signatureNote: string | null } | null;
+
+/**
+ * Tvrdnja garda T83: potpis ostaje uz ovjeru samo kad opisuje ISTO potpisano v2 mjerenje; v1 ovjera
+ * s istim otiskom i novo mjerenje istog skupa ne nasljedjuju potpis.
+ */
+function potpisOstajeSamoUzIstoMjerenje(inherit: PotpisFn): boolean {
+  const otisak = '8e5bd529d4f2b596ccf8fa0ef58c029d';
+  const v2 = { fingerprintVersion: 2, corpusFingerprint: otisak, signedBy: 'Vlasnik', signedAt: '2026-09-28T10:00:00.000Z', signatureNote: null };
+  const v1 = { corpusFingerprint: otisak, signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
+  const isto = inherit(v2, { fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-28T09:00:00.000Z' });
+  const prekoVerzije = inherit(v1, { fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-10T08:28:07.311Z' });
+  const novoMjerenje = inherit(v2, { fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-29T09:00:00.000Z' });
+  return isto?.signedBy === 'Vlasnik' && prekoVerzije === null && novoMjerenje === null;
 }
 
 /**
@@ -1168,6 +1188,18 @@ const MUTATIONS: Mutation[] = [
       'manifest je obican spoj docx-local i LEKTA_CORPUS_SOURCE, pa 102 bajt-identicna rada ulaze dvaput (321 umjesto 219, 2026-09-27)',
     caught: () => !jedanDokumentJedanGlas((entries) => ({ entries, duplicates: [] })),
     cleanBefore: () => jedanDokumentJedanGlas((entries) => dedupeManifest(entries, () => new Uint8Array([1]))),
+  },
+  {
+    id: 'korpus/potpis-v1-ovjere-prelazi-na-v2-mjerenje',
+    imitates:
+      'attest-real-corpus.mjs je potpis prenosio cim je otisak isti; ponovljeno mjerenje 27. 9. dalo je isti v1 otisak kao ovjera potpisana 12. 9.',
+    caught: () =>
+      potpisOstajeSamoUzIstoMjerenje((e, n) =>
+        e && e.signedBy && e.signedAt && e.corpusFingerprint === n.corpusFingerprint
+          ? { signedBy: e.signedBy, signedAt: e.signedAt, signatureNote: e.signatureNote ?? null }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstoMjerenje(inheritedSignature),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------
