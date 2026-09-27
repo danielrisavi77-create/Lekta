@@ -13,4 +13,14 @@ describe('repository hygiene', () => {
 
     expect(result.status).toBe(0);
   });
+
+  test('Firecrawl cache (sirovi web sadrzaj, mogu biti osobni podaci/tokeni) ne ulazi u Git checkpoint', () => {
+    const result = spawnSync(
+      'git',
+      ['check-ignore', '--no-index', '-q', '.firecrawl/search-primjer.json'],
+      { cwd: ROOT, shell: false },
+    );
+
+    expect(result.status).toBe(0);
+  });
 });
