@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/generated/faculty-matrix.json",
-  "totalProfiles": 407,
-  "profilesWithoutSample": 402,
+  "totalProfiles": 423,
+  "profilesWithoutSample": 418,
   "entries": [
     {
       "profileId": "algebra-diplomski",
@@ -2218,6 +2218,12 @@
       "offeredOptionCount": 0
     },
     {
+      "profileId": "agromed-zavrsni",
+      "unitId": "agromed",
+      "facultyLabel": "Agromediteranski fakultet",
+      "offeredOptionCount": 0
+    },
+    {
       "profileId": "alu-doktorski",
       "unitId": "alu",
       "facultyLabel": "Akademija likovnih umjetnosti",
@@ -2248,6 +2254,18 @@
       "offeredOptionCount": 0
     },
     {
+      "profileId": "efri-specijalisticki",
+      "unitId": "efri",
+      "facultyLabel": "Ekonomski fakultet u Rijeci",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "ffzg-svedski-zavrsni",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 0
+    },
+    {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
       "unitId": "fpzg",
       "facultyLabel": "Fakultet političkih znanosti",
@@ -2272,6 +2290,24 @@
       "offeredOptionCount": 0
     },
     {
+      "profileId": "geoteh-diplomski",
+      "unitId": "geoteh",
+      "facultyLabel": "Geotehnički fakultet",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "unitId": "geoteh",
+      "facultyLabel": "Geotehnički fakultet",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "unitId": "geoteh",
+      "facultyLabel": "Geotehnički fakultet",
+      "offeredOptionCount": 0
+    },
+    {
       "profileId": "gradri-diplomski",
       "unitId": "gradri",
       "facultyLabel": "Građevinski fakultet u Rijeci",
@@ -2284,6 +2320,48 @@
       "offeredOptionCount": 0
     },
     {
+      "profileId": "hig-zavrsni",
+      "unitId": "hig",
+      "facultyLabel": "Samostalni sveučilišni studij Hotelijerstvo i gastronomija",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "medri-doktorski",
+      "unitId": "medri",
+      "facultyLabel": "Medicinski fakultet u Rijeci",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
+      "unitId": "medri",
+      "facultyLabel": "Medicinski fakultet u Rijeci",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "unitId": "mefst",
+      "facultyLabel": "Medicinski fakultet u Splitu",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
+      "unitId": "mefst",
+      "facultyLabel": "Medicinski fakultet u Splitu",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "unitId": "mvi",
+      "facultyLabel": "Teološki fakultet Matija Vlačić Ilirik",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "unitId": "mvi",
+      "facultyLabel": "Teološki fakultet Matija Vlačić Ilirik",
+      "offeredOptionCount": 0
+    },
+    {
       "profileId": "par-diplomski",
       "unitId": "par",
       "facultyLabel": "Veleučilište PAR",
@@ -2293,6 +2371,18 @@
       "profileId": "par-zavrsni",
       "unitId": "par",
       "facultyLabel": "Veleučilište PAR",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "pmf-biologija-zavrsni",
+      "unitId": "pmf",
+      "facultyLabel": "Prirodoslovno-matematički fakultet",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
+      "unitId": "pmf",
+      "facultyLabel": "Prirodoslovno-matematički fakultet",
       "offeredOptionCount": 0
     },
     {
@@ -2389,6 +2479,12 @@
       "profileId": "unizd-sociologija-zavrsni",
       "unitId": "unizd",
       "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "vef-specijalisticki",
+      "unitId": "vef",
+      "facultyLabel": "Veterinarski fakultet",
       "offeredOptionCount": 0
     },
     {

@@ -97,12 +97,13 @@ describe('commitani izvjestaj', () => {
 
   /**
    * Zatecena podjela (2026-08-19). Brojke smiju pasti kad se posao odradi, ali ne smiju se tiho
-   * promijeniti: 24 su posljedica P2-2/P2-3, 6 je rupa u mjerenju, 5 je ispravna nula, a stvarni
+   * promijeniti: 24 su posljedica P2-2/P2-3, a dodatnih 16 profila bez bodovanih pravila su
+   * agromed-zavrsni, efri-specijalisticki, ffzg-svedski-zavrsni, geoteh-diplomski, geoteh-doktorski, geoteh-zavrsni, hig-zavrsni, medri-doktorski, medri-sanitarno-diplomski, mefst-doktorski, mefst-tribe-doktorski, mvi-diplomski, mvi-prijediplomski, pmf-biologija-zavrsni, pmf-geologija-zavrsni, vef-specijalisticki. Ostalih 6 je rupa u mjerenju, 5 je ispravna nula, a stvarni
    * P2-4 backlog je pet podatkovnih prijevoda.
    */
   it('zatecena podjela ostaje vidljiva', () => {
-    expect(baked.summary.total).toBe(40);
-    expect(baked.summary['no-scored-rules']).toBe(24);
+    expect(baked.summary.total).toBe(56);
+    expect(baked.summary['no-scored-rules']).toBe(40);
     expect(baked.summary['assisted-profile-gated']).toBe(6);
     expect(baked.summary['not-repairable-by-nature']).toBe(5);
     expect(baked.summary['rule-shape-unusable']).toBe(5);

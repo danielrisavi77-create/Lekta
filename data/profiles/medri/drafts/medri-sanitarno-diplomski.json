@@ -1,0 +1,139 @@
+{
+  "profileId": "medri-sanitarno-diplomski",
+  "generatedAt": "2026-09-25",
+  "source": "Upute o izradi diplomskog rada na diplomskom studiju Sanitarno inženjerstvo (MEDRI, 2025./2026.), izravno iz službenog PDF snapshot-a.",
+  "note": "Izravno su izdvojene obvezne tehničke tvrdnje i opseg. Pravila su ostavljena kao needs-recheck i nebodovana dok ne prođu odobrenje; citiranje je samo preporučeno jer izvor kaže da se Vancouver najčešće koristi. Citiranje ostaje neobvezujuća napomena: uputa navodi da se Vancouver najčešće koristi, ali nema odobrenog zadanog stila.",
+  "entries": [
+    {
+      "ruleId": "medri-sanitarno-diplomski--paper-size",
+      "checkId": "paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "value": "A4",
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "medri-sanitarno-diplomski-2025-26",
+      "sourcePage": "str. 1, opće upute",
+      "quote": "na stranici standardne veličine (A4, 210x297 mm)",
+      "status": "needs-recheck",
+      "scored": false
+    },
+    {
+      "ruleId": "medri-sanitarno-diplomski--margins",
+      "checkId": "margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "medri-sanitarno-diplomski-2025-26",
+      "sourcePage": "str. 1, opće upute",
+      "quote": "sa slobodnim rubnicima od 2,5 cm",
+      "status": "needs-recheck",
+      "scored": false
+    },
+    {
+      "ruleId": "medri-sanitarno-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "medri-sanitarno-diplomski-2025-26",
+      "sourcePage": "str. 1, opće upute",
+      "quote": "i s proredom 1,5",
+      "status": "needs-recheck",
+      "scored": false
+    },
+    {
+      "ruleId": "medri-sanitarno-diplomski--font-size",
+      "checkId": "font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Veličina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "medri-sanitarno-diplomski-2025-26",
+      "sourcePage": "str. 1, opće upute",
+      "quote": "pismo veličine 12 tipografskih točaka",
+      "status": "needs-recheck",
+      "scored": false
+    },
+    {
+      "ruleId": "medri-sanitarno-diplomski--font",
+      "checkId": "font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Pismo",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "medri-sanitarno-diplomski-2025-26",
+      "sourcePage": "str. 1, opće upute",
+      "quote": "Potrebno je rabiti Times New Roman pismo veličine 12 tipografskih točaka",
+      "status": "needs-recheck",
+      "scored": false
+    },
+    {
+      "ruleId": "medri-sanitarno-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "value": true,
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "medri-sanitarno-diplomski-2025-26",
+      "sourcePage": "str. 1, opće upute",
+      "quote": "Sve stranice moraju biti numerirane",
+      "status": "needs-recheck",
+      "scored": false
+    },
+    {
+      "ruleId": "medri-sanitarno-diplomski--page-count",
+      "checkId": "page-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "value": {
+        "min": 40,
+        "max": 90
+      },
+      "category": "scope",
+      "label": "Opseg (40-90 str.)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "medri-sanitarno-diplomski-2025-26",
+      "sourcePage": "str. 1, opseg rada",
+      "quote": "Diplomski rad ne može sadržavati manje od 40 niti više od 90 stranica.",
+      "status": "needs-recheck",
+      "scored": false
+    }
+  ]
+}
