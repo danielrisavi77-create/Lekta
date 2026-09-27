@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   EXPECTED_SUPABASE_PROJECT_REF,
@@ -14,6 +14,10 @@ import { parseAndVerifyRemoteRepairDocxBaseline } from '../scripts/run-local-rep
 import * as releaseCli from '../scripts/run-local-repair-release';
 
 import type { LocalRepairDeploymentExecutor } from '../scripts/run-local-repair-release';
+import { removeTrackedTempDirs, trackedTempDir } from './helpers/temp-dirs';
+
+// Stavka G: mkdtemp mape bez vlastitog try/finally brisu se nakon svakog testa, i nakon pada.
+afterEach(removeTrackedTempDirs);
 
 const SUCCESS_TRACE = [
   'command:supabase link',
@@ -843,7 +847,7 @@ describe('automatizirani local-repair release CLI', () => {
 
   it('odbija nedostajuci artefakt prije platformskog Authenticode poziva', () => {
     const missing = join(
-      mkdtempSync(join(tmpdir(), 'lekta-release-missing-artifact-')),
+      trackedTempDir('lekta-release-missing-artifact-'),
       'missing.exe',
     );
     expect(() => releaseCli.readAuthenticodeEvidence(missing)).toThrow(/runner artefakt ne postoji/i);

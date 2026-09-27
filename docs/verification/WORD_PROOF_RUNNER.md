@@ -43,12 +43,24 @@ Stroj:
   koje ne smiju procuriti.
 - Runner ne dobiva nikakve tajne; ne dodaji ih ni kao varijable okoline na stroju.
 
+Odstupanje, prihvaceno 2026-09-27: runner `DESKTOP-LJMIVR9` radi pod vlasnikovim osobnim racunom
+`Daniel`, na kojem su aktivne Claude prijave (u runu 36336507818 preflight je zabiljezio 14
+`claude.exe` procesa). Kod koji se izvrsi na runneru vidi te prijave i datoteke racuna. Vlasnik je
+2026-09-27 izravno odlucio da runner ostaje na tom racunu i prihvatio rizik; granica ostaju mjere 1
+do 4 iz odjeljka 6. Administratorska prava racuna nisu provjerena. Iznimka vrijedi do lansiranja
+(go/no-go 19. 10. 2026.), nakon toga ponovna odluka (T81); vlasnik je to izravno potvrdio 27. 9. 2026.
+
 ## 2. Priprema stroja
 
 1. Instaliraj **Node.js 24** (https://nodejs.org, LTS instalacijski paket).
 2. Instaliraj **Git for Windows** (https://git-scm.com) tako da je `git` u PATH-u korisnika
    runnera. **WSL / bash nisu potrebni**: `setup-deps` na Windowsu koristi `powershell`
    (WindowsApps `bash.exe` bez WSL-a pada s `WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED`).
+   Dodaj i `C:\Program Files\Git\usr\bin` u PATH korisnika runnera: `actions/cache` na Windowsu
+   pakira kroz Gitov `tar.exe -z`, koji trazi `gzip` iz te mape. Bez nje kes se nikad ne sprema
+   (`gzip: command not found`, `Failed to save`), pa svaki run iznova vrti `npm ci`. S njom je run
+   36346047897 spremio `node_modules` kes, a run 36348083630 ga je pogodio i preskocio `npm ci`.
+   Nakon promjene PATH-a runner treba ponovno pokrenuti.
 3. Provjeri Word iz PowerShella (prijavljen kao korisnik runnera). Primjer sam gasi Word, da ne
    ostavi proces:
 
@@ -117,6 +129,7 @@ Stroj:
 | "Word proces iz ovog runa nije zavrsio" | automatizacija je zapela; zatvori `WINWORD.EXE` u Task Manageru prije sljedeceg runa |
 | Preflight pada na `New-Object -ComObject Word.Application` | Word nije instaliran ili aktiviran za tog korisnika, ili ceka dijalog prvog pokretanja |
 | Preflight pada na `git --version` | Git for Windows nije u PATH-u korisnika runnera |
+| "Ovisnosti" svaki put vrti `npm ci`; u Post koraku `gzip: command not found` | `C:\Program Files\Git\usr\bin` nije u PATH-u korisnika runnera (odjeljak 2, korak 2); dodaj i ponovno pokreni runner |
 | `Ovisnosti` pada s `WSL_E_WSL_OPTIONAL_COMPONENT_REQUIRED` | Stari `setup-deps` zvao je `bash`; na masteru mora biti verzija s `shell: powershell` na Windowsu |
 | "nije tocan vrh origin/master ni origin/release/*" | `ref` pokazuje na stari commit, tag ili commit izvan ovog repozitorija; namjerno odbijeno |
 | Job skipped | pokrenut je u forku ili drugom repozitoriju; namjerno |
@@ -153,3 +166,7 @@ branch protection (PR obvezan, enforce admins, 6 obveznih provjera); odobrenje f
 sve vanjske suradnike je ukljuceno; `release/**` dobiva ruleset (PR obvezan, bez force pusha i
 brisanja). Vlasnik je 2026-09-27 odlucio da se #162 spaja uz mjere 1 do 4, a mjera 5 ostaje
 biljeska u T80.
+
+Word na runneru je 14.0 (Word 2010), isti kao na stroju lokalnog `RELEASE_PROOF` (T72); Word 2013 i
+noviji nisu pokriveni ni na jednom stroju (vidi `docs/superpowers/specs/2026-08-23-real-docx-corpus-f1-f2.md`).
+Prvi zeleni run: 36336507818 (commit 7e15d9ac), samo cetiri Word razine, sve PROLAZ.

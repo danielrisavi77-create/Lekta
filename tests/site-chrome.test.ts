@@ -14,7 +14,7 @@
  * Svaka tvrdnja ima mutaciju, i svaka mutacija ima baseline nad neizmijenjenim markupom: gard koji
  * vristi na sve jednako je bezvrijedan kao gard koji ne vidi nista.
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import {
@@ -26,6 +26,7 @@ import {
   lampOverlayTheme,
   markActiveDestination,
   mountSiteChrome,
+  placeSiteChromeMarker,
   siteChromeLowestPrice,
   siteChromeSteps,
   siteChromeToolCount,
@@ -36,6 +37,34 @@ import {
   SITE_CHROME_PLATE_EMPTY,
 } from '../src/shared/site-chrome';
 import { unitKratica } from '../src/coverage/site-stats';
+import {
+  DESK_NO_WORK,
+  INK_CLASS,
+  SITE_STATS_DESK,
+  deskLastWork,
+  deskRules,
+  deskSources,
+  fillDeskState,
+  lampLine,
+  mountFullFooter,
+  wireInkSignature,
+} from '../src/shared/site-footer-full';
+import {
+  backdropFilterProblems,
+  deskStateSourceProblems,
+  footerCopyFromTemplate,
+  footerLinkProblems,
+  fullFooterBlock,
+  fullFooterProblems,
+  inkObserverProblems,
+  inkSignatureCssProblems,
+  markerMotionProblems,
+  markerTravelProblems,
+  scrolledBarProblems,
+  shortStepperProblems,
+} from './helpers/site-footer-guards';
+import { releasedPublicRouteGroups } from '../src/routes/shared/public-route-directory';
+import { DEFAULT_PRODUCTION_CONFIG } from '../src/config/production-config';
 import { WORK_TYPE_ORDER, WORK_TYPE_TIERS, formatEurAmount } from '../src/report/pricing';
 import { legalDocuments } from '../src/legal/legal-content';
 
@@ -64,6 +93,16 @@ const STRANICE = [
   'saznaj-vise/index.html',
   'moji-radovi/index.html',
 ] as const;
+
+/**
+ * STRANICE S PUNIM PODNOZJEM (Z15 drugi krug): "saznaj vise, cjenik, pribor, po fakultetu".
+ * Cjenik je odjeljak `/saznaj-vise/#cjenik`, ne vlastita stranica; `/fakulteti/` pece
+ * `scripts/generate-faculty-pages.mjs` bez bundlea i po F9 ostaje na brend retku (F24). Sve
+ * ostale stranice s trakom (ulaz, `/rad/`, pojedinacni alati, usporedba, benchmark, moji radovi)
+ * ostaju s pravnim minimumom.
+ */
+const PUNO_PODNOZJE = ['saznaj-vise/index.html', 'alati.html'] as const;
+const S_PRAVNIM_MINIMUMOM = STRANICE.filter((rel) => !(PUNO_PODNOZJE as readonly string[]).includes(rel));
 
 /** Zaglavlje kao tekst; usporedbe su neosjetljive na CR (CLAUDE.md, tekstualne usporedbe). */
 function zaglavlje(html: string): string {
@@ -816,12 +855,24 @@ describe('Z15 stanje nakon skrola', () => {
     expect(mobilnoPraviloNatpisa(sakriven)).not.toContain('clip-path: inset(50%)');
   });
 
-  it('list nosi ucinke tankog stanja: padding, blur, crvena nit i manji logo', () => {
+  /**
+   * TANKO STANJE BEZ ZAMUCENJA (Z15 drugi krug, F22). Nalog je trazio zamucenje od 14px, Z31 ga
+   * na javnim stranicama zabranjuje; traka zato nosi punu pozadinu `--desk`. Tvrdnja je okrenuta
+   * u odnosu na prvi krug, koji je zamucenje zahtijevao.
+   */
+  it('list nosi ucinke tankog stanja: padding 8px, puna pozadina --desk, crvena nit i logo 24px', () => {
     const css = read('src/shared/site-chrome.css');
-    expect(css).toContain('padding-block: 8px');
-    expect(css).toContain('backdrop-filter: blur(14px)');
-    expect(css).toMatch(/\.site-chrome--scrolled \.site-chrome__thread \{ opacity: \.7; \}/);
-    expect(css).toMatch(/\.site-chrome--scrolled \.ks-mark \{ width: 24px/);
+    expect(scrolledBarProblems(css)).toEqual([]);
+  });
+
+  it('MUTACIJA: prozirna pozadina ili izgubljen padding tankog stanja padaju', () => {
+    const css = read('src/shared/site-chrome.css').split('\r\n').join('\n');
+    const prozirno = css.replace(/(header\.site-chrome--scrolled \{[^}]*)background: var\(--desk\);/, '$1background: color-mix(in srgb, var(--desk) 82%, transparent);');
+    expect(prozirno, 'podmetanje se nije primilo').not.toBe(css);
+    expect(scrolledBarProblems(prozirno)).toContain('tanko stanje nema punu pozadinu var(--desk)');
+    const bezPaddinga = css.replace(/(header\.site-chrome--scrolled \{[^}]*)padding-block: 8px;/, '$1');
+    expect(bezPaddinga).not.toBe(css);
+    expect(scrolledBarProblems(bezPaddinga)).toContain('tanko stanje nema padding 8px');
   });
 });
 
@@ -1025,7 +1076,7 @@ describe('Z15 brojke mobilnog lista dolaze IZ IZVORA', () => {
 });
 
 describe('Z15 podnozje: pravni minimum', () => {
-  const S_PODNOZJEM = STRANICE;
+  const S_PODNOZJEM = S_PRAVNIM_MINIMUMOM;
 
   it.each(S_PODNOZJEM)('%s nosi cetiri pravne poveznice, "Sve pravno" i jednu recenicu', (rel) => {
     const foot = podnozje(read(rel));
@@ -1071,7 +1122,7 @@ describe('Z15 podnozje: pravni minimum', () => {
     expect(generator).toContain('`${doc.slug}.html`');
   });
 
-  it.each(STRANICE)('%s: "Sve pravno" vodi na /privatnost.html i najavljuje Z20 indeks', (rel) => {
+  it.each(S_PRAVNIM_MINIMUMOM)('%s: "Sve pravno" vodi na /privatnost.html i najavljuje Z20 indeks', (rel) => {
     const foot = podnozje(read(rel));
     expect(svePravnoOdrediste(foot)).toBe('/privatnost.html');
     expect(GENERIRANA_ODREDISTA, 'odrediste nije medju pecenim pravnim stranicama')
@@ -1107,11 +1158,340 @@ describe('Z15 podnozje: pravni minimum', () => {
     expect(podnozje(read('rad/index.html'))).toContain('id="privacySettingsBtn"');
   });
 
-  it('puno podnozje je DRUGI krug, i stranice koje ga cekaju to imaju zapisano', () => {
-    // Bez ovoga bi pravni minimum na sadrzajnim stranicama izgledao kao konacna odluka.
-    for (const rel of ['saznaj-vise/index.html']) {
-      expect(read(rel), rel).toContain('TODO (Z15, drugi krug)');
+  /**
+   * PODJELA JE IMENOVANA, NE PREBROJANA (Z15 drugi krug). Ulaz, `/rad/` i pojedinacni alati
+   * ostaju s pravnim minimumom; puno podnozje nose samo imenovane stranice, i svaka stranica s
+   * trakom nosi TOCNO JEDNO od dva podnozja.
+   */
+  it('ulaz, `/rad/` i pojedinacni alati ostaju s pravnim minimumom; puno nose samo imenovane', () => {
+    for (const rel of ['index.html', 'rad/index.html', 'citat.html', 'izjava.html', 'kartice.html', 'literatura.html', 'naslovnica.html']) {
+      expect(S_PRAVNIM_MINIMUMOM, rel).toContain(rel);
     }
+    for (const rel of STRANICE) {
+      const html = read(rel);
+      const legal = (html.match(/data-site-footer="legal"/g) ?? []).length;
+      const full = (html.match(/data-site-footer="full"/g) ?? []).length;
+      const ocekujePuno = (PUNO_PODNOZJE as readonly string[]).includes(rel);
+      expect([legal, full], rel).toEqual(ocekujePuno ? [0, 1] : [1, 0]);
+    }
+    // Obecanje iz prvog kruga je ispunjeno, pa TODO ne smije ostati kao lazna najava.
+    expect(read('saznaj-vise/index.html')).not.toContain('TODO (Z15, drugi krug)');
+  });
+});
+
+/**
+ * PUNO PODNOZJE (Z15, DRUGI KRUG).
+ *
+ * Copy se ne prepisuje u test: citac `footerCopyFromTemplate` ga vadi iz PREDLOSKA
+ * (`design/templates/chrome/Chrome.dc.html`, prizor 05), a isti citac cita stranicu. Svaka
+ * tvrdnja ima mutaciju u `tests/gate-mutations.test.ts` (id `z15b/...`) i baseline ovdje.
+ */
+describe('Z15 drugi krug: puno podnozje', () => {
+  const PREDLOZAK = footerCopyFromTemplate(read('design/templates/chrome/Chrome.dc.html'));
+
+  it('citac predloska stvarno cita prizor 05, ne prazninu', () => {
+    // SENTINEL: bez ovoga bi prazan predlozak i prazno podnozje bili "jednaki".
+    expect(PREDLOZAK).not.toBeNull();
+    expect(PREDLOZAK!.stupci.map((c) => c.naziv)).toEqual(['Proizvod', 'Pribor', 'Pravno']);
+    expect(PREDLOZAK!.stupci.flatMap((c) => c.stavke)).toHaveLength(19);
+    expect(PREDLOZAK!.granice).toHaveLength(4);
+    expect(PREDLOZAK!.moto).toContain('Mjeri, ne piše.');
+  });
+
+  it.each(PUNO_PODNOZJE)('%s: kolofon od cetiri stupca, copy doslovno iz predloska, 01 do 19', (rel) => {
+    expect(fullFooterProblems(fullFooterBlock(read(rel)), PREDLOZAK)).toEqual([]);
+  });
+
+  it('isti blok na obje stranice (jedan izvor, dvije kopije koje se ne smiju raziciti)', () => {
+    const [prva, druga] = PUNO_PODNOZJE.map((rel) => fullFooterBlock(read(rel)));
+    expect(prva).not.toBeNull();
+    expect(prva).toBe(druga);
+  });
+
+  it('kolofon je u auto-fit stupcima, ne u fiksnoj mrezi', () => {
+    const css = bezKomentara(read('src/shared/site-chrome.css'));
+    expect(css).toMatch(/\.site-footer__kolofon \{[^}]*grid-template-columns: repeat\(auto-fit, minmax\(min\(100%, 200px\), 1fr\)\);/);
+  });
+
+  /** Poznata odredista: javni direktorij, odredista trake i pravne stranice koje generator pece. */
+  const POZNATE = new Set<string>([
+    ...releasedPublicRouteGroups.flatMap((g) => g.destinations.map((d) => d.href)),
+    ...SITE_CHROME_DESTINATIONS.map((d) => d.href),
+    ...Object.values(legalDocuments()).map((d) => `/${d.slug}.html`),
+  ]);
+
+  it.each(PUNO_PODNOZJE)('%s: svaka poveznica vodi na postojecu stranicu ili na kontakt iz konfiguracije', (rel) => {
+    expect(footerLinkProblems(fullFooterBlock(read(rel)), POZNATE, DEFAULT_PRODUCTION_CONFIG.contactEmail)).toEqual([]);
+  });
+
+  it('pravni stupac nabraja SVIH sedam pravnih dokumenata koje generator pece, plus kontakt', () => {
+    const foot = fullFooterBlock(read('alati.html'))!;
+    const pravno = foot.slice(foot.indexOf('aria-label="Pravno"'));
+    for (const doc of Object.values(legalDocuments())) {
+      expect(pravno, doc.slug).toContain(`href="/${doc.slug}.html"`);
+    }
+    expect(pravno).toContain(`href="mailto:${DEFAULT_PRODUCTION_CONFIG.contactEmail}"`);
+  });
+
+  it('"Stanje stola" cita pecen site-stats.json i povijest kroz siguran omotac', () => {
+    const baked = JSON.parse(read('data/coverage/site-stats.json')) as { profiles: number; rulesVersion: string | null; sourcesCheckedAt: string | null };
+    expect(deskStateSourceProblems(read('src/shared/site-footer-full.ts'), baked)).toEqual([]);
+    // Isti uvoz koji modul cita, ne druga kopija: vrijednosti su jednake pecenima.
+    expect(SITE_STATS_DESK).toEqual({ profiles: baked.profiles, rulesVersion: baked.rulesVersion, sourcesCheckedAt: baked.sourcesCheckedAt });
+    // SENTINEL: pecene vrijednosti nisu prazne, inace bi redak "Pravila" bio samo broj profila.
+    expect(baked.rulesVersion).toMatch(/^[0-9a-f]{7}$/);
+    expect(baked.sourcesCheckedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  it('retci "Stanja stola": zadnji rad s ocjenom, verzija pravila s profilima, datum izvora', () => {
+    expect(deskLastWork([{ fileName: 'diplomski-rad-final-v3.docx', score: 70.6 }, { fileName: 'stari.docx', score: 12 }]))
+      .toBe('diplomski-rad-final-v3.docx · 71');
+    expect(deskLastWork([{ fileName: 'bez-ocjene.docx' }])).toBe('bez-ocjene.docx');
+    expect(deskRules({ profiles: 407, rulesVersion: '8ce3bee', sourcesCheckedAt: null })).toBe('v8ce3bee · 407 profila');
+    expect(deskRules({ profiles: 401, rulesVersion: null, sourcesCheckedAt: null })).toBe('401 profil');
+    expect(deskSources({ profiles: 1, rulesVersion: null, sourcesCheckedAt: '2026-08-24' })).toBe('24. 8. 2026.');
+  });
+
+  it('BEZ ZAPISA redak to kaze istinito, i pokvaren zapis ne izmislja rad', () => {
+    for (const zapis of [null, undefined, [], {}, 'x', [null], [{ score: 50 }], [{ fileName: '  ', score: 50 }]]) {
+      expect(deskLastWork(zapis), JSON.stringify(zapis) ?? 'undefined').toBe(DESK_NO_WORK);
+    }
+    expect(deskSources({ profiles: 1, rulesVersion: null, sourcesCheckedAt: null })).toBe('datum provjere nije zabilježen');
+  });
+
+  it('montaza upise "Stanje stola" iz pohrane i otkrije blok; bez JS-a blok ostaje skriven', () => {
+    localStorage.clear();
+    const foot = fullFooterBlock(read('saznaj-vise/index.html'))!;
+    const doc = dom(foot);
+    const footer = doc.querySelector<HTMLElement>('[data-site-footer="full"]')!;
+    const blok = footer.querySelector<HTMLElement>('[data-site-footer-stanje]')!;
+    // BASELINE: staticki markup je skriven (bez JavaScripta nema tvrdnje).
+    expect(blok.hidden).toBe(true);
+    const kontroler = new AbortController();
+    mountFullFooter(footer, kontroler.signal);
+    expect(blok.hidden).toBe(false);
+    expect(footer.querySelector('[data-site-footer-stat="rad"]')!.textContent).toBe(DESK_NO_WORK);
+    expect(footer.querySelector('[data-site-footer-stat="pravila"]')!.textContent).toBe(deskRules(SITE_STATS_DESK));
+    expect(footer.querySelector('[data-site-footer-stat="izvori"]')!.textContent).toBe(deskSources(SITE_STATS_DESK));
+    kontroler.abort();
+
+    localStorage.setItem('lekta.history.v2', JSON.stringify([{ fileName: 'zavrsni.docx', score: 83 }]));
+    const drugi = dom(foot);
+    const f2 = drugi.querySelector<HTMLElement>('[data-site-footer="full"]')!;
+    fillDeskState(f2, JSON.parse(localStorage.getItem('lekta.history.v2')!));
+    expect(f2.querySelector('[data-site-footer-stat="rad"]')!.textContent).toBe('zavrsni.docx · 83');
+    localStorage.clear();
+  });
+
+  it('traka LIJENO ucita podnozje samo kad ga stranica nosi, i ono se stvarno upise', async () => {
+    localStorage.clear();
+    const html = read('saznaj-vise/index.html');
+    const doc = dom(`${zaglavlje(html)}${fullFooterBlock(html)!}`, kanonskaOd('saznaj-vise/index.html'));
+    mountSiteChrome(doc);
+    await import('../src/shared/site-footer-full');
+    await new Promise((r) => setTimeout(r, 0));
+    expect(doc.querySelector<HTMLElement>('[data-site-footer-stanje]')!.hidden).toBe(false);
+    disposeSiteChrome(doc);
+  });
+
+  it('redak lampe prati STVARNU temu, i mijenja se kad se tema promijeni', async () => {
+    const doc = dom(fullFooterBlock(read('alati.html'))!);
+    doc.documentElement.dataset.theme = 'dark';
+    const footer = doc.querySelector<HTMLElement>('[data-site-footer="full"]')!;
+    const kontroler = new AbortController();
+    mountFullFooter(footer, kontroler.signal);
+    const redak = footer.querySelector('[data-site-footer-lampa]')!;
+    expect(redak.textContent).toBe('Radna lampa upaljena');
+    doc.documentElement.dataset.theme = 'light';
+    await new Promise((r) => setTimeout(r, 0));
+    expect(lampLine(doc)).toBe('Danje svjetlo');
+    expect(redak.textContent).toBe('Danje svjetlo');
+    kontroler.abort();
+  });
+});
+
+/**
+ * POTPIS KOJI SE PUNI TINTOM. `IntersectionObserver` u happy-domu ne okida, pa se podmece
+ * promatrac koji test sam pokrene; tvrdi se PRAG (.5), `.motion-offscreen` izvan pogleda (Z31) i
+ * da je pod prigusenim pokretom potpis ODMAH popunjen.
+ */
+describe('Z15 drugi krug: potpis se puni tintom', () => {
+  type Unos = { isIntersecting: boolean; intersectionRatio: number };
+  let okini: ((unosi: Unos[]) => void) | null = null;
+  let pragovi: number[] = [];
+  const izvorni = window.IntersectionObserver;
+
+  beforeEach(() => {
+    okini = null;
+    pragovi = [];
+    class Lazni {
+      constructor(cb: (unosi: Unos[]) => void, opcije?: { threshold?: number | number[] }) {
+        okini = cb;
+        pragovi = ([] as number[]).concat(opcije?.threshold ?? []);
+      }
+      observe(): void {}
+      disconnect(): void {}
+    }
+    (window as unknown as { IntersectionObserver: unknown }).IntersectionObserver = Lazni;
+  });
+  afterEach(() => {
+    (window as unknown as { IntersectionObserver: unknown }).IntersectionObserver = izvorni;
+  });
+
+  const potpisIz = (doc: Document): HTMLElement => doc.querySelector<HTMLElement>('[data-site-footer-potpis]')!;
+
+  it('tinta dolazi TEK kad je pola potpisa u pogledu; izvan pogleda potpis nosi .motion-offscreen', () => {
+    const doc = dom(fullFooterBlock(read('alati.html'))!);
+    const potpis = potpisIz(doc);
+    const kontroler = new AbortController();
+    wireInkSignature(potpis, kontroler.signal);
+    expect(pragovi).toContain(0.5);
+    expect(potpis.classList.contains(INK_CLASS)).toBe(false);
+    okini!([{ isIntersecting: false, intersectionRatio: 0 }]);
+    expect(potpis.classList.contains('motion-offscreen')).toBe(true);
+    okini!([{ isIntersecting: true, intersectionRatio: 0.3 }]);
+    expect(potpis.classList.contains(INK_CLASS), 'tinta na 30% vidljivosti').toBe(false);
+    expect(potpis.classList.contains('motion-offscreen')).toBe(false);
+    okini!([{ isIntersecting: true, intersectionRatio: 0.5 }]);
+    expect(potpis.classList.contains(INK_CLASS)).toBe(true);
+    kontroler.abort();
+  });
+
+  it('pod prigusenim pokretom potpis je ODMAH popunjen, bez promatraca', () => {
+    const doc = dom(fullFooterBlock(read('alati.html'))!);
+    doc.documentElement.dataset.motion = 'reduce';
+    const potpis = potpisIz(doc);
+    wireInkSignature(potpis, new AbortController().signal);
+    expect(potpis.classList.contains(INK_CLASS)).toBe(true);
+    expect(okini, 'promatrac se ne smije ni stvoriti').toBeNull();
+  });
+
+  it('list: tinta ide kroz background-position (ne size/width), 1.4s, i pod reduced-motion je odmah puna', () => {
+    // Gard je u `tests/helpers/site-footer-guards.ts`; mutacije `z15b/tinta-*` u gate-mutations.
+    expect(inkSignatureCssProblems(read('src/shared/site-chrome.css'))).toEqual([]);
+  });
+
+  it('ponasanje: prag .5, .motion-offscreen, pod data-motion="reduce" odmah puno (isti gard kao mutacija)', () => {
+    expect(inkObserverProblems(wireInkSignature, document, INK_CLASS)).toEqual([]);
+  });
+});
+
+/**
+ * KVACICA PUTUJE KROZ `transform` (Z15 drugi krug, Z31) I PO SIDRU NA ISTOJ STRANICI.
+ */
+describe('Z15 drugi krug: kvacica kroz transform i sidro', () => {
+  afterEach(() => disposeSiteChrome(document));
+
+  it('list i kod: transform .45s ease-spring, bez left i bez view-transition-name', () => {
+    expect(markerMotionProblems(read('src/shared/site-chrome.css'), read('src/shared/site-chrome.ts'))).toEqual([]);
+  });
+
+  it('pomak se upisuje kao translateX, prvi put bez prijelaza, a `left` ostaje netaknut', () => {
+    const doc = dom(zaglavlje(read('alati.html')), kanonskaOd('alati.html'));
+    const chrome = doc.querySelector<HTMLElement>('[data-site-chrome]')!;
+    const marker = doc.querySelector<HTMLElement>('[data-site-chrome-marker]')!;
+    markActiveDestination(chrome, 'tools');
+    expect(marker.style.transform).toMatch(/^translateX\(-?\d+px\)$/);
+    expect(marker.style.left).toBe('');
+    // Prvo postavljanje je ukinulo `transition: none` nakon skoka, pa sljedeci pomak putuje.
+    expect(marker.style.transition).toBe('');
+    expect(marker.dataset.siteChromeMarkerX).toBeDefined();
+    markActiveDestination(chrome, null);
+    expect(marker.dataset.siteChromeMarkerX, 'skrivena kvacica pri sljedecem prikazu opet skace').toBeUndefined();
+  });
+
+  it('dva prolaza: prvo postavljanje skace, drugi i treci pomak PUTUJU (bez transition: none i bez rasporeda)', () => {
+    // Izravan signal (dnevnik upisa u stil lazne kvacice); mutacija `z15b/kvacica-ne-putuje`.
+    expect(markerTravelProblems(placeSiteChromeMarker)).toEqual([]);
+  });
+
+  it('DOM: promjena sidra na /saznaj-vise/ ne gasi prijelaz; samo montiranje ga gasi', () => {
+    const html = read('saznaj-vise/index.html');
+    const doc = dom(zaglavlje(html), kanonskaOd('saznaj-vise/index.html'));
+    const view = doc.defaultView!;
+    view.location.hash = '#cjenik';
+    const marker = doc.querySelector<HTMLElement>('[data-site-chrome-marker]')!;
+    const mo = new view.MutationObserver(() => {});
+    mo.observe(marker, { attributes: true, attributeFilter: ['style'], attributeOldValue: true });
+    const stilovi = (): string[] => mo.takeRecords().map((r) => r.oldValue ?? '').concat(marker.getAttribute('style') ?? '');
+    mountSiteChrome(doc);
+    const montiranje = stilovi();
+    expect(montiranje.some((st) => /transition:\s*none/.test(st)), `montiranje: ${JSON.stringify(montiranje)}`).toBe(true);
+    view.location.hash = '#how';
+    view.dispatchEvent(new Event('hashchange'));
+    const pomak = stilovi();
+    expect(marker.dataset.siteChromeMarkerFor).toBe('how');
+    expect(pomak.some((st) => /transition/.test(st)), `pomak po sidru: ${JSON.stringify(pomak)}`).toBe(false);
+    expect(marker.style.transform).toMatch(/^translateX\(-?\d+px\)$/);
+    mo.disconnect();
+    view.location.hash = '';
+  });
+
+  it('`/saznaj-vise/#cjenik` aktivira Cjenik, a promjena sidra PUTUJE kvacicu na istoj stranici', () => {
+    const html = read('saznaj-vise/index.html');
+    const doc = dom(zaglavlje(html), kanonskaOd('saznaj-vise/index.html'));
+    const view = doc.defaultView!;
+    view.location.hash = '#cjenik';
+    mountSiteChrome(doc);
+    const marker = doc.querySelector<HTMLElement>('[data-site-chrome-marker]')!;
+    expect(marker.dataset.siteChromeMarkerFor).toBe('pricing');
+    expect(doc.querySelector('[data-site-chrome-dests] [data-site-chrome-dest="pricing"]')!.getAttribute('aria-current')).toBe('page');
+    view.location.hash = '#how';
+    view.dispatchEvent(new Event('hashchange'));
+    expect(marker.dataset.siteChromeMarkerFor).toBe('how');
+    expect([...doc.querySelectorAll('[data-site-chrome-dests] [aria-current]')].map((a) => a.getAttribute('data-site-chrome-dest'))).toEqual(['how']);
+    // Nepoznato sidro vraca ZADANO odrediste stranice, ne ostavlja zadnje ni ne gasi kvacicu.
+    view.location.hash = '#faq';
+    view.dispatchEvent(new Event('hashchange'));
+    expect(marker.dataset.siteChromeMarkerFor).toBe('how');
+    view.location.hash = '';
+  });
+
+  it('MUTACIJA: sidro tudje stranice ne pomice kvacicu (#cjenik na /alati.html)', () => {
+    const doc = dom(zaglavlje(read('alati.html')), kanonskaOd('alati.html'));
+    doc.defaultView!.location.hash = '#cjenik';
+    mountSiteChrome(doc);
+    expect(doc.querySelector<HTMLElement>('[data-site-chrome-marker]')!.dataset.siteChromeMarkerFor).toBe('tools');
+    doc.defaultView!.location.hash = '';
+  });
+});
+
+/**
+ * NEMA ZAMUCENJA POZADINE NA JAVNIM STRANICAMA (Z31), RATCHET. Traka nula; zatecena tri u
+ * `page-app.css` (pozadina modala dvaput, traka nad analizatorom) su izvan opsega ovog kruga i
+ * zapisana u F22; admin nije javna stranica.
+ */
+describe('Z15 drugi krug: nema backdrop-filter na javnim stranicama (ratchet)', () => {
+  const DOPUSTENO: Readonly<Record<string, number>> = { 'src/shared/page-app.css': 3 };
+  const JAVNI_LISTOVI = (): Array<{ ime: string; css: string }> => {
+    const out: Array<{ ime: string; css: string }> = [];
+    const hodaj = (dir: string): void => {
+      for (const e of readdirSync(resolve(ROOT, dir), { withFileTypes: true })) {
+        const rel = `${dir}/${e.name}`;
+        if (e.isDirectory()) { if (rel !== 'src/admin') hodaj(rel); continue; }
+        if (e.name.endsWith('.css')) out.push({ ime: rel, css: read(rel) });
+      }
+    };
+    hodaj('src');
+    return out;
+  };
+
+  it('nijedan javni list ne dobiva novo zamucenje, a traka nema nijedno', () => {
+    const listovi = JAVNI_LISTOVI();
+    // SENTINEL: hodanje je stvarno nasli listove, ukljucivo traku.
+    expect(listovi.length).toBeGreaterThan(10);
+    expect(backdropFilterProblems(listovi, DOPUSTENO)).toEqual([]);
+  });
+});
+
+/**
+ * PILULA DOKUMENTA NA 1180px I KRATKI STEPPER (stavka 4). Brojke su izmjerene u Chromiumu i
+ * zapisane uz pravilo u listu; strukturu cuva `shortStepperProblems`, a stvarnu sirinu
+ * `tests/ux/workspace-viewports.spec.ts` (1180px, tanko stanje, barem 18 znakova imena).
+ */
+describe('Z15 drugi krug: pilula dokumenta i kratki stepper', () => {
+  it('sredina je spremnik, stepper gubi natpise ispod izmjerene sirine, pilula ne izlazi iz sredine', () => {
+    expect(shortStepperProblems(read('src/shared/site-chrome.css'))).toEqual([]);
   });
 });
 

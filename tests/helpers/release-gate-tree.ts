@@ -13,6 +13,9 @@ import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+
+import { afterAll } from 'vitest';
+
 import { treeDigestFromLsTree } from '../../scripts/release-proof-core.mjs';
 import { requiredTierIds } from '../../scripts/release-tiers.mjs';
 
@@ -25,6 +28,20 @@ export interface GateTree {
   cleanup: () => void;
 }
 
+/** Stabla koja jos nisu obrisana; `cleanup` ih mice iz skupa. */
+const liveTrees = new Set<string>();
+
+/**
+ * Stavka G (2026-09-26): sigurnosna mreza za stablo ciji `cleanup` pozivatelj nije pozvao (npr.
+ * test koji stvori dva stabla, a `afterEach` cisti samo zadnje). Registrira se u datoteci koja
+ * uveze ovaj pomocnik, pa se izvrsi na kraju te datoteke.
+ */
+function cleanupAllGateTrees(): void {
+  for (const root of liveTrees) rmSync(root, { recursive: true, force: true });
+  liveTrees.clear();
+}
+afterAll(cleanupAllGateTrees);
+
 const git = (cwd: string, ...args: string[]): string =>
   // `core.autocrlf=false` samo da ispis ne bude zatrpan upozorenjima o zavrsecima redaka; otisak stabla
   // se ionako racuna iz blob hasheva koje daje git, ne s diska (vidi release-proof-core.mjs).
@@ -36,6 +53,7 @@ const git = (cwd: string, ...args: string[]): string =>
 
 export function makeGateTree(): GateTree {
   const root = mkdtempSync(join(tmpdir(), 'lekta-release-gate-'));
+  liveTrees.add(root);
   writeFileSync(join(root, 'README.md'), 'sinteticko stablo za gate izdanja\n', 'utf8');
   git(root, 'init', '-q');
   git(root, 'add', 'README.md');
@@ -45,7 +63,11 @@ export function makeGateTree(): GateTree {
   const dist = join(root, 'dist');
   mkdirSync(dist, { recursive: true });
   mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
-  return { root, dist, head, freshDigest, cleanup: () => rmSync(root, { recursive: true, force: true }) };
+  const cleanup = (): void => {
+    rmSync(root, { recursive: true, force: true });
+    liveTrees.delete(root);
+  };
+  return { root, dist, head, freshDigest, cleanup };
 }
 
 /** Ispravan `dist/build-info.json`: isti commit koji bi `write-build-info` upisao za ovo stablo. */
