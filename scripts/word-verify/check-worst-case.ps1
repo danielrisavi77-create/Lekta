@@ -198,6 +198,11 @@ if ($script:fail -gt 0) {
   Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
   exit 1
 }
+if ($provjereno -eq 0) {
+  Write-Output "PAD: nijedan dokument nije provjeren (prazan skup je crveno, ne zeleno)"
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
+  exit 1
+}
 Write-Output 'SVE PROSLO.'
 
 # Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.

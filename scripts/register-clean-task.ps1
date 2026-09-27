@@ -37,6 +37,10 @@ function Test-LektaCleanTaskOwned {
   $korijen = $Root.TrimEnd('\', '/')
   $akcije = @($Task.Actions)
   if ($akcije.Count -ne 1) { return $false }
+  # Execute mora biti node ili node.exe (bez razlike velikih slova) ili tocna putanja koju skripta registrira
+  $execute = ([string]$akcije[0].Execute).Trim()
+  $leafExecute = [System.IO.Path]::GetFileName($execute).ToLower()
+  if ($leafExecute -ne 'node' -and $leafExecute -ne 'node.exe') { return $false }
   $ocekivano = '"' + (Join-Path $korijen 'scripts\clean-vitest-tmp.mjs') + '"'
   $argumenti = ([string]$akcije[0].Arguments).Trim()
   $radni = ([string]$akcije[0].WorkingDirectory).TrimEnd('\', '/')

@@ -58,6 +58,9 @@ function registerOwnershipProblems(src: string): string[] {
   if (!c.includes('[string]$akcije[0].Arguments') || !c.includes('[string]$akcije[0].WorkingDirectory')) {
     problems.push('vlasnistvo ne usporedjuje Actions[0].Arguments i WorkingDirectory');
   }
+  if (!c.includes('[string]$akcije[0].Execute') || !c.includes('node') || !c.includes('node.exe')) {
+    problems.push('vlasnistvo ne provjerava da je Execute node ili node.exe');
+  }
   if (/-Force\b/.test(c)) problems.push('skripta koristi -Force (prepisuje tudji task)');
   const refuse = /if \(-not \(Test-LektaCleanTaskOwned [^\n]*\)\) \{\n[^\n]*Odbijam[^\n]*\n\s+exit 1\n/;
   const unreg = c.indexOf('if ($Unregister) {');
@@ -137,13 +140,13 @@ describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: -DryRun 
   });
 });
 
-describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-LektaCleanTaskOwned stvarno izvedena (M2)', () => {
+describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-LektaCleanTaskOwned stvarno izvedena (M1)', () => {
   it('prihvaca samo nasu akciju iz predanog korijena, odbija tudju akciju i tudji radni direktorij', () => {
     const repo = resolve(process.cwd());
     const nasArg = `"${resolve(repo, 'scripts', 'clean-vitest-tmp.mjs')}"`;
     const q = (s: string) => `'${s.replace(/'/g, "''")}'`;
-    const task = (args: string, wd: string, n = 1) =>
-      `[pscustomobject]@{ Actions = @(1..${n} | ForEach-Object { [pscustomobject]@{ Execute = 'node.exe'; Arguments = ${q(args)}; WorkingDirectory = ${q(wd)} } }) }`;
+    const task = (args: string, wd: string, n = 1, exe = 'node.exe') =>
+      `[pscustomobject]@{ Actions = @(1..${n} | ForEach-Object { [pscustomobject]@{ Execute = ${q(exe)}; Arguments = ${q(args)}; WorkingDirectory = ${q(wd)} } }) }`;
     const cases: Array<[string, string]> = [
       ['NAS', task(nasArg, repo)],
       ['NAS_VELIKA', task(nasArg.toUpperCase(), `${repo.toUpperCase()}\\`)],
@@ -151,6 +154,7 @@ describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-Lek
       ['TUDJI_WD', task(nasArg, 'C:\\drugi-repo')],
       ['DRUGI_REPO', task('"C:\\drugi-repo\\scripts\\clean-vitest-tmp.mjs"', 'C:\\drugi-repo')],
       ['DVIJE_AKCIJE', task(nasArg, repo, 2)],
+      ['POWERSHELL_EXECUTE', task(nasArg, repo, 1, 'powershell.exe')],
     ];
     const cmd = [
       `$ast = [System.Management.Automation.Language.Parser]::ParseFile(${q(SCRIPT)}, [ref]$null, [ref]$null)`,
@@ -168,5 +172,6 @@ describe.skipIf(process.platform !== 'win32')('register-clean-task.ps1: Test-Lek
     expect(out).toContain('TUDJI_WD=False');
     expect(out).toContain('DRUGI_REPO=False');
     expect(out).toContain('DVIJE_AKCIJE=False');
+    expect(out).toContain('POWERSHELL_EXECUTE=False');
   });
 });

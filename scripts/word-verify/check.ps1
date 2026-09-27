@@ -150,6 +150,11 @@ if ($fail -gt 0) {
   Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
   exit 1
 }
+if ($provjereno -eq 0) {
+  Write-Output "PAD: nijedan dokument nije provjeren (prazan skup je crveno, ne zeleno)"
+  Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
+  exit 1
+}
 Write-Output 'SVE PROSLO: svaki dokument se otvara i svako pravilo je primijenjeno.'
 
 # Uspjeh: tek sada, kad je Word zatvoren i nijedna provjera nije pala.

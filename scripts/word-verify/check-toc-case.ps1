@@ -132,6 +132,11 @@ try {
 
   Write-Host ''
   if ($fail -eq 0) {
+    if ($provjereno -eq 0) {
+      Write-Host 'PAD: nijedan dokument nije provjeren (prazan skup je crveno, ne zeleno)'
+      Write-Output "Izlazni direktorij ostavljen za dijagnozu: $OutDir"
+      exit 1
+    }
     Write-Host 'SVE PROSLO: toc-field-fixer mijenja SAMO tekst koji Word generira iz polja.'
   } else {
     Write-Host "PALO: $fail provjera(e)."
