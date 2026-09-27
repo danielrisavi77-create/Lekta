@@ -31,7 +31,7 @@ const DOPUSTENI_KLJUCEVI = [
   'event', 'package', 'profileId', 'workType', 'scoreBand', 'provider', 'source', 'total', 'found',
   'missing', 'flagged', 'checked', 'profileStatus', 'pick', 'sizeBucket', 'category', 'issueCount',
   'kind', 'manual', 'count', 'score', 'demo', 'method', 'product', 'ruleId', 'changes', 'stored', 'ms',
-  'auto', 'assisted', 'unknown',
+  'auto', 'assisted', 'unknown', 'structureGaps',
 ];
 
 /**
