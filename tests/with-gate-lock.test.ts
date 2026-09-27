@@ -199,14 +199,17 @@ describe('with-gate-lock: lock oko naredbe', { timeout: 90_000 }, () => {
 });
 
 /**
- * Provjerava da `check:inner` (a) pocinje ciscenjem privremenih vitest datoteka i (b) sadrzi,
- * tim redom, svih sest koraka nekadasnjeg gatea. Ne trazi doslovni niz jer master (PR #128)
- * smije mijenjati samo prefiks; identitet koraka i njihov redoslijed ostaju obvezni.
+ * Provjerava da `check:inner` (a) pocinje ciscenjem privremenih vitest datoteka, (b) sadrzi,
+ * tim redom, svih sest koraka nekadasnjeg gatea kao PODNIZ (subsequence) koraka razdvojenih
+ * s ' && ', dopustajuci dodatne korake izmedju (npr. `npm run check:laya`), i (c) da je
+ * `vite build` doslovno zadnji korak. Ne trazi doslovni niz jer master smije umetati dodatne
+ * korake; identitet sest koraka i njihov redoslijed ostaju obvezni, kao i zavrsni `vite build`.
  */
 function checkInnerStepsValid(script: string): boolean {
   const prefix = 'node scripts/clean-vitest-tmp.mjs && ';
   if (!script.startsWith(prefix)) return false;
   const steps = script.slice(prefix.length).split(' && ');
+  if (steps.length === 0 || steps[steps.length - 1] !== 'vite build') return false;
   const expected = [
     'npm run check:claude-context',
     'oxlint',
@@ -215,7 +218,13 @@ function checkInnerStepsValid(script: string): boolean {
     'vitest run',
     'vite build',
   ];
-  return steps.length === expected.length && steps.every((step, i) => step === expected[i]);
+  let expectedIndex = 0;
+  for (const step of steps) {
+    if (expectedIndex < expected.length && step === expected[expectedIndex]) {
+      expectedIndex += 1;
+    }
+  }
+  return expectedIndex === expected.length;
 }
 
 describe('package.json: gate skripte idu kroz omotac', () => {
@@ -248,5 +257,28 @@ describe('package.json: gate skripte idu kroz omotac', () => {
     const mutated = pkg.scripts['check:inner'].replace('node scripts/clean-vitest-tmp.mjs && ', '');
     expect(mutated).not.toBe(pkg.scripts['check:inner']);
     expect(checkInnerStepsValid(mutated)).toBe(false);
+  });
+
+  it('MUTACIJA: check:inner s premjestenim vite build ispred vitest run obara provjeru', () => {
+    const mutated = pkg.scripts['check:inner'].replace(
+      'npm run check:edge && vitest run && vite build',
+      'npm run check:edge && vite build && vitest run',
+    );
+    expect(mutated).not.toBe(pkg.scripts['check:inner']);
+    expect(checkInnerStepsValid(mutated)).toBe(false);
+  });
+
+  it('POZITIVAN: check:inner s dodatnim umetnutim korakom (npm run check:laya) i dalje prolazi', () => {
+    const withExtraStep = [
+      'node scripts/clean-vitest-tmp.mjs',
+      'npm run check:claude-context',
+      'oxlint',
+      'tsc --noEmit',
+      'npm run check:laya',
+      'npm run check:edge',
+      'vitest run',
+      'vite build',
+    ].join(' && ');
+    expect(checkInnerStepsValid(withExtraStep)).toBe(true);
   });
 });
