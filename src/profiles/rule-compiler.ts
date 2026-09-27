@@ -30,6 +30,7 @@ export const COMPILED_CHECK_IDS = [
   'font',
   'font-size',
   'line-spacing',
+  'lines-per-page',
   'margins',
   'citation-style',
   'required-sections',
@@ -132,6 +133,7 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
       eff.size = expandNumericRange(value) ?? (value as never);
       return true;
     case 'line-spacing': eff.spacing = value; return true;
+    case 'lines-per-page': eff.linesPerPage = value; return true;
     case 'margins':
       // Vrijednost smije nositi `minimum: true` (izvor kaze "najmanje 2,5 cm"). Zastavica se
       // odvaja od strana, jer normalizeCheckFlags trazi da SVE cetiri strane budu brojevi.
