@@ -6,7 +6,7 @@
  * isjecak rada ili komentar.
  */
 export interface OpportunityAnalysisLike {
-  checks?: readonly Array<{ status?: unknown }> | null;
+  checks?: ReadonlyArray<{ status?: unknown }> | null;
   details?: {
     profileDefinitionId?: unknown;
     triage?: {
