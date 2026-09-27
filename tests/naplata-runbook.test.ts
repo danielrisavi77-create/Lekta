@@ -1,17 +1,18 @@
 /**
  * Gard nad RUNBOOKOM naplate. Kod i runbook su ovdje jedan mehanizam, ne dvije stvari.
  *
- * Od 2026-09-22 `webhook-mor` obradjuje TOCNO dva dogadjaja i pise pet ishoda u `webhook_events`.
- * Oba su nosiva za novac, a nijedno se ne vidi iz koda:
- *  - skup PRETPLACENIH dogadjaja postavlja covjek u Lemon Squeezy sucelju. Tko pretplati samo
- *    `order_created` dobije naplatu koja radi i povrate koji se nikad ne obrade (entitlement ostaje
- *    `paid`, referral nagrada se ne povuce), bez ijedne greske;
- *  - ishodi `needs_manual_link` i `ignored` NISU u djelomicnom indeksu `webhook_events_unresolved`
- *    (migracija 0092), pa ih standardni upit nad neobradjenima ne vraca. Bez upita i postupka u
- *    runbooku, placena narudzba bez `user_id` ostaje redak koji nitko ne gleda.
+ * Porijeklo: master (81a89f2f, daf5f53a, 2f1621bf) za prijasnjeg pruzatelja; pri spajanju mastera
+ * u design/pack3 (2026-09-26) prenesen na Stripe (F18). `webhook-mor` obradjuje TOCNO dva
+ * dogadjaja (`payment_intent.succeeded`, `charge.refunded`). Dvije stvari su nosive za novac, a
+ * nijedna se ne vidi iz koda:
+ *  - skup PRETPLACENIH dogadjaja postavlja covjek u Stripe sucelju. Tko pretplati samo
+ *    `payment_intent.succeeded` dobije naplatu koja radi i povrate koji se nikad ne obrade
+ *    (entitlement ostaje `paid`, referral nagrada se ne povuce), bez ijedne greske;
+ *  - ishodi `ignored` i `refused` NISU u djelomicnom indeksu `webhook_events_unresolved`
+ *    (migracija 0092), pa ih standardni upit nad neobradjenima ne vraca.
  *
- * Popis ishoda se IZVODI iz izvora Edge funkcije, pa novi ishod u kodu obara ovaj test dok se ne
- * opise u runbooku. To je namjerno: dokumentacija ovdje nije uljudnost nego dio garda.
+ * Popis ishoda i imena log redaka se IZVODI iz izvora handlera, pa novi ishod u kodu obara ovaj
+ * test dok se ne opise u runbooku. To je namjerno: dokumentacija ovdje nije uljudnost nego dio garda.
  */
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -35,16 +36,19 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p: string): string => readTextLf(resolve(ROOT, p));
 
 const RUNBOOK = read('docs/GO_LIVE_NAPLATA.md');
-const HANDLER = read('supabase/functions/webhook-mor/index.ts');
+// Obrada dogadjaja (settle, log redci) zivi u handler.ts; index.ts cita samo okolinu.
+const HANDLER = read('supabase/functions/webhook-mor/handler.ts');
 const MIGRACIJA = read('supabase/migrations/0092_webhook_events_inbox.sql');
 
 describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizvodi', () => {
   it('mjerenje je netrivijalno (prazan izvod ne smije "proci")', () => {
     expect(RUNBOOK.length).toBeGreaterThan(4000);
     const outcomes = handlerOutcomes(HANDLER);
-    expect(outcomes.length).toBeGreaterThanOrEqual(4);
-    expect(outcomes).toContain('needs_manual_link');
+    expect(outcomes.length).toBeGreaterThanOrEqual(5);
     expect(outcomes).toContain('ignored');
+    expect(outcomes).toContain('refused');
+    expect(outcomes).toContain('processed');
+    expect(outcomes).toContain('needs_manual_link');
   });
 
   it('BASELINE: runbook nema nijedan od poznatih propusta', () => {
@@ -53,7 +57,7 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
   });
 
   it('gard grize: razlog iz outcome_detail bez retka u runbooku se prijavi', () => {
-    // Ishod `ignored` pokriva tri razloga s tri razlicite radnje; ime ishoda nije dovoljno.
+    // Ishod `ignored` pokriva vise razloga s razlicitim radnjama; ime ishoda nije dovoljno.
     const problems = naplataRunbookProblems(RUNBOOK, handlerOutcomes(HANDLER), [
       ...IGNORE_REASON_PREFIXES,
       'nov_razlog:',
@@ -67,17 +71,24 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
     expect(RUNBOOK).toContain("outcome = 'processed'");
   });
 
-  it('gard grize: runbook bez imena dogadjaja order_refunded se prijavi', () => {
-    // MUTACIJA u memoriji: stanje runbooka do ove promjene, gdje je pisalo samo "postavi webhook".
-    const mutated = RUNBOOK.split('`order_refunded`').join('povrat');
+  it('gard grize: runbook bez imena dogadjaja charge.refunded se prijavi', () => {
+    // MUTACIJA u memoriji: runbook koji povrat ne imenuje kao dogadjaj za pretplatu.
+    const mutated = RUNBOOK.split('`charge.refunded`').join('povrat');
     expect(mutated).not.toBe(RUNBOOK);
-    expect(naplataRunbookProblems(mutated, handlerOutcomes(HANDLER)).join('; ')).toContain('order_refunded');
+    expect(naplataRunbookProblems(mutated, handlerOutcomes(HANDLER)).join('; ')).toContain('charge.refunded');
   });
 
-  it('gard grize: runbook bez opisa ishoda needs_manual_link se prijavi', () => {
-    const mutated = RUNBOOK.split('`needs_manual_link`').join('rucno vezivanje');
+  it('gard grize: runbook bez opisa ishoda refused se prijavi', () => {
+    const mutated = RUNBOOK.split('`refused`').join('odbijeno');
     expect(mutated).not.toBe(RUNBOOK);
-    expect(naplataRunbookProblems(mutated, handlerOutcomes(HANDLER)).join('; ')).toContain('needs_manual_link');
+    expect(naplataRunbookProblems(mutated, handlerOutcomes(HANDLER)).join('; ')).toContain('refused');
+  });
+
+  it('gard grize: runbook bez razloga payment_status: (uplata bez potvrdjene naplate) se prijavi', () => {
+    const mutated = RUNBOOK.split('`payment_status:`').join('status');
+    expect(mutated).not.toBe(RUNBOOK);
+    expect(naplataRunbookProblems(mutated, handlerOutcomes(HANDLER), IGNORE_REASON_PREFIXES).join('; '))
+      .toContain('payment_status:');
   });
 
   it('gard grize: nov ishod u kodu bez retka u runbooku se prijavi', () => {
@@ -99,17 +110,22 @@ describe('runbook naplate pokriva dogadjaje i ishode koje handler stvarno proizv
 /**
  * IME LOG RETKA KOJE IZVOR NE ISPISUJE NIJE IME (nalaz pregleda 2026-09-23).
  *
- * Runbook je spominjao `webhook-mor ignored_unpaid_order`, redak koji `webhook-mor/index.ts` nikad
- * nije pisao (stvarno ime je `ignored_needs_attention`). Popis imena se izvodi iz izvora, ne
+ * Na masteru je runbook spominjao `webhook-mor ignored_unpaid_order`, redak koji izvor nikad nije
+ * pisao (stvarno ime je `ignored_needs_attention`). Popis imena se izvodi iz izvora handlera, ne
  * prepisuje rucno, pa promjena imena u kodu bez pratece izmjene runbooka obara ovaj test.
  */
 describe('runbook imenuje samo log retke koji stvarno postoje u izvoru webhook-mor', () => {
   it('mjerenje je netrivijalno (izvod imena iz izvora nije prazan)', () => {
     const imena = webhookMorLogNames(HANDLER);
     expect(imena.size).toBeGreaterThanOrEqual(5);
+    // `event_ignored` vise ne postoji: gate gleda samo porijeklo, vrstu odlucuje klasifikator
+    // (krug 2 spajanja, 2026-09-26). Placena uplata bez korisnika ima vlastiti ERROR redak.
+    expect(imena.has('event_ignored')).toBe(false);
     expect(imena.has('needs_manual_link')).toBe(true);
+    expect(imena.has('event_refused')).toBe(true);
     expect(imena.has('ignored_needs_attention')).toBe(true);
     expect(imena.has('ignored_foreign_event')).toBe(true);
+    expect(imena.has('foreign_event_ignored')).toBe(true);
   });
 
   it('BASELINE: runbook ne spominje nijedno izmisljeno ime', () => {
@@ -129,12 +145,11 @@ describe('runbook imenuje samo log retke koji stvarno postoje u izvoru webhook-m
 /**
  * UPIT KOJI SE NE MOZE IZVRSITI NIJE UPIT (nalaz pregleda 2026-09-23).
  *
- * Oba upita u sekciji 5.1 citala su i sortirala po `created_at`, stupcu kojeg `webhook_events`
- * nema: migracija 0092 definira `received_at` i `processed_at`, a nijedna kasnija migracija tu
- * tablicu ne dira. Operater bi u tjednu lansiranja umjesto popisa placenih narudzbi bez prava
- * pristupa dobio `ERROR: 42703 column "created_at" does not exist`. Bas ti upiti su jedina zamjena
- * za djelomicni indeks `webhook_events_unresolved`, koji ishode `needs_manual_link` i `ignored`
- * namjerno ne pokriva.
+ * Na masteru su oba upita u sekciji 5.1 citala i sortirala po `created_at`, stupcu kojeg
+ * `webhook_events` nema: migracija 0092 definira `received_at` i `processed_at`. Operater bi u
+ * tjednu lansiranja umjesto popisa dobio `ERROR: 42703 column "created_at" does not exist`. Bas ti
+ * upiti su jedina zamjena za djelomicni indeks `webhook_events_unresolved`, koji ishode `ignored`
+ * i `refused` namjerno ne pokriva.
  *
  * Stari gard to nije mogao vidjeti: trazio je samo da se niz `from webhook_events` negdje pojavi.
  */

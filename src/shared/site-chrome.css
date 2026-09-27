@@ -1,0 +1,551 @@
+/*
+ * TRAKA I PODNOZJE KAO SUSTAV (ALIGNMENT Z15, prvi krug).
+ *
+ * JEDINI list koji oblikuje traku i pravno podnozje na SVIM stranicama; uvozi ga `ui-boot.ts`,
+ * koji boota svaka ruta. Ponasanje je u `src/shared/site-chrome.ts`, markup je statican i jednak
+ * po stranicama (jednakost mjeri `tests/site-chrome.test.ts`).
+ *
+ * PISMA: Z7 opcija (a), odluka vlasnika 2026-09-26. Predlozak crta Instrument Serif + Geist Mono
+ * i list ih sada crta DOSLOVNO: `var(--display-serif)` je Instrument Serif, a `var(--ui)` je alias
+ * za `var(--mono)`, dakle Geist Mono, na svakoj ruti ukljucivo ulaz `/` (oba glasa ucitava
+ * `fonts-core.ts` preko `ui-boot`). Oznake i dalje nose mjeru 11 do 11.5px i razmak slova.
+ * Poziv ostaje `var(--ui)` a ne `var(--mono)`: ime kaze ULOGU (glas sucelja), a token odlucuje
+ * pismo, pa buduca promjena glasa sucelja ne trazi prepisivanje ovog lista.
+ *
+ * RADIUSI: 2px (gumb je pecat, dijeli rub s papirom), pill samo za korake i znacke.
+ */
+
+/* SPECIFICNOST, NE REDOSLIJED. `page-chrome.css` i `tool-page.css` se ucitavaju POSLIJE ovog
+   lista (rute ih uvoze nakon `ui-boot`), pa bi gola `.site-chrome` (0,1,0) izgubila od bilo kojeg
+   zaostalog `.topbar` pravila iste specificnosti. `header.site-chrome` je (0,1,1) i pobjeduje bez
+   obzira na poredak, sto je ista pouka kao u zaglavlju `page-chrome.css`. */
+header.site-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--desk) 94%, transparent);
+  border-bottom: 1px solid transparent;
+  transition: padding .22s var(--ease-out-3, ease), background .22s var(--ease-out-3, ease);
+}
+
+/* STANJE NAKON SKROLA (>40px): tanja traka, blur, crvena nit po donjem rubu. */
+header.site-chrome--scrolled {
+  padding-block: 8px;
+  background: color-mix(in srgb, var(--desk) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.site-chrome--scrolled .site-chrome__bar { min-height: 46px; }
+.site-chrome--scrolled .ks-mark { width: 24px; height: 24px; font-size: 15px; }
+.site-chrome--scrolled .ks-tick { width: 10px; height: 10px; }
+.site-chrome--scrolled .logo-word { font-size: 20px; }
+.site-chrome__thread {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--red) 30%, var(--red) 70%, transparent);
+  opacity: 0;
+  transition: opacity .22s var(--ease-out-3, ease);
+  pointer-events: none;
+}
+.site-chrome--scrolled .site-chrome__thread { opacity: .7; }
+
+.site-chrome__bar {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 60px;
+  min-width: 0;
+}
+
+.site-chrome__left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.site-chrome__logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--desk-ink); }
+.site-chrome__hairline { width: 1px; height: 18px; background: var(--desk-line); flex: none; }
+
+.site-chrome__dests { position: relative; display: flex; align-items: center; gap: 2px; }
+.site-chrome__marker {
+  position: absolute;
+  top: 50%;
+  margin-top: -3.5px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  background: var(--red);
+  pointer-events: none;
+  transition: left .45s var(--ease-out-3, ease);
+  /* Ime je pripremljeno za View Transitions (Z15, drugi krug). Nista ga jos ne pokrece: prijelaz
+     izmedu dokumenata nije ozicen, pa ovo za sada samo rezervira identitet elementa. */
+  view-transition-name: nav-marker;
+}
+.site-chrome__dest {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 8px 9px 8px 20px;
+  color: var(--desk-muted);
+  text-decoration: none;
+  font-family: var(--ui);
+  font-size: 11.5px;
+  letter-spacing: .03em;
+  border-radius: 2px;
+  white-space: nowrap;
+  transition: color .18s, background .18s;
+}
+.site-chrome__dest:hover { color: var(--desk-ink); background: color-mix(in srgb, var(--desk-ink) 6%, transparent); }
+.site-chrome__dest[aria-current="page"] { color: var(--desk-ink); font-weight: 500; }
+
+/* RADNA POVRSINA NEMA CETIRI ODREDISTA U TRACI (Z15, krug popravka). Markup ostaje ISTI na svim
+   stranicama (jednakost mjeri `tests/site-chrome.test.ts`, gard "ISTI markup na svim stranicama"),
+   jer traka bez JavaScripta i dalje mora biti valjana navigacija na strankama koje je nose; ovdje
+   se odjeljak samo sakriva NA workspace varijanti, na SVIM sirinama, jer `/rad/` vec ima svoju
+   navigaciju u mobilnom listu i nista drugo ne treba dijeliti prostor sa sredinom. Bez ovoga se
+   pilula dokumenta na 1180px sudarala s "Po fakultetu" i drugim odredistima. */
+.site-chrome[data-site-chrome="workspace"] .site-chrome__dests,
+.site-chrome[data-site-chrome="workspace"] .site-chrome__hairline { display: none; }
+
+.site-chrome__mid { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; min-width: 0; }
+/* SREDINA NA RADNOJ POVRSINI JE DVOREDNA (Z15, krug popravka): PRVI red pilula dokumenta (tocka +
+   ime + ocjena, jedan redak), DRUGI red stepper. Do ovog kruga je pilula uz to nosila "Spremljeno
+   HH:MM", znacku i gumb nove verzije, pa se na 1180px lomila u CETIRI retka (vidi rad-doc-meta.css
+   komentar u rad/index.html gdje su ta tri elementa preselila). Redoslijed je izricito STUPAC
+   (`flex-direction: column`), ne oslanjanje na `flex-wrap`, jer wrap ovisi o raspolozivoj sirini i
+   ne jamci TOCNO dva reda. */
+.site-chrome[data-site-chrome="workspace"] .site-chrome__mid {
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+/* NAKON SKROLA SREDINA VRACA U JEDAN RED (prizor "03 NAKON SKROLA" u Chrome.dc.html): tanko stanje
+   trake mora stati u budzet od 60px, sto dva stupca stack-a (pilula + stepper) ne bi. Pilula i
+   stepper su na uskom sirokom zaslonu dovoljno kompaktni da stanu jedan uz drugi. */
+.site-chrome--scrolled[data-site-chrome="workspace"] .site-chrome__mid {
+  flex-direction: row;
+  gap: 14px;
+}
+.site-chrome__doc {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 360px;
+  min-width: 0;
+  min-height: 24px;
+  padding: 6px 12px;
+  border: 1px solid var(--desk-line);
+  border-radius: 2px;
+  font-family: var(--ui);
+  font-size: var(--fs-mono-label);
+  letter-spacing: .06em;
+  color: var(--desk-muted);
+}
+.site-chrome__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex: none; }
+/* IME NE LOMI, SKRACUJE SE (Z15, krug popravka). Prije ovog pravila `.rad-doc-name` nije nosilo
+   NIKAKVU ogranicavajucu vrijednost (stari komentar nize u ovom listu je to tvrdio, mjerenje je
+   pokazalo suprotno), pa je dugo ime dokumenta pilulu i cijelu traku moglo gurnuti u vise redaka.
+   `flex: 0 1 auto` uz `min-width: 0` je flex-itemu koji bi se inace odbijao stisnuti ispod sirine
+   sadrzaja; `max-width: min(46ch, 100%)` je gornja granica koja radi i kad je pilula uza od 46ch. */
+.rad-doc-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(46ch, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-chrome__score { font-family: var(--display-serif); font-size: 16px; color: var(--desk-ink); flex: none; --emph-weight: 400; --emph-style: italic; }
+
+/* `host.hidden` (site-chrome.ts, faza `scanning` bez koraka) postavlja atribut `[hidden]`, ali
+   autorski `display: flex` NIZE u ovom listu je jednake specificnosti (0,1,0) kao `[hidden]` i
+   pobjeduje po podrijetlu (UA list uvijek gubi od autorskog, bez obzira na redoslijed): traka je
+   ostajala vidljiva prije nego je dokument uopce odabran (Z15 popravak). `!important` je ovdje
+   namjeran, ne naviknuta navika: jedino tako `[hidden]` sigurno pobjedjuje SVAKO buduce
+   `display` pravilo na istom elementu. */
+[hidden] { display: none !important; }
+
+.site-chrome__steps {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--ui);
+  font-size: var(--fs-mono-label);
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+.site-chrome__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 6px 10px;
+  border: 1px solid var(--desk-line);
+  border-radius: var(--radius-pill);
+  color: var(--desk-faint);
+}
+.site-chrome__step--active { background: var(--desk-ink); border-color: var(--desk-ink); color: var(--desk); font-weight: 500; }
+.site-chrome__step-num { font-variant-numeric: tabular-nums; opacity: .75; }
+
+.site-chrome__right { display: flex; align-items: center; gap: 6px; justify-self: end; }
+.site-chrome__work {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 9px 12px;
+  color: var(--desk-muted);
+  text-decoration: none;
+  font-family: var(--ui);
+  font-size: 12px;
+  letter-spacing: .04em;
+  border-radius: 2px;
+  white-space: nowrap;
+  transition: color .18s, background .18s;
+}
+.site-chrome__work:hover { color: var(--desk-ink); background: color-mix(in srgb, var(--desk-ink) 6%, transparent); }
+
+/* MJEDENA PLOCICA PROFILA. Ladica Z13 jos ne postoji, pa je gumb `aria-disabled` i nosi "Uskoro";
+   ponasanje se ne izmislja unaprijed. */
+.site-chrome__plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #C9A96A, #A98649);
+  color: #26221B;
+  border: 1px solid #6E5A34;
+  border-radius: 2px;
+  font-family: var(--ui);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.site-chrome__plate[aria-disabled="true"] { cursor: default; }
+.site-chrome__plate-dot { width: 6px; height: 6px; border-radius: 50%; background: #6E5A34; }
+
+/* PECAT "Provjeri rad": jedna primarna radnja po ekranu, radius 2px, hover je podigne. */
+.site-chrome__stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  padding: 10px 13px;
+  background: var(--red);
+  color: var(--on-red);
+  border-radius: 2px;
+  text-decoration: none;
+  font-family: var(--ui);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  transition: transform .18s var(--ease-out-3, ease);
+}
+.site-chrome__stamp:hover { transform: translateY(-2px); }
+
+/* IKONA JE KVADRAT 36px, ALI GUMB S NATPISOM SE SIRI. Na `/rad/` `#displayBtn` po WCAG 2.5.3
+   (gard u `tests/a11y-batch-2026-07-18.test.ts`) MORA nositi vidljiv natpis "Prikaz", pa fiksna
+   sirina ondje reze tekst. `min-width` drzi kvadrat kad natpisa nema. */
+.site-chrome .lampa-btn {
+  position: relative;
+  width: auto;
+  min-width: 36px;
+  height: 36px;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 9px;
+  font-family: var(--ui);
+  font-size: var(--fs-mono-label);
+  letter-spacing: .04em;
+  border: 1px solid var(--desk-line);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--desk-muted);
+}
+.site-chrome .lampa-btn:hover { color: var(--desk-ink); border-color: var(--desk-muted); }
+.site-chrome .lampa-btn svg { width: 15px; height: 15px; display: block; }
+
+.site-chrome__burger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  min-width: 24px;
+  min-height: 24px;
+  place-items: center;
+  border: 1px solid var(--desk-line);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--desk-ink);
+}
+.site-chrome__burger-glif { display: grid; gap: 5px; width: 16px; }
+.site-chrome__burger-glif i { display: block; height: 1.5px; background: currentColor; }
+
+/* LAMPA: overlay boje CILJNE teme otkriva stol iz sredista gumba, zatim nestaje. Boja NIJE
+   duplicirana ovdje (Z15 popravak F5): `data-theme` ciljne teme stoji na SAMOM overlayu
+   (site-chrome.ts), pa `[data-theme="light"] { --desk: ... }` (design-system.css) taj token
+   postavlja unutar overlayeva vlastitog podstabla bez obzira na trenutnu temu <html>-a, i ovdje
+   se samo cita `var(--desk)`. `data-site-chrome-reveal` ostaje kao stabilan identitet za testove
+   (site-chrome.test.ts) neovisan o vrijednosti tokena. */
+.site-chrome__reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  pointer-events: none;
+  background: var(--desk);
+  animation: siteChromeReveal .9s var(--ease-out-3, ease) both;
+}
+@keyframes siteChromeReveal {
+  from { clip-path: circle(0 at var(--lx, 90%) var(--ly, 40px)); }
+  to { clip-path: circle(160% at var(--lx, 90%) var(--ly, 40px)); }
+}
+
+/* MOBILNI LIST: pada na stol. Papir je svijetla ploha u OBJE teme, kao i svaki drugi list. */
+.site-chrome__sheet { display: none; }
+.site-chrome__sheet-eyebrow {
+  font-family: var(--ui);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+.site-chrome__sheet-pecat {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  padding: 6px 10px;
+  border: 2px solid var(--red-deep);
+  border-radius: 2px;
+  color: var(--red-deep);
+  font-family: var(--ui);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transform: rotate(8deg);
+  opacity: .8;
+}
+.site-chrome__sheet-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  min-height: 44px;
+  padding: 12px 0;
+  border-top: 1px solid var(--paper-line);
+  text-decoration: none;
+  color: var(--paper-ink);
+  font-family: var(--display-serif);
+  font-size: 22px;
+  line-height: 1.1;
+  --emph-weight: 400;
+  --emph-style: italic;
+}
+.site-chrome__sheet-note {
+  font-family: var(--ui);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: var(--paper-muted);
+}
+.site-chrome__sheet-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  margin-top: 8px;
+  border-top: 1px solid var(--paper-line);
+  font-family: var(--ui);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: var(--paper-muted);
+}
+.site-chrome__sheet-foot a { color: inherit; text-decoration: none; min-height: 24px; display: inline-flex; align-items: center; }
+.site-chrome__sheet-aa {
+  border: 1px solid var(--paper-line);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--paper-ink);
+  font-family: var(--ui);
+  font-size: 10px;
+  letter-spacing: .08em;
+  min-height: 24px;
+  padding: 5px 9px;
+}
+
+@media (max-width: 819px) {
+  .site-chrome__bar { grid-template-columns: 1fr auto; row-gap: 6px; }
+  /* IZRICITO MJESTO U MREZI, JER AUTO-PLACEMENT JE DAVAO TRI REDA.
+     Sa dva stupca i sredinom preko `grid-column: 1 / -1` auto-placement je logo stavljao u red 1,
+     sredinu u red 2 (puna sirina), a DESNU SKUPINU nije mogao natrag uz logo nego u red 3: lampa i
+     hamburger su zavrsili ISPOD trake dokumenta, a zaglavlje je na 390 px naraslo na 172 px na
+     zivoj stranici (21% zaslona), odnosno 177 px u probi s vidljivim gumbom nove verzije.
+     Komentar ispod je tvrdio suprotno od izmjerenog, sto je tocno razred kvara koji ovaj
+     repozitorij zove laznim zelenim. Mjera je sad u `tests/ux/workspace-viewports.spec.ts`
+     (proracun visine zaglavlja na 390 px, i prije i poslije skrola). */
+  .site-chrome__left { grid-area: 1 / 1 / 2 / 2; }
+  .site-chrome__right { grid-area: 1 / 2 / 2 / 3; }
+  .site-chrome__hairline,
+  .site-chrome__dests,
+  .site-chrome__mid,
+  .site-chrome__work,
+  .site-chrome__plate,
+  .site-chrome__stamp,
+  .site-chrome #displayBtn { display: none; }
+  /* SREDINA NA `/rad/` OSTAJE I NA MOBITELU, i to nije odstupanje od Z15 nego Z16.
+     Pravilo "logo, lampa, hamburger" opisuje MARKETINSKU traku; mobilni prolaz (Z16) za `/rad/`
+     izricito kaze da "stepper prelama u dva reda", dakle da sredina ostaje. Identitet dokumenta je
+     uz to jedino sto korisniku radne povrsine na uskom ekranu treba u zaglavlju, a dva postojeca
+     Playwright garda (`workspace-entry`, `workspace-viewports`) ga na 390 px mjere kao vidljivog.
+     Sredina zato pada u VLASTITI RED (red 2) ISPOD prvog reda, koji ostaje logo + lampa + hamburger.
+     Pitanje F11 u `docs/agents/orchestrator-backlog.md` nosi odstupanje od doslovnog Z15. */
+  .site-chrome[data-site-chrome="workspace"] .site-chrome__mid {
+    display: flex;
+    flex-direction: row;
+    grid-area: 2 / 1 / 3 / -1;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+  }
+  /* IME SE SKRACUJE, NE LOMI (`.rad-doc-name`, gore u baznom sloju). Pilula sad nosi SAMO tocku,
+     ime i ocjenu (znacka, spremanje i gumb nove verzije su preseljeni u tijelo, Z15 krug popravka),
+     pa vise nema sadrzaja koji bi je gurao u drugi red na 390px. */
+  .site-chrome[data-site-chrome="workspace"] .site-chrome__doc {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+    padding: 4px 9px;
+  }
+  /* KORACI BEZ NATPISA, ALI NE BEZ IMENA. Cetiri pilule s natpisima su 330 px, sto na 390 px ne
+     stoji uz ime dokumenta, pa se natpis vizualno skriva a ostaje u pristupacnom imenu koraka
+     (`clip-path`, ne `display:none`): citac ekrana i dalje cita "01 Nalazi". */
+  .site-chrome__steps { flex: 0 0 auto; flex-wrap: nowrap; }
+  .site-chrome__step { padding: 5px 8px; gap: 0; }
+  .site-chrome__step-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+  .site-chrome__burger { display: grid; }
+  /* TANKO STANJE NE SMIJE BITI DEBLJE OD DEBELOG. Na mobitelu zaglavlje ima dva reda, pa je
+     `padding-block: 8px` iz stanja nakon skrola dodavao 16 px, a prvi red se stisnuo samo 11 px:
+     izmjereno na 390 px, 122 px nakon skrola naspram 113 px prije njega. Proracun mjeri
+     `tests/ux/workspace-viewports.spec.ts`, i u skrolanom stanju. */
+  header.site-chrome--scrolled { padding-block: 2px; }
+  .site-chrome__sheet.open {
+    display: grid;
+    gap: 4px;
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 100%;
+    margin-top: 14px;
+    padding: 22px 24px 24px;
+    background: var(--paper);
+    color: var(--paper-ink);
+    border: 1px solid var(--paper-line);
+    border-radius: 2px;
+    box-shadow: var(--paper-sh);
+    z-index: 29;
+    transform: rotate(-.8deg);
+    animation: siteChromeDrop .45s var(--ease-out-3, ease) both;
+  }
+  body:has(.site-chrome__sheet.open) { overflow: hidden; }
+}
+/* OCJENA U TRACI ODLAZI NA 720px, isto stanje kao prije Z15 kruga popravka. Znacka "Lokalno" vise
+   NE zivi u `.site-chrome__doc` (preselila je u `.rad-doc-meta` u tijelu, Z15 krug popravka), pa
+   nije vise sadrzaj trake i ovo pravilo je vise ne spominje; gard nad njom je nize, uz `.rad-doc-meta`.
+   Gard nad ocjenom je `tests/ux/workspace-viewports.spec.ts`. */
+@media (max-width: 720px) {
+  .site-chrome__score { display: none; }
+}
+
+/* DOKUMENTOV RED U TIJELU (Z15, krug popravka). Spremanje, znacka "Lokalno" i gumb nove verzije
+   zive ovdje, u main-u ispod trake (rad/index.html #radDocMeta), otkad su preseljeni iz pilule
+   `.site-chrome__doc`: prostor ovdje nije ogranicen visinom zaglavlja, pa `.local-badge` ostaje u
+   punom obliku iz `page-chrome.css`, bez zbijanja koje je traka trazila. `class="shell"` na
+   `#radDocMeta` daje istu sirinu i centriranje kao ostali sadrzaj stranice. */
+.rad-doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 14px;
+}
+
+@keyframes siteChromeDrop {
+  from { opacity: 0; transform: translateY(-26px) rotate(-3deg); }
+  to { opacity: 1; transform: rotate(-.8deg); }
+}
+
+/* PODNOZJE, PRAVNI MINIMUM (ulaz, /rad/, alati; puno podnozje je drugi krug Z15). */
+.site-footer {
+  border-top: 1px solid var(--desk-line);
+  padding: 22px 0 30px;
+}
+.site-footer__inner {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  text-align: center;
+}
+.site-footer__pravno { display: flex; gap: 6px 22px; flex-wrap: wrap; justify-content: center; }
+.site-footer__pravno a {
+  color: var(--desk-muted);
+  text-decoration: none;
+  font-family: var(--ui);
+  font-size: 12px;
+  letter-spacing: .04em;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+}
+.site-footer__pravno a:hover { color: var(--desk-ink); }
+.site-footer__nota {
+  margin: 0;
+  max-width: 70ch;
+  font-family: var(--ui);
+  font-size: var(--fs-mono-label);
+  line-height: 1.6;
+  color: var(--desk-faint);
+}
+.site-footer__nota b { font-weight: 500; color: var(--desk-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .site-chrome,
+  .site-chrome__marker,
+  .site-chrome__thread,
+  .site-chrome__stamp,
+  .site-chrome__dest,
+  .site-chrome__work { transition: none; }
+  .site-chrome__sheet.open,
+  .site-chrome__reveal { animation: none; }
+}
+:root[data-motion="reduce"] .site-chrome,
+:root[data-motion="reduce"] .site-chrome__marker,
+:root[data-motion="reduce"] .site-chrome__thread,
+:root[data-motion="reduce"] .site-chrome__stamp,
+:root[data-motion="reduce"] .site-chrome__dest,
+:root[data-motion="reduce"] .site-chrome__work { transition: none; }
+:root[data-motion="reduce"] .site-chrome__sheet.open,
+:root[data-motion="reduce"] .site-chrome__reveal { animation: none; }
+
+@media print {
+  .site-chrome, .site-footer { display: none !important; }
+}

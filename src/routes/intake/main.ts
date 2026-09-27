@@ -3,7 +3,6 @@ import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-
 import { createLocalDocumentSession, sessionFragment } from '../../session/local-document-session';
 import { mountIntakeController } from './intake-controller';
 import { prikaziUlazniListBroj } from './list-number';
-import { mountDisplaySettings } from '../../shared/display-settings';
 import { playIntakeEntry } from './intake-motion';
 import '../../shared/ui-boot';
 // ULAZ NOSI TOCNO DVA GLASA, i to je odluka vlasnika, ne propust. Z7 papir ima mete koje
@@ -80,9 +79,12 @@ async function offerContinuation(doc: Document, store: IndexedDbDocumentSessionS
 }
 
 function start(): void {
-  // Panel "Prilagodi prikaz" ide PRVI: postavke se primjenjuju prije nego se bilo sto animira,
-  // pa korisnik s `data-motion="reduce"` ne vidi ulaznu sekvencu koju je izricito iskljucio.
-  mountDisplaySettings(document);
+  // PANEL "PRILAGODI PRIKAZ" SE OD F10 (2026-09-23) MONTIRA U `shared/ui-boot.ts`, JEDNIM POZIVOM
+  // ZA SVE RUTE, pa poziva odavde vise nema. Uvjet zbog kojeg je stajao prvi (postavke prije nego
+  // se bilo sto animira, da korisnik s `data-motion="reduce"` ne vidi ulaznu sekvencu) je ocuvan:
+  // `ui-boot` se uvozi IZNAD ovog modula i njegov `boot()` se izvrsi prije `start()`, a atribute
+  // `data-motion`/`data-contrast`/`data-reading-font` ionako upisuje pre-paint skripta u <head>,
+  // dakle prije prvog kadra, neovisno o montazi panela.
   const maxUploadBytes = uploadLimitForCurrentDevice();
   showUploadLimit(document, maxUploadBytes);
   // Broj ulaznog lista (Z7) ide PRIJE sekvence: zamjena "0001" -> stvaran broj mora se dogoditi

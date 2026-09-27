@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Rezultat · sve u jednom" description="Presuda s prstenom koji pokazuje ocjenu sada i nakon plana, kategorije kao jezičci, stranica koja zumira na nalaz uz hrpu kartica, prikaz Sada / Nakon plana, DNA od 41 stranice i ladica plana koja se puni dok čitaš." -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>html,body{margin:0;background:#191512}a{color:inherit}a:hover{color:#E4573D}@keyframes rlStamp{from{transform:rotate(-8deg) scale(1.7);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:.9}}@keyframes rlIn{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style></helmet>
+<div ref="{{ rootRef }}" style="position:relative;min-height:100vh;background:#191512;color:#EDE7DC;font-family:'Geist Mono',ui-monospace,monospace;overflow-x:clip">
+<div aria-hidden="true" style="position:absolute;top:-420px;right:-200px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.14),transparent 60%);pointer-events:none"></div>
+<header style="position:relative;display:flex;align-items:center;gap:20px;flex-wrap:wrap;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:20px 0">
+<a href="#" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><span style="position:relative;width:30px;height:30px;background:#EDE7DC;color:#191512;display:grid;place-items:center;font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1">L<span style="position:absolute;right:-4px;bottom:-4px;width:12px;height:12px;background:#E4573D"></span></span><span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:28px">Lekta</span></a>
+<ol aria-label="Koraci" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:0 auto;padding:0;list-style:none;font-size:11px;letter-spacing:.06em"><li style="padding:7px 12px;border-radius:999px;background:#EDE7DC;color:#191512;font-weight:500">01 Nalazi</li><li style="padding:7px 12px;border-radius:999px;border:1px solid rgba(237,231,220,.16);color:rgba(237,231,220,.6)">02 Plan</li><li style="padding:7px 12px;border-radius:999px;border:1px solid rgba(237,231,220,.16);color:rgba(237,231,220,.6)">03 Plaćanje</li><li style="padding:7px 12px;border-radius:999px;border:1px solid rgba(237,231,220,.16);color:rgba(237,231,220,.6)">04 Rezultat</li></ol>
+<a href="#" style="font-size:13px;color:rgba(237,231,220,.72);text-decoration:none">Moji radovi</a>
+</header>
+<main style="position:relative;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:8px 0 120px;display:grid;gap:28px">
+<section ref="{{ verdictRef }}" data-screen-label="Presuda" style="position:relative;background:#F7F3E8;color:#26221B;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);padding:clamp(24px,4vw,36px) clamp(22px,4.5vw,48px) clamp(28px,4vw,40px);display:grid;gap:26px">
+<div style="display:flex;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid #DCD4BF;font-size:11px;letter-spacing:.08em;color:#6E6656"><span>DIPLOMSKI-RAD-FINAL-V3.DOCX · FPZG · POLITOLOGIJA · DIPLOMSKI</span><span style="display:inline-flex;gap:10px;align-items:center;color:#26221B"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:#C98A2E"></span>ROK 14. 10. · JOŠ 21 DAN · POPRAVAK OKO 2 MIN</span></div>
+<div style="display:grid;grid-template-columns:{{ verdictCols }};gap:28px 40px;align-items:center">
+<div style="display:grid;gap:18px;min-width:0">
+<h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(40px,5.6vw,76px);line-height:.94;letter-spacing:-.02em;text-wrap:balance">Rad nije spreman za predaju.</h1>
+<p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:24px;line-height:1.3">6 stvari traže tvoju pažnju.</p>
+<ul style="margin:0;padding:0;list-style:none;display:flex;gap:10px 22px;flex-wrap:wrap;font-size:13px"><li style="display:flex;align-items:center;gap:8px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C4372E"></span><b style="font-weight:600">2</b> blokira predaju</li><li style="display:flex;align-items:center;gap:8px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#C98A2E"></span><b style="font-weight:600">3</b> treba doraditi</li><li style="display:flex;align-items:center;gap:8px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#4A6CF0"></span><b style="font-weight:600">1</b> provjeri sam</li></ul>
+<div style="display:flex;align-items:center;gap:16px 20px;flex-wrap:wrap;padding-top:6px"><button type="button" style="font:inherit;font-size:14px;font-weight:500;letter-spacing:.02em;min-height:48px;padding:14px 24px;border:0;border-radius:10px;background:#C4372E;color:#F7F3E8;cursor:pointer" style-hover="background:#A62B23">Napravi plan popravka →</button><a href="#nalazi" style="font-size:13px;color:#6E6656;text-underline-offset:4px">Pregledaj nalaze ↓</a></div>
+</div>
+<div style="display:grid;justify-items:center;gap:12px">
+<div ref="{{ ringRef }}" role="img" aria-label="Ocjena sada 71, nakon plana {{ proj }}" style="width:152px;height:152px;border-radius:50%;background:conic-gradient(#C4372E 0 {{ ringA }},#7FB894 {{ ringA }} {{ ringB }},#DCD4BF {{ ringB }} 100%);display:grid;place-items:center"><span style="width:124px;height:124px;border-radius:50%;background:#F7F3E8;display:grid;place-items:center;align-content:center;gap:2px"><span style="font-family:'Instrument Serif',Georgia,serif;font-size:56px;line-height:.9">{{ scoreNow }}</span><span style="font-size:10px;letter-spacing:.08em;color:#6E6656">/ 100</span></span></div>
+<div style="display:grid;grid-template-columns:auto auto;gap:4px 14px;font-size:11px;color:#6E6656"><span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:8px;height:8px;background:#C4372E"></span>sada</span><b style="font-weight:500;color:#26221B;text-align:right">71</b><span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:8px;height:8px;background:#7FB894"></span>nakon plana</span><b style="font-weight:500;color:#1E7F4F;text-align:right">{{ proj }}</b></div>
+<div style="min-height:40px;display:grid;place-items:center"><sc-if value="{{ stamped }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="padding:7px 13px;border:2.5px solid #C4372E;border-radius:2px;color:#C4372E;font-size:12px;letter-spacing:.14em;text-transform:uppercase;mix-blend-mode:multiply;animation:rlStamp .34s cubic-bezier(.2,.9,.3,1.2) both">Nije spremno</div></sc-if></div>
+</div>
+</div>
+</section>
+<div id="nalazi" role="tablist" aria-label="Kategorije" style="display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid rgba(237,231,220,.14)">
+<sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="5"><button type="button" role="tab" aria-selected="{{ tb.sel }}" onClick="{{ tb.on }}" disabled="{{ tb.dis }}" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;box-sizing:border-box;font-size:12px;letter-spacing:.04em;background:{{ tb.bg }};color:{{ tb.col }};transition:background .2s"><span>{{ tb.t }}</span><span style="font-size:11px;opacity:.7">{{ tb.n }}</span></button></sc-for>
+</div>
+<section data-screen-label="Stol" style="display:grid;grid-template-columns:{{ deskCols }};gap:clamp(24px,4vw,48px);align-items:start">
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><div style="display:grid;gap:12px;min-width:0;position:sticky;top:16px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)">STR. 7 OD 41 · {{ zoomLabel }}</span><div role="group" aria-label="Prikaz stranice" style="display:inline-flex;padding:3px;border:1px solid rgba(237,231,220,.16);border-radius:999px"><button type="button" onClick="{{ setNow }}" aria-pressed="{{ nowP }}" style="all:unset;cursor:pointer;min-height:32px;padding:0 14px;border-radius:999px;font-size:11px;letter-spacing:.06em;background:{{ nowBg }};color:{{ nowCol }}">SADA</button><button type="button" onClick="{{ setAfter }}" aria-pressed="{{ afterP }}" style="all:unset;cursor:pointer;min-height:32px;padding:0 14px;border-radius:999px;font-size:11px;letter-spacing:.06em;background:{{ afterBg }};color:{{ afterCol }}">NAKON PLANA</button></div></div>
+<div style="position:relative;container-type:inline-size;aspect-ratio:210/297;background:#F7F3E8;color:#26221B;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55)">
+<div style="position:absolute;inset:0;transform-origin:{{ zo }};transform:scale({{ zs }});transition:transform .7s cubic-bezier(.22,1,.36,1)">
+<div lang="hr" style="position:absolute;inset:0;padding:8cqw 9cqw 10cqw {{ padL }};font-family:{{ ff }};font-size:{{ fs }};line-height:{{ lh }};text-align:{{ ta }};hyphens:auto;overflow:hidden;transition:padding .5s,line-height .5s">
+<p style="margin:0 0 3cqw;font-size:1.4em;font-weight:700;line-height:1.2">2. Teorijski okvir</p>
+<p style="margin:0 0 2.4cqw">Politička participacija mladih u Hrvatskoj posljednjih se godina mijenja. Dok izlaznost na izborima ostaje niska, rastu oblici sudjelovanja koji se odvijaju na društvenim mrežama: potpisivanje peticija, dijeljenje sadržaja i organiziranje prosvjeda.</p>
+<p style="margin:0 0 2.4cqw">Verba, Schlozman i Brady (1995) participaciju definiraju kao aktivnost kojoj je cilj utjecati na djelovanje vlasti. Ta definicija dugo je isključivala simboličke oblike, poput javnog izražavanja stava, koji danas čine velik dio angažmana mladih <span style="background:{{ hlNov }};box-shadow:0 0 0 .6cqw {{ hlNov }};transition:background .3s">(Novak, 2022)</span>.</p>
+<p style="margin:0 0 3cqw;font-size:1.15em;font-weight:700;line-height:1.2"><span style="background:{{ hlHead }};box-shadow:0 0 0 .8cqw {{ hlHead }};transition:background .3s">2.3. Digitalna participacija</span></p>
+<p style="margin:0 0 2.4cqw">Theocharis i van Deth (2018) predlažu širu tipologiju u kojoj se digitalni oblici promatraju kao zaseban modus sudjelovanja. Prema njima, niži prag ulaska ne znači nužno i manju političku važnost.</p>
+<p style="margin:0">Ovaj rad ispituje odnose li se ti oblici na tradicionalne kanale ili ih zamjenjuju. Polazi se od pretpostavke da digitalna participacija snižava prag ulaska, ali i trajnost angažmana.</p>
+</div>
+<div aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:{{ padL }};background:rgba(196,55,46,.12);border-right:1.5px dashed #A62B23;opacity:{{ hlMarg }};transition:opacity .3s,width .5s"></div>
+<div aria-hidden="true" style="position:absolute;left:{{ padL }};right:8cqw;top:6cqw;bottom:9cqw;outline:1.5px dashed #A62B23;outline-offset:1cqw;background:rgba(196,55,46,.05);opacity:{{ hlText }};transition:opacity .3s"></div>
+<div aria-hidden="true" style="position:absolute;left:50%;bottom:2.4cqw;width:9cqw;height:4.4cqw;margin-left:-4.5cqw;border:1.5px dashed #A62B23;border-radius:50%;opacity:{{ hlPn }};transition:opacity .3s"></div>
+<span aria-hidden="true" style="position:absolute;left:0;right:0;bottom:3.4cqw;text-align:center;font-family:'Times New Roman',serif;font-size:2.8cqw;opacity:{{ pnOp }};transition:opacity .4s">7</span>
+</div>
+</div>
+<sc-if value="{{ after }}" hint-placeholder-val="{{ false }}"><p style="justify-self:start;margin:6px 0 0;padding:10px 14px;background:#F1E6B8;color:#3E382C;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:17px;line-height:1.25;box-shadow:0 8px 18px rgba(0,0,0,.3);transform:rotate(-1deg);animation:rlIn .4s both">Ovo dodaješ sam: naslov 2.3 u sadržaj, Novak u literaturu.</p></sc-if>
+</div></sc-if>
+<div style="display:grid;gap:18px;min-width:0">
+<div style="position:relative">
+<div aria-hidden="true" style="position:absolute;inset:0;background:#E6DFCC;transform:translate(8px,10px) rotate(1.6deg);box-shadow:0 10px 28px rgba(0,0,0,.4)"></div>
+<div aria-hidden="true" style="position:absolute;inset:0;background:#EBE4D2;transform:translate(4px,5px) rotate(.7deg)"></div>
+<article aria-live="polite" style="position:relative;background:#EFE9D9;color:#26221B;box-shadow:0 2px 6px rgba(0,0,0,.3);padding:22px 26px 24px;display:grid;gap:14px;transform:{{ cardTr }};opacity:{{ cardOp }};transition:{{ cardTrans }}">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;letter-spacing:.08em;color:#6E6656"><span>NALAZ {{ pos }} OD {{ total }}</span><span style="display:inline-flex;gap:6px"><button type="button" onClick="{{ prev }}" aria-label="Prethodni nalaz" style="all:unset;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;border:1px solid #DCD4BF;border-radius:999px;color:#26221B" style-hover="background:#F7F3E8">←</button><button type="button" onClick="{{ next }}" aria-label="Sljedeći nalaz" style="all:unset;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;border:1px solid #DCD4BF;border-radius:999px;color:#26221B" style-hover="background:#F7F3E8">→</button></span></div>
+<p style="margin:0;display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;color:{{ cur.ink }}"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:{{ cur.col }}"></span>{{ cur.sevT }} · {{ cur.cat }}</p>
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(26px,3vw,32px);line-height:1.08;letter-spacing:-.01em;text-wrap:balance">{{ cur.t }}</h2>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;background:#F7F3E8;border:1px solid #DCD4BF;font-size:13px"><span style="min-width:0"><span style="display:block;font-size:10px;letter-spacing:.08em;color:#6E6656">IZMJERENO</span><s style="color:#A62B23;text-decoration-thickness:1px">{{ cur.m }}</s></span><span aria-hidden="true" style="color:#6E6656">→</span><span style="min-width:0"><span style="display:block;font-size:10px;letter-spacing:.08em;color:#6E6656">PRAVILNIK</span>{{ cur.r }}</span></div>
+<p style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:17px;line-height:1.4;color:#4A4438;text-wrap:pretty">{{ cur.why }}</p>
+<sc-if value="{{ cur.auto }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;padding-top:4px">
+<sc-if value="{{ inPlan }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ toggle }}" aria-pressed="true" style="font:inherit;font-size:13px;min-height:44px;padding:0 18px;border:1.5px solid #1E7F4F;border-radius:10px;background:transparent;color:#1E7F4F;cursor:pointer">U planu ✓ · +{{ cur.p }}</button></sc-if>
+<sc-if value="{{ notInPlan }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggle }}" aria-pressed="false" style="font:inherit;font-size:13px;min-height:44px;padding:0 18px;border:0;border-radius:10px;background:#26221B;color:#F7F3E8;cursor:pointer" style-hover="background:#C4372E">Uključi u plan · +{{ cur.p }}</button></sc-if>
+<span style="font-size:12px;color:#6E6656">Lekta ovo popravlja sama</span>
+</div></sc-if>
+<sc-if value="{{ cur.manual }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:12px 14px;background:rgba(74,108,240,.08);font-size:12px;line-height:1.5;color:#2F3F8F">Ovo dodaješ sam. Lekta ne mijenja sadržaj rada, samo oblik.</p></sc-if>
+</article>
+</div>
+<div style="display:grid;gap:10px;padding:18px 0 0">
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.08em;color:rgba(237,231,220,.6)"><span>GDJE SU NALAZI · 41 STRANICA</span><span>{{ pageNote }}</span></div>
+<div aria-hidden="true" style="height:3px;background:#C4372E;opacity:.85"></div>
+<div style="display:grid;grid-template-columns:repeat(41,minmax(0,1fr));gap:2px">
+<sc-for list="{{ tiles }}" as="p" hint-placeholder-count="41"><button type="button" onClick="{{ p.on }}" aria-label="Stranica {{ p.n }}" style="all:unset;cursor:pointer;height:40px;background:{{ p.bg }};box-shadow:inset 0 0 0 1.5px {{ p.ring }};transition:box-shadow .2s" style-hover="background:#F7F3E8"></button></sc-for>
+</div>
+<p style="margin:0;font-size:11px;line-height:1.55;color:rgba(237,231,220,.6)">Crvena crta: 4 nalaza vrijede za cijeli rad. Jantarna stranica ima nalaze na točno jednom mjestu.</p>
+</div>
+</div>
+</section>
+</main>
+<div ref="{{ trayRef }}" aria-hidden="{{ trayHidden }}" style="position:fixed;left:50%;bottom:16px;z-index:40;width:min(760px,calc(100% - 24px));display:flex;align-items:center;gap:12px 22px;flex-wrap:wrap;padding:12px 12px 12px 22px;box-sizing:border-box;background:#F7F3E8;color:#26221B;box-shadow:0 18px 50px rgba(0,0,0,.55);transform:{{ trayTr }};opacity:{{ trayOp }};transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s">
+<span style="font-size:11px;letter-spacing:.08em;color:#6E6656">PLAN POPRAVKA</span>
+<span style="font-family:'Instrument Serif',Georgia,serif;font-size:20px">{{ planN }} zahvata</span>
+<span style="font-size:13px">71 → <b style="font-weight:600;color:#1E7F4F">{{ proj }}</b></span>
+<span style="font-size:13px;color:#6E6656">14,99 €</span>
+<button type="button" style="font:inherit;margin-left:auto;font-size:13px;font-weight:500;min-height:44px;padding:0 18px;border:0;border-radius:10px;background:#C4372E;color:#F7F3E8;cursor:pointer" style-hover="background:#A62B23">Napravi plan →</button>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RL_SEV = [['Blokira predaju', '#C4372E', '#A62B23'], ['Treba doraditi', '#C98A2E', '#8A5A12'], ['Provjeri sam', '#4A6CF0', '#2F3F8F']];
+const RL_F = [
+  { t: 'Font nije po pravilniku', m: 'Calibri 11 pt', r: 'Times New Roman 12 pt', sev: 0, cat: 'Format', auto: 1, p: 7, zo: '50% 40%', zs: 1, short: 'Font', z: 'CIJELA STRANICA', why: 'Vrijedi za cijeli rad. Lekta mijenja stil Normal i sve stilove naslova, tekst ostaje isti.' },
+  { t: 'Lijeva margina je preuska', m: '2,0 cm', r: '2,5 cm', sev: 0, cat: 'Format', auto: 1, p: 6, zo: '0% 45%', zs: 2.1, short: 'Margina', z: 'LIJEVA MARGINA', why: 'Na uvezu se lijevi rub gubi. Promjena se radi u postavkama stranice, prijelomi se pomaknu za pola retka.' },
+  { t: 'Prored je jednostruk', m: '1,0', r: '1,5', sev: 1, cat: 'Format', auto: 1, p: 6, zo: '50% 22%', zs: 1.7, short: 'Prored', z: 'PRORED', why: 'Rad će imati otprilike 14 stranica više. Opseg se računa u riječima, pa to ne utječe na ocjenu opsega.' },
+  { t: 'Stranice nisu numerirane', m: 'bez broja', r: 'od uvoda, dolje u sredini', sev: 1, cat: 'Format', auto: 1, p: 4, zo: '50% 100%', zs: 2.4, short: 'Brojevi', z: 'PODNOŽJE', why: 'Naslovnica i sadržaj ostaju bez broja, brojanje kreće od uvoda. Sadržaj se tada sam osvježi.' },
+  { t: 'Naslov 2.3 nije u sadržaju', m: 'nedostaje', r: 'u sadržaju', sev: 1, cat: 'Struktura', auto: 0, p: 3, zo: '30% 50%', zs: 2, short: 'Sadržaj', z: 'NASLOV 2.3', why: 'Naslov je napisan kao običan podebljan tekst, pa ga Word ne vidi. Primijeni stil Naslov 2 i osvježi sadržaj.' },
+  { t: '(Novak, 2022) nema zapis u literaturi', m: 'citat bez izvora', r: 'zapis u popisu literature', sev: 2, cat: 'Citati', auto: 0, p: 3, zo: '70% 34%', zs: 2.2, short: 'Novak', z: 'CITAT', why: 'U popisu literature nema djela autora Novak iz 2022. Dodaj zapis ili provjeri je li godina točna.' }
+];
+const RL_CATS = [['all', 'Sve'], ['Format', 'Format'], ['Struktura', 'Struktura'], ['Citati', 'Citati'], ['Predaja', 'Predaja']];
+class Component extends DCLogic {
+  state = { sel: 0, cat: 'all', plan: { 0: 1, 1: 1, 2: 1, 3: 1 }, mode: 'now', anim: '', ring: 0, stamped: false, tray: false, width: 1200, page: 7 };
+  rootRef = React.createRef(); verdictRef = React.createRef(); trayRef = React.createRef(); ringRef = React.createRef();
+  componentDidMount() {
+    this.rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = this.rootRef.current;
+    if (el && 'ResizeObserver' in window) { this.ro = new ResizeObserver(e => this.setState({ width: e[0].contentRect.width })); this.ro.observe(el); }
+    const v = this.verdictRef.current;
+    if (v && 'IntersectionObserver' in window) { this.io = new IntersectionObserver(e => this.setState({ tray: !e[0].isIntersecting }), { threshold: .15 }); this.io.observe(v); }
+    if (this.rm) { this.setState({ ring: 71, stamped: true }); return; }
+    const t0 = performance.now();
+    const f = t => { const p = Math.min(1, (t - t0) / 1200), e = 1 - Math.pow(1 - p, 3); this.setState({ ring: Math.round(71 * e) }); if (p < 1) this.raf = requestAnimationFrame(f); };
+    this.raf = requestAnimationFrame(f);
+    this.st = setTimeout(() => this.setState({ stamped: true }), 1350);
+  }
+  componentWillUnmount() { this.ro && this.ro.disconnect(); this.io && this.io.disconnect(); cancelAnimationFrame(this.raf); clearTimeout(this.st); clearTimeout(this.ft); }
+  list(cat) { const c = cat ?? this.state.cat; return RL_F.map((f, i) => i).filter(i => c === 'all' || RL_F[i].cat === c); }
+  go(d) { const L = this.list(); if (L.length < 2) return; const k = Math.max(0, L.indexOf(this.state.sel)); this.flick(L[(k + d + L.length) % L.length], d); }
+  flick(n, d) {
+    if (this.rm) { this.setState({ sel: n }); return; }
+    clearTimeout(this.ft);
+    this.setState({ anim: d > 0 ? 'out' : 'outR' });
+    this.ft = setTimeout(() => { this.setState({ sel: n, anim: d > 0 ? 'in' : 'inR' }); requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ anim: '' }))); }, 200);
+  }
+  toggle(e) {
+    const i = this.state.sel, on = !this.state.plan[i], btn = e.currentTarget;
+    this.setState(s => ({ plan: { ...s.plan, [i]: on ? 1 : 0 } }));
+    if (on) this.fly(btn, '+ ' + RL_F[i].short);
+  }
+  fly(btn, label) {
+    const tgt = this.state.tray ? this.trayRef.current : this.ringRef.current;
+    if (this.rm || !btn || !tgt || !document.body.animate) return;
+    const a = btn.getBoundingClientRect(), b = tgt.getBoundingClientRect();
+    const c = document.createElement('div');
+    c.textContent = label;
+    Object.assign(c.style, { position: 'fixed', left: a.left + 'px', top: a.top + 'px', zIndex: 80, padding: '8px 12px', background: '#F1E6B8', color: '#3E382C', font: "italic 17px 'Instrument Serif', Georgia, serif", boxShadow: '0 8px 18px rgba(0,0,0,.35)', pointerEvents: 'none' });
+    document.body.appendChild(c);
+    const dx = b.left + b.width / 2 - a.left - 40, dy = b.top + b.height / 2 - a.top - 16;
+    c.animate([{ transform: 'rotate(2deg)', opacity: 1 }, { transform: 'translate(' + dx * .5 + 'px,' + (dy * .5 - 70) + 'px) rotate(-6deg)', opacity: 1, offset: .55 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.5)', opacity: 0 }], { duration: 850, easing: 'cubic-bezier(.5,0,.2,1)' }).onfinish = () => c.remove();
+  }
+  renderVals() {
+    const s = this.state, L = this.list(), sel = L.includes(s.sel) ? s.sel : L[0], f = RL_F[sel], sv = RL_SEV[f.sev];
+    const wide = s.width >= 900, after = s.mode === 'after', P = s.plan;
+    const proj = 71 + RL_F.reduce((a, x, i) => a + (P[i] ? x.p : 0), 0), planN = Object.values(P).filter(Boolean).length;
+    const ringProj = Math.round(s.ring + (proj - 71) * (s.ring / 71));
+    const cardTr = { out: 'translate(-56px,8px) rotate(-5deg)', outR: 'translate(56px,8px) rotate(5deg)', in: 'translate(56px,0) rotate(4deg)', inR: 'translate(-56px,0) rotate(-4deg)' }[s.anim] || 'none';
+    const hl = i => !after && sel === i ? '1' : '0', hlBg = i => !after && sel === i ? 'rgba(196,55,46,.2)' : 'transparent';
+    const tabs = RL_CATS.map(([k, t]) => { const n = k === 'all' ? RL_F.length : RL_F.filter(x => x.cat === k).length, on = s.cat === k; return { t, n: n ? String(n) : '✓', sel: on ? 'true' : 'false', dis: !n, bg: on ? '#EDE7DC' : 'transparent', col: on ? '#191512' : n ? 'rgba(237,231,220,.75)' : 'rgba(95,191,138,.8)', on: () => { if (!n) return; const LL = this.list(k); this.setState({ cat: k, sel: LL[0] }); } }; });
+    const tiles = Array.from({ length: 41 }, (_, i) => ({ n: String(i + 1), bg: i === 6 ? '#C98A2E' : 'rgba(237,231,220,.14)', ring: s.page === i + 1 ? '#EDE7DC' : 'transparent', on: () => { if (i === 6) this.setState({ page: 7, cat: 'all' }, () => this.flick(4, 1)); else this.setState({ page: i + 1 }); } }));
+    return {
+      rootRef: this.rootRef, verdictRef: this.verdictRef, trayRef: this.trayRef, ringRef: this.ringRef,
+      wide, after, verdictCols: s.width >= 700 ? 'minmax(0,1fr) auto' : 'minmax(0,1fr)', deskCols: wide ? 'minmax(0,1.15fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      scoreNow: String(s.ring), proj: String(proj), ringA: s.ring + '%', ringB: ringProj + '%', stamped: s.stamped,
+      tabs, tiles, pageNote: s.page === 7 ? 'STR. 7 · NASLOV 2.3 I (NOVAK, 2022)' : 'STR. ' + s.page + ' · SAMO NALAZI ZA CIJELI RAD',
+      cur: { ...f, p: String(f.p), sevT: sv[0].toUpperCase(), col: sv[1], ink: sv[2], cat: f.cat.toUpperCase(), auto: !!f.auto, manual: !f.auto },
+      pos: String(L.indexOf(sel) + 1), total: String(L.length), inPlan: !!f.auto && !!P[sel], notInPlan: !!f.auto && !P[sel],
+      cardTr, cardOp: s.anim ? '0' : '1', cardTrans: s.anim === 'in' || s.anim === 'inR' ? 'none' : 'transform .2s ease, opacity .2s ease',
+      prev: () => this.go(-1), next: () => this.go(1), toggle: e => this.toggle(e),
+      zo: after ? '50% 50%' : f.zo, zs: String(after ? 1 : f.zs), zoomLabel: after ? 'NAKON PLANA' : f.z,
+      ff: after && P[0] ? "'Times New Roman',Times,'Liberation Serif',serif" : "Calibri,Carlito,'Segoe UI',sans-serif", fs: after && P[0] ? '3.05cqw' : '2.85cqw',
+      padL: after && P[1] ? '10cqw' : '7cqw', lh: after && P[2] ? '1.5' : '1.08', ta: after && P[0] ? 'justify' : 'left', pnOp: after && P[3] ? '1' : '0',
+      hlMarg: hl(1), hlText: !after && (sel === 0 || sel === 2) ? '1' : '0', hlPn: hl(3), hlHead: hlBg(4), hlNov: hlBg(5),
+      setNow: () => this.setState({ mode: 'now' }), setAfter: () => this.setState({ mode: 'after' }),
+      nowP: after ? 'false' : 'true', afterP: after ? 'true' : 'false', nowBg: after ? 'transparent' : '#EDE7DC', nowCol: after ? 'rgba(237,231,220,.7)' : '#191512', afterBg: after ? '#7FB894' : 'transparent', afterCol: after ? '#191512' : 'rgba(237,231,220,.7)',
+      planN: String(planN), trayHidden: s.tray ? 'false' : 'true', trayTr: s.tray ? 'translate(-50%,0)' : 'translate(-50%,140%)', trayOp: s.tray ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

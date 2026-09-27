@@ -9,9 +9,10 @@
  * Modul ne dira nijedan drugi element stranice i ne zna nista o analizi.
  *
  * TAJ CSS OVAJ MODUL NE UVOZI, nego `src/shared/ui-boot.ts`, koji ucitavaju SVE rute. Razlog:
- * pre-paint skripta atribute upisuje na svakoj stranici, a panel se montira samo na `/` i
- * `/rad/`; da stil dolazi s panelom, izbor napravljen na `/` bio bi mrtav na `/saznaj-vise/`,
- * `/moji-radovi/` i alat-stranicama. Stil prati ATRIBUT, ne kontrolu.
+ * pre-paint skripta atribute upisuje na svakoj stranici, pa stil mora vrijediti svugdje bez obzira
+ * na to gdje kontrola stoji; stil prati ATRIBUT, ne kontrolu. Od F10 (2026-09-23) isti `ui-boot.ts`
+ * montira i SAM PANEL, dakle na svim rutama. Do tada je panel zivio samo na `/` i `/rad/`, pa je
+ * izbor napravljen na `/` bio mrtav na `/saznaj-vise/`, `/moji-radovi/` i alat-stranicama.
  *
  * GUSTOCA SE NAMJERNO NE NUDI, iako je ALIGNMENT Z6 nabraja. Mjerenje Z4 (2026-09-19) pokazalo je
  * da samo 25 posto razmaka u proizvodu lezi na predlozenoj ljestvici, pa `--space-*` tokeni nisu ni
@@ -39,7 +40,7 @@ export interface DisplaySettings {
   readonly motion: Pokret;
 }
 
-/** Zadano stanje proizvoda: radna lampa, Newsreader, bez pojacanja i bez prigusenja pokreta. */
+/** Zadano stanje proizvoda: radna lampa, Instrument Serif, bez pojacanja i bez prigusenja pokreta. */
 export const ZADANO_OSVJETLJENJE: Osvjetljenje = 'dark';
 export const ZADANE_POSTAVKE: DisplaySettings = {
   readingFont: 'default', contrast: 'normal', motion: 'auto',
@@ -213,15 +214,83 @@ export interface DisplaySettingsController {
 const montirani = new WeakMap<Document, DisplaySettingsController>();
 
 /**
- * Montira panel i gumb `#displayBtn`. Vraca `null` kad gumba nema (svaka stranica koja panel ne
- * nudi), jer tiho stvaranje `<aside>`-a bez nacina da ga se otvori ne bi bilo degradacija nego smece.
+ * OTVARACI PANELA: `#displayBtn` U TRACI I SVAKI `[data-display-open]`.
+ *
+ * Do F10 je panel imao tocno jedan otvarac, `#displayBtn`, i zivio samo na `/` i `/rad/`. Mobilni
+ * list je zato nosio POSREDNIK koji je klik proslijedivao na taj gumb, a na stranicama bez panela se
+ * pri montazi uklonio. Odluka F10 (2026-09-23) panel stavlja na SVE rute, pa posrednik nema koga
+ * posredovati: gumb u listu je od sada obican otvarac, `[data-display-open]`.
+ *
+ * DVA ELEMENTA S ISTIM `id` OSTAJU NEVALJAN HTML, i zato mobilni gumb `id` NE dobiva: `#displayBtn`
+ * je i dalje jedinstven u dokumentu (gard: `tests/site-chrome.test.ts`). Oba otvaraca dobivaju
+ * `aria-expanded` i `aria-controls`, jer oba stvarno kontroliraju isti panel.
+ */
+function otvaraciPanela(doc: Document): HTMLElement[] {
+  const glavni = doc.getElementById('displayBtn');
+  const ostali = [...doc.querySelectorAll<HTMLElement>('[data-display-open]')];
+  return glavni ? [glavni, ...ostali.filter((el) => el !== glavni)] : ostali;
+}
+
+/**
+ * JE LI ELEMENT ISCRTAN, dakle moze li uopce primiti fokus.
+ *
+ * `focus()` nad elementom bez kutije je po specifikaciji NO-OP: fokus ostaje gdje je bio ili padne
+ * na `<body>`, pa je sljedeci Tab pocetak stranice. To je tocno kvar zbog kojeg se fokus i vraca
+ * na otvarac, pa se odrediste mora PROVJERITI prije nego ga se gadja.
+ *
+ * Racuna se iz kaskade, a ne iz `offsetParent` ni `checkVisibility`: happy-dom nijedno ne nudi
+ * (izmjereno u ovom stablu 2026-09-23), pa bi gard nad njima bio zelen bez ijedne izvrsene grane.
+ * Lanac predaka se hoda jer se `display: none` s PRETKA u izracunatom stilu djeteta NE VIDI:
+ * izmjereno, dijete zatvorenog `.site-chrome__sheet`-a i dalje prijavljuje `inline-block`.
+ */
+function iscrtan(el: HTMLElement): boolean {
+  if (!el.isConnected || typeof el.focus !== 'function') return false;
+  const prozor = el.ownerDocument.defaultView;
+  if (!prozor || typeof prozor.getComputedStyle !== 'function') return true;
+  for (let cvor: HTMLElement | null = el; cvor; cvor = cvor.parentElement) {
+    if (cvor.hidden) return false;
+    const stil = prozor.getComputedStyle(cvor);
+    if (stil.display === 'none' || stil.visibility === 'hidden') return false;
+  }
+  return true;
+}
+
+/**
+ * SIDRA FOKUSA ZA ZATVARANJE, redom kojim se pokusavaju.
+ *
+ * MJERENI SLUCAJ, NE HIPOTEZA: na svih 13 stranica jedini `[data-display-open]` stoji UNUTAR
+ * mobilnog lista (`<nav id="mobileNav" class="site-chrome__sheet">`), a taj list `wireSiteMenu` u
+ * `site-chrome.ts` zatvara na isti klik kojim se panel otvara (rukovatelj na listu, faza mjehurica,
+ * poslije rukovatelja na gumbu). Zatvoren list je `display: none` (`site-chrome.css`), pa je otvarac
+ * u trenutku Esc-a NEISCRTAN: vracanje fokusa na njega je vracanje u nista.
+ *
+ * Zato se poslije otvaraca pokusava kontrola koja otvara njegov SPREMNIK, nadjena kroz
+ * `aria-controls` (u praksi hamburger `#mobileMenuBtn`, koji na toj sirini jest iscrtan). Veza ide
+ * kroz ARIA atribut, a ne kroz `id` iz drugog modula, pa panel i dalje ne zna nista o traci.
+ * Na kraju su ostali otvaraci panela (na sirokom zaslonu `#displayBtn` u traci).
+ */
+function sidraFokusa(otvarac: HTMLElement, gumbi: HTMLElement[]): HTMLElement[] {
+  const doc = otvarac.ownerDocument;
+  const spremnici: HTMLElement[] = [];
+  for (let cvor = otvarac.parentElement; cvor; cvor = cvor.parentElement) {
+    // Samo obicni identifikatori: umetanje u selektor iz tudjeg markupa nije nicija potreba.
+    if (!/^[A-Za-z][\w-]*$/.test(cvor.id)) continue;
+    spremnici.push(...doc.querySelectorAll<HTMLElement>(`[aria-controls="${cvor.id}"]`));
+  }
+  return [otvarac, ...spremnici, ...gumbi];
+}
+
+/**
+ * Montira panel i njegove otvarace. Vraca `null` kad na stranici nema NIJEDNOG otvaraca, jer tiho
+ * stvaranje `<aside>`-a bez nacina da ga se otvori ne bi bilo degradacija nego smece.
  *
  * Panel NIJE modal: pozadina ostaje interaktivna, fokus se ne zarobljava, `inert` se ne postavlja.
  * Korisnik mora vidjeti ucinak svake promjene na stvarnom sadrzaju, a ne na zamracenoj stranici.
  */
 export function mountDisplaySettings(doc: Document): DisplaySettingsController | null {
   montirani.get(doc)?.dispose();
-  const gumb = doc.getElementById('displayBtn');
+  const gumbi = otvaraciPanela(doc);
+  const gumb = gumbi[0];
   if (!gumb) return null;
 
   const kontroler = new AbortController();
@@ -265,7 +334,7 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   pismo.id = 'lektaPismo';
   pismo.className = 'ps-select';
   for (const [vrijednost, natpis] of [
-    ['default', 'Newsreader (zadano)'],
+    ['default', 'Instrument Serif (zadano)'],
     ['serif', 'Sistemski serif'],
     ['sans', 'Sistemski sans'],
     ['dyslexic', 'Pismo za disleksiju'],
@@ -352,10 +421,21 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
   }, { signal });
 
   const otvoren = (): boolean => !panel.hidden;
-  const open = (): void => {
+  /**
+   * FOKUS SE VRACA NA PRVO ISCRTANO SIDRO OTVARACA, NE SLIJEPO NA OTVARAC.
+   *
+   * Panel od F10 ima dva otvaraca, pa fiksno vracanje na `#displayBtn` mobilnog korisnika ostavlja
+   * na gumbu koji je na njegovoj sirini `display: none`. ISPRAVAK (krug popravka 2026-09-23):
+   * vracanje na sam otvarac ima isti kvar u istom prizoru, jer se mobilni list zatvara u istom
+   * kliku kojim se panel otvara, pa je otvarac u listu nakon Esc-a jednako neiscrtan. Redoslijed
+   * sidara i mjerenje stoje uz `sidraFokusa` iznad.
+   */
+  let zadnjiOtvarac: HTMLElement = gumb;
+  const open = (izvor: HTMLElement = gumb): void => {
+    zadnjiOtvarac = izvor;
     if (otvoren()) return;
     panel.hidden = false;
-    gumb.setAttribute('aria-expanded', 'true');
+    for (const el of gumbi) el.setAttribute('aria-expanded', 'true');
     // KLIZANJE IDE U SLJEDECEM KADRU. Dok je `hidden`, element nema kutiju, pa prijelaz nema iz
     // cega krenuti i panel bi samo iskocio. `hidden` je pritom i dalje jedini izvor istine o tome
     // je li panel otvoren; klasa nosi samo polozaj.
@@ -373,13 +453,22 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
     // fokus vraca na gumb, inace citac ekrana nakratko stoji u elementu koji vise nije otvoren.
     panel.classList.remove('ps--otvoren');
     panel.hidden = true;
-    gumb.setAttribute('aria-expanded', 'false');
-    gumb.focus();
+    for (const el of gumbi) el.setAttribute('aria-expanded', 'false');
+    const cilj = sidraFokusa(zadnjiOtvarac, gumbi).find(iscrtan);
+    if (cilj) cilj.focus();
+    else {
+      // Nijedno sidro nije iscrtano (npr. traka jos nije montirana): fokus se barem MAKNE iz
+      // skrivenog panela, jer citac ekrana inace ostaje u podstablu koje vise nije na ekranu.
+      const aktivan = doc.activeElement as HTMLElement | null;
+      if (aktivan && panel.contains(aktivan) && typeof aktivan.blur === 'function') aktivan.blur();
+    }
   };
 
-  gumb.setAttribute('aria-expanded', 'false');
-  gumb.setAttribute('aria-controls', PANEL_ID);
-  gumb.addEventListener('click', () => { if (otvoren()) close(); else open(); }, { signal });
+  for (const el of gumbi) {
+    el.setAttribute('aria-expanded', 'false');
+    el.setAttribute('aria-controls', PANEL_ID);
+    el.addEventListener('click', () => { if (otvoren()) close(); else open(el); }, { signal });
+  }
   zatvori.addEventListener('click', close, { signal });
   doc.addEventListener('keydown', (event) => {
     if ((event as KeyboardEvent).key === 'Escape' && otvoren()) {
@@ -428,8 +517,10 @@ export function mountDisplaySettings(doc: Document): DisplaySettingsController |
       montirani.delete(doc);
       kontroler.abort();
       panel.remove();
-      gumb.removeAttribute('aria-expanded');
-      gumb.removeAttribute('aria-controls');
+      for (const el of gumbi) {
+        el.removeAttribute('aria-expanded');
+        el.removeAttribute('aria-controls');
+      }
       if (lampa) delete lampa.dataset.themeOwner;
     },
   };

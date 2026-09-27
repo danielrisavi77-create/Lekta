@@ -8,6 +8,15 @@
 <meta name="robots" content="noindex, follow">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <style>
+  /* DVA GLASA I NA OVOJ STRANICI (Z7(a) popravak). Stranica je samostalna: Vite je iz public/ kopira
+     BEZ obrade, pa ne moze uvesti fonts.css ni znati hashirana imena rezova. Izabrana je obrada POSLIJE
+     builda, ne nehashirana kopija woff2 u public/: `scripts/generate-legal-pages.mjs` na oznaku ispod
+     umece @font-face prema ISTIM woff2 koje je Vite proizveo za rute (jedan izvor bajtova, isti cache
+     pogodak, a rez koji se ne nadje obara build umjesto da se tiho crta zamjenski glas). Kopija u
+     public/ bi drzala drugi primjerak istih bajtova koji se moze razici s vendoriranim, i nosila bi
+     nehashirana imena koja CDN ne smije dugo cuvati. Bez generatora (npr. `vite` dev) oznaka ostaje
+     komentar i stranica crta sistemski Georgia i monospace iz repa tokena: cita se, ali ne u glasu proizvoda. */
+  /* LEKTA-WEBFONTOVI: generate-legal-pages.mjs ovdje umece @font-face */
   :root {
     color-scheme: light;
     /* Tinta i papir tokeni (self-contained podskup) */
@@ -24,9 +33,12 @@
     --radius-xl: 12px;
     --radius: 10px;
     --radius-pill: 999px;
-    --display-serif: "Newsreader Variable", Georgia, "Times New Roman", serif;
-    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    /* Isti tokeni kao `design-system.css`; @font-face za oba glasa umece generator (vidi vrh). */
+    --display-serif: "Instrument Serif", "Instrument Serif Fallback", "Instrument Serif Fallback Times", Georgia, "Times New Roman", serif;
+    --mono: "Geist Mono", "Geist Mono Fallback", "Geist Mono Fallback Courier", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     --focus: 0 0 0 2px var(--panel), 0 0 0 4px var(--brand);
+    /* Instrument Serif ima samo rez 400: bez ovoga preglednik lazno podebljava. */
+    font-synthesis: none;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -45,7 +57,7 @@
   }
   * { box-sizing: border-box; }
   body {
-    font-family: "Inter Tight Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--mono);
     margin: 0; min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
     padding: 2rem 1rem;
@@ -56,8 +68,8 @@
   .brand {
     display: inline-flex; align-items: center; gap: 0.55rem;
     text-decoration: none; color: var(--text);
-    font-family: var(--display-serif); font-optical-sizing: auto;
-    font-weight: 600; font-size: 1.3rem; margin-bottom: 1.5rem;
+    font-family: var(--display-serif);
+    font-weight: 400; font-size: 1.3rem; margin-bottom: 1.5rem;
   }
   .brand .tick { width: 15px; height: 13px; color: var(--brand); transform: translateY(1px); }
   /* Folija: bijeli list na papiru */
@@ -83,11 +95,12 @@
   }
   h1 {
     font-family: var(--display-serif);
-    font-size: 1.5rem; font-weight: 600;
+    font-size: 1.5rem; font-weight: 400;
     margin: 0.4rem 0 0.5rem; letter-spacing: -0.01em;
     color: var(--text);
   }
   p.lead {
+    font-family: var(--display-serif);
     color: var(--muted); font-size: 0.98rem;
     margin: 0 auto 1.7rem; max-width: 440px;
   }
@@ -140,11 +153,9 @@
     --radius-xl: 2px;
     --radius: 2px;
     --radius-pill: 2px;
-    --display-serif: Georgia, "Times New Roman", serif;
-    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
-  /* Sucelje govori monospaceom (sistemski fallback, stranica ne ucitava webfontove) */
-  body { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  /* Sucelje oznacava Geist Monom; recenica ispod naslova govori serifom (p.lead). */
+  body { font-family: var(--mono); }
   /* Papir: sadrzaj kartice pise tintom papira, ne tintom stola */
   .card {
     --text: #26221B;

@@ -686,7 +686,35 @@ for (const [ime, dataTheme, scheme] of [
  * ili vakuumski za radnu povrsinu.
  */
 const KONTRAST_STRANICE = [
-  { ruta: '/rad/', prag: 90 },        // izmjereno 118 neutralizirano; tekstura u svijetloj temi ~65
+  /**
+   * PRAG ZA `/rad/` PREKALIBRIRAN 2026-09-27 zbog Z15 reza podnozja (odluka vlasnika F6/F10,
+   * pravni minimum na `/rad/`), ne zbog regresije kontrasta.
+   *
+   * Izmjereno (chromium 1440x1000, reducedMotion reduce, ista neutralizacija kao gore,
+   * @axe-core/playwright), broj `color-contrast` PROLAZA (`mjereno`), SA i BEZ teksture, obje teme:
+   *
+   *     grana         sa teksturom   neutralizirano   krsenja   neodredivih (incomplete)
+   *     master 6e5474e9    101            101            0            13
+   *     design/pack3         81             81            0            12
+   *
+   * Tekstura vise NE zasljepljuje axe ni na masteru (stara tablica 65 -> 102 vise ne vrijedi;
+   * "sa teksturom" i "neutralizirano" sada daju ISTI broj na obje grane), pa prag ovdje vise ne
+   * dokazuje da je neutralizacija ukljucena, samo da stranica nije ostala trivijalno prazna.
+   *
+   * Razlika od tocno 20 cvorova (101 -> 81) je STARO veliko podnozje koje je Z15 zamijenio:
+   * `.footer-bottom`, `.footer-brand`, `.footer-copy`, `nav[aria-label]` za Alati/Ostalo/Pravno/
+   * Proizvod i poveznice na alati.html, citat.html, izjava.html, kartice.html, literatura.html,
+   * naslovnica.html, fakulteti/, landing_benchmark.html, landing_usporedba.html, pokrivenost.html,
+   * pravila-povrata.html, garancija, disclaimer, saznaj-vise/#pricing, #top, #analyzer. Novi
+   * cvorovi na pack3 (`.site-chrome__work`, `.site-footer__nota`, `.site-footer__sve`,
+   * `.legal-open`, `.logo-word`, `.ks-mark`) su MANJI od onoga sto je Z15 uklonio, pa je 81 ispod
+   * stare kalibracije (90) bez ikakvog novog krsenja.
+   *
+   * Prag je zato spusten na 70: dovoljno ispod 81 da drzi rezervu, dovoljno iznad neodredivih
+   * (12-13, isti selektori kao na masteru, `messageKey: pseudoContent`) da ostane NETRIVIJALAN.
+   * Ne mijenja se prag za `/index.html`, koji nije zahvacen ovim rezom.
+   */
+  { ruta: '/rad/', prag: 70 },
   { ruta: '/index.html', prag: 8 },   // PREKALIBRIRANO 2026-09-08 (v. dolje): 35 -> 20 moguca cvora
                                       // nakon reza navigacije/podnozja; prag ovdje samo provjerava
                                       // da stranica nije ostala prazna, ne mjeri stvarni kontrast.

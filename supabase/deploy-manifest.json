@@ -74,9 +74,8 @@
       "requiredSecrets": [
         "ALLOWED_ORIGIN",
         "CHECKOUT_DAILY_CAP",
-        "CHECKOUT_REDIRECT_URL",
-        "LEMONSQUEEZY_API_KEY",
-        "LEMONSQUEEZY_STORE_ID",
+        "STRIPE_PUBLISHABLE_KEY",
+        "STRIPE_SECRET_KEY",
         "SUPABASE_ANON_KEY",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
@@ -436,9 +435,8 @@
       "verifyJwt": false,
       "declaredInConfig": true,
       "requiredSecrets": [
-        "LEMONSQUEEZY_STORE_ID",
-        "LS_ALLOW_TEST_MODE",
-        "MOR_WEBHOOK_SECRET",
+        "STRIPE_ALLOW_TEST_MODE",
+        "STRIPE_WEBHOOK_SECRET",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
@@ -462,7 +460,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-23T12:44:54.467Z",
-  "generatedFromCommit": "2fffe3e31ad6b2c26fbca657084e79d0c09eb53d",
+  "generatedAt": "2026-09-26T22:42:57.888Z",
+  "generatedFromCommit": "a2b76fbb0f255eb082c2cbd28736d913bd8dc6c5",
   "generator": "npm run deploy-manifest"
 }

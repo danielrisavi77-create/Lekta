@@ -1,4 +1,4 @@
-<!-- @dsCard group="Rezultat" name="Prsten ocjene" subtitle="blokira / dorada / rucna provjera / cisto / opca provjera / unscored" width="1080" height="440" -->
+<!-- @dsCard group="Rezultat" name="Prsten ocjene" subtitle="jedna ocjena 0-100 u display serifu; boja prstena = ton presude; strop popravka kao crtkani luk; nebodovano, delta nakon popravka, male velicine" width="960" height="720" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,96 +7,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-.ring-card{width:150px;height:150px;border-radius:2px;display:grid;place-items:center;background:linear-gradient(180deg,var(--desk-2) 0%,var(--desk) 100%);box-shadow:var(--paper-sh-sm);position:relative}
-.ring{width:104px;height:104px;border-radius:50%;position:relative;display:grid;place-items:center}
-.ring::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--tone,#666) calc(var(--pct,0)*1%), rgba(237,231,220,.12) 0)}
-.ring::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--desk)}
-.ring-val{position:relative;z-index:1;font-family:var(--mono);font-weight:600;font-size:1.9rem;color:var(--desk-ink);font-variant-numeric:tabular-nums}
-.ring-val small{display:block;font-size:.6rem;color:rgba(237,231,220,.5);font-weight:500}
-.ring-status{position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);border-radius:999px;background:var(--desk);box-shadow:0 0 0 1px rgba(237,231,220,.16);font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;white-space:nowrap}
-.ring-dashed::before{background:none;border:2px dashed rgba(237,231,220,.35)}
-.ring-empty::before{background:rgba(237,231,220,.10)}
+:root{color-scheme:dark;--desk:#191512;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red-deep:#C4372E;--warn:#C98A2E;--scan:#4A6CF0;--pass:#34996A;--sh-lg:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:28px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+.paper{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:2px;box-shadow:var(--sh-lg);padding:26px 28px;transform:rotate(-.3deg)}
+.row{display:flex;gap:40px;flex-wrap:wrap;align-items:flex-start}
+.item{display:grid;gap:10px;justify-items:center;text-align:center}
+.item .cap{margin:0;color:var(--paper-muted)}
+/* ===== Prsten ===== */
+.ring{--v:71;--tone:var(--red-deep);--size:132px;--w:11px;position:relative;width:var(--size);height:var(--size);border-radius:50%;background:conic-gradient(var(--tone) calc(var(--v)*1%),var(--paper-line) 0);display:grid;place-items:center}
+.ring::before{content:"";position:absolute;inset:var(--w);border-radius:50%;background:var(--paper)}
+.ring b{position:relative;font:400 calc(var(--size)*.4)/1 var(--display);letter-spacing:-.02em;color:var(--paper-ink)}
+.ring small{position:absolute;bottom:calc(var(--w)*1.9);font:400 9px var(--mono);letter-spacing:.1em;color:var(--paper-muted)}
+/* Strop popravka: crtkani luk od trenutne do najvise dosezne ocjene. */
+.ring.has-ceil{--c:88}
+.ring.has-ceil::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(transparent calc(var(--v)*1%),var(--tone) calc(var(--v)*1%) calc(var(--c)*1%),transparent 0);-webkit-mask:radial-gradient(circle,transparent calc(50% - var(--w)),#000 calc(50% - var(--w) + 1px));mask:radial-gradient(circle,transparent calc(50% - var(--w)),#000 calc(50% - var(--w) + 1px));opacity:.38}
+.ring.tone-warn{--tone:var(--warn)}.ring.tone-scan{--tone:var(--scan)}.ring.tone-pass{--tone:var(--pass)}.ring.tone-ink{--tone:var(--paper-ink)}
+.ring.unscored{background:repeating-conic-gradient(var(--paper-line) 0 4deg,transparent 4deg 8deg)}
+.ring.unscored b{font-size:calc(var(--size)*.3)}
+.ring.sm{--size:56px;--w:5px}.ring.sm b{font-size:22px}.ring.sm small{display:none}
+.ring.xs{--size:30px;--w:3px}.ring.xs b{font-size:12px;font-family:var(--mono)}.ring.xs small{display:none}
+.legend{display:grid;gap:6px;font-size:11px;color:var(--paper-muted);max-width:30ch;text-align:left}
+.legend span{display:flex;gap:8px;align-items:center}
+.legend i{width:14px;height:3px;background:var(--red-deep)}
+.legend i.d{opacity:.38}
+.delta{display:grid;grid-auto-flow:column;align-items:center;gap:14px}
+.delta .arrow{font-size:20px;color:var(--paper-muted)}
+.list{display:grid;gap:8px;min-width:280px;text-align:left}
+.list .r{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center;font-size:12px;padding:6px 0;border-bottom:1px solid var(--paper-line)}
+.list .r span:last-child{font-size:10px;letter-spacing:.06em;color:var(--paper-muted)}
 </style>
 </head>
 <body>
-<h1 class="dsc-h">Prsten ocjene</h1>
-<p class="dsc-sub">Presuda je BOJA, ne dekoracija: crvena blokira predaju, jantarna traži doradu, plava traži ručnu provjeru, zelena je čisto. Opća provjera (bez prepoznatog profila) ima isprekidan rub jer ocjena nije mjerodavna za točan fakultet.</p>
-<div class="dsc-row">
+<div><h1 class="dsc-h">Prsten ocjene</h1><p class="dsc-sub">Jedna ocjena, jedan prsten, uvijek sekundaran presudi u riječima. Broj je u display serifu, obrub nosi ton presude (crvena blokira, jantarna dorada, plava ručna provjera, zelena čisto). Novo: <b style="color:var(--desk-ink)">strop popravka</b> kao svjetliji luk od trenutne do najviše dosezne ocjene (iz <code>repairOutlook.ceilingScore</code>), gornja granica, nikad predviđanje.</p></div>
 
-<div class="dsc-item">
-  <div class="ring-card"><div class="ring" style="--tone:#E4573D;--pct:34"><span class="ring-val">34<small>/ 100</small></span></div><span class="ring-status" style="color:#E4573D">Blokira</span></div>
-  <div class="dsc-cap" style="margin-top:16px">Blokira predaju</div>
+<section class="paper"><span class="cap" style="color:var(--paper-muted)">01 · Četiri tona presude i strop</span>
+<div class="row">
+  <div class="item"><div class="ring has-ceil" style="--v:71;--c:88"><b>71</b><small>/ 100</small></div><span class="cap">Nije spremno · strop 88</span></div>
+  <div class="item"><div class="ring tone-warn has-ceil" style="--v:79;--c:93"><b>79</b><small>/ 100</small></div><span class="cap">Treba doraditi · strop 93</span></div>
+  <div class="item"><div class="ring tone-scan" style="--v:84"><b>84</b><small>/ 100</small></div><span class="cap">Ručna provjera</span></div>
+  <div class="item"><div class="ring tone-pass" style="--v:96"><b>96</b><small>/ 100</small></div><span class="cap">Nema blokatora</span></div>
+  <div class="legend" style="align-self:center;min-width:220px"><span><i></i>izmjereno sada</span><span><i class="d"></i>koliko automatika može doseći ako sve uspije</span><span style="color:var(--paper-ink)">Ostatak do 100 ostaje autoru: to se ne crta kao obećanje.</span></div>
 </div>
+</section>
 
-<div class="dsc-item">
-  <div class="ring-card"><div class="ring" style="--tone:#C98A2E;--pct:68"><span class="ring-val">68<small>/ 100</small></span></div><span class="ring-status" style="color:#C98A2E">Dorada</span></div>
-  <div class="dsc-cap" style="margin-top:16px">Treba doradu</div>
+<section class="paper" style="transform:rotate(.4deg)"><span class="cap" style="color:var(--paper-muted)">02 · Nebodovano, delta nakon popravka, male veličine</span>
+<div class="row" style="align-items:center">
+  <div class="item"><div class="ring unscored tone-ink"><b>24</b><small>pravila</small></div><span class="cap">Profil ne boduje · provjereno 24 pravila</span></div>
+  <div class="item"><div class="delta"><div class="ring" style="--v:71;--size:88px;--w:8px;opacity:.45"><b style="font-size:32px;text-decoration:line-through;text-decoration-thickness:1px">71</b></div><span class="arrow">→</span><div class="ring tone-ink" style="--v:88"><b>88</b><small>/ 100</small></div></div><span class="cap">Nakon popravka · stari prsten blijedi, novi je tinta</span></div>
+  <div class="item"><div class="list"><div class="r"><div class="ring sm" style="--v:71"><b>71</b></div><span>diplomski-rad-final-v3.docx</span><span>nije spremno</span></div><div class="r"><div class="ring sm tone-pass" style="--v:96"><b>96</b></div><span>seminarski-razmjernost.docx</span><span>predano</span></div><div class="r" style="border:0"><div class="ring xs tone-warn" style="--v:79"><b>79</b></div><span>v2 · 16. 9.</span><span>u popisu verzija</span></div></div><span class="cap">sm 56px u popisu · xs 30px u vremenskoj crti</span></div>
 </div>
-
-<div class="dsc-item">
-  <div class="ring-card"><div class="ring" style="--tone:#4A6CF0;--pct:81"><span class="ring-val">81<small>/ 100</small></span></div><span class="ring-status" style="color:#4A6CF0">Ručna provjera</span></div>
-  <div class="dsc-cap" style="margin-top:16px">Treba ručnu provjeru</div>
-</div>
-
-<div class="dsc-item">
-  <div class="ring-card"><div class="ring" style="--tone:#34996A;--pct:96"><span class="ring-val">96<small>/ 100</small></span></div><span class="ring-status" style="color:#34996A">Čisto</span></div>
-  <div class="dsc-cap" style="margin-top:16px">Spremno, čisto</div>
-</div>
-
-<div class="dsc-item">
-  <div class="ring-card"><div class="ring ring-dashed"><span class="ring-val">57<small>/ 100</small></span></div><span class="ring-status" style="color:rgba(237,231,220,.7)">Opća provjera</span></div>
-  <div class="dsc-cap" style="margin-top:16px">Fakultet nije prepoznat</div>
-</div>
-
-<div class="dsc-item">
-  <div class="ring-card"><div class="ring ring-empty"><span class="ring-val">—<small>nema ocjene</small></span></div><span class="ring-status" style="color:rgba(237,231,220,.55)">Unscored</span></div>
-  <div class="dsc-cap" style="margin-top:16px">Nema bodovanih pravila</div>
-</div>
-
-</div>
+</section>
 </body>
 </html>

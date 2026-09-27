@@ -5,6 +5,14 @@ Svaki zadatak: (1) pročitaj navedene datoteke, (2) primijeni promjenu, (3) pokr
 
 Pravilo iznad svih: ne mijenjaj `design-system.css` primitive bez odobrenja. Sve ostalo se svodi na njih.
 
+## Stanje nakon synca 22. 9. 2026. (commit 4c9b1400)
+
+Odrađeno u repou: Z2 (radiusi gumba), Z3 (border-left → točka), Z5 (`--fs-*` ljestvica + `tests/design-tokens.test.ts`), Z6 (panel, bez gustoće i veličine teksta), Z7 kao **opcija (b)**: raspored predloška preuzet, Newsreader/Inter Tight zadržani, mono na ulaz nije dodan (`tests/entry-fonts.test.ts`). Z4 odbijen mjerenjem (25 % razmaka na ljestvici), stoji kao otvoreno.
+
+**Odluka o fontovima za sve daljnje zadatke (Z8 do Z23): opcija (b) vrijedi globalno.** Predlošci u `design/templates/` crtaju Instrument Serif + Geist Mono; kod ih preuzima kao RASPORED, MJERE i COPY, a obitelji preslikava: Instrument Serif → `var(--display-serif)`, Geist Mono → `var(--mono)` na rutama koje mono već učitavaju (`/rad/`, alati), inače `var(--ui)` s mjerom 11px i letter-spacingom. Ne dodaj webfontove. Ako autor kasnije odluči (a), mijenjaju se samo tri tokena.
+
+Nepočeto: Z1, Z8 do Z26. Redoslijed: Z1 → Z15 (traka) → Z8 → Z13 → Z9 → Z10 → Z24 (cijene) → Z11 → Z12 → Z14 → Z16 do Z23 → Z25 → Z26.
+
 ---
 
 ## Z1. `--route-*` paleta → primitive iz `design-system.css`
@@ -42,14 +50,14 @@ Ukloni `:root[data-theme="dark"]` blok (primitive već nose obje teme). Dodatno 
 
 ---
 
-## Z2. Radiusi gumba: 8px (default), 10px (veliki)
+## Z2. Radiusi gumba: 2px (jezik pečata; pill samo za značke)
 
-**Problem.** Gumbi imaju 2px (`page-chrome.css:135`, `tool-page.css:145,152`, `page-app.css:640`), 9px (`intake.css .intake-cta`), 12px (`route-shell.css .route-button`, `tool-page.css:72`), 14px (`page-app.css:153 .btn-lg`). 2px ostaje isključivo za papir.
+**Problem.** Gumbi imaju 2px (`page-chrome.css:135`, `tool-page.css:145,152`, `page-app.css:640`), 9px (`intake.css .intake-cta`), 12px (`route-shell.css .route-button`, `tool-page.css:72`), 14px (`page-app.css:153 .btn-lg`). ODLUKA (2026-09-19, `design/base-buttons.html`): gumb je pečat i dijeli rub s papirom, dakle 2px svugdje; pill ostaje samo za značke, korake i čipove.
 
 **Rješenje.** U `design-system.css` dodaj dva tokena uz postojeće radiuse (jedina dopuštena izmjena primitiva u ovom paketu):
 ```css
---radius-btn: 8px;
---radius-btn-lg: 10px;
+--radius-btn: 2px;      /* = --radius; zaseban token da se kasnije može odvojiti */
+--radius-btn-lg: 2px;
 ```
 Zatim:
 - `page-chrome.css:135` `.btn{border-radius:2px}` → `var(--radius-btn)`
@@ -151,14 +159,542 @@ Sve u `localStorage` pod `lekta.display` (jedan JSON). Panel ne nudi izbor boja 
 - Podnožje papira: "Dokument ostaje na uređaju" / "Provjeravamo formu, ne sadržaj" (zamjenjuje `.intake-brava`).
 - CTA: radius `var(--radius-btn-lg)`, mono 14px, `letter-spacing:.02em`.
 
-**Fontovi (ODLUKA ZA AUTORA, ne implementiraj sam):** predložak koristi `Instrument Serif` (govor) + `Geist Mono` (oznake, gumb, UI). To odstupa od 4 glasa u `design-system.css` (Newsreader / Inter Tight / IBM Plex Mono). Dvije opcije:
+**Fontovi: ODLUČENO, opcija (a).** Instrument Serif (`--display-serif`), Geist Mono (`--ui` i `--mono`, isti font), Georgia ostaje `--font-doc`. Ukloni Newsreader, Inter Tight, IBM Plex Mono i Source Serif iz učitavanja. Instrument Serif ima samo 400 + kurziv: svaki `font-weight:500/600` na `--display-serif` postavi na 400. Prijašnji tekst odluke ostaje ispod radi konteksta: predložak koristi `Instrument Serif` (govor) + `Geist Mono` (oznake, gumb, UI). To odstupa od 4 glasa u `design-system.css` (Newsreader / Inter Tight / IBM Plex Mono). Dvije opcije:
 - (a) zamijeniti obitelji na razini tokena (`--display-serif`, `--ui`, `--mono`) za cijeli proizvod; Instrument Serif nema optičke veličine ni težine osim 400, pa provjeri sve naslove koji koriste 500/600;
 - (b) zadržati postojeće obitelji, a predložak preuzeti samo kao raspored.
 Ne kreni u Z7 dok autor ne odabere (a) ili (b).
 
 ---
 
-## Redoslijed i rizik
-Z1 → Z2 → Z3 (vidljive promjene, niski rizik jer sve idu na postojeće primitive). Z4 i Z5 su tokenizacija bez vizualne promjene; radi ih zadnje i samo na pilotu. Z6 ovisi o Z4 (gustoća). Z7 čeka odluku o fontovima.
+## Z8. Ekran `/rad/` kao vodič u 4 koraka
+
+**Referenca.** `design/templates/results/Results.dc.html`; tweak `state` prebacuje 6 stanja (scanning, blocked, clear, plan, payment, done). Otvori u pregledniku i prepiši inline stilove u `result-visuals.css` (nove klase), stari kokpit ostaje dostupan iza `?resultRenderer=legacy` dok novi ne prođe testove.
+
+**Informacijska arhitektura (što se mijenja u `results-cockpit.ts`):**
+- Zaglavlje dobiva **stepper** `01 Nalazi · 02 Plan · 03 Plaćanje · 04 Rezultat` (mono pill, aktivan korak inverzan). Nema ga u stanju analize.
+- **Jedan list presude** zamjenjuje `cockpit-header` + `cockpit-hero` + `cockpit-actions`: eyebrow (ime datoteke · profil · autoritet izvora), presuda kao H1 u display serifu, sažetak "N stvari traže tvoju pažnju" s tri točke po ozbiljnosti (postojeći `findingSummary`), redak "od toga N mogu popraviti automatski, automatika može doseći najviše M" (spaja `fsum-auto` i `repairOutlook.ceilingScore`), **jedan** primarni gumb "Napravi plan popravka" + tekstualna poveznica "Pregledaj nalaze". Prsten ocjene desno, 132px, conic-gradient, boja prstena = ton presude. Pečat presude dolje desno ispod prstena.
+- **Stol** (`desk-mount`) ostaje 58/42, ali kartica nalaza je JEDNA s pagerom "Nalaz 1 od 6" (← →), a ne popis: eyebrow s točkom (Z3 oblik), naslov u serifu, redak izmjereno → pravilnik, citat izvora, gumbi "Uključi u plan" / "Zanemari".
+- **DNA i kategorije** su dva mala lista u jednom redu ispod stola, sekundarni. `dna__bar` ostaje grid, boje po dominantnoj ozbiljnosti. Poveznica "Sve provjere (24)" zamjenjuje gumb "Detalji provjere" i otvara postojeći napredni panel.
+- Uklanja se: `cockpit-actions` s tri gumba, `cockpit-authority` blok (tekst autoriteta ide u eyebrow), `repair-outlook` kao zasebna sekcija (jedna rečenica u sažetku).
+
+**Tok popravka postaje 4 rute/stanja istog ekrana:**
+1. `blocked`/`clear` (postojeće).
+2. `plan`: `buildRepairPlan` već daje `sigurni / odluka / rucni`; prikaz je lista s checkboxovima (sigurni uključeni, odluke isključene s tekstom potvrde, ručni bez kontrole s razlogom) + sticky kartica narudžbe desno (cijena iz `data/packages.json`, "što radimo / što ne radimo" doslovno iz `design/result-repair-card.html`, gumb "Nastavi na plaćanje").
+3. `payment`: lijevo tri koraka što slijedi, desno obrazac na listu (Stripe Elements u polja s istim stilom; polja `width:100%; box-sizing:border-box`).
+4. `done`: `repairDoneModel` → "N od N zahvata primijenjena · 0 novih problema" (ili tekst o nepoznatom broju kad je `null`), tablica prije/poslije, prsten sa `71 → 88`, primarni "Preuzmi popravljeni .docx", sekundarni "Ponovno provjeri novu verziju".
+- `scanning`: naslov "Čitam formu rada.", popis kategorija provjere koje se kvačaju (✓ / treperi / čeka), faksimil s crvenom linijom skeniranja (`transform` only, gasi se pod `prefers-reduced-motion`).
+
+**Copy** je u predlošku; prepiši doslovno, hrvatski s dijakritikom, bez crtica.
+
+**Provjera.** Snimke 6 stanja u obje teme; `tests/repair-plan.test.ts`, `repair-done.test.ts` prolaze bez izmjene (mijenja se samo prikaz).
+
+---
+
+## Z9. Faksimil dokumenta (korektorski stol)
+
+**Referenca.** `design/templates/facsimile/Facsimile.dc.html`; tweakovi `layerNotes`, `layerDots`, `layerRulers`, `compare`.
+
+**Stol (`desk-view.ts`, `desk-document.ts`, `render-facsimile`):**
+- Lijevi pano ima rezerviran **žlijeb 210px desno od stranice** za bilješke; stranica je `width:calc(100% - 210px); box-sizing:border-box`. Bilješke NIKAD ne prelaze preko teksta ni preko klizača panoa.
+- **Bilješke (zadani sloj):** kurziv display serifa u boji presude (crvena/jantarna/plava, isti parovi kao eyebrow), svaka s preciznom oznakom na mjestu greške i ravnom spojnom linijom (1px, 55 % alpha) do bilješke u žlijebu. Oblici oznaka po vrsti nalaza:
+  - razmak redaka: zagrada visine dva retka na desnom rubu odlomka;
+  - nedostajući broj naslova: ovalni okvir na mjestu broja, iznad njega upisan očekivani broj;
+  - fusnota: zaokružena oznaka u tekstu;
+  - margina (cijeli rad): zagrada preko lijeve margine u gornjem rubu stranice, linija do bilješke.
+- **Točke (sloj):** numerirani krugovi 16px na samom lijevom rubu (2,5 %), broj = redni broj u redu čekanja.
+- **Mjerne linije (sloj):** izmjereno crveno isprekidano, pravilnik zeleno isprekidano, brojke u cm mono 9px u rubovima.
+- **Traka stranica** pod dokumentom: jedan stupac po stranici, točke boje presude iznad stranica s nalazom, trenutna stranica istaknuta; poruka "N nalaza vrijede za cijeli rad".
+- **Alatna traka iznad dokumenta:** preklopnici slojeva (pill), broj stranice, zoom. Isti preklopnici i u panelu "Prilagodi prikaz" (Z6), spremaju se.
+- **Prije / poslije (`compare`):** crveni pill; kad je uključen, preko SVAKE stranice legne "poslije" sloj (isti tekst, pravilnikom zadani font, prored, margine, numeracija naslova), rezan `clip-path: inset(0 0 0 X%)`, jedna ručica (34px, `--red`) zajednička svim stranicama, vuče se pointer eventima bilo gdje po panou; bilješke se u tom načinu sakrivaju. "Poslije" se gradi iz istog modela koji koristi popravak (deterministički), ne iz slike; ako popravak nije dostupan, pill se ne prikazuje.
+- **Desni pano:** kartica jednog nalaza s pagerom "Nalaz N od M", gumbi "Uključi u plan" / "Pokaži u dokumentu" / "Zanemari"; **isječak pravilnika** kao `<figure>` (bijeli list, broj članka, rečenica na koju se nalaz poziva označena `<mark>`, poveznica "Otvori PDF" na `source.url` sa stranicom); ispod red čekanja (broj, točka, naslov, mjesto ili "cijeli rad").
+- Klik na oznaku/bilješku/točku odabire taj nalaz u kartici (isti `data-desk-go`); "Pokaži u dokumentu" skrola pano na oznaku.
+- Uski ekran: faksimil se ne crta (postojeće pravilo), ostaju kartica, red čekanja i traka stranica.
+
+**Provjera.** Pri 900px širini nema vodoravnog klizača u panou; sve bilješke unutar `clientWidth`; `prefers-reduced-motion` gasi prijelaz klizača.
+
+---
+
+## Z10. Ekran "Moji radovi"
+
+**Referenca.** `design/templates/my-works/MyWorks.dc.html`; tweakovi `share`, `empty`.
+
+- Ruta `/moji-radovi/` čita postojeću lokalnu pohranu; nikakav podatak ne ide na server osim po izričitoj radnji dijeljenja.
+- **Aktivni rad = veliki list:** eyebrow (profil, vrsta, zadnja provjera), naslov rada u display serifu, ime datoteke; **vremenska crta verzija** (čvorovi na hairlineu, ocjena u serifu, datum mono, presuda s točkom; zadnja verzija veća i tamna); gumbi "Otvori korektorski stol", "Podijeli s mentorom", poveznica "Ukloni s stola".
+- **Kartica roka** (paper-2, rotirana 1°): "N dana" u serifu 44px, datum, preklopnik "Podsjeti me 3 dana prije" (postojeći `deadline-reminder-toggle.ts`), "Promijeni rok". Bez roka: "Dodaj rok".
+- **Predani radovi = uži listovi** s ocjenom i "Otvori".
+- **Dijeljenje s mentorom (dialog):** dva stupca "Mentor vidi / Mentor ne vidi" (doslovno iz predloška), poveznica s rokom 14 dana, Kopiraj, Poništi. Dijeli se isključivo `contentFreeMetadata` + popis nalaza; nikad tekst ni datoteka.
+- **Prazno stanje:** jedan list "Još nema nijednog rada."
+- NE prikazivati usporedbu s drugim radovima (nema podataka).
+
+---
+
+## Z11. Jedan cjenik, jedan izvor
+
+**Referenca.** `design/templates/pricing/Pricing.dc.html` (tweakovi `personal`, `live`) i `design/pricing-card.html` (zamijeniti novim oblikom).
+
+**Problem.** Tri neusklađena izvora cijene: `src/report/pricing.ts` (stvarna naplata: diplomski 9,99 €, doktorski 24,99 €, 14 dana ponovnih provjera), `src/config/pricing-tiers.ts` ("od 3,99 €" na `/saznaj-vise/`), `data/packages.json` (9/39/69/99 €, stari koncept; `config-loader.ts` ga još hidrira).
+
+**Rješenje.**
+- `pricing.ts` je jedini izvor; `pricing-tiers.ts` i `packages.json` se brišu (ili `packages.json` ostaje samo ako ga admin doista čita, uz komentar da NIJE cjenik). Popravi `config-loader.ts`.
+- Cjenik (`/saznaj-vise/#cjenik` ili `/cjenik/`) se crta kao **račun na stolu** iz predloška: perforirani rub, stavke "Lokalna provjera forme 0,00" (uvijek) i "Popravak forme i puni izvještaj <cijena po vrsti rada>" (uključi/isključi), pod njom "Opseg · uključeno u cijenu" s redcima s točkastom linijom (zahvati bez cijene, izvještaj PDF, ponovne provjere 14 dana), ukupno u serifu, pečat "Ponovna provjera prije preuzimanja" uz ukupno (ne preko teksta), CTA mijenja natpis po stanju. Iznos NIKAD ne ovisi o broju odabranih zahvata (ista tvrdnja koju čuva ledger u `repair-price-slider.ts`).
+- `personal`: kad postoji rezultat analize, račun se sastavlja iz njega (ime datoteke, vrsta rada iz profila, stvarni zahvati iz `buildRepairPlan`); bez rezultata je općenit s cijenama po vrsti rada.
+- Dok je plaćeni sloj u soft launchu, gumb je "Uskoro" (onemogućen) s rečenicom "Provjera radi već sad, besplatno".
+- **Institucija je pismo, ne kartica:** list u Georgiji s zaglavljem, tekst doslovno iz predloška, gumb "Zatraži ponudu" + e-adresa. Bez datuma u zaglavlju.
+- Stari `.price-card` markup i CSS (`page-app.css:45, 1170-1182`, `learn-more/main.ts:48`) se uklanjaju.
+
+**Provjera.** `grep -rn "3,99\|39 €\|69 €\|99 €" src data` vraća 0; jedan `priceEur` po vrsti rada.
+
+---
+
+## Z12. Stranica `/saznaj-vise/` kao svitak
+
+**Referenca.** `design/templates/learn-more/LearnMore.dc.html`. Otvori u pregledniku; prepiši inline stilove u `src/routes/learn-more/learn-more.css`, logiku u `main.ts`. Zamjenjuje sadašnjih 8 sekcija i video.
+
+**Struktura.** Jedan list papira (`min(960px,100%)`, perforacija gore, zaobljeni rub dolje) s 10 poglavlja. Svako poglavlje: `<section>` kao `flex-wrap` red, lijeva margina `flex:0 1 150px; position:sticky; top:24px` (broj u serifu 44px + naziv mono 11px uppercase), sadržaj `flex:1 1 480px`. Poglavlja 1–3 otvorena; 4–10 imaju gumb Otvori/Sklopi u zaglavlju, sklopljeno stanje pokazuje jedan redak "N stavki". Redoslijed i naslovi su u predlošku, prepiši doslovno.
+
+**Izbor profila na vrhu** (ispod uvoda) je izvor podataka za cijeli svitak: dosje (1), brojke u demu (2), verdikti u registru (6), vrsta rada u cjeniku (7), primjer citata u priboru (8), sažetak na ulaznom listu (10). Profili dolaze iz stvarnog registra profila (`src/rules/` ili gdje je `profile registry`), ne iz predloška: predložak ima tri ogledna (FPZG diplomski, FFZG završni, EFZG seminarski). Odabir pamti `localStorage` `lekta.profile` i prenosi ga na `/` kao predodabrani profil.
+
+**Interakcije po poglavlju** (svaka mora raditi bez JS-a barem kao statični prikaz):
+1. Kako radi: tri lista s `animation-timeline: view()` ulaskom (fallback: bez animacije). Tekst koraka 2 uzima fakultet i citatni stil iz profila.
+2. Živi demo: zamjenjuje `<video>`. Klik za start, petlja 8 s, `@keyframes` samo na `padding-left`, `row-gap`, `font-size` i `opacity` (nema layout thrash u tekstu); natpisi 01–03 i "Ponovna provjera" uzimaju brojke iz profila. Gasi se pod `prefers-reduced-motion`.
+3. Podcrta: klik na problem podcrta mjesto (`lmDraw` širina 0→100%) i otisne komentar (`lmStamp`). Gumb "Popravi ovo, sigurno" primijeni ispravak na papir (umetne 3.1., doda zapis u literaturu, natpis tablice, pomakne marginu na vrijednost profila) i prekriži stavku; izjava o izvornosti je ručna i vodi na alat. Ovo je isti razred sigurni/ručni kao u `repair-plan.ts`; koristi iste oznake.
+4. Privatnost: dokument se vuče `pointer` događajima; bez privole se odbije na granici (`transition: transform .45s cubic-bezier(.34,1.56,.64,1)`), uz ručni način prelazi i dobiva pečat. Brojač "poslano na internet" stoji na 0 B i skače tek kad dokument prijeđe granicu: veži ga na stvarni `fetch` sloj kad postoji.
+5. Dokazi: 3×2 kartice, klik okreće (`lmFlip`), poleđina nosi izvor, datum provjere kao pečat i vezu. Datum dolazi iz `pokrivenost` podataka po profilu.
+6. Registar: pretraga po nazivu/skupini/oznaci nad stvarnim popisom pravila (isti izvor koji puni `checkGrid`); predložak ima 24 ogledna. Dva polja "tvoja margina" i "tvoj prored" daju verdikt F-02/F-04 prema profilu prije učitavanja rada.
+7. Cjenik: račun se ispiše red po red (`lmPrint` sa zakašnjenjima .1/.45/.8/1.15/1.5 s) pri promjeni vrste rada; redak "ručno bi trajalo" i kupon jamstva na dnu (hover ga "otkine"). Cijene i dani ponovnih provjera iz `data/packages.json` (Z11).
+8. Pribor: šest listića na tamnoj podlozi, hover ih podigne. Brojač kartica ima živo polje (znakovi / 1800), citat generator pokazuje primjer u stilu profila.
+9. FAQ: pitanja kao žute ceduljice (`#F3E6A8`, rotate -.4deg), odgovor se odlijepi (`lmPeel`). Pitanja 1 i 3 imaju "Zalijepi na ulazni list": rečenica ode na list u poglavlju 10.
+10. Zadnja stavka: ulazni list upiše ime datoteke slovo po slovo kad uđe u vidno polje (`IntersectionObserver`, threshold .4), ispod profil, cijena, broj sigurnih zahvata iz 3 i zalijepljene ceduljice. Klik "Provjeri rad sada" nosi profil na `/`.
+
+**Uklanja se.** `#video` sekcija i njezin player, `ks-priv-scena` s pečatima, `site-stats`, `landing_usporedba.html` i `landing_benchmark.html` iz navigacije.
+
+**Provjera.** Snimke 10 poglavlja u obje teme, sklopljeno i otvoreno; `prefers-reduced-motion` gasi demo i sve `lm*` animacije; tipkovnica dolazi do svih gumba (ceduljice, kartice, koraci).
+
+---
+
+## Z13. Odabir i potvrda profila kao ladica registra
+
+**Referenca.** `design/templates/profile-picker/ProfilePicker.dc.html`; tweak `detected` = confident / unsure / none. Zamjenjuje `renderProfileCard` (`src/ui/profile-card.ts`) i devet izbornika iz `app.ts`.
+
+**Tok.** (1) Potvrda: ladica zatvorena, na njoj mjedena pločica s jednim retkom "Fakultet · Studij · Vrsta rada · citatni stil · pravila provjerena ak. god." i pečatom statusa; gumbi "Potvrdi i provjeri" (primarni) i "Izvuci ladicu". Kad `isConfidentDetection` nije istinit (studij nije prepoznat): kicker "Zadani odabir, nije prepoznat iz dokumenta", primarni gumb postaje "Provjeri odabir", sekundarni "Ipak potvrdi", upozorenje ispod pločice. Kad detekcija ne nađe ništa: ladica se otvara odmah. (2) Pretraga: jedno polje (fakultet, studij ili grad; `detectWords` normalizacija bez dijakritike), abecedni jezičci svijetle za slova ustanova u rezultatima, viseće mape ustanova s gradom, brojem studija i pečatom statusa. (3) Klik na mapu otvara list: studij kao čipovi, vrsta rada kao čipovi s predodabirom iz `WORK_TYPE_RULES`, "Napredno" skriva citatni stil, fazu predaje, strogoću, jezik i upute mentora. (4) Za `research`/`generic` status: tamni blok "Tvoj fakultet je još u istraživanju" s popisom što ipak provjeravamo, poljima margina/prored/font, slobodnim uputama mentora i e-mail poljem "Javi mi kad profil bude gotov" (postojeći `detectWaitlist` tok). (5) Potvrda otisne pečat "Profil potvrđen" (0,55 s) i zatvori ladicu.
+
+**Četiri pečata statusa** (iz `profile-status.json`): verified zeleni puni `#34996A` "Pravila potvrđena"; partial `#C98A2E` "Tehničke provjere"; research iscrtkani `#6E6656` "U istraživanju"; generic iscrtkani `#C4372E` "Generička provjera". Isti oblik pečata u `desk-view` i na rezultatu.
+
+**Podaci.** Ustanove, studiji i status iz `VERIFIED_PROFILE_REGISTRY` i `institutional-coverage-matrix.json`; akademska godina iz `verifiedAt`. Predložak ima šest oglednih ustanova.
+
+**Ponašanje.** Ladica je `position:fixed; bottom:0`, klizi `transform`om (`.5s cubic-bezier(.22,1,.36,1)`), pod `prefers-reduced-motion` samo se pojavi. Esc zatvara. Fokus ide u polje pretrage pri otvaranju. Odabir sprema `lekta.profile` i emitira postojeći `profile-confirmed` događaj.
+
+**Provjera.** Tri stanja `detected` × dvije teme; `tests/profile-claim-ui.test.ts` i `confirm-profile.ts` UX test prolaze uz nove selektore.
+
+---
+
+## Z14. Alati kao jedna obitelj (prvi: naslovnica)
+
+**Referenca.** `design/templates/tools/ToolCover.dc.html`. Jedan predložak za šest alata (`naslovnica`, `citat`, `literatura`, `kartice`, `izjava`, `alati` kao hub). Zamjenjuje `tool-page.css` i inline `<style>` blokove po alatu.
+
+**Zajednički okvir.** (1) Traka pribora ispod zaglavlja: šest listića (mono oznaka `01 / DOKUMENT` + naziv u serifu), aktivni podignut `translateY(-8px) rotate(-1deg)` s dubokom sjenom, ostali na hover. Horizontalno skrolabilna, `overflow-y: visible`, `padding-top:16px` da podignuti listić ne bude odrezan. (2) Naslov alata u serifu `clamp(34px,5vw,60px)` s kickerom "Besplatan alat, bez registracije". (3) Mjedena pločica predispune iz profila: "Iz tvog profila: FPZG · Politologija · Diplomski. Popuniti?" s Da / Ne; pojavljuje se samo kad `lekta.profile` postoji, odgovor se pamti po alatu. (4) Dva lista: lijevo žuta ceduljica `#F3E6A8` (rotate -1.2deg, sticky top 20px, širina 260–340px) s poljima kao podcrtani retci (bez okvira, `border-bottom:1px solid rgba(38,34,27,.35)`); desno rezultat kao pravi dokument. (5) Gumbi izlaza uvijek vidljivi ispod rezultata: primarni crveni + dva obrubljena; desno napomena porijekla. (6) Ispod: vodič + FAQ u dva stupca na tamnoj podlozi, CTA list "Provjeri cijeli rad", disclaimer.
+
+**Naslovnica.** Desni list je A4 `aspect-ratio:1/1.414`, `#FFFEFB`, Georgia/Times (zrcali Word), padding 9%/8%, `grid-template-rows:auto 1fr auto 1fr auto` za tri zone. Prazna polja su sive crtice (`border-bottom:1px solid #C9C2B0`, širine po polju), tekst ih zamjenjuje dok tipkaš. Pečat porijekla gore desno: `official` zeleni puni "Službeni raspored", `derived` `#C98A2E` "Izveden iz radova", `generic` iscrtkani sivi "Generički raspored" (mapiraj iz postojećeg `tp-badge`). Zone i redoslijed dolaze iz postojećih 198 predložaka (`tp-group`): predložak ima generički raspored, kod veže stvarni predložak fakulteta na iste tri zone. Izlaz: `.docx` (postojeći generator), PDF (print samo A4 lista), kopiraj tekst.
+
+**Ostali alati na istom okviru** (predlošci: `templates/tool-citat/`, `tool-literatura/`, `tool-kartice/`, `tool-izjava/`): citat: desni list je stranica literature s jednim zapisom, dijelovi koje stil traži (kurziv naslova, zagrade, dvotočka) svijetle crveno/roza s `title` pravilom, ispod popis pravila (C-01, C-03, C-04); način "Cijela literatura" prepoznaje retke i označava nesigurne (`PROVJERI`). Literatura: duplikati se spoje u jedan zapis s oznakom `SPOJENO n`, zapis bez godine dobiva crvenu prazninu na mjestu godine, Crossref provjera daje `✓ CROSSREF` / `? NIJE PRONAĐENO` po zapisu, stil se ne mijenja. Kartice: desno tamni stol, veliki broj kartica u serifu, statistike, minijaturne stranice (`ceil(kartice*0.7)`, max 7 + "+n") slažu se dok tekst raste, cilj kao ravnalo s crvenim ispunom. Izjava: A4 s tekstom fakulteta (klauzula o repozitoriju iz profila), crtice za prazna polja, gumb "Ovjeri i pripremi" spušta okrugli dvostruki pečat `#A62B23` (`mix-blend-mode:multiply`), tek tada se pojavi "Preuzmi .docx". Sve četiri dijele `common(idx)` logiku: traka pribora, pločica predispune, FAQ.
+
+**Hub "Pribor"** (`design/templates/tool-hub/Hub.dc.html`, zamjenjuje `alati.html`): drveni stol lijevo (3×2 predmeta), podignuti list desno s opisom, tri točke i gumbom "Otvori alat". Predmeti su inline SVG ilustracije iz predloška (A4 list, kartica kartoteke, snop s kvačicom, drveno ravnalo, gumeni pečat, registrator; gradijenti + `feDropShadow`, viewBox 150×110). Izvuci ih u `public/assets/pribor/*.svg` i učitaj kao `<img>` s `alt` nazivom alata. Hover podiže predmet `translateY(-10px)`; aktivni ima crvenu točku ispod.
+
+---
+
+## Z15. Traka i podnožje kao sustav
+
+**Referenca.** `design/templates/chrome/Chrome.dc.html` (šest prizora). Zamjenjuje `page-chrome.css` header/footer i sve inline navigacije po stranicama (`index.html`, `saznaj-vise/`, alati, `rad/`).
+
+**Traka, desktop.** Grid `auto minmax(0,1fr) auto`. Lijevo: logo + hairline + četiri odredišta (Kako radi, Cjenik, Pribor, Po fakultetu) mono 11.5px; aktivno nosi crvenu kvačicu 7×7 koja **putuje** (`left` tranzicija .45s; s View Transitions API `view-transition-name: nav-marker` između stranica). Desno: Moji radovi, **mjedena pločica profila** ("FPZG · Dipl.", klik otvara ladicu Z13), gumb Aa (panel Z6), lampa, pečat "Provjeri rad". Na `/rad/` sredina nosi ime dokumenta + ocjenu + stepper, pečata nema. Nakon skrola (>40px): padding 8px, `backdrop-filter: blur(14px)`, crvena nit po donjem rubu, ime dokumenta ostaje, logo 24px.
+
+**Lampa.** Klik: overlay boje ciljne teme s `clip-path: circle()` animacijom iz središta gumba (.9s), zatim `data-theme` swap i overlay nestaje. Pod `prefers-reduced-motion` samo swap. Sprema `lekta.theme` kao dosad.
+
+**Mobitel (<820px).** Traka: logo, lampa, hamburger. List izbornika pada na stol (`translateY(-26px) rotate(-3deg)` → `rotate(-.8deg)`, .45s): papir `#F7F3E8`, stavke u serifu 22px s mono napomenom (besplatno, 3 min, od 4,99 €, 6 alata, 109 profila, 2 rada), pečat profila gore desno, podnožje lista: pravno + Aa. Esc i klik izvan zatvara.
+
+**Podnožje, puno** (saznaj više, cjenik, pribor, po fakultetu): kolofon u auto-fit stupcima (brend s "Mjeri, ne piše." i četiri granice ✓/✕; Proizvod 01–05; Pribor 06–11; Pravno 12–19: privatnost, uvjeti, obrada, kolačići, odricanje, kupnja i povrat, garancija, kontakt). Ispod "Stanje stola": zadnji rad + ocjena, verzija pravila + broj profila, datum provjere izvora (iz `site-stats.json` i `localStorage`). Potpis: "Lekta" kurziv 260px, obris `-webkit-text-stroke`, odrezan rubom; kad uđe u vidno polje (`IntersectionObserver` .5) popuni se crvenom tintom (`background-clip:text`, 1.4s).
+
+**Podnožje, pravni minimum** (ulaz, /rad/, alati): četiri poveznice + "Sve pravno →" + jedna rečenica.
+
+**Provjera.** Traka na 1180 / 960 / 820 / 390px bez preklapanja; lampa u obje smjerove; tipkovnica kroz sve gumbe; `aria-current` na aktivnom odredištu.
+
+---
+
+## Z16. Mobilni prolaz (390px)
+
+**Referenca.** `design/state-mobile-pass.html` (svi predlošci u okvirima 390px). Pravilo za sve ekrane: nijedan dvostupčani raspored nije fiksan; svaki koristi `repeat(auto-fit, minmax(min(100%, Npx), 1fr))` ili `flex-wrap`, pa se na uskom ekranu slaže u jedan stupac. Konkretno: stol rezultata (faksimil + nalaz) i korektorski stol (dokument + nalazi) u jedan stupac, nalazi ispod dokumenta; alati: ceduljica iznad A4 lista, traka pribora horizontalno skrolabilna; cjenik: račun ispod teksta; svitak Saznaj više: margina s brojem iznad sadržaja; stepper na /rad/ prelama u dva reda; zaglavlja listova (`Lekta · Ulazni list / Nº`) prelamaju. Papir ima `padding: clamp(20px, 6vw, 52px)` umjesto fiksnih 52px. Traka: mobilni list iz Z15 ispod 820px.
+
+**Provjera.** Svaki ekran na 390px bez horizontalnog skrola dokumenta (`document.documentElement.scrollWidth === clientWidth`); minimalna dodirna površina 44px na svim gumbima.
+
+---
+
+## Z17. Indeks fakulteta /fakulteti/ kao imenik
+
+**Referenca.** `design/templates/faculties/Faculties.dc.html`. Zamjenjuje `buildMasterIndexPage` u `scripts/generate-faculty-pages.mjs`; puni popis ostaje u HTML-u (SEO, bez JS-a), JS samo filtrira i sklapa.
+
+**Oblik.** List papira "Lekta · Imenik fakulteta". Gore mjedena pločica pretrage (serif 26px, `normalizeSearch` bez dijakritike, AND po tokenima), filtri GRAD i RAZINA DOKAZA A–E kao čipovi (ladder tekst u `title`). Lijeva margina 36px: abecedni jezičci u serifu 15px, sticky; slovo svijetli (`#26221B` na `#F7F3E8`) kad neka prikazana jedinica počinje njime. Ustanove: naslov u serifu 26px na 2px liniji, redak "grad · N jedinica · N profila · izvori provjereni {datum}", gumb otvori/sklopi (`aria-expanded`); sklopljene po zadanom, otvorena je ona iz profila korisnika, sve otvorene dok traje pretraga. Jedinice u dva stupca kao imenik: naziv (serif 18px) … točkasti vodič … pečat statusa (potvrđeno zeleno / tehničko `#C98A2E` / u istraživanju iscrtkano sivo / generičko iscrtkano crveno); ispod čipovi vrsta rada (seminarski / završni / diplomski) s malom oznakom razine A–E u boji statusa; klik vodi na `/{unitId}/{slug}/`. Prazan rezultat: "Tog fakulteta još nema u registru" + e-mail "Javi mi" (postojeći `detectWaitlist`). Iznad popisa: mjedena poveznica "Moj fakultet: … →" iz `lekta.profile` i "Usporedi dva fakulteta" (zaseban ekran, kasnije). Podnožje lista: legenda razina A–E doslovno iz `profile-claims.json` ladder.
+
+**Podaci.** Ustanove i jedinice iz `zagreb-catalog.json`; status iz `weakestStatus`; razina iz `profile-claims.json` byProfile; datum iz `verifiedAt`. Predložak ima pet oglednih ustanova.
+
+**Provjera.** Bez JS-a popis je cijel i otvoren; s JS-om filtar radi na 109+ jedinica bez kašnjenja; tipkovnica kroz gumbe ustanova i čipove.
+
+---
+
+## Z18. Stranica fakulteta /{unit}/{vrsta-rada}/ kao pravilnik
+
+**Referenca.** `design/templates/faculty-page/FacultyPage.dc.html`. Zamjenjuje `buildFacultyPage` u `scripts/generate-faculty-pages.mjs`; sadržaj ostaje isključivo iz `verified-profiles-heavy.json` (nema izmišljenih pravila), samo prikaz.
+
+**Oblik.** Breadcrumb, naslov "{Fakultet}: {vrsta rada}" (vrsta u crvenom kurzivu), čipovi vrsta rada koje postoje za jedinicu (klik mijenja stranicu; u statičnom buildu su to poveznice). **Tamna traka** ispod naslova: lijevo rečenica u serifu s ključnim brojkama ("Lijeva margina 3,0 cm, prored 1,5, Times New Roman 12 pt.") i kartica "Što Lekta pokriva" (✓△○ kao čipovi, boje zelena/amber/iscrtkano), desno **faksimil stranice** A4 s zelenom crtom propisane lijeve margine, oznakom cm i redcima čiji razmak prati prored; pri promjeni vrste rada margina i prored kliznu (`transition .5s`). **List pravilnika**: zaglavlje "Pravilnik · {Fakultet} / {vrsta}", pečat statusa pada pri učitavanju (`fpStamp .55s`, 400 ms nakon montiranja) s retkom "izvor provjeren {datum}"; članci "čl. N." u serifu (naziv: vrijednost podcrtana crveno) + "✓ provjerava Lekta"; ispod svakog gumb "Izvor: {naziv, čl./str.} ↗" koji otvara **izrezak**: citat iz izvora na bijelom papiriću s žutom oznakom "izrezak", podcrtana rečenica, veza na PDF stranicu (`#page=N` kad izvor ima stranicu). Tablica po programu kad se polje razlikuje (isti `computeFactRows`). "Na što paziti (ručno)" i "Predaja" u dva stupca. **Rok** kao kalendar-listić: crvena traka "ROK", broj dana u serifu 36px, klik otkine listić (`fpTear .7s`) i ostavi "rok zabilježen" (veže se na postojeći `deadline-reminder-toggle`); tekst hitnosti iz `deadlineUrgencyLead`. Izvori s datumom zadnje provjere. Ispod lista: tamni CTA "Provjeri svoj rad prema ovim pravilima" s profilom u linku (`/?unit=`), poveznice na citat/naslovnicu/izjavu za tu jedinicu i "Usporedi s drugim fakultetom" (Z19, kasnije), demo slika, disclaimer.
+
+**Pravila prikaza.** Nijedan tekst preko drugoga: naslov članka `flex:1 1 200px`, oznaka "provjerava Lekta" prelama ispod na uskom; pečat u zaglavlju ima rezerviranih 200px. Faksimil i traka slažu se u jedan stupac ispod 560px.
+
+**Provjera.** Snimke za profil A (FPZG diplomski) i D/E (generički) u obje teme; `prefers-reduced-motion` gasi pečat i otkidanje; svi članci imaju izvor.
+
+---
+
+## Z19. Usporedba dva fakulteta /usporedi/
+
+**Referenca.** `design/templates/compare/Compare.dc.html`. Nova ruta; podaci iz istog `computeFactRows` izvora kao Z18, po dva profila (`?a=fpzg-diplomski&b=pravo-diplomski`).
+
+**Oblik.** Naslov "Usporedi fakultete." i desno velika brojka **N razlika** u serifu koja se broji od 0 (110 ms po koraku, ponovno pri promjeni izbora). Dva mjedena izbornika (fakultet · vrsta rada) s okruglim gumbom ⇄ između koji **zamijeni strane** (rotira 180° na hover). **Tamna traka**: rečenica s marginama oba fakulteta + jedan faksimil A4 s **dva sloja**: donji sloj je desni fakultet (amber margina), gornji lijevi (zelena margina) odrezan `clip-path: inset(0 X% 0 0)`; crvena ručica se vuče (`pointer` događaji, `role=slider`) i otkriva razliku margina i proreda. Gumb "Sakrij / Pokaži stupac Tvoj rad". **Tri lista** u redu (auto-fit ≥250px): dva papira pravilnika (naslov fakulteta, vrsta, pečat statusa + razina A–E) s istim redcima (font i veličina, prored, margine, opseg, min. izvora, citatni stil, naslovnica, predaja, rok) poravnatim po visini (`min-height:58px`); vrijednost koja se **razlikuje** podcrtana je crveno-rozom, jednaka je siva; ispod redak "Pokriva" s ✓△○ po dimenziji. Treći, tamni list **"Tvoj rad"**: izmjerene vrijednosti iz zadnje provjere (`lekta.lastResult`), odstupanje od oba pravila crveno s oznakom "odstupa", poveznica na nalaz; prikazuje se samo kad postoji provjera. Dolje: "Izvezi usporedbu kao PDF" (print samo tri lista, A4 landscape) i "Provjeri rad po {A} pravilima".
+
+**Provjera.** Zamjena strana ne mijenja brojku razlika; klizač radi tipkovnicom (←/→ po 5 %); bez rezultata provjere treći stupac se ne prikazuje.
+
+---
+
+## Z20. Pravne stranice kao svezak
+
+**Referenca.** `design/templates/legal/Legal.dc.html`. Zamjenjuje `scripts/generate-legal-pages.mjs` izlaz i modal na ulazu; tekst ostaje isključivo iz `src/legal/legal-content.ts` (predložak nosi skraćene odlomke samo kao ogledne).
+
+**Oblik.** Jedna ruta `/pravno/` s sedam dokumenata (privatnost, uvjeti, odricanje, kupnja i povrat, obrada dokumenata, kolačići, garancija); stari URL-ovi ostaju kao preusmjerenja na `/pravno/#slug`. Lijevo sticky **sadržaj** kao jezičci (broj mono, naslov serif, crvena točka na otvorenom), s poveznicom "Sadržaj i kontakt". Prva stranica: list sadržaja + kontakt kutija (tamna, e-mail, AZOP). Dokument je list papira "Pravilnik": zaglavlje `Lekta · Pravno · 0N / 7` i "Voditelj obrade", naslov u serifu; **pečat verzije** (`TERMS_VERSION`) pada pri učitavanju, klik otvara žutu ceduljicu "Od verzije X" s promjenama (iz changeloga uz `terms-version.ts`); **sažetak "Što ovo znači za tebe"** u tri rečenice (autor piše i održava u `legal-content.ts` kao `summary[]`; predložak ima moj nacrt); članci § N u serifu, tekst Georgia 14.5px/1.7; odjeljci koji govore o slanju podataka nose **mini granicu uređaja** (tamno "ostaje na uređaju" | iscrtkano "internet · ništa", odnosno žuto "prelazi uz privolu · EU"), označava se u sadržaju flagom `border: 'local'|'consent'`; **rok čuvanja** kao vremenska crta (24 h · 7 dana · 30 dana · do brisanja) na privatnosti i obradi; **pojmovi** kao žute ceduljice (voditelj obrade, izvršitelj, privola, hashirano, legitimni interes, Merchant of Record) s objašnjenjem na klik i `title`; prethodni/sljedeći dokument na dnu. Gore: **napredak čitanja** (crvena nit 2px na vrhu + "PROČITANO N %") i "Ispis / PDF" (`window.print`, print skriva traku i gumbe).
+
+**Provjera.** Tekst dokumenata jednak izvoru (test `legal-content.test.ts` proširiti na render); bez JS-a svi dokumenti su na stranici jedan pod drugim; tipkovnica kroz sadržaj i pojmove.
+
+---
+
+## Z21. Sitni tokovi na /rad/
+
+**Referenca.** `design/templates/rad-flows/RadFlows.dc.html`; tweak `flow`.
+
+1. **Sve provjere** (zamjenjuje "Detalji provjere" panel, `results-cockpit.ts` advanced): list papira "Registar provjera." s brojkama prolazi/pada/nije mjereno, pretraga + filtri (Sve/Pada/Prolazi), redak po pravilu: točka statusa (zelena, crvena, iscrtkana siva za nemjereno), oznaka, naziv, "izmjereno …", skupina, bodovi u serifu. Napomena o zbroju i o nemjerenom. Podaci iz postojećeg `findingSummary`/scoring.
+2. **Provjera prije predaje** (zamjenjuje `preflight-panel`): tri koraka u pillovima. Privola: naslov "Ovaj put dokument prelazi granicu.", puni tekst iz `legal-content` 1a, granica uređaja (uređaj | prelazi uz privolu · EU · briše se odmah), checkbox koji otključava crveni gumb (bez privole gumb je siv `#DCD4BF`). Provjera: četiri faze (prijenos, metapodaci, reference, brisanje) s ✓/točka/○, faksimil s crvenom linijom skeniranja. Nalaz: pečat "Datoteka obrisana · nalaz do {datum}" pada; naslov u serifu; čipovi ✓/△; popis referenci s oznakom izvora ili "? nije pronađeno"; napomena da to nije utvrđenje.
+3. **Pozovi kolegu** (`referral-share-section.ts`): uputnica kao list s žutom oznakom "nakon prve kupnje", rok kolega iz `findUpcomingDeadline`, poveznica u iscrtkanom polju, gumb "Kopiraj link" → "Kopirano ✓" 2 s, redak statusa (prijave/nagrađeno) i kod.
+4. **Potvrda e-maila** (`verification.html`): tri stanja: Poslano (adresa, 15 min, "Pošalji ponovno"), Potvrđeno (zeleni pečat, "Natrag na rad"), Isteklo (iscrtkani crveni pečat, "Pošalji novu poveznicu"). Uvijek rečenica da rad ostaje na uređaju.
+
+**Provjera.** Bez privole slanje nije moguće ni tipkovnicom; `prefers-reduced-motion` gasi skeniranje i pečate.
+
+---
+
+## Z22. Prazna i greška stanja
+
+**Referenca.** `design/templates/states/States.dc.html`; tweak `state` (empty, unreadable, interrupted, payment, offline, notfound) × `variant` (A pečat, B bilješka, C prazan list). Autor je odabrao **B (bilješka)**: žuta ceduljica s trakom ljepila, prelazi gornji desni rub lista (top -34px, right -40px, rotate 3deg), naslov spušten na 96px da se ne preklapa; okolni padding lista mora ostaviti mjesta (72px gore, 56px sa strane). Implementiraj B. Primarni gumb: crveni (`--red`) na pozivnim stanjima (empty, notfound), tinta na greškama (unreadable, interrupted, payment, offline) jer crveno tamo znači problem.
+
+**Rješenje.** Jedan primitiv `src/shared/state-sheet.ts` (list na stolu: zaglavlje mono, naslov serif, tijelo, primarni gumb + tekstualna poveznica, podnožje) koji prima `{sheet, code, title, body, primary, secondary, foot, stamp}`. Copy doslovno iz predloška. Mjesta: `moji-radovi` (empty), `intake` (unreadable, zamjenjuje sadašnji toast), `/rad/` (interrupted, offline), `payment` (payment), `404.html` (notfound). Pečat animacija `transform` only, gasi se pod `prefers-reduced-motion`.
+
+**Provjera.** Snimke 6×2 teme; nijedan tekst preko drugoga na 360px.
+
+---
+
+## Z23. Potvrdni e-mail i OG slika
+
+**E-mail.** `design/templates/email-receipt/EmailReceipt.dc.html`. Šalje se nakon uspješne naplate (Stripe webhook). Tablični HTML, inline stilovi, sistemski fontovi (Georgia + Menlo/Consolas; webfontovi u e-mailu nisu pouzdani), širina 560px. Sadržaj: naslov, ime datoteke, gumb za preuzimanje (poveznica vrijedi 7 dana), račun (ocjena prije → poslije, zahvati, ostaje ručno, profil, naplaćeno), jamstvo, podnožje s napomenom da tekst rada nije poslan. Vrijednosti iz `repairDoneModel` i `packages.json`. Plain-text alternativa obvezna.
+
+**OG slika.** `design/state-og-image.html`, 1200×630. Renderiraj u PNG (Playwright) u `public/og.png` i postavi `og:image`, `twitter:card=summary_large_image` na svim rutama. Bez teksta manjeg od 18px.
+
+---
+
+## Z24. Jedna istina o cijenama
+
+**Odluka autora (23. 9. 2026).** Cijena je jedna po dokumentu i ovisi o vrsti rada. Uključuje popravak forme, puni izvještaj i ponovne provjere (7 dana za seminarski i završni, 14 za ostale):
+- seminarski 4,99 €
+- završni 9,99 €
+- diplomski 14,99 €
+- specijalistički 19,99 €
+- doktorski 24,99 €
+Provjera je besplatna. Institucije na upit.
+
+**Problem.** Trenutno postoje četiri popisa koji se ne slažu: `data/packages.json` (9 / 39 / 69 / 99), tablica `products` u Supabaseu, `citati-i-literatura.html` (3,99 / 5,99 / 9,99 / 24,99, bez specijalističkog) i stari dizajn (4,99 izvještaj + 9,99 popravak).
+
+**Rješenje.** (1) Migracija `products`: pet retail redaka po vrsti rada s gornjim cijenama, `slots_total 1`, `slot_window_days` 7 ili 14; institucionalni kao `partner` bez cijene; ostali se deaktiviraju. (2) `src/report/pricing.ts` je jedini izvor u kodu; `packages.json` obriši ili generiraj iz njega. (3) `formatPriceEur` vraća `14,99 €` (znak, ne "EUR"). (4) Cjenik (Z11), kartica popravka i plaćanje (Z8), račun na saznaj-više (Z12), e-mail (Z23) i stanje neuspjele naplate (Z22) čitaju cijenu za vrstu rada iz profila. (5) `citati-i-literatura.html` i ostale SEO stranice: tablica cijena zamijeni se s pet redaka gore.
+
+**Reference ažurirane:** `Pricing.dc.html` (tweak `workType`), `LearnMore.dc.html` (račun po vrsti rada, dodan specijalistički), `Results.dc.html`, `EmailReceipt.dc.html`, `States.dc.html` (primjer je diplomski, 14,99 €).
+
+**Provjera.** `grep -rn "3,99\|5,99\|39 €\|69 €\|EUR"` u `*.html`/`src` prazan (osim testova); `tests/products-catalog.test.ts` provjerava svih pet cijena.
+
+---
+
+## Z25. Izresci pravilnika za faksimil i stranicu fakulteta
+
+**Referenca.** Faksimil (Z9) i stranica fakulteta (Z18) crtaju "isječak pravilnika s podcrtanom rečenicom". Repo već ima OCR tekstove u `data/sources/<fakultet>/*-ocr.txt` i `source-registry.json`.
+
+**Rješenje.** Skripta `scripts/build-rule-snippets.mjs`: za svaki profil i pravilo iz `profile-rules-contract.ts` pronađi rečenicu u OCR tekstu (već postoji logika u `source-claim-check.ts`), zapiši `{ruleId, profileId, quote, sourceFile, page?, checkedAt}` u `data/generated/rule-snippets.json`. UI prikazuje `quote` u serifu na papiru s podcrtom, ispod `sourceFile` i datum provjere. Kad izreska nema, kartica pokazuje samo naziv izvora (bez izmišljenog citata). Ne prikazivati PDF stranicu (CSP `img-src 'self'`, težina).
+
+**Provjera.** Pokrivenost izrescima po profilu u `docs/generated/`; FPZG diplomski 100 %.
+
+---
+
+## Z26. Ikone i OG
+
+**Referenca.** `design/base-app-icons.html`, `design/state-og-image.html`.
+
+**Rješenje.** Zamijeni `public/favicon.svg` (pečat: rotirani crveni okvir + kurzivno L; za 16 px varijanta bez rotacije), izvezi `favicon.ico` (16+32), `apple-touch-icon.png` 180 (papir + pečat), `icon-512-maskable.png` (crveni), dodaj `site.webmanifest` s `theme_color #191512`, `background_color #F7F3E8`. OG: renderiraj `state-og-image.html` u `public/og.png` 1200×630 i postavi `og:title`, `og:description`, `og:image`, `twitter:card` na svim rutama kroz postojeće generatore. `tests/favicon.test.ts` proširi na manifest i og.
+
+---
+
+## Z27. SEO stranica `citati-i-literatura.html`
+
+**Referenca.** `design/templates/seo-citati/Citati.dc.html` (odabrana varijanta A, konac). Ostale SEO stranice slijede isti obrazac sekcija, ali svaka dobiva svoj oblik (odluka autora).
+
+**Sekcije redom:** hero s faksimilom koji se sam provjerava (skenirajuća linija, citatnice se boje, pečat "2 citata bez izvora"); 01 crvene niti između citatnica i popisa literature (SVG putanje računaju se iz `getBoundingClientRect` citatnice i zapisa, preračun na `resize`; nepovezana citatnica ima nit koja visi); 02 traka nalaza (8 primjera iz `tests/fixtures`, bez imena autora; vrti se sama, staje na hover, stoji pod `prefers-reduced-motion`); 03 što provjerava (§ 1 do § 3); 04 kako radi; 05 usporedba pristupa (red po pitanju, klik otvara odgovor za sva četiri pristupa); 06 cjenik kao račun po vrsti rada (Z24 cijene); 07 FAQ (5 pitanja + `FAQPage` schema.org); završni CTA; odricanje od odgovornosti.
+
+**Copy** doslovno iz predloška. Citati korisnika se ne prikazuju dok nema pravih (primjeri nalaza ih zamjenjuju). Benchmark nije uključen dok nema izmjerenih brojki.
+
+**Provjera.** Niti se ne sijeku s tekstom na 360, 768 i 1280px; Lighthouse SEO 100; nema mrežnih zahtjeva osim fontova.
+
+---
+
+## Z28. SEO stranica `landing_usporedba.html`
+
+**Referenca.** `design/templates/seo-usporedba/Usporedba.dc.html`, varijanta B (fokus). Tweak `variant` A i C ostaju samo kao referenca.
+
+**Registar.** Jedna tablica: prvi stupac su pitanja, pa četiri pristupa (AI chat i savjet, Upload-alati, Ljudsko lektoriranje, Lekta). U ćelijama je samo znak (✓ zeleno #1E7F4F, ~ jantar #8A570E, ✗ crveno #C4372E); legenda stoji u zaglavlju prvog stupca, a iznad tablice oznaka "Klikni znak za objašnjenje". Lekta stupac nosi pečat. Deset redaka, zadnja dva ispod crte "Gdje je drugi bolji" (sadržaj i argumentacija, jezik i stil), a tamo Lekta dobiva ✗. Tekst ćelija i fusnote 1 do 4 doslovno iz predloška.
+**Fokus (B).** Klizač od 0 do 3 iznad tablice i nazivi pristupa ispod njega; stupci izvan fokusa idu na opacity .28, a ispod tablice je mreža s odgovorima za sve retke tog pristupa. Klik na znak postavlja fokus na taj stupac.
+**Pokret.** Znakovi se iscrtavaju (stroke-dashoffset) red po red kad tablica uđe u pogled (IntersectionObserver, razmak 130 ms). Redak pod mišem je svijetao, ostali idu na .45. Pod `prefers-reduced-motion` sve je odmah vidljivo.
+**Mobitel (<760px).** Tablica se pretvara u četiri kartice (jedna po pristupu) s horizontalnim scroll-snapom, tekst je vidljiv uz znak.
+**Ostale sekcije:** cijena kao dvije trake (lektor 70 do 110 € s iscrtkanim rasponom, Lekta 14,99 €); § 1 i § 2 dokaz; četiri poveznice na `/usporedba/*`; FAQ (5 pitanja + `FAQPage` schema.org); završni CTA; odricanje. Beta se ne spominje, prikazuju se samo cijene (Z24).
+
+**Provjera.** Nijedan tekst preko drugoga na 360, 768 i 1280px; tablica ne izlazi van lista.
+
+---
+
+---
+
+## Z29. Javni benchmark (`landing_benchmark.html`)
+
+**Referenca.** `design/templates/seo-benchmark/Benchmark.dc.html` (varijanta A) + `BenchSheet.dc.html`.
+
+**Sekcije redom:** hero (copy postojeće stranice doslovno); 01 prekidač "Klizač" (zadano) / "Dva lista". Klizač (`BenchFix.dc.html`): jedna A4 stranica s istim tekstom u dva sloja. Donji sloj je rad kako je ostao nakon AI chata (Calibri, 11 pt, prored 1,0, lijevo, bez broja stranice, crvene oznake 1 do 7 u gornjoj i donjoj margini). Gornji sloj je isti tekst po pravilniku (Times New Roman, 12 pt, prored 1,5, obostrano s rastavljanjem, uvlaka odlomka, broj stranice, zelene oznake; 7 opseg jantarno "ručno"), otkriva se `clip-path: inset(0 X% 0 0)` slijeva. Stranica kreće potpuno "kriva"; kad uđe u pogled, ručka sama klizne do 55 % (1,6 s, ease-out) pa je preuzima korisnik; pod `prefers-reduced-motion` stoji na 50 %. Oznake na istim mjestima u oba sloja (fiksni grid 3 + 4 ćelije), veličine u `cqw` (`container-type: inline-size`) da se nigdje ne preklapaju. Ispod: legenda od 7 redaka (naziv · ~~krivo~~ → točno), dodir retka istakne oznaku na listu. Dva lista: Lekta lijevo, AI chat desno, svaki blago nakošen (−1° / +1,2°, desni spušten 18px), na hover se ispravi i podigne; oznake 1 do 7 padaju redom kad sekcija uđe u pogled (`IntersectionObserver`, 520ms razmak), gumb "↻ Ponovi provjeru"; iznad listova red čipova "Pokaži isto mjesto na oba lista" (1 Font … 7 Opseg): klik fokusira grešku, ostale oznake blijede na 18 %, na oba lista isto mjesto dobiva isprekidani krug (Lekta "Nº N · označeno", AI "Nº N · bez oznake"), redak u popisu ispod lista se osvijetli; kad animacija završi, ispod listova padne pečat "7 OZNAKA FORME 0"; 02 katalog grešaka; 03 drugi pristupi (netestirani otvoreno označeni); 04 AI test detaljno; 05 metodologija + preuzimanje; CTA.
+
+**Pravila.** Brojke i copy doslovno iz postojeće stranice i `scripts/generate-benchmark-fixture.mts`; ništa se ne procjenjuje. Čipovi su `button` s `aria-pressed`, min. visina 36px. Pod `prefers-reduced-motion` sve oznake odmah vidljive, bez nagiba i pečata u animaciji.
+
+**Provjera.** 360px: listovi jedan ispod drugog, čipovi se prelamaju, oznaka ni krug ne izlaze iz lista; tipkovnica dolazi do svih čipova.
+
+---
+
+## Z30. Interne stranice (`verification.html`, `admin.html`)
+
+**Stanje.** Obje su `noindex`, samo za autora. `verification.html` već ima sloj "korektorski stol" (tamni stol, papirnati paneli, radius 2px, pečat za potvrdu), ali s hardkodiranim tokenima i starim `Newsreader`/`Inter Tight` deklaracijama koje odmah prepisuje.
+
+**Rješenje (bez redizajna).** Ukloni prvi `:root` blok i dupli light-tema kod; učitaj `design-system.css` + `page-chrome.css` (Z15 traka u minimalnom obliku: logo + "Interno"); klase `vc-*` preslikaj na postojeće tokene (`--desk`, `--paper`, `--paper-line`, `--red`, `--radius-btn`). Isto za `admin.html`. Bez animacija, bez premium elemenata.
+
+**Provjera.** Vizualno isto kao sada u obje teme; nijedan hex literal u `<style>` osim sjena.
+
+## Redoslijed i rizik (dopuna 9)
+Z28 ovisi o Z24 i Z15. Z29 ovisi o Z15.
+
+## Redoslijed i rizik (dopuna 8)
+Z27 ovisi o Z24 (cijene) i Z15 (traka). Ostale SEO stranice idu kao zasebni zadaci kad dobiju predložak.
+
+## Redoslijed i rizik (dopuna 7)
+Z15 ide odmah nakon Z3 (prije Z7), jer svi kasniji ekrani nasljeđuju traku.
+
+## Redoslijed i rizik (dopuna 6)
+Z14 je neovisan o rezultatu; može ići paralelno sa Z8. Ovisi o Z13 za predispunu iz profila.
+
+## Redoslijed i rizik (dopuna 5)
+Z13 ide nakon Z8 (koristi novi list rezultata) i prije Z9.
+
+## Redoslijed i rizik (dopuna 4)
+Z12 ovisi o Z11 (cijene) i o odluci o fontovima (Z7). Radi ga u četiri commita: svitak + margina + profil (1, 2, 10), podcrta i privatnost (3, 4), dokazi i registar (5, 6), cjenik, pribor, FAQ (7, 8, 9).
+
+## Redoslijed i rizik (dopuna 3)
+Z11 je neovisan o fontovima i može ići odmah nakon Z3.
+Z9 ovisi o Z8 (nova kartica nalaza) i Z3 (oblik eyebrowa). Z10 je neovisan i mali. Redoslijed: Z1 → Z2 → Z3 → Z7 → Z8 → Z9 → Z10, pa Z4 → Z5 → Z6.
 
 Nakon svakog zadatka snimi `/` i `/rad/` u obje teme i usporedi s `design/*.html`. Ako se neka razlika ne može riješiti bez promjene primitiva, zaustavi se i javi.
+
+
+---
+
+## Z30. Jedan skup sjena, pokreta i razmaka
+
+**Stanje.** Predlošci su imali 40 različitih sjena, 20 trajanja i 5 krivulja; ujednačeno je na skup ispod (`design/styles.css`, kartica "Tokeni · Sjene i pokret"). Repo već ima `--dur-1/2/3` i `--ease-spring` u `src/shared/motion.css`; skup ih zadržava (`--dur-2` ostaje .32s).
+
+**Rješenje.** U `src/shared/design-system.css` dodaj:
+- Sjene po razini, ne po komponenti: `--shadow-paper` (element na papiru), `--shadow-sm` (pločica, gumb na stolu), `--shadow-object` (pečat, kartica, pribor), `--shadow-sheet` (list na stolu), `--shadow-lift` (podignut list, otvorena ladica). Svaka `box-shadow` u `src/**/*.css` mapira se na jednu od pet.
+- Pokret: `--dur-1` .18s (hover, boja), `--dur-2` .32s (stanje, prozirnost), `--dur-3` .5s (ladica, list, raspored), `--dur-reveal` 1.6s (samo klizač krivo → točno i otkrivanje nalaza). Krivulje: `--ease-spring` za sve, `--ease-stamp` (blagi prebačaj) samo za pečate.
+- Razmaci: `--gap-1..7` = 4, 8, 12, 16, 24, 32, 48. Međuvrijednosti 6, 10, 14 samo za retke popisa i ikone uz tekst.
+
+**Provjera.** `tests/design-tokens.test.ts`: u `src/**/*.css` nema `box-shadow` literala ni `cubic-bezier` izvan tokena (iznimka `admin/`, `demo/`).
+
+---
+
+## Z31. Brzina i mobitel na stvarnom kodu
+
+Repo je već pažljiv (statičan hero, bez beskonačne trake, `.motion-offscreen` pauzira animacije izvan pogleda, cross-document prijelazi ugašeni zbog kvara). Efekti iz Z8 do Z29 moraju ostati u tim granicama.
+
+**Proračun (Lighthouse mobile, 4× CPU, sporo 4G):** LCP ≤ 2,5 s na `/`, `/rad/`, `/saznaj-vise/`, `/usporedba/`; INP ≤ 200 ms za klizač, ladicu i pribor; CLS ≤ 0,05; JS po ruti ≤ 170 KB gzip; fontovi ≤ 120 KB.
+
+**Pravila za efekte:**
+- Animira se samo `transform`, `opacity` i `clip-path`. Nikad `box-shadow`, `filter`, `width` ili `left` u petlji; gdje predložak animira `left` (kvačica navigacije, klizač), u kodu je `transform: translateX`.
+- Klizač krivo → točno: oba sloja su statična, pomiču se samo `clip-path` i ručka, bez reflowa teksta. Samostalni pomak pokreće `IntersectionObserver` jednom.
+- Sve što se vrti (traka nalaza, demo koji se sam popravlja, lampa) dobiva `.motion-offscreen` i staje na hover, izvan pogleda i pod `prefers-reduced-motion`.
+- Nema `backdrop-filter` na javnim stranicama.
+- Fontovi: Instrument Serif 400 + italic i Geist Mono 400/500 kao samostalno posluženi `woff2`, podskup latin + latin-ext, `font-display: swap`, `preload` samo serif 400 i mono 400; metrički fallback (`size-adjust`) da zamjena ne pomakne raspored.
+- Slike: AVIF/WebP, eksplicitni `width/height`.
+
+**Provjera.** `tests/ux-dist/perf-budget.spec.ts`: Playwright s 4× CPU usporavanjem mjeri INP za povlačenje klizača i otvaranje ladice; Lighthouse CI na četiri rute s gornjim pragovima. Ručno: jedan jeftini Android, snimka uz rezultat u PR-u.
+
+---
+
+## Z32. Ulaz kao živi list (varijanta B)
+
+**Referenca.** `design/templates/intake-live/IntakeLive.dc.html`, tweak `variant=B` (zadano). Autor je odabrao B: fakultet i rok su pribor na stolu uz list, a ne polja na listu. Zamjenjuje raspored iz Z7; copy lista (naslov, podnaslov, podnožje) ostaje iz Z7.
+
+**Redoslijed trenutaka na jednom ekranu:**
+1. **Učitavanje:** na listu se jednom pokaže 7 tragova olovke (elipsa + kurzivni natpis: margine, prored, font, broj stranice, naslovi, literatura, opseg), 2,8 s, zatim izblijede. Na mobitelu isto; nema hover ponavljanja. Na desktopu se tragovi vrate na hover lista.
+2. **Pribor uz list (desno, ispod 900px ispod lista):** kartica fakulteta s predodabranim profilom (prepoznat iz profila/ranijeg odabira) i gumbom "Potvrdi"; polje roka (datum) s kvačicom "Još ne znam rok". Kad se odabere fakultet, list promijeni unutarnju marginu i prored po tom pravilniku (`padding` i `line-height`, 0,5 s). Kad se upiše rok, na list padne mali pečat "Rok 15. 10. · 22 dana" ili "Rok nije zadan".
+3. **Obavezno prije ubacivanja:** fakultet potvrđen i (rok ili "Još ne znam rok"). Dok nije, CTA je onemogućen s natpisom što nedostaje.
+4. **Povlačenje datoteke (desktop):** `dragenter` na cijelom ekranu podiže list (`translateY(-10px) rotate(-.6deg)`, jača sjena); na `drop` se ime datoteke upisuje u zaglavlje lista slovo po slovo (`Nº 0007 · rad.docx`). Mobitel: dodir lista otvara odabir datoteke.
+5. **Provjera:** isti pečat mijenja tekst "Čeka provjeru" → "Čitam" → "Pregledano · 71", bez promjene ekrana; tanka crvena linija skeniranja ispod podnaslova.
+6. **Kraj:** ispod pečata "Klikni list za nalaz →"; klik na list otvara `/rad/`. Poveznica "Ubaci drugi rad" vraća u početno stanje.
+
+**Pokret:** samo `transform`/`opacity` (Z31); `padding` i `line-height` mijenjaju se jednom po odabiru, ne u petlji. Pod `prefers-reduced-motion` svi prijelazi su trenutni, tragovi se ne prikazuju.
+
+**Provjera.** Playwright: CTA onemogućen bez fakulteta i roka; "Još ne znam rok" ga omogućuje; drop postavlja ime datoteke; pečat prolazi tri stanja; 360px bez preklapanja.
+
+## Redoslijed i rizik (dopuna 10)
+Z32 zamjenjuje raspored Z7 i ovisi o Z13 (profil) za predodabir fakulteta.
+
+---
+
+## Z34. Rezultat: sve u jednom
+
+**Referenca.** `design/templates/result-live/ResultLive.dc.html`. Zamjenjuje stanje `blocked` iz Z8 (plan, plaćanje i gotovo ostaju iz Z8).
+
+1. **Presuda.** Traka s dokumentom, profilom i rokom iz Z32 ("Rok 14. 10. · još 21 dan · popravak oko 2 min"). Ocjena raste od 0 do 71 (1,2 s), zatim ispod legende prstena padne pečat "Nije spremno" (u toku stranice, ne preko teksta).
+2. **Prsten s dvije ocjene.** Crveni luk je ocjena sada (71), zeleni ocjena nakon plana (71 + bodovi zahvata u planu); mijenja se odmah kad se zahvat uključi ili isključi.
+3. **Kategorije kao jezičci** (Sve · Format · Struktura · Citati · Predaja) filtriraju hrpu kartica; kategorija bez nalaza pokazuje ✓ i nije klikabilna.
+4. **Stol.** Lijevo stranica rada (sticky), desno hrpa kartica. Odabir nalaza zumira stranicu na njegovo mjesto (`transform-origin` + `scale`, 0,7 s) i istakne ga. Kartice se listaju strelicama: gornja odleti ustranu, sljedeća uđe s druge strane.
+5. **Sada / Nakon plana.** Isti tekst s primijenjenim zahvatima iz plana (font, margina, prored, broj stranice); ispod stranice cedulja "Ovo dodaješ sam" za ručne nalaze.
+6. **Uključi u plan.** 4 sigurna zahvata su zadano u planu; uključivanje šalje cedulju "+ Font" lukom do prstena ili ladice. Ručni nalazi imaju plavu napomenu umjesto gumba.
+7. **Traka stranica.** 41 ćelija; crvena crta iznad = nalazi za cijeli rad, jantarna ćelija = stranica s nalazom na jednom mjestu; klik otvara taj nalaz.
+8. **Ladica plana.** Kad presuda izađe iz pogleda, pri dnu se pojavi fiksna traka "Plan popravka · N zahvata · 71 → X · 14,99 € · Napravi plan →".
+
+**Podaci.** Bodovi iz postojećeg izračuna ocjene; plafon = `repairOutlook.ceilingScore`; cijena po vrsti rada (diplomski 14,99 €).
+**Mobitel (< 900 px):** bez stranice rada; kartice, traka stranica i ladica ostaju. `prefers-reduced-motion`: bez brojanja, zumiranja i letenja.
+**Provjera.** Uključivanje zahvata mijenja zeleni luk i ladicu; filtar Citati pokazuje 1 od 1; 360 px bez preklapanja.
+
+Z34 ide nakon Z33.
+
+---
+
+## Z35. Faksimil: sve u jednom
+
+**Referenca.** `design/templates/facsimile-live/FacsimileLive.dc.html`. Zamjenjuje `Facsimile.dc.html` (Z9) na ruti faksimila.
+
+**Raspored (≥ 1180 px):** stranica rada · stupac bilješki 230 px (izvan stranice) · kartica nalaza 360 px (sticky). 760–1180 px: kartica ide ispod. < 760 px: bilješke su popis ispod stranice; nema lampe, povećala ni konca.
+
+1. **Slojevi** (Bilješke, Točke, Mjerne linije, Duh pravilnika) + zaseban prekidač **Prije / poslije**.
+   - Kad držiš miš iznad gumba ili ga fokusiraš s tipkovnicom, ispod trake izađe kartica s objašnjenjem i strelicom prema gumbu. Kartica ima svoj red (`min-height`), pa nikad ne prekriva stranicu. Tekstovi su u `FX_TIP` u predlošku; prepiši ih doslovno.
+   - Dok je miš iznad isključenog sloja, sloj se privremeno pokaže na stranici, a klik ga trajno uključuje.
+   - Na dodirnim ekranima kartica se pokaže na dodir i nestane nakon 3,5 s.
+2. **Duh pravilnika:** iscrtkani okvir tekstnog područja po pravilniku, obojeni pojas razlike u margini, linije proreda 1,5 (`repeating-linear-gradient`) i oval broja stranice. Bez teksta.
+3. **Klizač prije/poslije:** gornji sloj je popravljena stranica (sve automatske izmjene), otkriva se s `clip-path: inset(0 X% 0 0)`. Ručni nalazi su na njoj jantarno obojeni. Ručka se vuče (pointer events na ručki, ne preko cijele stranice) ili pomiče strelicama.
+4. **Lampa:** krug svjetla prati miš po stranici (`radial-gradient`, `pointer-events:none`) i tekst ostaje čitljiv. Bilješke daleko od miša blijede na 0,38, a odabrana nikad ne blijedi.
+5. **Povećalo:** kad miš 500 ms miruje nad tekstom (`[data-fx-par]`, nikad nad marginama), iznad stranice se ispiše "Ispod miša: Calibri 11 pt · prored 1,0 · lijevo", a na mjestu miša je samo prsten bez teksta. Lijevo od ručke klizača prikazuju se popravljene vrijednosti. Vrijednosti dolaze iz stvarnih stilova odlomka u dokumentu.
+6. **Konac:** SVG krivulja od svake bilješke do točke uz redak u razmaku između stranice i stupca; nit odabranog nalaza je crvena.
+7. **Kartica nalaza:** izmjereno → pravilnik; **isječak pravilnika** (članak, stranica, rečenica s valovitim crvenim podcrtom); primarni gumb "Uključi u plan · +N" (automatski) ili "Napravit ću sam" (ručni); poveznica "Pokaži popravak na stranici" samo mijenja prikaz tog mjesta i ne dira dokument.
+8. **Listanje:** strelice iznad stranice, klik na traku stranica ili povlačenje prstom. List se okrene preko stranice (WAAPI `rotateY`, 560 ms).
+9. **Red čekanja** iznad trake stranica: 6 stavki koje se prekriže kad je nalaz u planu ili označen "Napravit ću sam". Kad su svih 6 riješeni, u toku stranice padne pečat "Plan spreman", a pojave se gumb "Nastavi na plan popravka →" i redak "N zahvata u planu · 71 → X · 14,99 €".
+
+Svi pokreti koriste samo `transform`/`opacity`. Pod `prefers-reduced-motion` nema okretanja, brisanja ni pečata s animacijom.
+
+**Provjera.** Kartica objašnjenja ne prekriva stranicu ni na 1180 ni na 1440 px; povećalo se ne pojavljuje nad marginama; kad se prekriži svih 6, pojavi se pečat; na 360 px ništa se ne preklapa.
+
+Z35 ide nakon Z34 i dijeli s njim stanje plana.
+
+---
+
+## Z36. Popravak: sve u jednom
+
+**Referenca.** `design/templates/repair-live/RepairLive.dc.html`. Zamjenjuje stanja `plan`, `payment` i `done` iz Z8.
+
+**Tok.** Četiri koraka, **jedan korak po ekranu** (nema dugog skrolanja). Naprijed stranica klizne zdesna, natrag slijeva (`transform`, 0,45 s). Iznad svakog koraka je "← Natrag na …", a koraci u zaglavlju su klikabilni do najdaljeg dosegnutog. Nakon plaćanja plan je zaključan, ali se može otvoriti; gumb tada glasi "Plan je plaćen · dalje →". U zaglavlju je "Verzije · N".
+
+### 01 Plan
+- Redak "Lekta zna popraviti 18 stvari · u tvom radu treba N". Klik izvuče **ladicu** zdesna (`role="dialog"`, zatvara se klikom izvan ili tipkom Esc) s tri skupine iz `check-fixer-map.ts`:
+  - **Automatski (10):** margine, format papira, font, veličina slova, prored, poravnanje, razmak odlomaka, razmak fusnota, položaj broja stranice, prazni odlomci (`AUTO_CHECK_FIXER` + empty-paragraphs).
+  - **Uz potvrdu (8):** numeracija od uvoda, shema numeriranja, abecedni red literature, citat bez zapisa ili zapis bez citata, oznake a/b uz godinu, obavezna poglavlja, oblikovanje naslova, oblikovanje fusnota (`STRUCTURAL_CHECK_RULES` s `fixId`).
+  - **Ručno:** stilovi naslova u Wordu, natpisi tablica i slika, popisi prikaza (sve bez fixera).
+  - Kod svakog retka stoji "u tvom radu: treba" ili "u redu ✓", izvedeno iz stvarnih nalaza. Broj "18" i brojevi skupina računaju se iz mape, a ne upisuju se ručno.
+- **Automatski zahvati** su zadano uključeni (checkbox, izmjereno → pravilnik, +bodovi).
+- **Zahvati uz potvrdu** su zadano isključeni. Kad ih uključiš, ispod se otvori pregled PRIJE / POSLIJE s napomenom i gumbima "Potvrđujem · +N" i "Odustani". Tek potvrđeni zahvat ulazi u plan i na račun ("· potvrđeno"). Tekst pregleda dolazi iz stvarnog prijedloga fixera.
+- **Mala stranica** uz popis (str. 7) odmah pokazuje uključene zahvate: font, veličinu, marginu, prored, poravnanje i broj stranice.
+- **Račun** (papir s perforacijom gore): redak po zahvatu s 0,00 €, jedna cijena "Diplomski rad · N zahvata · 14,99 €" (cijena po vrsti rada iz Z24), a ocjena 71 → X se broji. Ispod su:
+  - **Opseg:** "41 → X stranica" (prored +14, margina +1, veličina +2, razmak odlomaka −2; zamijeni stvarnom procjenom iz layouta ako postoji).
+  - **Ušteda · procjena** s načinom računanja: 3 min/str. za prored i marginu, 1 min/str. za font i veličinu, 20 min za poravnanje i razmake, 10 min za numeraciju, 5 min za zapis u literaturi. Uvijek s napomenom da stvarno vrijeme ovisi o korisniku.
+  - **Jamstvo:** "ako ponovna provjera nađe grešku u formi koju smo popravili, vraćamo 14,99 €" i "ponovna provjera istog rada je besplatna do [rok ili 30 dana]".
+- Okvir "Ovo radiš sam" nabraja ručne nalaze, a ispod su "Što radimo / Što ne radimo".
+
+### 02 Plaćanje
+- Stripe Payment Element na listu: Apple Pay, Google Pay, kartica.
+- **Kartica koja se crta** iznad polja: vrsta i boja kartice (iz Stripeova `change` eventa, `brand`), ime i datum dok se tipkaju. **Broj je uvijek •••• •••• •••• ••••**; stranica ga ne vidi i ne smije ga prikazati.
+- Kad plaćanje prođe: list se kratko strese (`rpShake`, 0,42 s), poziva se `navigator.vibrate(40)` na mobitelu i udari žig "Plaćeno · datum". Lijevo se od lista otkine **potvrda** (isprekidani gornji rub) s brojem, iznosom, vrstom kartice •••• i QR kodom koji vodi na PDF računa. QR u predlošku je samo placeholder; generiraj pravi.
+- Nakon 1,7 s ekran sam prelazi na korak 03.
+
+### 03 Popravak
+- Stranica rada se popravlja pred očima, redom po zahvatima u planu (oko 2 s po zahvatu); popis zahvata se kvači.
+- **Stroj:** traka od 41 minijature klizi kroz crveni okvir u sredini. Lijevo su stare (gusti redci, uska margina), a desno popravljene. Iznad trake: "STROJ · STR. N / 41".
+- **Dnevnik izmjena** (žuta cedulja) ispisuje se slovo po slovo s crvenim kursorom i prikazuje zadnjih 6 redaka. Redci dolaze iz stvarnog izvještaja fixera.
+- Brojač "N odlomaka popravljeno od 1.284" (stvarni broj odlomaka).
+- Traka napretka prati stvarni tok popravka. Animacija je samo prikaz i ne smije lagati o tome gdje je popravak.
+
+### 04 Gotovo
+- **Prsten ocjene** se napuni od 71 do X (1,3 s), a tek tada padne pečat "Forma popravljena · još N tebi" ili, nakon ponovne provjere, "Spremno za predaju". Ispod naslova je rok iz Z32: "Rok 14. 10. · još 21 dan", odnosno "spremno 21 dan prije roka".
+- **Usporedba** s prekidačem **Klizač / Svjetlosni stol**:
+  - **Klizač:** kao Z35.
+  - **Svjetlosni stol:** donji list je stari (v3), gornji popravljeni, na osvijetljenoj podlozi. Gornji se vuče ustranu (pointer events, rotacija proporcionalna pomaku) i otpušten se vrati.
+  - Ispod je traka od 41 stranice.
+- Tablica prije/poslije za zahvate iz plana; "0 novih problema".
+- "↓ Preuzmi popravljeni .docx": kartica s imenom datoteke odleti prema traci preuzimanja. Uz to je "Izvještaj o izmjenama (PDF)".
+- **Pismo mentoru:** sažetak izmjena složen iz plana i gumb "Kopiraj za e-mail" (`navigator.clipboard`, pa "Kopirano ✓").
+- **"Još ti ostaje":** cedulje ručnih nalaza s praznim kvadratićem. **Kvačicu stavlja samo ponovna provjera nove verzije**, korisnik je ne može sam označiti.
+- **Ponovna provjera (besplatna do roka ili 30 dana):** "Ubaci novu verziju (v4)" → "Čitam …" → cedulje se prekriže jedna po jedna → pečat "Spremno za predaju" → stari list odleti u "Verzije" (WAAPI na klonu) i brojač verzija naraste.
+
+**Za provjeru u kodu (ne pretpostavljaj):**
+1. Radi li `citation-bibliography-sync-fixer` za citat bez zapisa tako da doda zapis s praznim poljima (predložak prikazuje "Novak, [ime]. (2022). [Naslov djela]. [Mjesto: Izdavač]." i napomenu "izvor ne izmišljamo")? Ako radi drugačije, prepiši PRIJE / POSLIJE i napomenu prema stvarnom ponašanju. Nikad ne prikazuj izmišljen naslov ili izdavača.
+2. Je li jamstvo povrata novca upisano u uvjetima korištenja (Z20)? Ako nije, dodaj ga ondje prije nego što se pojavi na računu.
+3. Bodovi po zahvatu (predložak: 4, 2, 4, 4, 2, 2 · 3, 2) moraju dolaziti iz stvarnog izračuna ocjene. Plafon mora biti isti kao na Rezultatu (Z34).
+
+**Mobitel (< 900 px):** jedan stupac, račun ispod popisa, mala stranica iznad popisa; ladica je preko cijele širine. `prefers-reduced-motion`: bez klizanja, tresenja, stroja, brojanja i letenja; svako stanje se prikaže odmah.
+
+**Provjera.**
+- Zahvat uz potvrdu nije na računu dok nije potvrđen.
+- Natrag s plaćanja vraća na plan bez gubitka odabira; nakon plaćanja plan je samo za čitanje.
+- Broj kartice se nigdje ne ispisuje.
+- Ručna cedulja se ne može označiti bez ponovne provjere.
+- Na 360 px ništa se ne preklapa, uključujući ladicu i potvrdu.
+
+Z36 ide nakon Z35. Za plaćanje ovisi o Z24 (cijene), a za jamstvo o Z20 (uvjeti).
+
+---
+
+## Z33. Analiza: rezultat se gradi uživo
+
+**Referenca.** `design/templates/analysis/Analysis.dc.html` (zadano `variant: A`; B i C su samo izolirani efekti za usporedbu).
+
+**Raspored.** Gore stol: stranica rada (58 %) + stupac cedulja (180 px) lijevo, desno sitno profil i pravilnik, ocjena koja pada od 100, popis 8 provjera (○ → ● pulsira → ✓/✗), stranice · riječi · izvori koji rastu, preostale sekunde i "Javi mi kad bude gotovo" (Notification API, pita dopuštenje na klik). Ispod: ekran rezultata je otvoren od početka (presuda, kategorije, 6 mjesta za nalaze).
+
+**Tijek (sve troje zajedno):**
+1. Svjetlo lampe prolazi preko lista kao skener; stranice se listaju u hrpi iza.
+2. Kad se provjera završi, na listu se olovkom nacrta mjerna linija s brojkom (margina 2,0 cm · treba 2,5, prored 1,0, font, broj stranice).
+3. Svaki nalaz: crveni trag na desnom rubu lista + žuta cedulja u stupcu uz list. Njegovo mjesto u rezultatu čeka iscrtkano ("Nalaz 3 · čeka provjeru").
+4. Nakon ~0,9 s cedulja **odleti** lukom s lista na svoje mjesto (Web Animations API na klonu, `transform`/`opacity` only), a tamo se naslov nalaza **ispiše slovo po slovo**; izmjereno → pravilnik se pojavi kad je naslov gotov.
+5. Na kraju se tragovi s ruba skupe u pečat "6 nalaza · 71", presuda se otipka s crvenim kursorom, pa stranica sama skrola do presude.
+Pod `prefers-reduced-motion` sve je odmah u završnom stanju. Na < 980 px nema stupca cedulja; nalazi se samo ispisuju na mjestu.
+
+**Provjera.** Snimke u 0 s, 6 s, 12 s i na kraju; 360 px bez preklapanja; reduced-motion prikazuje završno stanje.
+
+## Redoslijed i rizik (dopuna 11)
+Z33 zamjenjuje stanje `scanning` iz Z8 i ide nakon Z32.

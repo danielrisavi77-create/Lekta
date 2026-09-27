@@ -1,4 +1,4 @@
-<!-- @dsCard group="Osnove" name="Podnozje" subtitle="4-5 stupaca, mono naslovi, local-badge, donja traka" width="1040" height="480" -->
+<!-- @dsCard group="Osnove" name="Podnozje" subtitle="kolofon na dnu stola: sto Lekta radi i ne radi, mono odredista, veliki kurzivni potpis odrezan rubom; puna i pravna varijanta" width="960" height="900" -->
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -7,84 +7,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Inter+Tight:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{
-  color-scheme:dark;
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;
-  --desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
-  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-soft:#A62B23;
-  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);--ok-on-soft:#176243;
-  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
-  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
-  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --display-serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --ui:"Inter Tight",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --font-doc:Georgia,"Times New Roman",serif;
-  --radius:2px;--radius-pill:999px;
-  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--red);
-}
-[data-theme="light"]{
-  color-scheme:light;
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;
-  --desk-muted:#5F5645;--desk-faint:#5F5645;--desk-line:rgba(38,34,27,.16);
-  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-soft:#A62B23;
-  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);--ok-on-soft:#176243;
-  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
-  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
-  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
-  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
-}
-html,body{height:auto}
-body{margin:0;background:var(--desk);color:var(--desk-ink);font:15px/1.5 var(--ui);padding:26px}
-.dsc-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.dsc-item{display:grid;gap:9px;justify-items:start}
-.dsc-cap{font:600 10.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--desk-faint)}
-.dsc-h{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:500;font-size:1.3rem;margin:0 0 4px;color:var(--desk-ink)}
-.dsc-sub{margin:0 0 20px;color:var(--desk-muted);font-size:.85rem;max-width:60ch}
-.dsc-block{padding:20px;border:1px solid var(--desk-line);border-radius:4px}
-</style>
-<style>
-body{padding:0}
-footer{border-top:1px solid var(--desk-line);padding:44px 30px 30px;max-width:1000px;margin:0 auto}
-.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr .9fr;gap:32px;align-items:start}
-.footer-brand{display:grid;gap:12px}
-.logo{display:inline-flex;align-items:center;gap:10px;color:var(--desk-ink);text-decoration:none;font-family:var(--display-serif)}
-.ks-mark{width:26px;height:26px;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font-weight:600;font-size:16px;position:relative}
-.ks-tick{position:absolute;right:-3px;bottom:-3px;width:11px;height:11px;background:var(--red);color:#F7F3E8;display:grid;place-items:center}
-.logo-word{font-style:italic;font-weight:500;font-size:22px;color:var(--desk-ink)}
-.footer-copy{font-family:var(--display-serif);font-size:13px;color:var(--desk-muted);line-height:1.7;max-width:300px}
-.local-badge{display:inline-flex;align-items:center;gap:8px;border:1px dashed var(--desk-line);width:fit-content;padding:7px 12px;font-family:var(--display-serif);font-style:italic;font-size:12.5px;color:var(--pass)}
-.footer-col{display:grid;gap:8px}
-.footer-col-h{font-family:var(--display-serif);font-style:italic;font-size:16px;font-weight:500;color:#FF7A5C;transform:rotate(-1.5deg);display:inline-block;margin-bottom:6px}
-.footer-col a{font-family:var(--display-serif);font-size:14px;color:var(--desk-muted);text-decoration:none}
-.footer-col a:hover{color:var(--desk-ink)}
-.footer-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:36px;padding-top:18px;border-top:1px solid var(--desk-line);font-family:var(--ui);font-size:10px;letter-spacing:.1em;color:var(--desk-faint);text-transform:uppercase}
+:root{color-scheme:dark;--desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.6);--desk-line:rgba(237,231,220,.16);--paper:#F7F3E8;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;--red:#E4573D;--red-deep:#C4372E;--pass:#34996A;--display:'Instrument Serif',Georgia,serif;--mono:'Geist Mono',ui-monospace,monospace;--ease:cubic-bezier(.22,1,.36,1)}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font:14px/1.5 var(--mono);padding:26px;display:grid;gap:30px}
+.dsc-h{font-family:var(--display);font-weight:400;font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+.dsc-sub{margin:0;color:var(--desk-muted);font-size:.82rem;max-width:66ch;line-height:1.55}
+.cap{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint);display:block;margin-bottom:10px}
+/* ===== Puno podnozje: kolofon ===== */
+.foot{position:relative;overflow:hidden;border:1px solid var(--desk-line);border-radius:2px;background:linear-gradient(180deg,var(--desk) 0%,#120F0C 100%);padding:44px 40px 0}
+.kolofon{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));gap:36px;align-items:start;position:relative;z-index:1}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--desk-ink)}
+.mark{position:relative;width:26px;height:26px;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font:400 17px/1 var(--display)}
+.mark i{position:absolute;right:-3px;bottom:-3px;width:11px;height:11px;background:var(--red)}
+.word{font:italic 24px/1 var(--display)}
+.brand{display:grid;gap:16px}
+.claim{margin:0;font:400 19px/1.35 var(--display);color:var(--desk-ink);max-width:30ch;text-wrap:pretty}
+.claim em{color:var(--red);font-style:italic}
+.granice{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:11px;letter-spacing:.02em;color:var(--desk-muted)}
+.granice li{display:grid;grid-template-columns:14px 1fr;gap:8px;align-items:baseline}
+.granice li::before{content:"✕";color:var(--desk-faint);font-size:10px}
+.granice li.da::before{content:"✓";color:var(--pass)}
+.col{display:grid;gap:2px}
+.col h4{margin:0 0 10px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--desk-faint);font-weight:500;display:flex;align-items:center;gap:10px}
+.col h4::after{content:"";flex:1;height:1px;background:var(--desk-line)}
+.col a{display:flex;align-items:baseline;gap:10px;padding:7px 0;color:var(--desk-muted);text-decoration:none;font-size:13px;transition:color .18s,transform .18s var(--ease)}
+.col a small{font-size:10px;letter-spacing:.06em;color:var(--desk-faint);width:18px}
+.col a:hover{color:var(--desk-ink);transform:translateX(4px)}
+.col a:hover small{color:var(--red)}
+/* Potpis: veliki kurzivni "Lekta" odrezan donjim rubom stola. */
+.potpis{position:relative;margin:34px -40px 0;height:120px;overflow:hidden;border-top:1px solid var(--desk-line)}
+.potpis span{position:absolute;left:36px;top:6px;font:italic 260px/1 var(--display);letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1px rgba(237,231,220,.28);user-select:none;white-space:nowrap}
+.potpis .meta{position:absolute;right:40px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:6px;text-align:right;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--desk-faint)}
+.potpis .meta b{font-weight:500;color:var(--desk-muted)}
+.potpis .meta i{display:inline-block;width:7px;height:7px;background:var(--red);vertical-align:middle;margin-left:8px}
+/* ===== Pravno podnozje (ulaz, rad) ===== */
+.foot-min{border:1px solid var(--desk-line);border-radius:2px;padding:22px 30px;display:grid;gap:12px;justify-items:center;text-align:center}
+.foot-min nav{display:flex;gap:6px 22px;flex-wrap:wrap;justify-content:center}
+.foot-min a{color:var(--desk-muted);text-decoration:none;font-size:12px;letter-spacing:.04em;padding:4px 0;background:linear-gradient(var(--red),var(--red)) no-repeat 0 100%/0 1px;transition:background-size .25s var(--ease),color .18s}
+.foot-min a:hover{color:var(--desk-ink);background-size:100% 1px}
+.foot-min p{margin:0;font-size:11px;line-height:1.6;color:var(--desk-faint);max-width:70ch}
+.foot-min p b{font-weight:500;color:var(--desk-muted)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<footer>
-<div class="footer-grid">
-  <div class="footer-brand">
-    <a class="logo" href="#"><span class="ks-mark">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
-    <p class="footer-copy">Tehnička provjera i priprema akademskih radova. Aplikacija ne piše sadržaj rada i ne zamjenjuje mentora ni provjeru plagijata.</p>
-    <span class="local-badge">Automatska provjera je lokalna</span>
+<div><h1 class="dsc-h">Podnožje</h1><p class="dsc-sub">Dno stola je <b style="color:var(--desk-ink)">kolofon</b>, kao u knjizi: tko je ovo napravio, što radi i, jednako glasno, što ne radi. Odredišta su mono s rednim brojem, tri stupca najviše. Ispod svega veliki kurzivni potpis odrezan rubom stola, samo obris, da ne konkurira sadržaju. Ulaz i rad koriste pravnu varijantu: četiri poveznice i jedna rečenica.</p></div>
+
+<section><span class="cap">01 · Puno podnožje (/saznaj-vise/, cjenik)</span>
+<footer class="foot">
+<div class="kolofon">
+  <div class="brand">
+    <a class="logo" href="#"><span class="mark">L<i></i></span><span class="word">Lekta</span></a>
+    <p class="claim">Korektorski stol za formu akademskog rada. <em>Mjeri, ne piše.</em></p>
+    <ul class="granice"><li class="da">Provjera je lokalna, u tvom pregledniku</li><li class="da">Pravila iz službenih pravilnika fakulteta</li><li>Ne piše ni ne prepravlja sadržaj</li><li>Nije provjera plagijata ni potvrda fakulteta</li></ul>
   </div>
-  <nav class="footer-col"><span class="footer-col-h">Proizvod</span><a href="#">Provjera</a><a href="#">Paketi</a><a href="#">Pokrivenost profila</a></nav>
-  <nav class="footer-col"><span class="footer-col-h">Alati</span><a href="#">Svi alati</a><a href="#">Citat generator</a><a href="#">Brojač kartica</a></nav>
-  <nav class="footer-col"><span class="footer-col-h">Pravno</span><a href="#">Privatnost</a><a href="#">Uvjeti</a><a href="#">Obrada dokumenata</a></nav>
-  <nav class="footer-col"><span class="footer-col-h">Ostalo</span><a href="#">Postavke privatnosti</a></nav>
+  <nav class="col" aria-label="Proizvod"><h4>Proizvod</h4><a href="#"><small>01</small>Provjeri rad</a><a href="#"><small>02</small>Kako radi</a><a href="#"><small>03</small>Cjenik</a><a href="#"><small>04</small>Pokriveni fakulteti</a></nav>
+  <nav class="col" aria-label="Alati"><h4>Alati</h4><a href="#"><small>05</small>Generator citata</a><a href="#"><small>06</small>Brojač kartica</a><a href="#"><small>07</small>Svi alati</a></nav>
+  <nav class="col" aria-label="Pravno"><h4>Pravno</h4><a href="#"><small>08</small>Privatnost</a><a href="#"><small>09</small>Uvjeti</a><a href="#"><small>10</small>Obrada dokumenata</a><a href="#"><small>11</small>Kolačići</a></nav>
 </div>
-<div class="footer-bottom">
-  <span>© 2026 Lekta · Zagreb</span>
-  <span>Nije provjera plagijata · Nije službena potvrda fakulteta</span>
-</div>
+<div class="potpis" aria-hidden="true"><span>Lekta</span><div class="meta"><b>© 2026 Lekta · Zagreb</b><span>Radna lampa upaljena<i></i></span></div></div>
 </footer>
+</section>
+
+<section><span class="cap">02 · Pravno podnožje (/ i /rad/): ništa ne konkurira jedinoj radnji ekrana</span>
+<footer class="foot-min">
+<nav aria-label="Pravno"><a href="#">Privatnost</a><a href="#">Uvjeti</a><a href="#">Obrada dokumenata</a><a href="#">Kolačići</a></nav>
+<p><b>© 2026 Lekta</b> · Automatska provjera je lokalna · Nije provjera plagijata ni službena potvrda fakulteta</p>
+</footer>
+</section>
 </body>
 </html>
