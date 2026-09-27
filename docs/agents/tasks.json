@@ -264,11 +264,11 @@
     {
       "id": "T26",
       "title": "Potvrditi točnost lokalne DOCX analize",
-      "status": "in_progress",
+      "status": "in_review",
       "dependsOn": [
         "T16"
       ],
-      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera. AUDIT 22.9.: #14 xmldom onError (osteceni document.xml dobiva ocjenu umjesto greske); #16 CFB potpis za zasticen .docx; #17 w:vanish u bodovanju. STANJE 27.9.: #184 spojen (stavke literature nisu naslovi, matrica laznih nalaza nad 14 fixtura u tests/analysis-false-findings.test.ts, mjerenje nad 314 radova bez novopropustenih naslova prema prijavi koordinatora). Za zatvaranje jos treba: conformance matrica bez sustavnog laznog nalaza i nalazi #14, #16 i #17."
+      "note": "P1. Dokaz: reprezentativna matrica mjerenja i conformance prolaze, nema sustavnog laznog nalaza na poznato ispravnim dokumentima, a nemjerljive stavke su oznacene kao unknown ili rucna provjera. AUDIT 22.9.: #14 xmldom onError (osteceni document.xml dobiva ocjenu umjesto greske); #16 CFB potpis za zasticen .docx; #17 w:vanish u bodovanju. STANJE 27.9.: #184 spojen (stavke literature nisu naslovi, matrica laznih nalaza nad 14 fixtura u tests/analysis-false-findings.test.ts, mjerenje nad 314 radova bez novopropustenih naslova prema prijavi koordinatora). DOSJE 27.9. (docs/agents/reports/T26_ZATVARANJE.md, baza cee4751): conformance 10 datoteka, 552 testa, EXIT 0 (441 profil); #14, #16 i #17 zatvoreni u #168 (docx-malformed-xml, docx-intake-cfb, docx-hidden-text-scoring zeleni); measure:false-findings nad 24 fixtura bez greske, na 11 ispravnih s profilom samo 7 nalaza sa strojnim dokazom iz paketa; nemjerljivo ide kao unmeasurable ili informational s max 0. Otvoreno izvan kriterija: tablica podrzanih svojstava, vrijeme obrade kao gard (izmjereno jednokratno u Nodeu: 30k rijeci 1,4 s, 480k 18 s), skriveni tekst u broju rijeci i pregledu."
     },
     {
       "id": "T27",
