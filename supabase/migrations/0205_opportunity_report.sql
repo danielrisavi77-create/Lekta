@@ -28,6 +28,8 @@ as $$
       w.t,
 
       (select count(*) from public.analytics_events e
+        where e.event = 'analysis_completed' and e.created_at >= w.f and e.created_at < w.t) as analysis_completed_events,
+      (select count(*) from public.analytics_events e
         where e.event = 'opportunity_summary' and e.created_at >= w.f and e.created_at < w.t) as opportunity_events,
       (select count(*) from public.analytics_events e
         where e.event = 'opportunity_summary' and e.created_at >= w.f and e.created_at < w.t
@@ -45,6 +47,13 @@ as $$
         ), 0)
         from public.analytics_events e
         where e.event = 'opportunity_summary' and e.created_at >= w.f and e.created_at < w.t) as structure_gap_items,
+      (select coalesce(sum(
+          case when jsonb_typeof(e.data->'count') = 'number'
+            then greatest((e.data->>'count')::numeric, 0)
+            else 0 end
+        ), 0)
+        from public.analytics_events e
+        where e.event = 'analysis_structure_gap' and e.created_at >= w.f and e.created_at < w.t) as structure_breakdown_items,
 
       (select count(*) from public.analytics_events e
         where e.event = 'profile_completed' and e.created_at >= w.f and e.created_at < w.t) as profile_events,
@@ -102,12 +111,14 @@ as $$
     ),
     'current', (
       select jsonb_build_object(
+        'analysisCompletedEvents', analysis_completed_events,
         'opportunityEvents', opportunity_events,
         'manualAnalyses', manual_analyses,
         'unmeasurableAnalyses', unmeasurable_analyses,
         'structureGapAnalyses', structure_gap_analyses,
         'structureGapItems', structure_gap_items,
-        'profileEvents', profile_events,
+        'structureBreakdownItems', structure_breakdown_items,
+        'profileEvents', profile_events;
         'nonVerifiedProfileEvents', nonverified_profile_events,
         'repairRuns', repair_runs,
         'repairGapRuns', repair_gap_runs,
