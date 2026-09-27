@@ -140,7 +140,8 @@ test('Z32: ispustanje bilo gdje upisuje ime u zaglavlje, a pecat prolazi "Čeka 
   const sesija = new URL(page.url()).hash.replace('#session=', '');
   const zapis = await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.intake.v1') ?? 'null'));
   expect(zapis.rok).toEqual({ datum: null, neznam: true });
-  expect(zapis.rokSesije, 'rok tog rada za Z34 i Z36').toEqual({ sesija, datum: null, neznam: true });
+  // rokSesije je mapa po id-u sesije (odluka: rok se veze uz rad, ne uz jedini slot).
+  expect(zapis.rokSesije, 'rok tog rada za Z34 i Z36').toEqual({ [sesija]: { datum: null, neznam: true } });
   expect(zapis.potvrda).toMatchObject({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija });
 });
 
@@ -214,7 +215,18 @@ test('Z32: potvrdjen fakultet s ulaza pobjeduje detekciju drugog fakulteta iz do
   await page.getByLabel('Još ne znam rok').check();
   await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
   await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
-  await expect(page.locator('#detectBadge')).toContainText('Fakultet potvrđen na ulazu ostaje', { timeout: 30_000 });
+  // Znacka istinito imenuje prepoznati fakultet i nudi oba gumba (Z32: napomenaDrugiFakultet).
+  // `#detectBadge` zivi unutar `#profileSheet` (list za promjenu profila), koji ovaj tok ne
+  // otvara, pa se provjerava sadrzaj (bez zahtjeva na vidljivost), a ne `toBeVisible`.
+  const znacka = page.locator('#detectBadge');
+  await expect(znacka).toContainText(
+    'Dokument izgleda kao rad koji pripada fakultetu Fakultet političkih znanosti. Na ulazu je potvrđen Fakultet elektrotehnike i računarstva.',
+    { timeout: 30_000 },
+  );
+  await expect(znacka.locator('button')).toHaveText([
+    'Prebaci na Fakultet političkih znanosti',
+    'Zadrži Fakultet elektrotehnike i računarstva',
+  ]);
   await expect(page.locator('#unitSelect')).toHaveValue('fer');
 });
 
