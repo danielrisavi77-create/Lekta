@@ -312,11 +312,7 @@ function potvrdiProfil(){_profileConfirmed=true;updateProfile();if(_restoringSes
 // bi u tom trenutku sama pomaknula izbornik zamijenila bi jednu neizrecenu odluku drugom.
 export function applyConfirmedProfileSelection(ids: Record<string,string>): string|null{_restoringSessionProfile=true;try{_sessionProfileApplied=true;_sessionProfileFile=null;_profileConfirmed=true;applySelectionIds(ids)}finally{_restoringSessionProfile=false}return currentDefinitionId()}
 subscribeAnalyzerDocumentSettled((e)=>{if(!_sessionProfileApplied)return;if(e.kind!=='accepted'){if(!_sessionProfileFile)_sessionProfileApplied=false;return}if(!_sessionProfileFile)_sessionProfileFile=e.file;else if(e.file!==_sessionProfileFile)_sessionProfileApplied=false});
-// Z32: fakultet s ulaza bez studija; studij ostaje nepotvrdjen (./confirmed-faculty)
 export function applyConfirmedFacultySelection(ids: Record<string,string>): boolean{applySelectionIds(ids);_profileConfirmed=false;return zakljucajFakultet(ids.unit,$('#unitSelect')?.value)}
-/* ZAGREB_CATALOG se sada uvozi iz catalog-loader (data/catalog/zagreb-catalog.json) */
-/* INSTITUTIONAL_COVERAGE_MATRIX i COVERAGE_STATUS_META se uvoze iz coverage-loader (data/coverage) */
-/* SOCIAL_METHOD_REGISTRY i SOCIAL_METHOD_SOURCE se uvoze iz methodology-loader (data/methodology) */
 // Ponuda ima tri tiera: besplatna automatska provjera (teaser), puni izvjestaj po
 // vrsti rada (otkljucava se u rezultatu), i rucno uredivanje (ljudski servis preko
 // obrasca narudzbe).

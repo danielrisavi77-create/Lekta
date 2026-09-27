@@ -55,13 +55,13 @@ export function izvorFakulteta(predodabir: Predodabir | null, potvrden: boolean)
 }
 
 /** Kartica bez predodabira: fakultet se ne trazi na ulazu, `/rad/` ga prepoznaje iz dokumenta. */
-export const NAPOMENA_BEZ_FAKULTETA = 'Prepoznat ćemo ga iz rada.';
+const NAPOMENA_BEZ_FAKULTETA = 'Prepoznat ćemo ga iz rada.';
 
 /** Poruka kad korisnik pokusa ubaciti rad prije nego je rok odlucen (klik ili ispustanje). */
 export const PORUKA_ODBIJENO = 'Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“.';
 
 /** Koliko milisekundi traje jedno slovo pri upisu imena (predlozak: 32 ms). */
-export const SLOVO_MS = 32;
+const SLOVO_MS = 32;
 
 export interface IntakeLive {
   canAccept(): boolean;

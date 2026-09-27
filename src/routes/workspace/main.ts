@@ -6,7 +6,6 @@ import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../u
 import { subscribeProfileConfirmed } from '../../ui/profile-confirmed-events';
 import { createRevisions } from './revisions';
 import { createConfirmedProfile } from './confirmed-profile';
-import { primijeniPotvrduUlaza } from './intake-confirmation';
 import { readSelectionIds } from '../../ui/profile-selection-ids';
 import { createRepairSelectionMemory } from './repair-selection';
 import { createSaveIndicator } from './save-indicator';
@@ -259,6 +258,9 @@ async function start(): Promise<void> {
     // `/rad/` ne pita ponovo; potvrda bez studija (`?unit=`) postavi samo fakultet, a studij
     // ostaje na detekciji. Isti redoslijedni ugovor: poslije postavki, prije detekcije iz
     // dokumenta (gard: tests/intake-live.test.ts). Bez vazece potvrde je no-op.
+    // Dinamicki uvoz: intake-confirmation vuce intake-choice + deadline-stamp; ne smiju u
+    // pocetni staticki graf ulaza `rad` (bundle-guard 960 KB).
+    const { primijeniPotvrduUlaza } = await import('./intake-confirmation');
     primijeniPotvrduUlaza({
       sessionId: outcome.session.id,
       sessionHasProfile: Boolean(outcome.session.profile),

@@ -229,8 +229,8 @@ export function procitajPostavke(): unknown {
  * rok"); ovo je njegov skraceni oblik bez fakulteta, isti koji je ulaz vec nosio kad je nedostajao
  * samo rok.
  */
-export const NATPIS_SPREMNO = 'ili ispusti dokument ovdje';
-export const NATPIS_BEZ_ROKA = 'Prvo potvrdi rok';
+const NATPIS_SPREMNO = 'ili ispusti dokument ovdje';
+const NATPIS_BEZ_ROKA = 'Prvo potvrdi rok';
 
 export function spremnostUlaza(stanje: { rok: RokStanje }): { spremno: boolean; natpis: string } {
   return rokOdlucen(stanje.rok)

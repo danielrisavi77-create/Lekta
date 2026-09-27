@@ -26,7 +26,7 @@ export interface RokStanje {
 export const ROK_PRAZAN: RokStanje = Object.freeze({ datum: null, neznam: false });
 
 /** Tekst pecata kad je korisnik oznacio da rok jos ne zna (predlozak, doslovno). */
-export const PECAT_ROK_NIJE_ZADAN = 'Rok nije zadan';
+const PECAT_ROK_NIJE_ZADAN = 'Rok nije zadan';
 
 const ISO_DATUM = /^(\d{4})-(\d{2})-(\d{2})$/;
 const DAN_MS = 86_400_000;

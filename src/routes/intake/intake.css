@@ -25,8 +25,7 @@
   background:var(--paper);color:var(--paper-ink);
   border:1px solid var(--paper-line);border-radius:6px;box-shadow:var(--paper-sh);
   cursor:pointer;outline:none;transform:rotate(-.35deg);
-  transition:transform .22s var(--ease-out,cubic-bezier(.22,1,.36,1)),box-shadow .22s ease,border-color .22s ease,
-    padding var(--dur-3,.5s) var(--ease-spring,cubic-bezier(.22,1,.36,1));
+  transition:transform .22s var(--ease-out,cubic-bezier(.22,1,.36,1));
 }
 /* Dva lista ispod: debljina snopa, ne ukras. Cisto CSS, bez ijednog dodatnog cvora. */
 .intake-paper::before,.intake-paper::after{
@@ -92,7 +91,6 @@
   margin:18px 0 0;max-width:44ch;color:var(--paper-muted);
   font-family:var(--display-serif);
   font-size:var(--fs-lead);line-height:1.5;letter-spacing:-.003em;text-wrap:balance;
-  transition:line-height var(--dur-3,.5s) var(--ease-spring,cubic-bezier(.22,1,.36,1));
   --emph-weight: 400;
   --emph-style: italic;
 }
@@ -109,7 +107,7 @@
      na raspolaganju; sada jest, jer ga ulaz ucitava kao i svaka druga ruta. */
   font-family:var(--mono);font-weight:650;font-size:14px;letter-spacing:.02em;
   box-shadow:0 10px 24px color-mix(in srgb,var(--brand) 26%,transparent);
-  transition:transform .2s ease,box-shadow .2s ease;
+  transition:transform .2s ease;
 }
 /* Oznaka formata se unutar mono natpisa izdvaja REZOM. */
 .intake-cta b{font-weight:700}
@@ -233,10 +231,10 @@
 /* ==========================================================================
    ZIVI LIST (ALIGNMENT Z32, varijanta B)
 
-   Pokret po Z31: animira se samo `transform` i `opacity`. `padding` lista i `line-height` uvoda
-   mijenjaju se JEDNOM po potvrdi fakulteta (prijelaz od `--dur-3`), nikad u petlji. Sve sto se
-   vrti (linija skeniranja) ima konacan broj ponavljanja, nosi `data-motion-offscreen` (ui-boot ga
-   pauzira izvan pogleda) i staje pod prigusenim pokretom. Nema `backdrop-filter`.
+   Pokret po Z31: animira se samo `transform` / `opacity` / `clip-path`. `padding` lista i
+   `line-height` uvoda mijenjaju se JEDNOM po potvrdi fakulteta, BEZ prijelaza (layout, ne pokret).
+   Sve sto se vrti (linija skeniranja) ima konacan broj ponavljanja, nosi `data-motion-offscreen`
+   (ui-boot ga pauzira izvan pogleda) i staje pod prigusenim pokretom. Nema `backdrop-filter`.
    ========================================================================== */
 
 /* STOL: list lijevo, pribor desno; ispod 900 px pribor pada ispod lista (media upit nize). */
@@ -382,7 +380,7 @@
    Animiraju se ISKLJUCIVO `transform` i `opacity`; sve ostalo bi izazvalo preracun rasporeda. */
 .intake-stage.intake-leaving .intake-paper{
   transform:translateY(-64px) scale(.955) rotate(0);opacity:0;
-  transition:transform .34s cubic-bezier(.4,0,.2,1),opacity .34s ease,box-shadow .34s ease;
+  transition:transform .34s cubic-bezier(.4,0,.2,1),opacity .34s ease;
   box-shadow:0 40px 60px rgba(0,0,0,.18);
 }
 .intake-stage.intake-leaving .intake-paper::before,
