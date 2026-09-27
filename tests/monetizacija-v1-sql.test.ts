@@ -14,6 +14,7 @@ import {
   idempotencyProblems,
   runV1,
   snapshotProblems,
+  upgradeRevertSqlProblems,
   upgradeSqlProblems,
   type V1Run,
 } from './helpers/monetizacija-v1-sql';
@@ -46,5 +47,10 @@ describe('0207 u stvarnom Postgresu', () => {
   it('apply_entitlement_upgrade: isto pravo, jednom, ista vrsta rada, samo dok je vezani rad ziv', async () => {
     run = await runV1();
     expect(await upgradeSqlProblems(run.db)).toEqual([]);
+  }, ROK);
+
+  it('krug 4: puni povrat uplate nadogradnje vraca placeni Repair (tocno stanje prije), dan 60 nije besplatan, drugi prolaz no-op', async () => {
+    run = await runV1();
+    expect(await upgradeRevertSqlProblems(run.db)).toEqual([]);
   }, ROK);
 });

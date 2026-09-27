@@ -1904,7 +1904,7 @@ describe('webhook-mor handler: nadogradnja Repair -> Final Pass', () => {
   }
 
   /** `markerFrom`: od kojeg citanja oznake (0 = prvog) je povrat vec zabiljezen; null = nikad. */
-  function upgradeResolve(over: { source?: unknown; rpc?: FakeResult; markerFrom?: number | null; slot?: FakeResult; partial?: FakeResult } = {}) {
+  function upgradeResolve(over: { source?: unknown; rpc?: FakeResult; revert?: FakeResult; markerFrom?: number | null; slot?: FakeResult; partial?: FakeResult } = {}) {
     let citanja = 0;
     return baseResolver((c) => {
       if (c.table === 'products') return { data: PASS_ROW };
@@ -1912,6 +1912,7 @@ describe('webhook-mor handler: nadogradnja Repair -> Final Pass', () => {
       if (c.table === 'document_slots') return over.slot ?? { data: [{ id: 'slot-1', fingerprint: { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 } }] };
       if (c.table === 'entitlements' && writeOp(c) === 'select') return { data: 'source' in over ? over.source : SOURCE_ROW };
       if (c.table === 'rpc:apply_entitlement_upgrade') return over.rpc ?? { data: 'upgraded' };
+      if (c.table === 'rpc:revert_entitlement_upgrade') return over.revert ?? { data: 'reverted' };
       // Oznaka djelomicnog povrata izvorne uplate (krug 4) je zasebno citanje, ne oznaka punog povrata.
       if (c.table === 'webhook_events' && writeOp(c) === 'select' && eqs(c).outcome_detail === 'partial_refund_noted') {
         return over.partial ?? { data: [] };
@@ -1926,6 +1927,7 @@ describe('webhook-mor handler: nadogradnja Repair -> Final Pass', () => {
   }
 
   const rpcCalls = (calls: FakeCall[]) => calls.filter((c) => c.table === 'rpc:apply_entitlement_upgrade');
+  const revertCalls = (calls: FakeCall[]) => calls.filter((c) => c.table === 'rpc:revert_entitlement_upgrade');
 
   it('placena razlika (10,00) pretvara ISTO pravo kroz apply_entitlement_upgrade, bez novog retka i bez bonusa', async () => {
     const { res, body, calls, granted } = await run(upgradeEvent(1000), upgradeResolve());
@@ -2083,33 +2085,132 @@ describe('webhook-mor handler: nadogradnja Repair -> Final Pass', () => {
     }
   });
 
-  it('povrat stigao ISTODOBNO (izmedju prvog citanja i pretvorbe): pretvoreno pravo se odmah gasi', async () => {
-    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  it('povrat stigao ISTODOBNO (izmedju prvog citanja i pretvorbe): pretvorba se vraca na Repair, pravo se NE gasi', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     try {
       const { body, calls } = await run(upgradeEvent(1000), upgradeResolve({ markerFrom: 1 }));
       expect(body).toEqual({ ok: true, action: 'refunded_before_payment' });
       expect(rpcCalls(calls)).toHaveLength(1);
+      const vracanje = revertCalls(calls);
+      expect(vracanje).toHaveLength(1);
+      expect(vracanje[0].ops[0].args[1]).toEqual({ p_upgrade_order_id: 'pi_up' });
+      // Krug 4 (nalaz pregleda): placeni Repair ostaje, nema gasenja prava u refunded.
+      expect(entitlementWrites(calls)).toHaveLength(0);
+      const zadnji = settled(calls).at(-1)!;
+      expect(zadnji).toMatchObject({ outcome: 'processed', outcome_detail: 'refunded_before_payment' });
+      expect(String(zadnji.outcome_note)).toBe(`upgrade_reverted: pravo=${SOURCE_ID} izvorna_uplata=pi_repair naplaceno_repair=999 ishod=reverted`);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it('povrat ISTODOBNO, a stanje prije pretvorbe nije zapamceno (no_snapshot): pravo se gasi i ide na trajan rucni pregled', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { body, calls } = await run(upgradeEvent(1000), upgradeResolve({ markerFrom: 1, revert: { data: 'no_snapshot' } }));
+      expect(body).toEqual({ ok: true, action: 'refunded_before_payment', review: 'upgrade_refunded' });
       const writes = entitlementWrites(calls);
       expect(writes).toHaveLength(1);
       expect(argOf(writes[0], 'update')).toEqual({ status: 'refunded' });
       expect(eqs(writes[0])).toEqual({ id: SOURCE_ID, upgrade_order_id: 'pi_up' });
+      const zadnji = settled(calls).at(-1)!;
+      expect(zadnji).toMatchObject({ outcome: 'needs_manual_review', outcome_detail: 'refunded_before_payment' });
+      expect(String(zadnji.outcome_note)).toBe(`upgrade_refunded: pravo=${SOURCE_ID} izvorna_uplata=pi_repair naplaceno_repair=999 ishod=no_snapshot`);
     } finally {
       err.mockRestore();
     }
   });
 
-  it('puni povrat uplate nadogradnje gasi nadogradjeno pravo (po upgrade_order_id), ne ostavlja Final Pass', async () => {
+  it('pad vracanja nadogradnje nakon istodobnog povrata je 500 (Stripe ponovi), bez gasenja prava', async () => {
     const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     try {
-      const resolve = baseResolver((c) => {
-        if (c.table === 'entitlements' && writeOp(c) === 'select') {
-          // Po order_id nema retka (nadogradnja ne stvara svoj), po upgrade_order_id ima.
-          return eqs(c).upgrade_order_id === 'pi_up' ? { data: [{ id: SOURCE_ID, order_id: 'pi_repair', paid_amount_cents: 999 }] } : { data: [] };
-        }
-        if (c.table === 'entitlements' && writeOp(c) === 'update') return { data: [{ id: SOURCE_ID }] };
-        return undefined;
-      });
-      const { body, calls } = await run(signedRequest(refunded(999, 'pi_up')), resolve);
+      const { res, body, calls } = await run(upgradeEvent(1000), upgradeResolve({ markerFrom: 1, revert: { error: { message: 'tajni_detalj_baze' } } }));
+      expect(res.status).toBe(500);
+      expect(body).toEqual({ error: 'refund_failed' });
+      expect(entitlementWrites(calls)).toHaveLength(0);
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'failed' });
+    } finally {
+      err.mockRestore();
+    }
+  });
+
+  /** Povrat uplate nadogradnje: po order_id nema retka (nadogradnja ne stvara svoj), po upgrade_order_id ima. */
+  function upgradeRefundResolve(revert: FakeResult) {
+    return baseResolver((c) => {
+      if (c.table === 'entitlements' && writeOp(c) === 'select') {
+        return eqs(c).upgrade_order_id === 'pi_up' ? { data: [{ id: SOURCE_ID, order_id: 'pi_repair', paid_amount_cents: 999 }] } : { data: [] };
+      }
+      if (c.table === 'rpc:revert_entitlement_upgrade') return revert;
+      if (c.table === 'entitlements' && writeOp(c) === 'update') return { data: [{ id: SOURCE_ID }] };
+      return undefined;
+    });
+  }
+
+  it('krug 4: puni povrat uplate nadogradnje VRACA pravo na Repair (ne gasi ga): Final Pass nestaje, placeni Repair ostaje', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      const { res, body, calls } = await run(signedRequest(refunded(999, 'pi_up')), upgradeRefundResolve({ data: 'reverted' }));
+      expect(res.status).toBe(200);
+      expect(body).toEqual({ ok: true, action: 'refunded', upgrade: 'reverted' });
+      const vracanje = revertCalls(calls);
+      expect(vracanje).toHaveLength(1);
+      expect(vracanje[0].ops[0].args[1]).toEqual({ p_upgrade_order_id: 'pi_up' });
+      // Nijedan upis statusa prava: Repair uplata je i dalje naplacena (odjeljak 14).
+      expect(entitlementWrites(calls).filter((c) => writeOp(c) === 'update')).toHaveLength(0);
+      expect(warn.mock.calls.map((c) => String(c[0]))).toContain('webhook-mor upgrade_reverted');
+      // Nista ne ceka operatera, ali trag ostaje; oznaka punog povrata ostaje doslovna.
+      const zadnji = settled(calls).at(-1)!;
+      expect(zadnji).toMatchObject({ outcome: 'processed', outcome_detail: 'refunded' });
+      expect(String(zadnji.outcome_note)).toBe(`upgrade_reverted: pravo=${SOURCE_ID} izvorna_uplata=pi_repair naplaceno_repair=999 ishod=reverted`);
+      expect(REFUND_DETAILS).toContain(zadnji.outcome_detail);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it('krug 4: ponovljena dostava povrata nadogradnje (revert vrati duplicate) je isti ishod, bez gasenja', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      const { body, calls } = await run(signedRequest(refunded(999, 'pi_up')), upgradeRefundResolve({ data: 'duplicate' }));
+      expect(body).toEqual({ ok: true, action: 'refunded', upgrade: 'reverted' });
+      expect(entitlementWrites(calls).filter((c) => writeOp(c) === 'update')).toHaveLength(0);
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'refunded' });
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it('krug 4: pad vracanja nadogradnje u grani povrata je 500 uz ocuvanu oznaku, bez gasenja prava', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { res, calls } = await run(signedRequest(refunded(999, 'pi_up')), upgradeRefundResolve({ error: { message: 'tajni_detalj_baze' } }));
+      expect(res.status).toBe(500);
+      expect(entitlementWrites(calls).filter((c) => writeOp(c) === 'update')).toHaveLength(0);
+      expect(settled(calls).at(-1)).toMatchObject({ outcome: 'failed', outcome_detail: 'refund_pending' });
+    } finally {
+      err.mockRestore();
+    }
+  });
+
+  it('krug 4: povrat izvorne Repair uplate prava cija je nadogradnja vec vracena: obican povrat, bez rucnog pregleda', async () => {
+    const resolve = baseResolver((c) => {
+      if (c.table === 'entitlements' && writeOp(c) === 'select' && eqs(c).order_id === 'pi_repair') {
+        return { data: [{ id: SOURCE_ID, product_id: 'slot_diplomski', upgrade_order_id: 'pi_up', upgrade_paid_cents: 1000, upgrade_reverted_at: '2026-09-20T00:00:00.000Z' }] };
+      }
+      if (c.table === 'entitlements' && writeOp(c) === 'update') return { data: [{ id: SOURCE_ID }] };
+      return undefined;
+    });
+    const { body, calls } = await run(signedRequest(refunded(999, 'pi_repair')), resolve);
+    expect(body).toEqual({ ok: true, action: 'refunded' });
+    const zadnji = settled(calls).at(-1)!;
+    expect(zadnji).toMatchObject({ outcome: 'processed', outcome_detail: 'refunded' });
+    expect(zadnji.outcome_note).toBeUndefined();
+  });
+
+  it('povrat uplate nadogradnje bez zapamcenog stanja (no_snapshot): pravo se gasi cijelo i ide na trajan rucni pregled', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { body, calls } = await run(signedRequest(refunded(999, 'pi_up')), upgradeRefundResolve({ data: 'no_snapshot' }));
       expect(body).toEqual({ ok: true, action: 'refunded', review: 'upgrade_refunded' });
       const update = entitlementWrites(calls).find((c) => writeOp(c) === 'update')!;
       expect(argOf(update, 'update')).toEqual({ status: 'refunded' });

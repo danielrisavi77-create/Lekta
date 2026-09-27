@@ -84,9 +84,10 @@ async function refundMarker(admin: ReferrerRewardDb, orderId: string): Promise<b
  * pise PRIJE ikakvog drugog koraka povrata) ili kupcevo pravo u stanju `refunded`. Baca na gresku.
  *
  * KOJA JE UPLATA VRACENA (krug 4). Nadogradnja Repair -> Final Pass ne stvara vlastiti redak nego
- * pretvara isti (order_id = Repair uplata, upgrade_order_id = uplata nadogradnje), a puni povrat
- * UPLATE NADOGRADNJE gasi taj redak u `refunded`. Status retka zato sam ne kaze je li vracena
- * izvorna uplata. Redak `refunded` koji nosi `upgrade_order_id` se broji kao povrat izvorne uplate
+ * pretvara isti (order_id = Repair uplata, upgrade_order_id = uplata nadogradnje). Puni povrat
+ * UPLATE NADOGRADNJE redak vraca na zapamceni Repair (ostaje `active`); samo pravo bez zapamcenog
+ * stanja prije nadogradnje gasi u `refunded` (webhook-mor, `no_snapshot`). Status retka zato sam ne
+ * kaze je li vracena izvorna uplata. Redak `refunded` koji nosi `upgrade_order_id` se broji kao povrat izvorne uplate
  * SAMO ako povrat uplate nadogradnje nije zabiljezen; inace je status posljedica povrata
  * nadogradnje, a Repair uplata (i nagrada preporucitelju za nju) ostaje. Povrat same izvorne uplate
  * ionako ima vlastitu oznaku (prvi korak).

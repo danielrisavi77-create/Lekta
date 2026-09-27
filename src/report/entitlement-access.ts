@@ -17,10 +17,11 @@
  *
  * Krug 4: SLOT VRIJEDI SAMO UZ AKTIVNO PRAVO. Besplatan re-check (decideReportAccess) daje svaki
  * zivi slot ciji se otisak poklapa. Slot se dotad citao bez veze na status prava, pa je puni povrat
- * (npr. uplate nadogradnje, koja je slot_expires_at produljila na prozor Final Passa) ostavljao
- * besplatne provjere do isteka slota. Sada se slot vraca samo ako je njegov `entitlement_id` medju
- * aktivnim pravima istog citanja; povrat ili ponistenje prava odmah gasi i re-check, bez ikakvog
- * upisa u document_slots i bez pamcenja prijasnjeg isteka.
+ * prava ostavljao besplatne provjere do isteka slota. Sada se slot vraca samo ako je njegov
+ * `entitlement_id` medju aktivnim pravima istog citanja; povrat ili ponistenje prava odmah gasi i
+ * re-check. Povrat SAMO uplate nadogradnje pravo ne gasi: revert_entitlement_upgrade (0207) ga vraca
+ * na zapamceni Repair i slot na istek prije nadogradnje, pa placeni Repair ostaje, a produljeni
+ * prozor Final Passa nestaje (docs/GO_LIVE_NAPLATA.md).
  */
 import type { EntitlementRow, SlotRow } from './slot-logic.ts';
 import type { DocumentFingerprint } from '../fingerprint/fingerprint.ts';

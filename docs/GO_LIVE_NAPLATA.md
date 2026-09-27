@@ -460,23 +460,43 @@ Ishodi nadogradnje u `webhook_events`:
 | `processed` uz `entitlement_upgraded` | pravo je pretvoreno u Final Pass | ništa |
 | `processed` uz `upgrade_duplicate` | ponovljena dostava iste uplate nadogradnje | ništa |
 | `needs_manual_review` uz `outcome_detail` koji počinje s `upgrade:` | uplata nadogradnje je naplaćena, a pretvorba nije dopuštena: iznos ispod razlike (`upgrade:amount_below_catalog`), pravo tuđe ili nepostojeće, već nadograđeno drugom uplatom, vraćeno, isteklo, izvorna uplata djelomično vraćena (`upgrade:upgrade_source_partially_refunded`), vezani slot anonimiziran (`upgrade:upgrade_slot_anonymized`), ili ga je u međuvremenu promijenila druga uplata ili ga je purge anonimizirao između checkouta i uplate (`upgrade:upgrade_source_unavailable ... ishod=unavailable` ili `ishod=slot_anonymized`). ERROR redak `webhook-mor upgrade_needs_manual_review` | isti dan: povrat uplate nadogradnje u Stripe sučelju, ili ručna pretvorba ako je opravdana |
-| `needs_manual_review` uz `outcome_detail` `refunded` | puni povrat koji dira nadogradnju: pravo je ugašeno, a jedna uplata je ostala bez prava. `outcome_note` počinje s `refund_of_upgraded_entitlement:` (vraćena je izvorna Repair uplata; nosi `nadogradnja=<PaymentIntent>` i `naplaceno_nadogradnje=<centi>`) ili s `upgrade_refunded:` (vraćena je uplata nadogradnje; nosi `izvorna_uplata=<PaymentIntent>` i `naplaceno_repair=<centi>`). `outcome_detail` ostaje `refunded`, pa oznaka punog povrata (`REFUND_MARKERS`) vrijedi kao i dosad | isti dan: za `refund_of_upgraded_entitlement` povrat uplate nadogradnje u Stripe sučelju; za `upgrade_refunded` povrat Repair uplate ili ručno vraćanje Repair prava |
+| `processed` uz `outcome_detail` `refunded` i `outcome_note` `upgrade_reverted: ...` | puni povrat **uplate nadogradnje**: pravo je vraćeno na plaćeni Repair (`revert_entitlement_upgrade`), Final Pass je nestao. Bilješka nosi `izvorna_uplata=<PaymentIntent>`, `naplaceno_repair=<centi>` i `ishod=` (`reverted`, `duplicate` za ponovljenu dostavu, `inactive` ako je pravo već bilo ugašeno) | ništa |
+| `needs_manual_review` uz `outcome_detail` `refunded` | puni povrat koji dira nadogradnju, a jedna uplata je ostala bez prava. `outcome_note` počinje s `refund_of_upgraded_entitlement:` (vraćena je izvorna Repair uplata, pravo je ugašeno; nosi `nadogradnja=<PaymentIntent>` i `naplaceno_nadogradnje=<centi>`) ili s `upgrade_refunded:` (vraćena je uplata nadogradnje, a stanje prije nadogradnje NIJE zapamćeno, `no_snapshot`, pa je pravo ugašeno; nosi `izvorna_uplata=<PaymentIntent>` i `naplaceno_repair=<centi>`). `outcome_detail` ostaje `refunded`, pa oznaka punog povrata (`REFUND_MARKERS`) vrijedi kao i dosad | isti dan: za `refund_of_upgraded_entitlement` povrat uplate nadogradnje u Stripe sučelju; za `upgrade_refunded` povrat Repair uplate u Stripe sučelju (vidi napomenu ispod tablice) |
 | `failed` uz `upgrade_source_lookup` ili `upgrade_apply` | čitanje prava ili `apply_entitlement_upgrade` je pao; Stripe ponavlja | provjeri bazu i migraciju 0207 |
 
-Ako je puni povrat uplate nadogradnje zabilježen PRIJE same uplate (Stripe ne jamči redoslijed),
-pravo se uopće ne pretvara i Repair ostaje netaknut (`processed` uz `refunded_before_payment`). Samo
-povrat koji stigne istodobno s pretvorbom gasi već pretvoreno pravo.
+**Nikad ne vraćaj `status = 'active'` na nadograđenom retku** (`upgrade_order_id` postavljen, a
+`upgrade_reverted_at` prazan). Taj redak nosi Final Pass (`offer_code = final_pass_v1`, njegova prava,
+prozor slota i vezani slot produljen na prozor passa), pa bi takvo "vraćanje Repaira" dalo Final
+Pass za vraćen novac. Stanje Repaira prije nadogradnje vraća samo `revert_entitlement_upgrade`; za
+`upgrade_refunded` (`no_snapshot`, stanje nije zapamćeno) ispravna radnja je povrat Repair uplate.
 
-Puni povrat **uplate nadogradnje** gasi cijelo nadograđeno pravo (traži se po `upgrade_order_id`),
-uz ERROR redak `webhook-mor upgrade_refunded`: plaćeni Repair dio tada ostaje bez prava, pa
-operater odlučuje o povratu Repaira ili ručnom vraćanju prava. Ugašeno pravo gasi i besplatan
-re-check vezanog slota koji je nadogradnja produljila: `readAccessRows` slot uzima samo uz aktivno
-pravo, pa isti rad nakon povrata više nije besplatan ni unutar produljenog prozora. Radnik
+Ako je puni povrat uplate nadogradnje zabilježen PRIJE same uplate (Stripe ne jamči redoslijed),
+pravo se uopće ne pretvara i Repair ostaje netaknut (`processed` uz `refunded_before_payment`). Povrat
+koji stigne istodobno s pretvorbom (uplata pretvori pravo, pa vidi oznaku) pretvorbu vraća na Repair
+istom funkcijom: `processed` uz `refunded_before_payment` i `outcome_note` `upgrade_reverted: ...`.
+Samo bez zapamćenog stanja (`no_snapshot`) pravo se gasi, a ishod je `needs_manual_review` uz
+`refunded_before_payment` i bilješku `upgrade_refunded: ...` (ista radnja kao u tablici).
+
+Puni povrat **uplate nadogradnje** (traži se po `upgrade_order_id`) pravo NE gasi: vraćena je samo
+uplata nadogradnje, a Repair uplata je i dalje naplaćena (odjeljak 14: korisnik koji je prvo kupio
+Repair ne smije biti kažnjen). `revert_entitlement_upgrade` (0207) atomski vraća pravo na stanje
+koje je `apply_entitlement_upgrade` zapamtio pri pretvorbi (`upgraded_from_*`): Repair proizvod,
+ponudu, prava, prozor slota i rok potrošnje, a vezani slot na istek prije nadogradnje (slot vezan
+tek pod Final Passom dobiva Repair prozor od vezivanja). Final Pass i produljen prozor tako nestaju:
+isti rad nakon isteka Repair prozora više nije besplatan, a unutar njega re-check i dalje radi.
+`upgrade_order_id` i `upgrade_paid_cents` ostaju kao trag, a `upgrade_reverted_at` bilježi vraćanje;
+ponovljena dostava povrata je `duplicate` i ne mijenja ništa. Vraćeno pravo se samo ne nadograđuje
+ponovno (409 `upgrade_already_applied`): novu nadogradnju nakon vraćene odobrava operater. Radnik
 `process-bonus-outbox` povrat uplate nadogradnje ne tumači kao povrat izvorne Repair uplate
-(nagrada preporučitelju za Repair ostaje). Puni povrat **izvorne Repair
-uplate** prava koje je već nadograđeno gasi i Final Pass, uz ERROR redak
-`webhook-mor refund_of_upgraded_entitlement`: odluči o povratu uplate nadogradnje. Oba slučaja
-ostavljaju i trajan trag u bazi, ne samo u logu koji istječe: `outcome = 'needs_manual_review'`,
+(nagrada preporučitelju za Repair ostaje), što je sada usklađeno sa stanjem prava: i Repair ostaje.
+Pravo koje je već ugašeno (npr. prvo je vraćena izvorna Repair uplata) se ne oživljava (`inactive`).
+
+Puni povrat **izvorne Repair uplate** prava koje je već nadograđeno gasi i Final Pass, uz ERROR
+redak `webhook-mor refund_of_upgraded_entitlement`: odluči o povratu uplate nadogradnje (taj povrat
+tada završi kao `upgrade_reverted` uz `ishod=inactive` i ništa ne oživljava). Povrat izvorne uplate
+prava čija je nadogradnja već vraćena obična je Repair uplata (`processed`/`refunded`). Slučajevi
+kad jedna uplata ostane bez prava (`refund_of_upgraded_entitlement` i `upgrade_refunded`) ostavljaju
+trajan trag u bazi, ne samo u logu koji istječe: `outcome = 'needs_manual_review'`,
 `outcome_detail = 'refunded'` i `outcome_note` s PaymentIntentom i iznosom druge uplate (tablica
 iznad). Zato ih dnevni upit iz 5.1 (`outcome in (..., 'needs_manual_review', ...)`) vidi.
 

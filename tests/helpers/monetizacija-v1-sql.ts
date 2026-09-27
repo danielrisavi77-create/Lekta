@@ -15,6 +15,10 @@ import { PGlite } from '@electric-sql/pglite';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { readAccessRows, type AccessDb, type AccessQuery } from '../../src/report/entitlement-access';
+import type { BillableWorkType } from '../../src/report/billable-work-type';
+import { decideReportAccess } from '../../src/report/slot-logic';
+
 const MIGRATIONS_DIR = join(process.cwd(), 'supabase', 'migrations');
 
 /** Migracije ispod 0207 koje stvaraju tablice, funkcije i proizvode koje 0207 dira. */
@@ -358,5 +362,172 @@ export async function upgradeSqlProblems(db: PGlite): Promise<string[]> {
       if (r?.produljen !== true) problems.push(`${c.opis}: nadogradnja ne produljuje rok potrosnje na prozor Final Passa`);
     }
   }
+  return problems;
+}
+
+/**
+ * CITANJE PRISTUPA NAD STVARNIM RETCIMA PGlite baze: isti readAccessRows kao generate-report i
+ * repair-docx, a filtri upita (eq, gt) se primjenjuju na retke koje baza stvarno ima. Tako odluka
+ * o pristupu mjeri stanje koje je SQL (nadogradnja, povrat) stvarno ostavio, ne rukom slozen redak.
+ */
+function pgliteAccessDb(db: PGlite): AccessDb {
+  return {
+    from(table: 'document_slots' | 'entitlements') {
+      return {
+        select(_columns: string) {
+          const filtri: Array<(r: Row) => boolean> = [];
+          const q: AccessQuery = {
+            eq(c: string, v: string) {
+              filtri.push((r) => String(r[c]) === v);
+              return q;
+            },
+            gt(c: string, v: string) {
+              filtri.push((r) => Date.parse(String(r[c])) > Date.parse(v));
+              return q;
+            },
+            // oxlint-disable-next-line unicorn/no-thenable
+            then<A = { data: unknown; error: unknown }, B = never>(
+              ok?: ((v: { data: unknown; error: unknown }) => A | PromiseLike<A>) | null,
+              fail?: ((e: unknown) => B | PromiseLike<B>) | null,
+            ): PromiseLike<A | B> {
+              const sql = table === 'document_slots'
+                ? 'select id::text as id, entitlement_id::text as entitlement_id, user_id::text as user_id, work_type, fingerprint, slot_expires_at from public.document_slots'
+                : `select e.id::text as id, e.user_id::text as user_id, e.work_type, e.status, e.slots_used, e.slots_total, e.purchase_expires_at,
+                          e.slot_window_days, json_build_object('slot_window_days', p.slot_window_days) as products
+                     from public.entitlements e left join public.products p on p.id = e.product_id`;
+              return rows(db, sql)
+                .then((svi) => svi.map((r) => {
+                  const iso: Row = { ...r };
+                  for (const k of ['slot_expires_at', 'purchase_expires_at']) {
+                    if (iso[k] instanceof Date) iso[k] = (iso[k] as Date).toISOString();
+                  }
+                  return iso;
+                }))
+                .then((svi) => ({ data: svi.filter((r) => filtri.every((f) => f(r))), error: null }))
+                .then(ok, fail);
+            },
+          };
+          return q;
+        },
+      };
+    },
+  };
+}
+
+const DAN_MS = 86_400_000;
+
+async function accessDecision(db: PGlite, workType: BillableWorkType, danOdSada: number): Promise<string> {
+  const now = new Date(Date.now() + danOdSada * DAN_MS).toISOString();
+  const r = await readAccessRows(pgliteAccessDb(db), USER_A, workType, now);
+  if (!r.ok) return `greska: ${r.error}`;
+  return decideReportAccess({
+    now,
+    workType,
+    fingerprint: { titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 },
+    activeSlots: r.activeSlots,
+    entitlements: r.entitlements,
+    recentGenerationCount: 0,
+  }).decision;
+}
+
+async function revert(db: PGlite, order: string): Promise<string> {
+  const r = await one(db, 'select public.revert_entitlement_upgrade($1) as ishod', [order]);
+  return String(r?.ishod);
+}
+
+/** Stanje prava i slota koje povrat nadogradnje smije ili ne smije mijenjati. */
+async function pravoISlot(db: PGlite, id: string): Promise<string> {
+  const e = await one(db, `select status, product_id, offer_code, capabilities, slot_window_days, purchase_expires_at, slots_used, slots_total
+                             from public.entitlements where id = $1`, [id]);
+  const s = await rows(db, 'select slot_expires_at from public.document_slots where entitlement_id = $1 order by id', [id]);
+  return JSON.stringify({ e, s });
+}
+
+/**
+ * POVRAT UPLATE NADOGRADNJE VRACA REPAIR (krug 4, odjeljak 14). Puni povrat SAMO uplate nadogradnje
+ * ne smije oduzeti placeni Repair, a Final Pass (i produljen slot) za vracen novac ne smije ostati.
+ * revert_entitlement_upgrade vraca pravo TOCNO na stanje prije pretvorbe, jednom (drugi prolaz je
+ * no-op), nikad ne ozivljava ugaseno pravo, a bez zapamcenog stanja ne pogadja. Odluka o pristupu
+ * se mjeri nad stvarnim retcima: dan 60 nakon povrata nije besplatan, a Repair unutar svog prozora
+ * i dalje daje re-check.
+ */
+export async function upgradeRevertSqlProblems(db: PGlite): Promise<string[]> {
+  const problems: string[] = [];
+  const tudja = await one(db, "select count(*)::int as n from public.entitlements where user_id = $1 and work_type in ('zavrsni', 'diplomski')", [USER_A]);
+  if (Number(tudja?.n) !== 0) return ['povrat: mjerenje treba svjezu bazu (druga prava istog korisnika mijenjaju odluku o pristupu)'];
+
+  // 1. slot_zavrsni vezan danas (prozor 7), nadogradjen, pa puni povrat nadogradnje.
+  const osnovno: UpgradeCase = { opis: 'povrat: vezan slot_zavrsni', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: 7, targetId: 'pass_zavrsni', ocekivano: 'upgraded' };
+  const id = await seedRepair(db, osnovno, 900);
+  const prije = await pravoISlot(db, id);
+  if ((await apply(db, id, USER_A, 'pi_up_rev_0', 'pass_zavrsni')) !== 'upgraded') {
+    problems.push('povrat: generator ne proizvodi nadogradjeno pravo');
+    return problems;
+  }
+  // Generator mora proizvesti ciljanu klasu: nadogradnja je dan 60 ucinila besplatnim.
+  const dan60Nadogradjeno = await accessDecision(db, 'zavrsni', 60);
+  if (dan60Nadogradjeno !== 'recheck') {
+    problems.push(`povrat: generator ne proizvodi produljen slot (nadogradjeno pravo na dan 60 daje ${dan60Nadogradjeno}, ne recheck)`);
+  }
+  const ishod = await revert(db, 'pi_up_rev_0');
+  if (ishod !== 'reverted') problems.push(`povrat: revert_entitlement_upgrade vraca ${ishod} umjesto reverted`);
+  const poslije = await pravoISlot(db, id);
+  if (poslije !== prije) problems.push(`povrat: pravo i slot nisu vraceni na stanje prije nadogradnje (prije ${prije}, poslije ${poslije})`);
+  const trag = await one(db, 'select upgrade_order_id, upgrade_reverted_at is not null as vraceno from public.entitlements where id = $1', [id]);
+  if (trag?.upgrade_order_id !== 'pi_up_rev_0' || trag?.vraceno !== true) problems.push(`povrat: nema traga vracene nadogradnje (${JSON.stringify(trag)})`);
+  const dan60 = await accessDecision(db, 'zavrsni', 60);
+  if (dan60 !== 'payment_required') problems.push(`povrat: ponovna provjera na dan 60 nakon povrata nadogradnje daje ${dan60} umjesto 402`);
+  const dan1 = await accessDecision(db, 'zavrsni', 1);
+  if (dan1 !== 'recheck') problems.push(`povrat: placeni Repair unutar svog prozora (dan 1) daje ${dan1} umjesto besplatnog re-checka (Repair kupac kaznjen)`);
+  // Idempotencija: drugi prolaz je no-op.
+  const drugi = await revert(db, 'pi_up_rev_0');
+  if (drugi !== 'duplicate') problems.push(`povrat: drugi prolaz vraca ${drugi} umjesto duplicate`);
+  if ((await pravoISlot(db, id)) !== prije) problems.push('povrat: drugi prolaz mijenja pravo ili slot (nije no-op)');
+  // Vraceno pravo se samo sebe ne nadogradjuje ponovno (nova nadogradnja ide kroz rucni pregled).
+  if ((await apply(db, id, USER_A, 'pi_up_rev_novi', 'pass_zavrsni')) !== 'unavailable') problems.push('povrat: vraceno pravo se tiho nadogradjuje drugom uplatom');
+
+  // 2. Istekao, neanonimiziran slot (kredit za popravak) oziven nadogradnjom: povrat ga vraca na stari istek.
+  const ozivljen: UpgradeCase = { opis: 'povrat: ozivljen slot', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: -5, targetId: 'pass_zavrsni', ocekivano: 'upgraded' };
+  const id2 = await seedRepair(db, ozivljen, 901);
+  const prije2 = await pravoISlot(db, id2);
+  await apply(db, id2, USER_A, 'pi_up_rev_1', 'pass_zavrsni');
+  if ((await revert(db, 'pi_up_rev_1')) !== 'reverted' || (await pravoISlot(db, id2)) !== prije2) {
+    problems.push('povrat: ozivljen slot nije vracen na istek prije nadogradnje');
+  }
+
+  // 3. Nevezan Repair nadogradjen, slot vezan TEK pod Final Passom: povrat daje Repair prozor od vezivanja.
+  const nevezan: UpgradeCase = { opis: 'povrat: vezan nakon nadogradnje', productId: 'slot_diplomski', workType: 'diplomski', slotsUsed: 0, slotDays: null, targetId: 'pass_diplomski', ocekivano: 'upgraded' };
+  const id3 = await seedRepair(db, nevezan, 902);
+  await apply(db, id3, USER_A, 'pi_up_rev_2', 'pass_diplomski');
+  await db.query(`insert into public.document_slots (entitlement_id, user_id, work_type, fingerprint, bound_at, slot_expires_at)
+                  values ($1, $2, 'diplomski', $3::jsonb, now() - interval '2 days', now() + interval '178 days')`,
+  [id3, USER_A, JSON.stringify({ titleNorm: 'rad', authorNorm: 'autor', headings: ['uvod'], sectionCount: 1 })]);
+  await db.query('update public.entitlements set slots_used = 1 where id = $1', [id3]);
+  await revert(db, 'pi_up_rev_2');
+  const s3 = await one(db, `select (slot_expires_at = bound_at + interval '14 days') as repair_prozor from public.document_slots where entitlement_id = $1`, [id3]);
+  if (s3?.repair_prozor !== true) problems.push('povrat: slot vezan pod Final Passom ne dobiva Repair prozor od vezivanja (bound_at + 14)');
+
+  // 4. Pravo vec ugaseno (prvo je vracena izvorna Repair uplata): povrat nadogradnje ga ne ozivljava.
+  const ugaseno: UpgradeCase = { opis: 'povrat: ugaseno pravo', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: 7, targetId: 'pass_zavrsni', ocekivano: 'upgraded' };
+  const id4 = await seedRepair(db, ugaseno, 903);
+  await apply(db, id4, USER_A, 'pi_up_rev_3', 'pass_zavrsni');
+  await db.query("update public.entitlements set status = 'refunded' where id = $1", [id4]);
+  const prije4 = await pravoISlot(db, id4);
+  const ishod4 = await revert(db, 'pi_up_rev_3');
+  if (ishod4 !== 'inactive' || (await pravoISlot(db, id4)) !== prije4) {
+    problems.push(`povrat: povrat nadogradnje vec ugasenog prava vraca ${ishod4} ili ga mijenja (ozivljava ugaseno pravo)`);
+  }
+
+  // 5. Bez zapamcenog stanja: ne pogadja Repair iz danasnjeg kataloga.
+  const bez: UpgradeCase = { opis: 'povrat: bez snapshota', productId: 'slot_zavrsni', workType: 'zavrsni', slotsUsed: 1, slotDays: 7, targetId: 'pass_zavrsni', ocekivano: 'upgraded' };
+  const id5 = await seedRepair(db, bez, 904);
+  await apply(db, id5, USER_A, 'pi_up_rev_4', 'pass_zavrsni');
+  await db.query('update public.entitlements set upgraded_from_offer_code = null where id = $1', [id5]);
+  const prije5 = await pravoISlot(db, id5);
+  const ishod5 = await revert(db, 'pi_up_rev_4');
+  if (ishod5 !== 'no_snapshot' || (await pravoISlot(db, id5)) !== prije5) {
+    problems.push(`povrat: pravo bez zapamcenog stanja vraca ${ishod5} ili se mijenja (pogadja Repair)`);
+  }
+  if ((await revert(db, 'pi_nepostojeci')) !== 'not_found') problems.push('povrat: nepoznata uplata nadogradnje ne vraca not_found');
   return problems;
 }

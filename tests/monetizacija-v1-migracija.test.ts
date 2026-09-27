@@ -235,6 +235,9 @@ describe('0207: apply_entitlement_upgrade provodi pravila odjeljka 14 atomski', 
 
   it('funkciju ne smije zvati klijent', () => {
     expect(SQL).toMatch(/revoke all on function public\.apply_entitlement_upgrade\([^)]*\)\s*from public, anon, authenticated/);
+    // Krug 4: vracanje nadogradnje na Repair (povrat uplate nadogradnje) zove samo webhook-mor.
+    expect(SQL).toMatch(/revoke all on function public\.revert_entitlement_upgrade\(text\)\s*from public, anon, authenticated/);
+    expect(SQL).toMatch(/create or replace function public\.revert_entitlement_upgrade\([\s\S]*?security definer\s*set search_path = ''/);
   });
 });
 

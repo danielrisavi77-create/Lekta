@@ -23,6 +23,9 @@
 --  7. `bonus_outbox.status` dobiva `cancelled`: puni povrat otkazuje obvezu koja jos ceka (F21), a
 --     `webhook_events.outcome_note` nosi korak i gresku sporednog pada povrata (F21).
 --  8. apply_entitlement_upgrade: atomska pretvorba Repair prava u Final Pass za ISTI entitlement.
+--     Pretvorba pamti stanje Repair prava prije nje (upgraded_from_*).
+--  9. revert_entitlement_upgrade: puni povrat SAMO uplate nadogradnje vraca pravo na zapamceni
+--     Repair (proizvod, ponuda, prava, prozor, rok potrosnje i istek vezanog slota), ne gasi ga.
 --
 -- IDEMPOTENTNO: if not exists, on conflict do nothing, drop constraint prije add, i uvjetni upisi
 -- (is distinct from). Drugi prolaz ne mijenja ni jedan redak.
@@ -119,7 +122,15 @@ alter table public.entitlements
   add column if not exists upgrade_order_id text,
   add column if not exists upgrade_paid_cents integer check (upgrade_paid_cents is null or upgrade_paid_cents >= 0),
   add column if not exists upgraded_from_product_id text,
-  add column if not exists upgraded_at timestamptz;
+  add column if not exists upgraded_at timestamptz,
+  -- Stanje Repair prava PRIJE nadogradnje (krug 4): povrat uplate nadogradnje ga vraca, pa placeni
+  -- Repair ostaje, a Final Pass za vracen novac nestaje (revert_entitlement_upgrade, odjeljak 9).
+  add column if not exists upgraded_from_offer_code text,
+  add column if not exists upgraded_from_capabilities text[],
+  add column if not exists upgraded_from_slot_window_days integer,
+  add column if not exists upgraded_from_purchase_expires_at timestamptz,
+  add column if not exists upgraded_from_slot_expires_at timestamptz,
+  add column if not exists upgrade_reverted_at timestamptz;
 
 -- Ako je raniji nacrt ove migracije ikad dodao kljuc na upgraded_from_product_id, ukloni ga.
 alter table public.entitlements drop constraint if exists entitlements_upgraded_from_product_id_fkey;
@@ -185,6 +196,10 @@ comment on column public.entitlements.paid_amount_cents is
   'Stvarno naplaceno pri kupnji (Stripe amount_received). NULL = nepoznato, nadogradnja tada nije dopustena.';
 comment on column public.entitlements.upgrade_order_id is
   'PaymentIntent nadogradnje Repair -> Final Pass koji je PRETVORIO ovo pravo (odjeljak 14). Najvise jedan.';
+comment on column public.entitlements.upgraded_from_slot_expires_at is
+  'Istek vezanog slota PRIJE nadogradnje; NULL = pravo pri nadogradnji nije bilo vezano uz rad.';
+comment on column public.entitlements.upgrade_reverted_at is
+  'Kad je puni povrat uplate nadogradnje vratio pravo na zapamceni Repair (revert_entitlement_upgrade).';
 
 -- ---------------------------------------------------------------------------------------------
 -- 4. Novi proizvodi (odjeljci 3, 5, 6, 25)
@@ -388,6 +403,7 @@ declare
   v_ent public.entitlements;
   v_target public.products;
   v_caps text[];
+  v_slot_prije timestamptz;
 begin
   if coalesce(p_upgrade_order_id, '') = '' then
     raise exception 'upgrade_order_missing';
@@ -433,8 +449,18 @@ begin
     return 'unavailable';
   end if;
 
+  -- Istek vezanog slota PRIJE pretvorbe (slot je gore zakljucan); NULL ako pravo jos nije vezano.
+  select max(s.slot_expires_at) into v_slot_prije
+    from public.document_slots s
+   where s.entitlement_id = p_entitlement_id;
+
   update public.entitlements
      set upgraded_from_product_id = product_id,
+         upgraded_from_offer_code = offer_code,
+         upgraded_from_capabilities = capabilities,
+         upgraded_from_slot_window_days = slot_window_days,
+         upgraded_from_purchase_expires_at = purchase_expires_at,
+         upgraded_from_slot_expires_at = v_slot_prije,
          product_id = v_target.id,
          offer_code = v_target.offer_code,
          capabilities = v_caps,
@@ -458,3 +484,77 @@ revoke all on function public.apply_entitlement_upgrade(uuid, uuid, text, text, 
 
 comment on function public.apply_entitlement_upgrade(uuid, uuid, text, text, integer, timestamptz, timestamptz) is
   'Atomska pretvorba Repair prava u Final Pass za isti entitlement (MONETIZACIJA_V1.md odjeljak 14). Samo webhook-mor.';
+
+-- ---------------------------------------------------------------------------------------------
+-- 9. Povrat uplate nadogradnje vraca Repair (odjeljak 14, krug 4)
+-- ---------------------------------------------------------------------------------------------
+-- Poziva je SAMO webhook-mor, kad je PUNO vracena uplata NADOGRADNJE (PaymentIntent u
+-- upgrade_order_id). Izvorna Repair uplata je i dalje naplacena, pa korisnik koji je prvo kupio
+-- Repair ne smije ostati bez njega (odjeljak 14), a Final Pass za vracen novac ne smije ostati.
+-- Zato se pravo NE gasi nego vraca na stanje zapamceno pri pretvorbi (upgraded_from_*):
+--  * proizvod, ponuda, prava, prozor slota i rok potrosnje Repaira;
+--  * vezani slot na istek prije nadogradnje; slot vezan TEK nakon nadogradnje (tada zapamcenog
+--    isteka nema) dobiva Repair prozor od trenutka vezivanja (bound_at + zapamceni prozor). least:
+--    povrat nikad ne produljuje slot.
+-- Ishodi: `reverted`; `duplicate` (vec vraceno: ponovljena dostava ili istodobna uplata i povrat;
+-- redak je zakljucan, pa pise samo jedan poziv); `inactive` (pravo je vec vraceno ili ponisteno,
+-- npr. jer je prvo vracena izvorna Repair uplata: nista se ne ozivljava); `not_found`;
+-- `no_snapshot` (stanje prije nadogradnje nije zapamceno: webhook tada pravo gasi i salje na
+-- rucni pregled, sigurnije nego pogadjati Repair iz danasnjeg kataloga).
+-- upgrade_order_id i upgrade_paid_cents ostaju kao trag, pa vraceno pravo samo sebe ne nadogradjuje
+-- ponovno (apply_entitlement_upgrade vraca `unavailable`); nova nadogradnja ide kroz rucni pregled.
+create or replace function public.revert_entitlement_upgrade(
+  p_upgrade_order_id text
+) returns text
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_ent public.entitlements;
+begin
+  if coalesce(p_upgrade_order_id, '') = '' then
+    raise exception 'upgrade_order_missing';
+  end if;
+
+  select * into v_ent from public.entitlements where upgrade_order_id = p_upgrade_order_id for update;
+  if not found then
+    return 'not_found';
+  end if;
+  if v_ent.upgrade_reverted_at is not null then
+    return 'duplicate';
+  end if;
+  if v_ent.status <> 'active' then
+    return 'inactive';
+  end if;
+  if v_ent.upgraded_from_product_id is null
+     or v_ent.upgraded_from_offer_code is null
+     or v_ent.upgraded_from_slot_window_days is null
+     or v_ent.upgraded_from_purchase_expires_at is null then
+    return 'no_snapshot';
+  end if;
+
+  update public.document_slots s
+     set slot_expires_at = least(
+           s.slot_expires_at,
+           coalesce(v_ent.upgraded_from_slot_expires_at,
+                    s.bound_at + make_interval(days => v_ent.upgraded_from_slot_window_days)))
+   where s.entitlement_id = v_ent.id;
+
+  update public.entitlements
+     set product_id = upgraded_from_product_id,
+         offer_code = upgraded_from_offer_code,
+         capabilities = upgraded_from_capabilities,
+         slot_window_days = upgraded_from_slot_window_days,
+         purchase_expires_at = upgraded_from_purchase_expires_at,
+         upgrade_reverted_at = now()
+   where id = v_ent.id;
+
+  return 'reverted';
+end;
+$$;
+
+revoke all on function public.revert_entitlement_upgrade(text) from public, anon, authenticated;
+
+comment on function public.revert_entitlement_upgrade(text) is
+  'Puni povrat uplate nadogradnje vraca pravo na zapamceni Repair (MONETIZACIJA_V1.md odjeljak 14). Samo webhook-mor.';

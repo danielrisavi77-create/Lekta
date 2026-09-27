@@ -725,7 +725,7 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     // proglasila tudjim ili nepostojecim i nikad ga ne bi ponovila (Codex pregled kruga 3).
     const { data: refundTargets, error: lookupErr } = await admin
       .from('entitlements')
-      .select('id, product_id, upgrade_order_id, upgrade_paid_cents')
+      .select('id, product_id, upgrade_order_id, upgrade_paid_cents, upgrade_reverted_at')
       .eq('provider', PROVIDER)
       .eq('order_id', ev.orderId);
     if (lookupErr) {
@@ -738,13 +738,16 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
       productId: String(r.product_id ?? ''),
       upgradeOrderId: typeof r.upgrade_order_id === 'string' ? r.upgrade_order_id : '',
       upgradePaidCents: typeof r.upgrade_paid_cents === 'number' ? r.upgrade_paid_cents : null,
+      upgradeReverted: typeof r.upgrade_reverted_at === 'string' && r.upgrade_reverted_at !== '',
     }));
     // Povrat IZVORNE (Repair) uplate prava koje je vec nadogradjeno u Final Pass gasi i nadogradnju,
     // a uplata nadogradnje ostaje naplacena. Pravo se svejedno gasi (sigurnije), ali to netko mora
     // vidjeti i odluciti o povratu nadogradnje. Trag je TRAJAN (nalaz pregleda kruga 3): ishod
     // `needs_manual_review` uz `outcome_note` s PaymentIntentom i iznosom nadogradnje, ne samo redak
-    // u logu koji istekne. `outcome_detail` ostaje `refunded` (REFUND_MARKERS).
-    const nadogradjeni = targets.filter((r) => r.upgradeOrderId !== '');
+    // u logu koji istekne. `outcome_detail` ostaje `refunded` (REFUND_MARKERS). Pravo cija je
+    // nadogradnja vec vracena (upgrade_reverted_at) opet je obican Repair, a uplata nadogradnje je
+    // vec vracena, pa tu nema druge uplate bez prava ni rucnog pregleda.
+    const nadogradjeni = targets.filter((r) => r.upgradeOrderId !== '' && !r.upgradeReverted);
     let rucniPregled: string | null = null;
     if (nadogradjeni.length > 0) {
       console.error('webhook-mor refund_of_upgraded_entitlement', {
@@ -771,12 +774,8 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
 
     // POVRAT UPLATE NADOGRADNJE (Monetizacija V1, odjeljak 14). Nadogradnja ne stvara vlastiti redak
     // nego pretvara postojeci, pa njezin PaymentIntent stoji u `upgrade_order_id`, ne u `order_id`.
-    // Bez ovog citanja bi povrat nadogradnje zavrsio kao `refund_without_entitlement`, a pravo bi
-    // ostalo `active`. Gasenje prava samo po sebi zatvara novo vezivanje slota; BESPLATAN re-check
-    // vezanog slota, kojem je nadogradnja produljila slot_expires_at na prozor Final Passa, zatvara
-    // tek citanje pristupa (readAccessRows, src/report/entitlement-access.ts), koje slot uzima samo
-    // uz aktivno pravo (krug 4; dotad je taj slot i nakon povrata do isteka davao besplatnu provjeru).
-    // Pad citanja je 500 (Stripe ponovi), isto kao gore.
+    // Bez ovog citanja bi povrat nadogradnje zavrsio kao `refund_without_entitlement`, a Final Pass
+    // bi ostao za vracen novac. Pad citanja je 500 (Stripe ponovi), isto kao gore.
     let upgradeIds: string[] = [];
     let upgradeSources: string[] = [];
     if (ownIds.length === 0) {
@@ -821,12 +820,36 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
         await pullReferralSignupReward(admin, ev.orderId); // isto za pozovi-prijatelja nagradu (0013)
       }
     }
-    // Nadogradjeno pravo se gasi CIJELO: nadogradnja ga je pretvorila u Final Pass, a stanje prije
-    // nje se ne cuva zasebno. Placeni Repair dio tako ostaje bez prava, i bez re-checka vezanog slota
-    // (readAccessRows ga uz ugaseno pravo ne vraca), pa je redak ERROR: operater odlucuje o povratu
-    // ili rucnom vracanju Repaira (docs/GO_LIVE_NAPLATA.md). Sigurnije je oduzeti previse nego
-    // ostaviti Final Pass za vracen novac.
+    // POVRAT NADOGRADNJE VRACA REPAIR (krug 4, odjeljak 14: korisnik koji je prvo kupio Repair ne
+    // smije biti kaznjen). Vracena je SAMO uplata nadogradnje; Repair uplata je i dalje naplacena.
+    // revert_entitlement_upgrade (0207) zato pravo ne gasi nego ga atomski vraca na stanje
+    // zapamceno pri pretvorbi: Repair proizvod, ponudu, prava, prozor, rok potrosnje i istek
+    // vezanog slota. Final Pass (i besplatan re-check u produljenom prozoru) nestaje, placeni Repair
+    // ostaje. Nista ne ceka operatera: ishod je `processed`/`refunded`, a `outcome_note` nosi trag.
+    // `inactive`: pravo je vec ugaseno (npr. prvo je vracena izvorna Repair uplata), nista se ne
+    // ozivljava. Samo pravo bez zapamcenog stanja (`no_snapshot`) se gasi cijelo i ide na rucni
+    // pregled: sigurnije je oduzeti previse nego ostaviti Final Pass za vracen novac.
+    let nadogradnjaVracena = false;
+    let biljeska: string | null = null;
     if (upgradeIds.length > 0) {
+      const { data: vracanje, error: vracanjeErr } = await admin.rpc('revert_entitlement_upgrade', {
+        p_upgrade_order_id: ev.orderId,
+      });
+      if (vracanjeErr) {
+        console.error('webhook-mor refund_update_failed', { orderId: ev.orderId, error: dbErrorMessage(vracanjeErr) });
+        await settle('failed', 'refund_pending');
+        return json({ error: 'refund_failed' }, 500);
+      }
+      const ishodVracanja = String(vracanje ?? '');
+      if (ishodVracanja === 'reverted' || ishodVracanja === 'duplicate' || ishodVracanja === 'inactive') {
+        nadogradnjaVracena = true;
+        console.warn('webhook-mor upgrade_reverted', { orderId: ev.orderId, entitlementIds: upgradeIds, ishod: ishodVracanja });
+        biljeska = `upgrade_reverted: ${upgradeSources.join('; ')} ishod=${ishodVracanja}`;
+      }
+    }
+    // Pravo bez zapamcenog stanja prije nadogradnje: gasi se cijelo, placeni Repair ostaje bez
+    // prava, pa ERROR i trajan rucni pregled (povrat Repaira ili rucno vezivanje novog Repair prava).
+    if (upgradeIds.length > 0 && !nadogradnjaVracena) {
       const { data: upgradeRefunded, error: upgradeRefundErr } = await admin
         .from('entitlements')
         .update({ status: 'refunded' })
@@ -868,13 +891,18 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
 
     // Rucna narudzba nema entitlement, a povrat ju je upravo zatvorio (ili je vec bila zatvorena),
     // pa je ishod `refunded`, isti kao za entitlement.
-    if (pravoUgaseno || posljedice.manualOrderFound) {
+    if (pravoUgaseno || nadogradnjaVracena || posljedice.manualOrderFound) {
       // Povrat koji dira nadogradnju ostavlja jednu uplatu bez prava: ishod `needs_manual_review`
       // ulazi u dnevni upit rucnog pregleda (docs/GO_LIVE_NAPLATA.md 5.1 i 5.2), a oznaka punog
       // povrata ostaje `refunded` pa je uplata i radnik bonusa i dalje vide.
       if (rucniPregled !== null) {
         await settle('needs_manual_review', 'refunded', rucniPregled);
         return json({ ok: true, action: 'refunded', review: rucniPregled.slice(0, rucniPregled.indexOf(':')) });
+      }
+      // Nadogradnja vracena na Repair: nista ne ceka operatera, ali trag ostaje u inboxu.
+      if (biljeska !== null) {
+        await settle('processed', 'refunded', biljeska);
+        return json({ ok: true, action: 'refunded', upgrade: 'reverted' });
       }
       await settle('processed', 'refunded');
       return json({ ok: true, action: 'refunded' });
@@ -1338,11 +1366,11 @@ interface UpgradeDb {
     select(columns: string): UpgradeQuery;
     update(values: Record<string, string>): UpgradeQuery;
   };
-  rpc(fn: 'apply_entitlement_upgrade', args: Record<string, string | number | null>): PromiseLike<DbResponse>;
+  rpc(fn: 'apply_entitlement_upgrade' | 'revert_entitlement_upgrade', args: Record<string, string | number | null>): PromiseLike<DbResponse>;
 }
 
 /** Zapis ishoda u inbox (settle iz handlera). */
-type Settle = (outcome: string | null, detail?: string) => Promise<boolean>;
+type Settle = (outcome: string | null, detail?: string, note?: string) => Promise<boolean>;
 
 /**
  * UPLATA NADOGRADNJE Repair -> Final Pass (Monetizacija V1, odjeljak 14). Pretvara POSTOJECE pravo
@@ -1357,7 +1385,8 @@ type Settle = (outcome: string | null, detail?: string) => Promise<boolean>;
  *  3. apply_entitlement_upgrade (0207) pretvara pravo atomski i jednom; `unavailable` znaci da ga
  *     je u medjuvremenu promijenilo nesto drugo (npr. druga uplata nadogradnje), pa rucni pregled.
  *  4. Pisi pa citaj, kao i obicna uplata: tek nakon pretvorbe se cita oznaka punog povrata ISTE
- *     uplate; ako je tu, nadogradjeno pravo se gasi.
+ *     uplate; ako je tu, pretvorba se vraca na zapamceni Repair (revert_entitlement_upgrade), isto
+ *     kao u grani povrata. Placeni Repair ostaje, Final Pass za vracen novac nestaje.
  * Nadogradnja ne izdaje bonuse (pass kupon, nagrada preporucitelju): to su posljedice prve kupnje.
  */
 async function bookUpgradePayment(
@@ -1496,8 +1525,31 @@ async function bookUpgradePayment(
     return json({ error: 'refund_marker_lookup_failed' }, 500);
   }
   if (dbRows(oznaka).length > 0) {
-    // Ugaseno pravo zatvara i besplatan re-check vezanog slota koji je pretvorba upravo produljila:
-    // readAccessRows slot uzima samo uz aktivno pravo (krug 4).
+    // POVRAT STIGAO ISTODOBNO S PRETVORBOM (krug 4). Pravo se NE gasi: vraca se na Repair zapamcen
+    // pri pretvorbi (revert_entitlement_upgrade, 0207), jer je vracena samo uplata nadogradnje, a
+    // Repair uplata ostaje naplacena (odjeljak 14). Final Pass i produljen slot tako nestaju,
+    // placeni Repair i njegov re-check ostaju. Trag ide u `outcome_note`.
+    const izvor = `pravo=${ev.upgradeFromEntitlementId} izvorna_uplata=${source?.orderId || 'nepoznato'} naplaceno_repair=${source?.paidAmountCents ?? 'nepoznato'}`;
+    const { data: vracanje, error: vracanjeErr } = await admin.rpc('revert_entitlement_upgrade', {
+      p_upgrade_order_id: ev.orderId,
+    });
+    if (vracanjeErr) {
+      console.error('webhook-mor refund_consequences_failed', {
+        orderId: ev.orderId,
+        step: 'upgrade_revert',
+        error: dbErrorMessage(vracanjeErr),
+      });
+      await settle('failed', `refunded_before_payment: upgrade_revert: ${dbErrorMessage(vracanjeErr)}`);
+      return json({ error: 'refund_failed' }, 500);
+    }
+    const ishodVracanja = String(vracanje ?? '');
+    if (ishodVracanja === 'reverted' || ishodVracanja === 'duplicate' || ishodVracanja === 'inactive') {
+      console.warn('webhook-mor refunded_before_payment', { orderId: ev.orderId, productId: product.id, upgrade: true, ishod: ishodVracanja });
+      await settle('processed', 'refunded_before_payment', `upgrade_reverted: ${izvor} ishod=${ishodVracanja}`);
+      return json({ ok: true, action: 'refunded_before_payment' }, 200);
+    }
+    // Stanje prije pretvorbe nije zapamceno (ili pravo nije nadjeno): gasi se cijelo, a placeni
+    // Repair ostaje bez prava, pa trajan rucni pregled (isto kao grana povrata).
     const { error: gasiErr } = await admin
       .from('entitlements')
       .update({ status: 'refunded' })
@@ -1512,9 +1564,9 @@ async function bookUpgradePayment(
       await settle('failed', `refunded_before_payment: upgrade_entitlement_update: ${dbErrorMessage(gasiErr)}`);
       return json({ error: 'refund_failed' }, 500);
     }
-    console.error('webhook-mor refunded_before_payment', { orderId: ev.orderId, productId: product.id, upgrade: true });
-    await settle('processed', 'refunded_before_payment');
-    return json({ ok: true, action: 'refunded_before_payment' }, 200);
+    console.error('webhook-mor upgrade_refunded', { orderId: ev.orderId, productId: product.id, ishod: ishodVracanja });
+    await settle('needs_manual_review', 'refunded_before_payment', `upgrade_refunded: ${izvor} ishod=${ishodVracanja}`);
+    return json({ ok: true, action: 'refunded_before_payment', review: 'upgrade_refunded' }, 200);
   }
 
   if (ponovljeno) {

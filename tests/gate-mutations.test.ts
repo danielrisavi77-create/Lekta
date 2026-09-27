@@ -123,6 +123,7 @@ import {
   readMigration,
   runV1,
   snapshotProblems,
+  upgradeRevertSqlProblems,
   upgradeSqlProblems,
 } from './helpers/monetizacija-v1-sql';
 import { findBotsImplementingProtected, findSameProviderWithoutFallback, findUnverifiedModelUsages, type BotSpec } from './helpers/agent-routing-checks';
@@ -5614,6 +5615,32 @@ const MUTATIONS: Mutation[] = [
     },
     cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
   },
+  {
+    id: 'naplata/povrat-nadogradnje-gasi-repair',
+    imitates: 'krug 4 prvi pokusaj: puni povrat SAMO uplate nadogradnje gasi cijelo pravo u refunded, pa placeni Repair ostaje bez prava i bez re-checka (odjeljak 14)',
+    caught: () => {
+      const src = webhookMorSource();
+      // Grana povrata bez vracanja: pricuvno gasenje se izvrsava uvijek.
+      const mutated = src.replace('    if (upgradeIds.length > 0 && !nadogradnjaVracena) {', '    if (upgradeIds.length > 0) {');
+      if (mutated === src) return false;
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('gasi pravo umjesto da ga vrati'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/istodobni-povrat-nadogradnje-gasi-repair',
+    imitates: 'krug 4 nalaz pregleda: u bookUpgradePayment istodobni povrat (pretvorba pa oznaka) gasi pravo u refunded uz processed/refunded_before_payment, bez traga i bez placenog Repaira',
+    caught: () => {
+      const src = webhookMorSource();
+      const start = src.indexOf('async function bookUpgradePayment(');
+      const od = src.indexOf("    const { data: vracanje, error: vracanjeErr } = await admin.rpc('revert_entitlement_upgrade', {", start);
+      const _do = src.indexOf('    // Stanje prije pretvorbe nije zapamceno', od);
+      if (start < 0 || od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      return upgradeRefundTraceProblems(mutated).some((p) => p.includes('istodobni povrat uplate nadogradnje'));
+    },
+    cleanBefore: () => upgradeRefundTraceProblems(webhookMorSource()).length === 0,
+  },
   // --- naplata: F21 (docs/agents/orchestrator-backlog.md), zatvoreno u Monetizaciji V1 (M2) ---------
   {
     id: 'naplata/f21-povrat-ne-otkazuje-obvezu',
@@ -6441,6 +6468,55 @@ describe('mutacije: Monetizacija V1 izvrseni gardovi', () => {
     const run = await runV1(mutated);
     try {
       expect((await upgradeSqlProblems(run.db)).some((p) => p.includes('nevezan izvan roka potrosnje'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje baseline cist nad svjezom bazom', async () => {
+    const run = await runV1();
+    try {
+      expect(await upgradeRevertSqlProblems(run.db)).toEqual([]);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: revert_entitlement_upgrade bez vracanja slota ostavlja produljen prozor i obara gard (dan 60 besplatan)', async () => {
+    const mutated = mutirajRe(/  update public\.document_slots s\r?\n     set slot_expires_at = least\(/, '  update public.document_slots s\n     set slot_expires_at = greatest(');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('dan 60'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje koji gasi pravo (umjesto vracanja Repaira) obara gard placenog Repaira', async () => {
+    const mutated = mutirajRe(/         upgrade_reverted_at = now\(\)\r?\n   where id = v_ent\.id;/, "         upgrade_reverted_at = now(),\n         status = 'refunded'\n   where id = v_ent.id;");
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('Repair kupac kaznjen'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: pretvorba koja ne pamti istek slota prije nadogradnje obara gard (ozivljen slot ostaje produljen)', async () => {
+    const mutated = mutirajRe(/upgraded_from_slot_expires_at = v_slot_prije,/, 'upgraded_from_slot_expires_at = null,');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ozivljen slot'))).toBe(true);
+    } finally {
+      await run.db.close();
+    }
+  }, ROK_SQL);
+
+  it('krug 4: povrat nadogradnje koji ozivljava vec ugaseno pravo obara gard', async () => {
+    const mutated = mutirajRe(/  if v_ent\.status <> 'active' then\r?\n    return 'inactive';\r?\n  end if;\r?\n/, '');
+    const run = await runV1(mutated);
+    try {
+      expect((await upgradeRevertSqlProblems(run.db)).some((p) => p.includes('ugasenog prava'))).toBe(true);
     } finally {
       await run.db.close();
     }

@@ -583,6 +583,25 @@ export function upgradeRefundTraceProblems(webhookSrc: string): string[] {
   if (!w.includes('rucniPregled = `upgrade_refunded: ')) {
     problems.push('povrat uplate nadogradnje ne sastavlja biljesku za rucni pregled (placeni Repair bez prava samo u logu)');
   }
+  // Krug 4 (nalaz pregleda): povrat SAMO uplate nadogradnje vraca pravo na zapamceni Repair
+  // (revert_entitlement_upgrade), i u grani povrata i u grani uplate kad povrat stigne istodobno.
+  // Gasenje u refunded smije biti samo pricuva za pravo bez zapamcenog stanja (no_snapshot).
+  const poziv = "admin.rpc('revert_entitlement_upgrade', {";
+  const granaPovrata = w.indexOf('  if (decision.kind === \'refund\') {');
+  const krajPovrata = granaPovrata < 0 ? -1 : w.indexOf("console.error('webhook-mor refund_without_entitlement'", granaPovrata);
+  const povrat = granaPovrata >= 0 && krajPovrata > granaPovrata ? w.slice(granaPovrata, krajPovrata) : '';
+  const vracanjeUPovratu = povrat.indexOf(poziv);
+  const gasenjeNadogradnje = povrat.indexOf(".eq('upgrade_order_id', ev.orderId)\n        .in('id', upgradeIds)");
+  if (vracanjeUPovratu < 0 || (gasenjeNadogradnje >= 0 && gasenjeNadogradnje < vracanjeUPovratu)
+    || !povrat.includes('if (upgradeIds.length > 0 && !nadogradnjaVracena) {')) {
+    problems.push('povrat uplate nadogradnje gasi pravo umjesto da ga vrati na placeni Repair (odjeljak 14)');
+  }
+  const uplata = w.slice(Math.max(0, w.indexOf('async function bookUpgradePayment(')));
+  const vracanjeUUplati = uplata.indexOf(poziv);
+  const gasenjeUUplati = uplata.indexOf(".update({ status: 'refunded' })");
+  if (vracanjeUUplati < 0 || gasenjeUUplati < 0 || gasenjeUUplati < vracanjeUUplati) {
+    problems.push('istodobni povrat uplate nadogradnje gasi pretvoreno pravo umjesto da ga vrati na placeni Repair');
+  }
   const pregled = w.indexOf("await settle('needs_manual_review', 'refunded', rucniPregled);");
   const obicno = w.indexOf("await settle('processed', 'refunded');");
   if (pregled < 0 || obicno < 0 || pregled > obicno || !w.slice(Math.max(0, pregled - 200), pregled).includes('if (rucniPregled !== null) {')) {
