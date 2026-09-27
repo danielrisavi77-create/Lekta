@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { opportunitySignalForEvent } from '../src/analytics/opportunity-signal';
+import { opportunitySignalForEvent, repairNoOpSignals, structureGapSignalsForEvent } from '../src/analytics/opportunity-signal';
 
 describe('opportunitySignalForEvent', () => {
   it('izvodi samo agregirane brojace bez teksta rada', () => {
@@ -20,6 +20,7 @@ describe('opportunitySignalForEvent', () => {
       assisted: 2,
       manual: 3,
       unknown: 2,
+      structureGaps: 0,
       total: 9,
       kind: 'manual',
     });
@@ -38,15 +39,49 @@ describe('opportunitySignalForEvent', () => {
       assisted: 0,
       manual: 0,
       unknown: 0,
+      structureGaps: 0,
       total: 0,
       kind: 'clear',
     });
   });
 
-  it('unknown ima prednost pred assisted kad nema manual nalaza', () => {
+  it('unknown ima prednost pred structure gapom i assisted kad nema manual nalaza', () => {
     expect(opportunitySignalForEvent({
       checks: [{ status: 'unmeasurable' }],
-      details: { triage: { counts: { auto: 2, assisted: 1, manual: 0, total: 3 } } },
+      details: {
+        triage: { counts: { auto: 2, assisted: 1, manual: 0, total: 3 } },
+        typographyStructure: { skipped: [{ reason: 'unsupported-structure' }] },
+      },
     }, 'partial').kind).toBe('unknown');
+  });
+
+  it('strukturirane skip razloge svodi na sigurni enum bez slanja izvornog razloga', () => {
+    const signals = structureGapSignalsForEvent({
+      details: {
+        typographyStructure: { skipped: [{ reason: 'unsupported textbox: tajni detalj' }, { reason: 'unsupported run' }] },
+        consistencyStructure: { skipped: [{ reason: 'stale-anchor: odlomak 42' }] },
+        linkDoiStructure: { skipped: [{ reason: 'nepoznat slobodni tekst' }] },
+      },
+    });
+    expect(signals).toEqual([
+      { category: 'typography', kind: 'unsupported-structure', count: 2 },
+      { category: 'consistency', kind: 'stale-anchor', count: 1 },
+      { category: 'link-doi', kind: 'other', count: 1 },
+    ]);
+    expect(JSON.stringify(signals)).not.toContain('tajni detalj');
+    expect(JSON.stringify(signals)).not.toContain('odlomak 42');
+  });
+
+  it('repair no-op razloge grupira bez ruleId-a i odbacuje nepoznatu vrijednost u unclassified', () => {
+    expect(repairNoOpSignals({
+      'rule-1': 'unsupported-structure',
+      'rule-2': 'unsupported-structure',
+      'rule-3': 'invalid-params',
+      'tajni-rule-id': 'slobodni tekst',
+    })).toEqual([
+      { kind: 'unsupported-structure', count: 2 },
+      { kind: 'invalid-params', count: 1 },
+      { kind: 'unclassified', count: 1 },
+    ]);
   });
 });
