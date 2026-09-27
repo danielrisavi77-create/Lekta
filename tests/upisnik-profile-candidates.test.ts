@@ -2331,10 +2331,16 @@ describe('Upisnik heuristic guard redesign', () => {
   it('uses component host keys under university roots and allows a university itself', () => {
     expect(fixture('Elektrotehnika', 'fesb', 'https://data.fesb.unist.hr/studij', 'Elektrotehnika').programs[0]?.coverageStatus).toBe('verified');
     expect(fixture('Ekonomija', 'unidu', 'https://unidu.hr/studij', 'Ekonomija').programs[0]?.coverageStatus).toBe('verified');
+    expect(fixture('Strojarstvo', 'sfsb', 'https://sfsb.unisb.hr/studij', 'Strojarstvo').programs[0]?.coverageStatus).toBe('verified');
+    expect(fixture('Strojarstvo', 'unisb', 'https://unisb.hr/studij', 'Strojarstvo').programs[0]?.coverageStatus).toBe('verified');
     const rows = [{ sifraUpisnik: '1', naziv: 'Elektrotehnika', izvoditelj: 'RITEH', vrsta: 'Sveucilisni prijediplomski studij' }];
     const components = [{ programCode: '1', executors: [{ componentIds: ['riteh'] }] }];
     const profiles = [{ id: 'profile', unitId: 'riteh', programs: ['Elektrotehnika'], workTypes: ['final'], sources: [{ url: 'https://uniri.hr/studij' }] }];
     expect(() => buildUpisnikProfileCandidates(rows, components, profiles, [decision('1', 'profile', 'https://medri.uniri.hr/studij', 'Elektrotehnika')])).toThrow(/source domain/u);
+    const sfsbRows = [{ sifraUpisnik: '1', naziv: 'Strojarstvo', izvoditelj: 'SFSB', vrsta: 'Sveucilisni prijediplomski studij' }];
+    const sfsbComponents = [{ programCode: '1', executors: [{ componentIds: ['sfsb'] }] }];
+    const sfsbProfiles = [{ id: 'profile', unitId: 'sfsb', programs: ['Strojarstvo'], workTypes: ['final'], sources: [{ url: 'https://unisb.hr/studij' }] }];
+    expect(() => buildUpisnikProfileCandidates(sfsbRows, sfsbComponents, sfsbProfiles, [decision('1', 'profile', 'https://teho.unisb.hr/studij', 'Strojarstvo')])).toThrow(/source domain/u);
     for (const url of ['https://ffzg.unizg.hr/studij', 'https://unicath.hr/studij']) {
       const fhsRows = [{ sifraUpisnik: '1', naziv: 'Povijest', izvoditelj: 'FHS', vrsta: 'Sveucilisni prijediplomski studij' }];
       const fhsComponents = [{ programCode: '1', executors: [{ componentIds: ['fhs'] }] }];
@@ -2346,6 +2352,7 @@ describe('Upisnik heuristic guard redesign', () => {
   it('rejects cross-unit university hosts and unrelated public suffix domains', () => {
     const cases = [
       ['riteh', 'https://uniri.hr/studij', 'https://medri.uniri.hr/studij'],
+      ['sfsb', 'https://unisb.hr/studij', 'https://teho.unisb.hr/studij'],
       ['fhs', 'https://fhs.unizg.hr/studij', 'https://ffzg.unizg.hr/studij'],
       ['fhs', 'https://fhs.unizg.hr/studij', 'https://unicath.hr/studij'],
       ['kbf', 'https://kbf.unizg.hr/studij', 'https://kbf.unist.hr/studij'],
