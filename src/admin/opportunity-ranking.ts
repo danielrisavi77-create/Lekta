@@ -1,4 +1,4 @@
-import type { OpportunityRow } from './admin-types';
+import type { OpportunityBucket, OpportunityRow } from './admin-types';
 
 export interface RankedOpportunityRow extends OpportunityRow {
   sample: 'enough' | 'low';
@@ -13,18 +13,50 @@ export interface RankedOpportunityRow extends OpportunityRow {
  */
 export function rankOpportunityRows(rows: readonly OpportunityRow[]): RankedOpportunityRow[] {
   return rows
-    .map((row) => ({ ...row, sample: row.denominator >= 20 ? 'enough' as const : 'low' as const }))
+    .map((row) => ({
+      ...row,
+      sample: row.denominator >= 20 ? 'enough' as const : 'low' as const,
+      evidence: row.basis === 'event_count_proxy' ? 'proxy' as const : 'direct' as const,
+    }))
     .sort((a, b) => {
       // Event-count proxy nije jednako jak dokaz kao signal vezan uz jednu analizu/profil/repair run.
       // Bez ove granice bi npr. 80% paywall event-gapa mogao postati "najjaci signal" ispred
       // stvarnog 30% manual gapa, iako prvi nije cohort mjera.
-      const aProxy = a.basis === 'event_count_proxy';
-      const bProxy = b.basis === 'event_count_proxy';
-      if (aProxy !== bProxy) return aProxy ? 1 : -1;
+      if (a.evidence !== b.evidence) return a.evidence === 'direct' ? -1 : 1;
       if (a.sample !== b.sample) return a.sample === 'enough' ? -1 : 1;
       const ar = a.ratePct ?? -1;
       const br = b.ratePct ?? -1;
       if (ar !== br) return br - ar;
       return b.affected - a.affected;
     });
+}
+
+
+export interface OpportunityMeasurementHealth {
+  kind: 'no-data' | 'healthy' | 'partial';
+  analysisDelta: number;
+  structureDelta: number;
+}
+
+/**
+ * Neovisni brojači dokazuju da instrumentation nije utihnuo.
+ * Exact parity je namjerno strog: kratki prijelaz preko granice vremenskog prozora može dati
+ * privremeni mismatch, ali to je bolji ishod nego proglasiti nepotpun report zelenim.
+ */
+export function opportunityMeasurementHealth(
+  bucket: Pick<
+    OpportunityBucket,
+    'analysisCompletedEvents' | 'opportunityEvents' | 'structureGapItems' | 'structureBreakdownItems'
+  >,
+): OpportunityMeasurementHealth {
+  const analysisDelta = bucket.opportunityEvents - bucket.analysisCompletedEvents;
+  const structureDelta = bucket.structureBreakdownItems - bucket.structureGapItems;
+  if (bucket.analysisCompletedEvents === 0 && bucket.opportunityEvents === 0) {
+    return { kind: 'no-data', analysisDelta, structureDelta };
+  }
+  return {
+    kind: analysisDelta === 0 && structureDelta === 0 ? 'healthy' : 'partial',
+    analysisDelta,
+    structureDelta,
+  };
 }
