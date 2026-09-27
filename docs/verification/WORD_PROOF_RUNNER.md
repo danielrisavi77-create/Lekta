@@ -12,25 +12,29 @@ greska i ne blokira merge: `word-proof` nije obvezna provjera.
 ## 1. Sigurnost: repo je javan
 
 GitHub izricito upozorava da self-hosted runner na javnom repozitoriju moze izvrsiti tudji kod.
-Zato vrijedi sve od navedenog, i svaka stavka ima svoj razlog:
+**Granica pristupa stroju su postavke repozitorija iz odjeljka 6, ne workflow ni gard.** Workflow
+i gard samo smanjuju rizik:
 
-- **Workflow nema `pull_request` ni `pull_request_target` trigera.** Pokrece ga samo `push` na
-  `master` ili `release/**` i rucni `workflow_dispatch`; oba traze pravo pisanja.
-- **Job ima uvjet** `github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'`.
-- **Porijeklo commita:** prije ijednog koraka koji izvrsava kod iz stabla provjerava se da je
-  commit na nekoj grani ovog repozitorija. SHA iz fork PR-a se odbija.
-- **Nula tajni i token samo za citanje** (`permissions: contents: read`).
-- **Gard:** `tests/ci-workflow-triggers.test.ts` (`findSelfHostedProblems`) rusi CI ako BILO KOJI
-  drugi workflow zatrazi `self-hosted`, ako se doda fork trigger, makne fork uvjet, prosiri token
-  ili spomene `secrets.`. Mutacije su u `tests/gate-mutations.test.ts`.
+- Workflow ima samo `push` na `master` i `release/**` te rucni `workflow_dispatch`; oba traze
+  pravo pisanja. Nema `pull_request`, `pull_request_target`, `workflow_call` ni drugih trigera.
+- Job ima uvjet `github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'`.
+- **Porijeklo commita:** prvi korak nakon checkouta, prije ijednog koraka koji izvrsava kod iz
+  stabla. Uz rucno pokretanje commit mora biti TOCAN trenutni vrh `origin/master` ili
+  `origin/release/*`; povijesni commit, vraceni commit, tag ili SHA iz fork PR-a se odbijaju.
+  Uz push commit mora biti bas commit tog pusha na `master` ili `release/*`.
+- Nula eksplicitno proslijedjenih tajni i token samo za citanje (`permissions: contents: read`,
+  `persist-credentials: false`). To nije potpuna izolacija: kod koji se izvrsi na stroju vidi
+  datoteke i varijable okoline korisnika runnera.
+- **Gard** `findSelfHostedProblems` u `tests/ci-workflow-triggers.test.ts` rusi CI ako:
+  - `word-proof.yml` odstupi od tocno propisanog oblika (trigeri, grane bez tagova, `runs-on`,
+    doslovni `if`, token, rijec `secrets` u bilo kojem obliku, redoslijed provjere porijekla);
+  - BILO KOJI job u bilo kojem drugom workflowu ima `runs-on` koji nije jedna GitHub-hosted oznaka
+    (`ubuntu-latest` i slicno). Gola `word`, `windows`, `self-hosted`, izraz `${{ ... }}` i runner
+    grupa padaju. Mutacije su u `tests/gate-mutations.test.ts`.
 
-Gard stiti samo datoteke u repou. Netko moze u fork PR-u dodati VLASTITI workflow s
-`runs-on: self-hosted`. Zato je obvezna i postavka repozitorija:
-
-1. GitHub, repozitorij Lekta, **Settings > Actions > General**.
-2. Pod "Approval for running fork pull request workflows from contributors" odaberi
-   **Require approval for all external contributors**.
-3. Nikad ne odobravaj run fork PR-a koji dira `.github/workflows/`, a da ga nisi procitao.
+Gard vidi samo datoteke u repou. Fork PR moze donijeti VLASTITI workflow koji cilja stroj, a
+suradnik s pravom pisanja moze pokrenuti izmijenjenu verziju workflowa sa svoje grane. Zato
+vrijedi odjeljak 6.
 
 Stroj:
 
@@ -45,10 +49,11 @@ Stroj:
 2. Instaliraj **Git for Windows** (https://git-scm.com). Nakon instalacije dodaj
    `C:\Program Files\Git\bin` u PATH korisnika (Postavke sustava > Varijable okruzenja > Path).
    Workflow koristi `bash` iz te mape; preflight korak javlja gresku ako ga nema.
-3. Provjeri Word iz PowerShella (prijavljen kao korisnik runnera):
+3. Provjeri Word iz PowerShella (prijavljen kao korisnik runnera). Primjer sam gasi Word, da ne
+   ostavi proces:
 
    ```powershell
-   powershell -c "(New-Object -ComObject Word.Application).Version"
+   $w = New-Object -ComObject Word.Application; try { $w.Version } finally { $w.Quit() }
    ```
 
    Ocekivano: broj verzije, npr. `16.0`. Otvori Word jednom rucno i zatvori sve dijaloge prvog
@@ -70,32 +75,77 @@ Stroj:
    ```
 
    Token vrijedi kratko i sluzi samo za registraciju; ne sprema se nigdje.
-3. **Ne instaliraj runner kao Windows servis.** Servis radi u izoliranoj sesiji 0, u kojoj
+3. Provjeri verziju runnera: `.\config.cmd --version` mora biti **2.327.1 ili novija**
+   (`actions/checkout@v7` i `actions/setup-node@v7` je traze). Runner se inace sam azurira.
+4. **Ne instaliraj runner kao Windows servis.** Servis radi u izoliranoj sesiji 0, u kojoj
    Microsoft ne podrzava automatizaciju Officea; Word COM ondje visi ili pada bez poruke. Runner
    mora raditi u prijavljenoj korisnickoj sesiji:
    - Task Scheduler > Create Task; okidac **At log on** za korisnika runnera;
    - akcija `C:\actions-runner\run.cmd`, "Start in" `C:\actions-runner`;
    - "Run only when user is logged on"; bez "Run with highest privileges";
    - po zelji ukljuci automatsku prijavu tog korisnika nakon ponovnog pokretanja stroja.
-4. Na stranici **Settings > Actions > Runners** runner mora biti **Idle** (zeleno).
+5. **Korisnik mora ostati prijavljen.** Zakljucavanje zaslona (Win+L) je u redu; odjava gasi
+   runner i sve njegove procese.
+6. Na stranici **Settings > Actions > Runners** runner mora biti **Idle** (zeleno).
 
 ## 4. Pokretanje
 
 - **Automatski:** svaki push na `master` ili `release/**` vrti cetiri Word razine
   (`npm run release:check -- --only=word,word-worst,word-corpus,word-toc`, oko 10 minuta).
-- **Rucno:** Actions > word-proof > Run workflow:
-  - `ref`: grana, tag ili commit (zadano `master`);
+- **Rucno:** Actions > word-proof > Run workflow, s workflowom s grane `master`:
+  - `ref`: `master` ili `release/<ime>`; mora biti tocan trenutni vrh te grane;
   - `razine`: `word` (cetiri Word razine) ili `sve` (puni `npm run release:check`, oko 70 minuta).
-- **Rezultat:** artefakt `word-proof-<run id>` sadrzi `docs/generated/RELEASE_PROOF.json` i puni
-  log. Uz `word` dokaz je `partial: true`; potpun (`complete: true`) moze biti samo uz `sve`.
-  Artefakt se ne commita automatski: koordinator ga usporedjuje s lokalnim dokazom i odlucuje.
+- **Rezultat:**
+  - `word-proof-<run id>`: `RELEASE_PROOF.json` i `sazetak.txt`. Objavljuje se SAMO kad je dokaz
+    nastao u tom runu za taj commit (commit jednak HEAD-u, `createdAt` nakon pocetka runa). Uz
+    `word` dokaz je `partial: true`; potpun (`complete: true`) moze biti samo uz `sve`.
+  - `word-proof-FAILED-<run id>`: samo `sazetak.txt`, kad svjezeg dokaza nema.
+  - Sazetak sadrzi samo retke razina i ishoda, s redaktiranim putanjama i korisnickim imenom.
+    Puni log NIJE u artefaktu (artefakte javnog repoa moze preuzeti svaki prijavljeni korisnik):
+    ostaje na stroju u `%LOCALAPPDATA%\lekta-word-proof\logs\<run id>.log`.
+  - Artefakt se ne commita automatski: koordinator ga usporedjuje s lokalnim dokazom i odlucuje.
 
 ## 5. Kad nesto ne radi
 
-| Simptom | Znacenje |
+| Simptom | Znacenje i postupak |
 | --- | --- |
-| Job stoji na **Queued** | nijedan runner s oznakama `self-hosted, windows, word` nije Idle (stroj ugasen, runner nije pokrenut, korisnik nije prijavljen) |
+| Job stoji na **Queued** | nijedan runner s oznakama `self-hosted, windows, word` nije Idle (stroj ugasen, runner nije pokrenut, korisnik odjavljen) |
+| "Word vec radi u sesiji runnera" | u sesiji je otvoren Word (zaostali proces ili tvoj dokument). Run nista ne gasi: spremi i zatvori Word, u Task Manageru provjeri da nema `WINWORD.EXE`, pa pokreni ponovno |
+| "Word proces iz ovog runa nije zavrsio" | automatizacija je zapela; zatvori `WINWORD.EXE` u Task Manageru prije sljedeceg runa |
 | Preflight pada na `New-Object -ComObject Word.Application` | Word nije instaliran ili aktiviran za tog korisnika, ili ceka dijalog prvog pokretanja |
 | Preflight pada na `Get-Command bash` | `C:\Program Files\Git\bin` nije u PATH-u korisnika runnera |
-| "Commit ... nije ni na jednoj grani" | `ref` pokazuje na commit izvan ovog repozitorija (npr. fork PR); namjerno odbijeno |
+| "nije tocan vrh origin/master ni origin/release/*" | `ref` pokazuje na stari commit, tag ili commit izvan ovog repozitorija; namjerno odbijeno |
 | Job skipped | pokrenut je u forku ili drugom repozitoriju; namjerno |
+
+## 6. Preostali rizik i mjere (Codex F1, F2, F4 na #162)
+
+Tri rizika kod ne moze zatvoriti:
+
+- **F1:** fork PR moze donijeti vlastiti workflow koji cilja stroj; gard ga ne vidi jer nije u repou.
+- **F2:** `workflow_dispatch` pokrece verziju workflowa s grane koju odabere pokretac, pa suradnik
+  s pravom pisanja moze pokrenuti izmijenjenu verziju bez provjera. Isto vrijedi za izmijenjeni
+  workflow pushan na `release/**`.
+- **F4:** `npm ci` i `release:check` izvrsavaju `package.json` i kod odabrane grane, ukljucujuci
+  lifecycle skripte ovisnosti.
+
+Zato runner u javnom repou stite **postavke**, i sve ove mjere moraju biti ukljucene PRIJE
+registracije runnera:
+
+1. **Jedini suradnik s pravom pisanja je vlasnik** (Settings > Collaborators).
+2. **Settings > Actions > General**, "Approval for running fork pull request workflows from
+   contributors": **Require approval for all external contributors**. Nikad ne odobravaj run fork
+   PR-a koji dira `.github/`, `package.json` ili `package-lock.json` a da ga nisi procitao.
+3. **Branch protection** (Settings > Branches) za `master` i `release/**`: PR obvezan prije
+   mergea, ukljucen "Do not allow bypassing the above settings" (enforce admins).
+4. **Rucni `workflow_dispatch` pokrece samo vlasnik**, i to samo s workflowom s grane `master`.
+5. **Dugorocno:** izvrsavanje preseliti u zaseban PRIVATNI repozitorij koji prima samo provjereni
+   SHA iz ovog repoa (uz T63). Tek tada je granica tehnicka, a ne organizacijska.
+
+Vlasnik odlucuje hoce li se runner registrirati prije mjere 5, uz mjere 1 do 4.
+
+Stanje 2026-09-27 prema koordinatoru lekta-32 (provjereno GitHub API-jem u 13:40, u sesiji
+izvrsitelja NIJE neovisno provjereno): jedini suradnik s pravom pisanja je vlasnik; `master` ima
+branch protection (PR obvezan, enforce admins, 6 obveznih provjera); odobrenje fork PR workflowa za
+sve vanjske suradnike je ukljuceno; `release/**` dobiva ruleset (PR obvezan, bez force pusha i
+brisanja). Vlasnik je 2026-09-27 odlucio da se #162 spaja uz mjere 1 do 4, a mjera 5 ostaje
+biljeska u T80.

@@ -6,10 +6,18 @@ export interface WorkflowTrigger {
   tags?: string[];
 }
 
+export interface WorkflowStepShape {
+  name?: string;
+  uses?: string;
+  run?: string;
+}
+
 export interface WorkflowJobShape {
   'runs-on'?: unknown;
   if?: unknown;
   permissions?: unknown;
+  uses?: string;
+  steps?: WorkflowStepShape[];
 }
 
 export interface WorkflowFile {
@@ -88,19 +96,84 @@ export function findPullRequestWithoutConcurrency(
   return problems;
 }
 
-/** Trigeri koji mogu pokrenuti kod koji nije napisao suradnik s pravom pisanja (fork PR i slicno). */
-const UNTRUSTED_TRIGGERS = ['pull_request', 'pull_request_target', 'issue_comment', 'workflow_run'];
+/** Jedini workflow koji smije ciljati vlasnikov Word stroj (T80). */
+export const WORD_PROOF_FILE = 'word-proof.yml';
 
-function runsOnLabels(runsOn: unknown): string[] {
-  if (typeof runsOn === 'string') return [runsOn];
-  if (Array.isArray(runsOn)) return runsOn.map(String);
-  if (runsOn && typeof runsOn === 'object') {
-    const labels = (runsOn as { labels?: unknown }).labels;
-    const group = (runsOn as { group?: unknown }).group;
-    // `group:` bez labela je runner grupa, a grupe drze self-hosted runnere.
-    return [...runsOnLabels(labels), ...(group ? ['self-hosted'] : [])];
+/** Tocan, jedini dopusteni oblik word-proof.yml; sve ostalo je nalaz (Codex F5 na #162). */
+export const WORD_PROOF_SHAPE = Object.freeze({
+  triggers: ['push', 'workflow_dispatch'],
+  pushBranches: ['master', 'release/**'],
+  runsOn: ['self-hosted', 'windows', 'word'],
+  jobIf: "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'",
+});
+
+/**
+ * GitHub-hosted oznaka: `ubuntu-latest`, `windows-2022`, `macos-15`... Gola `windows`, `word`,
+ * `self-hosted`, izraz `${{ ... }}`, popis oznaka i runner grupa NISU dopusteni izvan
+ * word-proof.yml, jer svaki od njih moze pogoditi vlasnikov stroj (Codex F1 na #162).
+ */
+const GITHUB_HOSTED_LABEL = /^(ubuntu|windows|macos)-[A-Za-z0-9.]+$/;
+
+function normalize(text: string): string {
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+function triggerKeys(on: WorkflowFile['on']): string[] {
+  if (!on) return [];
+  if (typeof on === 'string') return [on];
+  if (Array.isArray(on)) return [...on];
+  return Object.keys(on);
+}
+
+function sameSet(a: readonly string[], b: readonly string[]): boolean {
+  return a.length === b.length && [...a].sort().every((v, i) => v === [...b].sort()[i]);
+}
+
+function checkWordProof(file: string, doc: WorkflowFile, raw: string | undefined): string[] {
+  const problems: string[] = [];
+  const triggers = triggerKeys(doc.on);
+  if (!sameSet(triggers, WORD_PROOF_SHAPE.triggers)) {
+    problems.push(`${file}: trigeri moraju biti tocno ${WORD_PROOF_SHAPE.triggers.join(', ')} (ima: ${triggers.join(', ')})`);
   }
-  return [];
+  const push = triggerValue(doc.on, 'push') as Record<string, unknown> | null | undefined;
+  const pushKeys = push ? Object.keys(push) : [];
+  if (!sameSet(pushKeys, ['branches'])) {
+    problems.push(`${file}: push smije imati samo branches (ima: ${pushKeys.join(', ') || 'nista'})`);
+  }
+  const branches = Array.isArray(push?.branches) ? (push!.branches as unknown[]).map(String) : [];
+  if (!sameSet(branches, WORD_PROOF_SHAPE.pushBranches)) {
+    problems.push(`${file}: push.branches mora biti tocno ${WORD_PROOF_SHAPE.pushBranches.join(', ')}`);
+  }
+  for (const [jobName, job] of Object.entries(doc.jobs ?? {})) {
+    const runsOn = job['runs-on'];
+    if (!Array.isArray(runsOn) || !sameSet(runsOn.map(String), WORD_PROOF_SHAPE.runsOn) || runsOn.length !== 3) {
+      problems.push(`${file}: job ${jobName} runs-on mora biti tocno [${WORD_PROOF_SHAPE.runsOn.join(', ')}]`);
+    }
+    if (typeof job.if !== 'string' || normalize(job.if) !== WORD_PROOF_SHAPE.jobIf) {
+      problems.push(`${file}: job ${jobName} if mora biti tocno: ${WORD_PROOF_SHAPE.jobIf}`);
+    }
+    if (!isContentsReadOnly(job.permissions ?? doc.permissions)) {
+      problems.push(`${file}: job ${jobName} nema permissions samo contents: read`);
+    }
+    if (job.uses) problems.push(`${file}: job ${jobName} poziva drugi workflow (uses)`);
+    const steps = job.steps ?? [];
+    const origin = steps.findIndex((step) => (step.name ?? '').startsWith('Porijeklo commita'));
+    if (origin < 0) {
+      problems.push(`${file}: job ${jobName} nema korak Porijeklo commita`);
+    } else {
+      const before = steps.slice(0, origin);
+      if (!before.every((step) => (step.uses ?? '').startsWith('actions/checkout@') && !step.run)) {
+        problems.push(`${file}: job ${jobName} izvrsava nesto prije koraka Porijeklo commita`);
+      }
+      const run = steps[origin].run ?? '';
+      if (!run.includes('for-each-ref') || run.includes('--contains')) {
+        problems.push(`${file}: job ${jobName} Porijeklo commita mora usporedjivati tocne vrhove grana, ne --contains`);
+      }
+    }
+  }
+  if (raw === undefined) problems.push(`${file}: nema sirovog teksta za provjeru tajni`);
+  else if (/\bsecrets\b/.test(raw)) problems.push(`${file}: spominje secrets (secrets., secrets[ ili secrets: inherit)`);
+  return problems;
 }
 
 function isContentsReadOnly(permissions: unknown): boolean {
@@ -110,48 +183,36 @@ function isContentsReadOnly(permissions: unknown): boolean {
 }
 
 /**
- * Self-hosted runner na JAVNOM repozitoriju (T80, Word dokaz na vlasnikovom stroju). Vraca
- * probleme oblika `datoteka: razlog` za svaki workflow ciji job trazi `self-hosted`:
- *  - datoteka nije na popisu dopustenih (`allowed`);
- *  - workflow ima trigger kojim tudji kod moze doci na stroj (pull_request i slicni);
- *  - job nema `if` koji odbija fork i drugi repozitorij;
- *  - token nije samo `contents: read`;
- *  - tekst datoteke spominje `secrets.`.
+ * Pristup vlasnikovom Word stroju na JAVNOM repozitoriju (T80). Vraca probleme `datoteka: razlog`:
+ *  - word-proof.yml mora imati tocno propisan oblik (trigeri, grane, runs-on, if, token, bez tajni,
+ *    Porijeklo commita prije ijednog izvrsavanja koda iz stabla);
+ *  - svaki drugi job u svakom drugom workflowu mora imati `runs-on` koji je JEDNA GitHub-hosted
+ *    oznaka (`ubuntu-latest` i slicno), a `uses:` samo lokalni `./.github/workflows/...`.
+ * Gard nije granica pristupa stroju: fork PR moze donijeti vlastiti workflow koji ovaj test nikad ne
+ * vidi. Granica su postavke repozitorija (docs/verification/WORD_PROOF_RUNNER.md, odjeljak 6).
  */
 export function findSelfHostedProblems(
   workflows: NamedWorkflow[],
-  allowed: ReadonlySet<string>,
+  allowed: ReadonlySet<string> = new Set([WORD_PROOF_FILE]),
 ): string[] {
   const problems: string[] = [];
   for (const { file, doc, raw } of workflows) {
-    const selfHostedJobs = Object.entries(doc.jobs ?? {}).filter(([, job]) =>
-      runsOnLabels(job['runs-on']).some((label) => label.trim().toLowerCase() === 'self-hosted'),
-    );
-    if (selfHostedJobs.length === 0) continue;
-    if (!allowed.has(file)) problems.push(`${file}: self-hosted runner izvan popisa dopustenih workflowa`);
-    for (const trigger of UNTRUSTED_TRIGGERS) {
-      if (hasKey(doc.on, trigger)) problems.push(`${file}: trigger ${trigger} uz self-hosted runner`);
+    if (allowed.has(file)) {
+      problems.push(...checkWordProof(file, doc, raw));
+      continue;
     }
-    for (const [jobName, job] of selfHostedJobs) {
-      const condition = typeof job.if === 'string' ? job.if.replace(/\s+/g, ' ') : '';
-      if (!condition.includes('github.event.repository.fork == false') || !condition.includes('github.repository ==')) {
-        problems.push(`${file}: job ${jobName} nema if koji odbija fork i drugi repozitorij`);
+    for (const [jobName, job] of Object.entries(doc.jobs ?? {})) {
+      if (job.uses !== undefined) {
+        if (!String(job.uses).startsWith('./.github/workflows/')) {
+          problems.push(`${file}: job ${jobName} poziva vanjski workflow ${String(job.uses)}`);
+        }
+        continue;
       }
-      const permissions = job.permissions ?? doc.permissions;
-      if (!isContentsReadOnly(permissions)) {
-        problems.push(`${file}: job ${jobName} nema permissions samo contents: read`);
+      const runsOn = job['runs-on'];
+      if (typeof runsOn !== 'string' || !GITHUB_HOSTED_LABEL.test(runsOn)) {
+        problems.push(`${file}: job ${jobName} runs-on nije jedna GitHub-hosted oznaka (${JSON.stringify(runsOn)})`);
       }
     }
-    if (raw === undefined) problems.push(`${file}: nema sirovog teksta za provjeru tajni`);
-    else if (/secrets\./.test(raw)) problems.push(`${file}: spominje secrets. uz self-hosted runner`);
   }
   return problems;
-}
-
-/** Grane iz `push.branches` koje nisu na dopustenom popisu (tocna usporedba uzorka). */
-export function pushBranchesOutside(doc: WorkflowFile, allowed: readonly string[]): string[] {
-  const push = triggerValue(doc.on, 'push');
-  const branches = push?.branches ?? [];
-  if (hasKey(doc.on, 'push') && branches.length === 0) return ['(push bez branches filtra)'];
-  return branches.filter((b) => !allowed.includes(b));
 }

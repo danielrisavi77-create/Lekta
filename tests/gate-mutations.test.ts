@@ -5797,65 +5797,92 @@ describe('mutacije: .github/workflows trigeri (CI minute, ne vrti dvaput po PR-u
   });
 });
 
-describe('mutacije: self-hosted Word runner na javnom repou (T80)', () => {
-  const DOPUSTENI = new Set(['word-proof.yml']);
-  const RAW_CIST = "name: word-proof\npermissions:\n  contents: read\njobs:\n  word-proof:\n    runs-on: [self-hosted, windows, word]\n";
-  const cist = (): NamedWorkflow => ({
+describe('mutacije: self-hosted Word runner na javnom repou (T80, Codex F1, F3, F5 na #162)', () => {
+  const IF = "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'";
+  const RAW = 'name: word-proof\npermissions:\n  contents: read\n';
+  const wordProof = (): NamedWorkflow => ({
     file: 'word-proof.yml',
-    raw: RAW_CIST,
+    raw: RAW,
     doc: {
       on: { workflow_dispatch: null, push: { branches: ['master', 'release/**'] } },
       permissions: { contents: 'read' },
       jobs: {
         'word-proof': {
           'runs-on': ['self-hosted', 'windows', 'word'],
-          if: "github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'",
+          if: IF,
+          steps: [
+            { name: 'Checkout', uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' },
+            { name: 'Porijeklo commita (samo tocan vrh)', run: 'git for-each-ref --format=x refs/remotes/origin/master' },
+            { name: 'release:check', run: 'npm run release:check' },
+          ],
         },
       },
     },
   });
+  const drugi = (runsOn: unknown): NamedWorkflow => ({
+    file: 'drugi.yml',
+    raw: 'name: drugi\n',
+    doc: { on: { push: { branches: ['master'] } }, jobs: { posao: { 'runs-on': runsOn } } },
+  });
+  const nalazi = (...w: NamedWorkflow[]) => findSelfHostedProblems(w);
 
-  it('BASELINE: word-proof s fork uvjetom, samo contents: read i bez tajni prolazi', () => {
-    expect(findSelfHostedProblems([cist()], DOPUSTENI)).toEqual([]);
+  it('BASELINE: tocan word-proof i drugi workflow na ubuntu-latest su cisti', () => {
+    expect(nalazi(wordProof(), drugi('ubuntu-latest'))).toEqual([]);
   });
 
-  it('mutant bez fork uvjeta se hvata', () => {
-    const m = cist();
-    m.doc.jobs!['word-proof'].if = "github.repository == 'danielrisavi77-create/Lekta'";
-    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
-      'word-proof.yml: job word-proof nema if koji odbija fork i drugi repozitorij',
-    ]);
+  it('F1: drugi workflow s golom oznakom word, windows, self-hosted, izrazom ili grupom se hvata', () => {
+    for (const runsOn of ['word', 'windows', 'self-hosted', ['self-hosted'], '${{ matrix.os }}', { group: 'default' }]) {
+      expect(nalazi(drugi(runsOn)), JSON.stringify(runsOn)).toHaveLength(1);
+    }
   });
 
-  it('mutant koji cita tajnu se hvata', () => {
-    const m = cist();
-    m.raw = RAW_CIST + '    env:\n      KLJUC: ${{ secrets.STRIPE_SECRET_KEY }}\n';
-    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
-      'word-proof.yml: spominje secrets. uz self-hosted runner',
-    ]);
+  it('F5: slabiji if (|| umjesto &&) se hvata', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof'].if = IF.replace('&&', '||');
+    expect(nalazi(m)).toEqual([`word-proof.yml: job word-proof if mora biti tocno: ${IF}`]);
   });
 
-  it('mutant s pull_request trigerom (fork PR kod na stroju) se hvata', () => {
-    const m = cist();
-    (m.doc.on as Record<string, unknown>).pull_request = {};
-    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
-      'word-proof.yml: trigger pull_request uz self-hosted runner',
-    ]);
+  it('F5: push.tags uz dopustene grane se hvata', () => {
+    const m = wordProof();
+    (m.doc.on as Record<string, unknown>).push = { branches: ['master', 'release/**'], tags: ['v*'] };
+    expect(nalazi(m)).toEqual(['word-proof.yml: push smije imati samo branches (ima: branches, tags)']);
   });
 
-  it('mutant s pravom pisanja se hvata', () => {
-    const m = cist();
+  it('F5: workflow_call i pull_request trigeri se hvataju', () => {
+    for (const trigger of ['workflow_call', 'pull_request']) {
+      const m = wordProof();
+      (m.doc.on as Record<string, unknown>)[trigger] = {};
+      expect(nalazi(m)[0], trigger).toMatch(/^word-proof\.yml: trigeri moraju biti tocno push, workflow_dispatch/);
+    }
+  });
+
+  it('F5: secrets: inherit, secrets[ i secrets. se hvataju', () => {
+    for (const dodatak of ['    secrets: inherit\n', "    env:\n      K: ${{ secrets['K'] }}\n", '      K: ${{ secrets.K }}\n']) {
+      const m = wordProof();
+      m.raw = RAW + dodatak;
+      expect(nalazi(m), dodatak).toEqual(['word-proof.yml: spominje secrets (secrets., secrets[ ili secrets: inherit)']);
+    }
+  });
+
+  it('F5: prosireni runs-on i pravo pisanja se hvataju', () => {
+    const m = wordProof();
+    m.doc.jobs!['word-proof']['runs-on'] = ['self-hosted', 'windows', 'word', 'x64'];
     m.doc.permissions = { contents: 'write' };
-    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
+    expect(nalazi(m)).toEqual([
+      'word-proof.yml: job word-proof runs-on mora biti tocno [self-hosted, windows, word]',
       'word-proof.yml: job word-proof nema permissions samo contents: read',
     ]);
   });
 
-  it('self-hosted u workflowu izvan popisa dopustenih se hvata', () => {
-    const m = { ...cist(), file: 'drugi.yml' };
-    expect(findSelfHostedProblems([m], DOPUSTENI)).toEqual([
-      'drugi.yml: self-hosted runner izvan popisa dopustenih workflowa',
+  it('F3: provjera porijekla s --contains ili korak koji izvrsava kod prije nje se hvata', () => {
+    const contains = wordProof();
+    contains.doc.jobs!['word-proof'].steps![1].run = 'git branch -r --contains HEAD';
+    expect(nalazi(contains)).toEqual([
+      'word-proof.yml: job word-proof Porijeklo commita mora usporedjivati tocne vrhove grana, ne --contains',
     ]);
+    const prije = wordProof();
+    prije.doc.jobs!['word-proof'].steps!.splice(1, 0, { name: 'npm ci', run: 'npm ci' });
+    expect(nalazi(prije)).toEqual(['word-proof.yml: job word-proof izvrsava nesto prije koraka Porijeklo commita']);
   });
 });
 

@@ -776,7 +776,7 @@
       "title": "Self-hosted Word runner: word-proof workflow, registracija runnera, prvi run usporedjen s lokalnim dokazom",
       "status": "in_progress",
       "dependsOn": [],
-      "note": "Vlasnik registrira runner; koordinator nadzire prvi run. Workflow .github/workflows/word-proof.yml, upute docs/verification/WORD_PROOF_RUNNER.md, gard findSelfHostedProblems u tests/ci-workflow-triggers.test.ts s mutacijama u tests/gate-mutations.test.ts. Povezano s T71 (gate preflight i lock): ovisnost nije upisana u dependsOn jer gard statusa ne dopusta in_progress uz T71 koji je in_review. Razred: full. Zasticeno: ne (CI i sigurnost javnog repoa).",
+      "note": "Vlasnik registrira runner; koordinator nadzire prvi run. Workflow .github/workflows/word-proof.yml, upute docs/verification/WORD_PROOF_RUNNER.md, gard findSelfHostedProblems u tests/ci-workflow-triggers.test.ts s mutacijama u tests/gate-mutations.test.ts. Povezano s T71 (gate preflight i lock): ovisnost nije upisana u dependsOn jer gard statusa ne dopusta in_progress uz T71 koji je in_review. Razred: full. Zasticeno: ne (CI i sigurnost javnog repoa). Codex pregled #162 (F1 do F10): F3 i F5 do F10 popravljeni u PR-u; F1, F2 i F4 su preostali rizik u WORD_PROOF_RUNNER.md odjeljak 6. Dugorocno: izvrsavanje preseliti u zaseban privatni repozitorij koji prima samo provjereni SHA (uz T63).",
       "owner": "lekta-32"
     }
   ],
