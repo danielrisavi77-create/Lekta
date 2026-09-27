@@ -199,6 +199,23 @@ function caveatHtml(model: VisualResultModel): string {
  * procita presudu. `verdictRingHtml` ovaj HTML ugraduje u `cockpit-ring-wrap`, kao metapodatak o
  * mjeracu, ne kao recenicu u prici.
  */
+function inspectionLimitHtml(model: VisualResultModel): string {
+  const inspection = model.inspectionCoverage;
+  if (!inspection || inspection.status === 'complete') return '';
+  if (inspection.status === 'unknown') {
+    return '<p class="cockpit-caveat cockpit-inspection-limit" data-cockpit-inspection-limit>'
+      + '<strong>Nije provjereno u cijelosti:</strong> nije bilo moguće utvrditi opseg složenih Word struktura.</p>';
+  }
+  const parts: string[] = [];
+  if (inspection.labels.length) parts.push(inspection.labels.map(escapeHtml).join(', '));
+  if (inspection.analyzerSkips > 0) {
+    parts.push(`${inspection.analyzerSkips} strukturiranih preskoka u automatiziranim provjerama`);
+  }
+  const detail = parts.length ? parts.join(' · ') : 'postoje složene Word strukture s ograničenom automatskom provjerom';
+  return '<p class="cockpit-caveat cockpit-inspection-limit" data-cockpit-inspection-limit>'
+    + '<strong>Nije provjereno u cijelosti:</strong> ' + detail + '.</p>';
+}
+
 function marksHtml(model: VisualResultModel): string {
   const potvrden = model.header.profileConfirmed;
   const natpis = potvrden ? 'Profil potvrđen' : 'Profil nije potvrđen';
@@ -323,6 +340,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     // prsten desno; da oba crtaju ocjenu, ekran bi nosio dva mjeraca iste stvari.
     findingSummaryHtml(sazetak, escapeHtml, { strop, ocjena: false }),
     caveatHtml(model),
+    inspectionLimitHtml(model),
     '<div class="cockpit-sheet__actions">',
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',
     findingIdAttr(action),
