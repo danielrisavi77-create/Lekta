@@ -14,6 +14,7 @@ import { FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, cor
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { repairSourceHashAtCommit } from './lib/repair-source-hash.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Putanje se mogu preusmjeriti SAMO za test kroz stvarnu skriptu (T83-06): tests/real-corpus-dedupe.test.ts
@@ -76,6 +77,15 @@ if (odbijeno.length) {
 const otisak = corpusFingerprintV2(rezultati.map((r) => r.documentId));
 // Koliko je kopija harness izbacio prije mjerenja; povijest ostaje citljiva uz ovjere prije T83.
 const izbaceno = Number.isInteger(mjerenje.scope?.duplicateDocumentCount) ? mjerenje.scope.duplicateDocumentCount : 0;
+// T75: otisak koda popravka NAD KOJIM JE MJERENO, iz git objekata commita mjerenja (T74 modul). Ovjera se
+// pise u commitu nakon mjerenja, pa otisak s diska (HEAD) ne bi opisivao mjereni kod. Bez otiska nema ovjere.
+let otisakKoda;
+try {
+  otisakKoda = repairSourceHashAtCommit(mjerenje.generatedFromCommit, ROOT).hash;
+} catch (e) {
+  console.error(`[ovjera] FAIL: otisak koda popravka za commit mjerenja ${mjerenje.generatedFromCommit} nije izracunljiv: ${e.message}`);
+  process.exit(1);
+}
 
 // Registar daje jedinicu i vrste rada za svaki profil; sidecar dokumenta nosi samo `profileId`.
 const registar = new Map(
@@ -129,6 +139,7 @@ const sadrzaj = {
   corpusFingerprint: otisak,
   measuredAt: mjerenje.generatedAt,
   measuredFromCommit: mjerenje.generatedFromCommit,
+  repairSourceHash: otisakKoda,
   oracles: ['scripts/repair-real-corpus.mts (harness + detectPassRegressions)'],
   // T06: okolina i protokol mjerenja, da se zakljucak moze vezati uz verziju alata i uz nacin nastanka ocekivanja.
   environment: { wordVersion },

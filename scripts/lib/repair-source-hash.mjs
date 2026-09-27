@@ -31,6 +31,7 @@
 // svjezom ovjerom, da master nijednog trenutka nema A = 0. Racunanje otiska s diska, naprotiv, BACA
 // kad izvor nije pouzdan (prazan skup, simbolicka veza): otisak koji ne pokriva stvarni kod ne smije
 // postojati ni kao `missing` ulaz u usporedbu.
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -99,6 +100,36 @@ export function repairSourceHash(root = ROOT) {
   const result = repairSourceHashFromFiles(files);
   if (result.hash === null) {
     throw new Error(`Otisak koda popravka: ${REPAIR_SOURCE_DIR} nema nijednu produkcijsku .ts datoteku.`);
+  }
+  return result;
+}
+
+/**
+ * Otisak `src/repair` IZ GIT STABLA zadanog commita, ne s diska (T75). Ovjera realnog korpusa nastaje
+ * u commitu koji dolazi POSLIJE mjerenja, pa HEAD nikad nije commit mjerenja; otisak zato mora opisati
+ * kod nad kojim je mjereno, procitan iz objekata tog commita. Isti filtar, isti zapis kao s diska.
+ * Baca kad commit ne postoji, kad je u `src/repair` simbolicka veza (mod 120000) ili kad je skup prazan.
+ */
+export function repairSourceHashAtCommit(commit, root = ROOT) {
+  if (!/^[0-9a-f]{7,40}$/.test(String(commit))) {
+    throw new Error(`Otisak koda popravka: '${commit}' nije commit.`);
+  }
+  const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  const tree = git(['ls-tree', '-r', '-z', commit, '--', `${REPAIR_SOURCE_DIR}/`]);
+  const files = [];
+  for (const line of tree.split('\0').filter(Boolean)) {
+    const tab = line.indexOf('\t');
+    const [mode, type, sha] = line.slice(0, tab).split(' ');
+    const relPath = line.slice(tab + 1);
+    if (mode === '120000') {
+      throw new Error(`Otisak koda popravka: simbolicka veza ${relPath} nije dopustena u ${REPAIR_SOURCE_DIR}.`);
+    }
+    if (type !== 'blob' || !isRepairProductionSource(relPath)) continue;
+    files.push({ path: relPath, content: git(['cat-file', 'blob', sha]) });
+  }
+  const result = repairSourceHashFromFiles(files);
+  if (result.hash === null) {
+    throw new Error(`Otisak koda popravka: ${REPAIR_SOURCE_DIR} u ${commit} nema nijednu produkcijsku .ts datoteku.`);
   }
   return result;
 }

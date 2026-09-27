@@ -12,8 +12,22 @@ import {
   isRepairProductionSource,
   repairSourceFreshness,
   repairSourceHash,
+  repairSourceHashAtCommit,
   repairSourceHashFromFiles,
 } from '../scripts/lib/repair-source-hash.mjs';
+
+describe('repair-source-hash: otisak iz git stabla commita (T75)', () => {
+  it('na HEAD-u je jednak otisku s diska, a nepostojeci ili neispravan commit baca', () => {
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    const status = execFileSync('git', ['status', '--porcelain', '--', 'src/repair'], { encoding: 'utf8' }).trim();
+    const izGita = repairSourceHashAtCommit(head);
+    expect(izGita.hash).toMatch(/^[0-9a-f]{64}$/);
+    // Usporedba s diskom vrijedi samo nad cistim src/repair (inace disk i commit legitimno odstupaju).
+    if (status === '') expect(izGita).toEqual(repairSourceHash());
+    expect(() => repairSourceHashAtCommit('0'.repeat(40))).toThrow();
+    expect(() => repairSourceHashAtCommit('HEAD --output=x')).toThrow(/nije commit/);
+  });
+});
 
 const BASE = [
   { path: 'src/repair/apply-fixers.ts', content: 'export const a = 1;\n' },
