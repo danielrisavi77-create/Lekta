@@ -7,7 +7,12 @@ import {
   inspectRouteShellBudget,
   type RouteShellBudgetIssue,
 } from './helpers/route-shell-budget';
-import { chromeGraph, lazyFooterProblems } from './helpers/site-footer-guards';
+import {
+  MAX_LAZY_FOOTER_JS_GZIP,
+  chromeGraph,
+  lazyFooterBudgetProblems,
+  lazyFooterProblems,
+} from './helpers/site-footer-guards';
 
 /**
  * PRORACUN LJUSKE MJERI TRAKU (Z15), JER `route-shell.ts` VISE NE POSTOJI.
@@ -31,9 +36,9 @@ import { chromeGraph, lazyFooterProblems } from './helpers/site-footer-guards';
  * uvoz upise u isti izlaz i proracun bi mjerio kod koji ostalih jedanaest stranica nikad ne skine
  * (izmjereno: 7783 B bez razdvajanja). Sa `splitting` se zbrajaju gzip velicine ulaza trake i SVIH
  * komada koje on STATICKI uvozi (7008 B: 6299 + 709 zajednickog komada), a lijeni komad ima
- * vlastitu granicu. Zabranjeni rjecnik i dalje vrijedi za CIJELI graf, lijeni ukljucivo.
+ * vlastitu granicu (`MAX_LAZY_FOOTER_JS_GZIP`, 3 KB) i mora biti JEDINI lijeni ulaz trake
+ * (`lazyFooterBudgetProblems`). Zabranjeni rjecnik i dalje vrijedi za CIJELI graf, lijeni ukljucivo.
  */
-const MAX_LAZY_FOOTER_JS_GZIP = 3 * 1024;
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY_JS = join(ROOT, 'src', 'shared', 'site-chrome.ts');
@@ -73,10 +78,12 @@ describe('site chrome performance budget', () => {
       return zbroj + (datoteka ? gzipSync(datoteka.contents).byteLength : 0);
     }, 0);
     const statickiJs = gzipOd(graf.staticOutputs);
-    const lijeniJs = gzipOd(graf.lazyOutputs);
     // SENTINEL: nula bi znacila da zbrajanje nije naslo nijedan izlaz.
     expect(statickiJs, 'staticki JS trake je 0 B; mjerenje ne mjeri nista').toBeGreaterThan(1000);
-    expect(lijeniJs, `lijeno podnozje je ${lijeniJs} B gzip`).toBeLessThanOrEqual(MAX_LAZY_FOOTER_JS_GZIP);
+    // LIJENI DIO: jedini lijeni ulaz je podnozje, a zbroj svih lijenih izlaza je unutar granice.
+    // Gard i granica su u helperu; mutacije `z15b/lijeni-*` u `tests/gate-mutations.test.ts`.
+    const lijeneVelicine = Object.fromEntries(graf.lazyOutputs.map((izlaz) => [izlaz, gzipOd([izlaz])]));
+    expect(lazyFooterBudgetProblems(result.metafile, graf, lijeneVelicine, MAX_LAZY_FOOTER_JS_GZIP)).toEqual([]);
 
     // Sentinel: prazan graf bi ucinio "nula zabranjenih ulaza" vakuumskim nalazom.
     const inputPaths = Object.keys(result.metafile.inputs);
