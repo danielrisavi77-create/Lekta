@@ -105,6 +105,11 @@ ne tumaci kao zeleno.
 - Podatke parsiraj, ne greppaj. Djelomican pad pipelinea mora oboriti mjerenje.
 - Tekstualne usporedbe normaliziraju CR; binarne fixture usporeduju sirove bajtove.
 - Ne koristi `git status`, izlazni kod ili ukupan broj kao odgovor na drugo pitanje.
+- Popravni krug nakon pregleda je razmjeran dosegu nalaza (odluka vlasnika 2026-09-27): mali
+  lokalni nalaz mjeri doseg, regenerira samo pogodjene artefakte u dva prolaza i ide mehanicki
+  uz ciljani pregled; novi dizajn nije mehanicki. Puni gate i jedan pregled drugog providera
+  ostaju obvezni prije commita. Sirenje izvan izvornih stavki staje i postaje zaseban zadatak.
+  Detalji: `docs/agents/no-fable-workflow.md`.
 
 Detalji i povijesni razlozi su u `docs/verification/AGENT_VERIFICATION.md` i
 `docs/incidents/`.
