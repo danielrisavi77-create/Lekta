@@ -87,3 +87,27 @@ describe('dogadjaji toka su stvarno emitirani', () => {
     expect(/(trackEvent|track)(\?\.)?\(\s*'dogadjaj_koji_ne_postoji'/.test(izvor)).toBe(false);
   });
 });
+
+
+describe('Opportunity Report wiring', () => {
+  const app = readFileSync(join(KORIJEN, 'src/ui/app.ts'), 'utf8');
+  const panel = readFileSync(join(KORIJEN, 'src/ui/repair-panel.ts'), 'utf8');
+  const emitter = readFileSync(join(KORIJEN, 'src/analytics/opportunity-emit.ts'), 'utf8');
+
+  it('repair_noop_summary ima jedan emitter koji koriste serverski i lokalni repair put', () => {
+    expect(emitter).toContain("track('repair_noop_summary'");
+    expect(app).toContain("emitRepairNoOpSignals(trackEvent,out.skippedReasons");
+    expect(panel).toContain("emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext)");
+  });
+
+  it('oba repair puta nose profil/vrstu rada u Opportunity kontekst', () => {
+    expect(app).toContain("opportunityContext:{profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''}");
+    expect(app).toContain("const _noopCtx={profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''}");
+  });
+
+  it('analysis structure gap ostaje izveden iz sanitiziranog helpera, ne iz sirovog reasona', () => {
+    expect(app).toContain("emitAnalysisOpportunitySignals(trackEvent,result");
+    expect(emitter).toContain("structureGapSignalsForEvent(result)");
+    expect(emitter).toContain("track('analysis_structure_gap'");
+  });
+});

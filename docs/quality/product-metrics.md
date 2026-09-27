@@ -41,19 +41,28 @@ udio zahvacenih i veci volumen. Paywall/checkout razlika je samo **event-count p
 nema session/user identifikator; ne smije se zvati cohort abandonmentom niti postati "najjači signal"
 samo zato što joj je sirovi postotak veći.
 
-V2 dodatno salje `analysis_structure_gap` samo za postojeci `skipped[]` iz poznatih strukturiranih
-analizatora. Izvorni `reason` nikad se ne salje: svodi se na `unsupported-structure`, `stale-anchor`,
-`no-target` ili `other`, uz `category` i `count`. To NIJE potpuni OOXML inspection coverage.
+V2/V3 dodatno šalje `analysis_structure_gap` samo za postojeći `skipped[]` iz poznatih strukturiranih
+analizatora. Izvorni `reason` nikad se ne šalje: svodi se na `unsupported-structure`, `stale-anchor`,
+`no-target` ili `other`, uz `category`, `count`, interni `profileId` i `workType`. Profil i vrsta rada
+služe samo agregaciji gdje se problem pojavljuje; nisu korisnički/session identifikatori. To NIJE potpuni
+OOXML inspection coverage.
 
-`repair_noop_reason` grupira postojeci `skippedReasons` iz repair enginea po sigurnom enumu
+`repair_noop_reason` grupira postojeći `skippedReasons` iz repair enginea po sigurnom enumu
 (`already-ok`, `no-target`, `invalid-params`, `unsupported-structure`, `stale-anchor`, `unclassified`)
-i salje samo `kind` + `count`, bez `ruleId`-a. `inspection_coverage_global` ostaje u `missingSignals`
+i šalje `profileId` + `workType` + `kind` + `count`, bez `ruleId`-a. Jedan `repair_noop_summary`
+događaj po uspješnom repair pokušaju nosi samo ukupni `count`; zbroj summary counta mora imati exact parity
+sa zbrojem detaljnih `repair_noop_reason.count`. `inspection_coverage_global` ostaje u `missingSignals`
 dok T64 ne uvede zasebni dokaz sto cijeli analizator nije pregledao; odsutnost mjerenja nikad se
 ne prikazuje kao nula.
 
+Migracijski oblik je namjerno aditivan: #153 uvodi `0205_opportunity_report.sql`, a V3 mijenja
+`admin_opportunity_stats()` kroz novu `0206_opportunity_report_v3.sql`. V3 ne prepisuje 0205,
+jer stacked PR može biti integriran nakon što je 0205 već primijenjen na staging ili produkciju.
+
 Sekcija ima i **zdravlje mjerenja**: broj `analysis_completed` mora imati exact parity s brojem
-`opportunity_summary`, a zbroj `opportunity_summary.structureGaps` s neovisnim zbrojem detaljnih
-`analysis_structure_gap.count`. Mismatch je `partial`, ne zeleno stanje. Kratak vremenski prozor
+`opportunity_summary`, zbroj `opportunity_summary.structureGaps` s neovisnim zbrojem detaljnih
+`analysis_structure_gap.count`, a zbroj `repair_noop_summary.count` sa zbrojem
+`repair_noop_reason.count`. Bilo koji mismatch je `partial`, ne zeleno stanje. Kratak vremenski prozor
 može prolazno presjeći dva uzastopna događaja preko granice raspona, ali to se namjerno prikazuje kao
 nepotpuno mjerenje umjesto da se pretpostavi da je sve u redu.
 

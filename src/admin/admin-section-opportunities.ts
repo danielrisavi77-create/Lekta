@@ -35,6 +35,10 @@ function opportunityLabel(row: OpportunityRow): string {
   return LABELS[row.id] ?? row.id;
 }
 
+function scopeLabel(row: { profileId?: string; workType?: string }): string {
+  return `${row.profileId || 'unknown'} · ${row.workType || 'unknown'}`;
+}
+
 export function renderOpportunitiesSection(container: HTMLElement, stats: OpportunityStats): void {
   container.replaceChildren();
   const s = seriesColors();
@@ -60,10 +64,10 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   const healthCard = el('div', 'card c12 rise');
   healthCard.appendChild(el('div', 'card-title', 'Zdravlje mjerenja'));
   const healthText = health.kind === 'healthy'
-    ? `Exact parity: analysis_completed ${fmtCount(stats.current.analysisCompletedEvents)} = opportunity_summary ${fmtCount(stats.current.opportunityEvents)}; structure summary ${fmtCount(stats.current.structureGapItems)} = breakdown ${fmtCount(stats.current.structureBreakdownItems)}.`
+    ? `Exact parity: analysis_completed ${fmtCount(stats.current.analysisCompletedEvents)} = opportunity_summary ${fmtCount(stats.current.opportunityEvents)}; structure summary ${fmtCount(stats.current.structureGapItems)} = breakdown ${fmtCount(stats.current.structureBreakdownItems)}; repair no-op summary ${fmtCount(stats.current.repairNoOpSummaryItems)} = breakdown ${fmtCount(stats.current.repairNoOpItems)}.`
     : health.kind === 'no-data'
       ? 'Nema baznih analiza u odabranom razdoblju; report nema što potvrditi.'
-      : `Mjerenje je nepotpuno: analysis parity Δ ${health.analysisDelta >= 0 ? '+' : ''}${health.analysisDelta}; structure parity Δ ${health.structureDelta >= 0 ? '+' : ''}${health.structureDelta}. Rangiranje koristi nepotpun uzorak dok se parity ne vrati na nulu.`;
+      : `Mjerenje je nepotpuno: analysis parity Δ ${health.analysisDelta >= 0 ? '+' : ''}${health.analysisDelta}; structure parity Δ ${health.structureDelta >= 0 ? '+' : ''}${health.structureDelta}; repair no-op parity Δ ${health.repairNoOpDelta >= 0 ? '+' : ''}${health.repairNoOpDelta}. Rangiranje koristi nepotpun uzorak dok se parity ne vrati na nulu.`;
   healthCard.appendChild(el('p', 'hint', healthText));
   bento.appendChild(healthCard);
 
@@ -108,6 +112,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   }));
 
   const structureColumns: Array<Column<(typeof stats.current.structureGaps)[number]>> = [
+    { header: 'Profil · vrsta', render: (r) => scopeLabel(r) },
     { header: 'Podsustav', render: (r) => r.category ?? '—' },
     { header: 'Razlog', render: (r) => r.kind },
     { header: 'Broj', numeric: true, render: (r) => fmtCount(r.count) },
@@ -122,6 +127,7 @@ export function renderOpportunitiesSection(container: HTMLElement, stats: Opport
   bento.appendChild(structureTable);
 
   const noOpColumns: Array<Column<(typeof stats.current.repairNoOpReasons)[number]>> = [
+    { header: 'Profil · vrsta', render: (r) => scopeLabel(r) },
     { header: 'Razlog fixera', render: (r) => NOOP_META[r.kind]?.label ?? r.kind },
     { header: 'Razred', render: (r) => NOOP_META[r.kind]?.class ?? 'unknown' },
     { header: 'Broj', numeric: true, render: (r) => fmtCount(r.count) },
