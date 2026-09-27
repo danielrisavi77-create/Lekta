@@ -35,9 +35,11 @@ Nosi samo interne dimenzije i brojace: `profileId`, `profileStatus`, `workType`,
 
 Control Center sekcija **Prilike** kombinira taj signal s postojecim `profile_completed`,
 `repair_completed`, `paywall_viewed`, `checkout_started` i `purchase_completed` dogadjajima.
-Rangiranje nije kompozitni score: prvo idu signali s najmanje 20 opažanja, zatim veci udio
-zahvacenih i veci volumen. Paywall/checkout razlika je samo **event-count proxy** jer tablica nema
-session/user identifikator; ne smije se zvati cohort abandonmentom.
+Rangiranje nije kompozitni score: **izravna mjerenja** (analysis/profile/repair) uvijek idu prije
+event-count proxyja; unutar iste dokazne razine prvo idu signali s najmanje 20 opažanja, zatim veci
+udio zahvacenih i veci volumen. Paywall/checkout razlika je samo **event-count proxy** jer tablica
+nema session/user identifikator; ne smije se zvati cohort abandonmentom niti postati "najjači signal"
+samo zato što joj je sirovi postotak veći.
 
 V2 dodatno salje `analysis_structure_gap` samo za postojeci `skipped[]` iz poznatih strukturiranih
 analizatora. Izvorni `reason` nikad se ne salje: svodi se na `unsupported-structure`, `stale-anchor`,
@@ -48,6 +50,12 @@ analizatora. Izvorni `reason` nikad se ne salje: svodi se na `unsupported-struct
 i salje samo `kind` + `count`, bez `ruleId`-a. `inspection_coverage_global` ostaje u `missingSignals`
 dok T64 ne uvede zasebni dokaz sto cijeli analizator nije pregledao; odsutnost mjerenja nikad se
 ne prikazuje kao nula.
+
+Sekcija ima i **zdravlje mjerenja**: broj `analysis_completed` mora imati exact parity s brojem
+`opportunity_summary`, a zbroj `opportunity_summary.structureGaps` s neovisnim zbrojem detaljnih
+`analysis_structure_gap.count`. Mismatch je `partial`, ne zeleno stanje. Kratak vremenski prozor
+može prolazno presjeći dva uzastopna događaja preko granice raspona, ali to se namjerno prikazuje kao
+nepotpuno mjerenje umjesto da se pretpostavi da je sve u redu.
 
 Postojeci dogadjaji (`file_selected`, `profile_completed`, `analysis_completed`) su zadrzani pod svojim imenima:
 drugo ime za isti korak mjerilo bi ga dvaput.
