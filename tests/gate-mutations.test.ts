@@ -128,7 +128,7 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
-import { inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
+import { attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -279,23 +279,62 @@ function jedanDokumentJedanGlas(
   return ids.length === 2 && new Set(ids).size === 2 && duplicates.length === 1;
 }
 
+/** Razliciti radovi imaju razlicite bajtove, kao u stvarnom korpusu (inace T83-01 s pravom baca). */
+const bajtoviPoIdu = (e: RealCorpusManifestEntry) => new TextEncoder().encode(`sadrzaj-${e.documentId}`);
+
+/** Stara izvedba dedupea (prije T83-01): kljuc je samo documentId, sadrzaj se ne usporeduje medu id-ovima. */
+function dedupeManifestSamoPoIdu(entries: RealCorpusManifestEntry[]) {
+  const seen = new Set<string>();
+  const out = entries.filter((e) => (seen.has(e.documentId) ? false : (seen.add(e.documentId), true)));
+  return { entries: out, duplicates: [] as unknown[] };
+}
+
+/** Tvrdnja garda T83-01: isti bajtovi pod dva razlicita id-a ne prolaze kao dva rada. */
+function istiSadrzajPodDvaImenaPada(
+  dedupe: (entries: RealCorpusManifestEntry[]) => { entries: RealCorpusManifestEntry[] },
+): boolean {
+  const e = (documentId: string): RealCorpusManifestEntry => ({
+    documentId, fileName: `${documentId}.docx`, profileId: 'fer-diplomski', root: 'r', holdout: false, expectationProvenance: 'derived',
+  });
+  try {
+    return dedupe([e('corpus-a'), e('corpus-kopija-a')]).entries.length < 2;
+  } catch {
+    return true;
+  }
+}
+
+/** Tvrdnja garda T83-03: mjerenje s ijednim palim dokumentom se ne ovjerava. */
+function paloMjerenjeSeNeOvjerava(refuse: (results: Array<Record<string, unknown>>) => string[]): boolean {
+  const r = (documentId: string, outcome: string) => ({ documentId, outcome, integrityFailure: null });
+  return refuse([r('a', 'review'), r('b', 'review')]).length === 0 && refuse([r('a', 'review'), r('b', 'fail')]).length > 0;
+}
+
 type PotpisFn = (
-  existing: { signedBy?: string | null; signedAt?: string | null; signatureNote?: string | null; corpusFingerprint?: string; fingerprintVersion?: number } | null,
-  next: { fingerprintVersion: number; corpusFingerprint: string; measuredAt: string },
+  existing: {
+    signedBy?: string | null; signedAt?: string | null; signatureNote?: string | null; corpusFingerprint?: string;
+    fingerprintVersion?: number; measuredAt?: string; measuredFromCommit?: string;
+  } | null,
+  next: { fingerprintVersion: number; corpusFingerprint: string; measuredAt: string; measuredFromCommit: string },
 ) => { signedBy: string; signedAt: string; signatureNote: string | null } | null;
 
 /**
  * Tvrdnja garda T83: potpis ostaje uz ovjeru samo kad opisuje ISTO potpisano v2 mjerenje; v1 ovjera
- * s istim otiskom i novo mjerenje istog skupa ne nasljedjuju potpis.
+ * s istim otiskom, novo mjerenje istog skupa i mjerenje starije od potpisa ne nasljedjuju potpis.
  */
 function potpisOstajeSamoUzIstoMjerenje(inherit: PotpisFn): boolean {
   const otisak = '8e5bd529d4f2b596ccf8fa0ef58c029d';
-  const v2 = { fingerprintVersion: 2, corpusFingerprint: otisak, signedBy: 'Vlasnik', signedAt: '2026-09-28T10:00:00.000Z', signatureNote: null };
-  const v1 = { corpusFingerprint: otisak, signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
-  const isto = inherit(v2, { fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-28T09:00:00.000Z' });
-  const prekoVerzije = inherit(v1, { fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-10T08:28:07.311Z' });
-  const novoMjerenje = inherit(v2, { fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-29T09:00:00.000Z' });
-  return isto?.signedBy === 'Vlasnik' && prekoVerzije === null && novoMjerenje === null;
+  const commit = 'c'.repeat(40);
+  const v2 = {
+    fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-28T09:00:00.000Z', measuredFromCommit: commit,
+    signedBy: 'Vlasnik', signedAt: '2026-09-28T10:00:00.000Z', signatureNote: null,
+  };
+  const v1 = { corpusFingerprint: otisak, measuredAt: '2026-09-10T08:28:07.311Z', measuredFromCommit: commit, signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
+  const next = (measuredAt: string) => ({ fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt, measuredFromCommit: commit });
+  const isto = inherit(v2, next(v2.measuredAt));
+  const prekoVerzije = inherit(v1, next(v1.measuredAt));
+  const novoKasnije = inherit(v2, next('2026-09-29T09:00:00.000Z'));
+  const novoIzmedju = inherit(v2, next('2026-09-28T09:30:00.000Z'));
+  return isto?.signedBy === 'Vlasnik' && prekoVerzije === null && novoKasnije === null && novoIzmedju === null;
 }
 
 /**
@@ -1187,7 +1226,14 @@ const MUTATIONS: Mutation[] = [
     imitates:
       'manifest je obican spoj docx-local i LEKTA_CORPUS_SOURCE, pa 102 bajt-identicna rada ulaze dvaput (321 umjesto 219, 2026-09-27)',
     caught: () => !jedanDokumentJedanGlas((entries) => ({ entries, duplicates: [] })),
-    cleanBefore: () => jedanDokumentJedanGlas((entries) => dedupeManifest(entries, () => new Uint8Array([1]))),
+    cleanBefore: () => jedanDokumentJedanGlas((entries) => dedupeManifest(entries, bajtoviPoIdu)),
+  },
+  {
+    id: 'korpus/isti-sadrzaj-pod-dva-imena-prolazi',
+    imitates:
+      'dedupe po documentId cita bajtove tek kad se id ponovi, pa isti rad pod drugim imenom ulazi dvaput (Codex #185, T83-01)',
+    caught: () => !istiSadrzajPodDvaImenaPada((entries) => dedupeManifestSamoPoIdu(entries)),
+    cleanBefore: () => istiSadrzajPodDvaImenaPada((entries) => dedupeManifest(entries, () => new Uint8Array([7]))),
   },
   {
     id: 'korpus/potpis-v1-ovjere-prelazi-na-v2-mjerenje',
@@ -1200,6 +1246,26 @@ const MUTATIONS: Mutation[] = [
           : null,
       ) === false,
     cleanBefore: () => potpisOstajeSamoUzIstoMjerenje(inheritedSignature),
+  },
+  {
+    id: 'korpus/potpis-noviji-od-drugog-mjerenja-istog-skupa',
+    imitates:
+      'uvjet "potpis nije stariji od mjerenja" bez identiteta mjerenja: mjerenje 09:00, potpis 10:00, novo mjerenje 09:30 nasljeduje (Codex #185, T83-05)',
+    caught: () =>
+      potpisOstajeSamoUzIstoMjerenje((e, n) =>
+        e && e.signedBy && e.signedAt && e.fingerprintVersion === 2 && e.corpusFingerprint === n.corpusFingerprint &&
+        Date.parse(e.signedAt) >= Date.parse(n.measuredAt)
+          ? { signedBy: e.signedBy, signedAt: e.signedAt, signatureNote: e.signatureNote ?? null }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstoMjerenje(inheritedSignature),
+  },
+  {
+    id: 'korpus/skupina-s-palim-radom-ostaje-dokaziva',
+    imitates:
+      'pali dokument samo nije ulazio u cleanCount, pa je skupina s jednim cistim i jednim palim radom ostajala dokaziva (Codex #185, T83-03)',
+    caught: () => !paloMjerenjeSeNeOvjerava((results) => attestationRefusals(results).filter((r: string) => !/outcome fail/.test(r))),
+    cleanBefore: () => paloMjerenjeSeNeOvjerava(attestationRefusals),
   },
 
   // --- integritet snapshota ----------------------------------------------------------------------

@@ -106,6 +106,23 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   // T83: mjerenje koje je isti rad brojalo vise puta napuhuje documentCount i cleanCount po skupini.
   const dvostruki = a.protocol?.duplicateDocumentCount;
   if (typeof dvostruki === 'number' && dvostruki > 0) p.push('mjerenje je iste dokumente brojalo vise puta');
+  // T83 (Codex #185, T83-04): v2 ovjera mora nositi uskladjena brojcana polja; nepoznata verzija otiska
+  // se ne tumaci. Bez polja je v1 (ovjere prije T83) i ostaje citljiva.
+  const verzija = a.fingerprintVersion;
+  if (verzija !== undefined && verzija !== 1 && verzija !== 2) p.push('nepoznata verzija otiska korpusa');
+  if (verzija === 2) {
+    const pr = a.protocol;
+    const cijeli = (x: unknown): x is number => typeof x === 'number' && Number.isInteger(x) && x >= 0;
+    if (
+      !pr ||
+      pr.duplicateDocumentCount !== 0 ||
+      !cijeli(pr.uniqueDocumentCount) ||
+      !cijeli(pr.rawDocumentCount) ||
+      pr.rawDocumentCount < pr.uniqueDocumentCount
+    ) {
+      p.push('ovjera v2 nema uskladjene brojeve dokumenata');
+    }
+  }
 
   // POTPIS NE SMIJE BITI STARIJI OD MJERENJA KOJE POKRIVA.
   //

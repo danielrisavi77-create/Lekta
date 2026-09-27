@@ -10,14 +10,16 @@
 // postoji ali ljestvica je ne priznaje. Time se ne moze dogoditi da razina dokaza poraste zato sto
 // je netko pokrenuo skriptu.
 import { execFileSync } from 'node:child_process';
-import { FINGERPRINT_VERSION, corpusFingerprintV2, inheritedSignature } from './lib/corpus-attestation-core.mjs';
+import { FINGERPRINT_VERSION, attestationRefusals, corpusFingerprintV2, inheritedSignature } from './lib/corpus-attestation-core.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ULAZ = path.join(ROOT, 'docs', 'generated', 'repair-real-corpus.local.json');
-const IZLAZ = path.join(ROOT, 'data', 'verification', 'real-corpus-attestation.json');
+// Putanje se mogu preusmjeriti SAMO za test kroz stvarnu skriptu (T83-06): tests/real-corpus-dedupe.test.ts
+// je pokrece nad privremenim datotekama, da ne dira gitignorirano mjerenje ni commitanu ovjeru.
+const ULAZ = process.env.LEKTA_ATTEST_INPUT || path.join(ROOT, 'docs', 'generated', 'repair-real-corpus.local.json');
+const IZLAZ = process.env.LEKTA_ATTEST_OUTPUT || path.join(ROOT, 'data', 'verification', 'real-corpus-attestation.json');
 
 const args = process.argv.slice(2);
 const potpis = (() => {
@@ -60,12 +62,11 @@ if (rezultati.length === 0) {
   console.error('[ovjera] FAIL: mjerenje nema nijedan rezultat; prazan skup nije ovjera.');
   process.exit(1);
 }
-// JEDAN DOKUMENT, JEDAN GLAS (T83). Mjerenje prije `dedupeManifest` brojalo je istu datoteku iz
-// `docx-local` i iz `LEKTA_CORPUS_SOURCE` dvaput (izmjereno 2026-09-27: 321 rezultat, 219 razlicitih),
-// pa su `documentCount` i `cleanCount` po skupini bili napuhani. Takvo mjerenje se ne ovjerava.
-const dvostruki = rezultati.length - new Set(rezultati.map((r) => r.documentId)).size;
-if (dvostruki > 0) {
-  console.error(`[ovjera] FAIL: mjerenje ima ${dvostruki} dvostrukih documentId; ponovi mjerenje harnessom s dedupeManifest.`);
+// T83: mjerenje s dvostrukim documentId (napuhani brojevi po skupini), s padom isporuke ili s
+// ostecenim paketom ne ovjerava se (scripts/lib/corpus-attestation-core.mjs, attestationRefusals).
+const odbijeno = attestationRefusals(rezultati);
+if (odbijeno.length) {
+  for (const razlog of odbijeno) console.error(`[ovjera] FAIL: ${razlog}.`);
   process.exit(1);
 }
 
@@ -121,7 +122,8 @@ const postojeca = fs.existsSync(IZLAZ) ? JSON.parse(fs.readFileSync(IZLAZ, 'utf8
 // Potpis se prenosi samo na ISTO potpisano mjerenje (verzija i vrijednost otiska, potpis ne stariji od
 // mjerenja); novo mjerenje istog skupa trazi novi potpis.
 const naslijedjen = potpis ? null : inheritedSignature(postojeca, {
-  fingerprintVersion: FINGERPRINT_VERSION, corpusFingerprint: otisak, measuredAt: mjerenje.generatedAt,
+  fingerprintVersion: FINGERPRINT_VERSION, corpusFingerprint: otisak,
+  measuredAt: mjerenje.generatedAt, measuredFromCommit: mjerenje.generatedFromCommit,
 });
 const ovjera = {
   schemaVersion: 1,
@@ -138,7 +140,7 @@ const ovjera = {
     independentlyConfirmedCount: neovisnoPotvrdjeno,
     derivedExpectationCount: rezultati.length - neovisnoPotvrdjeno,
     // T83: ovjera je provjerila da nijedan dokument nije brojan dvaput (gore se inace prekida).
-    duplicateDocumentCount: dvostruki,
+    duplicateDocumentCount: 0,
     uniqueDocumentCount: rezultati.length,
     rawDocumentCount: rezultati.length + izbaceno,
   },
