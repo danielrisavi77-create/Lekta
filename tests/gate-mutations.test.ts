@@ -105,6 +105,7 @@ import { detectIntegrityFailure } from '../src/repair/apply-fixers';
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import { computeInspectionCoverage, type InspectionCensus } from '../src/analysis/inspection-coverage';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -3572,7 +3573,53 @@ const MUTATIONS: Mutation[] = [
       readFileSync(resolve(process.cwd(), 'scripts/agents/session-bootstrap.mjs'), 'utf8'),
     ).length === 0,
   },
+
+  // --- T64 inspectionCoverage: nepoznato stanje izvora nikad nije "sve provjereno" --------------
+  {
+    id: 'inspection-coverage/izgubljen-izvor-agregacije',
+    imitates: 'T64: agregacija izgubi jedan od pet izvora (npr. consistencyStructure se prestane '
+      + 'racunati ili preimenuje), pa bi odsutan skipped niz izgledao kao "nista preskoceno" i '
+      + 'dokument bi dobio fullyChecked iako dio analize nije ni pokrenut',
+    caught: () => {
+      const details = inspectionDetails();
+      delete details.consistencyStructure;
+      const out = computeInspectionCoverage({ details, census: cleanInspectionCensus() });
+      return out.status !== 'fullyChecked' && out.skippedParts.some((part) => part.kind === 'analysisUnavailable');
+    },
+    cleanBefore: () => computeInspectionCoverage({ details: inspectionDetails(), census: cleanInspectionCensus() }).status === 'fullyChecked',
+  },
+  {
+    id: 'inspection-coverage/prazan-fallback-kao-zeleno',
+    imitates: 'T64: catch grana omotaca analyzeDocx postavi requiredSectionsStructure i '
+      + 'linkDoiStructure na prazan fallback sa skipped: [], sto je oblikom isto kao stvarno '
+      + '"nista preskoceno"; bez prijave nedostupnog izvora ishod bi lagao zelenim',
+    caught: () => computeInspectionCoverage({
+      details: inspectionDetails(),
+      census: cleanInspectionCensus(),
+      unavailableSources: ['requiredSectionsStructure', 'linkDoiStructure'],
+    }).status === 'manualReviewRequired',
+    cleanBefore: () => computeInspectionCoverage({ details: inspectionDetails(), census: cleanInspectionCensus(), unavailableSources: [] }).status === 'fullyChecked',
+  },
 ];
+
+/** T64: potpun skup izvora kakav vanjski omotac analyzeDocx sastavlja nad cistim dokumentom. */
+function inspectionDetails(): Record<string, unknown> {
+  return {
+    typographyStructure: { skipped: [] },
+    consistencyStructure: { skipped: [] },
+    requiredSectionsStructure: { skipped: [] },
+    linkDoiStructure: { skipped: [] },
+    tableFigureRescue: { tables: [], figures: [] },
+    legalFootnoteStructure: null,
+  };
+}
+
+function cleanInspectionCensus(): InspectionCensus {
+  return {
+    totalParagraphs: 40,
+    byKind: { citationField: 0, textBox: 0, nestedTable: 0, tableCell: 0, contentControl: 0, trackedChange: 0, equation: 0, embeddedObject: 0, fieldOrHyperlink: 0 },
+  };
+}
 
 /** Izvor Edge funkcije webhook-mor s diska; mutira se samo kopija u memoriji. */
 function webhookMorSource(): string {

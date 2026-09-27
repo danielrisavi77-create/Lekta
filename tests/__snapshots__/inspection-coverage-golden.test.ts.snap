@@ -1,0 +1,195 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`T64 inspectionCoverage nad golden fixturama > oblik, invarijante i snapshot po fixturi 1`] = `
+{
+  "fer-diplomski-prazni-odlomci.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 172,
+    "version": 1,
+  },
+  "fer-diplomski-puna-struktura.docx": {
+    "skippedParagraphs": 24,
+    "skippedParts": [
+      {
+        "affectedCheckIds": [
+          "format.typography.consistency",
+        ],
+        "count": 24,
+        "kind": "tableCell",
+        "reason": "odlomci unutar tablica nisu analizirani",
+      },
+    ],
+    "status": "partiallyChecked",
+    "totalParagraphs": 58,
+    "version": 1,
+  },
+  "fer-diplomski-uskladjen.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 160,
+    "version": 1,
+  },
+  "ffzg-filozofija-diplomski.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 176,
+    "version": 1,
+  },
+  "fpzg-novinarstvo-bibliografija.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 23,
+    "version": 1,
+  },
+  "grf-diplomski-neuskladjen.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 6,
+    "version": 1,
+  },
+  "lo-fpzg-zavrsni-neuskladjen.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 72,
+    "version": 1,
+  },
+  "lo-fpzg-zavrsni-uskladjen.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 139,
+    "version": 1,
+  },
+  "mef-doktorski-disertacija.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 262,
+    "version": 1,
+  },
+  "pmf-matematika-uskladjen.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 127,
+    "version": 1,
+  },
+  "pmf-matematika-zasticeni-odlomci.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 129,
+    "version": 1,
+  },
+  "pravo-integrirani-fusnote.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [
+      {
+        "affectedCheckIds": [],
+        "count": 1,
+        "kind": "legalFootnote",
+        "reason": "fusnote bez dovoljno pouzdane pravne strukture nisu analizirane",
+      },
+    ],
+    "status": "partiallyChecked",
+    "totalParagraphs": 18,
+    "version": 1,
+  },
+  "pravo-socijalni-rad-fusnote.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 18,
+    "version": 1,
+  },
+  "synthetic-formula-omath.docx": {
+    "skippedParagraphs": 1,
+    "skippedParts": [
+      {
+        "affectedCheckIds": [
+          "format.typography.consistency",
+        ],
+        "count": 1,
+        "kind": "equation",
+        "reason": "odlomci s formulama nisu analizirani",
+      },
+    ],
+    "status": "partiallyChecked",
+    "totalParagraphs": 5,
+    "version": 1,
+  },
+  "synthetic-fpzg-zavrsni-verzija-2.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 72,
+    "version": 1,
+  },
+  "synthetic-hrvatski-naslov1-heading.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 2,
+    "version": 1,
+  },
+  "synthetic-libreoffice-standard-default.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 3,
+    "version": 1,
+  },
+  "synthetic-mentor-komentari.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 72,
+    "version": 1,
+  },
+  "ttf-diplomski-arial.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 143,
+    "version": 1,
+  },
+  "typografija-i-literatura.docx": {
+    "skippedParagraphs": 0,
+    "skippedParts": [],
+    "status": "fullyChecked",
+    "totalParagraphs": 7,
+    "version": 1,
+  },
+  "word-veliki-neuredan.docx": {
+    "skippedParagraphs": 13,
+    "skippedParts": [
+      {
+        "affectedCheckIds": [
+          "format.typography.consistency",
+        ],
+        "count": 12,
+        "kind": "tableCell",
+        "reason": "odlomci unutar tablica nisu analizirani",
+      },
+      {
+        "affectedCheckIds": [
+          "format.typography.consistency",
+        ],
+        "count": 1,
+        "kind": "trackedChange",
+        "reason": "odlomci s praćenim promjenama nisu analizirani",
+      },
+    ],
+    "status": "partiallyChecked",
+    "totalParagraphs": 445,
+    "version": 1,
+  },
+}
+`;
