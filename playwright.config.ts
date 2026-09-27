@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices, type Project as PlaywrightTestProject } from '@playwright/test';
 
 /**
  * PORT JE PODESIV, jer je fiksni port u ovom repozitoriju izvor KRIVIH MJERENJA, ne samo gnjavaze.
@@ -38,6 +38,118 @@ const UX_ORIGIN = `http://127.0.0.1:${UX_PORT}`;
  */
 const UX_REUSE_SERVER = process.env.CI ? false : process.env.LEKTA_UX_REUSE_SERVER === '1';
 
+/**
+ * LOKALNO SAMO CHROMIUM MOTOR (vlasnik 2026-09-26, T62, pravila za stroj). Razvojni stroj je i3 s
+ * 2 jezgre i 8 GB RAM-a, na kojem istodobno radi vise sesija. Svaki dodatni motor (Firefox, WebKit)
+ * dize vlastiti preglednik i vlastiti skup procesa, pa lokalni run koji pokupi sve projekte (npr.
+ * `playwright test` bez `--project`) trostruko trosi stroj i mlati memoriju drugim sesijama.
+ *
+ * Zato lokalno postoje samo `chromium` i `mobile-chromium` (mobilna emulacija u istom Chromiumu,
+ * vidi komentar projekta nize). `firefox`, `webkit` i `mobile-webkit` ukljuceni su kad je `CI`
+ * postavljen (CI ponasanje nepromijenjeno: ondje su svi projekti kao i dosad) ili lokalno izricito
+ * uz `LEKTA_UX_ALL_BROWSERS=1` (`npm run test:ux:browsers` to postavlja sam, kroz omotac locka).
+ */
+export const CHROMIUM_ENGINE_PROJECTS: readonly string[] = ['chromium', 'mobile-chromium'];
+
+export function includeAllBrowsers(env: Record<string, string | undefined>): boolean {
+  return Boolean(env.CI) || env.LEKTA_UX_ALL_BROWSERS === '1';
+}
+
+export function selectUxProjects<T extends { name?: string }>(
+  projects: readonly T[],
+  env: Record<string, string | undefined>,
+): T[] {
+  if (includeAllBrowsers(env)) return [...projects];
+  return projects.filter((p) => CHROMIUM_ENGINE_PROJECTS.includes(p.name ?? ''));
+}
+
+/** Svi projekti; koji se od njih stvarno vrte odlucuje `selectUxProjects` iznad. */
+export const ALL_UX_PROJECTS: PlaywrightTestProject[] = [
+  /**
+   * Mobilni kriticni put se NE vrti na desktopu: ondje upload odmah skace na korak 2, pa bi test
+   * mjerio tok koji na sirokom ekranu ne postoji. Izuzece je strukturno (po projektu), ne
+   * `test.skip()` u tijelu: runtime skip je audit P1-17 prijavio kao nacin da suite bude zelena
+   * a da nista ne vrti.
+   */
+  { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: [/mobile-critical-path\.spec\.ts/] },
+  /**
+   * MOBILNI PROJEKT (audit TEST-09, TEST-12). Dosad se sve vrtjelo samo na Desktop Chromeu, a
+   * mobilni audit je bio uglavnom provjera vidljivosti: nije dokazivao da se sucelje da koristiti
+   * prstom na uskom zaslonu.
+   *
+   * Namjerno emulacija u Chromiumu, ne novi preglednik: ne trazi dodatno preuzimanje, vrti se na
+   * istom stroju, a hvata ono sto je za ovaj proizvod stvarno rizicno (uzak viewport, touch,
+   * dodirne mete). Firefox i WebKit su zaseban posao i ostaju otvoreni, jer ih nema smisla
+   * ukljuciti dok se ne moze dokazati da prolaze.
+   */
+  {
+    name: 'mobile-chromium',
+    use: { ...devices['Pixel 5'] },
+    /**
+     * ZATVOREN 2026-08-31. Ovdje je stajalo da klik na "Nastavi na profil" pod `isMobile` +
+     * `hasTouch` ne prolazi ni u 120 s, pa je `roadmap-v2.spec.ts` bio izuzet. Vise nije ni
+     * izuzet ni crven.
+     *
+     * Kvar NIJE bio dodirna meta nego OKOMITI PRORACUN na niskom zaslonu: `#browseBtn`
+     * zavrsava tocno na 667, pa je dropzone prelazio prvi ekran za svojih 14 px donjeg
+     * paddinga i 1 px ruba (448..682). Uz to stavka `.wizard-grid` ima zadani `min-width:auto`,
+     * pa stupac nije mogao ispod svoje min-content sirine: dropzone 378 px na zaslonu od 375,
+     * a `body` ima `overflow-x:clip` pa se visak tiho REZAO. Oboje popravljeno u `index.html`
+     * (commit `e86da45e`), pod `(max-width:720px) and (max-height:720px)`.
+     *
+     * Zasto se dugo cinilo kao kradja dodira: Pixel 5 je visok 851 px, pa se na njemu nista od
+     * toga ne vidi. Pada samo slucaj 375x667 unutar tog istog projekta.
+     */
+    /**
+     * `repair-panel.spec.ts` VISE nije izuzet (UX-02, 2026-09-01). Tvrdi viewport 1440x1000 je
+     * maknut, pa velicinu daje projekt, a trosak vise nije argument: dijeljena analiza ga drzi
+     * na JEDNOJ po projektu. Prvi mobilni prolaz odmah je nasao stvaran kvar (odzumiranje
+     * stranice na ~52 % zbog `min-width:auto` u ljusci napredne provjere), sto je i bila
+     * poanta: popravak je placeni dio proizvoda i nije imao nijednu mobilnu provjeru.
+     *
+     * `desktop-flow.spec.ts` ostaje izuzet: on je tvrdo desktop scenarij.
+     */
+    testIgnore: [/desktop-flow\.spec\.ts/],
+  },
+  /**
+   * FIREFOX I WEBKIT (audit P1-18). Do sada je release matrica bila samo Chromium (desktop +
+   * mobilna emulacija), pa su upload .docx-a, Web Worker, blob download i modal/focus na
+   * Safariju i Firefoxu bili potpuno nepokriveni.
+   *
+   * Vrte SAMO kriticni put (`roadmap-v2`), ne cijelu suite: cilj je dokazati da se do rezultata
+   * moze doci u svakom pregledniku, ne udvostruciti sve provjere u tri preglednika.
+   *
+   * `parser-parity` je dodan 2026-09-03, nakon prvog zelenog prolaza u OBA motora, po pravilu
+   * koje ova matrica sama propisuje. Izmjereno na mirnom stroju: WebKit 2,7 i 2,3 min (dva
+   * uzastopna prolaza), Firefox 1,6 min. Raniji istek od 600 s bio je opterecenje stroja, ne
+   * kvar: ista provjera je uz 25 tudjih node procesa padala, a uz jedan prolazi.
+   *
+   * NISU u `npm run test:ux` niti u `check.yml` gateu. Razlog je posten: ovi preglednici jos
+   * nijednom nisu odvrtjeli ovu suite, pa bi ih odmah proglasiti blokirajucima znacilo pustiti
+   * u gate nesto sto nitko nije vidio kako se ponasa. Vrte se u zasebnom `browser-matrix`
+   * workflowu, vidljivo; u obavezne provjere se PROMICU tek nakon prvog zelenog prolaza.
+   *
+   * RADNI PROSTOR TRI FAZE (korak D, 2026-09-13). Specovi radnog prostora `/rad/` (ulaz, CTA
+   * popravka, povratak odabira, indikator spremanja, pristupacnost, sirine zaslona) ulaze u
+   * allowliste WebKita i mobilnog WebKita, jer bas ondje zive razlike koje Chromium ne vidi:
+   * fokus poslije `display:none`, `inert`, `scrollIntoView` i IndexedDB u Safariju. Firefox
+   * dobiva ulaz, pristupacnost i sirine; ostali specovi mjere IndexedDB tok koji je vec pokriven
+   * u WebKitu i na Chromiumu, pa bi trostruko vrtjenje samo trosilo stroj matrice.
+   *
+   * ALLOWLISTA JE PO IMENU DATOTEKE, pa nov spec ovdje NE ulazi sam: `--list` na projektu prije
+   * dodavanja daje 0 testova za tu datoteku, i to je cijena koja se placa svjesno (matrica ostaje
+   * popis onoga sto je netko vidio kako se ponasa, ne sve sto postoji). Izmjereno pri dodavanju:
+   * `webkit --list` nad workspace-entry davao je 0 testova, poslije 10; roadmap-v2 (sentinel, vec u
+   * allowlisti) davao je 2 prije i poslije, pa mjerenje nije bilo pokvareno.
+   */
+  { name: 'firefox', use: { ...devices['Desktop Firefox'] },
+    testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|workspace-a11y|workspace-viewports)\.spec\.ts/ },
+  { name: 'webkit', use: { ...devices['Desktop Safari'] },
+    testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports)\.spec\.ts/ },
+  { name: 'mobile-webkit', use: { ...devices['iPhone 13'] },
+    testMatch: /(roadmap-v2|mobile-critical-path|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports)\.spec\.ts/ },
+];
+
 export default defineConfig({
   testDir: './tests/ux',
   timeout: 120_000,
@@ -62,91 +174,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  projects: [
-    /**
-     * Mobilni kriticni put se NE vrti na desktopu: ondje upload odmah skace na korak 2, pa bi test
-     * mjerio tok koji na sirokom ekranu ne postoji. Izuzece je strukturno (po projektu), ne
-     * `test.skip()` u tijelu: runtime skip je audit P1-17 prijavio kao nacin da suite bude zelena
-     * a da nista ne vrti.
-     */
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: [/mobile-critical-path\.spec\.ts/] },
-    /**
-     * MOBILNI PROJEKT (audit TEST-09, TEST-12). Dosad se sve vrtjelo samo na Desktop Chromeu, a
-     * mobilni audit je bio uglavnom provjera vidljivosti: nije dokazivao da se sucelje da koristiti
-     * prstom na uskom zaslonu.
-     *
-     * Namjerno emulacija u Chromiumu, ne novi preglednik: ne trazi dodatno preuzimanje, vrti se na
-     * istom stroju, a hvata ono sto je za ovaj proizvod stvarno rizicno (uzak viewport, touch,
-     * dodirne mete). Firefox i WebKit su zaseban posao i ostaju otvoreni, jer ih nema smisla
-     * ukljuciti dok se ne moze dokazati da prolaze.
-     */
-    {
-      name: 'mobile-chromium',
-      use: { ...devices['Pixel 5'] },
-      /**
-       * ZATVOREN 2026-08-31. Ovdje je stajalo da klik na "Nastavi na profil" pod `isMobile` +
-       * `hasTouch` ne prolazi ni u 120 s, pa je `roadmap-v2.spec.ts` bio izuzet. Vise nije ni
-       * izuzet ni crven.
-       *
-       * Kvar NIJE bio dodirna meta nego OKOMITI PRORACUN na niskom zaslonu: `#browseBtn`
-       * zavrsava tocno na 667, pa je dropzone prelazio prvi ekran za svojih 14 px donjeg
-       * paddinga i 1 px ruba (448..682). Uz to stavka `.wizard-grid` ima zadani `min-width:auto`,
-       * pa stupac nije mogao ispod svoje min-content sirine: dropzone 378 px na zaslonu od 375,
-       * a `body` ima `overflow-x:clip` pa se visak tiho REZAO. Oboje popravljeno u `index.html`
-       * (commit `e86da45e`), pod `(max-width:720px) and (max-height:720px)`.
-       *
-       * Zasto se dugo cinilo kao kradja dodira: Pixel 5 je visok 851 px, pa se na njemu nista od
-       * toga ne vidi. Pada samo slucaj 375x667 unutar tog istog projekta.
-       */
-      /**
-       * `repair-panel.spec.ts` VISE nije izuzet (UX-02, 2026-09-01). Tvrdi viewport 1440x1000 je
-       * maknut, pa velicinu daje projekt, a trosak vise nije argument: dijeljena analiza ga drzi
-       * na JEDNOJ po projektu. Prvi mobilni prolaz odmah je nasao stvaran kvar (odzumiranje
-       * stranice na ~52 % zbog `min-width:auto` u ljusci napredne provjere), sto je i bila
-       * poanta: popravak je placeni dio proizvoda i nije imao nijednu mobilnu provjeru.
-       *
-       * `desktop-flow.spec.ts` ostaje izuzet: on je tvrdo desktop scenarij.
-       */
-      testIgnore: [/desktop-flow\.spec\.ts/],
-    },
-    /**
-     * FIREFOX I WEBKIT (audit P1-18). Do sada je release matrica bila samo Chromium (desktop +
-     * mobilna emulacija), pa su upload .docx-a, Web Worker, blob download i modal/focus na
-     * Safariju i Firefoxu bili potpuno nepokriveni.
-     *
-     * Vrte SAMO kriticni put (`roadmap-v2`), ne cijelu suite: cilj je dokazati da se do rezultata
-     * moze doci u svakom pregledniku, ne udvostruciti sve provjere u tri preglednika.
-     *
-     * `parser-parity` je dodan 2026-09-03, nakon prvog zelenog prolaza u OBA motora, po pravilu
-     * koje ova matrica sama propisuje. Izmjereno na mirnom stroju: WebKit 2,7 i 2,3 min (dva
-     * uzastopna prolaza), Firefox 1,6 min. Raniji istek od 600 s bio je opterecenje stroja, ne
-     * kvar: ista provjera je uz 25 tudjih node procesa padala, a uz jedan prolazi.
-     *
-     * NISU u `npm run test:ux` niti u `check.yml` gateu. Razlog je posten: ovi preglednici jos
-     * nijednom nisu odvrtjeli ovu suite, pa bi ih odmah proglasiti blokirajucima znacilo pustiti
-     * u gate nesto sto nitko nije vidio kako se ponasa. Vrte se u zasebnom `browser-matrix`
-     * workflowu, vidljivo; u obavezne provjere se PROMICU tek nakon prvog zelenog prolaza.
-     *
-     * RADNI PROSTOR TRI FAZE (korak D, 2026-09-13). Specovi radnog prostora `/rad/` (ulaz, CTA
-     * popravka, povratak odabira, indikator spremanja, pristupacnost, sirine zaslona) ulaze u
-     * allowliste WebKita i mobilnog WebKita, jer bas ondje zive razlike koje Chromium ne vidi:
-     * fokus poslije `display:none`, `inert`, `scrollIntoView` i IndexedDB u Safariju. Firefox
-     * dobiva ulaz, pristupacnost i sirine; ostali specovi mjere IndexedDB tok koji je vec pokriven
-     * u WebKitu i na Chromiumu, pa bi trostruko vrtjenje samo trosilo stroj matrice.
-     *
-     * ALLOWLISTA JE PO IMENU DATOTEKE, pa nov spec ovdje NE ulazi sam: `--list` na projektu prije
-     * dodavanja daje 0 testova za tu datoteku, i to je cijena koja se placa svjesno (matrica ostaje
-     * popis onoga sto je netko vidio kako se ponasa, ne sve sto postoji). Izmjereno pri dodavanju:
-     * `webkit --list` nad workspace-entry davao je 0 testova, poslije 10; roadmap-v2 (sentinel, vec u
-     * allowlisti) davao je 2 prije i poslije, pa mjerenje nije bilo pokvareno.
-     */
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] },
-      testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|workspace-a11y|workspace-viewports)\.spec\.ts/ },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] },
-      testMatch: /(roadmap-v2|desktop-flow|parser-parity|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports)\.spec\.ts/ },
-    { name: 'mobile-webkit', use: { ...devices['iPhone 13'] },
-      testMatch: /(roadmap-v2|mobile-critical-path|workspace-entry|repair-cta-opens-panel|repair-selection-restore|save-indicator|workspace-a11y|workspace-viewports)\.spec\.ts/ },
-  ],
+  projects: selectUxProjects(ALL_UX_PROJECTS, process.env),
   /**
    * Dizanje posluzitelja traje MNOGO duze na hladno nego na toplo, pa je 120 s bila granica koja
    * povremeno pada bez ijednog stvarnog kvara.
