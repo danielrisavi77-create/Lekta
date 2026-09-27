@@ -3927,6 +3927,34 @@ const MUTATIONS: Mutation[] = [
     cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
   },
   {
+    id: 'naplata/rucna-narudzba-ne-cita-oznaku-povrata',
+    imitates: 'stanje handlera do kruga 2 popravka 2026-09-27: grana premium_human upise manual_orders i odmah javi manual_order_created, bez citanja oznake punog povrata. Povrat obradjen prije retryja uplate (Stripe ne jamci redoslijed, prvi pokusaj uplate mogao je pasti) nalazi praznu manual_orders, a retry potom otvara pending narudzbu za vec vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const od = src.indexOf('    // POVRAT STIGAO PRIJE ILI ISTODOBNO S UPLATOM, ZA RUCNU NARUDZBU');
+      const _do = src.indexOf('    if (narudzbaVecPostoji) {', od);
+      if (od < 0 || _do < 0) return false;
+      const mutated = src.slice(0, od) + src.slice(_do);
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('rucna narudzba ne cita oznaku punog povrata'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
+    id: 'naplata/rucna-narudzba-duplikat-prije-oznake-povrata',
+    imitates: 'pola popravka: grana premium_human cita oznaku povrata, ali duplikat (23505) izlazi kao duplicate_ignored PRIJE citanja. Retry uplate nakon povrata tada javi obradjeno, a narudzba koju je prvi pokusaj otvorio ostaje pending za vracen novac',
+    caught: () => {
+      const src = webhookMorSource();
+      const dup = "    if (narudzbaVecPostoji) {\n      await settle('processed', 'manual_order_duplicate');\n      return json({ ok: true, action: 'duplicate_ignored' });\n    }\n";
+      const oznaka = '    // POVRAT STIGAO PRIJE ILI ISTODOBNO S UPLATOM, ZA RUCNU NARUDZBU';
+      if (!src.includes(dup) || !src.includes(oznaka)) return false;
+      const mutated = src.replace(dup, '').replace(oznaka, dup + oznaka);
+      if (mutated === src) return false;
+      return webhookHandlerProblems(mutated).some((p) => p.includes('utrka s povratom'));
+    },
+    cleanBefore: () => webhookHandlerProblems(webhookMorSource()).length === 0,
+  },
+  {
     id: 'naplata/23505-bez-provjere-vlasnika',
     imitates: 'stanje handlera do 2026-09-27: insert entitlementa koji padne na unique(provider, order_id) (23505) tumacio se kao vec obradjeno i nastavljao na duplicate_ignored i obveze bonusa, bez provjere da postojeci redak pripada istom korisniku kao dogadjaj',
     caught: () => {

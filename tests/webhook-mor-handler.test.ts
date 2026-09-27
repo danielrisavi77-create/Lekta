@@ -1080,3 +1080,203 @@ describe('webhook-mor handler: 500 odgovori ne nose tekst greske baze', () => {
     expect(err.mock.calls.some((c) => JSON.stringify(c[1] ?? '').includes('tajni_detalj_baze'))).toBe(true);
   });
 });
+
+/**
+ * RUCNA NARUDZBA I POVRAT KOJI STIGNE PRIJE UPLATE (nalaz pregleda kruga 2, odluka vlasnika
+ * 2026-09-27). Stripe ne jamci redoslijed, a prvi pokusaj uplate moze pasti i cekati retry. Grana
+ * premium_human dotad nije citala oznaku punog povrata, pa je povrat obradjen PRIJE retryja uplate
+ * nalazio praznu manual_orders, a retry je potom otvarao `pending` narudzbu za vec vracen novac.
+ *
+ * Lazna baza ovdje pamti stanje preko vise prolaza (inbox po retku dogadjaja, manual_orders), pa se
+ * redoslijed dokazuje stvarnim nizom dogadjaja kroz isti handler, a ne pretpostavkom o upitu.
+ */
+const PREMIUM_ROW = {
+  ...PRODUCT_ROW,
+  id: 'premium_human',
+  kind: 'premium_human',
+  work_type: null,
+  price_eur: 9.99,
+  manual_fulfillment: true,
+};
+const premiumPayment = () => signedRequest(succeeded({}, { user_id: 'user-1', product_id: 'premium_human' }));
+
+function manualOrderWorld(opts: { failFirstInsert?: boolean } = {}) {
+  const inbox = new Map<string, string | null>();
+  let nextInbox = 0;
+  const state: { order: { id: string; status: string } | null; failInsert: boolean } = {
+    order: null,
+    failInsert: Boolean(opts.failFirstInsert),
+  };
+  const resolve = (c: FakeCall): FakeResult | undefined => {
+    const op = writeOp(c);
+    if (c.table === 'products') return { data: PREMIUM_ROW };
+    if (c.table === 'webhook_events' && op === 'insert') {
+      nextInbox += 1;
+      const id = `inbox-${nextInbox}`;
+      inbox.set(id, null);
+      return { data: { id } };
+    }
+    if (c.table === 'webhook_events' && op === 'update') {
+      const id = String(eqs(c).id);
+      if (!inbox.has(id)) return { data: [] };
+      inbox.set(id, ((argOf(c, 'update') as Record<string, unknown>).outcome_detail as string | null) ?? null);
+      return { data: [{ id }] };
+    }
+    if (c.table === 'webhook_events' && op === 'select') {
+      const wanted = (c.ops.find((o) => o.op === 'in')?.args[1] ?? []) as string[];
+      const rows = [...inbox.entries()].filter(([, d]) => d !== null && wanted.includes(d)).map(([id]) => ({ id }));
+      return { data: rows.slice(0, 1) };
+    }
+    if (c.table === 'entitlements' && op === 'select') return { data: [] };
+    if (c.table === 'manual_orders' && op === 'insert') {
+      if (state.failInsert) {
+        state.failInsert = false;
+        return { error: { message: 'prolazna_greska_baze' } };
+      }
+      if (state.order) return { error: { message: 'duplicate key', code: '23505' } };
+      state.order = { id: 'mo-1', status: 'pending' };
+      return { data: null };
+    }
+    if (c.table === 'manual_orders' && op === 'select') return { data: state.order ? [{ ...state.order }] : [] };
+    if (c.table === 'manual_orders' && op === 'update') {
+      const ids = (c.ops.find((o) => o.op === 'in')?.args[1] ?? []) as string[];
+      if (state.order && ids.includes(state.order.id)) {
+        state.order.status = String((argOf(c, 'update') as Record<string, unknown>).status);
+      }
+      return { data: null };
+    }
+    return undefined;
+  };
+  return { state, resolve };
+}
+
+describe('webhook-mor handler: rucna narudzba i povrat prije uplate', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('prvi pokusaj uplate padne, puni povrat stigne, retry uplate NE ostavlja pending narudzbu; drugi retry je no-op', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = manualOrderWorld({ failFirstInsert: true });
+
+    // 1. prvi pokusaj uplate: prolazna greska upisa, 500, Stripe zakaze retry
+    const prvi = await run(premiumPayment(), w.resolve);
+    expect(prvi.res.status).toBe(500);
+    expect(w.state.order).toBeNull();
+
+    // 2. operater vrati novac u cijelosti: povrat ne nalazi ni pravo ni narudzbu, oznaka ostaje
+    const povrat = await run(signedRequest(refunded(999)), w.resolve);
+    expect(povrat.body).toEqual({ ok: true, action: 'refund_without_entitlement' });
+    expect(w.state.order).toBeNull();
+
+    // 3. Stripe retry uplate: narudzba se upise, oznaka procita, narudzba odmah zatvori
+    const retry = await run(premiumPayment(), w.resolve);
+    expect(retry.res.status).toBe(200);
+    expect(retry.body).toEqual({ ok: true, action: 'refunded_before_payment' });
+    expect(w.state.order).toEqual({ id: 'mo-1', status: 'refunded' });
+    expect(settled(retry.calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'refunded_before_payment' });
+    // Redoslijed: upis narudzbe, pa citanje oznake, pa zatvaranje (isti dogovor kao za entitlement).
+    const idx = (pred: (c: FakeCall) => boolean) => retry.calls.findIndex(pred);
+    const upis = idx((c) => c.table === 'manual_orders' && writeOp(c) === 'insert');
+    const oznaka = idx((c) => c.table === 'webhook_events' && writeOp(c) === 'select');
+    const zatvori = idx((c) => c.table === 'manual_orders' && writeOp(c) === 'update');
+    expect(upis).toBeGreaterThanOrEqual(0);
+    expect(upis).toBeLessThan(oznaka);
+    expect(oznaka).toBeLessThan(zatvori);
+    const citanje = retry.calls[oznaka];
+    expect(eqs(citanje)).toEqual({ provider: 'stripe', order_id: 'pi_1' });
+    expect(citanje.ops.find((o) => o.op === 'in')?.args).toEqual(['outcome_detail', REFUND_DETAILS]);
+    const zatvaranje = retry.calls[zatvori];
+    expect(argOf(zatvaranje, 'update')).toEqual({ status: 'refunded' });
+    expect(eqs(zatvaranje)).toEqual({ provider: 'stripe', order_id: 'pi_1' });
+    const redak = err.mock.calls.find((c) => c[0] === 'webhook-mor manual_order_refunded_before_payment');
+    expect(redak?.[1]).toMatchObject({ orderId: 'pi_1', productId: 'premium_human', manualOrdersClosed: 1 });
+
+    // 4. jos jedan retry iste uplate (23505): isti ishod, jedini upis u manual_orders je pokusaj inserta
+    const drugi = await run(premiumPayment(), w.resolve);
+    expect(drugi.body).toEqual({ ok: true, action: 'refunded_before_payment' });
+    expect(writesTo(drugi.calls, 'manual_orders').map(writeOp)).toEqual(['insert']);
+    expect(w.state.order).toEqual({ id: 'mo-1', status: 'refunded' });
+  });
+
+  it('charge.refunded dostavljen prije payment_intent.succeeded: narudzba zavrsi zatvorena', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = manualOrderWorld();
+    const povrat = await run(signedRequest(refunded(999)), w.resolve);
+    expect(povrat.body).toEqual({ ok: true, action: 'refund_without_entitlement' });
+    const uplata = await run(premiumPayment(), w.resolve);
+    expect(uplata.body).toEqual({ ok: true, action: 'refunded_before_payment' });
+    expect(w.state.order?.status).toBe('refunded');
+  });
+
+  it('zrcalni redoslijed (uplata, povrat, retry uplate) konvergira u isto stanje bez drugog upisa', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = manualOrderWorld();
+    const uplata = await run(premiumPayment(), w.resolve);
+    expect(uplata.body).toEqual({ ok: true, action: 'manual_order_created' });
+    expect(w.state.order?.status).toBe('pending');
+    const povrat = await run(signedRequest(refunded(999)), w.resolve);
+    expect(povrat.body).toEqual({ ok: true, action: 'refunded' });
+    expect(w.state.order?.status).toBe('refunded');
+    const retry = await run(premiumPayment(), w.resolve);
+    expect(retry.body).toEqual({ ok: true, action: 'refunded_before_payment' });
+    expect(writesTo(retry.calls, 'manual_orders').map(writeOp)).toEqual(['insert']);
+    expect(w.state.order?.status).toBe('refunded');
+  });
+
+  it('bez oznake povrata ponasanje je nepromijenjeno: manual_order_created, pa duplicate_ignored', async () => {
+    const w = manualOrderWorld();
+    const prva = await run(premiumPayment(), w.resolve);
+    expect(prva.body).toEqual({ ok: true, action: 'manual_order_created' });
+    expect(settled(prva.calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'manual_order_created' });
+    const druga = await run(premiumPayment(), w.resolve);
+    expect(druga.body).toEqual({ ok: true, action: 'duplicate_ignored' });
+    expect(settled(druga.calls).at(-1)).toMatchObject({ outcome: 'processed', outcome_detail: 'manual_order_duplicate' });
+    expect(w.state.order).toEqual({ id: 'mo-1', status: 'pending' });
+    expect(druga.calls.some((c) => c.table === 'manual_orders' && writeOp(c) === 'update')).toBe(false);
+  });
+
+  it('DJELOMICNI povrat prije uplate ne ostavlja oznaku: narudzba se otvara normalno', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = manualOrderWorld();
+    const povrat = await run(signedRequest(refunded(500)), w.resolve);
+    expect(povrat.body).toEqual({ ok: true, action: 'partial_refund_noted' });
+    const uplata = await run(premiumPayment(), w.resolve);
+    expect(uplata.body).toEqual({ ok: true, action: 'manual_order_created' });
+    expect(w.state.order).toEqual({ id: 'mo-1', status: 'pending' });
+  });
+
+  it('pad citanja oznake je 500 bez teksta greske; retry kroz 23505 zatvara narudzbu', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = manualOrderWorld();
+    await run(signedRequest(refunded(999)), w.resolve);
+    const boom = (c: FakeCall): FakeResult | undefined =>
+      c.table === 'webhook_events' && writeOp(c) === 'select' ? { error: { message: 'tajni_detalj_baze' } } : w.resolve(c);
+    const pad = await run(premiumPayment(), boom);
+    expect(pad.res.status).toBe(500);
+    expect(pad.body).toEqual({ error: 'refund_marker_lookup_failed' });
+    expect(settled(pad.calls).at(-1)).toMatchObject({ outcome: 'failed', outcome_detail: 'refund_marker_lookup: tajni_detalj_baze' });
+    expect(err.mock.calls.some((c) => c[0] === 'webhook-mor refund_marker_lookup_failed')).toBe(true);
+    // Retry ne javlja duplicate_ignored dok je narudzba otvorena: prolazi kroz 23505 i zatvara je.
+    const retry = await run(premiumPayment(), w.resolve);
+    expect(retry.body).toEqual({ ok: true, action: 'refunded_before_payment' });
+    expect(w.state.order?.status).toBe('refunded');
+  });
+
+  it('pad zatvaranja narudzbe je 500 bez teksta greske, detalj u inboxu i logu', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const w = manualOrderWorld();
+    await run(signedRequest(refunded(999)), w.resolve);
+    const boom = (c: FakeCall): FakeResult | undefined =>
+      c.table === 'manual_orders' && writeOp(c) === 'update' ? { error: { message: 'tajni_detalj_baze' } } : w.resolve(c);
+    const pad = await run(premiumPayment(), boom);
+    expect(pad.res.status).toBe(500);
+    expect(pad.body).toEqual({ error: 'refund_failed' });
+    expect(settled(pad.calls).at(-1)).toMatchObject({
+      outcome: 'failed',
+      outcome_detail: 'refunded_before_payment: manual_orders_update: tajni_detalj_baze',
+    });
+    const redak = err.mock.calls.find((c) => c[0] === 'webhook-mor refund_consequences_failed');
+    expect(redak?.[1]).toMatchObject({ orderId: 'pi_1', step: 'manual_orders_update', error: 'tajni_detalj_baze' });
+  });
+});

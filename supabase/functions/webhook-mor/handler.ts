@@ -37,7 +37,8 @@ const PROVIDER = 'stripe';
 
 /**
  * `outcome_detail` inbox zapisa koji znace da je za PaymentIntent zabiljezen PUNI povrat. Uplata
- * koja stigne nakon (ili istodobno s) takvim zapisom ne smije ostaviti aktivno pravo.
+ * koja stigne nakon (ili istodobno s) takvim zapisom ne smije ostaviti aktivno pravo ni otvorenu
+ * rucnu narudzbu (premium_human): obje grane uplate prvo pisu, pa citaju oznaku.
  * `refund_pending` se upisuje PRIJE citanja prava i ostaje i kad obrada povrata padne.
  */
 const REFUND_MARKERS = ['refund_pending', 'refund_without_entitlement', 'refunded'];
@@ -711,15 +712,59 @@ export function createWebhookHandler(deps: WebhookDeps): (req: Request) => Promi
     const { error } = await admin
       .from('manual_orders')
       .insert({ user_id: ev.userId, product_id: product.id, order_id: ev.orderId, provider: PROVIDER });
-    if (error && (error as any).code === '23505') {
-      await settle('processed', 'manual_order_duplicate');
-      return json({ ok: true, action: 'duplicate_ignored' });
-    }
-    if (error) {
+    const narudzbaVecPostoji = Boolean(error && (error as any).code === '23505');
+    if (error && !narudzbaVecPostoji) {
       // Tekst greske baze ide SAMO u log i inbox, nikad u odgovor (odluka vlasnika 2026-09-27).
       console.error('webhook-mor manual_order_insert_failed', { orderId: ev.orderId, error: error.message });
       await settle('failed', `manual_order_insert: ${error.message}`);
       return json({ error: 'insert_failed' }, 500);
+    }
+
+    // POVRAT STIGAO PRIJE ILI ISTODOBNO S UPLATOM, ZA RUCNU NARUDZBU (nalaz pregleda kruga 2 za
+    // odluku vlasnika 2026-09-27). Isti dogovor kao za entitlement nize: narudzba se PRVO upise, pa
+    // se TEK ONDA cita oznaka punog povrata istog PaymentIntenta. Povrat radi zrcalno (oznaka, pa
+    // citanje manual_orders u closeRefundConsequences), pa barem jedna strana vidi upis druge.
+    // Bez ovoga je povrat obradjen prije uplate (Stripe ne jamci redoslijed, a prvi pokusaj uplate
+    // mogao je pasti pa cekati retry) nalazio praznu manual_orders, a retry uplate je potom otvarao
+    // `pending` narudzbu za vec vracen novac, bez ijednog kasnijeg dogadjaja koji bi je zatvorio.
+    // I duplikat (23505) prolazi ovuda: retry nakon povrata ne smije javiti `duplicate_ignored` dok
+    // je narudzba jos otvorena. Zatvaranje je isto kao na strani povrata i ne dira vec zatvoreno.
+    // Pad citanja ili zatvaranja je 500 (retry prolazi kroz 23505 i opet dolazi ovamo).
+    const { data: oznakaPovrata, error: oznakaErr } = await admin
+      .from('webhook_events')
+      .select('id')
+      .eq('provider', PROVIDER)
+      .eq('order_id', ev.orderId)
+      .in('outcome_detail', REFUND_MARKERS)
+      .limit(1);
+    if (oznakaErr) {
+      console.error('webhook-mor refund_marker_lookup_failed', { orderId: ev.orderId, error: oznakaErr.message });
+      await settle('failed', `refund_marker_lookup: ${oznakaErr.message}`);
+      return json({ error: 'refund_marker_lookup_failed' }, 500);
+    }
+    if (Array.isArray(oznakaPovrata) && oznakaPovrata.length > 0) {
+      const zatvoreno = await closeRefundConsequences(admin, ev.orderId, deps.now?.() ?? Date.now());
+      if (!zatvoreno.ok) {
+        console.error('webhook-mor refund_consequences_failed', {
+          orderId: ev.orderId,
+          step: zatvoreno.step,
+          error: zatvoreno.error,
+        });
+        await settle('failed', `refunded_before_payment: ${zatvoreno.step}: ${zatvoreno.error}`);
+        return json({ error: 'refund_failed' }, 500);
+      }
+      console.error('webhook-mor manual_order_refunded_before_payment', {
+        orderId: ev.orderId,
+        productId: product.id,
+        manualOrdersClosed: zatvoreno.manualOrdersClosed,
+      });
+      await settle('processed', 'refunded_before_payment');
+      return json({ ok: true, action: 'refunded_before_payment' }, 200);
+    }
+
+    if (narudzbaVecPostoji) {
+      await settle('processed', 'manual_order_duplicate');
+      return json({ ok: true, action: 'duplicate_ignored' });
     }
     await settle('processed', 'manual_order_created');
     return json({ ok: true, action: 'manual_order_created' });

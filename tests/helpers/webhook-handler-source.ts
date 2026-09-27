@@ -96,6 +96,7 @@ export function webhookHandlerProblems(src: string): string[] {
  *     ERROR redak i izlaz PRIJE rucne narudzbe i PRIJE upisa entitlementa;
  *  2. puni povrat zatvara rucnu narudzbu i povlaci pass kupon, i to TEK nakon izlaza za
  *     djelomicni povrat, a prije izlaza `refund_without_entitlement` (rucna narudzba nema pravo);
+ *     Grana rucne narudzbe pise pa cita oznaku povrata (povrat prije uplate ne ostavlja narudzbu).
  *  3. 23505 se ne tumaci kao "vec obradjeno" dok se ne usporedi vlasnik postojeceg retka, i to
  *     prije citanja oznake povrata i prije ikakvog bonusa;
  *  4. (responseLeakProblems) nijedan odgovor ne nosi tekst greske baze.
@@ -129,7 +130,11 @@ function ownerDecisionProblems(raw: string): string[] {
   // 2. posljedice punog povrata
   const refundBranch = at("decision.kind === 'refund'");
   const partial = at("settle('processed', 'partial_refund_noted')");
-  const call = at('await closeRefundConsequences(admin, ev.orderId');
+  // Poziv se trazi SAMO unutar refund grane (do citanja kataloga): grana rucne narudzbe zove istu
+  // funkciju (2b), pa bi globalna pretraga maskirala refund granu koja je prestala zatvarati posljedice.
+  const refundEnd = refundBranch >= 0 ? at("from('products')", refundBranch) : -1;
+  const callAny = refundBranch >= 0 ? at('await closeRefundConsequences(admin, ev.orderId', refundBranch) : -1;
+  const call = callAny >= 0 && (refundEnd < 0 || callAny < refundEnd) ? callAny : -1;
   const withoutEnt = at("settle('processed', 'refund_without_entitlement')");
   if (call < 0) {
     problems.push('puni povrat ne zove closeRefundConsequences (rucna narudzba i pass kupon ostaju aktivni)');
@@ -150,10 +155,28 @@ function ownerDecisionProblems(raw: string): string[] {
     problems.push('closeRefundConsequences ne povlaci pass kupon (coupon_grants, reason pass_bonus)');
   }
 
+  // 2b. rucna narudzba i povrat koji je stigao PRIJE (ili istodobno s) uplatom (nalaz pregleda
+  // kruga 2). Grana premium_human mora, kao i grana entitlementa, PRVO upisati narudzbu, pa TEK
+  // ONDA procitati oznaku punog povrata i zatvoriti narudzbu. Bez toga je povrat obradjen prije
+  // retryja uplate nalazio praznu manual_orders, a retry je otvarao `pending` narudzbu za vracen novac.
+  const workType = at('if (!product.workType)', manual);
+  const manualBranchSrc = manual >= 0 && workType > manual ? src.slice(manual, workType) : '';
+  const moInsert = manualBranchSrc.search(/from\('manual_orders'\)\s*\.insert\(/);
+  const moMarker = manualBranchSrc.indexOf(".in('outcome_detail', REFUND_MARKERS)");
+  const moClose = manualBranchSrc.indexOf('await closeRefundConsequences(admin, ev.orderId');
+  const moExits = ["settle('processed', 'manual_order_created')", "settle('processed', 'manual_order_duplicate')"]
+    .map((n) => manualBranchSrc.indexOf(n));
+  if (!manualBranchSrc || moInsert < 0 || moMarker < 0 || moClose < 0) {
+    problems.push('rucna narudzba ne cita oznaku punog povrata nakon upisa (povrat prije uplate ostavlja pending narudzbu)');
+  } else if (!(moInsert < moMarker && moMarker < moClose) || moExits.some((e) => e < 0 || !(moClose < e))) {
+    problems.push('rucna narudzba cita oznaku povrata prije upisa ili nakon izlaza created/duplicate (utrka s povratom)');
+  }
+
   // 3. 23505 uz provjeru vlasnika
   const conflict = at("'conflict_other_user'");
   const duplicate = at("settle('processed', 'entitlement_duplicate')");
-  const markerRead = at(".in('outcome_detail', REFUND_MARKERS)");
+  // Citanje oznake povrata u GRANI ENTITLEMENTA (rucna narudzba ima vlastito, gore, 2b).
+  const markerRead = insert >= 0 ? at(".in('outcome_detail', REFUND_MARKERS)", insert) : -1;
   const region = insert >= 0 && duplicate > insert ? src.slice(insert, duplicate) : '';
   if (!/postojece\.user_id[^)]*\)\s*!==\s*ev\.userId/.test(region) || conflict < 0) {
     problems.push('23505 se tumaci kao vec obradjeno bez usporedbe vlasnika postojeceg retka (conflict_other_user)');
