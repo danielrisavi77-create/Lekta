@@ -118,3 +118,48 @@ export function hasConditionalNpmCiStep(actionText: string): boolean {
       step.if.includes("!= 'true'"),
   );
 }
+
+/** Workflow koji jedini smije ugasiti setup-node npm kes (self-hosted Word runner). */
+export const NPM_CACHE_OFF_WORKFLOW = 'word-proof.yml';
+
+/**
+ * Prosljedjuje li composite akcija ulaz `npm-cache` u `actions/setup-node` kao
+ * `package-manager-cache`. Bez toga `npm-cache: 'false'` u pozivatelju ne bi nista gasio.
+ */
+export function forwardsNpmCacheInput(actionText: string): boolean {
+  const doc = parseYaml(actionText) as {
+    inputs?: Record<string, { default?: unknown }>;
+    runs?: { steps?: Array<{ uses?: string; with?: Record<string, unknown> }> };
+  };
+  if (String(doc.inputs?.['npm-cache']?.default) !== 'true') return false;
+  return (doc.runs?.steps ?? []).some(
+    (step) =>
+      typeof step.uses === 'string' &&
+      step.uses.startsWith('actions/setup-node@') &&
+      String(step.with?.['package-manager-cache'] ?? '').replace(/\s/g, '') === '${{inputs.npm-cache}}',
+  );
+}
+
+/**
+ * Problemi s npm kesom po workflowu: `word-proof.yml` mora u SVAKOM pozivu setup-deps ugasiti
+ * npm kes (tamo je to cijeli korisnikov npm-cache, 3,6 GB, restore oko 23 min, run 36348083630),
+ * a nijedan drugi workflow ga ne smije ugasiti (hostani Linux jobovi njime ubrzavaju promasaj
+ * node_modules kesa).
+ */
+export function npmCacheProblems(files: ReadonlyArray<{ file: string; text: string }>): string[] {
+  const problems: string[] = [];
+  for (const { file, text } of files) {
+    const doc = parseWorkflow(text) as {
+      jobs?: Record<string, { steps?: Array<{ uses?: string; with?: Record<string, unknown> }> }>;
+    };
+    for (const [jobName, job] of Object.entries(doc.jobs ?? {})) {
+      for (const step of job.steps ?? []) {
+        if (!step.uses || !step.uses.includes('.github/actions/setup-deps')) continue;
+        const off = String(step.with?.['npm-cache'] ?? 'true') === 'false';
+        if (file === NPM_CACHE_OFF_WORKFLOW && !off) problems.push(`${file}#${jobName}: npm kes nije ugasen`);
+        if (file !== NPM_CACHE_OFF_WORKFLOW && off) problems.push(`${file}#${jobName}: npm kes ugasen izvan ${NPM_CACHE_OFF_WORKFLOW}`);
+      }
+    }
+  }
+  return problems;
+}
