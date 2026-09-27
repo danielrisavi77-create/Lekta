@@ -196,23 +196,74 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 </section>
 </main>
 
-<!-- PODNOZJE, PRAVNI MINIMUM (ALIGNMENT Z15). Cetiri poveznice, "Sve pravno" i jedna recenica;
-     copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html` (prizor 06). -->
-<footer class="site-footer" data-site-footer="legal"><div class="shell site-footer__inner">
-  <nav class="site-footer__pravno" aria-label="Pravno">
-    <a class="legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a>
-    <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
-    <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
-    <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
-    <!-- F6 (odluka 2026-09-23, docs/agents/orchestrator-backlog.md): do Z20 "Sve pravno" vodi na
-         /privatnost.html, jer stranica koja nabraja SVE pravne dokumente jos ne postoji. Z20
-         ("Pravne stranice kao svezak") uvodi /pravno/ indeks i tada ovo odrediste ide na njega.
-         Privremeno odrediste NIJE proizvoljno: svaka stranica koju pece scripts/generate-legal-pages.mjs
-         u svom podnozju nabraja sve ostale pravne dokumente, pa poveznica vodi na popis, ne u prazno. -->
-    <a class="site-footer__sve" href="/privatnost.html">Sve pravno &rarr;</a>
-  </nav>
-  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
-</div></footer>
+<!-- PODNOZJE, PUNO (ALIGNMENT Z15, drugi krug). Kolofon u auto-fit stupcima, "Stanje stola" i potpis
+     koji se puni tintom; copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html`
+     (prizor 05). ISTI blok stoji na `/saznaj-vise/` (koji nosi i cjenik) i na `/alati.html`
+     (Pribor); jednakost mjeri `tests/site-chrome.test.ts`. `/fakulteti/` pece
+     `scripts/generate-faculty-pages.mjs` bez bundlea, pa po odluci F9 ostaje na brend retku (F24).
+     "Stanje stola" je skriveno dok ga `src/shared/site-footer-full.ts` ne upise iz pecenog
+     `data/coverage/site-stats.json` i lokalne povijesti provjera: bez JavaScripta stranica te
+     tvrdnje ne moze procitati, pa ih ni ne ispisuje. Kontakt nema vlastitu stranicu, pa je
+     poveznica `mailto:` na `contactEmail` iz `src/config/production-config.ts`. -->
+<footer class="site-footer site-footer--full" data-site-footer="full">
+  <div class="shell">
+    <div class="site-footer__kolofon">
+      <div class="site-footer__brend">
+        <a class="logo site-footer__logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+        <p class="site-footer__moto">Korektorski stol za formu akademskog rada. <em>Mjeri, ne piše.</em></p>
+        <ul class="site-footer__granice">
+          <li class="site-footer__granica site-footer__granica--da"><span aria-hidden="true">✓</span>Provjera je lokalna, u tvom pregledniku</li>
+          <li class="site-footer__granica site-footer__granica--da"><span aria-hidden="true">✓</span>Pravila iz službenih pravilnika fakulteta</li>
+          <li class="site-footer__granica site-footer__granica--ne"><span aria-hidden="true">✕</span>Ne piše ni ne prepravlja sadržaj</li>
+          <li class="site-footer__granica site-footer__granica--ne"><span aria-hidden="true">✕</span>Nije provjera plagijata ni potvrda fakulteta</li>
+        </ul>
+      </div>
+      <nav class="site-footer__stupac" aria-label="Proizvod">
+        <h2 class="site-footer__naslov">Proizvod</h2>
+        <a class="site-footer__link" href="/"><small>01</small>Provjeri rad</a>
+        <a class="site-footer__link" href="/saznaj-vise/#how"><small>02</small>Kako radi</a>
+        <a class="site-footer__link" href="/saznaj-vise/#cjenik"><small>03</small>Cjenik</a>
+        <a class="site-footer__link" href="/fakulteti/"><small>04</small>Po fakultetu</a>
+        <a class="site-footer__link" href="/pokrivenost.html"><small>05</small>Pokrivenost profila</a>
+      </nav>
+      <nav class="site-footer__stupac" aria-label="Pribor">
+        <h2 class="site-footer__naslov">Pribor</h2>
+        <a class="site-footer__link" href="/naslovnica.html"><small>06</small>Naslovnica</a>
+        <a class="site-footer__link" href="/citat.html"><small>07</small>Citat generator</a>
+        <a class="site-footer__link" href="/literatura.html"><small>08</small>Sređivanje literature</a>
+        <a class="site-footer__link" href="/kartice.html"><small>09</small>Brojač kartica</a>
+        <a class="site-footer__link" href="/izjava.html"><small>10</small>Izjava o izvornosti</a>
+        <a class="site-footer__link" href="/alati.html"><small>11</small>Sav pribor</a>
+      </nav>
+      <nav class="site-footer__stupac" aria-label="Pravno">
+        <h2 class="site-footer__naslov">Pravno</h2>
+        <a class="site-footer__link" href="/privatnost.html"><small>12</small>Privatnost</a>
+        <a class="site-footer__link" href="/uvjeti-koristenja.html"><small>13</small>Uvjeti</a>
+        <a class="site-footer__link" href="/obrada-dokumenata.html"><small>14</small>Obrada dokumenata</a>
+        <a class="site-footer__link" href="/kolacici.html"><small>15</small>Kolačići</a>
+        <a class="site-footer__link" href="/odricanje-od-odgovornosti.html"><small>16</small>Odricanje od odgovornosti</a>
+        <a class="site-footer__link" href="/pravila-povrata.html"><small>17</small>Kupnja i povrat</a>
+        <a class="site-footer__link" href="/garancija.html"><small>18</small>Garancija</a>
+        <a class="site-footer__link" href="mailto:lekta.kontakt@gmail.com"><small>19</small>Kontakt</a>
+      </nav>
+    </div>
+    <div class="site-footer__stanje" data-site-footer-stanje hidden>
+      <p class="site-footer__stanje-naslov">Stanje stola</p>
+      <dl>
+        <dt>Zadnji rad</dt><dd data-site-footer-stat="rad"></dd>
+        <dt>Pravila</dt><dd data-site-footer-stat="pravila"></dd>
+        <dt>Izvori</dt><dd data-site-footer-stat="izvori"></dd>
+      </dl>
+    </div>
+  </div>
+  <div class="site-footer__potpis" data-site-footer-potpis>
+    <span class="site-footer__potpis-slovo" aria-hidden="true">Lekta</span>
+    <div class="site-footer__potpis-desno">
+      <b>&copy; 2026 Lekta &middot; Zagreb</b>
+      <span><span data-site-footer-lampa>Radna lampa upaljena</span><i aria-hidden="true"></i></span>
+    </div>
+  </div>
+</footer>
 
 <script type="module" src="/src/shared/page-boot.ts"></script>
 </body>

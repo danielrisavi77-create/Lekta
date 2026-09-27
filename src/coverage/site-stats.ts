@@ -1,4 +1,8 @@
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { VERIFIED_PROFILE_REGISTRY } from '../profiles/profile-registry';
+import SCORED_COVERAGE from '../../data/coverage/scored-coverage.json';
 import { ZAGREB_CATALOG, allUnits } from '../catalog/catalog-loader';
 import { CORPUS_STATS } from './coverage-loader';
 import type { WorkType } from '../ui/work-selection';
@@ -39,6 +43,62 @@ export interface SiteStats {
   units: Record<string, SiteStatsUnit>;
   /** Pohranjeni `workType` -> kratica razine rada (F8). */
   workTypes: Record<string, string>;
+  /**
+   * VERZIJA PRAVILA za "Stanje stola" u punom podnozju (Z15, drugi krug): prvih sedam znakova
+   * `datasetVersion` iz `data/generated/profile-rules-server.json`, dakle ISTOG sazetka koji
+   * endpoint `profile-rules` salje pregledniku uz svaki profil (`src/profiles/profile-rules-contract.ts`).
+   * Generator PADA kad artefakt verziju ne nosi; `null` u tipu stiti samo citatelja (podnozje tada
+   * pise broj profila bez verzije, ne izmislja je).
+   */
+  rulesVersion: string | null;
+  /**
+   * DATUM PROVJERE IZVORA: najsvjeziji `lastVerified` medju BODOVANIM pravilima, iz pohranjenog
+   * `data/coverage/scored-coverage.json` (koji `tests/coverage-report.test.ts` drzi jednakim zivom
+   * izracunu). ISO `YYYY-MM-DD` ili `null`.
+   */
+  sourcesCheckedAt: string | null;
+}
+
+/** Duljina prikazane verzije pravila; sazetak je sha256, pa sedam znakova razlikuje izdanja. */
+const VERZIJA_ZNAKOVA = 7;
+
+/**
+ * Verzija pravila iz TEKSTA serverskog artefakta. Parsira se, ne greppa (CLAUDE.md), i vrijednost
+ * mora biti sha256 heks; sve drugo daje `null`, ne pogodjenu verziju.
+ */
+export function rulesVersionFromArtifact(tekst: string): string | null {
+  let parsed: unknown;
+  try { parsed = JSON.parse(tekst); } catch { return null; }
+  const v = typeof parsed === 'object' && parsed !== null ? (parsed as { datasetVersion?: unknown }).datasetVersion : undefined;
+  return typeof v === 'string' && /^[0-9a-f]{64}$/.test(v) ? v.slice(0, VERZIJA_ZNAKOVA) : null;
+}
+
+/** Najsvjeziji ISO datum `lastVerified` medju celijama; `null` kad nijedna ne nosi datum. */
+export function latestSourceCheck(cells: ReadonlyArray<{ lastVerified?: string | null }>): string | null {
+  let best: string | null = null;
+  for (const cell of cells) {
+    const d = cell.lastVerified;
+    if (typeof d !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(d)) continue;
+    if (best === null || d > best) best = d;
+  }
+  return best;
+}
+
+/**
+ * Serverski artefakt je 2 MB i SECURITY-SENSITIVE (`data/classification.json`), pa se ne uvozi
+ * kao modul nego cita iz datoteke, i to samo u generatoru i testu (ovaj modul nije u bundleu).
+ * U `site-stats.json` ide JEDINO sedam znakova sazetka koji endpoint ionako javno vraca.
+ */
+function rulesVersionFromDisk(): string {
+  // Putanja kroz TEKST `import.meta.url`, ne kroz `new URL(...)`: pod happy-domom je `URL`
+  // preglednikov razred, koji `readFileSync` ne prima. Prva izvedba je gresku gutala i vracala
+  // `null`, pa je test pod happy-domom racunao drugu vrijednost od generatora; sad greska PADA.
+  const artefakt = resolve(dirname(fileURLToPath(import.meta.url)), '../../data/generated/profile-rules-server.json');
+  const verzija = rulesVersionFromArtifact(readFileSync(artefakt, 'utf8'));
+  // Artefakt je commitan i cuvan (`tests/profile-rules-server.test.ts`); bez verzije je pokvaren,
+  // a "Stanje stola" ne smije tiho izgubiti redak zbog pokvarenog artefakta.
+  if (verzija === null) throw new Error(`${artefakt}: datasetVersion nije sha256`);
+  return verzija;
 }
 
 /**
@@ -125,6 +185,8 @@ export function computeSiteStats(): SiteStats {
     works: CORPUS_STATS.works,
     units: unitIndex(),
     workTypes: { ...RAZINA_KRATICA } as Record<string, string>,
+    rulesVersion: rulesVersionFromDisk(),
+    sourcesCheckedAt: latestSourceCheck((SCORED_COVERAGE as { cells: Array<{ lastVerified?: string | null }> }).cells),
   };
 }
 

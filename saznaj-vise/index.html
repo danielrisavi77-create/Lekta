@@ -245,26 +245,74 @@
 <section class="section section-soft" id="faq"><div class="shell"><div class="ks-sec-head" data-reveal><span class="ks-no" aria-hidden="true">7.</span><h2>Prije nego učitaš dokument<span class="ks-dot">.</span></h2></div><div class="faq"><details><summary>Šalje li se moj rad na internet?</summary><p>Ne šalje se. Rad ostaje na tvom uređaju sve dok mu ti ne kažeš drugačije. Besplatna automatska provjera oblikovanja je potpuno lokalna i ne napušta uređaj; analiza ne koristi umjetnu inteligenciju ni jezične modele, nego pravilima utemeljen softver koji lokalno čita strukturu dokumenta. Dokument se na poslužitelj šalje samo uz tvoju izričitu privolu i samo za usluge koje to traže: ručnu obradu, Provjeru prije predaje te plaćeni automatski popravak. Provjera prije predaje briše datoteku odmah nakon analize; plaćeni automatski popravak čuva izvorni i ispravljeni dokument dok ih sam ne obrišeš u Moji popravci.</p></details><details><summary>Može li aplikacija automatski ispraviti cijeli Word dokument?</summary><p>Ne cijeli dokument, nego odabrane tehničke elemente. Uz plan ispravaka Lekta automatski popravlja oblikovanje (margine, format papira, font, prored, poravnanje, razmake) te strukturu: numeriranje stranica i sekcije, polja sadržaja, oblikovanje naslova po razinama, naslovnicu, natpise tablica i slika, poredak i oblik popisa literature te usklađivanje citata s literaturom. Opseg ovisi o profilu tvog fakulteta i o složenosti dokumenta: na stvarnim radovima dio nalaza ostane za ručnu izmjenu, a izvještaj ti točno kaže koji. Popravlja se FORMA, nikad sadržaj: rečenice, argumentacija i tvoje tvrdnje ostaju netaknute. Popravljeni dokument se prije preuzimanja ponovno provjeri, a ako je neki popravak srušio provjeru koja je prije prolazila, preporučujemo izvorni dokument. Svaki rezultat treba tvoj završni pregled.</p></details><details><summary>Što ako nakon ispravka nešto još fali?</summary><p>Puna kupnja diplomskog i doktorskog rada uključuje 14 dana ponovnih provjera nakon ispravka (7 dana za seminarski i završni): učitaj ispravljenu verziju koliko god puta treba unutar tog roka, bez nove kupnje.</p></details><details><summary>Provjerava li Lekta plagijat ili sličnost teksta?</summary><p>Ne. Lekta provjerava oblikovanje, strukturu, opseg i citiranje prema pravilima fakulteta, ali ne uspoređuje tekst s drugim izvorima i nije zamjena za Turnitin ni druge alate za provjeru izvornosti. Provjeru izvornosti provodi fakultet.</p></details><details><summary>Je li rezultat službena potvrda fakulteta?</summary><p>Nije. Rezultat je pomoćna tehnička provjera prema odabranom profilu. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora.</p></details><details><summary>Zašto je moj fakultet označen kao generički profil?</summary><p>Ustanova je dostupna za odabir, ali posebna pravila još nisu povezana s provjerenim službenim izvorom. Aplikacija zato radi opći tehnički audit i dopušta unos posebnih uputa mentora, bez tvrdnje da je dokument službeno usklađen.</p></details><details><summary>Zašto neka citatnica možda nije prepoznata?</summary><p>Citatni stilovi imaju brojne varijante, a Word tekst može sadržavati polja, fusnote i posebne znakove. Aplikacija označava moguće probleme, ali rezultat treba provjeriti u kontekstu rada.</p></details></div></div></section>
 <section class="section ks-final"><div class="shell"><div class="ks-cta" data-reveal><div class="ks-cta-k">zadnja stavka na stolu</div><h2>Nemoj prvi put otkriti problem<br>kad ti rad <em class="h1-crta">vrati mentor<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em>.</h2><p>Provjeri dokument dok još imaš vremena nešto ispraviti. Predaja bez panike u zadnji čas.</p><a class="btn btn-primary btn-lg" href="/#analyzer">Provjeri rad sada →</a><div class="ks-cta-priv">Automatska provjera ostaje na tvom uređaju · bez registracije</div></div></div></section>
 </main>
-<!-- PODNOZJE, PRAVNI MINIMUM (ALIGNMENT Z15). Cetiri poveznice, "Sve pravno" i jedna recenica;
-     copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html` (prizor 06).
-     TODO (Z15, drugi krug): ova stranica po handoffu dobiva PUNO podnozje (kolofon, "Stanje stola",
-     potpis koji se puni tintom). Do tada nosi isti pravni minimum kao ulaz, jer podnozje bez pravnih
-     poveznica nije opcija. -->
-<footer class="site-footer" data-site-footer="legal"><div class="shell site-footer__inner">
-  <nav class="site-footer__pravno" aria-label="Pravno">
-    <a class="legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a>
-    <a class="legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a>
-    <a class="legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a>
-    <a class="legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a>
-    <!-- F6 (odluka 2026-09-23, docs/agents/orchestrator-backlog.md): do Z20 "Sve pravno" vodi na
-         /privatnost.html, jer stranica koja nabraja SVE pravne dokumente jos ne postoji. Z20
-         ("Pravne stranice kao svezak") uvodi /pravno/ indeks i tada ovo odrediste ide na njega.
-         Privremeno odrediste NIJE proizvoljno: svaka stranica koju pece scripts/generate-legal-pages.mjs
-         u svom podnozju nabraja sve ostale pravne dokumente, pa poveznica vodi na popis, ne u prazno. -->
-    <a class="site-footer__sve" href="/privatnost.html">Sve pravno &rarr;</a>
-  </nav>
-  <p class="site-footer__nota"><b>&copy; 2026 Lekta</b> &middot; Automatska provjera je lokalna &middot; Nije provjera plagijata ni službena potvrda fakulteta</p>
-</div></footer>
+<!-- PODNOZJE, PUNO (ALIGNMENT Z15, drugi krug). Kolofon u auto-fit stupcima, "Stanje stola" i potpis
+     koji se puni tintom; copy je doslovno iz predloska `design/templates/chrome/Chrome.dc.html`
+     (prizor 05). ISTI blok stoji na `/saznaj-vise/` (koji nosi i cjenik) i na `/alati.html`
+     (Pribor); jednakost mjeri `tests/site-chrome.test.ts`. `/fakulteti/` pece
+     `scripts/generate-faculty-pages.mjs` bez bundlea, pa po odluci F9 ostaje na brend retku (F24).
+     "Stanje stola" je skriveno dok ga `src/shared/site-footer-full.ts` ne upise iz pecenog
+     `data/coverage/site-stats.json` i lokalne povijesti provjera: bez JavaScripta stranica te
+     tvrdnje ne moze procitati, pa ih ni ne ispisuje. Kontakt nema vlastitu stranicu, pa je
+     poveznica `mailto:` na `contactEmail` iz `src/config/production-config.ts`. -->
+<footer class="site-footer site-footer--full" data-site-footer="full">
+  <div class="shell">
+    <div class="site-footer__kolofon">
+      <div class="site-footer__brend">
+        <a class="logo site-footer__logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+        <p class="site-footer__moto">Korektorski stol za formu akademskog rada. <em>Mjeri, ne piše.</em></p>
+        <ul class="site-footer__granice">
+          <li class="site-footer__granica site-footer__granica--da"><span aria-hidden="true">✓</span>Provjera je lokalna, u tvom pregledniku</li>
+          <li class="site-footer__granica site-footer__granica--da"><span aria-hidden="true">✓</span>Pravila iz službenih pravilnika fakulteta</li>
+          <li class="site-footer__granica site-footer__granica--ne"><span aria-hidden="true">✕</span>Ne piše ni ne prepravlja sadržaj</li>
+          <li class="site-footer__granica site-footer__granica--ne"><span aria-hidden="true">✕</span>Nije provjera plagijata ni potvrda fakulteta</li>
+        </ul>
+      </div>
+      <nav class="site-footer__stupac" aria-label="Proizvod">
+        <h2 class="site-footer__naslov">Proizvod</h2>
+        <a class="site-footer__link" href="/"><small>01</small>Provjeri rad</a>
+        <a class="site-footer__link" href="/saznaj-vise/#how"><small>02</small>Kako radi</a>
+        <a class="site-footer__link" href="/saznaj-vise/#cjenik"><small>03</small>Cjenik</a>
+        <a class="site-footer__link" href="/fakulteti/"><small>04</small>Po fakultetu</a>
+        <a class="site-footer__link" href="/pokrivenost.html"><small>05</small>Pokrivenost profila</a>
+      </nav>
+      <nav class="site-footer__stupac" aria-label="Pribor">
+        <h2 class="site-footer__naslov">Pribor</h2>
+        <a class="site-footer__link" href="/naslovnica.html"><small>06</small>Naslovnica</a>
+        <a class="site-footer__link" href="/citat.html"><small>07</small>Citat generator</a>
+        <a class="site-footer__link" href="/literatura.html"><small>08</small>Sređivanje literature</a>
+        <a class="site-footer__link" href="/kartice.html"><small>09</small>Brojač kartica</a>
+        <a class="site-footer__link" href="/izjava.html"><small>10</small>Izjava o izvornosti</a>
+        <a class="site-footer__link" href="/alati.html"><small>11</small>Sav pribor</a>
+      </nav>
+      <nav class="site-footer__stupac" aria-label="Pravno">
+        <h2 class="site-footer__naslov">Pravno</h2>
+        <a class="site-footer__link" href="/privatnost.html"><small>12</small>Privatnost</a>
+        <a class="site-footer__link" href="/uvjeti-koristenja.html"><small>13</small>Uvjeti</a>
+        <a class="site-footer__link" href="/obrada-dokumenata.html"><small>14</small>Obrada dokumenata</a>
+        <a class="site-footer__link" href="/kolacici.html"><small>15</small>Kolačići</a>
+        <a class="site-footer__link" href="/odricanje-od-odgovornosti.html"><small>16</small>Odricanje od odgovornosti</a>
+        <a class="site-footer__link" href="/pravila-povrata.html"><small>17</small>Kupnja i povrat</a>
+        <a class="site-footer__link" href="/garancija.html"><small>18</small>Garancija</a>
+        <a class="site-footer__link" href="mailto:lekta.kontakt@gmail.com"><small>19</small>Kontakt</a>
+      </nav>
+    </div>
+    <div class="site-footer__stanje" data-site-footer-stanje hidden>
+      <p class="site-footer__stanje-naslov">Stanje stola</p>
+      <dl>
+        <dt>Zadnji rad</dt><dd data-site-footer-stat="rad"></dd>
+        <dt>Pravila</dt><dd data-site-footer-stat="pravila"></dd>
+        <dt>Izvori</dt><dd data-site-footer-stat="izvori"></dd>
+      </dl>
+    </div>
+  </div>
+  <div class="site-footer__potpis" data-site-footer-potpis>
+    <span class="site-footer__potpis-slovo" aria-hidden="true">Lekta</span>
+    <div class="site-footer__potpis-desno">
+      <b>&copy; 2026 Lekta &middot; Zagreb</b>
+      <span><span data-site-footer-lampa>Radna lampa upaljena</span><i aria-hidden="true"></i></span>
+    </div>
+  </div>
+</footer>
 <script type="module" src="/src/routes/learn-more/main.ts"></script>
 </body>
 </html>

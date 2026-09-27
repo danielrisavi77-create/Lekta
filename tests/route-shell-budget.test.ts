@@ -7,6 +7,7 @@ import {
   inspectRouteShellBudget,
   type RouteShellBudgetIssue,
 } from './helpers/route-shell-budget';
+import { chromeGraph, lazyFooterProblems } from './helpers/site-footer-guards';
 
 /**
  * PRORACUN LJUSKE MJERI TRAKU (Z15), JER `route-shell.ts` VISE NE POSTOJI.
@@ -23,7 +24,16 @@ import {
  * PAO s 8001 B: traka od ovog kruga vise ne uvozi cijeli `site-stats.json` (s nazivom svake od 134
  * jedinica) nego mali `data/coverage/unit-kratice.json` (F16/F17). Traka ima zraka, ali ne i
  * dopustenje da uvuce feature graf.
+ *
+ * DRUGI KRUG Z15 (2026-09-27): MJERI SE ONO STO SVAKA STRANICA SKINE, S RAZDVAJANJEM KOMADA.
+ * Puno podnozje (`site-footer-full.ts`, s pecenim brojkama iz `site-stats.json`) treba samo
+ * `/saznaj-vise/` i `/alati.html`, pa ga traka uvozi DINAMICKI. Bez `splitting` esbuild dinamicki
+ * uvoz upise u isti izlaz i proracun bi mjerio kod koji ostalih jedanaest stranica nikad ne skine
+ * (izmjereno: 7783 B bez razdvajanja). Sa `splitting` se zbrajaju gzip velicine ulaza trake i SVIH
+ * komada koje on STATICKI uvozi (7008 B: 6299 + 709 zajednickog komada), a lijeni komad ima
+ * vlastitu granicu. Zabranjeni rjecnik i dalje vrijedi za CIJELI graf, lijeni ukljucivo.
  */
+const MAX_LAZY_FOOTER_JS_GZIP = 3 * 1024;
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY_JS = join(ROOT, 'src', 'shared', 'site-chrome.ts');
@@ -46,14 +56,27 @@ describe('site chrome performance budget', () => {
       platform: 'browser',
       target: 'es2022',
       metafile: true,
+      splitting: true,
       outdir: 'site-chrome-budget',
     });
-    const jsFiles = result.outputFiles.filter((file) => file.path.endsWith('.js'));
     const cssFiles = result.outputFiles.filter((file) => file.path.endsWith('.css'));
-    expect(jsFiles, 'esbuild mora emitirati tocno jedan chrome JS izlaz').toHaveLength(1);
     expect(cssFiles, 'esbuild mora emitirati tocno jedan chrome CSS izlaz').toHaveLength(1);
     expect(result.metafile, 'esbuild mora vratiti potpuni metafile import grafa').toBeDefined();
-    if (jsFiles.length !== 1 || cssFiles.length !== 1 || !result.metafile) return;
+    if (cssFiles.length !== 1 || !result.metafile) return;
+
+    // STATICKI GRAF (uvijek skinut) naspram LIJENOG; izlazi metafilea su relativni na radni direktorij.
+    const graf = chromeGraph(result.metafile, 'src/shared/site-chrome.ts');
+    expect(lazyFooterProblems(graf)).toEqual([]);
+    const gzipOd = (izlazi: readonly string[]): number => izlazi.reduce((zbroj, izlaz) => {
+      const datoteka = result.outputFiles.find((f) => f.path.replaceAll('\\', '/').endsWith(izlaz.replaceAll('\\', '/')));
+      expect(datoteka, `izlaz ${izlaz} nije emitiran`).toBeDefined();
+      return zbroj + (datoteka ? gzipSync(datoteka.contents).byteLength : 0);
+    }, 0);
+    const statickiJs = gzipOd(graf.staticOutputs);
+    const lijeniJs = gzipOd(graf.lazyOutputs);
+    // SENTINEL: nula bi znacila da zbrajanje nije naslo nijedan izlaz.
+    expect(statickiJs, 'staticki JS trake je 0 B; mjerenje ne mjeri nista').toBeGreaterThan(1000);
+    expect(lijeniJs, `lijeno podnozje je ${lijeniJs} B gzip`).toBeLessThanOrEqual(MAX_LAZY_FOOTER_JS_GZIP);
 
     // Sentinel: prazan graf bi ucinio "nula zabranjenih ulaza" vakuumskim nalazom.
     const inputPaths = Object.keys(result.metafile.inputs);
@@ -62,7 +85,7 @@ describe('site chrome performance budget', () => {
       .toContain('src/shared/site-chrome.ts');
 
     const issues = inspectRouteShellBudget({
-      jsGzipBytes: gzipSync(jsFiles[0].contents).byteLength,
+      jsGzipBytes: statickiJs,
       cssGzipBytes: gzipSync(cssFiles[0].contents).byteLength,
       inputPaths,
     });
