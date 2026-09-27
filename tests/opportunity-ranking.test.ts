@@ -12,6 +12,14 @@ describe('rankOpportunityRows', () => {
     expect(out[2].sample).toBe('low');
   });
 
+  it('event-count proxy ne smije postati najjaci signal ispred direktnog mjerenja', () => {
+    const out = rankOpportunityRows([
+      { id: 'proxy', affected: 80, denominator: 100, ratePct: 80, basis: 'event_count_proxy' },
+      { id: 'manual', affected: 30, denominator: 100, ratePct: 30, basis: 'analysis_event' },
+    ]);
+    expect(out.map((x) => x.id)).toEqual(['manual', 'proxy']);
+  });
+
   it('ne izmislja stopu kad je ratePct null', () => {
     const out = rankOpportunityRows([
       { id: 'nema', affected: 0, denominator: 0, ratePct: null, basis: 'analysis_event' },
