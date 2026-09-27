@@ -241,4 +241,57 @@ describe('VisualResultModel', () => {
       'topFindingIds',
     ]);
   });
+
+  it('inspectionCoverage je transparentna ograda i ne mijenja score ni readiness', () => {
+    const baseline = buildVisualResultModel(baseResult);
+    const partial = buildVisualResultModel({
+      ...baseResult,
+      details: {
+        ...baseResult.details,
+        inspectionCoverage: {
+          version: 1,
+          status: 'partial',
+          items: [
+            { kind: 'content-control', count: 2 },
+            { kind: 'tracked-change', count: 1 },
+          ],
+          analyzerSkips: [{ analyzer: 'typography', count: 3 }],
+          summary: { limitedKinds: 2, limitedOccurrences: 3, analyzerSkips: 3 },
+        },
+      },
+    });
+
+    expect(partial.score).toEqual(baseline.score);
+    expect(partial.readiness).toEqual(baseline.readiness);
+    expect(partial.signals).toEqual(baseline.signals);
+    expect(partial.inspectionCoverage).toEqual({
+      status: 'partial',
+      limitedOccurrences: 3,
+      analyzerSkips: 3,
+      labels: ['strukturirane kontrole', 'praćene izmjene'],
+    });
+  });
+
+  it('complete inspection coverage ostaje eksplicitno complete bez izmisljene granice', () => {
+    const model = buildVisualResultModel({
+      ...baseResult,
+      details: {
+        ...baseResult.details,
+        inspectionCoverage: {
+          version: 1,
+          status: 'complete',
+          items: [],
+          analyzerSkips: [],
+          summary: { limitedKinds: 0, limitedOccurrences: 0, analyzerSkips: 0 },
+        },
+      },
+    });
+    expect(model.inspectionCoverage).toEqual({
+      status: 'complete',
+      limitedOccurrences: 0,
+      analyzerSkips: 0,
+      labels: [],
+    });
+  });
+
 });
