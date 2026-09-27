@@ -188,6 +188,6 @@ Veza s `trackEvent` u `src/ui/telemetry.ts`:
   - brojevi i ishodi provjere: `total`, `found`, `missing`, `flagged`, `checked`, `issueCount`,
     `count`, `changes`, `stored`, `score`, `scoreBand`;
   - velicina i trajanje: `sizeBucket` (razred velicine, ne tocna velicina), `ms`.
-- Nijedan kljuc ne nosi tekst rada ni ime datoteke; `tests/product-journey-telemetry.test.ts` tvrdi
+- Opportunity Report dodatno koristi brojcane kljuceve `auto`, `assisted` i `unknown`; svi ostaju anonimni agregati bez teksta rada.\n- Nijedan kljuc ne nosi tekst rada ni ime datoteke; `tests/product-journey-telemetry.test.ts` tvrdi
   da sanitizacija odbacuje sve izvan bijele liste. T53 skript ne zove `trackEvent` i ne salje
   produktne dogadjaje, pa sloj bez privole ne moze procuriti u sloj s privolom ni obrnuto.
