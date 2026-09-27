@@ -102,13 +102,18 @@ test('klik na redak otvara SAMO njegov detalj', async ({ page }) => {
   // Z8: jedna kartica u panou umjesto detalja unutar retka; "samo njegov detalj" se sad mjeri
   // time da je kartica jedna i da je odabran tocno taj redak.
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
-  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="2"]')).toHaveAttribute('aria-expanded', 'true');
+  // Z8 (commit cd42c90f): gumb ne rasklapa nista na sebi, pa `aria-expanded` vise ne postoji
+  // (`desk-queue.ts` redak 67). Odabrani redak nosi `aria-current="true"`; provjeravamo i da je
+  // TOCNO jedan takav redak, ne samo da ovaj ima atribut.
+  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="2"]')).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('[data-desk-queue] [aria-current="true"]')).toHaveCount(1);
 
   // Popis i navigacija su DVA nacina rada nad istim stanjem, ne dva stanja: nakon klika na redak
   // navigacija nastavlja odande, a ne od pocetka.
   await page.locator('.desk-nav__btn--next').click();
   await expect(page.locator('[data-desk-count]')).toHaveText(/^4 od \d+$/);
-  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="3"]')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('[data-desk-queue] .dq-item--open [data-desk-go="3"]')).toHaveAttribute('aria-current', 'true');
+  await expect(page.locator('[data-desk-queue] [aria-current="true"]')).toHaveCount(1);
   await expect(page.locator('[data-desk-pane] [data-cockpit-finding]')).toHaveCount(1);
 });
 
