@@ -38,6 +38,9 @@ import { runVerificationGate, isRuleScored } from '../src/verification/verificat
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { hasNaiveEntryGuard } from './helpers/entry-guard';
+import { parseXml, cfbKind } from '../src/docx/parser';
+import { runMetrics } from '../src/audits/metrics';
+import { buildDocx } from './helpers/docx-builder';
 import { srcLayaImportProblems } from './helpers/laya-src-boundary';
 import { adjudicate } from '../scripts/laya/contracts-v2.ts';
 import { buildLayaCandidates } from '../scripts/laya/candidate-builder.ts';
@@ -5008,6 +5011,25 @@ const MUTATIONS: Mutation[] = [
     caught: () => formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'page.margins']).length === 1
       && formalRegistryEntries([...LAYA_ELIGIBLE_CHECKS, 'toc.present', 'font.family']).length === 2,
     cleanBefore: () => formalRegistryEntries().length === 0 && isLayaEligibleCheck('reference.completeness'),
+  },
+  // --- T26, audit 22. 9. nalazi #14, #16, #17: tocnost lokalne DOCX analize -----------------------
+  {
+    id: 'docx/xml-greska-tiho-boduje',
+    imitates: 'xmldom gresku razine error (goli & u tekstu) samo ispise i vrati djelomican DOM, pa se osteceni document.xml boduje umjesto da analiza javi gresku (nalaz #14)',
+    caught: () => { try { parseXml('<t>R&D</t>', 'Glavni Word dokument'); return false; } catch (e) { return String((e as Error).message) === 'Glavni Word dokument nije moguće pročitati.'; } },
+    cleanBefore: () => { try { return parseXml('<t>R&amp;D</t>').documentElement?.textContent === 'R&D'; } catch { return false; } },
+  },
+  {
+    id: 'docx/zasticen-docx-kao-not-zip',
+    imitates: 'docx zasticen lozinkom (CFB s EncryptedPackage) dobiva poruku "preimenovana datoteka drugog tipa" umjesto upute za uklanjanje lozinke (nalaz #16)',
+    caught: () => cfbKind(new Uint8Array(readFileSync(resolve(process.cwd(), 'tests/fixtures/intake/encrypted-synthetic.docx')))) === 'encrypted-docx',
+    cleanBefore: () => cfbKind(buildDocx({ paragraphs: [{ text: 'Obican dokument.' }] })) === null,
+  },
+  {
+    id: 'docx/skriveni-run-bira-font',
+    imitates: 'dugi skriveni (w:vanish) blok iz predloska u drugom fontu odredi dominantni font naslova ili tijela, pa rad pada na formi koju Word uopce ne prikazuje (nalaz #17)',
+    caught: () => runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20, hidden: true }]).font === 'Times New Roman',
+    cleanBefore: () => runMetrics([{ text: 'Vidljivo', font: 'Times New Roman', size: 12 }, { text: 'skriveno '.repeat(30), font: 'Arial', size: 20 }]).font === 'Arial',
   },
 ];
 

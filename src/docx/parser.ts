@@ -46,6 +46,40 @@ export const MAX_SCAN_PARAGRAPHS = 300000;
 /** Greska kad zapis premasi sigurnosnu granicu dekompresije (razlikovanje od korupcije). */
 export class ZipLimitError extends Error {}
 
+/** OLE/CFB potpis (D0 CF 11 E0 A1 B1 1A E1). Nije ZIP: takav je stari .doc i .docx zasticen lozinkom. */
+const CFB_MAGIC = [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1];
+
+function hasUtf16Le(bytes: Uint8Array, text: string): boolean {
+  const needle = new Uint8Array(text.length * 2);
+  for (let i = 0; i < text.length; i++) needle[i * 2] = text.charCodeAt(i);
+  outer: for (let i = 0; i + needle.length <= bytes.length; i++) {
+    for (let j = 0; j < needle.length; j++) if (bytes[i + j] !== needle[j]) continue outer;
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Sto je CFB datoteka, ako to jest (audit 22. 9., nalaz #16). Word dokument zasticen lozinkom
+ * sprema se kao CFB s tokovima `EncryptionInfo` i `EncryptedPackage`; stari Word 97-2003 .doc
+ * ima tok `WordDocument`. Imena tokova su u CFB direktoriju zapisana kao UTF-16LE.
+ * `null` znaci da datoteka nema CFB potpis.
+ */
+export function cfbKind(bytes: Uint8Array): 'encrypted-docx' | 'legacy-doc' | 'other' | null {
+  if (bytes.length < CFB_MAGIC.length || CFB_MAGIC.some((b, i) => bytes[i] !== b)) return null;
+  if (hasUtf16Le(bytes, 'EncryptedPackage') || hasUtf16Le(bytes, 'EncryptionInfo')) return 'encrypted-docx';
+  if (hasUtf16Le(bytes, 'WordDocument')) return 'legacy-doc';
+  return 'other';
+}
+
+/** Korisnicka poruka za CFB datoteku; `null` za sve ostalo. */
+export function cfbMessage(bytes: Uint8Array): string | null {
+  const kind = cfbKind(bytes);
+  if (kind === 'encrypted-docx') return 'Dokument je zaštićen lozinkom pa ga nije moguće pročitati. U Wordu otvori Datoteka > Informacije > Zaštiti dokument > Šifriraj lozinkom, obriši lozinku i spremi ponovno kao .docx.';
+  if (kind === 'legacy-doc') return 'Datoteka je u starom Word formatu (.doc). U Wordu je otvori i spremi kao .docx (Spremi kao > Word dokument).';
+  return null;
+}
+
 /** DecompressionStream iz globalnog opsega (preglednik ili Node 18+); null izvan oba. */
 function getDecompressionStream(): any {
   const g: any = typeof globalThis !== 'undefined' ? globalThis : undefined;
@@ -108,7 +142,7 @@ export class ZipReader {
     for (let i = this.bytes.length - 22; i >= Math.max(0, this.bytes.length - 65557); i--) {
       if (this.view.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
     }
-    if (eocd < 0) throw new Error('Datoteka nije valjana ZIP/DOCX arhiva.');
+    if (eocd < 0) throw new Error(cfbMessage(this.bytes) ?? 'Datoteka nije valjana ZIP/DOCX arhiva.');
     const count = this.view.getUint16(eocd + 10, true), offset = this.view.getUint32(eocd + 16, true);
     if (count > MAX_ZIP_ENTRIES) {
       throw new ZipLimitError(
@@ -190,8 +224,21 @@ export class ZipReader {
  *  koje Word nikad ne pise, pa ih odbacujemo prije parsiranja (defense-in-depth). */
 export function parseXml(s: string, label = 'XML'): Document {
   if (/<!DOCTYPE/i.test(s)) throw new Error(`${label} sadrži DTD deklaraciju i odbijen je iz sigurnosnih razloga.`);
-  const x = new DOMParser().parseFromString(s, 'application/xml');
-  if (first(x as any, 'parsererror')) throw new Error(`${label} nije moguće pročitati.`);
+  const unreadable = () => new Error(`${label} nije moguće pročitati.`);
+  // @xmldom/xmldom (worker i testovi) greske razine `error` i `warning` (goli `&` ili `<` u tekstu,
+  // nepoznati entitet, atribut bez navodnika) samo ispise i vrati djelomican DOM, pa se osteceni
+  // dokument tiho bodovao (audit 22. 9., nalaz #14). `onError` svaku dijagnostiku pretvara u
+  // gresku; preglednikov DOMParser argument ignorira i takav ulaz ionako vraca kao parsererror.
+  // Poruka nosi samo oznaku dijela: xmldomova poruka moze citirati imena i sadrzaj dokumenta.
+  let diagnosed = false;
+  let x: Document;
+  try {
+    const Parser = DOMParser as unknown as new (options?: { onError?: (level: string) => void }) => DOMParser;
+    x = new Parser({ onError: () => { diagnosed = true; } }).parseFromString(s, 'application/xml');
+  } catch {
+    throw unreadable();
+  }
+  if (diagnosed || first(x as any, 'parsererror')) throw unreadable();
   return x;
 }
 
@@ -234,6 +281,11 @@ export function readRPr(rPr: any): any {
   if (smallCaps) out.smallCaps = toggle(smallCaps);
   if (strike) out.strike = toggle(strike);
   if (color) { const cv = attr(color, 'w:val'); if (cv && String(cv).toLowerCase() !== 'auto') out.color = '#' + cv; }
+  // Skriveni tekst (w:vanish) Word ne prikazuje ni ne ispisuje, pa ne smije odlucivati o fontu
+  // i velicini rada (audit 22. 9., nalaz #17). Toggle kao b/i; kroz merge lanac vrijedi i iz stila.
+  // `w:specVanish` skriva samo oznaku odlomka, a `w:webHidden` samo web prikaz: nisu skriveni tekst.
+  const vanish = direct(rPr, 'w:vanish');
+  if (vanish) out.hidden = toggle(vanish);
   if (vertAlign) {
     const value = String(attr(vertAlign, 'w:val') || '').toLowerCase();
     if (value === 'superscript' || value === 'subscript') out.vertAlign = value;
