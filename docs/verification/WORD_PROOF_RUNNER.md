@@ -91,7 +91,8 @@ Stroj:
 ## 4. Pokretanje
 
 - **Automatski:** svaki push na `master` ili `release/**` vrti cetiri Word razine
-  (`npm run release:check -- --only=word,word-worst,word-corpus,word-toc`, oko 10 minuta; uz
+  (`release:check --only=word,word-worst,word-corpus,word-toc`, pozvan izravno kroz `node` jer
+  npm.ps1 na Windowsu proguta `--`; oko 10 minuta; uz
   checkout i `npm ci` bez kesa prvi run traje oko 30 minuta, a timeout joba je 60 minuta).
 - **Rucno:** Actions > word-proof > Run workflow, s workflowom s grane `master`:
   - `ref`: `master` ili `release/<ime>`; mora biti tocan trenutni vrh te grane;
