@@ -12,9 +12,11 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  forwardsNpmCacheInput,
   hasConditionalNpmCiStep,
   hasLockfileHashedCacheStep,
   jobsWithBareNpmCi,
+  npmCacheProblems,
   unpinnedExternalUses,
 } from './helpers/ci-workflow-cache';
 
@@ -78,4 +80,15 @@ describe('sve uses: akcije u workflowima su pinane SHA-om uz komentar verzije', 
       ).toEqual([]);
     });
   }
+});
+
+describe('setup-node npm kes: ugasen samo u word-proof.yml', () => {
+  it('setup-deps prosljedjuje ulaz npm-cache (zadano true) u setup-node package-manager-cache', () => {
+    expect(forwardsNpmCacheInput(readText(SETUP_DEPS_ACTION))).toBe(true);
+  });
+
+  it('word-proof.yml gasi npm kes, nijedan drugi workflow ga ne gasi', () => {
+    const files = workflowFiles().map((file) => ({ file, text: readText(join(WORKFLOWS_DIR, file)) }));
+    expect(npmCacheProblems(files)).toEqual([]);
+  });
 });
