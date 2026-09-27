@@ -68,6 +68,7 @@
     "verify:word:corpus": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-corpus.ps1",
     "deploy-drift": "node scripts/deploy-drift.mjs",
     "orphan-scan": "node scripts/orphan-scan.mjs",
+    "lean:report": "node scripts/lean-report.mjs",
     "migration-identity": "node scripts/migration-identity.mjs",
     "gen-site-stats": "vite-node scripts/gen-site-stats.mts",
     "gen-profile-rules-server": "vite-node scripts/gen-profile-rules-server.mts",
@@ -153,7 +154,9 @@
     "vitest": "^2.1.4",
     "@babel/parser": "^7.29.8",
     "@electric-sql/pglite": "0.5.8",
-    "tsx": "4.23.13"
+    "tsx": "4.23.13",
+    "knip": "6.38.0",
+    "jscpd": "5.3.2"
   },
   "dependencies": {
     "@fontsource-variable/inter-tight": "^5.3.0",

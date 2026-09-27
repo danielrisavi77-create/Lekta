@@ -5961,3 +5961,27 @@ describe('mutacije: routing korak 2 (select-route)', () => {
     expect(odbijaUnverified(izvedi(mutant))).toBe(false);
   });
 });
+
+describe('mutacije: lean ratchet (T56)', () => {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/lean-report.mjs'), 'utf8').replace(/\r/g, '');
+  const metrikeBlok = src.slice(src.indexOf('export const RATCHET_METRIKE'), src.indexOf('];', src.indexOf('export const RATCHET_METRIKE')) + 2);
+  const fnStart = src.indexOf('export function ratchetProblems');
+  const fnBlok = src.slice(fnStart, src.indexOf('\n}\n', fnStart) + 3);
+  type Ratchet = (b: { metrike: Record<string, number> }, c: Record<string, number>) => string[];
+  const izvedi = (fn: string): Ratchet =>
+    new Function(`${metrikeBlok.replace('export ', '')}\n${fn.replace('export ', '')}\nreturn ratchetProblems;`)() as Ratchet;
+  const baseline = JSON.parse(readFileSync(resolve(process.cwd(), 'docs/generated/lean-baseline.json'), 'utf8'));
+  /** Tvrdnja garda: rast bilo koje metrike za 1 je nalaz. */
+  const hvataRast = (r: Ratchet): boolean =>
+    Object.keys(baseline.metrike).every((k) => r(baseline, { ...baseline.metrike, [k]: baseline.metrike[k] + 1 }).length === 1);
+
+  it('baseline: stvarni ratchetProblems hvata rast za 1', () => {
+    expect(hvataRast(izvedi(fnBlok))).toBe(true);
+  });
+
+  it('mutant koji povisi prag (tolerira rast za 1) obara tvrdnju', () => {
+    const mutant = fnBlok.replace('if (c > b)', 'if (c > b + 1)');
+    expect(mutant).not.toBe(fnBlok);
+    expect(hvataRast(izvedi(mutant))).toBe(false);
+  });
+});
