@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-26T20:55:55.667Z",
+  "generatedAt": "2026-09-27T16:33:03.420Z",
   "command": "npm run closed-loop -- --profile unizd-zdravstvo-diplomski --no-structural",
   "profileId": "unizd-zdravstvo-diplomski",
   "row": {
@@ -31,7 +31,7 @@
   },
   "manifests": [
     {
-      "manifestId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--font:8ab32b689ff5583f83b4911f72273152be0b16ea2bf275523daa74ec7b9929e4:5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244",
+      "manifestId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--font:8ab32b689ff5583f83b4911f72273152be0b16ea2bf275523daa74ec7b9929e4:5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244:pass",
       "profileId": "unizd-zdravstvo-diplomski",
       "ruleId": "unizd-zdravstvo-diplomski--font",
       "testId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--font",
@@ -41,10 +41,10 @@
       "outputHash": "5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "1f5f650491f7cda46e799cf6c45fcbb392b501f59a163a1c1df3625fd43979de",
-      "ranAt": "2026-09-26T20:55:55.667Z"
+      "ranAt": "2026-09-27T16:33:03.420Z"
     },
     {
-      "manifestId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--font-size:8ab32b689ff5583f83b4911f72273152be0b16ea2bf275523daa74ec7b9929e4:5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244",
+      "manifestId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--font-size:8ab32b689ff5583f83b4911f72273152be0b16ea2bf275523daa74ec7b9929e4:5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244:pass",
       "profileId": "unizd-zdravstvo-diplomski",
       "ruleId": "unizd-zdravstvo-diplomski--font-size",
       "testId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--font-size",
@@ -54,10 +54,10 @@
       "outputHash": "5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "568f15e9fe7bcf0adbe2836f7b2c521ab414bcb65c1224ee0feda777965886f7",
-      "ranAt": "2026-09-26T20:55:55.667Z"
+      "ranAt": "2026-09-27T16:33:03.420Z"
     },
     {
-      "manifestId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--paper-size:8ab32b689ff5583f83b4911f72273152be0b16ea2bf275523daa74ec7b9929e4:5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244",
+      "manifestId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--paper-size:8ab32b689ff5583f83b4911f72273152be0b16ea2bf275523daa74ec7b9929e4:5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244:pass",
       "profileId": "unizd-zdravstvo-diplomski",
       "ruleId": "unizd-zdravstvo-diplomski--paper-size",
       "testId": "closed-loop:unizd-zdravstvo-diplomski:unizd-zdravstvo-diplomski--paper-size",
@@ -67,7 +67,7 @@
       "outputHash": "5cdd431e8ac2b848d2014203c0c92a9ac2dcebee36a268171cbdadf09f0a9244",
       "repairSourceHash": "7ead2282f694699503266f5be91dd735107067af69c25b5d250266fa48d54b32",
       "ruleValueHash": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
-      "ranAt": "2026-09-26T20:55:55.667Z"
+      "ranAt": "2026-09-27T16:33:03.420Z"
     }
   ]
 }

@@ -49,7 +49,7 @@ export function createAiEvidenceAuditFixture(): AiEvidenceAuditFixture {
   const inputHash = sha256('closed-loop-input');
   const outputHash = sha256('closed-loop-output');
   const execution = {
-    manifestId: `closed-loop:${AI_AUDIT_PROFILE_ID}:${rule.ruleId}:${inputHash}:${outputHash}`,
+    manifestId: `closed-loop:${AI_AUDIT_PROFILE_ID}:${rule.ruleId}:${inputHash}:${outputHash}:pass`,
     testId: 'closed-loop:profile-ai-audit-test',
     command: 'npm run closed-loop -- --profile profile-ai-audit-test',
     inputHash,

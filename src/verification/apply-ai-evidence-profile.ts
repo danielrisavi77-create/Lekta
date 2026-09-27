@@ -1,5 +1,6 @@
 import type { ThesisProfile, RuleEntry, SourceEntry, VerificationLedgerEntry } from '../profiles/profile-schema';
 import type { AiEvidenceExecutionManifest } from './ai-evidence-audit';
+import { stableJson } from './ai-evidence-audit.ts';
 import { approveFromAi } from './verification-actions';
 
 export interface AiEvidenceProfileApplyContext {
@@ -9,6 +10,7 @@ export interface AiEvidenceProfileApplyContext {
   snapshotTextsBySourceId: Readonly<Record<string, string | undefined>>;
   snapshotHashesBySourceId?: Readonly<Record<string, string | undefined>>;
   currentRepairSourceHash?: string;
+  currentAnalysisSourceHash?: string;
   ruleValueHashesByRule?: Readonly<Record<string, string>>;
   manifestsById: Readonly<Record<string, AiEvidenceExecutionManifest | undefined>>;
 }
@@ -18,34 +20,26 @@ export type AiEvidenceProfileApplyResult =
   | { ok: false; errors: string[] };
 
 /**
- * Primjenjuje AI-audit na bodovana i dokazom opremljena pending pravila profila atomski: nijedna promjena ni ledger dodatak
- * ne izlaze ako ijedno pravilo nema valjan paket, službeni snapshot ili stvarni manifest.
+ * Primjenjuje novi AI dokaz atomski unutar skupa pravila koja ga nose.
  */
 export function applyAiEvidenceProfile(
   profile: ThesisProfile,
   context: AiEvidenceProfileApplyContext,
 ): AiEvidenceProfileApplyResult {
-  const candidates = (profile.ruleEntries ?? []).filter((entry) =>
-    entry.scored === true || (entry.aiEvidence != null && (
-      entry.status === 'draft' || entry.status === 'needs-recheck' || entry.status === 'ai-confirmed'
-      || (entry.status === 'verified' && (
-        entry.verifiedBy === 'owner-bulk-approval'
-        || entry.confirmedVia === 'ai-1pass-batch'
-        || entry.confirmedVia === 'ai-3pass-batch'
-      ))
-    )),
-  );
+  const candidates = (profile.ruleEntries ?? []).filter((entry) => entry.aiEvidence != null
+    && !(entry.status === 'verified' && entry.confirmedVia === 'ai-evidence-audit'
+      && entry.aiEvidenceApprovedCanonical === stableJson(entry.aiEvidence)));
   if (!candidates.length) return { ok: true, profile, ledger: [], skipped: [] };
 
   const seenRuleIds = new Set<string>();
-  const updatedByRuleId = new Map<string, RuleEntry>();
+  const updatedEntries = new Map<RuleEntry, RuleEntry>();
   const ledger: VerificationLedgerEntry[] = [];
   const errors: string[] = [];
   const skipped: Array<{ ruleId: string; reasons: string[] }> = [];
 
   for (const entry of candidates) {
     if (seenRuleIds.has(entry.ruleId)) {
-      errors.push(`${profile.id}/${entry.ruleId}: dupliciran ruleId u bodovanim pravilima.`);
+      errors.push(`${profile.id}/${entry.ruleId}: dupliciran ruleId u kandidatima.`);
       continue;
     }
     seenRuleIds.add(entry.ruleId);
@@ -62,6 +56,7 @@ export function applyAiEvidenceProfile(
         snapshotBytes: context.snapshotBytesBySourceId[sourceId] ?? new Uint8Array(),
         snapshotSha256: context.snapshotHashesBySourceId?.[sourceId],
         currentRepairSourceHash: context.currentRepairSourceHash,
+        currentAnalysisSourceHash: context.currentAnalysisSourceHash,
         ruleValueSha256: context.ruleValueHashesByRule?.[JSON.stringify([profile.id, entry.ruleId])],
         snapshotText: context.snapshotTextsBySourceId[sourceId] ?? '',
         manifest: context.manifestsById[manifestId] ?? null,
@@ -71,11 +66,10 @@ export function applyAiEvidenceProfile(
 
     if (!result.ok || !result.entry || !result.ledger) {
       const reasons = result.errors ?? ['AI-audit prijelaz nije proizveo rezultat.'];
-      if (entry.scored === true) errors.push(...reasons.map((reason) => `${profile.id}/${entry.ruleId}: ${reason}`));
-      else skipped.push({ ruleId: entry.ruleId, reasons });
+      errors.push(...reasons.map((reason) => `${profile.id}/${entry.ruleId}: ${reason}`));
       continue;
     }
-    updatedByRuleId.set(entry.ruleId, result.entry);
+    updatedEntries.set(entry, result.entry);
     ledger.push(...result.ledger);
   }
 
@@ -85,7 +79,7 @@ export function applyAiEvidenceProfile(
     ok: true,
     profile: {
       ...profile,
-      ruleEntries: (profile.ruleEntries ?? []).map((entry) => updatedByRuleId.get(entry.ruleId) ?? entry),
+      ruleEntries: (profile.ruleEntries ?? []).map((entry) => updatedEntries.get(entry) ?? entry),
     },
     ledger,
     skipped,

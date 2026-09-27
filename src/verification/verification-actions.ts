@@ -149,6 +149,7 @@ export function approveFromAi(
   entry: RuleEntry,
   source: SourceEntry | undefined,
   input: { now: string; snapshotBytes: Uint8Array; snapshotSha256?: string; currentRepairSourceHash?: string;
+    currentAnalysisSourceHash?: string;
     ruleValueSha256?: string; snapshotText: string; manifest: AiEvidenceExecutionManifest | null },
   evidence: AiEvidence | undefined,
 ): BatchApproveResult {
@@ -159,7 +160,8 @@ export function approveFromAi(
       || entry.confirmedVia === 'ai-1pass-batch'
       || entry.confirmedVia === 'ai-3pass-batch'
     );
-  const individuallyHumanVerified = entry.status === 'verified' && entry.confirmedVia === 'human';
+  const individuallyHumanVerified = entry.status === 'verified'
+    && (entry.confirmedVia === 'human' || entry.confirmedVia === 'human-audit');
   const alreadyAiVerified = entry.status === 'verified' && entry.confirmedVia === 'ai-evidence-audit';
   if (entry.status !== 'draft' && entry.status !== 'needs-recheck' && entry.status !== 'ai-confirmed'
       && !legacyBatch && !individuallyHumanVerified && !alreadyAiVerified) {
@@ -172,6 +174,7 @@ export function approveFromAi(
     snapshotBytes: input.snapshotBytes,
     snapshotSha256: input.snapshotSha256,
     currentRepairSourceHash: input.currentRepairSourceHash,
+    currentAnalysisSourceHash: input.currentAnalysisSourceHash,
     ruleValueSha256: input.ruleValueSha256,
     snapshotText: input.snapshotText,
     evidence,
@@ -180,8 +183,7 @@ export function approveFromAi(
   if (!audit.valid) errors.push(...audit.reasons.map((reason) => `${reason.code}: ${reason.message}`));
   if (errors.length || !evidence) return { ok: false, errors };
   const canonicalEvidence = stableJson(evidence);
-  if (alreadyAiVerified && (entry.aiEvidenceApprovedCanonical === canonicalEvidence
-      || (entry.aiEvidenceApprovedCanonical == null && evidence.schemaVersion === 1))) {
+  if (alreadyAiVerified && entry.aiEvidenceApprovedCanonical === canonicalEvidence) {
     return { ok: true, entry, ledger: [] };
   }
 

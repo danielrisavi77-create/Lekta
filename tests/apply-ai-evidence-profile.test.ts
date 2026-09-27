@@ -91,16 +91,44 @@ describe('applyAiEvidenceProfile', () => {
     expect(result.ledger).toHaveLength(1);
   });
 
-  it('nevaljan dokaz nebodovanog pending pravila ne blokira valjano bodovano pravilo', () => {
+  it('nevaljan dokaz nebodovanog kandidata blokira cijeli skup kandidata', () => {
     const { fixture, entry, context } = legacyEntryWithEvidence();
     const invalidPending = { ...entry, ruleId: 'pending-invalid-evidence', status: 'draft' as const, scored: false };
     const profile = { id: fixture.profileId, ruleEntries: [entry, invalidPending] } as unknown as ThesisProfile;
     const result = applyAiEvidenceProfile(profile, context);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors.join('\n')).toContain('rule-id-mismatch');
+    expect('profile' in result).toBe(false);
+    expect('ledger' in result).toBe(false);
+  });
+
+  it('ne dira legacy bodovano pravilo bez novog dokaza', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const legacy = { ...entry, ruleId: 'legacy-without-evidence', aiEvidence: undefined };
+    const profile = { id: fixture.profileId, ruleEntries: [entry, legacy] } as ThesisProfile;
+    const result = applyAiEvidenceProfile(profile, context);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.profile.ruleEntries?.[0]).toMatchObject({ confirmedVia: 'ai-evidence-audit', scored: true });
-    expect(result.profile.ruleEntries?.[1]).toEqual(invalidPending);
+    expect(result.profile.ruleEntries?.[1]).toEqual(legacy);
     expect(result.ledger).toHaveLength(1);
+  });
+
+  it('ne mijenja zapis bez dokaza ni kad dijeli ruleId s kandidatom', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const untouched = { ...entry, aiEvidence: undefined };
+    const profile = { id: fixture.profileId, ruleEntries: [entry, untouched] } as ThesisProfile;
+    const result = applyAiEvidenceProfile(profile, context);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.profile.ruleEntries?.[1]).toEqual(untouched);
+  });
+
+  it('profil bez novog dokaza prolazi bez promjena', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const profile = { id: fixture.profileId, ruleEntries: [{ ...entry, aiEvidence: undefined }] } as ThesisProfile;
+    const result = applyAiEvidenceProfile(profile, context);
+    expect(result).toEqual({ ok: true, profile, ledger: [], skipped: [] });
   });
 
   it('drugi prolaz nad istim valjanim dokazom ne mijenja draft ni ledger', () => {
@@ -135,6 +163,16 @@ describe('applyAiEvidenceProfile', () => {
     const second = applyAiEvidenceProfile(result.profile, context);
     expect(second.ok).toBe(true);
     if (second.ok) expect(second.ledger).toEqual([]);
+  });
+
+  it('AI potvrda bez kanonskog otiska ne skriva novi dokaz sheme 1', () => {
+    const { fixture, entry, context } = legacyEntryWithEvidence();
+    const changedEvidence = { ...fixture.evidence, summary: `${fixture.evidence.summary} Novi pregled.` };
+    const old = { ...entry, confirmedVia: 'ai-evidence-audit', verifiedBy: 'ai-evidence-audit',
+      aiEvidence: changedEvidence, aiEvidenceApprovedCanonical: undefined };
+    const result = applyAiEvidenceProfile({ id: fixture.profileId, ruleEntries: [old] } as ThesisProfile, context);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.ledger).toHaveLength(1);
   });
 
   it.each([

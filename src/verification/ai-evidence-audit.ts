@@ -1,4 +1,5 @@
 import type { RuleEntry, SourceEntry } from '../profiles/profile-schema.ts';
+import { DETECTOR_CHECK_BY_RULE } from './detector-check-map.ts';
 
 export type AiEvidenceAuditReasonCode =
   | 'evidence-missing'
@@ -43,6 +44,9 @@ export type AiEvidenceAuditReasonCode =
   | 'manifest-output-hash-mismatch'
   | 'manifest-time-mismatch'
   | 'manifest-stale-repair'
+  | 'manifest-stale-analysis'
+  | 'manifest-check-mismatch'
+  | 'manifest-kind-mismatch'
   | 'manifest-rule-value-mismatch'
   | 'test-failed';
 
@@ -94,6 +98,7 @@ export interface AiEvidenceAudit {
  * Ova čista funkcija ne čita proizvoljne putanje niti prihvaća samoprijavljeni `pass` iz AI izlaza.
  */
 export interface AiEvidenceExecutionManifest {
+  kind?: 'repair' | 'detector';
   manifestId: string;
   profileId: string;
   ruleId: string;
@@ -102,7 +107,14 @@ export interface AiEvidenceExecutionManifest {
   outcome: 'pass' | 'fail' | 'skipped';
   inputHash: string;
   outputHash: string;
-  repairSourceHash: string;
+  repairSourceHash?: string;
+  /** Detector manifests bind both analysis runs, including no-op output bytes. */
+  analysisSourceHash?: string;
+  ruleCheckId?: string;
+  checkId?: string;
+  violatingOutputHash?: string;
+  correctInputHash?: string;
+  failureReason?: string;
   ruleValueHash: string;
   ranAt: string;
 }
@@ -116,6 +128,7 @@ export interface AiEvidenceAuditInput {
   /** SHA-256 izvornih bajtova, izracunat u pouzdanom adapteru. */
   snapshotSha256?: string;
   currentRepairSourceHash?: string;
+  currentAnalysisSourceHash?: string;
   ruleValueSha256?: string;
   snapshotText: string;
   evidence: AiEvidenceAudit | undefined;
@@ -180,6 +193,14 @@ export function stableJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
   const record = value as Record<string, unknown>;
   return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${stableJson(record[key])}`).join(',')}}`;
+}
+
+export function detectorManifestId(manifest: AiEvidenceExecutionManifest): string {
+  return [
+    'detector', manifest.profileId, manifest.ruleId, manifest.ruleCheckId, manifest.checkId,
+    manifest.inputHash, manifest.violatingOutputHash, manifest.correctInputHash, manifest.outputHash,
+    manifest.analysisSourceHash, manifest.ruleValueHash, manifest.outcome,
+  ].join(':');
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -313,7 +334,9 @@ export function auditAiEvidence(input: AiEvidenceAuditInput): AiEvidenceAuditRes
   if (!manifest) {
     add('manifest-missing', 'Nije razriješen izvršni manifest iz testnog ili DOCX harnessa.');
   } else {
-    const expectedManifestId = `closed-loop:${manifest.profileId}:${manifest.ruleId}:${manifest.inputHash}:${manifest.outputHash}`;
+    const expectedManifestId = manifest.kind === 'detector'
+      ? detectorManifestId(manifest)
+      : `closed-loop:${manifest.profileId}:${manifest.ruleId}:${manifest.inputHash}:${manifest.outputHash}:${manifest.outcome}`;
     if (manifest.manifestId !== expectedManifestId) {
       add('manifest-id-mismatch', 'ID manifesta ne veže profil, pravilo i hashove opaženog ulaza/izlaza.');
     }
@@ -333,7 +356,21 @@ export function auditAiEvidence(input: AiEvidenceAuditInput): AiEvidenceAuditRes
       add('manifest-output-hash-mismatch', 'Izlazni hash nije valjan ili ne odgovara izvršnom manifestu.');
     }
     if (evidence.execution.ranAt !== manifest.ranAt) add('manifest-time-mismatch', 'Vrijeme izvođenja ne odgovara izvršnom manifestu.');
-    if (!SHA256.test(manifest.repairSourceHash) || manifest.repairSourceHash !== input.currentRepairSourceHash) {
+    if (manifest.kind === 'detector') {
+      if (rule.autoFixable === true && !!rule.fixerId) {
+        add('manifest-kind-mismatch', 'Pravilo s automatskim popravkom traži closed-loop dokaz popravka.');
+      }
+      if (!manifest.ruleCheckId || manifest.ruleCheckId !== rule.checkId || !manifest.checkId
+        || manifest.checkId !== DETECTOR_CHECK_BY_RULE[rule.checkId ?? '']) {
+        add('manifest-check-mismatch', 'Manifest detektora ne veže profilnu os i stvarni check.id.');
+      }
+      if (!SHA256.test(manifest.violatingOutputHash ?? '') || !SHA256.test(manifest.correctInputHash ?? '')) {
+        add('manifest-input-hash-mismatch', 'Nedostaju hashovi oba ulaza i izlaza detektora.');
+      }
+      if (!SHA256.test(manifest.analysisSourceHash ?? '') || manifest.analysisSourceHash !== input.currentAnalysisSourceHash) {
+        add('manifest-stale-analysis', 'Kod analize se promijenio nakon izvršnog mjerenja.');
+      }
+    } else if (!SHA256.test(manifest.repairSourceHash ?? '') || manifest.repairSourceHash !== input.currentRepairSourceHash) {
       add('manifest-stale-repair', 'Kod popravka se promijenio nakon izvršnog mjerenja.');
     }
     if (!SHA256.test(manifest.ruleValueHash) || manifest.ruleValueHash !== input.ruleValueSha256) {

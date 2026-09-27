@@ -198,6 +198,7 @@ export interface SourceEntry {
 export type LedgerAction =
   | 'drafted'
   | 'ai-confirmed'
+  | 'ai-confirmation-revoked'
   | 'verified'
   | 'rechecked'
   | 'quote-anchored'
@@ -223,6 +224,8 @@ export interface VerificationLedgerEntry {
   oldQuote?: string;
   newQuote?: string;
   snapshotHash?: string;
+  /** Append-only correction of an earlier ai-confirmed event. */
+  revokesLedgerId?: string;
   note?: string;
 }
 

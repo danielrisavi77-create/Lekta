@@ -5,6 +5,7 @@ import { extname, isAbsolute, relative, resolve } from 'node:path';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
 import { documentText } from '../src/repair/docx-visible-text';
 import { hashRepairSourceTree } from './lib/repair-source-hash.mjs';
+import { hashAnalysisSourceTree } from './lib/analysis-source-hash.mjs';
 import { stableJson } from '../src/verification/ai-evidence-audit';
 import { ruleEvidenceKey } from '../src/verification/worklist';
 import {
@@ -152,16 +153,23 @@ export async function loadRepositoryAiEvidenceContext(
     }
   }
   let currentRepairSourceHash: string | undefined;
+  let currentAnalysisSourceHash: string | undefined;
   try {
     currentRepairSourceHash = hashRepairSourceTree(resolve(rootDir, 'src', 'repair'));
   } catch {
     // Nepostojeci kod popravka ne moze dati valjan izvrsni dokaz.
+  }
+  try {
+    currentAnalysisSourceHash = hashAnalysisSourceTree(rootDir);
+  } catch {
+    // Missing analysis code cannot validate a detector manifest.
   }
 
   return resolveAiEvidenceContext(profiles, sources, {
     snapshotsBySourceId: snapshots,
     manifestFilesByProfileId: manifestFiles,
     currentRepairSourceHash,
+    currentAnalysisSourceHash,
     ruleValueHashesByRule,
   });
 }
