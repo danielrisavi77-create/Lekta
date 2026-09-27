@@ -139,11 +139,13 @@ const OPPORTUNITIES: OpportunityStats = {
   basis: 'mixed_anonymous_event_count',
   range: RANGE,
   current: {
+    analysisCompletedEvents: 100,
     opportunityEvents: 100,
     manualAnalyses: 42,
     unmeasurableAnalyses: 13,
     structureGapAnalyses: 17,
     structureGapItems: 23,
+    structureBreakdownItems: 23,
     profileEvents: 90,
     nonVerifiedProfileEvents: 18,
     repairRuns: 20,
@@ -169,11 +171,13 @@ const OPPORTUNITIES: OpportunityStats = {
     ],
   },
   previous: {
+    analysisCompletedEvents: 80,
     opportunityEvents: 80,
     manualAnalyses: 36,
     unmeasurableAnalyses: 10,
     structureGapAnalyses: 14,
     structureGapItems: 18,
+    structureBreakdownItems: 18,
     profileEvents: 70,
     nonVerifiedProfileEvents: 20,
     repairRuns: 15,
@@ -293,6 +297,8 @@ describe('admin-section render moduli: ne ruse se, proizvode razuman DOM', () =>
     expect(c.textContent).toContain('nije cohort');
     expect(c.textContent).toContain('inspection_coverage_global');
     expect(c.textContent).toContain('unsupported-structure');
+    expect(c.textContent).toContain('Zdravlje mjerenja');
+    expect(c.textContent).toContain('Exact parity');
   });
 
   it('coverage: prazan topCells prikazuje prazno stanje, ne praznu tablicu', () => {
