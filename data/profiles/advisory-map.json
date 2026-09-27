@@ -249,6 +249,16 @@
     "toc",
     "page-numbers"
   ],
+  "efri-specijalisticki": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "efri-zavrsni": [
     "toc",
     "page-numbers"
@@ -570,6 +580,16 @@
   "ffzg-sociologija-diplomski": [
     "paper-size",
     "toc"
+  ],
+  "ffzg-svedski-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
   ],
   "fgag-diplomski": [
     "margins",
@@ -1043,6 +1063,16 @@
     "justify",
     "page-numbers"
   ],
+  "medri-doktorski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "medri-farmacija-diplomski": [
     "font",
     "justify",
@@ -1052,6 +1082,16 @@
   "medri-medicina-diplomski": [
     "font",
     "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "medri-sanitarno-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
@@ -1076,6 +1116,26 @@
     "page-numbers"
   ],
   "mefst-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "mefst-doktorski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "mefst-tribe-doktorski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
@@ -1197,6 +1257,16 @@
     "justify",
     "toc"
   ],
+  "pmf-biologija-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "pmf-fizika-graduate": [
     "paper-size",
     "toc"
@@ -1219,6 +1289,16 @@
     "margins",
     "justify",
     "paper-size"
+  ],
+  "pmf-geologija-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
   ],
   "pmf-matematika-graduate": [
     "font",
@@ -1845,6 +1925,16 @@
   "vef-doktorski": [
     "justify",
     "toc"
+  ],
+  "vef-specijalisticki": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
   ],
   "veleknin-diplomski": [
     "paper-size",

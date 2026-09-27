@@ -450,6 +450,12 @@
       "programIds": []
     },
     {
+      "profileId": "agromed-zavrsni",
+      "unitId": "agromed",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
       "profileId": "algebra-diplomski",
       "unitId": "algebra",
       "state": "unit-not-in-registry",
@@ -667,6 +673,12 @@
     },
     {
       "profileId": "efri-diplomski",
+      "unitId": "efri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efri-specijalisticki",
       "unitId": "efri",
       "state": "unit-not-in-registry",
       "programIds": []
@@ -1068,6 +1080,12 @@
       "programIds": []
     },
     {
+      "profileId": "ffzg-svedski-zavrsni",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
       "profileId": "fgag-diplomski",
       "unitId": "fgag",
       "state": "unit-not-in-registry",
@@ -1386,6 +1404,24 @@
       "programIds": []
     },
     {
+      "profileId": "geoteh-diplomski",
+      "unitId": "geoteh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "geoteh-doktorski",
+      "unitId": "geoteh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "geoteh-zavrsni",
+      "unitId": "geoteh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
       "profileId": "grad-diplomski",
       "unitId": "grad",
       "state": "unit-not-in-registry",
@@ -1442,6 +1478,12 @@
     {
       "profileId": "grf-zavrsni",
       "unitId": "grf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "hig-zavrsni",
+      "unitId": "hig",
       "state": "unit-not-in-registry",
       "programIds": []
     },
@@ -1638,6 +1680,12 @@
       "programIds": []
     },
     {
+      "profileId": "medri-doktorski",
+      "unitId": "medri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
       "profileId": "medri-farmacija-diplomski",
       "unitId": "medri",
       "state": "unit-not-in-registry",
@@ -1645,6 +1693,12 @@
     },
     {
       "profileId": "medri-medicina-diplomski",
+      "unitId": "medri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "medri-sanitarno-diplomski",
       "unitId": "medri",
       "state": "unit-not-in-registry",
       "programIds": []
@@ -1675,6 +1729,18 @@
     },
     {
       "profileId": "mefst-diplomski",
+      "unitId": "mefst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mefst-doktorski",
+      "unitId": "mefst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mefst-tribe-doktorski",
       "unitId": "mefst",
       "state": "unit-not-in-registry",
       "programIds": []
@@ -1724,6 +1790,18 @@
     {
       "profileId": "muza-doktorski",
       "unitId": "muza",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mvi-diplomski",
+      "unitId": "mvi",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mvi-prijediplomski",
+      "unitId": "mvi",
       "state": "unit-not-in-registry",
       "programIds": []
     },
@@ -1806,6 +1884,12 @@
       "programIds": []
     },
     {
+      "profileId": "pmf-biologija-zavrsni",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
       "profileId": "pmf-fizika-graduate",
       "unitId": "pmf",
       "state": "unit-not-in-registry",
@@ -1825,6 +1909,12 @@
     },
     {
       "profileId": "pmf-geologija-graduate",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmf-geologija-zavrsni",
       "unitId": "pmf",
       "state": "unit-not-in-registry",
       "programIds": []
@@ -2632,6 +2722,12 @@
       "programIds": []
     },
     {
+      "profileId": "vef-specijalisticki",
+      "unitId": "vef",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
       "profileId": "veleknin-diplomski",
       "unitId": "veleknin",
       "state": "unit-not-in-registry",
@@ -2887,6 +2983,7 @@
   "unitsWithoutPrograms": [
     "adu",
     "agr",
+    "agromed",
     "algebra",
     "alu",
     "apuri",
@@ -2897,6 +2994,7 @@
     "biolos",
     "biotech",
     "btho",
+    "cps",
     "effectus",
     "efos",
     "efri",
@@ -2935,10 +3033,12 @@
     "ftrr",
     "fzsri",
     "geof",
+    "geoteh",
     "grad",
     "gradri",
     "grafos",
     "grf",
+    "hig",
     "hks",
     "inf",
     "iv",
@@ -2963,6 +3063,7 @@
     "mfpu",
     "more",
     "muza",
+    "mvi",
     "odhz",
     "oss",
     "ozs",
@@ -3020,9 +3121,9 @@
   ],
   "summary": {
     "programCount": 35,
-    "profileCount": 410,
-    "unitCount": 134,
-    "unitsWithoutPrograms": 132,
+    "profileCount": 426,
+    "unitCount": 139,
+    "unitsWithoutPrograms": 137,
     "profilesUnclaimedInCoveredUnits": 6,
     "programsPendingPort": 0,
     "byProgramState": {
@@ -3032,12 +3133,12 @@
     },
     "byProfileState": {
       "linked": 20,
-      "unit-not-in-registry": 384,
+      "unit-not-in-registry": 400,
       "unclaimed-by-program": 6
     },
     "upisnikSynced": false
   },
-  "generatedAt": "2026-09-03T18:12:43.554Z",
-  "generatedFromCommit": "fef95ad136cc6062214a03b3a22d3fd2f88eb31d",
+  "generatedAt": "2026-09-26T22:21:19.653Z",
+  "generatedFromCommit": "59cc82e212d6015ac8ee14a6c782e6a355fea5ba",
   "generator": "npm run reconcile-programs"
 }

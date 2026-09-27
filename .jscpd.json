@@ -1,0 +1,28 @@
+{
+  "path": [
+    "src",
+    "scripts",
+    "supabase/functions",
+    "workers"
+  ],
+  "ignore": [
+    "**/tests/**",
+    "tests/**",
+    "scripts/autonomy/**",
+    "data/**",
+    "dist/**",
+    "**/node_modules/**",
+    "**/*.json",
+    "**/*.md"
+  ],
+  "format": [
+    "typescript",
+    "javascript",
+    "tsx",
+    "jsx"
+  ],
+  "minLines": 5,
+  "minTokens": 50,
+  "gitignore": true,
+  "silent": true
+}

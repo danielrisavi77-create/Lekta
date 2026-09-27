@@ -82,6 +82,26 @@
         "confirmedVia": "human-audit"
       },
       {
+        "ruleId": "fbf-specijalisticki--lines-per-page",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
+        "checkId": "lines-per-page",
+        "value": {
+          "min": 28,
+          "max": 32
+        },
+        "category": "format",
+        "label": "Redaka po stranici (kapacitet)",
+        "machineCheckable": true,
+        "authority": "program-page",
+        "sourceId": "fbf-upute-spec-2014",
+        "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+        "quote": "(28-32 retka po stranici; pismo velicine 10 do 12 tipografskih tocaka citljive vrste s",
+        "status": "draft",
+        "scored": false
+      },
+      {
         "ruleId": "fbf-specijalisticki--font-size",
         "modality": "directive",
         "scope": "body",

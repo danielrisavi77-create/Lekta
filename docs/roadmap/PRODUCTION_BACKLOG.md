@@ -958,4 +958,5 @@ nista od ovoga ne mijenja granicu proizvoda (Lekta analizira i popravlja FORMU, 
 ### Redoslijed i razlog
 
 P-A je najjeftinija i prodaje se odmah. P-B nosi najjacu pricu, ali je skupa za podatke.
+M5 Final Pass funkcije i M6 Expert idu uz P-A (`docs/decisions/MONETIZACIJA_V1_ODLUKA.md`, odluka vlasnika 2026-09-27).
 P-C je temelj za P-D, P-F i P-G.

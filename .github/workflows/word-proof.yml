@@ -1,0 +1,250 @@
+# Word dokaz (Tier 2) na vlasnikovom Windows stroju s aktiviranim Microsoft Wordom (T80).
+#
+# GitHubovi runneri nemaju Word, pa su `verify:word*` razine iz `scripts/release-tiers.mjs` dosad
+# isle samo rucno na laptopu. Ovaj workflow ih vrti na self-hosted runneru s oznakama
+# `self-hosted, windows, word`. Upute za registraciju: docs/verification/WORD_PROOF_RUNNER.md.
+#
+# SIGURNOST (repo je JAVAN). Ovaj workflow i njegov gard smanjuju rizik, ali NISU granica pristupa
+# stroju; granica su postavke repozitorija iz WORD_PROOF_RUNNER.md, odjeljak 6 (Codex F1, F2, F4).
+#  - Nema `pull_request`, `pull_request_target`, `workflow_call` ni drugih trigera osim `push` na
+#    master i release/** te `workflow_dispatch`; oba traze pravo pisanja.
+#  - Job `if` odbija fork i bilo koji drugi repozitorij.
+#  - Prije ijednog koraka koji izvrsava kod iz stabla: commit mora biti TOCAN vrh origin/master ili
+#    origin/release/* (dispatch), odnosno commit samog pusha na te grane (push).
+#  - Nula eksplicitno proslijedjenih tajni, token samo za citanje.
+#  - Objavljuje se samo dokaz koji je nastao u ovom runu za ovaj commit i redaktiran sazetak; puni
+#    log ostaje na stroju.
+#  Gard: tests/ci-workflow-triggers.test.ts (`findSelfHostedProblems`), mutacije u
+#  tests/gate-mutations.test.ts.
+#
+# Nije obvezna provjera: dok runner nije registriran, job stoji u stanju "Queued".
+name: word-proof
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Grana za Word dokaz: master ili release/<ime>; mora biti tocan vrh grane'
+        required: false
+        default: master
+      razine:
+        description: 'word = cetiri Word razine (oko 10 min); sve = puni release:check (oko 70 min)'
+        required: false
+        default: word
+        type: choice
+        options:
+          - word
+          - sve
+  push:
+    branches: [master, 'release/**']
+
+permissions:
+  contents: read
+
+# Jedan Word na stroju: dva paralelna runa bi se borila za isti COM objekt.
+concurrency:
+  group: word-proof
+  cancel-in-progress: false
+
+jobs:
+  word-proof:
+    if: github.event.repository.fork == false && github.repository == 'danielrisavi77-create/Lekta'
+    runs-on: [self-hosted, windows, word]
+    # Timeout pokriva CIJELI job, ne samo release:check. Izmjereno na runneru (run 36325565241):
+    # checkout s punom povijescu 4 min 22 s, `npm ci` bez kesa 15 min 57 s; tek onda razine.
+    # Razine iz docs/generated/RELEASE_PROOF.json (f754537c): cetiri Word razine oko 9 min
+    # (word 62 s, word-worst 37 s, word-corpus 399 s, word-toc 25 s), puni release:check oko
+    # 70 min. Prijasnjih 30 min je ubilo run #8 usred release:check, pa se ni kes ni ciscenje
+    # nisu izvrsili. word: 21 + 9 = 30 min, uz dvostruku rezervu 60; sve: 21 + 70 = 91, rezerva 180.
+    timeout-minutes: ${{ inputs.razine == 'sve' && 180 || 60 }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+          # Svi vrhovi grana kao origin/*, da bi korak ispod mogao usporediti SHA s njima.
+          fetch-depth: 0
+
+      # Ovo je PRVI korak nakon checkouta; ispred njega se ne smije izvrsiti nista iz stabla
+      # (gard to provjerava). `--contains` nije dovoljan: prihvaca povijesni ili vraceni commit i
+      # tagove (Codex F3 na #162). Dopusten je samo tocan vrh zasticene grane.
+      - name: Porijeklo commita (samo tocan vrh master ili release/*)
+        shell: powershell
+        env:
+          DOGADJAJ: ${{ github.event_name }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sha = (git rev-parse HEAD).Trim()
+          if ($LASTEXITCODE -ne 0) { throw 'git rev-parse HEAD nije uspio.' }
+          if ($env:DOGADJAJ -eq 'push') {
+            if ($sha -ne $env:GITHUB_SHA) { throw "Checkout ($sha) nije commit pusha ($env:GITHUB_SHA)." }
+            if ($env:GITHUB_REF -ne 'refs/heads/master' -and -not $env:GITHUB_REF.StartsWith('refs/heads/release/')) {
+              throw "Push na $env:GITHUB_REF nije dopusten za Word dokaz."
+            }
+            Write-Output "Push $sha na $env:GITHUB_REF."
+          } else {
+            $vrhovi = @(git for-each-ref --format='%(objectname) %(refname)' refs/remotes/origin/master refs/remotes/origin/release)
+            if ($LASTEXITCODE -ne 0) { throw 'git for-each-ref nije uspio.' }
+            $pogodak = @($vrhovi | Where-Object { ($_ -split ' ')[0] -eq $sha })
+            if ($pogodak.Count -eq 0) {
+              throw "Commit $sha nije tocan vrh origin/master ni origin/release/*; Word dokaz se ne pokrece."
+            }
+            Write-Output "Commit $sha je vrh: $($pogodak -join ', ')"
+          }
+          [IO.File]::AppendAllText($env:GITHUB_ENV, "WORD_PROOF_START=$([DateTime]::UtcNow.ToString('o'))`n")
+
+      # Word koji vec radi u sesiji runnera znaci zaostali proces prethodnog runa ili korisnikov
+      # otvoreni dokument. Run tada STAJE i nista ne gasi (Codex F8). Zatim: Word COM i git.
+      # bash se vise ne trazi: setup-deps na Windowsu koristi powershell (#177).
+      - name: Preflight (zaostali Word, Word COM, git)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sesija = [System.Diagnostics.Process]::GetCurrentProcess().SessionId
+          $zaostali = @(Get-Process -Name WINWORD -ErrorAction SilentlyContinue | Where-Object { $_.SessionId -eq $sesija })
+          if ($zaostali.Count -gt 0) {
+            $opis = ($zaostali | ForEach-Object { "PID $($_.Id), pokrenut $($_.StartTime)" }) -join '; '
+            throw "Word vec radi u sesiji runnera ($opis). Run staje i nista ne gasi: spremi i zatvori Word rucno pa pokreni ponovno."
+          }
+          $word = New-Object -ComObject Word.Application
+          try { Write-Output "Word verzija: $($word.Version)" } finally { $word.Quit(); [void][Runtime.InteropServices.Marshal]::ReleaseComObject($word) }
+          git --version
+          if ($LASTEXITCODE -ne 0) { throw 'git nije dostupan.' }
+
+      - name: Ovisnosti (kesirano)
+        uses: ./.github/actions/setup-deps
+        with:
+          node-version: 24
+          npm-version: 11.11.0
+
+      # Samo za puni release:check: Edge typecheck (Deno), Tier 1 (lxml) i Playwright.
+      - name: Deno setup (samo razine=sve)
+        if: inputs.razine == 'sve'
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: v2.x
+      - name: Python setup (samo razine=sve)
+        if: inputs.razine == 'sve'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: lxml i Playwright chromium (samo razine=sve)
+        if: inputs.razine == 'sve'
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -m pip install python-docx lxml
+          if ($LASTEXITCODE -ne 0) { throw "pip install nije uspio ($LASTEXITCODE)." }
+          npx playwright install chromium
+          if ($LASTEXITCODE -ne 0) { throw "playwright install nije uspio ($LASTEXITCODE)." }
+
+      # Postojeca naredba iz scripts/release-check.mjs; razine su iz scripts/release-tiers.mjs.
+      # Izbor ide kroz env, ne kroz interpolaciju u skriptu, i provjerava se protiv popisa.
+      # Puni log ide u RUNNER_TEMP i u trajnu mapu na stroju, NIKAD u artefakt (Codex F7); u stablu bi
+      # dokaz pogresno oznacio `dirtyWorkingTree`.
+      # Continue, ne Stop: Windows PowerShell 5.1 uz `2>&1` pretvara svaki stderr redak nativne
+      # naredbe u gresku, pa bi Stop srusio korak na prvom upozorenju npm-a. Ishod nosi izlazni kod.
+      - name: release:check
+        shell: powershell
+        env:
+          RAZINE: ${{ inputs.razine || 'word' }}
+        run: |
+          $ErrorActionPreference = 'Continue'
+          $log = Join-Path $env:RUNNER_TEMP 'release-check.log'
+          # Isto sto i `npm run release:check` (package.json), ali izravno kroz node.exe: npm na
+          # Windowsu ide kroz PowerShell shim npm.ps1, koji proguta `--`, pa je u runu 36330000264
+          # `--only` ignoriran i pokrenut je PUNI release:check. `'--'` u navodnicima PowerShell
+          # uvijek prosljedjuje doslovno.
+          $gate = @('scripts/with-gate-lock.mjs', 'release:check', '--', 'node', 'scripts/release-check.mjs')
+          if ($env:RAZINE -eq 'sve') {
+            node @gate 2>&1 | Tee-Object -FilePath $log
+          } elseif ($env:RAZINE -eq 'word') {
+            node @gate '--only=word,word-worst,word-corpus,word-toc' 2>&1 | Tee-Object -FilePath $log
+          } else {
+            throw "Nepoznata vrijednost razine: $env:RAZINE"
+          }
+          $kod = $LASTEXITCODE
+          $trajno = Join-Path $env:LOCALAPPDATA 'lekta-word-proof\logs'
+          New-Item -ItemType Directory -Force -Path $trajno | Out-Null
+          Copy-Item $log (Join-Path $trajno "$env:GITHUB_RUN_ID.log")
+          exit $kod
+
+      # Objavljuje se samo dokaz koji je nastao u OVOM runu za OVAJ commit (Codex F6): commit u
+      # RELEASE_PROOF.json mora biti HEAD, a createdAt nakon pocetka runa. Inace ide samo sazetak pod
+      # imenom word-proof-FAILED-<run id>. Sazetak su retci razina i ishoda, s redaktiranim putanjama
+      # i korisnickim imenom; nazivi dokumenata i iznimke iz korpusa ostaju u punom logu na stroju.
+      - name: Provjera svjezine dokaza i sazetak
+        id: dokaz
+        if: always()
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Continue'
+          $izlaz = Join-Path $env:RUNNER_TEMP 'word-proof-objava'
+          New-Item -ItemType Directory -Force -Path $izlaz | Out-Null
+          $sha = (git rev-parse HEAD).Trim()
+          $put = 'docs/generated/RELEASE_PROOF.json'
+          $svjez = $false
+          if ((Test-Path $put) -and $env:WORD_PROOF_START) {
+            try {
+              $d = Get-Content $put -Raw | ConvertFrom-Json
+              $nastao = ([DateTime]$d.createdAt).ToUniversalTime()
+              $pocetak = ([DateTime]$env:WORD_PROOF_START).ToUniversalTime()
+              $svjez = ($d.commit -eq $sha) -and ($nastao -ge $pocetak)
+            } catch { $svjez = $false }
+          }
+          if ($svjez) { Copy-Item $put (Join-Path $izlaz 'RELEASE_PROOF.json') }
+          $log = Join-Path $env:RUNNER_TEMP 'release-check.log'
+          $retci = @()
+          if (Test-Path $log) {
+            $retci = @(Get-Content $log | Where-Object { $_ -match '^(=== |--- |\[release-check\])' -or $_ -match 'Test Files|^\s+Tests\s' })
+          }
+          $cisti = foreach ($r in $retci) {
+            foreach ($p in @($env:GITHUB_WORKSPACE, $env:RUNNER_TEMP, $env:USERPROFILE)) { if ($p) { $r = $r.Replace($p, '<put>') } }
+            if ($env:USERNAME) { $r = $r.Replace($env:USERNAME, '<korisnik>') }
+            $r -replace '[A-Za-z]:\\[^\s"'']*', '<put>'
+          }
+          $zaglavlje = @("commit: $sha", "dogadjaj: $env:GITHUB_EVENT_NAME", "svjez dokaz ovog runa: $svjez", '')
+          ($zaglavlje + $cisti) | Set-Content -Path (Join-Path $izlaz 'sazetak.txt') -Encoding UTF8
+          [IO.File]::AppendAllText($env:GITHUB_OUTPUT, "svjez=$($svjez.ToString().ToLower())`n")
+
+      - name: Artefakt (svjez dokaz i sazetak)
+        if: always() && steps.dokaz.outputs.svjez == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: word-proof-${{ github.run_id }}
+          path: ${{ runner.temp }}/word-proof-objava/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Artefakt (neuspjeh, samo sazetak)
+        if: always() && steps.dokaz.outputs.svjez != 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: word-proof-FAILED-${{ github.run_id }}
+          path: ${{ runner.temp }}/word-proof-objava/sazetak.txt
+          if-no-files-found: warn
+          retention-days: 30
+
+      # Trajni runner: zaostali Word pokvario bi sljedeci run (Codex F8). Word koji je nastao za
+      # vrijeme runa i nije se ugasio u 60 s prijavljuje se kao greska; nista se ne gasi naslijepo.
+      - name: Ciscenje i provjera zaostalog Worda
+        if: always()
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Continue'
+          Get-ChildItem -Directory -Force -Filter '.tmp-word*' -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+          $sesija = [System.Diagnostics.Process]::GetCurrentProcess().SessionId
+          $pocetak = if ($env:WORD_PROOF_START) { ([DateTime]$env:WORD_PROOF_START).ToLocalTime() } else { [DateTime]::MinValue }
+          $zaostali = @()
+          for ($i = 0; $i -lt 12; $i++) {
+            $zaostali = @(Get-Process -Name WINWORD -ErrorAction SilentlyContinue | Where-Object { $_.SessionId -eq $sesija -and $_.StartTime -ge $pocetak })
+            if ($zaostali.Count -eq 0) { break }
+            Start-Sleep -Seconds 5
+          }
+          if ($zaostali.Count -gt 0) {
+            $opis = ($zaostali | ForEach-Object { "PID $($_.Id)" }) -join ', '
+            Write-Output "::error::Word proces iz ovog runa nije zavrsio ($opis). Zatvori ga rucno prije sljedeceg runa; vidi WORD_PROOF_RUNNER.md."
+            exit 1
+          }
+          Write-Output 'Nema zaostalog Word procesa iz ovog runa.'
