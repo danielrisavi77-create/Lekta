@@ -15,15 +15,29 @@
  * dokumenta ga ne gazi) i `onConfirmed` (snimka se zapise uz sesiju, pa ponovno ucitavanje vise
  * ne ovisi o ovom zapisu).
  *
- * KADA SE NE PRIMJENJUJE (i `/rad/` radi tocno kao prije Z32), vidi `potvrdaVrijediZaSesiju`:
- * potvrda za drugu sesiju, potvrda bez studija (fakultet iz `?unit=` linka), obrazac koji nakon
- * obnove postavki pokazuje nesto drugo, ili sesija koja vec ima vlastiti potvrdjen profil.
+ * DVA OBLIKA POTVRDE (Z32 popravak, odluka vlasnika 2026-09-27):
+ *
+ *   cijeli profil  potvrda nosi studij i obrazac nakon obnove postavki pokazuje isti fakultet,
+ *                  studij i razinu (`potvrdaNosiCijeliProfil`): put C4, kao gore.
+ *   samo fakultet  svaka druga vazeca potvrda, npr. fakultet iz `?unit=` linka bez studija.
+ *                  `applyConfirmedFacultySelection` postavi ustanovu i fakultet (i razinu iz
+ *                  linka) i zabrani detekciji iz dokumenta da ga promijeni
+ *                  (`src/ui/confirmed-faculty.ts`); STUDIJ ostaje na detekciji, jer ga student na
+ *                  ulazu nije potvrdio. Snimka profila se ne pise: bez studija nema verificiranog
+ *                  profila koji bi se potvrdio.
+ *
+ * KADA SE NE PRIMJENJUJE (i `/rad/` radi tocno kao prije Z32: detekcija iz dokumenta, prikaz
+ * prepoznatog i mogucnost promjene), vidi `potvrdaVrijediZaSesiju`: nema potvrde, potvrda za
+ * drugu sesiju, ili sesija koja vec ima vlastiti potvrdjen profil.
  */
-import { potvrdaVrijediZaSesiju, procitajIzborUlaza, type IzborUlaza } from '../../shared/intake-choice';
+import { ZAGREB_CATALOG } from '../../catalog/catalog-loader';
+import {
+  potvrdaNosiCijeliProfil, potvrdaVrijediZaSesiju, procitajIzborUlaza, type IzborUlaza, type PotvrdaUlaza,
+} from '../../shared/intake-choice';
 import type { ProfileConfirmed } from '../../ui/profile-confirmed-events';
 import type { SelectionIds } from '../../ui/profile-selection-ids';
 
-export type IntakeConfirmationOutcome = 'none' | 'applied' | 'unresolved';
+export type IntakeConfirmationOutcome = 'none' | 'applied' | 'unresolved' | 'faculty';
 
 export interface IntakeConfirmationDeps {
   sessionId: string;
@@ -32,6 +46,11 @@ export interface IntakeConfirmationDeps {
   readForm: () => SelectionIds;
   /** `applyConfirmedProfileSelection` iz `app.ts`: vraca razrijeseni id profila ili `null`. */
   apply: (ids: Record<string, string>) => string | null;
+  /**
+   * `applyConfirmedFacultySelection` iz `app.ts`: postavlja potvrdjen fakultet (ustanovu,
+   * jedinicu i razinu, kad je poznata) bez studija; `false` kad obrazac tu jedinicu ne prihvati.
+   */
+  applyFaculty: (ids: Record<string, string>) => boolean;
   /** `profil.onConfirmed`: snimka ide pisacu sesije. */
   confirm: (event: ProfileConfirmed) => void;
   read?: () => IzborUlaza;
@@ -44,18 +63,39 @@ export interface IntakeConfirmationDeps {
  *   applied     profil je potvrdjen i snimka je predana pisacu sesije
  *   unresolved  korisnikov izbor je primijenjen i potvrdjen, ali ne daje verificiran profil
  *               (npr. fakultet u istrazivanju), pa se snimka ne pise; isto kao rucna potvrda
+ *   faculty     primijenjen je samo potvrdjen fakultet; studij prepoznaje detekcija iz dokumenta
  */
 export function primijeniPotvrduUlaza(deps: IntakeConfirmationDeps): IntakeConfirmationOutcome {
   const { potvrda } = (deps.read ?? procitajIzborUlaza)();
+  if (!potvrdaVrijediZaSesiju(potvrda, { id: deps.sessionId, imaProfil: deps.sessionHasProfile })) return 'none';
   let obrazac: SelectionIds;
   try { obrazac = deps.readForm(); } catch { return 'none'; }
-  if (!potvrda || !potvrdaVrijediZaSesiju(potvrda, { id: deps.sessionId, imaProfil: deps.sessionHasProfile }, obrazac)) {
+  if (potvrdaNosiCijeliProfil(potvrda, obrazac)) {
+    const ids = Object.fromEntries(Object.entries(obrazac)) as Record<string, string>;
+    let definicija: string | null;
+    try { definicija = deps.apply(ids); } catch { return 'none'; }
+    if (!definicija) return 'unresolved';
+    deps.confirm({ profileDefinitionId: definicija, selectionIds: obrazac, confirmedAt: potvrda.at });
+    return 'applied';
+  }
+  const ids = odabirFakulteta(potvrda);
+  if (!ids) return 'none';
+  try {
+    return deps.applyFaculty(ids) ? 'faculty' : 'none';
+  } catch {
     return 'none';
   }
-  const ids = Object.fromEntries(Object.entries(obrazac)) as Record<string, string>;
-  let definicija: string | null;
-  try { definicija = deps.apply(ids); } catch { return 'none'; }
-  if (!definicija) return 'unresolved';
-  deps.confirm({ profileDefinitionId: definicija, selectionIds: obrazac, confirmedAt: potvrda.at });
-  return 'applied';
+}
+
+/**
+ * Odabir za obrazac iz potvrde BEZ studija: ustanova iz kataloga (obrazac bira fakultet unutar
+ * ustanove), jedinica i razina kad je poznata. Studija nema namjerno. Jedinica koje nema u
+ * katalogu daje `null`: tada se nista ne potvrdjuje.
+ */
+export function odabirFakulteta(potvrda: Pick<PotvrdaUlaza, 'unit' | 'workType'>): Record<string, string> | null {
+  const ustanova = ZAGREB_CATALOG.find((u) => u.units.some((j) => j.id === potvrda.unit));
+  if (!ustanova) return null;
+  const ids: Record<string, string> = { institution: ustanova.id, unit: potvrda.unit };
+  if (potvrda.workType) ids.workType = potvrda.workType;
+  return ids;
 }

@@ -137,10 +137,11 @@ describe('Z7 papir ulaza: sedam elemenata predloska', () => {
     const cta = doc.querySelector('.intake-cta');
     expect(cta, 'nema CTA-a').not.toBeNull();
     expect(tekst(cta)).toBe('Odaberi .docx');
-    // Z32: STATICKI natpis je natpis ZATVORENIH vrata (predlozak: "Prvo potvrdi fakultet i rok"), a
-    // gumb je `aria-disabled`, jer dok JS ne procita pribor nista nije potvrdjeno. "ili ispusti
-    // dokument ovdje" upisuje `intake-live.ts` kad je pribor spreman (tests/intake-live.test.ts).
-    expect(tekst(doc.querySelector('.intake-hint'))).toBe('Prvo potvrdi fakultet i rok');
+    // Z32: STATICKI natpis je natpis ZATVORENIH vrata, a gumb je `aria-disabled`, jer dok JS ne
+    // procita pribor rok nije odlucen. Od odluke vlasnika 2026-09-27 fakultet nije uvjet, pa
+    // natpis spominje samo rok (skraceni oblik predloska "Prvo potvrdi fakultet i rok"). "ili
+    // ispusti dokument ovdje" upisuje `intake-live.ts` kad je rok odlucen (tests/intake-live.test.ts).
+    expect(tekst(doc.querySelector('.intake-hint'))).toBe('Prvo potvrdi rok');
     expect(doc.querySelector('.intake-paper__gumb')!.getAttribute('aria-disabled')).toBe('true');
     // Isti redak: oboje su ista radnja izvedena na dva nacina.
     const akcija = doc.querySelector('.intake-akcija');

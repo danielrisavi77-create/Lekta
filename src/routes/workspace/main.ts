@@ -1,5 +1,5 @@
 import {
-  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection,
+  initAnalyzerApp, loadAnalyzerDocument, trackWorkspaceEvent, applyConfirmedProfileSelection, applyConfirmedFacultySelection,
   subscribeAnalyzerDocumentAccepted, subscribeAnalyzerDocumentSettled,
 } from '../../ui/app';
 import { subscribeAnalyzerResultReady, subscribeRepairPanelReady } from '../../ui/analyzer-document-events';
@@ -256,13 +256,15 @@ async function start(): Promise<void> {
     // pregazile) i PRIJE `restoreDocument` (cija detekcija iz dokumenta bi ga inace pregazila).
     profil.restore(outcome.session.profile);
     // Z32: fakultet potvrdjen uz list na `/` za OVU sesiju ide ISTIM putem kao obnova (C4), pa ga
-    // `/rad/` ne pita ponovo. Isti redoslijedni ugovor: poslije postavki, prije detekcije iz
+    // `/rad/` ne pita ponovo; potvrda bez studija (`?unit=`) postavi samo fakultet, a studij
+    // ostaje na detekciji. Isti redoslijedni ugovor: poslije postavki, prije detekcije iz
     // dokumenta (gard: tests/intake-live.test.ts). Bez vazece potvrde je no-op.
     primijeniPotvrduUlaza({
       sessionId: outcome.session.id,
       sessionHasProfile: Boolean(outcome.session.profile),
       readForm: () => readSelectionIds(document),
       apply: applyConfirmedProfileSelection,
+      applyFaculty: applyConfirmedFacultySelection,
       confirm: (event) => profil.onConfirmed(event),
     });
     odabir.restore(outcome.session.workspace?.repairSelection);

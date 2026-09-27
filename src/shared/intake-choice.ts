@@ -7,15 +7,19 @@
  *
  * STO SE PAMTI I ZASTO TOLIKO:
  *
- *   rok      Pamti se trajno i vraca na ulaz pri sljedecem dolasku: rok je svojstvo rada, ne
- *            posjeta, a Z34 (rezultat) i Z36 (popravak) ga trebaju na `/rad/`. Ako korisnik
- *            zatvori karticu prije ubacivanja, zapis ostaje bez rada; to je prihvatljivo, jer
- *            rada tada jos nema, a sljedeci dolazak dobiva isti rok vec upisan.
+ *   rok      Pamti se i vraca na ulaz pri sljedecem dolasku, jer je rok svojstvo rada, ne
+ *            posjeta. ISTEKAO datum se NE vraca (`rokZaPovratak`): vrata ulaza otvara samo rok,
+ *            pa bi zaboravljen rok proslog rada sam otvorio vrata za novi rad.
+ *
+ *   rokSesije  Rok vezan za id sesije ubacenog rada (`veziRokZaSesiju`). Z34 (rezultat) i Z36
+ *            (popravak) na `/rad/` citaju OVAJ zapis (`rokZaSesiju`), a ne `rok`, koji se pri
+ *            sljedecem posjetu ulaza vec moze odnositi na drugi rad.
  *
  *   potvrda  Tko je sto potvrdio na ulazu, i ZA KOJU SESIJU. Vezanje za id sesije je cijela
  *            zastita: potvrda iz proslog posjeta ne smije se primijeniti na drugi dokument.
  *            Ulaz je pri ucitavanju NE vraca kao potvrdjenu; kartica fakulteta uvijek trazi novi
- *            klik na "Potvrdi" (Z32 tocka 3).
+ *            klik na "Potvrdi" (Z32 tocka 3). Potvrda NIJE uvjet za ubacivanje (odluka vlasnika
+ *            2026-09-27): bez nje `/rad/` fakultet prepoznaje iz dokumenta, kao i prije Z32.
  *
  * NEPOZNATI KLJUCEVI ZAPISA SE CUVAJU: pisac spaja, ne prepisuje, pa kasniji zadatak (Z34, Z36)
  * moze dodati svoje polje bez da ga ulaz pri sljedecem upisu izbrise.
@@ -24,9 +28,13 @@
 import PLATE_INDEX from '../../data/coverage/unit-kratice.json';
 import { workTypeFromSlug } from '../title-pages/level-slugs';
 import { safeStorageGet, safeStorageSet, STORAGE_KEYS } from './browser-storage';
-import { normalizirajRok, rokOdlucen, type RokStanje } from '../routes/intake/deadline-stamp';
+import { danaDoRoka, normalizirajRok, rokOdlucen, ROK_PRAZAN, type RokStanje } from '../routes/intake/deadline-stamp';
 
-/** Sto je korisnik potvrdio na ulazu. `program` postoji samo kad je predodabir dosao iz postavki. */
+/**
+ * Sto je korisnik potvrdio na ulazu. `program` postoji samo kad je predodabir dosao iz postavki;
+ * potvrda iz `?unit=` linka nosi samo fakultet (i razinu), i `/rad/` je primjenjuje kao potvrdjen
+ * FAKULTET, dok studij ostaje na detekciji iz dokumenta.
+ */
 export interface PotvrdaUlaza {
   unit: string;
   program: string | null;
@@ -83,7 +91,7 @@ export function procitajIzborUlaza(): IzborUlaza {
  * Upis jednog polja zapisa uz cuvanje ostalih. Vraca `false` kad je vrijednost vec ista, pa drugi
  * upis iste vrijednosti NE dira pohranu (idempotencija se mjeri, ne pretpostavlja).
  */
-function upisiPolje(kljuc: 'rok' | 'potvrda', vrijednost: unknown): boolean {
+function upisiPolje(kljuc: 'rok' | 'potvrda' | 'rokSesije', vrijednost: unknown): boolean {
   const z = zapis();
   if (JSON.stringify(z[kljuc] ?? null) === JSON.stringify(vrijednost ?? null)) return false;
   z[kljuc] = vrijednost;
@@ -99,6 +107,35 @@ export function zapisiPotvrdu(potvrda: PotvrdaUlaza | null): boolean {
   return upisiPolje('potvrda', potvrda);
 }
 
+/**
+ * ROK KOJI SE VRACA NA ULAZ. Istekao datum (prije danasnjeg kalendarskog dana) se ne vraca, jer
+ * vrata ulaza otvara samo rok: zaboravljen rok proslog rada ne smije sam otvoriti vrata za novi
+ * rad. "Još ne znam rok" i rok danas ili kasnije vracaju se kakvi jesu.
+ */
+export function rokZaPovratak(rok: RokStanje, danas: Date): RokStanje {
+  if (rok.neznam || rok.datum === null) return rok;
+  const dana = danaDoRoka(rok.datum, danas);
+  return dana === null || dana < 0 ? { ...ROK_PRAZAN } : rok;
+}
+
+/**
+ * Vezuje rok s kojim je rad ubacen za upravo spremljenu sesiju, pa Z34 i Z36 na `/rad/` citaju
+ * rok TOG rada. Drugi upis iste vrijednosti je no-op.
+ */
+export function veziRokZaSesiju(sesija: string, rok: RokStanje): boolean {
+  const r = normalizirajRok(rok);
+  return upisiPolje('rokSesije', { sesija, datum: r.datum, neznam: r.neznam });
+}
+
+/** Rok rada iz sesije `sesija`; `null` kad rok nije vezan za tu sesiju. */
+export function rokZaSesiju(sesija: string): RokStanje | null {
+  const v = zapis().rokSesije;
+  if (typeof v !== 'object' || v === null) return null;
+  const z = v as Record<string, unknown>;
+  if (z.sesija !== sesija) return null;
+  return normalizirajRok({ datum: z.datum, neznam: z.neznam });
+}
+
 /** Vezuje zivu potvrdu za upravo spremljenu sesiju. Bez potvrde nema sto vezati. */
 export function veziPotvrduZaSesiju(sesija: string): boolean {
   const { potvrda } = procitajIzborUlaza();
@@ -112,12 +149,12 @@ export function veziPotvrduZaSesiju(sesija: string): boolean {
  * (`data/coverage/unit-kratice.json` i `lekta.preferences.v2`), pa kartica i traka ne mogu
  * tvrditi razlicit fakultet.
  *
- * STUDIJ SE NAVODI SAMO IZ POSTAVKI. Kad fakultet dolazi iz linka, `/rad/` ga primijeni bez
- * studija i izbornik studija padne na abecedno prvi (`populatePrograms`), pa bi kartica s
- * studijem iz postavki obecavala nesto sto odrediste nece primijeniti.
+ * STUDIJ SE NAVODI SAMO IZ POSTAVKI. Kad fakultet dolazi iz linka, `/rad/` ga primijeni kao
+ * potvrdjen fakultet, a studij prepoznaje iz dokumenta, pa bi kartica sa studijem iz postavki
+ * obecavala nesto sto odrediste nece primijeniti.
  *
- * Nepoznata jedinica (nema je u indeksu) nije predodabir: vraca se `null`, a kartica nudi
- * postojeci odabir profila umjesto da pogadja.
+ * Nepoznata jedinica (nema je u indeksu) nije predodabir: vraca se `null`, a kartica kaze da ce
+ * fakultet biti prepoznat iz rada, umjesto da pogadja.
  */
 export function predodabirFakulteta(search: string, postavke: unknown): Predodabir | null {
   let params: URLSearchParams;
@@ -147,39 +184,52 @@ export function procitajPostavke(): unknown {
 }
 
 /**
- * SPREMNOST ZA UBACIVANJE (Z32 tocka 3): fakultet potvrdjen I (rok ILI "Još ne znam rok").
+ * SPREMNOST ZA UBACIVANJE: rok ILI "Još ne znam rok". Fakultet NIJE uvjet (odluka vlasnika
+ * 2026-09-27: "Ne treba upisati faks odmah, nego aplikacija automatski prepoznaje. Ako je
+ * prepozna, onda korisnik može odabrati sam"). Bez potvrde ga `/rad/` prepoznaje iz dokumenta.
  *
- * Natpis kad oboje nedostaje je doslovno iz predloska ("Prvo potvrdi fakultet i rok"). Kad
- * nedostaje samo jedno, natpis kaze samo to, skracivanjem istog teksta, jer nalog trazi natpis
- * "sto nedostaje"; predlozak ima samo zbirni oblik.
+ * Natpis zatvorenih vrata spominje samo rok. Predlozak ima zbirni oblik ("Prvo potvrdi fakultet i
+ * rok"); ovo je njegov skraceni oblik bez fakulteta, isti koji je ulaz vec nosio kad je nedostajao
+ * samo rok.
  */
 export const NATPIS_SPREMNO = 'ili ispusti dokument ovdje';
+export const NATPIS_BEZ_ROKA = 'Prvo potvrdi rok';
 
-export function spremnostUlaza(stanje: { fakultetPotvrden: boolean; rok: RokStanje }): { spremno: boolean; natpis: string } {
-  const rok = rokOdlucen(stanje.rok);
-  if (stanje.fakultetPotvrden && rok) return { spremno: true, natpis: NATPIS_SPREMNO };
-  if (!stanje.fakultetPotvrden && !rok) return { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' };
-  return { spremno: false, natpis: stanje.fakultetPotvrden ? 'Prvo potvrdi rok' : 'Prvo potvrdi fakultet' };
+export function spremnostUlaza(stanje: { rok: RokStanje }): { spremno: boolean; natpis: string } {
+  return rokOdlucen(stanje.rok)
+    ? { spremno: true, natpis: NATPIS_SPREMNO }
+    : { spremno: false, natpis: NATPIS_BEZ_ROKA };
 }
 
 /**
- * SMIJE LI `/rad/` PRIMIJENITI POTVRDU S ULAZA kao potvrdjen profil sesije.
- *
- * Sve cetiri stvari moraju vrijediti, jer svaka zatvara jednu tvrdnju koju ulaz ne smije dati:
+ * SMIJE LI `/rad/` PRIMIJENITI POTVRDU S ULAZA, u bilo kojem obliku (cijeli profil ili samo
+ * fakultet). Obje stvari moraju vrijediti:
  *   1. potvrda je vezana za OVU sesiju (ne za neki drugi dokument iz proslog posjeta);
- *   2. potvrda nosi studij (predodabir iz postavki); bez njega bi `/rad/` kao potvrdjen oznacio
- *      abecedni fallback izbornika, tocno slucaj koji `renderAnalyzeSummary` zove nepouzdanim;
- *   3. obrazac na `/rad/` nakon obnove postavki i linka pokazuje ISTI fakultet, studij i razinu
- *      (inace je korisnik potvrdio nesto drugo od onoga sto bi se bodovalo);
- *   4. sesija nema vlastiti potvrdjen profil (njegova obnova je jaca i ide svojim putem).
+ *   2. sesija nema vlastiti potvrdjen profil (njegova obnova je jaca i ide svojim putem).
+ *
+ * Potvrda BEZ studija (fakultet iz `?unit=` linka) vrijedi: student je izricito potvrdio fakultet,
+ * pa ga `/rad/` ne smije pitati ponovo ni dopustiti detekciji da ga promijeni. Koliko se od potvrde
+ * primjenjuje, odlucuje `potvrdaNosiCijeliProfil`.
  */
 export function potvrdaVrijediZaSesiju(
   potvrda: PotvrdaUlaza | null,
   sesija: { id: string; imaProfil: boolean },
+): potvrda is PotvrdaUlaza {
+  if (!potvrda || sesija.imaProfil) return false;
+  return potvrda.sesija === sesija.id;
+}
+
+/**
+ * NOSI LI POTVRDA CIJELI PROFIL: studij je potvrdjen I obrazac na `/rad/` nakon obnove postavki i
+ * linka pokazuje ISTI fakultet, studij i razinu. Samo tada se potvrda primjenjuje kao potvrdjen
+ * PROFIL. Inace se primjenjuje samo kao potvrdjen FAKULTET, a studij ostaje na detekciji: potvrda
+ * bez studija oznacila bi kao potvrdjen abecedni fallback izbornika, tocno slucaj koji
+ * `renderAnalyzeSummary` zove nepouzdanim.
+ */
+export function potvrdaNosiCijeliProfil(
+  potvrda: PotvrdaUlaza,
   obrazac: { unit: string; program: string; workType: string },
 ): boolean {
-  if (!potvrda || sesija.imaProfil) return false;
-  if (potvrda.sesija !== sesija.id) return false;
   if (!potvrda.program) return false;
   return potvrda.unit === obrazac.unit
     && potvrda.program === obrazac.program

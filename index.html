@@ -129,12 +129,13 @@
           <!-- LINIJA SKENIRANJA: vidljiva samo dok ulaz cita dokument; pomice se `transform`om,
                konacan broj ponavljanja, i staje izvan pogleda (`data-motion-offscreen`, ui-boot). -->
           <div class="intake-sken" aria-hidden="true" data-motion-offscreen><i></i></div>
-          <!-- IME GUMBA SE IZRICE (`aria-label`), ne skuplja iz sadrzaja. Dok pribor nije spreman,
-               gumb nosi `aria-disabled` i natpis sto nedostaje (`#intakeHint`, Z32 tocka 3). -->
+          <!-- IME GUMBA SE IZRICE (`aria-label`), ne skuplja iz sadrzaja. Dok rok nije odlucen,
+               gumb nosi `aria-disabled` i natpis sto nedostaje (`#intakeHint`, Z32 tocka 3).
+               Fakultet nije uvjet (odluka vlasnika 2026-09-27); `/rad/` ga prepoznaje iz rada. -->
           <div class="intake-paper__gumb" role="button" tabindex="0" aria-label="Odaberi .docx dokument ili ga ispusti ovdje" aria-controls="intakeFile" aria-describedby="intakeHint intakeMeta" aria-disabled="true">
             <span class="intake-akcija">
               <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
-              <span class="intake-hint" id="intakeHint">Prvo potvrdi fakultet i rok</span>
+              <span class="intake-hint" id="intakeHint">Prvo potvrdi rok</span>
             </span>
           </div>
           <!-- MALI PECAT ROKA (Z32 tocka 2): padne na list kad je rok upisan ili izricito nepoznat.
@@ -153,16 +154,19 @@
          (`lekta.preferences.v2` i `data/coverage/unit-kratice.json`), uz izricit `?unit=` link
          ispred njega. Ladica profila (Z13) jos ne postoji, pa "Promijeni" vodi na postojeci
          odabir po fakultetu (`/fakulteti/`), cija stranica vraca na `/?unit=...`. Tekstovi su
-         iz predloska `design/templates/intake-live/IntakeFields.dc.html`. -->
+         iz predloska `design/templates/intake-live/IntakeFields.dc.html`. Fakultet NIJE uvjet
+         za ubacivanje (odluka vlasnika 2026-09-27): bez predodabira kartica kaze da ce biti
+         prepoznat iz rada; taj tekst predlozak nema (pitanje F26, docs/agents/orchestrator-backlog.md). -->
     <aside class="intake-pribor" aria-labelledby="intakePriborNaslov" data-intake-pribor>
       <span class="intake-pribor-oznaka" id="intakePriborNaslov">Pribor · prije ubacivanja</span>
       <div class="intake-polje">
         <span class="intake-polje-oznaka" id="intakeFakultetOznaka">Fakultet<span data-intake-fakultet-izvor></span></span>
         <div class="intake-polje-red">
           <span class="intake-fakultet" data-intake-fakultet hidden></span>
-          <button class="intake-potvrdi" type="button" data-intake-potvrdi aria-pressed="false" aria-describedby="intakeFakultetOznaka" disabled>Potvrdi</button>
+          <span class="intake-fakultet intake-napomena" data-intake-fakultet-napomena>Prepoznat ćemo ga iz rada.</span>
+          <button class="intake-potvrdi" type="button" data-intake-potvrdi aria-pressed="false" aria-describedby="intakeFakultetOznaka" disabled hidden>Potvrdi</button>
         </div>
-        <a class="intake-promijeni" href="/fakulteti/" data-intake-promijeni>Odaberi profil</a>
+        <a class="intake-promijeni" href="/fakulteti/" data-intake-promijeni hidden>Promijeni</a>
       </div>
       <div class="intake-polje">
         <label class="intake-polje-oznaka" for="intakeRok">Rok predaje</label>

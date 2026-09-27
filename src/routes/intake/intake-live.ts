@@ -20,14 +20,18 @@
  *   lista JEDNOM i NEUTRALNO (ista vrijednost za svaki fakultet), a list ne ispisuje mjere koje
  *   ne zna; ispisuje samo kraticu potvrdjenog fakulteta.
  *
- *   Izbornik fakulteta na ulazu. Ladica profila (Z13) jos ne postoji; "Promijeni" vodi na
- *   postojeci odabir po fakultetu (`/fakulteti/`), cija stranica vraca na `/?unit=...`.
+ *   Izbornik fakulteta na ulazu. Fakultet NIJE uvjet za ubacivanje (odluka vlasnika 2026-09-27:
+ *   "Ne treba upisati faks odmah, nego aplikacija automatski prepoznaje. Ako je prepozna, onda
+ *   korisnik može odabrati sam"). `/rad/` ga prepoznaje iz dokumenta i ondje ga student
+ *   potvrdjuje ili mijenja. Kartica na ulazu zato samo nudi potvrdu predodabira (postavke ili
+ *   `?unit=`), a bez njega istinito kaze da ce fakultet biti prepoznat iz rada. "Promijeni" vodi
+ *   na postojeci odabir po fakultetu (`/fakulteti/`), cija stranica vraca na `/?unit=...`.
  */
 
 import { pokretPrigusen } from '../../shared/display-prefs';
 import {
-  predodabirFakulteta, procitajIzborUlaza, procitajPostavke, spremnostUlaza, veziPotvrduZaSesiju,
-  zapisiPotvrdu, zapisiRok, type Predodabir,
+  predodabirFakulteta, procitajIzborUlaza, procitajPostavke, rokZaPovratak, spremnostUlaza,
+  veziPotvrduZaSesiju, veziRokZaSesiju, zapisiPotvrdu, zapisiRok, type Predodabir,
 } from '../../shared/intake-choice';
 import { pecatRoka, type RokStanje } from './deadline-stamp';
 
@@ -39,11 +43,22 @@ export function tekstPecataProvjere(stanje: string | undefined): string {
   return stanje !== undefined && STANJA_CITANJA.has(stanje) ? 'Čitam' : 'Čeka provjeru';
 }
 
-/** Natpis izvora uz oznaku "Fakultet" (predlozak: "PREPOZNATO IZ PROFILA" / "POTVRĐENO"). */
+/**
+ * Natpis izvora uz oznaku "Fakultet" (predlozak: "PREPOZNATO IZ PROFILA" / "POTVRĐENO").
+ * "Prepoznato iz profila" vrijedi SAMO kad predodabir dolazi iz zapamcenih postavki; fakultet iz
+ * `?unit=` linka nije prepoznat iz profila nego ga je donijela poveznica, pa tako i pise.
+ */
 export function izvorFakulteta(predodabir: Predodabir | null, potvrden: boolean): string {
   if (!predodabir) return '';
-  return potvrden ? ' · potvrđeno' : ' · prepoznato iz profila';
+  if (potvrden) return ' · potvrđeno';
+  return predodabir.izvor === 'postavke' ? ' · prepoznato iz profila' : ' · s poveznice';
 }
+
+/** Kartica bez predodabira: fakultet se ne trazi na ulazu, `/rad/` ga prepoznaje iz dokumenta. */
+export const NAPOMENA_BEZ_FAKULTETA = 'Prepoznat ćemo ga iz rada.';
+
+/** Poruka kad korisnik pokusa ubaciti rad prije nego je rok odlucen (klik ili ispustanje). */
+export const PORUKA_ODBIJENO = 'Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“.';
 
 /** Koliko milisekundi traje jedno slovo pri upisu imena (predlozak: 32 ms). */
 export const SLOVO_MS = 32;
@@ -78,7 +93,9 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
   const ime = el<HTMLElement>(doc, '[data-intake-ime]');
   const listFakultet = el<HTMLElement>(doc, '[data-intake-list-fakultet]');
   const fakultet = el<HTMLElement>(doc, '[data-intake-fakultet]');
+  const napomena = el<HTMLElement>(doc, '[data-intake-fakultet-napomena]');
   const izvor = el<HTMLElement>(doc, '[data-intake-fakultet-izvor]');
+  const greska = el<HTMLElement>(doc, '#intakeError');
   const potvrdi = el<HTMLButtonElement>(doc, '[data-intake-potvrdi]');
   const promijeni = el<HTMLAnchorElement>(doc, '[data-intake-promijeni]');
   const rokPolje = el<HTMLInputElement>(doc, '[data-intake-rok]');
@@ -87,17 +104,25 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
 
   const predodabir = predodabirFakulteta(options.search, procitajPostavke());
   let potvrden = false;
-  let rok: RokStanje = procitajIzborUlaza().rok;
+  // Istekao rok iz proslog posjeta se ne vraca: sam bi otvorio vrata za novi rad.
+  let rok: RokStanje = rokZaPovratak(procitajIzborUlaza().rok, danas());
   let odabir: ((file: File) => void) | null = null;
 
   // --- vrata ubacivanja ------------------------------------------------------------------
-  const spremnost = () => spremnostUlaza({ fakultetPotvrden: potvrden, rok });
+  // Vrata otvara SAMO rok; fakultet nije uvjet (vidi zaglavlje).
+  const spremnost = () => spremnostUlaza({ rok });
 
   const osvjeziVrata = (): void => {
     const s = spremnost();
     gumb?.setAttribute('aria-disabled', s.spremno ? 'false' : 'true');
     if (hint) hint.textContent = s.natpis;
     stage?.toggleAttribute('data-intake-spreman', s.spremno);
+    // Poruku o odbijenom radu brise samo onaj tko ju je napisao; greske kontrolera ostaju njegove.
+    if (s.spremno && greska?.hasAttribute('data-intake-vrata')) {
+      greska.removeAttribute('data-intake-vrata');
+      greska.textContent = '';
+      greska.hidden = true;
+    }
   };
 
   // --- kartica fakulteta -----------------------------------------------------------------
@@ -106,9 +131,15 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
       fakultet.textContent = predodabir ? predodabir.natpis : '';
       fakultet.hidden = !predodabir;
     }
+    if (napomena) {
+      napomena.textContent = NAPOMENA_BEZ_FAKULTETA;
+      napomena.hidden = Boolean(predodabir);
+    }
     if (izvor) izvor.textContent = izvorFakulteta(predodabir, potvrden);
-    if (promijeni) promijeni.textContent = predodabir ? 'Promijeni' : 'Odaberi profil';
+    // Bez predodabira nema sto potvrditi ni mijenjati: fakultet se bira na `/rad/`.
+    if (promijeni) promijeni.hidden = !predodabir;
     if (potvrdi) {
+      potvrdi.hidden = !predodabir;
       potvrdi.disabled = !predodabir;
       potvrdi.setAttribute('aria-pressed', potvrden ? 'true' : 'false');
       potvrdi.textContent = potvrden ? '✓ Potvrđeno' : 'Potvrdi';
@@ -224,9 +255,14 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
 
   // --- vrata: sto kad korisnik pokusa prerano --------------------------------------------
   function onBlocked(): void {
-    // Fokus ide na PRVO sto nedostaje, pa se na mobitelu (pribor je ispod lista) ekran sam
-    // pomakne do njega; natpis na gumbu vec kaze sto fali.
-    const cilj = !potvrden ? (potvrdi && !potvrdi.disabled ? potvrdi : promijeni) : (rokPolje ?? neznam);
+    // Rad NIJE primljen, i to se kaze (poruka s `role="alert"`), a fokus ide na rok, jedino sto
+    // vrata traze; na mobitelu (pribor je ispod lista) ekran se sam pomakne do njega.
+    if (greska) {
+      greska.textContent = PORUKA_ODBIJENO;
+      greska.hidden = false;
+      greska.setAttribute('data-intake-vrata', '');
+    }
+    const cilj = rokPolje && !rokPolje.disabled ? rokPolje : neznam;
     cilj?.focus();
   }
 
@@ -248,7 +284,11 @@ export function mountIntakeLive(doc: Document, options: IntakeLiveOptions): Inta
     canAccept: () => spremnost().spremno,
     onBlocked,
     onFileChosen,
-    onSessionStored(sessionId: string): void { if (potvrden) veziPotvrduZaSesiju(sessionId); },
+    onSessionStored(sessionId: string): void {
+      // Rok se veze za sesiju UVIJEK (Z34 i Z36 citaju rok tog rada); potvrda samo ako je dana.
+      veziRokZaSesiju(sessionId, rok);
+      if (potvrden) veziPotvrduZaSesiju(sessionId);
+    },
     poveziOdabir(fn): void { odabir = fn; },
     destroy(): void {
       stani();

@@ -346,6 +346,9 @@
 .intake-polje{display:grid;gap:6px}
 .intake-polje-red{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .intake-fakultet{flex:1 1 160px;min-width:0;padding:12px 0;border-bottom:1px solid var(--desk-line);overflow-wrap:anywhere}
+/* Bez predodabira kartica ne tvrdi fakultet nego kaze da ce biti prepoznat iz rada: isti redak,
+   prigusen ton oznake, pa se ne cita kao odabrana vrijednost. */
+.intake-napomena{color:var(--desk-muted)}
 .intake-potvrdi{
   min-height:44px;padding:0 14px;border:1.5px solid var(--red);border-radius:2px;
   background:var(--red);color:var(--on-red,#fff);font:inherit;font-size:12px;cursor:pointer;

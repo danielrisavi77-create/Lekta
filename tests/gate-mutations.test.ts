@@ -5965,31 +5965,49 @@ describe('mutacije: routing korak 2 (select-route)', () => {
 describe('mutacije: zivi list na ulazu (Z32)', () => {
   const procitaj = (f: string): string => readFileSync(resolve(__dirname, '..', f), 'utf8').replace(/\r/g, '');
   type Rok = { datum: string | null; neznam: boolean };
-  type Vrata = { fakultetPotvrden: boolean; rok: Rok };
+  type Vrata = { rok: Rok; fakultetPotvrden?: boolean };
 
   it('baseline: stvarni kod prolazi sve gardove zivog lista', async () => {
     const g = await import('./helpers/intake-live-guards');
-    const { spremnostUlaza, potvrdaVrijediZaSesiju } = await import('../src/shared/intake-choice');
+    const { spremnostUlaza, potvrdaVrijediZaSesiju, potvrdaNosiCijeliProfil, rokZaPovratak } = await import('../src/shared/intake-choice');
     const { pecatRoka } = await import('../src/routes/intake/deadline-stamp');
     expect(g.vrataProblemi(spremnostUlaza)).toEqual([]);
+    expect(g.povratakRokaProblemi(rokZaPovratak)).toEqual([]);
     expect(g.pecatRokaProblemi(pecatRoka)).toEqual([]);
     expect(g.potvrdaSesijeProblemi(potvrdaVrijediZaSesiju)).toEqual([]);
+    expect(g.cijeliProfilProblemi(potvrdaNosiCijeliProfil)).toEqual([]);
     expect(g.ozicenjeUlazaProblemi(procitaj('src/routes/intake/main.ts'))).toEqual([]);
     expect(g.pokretProblemi(procitaj('src/routes/intake/intake.css'), procitaj('index.html'), procitaj('src/shared/ui-boot.ts'))).toEqual([]);
     expect(g.redoslijedPotvrdeProblemi(procitaj('src/routes/workspace/main.ts'))).toEqual([]);
+    expect(g.ispustanjeProblemi(procitaj('src/routes/intake/intake-controller.ts'), procitaj('src/routes/intake/intake-live.ts'))).toEqual([]);
+    expect(g.detekcijaFakultetaProblemi(procitaj('src/ui/app.ts'))).toEqual([]);
   });
 
-  it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili preskoce fakultet, obaraju gard', async () => {
+  it('(a) vrata koja "Još ne znam rok" ne broje kao odluku, ili opet traze fakultet, obaraju gard', async () => {
     const { vrataProblemi } = await import('./helpers/intake-live-guards');
     const { rokOdlucen } = await import('../src/routes/intake/deadline-stamp');
     const otvoreno = { spremno: true, natpis: 'ili ispusti dokument ovdje' };
-    const zatvoreno = { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' };
+    const zatvoreno = { spremno: false, natpis: 'Prvo potvrdi rok' };
     // Kvar: samo upisan datum otvara vrata, kvacica "Još ne znam rok" se ne broji.
-    const samoDatum = (s: Vrata) => (s.fakultetPotvrden && !s.rok.neznam && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    const samoDatum = (s: Vrata) => (!s.rok.neznam && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
     expect(vrataProblemi(samoDatum).length).toBeGreaterThan(0);
-    // Kvar: fakultet se ne trazi.
-    const bezFakulteta = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : zatvoreno);
-    expect(vrataProblemi(bezFakulteta).length).toBeGreaterThan(0);
+    // Kvar (izvedba prije odluke vlasnika 2026-09-27): vrata traze i potvrdjen fakultet.
+    const traziFakultet = (s: Vrata) => (s.fakultetPotvrden && rokOdlucen(s.rok) ? otvoreno : zatvoreno);
+    expect(vrataProblemi(traziFakultet)).toContain('fakultet nepotvrdjen, "Još ne znam rok": spremno=false, ocekivano true');
+    // Kvar: natpis zatvorenih vrata i dalje trazi fakultet.
+    const stariNatpis = (s: Vrata) => (rokOdlucen(s.rok) ? otvoreno : { spremno: false, natpis: 'Prvo potvrdi fakultet i rok' });
+    expect(vrataProblemi(stariNatpis).length).toBeGreaterThan(0);
+  });
+
+  it('(a2) istekao rok koji se vraca na ulaz obara gard', async () => {
+    const { povratakRokaProblemi } = await import('./helpers/intake-live-guards');
+    const { rokZaPovratak } = await import('../src/shared/intake-choice');
+    // Kvar: zapamcen rok se vraca kakav jest, pa rok proslog rada sam otvara vrata.
+    const vratiSve = (rok: Rok) => rok;
+    expect(povratakRokaProblemi(vratiSve)).toContain('rok jucer: {"datum":"2026-09-26","neznam":false}, ocekivano {"datum":null,"neznam":false}');
+    // Kvar: brise i rok danas (usporedba po satima, ne po kalendaru).
+    const strogo = (rok: Rok, danas: Date) => (rok.datum && new Date(`${rok.datum}T00:00`).getTime() < danas.getTime() ? { datum: null, neznam: false } : rokZaPovratak(rok, danas));
+    expect(povratakRokaProblemi(strogo).length).toBeGreaterThan(0);
   });
 
   it('(b) pecat roka po SATIMA (ljetno vrijeme, ponoc) i sklonidba "21 dana" obaraju gard', async () => {
@@ -6007,16 +6025,52 @@ describe('mutacije: zivi list na ulazu (Z32)', () => {
     expect(pecatRokaProblemi(uvijekDana).length).toBeGreaterThan(0);
   });
 
-  it('(c) potvrda koja ne gleda id sesije ili studij obara gard', async () => {
-    const { potvrdaSesijeProblemi } = await import('./helpers/intake-live-guards');
-    type P = { unit: string; program: string | null; workType: string | null; sesija: string | null } | null;
+  it('(c) potvrda koja ne gleda id sesije, odbija fakultet bez studija ili bez studija nosi profil obara gard', async () => {
+    const { potvrdaSesijeProblemi, cijeliProfilProblemi } = await import('./helpers/intake-live-guards');
+    type P = { unit: string; program: string | null; workType: string | null; sesija: string | null };
     type O = { unit: string; program: string; workType: string };
-    const bezSesije = (p: P, s: { imaProfil: boolean }, o: O) =>
-      Boolean(p && !s.imaProfil && p.program && p.unit === o.unit && p.program === o.program && p.workType === o.workType);
+    const bezSesije = (p: P | null, s: { imaProfil: boolean }) => Boolean(p && !s.imaProfil);
     expect(potvrdaSesijeProblemi(bezSesije)).toContain('potvrda vrijedi za TUDJU sesiju');
-    const bezStudija = (p: P, s: { id: string; imaProfil: boolean }, o: O) =>
-      Boolean(p && !s.imaProfil && p.sesija === s.id && p.unit === o.unit);
-    expect(potvrdaSesijeProblemi(bezStudija)).toContain('potvrda bez studija zakljucava fallback');
+    // Nalaz pregleda Z32: prva izvedba odbijala potvrdu s `program=null` (fakultet iz `?unit=`).
+    const trazStudij = (p: P | null, s: { id: string; imaProfil: boolean }) => Boolean(p && !s.imaProfil && p.sesija === s.id && p.program);
+    expect(potvrdaSesijeProblemi(trazStudij)).toContain('potvrda fakulteta bez studija (?unit=) ne vrijedi');
+    const bezStudija = (p: P, o: O) => p.unit === o.unit;
+    expect(cijeliProfilProblemi(bezStudija)).toContain('potvrda bez studija zakljucava fallback');
+  });
+
+  it('(g) ispustanje bez provjere vrata (kontroler ili zivi list) obara gard', async () => {
+    const { ispustanjeProblemi } = await import('./helpers/intake-live-guards');
+    const kontroler = procitaj('src/routes/intake/intake-controller.ts');
+    const live = procitaj('src/routes/intake/intake-live.ts');
+    // Kvar: kontroler prima ispusteni dokument bez `accepts()`.
+    const kontrolerBez = kontroler.replace('if (file && accepts()) void selectFile(file);', 'if (file) void selectFile(file);');
+    expect(kontrolerBez).not.toBe(kontroler);
+    expect(ispustanjeProblemi(kontrolerBez, live)).toContain('kontroler prima ispusten dokument bez provjere vrata');
+    // Kvar: zivi list predaje ispustanje izvan lista bez provjere spremnosti.
+    const liveBez = live.replace('    if (!spremnost().spremno) { onBlocked(); return; }\n', '');
+    expect(liveBez).not.toBe(live);
+    expect(ispustanjeProblemi(kontroler, liveBez)).toContain('ispustanje izvan lista prolazi kroz zatvorena vrata');
+    // Kvar: provjera ostane, ali tek POSLIJE predaje.
+    const kasno = live.replace('    if (!spremnost().spremno) { onBlocked(); return; }\n    odabir?.(file);', '    odabir?.(file);\n    if (!spremnost().spremno) { onBlocked(); return; }');
+    expect(kasno).not.toBe(live);
+    expect(ispustanjeProblemi(kontroler, kasno)).toContain('ispustanje izvan lista prolazi kroz zatvorena vrata');
+  });
+
+  it('(h) detekcija na /rad/ koja gazi fakultet potvrdjen na ulazu obara gard', async () => {
+    const { detekcijaFakultetaProblemi } = await import('./helpers/intake-live-guards');
+    const app = procitaj('src/ui/app.ts');
+    // Kvar: detekcija ne pita bravu.
+    const bez = app.replace('||!detekcijaSmije(ctx.unitId))return;', ')return;');
+    expect(bez).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(bez)).toContain('detekcija ne postuje fakultet potvrdjen na ulazu');
+    // Kvar: primjena fakulteta ne postavlja bravu.
+    const bezBrave = app.replace('return zakljucajFakultet(ids.unit,$(\'#unitSelect\')?.value)', 'return true');
+    expect(bezBrave).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(bezBrave)).toContain('primjena fakulteta ne postavlja bravu');
+    // Kvar: fakultet bez studija ostavi `_profileConfirmed` iz postavki, pa nepotvrdjen studij prolazi kao potvrdjen.
+    const potvrden = app.replace('applySelectionIds(ids);_profileConfirmed=false;', 'applySelectionIds(ids);');
+    expect(potvrden).not.toBe(app);
+    expect(detekcijaFakultetaProblemi(potvrden)).toContain('fakultet bez studija oznacen kao potvrdjen profil');
   });
 
   it('(d) main.ts bez kuke canAccept, ili bez veze ispustanja izvan lista, obara gard', async () => {

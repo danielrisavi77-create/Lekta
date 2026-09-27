@@ -40,10 +40,18 @@ test('ulaz `/` nema vodoravni scroll u uskom prozoru', async ({ page }) => {
  * Pixel 5), jer pribor mijenja mjesto na 900 px, a hover tragova postoji samo uz mis.
  *
  * Postavke (`lekta.preferences.v2`) se podmecu PRIJE ucitavanja (`addInitScript`), jer kartica
- * fakulteta cita isti izvor kao plocica u traci; bez njih predodabira nema i "Potvrdi" je s
- * pravom onemogucen.
+ * fakulteta cita isti izvor kao plocica u traci; bez njih predodabira nema, pa kartica kaze da ce
+ * fakultet biti prepoznat iz rada. Fakultet NIJE uvjet za ubacivanje (odluka vlasnika
+ * 2026-09-27); vrata otvara samo rok.
  */
 const DOCX = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
+/**
+ * Dokument koji detekcija na `/rad/` prepoznaje kao FPZG (izmjereno 2026-09-27 kroz
+ * `detectContextFromText`: fpzg, "Prijediplomski studij Politologija", zavrsni). `DOCX` iznad
+ * detekcija NE prepoznaje (null), a `fpzg-novinarstvo-bibliografija.docx` je ispod praga ulaza
+ * (`MIN_DOCX_BYTES`), pa ga ulaz odbija prije primopredaje.
+ */
+const DOCX_FPZG = path.resolve('tests/fixtures/docx/lo-fpzg-zavrsni-uskladjen.docx');
 const POSTAVKE = { unit: 'fer', program: 'Računarstvo', workType: 'graduate' };
 
 async function sPostavkama(page: Page): Promise<void> {
@@ -57,28 +65,30 @@ async function sPostavkama(page: Page): Promise<void> {
 
 const gumb = (page: Page) => page.locator('.intake-paper__gumb');
 
-test('Z32: CTA je zatvoren bez fakulteta i roka, "Još ne znam rok" ga uz potvrdu otvara', async ({ page }) => {
+test('Z32: CTA je zatvoren bez roka, "Još ne znam rok" ga otvara i bez potvrde fakulteta', async ({ page }) => {
   await sPostavkama(page);
   await page.goto('/');
   await expect(gumb(page)).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#intakeHint')).toHaveText('Prvo potvrdi fakultet i rok');
-  // Zatvorena vrata: klik na list NE otvara odabir datoteke, nego vodi na ono sto nedostaje.
-  // Klika se po listu (naslov), ne po gumbu: Playwright odbija kliknuti `aria-disabled` element,
-  // a ploha lista vodi isti tok (kontroler slusa cijeli `#intakeDropzone`).
+  await expect(page.locator('#intakeHint')).toHaveText('Prvo potvrdi rok');
+  // Zatvorena vrata: klik na list NE otvara odabir datoteke, nego kaze da rad nije primljen i
+  // vodi na rok. Klika se po listu (naslov), ne po gumbu: Playwright odbija kliknuti
+  // `aria-disabled` element, a ploha lista vodi isti tok (kontroler slusa cijeli `#intakeDropzone`).
   let otvoren = false;
   page.on('filechooser', () => { otvoren = true; });
   await page.locator('.intake-title').click();
-  await expect(page.locator('[data-intake-potvrdi]')).toBeFocused();
+  await expect(page.getByLabel('Rok predaje')).toBeFocused();
+  await expect(page.locator('#intakeError')).toHaveText('Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“.');
   expect(otvoren, 'zatvorena vrata su otvorila odabir datoteke').toBe(false);
 
+  // Predodabir iz postavki se nudi na potvrdu, ali nije uvjet.
   await expect(page.locator('[data-intake-fakultet]')).toHaveText('FER · Računarstvo · Dipl.');
-  await page.locator('[data-intake-potvrdi]').click();
-  await expect(page.locator('#intakeHint')).toHaveText('Prvo potvrdi rok');
-  await expect(page.locator('#intakeDropzone')).toHaveAttribute('data-fakultet-potvrden', '');
+  await expect(page.locator('[data-intake-fakultet-izvor]')).toHaveText(' · prepoznato iz profila');
   await page.getByLabel('Još ne znam rok').check();
+  await expect(page.locator('[data-intake-potvrdi]')).toHaveAttribute('aria-pressed', 'false');
   await expect(gumb(page)).toHaveAttribute('aria-disabled', 'false');
   await expect(page.locator('#intakeHint')).toHaveText('ili ispusti dokument ovdje');
   await expect(page.locator('[data-intake-rok-pecat]')).toHaveText('Rok nije zadan');
+  await expect(page.locator('#intakeError')).toBeHidden();
 
   // Otvorena vrata: dodir ili klik lista otvara odabir datoteke (Z32 tocka 4, mobitel).
   const odabir = page.waitForEvent('filechooser');
@@ -130,7 +140,82 @@ test('Z32: ispustanje bilo gdje upisuje ime u zaglavlje, a pecat prolazi "Čeka 
   const sesija = new URL(page.url()).hash.replace('#session=', '');
   const zapis = await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.intake.v1') ?? 'null'));
   expect(zapis.rok).toEqual({ datum: null, neznam: true });
+  expect(zapis.rokSesije, 'rok tog rada za Z34 i Z36').toEqual({ sesija, datum: null, neznam: true });
   expect(zapis.potvrda).toMatchObject({ unit: 'fer', program: 'Računarstvo', workType: 'graduate', sesija });
+});
+
+/** Ispustanje datoteke s diska NA list (`#intakeDropzone`), istim putem kao test iznad. */
+async function ispustiNaList(page: Page, datoteka: string, ime: string): Promise<void> {
+  const bajtovi = [...readFileSync(datoteka)];
+  await page.evaluate(({ b, n }) => {
+    const dt = new DataTransfer();
+    dt.items.add(new File([new Uint8Array(b)], n, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }));
+    document.getElementById('intakeDropzone')!.dispatchEvent(new DragEvent('drop', { dataTransfer: dt, bubbles: true, cancelable: true }));
+  }, { b: bajtovi, n: ime });
+}
+
+test('Z32: posjetitelj BEZ postavki i linka ubacuje rad nakon "Još ne znam rok"; fakultet se prepoznaje iz rada', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('[data-intake-fakultet-napomena]')).toHaveText('Prepoznat ćemo ga iz rada.');
+  await expect(page.locator('[data-intake-potvrdi]')).toBeHidden();
+  await expect(page.locator('[data-intake-promijeni]')).toBeHidden();
+  // Bez roka: ispustanje na list se odbija s porukom i nigdje ne vodi.
+  await ispustiNaList(page, DOCX, 'rad.docx');
+  await expect(page.locator('#intakeError')).toHaveText('Rad nije primljen: prvo upiši rok predaje ili označi „Još ne znam rok“.');
+  expect(page.url(), 'zatvorena vrata su primila rad').not.toMatch(/\/rad\//);
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX_FPZG, 'rad.docx');
+  await page.waitForURL(/\/rad\/#session=/);
+  const zapis = await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.intake.v1') ?? 'null'));
+  expect(zapis.potvrda ?? null, 'nista nije potvrdjeno').toBeNull();
+  // /rad/ radi kao i prije: detekcija iz dokumenta prepoznaje fakultet i to kaze; promjena je na kartici.
+  await expect(page.locator('#detectBadge')).toContainText('Prepoznato iz dokumenta', { timeout: 30_000 });
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg');
+  await expect(page.locator('#analyzeProfile [data-change-profile]')).toBeVisible({ timeout: 30_000 });
+});
+
+test('Z32: fakultet potvrdjen na / (?unit=fer, bez studija) stize na /rad/ potvrdjen i ne trazi se ponovo', async ({ page }) => {
+  await page.goto('/?unit=fer');
+  await expect(page.locator('[data-intake-fakultet]')).toHaveText('FER');
+  await expect(page.locator('[data-intake-fakultet-izvor]')).toHaveText(' · s poveznice');
+  await page.locator('[data-intake-potvrdi]').click();
+  await expect(page.locator('[data-intake-fakultet-izvor]')).toHaveText(' · potvrđeno');
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX, 'rad.docx');
+  await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
+  const sesija = new URL(page.url()).hash.replace('#session=', '');
+  const zapis = await page.evaluate(() => JSON.parse(localStorage.getItem('lekta.intake.v1') ?? 'null'));
+  expect(zapis.potvrda).toMatchObject({ unit: 'fer', program: null, sesija });
+  // Kartica profila na /rad/ nosi potvrdjeni FER. Ovaj dokument detekcija ne prepoznaje, pa
+  // kartica istinito trazi samo STUDIJ (nije ga prepoznala), ne fakultet.
+  await expect(page.locator('#analyzeProfile .ap-ustanova')).toHaveText('Fakultet elektrotehnike i računarstva', { timeout: 30_000 });
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
+  await expect(page.locator('#analyzeProfile .ap-upozorenje')).toHaveText(/^Nisam prepoznao studij/);
+  await expect(page.locator('#detectBadge')).not.toContainText('Prepoznato iz dokumenta');
+});
+
+/**
+ * IZRAVAN SIGNAL da potvrda s ulaza, a ne detekcija, drzi fakultet: dokument DRUGOG fakulteta
+ * (FPZG) uz potvrdjen FER. Kontrola u istom testu: isti tok BEZ klika na "Potvrdi" daje FPZG, pa
+ * tvrdnja "ostaje FER" nije prazna.
+ */
+test('Z32: potvrdjen fakultet s ulaza pobjeduje detekciju drugog fakulteta iz dokumenta', async ({ page }) => {
+  // KONTROLA: bez potvrde detekcija prebaci fakultet na onaj iz dokumenta.
+  await page.goto('/?unit=fer');
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
+  await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
+  await expect(page.locator('#detectBadge')).toContainText('Prepoznato iz dokumenta', { timeout: 30_000 });
+  await expect(page.locator('#unitSelect')).toHaveValue('fpzg');
+
+  // S potvrdom: fakultet ostaje FER, a znacka kaze zasto studij nije prepoznat.
+  await page.goto('/?unit=fer');
+  await page.locator('[data-intake-potvrdi]').click();
+  await page.getByLabel('Još ne znam rok').check();
+  await ispustiNaList(page, DOCX_FPZG, 'fpzg.docx');
+  await page.waitForURL(/\/rad\/(\?[^#]*)?#session=/);
+  await expect(page.locator('#detectBadge')).toContainText('Fakultet potvrđen na ulazu ostaje', { timeout: 30_000 });
+  await expect(page.locator('#unitSelect')).toHaveValue('fer');
 });
 
 test('Z32: povlacenje podize list, a napustanje ekrana ga spusta', async ({ page }) => {
