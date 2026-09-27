@@ -21,6 +21,7 @@ import {
   validateUpisnikProfileCoverageHolds,
   type ProfileCandidateInput,
   type ProgramProfileDecision,
+  type IntegratedGraduateCoverageDecision,
   type ProgramProfileExclusionDecision,
   type ProgramProfileBlockerDecision,
   type ProgramProfileHoldDecision,
@@ -93,7 +94,7 @@ const profiles = JSON.parse(
 ) as Record<string, ProfileCandidateInput>;
 const profileDecisionFile = JSON.parse(
   readFileSync(join(root, 'data', 'programs', 'upisnik-profile-decisions.json'), 'utf8'),
-) as { schemaVersion: 1; decisions: ProgramProfileDecision[]; exclusions: ProgramProfileExclusionDecision[]; blockers: ProgramProfileBlockerDecision[]; holds: ProgramProfileHoldDecision[] };
+) as { schemaVersion: 1; decisions: ProgramProfileDecision[]; exclusions: ProgramProfileExclusionDecision[]; blockers: ProgramProfileBlockerDecision[]; holds: ProgramProfileHoldDecision[]; integratedGraduateCoverage?: IntegratedGraduateCoverageDecision[] };
 const sourceRegistry = JSON.parse(readFileSync(join(root, 'data', 'sources', 'source-registry.json'), 'utf8')) as Array<{ url: string; snapshotPath?: string }>;
 const profileCandidates = buildUpisnikProfileCandidates(
   upisnik.rows,
@@ -104,6 +105,7 @@ const profileCandidates = buildUpisnikProfileCandidates(
   profileDecisionFile.blockers,
   profileDecisionFile.holds,
   sourceRegistry,
+  profileDecisionFile.integratedGraduateCoverage ?? [],
 );
 const profileHoldProblems = validateUpisnikProfileCoverageHolds(profileCandidates);
 if (profileHoldProblems.length > 0) {
