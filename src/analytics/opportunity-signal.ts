@@ -58,6 +58,14 @@ export interface OpportunityGapSignal extends Record<string, unknown> {
   count: number;
 }
 
+/** Anonimni Opportunity kontekst rezultata analize: interni profil i vrsta rada, bez identiteta. */
+export function opportunityContextFor(result: OpportunityAnalysisLike | null | undefined): OpportunityGapContext {
+  return {
+    profileId: typeof result?.details?.profileDefinitionId === 'string' ? result.details.profileDefinitionId : '',
+    workType: typeof result?.settings?.workType === 'string' ? result.settings.workType : '',
+  };
+}
+
 function gapContext(context: OpportunityGapContext): OpportunityGapContext {
   return {
     ...(typeof context.profileId === 'string' && context.profileId ? { profileId: context.profileId } : {}),
@@ -99,10 +107,7 @@ export function structureGapSignalsForEvent(
 ): OpportunityGapSignal[] {
   const details = result?.details as Record<string, unknown> | null | undefined;
   if (!details) return [];
-  const context = gapContext({
-    profileId: typeof result?.details?.profileDefinitionId === 'string' ? result.details.profileDefinitionId : '',
-    workType: typeof result?.settings?.workType === 'string' ? result.settings.workType : '',
-  });
+  const context = gapContext(opportunityContextFor(result));
   const out: OpportunityGapSignal[] = [];
   for (const [category, key] of STRUCTURE_SOURCES) {
     const source = details[key] as StructureGapSource | null | undefined;

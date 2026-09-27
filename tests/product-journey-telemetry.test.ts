@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createTelemetry, PRODUCT_JOURNEY_EVENTS } from '../src/ui/telemetry';
+import { opportunityWiringProblems } from './helpers/opportunity-wiring';
 
 /**
  * T14 (plan razvoja): mjerenje toka uz postojecu privolu i ogranicene podatke.
@@ -93,23 +94,10 @@ describe('Opportunity Report wiring', () => {
   const app = readFileSync(join(KORIJEN, 'src/ui/app.ts'), 'utf8');
   const panel = readFileSync(join(KORIJEN, 'src/ui/repair-panel.ts'), 'utf8');
   const emitter = readFileSync(join(KORIJEN, 'src/analytics/opportunity-emit.ts'), 'utf8');
+  const result = readFileSync(join(KORIJEN, 'src/analytics/repair-result.ts'), 'utf8');
 
-  it('repair_noop_summary ima jedan emitter koji koriste serverski i lokalni repair put', () => {
-    expect(emitter).toContain("track('repair_noop_summary'");
-    expect(app).toContain("emitRepairNoOpSignals(trackEvent,out.skippedReasons");
-    expect(panel).toContain("emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext)");
-  });
-
-  it('oba repair puta nose profil/vrstu rada u Opportunity kontekst', () => {
-    expect(app).toContain("opportunityContext:{profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''}");
-    expect(app).toContain("emitRepairNoOpSignals(trackEvent,out.skippedReasons,{profileId:r.details?.profileDefinitionId||'',workType:r.settings?.workType||''})");
-  });
-
-  it('lokalni no-op signal nastaje tek nakon integrity gatea', () => {
-    const integrity = panel.indexOf('if (result.integrityFailure)');
-    const noop = panel.indexOf('emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext)');
-    expect(integrity).toBeGreaterThan(-1);
-    expect(noop).toBeGreaterThan(integrity);
+  it('jedna emisija po putu, neovisni repair_result_ok, isti kontekst, nakon integrity gatea', () => {
+    expect(opportunityWiringProblems({ app, panel, emitter, result })).toEqual([]);
   });
 
   it('analysis structure gap ostaje izveden iz sanitiziranog helpera, ne iz sirovog reasona', () => {

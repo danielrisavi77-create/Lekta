@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emitAnalysisOpportunitySignals, emitRepairNoOpSignals } from '../src/analytics/opportunity-emit';
+import { opportunityContextFor, trackRepairResultOk } from '../src/analytics/repair-result';
 
 describe('Opportunity emitter V3', () => {
   it('analiza emitira summary i samo sanitizirani structure breakdown', () => {
@@ -71,5 +72,22 @@ describe('Opportunity emitter V3', () => {
       event: 'repair_noop_summary',
       data: { profileId: 'fpzg-diplomski', workType: 'diplomski', count: 0 },
     }]);
+  });
+
+  it('trackRepairResultOk salje neovisni repair_result_ok pa summary i breakdown s istim kontekstom', () => {
+    const events: Array<{ event: string; data?: Record<string, unknown> }> = [];
+    const context = opportunityContextFor({ details: { profileDefinitionId: 'fpzg-diplomski' }, settings: { workType: 'diplomski' } });
+    trackRepairResultOk((event, data) => { events.push({ event, data }); }, { 'tajni-rule': 'no-target' }, context);
+
+    expect(events).toEqual([
+      { event: 'repair_result_ok', data: { profileId: 'fpzg-diplomski', workType: 'diplomski' } },
+      { event: 'repair_noop_summary', data: { profileId: 'fpzg-diplomski', workType: 'diplomski', count: 1 } },
+      { event: 'repair_noop_reason', data: { profileId: 'fpzg-diplomski', workType: 'diplomski', kind: 'no-target', count: 1 } },
+    ]);
+  });
+
+  it('opportunityContextFor ne izmislja profil ni vrstu rada', () => {
+    expect(opportunityContextFor(null)).toEqual({ profileId: '', workType: '' });
+    expect(opportunityContextFor({ details: { profileDefinitionId: 7 as unknown as string } })).toEqual({ profileId: '', workType: '' });
   });
 });

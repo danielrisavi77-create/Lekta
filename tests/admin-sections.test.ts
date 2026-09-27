@@ -151,6 +151,7 @@ const OPPORTUNITIES: OpportunityStats = {
     repairRuns: 20,
     repairGapRuns: 5,
     repairUnresolvedChecks: 9,
+    repairAttemptEvents: 6,
     repairNoOpSummaryEvents: 6,
     repairNoOpSummaryItems: 14,
     repairNoOpItems: 14,
@@ -163,6 +164,7 @@ const OPPORTUNITIES: OpportunityStats = {
       { id: 'repair_gap', affected: 5, denominator: 20, ratePct: 25, basis: 'repair_event' },
       { id: 'paywall_checkout_gap_proxy', affected: 40, denominator: 60, ratePct: 66.7, basis: 'event_count_proxy' },
     ],
+    scopeParityMismatches: [],
     structureGaps: [
       { profileId: 'fpzg-diplomski', workType: 'diplomski', category: 'typography', kind: 'unsupported-structure', count: 12 },
       { profileId: 'pravo-diplomski', workType: 'diplomski', category: 'link-doi', kind: 'stale-anchor', count: 11 },
@@ -185,6 +187,7 @@ const OPPORTUNITIES: OpportunityStats = {
     repairRuns: 15,
     repairGapRuns: 6,
     repairUnresolvedChecks: 11,
+    repairAttemptEvents: 4,
     repairNoOpSummaryEvents: 4,
     repairNoOpSummaryItems: 10,
     repairNoOpItems: 10,
@@ -192,6 +195,7 @@ const OPPORTUNITIES: OpportunityStats = {
     checkoutEvents: 18,
     purchaseEvents: 10,
     opportunities: [],
+    scopeParityMismatches: [],
     structureGaps: [],
     repairNoOpReasons: [],
   },
@@ -303,8 +307,46 @@ describe('admin-section render moduli: ne ruse se, proizvode razuman DOM', () =>
     expect(c.textContent).toContain('unsupported-structure');
     expect(c.textContent).toContain('fpzg-diplomski');
     expect(c.textContent).toContain('Zdravlje mjerenja');
-    expect(c.textContent).toContain('repair no-op summary 14 = breakdown 14');
-    expect(c.textContent).toContain('Exact parity');
+    expect(c.textContent).toContain('no-op summary 14 = breakdown 14');
+    expect(c.textContent).toContain('repair_result_ok 6 = repair_noop_summary 6');
+    expect(c.textContent).toContain('exact parity');
+    expect(c.querySelector('.hero-label')?.textContent).toBe('Najjači izmjereni signal');
+  });
+
+  it('opportunities V3-03: repair-only prozor bez nazivnika nema "najjaci signal" ni 0 %', () => {
+    const c = container();
+    const repairOnly: OpportunityStats = {
+      ...OPPORTUNITIES,
+      current: {
+        ...OPPORTUNITIES.previous,
+        analysisCompletedEvents: 0, opportunityEvents: 0, structureGapItems: 0, structureBreakdownItems: 0,
+        repairAttemptEvents: 1, repairNoOpSummaryEvents: 1, repairNoOpSummaryItems: 0, repairNoOpItems: 0,
+        opportunities: [
+          { id: 'manual_gap', affected: 0, denominator: 0, ratePct: null, basis: 'analysis_event' },
+        ],
+      },
+    };
+    renderOpportunitiesSection(c, repairOnly);
+    expect(c.querySelector('.hero-label')?.textContent).toBe('Nema izmjerenog signala');
+    expect(c.querySelector('.hero-fig')?.textContent).toBe('—');
+    expect(c.textContent).toContain('Analiza: nema baznih analiza');
+  });
+
+  it('opportunities V3-01: scoped mismatch se prikazuje i spusta zdravlje na nepotpuno', () => {
+    const c = container();
+    const scoped: OpportunityStats = {
+      ...OPPORTUNITIES,
+      current: {
+        ...OPPORTUNITIES.current,
+        scopeParityMismatches: [
+          { surface: 'structure', profileId: 'fpzg-diplomski', workType: 'diplomski', summary: 12, breakdown: 11 },
+          { surface: 'structure', profileId: 'pravo-diplomski', workType: 'diplomski', summary: 11, breakdown: 12 },
+        ],
+      },
+    };
+    renderOpportunitiesSection(c, scoped);
+    expect(c.querySelector('.hero-label')?.textContent).toBe('Privremeni signal · mjerenje nepotpuno');
+    expect(c.textContent).toContain('Parity po obuhvatu ne odgovara (2)');
   });
 
   it('coverage: prazan topCells prikazuje prazno stanje, ne praznu tablicu', () => {

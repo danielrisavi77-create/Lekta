@@ -170,6 +170,10 @@ import { DISK, collectStaticGraph, packageImports, type IzvorDatoteka } from './
 import { hasMergedCells, tableFigureRescueFixer, type TableFigureRescueParams } from '../src/repair/table-figure-rescue-fixer';
 import { anchorFingerprintForXml } from '../src/analysis/element-structure';
 import { jobsWithBareNpmCi, unpinnedExternalUses } from './helpers/ci-workflow-cache';
+import {
+  falseGreenParityProblems, opportunitySqlScopeProblems, opportunityWiringProblems,
+} from './helpers/opportunity-wiring';
+import { opportunityMeasurementHealth } from '../src/admin/opportunity-ranking';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -7034,5 +7038,141 @@ describe('mutacije: kapacitet redaka po stranici', () => {
       lineHeightFactor: 1.15,
       supportsFont: () => true,
     })).not.toBeNull();
+  });
+});
+
+describe('Opportunity Report V3 gardovi (Codex V3-04 na #163)', () => {
+  const root = resolve(dirname(new URL(import.meta.url).pathname), '..');
+  const read = (p: string) => readFileSync(join(root, p), 'utf8');
+  const izvori = () => ({
+    app: read('src/ui/app.ts'),
+    panel: read('src/ui/repair-panel.ts'),
+    emitter: read('src/analytics/opportunity-emit.ts'),
+    result: read('src/analytics/repair-result.ts'),
+  });
+  const sql = read('supabase/migrations/0208_opportunity_report_v3.sql');
+  const LOCAL = 'if (ctx.trackEvent) trackRepairResultOk(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);';
+  const EMIT = 'emitRepairNoOpSignals(track, skippedReasons, context);';
+
+  it('BASELINE: stvarni izvori, SQL i health su cisti', () => {
+    expect(opportunityWiringProblems(izvori())).toEqual([]);
+    expect(opportunitySqlScopeProblems(sql)).toEqual([]);
+    expect(falseGreenParityProblems(opportunityMeasurementHealth)).toEqual([]);
+  });
+
+  it('dvostruka emisija: drugi summary, drugi poziv emittera ili drugi repair put se hvata', () => {
+    const src = izvori();
+    const dvaSummaryja = src.emitter.replace(
+      "void track('repair_noop_summary',",
+      "void track('repair_noop_summary', {}); void track('repair_noop_summary',",
+    );
+    expect(dvaSummaryja).not.toBe(src.emitter);
+    expect(opportunityWiringProblems({ ...src, emitter: dvaSummaryja }))
+      .toEqual(['emitter: repair_noop_summary se emitira 2 puta (mora tocno 1)']);
+
+    const dvaEmittera = src.result.replace(EMIT, `${EMIT}\n  ${EMIT}`);
+    expect(dvaEmittera).not.toBe(src.result);
+    expect(opportunityWiringProblems({ ...src, result: dvaEmittera }))
+      .toEqual(['repair-result.ts: emitRepairNoOpSignals se poziva 2 puta (mora tocno 1)']);
+
+    const dvaPuta = src.panel.replace(LOCAL, `${LOCAL}\n      ${LOCAL}`);
+    expect(dvaPuta).not.toBe(src.panel);
+    expect(opportunityWiringProblems({ ...src, panel: dvaPuta }))
+      .toEqual(['repair-panel.ts: trackRepairResultOk se poziva 2 puta (mora tocno 1)']);
+  });
+
+  it('neovisnost: brojac u emitteru ili izravan poziv emittera iz puta se hvata', () => {
+    const src = izvori();
+    const uEmitteru = src.emitter.replace(
+      "void track('repair_noop_summary',",
+      "void track('repair_result_ok', context); void track('repair_noop_summary',",
+    );
+    expect(opportunityWiringProblems({ ...src, emitter: uEmitteru }))
+      .toEqual(['emitter: repair_result_ok ne smije biti u emitteru, inace nije neovisan brojac']);
+
+    const mimo = src.panel.replace(
+      LOCAL,
+      'if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);',
+    );
+    const nalazi = opportunityWiringProblems({ ...src, panel: mimo });
+    expect(nalazi).toContain('repair-panel.ts: emitter se zove izravno, mimo neovisnog brojaca');
+    expect(nalazi).toContain('repair-panel.ts: trackRepairResultOk se poziva 0 puta (mora tocno 1)');
+  });
+
+  it('izgubljen kontekst: put bez konteksta ili emitter bez istog konteksta se hvata', () => {
+    const src = izvori();
+    const bezKonteksta = src.panel.replace(LOCAL, 'if (ctx.trackEvent) trackRepairResultOk(ctx.trackEvent, result.skippedReasons);');
+    expect(opportunityWiringProblems({ ...src, panel: bezKonteksta })).toEqual([
+      'repair-panel.ts: trackRepairResultOk bez Opportunity konteksta',
+      'repair-panel.ts: pozivatelj bez ctx.opportunityContext',
+    ]);
+
+    const server = src.app.replace('trackRepairResultOk(trackEvent,out.skippedReasons,opportunityContextFor(r))', 'trackRepairResultOk(trackEvent,out.skippedReasons,{})');
+    expect(server).not.toBe(src.app);
+    expect(opportunityWiringProblems({ ...src, app: server }))
+      .toEqual(['app.ts: serverski repair ne salje profileId/workType rezultata']);
+
+    const emitterBez = src.result.replace(EMIT, 'emitRepairNoOpSignals(track, skippedReasons, {});');
+    expect(opportunityWiringProblems({ ...src, result: emitterBez }))
+      .toEqual(['repair-result.ts: emitter ne dobiva isti Opportunity kontekst']);
+
+    const brojacBez = src.result.replace("track('repair_result_ok', { ...context })", "track('repair_result_ok', {})");
+    expect(opportunityWiringProblems({ ...src, result: brojacBez }))
+      .toEqual(['repair-result.ts: repair_result_ok s kontekstom se emitira 0 puta (mora tocno 1)']);
+  });
+
+  it('redoslijed: repair rezultat prije integrity gatea se hvata', () => {
+    const src = izvori();
+    const gate = 'if (result.integrityFailure)';
+    const prije = src.panel.replace(LOCAL, '').replace(gate, `${LOCAL}\n      ${gate}`);
+    expect(opportunityWiringProblems({ ...src, panel: prije }))
+      .toEqual(['repair-panel.ts: repair rezultat prije integrity gatea']);
+  });
+
+  it('krivi SQL obuhvat: V3 dogadjaj od pocetka prozora, epoha po prozoru ili samoreferencija se hvata', () => {
+    const odPocetka = sql.replace(
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.repair_v3_from",
+      "where e.event = 'repair_result_ok'\n          and e.created_at >= w.f",
+    );
+    expect(odPocetka).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(odPocetka)).toEqual(['SQL: repair_result_ok mora poceti od repair_v3_from (ima w.f)']);
+
+    const epohaPoProzoru = sql.replace(
+      "where e.event in ('repair_result_ok', 'repair_noop_summary')",
+      "where e.event in ('repair_result_ok', 'repair_noop_summary') and e.created_at >= p_from",
+    );
+    expect(opportunitySqlScopeProblems(epohaPoProzoru)).toEqual(['SQL: V3 epoha ne smije biti ogranicena prozorom']);
+
+    const samoSummary = sql.replace("e.event in ('repair_result_ok', 'repair_noop_summary')", "e.event = 'repair_noop_summary'");
+    expect(opportunitySqlScopeProblems(samoSummary)).toContain('SQL: V3 epoha mora obuhvatiti repair_result_ok i repair_noop_summary');
+
+    const samoref = sql.replace('    from win w\n    cross join v3 v', '    from win_v3 w\n    cross join v3 v');
+    expect(samoref).not.toBe(sql);
+    expect(opportunitySqlScopeProblems(samoref)).toEqual(['SQL: win_v3 mora citati win, ne sebe']);
+
+    const bezScopea = sql.replace("'repair_attempts'::text", "'repair_attempt'::text");
+    expect(opportunitySqlScopeProblems(bezScopea)).toEqual(['SQL: nema parity po obuhvatu za repair_attempts']);
+  });
+
+  it('lazno zelen paritet: health koji ignorira scope, brojac pokusaja ili razdvajanje povrsina se hvata', () => {
+    const bezScopea: typeof opportunityMeasurementHealth = (b) =>
+      opportunityMeasurementHealth({ ...b, scopeParityMismatches: [] });
+    expect(falseGreenParityProblems(bezScopea)).toEqual([
+      'V3-01 structure: isti zbroj, krivi profil: healthy, mora biti partial',
+      'V3-01 repair: isti zbroj, kriva vrsta rada: healthy, mora biti partial',
+    ]);
+
+    const bezBrojaca: typeof opportunityMeasurementHealth = (b) =>
+      opportunityMeasurementHealth({ ...b, repairAttemptEvents: b.repairNoOpSummaryEvents });
+    expect(falseGreenParityProblems(bezBrojaca)).toEqual([
+      'V3-02: uspjesan repair bez summaryja: healthy, mora biti partial',
+      'V3-02: summary bez uspjesnog repaira: healthy, mora biti partial',
+    ]);
+
+    const jedinstveno: typeof opportunityMeasurementHealth = (b) => {
+      const h = opportunityMeasurementHealth(b);
+      return { ...h, analysis: h.kind };
+    };
+    expect(falseGreenParityProblems(jedinstveno)).toEqual(['V3-03: repair-only prozor daje analysis=healthy']);
   });
 });

@@ -19,7 +19,7 @@ import { repairCeiling } from './result-readiness';
 import { detectPassRegressions, dropStaleFieldRegressions } from '../analysis/repair-regression';
 import { DEEP_CAPABLE } from '../repair/default-selection';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
-import { emitRepairNoOpSignals } from '../analytics/opportunity-emit';
+import { trackRepairResultOk } from '../analytics/repair-result';
 
 export interface TitlePageFormField {
   key: string;
@@ -751,7 +751,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): RepairPanelHandle | 
         renderIntegrityFailure(summary, result.integrityFailure);
         return;
       }
-      if (ctx.trackEvent) emitRepairNoOpSignals(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);
+      if (ctx.trackEvent) trackRepairResultOk(ctx.trackEvent, result.skippedReasons, ctx.opportunityContext);
       // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
       // reci iskreno sto se dogodilo (fail-safe skip, npr. atribut ne postoji).
       renderRepairOutcomeSummary(summary, result.changelog, alreadyOk, cannotFix, skippedNotes);
