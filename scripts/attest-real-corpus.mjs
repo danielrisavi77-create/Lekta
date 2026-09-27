@@ -10,7 +10,7 @@
 // postoji ali ljestvica je ne priznaje. Time se ne moze dogoditi da razina dokaza poraste zato sto
 // je netko pokrenuo skriptu.
 import { execFileSync } from 'node:child_process';
-import { FINGERPRINT_VERSION, attestationRefusals, corpusFingerprintV2, inheritedSignature } from './lib/corpus-attestation-core.mjs';
+import { FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature } from './lib/corpus-attestation-core.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -89,11 +89,15 @@ const poSkupini = new Map();
 let bezJedinice = 0;
 let izdvojeno = 0;
 let neovisnoPotvrdjeno = 0;
+// T83-07: koliko je JEDINSTVENIH dokumenata uslo u bar jednu skupinu. Zbroj `documentCount` po skupinama
+// nije jednak tom broju (dokument profila s vise vrsta rada ulazi u svaku), pa se broj pise izricito.
+let uracunato = 0;
 for (const r of rezultati) {
   if (r.expectationProvenance === 'independent') neovisnoPotvrdjeno += 1;
   if (r.holdout === true && !holdoutConfirmed) { izdvojeno += 1; continue; }
   const p = registar.get(r.profileId);
   if (!p || !p.unitId) { bezJedinice += 1; continue; }
+  uracunato += 1;
   const vrste = p.workTypes.length ? p.workTypes : ['unknown'];
   for (const wt of vrste) {
     const kljuc = `${p.unitId}::${wt}`;
@@ -119,13 +123,7 @@ if (mjerenje.generatedFromCommit !== commit) {
 }
 
 const postojeca = fs.existsSync(IZLAZ) ? JSON.parse(fs.readFileSync(IZLAZ, 'utf8')) : null;
-// Potpis se prenosi samo na ISTO potpisano mjerenje (verzija i vrijednost otiska, potpis ne stariji od
-// mjerenja); novo mjerenje istog skupa trazi novi potpis.
-const naslijedjen = potpis ? null : inheritedSignature(postojeca, {
-  fingerprintVersion: FINGERPRINT_VERSION, corpusFingerprint: otisak,
-  measuredAt: mjerenje.generatedAt, measuredFromCommit: mjerenje.generatedFromCommit,
-});
-const ovjera = {
+const sadrzaj = {
   schemaVersion: 1,
   fingerprintVersion: FINGERPRINT_VERSION,
   corpusFingerprint: otisak,
@@ -143,13 +141,22 @@ const ovjera = {
     duplicateDocumentCount: 0,
     uniqueDocumentCount: rezultati.length,
     rawDocumentCount: rezultati.length + izbaceno,
+    countedDocumentCount: uracunato,
   },
-  signedBy: potpis ?? naslijedjen?.signedBy ?? null,
-  signedAt: potpis ? new Date().toISOString() : naslijedjen?.signedAt ?? null,
-  signatureNote: biljeska ?? naslijedjen?.signatureNote ?? null,
   entries: [...poSkupini.values()]
     .map((e) => ({ ...e, profileIds: [...e.profileIds].sort(), regressedChecks: [...e.regressedChecks].sort() }))
     .sort((a, b) => (a.unitId + a.workType).localeCompare(b.unitId + b.workType)),
+};
+// Potpis pokriva kanonski otisak SADRZAJA ovjere; novi potpis ga zapisuje, a postojeci se prenosi samo
+// kad je sadrzaj bajt po bajt isti (isto mjerenje, isti opseg holdouta, iste brojke), vidi T83-05.
+const otisakSadrzaja = attestationContentDigest(sadrzaj);
+const naslijedjen = potpis ? null : inheritedSignature(postojeca, sadrzaj);
+const ovjera = {
+  ...sadrzaj,
+  signedBy: potpis ?? naslijedjen?.signedBy ?? null,
+  signedAt: potpis ? new Date().toISOString() : naslijedjen?.signedAt ?? null,
+  signatureNote: biljeska ?? naslijedjen?.signatureNote ?? null,
+  signedContentDigest: potpis ? otisakSadrzaja : naslijedjen?.signedContentDigest ?? null,
 };
 
 fs.mkdirSync(path.dirname(IZLAZ), { recursive: true });

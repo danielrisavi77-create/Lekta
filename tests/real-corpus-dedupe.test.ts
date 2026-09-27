@@ -14,7 +14,7 @@ import {
 } from './real-corpus/harness';
 import { attestationProblems, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 import {
-  FINGERPRINT_VERSION, attestationRefusals, corpusFingerprintV2, inheritedSignature,
+  FINGERPRINT_VERSION, attestationContentDigest, attestationRefusals, corpusFingerprintV2, inheritedSignature,
 } from '../scripts/lib/corpus-attestation-core.mjs';
 
 const entry = (documentId: string, root: string, extra: Partial<RealCorpusManifestEntry> = {}): RealCorpusManifestEntry => ({
@@ -103,6 +103,55 @@ describe('T83-06: stvarno mjerenje kroz runRealCorpus', () => {
       rmSync(lokalni, { recursive: true, force: true });
     }
   }, 180_000);
+
+  /** Commitana fixture u prvom korijenu i njena varijanta u drugom; vraca oba korijena. */
+  const dvaKorijena = (varijanta: (izvor: RealCorpusManifestEntry, lokalni: string, sidecar: string) => void) => {
+    const izvor = discoverRealCorpus(REAL_CORPUS_ROOT)[0];
+    const sidecar = izvor.fileName.replace(/\.docx$/, '.json');
+    const commitani = mkdtempSync(join(tmpdir(), 'lekta-t83-docx-'));
+    const lokalni = mkdtempSync(join(tmpdir(), 'lekta-t83-local-'));
+    copyFileSync(join(REAL_CORPUS_ROOT, izvor.fileName), join(commitani, izvor.fileName));
+    copyFileSync(join(REAL_CORPUS_ROOT, sidecar), join(commitani, sidecar));
+    varijanta(izvor, lokalni, sidecar);
+    return { izvor, commitani, lokalni };
+  };
+
+  it('T83-01 kroz mjerenje: isti bajtovi pod drugim imenom rusu runRealCorpus', async () => {
+    const { izvor, commitani, lokalni } = dvaKorijena((izvor, lokalni, sidecar) => {
+      copyFileSync(join(REAL_CORPUS_ROOT, izvor.fileName), join(lokalni, 'kopija-pod-drugim-imenom.docx'));
+      copyFileSync(join(REAL_CORPUS_ROOT, sidecar), join(lokalni, 'kopija-pod-drugim-imenom.json'));
+    });
+    try {
+      // Generator proizvodi ciljanu klasu: dva razlicita id-a, isti bajtovi.
+      const ids = [...discoverRealCorpus(commitani), ...discoverRealCorpus(lokalni)].map((e) => e.documentId);
+      expect(ids).toEqual([izvor.documentId, 'kopija-pod-drugim-imenom']);
+      expect(readFileSync(join(commitani, izvor.fileName)).equals(readFileSync(join(lokalni, 'kopija-pod-drugim-imenom.docx')))).toBe(true);
+      await expect(runRealCorpus(commitani, { includeLocal: true, localRoot: lokalni, externalRoot: null }))
+        .rejects.toThrow(/isti sadrzaj postoji pod documentId/);
+    } finally {
+      rmSync(commitani, { recursive: true, force: true });
+      rmSync(lokalni, { recursive: true, force: true });
+    }
+  }, 60_000);
+
+  it('T83-02 kroz mjerenje: ista datoteka s drugacijim holdoutom u sidecaru rusi runRealCorpus', async () => {
+    const { izvor, commitani, lokalni } = dvaKorijena((izvor, lokalni, sidecar) => {
+      copyFileSync(join(REAL_CORPUS_ROOT, izvor.fileName), join(lokalni, izvor.fileName));
+      const meta = JSON.parse(readFileSync(join(REAL_CORPUS_ROOT, sidecar), 'utf8'));
+      writeFileSync(join(lokalni, sidecar), JSON.stringify({ ...meta, holdout: !discoverRealCorpus(REAL_CORPUS_ROOT)[0].holdout }));
+    });
+    try {
+      const [a, b] = [...discoverRealCorpus(commitani), ...discoverRealCorpus(lokalni)];
+      expect(a.documentId).toBe(b.documentId);
+      expect(a.holdout).not.toBe(b.holdout);
+      expect(izvor.documentId).toBe(a.documentId);
+      await expect(runRealCorpus(commitani, { includeLocal: true, localRoot: lokalni, externalRoot: null }))
+        .rejects.toThrow(/izdvojeni skup/);
+    } finally {
+      rmSync(commitani, { recursive: true, force: true });
+      rmSync(lokalni, { recursive: true, force: true });
+    }
+  }, 60_000);
 });
 
 describe('otisak v2, potpis i odbijanje ovjere', () => {
@@ -116,39 +165,61 @@ describe('otisak v2, potpis i odbijanje ovjere', () => {
     expect(v1([...ids, 'corpus-a'])).not.toBe(v1(ids));
   });
 
-  const potpisana = {
+  /** Sadrzaj ovjere bez polja potpisa, kako ga skripta gradi. */
+  const sadrzaj = (over: Record<string, unknown> = {}) => ({
+    schemaVersion: 1,
     fingerprintVersion: FINGERPRINT_VERSION,
     corpusFingerprint: corpusFingerprintV2(ids),
-    measuredAt: '2026-09-28T09:00:00.000Z',
+    measuredAt: '2026-09-20T09:00:00.000Z',
     measuredFromCommit: 'a'.repeat(40),
-    signedBy: 'Vlasnik',
-    signedAt: '2026-09-28T10:00:00.000Z',
-    signatureNote: null,
-  };
-  const isto = { fingerprintVersion: 2, corpusFingerprint: potpisana.corpusFingerprint, measuredAt: potpisana.measuredAt, measuredFromCommit: potpisana.measuredFromCommit };
-
-  it('isto potpisano mjerenje zadrzava potpis', () => {
-    expect(inheritedSignature(potpisana, isto)).toEqual({ signedBy: 'Vlasnik', signedAt: potpisana.signedAt, signatureNote: null });
+    oracles: ['scripts/repair-real-corpus.mts'],
+    environment: { wordVersion: null },
+    protocol: { holdoutExcluded: true, holdoutDocumentCount: 1, uniqueDocumentCount: 3, rawDocumentCount: 3, countedDocumentCount: 2, duplicateDocumentCount: 0 },
+    entries: [{ unitId: 'fpzg', workType: 'final', profileIds: ['p'], documentCount: 2, cleanCount: 2, regressedChecks: [] }],
+    ...over,
+  });
+  const potpisi = (s: Record<string, unknown>) => ({
+    ...s, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigest(s),
   });
 
-  it('T83-05: drugo mjerenje istog skupa ne nasljeduje potpis ni kad je potpis noviji od njega', () => {
-    // Mjerenje 09:00, potpis 10:00, novo mjerenje 09:30: potpis je noviji, ali pokriva drugo mjerenje.
-    expect(inheritedSignature(potpisana, { ...isto, measuredAt: '2026-09-28T09:30:00.000Z' })).toBeNull();
-    expect(inheritedSignature(potpisana, { ...isto, measuredFromCommit: 'b'.repeat(40) })).toBeNull();
-    expect(inheritedSignature(potpisana, { ...isto, corpusFingerprint: corpusFingerprintV2(['x']) })).toBeNull();
-    // Stvarni slucaj: potpisana v1 ovjera a74d93d5 (bez fingerprintVersion), isti v1 otisak i isto mjerenje.
-    const staraV1 = {
-      corpusFingerprint: '8e5bd529d4f2b596ccf8fa0ef58c029d', measuredAt: '2026-09-10T08:28:07.311Z',
-      measuredFromCommit: '59adbc8c', signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z',
-    };
-    expect(inheritedSignature(staraV1, { fingerprintVersion: 2, corpusFingerprint: staraV1.corpusFingerprint, measuredAt: staraV1.measuredAt, measuredFromCommit: staraV1.measuredFromCommit })).toBeNull();
-    expect(inheritedSignature(null, isto)).toBeNull();
+  it('otisak sadrzaja ne ovisi o redoslijedu kljuceva ni o poljima potpisa', () => {
+    const s = sadrzaj();
+    const obrnuto = Object.fromEntries(Object.entries(s).reverse());
+    expect(attestationContentDigest(obrnuto)).toBe(attestationContentDigest(s));
+    expect(attestationContentDigest(potpisi(s))).toBe(attestationContentDigest(s));
+    expect(attestationContentDigest(sadrzaj({ protocol: { ...s.protocol, holdoutExcluded: false } }))).not.toBe(attestationContentDigest(s));
   });
 
-  it('T83-03: pad isporuke, ostecen paket ili dvostruki id odbijaju ovjeru', () => {
-    const r = (documentId: string, extra: Record<string, unknown> = {}) => ({ documentId, outcome: 'review', integrityFailure: null, ...extra });
-    expect(attestationRefusals([r('a'), r('b')])).toEqual([]);
-    expect(attestationRefusals([r('a'), r('b', { outcome: 'fail' })])).toEqual(['1 dokumenata ima pad isporuke (outcome fail)']);
+  it('isti sadrzaj zadrzava potpis', () => {
+    const s = sadrzaj();
+    expect(inheritedSignature(potpisi(s), s)).toMatchObject({ signedBy: 'Vlasnik', signedContentDigest: attestationContentDigest(s) });
+  });
+
+  it('T83-05: drugo mjerenje, --holdout-confirmed ili drugacije brojke ne nasljeduju potpis', () => {
+    const s = sadrzaj();
+    const p = potpisi(s);
+    // Mjerenje 09:00, potpis 10:00, novo mjerenje 09:30.
+    expect(inheritedSignature(p, sadrzaj({ measuredAt: '2026-09-20T09:30:00.000Z' }))).toBeNull();
+    expect(inheritedSignature(p, sadrzaj({ measuredFromCommit: 'b'.repeat(40) }))).toBeNull();
+    // Isto mjerenje ovjereno s --holdout-confirmed: isti otisak, vrijeme i commit, drugi opseg dokaza.
+    expect(inheritedSignature(p, sadrzaj({
+      protocol: { ...s.protocol, holdoutExcluded: false, countedDocumentCount: 3 },
+      entries: [{ ...s.entries[0], documentCount: 3, cleanCount: 3 }],
+    }))).toBeNull();
+    // Rucno izmijenjena potpisana ovjera: zapisani otisak vise ne odgovara njenom sadrzaju.
+    expect(inheritedSignature({ ...p, entries: [{ ...s.entries[0], cleanCount: 1 }] }, sadrzaj({ entries: [{ ...s.entries[0], cleanCount: 1 }] }))).toBeNull();
+    // Stvarni slucaj: potpisana v1 ovjera a74d93d5 nema otisak sadrzaja.
+    expect(inheritedSignature({ corpusFingerprint: '8e5bd529d4f2b596ccf8fa0ef58c029d', signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' }, s)).toBeNull();
+    expect(inheritedSignature(null, s)).toBeNull();
+  });
+
+  it('T83-03: nedopusten ishod, greska, ostecen paket ili dvostruki id odbijaju ovjeru', () => {
+    const r = (documentId: string, extra: Record<string, unknown> = {}) => ({ documentId, outcome: 'review', error: null, integrityFailure: null, ...extra });
+    expect(attestationRefusals([r('a'), r('b', { outcome: 'pass' }), r('c', { outcome: 'no-op' })])).toEqual([]);
+    expect(attestationRefusals([r('a'), r('b', { outcome: 'fail' })])).toEqual(['1 dokumenata nema dopusten ishod (pass, review, no-op)']);
+    expect(attestationRefusals([r('a', { outcome: 'nepoznat' })])).toEqual(['1 dokumenata nema dopusten ishod (pass, review, no-op)']);
+    // Codexov primjer iz runde 2: ishod review uz gresku analize.
+    expect(attestationRefusals([r('a', { error: 'analysis crashed' })])).toEqual(['1 dokumenata ima gresku mjerenja (error)']);
     expect(attestationRefusals([r('a', { integrityFailure: 'nedostaje dio' })])).toEqual(['1 dokumenata ima ostecen paket (integrityFailure)']);
     expect(attestationRefusals([r('a'), r('a')])[0]).toMatch(/1 dvostrukih documentId/);
   });
@@ -161,55 +232,71 @@ describe('T83-06: stvarna skripta ovjere', () => {
     if (!p) throw new Error('registar nema profil s jedinicom');
     return p.id;
   })();
-  const mjerenje = (ids: string[], generatedAt: string, extra: Record<string, unknown> = {}) => ({
+  const mjerenje = (ids: string[], generatedAt: string, extra: Record<string, unknown> = {}, holdoutIds: string[] = []) => ({
     generatedAt,
     generatedFromCommit: 'c'.repeat(40),
     scope: { duplicateDocumentCount: 0 },
     results: ids.map((documentId) => ({
-      documentId, profileId: profil, holdout: false, expectationProvenance: 'derived', outcome: 'review',
-      statusChanges: [], integrityFailure: null, ...extra,
+      documentId, profileId: profil, holdout: holdoutIds.includes(documentId), expectationProvenance: 'derived', outcome: 'review',
+      statusChanges: [], integrityFailure: null, error: null, ...extra,
     })),
   });
   const pokreni = (dir: string, args: string[] = []) => spawnSync(process.execPath, ['scripts/attest-real-corpus.mjs', ...args], {
     encoding: 'utf8',
     env: { ...process.env, LEKTA_ATTEST_INPUT: join(dir, 'mjerenje.json'), LEKTA_ATTEST_OUTPUT: join(dir, 'ovjera.json') },
   });
+  const procitaj = (dir: string) => JSON.parse(readFileSync(join(dir, 'ovjera.json'), 'utf8'));
 
-  it('odbija napuhano i palo mjerenje, a potpis zadrzava samo uz isto mjerenje', () => {
+  it('odbija napuhano, palo i pogresno mjerenje, a potpis zadrzava samo uz isti sadrzaj', () => {
     const dir = mkdtempSync(join(tmpdir(), 'lekta-t83-attest-'));
+    const upisi = (m: unknown) => writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(m));
     try {
-      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a', 'corpus-a'], '2026-09-20T09:00:00.000Z')));
+      upisi(mjerenje(['corpus-a', 'corpus-a'], '2026-09-20T09:00:00.000Z'));
       const dvostruko = pokreni(dir);
       expect(dvostruko.status).toBe(1);
       expect(dvostruko.stderr).toMatch(/dvostrukih documentId/);
 
-      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a'], '2026-09-20T09:00:00.000Z', { outcome: 'fail' })));
+      upisi(mjerenje(['corpus-a'], '2026-09-20T09:00:00.000Z', { outcome: 'fail' }));
       expect(pokreni(dir).status).toBe(1);
+      upisi(mjerenje(['corpus-a'], '2026-09-20T09:00:00.000Z', { error: 'analysis crashed' }));
+      const greska = pokreni(dir);
+      expect(greska.status).toBe(1);
+      expect(greska.stderr).toMatch(/gresku mjerenja/);
 
-      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:00:00.000Z')));
+      const cisto = mjerenje(['corpus-a', 'corpus-b', 'corpus-c'], '2026-09-20T09:00:00.000Z', {}, ['corpus-c']);
+      upisi(cisto);
       expect(pokreni(dir, ['--sign', 'Vlasnik']).status).toBe(0);
-      const potpisana = JSON.parse(readFileSync(join(dir, 'ovjera.json'), 'utf8'));
+      const potpisana = procitaj(dir);
       expect(potpisana.fingerprintVersion).toBe(2);
-      expect(potpisana.protocol).toMatchObject({ duplicateDocumentCount: 0, uniqueDocumentCount: 2, rawDocumentCount: 2 });
+      expect(potpisana.protocol).toMatchObject({ duplicateDocumentCount: 0, uniqueDocumentCount: 3, rawDocumentCount: 3, countedDocumentCount: 2 });
+      expect(potpisana.signedContentDigest).toMatch(/^[0-9a-f]{64}$/);
       expect(attestationProblems(potpisana)).toEqual([]);
 
       // Ista ovjera ponovljena nad ISTIM mjerenjem zadrzava potpis.
       expect(pokreni(dir).status).toBe(0);
-      expect(JSON.parse(readFileSync(join(dir, 'ovjera.json'), 'utf8')).signedBy).toBe('Vlasnik');
+      expect(procitaj(dir).signedBy).toBe('Vlasnik');
 
-      // Novo mjerenje istog skupa (isti otisak, drugo vrijeme) gubi potpis.
-      writeFileSync(join(dir, 'mjerenje.json'), JSON.stringify(mjerenje(['corpus-a', 'corpus-b'], '2026-09-20T09:30:00.000Z')));
+      // T83-05: isto mjerenje s --holdout-confirmed mijenja opseg dokaza i gubi potpis.
+      expect(pokreni(dir, ['--holdout-confirmed']).status).toBe(0);
+      const siriOpseg = procitaj(dir);
+      expect(siriOpseg.corpusFingerprint).toBe(potpisana.corpusFingerprint);
+      expect(siriOpseg.protocol.countedDocumentCount).toBe(3);
+      expect(siriOpseg.signedBy).toBeNull();
+
+      // Novo mjerenje istog skupa (isti otisak, drugo vrijeme) takodjer gubi potpis.
+      upisi(cisto);
+      expect(pokreni(dir, ['--sign', 'Vlasnik']).status).toBe(0);
+      upisi(mjerenje(['corpus-a', 'corpus-b', 'corpus-c'], '2026-09-20T09:30:00.000Z', {}, ['corpus-c']));
       expect(pokreni(dir).status).toBe(0);
-      const nova = JSON.parse(readFileSync(join(dir, 'ovjera.json'), 'utf8'));
-      expect(nova.corpusFingerprint).toBe(potpisana.corpusFingerprint);
-      expect(nova.signedBy).toBeNull();
+      expect(procitaj(dir).signedBy).toBeNull();
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
   }, 60_000);
 });
 
-describe('attestationProblems: dvostruko brojanje i verzija otiska', () => {
+describe('attestationProblems: dvostruko brojanje, verzija otiska i dosljednost brojeva', () => {
+  const cista = { duplicateDocumentCount: 0, uniqueDocumentCount: 219, rawDocumentCount: 321, countedDocumentCount: 178 };
   const ovjera = (extra: Record<string, unknown> = {}, protocol: Record<string, unknown> = {}): CorpusAttestation => ({
     schemaVersion: 1,
     corpusFingerprint: 'f'.repeat(32),
@@ -217,13 +304,15 @@ describe('attestationProblems: dvostruko brojanje i verzija otiska', () => {
     measuredFromCommit: 'a'.repeat(40),
     oracles: ['scripts/repair-real-corpus.mts'],
     environment: { wordVersion: null },
-    protocol: { holdoutExcluded: true, holdoutDocumentCount: 0, independentlyConfirmedCount: 0, derivedExpectationCount: 1, ...protocol },
+    protocol: { holdoutExcluded: true, holdoutDocumentCount: 41, independentlyConfirmedCount: 0, derivedExpectationCount: 219, ...protocol },
     signedBy: 'Vlasnik',
     signedAt: '2026-09-27T16:00:00.000Z',
     signatureNote: null,
-    entries: [{ unitId: 'fer', workType: 'graduate', profileIds: ['fer-diplomski'], documentCount: 1, cleanCount: 1, regressedChecks: [] }],
+    entries: [{ unitId: 'fer', workType: 'graduate', profileIds: ['fer-diplomski'], documentCount: 2, cleanCount: 2, regressedChecks: [] }],
     ...extra,
   } as unknown as CorpusAttestation);
+  const v2 = (protocol: Record<string, unknown> = cista, extra: Record<string, unknown> = {}) =>
+    ovjera({ fingerprintVersion: 2, signedContentDigest: 'd'.repeat(64), ...extra }, protocol);
 
   it('v1 ovjera (bez verzije) ostaje citljiva; dvostruko brojanje je problem', () => {
     expect(attestationProblems(ovjera())).toEqual([]);
@@ -231,10 +320,25 @@ describe('attestationProblems: dvostruko brojanje i verzija otiska', () => {
   });
 
   it('T83-04: v2 bez uskladjenih brojeva i nepoznata verzija su problem', () => {
-    const cista = { duplicateDocumentCount: 0, uniqueDocumentCount: 219, rawDocumentCount: 321 };
-    expect(attestationProblems(ovjera({ fingerprintVersion: 2 }, cista))).toEqual([]);
-    expect(attestationProblems(ovjera({ fingerprintVersion: 2 }))).toContain('ovjera v2 nema uskladjene brojeve dokumenata');
-    expect(attestationProblems(ovjera({ fingerprintVersion: 2 }, { ...cista, rawDocumentCount: 100 }))).toContain('ovjera v2 nema uskladjene brojeve dokumenata');
+    expect(attestationProblems(v2())).toEqual([]);
+    expect(attestationProblems(v2({}))).toContain('ovjera v2 nema uskladjene brojeve dokumenata');
+    expect(attestationProblems(v2({ ...cista, rawDocumentCount: 100 }))).toContain('ovjera v2 nema uskladjene brojeve dokumenata');
+    expect(attestationProblems(v2({ ...cista, countedDocumentCount: 300 }))).toContain('ovjera v2 nema uskladjene brojeve dokumenata');
     expect(attestationProblems(ovjera({ fingerprintVersion: 3 }, cista))).toContain('nepoznata verzija otiska korpusa');
+  });
+
+  it('T83-07: nula jedinstvenih uz dokazne unose i nedosljedne brojke po skupini su problem', () => {
+    // Codexov primjer iz runde 2.
+    expect(attestationProblems(v2({ ...cista, uniqueDocumentCount: 0, rawDocumentCount: 0, countedDocumentCount: 0, holdoutDocumentCount: 0 })))
+      .toContain('ovjera v2: brojke po skupini ne odgovaraju broju dokumenata');
+    const skupina = { unitId: 'fer', workType: 'graduate', profileIds: ['fer-diplomski'], regressedChecks: [] };
+    expect(attestationProblems(v2(cista, { entries: [{ ...skupina, documentCount: 500, cleanCount: 1 }] })))
+      .toContain('ovjera v2: brojke po skupini ne odgovaraju broju dokumenata');
+    expect(attestationProblems(v2(cista, { entries: [{ ...skupina, documentCount: 2, cleanCount: 3 }] })))
+      .toContain('ovjera v2: brojke po skupini ne odgovaraju broju dokumenata');
+  });
+
+  it('T83-05: potpisana v2 ovjera mora navesti otisak sadrzaja koji potpis pokriva', () => {
+    expect(attestationProblems(v2(cista, { signedContentDigest: null }))).toContain('potpis v2 ovjere ne navodi otisak sadrzaja koji pokriva');
   });
 });

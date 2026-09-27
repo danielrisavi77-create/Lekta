@@ -128,7 +128,7 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import { repairSourceHashFromFiles } from '../scripts/lib/repair-source-hash.mjs';
 import { dedupeManifest, type RealCorpusManifestEntry } from './real-corpus/harness';
-import { attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
+import { attestationContentDigest, attestationRefusals, inheritedSignature } from '../scripts/lib/corpus-attestation-core.mjs';
 import { cspHeaderProblems, substituteCspTokens } from '../scripts/lib/csp-headers.mjs';
 import { resolveCheckout, buildStripePaymentIntentParams } from '../src/report/checkout';
 import { isSoldByLektaCheckout, mapProductRow } from '../src/catalog/products-catalog';
@@ -303,38 +303,60 @@ function istiSadrzajPodDvaImenaPada(
   }
 }
 
-/** Tvrdnja garda T83-03: mjerenje s ijednim palim dokumentom se ne ovjerava. */
+/** Tvrdnja garda T83-03: mjerenje s ijednim palim ili pogresnim dokumentom se ne ovjerava. */
 function paloMjerenjeSeNeOvjerava(refuse: (results: Array<Record<string, unknown>>) => string[]): boolean {
-  const r = (documentId: string, outcome: string) => ({ documentId, outcome, integrityFailure: null });
-  return refuse([r('a', 'review'), r('b', 'review')]).length === 0 && refuse([r('a', 'review'), r('b', 'fail')]).length > 0;
+  const r = (documentId: string, extra: Record<string, unknown> = {}) => ({ documentId, outcome: 'review', error: null, integrityFailure: null, ...extra });
+  return (
+    refuse([r('a'), r('b', { outcome: 'pass' })]).length === 0 &&
+    refuse([r('a'), r('b', { outcome: 'fail' })]).length > 0 &&
+    refuse([r('a', { error: 'analysis crashed' })]).length > 0
+  );
+}
+
+/**
+ * Mutant garda `attestationRefusals` izveden iz STVARNOG izvora (blok GARD u
+ * scripts/lib/corpus-attestation-core.mjs) zamjenom jednog izraza; mutacija ne filtrira izlaz nego
+ * mijenja sam gard (Codex #185, T83-06).
+ */
+function gardIzIzvora(staro: string, novo: string): (results: Array<Record<string, unknown>>) => string[] {
+  const src = readFileSync(resolve(process.cwd(), 'scripts/lib/corpus-attestation-core.mjs'), 'utf8').replace(/\r/g, '');
+  const a = src.indexOf('// >>> GARD:attestationRefusals');
+  const b = src.indexOf('// <<< GARD:attestationRefusals');
+  if (a < 0 || b < a) throw new Error('blok GARD:attestationRefusals nije pronadjen');
+  const blok = src.slice(a, b).replace('export function', 'function');
+  if (!blok.includes(staro)) throw new Error(`mutacija ne pogadja izvor: ${staro}`);
+  return new Function(`${blok.replace(staro, novo)}\nreturn attestationRefusals;`)() as (results: Array<Record<string, unknown>>) => string[];
 }
 
 type PotpisFn = (
-  existing: {
-    signedBy?: string | null; signedAt?: string | null; signatureNote?: string | null; corpusFingerprint?: string;
-    fingerprintVersion?: number; measuredAt?: string; measuredFromCommit?: string;
-  } | null,
-  next: { fingerprintVersion: number; corpusFingerprint: string; measuredAt: string; measuredFromCommit: string },
-) => { signedBy: string; signedAt: string; signatureNote: string | null } | null;
+  existing: Record<string, unknown> | null,
+  next: Record<string, unknown>,
+) => { signedBy: string; signedAt: string } | null;
 
 /**
- * Tvrdnja garda T83: potpis ostaje uz ovjeru samo kad opisuje ISTO potpisano v2 mjerenje; v1 ovjera
- * s istim otiskom, novo mjerenje istog skupa i mjerenje starije od potpisa ne nasljedjuju potpis.
+ * Tvrdnja garda T83-05: potpis ostaje uz ovjeru samo kad je SADRZAJ ovjere isti kao potpisani; v1
+ * ovjera s istim otiskom, novo mjerenje istog skupa i isto mjerenje s --holdout-confirmed gube potpis.
  */
-function potpisOstajeSamoUzIstoMjerenje(inherit: PotpisFn): boolean {
+function potpisOstajeSamoUzIstiSadrzaj(inherit: PotpisFn): boolean {
   const otisak = '8e5bd529d4f2b596ccf8fa0ef58c029d';
-  const commit = 'c'.repeat(40);
-  const v2 = {
-    fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt: '2026-09-28T09:00:00.000Z', measuredFromCommit: commit,
-    signedBy: 'Vlasnik', signedAt: '2026-09-28T10:00:00.000Z', signatureNote: null,
-  };
-  const v1 = { corpusFingerprint: otisak, measuredAt: '2026-09-10T08:28:07.311Z', measuredFromCommit: commit, signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
-  const next = (measuredAt: string) => ({ fingerprintVersion: 2, corpusFingerprint: otisak, measuredAt, measuredFromCommit: commit });
-  const isto = inherit(v2, next(v2.measuredAt));
-  const prekoVerzije = inherit(v1, next(v1.measuredAt));
-  const novoKasnije = inherit(v2, next('2026-09-29T09:00:00.000Z'));
-  const novoIzmedju = inherit(v2, next('2026-09-28T09:30:00.000Z'));
-  return isto?.signedBy === 'Vlasnik' && prekoVerzije === null && novoKasnije === null && novoIzmedju === null;
+  const sadrzaj = (over: Record<string, unknown> = {}) => ({
+    schemaVersion: 1, fingerprintVersion: 2, corpusFingerprint: otisak,
+    measuredAt: '2026-09-20T09:00:00.000Z', measuredFromCommit: 'c'.repeat(40),
+    protocol: { holdoutExcluded: true, countedDocumentCount: 2 },
+    entries: [{ unitId: 'fpzg', workType: 'final', documentCount: 2, cleanCount: 2 }],
+    ...over,
+  });
+  const s = sadrzaj();
+  const potpisana = { ...s, signedBy: 'Vlasnik', signedAt: '2026-09-20T10:00:00.000Z', signatureNote: null, signedContentDigest: attestationContentDigest(s) };
+  const v1 = { corpusFingerprint: otisak, measuredAt: s.measuredAt, measuredFromCommit: s.measuredFromCommit, signedBy: 'Daniel', signedAt: '2026-09-12T22:00:26.856Z' };
+  const isto = inherit(potpisana, s);
+  const prekoVerzije = inherit(v1, s);
+  const novoIzmedju = inherit(potpisana, sadrzaj({ measuredAt: '2026-09-20T09:30:00.000Z' }));
+  const holdoutPotvrdjen = inherit(potpisana, sadrzaj({
+    protocol: { holdoutExcluded: false, countedDocumentCount: 3 },
+    entries: [{ unitId: 'fpzg', workType: 'final', documentCount: 3, cleanCount: 3 }],
+  }));
+  return isto?.signedBy === 'Vlasnik' && prekoVerzije === null && novoIzmedju === null && holdoutPotvrdjen === null;
 }
 
 /**
@@ -1240,31 +1262,51 @@ const MUTATIONS: Mutation[] = [
     imitates:
       'attest-real-corpus.mjs je potpis prenosio cim je otisak isti; ponovljeno mjerenje 27. 9. dalo je isti v1 otisak kao ovjera potpisana 12. 9.',
     caught: () =>
-      potpisOstajeSamoUzIstoMjerenje((e, n) =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
         e && e.signedBy && e.signedAt && e.corpusFingerprint === n.corpusFingerprint
-          ? { signedBy: e.signedBy, signedAt: e.signedAt, signatureNote: e.signatureNote ?? null }
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
           : null,
       ) === false,
-    cleanBefore: () => potpisOstajeSamoUzIstoMjerenje(inheritedSignature),
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
   },
   {
     id: 'korpus/potpis-noviji-od-drugog-mjerenja-istog-skupa',
     imitates:
       'uvjet "potpis nije stariji od mjerenja" bez identiteta mjerenja: mjerenje 09:00, potpis 10:00, novo mjerenje 09:30 nasljeduje (Codex #185, T83-05)',
     caught: () =>
-      potpisOstajeSamoUzIstoMjerenje((e, n) =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
         e && e.signedBy && e.signedAt && e.fingerprintVersion === 2 && e.corpusFingerprint === n.corpusFingerprint &&
-        Date.parse(e.signedAt) >= Date.parse(n.measuredAt)
-          ? { signedBy: e.signedBy, signedAt: e.signedAt, signatureNote: e.signatureNote ?? null }
+        Date.parse(String(e.signedAt)) >= Date.parse(String(n.measuredAt))
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
           : null,
       ) === false,
-    cleanBefore: () => potpisOstajeSamoUzIstoMjerenje(inheritedSignature),
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
+  },
+  {
+    id: 'korpus/potpis-prelazi-na-holdout-confirmed-ovjeru',
+    imitates:
+      'potpis vezan uz otisak, vrijeme i commit mjerenja prelazi na istu ovjeru s --holdout-confirmed, iako se opseg dokaza i brojke mijenjaju (Codex #185, runda 2, T83-05)',
+    caught: () =>
+      potpisOstajeSamoUzIstiSadrzaj((e, n) =>
+        e && e.signedBy && e.signedAt && e.fingerprintVersion === 2 && e.corpusFingerprint === n.corpusFingerprint &&
+        e.measuredAt === n.measuredAt && e.measuredFromCommit === n.measuredFromCommit
+          ? { signedBy: String(e.signedBy), signedAt: String(e.signedAt) }
+          : null,
+      ) === false,
+    cleanBefore: () => potpisOstajeSamoUzIstiSadrzaj(inheritedSignature),
   },
   {
     id: 'korpus/skupina-s-palim-radom-ostaje-dokaziva',
     imitates:
       'pali dokument samo nije ulazio u cleanCount, pa je skupina s jednim cistim i jednim palim radom ostajala dokaziva (Codex #185, T83-03)',
-    caught: () => !paloMjerenjeSeNeOvjerava((results) => attestationRefusals(results).filter((r: string) => !/outcome fail/.test(r))),
+    caught: () => !paloMjerenjeSeNeOvjerava(gardIzIzvora('!DOPUSTENI_ISHODI.has(r.outcome)', 'false')),
+    cleanBefore: () => paloMjerenjeSeNeOvjerava(gardIzIzvora('!DOPUSTENI_ISHODI.has(r.outcome)', '!DOPUSTENI_ISHODI.has(r.outcome)')),
+  },
+  {
+    id: 'korpus/rezultat-s-greskom-i-ishodom-review-prolazi',
+    imitates:
+      'attestationRefusals je gledao samo ishod, pa je rezultat { outcome: "review", error: "analysis crashed" } prolazio (Codex #185, runda 2, T83-03)',
+    caught: () => !paloMjerenjeSeNeOvjerava(gardIzIzvora("r.error !== null && r.error !== undefined && String(r.error).trim() !== ''", 'false')),
     cleanBefore: () => paloMjerenjeSeNeOvjerava(attestationRefusals),
   },
 

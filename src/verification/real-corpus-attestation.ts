@@ -62,6 +62,8 @@ export interface CorpusAttestation {
   /** Tko jamci za mjerenje. `null` dok covjek ne potpise, i tada ovjera NE vrijedi. */
   signedBy: string | null;
   signedAt: string | null;
+  /** T83-05: sha256 kanonskog sadrzaja ovjere (bez polja potpisa) koji potpis pokriva; samo v2. */
+  signedContentDigest?: string | null;
   /**
    * T06 (protokol 2.4): u kojoj je verziji Worda izlaz vizualno provjeren. `null` znaci "nije", ne "nepoznato".
    * Neobavezno, jer starije ovjere polje nemaju; njihova valjanost se time ne mijenja.
@@ -85,6 +87,8 @@ export interface CorpusAttestation {
     /** T83: rezultata u ovjeri (jedinstveni id-ovi) i koliko ih je bilo prije nego sto je harness izbacio kopije. */
     uniqueDocumentCount?: number;
     rawDocumentCount?: number;
+    /** T83-07: jedinstveni dokumenti koji su usli u bar jednu skupinu (bez izdvojenih i bez jedinice). */
+    countedDocumentCount?: number;
   };
   entries: CorpusAttestationEntry[];
 }
@@ -118,9 +122,26 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
       pr.duplicateDocumentCount !== 0 ||
       !cijeli(pr.uniqueDocumentCount) ||
       !cijeli(pr.rawDocumentCount) ||
-      pr.rawDocumentCount < pr.uniqueDocumentCount
+      !cijeli(pr.countedDocumentCount) ||
+      pr.rawDocumentCount < pr.uniqueDocumentCount ||
+      pr.countedDocumentCount > pr.uniqueDocumentCount ||
+      pr.holdoutDocumentCount > pr.uniqueDocumentCount
     ) {
       p.push('ovjera v2 nema uskladjene brojeve dokumenata');
+    } else {
+      // T83-07 (Codex #185, runda 2): agregati moraju biti dosljedni medjusobno. Zbroj `documentCount`
+      // po skupinama NIJE jednak broju jedinstvenih (dokument profila s vise vrsta rada ulazi u svaku;
+      // izmjereno 27. 9.: 290 prema 219), ali nijedna skupina ne smije imati vise dokumenata od
+      // uracunatih, ni vise cistih od mjerenih, a dokazna skupina trazi bar jedan uracunat dokument.
+      const counted = pr.countedDocumentCount as number;
+      const dokazne = Array.isArray(a.entries) ? a.entries.filter((e) => e.documentCount > 0) : [];
+      const neskladne = (Array.isArray(a.entries) ? a.entries : []).some(
+        (e) => e.cleanCount > e.documentCount || e.documentCount > counted || e.cleanCount < 0 || e.documentCount < 0,
+      );
+      if (neskladne || (dokazne.length > 0 && counted === 0)) p.push('ovjera v2: brojke po skupini ne odgovaraju broju dokumenata');
+    }
+    if (a.signedBy && !/^[0-9a-f]{64}$/.test(String(a.signedContentDigest ?? ''))) {
+      p.push('potpis v2 ovjere ne navodi otisak sadrzaja koji pokriva');
     }
   }
 
